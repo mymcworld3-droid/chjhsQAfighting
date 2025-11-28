@@ -1,0 +1,199 @@
+import React, { useState, useEffect } from 'react';
+import { base44 } from '@/api/base44Client';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { motion } from 'framer-motion';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Card } from "@/components/ui/card";
+import { Save, User, Briefcase, Star, RotateCcw, Settings as SettingsIcon } from 'lucide-react';
+import { toast } from 'sonner';
+import RankBadge from '@/components/game/RankBadge';
+
+export default function Settings() {
+  const queryClient = useQueryClient();
+  const [formData, setFormData] = useState({
+    interests: '',
+    profession: '',
+    expertise: ''
+  });
+  
+  const { data: progressList, isLoading } = useQuery({
+    queryKey: ['progress'],
+    queryFn: () => base44.entities.UserProgress.list()
+  });
+  
+  const progress = progressList?.[0];
+  
+  useEffect(() => {
+    if (progress) {
+      setFormData({
+        interests: progress.interests || '',
+        profession: progress.profession || '',
+        expertise: progress.expertise || ''
+      });
+    }
+  }, [progress]);
+  
+  const updateMutation = useMutation({
+    mutationFn: (data) => base44.entities.UserProgress.update(progress.id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['progress'] });
+      toast.success('個人資料已更新！');
+    }
+  });
+  
+  const resetMutation = useMutation({
+    mutationFn: () => base44.entities.UserProgress.update(progress.id, {
+      rank: 'bronze',
+      stage: 1,
+      total_correct: 0,
+      total_questions: 0
+    }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['progress'] });
+      toast.success('進度已重置！');
+    }
+  });
+  
+  const handleSave = () => {
+    updateMutation.mutate(formData);
+  };
+  
+  const handleReset = () => {
+    if (window.confirm('確定要重置所有進度嗎？此操作無法復原。')) {
+      resetMutation.mutate();
+    }
+  };
+  
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-purple-50 to-pink-50">
+        <div className="animate-pulse text-slate-400">載入中...</div>
+      </div>
+    );
+  }
+  
+  return (
+    <div className="max-w-3xl mx-auto px-4 py-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-center mb-8"
+      >
+        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-slate-600 to-slate-800 shadow-lg mb-4">
+          <SettingsIcon className="w-8 h-8 text-white" />
+        </div>
+        <h1 className="text-3xl font-bold text-slate-800">設定</h1>
+        <p className="text-slate-600 mt-2">自訂你的答題體驗</p>
+      </motion.div>
+      
+      <div className="space-y-6">
+        {/* Current Status */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <Card className="p-6 bg-white/60 backdrop-blur-sm border-0 shadow-lg">
+            <h2 className="text-lg font-semibold text-slate-800 mb-4">當前狀態</h2>
+            <div className="flex items-center justify-between">
+              <RankBadge rank={progress?.rank || 'bronze'} stage={progress?.stage || 1} />
+              <div className="text-right text-sm text-slate-600">
+                <p>答對 {progress?.total_correct || 0} 題</p>
+                <p>共回答 {progress?.total_questions || 0} 題</p>
+              </div>
+            </div>
+          </Card>
+        </motion.div>
+        
+        {/* Personal Info */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+        >
+          <Card className="p-6 bg-white/60 backdrop-blur-sm border-0 shadow-lg">
+            <h2 className="text-lg font-semibold text-slate-800 mb-2">個人資料</h2>
+            <p className="text-sm text-slate-500 mb-6">填寫資料讓 AI 為你出更適合的題目</p>
+            
+            <div className="space-y-5">
+              <div className="space-y-2">
+                <Label htmlFor="profession" className="flex items-center gap-2 text-slate-700">
+                  <Briefcase className="w-4 h-4" />
+                  職業
+                </Label>
+                <Input
+                  id="profession"
+                  placeholder="例如：軟體工程師、教師、學生..."
+                  value={formData.profession}
+                  onChange={(e) => setFormData({ ...formData, profession: e.target.value })}
+                  className="bg-white/80 border-slate-200 focus:border-purple-400 focus:ring-purple-400"
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="interests" className="flex items-center gap-2 text-slate-700">
+                  <Star className="w-4 h-4" />
+                  興趣愛好
+                </Label>
+                <Textarea
+                  id="interests"
+                  placeholder="例如：閱讀、旅遊、電影、音樂、運動、科技..."
+                  value={formData.interests}
+                  onChange={(e) => setFormData({ ...formData, interests: e.target.value })}
+                  className="bg-white/80 border-slate-200 focus:border-purple-400 focus:ring-purple-400 min-h-[100px]"
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="expertise" className="flex items-center gap-2 text-slate-700">
+                  <User className="w-4 h-4" />
+                  專長領域
+                </Label>
+                <Textarea
+                  id="expertise"
+                  placeholder="例如：程式設計、歷史、數學、藝術..."
+                  value={formData.expertise}
+                  onChange={(e) => setFormData({ ...formData, expertise: e.target.value })}
+                  className="bg-white/80 border-slate-200 focus:border-purple-400 focus:ring-purple-400 min-h-[100px]"
+                />
+              </div>
+              
+              <Button
+                onClick={handleSave}
+                disabled={updateMutation.isPending}
+                className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-6 rounded-xl shadow-lg"
+              >
+                <Save className="w-4 h-4 mr-2" />
+                {updateMutation.isPending ? '儲存中...' : '儲存設定'}
+              </Button>
+            </div>
+          </Card>
+        </motion.div>
+        
+        {/* Reset Progress */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <Card className="p-6 bg-white/60 backdrop-blur-sm border-0 shadow-lg">
+            <h2 className="text-lg font-semibold text-slate-800 mb-2">重置進度</h2>
+            <p className="text-sm text-slate-500 mb-4">重新開始你的答題之旅</p>
+            
+            <Button
+              onClick={handleReset}
+              disabled={resetMutation.isPending}
+              variant="outline"
+              className="w-full border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300"
+            >
+              <RotateCcw className="w-4 h-4 mr-2" />
+              {resetMutation.isPending ? '重置中...' : '重置所有進度'}
+            </Button>
+          </Card>
+        </motion.div>
+      </div>
+    </div>
+  );
+}
