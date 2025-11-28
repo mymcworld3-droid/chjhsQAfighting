@@ -1,0 +1,28 @@
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Flame, Trophy } from 'lucide-react';
+
+export default function StreakDisplay({ streak, bestStreak }) {
+  return (
+    <div className="flex items-center gap-4">
+      <motion.div
+        animate={streak > 0 ? { scale: [1, 1.1, 1] } : {}}
+        transition={{ duration: 0.5, repeat: streak > 0 ? Infinity : 0, repeatDelay: 1 }}
+        className={`flex items-center gap-2 px-4 py-2 rounded-full ${
+          streak >= 5 ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white' :
+          streak >= 3 ? 'bg-orange-100 text-orange-600' :
+          'bg-slate-100 text-slate-600'
+        }`}
+      >
+        <Flame className={`w-5 h-5 ${streak >= 5 ? 'animate-pulse' : ''}`} />
+        <span className="font-bold">{streak}</span>
+        <span className="text-sm opacity-80">連勝</span>
+      </motion.div>
+      
+      <div className="flex items-center gap-2 px-3 py-2 rounded-full bg-yellow-50 text-yellow-600">
+        <Trophy className="w-4 h-4" />
+        <span className="text-sm font-medium">最佳: {bestStreak}</span>
+      </div>
+    </div>
+  );
+}

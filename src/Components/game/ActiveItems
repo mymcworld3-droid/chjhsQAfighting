@@ -1,0 +1,95 @@
+import React from 'react';
+import { Button } from "@/components/ui/button";
+import { Lightbulb, Shield, Zap } from 'lucide-react';
+import { cn } from "@/lib/utils";
+import { toast } from 'sonner';
+
+export default function ActiveItems({ 
+  progress, 
+  onUseHint, 
+  onToggleShield, 
+  onToggleDouble,
+  activeShield,
+  activeDouble,
+  hintUsed,
+  questionActive
+}) {
+  const items = [
+    {
+      id: 'hint',
+      name: '提示',
+      icon: Lightbulb,
+      count: progress?.hints_owned || 0,
+      color: 'from-yellow-400 to-orange-500',
+      active: hintUsed,
+      disabled: !questionActive || hintUsed,
+      onClick: () => {
+        if (progress?.hints_owned > 0) {
+          onUseHint();
+        } else {
+          toast.error('沒有提示卡了！');
+        }
+      }
+    },
+    {
+      id: 'shield',
+      name: '護盾',
+      icon: Shield,
+      count: progress?.shields_owned || 0,
+      color: 'from-blue-400 to-cyan-500',
+      active: activeShield,
+      disabled: false,
+      onClick: () => {
+        if (!activeShield && progress?.shields_owned <= 0) {
+          toast.error('沒有保護盾了！');
+          return;
+        }
+        onToggleShield();
+      }
+    },
+    {
+      id: 'double',
+      name: '雙倍',
+      icon: Zap,
+      count: progress?.double_ups_owned || 0,
+      color: 'from-purple-400 to-pink-500',
+      active: activeDouble,
+      disabled: false,
+      onClick: () => {
+        if (!activeDouble && progress?.double_ups_owned <= 0) {
+          toast.error('沒有雙倍卡了！');
+          return;
+        }
+        onToggleDouble();
+      }
+    }
+  ];
+
+  return (
+    <div className="flex items-center gap-2">
+      {items.map((item) => {
+        const Icon = item.icon;
+        return (
+          <Button
+            key={item.id}
+            variant="outline"
+            size="sm"
+            disabled={item.disabled}
+            onClick={item.onClick}
+            className={cn(
+              "relative flex items-center gap-1 rounded-full transition-all",
+              item.active && `bg-gradient-to-r ${item.color} text-white border-0 shadow-lg`,
+              !item.active && "hover:border-slate-300"
+            )}
+          >
+            <Icon className="w-4 h-4" />
+            <span className="text-xs font-bold">{item.count}</span>
+            {item.active && (
+              <span className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse" />
+            )}
+          </Button>
+        );
+      })}
+    </div>
+  );
+}

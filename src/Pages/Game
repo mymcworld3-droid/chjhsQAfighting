@@ -1,0 +1,457 @@
+import React, { useState, useEffect } from 'react';
+import { base44 } from '@/api/base44Client';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { motion } from 'framer-motion';
+import { Button } from "@/components/ui/button";
+import { Zap, ShoppingBag, Coins } from 'lucide-react';
+import RankBadge, { rankConfig, stagesRequired } from '@/components/game/RankBadge';
+import LoginRequired from '@/components/auth/LoginRequired';
+import ProgressRing from '@/components/game/ProgressRing';
+import QuestionCard from '@/components/game/QuestionCard';
+import GameResult from '@/components/game/GameResult';
+import StreakDisplay from '@/components/game/StreakDisplay';
+import ActiveItems from '@/components/game/ActiveItems';
+import ItemShop from '@/components/game/ItemShop';
+import { toast } from 'sonner';
+
+const rankOrder = ['bronze', 'silver', 'gold', 'platinum', 'diamond', 'star'];
+
+const difficultyMap = {
+  bronze: '非常簡單',
+  silver: '簡單',
+  gold: '中等',
+  platinum: '較難',
+  diamond: '困難',
+  star: '極度困難'
+};
+
+export default function Game() {
+  const queryClient = useQueryClient();
+  const [currentQuestion, setCurrentQuestion] = useState(null);
+  const [isLoadingQuestion, setIsLoadingQuestion] = useState(false);
+  const [showResult, setShowResult] = useState(false);
+  const [resultData, setResultData] = useState({});
+  const [showShop, setShowShop] = useState(false);
+  
+  // Active items state
+  const [activeShield, setActiveShield] = useState(false);
+  const [activeDouble, setActiveDouble] = useState(false);
+  const [hintUsed, setHintUsed] = useState(false);
+  const [hiddenOptions, setHiddenOptions] = useState([]);
+  
+  const [questionStartTime, setQuestionStartTime] = useState(null);
+  
+  const { data: user, isLoading: userLoading } = useQuery({
+    queryKey: ['user'],
+    queryFn: () => base44.auth.me()
+  });
+  
+  const { data: progressList, isLoading: isLoadingProgress } = useQuery({
+    queryKey: ['progress'],
+    queryFn: () => base44.entities.UserProgress.list(),
+    enabled: !!user
+  });
+  
+  const progress = progressList?.[0];
+  
+  const createProgressMutation = useMutation({
+    mutationFn: (data) => base44.entities.UserProgress.create(data),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['progress'] })
+  });
+  
+  const updateProgressMutation = useMutation({
+    mutationFn: ({ id, data }) => base44.entities.UserProgress.update(id, data),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['progress'] })
+  });
+  
+  useEffect(() => {
+    if (user && progressList && progressList.length === 0) {
+      createProgressMutation.mutate({
+        rank: 'bronze',
+        stage: 1,
+        total_correct: 0,
+        total_questions: 0,
+        streak: 0,
+        best_streak: 0,
+        coins: 100,
+        hints_owned: 3,
+        shields_owned: 1,
+        double_ups_owned: 1,
+        achievements: []
+      });
+    }
+  }, [user, progressList]);
+  
+  const generateQuestion = async () => {
+    if (!progress) return;
+    
+    // Reset item states for new question
+    setHintUsed(false);
+    setHiddenOptions([]);
+    setIsLoadingQuestion(true);
+    setQuestionStartTime(Date.now());
+    
+    const difficulty = difficultyMap[progress.rank];
+    const personalInfo = [
+      progress.interests && `興趣: ${progress.interests}`,
+      progress.profession && `職業: ${progress.profession}`,
+      progress.expertise && `專長: ${progress.expertise}`
+    ].filter(Boolean).join(', ');
+    
+    const maxStage = stagesRequired[progress.rank] || 10;
+    
+    const prompt = `你是一個專業考試出題專家。請出一道${difficulty}程度的學科考試選擇題。
+
+題目類型請從以下領域選擇：國文、英文、數學、物理、化學、生物、歷史、地理、公民、時事常識等學科考試題目。
+    
+${personalInfo ? `學生背景資訊: ${personalInfo}。可根據這些資訊調整出題方向。` : ''}
+
+當前段位: ${rankConfig[progress.rank].label}，階段: ${progress.stage}/${maxStage}
+
+難度說明:
+- 青銅(非常簡單): 國小程度基礎題
+- 白銀(簡單): 國中程度基礎題
+- 黃金(中等): 國中會考程度
+- 鉑金(較難): 高中學測程度
+- 鑽石(困難): 高中指考程度
+- 星耀(極度困難): 大學或專業考試程度
+
+請用繁體中文出題，題目要有教育價值，選項設計要有鑑別度。`;
+
+    const response = await base44.integrations.Core.InvokeLLM({
+      prompt,
+      response_json_schema: {
+        type: "object",
+        properties: {
+          question: { type: "string", description: "題目內容" },
+          options: { type: "array", items: { type: "string" }, description: "四個選項" },
+          correct_answer: { type: "number", description: "正確答案的索引 (0-3)" },
+          explanation: { type: "string", description: "答案解析" }
+        },
+        required: ["question", "options", "correct_answer", "explanation"]
+      }
+    });
+    
+    setCurrentQuestion(response);
+    setIsLoadingQuestion(false);
+  };
+  
+  const useHint = async () => {
+    if (!currentQuestion || hintUsed || progress.hints_owned <= 0) return;
+    
+    // Find two wrong options to hide
+    const wrongOptions = [0, 1, 2, 3].filter(i => i !== currentQuestion.correct_answer);
+    const toHide = wrongOptions.sort(() => Math.random() - 0.5).slice(0, 2);
+    
+    setHiddenOptions(toHide);
+    setHintUsed(true);
+    
+    // Deduct hint
+    await updateProgressMutation.mutateAsync({
+      id: progress.id,
+      data: { hints_owned: progress.hints_owned - 1 }
+    });
+    
+    toast.success('已移除兩個錯誤選項！');
+  };
+  
+  const handleAnswer = async (isCorrect, userAnswerIndex = -1) => {
+    if (!progress) return;
+    
+    const timeTaken = questionStartTime ? Math.round((Date.now() - questionStartTime) / 1000) : 0;
+    const oldRank = progress.rank;
+    const oldStage = progress.stage;
+    const maxStage = stagesRequired[progress.rank] || 10;
+    
+    let newRank = progress.rank;
+    let newStage = progress.stage;
+    let coinsEarned = 0;
+    let streakBonus = 0;
+    let usedShield = false;
+    let doubleUp = false;
+    
+    const newTotalCorrect = (progress.total_correct || 0) + (isCorrect ? 1 : 0);
+    const newTotalQuestions = (progress.total_questions || 0) + 1;
+    let newStreak = isCorrect ? (progress.streak || 0) + 1 : 0;
+    let newBestStreak = Math.max(newStreak, progress.best_streak || 0);
+    let newCoins = progress.coins || 0;
+    let newShields = progress.shields_owned || 0;
+    let newDoubles = progress.double_ups_owned || 0;
+    
+    if (isCorrect) {
+      // Calculate coins
+      const baseCoins = { bronze: 10, silver: 15, gold: 20, platinum: 30, diamond: 40, star: 50 };
+      coinsEarned = baseCoins[progress.rank] || 10;
+      
+      // Streak bonus
+      if (newStreak >= 3) {
+        streakBonus = Math.min(newStreak * 5, 50);
+        coinsEarned += streakBonus;
+      }
+      
+      newCoins += coinsEarned;
+      
+      // Stage progression
+      let stageIncrease = 1;
+      if (activeDouble && newDoubles > 0) {
+        stageIncrease = 2;
+        doubleUp = true;
+        newDoubles--;
+      }
+      
+      if (progress.stage + stageIncrease > maxStage) {
+        // Rank up
+        const currentRankIndex = rankOrder.indexOf(progress.rank);
+        if (currentRankIndex < rankOrder.length - 1) {
+          newRank = rankOrder[currentRankIndex + 1];
+          newStage = (progress.stage + stageIncrease) - maxStage;
+          if (newStage < 1) newStage = 1;
+        } else {
+          newStage = maxStage; // Max rank, max stage
+        }
+      } else {
+        newStage = progress.stage + stageIncrease;
+      }
+    } else {
+      // Wrong answer - check for shield
+      if (activeShield && newShields > 0) {
+        usedShield = true;
+        newShields--;
+      } else {
+        // Rank down
+        if (progress.stage > 1) {
+          newStage = progress.stage - 1;
+        } else {
+          // At stage 1, go down a rank
+          const currentRankIndex = rankOrder.indexOf(progress.rank);
+          if (currentRankIndex > 0) {
+            newRank = rankOrder[currentRankIndex - 1];
+            const prevMaxStage = stagesRequired[rankOrder[currentRankIndex - 1]] || 10;
+            newStage = prevMaxStage;
+          }
+        }
+      }
+    }
+    
+    // Reset active items
+    setActiveShield(false);
+    setActiveDouble(false);
+    
+    // Save answer record to database
+    if (currentQuestion) {
+      await base44.entities.AnswerRecord.create({
+        user_email: user.email,
+        user_name: user.full_name,
+        question: currentQuestion.question,
+        options: currentQuestion.options,
+        correct_answer: currentQuestion.correct_answer,
+        user_answer: userAnswerIndex,
+        is_correct: isCorrect,
+        rank_at_time: progress.rank,
+        stage_at_time: progress.stage,
+        time_taken: timeTaken,
+        coins_earned: coinsEarned
+      });
+    }
+    
+    setResultData({
+      isCorrect,
+      coinsEarned,
+      streakBonus,
+      newRank,
+      newStage,
+      oldRank,
+      oldStage,
+      usedShield,
+      doubleUp
+    });
+    
+    await updateProgressMutation.mutateAsync({
+      id: progress.id,
+      data: {
+        rank: newRank,
+        stage: newStage,
+        total_correct: newTotalCorrect,
+        total_questions: newTotalQuestions,
+        streak: newStreak,
+        best_streak: newBestStreak,
+        coins: newCoins,
+        shields_owned: newShields,
+        double_ups_owned: newDoubles
+      }
+    });
+    
+    setCurrentQuestion(null);
+    setShowResult(true);
+  };
+  
+  const handlePurchase = async (item) => {
+    await updateProgressMutation.mutateAsync({
+      id: progress.id,
+      data: {
+        coins: progress.coins - item.price,
+        [item.field]: (progress[item.field] || 0) + 1
+      }
+    });
+  };
+  
+  if (userLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-purple-50 to-pink-50">
+        <div className="animate-pulse text-slate-400">載入中...</div>
+      </div>
+    );
+  }
+  
+  if (!user) {
+    return <LoginRequired />;
+  }
+  
+  if (isLoadingProgress) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-purple-50 to-pink-50">
+        <div className="animate-pulse text-slate-400">載入中...</div>
+      </div>
+    );
+  }
+  
+  return (
+    <div className="max-w-3xl mx-auto px-4 py-8">
+      {/* Top Bar with Coins */}
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold text-slate-800">答題挑戰</h1>
+        <Button
+          variant="outline"
+          onClick={() => setShowShop(true)}
+          className="flex items-center gap-2 bg-yellow-50 border-yellow-200 hover:bg-yellow-100"
+        >
+          <Coins className="w-5 h-5 text-yellow-600" />
+          <span className="font-bold text-yellow-700">{progress?.coins || 0}</span>
+          <ShoppingBag className="w-4 h-4 text-yellow-600" />
+        </Button>
+      </div>
+      
+      <div className="space-y-6">
+        {/* Stats Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-white/60 backdrop-blur-sm rounded-3xl p-6 shadow-lg shadow-purple-500/5"
+        >
+          <div className="flex flex-col md:flex-row items-center gap-6">
+            <ProgressRing stage={progress?.stage || 1} rank={progress?.rank || 'bronze'} />
+            
+            <div className="flex-1 text-center md:text-left space-y-3">
+              <RankBadge rank={progress?.rank || 'bronze'} stage={progress?.stage || 1} size="large" />
+              <p className="text-xs text-slate-500 mt-1">
+                晉升需要 {stagesRequired[progress?.rank || 'bronze']} 階
+              </p>
+              
+              <StreakDisplay 
+                streak={progress?.streak || 0} 
+                bestStreak={progress?.best_streak || 0} 
+              />
+              
+              <div className="text-sm text-slate-600">
+                正確率: {progress?.total_questions > 0 
+                  ? Math.round((progress.total_correct / progress.total_questions) * 100) 
+                  : 0}% ({progress?.total_correct || 0}/{progress?.total_questions || 0})
+              </div>
+            </div>
+          </div>
+        </motion.div>
+        
+        {/* Active Items Bar */}
+        {currentQuestion && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex items-center justify-between bg-white/60 backdrop-blur-sm rounded-2xl p-4"
+          >
+            <span className="text-sm text-slate-600">使用道具：</span>
+            <ActiveItems 
+              progress={progress}
+              onUseHint={useHint}
+              onToggleShield={() => setActiveShield(!activeShield)}
+              onToggleDouble={() => setActiveDouble(!activeDouble)}
+              activeShield={activeShield}
+              activeDouble={activeDouble}
+              hintUsed={hintUsed}
+              questionActive={!!currentQuestion}
+            />
+          </motion.div>
+        )}
+        
+        {/* Question Section */}
+        {currentQuestion ? (
+          <QuestionCard
+            question={currentQuestion.question}
+            options={currentQuestion.options}
+            correctAnswer={currentQuestion.correct_answer}
+            explanation={currentQuestion.explanation}
+            onAnswer={(isCorrect, answerIndex) => handleAnswer(isCorrect, answerIndex)}
+            isLoading={false}
+            hiddenOptions={hiddenOptions}
+          />
+        ) : isLoadingQuestion ? (
+          <QuestionCard isLoading={true} />
+        ) : (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center py-12"
+          >
+            <Button
+              onClick={generateQuestion}
+              size="lg"
+              className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold px-8 py-6 rounded-2xl shadow-lg shadow-purple-500/30 transition-all hover:shadow-xl hover:scale-105"
+            >
+              <Zap className="w-5 h-5 mr-2" />
+              開始答題
+            </Button>
+            <p className="mt-4 text-sm text-slate-500">
+              難度: {difficultyMap[progress?.rank || 'bronze']}
+            </p>
+          </motion.div>
+        )}
+        
+        {/* Rank Progress */}
+        <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6">
+          <h3 className="text-sm font-semibold text-slate-700 mb-4">段位進度</h3>
+          <div className="flex items-center justify-between gap-2">
+            {rankOrder.map((rank, index) => {
+              const config = rankConfig[rank];
+              const currentIndex = rankOrder.indexOf(progress?.rank || 'bronze');
+              const isActive = index <= currentIndex;
+              
+              return (
+                <div 
+                  key={rank}
+                  className={`flex flex-col items-center gap-1 ${isActive ? '' : 'opacity-30'}`}
+                >
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${isActive ? `bg-gradient-to-br ${config.gradient}` : 'bg-slate-200'}`}>
+                    <span className="text-lg">{config.icon}</span>
+                  </div>
+                  <span className="text-xs text-slate-600">{config.label}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+      
+      <GameResult
+        isOpen={showResult}
+        onClose={() => setShowResult(false)}
+        {...resultData}
+      />
+      
+      <ItemShop
+        isOpen={showShop}
+        onClose={() => setShowShop(false)}
+        progress={progress}
+        onPurchase={handlePurchase}
+      />
+    </div>
+  );
+}

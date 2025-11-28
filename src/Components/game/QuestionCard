@@ -1,0 +1,182 @@
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Card } from "@/components/ui/card";
+import { CheckCircle2, XCircle, Loader2, Clock } from 'lucide-react';
+import { cn } from "@/lib/utils";
+
+export default function QuestionCard({ 
+  question, 
+  options, 
+  correctAnswer, 
+  onAnswer, 
+  isLoading,
+  explanation,
+  hiddenOptions = [],
+  timeLimit = 30
+}) {
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [showResult, setShowResult] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(timeLimit);
+  
+  // Timer
+  useEffect(() => {
+    if (isLoading || showResult || !question) return;
+    
+    setTimeLeft(timeLimit);
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          // Time's up - auto wrong
+          handleSelect(null, -1);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    
+    return () => clearInterval(timer);
+  }, [question, isLoading]);
+  
+  const handleSelect = (option, index) => {
+    if (showResult) return;
+    setSelectedAnswer(index);
+    setShowResult(true);
+    
+    setTimeout(() => {
+      onAnswer(index === correctAnswer, index);
+      setSelectedAnswer(null);
+      setShowResult(false);
+    }, 2000);
+  };
+  
+  if (isLoading) {
+    return (
+      <Card className="p-8 bg-white/80 backdrop-blur-sm border-0 shadow-xl">
+        <div className="flex flex-col items-center justify-center py-12 gap-4">
+          <Loader2 className="w-12 h-12 animate-spin text-purple-500" />
+          <p className="text-slate-500 animate-pulse">AI 正在為您出題...</p>
+        </div>
+      </Card>
+    );
+  }
+  
+  const timerColor = timeLeft > 20 ? 'text-green-500' : timeLeft > 10 ? 'text-yellow-500' : 'text-red-500';
+  const timerBg = timeLeft > 20 ? 'bg-green-100' : timeLeft > 10 ? 'bg-yellow-100' : 'bg-red-100';
+  
+  return (
+    <Card className="p-6 md:p-8 bg-white/80 backdrop-blur-sm border-0 shadow-xl">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="space-y-6"
+      >
+        {/* Timer */}
+        <div className="flex justify-center">
+          <motion.div 
+            animate={timeLeft <= 10 ? { scale: [1, 1.1, 1] } : {}}
+            transition={{ duration: 0.5, repeat: timeLeft <= 10 ? Infinity : 0 }}
+            className={cn("flex items-center gap-2 px-4 py-2 rounded-full", timerBg)}
+          >
+            <Clock className={cn("w-5 h-5", timerColor)} />
+            <span className={cn("font-bold text-lg", timerColor)}>{timeLeft}s</span>
+          </motion.div>
+        </div>
+        
+        <h2 className="text-lg md:text-xl font-semibold text-slate-800 leading-relaxed text-center">
+          {question}
+        </h2>
+        
+        <div className="grid gap-3">
+          {options?.map((option, index) => {
+            const isHidden = hiddenOptions.includes(index);
+            const isSelected = selectedAnswer === index;
+            const isCorrect = index === correctAnswer;
+            const showCorrect = showResult && isCorrect;
+            const showWrong = showResult && isSelected && !isCorrect;
+            
+            if (isHidden) {
+              return (
+                <div
+                  key={index}
+                  className="w-full p-4 rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 opacity-50"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="w-8 h-8 rounded-full flex items-center justify-center bg-slate-200 text-slate-400 text-sm font-bold">
+                      {String.fromCharCode(65 + index)}
+                    </span>
+                    <span className="text-slate-400 line-through">{option}</span>
+                  </div>
+                </div>
+              );
+            }
+            
+            return (
+              <motion.button
+                key={index}
+                whileHover={!showResult ? { scale: 1.02 } : {}}
+                whileTap={!showResult ? { scale: 0.98 } : {}}
+                onClick={() => handleSelect(option, index)}
+                disabled={showResult}
+                className={cn(
+                  "relative w-full p-4 rounded-xl text-left transition-all duration-300",
+                  "border-2 font-medium",
+                  !showResult && "hover:border-purple-400 hover:bg-purple-50 border-slate-200 bg-white",
+                  showCorrect && "border-green-500 bg-green-50",
+                  showWrong && "border-red-500 bg-red-50",
+                  showResult && !isCorrect && !isSelected && "border-slate-100 bg-slate-50 opacity-50"
+                )}
+              >
+                <div className="flex items-center gap-3">
+                  <span className={cn(
+                    "w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold",
+                    !showResult && "bg-slate-100 text-slate-600",
+                    showCorrect && "bg-green-500 text-white",
+                    showWrong && "bg-red-500 text-white"
+                  )}>
+                    {showCorrect ? <CheckCircle2 className="w-5 h-5" /> : 
+                     showWrong ? <XCircle className="w-5 h-5" /> : 
+                     String.fromCharCode(65 + index)}
+                  </span>
+                  <span className={cn(
+                    "flex-1",
+                    showCorrect && "text-green-700",
+                    showWrong && "text-red-700"
+                  )}>
+                    {option}
+                  </span>
+                </div>
+              </motion.button>
+            );
+          })}
+        </div>
+        
+        {/* Time's up message */}
+        {selectedAnswer === -1 && showResult && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="p-4 rounded-xl bg-red-50 border border-red-200 text-center"
+          >
+            <p className="text-red-600 font-semibold">⏰ 時間到！</p>
+          </motion.div>
+        )}
+        
+        <AnimatePresence>
+          {showResult && explanation && selectedAnswer !== -1 && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="p-4 rounded-xl bg-slate-50 border border-slate-200"
+            >
+              <p className="text-sm text-slate-600">
+                <span className="font-semibold">解析：</span>{explanation}
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+    </Card>
+  );
+}

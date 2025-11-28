@@ -1,0 +1,79 @@
+import React from 'react';
+import { cn } from "@/lib/utils";
+
+// 每個等級所需的階段數
+const stagesRequired = {
+  bronze: 5,      // 青銅: 5階
+  silver: 8,      // 白銀: 8階
+  gold: 10,       // 黃金: 10階
+  platinum: 12,   // 鉑金: 12階
+  diamond: 15,    // 鑽石: 15階
+  star: 20        // 星耀: 20階
+};
+
+const rankConfig = {
+  bronze: { 
+    label: '青銅', 
+    gradient: 'from-amber-600 to-amber-800',
+    glow: 'shadow-amber-500/30',
+    icon: '🥉',
+    maxStage: 5
+  },
+  silver: { 
+    label: '白銀', 
+    gradient: 'from-slate-300 to-slate-500',
+    glow: 'shadow-slate-400/30',
+    icon: '🥈',
+    maxStage: 8
+  },
+  gold: { 
+    label: '黃金', 
+    gradient: 'from-yellow-400 to-yellow-600',
+    glow: 'shadow-yellow-500/40',
+    icon: '🥇',
+    maxStage: 10
+  },
+  platinum: { 
+    label: '鉑金', 
+    gradient: 'from-cyan-300 to-cyan-500',
+    glow: 'shadow-cyan-400/40',
+    icon: '💎',
+    maxStage: 12
+  },
+  diamond: { 
+    label: '鑽石', 
+    gradient: 'from-blue-400 to-purple-500',
+    glow: 'shadow-blue-500/50',
+    icon: '💠',
+    maxStage: 15
+  },
+  star: { 
+    label: '星耀', 
+    gradient: 'from-purple-500 via-pink-500 to-orange-400',
+    glow: 'shadow-purple-500/50',
+    icon: '⭐',
+    maxStage: 20
+  }
+};
+
+export default function RankBadge({ rank, stage, size = 'default' }) {
+  const config = rankConfig[rank] || rankConfig.bronze;
+  const maxStage = config.maxStage || 10;
+  
+  return (
+    <div className={cn(
+      "relative inline-flex items-center gap-2 rounded-full bg-gradient-to-r px-4 py-2",
+      config.gradient,
+      `shadow-lg ${config.glow}`,
+      size === 'large' && "px-6 py-3 text-lg"
+    )}>
+      <span className={cn("text-xl", size === 'large' && "text-3xl")}>{config.icon}</span>
+      <div className="flex flex-col">
+        <span className="font-bold text-white tracking-wide">{config.label}</span>
+        <span className="text-xs text-white/80">階段 {stage}/{maxStage}</span>
+      </div>
+    </div>
+  );
+}
+
+export { rankConfig, stagesRequired };
