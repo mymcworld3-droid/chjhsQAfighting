@@ -1,0 +1,225 @@
+import React from 'react';
+import { base44 } from '@/api/base44Client';
+import { useQuery } from '@tanstack/react-query';
+import { motion } from 'framer-motion';
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Link } from 'react-router-dom';
+import { createPageUrl } from '@/utils';
+import { Zap, Trophy, Target, Flame, ChevronRight, Coins, Shield, Lightbulb } from 'lucide-react';
+import RankBadge, { rankConfig, stagesRequired } from '@/components/game/RankBadge';
+import LoginRequired from '@/components/auth/LoginRequired';
+import ProgressRing from '@/components/game/ProgressRing';
+
+export default function Home() {
+  const { data: user, isLoading: userLoading } = useQuery({
+    queryKey: ['user'],
+    queryFn: () => base44.auth.me()
+  });
+
+  const { data: progressList, isLoading: progressLoading } = useQuery({
+    queryKey: ['progress'],
+    queryFn: () => base44.entities.UserProgress.list(),
+    enabled: !!user
+  });
+
+  const progress = progressList?.[0];
+
+  if (userLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-pulse text-slate-400">載入中...</div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <LoginRequired />;
+  }
+
+  const features = [
+    {
+      icon: Target,
+      title: 'AI 智慧出題',
+      description: '根據你的程度和興趣，AI 為你量身打造題目',
+      color: 'from-blue-500 to-cyan-500'
+    },
+    {
+      icon: Flame,
+      title: '連勝獎勵',
+      description: '連續答對獲得額外金幣，挑戰最高連勝紀錄',
+      color: 'from-orange-500 to-red-500'
+    },
+    {
+      icon: Trophy,
+      title: '段位挑戰',
+      description: '從青銅一路挑戰到星耀，證明你的實力',
+      color: 'from-yellow-500 to-orange-500'
+    }
+  ];
+
+  return (
+    <div className="max-w-6xl mx-auto px-4 py-8">
+      {/* Hero Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-center mb-12"
+      >
+        <div className="inline-flex items-center gap-2 bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm font-medium mb-6">
+          <Zap className="w-4 h-4" />
+          每日答題挑戰
+        </div>
+        <h1 className="text-4xl md:text-5xl font-bold text-slate-800 mb-4">
+          用 <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">AI</span> 提升你的知識
+        </h1>
+        <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-8">
+          每天答題，累積知識，從青銅晉升到星耀。AI 會根據你的興趣和專長出題，讓學習更有趣！
+        </p>
+        
+        <Link to={createPageUrl('Game')}>
+          <Button size="lg" className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold px-8 py-6 rounded-2xl shadow-lg shadow-purple-500/30 transition-all hover:shadow-xl hover:scale-105">
+            <Zap className="w-5 h-5 mr-2" />
+            開始答題
+            <ChevronRight className="w-5 h-5 ml-1" />
+          </Button>
+        </Link>
+      </motion.div>
+
+      {/* User Stats Card */}
+      {progress && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="mb-12"
+        >
+          <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-xl overflow-hidden">
+            <div className="p-6 md:p-8">
+              <div className="flex flex-col md:flex-row items-center gap-8">
+                <ProgressRing stage={progress.stage || 1} rank={progress.rank || 'bronze'} />
+                
+                <div className="flex-1 text-center md:text-left">
+                  <h2 className="text-lg text-slate-600 mb-2">歡迎回來，{user?.full_name || '挑戰者'}！</h2>
+                  <RankBadge rank={progress.rank || 'bronze'} stage={progress.stage || 1} size="large" />
+                  <p className="text-xs text-slate-500 mt-1">
+                    晉升需要 {stagesRequired[progress.rank || 'bronze']} 階
+                  </p>
+                  
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+                    <div className="bg-slate-50 rounded-xl p-4 text-center">
+                      <div className="flex items-center justify-center gap-1 text-yellow-600 mb-1">
+                        <Coins className="w-4 h-4" />
+                        <span className="font-bold text-xl">{progress.coins || 0}</span>
+                      </div>
+                      <span className="text-xs text-slate-500">金幣</span>
+                    </div>
+                    <div className="bg-slate-50 rounded-xl p-4 text-center">
+                      <div className="flex items-center justify-center gap-1 text-orange-600 mb-1">
+                        <Flame className="w-4 h-4" />
+                        <span className="font-bold text-xl">{progress.best_streak || 0}</span>
+                      </div>
+                      <span className="text-xs text-slate-500">最佳連勝</span>
+                    </div>
+                    <div className="bg-slate-50 rounded-xl p-4 text-center">
+                      <div className="flex items-center justify-center gap-1 text-green-600 mb-1">
+                        <Target className="w-4 h-4" />
+                        <span className="font-bold text-xl">
+                          {progress.total_questions > 0 
+                            ? Math.round((progress.total_correct / progress.total_questions) * 100) 
+                            : 0}%
+                        </span>
+                      </div>
+                      <span className="text-xs text-slate-500">正確率</span>
+                    </div>
+                    <div className="bg-slate-50 rounded-xl p-4 text-center">
+                      <div className="flex items-center justify-center gap-1 text-purple-600 mb-1">
+                        <Trophy className="w-4 h-4" />
+                        <span className="font-bold text-xl">{progress.total_correct || 0}</span>
+                      </div>
+                      <span className="text-xs text-slate-500">答對題數</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Items owned */}
+                <div className="flex md:flex-col gap-3">
+                  <div className="flex items-center gap-2 bg-yellow-50 px-4 py-2 rounded-xl">
+                    <Lightbulb className="w-5 h-5 text-yellow-500" />
+                    <span className="font-bold text-yellow-700">{progress.hints_owned || 0}</span>
+                  </div>
+                  <div className="flex items-center gap-2 bg-blue-50 px-4 py-2 rounded-xl">
+                    <Shield className="w-5 h-5 text-blue-500" />
+                    <span className="font-bold text-blue-700">{progress.shields_owned || 0}</span>
+                  </div>
+                  <div className="flex items-center gap-2 bg-purple-50 px-4 py-2 rounded-xl">
+                    <Zap className="w-5 h-5 text-purple-500" />
+                    <span className="font-bold text-purple-700">{progress.double_ups_owned || 0}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Card>
+        </motion.div>
+      )}
+
+      {/* Features Grid */}
+      <div className="grid md:grid-cols-3 gap-6 mb-12">
+        {features.map((feature, index) => {
+          const Icon = feature.icon;
+          return (
+            <motion.div
+              key={feature.title}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 + index * 0.1 }}
+            >
+              <Card className="h-full bg-white/60 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all p-6">
+                <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-4 shadow-lg`}>
+                  <Icon className="w-7 h-7 text-white" />
+                </div>
+                <h3 className="text-lg font-bold text-slate-800 mb-2">{feature.title}</h3>
+                <p className="text-slate-600">{feature.description}</p>
+              </Card>
+            </motion.div>
+          );
+        })}
+      </div>
+
+      {/* Rank Overview */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+      >
+        <Card className="bg-white/60 backdrop-blur-sm border-0 shadow-lg p-6 md:p-8">
+          <h2 className="text-xl font-bold text-slate-800 mb-6 text-center">段位系統</h2>
+          <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
+            {Object.entries(rankConfig).map(([key, config], index) => {
+              const currentIndex = progress ? ['bronze', 'silver', 'gold', 'platinum', 'diamond', 'star'].indexOf(progress.rank) : -1;
+              const isUnlocked = index <= currentIndex;
+              
+              return (
+                <div 
+                  key={key}
+                  className={`flex flex-col items-center gap-2 p-4 rounded-2xl transition-all ${
+                    isUnlocked ? 'bg-white shadow-md' : 'bg-slate-50 opacity-50'
+                  }`}
+                >
+                  <div className={`w-16 h-16 rounded-full flex items-center justify-center ${
+                    isUnlocked ? `bg-gradient-to-br ${config.gradient} shadow-lg` : 'bg-slate-200'
+                  }`}>
+                    <span className="text-3xl">{config.icon}</span>
+                  </div>
+                  <span className={`font-bold ${isUnlocked ? 'text-slate-800' : 'text-slate-400'}`}>
+                    {config.label}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </Card>
+      </motion.div>
+    </div>
+  );
+}
