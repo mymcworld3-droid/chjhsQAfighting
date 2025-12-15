@@ -363,8 +363,13 @@
         // 4. AI 出題系統 (核心修正版)
         // ----------------------------------------------------
         // 4. AI 出題系統 (改回 gemini-pro 穩定版)
+        // 4. AI 出題系統 (HTTP 直連版 - 最穩定)
         window.startQuizFlow = async () => {
-            if (!genAI) { alert("請先在程式碼中填入 Gemini API Key"); return; }
+            // 檢查 API Key
+            if (GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE" || GEMINI_API_KEY.length < 20) {
+                alert("請先在程式碼中填入正確的 Gemini API Key！");
+                return;
+            }
             
             switchToPage('page-quiz');
             document.getElementById('quiz-container').classList.add('hidden');
@@ -374,46 +379,58 @@
             const rankName = RANKS[currentUserData.stats.rankLevel];
             const interests = currentUserData.profile.interests || "一般常識";
 
-            try {
-                // *** 改用 gemini-pro，避免 404 錯誤 ***
-                const model = genAI.getGenerativeModel({ model: "gemini-pro"});
-                
-                const prompt = `
-                    你是一個嚴格的遊戲出題官。
-                    【任務】請根據玩家興趣"${interests}"與等級"${rankName}"，出一個單選題。
-                    【重要】請直接回傳 JSON 字串，不要包含 \`\`\`json 或任何其他文字。
-                    
-                    JSON 格式範例：
-                    {
-                        "q": "題目敘述...",
-                        "opts": ["選項A", "選項B", "選項C", "選項D"],
-                        "ans": 0 
-                    }
-                    (ans 是正確選項的索引，0代表A)
-                `;
-
-                const result = await model.generateContent(prompt);
-                const response = result.response;
-                let text = response.text();
-
-                // 清洗資料：只抓取 JSON 部分
-                const jsonMatch = text.match(/\{[\s\S]*\}/);
-                if (jsonMatch) {
-                    text = jsonMatch[0];
+            // 設定 Prompt
+            const promptText = `
+                你是一個遊戲出題官。
+                任務：根據玩家興趣"${interests}"與等級"${rankName}"，出一個單選題。
+                要求：只回傳純 JSON 字串，不要 Markdown。
+                格式範例：
+                {
+                    "q": "題目內容...",
+                    "opts": ["A選項", "B選項", "C選項", "D選項"],
+                    "ans": 0 
                 }
+                (ans: 0=A, 1=B...)
+            `;
+
+            try {
+                // *** 關鍵修改：直接呼叫 API 網址，不透過 SDK ***
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+                
+                const response = await fetch(apiUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{ text: promptText }]
+                        }]
+                    })
+                });
+
+                if (!response.ok) {
+                    const errData = await response.json();
+                    throw new Error(errData.error?.message || "API 連線失敗");
+                }
+
+                const result = await response.json();
+                let text = result.candidates[0].content.parts[0].text;
+
+                // 清洗資料 (去掉可能的 ```json 標籤)
+                const jsonMatch = text.match(/\{[\s\S]*\}/);
+                if (jsonMatch) text = jsonMatch[0];
 
                 const quizData = JSON.parse(text);
 
-                // 驗證
-                if (!quizData.q || !quizData.opts) {
-                    throw new Error("AI 回傳格式不完整");
-                }
+                // 驗證欄位
+                if (!quizData.q || !quizData.opts) throw new Error("AI 回傳格式錯誤");
 
                 renderQuiz(quizData, rankName, interests);
 
             } catch (e) {
                 console.error("AI Error:", e);
-                alert(`出題失敗：${e.message}\n請確認 API Key 是否正確。`);
+                alert(`出題失敗：${e.message}\n(請確認 API Key 是否正確且未過期)`);
                 switchToPage('page-home');
             }
         };
