@@ -361,8 +361,10 @@
 
         // ----------------------------------------------------
         // 4. AI 出題系統 (最終修正版 v3.0)
+        // ----------------------------------------------------
+        // 4. AI 出題系統 (修正版：使用 gemini-2.5-flash)
         window.startQuizFlow = async () => {
-            // 這裡填入你剛剛申請的「全新專案」的 Key
+            // 簡單檢查 Key 是否填寫
             if (GEMINI_API_KEY.includes("YOUR") || GEMINI_API_KEY.length < 20) {
                 alert("請填入新的 API Key！");
                 return;
@@ -371,7 +373,7 @@
             switchToPage('page-quiz');
             document.getElementById('quiz-container').classList.add('hidden');
             document.getElementById('quiz-loading').classList.remove('hidden');
-            document.getElementById('loading-text').innerText = "AI 正在思考 (v3.0)...";
+            document.getElementById('loading-text').innerText = "Gemini 2.5 正在極速運算中...";
 
             const rankName = RANKS[currentUserData.stats.rankLevel];
             const interests = currentUserData.profile.interests || "一般常識";
@@ -390,8 +392,8 @@
             `;
 
             try {
-                // *** 使用 gemini-1.5-flash (新專案預設支援這個) ***
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+                // *** 這裡修改為你清單中的名稱: gemini-2.5-flash ***
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
                 
                 const response = await fetch(apiUrl, {
                     method: "POST",
@@ -403,7 +405,10 @@
 
                 if (!response.ok) {
                     const errData = await response.json();
-                    // 如果這裡報錯，通常是 Key 沒權限
+                    // 針對 429 錯誤做特別提醒
+                    if (response.status === 429) {
+                        throw new Error("已達到今日使用上限 (20次/天)，請明天再來挑戰！");
+                    }
                     throw new Error(errData.error?.message || `HTTP Error: ${response.status}`);
                 }
 
@@ -415,7 +420,7 @@
 
                 let text = result.candidates[0].content.parts[0].text;
 
-                // 清洗資料
+                // 清洗資料 (避免 AI 回傳 ```json 開頭)
                 const jsonMatch = text.match(/\{[\s\S]*\}/);
                 if (jsonMatch) text = jsonMatch[0];
 
@@ -427,8 +432,7 @@
 
             } catch (e) {
                 console.error("AI Error:", e);
-                // 這裡會顯示最真實的錯誤原因
-                alert(`出題失敗：${e.message}\n\n請確認你使用的是「Create API key in NEW project」產生的新 Key！`);
+                alert(`出題失敗：${e.message}`);
                 switchToPage('page-home');
             }
         };
