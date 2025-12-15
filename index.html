@@ -360,13 +360,13 @@
         }
 
         // ----------------------------------------------------
-        // 4. AI 出題系統 (核心修正版)
-        // ----------------------------------------------------
-        // 4. AI 出題系統 (改回 gemini-pro 穩定版)
-        // 4. AI 出題系統 (HTTP 直連版 - 最穩定)
+        // 4. AI 出題系統 (HTTP 直連版 - 使用 gemini-pro)
         window.startQuizFlow = async () => {
+            // --- 除錯用：確認程式碼是否有更新 ---
+            console.log("正在執行版本 v2.0 (Gemini Pro)"); 
+            
             // 檢查 API Key
-            if (GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE" || GEMINI_API_KEY.length < 20) {
+            if (GEMINI_API_KEY.includes("YOUR") || GEMINI_API_KEY.length < 20) {
                 alert("請先在程式碼中填入正確的 Gemini API Key！");
                 return;
             }
@@ -374,12 +374,11 @@
             switchToPage('page-quiz');
             document.getElementById('quiz-container').classList.add('hidden');
             document.getElementById('quiz-loading').classList.remove('hidden');
-            document.getElementById('loading-text').innerText = "AI 正在思考題目...";
+            document.getElementById('loading-text').innerText = "AI 正在思考題目 (v2.0)...";
 
             const rankName = RANKS[currentUserData.stats.rankLevel];
             const interests = currentUserData.profile.interests || "一般常識";
 
-            // 設定 Prompt
             const promptText = `
                 你是一個遊戲出題官。
                 任務：根據玩家興趣"${interests}"與等級"${rankName}"，出一個單選題。
@@ -394,18 +393,14 @@
             `;
 
             try {
-                // *** 關鍵修改：直接呼叫 API 網址，不透過 SDK ***
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+                // *** 關鍵修改：改用 'gemini-pro'，這是最穩定的模型名稱 ***
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`;
                 
                 const response = await fetch(apiUrl, {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        contents: [{
-                            parts: [{ text: promptText }]
-                        }]
+                        contents: [{ parts: [{ text: promptText }] }]
                     })
                 });
 
@@ -415,22 +410,27 @@
                 }
 
                 const result = await response.json();
+                
+                // 安全檢查：確認回傳結構
+                if (!result.candidates || !result.candidates[0] || !result.candidates[0].content) {
+                   throw new Error("AI 沒有回傳任何內容 (被安全阻擋或格式錯誤)");
+                }
+
                 let text = result.candidates[0].content.parts[0].text;
 
-                // 清洗資料 (去掉可能的 ```json 標籤)
+                // 清洗資料
                 const jsonMatch = text.match(/\{[\s\S]*\}/);
                 if (jsonMatch) text = jsonMatch[0];
 
                 const quizData = JSON.parse(text);
 
-                // 驗證欄位
                 if (!quizData.q || !quizData.opts) throw new Error("AI 回傳格式錯誤");
 
                 renderQuiz(quizData, rankName, interests);
 
             } catch (e) {
                 console.error("AI Error:", e);
-                alert(`出題失敗：${e.message}\n(請確認 API Key 是否正確且未過期)`);
+                alert(`出題失敗：${e.message}\n(請確認 API Key 是否正確)`);
                 switchToPage('page-home');
             }
         };
