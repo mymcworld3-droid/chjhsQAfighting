@@ -362,6 +362,7 @@
         // ----------------------------------------------------
         // 4. AI 出題系統 (核心修正版)
         // ----------------------------------------------------
+        // 4. AI 出題系統 (改回 gemini-pro 穩定版)
         window.startQuizFlow = async () => {
             if (!genAI) { alert("請先在程式碼中填入 Gemini API Key"); return; }
             
@@ -374,8 +375,8 @@
             const interests = currentUserData.profile.interests || "一般常識";
 
             try {
-                // 使用 gemini-1.5-flash，速度更快更穩
-                const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash"});
+                // *** 改用 gemini-pro，避免 404 錯誤 ***
+                const model = genAI.getGenerativeModel({ model: "gemini-pro"});
                 
                 const prompt = `
                     你是一個嚴格的遊戲出題官。
@@ -395,7 +396,7 @@
                 const response = result.response;
                 let text = response.text();
 
-                // 強力清洗資料：只抓取第一個 { 到最後一個 } 之間的內容
+                // 清洗資料：只抓取 JSON 部分
                 const jsonMatch = text.match(/\{[\s\S]*\}/);
                 if (jsonMatch) {
                     text = jsonMatch[0];
@@ -403,8 +404,8 @@
 
                 const quizData = JSON.parse(text);
 
-                // 簡單驗證格式
-                if (!quizData.q || !quizData.opts || typeof quizData.ans === 'undefined') {
+                // 驗證
+                if (!quizData.q || !quizData.opts) {
                     throw new Error("AI 回傳格式不完整");
                 }
 
@@ -412,7 +413,7 @@
 
             } catch (e) {
                 console.error("AI Error:", e);
-                alert(`出題失敗：${e.message}\n建議：再試一次，或檢查 API Key 額度。`);
+                alert(`出題失敗：${e.message}\n請確認 API Key 是否正確。`);
                 switchToPage('page-home');
             }
         };
