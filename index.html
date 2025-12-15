@@ -21,90 +21,99 @@
             margin: 20px auto;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        /* 避免底部導航遮擋內容 */
+        .pb-safe { padding-bottom: 5rem; }
     </style>
 </head>
 <body class="font-sans h-screen flex flex-col overflow-hidden">
 
-    <header class="p-4 bg-slate-800 shadow-lg flex justify-between items-center z-10">
-        <h1 class="text-xl font-bold text-yellow-400"><i class="fa-solid fa-crown"></i> AI 升階戰</h1>
-        <div id="user-info" class="text-xs text-gray-300">未登入</div>
+    <header class="p-4 bg-slate-800 shadow-lg flex justify-between items-center z-10 border-b border-slate-700">
+        <h1 class="text-xl font-bold text-yellow-400 flex items-center gap-2">
+            <i class="fa-solid fa-dragon"></i> 升階答題戰
+        </h1>
+        <div id="user-info" class="text-xs text-gray-300 bg-slate-700 px-3 py-1 rounded-full">未登入</div>
     </header>
 
-    <main class="flex-1 overflow-y-auto p-4 relative scroll-smooth">
+    <main class="flex-1 overflow-y-auto p-4 relative scroll-smooth pb-safe">
         
         <div id="login-screen" class="flex flex-col items-center justify-center h-full">
-            <div class="text-center mb-8">
-                <i class="fa-solid fa-dragon text-6xl text-yellow-500 mb-4"></i>
-                <h2 class="text-3xl font-bold">歡迎來到答題戰場</h2>
-                <p class="text-gray-400 mt-2">挑戰 AI 出題，從青銅邁向星耀</p>
+            <div class="text-center mb-8 animate-bounce">
+                <i class="fa-solid fa-crown text-6xl text-yellow-500 mb-4"></i>
             </div>
-            <button onclick="googleLogin()" class="bg-white text-gray-800 hover:bg-gray-100 px-8 py-3 rounded-full font-bold shadow-lg transition flex items-center gap-2">
+            <h2 class="text-3xl font-bold mb-2">歡迎挑戰</h2>
+            <p class="text-gray-400 mb-8 text-sm">AI 出題 x 段位系統 x 全服排行</p>
+            
+            <button onclick="googleLogin()" class="bg-white text-gray-800 hover:bg-gray-100 px-8 py-3 rounded-full font-bold shadow-lg transition flex items-center gap-2 transform hover:scale-105">
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-6 h-6">
                 使用 Google 登入
             </button>
         </div>
 
         <div id="page-home" class="page-section hidden">
-            <div class="bg-slate-800 p-8 rounded-2xl shadow-xl text-center border border-slate-700">
-                <div class="text-gray-400 text-sm mb-2">當前段位</div>
-                <h2 class="text-4xl font-black mb-2 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500" id="display-rank">讀取中...</h2>
+            <div class="bg-gradient-to-br from-slate-800 to-slate-900 p-8 rounded-2xl shadow-xl text-center border border-slate-700 relative overflow-hidden">
+                <i class="fa-solid fa-trophy absolute -bottom-4 -right-4 text-9xl text-white opacity-5 transform rotate-12"></i>
                 
-                <div class="flex justify-center items-center gap-2 mt-4 text-gray-300">
+                <div class="text-gray-400 text-xs uppercase tracking-widest mb-2">Current Rank</div>
+                <h2 class="text-5xl font-black mb-2 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-400 to-red-500" id="display-rank">載入中</h2>
+                
+                <div class="flex justify-center items-center gap-2 mt-6 text-gray-300 bg-slate-800/50 inline-block px-4 py-1 rounded-full">
                     <i class="fa-solid fa-star text-yellow-400"></i>
-                    <span>階段: <span id="display-stars" class="font-bold text-white">0</span>/10</span>
+                    <span>階段: <span id="display-stars" class="font-bold text-white text-lg">0</span> / 10</span>
                 </div>
 
-                <div class="w-full bg-slate-900 rounded-full h-4 mt-4 overflow-hidden border border-slate-600">
-                    <div id="progress-bar" class="bg-gradient-to-r from-yellow-500 to-orange-600 h-4 rounded-full transition-all duration-500" style="width: 0%"></div>
+                <div class="w-full bg-slate-950 rounded-full h-3 mt-6 overflow-hidden border border-slate-700">
+                    <div id="progress-bar" class="bg-gradient-to-r from-blue-500 to-purple-600 h-3 rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
                 </div>
 
-                <button onclick="startQuizFlow()" class="mt-8 bg-blue-600 w-full py-4 rounded-xl text-xl font-bold hover:bg-blue-500 shadow-lg transform active:scale-95 transition">
+                <button onclick="startQuizFlow()" class="mt-8 bg-blue-600 w-full py-4 rounded-xl text-xl font-bold hover:bg-blue-500 shadow-lg shadow-blue-900/50 transform active:scale-95 transition flex items-center justify-center gap-2">
                     <i class="fa-solid fa-play"></i> 開始挑戰
                 </button>
             </div>
 
-            <div class="mt-6">
-                <h3 class="text-sm font-bold text-gray-400 mb-2 uppercase">遊戲說明</h3>
-                <div class="bg-slate-800 p-4 rounded-lg text-sm text-gray-300 space-y-2">
-                    <p>✅ 答對一題：星星 +1</p>
-                    <p>❌ 答錯一題：星星 -1 (可能導致降階)</p>
-                    <p>🎯 滿 10 星：晉升下一個段位</p>
+            <div class="grid grid-cols-2 gap-4 mt-4">
+                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
+                    <div class="text-xs text-gray-400">總積分</div>
+                    <div class="text-2xl font-bold text-white" id="display-score">0</div>
+                </div>
+                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
+                    <div class="text-xs text-gray-400">連勝紀錄</div>
+                    <div class="text-2xl font-bold text-green-400">--</div>
                 </div>
             </div>
         </div>
 
         <div id="page-quiz" class="page-section hidden">
-            <div id="quiz-loading" class="text-center mt-20 hidden">
+            <div id="quiz-loading" class="text-center mt-32 hidden">
                 <div class="loader"></div>
-                <p class="text-xl animate-pulse text-blue-300">AI 考官正在出題中...</p>
-                <p class="text-xs text-gray-500 mt-2">根據您的興趣與等級生成</p>
+                <h3 class="text-xl font-bold mt-4 text-blue-300">AI 考官出題中</h3>
+                <p class="text-xs text-gray-500 mt-2" id="loading-text">正在分析您的興趣與等級...</p>
             </div>
 
             <div id="quiz-container" class="hidden">
-                <div class="bg-slate-800 p-6 rounded-xl mb-6 border-l-4 border-blue-500 shadow-lg">
-                    <div class="flex justify-between items-center mb-3">
-                        <span class="bg-blue-900 text-blue-200 text-xs font-bold px-2 py-1 rounded" id="quiz-badge">主題</span>
-                        <span class="text-xs text-gray-400">單選題</span>
-                    </div>
-                    <h3 class="text-lg font-bold leading-relaxed" id="question-text">題目載入中...</h3>
+                <div class="bg-slate-800 p-6 rounded-xl mb-6 border-t-4 border-blue-500 shadow-lg relative">
+                    <span class="absolute top-4 right-4 bg-slate-900 text-xs px-2 py-1 rounded text-gray-400" id="quiz-badge">歷史 | 青銅</span>
+                    <div class="text-4xl text-blue-500/20 absolute top-2 left-2"><i class="fa-solid fa-quote-left"></i></div>
+                    <h3 class="text-lg font-bold leading-relaxed mt-4 relative z-10" id="question-text">題目載入中...</h3>
                 </div>
 
                 <div id="options-container" class="space-y-3">
                     </div>
                 
-                <button onclick="switchToPage('page-home')" class="mt-8 text-gray-500 text-sm w-full text-center hover:text-white">放棄並返回</button>
+                <button onclick="switchToPage('page-home')" class="mt-8 py-3 text-gray-500 text-sm w-full text-center hover:text-white border border-transparent hover:border-slate-700 rounded-lg transition">
+                    <i class="fa-solid fa-arrow-left"></i> 放棄並返回首頁
+                </button>
             </div>
         </div>
 
         <div id="page-rank" class="page-section hidden">
-            <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
-                <i class="fa-solid fa-trophy text-yellow-400"></i> 全服排行榜
+            <h2 class="text-2xl font-bold mb-4 flex items-center gap-2 text-yellow-400">
+                <i class="fa-solid fa-trophy"></i> 全服排行榜
             </h2>
-            <div class="bg-slate-800 rounded-xl overflow-hidden shadow-lg">
+            <div class="bg-slate-800 rounded-xl overflow-hidden shadow-lg border border-slate-700">
                 <table class="w-full text-left text-sm text-gray-300">
-                    <thead class="bg-slate-700 text-gray-100 uppercase text-xs">
+                    <thead class="bg-slate-900 text-gray-400 uppercase text-xs">
                         <tr>
-                            <th class="px-4 py-3">#</th>
+                            <th class="px-4 py-3 w-12">#</th>
                             <th class="px-4 py-3">玩家</th>
                             <th class="px-4 py-3 text-right">段位</th>
                         </tr>
@@ -116,71 +125,87 @@
         </div>
 
         <div id="page-settings" class="page-section hidden">
-            <h2 class="text-2xl font-bold mb-4">⚙️ 個人檔案</h2>
+            <h2 class="text-2xl font-bold mb-4">⚙️ 個人設定</h2>
             
-            <div class="bg-slate-800 p-6 rounded-xl shadow-lg mb-6">
-                <label class="block mb-2 text-sm font-bold text-blue-300">
+            <div class="bg-slate-800 p-6 rounded-xl shadow-lg mb-6 border border-slate-700">
+                <label class="block mb-2 text-sm font-bold text-blue-300 flex items-center gap-2">
                     <i class="fa-solid fa-wand-magic-sparkles"></i> 出題興趣偏好
                 </label>
-                <p class="text-xs text-gray-400 mb-3">AI 會優先針對這些主題出題 (用逗號分隔)</p>
-                <input type="text" id="input-interests" class="bg-slate-900 border border-slate-600 text-white text-sm rounded-lg w-full p-3 focus:ring-blue-500 focus:border-blue-500 outline-none" placeholder="例如：台灣歷史, Javascript, 漫威電影">
-                <button onclick="saveProfile()" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg w-full font-bold hover:bg-blue-500 transition">
+                <p class="text-xs text-gray-400 mb-3">AI 會優先針對這些主題出題 (請用逗號分隔)</p>
+                <input type="text" id="input-interests" class="bg-slate-900 border border-slate-600 text-white text-sm rounded-lg w-full p-3 focus:ring-blue-500 focus:border-blue-500 outline-none placeholder-gray-600 transition" placeholder="例如：台灣歷史, Javascript, 漫威電影">
+                <button onclick="saveProfile()" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg w-full font-bold hover:bg-blue-500 transition shadow-lg">
                     儲存設定
                 </button>
             </div>
 
-            <button onclick="logout()" class="bg-red-900/50 border border-red-800 text-red-200 px-4 py-3 rounded-lg w-full hover:bg-red-900 transition flex items-center justify-center gap-2">
+            <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 mb-6">
+                <div class="text-xs text-gray-400 mb-1">帳號</div>
+                <div class="text-sm font-mono text-white truncate" id="settings-email">checking...</div>
+            </div>
+
+            <button onclick="logout()" class="bg-red-900/30 border border-red-800/50 text-red-300 px-4 py-3 rounded-lg w-full hover:bg-red-900/50 transition flex items-center justify-center gap-2">
                 <i class="fa-solid fa-right-from-bracket"></i> 登出帳號
             </button>
         </div>
 
         <div id="page-admin" class="page-section hidden">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="text-2xl font-bold text-red-400"><i class="fa-solid fa-shield-halved"></i> 管理員後台</h2>
-                <button onclick="loadAdminLogs()" class="text-xs bg-slate-700 px-3 py-1 rounded hover:bg-slate-600">刷新日誌</button>
+                <h2 class="text-2xl font-bold text-red-400 flex items-center gap-2">
+                    <i class="fa-solid fa-shield-halved"></i> 管理後台
+                </h2>
+                <button onclick="loadAdminLogs()" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded transition">
+                    <i class="fa-solid fa-rotate"></i> 刷新
+                </button>
             </div>
             
-            <div class="bg-slate-800 rounded-xl overflow-hidden border border-slate-700 h-[70vh] flex flex-col">
-                <div class="p-3 bg-slate-900 border-b border-slate-700 font-bold text-sm">
-                    即時答題監控
+            <div class="bg-slate-800 rounded-xl overflow-hidden border border-slate-700 h-[75vh] flex flex-col shadow-2xl">
+                <div class="p-3 bg-slate-900 border-b border-slate-700 font-bold text-xs text-gray-400 uppercase tracking-wider">
+                    即時答題監控日誌
                 </div>
-                <ul id="admin-logs-list" class="overflow-y-auto p-2 space-y-2 flex-1">
-                    <li class="text-center text-gray-500 py-4">點擊刷新載入數據...</li>
+                <ul id="admin-logs-list" class="overflow-y-auto p-2 space-y-2 flex-1 text-sm scrollbar-thin scrollbar-thumb-slate-600">
+                    <li class="text-center text-gray-500 py-10">點擊右上角刷新載入數據...</li>
                 </ul>
             </div>
         </div>
 
     </main>
 
-    <nav id="bottom-nav" class="bg-slate-800 border-t border-slate-700 hidden pb-safe">
+    <nav id="bottom-nav" class="bg-slate-800/90 backdrop-blur-md border-t border-slate-700 fixed bottom-0 w-full z-50 hidden transition-all duration-300">
         <div class="grid h-16 grid-cols-4 mx-auto font-medium" id="nav-grid">
-            <button onclick="switchToPage('page-home')" class="flex flex-col items-center justify-center hover:bg-slate-700 text-gray-400 hover:text-white transition group">
-                <i class="fa-solid fa-house mb-1 text-lg group-hover:text-blue-400"></i>
+            
+            <button onclick="switchToPage('page-home')" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group active-nav-btn" data-target="page-home">
+                <i class="fa-solid fa-house mb-1 text-lg group-hover:text-blue-400 transition-colors"></i>
                 <span class="text-[10px]">首頁</span>
             </button>
-            <button onclick="startQuizFlow()" class="flex flex-col items-center justify-center hover:bg-slate-700 text-gray-400 hover:text-white transition group">
-                <i class="fa-solid fa-swords mb-1 text-lg group-hover:text-red-400"></i>
+            
+            <button onclick="startQuizFlow()" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group" data-target="page-quiz">
+                <i class="fa-solid fa-swords mb-1 text-lg group-hover:text-red-400 transition-colors"></i>
                 <span class="text-[10px]">答題</span>
             </button>
-            <button onclick="loadLeaderboard(); switchToPage('page-rank')" class="flex flex-col items-center justify-center hover:bg-slate-700 text-gray-400 hover:text-white transition group">
-                <i class="fa-solid fa-chart-simple mb-1 text-lg group-hover:text-yellow-400"></i>
+            
+            <button onclick="loadLeaderboard(); switchToPage('page-rank')" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group" data-target="page-rank">
+                <i class="fa-solid fa-chart-simple mb-1 text-lg group-hover:text-yellow-400 transition-colors"></i>
                 <span class="text-[10px]">排行</span>
             </button>
-            <button onclick="switchToPage('page-settings')" class="flex flex-col items-center justify-center hover:bg-slate-700 text-gray-400 hover:text-white transition group">
-                <i class="fa-solid fa-user-gear mb-1 text-lg group-hover:text-green-400"></i>
+            
+            <button onclick="switchToPage('page-settings')" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group" data-target="page-settings">
+                <i class="fa-solid fa-user-gear mb-1 text-lg group-hover:text-green-400 transition-colors"></i>
                 <span class="text-[10px]">設定</span>
             </button>
+
             </div>
     </nav>
 
     <script type="module">
-        // 1. 引入必要的 Firebase 與 Gemini 模組 (CDN)
+        // ----------------------------------------------------
+        // 1. 初始化區
+        // ----------------------------------------------------
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, query, orderBy, limit, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
-        // 2. 設定檔區域
+        // 你的 Firebase 設定 (我已經幫你填好了)
         const firebaseConfig = {
             apiKey: "AIzaSyDifdJmLTmwQATz__xUHSkXZ_xXOWyX-wU",
             authDomain: "question-learning.firebaseapp.com",
@@ -194,17 +219,15 @@
         // ⚠️⚠️⚠️ 請在此填入你的 Gemini API Key ⚠️⚠️⚠️
         const GEMINI_API_KEY = "AIzaSyCVhmPZlA84487vG286-McCm8HBHv3K2Mw"; 
 
-        // 3. 初始化系統
         const app = initializeApp(firebaseConfig);
         const auth = getAuth();
         const db = getFirestore();
         const provider = new GoogleAuthProvider();
         
-        // 檢查 API Key
         let genAI;
+        // 簡單檢查 Key 是否填寫
         if (GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE" || GEMINI_API_KEY === "") {
-            console.error("尚未填寫 Gemini API Key");
-            alert("請編輯程式碼，填入你的 Gemini API Key 才能開始出題！");
+            console.warn("⚠️ 尚未填寫 Gemini API Key");
         } else {
             genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
         }
@@ -213,10 +236,13 @@
         let currentUserData = null;
         const RANKS = ["🥉 青銅", "🥈 白銀", "🥇 黃金", "💎 鉑金", "🔷 鑽石", "🌟 星耀"];
 
-        // 4. 身份驗證邏輯
+        // ----------------------------------------------------
+        // 2. 身份驗證邏輯
+        // ----------------------------------------------------
         window.googleLogin = () => {
             signInWithPopup(auth, provider).catch((error) => {
-                alert("登入失敗: " + error.message);
+                console.error(error);
+                alert("登入失敗，請確認網域是否已加入 Firebase 授權清單。\n錯誤: " + error.code);
             });
         };
 
@@ -226,10 +252,11 @@
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // UI 切換
+                // UI 狀態更新
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('bottom-nav').classList.remove('hidden');
-                document.getElementById('user-info').innerHTML = `<i class="fa-solid fa-user"></i> ${user.displayName}`;
+                document.getElementById('user-info').innerHTML = `<i class="fa-solid fa-user-astronaut"></i> ${user.displayName}`;
+                document.getElementById('settings-email').innerText = user.email;
 
                 // 讀取/創建 User 資料
                 const userRef = doc(db, "users", user.uid);
@@ -246,75 +273,108 @@
                             email: user.email,
                             profile: { interests: "生活常識" },
                             stats: { rankLevel: 0, currentStars: 0, totalScore: 0 },
-                            isAdmin: false
+                            isAdmin: false // 預設不是管理員
                         };
                         await setDoc(userRef, currentUserData);
                     }
                     
-                    // 管理員檢查
+                    // *** 關鍵：檢查管理員權限，動態新增第 5 個分頁 ***
                     checkAdminRole(currentUserData.isAdmin);
                     
-                    // 更新畫面並跳轉首頁
+                    // 更新畫面
                     updateUIStats();
                     switchToPage('page-home');
 
                 } catch (error) {
                     console.error("Firestore Error:", error);
-                    alert("讀取資料失敗，請檢查 Firestore 權限規則 (Rules)。");
+                    alert("讀取資料失敗 (Permission Denied)，請檢查 Firestore Rules。");
                 }
             } else {
+                // 未登入
                 document.getElementById('login-screen').classList.remove('hidden');
                 document.getElementById('bottom-nav').classList.add('hidden');
             }
         });
 
-        // 5. 核心功能：頁面切換與 UI 更新
+        // ----------------------------------------------------
+        // 3. 頁面導航系統
+        // ----------------------------------------------------
         window.switchToPage = (pageId) => {
-            document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active-page', 'hidden'));
-            document.querySelectorAll('.page-section').forEach(el => el.classList.add('hidden'));
-            document.getElementById(pageId).classList.remove('hidden');
-            document.getElementById(pageId).classList.add('active-page');
+            // 隱藏所有頁面
+            document.querySelectorAll('.page-section').forEach(el => {
+                el.classList.remove('active-page', 'hidden');
+                el.classList.add('hidden');
+            });
+            // 顯示目標頁面
+            const target = document.getElementById(pageId);
+            if(target) {
+                target.classList.remove('hidden');
+                target.classList.add('active-page');
+            }
+
+            // 更新底部按鈕顏色狀態
+            document.querySelectorAll('#nav-grid button').forEach(btn => {
+                if (btn.dataset.target === pageId) {
+                    btn.classList.add('text-white');
+                    btn.classList.remove('text-gray-400');
+                } else {
+                    btn.classList.remove('text-white');
+                    btn.classList.add('text-gray-400');
+                }
+            });
         };
 
         function updateUIStats() {
             if(!currentUserData) return;
-            const { rankLevel, currentStars } = currentUserData.stats;
+            const { rankLevel, currentStars, totalScore } = currentUserData.stats;
             
-            document.getElementById('display-rank').innerText = RANKS[rankLevel];
+            document.getElementById('display-rank').innerText = RANKS[rankLevel] || "未知";
             document.getElementById('display-stars').innerText = currentStars;
-            // 計算進度條寬度
-            document.getElementById('progress-bar').style.width = `${(currentStars / 10) * 100}%`;
+            document.getElementById('display-score').innerText = totalScore;
+            
+            // 進度條動畫
+            setTimeout(() => {
+                document.getElementById('progress-bar').style.width = `${(currentStars / 10) * 100}%`;
+            }, 100);
         }
 
+        // 動態新增管理員按鈕
         function checkAdminRole(isAdmin) {
             const navGrid = document.getElementById('nav-grid');
             if (isAdmin && !document.getElementById('btn-admin-nav')) {
+                // 修改 Grid 為 5 欄
                 navGrid.classList.remove('grid-cols-4');
                 navGrid.classList.add('grid-cols-5');
                 
                 const btn = document.createElement('button');
                 btn.id = "btn-admin-nav";
-                btn.className = "flex flex-col items-center justify-center hover:bg-slate-700 text-red-400 transition group";
+                btn.dataset.target = "page-admin";
+                btn.className = "flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-red-400 transition group";
                 btn.onclick = () => { loadAdminLogs(); switchToPage('page-admin'); };
-                btn.innerHTML = `<i class="fa-solid fa-user-shield mb-1 text-lg"></i><span class="text-[10px]">管理</span>`;
+                btn.innerHTML = `
+                    <i class="fa-solid fa-user-shield mb-1 text-lg group-hover:text-red-400 transition-colors"></i>
+                    <span class="text-[10px]">管理</span>
+                `;
                 navGrid.appendChild(btn);
             }
         }
 
-        // 6. 核心功能：AI 出題系統
-        // 6. 核心功能：AI 出題系統 (修正版)
+        // ----------------------------------------------------
+        // 4. AI 出題系統 (核心修正版)
+        // ----------------------------------------------------
         window.startQuizFlow = async () => {
-            if (!genAI) { alert("無效的 API Key"); return; }
+            if (!genAI) { alert("請先在程式碼中填入 Gemini API Key"); return; }
             
             switchToPage('page-quiz');
             document.getElementById('quiz-container').classList.add('hidden');
             document.getElementById('quiz-loading').classList.remove('hidden');
+            document.getElementById('loading-text').innerText = "AI 正在思考題目...";
 
             const rankName = RANKS[currentUserData.stats.rankLevel];
             const interests = currentUserData.profile.interests || "一般常識";
 
             try {
-                // *** 修改點 1: 改用 gemini-1.5-flash，速度快且格式準 ***
+                // 使用 gemini-1.5-flash，速度更快更穩
                 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash"});
                 
                 const prompt = `
@@ -328,14 +388,14 @@
                         "opts": ["選項A", "選項B", "選項C", "選項D"],
                         "ans": 0 
                     }
+                    (ans 是正確選項的索引，0代表A)
                 `;
 
                 const result = await model.generateContent(prompt);
                 const response = result.response;
                 let text = response.text();
 
-                // *** 修改點 2: 強力清洗資料 (防止 AI 多嘴回傳 Markdown) ***
-                // 找出第一個 { 和最後一個 } 之間的內容
+                // 強力清洗資料：只抓取第一個 { 到最後一個 } 之間的內容
                 const jsonMatch = text.match(/\{[\s\S]*\}/);
                 if (jsonMatch) {
                     text = jsonMatch[0];
@@ -343,17 +403,16 @@
 
                 const quizData = JSON.parse(text);
 
-                // 檢查資料欄位是否正確
-                if (!quizData.q || !quizData.opts || quizData.opts.length < 2) {
-                    throw new Error("AI 回傳格式缺少欄位");
+                // 簡單驗證格式
+                if (!quizData.q || !quizData.opts || typeof quizData.ans === 'undefined') {
+                    throw new Error("AI 回傳格式不完整");
                 }
 
                 renderQuiz(quizData, rankName, interests);
 
             } catch (e) {
-                console.error("AI 出題詳細錯誤:", e);
-                // 顯示更清楚的錯誤給你看
-                alert(`出題失敗：${e.message}\n(請按 F12 開啟 Console 查看詳細紅字錯誤)`);
+                console.error("AI Error:", e);
+                alert(`出題失敗：${e.message}\n建議：再試一次，或檢查 API Key 額度。`);
                 switchToPage('page-home');
             }
         };
@@ -366,63 +425,68 @@
             document.getElementById('question-text').innerText = data.q;
             
             const container = document.getElementById('options-container');
-            container.innerHTML = ''; // 清空舊選項
+            container.innerHTML = ''; 
 
             data.opts.forEach((optText, idx) => {
                 const btn = document.createElement('button');
-                btn.className = "w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 flex items-center gap-3";
-                btn.innerHTML = `<span class="bg-slate-800 w-6 h-6 rounded-full flex items-center justify-center text-xs text-gray-400">${String.fromCharCode(65+idx)}</span> <span>${optText}</span>`;
+                btn.className = "w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 flex items-center gap-3 active:scale-95";
+                btn.innerHTML = `
+                    <span class="bg-slate-800 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-blue-400 border border-slate-600">${String.fromCharCode(65+idx)}</span> 
+                    <span class="flex-1">${optText}</span>
+                `;
                 btn.onclick = () => handleAnswer(idx, data.ans, data.q);
                 container.appendChild(btn);
             });
         }
 
-        // 7. 核心功能：結算系統
+        // ----------------------------------------------------
+        // 5. 結算系統
+        // ----------------------------------------------------
         async function handleAnswer(userIdx, correctIdx, questionText) {
             const isCorrect = userIdx === correctIdx;
             let { rankLevel, currentStars, totalScore } = currentUserData.stats;
-            let msg = "";
+            
+            // 播放音效或震動 (可選)
+            if (navigator.vibrate) navigator.vibrate(isCorrect ? 50 : 200);
 
             if (isCorrect) {
                 currentStars++;
-                totalScore += 10 + (rankLevel * 5); // 等級越高分越多
-                msg = "✅ 答對了！";
+                totalScore += 10 + (rankLevel * 5); 
+                alert("✅ 答對了！");
                 
-                // 升階邏輯
+                // 升階
                 if (currentStars >= 10) {
                     if (rankLevel < RANKS.length - 1) {
                         rankLevel++;
                         currentStars = 0;
-                        msg = `🎉 晉升！恭喜來到 ${RANKS[rankLevel]}`;
+                        alert(`🎉 恭喜晉升！來到 ${RANKS[rankLevel]}`);
                     } else {
                         currentStars = 10; // 滿等
                     }
                 }
             } else {
                 currentStars--;
-                msg = "❌ 答錯了...";
+                alert("❌ 答錯了...");
                 
-                // 降階邏輯
+                // 降階
                 if (currentStars < 0) {
                     if (rankLevel > 0) {
                         rankLevel--;
-                        currentStars = 8; // 降級保護
-                        msg = `💔 遺憾降級... 回到 ${RANKS[rankLevel]}`;
+                        currentStars = 8; // 保護機制
+                        alert(`💔 降級... 退回 ${RANKS[rankLevel]}`);
                     } else {
-                        currentStars = 0;
+                        currentStars = 0; // 青銅底限
                     }
                 }
             }
 
-            alert(msg);
-
-            // 更新本地與雲端
+            // 更新本地
             currentUserData.stats = { rankLevel, currentStars, totalScore };
             
-            // 寫入 User
+            // 更新雲端 User
             updateDoc(doc(db, "users", auth.currentUser.uid), { stats: currentUserData.stats });
 
-            // 寫入 Log (非同步，不需等待)
+            // 寫入 Log (背景執行)
             addDoc(collection(db, "exam_logs"), {
                 uid: auth.currentUser.uid,
                 email: auth.currentUser.email,
@@ -430,23 +494,30 @@
                 isCorrect: isCorrect,
                 rankAtTime: RANKS[rankLevel],
                 timestamp: serverTimestamp()
-            });
+            }).catch(e => console.error("Log error:", e));
 
             updateUIStats();
             switchToPage('page-home');
         }
 
-        // 8. 其他功能：設定與排行
+        // ----------------------------------------------------
+        // 6. 其他功能 (排行/設定/管理)
+        // ----------------------------------------------------
         window.saveProfile = async () => {
             const val = document.getElementById('input-interests').value;
+            const btn = document.querySelector('button[onclick="saveProfile()"]');
+            
+            btn.innerText = "儲存中...";
             await updateDoc(doc(db, "users", auth.currentUser.uid), { "profile.interests": val });
             currentUserData.profile.interests = val;
-            alert("設定已儲存！下題生效。");
+            
+            btn.innerText = "儲存成功";
+            setTimeout(() => btn.innerText = "儲存設定", 2000);
         };
 
         window.loadLeaderboard = async () => {
             const tbody = document.getElementById('leaderboard-body');
-            tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-center">載入中...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="3" class="p-8 text-center text-gray-500"><div class="loader"></div></td></tr>';
             
             try {
                 const q = query(collection(db, "users"), orderBy("stats.totalScore", "desc"), limit(10));
@@ -456,16 +527,19 @@
                 let i = 1;
                 snap.forEach(doc => {
                     const d = doc.data();
-                    const isMe = d.uid === auth.currentUser.uid;
+                    const isMe = auth.currentUser && d.uid === auth.currentUser.uid;
                     const row = `
-                        <tr class="border-b border-slate-700 ${isMe ? 'bg-slate-700' : ''}">
-                            <td class="px-4 py-3 font-bold ${i===1?'text-yellow-400':''}">${i}</td>
-                            <td class="px-4 py-3 flex items-center gap-2">
-                                ${i===1 ? '<i class="fa-solid fa-crown text-yellow-500"></i>' : ''}
-                                ${d.displayName}
+                        <tr class="border-b border-slate-700/50 ${isMe ? 'bg-blue-900/20' : ''} hover:bg-slate-700/50 transition">
+                            <td class="px-4 py-4 font-bold ${i===1?'text-yellow-400':(i===2?'text-gray-300':(i===3?'text-orange-400':'text-gray-500'))}">${i}</td>
+                            <td class="px-4 py-4 flex items-center gap-2">
+                                <div class="w-6 h-6 rounded-full bg-slate-700 flex items-center justify-center text-xs text-gray-400">
+                                    <i class="fa-solid fa-user"></i>
+                                </div>
+                                <span class="${isMe ? 'text-blue-300 font-bold' : ''}">${d.displayName}</span>
                             </td>
-                            <td class="px-4 py-3 text-right font-mono text-blue-300">
-                                ${RANKS[d.stats.rankLevel]} <span class="text-xs text-gray-500">(${d.stats.totalScore}分)</span>
+                            <td class="px-4 py-4 text-right font-mono text-blue-300">
+                                ${RANKS[d.stats.rankLevel] || "青銅"} 
+                                <span class="text-xs text-gray-500 block">${d.stats.totalScore} pts</span>
                             </td>
                         </tr>
                     `;
@@ -473,40 +547,44 @@
                     i++;
                 });
             } catch (e) {
-                tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-red-400 text-center">無法讀取排行榜 (請檢查 Rules)</td></tr>';
+                console.error(e);
+                tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-red-400 text-center">無法讀取排行榜</td></tr>';
             }
         };
 
         window.loadAdminLogs = async () => {
             const ul = document.getElementById('admin-logs-list');
-            ul.innerHTML = '<li class="text-center py-4">載入中...</li>';
+            ul.innerHTML = '<li class="text-center py-10"><div class="loader"></div></li>';
             
-            const q = query(collection(db, "exam_logs"), orderBy("timestamp", "desc"), limit(30));
-            const snap = await getDocs(q);
-            
-            ul.innerHTML = '';
-            snap.forEach(doc => {
-                const log = doc.data();
-                const time = log.timestamp ? new Date(log.timestamp.toDate()).toLocaleTimeString() : '--:--';
-                const statusClass = log.isCorrect ? 'border-green-500 bg-green-900/20' : 'border-red-500 bg-red-900/20';
+            try {
+                const q = query(collection(db, "exam_logs"), orderBy("timestamp", "desc"), limit(30));
+                const snap = await getDocs(q);
                 
-                const li = document.createElement('li');
-                li.className = `p-3 rounded text-xs border-l-4 mb-2 ${statusClass}`;
-                li.innerHTML = `
-                    <div class="flex justify-between mb-1 font-bold">
-                        <span>${log.email}</span>
-                        <span class="text-gray-400 font-mono">${time}</span>
-                    </div>
-                    <div class="text-gray-300 mb-2">${log.question}</div>
-                    <div class="flex justify-between items-center">
-                        <span class="bg-slate-700 px-2 rounded">${log.rankAtTime}</span>
-                        <span class="${log.isCorrect ? 'text-green-400' : 'text-red-400'} font-bold">
-                            ${log.isCorrect ? 'CORRECT' : 'WRONG'}
-                        </span>
-                    </div>
-                `;
-                ul.appendChild(li);
-            });
+                ul.innerHTML = '';
+                snap.forEach(doc => {
+                    const log = doc.data();
+                    const time = log.timestamp ? new Date(log.timestamp.toDate()).toLocaleTimeString() : '--:--';
+                    
+                    const li = document.createElement('li');
+                    li.className = `p-3 rounded-lg text-xs border-l-4 mb-2 bg-slate-700/50 ${log.isCorrect ? 'border-green-500' : 'border-red-500'}`;
+                    li.innerHTML = `
+                        <div class="flex justify-between mb-1">
+                            <span class="font-bold text-gray-300 truncate w-2/3">${log.email}</span>
+                            <span class="text-gray-500 font-mono">${time}</span>
+                        </div>
+                        <div class="text-gray-400 mb-2 line-clamp-2">${log.question}</div>
+                        <div class="flex justify-between items-center bg-slate-900/50 p-1 rounded">
+                            <span class="text-gray-400">${log.rankAtTime}</span>
+                            <span class="${log.isCorrect ? 'text-green-400' : 'text-red-400'} font-bold px-2 py-0.5 rounded">
+                                ${log.isCorrect ? 'CORRECT' : 'WRONG'}
+                            </span>
+                        </div>
+                    `;
+                    ul.appendChild(li);
+                });
+            } catch (e) {
+                ul.innerHTML = '<li class="text-center text-red-400 py-4">讀取失敗 (權限不足)</li>';
+            }
         };
     </script>
 </body>
