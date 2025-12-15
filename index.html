@@ -1,90 +1,499 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { createPageUrl } from '@/utils';
-import { Zap, Settings, Home, Trophy } from 'lucide-react';
-import { cn } from '@/lib/utils';
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 每日升階答題戰</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .page-section { display: none; } /* 預設隱藏所有頁面 */
+        .active-page { display: block; } /* 顯示當前頁面 */
+        body { background-color: #0f172a; color: white; }
+        /* 簡單的載入動畫 */
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="font-sans h-screen flex flex-col overflow-hidden">
 
-export default function Layout({ children, currentPageName }) {
-  const navItems = [
-    { name: 'Home', label: '首頁', icon: Home },
-    { name: 'Game', label: '答題', icon: Zap },
-    { name: 'Leaderboard', label: '排行榜', icon: Trophy },
-    { name: 'Settings', label: '設定', icon: Settings },
-    { name: 'Admin', label: '管理', icon: Settings, adminOnly: true },
-  ];
+    <header class="p-4 bg-slate-800 shadow-lg flex justify-between items-center z-10">
+        <h1 class="text-xl font-bold text-yellow-400"><i class="fa-solid fa-crown"></i> AI 升階戰</h1>
+        <div id="user-info" class="text-xs text-gray-300">未登入</div>
+    </header>
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-pink-50">
-      {/* Desktop Header */}
-      <header className="hidden md:block sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-slate-200/50">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link to={createPageUrl('Home')} className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
-              <Zap className="w-6 h-6 text-white" />
+    <main class="flex-1 overflow-y-auto p-4 relative scroll-smooth">
+        
+        <div id="login-screen" class="flex flex-col items-center justify-center h-full">
+            <div class="text-center mb-8">
+                <i class="fa-solid fa-dragon text-6xl text-yellow-500 mb-4"></i>
+                <h2 class="text-3xl font-bold">歡迎來到答題戰場</h2>
+                <p class="text-gray-400 mt-2">挑戰 AI 出題，從青銅邁向星耀</p>
             </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-              智慧答題
-            </span>
-          </Link>
-          
-          <nav className="flex items-center gap-1">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = currentPageName === item.name;
-              return (
-                <Link
-                  key={item.name}
-                  to={createPageUrl(item.name)}
-                  className={cn(
-                    "flex items-center gap-2 px-4 py-2 rounded-full transition-all",
-                    isActive 
-                      ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-500/25" 
-                      : "text-slate-600 hover:bg-slate-100"
-                  )}
-                >
-                  <Icon className="w-4 h-4" />
-                  <span className="font-medium">{item.label}</span>
-                </Link>
-              );
-            })}
-          </nav>
+            <button onclick="googleLogin()" class="bg-white text-gray-800 hover:bg-gray-100 px-8 py-3 rounded-full font-bold shadow-lg transition flex items-center gap-2">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-6 h-6">
+                使用 Google 登入
+            </button>
         </div>
-      </header>
 
-      {/* Main Content */}
-      <main className="pb-20 md:pb-8">
-        {children}
-      </main>
-
-      {/* Mobile Bottom Navigation */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-lg border-t border-slate-200/50 safe-area-pb">
-        <div className="flex items-center justify-around py-2">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = currentPageName === item.name;
-            return (
-              <Link
-                key={item.name}
-                to={createPageUrl(item.name)}
-                className={cn(
-                  "flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-all",
-                  isActive 
-                    ? "text-purple-600" 
-                    : "text-slate-400"
-                )}
-              >
-                <div className={cn(
-                  "p-2 rounded-xl transition-all",
-                  isActive && "bg-purple-100"
-                )}>
-                  <Icon className="w-5 h-5" />
+        <div id="page-home" class="page-section hidden">
+            <div class="bg-slate-800 p-8 rounded-2xl shadow-xl text-center border border-slate-700">
+                <div class="text-gray-400 text-sm mb-2">當前段位</div>
+                <h2 class="text-4xl font-black mb-2 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500" id="display-rank">讀取中...</h2>
+                
+                <div class="flex justify-center items-center gap-2 mt-4 text-gray-300">
+                    <i class="fa-solid fa-star text-yellow-400"></i>
+                    <span>階段: <span id="display-stars" class="font-bold text-white">0</span>/10</span>
                 </div>
-                <span className="text-xs font-medium">{item.label}</span>
-              </Link>
-            );
-          })}
+
+                <div class="w-full bg-slate-900 rounded-full h-4 mt-4 overflow-hidden border border-slate-600">
+                    <div id="progress-bar" class="bg-gradient-to-r from-yellow-500 to-orange-600 h-4 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+
+                <button onclick="startQuizFlow()" class="mt-8 bg-blue-600 w-full py-4 rounded-xl text-xl font-bold hover:bg-blue-500 shadow-lg transform active:scale-95 transition">
+                    <i class="fa-solid fa-play"></i> 開始挑戰
+                </button>
+            </div>
+
+            <div class="mt-6">
+                <h3 class="text-sm font-bold text-gray-400 mb-2 uppercase">遊戲說明</h3>
+                <div class="bg-slate-800 p-4 rounded-lg text-sm text-gray-300 space-y-2">
+                    <p>✅ 答對一題：星星 +1</p>
+                    <p>❌ 答錯一題：星星 -1 (可能導致降階)</p>
+                    <p>🎯 滿 10 星：晉升下一個段位</p>
+                </div>
+            </div>
         </div>
-      </nav>
-    </div>
-  );
-}
+
+        <div id="page-quiz" class="page-section hidden">
+            <div id="quiz-loading" class="text-center mt-20 hidden">
+                <div class="loader"></div>
+                <p class="text-xl animate-pulse text-blue-300">AI 考官正在出題中...</p>
+                <p class="text-xs text-gray-500 mt-2">根據您的興趣與等級生成</p>
+            </div>
+
+            <div id="quiz-container" class="hidden">
+                <div class="bg-slate-800 p-6 rounded-xl mb-6 border-l-4 border-blue-500 shadow-lg">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="bg-blue-900 text-blue-200 text-xs font-bold px-2 py-1 rounded" id="quiz-badge">主題</span>
+                        <span class="text-xs text-gray-400">單選題</span>
+                    </div>
+                    <h3 class="text-lg font-bold leading-relaxed" id="question-text">題目載入中...</h3>
+                </div>
+
+                <div id="options-container" class="space-y-3">
+                    </div>
+                
+                <button onclick="switchToPage('page-home')" class="mt-8 text-gray-500 text-sm w-full text-center hover:text-white">放棄並返回</button>
+            </div>
+        </div>
+
+        <div id="page-rank" class="page-section hidden">
+            <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-trophy text-yellow-400"></i> 全服排行榜
+            </h2>
+            <div class="bg-slate-800 rounded-xl overflow-hidden shadow-lg">
+                <table class="w-full text-left text-sm text-gray-300">
+                    <thead class="bg-slate-700 text-gray-100 uppercase text-xs">
+                        <tr>
+                            <th class="px-4 py-3">#</th>
+                            <th class="px-4 py-3">玩家</th>
+                            <th class="px-4 py-3 text-right">段位</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-body">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="page-settings" class="page-section hidden">
+            <h2 class="text-2xl font-bold mb-4">⚙️ 個人檔案</h2>
+            
+            <div class="bg-slate-800 p-6 rounded-xl shadow-lg mb-6">
+                <label class="block mb-2 text-sm font-bold text-blue-300">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> 出題興趣偏好
+                </label>
+                <p class="text-xs text-gray-400 mb-3">AI 會優先針對這些主題出題 (用逗號分隔)</p>
+                <input type="text" id="input-interests" class="bg-slate-900 border border-slate-600 text-white text-sm rounded-lg w-full p-3 focus:ring-blue-500 focus:border-blue-500 outline-none" placeholder="例如：台灣歷史, Javascript, 漫威電影">
+                <button onclick="saveProfile()" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg w-full font-bold hover:bg-blue-500 transition">
+                    儲存設定
+                </button>
+            </div>
+
+            <button onclick="logout()" class="bg-red-900/50 border border-red-800 text-red-200 px-4 py-3 rounded-lg w-full hover:bg-red-900 transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-right-from-bracket"></i> 登出帳號
+            </button>
+        </div>
+
+        <div id="page-admin" class="page-section hidden">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold text-red-400"><i class="fa-solid fa-shield-halved"></i> 管理員後台</h2>
+                <button onclick="loadAdminLogs()" class="text-xs bg-slate-700 px-3 py-1 rounded hover:bg-slate-600">刷新日誌</button>
+            </div>
+            
+            <div class="bg-slate-800 rounded-xl overflow-hidden border border-slate-700 h-[70vh] flex flex-col">
+                <div class="p-3 bg-slate-900 border-b border-slate-700 font-bold text-sm">
+                    即時答題監控
+                </div>
+                <ul id="admin-logs-list" class="overflow-y-auto p-2 space-y-2 flex-1">
+                    <li class="text-center text-gray-500 py-4">點擊刷新載入數據...</li>
+                </ul>
+            </div>
+        </div>
+
+    </main>
+
+    <nav id="bottom-nav" class="bg-slate-800 border-t border-slate-700 hidden pb-safe">
+        <div class="grid h-16 grid-cols-4 mx-auto font-medium" id="nav-grid">
+            <button onclick="switchToPage('page-home')" class="flex flex-col items-center justify-center hover:bg-slate-700 text-gray-400 hover:text-white transition group">
+                <i class="fa-solid fa-house mb-1 text-lg group-hover:text-blue-400"></i>
+                <span class="text-[10px]">首頁</span>
+            </button>
+            <button onclick="startQuizFlow()" class="flex flex-col items-center justify-center hover:bg-slate-700 text-gray-400 hover:text-white transition group">
+                <i class="fa-solid fa-swords mb-1 text-lg group-hover:text-red-400"></i>
+                <span class="text-[10px]">答題</span>
+            </button>
+            <button onclick="loadLeaderboard(); switchToPage('page-rank')" class="flex flex-col items-center justify-center hover:bg-slate-700 text-gray-400 hover:text-white transition group">
+                <i class="fa-solid fa-chart-simple mb-1 text-lg group-hover:text-yellow-400"></i>
+                <span class="text-[10px]">排行</span>
+            </button>
+            <button onclick="switchToPage('page-settings')" class="flex flex-col items-center justify-center hover:bg-slate-700 text-gray-400 hover:text-white transition group">
+                <i class="fa-solid fa-user-gear mb-1 text-lg group-hover:text-green-400"></i>
+                <span class="text-[10px]">設定</span>
+            </button>
+            </div>
+    </nav>
+
+    <script type="module">
+        // 1. 引入必要的 Firebase 與 Gemini 模組 (CDN)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, query, orderBy, limit, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
+
+        // 2. 設定檔區域
+        const firebaseConfig = {
+            apiKey: "AIzaSyDifdJmLTmwQATz__xUHSkXZ_xXOWyX-wU",
+            authDomain: "question-learning.firebaseapp.com",
+            projectId: "question-learning",
+            storageBucket: "question-learning.firebasestorage.app",
+            messagingSenderId: "1058543232092",
+            appId: "1:1058543232092:web:3fcc40f5f069b6df307299",
+            measurementId: "G-76ER8RGBN7"
+        };
+
+        // ⚠️⚠️⚠️ 請在此填入你的 Gemini API Key ⚠️⚠️⚠️
+        const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY_HERE"; 
+
+        // 3. 初始化系統
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
+        const db = getFirestore();
+        const provider = new GoogleAuthProvider();
+        
+        // 檢查 API Key
+        let genAI;
+        if (GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE" || GEMINI_API_KEY === "") {
+            console.error("尚未填寫 Gemini API Key");
+            alert("請編輯程式碼，填入你的 Gemini API Key 才能開始出題！");
+        } else {
+            genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+        }
+
+        // 遊戲全域變數
+        let currentUserData = null;
+        const RANKS = ["🥉 青銅", "🥈 白銀", "🥇 黃金", "💎 鉑金", "🔷 鑽石", "🌟 星耀"];
+
+        // 4. 身份驗證邏輯
+        window.googleLogin = () => {
+            signInWithPopup(auth, provider).catch((error) => {
+                alert("登入失敗: " + error.message);
+            });
+        };
+
+        window.logout = () => {
+            signOut(auth).then(() => location.reload());
+        };
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // UI 切換
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('bottom-nav').classList.remove('hidden');
+                document.getElementById('user-info').innerHTML = `<i class="fa-solid fa-user"></i> ${user.displayName}`;
+
+                // 讀取/創建 User 資料
+                const userRef = doc(db, "users", user.uid);
+                try {
+                    const docSnap = await getDoc(userRef);
+                    if (docSnap.exists()) {
+                        currentUserData = docSnap.data();
+                        document.getElementById('input-interests').value = currentUserData.profile?.interests || "";
+                    } else {
+                        // 新用戶預設值
+                        currentUserData = {
+                            uid: user.uid,
+                            displayName: user.displayName,
+                            email: user.email,
+                            profile: { interests: "生活常識" },
+                            stats: { rankLevel: 0, currentStars: 0, totalScore: 0 },
+                            isAdmin: false
+                        };
+                        await setDoc(userRef, currentUserData);
+                    }
+                    
+                    // 管理員檢查
+                    checkAdminRole(currentUserData.isAdmin);
+                    
+                    // 更新畫面並跳轉首頁
+                    updateUIStats();
+                    switchToPage('page-home');
+
+                } catch (error) {
+                    console.error("Firestore Error:", error);
+                    alert("讀取資料失敗，請檢查 Firestore 權限規則 (Rules)。");
+                }
+            } else {
+                document.getElementById('login-screen').classList.remove('hidden');
+                document.getElementById('bottom-nav').classList.add('hidden');
+            }
+        });
+
+        // 5. 核心功能：頁面切換與 UI 更新
+        window.switchToPage = (pageId) => {
+            document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active-page', 'hidden'));
+            document.querySelectorAll('.page-section').forEach(el => el.classList.add('hidden'));
+            document.getElementById(pageId).classList.remove('hidden');
+            document.getElementById(pageId).classList.add('active-page');
+        };
+
+        function updateUIStats() {
+            if(!currentUserData) return;
+            const { rankLevel, currentStars } = currentUserData.stats;
+            
+            document.getElementById('display-rank').innerText = RANKS[rankLevel];
+            document.getElementById('display-stars').innerText = currentStars;
+            // 計算進度條寬度
+            document.getElementById('progress-bar').style.width = `${(currentStars / 10) * 100}%`;
+        }
+
+        function checkAdminRole(isAdmin) {
+            const navGrid = document.getElementById('nav-grid');
+            if (isAdmin && !document.getElementById('btn-admin-nav')) {
+                navGrid.classList.remove('grid-cols-4');
+                navGrid.classList.add('grid-cols-5');
+                
+                const btn = document.createElement('button');
+                btn.id = "btn-admin-nav";
+                btn.className = "flex flex-col items-center justify-center hover:bg-slate-700 text-red-400 transition group";
+                btn.onclick = () => { loadAdminLogs(); switchToPage('page-admin'); };
+                btn.innerHTML = `<i class="fa-solid fa-user-shield mb-1 text-lg"></i><span class="text-[10px]">管理</span>`;
+                navGrid.appendChild(btn);
+            }
+        }
+
+        // 6. 核心功能：AI 出題系統
+        window.startQuizFlow = async () => {
+            if (!genAI) { alert("無效的 API Key"); return; }
+            
+            switchToPage('page-quiz');
+            document.getElementById('quiz-container').classList.add('hidden');
+            document.getElementById('quiz-loading').classList.remove('hidden');
+
+            const rankName = RANKS[currentUserData.stats.rankLevel];
+            const interests = currentUserData.profile.interests || "一般常識";
+
+            try {
+                const model = genAI.getGenerativeModel({ model: "gemini-pro"});
+                // Prompt Engineering
+                const prompt = `
+                    你是一個嚴格的遊戲考官。
+                    【目標】生成一個符合等級的單選題。
+                    【玩家等級】${rankName} (青銅極簡 -> 星耀專家級)。
+                    【主題偏好】${interests}。
+                    【格式要求】只回傳純 JSON，不要 Markdown，不要解釋。
+                    
+                    JSON 結構:
+                    {
+                        "q": "題目敘述...",
+                        "opts": ["選項A", "選項B", "選項C", "選項D"],
+                        "ans": 0 
+                    }
+                    (ans 0代表A, 1代表B...)
+                `;
+
+                const result = await model.generateContent(prompt);
+                const text = result.response.text().replace(/```json|```/g, "").trim();
+                const quizData = JSON.parse(text);
+
+                renderQuiz(quizData, rankName, interests);
+
+            } catch (e) {
+                console.error("AI Error:", e);
+                alert("AI 出題失敗 (可能 API Key 額度不足或格式錯誤)，請重試。");
+                switchToPage('page-home');
+            }
+        };
+
+        function renderQuiz(data, rank, topic) {
+            document.getElementById('quiz-loading').classList.add('hidden');
+            document.getElementById('quiz-container').classList.remove('hidden');
+            
+            document.getElementById('quiz-badge').innerText = `${topic} | ${rank}`;
+            document.getElementById('question-text').innerText = data.q;
+            
+            const container = document.getElementById('options-container');
+            container.innerHTML = ''; // 清空舊選項
+
+            data.opts.forEach((optText, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 flex items-center gap-3";
+                btn.innerHTML = `<span class="bg-slate-800 w-6 h-6 rounded-full flex items-center justify-center text-xs text-gray-400">${String.fromCharCode(65+idx)}</span> <span>${optText}</span>`;
+                btn.onclick = () => handleAnswer(idx, data.ans, data.q);
+                container.appendChild(btn);
+            });
+        }
+
+        // 7. 核心功能：結算系統
+        async function handleAnswer(userIdx, correctIdx, questionText) {
+            const isCorrect = userIdx === correctIdx;
+            let { rankLevel, currentStars, totalScore } = currentUserData.stats;
+            let msg = "";
+
+            if (isCorrect) {
+                currentStars++;
+                totalScore += 10 + (rankLevel * 5); // 等級越高分越多
+                msg = "✅ 答對了！";
+                
+                // 升階邏輯
+                if (currentStars >= 10) {
+                    if (rankLevel < RANKS.length - 1) {
+                        rankLevel++;
+                        currentStars = 0;
+                        msg = `🎉 晉升！恭喜來到 ${RANKS[rankLevel]}`;
+                    } else {
+                        currentStars = 10; // 滿等
+                    }
+                }
+            } else {
+                currentStars--;
+                msg = "❌ 答錯了...";
+                
+                // 降階邏輯
+                if (currentStars < 0) {
+                    if (rankLevel > 0) {
+                        rankLevel--;
+                        currentStars = 8; // 降級保護
+                        msg = `💔 遺憾降級... 回到 ${RANKS[rankLevel]}`;
+                    } else {
+                        currentStars = 0;
+                    }
+                }
+            }
+
+            alert(msg);
+
+            // 更新本地與雲端
+            currentUserData.stats = { rankLevel, currentStars, totalScore };
+            
+            // 寫入 User
+            updateDoc(doc(db, "users", auth.currentUser.uid), { stats: currentUserData.stats });
+
+            // 寫入 Log (非同步，不需等待)
+            addDoc(collection(db, "exam_logs"), {
+                uid: auth.currentUser.uid,
+                email: auth.currentUser.email,
+                question: questionText,
+                isCorrect: isCorrect,
+                rankAtTime: RANKS[rankLevel],
+                timestamp: serverTimestamp()
+            });
+
+            updateUIStats();
+            switchToPage('page-home');
+        }
+
+        // 8. 其他功能：設定與排行
+        window.saveProfile = async () => {
+            const val = document.getElementById('input-interests').value;
+            await updateDoc(doc(db, "users", auth.currentUser.uid), { "profile.interests": val });
+            currentUserData.profile.interests = val;
+            alert("設定已儲存！下題生效。");
+        };
+
+        window.loadLeaderboard = async () => {
+            const tbody = document.getElementById('leaderboard-body');
+            tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-center">載入中...</td></tr>';
+            
+            try {
+                const q = query(collection(db, "users"), orderBy("stats.totalScore", "desc"), limit(10));
+                const snap = await getDocs(q);
+                tbody.innerHTML = '';
+                
+                let i = 1;
+                snap.forEach(doc => {
+                    const d = doc.data();
+                    const isMe = d.uid === auth.currentUser.uid;
+                    const row = `
+                        <tr class="border-b border-slate-700 ${isMe ? 'bg-slate-700' : ''}">
+                            <td class="px-4 py-3 font-bold ${i===1?'text-yellow-400':''}">${i}</td>
+                            <td class="px-4 py-3 flex items-center gap-2">
+                                ${i===1 ? '<i class="fa-solid fa-crown text-yellow-500"></i>' : ''}
+                                ${d.displayName}
+                            </td>
+                            <td class="px-4 py-3 text-right font-mono text-blue-300">
+                                ${RANKS[d.stats.rankLevel]} <span class="text-xs text-gray-500">(${d.stats.totalScore}分)</span>
+                            </td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += row;
+                    i++;
+                });
+            } catch (e) {
+                tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-red-400 text-center">無法讀取排行榜 (請檢查 Rules)</td></tr>';
+            }
+        };
+
+        window.loadAdminLogs = async () => {
+            const ul = document.getElementById('admin-logs-list');
+            ul.innerHTML = '<li class="text-center py-4">載入中...</li>';
+            
+            const q = query(collection(db, "exam_logs"), orderBy("timestamp", "desc"), limit(30));
+            const snap = await getDocs(q);
+            
+            ul.innerHTML = '';
+            snap.forEach(doc => {
+                const log = doc.data();
+                const time = log.timestamp ? new Date(log.timestamp.toDate()).toLocaleTimeString() : '--:--';
+                const statusClass = log.isCorrect ? 'border-green-500 bg-green-900/20' : 'border-red-500 bg-red-900/20';
+                
+                const li = document.createElement('li');
+                li.className = `p-3 rounded text-xs border-l-4 mb-2 ${statusClass}`;
+                li.innerHTML = `
+                    <div class="flex justify-between mb-1 font-bold">
+                        <span>${log.email}</span>
+                        <span class="text-gray-400 font-mono">${time}</span>
+                    </div>
+                    <div class="text-gray-300 mb-2">${log.question}</div>
+                    <div class="flex justify-between items-center">
+                        <span class="bg-slate-700 px-2 rounded">${log.rankAtTime}</span>
+                        <span class="${log.isCorrect ? 'text-green-400' : 'text-red-400'} font-bold">
+                            ${log.isCorrect ? 'CORRECT' : 'WRONG'}
+                        </span>
+                    </div>
+                `;
+                ul.appendChild(li);
+            });
+        };
+    </script>
+</body>
+</html>
