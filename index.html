@@ -302,6 +302,7 @@
         }
 
         // 6. 核心功能：AI 出題系統
+        // 6. 核心功能：AI 出題系統 (修正版)
         window.startQuizFlow = async () => {
             if (!genAI) { alert("無效的 API Key"); return; }
             
@@ -313,33 +314,46 @@
             const interests = currentUserData.profile.interests || "一般常識";
 
             try {
-                const model = genAI.getGenerativeModel({ model: "gemini-pro"});
-                // Prompt Engineering
+                // *** 修改點 1: 改用 gemini-1.5-flash，速度快且格式準 ***
+                const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash"});
+                
                 const prompt = `
-                    你是一個嚴格的遊戲考官。
-                    【目標】生成一個符合等級的單選題。
-                    【玩家等級】${rankName} (青銅極簡 -> 星耀專家級)。
-                    【主題偏好】${interests}。
-                    【格式要求】只回傳純 JSON，不要 Markdown，不要解釋。
+                    你是一個嚴格的遊戲出題官。
+                    【任務】請根據玩家興趣"${interests}"與等級"${rankName}"，出一個單選題。
+                    【重要】請直接回傳 JSON 字串，不要包含 \`\`\`json 或任何其他文字。
                     
-                    JSON 結構:
+                    JSON 格式範例：
                     {
                         "q": "題目敘述...",
                         "opts": ["選項A", "選項B", "選項C", "選項D"],
                         "ans": 0 
                     }
-                    (ans 0代表A, 1代表B...)
                 `;
 
                 const result = await model.generateContent(prompt);
-                const text = result.response.text().replace(/```json|```/g, "").trim();
+                const response = result.response;
+                let text = response.text();
+
+                // *** 修改點 2: 強力清洗資料 (防止 AI 多嘴回傳 Markdown) ***
+                // 找出第一個 { 和最後一個 } 之間的內容
+                const jsonMatch = text.match(/\{[\s\S]*\}/);
+                if (jsonMatch) {
+                    text = jsonMatch[0];
+                }
+
                 const quizData = JSON.parse(text);
+
+                // 檢查資料欄位是否正確
+                if (!quizData.q || !quizData.opts || quizData.opts.length < 2) {
+                    throw new Error("AI 回傳格式缺少欄位");
+                }
 
                 renderQuiz(quizData, rankName, interests);
 
             } catch (e) {
-                console.error("AI Error:", e);
-                alert("AI 出題失敗 (可能 API Key 額度不足或格式錯誤)，請重試。");
+                console.error("AI 出題詳細錯誤:", e);
+                // 顯示更清楚的錯誤給你看
+                alert(`出題失敗：${e.message}\n(請按 F12 開啟 Console 查看詳細紅字錯誤)`);
                 switchToPage('page-home');
             }
         };
