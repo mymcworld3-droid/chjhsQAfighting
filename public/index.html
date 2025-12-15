@@ -10,7 +10,6 @@
         .page-section { display: none; } /* 預設隱藏所有頁面 */
         .active-page { display: block; } /* 顯示當前頁面 */
         body { background-color: #0f172a; color: white; }
-        /* 簡單的載入動畫 */
         .loader {
             border: 4px solid #f3f3f3;
             border-top: 4px solid #3498db;
@@ -21,8 +20,18 @@
             margin: 20px auto;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        /* 避免底部導航遮擋內容 */
         .pb-safe { padding-bottom: 5rem; }
+        
+        /* 下拉選單樣式優化 */
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+        }
     </style>
 </head>
 <body class="font-sans h-screen flex flex-col overflow-hidden">
@@ -41,12 +50,49 @@
                 <i class="fa-solid fa-crown text-6xl text-yellow-500 mb-4"></i>
             </div>
             <h2 class="text-3xl font-bold mb-2">歡迎挑戰</h2>
-            <p class="text-gray-400 mb-8 text-sm">AI 出題 x 段位系統 x 全服排行</p>
+            <p class="text-gray-400 mb-8 text-sm">AI 出題 x 客製化學習 x 全服排行</p>
             
             <button onclick="googleLogin()" class="bg-white text-gray-800 hover:bg-gray-100 px-8 py-3 rounded-full font-bold shadow-lg transition flex items-center gap-2 transform hover:scale-105">
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-6 h-6">
                 使用 Google 登入
             </button>
+        </div>
+
+        <div id="page-onboarding" class="page-section hidden absolute top-0 left-0 w-full h-full bg-slate-900 z-50 p-6 overflow-y-auto">
+            <div class="max-w-md mx-auto mt-10">
+                <h2 class="text-2xl font-bold text-blue-400 mb-2">👋 嗨！初次見面</h2>
+                <p class="text-gray-400 mb-6">為了讓 AI 出更適合你的題目，請告訴我關於你的資訊：</p>
+
+                <div class="space-y-6">
+                    <div>
+                        <label class="block mb-2 text-sm font-bold text-white">你是幾年級學生？</label>
+                        <select id="ob-level" class="w-full bg-slate-800 border border-slate-600 text-white rounded-lg p-3 outline-none focus:border-blue-500">
+                            <option value="國小低年級">國小 (低年級)</option>
+                            <option value="國小中年級">國小 (中年級)</option>
+                            <option value="國小高年級">國小 (高年級)</option>
+                            <option value="國中一年級">國中 (一年級)</option>
+                            <option value="國中二年級">國中 (二年級)</option>
+                            <option value="國中三年級">國中 (三年級)</option>
+                            <option value="高中職">高中 / 高職</option>
+                            <option value="大學以上">大學 / 社會人士</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block mb-2 text-sm font-bold text-green-400">你擅長的科目 (或興趣)？</label>
+                        <input type="text" id="ob-strong" class="w-full bg-slate-800 border border-slate-600 text-white rounded-lg p-3 outline-none focus:border-green-500" placeholder="例如：歷史, 英文, 動漫知識">
+                    </div>
+
+                    <div>
+                        <label class="block mb-2 text-sm font-bold text-red-400">你想加強的弱項科目？</label>
+                        <input type="text" id="ob-weak" class="w-full bg-slate-800 border border-slate-600 text-white rounded-lg p-3 outline-none focus:border-red-500" placeholder="例如：數學, 理化">
+                    </div>
+
+                    <button onclick="submitOnboarding()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl shadow-lg transform active:scale-95 transition">
+                        開始我的旅程 🚀
+                    </button>
+                </div>
+            </div>
         </div>
 
         <div id="page-home" class="page-section hidden">
@@ -86,12 +132,12 @@
             <div id="quiz-loading" class="text-center mt-32 hidden">
                 <div class="loader"></div>
                 <h3 class="text-xl font-bold mt-4 text-blue-300">雲端大腦運算中</h3>
-                <p class="text-xs text-gray-500 mt-2" id="loading-text">正在請求後端生成題目...</p>
+                <p class="text-xs text-gray-500 mt-2" id="loading-text">正在根據您的弱項生成題目...</p>
             </div>
 
             <div id="quiz-container" class="hidden">
                 <div class="bg-slate-800 p-6 rounded-xl mb-6 border-t-4 border-blue-500 shadow-lg relative">
-                    <span class="absolute top-4 right-4 bg-slate-900 text-xs px-2 py-1 rounded text-gray-400" id="quiz-badge">歷史 | 青銅</span>
+                    <span class="absolute top-4 right-4 bg-slate-900 text-xs px-2 py-1 rounded text-gray-400" id="quiz-badge">主題 | 等級</span>
                     <div class="text-4xl text-blue-500/20 absolute top-2 left-2"><i class="fa-solid fa-quote-left"></i></div>
                     <h3 class="text-lg font-bold leading-relaxed mt-4 relative z-10" id="question-text">題目載入中...</h3>
                 </div>
@@ -102,6 +148,21 @@
                 <button onclick="switchToPage('page-home')" class="mt-8 py-3 text-gray-500 text-sm w-full text-center hover:text-white border border-transparent hover:border-slate-700 rounded-lg transition">
                     <i class="fa-solid fa-arrow-left"></i> 放棄並返回首頁
                 </button>
+            </div>
+        </div>
+
+        <div id="page-history" class="page-section hidden">
+            <h2 class="text-2xl font-bold mb-4 flex items-center gap-2 text-purple-400">
+                <i class="fa-solid fa-clock-rotate-left"></i> 我的答題紀錄
+            </h2>
+            <div class="bg-slate-800 rounded-xl overflow-hidden border border-slate-700 h-[75vh] flex flex-col shadow-2xl">
+                <div class="p-3 bg-slate-900 border-b border-slate-700 font-bold text-xs text-gray-400 uppercase tracking-wider flex justify-between">
+                    <span>個人學習歷程</span>
+                    <button onclick="loadUserHistory()" class="text-blue-400 hover:text-white transition"><i class="fa-solid fa-rotate"></i></button>
+                </div>
+                <ul id="history-list" class="overflow-y-auto p-2 space-y-2 flex-1 text-sm scrollbar-thin scrollbar-thumb-slate-600">
+                    <li class="text-center text-gray-500 py-10">載入中...</li>
+                </ul>
             </div>
         </div>
 
@@ -127,14 +188,34 @@
         <div id="page-settings" class="page-section hidden">
             <h2 class="text-2xl font-bold mb-4">⚙️ 個人設定</h2>
             
-            <div class="bg-slate-800 p-6 rounded-xl shadow-lg mb-6 border border-slate-700">
-                <label class="block mb-2 text-sm font-bold text-blue-300 flex items-center gap-2">
-                    <i class="fa-solid fa-wand-magic-sparkles"></i> 出題興趣偏好
-                </label>
-                <p class="text-xs text-gray-400 mb-3">AI 會優先針對這些主題出題 (請用逗號分隔)</p>
-                <input type="text" id="input-interests" class="bg-slate-900 border border-slate-600 text-white text-sm rounded-lg w-full p-3 focus:ring-blue-500 focus:border-blue-500 outline-none placeholder-gray-600 transition" placeholder="例如：台灣歷史, Javascript, 漫威電影">
-                <button onclick="saveProfile()" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg w-full font-bold hover:bg-blue-500 transition shadow-lg">
-                    儲存設定
+            <div class="bg-slate-800 p-6 rounded-xl shadow-lg mb-6 border border-slate-700 space-y-4">
+                
+                <div>
+                    <label class="block mb-1 text-sm font-bold text-white">年級 / 身份</label>
+                    <select id="set-level" class="w-full bg-slate-900 border border-slate-600 text-white rounded-lg p-3">
+                        <option value="國小低年級">國小 (低年級)</option>
+                        <option value="國小中年級">國小 (中年級)</option>
+                        <option value="國小高年級">國小 (高年級)</option>
+                        <option value="國中一年級">國中 (一年級)</option>
+                        <option value="國中二年級">國中 (二年級)</option>
+                        <option value="國中三年級">國中 (三年級)</option>
+                        <option value="高中職">高中 / 高職</option>
+                        <option value="大學以上">大學 / 社會人士</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block mb-1 text-sm font-bold text-green-400">擅長科目</label>
+                    <input type="text" id="set-strong" class="bg-slate-900 border border-slate-600 text-white text-sm rounded-lg w-full p-3" placeholder="例如：歷史">
+                </div>
+
+                <div>
+                    <label class="block mb-1 text-sm font-bold text-red-400">弱項 (加強練習)</label>
+                    <input type="text" id="set-weak" class="bg-slate-900 border border-slate-600 text-white text-sm rounded-lg w-full p-3" placeholder="例如：數學">
+                </div>
+
+                <button onclick="saveProfile()" class="mt-2 bg-blue-600 text-white px-4 py-3 rounded-lg w-full font-bold hover:bg-blue-500 transition shadow-lg">
+                    更新設定
                 </button>
             </div>
 
@@ -151,7 +232,7 @@
         <div id="page-admin" class="page-section hidden">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-2xl font-bold text-red-400 flex items-center gap-2">
-                    <i class="fa-solid fa-shield-halved"></i> 管理後台
+                    <i class="fa-solid fa-shield-halved"></i> 管理後台 (全服)
                 </h2>
                 <button onclick="loadAdminLogs()" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded transition">
                     <i class="fa-solid fa-rotate"></i> 刷新
@@ -171,7 +252,7 @@
     </main>
 
     <nav id="bottom-nav" class="bg-slate-800/90 backdrop-blur-md border-t border-slate-700 fixed bottom-0 w-full z-50 hidden transition-all duration-300">
-        <div class="grid h-16 grid-cols-4 mx-auto font-medium" id="nav-grid">
+        <div class="grid h-16 grid-cols-5 mx-auto font-medium" id="nav-grid">
             
             <button onclick="switchToPage('page-home')" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group active-nav-btn" data-target="page-home">
                 <i class="fa-solid fa-house mb-1 text-lg group-hover:text-blue-400 transition-colors"></i>
@@ -183,6 +264,11 @@
                 <span class="text-[10px]">答題</span>
             </button>
             
+            <button onclick="loadUserHistory(); switchToPage('page-history')" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group" data-target="page-history">
+                <i class="fa-solid fa-clock-rotate-left mb-1 text-lg group-hover:text-purple-400 transition-colors"></i>
+                <span class="text-[10px]">紀錄</span>
+            </button>
+
             <button onclick="loadLeaderboard(); switchToPage('page-rank')" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group" data-target="page-rank">
                 <i class="fa-solid fa-chart-simple mb-1 text-lg group-hover:text-yellow-400 transition-colors"></i>
                 <span class="text-[10px]">排行</span>
@@ -193,19 +279,15 @@
                 <span class="text-[10px]">設定</span>
             </button>
 
-            </div>
+        </div>
     </nav>
 
     <script type="module">
-        // ----------------------------------------------------
-        // 1. 初始化區
-        // ----------------------------------------------------
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, query, orderBy, limit, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        // ❌ 不需要再引用 @google/generative-ai 了！
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, query, orderBy, limit, getDocs, serverTimestamp, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // 你的 Firebase 設定
+        // Firebase Config (請確保這跟之前一樣)
         const firebaseConfig = {
             apiKey: "AIzaSyDifdJmLTmwQATz__xUHSkXZ_xXOWyX-wU",
             authDomain: "question-learning.firebaseapp.com",
@@ -221,70 +303,74 @@
         const db = getFirestore();
         const provider = new GoogleAuthProvider();
         
-        // 遊戲全域變數
         let currentUserData = null;
         const RANKS = ["🥉 青銅", "🥈 白銀", "🥇 黃金", "💎 鉑金", "🔷 鑽石", "🌟 星耀"];
 
-        // ----------------------------------------------------
-        // 2. 身份驗證邏輯
-        // ----------------------------------------------------
+        // 登入
         window.googleLogin = () => {
-            signInWithPopup(auth, provider).catch((error) => {
-                console.error(error);
-                alert("登入失敗，請確認網域是否已加入 Firebase 授權清單。\n錯誤: " + error.code);
-            });
+            signInWithPopup(auth, provider).catch((error) => alert("登入失敗: " + error.code));
         };
 
         window.logout = () => {
             signOut(auth).then(() => location.reload());
         };
 
+        // 監聽登入狀態
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // UI 狀態更新
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('bottom-nav').classList.remove('hidden');
                 document.getElementById('user-info').innerHTML = `<i class="fa-solid fa-user-astronaut"></i> ${user.displayName}`;
                 document.getElementById('settings-email').innerText = user.email;
 
-                // 讀取/創建 User 資料
                 const userRef = doc(db, "users", user.uid);
                 try {
                     const docSnap = await getDoc(userRef);
+                    
                     if (docSnap.exists()) {
                         currentUserData = docSnap.data();
-                        document.getElementById('input-interests').value = currentUserData.profile?.interests || "";
                     } else {
-                        // 新用戶預設值
+                        // 初始化資料
                         currentUserData = {
                             uid: user.uid,
                             displayName: user.displayName,
                             email: user.email,
-                            profile: { interests: "生活常識" },
+                            profile: { 
+                                educationLevel: "", // 新欄位
+                                strongSubjects: "", // 新欄位
+                                weakSubjects: ""    // 新欄位
+                            },
                             stats: { rankLevel: 0, currentStars: 0, totalScore: 0 },
                             isAdmin: false
                         };
                         await setDoc(userRef, currentUserData);
                     }
                     
+                    // 填充設定頁面的值
+                    updateSettingsInputs();
+
+                    // 檢查管理員
                     checkAdminRole(currentUserData.isAdmin);
-                    updateUIStats();
-                    switchToPage('page-home');
+
+                    // 檢查是否需要顯示「新手引導」 (如果沒有年級資料)
+                    if (!currentUserData.profile?.educationLevel) {
+                        switchToPage('page-onboarding');
+                    } else {
+                        updateUIStats();
+                        switchToPage('page-home');
+                    }
 
                 } catch (error) {
-                    console.error("Firestore Error:", error);
-                    alert("讀取資料失敗，請檢查 Firestore Rules。");
+                    console.error(error);
+                    alert("資料讀取錯誤");
                 }
             } else {
-                // 未登入
                 document.getElementById('login-screen').classList.remove('hidden');
                 document.getElementById('bottom-nav').classList.add('hidden');
             }
         });
 
-        // ----------------------------------------------------
-        // 3. 頁面導航系統
-        // ----------------------------------------------------
+        // 頁面切換
         window.switchToPage = (pageId) => {
             document.querySelectorAll('.page-section').forEach(el => {
                 el.classList.remove('active-page', 'hidden');
@@ -295,7 +381,8 @@
                 target.classList.remove('hidden');
                 target.classList.add('active-page');
             }
-
+            
+            // 更新導航按鈕狀態
             document.querySelectorAll('#nav-grid button').forEach(btn => {
                 if (btn.dataset.target === pageId) {
                     btn.classList.add('text-white');
@@ -310,21 +397,81 @@
         function updateUIStats() {
             if(!currentUserData) return;
             const { rankLevel, currentStars, totalScore } = currentUserData.stats;
-            
             document.getElementById('display-rank').innerText = RANKS[rankLevel] || "未知";
             document.getElementById('display-stars').innerText = currentStars;
             document.getElementById('display-score').innerText = totalScore;
-            
             setTimeout(() => {
                 document.getElementById('progress-bar').style.width = `${(currentStars / 10) * 100}%`;
             }, 100);
         }
 
+        function updateSettingsInputs() {
+            if (currentUserData && currentUserData.profile) {
+                document.getElementById('set-level').value = currentUserData.profile.educationLevel || "國中一年級";
+                document.getElementById('set-strong').value = currentUserData.profile.strongSubjects || "";
+                document.getElementById('set-weak').value = currentUserData.profile.weakSubjects || "";
+            }
+        }
+
+        // 新手引導提交
+        window.submitOnboarding = async () => {
+            const level = document.getElementById('ob-level').value;
+            const strong = document.getElementById('ob-strong').value;
+            const weak = document.getElementById('ob-weak').value;
+
+            if(!level) { alert("請選擇年級"); return; }
+
+            const btn = document.querySelector('button[onclick="submitOnboarding()"]');
+            btn.innerText = "資料建立中...";
+            
+            // 更新資料庫
+            await updateDoc(doc(db, "users", auth.currentUser.uid), {
+                "profile.educationLevel": level,
+                "profile.strongSubjects": strong,
+                "profile.weakSubjects": weak
+            });
+
+            // 更新本地變數
+            currentUserData.profile.educationLevel = level;
+            currentUserData.profile.strongSubjects = strong;
+            currentUserData.profile.weakSubjects = weak;
+
+            // 同步更新設定頁面
+            updateSettingsInputs();
+
+            updateUIStats();
+            switchToPage('page-home');
+        };
+
+        // 設定頁面保存
+        window.saveProfile = async () => {
+            const level = document.getElementById('set-level').value;
+            const strong = document.getElementById('set-strong').value;
+            const weak = document.getElementById('set-weak').value;
+
+            const btn = document.querySelector('button[onclick="saveProfile()"]');
+            btn.innerText = "儲存中...";
+
+            await updateDoc(doc(db, "users", auth.currentUser.uid), {
+                "profile.educationLevel": level,
+                "profile.strongSubjects": strong,
+                "profile.weakSubjects": weak
+            });
+
+            currentUserData.profile.educationLevel = level;
+            currentUserData.profile.strongSubjects = strong;
+            currentUserData.profile.weakSubjects = weak;
+            
+            btn.innerText = "儲存成功";
+            setTimeout(() => btn.innerText = "更新設定", 2000);
+        };
+
         function checkAdminRole(isAdmin) {
             const navGrid = document.getElementById('nav-grid');
             if (isAdmin && !document.getElementById('btn-admin-nav')) {
-                navGrid.classList.remove('grid-cols-4');
-                navGrid.classList.add('grid-cols-5');
+                // 如果是管理員，把 Grid 變成 6 欄
+                navGrid.classList.remove('grid-cols-5');
+                navGrid.classList.add('grid-cols-6');
                 
                 const btn = document.createElement('button');
                 btn.id = "btn-admin-nav";
@@ -339,11 +486,10 @@
             }
         }
 
-        // ----------------------------------------------------
-        // 4. AI 出題系統 (後端版 - 最重要修改區)
-        // ----------------------------------------------------
+        // ==========================================
+        //  AI 出題 (已整合個人資料)
+        // ==========================================
         window.startQuizFlow = async () => {
-            
             const BACKEND_URL = "/api/generate-quiz";
 
             // 檢查網址有沒有改
@@ -355,14 +501,26 @@
             switchToPage('page-quiz');
             document.getElementById('quiz-container').classList.add('hidden');
             document.getElementById('quiz-loading').classList.remove('hidden');
-            document.getElementById('loading-text').innerText = "雲端大腦運算中...";
+            document.getElementById('loading-text').innerText = "AI 正在分析您的弱項並出題...";
 
             const rankName = RANKS[currentUserData.stats.rankLevel];
-            const interests = currentUserData.profile.interests || "一般常識";
+            
+            // 取出個人資料
+            const level = currentUserData.profile.educationLevel || "一般";
+            const strong = currentUserData.profile.strongSubjects || "無";
+            const weak = currentUserData.profile.weakSubjects || "無";
 
+            // Prompt 整合所有資訊
             const promptText = `
-                你是一個遊戲出題官。
-                任務：根據玩家興趣"${interests}"與等級"${rankName}"，出一個單選題。
+                你是一個專業家教與遊戲出題官。
+                玩家資料：
+                - 年級程度：${level}
+                - 遊戲段位：${rankName}
+                - 擅長科目：${strong}
+                - 弱項科目：${weak}
+
+                任務：請優先針對玩家的「弱項科目」出題，如果弱項不明確則混合出題。難度請符合「年級程度」與「遊戲段位」。
+                
                 要求：只回傳純 JSON 字串，不要 Markdown。
                 格式範例：
                 {
@@ -374,25 +532,16 @@
             `;
 
             try {
-                // 發送請求給我們自己的後端
                 const response = await fetch(BACKEND_URL, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        prompt: promptText
-                    })
+                    body: JSON.stringify({ prompt: promptText })
                 });
 
-                if (!response.ok) {
-                    throw new Error(`Server Error: ${response.status}`);
-                }
+                if (!response.ok) throw new Error(`Server Error: ${response.status}`);
 
                 const data = await response.json();
-                
-                // 後端回傳的是 { text: "AI的文字..." }
                 let aiText = data.text;
-
-                // 清洗資料
                 const jsonMatch = aiText.match(/\{[\s\S]*\}/);
                 if (jsonMatch) aiText = jsonMatch[0];
 
@@ -400,7 +549,9 @@
 
                 if (!quizData.q || !quizData.opts) throw new Error("JSON 格式損壞");
 
-                renderQuiz(quizData, rankName, interests);
+                // 在畫面上顯示這題是針對什麼出的 (簡單判斷)
+                let badgeText = weak !== "無" ? `加強練習: ${weak}` : "綜合測驗";
+                renderQuiz(quizData, rankName, badgeText);
 
             } catch (e) {
                 console.error("Quiz Error:", e);
@@ -412,13 +563,11 @@
         function renderQuiz(data, rank, topic) {
             document.getElementById('quiz-loading').classList.add('hidden');
             document.getElementById('quiz-container').classList.remove('hidden');
-            
             document.getElementById('quiz-badge').innerText = `${topic} | ${rank}`;
             document.getElementById('question-text').innerText = data.q;
             
             const container = document.getElementById('options-container');
             container.innerHTML = ''; 
-
             data.opts.forEach((optText, idx) => {
                 const btn = document.createElement('button');
                 btn.className = "w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 flex items-center gap-3 active:scale-95";
@@ -431,9 +580,6 @@
             });
         }
 
-        // ----------------------------------------------------
-        // 5. 結算系統
-        // ----------------------------------------------------
         async function handleAnswer(userIdx, correctIdx, questionText) {
             const isCorrect = userIdx === correctIdx;
             let { rankLevel, currentStars, totalScore } = currentUserData.stats;
@@ -444,7 +590,6 @@
                 currentStars++;
                 totalScore += 10 + (rankLevel * 5); 
                 alert("✅ 答對了！");
-                
                 if (currentStars >= 10) {
                     if (rankLevel < RANKS.length - 1) {
                         rankLevel++;
@@ -457,7 +602,6 @@
             } else {
                 currentStars--;
                 alert("❌ 答錯了...");
-                
                 if (currentStars < 0) {
                     if (rankLevel > 0) {
                         rankLevel--;
@@ -470,10 +614,8 @@
             }
 
             currentUserData.stats = { rankLevel, currentStars, totalScore };
-            
             updateDoc(doc(db, "users", auth.currentUser.uid), { stats: currentUserData.stats });
 
-            // 寫入 Log
             addDoc(collection(db, "exam_logs"), {
                 uid: auth.currentUser.uid,
                 email: auth.currentUser.email,
@@ -487,19 +629,96 @@
             switchToPage('page-home');
         }
 
-        // ----------------------------------------------------
-        // 6. 其他功能 (排行/設定/管理)
-        // ----------------------------------------------------
-        window.saveProfile = async () => {
-            const val = document.getElementById('input-interests').value;
-            const btn = document.querySelector('button[onclick="saveProfile()"]');
+        // ==========================================
+        //  歷史紀錄 (個人 vs 管理員)
+        // ==========================================
+        
+        // 1. 載入「個人」歷史紀錄 (只看自己的)
+        window.loadUserHistory = async () => {
+            const ul = document.getElementById('history-list');
+            ul.innerHTML = '<li class="text-center py-10"><div class="loader"></div></li>';
             
-            btn.innerText = "儲存中...";
-            await updateDoc(doc(db, "users", auth.currentUser.uid), { "profile.interests": val });
-            currentUserData.profile.interests = val;
+            try {
+                // 查詢條件：uid 是自己，且按照時間排序
+                // ⚠️ 注意：第一次執行可能會在 Console 看到紅色錯誤要求建立索引，請點擊連結建立
+                const q = query(
+                    collection(db, "exam_logs"), 
+                    where("uid", "==", auth.currentUser.uid),
+                    orderBy("timestamp", "desc"), 
+                    limit(20)
+                );
+                
+                const snap = await getDocs(q);
+                ul.innerHTML = '';
+                
+                if (snap.empty) {
+                    ul.innerHTML = '<li class="text-center text-gray-500 py-10">還沒有答題紀錄，快去挑戰吧！</li>';
+                    return;
+                }
+
+                snap.forEach(doc => {
+                    const log = doc.data();
+                    const time = log.timestamp ? new Date(log.timestamp.toDate()).toLocaleString() : '--';
+                    
+                    const li = document.createElement('li');
+                    li.className = `p-3 rounded-lg text-xs border-l-4 mb-2 bg-slate-700/50 ${log.isCorrect ? 'border-green-500' : 'border-red-500'}`;
+                    li.innerHTML = `
+                        <div class="flex justify-between mb-1">
+                            <span class="text-gray-400 font-mono">${time}</span>
+                            <span class="${log.isCorrect ? 'text-green-400' : 'text-red-400'} font-bold">
+                                ${log.isCorrect ? '答對' : '答錯'}
+                            </span>
+                        </div>
+                        <div class="text-white mb-2 text-sm">${log.question}</div>
+                        <div class="text-gray-500 text-right">當時段位: ${log.rankAtTime}</div>
+                    `;
+                    ul.appendChild(li);
+                });
+
+            } catch (e) {
+                console.error(e);
+                if(e.message.includes("requires an index")) {
+                    ul.innerHTML = '<li class="text-center text-yellow-400 py-4 p-4">⚠️ 開發者請注意：<br>Firebase 需要建立複合索引才能進行此查詢。<br>請打開瀏覽器 Console (F12) 點擊連結建立索引。</li>';
+                } else {
+                    ul.innerHTML = '<li class="text-center text-red-400 py-4">讀取失敗</li>';
+                }
+            }
+        };
+
+        // 2. 載入「管理員」監控日誌 (看所有人的)
+        window.loadAdminLogs = async () => {
+            const ul = document.getElementById('admin-logs-list');
+            ul.innerHTML = '<li class="text-center py-10"><div class="loader"></div></li>';
             
-            btn.innerText = "儲存成功";
-            setTimeout(() => btn.innerText = "儲存設定", 2000);
+            try {
+                const q = query(collection(db, "exam_logs"), orderBy("timestamp", "desc"), limit(30));
+                const snap = await getDocs(q);
+                
+                ul.innerHTML = '';
+                snap.forEach(doc => {
+                    const log = doc.data();
+                    const time = log.timestamp ? new Date(log.timestamp.toDate()).toLocaleTimeString() : '--:--';
+                    
+                    const li = document.createElement('li');
+                    li.className = `p-3 rounded-lg text-xs border-l-4 mb-2 bg-slate-700/50 ${log.isCorrect ? 'border-green-500' : 'border-red-500'}`;
+                    li.innerHTML = `
+                        <div class="flex justify-between mb-1">
+                            <span class="font-bold text-gray-300 truncate w-2/3">${log.email}</span>
+                            <span class="text-gray-500 font-mono">${time}</span>
+                        </div>
+                        <div class="text-gray-400 mb-2 line-clamp-2">${log.question}</div>
+                        <div class="flex justify-between items-center bg-slate-900/50 p-1 rounded">
+                            <span class="text-gray-400">${log.rankAtTime}</span>
+                            <span class="${log.isCorrect ? 'text-green-400' : 'text-red-400'} font-bold px-2 py-0.5 rounded">
+                                ${log.isCorrect ? 'CORRECT' : 'WRONG'}
+                            </span>
+                        </div>
+                    `;
+                    ul.appendChild(li);
+                });
+            } catch (e) {
+                ul.innerHTML = '<li class="text-center text-red-400 py-4">讀取失敗 (權限不足)</li>';
+            }
         };
 
         window.loadLeaderboard = async () => {
@@ -536,41 +755,6 @@
             } catch (e) {
                 console.error(e);
                 tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-red-400 text-center">無法讀取排行榜</td></tr>';
-            }
-        };
-
-        window.loadAdminLogs = async () => {
-            const ul = document.getElementById('admin-logs-list');
-            ul.innerHTML = '<li class="text-center py-10"><div class="loader"></div></li>';
-            
-            try {
-                const q = query(collection(db, "exam_logs"), orderBy("timestamp", "desc"), limit(30));
-                const snap = await getDocs(q);
-                
-                ul.innerHTML = '';
-                snap.forEach(doc => {
-                    const log = doc.data();
-                    const time = log.timestamp ? new Date(log.timestamp.toDate()).toLocaleTimeString() : '--:--';
-                    
-                    const li = document.createElement('li');
-                    li.className = `p-3 rounded-lg text-xs border-l-4 mb-2 bg-slate-700/50 ${log.isCorrect ? 'border-green-500' : 'border-red-500'}`;
-                    li.innerHTML = `
-                        <div class="flex justify-between mb-1">
-                            <span class="font-bold text-gray-300 truncate w-2/3">${log.email}</span>
-                            <span class="text-gray-500 font-mono">${time}</span>
-                        </div>
-                        <div class="text-gray-400 mb-2 line-clamp-2">${log.question}</div>
-                        <div class="flex justify-between items-center bg-slate-900/50 p-1 rounded">
-                            <span class="text-gray-400">${log.rankAtTime}</span>
-                            <span class="${log.isCorrect ? 'text-green-400' : 'text-red-400'} font-bold px-2 py-0.5 rounded">
-                                ${log.isCorrect ? 'CORRECT' : 'WRONG'}
-                            </span>
-                        </div>
-                    `;
-                    ul.appendChild(li);
-                });
-            } catch (e) {
-                ul.innerHTML = '<li class="text-center text-red-400 py-4">讀取失敗 (權限不足)</li>';
             }
         };
     </script>
