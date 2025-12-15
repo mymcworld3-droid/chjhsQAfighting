@@ -203,7 +203,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, query, orderBy, limit, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
         // 你的 Firebase 設定 (我已經幫你填好了)
         const firebaseConfig = {
@@ -215,9 +214,6 @@
             appId: "1:1058543232092:web:3fcc40f5f069b6df307299",
             measurementId: "G-76ER8RGBN7"
         };
-
-        // ⚠️⚠️⚠️ 請在此填入你的 Gemini API Key ⚠️⚠️⚠️
-        const GEMINI_API_KEY = "AIzaSyCVhmPZlA84487vG286-McCm8HBHv3K2Mw"; 
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth();
@@ -362,22 +358,20 @@
         // ----------------------------------------------------
         // 4. AI 出題系統 (最終修正版 v3.0)
         // ----------------------------------------------------
-        // 4. AI 出題系統 (修正版：使用 gemini-2.5-flash)
+        // 4. AI 出題系統 (後端版)
         window.startQuizFlow = async () => {
-            // 簡單檢查 Key 是否填寫
-            if (GEMINI_API_KEY.includes("YOUR") || GEMINI_API_KEY.length < 20) {
-                alert("請填入新的 API Key！");
-                return;
-            }
-            
+    
+            // ⚠️ 請將這裡換成你 Render 部署好的網址，後面要加上 /api/generate-quiz
+            const BACKEND_URL = "https://你的專案名稱.onrender.com/api/generate-quiz";
+        
             switchToPage('page-quiz');
             document.getElementById('quiz-container').classList.add('hidden');
             document.getElementById('quiz-loading').classList.remove('hidden');
-            document.getElementById('loading-text').innerText = "Gemini 2.5 正在極速運算中...";
-
+            document.getElementById('loading-text').innerText = "雲端大腦運算中...";
+        
             const rankName = RANKS[currentUserData.stats.rankLevel];
             const interests = currentUserData.profile.interests || "一般常識";
-
+        
             const promptText = `
                 你是一個遊戲出題官。
                 任務：根據玩家興趣"${interests}"與等級"${rankName}"，出一個單選題。
@@ -392,47 +386,37 @@
             `;
 
             try {
-                // *** 這裡修改為你清單中的名稱: gemini-2.5-flash ***
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
-                
-                const response = await fetch(apiUrl, {
+                // 呼叫我們自己的後端，而不是直接呼叫 Google
+                const response = await fetch(BACKEND_URL, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        contents: [{ parts: [{ text: promptText }] }]
+                        prompt: promptText
                     })
                 });
 
                 if (!response.ok) {
-                    const errData = await response.json();
-                    // 針對 429 錯誤做特別提醒
-                    if (response.status === 429) {
-                        throw new Error("已達到今日使用上限 (20次/天)，請明天再來挑戰！");
-                    }
-                    throw new Error(errData.error?.message || `HTTP Error: ${response.status}`);
+                    throw new Error(`Server Error: ${response.status}`);
                 }
 
-                const result = await response.json();
-                
-                if (!result.candidates || !result.candidates[0] || !result.candidates[0].content) {
-                   throw new Error("AI 安全性攔截，請換個題目主題試試");
-                }
+                const data = await response.json();
+        
+                // 後端回傳的結構是 { text: "AI的回應..." }
+                let aiText = data.text;
 
-                let text = result.candidates[0].content.parts[0].text;
+                // 清洗資料
+                const jsonMatch = aiText.match(/\{[\s\S]*\}/);
+                if (jsonMatch) aiText = jsonMatch[0];
 
-                // 清洗資料 (避免 AI 回傳 ```json 開頭)
-                const jsonMatch = text.match(/\{[\s\S]*\}/);
-                if (jsonMatch) text = jsonMatch[0];
+                const quizData = JSON.parse(aiText);
 
-                const quizData = JSON.parse(text);
-
-                if (!quizData.q || !quizData.opts) throw new Error("AI 回傳 JSON 格式損壞");
+                if (!quizData.q || !quizData.opts) throw new Error("JSON 格式損壞");
 
                 renderQuiz(quizData, rankName, interests);
 
             } catch (e) {
-                console.error("AI Error:", e);
-                alert(`出題失敗：${e.message}`);
+                console.error("Quiz Error:", e);
+                alert(`出題失敗，請稍後再試。\n原因: ${e.message}`);
                 switchToPage('page-home');
             }
         };
