@@ -85,8 +85,8 @@
         <div id="page-quiz" class="page-section hidden">
             <div id="quiz-loading" class="text-center mt-32 hidden">
                 <div class="loader"></div>
-                <h3 class="text-xl font-bold mt-4 text-blue-300">AI 考官出題中</h3>
-                <p class="text-xs text-gray-500 mt-2" id="loading-text">正在分析您的興趣與等級...</p>
+                <h3 class="text-xl font-bold mt-4 text-blue-300">雲端大腦運算中</h3>
+                <p class="text-xs text-gray-500 mt-2" id="loading-text">正在請求後端生成題目...</p>
             </div>
 
             <div id="quiz-container" class="hidden">
@@ -203,8 +203,9 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, query, orderBy, limit, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        // ❌ 不需要再引用 @google/generative-ai 了！
 
-        // 你的 Firebase 設定 (我已經幫你填好了)
+        // 你的 Firebase 設定
         const firebaseConfig = {
             apiKey: "AIzaSyDifdJmLTmwQATz__xUHSkXZ_xXOWyX-wU",
             authDomain: "question-learning.firebaseapp.com",
@@ -220,14 +221,6 @@
         const db = getFirestore();
         const provider = new GoogleAuthProvider();
         
-        let genAI;
-        // 簡單檢查 Key 是否填寫
-        if (GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE" || GEMINI_API_KEY === "") {
-            console.warn("⚠️ 尚未填寫 Gemini API Key");
-        } else {
-            genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
-        }
-
         // 遊戲全域變數
         let currentUserData = null;
         const RANKS = ["🥉 青銅", "🥈 白銀", "🥇 黃金", "💎 鉑金", "🔷 鑽石", "🌟 星耀"];
@@ -269,21 +262,18 @@
                             email: user.email,
                             profile: { interests: "生活常識" },
                             stats: { rankLevel: 0, currentStars: 0, totalScore: 0 },
-                            isAdmin: false // 預設不是管理員
+                            isAdmin: false
                         };
                         await setDoc(userRef, currentUserData);
                     }
                     
-                    // *** 關鍵：檢查管理員權限，動態新增第 5 個分頁 ***
                     checkAdminRole(currentUserData.isAdmin);
-                    
-                    // 更新畫面
                     updateUIStats();
                     switchToPage('page-home');
 
                 } catch (error) {
                     console.error("Firestore Error:", error);
-                    alert("讀取資料失敗 (Permission Denied)，請檢查 Firestore Rules。");
+                    alert("讀取資料失敗，請檢查 Firestore Rules。");
                 }
             } else {
                 // 未登入
@@ -296,19 +286,16 @@
         // 3. 頁面導航系統
         // ----------------------------------------------------
         window.switchToPage = (pageId) => {
-            // 隱藏所有頁面
             document.querySelectorAll('.page-section').forEach(el => {
                 el.classList.remove('active-page', 'hidden');
                 el.classList.add('hidden');
             });
-            // 顯示目標頁面
             const target = document.getElementById(pageId);
             if(target) {
                 target.classList.remove('hidden');
                 target.classList.add('active-page');
             }
 
-            // 更新底部按鈕顏色狀態
             document.querySelectorAll('#nav-grid button').forEach(btn => {
                 if (btn.dataset.target === pageId) {
                     btn.classList.add('text-white');
@@ -328,17 +315,14 @@
             document.getElementById('display-stars').innerText = currentStars;
             document.getElementById('display-score').innerText = totalScore;
             
-            // 進度條動畫
             setTimeout(() => {
                 document.getElementById('progress-bar').style.width = `${(currentStars / 10) * 100}%`;
             }, 100);
         }
 
-        // 動態新增管理員按鈕
         function checkAdminRole(isAdmin) {
             const navGrid = document.getElementById('nav-grid');
             if (isAdmin && !document.getElementById('btn-admin-nav')) {
-                // 修改 Grid 為 5 欄
                 navGrid.classList.remove('grid-cols-4');
                 navGrid.classList.add('grid-cols-5');
                 
@@ -356,22 +340,27 @@
         }
 
         // ----------------------------------------------------
-        // 4. AI 出題系統 (最終修正版 v3.0)
+        // 4. AI 出題系統 (後端版 - 最重要修改區)
         // ----------------------------------------------------
-        // 4. AI 出題系統 (後端版)
         window.startQuizFlow = async () => {
-    
-            // ⚠️ 請將這裡換成你 Render 部署好的網址，後面要加上 /api/generate-quiz
-            const BACKEND_URL = "https://你的專案名稱.onrender.com/api/generate-quiz";
-        
+            
+            // 👇👇👇 ⚠️ 請在這裡貼上你 Render 的網址 (記得後面要加 /api/generate-quiz) 👇👇👇
+            const BACKEND_URL = "https://chjhsqafighting.onrender.com/api/generate-quiz";
+
+            // 檢查網址有沒有改
+            if(BACKEND_URL.includes("你的專案名稱")) {
+                alert("請修改程式碼中的 BACKEND_URL 為你的 Render 網址！");
+                return;
+            }
+
             switchToPage('page-quiz');
             document.getElementById('quiz-container').classList.add('hidden');
             document.getElementById('quiz-loading').classList.remove('hidden');
             document.getElementById('loading-text').innerText = "雲端大腦運算中...";
-        
+
             const rankName = RANKS[currentUserData.stats.rankLevel];
             const interests = currentUserData.profile.interests || "一般常識";
-        
+
             const promptText = `
                 你是一個遊戲出題官。
                 任務：根據玩家興趣"${interests}"與等級"${rankName}"，出一個單選題。
@@ -386,7 +375,7 @@
             `;
 
             try {
-                // 呼叫我們自己的後端，而不是直接呼叫 Google
+                // 發送請求給我們自己的後端
                 const response = await fetch(BACKEND_URL, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -400,8 +389,8 @@
                 }
 
                 const data = await response.json();
-        
-                // 後端回傳的結構是 { text: "AI的回應..." }
+                
+                // 後端回傳的是 { text: "AI的文字..." }
                 let aiText = data.text;
 
                 // 清洗資料
@@ -450,7 +439,6 @@
             const isCorrect = userIdx === correctIdx;
             let { rankLevel, currentStars, totalScore } = currentUserData.stats;
             
-            // 播放音效或震動 (可選)
             if (navigator.vibrate) navigator.vibrate(isCorrect ? 50 : 200);
 
             if (isCorrect) {
@@ -458,39 +446,35 @@
                 totalScore += 10 + (rankLevel * 5); 
                 alert("✅ 答對了！");
                 
-                // 升階
                 if (currentStars >= 10) {
                     if (rankLevel < RANKS.length - 1) {
                         rankLevel++;
                         currentStars = 0;
                         alert(`🎉 恭喜晉升！來到 ${RANKS[rankLevel]}`);
                     } else {
-                        currentStars = 10; // 滿等
+                        currentStars = 10;
                     }
                 }
             } else {
                 currentStars--;
                 alert("❌ 答錯了...");
                 
-                // 降階
                 if (currentStars < 0) {
                     if (rankLevel > 0) {
                         rankLevel--;
-                        currentStars = 8; // 保護機制
+                        currentStars = 8;
                         alert(`💔 降級... 退回 ${RANKS[rankLevel]}`);
                     } else {
-                        currentStars = 0; // 青銅底限
+                        currentStars = 0;
                     }
                 }
             }
 
-            // 更新本地
             currentUserData.stats = { rankLevel, currentStars, totalScore };
             
-            // 更新雲端 User
             updateDoc(doc(db, "users", auth.currentUser.uid), { stats: currentUserData.stats });
 
-            // 寫入 Log (背景執行)
+            // 寫入 Log
             addDoc(collection(db, "exam_logs"), {
                 uid: auth.currentUser.uid,
                 email: auth.currentUser.email,
