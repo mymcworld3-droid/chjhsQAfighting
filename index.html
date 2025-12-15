@@ -360,21 +360,18 @@
         }
 
         // ----------------------------------------------------
-        // 4. AI 出題系統 (HTTP 直連版 - 使用 gemini-pro)
+        // 4. AI 出題系統 (最終修正版 v3.0)
         window.startQuizFlow = async () => {
-            // --- 除錯用：確認程式碼是否有更新 ---
-            console.log("正在執行版本 v2.0 (Gemini Pro)"); 
-            
-            // 檢查 API Key
+            // 這裡填入你剛剛申請的「全新專案」的 Key
             if (GEMINI_API_KEY.includes("YOUR") || GEMINI_API_KEY.length < 20) {
-                alert("請先在程式碼中填入正確的 Gemini API Key！");
+                alert("請填入新的 API Key！");
                 return;
             }
             
             switchToPage('page-quiz');
             document.getElementById('quiz-container').classList.add('hidden');
             document.getElementById('quiz-loading').classList.remove('hidden');
-            document.getElementById('loading-text').innerText = "AI 正在思考題目 (v2.0)...";
+            document.getElementById('loading-text').innerText = "AI 正在思考 (v3.0)...";
 
             const rankName = RANKS[currentUserData.stats.rankLevel];
             const interests = currentUserData.profile.interests || "一般常識";
@@ -393,8 +390,8 @@
             `;
 
             try {
-                // *** 關鍵修改：改用 'gemini-pro'，這是最穩定的模型名稱 ***
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`;
+                // *** 使用 gemini-1.5-flash (新專案預設支援這個) ***
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
                 
                 const response = await fetch(apiUrl, {
                     method: "POST",
@@ -406,14 +403,14 @@
 
                 if (!response.ok) {
                     const errData = await response.json();
-                    throw new Error(errData.error?.message || "API 連線失敗");
+                    // 如果這裡報錯，通常是 Key 沒權限
+                    throw new Error(errData.error?.message || `HTTP Error: ${response.status}`);
                 }
 
                 const result = await response.json();
                 
-                // 安全檢查：確認回傳結構
                 if (!result.candidates || !result.candidates[0] || !result.candidates[0].content) {
-                   throw new Error("AI 沒有回傳任何內容 (被安全阻擋或格式錯誤)");
+                   throw new Error("AI 安全性攔截，請換個題目主題試試");
                 }
 
                 let text = result.candidates[0].content.parts[0].text;
@@ -424,13 +421,14 @@
 
                 const quizData = JSON.parse(text);
 
-                if (!quizData.q || !quizData.opts) throw new Error("AI 回傳格式錯誤");
+                if (!quizData.q || !quizData.opts) throw new Error("AI 回傳 JSON 格式損壞");
 
                 renderQuiz(quizData, rankName, interests);
 
             } catch (e) {
                 console.error("AI Error:", e);
-                alert(`出題失敗：${e.message}\n(請確認 API Key 是否正確)`);
+                // 這裡會顯示最真實的錯誤原因
+                alert(`出題失敗：${e.message}\n\n請確認你使用的是「Create API key in NEW project」產生的新 Key！`);
                 switchToPage('page-home');
             }
         };
