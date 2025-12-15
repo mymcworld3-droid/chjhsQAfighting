@@ -14,6 +14,10 @@ app.use(express.json());
 // 注意：這裡我們使用環境變數，絕對不把 Key 寫死在程式碼裡
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
+app.get('/', (req, res) => {
+    res.send('✅ Server is running! API endpoint is at /api/generate-quiz');
+});
+
 app.post('/api/generate-quiz', async (req, res) => {
     try {
         const { prompt } = req.body;
