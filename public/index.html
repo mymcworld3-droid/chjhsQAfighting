@@ -490,7 +490,7 @@
             const rankName = RANKS[currentUserData.stats.rankLevel];
             const level = currentUserData.profile.educationLevel || "一般";
             
-            // 1. 隨機抽選科目
+            // 1. 隨機抽選科目 (這部分邏輯保留在前端，因為是根據用戶資料算的)
             let rawWeakString = currentUserData.profile.weakSubjects || "";
             let targetSubject = "";
             let subjectsArray = rawWeakString.split(/[,，\s]+/).filter(s => s.trim().length > 0);
@@ -502,44 +502,24 @@
                 targetSubject = generalTopics[Math.floor(Math.random() * generalTopics.length)];
             }
 
-            const randomSeed = Math.random().toString(36).substring(7);
-
-            // 2. 指令優化：要求分開回傳正確與錯誤選項
-            const promptText = `
-                [系統指令]
-                角色：專業題庫老師
-                當前任務：出一道單選題。
-                隨機因子：${randomSeed}
-
-                [玩家數據]
-                程度：${level}
-                段位：${rankName}
-                
-                [出題核心要求]
-                1. ⚠️ **指定主題**：請務必針對「${targetSubject}」這個領域出題。
-                2. 若該主題非學科(如動漫)，請出趣味題；若為學科，請結合生活應用。
-                3. 請提供 1 個正確選項，以及 3 個具誘答性的錯誤選項。
-                4. **回傳純 JSON**，格式如下 (不要 Markdown)：
-
-                {
-                    "q": "題目敘述...",
-                    "correct": "正確選項的文字",
-                    "wrong": ["錯誤選項1", "錯誤選項2", "錯誤選項3"],
-                    "exp": "解析：解釋為什麼正確，並補充相關知識..." 
-                }
-            `;
-
+            // ⭐ 2. 發送請求 (現在只傳送參數，不傳 Prompt 字串了)
             const response = await fetch(BACKEND_URL, {
-                method: "POST", headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ prompt: promptText })
+                method: "POST", 
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ 
+                    subject: targetSubject,
+                    level: level,
+                    rank: rankName
+                })
             });
 
             if (!response.ok) throw new Error(`Server Error: ${response.status}`);
             const data = await response.json();
+            
+            // 解析回傳資料
             let aiText = data.text;
             const jsonMatch = aiText.match(/\{[\s\S]*\}/);
             if (jsonMatch) aiText = jsonMatch[0];
-            
             const rawData = JSON.parse(aiText);
             
             if (!rawData.q || !rawData.correct || !Array.isArray(rawData.wrong)) {
