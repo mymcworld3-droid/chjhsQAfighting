@@ -11,60 +11,70 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// ⭐ 初始化 Gemini 2.0 Flash 模型
+// 使用 'gemini-2.0-flash-exp' (目前最快且支援 JSON 模式的版本)
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const model = genAI.getGenerativeModel({ 
+    model: "gemini-2.0-flash-exp", 
+    generationConfig: { responseMimeType: "application/json" } // 強制 JSON 模式
+});
 
 // 根目錄路由
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+// API: 生成測驗題目 (包含重試機制)
 app.post('/api/generate-quiz', async (req, res) => {
-    try {
-        const { prompt } = req.body;
-        if (!prompt) return res.status(400).json({ error: 'Prompt is required' });
+    const { prompt } = req.body;
+    if (!prompt) return res.status(400).json({ error: 'Prompt is required' });
 
-        // 🚨 修正點 1：嘗試改用 "-it" 結尾的模型名稱 (Instruction Tuned)
-        // 如果 gemma-3-27b-it 還是報錯，請暫時改回 gemini-1.5-flash 測試是否為帳號權限問題
-        const modelName = "gemma-3-27b-it"; 
-        
-        console.log(`正在使用模型: ${modelName} 請求中...`);
-        const model = genAI.getGenerativeModel({ model: modelName });
+    // --- 🛡️ 防彈重試機制 ---
+    let attempts = 0;
+    const maxAttempts = 3;
 
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        const text = response.text();
+    while (attempts < maxAttempts) {
+        try {
+            console.log(`[Attempt ${attempts + 1}] Generating quiz with Gemini 2.0...`);
+            
+            const result = await model.generateContent(prompt);
+            const response = await result.response;
+            let text = response.text();
 
-        console.log("✅ 生成成功！");
-        res.json({ text: text });
+            // 強力清洗：移除 Markdown 符號
+            text = text.replace(/```json/g, '').replace(/```/g, '').trim();
 
-    } catch (error) {
-        // 🚨 修正點 2：印出更詳細的錯誤資訊到終端機，方便除錯
-        console.error("❌ Backend Error Details:", error);
-        
-        // 檢查是否為模型不支援
-        let errorMsg = error.message || "Internal Server Error";
-        if (error.message.includes("404") || error.message.includes("not found")) {
-            errorMsg = "找不到指定的模型 (Model not found)。請確認該模型是否有權限使用，或嘗試改回 gemini-1.5-flash。";
+            // 自我驗證：確保是有效的 JSON
+            JSON.parse(text); 
+
+            console.log("✅ 生成成功！");
+            return res.json({ text: text });
+
+        } catch (error) {
+            console.error(`❌ Attempt ${attempts + 1} failed:`, error.message);
+            attempts++;
+            
+            if (attempts === maxAttempts) {
+                let errorMsg = "AI 連線繁忙，請稍後再試。";
+                if (error.message.includes("429")) {
+                    errorMsg = "今日 API 使用額度已達上限 (429)，請明天再來。";
+                } else if (error.message.includes("not found")) {
+                    errorMsg = "找不到 Gemini 2.0 模型，請檢查 API Key 權限。";
+                }
+                return res.status(500).json({ error: errorMsg, details: error.message });
+            }
         }
-
-        res.status(500).json({ error: errorMsg });
     }
 });
 
-// ⭐ 新增：AI 資料清洗 API (把使用者的口語轉成標準科目清單)
+// API: 分析使用者輸入的弱項 (資料清洗)
 app.post('/api/analyze-subjects', async (req, res) => {
     try {
         const { text } = req.body;
         
-        // 如果使用者沒填，直接回傳空字串
         if (!text || text.trim().length === 0) {
             return res.json({ subjects: "" });
         }
-
-        const model = genAI.getGenerativeModel({ 
-            model: "gemini-1.5-flash",
-            generationConfig: { responseMimeType: "application/json" }
-        });
 
         const prompt = `
             任務：分析使用者的輸入文字，提取出「學科」或「知識領域」關鍵字。
@@ -78,6 +88,7 @@ app.post('/api/analyze-subjects', async (req, res) => {
             5. 如果輸入完全無關或無法辨識，回傳 { "subjects": "綜合常識" }
         `;
 
+        // 這裡也使用 Gemini 2.0
         const result = await model.generateContent(prompt);
         const response = await result.response;
         let jsonText = response.text().replace(/```json/g, '').replace(/```/g, '').trim();
