@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -21,6 +20,7 @@
             margin: 20px auto;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        /* 底部留白，避免按鈕被導航擋住 */
         .pb-safe { padding-bottom: 10rem; }
         select {
             -webkit-appearance: none;
@@ -31,13 +31,12 @@
             background-position: right 1rem center;
             background-size: 1em;
         }
-        /* 選項按鈕的狀態樣式 */
         .btn-correct { background-color: #22c55e !important; border-color: #22c55e !important; color: white !important; }
         .btn-wrong { background-color: #ef4444 !important; border-color: #ef4444 !important; color: white !important; }
         .btn-disabled { opacity: 0.6; pointer-events: none; }
     </style>
 </head>
-<body class="font-sans h-screen flex flex-col overflow-hidden">
+<body class="font-sans h-[100dvh] flex flex-col overflow-hidden">
 
     <header class="p-4 bg-slate-800 shadow-lg flex justify-between items-center z-10 border-b border-slate-700">
         <h1 class="text-xl font-bold text-yellow-400 flex items-center gap-2">
@@ -53,7 +52,7 @@
                 <i class="fa-solid fa-crown text-6xl text-yellow-500 mb-4"></i>
             </div>
             <h2 class="text-3xl font-bold mb-2">歡迎挑戰</h2>
-            <p class="text-gray-400 mb-8 text-sm">AI 出題 x 詳細解析 x 全服排行</p>
+            <p class="text-gray-400 mb-8 text-sm">AI 出題 x 極速秒開 x 詳細解析</p>
             <button onclick="googleLogin()" class="bg-white text-gray-800 hover:bg-gray-100 px-8 py-3 rounded-full font-bold shadow-lg transition flex items-center gap-2 transform hover:scale-105">
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-6 h-6">
                 使用 Google 登入
@@ -122,7 +121,7 @@
             <div id="quiz-loading" class="text-center mt-32 hidden">
                 <div class="loader"></div>
                 <h3 class="text-xl font-bold mt-4 text-blue-300">雲端大腦運算中</h3>
-                <p class="text-xs text-gray-500 mt-2" id="loading-text">AI 正在生成題目與解析...</p>
+                <p class="text-xs text-gray-500 mt-2" id="loading-text">AI 正在趕工出題中...</p>
             </div>
 
             <div id="quiz-container" class="hidden">
@@ -132,20 +131,17 @@
                     <h3 class="text-lg font-bold leading-relaxed mt-4 relative z-10" id="question-text">...</h3>
                 </div>
 
-                <div id="options-container" class="space-y-3">
-                    </div>
+                <div id="options-container" class="space-y-3"></div>
 
                 <div id="feedback-section" class="hidden mt-6 bg-slate-800 border border-slate-700 rounded-xl p-5 shadow-2xl animate-fade-in-up">
                     <div class="flex items-center gap-3 mb-3">
                         <div id="feedback-icon" class="text-2xl"></div>
                         <h3 id="feedback-title" class="text-xl font-bold"></h3>
                     </div>
-                    
                     <div class="bg-slate-900/50 p-4 rounded-lg text-sm text-gray-300 leading-relaxed border border-slate-700/50 mb-4">
                         <span class="text-blue-400 font-bold block mb-1"><i class="fa-solid fa-magnifying-glass"></i> AI 解析：</span>
                         <span id="feedback-text"></span>
                     </div>
-
                     <div class="flex gap-3">
                         <button onclick="switchToPage('page-home')" class="flex-1 bg-slate-700 hover:bg-slate-600 text-gray-300 py-3 rounded-lg font-bold transition">
                             返回大廳
@@ -284,6 +280,11 @@
         let currentUserData = null;
         const RANKS = ["🥉 青銅", "🥈 白銀", "🥇 黃金", "💎 鉑金", "🔷 鑽石", "🌟 星耀"];
 
+        // ⭐ 新增：題目緩衝區 (Buffer) ⭐
+        let quizBuffer = [];
+        const BUFFER_SIZE = 2; // 隨時保持 2 題庫存
+        let isFetchingBuffer = false; // 避免同時重複抓
+
         window.googleLogin = () => { signInWithPopup(auth, provider).catch((error) => alert("登入失敗: " + error.code)); };
         window.logout = () => { signOut(auth).then(() => location.reload()); };
 
@@ -317,6 +318,8 @@
                     } else {
                         updateUIStats();
                         switchToPage('page-home');
+                        // ⭐ 登入成功後，立刻開始在背景存題目！
+                        fillBuffer(); 
                     }
                 } catch (error) { console.error(error); alert("資料讀取錯誤"); }
             } else {
@@ -329,7 +332,6 @@
             document.querySelectorAll('.page-section').forEach(el => { el.classList.remove('active-page', 'hidden'); el.classList.add('hidden'); });
             const target = document.getElementById(pageId);
             if(target) { target.classList.remove('hidden'); target.classList.add('active-page'); }
-            
             document.querySelectorAll('#nav-grid button').forEach(btn => {
                 if (btn.dataset.target === pageId) { btn.classList.add('text-white'); btn.classList.remove('text-gray-400'); } 
                 else { btn.classList.remove('text-white'); btn.classList.add('text-gray-400'); }
@@ -360,14 +362,16 @@
             if(!level) { alert("請選擇年級"); return; }
             const btn = document.querySelector('button[onclick="submitOnboarding()"]');
             btn.innerText = "資料建立中...";
-            
-            await updateDoc(doc(db, "users", auth.currentUser.uid), {
-                "profile.educationLevel": level, "profile.strongSubjects": strong, "profile.weakSubjects": weak
-            });
+            await updateDoc(doc(db, "users", auth.currentUser.uid), { "profile.educationLevel": level, "profile.strongSubjects": strong, "profile.weakSubjects": weak });
             currentUserData.profile.educationLevel = level;
             currentUserData.profile.strongSubjects = strong;
             currentUserData.profile.weakSubjects = weak;
+            
             updateSettingsInputs(); updateUIStats(); switchToPage('page-home');
+            
+            // ⭐ 新手引導完成，立刻補貨！
+            quizBuffer = []; // 清空舊的
+            fillBuffer();
         };
 
         window.saveProfile = async () => {
@@ -376,14 +380,16 @@
             const weak = document.getElementById('set-weak').value;
             const btn = document.querySelector('button[onclick="saveProfile()"]');
             btn.innerText = "儲存中...";
-            await updateDoc(doc(db, "users", auth.currentUser.uid), {
-                "profile.educationLevel": level, "profile.strongSubjects": strong, "profile.weakSubjects": weak
-            });
+            await updateDoc(doc(db, "users", auth.currentUser.uid), { "profile.educationLevel": level, "profile.strongSubjects": strong, "profile.weakSubjects": weak });
             currentUserData.profile.educationLevel = level;
             currentUserData.profile.strongSubjects = strong;
             currentUserData.profile.weakSubjects = weak;
             btn.innerText = "儲存成功";
             setTimeout(() => btn.innerText = "更新設定", 2000);
+
+            // ⭐ 設定改變，清空庫存並重新抓題 (因為難度或科目變了)
+            quizBuffer = [];
+            fillBuffer();
         };
 
         function checkAdminRole(isAdmin) {
@@ -401,68 +407,104 @@
         }
 
         // ==========================================
-        //  AI 出題與解析 (已修改)
+        //  ⭐ 核心邏輯：背景緩衝 & 出題 ⭐
         // ==========================================
-        window.startQuizFlow = async () => {
+
+        // 1. 獨立的「抓一題」函式 (不負責 UI)
+        async function fetchOneQuestion() {
             const BACKEND_URL = "/api/generate-quiz";
-            if(BACKEND_URL.includes("你的專案名稱")) { alert("請修改程式碼中的 BACKEND_URL 為你的 Render 網址！"); return; }
-
-            switchToPage('page-quiz');
-            // 重置介面狀態
-            document.getElementById('quiz-container').classList.add('hidden');
-            document.getElementById('feedback-section').classList.add('hidden');
-            document.getElementById('btn-giveup').classList.remove('hidden'); // 顯示放棄按鈕
-            document.getElementById('quiz-loading').classList.remove('hidden');
-            document.getElementById('loading-text').innerText = "AI 正在分析您的弱項並出題...";
-
             const rankName = RANKS[currentUserData.stats.rankLevel];
             const level = currentUserData.profile.educationLevel || "一般";
             const strong = currentUserData.profile.strongSubjects || "無";
             const weak = currentUserData.profile.weakSubjects || "無";
 
             const promptText = `
-                你是一個遊戲出題官。
-                任務：根據玩家資料出一個單選題。
-        
-                【絕對遵守】：
-                1. 只回傳純 JSON 字串。
-                2. 不要使用 Markdown (不要有 \`\`\`json )。
-                3. 不要說任何廢話。
-
-                格式範例：
+                你是一個專業家教與遊戲出題官。
+                玩家資料：年級${level}, 段位${rankName}, 擅長${strong}, 弱項${weak}。
+                任務：針對「弱項科目」出一個單選題，若無則綜合出題。
+                要求：回傳純JSON。格式範例：
                 {
-                    "q": "題目...",
-                    "opts": ["A", "B", "C", "D"],
+                    "q": "題目內容...",
+                    "opts": ["A選項", "B選項", "C選項", "D選項"],
                     "ans": 0,
-                    "exp": "解析..."
+                    "exp": "解析..." 
                 }
-
-                玩家需求：${prompt}
             `;
 
+            const response = await fetch(BACKEND_URL, {
+                method: "POST", headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ prompt: promptText })
+            });
+
+            if (!response.ok) throw new Error(`Server Error: ${response.status}`);
+            const data = await response.json();
+            let aiText = data.text;
+            const jsonMatch = aiText.match(/\{[\s\S]*\}/);
+            if (jsonMatch) aiText = jsonMatch[0];
+            const quizData = JSON.parse(aiText);
+            if (!quizData.q || !quizData.opts) throw new Error("JSON format error");
+
+            return {
+                data: quizData,
+                rank: rankName,
+                badge: weak !== "無" ? `加強: ${weak}` : "綜合測驗"
+            };
+        }
+
+        // 2. 背景補貨員 (默默工作)
+        async function fillBuffer() {
+            if (isFetchingBuffer || quizBuffer.length >= BUFFER_SIZE) return;
+            
+            isFetchingBuffer = true;
+            console.log("📦 背景補貨中...");
             try {
-                const response = await fetch(BACKEND_URL, {
-                    method: "POST", headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ prompt: promptText })
-                });
-
-                if (!response.ok) throw new Error(`Server Error: ${response.status}`);
-
-                const data = await response.json();
-                let aiText = data.text;
-                const jsonMatch = aiText.match(/\{[\s\S]*\}/);
-                if (jsonMatch) aiText = jsonMatch[0];
-
-                const quizData = JSON.parse(aiText);
-                if (!quizData.q || !quizData.opts) throw new Error("JSON 格式損壞");
-
-                let badgeText = weak !== "無" ? `加強: ${weak}` : "綜合測驗";
-                renderQuiz(quizData, rankName, badgeText);
-
+                // 只要庫存不夠，就繼續抓
+                while (quizBuffer.length < BUFFER_SIZE) {
+                    const question = await fetchOneQuestion();
+                    quizBuffer.push(question);
+                    console.log(`✅ 補貨成功！目前庫存: ${quizBuffer.length}`);
+                }
             } catch (e) {
-                console.error("Quiz Error:", e);
-                alert(`出題失敗: ${e.message}`);
-                switchToPage('page-home');
+                console.warn("⚠️ 背景補貨失敗 (網路波動或額度限制)", e);
+            } finally {
+                isFetchingBuffer = false;
+            }
+        }
+
+        // 3. 玩家點擊「開始挑戰」或「下一題」
+        window.startQuizFlow = async () => {
+            const BACKEND_URL = "/api/generate-quiz";
+            if(BACKEND_URL.includes("你的專案名稱")) { alert("請修改程式碼中的 BACKEND_URL 為你的 Render 網址！"); return; }
+
+            switchToPage('page-quiz');
+            // 重置 UI
+            document.getElementById('quiz-container').classList.add('hidden');
+            document.getElementById('feedback-section').classList.add('hidden');
+            document.getElementById('btn-giveup').classList.remove('hidden');
+            
+            // ⭐ 關鍵邏輯：先看倉庫有沒有貨？
+            if (quizBuffer.length > 0) {
+                // 🚀 有貨！秒開！
+                const nextQ = quizBuffer.shift(); // 拿走第一題
+                console.log("🚀 使用庫存題目，剩餘:", quizBuffer.length);
+                renderQuiz(nextQ.data, nextQ.rank, nextQ.badge);
+                
+                // 拿走一題後，倉庫空了，叫補貨員去補貨
+                fillBuffer(); 
+            } else {
+                // 🐢 沒貨 (剛進遊戲，或點太快)，只好現場抓
+                document.getElementById('quiz-loading').classList.remove('hidden');
+                document.getElementById('loading-text').innerText = "正在現場生成題目...";
+                try {
+                    const q = await fetchOneQuestion();
+                    renderQuiz(q.data, q.rank, q.badge);
+                    // 順便叫補貨員去補下一題，避免下次還要等
+                    fillBuffer();
+                } catch (e) {
+                    console.error(e);
+                    alert("出題失敗，請稍後再試。");
+                    switchToPage('page-home');
+                }
             }
         };
 
@@ -482,7 +524,6 @@
                     <span class="bg-slate-800 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-blue-400 border border-slate-600">${String.fromCharCode(65+idx)}</span> 
                     <span class="flex-1">${optText}</span>
                 `;
-                // 傳入解析資料
                 btn.onclick = () => handleAnswer(idx, data.ans, data.q, data.exp);
                 container.appendChild(btn);
             });
@@ -491,21 +532,14 @@
         async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
             const isCorrect = userIdx === correctIdx;
             
-            // 1. 鎖定所有按鈕，不讓重複點擊
             const opts = document.querySelectorAll('[id^="option-btn-"]');
             opts.forEach((btn, idx) => {
-                btn.onclick = null; // 移除點擊事件
-                btn.classList.add('btn-disabled'); // 加上禁用樣式
-                
-                // 標示顏色
-                if (idx === correctIdx) {
-                    btn.classList.add('btn-correct'); // 正確答案顯示綠色
-                } else if (idx === userIdx && !isCorrect) {
-                    btn.classList.add('btn-wrong'); // 選錯的顯示紅色
-                }
+                btn.onclick = null;
+                btn.classList.add('btn-disabled');
+                if (idx === correctIdx) btn.classList.add('btn-correct');
+                else if (idx === userIdx && !isCorrect) btn.classList.add('btn-wrong');
             });
 
-            // 2. 顯示解析區塊
             const fbSection = document.getElementById('feedback-section');
             const fbTitle = document.getElementById('feedback-title');
             const fbIcon = document.getElementById('feedback-icon');
@@ -513,7 +547,7 @@
             const btnGiveUp = document.getElementById('btn-giveup');
 
             fbSection.classList.remove('hidden');
-            btnGiveUp.classList.add('hidden'); // 隱藏放棄按鈕
+            btnGiveUp.classList.add('hidden');
 
             if(isCorrect) {
                 fbTitle.innerText = "回答正確！";
@@ -529,7 +563,6 @@
 
             fbText.innerText = explanation || "AI 未提供詳細解析。";
 
-            // 3. 計算分數邏輯 (後台運算)
             let { rankLevel, currentStars, totalScore } = currentUserData.stats;
             if (isCorrect) {
                 currentStars++;
@@ -538,7 +571,6 @@
                     if (rankLevel < RANKS.length - 1) {
                         rankLevel++;
                         currentStars = 0;
-                        // 升級特效可以在這裡加，這裡先簡單處理
                         fbTitle.innerText += ` (晉升 ${RANKS[rankLevel]}!)`;
                     } else {
                         currentStars = 10;
@@ -570,11 +602,11 @@
             }).catch(e => console.error("Log error:", e));
 
             updateUIStats();
+            
+            // ⭐ 玩家正在看解析，這時候是補貨的最好時機！
+            fillBuffer();
         }
 
-        // ==========================================
-        //  歷史紀錄
-        // ==========================================
         window.loadUserHistory = async () => {
             const ul = document.getElementById('history-list');
             ul.innerHTML = '<li class="text-center py-10"><div class="loader"></div></li>';
@@ -643,4 +675,3 @@
     </script>
 </body>
 </html>
-```
