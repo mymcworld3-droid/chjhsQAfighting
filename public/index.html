@@ -20,7 +20,6 @@
             margin: 20px auto;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        /* 底部留白，避免按鈕被導航擋住 */
         .pb-safe { padding-bottom: 10rem; }
         select {
             -webkit-appearance: none;
@@ -101,7 +100,8 @@
                 <div class="w-full bg-slate-950 rounded-full h-3 mt-6 overflow-hidden border border-slate-700">
                     <div id="progress-bar" class="bg-gradient-to-r from-blue-500 to-purple-600 h-3 rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
                 </div>
-                <button onclick="startQuizFlow()" class="mt-8 bg-blue-600 w-full py-4 rounded-xl text-xl font-bold hover:bg-blue-500 shadow-lg shadow-blue-900/50 transform active:scale-95 transition flex items-center justify-center gap-2">
+                
+                <button id="btn-home-start" onclick="startQuizFlow()" class="mt-8 bg-blue-600 w-full py-4 rounded-xl text-xl font-bold hover:bg-blue-500 shadow-lg shadow-blue-900/50 transform active:scale-95 transition flex items-center justify-center gap-2">
                     <i class="fa-solid fa-play"></i> 開始挑戰
                 </button>
             </div>
@@ -146,14 +146,14 @@
                         <button onclick="switchToPage('page-home')" class="flex-1 bg-slate-700 hover:bg-slate-600 text-gray-300 py-3 rounded-lg font-bold transition">
                             返回大廳
                         </button>
-                        <button onclick="startQuizFlow()" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white py-3 rounded-lg font-bold shadow-lg transition flex justify-center items-center gap-2">
+                        <button onclick="nextQuestion()" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white py-3 rounded-lg font-bold shadow-lg transition flex justify-center items-center gap-2">
                             下一題 <i class="fa-solid fa-arrow-right"></i>
                         </button>
                     </div>
                 </div>
                 
-                <button id="btn-giveup" onclick="switchToPage('page-home')" class="mt-8 py-3 text-gray-500 text-sm w-full text-center hover:text-white border border-transparent hover:border-slate-700 rounded-lg transition">
-                    <i class="fa-solid fa-arrow-left"></i> 放棄並返回首頁
+                <button id="btn-giveup" onclick="giveUpQuiz()" class="mt-8 py-3 text-gray-500 text-sm w-full text-center hover:text-white border border-transparent hover:border-slate-700 rounded-lg transition">
+                    <i class="fa-solid fa-arrow-left"></i> 放棄此題 (換下一題)
                 </button>
             </div>
         </div>
@@ -280,13 +280,16 @@
         let currentUserData = null;
         const RANKS = ["🥉 青銅", "🥈 白銀", "🥇 黃金", "💎 鉑金", "🔷 鑽石", "🌟 星耀"];
 
-        // ⭐ 新增：題目緩衝區 (Buffer) ⭐
         let quizBuffer = [];
-        const BUFFER_SIZE = 2; // 隨時保持 2 題庫存
-        let isFetchingBuffer = false; // 避免同時重複抓
+        const BUFFER_SIZE = 2; 
+        let isFetchingBuffer = false; 
 
         window.googleLogin = () => { signInWithPopup(auth, provider).catch((error) => alert("登入失敗: " + error.code)); };
-        window.logout = () => { signOut(auth).then(() => location.reload()); };
+        window.logout = () => { 
+            // 登出時清空本地暫存題目
+            localStorage.removeItem('currentQuiz');
+            signOut(auth).then(() => location.reload()); 
+        };
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
@@ -313,12 +316,17 @@
                     updateSettingsInputs();
                     checkAdminRole(currentUserData.isAdmin);
 
+                    // 檢查是否有「未完成的題目」
+                    const savedQuiz = localStorage.getItem('currentQuiz');
+                    if(savedQuiz) {
+                        document.getElementById('btn-home-start').innerHTML = `<i class="fa-solid fa-arrow-rotate-left"></i> 繼續上次的挑戰`;
+                    }
+
                     if (!currentUserData.profile?.educationLevel) {
                         switchToPage('page-onboarding');
                     } else {
                         updateUIStats();
                         switchToPage('page-home');
-                        // ⭐ 登入成功後，立刻開始在背景存題目！
                         fillBuffer(); 
                     }
                 } catch (error) { console.error(error); alert("資料讀取錯誤"); }
@@ -368,9 +376,8 @@
             currentUserData.profile.weakSubjects = weak;
             
             updateSettingsInputs(); updateUIStats(); switchToPage('page-home');
-            
-            // ⭐ 新手引導完成，立刻補貨！
-            quizBuffer = []; // 清空舊的
+            localStorage.removeItem('currentQuiz'); // 清空舊題
+            quizBuffer = []; 
             fillBuffer();
         };
 
@@ -387,7 +394,7 @@
             btn.innerText = "儲存成功";
             setTimeout(() => btn.innerText = "更新設定", 2000);
 
-            // ⭐ 設定改變，清空庫存並重新抓題 (因為難度或科目變了)
+            localStorage.removeItem('currentQuiz'); // 設定變更，清空舊題
             quizBuffer = [];
             fillBuffer();
         };
@@ -410,7 +417,6 @@
         //  ⭐ 核心邏輯：背景緩衝 & 出題 ⭐
         // ==========================================
 
-        // 1. 獨立的「抓一題」函式 (不負責 UI)
         async function fetchOneQuestion() {
             const BACKEND_URL = "/api/generate-quiz";
             const rankName = RANKS[currentUserData.stats.rankLevel];
@@ -418,11 +424,17 @@
             const strong = currentUserData.profile.strongSubjects || "無";
             const weak = currentUserData.profile.weakSubjects || "無";
 
+            // ⭐ 優化 Prompt：增加多樣性與隨機指令
             const promptText = `
-                你是一個專業家教與遊戲出題官。
+                你是一個專業家教與創意遊戲出題官。
                 玩家資料：年級${level}, 段位${rankName}, 擅長${strong}, 弱項${weak}。
-                任務：針對「弱項科目」出一個單選題，若無則綜合出題。
-                要求：回傳純JSON。格式範例：
+                
+                任務：出一個單選題。
+                重點要求：
+                1. **請極力避免題目重複**。
+                2. 若針對「弱項科目」出題，請嘗試結合生活應用、冷知識或跨領域概念，不要只是死板的課本題。
+                3. 如果弱項不明確，請隨機挑選有趣的主題（如：科技、歷史趣聞、邏輯推理）。
+                4. 回傳純JSON，格式如下：
                 {
                     "q": "題目內容...",
                     "opts": ["A選項", "B選項", "C選項", "D選項"],
@@ -451,27 +463,21 @@
             };
         }
 
-        // 2. 背景補貨員 (默默工作)
         async function fillBuffer() {
             if (isFetchingBuffer || quizBuffer.length >= BUFFER_SIZE) return;
-            
             isFetchingBuffer = true;
-            console.log("📦 背景補貨中...");
             try {
-                // 只要庫存不夠，就繼續抓
                 while (quizBuffer.length < BUFFER_SIZE) {
                     const question = await fetchOneQuestion();
                     quizBuffer.push(question);
-                    console.log(`✅ 補貨成功！目前庫存: ${quizBuffer.length}`);
                 }
             } catch (e) {
-                console.warn("⚠️ 背景補貨失敗 (網路波動或額度限制)", e);
+                console.warn("⚠️ 背景補貨失敗", e);
             } finally {
                 isFetchingBuffer = false;
             }
         }
 
-        // 3. 玩家點擊「開始挑戰」或「下一題」
         window.startQuizFlow = async () => {
             const BACKEND_URL = "/api/generate-quiz";
             if(BACKEND_URL.includes("你的專案名稱")) { alert("請修改程式碼中的 BACKEND_URL 為你的 Render 網址！"); return; }
@@ -482,23 +488,34 @@
             document.getElementById('feedback-section').classList.add('hidden');
             document.getElementById('btn-giveup').classList.remove('hidden');
             
-            // ⭐ 關鍵邏輯：先看倉庫有沒有貨？
+            // ⭐ 1. 先檢查有沒有「上次沒做完的題目」
+            const savedQuiz = localStorage.getItem('currentQuiz');
+            if (savedQuiz) {
+                console.log("💾 讀取到未完成的題目");
+                const q = JSON.parse(savedQuiz);
+                renderQuiz(q.data, q.rank, q.badge);
+                // 同時背景補貨
+                fillBuffer();
+                return;
+            }
+
+            // ⭐ 2. 若沒存檔，則看 Buffer
             if (quizBuffer.length > 0) {
-                // 🚀 有貨！秒開！
-                const nextQ = quizBuffer.shift(); // 拿走第一題
-                console.log("🚀 使用庫存題目，剩餘:", quizBuffer.length);
-                renderQuiz(nextQ.data, nextQ.rank, nextQ.badge);
+                const nextQ = quizBuffer.shift(); 
+                // 拿到新題目，立刻存檔！
+                localStorage.setItem('currentQuiz', JSON.stringify(nextQ));
                 
-                // 拿走一題後，倉庫空了，叫補貨員去補貨
+                renderQuiz(nextQ.data, nextQ.rank, nextQ.badge);
                 fillBuffer(); 
             } else {
-                // 🐢 沒貨 (剛進遊戲，或點太快)，只好現場抓
                 document.getElementById('quiz-loading').classList.remove('hidden');
                 document.getElementById('loading-text').innerText = "正在現場生成題目...";
                 try {
                     const q = await fetchOneQuestion();
+                    // 拿到新題目，立刻存檔！
+                    localStorage.setItem('currentQuiz', JSON.stringify(q));
+                    
                     renderQuiz(q.data, q.rank, q.badge);
-                    // 順便叫補貨員去補下一題，避免下次還要等
                     fillBuffer();
                 } catch (e) {
                     console.error(e);
@@ -554,11 +571,16 @@
                 fbTitle.className = "text-xl font-bold text-green-400";
                 fbIcon.innerHTML = '<i class="fa-solid fa-circle-check text-green-400"></i>';
                 if (navigator.vibrate) navigator.vibrate(50);
+                
+                // ⭐ 答對了！清除本地暫存，準備下一題
+                localStorage.removeItem('currentQuiz');
             } else {
                 fbTitle.innerText = "回答錯誤...";
                 fbTitle.className = "text-xl font-bold text-red-400";
                 fbIcon.innerHTML = '<i class="fa-solid fa-circle-xmark text-red-400"></i>';
                 if (navigator.vibrate) navigator.vibrate(200);
+                // 答錯不清除暫存？看你設計，這裡我設定為「答錯就算這題結束」，所以也清除
+                localStorage.removeItem('currentQuiz');
             }
 
             fbText.innerText = explanation || "AI 未提供詳細解析。";
@@ -602,10 +624,23 @@
             }).catch(e => console.error("Log error:", e));
 
             updateUIStats();
-            
-            // ⭐ 玩家正在看解析，這時候是補貨的最好時機！
             fillBuffer();
         }
+
+        // 新增：放棄按鈕邏輯
+        window.giveUpQuiz = () => {
+            if(confirm("確定要放棄這題嗎？(將視為答錯扣分)")) {
+                // 視為答錯
+                handleAnswer(-1, -2, document.getElementById('question-text').innerText, "您選擇了放棄此題。");
+                // 強制跳轉下一題的準備狀態 (因為 handleAnswer 會顯示解析，這裡我們稍微改一下流程讓使用者直接看下一題)
+                // 其實直接呼叫 handleAnswer 就會顯示解析與「下一題」按鈕，這樣體驗比較好
+            }
+        };
+        
+        // 新增：下一題按鈕邏輯 (為了語意清晰)
+        window.nextQuestion = () => {
+            startQuizFlow();
+        };
 
         window.loadUserHistory = async () => {
             const ul = document.getElementById('history-list');
