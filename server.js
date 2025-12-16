@@ -15,7 +15,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // 使用 'gemini-2.0-flash-exp' (目前最快且支援 JSON 模式的版本)
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ 
-    model: "gemini-2.0-flash-exp", 
+    model: "gemini-2.0-flash", 
     generationConfig: { responseMimeType: "application/json" } // 強制 JSON 模式
 });
 
