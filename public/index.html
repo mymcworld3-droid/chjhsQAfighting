@@ -20,7 +20,10 @@
             margin: 20px auto;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        /* 底部留白，避免按鈕被導航擋住 */
         .pb-safe { padding-bottom: 10rem; }
+        
         select {
             -webkit-appearance: none;
             -moz-appearance: none;
@@ -30,6 +33,8 @@
             background-position: right 1rem center;
             background-size: 1em;
         }
+        
+        /* 選項按鈕的狀態樣式 */
         .btn-correct { background-color: #22c55e !important; border-color: #22c55e !important; color: white !important; }
         .btn-wrong { background-color: #ef4444 !important; border-color: #ef4444 !important; color: white !important; }
         .btn-disabled { opacity: 0.6; pointer-events: none; }
@@ -80,7 +85,7 @@
                         <input type="text" id="ob-strong" class="w-full bg-slate-800 border border-slate-600 text-white rounded-lg p-3 outline-none focus:border-green-500" placeholder="例如：歷史, 英文">
                     </div>
                     <div>
-                        <label class="block mb-2 text-sm font-bold text-red-400">弱項科目</label>
+                        <label class="block mb-2 text-sm font-bold text-red-400">弱項科目 (AI 將重點出題)</label>
                         <input type="text" id="ob-weak" class="w-full bg-slate-800 border border-slate-600 text-white rounded-lg p-3 outline-none focus:border-red-500" placeholder="例如：數學, 理化">
                     </div>
                     <button onclick="submitOnboarding()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl shadow-lg transform active:scale-95 transition">開始旅程 🚀</button>
@@ -262,6 +267,7 @@
         import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, query, orderBy, limit, getDocs, serverTimestamp, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+        // Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyDifdJmLTmwQATz__xUHSkXZ_xXOWyX-wU",
             authDomain: "question-learning.firebaseapp.com",
@@ -280,13 +286,13 @@
         let currentUserData = null;
         const RANKS = ["🥉 青銅", "🥈 白銀", "🥇 黃金", "💎 鉑金", "🔷 鑽石", "🌟 星耀"];
 
+        // ⭐ 緩衝機制與狀態變數
         let quizBuffer = [];
         const BUFFER_SIZE = 2; 
         let isFetchingBuffer = false; 
 
         window.googleLogin = () => { signInWithPopup(auth, provider).catch((error) => alert("登入失敗: " + error.code)); };
         window.logout = () => { 
-            // 登出時清空本地暫存題目
             localStorage.removeItem('currentQuiz');
             signOut(auth).then(() => location.reload()); 
         };
@@ -316,7 +322,7 @@
                     updateSettingsInputs();
                     checkAdminRole(currentUserData.isAdmin);
 
-                    // 檢查是否有「未完成的題目」
+                    // 檢查存檔
                     const savedQuiz = localStorage.getItem('currentQuiz');
                     if(savedQuiz) {
                         document.getElementById('btn-home-start').innerHTML = `<i class="fa-solid fa-arrow-rotate-left"></i> 繼續上次的挑戰`;
@@ -336,6 +342,7 @@
             }
         });
 
+        // 頁面切換
         window.switchToPage = (pageId) => {
             document.querySelectorAll('.page-section').forEach(el => { el.classList.remove('active-page', 'hidden'); el.classList.add('hidden'); });
             const target = document.getElementById(pageId);
@@ -363,38 +370,96 @@
             }
         }
 
+        // ==========================================
+        //  ⭐ 資料清洗與儲存邏輯 (AI 介入) ⭐
+        // ==========================================
+        async function getCleanSubjects(rawText) {
+            if (!rawText) return "";
+            try {
+                const response = await fetch('/api/analyze-subjects', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: rawText })
+                });
+                const data = await response.json();
+                console.log(`原始輸入: "${rawText}" -> AI清洗後: "${data.subjects}"`);
+                return data.subjects;
+            } catch (e) {
+                console.error("清洗失敗，使用原始資料", e);
+                return rawText; 
+            }
+        }
+
         window.submitOnboarding = async () => {
             const level = document.getElementById('ob-level').value;
-            const strong = document.getElementById('ob-strong').value;
-            const weak = document.getElementById('ob-weak').value;
+            const rawStrong = document.getElementById('ob-strong').value;
+            const rawWeak = document.getElementById('ob-weak').value;
+
             if(!level) { alert("請選擇年級"); return; }
+
             const btn = document.querySelector('button[onclick="submitOnboarding()"]');
-            btn.innerText = "資料建立中...";
-            await updateDoc(doc(db, "users", auth.currentUser.uid), { "profile.educationLevel": level, "profile.strongSubjects": strong, "profile.weakSubjects": weak });
+            const originalText = btn.innerText;
+            btn.innerText = "AI 正在分析您的資料...";
+            btn.disabled = true;
+
+            const cleanStrong = await getCleanSubjects(rawStrong);
+            const cleanWeak = await getCleanSubjects(rawWeak);
+
+            await updateDoc(doc(db, "users", auth.currentUser.uid), { 
+                "profile.educationLevel": level, 
+                "profile.strongSubjects": cleanStrong, 
+                "profile.weakSubjects": cleanWeak 
+            });
+
             currentUserData.profile.educationLevel = level;
-            currentUserData.profile.strongSubjects = strong;
-            currentUserData.profile.weakSubjects = weak;
+            currentUserData.profile.strongSubjects = cleanStrong;
+            currentUserData.profile.weakSubjects = cleanWeak;
             
-            updateSettingsInputs(); updateUIStats(); switchToPage('page-home');
-            localStorage.removeItem('currentQuiz'); // 清空舊題
+            updateSettingsInputs(); 
+            updateUIStats(); 
+            switchToPage('page-home');
+            
+            localStorage.removeItem('currentQuiz');
             quizBuffer = []; 
             fillBuffer();
+
+            btn.innerText = originalText;
+            btn.disabled = false;
         };
 
         window.saveProfile = async () => {
             const level = document.getElementById('set-level').value;
-            const strong = document.getElementById('set-strong').value;
-            const weak = document.getElementById('set-weak').value;
-            const btn = document.querySelector('button[onclick="saveProfile()"]');
-            btn.innerText = "儲存中...";
-            await updateDoc(doc(db, "users", auth.currentUser.uid), { "profile.educationLevel": level, "profile.strongSubjects": strong, "profile.weakSubjects": weak });
-            currentUserData.profile.educationLevel = level;
-            currentUserData.profile.strongSubjects = strong;
-            currentUserData.profile.weakSubjects = weak;
-            btn.innerText = "儲存成功";
-            setTimeout(() => btn.innerText = "更新設定", 2000);
+            const rawStrong = document.getElementById('set-strong').value;
+            const rawWeak = document.getElementById('set-weak').value;
 
-            localStorage.removeItem('currentQuiz'); // 設定變更，清空舊題
+            const btn = document.querySelector('button[onclick="saveProfile()"]');
+            const originalText = btn.innerText;
+            btn.innerText = "AI 正在優化關鍵字...";
+            btn.disabled = true;
+
+            const cleanStrong = await getCleanSubjects(rawStrong);
+            const cleanWeak = await getCleanSubjects(rawWeak);
+
+            document.getElementById('set-strong').value = cleanStrong;
+            document.getElementById('set-weak').value = cleanWeak;
+
+            await updateDoc(doc(db, "users", auth.currentUser.uid), { 
+                "profile.educationLevel": level, 
+                "profile.strongSubjects": cleanStrong, 
+                "profile.weakSubjects": cleanWeak 
+            });
+
+            currentUserData.profile.educationLevel = level;
+            currentUserData.profile.strongSubjects = cleanStrong;
+            currentUserData.profile.weakSubjects = cleanWeak;
+            
+            btn.innerText = "儲存成功！";
+            setTimeout(() => {
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }, 2000);
+
+            localStorage.removeItem('currentQuiz');
             quizBuffer = [];
             fillBuffer();
         };
@@ -414,34 +479,56 @@
         }
 
         // ==========================================
-        //  ⭐ 核心邏輯：背景緩衝 & 出題 ⭐
+        //  ⭐ 核心邏輯：隨機抽題 & 出題 ⭐
         // ==========================================
 
         async function fetchOneQuestion() {
             const BACKEND_URL = "/api/generate-quiz";
             const rankName = RANKS[currentUserData.stats.rankLevel];
             const level = currentUserData.profile.educationLevel || "一般";
-            const strong = currentUserData.profile.strongSubjects || "無";
-            const weak = currentUserData.profile.weakSubjects || "無";
+            
+            // 1. 隨機抽選科目邏輯
+            let rawWeakString = currentUserData.profile.weakSubjects || "";
+            let targetSubject = "";
+            let subjectsArray = rawWeakString.split(/[,，\s]+/).filter(s => s.trim().length > 0);
 
-            // ⭐ 優化 Prompt：增加多樣性與隨機指令
+            if (subjectsArray.length > 0) {
+                targetSubject = subjectsArray[Math.floor(Math.random() * subjectsArray.length)];
+            } else {
+                const generalTopics = [
+                    "台灣歷史", "世界地理", "生活科學", "邏輯推理", 
+                    "國語文常識", "科技新知", "動漫與遊戲", "環境保育"
+                ];
+                targetSubject = generalTopics[Math.floor(Math.random() * generalTopics.length)];
+            }
+
+            const randomSeed = Math.random().toString(36).substring(7);
+
             const promptText = `
-                你是一個專業家教與創意遊戲出題官。
-                段位有分"🥉 青銅", "🥈 白銀", "🥇 黃金", "💎 鉑金", "🔷 鑽石", "🌟 星耀"
-                玩家資料：年級${level}, 段位${rankName}, 擅長${strong}, 弱項${weak}。
+                [系統指令]
+                角色：專業題庫老師
+                當前任務：出一道單選題。
+                隨機因子：${randomSeed}
+
+                [玩家數據]
+                程度：${level}
+                段位：${rankName}
                 
-                任務：出一個單選題。
-                重點要求：
-                1. **請極力避免題目重複**。
-                2. 若針對「弱項科目」出題，針對考試題目為主，隨幾選一個弱項為主題，並跳過並非課業的弱項。
-                3. 如果弱項不明確，請隨機挑選有趣的主題（如：科技、歷史趣聞、邏輯推理）。
-                4. 回傳純JSON，格式如下：
+                [出題核心要求]
+                1. ⚠️ **指定主題**：請務必針對「${targetSubject}」這個領域出題。
+                2. 若該主題非學科(如動漫)，請出趣味題；若為學科，請結合生活應用。
+                3. **選項位置隨機**：正確答案不要固定在某個選項。
+                4. 不要出重複的考古題。
+                5. 回傳純 JSON，不要 Markdown。
+
+                [JSON 結構]
                 {
-                    "q": "題目內容...",
-                    "opts": ["A選項", "B選項", "C選項", "D選項"],
-                    "ans": 0,
+                    "q": "題目...",
+                    "opts": ["選項A", "選項B", "選項C", "選項D"],
+                    "ans": 0, 
                     "exp": "解析..." 
                 }
+                (ans: 0=A, 1=B...)
             `;
 
             const response = await fetch(BACKEND_URL, {
@@ -455,12 +542,13 @@
             const jsonMatch = aiText.match(/\{[\s\S]*\}/);
             if (jsonMatch) aiText = jsonMatch[0];
             const quizData = JSON.parse(aiText);
+            
             if (!quizData.q || !quizData.opts) throw new Error("JSON format error");
 
             return {
                 data: quizData,
                 rank: rankName,
-                badge: weak !== "無" ? `加強: ${weak}` : "綜合測驗"
+                badge: `🎯 專項特訓: ${targetSubject}`
             };
         }
 
@@ -484,28 +572,22 @@
             if(BACKEND_URL.includes("你的專案名稱")) { alert("請修改程式碼中的 BACKEND_URL 為你的 Render 網址！"); return; }
 
             switchToPage('page-quiz');
-            // 重置 UI
             document.getElementById('quiz-container').classList.add('hidden');
             document.getElementById('feedback-section').classList.add('hidden');
             document.getElementById('btn-giveup').classList.remove('hidden');
             
-            // ⭐ 1. 先檢查有沒有「上次沒做完的題目」
             const savedQuiz = localStorage.getItem('currentQuiz');
             if (savedQuiz) {
                 console.log("💾 讀取到未完成的題目");
                 const q = JSON.parse(savedQuiz);
                 renderQuiz(q.data, q.rank, q.badge);
-                // 同時背景補貨
                 fillBuffer();
                 return;
             }
 
-            // ⭐ 2. 若沒存檔，則看 Buffer
             if (quizBuffer.length > 0) {
                 const nextQ = quizBuffer.shift(); 
-                // 拿到新題目，立刻存檔！
                 localStorage.setItem('currentQuiz', JSON.stringify(nextQ));
-                
                 renderQuiz(nextQ.data, nextQ.rank, nextQ.badge);
                 fillBuffer(); 
             } else {
@@ -513,9 +595,7 @@
                 document.getElementById('loading-text').innerText = "正在現場生成題目...";
                 try {
                     const q = await fetchOneQuestion();
-                    // 拿到新題目，立刻存檔！
                     localStorage.setItem('currentQuiz', JSON.stringify(q));
-                    
                     renderQuiz(q.data, q.rank, q.badge);
                     fillBuffer();
                 } catch (e) {
@@ -572,15 +652,12 @@
                 fbTitle.className = "text-xl font-bold text-green-400";
                 fbIcon.innerHTML = '<i class="fa-solid fa-circle-check text-green-400"></i>';
                 if (navigator.vibrate) navigator.vibrate(50);
-                
-                // ⭐ 答對了！清除本地暫存，準備下一題
                 localStorage.removeItem('currentQuiz');
             } else {
                 fbTitle.innerText = "回答錯誤...";
                 fbTitle.className = "text-xl font-bold text-red-400";
                 fbIcon.innerHTML = '<i class="fa-solid fa-circle-xmark text-red-400"></i>';
                 if (navigator.vibrate) navigator.vibrate(200);
-                // 答錯不清除暫存？看你設計，這裡我設定為「答錯就算這題結束」，所以也清除
                 localStorage.removeItem('currentQuiz');
             }
 
@@ -628,17 +705,12 @@
             fillBuffer();
         }
 
-        // 新增：放棄按鈕邏輯
         window.giveUpQuiz = () => {
             if(confirm("確定要放棄這題嗎？(將視為答錯扣分)")) {
-                // 視為答錯
                 handleAnswer(-1, -2, document.getElementById('question-text').innerText, "您選擇了放棄此題。");
-                // 強制跳轉下一題的準備狀態 (因為 handleAnswer 會顯示解析，這裡我們稍微改一下流程讓使用者直接看下一題)
-                // 其實直接呼叫 handleAnswer 就會顯示解析與「下一題」按鈕，這樣體驗比較好
             }
         };
         
-        // 新增：下一題按鈕邏輯 (為了語意清晰)
         window.nextQuestion = () => {
             startQuizFlow();
         };
