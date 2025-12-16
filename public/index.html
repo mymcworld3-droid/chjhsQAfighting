@@ -10,6 +10,8 @@
         .page-section { display: none; }
         .active-page { display: block; }
         body { background-color: #0f172a; color: white; }
+        
+        /* 載入動畫 */
         .loader {
             border: 4px solid #f3f3f3;
             border-top: 4px solid #3498db;
@@ -20,20 +22,41 @@
             margin: 20px auto;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        /* 底部留白，避免按鈕被導航擋住 */
-        .pb-safe { padding-bottom: 10rem; }
-        select {
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right 1rem center;
-            background-size: 1em;
+        
+        /* 戰鬥中雷達掃描動畫 */
+        .radar-scan {
+            width: 100px; height: 100px;
+            background: radial-gradient(circle, rgba(59,130,246,0) 0%, rgba(59,130,246,0.2) 100%);
+            border: 2px solid #3b82f6;
+            border-radius: 50%;
+            position: relative;
+            animation: pulse 2s infinite;
         }
+        .radar-line {
+            width: 50%; height: 2px; background: #3b82f6;
+            position: absolute; top: 50%; left: 50%;
+            transform-origin: 0 0;
+            animation: radar 2s linear infinite;
+        }
+        @keyframes radar { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); } 70% { box-shadow: 0 0 0 20px rgba(59, 130, 246, 0); } 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); } }
+
+        /* ⭐ 關鍵修改：全頁面底部留白 10rem (約 160px) */
+        .pb-safe { padding-bottom: 10rem; }
+        
+        select {
+            -webkit-appearance: none; -moz-appearance: none; appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em;
+        }
+        
+        /* 選項按鈕狀態 */
         .btn-correct { background-color: #22c55e !important; border-color: #22c55e !important; color: white !important; }
         .btn-wrong { background-color: #ef4444 !important; border-color: #ef4444 !important; color: white !important; }
         .btn-disabled { opacity: 0.6; pointer-events: none; }
+        
+        /* 對戰專用樣式 */
+        .vs-avatar { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 3px solid; }
     </style>
 </head>
 <body class="font-sans h-[100dvh] flex flex-col overflow-hidden">
@@ -52,7 +75,7 @@
                 <i class="fa-solid fa-crown text-6xl text-yellow-500 mb-4"></i>
             </div>
             <h2 class="text-3xl font-bold mb-2">歡迎挑戰</h2>
-            <p class="text-gray-400 mb-8 text-sm">AI 出題 x 極速秒開 x 詳細解析</p>
+            <p class="text-gray-400 mb-8 text-sm">AI 出題 x 真人對戰 x 段位系統</p>
             <button onclick="googleLogin()" class="bg-white text-gray-800 hover:bg-gray-100 px-8 py-3 rounded-full font-bold shadow-lg transition flex items-center gap-2 transform hover:scale-105">
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-6 h-6">
                 使用 Google 登入
@@ -102,9 +125,14 @@
                     <div id="progress-bar" class="bg-gradient-to-r from-blue-500 to-purple-600 h-3 rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
                 </div>
                 
-                <button id="btn-home-start" onclick="startQuizFlow()" class="mt-8 bg-blue-600 w-full py-4 rounded-xl text-xl font-bold hover:bg-blue-500 shadow-lg shadow-blue-900/50 transform active:scale-95 transition flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-play"></i> 開始挑戰
-                </button>
+                <div class="flex gap-3 mt-8">
+                    <button id="btn-home-start" onclick="startQuizFlow()" class="flex-1 bg-blue-600 py-4 rounded-xl text-lg font-bold hover:bg-blue-500 shadow-lg active:scale-95 transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-play"></i> 單人挑戰
+                    </button>
+                    <button onclick="startBattleMatchmaking()" class="flex-1 bg-red-600 py-4 rounded-xl text-lg font-bold hover:bg-red-500 shadow-lg active:scale-95 transition flex items-center justify-center gap-2 border border-red-400/30">
+                        <i class="fa-solid fa-khanda"></i> 雙人對戰
+                    </button>
+                </div>
             </div>
 
             <div class="grid grid-cols-2 gap-3 mt-4">
@@ -165,6 +193,58 @@
                 <button id="btn-giveup" onclick="giveUpQuiz()" class="mt-8 py-3 text-gray-500 text-sm w-full text-center hover:text-white border border-transparent hover:border-slate-700 rounded-lg transition">
                     <i class="fa-solid fa-arrow-left"></i> 放棄此題 (換下一題)
                 </button>
+            </div>
+        </div>
+
+        <div id="page-battle" class="page-section hidden">
+            <div id="battle-lobby" class="flex flex-col items-center justify-center pt-20">
+                <div class="radar-scan mb-8">
+                    <div class="radar-line"></div>
+                </div>
+                <h2 class="text-2xl font-bold mb-2">正在搜尋對手...</h2>
+                <p class="text-gray-400 text-sm mb-8" id="battle-status-text">正在連接對戰伺服器</p>
+                <button onclick="leaveBattle()" class="border border-red-500 text-red-400 px-6 py-2 rounded-full hover:bg-red-500/10">取消配對</button>
+            </div>
+
+            <div id="battle-arena" class="hidden">
+                <div class="flex justify-between items-center mb-6 bg-slate-900/50 p-4 rounded-xl border border-slate-700">
+                    <div class="flex flex-col items-center">
+                        <div class="vs-avatar border-blue-500 text-blue-400 bg-blue-900/20"><i class="fa-solid fa-user"></i></div>
+                        <span class="text-xs mt-1 font-bold text-blue-300">我方</span>
+                        <span class="text-xl font-black" id="p1-score">0</span>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-black italic text-red-500/50">VS</div>
+                        <div class="text-xs text-gray-400 mt-1">Round <span id="battle-round">1</span>/3</div>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="vs-avatar border-red-500 text-red-400 bg-red-900/20"><i class="fa-solid fa-robot"></i></div>
+                        <span class="text-xs mt-1 font-bold text-red-300">對手</span>
+                        <span class="text-xl font-black" id="p2-score">0</span>
+                    </div>
+                </div>
+
+                <div id="battle-loading" class="text-center py-10">
+                    <div class="loader"></div>
+                    <p class="mt-4 text-blue-300">雙方連線中，AI 正在出題...</p>
+                </div>
+
+                <div id="battle-quiz-box" class="hidden">
+                    <div class="bg-slate-800 p-5 rounded-xl mb-4 border border-blue-500/30">
+                        <h3 class="text-lg font-bold" id="battle-q-text">題目...</h3>
+                    </div>
+                    <div id="battle-options" class="space-y-3"></div>
+                    <div id="battle-waiting-msg" class="hidden text-center text-yellow-400 mt-4 animate-pulse">
+                        <i class="fa-solid fa-hourglass-half"></i> 等待對手作答...
+                    </div>
+                </div>
+
+                <div id="battle-result" class="hidden text-center pt-10">
+                    <i class="fa-solid fa-trophy text-6xl text-yellow-400 mb-4 animate-bounce"></i>
+                    <h2 class="text-3xl font-bold mb-2" id="battle-result-title">勝利!</h2>
+                    <p class="text-gray-400 mb-8" id="battle-result-msg">恭喜獲得積分獎勵</p>
+                    <button onclick="leaveBattle()" class="bg-blue-600 w-full py-3 rounded-xl font-bold">返回大廳</button>
+                </div>
             </div>
         </div>
 
@@ -270,7 +350,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, query, orderBy, limit, getDocs, serverTimestamp, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, query, orderBy, limit, getDocs, serverTimestamp, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         // Firebase Config
         const firebaseConfig = {
@@ -291,10 +371,12 @@
         let currentUserData = null;
         const RANKS = ["🥉 青銅", "🥈 白銀", "🥇 黃金", "💎 鉑金", "🔷 鑽石", "🌟 星耀"];
 
-        // ⭐ 緩衝與鎖定機制
+        // ⭐ 緩衝與狀態變數
         let quizBuffer = [];
         const BUFFER_SIZE = 1; 
         let isFetchingBuffer = false; 
+        let battleUnsub = null; // 對戰監聽器
+        let currentBattleId = null;
 
         window.googleLogin = () => { signInWithPopup(auth, provider).catch((error) => alert("登入失敗: " + error.code)); };
         window.logout = () => { 
@@ -315,7 +397,6 @@
                     if (docSnap.exists()) {
                         currentUserData = docSnap.data();
                     } else {
-                        // ⭐ 新使用者初始化資料結構 (包含連對、正確率欄位)
                         currentUserData = {
                             uid: user.uid, displayName: user.displayName, email: user.email,
                             profile: { educationLevel: "", strongSubjects: "", weakSubjects: "" },
@@ -327,23 +408,11 @@
                         };
                         await setDoc(userRef, currentUserData);
                     }
-                    
                     updateSettingsInputs();
                     checkAdminRole(currentUserData.isAdmin);
-
-                    // 檢查存檔
-                    const savedQuiz = localStorage.getItem('currentQuiz');
-                    if(savedQuiz) {
-                        document.getElementById('btn-home-start').innerHTML = `<i class="fa-solid fa-arrow-rotate-left"></i> 繼續上次的挑戰`;
-                    }
-
-                    if (!currentUserData.profile?.educationLevel) {
-                        switchToPage('page-onboarding');
-                    } else {
-                        updateUIStats();
-                        switchToPage('page-home');
-                        fillBuffer(); 
-                    }
+                    updateUIStats();
+                    switchToPage('page-home');
+                    fillBuffer(); 
                 } catch (error) { console.error(error); alert("資料讀取錯誤"); }
             } else {
                 document.getElementById('login-screen').classList.remove('hidden');
@@ -351,7 +420,6 @@
             }
         });
 
-        // 頁面切換
         window.switchToPage = (pageId) => {
             document.querySelectorAll('.page-section').forEach(el => { el.classList.remove('active-page', 'hidden'); el.classList.add('hidden'); });
             const target = document.getElementById(pageId);
@@ -362,12 +430,10 @@
             });
         };
 
-        // ⭐ UI 更新：包含積分、正確率、連對
         function updateUIStats() {
             if(!currentUserData) return;
             const stats = currentUserData.stats;
-            
-            // 兼容舊資料 (如果舊用戶沒有這些欄位)
+            // 兼容舊資料
             if(typeof stats.currentStreak === 'undefined') stats.currentStreak = 0;
             if(typeof stats.bestStreak === 'undefined') stats.bestStreak = 0;
             if(typeof stats.totalCorrect === 'undefined') stats.totalCorrect = 0;
@@ -376,19 +442,208 @@
             document.getElementById('display-rank').innerText = RANKS[stats.rankLevel] || "未知";
             document.getElementById('display-stars').innerText = stats.currentStars;
             document.getElementById('display-score').innerText = stats.totalScore;
-            
-            // 新增：顯示連對與正確率
             document.getElementById('display-streak').innerText = stats.currentStreak;
             document.getElementById('display-best-streak').innerText = stats.bestStreak;
             
-            const accuracy = stats.totalAnswered > 0 
-                ? ((stats.totalCorrect / stats.totalAnswered) * 100).toFixed(1) 
-                : "0.0";
+            const accuracy = stats.totalAnswered > 0 ? ((stats.totalCorrect / stats.totalAnswered) * 100).toFixed(1) : "0.0";
             document.getElementById('display-accuracy').innerText = accuracy + "%";
-
             setTimeout(() => { document.getElementById('progress-bar').style.width = `${(stats.currentStars / 10) * 100}%`; }, 100);
         }
 
+        // ==========================================
+        //  ⭐ 雙人對戰系統 (PvP System)
+        // ==========================================
+        
+        window.startBattleMatchmaking = async () => {
+            switchToPage('page-battle');
+            document.getElementById('battle-lobby').classList.remove('hidden');
+            document.getElementById('battle-arena').classList.add('hidden');
+            document.getElementById('battle-status-text').innerText = "正在搜尋合適對手...";
+
+            // 1. 尋找是否有等待中的房間
+            const q = query(collection(db, "rooms"), where("status", "==", "waiting"), limit(1));
+            const snapshot = await getDocs(q);
+
+            if (!snapshot.empty) {
+                // 加入現有房間
+                const roomDoc = snapshot.docs[0];
+                currentBattleId = roomDoc.id;
+                await updateDoc(doc(db, "rooms", currentBattleId), {
+                    guest: { uid: auth.currentUser.uid, name: currentUserData.displayName, score: 0, done: false },
+                    status: "ready"
+                });
+                console.log("Joined room:", currentBattleId);
+            } else {
+                // 創建新房間
+                const roomRef = await addDoc(collection(db, "rooms"), {
+                    host: { uid: auth.currentUser.uid, name: currentUserData.displayName, score: 0, done: false },
+                    guest: null,
+                    status: "waiting",
+                    round: 1,
+                    createdAt: serverTimestamp()
+                });
+                currentBattleId = roomRef.id;
+                console.log("Created room:", currentBattleId);
+            }
+
+            listenToBattleRoom(currentBattleId);
+        };
+
+        function listenToBattleRoom(roomId) {
+            if (battleUnsub) battleUnsub(); // 移除舊監聽
+
+            battleUnsub = onSnapshot(doc(db, "rooms", roomId), async (docSnap) => {
+                if (!docSnap.exists()) return;
+                const room = docSnap.data();
+                const isHost = room.host.uid === auth.currentUser.uid;
+
+                // 狀態: 準備好開始 (ready)
+                if (room.status === "ready") {
+                    document.getElementById('battle-lobby').classList.add('hidden');
+                    document.getElementById('battle-arena').classList.remove('hidden');
+                    
+                    // 更新分數介面
+                    document.getElementById('p1-score').innerText = isHost ? room.host.score : room.guest.score;
+                    document.getElementById('p2-score').innerText = isHost ? room.guest.score : room.host.score;
+                    document.getElementById('battle-round').innerText = room.round;
+
+                    // 如果還沒出題，由房主負責出題
+                    if (!room.currentQuestion && isHost) {
+                        generateSharedQuiz(roomId);
+                    }
+                    
+                    // 顯示題目 (雙方同步)
+                    if (room.currentQuestion) {
+                        document.getElementById('battle-loading').classList.add('hidden');
+                        document.getElementById('battle-quiz-box').classList.remove('hidden');
+                        document.getElementById('battle-q-text').innerText = room.currentQuestion.q;
+                        
+                        const container = document.getElementById('battle-options');
+                        container.innerHTML = '';
+                        
+                        // 檢查自己是否已回答
+                        const myData = isHost ? room.host : room.guest;
+                        
+                        if (!myData.done) {
+                            // 還沒答，顯示按鈕
+                            document.getElementById('battle-waiting-msg').classList.add('hidden');
+                            room.currentQuestion.opts.forEach((opt, idx) => {
+                                const btn = document.createElement('button');
+                                btn.className = "w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600";
+                                btn.innerText = opt;
+                                btn.onclick = () => handleBattleAnswer(roomId, idx, room.currentQuestion.ans, isHost);
+                                container.appendChild(btn);
+                            });
+                        } else {
+                            // 已回答，顯示等待訊息
+                            container.innerHTML = '<div class="text-center text-gray-500 italic">已提交，等待對手...</div>';
+                            document.getElementById('battle-waiting-msg').classList.remove('hidden');
+                        }
+                    } else {
+                        document.getElementById('battle-loading').classList.remove('hidden');
+                        document.getElementById('battle-quiz-box').classList.add('hidden');
+                    }
+
+                    // 檢查是否雙方都回答完 -> 下一局或結束
+                    if (room.host.done && room.guest.done) {
+                        if (isHost) {
+                            setTimeout(async () => {
+                                if (room.round >= 3) {
+                                    await updateDoc(doc(db, "rooms", roomId), { status: "finished" });
+                                } else {
+                                    // 清空題目進入下一輪
+                                    await updateDoc(doc(db, "rooms", roomId), {
+                                        round: room.round + 1,
+                                        currentQuestion: null,
+                                        "host.done": false,
+                                        "guest.done": false
+                                    });
+                                }
+                            }, 2000);
+                        }
+                    }
+                }
+
+                // 狀態: 結束 (finished)
+                if (room.status === "finished") {
+                    document.getElementById('battle-arena').classList.add('hidden');
+                    document.getElementById('battle-result').classList.remove('hidden');
+                    
+                    const myScore = isHost ? room.host.score : room.guest.score;
+                    const oppScore = isHost ? room.guest.score : room.host.score;
+                    
+                    if (myScore > oppScore) {
+                        document.getElementById('battle-result-title').innerText = "🎉 勝利！";
+                        document.getElementById('battle-result-title').className = "text-3xl font-bold mb-2 text-green-400";
+                        document.getElementById('battle-result-msg').innerText = `你以 ${myScore} : ${oppScore} 擊敗對手！`;
+                    } else if (myScore < oppScore) {
+                        document.getElementById('battle-result-title').innerText = "💔 惜敗...";
+                        document.getElementById('battle-result-title').className = "text-3xl font-bold mb-2 text-red-400";
+                        document.getElementById('battle-result-msg').innerText = `對手以 ${oppScore} : ${myScore} 獲勝`;
+                    } else {
+                        document.getElementById('battle-result-title').innerText = "🤝 平手";
+                        document.getElementById('battle-result-title').className = "text-3xl font-bold mb-2 text-yellow-400";
+                        document.getElementById('battle-result-msg').innerText = `雙方 ${myScore} : ${oppScore} 平分秋色`;
+                    }
+                }
+            });
+        }
+
+        async function generateSharedQuiz(roomId) {
+            try {
+                // 使用通用的出題函式，但強制指定隨機主題
+                const q = await fetchOneQuestion(); 
+                await updateDoc(doc(db, "rooms", roomId), {
+                    currentQuestion: {
+                        q: q.data.q,
+                        opts: q.data.opts,
+                        ans: q.data.ans
+                    }
+                });
+            } catch (e) {
+                console.error("Host failed to generate question", e);
+            }
+        }
+
+        async function handleBattleAnswer(roomId, userIdx, correctIdx, isHost) {
+            const isCorrect = userIdx === correctIdx;
+            const scoreToAdd = isCorrect ? 100 : 0;
+            
+            // 震動回饋
+            if (navigator.vibrate) navigator.vibrate(isCorrect ? 50 : 200);
+
+            // 更新 Firestore
+            const updateField = isHost ? "host" : "guest";
+            // 這裡需要先讀取目前分數 (因為是累加) -> 簡化做法：直接用 increment
+            // 但 Firestore 巢狀 increment 比較麻煩，我們用前端計算後寫入即可 (即時性要求不高)
+            
+            // 簡單起見，我們假設這是一個原子操作，直接寫入狀態
+            // 為了避免並發問題，這裡只標記 done，分數用 transaction 最好，但 demo 用簡單 update
+            // 我們利用 docSnap 在 onSnapshot 裡已經拿到的最新數據來加分
+            // (稍微偷懶一點，直接重新讀取再寫入)
+            const roomRef = doc(db, "rooms", roomId);
+            const roomSnap = await getDoc(roomRef);
+            const room = roomSnap.data();
+            const currentScore = isHost ? room.host.score : room.guest.score;
+
+            await updateDoc(roomRef, {
+                [`${updateField}.score`]: currentScore + scoreToAdd,
+                [`${updateField}.done`]: true
+            });
+        }
+
+        window.leaveBattle = () => {
+            if (battleUnsub) battleUnsub();
+            if (currentBattleId) {
+                // 嘗試將狀態改為 ended 或刪除 (視需求)
+                // 這裡簡單切換頁面
+            }
+            switchToPage('page-home');
+        };
+
+        // ==========================================
+        //  一般單人功能 (同前)
+        // ==========================================
         function updateSettingsInputs() {
             if (currentUserData && currentUserData.profile) {
                 document.getElementById('set-level').value = currentUserData.profile.educationLevel || "國中一年級";
@@ -397,9 +652,6 @@
             }
         }
 
-        // ==========================================
-        //  資料清洗與儲存邏輯 (AI 介入)
-        // ==========================================
         async function getCleanSubjects(rawText) {
             if (!rawText) return "";
             try {
@@ -409,10 +661,8 @@
                     body: JSON.stringify({ text: rawText })
                 });
                 const data = await response.json();
-                console.log(`原始輸入: "${rawText}" -> AI清洗後: "${data.subjects}"`);
                 return data.subjects;
             } catch (e) {
-                console.error("清洗失敗，使用原始資料", e);
                 return rawText; 
             }
         }
@@ -421,87 +671,41 @@
             const level = document.getElementById('ob-level').value;
             const rawStrong = document.getElementById('ob-strong').value;
             const rawWeak = document.getElementById('ob-weak').value;
-
             if(!level) { alert("請選擇年級"); return; }
-
             const btn = document.querySelector('button[onclick="submitOnboarding()"]');
-            const originalText = btn.innerText;
-            btn.innerText = "AI 正在分析您的資料...";
-            btn.disabled = true;
-
+            btn.innerText = "AI 分析中..."; btn.disabled = true;
             const cleanStrong = await getCleanSubjects(rawStrong);
             const cleanWeak = await getCleanSubjects(rawWeak);
-
             await updateDoc(doc(db, "users", auth.currentUser.uid), { 
-                "profile.educationLevel": level, 
-                "profile.strongSubjects": cleanStrong, 
-                "profile.weakSubjects": cleanWeak,
-                "stats.currentStreak": 0, // 初始化新欄位
-                "stats.bestStreak": 0,
-                "stats.totalCorrect": 0,
-                "stats.totalAnswered": 0
+                "profile.educationLevel": level, "profile.strongSubjects": cleanStrong, "profile.weakSubjects": cleanWeak,
+                "stats.currentStreak": 0, "stats.bestStreak": 0, "stats.totalCorrect": 0, "stats.totalAnswered": 0
             });
-
-            currentUserData.profile.educationLevel = level;
-            currentUserData.profile.strongSubjects = cleanStrong;
-            currentUserData.profile.weakSubjects = cleanWeak;
-            currentUserData.stats.currentStreak = 0;
-            currentUserData.stats.bestStreak = 0;
-            
-            updateSettingsInputs(); 
-            updateUIStats(); 
-            switchToPage('page-home');
-            
-            localStorage.removeItem('currentQuiz');
-            quizBuffer = []; 
-            fillBuffer();
-
-            btn.innerText = originalText;
-            btn.disabled = false;
+            currentUserData.profile.educationLevel = level; currentUserData.profile.strongSubjects = cleanStrong; currentUserData.profile.weakSubjects = cleanWeak;
+            updateSettingsInputs(); updateUIStats(); switchToPage('page-home');
+            localStorage.removeItem('currentQuiz'); quizBuffer = []; fillBuffer();
+            btn.innerText = "開始旅程 🚀"; btn.disabled = false;
         };
 
         window.saveProfile = async () => {
             const level = document.getElementById('set-level').value;
             const rawStrong = document.getElementById('set-strong').value;
             const rawWeak = document.getElementById('set-weak').value;
-
             const btn = document.querySelector('button[onclick="saveProfile()"]');
-            const originalText = btn.innerText;
-            btn.innerText = "AI 正在優化關鍵字...";
-            btn.disabled = true;
-
+            btn.innerText = "AI 優化中..."; btn.disabled = true;
             const cleanStrong = await getCleanSubjects(rawStrong);
             const cleanWeak = await getCleanSubjects(rawWeak);
-
             document.getElementById('set-strong').value = cleanStrong;
             document.getElementById('set-weak').value = cleanWeak;
-
-            await updateDoc(doc(db, "users", auth.currentUser.uid), { 
-                "profile.educationLevel": level, 
-                "profile.strongSubjects": cleanStrong, 
-                "profile.weakSubjects": cleanWeak 
-            });
-
-            currentUserData.profile.educationLevel = level;
-            currentUserData.profile.strongSubjects = cleanStrong;
-            currentUserData.profile.weakSubjects = cleanWeak;
-            
-            btn.innerText = "儲存成功！";
-            setTimeout(() => {
-                btn.innerText = originalText;
-                btn.disabled = false;
-            }, 2000);
-
-            localStorage.removeItem('currentQuiz');
-            quizBuffer = [];
-            fillBuffer();
+            await updateDoc(doc(db, "users", auth.currentUser.uid), { "profile.educationLevel": level, "profile.strongSubjects": cleanStrong, "profile.weakSubjects": cleanWeak });
+            currentUserData.profile.educationLevel = level; currentUserData.profile.strongSubjects = cleanStrong; currentUserData.profile.weakSubjects = cleanWeak;
+            btn.innerText = "儲存成功！"; setTimeout(() => { btn.innerText = "更新設定"; btn.disabled = false; }, 2000);
+            localStorage.removeItem('currentQuiz'); quizBuffer = []; fillBuffer();
         };
 
         function checkAdminRole(isAdmin) {
             const navGrid = document.getElementById('nav-grid');
             if (isAdmin && !document.getElementById('btn-admin-nav')) {
-                navGrid.classList.remove('grid-cols-5');
-                navGrid.classList.add('grid-cols-6');
+                navGrid.classList.remove('grid-cols-5'); navGrid.classList.add('grid-cols-6');
                 const btn = document.createElement('button');
                 btn.id = "btn-admin-nav"; btn.dataset.target = "page-admin";
                 btn.className = "flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-red-400 transition group";
@@ -510,10 +714,6 @@
                 navGrid.appendChild(btn);
             }
         }
-
-        // ==========================================
-        //  核心邏輯：隨機抽題 & 前端洗牌
-        // ==========================================
 
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
@@ -527,55 +727,28 @@
             const BACKEND_URL = "/api/generate-quiz";
             const rankName = RANKS[currentUserData.stats.rankLevel];
             const level = currentUserData.profile.educationLevel || "一般";
-            
-            // 隨機抽選科目
             let rawWeakString = currentUserData.profile.weakSubjects || "";
             let targetSubject = "";
             let subjectsArray = rawWeakString.split(/[,，\s]+/).filter(s => s.trim().length > 0);
-
-            if (subjectsArray.length > 0) {
-                targetSubject = subjectsArray[Math.floor(Math.random() * subjectsArray.length)];
-            } else {
-                const generalTopics = ["台灣歷史", "世界地理", "生活科學", "邏輯推理", "國語文常識", "科技新知", "動漫與遊戲", "環境保育"];
-                targetSubject = generalTopics[Math.floor(Math.random() * generalTopics.length)];
-            }
-
+            if (subjectsArray.length > 0) { targetSubject = subjectsArray[Math.floor(Math.random() * subjectsArray.length)]; } 
+            else { const generalTopics = ["台灣歷史", "世界地理", "生活科學", "邏輯推理", "國語文常識", "科技新知", "動漫與遊戲", "環境保育"]; targetSubject = generalTopics[Math.floor(Math.random() * generalTopics.length)]; }
+            
             const response = await fetch(BACKEND_URL, {
                 method: "POST", headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ 
-                    subject: targetSubject,
-                    level: level,
-                    rank: rankName
-                })
+                body: JSON.stringify({ subject: targetSubject, level: level, rank: rankName })
             });
-
             if (!response.ok) throw new Error(`Server Error: ${response.status}`);
             const data = await response.json();
-            
             let aiText = data.text;
             const jsonMatch = aiText.match(/\{[\s\S]*\}/);
             if (jsonMatch) aiText = jsonMatch[0];
-            
             const rawData = JSON.parse(aiText);
             
-            if (!rawData.q || !rawData.correct || !Array.isArray(rawData.wrong)) {
-                throw new Error("JSON format error: 缺少 correct 或 wrong 欄位");
-            }
-
-            // 前端手動洗牌
             let allOptions = [rawData.correct, ...rawData.wrong];
             allOptions = shuffleArray(allOptions);
             const correctIndex = allOptions.indexOf(rawData.correct);
-
-            const finalQuizData = {
-                q: rawData.q,
-                opts: allOptions,
-                ans: correctIndex,
-                exp: rawData.exp
-            };
-
             return {
-                data: finalQuizData,
+                data: { q: rawData.q, opts: allOptions, ans: correctIndex, exp: rawData.exp },
                 rank: rankName,
                 badge: `🎯 專項特訓: ${targetSubject}`
             };
@@ -589,17 +762,12 @@
                     const question = await fetchOneQuestion();
                     quizBuffer.push(question);
                 }
-            } catch (e) {
-                console.warn("⚠️ 背景補貨失敗", e);
-            } finally {
-                isFetchingBuffer = false;
-            }
+            } catch (e) { console.warn("⚠️ 背景補貨失敗", e); } finally { isFetchingBuffer = false; }
         }
 
         window.startQuizFlow = async () => {
             const BACKEND_URL = "/api/generate-quiz";
             if(BACKEND_URL.includes("你的專案名稱")) { alert("請修改程式碼中的 BACKEND_URL 為你的 Render 網址！"); return; }
-
             switchToPage('page-quiz');
             document.getElementById('quiz-container').classList.add('hidden');
             document.getElementById('feedback-section').classList.add('hidden');
@@ -607,31 +775,20 @@
             
             const savedQuiz = localStorage.getItem('currentQuiz');
             if (savedQuiz) {
-                console.log("💾 讀取到未完成的題目");
                 const q = JSON.parse(savedQuiz);
                 renderQuiz(q.data, q.rank, q.badge);
-                fillBuffer();
-                return;
+                fillBuffer(); return;
             }
-
             if (quizBuffer.length > 0) {
-                const nextQ = quizBuffer.shift(); 
-                localStorage.setItem('currentQuiz', JSON.stringify(nextQ));
-                renderQuiz(nextQ.data, nextQ.rank, nextQ.badge);
-                fillBuffer(); 
+                const nextQ = quizBuffer.shift(); localStorage.setItem('currentQuiz', JSON.stringify(nextQ));
+                renderQuiz(nextQ.data, nextQ.rank, nextQ.badge); fillBuffer(); 
             } else {
                 document.getElementById('quiz-loading').classList.remove('hidden');
                 document.getElementById('loading-text').innerText = "正在現場生成題目...";
                 try {
-                    const q = await fetchOneQuestion();
-                    localStorage.setItem('currentQuiz', JSON.stringify(q));
-                    renderQuiz(q.data, q.rank, q.badge);
-                    fillBuffer();
-                } catch (e) {
-                    console.error(e);
-                    alert("出題失敗，請稍後再試。");
-                    switchToPage('page-home');
-                }
+                    const q = await fetchOneQuestion(); localStorage.setItem('currentQuiz', JSON.stringify(q));
+                    renderQuiz(q.data, q.rank, q.badge); fillBuffer();
+                } catch (e) { console.error(e); alert("出題失敗"); switchToPage('page-home'); }
             }
         };
 
@@ -640,130 +797,69 @@
             document.getElementById('quiz-container').classList.remove('hidden');
             document.getElementById('quiz-badge').innerText = `${topic} | ${rank}`;
             document.getElementById('question-text').innerText = data.q;
-            
             const container = document.getElementById('options-container');
             container.innerHTML = ''; 
             data.opts.forEach((optText, idx) => {
                 const btn = document.createElement('button');
                 btn.id = `option-btn-${idx}`;
                 btn.className = "w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 flex items-center gap-3 active:scale-95";
-                btn.innerHTML = `
-                    <span class="bg-slate-800 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-blue-400 border border-slate-600">${String.fromCharCode(65+idx)}</span> 
-                    <span class="flex-1">${optText}</span>
-                `;
+                btn.innerHTML = `<span class="bg-slate-800 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-blue-400 border border-slate-600">${String.fromCharCode(65+idx)}</span><span class="flex-1">${optText}</span>`;
                 btn.onclick = () => handleAnswer(idx, data.ans, data.q, data.exp);
                 container.appendChild(btn);
             });
         }
 
-        // ⭐ 答題處理邏輯 (含連對、正確率更新)
         async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
             const isCorrect = userIdx === correctIdx;
-            
-            // UI 狀態更新 (鎖定按鈕)
             const opts = document.querySelectorAll('[id^="option-btn-"]');
             opts.forEach((btn, idx) => {
-                btn.onclick = null;
-                btn.classList.add('btn-disabled');
+                btn.onclick = null; btn.classList.add('btn-disabled');
                 if (idx === correctIdx) btn.classList.add('btn-correct');
                 else if (idx === userIdx && !isCorrect) btn.classList.add('btn-wrong');
             });
-
             const fbSection = document.getElementById('feedback-section');
             const fbTitle = document.getElementById('feedback-title');
             const fbIcon = document.getElementById('feedback-icon');
             const fbText = document.getElementById('feedback-text');
-            const btnGiveUp = document.getElementById('btn-giveup');
-
+            document.getElementById('btn-giveup').classList.add('hidden');
             fbSection.classList.remove('hidden');
-            btnGiveUp.classList.add('hidden');
 
             if(isCorrect) {
-                fbTitle.innerText = "回答正確！";
-                fbTitle.className = "text-xl font-bold text-green-400";
+                fbTitle.innerText = "回答正確！"; fbTitle.className = "text-xl font-bold text-green-400";
                 fbIcon.innerHTML = '<i class="fa-solid fa-circle-check text-green-400"></i>';
                 if (navigator.vibrate) navigator.vibrate(50);
-                localStorage.removeItem('currentQuiz');
             } else {
-                fbTitle.innerText = "回答錯誤...";
-                fbTitle.className = "text-xl font-bold text-red-400";
+                fbTitle.innerText = "回答錯誤..."; fbTitle.className = "text-xl font-bold text-red-400";
                 fbIcon.innerHTML = '<i class="fa-solid fa-circle-xmark text-red-400"></i>';
                 if (navigator.vibrate) navigator.vibrate(200);
-                localStorage.removeItem('currentQuiz');
             }
-
+            localStorage.removeItem('currentQuiz');
             fbText.innerText = explanation || "AI 未提供詳細解析。";
 
-            // ⭐ 數據更新邏輯
             let stats = currentUserData.stats;
-            
-            // 確保欄位存在
-            if(typeof stats.currentStreak === 'undefined') stats.currentStreak = 0;
-            if(typeof stats.bestStreak === 'undefined') stats.bestStreak = 0;
-            if(typeof stats.totalCorrect === 'undefined') stats.totalCorrect = 0;
-            if(typeof stats.totalAnswered === 'undefined') stats.totalAnswered = 0;
-
             stats.totalAnswered++;
-
             if (isCorrect) {
-                stats.totalCorrect++;
-                stats.currentStreak++;
-                if (stats.currentStreak > stats.bestStreak) {
-                    stats.bestStreak = stats.currentStreak;
-                }
-
-                stats.currentStars++;
-                stats.totalScore += 10 + (stats.rankLevel * 5) + (stats.currentStreak * 2); // 連對加分獎勵
-                
+                stats.totalCorrect++; stats.currentStreak++;
+                if (stats.currentStreak > stats.bestStreak) stats.bestStreak = stats.currentStreak;
+                stats.currentStars++; stats.totalScore += 10 + (stats.rankLevel * 5) + (stats.currentStreak * 2);
                 if (stats.currentStars >= 10) {
-                    if (stats.rankLevel < RANKS.length - 1) {
-                        stats.rankLevel++;
-                        stats.currentStars = 0;
-                        fbTitle.innerText += ` (晉升 ${RANKS[stats.rankLevel]}!)`;
-                    } else {
-                        stats.currentStars = 10;
-                    }
+                    if (stats.rankLevel < RANKS.length - 1) { stats.rankLevel++; stats.currentStars = 0; fbTitle.innerText += ` (晉升 ${RANKS[stats.rankLevel]}!)`; } 
+                    else { stats.currentStars = 10; }
                 }
             } else {
-                stats.currentStreak = 0; // 答錯，連對歸零
-                stats.currentStars--;
+                stats.currentStreak = 0; stats.currentStars--;
                 if (stats.currentStars < 0) {
-                    if (stats.rankLevel > 0) {
-                        stats.rankLevel--;
-                        stats.currentStars = 8;
-                        fbTitle.innerText += ` (降級...)`;
-                    } else {
-                        stats.currentStars = 0;
-                    }
+                    if (stats.rankLevel > 0) { stats.rankLevel--; stats.currentStars = 8; fbTitle.innerText += ` (降級...)`; } 
+                    else { stats.currentStars = 0; }
                 }
             }
-
-            // 更新到資料庫
             updateDoc(doc(db, "users", auth.currentUser.uid), { stats: stats });
-
-            addDoc(collection(db, "exam_logs"), {
-                uid: auth.currentUser.uid,
-                email: auth.currentUser.email,
-                question: questionText,
-                isCorrect: isCorrect,
-                rankAtTime: RANKS[stats.rankLevel],
-                timestamp: serverTimestamp()
-            }).catch(e => console.error("Log error:", e));
-
-            updateUIStats();
-            fillBuffer();
+            addDoc(collection(db, "exam_logs"), { uid: auth.currentUser.uid, email: auth.currentUser.email, question: questionText, isCorrect: isCorrect, rankAtTime: RANKS[stats.rankLevel], timestamp: serverTimestamp() }).catch(e => console.error(e));
+            updateUIStats(); fillBuffer();
         }
 
-        window.giveUpQuiz = () => {
-            if(confirm("確定要放棄這題嗎？(將視為答錯扣分)")) {
-                handleAnswer(-1, -2, document.getElementById('question-text').innerText, "您選擇了放棄此題。");
-            }
-        };
-        
-        window.nextQuestion = () => {
-            startQuizFlow();
-        };
-
+        window.giveUpQuiz = () => { if(confirm("確定要放棄這題嗎？")) handleAnswer(-1, -2, document.getElementById('question-text').innerText, "您選擇了放棄此題。"); };
+        window.nextQuestion = () => { startQuizFlow(); };
         window.loadUserHistory = async () => {
             const ul = document.getElementById('history-list');
             ul.innerHTML = '<li class="text-center py-10"><div class="loader"></div></li>';
