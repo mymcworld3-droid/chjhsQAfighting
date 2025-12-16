@@ -11,12 +11,13 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ⭐ 初始化 Gemini 2.0 Flash 模型
-// 使用 'gemini-2.0-flash-exp' (目前最快且支援 JSON 模式的版本)
+// ⭐ 初始化 Gemini 2.5 模型
+// ⚠️ 警告：根據你的資料，此模型每日限制可能僅有 10-20 次
+// 如果遇到 429 錯誤，請改回 'gemini-2.0-flash-exp' 或 'gemini-1.5-flash'
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ 
-    model: "gemini-2.5-flash", 
-    generationConfig: { responseMimeType: "application/json" } // 強制 JSON 模式
+    model: "gemini-2.5-flash-lite", 
+    generationConfig: { responseMimeType: "application/json" }
 });
 
 // 根目錄路由
@@ -24,60 +25,41 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// API: 生成測驗題目 (包含重試機制)
-app.post('/api/generate-quiz', async (req, res) => {
-    const { prompt } = req.body;
-    if (!prompt) return res.status(400).json({ error: 'Prompt is required' });
+// ==========================================
+// API 1: 分析使用者輸入的弱項
+// ==========================================
+app.post('/api/analyze-subjects', async (req, res) => {
+    try {
+        const { text } = req.body;
+        if (!text || text.trim().length === 0) return res.json({ subjects: "" });
 
-    // --- 🛡️ 防彈重試機制 ---
-    let attempts = 0;
-    const maxAttempts = 3;
+        const prompt = `
+            任務：分析使用者的輸入文字，提取出「學科」或「知識領域」關鍵字。
+            輸入：${text}
+            要求：統一用繁體中文正式名稱，回傳純 JSON { "subjects": "科目A, 科目B" }。
+        `;
 
-    while (attempts < maxAttempts) {
-        try {
-            console.log(`[Attempt ${attempts + 1}] Generating quiz with Gemini 2.0...`);
-            
-            const result = await model.generateContent(prompt);
-            const response = await result.response;
-            let text = response.text();
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        let jsonText = response.text().replace(/```json/g, '').replace(/```/g, '').trim();
+        const parsed = JSON.parse(jsonText);
+        res.json({ subjects: parsed.subjects });
 
-            // 強力清洗：移除 Markdown 符號
-            text = text.replace(/```json/g, '').replace(/```/g, '').trim();
-
-            // 自我驗證：確保是有效的 JSON
-            JSON.parse(text); 
-
-            console.log("✅ 生成成功！");
-            return res.json({ text: text });
-
-        } catch (error) {
-            console.error(`❌ Attempt ${attempts + 1} failed:`, error.message);
-            attempts++;
-            
-            if (attempts === maxAttempts) {
-                let errorMsg = "AI 連線繁忙，請稍後再試。";
-                if (error.message.includes("429")) {
-                    errorMsg = "今日 API 使用額度已達上限 (429)，請明天再來。";
-                } else if (error.message.includes("not found")) {
-                    errorMsg = "找不到 Gemini 2.0 模型，請檢查 API Key 權限。";
-                }
-                return res.status(500).json({ error: errorMsg, details: error.message });
-            }
-        }
+    } catch (error) {
+        console.error("Analyze Error:", error);
+        res.json({ subjects: req.body.text }); 
     }
 });
 
+// ==========================================
+// API 2: 生成測驗題目
+// ==========================================
 app.post('/api/generate-quiz', async (req, res) => {
-    // 1. 接收前端傳來的「參數」，而不是完整的 Prompt
     const { subject, level, rank } = req.body;
-
-    // 簡單驗證
     if (!subject) return res.status(400).json({ error: 'Subject is required' });
 
-    // 2. 在後端生成隨機因子
     const randomSeed = Math.random().toString(36).substring(7);
 
-    // 3. ⭐ 在後端組裝 Prompt (這樣前端就看不到了，比較安全)
     const prompt = `
         [系統指令]
         角色：專業題庫老師
@@ -102,20 +84,20 @@ app.post('/api/generate-quiz', async (req, res) => {
         }
     `;
 
-    // --- 🛡️ 防彈重試機制 ---
+    // --- 🛡️ 重試機制 ---
     let attempts = 0;
     const maxAttempts = 3;
 
     while (attempts < maxAttempts) {
         try {
-            console.log(`[Attempt ${attempts + 1}] Generating quiz for topic: ${subject}...`);
+            console.log(`[Attempt ${attempts + 1}] Generating with Gemini 2.5 (${subject})...`);
             
             const result = await model.generateContent(prompt);
             const response = await result.response;
             let text = response.text();
 
             text = text.replace(/```json/g, '').replace(/```/g, '').trim();
-            JSON.parse(text); // 驗證格式
+            JSON.parse(text); 
 
             console.log("✅ 生成成功！");
             return res.json({ text: text });
@@ -126,8 +108,11 @@ app.post('/api/generate-quiz', async (req, res) => {
             
             if (attempts === maxAttempts) {
                 let errorMsg = "AI 連線繁忙，請稍後再試。";
+                // 針對 Gemini 2.5 低額度的特別錯誤提示
                 if (error.message.includes("429")) {
-                    errorMsg = "今日 API 使用額度已達上限 (429)。";
+                    errorMsg = "❌ Gemini 2.5 今日額度已用完 (僅約 10 題)。請通知管理員切換回 1.5 Flash。";
+                } else if (error.message.includes("not found")) {
+                    errorMsg = "找不到 gemini-2.5-flash-lite 模型，請確認 API 權限或名稱。";
                 }
                 return res.status(500).json({ error: errorMsg, details: error.message });
             }
