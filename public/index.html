@@ -284,7 +284,7 @@
 
         // ⭐ 緩衝與鎖定機制
         let quizBuffer = [];
-        const BUFFER_SIZE = 1; // 只預存 1 題，增加隨機性
+        const BUFFER_SIZE = 3;
         let isFetchingBuffer = false; 
 
         window.googleLogin = () => { signInWithPopup(auth, provider).catch((error) => alert("登入失敗: " + error.code)); };
