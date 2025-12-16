@@ -106,14 +106,23 @@
                     <i class="fa-solid fa-play"></i> 開始挑戰
                 </button>
             </div>
-            <div class="grid grid-cols-2 gap-4 mt-4">
-                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
-                    <div class="text-xs text-gray-400">總積分</div>
+
+            <div class="grid grid-cols-2 gap-3 mt-4">
+                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 flex flex-col items-center">
+                    <div class="text-xs text-gray-400 mb-1"><i class="fa-solid fa-coins text-yellow-500"></i> 總積分</div>
                     <div class="text-2xl font-bold text-white" id="display-score">0</div>
                 </div>
-                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
-                    <div class="text-xs text-gray-400">連勝紀錄</div>
-                    <div class="text-2xl font-bold text-green-400">--</div>
+                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 flex flex-col items-center">
+                    <div class="text-xs text-gray-400 mb-1"><i class="fa-solid fa-bullseye text-blue-400"></i> 正確率</div>
+                    <div class="text-2xl font-bold text-white" id="display-accuracy">0%</div>
+                </div>
+                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 flex flex-col items-center">
+                    <div class="text-xs text-gray-400 mb-1"><i class="fa-solid fa-fire text-orange-500"></i> 當前連對</div>
+                    <div class="text-2xl font-bold text-orange-400" id="display-streak">0</div>
+                </div>
+                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 flex flex-col items-center">
+                    <div class="text-xs text-gray-400 mb-1"><i class="fa-solid fa-crown text-purple-500"></i> 最佳連對</div>
+                    <div class="text-2xl font-bold text-purple-400" id="display-best-streak">0</div>
                 </div>
             </div>
         </div>
@@ -263,7 +272,7 @@
         import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, query, orderBy, limit, getDocs, serverTimestamp, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // Firebase Config (請保持不變)
+        // Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyDifdJmLTmwQATz__xUHSkXZ_xXOWyX-wU",
             authDomain: "question-learning.firebaseapp.com",
@@ -284,7 +293,7 @@
 
         // ⭐ 緩衝與鎖定機制
         let quizBuffer = [];
-        const BUFFER_SIZE = 3;
+        const BUFFER_SIZE = 1; 
         let isFetchingBuffer = false; 
 
         window.googleLogin = () => { signInWithPopup(auth, provider).catch((error) => alert("登入失敗: " + error.code)); };
@@ -306,10 +315,14 @@
                     if (docSnap.exists()) {
                         currentUserData = docSnap.data();
                     } else {
+                        // ⭐ 新使用者初始化資料結構 (包含連對、正確率欄位)
                         currentUserData = {
                             uid: user.uid, displayName: user.displayName, email: user.email,
                             profile: { educationLevel: "", strongSubjects: "", weakSubjects: "" },
-                            stats: { rankLevel: 0, currentStars: 0, totalScore: 0 },
+                            stats: { 
+                                rankLevel: 0, currentStars: 0, totalScore: 0,
+                                currentStreak: 0, bestStreak: 0, totalCorrect: 0, totalAnswered: 0
+                            },
                             isAdmin: false
                         };
                         await setDoc(userRef, currentUserData);
@@ -338,6 +351,7 @@
             }
         });
 
+        // 頁面切換
         window.switchToPage = (pageId) => {
             document.querySelectorAll('.page-section').forEach(el => { el.classList.remove('active-page', 'hidden'); el.classList.add('hidden'); });
             const target = document.getElementById(pageId);
@@ -348,13 +362,31 @@
             });
         };
 
+        // ⭐ UI 更新：包含積分、正確率、連對
         function updateUIStats() {
             if(!currentUserData) return;
-            const { rankLevel, currentStars, totalScore } = currentUserData.stats;
-            document.getElementById('display-rank').innerText = RANKS[rankLevel] || "未知";
-            document.getElementById('display-stars').innerText = currentStars;
-            document.getElementById('display-score').innerText = totalScore;
-            setTimeout(() => { document.getElementById('progress-bar').style.width = `${(currentStars / 10) * 100}%`; }, 100);
+            const stats = currentUserData.stats;
+            
+            // 兼容舊資料 (如果舊用戶沒有這些欄位)
+            if(typeof stats.currentStreak === 'undefined') stats.currentStreak = 0;
+            if(typeof stats.bestStreak === 'undefined') stats.bestStreak = 0;
+            if(typeof stats.totalCorrect === 'undefined') stats.totalCorrect = 0;
+            if(typeof stats.totalAnswered === 'undefined') stats.totalAnswered = 0;
+
+            document.getElementById('display-rank').innerText = RANKS[stats.rankLevel] || "未知";
+            document.getElementById('display-stars').innerText = stats.currentStars;
+            document.getElementById('display-score').innerText = stats.totalScore;
+            
+            // 新增：顯示連對與正確率
+            document.getElementById('display-streak').innerText = stats.currentStreak;
+            document.getElementById('display-best-streak').innerText = stats.bestStreak;
+            
+            const accuracy = stats.totalAnswered > 0 
+                ? ((stats.totalCorrect / stats.totalAnswered) * 100).toFixed(1) 
+                : "0.0";
+            document.getElementById('display-accuracy').innerText = accuracy + "%";
+
+            setTimeout(() => { document.getElementById('progress-bar').style.width = `${(stats.currentStars / 10) * 100}%`; }, 100);
         }
 
         function updateSettingsInputs() {
@@ -366,7 +398,7 @@
         }
 
         // ==========================================
-        //  ⭐ 資料清洗與儲存邏輯 (AI 介入) ⭐
+        //  資料清洗與儲存邏輯 (AI 介入)
         // ==========================================
         async function getCleanSubjects(rawText) {
             if (!rawText) return "";
@@ -403,12 +435,18 @@
             await updateDoc(doc(db, "users", auth.currentUser.uid), { 
                 "profile.educationLevel": level, 
                 "profile.strongSubjects": cleanStrong, 
-                "profile.weakSubjects": cleanWeak 
+                "profile.weakSubjects": cleanWeak,
+                "stats.currentStreak": 0, // 初始化新欄位
+                "stats.bestStreak": 0,
+                "stats.totalCorrect": 0,
+                "stats.totalAnswered": 0
             });
 
             currentUserData.profile.educationLevel = level;
             currentUserData.profile.strongSubjects = cleanStrong;
             currentUserData.profile.weakSubjects = cleanWeak;
+            currentUserData.stats.currentStreak = 0;
+            currentUserData.stats.bestStreak = 0;
             
             updateSettingsInputs(); 
             updateUIStats(); 
@@ -474,7 +512,7 @@
         }
 
         // ==========================================
-        //  ⭐ 核心邏輯：隨機抽題 & 前端洗牌 ⭐
+        //  核心邏輯：隨機抽題 & 前端洗牌
         // ==========================================
 
         function shuffleArray(array) {
@@ -490,7 +528,7 @@
             const rankName = RANKS[currentUserData.stats.rankLevel];
             const level = currentUserData.profile.educationLevel || "一般";
             
-            // 1. 隨機抽選科目 (這部分邏輯保留在前端，因為是根據用戶資料算的)
+            // 隨機抽選科目
             let rawWeakString = currentUserData.profile.weakSubjects || "";
             let targetSubject = "";
             let subjectsArray = rawWeakString.split(/[,，\s]+/).filter(s => s.trim().length > 0);
@@ -502,10 +540,8 @@
                 targetSubject = generalTopics[Math.floor(Math.random() * generalTopics.length)];
             }
 
-            // ⭐ 2. 發送請求 (現在只傳送參數，不傳 Prompt 字串了)
             const response = await fetch(BACKEND_URL, {
-                method: "POST", 
-                headers: { "Content-Type": "application/json" },
+                method: "POST", headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ 
                     subject: targetSubject,
                     level: level,
@@ -516,17 +552,17 @@
             if (!response.ok) throw new Error(`Server Error: ${response.status}`);
             const data = await response.json();
             
-            // 解析回傳資料
             let aiText = data.text;
             const jsonMatch = aiText.match(/\{[\s\S]*\}/);
             if (jsonMatch) aiText = jsonMatch[0];
+            
             const rawData = JSON.parse(aiText);
             
             if (!rawData.q || !rawData.correct || !Array.isArray(rawData.wrong)) {
                 throw new Error("JSON format error: 缺少 correct 或 wrong 欄位");
             }
 
-            // 3. 前端手動洗牌
+            // 前端手動洗牌
             let allOptions = [rawData.correct, ...rawData.wrong];
             allOptions = shuffleArray(allOptions);
             const correctIndex = allOptions.indexOf(rawData.correct);
@@ -620,9 +656,11 @@
             });
         }
 
+        // ⭐ 答題處理邏輯 (含連對、正確率更新)
         async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
             const isCorrect = userIdx === correctIdx;
             
+            // UI 狀態更新 (鎖定按鈕)
             const opts = document.querySelectorAll('[id^="option-btn-"]');
             opts.forEach((btn, idx) => {
                 btn.onclick = null;
@@ -656,41 +694,59 @@
 
             fbText.innerText = explanation || "AI 未提供詳細解析。";
 
-            let { rankLevel, currentStars, totalScore } = currentUserData.stats;
+            // ⭐ 數據更新邏輯
+            let stats = currentUserData.stats;
+            
+            // 確保欄位存在
+            if(typeof stats.currentStreak === 'undefined') stats.currentStreak = 0;
+            if(typeof stats.bestStreak === 'undefined') stats.bestStreak = 0;
+            if(typeof stats.totalCorrect === 'undefined') stats.totalCorrect = 0;
+            if(typeof stats.totalAnswered === 'undefined') stats.totalAnswered = 0;
+
+            stats.totalAnswered++;
+
             if (isCorrect) {
-                currentStars++;
-                totalScore += 10 + (rankLevel * 5); 
-                if (currentStars >= 10) {
-                    if (rankLevel < RANKS.length - 1) {
-                        rankLevel++;
-                        currentStars = 0;
-                        fbTitle.innerText += ` (晉升 ${RANKS[rankLevel]}!)`;
+                stats.totalCorrect++;
+                stats.currentStreak++;
+                if (stats.currentStreak > stats.bestStreak) {
+                    stats.bestStreak = stats.currentStreak;
+                }
+
+                stats.currentStars++;
+                stats.totalScore += 10 + (stats.rankLevel * 5) + (stats.currentStreak * 2); // 連對加分獎勵
+                
+                if (stats.currentStars >= 10) {
+                    if (stats.rankLevel < RANKS.length - 1) {
+                        stats.rankLevel++;
+                        stats.currentStars = 0;
+                        fbTitle.innerText += ` (晉升 ${RANKS[stats.rankLevel]}!)`;
                     } else {
-                        currentStars = 10;
+                        stats.currentStars = 10;
                     }
                 }
             } else {
-                currentStars--;
-                if (currentStars < 0) {
-                    if (rankLevel > 0) {
-                        rankLevel--;
-                        currentStars = 8;
+                stats.currentStreak = 0; // 答錯，連對歸零
+                stats.currentStars--;
+                if (stats.currentStars < 0) {
+                    if (stats.rankLevel > 0) {
+                        stats.rankLevel--;
+                        stats.currentStars = 8;
                         fbTitle.innerText += ` (降級...)`;
                     } else {
-                        currentStars = 0;
+                        stats.currentStars = 0;
                     }
                 }
             }
 
-            currentUserData.stats = { rankLevel, currentStars, totalScore };
-            updateDoc(doc(db, "users", auth.currentUser.uid), { stats: currentUserData.stats });
+            // 更新到資料庫
+            updateDoc(doc(db, "users", auth.currentUser.uid), { stats: stats });
 
             addDoc(collection(db, "exam_logs"), {
                 uid: auth.currentUser.uid,
                 email: auth.currentUser.email,
                 question: questionText,
                 isCorrect: isCorrect,
-                rankAtTime: RANKS[rankLevel],
+                rankAtTime: RANKS[stats.rankLevel],
                 timestamp: serverTimestamp()
             }).catch(e => console.error("Log error:", e));
 
