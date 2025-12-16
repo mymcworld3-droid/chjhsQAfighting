@@ -23,7 +23,7 @@
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        /* 戰鬥中雷達掃描動畫 */
+        /* 雷達掃描動畫 */
         .radar-scan {
             width: 100px; height: 100px;
             background: radial-gradient(circle, rgba(59,130,246,0) 0%, rgba(59,130,246,0.2) 100%);
@@ -41,8 +41,8 @@
         @keyframes radar { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); } 70% { box-shadow: 0 0 0 20px rgba(59, 130, 246, 0); } 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); } }
 
-        /* ⭐ 關鍵修改：全頁面底部留白 10rem (約 160px) */
-        .pb-safe { padding-bottom: 10rem; }
+        /* ⭐ 關鍵修改：全頁面底部留白 10rem (約 160px)，確保所有頁面都不會被擋住 */
+        .pb-safe { padding-bottom: 10rem !important; }
         
         select {
             -webkit-appearance: none; -moz-appearance: none; appearance: none;
@@ -50,13 +50,13 @@
             background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em;
         }
         
-        /* 選項按鈕狀態 */
         .btn-correct { background-color: #22c55e !important; border-color: #22c55e !important; color: white !important; }
         .btn-wrong { background-color: #ef4444 !important; border-color: #ef4444 !important; color: white !important; }
         .btn-disabled { opacity: 0.6; pointer-events: none; }
-        
-        /* 對戰專用樣式 */
         .vs-avatar { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 3px solid; }
+        
+        /* 鎖定時導航列變暗 */
+        .nav-locked { opacity: 0.3; pointer-events: none; filter: grayscale(100%); transition: all 0.3s; }
     </style>
 </head>
 <body class="font-sans h-[100dvh] flex flex-col overflow-hidden">
@@ -371,12 +371,13 @@
         let currentUserData = null;
         const RANKS = ["🥉 青銅", "🥈 白銀", "🥇 黃金", "💎 鉑金", "🔷 鑽石", "🌟 星耀"];
 
-        // ⭐ 緩衝與狀態變數
+        // 緩衝與狀態變數
         let quizBuffer = [];
         const BUFFER_SIZE = 1; 
         let isFetchingBuffer = false; 
         let battleUnsub = null; // 對戰監聽器
         let currentBattleId = null;
+        let isBattleActive = false; // ⭐ 戰鬥鎖定狀態
 
         window.googleLogin = () => { signInWithPopup(auth, provider).catch((error) => alert("登入失敗: " + error.code)); };
         window.logout = () => { 
@@ -420,11 +421,26 @@
             }
         });
 
+        // ⭐ 頁面切換控制 (含鎖定邏輯)
         window.switchToPage = (pageId) => {
+            // 如果正在對戰中，禁止切換到其他頁面
+            if (isBattleActive && pageId !== 'page-battle') {
+                alert("⚔️ 戰鬥/配對中無法切換頁面！\n請先取消配對或完成對戰。");
+                return;
+            }
+
             document.querySelectorAll('.page-section').forEach(el => { el.classList.remove('active-page', 'hidden'); el.classList.add('hidden'); });
             const target = document.getElementById(pageId);
             if(target) { target.classList.remove('hidden'); target.classList.add('active-page'); }
+            
             document.querySelectorAll('#nav-grid button').forEach(btn => {
+                // 如果是鎖定狀態，讓導航看起來像失效 (UI Feedback)
+                if(isBattleActive) {
+                    btn.classList.add('nav-locked');
+                } else {
+                    btn.classList.remove('nav-locked');
+                }
+
                 if (btn.dataset.target === pageId) { btn.classList.add('text-white'); btn.classList.remove('text-gray-400'); } 
                 else { btn.classList.remove('text-white'); btn.classList.add('text-gray-400'); }
             });
@@ -433,7 +449,6 @@
         function updateUIStats() {
             if(!currentUserData) return;
             const stats = currentUserData.stats;
-            // 兼容舊資料
             if(typeof stats.currentStreak === 'undefined') stats.currentStreak = 0;
             if(typeof stats.bestStreak === 'undefined') stats.bestStreak = 0;
             if(typeof stats.totalCorrect === 'undefined') stats.totalCorrect = 0;
@@ -451,30 +466,29 @@
         }
 
         // ==========================================
-        //  ⭐ 雙人對戰系統 (PvP System)
+        //  雙人對戰系統 (PvP System)
         // ==========================================
         
         window.startBattleMatchmaking = async () => {
-            switchToPage('page-battle');
+            // ⭐ 啟動鎖定
+            isBattleActive = true;
+            switchToPage('page-battle'); // 切換到對戰頁，同時觸發 UI 鎖定效果
+
             document.getElementById('battle-lobby').classList.remove('hidden');
             document.getElementById('battle-arena').classList.add('hidden');
             document.getElementById('battle-status-text').innerText = "正在搜尋合適對手...";
 
-            // 1. 尋找是否有等待中的房間
             const q = query(collection(db, "rooms"), where("status", "==", "waiting"), limit(1));
             const snapshot = await getDocs(q);
 
             if (!snapshot.empty) {
-                // 加入現有房間
                 const roomDoc = snapshot.docs[0];
                 currentBattleId = roomDoc.id;
                 await updateDoc(doc(db, "rooms", currentBattleId), {
                     guest: { uid: auth.currentUser.uid, name: currentUserData.displayName, score: 0, done: false },
                     status: "ready"
                 });
-                console.log("Joined room:", currentBattleId);
             } else {
-                // 創建新房間
                 const roomRef = await addDoc(collection(db, "rooms"), {
                     host: { uid: auth.currentUser.uid, name: currentUserData.displayName, score: 0, done: false },
                     guest: null,
@@ -483,36 +497,31 @@
                     createdAt: serverTimestamp()
                 });
                 currentBattleId = roomRef.id;
-                console.log("Created room:", currentBattleId);
             }
 
             listenToBattleRoom(currentBattleId);
         };
 
         function listenToBattleRoom(roomId) {
-            if (battleUnsub) battleUnsub(); // 移除舊監聽
+            if (battleUnsub) battleUnsub();
 
             battleUnsub = onSnapshot(doc(db, "rooms", roomId), async (docSnap) => {
                 if (!docSnap.exists()) return;
                 const room = docSnap.data();
                 const isHost = room.host.uid === auth.currentUser.uid;
 
-                // 狀態: 準備好開始 (ready)
                 if (room.status === "ready") {
                     document.getElementById('battle-lobby').classList.add('hidden');
                     document.getElementById('battle-arena').classList.remove('hidden');
                     
-                    // 更新分數介面
                     document.getElementById('p1-score').innerText = isHost ? room.host.score : room.guest.score;
                     document.getElementById('p2-score').innerText = isHost ? room.guest.score : room.host.score;
                     document.getElementById('battle-round').innerText = room.round;
 
-                    // 如果還沒出題，由房主負責出題
                     if (!room.currentQuestion && isHost) {
                         generateSharedQuiz(roomId);
                     }
                     
-                    // 顯示題目 (雙方同步)
                     if (room.currentQuestion) {
                         document.getElementById('battle-loading').classList.add('hidden');
                         document.getElementById('battle-quiz-box').classList.remove('hidden');
@@ -521,11 +530,9 @@
                         const container = document.getElementById('battle-options');
                         container.innerHTML = '';
                         
-                        // 檢查自己是否已回答
                         const myData = isHost ? room.host : room.guest;
                         
                         if (!myData.done) {
-                            // 還沒答，顯示按鈕
                             document.getElementById('battle-waiting-msg').classList.add('hidden');
                             room.currentQuestion.opts.forEach((opt, idx) => {
                                 const btn = document.createElement('button');
@@ -535,7 +542,6 @@
                                 container.appendChild(btn);
                             });
                         } else {
-                            // 已回答，顯示等待訊息
                             container.innerHTML = '<div class="text-center text-gray-500 italic">已提交，等待對手...</div>';
                             document.getElementById('battle-waiting-msg').classList.remove('hidden');
                         }
@@ -544,14 +550,12 @@
                         document.getElementById('battle-quiz-box').classList.add('hidden');
                     }
 
-                    // 檢查是否雙方都回答完 -> 下一局或結束
                     if (room.host.done && room.guest.done) {
                         if (isHost) {
                             setTimeout(async () => {
                                 if (room.round >= 3) {
                                     await updateDoc(doc(db, "rooms", roomId), { status: "finished" });
                                 } else {
-                                    // 清空題目進入下一輪
                                     await updateDoc(doc(db, "rooms", roomId), {
                                         round: room.round + 1,
                                         currentQuestion: null,
@@ -564,7 +568,6 @@
                     }
                 }
 
-                // 狀態: 結束 (finished)
                 if (room.status === "finished") {
                     document.getElementById('battle-arena').classList.add('hidden');
                     document.getElementById('battle-result').classList.remove('hidden');
@@ -591,7 +594,6 @@
 
         async function generateSharedQuiz(roomId) {
             try {
-                // 使用通用的出題函式，但強制指定隨機主題
                 const q = await fetchOneQuestion(); 
                 await updateDoc(doc(db, "rooms", roomId), {
                     currentQuestion: {
@@ -609,18 +611,9 @@
             const isCorrect = userIdx === correctIdx;
             const scoreToAdd = isCorrect ? 100 : 0;
             
-            // 震動回饋
             if (navigator.vibrate) navigator.vibrate(isCorrect ? 50 : 200);
 
-            // 更新 Firestore
             const updateField = isHost ? "host" : "guest";
-            // 這裡需要先讀取目前分數 (因為是累加) -> 簡化做法：直接用 increment
-            // 但 Firestore 巢狀 increment 比較麻煩，我們用前端計算後寫入即可 (即時性要求不高)
-            
-            // 簡單起見，我們假設這是一個原子操作，直接寫入狀態
-            // 為了避免並發問題，這裡只標記 done，分數用 transaction 最好，但 demo 用簡單 update
-            // 我們利用 docSnap 在 onSnapshot 裡已經拿到的最新數據來加分
-            // (稍微偷懶一點，直接重新讀取再寫入)
             const roomRef = doc(db, "rooms", roomId);
             const roomSnap = await getDoc(roomRef);
             const room = roomSnap.data();
@@ -634,11 +627,12 @@
 
         window.leaveBattle = () => {
             if (battleUnsub) battleUnsub();
-            if (currentBattleId) {
-                // 嘗試將狀態改為 ended 或刪除 (視需求)
-                // 這裡簡單切換頁面
-            }
-            switchToPage('page-home');
+            // ⭐ 解除鎖定
+            isBattleActive = false;
+            // 清除一些臨時變數或UI狀態
+            currentBattleId = null;
+            
+            switchToPage('page-home'); // 解鎖後才能切換
         };
 
         // ==========================================
