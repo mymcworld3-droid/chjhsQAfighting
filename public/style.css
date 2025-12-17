@@ -108,3 +108,51 @@ select {
 /* 已擁有/已裝備標籤 */
 .badge-owned { background-color: #475569; color: #94a3b8; font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; }
 .badge-equipped { background-color: #22c55e; color: white; font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; }
+/* ... (保留原本的樣式) ... */
+
+/* 新增：圖片頭像樣式 */
+.avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* 新增：管理後台的列表項目 */
+.admin-item-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(30, 41, 59, 0.5);
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    border: 1px solid #334155;
+    margin-bottom: 0.5rem;
+    transition: background 0.2s;
+}
+.admin-item-row:hover {
+    background: rgba(30, 41, 59, 1);
+    border-color: #64748b;
+}
+
+/* 新增：設定頁面的庫存 Grid */
+.inventory-grid {
+    display: grid;
+    grid-template-cols: repeat(4, 1fr);
+    gap: 0.5rem;
+}
+.inventory-item {
+    aspect-ratio: 1/1;
+    background: #1e293b;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border: 2px solid transparent;
+    cursor: pointer;
+}
+.inventory-item.selected {
+    border-color: #22c55e;
+    background: #0f172a;
+}
