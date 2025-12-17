@@ -1,6 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, query, orderBy, limit, getDocs, serverTimestamp, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+// ⭐ 修正：加入 deleteDoc
+import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, addDoc, query, orderBy, limit, getDocs, serverTimestamp, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // Firebase Config
 const firebaseConfig = {
@@ -761,24 +762,47 @@ window.saveProduct = async () => {
     }
 };
 
+// ⭐ 新增：刪除商品邏輯
+window.deleteProduct = async () => {
+    const docId = document.getElementById('admin-edit-id').value;
+    if (!docId) return;
+    if (!confirm("確定要下架此商品嗎？")) return;
+
+    try {
+        await deleteDoc(doc(db, "products", docId));
+        alert("刪除成功");
+        resetAdminForm();
+        loadAdminData();
+    } catch (e) {
+        console.error(e);
+        alert("刪除失敗");
+    }
+};
+
 // 輔助：更新 Input Placeholder
 window.updateValuePlaceholder = () => {
+    // 這裡我們直接複用 toggleAdminInputPlaceholder
+    toggleAdminInputPlaceholder();
+};
+
+window.toggleAdminInputPlaceholder = () => {
     const type = document.getElementById('admin-p-type').value;
-    const label = document.getElementById('admin-value-label');
     const input = document.getElementById('admin-p-value');
-    
+    const hint = document.getElementById('admin-hint');
     if (type === 'frame') {
-        label.innerText = "CSS 類名 (從 style.css 定義)";
-        input.placeholder = "例: frame-gold, frame-fire";
+        input.placeholder = "CSS 類名 (例: frame-gold)";
+        hint.innerText = "請輸入 style.css 定義的 Class 名稱";
     } else {
-        label.innerText = "圖片檔名 (需放在 public 資料夾)";
-        input.placeholder = "例: avatar1.png, hero.jpg";
+        input.placeholder = "圖片路徑 (例: assets/avatar1.png)";
+        hint.innerText = "請輸入 public 資料夾內的圖片路徑";
     }
 };
 
 // 5. 設定頁面：載入背包 (Inventory)
 window.renderInventory = async (filterType = 'frame') => {
-    const container = document.getElementById('inventory-display');
+    const container = document.getElementById('settings-inventory-grid'); // 修正 HTML ID 對應
+    if (!container) return; // 防呆
+
     const userInv = currentUserData.inventory || [];
     
     container.innerHTML = '<div class="col-span-4 text-center text-gray-500 py-4"><div class="loader"></div></div>';
@@ -789,7 +813,7 @@ window.renderInventory = async (filterType = 'frame') => {
         return;
     }
 
-    // 抓取所有商品資料來比對 (這裡可以優化，例如用 cache，但目前量少直接抓)
+    // 抓取所有商品資料來比對
     const q = query(collection(db, "products"));
     const snap = await getDocs(q);
     const allProducts = {};
@@ -801,9 +825,11 @@ window.renderInventory = async (filterType = 'frame') => {
     userInv.forEach(pid => {
         const item = allProducts[pid];
         if (!item) return; // 商品可能被刪除了
-        if (item.type !== filterType) return; // 篩選類型
-
-        const isEquipped = (currentUserData.equipped[filterType] === item.value);
+        
+        // 這裡因為設定頁只有一個背包區塊，我們可以選擇顯示全部，或者分類
+        // 目前設計是顯示全部，或依需求修改
+        
+        const isEquipped = (currentUserData.equipped[item.type] === item.value);
         
         const div = document.createElement('div');
         div.className = `inventory-item ${isEquipped ? 'selected' : ''}`;
@@ -821,7 +847,7 @@ window.renderInventory = async (filterType = 'frame') => {
     });
 
     if (count === 0) {
-        container.innerHTML = `<div class="col-span-4 text-center text-gray-500 py-4 text-xs">沒有擁有的${filterType === 'frame' ? '相框' : '頭像'}</div>`;
+        container.innerHTML = `<div class="col-span-4 text-center text-gray-500 py-4 text-xs">背包裡沒有物品</div>`;
     }
 };
 
@@ -861,8 +887,9 @@ window.loadStoreItems = async () => {
             }
 
             const card = document.createElement('div');
-            card.className = `store-card ${item.type}-item`;
+            card.className = `store-card ${item.type}-item relative`;
             card.innerHTML = `
+                ${isOwned ? '<div class="absolute top-2 right-2 text-green-400 text-xs"><i class="fa-solid fa-check"></i></div>' : ''}
                 ${visual}
                 <div class="text-sm font-bold text-white mt-2">${item.name}</div>
                 <div class="text-xs text-gray-400 mb-1">${item.type === 'frame' ? '相框' : '頭像'}</div>
@@ -871,6 +898,52 @@ window.loadStoreItems = async () => {
             grid.appendChild(card);
         });
     } catch (e) { console.error(e); }
+};
+
+// ⭐ 新增：購買邏輯
+window.buyItem = async (pid, price) => {
+    // 1. 防止數據尚未載入
+    if (!currentUserData || !currentUserData.stats) return alert("資料載入中，請稍後");
+
+    // 2. 檢查積分
+    if (currentUserData.stats.totalScore < price) {
+        return alert(`積分不足！你需要 ${price} 分，目前只有 ${currentUserData.stats.totalScore} 分`);
+    }
+
+    if (!confirm(`確定要花費 ${price} 積分購買嗎？`)) return;
+
+    try {
+        const userRef = doc(db, "users", auth.currentUser.uid);
+        
+        // ⭐ 確保 inventory 是陣列
+        let newInventory = currentUserData.inventory || [];
+        
+        // 防止重複購買 (前端檢查)
+        if(newInventory.includes(pid)) return alert("你已經擁有此商品了");
+        
+        // 扣款與加入
+        newInventory.push(pid);
+        const newScore = currentUserData.stats.totalScore - price;
+
+        // 樂觀更新
+        currentUserData.stats.totalScore = newScore;
+        currentUserData.inventory = newInventory;
+
+        await updateDoc(userRef, {
+            "stats.totalScore": newScore,
+            "inventory": newInventory
+        });
+
+        alert("購買成功！");
+        updateUIStats();
+        loadStoreItems();
+        if(document.getElementById('page-settings').classList.contains('active-page')) {
+            renderInventory();
+        }
+    } catch(e) {
+        console.error(e);
+        alert("購買失敗: " + e.message);
+    }
 };
 
 // 7. 更新用戶頭像顯示 (更新版：支援圖片)
@@ -906,8 +979,6 @@ window.updateUserAvatarDisplay = () => {
     `;
 };
 
-// ... (保留 buyItem, equipItem 等邏輯，但記得 equipItem 最後要呼叫 renderInventory 以更新 UI) ...
-
 window.equipItem = async (type, pid, value) => {
     try {
         const userRef = doc(db, "users", auth.currentUser.uid);
@@ -918,7 +989,10 @@ window.equipItem = async (type, pid, value) => {
 
         updateUserAvatarDisplay();
         loadStoreItems(); // 如果在商店頁，更新按鈕狀態
-        renderInventory(type); // 如果在設定頁，更新選取狀態
+        // 如果在設定頁，更新
+        if(document.getElementById('page-settings').classList.contains('active-page')) {
+            renderInventory();
+        }
     } catch (e) {
         console.error(e);
         alert("裝備失敗");
@@ -926,7 +1000,7 @@ window.equipItem = async (type, pid, value) => {
 };
 
 // ==========================================
-//  商店篩選與 UI 切換邏輯 (補上遺失的部分)
+//  商店篩選與 UI 切換邏輯
 // ==========================================
 
 window.filterStore = (type, btnElement) => {
@@ -971,7 +1045,7 @@ window.switchToPage = (pageId) => {
     originalSwitchToPage(pageId); // 呼叫原本的切換邏輯
     
     if (pageId === 'page-settings') {
-        renderInventory('frame'); // 預設載入相框背包
+        renderInventory(); // 預設載入背包
     }
     if (pageId === 'page-admin') {
         loadAdminData(); // 載入商品列表
