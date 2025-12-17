@@ -13,13 +13,9 @@
         
         /* 載入動畫 */
         .loader {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #3498db;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
+            border: 4px solid #f3f3f3; border-top: 4px solid #3498db;
+            border-radius: 50%; width: 30px; height: 30px;
+            animation: spin 1s linear infinite; margin: 20px auto;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
@@ -27,35 +23,26 @@
         .radar-scan {
             width: 100px; height: 100px;
             background: radial-gradient(circle, rgba(59,130,246,0) 0%, rgba(59,130,246,0.2) 100%);
-            border: 2px solid #3b82f6;
-            border-radius: 50%;
-            position: relative;
-            animation: pulse 2s infinite;
+            border: 2px solid #3b82f6; border-radius: 50%; position: relative; animation: pulse 2s infinite;
         }
         .radar-line {
-            width: 50%; height: 2px; background: #3b82f6;
-            position: absolute; top: 50%; left: 50%;
-            transform-origin: 0 0;
-            animation: radar 2s linear infinite;
+            width: 50%; height: 2px; background: #3b82f6; position: absolute; top: 50%; left: 50%;
+            transform-origin: 0 0; animation: radar 2s linear infinite;
         }
         @keyframes radar { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); } 70% { box-shadow: 0 0 0 20px rgba(59, 130, 246, 0); } 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); } }
         
-        /* ⭐ 關鍵修改：全頁面底部留白 10rem */
+        /* ⭐ 全頁面底部留白 10rem */
         .pb-safe { padding-bottom: 10rem !important; }
         
-        select {
-            -webkit-appearance: none; -moz-appearance: none; appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-            background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em;
-        }
+        select { -webkit-appearance: none; -moz-appearance: none; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em; }
         
         .btn-correct { background-color: #22c55e !important; border-color: #22c55e !important; color: white !important; }
         .btn-wrong { background-color: #ef4444 !important; border-color: #ef4444 !important; color: white !important; }
         .btn-disabled { opacity: 0.6; pointer-events: none; }
         .nav-locked { opacity: 0.3; pointer-events: none; filter: grayscale(100%); transition: all 0.3s; }
 
-        /* ⭐ 頭像與框的疊加樣式 */
+        /* 頭像與框 */
         .avatar-container { position: relative; display: inline-block; }
         .avatar-img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
         .avatar-frame { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; object-fit: contain; transform: scale(1.15); } 
@@ -176,8 +163,7 @@
                 <button onclick="filterShop('frame')" class="flex-1 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-sm font-bold transition">邊框 (Frame)</button>
             </div>
 
-            <div id="shop-grid" class="grid grid-cols-2 gap-3">
-                </div>
+            <div id="shop-grid" class="grid grid-cols-2 gap-3"></div>
         </div>
 
         <div id="page-quiz" class="page-section hidden pb-20">
@@ -268,7 +254,6 @@
 
         <div id="page-settings" class="page-section hidden">
             <h2 class="text-2xl font-bold mb-4">⚙️ 設定與裝扮</h2>
-            
             <div class="bg-slate-800 p-6 rounded-xl shadow-lg mb-6 border border-slate-700 flex flex-col items-center">
                 <div class="avatar-container w-24 h-24 mb-4">
                     <img id="preview-avatar" src="" class="avatar-img border-4 border-slate-600">
@@ -279,6 +264,10 @@
                     <button onclick="updateNickname()" class="bg-blue-600 px-4 rounded-lg hover:bg-blue-500"><i class="fa-solid fa-check"></i></button>
                 </div>
             </div>
+            
+            <button onclick="loadUserHistory(); switchToPage('page-history')" class="w-full bg-purple-600 hover:bg-purple-500 text-white py-3 rounded-xl font-bold mb-6 flex items-center justify-center gap-2 shadow-lg">
+                <i class="fa-solid fa-clock-rotate-left"></i> 查看答題紀錄
+            </button>
 
             <div class="mb-6">
                 <h3 class="font-bold mb-2 text-gray-400 text-sm">更換頭像 (背包)</h3>
@@ -295,7 +284,6 @@
                 <div><label class="block mb-1 text-xs text-red-400">弱項</label><input type="text" id="set-weak" class="bg-slate-900 border border-slate-600 rounded-lg w-full p-2"></div>
                 <button onclick="saveProfile()" class="mt-2 bg-slate-700 text-white px-4 py-2 rounded-lg w-full font-bold">更新學習設定</button>
             </div>
-            
             <button onclick="logout()" class="bg-red-900/30 border border-red-800/50 text-red-300 px-4 py-3 rounded-lg w-full">登出</button>
         </div>
 
@@ -303,7 +291,9 @@
             <h2 class="text-2xl font-bold mb-4 flex items-center gap-2 text-purple-400">
                 <i class="fa-solid fa-clock-rotate-left"></i> 我的答題紀錄
             </h2>
-            <div class="bg-slate-800 rounded-xl overflow-hidden border border-slate-700 h-[75vh] flex flex-col shadow-2xl">
+            <button onclick="switchToPage('page-settings')" class="mb-4 text-sm text-gray-400 hover:text-white flex items-center gap-1"><i class="fa-solid fa-arrow-left"></i> 返回設定</button>
+            
+            <div class="bg-slate-800 rounded-xl overflow-hidden border border-slate-700 h-[70vh] flex flex-col shadow-2xl">
                 <div class="p-3 bg-slate-900 border-b border-slate-700 font-bold text-xs text-gray-400 uppercase tracking-wider flex justify-between">
                     <span>個人學習歷程</span>
                     <button onclick="loadUserHistory()" class="text-blue-400 hover:text-white transition"><i class="fa-solid fa-rotate"></i></button>
@@ -319,7 +309,6 @@
                 <h2 class="text-2xl font-bold text-red-400 flex items-center gap-2"><i class="fa-solid fa-shield-halved"></i> 管理後台</h2>
                 <button onclick="loadAdminLogs()" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded transition"><i class="fa-solid fa-rotate"></i> 刷新</button>
             </div>
-            
             <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 mb-4">
                 <h3 class="font-bold mb-2">上架新商品</h3>
                 <div class="space-y-2">
@@ -333,7 +322,6 @@
                     <button onclick="addItemToShop()" class="bg-green-600 w-full py-2 rounded font-bold hover:bg-green-500 text-white">上架商品</button>
                 </div>
             </div>
-
             <div class="bg-slate-800 rounded-xl border border-slate-700 h-[40vh] overflow-hidden flex flex-col">
                 <div class="p-3 bg-slate-900 border-b border-slate-700 text-xs text-gray-400 uppercase">監控日誌</div>
                 <ul id="admin-logs-list" class="overflow-y-auto flex-1 p-2 text-xs text-gray-400 space-y-1 scrollbar-thin scrollbar-thumb-slate-600"></ul>
@@ -341,7 +329,7 @@
         </div>
     </main>
 
-    <nav id="bottom-nav" class="bg-slate-800/90 backdrop-blur-md border-t border-slate-700 fixed bottom-0 w-full z-50 hidden grid h-16 grid-cols-6 mx-auto font-medium" id="nav-grid">
+    <nav id="bottom-nav" class="bg-slate-800/90 backdrop-blur-md border-t border-slate-700 fixed bottom-0 w-full z-50 hidden grid h-16 grid-cols-5 mx-auto font-medium" id="nav-grid">
         <button onclick="switchToPage('page-home')" class="flex flex-col items-center justify-center text-gray-400 active-nav-btn" data-target="page-home"><i class="fa-solid fa-house mb-1 text-lg"></i><span class="text-[10px]">首頁</span></button>
         <button onclick="startQuizFlow()" class="flex flex-col items-center justify-center text-gray-400" data-target="page-quiz"><i class="fa-solid fa-swords mb-1 text-lg"></i><span class="text-[10px]">答題</span></button>
         <button onclick="loadShop(); switchToPage('page-shop')" class="flex flex-col items-center justify-center text-gray-400" data-target="page-shop"><i class="fa-solid fa-store mb-1 text-lg"></i><span class="text-[10px]">商城</span></button>
@@ -389,39 +377,25 @@
                 
                 if (docSnap.exists()) {
                     currentUserData = docSnap.data();
-                    // 資料遷移：確保有新欄位
                     if (!currentUserData.inventory) {
                         await updateDoc(userRef, { inventory: ['default'], equipped: { avatar: DEFAULT_AVATAR, frame: '' } });
-                        currentUserData.inventory = ['default'];
-                        currentUserData.equipped = { avatar: DEFAULT_AVATAR, frame: '' };
+                        currentUserData.inventory = ['default']; currentUserData.equipped = { avatar: DEFAULT_AVATAR, frame: '' };
                     }
                 } else {
                     currentUserData = {
                         uid: user.uid, displayName: user.displayName, email: user.email,
                         profile: { educationLevel: "", strongSubjects: "", weakSubjects: "" },
                         stats: { rankLevel: 0, currentStars: 0, totalScore: 0, currentStreak: 0, bestStreak: 0, totalCorrect: 0, totalAnswered: 0 },
-                        inventory: ['default'],
-                        equipped: { avatar: DEFAULT_AVATAR, frame: '' },
-                        isAdmin: false
+                        inventory: ['default'], equipped: { avatar: DEFAULT_AVATAR, frame: '' }, isAdmin: false
                     };
                     await setDoc(userRef, currentUserData);
                 }
-                
-                updateUIStats();
-                updateHeaderUI();
-                checkAdminRole(currentUserData.isAdmin);
-                
+                updateUIStats(); updateHeaderUI(); checkAdminRole(currentUserData.isAdmin);
                 if (!currentUserData.profile?.educationLevel) switchToPage('page-onboarding');
-                else { 
-                    switchToPage('page-home'); 
-                    fillBuffer(); 
-                }
-            } else {
-                document.getElementById('login-screen').classList.remove('hidden');
-            }
+                else { switchToPage('page-home'); fillBuffer(); }
+            } else { document.getElementById('login-screen').classList.remove('hidden'); }
         });
 
-        // ⭐ UI 更新
         function updateUIStats() {
             if(!currentUserData) return;
             const stats = currentUserData.stats;
@@ -431,7 +405,6 @@
             document.getElementById('display-streak').innerText = stats.currentStreak || 0;
             document.getElementById('display-best-streak').innerText = stats.bestStreak || 0;
             
-            // 商城分數
             const shopScore = document.getElementById('shop-user-score');
             if(shopScore) shopScore.innerText = stats.totalScore;
 
@@ -445,85 +418,42 @@
             const avatar = currentUserData.equipped?.avatar || DEFAULT_AVATAR;
             const frame = currentUserData.equipped?.frame || "";
             const name = currentUserData.displayName || "玩家";
-            
             document.getElementById('header-avatar').src = avatar;
             const hFrame = document.getElementById('header-frame');
             if(frame) { hFrame.src = frame; hFrame.classList.remove('hidden'); } else { hFrame.classList.add('hidden'); }
-            
             document.getElementById('user-info').innerText = name;
-
             document.getElementById('preview-avatar').src = avatar;
             const pFrame = document.getElementById('preview-frame');
             if(frame) { pFrame.src = frame; pFrame.classList.remove('hidden'); } else { pFrame.classList.add('hidden'); }
             document.getElementById('setting-nickname').value = name;
         }
 
-        // ==========================================
-        //  ⭐ 商城與背包系統
-        // ==========================================
-        window.loadShop = async () => {
-            filterShop('avatar'); 
-        };
-
+        window.loadShop = async () => { filterShop('avatar'); };
         window.filterShop = async (type) => {
-            const grid = document.getElementById('shop-grid');
-            grid.innerHTML = '<div class="loader col-span-2"></div>';
-            
+            const grid = document.getElementById('shop-grid'); grid.innerHTML = '<div class="loader col-span-2"></div>';
             const q = query(collection(db, "items"), where("type", "==", type));
-            const snap = await getDocs(q);
-            grid.innerHTML = '';
-
+            const snap = await getDocs(q); grid.innerHTML = '';
             snap.forEach(doc => {
-                const item = doc.data();
-                const isOwned = currentUserData.inventory.includes(doc.id);
-                const card = document.createElement('div');
-                card.className = "bg-slate-700 p-3 rounded-xl flex flex-col items-center relative border border-slate-600";
-                
-                let imgHTML = '';
-                if(type === 'avatar') imgHTML = `<img src="${item.url}" class="w-16 h-16 rounded-full object-cover mb-2 border-2 border-slate-500">`;
-                else imgHTML = `<div class="w-16 h-16 relative mb-2"><img src="${DEFAULT_AVATAR}" class="w-full h-full rounded-full opacity-50"><img src="${item.url}" class="absolute top-0 left-0 w-full h-full object-contain"></div>`;
-
-                let btnHTML = '';
-                if(isOwned) {
-                    btnHTML = `<button class="w-full py-1 bg-gray-600 text-gray-300 text-xs rounded cursor-default">已擁有</button>`;
-                } else {
-                    const canAfford = currentUserData.stats.totalScore >= item.price;
-                    btnHTML = `<button onclick="buyItem('${doc.id}', ${item.price}, '${type}')" class="w-full py-1 ${canAfford ? 'bg-yellow-600 hover:bg-yellow-500' : 'bg-slate-600 cursor-not-allowed'} text-white text-xs rounded font-bold">💰 ${item.price}</button>`;
-                }
-
-                card.innerHTML = `
-                    ${imgHTML}
-                    <div class="text-sm font-bold mb-1">${item.name}</div>
-                    ${btnHTML}
-                `;
-                grid.appendChild(card);
+                const item = doc.data(); const isOwned = currentUserData.inventory.includes(doc.id);
+                const card = document.createElement('div'); card.className = "bg-slate-700 p-3 rounded-xl flex flex-col items-center relative border border-slate-600";
+                let imgHTML = type === 'avatar' ? `<img src="${item.url}" class="w-16 h-16 rounded-full object-cover mb-2 border-2 border-slate-500">` : `<div class="w-16 h-16 relative mb-2"><img src="${DEFAULT_AVATAR}" class="w-full h-full rounded-full opacity-50"><img src="${item.url}" class="absolute top-0 left-0 w-full h-full object-contain"></div>`;
+                let btnHTML = isOwned ? `<button class="w-full py-1 bg-gray-600 text-gray-300 text-xs rounded cursor-default">已擁有</button>` : `<button onclick="buyItem('${doc.id}', ${item.price}, '${type}')" class="w-full py-1 bg-yellow-600 hover:bg-yellow-500 text-white text-xs rounded font-bold">💰 ${item.price}</button>`;
+                card.innerHTML = `${imgHTML}<div class="text-sm font-bold mb-1">${item.name}</div>${btnHTML}`; grid.appendChild(card);
             });
         };
 
         window.buyItem = async (itemId, price, type) => {
             if(currentUserData.stats.totalScore < price) { alert("積分不足！"); return; }
             if(!confirm(`確定花費 ${price} 積分購買嗎？`)) return;
-
-            currentUserData.stats.totalScore -= price;
-            currentUserData.inventory.push(itemId);
-
-            await updateDoc(doc(db, "users", auth.currentUser.uid), {
-                "stats.totalScore": currentUserData.stats.totalScore,
-                "inventory": currentUserData.inventory
-            });
-
-            alert("購買成功！");
-            updateUIStats();
-            filterShop(type); 
+            currentUserData.stats.totalScore -= price; currentUserData.inventory.push(itemId);
+            await updateDoc(doc(db, "users", auth.currentUser.uid), { "stats.totalScore": currentUserData.stats.totalScore, "inventory": currentUserData.inventory });
+            alert("購買成功！"); updateUIStats(); filterShop(type);
         };
 
         window.loadInventory = () => {
-            const avatarDiv = document.getElementById('inventory-avatars');
-            const frameDiv = document.getElementById('inventory-frames');
+            const avatarDiv = document.getElementById('inventory-avatars'); const frameDiv = document.getElementById('inventory-frames');
             avatarDiv.innerHTML = ''; frameDiv.innerHTML = '';
-
             renderEquipItem(avatarDiv, 'default', DEFAULT_AVATAR, 'avatar', '預設');
-
             getDocs(collection(db, "items")).then(snap => {
                 snap.forEach(doc => {
                     const item = doc.data();
@@ -536,22 +466,15 @@
         };
 
         function renderEquipItem(container, id, url, type, name) {
-            const div = document.createElement('div');
-            div.className = "flex-shrink-0 flex flex-col items-center cursor-pointer hover:bg-white/10 p-2 rounded transition";
+            const div = document.createElement('div'); div.className = "flex-shrink-0 flex flex-col items-center cursor-pointer hover:bg-white/10 p-2 rounded transition";
             div.onclick = () => equipItem(type, url);
-            
-            if(type === 'avatar') {
-                div.innerHTML = `<img src="${url}" class="w-12 h-12 rounded-full border-2 border-gray-500"><span class="text-[10px] mt-1">${name}</span>`;
-            } else {
-                div.innerHTML = `<div class="w-12 h-12 relative"><img src="${DEFAULT_AVATAR}" class="w-full h-full rounded-full opacity-30"><img src="${url}" class="absolute top-0 left-0 w-full h-full"></div><span class="text-[10px] mt-1">${name}</span>`;
-            }
+            div.innerHTML = type === 'avatar' ? `<img src="${url}" class="w-12 h-12 rounded-full border-2 border-gray-500"><span class="text-[10px] mt-1">${name}</span>` : `<div class="w-12 h-12 relative"><img src="${DEFAULT_AVATAR}" class="w-full h-full rounded-full opacity-30"><img src="${url}" class="absolute top-0 left-0 w-full h-full"></div><span class="text-[10px] mt-1">${name}</span>`;
             container.appendChild(div);
         }
 
         window.equipItem = async (type, url) => {
             if(type === 'avatar') currentUserData.equipped.avatar = url;
             if(type === 'frame') currentUserData.equipped.frame = url;
-            
             await updateDoc(doc(db, "users", auth.currentUser.uid), { equipped: currentUserData.equipped });
             updateHeaderUI();
         };
@@ -560,9 +483,7 @@
             const newName = document.getElementById('setting-nickname').value.trim();
             if(!newName) return;
             await updateDoc(doc(db, "users", auth.currentUser.uid), { displayName: newName });
-            currentUserData.displayName = newName;
-            updateHeaderUI();
-            alert("暱稱已更新！");
+            currentUserData.displayName = newName; updateHeaderUI(); alert("暱稱已更新！");
         };
 
         window.addItemToShop = async () => {
@@ -570,20 +491,10 @@
             const type = document.getElementById('admin-item-type').value;
             const price = parseInt(document.getElementById('admin-item-price').value);
             const url = document.getElementById('admin-item-url').value;
-
             if(!name || !price || !url) { alert("請填寫完整資訊"); return; }
-
-            try {
-                await addDoc(collection(db, "items"), { name, type, price, url, createdAt: serverTimestamp() });
-                alert("上架成功！");
-                document.getElementById('admin-item-name').value = '';
-                document.getElementById('admin-item-url').value = '';
-            } catch(e) { alert("上架失敗: " + e.message); }
+            try { await addDoc(collection(db, "items"), { name, type, price, url, createdAt: serverTimestamp() }); alert("上架成功！"); } catch(e) { alert("上架失敗: " + e.message); }
         };
 
-        // ==========================================
-        //  通用功能 (對戰、答題、UI)
-        // ==========================================
         window.switchToPage = (pageId) => {
             if (isBattleActive && pageId !== 'page-battle') { alert("⚔️ 戰鬥中無法離開！"); return; }
             document.querySelectorAll('.page-section').forEach(el => { el.classList.remove('active-page', 'hidden'); el.classList.add('hidden'); });
@@ -594,10 +505,17 @@
             });
         };
 
+        // ⭐ 管理員按鈕邏輯：自動擴充導航欄位
         function checkAdminRole(isAdmin) {
             const navGrid = document.getElementById('nav-grid');
             if (isAdmin && !document.getElementById('btn-admin-nav')) {
-                const btn = document.createElement('button'); btn.id = "btn-admin-nav"; btn.dataset.target = "page-admin";
+                // 將 5 欄改為 6 欄，並插入按鈕
+                navGrid.classList.remove('grid-cols-5');
+                navGrid.classList.add('grid-cols-6');
+                
+                const btn = document.createElement('button'); 
+                btn.id = "btn-admin-nav"; 
+                btn.dataset.target = "page-admin";
                 btn.className = "flex flex-col items-center justify-center text-gray-400";
                 btn.onclick = () => { loadAdminLogs(); switchToPage('page-admin'); };
                 btn.innerHTML = `<i class="fa-solid fa-user-shield mb-1 text-lg text-red-400"></i><span class="text-[10px]">管理</span>`;
@@ -605,7 +523,6 @@
             }
         }
 
-        // 對戰相關
         window.startBattleMatchmaking = async () => {
             isBattleActive = true; switchToPage('page-battle');
             document.getElementById('battle-lobby').classList.remove('hidden'); document.getElementById('battle-arena').classList.add('hidden');
@@ -613,15 +530,9 @@
             const snapshot = await getDocs(q);
             if (!snapshot.empty) {
                 currentBattleId = snapshot.docs[0].id;
-                await updateDoc(doc(db, "rooms", currentBattleId), {
-                    guest: { uid: auth.currentUser.uid, name: currentUserData.displayName, score: 0, done: false, equipped: currentUserData.equipped },
-                    status: "ready"
-                });
+                await updateDoc(doc(db, "rooms", currentBattleId), { guest: { uid: auth.currentUser.uid, name: currentUserData.displayName, score: 0, done: false, equipped: currentUserData.equipped }, status: "ready" });
             } else {
-                const roomRef = await addDoc(collection(db, "rooms"), {
-                    host: { uid: auth.currentUser.uid, name: currentUserData.displayName, score: 0, done: false, equipped: currentUserData.equipped },
-                    guest: null, status: "waiting", round: 1, createdAt: serverTimestamp()
-                });
+                const roomRef = await addDoc(collection(db, "rooms"), { host: { uid: auth.currentUser.uid, name: currentUserData.displayName, score: 0, done: false, equipped: currentUserData.equipped }, guest: null, status: "waiting", round: 1, createdAt: serverTimestamp() });
                 currentBattleId = roomRef.id;
             }
             listenToBattleRoom(currentBattleId);
@@ -633,24 +544,16 @@
                 if (!docSnap.exists()) return;
                 const room = docSnap.data();
                 const isHost = room.host.uid === auth.currentUser.uid;
-
                 if (room.status === "ready") {
                     document.getElementById('battle-lobby').classList.add('hidden'); document.getElementById('battle-arena').classList.remove('hidden');
-                    const p1 = isHost ? room.host : room.guest;
-                    const p2 = isHost ? room.guest : room.host;
-                    
-                    document.getElementById('p1-name').innerText = p1.name;
-                    document.getElementById('p1-score').innerText = p1.score;
+                    const p1 = isHost ? room.host : room.guest; const p2 = isHost ? room.guest : room.host;
+                    document.getElementById('p1-name').innerText = p1.name; document.getElementById('p1-score').innerText = p1.score;
                     document.getElementById('p1-avatar').src = p1.equipped?.avatar || DEFAULT_AVATAR;
                     if(p1.equipped?.frame) { document.getElementById('p1-frame').src = p1.equipped.frame; document.getElementById('p1-frame').classList.remove('hidden'); }
-
-                    document.getElementById('p2-name').innerText = p2.name;
-                    document.getElementById('p2-score').innerText = p2.score;
+                    document.getElementById('p2-name').innerText = p2.name; document.getElementById('p2-score').innerText = p2.score;
                     document.getElementById('p2-avatar').src = p2.equipped?.avatar || DEFAULT_AVATAR;
                     if(p2.equipped?.frame) { document.getElementById('p2-frame').src = p2.equipped.frame; document.getElementById('p2-frame').classList.remove('hidden'); }
-
                     if (!room.currentQuestion && isHost) generateSharedQuiz(roomId);
-                    
                     if (room.currentQuestion) {
                         document.getElementById('battle-loading').classList.add('hidden'); document.getElementById('battle-quiz-box').classList.remove('hidden');
                         document.getElementById('battle-q-text').innerText = room.currentQuestion.q;
@@ -697,9 +600,14 @@
             try { const q = await fetchOneQuestion(); await updateDoc(doc(db, "rooms", roomId), { currentQuestion: { q: q.data.q, opts: q.data.opts, ans: q.data.ans } }); } catch (e) {}
         }
 
-        window.leaveBattle = () => { if (battleUnsub) battleUnsub(); isBattleActive = false; currentBattleId = null; switchToPage('page-home'); };
+        window.leaveBattle = async () => {
+            if (battleUnsub) battleUnsub();
+            if (currentBattleId) {
+                try { const roomRef = doc(db, "rooms", currentBattleId); await updateDoc(roomRef, { status: "abandoned" }); } catch(e) {}
+            }
+            isBattleActive = false; currentBattleId = null; switchToPage('page-home');
+        };
 
-        // 排行榜更新 (顯示自訂頭像)
         window.loadLeaderboard = async () => {
             const tbody = document.getElementById('leaderboard-body'); tbody.innerHTML = '<tr><td colspan="3" class="text-center p-4"><div class="loader"></div></td></tr>';
             try {
@@ -710,25 +618,12 @@
                     const d = doc.data(); const isMe = auth.currentUser && d.uid === auth.currentUser.uid;
                     const avatar = d.equipped?.avatar || DEFAULT_AVATAR;
                     const frame = d.equipped?.frame ? `<img src="${d.equipped.frame}" class="absolute top-0 left-0 w-full h-full scale-110 object-contain">` : '';
-                    
-                    const row = `
-                        <tr class="border-b border-slate-700/50 ${isMe ? 'bg-blue-900/20' : ''}">
-                            <td class="px-4 py-4 font-bold ${i===1?'text-yellow-400':(i===2?'text-gray-300':(i===3?'text-orange-400':'text-gray-500'))}">${i}</td>
-                            <td class="px-4 py-4 flex items-center gap-2">
-                                <div class="w-8 h-8 relative shrink-0">
-                                    <img src="${avatar}" class="w-full h-full rounded-full object-cover">
-                                    ${frame}
-                                </div>
-                                <span class="${isMe ? 'text-blue-300 font-bold' : ''}">${d.displayName}</span>
-                            </td>
-                            <td class="px-4 py-4 text-right font-mono text-blue-300">${RANKS[d.stats.rankLevel] || "青銅"} <span class="text-xs text-gray-500 block">${d.stats.totalScore} pts</span></td>
-                        </tr>`;
-                    tbody.innerHTML += row; i++;
+                    tbody.innerHTML += `<tr class="border-b border-slate-700/50 ${isMe ? 'bg-blue-900/20' : ''}"><td class="px-4 py-4 font-bold ${i===1?'text-yellow-400':(i===2?'text-gray-300':(i===3?'text-orange-400':'text-gray-500'))}">${i}</td><td class="px-4 py-4 flex items-center gap-2"><div class="w-8 h-8 relative shrink-0"><img src="${avatar}" class="w-full h-full rounded-full object-cover">${frame}</div><span class="${isMe ? 'text-blue-300 font-bold' : ''}">${d.displayName}</span></td><td class="px-4 py-4 text-right font-mono text-blue-300">${RANKS[d.stats.rankLevel] || "青銅"} <span class="text-xs text-gray-500 block">${d.stats.totalScore} pts</span></td></tr>`;
+                    i++;
                 });
             } catch (e) { tbody.innerHTML = '<tr><td colspan="3" class="text-center p-4 text-red-400">讀取失敗</td></tr>'; }
         };
 
-        // 單人出題邏輯
         function shuffleArray(array) { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } return array; }
         
         async function fetchOneQuestion() {
@@ -737,46 +632,45 @@
             let rawWeakString = currentUserData.profile.weakSubjects || "";
             let targetSubject = "";
             let subjectsArray = rawWeakString.split(/[,，\s]+/).filter(s => s.trim().length > 0);
-            
             if (subjectsArray.length > 0) { targetSubject = subjectsArray[Math.floor(Math.random() * subjectsArray.length)]; } 
             else { const generalTopics = ["台灣歷史", "世界地理", "生活科學", "邏輯推理", "國語文常識", "科技新知", "動漫與遊戲", "環境保育"]; targetSubject = generalTopics[Math.floor(Math.random() * generalTopics.length)]; }
 
             const response = await fetch("/api/generate-quiz", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ subject: targetSubject, level: level, rank: rankName }) });
             const data = await response.json(); 
-            let text = data.text.match(/\{[\s\S]*\}/)[0];
-            const raw = JSON.parse(text);
-            let opts = [raw.correct, ...raw.wrong]; opts = shuffleArray(opts);
-            return { data: { q: raw.q, opts: opts, ans: opts.indexOf(raw.correct), exp: raw.exp }, rank: rankName, badge: `🎯 ${targetSubject}` };
+            try {
+                let match = data.text.match(/\{[\s\S]*\}/);
+                if (!match) throw new Error("JSON not found");
+                const raw = JSON.parse(match[0]);
+                let opts = [raw.correct, ...raw.wrong]; opts = shuffleArray(opts);
+                return { data: { q: raw.q, opts: opts, ans: opts.indexOf(raw.correct), exp: raw.exp }, rank: rankName, badge: `🎯 ${targetSubject}` };
+            } catch (e) {
+                console.error("Parse Error", e);
+                throw new Error("題目生成失敗");
+            }
         }
         
         async function fillBuffer() { if (!isFetchingBuffer && quizBuffer.length < BUFFER_SIZE) { isFetchingBuffer = true; try { while(quizBuffer.length < BUFFER_SIZE) quizBuffer.push(await fetchOneQuestion()); } catch(e){} isFetchingBuffer = false; } }
         
         window.startQuizFlow = async () => { switchToPage('page-quiz'); document.getElementById('quiz-container').classList.add('hidden'); document.getElementById('feedback-section').classList.add('hidden'); document.getElementById('btn-giveup').classList.remove('hidden'); if(quizBuffer.length>0) { const q = quizBuffer.shift(); renderQuiz(q.data, q.rank, q.badge); fillBuffer(); } else { document.getElementById('quiz-loading').classList.remove('hidden'); try{ const q = await fetchOneQuestion(); renderQuiz(q.data, q.rank, q.badge); fillBuffer(); }catch(e){alert("出題失敗");switchToPage('page-home');} } };
         
-        function renderQuiz(data, rank, topic) { document.getElementById('quiz-loading').classList.add('hidden'); document.getElementById('quiz-container').classList.remove('hidden'); document.getElementById('question-text').innerText = data.q; const c = document.getElementById('options-container'); c.innerHTML=''; data.opts.forEach((o,i)=>{ const b=document.createElement('button'); b.className="w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg mb-2 border border-slate-600 active:scale-95 transition"; b.innerText=o; b.onclick=()=>handleAnswer(i,data.ans,data.q,data.exp); c.appendChild(b); }); }
+        function renderQuiz(data, rank, topic) { document.getElementById('quiz-loading').classList.add('hidden'); document.getElementById('quiz-container').classList.remove('hidden'); document.getElementById('question-text').innerText = data.q; const c = document.getElementById('options-container'); c.innerHTML=''; data.opts.forEach((o,i)=>{ const b=document.createElement('button'); b.id=`option-btn-${i}`; b.className="w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg mb-2 border border-slate-600 active:scale-95 transition"; b.innerText=o; b.onclick=()=>handleAnswer(i,data.ans,data.q,data.exp); c.appendChild(b); }); }
         
         async function handleAnswer(u, c, q, exp) { 
             const isC = u===c; 
-            // 按鈕鎖定
-            const opts = document.querySelectorAll('[id^="option-btn-"]');
+            document.querySelectorAll('[id^="option-btn-"]').forEach((btn, idx) => {
+                btn.disabled = true; btn.onclick = null; btn.classList.add('btn-disabled');
+                if (idx === c) btn.classList.add('btn-correct'); else if (idx === u && !isC) btn.classList.add('btn-wrong');
+            });
             document.getElementById('feedback-section').classList.remove('hidden'); 
             document.getElementById('btn-giveup').classList.add('hidden');
-            
-            const fbTitle = document.getElementById('feedback-title');
-            const fbIcon = document.getElementById('feedback-icon');
-            
-            if(isC) {
-                fbTitle.innerText = "回答正確！"; fbTitle.className = "text-xl font-bold text-green-400";
-                fbIcon.innerHTML = '<i class="fa-solid fa-circle-check text-green-400"></i>';
-            } else {
-                fbTitle.innerText = "回答錯誤..."; fbTitle.className = "text-xl font-bold text-red-400";
-                fbIcon.innerHTML = '<i class="fa-solid fa-circle-xmark text-red-400"></i>';
-            }
+            const fbTitle = document.getElementById('feedback-title'); const fbIcon = document.getElementById('feedback-icon');
+            if(isC) { fbTitle.innerText = "回答正確！"; fbTitle.className = "text-xl font-bold text-green-400"; fbIcon.innerHTML = '<i class="fa-solid fa-circle-check text-green-400"></i>'; } 
+            else { fbTitle.innerText = "回答錯誤..."; fbTitle.className = "text-xl font-bold text-red-400"; fbIcon.innerHTML = '<i class="fa-solid fa-circle-xmark text-red-400"></i>'; }
             document.getElementById('feedback-text').innerText = exp;
             
             let s = currentUserData.stats; s.totalAnswered++;
             if(isC) { s.totalCorrect++; s.currentStreak++; s.totalScore+=10; if(s.currentStreak>s.bestStreak)s.bestStreak=s.currentStreak; s.currentStars++; if (s.currentStars >= 10 && s.rankLevel < RANKS.length - 1) { s.rankLevel++; s.currentStars = 0; } } 
-            else { s.currentStreak=0; s.currentStars--; if (s.currentStars < 0 && s.rankLevel > 0) { s.rankLevel--; s.currentStars = 8; } }
+            else { s.currentStreak=0; s.currentStars--; if (s.currentStars < 0 && s.rankLevel > 0) { s.rankLevel--; s.currentStars = 8; } else if (s.currentStars < 0) { s.currentStars = 0; } }
             
             await updateDoc(doc(db, "users", auth.currentUser.uid), { stats: s });
             addDoc(collection(db, "exam_logs"), { uid: auth.currentUser.uid, email: auth.currentUser.email, question: q, isCorrect: isC, rankAtTime: RANKS[s.rankLevel], timestamp: serverTimestamp() }).catch(e=>{});
@@ -789,14 +683,20 @@
         window.loadUserHistory = async () => {
             const ul = document.getElementById('history-list'); ul.innerHTML = '<div class="loader"></div>';
             const snap = await getDocs(query(collection(db, "exam_logs"), where("uid", "==", auth.currentUser.uid), orderBy("timestamp", "desc"), limit(20)));
-            ul.innerHTML = ''; snap.forEach(doc => { const d=doc.data(); ul.innerHTML += `<li class="p-2 bg-slate-700/50 rounded mb-2 border-l-4 ${d.isCorrect?'border-green-500':'border-red-500'}"><div class="flex justify-between text-xs text-gray-400"><span>${d.timestamp?.toDate().toLocaleTimeString()}</span><span class="${d.isCorrect?'text-green-400':'text-red-400'}">${d.isCorrect?'CORRECT':'WRONG'}</span></div><div class="text-sm mt-1">${d.question}</div></li>`; });
+            let html = '';
+            snap.forEach(doc => { const d=doc.data(); html += `<li class="p-2 bg-slate-700/50 rounded mb-2 border-l-4 ${d.isCorrect?'border-green-500':'border-red-500'}"><div class="flex justify-between text-xs text-gray-400"><span>${d.timestamp?.toDate().toLocaleTimeString()}</span><span class="${d.isCorrect?'text-green-400':'text-red-400'}">${d.isCorrect?'CORRECT':'WRONG'}</span></div><div class="text-sm mt-1">${d.question}</div></li>`; });
+            ul.innerHTML = html || '<div class="text-center text-gray-500">尚無紀錄</div>';
         };
         
         window.loadAdminLogs = async () => {
             const ul = document.getElementById('admin-logs-list'); ul.innerHTML = '<div class="loader"></div>';
             const snap = await getDocs(query(collection(db, "exam_logs"), orderBy("timestamp", "desc"), limit(30)));
-            ul.innerHTML = ''; snap.forEach(doc => { const d=doc.data(); ul.innerHTML += `<li class="p-2 bg-slate-700/50 rounded mb-1 text-xs border-l-2 ${d.isCorrect?'border-green-500':'border-red-500'}"><span class="text-gray-400">${d.email?.split('@')[0]}</span>: ${d.question.substring(0,20)}...</li>`; });
+            let html = '';
+            snap.forEach(doc => { const d=doc.data(); html += `<li class="p-2 bg-slate-700/50 rounded mb-1 text-xs border-l-2 ${d.isCorrect?'border-green-500':'border-red-500'}"><span class="text-gray-400">${d.email?.split('@')[0]}</span>: ${d.question.substring(0,20)}...</li>`; });
+            ul.innerHTML = html;
         };
     </script>
 </body>
 </html>
+
+```。
