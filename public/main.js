@@ -50,11 +50,15 @@ onAuthStateChanged(auth, async (user) => {
             // 1. 讀取或初始化使用者資料
             if (docSnap.exists()) {
                 currentUserData = docSnap.data();
+                if (!currentUserData.inventory) currentUserData.inventory = [];
+                if (!currentUserData.equipped) currentUserData.equipped = { frame: '', avatar: '' };
             } else {
                 // 如果是全新帳號，建立預設資料 (profile 留空)
                 currentUserData = {
                     uid: user.uid, displayName: user.displayName, email: user.email,
                     profile: { educationLevel: "", strongSubjects: "", weakSubjects: "" }, // 這裡留空
+                    inventory: [], // 擁有的物品 ID 列表
+                    equipped: { frame: '', avatar: '' }, // 當前裝備
                     stats: { 
                         rankLevel: 0, currentStars: 0, totalScore: 0,
                         currentStreak: 0, bestStreak: 0, totalCorrect: 0, totalAnswered: 0
@@ -65,6 +69,7 @@ onAuthStateChanged(auth, async (user) => {
             }
 
             // 2. 更新 UI 狀態
+            updateUserAvatarDisplay();
             updateSettingsInputs();
             checkAdminRole(currentUserData.isAdmin);
             updateUIStats();
@@ -602,4 +607,206 @@ window.loadLeaderboard = async () => {
             tbody.innerHTML += row; i++;
         });
     } catch (e) { console.error(e); tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-red-400 text-center">無法讀取排行榜</td></tr>'; }
+};
+
+// ==========================================
+//  商店與物品系統 (Store System)
+// ==========================================
+
+// 1. 管理員上架商品
+window.adminAddProduct = async () => {
+    if (!currentUserData.isAdmin) return alert("權限不足");
+    
+    const name = document.getElementById('admin-p-name').value;
+    const type = document.getElementById('admin-p-type').value;
+    const value = document.getElementById('admin-p-value').value; // CSS class 或 URL
+    const price = parseInt(document.getElementById('admin-p-price').value);
+
+    if (!name || !value || !price) return alert("請填寫完整資訊");
+
+    try {
+        await addDoc(collection(db, "products"), {
+            name, type, value, price,
+            createdAt: serverTimestamp()
+        });
+        alert(`上架成功: ${name}`);
+        // 清空表單
+        document.getElementById('admin-p-name').value = '';
+        document.getElementById('admin-p-value').value = '';
+        document.getElementById('admin-p-price').value = '';
+    } catch (e) {
+        console.error(e);
+        alert("上架失敗");
+    }
+};
+
+// 2. 載入商店與庫存
+window.loadStoreItems = async () => {
+    const grid = document.getElementById('store-grid');
+    document.getElementById('store-user-points').innerText = currentUserData.stats.totalScore;
+    
+    try {
+        const q = query(collection(db, "products"), orderBy("price", "asc"));
+        const snap = await getDocs(q);
+        
+        grid.innerHTML = '';
+        
+        if (snap.empty) {
+            grid.innerHTML = '<div class="col-span-2 text-center text-gray-500">商店目前空空如也...<br>請呼叫管理員上架商品</div>';
+            return;
+        }
+
+        snap.forEach(doc => {
+            const item = doc.data();
+            const pid = doc.id;
+            const isOwned = currentUserData.inventory && currentUserData.inventory.includes(pid);
+            const isEquipped = (currentUserData.equipped.frame === item.value) || (currentUserData.equipped.avatar === item.value);
+            
+            // 視覺預覽
+            let visual = '';
+            if (item.type === 'frame') {
+                visual = `<div class="w-12 h-12 rounded-full border-2 border-gray-600 ${item.value} flex items-center justify-center bg-slate-800"><i class="fa-solid fa-user text-gray-500"></i></div>`;
+            } else {
+                // 如果是圖片網址就顯示 img，如果是 fontawesome 就顯示 i (這裡簡化假設 avatar 暫時用 icon)
+                visual = `<div class="w-12 h-12 rounded-full flex items-center justify-center bg-slate-800 text-2xl"><i class="${item.value}"></i></div>`;
+            }
+
+            // 按鈕狀態
+            let btnAction = '';
+            if (isEquipped) {
+                btnAction = `<button class="w-full mt-2 bg-green-600 text-white text-xs py-1.5 rounded cursor-default">已裝備</button>`;
+            } else if (isOwned) {
+                btnAction = `<button onclick="equipItem('${item.type}', '${pid}', '${item.value}')" class="w-full mt-2 bg-slate-600 hover:bg-slate-500 text-white text-xs py-1.5 rounded">裝備</button>`;
+            } else {
+                btnAction = `<button onclick="buyItem('${pid}', ${item.price})" class="w-full mt-2 bg-blue-600 hover:bg-blue-500 text-white text-xs py-1.5 rounded flex items-center justify-center gap-1"><i class="fa-solid fa-coins text-yellow-300"></i> ${item.price}</button>`;
+            }
+
+            const card = document.createElement('div');
+            card.className = `store-card ${item.type}-item`; // 方便篩選
+            card.innerHTML = `
+                ${visual}
+                <div class="text-sm font-bold text-white mt-2">${item.name}</div>
+                <div class="text-xs text-gray-400 mb-1">${item.type === 'frame' ? '相框' : '頭像'}</div>
+                ${btnAction}
+            `;
+            grid.appendChild(card);
+        });
+
+    } catch (e) {
+        console.error(e);
+        grid.innerHTML = '<div class="col-span-2 text-center text-red-500">載入失敗</div>';
+    }
+};
+
+// 3. 購買物品
+window.buyItem = async (pid, price) => {
+    if (currentUserData.stats.totalScore < price) {
+        return alert("積分不足！快去答題賺分吧！");
+    }
+
+    if (!confirm(`確定要花費 ${price} 積分購買嗎？`)) return;
+
+    // 扣款與加入庫存
+    try {
+        const userRef = doc(db, "users", auth.currentUser.uid);
+        
+        // 更新本地數據 (樂觀更新 UI)
+        currentUserData.stats.totalScore -= price;
+        if (!currentUserData.inventory) currentUserData.inventory = [];
+        currentUserData.inventory.push(pid);
+
+        // 更新資料庫
+        await updateDoc(userRef, {
+            "stats.totalScore": currentUserData.stats.totalScore,
+            "inventory": currentUserData.inventory
+        });
+
+        alert("購買成功！");
+        updateUIStats(); // 更新首頁積分顯示
+        loadStoreItems(); // 重新整理商店按鈕狀態
+    } catch (e) {
+        console.error(e);
+        alert("交易失敗，請稍後再試");
+        // 如果失敗最好重新拉取資料，這裡簡化處理
+    }
+};
+
+// 4. 裝備物品
+window.equipItem = async (type, pid, value) => {
+    try {
+        const userRef = doc(db, "users", auth.currentUser.uid);
+        
+        // 更新本地
+        if (type === 'frame') currentUserData.equipped.frame = value;
+        if (type === 'avatar') currentUserData.equipped.avatar = value;
+
+        // 更新資料庫
+        await updateDoc(userRef, {
+            "equipped": currentUserData.equipped
+        });
+
+        // 重新整理 UI
+        updateUserAvatarDisplay();
+        loadStoreItems();
+        
+        // 若在對戰頁，這會需要比較複雜的同步，這裡先只處理本地顯示
+    } catch (e) {
+        console.error(e);
+        alert("裝備失敗");
+    }
+};
+
+// 5. 篩選功能
+window.filterStore = (type) => {
+    const items = document.querySelectorAll('.store-card');
+    items.forEach(item => {
+        if (type === 'all') {
+            item.classList.remove('hidden');
+        } else {
+            if (item.classList.contains(`${type}-item`)) {
+                item.classList.remove('hidden');
+            } else {
+                item.classList.add('hidden');
+            }
+        }
+    });
+};
+
+// 6. 全域更新頭像顯示 (在首頁、對戰頁使用)
+window.updateUserAvatarDisplay = () => {
+    if (!currentUserData) return;
+    
+    // 找出所有顯示頭像的地方 (例如對戰頁的我方頭像)
+    // 這裡我們針對首頁的 User Info 和 對戰頁的 Avatar 做處理
+    
+    // 更新上方 Header
+    const headerIcon = document.querySelector('#user-info i');
+    if (headerIcon && currentUserData.equipped.avatar) {
+        // 如果有買頭像，替換掉預設的 fa-user-astronaut
+        // 這裡假設 avatar 存的是 font-awesome class (例如 "fa-solid fa-dragon")
+        // 如果你存的是圖片 URL，這裡要改成 img tag
+        // 簡單起見，我們先假設 avatar 沒實作，只實作 frame
+    }
+
+    // 更新對戰頁面的 Frame (這需要動態修改 DOM)
+    // 這裡示範如何將 frame 樣式應用到首頁的大頭貼(如果有)
+    // 但因為目前的 UI 首頁只有 Rank 顯示，我們把效果加在 "Page Home" 的 Rank 星星上，或是加一個個人頭像區
+    
+    // **新增：在首頁顯示個人頭像與框**
+    let homeAvatarContainer = document.getElementById('home-avatar-container');
+    if (!homeAvatarContainer) {
+        // 如果首頁沒有頭像區，插入一個
+        const homeSection = document.querySelector('#page-home > div'); // 第一個區塊
+        const avatarDiv = document.createElement('div');
+        avatarDiv.id = 'home-avatar-container';
+        avatarDiv.className = 'absolute top-4 left-4';
+        avatarDiv.innerHTML = `<div id="home-avatar" class="w-12 h-12 rounded-full bg-slate-700 flex items-center justify-center border-2 border-slate-500"><i class="fa-solid fa-user"></i></div>`;
+        homeSection.appendChild(avatarDiv);
+    }
+    
+    const avatarEl = document.getElementById('home-avatar');
+    if (avatarEl) {
+        // 清除舊框
+        avatarEl.className = `w-12 h-12 rounded-full bg-slate-700 flex items-center justify-center text-white ${currentUserData.equipped.frame || 'border-2 border-slate-500'}`;
+    }
 };
