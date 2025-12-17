@@ -673,37 +673,7 @@ window.loadAdminData = async () => {
     }
 };
 
-// 2. 管理員：編輯模式填充
-window.editProduct = (id, data) => {
-    document.getElementById('admin-p-id').value = id; // 設定 ID
-    document.getElementById('admin-p-name').value = data.name;
-    document.getElementById('admin-p-type').value = data.type;
-    document.getElementById('admin-p-value').value = data.value;
-    document.getElementById('admin-p-price').value = data.price;
-    
-    // UI 變更
-    document.getElementById('admin-form-title').innerText = "✏️ 編輯商品";
-    document.getElementById('admin-submit-btn').innerText = "更新商品";
-    document.getElementById('admin-submit-btn').classList.remove('bg-blue-600');
-    document.getElementById('admin-submit-btn').classList.add('bg-green-600');
-    
-    updateValuePlaceholder(); // 更新提示文字
-};
 
-// 3. 管理員：重置表單
-window.resetAdminForm = () => {
-    document.getElementById('admin-p-id').value = '';
-    document.getElementById('admin-p-name').value = '';
-    document.getElementById('admin-p-value').value = '';
-    document.getElementById('admin-p-price').value = '';
-    
-    document.getElementById('admin-form-title').innerText = "➕ 新增商品";
-    document.getElementById('admin-submit-btn').innerText = "確認上架";
-    document.getElementById('admin-submit-btn').classList.add('bg-blue-600');
-    document.getElementById('admin-submit-btn').classList.remove('bg-green-600');
-    
-    updateValuePlaceholder();
-};
 
 // 4. 管理員：提交 (新增或更新)
 window.handleProductSubmit = async () => {
