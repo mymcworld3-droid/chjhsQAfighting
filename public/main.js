@@ -143,10 +143,8 @@ function updateUIStats() {
 // ==========================================
 
 window.startBattleMatchmaking = async () => {
-    // ⭐ 啟動鎖定
     isBattleActive = true;
-    switchToPage('page-battle'); // 切換到對戰頁，同時觸發 UI 鎖定效果
-
+    switchToPage('page-battle');
     document.getElementById('battle-lobby').classList.remove('hidden');
     document.getElementById('battle-arena').classList.add('hidden');
     document.getElementById('battle-status-text').innerText = "正在搜尋合適對手...";
@@ -154,16 +152,25 @@ window.startBattleMatchmaking = async () => {
     const q = query(collection(db, "rooms"), where("status", "==", "waiting"), limit(1));
     const snapshot = await getDocs(q);
 
+    // 準備我的玩家資料 (包含裝備)
+    const myPlayerData = { 
+        uid: auth.currentUser.uid, 
+        name: currentUserData.displayName, 
+        score: 0, 
+        done: false,
+        equipped: currentUserData.equipped || {} // ⭐ 寫入裝備資訊
+    };
+
     if (!snapshot.empty) {
         const roomDoc = snapshot.docs[0];
         currentBattleId = roomDoc.id;
         await updateDoc(doc(db, "rooms", currentBattleId), {
-            guest: { uid: auth.currentUser.uid, name: currentUserData.displayName, score: 0, done: false },
+            guest: myPlayerData, // 加入房間成為 Guest
             status: "ready"
         });
     } else {
         const roomRef = await addDoc(collection(db, "rooms"), {
-            host: { uid: auth.currentUser.uid, name: currentUserData.displayName, score: 0, done: false },
+            host: myPlayerData, // 建立房間成為 Host
             guest: null,
             status: "waiting",
             round: 1,
@@ -176,25 +183,51 @@ window.startBattleMatchmaking = async () => {
 };
 
 function listenToBattleRoom(roomId) {
+    // 如果已有舊的監聽器，先取消，避免重複執行
     if (battleUnsub) battleUnsub();
 
+    // 開始監聽房間文件的變化
     battleUnsub = onSnapshot(doc(db, "rooms", roomId), async (docSnap) => {
-        if (!docSnap.exists()) return;
+        if (!docSnap.exists()) return; // 房間被刪除時防止報錯
         const room = docSnap.data();
         const isHost = room.host.uid === auth.currentUser.uid;
 
+        // ------------------------------------------------
+        // 狀態 1: 遊戲進行中 (Ready)
+        // ------------------------------------------------
         if (room.status === "ready") {
+            // 切換 UI
             document.getElementById('battle-lobby').classList.add('hidden');
             document.getElementById('battle-arena').classList.remove('hidden');
             
+            // 更新分數與回合
             document.getElementById('p1-score').innerText = isHost ? room.host.score : room.guest.score;
             document.getElementById('p2-score').innerText = isHost ? room.guest.score : room.host.score;
             document.getElementById('battle-round').innerText = room.round;
 
+            // --- [更新頭像區塊] ---
+            
+            // 1. 我方頭像
+            const myData = isHost ? room.host : room.guest;
+            document.getElementById('battle-my-avatar').innerHTML = getAvatarHtml(myData.equipped, "w-16 h-16");
+            
+            // 2. 對手頭像
+            const oppData = isHost ? room.guest : room.host;
+            if (oppData) {
+                document.getElementById('battle-opp-avatar').innerHTML = getAvatarHtml(oppData.equipped, "w-16 h-16");
+            } else {
+                // 如果對手資料剛好還沒寫入完畢，暫時顯示載入圈
+                document.getElementById('battle-opp-avatar').innerHTML = `<div class="w-16 h-16 rounded-full bg-slate-800 border-2 border-dashed border-gray-500 flex items-center justify-center"><i class="fa-solid fa-spinner fa-spin"></i></div>`;
+            }
+
+            // --- [題目邏輯] ---
+
+            // 如果沒有當前題目，且我是房主，負責產生題目
             if (!room.currentQuestion && isHost) {
                 generateSharedQuiz(roomId);
             }
             
+            // 顯示題目與選項
             if (room.currentQuestion) {
                 document.getElementById('battle-loading').classList.add('hidden');
                 document.getElementById('battle-quiz-box').classList.remove('hidden');
@@ -203,35 +236,45 @@ function listenToBattleRoom(roomId) {
                 const container = document.getElementById('battle-options');
                 container.innerHTML = '';
                 
-                const myData = isHost ? room.host : room.guest;
-                
+                // 檢查我是否已作答
                 if (!myData.done) {
+                    // 還沒作答：顯示選項按鈕
                     document.getElementById('battle-waiting-msg').classList.add('hidden');
                     room.currentQuestion.opts.forEach((opt, idx) => {
                         const btn = document.createElement('button');
-                        btn.className = "w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600";
+                        btn.className = "w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 active:scale-95";
                         btn.innerText = opt;
+                        // 點擊後送出答案
                         btn.onclick = () => handleBattleAnswer(roomId, idx, room.currentQuestion.ans, isHost);
                         container.appendChild(btn);
                     });
                 } else {
-                    container.innerHTML = '<div class="text-center text-gray-500 italic">已提交，等待對手...</div>';
+                    // 已作答：顯示等待訊息
+                    container.innerHTML = '<div class="text-center text-gray-500 italic py-4">已提交，等待對手...</div>';
                     document.getElementById('battle-waiting-msg').classList.remove('hidden');
                 }
             } else {
+                // 題目產生中
                 document.getElementById('battle-loading').classList.remove('hidden');
                 document.getElementById('battle-quiz-box').classList.add('hidden');
             }
 
+            // --- [回合結算與切換] ---
+            
+            // 如果雙方都已經作答完畢 (done = true)
             if (room.host.done && room.guest.done) {
                 if (isHost) {
+                    // 由房主負責切換回合，延遲 2 秒讓大家看分數變化
                     setTimeout(async () => {
+                        // 假設總共 3 回合 (你可以修改這個數字)
                         if (room.round >= 3) {
+                            // 遊戲結束
                             await updateDoc(doc(db, "rooms", roomId), { status: "finished" });
                         } else {
+                            // 進入下一回合
                             await updateDoc(doc(db, "rooms", roomId), {
                                 round: room.round + 1,
-                                currentQuestion: null,
+                                currentQuestion: null, // 清空題目，觸發 generateSharedQuiz
                                 "host.done": false,
                                 "guest.done": false
                             });
@@ -241,6 +284,9 @@ function listenToBattleRoom(roomId) {
             }
         }
 
+        // ------------------------------------------------
+        // 狀態 2: 遊戲結束 (Finished)
+        // ------------------------------------------------
         if (room.status === "finished") {
             document.getElementById('battle-arena').classList.add('hidden');
             document.getElementById('battle-result').classList.remove('hidden');
@@ -248,18 +294,21 @@ function listenToBattleRoom(roomId) {
             const myScore = isHost ? room.host.score : room.guest.score;
             const oppScore = isHost ? room.guest.score : room.host.score;
             
+            const titleEl = document.getElementById('battle-result-title');
+            const msgEl = document.getElementById('battle-result-msg');
+
             if (myScore > oppScore) {
-                document.getElementById('battle-result-title').innerText = "🎉 勝利！";
-                document.getElementById('battle-result-title').className = "text-3xl font-bold mb-2 text-green-400";
-                document.getElementById('battle-result-msg').innerText = `你以 ${myScore} : ${oppScore} 擊敗對手！`;
+                titleEl.innerText = "🎉 勝利！";
+                titleEl.className = "text-3xl font-bold mb-2 text-green-400 animate-bounce";
+                msgEl.innerText = `你以 ${myScore} : ${oppScore} 擊敗對手！`;
             } else if (myScore < oppScore) {
-                document.getElementById('battle-result-title').innerText = "💔 惜敗...";
-                document.getElementById('battle-result-title').className = "text-3xl font-bold mb-2 text-red-400";
-                document.getElementById('battle-result-msg').innerText = `對手以 ${oppScore} : ${myScore} 獲勝`;
+                titleEl.innerText = "💔 惜敗...";
+                titleEl.className = "text-3xl font-bold mb-2 text-red-400";
+                msgEl.innerText = `對手以 ${oppScore} : ${myScore} 獲勝`;
             } else {
-                document.getElementById('battle-result-title').innerText = "🤝 平手";
-                document.getElementById('battle-result-title').className = "text-3xl font-bold mb-2 text-yellow-400";
-                document.getElementById('battle-result-msg').innerText = `雙方 ${myScore} : ${oppScore} 平分秋色`;
+                titleEl.innerText = "🤝 平手";
+                titleEl.className = "text-3xl font-bold mb-2 text-yellow-400";
+                msgEl.innerText = `雙方 ${myScore} : ${oppScore} 平分秋色`;
             }
         }
     });
@@ -604,8 +653,25 @@ window.loadLeaderboard = async () => {
         snap.forEach(doc => {
             const d = doc.data();
             const isMe = auth.currentUser && d.uid === auth.currentUser.uid;
-            const row = `<tr class="border-b border-slate-700/50 ${isMe ? 'bg-blue-900/20' : ''} hover:bg-slate-700/50 transition"><td class="px-4 py-4 font-bold ${i===1?'text-yellow-400':(i===2?'text-gray-300':(i===3?'text-orange-400':'text-gray-500'))}">${i}</td><td class="px-4 py-4 flex items-center gap-2"><div class="w-6 h-6 rounded-full bg-slate-700 flex items-center justify-center text-xs text-gray-400"><i class="fa-solid fa-user"></i></div><span class="${isMe ? 'text-blue-300 font-bold' : ''}">${d.displayName}</span></td><td class="px-4 py-4 text-right font-mono text-blue-300">${RANKS[d.stats.rankLevel] || "青銅"} <span class="text-xs text-gray-500 block">${d.stats.totalScore} pts</span></td></tr>`;
-            tbody.innerHTML += row; i++;
+            
+            // ⭐ 取得使用者裝備
+            const equipped = d.equipped || {};
+            // ⭐ 產生頭像 HTML
+            const avatarHtml = getAvatarHtml(equipped, "w-8 h-8");
+
+            const row = `
+                <tr class="border-b border-slate-700/50 ${isMe ? 'bg-blue-900/20' : ''} hover:bg-slate-700/50 transition">
+                    <td class="px-4 py-4 font-bold ${i===1?'text-yellow-400':(i===2?'text-gray-300':(i===3?'text-orange-400':'text-gray-500'))}">${i}</td>
+                    <td class="px-4 py-4 flex items-center gap-3">
+                        ${avatarHtml}
+                        <span class="${isMe ? 'text-blue-300 font-bold' : ''}">${d.displayName}</span>
+                    </td>
+                    <td class="px-4 py-4 text-right font-mono text-blue-300">
+                        ${RANKS[d.stats.rankLevel] || "青銅"} <span class="text-xs text-gray-500 block">${d.stats.totalScore} pts</span>
+                    </td>
+                </tr>`;
+            tbody.innerHTML += row; 
+            i++;
         });
     } catch (e) { console.error(e); tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-red-400 text-center">無法讀取排行榜</td></tr>'; }
 };
@@ -629,6 +695,26 @@ function renderVisual(type, value, sizeClass = "w-12 h-12") {
                 </div>`;
     }
     return '';
+}
+
+// --- [核心工具] 產生完整的頭像 HTML (包含框與圖) ---
+//這將用於排行榜與對戰畫面
+function getAvatarHtml(equipped, sizeClass = "w-10 h-10") {
+    const frame = equipped?.frame || '';
+    const avatar = equipped?.avatar || '';
+    
+    // 如果有圖片，顯示圖片；否則顯示預設 icon
+    const imgContent = avatar 
+        ? `<img src="${avatar}" class="w-full h-full object-cover rounded-full p-[2px]" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"> <i class="fa-solid fa-user text-gray-400 absolute hidden"></i>`
+        : `<i class="fa-solid fa-user text-gray-400"></i>`;
+
+    // 只有當沒有框的時候，才加預設邊框 (border-slate-600)
+    // 如果有框 (frame 變數有值)，邊框由 style.css 的 class 控制
+    const borderClass = frame ? '' : 'border-2 border-slate-600';
+
+    return `<div class="${sizeClass} rounded-full bg-slate-800 flex items-center justify-center relative ${borderClass} ${frame}">
+        ${imgContent}
+    </div>`;
 }
 
 // 1. 管理員：載入商品列表與表單邏輯
