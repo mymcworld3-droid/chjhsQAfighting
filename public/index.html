@@ -146,20 +146,37 @@
         </div>
         
         <div id="page-store" class="page-section hidden">
-            <div class="flex justify-between items-center mb-4 sticky top-0 bg-slate-900/90 p-2 z-10 backdrop-blur">
-                <h2 class="text-2xl font-bold text-pink-400"><i class="fa-solid fa-store"></i> 道具商店</h2>
-                <div class="bg-slate-800 px-3 py-1 rounded-full border border-yellow-500/30 text-yellow-400 font-mono text-sm">
-                    <i class="fa-solid fa-coins"></i> <span id="store-user-points">0</span>
+            <div class="sticky top-0 bg-slate-900/95 backdrop-blur-sm z-20 pb-2 border-b border-slate-800">
+        
+                <div class="flex justify-between items-center mb-3 p-2">
+                    <div class="flex items-center gap-3">
+                        <button onclick="switchToPage('page-home')" class="text-gray-400 hover:text-white p-2">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                        <h2 class="text-xl font-bold text-pink-400 flex items-center gap-2">
+                            <i class="fa-solid fa-store"></i> 道具商店
+                        </h2>
+                    </div>
+                    <div class="bg-slate-800 px-3 py-1 rounded-full border border-yellow-500/30 text-yellow-400 font-mono text-sm flex items-center gap-1">
+                        <i class="fa-solid fa-coins"></i> 
+                        <span id="store-user-points">0</span>
+                    </div>
+                </div>
+
+                <div class="flex px-2 gap-2" id="store-tabs">
+                    <button onclick="filterStore('all', this)" class="store-tab active-tab flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-pink-600 text-white shadow-lg shadow-pink-900/50">
+                        全部
+                    </button>
+                    <button onclick="filterStore('frame', this)" class="store-tab flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-slate-800 text-gray-400 hover:bg-slate-700">
+                        <i class="fa-regular fa-square"></i> 相框
+                    </button>
+                    <button onclick="filterStore('avatar', this)" class="store-tab flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-slate-800 text-gray-400 hover:bg-slate-700">
+                        <i class="fa-regular fa-user"></i> 頭像
+                    </button>
                 </div>
             </div>
 
-            <div class="flex gap-2 mb-4">
-                <button onclick="filterStore('all')" class="flex-1 bg-slate-700 hover:bg-slate-600 py-2 rounded text-xs active:bg-blue-600">全部</button>
-                <button onclick="filterStore('frame')" class="flex-1 bg-slate-700 hover:bg-slate-600 py-2 rounded text-xs active:bg-blue-600">相框</button>
-                <button onclick="filterStore('avatar')" class="flex-1 bg-slate-700 hover:bg-slate-600 py-2 rounded text-xs active:bg-blue-600">頭像</button>
-            </div>
-
-            <div id="store-grid" class="grid grid-cols-2 gap-3 pb-20">
+            <div id="store-grid" class="grid grid-cols-2 gap-3 p-2 pb-24 mt-2">
                 <div class="text-center col-span-2 py-10 text-gray-500">
                     <div class="loader"></div> 載入商品中...
                 </div>
