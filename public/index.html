@@ -144,6 +144,27 @@
                 </button>
             </div>
         </div>
+        
+        <div id="page-store" class="page-section hidden">
+            <div class="flex justify-between items-center mb-4 sticky top-0 bg-slate-900/90 p-2 z-10 backdrop-blur">
+                <h2 class="text-2xl font-bold text-pink-400"><i class="fa-solid fa-store"></i> 道具商店</h2>
+                <div class="bg-slate-800 px-3 py-1 rounded-full border border-yellow-500/30 text-yellow-400 font-mono text-sm">
+                    <i class="fa-solid fa-coins"></i> <span id="store-user-points">0</span>
+                </div>
+            </div>
+
+            <div class="flex gap-2 mb-4">
+                <button onclick="filterStore('all')" class="flex-1 bg-slate-700 hover:bg-slate-600 py-2 rounded text-xs active:bg-blue-600">全部</button>
+                <button onclick="filterStore('frame')" class="flex-1 bg-slate-700 hover:bg-slate-600 py-2 rounded text-xs active:bg-blue-600">相框</button>
+                <button onclick="filterStore('avatar')" class="flex-1 bg-slate-700 hover:bg-slate-600 py-2 rounded text-xs active:bg-blue-600">頭像</button>
+            </div>
+
+            <div id="store-grid" class="grid grid-cols-2 gap-3 pb-20">
+                <div class="text-center col-span-2 py-10 text-gray-500">
+                    <div class="loader"></div> 載入商品中...
+                </div>
+            </div>
+        </div>
 
         <div id="page-battle" class="page-section hidden">
             <div id="battle-lobby" class="flex flex-col items-center justify-center pt-20">
@@ -265,6 +286,19 @@
         </div>
 
         <div id="page-admin" class="page-section hidden">
+            <div class="bg-slate-800 p-4 rounded-xl border border-red-900/50 mb-6">
+                <h3 class="font-bold text-white mb-3">➕ 上架新商品</h3>
+                <div class="space-y-3">
+                    <input type="text" id="admin-p-name" placeholder="商品名稱 (例: 黃金霸氣框)" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white">    
+                    <select id="admin-p-type" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white">
+                        <option value="frame">相框 (Frame)</option>
+                        <option value="avatar">頭像 (Avatar)</option>
+                    </select>
+                    <input type="text" id="admin-p-value" placeholder="CSS類名或圖片網址 (例: frame-gold)" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white">
+                    <input type="number" id="admin-p-price" placeholder="價格 (積分)" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white">
+                    <button onclick="adminAddProduct()" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-2 rounded text-sm">上架商品</button>
+                </div>
+            </div>
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-2xl font-bold text-red-400 flex items-center gap-2"><i class="fa-solid fa-shield-halved"></i> 管理後台</h2>
                 <button onclick="loadAdminLogs()" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded transition"><i class="fa-solid fa-rotate"></i> 刷新</button>
