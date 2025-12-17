@@ -46,12 +46,15 @@ onAuthStateChanged(auth, async (user) => {
         const userRef = doc(db, "users", user.uid);
         try {
             const docSnap = await getDoc(userRef);
+            
+            // 1. 讀取或初始化使用者資料
             if (docSnap.exists()) {
                 currentUserData = docSnap.data();
             } else {
+                // 如果是全新帳號，建立預設資料 (profile 留空)
                 currentUserData = {
                     uid: user.uid, displayName: user.displayName, email: user.email,
-                    profile: { educationLevel: "", strongSubjects: "", weakSubjects: "" },
+                    profile: { educationLevel: "", strongSubjects: "", weakSubjects: "" }, // 這裡留空
                     stats: { 
                         rankLevel: 0, currentStars: 0, totalScore: 0,
                         currentStreak: 0, bestStreak: 0, totalCorrect: 0, totalAnswered: 0
@@ -60,11 +63,24 @@ onAuthStateChanged(auth, async (user) => {
                 };
                 await setDoc(userRef, currentUserData);
             }
+
+            // 2. 更新 UI 狀態
             updateSettingsInputs();
             checkAdminRole(currentUserData.isAdmin);
             updateUIStats();
-            switchToPage('page-home');
-            fillBuffer(); 
+
+            // ⭐ 3. 關鍵修改：判斷是否為新帳號 (或未完成設定)
+            // 如果 educationLevel 是空字串，代表還沒填過資料 -> 強制跳轉到引導頁
+            if (!currentUserData.profile.educationLevel || currentUserData.profile.educationLevel === "") {
+                switchToPage('page-onboarding'); 
+                // 隱藏底部導航，避免使用者亂點跑走
+                document.getElementById('bottom-nav').classList.add('hidden'); 
+            } else {
+                // 資料齊全，進入首頁
+                switchToPage('page-home');
+                fillBuffer(); 
+            }
+
         } catch (error) { console.error(error); alert("資料讀取錯誤"); }
     } else {
         document.getElementById('login-screen').classList.remove('hidden');
@@ -323,12 +339,27 @@ window.submitOnboarding = async () => {
     const cleanStrong = await getCleanSubjects(rawStrong);
     const cleanWeak = await getCleanSubjects(rawWeak);
     await updateDoc(doc(db, "users", auth.currentUser.uid), { 
-        "profile.educationLevel": level, "profile.strongSubjects": cleanStrong, "profile.weakSubjects": cleanWeak,
-        "stats.currentStreak": 0, "stats.bestStreak": 0, "stats.totalCorrect": 0, "stats.totalAnswered": 0
+        "profile.educationLevel": level, 
+        "profile.strongSubjects": cleanStrong, 
+        "profile.weakSubjects": cleanWeak,
+        // ...
     });
-    currentUserData.profile.educationLevel = level; currentUserData.profile.strongSubjects = cleanStrong; currentUserData.profile.weakSubjects = cleanWeak;
-    updateSettingsInputs(); updateUIStats(); switchToPage('page-home');
-    localStorage.removeItem('currentQuiz'); quizBuffer = []; fillBuffer();
+    
+    // 更新本地暫存
+    currentUserData.profile.educationLevel = level; 
+    currentUserData.profile.strongSubjects = cleanStrong; 
+    currentUserData.profile.weakSubjects = cleanWeak;
+    
+    updateSettingsInputs(); 
+    updateUIStats(); 
+
+    // ⭐ 提交成功後的動作：
+    switchToPage('page-home');          // 1. 轉跳回首頁
+    document.getElementById('bottom-nav').classList.remove('hidden'); // 2. 顯示底部導航列 (因為剛剛被隱藏了)
+    
+    localStorage.removeItem('currentQuiz'); 
+    quizBuffer = []; 
+    fillBuffer(); // 3. 開始背景載入題目
     btn.innerText = "開始旅程 🚀"; btn.disabled = false;
 };
 
