@@ -902,7 +902,45 @@ window.equipItem = async (type, pid, value) => {
     }
 };
 
-// ... (保留原本的 filterStore 等邏輯) ...
+// ==========================================
+//  商店篩選與 UI 切換邏輯 (補上遺失的部分)
+// ==========================================
+
+window.filterStore = (type, btnElement) => {
+    // 1. 篩選商品顯示 (DOM 操作)
+    const items = document.querySelectorAll('.store-card');
+    items.forEach(item => {
+        if (type === 'all') {
+            item.classList.remove('hidden');
+        } else {
+            // 檢查卡片是否有對應的 class (frame-item 或 avatar-item)
+            if (item.classList.contains(`${type}-item`)) {
+                item.classList.remove('hidden');
+            } else {
+                item.classList.add('hidden');
+            }
+        }
+    });
+
+    // 2. 切換按鈕樣式 (Highlight Active Tab)
+    // 如果是透過點擊按鈕觸發的 (btnElement 存在)
+    if (btnElement) {
+        // 重置所有 Tab 樣式為「未選取狀態」 (灰色)
+        document.querySelectorAll('.store-tab').forEach(tab => {
+            tab.className = 'store-tab flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-slate-800 text-gray-400 hover:bg-slate-700';
+            // 移除 icon 的實心效果 (選用)
+            const icon = tab.querySelector('i');
+            if(icon) icon.classList.replace('fa-solid', 'fa-regular');
+        });
+        
+        // 設定當前被點擊的 Tab 為「啟用樣式」 (粉紅色 + 發光)
+        btnElement.className = 'store-tab active-tab flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-pink-600 text-white shadow-lg shadow-pink-900/50';
+        
+        // 讓 icon 變實心 (選用)
+        const activeIcon = btnElement.querySelector('i');
+        if(activeIcon) activeIcon.classList.replace('fa-regular', 'fa-solid');
+    }
+};
 
 // ⭐ 重要：修改 switchToPage，當切換到設定頁或管理頁時自動載入資料
 const originalSwitchToPage = window.switchToPage;
