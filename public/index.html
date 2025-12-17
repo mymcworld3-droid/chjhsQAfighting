@@ -854,13 +854,6 @@
 
         window.giveUpQuiz = () => { if(confirm("確定要放棄這題嗎？")) handleAnswer(-1, -2, document.getElementById('question-text').innerText, "您選擇了放棄此題。"); };
         window.nextQuestion = () => { startQuizFlow(); };
-        window.loadUserHistory = async () => { /* 省略 */ };
-        window.loadAdminLogs = async () => { /* 省略 */ };
-        window.loadLeaderboard = async () => { /* 省略 */ };
-    </script>
-</body>
-</html>
-
         window.loadUserHistory = async () => {
             const ul = document.getElementById('history-list');
             ul.innerHTML = '<li class="text-center py-10"><div class="loader"></div></li>';
