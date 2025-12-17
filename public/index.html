@@ -286,26 +286,40 @@
         </div>
 
         <div id="page-admin" class="page-section hidden">
-            <div class="bg-slate-800 p-4 rounded-xl border border-red-900/50 mb-6">
-                <h3 class="font-bold text-white mb-3">➕ 上架新商品</h3>
-                <div class="space-y-3">
-                    <input type="text" id="admin-p-name" placeholder="商品名稱 (例: 黃金霸氣框)" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white">    
-                    <select id="admin-p-type" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold text-red-400"><i class="fa-solid fa-shield-halved"></i> 管理後台</h2>
+                <button onclick="resetAdminForm()" class="text-xs bg-green-600 hover:bg-green-500 text-white px-3 py-1 rounded transition"><i class="fa-solid fa-plus"></i> 新增模式</button>
+            </div>
+
+            <div class="bg-slate-800 p-4 rounded-xl border border-red-900/50 mb-6 sticky top-0 z-20 shadow-xl">
+                <h3 class="font-bold text-white mb-3" id="admin-form-title">➕ 上架新商品</h3>
+                <input type="hidden" id="admin-edit-id"> <div class="space-y-3">
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="text" id="admin-p-name" placeholder="商品名稱 (例: 龍騎士)" class="bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white">
+                        <input type="number" id="admin-p-price" placeholder="價格" class="bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white">
+                    </div>
+                    <select id="admin-p-type" onchange="toggleAdminInputPlaceholder()" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white">
                         <option value="frame">相框 (Frame)</option>
                         <option value="avatar">頭像 (Avatar)</option>
                     </select>
-                    <input type="text" id="admin-p-value" placeholder="CSS類名或圖片網址 (例: frame-gold)" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white">
-                    <input type="number" id="admin-p-price" placeholder="價格 (積分)" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white">
-                    <button onclick="adminAddProduct()" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-2 rounded text-sm">上架商品</button>
+                    <div>
+                        <input type="text" id="admin-p-value" placeholder="CSS 類名 (例如 frame-gold)" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white font-mono">
+                        <p class="text-[10px] text-gray-500 mt-1" id="admin-hint">相框請輸入 CSS Class；頭像請輸入檔名 (如: assets/dragon.png)</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="saveProduct()" id="admin-btn-save" class="flex-1 bg-red-600 hover:bg-red-500 text-white font-bold py-2 rounded text-sm">上架商品</button>
+                        <button onclick="deleteProduct()" id="admin-btn-del" class="hidden bg-gray-600 hover:bg-gray-500 text-white px-4 rounded text-sm"><i class="fa-solid fa-trash"></i></button>
+                    </div>
                 </div>
             </div>
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-2xl font-bold text-red-400 flex items-center gap-2"><i class="fa-solid fa-shield-halved"></i> 管理後台</h2>
-                <button onclick="loadAdminLogs()" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded transition"><i class="fa-solid fa-rotate"></i> 刷新</button>
-            </div>
-            <div class="bg-slate-800 rounded-xl overflow-hidden border border-slate-700 h-[75vh] flex flex-col shadow-2xl">
-                <div class="p-3 bg-slate-900 border-b border-slate-700 font-bold text-xs text-gray-400 uppercase tracking-wider">即時答題監控日誌</div>
-                <ul id="admin-logs-list" class="overflow-y-auto p-2 space-y-2 flex-1 text-sm scrollbar-thin scrollbar-thumb-slate-600"></ul>
+
+            <div class="bg-slate-800 rounded-xl overflow-hidden border border-slate-700 flex flex-col shadow-2xl pb-20">
+                <div class="p-3 bg-slate-900 border-b border-slate-700 font-bold text-xs text-gray-400 uppercase tracking-wider flex justify-between">
+                    <span>現有商品 (點擊編輯)</span>
+                    <button onclick="loadAdminProducts()" class="text-blue-400"><i class="fa-solid fa-rotate"></i></button>
+                </div>
+                <div id="admin-product-list" class="p-2 space-y-2 max-h-[50vh] overflow-y-auto scrollbar-thin">
+                    </div>
             </div>
         </div>
     </main>
