@@ -791,6 +791,27 @@
             const snap = await getDocs(query(collection(db, "exam_logs"), where("uid", "==", auth.currentUser.uid), orderBy("timestamp", "desc"), limit(20)));
             ul.innerHTML = ''; snap.forEach(doc => { const d=doc.data(); ul.innerHTML += `<li class="p-2 bg-slate-700/50 rounded mb-2 border-l-4 ${d.isCorrect?'border-green-500':'border-red-500'}"><div class="flex justify-between text-xs text-gray-400"><span>${d.timestamp?.toDate().toLocaleTimeString()}</span><span class="${d.isCorrect?'text-green-400':'text-red-400'}">${d.isCorrect?'CORRECT':'WRONG'}</span></div><div class="text-sm mt-1">${d.question}</div></li>`; });
         };
+        window.loadAdminLogs = async () => {
+            const ul = document.getElementById('admin-logs-list');
+            ul.innerHTML = '<li class="text-center py-10"><div class="loader"></div></li>';
+            try {
+                const q = query(collection(db, "exam_logs"), orderBy("timestamp", "desc"), limit(30));
+                const snap = await getDocs(q);
+                ul.innerHTML = '';
+                snap.forEach(doc => {
+                    const log = doc.data();
+                    const time = log.timestamp ? new Date(log.timestamp.toDate()).toLocaleTimeString() : '--:--';
+                    const li = document.createElement('li');
+                    li.className = `p-3 rounded-lg text-xs border-l-4 mb-2 bg-slate-700/50 ${log.isCorrect ? 'border-green-500' : 'border-red-500'}`;
+                    li.innerHTML = `
+                        <div class="flex justify-between mb-1"><span class="font-bold text-gray-300 truncate w-2/3">${log.email}</span><span class="text-gray-500 font-mono">${time}</span></div>
+                        <div class="text-gray-400 mb-2 line-clamp-2">${log.question}</div>
+                        <div class="flex justify-between items-center bg-slate-900/50 p-1 rounded"><span class="text-gray-400">${log.rankAtTime}</span><span class="${log.isCorrect ? 'text-green-400' : 'text-red-400'} font-bold px-2 py-0.5 rounded">${log.isCorrect ? 'CORRECT' : 'WRONG'}</span></div>
+                    `;
+                    ul.appendChild(li);
+                });
+            } catch (e) { ul.innerHTML = '<li class="text-center text-red-400 py-4">讀取失敗 (權限不足)</li>'; }
+        };
         
         window.loadAdminLogs = async () => {
             const ul = document.getElementById('admin-logs-list'); ul.innerHTML = '<div class="loader"></div>';
