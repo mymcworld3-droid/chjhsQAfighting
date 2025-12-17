@@ -673,29 +673,78 @@ window.loadAdminData = async () => {
     }
 };
 
+// ==========================================
+//  [修正版] 管理員存檔邏輯 (請替換 main.js 對應部分)
+// ==========================================
 
+// 2. 編輯模式填充 (點擊筆圖示時觸發)
+window.editProduct = (id, data) => {
+    // ⭐ 修正：HTML 裡的 ID 是 'admin-edit-id'，不是 'admin-p-id'
+    document.getElementById('admin-edit-id').value = id; 
+    
+    document.getElementById('admin-p-name').value = data.name;
+    document.getElementById('admin-p-type').value = data.type;
+    document.getElementById('admin-p-value').value = data.value;
+    document.getElementById('admin-p-price').value = data.price;
+    
+    // UI 變更
+    document.getElementById('admin-form-title').innerText = "✏️ 編輯商品";
+    const saveBtn = document.getElementById('admin-btn-save'); // ⭐ 修正：HTML ID 是 'admin-btn-save'
+    saveBtn.innerText = "更新商品";
+    saveBtn.classList.replace('bg-red-600', 'bg-blue-600');
+    
+    document.getElementById('admin-btn-del').classList.remove('hidden'); // 顯示刪除鈕
+    toggleAdminInputPlaceholder(); // 更新提示
+};
 
-// 4. 管理員：提交 (新增或更新)
-window.handleProductSubmit = async () => {
-    if (!currentUserData.isAdmin) return alert("權限不足");
+// 3. 重置表單 (點擊新增模式時觸發)
+window.resetAdminForm = () => {
+    document.getElementById('admin-edit-id').value = ''; // ⭐ 修正 ID
+    document.getElementById('admin-p-name').value = '';
+    document.getElementById('admin-p-value').value = '';
+    document.getElementById('admin-p-price').value = '';
+    
+    document.getElementById('admin-form-title').innerText = "➕ 上架新商品";
+    const saveBtn = document.getElementById('admin-btn-save');
+    saveBtn.innerText = "上架商品";
+    saveBtn.classList.replace('bg-blue-600', 'bg-red-600');
+    
+    document.getElementById('admin-btn-del').classList.add('hidden'); // 隱藏刪除鈕
+    toggleAdminInputPlaceholder();
+};
 
-    const id = document.getElementById('admin-p-id').value;
+// 4. [關鍵修正] 儲存商品 (對應 HTML onclick="saveProduct()")
+window.saveProduct = async () => {
+    // 1. 權限檢查
+    if (!currentUserData || !currentUserData.isAdmin) {
+        return alert("權限不足！請去 Firebase Console 將 isAdmin 設為 true");
+    }
+
+    // 2. 抓取 DOM 元素
+    const docId = document.getElementById('admin-edit-id').value; // ⭐ 修正 ID
     const name = document.getElementById('admin-p-name').value;
     const type = document.getElementById('admin-p-type').value;
     const value = document.getElementById('admin-p-value').value;
-    const price = parseInt(document.getElementById('admin-p-price').value);
+    const priceRaw = document.getElementById('admin-p-price').value;
+    const price = parseInt(priceRaw);
 
-    if (!name || !value || !price) return alert("請填寫完整資訊");
+    // 3. 驗證資料
+    if (!name || !value || isNaN(price)) {
+        return alert("請填寫完整資訊 (名稱、數值、價格)");
+    }
 
     const productData = { name, type, value, price, updatedAt: serverTimestamp() };
+    const btn = document.getElementById('admin-btn-save');
+    btn.innerText = "處理中...";
+    btn.disabled = true;
 
     try {
-        if (id) {
-            // 更新模式
-            await updateDoc(doc(db, "products", id), productData);
+        if (docId) {
+            // --- 更新模式 ---
+            await updateDoc(doc(db, "products", docId), productData);
             alert(`商品「${name}」更新成功！`);
         } else {
-            // 新增模式
+            // --- 新增模式 ---
             productData.createdAt = serverTimestamp();
             await addDoc(collection(db, "products"), productData);
             alert(`商品「${name}」上架成功！`);
@@ -703,8 +752,12 @@ window.handleProductSubmit = async () => {
         resetAdminForm();
         loadAdminData(); // 重新整理列表
     } catch (e) {
-        console.error(e);
-        alert("操作失敗: " + e.message);
+        console.error("Save Error:", e);
+        alert("操作失敗，請查看 Console (F12)");
+    } finally {
+        btn.disabled = false;
+        if(!docId) btn.innerText = "上架商品";
+        else btn.innerText = "更新商品";
     }
 };
 
