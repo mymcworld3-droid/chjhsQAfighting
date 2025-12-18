@@ -142,32 +142,37 @@ function updateUIStats() {
 //  雙人對戰系統 (PvP System)
 // ==========================================
 
+// ==========================================
+//  雙人對戰系統 (PvP System) - 修正版
+// ==========================================
+
 window.startBattleMatchmaking = async () => {
+    // 1. UI 初始化
     isBattleActive = true;
     switchToPage('page-battle');
     document.getElementById('battle-lobby').classList.remove('hidden');
     document.getElementById('battle-arena').classList.add('hidden');
     document.getElementById('battle-status-text').innerText = "🔍 搜尋對手中...";
 
-    // 1. 定義「有效房間」的時間範圍 (例如：只找最近 2 分鐘內建立的房間)
+    // 2. 定義「有效房間」的時間範圍 (只找最近 2 分鐘內建立的房間)
     // 這樣可以避免配對到房主已經關閉視窗的「幽靈房間」
     const twoMinutesAgo = new Date(Date.now() - 2 * 60 * 1000);
 
-    // 準備我的資料
+    // 3. 準備我的玩家資料 (🔥 關鍵修正：必須帶上 equipped 裝備資訊)
     const myPlayerData = { 
         uid: auth.currentUser.uid, 
         name: currentUserData.displayName, 
         score: 0, 
         done: false,
-        equipped: currentUserData.equipped || {}
+        equipped: currentUserData.equipped || { frame: '', avatar: '' } 
     };
 
     try {
-        // 搜尋等待中的房間 (增加時間過濾)
+        // 4. 搜尋等待中的房間 (增加時間過濾，避免幽靈房)
         const q = query(
             collection(db, "rooms"), 
             where("status", "==", "waiting"),
-            where("createdAt", ">", twoMinutesAgo), // 避免幽靈房
+            where("createdAt", ">", twoMinutesAgo), 
             limit(5) // 一次抓 5 個，減少大家搶同一個的機率
         );
         
@@ -175,13 +180,13 @@ window.startBattleMatchmaking = async () => {
         let joinedRoomId = null;
 
         if (!snapshot.empty) {
-            // 隨機選一個房間嘗試加入 (分散流量)
+            // 隨機選一個房間嘗試加入 (分散流量，減少撞房)
             const availableDocs = snapshot.docs;
             const targetDoc = availableDocs[Math.floor(Math.random() * availableDocs.length)];
             const roomRef = doc(db, "rooms", targetDoc.id);
 
             try {
-                // 🔥 使用 Transaction 防止多人同時進入同一房間
+                // 🔥 使用 Transaction (事務) 防止多人同時進入同一房間
                 await runTransaction(db, async (transaction) => {
                     const sfDoc = await transaction.get(roomRef);
                     if (!sfDoc.exists()) throw "Document does not exist!";
@@ -202,10 +207,11 @@ window.startBattleMatchmaking = async () => {
                 });
             } catch (e) {
                 console.log("配對衝突 (正常現象)，將建立新房間:", e);
-                // 這裡捕捉錯誤後，joinedRoomId 仍為 null，會自動往下走到建立房間
+                // 這裡捕捉錯誤後，joinedRoomId 仍為 null，程式會自動往下走到「建立房間」
             }
         }
 
+        // 5. 判斷結果
         if (joinedRoomId) {
             // 加入成功
             currentBattleId = joinedRoomId;
@@ -223,13 +229,14 @@ window.startBattleMatchmaking = async () => {
             currentBattleId = roomRef.id;
         }
 
+        // 6. 開始監聽
         listenToBattleRoom(currentBattleId);
 
     } catch (e) {
         console.error("配對系統錯誤:", e);
-        // 如果報錯 "requires an index"，請按 F12 看 Console 點擊連結建立索引
+        // 如果報錯 "requires an index"，提示使用者建立索引
         if (e.message.includes("index")) {
-            alert("⚠️ 開發者注意：請到 Console 建立 Firestore 複合索引 (status + createdAt)");
+            alert("⚠️ 開發者注意：請按 F12 打開 Console，點擊連結建立 Firestore 複合索引 (status + createdAt)");
         } else {
             alert("配對失敗，請重試");
             leaveBattle();
