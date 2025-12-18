@@ -575,7 +575,7 @@ async function fetchOneQuestion() {
     let weakArray = rawWeakString.split(/[,，\s]+/).filter(s => s.trim().length > 0);
     let strongArray = rawStrongString.split(/[,，\s]+/).filter(s => s.trim().length > 0);
     // 內建通識題庫，確保永遠有題目可出
-    const generalTopics = ["台灣歷史", "世界地理", "生活科學", "邏輯推理", "國語文常識", "科技新知", "動漫與遊戲", "環境保育", "流行文化"];
+    const generalTopics = ["台灣歷史", "世界地理", "生活科學", "邏輯推理", "國語文常識", "科技新知"];
 
     // 2. 決定這次的主題 (混合機制 🎲)
     let targetSubject = "";
