@@ -376,9 +376,20 @@ function listenToBattleRoom(roomId) {
     });
 }
 
+// 全域變數：防止重複生成
+let isGenerating = false;
+
 async function generateSharedQuiz(roomId) {
+    // 1. 如果正在生成中，直接退出，不要重複呼叫
+    if (isGenerating) return;
+    
+    isGenerating = true; // 上鎖
+    console.log("🚀 房主正在生成題目...");
+
     try {
         const q = await fetchOneQuestion(); 
+        
+        // 寫入資料庫
         await updateDoc(doc(db, "rooms", roomId), {
             currentQuestion: {
                 q: q.data.q,
@@ -386,8 +397,13 @@ async function generateSharedQuiz(roomId) {
                 ans: q.data.ans
             }
         });
+        console.log("✅ 題目已生成並同步！");
+
     } catch (e) {
-        console.error("Host failed to generate question", e);
+        console.error("❌ 題目生成失敗:", e);
+        // (選用) 可以在這裡加入 alert 通知使用者重試
+    } finally {
+        isGenerating = false; // 無論成功失敗，都解鎖
     }
 }
 
