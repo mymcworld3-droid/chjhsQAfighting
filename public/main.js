@@ -181,7 +181,7 @@ window.startBattleMatchmaking = async () => {
 
         if (!snapshot.empty) {
             // 隨機選一個房間嘗試加入 (分散流量，減少撞房)
-            const availableDocs = snapshot.docs;
+            const availableDocs = snapshot.docs.filter(d => d.data().host.uid !== auth.currentUser.uid);
             const targetDoc = availableDocs[Math.floor(Math.random() * availableDocs.length)];
             const roomRef = doc(db, "rooms", targetDoc.id);
 
