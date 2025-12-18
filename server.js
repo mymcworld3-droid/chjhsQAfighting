@@ -52,7 +52,7 @@ app.post('/api/analyze-subjects', async (req, res) => {
 });
 
 // ==========================================
-// API 2: 生成測驗題目
+// API 2: 生成測驗題目 (包含自動審查機制)
 // ==========================================
 app.post('/api/generate-quiz', async (req, res) => {
     const { subject, level, rank } = req.body;
@@ -60,10 +60,11 @@ app.post('/api/generate-quiz', async (req, res) => {
 
     const randomSeed = Math.random().toString(36).substring(7);
 
-    const prompt = `
+    // --- 步驟 1: 生成題目 (Generator) ---
+    const generationPrompt = `
         [系統指令]
-        角色：專業題庫老師
-        當前任務：出一道單選題。
+        角色：創意題庫出題者
+        任務：出一道單選題。
         隨機因子：${randomSeed}
 
         [玩家數據]
@@ -84,23 +85,54 @@ app.post('/api/generate-quiz', async (req, res) => {
         }
     `;
 
-    // --- 🛡️ 重試機制 ---
+    // --- 🛡️ 重試機制 (包含審查步驟) ---
     let attempts = 0;
     const maxAttempts = 3;
 
     while (attempts < maxAttempts) {
         try {
-            console.log(`[Attempt ${attempts + 1}] Generating with Gemini 2.5 (${subject})...`);
+            console.log(`[Attempt ${attempts + 1}] Step 1: Generating (${subject})...`);
             
-            const result = await model.generateContent(prompt);
-            const response = await result.response;
-            let text = response.text();
+            // 1. 初次生成
+            const genResult = await model.generateContent(generationPrompt);
+            let rawText = genResult.response.text();
+            
+            // 清理 Markdown (防止 AI 加了 ```json)
+            rawText = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
 
-            text = text.replace(/```json/g, '').replace(/```/g, '').trim();
-            JSON.parse(text); 
+            // --- 步驟 2: 自我審查與修正 (Critic) ---
+            console.log(`[Attempt ${attempts + 1}] Step 2: Validating...`);
+            
+            const validationPrompt = `
+                [系統指令：嚴格審查員]
+                你現在是審題老師，請檢查以下 AI 生成的題目 JSON。
+                
+                [待審查 JSON]
+                ${rawText}
 
-            console.log("✅ 生成成功！");
-            return res.json({ text: text });
+                [審查標準]
+                1. **正確性**： "correct" 的答案是否絕對正確？
+                2. **唯一性**： "wrong" 選項中是否有正確答案？(確保只有一個正解)
+                3. **邏輯性**： 題目敘述是否通順？
+                4. **格式**： 是否符合 JSON 格式？
+
+                [輸出要求]
+                - 如果發現錯誤：請修正它，並輸出修正後的 **純 JSON**。
+                - 如果完全正確：請直接輸出原 JSON。
+                - 不要輸出任何解釋文字，只要 JSON。
+            `;
+
+            const valResult = await model.generateContent(validationPrompt);
+            let finalText = valResult.response.text();
+            
+            // 清理驗證後的文字
+            finalText = finalText.replace(/```json/g, '').replace(/```/g, '').trim();
+
+            // 測試能否解析 (確保是有效 JSON)
+            JSON.parse(finalText); 
+
+            console.log("✅ 審查通過，生成成功！");
+            return res.json({ text: finalText });
 
         } catch (error) {
             console.error(`❌ Attempt ${attempts + 1} failed:`, error.message);
@@ -108,11 +140,8 @@ app.post('/api/generate-quiz', async (req, res) => {
             
             if (attempts === maxAttempts) {
                 let errorMsg = "AI 連線繁忙，請稍後再試。";
-                // 針對 Gemini 2.5 低額度的特別錯誤提示
                 if (error.message.includes("429")) {
-                    errorMsg = "❌ Gemini 2.5 今日額度已用完 (僅約 10 題)。請通知管理員切換回 1.5 Flash。";
-                } else if (error.message.includes("not found")) {
-                    errorMsg = "找不到 gemini-2.5-flash-lite 模型，請確認 API 權限或名稱。";
+                    errorMsg = "❌ Gemini API 額度已用完。";
                 }
                 return res.status(500).json({ error: errorMsg, details: error.message });
             }
