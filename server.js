@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 require('dotenv').config();
 
@@ -49,6 +50,25 @@ app.post('/api/analyze-subjects', async (req, res) => {
         console.error("Analyze Error:", error);
         res.json({ subjects: req.body.text }); 
     }
+});
+
+app.get('/api/assets', (req, res) => {
+    const assetsDir = path.join(__dirname, 'public', 'assets');
+    
+    // 讀取資料夾
+    fs.readdir(assetsDir, (err, files) => {
+        if (err) {
+            console.error("無法讀取 assets 資料夾:", err);
+            return res.status(500).json({ error: "無法讀取圖片列表" });
+        }
+        
+        // 過濾出圖片檔 (png, jpg, jpeg, webp, gif)
+        const images = files.filter(file => /\.(png|jpg|jpeg|gif|webp)$/i.test(file));
+        
+        // 回傳格式：加上資料夾前綴 (例如: "assets/abc.png")
+        const imagePaths = images.map(file => `assets/${file}`);
+        res.json({ images: imagePaths });
+    });
 });
 
 // ==========================================
