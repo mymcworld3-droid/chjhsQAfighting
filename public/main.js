@@ -959,18 +959,96 @@ window.updateValuePlaceholder = () => {
     toggleAdminInputPlaceholder();
 };
 
-window.toggleAdminInputPlaceholder = () => {
+// ==========================================
+//  管理後台：圖片選擇器邏輯 (新增)
+// ==========================================
+
+// 1. 切換輸入模式 (當選擇類型變更時)
+window.toggleAdminInputPlaceholder = async () => {
     const type = document.getElementById('admin-p-type').value;
     const input = document.getElementById('admin-p-value');
     const hint = document.getElementById('admin-hint');
+    const selectorDiv = document.getElementById('admin-asset-selector');
+
     if (type === 'frame') {
+        // 相框模式：隱藏圖片選擇器
+        selectorDiv.classList.add('hidden');
         input.placeholder = "CSS 類名 (例: frame-gold)";
         hint.innerText = "請輸入 style.css 定義的 Class 名稱";
     } else {
+        // 頭像模式：顯示圖片選擇器並載入圖片
+        selectorDiv.classList.remove('hidden');
         input.placeholder = "圖片路徑 (例: assets/avatar1.png)";
-        hint.innerText = "請輸入 public 資料夾內的圖片路徑";
+        hint.innerText = "手動輸入或從上方選擇未使用的圖片";
+        
+        // 自動載入伺服器圖片
+        await loadUnusedAssets();
     }
 };
+
+// 2. 載入並過濾圖片
+async function loadUnusedAssets() {
+    const select = document.getElementById('admin-asset-select');
+    select.innerHTML = '<option value="">-- 掃描中... --</option>';
+
+    try {
+        // 步驟 A: 抓取伺服器上的所有圖片
+        const res = await fetch('/api/assets');
+        const data = await res.json();
+        const allImages = data.images || [];
+
+        // 步驟 B: 抓取 Firebase 裡已經被商品使用過的圖片
+        const q = query(collection(db, "products"));
+        const snap = await getDocs(q);
+        const usedImages = new Set();
+        snap.forEach(doc => {
+            const item = doc.data();
+            if (item.type === 'avatar') usedImages.add(item.value);
+        });
+
+        // 步驟 C: 過濾出未使用的圖片
+        // (如果是「編輯模式」，當前商品的圖片算作「已使用」，但我們還是要讓它顯示在 input 裡，這裡只列出可供更換的)
+        const unusedImages = allImages.filter(img => !usedImages.has(img));
+
+        // 步驟 D: 渲染選項
+        select.innerHTML = '<option value="">-- 請選擇一張圖片 --</option>';
+        
+        if (unusedImages.length === 0) {
+            const opt = document.createElement('option');
+            opt.innerText = "(沒有可用的新圖片)";
+            opt.disabled = true;
+            select.appendChild(opt);
+        } else {
+            unusedImages.forEach(img => {
+                const opt = document.createElement('option');
+                opt.value = img;
+                opt.innerText = img.replace('assets/', ''); // 只顯示檔名比較清爽
+                select.appendChild(opt);
+            });
+        }
+
+    } catch (e) {
+        console.error(e);
+        select.innerHTML = '<option value="">讀取失敗</option>';
+    }
+}
+
+// 3. 選擇圖片時的動作 (選單 onchange)
+window.selectAdminImage = (value) => {
+    if (!value) return;
+    
+    // 自動填入 input
+    document.getElementById('admin-p-value').value = value;
+    
+    // 更新預覽圖
+    const preview = document.getElementById('admin-asset-preview');
+    preview.src = value;
+    preview.classList.remove('hidden');
+};
+
+// 4. (補充) 在編輯模式填充表單時，也要觸發預覽
+// 請找到原本的 editProduct 函式，在最後面加上這行：
+// if (data.type === 'avatar') selectAdminImage(data.value);
 
 // 5. 設定頁面：載入背包 (Inventory)
 window.renderInventory = async (filterType = 'frame') => {
