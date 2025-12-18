@@ -316,7 +316,18 @@
                     </select>
                     <div>
                         <input type="text" id="admin-p-value" placeholder="CSS 類名 (例如 frame-gold)" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white font-mono">
-                        <p class="text-[10px] text-gray-500 mt-1" id="admin-hint">相框請輸入 CSS Class；頭像請輸入檔名 (如: assets/dragon.png)</p>
+    
+                        <div id="admin-asset-selector" class="hidden mt-2 p-2 bg-slate-700/30 rounded border border-slate-600">
+                            <label class="text-xs text-gray-400 block mb-1">快速選擇未使用的圖片：</label>
+                            <div class="flex gap-2">
+                                <select id="admin-asset-select" onchange="selectAdminImage(this.value)" class="flex-1 bg-slate-900 border border-slate-600 text-white text-xs rounded p-2 outline-none">
+                                    <option value="">載入中...</option>
+                                </select>
+                                <img id="admin-asset-preview" src="" class="w-10 h-10 rounded bg-black object-cover border border-slate-500 hidden">
+                            </div>
+                        </div>
+
+                        <p class="text-[10px] text-gray-500 mt-1" id="admin-hint">相框請輸入 CSS Class；頭像請輸入檔名</p>
                     </div>
                     <div class="flex gap-2">
                         <button onclick="saveProduct()" id="admin-btn-save" class="flex-1 bg-red-600 hover:bg-red-500 text-white font-bold py-2 rounded text-sm">上架商品</button>
