@@ -514,30 +514,56 @@ async function fetchOneQuestion() {
     const BACKEND_URL = "/api/generate-quiz";
     const rankName = RANKS[currentUserData.stats.rankLevel];
     const level = currentUserData.profile.educationLevel || "一般";
-    let rawWeakString = currentUserData.profile.weakSubjects || "";
-    let targetSubject = "";
-    let subjectsArray = rawWeakString.split(/[,，\s]+/).filter(s => s.trim().length > 0);
-    if (subjectsArray.length > 0) { targetSubject = subjectsArray[Math.floor(Math.random() * subjectsArray.length)]; } 
-    else { const generalTopics = ["台灣歷史", "世界地理", "生活科學", "邏輯推理", "國語文常識", "科技新知", "動漫與遊戲", "環境保育"]; targetSubject = generalTopics[Math.floor(Math.random() * generalTopics.length)]; }
     
+    // 1. 準備題庫來源 (弱項、強項、通識)
+    let rawWeakString = currentUserData.profile.weakSubjects || "";
+    let rawStrongString = currentUserData.profile.strongSubjects || "";
+    
+    // 將字串轉為陣列 (去除空白)
+    let weakArray = rawWeakString.split(/[,，\s]+/).filter(s => s.trim().length > 0);
+    let strongArray = rawStrongString.split(/[,，\s]+/).filter(s => s.trim().length > 0);
+    // 內建通識題庫，確保永遠有題目可出
+    const generalTopics = ["台灣歷史", "世界地理", "生活科學", "邏輯推理", "國語文常識", "科技新知", "動漫與遊戲", "環境保育", "流行文化"];
+
+    // 2. 決定這次的主題 (混合機制 🎲)
+    let targetSubject = "";
+    const rand = Math.random(); // 產生 0.0 ~ 1.0 的隨機數
+
+    // 邏輯說明：
+    // 如果使用者有設定弱項，則有 60% 機率出弱項 (加強訓練)
+    // 剩下的 40% (或者使用者根本沒設弱項)，則從「強項 + 通識」裡面隨機挑一個
+    if (weakArray.length > 0 && rand < 0.6) {
+        targetSubject = weakArray[Math.floor(Math.random() * weakArray.length)];
+    } else {
+        // 混合強項與通識，讓大腦放鬆或建立自信
+        const pool = [...strongArray, ...generalTopics];
+        targetSubject = pool[Math.floor(Math.random() * pool.length)];
+    }
+    
+    // 3. 發送請求給 AI
     const response = await fetch(BACKEND_URL, {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ subject: targetSubject, level: level, rank: rankName })
     });
+    
     if (!response.ok) throw new Error(`Server Error: ${response.status}`);
     const data = await response.json();
+    
+    // 解析 AI 回傳的資料
     let aiText = data.text;
     const jsonMatch = aiText.match(/\{[\s\S]*\}/);
     if (jsonMatch) aiText = jsonMatch[0];
     const rawData = JSON.parse(aiText);
     
+    // 洗牌選項
     let allOptions = [rawData.correct, ...rawData.wrong];
     allOptions = shuffleArray(allOptions);
     const correctIndex = allOptions.indexOf(rawData.correct);
+    
     return {
         data: { q: rawData.q, opts: allOptions, ans: correctIndex, exp: rawData.exp },
         rank: rankName,
-        badge: `🎯 專項特訓: ${targetSubject}`
+        badge: `🎯 題目: ${targetSubject}` // 讓使用者知道這題的主題
     };
 }
 
