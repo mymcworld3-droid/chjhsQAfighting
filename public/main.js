@@ -409,14 +409,37 @@ async function handleBattleAnswer(roomId, userIdx, correctIdx, isHost) {
     });
 }
 
-window.leaveBattle = () => {
-    if (battleUnsub) battleUnsub();
-    // ⭐ 解除鎖定
+window.leaveBattle = async () => {
+    // 1. 停止監聽 (這步最重要，先切斷連線)
+    if (battleUnsub) {
+        battleUnsub();
+        battleUnsub = null;
+    }
+    
+    // 2. 🔥 關鍵修正：檢查並刪除「我建立的、還在等待中」的房間
+    if (currentBattleId) {
+        // 先把 ID 存起來，以免下面被清空後讀不到
+        const roomIdToRemove = currentBattleId;
+        
+        // 背景執行清理 (不卡 UI 體驗)
+        // 這裡我們去讀取該房間，確認「我是房主」且「沒人加入」才刪除
+        getDoc(doc(db, "rooms", roomIdToRemove)).then(async (snap) => {
+            if (snap.exists()) {
+                const data = snap.data();
+                // 只有當房間狀態是 waiting 且房主是我本人時，才執行刪除
+                if (data.status === "waiting" && data.host.uid === auth.currentUser.uid) {
+                    await deleteDoc(doc(db, "rooms", roomIdToRemove));
+                    console.log("🗑️ 已清理閒置房間:", roomIdToRemove);
+                }
+            }
+        }).catch(err => console.error("清理房間失敗:", err));
+    }
+
+    // 3. 重置狀態並回首頁
     isBattleActive = false;
-    // 清除一些臨時變數或UI狀態
     currentBattleId = null;
     
-    switchToPage('page-home'); // 解鎖後才能切換
+    switchToPage('page-home');
 };
 
 // ==========================================
