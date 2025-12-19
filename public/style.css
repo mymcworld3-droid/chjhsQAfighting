@@ -564,111 +564,112 @@ button:active::before {
     100% { transform: translate(0); }
 }
 /* ==========================================
-   [新增] 翅膀系列頭像框
+   [修正版] 翅膀系列頭像框 (修復歪斜問題)
    ========================================== */
-/* 通用設定：確保翅膀可以超出圓框 */
+
+/* 通用設定：允許翅膀超出圓框 */
 .frame-seraphim, .frame-dragon {
     position: relative;
-    overflow: visible !important; /* 關鍵：讓翅膀露出來 */
+    overflow: visible !important;
 }
 
 /* --- 1. 熾天使之翼 (Seraphim Wings) --- */
 .frame-seraphim {
-    border: 3px solid #fbbf24; /* 金色邊框 */
+    border: 3px solid #fbbf24;
     box-shadow: 0 0 15px rgba(251, 191, 36, 0.6), inset 0 0 15px rgba(255, 255, 255, 0.5);
-    background: linear-gradient(to bottom, #fffbeb, #fef3c7); /* 內部微微發亮 */
+    background: linear-gradient(to bottom, #fffbeb, #fef3c7);
 }
 
-/* 左翼 & 右翼共用設定 */
+/* 翅膀共用屬性 */
 .frame-seraphim::before,
 .frame-seraphim::after {
     content: '';
     position: absolute;
-    top: -10%; /* 調整翅膀上下位置 */
-    width: 80%; /* 翅膀大小 */
-    height: 120%;
-    z-index: -1; /* 在頭像後面 */
+    top: 50%; /* 垂直置中 */
+    width: 90%; /* 翅膀寬度 */
+    height: 120%; /* 翅膀高度 */
+    z-index: -1;
     background-repeat: no-repeat;
     background-size: contain;
-    /* 使用內嵌 SVG 繪製羽毛翅膀形狀 */
+    background-position: center;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23fbbf24' d='M95.8,22.6c-6.6,6.3-15.7,10.3-25.1,11.1c-3.6,0.3-7.1,0.2-10.6-0.4c-2.9-0.5-5.7-1.4-8.4-2.6 c-5.8-2.7-10.8-6.8-14.7-11.8C33,14,29.7,8.7,26.9,3.1c-0.6-1.2-1.8-1.7-3-1.2c-1.3,0.5-1.8,2-1.3,3.2c2.6,6.2,6,12.1,10.1,17.4 c4.6,5.9,10.4,10.8,17.2,14.1c3.5,1.7,7.3,2.9,11.2,3.5c4.8,0.8,9.7,0.9,14.5-0.1c8.6-1.7,16.6-6.3,22.7-12.9 c1.1-1.2,0.9-3.1-0.4-4.1C97.5,22.2,96.7,22.1,95.8,22.6z'/%3E%3Cpath fill='%23ffffff' opacity='0.7' d='M85,45c-5,5-12,8-20,9c-3,0.3-6,0.2-9-0.3c-2-0.4-5-1.2-7-2.3c-5-2.3-9-5.8-12-10 C33,38,30,33,27,28c-0.5-1-1.5-1.5-2.5-1c-1,0.5-1.5,1.5-1,2.5c2,5,5,10,9,15c4,5,9,9,15,12c3,1.5,6,2.5,9,3c4,0.7,8,0.8,12,0 c7-1.5,14-5.5,19-11c1-1,0.8-2.5-0.2-3.5C87,44,86,44,85,45z'/%3E%3C/svg%3E");
-    filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.8)); /* 翅膀發光 */
-    animation: wing-flap-gold 2s ease-in-out infinite alternate;
+    filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.8));
 }
 
-/* 左翼定位與旋轉 */
+/* 左翼 (鏡像) */
 .frame-seraphim::before {
-    right: 80%; /* 定位在圓框左側 */
-    transform-origin: right center; /* 設定旋轉軸心在翅膀根部 */
-    transform: rotate(-15deg) scaleX(-1); /* 鏡像並旋轉 */
+    right: 85%; /* 緊貼圓框左側 */
+    /* 關鍵：先垂直置中 (translateY)，再鏡像 (scaleX)，最後設定旋轉中心 (right center) */
+    transform: translateY(-50%) scaleX(-1) rotate(10deg);
+    transform-origin: right center; /* 旋轉軸心設定在翅膀根部 */
+    animation: flap-left 2s ease-in-out infinite alternate;
 }
 
-/* 右翼定位與旋轉 */
+/* 右翼 (正常) */
 .frame-seraphim::after {
-    left: 80%; /* 定位在圓框右側 */
+    left: 85%; /* 緊貼圓框右側 */
+    transform: translateY(-50%) rotate(10deg);
     transform-origin: left center;
-    transform: rotate(15deg);
+    animation: flap-right 2s ease-in-out infinite alternate;
 }
 
-/* 天使翅膀拍動動畫 */
-@keyframes wing-flap-gold {
-    0% { transform: rotate(15deg) translateY(0); }
-    100% { transform: rotate(25deg) translateY(-5px); }
+/* 動畫：只改變角度，不改變位移，避免歪斜 */
+@keyframes flap-left {
+    from { transform: translateY(-50%) scaleX(-1) rotate(5deg); }
+    to   { transform: translateY(-50%) scaleX(-1) rotate(20deg); }
 }
-/* 需要為左翼單獨寫一個鏡像的動畫 */
-@keyframes wing-flap-gold-left {
-    0% { transform: rotate(-15deg) scaleX(-1) translateY(0); }
-    100% { transform: rotate(-25deg) scaleX(-1) translateY(-5px); }
+
+@keyframes flap-right {
+    from { transform: translateY(-50%) rotate(5deg); }
+    to   { transform: translateY(-50%) rotate(20deg); }
 }
-.frame-seraphim::before { animation-name: wing-flap-gold-left; }
 
 
 /* --- 2. 魔龍之翼 (Dragon Wings) --- */
 .frame-dragon {
-    border: 3px solid #dc2626; /* 紅色邊框 */
+    border: 3px solid #dc2626;
     box-shadow: 0 0 15px rgba(220, 38, 38, 0.8), inset 0 0 20px rgba(0, 0, 0, 0.8);
-    background: linear-gradient(to bottom, #450a0a, #7f1d1d); /* 深紅熔岩背景 */
+    background: linear-gradient(to bottom, #450a0a, #7f1d1d);
 }
 
 .frame-dragon::before,
 .frame-dragon::after {
     content: '';
     position: absolute;
-    top: -20%;
-    width: 110%; /* 龍翅膀較大 */
+    top: 50%;
+    width: 120%; /* 龍翅膀更大 */
     height: 140%;
     z-index: -1;
     background-repeat: no-repeat;
     background-size: contain;
-    /* 使用內嵌 SVG 繪製蝙蝠/龍翼形狀 */
+    background-position: center;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%237f1d1d' d='M98,10c-5,15-20,25-35,28c-5,1-10,1-15-1c-4-2-8-5-11-9c-8-10-14-22-18-36C18,6,16,4,14,5 c-2,1-2,4-1,7c4,12,10,24,17,34c7,11,16,20,26,25c5,3,11,5,17,5c7,0,14-2,20-5c12-7,22-20,28-34c2-3,0-6-3-7C98,9,98,9,98,10z'/%3E%3Cpath fill='%23dc2626' opacity='0.6' d='M90,30c-4,10-15,18-28,20c-4,0.8-8,0.8-12-0.8c-3-1.6-6-4-8-7.2c-6-8-10-18-14-28 c-0.8-1.6-2.4-3.2-4-2.4c-1.6,0.8-1.6,3.2-0.8,5.6c3.2,9.6,8,19.2,13.6,27.2c5.6,8.8,12.8,16,20.8,20c4,2.4,8.8,4,13.6,4 c5.6,0,11.2-1.6,16-4c9.6-5.6,17.6-16,22.4-27.2c1.6-2.4,0-4.8-2.4-5.6C91,29.2,90,29.2,90,30z'/%3E%3C/svg%3E");
-    filter: drop-shadow(0 0 10px rgba(220, 38, 38, 1)); /* 紅色強烈發光 */
-    animation: dragon-breathe 3s ease-in-out infinite alternate;
-    opacity: 0.9;
+    filter: drop-shadow(0 0 10px rgba(220, 38, 38, 0.8));
 }
 
 .frame-dragon::before {
-    right: 75%;
-    transform-origin: bottom right;
-    transform: rotate(-20deg) scaleX(-1);
+    right: 75%; 
+    transform: translateY(-50%) scaleX(-1) rotate(-10deg);
+    transform-origin: right bottom; /* 龍翅膀通常從肩膀下方長出 */
+    animation: dragon-left 3s ease-in-out infinite alternate;
 }
 
 .frame-dragon::after {
     left: 75%;
-    transform-origin: bottom left;
-    transform: rotate(20deg);
+    transform: translateY(-50%) rotate(-10deg);
+    transform-origin: left bottom;
+    animation: dragon-right 3s ease-in-out infinite alternate;
 }
 
-/* 龍翼呼吸閃爍動畫 */
-@keyframes dragon-breathe {
-    0% { filter: drop-shadow(0 0 10px rgba(220, 38, 38, 0.8)); transform: rotate(20deg) scale(1); }
-    100% { filter: drop-shadow(0 0 25px rgba(239, 68, 68, 1)); transform: rotate(22deg) scale(1.05); }
+@keyframes dragon-left {
+    from { transform: translateY(-50%) scaleX(-1) rotate(-10deg); }
+    to   { transform: translateY(-50%) scaleX(-1) rotate(5deg); }
 }
-@keyframes dragon-breathe-left {
-    0% { filter: drop-shadow(0 0 10px rgba(220, 38, 38, 0.8)); transform: rotate(-20deg) scaleX(-1) scale(1); }
-    100% { filter: drop-shadow(0 0 25px rgba(239, 68, 68, 1)); transform: rotate(-22deg) scaleX(-1) scale(1.05); }
+
+@keyframes dragon-right {
+    from { transform: translateY(-50%) rotate(-10deg); }
+    to   { transform: translateY(-50%) rotate(5deg); }
 }
-.frame-dragon::before { animation-name: dragon-breathe-left; }
 /* ==========================================
    排行榜特效
    ========================================== */
