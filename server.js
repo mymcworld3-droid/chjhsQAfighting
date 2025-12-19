@@ -17,7 +17,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // 如果遇到 429 錯誤，請改回 'gemini-2.0-flash-exp' 或 'gemini-1.5-flash'
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ 
-    model: "gemini-2.5-flash-lite", 
+    model: "gemini-2.5-flash-lite", // 建議改回這個
     generationConfig: { responseMimeType: "application/json" }
 });
 
@@ -52,6 +52,9 @@ app.post('/api/analyze-subjects', async (req, res) => {
     }
 });
 
+// ==========================================
+// API 3: 取得伺服器上的圖片列表 (新增功能)
+// ==========================================
 app.get('/api/assets', (req, res) => {
     const assetsDir = path.join(__dirname, 'public', 'assets');
     
@@ -72,13 +75,62 @@ app.get('/api/assets', (req, res) => {
 });
 
 // ==========================================
+// API 4: 取得題庫檔案列表 (支援子資料夾)
+// ==========================================
+app.get('/api/banks', (req, res) => {
+    const banksDir = path.join(__dirname, 'public', 'banks');
+
+    // 如果資料夾不存在，建立它
+    if (!fs.existsSync(banksDir)) {
+        fs.mkdirSync(banksDir);
+    }
+
+    // 定義遞迴讀取函式
+    const getFilesRecursively = (dir, fileList = [], rootDir = banksDir) => {
+        const files = fs.readdirSync(dir);
+        
+        files.forEach(file => {
+            const filePath = path.join(dir, file);
+            const stat = fs.statSync(filePath);
+
+            if (stat.isDirectory()) {
+                // 如果是資料夾，繼續往下找
+                getFilesRecursively(filePath, fileList, rootDir);
+            } else {
+                // 如果是檔案，且是 .json 結尾
+                if (file.endsWith('.json')) {
+                    // 計算相對路徑 (例如: "歷史/grade1.json")
+                    // 並將 Windows 的反斜線 (\) 統一轉為正斜線 (/)
+                    const relativePath = path.relative(rootDir, filePath).split(path.sep).join('/');
+                    fileList.push(relativePath);
+                }
+            }
+        });
+        return fileList;
+    };
+
+    try {
+        const allFiles = getFilesRecursively(banksDir);
+        res.json({ files: allFiles });
+    } catch (e) {
+        console.error("讀取題庫失敗:", e);
+        res.json({ files: [] });
+    }
+});
+
+// ==========================================
 // API 2: 生成測驗題目 (包含自動審查機制)
 // ==========================================
 app.post('/api/generate-quiz', async (req, res) => {
-    const { subject, level, rank } = req.body;
+    const { subject, level, rank, difficulty } = req.body;
     if (!subject) return res.status(400).json({ error: 'Subject is required' });
 
     const randomSeed = Math.random().toString(36).substring(7);
+
+    // 定義難度描述
+    let difficultyDesc = "適中";
+    if (difficulty === 'easy') difficultyDesc = "簡單直觀，適合初學者";
+    if (difficulty === 'hard') difficultyDesc = "困難，需要深入思考或冷門知識";
 
     // --- 步驟 1: 生成題目 (Generator) ---
     const generationPrompt = `
@@ -90,6 +142,7 @@ app.post('/api/generate-quiz', async (req, res) => {
         [玩家數據]
         程度：${level || "一般"}
         段位：${rank || "新手"}
+        題目難度：${difficultyDesc} (重要！)。
         
         [出題核心要求]
         1. ⚠️ **指定主題**：請務必針對「${subject}」這個領域出題。
