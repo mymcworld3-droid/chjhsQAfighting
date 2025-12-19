@@ -364,6 +364,12 @@
                         <label class="block mb-2 text-sm font-bold text-yellow-400 flex items-center gap-2">
                             <i class="fa-solid fa-book-open"></i> 出題來源
                         </label>
+                        
+                        <div id="bank-selectors-container" class="space-y-2"></div>
+                        
+                        <input type="hidden" id="set-source-final-value" value="ai">
+                        
+                        <p id="bank-selection-hint" class="text-xs text-gray-500 mt-1">請依序選擇分類...</p>
                         <select id="set-source" class="w-full bg-slate-900/50 border border-slate-600 text-white rounded-xl p-3 outline-none focus:border-yellow-500 transition-all cursor-pointer">
                             <option value="ai">✨ AI 隨機生成 (預設)</option>
                             </select>
