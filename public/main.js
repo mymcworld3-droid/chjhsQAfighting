@@ -1085,27 +1085,25 @@ async function loadUnusedAssets() {
     select.innerHTML = '<option value="">-- 掃描中... --</option>';
 
     try {
-        // 步驟 A: 抓取伺服器上的所有圖片
         const res = await fetch('/api/assets');
         const data = await res.json();
         const allImages = data.images || [];
 
-        // 步驟 B: 抓取 Firebase 裡已經被商品使用過的圖片
         const q = query(collection(db, "products"));
         const snap = await getDocs(q);
         const usedImages = new Set();
+        
         snap.forEach(doc => {
             const item = doc.data();
-            if (item.type === 'avatar') usedImages.add(item.value);
+            // 🔥 修改：只要是路徑 (有 . 或 /)，無論是 avatar 還是 frame 都視為已使用
+            if (item.value && (item.value.includes('.') || item.value.includes('/'))) {
+                usedImages.add(item.value);
+            }
         });
 
-        // 步驟 C: 過濾出未使用的圖片
-        // (如果是「編輯模式」，當前商品的圖片算作「已使用」，但我們還是要讓它顯示在 input 裡，這裡只列出可供更換的)
         const unusedImages = allImages.filter(img => !usedImages.has(img));
 
-        // 步驟 D: 渲染選項
         select.innerHTML = '<option value="">-- 請選擇一張圖片 --</option>';
-        
         if (unusedImages.length === 0) {
             const opt = document.createElement('option');
             opt.innerText = "(沒有可用的新圖片)";
@@ -1115,11 +1113,10 @@ async function loadUnusedAssets() {
             unusedImages.forEach(img => {
                 const opt = document.createElement('option');
                 opt.value = img;
-                opt.innerText = img.replace('assets/', ''); // 只顯示檔名比較清爽
+                opt.innerText = img.replace('assets/', '');
                 select.appendChild(opt);
             });
         }
-
     } catch (e) {
         console.error(e);
         select.innerHTML = '<option value="">讀取失敗</option>';
