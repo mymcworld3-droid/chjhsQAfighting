@@ -320,123 +320,179 @@
         </div>
 
         <div id="page-settings" class="page-section hidden">
-            <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
-                <i class="fa-solid fa-user-gear text-green-400"></i> 個人設定
+            <h2 class="text-2xl font-bold mb-4 flex items-center gap-2 text-green-400 animate-fade-in-up">
+                <i class="fa-solid fa-user-gear"></i> 個人設定
             </h2>
-            <div class="bg-slate-800/90 backdrop-blur-sm p-6 rounded-xl shadow-lg mb-6 border border-slate-700 space-y-4">
-                <div>
-                    <label class="block mb-1 text-sm font-bold text-white">年級 / 身份</label>
-                    <select id="set-level" class="w-full bg-slate-900 border border-slate-600 text-white rounded-lg p-3 transition-all">
-                        <option value="國小中年級">國小 (中年級)</option>
-                        <option value="國小高年級">國小 (高年級)</option>
-                        <option value="國中一年級">國中 (一年級)</option>
-                        <option value="國中二年級">國中 (二年級)</option>
-                        <option value="國中三年級">國中 (三年級)</option>
-                        <option value="高中職">高中 / 高職</option>
-                        <option value="大學以上">大學 / 社會人士</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block mb-1 text-sm font-bold text-green-400">擅長科目</label>
-                    <input type="text" id="set-strong" class="bg-slate-900 border border-slate-600 text-white text-sm rounded-lg w-full p-3 transition-all">
-                </div>
-                <div>
-                    <label class="block mb-1 text-sm font-bold text-red-400">弱項 (加強練習)</label>
-                    <input type="text" id="set-weak" class="bg-slate-900 border border-slate-600 text-white text-sm rounded-lg w-full p-3 transition-all">
-                </div>
-                <button onclick="saveProfile()" class="mt-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white px-4 py-3 rounded-lg w-full font-bold transition-all shadow-lg mb-6 hover:scale-105">更新設定</button>
+            
+            <div class="bg-slate-800/80 backdrop-blur-md p-6 rounded-2xl shadow-xl mb-6 border border-slate-700/50 space-y-5 relative overflow-hidden">
+                <div class="absolute -top-10 -right-10 w-32 h-32 bg-green-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
-                <div class="bg-slate-800/90 backdrop-blur-sm p-4 rounded-xl border border-slate-700 mb-6">
-                    <h3 class="font-bold text-white mb-3 flex items-center gap-2">
-                        <i class="fa-solid fa-backpack text-green-400"></i> 我的背包 (Inventory)
+                <div>
+                    <label class="block mb-2 text-sm font-bold text-gray-300 flex items-center gap-2">
+                        <i class="fa-solid fa-graduation-cap text-blue-400"></i> 年級 / 身份
+                    </label>
+                    <div class="relative">
+                        <select id="set-level" class="w-full bg-slate-900/50 border border-slate-600 text-white rounded-xl p-3 pl-4 appearance-none outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all cursor-pointer">
+                            <option value="國小中年級">國小 (中年級)</option>
+                            <option value="國小高年級">國小 (高年級)</option>
+                            <option value="國中一年級">國中 (一年級)</option>
+                            <option value="國中二年級">國中 (二年級)</option>
+                            <option value="國中三年級">國中 (三年級)</option>
+                            <option value="高中職">高中 / 高職</option>
+                            <option value="大學以上">大學 / 社會人士</option>
+                        </select>
+                        <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"></i>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block mb-2 text-sm font-bold text-gray-300 flex items-center gap-2">
+                        <i class="fa-solid fa-thumbs-up text-green-400"></i> 擅長科目
+                    </label>
+                    <input type="text" id="set-strong" class="w-full bg-slate-900/50 border border-slate-600 text-white text-sm rounded-xl p-3 outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-all" placeholder="輸入擅長科目...">
+                </div>
+
+                <div>
+                    <label class="block mb-2 text-sm font-bold text-gray-300 flex items-center gap-2">
+                        <i class="fa-solid fa-dumbbell text-red-400"></i> 弱項 (加強練習)
+                    </label>
+                    <input type="text" id="set-weak" class="w-full bg-slate-900/50 border border-slate-600 text-white text-sm rounded-xl p-3 outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all" placeholder="輸入想加強的科目...">
+                </div>
+
+                <button onclick="saveProfile()" class="w-full mt-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white px-4 py-3.5 rounded-xl font-bold transition-all shadow-lg hover:shadow-blue-900/30 hover:scale-[1.02] flex justify-center items-center gap-2">
+                    <i class="fa-solid fa-floppy-disk"></i> 更新設定
+                </button>
+            </div>
+
+            <div class="bg-slate-800/80 backdrop-blur-md p-5 rounded-2xl border border-slate-700/50 mb-6 shadow-xl">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-backpack text-yellow-400"></i> 我的背包
                     </h3>
-                    <div id="settings-inventory-grid" class="grid grid-cols-4 gap-2">
-                        <div class="text-xs text-gray-500 col-span-4 text-center py-4">載入中...</div>
+                    <span class="text-xs text-gray-500 bg-slate-900 px-2 py-1 rounded">Inventory</span>
+                </div>
+                <div id="settings-inventory-grid" class="grid grid-cols-4 gap-3">
+                    <div class="text-xs text-gray-500 col-span-4 text-center py-6 bg-slate-900/30 rounded-xl border border-dashed border-slate-700">
+                        <i class="fa-solid fa-box-open text-2xl mb-2 text-gray-600 block"></i>
+                        載入中...
                     </div>
                 </div>
             </div>
-            <div class="bg-slate-800/90 backdrop-blur-sm p-4 rounded-xl border border-slate-700 mb-6">
-                <div class="text-xs text-gray-400 mb-1">帳號</div>
-                <div class="text-sm font-mono text-white truncate" id="settings-email">checking...</div>
+
+            <div class="bg-slate-800/80 backdrop-blur-md p-4 rounded-xl border border-slate-700/50 mb-6 flex justify-between items-center">
+                <div>
+                    <div class="text-[10px] text-gray-400 uppercase tracking-widest mb-0.5">Account</div>
+                    <div class="text-sm font-mono text-blue-200 truncate max-w-[200px]" id="settings-email">checking...</div>
+                </div>
+                <i class="fa-solid fa-id-card text-slate-600 text-2xl"></i>
             </div>
-            <button onclick="logout()" class="bg-red-900/30 border border-red-800/50 text-red-300 px-4 py-3 rounded-lg w-full hover:bg-red-900/50 transition flex items-center justify-center gap-2">
-                <i class="fa-solid fa-right-from-bracket"></i> 登出帳號
+
+            <button onclick="logout()" class="w-full bg-gradient-to-r from-red-900/80 to-red-800/80 hover:from-red-800 hover:to-red-700 border border-red-700/50 text-red-100 px-4 py-3.5 rounded-xl transition-all shadow-lg hover:shadow-red-900/30 flex items-center justify-center gap-2 group">
+                <i class="fa-solid fa-right-from-bracket group-hover:-translate-x-1 transition-transform"></i> 登出帳號
             </button>
         </div>
 
         <div id="page-admin" class="page-section hidden">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-2xl font-bold text-red-400"><i class="fa-solid fa-shield-halved"></i> 管理後台</h2>
-                <button onclick="resetAdminForm()" class="text-xs bg-green-600 hover:bg-green-500 text-white px-3 py-1 rounded transition"><i class="fa-solid fa-plus"></i> 新增模式</button>
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-red-400 flex items-center gap-2">
+                    <i class="fa-solid fa-shield-halved"></i> 管理後台
+                </h2>
+                <button onclick="resetAdminForm()" class="text-xs bg-slate-700 hover:bg-slate-600 text-white px-3 py-2 rounded-lg transition-all shadow border border-slate-600 flex items-center gap-1">
+                    <i class="fa-solid fa-plus"></i> 新增模式
+                </button>
             </div>
 
-            <div class="bg-slate-800 p-4 rounded-xl border border-red-900/50 mb-6 sticky top-0 z-20 shadow-xl">
-                <h3 class="font-bold text-white mb-3" id="admin-form-title">➕ 上架新商品</h3>
-                <input type="hidden" id="admin-edit-id"> <div class="space-y-3">
-                    <div class="grid grid-cols-2 gap-2">
-                        <input type="text" id="admin-p-name" placeholder="商品名稱 (例: 龍騎士)" class="bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white">
-                        <input type="number" id="admin-p-price" placeholder="價格" class="bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white">
+            <div class="bg-slate-800/90 backdrop-blur-md p-5 rounded-2xl border border-red-500/20 mb-6 sticky top-2 z-20 shadow-2xl ring-1 ring-red-900/30">
+                <h3 class="font-bold text-white mb-4 flex items-center gap-2 border-b border-slate-700 pb-2">
+                    <span id="admin-form-title">➕ 上架新商品</span>
+                </h3>
+                
+                <input type="hidden" id="admin-edit-id"> 
+                
+                <div class="space-y-4">
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="col-span-2">
+                            <label class="text-[10px] text-gray-400 block mb-1">商品名稱</label>
+                            <input type="text" id="admin-p-name" placeholder="輸入名稱..." class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2.5 text-sm text-white focus:border-red-500 outline-none transition-colors">
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-gray-400 block mb-1">價格 (分)</label>
+                            <input type="number" id="admin-p-price" placeholder="0" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2.5 text-sm text-white focus:border-red-500 outline-none transition-colors font-mono text-center">
+                        </div>
                     </div>
-                    <select id="admin-p-type" onchange="toggleAdminInputPlaceholder()" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white">
-                        <option value="frame">相框 (Frame)</option>
-                        <option value="avatar">頭像 (Avatar)</option>
-                    </select>
+
                     <div>
-                        <input type="text" id="admin-p-value" placeholder="CSS 類名 (例如 frame-gold)" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white font-mono">
-    
-                        <div id="admin-asset-selector" class="hidden mt-2 p-2 bg-slate-700/30 rounded border border-slate-600">
-                            <label class="text-xs text-gray-400 block mb-1">快速選擇未使用的圖片：</label>
-                            <div class="flex gap-2">
-                                <select id="admin-asset-select" onchange="selectAdminImage(this.value)" class="flex-1 bg-slate-900 border border-slate-600 text-white text-xs rounded p-2 outline-none">
-                                    <option value="">載入中...</option>
-                                </select>
-                                <img id="admin-asset-preview" src="" class="w-10 h-10 rounded bg-black object-cover border border-slate-500 hidden">
-                            </div>
+                        <label class="text-[10px] text-gray-400 block mb-1">商品類型</label>
+                        <select id="admin-p-type" onchange="toggleAdminInputPlaceholder()" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2.5 text-sm text-white focus:border-red-500 outline-none cursor-pointer">
+                            <option value="frame">🖼️ 相框 (Frame)</option>
+                            <option value="avatar">👤 頭像 (Avatar)</option>
+                        </select>
+                    </div>
+
+                    <div class="bg-slate-900/50 p-3 rounded-xl border border-slate-700">
+                        <label class="text-[10px] text-gray-400 block mb-1" id="admin-value-label">數值 / 路徑</label>
+                        <div class="flex gap-2 mb-2">
+                            <input type="text" id="admin-p-value" placeholder="輸入 CSS Class 或 路徑..." class="flex-1 bg-slate-800 border border-slate-600 rounded-lg p-2.5 text-sm text-white font-mono focus:border-blue-500 outline-none">
                         </div>
 
-                        <p class="text-[10px] text-gray-500 mt-1" id="admin-hint">相框請輸入 CSS Class；頭像請輸入檔名</p>
+                        <div id="admin-asset-selector" class="hidden">
+                            <div class="flex items-center gap-3 bg-slate-800 p-2 rounded-lg border border-slate-600">
+                                <div class="flex-1">
+                                    <label class="text-[10px] text-blue-300 block mb-1">從伺服器選擇圖片：</label>
+                                    <select id="admin-asset-select" onchange="selectAdminImage(this.value)" class="w-full bg-slate-900 text-xs text-white p-2 rounded border border-slate-700 outline-none cursor-pointer">
+                                        <option value="">載入中...</option>
+                                    </select>
+                                </div>
+                                <div class="w-12 h-12 bg-black rounded-lg border border-slate-500 overflow-hidden flex-shrink-0">
+                                    <img id="admin-asset-preview" src="" class="w-full h-full object-cover hidden">
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-[10px] text-gray-500 mt-2 flex items-center gap-1" id="admin-hint">
+                            <i class="fa-solid fa-circle-info"></i> 相框請輸入 CSS Class；頭像請輸入檔名
+                        </p>
                     </div>
-                    <div class="flex gap-2">
-                        <button onclick="saveProduct()" id="admin-btn-save" class="flex-1 bg-red-600 hover:bg-red-500 text-white font-bold py-2 rounded text-sm">上架商品</button>
-                        <button onclick="deleteProduct()" id="admin-btn-del" class="hidden bg-gray-600 hover:bg-gray-500 text-white px-4 rounded text-sm"><i class="fa-solid fa-trash"></i></button>
+
+                    <div class="flex gap-3 pt-2">
+                        <button onclick="saveProduct()" id="admin-btn-save" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl text-sm shadow-lg transition-all hover:scale-[1.02]">
+                            上架商品
+                        </button>
+                        <button onclick="deleteProduct()" id="admin-btn-del" class="hidden w-12 bg-slate-700 hover:bg-red-600 text-white rounded-xl text-sm transition-colors flex items-center justify-center border border-slate-600 hover:border-red-500">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <div class="bg-slate-800 rounded-xl overflow-hidden border border-slate-700 flex flex-col shadow-2xl pb-20">
-                <div class="p-3 bg-slate-900 border-b border-slate-700 font-bold text-xs text-gray-400 uppercase tracking-wider flex justify-between">
-                    <span>現有商品 (點擊編輯)</span>
-                    <button onclick="loadAdminProducts()" class="text-blue-400"><i class="fa-solid fa-rotate"></i></button>
+            <div class="bg-slate-800/90 backdrop-blur-md rounded-2xl overflow-hidden border border-slate-700 flex flex-col shadow-2xl pb-20">
+                <div class="p-4 bg-slate-900/80 border-b border-slate-700 font-bold text-xs text-gray-400 uppercase tracking-wider flex justify-between items-center">
+                    <span>📦 現有商品庫存</span>
+                    <button onclick="loadAdminProducts()" class="text-blue-400 hover:text-white p-1 rounded hover:bg-slate-700 transition"><i class="fa-solid fa-rotate"></i></button>
                 </div>
-                <div id="admin-product-list" class="p-2 space-y-2 max-h-[50vh] overflow-y-auto scrollbar-thin">
-                    </div>
+                <div id="admin-product-list" class="p-3 space-y-2 max-h-[50vh] overflow-y-auto scrollbar-thin">
+                    <div class="text-center text-gray-500 py-8 text-xs">載入中...</div>
+                </div>
             </div>
         </div>
     </main>
 
     <nav id="bottom-nav" class="bg-slate-800/90 backdrop-blur-md border-t border-slate-700 fixed bottom-0 w-full z-50 hidden transition-all duration-300">
         <div class="grid h-16 grid-cols-6 mx-auto font-medium" id="nav-grid">
-        
             <button onclick="switchToPage('page-home')" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group active-nav-btn" data-target="page-home">
                 <i class="fa-solid fa-house mb-1 text-lg group-hover:text-blue-400 transition-colors"></i><span class="text-[10px]">首頁</span>
             </button>
-        
             <button onclick="startQuizFlow()" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group" data-target="page-quiz">
                 <i class="fa-solid fa-swords mb-1 text-lg group-hover:text-red-400 transition-colors"></i><span class="text-[10px]">答題</span>
             </button>
-
             <button onclick="loadStoreItems(); switchToPage('page-store')" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group" data-target="page-store">
                 <i class="fa-solid fa-store mb-1 text-lg group-hover:text-pink-400 transition-colors"></i><span class="text-[10px]">商店</span>
             </button>
-
             <button onclick="loadUserHistory(); switchToPage('page-history')" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group" data-target="page-history">
                 <i class="fa-solid fa-clock-rotate-left mb-1 text-lg group-hover:text-purple-400 transition-colors"></i><span class="text-[10px]">紀錄</span>
             </button>
-        
             <button onclick="loadLeaderboard(); switchToPage('page-rank')" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group" data-target="page-rank">
                 <i class="fa-solid fa-chart-simple mb-1 text-lg group-hover:text-yellow-400 transition-colors"></i><span class="text-[10px]">排行</span>
             </button>
-        
             <button onclick="switchToPage('page-settings')" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group" data-target="page-settings">
                 <i class="fa-solid fa-user-gear mb-1 text-lg group-hover:text-green-400 transition-colors"></i><span class="text-[10px]">設定</span>
             </button>
