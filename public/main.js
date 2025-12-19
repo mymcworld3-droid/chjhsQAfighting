@@ -835,10 +835,22 @@ window.loadLeaderboard = async () => {
 
 // --- [核心工具] 渲染視覺效果 (重要：處理圖片路徑) ---
 function renderVisual(type, value, sizeClass = "w-12 h-12") {
+    const isImage = value && value.includes('/');
     if (type === 'frame') {
         // 相框：使用 CSS Class (value = frame-gold)
         // 內部的 icon 是預設頭像佔位符
-        return `<div class="${sizeClass} rounded-full border-2 border-gray-600 ${value} flex items-center justify-center bg-slate-800 relative z-0"><i class="fa-solid fa-user text-gray-500"></i></div>`;
+        if (isImage) {
+            // 🖼️ 圖片相框模式
+            return `<div class="${sizeClass} rounded-full bg-slate-800 flex items-center justify-center relative overflow-visible">
+                        <i class="fa-solid fa-user text-gray-500"></i>
+                        <img src="${value}" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[135%] h-[135%] object-contain pointer-events-none z-10"> 
+                    </div>`;
+        } else {
+            // 🎨 CSS 相框模式 (舊有邏輯)
+            return `<div class="${sizeClass} rounded-full border-2 border-gray-600 ${value} flex items-center justify-center bg-slate-800 relative z-0">
+                        <i class="fa-solid fa-user text-gray-500"></i>
+                    </div>`;
+        }
     } else if (type === 'avatar') {
         // 頭像：使用圖片路徑 (value = avatar1.png)
         // 假設圖片都放在 public 根目錄，若有資料夾請自行加前綴 (e.g., /images/${value})
