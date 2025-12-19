@@ -10,9 +10,7 @@
 </head>
 <body class="font-sans h-[100dvh] flex flex-col overflow-hidden">
 
-    <!-- 🎨 Header 增強版 -->
     <header class="p-4 bg-slate-800/90 backdrop-blur-md shadow-lg flex justify-between items-center z-10 border-b border-slate-700/50 relative">
-        <!-- 裝飾線條 -->
         <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
         
         <h1 class="text-xl font-bold text-yellow-400 flex items-center gap-2">
@@ -26,7 +24,6 @@
 
     <main class="flex-1 overflow-y-auto p-4 relative scroll-smooth pb-safe">
         
-        <!-- 🔐 登入畫面 - 增強版 -->
         <div id="login-screen" class="flex flex-col items-center justify-center h-full">
             <div class="text-center mb-8">
                 <i class="fa-solid fa-crown text-6xl text-yellow-500 mb-4 animate-bounce" style="filter: drop-shadow(0 0 20px rgba(250, 204, 21, 0.5));"></i>
@@ -44,7 +41,6 @@
             </button>
         </div>
 
-        <!-- 📝 新手引導頁 -->
         <div id="page-onboarding" class="page-section hidden absolute top-0 left-0 w-full h-full bg-slate-900 z-50 p-6 overflow-y-auto">
             <div class="max-w-md mx-auto mt-10">
                 <div class="text-center mb-6">
@@ -86,9 +82,7 @@
             </div>
         </div>
 
-        <!-- 🏠 首頁 - 增強版 -->
         <div id="page-home" class="page-section hidden">
-            <!-- 主要段位卡片 -->
             <div class="bg-gradient-to-br from-slate-800 to-slate-900 p-8 rounded-2xl shadow-xl text-center border border-slate-700 relative overflow-hidden">
                 <i class="fa-solid fa-trophy absolute -bottom-4 -right-4 text-9xl text-white opacity-5 transform rotate-12"></i>
                 
@@ -120,7 +114,6 @@
                 </div>
             </div>
 
-            <!-- 統計卡片網格 -->
             <div class="grid grid-cols-2 gap-3 mt-4">
                 <div class="bg-slate-800/50 backdrop-blur-sm p-4 rounded-xl border border-slate-700 flex flex-col items-center hover:border-yellow-500/50 transition-all">
                     <div class="text-xs text-gray-400 mb-1"><i class="fa-solid fa-coins text-yellow-500"></i> 總積分</div>
@@ -141,7 +134,6 @@
             </div>
         </div>
 
-        <!-- 📚 答題頁面 - 保留原有結構 -->
         <div id="page-quiz" class="page-section hidden pb-20">
             <div id="quiz-loading" class="text-center mt-32 hidden">
                 <div class="loader"></div>
@@ -158,7 +150,7 @@
 
                 <div id="options-container" class="space-y-3"></div>
 
-                <div id="feedback-section" class="hidden mt-6 bg-slate-800/90 backdrop-blur-sm border border-slate-700 rounded-xl p-5 shadow-2xl">
+                <div id="feedback-section" class="hidden mt-6 bg-slate-800/90 backdrop-blur-sm border border-slate-700 rounded-xl p-5 shadow-2xl animate-fade-in-up">
                     <div class="flex items-center gap-3 mb-3">
                         <div id="feedback-icon" class="text-2xl"></div>
                         <h3 id="feedback-title" class="text-xl font-bold"></h3>
@@ -183,7 +175,6 @@
             </div>
         </div>
         
-        <!-- 🛒 商店頁面 - 保留原有結構 -->
         <div id="page-store" class="page-section hidden">
             <div class="sticky top-0 bg-slate-900/95 backdrop-blur-sm z-20 pb-2 border-b border-slate-800">
                 <div class="flex justify-between items-center mb-3 p-2">
@@ -221,7 +212,6 @@
             </div>
         </div>
 
-        <!-- ⚔️ 對戰頁面 - 使用修正後的版本 -->
         <div id="page-battle" class="page-section hidden">
             <div id="battle-lobby" class="flex flex-col items-center justify-center pt-20">
                 <div class="radar-scan mb-8">
@@ -234,6 +224,7 @@
 
             <div id="battle-arena" class="hidden">
                 <div class="flex justify-between items-center mb-6 bg-slate-900/50 backdrop-blur-sm p-4 rounded-xl border border-slate-700">
+        
                     <div class="flex flex-col items-center">
                         <div id="battle-my-avatar" class="flex justify-center items-center mb-2">
                             <div class="w-16 h-16 rounded-full bg-slate-800 border-2 border-blue-500 flex items-center justify-center"><i class="fa-solid fa-user"></i></div>
@@ -254,6 +245,7 @@
                         <span class="text-xs mt-1 font-bold text-red-300">對手</span>
                         <span class="text-xl font-black" id="p2-score">0</span>
                     </div>
+
                 </div>
 
                 <div id="battle-loading" class="text-center py-10 hidden">
@@ -294,7 +286,6 @@
             </div>
         </div>
 
-        <!-- 📜 歷史紀錄頁 -->
         <div id="page-history" class="page-section hidden">
             <h2 class="text-2xl font-bold mb-4 flex items-center gap-2 text-purple-400">
                 <i class="fa-solid fa-clock-rotate-left"></i> 我的答題紀錄
@@ -310,7 +301,6 @@
             </div>
         </div>
 
-        <!-- 🏆 排行榜頁 -->
         <div id="page-rank" class="page-section hidden">
             <h2 class="text-2xl font-bold mb-4 flex items-center gap-2 text-yellow-400">
                 <i class="fa-solid fa-trophy animate-pulse"></i> 全服排行榜
@@ -329,7 +319,6 @@
             </div>
         </div>
 
-        <!-- ⚙️ 設定頁 -->
         <div id="page-settings" class="page-section hidden">
             <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
                 <i class="fa-solid fa-user-gear text-green-400"></i> 個人設定
@@ -394,7 +383,7 @@
                     </select>
                     <div>
                         <input type="text" id="admin-p-value" placeholder="CSS 類名 (例如 frame-gold)" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white font-mono">
-
+    
                         <div id="admin-asset-selector" class="hidden mt-2 p-2 bg-slate-700/30 rounded border border-slate-600">
                             <label class="text-xs text-gray-400 block mb-1">快速選擇未使用的圖片：</label>
                             <div class="flex gap-2">
@@ -427,11 +416,11 @@
 
     <nav id="bottom-nav" class="bg-slate-800/90 backdrop-blur-md border-t border-slate-700 fixed bottom-0 w-full z-50 hidden transition-all duration-300">
         <div class="grid h-16 grid-cols-6 mx-auto font-medium" id="nav-grid">
-
+        
             <button onclick="switchToPage('page-home')" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group active-nav-btn" data-target="page-home">
                 <i class="fa-solid fa-house mb-1 text-lg group-hover:text-blue-400 transition-colors"></i><span class="text-[10px]">首頁</span>
             </button>
-
+        
             <button onclick="startQuizFlow()" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group" data-target="page-quiz">
                 <i class="fa-solid fa-swords mb-1 text-lg group-hover:text-red-400 transition-colors"></i><span class="text-[10px]">答題</span>
             </button>
@@ -443,11 +432,11 @@
             <button onclick="loadUserHistory(); switchToPage('page-history')" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group" data-target="page-history">
                 <i class="fa-solid fa-clock-rotate-left mb-1 text-lg group-hover:text-purple-400 transition-colors"></i><span class="text-[10px]">紀錄</span>
             </button>
-
+        
             <button onclick="loadLeaderboard(); switchToPage('page-rank')" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group" data-target="page-rank">
                 <i class="fa-solid fa-chart-simple mb-1 text-lg group-hover:text-yellow-400 transition-colors"></i><span class="text-[10px]">排行</span>
             </button>
-
+        
             <button onclick="switchToPage('page-settings')" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group" data-target="page-settings">
                 <i class="fa-solid fa-user-gear mb-1 text-lg group-hover:text-green-400 transition-colors"></i><span class="text-[10px]">設定</span>
             </button>
@@ -457,4 +446,3 @@
     <script type="module" src="main.js"></script>
 </body>
 </html>
-
