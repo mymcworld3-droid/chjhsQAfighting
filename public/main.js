@@ -1064,20 +1064,19 @@ window.toggleAdminInputPlaceholder = async () => {
     const hint = document.getElementById('admin-hint');
     const selectorDiv = document.getElementById('admin-asset-selector');
 
+    // 🔥 修改：無論是 frame 還是 avatar，都顯示圖片選擇器
+    selectorDiv.classList.remove('hidden');
+
     if (type === 'frame') {
-        // 相框模式：隱藏圖片選擇器
-        selectorDiv.classList.add('hidden');
-        input.placeholder = "CSS 類名 (例: frame-gold)";
-        hint.innerText = "請輸入 style.css 定義的 Class 名稱";
+        input.placeholder = "CSS 類名 (frame-gold) 或 圖片路徑 (assets/frame.png)";
+        hint.innerText = "支援 CSS 類名 (需寫在 style.css) 或 圖片路徑";
     } else {
-        // 頭像模式：顯示圖片選擇器並載入圖片
-        selectorDiv.classList.remove('hidden');
         input.placeholder = "圖片路徑 (例: assets/avatar1.png)";
         hint.innerText = "手動輸入或從上方選擇未使用的圖片";
-        
-        // 自動載入伺服器圖片
-        await loadUnusedAssets();
     }
+    
+    // 自動載入伺服器圖片
+    await loadUnusedAssets();
 };
 
 // 2. 載入並過濾圖片
