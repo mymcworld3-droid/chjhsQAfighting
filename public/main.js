@@ -244,6 +244,8 @@ window.startBattleMatchmaking = async () => {
     }
 };
 
+// 🔥 將這段程式碼替換你的 main.js 中的 listenToBattleRoom 函式
+
 function listenToBattleRoom(roomId) {
     if (battleUnsub) battleUnsub();
 
@@ -259,6 +261,9 @@ function listenToBattleRoom(roomId) {
         // 狀態 1: 遊戲進行中 (Ready)
         // ------------------------------------------------
         if (room.status === "ready") {
+            console.log("🎮 對戰開始！當前回合:", room.round);
+            
+            // 隱藏 Lobby，顯示競技場
             document.getElementById('battle-lobby').classList.add('hidden');
             document.getElementById('battle-arena').classList.remove('hidden');
             
@@ -274,71 +279,84 @@ function listenToBattleRoom(roomId) {
             const myData = isHost ? room.host : room.guest;
             const oppData = isHost ? room.guest : room.host;
 
-            // 防呆：確保 myData 存在才渲染
             if (myData) {
                 document.getElementById('battle-my-avatar').innerHTML = getAvatarHtml(myData.equipped, "w-16 h-16");
             }
             if (oppData) {
                 document.getElementById('battle-opp-avatar').innerHTML = getAvatarHtml(oppData.equipped, "w-16 h-16");
-            } else {
-                document.getElementById('battle-opp-avatar').innerHTML = `<div class="w-16 h-16 rounded-full bg-slate-800 border-2 border-dashed border-gray-500 flex items-center justify-center"><i class="fa-solid fa-spinner fa-spin"></i></div>`;
             }
 
-            // --- [題目邏輯] ---
-
-            // 如果沒有題目且我是房主，去生成
-            if (!room.currentQuestion && isHost) {
-                generateSharedQuiz(roomId);
-            }
+            // --- [題目邏輯] 🔥 修正重點在這裡 ---
             
-            // 顯示題目
-            if (room.currentQuestion) {
-                document.getElementById('battle-loading').classList.add('hidden');
-                document.getElementById('battle-quiz-box').classList.remove('hidden');
+            // 如果沒有題目
+            if (!room.currentQuestion) {
+                console.log("📝 題目尚未生成");
                 
-                // 防呆：確保題目文字存在
-                document.getElementById('battle-q-text').innerText = room.currentQuestion.q || "題目讀取錯誤";
-                
-                const container = document.getElementById('battle-options');
-                container.innerHTML = '';
-                
-                // 防呆：確保 myData 存在，避免報錯
-                if (myData && !myData.done) {
-                    document.getElementById('battle-waiting-msg').classList.add('hidden');
-                    
-                    // 🔥 關鍵修正：檢查 opts 是否為陣列，防止程式崩潰
-                    const options = Array.isArray(room.currentQuestion.opts) ? room.currentQuestion.opts : [];
-                    
-                    if (options.length === 0) {
-                        container.innerHTML = '<div class="text-red-400 text-center py-4">選項載入異常，請稍候...</div>';
-                        // 強制重整可能是種解法，但先顯示錯誤就好
-                    } else {
-                        options.forEach((opt, idx) => {
-                            const btn = document.createElement('button');
-                            btn.className = "w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 active:scale-95";
-                            btn.innerText = opt;
-                            btn.onclick = () => handleBattleAnswer(roomId, idx, room.currentQuestion.ans, isHost);
-                            container.appendChild(btn);
-                        });
-                    }
-                } else {
-                    // 已作答狀態
-                    container.innerHTML = '<div class="text-center text-gray-500 italic py-4">已提交，等待對手...</div>';
-                    document.getElementById('battle-waiting-msg').classList.remove('hidden');
-                }
-            } else {
-                // 題目生成中
+                // 顯示載入中
                 document.getElementById('battle-loading').classList.remove('hidden');
                 document.getElementById('battle-quiz-box').classList.add('hidden');
+                
+                // 只有房主負責生成題目 (避免重複呼叫)
+                if (isHost) {
+                    console.log("👑 我是房主，開始生成題目...");
+                    generateSharedQuiz(roomId);
+                } else {
+                    console.log("👤 我是客人，等待房主生成題目...");
+                }
+                return; // 🔥 重要：等待題目生成，先不往下執行
+            }
+            
+            // --- 有題目時的處理 ---
+            console.log("✅ 題目已存在，開始渲染");
+            
+            // 隱藏載入中，顯示題目
+            document.getElementById('battle-loading').classList.add('hidden');
+            document.getElementById('battle-quiz-box').classList.remove('hidden');
+            
+            // 顯示題目文字
+            document.getElementById('battle-q-text').innerText = room.currentQuestion.q || "題目讀取錯誤";
+            
+            const container = document.getElementById('battle-options');
+            
+            // 🔥 檢查玩家是否已作答
+            if (myData && !myData.done) {
+                // 還沒作答 -> 顯示選項按鈕
+                console.log("⏳ 我還沒作答，顯示選項");
+                document.getElementById('battle-waiting-msg').classList.add('hidden');
+                
+                container.innerHTML = '';
+                const options = Array.isArray(room.currentQuestion.opts) ? room.currentQuestion.opts : [];
+                
+                if (options.length === 0) {
+                    container.innerHTML = '<div class="text-red-400 text-center py-4">選項載入異常</div>';
+                } else {
+                    options.forEach((opt, idx) => {
+                        const btn = document.createElement('button');
+                        btn.className = "w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 active:scale-95";
+                        btn.innerHTML = `<span class="bg-slate-800 w-8 h-8 rounded-full inline-flex items-center justify-center text-sm font-bold text-blue-400 border border-slate-600 mr-3">${String.fromCharCode(65+idx)}</span><span>${opt}</span>`;
+                        btn.onclick = () => handleBattleAnswer(roomId, idx, room.currentQuestion.ans, isHost);
+                        container.appendChild(btn);
+                    });
+                }
+            } else {
+                // 已作答 -> 顯示等待訊息
+                console.log("✅ 我已作答，等待對手");
+                container.innerHTML = '<div class="text-center text-gray-400 italic py-4 bg-slate-700/30 rounded-lg">✓ 已提交答案</div>';
+                document.getElementById('battle-waiting-msg').classList.remove('hidden');
             }
 
             // --- [回合結算] ---
             if (room.host?.done && room.guest?.done) {
+                console.log("🎯 雙方都答完了，準備進入下一回合");
+                
+                // 只有房主負責推進
                 if (isHost) {
                     setTimeout(async () => {
                         if (room.round >= 3) {
+                            console.log("🏁 三回合結束，遊戲結束");
                             await updateDoc(doc(db, "rooms", roomId), { status: "finished" });
                         } else {
+                            console.log(`➡️ 進入第 ${room.round + 1} 回合`);
                             await updateDoc(doc(db, "rooms", roomId), {
                                 round: room.round + 1,
                                 currentQuestion: null,
@@ -346,7 +364,7 @@ function listenToBattleRoom(roomId) {
                                 "guest.done": false
                             });
                         }
-                    }, 2000);
+                    }, 2000); // 延遲 2 秒讓玩家看到結果
                 }
             }
         }
@@ -355,6 +373,8 @@ function listenToBattleRoom(roomId) {
         // 狀態 2: 遊戲結束 (Finished)
         // ------------------------------------------------
         if (room.status === "finished") {
+            console.log("🏆 對戰結束");
+            
             document.getElementById('battle-arena').classList.add('hidden');
             document.getElementById('battle-result').classList.remove('hidden');
             
