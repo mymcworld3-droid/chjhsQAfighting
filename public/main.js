@@ -592,6 +592,143 @@ function checkAdminRole(isAdmin) {
         navGrid.appendChild(btn);
     }
 }
+// ==========================================
+//  多層級選單輔助函式 (Cascading Selects)
+// ==========================================
+
+// 1. 將路徑陣列轉為樹狀物件
+function buildPathTree(paths) {
+    const tree = { name: "root", children: {} };
+    
+    paths.forEach(path => {
+        const parts = path.split('/');
+        let current = tree;
+        
+        parts.forEach((part, index) => {
+            if (!current.children[part]) {
+                current.children[part] = {
+                    name: part,
+                    // 如果是最後一段，代表是檔案；否則為資料夾
+                    type: index === parts.length - 1 ? 'file' : 'folder',
+                    fullPath: index === parts.length - 1 ? path : null,
+                    children: {}
+                };
+            }
+            current = current.children[part];
+        });
+    });
+    return tree;
+}
+
+// 2. 渲染多層級選單
+// currentPath: 使用者目前儲存的設定 (例如 "高中/學測/國文.json" 或 "ai")
+window.renderCascadingSelectors = (tree, currentPath) => {
+    const container = document.getElementById('bank-selectors-container');
+    const hiddenInput = document.getElementById('set-source-final-value');
+    const hint = document.getElementById('bank-selection-hint');
+    
+    container.innerHTML = ''; // 清空現有選單
+
+    // 預設第一層永遠有 "AI 隨機生成"
+    // 我們將路徑拆解，例如 "高中/學測.json" -> ["高中", "學測.json"]
+    // 如果是 "ai"，則 parts 為 ["ai"]
+    let selectedParts = (currentPath && currentPath !== 'ai') ? currentPath.split('/') : ['ai'];
+
+    // 遞迴生成選單
+    // level: 目前第幾層 (0開始)
+    // currentNode: 目前樹的節點
+    const createSelect = (level, currentNode) => {
+        const wrapper = document.createElement('div');
+        const select = document.createElement('select');
+        select.className = "w-full bg-slate-900/50 border border-slate-600 text-white rounded-xl p-3 outline-none focus:border-yellow-500 transition-all cursor-pointer";
+        
+        // 預設選項
+        const defaultOpt = document.createElement('option');
+        defaultOpt.value = "";
+        defaultOpt.innerText = level === 0 ? "-- 請選擇模式 --" : "-- 請選擇 --";
+        defaultOpt.disabled = true;
+        if (!selectedParts[level]) defaultOpt.selected = true;
+        select.appendChild(defaultOpt);
+
+        // 如果是第一層，加入 AI 選項
+        if (level === 0) {
+            const aiOpt = document.createElement('option');
+            aiOpt.value = "ai";
+            aiOpt.innerText = "✨ AI 隨機生成";
+            if (selectedParts[0] === 'ai') aiOpt.selected = true;
+            select.appendChild(aiOpt);
+        }
+
+        // 加入資料夾/檔案選項
+        const keys = Object.keys(currentNode.children);
+        if (keys.length === 0 && level > 0) return; // 沒有子項目就不顯示
+
+        keys.forEach(key => {
+            const node = currentNode.children[key];
+            const opt = document.createElement('option');
+            opt.value = key;
+            // 如果是檔案，顯示檔名(去副檔名)；如果是資料夾，加個圖示
+            opt.innerText = node.type === 'file' ? `📄 ${key.replace('.json', '')}` : `📂 ${key}`;
+            
+            // 判斷是否選中
+            if (selectedParts[level] === key) {
+                opt.selected = true;
+            }
+            select.appendChild(opt);
+        });
+
+        // 事件監聽：當選擇改變時
+        select.onchange = (e) => {
+            const val = e.target.value;
+            
+            if (val === 'ai') {
+                hiddenInput.value = 'ai';
+                hint.innerText = "目前設定：AI 隨機出題";
+                hint.className = "text-xs text-green-400 mt-1";
+                // 重繪：只留第一層
+                renderCascadingSelectors(tree, 'ai');
+            } else {
+                // 組合新的路徑
+                // 取得目前為止的路徑陣列 (0 ~ level-1) + 當前選擇
+                const newParts = selectedParts.slice(0, level);
+                newParts.push(val);
+                
+                // 檢查這個選擇是否為檔案 (終點)
+                const nextNode = currentNode.children[val];
+                
+                if (nextNode && nextNode.type === 'file') {
+                    // 是檔案 -> 更新最終值
+                    const finalPath = nextNode.fullPath;
+                    hiddenInput.value = finalPath;
+                    hint.innerText = `已選擇：${finalPath.replace('.json', '')}`;
+                    hint.className = "text-xs text-green-400 mt-1";
+                    // 重繪以更新狀態
+                    renderCascadingSelectors(tree, finalPath);
+                } else {
+                    // 是資料夾 -> 暫存路徑 (尚未完成)，並展開下一層
+                    // 這裡我們傳入一個假路徑讓函式知道要展開到哪
+                    // 例如 "高中" -> 下次遞迴會找 "高中" 的 children
+                    hiddenInput.value = ""; // 清空，強迫使用者選到檔案為止
+                    hint.innerText = "請繼續選擇下一層...";
+                    hint.className = "text-xs text-yellow-500 mt-1";
+                    renderCascadingSelectors(tree, newParts.join('/'));
+                }
+            }
+        };
+
+        container.appendChild(wrapper);
+        wrapper.appendChild(select);
+
+        // 如果當前有選中值，且該節點還有子節點，則繼續生成下一層選單
+        const currentVal = selectedParts[level];
+        if (currentVal && currentVal !== 'ai' && currentNode.children[currentVal]) {
+            createSelect(level + 1, currentNode.children[currentVal]);
+        }
+    };
+
+    // 開始生成第一層
+    createSelect(0, tree);
+};
 
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
