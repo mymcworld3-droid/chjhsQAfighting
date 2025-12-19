@@ -359,6 +359,27 @@
                     <input type="text" id="set-weak" class="w-full bg-slate-900/50 border border-slate-600 text-white text-sm rounded-xl p-3 outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all" placeholder="輸入想加強的科目...">
                 </div>
 
+                <div class="grid grid-cols-2 gap-3 pt-2 border-t border-slate-700/50 mt-4">
+                    <div>
+                        <label class="block mb-2 text-sm font-bold text-yellow-400 flex items-center gap-2">
+                            <i class="fa-solid fa-book-open"></i> 出題來源
+                        </label>
+                        <select id="set-source" class="w-full bg-slate-900/50 border border-slate-600 text-white rounded-xl p-3 outline-none focus:border-yellow-500 transition-all cursor-pointer">
+                            <option value="ai">✨ AI 隨機生成 (預設)</option>
+                            </select>
+                    </div>
+                    <div>
+                        <label class="block mb-2 text-sm font-bold text-purple-400 flex items-center gap-2">
+                            <i class="fa-solid fa-layer-group"></i> 題目難度
+                        </label>
+                        <select id="set-difficulty" class="w-full bg-slate-900/50 border border-slate-600 text-white rounded-xl p-3 outline-none focus:border-purple-500 transition-all cursor-pointer">
+                            <option value="easy">🟢 簡單 (Easy)</option>
+                            <option value="medium">🟡 中等 (Medium)</option>
+                            <option value="hard">🔴 困難 (Hard)</option>
+                        </select>
+                    </div>
+                </div>
+
                 <button onclick="saveProfile()" class="w-full mt-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white px-4 py-3.5 rounded-xl font-bold transition-all shadow-lg hover:shadow-blue-900/30 hover:scale-[1.02] flex justify-center items-center gap-2">
                     <i class="fa-solid fa-floppy-disk"></i> 更新設定
                 </button>
