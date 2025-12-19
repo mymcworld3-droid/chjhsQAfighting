@@ -1,7 +1,6 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-// ⭐ 修正：加入 deleteDoc
-import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, addDoc, query, orderBy, limit, getDocs, serverTimestamp, where, onSnapshot, runTransaction } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { initializeApp } from "[https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js](https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js)";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "[https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js](https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js)";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, addDoc, query, orderBy, limit, getDocs, serverTimestamp, where, onSnapshot, runTransaction } from "[https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js](https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js)";
 
 // Firebase Config
 const firebaseConfig = {
@@ -29,6 +28,7 @@ let isFetchingBuffer = false;
 let battleUnsub = null; // 對戰監聽器
 let currentBattleId = null;
 let isBattleActive = false; // ⭐ 戰鬥鎖定狀態
+let currentBankData = null; // 用來暫存下載下來的題庫 JSON
 
 // 綁定全域函式供 HTML onclick 使用
 window.googleLogin = () => { signInWithPopup(auth, provider).catch((error) => alert("登入失敗: " + error.code)); };
@@ -117,6 +117,14 @@ window.switchToPage = (pageId) => {
         if (btn.dataset.target === pageId) { btn.classList.add('text-white'); btn.classList.remove('text-gray-400'); } 
         else { btn.classList.remove('text-white'); btn.classList.add('text-gray-400'); }
     });
+    
+    // ⭐ 重要：修改 switchToPage，當切換到設定頁或管理頁時自動載入資料
+    if (pageId === 'page-settings') {
+        renderInventory(); // 預設載入背包
+    }
+    if (pageId === 'page-admin') {
+        loadAdminData(); // 載入商品列表
+    }
 };
 
 function updateUIStats() {
@@ -142,23 +150,15 @@ function updateUIStats() {
 //  雙人對戰系統 (PvP System)
 // ==========================================
 
-// ==========================================
-//  雙人對戰系統 (PvP System) - 修正版
-// ==========================================
-
 window.startBattleMatchmaking = async () => {
-    // 1. UI 初始化
     isBattleActive = true;
     switchToPage('page-battle');
     document.getElementById('battle-lobby').classList.remove('hidden');
     document.getElementById('battle-arena').classList.add('hidden');
     document.getElementById('battle-status-text').innerText = "🔍 搜尋對手中...";
 
-    // 2. 定義「有效房間」的時間範圍 (只找最近 2 分鐘內建立的房間)
-    // 這樣可以避免配對到房主已經關閉視窗的「幽靈房間」
     const twoMinutesAgo = new Date(Date.now() - 2 * 60 * 1000);
 
-    // 3. 準備我的玩家資料 (🔥 關鍵修正：必須帶上 equipped 裝備資訊)
     const myPlayerData = { 
         uid: auth.currentUser.uid, 
         name: currentUserData.displayName, 
@@ -168,73 +168,65 @@ window.startBattleMatchmaking = async () => {
     };
 
     try {
-        // 4. 搜尋等待中的房間 (增加時間過濾，避免幽靈房)
         const q = query(
             collection(db, "rooms"), 
             where("status", "==", "waiting"),
             where("createdAt", ">", twoMinutesAgo), 
-            limit(5) // 一次抓 5 個，減少大家搶同一個的機率
+            limit(5) 
         );
         
         const snapshot = await getDocs(q);
         let joinedRoomId = null;
 
         if (!snapshot.empty) {
-            // 隨機選一個房間嘗試加入 (分散流量，減少撞房)
             const availableDocs = snapshot.docs.filter(d => d.data().host.uid !== auth.currentUser.uid);
-            const targetDoc = availableDocs[Math.floor(Math.random() * availableDocs.length)];
-            const roomRef = doc(db, "rooms", targetDoc.id);
+            
+            if (availableDocs.length > 0) {
+                const targetDoc = availableDocs[Math.floor(Math.random() * availableDocs.length)];
+                const roomRef = doc(db, "rooms", targetDoc.id);
 
-            try {
-                // 🔥 使用 Transaction (事務) 防止多人同時進入同一房間
-                await runTransaction(db, async (transaction) => {
-                    const sfDoc = await transaction.get(roomRef);
-                    if (!sfDoc.exists()) throw "Document does not exist!";
+                try {
+                    await runTransaction(db, async (transaction) => {
+                        const sfDoc = await transaction.get(roomRef);
+                        if (!sfDoc.exists()) throw "Document does not exist!";
 
-                    const data = sfDoc.data();
-                    
-                    // 二次檢查：確保這一刻房間真的是 waiting 且沒有 guest
-                    if (data.status === "waiting" && !data.guest) {
-                        transaction.update(roomRef, {
-                            guest: myPlayerData,
-                            status: "ready"
-                        });
-                        joinedRoomId = targetDoc.id;
-                    } else {
-                        // 慢了一步，房間被搶走了
-                        throw "Room is full"; 
-                    }
-                });
-            } catch (e) {
-                console.log("配對衝突 (正常現象)，將建立新房間:", e);
-                // 這裡捕捉錯誤後，joinedRoomId 仍為 null，程式會自動往下走到「建立房間」
+                        const data = sfDoc.data();
+                        
+                        if (data.status === "waiting" && !data.guest) {
+                            transaction.update(roomRef, {
+                                guest: myPlayerData,
+                                status: "ready"
+                            });
+                            joinedRoomId = targetDoc.id;
+                        } else {
+                            throw "Room is full"; 
+                        }
+                    });
+                } catch (e) {
+                    console.log("配對衝突 (正常現象)，將建立新房間:", e);
+                }
             }
         }
 
-        // 5. 判斷結果
         if (joinedRoomId) {
-            // 加入成功
             currentBattleId = joinedRoomId;
             document.getElementById('battle-status-text').innerText = "✅ 配對成功！連接中...";
         } else {
-            // 沒有房間 或 搶房失敗 -> 自己建立房間
             document.getElementById('battle-status-text').innerText = "👑 建立房間，等待挑戰者...";
             const roomRef = await addDoc(collection(db, "rooms"), {
                 host: myPlayerData,
                 guest: null,
                 status: "waiting",
                 round: 1,
-                createdAt: serverTimestamp() // 這是 Server 時間，用於過濾
+                createdAt: serverTimestamp() 
             });
             currentBattleId = roomRef.id;
         }
 
-        // 6. 開始監聽
         listenToBattleRoom(currentBattleId);
 
     } catch (e) {
         console.error("配對系統錯誤:", e);
-        // 如果報錯 "requires an index"，提示使用者建立索引
         if (e.message.includes("index")) {
             alert("⚠️ 開發者注意：請按 F12 打開 Console，點擊連結建立 Firestore 複合索引 (status + createdAt)");
         } else {
@@ -244,8 +236,6 @@ window.startBattleMatchmaking = async () => {
     }
 };
 
-// 🔥 將這段程式碼替換你的 main.js 中的 listenToBattleRoom 函式
-
 function listenToBattleRoom(roomId) {
     if (battleUnsub) battleUnsub();
 
@@ -253,21 +243,13 @@ function listenToBattleRoom(roomId) {
         if (!docSnap.exists()) return;
         const room = docSnap.data();
         
-        // 防呆：確保使用者已登入
         if (!auth.currentUser) return;
         const isHost = room.host.uid === auth.currentUser.uid;
 
-        // ------------------------------------------------
-        // 狀態 1: 遊戲進行中 (Ready)
-        // ------------------------------------------------
         if (room.status === "ready") {
-            console.log("🎮 對戰開始！當前回合:", room.round);
-            
-            // 隱藏 Lobby，顯示競技場
             document.getElementById('battle-lobby').classList.add('hidden');
             document.getElementById('battle-arena').classList.remove('hidden');
             
-            // 防呆：分數預設為 0
             const hostScore = room.host?.score || 0;
             const guestScore = room.guest?.score || 0;
 
@@ -275,7 +257,6 @@ function listenToBattleRoom(roomId) {
             document.getElementById('p2-score').innerText = isHost ? guestScore : hostScore;
             document.getElementById('battle-round').innerText = room.round;
 
-            // --- [更新頭像] ---
             const myData = isHost ? room.host : room.guest;
             const oppData = isHost ? room.guest : room.host;
 
@@ -286,42 +267,23 @@ function listenToBattleRoom(roomId) {
                 document.getElementById('battle-opp-avatar').innerHTML = getAvatarHtml(oppData.equipped, "w-16 h-16");
             }
 
-            // --- [題目邏輯] 🔥 修正重點在這裡 ---
-            
-            // 如果沒有題目
             if (!room.currentQuestion) {
-                console.log("📝 題目尚未生成");
-                
-                // 顯示載入中
                 document.getElementById('battle-loading').classList.remove('hidden');
                 document.getElementById('battle-quiz-box').classList.add('hidden');
                 
-                // 只有房主負責生成題目 (避免重複呼叫)
                 if (isHost) {
-                    console.log("👑 我是房主，開始生成題目...");
                     generateSharedQuiz(roomId);
-                } else {
-                    console.log("👤 我是客人，等待房主生成題目...");
-                }
-                return; // 🔥 重要：等待題目生成，先不往下執行
+                } 
+                return; 
             }
             
-            // --- 有題目時的處理 ---
-            console.log("✅ 題目已存在，開始渲染");
-            
-            // 隱藏載入中，顯示題目
             document.getElementById('battle-loading').classList.add('hidden');
             document.getElementById('battle-quiz-box').classList.remove('hidden');
-            
-            // 顯示題目文字
             document.getElementById('battle-q-text').innerText = room.currentQuestion.q || "題目讀取錯誤";
             
             const container = document.getElementById('battle-options');
             
-            // 🔥 檢查玩家是否已作答
             if (myData && !myData.done) {
-                // 還沒作答 -> 顯示選項按鈕
-                console.log("⏳ 我還沒作答，顯示選項");
                 document.getElementById('battle-waiting-msg').classList.add('hidden');
                 
                 container.innerHTML = '';
@@ -339,24 +301,16 @@ function listenToBattleRoom(roomId) {
                     });
                 }
             } else {
-                // 已作答 -> 顯示等待訊息
-                console.log("✅ 我已作答，等待對手");
                 container.innerHTML = '<div class="text-center text-gray-400 italic py-4 bg-slate-700/30 rounded-lg">✓ 已提交答案</div>';
                 document.getElementById('battle-waiting-msg').classList.remove('hidden');
             }
 
-            // --- [回合結算] ---
             if (room.host?.done && room.guest?.done) {
-                console.log("🎯 雙方都答完了，準備進入下一回合");
-                
-                // 只有房主負責推進
                 if (isHost) {
                     setTimeout(async () => {
                         if (room.round >= 3) {
-                            console.log("🏁 三回合結束，遊戲結束");
                             await updateDoc(doc(db, "rooms", roomId), { status: "finished" });
                         } else {
-                            console.log(`➡️ 進入第 ${room.round + 1} 回合`);
                             await updateDoc(doc(db, "rooms", roomId), {
                                 round: room.round + 1,
                                 currentQuestion: null,
@@ -364,17 +318,12 @@ function listenToBattleRoom(roomId) {
                                 "guest.done": false
                             });
                         }
-                    }, 2000); // 延遲 2 秒讓玩家看到結果
+                    }, 2000); 
                 }
             }
         }
 
-        // ------------------------------------------------
-        // 狀態 2: 遊戲結束 (Finished)
-        // ------------------------------------------------
         if (room.status === "finished") {
-            console.log("🏆 對戰結束");
-            
             document.getElementById('battle-arena').classList.add('hidden');
             document.getElementById('battle-result').classList.remove('hidden');
             
@@ -401,21 +350,17 @@ function listenToBattleRoom(roomId) {
     });
 }
 
-       
-// 全域變數：防止重複生成
 let isGenerating = false;
 
 async function generateSharedQuiz(roomId) {
-    // 1. 如果正在生成中，直接退出，不要重複呼叫
     if (isGenerating) return;
     
-    isGenerating = true; // 上鎖
+    isGenerating = true; 
     console.log("🚀 房主正在生成題目...");
 
     try {
         const q = await fetchOneQuestion(); 
         
-        // 寫入資料庫
         await updateDoc(doc(db, "rooms", roomId), {
             currentQuestion: {
                 q: q.data.q,
@@ -427,9 +372,8 @@ async function generateSharedQuiz(roomId) {
 
     } catch (e) {
         console.error("❌ 題目生成失敗:", e);
-        // (選用) 可以在這裡加入 alert 通知使用者重試
     } finally {
-        isGenerating = false; // 無論成功失敗，都解鎖
+        isGenerating = false; 
     }
 }
 
@@ -452,23 +396,17 @@ async function handleBattleAnswer(roomId, userIdx, correctIdx, isHost) {
 }
 
 window.leaveBattle = async () => {
-    // 1. 停止監聽 (這步最重要，先切斷連線)
     if (battleUnsub) {
         battleUnsub();
         battleUnsub = null;
     }
     
-    // 2. 🔥 關鍵修正：檢查並刪除「我建立的、還在等待中」的房間
     if (currentBattleId) {
-        // 先把 ID 存起來，以免下面被清空後讀不到
         const roomIdToRemove = currentBattleId;
         
-        // 背景執行清理 (不卡 UI 體驗)
-        // 這裡我們去讀取該房間，確認「我是房主」且「沒人加入」才刪除
         getDoc(doc(db, "rooms", roomIdToRemove)).then(async (snap) => {
             if (snap.exists()) {
                 const data = snap.data();
-                // 只有當房間狀態是 waiting 且房主是我本人時，才執行刪除
                 if (data.status === "waiting" && data.host.uid === auth.currentUser.uid) {
                     await deleteDoc(doc(db, "rooms", roomIdToRemove));
                     console.log("🗑️ 已清理閒置房間:", roomIdToRemove);
@@ -477,7 +415,6 @@ window.leaveBattle = async () => {
         }).catch(err => console.error("清理房間失敗:", err));
     }
 
-    // 3. 重置狀態並回首頁
     isBattleActive = false;
     currentBattleId = null;
     
@@ -488,11 +425,72 @@ window.leaveBattle = async () => {
 //  一般單人功能
 // ==========================================
 
-function updateSettingsInputs() {
+async function updateSettingsInputs() {
     if (currentUserData && currentUserData.profile) {
         document.getElementById('set-level').value = currentUserData.profile.educationLevel || "國中一年級";
         document.getElementById('set-strong').value = currentUserData.profile.strongSubjects || "";
         document.getElementById('set-weak').value = currentUserData.profile.weakSubjects || "";
+        
+        const settings = currentUserData.gameSettings || { source: 'ai', difficulty: 'medium' };
+        
+        const diffSelect = document.getElementById('set-difficulty');
+        if(diffSelect) diffSelect.value = settings.difficulty;
+
+        const sourceSelect = document.getElementById('set-source');
+        if (sourceSelect) {
+            sourceSelect.innerHTML = '<option value="ai">✨ AI 隨機生成 (預設)</option>';
+            
+            try {
+                const res = await fetch('/api/banks');
+                const data = await res.json();
+                
+                if (data.files && Array.isArray(data.files)) {
+                    const groups = {}; 
+                    const rootFiles = [];
+
+                    data.files.forEach(file => {
+                        if (file.includes('/')) {
+                            const parts = file.split('/');
+                            const folderName = parts[0]; 
+                            const fileName = parts.slice(1).join('/'); 
+
+                            if (!groups[folderName]) {
+                                groups[folderName] = document.createElement('optgroup');
+                                groups[folderName].label = `📂 ${folderName}`;
+                            }
+
+                            const opt = document.createElement('option');
+                            opt.value = file; 
+                            opt.innerText = fileName.replace('.json', ''); 
+                            groups[folderName].appendChild(opt);
+
+                        } else {
+                            rootFiles.push(file);
+                        }
+                    });
+
+                    for (const folder in groups) {
+                        sourceSelect.appendChild(groups[folder]);
+                    }
+
+                    if (rootFiles.length > 0) {
+                        const rootGroup = document.createElement('optgroup');
+                        rootGroup.label = "📄 其他";
+                        rootFiles.forEach(file => {
+                            const opt = document.createElement('option');
+                            opt.value = file;
+                            opt.innerText = file.replace('.json', '');
+                            rootGroup.appendChild(opt);
+                        });
+                        sourceSelect.appendChild(rootGroup);
+                    }
+                }
+                
+                sourceSelect.value = settings.source;
+            } catch (e) {
+                console.error("無法載入題庫列表", e);
+            }
+        }
     }
 }
 
@@ -524,10 +522,8 @@ window.submitOnboarding = async () => {
         "profile.educationLevel": level, 
         "profile.strongSubjects": cleanStrong, 
         "profile.weakSubjects": cleanWeak,
-        // ...
     });
     
-    // 更新本地暫存
     currentUserData.profile.educationLevel = level; 
     currentUserData.profile.strongSubjects = cleanStrong; 
     currentUserData.profile.weakSubjects = cleanWeak;
@@ -535,13 +531,12 @@ window.submitOnboarding = async () => {
     updateSettingsInputs(); 
     updateUIStats(); 
 
-    // ⭐ 提交成功後的動作：
-    switchToPage('page-home');          // 1. 轉跳回首頁
-    document.getElementById('bottom-nav').classList.remove('hidden'); // 2. 顯示底部導航列 (因為剛剛被隱藏了)
+    switchToPage('page-home');          
+    document.getElementById('bottom-nav').classList.remove('hidden'); 
     
     localStorage.removeItem('currentQuiz'); 
     quizBuffer = []; 
-    fillBuffer(); // 3. 開始背景載入題目
+    fillBuffer(); 
     btn.innerText = "開始旅程 🚀"; btn.disabled = false;
 };
 
@@ -549,16 +544,40 @@ window.saveProfile = async () => {
     const level = document.getElementById('set-level').value;
     const rawStrong = document.getElementById('set-strong').value;
     const rawWeak = document.getElementById('set-weak').value;
+    
+    const source = document.getElementById('set-source').value;
+    const difficulty = document.getElementById('set-difficulty').value;
+
     const btn = document.querySelector('button[onclick="saveProfile()"]');
-    btn.innerText = "AI 優化中..."; btn.disabled = true;
+    btn.innerText = "處理中..."; btn.disabled = true;
+
     const cleanStrong = await getCleanSubjects(rawStrong);
     const cleanWeak = await getCleanSubjects(rawWeak);
     document.getElementById('set-strong').value = cleanStrong;
     document.getElementById('set-weak').value = cleanWeak;
-    await updateDoc(doc(db, "users", auth.currentUser.uid), { "profile.educationLevel": level, "profile.strongSubjects": cleanStrong, "profile.weakSubjects": cleanWeak });
-    currentUserData.profile.educationLevel = level; currentUserData.profile.strongSubjects = cleanStrong; currentUserData.profile.weakSubjects = cleanWeak;
-    btn.innerText = "儲存成功！"; setTimeout(() => { btn.innerText = "更新設定"; btn.disabled = false; }, 2000);
-    localStorage.removeItem('currentQuiz'); quizBuffer = []; fillBuffer();
+
+    await updateDoc(doc(db, "users", auth.currentUser.uid), { 
+        "profile.educationLevel": level, 
+        "profile.strongSubjects": cleanStrong, 
+        "profile.weakSubjects": cleanWeak,
+        "gameSettings": { source, difficulty } 
+    });
+
+    currentUserData.profile.educationLevel = level;
+    currentUserData.profile.strongSubjects = cleanStrong;
+    currentUserData.profile.weakSubjects = cleanWeak;
+    currentUserData.gameSettings = { source, difficulty };
+
+    currentBankData = null; 
+    localStorage.removeItem('currentQuiz'); 
+    quizBuffer = []; 
+    fillBuffer();
+
+    btn.innerText = "儲存成功！"; 
+    setTimeout(() => { 
+        btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> 更新設定`; 
+        btn.disabled = false; 
+    }, 2000);
 };
 
 function checkAdminRole(isAdmin) {
@@ -583,60 +602,94 @@ function shuffleArray(array) {
 }
 
 async function fetchOneQuestion() {
-    const BACKEND_URL = "/api/generate-quiz";
+    const settings = currentUserData.gameSettings || { source: 'ai', difficulty: 'medium' };
     const rankName = RANKS[currentUserData.stats.rankLevel];
-    const level = currentUserData.profile.educationLevel || "一般";
     
-    // 1. 準備題庫來源 (弱項、強項、通識)
-    let rawWeakString = currentUserData.profile.weakSubjects || "";
-    let rawStrongString = currentUserData.profile.strongSubjects || "";
+    if (settings.source === 'ai') {
+        const BACKEND_URL = "/api/generate-quiz";
+        const level = currentUserData.profile.educationLevel || "一般";
+        
+        let rawWeakString = currentUserData.profile.weakSubjects || "";
+        let rawStrongString = currentUserData.profile.strongSubjects || "";
+        let weakArray = rawWeakString.split(/[,，\s]+/).filter(s => s.trim().length > 0);
+        let strongArray = rawStrongString.split(/[,，\s]+/).filter(s => s.trim().length > 0);
+        const generalTopics = ["台灣歷史", "世界地理", "生活科學", "邏輯推理", "國語文常識", "科技新知"];
+        let targetSubject = "";
+        const rand = Math.random(); 
+
+        if (weakArray.length > 0 && rand < 0.6) targetSubject = weakArray[Math.floor(Math.random() * weakArray.length)];
+        else {
+            const pool = [...strongArray, ...generalTopics];
+            targetSubject = pool[Math.floor(Math.random() * pool.length)];
+        }
+        
+        const response = await fetch(BACKEND_URL, {
+            method: "POST", headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ 
+                subject: targetSubject, 
+                level: level, 
+                rank: rankName,
+                difficulty: settings.difficulty 
+            })
+        });
+        
+        if (!response.ok) throw new Error(`Server Error: ${response.status}`);
+        const data = await response.json();
+        let aiText = data.text;
+        const jsonMatch = aiText.match(/\{[\s\S]*\}/);
+        if (jsonMatch) aiText = jsonMatch[0];
+        const rawData = JSON.parse(aiText);
+        
+        let allOptions = [rawData.correct, ...rawData.wrong];
+        allOptions = shuffleArray(allOptions);
+        const correctIndex = allOptions.indexOf(rawData.correct);
+        
+        return {
+            data: { q: rawData.q, opts: allOptions, ans: correctIndex, exp: rawData.exp },
+            rank: rankName,
+            badge: `🎯 題目: [${targetSubject}]` 
+        };
+    } 
     
-    // 將字串轉為陣列 (去除空白)
-    let weakArray = rawWeakString.split(/[,，\s]+/).filter(s => s.trim().length > 0);
-    let strongArray = rawStrongString.split(/[,，\s]+/).filter(s => s.trim().length > 0);
-    // 內建通識題庫，確保永遠有題目可出
-    const generalTopics = ["台灣歷史", "世界地理", "生活科學", "邏輯推理", "國語文常識", "科技新知"];
+    else {
+        if (!currentBankData || currentBankData.fileName !== settings.source) {
+            try {
+                const res = await fetch(`/banks/${settings.source}?t=${Date.now()}`);
+                if (!res.ok) throw new Error("找不到題庫檔案");
+                const json = await res.json();
+                currentBankData = { fileName: settings.source, questions: json };
+            } catch (e) {
+                console.error(e);
+                alert("題庫載入失敗，切換回 AI 模式");
+                await updateDoc(doc(db, "users", auth.currentUser.uid), { 
+                    "gameSettings.source": 'ai' 
+                });
+                currentUserData.gameSettings.source = 'ai';
+                document.getElementById('set-source').value = 'ai';
+                return fetchOneQuestion();
+            }
+        }
 
-    // 2. 決定這次的主題 (混合機制 🎲)
-    let targetSubject = "";
-    const rand = Math.random(); // 產生 0.0 ~ 1.0 的隨機數
+        const filteredQuestions = currentBankData.questions.filter(q => q.difficulty === settings.difficulty);
+        
+        const pool = filteredQuestions.length > 0 ? filteredQuestions : currentBankData.questions;
+        
+        if (pool.length === 0) throw new Error("題庫是空的！");
 
-    // 邏輯說明：
-    // 如果使用者有設定弱項，則有 60% 機率出弱項 (加強訓練)
-    // 剩下的 40% (或者使用者根本沒設弱項)，則從「強項 + 通識」裡面隨機挑一個
-    if (weakArray.length > 0 && rand < 0.6) {
-        targetSubject = weakArray[Math.floor(Math.random() * weakArray.length)];
-    } else {
-        // 混合強項與通識，讓大腦放鬆或建立自信
-        const pool = [...strongArray, ...generalTopics];
-        targetSubject = pool[Math.floor(Math.random() * pool.length)];
+        const rawData = pool[Math.floor(Math.random() * pool.length)];
+
+        let allOptions = [rawData.correct, ...rawData.wrong];
+        allOptions = shuffleArray(allOptions);
+        const correctIndex = allOptions.indexOf(rawData.correct);
+
+        const displaySubject = rawData.subject || settings.source.replace('.json','');
+
+        return {
+            data: { q: rawData.q, opts: allOptions, ans: correctIndex, exp: rawData.exp },
+            rank: rankName,
+            badge: `🎯 題目: [${displaySubject}]` 
+        };
     }
-    
-    // 3. 發送請求給 AI
-    const response = await fetch(BACKEND_URL, {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ subject: targetSubject, level: level, rank: rankName })
-    });
-    
-    if (!response.ok) throw new Error(`Server Error: ${response.status}`);
-    const data = await response.json();
-    
-    // 解析 AI 回傳的資料
-    let aiText = data.text;
-    const jsonMatch = aiText.match(/\{[\s\S]*\}/);
-    if (jsonMatch) aiText = jsonMatch[0];
-    const rawData = JSON.parse(aiText);
-    
-    // 洗牌選項
-    let allOptions = [rawData.correct, ...rawData.wrong];
-    allOptions = shuffleArray(allOptions);
-    const correctIndex = allOptions.indexOf(rawData.correct);
-    
-    return {
-        data: { q: rawData.q, opts: allOptions, ans: correctIndex, exp: rawData.exp },
-        rank: rankName,
-        badge: `🎯 題目: ${targetSubject}` // 讓使用者知道這題的主題
-    };
 }
 
 async function fillBuffer() {
@@ -651,7 +704,6 @@ async function fillBuffer() {
 }
 
 window.startQuizFlow = async () => {
-    // 檢查點：確保在本地測試或生產環境皆可運作
     const BACKEND_URL = "/api/generate-quiz"; 
     
     switchToPage('page-quiz');
@@ -835,6 +887,7 @@ window.loadLeaderboard = async () => {
 
 // --- [核心工具] 渲染視覺效果 (支援圖片相框 - 固定高度版) ---
 function renderVisual(type, value, sizeClass = "w-12 h-12") {
+    // 判斷是否為圖片路徑
     const isImage = value && (value.includes('.') || value.includes('/'));
 
     if (type === 'frame') {
@@ -848,13 +901,13 @@ function renderVisual(type, value, sizeClass = "w-12 h-12") {
                 <img src="${value}" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[140%] w-auto object-contain pointer-events-none z-20" style="max-width: none;"> 
             </div>`;
         } else {
-            // ... (CSS 框部分保持不變) ...
+            // 🎨 CSS 相框模式
             return `<div class="${sizeClass} rounded-full border-2 border-gray-600 ${value} flex items-center justify-center bg-slate-800 relative z-0">
                         <i class="fa-solid fa-user text-gray-500"></i>
                     </div>`;
         }
     } else if (type === 'avatar') {
-        // ... (頭像部分保持不變) ...
+        // 頭像模式
         return `<div class="${sizeClass} rounded-full overflow-hidden bg-slate-800 border-2 border-slate-600 relative z-10">
                     <img src="${value}" class="avatar-img" onerror="this.style.display='none';this.parentElement.innerHTML='<i class=\'fa-solid fa-image text-red-500\'></i>'">
                 </div>`;
@@ -868,19 +921,21 @@ function getAvatarHtml(equipped, sizeClass = "w-10 h-10") {
     const avatar = equipped?.avatar || '';
     const isFrameImg = frame && (frame.includes('.') || frame.includes('/'));
 
+    // 1. 準備頭像內容
     const imgContent = avatar 
         ? `<img src="${avatar}" class="w-full h-full object-cover" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"> <i class="fa-solid fa-user text-gray-400 absolute hidden"></i>`
         : `<i class="fa-solid fa-user text-gray-400"></i>`;
 
+    // 2. 處理 CSS 框
     const borderClass = frame ? '' : 'border-2 border-slate-600';
     const cssFrameClass = (!isFrameImg && frame) ? frame : '';
 
-    // 圖片框層 (高度 145%, 寬度自動)
-    // 注意：style 中加入了 height: 145%; width: auto; max-width: none;
+    // 3. 準備圖片框元素 (使用 inline style 強制置頂)
     const frameImgElement = isFrameImg 
         ? `<img src="${frame}" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); height: 145%; width: auto; max-width: none; z-index: 50; pointer-events: none;">` 
         : '';
 
+    // 4. 組合 HTML (外層 style="overflow: visible !important" 是關鍵)
     return `
     <div class="${sizeClass} rounded-full bg-slate-800 flex items-center justify-center relative ${borderClass} ${cssFrameClass}" style="overflow: visible !important;">
         <div class="w-full h-full rounded-full overflow-hidden flex items-center justify-center bg-slate-800 relative z-0">
@@ -1403,4 +1458,3 @@ window.switchToPage = (pageId) => {
         loadAdminData(); // 載入商品列表
     }
 };
-
