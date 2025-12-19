@@ -863,22 +863,39 @@ function renderVisual(type, value, sizeClass = "w-12 h-12") {
 }
 
 // --- [核心工具] 產生完整的頭像 HTML (包含框與圖) ---
-//這將用於排行榜與對戰畫面
 function getAvatarHtml(equipped, sizeClass = "w-10 h-10") {
     const frame = equipped?.frame || '';
     const avatar = equipped?.avatar || '';
     
-    // 如果有圖片，顯示圖片；否則顯示預設 icon
+    // 判斷框是否為圖片
+    const isFrameImg = frame && (frame.includes('.') || frame.includes('/'));
+
+    // 1. 準備頭像內容 (圖片或預設圖標)
+    // 注意：我們把頭像包在一個內層 div 裡並設為 overflow-hidden，確保頭像是圓的
     const imgContent = avatar 
-        ? `<img src="${avatar}" class="w-full h-full object-cover rounded-full p-[2px]" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"> <i class="fa-solid fa-user text-gray-400 absolute hidden"></i>`
+        ? `<img src="${avatar}" class="w-full h-full object-cover" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"> <i class="fa-solid fa-user text-gray-400 absolute hidden"></i>`
         : `<i class="fa-solid fa-user text-gray-400"></i>`;
 
-    // 只有當沒有框的時候，才加預設邊框 (border-slate-600)
-    // 如果有框 (frame 變數有值)，邊框由 style.css 的 class 控制
+    // 2. 處理邊框樣式
+    // 如果有任何框 (CSS或圖片)，就移除預設灰框
     const borderClass = frame ? '' : 'border-2 border-slate-600';
+    // 如果是 CSS 框，就把 class 加在容器上；如果是圖片框，容器不加 class
+    const cssFrameClass = (!isFrameImg && frame) ? frame : '';
 
-    return `<div class="${sizeClass} rounded-full bg-slate-800 flex items-center justify-center relative ${borderClass} ${frame}">
-        ${imgContent}
+    // 3. 準備圖片框元素 (如果是圖片框)
+    // z-index 設為 20 確保蓋在頭像上面
+    const frameImgElement = isFrameImg 
+        ? `<img src="${frame}" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[135%] h-[135%] object-contain pointer-events-none z-20">` 
+        : '';
+
+    // 4. 組合 HTML
+    // 外層 overflow-visible 讓圖片框可以超出圓形邊界
+    return `
+    <div class="${sizeClass} rounded-full bg-slate-800 flex items-center justify-center relative ${borderClass} ${cssFrameClass} overflow-visible">
+        <div class="w-full h-full rounded-full overflow-hidden flex items-center justify-center bg-slate-800 relative z-0">
+            ${imgContent}
+        </div>
+        ${frameImgElement}
     </div>`;
 }
 
