@@ -10,35 +10,54 @@
 </head>
 <body class="font-sans h-[100dvh] flex flex-col overflow-hidden">
 
-    <header class="p-4 bg-slate-800 shadow-lg flex justify-between items-center z-10 border-b border-slate-700">
+    <!-- 🎨 Header 增強版 -->
+    <header class="p-4 bg-slate-800/90 backdrop-blur-md shadow-lg flex justify-between items-center z-10 border-b border-slate-700/50 relative">
+        <!-- 裝飾線條 -->
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
+        
         <h1 class="text-xl font-bold text-yellow-400 flex items-center gap-2">
-            <i class="fa-solid fa-dragon"></i> 升階答題戰
+            <i class="fa-solid fa-dragon animate-pulse"></i> 
+            <span class="bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-orange-500">升階答題戰</span>
         </h1>
-        <div id="user-info" class="text-xs text-gray-300 bg-slate-700 px-3 py-1 rounded-full">未登入</div>
+        <div id="user-info" class="text-xs text-gray-300 bg-slate-700/50 px-3 py-1 rounded-full backdrop-blur-sm border border-slate-600/50 hover:border-blue-500/50 transition-all">
+            未登入
+        </div>
     </header>
 
     <main class="flex-1 overflow-y-auto p-4 relative scroll-smooth pb-safe">
         
+        <!-- 🔐 登入畫面 - 增強版 -->
         <div id="login-screen" class="flex flex-col items-center justify-center h-full">
-            <div class="text-center mb-8 animate-bounce">
-                <i class="fa-solid fa-crown text-6xl text-yellow-500 mb-4"></i>
+            <div class="text-center mb-8">
+                <i class="fa-solid fa-crown text-6xl text-yellow-500 mb-4 animate-bounce" style="filter: drop-shadow(0 0 20px rgba(250, 204, 21, 0.5));"></i>
+                <div class="flex gap-2 justify-center mb-4">
+                    <i class="fa-solid fa-star text-2xl text-yellow-400 animate-pulse" style="animation-delay: 0s;"></i>
+                    <i class="fa-solid fa-star text-2xl text-yellow-400 animate-pulse" style="animation-delay: 0.2s;"></i>
+                    <i class="fa-solid fa-star text-2xl text-yellow-400 animate-pulse" style="animation-delay: 0.4s;"></i>
+                </div>
             </div>
-            <h2 class="text-3xl font-bold mb-2">歡迎挑戰</h2>
+            <h2 class="text-4xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">歡迎挑戰</h2>
             <p class="text-gray-400 mb-8 text-sm">AI 出題 x 真人對戰 x 段位系統</p>
-            <button onclick="googleLogin()" class="bg-white text-gray-800 hover:bg-gray-100 px-8 py-3 rounded-full font-bold shadow-lg transition flex items-center gap-2 transform hover:scale-105">
+            <button onclick="googleLogin()" class="bg-white text-gray-800 hover:bg-gray-100 px-8 py-3 rounded-full font-bold shadow-lg transition flex items-center gap-2 transform hover:scale-105 hover:shadow-2xl">
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-6 h-6">
                 使用 Google 登入
             </button>
         </div>
 
+        <!-- 📝 新手引導頁 -->
         <div id="page-onboarding" class="page-section hidden absolute top-0 left-0 w-full h-full bg-slate-900 z-50 p-6 overflow-y-auto">
             <div class="max-w-md mx-auto mt-10">
-                <h2 class="text-2xl font-bold text-blue-400 mb-2">👋 嗨！初次見面</h2>
-                <p class="text-gray-400 mb-6">設定資料讓題目更適合你：</p>
+                <div class="text-center mb-6">
+                    <i class="fa-solid fa-wand-magic-sparkles text-5xl text-blue-400 mb-3" style="filter: drop-shadow(0 0 15px rgba(59, 130, 246, 0.5));"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-blue-400 mb-2 text-center">👋 嗨！初次見面</h2>
+                <p class="text-gray-400 mb-6 text-center">設定資料讓題目更適合你：</p>
                 <div class="space-y-6">
                     <div>
-                        <label class="block mb-2 text-sm font-bold text-white">你是幾年級學生？</label>
-                        <select id="ob-level" class="w-full bg-slate-800 border border-slate-600 text-white rounded-lg p-3 outline-none focus:border-blue-500">
+                        <label class="block mb-2 text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-graduation-cap text-blue-400"></i> 你是幾年級學生？
+                        </label>
+                        <select id="ob-level" class="w-full bg-slate-800 border border-slate-600 text-white rounded-lg p-3 outline-none focus:border-blue-500 transition-all">
                             <option value="國小中年級">國小 (中年級)</option>
                             <option value="國小高年級">國小 (高年級)</option>
                             <option value="國中一年級">國中 (一年級)</option>
@@ -49,61 +68,80 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block mb-2 text-sm font-bold text-green-400">擅長科目</label>
-                        <input type="text" id="ob-strong" class="w-full bg-slate-800 border border-slate-600 text-white rounded-lg p-3 outline-none focus:border-green-500" placeholder="例如：歷史, 英文">
+                        <label class="block mb-2 text-sm font-bold text-green-400 flex items-center gap-2">
+                            <i class="fa-solid fa-trophy"></i> 擅長科目
+                        </label>
+                        <input type="text" id="ob-strong" class="w-full bg-slate-800 border border-slate-600 text-white rounded-lg p-3 outline-none focus:border-green-500 transition-all" placeholder="例如：歷史, 英文">
                     </div>
                     <div>
-                        <label class="block mb-2 text-sm font-bold text-red-400">弱項科目</label>
-                        <input type="text" id="ob-weak" class="w-full bg-slate-800 border border-slate-600 text-white rounded-lg p-3 outline-none focus:border-red-500" placeholder="例如：數學, 理化">
+                        <label class="block mb-2 text-sm font-bold text-red-400 flex items-center gap-2">
+                            <i class="fa-solid fa-fire"></i> 弱項科目
+                        </label>
+                        <input type="text" id="ob-weak" class="w-full bg-slate-800 border border-slate-600 text-white rounded-lg p-3 outline-none focus:border-red-500 transition-all" placeholder="例如：數學, 理化">
                     </div>
-                    <button onclick="submitOnboarding()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl shadow-lg transform active:scale-95 transition">開始旅程 🚀</button>
+                    <button onclick="submitOnboarding()" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold py-4 rounded-xl shadow-lg transform active:scale-95 transition flex items-center justify-center gap-2">
+                        開始旅程 <i class="fa-solid fa-rocket"></i>
+                    </button>
                 </div>
             </div>
         </div>
 
+        <!-- 🏠 首頁 - 增強版 -->
         <div id="page-home" class="page-section hidden">
+            <!-- 主要段位卡片 -->
             <div class="bg-gradient-to-br from-slate-800 to-slate-900 p-8 rounded-2xl shadow-xl text-center border border-slate-700 relative overflow-hidden">
                 <i class="fa-solid fa-trophy absolute -bottom-4 -right-4 text-9xl text-white opacity-5 transform rotate-12"></i>
-                <div class="text-gray-400 text-xs uppercase tracking-widest mb-2">Current Rank</div>
-                <h2 class="text-5xl font-black mb-2 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-400 to-red-500" id="display-rank">載入中</h2>
-                <div class="flex justify-center items-center gap-2 mt-6 text-gray-300 bg-slate-800/50 inline-block px-4 py-1 rounded-full">
-                    <i class="fa-solid fa-star text-yellow-400"></i>
+                
+                <div class="text-gray-400 text-xs uppercase tracking-widest mb-2 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-crown text-yellow-500"></i>
+                    Current Rank
+                </div>
+                
+                <h2 class="text-5xl font-black mb-2 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-400 to-red-500 animate-pulse" id="display-rank">載入中</h2>
+                
+                <div class="flex justify-center items-center gap-2 mt-6 text-gray-300 bg-slate-800/50 inline-block px-4 py-1 rounded-full backdrop-blur-sm">
+                    <i class="fa-solid fa-star text-yellow-400 animate-pulse"></i>
                     <span>階段: <span id="display-stars" class="font-bold text-white text-lg">0</span> / 10</span>
                 </div>
-                <div class="w-full bg-slate-950 rounded-full h-3 mt-6 overflow-hidden border border-slate-700">
-                    <div id="progress-bar" class="bg-gradient-to-r from-blue-500 to-purple-600 h-3 rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
+                
+                <div class="w-full bg-slate-950 rounded-full h-3 mt-6 overflow-hidden border border-slate-700 relative">
+                    <div id="progress-bar" class="bg-gradient-to-r from-blue-500 to-purple-600 h-3 rounded-full transition-all duration-1000 ease-out relative" style="width: 0%">
+                        <div class="absolute inset-0 bg-white/20 animate-pulse"></div>
+                    </div>
                 </div>
                 
                 <div class="flex gap-3 mt-8">
-                    <button id="btn-home-start" onclick="startQuizFlow()" class="flex-1 bg-blue-600 py-4 rounded-xl text-lg font-bold hover:bg-blue-500 shadow-lg active:scale-95 transition flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-play"></i> 單人挑戰
+                    <button id="btn-home-start" onclick="startQuizFlow()" class="flex-1 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 py-4 rounded-xl text-lg font-bold shadow-lg active:scale-95 transition flex items-center justify-center gap-2 group">
+                        <i class="fa-solid fa-play group-hover:animate-pulse"></i> 單人挑戰
                     </button>
-                    <button onclick="startBattleMatchmaking()" class="flex-1 bg-red-600 py-4 rounded-xl text-lg font-bold hover:bg-red-500 shadow-lg active:scale-95 transition flex items-center justify-center gap-2 border border-red-400/30">
-                        <i class="fa-solid fa-khanda"></i> 雙人對戰
+                    <button onclick="startBattleMatchmaking()" class="flex-1 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 py-4 rounded-xl text-lg font-bold shadow-lg active:scale-95 transition flex items-center justify-center gap-2 border border-red-400/30 group">
+                        <i class="fa-solid fa-khanda group-hover:animate-bounce"></i> 雙人對戰
                     </button>
                 </div>
             </div>
 
+            <!-- 統計卡片網格 -->
             <div class="grid grid-cols-2 gap-3 mt-4">
-                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 flex flex-col items-center">
+                <div class="bg-slate-800/50 backdrop-blur-sm p-4 rounded-xl border border-slate-700 flex flex-col items-center hover:border-yellow-500/50 transition-all">
                     <div class="text-xs text-gray-400 mb-1"><i class="fa-solid fa-coins text-yellow-500"></i> 總積分</div>
                     <div class="text-2xl font-bold text-white" id="display-score">0</div>
                 </div>
-                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 flex flex-col items-center">
+                <div class="bg-slate-800/50 backdrop-blur-sm p-4 rounded-xl border border-slate-700 flex flex-col items-center hover:border-blue-500/50 transition-all">
                     <div class="text-xs text-gray-400 mb-1"><i class="fa-solid fa-bullseye text-blue-400"></i> 正確率</div>
                     <div class="text-2xl font-bold text-white" id="display-accuracy">0%</div>
                 </div>
-                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 flex flex-col items-center">
+                <div class="bg-slate-800/50 backdrop-blur-sm p-4 rounded-xl border border-slate-700 flex flex-col items-center hover:border-orange-500/50 transition-all">
                     <div class="text-xs text-gray-400 mb-1"><i class="fa-solid fa-fire text-orange-500"></i> 當前連對</div>
                     <div class="text-2xl font-bold text-orange-400" id="display-streak">0</div>
                 </div>
-                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 flex flex-col items-center">
+                <div class="bg-slate-800/50 backdrop-blur-sm p-4 rounded-xl border border-slate-700 flex flex-col items-center hover:border-purple-500/50 transition-all">
                     <div class="text-xs text-gray-400 mb-1"><i class="fa-solid fa-crown text-purple-500"></i> 最佳連對</div>
                     <div class="text-2xl font-bold text-purple-400" id="display-best-streak">0</div>
                 </div>
             </div>
         </div>
 
+        <!-- 📚 答題頁面 - 保留原有結構 -->
         <div id="page-quiz" class="page-section hidden pb-20">
             <div id="quiz-loading" class="text-center mt-32 hidden">
                 <div class="loader"></div>
@@ -112,15 +150,15 @@
             </div>
 
             <div id="quiz-container" class="hidden">
-                <div class="bg-slate-800 p-6 rounded-xl mb-6 border-t-4 border-blue-500 shadow-lg relative">
-                    <span class="absolute top-4 right-4 bg-slate-900 text-xs px-2 py-1 rounded text-gray-400" id="quiz-badge">主題 | 等級</span>
+                <div class="bg-slate-800/90 backdrop-blur-sm p-6 rounded-xl mb-6 border-t-4 border-blue-500 shadow-lg relative">
+                    <span class="absolute top-4 right-4 bg-slate-900/80 text-xs px-2 py-1 rounded text-gray-400 backdrop-blur-sm" id="quiz-badge">主題 | 等級</span>
                     <div class="text-4xl text-blue-500/20 absolute top-2 left-2"><i class="fa-solid fa-quote-left"></i></div>
                     <h3 class="text-lg font-bold leading-relaxed mt-4 relative z-10" id="question-text">...</h3>
                 </div>
 
                 <div id="options-container" class="space-y-3"></div>
 
-                <div id="feedback-section" class="hidden mt-6 bg-slate-800 border border-slate-700 rounded-xl p-5 shadow-2xl animate-fade-in-up">
+                <div id="feedback-section" class="hidden mt-6 bg-slate-800/90 backdrop-blur-sm border border-slate-700 rounded-xl p-5 shadow-2xl">
                     <div class="flex items-center gap-3 mb-3">
                         <div id="feedback-icon" class="text-2xl"></div>
                         <h3 id="feedback-title" class="text-xl font-bold"></h3>
@@ -133,7 +171,7 @@
                         <button onclick="switchToPage('page-home')" class="flex-1 bg-slate-700 hover:bg-slate-600 text-gray-300 py-3 rounded-lg font-bold transition">
                             返回大廳
                         </button>
-                        <button onclick="nextQuestion()" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white py-3 rounded-lg font-bold shadow-lg transition flex justify-center items-center gap-2">
+                        <button onclick="nextQuestion()" class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white py-3 rounded-lg font-bold shadow-lg transition flex justify-center items-center gap-2">
                             下一題 <i class="fa-solid fa-arrow-right"></i>
                         </button>
                     </div>
@@ -145,20 +183,20 @@
             </div>
         </div>
         
+        <!-- 🛒 商店頁面 - 保留原有結構 -->
         <div id="page-store" class="page-section hidden">
             <div class="sticky top-0 bg-slate-900/95 backdrop-blur-sm z-20 pb-2 border-b border-slate-800">
-        
                 <div class="flex justify-between items-center mb-3 p-2">
                     <div class="flex items-center gap-3">
-                        <button onclick="switchToPage('page-home')" class="text-gray-400 hover:text-white p-2">
+                        <button onclick="switchToPage('page-home')" class="text-gray-400 hover:text-white p-2 transition-all hover:scale-110">
                             <i class="fa-solid fa-arrow-left"></i>
                         </button>
                         <h2 class="text-xl font-bold text-pink-400 flex items-center gap-2">
-                            <i class="fa-solid fa-store"></i> 道具商店
+                            <i class="fa-solid fa-store animate-pulse"></i> 道具商店
                         </h2>
                     </div>
-                    <div class="bg-slate-800 px-3 py-1 rounded-full border border-yellow-500/30 text-yellow-400 font-mono text-sm flex items-center gap-1">
-                        <i class="fa-solid fa-coins"></i> 
+                    <div class="bg-slate-800 px-3 py-1 rounded-full border border-yellow-500/30 text-yellow-400 font-mono text-sm flex items-center gap-1 hover:scale-105 transition-transform">
+                        <i class="fa-solid fa-coins animate-pulse"></i> 
                         <span id="store-user-points">0</span>
                     </div>
                 </div>
@@ -183,24 +221,19 @@
             </div>
         </div>
 
-        <!-- 將這段程式碼替換你的 index.html 中的 page-battle 區塊 -->
+        <!-- ⚔️ 對戰頁面 - 使用修正後的版本 -->
         <div id="page-battle" class="page-section hidden">
-    
-            <!-- 1️⃣ 配對大廳 (等待對手) -->
             <div id="battle-lobby" class="flex flex-col items-center justify-center pt-20">
                 <div class="radar-scan mb-8">
                     <div class="radar-line"></div>
                 </div>
                 <h2 class="text-2xl font-bold mb-2">正在搜尋對手...</h2>
                 <p class="text-gray-400 text-sm mb-8" id="battle-status-text">正在連接對戰伺服器</p>
-                <button onclick="leaveBattle()" class="border border-red-500 text-red-400 px-6 py-2 rounded-full hover:bg-red-500/10">取消配對</button>
+                <button onclick="leaveBattle()" class="border border-red-500 text-red-400 px-6 py-2 rounded-full hover:bg-red-500/10 transition-all hover:scale-105">取消配對</button>
             </div>
 
-            <!-- 2️⃣ 對戰競技場 (顯示分數與題目) -->
             <div id="battle-arena" class="hidden">
-        
-                <!-- 玩家對戰面板 -->
-                <div class="flex justify-between items-center mb-6 bg-slate-900/50 p-4 rounded-xl border border-slate-700">
+                <div class="flex justify-between items-center mb-6 bg-slate-900/50 backdrop-blur-sm p-4 rounded-xl border border-slate-700">
                     <div class="flex flex-col items-center">
                         <div id="battle-my-avatar" class="flex justify-center items-center mb-2">
                             <div class="w-16 h-16 rounded-full bg-slate-800 border-2 border-blue-500 flex items-center justify-center"><i class="fa-solid fa-user"></i></div>
@@ -219,26 +252,22 @@
                             <div class="w-16 h-16 rounded-full bg-slate-800 border-2 border-red-500 flex items-center justify-center"><i class="fa-solid fa-robot"></i></div>
                         </div>
                         <span class="text-xs mt-1 font-bold text-red-300">對手</span>
-                        <span class="text-xl font-black" id="p2-score">0</span>    
+                        <span class="text-xl font-black" id="p2-score">0</span>
                     </div>
                 </div>
 
-                <!-- ⭐ 關鍵新增：題目載入中提示 -->
                 <div id="battle-loading" class="text-center py-10 hidden">
                     <div class="loader"></div>
                     <p class="text-gray-400 text-sm mt-4">正在生成題目...</p>
                 </div>
 
-                <!-- ⭐ 關鍵新增：題目顯示區塊 -->
                 <div id="battle-quiz-box" class="hidden">
-                    <div class="bg-slate-800 p-6 rounded-xl mb-6 border-t-4 border-red-500 shadow-lg">
+                    <div class="bg-slate-800/90 backdrop-blur-sm p-6 rounded-xl mb-6 border-t-4 border-red-500 shadow-lg">
                         <h3 class="text-lg font-bold leading-relaxed" id="battle-q-text">題目載入中...</h3>
                     </div>
 
-                    <!-- 選項容器 -->
                     <div id="battle-options" class="space-y-3"></div>
 
-                    <!-- 等待對手提示 -->
                     <div id="battle-waiting-msg" class="hidden mt-4 text-center">
                         <div class="inline-flex items-center gap-2 bg-slate-800/50 px-4 py-2 rounded-full text-sm text-gray-400">
                             <div class="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
@@ -248,32 +277,32 @@
                 </div>
             </div>
 
-            <!-- 3️⃣ 對戰結果頁面 -->
             <div id="battle-result" class="hidden flex flex-col items-center justify-center pt-20">
                 <div class="text-center mb-8">
                     <h2 id="battle-result-title" class="text-3xl font-bold mb-2">對戰結束</h2>
                     <p id="battle-result-msg" class="text-gray-400">計算結果中...</p>
                 </div>
-        
+                
                 <div class="flex gap-3">
-                    <button onclick="leaveBattle()" class="bg-slate-700 hover:bg-slate-600 text-white px-6 py-3 rounded-lg font-bold">
+                    <button onclick="leaveBattle()" class="bg-slate-700 hover:bg-slate-600 text-white px-6 py-3 rounded-lg font-bold transition-all hover:scale-105">
                         返回首頁
                     </button>
-                    <button onclick="startBattleMatchmaking()" class="bg-red-600 hover:bg-red-500 text-white px-6 py-3 rounded-lg font-bold">
+                    <button onclick="startBattleMatchmaking()" class="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white px-6 py-3 rounded-lg font-bold transition-all hover:scale-105">
                         再來一局
                     </button>
                 </div>
             </div>
         </div>
 
+        <!-- 📜 歷史紀錄頁 -->
         <div id="page-history" class="page-section hidden">
             <h2 class="text-2xl font-bold mb-4 flex items-center gap-2 text-purple-400">
                 <i class="fa-solid fa-clock-rotate-left"></i> 我的答題紀錄
             </h2>
-            <div class="bg-slate-800 rounded-xl overflow-hidden border border-slate-700 h-[75vh] flex flex-col shadow-2xl">
-                <div class="p-3 bg-slate-900 border-b border-slate-700 font-bold text-xs text-gray-400 uppercase tracking-wider flex justify-between">
+            <div class="bg-slate-800/90 backdrop-blur-sm rounded-xl overflow-hidden border border-slate-700 h-[75vh] flex flex-col shadow-2xl">
+                <div class="p-3 bg-slate-900/90 backdrop-blur-sm border-b border-slate-700 font-bold text-xs text-gray-400 uppercase tracking-wider flex justify-between">
                     <span>個人學習歷程</span>
-                    <button onclick="loadUserHistory()" class="text-blue-400 hover:text-white transition"><i class="fa-solid fa-rotate"></i></button>
+                    <button onclick="loadUserHistory()" class="text-blue-400 hover:text-white transition-all hover:rotate-180 duration-500"><i class="fa-solid fa-rotate"></i></button>
                 </div>
                 <ul id="history-list" class="overflow-y-auto p-2 space-y-2 flex-1 text-sm scrollbar-thin scrollbar-thumb-slate-600">
                     <li class="text-center text-gray-500 py-10">載入中...</li>
@@ -281,13 +310,14 @@
             </div>
         </div>
 
+        <!-- 🏆 排行榜頁 -->
         <div id="page-rank" class="page-section hidden">
             <h2 class="text-2xl font-bold mb-4 flex items-center gap-2 text-yellow-400">
-                <i class="fa-solid fa-trophy"></i> 全服排行榜
+                <i class="fa-solid fa-trophy animate-pulse"></i> 全服排行榜
             </h2>
-            <div class="bg-slate-800 rounded-xl overflow-hidden shadow-lg border border-slate-700">
+            <div class="bg-slate-800/90 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg border border-slate-700">
                 <table class="w-full text-left text-sm text-gray-300">
-                    <thead class="bg-slate-900 text-gray-400 uppercase text-xs">
+                    <thead class="bg-slate-900/90 backdrop-blur-sm text-gray-400 uppercase text-xs">
                         <tr>
                             <th class="px-4 py-3 w-12">#</th>
                             <th class="px-4 py-3">玩家</th>
@@ -299,12 +329,15 @@
             </div>
         </div>
 
+        <!-- ⚙️ 設定頁 -->
         <div id="page-settings" class="page-section hidden">
-            <h2 class="text-2xl font-bold mb-4">⚙️ 個人設定</h2>
-            <div class="bg-slate-800 p-6 rounded-xl shadow-lg mb-6 border border-slate-700 space-y-4">
+            <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-user-gear text-green-400"></i> 個人設定
+            </h2>
+            <div class="bg-slate-800/90 backdrop-blur-sm p-6 rounded-xl shadow-lg mb-6 border border-slate-700 space-y-4">
                 <div>
                     <label class="block mb-1 text-sm font-bold text-white">年級 / 身份</label>
-                    <select id="set-level" class="w-full bg-slate-900 border border-slate-600 text-white rounded-lg p-3">
+                    <select id="set-level" class="w-full bg-slate-900 border border-slate-600 text-white rounded-lg p-3 transition-all">
                         <option value="國小中年級">國小 (中年級)</option>
                         <option value="國小高年級">國小 (高年級)</option>
                         <option value="國中一年級">國中 (一年級)</option>
@@ -316,15 +349,15 @@
                 </div>
                 <div>
                     <label class="block mb-1 text-sm font-bold text-green-400">擅長科目</label>
-                    <input type="text" id="set-strong" class="bg-slate-900 border border-slate-600 text-white text-sm rounded-lg w-full p-3">
+                    <input type="text" id="set-strong" class="bg-slate-900 border border-slate-600 text-white text-sm rounded-lg w-full p-3 transition-all">
                 </div>
                 <div>
                     <label class="block mb-1 text-sm font-bold text-red-400">弱項 (加強練習)</label>
-                    <input type="text" id="set-weak" class="bg-slate-900 border border-slate-600 text-white text-sm rounded-lg w-full p-3">
+                    <input type="text" id="set-weak" class="bg-slate-900 border border-slate-600 text-white text-sm rounded-lg w-full p-3 transition-all">
                 </div>
-                <button onclick="saveProfile()" class="mt-2 bg-blue-600 text-white px-4 py-3 rounded-lg w-full font-bold hover:bg-blue-500 transition shadow-lg mb-6">更新設定</button>
+                <button onclick="saveProfile()" class="mt-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white px-4 py-3 rounded-lg w-full font-bold transition-all shadow-lg mb-6 hover:scale-105">更新設定</button>
 
-                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 mb-6">
+                <div class="bg-slate-800/90 backdrop-blur-sm p-4 rounded-xl border border-slate-700 mb-6">
                     <h3 class="font-bold text-white mb-3 flex items-center gap-2">
                         <i class="fa-solid fa-backpack text-green-400"></i> 我的背包 (Inventory)
                     </h3>
@@ -333,7 +366,7 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 mb-6">
+            <div class="bg-slate-800/90 backdrop-blur-sm p-4 rounded-xl border border-slate-700 mb-6">
                 <div class="text-xs text-gray-400 mb-1">帳號</div>
                 <div class="text-sm font-mono text-white truncate" id="settings-email">checking...</div>
             </div>
@@ -361,7 +394,7 @@
                     </select>
                     <div>
                         <input type="text" id="admin-p-value" placeholder="CSS 類名 (例如 frame-gold)" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white font-mono">
-    
+
                         <div id="admin-asset-selector" class="hidden mt-2 p-2 bg-slate-700/30 rounded border border-slate-600">
                             <label class="text-xs text-gray-400 block mb-1">快速選擇未使用的圖片：</label>
                             <div class="flex gap-2">
@@ -394,11 +427,11 @@
 
     <nav id="bottom-nav" class="bg-slate-800/90 backdrop-blur-md border-t border-slate-700 fixed bottom-0 w-full z-50 hidden transition-all duration-300">
         <div class="grid h-16 grid-cols-6 mx-auto font-medium" id="nav-grid">
-        
+
             <button onclick="switchToPage('page-home')" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group active-nav-btn" data-target="page-home">
                 <i class="fa-solid fa-house mb-1 text-lg group-hover:text-blue-400 transition-colors"></i><span class="text-[10px]">首頁</span>
             </button>
-        
+
             <button onclick="startQuizFlow()" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group" data-target="page-quiz">
                 <i class="fa-solid fa-swords mb-1 text-lg group-hover:text-red-400 transition-colors"></i><span class="text-[10px]">答題</span>
             </button>
@@ -410,11 +443,11 @@
             <button onclick="loadUserHistory(); switchToPage('page-history')" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group" data-target="page-history">
                 <i class="fa-solid fa-clock-rotate-left mb-1 text-lg group-hover:text-purple-400 transition-colors"></i><span class="text-[10px]">紀錄</span>
             </button>
-        
+
             <button onclick="loadLeaderboard(); switchToPage('page-rank')" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group" data-target="page-rank">
                 <i class="fa-solid fa-chart-simple mb-1 text-lg group-hover:text-yellow-400 transition-colors"></i><span class="text-[10px]">排行</span>
             </button>
-        
+
             <button onclick="switchToPage('page-settings')" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group" data-target="page-settings">
                 <i class="fa-solid fa-user-gear mb-1 text-lg group-hover:text-green-400 transition-colors"></i><span class="text-[10px]">設定</span>
             </button>
@@ -424,3 +457,4 @@
     <script type="module" src="main.js"></script>
 </body>
 </html>
+
