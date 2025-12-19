@@ -30,6 +30,8 @@ let currentBattleId = null;
 let isBattleActive = false; // 戰鬥鎖定狀態
 let currentBankData = null; // 題庫緩存
 
+let allBankFiles = [];
+
 // 綁定全域函式供 HTML onclick 使用
 window.googleLogin = () => { signInWithPopup(auth, provider).catch((error) => alert("登入失敗: " + error.code)); };
 window.logout = () => { 
