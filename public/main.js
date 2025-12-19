@@ -833,14 +833,14 @@ window.loadLeaderboard = async () => {
 //  商店、庫存與管理系統 (Enhanced Store System)
 // ==========================================
 
-// --- [核心工具] 渲染視覺效果 (重要：處理圖片路徑) ---
+// --- [核心工具] 渲染視覺效果 (支援圖片相框) ---
 function renderVisual(type, value, sizeClass = "w-12 h-12") {
-    const isImage = value && value.includes('/');
+    // 判斷是否為圖片路徑 (包含 . 或 /)
+    const isImage = value && (value.includes('.') || value.includes('/'));
+
     if (type === 'frame') {
-        // 相框：使用 CSS Class (value = frame-gold)
-        // 內部的 icon 是預設頭像佔位符
         if (isImage) {
-            // 🖼️ 圖片相框模式
+            // 🖼️ 圖片相框模式：使用 img 標籤疊加
             return `<div class="${sizeClass} rounded-full bg-slate-800 flex items-center justify-center relative overflow-visible">
                         <i class="fa-solid fa-user text-gray-500"></i>
                         <img src="${value}" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[135%] h-[135%] object-contain pointer-events-none z-10"> 
@@ -852,9 +852,7 @@ function renderVisual(type, value, sizeClass = "w-12 h-12") {
                     </div>`;
         }
     } else if (type === 'avatar') {
-        // 頭像：使用圖片路徑 (value = avatar1.png)
-        // 假設圖片都放在 public 根目錄，若有資料夾請自行加前綴 (e.g., /images/${value})
-        // 增加 onerror 處理，若圖檔找不到顯示預設 icon
+        // 頭像模式
         return `<div class="${sizeClass} rounded-full overflow-hidden bg-slate-800 border-2 border-slate-600 relative z-10">
                     <img src="${value}" class="avatar-img" onerror="this.style.display='none';this.parentElement.innerHTML='<i class=\'fa-solid fa-image text-red-500\'></i>'">
                 </div>`;
