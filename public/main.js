@@ -943,12 +943,33 @@ window.loadAdminData = async () => {
 };
 
 // ==========================================
-//  [修正版] 管理員存檔邏輯 (請替換 main.js 對應部分)
+//  管理後台：UI 收折邏輯 (新增)
 // ==========================================
 
-// 2. 編輯模式填充 (點擊筆圖示時觸發)
+// 切換表單顯示/隱藏
+window.toggleAdminForm = () => {
+    const body = document.getElementById('admin-form-body');
+    const arrow = document.getElementById('admin-form-arrow');
+    
+    if (body.classList.contains('hidden')) {
+        body.classList.remove('hidden');
+        arrow.style.transform = 'rotate(0deg)';
+    } else {
+        body.classList.add('hidden');
+        arrow.style.transform = 'rotate(180deg)';
+    }
+};
+
+// 強制展開表單 (用於點擊編輯或新增時)
+window.openAdminForm = () => {
+    const body = document.getElementById('admin-form-body');
+    const arrow = document.getElementById('admin-form-arrow');
+    body.classList.remove('hidden');
+    arrow.style.transform = 'rotate(0deg)';
+}
+
+// 2. 編輯模式填充 (點擊筆圖示時觸發) - 更新版
 window.editProduct = (id, data) => {
-    // ⭐ 修正：HTML 裡的 ID 是 'admin-edit-id'，不是 'admin-p-id'
     document.getElementById('admin-edit-id').value = id; 
     
     document.getElementById('admin-p-name').value = data.name;
@@ -958,17 +979,21 @@ window.editProduct = (id, data) => {
     
     // UI 變更
     document.getElementById('admin-form-title').innerText = "✏️ 編輯商品";
-    const saveBtn = document.getElementById('admin-btn-save'); // ⭐ 修正：HTML ID 是 'admin-btn-save'
+    const saveBtn = document.getElementById('admin-btn-save'); 
     saveBtn.innerText = "更新商品";
     saveBtn.classList.replace('bg-red-600', 'bg-blue-600');
     
-    document.getElementById('admin-btn-del').classList.remove('hidden'); // 顯示刪除鈕
-    toggleAdminInputPlaceholder(); // 更新提示
+    document.getElementById('admin-btn-del').classList.remove('hidden'); 
+    toggleAdminInputPlaceholder(); 
+    
+    // 🔥 新增：強制展開表單並捲動到頂部
+    openAdminForm();
+    document.getElementById('page-admin').scrollIntoView({ behavior: 'smooth', block: 'start' });
 };
 
-// 3. 重置表單 (點擊新增模式時觸發)
+// 3. 重置表單 (點擊新增模式時觸發) - 更新版
 window.resetAdminForm = () => {
-    document.getElementById('admin-edit-id').value = ''; // ⭐ 修正 ID
+    document.getElementById('admin-edit-id').value = ''; 
     document.getElementById('admin-p-name').value = '';
     document.getElementById('admin-p-value').value = '';
     document.getElementById('admin-p-price').value = '';
@@ -978,8 +1003,11 @@ window.resetAdminForm = () => {
     saveBtn.innerText = "上架商品";
     saveBtn.classList.replace('bg-blue-600', 'bg-red-600');
     
-    document.getElementById('admin-btn-del').classList.add('hidden'); // 隱藏刪除鈕
+    document.getElementById('admin-btn-del').classList.add('hidden'); 
     toggleAdminInputPlaceholder();
+    
+    // 🔥 新增：強制展開表單
+    openAdminForm();
 };
 
 // 4. [關鍵修正] 儲存商品 (對應 HTML onclick="saveProduct()")
