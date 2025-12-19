@@ -1,136 +1,618 @@
+/* ==========================================
+   基礎樣式
+   ========================================== */
 .page-section { display: none; }
-.active-page { display: block; }
-body { background-color: #0f172a; color: white; }
+.active-page { display: block; animation: fadeInUp 0.4s ease-out; }
+body { 
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+    background-size: 200% 200%;
+    animation: gradientShift 15s ease infinite;
+    color: white; 
+    position: relative;
+    overflow-x: hidden;
+}
 
-/* 載入動畫 */
+/* 背景漸變動畫 */
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* 星空背景效果 */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-image: 
+        radial-gradient(2px 2px at 20% 30%, white, transparent),
+        radial-gradient(2px 2px at 60% 70%, white, transparent),
+        radial-gradient(1px 1px at 50% 50%, white, transparent),
+        radial-gradient(1px 1px at 80% 10%, white, transparent),
+        radial-gradient(2px 2px at 90% 60%, white, transparent),
+        radial-gradient(1px 1px at 33% 95%, white, transparent);
+    background-size: 200% 200%;
+    background-position: 0% 0%;
+    animation: stars 60s linear infinite;
+    opacity: 0.3;
+    pointer-events: none;
+    z-index: 0;
+}
+
+@keyframes stars {
+    from { transform: translateY(0); }
+    to { transform: translateY(-100%); }
+}
+
+/* 頁面淡入動畫 */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* ==========================================
+   載入動畫 - 升級版
+   ========================================== */
 .loader {
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #3498db;
+    border: 4px solid rgba(59, 130, 246, 0.2);
+    border-top: 4px solid #3b82f6;
     border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    animation: spin 1s linear infinite;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
     margin: 20px auto;
+    position: relative;
 }
-@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-/* 雷達掃描動畫 */
-.radar-scan {
-    width: 100px; height: 100px;
-    background: radial-gradient(circle, rgba(59,130,246,0) 0%, rgba(59,130,246,0.2) 100%);
-    border: 2px solid #3b82f6;
+.loader::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px; height: 20px;
     border-radius: 50%;
+    background: #3b82f6;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes spin { 
+    0% { transform: rotate(0deg); } 
+    100% { transform: rotate(360deg); } 
+}
+
+/* ==========================================
+   首頁特效
+   ========================================== */
+/* 段位卡片發光效果 */
+#page-home > div:first-child {
     position: relative;
-    animation: pulse 2s infinite;
-}
-.radar-line {
-    width: 50%; height: 2px; background: #3b82f6;
-    position: absolute; top: 50%; left: 50%;
-    transform-origin: 0 0;
-    animation: radar 2s linear infinite;
-}
-@keyframes radar { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); } 70% { box-shadow: 0 0 0 20px rgba(59, 130, 246, 0); } 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); } }
-
-/* ⭐ 關鍵修改：全頁面底部留白 10rem (約 160px)，確保所有頁面都不會被擋住 */
-.pb-safe { padding-bottom: 10rem !important; }
-
-select {
-    -webkit-appearance: none; -moz-appearance: none; appearance: none;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-    background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em;
+    overflow: hidden;
 }
 
-.btn-correct { background-color: #22c55e !important; border-color: #22c55e !important; color: white !important; }
-.btn-wrong { background-color: #ef4444 !important; border-color: #ef4444 !important; color: white !important; }
-.btn-disabled { opacity: 0.6; pointer-events: none; }
-.vs-avatar { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 3px solid; }
+#page-home > div:first-child::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.1) 50%,
+        transparent 70%
+    );
+    animation: shine 3s infinite;
+}
 
-/* 鎖定時導航列變暗 */
-.nav-locked { opacity: 0.3; pointer-events: none; filter: grayscale(100%); transition: all 0.3s; }
+@keyframes shine {
+    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
 
-/* =========================================
-   商店與頭像框系統
-   ========================================= */
-
-/* 頭像框基礎樣式 */
-.avatar-frame {
+/* 按鈕懸浮效果 */
+button {
     position: relative;
-    box-sizing: border-box;
+    overflow: hidden;
     transition: all 0.3s ease;
 }
 
-/* 1. 黃金框特效 */
-.frame-gold {
-    border: 4px solid #ffd700;
-    box-shadow: 0 0 15px #ffd700, inset 0 0 10px #ffd700;
+button::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 0; height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
 }
 
-/* 2. 鑽石框特效 */
+button:active::before {
+    width: 300px;
+    height: 300px;
+}
+
+/* 統計卡片懸浮 */
+#page-home .grid > div {
+    transition: all 0.3s ease;
+    animation: float 3s ease-in-out infinite;
+}
+
+#page-home .grid > div:nth-child(1) { animation-delay: 0s; }
+#page-home .grid > div:nth-child(2) { animation-delay: 0.5s; }
+#page-home .grid > div:nth-child(3) { animation-delay: 1s; }
+#page-home .grid > div:nth-child(4) { animation-delay: 1.5s; }
+
+#page-home .grid > div:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-5px); }
+}
+
+/* 進度條動畫 */
+#progress-bar {
+    position: relative;
+    overflow: hidden;
+}
+
+#progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+    );
+    animation: progressShine 2s infinite;
+}
+
+@keyframes progressShine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* ==========================================
+   答題頁面特效
+   ========================================== */
+/* 題目卡片入場動畫 */
+#quiz-container {
+    animation: slideInFromTop 0.5s ease-out;
+}
+
+@keyframes slideInFromTop {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 選項按鈕磁吸效果 */
+#options-container button {
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    position: relative;
+}
+
+#options-container button::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1));
+    opacity: 0;
+    transition: opacity 0.3s;
+    border-radius: 0.5rem;
+}
+
+#options-container button:hover::after {
+    opacity: 1;
+}
+
+#options-container button:hover {
+    transform: translateX(8px);
+    box-shadow: -5px 5px 15px rgba(59, 130, 246, 0.3);
+}
+
+/* 正確/錯誤動畫增強 */
+.btn-correct { 
+    background-color: #22c55e !important; 
+    animation: correctPulse 0.6s ease-out;
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.6);
+}
+
+.btn-wrong { 
+    background-color: #ef4444 !important; 
+    animation: wrongShake 0.5s ease-out;
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
+}
+
+@keyframes correctPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); box-shadow: 0 0 30px rgba(34, 197, 94, 0.8); }
+    100% { transform: scale(1); }
+}
+
+@keyframes wrongShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+}
+
+/* 反饋區塊動畫 */
+#feedback-section {
+    animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+@keyframes bounceIn {
+    0% { opacity: 0; transform: scale(0.3); }
+    50% { transform: scale(1.05); }
+    70% { transform: scale(0.9); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* ==========================================
+   對戰頁面特效
+   ========================================== */
+/* 雷達掃描升級版 */
+.radar-scan {
+    width: 120px; 
+    height: 120px;
+    background: radial-gradient(circle, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.3) 100%);
+    border: 3px solid #ef4444;
+    border-radius: 50%;
+    position: relative;
+    animation: radarPulse 2s infinite;
+    box-shadow: 0 0 30px rgba(239, 68, 68, 0.5);
+}
+
+.radar-scan::before,
+.radar-scan::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 2px solid rgba(239, 68, 68, 0.3);
+    animation: radarRing 2s infinite;
+}
+
+.radar-scan::before {
+    width: 140%;
+    height: 140%;
+    animation-delay: 0.5s;
+}
+
+.radar-scan::after {
+    width: 180%;
+    height: 180%;
+    animation-delay: 1s;
+}
+
+.radar-line {
+    width: 50%; 
+    height: 3px; 
+    background: linear-gradient(to right, transparent, #ef4444);
+    box-shadow: 0 0 10px #ef4444;
+    position: absolute; 
+    top: 50%; 
+    left: 50%;
+    transform-origin: 0 0;
+    animation: radar 2s linear infinite;
+}
+
+@keyframes radar { 
+    0% { transform: rotate(0deg); } 
+    100% { transform: rotate(360deg); } 
+}
+
+@keyframes radarPulse { 
+    0%, 100% { 
+        box-shadow: 0 0 30px rgba(239, 68, 68, 0.5),
+                    0 0 60px rgba(239, 68, 68, 0.3); 
+    } 
+    50% { 
+        box-shadow: 0 0 50px rgba(239, 68, 68, 0.8),
+                    0 0 100px rgba(239, 68, 68, 0.5); 
+    } 
+}
+
+@keyframes radarRing {
+    0% { opacity: 1; transform: translate(-50%, -50%) scale(0.8); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(1.2); }
+}
+
+/* VS 特效 */
+#battle-arena .text-3xl {
+    text-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+    animation: vsGlow 2s ease-in-out infinite;
+}
+
+@keyframes vsGlow {
+    0%, 100% { 
+        text-shadow: 0 0 10px rgba(239, 68, 68, 0.5),
+                     0 0 20px rgba(239, 68, 68, 0.3);
+    }
+    50% { 
+        text-shadow: 0 0 20px rgba(239, 68, 68, 0.8),
+                     0 0 40px rgba(239, 68, 68, 0.5),
+                     0 0 60px rgba(239, 68, 68, 0.3);
+    }
+}
+
+/* 對戰題目特殊邊框 */
+#battle-quiz-box > div {
+    animation: borderGlow 2s ease-in-out infinite;
+}
+
+@keyframes borderGlow {
+    0%, 100% { border-top-color: #ef4444; }
+    50% { border-top-color: #f97316; }
+}
+
+/* ==========================================
+   商店頁面特效
+   ========================================== */
+/* 商品卡片 3D 翻轉效果 */
+.store-card {
+    transform-style: preserve-3d;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+.store-card:hover {
+    transform: translateY(-10px) rotateY(5deg);
+    box-shadow: 0 15px 40px rgba(219, 39, 119, 0.4);
+}
+
+.store-card:active { 
+    transform: scale(0.95) rotateY(0deg); 
+}
+
+/* Tab 切換動畫 */
+.store-tab {
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+.active-tab {
+    animation: tabPop 0.4s ease-out;
+}
+
+@keyframes tabPop {
+    0% { transform: scale(0.8); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* ==========================================
+   頭像框特效 - 增強版
+   ========================================== */
+.avatar-frame {
+    position: relative;
+    box-sizing: border-box;
+    transition: all 0.4s ease;
+}
+
+/* 1. 黃金框 - 閃耀效果 */
+.frame-gold {
+    border: 4px solid #ffd700;
+    box-shadow: 
+        0 0 15px #ffd700, 
+        inset 0 0 10px rgba(255, 215, 0, 0.3);
+    animation: goldShine 3s ease-in-out infinite;
+}
+
+@keyframes goldShine {
+    0%, 100% { 
+        box-shadow: 0 0 15px #ffd700, 
+                    0 0 30px rgba(255, 215, 0, 0.5),
+                    inset 0 0 10px rgba(255, 215, 0, 0.3); 
+    }
+    50% { 
+        box-shadow: 0 0 25px #ffd700, 
+                    0 0 50px rgba(255, 215, 0, 0.8),
+                    inset 0 0 20px rgba(255, 215, 0, 0.5); 
+    }
+}
+
+/* 2. 鑽石框 - 冰霜效果 */
 .frame-diamond {
     border: 4px solid #b9f2ff;
     box-shadow: 0 0 15px #00e5ff, 0 0 5px #fff;
-    animation: shine 2s infinite;
+    animation: diamondSparkle 2s infinite;
+    position: relative;
 }
 
-/* 3. 火焰框特效 */
+.frame-diamond::before {
+    content: '';
+    position: absolute;
+    top: -2px; left: -2px; right: -2px; bottom: -2px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, transparent, rgba(0, 229, 255, 0.5), transparent);
+    animation: rotate 3s linear infinite;
+    z-index: -1;
+}
+
+@keyframes diamondSparkle { 
+    0%, 100% { opacity: 1; } 
+    50% { opacity: 0.7; box-shadow: 0 0 30px #00e5ff; } 
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* 3. 火焰框 - 燃燒效果 */
 .frame-fire {
     border: 4px solid #ff4500;
-    box-shadow: 0 0 20px #ff4500;
-    animation: pulse-red 1.5s infinite;
+    box-shadow: 
+        0 0 20px #ff4500,
+        0 0 40px rgba(255, 69, 0, 0.5),
+        inset 0 0 15px rgba(255, 69, 0, 0.3);
+    animation: fireFlicker 1.5s infinite;
 }
 
-/* 4. 彩虹框特效 (管理員/高級) */
+@keyframes fireFlicker {
+    0%, 100% { 
+        box-shadow: 0 0 20px #ff4500,
+                    0 0 40px rgba(255, 69, 0, 0.5); 
+    }
+    50% { 
+        box-shadow: 0 0 30px #ff6347,
+                    0 0 60px rgba(255, 99, 71, 0.8); 
+    }
+}
+
+/* 4. 彩虹框 - 動態漸變 */
 .frame-rainbow {
     border: 4px solid transparent;
-    background-image: linear-gradient(#1e293b, #1e293b), linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+    background-image: 
+        linear-gradient(#1e293b, #1e293b), 
+        linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
     background-origin: border-box;
     background-clip: content-box, border-box;
-    animation: spin-border 3s linear infinite;
+    animation: rainbowRotate 3s linear infinite;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
 }
 
-/* 動畫定義 */
-@keyframes shine { 0% { opacity: 0.8; } 50% { opacity: 1; box-shadow: 0 0 25px #00e5ff; } 100% { opacity: 0.8; } }
-@keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(255, 69, 0, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(255, 69, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 69, 0, 0); } }
-@keyframes spin-border { 100% { transform: rotate(360deg); } }
-
-/* 商店卡片 */
-.store-card {
-    background: rgba(30, 41, 59, 0.8);
-    border: 1px solid #475569;
-    border-radius: 12px;
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    transition: transform 0.2s;
-    position: relative; /* 為了讓已擁有的打勾定位 */
-}
-.store-card:active { transform: scale(0.95); }
-
-/* 分頁 Tab 樣式 */
-.store-tab {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-}
-.active-tab {
-    /* 強制覆蓋 */
-    background-color: #db2777 !important; /* pink-600 */
-    color: white !important;
+@keyframes rainbowRotate {
+    0% { filter: hue-rotate(0deg); }
+    100% { filter: hue-rotate(360deg); }
 }
 
-/* 圖片頭像樣式 */
+/* ==========================================
+   排行榜特效
+   ========================================== */
+#leaderboard-body tr {
+    transition: all 0.3s ease;
+    animation: fadeInRow 0.5s ease-out backwards;
+}
+
+#leaderboard-body tr:nth-child(1) { animation-delay: 0.1s; }
+#leaderboard-body tr:nth-child(2) { animation-delay: 0.2s; }
+#leaderboard-body tr:nth-child(3) { animation-delay: 0.3s; }
+#leaderboard-body tr:nth-child(4) { animation-delay: 0.4s; }
+#leaderboard-body tr:nth-child(5) { animation-delay: 0.5s; }
+
+@keyframes fadeInRow {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+#leaderboard-body tr:hover {
+    transform: translateX(5px);
+    background: rgba(59, 130, 246, 0.1) !important;
+}
+
+/* 前三名特殊效果 */
+#leaderboard-body tr:nth-child(1) {
+    background: linear-gradient(90deg, rgba(250, 204, 21, 0.1), transparent);
+}
+
+#leaderboard-body tr:nth-child(2) {
+    background: linear-gradient(90deg, rgba(203, 213, 225, 0.1), transparent);
+}
+
+#leaderboard-body tr:nth-child(3) {
+    background: linear-gradient(90deg, rgba(251, 146, 60, 0.1), transparent);
+}
+
+/* ==========================================
+   底部導航特效
+   ========================================== */
+#bottom-nav button {
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+#bottom-nav button:active {
+    transform: scale(0.9);
+}
+
+#bottom-nav button i {
+    transition: all 0.3s ease;
+}
+
+#bottom-nav button:hover i {
+    transform: scale(1.2) translateY(-2px);
+}
+
+/* 導航鎖定效果 */
+.nav-locked { 
+    opacity: 0.3; 
+    pointer-events: none; 
+    filter: grayscale(100%); 
+    transition: all 0.3s; 
+}
+
+/* ==========================================
+   其他通用特效
+   ========================================== */
+/* Select 下拉動畫 */
+select {
+    -webkit-appearance: none; 
+    -moz-appearance: none; 
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat; 
+    background-position: right 1rem center; 
+    background-size: 1em;
+    transition: all 0.3s ease;
+}
+
+select:focus {
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+    border-color: #3b82f6;
+}
+
+/* Input 聚焦效果 */
+input:focus, textarea:focus {
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+    border-color: #3b82f6;
+    transform: scale(1.02);
+}
+
+/* 滾動條美化 */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1e293b;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #3b82f6, #8b5cf6);
+    border-radius: 10px;
+    transition: background 0.3s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #2563eb, #7c3aed);
+}
+
+/* 頭像圖片樣式 */
 .avatar-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     border-radius: 50%;
+    transition: transform 0.3s ease;
 }
 
-/* 管理後台的列表項目 */
+.avatar-img:hover {
+    transform: scale(1.1);
+}
+
+/* 管理後台列表 */
 .admin-item-row {
     display: flex;
     align-items: center;
@@ -140,14 +622,16 @@ select {
     border-radius: 0.5rem;
     border: 1px solid #334155;
     margin-bottom: 0.5rem;
-    transition: background 0.2s;
+    transition: all 0.3s ease;
 }
+
 .admin-item-row:hover {
     background: rgba(30, 41, 59, 1);
     border-color: #64748b;
+    transform: translateX(5px);
 }
 
-/* 設定頁面的庫存 Grid */
+/* 設定頁庫存 */
 .inventory-item {
     aspect-ratio: 1/1;
     background: #1e293b;
@@ -158,13 +642,57 @@ select {
     position: relative;
     border: 2px solid transparent;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
 }
+
 .inventory-item:hover {
     background: #334155;
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
 }
+
 .inventory-item.selected {
     border-color: #22c55e;
     background: #0f172a;
-    box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.5);
+    animation: selectedPulse 2s ease-in-out infinite;
+}
+
+@keyframes selectedPulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(34, 197, 94, 0.5); }
+    50% { box-shadow: 0 0 30px rgba(34, 197, 94, 0.8); }
+}
+
+/* 底部安全區域 */
+.pb-safe { 
+    padding-bottom: 10rem !important; 
+}
+
+/* ==========================================
+   響應式調整
+   ========================================== */
+@media (max-width: 640px) {
+    .loader { width: 30px; height: 30px; }
+    .radar-scan { width: 100px; height: 100px; }
+    
+    /* 減少移動端的動畫以提升性能 */
+    * {
+        animation-duration: 0.5s !important;
+    }
+}
+
+/* ==========================================
+   暗色模式優化
+   ========================================== */
+@media (prefers-color-scheme: dark) {
+    body {
+        background: linear-gradient(135deg, #000000 0%, #1e293b 50%, #000000 100%);
+    }
+}
+
+/* 高對比度模式 */
+@media (prefers-contrast: high) {
+    button, .store-card, .inventory-item {
+        border-width: 3px;
+    }
 }
