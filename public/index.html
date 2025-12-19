@@ -183,7 +183,10 @@
             </div>
         </div>
 
+        <!-- 將這段程式碼替換你的 index.html 中的 page-battle 區塊 -->
         <div id="page-battle" class="page-section hidden">
+    
+            <!-- 1️⃣ 配對大廳 (等待對手) -->
             <div id="battle-lobby" class="flex flex-col items-center justify-center pt-20">
                 <div class="radar-scan mb-8">
                     <div class="radar-line"></div>
@@ -193,9 +196,11 @@
                 <button onclick="leaveBattle()" class="border border-red-500 text-red-400 px-6 py-2 rounded-full hover:bg-red-500/10">取消配對</button>
             </div>
 
+            <!-- 2️⃣ 對戰競技場 (顯示分數與題目) -->
             <div id="battle-arena" class="hidden">
-                <div class="flex justify-between items-center mb-6 bg-slate-900/50 p-4 rounded-xl border border-slate-700">
         
+                <!-- 玩家對戰面板 -->
+                <div class="flex justify-between items-center mb-6 bg-slate-900/50 p-4 rounded-xl border border-slate-700">
                     <div class="flex flex-col items-center">
                         <div id="battle-my-avatar" class="flex justify-center items-center mb-2">
                             <div class="w-16 h-16 rounded-full bg-slate-800 border-2 border-blue-500 flex items-center justify-center"><i class="fa-solid fa-user"></i></div>
@@ -214,9 +219,49 @@
                             <div class="w-16 h-16 rounded-full bg-slate-800 border-2 border-red-500 flex items-center justify-center"><i class="fa-solid fa-robot"></i></div>
                         </div>
                         <span class="text-xs mt-1 font-bold text-red-300">對手</span>
-                        <span class="text-xl font-black" id="p2-score">0</span>
+                        <span class="text-xl font-black" id="p2-score">0</span>    
+                    </div>
+                </div>
+
+                <!-- ⭐ 關鍵新增：題目載入中提示 -->
+                <div id="battle-loading" class="text-center py-10 hidden">
+                    <div class="loader"></div>
+                    <p class="text-gray-400 text-sm mt-4">正在生成題目...</p>
+                </div>
+
+                <!-- ⭐ 關鍵新增：題目顯示區塊 -->
+                <div id="battle-quiz-box" class="hidden">
+                    <div class="bg-slate-800 p-6 rounded-xl mb-6 border-t-4 border-red-500 shadow-lg">
+                        <h3 class="text-lg font-bold leading-relaxed" id="battle-q-text">題目載入中...</h3>
                     </div>
 
+                    <!-- 選項容器 -->
+                    <div id="battle-options" class="space-y-3"></div>
+
+                    <!-- 等待對手提示 -->
+                    <div id="battle-waiting-msg" class="hidden mt-4 text-center">
+                        <div class="inline-flex items-center gap-2 bg-slate-800/50 px-4 py-2 rounded-full text-sm text-gray-400">
+                            <div class="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+                            等待對手作答中...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3️⃣ 對戰結果頁面 -->
+            <div id="battle-result" class="hidden flex flex-col items-center justify-center pt-20">
+                <div class="text-center mb-8">
+                    <h2 id="battle-result-title" class="text-3xl font-bold mb-2">對戰結束</h2>
+                    <p id="battle-result-msg" class="text-gray-400">計算結果中...</p>
+                </div>
+        
+                <div class="flex gap-3">
+                    <button onclick="leaveBattle()" class="bg-slate-700 hover:bg-slate-600 text-white px-6 py-3 rounded-lg font-bold">
+                        返回首頁
+                    </button>
+                    <button onclick="startBattleMatchmaking()" class="bg-red-600 hover:bg-red-500 text-white px-6 py-3 rounded-lg font-bold">
+                        再來一局
+                    </button>
                 </div>
             </div>
         </div>
