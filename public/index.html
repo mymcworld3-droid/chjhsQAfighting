@@ -402,15 +402,19 @@
                 </button>
             </div>
 
-            <div class="bg-slate-800/90 backdrop-blur-md p-5 rounded-2xl border border-red-500/20 mb-6 sticky top-2 z-20 shadow-2xl ring-1 ring-red-900/30">
-                <h3 class="font-bold text-white mb-4 flex items-center gap-2 border-b border-slate-700 pb-2">
-                    <span id="admin-form-title">➕ 上架新商品</span>
-                </h3>
+            <div class="bg-slate-800/90 backdrop-blur-md p-5 rounded-2xl border border-red-500/20 mb-6 sticky top-2 z-20 shadow-2xl ring-1 ring-red-900/30 transition-all">
+                
+                <div class="flex justify-between items-center cursor-pointer border-b border-slate-700 pb-2 mb-2 hover:bg-white/5 rounded px-2 -mx-2 transition" onclick="toggleAdminForm()">
+                    <h3 class="font-bold text-white flex items-center gap-2">
+                        <span id="admin-form-title">➕ 上架新商品</span>
+                    </h3>
+                    <i id="admin-form-arrow" class="fa-solid fa-chevron-up text-gray-400 transition-transform duration-300"></i>
+                </div>
                 
                 <input type="hidden" id="admin-edit-id"> 
                 
-                <div class="space-y-4">
-                    <div class="grid grid-cols-3 gap-3">
+                <div id="admin-form-body" class="space-y-4 origin-top transition-all duration-300">
+                    <div class="grid grid-cols-3 gap-3 pt-2">
                         <div class="col-span-2">
                             <label class="text-[10px] text-gray-400 block mb-1">商品名稱</label>
                             <input type="text" id="admin-p-name" placeholder="輸入名稱..." class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2.5 text-sm text-white focus:border-red-500 outline-none transition-colors">
@@ -469,7 +473,7 @@
                     <span>📦 現有商品庫存</span>
                     <button onclick="loadAdminProducts()" class="text-blue-400 hover:text-white p-1 rounded hover:bg-slate-700 transition"><i class="fa-solid fa-rotate"></i></button>
                 </div>
-                <div id="admin-product-list" class="p-3 space-y-2 max-h-[50vh] overflow-y-auto scrollbar-thin">
+                <div id="admin-product-list" class="p-3 space-y-2 max-h-[60vh] overflow-y-auto scrollbar-thin">
                     <div class="text-center text-gray-500 py-8 text-xs">載入中...</div>
                 </div>
             </div>
