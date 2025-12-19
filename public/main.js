@@ -520,16 +520,26 @@ window.submitOnboarding = async () => {
 };
 
 window.saveProfile = async () => {
+    // ... 前面的變數獲取 ...
     const level = document.getElementById('set-level').value;
     const rawStrong = document.getElementById('set-strong').value;
     const rawWeak = document.getElementById('set-weak').value;
     
-    const source = document.getElementById('set-source').value;
+    // 🔥 修改：從隱藏欄位獲取最終路徑
+    const source = document.getElementById('set-source-final-value').value; 
     const difficulty = document.getElementById('set-difficulty').value;
+
+    // 防呆：如果使用者選了一半沒選完 (例如只選了 "高中" 沒選 "學測")
+    if (!source) {
+        alert("請完整選擇出題來源（需選到檔案為止）");
+        return;
+    }
 
     const btn = document.querySelector('button[onclick="saveProfile()"]');
     btn.innerText = "處理中..."; btn.disabled = true;
 
+    // ... (中間的 AI 分析與 Firebase 更新邏輯保持不變，不用改) ...
+    // AI 分析科目
     const cleanStrong = await getCleanSubjects(rawStrong);
     const cleanWeak = await getCleanSubjects(rawWeak);
     document.getElementById('set-strong').value = cleanStrong;
