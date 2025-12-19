@@ -487,7 +487,82 @@ button:active::before {
     0% { filter: hue-rotate(0deg); }
     100% { filter: hue-rotate(360deg); }
 }
+/* ==========================================
+   [新增] 高級頭像框特效
+   ========================================== */
 
+/* 5. 星雲脈衝框 (適合神祕/魔法系) */
+.frame-nebula {
+    border: 3px solid transparent;
+    /* 使用雙層背景實現漸層邊框 */
+    background: 
+        linear-gradient(#1e293b, #1e293b) padding-box,
+        conic-gradient(from 0deg, #8b5cf6, #ec4899, #3b82f6, #8b5cf6) border-box;
+    border-radius: 50%;
+    /* 外部與內部的雙重光暈 */
+    box-shadow: 
+        0 0 15px rgba(139, 92, 246, 0.6),
+        inset 0 0 20px rgba(59, 130, 246, 0.4);
+    position: relative;
+    z-index: 1;
+}
+
+/* 添加旋轉的光環效果 */
+.frame-nebula::after {
+    content: '';
+    position: absolute;
+    top: -5px; left: -5px; right: -5px; bottom: -5px;
+    border-radius: 50%;
+    border: 2px dashed rgba(236, 72, 153, 0.5); /* 粉色虛線 */
+    animation: spin-slow 8s linear infinite;
+    z-index: -1;
+}
+
+@keyframes spin-slow {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* 6. 賽博科技框 (適合 AI/駭客系) */
+.frame-cyber {
+    border: 3px solid #00ff41; /* 駭客綠 */
+    box-shadow: 0 0 10px #00ff41, inset 0 0 10px rgba(0, 255, 65, 0.3);
+    position: relative;
+    overflow: visible; /* 讓特效突出 */
+}
+
+/* 掃描線特效 */
+.frame-cyber::before {
+    content: '';
+    position: absolute;
+    top: -10%; left: -10%; width: 120%; height: 120%;
+    border-radius: 50%;
+    border-top: 3px solid #00ff41;
+    border-bottom: 3px solid transparent;
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+    animation: cyber-scan 2s linear infinite;
+    filter: drop-shadow(0 0 5px #00ff41);
+}
+
+/* 偶爾閃爍的故障效果 */
+.frame-cyber:hover {
+    animation: glitch-anim 0.3s infinite;
+}
+
+@keyframes cyber-scan {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes glitch-anim {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(-2px, -2px); }
+    60% { transform: translate(2px, 2px); }
+    80% { transform: translate(2px, -2px); }
+    100% { transform: translate(0); }
+}
 /* ==========================================
    排行榜特效
    ========================================== */
