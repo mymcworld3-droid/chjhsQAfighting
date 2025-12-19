@@ -833,9 +833,8 @@ window.loadLeaderboard = async () => {
 //  商店、庫存與管理系統 (Enhanced Store System)
 // ==========================================
 
-// --- [核心工具] 渲染視覺效果 (支援圖片相框 - 絕對置頂版) ---
+// --- [核心工具] 渲染視覺效果 (支援圖片相框 - 固定高度版) ---
 function renderVisual(type, value, sizeClass = "w-12 h-12") {
-    // 判斷是否為圖片路徑
     const isImage = value && (value.includes('.') || value.includes('/'));
 
     if (type === 'frame') {
@@ -846,16 +845,16 @@ function renderVisual(type, value, sizeClass = "w-12 h-12") {
                 <div class="w-full h-full rounded-full overflow-hidden flex items-center justify-center bg-slate-800 relative z-0">
                     <i class="fa-solid fa-user text-gray-500"></i>
                 </div>
-                <img src="${value}" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[140%] object-contain pointer-events-none z-20"> 
+                <img src="${value}" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[140%] w-auto object-contain pointer-events-none z-20" style="max-width: none;"> 
             </div>`;
         } else {
-            // 🎨 CSS 相框模式
+            // ... (CSS 框部分保持不變) ...
             return `<div class="${sizeClass} rounded-full border-2 border-gray-600 ${value} flex items-center justify-center bg-slate-800 relative z-0">
                         <i class="fa-solid fa-user text-gray-500"></i>
                     </div>`;
         }
     } else if (type === 'avatar') {
-        // 頭像模式
+        // ... (頭像部分保持不變) ...
         return `<div class="${sizeClass} rounded-full overflow-hidden bg-slate-800 border-2 border-slate-600 relative z-10">
                     <img src="${value}" class="avatar-img" onerror="this.style.display='none';this.parentElement.innerHTML='<i class=\'fa-solid fa-image text-red-500\'></i>'">
                 </div>`;
@@ -863,27 +862,25 @@ function renderVisual(type, value, sizeClass = "w-12 h-12") {
     return '';
 }
 
-// --- [核心工具] 產生完整的頭像 HTML (支援圖片相框 - 絕對置頂版) ---
+// --- [核心工具] 產生完整的頭像 HTML (支援圖片相框 - 固定高度版) ---
 function getAvatarHtml(equipped, sizeClass = "w-10 h-10") {
     const frame = equipped?.frame || '';
     const avatar = equipped?.avatar || '';
     const isFrameImg = frame && (frame.includes('.') || frame.includes('/'));
 
-    // 1. 準備頭像內容
     const imgContent = avatar 
         ? `<img src="${avatar}" class="w-full h-full object-cover" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"> <i class="fa-solid fa-user text-gray-400 absolute hidden"></i>`
         : `<i class="fa-solid fa-user text-gray-400"></i>`;
 
-    // 2. 處理 CSS 框
     const borderClass = frame ? '' : 'border-2 border-slate-600';
     const cssFrameClass = (!isFrameImg && frame) ? frame : '';
 
-    // 3. 準備圖片框元素 (使用 inline style 強制置頂)
+    // 圖片框層 (高度 145%, 寬度自動)
+    // 注意：style 中加入了 height: 145%; width: auto; max-width: none;
     const frameImgElement = isFrameImg 
-        ? `<img src="${frame}" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 145%; height: 145%; max-width: none; z-index: 50; pointer-events: none;">` 
+        ? `<img src="${frame}" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); height: 145%; width: auto; max-width: none; z-index: 50; pointer-events: none;">` 
         : '';
 
-    // 4. 組合 HTML (外層 style="overflow: visible !important" 是關鍵)
     return `
     <div class="${sizeClass} rounded-full bg-slate-800 flex items-center justify-center relative ${borderClass} ${cssFrameClass}" style="overflow: visible !important;">
         <div class="w-full h-full rounded-full overflow-hidden flex items-center justify-center bg-slate-800 relative z-0">
