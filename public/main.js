@@ -431,64 +431,43 @@ async function updateSettingsInputs() {
         document.getElementById('set-strong').value = currentUserData.profile.strongSubjects || "";
         document.getElementById('set-weak').value = currentUserData.profile.weakSubjects || "";
         
+        // 讀取設定
         const settings = currentUserData.gameSettings || { source: 'ai', difficulty: 'medium' };
         
+        // 設定難度
         const diffSelect = document.getElementById('set-difficulty');
         if(diffSelect) diffSelect.value = settings.difficulty;
 
-        const sourceSelect = document.getElementById('set-source');
-        if (sourceSelect) {
-            sourceSelect.innerHTML = '<option value="ai">✨ AI 隨機生成 (預設)</option>';
-            
+        // 🔥 設定出題來源 (多層級)
+        const container = document.getElementById('bank-selectors-container');
+        const hiddenInput = document.getElementById('set-source-final-value');
+        const hint = document.getElementById('bank-selection-hint');
+
+        if (container) {
+            // 1. 初始化值
+            hiddenInput.value = settings.source;
+            if(settings.source === 'ai') {
+                hint.innerText = "目前設定：AI 隨機出題";
+                hint.className = "text-xs text-green-400 mt-1";
+            } else {
+                hint.innerText = `已選擇：${settings.source.replace('.json', '')}`;
+                hint.className = "text-xs text-green-400 mt-1";
+            }
+
+            // 2. 抓取所有檔案並建立樹狀選單
             try {
                 const res = await fetch('/api/banks');
                 const data = await res.json();
                 
                 if (data.files && Array.isArray(data.files)) {
-                    const groups = {}; 
-                    const rootFiles = [];
-
-                    data.files.forEach(file => {
-                        if (file.includes('/')) {
-                            const parts = file.split('/');
-                            const folderName = parts[0]; 
-                            const fileName = parts.slice(1).join('/'); 
-
-                            if (!groups[folderName]) {
-                                groups[folderName] = document.createElement('optgroup');
-                                groups[folderName].label = `📂 ${folderName}`;
-                            }
-
-                            const opt = document.createElement('option');
-                            opt.value = file; 
-                            opt.innerText = fileName.replace('.json', ''); 
-                            groups[folderName].appendChild(opt);
-
-                        } else {
-                            rootFiles.push(file);
-                        }
-                    });
-
-                    for (const folder in groups) {
-                        sourceSelect.appendChild(groups[folder]);
-                    }
-
-                    if (rootFiles.length > 0) {
-                        const rootGroup = document.createElement('optgroup');
-                        rootGroup.label = "📄 其他";
-                        rootFiles.forEach(file => {
-                            const opt = document.createElement('option');
-                            opt.value = file;
-                            opt.innerText = file.replace('.json', '');
-                            rootGroup.appendChild(opt);
-                        });
-                        sourceSelect.appendChild(rootGroup);
-                    }
+                    // 建立樹狀結構
+                    const tree = buildPathTree(data.files);
+                    // 渲染選單
+                    renderCascadingSelectors(tree, settings.source);
                 }
-                
-                sourceSelect.value = settings.source;
             } catch (e) {
                 console.error("無法載入題庫列表", e);
+                container.innerHTML = '<div class="text-red-400 text-xs">載入失敗</div>';
             }
         }
     }
