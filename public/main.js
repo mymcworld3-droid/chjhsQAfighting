@@ -1305,37 +1305,33 @@ window.buyItem = async (pid, price) => {
     }
 };
 
-// 7. 更新用戶頭像顯示 (更新版：支援圖片)
+// 7. 更新用戶頭像顯示 (修正版：修復首頁顯示 + 支援圖片框)
 window.updateUserAvatarDisplay = () => {
     if (!currentUserData) return;
     
-    // 1. 處理首頁大頭貼 (Home Page)
+    // 1. 抓取首頁的第一個卡片區塊
+    const homeSection = document.querySelector('#page-home > div'); 
+    
+    // 防呆：如果找不到首頁區塊 (可能 HTML 結構被改壞了)，直接結束，避免整個網頁卡死
+    if (!homeSection) {
+        console.warn("⚠️ 警告：找不到首頁 (#page-home > div)，無法渲染頭像。");
+        return;
+    }
+
+    // 2. 檢查或建立頭像容器
     let homeAvatarContainer = document.getElementById('home-avatar-container');
     if (!homeAvatarContainer) {
-        const homeSection = document.querySelector('#page-home > div'); 
         const avatarDiv = document.createElement('div');
         avatarDiv.id = 'home-avatar-container';
-        avatarDiv.className = 'absolute top-4 left-4';
+        // 設定絕對定位，讓它浮在卡片左上角
+        avatarDiv.className = 'absolute top-6 left-6 z-10'; 
         homeSection.appendChild(avatarDiv);
         homeAvatarContainer = avatarDiv;
     }
 
-    // 根據是否有裝備頭像來決定內容
-    let avatarContent = '<i class="fa-solid fa-user text-2xl text-gray-400"></i>';
-    if (currentUserData.equipped.avatar) {
-        avatarContent = `<img src="${currentUserData.equipped.avatar}" class="w-full h-full object-cover rounded-full" onerror="this.src='';this.nextElementSibling.style.display='block'">`;
-    }
-
-    // 組合框與圖
-    // 注意：相框是外層 div 的 class，頭像圖片是內部的 img
-    homeAvatarContainer.innerHTML = `
-        <div class="w-16 h-16 rounded-full bg-slate-800 flex items-center justify-center border-2 border-slate-600 relative ${currentUserData.equipped.frame || ''}">
-            ${currentUserData.equipped.avatar ? 
-                `<img src="${currentUserData.equipped.avatar}" class="w-full h-full rounded-full object-cover p-[2px]">` : 
-                `<i class="fa-solid fa-user text-2xl text-gray-400"></i>`
-            }
-        </div>
-    `;
+    // 3. 使用共用的 getAvatarHtml 函式渲染 (這樣就能支援圖片框和翅膀了！)
+    // 我們傳入 "w-16 h-16" 讓首頁頭像稍微大一點
+    homeAvatarContainer.innerHTML = getAvatarHtml(currentUserData.equipped, "w-16 h-16");
 };
 
 window.equipItem = async (type, pid, value) => {
