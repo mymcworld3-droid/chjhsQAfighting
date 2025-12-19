@@ -1079,11 +1079,6 @@ window.updateValuePlaceholder = () => {
     toggleAdminInputPlaceholder();
 };
 
-// ==========================================
-//  管理後台：圖片選擇器邏輯 (新增)
-// ==========================================
-
-// 1. 切換輸入模式 (當選擇類型變更時)
 window.toggleAdminInputPlaceholder = async () => {
     const type = document.getElementById('admin-p-type').value;
     const input = document.getElementById('admin-p-value');
