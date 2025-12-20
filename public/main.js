@@ -1,3 +1,16 @@
+好的，這是一個非常精準的邏輯控制！
+
+我們要在選單的 `onchange` 事件中加入一個判斷：
+**「這個資料夾裡面還有沒有其他資料夾？」**
+
+* 如果有子資料夾 ➡️ **不能選**（清空隱藏欄位，強迫使用者繼續往下點）。
+* 如果只有檔案（也就是最後一層資料夾）➡️ **可以選**（設為有效值，這時會混合讀取該資料夾下所有檔案）。
+
+請將 `public/main.js` 替換為以下內容。我主要修改了 `renderCascadingSelectors` 這個函式中的判斷邏輯。
+
+### 📁 `public/main.js` (完整版)
+
+```javascript
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, addDoc, query, orderBy, limit, getDocs, serverTimestamp, where, onSnapshot, runTransaction } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -1236,3 +1249,5 @@ function checkAdminRole(isAdmin) {
         navGrid.appendChild(btn);
     }
 }
+
+```
