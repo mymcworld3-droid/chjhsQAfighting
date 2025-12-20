@@ -25,15 +25,15 @@ const RANKS = ["🥉 青銅", "🥈 白銀", "🥇 黃金", "💎 鉑金", "🔷
 let quizBuffer = [];
 const BUFFER_SIZE = 1; 
 let isFetchingBuffer = false; 
-let battleUnsub = null; // 對戰監聽器
+let battleUnsub = null; 
 let currentBattleId = null;
-let isBattleActive = false; // 戰鬥鎖定狀態
-let currentBankData = null; // 題庫緩存
+let isBattleActive = false; 
+let currentBankData = null; 
 
-// 🔥 全域變數：儲存所有題庫檔案列表 (供資料夾隨機出題使用)
+// 🔥 全域變數：儲存所有題庫檔案列表
 let allBankFiles = [];
 
-// 綁定全域函式供 HTML onclick 使用
+// 綁定全域函式
 window.googleLogin = () => { signInWithPopup(auth, provider).catch((error) => alert("登入失敗: " + error.code)); };
 window.logout = () => { 
     localStorage.removeItem('currentQuiz');
@@ -51,7 +51,6 @@ onAuthStateChanged(auth, async (user) => {
         try {
             const docSnap = await getDoc(userRef);
             
-            // 1. 讀取或初始化使用者資料
             if (docSnap.exists()) {
                 currentUserData = docSnap.data();
                 if (!currentUserData.inventory) currentUserData.inventory = [];
@@ -71,13 +70,11 @@ onAuthStateChanged(auth, async (user) => {
                 await setDoc(userRef, currentUserData);
             }
 
-            // 2. 更新 UI 狀態
             updateUserAvatarDisplay();
             updateSettingsInputs();
             checkAdminRole(currentUserData.isAdmin);
             updateUIStats();
 
-            // 3. 判斷是否為新帳號
             if (!currentUserData.profile.educationLevel || currentUserData.profile.educationLevel === "") {
                 switchToPage('page-onboarding'); 
                 document.getElementById('bottom-nav').classList.add('hidden'); 
@@ -143,7 +140,7 @@ function updateUIStats() {
 }
 
 // ==========================================
-//  多層級選單邏輯 (Cascading Selects)
+//  多層級選單邏輯 (Cascading Selects) - 修正版
 // ==========================================
 
 function buildPathTree(paths) {
@@ -234,18 +231,37 @@ window.renderCascadingSelectors = (tree, currentPath) => {
             } else {
                 const nextNode = currentNode.children[val];
                 
-                // 🔥 關鍵：選到資料夾或檔案都更新值
-                hiddenInput.value = currentFullPath;
+                // 🔥 [邏輯修改] 檢查該資料夾是否還有「資料夾子節點」
+                let hasSubFolders = false;
+                if (nextNode.type === 'folder') {
+                    for (const childKey in nextNode.children) {
+                        if (nextNode.children[childKey].type === 'folder') {
+                            hasSubFolders = true;
+                            break;
+                        }
+                    }
+                }
 
-                if (nextNode && nextNode.type === 'file') {
+                if (nextNode.type === 'file') {
+                    // 是檔案 -> 有效選擇
+                    hiddenInput.value = currentFullPath;
                     hint.innerText = `✅ 已選擇考卷：${val.replace('.json', '')}`;
                     hint.className = "text-xs text-green-400 mt-1";
                     renderCascadingSelectors(tree, currentFullPath);
+                } else if (hasSubFolders) {
+                    // 是資料夾，且還有子資料夾 -> 無效選擇 (必須繼續選)
+                    hiddenInput.value = ""; // 清空，不讓儲存
+                    hint.innerText = "⚠️ 請繼續選擇下一層分類...";
+                    hint.className = "text-xs text-yellow-500 mt-1";
+                    // 繼續展開
+                    renderCascadingSelectors(tree, newParts.join('/'));
                 } else {
-                    // 資料夾 -> 顯示統計，但繼續展開
+                    // 是資料夾，但裡面只剩檔案 (沒有子資料夾) -> 有效選擇 (全卷混合)
+                    hiddenInput.value = currentFullPath;
                     const count = countJsonFiles(nextNode);
-                    hint.innerText = `📂 已選擇資料夾：${val} (包含 ${count} 份考卷)`;
+                    hint.innerText = `📂 已選擇分類：${val} (全卷混合 ${count} 份考卷)`;
                     hint.className = "text-xs text-blue-400 mt-1";
+                    // 雖然有效，但也展開讓使用者可以挑單檔
                     renderCascadingSelectors(tree, currentFullPath);
                 }
             }
@@ -294,7 +310,7 @@ async function updateSettingsInputs() {
                 const res = await fetch('/api/banks');
                 const data = await res.json();
                 if (data.files && Array.isArray(data.files)) {
-                    allBankFiles = data.files; // 🔥 存入全域
+                    allBankFiles = data.files; 
                     const tree = buildPathTree(data.files);
                     renderCascadingSelectors(tree, settings.source);
                 }
@@ -354,7 +370,7 @@ window.saveProfile = async () => {
     const difficulty = document.getElementById('set-difficulty').value;
 
     if (!source) {
-        alert("請選擇出題來源");
+        alert("請完整選擇出題來源（需選到「最後一層」分類或單一考卷）");
         return;
     }
 
@@ -391,7 +407,7 @@ window.saveProfile = async () => {
 };
 
 // ==========================================
-//  出題核心 (AI / 題庫 - 支援資料夾)
+//  出題核心 (AI / 題庫 - 支援資料夾混合)
 // ==========================================
 
 function shuffleArray(array) {
@@ -458,57 +474,78 @@ async function fetchOneQuestion() {
     } 
     // --- 題庫模式 ---
     else {
-        let targetFile = settings.source;
+        let targetSource = settings.source; 
 
-        // 🔥 判斷是否為資料夾 (如果不是 .json 結尾)
-        if (!targetFile.endsWith('.json')) {
-            // 防呆：如果全域檔案列表為空 (可能沒經過設定頁)，先抓一次
-            if (allBankFiles.length === 0) {
-                 try {
-                     const res = await fetch('/api/banks');
-                     const data = await res.json();
-                     allBankFiles = data.files || [];
-                 } catch (e) { console.error(e); }
+        // 檢查快取
+        if (!currentBankData || currentBankData.sourcePath !== targetSource) {
+            
+            let filesToFetch = [];
+
+            if (targetSource.endsWith('.json')) {
+                // 單檔
+                filesToFetch = [targetSource];
+            } else {
+                // 資料夾 -> 找出底下所有檔案
+                if (allBankFiles.length === 0) {
+                     try {
+                         const res = await fetch('/api/banks');
+                         const data = await res.json();
+                         allBankFiles = data.files || [];
+                     } catch (e) { console.error(e); }
+                }
+
+                filesToFetch = allBankFiles.filter(f => f.startsWith(targetSource + '/'));
+                
+                if (filesToFetch.length === 0) {
+                    console.error("資料夾下無題目:", targetSource);
+                    return switchToAI();
+                }
             }
 
-            // 篩選出該資料夾下的所有檔案
-            const matchedFiles = allBankFiles.filter(f => f.startsWith(targetFile + '/'));
-            
-            if (matchedFiles.length === 0) {
-                console.error("資料夾下無題目:", targetFile);
-                return switchToAI();
-            }
-            
-            // 隨機選一個檔案
-            targetFile = matchedFiles[Math.floor(Math.random() * matchedFiles.length)];
-        }
-
-        // 下載題目檔案 (如果緩存不符)
-        if (!currentBankData || currentBankData.fileName !== targetFile) {
             try {
-                const res = await fetch(`/banks/${targetFile}?t=${Date.now()}`);
-                if (!res.ok) throw new Error("找不到題庫檔案");
-                const json = await res.json();
-                currentBankData = { fileName: targetFile, questions: json };
+                // 平行下載所有檔案
+                const fetchPromises = filesToFetch.map(filePath => 
+                    fetch(`/banks/${filePath}?t=${Date.now()}`)
+                        .then(res => {
+                            if (!res.ok) throw new Error(`Failed to load ${filePath}`);
+                            return res.json();
+                        })
+                        .catch(err => {
+                            console.warn(`跳過損壞的檔案: ${filePath}`, err);
+                            return []; 
+                        })
+                );
+
+                const results = await Promise.all(fetchPromises);
+                const mergedQuestions = results.flat();
+
+                if (mergedQuestions.length === 0) throw new Error("沒有讀取到任何有效題目");
+
+                currentBankData = { 
+                    sourcePath: targetSource, 
+                    questions: mergedQuestions 
+                };
+
             } catch (e) {
-                console.error(e);
+                console.error("題庫載入錯誤:", e);
                 alert("題庫載入失敗，切換回 AI 模式");
                 return switchToAI();
             }
         }
 
-        // 難度過濾
         const filteredQuestions = currentBankData.questions.filter(q => q.difficulty === settings.difficulty);
         const pool = filteredQuestions.length > 0 ? filteredQuestions : currentBankData.questions;
         if (pool.length === 0) throw new Error("題庫是空的！");
 
-        // 隨機抽題
         const rawData = pool[Math.floor(Math.random() * pool.length)];
         let allOptions = shuffleArray([rawData.correct, ...rawData.wrong]);
         const correctIndex = allOptions.indexOf(rawData.correct);
 
-        // 顯示名稱 (優先用 subject，否則用檔名)
-        const displaySubject = rawData.subject || targetFile.split('/').pop().replace('.json','');
+        // 顯示 subject 或 資料夾名稱
+        let displaySubject = rawData.subject;
+        if (!displaySubject) {
+            displaySubject = targetSource.split('/').pop().replace('.json', '');
+        }
 
         return {
             data: { q: rawData.q, opts: allOptions, ans: correctIndex, exp: rawData.exp },
@@ -720,7 +757,6 @@ function renderVisual(type, value, sizeClass = "w-12 h-12") {
 
     if (type === 'frame') {
         if (isImage) {
-            // 🖼️ 圖片相框模式：高度固定 140%，寬度自動，確保不變形
             return `
             <div class="${sizeClass} rounded-full bg-slate-800 flex items-center justify-center relative" style="overflow: visible !important;">
                 <div class="w-full h-full rounded-full overflow-hidden flex items-center justify-center bg-slate-800 relative z-0">
@@ -753,7 +789,6 @@ function getAvatarHtml(equipped, sizeClass = "w-10 h-10") {
     const borderClass = frame ? '' : 'border-2 border-slate-600';
     const cssFrameClass = (!isFrameImg && frame) ? frame : '';
 
-    // 圖片相框：高度固定 145%，寬度自動
     const frameImgElement = isFrameImg 
         ? `<img src="${frame}" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); height: 145%; width: auto; max-width: none; z-index: 50; pointer-events: none;">` 
         : '';
@@ -767,7 +802,7 @@ function getAvatarHtml(equipped, sizeClass = "w-10 h-10") {
     </div>`;
 }
 
-// 7. 更新用戶頭像顯示 (修復首頁顯示 + 支援圖片框)
+// 7. 更新用戶頭像顯示
 window.updateUserAvatarDisplay = () => {
     if (!currentUserData) return;
     
@@ -882,7 +917,7 @@ window.resetAdminForm = () => {
     saveBtn.classList.replace('bg-blue-600', 'bg-red-600');
     
     document.getElementById('admin-btn-del').classList.add('hidden'); 
-    toggleAdminInputPlaceholder();
+    toggleAdminInputPlaceholder(); 
     
     openAdminForm();
 };
