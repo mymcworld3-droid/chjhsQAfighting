@@ -722,7 +722,14 @@ window.loadLeaderboard = async () => {
     const tbody = document.getElementById('leaderboard-body');
     tbody.innerHTML = '<tr><td colspan="3" class="p-8 text-center text-gray-500"><div class="loader"></div></td></tr>';
     try {
-        const q = query(collection(db, "users"), orderBy("stats.totalScore", "desc"), limit(10));
+        // 🔥 修改：先排段位 (rankLevel) 高到低，再排積分 (totalScore) 高到低
+        const q = query(
+            collection(db, "users"), 
+            orderBy("stats.rankLevel", "desc"), 
+            orderBy("stats.totalScore", "desc"), 
+            limit(10)
+        );
+        
         const snap = await getDocs(q);
         tbody.innerHTML = '';
         let i = 1;
@@ -746,7 +753,15 @@ window.loadLeaderboard = async () => {
             tbody.innerHTML += row; 
             i++;
         });
-    } catch (e) { console.error(e); tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-red-400 text-center">無法讀取排行榜</td></tr>'; }
+    } catch (e) { 
+        console.error(e); 
+        // 🔥 加入錯誤提示，提醒建立索引
+        if(e.message.includes("index")) {
+            tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-yellow-400 text-center text-xs">⚠️ 請按 F12 開啟 Console，點擊連結建立複合索引<br>(stats.rankLevel + stats.totalScore)</td></tr>';
+        } else {
+            tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-red-400 text-center">無法讀取排行榜</td></tr>'; 
+        }
+    }
 };
 
 // ==========================================
