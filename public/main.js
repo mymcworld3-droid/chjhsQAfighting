@@ -91,7 +91,7 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-// 頁面切換控制
+// 頁面切換控制 (修改：加入 loadUserHistory)
 window.switchToPage = (pageId) => {
     if (isBattleActive && pageId !== 'page-battle') {
         alert("⚔️ 戰鬥/配對中無法切換頁面！\n請先取消配對或完成對戰。");
@@ -115,6 +115,7 @@ window.switchToPage = (pageId) => {
     
     if (pageId === 'page-settings') {
         renderInventory();
+        loadUserHistory(); // 🔥 切換到設定頁時，自動載入歷史紀錄
     }
     if (pageId === 'page-admin') {
         loadAdminData();
@@ -141,7 +142,7 @@ function updateUIStats() {
 }
 
 // ==========================================
-//  多層級選單邏輯 (Cascading Selects)
+//  多層級選單邏輯
 // ==========================================
 
 function buildPathTree(paths) {
@@ -164,7 +165,6 @@ function buildPathTree(paths) {
     return tree;
 }
 
-// 輔助：計算資料夾下的檔案數
 function countJsonFiles(node) {
     if (node.type === 'file') return 1;
     let count = 0;
@@ -232,7 +232,6 @@ window.renderCascadingSelectors = (tree, currentPath) => {
             } else {
                 const nextNode = currentNode.children[val];
                 
-                // 檢查該資料夾是否還有「資料夾子節點」
                 let hasSubFolders = false;
                 if (nextNode.type === 'folder') {
                     for (const childKey in nextNode.children) {
@@ -251,7 +250,7 @@ window.renderCascadingSelectors = (tree, currentPath) => {
                     renderCascadingSelectors(tree, currentFullPath);
                 } else if (hasSubFolders) {
                     // 是資料夾，且還有子資料夾 -> 無效選擇 (必須繼續選)
-                    hiddenInput.value = ""; // 清空，不讓儲存
+                    hiddenInput.value = ""; 
                     hint.innerText = "⚠️ 請繼續選擇下一層分類...";
                     hint.className = "text-xs text-yellow-500 mt-1";
                     renderCascadingSelectors(tree, newParts.join('/'));
@@ -261,7 +260,6 @@ window.renderCascadingSelectors = (tree, currentPath) => {
                     const count = countJsonFiles(nextNode);
                     hint.innerText = `📂 已選擇分類：${val} (全卷混合 ${count} 份考卷)`;
                     hint.className = "text-xs text-blue-400 mt-1";
-                    // 雖然有效，但也展開讓使用者可以挑單檔
                     renderCascadingSelectors(tree, currentFullPath);
                 }
             }
@@ -370,7 +368,7 @@ window.saveProfile = async () => {
     const difficulty = document.getElementById('set-difficulty').value;
 
     if (!source) {
-        alert("請完整選擇出題來源（需選到「最後一層」分類或單一考卷）");
+        alert("請完整選擇出題來源");
         return;
     }
 
@@ -670,13 +668,12 @@ window.nextQuestion = () => { startQuizFlow(); };
 // ==========================================
 
 window.startBattleMatchmaking = async () => {
-    // 1. 檢查登入
     if (!auth.currentUser) {
         alert("請先登入才能進行對戰！");
         return;
     }
 
-    console.log("🚀 開始配對..."); // Debug Log
+    console.log("🚀 開始配對..."); 
 
     isBattleActive = true;
     switchToPage('page-battle');
@@ -695,7 +692,6 @@ window.startBattleMatchmaking = async () => {
     };
 
     try {
-        // 🔥 這段查詢最容易因為缺索引而報錯
         const q = query(
             collection(db, "rooms"), 
             where("status", "==", "waiting"),
@@ -758,7 +754,6 @@ window.startBattleMatchmaking = async () => {
 
     } catch (e) {
         console.error("配對系統錯誤:", e);
-        // 🔥 明確提示索引錯誤
         if (e.message.includes("index")) {
             alert("⚠️ 系統錯誤：Firebase 需要建立索引。\n請按 F12 打開 Console，點擊連結建立 Firestore 複合索引 (status + createdAt)");
         } else {
@@ -954,17 +949,18 @@ window.leaveBattle = async () => {
 };
 
 // ==========================================
-//  History / Logs
+//  History / Logs (已移入設定頁)
 // ==========================================
 
 window.loadUserHistory = async () => {
     const ul = document.getElementById('history-list');
+    if(!ul) return; 
     ul.innerHTML = '<li class="text-center py-10"><div class="loader"></div></li>';
     try {
         const q = query(collection(db, "exam_logs"), where("uid", "==", auth.currentUser.uid), orderBy("timestamp", "desc"), limit(20));
         const snap = await getDocs(q);
         ul.innerHTML = '';
-        if (snap.empty) { ul.innerHTML = '<li class="text-center text-gray-500 py-10">還沒有答題紀錄，快去挑戰吧！</li>'; return; }
+        if (snap.empty) { ul.innerHTML = '<li class="text-center text-gray-500 py-4">還沒有答題紀錄</li>'; return; }
         snap.forEach(doc => {
             const log = doc.data();
             const time = log.timestamp ? new Date(log.timestamp.toDate()).toLocaleString() : '--';
@@ -1011,7 +1007,6 @@ window.loadLeaderboard = async () => {
     const tbody = document.getElementById('leaderboard-body');
     tbody.innerHTML = '<tr><td colspan="3" class="p-8 text-center text-gray-500"><div class="loader"></div></td></tr>';
     try {
-        // 🔥 先排段位 (rankLevel) 高到低，再排積分 (totalScore) 高到低
         const q = query(
             collection(db, "users"), 
             orderBy("stats.rankLevel", "desc"), 
@@ -1531,7 +1526,9 @@ window.filterStore = (type, btnElement) => {
 function checkAdminRole(isAdmin) {
     const navGrid = document.getElementById('nav-grid');
     if (isAdmin && !document.getElementById('btn-admin-nav')) {
-        navGrid.classList.remove('grid-cols-5'); navGrid.classList.add('grid-cols-6');
+        // 🔥 修改：5 個預設按鈕，加管理變 6 個
+        navGrid.classList.remove('grid-cols-5'); 
+        navGrid.classList.add('grid-cols-6');
         const btn = document.createElement('button');
         btn.id = "btn-admin-nav"; btn.dataset.target = "page-admin";
         btn.className = "flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-red-400 transition group";
