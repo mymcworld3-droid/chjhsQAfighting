@@ -125,12 +125,37 @@ window.switchToPage = (pageId) => {
 function updateUIStats() {
     if(!currentUserData) return;
     const stats = currentUserData.stats;
+    
+    // 防呆初始化
     if(typeof stats.currentStreak === 'undefined') stats.currentStreak = 0;
     if(typeof stats.bestStreak === 'undefined') stats.bestStreak = 0;
     if(typeof stats.totalCorrect === 'undefined') stats.totalCorrect = 0;
     if(typeof stats.totalAnswered === 'undefined') stats.totalAnswered = 0;
 
-    document.getElementById('display-rank').innerText = RANKS[stats.rankLevel] || "未知";
+    // 🔥 設定段位顏色 (對應 RANKS 的 0~5)
+    // 0: 青銅, 1: 白銀, 2: 黃金, 3: 鉑金, 4: 鑽石, 5: 星耀
+    const rankColors = [
+        "text-orange-600", // 🥉 青銅 (深橘色)
+        "text-gray-300",   // 🥈 白銀 (銀灰色)
+        "text-yellow-400", // 🥇 黃金 (亮黃色)
+        "text-cyan-400",   // 💎 鉑金 (青藍色)
+        "text-blue-500",   // 🔷 鑽石 (深藍色)
+        "text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-red-500" // 🌟 星耀 (紫紅漸層特效)
+    ];
+
+    // 取得段位元素
+    const rankEl = document.getElementById('display-rank');
+    const rankIndex = stats.rankLevel || 0;
+
+    // 更新文字
+    rankEl.innerText = RANKS[rankIndex] || "未知";
+
+    // 🔥 更新顏色：保留字體大小與動畫，但替換顏色 Class
+    // 注意：如果等級超出範圍，預設使用白色 (text-white)
+    const colorClass = rankColors[rankIndex] || "text-white";
+    rankEl.className = `text-5xl font-black mb-2 animate-pulse ${colorClass}`;
+
+    // 更新其他數值
     document.getElementById('display-stars').innerText = stats.currentStars;
     document.getElementById('display-score').innerText = stats.totalScore;
     document.getElementById('display-streak').innerText = stats.currentStreak;
@@ -138,6 +163,7 @@ function updateUIStats() {
     
     const accuracy = stats.totalAnswered > 0 ? ((stats.totalCorrect / stats.totalAnswered) * 100).toFixed(1) : "0.0";
     document.getElementById('display-accuracy').innerText = accuracy + "%";
+    
     setTimeout(() => { document.getElementById('progress-bar').style.width = `${(stats.currentStars / 10) * 100}%`; }, 100);
 }
 
