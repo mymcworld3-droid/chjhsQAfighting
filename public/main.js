@@ -47,7 +47,7 @@ let notificationUnsub = null;
 let allBankFiles = [];
 
 // --- 4. 認證與初始化 ---
-window.googleLogin = () => { signInWithPopup(auth, provider).catch((error) => alert("登入失敗: " + error.code)); };
+window.googleLogin = () => { signInWithPopup(auth, provider).catch((error) => showToastMsg("登入失敗: " + error.code, "error")); };
 window.logout = () => { 
     localStorage.removeItem('currentQuiz');
     signOut(auth).then(() => location.reload()); 
@@ -68,7 +68,7 @@ onAuthStateChanged(auth, async (user) => {
             const docSnap = await getDoc(userRef);
             if (docSnap.exists()) {
                 currentUserData = docSnap.data();
-                // 資料補丁 (確保舊帳號有新欄位)
+                // 資料補丁
                 if (!currentUserData.inventory) currentUserData.inventory = [];
                 if (!currentUserData.equipped) currentUserData.equipped = { frame: '', avatar: '' };
                 if (!currentUserData.friends) currentUserData.friends = [];
@@ -77,12 +77,8 @@ onAuthStateChanged(auth, async (user) => {
                     await updateDoc(userRef, { friendCode: code });
                     currentUserData.friendCode = code;
                 }
-                
-                // 自動根據積分重算段位
                 recalcUserRank(); 
-
             } else {
-                // 新使用者初始化
                 const code = Math.random().toString(36).substring(2, 8).toUpperCase();
                 currentUserData = {
                     uid: user.uid, displayName: user.displayName, email: user.email,
@@ -101,7 +97,6 @@ onAuthStateChanged(auth, async (user) => {
             checkAdminRole(currentUserData.isAdmin);
             updateUIStats();
 
-            // 引導流程
             if (!currentUserData.profile.educationLevel) {
                 switchToPage('page-onboarding'); 
                 document.getElementById('bottom-nav').classList.add('hidden'); 
@@ -109,7 +104,9 @@ onAuthStateChanged(auth, async (user) => {
                 switchToPage('page-home');
                 fillBuffer(); 
             }
-        } catch (error) { console.error(error); alert("資料讀取錯誤"); }
+        } catch (error) { 
+            showToastMsg("資料讀取錯誤: " + error.message, "error"); 
+        }
     } else {
         document.getElementById('login-screen').classList.remove('hidden');
         document.getElementById('bottom-nav').classList.add('hidden');
@@ -123,7 +120,6 @@ function recalcUserRank() {
     const score = currentUserData.stats.totalScore || 0;
     let newRankLevel = 0;
 
-    // 找出目前分數對應的等級
     for (let i = RANK_SYSTEM.length - 1; i >= 0; i--) {
         if (score >= RANK_SYSTEM[i].threshold) {
             newRankLevel = i;
@@ -135,13 +131,11 @@ function recalcUserRank() {
     const currentThreshold = RANK_SYSTEM[newRankLevel].threshold;
     
     if (newRankLevel < RANK_SYSTEM.length - 1) {
-        // 一般階級：計算進度百分比 (0-10星)
         const nextThreshold = RANK_SYSTEM[newRankLevel + 1].threshold;
         const gap = nextThreshold - currentThreshold;
         const progress = score - currentThreshold;
         stars = Math.floor((progress / gap) * 10);
     } else {
-        // 永恆階級：無限星星 (每 2000 分一顆星)
         const progress = score - currentThreshold;
         stars = Math.floor(progress / 2000); 
     }
@@ -149,16 +143,18 @@ function recalcUserRank() {
     currentUserData.stats.rankLevel = newRankLevel;
     currentUserData.stats.currentStars = stars;
 
-    // 靜默更新
     updateDoc(doc(db, "users", auth.currentUser.uid), { 
         "stats.rankLevel": newRankLevel,
         "stats.currentStars": stars
-    }).catch(e => console.error("Auto rank update failed", e));
+    }).catch(e => showToastMsg("段位同步失敗", "error"));
 }
 
 // --- 6. 頁面導航與 UI ---
 window.switchToPage = (pageId) => {
-    if (isBattleActive && pageId !== 'page-battle') return alert("⚔️ 戰鬥中無法切換頁面！");
+    if (isBattleActive && pageId !== 'page-battle') {
+        showToastMsg("⚔️ 戰鬥中無法切換頁面！", "error");
+        return;
+    }
     document.querySelectorAll('.page-section').forEach(el => { el.classList.remove('active-page', 'hidden'); el.classList.add('hidden'); });
     const target = document.getElementById(pageId);
     if(target) { target.classList.remove('hidden'); target.classList.add('active-page'); }
@@ -185,17 +181,13 @@ function updateUIStats() {
     if(!currentUserData) return;
     const stats = currentUserData.stats;
     
-    // 段位顏色定義 (0~8)
     const rankColors = [
-        "text-orange-600", // 0
-        "text-gray-300",   // 1
-        "text-yellow-400", // 2
-        "text-transparent bg-clip-text bg-gradient-to-r from-cyan-200 to-blue-400", // 3
-        "text-blue-600",   // 4
-        "text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-red-500", // 5
-        "text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-indigo-400 animate-pulse", // 6
-        "text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 via-yellow-500 to-yellow-200 drop-shadow-lg", // 7
-        "text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-green-500 to-blue-500 animate-[pulse_0.5s_infinite]" // 8
+        "text-orange-600", "text-gray-300", "text-yellow-400", 
+        "text-transparent bg-clip-text bg-gradient-to-r from-cyan-200 to-blue-400", "text-blue-600",
+        "text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-red-500", 
+        "text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-indigo-400 animate-pulse", 
+        "text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 via-yellow-500 to-yellow-200 drop-shadow-lg", 
+        "text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-green-500 to-blue-500 animate-[pulse_0.5s_infinite]"
     ];
 
     const rankIndex = Math.min(stats.rankLevel || 0, RANKS.length - 1);
@@ -211,7 +203,6 @@ function updateUIStats() {
     const accuracy = stats.totalAnswered > 0 ? ((stats.totalCorrect / stats.totalAnswered) * 100).toFixed(1) : "0.0";
     document.getElementById('display-accuracy').innerText = accuracy + "%";
     
-    // 進度條顯示邏輯
     let progressPercent = 0;
     if (rankIndex >= RANKS.length - 1) {
         progressPercent = 100;
@@ -250,10 +241,12 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         currentUserData.stats.currentStreak++;
         if (currentUserData.stats.currentStreak > currentUserData.stats.bestStreak) currentUserData.stats.bestStreak = currentUserData.stats.currentStreak;
         
-        // 連勝獎勵機制
+        // 連勝獎勵
         let basePoints = 100 + (currentUserData.stats.rankLevel * 10);
         let streakBonus = currentUserData.stats.currentStreak >= 3 ? 50 : 0;
         currentUserData.stats.totalScore += (basePoints + streakBonus);
+
+        if(streakBonus > 0) showToastMsg(`🔥 連勝獎勵！ +${streakBonus} 分`);
 
     } else {
         fbTitle.innerText = "回答錯誤..."; fbTitle.className = "text-xl font-bold text-red-400";
@@ -264,12 +257,11 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     }
     
     currentUserData.stats.totalAnswered++;
-
-    // 重新計算段位
     recalcUserRank();
 
     if (currentUserData.stats.rankLevel > oldRank) {
         fbTitle.innerText += ` (晉升 ${RANKS[currentUserData.stats.rankLevel]}!)`; 
+        showToastMsg(`🎉 恭喜晉升 ${RANKS[currentUserData.stats.rankLevel]}！`);
     }
 
     updateDoc(doc(db, "users", auth.currentUser.uid), { stats: currentUserData.stats });
@@ -281,7 +273,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         isCorrect: isCorrect, 
         rankAtTime: RANKS[currentUserData.stats.rankLevel], 
         timestamp: serverTimestamp() 
-    }).catch(e => console.error(e));
+    }).catch(e => {});
     
     updateUIStats(); 
     fillBuffer();
@@ -331,6 +323,22 @@ function injectNotificationContainer() {
     document.body.appendChild(div);
 }
 
+// 顯示通用 Toast 訊息
+window.showToastMsg = (msg, type = "info") => {
+    const container = document.getElementById('notification-container');
+    if(!container) return;
+    const toast = document.createElement('div');
+    const colorClass = type === "error" ? "border-red-500/50" : "border-cyan-500/50";
+    toast.className = `bg-slate-800/90 backdrop-blur-md border ${colorClass} p-3 rounded-xl shadow-2xl transform translate-x-full transition-all duration-300 pointer-events-auto flex items-center gap-3`;
+    toast.innerHTML = `<i class="fa-solid fa-bell text-yellow-400"></i><span class="text-sm text-white">${msg}</span>`;
+    container.appendChild(toast);
+    requestAnimationFrame(() => toast.classList.remove('translate-x-full'));
+    setTimeout(() => {
+        toast.classList.add('translate-x-full', 'opacity-0');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+};
+
 function startPresenceSystem() {
     if (presenceInterval) clearInterval(presenceInterval);
     const updatePresence = async () => {
@@ -343,13 +351,13 @@ function startPresenceSystem() {
 
 window.copyFriendCode = () => {
     const code = document.getElementById('my-friend-code').innerText;
-    navigator.clipboard.writeText(code).then(() => alert("代碼已複製！"));
+    navigator.clipboard.writeText(code).then(() => showToastMsg("代碼已複製！"));
 };
 
 window.addFriend = async () => {
     const input = document.getElementById('input-friend-code');
     const targetCode = input.value.trim().toUpperCase();
-    if (!targetCode || targetCode === currentUserData.friendCode) return alert("代碼無效");
+    if (!targetCode || targetCode === currentUserData.friendCode) return showToastMsg("代碼無效", "error");
 
     const btn = document.querySelector('button[onclick="addFriend()"]');
     btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
@@ -358,11 +366,11 @@ window.addFriend = async () => {
         const q = query(collection(db, "users"), where("friendCode", "==", targetCode));
         const snap = await getDocs(q);
 
-        if (snap.empty) { alert("找不到此代碼"); return; }
+        if (snap.empty) { showToastMsg("找不到此代碼", "error"); return; }
         const targetUserDoc = snap.docs[0];
         const targetUserId = targetUserDoc.id;
 
-        if (currentUserData.friends.includes(targetUserId)) { alert("已經是好友囉！"); return; }
+        if (currentUserData.friends.includes(targetUserId)) { showToastMsg("已經是好友囉！", "info"); return; }
 
         await runTransaction(db, async (transaction) => {
             transaction.update(doc(db, "users", auth.currentUser.uid), { friends: arrayUnion(targetUserId) });
@@ -370,10 +378,10 @@ window.addFriend = async () => {
         });
 
         currentUserData.friends.push(targetUserId);
-        alert(`成功添加好友！`);
+        showToastMsg(`成功添加 ${targetUserDoc.data().displayName} 為好友！`);
         input.value = "";
         loadFriendList();
-    } catch (e) { console.error(e); alert("新增失敗"); } finally { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-user-plus"></i>'; }
+    } catch (e) { console.error(e); showToastMsg("新增失敗", "error"); } finally { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-user-plus"></i>'; }
 };
 
 window.loadFriendList = async () => {
@@ -413,13 +421,13 @@ function listenForNotifications() {
         snapshot.docChanges().forEach((change) => {
             if (change.type === "added") {
                 const data = change.doc.data();
-                if ((new Date() - (data.timestamp?.toDate() || new Date(0))) < 60000) showNotification(change.doc.id, data);
+                if ((new Date() - (data.timestamp?.toDate() || new Date(0))) < 60000) showInviteNotification(change.doc.id, data);
             }
         });
     });
 }
 
-function showNotification(docId, data) {
+function showInviteNotification(docId, data) {
     const container = document.getElementById('notification-container');
     const toast = document.createElement('div');
     toast.className = "bg-slate-800/90 backdrop-blur-md border border-yellow-500/50 p-4 rounded-xl shadow-2xl transform translate-x-full transition-all duration-300 pointer-events-auto flex flex-col gap-2";
@@ -444,12 +452,12 @@ async function dismissToast(element, docId) {
 }
 
 async function joinBattleRoom(roomId) {
-    if (isBattleActive) return alert("你已經在戰鬥或配對中了！");
+    if (isBattleActive) return showToastMsg("你已經在戰鬥或配對中了！", "error");
     const roomRef = doc(db, "rooms", roomId);
     const roomSnap = await getDoc(roomRef);
-    if (!roomSnap.exists()) return alert("該房間已不存在");
+    if (!roomSnap.exists()) return showToastMsg("該房間已不存在", "error");
     const roomData = roomSnap.data();
-    if (roomData.status !== "waiting" || roomData.guest) return alert("該房間已滿或遊戲已開始");
+    if (roomData.status !== "waiting" || roomData.guest) return showToastMsg("該房間已滿或遊戲已開始", "error");
 
     const myPlayerData = { uid: auth.currentUser.uid, name: currentUserData.displayName, score: 0, done: false, equipped: currentUserData.equipped || { frame: '', avatar: '' } };
     isBattleActive = true;
@@ -461,7 +469,7 @@ async function joinBattleRoom(roomId) {
         await updateDoc(roomRef, { guest: myPlayerData, status: "ready" });
         currentBattleId = roomId;
         listenToBattleRoom(roomId);
-    } catch (e) { console.error(e); alert("加入房間失敗"); leaveBattle(); }
+    } catch (e) { showToastMsg("加入房間失敗", "error"); leaveBattle(); }
 }
 
 async function inviteOnlinePlayers(roomId) {
@@ -469,19 +477,25 @@ async function inviteOnlinePlayers(roomId) {
         const q = query(collection(db, "users"), where("lastActive", ">", new Date(Date.now() - 5 * 60000)), limit(20));
         const snapshot = await getDocs(q);
         const candidates = snapshot.docs.filter(d => d.id !== auth.currentUser.uid).map(d => d.id);
-        if (candidates.length === 0) return;
+        if (candidates.length === 0) return showToastMsg("目前無其他線上玩家");
+        
         const selectedIds = shuffleArray(candidates).slice(0, 3);
+        showToastMsg(`已邀請 ${selectedIds.length} 位線上玩家！`);
+        
         selectedIds.forEach(targetUid => {
             addDoc(collection(db, "users", targetUid, "notifications"), {
                 type: "battle_invite", roomId: roomId, hostName: currentUserData.displayName || "神秘玩家", timestamp: serverTimestamp()
             });
         });
-    } catch (e) { console.error("邀請發送失敗", e); }
+    } catch (e) { 
+        // 默默失敗或顯示錯誤
+        if(e.message.includes("index")) showToastMsg("⚠️ 請建立 Firebase 索引 (lastActive)", "error");
+    }
 }
 
 // --- 9. 對戰配對邏輯 ---
 window.startBattleMatchmaking = async () => {
-    if (!auth.currentUser) return alert("請先登入！");
+    if (!auth.currentUser) return showToastMsg("請先登入！", "error");
     isBattleActive = true;
     switchToPage('page-battle');
     document.getElementById('battle-lobby').classList.remove('hidden');
@@ -513,16 +527,15 @@ window.startBattleMatchmaking = async () => {
             currentBattleId = joinedRoomId;
             document.getElementById('battle-status-text').innerText = "✅ 配對成功！";
         } else {
-            document.getElementById('battle-status-text').innerText = "👑 建立房間，並邀請線上玩家...";
+            document.getElementById('battle-status-text').innerText = "👑 建立房間...";
             const roomRef = await addDoc(collection(db, "rooms"), { host: myPlayerData, guest: null, status: "waiting", round: 1, createdAt: serverTimestamp() });
             currentBattleId = roomRef.id;
             inviteOnlinePlayers(currentBattleId);
         }
         listenToBattleRoom(currentBattleId);
     } catch (e) {
-        console.error(e);
-        if (e.message.includes("index")) alert("⚠️ 系統錯誤：Firebase 需要建立索引 (status + createdAt)");
-        else { alert("配對失敗"); leaveBattle(); }
+        if (e.message.includes("index")) showToastMsg("⚠️ 系統錯誤：Firebase 需要建立索引 (status + createdAt)", "error");
+        else { showToastMsg("配對失敗", "error"); leaveBattle(); }
     }
 };
 
@@ -594,10 +607,12 @@ let isGenerating = false;
 async function generateSharedQuiz(roomId) {
     if (isGenerating) return;
     isGenerating = true;
+    showToastMsg("正在生成對戰題目...");
     try {
         const q = await fetchOneQuestion();
         await updateDoc(doc(db, "rooms", roomId), { currentQuestion: { q: q.data.q, opts: q.data.opts, ans: q.data.ans } });
-    } catch (e) { console.error(e); } finally { isGenerating = false; }
+        showToastMsg("題目準備就緒！");
+    } catch (e) { showToastMsg("題目生成失敗", "error"); } finally { isGenerating = false; }
 }
 
 async function handleBattleAnswer(roomId, userIdx, correctIdx, isHost) {
@@ -666,6 +681,7 @@ async function fetchOneQuestion() {
                 if (filesToFetch.length === 0) return switchToAI();
             }
             try {
+                showToastMsg(`正在載入 ${filesToFetch.length} 份考卷...`);
                 const fetchPromises = filesToFetch.map(filePath => fetch(`/banks/${filePath}?t=${Date.now()}`).then(res => res.json()).catch(()=>[]));
                 const results = await Promise.all(fetchPromises);
                 const mergedQuestions = results.flat();
@@ -753,9 +769,120 @@ window.renderCascadingSelectors = (tree, currentPath) => {
     createSelect(0, tree);
 };
 
-// --- 10. 管理員專用函式 (修正呼叫名稱) ---
-// 關鍵修正：將 loadAdminData 暴露為 window.loadAdminProducts 以符合 HTML onclick
-window.loadAdminProducts = window.loadAdminData; 
+window.saveProfile = async () => {
+    const level = document.getElementById('set-level').value;
+    const rawStrong = document.getElementById('set-strong').value;
+    const rawWeak = document.getElementById('set-weak').value;
+    const source = document.getElementById('set-source-final-value').value;
+    const difficulty = document.getElementById('set-difficulty').value;
+    if (!source) return showToastMsg("請完整選擇出題來源", "error");
+    const btn = document.querySelector('button[onclick="saveProfile()"]');
+    btn.innerText = "處理中..."; btn.disabled = true;
+    const cleanStrong = await getCleanSubjects(rawStrong);
+    const cleanWeak = await getCleanSubjects(rawWeak);
+    document.getElementById('set-strong').value = cleanStrong;
+    document.getElementById('set-weak').value = cleanWeak;
+    await updateDoc(doc(db, "users", auth.currentUser.uid), { "profile.educationLevel": level, "profile.strongSubjects": cleanStrong, "profile.weakSubjects": cleanWeak, "gameSettings": { source, difficulty } });
+    currentUserData.profile.educationLevel = level; currentUserData.profile.strongSubjects = cleanStrong; currentUserData.profile.weakSubjects = cleanWeak; currentUserData.gameSettings = { source, difficulty };
+    currentBankData = null; localStorage.removeItem('currentQuiz'); quizBuffer = []; fillBuffer();
+    btn.innerText = "儲存成功！"; setTimeout(() => { btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> 更新設定`; btn.disabled = false; }, 2000);
+};
+
+window.loadAdminProducts = async () => {
+    loadAdminLogs(); 
+    const listContainer = document.getElementById('admin-product-list');
+    listContainer.innerHTML = '<div class="text-center text-gray-500">載入商品中...</div>';
+    try {
+        const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
+        const snap = await getDocs(q);
+        listContainer.innerHTML = '';
+        if(snap.empty) { listContainer.innerHTML = '<div class="text-center text-gray-500">尚無商品</div>'; return; }
+        snap.forEach(doc => {
+            const item = doc.data();
+            const div = document.createElement('div');
+            div.className = 'admin-item-row cursor-pointer';
+            div.onclick = () => editProduct(doc.id, item);
+            div.innerHTML = `<div class="flex items-center gap-3">${renderVisual(item.type, item.value, "w-8 h-8")}<div><div class="font-bold text-white text-sm">${item.name}</div><div class="text-xs text-gray-400">${item.type} | $${item.price}</div></div></div><div class="text-blue-400 text-xs"><i class="fa-solid fa-pen"></i> 編輯</div>`;
+            listContainer.appendChild(div);
+        });
+    } catch (e) { listContainer.innerHTML = '<div class="text-red-400 text-center">載入失敗</div>'; }
+};
+
+window.loadAdminData = window.loadAdminProducts;
+
+function renderVisual(type, value, sizeClass = "w-12 h-12") {
+    const isImage = value && (value.includes('.') || value.includes('/'));
+    if (type === 'frame') {
+        if (isImage) return `<div class="${sizeClass} rounded-full bg-slate-800 flex items-center justify-center relative" style="overflow: visible !important;"><div class="w-full h-full rounded-full overflow-hidden flex items-center justify-center bg-slate-800 relative z-0"><i class="fa-solid fa-user text-gray-500"></i></div><img src="${value}" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[140%] w-auto object-contain pointer-events-none z-20" style="max-width: none;"></div>`;
+        else return `<div class="${sizeClass} rounded-full border-2 border-gray-600 ${value} flex items-center justify-center bg-slate-800 relative z-0"><i class="fa-solid fa-user text-gray-500"></i></div>`;
+    } else if (type === 'avatar') {
+        return `<div class="${sizeClass} rounded-full overflow-hidden bg-slate-800 border-2 border-slate-600 relative z-10"><img src="${value}" class="avatar-img" onerror="this.style.display='none';this.parentElement.innerHTML='<i class=\'fa-solid fa-image text-red-500\'></i>'"></div>`;
+    }
+    return '';
+}
+
+function getAvatarHtml(equipped, sizeClass = "w-10 h-10") {
+    const frame = equipped?.frame || '';
+    const avatar = equipped?.avatar || '';
+    const isFrameImg = frame && (frame.includes('.') || frame.includes('/'));
+    const imgContent = avatar ? `<img src="${avatar}" class="w-full h-full object-cover" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"> <i class="fa-solid fa-user text-gray-400 absolute hidden"></i>` : `<i class="fa-solid fa-user text-gray-400"></i>`;
+    const borderClass = frame ? '' : 'border-2 border-slate-600';
+    const cssFrameClass = (!isFrameImg && frame) ? frame : '';
+    const frameImgElement = isFrameImg ? `<img src="${frame}" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); height: 145%; width: auto; max-width: none; z-index: 50; pointer-events: none;">` : '';
+    return `<div class="${sizeClass} rounded-full bg-slate-800 flex items-center justify-center relative ${borderClass} ${cssFrameClass}" style="overflow: visible !important;"><div class="w-full h-full rounded-full overflow-hidden flex items-center justify-center bg-slate-800 relative z-0">${imgContent}</div>${frameImgElement}</div>`;
+}
+
+window.toggleAdminForm = () => {
+    const body = document.getElementById('admin-form-body');
+    const arrow = document.getElementById('admin-form-arrow');
+    if (body.classList.contains('hidden')) { body.classList.remove('hidden'); arrow.style.transform = 'rotate(0deg)'; } 
+    else { body.classList.add('hidden'); arrow.style.transform = 'rotate(180deg)'; }
+};
+window.openAdminForm = () => { document.getElementById('admin-form-body').classList.remove('hidden'); document.getElementById('admin-form-arrow').style.transform = 'rotate(0deg)'; }
+window.editProduct = (id, data) => {
+    document.getElementById('admin-edit-id').value = id; document.getElementById('admin-p-name').value = data.name; document.getElementById('admin-p-type').value = data.type; document.getElementById('admin-p-value').value = data.value; document.getElementById('admin-p-price').value = data.price;
+    document.getElementById('admin-form-title').innerText = "✏️ 編輯商品";
+    const saveBtn = document.getElementById('admin-btn-save'); saveBtn.innerText = "更新商品"; saveBtn.classList.replace('bg-red-600', 'bg-blue-600');
+    document.getElementById('admin-btn-del').classList.remove('hidden'); toggleAdminInputPlaceholder(); openAdminForm(); document.getElementById('page-admin').scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+window.resetAdminForm = () => {
+    document.getElementById('admin-edit-id').value = ''; document.getElementById('admin-p-name').value = ''; document.getElementById('admin-p-value').value = ''; document.getElementById('admin-p-price').value = '';
+    document.getElementById('admin-form-title').innerText = "➕ 上架新商品";
+    const saveBtn = document.getElementById('admin-btn-save'); saveBtn.innerText = "上架商品"; saveBtn.classList.replace('bg-blue-600', 'bg-red-600');
+    document.getElementById('admin-btn-del').classList.add('hidden'); toggleAdminInputPlaceholder(); openAdminForm();
+};
+window.saveProduct = async () => {
+    if (!currentUserData || !currentUserData.isAdmin) return showToastMsg("權限不足！", "error");
+    const docId = document.getElementById('admin-edit-id').value; const name = document.getElementById('admin-p-name').value; const type = document.getElementById('admin-p-type').value; const value = document.getElementById('admin-p-value').value; const price = parseInt(document.getElementById('admin-p-price').value);
+    if (!name || !value || isNaN(price)) return showToastMsg("請填寫完整資訊", "error");
+    const btn = document.getElementById('admin-btn-save'); btn.innerText = "處理中..."; btn.disabled = true;
+    try {
+        if (docId) { await updateDoc(doc(db, "products", docId), { name, type, value, price, updatedAt: serverTimestamp() }); showToastMsg("更新成功！"); } 
+        else { await addDoc(collection(db, "products"), { name, type, value, price, createdAt: serverTimestamp() }); showToastMsg("上架成功！"); }
+        resetAdminForm(); loadAdminProducts();
+    } catch (e) { showToastMsg("操作失敗", "error"); } finally { btn.disabled = false; if(!docId) btn.innerText = "上架商品"; else btn.innerText = "更新商品"; }
+};
+window.deleteProduct = async () => {
+    const docId = document.getElementById('admin-edit-id').value; if (!docId || !confirm("確定要下架嗎？")) return;
+    try { await deleteDoc(doc(db, "products", docId)); showToastMsg("刪除成功"); resetAdminForm(); loadAdminProducts(); } catch (e) { showToastMsg("刪除失敗", "error"); }
+};
+window.toggleAdminInputPlaceholder = async () => {
+    const type = document.getElementById('admin-p-type').value; const input = document.getElementById('admin-p-value'); const hint = document.getElementById('admin-hint'); document.getElementById('admin-asset-selector').classList.remove('hidden');
+    if (type === 'frame') { input.placeholder = "CSS Class 或 圖片路徑"; hint.innerText = "CSS Class (style.css) 或 圖片"; } else { input.placeholder = "圖片路徑"; hint.innerText = "手動輸入或從上方選擇"; }
+    await loadUnusedAssets();
+};
+async function loadUnusedAssets() {
+    const select = document.getElementById('admin-asset-select'); select.innerHTML = '<option value="">-- 掃描中... --</option>';
+    try {
+        const res = await fetch('/api/assets'); const data = await res.json(); const allImages = data.images || [];
+        const q = query(collection(db, "products")); const snap = await getDocs(q); const usedImages = new Set();
+        snap.forEach(d => { if (d.data().value?.includes('.') || d.data().value?.includes('/')) usedImages.add(d.data().value); });
+        const unused = allImages.filter(img => !usedImages.has(img));
+        select.innerHTML = '<option value="">-- 請選擇 --</option>';
+        unused.forEach(img => { const opt = document.createElement('option'); opt.value = img; opt.innerText = img.replace('assets/', ''); select.appendChild(opt); });
+    } catch (e) { select.innerHTML = '<option value="">讀取失敗</option>'; }
+}
+window.selectAdminImage = (value) => { if (!value) return; document.getElementById('admin-p-value').value = value; const p = document.getElementById('admin-asset-preview'); p.src = value; p.classList.remove('hidden'); };
 
 function checkAdminRole(isAdmin) {
     const navGrid = document.getElementById('nav-grid');
@@ -767,13 +894,4 @@ function checkAdminRole(isAdmin) {
         btn.innerHTML = `<i class="fa-solid fa-user-shield mb-1 text-lg group-hover:text-red-400 transition-colors"></i><span class="text-[10px]">管理</span>`;
         navGrid.appendChild(btn);
     }
-}
-
-// 輔助時間顯示
-function getTimeAgo(date) {
-    const seconds = Math.floor((new Date() - date) / 1000);
-    if (seconds > 86400) return Math.floor(seconds/86400) + "天前";
-    if (seconds > 3600) return Math.floor(seconds/3600) + "小時前";
-    if (seconds > 60) return Math.floor(seconds/60) + "分鐘前";
-    return "剛剛";
 }
