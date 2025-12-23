@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 每日升階答題戰</title>
+    <title data-i18n="app_title">AI 每日升階答題戰</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
@@ -15,10 +15,16 @@
         
         <h1 class="text-xl font-bold text-yellow-400 flex items-center gap-2">
             <i class="fa-solid fa-dragon animate-pulse"></i> 
-            <span class="bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-orange-500">升階答題戰</span>
+            <span class="bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-orange-500" data-i18n="app_name">升階答題戰</span>
         </h1>
-        <div id="user-info" class="text-xs text-gray-300 bg-slate-700/50 px-3 py-1 rounded-full backdrop-blur-sm border border-slate-600/50 hover:border-blue-500/50 transition-all">
-            未登入
+        
+        <div class="flex items-center gap-2">
+            <button onclick="toggleLanguage()" class="text-xs bg-slate-700/50 hover:bg-slate-600 text-white px-2 py-1 rounded border border-slate-600 transition">
+                <i class="fa-solid fa-globe"></i> <span id="lang-display">EN</span>
+            </button>
+            <div id="user-info" class="text-xs text-gray-300 bg-slate-700/50 px-3 py-1 rounded-full backdrop-blur-sm border border-slate-600/50 hover:border-blue-500/50 transition-all" data-i18n="not_logged_in">
+                未登入
+            </div>
         </div>
     </header>
 
@@ -33,11 +39,11 @@
                     <i class="fa-solid fa-star text-2xl text-yellow-400 animate-pulse" style="animation-delay: 0.4s;"></i>
                 </div>
             </div>
-            <h2 class="text-4xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">歡迎挑戰</h2>
-            <p class="text-gray-400 mb-8 text-sm">AI 出題 x 真人對戰 x 段位系統</p>
+            <h2 class="text-4xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600" data-i18n="welcome_title">歡迎挑戰</h2>
+            <p class="text-gray-400 mb-8 text-sm" data-i18n="welcome_desc">AI 出題 x 真人對戰 x 段位系統</p>
             <button onclick="googleLogin()" class="bg-white text-gray-800 hover:bg-gray-100 px-8 py-3 rounded-full font-bold shadow-lg transition flex items-center gap-2 transform hover:scale-105 hover:shadow-2xl">
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-6 h-6">
-                使用 Google 登入
+                <span data-i18n="btn_login_google">使用 Google 登入</span>
             </button>
         </div>
 
@@ -46,37 +52,37 @@
                 <div class="text-center mb-6">
                     <i class="fa-solid fa-wand-magic-sparkles text-5xl text-blue-400 mb-3" style="filter: drop-shadow(0 0 15px rgba(59, 130, 246, 0.5));"></i>
                 </div>
-                <h2 class="text-2xl font-bold text-blue-400 mb-2 text-center">👋 嗨！初次見面</h2>
-                <p class="text-gray-400 mb-6 text-center">設定資料讓題目更適合你：</p>
+                <h2 class="text-2xl font-bold text-blue-400 mb-2 text-center" data-i18n="ob_title">👋 嗨！初次見面</h2>
+                <p class="text-gray-400 mb-6 text-center" data-i18n="ob_desc">設定資料讓題目更適合你：</p>
                 <div class="space-y-6">
                     <div>
                         <label class="block mb-2 text-sm font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-graduation-cap text-blue-400"></i> 你是幾年級學生？
+                            <i class="fa-solid fa-graduation-cap text-blue-400"></i> <span data-i18n="ob_label_level">你是幾年級學生？</span>
                         </label>
                         <select id="ob-level" class="w-full bg-slate-800 border border-slate-600 text-white rounded-lg p-3 outline-none focus:border-blue-500 transition-all">
-                            <option value="國小中年級">國小 (中年級)</option>
-                            <option value="國小高年級">國小 (高年級)</option>
-                            <option value="國中一年級">國中 (一年級)</option>
-                            <option value="國中二年級">國中 (二年級)</option>
-                            <option value="國中三年級">國中 (三年級)</option>
-                            <option value="高中職">高中 / 高職</option>
-                            <option value="大學以上">大學 / 社會人士</option>
+                            <option value="國小中年級" data-i18n="level_elem_mid">國小 (中年級)</option>
+                            <option value="國小高年級" data-i18n="level_elem_high">國小 (高年級)</option>
+                            <option value="國中一年級" data-i18n="level_jh_1">國中 (一年級)</option>
+                            <option value="國中二年級" data-i18n="level_jh_2">國中 (二年級)</option>
+                            <option value="國中三年級" data-i18n="level_jh_3">國中 (三年級)</option>
+                            <option value="高中職" data-i18n="level_sh">高中 / 高職</option>
+                            <option value="大學以上" data-i18n="level_univ">大學 / 社會人士</option>
                         </select>
                     </div>
                     <div>
                         <label class="block mb-2 text-sm font-bold text-green-400 flex items-center gap-2">
-                            <i class="fa-solid fa-trophy"></i> 擅長科目
+                            <i class="fa-solid fa-trophy"></i> <span data-i18n="ob_label_strong">擅長科目</span>
                         </label>
-                        <input type="text" id="ob-strong" class="w-full bg-slate-800 border border-slate-600 text-white rounded-lg p-3 outline-none focus:border-green-500 transition-all" placeholder="例如：歷史, 英文">
+                        <input type="text" id="ob-strong" class="w-full bg-slate-800 border border-slate-600 text-white rounded-lg p-3 outline-none focus:border-green-500 transition-all" data-i18n-placeholder="ob_placeholder_strong" placeholder="例如：歷史, 英文">
                     </div>
                     <div>
                         <label class="block mb-2 text-sm font-bold text-red-400 flex items-center gap-2">
-                            <i class="fa-solid fa-fire"></i> 弱項科目
+                            <i class="fa-solid fa-fire"></i> <span data-i18n="ob_label_weak">弱項科目</span>
                         </label>
-                        <input type="text" id="ob-weak" class="w-full bg-slate-800 border border-slate-600 text-white rounded-lg p-3 outline-none focus:border-red-500 transition-all" placeholder="例如：數學, 理化">
+                        <input type="text" id="ob-weak" class="w-full bg-slate-800 border border-slate-600 text-white rounded-lg p-3 outline-none focus:border-red-500 transition-all" data-i18n-placeholder="ob_placeholder_weak" placeholder="例如：數學, 理化">
                     </div>
                     <button onclick="submitOnboarding()" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold py-4 rounded-xl shadow-lg transform active:scale-95 transition flex items-center justify-center gap-2">
-                        開始旅程 <i class="fa-solid fa-rocket"></i>
+                        <span data-i18n="btn_start_journey">開始旅程</span> <i class="fa-solid fa-rocket"></i>
                     </button>
                 </div>
             </div>
@@ -91,11 +97,11 @@
                     Current Rank
                 </div>
                 
-                <h2 class="text-5xl font-black mb-2 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-400 to-red-500 animate-pulse" id="display-rank">載入中</h2>
+                <h2 class="text-5xl font-black mb-2 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-400 to-red-500 animate-pulse" id="display-rank">...</h2>
                 
                 <div class="flex justify-center items-center gap-2 mt-6 text-gray-300 bg-slate-800/50 inline-block px-4 py-1 rounded-full backdrop-blur-sm">
                     <i class="fa-solid fa-star text-yellow-400 animate-pulse"></i>
-                    <span>進度: <span id="display-stars" class="font-bold text-white text-lg">0</span> / 10</span>
+                    <span><span data-i18n="label_net_progress">淨勝</span>: <span id="display-stars" class="font-bold text-white text-lg">0</span> / 10</span>
                 </div>
                 
                 <div class="w-full bg-slate-950 rounded-full h-3 mt-6 overflow-hidden border border-slate-700 relative">
@@ -106,29 +112,29 @@
                 
                 <div class="flex gap-3 mt-8">
                     <button id="btn-home-start" onclick="startQuizFlow()" class="flex-1 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 py-4 rounded-xl text-lg font-bold shadow-lg active:scale-95 transition flex items-center justify-center gap-2 group">
-                        <i class="fa-solid fa-play group-hover:animate-pulse"></i> 單人挑戰
+                        <i class="fa-solid fa-play group-hover:animate-pulse"></i> <span data-i18n="btn_solo">單人挑戰</span>
                     </button>
                     <button onclick="startBattleMatchmaking()" class="flex-1 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 py-4 rounded-xl text-lg font-bold shadow-lg active:scale-95 transition flex items-center justify-center gap-2 border border-red-400/30 group">
-                        <i class="fa-solid fa-khanda group-hover:animate-bounce"></i> 雙人對戰
+                        <i class="fa-solid fa-khanda group-hover:animate-bounce"></i> <span data-i18n="btn_pvp">雙人對戰</span>
                     </button>
                 </div>
             </div>
 
             <div class="grid grid-cols-2 gap-3 mt-4">
                 <div class="bg-slate-800/50 backdrop-blur-sm p-4 rounded-xl border border-slate-700 flex flex-col items-center hover:border-yellow-500/50 transition-all">
-                    <div class="text-xs text-gray-400 mb-1"><i class="fa-solid fa-coins text-yellow-500"></i> 總積分</div>
+                    <div class="text-xs text-gray-400 mb-1"><i class="fa-solid fa-coins text-yellow-500"></i> <span data-i18n="stat_score">總積分</span></div>
                     <div class="text-2xl font-bold text-white" id="display-score">0</div>
                 </div>
                 <div class="bg-slate-800/50 backdrop-blur-sm p-4 rounded-xl border border-slate-700 flex flex-col items-center hover:border-blue-500/50 transition-all">
-                    <div class="text-xs text-gray-400 mb-1"><i class="fa-solid fa-bullseye text-blue-400"></i> 正確率</div>
+                    <div class="text-xs text-gray-400 mb-1"><i class="fa-solid fa-bullseye text-blue-400"></i> <span data-i18n="stat_accuracy">正確率</span></div>
                     <div class="text-2xl font-bold text-white" id="display-accuracy">0%</div>
                 </div>
                 <div class="bg-slate-800/50 backdrop-blur-sm p-4 rounded-xl border border-slate-700 flex flex-col items-center hover:border-orange-500/50 transition-all">
-                    <div class="text-xs text-gray-400 mb-1"><i class="fa-solid fa-fire text-orange-500"></i> 當前連對</div>
+                    <div class="text-xs text-gray-400 mb-1"><i class="fa-solid fa-fire text-orange-500"></i> <span data-i18n="stat_streak">當前連對</span></div>
                     <div class="text-2xl font-bold text-orange-400" id="display-streak">0</div>
                 </div>
                 <div class="bg-slate-800/50 backdrop-blur-sm p-4 rounded-xl border border-slate-700 flex flex-col items-center hover:border-purple-500/50 transition-all">
-                    <div class="text-xs text-gray-400 mb-1"><i class="fa-solid fa-crown text-purple-500"></i> 最佳連對</div>
+                    <div class="text-xs text-gray-400 mb-1"><i class="fa-solid fa-crown text-purple-500"></i> <span data-i18n="stat_best_streak">最佳連對</span></div>
                     <div class="text-2xl font-bold text-purple-400" id="display-best-streak">0</div>
                 </div>
             </div>
@@ -137,13 +143,13 @@
         <div id="page-quiz" class="page-section hidden pb-20">
             <div id="quiz-loading" class="text-center mt-32 hidden">
                 <div class="loader"></div>
-                <h3 class="text-xl font-bold mt-4 text-blue-300">雲端大腦運算中</h3>
-                <p class="text-xs text-gray-500 mt-2" id="loading-text">AI 正在趕工出題中...</p>
+                <h3 class="text-xl font-bold mt-4 text-blue-300" data-i18n="loading_title">雲端大腦運算中</h3>
+                <p class="text-xs text-gray-500 mt-2" id="loading-text" data-i18n="loading_text">AI 正在趕工出題中...</p>
             </div>
 
             <div id="quiz-container" class="hidden">
                 <div class="bg-slate-800/90 backdrop-blur-sm p-6 rounded-xl mb-6 border-t-4 border-blue-500 shadow-lg relative">
-                    <span class="absolute top-4 right-4 bg-slate-900/80 text-xs px-2 py-1 rounded text-gray-400 backdrop-blur-sm" id="quiz-badge">主題 | 等級</span>
+                    <span class="absolute top-4 right-4 bg-slate-900/80 text-xs px-2 py-1 rounded text-gray-400 backdrop-blur-sm" id="quiz-badge">...</span>
                     <div class="text-4xl text-blue-500/20 absolute top-2 left-2"><i class="fa-solid fa-quote-left"></i></div>
                     <h3 class="text-lg font-bold leading-relaxed mt-4 relative z-10" id="question-text">...</h3>
                 </div>
@@ -156,21 +162,21 @@
                         <h3 id="feedback-title" class="text-xl font-bold"></h3>
                     </div>
                     <div class="bg-slate-900/50 p-4 rounded-lg text-sm text-gray-300 leading-relaxed border border-slate-700/50 mb-4">
-                        <span class="text-blue-400 font-bold block mb-1"><i class="fa-solid fa-magnifying-glass"></i> AI 解析：</span>
+                        <span class="text-blue-400 font-bold block mb-1"><i class="fa-solid fa-magnifying-glass"></i> <span data-i18n="label_analysis">AI 解析：</span></span>
                         <span id="feedback-text"></span>
                     </div>
                     <div class="flex gap-3">
-                        <button onclick="switchToPage('page-home')" class="flex-1 bg-slate-700 hover:bg-slate-600 text-gray-300 py-3 rounded-lg font-bold transition">
+                        <button onclick="switchToPage('page-home')" class="flex-1 bg-slate-700 hover:bg-slate-600 text-gray-300 py-3 rounded-lg font-bold transition" data-i18n="btn_back_home">
                             返回大廳
                         </button>
                         <button onclick="nextQuestion()" class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white py-3 rounded-lg font-bold shadow-lg transition flex justify-center items-center gap-2">
-                            下一題 <i class="fa-solid fa-arrow-right"></i>
+                            <span data-i18n="btn_next_q">下一題</span> <i class="fa-solid fa-arrow-right"></i>
                         </button>
                     </div>
                 </div>
                 
                 <button id="btn-giveup" onclick="giveUpQuiz()" class="mt-8 py-3 text-gray-500 text-sm w-full text-center hover:text-white border border-transparent hover:border-slate-700 rounded-lg transition">
-                    <i class="fa-solid fa-arrow-left"></i> 放棄此題 (換下一題)
+                    <i class="fa-solid fa-arrow-left"></i> <span data-i18n="btn_giveup">放棄此題 (換下一題)</span>
                 </button>
             </div>
         </div>
@@ -183,7 +189,7 @@
                             <i class="fa-solid fa-arrow-left"></i>
                         </button>
                         <h2 class="text-xl font-bold text-pink-400 flex items-center gap-2">
-                            <i class="fa-solid fa-store animate-pulse"></i> 道具商店
+                            <i class="fa-solid fa-store animate-pulse"></i> <span data-i18n="store_title">道具商店</span>
                         </h2>
                     </div>
                     <div class="bg-slate-800 px-3 py-1 rounded-full border border-yellow-500/30 text-yellow-400 font-mono text-sm flex items-center gap-1 hover:scale-105 transition-transform">
@@ -193,21 +199,21 @@
                 </div>
 
                 <div class="flex px-2 gap-2" id="store-tabs">
-                    <button onclick="filterStore('all', this)" class="store-tab active-tab flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-pink-600 text-white shadow-lg shadow-pink-900/50">
+                    <button onclick="filterStore('all', this)" class="store-tab active-tab flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-pink-600 text-white shadow-lg shadow-pink-900/50" data-i18n="tab_all">
                         全部
                     </button>
                     <button onclick="filterStore('frame', this)" class="store-tab flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-slate-800 text-gray-400 hover:bg-slate-700">
-                        <i class="fa-regular fa-square"></i> 相框
+                        <i class="fa-regular fa-square"></i> <span data-i18n="tab_frame">相框</span>
                     </button>
                     <button onclick="filterStore('avatar', this)" class="store-tab flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-slate-800 text-gray-400 hover:bg-slate-700">
-                        <i class="fa-regular fa-user"></i> 頭像
+                        <i class="fa-regular fa-user"></i> <span data-i18n="tab_avatar">頭像</span>
                     </button>
                 </div>
             </div>
 
             <div id="store-grid" class="grid grid-cols-2 md:grid-cols-5 gap-3 p-2 pb-24 mt-2">
                 <div class="text-center col-span-2 md:col-span-5 py-10 text-gray-500">
-                    <div class="loader"></div> 載入商品中...
+                    <div class="loader"></div> <span data-i18n="msg_loading_products">載入商品中...</span>
                 </div>
             </div>
         </div>
@@ -217,9 +223,9 @@
                 <div class="radar-scan mb-8">
                     <div class="radar-line"></div>
                 </div>
-                <h2 class="text-2xl font-bold mb-2">正在搜尋對手...</h2>
-                <p class="text-gray-400 text-sm mb-8" id="battle-status-text">正在連接對戰伺服器</p>
-                <button onclick="leaveBattle()" class="border border-red-500 text-red-400 px-6 py-2 rounded-full hover:bg-red-500/10 transition-all hover:scale-105">取消配對</button>
+                <h2 class="text-2xl font-bold mb-2" data-i18n="battle_searching">正在搜尋對手...</h2>
+                <p class="text-gray-400 text-sm mb-8" id="battle-status-text" data-i18n="battle_connecting">正在連接對戰伺服器</p>
+                <button onclick="leaveBattle()" class="border border-red-500 text-red-400 px-6 py-2 rounded-full hover:bg-red-500/10 transition-all hover:scale-105" data-i18n="btn_cancel_match">取消配對</button>
             </div>
 
             <div id="battle-arena" class="hidden">
@@ -229,7 +235,7 @@
                         <div id="battle-my-avatar" class="flex justify-center items-center mb-2">
                             <div class="w-16 h-16 rounded-full bg-slate-800 border-2 border-blue-500 flex items-center justify-center"><i class="fa-solid fa-user"></i></div>
                         </div>
-                        <span class="text-xs mt-1 font-bold text-blue-300">我方</span>
+                        <span class="text-xs mt-1 font-bold text-blue-300" data-i18n="battle_me">我方</span>
                         <span class="text-xl font-black" id="p1-score">0</span>
                     </div>
 
@@ -242,7 +248,7 @@
                         <div id="battle-opp-avatar" class="flex justify-center items-center mb-2">
                             <div class="w-16 h-16 rounded-full bg-slate-800 border-2 border-red-500 flex items-center justify-center"><i class="fa-solid fa-robot"></i></div>
                         </div>
-                        <span class="text-xs mt-1 font-bold text-red-300">對手</span>
+                        <span class="text-xs mt-1 font-bold text-red-300" data-i18n="battle_opp">對手</span>
                         <span class="text-xl font-black" id="p2-score">0</span>
                     </div>
 
@@ -250,12 +256,12 @@
 
                 <div id="battle-loading" class="text-center py-10 hidden">
                     <div class="loader"></div>
-                    <p class="text-gray-400 text-sm mt-4">正在生成題目...</p>
+                    <p class="text-gray-400 text-sm mt-4" data-i18n="battle_generating">正在生成題目...</p>
                 </div>
 
                 <div id="battle-quiz-box" class="hidden">
                     <div class="bg-slate-800/90 backdrop-blur-sm p-6 rounded-xl mb-6 border-t-4 border-red-500 shadow-lg">
-                        <h3 class="text-lg font-bold leading-relaxed" id="battle-q-text">題目載入中...</h3>
+                        <h3 class="text-lg font-bold leading-relaxed" id="battle-q-text">...</h3>
                     </div>
 
                     <div id="battle-options" class="space-y-3"></div>
@@ -263,7 +269,7 @@
                     <div id="battle-waiting-msg" class="hidden mt-4 text-center">
                         <div class="inline-flex items-center gap-2 bg-slate-800/50 px-4 py-2 rounded-full text-sm text-gray-400">
                             <div class="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
-                            等待對手作答中...
+                            <span data-i18n="battle_waiting_opp">等待對手作答中...</span>
                         </div>
                     </div>
                 </div>
@@ -271,15 +277,15 @@
 
             <div id="battle-result" class="hidden flex flex-col items-center justify-center pt-20">
                 <div class="text-center mb-8">
-                    <h2 id="battle-result-title" class="text-3xl font-bold mb-2">對戰結束</h2>
-                    <p id="battle-result-msg" class="text-gray-400">計算結果中...</p>
+                    <h2 id="battle-result-title" class="text-3xl font-bold mb-2" data-i18n="battle_ended">對戰結束</h2>
+                    <p id="battle-result-msg" class="text-gray-400" data-i18n="battle_calculating">計算結果中...</p>
                 </div>
                 
                 <div class="flex gap-3">
-                    <button onclick="leaveBattle()" class="bg-slate-700 hover:bg-slate-600 text-white px-6 py-3 rounded-lg font-bold transition-all hover:scale-105">
+                    <button onclick="leaveBattle()" class="bg-slate-700 hover:bg-slate-600 text-white px-6 py-3 rounded-lg font-bold transition-all hover:scale-105" data-i18n="btn_back_home">
                         返回首頁
                     </button>
-                    <button onclick="startBattleMatchmaking()" class="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white px-6 py-3 rounded-lg font-bold transition-all hover:scale-105">
+                    <button onclick="startBattleMatchmaking()" class="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white px-6 py-3 rounded-lg font-bold transition-all hover:scale-105" data-i18n="btn_play_again">
                         再來一局
                     </button>
                 </div>
@@ -288,15 +294,15 @@
 
         <div id="page-rank" class="page-section hidden">
             <h2 class="text-2xl font-bold mb-4 flex items-center gap-2 text-yellow-400">
-                <i class="fa-solid fa-trophy animate-pulse"></i> 全服排行榜
+                <i class="fa-solid fa-trophy animate-pulse"></i> <span data-i18n="rank_title">全服排行榜</span>
             </h2>
             <div class="bg-slate-800/90 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg border border-slate-700">
                 <table class="w-full text-left text-sm text-gray-300">
                     <thead class="bg-slate-900/90 backdrop-blur-sm text-gray-400 uppercase text-xs">
                         <tr>
                             <th class="px-4 py-3 w-12">#</th>
-                            <th class="px-4 py-3">玩家</th>
-                            <th class="px-4 py-3 text-right">段位</th>
+                            <th class="px-4 py-3" data-i18n="th_player">玩家</th>
+                            <th class="px-4 py-3 text-right" data-i18n="th_rank">段位</th>
                         </tr>
                     </thead>
                     <tbody id="leaderboard-body"></tbody>
@@ -306,7 +312,7 @@
 
         <div id="page-settings" class="page-section hidden">
             <h2 class="text-2xl font-bold mb-4 flex items-center gap-2 text-green-400 animate-fade-in-up">
-                <i class="fa-solid fa-user-gear"></i> 個人設定
+                <i class="fa-solid fa-user-gear"></i> <span data-i18n="settings_title">個人設定</span>
             </h2>
             
             <div class="bg-slate-800/80 backdrop-blur-md p-6 rounded-2xl shadow-xl mb-6 border border-slate-700/50 space-y-5 relative overflow-hidden">
@@ -314,17 +320,17 @@
 
                 <div>
                     <label class="block mb-2 text-sm font-bold text-gray-300 flex items-center gap-2">
-                        <i class="fa-solid fa-graduation-cap text-blue-400"></i> 年級 / 身份
+                        <i class="fa-solid fa-graduation-cap text-blue-400"></i> <span data-i18n="label_level">年級 / 身份</span>
                     </label>
                     <div class="relative">
                         <select id="set-level" class="w-full bg-slate-900/50 border border-slate-600 text-white rounded-xl p-3 pl-4 appearance-none outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all cursor-pointer">
-                            <option value="國小中年級">國小 (中年級)</option>
-                            <option value="國小高年級">國小 (高年級)</option>
-                            <option value="國中一年級">國中 (一年級)</option>
-                            <option value="國中二年級">國中 (二年級)</option>
-                            <option value="國中三年級">國中 (三年級)</option>
-                            <option value="高中職">高中 / 高職</option>
-                            <option value="大學以上">大學 / 社會人士</option>
+                            <option value="國小中年級" data-i18n="level_elem_mid">國小 (中年級)</option>
+                            <option value="國小高年級" data-i18n="level_elem_high">國小 (高年級)</option>
+                            <option value="國中一年級" data-i18n="level_jh_1">國中 (一年級)</option>
+                            <option value="國中二年級" data-i18n="level_jh_2">國中 (二年級)</option>
+                            <option value="國中三年級" data-i18n="level_jh_3">國中 (三年級)</option>
+                            <option value="高中職" data-i18n="level_sh">高中 / 高職</option>
+                            <option value="大學以上" data-i18n="level_univ">大學 / 社會人士</option>
                         </select>
                         <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"></i>
                     </div>
@@ -332,71 +338,71 @@
 
                 <div>
                     <label class="block mb-2 text-sm font-bold text-gray-300 flex items-center gap-2">
-                        <i class="fa-solid fa-thumbs-up text-green-400"></i> 擅長科目
+                        <i class="fa-solid fa-thumbs-up text-green-400"></i> <span data-i18n="label_strong">擅長科目</span>
                     </label>
-                    <input type="text" id="set-strong" class="w-full bg-slate-900/50 border border-slate-600 text-white text-sm rounded-xl p-3 outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-all" placeholder="輸入擅長科目...">
+                    <input type="text" id="set-strong" class="w-full bg-slate-900/50 border border-slate-600 text-white text-sm rounded-xl p-3 outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-all" data-i18n-placeholder="placeholder_strong">
                 </div>
 
                 <div>
                     <label class="block mb-2 text-sm font-bold text-gray-300 flex items-center gap-2">
-                        <i class="fa-solid fa-dumbbell text-red-400"></i> 弱項 (加強練習)
+                        <i class="fa-solid fa-dumbbell text-red-400"></i> <span data-i18n="label_weak">弱項 (加強練習)</span>
                     </label>
-                    <input type="text" id="set-weak" class="w-full bg-slate-900/50 border border-slate-600 text-white text-sm rounded-xl p-3 outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all" placeholder="輸入想加強的科目...">
+                    <input type="text" id="set-weak" class="w-full bg-slate-900/50 border border-slate-600 text-white text-sm rounded-xl p-3 outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all" data-i18n-placeholder="placeholder_weak">
                 </div>
 
                 <div class="grid grid-cols-2 gap-3 pt-2 border-t border-slate-700/50 mt-4">
                     <div>
                         <label class="block mb-2 text-sm font-bold text-yellow-400 flex items-center gap-2">
-                            <i class="fa-solid fa-book-open"></i> 出題來源
+                            <i class="fa-solid fa-book-open"></i> <span data-i18n="label_source">出題來源</span>
                         </label>
                         
                         <div id="bank-selectors-container" class="space-y-2"></div>
                         <input type="hidden" id="set-source-final-value" value="ai">
-                        <p id="bank-selection-hint" class="text-xs text-gray-500 mt-1">請依序選擇分類...</p>
+                        <p id="bank-selection-hint" class="text-xs text-gray-500 mt-1" data-i18n="hint_select_bank">請依序選擇分類...</p>
                     </div>
                     
                     <div>
                         <label class="block mb-2 text-sm font-bold text-purple-400 flex items-center gap-2">
-                            <i class="fa-solid fa-layer-group"></i> 題目難度
+                            <i class="fa-solid fa-layer-group"></i> <span data-i18n="label_difficulty">題目難度</span>
                         </label>
                         <select id="set-difficulty" class="w-full bg-slate-900/50 border border-slate-600 text-white rounded-xl p-3 outline-none focus:border-purple-500 transition-all cursor-pointer">
-                            <option value="easy">🟢 簡單 (Easy)</option>
-                            <option value="medium">🟡 中等 (Medium)</option>
-                            <option value="hard">🔴 困難 (Hard)</option>
+                            <option value="easy" data-i18n="diff_easy">🟢 簡單 (Easy)</option>
+                            <option value="medium" data-i18n="diff_medium">🟡 中等 (Medium)</option>
+                            <option value="hard" data-i18n="diff_hard">🔴 困難 (Hard)</option>
                         </select>
                     </div>
                 </div>
 
                 <button onclick="saveProfile()" class="w-full mt-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white px-4 py-3.5 rounded-xl font-bold transition-all shadow-lg hover:shadow-blue-900/30 hover:scale-[1.02] flex justify-center items-center gap-2">
-                    <i class="fa-solid fa-floppy-disk"></i> 更新設定
+                    <i class="fa-solid fa-floppy-disk"></i> <span data-i18n="btn_update_settings">更新設定</span>
                 </button>
             </div>
 
             <div class="bg-slate-800/80 backdrop-blur-md p-5 rounded-2xl border border-slate-700/50 mb-6 shadow-xl">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-clock-rotate-left text-purple-400"></i> 答題紀錄
+                        <i class="fa-solid fa-clock-rotate-left text-purple-400"></i> <span data-i18n="history_title">答題紀錄</span>
                     </h3>
                     <button onclick="loadUserHistory()" class="text-xs text-blue-400 hover:text-white p-2 rounded hover:bg-slate-700 transition">
                         <i class="fa-solid fa-rotate"></i>
                     </button>
                 </div>
                 <ul id="history-list" class="space-y-2 max-h-60 overflow-y-auto scrollbar-thin text-sm p-1">
-                    <li class="text-center text-gray-500 py-4">載入中...</li>
+                    <li class="text-center text-gray-500 py-4" data-i18n="loading">載入中...</li>
                 </ul>
             </div>
 
             <div class="bg-slate-800/80 backdrop-blur-md p-5 rounded-2xl border border-slate-700/50 mb-6 shadow-xl">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-backpack text-yellow-400"></i> 我的背包
+                        <i class="fa-solid fa-backpack text-yellow-400"></i> <span data-i18n="inventory_title">我的背包</span>
                     </h3>
                     <span class="text-xs text-gray-500 bg-slate-900 px-2 py-1 rounded">Inventory</span>
                 </div>
                 <div id="settings-inventory-grid" class="grid grid-cols-4 gap-3">
                     <div class="text-xs text-gray-500 col-span-4 text-center py-6 bg-slate-900/30 rounded-xl border border-dashed border-slate-700">
                         <i class="fa-solid fa-box-open text-2xl mb-2 text-gray-600 block"></i>
-                        載入中...
+                        <span data-i18n="loading">載入中...</span>
                     </div>
                 </div>
             </div>
@@ -410,29 +416,29 @@
             </div>
 
             <button onclick="logout()" class="w-full bg-gradient-to-r from-red-900/80 to-red-800/80 hover:from-red-800 hover:to-red-700 border border-red-700/50 text-red-100 px-4 py-3.5 rounded-xl transition-all shadow-lg hover:shadow-red-900/30 flex items-center justify-center gap-2 group">
-                <i class="fa-solid fa-right-from-bracket group-hover:-translate-x-1 transition-transform"></i> 登出帳號
+                <i class="fa-solid fa-right-from-bracket group-hover:-translate-x-1 transition-transform"></i> <span data-i18n="btn_logout">登出帳號</span>
             </button>
         </div>
 
         <div id="page-admin" class="page-section hidden">
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-2xl font-bold text-red-400 flex items-center gap-2">
-                    <i class="fa-solid fa-shield-halved"></i> 管理後台
+                    <i class="fa-solid fa-shield-halved"></i> <span data-i18n="admin_title">管理後台</span>
                 </h2>
                 <button onclick="resetAdminForm()" class="text-xs bg-slate-700 hover:bg-slate-600 text-white px-3 py-2 rounded-lg transition-all shadow border border-slate-600 flex items-center gap-1">
-                    <i class="fa-solid fa-plus"></i> 新增模式
+                    <i class="fa-solid fa-plus"></i> <span data-i18n="admin_new_mode">新增模式</span>
                 </button>
             </div>
             
             <div class="bg-slate-800/90 backdrop-blur-md p-5 rounded-2xl border border-yellow-500/20 mb-6 shadow-xl">
                 <h3 class="font-bold text-white mb-3 flex items-center gap-2">
-                    <i class="fa-solid fa-wrench text-yellow-500"></i> 系統維護
+                    <i class="fa-solid fa-wrench text-yellow-500"></i> <span data-i18n="admin_maintenance">系統維護</span>
                 </h3>
                 <button onclick="recalculateAllUserRanks()" class="w-full bg-yellow-600/80 hover:bg-yellow-500 text-white py-3 rounded-xl font-bold transition flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-rotate"></i> 重算全服玩家段位
+                    <i class="fa-solid fa-rotate"></i> <span data-i18n="btn_recalc_rank">重算全服玩家段位</span>
                 </button>
                 <p class="text-[10px] text-gray-400 mt-2">
-                    ⚠️ 說明：這會遍歷所有使用者，根據其「總答對題數」重新設定段位 (Bronze ~ Challenger)。
+                    ⚠️ <span data-i18n="msg_recalc_warn">說明：這會遍歷所有使用者，根據其「總答對題數」重新設定段位。</span>
                 </p>
             </div>
 
@@ -440,7 +446,7 @@
                 
                 <div class="flex justify-between items-center cursor-pointer border-b border-slate-700 pb-2 mb-2 hover:bg-white/5 rounded px-2 -mx-2 transition" onclick="toggleAdminForm()">
                     <h3 class="font-bold text-white flex items-center gap-2">
-                        <span id="admin-form-title">➕ 上架新商品</span>
+                        <span id="admin-form-title" data-i18n="admin_add_product">➕ 上架新商品</span>
                     </h3>
                     <i id="admin-form-arrow" class="fa-solid fa-chevron-up text-gray-400 transition-transform duration-300"></i>
                 </div>
@@ -450,35 +456,35 @@
                 <div id="admin-form-body" class="space-y-4 origin-top transition-all duration-300">
                     <div class="grid grid-cols-3 gap-3 pt-2">
                         <div class="col-span-2">
-                            <label class="text-[10px] text-gray-400 block mb-1">商品名稱</label>
-                            <input type="text" id="admin-p-name" placeholder="輸入名稱..." class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2.5 text-sm text-white focus:border-red-500 outline-none transition-colors">
+                            <label class="text-[10px] text-gray-400 block mb-1" data-i18n="admin_label_name">商品名稱</label>
+                            <input type="text" id="admin-p-name" placeholder="Name..." class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2.5 text-sm text-white focus:border-red-500 outline-none transition-colors">
                         </div>
                         <div>
-                            <label class="text-[10px] text-gray-400 block mb-1">價格 (分)</label>
+                            <label class="text-[10px] text-gray-400 block mb-1" data-i18n="admin_label_price">價格 (分)</label>
                             <input type="number" id="admin-p-price" placeholder="0" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2.5 text-sm text-white focus:border-red-500 outline-none transition-colors font-mono text-center">
                         </div>
                     </div>
 
                     <div>
-                        <label class="text-[10px] text-gray-400 block mb-1">商品類型</label>
+                        <label class="text-[10px] text-gray-400 block mb-1" data-i18n="admin_label_type">商品類型</label>
                         <select id="admin-p-type" onchange="toggleAdminInputPlaceholder()" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2.5 text-sm text-white focus:border-red-500 outline-none cursor-pointer">
-                            <option value="frame">🖼️ 相框 (Frame)</option>
-                            <option value="avatar">👤 頭像 (Avatar)</option>
+                            <option value="frame">🖼️ Frame</option>
+                            <option value="avatar">👤 Avatar</option>
                         </select>
                     </div>
 
                     <div class="bg-slate-900/50 p-3 rounded-xl border border-slate-700">
-                        <label class="text-[10px] text-gray-400 block mb-1" id="admin-value-label">數值 / 路徑</label>
+                        <label class="text-[10px] text-gray-400 block mb-1" id="admin-value-label">Value / Path</label>
                         <div class="flex gap-2 mb-2">
-                            <input type="text" id="admin-p-value" placeholder="輸入 CSS Class 或 路徑..." class="flex-1 bg-slate-800 border border-slate-600 rounded-lg p-2.5 text-sm text-white font-mono focus:border-blue-500 outline-none">
+                            <input type="text" id="admin-p-value" placeholder="CSS Class or Path..." class="flex-1 bg-slate-800 border border-slate-600 rounded-lg p-2.5 text-sm text-white font-mono focus:border-blue-500 outline-none">
                         </div>
 
                         <div id="admin-asset-selector" class="hidden">
                             <div class="flex items-center gap-3 bg-slate-800 p-2 rounded-lg border border-slate-600">
                                 <div class="flex-1">
-                                    <label class="text-[10px] text-blue-300 block mb-1">從伺服器選擇圖片：</label>
+                                    <label class="text-[10px] text-blue-300 block mb-1" data-i18n="admin_select_img">從伺服器選擇圖片：</label>
                                     <select id="admin-asset-select" onchange="selectAdminImage(this.value)" class="w-full bg-slate-900 text-xs text-white p-2 rounded border border-slate-700 outline-none cursor-pointer">
-                                        <option value="">載入中...</option>
+                                        <option value="">Loading...</option>
                                     </select>
                                 </div>
                                 <div class="w-12 h-12 bg-black rounded-lg border border-slate-500 overflow-hidden flex-shrink-0">
@@ -487,12 +493,12 @@
                             </div>
                         </div>
                         <p class="text-[10px] text-gray-500 mt-2 flex items-center gap-1" id="admin-hint">
-                            <i class="fa-solid fa-circle-info"></i> 相框請輸入 CSS Class；頭像請輸入檔名
+                            <i class="fa-solid fa-circle-info"></i> Info
                         </p>
                     </div>
 
                     <div class="flex gap-3 pt-2">
-                        <button onclick="saveProduct()" id="admin-btn-save" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl text-sm shadow-lg transition-all hover:scale-[1.02]">
+                        <button onclick="saveProduct()" id="admin-btn-save" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl text-sm shadow-lg transition-all hover:scale-[1.02]" data-i18n="btn_save_product">
                             上架商品
                         </button>
                         <button onclick="deleteProduct()" id="admin-btn-del" class="hidden w-12 bg-slate-700 hover:bg-red-600 text-white rounded-xl text-sm transition-colors flex items-center justify-center border border-slate-600 hover:border-red-500">
@@ -504,11 +510,11 @@
 
             <div class="bg-slate-800/90 backdrop-blur-md rounded-2xl overflow-hidden border border-slate-700 flex flex-col shadow-2xl pb-20">
                 <div class="p-4 bg-slate-900/80 border-b border-slate-700 font-bold text-xs text-gray-400 uppercase tracking-wider flex justify-between items-center">
-                    <span>📦 現有商品庫存</span>
+                    <span data-i18n="admin_inventory_title">📦 現有商品庫存</span>
                     <button onclick="loadAdminProducts()" class="text-blue-400 hover:text-white p-1 rounded hover:bg-slate-700 transition"><i class="fa-solid fa-rotate"></i></button>
                 </div>
                 <div id="admin-product-list" class="p-3 space-y-2 max-h-[60vh] overflow-y-auto scrollbar-thin">
-                    <div class="text-center text-gray-500 py-8 text-xs">載入中...</div>
+                    <div class="text-center text-gray-500 py-8 text-xs" data-i18n="loading">載入中...</div>
                 </div>
             </div>
         </div>
@@ -517,19 +523,19 @@
     <nav id="bottom-nav" class="bg-slate-800/90 backdrop-blur-md border-t border-slate-700 fixed bottom-0 w-full z-50 hidden transition-all duration-300">
         <div class="grid h-16 grid-cols-5 mx-auto font-medium" id="nav-grid">
             <button onclick="switchToPage('page-home')" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group active-nav-btn" data-target="page-home">
-                <i class="fa-solid fa-house mb-1 text-lg group-hover:text-blue-400 transition-colors"></i><span class="text-[10px]">首頁</span>
+                <i class="fa-solid fa-house mb-1 text-lg group-hover:text-blue-400 transition-colors"></i><span class="text-[10px]" data-i18n="nav_home">首頁</span>
             </button>
             <button onclick="startQuizFlow()" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group" data-target="page-quiz">
-                <i class="fa-solid fa-swords mb-1 text-lg group-hover:text-red-400 transition-colors"></i><span class="text-[10px]">答題</span>
+                <i class="fa-solid fa-swords mb-1 text-lg group-hover:text-red-400 transition-colors"></i><span class="text-[10px]" data-i18n="nav_quiz">答題</span>
             </button>
             <button onclick="loadStoreItems(); switchToPage('page-store')" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group" data-target="page-store">
-                <i class="fa-solid fa-store mb-1 text-lg group-hover:text-pink-400 transition-colors"></i><span class="text-[10px]">商店</span>
+                <i class="fa-solid fa-store mb-1 text-lg group-hover:text-pink-400 transition-colors"></i><span class="text-[10px]" data-i18n="nav_store">商店</span>
             </button>
             <button onclick="loadLeaderboard(); switchToPage('page-rank')" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group" data-target="page-rank">
-                <i class="fa-solid fa-chart-simple mb-1 text-lg group-hover:text-yellow-400 transition-colors"></i><span class="text-[10px]">排行</span>
+                <i class="fa-solid fa-chart-simple mb-1 text-lg group-hover:text-yellow-400 transition-colors"></i><span class="text-[10px]" data-i18n="nav_rank">排行</span>
             </button>
             <button onclick="switchToPage('page-settings')" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group" data-target="page-settings">
-                <i class="fa-solid fa-user-gear mb-1 text-lg group-hover:text-green-400 transition-colors"></i><span class="text-[10px]">設定</span>
+                <i class="fa-solid fa-user-gear mb-1 text-lg group-hover:text-green-400 transition-colors"></i><span class="text-[10px]" data-i18n="nav_settings">設定</span>
             </button>
         </div>
     </nav>
