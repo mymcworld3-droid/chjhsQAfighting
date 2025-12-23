@@ -20,7 +20,6 @@ const db = getFirestore();
 const provider = new GoogleAuthProvider();
 
 let currentUserData = null;
-// 🔥 修改：移除「鉑金」，只保留 5 個段位
 const RANKS = ["🥉 青銅", "🥈 白銀", "🥇 黃金", "🔷 鑽石", "🌟 星耀"];
 
 // 緩衝與狀態變數
@@ -31,9 +30,10 @@ let battleUnsub = null;
 let currentBattleId = null;
 let isBattleActive = false; 
 let currentBankData = null; 
-let presenceInterval = null; // 上線狀態更新計時器
+let presenceInterval = null; 
+let notificationUnsub = null; // 🔥 通知監聽器
 
-// 🔥 全域變數：儲存所有題庫檔案列表
+// 全域變數：儲存所有題庫檔案列表
 let allBankFiles = [];
 
 // 綁定全域函式
@@ -50,8 +50,10 @@ onAuthStateChanged(auth, async (user) => {
         document.getElementById('user-info').innerHTML = `<i class="fa-solid fa-user-astronaut"></i> ${user.displayName}`;
         document.getElementById('settings-email').innerText = user.email;
 
-        // 🔥 注入社交功能 UI (如果還沒注入)
+        // 注入社交 UI
         injectSocialUI();
+        // 🔥 注入通知容器
+        injectNotificationContainer();
 
         const userRef = doc(db, "users", user.uid);
         try {
@@ -59,18 +61,15 @@ onAuthStateChanged(auth, async (user) => {
             
             if (docSnap.exists()) {
                 currentUserData = docSnap.data();
-                // 補齊舊資料缺少的欄位
                 if (!currentUserData.inventory) currentUserData.inventory = [];
                 if (!currentUserData.equipped) currentUserData.equipped = { frame: '', avatar: '' };
-                if (!currentUserData.friends) currentUserData.friends = []; // 好友清單
+                if (!currentUserData.friends) currentUserData.friends = [];
                 if (!currentUserData.friendCode) {
-                    // 產生好友代碼 (隨機 6 碼大寫英數)
                     const code = Math.random().toString(36).substring(2, 8).toUpperCase();
                     await updateDoc(userRef, { friendCode: code });
                     currentUserData.friendCode = code;
                 }
             } else {
-                // 新帳號
                 const code = Math.random().toString(36).substring(2, 8).toUpperCase();
                 currentUserData = {
                     uid: user.uid, displayName: user.displayName, email: user.email,
@@ -81,15 +80,15 @@ onAuthStateChanged(auth, async (user) => {
                         rankLevel: 0, currentStars: 0, totalScore: 0,
                         currentStreak: 0, bestStreak: 0, totalCorrect: 0, totalAnswered: 0
                     },
-                    friends: [], // 初始化好友
-                    friendCode: code, // 好友代碼
+                    friends: [], 
+                    friendCode: code, 
                     isAdmin: false
                 };
                 await setDoc(userRef, currentUserData);
             }
 
-            // 啟動上線狀態回報 (每 60 秒更新一次)
             startPresenceSystem();
+            listenForNotifications(); // 🔥 開始監聽邀請
 
             updateUserAvatarDisplay();
             updateSettingsInputs();
@@ -112,19 +111,205 @@ onAuthStateChanged(auth, async (user) => {
 });
 
 // ==========================================
-//  🔥 社交系統 (好友 & 上線狀態)
+//  🔥 邀請通知系統 (New Features)
 // ==========================================
 
-// 1. 動態注入 HTML (不破壞 index.html 結構)
+// 1. 注入通知容器 (Toasts)
+function injectNotificationContainer() {
+    if (document.getElementById('notification-container')) return;
+    const div = document.createElement('div');
+    div.id = 'notification-container';
+    div.className = "fixed top-4 right-4 z-[100] flex flex-col gap-2 w-72 pointer-events-none"; // pointer-events-none 讓點擊穿透，卡片本身再開
+    document.body.appendChild(div);
+}
+
+// 2. 監聽通知
+function listenForNotifications() {
+    if (notificationUnsub) notificationUnsub();
+    
+    // 監聽 users/{uid}/notifications 子集合
+    const q = query(collection(db, "users", auth.currentUser.uid, "notifications"), orderBy("timestamp", "desc"), limit(5));
+    
+    notificationUnsub = onSnapshot(q, (snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+            if (change.type === "added") {
+                const data = change.doc.data();
+                // 只顯示 1 分鐘內的邀請，避免舊通知一直跳
+                const now = new Date();
+                const inviteTime = data.timestamp ? data.timestamp.toDate() : new Date(0);
+                if ((now - inviteTime) < 60 * 1000) {
+                    showNotification(change.doc.id, data);
+                }
+            }
+        });
+    });
+}
+
+// 3. 顯示通知卡片
+function showNotification(docId, data) {
+    const container = document.getElementById('notification-container');
+    const toast = document.createElement('div');
+    
+    // UI 設計
+    toast.className = "bg-slate-800/90 backdrop-blur-md border border-yellow-500/50 p-4 rounded-xl shadow-2xl transform translate-x-full transition-all duration-300 pointer-events-auto flex flex-col gap-2";
+    toast.innerHTML = `
+        <div class="flex items-start gap-3">
+            <div class="bg-yellow-500/20 p-2 rounded-full text-yellow-400">
+                <i class="fa-solid fa-swords"></i>
+            </div>
+            <div>
+                <h4 class="font-bold text-white text-sm">對戰邀請！</h4>
+                <p class="text-xs text-gray-300 mt-1">玩家 <span class="text-yellow-300 font-bold">${data.hostName}</span> 邀請你一決勝負！</p>
+            </div>
+        </div>
+        <div class="flex gap-2 mt-1">
+            <button onclick="rejectInvite('${docId}', this)" class="flex-1 bg-slate-700 hover:bg-slate-600 text-xs py-2 rounded text-gray-300 transition">忽略</button>
+            <button onclick="acceptInvite('${data.roomId}', '${docId}', this)" class="flex-1 bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-500 hover:to-orange-500 text-xs py-2 rounded text-white font-bold shadow-lg transition animate-pulse">
+                接受挑戰 ⚔️
+            </button>
+        </div>
+    `;
+
+    container.appendChild(toast);
+    
+    // 進場動畫
+    requestAnimationFrame(() => {
+        toast.classList.remove('translate-x-full');
+    });
+
+    // 10秒後自動消失
+    setTimeout(() => {
+        dismissToast(toast, docId);
+    }, 10000);
+}
+
+// 4. 忽略邀請
+window.rejectInvite = async (docId, btn) => {
+    const toast = btn.closest('div').parentElement; // 找到外層 div
+    dismissToast(toast, docId);
+};
+
+// 5. 接受邀請 (加入指定房間)
+window.acceptInvite = async (roomId, docId, btn) => {
+    const toast = btn.closest('div').parentElement;
+    dismissToast(toast, docId); // 先關閉通知
+    
+    // 加入指定房間邏輯
+    await joinBattleRoom(roomId);
+};
+
+// 輔助：移除 Toast 並刪除資料庫紀錄
+async function dismissToast(element, docId) {
+    element.classList.add('translate-x-full', 'opacity-0');
+    setTimeout(() => {
+        if(element.parentElement) element.parentElement.removeChild(element);
+    }, 300);
+
+    // 刪除 Firestore 中的通知文件，避免重複顯示
+    try {
+        await deleteDoc(doc(db, "users", auth.currentUser.uid, "notifications", docId));
+    } catch(e) { console.error("刪除通知失敗", e); }
+}
+
+// 🔥 新增：隨機邀請線上玩家 (由建立房間者呼叫)
+async function inviteOnlinePlayers(roomId) {
+    try {
+        const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+        
+        // 1. 搜尋線上玩家
+        // 注意：這需要複合索引 (lastActive + uid 雖然不能直接混用，但可以用 client side filter)
+        const q = query(
+            collection(db, "users"), 
+            where("lastActive", ">", fiveMinutesAgo),
+            limit(20) // 限制抓取數量，避免讀取太多
+        );
+        
+        const snapshot = await getDocs(q);
+        
+        // 2. 排除自己，並隨機選 3 人
+        const candidates = snapshot.docs
+            .filter(d => d.id !== auth.currentUser.uid)
+            .map(d => d.id);
+            
+        if (candidates.length === 0) return;
+
+        // 洗牌並取前 3 個
+        const selectedIds = shuffleArray(candidates).slice(0, 3);
+        
+        console.log(`正在邀請 ${selectedIds.length} 位玩家...`);
+
+        // 3. 發送邀請 (寫入對方的 notifications)
+        const batch = [];
+        selectedIds.forEach(targetUid => {
+            const ref = collection(db, "users", targetUid, "notifications");
+            addDoc(ref, {
+                type: "battle_invite",
+                roomId: roomId,
+                hostName: currentUserData.displayName || "神秘玩家",
+                timestamp: serverTimestamp()
+            });
+        });
+
+    } catch (e) {
+        console.error("邀請發送失敗 (可能是索引問題或權限):", e);
+    }
+}
+
+// 🔥 新增：加入指定房間 (供接受邀請使用)
+async function joinBattleRoom(roomId) {
+    if (isBattleActive) return alert("你已經在戰鬥或配對中了！");
+    
+    // 檢查房間是否存在
+    const roomRef = doc(db, "rooms", roomId);
+    const roomSnap = await getDoc(roomRef);
+    
+    if (!roomSnap.exists()) return alert("該房間已不存在");
+    const roomData = roomSnap.data();
+    
+    if (roomData.status !== "waiting" || roomData.guest) {
+        return alert("該房間已滿或遊戲已開始");
+    }
+
+    // 準備加入
+    const myPlayerData = { 
+        uid: auth.currentUser.uid, 
+        name: currentUserData.displayName, 
+        score: 0, 
+        done: false,
+        equipped: currentUserData.equipped || { frame: '', avatar: '' } 
+    };
+
+    isBattleActive = true;
+    switchToPage('page-battle');
+    document.getElementById('battle-lobby').classList.add('hidden');
+    document.getElementById('battle-arena').classList.remove('hidden');
+    
+    try {
+        await updateDoc(roomRef, {
+            guest: myPlayerData,
+            status: "ready"
+        });
+        currentBattleId = roomId;
+        listenToBattleRoom(roomId);
+    } catch (e) {
+        console.error(e);
+        alert("加入房間失敗");
+        leaveBattle();
+    }
+}
+
+
+// ==========================================
+//  🔥 社交系統 (UI & 上線狀態)
+// ==========================================
+
 function injectSocialUI() {
-    if (document.getElementById('btn-social-nav')) return; // 避免重複注入
+    if (document.getElementById('btn-social-nav')) return;
 
     const navGrid = document.getElementById('nav-grid');
-    // 修改 grid 寬度，從 5 改 6
     navGrid.classList.remove('grid-cols-5');
     navGrid.classList.add('grid-cols-6');
 
-    // 插入導航按鈕
     const btn = document.createElement('button');
     btn.id = "btn-social-nav";
     btn.setAttribute("onclick", "switchToPage('page-social')");
@@ -132,11 +317,9 @@ function injectSocialUI() {
     btn.className = "flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group";
     btn.innerHTML = `<i class="fa-solid fa-users mb-1 text-lg group-hover:text-cyan-400 transition-colors"></i><span class="text-[10px]">社交</span>`;
     
-    // 插在「排行」跟「設定」中間
     const settingsBtn = navGrid.lastElementChild;
     navGrid.insertBefore(btn, settingsBtn);
 
-    // 插入頁面內容
     const main = document.querySelector('main');
     const pageSocial = document.createElement('div');
     pageSocial.id = "page-social";
@@ -167,40 +350,28 @@ function injectSocialUI() {
     main.appendChild(pageSocial);
 }
 
-// 2. 啟動上線狀態回報
 function startPresenceSystem() {
     if (presenceInterval) clearInterval(presenceInterval);
     
-    // 定義更新函式
     const updatePresence = async () => {
         if (!auth.currentUser) return;
         try {
             const userRef = doc(db, "users", auth.currentUser.uid);
             await updateDoc(userRef, {
-                lastActive: serverTimestamp() // 更新最後活動時間
+                lastActive: serverTimestamp() 
             });
         } catch (e) { console.error("Presence update failed", e); }
     };
 
-    // 立即更新一次
     updatePresence();
-    // 每 60 秒更新一次
     presenceInterval = setInterval(updatePresence, 60 * 1000);
-
-    // 視窗關閉前更新 (盡力而為)
-    window.addEventListener('beforeunload', () => {
-        // 這裡不能用 async/await，只能用 sendBeacon (但 Firebase SDK 不支援直接 sendBeacon)
-        // 所以我們依賴 lastActive 的時間差來判斷離線
-    });
 }
 
-// 3. 複製好友代碼
 window.copyFriendCode = () => {
     const code = document.getElementById('my-friend-code').innerText;
     navigator.clipboard.writeText(code).then(() => alert("代碼已複製！"));
 };
 
-// 4. 新增好友 (雙向)
 window.addFriend = async () => {
     const input = document.getElementById('input-friend-code');
     const targetCode = input.value.trim().toUpperCase();
@@ -212,13 +383,11 @@ window.addFriend = async () => {
     btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
 
     try {
-        // 1. 搜尋該代碼的使用者
         const q = query(collection(db, "users"), where("friendCode", "==", targetCode));
         const snap = await getDocs(q);
 
         if (snap.empty) {
             alert("找不到此代碼，請確認是否輸入正確。");
-            btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-user-plus"></i>';
             return;
         }
 
@@ -226,14 +395,11 @@ window.addFriend = async () => {
         const targetUserId = targetUserDoc.id;
         const targetUserData = targetUserDoc.data();
 
-        // 2. 檢查是否已經是好友
         if (currentUserData.friends.includes(targetUserId)) {
             alert("你們已經是好友囉！");
-            btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-user-plus"></i>';
             return;
         }
 
-        // 3. 雙向寫入 (Transaction 確保一致性)
         await runTransaction(db, async (transaction) => {
             const myRef = doc(db, "users", auth.currentUser.uid);
             const friendRef = doc(db, "users", targetUserId);
@@ -242,12 +408,11 @@ window.addFriend = async () => {
             transaction.update(friendRef, { friends: arrayUnion(auth.currentUser.uid) });
         });
 
-        // 更新本地資料
         currentUserData.friends.push(targetUserId);
         
         alert(`成功添加 ${targetUserData.displayName} 為好友！`);
         input.value = "";
-        loadFriendList(); // 重新整理列表
+        loadFriendList();
 
     } catch (e) {
         console.error(e);
@@ -257,7 +422,6 @@ window.addFriend = async () => {
     }
 };
 
-// 5. 載入好友列表 & 判斷上線狀態
 window.loadFriendList = async () => {
     const container = document.getElementById('friend-list-container');
     const myCodeEl = document.getElementById('my-friend-code');
@@ -279,9 +443,6 @@ window.loadFriendList = async () => {
     container.innerHTML = '<div class="loader"></div>';
 
     try {
-        // 批次讀取所有好友資料
-        // 注意：Firestore 'in' 查詢最多 10 個，或是分批讀取
-        // 這裡我們直接用 Promise.all 讀取每個 doc，雖然讀取次數多一點但邏輯最簡單
         const promises = currentUserData.friends.map(uid => getDoc(doc(db, "users", uid)));
         const docs = await Promise.all(promises);
 
@@ -291,17 +452,15 @@ window.loadFriendList = async () => {
             if (!d.exists()) return;
             const fData = d.data();
             
-            // 判斷上線狀態 (最後活動時間在 5 分鐘內算線上)
             const now = new Date();
             const lastActive = fData.lastActive ? fData.lastActive.toDate() : new Date(0);
             const diffMinutes = (now - lastActive) / 1000 / 60;
-            const isOnline = diffMinutes < 5; // 5分鐘內算線上
+            const isOnline = diffMinutes < 5;
 
             const statusHtml = isOnline 
                 ? `<span class="text-green-400 text-xs flex items-center gap-1"><div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div> 線上</span>`
                 : `<span class="text-gray-500 text-xs">離線 (${getTimeAgo(lastActive)})</span>`;
 
-            // 渲染好友卡片
             const div = document.createElement('div');
             div.className = "bg-slate-800/50 p-3 rounded-xl border border-slate-700 flex items-center gap-3";
             div.innerHTML = `
@@ -309,7 +468,7 @@ window.loadFriendList = async () => {
                 <div class="flex-1">
                     <div class="flex justify-between items-center">
                         <span class="font-bold text-white">${fData.displayName}</span>
-                        <span class="text-xs text-yellow-500 font-mono">${RANKS[fData.stats?.rankLevel || 0].split(' ')[1]}</span>
+                        <span class="text-xs text-yellow-500 font-mono">${RANKS[Math.min(fData.stats?.rankLevel || 0, 4)].split(' ')[1]}</span>
                     </div>
                     <div class="flex justify-between items-center mt-1">
                         ${statusHtml}
@@ -326,7 +485,6 @@ window.loadFriendList = async () => {
     }
 };
 
-// 輔助：時間顯示
 function getTimeAgo(date) {
     const seconds = Math.floor((new Date() - date) / 1000);
     if (seconds > 86400) return Math.floor(seconds/86400) + "天前";
@@ -356,14 +514,12 @@ window.switchToPage = (pageId) => {
         if (btn.dataset.target === pageId) { 
             btn.classList.add('text-white'); 
             btn.classList.remove('text-gray-400');
-            // 如果是社交按鈕，給它特殊色
             if (pageId === 'page-social') {
                 btn.querySelector('i').className = "fa-solid fa-users mb-1 text-lg text-cyan-400 transition-colors";
             }
         } else { 
             btn.classList.remove('text-white'); 
             btn.classList.add('text-gray-400'); 
-            // 恢復社交按鈕顏色
             if (btn.dataset.target === 'page-social') {
                  btn.querySelector('i').className = "fa-solid fa-users mb-1 text-lg group-hover:text-cyan-400 transition-colors";
             }
@@ -378,9 +534,13 @@ window.switchToPage = (pageId) => {
         loadAdminData();
     }
     if (pageId === 'page-social') {
-        loadFriendList(); // 🔥 載入好友列表
+        loadFriendList(); 
     }
 };
+
+// ==========================================
+//  (其餘原有函式：updateUIStats, buildPathTree, countJsonFiles, etc... 保持不變，直接沿用)
+// ==========================================
 
 function updateUIStats() {
     if(!currentUserData) return;
@@ -391,23 +551,16 @@ function updateUIStats() {
     if(typeof stats.totalCorrect === 'undefined') stats.totalCorrect = 0;
     if(typeof stats.totalAnswered === 'undefined') stats.totalAnswered = 0;
 
-    // 🔥 修改：移除鉑金顏色，調整對應
-    // 0: 青銅, 1: 白銀, 2: 黃金, 3: 鑽石, 4: 星耀
     const rankColors = [
-        "text-orange-600", // 🥉 青銅
-        "text-gray-300",   // 🥈 白銀
-        "text-yellow-400", // 🥇 黃金
-        "text-blue-600",   // 🔷 鑽石 (遞補上來)
-        "text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-red-500" // 🌟 星耀
+        "text-orange-600", "text-gray-300", "text-yellow-400", "text-blue-600",
+        "text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-red-500"
     ];
 
-    // 🔥 防呆：如果舊資料的等級超過現在的上限，強制顯示為最高級
     const maxRankIndex = RANKS.length - 1;
     const rankIndex = Math.min(stats.rankLevel || 0, maxRankIndex);
 
     const rankEl = document.getElementById('display-rank');
     rankEl.innerText = RANKS[rankIndex] || "未知";
-
     const colorClass = rankColors[rankIndex] || "text-white";
     rankEl.className = `text-5xl font-black mb-2 animate-pulse ${colorClass}`;
 
@@ -421,10 +574,6 @@ function updateUIStats() {
     
     setTimeout(() => { document.getElementById('progress-bar').style.width = `${(stats.currentStars / 10) * 100}%`; }, 100);
 }
-
-// ==========================================
-//  多層級選單邏輯 (Cascading Selects)
-// ==========================================
 
 function buildPathTree(paths) {
     const tree = { name: "root", children: {} };
@@ -499,8 +648,6 @@ window.renderCascadingSelectors = (tree, currentPath) => {
 
         select.onchange = (e) => {
             const val = e.target.value;
-            
-            // 組合新路徑
             const newParts = selectedParts.slice(0, level);
             newParts.push(val);
             const currentFullPath = newParts.join('/');
@@ -512,8 +659,6 @@ window.renderCascadingSelectors = (tree, currentPath) => {
                 renderCascadingSelectors(tree, 'ai');
             } else {
                 const nextNode = currentNode.children[val];
-                
-                // 檢查該資料夾是否還有「資料夾子節點」
                 let hasSubFolders = false;
                 if (nextNode.type === 'folder') {
                     for (const childKey in nextNode.children) {
@@ -525,19 +670,16 @@ window.renderCascadingSelectors = (tree, currentPath) => {
                 }
 
                 if (nextNode.type === 'file') {
-                    // 是檔案 -> 有效選擇
                     hiddenInput.value = currentFullPath;
                     hint.innerText = `✅ 已選擇考卷：${val.replace('.json', '')}`;
                     hint.className = "text-xs text-green-400 mt-1";
                     renderCascadingSelectors(tree, currentFullPath);
                 } else if (hasSubFolders) {
-                    // 是資料夾，且還有子資料夾 -> 無效選擇 (必須繼續選)
-                    hiddenInput.value = ""; // 清空，不讓儲存
+                    hiddenInput.value = ""; 
                     hint.innerText = "⚠️ 請繼續選擇下一層分類...";
                     hint.className = "text-xs text-yellow-500 mt-1";
                     renderCascadingSelectors(tree, newParts.join('/'));
                 } else {
-                    // 是資料夾，但裡面只剩檔案 (沒有子資料夾) -> 有效選擇 (全卷混合)
                     hiddenInput.value = currentFullPath;
                     const count = countJsonFiles(nextNode);
                     hint.innerText = `📂 已選擇分類：${val} (全卷混合 ${count} 份考卷)`;
@@ -557,10 +699,6 @@ window.renderCascadingSelectors = (tree, currentPath) => {
     createSelect(0, tree);
 };
 
-// ==========================================
-//  個人設定頁面邏輯
-// ==========================================
-
 async function updateSettingsInputs() {
     if (currentUserData && currentUserData.profile) {
         document.getElementById('set-level').value = currentUserData.profile.educationLevel || "國中一年級";
@@ -568,7 +706,6 @@ async function updateSettingsInputs() {
         document.getElementById('set-weak').value = currentUserData.profile.weakSubjects || "";
         
         const settings = currentUserData.gameSettings || { source: 'ai', difficulty: 'medium' };
-        
         const diffSelect = document.getElementById('set-difficulty');
         if(diffSelect) diffSelect.value = settings.difficulty;
 
@@ -590,7 +727,7 @@ async function updateSettingsInputs() {
                 const res = await fetch('/api/banks');
                 const data = await res.json();
                 if (data.files && Array.isArray(data.files)) {
-                    allBankFiles = data.files; // 存入全域
+                    allBankFiles = data.files; 
                     const tree = buildPathTree(data.files);
                     renderCascadingSelectors(tree, settings.source);
                 }
@@ -686,10 +823,6 @@ window.saveProfile = async () => {
     }, 2000);
 };
 
-// ==========================================
-//  出題核心 (AI / 題庫 - 支援資料夾混合)
-// ==========================================
-
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -698,7 +831,6 @@ function shuffleArray(array) {
     return array;
 }
 
-// 輔助：切換回 AI
 async function switchToAI() {
     await updateDoc(doc(db, "users", auth.currentUser.uid), { "gameSettings.source": 'ai' });
     currentUserData.gameSettings.source = 'ai';
@@ -709,7 +841,6 @@ async function fetchOneQuestion() {
     const settings = currentUserData.gameSettings || { source: 'ai', difficulty: 'medium' };
     const rankName = RANKS[Math.min(currentUserData.stats.rankLevel || 0, RANKS.length - 1)];
     
-    // --- AI 模式 ---
     if (settings.source === 'ai') {
         const BACKEND_URL = "/api/generate-quiz";
         const level = currentUserData.profile.educationLevel || "一般";
@@ -752,20 +883,14 @@ async function fetchOneQuestion() {
             badge: `🎯 題目: [${targetSubject}]` 
         };
     } 
-    // --- 題庫模式 ---
     else {
         let targetSource = settings.source; 
 
-        // 檢查快取
         if (!currentBankData || currentBankData.sourcePath !== targetSource) {
-            
             let filesToFetch = [];
-
             if (targetSource.endsWith('.json')) {
-                // 單檔
                 filesToFetch = [targetSource];
             } else {
-                // 資料夾 -> 找出底下所有檔案
                 if (allBankFiles.length === 0) {
                      try {
                          const res = await fetch('/api/banks');
@@ -773,9 +898,7 @@ async function fetchOneQuestion() {
                          allBankFiles = data.files || [];
                      } catch (e) { console.error(e); }
                 }
-
                 filesToFetch = allBankFiles.filter(f => f.startsWith(targetSource + '/'));
-                
                 if (filesToFetch.length === 0) {
                     console.error("資料夾下無題目:", targetSource);
                     return switchToAI();
@@ -783,7 +906,6 @@ async function fetchOneQuestion() {
             }
 
             try {
-                // 平行下載所有檔案
                 console.log(`📚 正在載入 ${filesToFetch.length} 份考卷...`);
                 const fetchPromises = filesToFetch.map(filePath => 
                     fetch(`/banks/${filePath}?t=${Date.now()}`)
@@ -796,17 +918,13 @@ async function fetchOneQuestion() {
                             return []; 
                         })
                 );
-
                 const results = await Promise.all(fetchPromises);
                 const mergedQuestions = results.flat();
-
                 if (mergedQuestions.length === 0) throw new Error("沒有讀取到任何有效題目");
-
                 currentBankData = { 
                     sourcePath: targetSource, 
                     questions: mergedQuestions 
                 };
-
             } catch (e) {
                 console.error("題庫載入錯誤:", e);
                 alert("題庫載入失敗，切換回 AI 模式");
@@ -822,7 +940,6 @@ async function fetchOneQuestion() {
         let allOptions = shuffleArray([rawData.correct, ...rawData.wrong]);
         const correctIndex = allOptions.indexOf(rawData.correct);
 
-        // 顯示 subject 或 資料夾名稱
         let displaySubject = rawData.subject;
         if (!displaySubject) {
             displaySubject = targetSource.split('/').pop().replace('.json', '');
@@ -846,10 +963,6 @@ async function fillBuffer() {
         }
     } catch (e) { console.warn("⚠️ 背景補貨失敗", e); } finally { isFetchingBuffer = false; }
 }
-
-// ==========================================
-//  Quiz UI Logic
-// ==========================================
 
 window.startQuizFlow = async () => {
     switchToPage('page-quiz');
@@ -926,15 +1039,26 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         stats.totalCorrect++; stats.currentStreak++;
         if (stats.currentStreak > stats.bestStreak) stats.bestStreak = stats.currentStreak;
         stats.currentStars++; stats.totalScore += 10 + (stats.rankLevel * 5) + (stats.currentStreak * 2);
+        
         if (stats.currentStars >= 10) {
-            if (stats.rankLevel < RANKS.length - 1) { stats.rankLevel++; stats.currentStars = 0; fbTitle.innerText += ` (晉升 ${RANKS[stats.rankLevel]}!)`; } 
-            else { stats.currentStars = 10; }
+            if (stats.rankLevel < RANKS.length - 1) { 
+                stats.rankLevel++; 
+                stats.currentStars = 0; 
+                fbTitle.innerText += ` (晉升 ${RANKS[stats.rankLevel]}!)`; 
+            } else { 
+                stats.currentStars = 10; 
+            }
         }
     } else {
         stats.currentStreak = 0; stats.currentStars--;
         if (stats.currentStars < 0) {
-            if (stats.rankLevel > 0) { stats.rankLevel--; stats.currentStars = 8; fbTitle.innerText += ` (降級...)`; } 
-            else { stats.currentStars = 0; }
+            if (stats.rankLevel > 0) { 
+                stats.rankLevel--; 
+                stats.currentStars = 8; 
+                fbTitle.innerText += ` (降級...)`; 
+            } else { 
+                stats.currentStars = 0; 
+            }
         }
     }
     updateDoc(doc(db, "users", auth.currentUser.uid), { stats: stats });
@@ -946,7 +1070,7 @@ window.giveUpQuiz = () => { if(confirm("確定要放棄這題嗎？")) handleAns
 window.nextQuestion = () => { startQuizFlow(); };
 
 // ==========================================
-//  PvP Battle Logic
+//  PvP Battle Logic (Modified to invite random online players)
 // ==========================================
 
 window.startBattleMatchmaking = async () => {
@@ -1021,7 +1145,7 @@ window.startBattleMatchmaking = async () => {
             currentBattleId = joinedRoomId;
             document.getElementById('battle-status-text').innerText = "✅ 配對成功！連接中...";
         } else {
-            document.getElementById('battle-status-text').innerText = "👑 建立房間，等待挑戰者...";
+            document.getElementById('battle-status-text').innerText = "👑 建立房間，並邀請線上玩家...";
             const roomRef = await addDoc(collection(db, "rooms"), {
                 host: myPlayerData,
                 guest: null,
@@ -1030,6 +1154,9 @@ window.startBattleMatchmaking = async () => {
                 createdAt: serverTimestamp() 
             });
             currentBattleId = roomRef.id;
+
+            // 🔥 新增：當自己是房主時，邀請其他線上玩家
+            inviteOnlinePlayers(currentBattleId);
         }
 
         listenToBattleRoom(currentBattleId);
@@ -1230,10 +1357,6 @@ window.leaveBattle = async () => {
     switchToPage('page-home');
 };
 
-// ==========================================
-//  History / Logs (已移入設定頁)
-// ==========================================
-
 window.loadUserHistory = async () => {
     const ul = document.getElementById('history-list');
     if(!ul) return; 
@@ -1329,10 +1452,6 @@ window.loadLeaderboard = async () => {
     }
 };
 
-// ==========================================
-//  Store & Admin & Visuals
-// ==========================================
-
 function renderVisual(type, value, sizeClass = "w-12 h-12") {
     const isImage = value && (value.includes('.') || value.includes('/'));
 
@@ -1383,7 +1502,6 @@ function getAvatarHtml(equipped, sizeClass = "w-10 h-10") {
     </div>`;
 }
 
-// 7. 更新用戶頭像顯示
 window.updateUserAvatarDisplay = () => {
     if (!currentUserData) return;
     
@@ -1406,7 +1524,6 @@ window.updateUserAvatarDisplay = () => {
     homeAvatarContainer.innerHTML = getAvatarHtml(currentUserData.equipped, "w-16 h-16");
 };
 
-// 1. 管理員：載入商品列表與表單邏輯
 window.loadAdminData = async () => {
     loadAdminLogs(); 
     
@@ -1818,4 +1935,383 @@ function checkAdminRole(isAdmin) {
         btn.innerHTML = `<i class="fa-solid fa-user-shield mb-1 text-lg group-hover:text-red-400 transition-colors"></i><span class="text-[10px]">管理</span>`;
         navGrid.appendChild(btn);
     }
+}
+
+// 1. 注入通知容器 (Toasts)
+function injectNotificationContainer() {
+    if (document.getElementById('notification-container')) return;
+    const div = document.createElement('div');
+    div.id = 'notification-container';
+    div.className = "fixed top-4 right-4 z-[100] flex flex-col gap-2 w-72 pointer-events-none"; // pointer-events-none 讓點擊穿透，卡片本身再開
+    document.body.appendChild(div);
+}
+
+// 2. 監聽通知
+function listenForNotifications() {
+    if (notificationUnsub) notificationUnsub();
+    
+    // 監聽 users/{uid}/notifications 子集合
+    const q = query(collection(db, "users", auth.currentUser.uid, "notifications"), orderBy("timestamp", "desc"), limit(5));
+    
+    notificationUnsub = onSnapshot(q, (snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+            if (change.type === "added") {
+                const data = change.doc.data();
+                // 只顯示 1 分鐘內的邀請，避免舊通知一直跳
+                const now = new Date();
+                const inviteTime = data.timestamp ? data.timestamp.toDate() : new Date(0);
+                if ((now - inviteTime) < 60 * 1000) {
+                    showNotification(change.doc.id, data);
+                }
+            }
+        });
+    });
+}
+
+// 3. 顯示通知卡片
+function showNotification(docId, data) {
+    const container = document.getElementById('notification-container');
+    const toast = document.createElement('div');
+    
+    // UI 設計
+    toast.className = "bg-slate-800/90 backdrop-blur-md border border-yellow-500/50 p-4 rounded-xl shadow-2xl transform translate-x-full transition-all duration-300 pointer-events-auto flex flex-col gap-2";
+    toast.innerHTML = `
+        <div class="flex items-start gap-3">
+            <div class="bg-yellow-500/20 p-2 rounded-full text-yellow-400">
+                <i class="fa-solid fa-swords"></i>
+            </div>
+            <div>
+                <h4 class="font-bold text-white text-sm">對戰邀請！</h4>
+                <p class="text-xs text-gray-300 mt-1">玩家 <span class="text-yellow-300 font-bold">${data.hostName}</span> 邀請你一決勝負！</p>
+            </div>
+        </div>
+        <div class="flex gap-2 mt-1">
+            <button onclick="rejectInvite('${docId}', this)" class="flex-1 bg-slate-700 hover:bg-slate-600 text-xs py-2 rounded text-gray-300 transition">忽略</button>
+            <button onclick="acceptInvite('${data.roomId}', '${docId}', this)" class="flex-1 bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-500 hover:to-orange-500 text-xs py-2 rounded text-white font-bold shadow-lg transition animate-pulse">
+                接受挑戰 ⚔️
+            </button>
+        </div>
+    `;
+
+    container.appendChild(toast);
+    
+    // 進場動畫
+    requestAnimationFrame(() => {
+        toast.classList.remove('translate-x-full');
+    });
+
+    // 10秒後自動消失
+    setTimeout(() => {
+        dismissToast(toast, docId);
+    }, 10000);
+}
+
+// 4. 忽略邀請
+window.rejectInvite = async (docId, btn) => {
+    const toast = btn.closest('div').parentElement; // 找到外層 div
+    dismissToast(toast, docId);
+};
+
+// 5. 接受邀請 (加入指定房間)
+window.acceptInvite = async (roomId, docId, btn) => {
+    const toast = btn.closest('div').parentElement;
+    dismissToast(toast, docId); // 先關閉通知
+    
+    // 加入指定房間邏輯
+    await joinBattleRoom(roomId);
+};
+
+// 輔助：移除 Toast 並刪除資料庫紀錄
+async function dismissToast(element, docId) {
+    element.classList.add('translate-x-full', 'opacity-0');
+    setTimeout(() => {
+        if(element.parentElement) element.parentElement.removeChild(element);
+    }, 300);
+
+    // 刪除 Firestore 中的通知文件，避免重複顯示
+    try {
+        await deleteDoc(doc(db, "users", auth.currentUser.uid, "notifications", docId));
+    } catch(e) { console.error("刪除通知失敗", e); }
+}
+
+// 🔥 新增：隨機邀請線上玩家 (由建立房間者呼叫)
+async function inviteOnlinePlayers(roomId) {
+    try {
+        const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+        
+        // 1. 搜尋線上玩家
+        // 注意：這需要複合索引 (lastActive + uid 雖然不能直接混用，但可以用 client side filter)
+        const q = query(
+            collection(db, "users"), 
+            where("lastActive", ">", fiveMinutesAgo),
+            limit(20) // 限制抓取數量，避免讀取太多
+        );
+        
+        const snapshot = await getDocs(q);
+        
+        // 2. 排除自己，並隨機選 3 人
+        const candidates = snapshot.docs
+            .filter(d => d.id !== auth.currentUser.uid)
+            .map(d => d.id);
+            
+        if (candidates.length === 0) return;
+
+        // 洗牌並取前 3 個
+        const selectedIds = shuffleArray(candidates).slice(0, 3);
+        
+        console.log(`正在邀請 ${selectedIds.length} 位玩家...`);
+
+        // 3. 發送邀請 (寫入對方的 notifications)
+        const batch = [];
+        selectedIds.forEach(targetUid => {
+            const ref = collection(db, "users", targetUid, "notifications");
+            addDoc(ref, {
+                type: "battle_invite",
+                roomId: roomId,
+                hostName: currentUserData.displayName || "神秘玩家",
+                timestamp: serverTimestamp()
+            });
+        });
+
+    } catch (e) {
+        console.error("邀請發送失敗 (可能是索引問題或權限):", e);
+    }
+}
+
+// 🔥 新增：加入指定房間 (供接受邀請使用)
+async function joinBattleRoom(roomId) {
+    if (isBattleActive) return alert("你已經在戰鬥或配對中了！");
+    
+    // 檢查房間是否存在
+    const roomRef = doc(db, "rooms", roomId);
+    const roomSnap = await getDoc(roomRef);
+    
+    if (!roomSnap.exists()) return alert("該房間已不存在");
+    const roomData = roomSnap.data();
+    
+    if (roomData.status !== "waiting" || roomData.guest) {
+        return alert("該房間已滿或遊戲已開始");
+    }
+
+    // 準備加入
+    const myPlayerData = { 
+        uid: auth.currentUser.uid, 
+        name: currentUserData.displayName, 
+        score: 0, 
+        done: false,
+        equipped: currentUserData.equipped || { frame: '', avatar: '' } 
+    };
+
+    isBattleActive = true;
+    switchToPage('page-battle');
+    document.getElementById('battle-lobby').classList.add('hidden');
+    document.getElementById('battle-arena').classList.remove('hidden');
+    
+    try {
+        await updateDoc(roomRef, {
+            guest: myPlayerData,
+            status: "ready"
+        });
+        currentBattleId = roomId;
+        listenToBattleRoom(roomId);
+    } catch (e) {
+        console.error(e);
+        alert("加入房間失敗");
+        leaveBattle();
+    }
+}
+
+
+// ==========================================
+//  🔥 社交系統 (UI & 上線狀態)
+// ==========================================
+
+function injectSocialUI() {
+    if (document.getElementById('btn-social-nav')) return;
+
+    const navGrid = document.getElementById('nav-grid');
+    navGrid.classList.remove('grid-cols-5');
+    navGrid.classList.add('grid-cols-6');
+
+    const btn = document.createElement('button');
+    btn.id = "btn-social-nav";
+    btn.setAttribute("onclick", "switchToPage('page-social')");
+    btn.dataset.target = "page-social";
+    btn.className = "flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group";
+    btn.innerHTML = `<i class="fa-solid fa-users mb-1 text-lg group-hover:text-cyan-400 transition-colors"></i><span class="text-[10px]">社交</span>`;
+    
+    const settingsBtn = navGrid.lastElementChild;
+    navGrid.insertBefore(btn, settingsBtn);
+
+    const main = document.querySelector('main');
+    const pageSocial = document.createElement('div');
+    pageSocial.id = "page-social";
+    pageSocial.className = "page-section hidden";
+    pageSocial.innerHTML = `
+        <div class="sticky top-0 bg-slate-900/95 backdrop-blur-sm z-20 pb-4 border-b border-slate-800 mb-4">
+            <h2 class="text-2xl font-bold text-cyan-400 flex items-center gap-2">
+                <i class="fa-solid fa-users"></i> 好友列表
+            </h2>
+            <div class="mt-4 bg-slate-800 p-4 rounded-xl border border-slate-700">
+                <div class="text-xs text-gray-400 mb-1">我的好友代碼</div>
+                <div class="flex justify-between items-center">
+                    <span class="text-2xl font-mono font-bold text-white tracking-widest" id="my-friend-code">...</span>
+                    <button onclick="copyFriendCode()" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-2 rounded text-white transition">複製</button>
+                </div>
+            </div>
+            <div class="flex gap-2 mt-3">
+                <input type="text" id="input-friend-code" placeholder="輸入對方代碼 (不分大小寫)" class="flex-1 bg-slate-900 border border-slate-600 text-white rounded-lg p-3 outline-none focus:border-cyan-500 uppercase">
+                <button onclick="addFriend()" class="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white px-4 rounded-lg font-bold shadow-lg">
+                    <i class="fa-solid fa-user-plus"></i>
+                </button>
+            </div>
+        </div>
+        <div id="friend-list-container" class="space-y-3 pb-20">
+            <div class="text-center text-gray-500 py-10">載入中...</div>
+        </div>
+    `;
+    main.appendChild(pageSocial);
+}
+
+function startPresenceSystem() {
+    if (presenceInterval) clearInterval(presenceInterval);
+    
+    const updatePresence = async () => {
+        if (!auth.currentUser) return;
+        try {
+            const userRef = doc(db, "users", auth.currentUser.uid);
+            await updateDoc(userRef, {
+                lastActive: serverTimestamp() 
+            });
+        } catch (e) { console.error("Presence update failed", e); }
+    };
+
+    updatePresence();
+    presenceInterval = setInterval(updatePresence, 60 * 1000);
+}
+
+window.copyFriendCode = () => {
+    const code = document.getElementById('my-friend-code').innerText;
+    navigator.clipboard.writeText(code).then(() => alert("代碼已複製！"));
+};
+
+window.addFriend = async () => {
+    const input = document.getElementById('input-friend-code');
+    const targetCode = input.value.trim().toUpperCase();
+    
+    if (!targetCode) return alert("請輸入代碼");
+    if (targetCode === currentUserData.friendCode) return alert("不能加自己為好友 XD");
+
+    const btn = document.querySelector('button[onclick="addFriend()"]');
+    btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+
+    try {
+        const q = query(collection(db, "users"), where("friendCode", "==", targetCode));
+        const snap = await getDocs(q);
+
+        if (snap.empty) {
+            alert("找不到此代碼，請確認是否輸入正確。");
+            return;
+        }
+
+        const targetUserDoc = snap.docs[0];
+        const targetUserId = targetUserDoc.id;
+        const targetUserData = targetUserDoc.data();
+
+        if (currentUserData.friends.includes(targetUserId)) {
+            alert("你們已經是好友囉！");
+            return;
+        }
+
+        await runTransaction(db, async (transaction) => {
+            const myRef = doc(db, "users", auth.currentUser.uid);
+            const friendRef = doc(db, "users", targetUserId);
+
+            transaction.update(myRef, { friends: arrayUnion(targetUserId) });
+            transaction.update(friendRef, { friends: arrayUnion(auth.currentUser.uid) });
+        });
+
+        currentUserData.friends.push(targetUserId);
+        
+        alert(`成功添加 ${targetUserData.displayName} 為好友！`);
+        input.value = "";
+        loadFriendList();
+
+    } catch (e) {
+        console.error(e);
+        alert("新增失敗：" + e.message);
+    } finally {
+        btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-user-plus"></i>';
+    }
+};
+
+window.loadFriendList = async () => {
+    const container = document.getElementById('friend-list-container');
+    const myCodeEl = document.getElementById('my-friend-code');
+    
+    if (currentUserData && currentUserData.friendCode) {
+        myCodeEl.innerText = currentUserData.friendCode;
+    }
+
+    if (!currentUserData.friends || currentUserData.friends.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-10 opacity-50">
+                <i class="fa-solid fa-user-group text-4xl mb-3"></i>
+                <p>還沒有好友...</p>
+                <p class="text-xs mt-1">快把代碼分享給朋友吧！</p>
+            </div>`;
+        return;
+    }
+
+    container.innerHTML = '<div class="loader"></div>';
+
+    try {
+        const promises = currentUserData.friends.map(uid => getDoc(doc(db, "users", uid)));
+        const docs = await Promise.all(promises);
+
+        container.innerHTML = '';
+        
+        docs.forEach(d => {
+            if (!d.exists()) return;
+            const fData = d.data();
+            
+            const now = new Date();
+            const lastActive = fData.lastActive ? fData.lastActive.toDate() : new Date(0);
+            const diffMinutes = (now - lastActive) / 1000 / 60;
+            const isOnline = diffMinutes < 5;
+
+            const statusHtml = isOnline 
+                ? `<span class="text-green-400 text-xs flex items-center gap-1"><div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div> 線上</span>`
+                : `<span class="text-gray-500 text-xs">離線 (${getTimeAgo(lastActive)})</span>`;
+
+            const div = document.createElement('div');
+            div.className = "bg-slate-800/50 p-3 rounded-xl border border-slate-700 flex items-center gap-3";
+            div.innerHTML = `
+                ${getAvatarHtml(fData.equipped, "w-12 h-12")}
+                <div class="flex-1">
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-white">${fData.displayName}</span>
+                        <span class="text-xs text-yellow-500 font-mono">${RANKS[Math.min(fData.stats?.rankLevel || 0, 4)].split(' ')[1]}</span>
+                    </div>
+                    <div class="flex justify-between items-center mt-1">
+                        ${statusHtml}
+                        <span class="text-[10px] text-gray-500">積分: ${fData.stats?.totalScore || 0}</span>
+                    </div>
+                </div>
+            `;
+            container.appendChild(div);
+        });
+
+    } catch (e) {
+        console.error(e);
+        container.innerHTML = '<div class="text-red-400 text-center">載入失敗</div>';
+    }
+};
+
+function getTimeAgo(date) {
+    const seconds = Math.floor((new Date() - date) / 1000);
+    if (seconds > 86400) return Math.floor(seconds/86400) + "天前";
+    if (seconds > 3600) return Math.floor(seconds/3600) + "小時前";
+    if (seconds > 60) return Math.floor(seconds/60) + "分鐘前";
+    return "剛剛";
 }
