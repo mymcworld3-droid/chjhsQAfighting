@@ -1252,4 +1252,336 @@ function checkAdminRole(isAdmin) {
         navGrid.appendChild(btn);
     }
 }
+// ==========================================
+// 🔥 將以下代碼添加到 main.js 的末尾（在 checkAdminRole 函數之後）
+// ==========================================
 
+// ==========================================
+// 對戰系統完整實現
+// ==========================================
+
+// 對戰相關變數（已在頂部宣告，這裡是參考）
+// let battleUnsub = null; 
+// let currentBattleId = null;
+// let isBattleActive = false;
+
+// 1. 開始配對
+window.startBattleMatchmaking = async () => {
+    if (!auth.currentUser) {
+        alert("請先登入");
+        return;
+    }
+
+    isBattleActive = true;
+    switchToPage('page-battle');
+    
+    document.getElementById('battle-lobby').classList.remove('hidden');
+    document.getElementById('battle-arena').classList.add('hidden');
+    document.getElementById('battle-result').classList.add('hidden');
+    document.getElementById('battle-status-text').innerText = "正在搜尋對手...";
+
+    try {
+        // 檢查是否有等待中的房間
+        const waitingRoomsQuery = query(
+            collection(db, "battles"),
+            where("status", "==", "waiting"),
+            where("p1.uid", "!=", auth.currentUser.uid),
+            limit(1)
+        );
+        
+        const waitingRooms = await getDocs(waitingRoomsQuery);
+        
+        if (!waitingRooms.empty) {
+            // 加入現有房間
+            const roomDoc = waitingRooms.docs[0];
+            currentBattleId = roomDoc.id;
+            
+            await updateDoc(doc(db, "battles", currentBattleId), {
+                p2: {
+                    uid: auth.currentUser.uid,
+                    name: auth.currentUser.displayName,
+                    score: 0,
+                    avatar: currentUserData.equipped || {}
+                },
+                status: "playing",
+                currentRound: 1,
+                updatedAt: serverTimestamp()
+            });
+            
+            document.getElementById('battle-status-text').innerText = "找到對手！準備開始...";
+            setTimeout(() => startBattleRound(), 1500);
+            
+        } else {
+            // 建立新房間
+            const newBattle = await addDoc(collection(db, "battles"), {
+                p1: {
+                    uid: auth.currentUser.uid,
+                    name: auth.currentUser.displayName,
+                    score: 0,
+                    avatar: currentUserData.equipped || {}
+                },
+                p2: null,
+                status: "waiting",
+                currentRound: 0,
+                createdAt: serverTimestamp(),
+                updatedAt: serverTimestamp()
+            });
+            
+            currentBattleId = newBattle.id;
+            document.getElementById('battle-status-text').innerText = "等待對手加入...";
+            
+            // 監聽房間狀態
+            battleUnsub = onSnapshot(doc(db, "battles", currentBattleId), (docSnap) => {
+                const data = docSnap.data();
+                if (data && data.status === "playing") {
+                    document.getElementById('battle-status-text').innerText = "對手已加入！準備開始...";
+                    setTimeout(() => startBattleRound(), 1500);
+                    if (battleUnsub) battleUnsub();
+                }
+            });
+        }
+        
+    } catch (e) {
+        console.error("配對失敗:", e);
+        alert("配對失敗，請重試");
+        leaveBattle();
+    }
+};
+
+// 2. 開始對戰回合
+async function startBattleRound() {
+    if (!currentBattleId) return;
+    
+    document.getElementById('battle-lobby').classList.add('hidden');
+    document.getElementById('battle-arena').classList.remove('hidden');
+    document.getElementById('battle-loading').classList.remove('hidden');
+    document.getElementById('battle-quiz-box').classList.add('hidden');
+    
+    try {
+        // 獲取當前戰局資料
+        const battleDoc = await getDoc(doc(db, "battles", currentBattleId));
+        const battleData = battleDoc.data();
+        
+        if (!battleData) {
+            alert("戰局資料錯誤");
+            leaveBattle();
+            return;
+        }
+        
+        // 更新頭像顯示
+        const isP1 = battleData.p1.uid === auth.currentUser.uid;
+        const myData = isP1 ? battleData.p1 : battleData.p2;
+        const oppData = isP1 ? battleData.p2 : battleData.p1;
+        
+        document.getElementById('p1-score').innerText = myData.score || 0;
+        document.getElementById('p2-score').innerText = oppData.score || 0;
+        document.getElementById('battle-round').innerText = battleData.currentRound || 1;
+        
+        // 渲染頭像
+        document.getElementById('battle-my-avatar').innerHTML = getAvatarHtml(myData.avatar, "w-16 h-16");
+        document.getElementById('battle-opp-avatar').innerHTML = getAvatarHtml(oppData.avatar, "w-16 h-16");
+        
+        // 只有 P1 負責生成題目
+        if (isP1) {
+            const question = await fetchOneQuestion();
+            
+            await updateDoc(doc(db, "battles", currentBattleId), {
+                currentQuestion: question.data,
+                p1Answer: null,
+                p2Answer: null,
+                updatedAt: serverTimestamp()
+            });
+        }
+        
+        // 等待題目生成
+        battleUnsub = onSnapshot(doc(db, "battles", currentBattleId), (docSnap) => {
+            const data = docSnap.data();
+            if (data && data.currentQuestion) {
+                renderBattleQuestion(data.currentQuestion);
+                if (battleUnsub) battleUnsub();
+            }
+        });
+        
+    } catch (e) {
+        console.error("回合開始失敗:", e);
+        alert("對戰出錯");
+        leaveBattle();
+    }
+}
+
+// 3. 渲染對戰題目
+function renderBattleQuestion(questionData) {
+    document.getElementById('battle-loading').classList.add('hidden');
+    document.getElementById('battle-quiz-box').classList.remove('hidden');
+    document.getElementById('battle-waiting-msg').classList.add('hidden');
+    
+    document.getElementById('battle-q-text').innerText = questionData.q;
+    
+    const container = document.getElementById('battle-options');
+    container.innerHTML = '';
+    
+    questionData.opts.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = "w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 flex items-center gap-3 active:scale-95";
+        btn.innerHTML = `
+            <span class="bg-slate-800 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-blue-400 border border-slate-600">
+                ${String.fromCharCode(65+idx)}
+            </span>
+            <span class="flex-1">${opt}</span>
+        `;
+        btn.onclick = () => submitBattleAnswer(idx);
+        container.appendChild(btn);
+    });
+}
+
+// 4. 提交答案
+async function submitBattleAnswer(userIdx) {
+    const btns = document.querySelectorAll('#battle-options button');
+    btns.forEach(btn => btn.onclick = null);
+    
+    try {
+        const battleDoc = await getDoc(doc(db, "battles", currentBattleId));
+        const battleData = battleDoc.data();
+        const isP1 = battleData.p1.uid === auth.currentUser.uid;
+        
+        const answerField = isP1 ? "p1Answer" : "p2Answer";
+        
+        await updateDoc(doc(db, "battles", currentBattleId), {
+            [answerField]: userIdx,
+            updatedAt: serverTimestamp()
+        });
+        
+        document.getElementById('battle-waiting-msg').classList.remove('hidden');
+        
+        // 監聽雙方答案
+        battleUnsub = onSnapshot(doc(db, "battles", currentBattleId), async (docSnap) => {
+            const data = docSnap.data();
+            if (data.p1Answer !== null && data.p2Answer !== null) {
+                if (battleUnsub) battleUnsub();
+                await evaluateBattleRound(data);
+            }
+        });
+        
+    } catch (e) {
+        console.error("提交答案失敗:", e);
+        alert("提交失敗");
+    }
+}
+
+// 5. 評估回合結果
+async function evaluateBattleRound(battleData) {
+    const correctAns = battleData.currentQuestion.ans;
+    const p1Correct = battleData.p1Answer === correctAns;
+    const p2Correct = battleData.p2Answer === correctAns;
+    
+    let newP1Score = battleData.p1.score;
+    let newP2Score = battleData.p2.score;
+    
+    if (p1Correct) newP1Score++;
+    if (p2Correct) newP2Score++;
+    
+    const isP1 = battleData.p1.uid === auth.currentUser.uid;
+    const myCorrect = isP1 ? p1Correct : p2Correct;
+    
+    // 顯示結果
+    const btns = document.querySelectorAll('#battle-options button');
+    btns.forEach((btn, idx) => {
+        if (idx === correctAns) {
+            btn.classList.add('btn-correct');
+        } else if (idx === battleData[isP1 ? "p1Answer" : "p2Answer"]) {
+            btn.classList.add('btn-wrong');
+        }
+    });
+    
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    // 更新分數
+    await updateDoc(doc(db, "battles", currentBattleId), {
+        "p1.score": newP1Score,
+        "p2.score": newP2Score,
+        currentRound: battleData.currentRound + 1,
+        updatedAt: serverTimestamp()
+    });
+    
+    // 檢查是否結束（3 回合）
+    if (battleData.currentRound >= 3) {
+        endBattle(newP1Score, newP2Score, isP1);
+    } else {
+        setTimeout(() => startBattleRound(), 1500);
+    }
+}
+
+// 6. 結束對戰
+async function endBattle(p1Score, p2Score, isP1) {
+    const myScore = isP1 ? p1Score : p2Score;
+    const oppScore = isP1 ? p2Score : p1Score;
+    
+    document.getElementById('battle-arena').classList.add('hidden');
+    document.getElementById('battle-result').classList.remove('hidden');
+    
+    let resultTitle = "";
+    let resultMsg = "";
+    
+    if (myScore > oppScore) {
+        resultTitle = "🎉 勝利！";
+        resultMsg = `你以 ${myScore}:${oppScore} 獲勝！`;
+        // 獎勵積分
+        if (currentUserData) {
+            currentUserData.stats.totalScore += 50;
+            await updateDoc(doc(db, "users", auth.currentUser.uid), {
+                "stats.totalScore": currentUserData.stats.totalScore
+            });
+            updateUIStats();
+        }
+    } else if (myScore < oppScore) {
+        resultTitle = "😢 失敗...";
+        resultMsg = `對手以 ${oppScore}:${myScore} 獲勝。`;
+    } else {
+        resultTitle = "🤝 平手";
+        resultMsg = `雙方都是 ${myScore} 分！`;
+    }
+    
+    document.getElementById('battle-result-title').innerText = resultTitle;
+    document.getElementById('battle-result-msg').innerText = resultMsg;
+    
+    // 清理戰局
+    try {
+        await updateDoc(doc(db, "battles", currentBattleId), {
+            status: "finished",
+            updatedAt: serverTimestamp()
+        });
+    } catch (e) {
+        console.error("清理戰局失敗:", e);
+    }
+    
+    isBattleActive = false;
+    currentBattleId = null;
+}
+
+// 7. 離開對戰
+window.leaveBattle = async () => {
+    if (battleUnsub) {
+        battleUnsub();
+        battleUnsub = null;
+    }
+    
+    if (currentBattleId) {
+        try {
+            const battleDoc = await getDoc(doc(db, "battles", currentBattleId));
+            if (battleDoc.exists()) {
+                await updateDoc(doc(db, "battles", currentBattleId), {
+                    status: "cancelled",
+                    updatedAt: serverTimestamp()
+                });
+            }
+        } catch (e) {
+            console.error("離開對戰失敗:", e);
+        }
+    }
+    
+    isBattleActive = false;
+    currentBattleId = null;
+    switchToPage('page-home');
+};
+
+console.log("✅ 對戰系統已載入完成");
