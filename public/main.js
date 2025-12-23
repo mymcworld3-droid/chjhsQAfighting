@@ -27,15 +27,26 @@ let currentUserData = null;
 // 8 個段位：增加 大師、宗師、王者
 const RANKS = ["🥉 青銅", "🥈 白銀", "🥇 黃金", "🔷 鑽石", "🌟 星耀", "🟣 大師", "🔥 宗師", "👑 王者"];
 
-// 設定每個段位需要的「總答對題數」門檻 (越來越難)
-// 青銅(0), 白銀(20), 黃金(50), 鑽石(90), 星耀(140), 大師(200), 宗師(270), 王者(360)
+// 設定每個段位需要的「淨積分」門檻 (答對 - 答錯)
+// 難度大幅提升，因為答錯會倒扣
 const RANK_THRESHOLDS = [0, 20, 50, 90, 140, 200, 270, 360];
 
-// 輔助函式：根據總答對數計算段位
-function calculateRankFromCorrect(totalCorrect) {
+// 🔥 新增：計算淨積分 (答對 - 答錯)
+function getNetScore(stats) {
+    if (!stats) return 0;
+    const totalCorrect = stats.totalCorrect || 0;
+    const totalAnswered = stats.totalAnswered || 0;
+    const totalWrong = totalAnswered - totalCorrect;
+    
+    // 淨積分 = 答對 - 答錯，最低為 0 (避免負分導致陣列索引錯誤)
+    return Math.max(0, totalCorrect - totalWrong);
+}
+
+// 輔助函式：根據「淨積分」計算段位
+function calculateRankFromScore(netScore) {
     let rank = 0;
     for (let i = RANK_THRESHOLDS.length - 1; i >= 0; i--) {
-        if (totalCorrect >= RANK_THRESHOLDS[i]) {
+        if (netScore >= RANK_THRESHOLDS[i]) {
             rank = i;
             break;
         }
@@ -401,16 +412,18 @@ window.switchToPage = (pageId) => {
 };
 
 // ==========================================
-// 🔥 修改：UI 顯示新段位與進度條
+// 🔥 修改：UI 顯示新段位與進度條 (依據淨積分)
 // ==========================================
 function updateUIStats() {
     if(!currentUserData) return;
     const stats = currentUserData.stats;
     
-    // 🔥 核心修改：強制根據「總答對數」重新計算當前段位
-    const realRankLevel = calculateRankFromCorrect(stats.totalCorrect || 0);
+    // 計算當前淨積分 (答對 - 答錯)
+    const currentNetScore = getNetScore(stats);
     
-    // 如果資料庫存的跟算出來的不一樣，默默修正 (等到 handleAnswer 或 saveProfile 時會存入)
+    // 強制根據「淨積分」重新計算當前段位
+    const realRankLevel = calculateRankFromScore(currentNetScore);
+    
     if (stats.rankLevel !== realRankLevel) {
         stats.rankLevel = realRankLevel;
     }
@@ -437,7 +450,7 @@ function updateUIStats() {
     rankEl.innerText = RANKS[rankIndex] || "未知";
     rankEl.className = `text-5xl font-black mb-2 ${rankColors[rankIndex] || "text-white"}`;
 
-    // 計算進度條 (距離下一階還差幾題)
+    // 計算進度條 (使用淨積分)
     let progressPercent = 100;
     let currentStarsDisplay = 10;
     let maxStarsDisplay = 10;
@@ -445,22 +458,22 @@ function updateUIStats() {
     if (rankIndex < RANK_THRESHOLDS.length - 1) {
         const currentBase = RANK_THRESHOLDS[rankIndex]; // 當前段位底限
         const nextBase = RANK_THRESHOLDS[rankIndex + 1]; // 下一階底限
-        const required = nextBase - currentBase; // 這一階總共要答對幾題
-        const earned = stats.totalCorrect - currentBase; // 這一階已經答對幾題
+        const required = nextBase - currentBase; // 這一階總共需要的分數
+        const earned = currentNetScore - currentBase; // 這一階已經獲得的分數 (可能倒扣變少)
         
-        progressPercent = Math.min((earned / required) * 100, 100);
-        currentStarsDisplay = earned;
+        progressPercent = Math.max(0, Math.min((earned / required) * 100, 100));
+        currentStarsDisplay = Math.max(0, earned);
         maxStarsDisplay = required;
     } else {
         // 已經是最高階王者
-        currentStarsDisplay = stats.totalCorrect - RANK_THRESHOLDS[RANK_THRESHOLDS.length - 1];
+        currentStarsDisplay = currentNetScore - RANK_THRESHOLDS[RANK_THRESHOLDS.length - 1];
         maxStarsDisplay = "∞";
         progressPercent = 100;
     }
 
-    // 更新星星/進度顯示
+    // 更新星星/進度顯示 (提示玩家是淨分)
     const starContainer = document.getElementById('display-stars').parentElement;
-    starContainer.innerHTML = `<i class="fa-solid fa-star text-yellow-400 animate-pulse"></i> <span>進度: <span id="display-stars" class="font-bold text-white text-lg">${currentStarsDisplay}</span> / ${maxStarsDisplay}</span>`;
+    starContainer.innerHTML = `<i class="fa-solid fa-star text-yellow-400 animate-pulse"></i> <span>淨勝: <span id="display-stars" class="font-bold text-white text-lg">${currentStarsDisplay}</span> / ${maxStarsDisplay}</span>`;
 
     document.getElementById('display-score').innerText = stats.totalScore;
     document.getElementById('display-streak').innerText = stats.currentStreak;
@@ -943,7 +956,7 @@ function renderQuiz(data, rank, topic) {
     });
 }
 
-// 🔥 修改：答題後檢查段位升級
+// 🔥 修改：答題後檢查段位升級 (使用淨積分邏輯)
 async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     const isCorrect = userIdx === correctIdx;
     const opts = document.querySelectorAll('[id^="option-btn-"]');
@@ -974,26 +987,30 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     let stats = currentUserData.stats;
     stats.totalAnswered++;
     
-    // 🔥 修改：使用總答對數決定段位
+    // 🔥 修改：使用淨積分決定段位
     if (isCorrect) {
         stats.totalCorrect++; 
         stats.currentStreak++;
         if (stats.currentStreak > stats.bestStreak) stats.bestStreak = stats.currentStreak;
-        
-        // 分數計算
         stats.totalScore += 10 + (stats.rankLevel * 5) + (stats.currentStreak * 2);
-
-        // 檢查是否升階
-        const newRank = calculateRankFromCorrect(stats.totalCorrect);
-        
-        if (newRank > stats.rankLevel) {
-            stats.rankLevel = newRank;
-            fbTitle.innerHTML += ` <br><span class="text-yellow-400 text-sm animate-bounce">🎉 晉升至 ${RANKS[newRank]}！</span>`;
-            if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 200]);
-        }
     } else {
         stats.currentStreak = 0; 
-        // 答錯不再扣星降級，因為是累積制
+        // 答錯雖然不扣分，但 totalAnswered 增加會導致 淨積分 下降
+    }
+
+    // 計算最新的淨積分
+    const netScore = getNetScore(stats);
+    // 判斷是否升級
+    const newRank = calculateRankFromScore(netScore);
+    
+    if (newRank > stats.rankLevel) {
+        stats.rankLevel = newRank;
+        fbTitle.innerHTML += ` <br><span class="text-yellow-400 text-sm animate-bounce">🎉 晉升至 ${RANKS[newRank]}！</span>`;
+        if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 200]);
+    } else if (newRank < stats.rankLevel) {
+        // 如果答錯導致降級 (可選)
+        stats.rankLevel = newRank;
+        fbTitle.innerHTML += ` <br><span class="text-red-400 text-sm">⚠️ 降級至 ${RANKS[newRank]}...</span>`;
     }
 
     updateDoc(doc(db, "users", auth.currentUser.uid), { stats: stats });
@@ -1879,14 +1896,14 @@ function checkAdminRole(isAdmin) {
 }
 
 // ==========================================
-// 4. 管理員功能：全服重算段位
+// 4. 管理員功能：全服重算段位 (使用淨積分)
 // ==========================================
 window.recalculateAllUserRanks = async () => {
     if (!currentUserData || !currentUserData.isAdmin) {
         return alert("權限不足！");
     }
 
-    if (!confirm("確定要重算所有玩家的段位嗎？\n這將根據他們的「總答對題數」重新分配階級。")) return;
+    if (!confirm("確定要重算所有玩家的段位嗎？\n這將根據他們的「淨積分 (答對-答錯)」重新分配階級。")) return;
 
     const btn = document.querySelector('button[onclick="recalculateAllUserRanks()"]');
     const originalText = btn.innerHTML;
@@ -1902,10 +1919,12 @@ window.recalculateAllUserRanks = async () => {
         const updates = snapshot.docs.map(async (userDoc) => {
             const data = userDoc.data();
             const stats = data.stats || {};
-            const totalCorrect = stats.totalCorrect || 0;
+            
+            // 計算淨積分
+            const netScore = getNetScore(stats);
             
             // 計算應有段位
-            const correctRank = calculateRankFromCorrect(totalCorrect);
+            const correctRank = calculateRankFromScore(netScore);
             
             // 只有當段位不符時才更新
             if (stats.rankLevel !== correctRank) {
