@@ -95,7 +95,7 @@
                 
                 <div class="flex justify-center items-center gap-2 mt-6 text-gray-300 bg-slate-800/50 inline-block px-4 py-1 rounded-full backdrop-blur-sm">
                     <i class="fa-solid fa-star text-yellow-400 animate-pulse"></i>
-                    <span>階段: <span id="display-stars" class="font-bold text-white text-lg">0</span> / 10</span>
+                    <span>進度: <span id="display-stars" class="font-bold text-white text-lg">0</span> / 10</span>
                 </div>
                 
                 <div class="w-full bg-slate-950 rounded-full h-3 mt-6 overflow-hidden border border-slate-700 relative">
@@ -422,6 +422,18 @@
                 <button onclick="resetAdminForm()" class="text-xs bg-slate-700 hover:bg-slate-600 text-white px-3 py-2 rounded-lg transition-all shadow border border-slate-600 flex items-center gap-1">
                     <i class="fa-solid fa-plus"></i> 新增模式
                 </button>
+            </div>
+            
+            <div class="bg-slate-800/90 backdrop-blur-md p-5 rounded-2xl border border-yellow-500/20 mb-6 shadow-xl">
+                <h3 class="font-bold text-white mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-wrench text-yellow-500"></i> 系統維護
+                </h3>
+                <button onclick="recalculateAllUserRanks()" class="w-full bg-yellow-600/80 hover:bg-yellow-500 text-white py-3 rounded-xl font-bold transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-rotate"></i> 重算全服玩家段位
+                </button>
+                <p class="text-[10px] text-gray-400 mt-2">
+                    ⚠️ 說明：這會遍歷所有使用者，根據其「總答對題數」重新設定段位 (Bronze ~ Challenger)。
+                </p>
             </div>
 
             <div class="bg-slate-800/90 backdrop-blur-md p-5 rounded-2xl border border-red-500/20 mb-6 sticky top-2 z-20 shadow-2xl ring-1 ring-red-900/30 transition-all">
