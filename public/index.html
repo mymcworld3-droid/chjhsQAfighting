@@ -286,21 +286,6 @@
             </div>
         </div>
 
-        <div id="page-history" class="page-section hidden">
-            <h2 class="text-2xl font-bold mb-4 flex items-center gap-2 text-purple-400">
-                <i class="fa-solid fa-clock-rotate-left"></i> 我的答題紀錄
-            </h2>
-            <div class="bg-slate-800/90 backdrop-blur-sm rounded-xl overflow-hidden border border-slate-700 h-[75vh] flex flex-col shadow-2xl">
-                <div class="p-3 bg-slate-900/90 backdrop-blur-sm border-b border-slate-700 font-bold text-xs text-gray-400 uppercase tracking-wider flex justify-between">
-                    <span>個人學習歷程</span>
-                    <button onclick="loadUserHistory()" class="text-blue-400 hover:text-white transition-all hover:rotate-180 duration-500"><i class="fa-solid fa-rotate"></i></button>
-                </div>
-                <ul id="history-list" class="overflow-y-auto p-2 space-y-2 flex-1 text-sm scrollbar-thin scrollbar-thumb-slate-600">
-                    <li class="text-center text-gray-500 py-10">載入中...</li>
-                </ul>
-            </div>
-        </div>
-
         <div id="page-rank" class="page-section hidden">
             <h2 class="text-2xl font-bold mb-4 flex items-center gap-2 text-yellow-400">
                 <i class="fa-solid fa-trophy animate-pulse"></i> 全服排行榜
@@ -364,12 +349,12 @@
                         <label class="block mb-2 text-sm font-bold text-yellow-400 flex items-center gap-2">
                             <i class="fa-solid fa-book-open"></i> 出題來源
                         </label>
-        
+                        
                         <div id="bank-selectors-container" class="space-y-2"></div>
                         <input type="hidden" id="set-source-final-value" value="ai">
                         <p id="bank-selection-hint" class="text-xs text-gray-500 mt-1">請依序選擇分類...</p>
                     </div>
-    
+                    
                     <div>
                         <label class="block mb-2 text-sm font-bold text-purple-400 flex items-center gap-2">
                             <i class="fa-solid fa-layer-group"></i> 題目難度
@@ -385,6 +370,20 @@
                 <button onclick="saveProfile()" class="w-full mt-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white px-4 py-3.5 rounded-xl font-bold transition-all shadow-lg hover:shadow-blue-900/30 hover:scale-[1.02] flex justify-center items-center gap-2">
                     <i class="fa-solid fa-floppy-disk"></i> 更新設定
                 </button>
+            </div>
+
+            <div class="bg-slate-800/80 backdrop-blur-md p-5 rounded-2xl border border-slate-700/50 mb-6 shadow-xl">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-clock-rotate-left text-purple-400"></i> 答題紀錄
+                    </h3>
+                    <button onclick="loadUserHistory()" class="text-xs text-blue-400 hover:text-white p-2 rounded hover:bg-slate-700 transition">
+                        <i class="fa-solid fa-rotate"></i>
+                    </button>
+                </div>
+                <ul id="history-list" class="space-y-2 max-h-60 overflow-y-auto scrollbar-thin text-sm p-1">
+                    <li class="text-center text-gray-500 py-4">載入中...</li>
+                </ul>
             </div>
 
             <div class="bg-slate-800/80 backdrop-blur-md p-5 rounded-2xl border border-slate-700/50 mb-6 shadow-xl">
@@ -504,7 +503,7 @@
     </main>
 
     <nav id="bottom-nav" class="bg-slate-800/90 backdrop-blur-md border-t border-slate-700 fixed bottom-0 w-full z-50 hidden transition-all duration-300">
-        <div class="grid h-16 grid-cols-6 mx-auto font-medium" id="nav-grid">
+        <div class="grid h-16 grid-cols-5 mx-auto font-medium" id="nav-grid">
             <button onclick="switchToPage('page-home')" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group active-nav-btn" data-target="page-home">
                 <i class="fa-solid fa-house mb-1 text-lg group-hover:text-blue-400 transition-colors"></i><span class="text-[10px]">首頁</span>
             </button>
@@ -513,9 +512,6 @@
             </button>
             <button onclick="loadStoreItems(); switchToPage('page-store')" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group" data-target="page-store">
                 <i class="fa-solid fa-store mb-1 text-lg group-hover:text-pink-400 transition-colors"></i><span class="text-[10px]">商店</span>
-            </button>
-            <button onclick="loadUserHistory(); switchToPage('page-history')" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group" data-target="page-history">
-                <i class="fa-solid fa-clock-rotate-left mb-1 text-lg group-hover:text-purple-400 transition-colors"></i><span class="text-[10px]">紀錄</span>
             </button>
             <button onclick="loadLeaderboard(); switchToPage('page-rank')" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group" data-target="page-rank">
                 <i class="fa-solid fa-chart-simple mb-1 text-lg group-hover:text-yellow-400 transition-colors"></i><span class="text-[10px]">排行</span>
