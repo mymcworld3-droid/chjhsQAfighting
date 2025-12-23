@@ -20,7 +20,9 @@ const db = getFirestore();
 const provider = new GoogleAuthProvider();
 
 let currentUserData = null;
-const RANKS = ["🥉 青銅", "🥈 白銀", "🥇 黃金", "💎 鉑金", "🔷 鑽石", "🌟 星耀"];
+
+// 🔥 修改：移除「鉑金」，只保留 5 個段位
+const RANKS = ["🥉 青銅", "🥈 白銀", "🥇 黃金", "🔷 鑽石", "🌟 星耀"];
 
 // 緩衝與狀態變數
 let quizBuffer = [];
@@ -91,7 +93,7 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-// 頁面切換控制 (修改：加入 loadUserHistory)
+// 頁面切換控制
 window.switchToPage = (pageId) => {
     if (isBattleActive && pageId !== 'page-battle') {
         alert("⚔️ 戰鬥/配對中無法切換頁面！\n請先取消配對或完成對戰。");
@@ -115,7 +117,7 @@ window.switchToPage = (pageId) => {
     
     if (pageId === 'page-settings') {
         renderInventory();
-        loadUserHistory(); // 🔥 切換到設定頁時，自動載入歷史紀錄
+        loadUserHistory();
     }
     if (pageId === 'page-admin') {
         loadAdminData();
@@ -126,36 +128,31 @@ function updateUIStats() {
     if(!currentUserData) return;
     const stats = currentUserData.stats;
     
-    // 防呆初始化
     if(typeof stats.currentStreak === 'undefined') stats.currentStreak = 0;
     if(typeof stats.bestStreak === 'undefined') stats.bestStreak = 0;
     if(typeof stats.totalCorrect === 'undefined') stats.totalCorrect = 0;
     if(typeof stats.totalAnswered === 'undefined') stats.totalAnswered = 0;
 
-    // 🔥 設定段位顏色 (對應 RANKS 的 0~5)
-    // 0: 青銅, 1: 白銀, 2: 黃金, 3: 鉑金, 4: 鑽石, 5: 星耀
+    // 🔥 修改：移除鉑金顏色，調整對應
+    // 0: 青銅, 1: 白銀, 2: 黃金, 3: 鑽石, 4: 星耀
     const rankColors = [
-        "text-orange-600", // 🥉 青銅 (深橘色)
-        "text-gray-300",   // 🥈 白銀 (銀灰色)
-        "text-yellow-400", // 🥇 黃金 (亮黃色)
-        "text-cyan-400",   // 💎 鉑金 (青藍色)
-        "text-blue-500",   // 🔷 鑽石 (深藍色)
-        "text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-red-500" // 🌟 星耀 (紫紅漸層特效)
+        "text-orange-600", // 🥉 青銅
+        "text-gray-300",   // 🥈 白銀
+        "text-yellow-400", // 🥇 黃金
+        "text-blue-600",   // 🔷 鑽石 (遞補上來)
+        "text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-red-500" // 🌟 星耀
     ];
 
-    // 取得段位元素
-    const rankEl = document.getElementById('display-rank');
-    const rankIndex = stats.rankLevel || 0;
+    // 🔥 防呆：如果舊資料的等級超過現在的上限，強制顯示為最高級
+    const maxRankIndex = RANKS.length - 1;
+    const rankIndex = Math.min(stats.rankLevel || 0, maxRankIndex);
 
-    // 更新文字
+    const rankEl = document.getElementById('display-rank');
     rankEl.innerText = RANKS[rankIndex] || "未知";
 
-    // 🔥 更新顏色：保留字體大小與動畫，但替換顏色 Class
-    // 注意：如果等級超出範圍，預設使用白色 (text-white)
     const colorClass = rankColors[rankIndex] || "text-white";
     rankEl.className = `text-5xl font-black mb-2 animate-pulse ${colorClass}`;
 
-    // 更新其他數值
     document.getElementById('display-stars').innerText = stats.currentStars;
     document.getElementById('display-score').innerText = stats.totalScore;
     document.getElementById('display-streak').innerText = stats.currentStreak;
@@ -168,7 +165,7 @@ function updateUIStats() {
 }
 
 // ==========================================
-//  多層級選單邏輯
+//  多層級選單邏輯 (Cascading Selects)
 // ==========================================
 
 function buildPathTree(paths) {
@@ -245,7 +242,6 @@ window.renderCascadingSelectors = (tree, currentPath) => {
         select.onchange = (e) => {
             const val = e.target.value;
             
-            // 組合新路徑
             const newParts = selectedParts.slice(0, level);
             newParts.push(val);
             const currentFullPath = newParts.join('/');
@@ -269,19 +265,16 @@ window.renderCascadingSelectors = (tree, currentPath) => {
                 }
 
                 if (nextNode.type === 'file') {
-                    // 是檔案 -> 有效選擇
                     hiddenInput.value = currentFullPath;
                     hint.innerText = `✅ 已選擇考卷：${val.replace('.json', '')}`;
                     hint.className = "text-xs text-green-400 mt-1";
                     renderCascadingSelectors(tree, currentFullPath);
                 } else if (hasSubFolders) {
-                    // 是資料夾，且還有子資料夾 -> 無效選擇 (必須繼續選)
                     hiddenInput.value = ""; 
                     hint.innerText = "⚠️ 請繼續選擇下一層分類...";
                     hint.className = "text-xs text-yellow-500 mt-1";
                     renderCascadingSelectors(tree, newParts.join('/'));
                 } else {
-                    // 是資料夾，但裡面只剩檔案 (沒有子資料夾) -> 有效選擇 (全卷混合)
                     hiddenInput.value = currentFullPath;
                     const count = countJsonFiles(nextNode);
                     hint.innerText = `📂 已選擇分類：${val} (全卷混合 ${count} 份考卷)`;
@@ -451,7 +444,10 @@ async function switchToAI() {
 
 async function fetchOneQuestion() {
     const settings = currentUserData.gameSettings || { source: 'ai', difficulty: 'medium' };
-    const rankName = RANKS[currentUserData.stats.rankLevel];
+    
+    // 防呆：如果 rankLevel 超出範圍，用最後一個
+    const rankIndex = Math.min(currentUserData.stats.rankLevel || 0, RANKS.length - 1);
+    const rankName = RANKS[rankIndex];
     
     // --- AI 模式 ---
     if (settings.source === 'ai') {
@@ -528,7 +524,6 @@ async function fetchOneQuestion() {
 
             try {
                 // 平行下載所有檔案
-                console.log(`📚 正在載入 ${filesToFetch.length} 份考卷...`);
                 const fetchPromises = filesToFetch.map(filePath => 
                     fetch(`/banks/${filePath}?t=${Date.now()}`)
                         .then(res => {
@@ -670,15 +665,27 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         stats.totalCorrect++; stats.currentStreak++;
         if (stats.currentStreak > stats.bestStreak) stats.bestStreak = stats.currentStreak;
         stats.currentStars++; stats.totalScore += 10 + (stats.rankLevel * 5) + (stats.currentStreak * 2);
+        
+        // 🔥 修改升段邏輯：適應 5 個段位
         if (stats.currentStars >= 10) {
-            if (stats.rankLevel < RANKS.length - 1) { stats.rankLevel++; stats.currentStars = 0; fbTitle.innerText += ` (晉升 ${RANKS[stats.rankLevel]}!)`; } 
-            else { stats.currentStars = 10; }
+            if (stats.rankLevel < RANKS.length - 1) { 
+                stats.rankLevel++; 
+                stats.currentStars = 0; 
+                fbTitle.innerText += ` (晉升 ${RANKS[stats.rankLevel]}!)`; 
+            } else { 
+                stats.currentStars = 10; 
+            }
         }
     } else {
         stats.currentStreak = 0; stats.currentStars--;
         if (stats.currentStars < 0) {
-            if (stats.rankLevel > 0) { stats.rankLevel--; stats.currentStars = 8; fbTitle.innerText += ` (降級...)`; } 
-            else { stats.currentStars = 0; }
+            if (stats.rankLevel > 0) { 
+                stats.rankLevel--; 
+                stats.currentStars = 8; 
+                fbTitle.innerText += ` (降級...)`; 
+            } else { 
+                stats.currentStars = 0; 
+            }
         }
     }
     updateDoc(doc(db, "users", auth.currentUser.uid), { stats: stats });
