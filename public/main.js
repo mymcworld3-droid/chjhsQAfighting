@@ -1105,7 +1105,30 @@ function startInvitationListener() {
         });
     });
 }
+function listenToSystemCommands() {
+    if (systemUnsub) systemUnsub();
+    
+    // 監聽 system/commands 文檔
+    systemUnsub = onSnapshot(doc(db, "system", "commands"), (docSnap) => {
+        if (!docSnap.exists()) return;
+        
+        const data = docSnap.data();
+        const serverToken = data.reloadToken;
 
+        // 第一次載入時，只記錄當前的 Token，不重整
+        if (localReloadToken === null) {
+            localReloadToken = serverToken;
+            return;
+        }
+
+        // 如果伺服器的 Token 變了，代表管理員按下了重整按鈕
+        if (serverToken && serverToken !== localReloadToken) {
+            console.log("收到強制重整指令！");
+            alert("系統進行更新，即將重新整理網頁...");
+            location.reload();
+        }
+    });
+}
 function showInviteToast(inviteId, data) {
     const container = document.getElementById('toast-container');
     const toast = document.createElement('div');
