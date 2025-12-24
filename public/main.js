@@ -24,9 +24,22 @@ const db = getFirestore();
 const provider = new GoogleAuthProvider();
 
 let currentUserData = null;
-let isBattleResultProcessed = false;
-let systemUnsub = null; // 系統指令監聽
-let localReloadToken = null; // 本地重整標記
+
+// --- 全域狀態變數 ---
+let isBattleResultProcessed = false; // 防止重複領取獎勵
+let systemUnsub = null;              // 系統指令監聽 (強制重整)
+let localReloadToken = null;         // 本地重整標記
+let inviteUnsub = null;              // 邀請監聽
+let battleUnsub = null;              // 對戰房監聽
+let currentBattleId = null;          // 當前對戰 ID
+let isBattleActive = false;          // 是否在對戰中
+let quizBuffer = [];                 // 題目緩衝
+const BUFFER_SIZE = 1; 
+let isFetchingBuffer = false; 
+let currentBankData = null; 
+let presenceInterval = null; 
+let allBankFiles = [];
+
 // ==========================================
 // 🌍 國際化 (i18n) 設定
 // ==========================================
@@ -361,24 +374,12 @@ function calculateRankFromScore(netScore) {
     return rank;
 }
 
-// 緩衝與狀態變數
-let quizBuffer = [];
-const BUFFER_SIZE = 1; 
-let isFetchingBuffer = false; 
-let battleUnsub = null; 
-let inviteUnsub = null; // 邀請監聽取消函數
-let currentBattleId = null;
-let isBattleActive = false; 
-let currentBankData = null; 
-let presenceInterval = null; 
-
-let allBankFiles = [];
-
 // 綁定全域函式
 window.googleLogin = () => { signInWithPopup(auth, provider).catch((error) => alert("Login Failed: " + error.code)); };
 window.logout = () => { 
     localStorage.removeItem('currentQuiz');
     if (inviteUnsub) inviteUnsub(); // 登出時取消監聽
+    if (systemUnsub) systemUnsub(); // 取消系統監聽
     signOut(auth).then(() => location.reload()); 
 };
 
@@ -427,6 +428,8 @@ onAuthStateChanged(auth, async (user) => {
 
             startPresenceSystem();
             startInvitationListener(); // 🔥 啟動邀請監聽
+            listenToSystemCommands();  // 🔥 啟動全域重整監聽
+            
             updateUserAvatarDisplay();
             updateSettingsInputs();
             checkAdminRole(currentUserData.isAdmin);
@@ -444,6 +447,9 @@ onAuthStateChanged(auth, async (user) => {
     } else {
         document.getElementById('login-screen').classList.remove('hidden');
         document.getElementById('bottom-nav').classList.add('hidden');
+        // 登出時取消監聽
+        if (inviteUnsub) inviteUnsub();
+        if (systemUnsub) systemUnsub();
     }
 });
 
@@ -1105,6 +1111,8 @@ function startInvitationListener() {
         });
     });
 }
+
+// 系統強制重整監聽
 function listenToSystemCommands() {
     if (systemUnsub) systemUnsub();
     
@@ -1129,15 +1137,14 @@ function listenToSystemCommands() {
         }
     });
 }
+
+// 顯示邀請通知 (使用 getAvatarHtml 修正顯示)
 function showInviteToast(inviteId, data) {
     const container = document.getElementById('toast-container');
     const toast = document.createElement('div');
     
-    // 使用 Tailwind 製作漂亮的通知卡片
     toast.className = "bg-slate-800/95 backdrop-blur border-l-4 border-yellow-400 text-white p-4 rounded shadow-2xl flex items-center gap-4 transform transition-all duration-300 translate-x-full mb-3 relative overflow-hidden";
     
-    // 構建頭像 HTML (使用 getAvatarHtml 確保相框與頭像位置正確)
-    // 這裡我們構造一個類似 currentUserData.equipped 的物件傳入
     const equippedData = { 
         frame: data.hostFrame || '', 
         avatar: data.hostAvatar || '' 
@@ -1173,26 +1180,19 @@ function showInviteToast(inviteId, data) {
     `;
 
     container.appendChild(toast);
-
-    // 動畫進入
     requestAnimationFrame(() => toast.classList.remove('translate-x-full'));
 
-    // 綁定按鈕事件
     document.getElementById(`btn-acc-${inviteId}`).onclick = () => acceptInvite(inviteId, data.roomId, toast);
     document.getElementById(`btn-dec-${inviteId}`).onclick = () => removeInvite(inviteId, toast);
 
-    // 10秒後自動消失
     setTimeout(() => { if (toast.parentNode) removeInvite(inviteId, toast); }, 10000);
 }
 
 async function acceptInvite(inviteId, roomId, toastElement) {
-    // 移除 Toast UI
     if (toastElement) {
         toastElement.classList.add('translate-x-full', 'opacity-0');
         setTimeout(() => toastElement.remove(), 300);
     }
-    
-    // 刪除資料庫中的邀請
     try {
         await deleteDoc(doc(db, "users", auth.currentUser.uid, "invitations", inviteId));
     } catch(e) { console.error("Remove invite error", e); }
@@ -2005,6 +2005,36 @@ function checkAdminRole(isAdmin) {
         navGrid.appendChild(btn);
     }
 }
+
+// 系統強制重整觸發函式 (Admin Only)
+window.triggerGlobalReload = async () => {
+    if (!currentUserData || !currentUserData.isAdmin) return alert("Permission Denied");
+    
+    if (!confirm("⚠️ 危險操作：確定要強制所有線上玩家重新整理網頁嗎？\n(這將會中斷所有正在進行的對戰)")) return;
+
+    const btn = document.querySelector('button[onclick="triggerGlobalReload()"]');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<div class="loader w-4 h-4 border-2"></div> Sending...';
+    btn.disabled = true;
+
+    try {
+        // 更新 timestamp，這會觸發所有客戶端的監聽器
+        await setDoc(doc(db, "system", "commands"), {
+            reloadToken: Date.now(),
+            triggeredBy: currentUserData.displayName,
+            triggeredAt: serverTimestamp()
+        }, { merge: true });
+
+        alert("已發送重整指令！所有在線玩家將在幾秒後重整。");
+
+    } catch (e) {
+        console.error(e);
+        alert("指令發送失敗: " + e.message);
+    } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+    }
+};
 
 window.recalculateAllUserRanks = async () => {
     if (!currentUserData || !currentUserData.isAdmin) return alert("Permission Denied");
