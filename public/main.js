@@ -31,10 +31,11 @@ let systemUnsub = null;              // 系統指令監聽 (強制重整)
 let localReloadToken = null;         // 本地重整標記
 let inviteUnsub = null;              // 邀請監聽
 let battleUnsub = null;              // 對戰房監聽
+let chatUnsub = null;                // 聊天室監聽
 let currentBattleId = null;          // 當前對戰 ID
 let isBattleActive = false;          // 是否在對戰中
 let quizBuffer = [];                 // 題目緩衝
-const BUFFER_SIZE = 2; 
+const BUFFER_SIZE = 3;               // 🔥 緩衝題數改為 3
 let isFetchingBuffer = false; 
 let currentBankData = null; 
 let presenceInterval = null; 
@@ -330,11 +331,6 @@ window.updateTexts = () => {
     if(langBtn) langBtn.innerText = currentLang === 'zh-TW' ? 'EN' : '中文';
     
     updateUIStats();
-    
-    // 如果在設定頁，重新渲染下拉選單
-    if (currentUserData && document.getElementById('page-settings').classList.contains('active-page')) {
-        // 這裡可以選擇是否重新渲染題庫選單，暫時不強制重繪以免中斷操作
-    }
 };
 
 window.toggleLanguage = () => {
@@ -379,7 +375,8 @@ window.googleLogin = () => { signInWithPopup(auth, provider).catch((error) => al
 window.logout = () => { 
     localStorage.removeItem('currentQuiz');
     if (inviteUnsub) inviteUnsub(); // 登出時取消監聽
-    if (systemUnsub) systemUnsub(); // 取消系統監聽
+    if (systemUnsub) systemUnsub(); 
+    if (chatUnsub) chatUnsub();
     signOut(auth).then(() => location.reload()); 
 };
 
@@ -450,11 +447,12 @@ onAuthStateChanged(auth, async (user) => {
         // 登出時取消監聽
         if (inviteUnsub) inviteUnsub();
         if (systemUnsub) systemUnsub();
+        if (chatUnsub) chatUnsub();
     }
 });
 
 // ==========================================
-//  Social & UI Injection
+//  Social & UI Injection (Tabbed Chat)
 // ==========================================
 function injectSocialUI() {
     if (document.getElementById('btn-social-nav')) return;
@@ -476,32 +474,168 @@ function injectSocialUI() {
     const main = document.querySelector('main');
     const pageSocial = document.createElement('div');
     pageSocial.id = "page-social";
-    pageSocial.className = "page-section hidden";
+    pageSocial.className = "page-section hidden h-full flex flex-col"; 
     
     pageSocial.innerHTML = `
-        <div class="sticky top-0 bg-slate-900/95 backdrop-blur-sm z-20 pb-4 border-b border-slate-800 mb-4">
-            <h2 class="text-2xl font-bold text-cyan-400 flex items-center gap-2">
-                <i class="fa-solid fa-users"></i> 好友列表
+        <div class="sticky top-0 bg-slate-900/95 backdrop-blur-sm z-20 border-b border-slate-800">
+            <h2 class="text-2xl font-bold text-cyan-400 flex items-center gap-2 p-4 pb-2">
+                <i class="fa-solid fa-comments"></i> 社交中心
             </h2>
-            <div class="mt-4 bg-slate-800 p-4 rounded-xl border border-slate-700">
+            
+            <div class="flex px-4 gap-2 mb-2">
+                <button onclick="switchSocialTab('friends')" id="tab-btn-friends" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-cyan-600 text-white shadow-lg">
+                    <i class="fa-solid fa-user-group"></i> 好友
+                </button>
+                <button onclick="switchSocialTab('chat')" id="tab-btn-chat" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-slate-800 text-gray-400 hover:bg-slate-700">
+                    <i class="fa-solid fa-earth-asia"></i> 全服聊天
+                </button>
+            </div>
+        </div>
+
+        <div id="section-friends" class="flex-1 overflow-y-auto p-4 pb-20">
+            <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 mb-4">
                 <div class="text-xs text-gray-400 mb-1">我的好友代碼</div>
                 <div class="flex justify-between items-center">
                     <span class="text-2xl font-mono font-bold text-white tracking-widest" id="my-friend-code">...</span>
                     <button onclick="copyFriendCode()" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-2 rounded text-white transition">複製</button>
                 </div>
             </div>
-            <div class="flex gap-2 mt-3">
+            <div class="flex gap-2 mb-4">
                 <input type="text" id="input-friend-code" placeholder="輸入代碼..." class="flex-1 bg-slate-900 border border-slate-600 text-white rounded-lg p-3 outline-none focus:border-cyan-500 uppercase">
                 <button onclick="addFriend()" class="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white px-4 rounded-lg font-bold shadow-lg">
                     <i class="fa-solid fa-user-plus"></i>
                 </button>
             </div>
+            <div id="friend-list-container" class="space-y-3">
+                <div class="text-center text-gray-500 py-10">${t('loading')}</div>
+            </div>
         </div>
-        <div id="friend-list-container" class="space-y-3 pb-20">
-            <div class="text-center text-gray-500 py-10">${t('loading')}</div>
+
+        <div id="section-chat" class="hidden flex-1 flex flex-col overflow-hidden relative pb-16">
+            <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4 scroll-smooth">
+                <div class="text-center text-gray-500 text-xs py-4">歡迎來到全服聊天室 👋<br>請保持友善發言</div>
+            </div>
+
+            <div class="p-2 bg-slate-800 border-t border-slate-700 flex gap-2 items-center absolute bottom-0 w-full z-10">
+                <input type="text" id="chat-input" maxlength="50" placeholder="說點什麼..." class="flex-1 bg-slate-900 border border-slate-600 text-white rounded-full px-4 py-2 text-sm outline-none focus:border-cyan-500" onkeypress="if(event.key==='Enter') sendChatMessage()">
+                <button onclick="sendChatMessage()" class="bg-cyan-600 hover:bg-cyan-500 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition transform active:scale-95">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </div>
         </div>
     `;
     main.appendChild(pageSocial);
+}
+
+// 切換分頁 (好友/聊天)
+window.switchSocialTab = (tab) => {
+    const btnFriends = document.getElementById('tab-btn-friends');
+    const btnChat = document.getElementById('tab-btn-chat');
+    const secFriends = document.getElementById('section-friends');
+    const secChat = document.getElementById('section-chat');
+
+    if (tab === 'friends') {
+        btnFriends.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-cyan-600 text-white shadow-lg";
+        btnChat.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-slate-800 text-gray-400 hover:bg-slate-700";
+        secFriends.classList.remove('hidden');
+        secChat.classList.add('hidden');
+        
+        // 切回好友時，取消聊天室監聽以省流量
+        if (chatUnsub) { chatUnsub(); chatUnsub = null; }
+        loadFriendList();
+    } else {
+        btnChat.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-cyan-600 text-white shadow-lg";
+        btnFriends.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-slate-800 text-gray-400 hover:bg-slate-700";
+        secChat.classList.remove('hidden');
+        secFriends.classList.add('hidden');
+        
+        // 啟用聊天室監聽
+        listenToGlobalChat();
+    }
+};
+
+// 監聽聊天訊息
+function listenToGlobalChat() {
+    if (chatUnsub) return; // 避免重複監聽
+
+    const chatContainer = document.getElementById('chat-messages');
+    const q = query(collection(db, "global_chat"), orderBy("timestamp", "desc"), limit(50));
+
+    chatUnsub = onSnapshot(q, (snapshot) => {
+        if(snapshot.size > 0 && chatContainer.innerHTML.includes('歡迎來到全服聊天室')) {
+            chatContainer.innerHTML = '';
+        }
+
+        const messages = [];
+        snapshot.forEach(doc => messages.push({id: doc.id, ...doc.data()}));
+        messages.reverse(); // 轉成 舊 -> 新
+
+        chatContainer.innerHTML = '';
+        messages.forEach(msg => {
+            renderChatMessage(msg, chatContainer);
+        });
+
+        // 自動捲動到底部
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    });
+}
+
+function renderChatMessage(msg, container) {
+    const isMe = auth.currentUser && msg.uid === auth.currentUser.uid;
+    const div = document.createElement('div');
+    div.className = `flex gap-3 mb-4 ${isMe ? 'flex-row-reverse' : ''}`;
+    
+    // 頭像
+    const equipped = { frame: msg.frame || '', avatar: msg.avatar || '' };
+    const avatarHtml = getAvatarHtml(equipped, "w-8 h-8");
+    const rankName = getRankName(msg.rankLevel || 0);
+    const time = msg.timestamp ? new Date(msg.timestamp.toMillis()).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '...';
+
+    div.innerHTML = `
+        <div class="flex-shrink-0 flex flex-col items-center">
+            ${avatarHtml}
+        </div>
+        <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'} max-w-[75%]">
+            <div class="flex items-baseline gap-2 mb-1">
+                <span class="text-[10px] text-yellow-500 font-mono border border-yellow-500/30 px-1 rounded bg-black/20">${rankName}</span>
+                <span class="text-xs text-gray-400 font-bold">${msg.displayName}</span>
+            </div>
+            <div class="px-4 py-2 rounded-2xl text-sm break-words relative shadow-md ${isMe ? 'bg-cyan-600 text-white rounded-tr-none' : 'bg-slate-700 text-gray-200 rounded-tl-none'}">
+                ${escapeHtml(msg.text)}
+                <span class="text-[9px] opacity-50 absolute bottom-0.5 ${isMe ? 'left-[-30px]' : 'right-[-30px]'} w-8 text-center">${time}</span>
+            </div>
+        </div>
+    `;
+    container.appendChild(div);
+}
+
+window.sendChatMessage = async () => {
+    const input = document.getElementById('chat-input');
+    const text = input.value.trim();
+    if (!text) return;
+    if (!auth.currentUser) return alert("請先登入");
+
+    input.value = ''; 
+
+    try {
+        await addDoc(collection(db, "global_chat"), {
+            uid: auth.currentUser.uid,
+            displayName: currentUserData.displayName,
+            avatar: currentUserData.equipped?.avatar || '',
+            frame: currentUserData.equipped?.frame || '',
+            rankLevel: currentUserData.stats?.rankLevel || 0,
+            text: text,
+            timestamp: serverTimestamp()
+        });
+    } catch (e) {
+        console.error("Send Error:", e);
+        alert("發送失敗");
+    }
+};
+
+function escapeHtml(text) {
+    if (!text) return text;
+    return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
 }
 
 window.copyFriendCode = () => {
@@ -626,6 +760,13 @@ window.switchToPage = (pageId) => {
         alert("Battle in progress!");
         return;
     }
+    
+    // 如果離開社交頁面，關閉聊天室監聽
+    if (pageId !== 'page-social' && chatUnsub) {
+        chatUnsub();
+        chatUnsub = null;
+    }
+
     document.querySelectorAll('.page-section').forEach(el => { el.classList.remove('active-page', 'hidden'); el.classList.add('hidden'); });
     const target = document.getElementById(pageId);
     if(target) { target.classList.remove('hidden'); target.classList.add('active-page'); }
@@ -647,7 +788,10 @@ window.switchToPage = (pageId) => {
     
     if (pageId === 'page-settings') { renderInventory(); loadUserHistory(); }
     if (pageId === 'page-admin') loadAdminData();
-    if (pageId === 'page-social') loadFriendList();
+    if (pageId === 'page-social') {
+        // 進入社交頁面時，預設顯示好友
+        switchSocialTab('friends');
+    }
     
     updateTexts();
 };
