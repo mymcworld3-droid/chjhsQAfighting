@@ -25,6 +25,8 @@ const provider = new GoogleAuthProvider();
 
 let currentUserData = null;
 let isBattleResultProcessed = false;
+let systemUnsub = null; // 系統指令監聽
+let localReloadToken = null; // 本地重整標記
 // ==========================================
 // 🌍 國際化 (i18n) 設定
 // ==========================================
