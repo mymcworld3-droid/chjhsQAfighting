@@ -437,9 +437,12 @@
                 <button onclick="recalculateAllUserRanks()" class="w-full bg-yellow-600/80 hover:bg-yellow-500 text-white py-3 rounded-xl font-bold transition flex items-center justify-center gap-2">
                     <i class="fa-solid fa-rotate"></i> <span data-i18n="btn_recalc_rank">重算全服玩家段位</span>
                 </button>
-                <p class="text-[10px] text-gray-400 mt-2">
+                <p class="text-[10px] text-gray-400 mt-2 mb-3">
                     ⚠️ <span data-i18n="msg_recalc_warn">說明：這會遍歷所有使用者，根據其「總答對題數」重新設定段位。</span>
                 </p>
+                <button onclick="triggerGlobalReload()" class="w-full mt-2 bg-red-900/80 hover:bg-red-800 text-red-100 py-3 rounded-xl font-bold transition flex items-center justify-center gap-2 border border-red-700">
+                    <i class="fa-solid fa-bolt"></i> <span>強制全服重整 (Force Reload)</span>
+                </button>
             </div>
 
             <div class="bg-slate-800/90 backdrop-blur-md p-5 rounded-2xl border border-red-500/20 mb-6 sticky top-2 z-20 shadow-2xl ring-1 ring-red-900/30 transition-all">
