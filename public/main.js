@@ -1262,14 +1262,7 @@ window.loadUserHistory = async () => {
     } catch (e) { console.error(e); ul.innerHTML = '<li class="text-center text-red-400 py-4">Error</li>'; }
 };
 
-// ... (loadAdminLogs, loadLeaderboard, renderVisual, getAvatarHtml, updateUserAvatarDisplay, loadAdminData 等函式邏輯不變，僅將內部提示文字英文/中文混用，或使用簡單英文) ...
-// 為了程式碼長度考量，未列出的函式與上個版本邏輯完全相同，僅文字提示改為更通用的英文或維持原樣（因為一般使用者看不到後台）
 
-// ==========================================
-//  Admin & Store Logic (Continuation)
-// ==========================================
-
-// 1. 管理員：載入商品列表與表單邏輯
 window.loadAdminData = async () => {
     loadAdminLogs(); 
     
