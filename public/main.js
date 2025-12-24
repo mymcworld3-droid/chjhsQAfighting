@@ -1265,217 +1265,16 @@ window.loadUserHistory = async () => {
 // ... (loadAdminLogs, loadLeaderboard, renderVisual, getAvatarHtml, updateUserAvatarDisplay, loadAdminData 等函式邏輯不變，僅將內部提示文字英文/中文混用，或使用簡單英文) ...
 // 為了程式碼長度考量，未列出的函式與上個版本邏輯完全相同，僅文字提示改為更通用的英文或維持原樣（因為一般使用者看不到後台）
 
-window.loadAdminLogs = async () => {
-    const ul = document.getElementById('admin-logs-list'); if(!ul) return;
-    ul.innerHTML = '<li class="text-center py-10"><div class="loader"></div></li>';
-    try {
-        const q = query(collection(db, "exam_logs"), orderBy("timestamp", "desc"), limit(30));
-        const snap = await getDocs(q); ul.innerHTML = '';
-        snap.forEach(doc => {
-            const log = doc.data(); const time = log.timestamp ? new Date(log.timestamp.toDate()).toLocaleTimeString() : '--';
-            const li = document.createElement('li'); li.className = `p-3 rounded-lg text-xs border-l-4 mb-2 bg-slate-700/50 ${log.isCorrect ? 'border-green-500' : 'border-red-500'}`;
-            li.innerHTML = `<div class="flex justify-between mb-1"><span class="font-bold text-gray-300 truncate w-2/3">${log.email}</span><span class="text-gray-500 font-mono">${time}</span></div><div class="text-gray-400 mb-2 line-clamp-2">${log.question}</div>`;
-            ul.appendChild(li);
-        });
-    } catch (e) { ul.innerHTML = '<li class="text-center text-red-400">Error</li>'; }
-};
-
-window.loadLeaderboard = async () => {
-    const tbody = document.getElementById('leaderboard-body');
-    tbody.innerHTML = '<tr><td colspan="3" class="p-8 text-center text-gray-500"><div class="loader"></div></td></tr>';
-    try {
-        const q = query(collection(db, "users"), orderBy("stats.rankLevel", "desc"), orderBy("stats.totalScore", "desc"), limit(10));
-        const snap = await getDocs(q);
-        tbody.innerHTML = '';
-        let i = 1;
-        snap.forEach(doc => {
-            const d = doc.data();
-            const isMe = auth.currentUser && d.uid === auth.currentUser.uid;
-            const row = `<tr class="border-b border-slate-700/50 ${isMe ? 'bg-blue-900/20' : ''} hover:bg-slate-700/50 transition"><td class="px-4 py-4 font-bold ${i===1?'text-yellow-400':(i===2?'text-gray-300':(i===3?'text-orange-400':'text-gray-500'))}">${i}</td><td class="px-4 py-4 flex items-center gap-3">${getAvatarHtml(d.equipped, "w-8 h-8")}<span class="${isMe ? 'text-blue-300 font-bold' : ''}">${d.displayName}</span></td><td class="px-4 py-4 text-right font-mono text-blue-300">${getRankName(d.stats.rankLevel)} <span class="text-xs text-gray-500 block">${d.stats.totalScore} pts</span></td></tr>`;
-            tbody.innerHTML += row; i++;
-        });
-    } catch (e) { console.error(e); tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-red-400 text-center">Load Error</td></tr>'; }
-};
-
-// ... (後台管理函式省略，與前版相同，僅需貼上即可) ...
-// 為了確保您可以直接複製使用，這裡附上剩餘的必要函式
-
-window.recalculateAllUserRanks = async () => {
-    if (!currentUserData || !currentUserData.isAdmin) return alert("Permission Denied");
-    if (!confirm("Recalculate all ranks?")) return;
-    const btn = document.querySelector('button[onclick="recalculateAllUserRanks()"]');
-    const originalText = btn.innerHTML;
-    btn.innerHTML = '<div class="loader w-4 h-4 border-2"></div> Processing...';
-    btn.disabled = true;
-    try {
-        const usersRef = collection(db, "users");
-        const snapshot = await getDocs(usersRef);
-        let count = 0;
-        const updates = snapshot.docs.map(async (userDoc) => {
-            const data = userDoc.data();
-            const stats = data.stats || {};
-            const netScore = getNetScore(stats);
-            const correctRank = calculateRankFromScore(netScore);
-            if (stats.rankLevel !== correctRank) {
-                count++;
-                return updateDoc(doc(db, "users", userDoc.id), { "stats.rankLevel": correctRank });
-            }
-        });
-        await Promise.all(updates);
-        alert(`Done! Updated ${count} users.`);
-    } catch (e) { console.error(e); alert("Error"); } finally { btn.innerHTML = originalText; btn.disabled = false; }
-};
-
-window.loadAdminLogs = async () => {
-    const ul = document.getElementById('admin-logs-list');
-    if(!ul) return; 
-    ul.innerHTML = '<li class="text-center py-10"><div class="loader"></div></li>';
-    try {
-        const q = query(collection(db, "exam_logs"), orderBy("timestamp", "desc"), limit(30));
-        const snap = await getDocs(q);
-        ul.innerHTML = '';
-        snap.forEach(doc => {
-            const log = doc.data();
-            const time = log.timestamp ? new Date(log.timestamp.toDate()).toLocaleTimeString() : '--:--';
-            const li = document.createElement('li');
-            li.className = `p-3 rounded-lg text-xs border-l-4 mb-2 bg-slate-700/50 ${log.isCorrect ? 'border-green-500' : 'border-red-500'}`;
-            li.innerHTML = `
-                <div class="flex justify-between mb-1"><span class="font-bold text-gray-300 truncate w-2/3">${log.email}</span><span class="text-gray-500 font-mono">${time}</span></div>
-                <div class="text-gray-400 mb-2 line-clamp-2">${log.question}</div>
-                <div class="flex justify-between items-center bg-slate-900/50 p-1 rounded"><span class="text-gray-400">${log.rankAtTime}</span><span class="${log.isCorrect ? 'text-green-400' : 'text-red-400'} font-bold px-2 py-0.5 rounded">${log.isCorrect ? 'CORRECT' : 'WRONG'}</span></div>
-            `;
-            ul.appendChild(li);
-        });
-    } catch (e) { ul.innerHTML = '<li class="text-center text-red-400 py-4">讀取失敗 (權限不足)</li>'; }
-};
-
-window.loadLeaderboard = async () => {
-    const tbody = document.getElementById('leaderboard-body');
-    tbody.innerHTML = '<tr><td colspan="3" class="p-8 text-center text-gray-500"><div class="loader"></div></td></tr>';
-    try {
-        const q = query(
-            collection(db, "users"), 
-            orderBy("stats.rankLevel", "desc"), 
-            orderBy("stats.totalScore", "desc"), 
-            limit(10)
-        );
-        
-        const snap = await getDocs(q);
-        tbody.innerHTML = '';
-        let i = 1;
-        snap.forEach(doc => {
-            const d = doc.data();
-            const isMe = auth.currentUser && d.uid === auth.currentUser.uid;
-            const equipped = d.equipped || {};
-            const avatarHtml = getAvatarHtml(equipped, "w-8 h-8");
-
-            const row = `
-                <tr class="border-b border-slate-700/50 ${isMe ? 'bg-blue-900/20' : ''} hover:bg-slate-700/50 transition">
-                    <td class="px-4 py-4 font-bold ${i===1?'text-yellow-400':(i===2?'text-gray-300':(i===3?'text-orange-400':'text-gray-500'))}">${i}</td>
-                    <td class="px-4 py-4 flex items-center gap-3">
-                        ${avatarHtml}
-                        <span class="${isMe ? 'text-blue-300 font-bold' : ''}">${d.displayName}</span>
-                    </td>
-                    <td class="px-4 py-4 text-right font-mono text-blue-300">
-                        ${RANKS[d.stats.rankLevel] || "青銅"} <span class="text-xs text-gray-500 block">${d.stats.totalScore} pts</span>
-                    </td>
-                </tr>`;
-            tbody.innerHTML += row; 
-            i++;
-        });
-    } catch (e) { 
-        console.error(e); 
-        if(e.message.includes("index")) {
-            tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-yellow-400 text-center text-xs">⚠️ 請按 F12 開啟 Console，點擊連結建立複合索引<br>(stats.rankLevel + stats.totalScore)</td></tr>';
-        } else {
-            tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-red-400 text-center">無法讀取排行榜</td></tr>'; 
-        }
-    }
-};
-
 // ==========================================
-//  Store & Admin & Visuals
+//  Admin & Store Logic (Continuation)
 // ==========================================
-
-function renderVisual(type, value, sizeClass = "w-12 h-12") {
-    const isImage = value && (value.includes('.') || value.includes('/'));
-
-    if (type === 'frame') {
-        if (isImage) {
-            return `
-            <div class="${sizeClass} rounded-full bg-slate-800 flex items-center justify-center relative" style="overflow: visible !important;">
-                <div class="w-full h-full rounded-full overflow-hidden flex items-center justify-center bg-slate-800 relative z-0">
-                    <i class="fa-solid fa-user text-gray-500"></i>
-                </div>
-                <img src="${value}" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[140%] w-auto object-contain pointer-events-none z-20" style="max-width: none;"> 
-            </div>`;
-        } else {
-            return `<div class="${sizeClass} rounded-full border-2 border-gray-600 ${value} flex items-center justify-center bg-slate-800 relative z-0">
-                        <i class="fa-solid fa-user text-gray-500"></i>
-                    </div>`;
-        }
-    } else if (type === 'avatar') {
-        return `<div class="${sizeClass} rounded-full overflow-hidden bg-slate-800 border-2 border-slate-600 relative z-10">
-                    <img src="${value}" class="avatar-img" onerror="this.style.display='none';this.parentElement.innerHTML='<i class=\'fa-solid fa-image text-red-500\'></i>'">
-                </div>`;
-    }
-    return '';
-}
-
-function getAvatarHtml(equipped, sizeClass = "w-10 h-10") {
-    const frame = equipped?.frame || '';
-    const avatar = equipped?.avatar || '';
-    const isFrameImg = frame && (frame.includes('.') || frame.includes('/'));
-
-    const imgContent = avatar 
-        ? `<img src="${avatar}" class="w-full h-full object-cover" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"> <i class="fa-solid fa-user text-gray-400 absolute hidden"></i>`
-        : `<i class="fa-solid fa-user text-gray-400"></i>`;
-
-    const borderClass = frame ? '' : 'border-2 border-slate-600';
-    const cssFrameClass = (!isFrameImg && frame) ? frame : '';
-
-    const frameImgElement = isFrameImg 
-        ? `<img src="${frame}" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); height: 145%; width: auto; max-width: none; z-index: 50; pointer-events: none;">` 
-        : '';
-
-    return `
-    <div class="${sizeClass} rounded-full bg-slate-800 flex items-center justify-center relative ${borderClass} ${cssFrameClass}" style="overflow: visible !important;">
-        <div class="w-full h-full rounded-full overflow-hidden flex items-center justify-center bg-slate-800 relative z-0">
-            ${imgContent}
-        </div>
-        ${frameImgElement}
-    </div>`;
-}
-
-// 7. 更新用戶頭像顯示
-window.updateUserAvatarDisplay = () => {
-    if (!currentUserData) return;
-    
-    const homeSection = document.querySelector('#page-home > div'); 
-    
-    if (!homeSection) {
-        console.warn("⚠️ 警告：找不到首頁 (#page-home > div)，無法渲染頭像。");
-        return;
-    }
-
-    let homeAvatarContainer = document.getElementById('home-avatar-container');
-    if (!homeAvatarContainer) {
-        const avatarDiv = document.createElement('div');
-        avatarDiv.id = 'home-avatar-container';
-        avatarDiv.className = 'absolute top-6 left-6 z-10'; 
-        homeSection.appendChild(avatarDiv);
-        homeAvatarContainer = avatarDiv;
-    }
-
-    homeAvatarContainer.innerHTML = getAvatarHtml(currentUserData.equipped, "w-16 h-16");
-};
 
 // 1. 管理員：載入商品列表與表單邏輯
 window.loadAdminData = async () => {
     loadAdminLogs(); 
     
     const listContainer = document.getElementById('admin-product-list');
-    listContainer.innerHTML = '<div class="text-center text-gray-500">載入商品中...</div>';
+    listContainer.innerHTML = `<div class="text-center text-gray-500">${t('loading')}</div>`;
 
     try {
         const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
@@ -1483,7 +1282,7 @@ window.loadAdminData = async () => {
         
         listContainer.innerHTML = '';
         if(snap.empty) {
-            listContainer.innerHTML = '<div class="text-center text-gray-500">尚無商品</div>';
+            listContainer.innerHTML = '<div class="text-center text-gray-500">No products</div>';
             return;
         }
 
@@ -1501,13 +1300,13 @@ window.loadAdminData = async () => {
                         <div class="text-xs text-gray-400">${item.type} | $${item.price}</div>
                     </div>
                 </div>
-                <div class="text-blue-400 text-xs"><i class="fa-solid fa-pen"></i> 編輯</div>
+                <div class="text-blue-400 text-xs"><i class="fa-solid fa-pen"></i> Edit</div>
             `;
             listContainer.appendChild(div);
         });
     } catch (e) {
         console.error(e);
-        listContainer.innerHTML = '<div class="text-red-400 text-center">載入失敗</div>';
+        listContainer.innerHTML = '<div class="text-red-400 text-center">Load Failed</div>';
     }
 };
 
@@ -1538,9 +1337,9 @@ window.editProduct = (id, data) => {
     document.getElementById('admin-p-value').value = data.value;
     document.getElementById('admin-p-price').value = data.price;
     
-    document.getElementById('admin-form-title').innerText = "✏️ 編輯商品";
+    document.getElementById('admin-form-title').innerText = "✏️ Edit Product";
     const saveBtn = document.getElementById('admin-btn-save'); 
-    saveBtn.innerText = "更新商品";
+    saveBtn.innerText = "Update";
     saveBtn.classList.replace('bg-red-600', 'bg-blue-600');
     
     document.getElementById('admin-btn-del').classList.remove('hidden'); 
@@ -1556,9 +1355,9 @@ window.resetAdminForm = () => {
     document.getElementById('admin-p-value').value = '';
     document.getElementById('admin-p-price').value = '';
     
-    document.getElementById('admin-form-title').innerText = "➕ 上架新商品";
+    document.getElementById('admin-form-title').innerText = t('admin_add_product');
     const saveBtn = document.getElementById('admin-btn-save');
-    saveBtn.innerText = "上架商品";
+    saveBtn.innerText = t('btn_save_product');
     saveBtn.classList.replace('bg-blue-600', 'bg-red-600');
     
     document.getElementById('admin-btn-del').classList.add('hidden'); 
@@ -1569,7 +1368,7 @@ window.resetAdminForm = () => {
 
 window.saveProduct = async () => {
     if (!currentUserData || !currentUserData.isAdmin) {
-        return alert("權限不足！請去 Firebase Console 將 isAdmin 設為 true");
+        return alert("Permission Denied (Admin only)");
     }
 
     const docId = document.getElementById('admin-edit-id').value; 
@@ -1580,48 +1379,48 @@ window.saveProduct = async () => {
     const price = parseInt(priceRaw);
 
     if (!name || !value || isNaN(price)) {
-        return alert("請填寫完整資訊 (名稱、數值、價格)");
+        return alert("Please fill all fields");
     }
 
     const productData = { name, type, value, price, updatedAt: serverTimestamp() };
     const btn = document.getElementById('admin-btn-save');
-    btn.innerText = "處理中...";
+    btn.innerText = "Processing...";
     btn.disabled = true;
 
     try {
         if (docId) {
             await updateDoc(doc(db, "products", docId), productData);
-            alert(`商品「${name}」更新成功！`);
+            alert(`Product "${name}" updated!`);
         } else {
             productData.createdAt = serverTimestamp();
             await addDoc(collection(db, "products"), productData);
-            alert(`商品「${name}」上架成功！`);
+            alert(`Product "${name}" created!`);
         }
         resetAdminForm();
         loadAdminData(); 
     } catch (e) {
         console.error("Save Error:", e);
-        alert("操作失敗，請查看 Console (F12)");
+        alert("Operation failed, check console.");
     } finally {
         btn.disabled = false;
-        if(!docId) btn.innerText = "上架商品";
-        else btn.innerText = "更新商品";
+        if(!docId) btn.innerText = t('btn_save_product');
+        else btn.innerText = "Update";
     }
 };
 
 window.deleteProduct = async () => {
     const docId = document.getElementById('admin-edit-id').value;
     if (!docId) return;
-    if (!confirm("確定要下架此商品嗎？")) return;
+    if (!confirm("Are you sure you want to delete this product?")) return;
 
     try {
         await deleteDoc(doc(db, "products", docId));
-        alert("刪除成功");
+        alert("Deleted successfully");
         resetAdminForm();
         loadAdminData();
     } catch (e) {
         console.error(e);
-        alert("刪除失敗");
+        alert("Delete failed");
     }
 };
 
@@ -1634,11 +1433,11 @@ window.toggleAdminInputPlaceholder = async () => {
     selectorDiv.classList.remove('hidden');
 
     if (type === 'frame') {
-        input.placeholder = "CSS 類名 (frame-gold) 或 圖片路徑 (assets/frame.png)";
-        hint.innerText = "支援 CSS 類名 (需寫在 style.css) 或 圖片路徑";
+        input.placeholder = "CSS Class (frame-gold) or Image Path";
+        hint.innerText = "Supports CSS classes or image paths";
     } else {
-        input.placeholder = "圖片路徑 (例: assets/avatar1.png)";
-        hint.innerText = "手動輸入或從上方選擇未使用的圖片";
+        input.placeholder = "Image Path (e.g., assets/avatar1.png)";
+        hint.innerText = "Manual input or select from unused images below";
     }
     
     await loadUnusedAssets();
@@ -1646,7 +1445,7 @@ window.toggleAdminInputPlaceholder = async () => {
 
 async function loadUnusedAssets() {
     const select = document.getElementById('admin-asset-select');
-    select.innerHTML = '<option value="">-- 掃描中... --</option>';
+    select.innerHTML = '<option value="">Scanning...</option>';
 
     try {
         const res = await fetch('/api/assets');
@@ -1666,10 +1465,10 @@ async function loadUnusedAssets() {
 
         const unusedImages = allImages.filter(img => !usedImages.has(img));
 
-        select.innerHTML = '<option value="">-- 請選擇一張圖片 --</option>';
+        select.innerHTML = `<option value="">${t('admin_select_img')}</option>`;
         if (unusedImages.length === 0) {
             const opt = document.createElement('option');
-            opt.innerText = "(沒有可用的新圖片)";
+            opt.innerText = "(No new images found)";
             opt.disabled = true;
             select.appendChild(opt);
         } else {
@@ -1682,7 +1481,7 @@ async function loadUnusedAssets() {
         }
     } catch (e) {
         console.error(e);
-        select.innerHTML = '<option value="">讀取失敗</option>';
+        select.innerHTML = '<option value="">Error</option>';
     }
 }
 
@@ -1700,10 +1499,10 @@ window.renderInventory = async (filterType = 'frame') => {
 
     const userInv = currentUserData.inventory || [];
     
-    container.innerHTML = '<div class="col-span-4 text-center text-gray-500 py-4"><div class="loader"></div></div>';
+    container.innerHTML = `<div class="col-span-4 text-center text-gray-500 py-4"><div class="loader"></div></div>`;
 
     if (userInv.length === 0) {
-        container.innerHTML = '<div class="col-span-4 text-center text-gray-500 py-4 text-xs">背包空空的，去商店逛逛吧！</div>';
+        container.innerHTML = `<div class="col-span-4 text-center text-gray-500 py-4 text-xs">Inventory empty. Go to Store!</div>`;
         return;
     }
 
@@ -1735,7 +1534,7 @@ window.renderInventory = async (filterType = 'frame') => {
     });
 
     if (count === 0) {
-        container.innerHTML = `<div class="col-span-4 text-center text-gray-500 py-4 text-xs">背包裡沒有物品</div>`;
+        container.innerHTML = `<div class="col-span-4 text-center text-gray-500 py-4 text-xs">No items found</div>`;
     }
 };
 
@@ -1749,7 +1548,7 @@ window.loadStoreItems = async () => {
         grid.innerHTML = '';
         
         if (snap.empty) {
-            grid.innerHTML = '<div class="col-span-2 text-center text-gray-500">商店目前空空如也...</div>';
+            grid.innerHTML = '<div class="col-span-2 text-center text-gray-500">Store is empty...</div>';
             return;
         }
 
@@ -1763,9 +1562,9 @@ window.loadStoreItems = async () => {
 
             let btnAction = '';
             if (isEquipped) {
-                btnAction = `<button class="w-full mt-2 bg-green-600 text-white text-xs py-1.5 rounded cursor-default opacity-50">已裝備</button>`;
+                btnAction = `<button class="w-full mt-2 bg-green-600 text-white text-xs py-1.5 rounded cursor-default opacity-50">${t('btn_equipped')}</button>`;
             } else if (isOwned) {
-                btnAction = `<button onclick="equipItem('${item.type}', '${pid}', '${item.value}')" class="w-full mt-2 bg-slate-600 hover:bg-slate-500 text-white text-xs py-1.5 rounded">裝備</button>`;
+                btnAction = `<button onclick="equipItem('${item.type}', '${pid}', '${item.value}')" class="w-full mt-2 bg-slate-600 hover:bg-slate-500 text-white text-xs py-1.5 rounded">${t('btn_equip')}</button>`;
             } else {
                 btnAction = `<button onclick="buyItem('${pid}', ${item.price})" class="w-full mt-2 bg-blue-600 hover:bg-blue-500 text-white text-xs py-1.5 rounded flex items-center justify-center gap-1"><i class="fa-solid fa-coins text-yellow-300"></i> ${item.price}</button>`;
             }
@@ -1776,7 +1575,7 @@ window.loadStoreItems = async () => {
                 ${isOwned ? '<div class="absolute top-2 right-2 text-green-400 text-xs"><i class="fa-solid fa-check"></i></div>' : ''}
                 ${visual}
                 <div class="text-sm font-bold text-white mt-2">${item.name}</div>
-                <div class="text-xs text-gray-400 mb-1">${item.type === 'frame' ? '相框' : '頭像'}</div>
+                <div class="text-xs text-gray-400 mb-1">${item.type === 'frame' ? 'Frame' : 'Avatar'}</div>
                 ${btnAction}
             `;
             grid.appendChild(card);
@@ -1785,19 +1584,19 @@ window.loadStoreItems = async () => {
 };
 
 window.buyItem = async (pid, price) => {
-    if (!currentUserData || !currentUserData.stats) return alert("資料載入中，請稍後");
+    if (!currentUserData || !currentUserData.stats) return alert(t('loading'));
 
     if (currentUserData.stats.totalScore < price) {
-        return alert(`積分不足！你需要 ${price} 分，目前只有 ${currentUserData.stats.totalScore} 分`);
+        return alert(t('msg_no_funds'));
     }
 
-    if (!confirm(`確定要花費 ${price} 積分購買嗎？`)) return;
+    if (!confirm(t('msg_buy_confirm', {price: price}))) return;
 
     try {
         const userRef = doc(db, "users", auth.currentUser.uid);
         let newInventory = currentUserData.inventory || [];
         
-        if(newInventory.includes(pid)) return alert("你已經擁有此商品了");
+        if(newInventory.includes(pid)) return alert("You already own this item");
         
         newInventory.push(pid);
         const newScore = currentUserData.stats.totalScore - price;
@@ -1810,7 +1609,7 @@ window.buyItem = async (pid, price) => {
             "inventory": newInventory
         });
 
-        alert("購買成功！");
+        alert(t('msg_buy_success'));
         updateUIStats();
         loadStoreItems();
         if(document.getElementById('page-settings').classList.contains('active-page')) {
@@ -1818,7 +1617,7 @@ window.buyItem = async (pid, price) => {
         }
     } catch(e) {
         console.error(e);
-        alert("購買失敗: " + e.message);
+        alert("Purchase failed: " + e.message);
     }
 };
 
@@ -1837,7 +1636,7 @@ window.equipItem = async (type, pid, value) => {
         }
     } catch (e) {
         console.error(e);
-        alert("裝備失敗");
+        alert("Equip failed");
     }
 };
 
@@ -1878,7 +1677,7 @@ function checkAdminRole(isAdmin) {
         btn.id = "btn-admin-nav"; btn.dataset.target = "page-admin";
         btn.className = "flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-red-400 transition group";
         btn.onclick = () => { loadAdminLogs(); switchToPage('page-admin'); };
-        btn.innerHTML = `<i class="fa-solid fa-user-shield mb-1 text-lg group-hover:text-red-400 transition-colors"></i><span class="text-[10px]">管理</span>`;
+        btn.innerHTML = `<i class="fa-solid fa-user-shield mb-1 text-lg group-hover:text-red-400 transition-colors"></i><span class="text-[10px]">${t('nav_admin')}</span>`;
         navGrid.appendChild(btn);
     }
 }
@@ -1888,14 +1687,14 @@ function checkAdminRole(isAdmin) {
 // ==========================================
 window.recalculateAllUserRanks = async () => {
     if (!currentUserData || !currentUserData.isAdmin) {
-        return alert("權限不足！");
+        return alert("Permission Denied");
     }
 
-    if (!confirm("確定要重算所有玩家的段位嗎？\n這將根據他們的「淨積分 (答對-答錯)」重新分配階級。")) return;
+    if (!confirm(t('msg_recalc_warn'))) return;
 
     const btn = document.querySelector('button[onclick="recalculateAllUserRanks()"]');
     const originalText = btn.innerHTML;
-    btn.innerHTML = '<div class="loader w-4 h-4 border-2"></div> 處理中...';
+    btn.innerHTML = '<div class="loader w-4 h-4 border-2"></div> Processing...';
     btn.disabled = true;
 
     try {
@@ -1925,11 +1724,11 @@ window.recalculateAllUserRanks = async () => {
 
         await Promise.all(updates);
         
-        alert(`重算完成！共修正了 ${count} 位玩家的段位。`);
+        alert(`Recalculation Complete! Updated ${count} users.`);
 
     } catch (e) {
         console.error(e);
-        alert("重算失敗：" + e.message);
+        alert("Recalculation Failed: " + e.message);
     } finally {
         btn.innerHTML = originalText;
         btn.disabled = false;
