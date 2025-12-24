@@ -1,7 +1,11 @@
 // 🔥 修正：使用純 URL 引入 Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, addDoc, query, orderBy, limit, getDocs, serverTimestamp, where, onSnapshot, runTransaction, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { 
+    getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, addDoc, 
+    query, orderBy, limit, getDocs, serverTimestamp, where, onSnapshot, runTransaction, 
+    arrayUnion, arrayRemove, writeBatch 
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // Firebase Config
 const firebaseConfig = {
@@ -310,7 +314,6 @@ window.updateTexts = () => {
     const langBtn = document.getElementById('lang-display');
     if(langBtn) langBtn.innerText = currentLang === 'zh-TW' ? 'EN' : '中文';
     
-    // 刷新需要動態生成的 UI
     updateUIStats();
     
     // 如果在設定頁，重新渲染下拉選單
@@ -330,13 +333,11 @@ window.toggleLanguage = () => {
 // ==========================================
 const RANKS_KEYS = ["rank_bronze", "rank_silver", "rank_gold", "rank_diamond", "rank_star", "rank_master", "rank_grandmaster", "rank_king"];
 
-// 輔助：取得當前語言的段位名稱
 function getRankName(level) {
     const idx = Math.min(level || 0, RANKS_KEYS.length - 1);
     return t(RANKS_KEYS[idx]);
 }
 
-// 設定每個段位需要的「淨積分」門檻 (答對 - 答錯)
 const RANK_THRESHOLDS = [0, 20, 50, 90, 140, 200, 270, 360];
 
 function getNetScore(stats) {
@@ -363,6 +364,7 @@ let quizBuffer = [];
 const BUFFER_SIZE = 1; 
 let isFetchingBuffer = false; 
 let battleUnsub = null; 
+let inviteUnsub = null; // 邀請監聽取消函數
 let currentBattleId = null;
 let isBattleActive = false; 
 let currentBankData = null; 
@@ -374,11 +376,12 @@ let allBankFiles = [];
 window.googleLogin = () => { signInWithPopup(auth, provider).catch((error) => alert("Login Failed: " + error.code)); };
 window.logout = () => { 
     localStorage.removeItem('currentQuiz');
+    if (inviteUnsub) inviteUnsub(); // 登出時取消監聽
     signOut(auth).then(() => location.reload()); 
 };
 
 onAuthStateChanged(auth, async (user) => {
-    updateTexts(); // 初始化語言
+    updateTexts();
 
     if (user) {
         document.getElementById('login-screen').classList.add('hidden');
@@ -421,6 +424,7 @@ onAuthStateChanged(auth, async (user) => {
             }
 
             startPresenceSystem();
+            startInvitationListener(); // 🔥 啟動邀請監聽
             updateUserAvatarDisplay();
             updateSettingsInputs();
             checkAdminRole(currentUserData.isAdmin);
@@ -465,8 +469,7 @@ function injectSocialUI() {
     const pageSocial = document.createElement('div');
     pageSocial.id = "page-social";
     pageSocial.className = "page-section hidden";
-    // 注意：這裡的 HTML 是動態生成的，所以要直接寫死或再跑一次 updateTexts
-    // 為了簡單，我直接用 Template Literals 插入
+    
     pageSocial.innerHTML = `
         <div class="sticky top-0 bg-slate-900/95 backdrop-blur-sm z-20 pb-4 border-b border-slate-800 mb-4">
             <h2 class="text-2xl font-bold text-cyan-400 flex items-center gap-2">
@@ -492,9 +495,6 @@ function injectSocialUI() {
     `;
     main.appendChild(pageSocial);
 }
-
-// ... (startPresenceSystem, copyFriendCode, addFriend 保持不變，但在 Alert 中使用 t() ) ...
-// 為了節省篇幅，僅修改有文字輸出的部分
 
 window.copyFriendCode = () => {
     const code = document.getElementById('my-friend-code').innerText;
@@ -559,7 +559,6 @@ function startPresenceSystem() {
     presenceInterval = setInterval(updatePresence, 60 * 1000);
 }
 
-// 5. Load Friend List (UI Update)
 window.loadFriendList = async () => {
     const container = document.getElementById('friend-list-container');
     const myCodeEl = document.getElementById('my-friend-code');
@@ -642,7 +641,6 @@ window.switchToPage = (pageId) => {
     if (pageId === 'page-admin') loadAdminData();
     if (pageId === 'page-social') loadFriendList();
     
-    // 每次切換頁面都刷新文字，確保動態生成的內容也被翻譯
     updateTexts();
 };
 
@@ -669,7 +667,7 @@ function updateUIStats() {
 
     const rankIndex = Math.min(stats.rankLevel, RANKS_KEYS.length - 1);
     const rankEl = document.getElementById('display-rank');
-    rankEl.innerText = t(RANKS_KEYS[rankIndex]); // 使用翻譯
+    rankEl.innerText = t(RANKS_KEYS[rankIndex]); 
     rankEl.className = `text-5xl font-black mb-2 ${rankColors[rankIndex] || "text-white"}`;
 
     let progressPercent = 100;
@@ -703,7 +701,6 @@ function updateUIStats() {
     setTimeout(() => { document.getElementById('progress-bar').style.width = `${progressPercent}%`; }, 100);
 }
 
-// ... (buildPathTree, countJsonFiles, renderCascadingSelectors 保持不變，除了文字部分可微調) ...
 function buildPathTree(paths) {
     const tree = { name: "root", children: {} };
     paths.forEach(path => {
@@ -805,8 +802,6 @@ window.renderCascadingSelectors = (tree, currentPath) => {
     createSelect(0, tree);
 };
 
-// ... (updateSettingsInputs, getCleanSubjects, submitOnboarding, saveProfile 保持大部分不變，僅 Alert 文字改英文或簡單化) ...
-
 async function updateSettingsInputs() {
     if (currentUserData && currentUserData.profile) {
         document.getElementById('set-level').value = currentUserData.profile.educationLevel || "國中一年級";
@@ -901,7 +896,7 @@ async function switchToAI() {
 
 async function fetchOneQuestion() {
     const settings = currentUserData.gameSettings || { source: 'ai', difficulty: 'medium' };
-    const rankName = getRankName(currentUserData.stats.rankLevel || 0); // 使用當前語言的段位名稱
+    const rankName = getRankName(currentUserData.stats.rankLevel || 0); 
     
     // --- AI 模式 ---
     if (settings.source === 'ai') {
@@ -922,12 +917,11 @@ async function fetchOneQuestion() {
             targetSubject = pool[Math.floor(Math.random() * pool.length)];
         }
         
-        // 🔥 將當前語言傳給後端
         const response = await fetch(BACKEND_URL, {
             method: "POST", headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ 
                 subject: targetSubject, level: level, rank: rankName, difficulty: settings.difficulty,
-                language: currentLang // 傳遞語言參數 ('zh-TW' or 'en')
+                language: currentLang 
             })
         });
         
@@ -1085,7 +1079,140 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
 window.giveUpQuiz = () => { if(confirm("Give up this question?")) handleAnswer(-1, -2, document.getElementById('question-text').innerText, "Skipped."); };
 window.nextQuestion = () => { startQuizFlow(); };
 
-// ... (Battle Logic 略有簡化翻譯文字) ...
+// ==========================================
+//  🚀 隨機邀請系統 & 對戰邏輯
+// ==========================================
+
+function startInvitationListener() {
+    if (inviteUnsub) inviteUnsub();
+    const userInvitesRef = collection(db, "users", auth.currentUser.uid, "invitations");
+    
+    inviteUnsub = onSnapshot(userInvitesRef, (snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+            if (change.type === "added") {
+                const invite = change.doc.data();
+                const now = Date.now();
+                const inviteTime = invite.timestamp ? invite.timestamp.toMillis() : now;
+                
+                if (now - inviteTime < 2 * 60 * 1000) {
+                    showInviteToast(change.doc.id, invite);
+                } else {
+                    deleteDoc(change.doc.ref);
+                }
+            }
+        });
+    });
+}
+
+function showInviteToast(inviteId, data) {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = "bg-slate-800/95 backdrop-blur border-l-4 border-yellow-400 text-white p-4 rounded shadow-2xl flex items-start gap-3 transform transition-all duration-300 translate-x-full mb-3";
+    toast.innerHTML = `
+        <div class="relative w-10 h-10 flex-shrink-0">
+             ${renderVisual('frame', data.hostFrame, 'w-10 h-10 absolute top-0 left-0 z-10')}
+             ${renderVisual('avatar', data.hostAvatar, 'w-10 h-10 absolute top-0 left-0')}
+        </div>
+        <div class="flex-1 min-w-0">
+            <h4 class="font-bold text-sm truncate text-yellow-400">對戰邀請！</h4>
+            <p class="text-xs text-gray-300 truncate mb-2">${data.hostName} 邀請你對戰</p>
+            <div class="flex gap-2">
+                <button id="btn-acc-${inviteId}" class="bg-green-600 hover:bg-green-500 text-white text-xs px-3 py-1 rounded font-bold transition">接受</button>
+                <button id="btn-dec-${inviteId}" class="bg-slate-600 hover:bg-slate-500 text-white text-xs px-3 py-1 rounded transition">拒絕</button>
+            </div>
+        </div>
+    `;
+
+    container.appendChild(toast);
+    requestAnimationFrame(() => toast.classList.remove('translate-x-full'));
+
+    document.getElementById(`btn-acc-${inviteId}`).onclick = () => acceptInvite(inviteId, data.roomId, toast);
+    document.getElementById(`btn-dec-${inviteId}`).onclick = () => removeInvite(inviteId, toast);
+
+    setTimeout(() => { if (toast.parentNode) removeInvite(inviteId, toast); }, 10000);
+}
+
+async function acceptInvite(inviteId, roomId, toastElement) {
+    toastElement.classList.add('translate-x-full', 'opacity-0');
+    setTimeout(() => toastElement.remove(), 300);
+    deleteDoc(doc(db, "users", auth.currentUser.uid, "invitations", inviteId));
+
+    if (isBattleActive) { alert("你正在對戰中，無法加入！"); return; }
+
+    const myPlayerData = { 
+        uid: auth.currentUser.uid, name: currentUserData.displayName, 
+        score: 0, done: false, equipped: currentUserData.equipped 
+    };
+
+    const roomRef = doc(db, "rooms", roomId);
+    try {
+        await runTransaction(db, async (transaction) => {
+            const sfDoc = await transaction.get(roomRef);
+            if (!sfDoc.exists()) throw "房間已不存在";
+            const data = sfDoc.data();
+            if (data.status === "waiting" && !data.guest) {
+                transaction.update(roomRef, { guest: myPlayerData, status: "ready" });
+            } else { throw "房間已滿或遊戲已開始"; }
+        });
+
+        isBattleActive = true;
+        currentBattleId = roomId;
+        switchToPage('page-battle');
+        document.getElementById('battle-lobby').classList.add('hidden'); 
+        document.getElementById('battle-arena').classList.remove('hidden');
+        listenToBattleRoom(roomId);
+    } catch (e) { alert("加入失敗：" + e); }
+}
+
+async function removeInvite(inviteId, toastElement) {
+    if (toastElement) {
+        toastElement.classList.add('translate-x-full', 'opacity-0');
+        setTimeout(() => toastElement.remove(), 300);
+    }
+    try { await deleteDoc(doc(db, "users", auth.currentUser.uid, "invitations", inviteId)); } catch (e) { console.error(e); }
+}
+
+async function inviteRandomPlayers(roomId) {
+    if (!auth.currentUser) return;
+    const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+    try {
+        const usersRef = collection(db, "users");
+        const q = query(usersRef, where("lastActive", ">", fiveMinutesAgo), limit(20));
+        const snapshot = await getDocs(q);
+        
+        let candidates = [];
+        snapshot.forEach(doc => {
+            if (doc.id !== auth.currentUser.uid) {
+                candidates.push({ id: doc.id, ...doc.data() });
+            }
+        });
+
+        if (candidates.length === 0) return; 
+
+        for (let i = candidates.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [candidates[i], candidates[j]] = [candidates[j], candidates[i]];
+        }
+
+        const targets = candidates.slice(0, 3);
+        const batch = writeBatch(db);
+
+        targets.forEach(user => {
+            const inviteRef = doc(collection(db, "users", user.id, "invitations"));
+            batch.set(inviteRef, {
+                roomId: roomId,
+                hostName: currentUserData.displayName,
+                hostAvatar: currentUserData.equipped?.avatar || '',
+                hostFrame: currentUserData.equipped?.frame || '',
+                timestamp: serverTimestamp()
+            });
+        });
+
+        await batch.commit();
+        console.log(`已發送邀請給 ${targets.length} 位玩家`);
+    } catch (e) { console.error("邀請發送失敗", e); }
+}
+
 window.startBattleMatchmaking = async () => {
     if (!auth.currentUser) { alert("Please login first!"); return; }
     console.log("🚀 Matchmaking..."); 
@@ -1129,6 +1256,7 @@ window.startBattleMatchmaking = async () => {
             document.getElementById('battle-status-text').innerText = "Waiting for challenger...";
             const roomRef = await addDoc(collection(db, "rooms"), { host: myPlayerData, guest: null, status: "waiting", round: 1, createdAt: serverTimestamp() });
             currentBattleId = roomRef.id;
+            inviteRandomPlayers(currentBattleId); // 🔥 發送邀請
         }
         listenToBattleRoom(currentBattleId);
     } catch (e) {
@@ -1262,14 +1390,6 @@ window.loadUserHistory = async () => {
     } catch (e) { console.error(e); ul.innerHTML = '<li class="text-center text-red-400 py-4">Error</li>'; }
 };
 
-
-// ==========================================
-//  Admin & Store Logic (Continuation)
-// ==========================================
-// ==========================================
-// 補全缺失的 UI/Log 函式 (請插入在 loadUserHistory 之後)
-// ==========================================
-
 window.loadAdminLogs = async () => {
     const ul = document.getElementById('admin-logs-list');
     if(!ul) return; 
@@ -1297,13 +1417,7 @@ window.loadLeaderboard = async () => {
     const tbody = document.getElementById('leaderboard-body');
     tbody.innerHTML = `<tr><td colspan="3" class="p-8 text-center text-gray-500"><div class="loader"></div> ${t('loading')}</td></tr>`;
     try {
-        const q = query(
-            collection(db, "users"), 
-            orderBy("stats.rankLevel", "desc"), 
-            orderBy("stats.totalScore", "desc"), 
-            limit(10)
-        );
-        
+        const q = query(collection(db, "users"), orderBy("stats.rankLevel", "desc"), orderBy("stats.totalScore", "desc"), limit(10));
         const snap = await getDocs(q);
         tbody.innerHTML = '';
         let i = 1;
@@ -1329,16 +1443,13 @@ window.loadLeaderboard = async () => {
         });
     } catch (e) { 
         console.error(e); 
-        if(e.message.includes("index")) {
-            tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-yellow-400 text-center text-xs">⚠️ Index Required (F12 Console)</td></tr>';
-        } else {
-            tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-red-400 text-center">Load Error</td></tr>'; 
-        }
+        if(e.message.includes("index")) { tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-yellow-400 text-center text-xs">⚠️ Index Required (F12 Console)</td></tr>'; } 
+        else { tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-red-400 text-center">Load Error</td></tr>'; }
     }
 };
 
 // ==========================================
-//  Visual Helpers (必須存在，否則商店會報錯)
+//  Visual Helpers
 // ==========================================
 
 function renderVisual(type, value, sizeClass = "w-12 h-12") {
@@ -1391,16 +1502,10 @@ function getAvatarHtml(equipped, sizeClass = "w-10 h-10") {
     </div>`;
 }
 
-// 更新用戶頭像顯示
 window.updateUserAvatarDisplay = () => {
     if (!currentUserData) return;
-    
     const homeSection = document.querySelector('#page-home > div'); 
-    
-    if (!homeSection) {
-        console.warn("⚠️ 警告：找不到首頁 (#page-home > div)，無法渲染頭像。");
-        return;
-    }
+    if (!homeSection) return;
 
     let homeAvatarContainer = document.getElementById('home-avatar-container');
     if (!homeAvatarContainer) {
@@ -1410,13 +1515,14 @@ window.updateUserAvatarDisplay = () => {
         homeSection.appendChild(avatarDiv);
         homeAvatarContainer = avatarDiv;
     }
-
     homeAvatarContainer.innerHTML = getAvatarHtml(currentUserData.equipped, "w-16 h-16");
 };
-// 1. 管理員：載入商品列表與表單邏輯
+
+// ==========================================
+// Admin & Store
+// ==========================================
 window.loadAdminData = async () => {
     loadAdminLogs(); 
-    
     const listContainer = document.getElementById('admin-product-list');
     listContainer.innerHTML = `<div class="text-center text-gray-500">${t('loading')}</div>`;
 
@@ -1425,10 +1531,7 @@ window.loadAdminData = async () => {
         const snap = await getDocs(q);
         
         listContainer.innerHTML = '';
-        if(snap.empty) {
-            listContainer.innerHTML = '<div class="text-center text-gray-500">No products</div>';
-            return;
-        }
+        if(snap.empty) { listContainer.innerHTML = '<div class="text-center text-gray-500">No products</div>'; return; }
 
         snap.forEach(doc => {
             const item = doc.data();
@@ -1457,7 +1560,6 @@ window.loadAdminData = async () => {
 window.toggleAdminForm = () => {
     const body = document.getElementById('admin-form-body');
     const arrow = document.getElementById('admin-form-arrow');
-    
     if (body.classList.contains('hidden')) {
         body.classList.remove('hidden');
         arrow.style.transform = 'rotate(0deg)';
@@ -1488,7 +1590,6 @@ window.editProduct = (id, data) => {
     
     document.getElementById('admin-btn-del').classList.remove('hidden'); 
     toggleAdminInputPlaceholder(); 
-    
     openAdminForm();
     document.getElementById('page-admin').scrollIntoView({ behavior: 'smooth', block: 'start' });
 };
@@ -1506,14 +1607,11 @@ window.resetAdminForm = () => {
     
     document.getElementById('admin-btn-del').classList.add('hidden'); 
     toggleAdminInputPlaceholder(); 
-    
     openAdminForm();
 };
 
 window.saveProduct = async () => {
-    if (!currentUserData || !currentUserData.isAdmin) {
-        return alert("Permission Denied (Admin only)");
-    }
+    if (!currentUserData || !currentUserData.isAdmin) return alert("Permission Denied (Admin only)");
 
     const docId = document.getElementById('admin-edit-id').value; 
     const name = document.getElementById('admin-p-name').value;
@@ -1522,9 +1620,7 @@ window.saveProduct = async () => {
     const priceRaw = document.getElementById('admin-p-price').value;
     const price = parseInt(priceRaw);
 
-    if (!name || !value || isNaN(price)) {
-        return alert("Please fill all fields");
-    }
+    if (!name || !value || isNaN(price)) return alert("Please fill all fields");
 
     const productData = { name, type, value, price, updatedAt: serverTimestamp() };
     const btn = document.getElementById('admin-btn-save');
@@ -1542,10 +1638,8 @@ window.saveProduct = async () => {
         }
         resetAdminForm();
         loadAdminData(); 
-    } catch (e) {
-        console.error("Save Error:", e);
-        alert("Operation failed, check console.");
-    } finally {
+    } catch (e) { console.error("Save Error:", e); alert("Operation failed"); } 
+    finally {
         btn.disabled = false;
         if(!docId) btn.innerText = t('btn_save_product');
         else btn.innerText = "Update";
@@ -1562,10 +1656,7 @@ window.deleteProduct = async () => {
         alert("Deleted successfully");
         resetAdminForm();
         loadAdminData();
-    } catch (e) {
-        console.error(e);
-        alert("Delete failed");
-    }
+    } catch (e) { console.error(e); alert("Delete failed"); }
 };
 
 window.toggleAdminInputPlaceholder = async () => {
@@ -1583,14 +1674,12 @@ window.toggleAdminInputPlaceholder = async () => {
         input.placeholder = "Image Path (e.g., assets/avatar1.png)";
         hint.innerText = "Manual input or select from unused images below";
     }
-    
     await loadUnusedAssets();
 };
 
 async function loadUnusedAssets() {
     const select = document.getElementById('admin-asset-select');
     select.innerHTML = '<option value="">Scanning...</option>';
-
     try {
         const res = await fetch('/api/assets');
         const data = await res.json();
@@ -1599,16 +1688,12 @@ async function loadUnusedAssets() {
         const q = query(collection(db, "products"));
         const snap = await getDocs(q);
         const usedImages = new Set();
-        
         snap.forEach(doc => {
             const item = doc.data();
-            if (item.value && (item.value.includes('.') || item.value.includes('/'))) {
-                usedImages.add(item.value);
-            }
+            if (item.value && (item.value.includes('.') || item.value.includes('/'))) { usedImages.add(item.value); }
         });
 
         const unusedImages = allImages.filter(img => !usedImages.has(img));
-
         select.innerHTML = `<option value="">${t('admin_select_img')}</option>`;
         if (unusedImages.length === 0) {
             const opt = document.createElement('option');
@@ -1623,10 +1708,7 @@ async function loadUnusedAssets() {
                 select.appendChild(opt);
             });
         }
-    } catch (e) {
-        console.error(e);
-        select.innerHTML = '<option value="">Error</option>';
-    }
+    } catch (e) { console.error(e); select.innerHTML = '<option value="">Error</option>'; }
 }
 
 window.selectAdminImage = (value) => {
@@ -1642,7 +1724,6 @@ window.renderInventory = async (filterType = 'frame') => {
     if (!container) return; 
 
     const userInv = currentUserData.inventory || [];
-    
     container.innerHTML = `<div class="col-span-4 text-center text-gray-500 py-4"><div class="loader"></div></div>`;
 
     if (userInv.length === 0) {
@@ -1677,9 +1758,7 @@ window.renderInventory = async (filterType = 'frame') => {
         count++;
     });
 
-    if (count === 0) {
-        container.innerHTML = `<div class="col-span-4 text-center text-gray-500 py-4 text-xs">No items found</div>`;
-    }
+    if (count === 0) container.innerHTML = `<div class="col-span-4 text-center text-gray-500 py-4 text-xs">No items found</div>`;
 };
 
 window.loadStoreItems = async () => {
@@ -1691,10 +1770,7 @@ window.loadStoreItems = async () => {
         const snap = await getDocs(q);
         grid.innerHTML = '';
         
-        if (snap.empty) {
-            grid.innerHTML = '<div class="col-span-2 text-center text-gray-500">Store is empty...</div>';
-            return;
-        }
+        if (snap.empty) { grid.innerHTML = '<div class="col-span-2 text-center text-gray-500">Store is empty...</div>'; return; }
 
         snap.forEach(doc => {
             const item = doc.data();
@@ -1703,7 +1779,6 @@ window.loadStoreItems = async () => {
             const isEquipped = (currentUserData.equipped[item.type] === item.value);
             
             let visual = renderVisual(item.type, item.value, "w-14 h-14");
-
             let btnAction = '';
             if (isEquipped) {
                 btnAction = `<button class="w-full mt-2 bg-green-600 text-white text-xs py-1.5 rounded cursor-default opacity-50">${t('btn_equipped')}</button>`;
@@ -1729,40 +1804,26 @@ window.loadStoreItems = async () => {
 
 window.buyItem = async (pid, price) => {
     if (!currentUserData || !currentUserData.stats) return alert(t('loading'));
-
-    if (currentUserData.stats.totalScore < price) {
-        return alert(t('msg_no_funds'));
-    }
-
+    if (currentUserData.stats.totalScore < price) return alert(t('msg_no_funds'));
     if (!confirm(t('msg_buy_confirm', {price: price}))) return;
 
     try {
         const userRef = doc(db, "users", auth.currentUser.uid);
         let newInventory = currentUserData.inventory || [];
-        
         if(newInventory.includes(pid)) return alert("You already own this item");
         
         newInventory.push(pid);
         const newScore = currentUserData.stats.totalScore - price;
-
         currentUserData.stats.totalScore = newScore;
         currentUserData.inventory = newInventory;
 
-        await updateDoc(userRef, {
-            "stats.totalScore": newScore,
-            "inventory": newInventory
-        });
+        await updateDoc(userRef, { "stats.totalScore": newScore, "inventory": newInventory });
 
         alert(t('msg_buy_success'));
         updateUIStats();
         loadStoreItems();
-        if(document.getElementById('page-settings').classList.contains('active-page')) {
-            renderInventory();
-        }
-    } catch(e) {
-        console.error(e);
-        alert("Purchase failed: " + e.message);
-    }
+        if(document.getElementById('page-settings').classList.contains('active-page')) renderInventory();
+    } catch(e) { console.error(e); alert("Purchase failed: " + e.message); }
 };
 
 window.equipItem = async (type, pid, value) => {
@@ -1775,26 +1836,17 @@ window.equipItem = async (type, pid, value) => {
 
         updateUserAvatarDisplay();
         loadStoreItems(); 
-        if(document.getElementById('page-settings').classList.contains('active-page')) {
-            renderInventory();
-        }
-    } catch (e) {
-        console.error(e);
-        alert("Equip failed");
-    }
+        if(document.getElementById('page-settings').classList.contains('active-page')) renderInventory();
+    } catch (e) { console.error(e); alert("Equip failed"); }
 };
 
 window.filterStore = (type, btnElement) => {
     const items = document.querySelectorAll('.store-card');
     items.forEach(item => {
-        if (type === 'all') {
-            item.classList.remove('hidden');
-        } else {
-            if (item.classList.contains(`${type}-item`)) {
-                item.classList.remove('hidden');
-            } else {
-                item.classList.add('hidden');
-            }
+        if (type === 'all') { item.classList.remove('hidden'); } 
+        else {
+            if (item.classList.contains(`${type}-item`)) { item.classList.remove('hidden'); } 
+            else { item.classList.add('hidden'); }
         }
     });
 
@@ -1806,7 +1858,6 @@ window.filterStore = (type, btnElement) => {
         });
         
         btnElement.className = 'store-tab active-tab flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-pink-600 text-white shadow-lg shadow-pink-900/50';
-        
         const activeIcon = btnElement.querySelector('i');
         if(activeIcon) activeIcon.classList.replace('fa-regular', 'fa-solid');
     }
@@ -1826,14 +1877,8 @@ function checkAdminRole(isAdmin) {
     }
 }
 
-// ==========================================
-// 4. 管理員功能：全服重算段位 (使用淨積分)
-// ==========================================
 window.recalculateAllUserRanks = async () => {
-    if (!currentUserData || !currentUserData.isAdmin) {
-        return alert("Permission Denied");
-    }
-
+    if (!currentUserData || !currentUserData.isAdmin) return alert("Permission Denied");
     if (!confirm(t('msg_recalc_warn'))) return;
 
     const btn = document.querySelector('button[onclick="recalculateAllUserRanks()"]');
@@ -1845,36 +1890,21 @@ window.recalculateAllUserRanks = async () => {
         const usersRef = collection(db, "users");
         const snapshot = await getDocs(usersRef);
         let count = 0;
-
-        // 使用 Promise.all 處理更新
         const updates = snapshot.docs.map(async (userDoc) => {
             const data = userDoc.data();
             const stats = data.stats || {};
-            
-            // 計算淨積分
             const netScore = getNetScore(stats);
-            
-            // 計算應有段位
             const correctRank = calculateRankFromScore(netScore);
             
-            // 只有當段位不符時才更新
             if (stats.rankLevel !== correctRank) {
                 count++;
-                return updateDoc(doc(db, "users", userDoc.id), {
-                    "stats.rankLevel": correctRank
-                });
+                return updateDoc(doc(db, "users", userDoc.id), { "stats.rankLevel": correctRank });
             }
         });
 
         await Promise.all(updates);
-        
         alert(`Recalculation Complete! Updated ${count} users.`);
 
-    } catch (e) {
-        console.error(e);
-        alert("Recalculation Failed: " + e.message);
-    } finally {
-        btn.innerHTML = originalText;
-        btn.disabled = false;
-    }
+    } catch (e) { console.error(e); alert("Recalculation Failed: " + e.message); } 
+    finally { btn.innerHTML = originalText; btn.disabled = false; }
 };
