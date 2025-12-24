@@ -1279,12 +1279,14 @@ window.startBattleMatchmaking = async () => {
 
         if (joinedRoomId) {
             currentBattleId = joinedRoomId;
+            isBattleResultProcessed = false; // 🔥 重置獎勵狀態
             document.getElementById('battle-status-text').innerText = t('battle_connecting');
         } else {
             document.getElementById('battle-status-text').innerText = "Waiting for challenger...";
             const roomRef = await addDoc(collection(db, "rooms"), { host: myPlayerData, guest: null, status: "waiting", round: 1, createdAt: serverTimestamp() });
             currentBattleId = roomRef.id;
-            inviteRandomPlayers(currentBattleId); // 🔥 發送邀請
+            isBattleResultProcessed = false; // 🔥 重置獎勵狀態
+            inviteRandomPlayers(currentBattleId); // 發送邀請
         }
         listenToBattleRoom(currentBattleId);
     } catch (e) {
