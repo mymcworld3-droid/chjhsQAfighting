@@ -1263,6 +1263,11 @@ window.loadUserHistory = async () => {
 };
 
 
+// ==========================================
+//  Admin & Store Logic (Continuation)
+// ==========================================
+
+// 1. 管理員：載入商品列表與表單邏輯
 window.loadAdminData = async () => {
     loadAdminLogs(); 
     
