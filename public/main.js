@@ -1107,28 +1107,56 @@ function startInvitationListener() {
 function showInviteToast(inviteId, data) {
     const container = document.getElementById('toast-container');
     const toast = document.createElement('div');
-    toast.className = "bg-slate-800/95 backdrop-blur border-l-4 border-yellow-400 text-white p-4 rounded shadow-2xl flex items-start gap-3 transform transition-all duration-300 translate-x-full mb-3";
+    
+    // 使用 Tailwind 製作漂亮的通知卡片
+    toast.className = "bg-slate-800/95 backdrop-blur border-l-4 border-yellow-400 text-white p-4 rounded shadow-2xl flex items-center gap-4 transform transition-all duration-300 translate-x-full mb-3 relative overflow-hidden";
+    
+    // 構建頭像 HTML (使用 getAvatarHtml 確保相框與頭像位置正確)
+    // 這裡我們構造一個類似 currentUserData.equipped 的物件傳入
+    const equippedData = { 
+        frame: data.hostFrame || '', 
+        avatar: data.hostAvatar || '' 
+    };
+    
+    const avatarHtml = getAvatarHtml(equippedData, "w-12 h-12");
+
     toast.innerHTML = `
-        <div class="relative w-10 h-10 flex-shrink-0">
-             ${renderVisual('frame', data.hostFrame, 'w-10 h-10 absolute top-0 left-0 z-10')}
-             ${renderVisual('avatar', data.hostAvatar, 'w-10 h-10 absolute top-0 left-0')}
+        <div class="flex-shrink-0">
+             ${avatarHtml}
         </div>
-        <div class="flex-1 min-w-0">
-            <h4 class="font-bold text-sm truncate text-yellow-400">對戰邀請！</h4>
-            <p class="text-xs text-gray-300 truncate mb-2">${data.hostName} 邀請你對戰</p>
+        
+        <div class="flex-1 min-w-0 z-10">
+            <h4 class="font-bold text-sm truncate text-yellow-400 flex items-center gap-2">
+                <i class="fa-solid fa-swords"></i> 對戰邀請！
+            </h4>
+            <p class="text-xs text-gray-300 truncate mb-2 mt-1">
+                <span class="text-white font-bold">${data.hostName}</span> 邀請你對戰
+            </p>
             <div class="flex gap-2">
-                <button id="btn-acc-${inviteId}" class="bg-green-600 hover:bg-green-500 text-white text-xs px-3 py-1 rounded font-bold transition">接受</button>
-                <button id="btn-dec-${inviteId}" class="bg-slate-600 hover:bg-slate-500 text-white text-xs px-3 py-1 rounded transition">拒絕</button>
+                <button id="btn-acc-${inviteId}" class="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white text-xs px-3 py-1.5 rounded font-bold transition shadow-lg">
+                    <i class="fa-solid fa-check"></i> 接受
+                </button>
+                <button id="btn-dec-${inviteId}" class="bg-slate-700 hover:bg-slate-600 text-gray-300 text-xs px-3 py-1.5 rounded transition border border-slate-600">
+                    拒絕
+                </button>
             </div>
+        </div>
+        
+        <div class="absolute -right-2 -bottom-2 text-6xl text-white/5 pointer-events-none">
+            <i class="fa-solid fa-gamepad"></i>
         </div>
     `;
 
     container.appendChild(toast);
+
+    // 動畫進入
     requestAnimationFrame(() => toast.classList.remove('translate-x-full'));
 
+    // 綁定按鈕事件
     document.getElementById(`btn-acc-${inviteId}`).onclick = () => acceptInvite(inviteId, data.roomId, toast);
     document.getElementById(`btn-dec-${inviteId}`).onclick = () => removeInvite(inviteId, toast);
 
+    // 10秒後自動消失
     setTimeout(() => { if (toast.parentNode) removeInvite(inviteId, toast); }, 10000);
 }
 
