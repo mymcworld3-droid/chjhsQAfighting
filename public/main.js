@@ -1313,12 +1313,14 @@ window.startBattleMatchmaking = async () => {
 
 function listenToBattleRoom(roomId) {
     if (battleUnsub) battleUnsub();
+    
     battleUnsub = onSnapshot(doc(db, "rooms", roomId), async (docSnap) => {
         if (!docSnap.exists()) return;
         const room = docSnap.data();
         if (!auth.currentUser) return;
         const isHost = room.host.uid === auth.currentUser.uid;
 
+        // --- 1. 遊戲進行中 (Ready) ---
         if (room.status === "ready") {
             document.getElementById('battle-lobby').classList.add('hidden');
             document.getElementById('battle-arena').classList.remove('hidden');
@@ -1331,6 +1333,7 @@ function listenToBattleRoom(roomId) {
             if (myData) document.getElementById('battle-my-avatar').innerHTML = getAvatarHtml(myData.equipped, "w-16 h-16");
             if (oppData) document.getElementById('battle-opp-avatar').innerHTML = getAvatarHtml(oppData.equipped, "w-16 h-16");
 
+            // 處理題目顯示
             if (!room.currentQuestion) {
                 document.getElementById('battle-loading').classList.remove('hidden');
                 document.getElementById('battle-quiz-box').classList.add('hidden');
@@ -1359,6 +1362,7 @@ function listenToBattleRoom(roomId) {
                 document.getElementById('battle-waiting-msg').classList.remove('hidden');
             }
 
+            // 雙方都回答完畢，進入下一輪或結束
             if (room.host?.done && room.guest?.done && isHost) {
                 setTimeout(async () => {
                     if (room.round >= 3) await updateDoc(doc(db, "rooms", roomId), { status: "finished" });
@@ -1367,17 +1371,72 @@ function listenToBattleRoom(roomId) {
             }
         }
 
+        // --- 2. 遊戲結束 (Finished) - 結算獎勵 ---
         if (room.status === "finished") {
             document.getElementById('battle-arena').classList.add('hidden');
             document.getElementById('battle-result').classList.remove('hidden');
+            
             const myScore = isHost ? (room.host?.score || 0) : (room.guest?.score || 0);
             const oppScore = isHost ? (room.guest?.score || 0) : (room.host?.score || 0);
+            
             const titleEl = document.getElementById('battle-result-title');
             const msgEl = document.getElementById('battle-result-msg');
+            
+            let resultText = "";
 
-            if (myScore > oppScore) { titleEl.innerText = t('battle_win'); titleEl.className = "text-3xl font-bold mb-2 text-green-400 animate-bounce"; msgEl.innerText = `${myScore} : ${oppScore}`; }
-            else if (myScore < oppScore) { titleEl.innerText = t('battle_lose'); titleEl.className = "text-3xl font-bold mb-2 text-red-400"; msgEl.innerText = `${myScore} : ${oppScore}`; }
-            else { titleEl.innerText = t('battle_draw'); titleEl.className = "text-3xl font-bold mb-2 text-yellow-400"; msgEl.innerText = `${myScore} : ${oppScore}`; }
+            if (myScore > oppScore) {
+                // 🏆 勝利邏輯
+                resultText = t('battle_win');
+                titleEl.className = "text-3xl font-bold mb-2 text-green-400 animate-bounce";
+                
+                // 🔥🔥🔥 核心修改：勝利者發放獎勵 (只執行一次) 🔥🔥🔥
+                if (!isBattleResultProcessed) {
+                    isBattleResultProcessed = true; // 鎖定，避免重複執行
+                    
+                    try {
+                        const userRef = doc(db, "users", auth.currentUser.uid);
+                        // 更新本地數據
+                        currentUserData.stats.totalScore += 100;
+                        currentUserData.stats.totalCorrect += 5;
+                        currentUserData.stats.totalAnswered += 5;
+                        
+                        // 重新計算段位
+                        const currentNetScore = getNetScore(currentUserData.stats);
+                        const newRank = calculateRankFromScore(currentNetScore);
+                        currentUserData.stats.rankLevel = newRank;
+
+                        // 更新資料庫
+                        await updateDoc(userRef, { 
+                            "stats.totalScore": currentUserData.stats.totalScore,
+                            "stats.totalCorrect": currentUserData.stats.totalCorrect,
+                            "stats.totalAnswered": currentUserData.stats.totalAnswered,
+                            "stats.rankLevel": newRank
+                        });
+                        
+                        // 顯示獎勵提示
+                        msgEl.innerHTML = `${myScore} : ${oppScore}<br><span class="text-yellow-400 text-sm mt-2 block animate-pulse">🎉 勝利獎勵：+100分, 答對+5</span>`;
+                        updateUIStats(); // 刷新左上角 UI
+                    } catch (e) {
+                        console.error("獎勵發放失敗", e);
+                    }
+                } else {
+                    // 如果已經發放過，顯示靜態文字即可
+                    msgEl.innerHTML = `${myScore} : ${oppScore}<br><span class="text-yellow-400 text-sm mt-2 block">🎉 勝利獎勵已領取</span>`;
+                }
+
+            } else if (myScore < oppScore) {
+                // 😭 戰敗邏輯
+                resultText = t('battle_lose');
+                titleEl.className = "text-3xl font-bold mb-2 text-red-400";
+                msgEl.innerText = `${myScore} : ${oppScore}`;
+            } else {
+                // 🤝 平手邏輯
+                resultText = t('battle_draw');
+                titleEl.className = "text-3xl font-bold mb-2 text-yellow-400";
+                msgEl.innerText = `${myScore} : ${oppScore}`;
+            }
+
+            titleEl.innerText = resultText;
         }
     });
 }
