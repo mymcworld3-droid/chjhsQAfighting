@@ -24,7 +24,7 @@ const db = getFirestore();
 const provider = new GoogleAuthProvider();
 
 let currentUserData = null;
-
+let isBattleResultProcessed = false;
 // ==========================================
 // 🌍 國際化 (i18n) 設定
 // ==========================================
