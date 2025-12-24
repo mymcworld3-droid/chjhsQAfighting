@@ -1266,7 +1266,153 @@ window.loadUserHistory = async () => {
 // ==========================================
 //  Admin & Store Logic (Continuation)
 // ==========================================
+// ==========================================
+// 補全缺失的 UI/Log 函式 (請插入在 loadUserHistory 之後)
+// ==========================================
 
+window.loadAdminLogs = async () => {
+    const ul = document.getElementById('admin-logs-list');
+    if(!ul) return; 
+    ul.innerHTML = `<li class="text-center py-10"><div class="loader"></div></li>`;
+    try {
+        const q = query(collection(db, "exam_logs"), orderBy("timestamp", "desc"), limit(30));
+        const snap = await getDocs(q);
+        ul.innerHTML = '';
+        snap.forEach(doc => {
+            const log = doc.data();
+            const time = log.timestamp ? new Date(log.timestamp.toDate()).toLocaleTimeString() : '--:--';
+            const li = document.createElement('li');
+            li.className = `p-3 rounded-lg text-xs border-l-4 mb-2 bg-slate-700/50 ${log.isCorrect ? 'border-green-500' : 'border-red-500'}`;
+            li.innerHTML = `
+                <div class="flex justify-between mb-1"><span class="font-bold text-gray-300 truncate w-2/3">${log.email}</span><span class="text-gray-500 font-mono">${time}</span></div>
+                <div class="text-gray-400 mb-2 line-clamp-2">${log.question}</div>
+                <div class="flex justify-between items-center bg-slate-900/50 p-1 rounded"><span class="text-gray-400">${log.rankAtTime}</span><span class="${log.isCorrect ? 'text-green-400' : 'text-red-400'} font-bold px-2 py-0.5 rounded">${log.isCorrect ? 'CORRECT' : 'WRONG'}</span></div>
+            `;
+            ul.appendChild(li);
+        });
+    } catch (e) { ul.innerHTML = '<li class="text-center text-red-400 py-4">Error (Permission Denied)</li>'; }
+};
+
+window.loadLeaderboard = async () => {
+    const tbody = document.getElementById('leaderboard-body');
+    tbody.innerHTML = `<tr><td colspan="3" class="p-8 text-center text-gray-500"><div class="loader"></div> ${t('loading')}</td></tr>`;
+    try {
+        const q = query(
+            collection(db, "users"), 
+            orderBy("stats.rankLevel", "desc"), 
+            orderBy("stats.totalScore", "desc"), 
+            limit(10)
+        );
+        
+        const snap = await getDocs(q);
+        tbody.innerHTML = '';
+        let i = 1;
+        snap.forEach(doc => {
+            const d = doc.data();
+            const isMe = auth.currentUser && d.uid === auth.currentUser.uid;
+            const equipped = d.equipped || {};
+            const avatarHtml = getAvatarHtml(equipped, "w-8 h-8");
+
+            const row = `
+                <tr class="border-b border-slate-700/50 ${isMe ? 'bg-blue-900/20' : ''} hover:bg-slate-700/50 transition">
+                    <td class="px-4 py-4 font-bold ${i===1?'text-yellow-400':(i===2?'text-gray-300':(i===3?'text-orange-400':'text-gray-500'))}">${i}</td>
+                    <td class="px-4 py-4 flex items-center gap-3">
+                        ${avatarHtml}
+                        <span class="${isMe ? 'text-blue-300 font-bold' : ''}">${d.displayName}</span>
+                    </td>
+                    <td class="px-4 py-4 text-right font-mono text-blue-300">
+                        ${getRankName(d.stats.rankLevel)} <span class="text-xs text-gray-500 block">${d.stats.totalScore} pts</span>
+                    </td>
+                </tr>`;
+            tbody.innerHTML += row; 
+            i++;
+        });
+    } catch (e) { 
+        console.error(e); 
+        if(e.message.includes("index")) {
+            tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-yellow-400 text-center text-xs">⚠️ Index Required (F12 Console)</td></tr>';
+        } else {
+            tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-red-400 text-center">Load Error</td></tr>'; 
+        }
+    }
+};
+
+// ==========================================
+//  Visual Helpers (必須存在，否則商店會報錯)
+// ==========================================
+
+function renderVisual(type, value, sizeClass = "w-12 h-12") {
+    const isImage = value && (value.includes('.') || value.includes('/'));
+
+    if (type === 'frame') {
+        if (isImage) {
+            return `
+            <div class="${sizeClass} rounded-full bg-slate-800 flex items-center justify-center relative" style="overflow: visible !important;">
+                <div class="w-full h-full rounded-full overflow-hidden flex items-center justify-center bg-slate-800 relative z-0">
+                    <i class="fa-solid fa-user text-gray-500"></i>
+                </div>
+                <img src="${value}" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[140%] w-auto object-contain pointer-events-none z-20" style="max-width: none;"> 
+            </div>`;
+        } else {
+            return `<div class="${sizeClass} rounded-full border-2 border-gray-600 ${value} flex items-center justify-center bg-slate-800 relative z-0">
+                        <i class="fa-solid fa-user text-gray-500"></i>
+                    </div>`;
+        }
+    } else if (type === 'avatar') {
+        return `<div class="${sizeClass} rounded-full overflow-hidden bg-slate-800 border-2 border-slate-600 relative z-10">
+                    <img src="${value}" class="avatar-img" onerror="this.style.display='none';this.parentElement.innerHTML='<i class=\'fa-solid fa-image text-red-500\'></i>'">
+                </div>`;
+    }
+    return '';
+}
+
+function getAvatarHtml(equipped, sizeClass = "w-10 h-10") {
+    const frame = equipped?.frame || '';
+    const avatar = equipped?.avatar || '';
+    const isFrameImg = frame && (frame.includes('.') || frame.includes('/'));
+
+    const imgContent = avatar 
+        ? `<img src="${avatar}" class="w-full h-full object-cover" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"> <i class="fa-solid fa-user text-gray-400 absolute hidden"></i>`
+        : `<i class="fa-solid fa-user text-gray-400"></i>`;
+
+    const borderClass = frame ? '' : 'border-2 border-slate-600';
+    const cssFrameClass = (!isFrameImg && frame) ? frame : '';
+
+    const frameImgElement = isFrameImg 
+        ? `<img src="${frame}" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); height: 145%; width: auto; max-width: none; z-index: 50; pointer-events: none;">` 
+        : '';
+
+    return `
+    <div class="${sizeClass} rounded-full bg-slate-800 flex items-center justify-center relative ${borderClass} ${cssFrameClass}" style="overflow: visible !important;">
+        <div class="w-full h-full rounded-full overflow-hidden flex items-center justify-center bg-slate-800 relative z-0">
+            ${imgContent}
+        </div>
+        ${frameImgElement}
+    </div>`;
+}
+
+// 更新用戶頭像顯示
+window.updateUserAvatarDisplay = () => {
+    if (!currentUserData) return;
+    
+    const homeSection = document.querySelector('#page-home > div'); 
+    
+    if (!homeSection) {
+        console.warn("⚠️ 警告：找不到首頁 (#page-home > div)，無法渲染頭像。");
+        return;
+    }
+
+    let homeAvatarContainer = document.getElementById('home-avatar-container');
+    if (!homeAvatarContainer) {
+        const avatarDiv = document.createElement('div');
+        avatarDiv.id = 'home-avatar-container';
+        avatarDiv.className = 'absolute top-6 left-6 z-10'; 
+        homeSection.appendChild(avatarDiv);
+        homeAvatarContainer = avatarDiv;
+    }
+
+    homeAvatarContainer.innerHTML = getAvatarHtml(currentUserData.equipped, "w-16 h-16");
+};
 // 1. 管理員：載入商品列表與表單邏輯
 window.loadAdminData = async () => {
     loadAdminLogs(); 
