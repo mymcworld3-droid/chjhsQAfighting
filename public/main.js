@@ -2269,71 +2269,62 @@ function updateBattleCardUI(prefix, playerData) {
         }
     }
 }
-
-// [修改] 處理戰鬥答題 (核心邏輯：扣血而非單純加分)
+// [重寫] 處理對戰答題 (只記錄狀態與顯示解析，不直接扣血)
 async function handleBattleAnswer(roomId, userIdx, correctIdx, isHost) {
     const isCorrect = userIdx === correctIdx;
+    
+    // 1. 震動回饋
     if (navigator.vibrate) navigator.vibrate(isCorrect ? 50 : 200);
-    
-    const roomRef = doc(db, "rooms", roomId);
-    
-    await runTransaction(db, async (transaction) => {
-        const roomDoc = await transaction.get(roomRef);
-        const room = roomDoc.data();
-        
-        const me = isHost ? room.host : room.guest;
-        const opp = isHost ? room.guest : room.host;
-        const oppField = isHost ? "guest" : "host";
-        const meField = isHost ? "host" : "guest";
 
-        // 只有活著且答對才攻擊
-        if (!me.isDead && isCorrect) {
-            const myCardKey = me.activeCard;
-            const myCard = me.cards[myCardKey];
-            const myDbCard = CARD_DATABASE[myCard.id];
-            
-            let damage = myDbCard.atk;
-            
-            // 主卡發動技能
-            if (myCardKey === 'main') {
-                damage += (myDbCard.skillDmg || 0);
-            }
-
-            // 扣除對方當前卡牌 HP
-            const oppKey = opp.activeCard;
-            const oppCard = opp.cards[oppKey];
-            let newHp = oppCard.currentHp - damage;
-
-            if (newHp <= 0) {
-                newHp = 0;
-                // 判定死亡與切換邏輯
-                if (oppKey === 'main' && opp.cards.sub) {
-                    // 主卡死，副卡上
-                    transaction.update(roomRef, {
-                        [`${oppField}.cards.main.currentHp`]: 0,
-                        [`${oppField}.activeCard`]: 'sub'
-                    });
-                } else {
-                    // 全死，標記死亡並結束遊戲
-                    transaction.update(roomRef, {
-                        [`${oppField}.cards.${oppKey}.currentHp`]: 0,
-                        [`${oppField}.isDead`]: true,
-                        "status": "finished",
-                        "winner": me.uid,
-                        "loser": opp.uid
-                    });
-                }
-            } else {
-                // 僅扣血
-                transaction.update(roomRef, {
-                    [`${oppField}.cards.${oppKey}.currentHp`]: newHp
-                });
-            }
+    // 2. 鎖定按鈕 UI
+    const btns = document.querySelectorAll('#battle-options button');
+    btns.forEach((btn, idx) => {
+        btn.disabled = true;
+        btn.classList.add('opacity-50', 'cursor-not-allowed');
+        if (idx === correctIdx) {
+            btn.classList.remove('bg-slate-700');
+            btn.classList.add('bg-green-600', 'border-green-400', 'text-white'); // 正確答案亮綠燈
+        } else if (idx === userIdx && !isCorrect) {
+            btn.classList.remove('bg-slate-700');
+            btn.classList.add('bg-red-600', 'border-red-400', 'text-white'); // 選錯亮紅燈
         }
-
-        // 標記已作答
-        transaction.update(roomRef, { [`${meField}.done`]: true });
     });
+
+    // 3. 顯示解析 UI
+    const fbBox = document.getElementById('battle-feedback');
+    const fbStatus = document.getElementById('battle-fb-status');
+    const fbText = document.getElementById('battle-fb-text');
+    
+    // 取得目前暫存的題目解析 (需要確保 fetchOneQuestion 有存下來，或從 room 讀取)
+    // 這裡我們假設 room.currentQuestion.exp 存在，這需要從 DOM 或全域變數獲取
+    // 簡單解法：直接讀取 DOM 上的題目，或依賴 listenToBattleRoom 的全域變數
+    // 為了穩健，我們從 DOM 讀取剛才渲染的解析文字 (如果有存) 或者顯示預設文字
+    const currentExp = window.currentBattleExp || "AI 未提供解析"; 
+
+    fbBox.classList.remove('hidden');
+    if (isCorrect) {
+        fbStatus.innerHTML = '<span class="text-green-400"><i class="fa-solid fa-check"></i> 回答正確！</span>';
+    } else {
+        fbStatus.innerHTML = '<span class="text-red-400"><i class="fa-solid fa-xmark"></i> 回答錯誤...</span>';
+    }
+    fbText.innerText = currentExp;
+
+    // 顯示等待訊息
+    document.getElementById('battle-waiting-msg').classList.remove('hidden');
+
+    // 4. 更新資料庫 (只標記已完成與時間戳記)
+    const roomRef = doc(db, "rooms", roomId);
+    const meField = isHost ? "host" : "guest";
+
+    try {
+        await updateDoc(roomRef, {
+            [`${meField}.done`]: true,
+            [`${meField}.answerCorrect`]: isCorrect, // 記錄是否答對
+            [`${meField}.answerTime`]: serverTimestamp() // 記錄伺服器時間 (用於判斷快慢)
+        });
+    } catch (e) {
+        console.error("Answer upload failed", e);
+    }
 }
 window.leaveBattle = async () => {
     if (battleUnsub) { battleUnsub(); battleUnsub = null; }
