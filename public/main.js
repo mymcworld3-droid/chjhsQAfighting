@@ -1290,14 +1290,18 @@ async function fetchOneQuestion() {
                 currentBankData = { sourcePath: targetSource, questions: mergedQuestions };
             } catch (e) { console.error("Bank Error:", e); alert("Bank load failed, switching to AI"); return switchToAI(); }
         }
-        const filteredQuestions = currentBankData.questions.filter(q => q.difficulty === settings.difficulty);
+        const filteredQuestions = currentBankData.questions.filter(q => q.difficulty === finalDifficulty);
         const pool = filteredQuestions.length > 0 ? filteredQuestions : currentBankData.questions;
         if (pool.length === 0) throw new Error("Pool empty!");
         const rawData = pool[Math.floor(Math.random() * pool.length)];
         let allOptions = shuffleArray([rawData.correct, ...rawData.wrong]);
         const correctIndex = allOptions.indexOf(rawData.correct);
-        let displaySubject = rawData.subject || targetSource.split('/').pop().replace('.json', '');
-        return { data: { q: rawData.q, opts: allOptions, ans: correctIndex, exp: rawData.exp }, rank: rankName, badge: `🎯 ${displaySubject}` };
+        let displaySubject = rawData.subject || settings.source.split('/').pop().replace('.json', '');
+        return { 
+            data: { q: rawData.q, opts: allOptions, ans: correctIndex, exp: rawData.exp }, 
+            rank: rankName, 
+            badge: `🎯 ${displaySubject} | ${finalDifficulty.toUpperCase()}` 
+        };
     }
 }
 
