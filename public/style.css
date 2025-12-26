@@ -878,3 +878,30 @@ input:focus, textarea:focus {
         border-width: 3px;
     }
 }
+/* 卡牌樣式 */
+.game-card {
+    background: linear-gradient(180deg, #1e293b, #0f172a);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+.card-trait { font-size: 10px; color: #fbbf24; } /* 特性文字顏色 */
+.card-skill { font-size: 10px; color: #f87171; } /* 技能文字顏色 */
+
+/* 攻擊動畫 */
+@keyframes attackUp {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-50px) scale(1.1); }
+    100% { transform: translateY(0); }
+}
+@keyframes attackDown {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(50px) scale(1.1); }
+    100% { transform: translateY(0); }
+}
+.anim-attack-up { animation: attackUp 0.3s ease-in-out; }
+.anim-attack-down { animation: attackDown 0.3s ease-in-out; }
+
+/* 受傷搖晃 */
+.anim-shake { animation: wrongShake 0.3s; }
