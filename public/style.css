@@ -905,3 +905,16 @@ input:focus, textarea:focus {
 
 /* 受傷搖晃 */
 .anim-shake { animation: wrongShake 0.3s; }
+
+/* 在 style.css 中加入 */
+#my-card-container {
+    margin-bottom: 2rem; /* 增加底部間距 */
+}
+
+#enemy-card-container {
+    margin-top: 1rem; /* 增加頂部間距 */
+}
+/* 血條漸變效果 */
+.hp-bar-critical { background: linear-gradient(90deg, #dc2626, #ef4444); }
+.hp-bar-warning { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+.hp-bar-healthy { background: linear-gradient(90deg, #10b981, #34d399); }
