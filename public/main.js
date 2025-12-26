@@ -114,6 +114,9 @@ const translations = {
         msg_buy_confirm: "確定要花費 {price} 積分購買嗎？",
         msg_buy_success: "購買成功！",
         msg_no_funds: "積分不足！",
+        // 加在 translations['zh-TW'] 裡面
+        admin_inventory_title: "📦 現有商品庫存",
+        tab_cards: "卡牌", // 導航欄用到
 
         // Battle
         battle_searching: "正在搜尋對手...",
@@ -414,8 +417,15 @@ onAuthStateChanged(auth, async (user) => {
                 if (!currentUserData.inventory) currentUserData.inventory = [];
                 if (!currentUserData.equipped) currentUserData.equipped = { frame: '', avatar: '' };
                 if (!currentUserData.friends) currentUserData.friends = []; 
-                if (!currentUserData.cards) currentUserData.cards = [];
-                if (!currentUserData.deck) currentUserData.deck = { main: "", sub: "" };
+                if (!currentUserData.cards || currentUserData.cards.length === 0) {
+                    currentUserData.cards = ["c001", "c002"];
+                    currentUserData.deck = { main: "c001", sub: "c002" };
+                    // 這裡建議加上 updateDoc 寫回資料庫，以免玩家沒存檔
+                    updateDoc(userRef, { 
+                        cards: ["c001", "c002"],
+                        deck: { main: "c001", sub: "c002" }
+                    });
+                }
                 if (!currentUserData.friendCode) {
                     const code = Math.random().toString(36).substring(2, 8).toUpperCase();
                     await updateDoc(userRef, { friendCode: code });
@@ -1863,37 +1873,72 @@ function listenToBattleRoom(roomId) {
 }
 
 // [新增] 輔助：更新戰鬥卡牌 UI (動態生成卡牌 HTML)
+// 取代 main.js 原本的 updateBattleCardUI 函式
 function updateBattleCardUI(prefix, playerData) {
     if (!playerData) return;
     
-    // 這裡我們動態替換掉原本的頭像容器內容
-    const container = document.getElementById(prefix === 'my' ? 'battle-my-avatar' : 'battle-opp-avatar').parentElement;
+    // 定義 ID 對應 (配合你的 HTML)
+    const idPrefix = prefix === 'my' ? 'my' : 'enemy';
     
-    const activeKey = playerData.activeCard;
-    const activeCard = playerData.cards[activeKey];
-    // 取得原始卡牌數據以計算血量百分比
-    const dbCard = CARD_DATABASE[activeCard.id];
-    const currentHp = activeCard.currentHp;
-    const hpPercent = Math.max(0, (currentHp / dbCard.hp) * 100);
+    const cardVisualEl = document.getElementById(`${idPrefix}-card-visual`);
+    const hpBarEl = document.getElementById(`${idPrefix}-hp-bar`);
+    const hpTextEl = document.getElementById(`${idPrefix}-hp-text`);
+    const subIndicatorEl = document.getElementById(`${idPrefix}-sub-card-indicator`);
 
-    let roleText = activeKey === 'main' ? '<span class="text-yellow-400 font-bold">MAIN</span>' : '<span class="text-gray-400 font-bold">SUB</span>';
+    if (!cardVisualEl || !hpBarEl) return; // 防止元素未找到導致報錯
+
+    const activeKey = playerData.activeCard; // 'main' or 'sub'
+    const activeCard = playerData.cards[activeKey];
     
-    container.innerHTML = `
-        <div class="relative w-28 h-40 bg-slate-800 rounded-lg border-2 ${activeKey==='main'?'border-yellow-500':'border-gray-500'} flex flex-col items-center justify-center p-2 mb-2 shadow-lg transition-all">
-            <div class="text-[10px] mb-1">${roleText}</div>
-            <div class="text-sm font-bold text-white text-center">${activeCard.name}</div>
-            <div class="text-xs text-red-400 mt-1">ATK ${activeCard.atk}</div>
-            ${activeKey==='main' ? `<div class="text-[10px] text-blue-300 mt-1">${activeCard.skill}</div>` : ''}
-            
-            <div class="absolute -bottom-3 left-0 w-full px-1">
-                <div class="h-2 bg-gray-900 rounded-full overflow-hidden border border-gray-600">
-                    <div class="h-full bg-red-500 transition-all duration-300" style="width: ${hpPercent}%"></div>
-                </div>
-                <div class="text-[8px] text-center text-white">${currentHp}/${dbCard.hp}</div>
+    // 取得原始卡牌數據 (用於計算最大血量)
+    const dbCard = CARD_DATABASE[activeCard.id];
+    if (!dbCard) return;
+
+    const maxHp = dbCard.hp;
+    const currentHp = activeCard.currentHp;
+    const hpPercent = Math.max(0, (currentHp / maxHp) * 100);
+
+    // 1. 更新血條
+    hpBarEl.style.width = `${hpPercent}%`;
+    hpTextEl.innerText = `${currentHp}/${maxHp}`;
+
+    // 2. 更新卡面視覺
+    // 判斷是否為主卡，主卡顯示黃色字，副卡顯示灰色
+    const nameColor = activeKey === 'main' ? 'text-yellow-400' : 'text-gray-300';
+    const borderClass = activeKey === 'main' ? 'border-yellow-500' : 'border-gray-500';
+    
+    // 更新卡片容器的邊框顏色 (選擇上一層 container)
+    const container = document.getElementById(`${idPrefix}-card-container`);
+    if(container) {
+        container.className = `relative w-32 h-44 bg-slate-800 rounded-lg border-2 ${borderClass} transition-all duration-500 mb-6`;
+    }
+
+    cardVisualEl.innerHTML = `
+        <div class="flex flex-col items-center justify-center h-full">
+            <div class="text-[10px] uppercase tracking-widest text-gray-500 mb-1">${activeKey}</div>
+            <div class="text-3xl mb-2">
+                ${activeKey === 'main' ? '🐉' : '🛡️'}
             </div>
+            <div class="${nameColor} font-bold text-sm text-center">${activeCard.name}</div>
+            <div class="text-xs text-red-400 mt-1 font-mono">⚔️ ${activeCard.atk}</div>
+            ${activeKey === 'main' ? `<div class="text-[9px] text-blue-300 mt-2 text-center px-1">${activeCard.skill}</div>` : ''}
         </div>
-        ${playerData.cards.sub && activeKey === 'main' ? '<div class="text-[10px] text-gray-500">Sub Ready</div>' : ''}
     `;
+
+    // 3. 更新副卡指示燈 (透明度)
+    // 如果現在是主卡且還有副卡，顯示副卡指示燈；如果現在已經是副卡了，指示燈改為激活狀態或隱藏
+    if (subIndicatorEl) {
+        if (activeKey === 'main' && playerData.cards.sub) {
+            subIndicatorEl.style.opacity = '0.5'; // 待機中
+            subIndicatorEl.innerHTML = '<span class="text-[8px] text-center block text-gray-400">Sub</span>';
+        } else if (activeKey === 'sub') {
+            subIndicatorEl.style.opacity = '1'; // 上場了 (或者可以選擇隱藏，因為卡片已經在中間了)
+            subIndicatorEl.classList.add('border-green-500'); // 亮起
+            subIndicatorEl.innerHTML = '<span class="text-[8px] text-center block text-green-400">Active</span>';
+        } else {
+            subIndicatorEl.style.opacity = '0.1'; // 無副卡或副卡已死
+        }
+    }
 }
 
 // [修改] 處理戰鬥答題 (核心邏輯：扣血而非單純加分)
