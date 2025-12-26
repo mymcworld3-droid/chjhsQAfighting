@@ -217,6 +217,54 @@
                 </div>
             </div>
         </div>
+        <div id="page-cards" class="page-section hidden pb-20">
+            <div class="sticky top-0 bg-slate-900/95 backdrop-blur-md z-20 p-4 border-b border-slate-800">
+                <h2 class="text-2xl font-bold text-purple-400 flex items-center gap-2">
+                    <i class="fa-solid fa-dragon"></i> 卡牌中心
+                </h2>
+            </div>
+
+            <div class="p-4">
+                <h3 class="text-white font-bold mb-2">⚔️ 出戰牌組 (Deck)</h3>
+                <div class="flex gap-4 mb-6">
+                    <div class="flex-1 bg-slate-800 border-2 border-yellow-500 rounded-xl p-2 relative text-center" onclick="selectCardForSlot('main')">
+                        <span class="absolute -top-3 left-2 bg-yellow-500 text-black text-xs font-bold px-2 rounded">主卡 (Main)</span>
+                        <div id="deck-main-display" class="mt-2 min-h-[100px] flex items-center justify-center text-gray-500">
+                            點擊選擇
+                        </div>
+                    </div>
+                    <div class="flex-1 bg-slate-800 border-2 border-gray-500 rounded-xl p-2 relative text-center" onclick="selectCardForSlot('sub')">
+                        <span class="absolute -top-3 left-2 bg-gray-500 text-black text-xs font-bold px-2 rounded">副卡 (Sub)</span>
+                        <div id="deck-sub-display" class="mt-2 min-h-[100px] flex items-center justify-center text-gray-500">
+                            點擊選擇
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-r from-purple-900 to-slate-900 rounded-2xl p-6 border border-purple-500/30 shadow-xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-purple-500/20 rounded-full blur-3xl"></div>
+                    <h3 class="text-xl font-bold text-white mb-2 relative z-10">🔮 召喚英靈</h3>
+                    <p class="text-sm text-purple-200 mb-4 relative z-10">消耗 500 積分隨機獲得一張卡牌</p>
+                    <button onclick="drawCard()" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold py-3 rounded-xl shadow-lg transition transform active:scale-95 relative z-10">
+                        <i class="fa-solid fa-dice-d20"></i> 召喚 (500 pts)
+                    </button>
+                </div>
+
+                <h3 class="text-white font-bold mt-8 mb-2">📦 我的卡庫</h3>
+                <div id="my-card-list" class="grid grid-cols-2 gap-3">
+                    </div>
+            </div>
+        </div>
+
+        <div id="card-selector-modal" class="hidden fixed inset-0 bg-black/80 z-[60] flex items-center justify-center p-4">
+            <div class="bg-slate-800 rounded-xl w-full max-w-md max-h-[80vh] flex flex-col">
+                <div class="p-4 border-b border-slate-700 flex justify-between">
+                    <h3 class="text-white font-bold">選擇卡牌</h3>
+                    <button onclick="document.getElementById('card-selector-modal').classList.add('hidden')" class="text-gray-400"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div id="modal-card-list" class="p-4 overflow-y-auto grid grid-cols-2 gap-2"></div>
+            </div>
+        </div>
 
         <div id="page-battle" class="page-section hidden">
             <div id="battle-lobby" class="flex flex-col items-center justify-center pt-20">
