@@ -1872,6 +1872,155 @@ function listenToBattleRoom(roomId) {
     });
 }
 
+window.confirmBattleDeck = async () => {
+    const btn = document.getElementById('btn-battle-ready');
+    const cancelBtn = document.getElementById('btn-battle-cancel');
+    const previewDiv = document.getElementById('setup-stats-preview');
+    
+    // UI 切換為尋找狀態
+    btn.classList.add('hidden');
+    cancelBtn.classList.remove('hidden');
+    
+    // 顯示配對中狀態
+    previewDiv.innerHTML = `
+        <div class="text-center py-4">
+            <div class="loader w-8 h-8 border-2 mx-auto mb-2"></div>
+            <p class="text-sm text-blue-400 animate-pulse">🔍 搜尋對手中...</p>
+            <p class="text-xs text-gray-500 mt-1">請稍候</p>
+        </div>
+    `;
+
+    try {
+        // 計算戰鬥數據
+        const main = selectedDeck.main;
+        const sub = selectedDeck.sub;
+        let finalHp = main.hp;
+        let finalAtk = main.power;
+
+        if (sub.subTrait) {
+            if (sub.subTrait.type === 'buff_hp') finalHp *= (1 + sub.subTrait.val);
+            if (sub.subTrait.type === 'buff_atk') finalAtk *= (1 + sub.subTrait.val);
+            if (sub.subTrait.type === 'buff_hp_flat') finalHp += sub.subTrait.val;
+            if (sub.subTrait.type === 'buff_atk_flat') finalAtk += sub.subTrait.val;
+        }
+
+        const myBattleData = {
+            uid: auth.currentUser.uid,
+            name: currentUserData.displayName,
+            avatar: currentUserData.equipped?.avatar || '',
+            hp: Math.floor(finalHp),
+            maxHp: Math.floor(finalHp),
+            atk: Math.floor(finalAtk),
+            mainCard: main,
+            subCard: sub,
+            answer: null
+        };
+
+        // 先清理過期房間 (超過 2 分鐘且還在 waiting 的)
+        const twoMinAgo = new Date(Date.now() - 120000);
+        const expiredQuery = query(
+            collection(db, "pvp_rooms"), 
+            where("status", "==", "waiting"), 
+            where("createdAt", "<", twoMinAgo)
+        );
+        const expiredSnap = await getDocs(expiredQuery);
+        const batch = writeBatch(db);
+        expiredSnap.forEach(doc => batch.delete(doc.ref));
+        if (!expiredSnap.empty) await batch.commit();
+
+        // 配對邏輯：尋找等待中的房間
+        const waitingQuery = query(
+            collection(db, "pvp_rooms"), 
+            where("status", "==", "waiting"),
+            where("createdAt", ">", twoMinAgo),
+            limit(5) // 多抓幾個以防有自己的房間
+        );
+        const snapshot = await getDocs(waitingQuery);
+
+        // 過濾掉自己創建的房間
+        const availableRooms = snapshot.docs.filter(
+            doc => doc.data().host.uid !== auth.currentUser.uid
+        );
+
+        if (availableRooms.length > 0) {
+            // 找到對手的房間，加入
+            const roomDoc = availableRooms[0];
+            console.log('[Guest] 找到房間:', roomDoc.id, '準備加入...');
+            
+            await updateDoc(doc(db, "pvp_rooms", roomDoc.id), {
+                guest: myBattleData,
+                status: "battle",
+                turn: 1,
+                attacker: Math.random() < 0.5 ? 'host' : 'guest'
+            });
+            
+            currentRoomId = roomDoc.id;
+            myBattleRole = 'guest';
+            
+            console.log('✅ [Guest] 成功加入房間，進入戰鬥介面');
+            showToast('✅ 找到對手！', 'success');
+            
+            // 延遲進入戰鬥
+            setTimeout(() => {
+                initBattleInterface();
+            }, 500);
+            return;
+        }
+
+        // 沒有可用房間，創建新房間
+        const docRef = await addDoc(collection(db, "pvp_rooms"), {
+            host: myBattleData,
+            guest: null,
+            status: "waiting",
+            createdAt: serverTimestamp(),
+            turn: 1,
+            expiresAt: new Date(Date.now() + 120000) // 2 分鐘後過期
+        });
+        currentRoomId = docRef.id;
+        myBattleRole = 'host';
+        
+        showToast('🔍 等待對手加入...', 'info');
+
+        // 設定超時機制 (90 秒後自動取消)
+        const matchTimeout = setTimeout(() => {
+            if (currentRoomId && myBattleRole === 'host') {
+                showToast('⏰ 配對超時，已取消', 'warning');
+                leaveBattle(true);
+            }
+        }, 90000);
+        
+        // 監聽房間狀態 (等待對手加入)
+        battleUnsub = onSnapshot(doc(db, "pvp_rooms", currentRoomId), (docSnap) => {
+            if (!docSnap.exists()) {
+                clearTimeout(matchTimeout);
+                showToast('❌ 房間已關閉', 'error');
+                leaveBattle(true);
+                return;
+            }
+            
+            const data = docSnap.data();
+            console.log('[Host Waiting] Room Status:', data.status, 'Has Guest:', !!data.guest);
+            
+            // 檢查對手是否加入
+            if (data.status === 'battle' && data.guest && data.guest.uid) {
+                clearTimeout(matchTimeout);
+                console.log('✅ 對手已加入，進入戰鬥！');
+                showToast('⚔️ 對手已加入！', 'success');
+                
+                // 延遲一下再進入戰鬥介面，讓 Toast 顯示出來
+                setTimeout(() => {
+                    initBattleInterface();
+                }, 500);
+            }
+        });
+
+    } catch (error) {
+        console.error("匹配失敗:", error);
+        showToast('❌ 匹配失敗，請重試', 'error');
+        leaveBattle(false);
+    }
+};
+
 // [新增] 輔助：更新戰鬥卡牌 UI (動態生成卡牌 HTML)
 // 取代 main.js 原本的 updateBattleCardUI 函式
 function updateBattleCardUI(prefix, playerData) {
