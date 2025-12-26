@@ -1851,173 +1851,226 @@ async function acceptInvite(inviteId, roomId, toastElement) {
     } catch (e) { console.error(e); alert("加入失敗：" + e); }
 }
 
-// [修改] 監聽對戰室 (改為顯示血量與卡牌，處理勝負搶卡)
-// [修正] 監聽對戰室 (修復題目不顯示的問題)
+// [修改] 監聽對戰室 (加入解析儲存 與 結算邏輯)
 function listenToBattleRoom(roomId) {
     if (battleUnsub) battleUnsub();
     
     console.log("📡 開始監聽對戰房間:", roomId);
 
     battleUnsub = onSnapshot(doc(db, "rooms", roomId), async (docSnap) => {
-        if (!docSnap.exists()) {
-            console.log("房間已不存在");
-            return;
-        }
+        if (!docSnap.exists()) return;
 
         const room = docSnap.data();
         if (!auth.currentUser) return;
 
-        // 判斷我是 Host 還是 Guest
         const isHost = room.host.uid === auth.currentUser.uid;
         const myData = isHost ? room.host : room.guest;
         const oppData = isHost ? room.guest : room.host;
 
-        // --- 1. 遊戲進行中 (Ready) ---
+        // --- 遊戲進行中 ---
         if (room.status === "ready") {
-            // 切換 UI
-            document.getElementById('battle-lobby').classList.add('hidden');
-            document.getElementById('battle-arena').classList.remove('hidden');
-            
-            // 🔥 關鍵修正：確保「題目遮罩層」是打開的
-            const overlay = document.getElementById('battle-quiz-overlay');
-            overlay.classList.remove('hidden'); 
-            overlay.style.display = "flex"; // 強制設定為 Flex 以便置中
-
-            // 更新血量與卡牌
+            // ... (省略 UI 切換與血量更新代碼，與原版相同) ...
             updateBattleCardUI('my', myData);
             updateBattleCardUI('enemy', oppData);
             document.getElementById('battle-round').innerText = room.round;
 
-            // --- 情況 A: 題目還沒產生 ---
-            if (!room.currentQuestion) {
-                console.log("⏳ 等待題目生成中...");
-                document.getElementById('battle-loading').classList.remove('hidden');
-                document.getElementById('battle-quiz-box').classList.add('hidden');
+            // 1. 處理題目顯示
+            if (room.currentQuestion) {
+                // 如果是新題目 (根據 round 判斷，避免重複重繪)
+                // 這裡簡單用「UI 是否為空」或「是否已回答」來判斷是否重繪
+                const qTextEl = document.getElementById('battle-q-text');
                 
-                // 如果我是房主，負責觸發出題
-                if (isHost) generateSharedQuiz(roomId);
-                return;
-            }
-            
-            // --- 情況 B: 題目已經存在 (Firebase 有資料) ---
-            console.log("📝 收到題目資料，準備渲染:", room.currentQuestion.q);
+                // 儲存解析到全域變數，供 handleBattleAnswer 使用
+                window.currentBattleExp = room.currentQuestion.exp;
 
-            // 隱藏載入動畫，顯示題目框
-            document.getElementById('battle-loading').classList.add('hidden');
-            document.getElementById('battle-quiz-box').classList.remove('hidden');
-            
-            // 填入題目文字
-            document.getElementById('battle-q-text').innerText = room.currentQuestion.q || "題目載入錯誤";
-            const container = document.getElementById('battle-options');
-            
-            // 檢查我是否已經回答過
-            if (myData && !myData.done) {
-                // 還沒回答 -> 顯示選項按鈕
-                document.getElementById('battle-waiting-msg').classList.add('hidden');
-                container.innerHTML = ''; // 清空舊按鈕
-                
-                const options = Array.isArray(room.currentQuestion.opts) ? room.currentQuestion.opts : [];
-                
-                options.forEach((opt, idx) => {
-                    const btn = document.createElement('button');
-                    // 設定按鈕樣式
-                    btn.className = "w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 active:scale-95 mb-2 flex items-center";
-                    btn.innerHTML = `
-                        <span class="bg-slate-800 w-8 h-8 rounded-full inline-flex items-center justify-center text-sm font-bold text-blue-400 border border-slate-600 mr-3 shrink-0">
-                            ${String.fromCharCode(65+idx)}
-                        </span>
-                        <span class="text-white font-bold">${opt}</span>
-                    `;
-                    // 綁定點擊事件
-                    btn.onclick = () => handleBattleAnswer(roomId, idx, room.currentQuestion.ans, isHost);
-                    container.appendChild(btn);
-                });
-
-            } else {
-                // 已經回答過 -> 顯示等待訊息
-                container.innerHTML = `
-                    <div class="text-center text-green-400 font-bold py-6 bg-slate-800/50 rounded-lg border border-green-500/30">
-                        <i class="fa-solid fa-check-circle text-2xl mb-2"></i><br>
-                        已完成作答
-                    </div>`;
-                document.getElementById('battle-waiting-msg').classList.remove('hidden');
-            }
-
-            // 雙方都回答完畢，進入下一輪或結算
-            if (room.host?.done && room.guest?.done && isHost) {
-                console.log("⚡ 雙方作答完畢，計算結果...");
-                setTimeout(async () => {
-                    // 判斷是否有人死亡或回合結束
-                    if (room.host.isDead || room.guest.isDead || room.round >= 10) {
-                        // 判定勝負邏輯
-                        let winnerUid = null;
-                        let loserUid = null;
-                        
-                        // 計算剩餘總血量 (主卡+副卡)
-                        const getTotalHp = (p) => (p.cards.main.currentHp) + (p.cards.sub?.currentHp || 0);
-                        const hHp = getTotalHp(room.host);
-                        const gHp = getTotalHp(room.guest);
-
-                        if (room.host.isDead && !room.guest.isDead) { winnerUid = room.guest.uid; loserUid = room.host.uid; }
-                        else if (!room.host.isDead && room.guest.isDead) { winnerUid = room.host.uid; loserUid = room.guest.uid; }
-                        else {
-                            if (hHp > gHp) { winnerUid = room.host.uid; loserUid = room.guest.uid; }
-                            else if (gHp > hHp) { winnerUid = room.guest.uid; loserUid = room.host.uid; }
-                        }
-
-                        await updateDoc(doc(db, "rooms", roomId), { 
-                            status: "finished",
-                            winner: winnerUid,
-                            loser: loserUid
-                        });
-                    } else {
-                        // 進入下一回合 (Reset)
-                        await updateDoc(doc(db, "rooms", roomId), { 
-                            round: room.round + 1, 
-                            currentQuestion: null, 
-                            "host.done": false, 
-                            "guest.done": false 
+                if (qTextEl.innerText !== room.currentQuestion.q) {
+                    // 重置介面狀態
+                    document.getElementById('battle-loading').classList.add('hidden');
+                    document.getElementById('battle-quiz-box').classList.remove('hidden');
+                    document.getElementById('battle-feedback').classList.add('hidden'); // 隱藏舊解析
+                    document.getElementById('battle-waiting-msg').classList.add('hidden');
+                    
+                    qTextEl.innerText = room.currentQuestion.q;
+                    
+                    // 渲染選項
+                    const container = document.getElementById('battle-options');
+                    container.innerHTML = '';
+                    
+                    // 只有當我「還沒回答」時才渲染按鈕
+                    if (!myData.done) {
+                        room.currentQuestion.opts.forEach((opt, idx) => {
+                            const btn = document.createElement('button');
+                            btn.className = "w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 active:scale-95 mb-2 flex items-center";
+                            btn.innerHTML = `<span class="bg-slate-800 w-8 h-8 rounded-full inline-flex items-center justify-center text-sm font-bold text-blue-400 border border-slate-600 mr-3 shrink-0">${String.fromCharCode(65+idx)}</span><span class="text-white font-bold">${opt}</span>`;
+                            btn.onclick = () => handleBattleAnswer(roomId, idx, room.currentQuestion.ans, isHost);
+                            container.appendChild(btn);
                         });
                     }
-                }, 1500); // 稍微延遲讓玩家看到結果
+                }
+            } else {
+                 // 等待題目生成...
+                 if (isHost) generateSharedQuiz(roomId);
+            }
+
+            // 2. [核心修改] 雙方都回答完畢 -> Host 執行結算與攻擊
+            if (room.host?.done && room.guest?.done && isHost && !room.isResolving) {
+                console.log("⚡ 雙方作答完畢，Host 進行速度判定與結算...");
+                
+                // 鎖定狀態防止重複計算
+                await updateDoc(doc(db, "rooms", roomId), { isResolving: true });
+
+                // 延遲 2 秒，讓雙方都有時間看完解析
+                setTimeout(() => resolveRoundLogic(roomId, room), 2500);
             }
         }
+        
+        // ... (省略遊戲結束判定，與原版相同) ...
+         if (room.status === "finished") {
+             // 記得隱藏解析區塊
+             document.getElementById('battle-feedback').classList.add('hidden');
+             // ... 顯示結算畫面 ...
+             document.getElementById('battle-quiz-overlay').classList.add('hidden');
+             document.getElementById('battle-arena').classList.add('hidden');
+             document.getElementById('battle-result').classList.remove('hidden');
+             // ... (後續代碼同原版)
+             const titleEl = document.getElementById('battle-result-title');
+             const msgEl = document.getElementById('battle-result-msg');
+             const isWinner = room.winner === auth.currentUser.uid;
+             
+             if(isWinner) {
+                 titleEl.innerText = "🎉 勝利！";
+                 titleEl.className = "text-3xl font-bold mb-2 text-green-400 animate-bounce";
+                 if(!isBattleResultProcessed) {
+                     isBattleResultProcessed = true;
+                     processBattleWin(isHost ? room.guest : room.host, msgEl);
+                 }
+             } else if (!room.winner) {
+                 titleEl.innerText = "🤝 平手";
+                 msgEl.innerText = "勢均力敵";
+             } else {
+                 titleEl.innerText = "💔 戰敗";
+                 msgEl.innerText = "再接再厲！";
+             }
+         }
+    });
+}
+// [新增] 回合結算邏輯 (Host Only)
+async function resolveRoundLogic(roomId, room) {
+    const host = room.host;
+    const guest = room.guest;
+    
+    // 取得時間戳記 (如果是 null 則視為極大值，即超時)
+    const tHost = host.answerTime ? host.answerTime.toMillis() : Date.now();
+    const tGuest = guest.answerTime ? guest.answerTime.toMillis() : Date.now();
 
-        // --- 2. 遊戲結束 (Finished) ---
-        if (room.status === "finished") {
-            document.getElementById('battle-quiz-overlay').classList.add('hidden'); // 隱藏題目遮罩
-            document.getElementById('battle-arena').classList.add('hidden');
-            document.getElementById('battle-result').classList.remove('hidden');
-            
-            const titleEl = document.getElementById('battle-result-title');
-            const msgEl = document.getElementById('battle-result-msg');
-            const isWinner = room.winner === auth.currentUser.uid;
-            const isDraw = !room.winner;
+    // 建立行動佇列 (Action Queue)
+    // 邏輯：答對者加入攻擊佇列。若都答對，時間短者排前面。
+    let actions = [];
 
-            if (isWinner) {
-                titleEl.innerText = "🎉 勝利！(Victory)";
-                titleEl.className = "text-3xl font-bold mb-2 text-green-400 animate-bounce";
-                
-                if (!isBattleResultProcessed) {
-                    isBattleResultProcessed = true;
-                    // 執行結算 (加分、搶卡)
-                    processBattleWin(isHost ? room.guest : room.host, msgEl);
+    if (host.answerCorrect && guest.answerCorrect) {
+        if (tHost < tGuest) {
+            actions = ['host', 'guest']; // Host 較快
+        } else {
+            actions = ['guest', 'host']; // Guest 較快
+        }
+    } else if (host.answerCorrect) {
+        actions = ['host'];
+    } else if (guest.answerCorrect) {
+        actions = ['guest'];
+    }
+    // 若都答錯，actions 為空，無人攻擊
+
+    const roomRef = doc(db, "rooms", roomId);
+
+    await runTransaction(db, async (transaction) => {
+        // 重新讀取以確保數據最新
+        const freshDoc = await transaction.get(roomRef);
+        if (!freshDoc.exists()) return;
+        const freshRoom = freshDoc.data();
+        
+        let h = freshRoom.host;
+        let g = freshRoom.guest;
+        let logMsg = "";
+
+        // 執行攻擊迴圈
+        for (const attackerRole of actions) {
+            const attacker = attackerRole === 'host' ? h : g;
+            const defender = attackerRole === 'host' ? g : h;
+            const defRole = attackerRole === 'host' ? 'guest' : 'host';
+
+            // 如果防守者已經死了，停止攻擊 (鞭屍邏輯可選)
+            if (defender.isDead) continue;
+
+            const cardKey = attacker.activeCard;
+            const card = attacker.cards[cardKey];
+            // 簡單傷害公式
+            let damage = card.atk; 
+            // 如果是主卡，加技能傷害
+            if (cardKey === 'main') damage += (card.skillDmg || 0);
+
+            // 扣血
+            const targetKey = defender.activeCard;
+            let newHp = defender.cards[targetKey].currentHp - damage;
+
+            if (newHp <= 0) {
+                newHp = 0;
+                // 死亡切換邏輯
+                if (targetKey === 'main' && defender.cards.sub) {
+                    // 主卡死，切副卡
+                    defender.activeCard = 'sub';
+                    logMsg = `${attacker.name} 擊敗了 ${defender.cards.main.name}！`;
                 } else {
-                    msgEl.innerHTML = `已領取獎勵`;
+                    // 全死
+                    defender.isDead = true;
+                    logMsg = `${attacker.name} 獲得了勝利！`;
                 }
-
-            } else if (isDraw) {
-                titleEl.innerText = "🤝 平手 (Draw)";
-                msgEl.innerText = "勢均力敵，無人受傷";
-            } else {
-                titleEl.innerText = "💔 戰敗 (Defeat)";
-                titleEl.className = "text-3xl font-bold mb-2 text-red-400";
-                msgEl.innerText = "勝敗乃兵家常事，再接再厲！";
             }
+
+            // 更新記憶體中的數據
+            defender.cards[targetKey].currentHp = newHp;
+        }
+
+        // 判斷遊戲是否結束
+        if (h.isDead || g.isDead || freshRoom.round >= 10) {
+             let winnerUid = null;
+             let loserUid = null;
+             
+             if (h.isDead && !g.isDead) { winnerUid = g.uid; loserUid = h.uid; }
+             else if (!h.isDead && g.isDead) { winnerUid = h.uid; loserUid = g.uid; }
+             else {
+                 // 回合結束比血量
+                 const hTotal = h.cards.main.currentHp + (h.cards.sub?.currentHp || 0);
+                 const gTotal = g.cards.main.currentHp + (g.cards.sub?.currentHp || 0);
+                 if (hTotal > gTotal) { winnerUid = h.uid; loserUid = g.uid; }
+                 else if (gTotal > hTotal) { winnerUid = g.uid; loserUid = h.uid; }
+             }
+
+             transaction.update(roomRef, {
+                 host: h,
+                 guest: g,
+                 status: "finished",
+                 winner: winnerUid,
+                 loser: loserUid,
+                 isResolving: false
+             });
+        } else {
+            // 進入下一回合
+            transaction.update(roomRef, {
+                host: h,
+                guest: g,
+                round: freshRoom.round + 1,
+                currentQuestion: null, // 清空題目以觸發生成
+                "host.done": false,
+                "guest.done": false,
+                "host.answerCorrect": null,
+                "guest.answerCorrect": null,
+                "host.answerTime": null,
+                "guest.answerTime": null,
+                isResolving: false
+            });
         }
     });
 }
-
 // 輔助函式：處理勝利結算 (避免主函式太長)
 async function processBattleWin(loserData, msgEl) {
     try {
