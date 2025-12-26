@@ -244,10 +244,23 @@
                 <div class="bg-gradient-to-r from-purple-900 to-slate-900 rounded-2xl p-6 border border-purple-500/30 shadow-xl relative overflow-hidden">
                     <div class="absolute top-0 right-0 w-32 h-32 bg-purple-500/20 rounded-full blur-3xl"></div>
                     <h3 class="text-xl font-bold text-white mb-2 relative z-10">🔮 召喚英靈</h3>
-                    <p class="text-sm text-purple-200 mb-4 relative z-10">消耗 500 積分隨機獲得一張卡牌</p>
-                    <button onclick="drawCard()" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold py-3 rounded-xl shadow-lg transition transform active:scale-95 relative z-10">
-                        <i class="fa-solid fa-dice-d20"></i> 召喚 (500 pts)
-                    </button>
+                    <p class="text-xs text-purple-200 mb-4 relative z-10">
+                        重複卡牌自動強化 (+5 ATK，上限+5)。<br>
+                        滿等後重複獲得將返還 100 積分。
+                    </p>
+    
+                    <div class="flex gap-3 relative z-10">
+                        <button onclick="drawSingleCard()" class="flex-1 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-bold py-3 rounded-xl shadow-lg transition active:scale-95 text-sm">
+                            <div class="text-lg mb-1"><i class="fa-solid fa-ticket"></i> 單抽</div>
+                            <div class="text-xs opacity-80">100 積分</div>
+                        </button>
+                        <button onclick="draw11Cards()" class="flex-1 bg-gradient-to-r from-yellow-600 to-orange-500 hover:from-yellow-500 hover:to-orange-400 text-white font-bold py-3 rounded-xl shadow-lg transition active:scale-95 text-sm relative overflow-hidden group">
+                            <div class="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500 skew-x-12"></div>
+                            <div class="text-lg mb-1"><i class="fa-solid fa-layer-group"></i> 11 連抽</div>
+                            <div class="text-xs opacity-80">1000 積分</div>
+                            <div class="absolute top-0 right-0 bg-red-600 text-[10px] px-2 py-0.5 rounded-bl font-bold">必中史詩+</div>
+                        </button>
+                    </div>
                 </div>
 
                 <h3 class="text-white font-bold mt-8 mb-2">📦 我的卡庫</h3>
