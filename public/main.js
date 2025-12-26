@@ -3118,3 +3118,12 @@ function showDrawResults(results, totalRefund) {
     if (totalRefund > 0) msg += `\n💰 總共返還：${totalRefund} 積分`;
     alert(msg);
 }
+
+window.addEventListener('beforeunload', () => {
+    if (isBattleActive && currentBattleId) {
+        // 嘗試標記離開 (Best effort)
+        // 注意：beforeunload 中能做的操作有限，通常建議用 Navigator.sendBeacon，
+        // 但這裡簡單處理，確保至少本地狀態重置
+        leaveBattle(); 
+    }
+});
