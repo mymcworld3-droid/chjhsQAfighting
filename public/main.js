@@ -2870,31 +2870,93 @@ window.recalculateAllUserRanks = async () => {
 };
 
 
-window.drawCard = async () => {
-    if (currentUserData.stats.totalScore < 500) return alert("積分不足 (需要 500)");
-    
-    // 隨機抽選
-    const keys = Object.keys(CARD_DATABASE);
-    const randomKey = keys[Math.floor(Math.random() * keys.length)];
-    const card = CARD_DATABASE[randomKey];
+// 單抽
+window.drawSingleCard = async () => {
+    const COST = 100;
+    if (currentUserData.stats.totalScore < COST) return alert("積分不足！");
+    if (!confirm(`花費 ${COST} 積分進行單次召喚？`)) return;
 
-    if (!confirm(`花費 500 積分召喚？`)) return;
+    await executeDraw(1, COST);
+};
+
+// 11連抽 (保底)
+window.draw11Cards = async () => {
+    const COST = 1000;
+    if (currentUserData.stats.totalScore < COST) return alert("積分不足！");
+    if (!confirm(`花費 ${COST} 積分進行 11 連抽？\n(包含一張保底史詩以上)`)) return;
+
+    await executeDraw(11, COST, "red"); // minRarity = red (史詩)
+};
+
+// 通用執行抽卡邏輯
+async function executeDraw(count, cost, guaranteedRarity = null) {
+    const btn = document.querySelector('button[onclick^="draw"]'); // 簡單鎖定按鈕
+    if(btn) btn.disabled = true;
 
     try {
-        // 扣分並給卡
         const userRef = doc(db, "users", auth.currentUser.uid);
-        await updateDoc(userRef, {
-            "stats.totalScore": currentUserData.stats.totalScore - 500,
-            "cards": arrayUnion(randomKey)
-        });
+        let currentScore = currentUserData.stats.totalScore;
         
-        // 更新本地
-        currentUserData.stats.totalScore -= 500;
-        if(!currentUserData.cards) currentUserData.cards = [];
-        currentUserData.cards.push(randomKey);
-        
-        alert(`🎉 恭喜獲得：${card.name}！\nHP: ${card.hp} | ATK: ${card.atk}\n技能: ${card.skill}`);
+        // 先扣款 (前端顯示)
+        currentScore -= cost;
+        currentUserData.stats.totalScore = currentScore;
         updateUIStats();
-        loadMyCards(); // 重新渲染卡牌列表
-    } catch(e) { console.error(e); alert("抽卡失敗"); }
-};
+
+        let totalRefund = 0;
+        let results = [];
+        let htmlResults = "";
+
+        // 執行抽卡迴圈
+        for (let i = 0; i < count; i++) {
+            // 如果是 11 連抽的最後一張，且有設定保底
+            let minR = null;
+            if (guaranteedRarity && i === count - 1) minR = guaranteedRarity;
+
+            const cardId = pickRandomCardId(minR);
+            const res = await processCardAcquisition(userRef, cardId, currentScore);
+            
+            totalRefund += res.refund;
+            results.push(res);
+            
+            // 建立結果 HTML (用於彈窗顯示)
+            const rConfig = RARITY_CONFIG[res.rarity];
+            htmlResults += `
+                <div class="flex justify-between items-center bg-slate-800 p-2 rounded mb-1 border-l-4 ${rConfig.border.replace('border', 'border-l')}">
+                    <span class="${rConfig.color} font-bold text-xs">[${rConfig.name}]</span>
+                    <span class="text-white text-sm flex-1 ml-2">${res.name}</span>
+                    <span class="text-[10px] text-gray-400">${res.refund > 0 ? '💰+100' : (res.msg.includes('強化') ? '⚡+5' : '🆕')}</span>
+                </div>
+            `;
+        }
+
+        // 處理扣款與返還的最終寫入
+        const finalScore = currentScore + totalRefund;
+        await updateDoc(userRef, { "stats.totalScore": finalScore });
+        currentUserData.stats.totalScore = finalScore;
+        updateUIStats();
+
+        // 顯示結果彈窗 (可以使用簡單的 alert 或自定義 Modal)
+        // 這裡簡單用 alert 顯示文字摘要，或者你可以做一個漂亮的 Overlay
+        showDrawResults(results, totalRefund);
+
+        // 重新載入卡片列表
+        loadMyCards();
+
+    } catch (e) {
+        console.error(e);
+        alert("召喚失敗，請稍後再試");
+    } finally {
+        if(btn) btn.disabled = false;
+    }
+}
+
+// 顯示抽卡結果的簡易 Modal (需要你在 HTML 加一個 id="draw-result-modal")
+function showDrawResults(results, totalRefund) {
+    // 簡單版：用 alert 顯示
+    let msg = `🎉 召喚完成！\n`;
+    results.forEach(r => {
+        msg += `[${RARITY_CONFIG[r.rarity].name}] ${r.name} -> ${r.refund > 0 ? '返還積分' : (r.msg.includes('強化') ? '強化 +5' : '獲得')}\n`;
+    });
+    if (totalRefund > 0) msg += `\n💰 總共返還：${totalRefund} 積分`;
+    alert(msg);
+}
