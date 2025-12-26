@@ -510,7 +510,7 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-// [新增] 載入我的卡庫 (在卡牌頁面)
+// [修改] 載入我的卡庫 (支援等級與稀有度顯示)
 window.loadMyCards = () => {
     const list = document.getElementById('my-card-list');
     if(!list) return;
@@ -521,29 +521,63 @@ window.loadMyCards = () => {
         return;
     }
 
+    // 確保 cardLevels 存在
+    const levels = currentUserData.cardLevels || {};
     const uniqueCards = [...new Set(currentUserData.cards)];
+
+    // 排序：稀有度高 -> 低，等級高 -> 低
+    uniqueCards.sort((a, b) => {
+        const cardA = CARD_DATABASE[a];
+        const cardB = CARD_DATABASE[b];
+        const rarityOrder = ["rainbow", "gold", "red", "purple", "blue", "gray"];
+        const rDiff = rarityOrder.indexOf(cardA.rarity) - rarityOrder.indexOf(cardB.rarity);
+        if (rDiff !== 0) return rDiff; // 稀有度優先
+        return (levels[b] || 0) - (levels[a] || 0); // 等級其次
+    });
 
     uniqueCards.forEach(cardId => {
         const card = CARD_DATABASE[cardId];
         if(!card) return;
         
+        const lvl = levels[cardId] || 0;
+        const finalAtk = card.atk + (lvl * 5); // 基礎攻擊 + 等級加成
+        const rConfig = RARITY_CONFIG[card.rarity];
+
         const isMain = currentUserData.deck.main === cardId;
         const isSub = currentUserData.deck.sub === cardId;
         let badge = "";
         if(isMain) badge = `<span class="bg-yellow-600 text-[10px] px-1 rounded ml-1">Main</span>`;
         else if(isSub) badge = `<span class="bg-gray-600 text-[10px] px-1 rounded ml-1">Sub</span>`;
 
+        // 星星顯示 (等級)
+        let stars = "";
+        for(let i=0; i<lvl; i++) stars += "★";
+
         const div = document.createElement('div');
-        div.className = "bg-slate-800 p-3 rounded-xl border border-slate-700 relative overflow-hidden";
+        // 套用稀有度邊框與光暈
+        div.className = `bg-slate-800 p-3 rounded-xl border-2 ${rConfig.border} relative overflow-hidden group hover:scale-[1.02] transition-transform`;
+        
         div.innerHTML = `
             <div class="flex justify-between items-start mb-2">
-                <span class="font-bold text-white text-sm">${card.name}${badge}</span>
-                <span class="text-xs text-purple-300 font-mono">ATK ${card.atk}</span>
+                <span class="font-bold ${rConfig.color} text-sm">${card.name} ${badge}</span>
+                <span class="text-xs text-yellow-500 font-mono tracking-tighter">${stars}</span>
             </div>
-            <div class="text-[10px] text-gray-400 mb-1">HP: ${card.hp}</div>
-            <div class="text-[10px] text-yellow-500">★ ${card.trait}</div>
-            <div class="text-[10px] text-red-400">⚡ ${card.skill}</div>
+            <div class="flex justify-between items-end">
+                <div>
+                    <div class="text-[10px] text-gray-400">HP: ${card.hp}</div>
+                    <div class="text-[10px] text-gray-300">Trait: ${card.trait}</div>
+                </div>
+                <div class="text-right">
+                    <div class="text-lg font-bold text-red-400 font-mono">⚔️${finalAtk}</div>
+                    <div class="text-[9px] text-gray-500">Base: ${card.atk}</div>
+                </div>
+            </div>
+            <div class="mt-2 pt-2 border-t border-white/10 text-[10px] text-blue-300 truncate">
+                ⚡ ${card.skill} (${card.skillDmg})
+            </div>
         `;
+        // 點擊事件 (如果需要詳情或裝備)
+        // div.onclick = ... 
         list.appendChild(div);
     });
 };
