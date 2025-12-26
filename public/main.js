@@ -2081,8 +2081,8 @@ async function processBattleWin(loserData, msgEl) {
         const userRef = doc(db, "users", auth.currentUser.uid);
         
         // 加分並獲得卡牌
-        currentUserData.stats.totalScore += 200;
-        currentUserData.stats.totalCorrect += 5; 
+        currentUserData.stats.totalScore += 500;
+        currentUserData.stats.totalCorrect += 10; 
         
         const currentNetScore = getNetScore(currentUserData.stats);
         const newRank = calculateRankFromScore(currentNetScore);
