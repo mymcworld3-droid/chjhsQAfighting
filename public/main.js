@@ -40,6 +40,7 @@ let isFetchingBuffer = false;
 let currentBankData = null; 
 let presenceInterval = null; 
 let allBankFiles = [];
+let currentSelectSlot = null;
 
 // ==========================================
 // 🌍 國際化 (i18n) 設定
@@ -159,6 +160,9 @@ const translations = {
         admin_select_img: "從伺服器選擇圖片：",
         btn_save_product: "上架商品",
         admin_inventory_title: "📦 現有商品庫存",
+        tab_cards: "卡牌",
+        btn_draw: "召喚 (500分)",
+        msg_no_cards: "你還沒有卡牌，快去召喚！",
 
         // Nav
         nav_home: "首頁",
@@ -282,6 +286,9 @@ const translations = {
         admin_select_img: "Select Image:",
         btn_save_product: "Save Product",
         admin_inventory_title: "📦 Current Inventory",
+        tab_cards: "Cards",
+        btn_draw: "Summon (500pts)",
+        msg_no_cards: "No cards yet. Summon now!",
 
         nav_home: "Home",
         nav_quiz: "Quiz",
@@ -408,6 +415,8 @@ onAuthStateChanged(auth, async (user) => {
                 if (!currentUserData.inventory) currentUserData.inventory = [];
                 if (!currentUserData.equipped) currentUserData.equipped = { frame: '', avatar: '' };
                 if (!currentUserData.friends) currentUserData.friends = []; 
+                if (!currentUserData.cards) currentUserData.cards = [];
+                if (!currentUserData.deck) currentUserData.deck = { main: "", sub: "" };
                 if (!currentUserData.friendCode) {
                     const code = Math.random().toString(36).substring(2, 8).toUpperCase();
                     await updateDoc(userRef, { friendCode: code });
@@ -419,6 +428,8 @@ onAuthStateChanged(auth, async (user) => {
                     uid: user.uid, displayName: user.displayName, email: user.email,
                     profile: { educationLevel: "", strongSubjects: "", weakSubjects: "" },
                     inventory: [], 
+                    cards: ["c001", "c002"], 
+                    deck: { main: "c001", sub: "c002" },
                     equipped: { frame: '', avatar: '' }, 
                     stats: { 
                         rankLevel: 0, currentStars: 0, totalScore: 0,
@@ -439,6 +450,7 @@ onAuthStateChanged(auth, async (user) => {
             updateSettingsInputs();
             checkAdminRole(currentUserData.isAdmin);
             updateUIStats();
+            updateDeckDisplay();
 
             if (!currentUserData.profile.educationLevel || currentUserData.profile.educationLevel === "") {
                 switchToPage('page-onboarding'); 
@@ -458,7 +470,144 @@ onAuthStateChanged(auth, async (user) => {
         if (chatUnsub) chatUnsub();
     }
 });
+// [新增] 抽卡功能
+window.drawCard = async () => {
+    if (currentUserData.stats.totalScore < 500) return alert("積分不足 (需要 500)");
+    
+    const keys = Object.keys(CARD_DATABASE);
+    const randomKey = keys[Math.floor(Math.random() * keys.length)];
+    const card = CARD_DATABASE[randomKey];
 
+    if (!confirm(`花費 500 積分召喚？`)) return;
+
+    try {
+        const userRef = doc(db, "users", auth.currentUser.uid);
+        await updateDoc(userRef, {
+            "stats.totalScore": currentUserData.stats.totalScore - 500,
+            "cards": arrayUnion(randomKey)
+        });
+        
+        currentUserData.stats.totalScore -= 500;
+        if(!currentUserData.cards) currentUserData.cards = [];
+        currentUserData.cards.push(randomKey);
+        
+        alert(`🎉 恭喜獲得：${card.name}！\nHP: ${card.hp} | ATK: ${card.atk}\n特性: ${card.trait}\n技能: ${card.skill}`);
+        updateUIStats();
+        loadMyCards(); 
+    } catch(e) { console.error(e); alert("抽卡失敗"); }
+};
+
+// [新增] 載入我的卡庫 (在卡牌頁面)
+window.loadMyCards = () => {
+    const list = document.getElementById('my-card-list');
+    if(!list) return;
+    list.innerHTML = "";
+    
+    if(!currentUserData.cards || currentUserData.cards.length === 0) {
+        list.innerHTML = `<div class="col-span-2 text-center text-gray-500 py-4">${t('msg_no_cards')}</div>`;
+        return;
+    }
+
+    const uniqueCards = [...new Set(currentUserData.cards)];
+
+    uniqueCards.forEach(cardId => {
+        const card = CARD_DATABASE[cardId];
+        if(!card) return;
+        
+        const isMain = currentUserData.deck.main === cardId;
+        const isSub = currentUserData.deck.sub === cardId;
+        let badge = "";
+        if(isMain) badge = `<span class="bg-yellow-600 text-[10px] px-1 rounded ml-1">Main</span>`;
+        else if(isSub) badge = `<span class="bg-gray-600 text-[10px] px-1 rounded ml-1">Sub</span>`;
+
+        const div = document.createElement('div');
+        div.className = "bg-slate-800 p-3 rounded-xl border border-slate-700 relative overflow-hidden";
+        div.innerHTML = `
+            <div class="flex justify-between items-start mb-2">
+                <span class="font-bold text-white text-sm">${card.name}${badge}</span>
+                <span class="text-xs text-purple-300 font-mono">ATK ${card.atk}</span>
+            </div>
+            <div class="text-[10px] text-gray-400 mb-1">HP: ${card.hp}</div>
+            <div class="text-[10px] text-yellow-500">★ ${card.trait}</div>
+            <div class="text-[10px] text-red-400">⚡ ${card.skill}</div>
+        `;
+        list.appendChild(div);
+    });
+};
+
+// [新增] 開啟選擇卡牌 Modal
+window.selectCardForSlot = (slot) => {
+    currentSelectSlot = slot;
+    document.getElementById('card-selector-modal').classList.remove('hidden');
+    renderModalCards();
+};
+
+// [新增] 渲染 Modal 中的卡牌列表
+function renderModalCards() {
+    const list = document.getElementById('modal-card-list');
+    list.innerHTML = "";
+    const myCards = [...new Set(currentUserData.cards || [])]; 
+    
+    myCards.forEach(cardId => {
+        const card = CARD_DATABASE[cardId];
+        if(!card) return;
+        
+        const div = document.createElement('div');
+        div.className = "bg-slate-700 p-2 rounded border border-slate-600 cursor-pointer hover:border-yellow-500 flex flex-col gap-1";
+        div.innerHTML = `
+            <div class="font-bold text-white text-sm">${card.name}</div>
+            <div class="text-[10px] text-gray-300">HP:${card.hp} ATK:${card.atk}</div>
+        `;
+        div.onclick = () => setDeckCard(cardId);
+        list.appendChild(div);
+    });
+}
+
+// [新增] 設定牌組 (寫入資料庫)
+async function setDeckCard(cardId) {
+    if (!currentSelectSlot) return;
+    
+    if (!currentUserData.deck) currentUserData.deck = { main: "", sub: "" };
+    
+    // 防呆：主副卡若設為同一張，則互換或清空
+    if (currentSelectSlot === 'main' && currentUserData.deck.sub === cardId) currentUserData.deck.sub = "";
+    if (currentSelectSlot === 'sub' && currentUserData.deck.main === cardId) currentUserData.deck.main = "";
+
+    currentUserData.deck[currentSelectSlot] = cardId;
+    
+    try {
+        await updateDoc(doc(db, "users", auth.currentUser.uid), { "deck": currentUserData.deck });
+        document.getElementById('card-selector-modal').classList.add('hidden');
+        updateDeckDisplay();
+        loadMyCards(); // 刷新列表標記
+    } catch(e) {
+        console.error(e);
+        alert("設定失敗");
+    }
+}
+
+// [新增] 更新主畫面上的牌組顯示區塊
+function updateDeckDisplay() {
+    const mainId = currentUserData.deck?.main;
+    const subId = currentUserData.deck?.sub;
+    
+    const mainEl = document.getElementById('deck-main-display');
+    const subEl = document.getElementById('deck-sub-display');
+    
+    if (mainId && CARD_DATABASE[mainId]) {
+        const c = CARD_DATABASE[mainId];
+        mainEl.innerHTML = `<div class="text-yellow-400 font-bold">${c.name}</div><div class="text-xs text-white">HP:${c.hp}</div><div class="text-[10px] text-red-300">${c.skill}</div>`;
+    } else {
+        mainEl.innerHTML = "點擊選擇";
+    }
+
+    if (subId && CARD_DATABASE[subId]) {
+        const c = CARD_DATABASE[subId];
+        subEl.innerHTML = `<div class="text-gray-300 font-bold">${c.name}</div><div class="text-xs text-white">HP:${c.hp}</div>`;
+    } else {
+        subEl.innerHTML = "點擊選擇";
+    }
+}
 // ==========================================
 //  Social & UI Injection (Tabbed Chat)
 // ==========================================
