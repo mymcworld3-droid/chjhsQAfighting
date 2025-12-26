@@ -1886,7 +1886,7 @@ async function acceptInvite(inviteId, roomId, toastElement) {
     document.getElementById('battle-lobby').classList.remove('hidden'); // 先顯示 Lobby
     document.getElementById('battle-arena').classList.add('hidden');    // 先隱藏 Arena
     document.getElementById('battle-status-text').innerText = "正在加入房間..."; // 更新文字
-    
+    document.getElementById('battle-result').classList.add('hidden');
     // 5. 執行加入房間交易
     const roomRef = doc(db, "rooms", roomId);
     try {
