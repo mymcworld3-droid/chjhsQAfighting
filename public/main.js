@@ -1190,10 +1190,39 @@ async function switchToAI() {
     currentUserData.gameSettings.source = 'ai';
     return fetchOneQuestion(); 
 }
+// [新增] 智慧難度判斷邏輯
+function getSmartDifficulty() {
+    if (!currentUserData || !currentUserData.stats) return 'easy';
 
+    const rank = currentUserData.stats.rankLevel || 0;
+    const streak = currentUserData.stats.currentStreak || 0;
+    
+    // 1. 基礎難度 (依照段位)
+    // 0-1 (青銅/白銀): easy
+    // 2-4 (黃金/鑽石/星耀): medium
+    // 5+ (大師以上): hard
+    let baseDiff = 'easy';
+    if (rank >= 5) baseDiff = 'hard';
+    else if (rank >= 2) baseDiff = 'medium';
+
+    // 2. 連勝加成 (Streak Bonus)
+    // 如果連對 3 題以上，強迫提升一級難度 (挑戰時刻)
+    if (streak >= 3) {
+        if (baseDiff === 'easy') return 'medium';
+        if (baseDiff === 'medium') return 'hard';
+        return 'hard'; // 已經是 hard 就維持
+    }
+
+    return baseDiff;
+}
 async function fetchOneQuestion() {
     const settings = currentUserData.gameSettings || { source: 'ai', difficulty: 'medium' };
     const rankName = getRankName(currentUserData.stats.rankLevel || 0); 
+
+    let finalDifficulty = settings.difficulty;
+    if (!finalDifficulty || finalDifficulty === 'auto') {
+        finalDifficulty = getSmartDifficulty();
+    }
     
     // --- AI 模式 ---
     if (settings.source === 'ai') {
@@ -1217,7 +1246,7 @@ async function fetchOneQuestion() {
         const response = await fetch(BACKEND_URL, {
             method: "POST", headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ 
-                subject: targetSubject, level: level, rank: rankName, difficulty: settings.difficulty,
+                subject: targetSubject, level: level, rank: rankName, difficulty: finalDifficulty,
                 language: currentLang 
             })
         });
