@@ -42,12 +42,42 @@ let presenceInterval = null;
 let allBankFiles = [];
 let currentSelectSlot = null;
 
-// 修改 main.js 最上方的 CARD_DATABASE
+// ==========================================
+// 0. 卡牌資料庫與稀有度設定
+// ==========================================
+
+const RARITY_CONFIG = {
+    gray:   { name: "普通", color: "text-gray-400", border: "border-gray-500", prob: 0.50 },    // 50%
+    blue:   { name: "稀有", color: "text-blue-400", border: "border-blue-500", prob: 0.30 },    // 30%
+    purple: { name: "罕見", color: "text-purple-400", border: "border-purple-500", prob: 0.15 }, // 15%
+    red:    { name: "史詩", color: "text-red-500", border: "border-red-500", prob: 0.04 },      // 4%
+    gold:   { name: "神話", color: "text-yellow-400", border: "border-yellow-400 shadow-[0_0_15px_rgba(250,204,21,0.6)]", prob: 0.008 }, // 0.8%
+    rainbow:{ name: "傳奇", color: "text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-green-500 to-blue-500 animate-pulse", border: "border-white shadow-[0_0_20px_rgba(255,255,255,0.8)]", prob: 0.002 } // 0.2%
+};
+
+// 為了測試，這裡擴充了一些卡牌
 const CARD_DATABASE = {
-    "c001": { name: "火焰幼龍", hp: 100, atk: 30, trait: "龍威(小)", skill: "火球術 (傷害+20)", skillDmg: 20 },
-    "c002": { name: "鋼鐵衛士", hp: 150, atk: 15, trait: "堅韌", skill: "盾擊 (傷害+10)", skillDmg: 10 },
-    "c003": { name: "暗影刺客", hp: 80,  atk: 45, trait: "隱匿", skill: "背刺 (傷害+30)", skillDmg: 30 },
-    "c004": { name: "光之祭司", hp: 120, atk: 20, trait: "祈禱", skill: "聖光 (傷害+15)", skillDmg: 15 },
+    // --- 普通 (Gray) ---
+    "c001": { name: "史萊姆", hp: 50, atk: 10, rarity: "gray", trait: "黏液", skill: "撞擊", skillDmg: 5 },
+    "c002": { name: "哥布林", hp: 60, atk: 15, rarity: "gray", trait: "貪婪", skill: "偷襲", skillDmg: 8 },
+    
+    // --- 稀有 (Blue) ---
+    "c011": { name: "冰霜狼", hp: 80, atk: 25, rarity: "blue", trait: "迅捷", skill: "冰咬", skillDmg: 15 },
+    "c012": { name: "鐵甲衛兵", hp: 120, atk: 15, rarity: "blue", trait: "堅硬", skill: "盾防", skillDmg: 5 },
+
+    // --- 罕見 (Purple) ---
+    "c021": { name: "暗影刺客", hp: 90, atk: 45, rarity: "purple", trait: "隱匿", skill: "背刺", skillDmg: 35 },
+    "c022": { name: "元素法師", hp: 100, atk: 40, rarity: "purple", trait: "魔力", skill: "火球", skillDmg: 30 },
+
+    // --- 史詩 (Red) ---
+    "c031": { name: "火焰幼龍", hp: 150, atk: 55, rarity: "red", trait: "龍威", skill: "龍息", skillDmg: 50 },
+    "c032": { name: "吸血鬼伯爵", hp: 140, atk: 50, rarity: "red", trait: "吸血", skill: "血爆", skillDmg: 45 },
+
+    // --- 神話 (Gold) ---
+    "c041": { name: "光之守護者", hp: 250, atk: 70, rarity: "gold", trait: "聖光", skill: "審判", skillDmg: 80 },
+
+    // --- 傳奇 (Rainbow) ---
+    "c051": { name: "虛空魔神", hp: 500, atk: 120, rarity: "rainbow", trait: "毀滅", skill: "黑洞", skillDmg: 999 }
 };
 // ==========================================
 // 🌍 國際化 (i18n) 設定
