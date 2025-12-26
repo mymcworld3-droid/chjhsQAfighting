@@ -42,6 +42,13 @@ let presenceInterval = null;
 let allBankFiles = [];
 let currentSelectSlot = null;
 
+// 修改 main.js 最上方的 CARD_DATABASE
+const CARD_DATABASE = {
+    "c001": { name: "火焰幼龍", hp: 100, atk: 30, trait: "龍威(小)", skill: "火球術 (傷害+20)", skillDmg: 20 },
+    "c002": { name: "鋼鐵衛士", hp: 150, atk: 15, trait: "堅韌", skill: "盾擊 (傷害+10)", skillDmg: 10 },
+    "c003": { name: "暗影刺客", hp: 80,  atk: 45, trait: "隱匿", skill: "背刺 (傷害+30)", skillDmg: 30 },
+    "c004": { name: "光之祭司", hp: 120, atk: 20, trait: "祈禱", skill: "聖光 (傷害+15)", skillDmg: 15 },
+};
 // ==========================================
 // 🌍 國際化 (i18n) 設定
 // ==========================================
@@ -376,14 +383,6 @@ function calculateRankFromScore(netScore) {
     }
     return rank;
 }
-
-const CARD_DATABASE = {
-    "c001": { name: "火焰幼龍", hp: 100, atk: 30, trait: "龍威(小)", skill: "火球術 (傷害+20)" },
-    "c002": { name: "鋼鐵衛士", hp: 150, atk: 15, trait: "堅韌", skill: "盾擊 (傷害+10)" },
-    "c003": { name: "暗影刺客", hp: 80,  atk: 45, trait: "隱匿", skill: "背刺 (傷害+30)" },
-    "c004": { name: "光之祭司", hp: 120, atk: 20, trait: "祈禱", skill: "聖光 (傷害+15)" },
-    // 可以新增更多...
-};
 
 // 綁定全域函式
 window.googleLogin = () => { signInWithPopup(auth, provider).catch((error) => alert("Login Failed: " + error.code)); };
