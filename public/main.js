@@ -599,6 +599,91 @@ async function setDeckCard(cardId) {
     }
 }
 
+// ==========================================
+// 核心：抽卡與合成系統
+// ==========================================
+
+// 根據權重隨機抽取一張卡
+function pickRandomCardId(minRarity = null) {
+    const rand = Math.random();
+    let cumulative = 0;
+    let targetRarity = "gray"; // 預設
+
+    // 定義稀有度順序 (低到高)
+    const order = ["gray", "blue", "purple", "red", "gold", "rainbow"];
+    const minIndex = minRarity ? order.indexOf(minRarity) : 0;
+
+    // 計算符合保底條件的總機率 (Normalization)
+    let validPoolProb = 0;
+    if (minRarity) {
+        for (let i = minIndex; i < order.length; i++) {
+            validPoolProb += RARITY_CONFIG[order[i]].prob;
+        }
+    }
+
+    // 擲骰子
+    for (let i = 0; i < order.length; i++) {
+        const r = order[i];
+        // 如果有保底要求，跳過低階卡
+        if (minRarity && i < minIndex) continue;
+
+        let prob = RARITY_CONFIG[r].prob;
+        
+        // 如果有保底，需重新分配機率 (讓剩下高等級的機率加總為 1)
+        if (minRarity) prob = prob / validPoolProb;
+
+        cumulative += prob;
+        if (rand <= cumulative) {
+            targetRarity = r;
+            break;
+        }
+    }
+
+    // 從該稀有度中隨機選一張
+    const pool = Object.keys(CARD_DATABASE).filter(id => CARD_DATABASE[id].rarity === targetRarity);
+    if (pool.length === 0) return "c001"; // Fallback
+    return pool[Math.floor(Math.random() * pool.length)];
+}
+
+// 處理卡牌獲取 (合成/返還邏輯)
+async function processCardAcquisition(userRef, cardId, currentScore) {
+    // 確保 cardLevels 存在
+    if (!currentUserData.cardLevels) currentUserData.cardLevels = {};
+    const currentLevel = currentUserData.cardLevels[cardId] || 0;
+    const cardName = CARD_DATABASE[cardId].name;
+    const rarity = CARD_DATABASE[cardId].rarity;
+    let msg = "";
+    let refund = 0;
+
+    // 情況 A: 尚未擁有 -> 獲得新卡
+    if (!currentUserData.cards.includes(cardId)) {
+        await updateDoc(userRef, { 
+            "cards": arrayUnion(cardId),
+            [`cardLevels.${cardId}`]: 0 // 初始等級 0
+        });
+        currentUserData.cards.push(cardId);
+        currentUserData.cardLevels[cardId] = 0;
+        msg = `✨ 獲得新卡：${cardName}`;
+    } 
+    // 情況 B: 已擁有且等級 < 5 -> 自動合成 (+5 ATK)
+    else if (currentLevel < 5) {
+        await updateDoc(userRef, { 
+            [`cardLevels.${cardId}`]: currentLevel + 1 
+        });
+        currentUserData.cardLevels[cardId] = currentLevel + 1;
+        msg = `⬆️ ${cardName} 強化至 +${currentLevel + 1} (ATK+5)`;
+    } 
+    // 情況 C: 已滿等 -> 返還積分
+    else {
+        refund = 100;
+        // 分數不扣反增 (因為外層已經扣了，這裡補回)
+        // 注意：外層是批次扣分，這裡是單張邏輯，我們回傳 refund 值由外層處理
+        msg = `💰 ${cardName} 已滿等，返還 100 積分`;
+    }
+
+    return { msg, refund, rarity, name: cardName };
+}
+
 // [新增] 更新主畫面上的牌組顯示區塊
 function updateDeckDisplay() {
     const mainId = currentUserData.deck?.main;
