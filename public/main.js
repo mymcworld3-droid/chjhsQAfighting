@@ -1503,50 +1503,6 @@ function showInviteToast(inviteId, data) {
     setTimeout(() => { if (toast.parentNode) removeInvite(inviteId, toast); }, 10000);
 }
 
-async function acceptInvite(inviteId, roomId, toastElement) {
-    if (toastElement) {
-        toastElement.classList.add('translate-x-full', 'opacity-0');
-        setTimeout(() => toastElement.remove(), 300);
-    }
-    try {
-        await deleteDoc(doc(db, "users", auth.currentUser.uid, "invitations", inviteId));
-    } catch(e) { console.error("Remove invite error", e); }
-
-    if (isBattleActive) { alert("你正在對戰中，無法加入！"); return; }
-
-    const myPlayerData = { 
-        uid: auth.currentUser.uid, 
-        name: currentUserData.displayName, 
-        score: 0, 
-        done: false, 
-        equipped: currentUserData.equipped 
-    };
-
-    const roomRef = doc(db, "rooms", roomId);
-    try {
-        await runTransaction(db, async (transaction) => {
-            const sfDoc = await transaction.get(roomRef);
-            if (!sfDoc.exists()) throw "房間已不存在";
-            const data = sfDoc.data();
-            if (data.status === "waiting" && !data.guest) {
-                transaction.update(roomRef, { guest: myPlayerData, status: "ready" });
-            } else { throw "房間已滿或遊戲已開始"; }
-        });
-
-        isBattleActive = true;
-        currentBattleId = roomId;
-        isBattleResultProcessed = false; // 🔥 重置獎勵狀態
-        
-        switchToPage('page-battle');
-        document.getElementById('battle-lobby').classList.add('hidden'); 
-        document.getElementById('battle-arena').classList.remove('hidden');
-        listenToBattleRoom(roomId);
-    } catch (e) { 
-        console.error(e);
-        alert("加入失敗：" + e); 
-    }
-}
-
 async function removeInvite(inviteId, toastElement) {
     if (toastElement) {
         toastElement.classList.add('translate-x-full', 'opacity-0');
