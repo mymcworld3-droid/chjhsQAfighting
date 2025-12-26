@@ -1803,19 +1803,20 @@ window.startBattleMatchmaking = async () => {
     }
 };
 
-// [修改] 接受邀請 (需傳送卡牌資訊)
+// [修正] 接受邀請 (強制切換 UI 並啟動監聽)
 async function acceptInvite(inviteId, roomId, toastElement) {
+    // 1. 移除邀請通知
     if (toastElement) {
         toastElement.classList.add('translate-x-full', 'opacity-0');
         setTimeout(() => toastElement.remove(), 300);
     }
     try { await deleteDoc(doc(db, "users", auth.currentUser.uid, "invitations", inviteId)); } catch(e) {}
 
+    // 2. 防呆檢查
     if (isBattleActive) { alert("你正在對戰中，無法加入！"); return; }
-    // [修改] 檢查主卡
     if (!currentUserData.deck?.main) { alert("請先設定主卡！"); return; }
 
-    // [修改] 包含卡牌資訊
+    // 3. 準備戰鬥資料
     const myBattleData = { 
         uid: auth.currentUser.uid, 
         name: currentUserData.displayName, 
@@ -1829,26 +1830,41 @@ async function acceptInvite(inviteId, roomId, toastElement) {
         }
     };
 
+    // 4. 切換頁面並顯示「連線中」 (避免畫面卡住)
+    switchToPage('page-battle');
+    document.getElementById('battle-lobby').classList.remove('hidden'); // 先顯示 Lobby
+    document.getElementById('battle-arena').classList.add('hidden');    // 先隱藏 Arena
+    document.getElementById('battle-status-text').innerText = "正在加入房間..."; // 更新文字
+    
+    // 5. 執行加入房間交易
     const roomRef = doc(db, "rooms", roomId);
     try {
         await runTransaction(db, async (transaction) => {
             const sfDoc = await transaction.get(roomRef);
-            if (!sfDoc.exists()) throw "房間已不存在";
+            if (!sfDoc.exists()) throw "房間已失效 (對方可能已取消)";
+            
             const data = sfDoc.data();
+            // 檢查房間狀態
             if (data.status === "waiting" && !data.guest) {
                 transaction.update(roomRef, { guest: myBattleData, status: "ready" });
-            } else { throw "房間已滿或遊戲已開始"; }
+            } else { 
+                throw "房間已滿或遊戲已開始"; 
+            }
         });
 
+        // 6. 成功加入後，設定狀態並開始監聽
         isBattleActive = true;
         currentBattleId = roomId;
         isBattleResultProcessed = false;
         
-        switchToPage('page-battle');
-        document.getElementById('battle-lobby').classList.add('hidden'); 
-        document.getElementById('battle-arena').classList.remove('hidden');
+        // 重要：啟動監聽，UI 的切換交給 listenToBattleRoom 處理，確保資料同步
         listenToBattleRoom(roomId);
-    } catch (e) { console.error(e); alert("加入失敗：" + e); }
+
+    } catch (e) { 
+        console.error(e); 
+        alert("加入失敗：" + e); 
+        switchToPage('page-home'); // 失敗則返回首頁
+    }
 }
 
 // [修改] 監聽對戰室 (加入解析儲存 與 結算邏輯)
