@@ -1582,8 +1582,23 @@ async function inviteRandomPlayers(roomId) {
     } catch (e) { console.error("邀請發送失敗", e); }
 }
 
+
+
+let isGenerating = false;
+async function generateSharedQuiz(roomId) {
+    if (isGenerating) return;
+    isGenerating = true; 
+    try {
+        const q = await fetchOneQuestion(); 
+        await updateDoc(doc(db, "rooms", roomId), { currentQuestion: { q: q.data.q, opts: q.data.opts, ans: q.data.ans } });
+    } catch (e) { console.error("Gen Error", e); } finally { isGenerating = false; }
+}
+// [修改] 開始配對 (需傳送卡牌與血量資訊)
 window.startBattleMatchmaking = async () => {
     if (!auth.currentUser) { alert("Please login first!"); return; }
+    // [修改] 檢查是否有主卡
+    if (!currentUserData.deck?.main) { alert("請先到卡牌中心設定「主卡」！"); switchToPage('page-cards'); return; }
+
     console.log("🚀 Matchmaking..."); 
     isBattleActive = true;
     switchToPage('page-battle');
@@ -1592,7 +1607,21 @@ window.startBattleMatchmaking = async () => {
     document.getElementById('battle-status-text').innerText = t('battle_searching');
 
     const twoMinutesAgo = new Date(Date.now() - 2 * 60 * 1000);
-    const myPlayerData = { uid: auth.currentUser.uid, name: currentUserData.displayName || "Player", score: 0, done: false, equipped: currentUserData.equipped || { frame: '', avatar: '' } };
+    
+    // [修改] 建構戰鬥資料，包含 cards 狀態
+    const myBattleData = { 
+        uid: auth.currentUser.uid, 
+        name: currentUserData.displayName || "Player", 
+        equipped: currentUserData.equipped || { frame: '', avatar: '' },
+        done: false,
+        // 新增：卡牌狀態與血量
+        activeCard: "main",
+        isDead: false,
+        cards: {
+            main: { ...CARD_DATABASE[currentUserData.deck.main], id: currentUserData.deck.main, currentHp: CARD_DATABASE[currentUserData.deck.main].hp },
+            sub: currentUserData.deck.sub ? { ...CARD_DATABASE[currentUserData.deck.sub], id: currentUserData.deck.sub, currentHp: CARD_DATABASE[currentUserData.deck.sub].hp } : null
+        }
+    };
 
     try {
         const q = query(collection(db, "rooms"), where("status", "==", "waiting"), where("createdAt", ">", twoMinutesAgo), limit(5));
@@ -1610,7 +1639,7 @@ window.startBattleMatchmaking = async () => {
                         if (!sfDoc.exists()) throw "Doc missing";
                         const data = sfDoc.data();
                         if (data.status === "waiting" && !data.guest) {
-                            transaction.update(roomRef, { guest: myPlayerData, status: "ready" });
+                            transaction.update(roomRef, { guest: myBattleData, status: "ready" });
                             joinedRoomId = targetDoc.id;
                         } else { throw "Room full"; }
                     });
@@ -1620,23 +1649,71 @@ window.startBattleMatchmaking = async () => {
 
         if (joinedRoomId) {
             currentBattleId = joinedRoomId;
-            isBattleResultProcessed = false; // 🔥 重置獎勵狀態
+            isBattleResultProcessed = false;
             document.getElementById('battle-status-text').innerText = t('battle_connecting');
         } else {
             document.getElementById('battle-status-text').innerText = "Waiting for challenger...";
-            const roomRef = await addDoc(collection(db, "rooms"), { host: myPlayerData, guest: null, status: "waiting", round: 1, createdAt: serverTimestamp() });
+            const roomRef = await addDoc(collection(db, "rooms"), { host: myBattleData, guest: null, status: "waiting", round: 1, createdAt: serverTimestamp() });
             currentBattleId = roomRef.id;
-            isBattleResultProcessed = false; // 🔥 重置獎勵狀態
-            inviteRandomPlayers(currentBattleId); // 發送邀請
+            isBattleResultProcessed = false;
+            inviteRandomPlayers(currentBattleId);
         }
         listenToBattleRoom(currentBattleId);
     } catch (e) {
         console.error("Match error", e);
-        if (e.message.includes("index")) alert("System Error: Index Missing");
-        else { alert("Match failed: " + e.message); leaveBattle(); }
+        alert("Match failed: " + e.message); leaveBattle();
     }
 };
 
+// [修改] 接受邀請 (需傳送卡牌資訊)
+async function acceptInvite(inviteId, roomId, toastElement) {
+    if (toastElement) {
+        toastElement.classList.add('translate-x-full', 'opacity-0');
+        setTimeout(() => toastElement.remove(), 300);
+    }
+    try { await deleteDoc(doc(db, "users", auth.currentUser.uid, "invitations", inviteId)); } catch(e) {}
+
+    if (isBattleActive) { alert("你正在對戰中，無法加入！"); return; }
+    // [修改] 檢查主卡
+    if (!currentUserData.deck?.main) { alert("請先設定主卡！"); return; }
+
+    // [修改] 包含卡牌資訊
+    const myBattleData = { 
+        uid: auth.currentUser.uid, 
+        name: currentUserData.displayName, 
+        equipped: currentUserData.equipped,
+        done: false,
+        activeCard: "main",
+        isDead: false,
+        cards: {
+            main: { ...CARD_DATABASE[currentUserData.deck.main], id: currentUserData.deck.main, currentHp: CARD_DATABASE[currentUserData.deck.main].hp },
+            sub: currentUserData.deck.sub ? { ...CARD_DATABASE[currentUserData.deck.sub], id: currentUserData.deck.sub, currentHp: CARD_DATABASE[currentUserData.deck.sub].hp } : null
+        }
+    };
+
+    const roomRef = doc(db, "rooms", roomId);
+    try {
+        await runTransaction(db, async (transaction) => {
+            const sfDoc = await transaction.get(roomRef);
+            if (!sfDoc.exists()) throw "房間已不存在";
+            const data = sfDoc.data();
+            if (data.status === "waiting" && !data.guest) {
+                transaction.update(roomRef, { guest: myBattleData, status: "ready" });
+            } else { throw "房間已滿或遊戲已開始"; }
+        });
+
+        isBattleActive = true;
+        currentBattleId = roomId;
+        isBattleResultProcessed = false;
+        
+        switchToPage('page-battle');
+        document.getElementById('battle-lobby').classList.add('hidden'); 
+        document.getElementById('battle-arena').classList.remove('hidden');
+        listenToBattleRoom(roomId);
+    } catch (e) { console.error(e); alert("加入失敗：" + e); }
+}
+
+// [修改] 監聽對戰室 (改為顯示血量與卡牌，處理勝負搶卡)
 function listenToBattleRoom(roomId) {
     if (battleUnsub) battleUnsub();
     
@@ -1646,18 +1723,19 @@ function listenToBattleRoom(roomId) {
         if (!auth.currentUser) return;
         const isHost = room.host.uid === auth.currentUser.uid;
 
+        const myData = isHost ? room.host : room.guest;
+        const oppData = isHost ? room.guest : room.host;
+
         // --- 1. 遊戲進行中 (Ready) ---
         if (room.status === "ready") {
             document.getElementById('battle-lobby').classList.add('hidden');
             document.getElementById('battle-arena').classList.remove('hidden');
-            document.getElementById('p1-score').innerText = isHost ? room.host?.score : room.guest?.score;
-            document.getElementById('p2-score').innerText = isHost ? room.guest?.score : room.host?.score;
-            document.getElementById('battle-round').innerText = room.round;
+            
+            // [新增] 更新 UI：顯示卡牌與血量
+            updateBattleCardUI('my', myData);
+            updateBattleCardUI('enemy', oppData);
 
-            const myData = isHost ? room.host : room.guest;
-            const oppData = isHost ? room.guest : room.host;
-            if (myData) document.getElementById('battle-my-avatar').innerHTML = getAvatarHtml(myData.equipped, "w-16 h-16");
-            if (oppData) document.getElementById('battle-opp-avatar').innerHTML = getAvatarHtml(oppData.equipped, "w-16 h-16");
+            document.getElementById('battle-round').innerText = room.round;
 
             // 處理題目顯示
             if (!room.currentQuestion) {
@@ -1684,111 +1762,201 @@ function listenToBattleRoom(roomId) {
                     container.appendChild(btn);
                 });
             } else {
-                container.innerHTML = '<div class="text-center text-gray-400 italic py-4 bg-slate-700/30 rounded-lg">✓ Done</div>';
+                container.innerHTML = '<div class="text-center text-gray-400 italic py-4 bg-slate-700/30 rounded-lg">✓ Done (Waiting for opponent)</div>';
                 document.getElementById('battle-waiting-msg').classList.remove('hidden');
             }
 
             // 雙方都回答完畢，進入下一輪或結束
             if (room.host?.done && room.guest?.done && isHost) {
                 setTimeout(async () => {
-                    if (room.round >= 3) await updateDoc(doc(db, "rooms", roomId), { status: "finished" });
-                    else await updateDoc(doc(db, "rooms", roomId), { round: room.round + 1, currentQuestion: null, "host.done": false, "guest.done": false });
+                    // [修改] 若有人死亡或回合數到
+                    if (room.host.isDead || room.guest.isDead || room.round >= 10) {
+                        // 判定勝負
+                        let winnerUid = null;
+                        let loserUid = null;
+                        if (room.host.isDead && !room.guest.isDead) { winnerUid = room.guest.uid; loserUid = room.host.uid; }
+                        else if (!room.host.isDead && room.guest.isDead) { winnerUid = room.host.uid; loserUid = room.guest.uid; }
+                        else {
+                            // 雙方都死或回合結束：比剩餘總血量
+                            const hHp = (room.host.cards.main.currentHp) + (room.host.cards.sub?.currentHp || 0);
+                            const gHp = (room.guest.cards.main.currentHp) + (room.guest.cards.sub?.currentHp || 0);
+                            if (hHp > gHp) { winnerUid = room.host.uid; loserUid = room.guest.uid; }
+                            else if (gHp > hHp) { winnerUid = room.guest.uid; loserUid = room.host.uid; }
+                        }
+
+                        await updateDoc(doc(db, "rooms", roomId), { 
+                            status: "finished",
+                            winner: winnerUid,
+                            loser: loserUid
+                        });
+                    } else {
+                        await updateDoc(doc(db, "rooms", roomId), { round: room.round + 1, currentQuestion: null, "host.done": false, "guest.done": false });
+                    }
                 }, 2000); 
             }
         }
 
-        // --- 2. 遊戲結束 (Finished) - 結算獎勵 ---
+        // --- 2. 遊戲結束 (Finished) - 搶卡與結算 ---
         if (room.status === "finished") {
             document.getElementById('battle-arena').classList.add('hidden');
             document.getElementById('battle-result').classList.remove('hidden');
             
-            const myScore = isHost ? (room.host?.score || 0) : (room.guest?.score || 0);
-            const oppScore = isHost ? (room.guest?.score || 0) : (room.host?.score || 0);
-            
             const titleEl = document.getElementById('battle-result-title');
             const msgEl = document.getElementById('battle-result-msg');
-            
-            let resultText = "";
+            const isWinner = room.winner === auth.currentUser.uid;
+            const isDraw = !room.winner;
 
-            if (myScore > oppScore) {
-                // 🏆 勝利邏輯
-                resultText = t('battle_win');
+            if (isWinner) {
+                titleEl.innerText = t('battle_win');
                 titleEl.className = "text-3xl font-bold mb-2 text-green-400 animate-bounce";
                 
-                // 🔥🔥🔥 核心修改：勝利者發放獎勵 (只執行一次) 🔥🔥🔥
+                // [修改] 贏家執行：搶卡邏輯 (只執行一次)
                 if (!isBattleResultProcessed) {
-                    isBattleResultProcessed = true; // 鎖定，避免重複執行
-                    
+                    isBattleResultProcessed = true;
                     try {
+                        const loserData = isHost ? room.guest : room.host;
+                        const lootIds = [];
+                        if (loserData.cards.main) lootIds.push(loserData.cards.main.id);
+                        if (loserData.cards.sub) lootIds.push(loserData.cards.sub.id);
+
                         const userRef = doc(db, "users", auth.currentUser.uid);
-                        // 更新本地數據
-                        currentUserData.stats.totalScore += 100;
-                        currentUserData.stats.totalCorrect += 5;
-                        currentUserData.stats.totalAnswered += 5;
+                        
+                        // 加分並獲得卡牌
+                        currentUserData.stats.totalScore += 200;
+                        currentUserData.stats.totalCorrect += 5; 
                         
                         // 重新計算段位
                         const currentNetScore = getNetScore(currentUserData.stats);
                         const newRank = calculateRankFromScore(currentNetScore);
-                        currentUserData.stats.rankLevel = newRank;
-
-                        // 更新資料庫
+                        
                         await updateDoc(userRef, { 
                             "stats.totalScore": currentUserData.stats.totalScore,
-                            "stats.totalCorrect": currentUserData.stats.totalCorrect,
-                            "stats.totalAnswered": currentUserData.stats.totalAnswered,
-                            "stats.rankLevel": newRank
+                            "stats.rankLevel": newRank,
+                            "cards": arrayUnion(...lootIds)
                         });
-                        
-                        // 顯示獎勵提示
-                        msgEl.innerHTML = `${myScore} : ${oppScore}<br><span class="text-yellow-400 text-sm mt-2 block animate-pulse">🎉 勝利獎勵：+100分, 答對+5</span>`;
-                        updateUIStats(); // 刷新左上角 UI
-                    } catch (e) {
-                        console.error("獎勵發放失敗", e);
-                    }
+
+                        // 更新本地
+                        currentUserData.cards.push(...lootIds);
+                        currentUserData.stats.rankLevel = newRank;
+
+                        msgEl.innerHTML = `恭喜勝利！<br>你獲得了對手的卡牌：<br><span class="text-yellow-400 font-bold">${lootIds.length} 張卡</span>`;
+                        updateUIStats();
+                    } catch (e) { console.error("Loot failed", e); }
                 } else {
-                    // 如果已經發放過，顯示靜態文字即可
-                    msgEl.innerHTML = `${myScore} : ${oppScore}<br><span class="text-yellow-400 text-sm mt-2 block">🎉 勝利獎勵已領取</span>`;
+                    msgEl.innerHTML = `勝利！獎勵已領取`;
                 }
 
-            } else if (myScore < oppScore) {
-                // 😭 戰敗邏輯
-                resultText = t('battle_lose');
-                titleEl.className = "text-3xl font-bold mb-2 text-red-400";
-                msgEl.innerText = `${myScore} : ${oppScore}`;
+            } else if (isDraw) {
+                titleEl.innerText = t('battle_draw');
+                msgEl.innerText = "平局 - 無人損失";
             } else {
-                // 🤝 平手邏輯
-                resultText = t('battle_draw');
-                titleEl.className = "text-3xl font-bold mb-2 text-yellow-400";
-                msgEl.innerText = `${myScore} : ${oppScore}`;
+                titleEl.innerText = t('battle_lose');
+                titleEl.className = "text-3xl font-bold mb-2 text-red-400";
+                msgEl.innerText = "你輸了... 卡牌被奪走 (模擬)";
             }
-
-            titleEl.innerText = resultText;
         }
     });
 }
 
-let isGenerating = false;
-async function generateSharedQuiz(roomId) {
-    if (isGenerating) return;
-    isGenerating = true; 
-    try {
-        const q = await fetchOneQuestion(); 
-        await updateDoc(doc(db, "rooms", roomId), { currentQuestion: { q: q.data.q, opts: q.data.opts, ans: q.data.ans } });
-    } catch (e) { console.error("Gen Error", e); } finally { isGenerating = false; }
+// [新增] 輔助：更新戰鬥卡牌 UI (動態生成卡牌 HTML)
+function updateBattleCardUI(prefix, playerData) {
+    if (!playerData) return;
+    
+    // 這裡我們動態替換掉原本的頭像容器內容
+    const container = document.getElementById(prefix === 'my' ? 'battle-my-avatar' : 'battle-opp-avatar').parentElement;
+    
+    const activeKey = playerData.activeCard;
+    const activeCard = playerData.cards[activeKey];
+    // 取得原始卡牌數據以計算血量百分比
+    const dbCard = CARD_DATABASE[activeCard.id];
+    const currentHp = activeCard.currentHp;
+    const hpPercent = Math.max(0, (currentHp / dbCard.hp) * 100);
+
+    let roleText = activeKey === 'main' ? '<span class="text-yellow-400 font-bold">MAIN</span>' : '<span class="text-gray-400 font-bold">SUB</span>';
+    
+    container.innerHTML = `
+        <div class="relative w-28 h-40 bg-slate-800 rounded-lg border-2 ${activeKey==='main'?'border-yellow-500':'border-gray-500'} flex flex-col items-center justify-center p-2 mb-2 shadow-lg transition-all">
+            <div class="text-[10px] mb-1">${roleText}</div>
+            <div class="text-sm font-bold text-white text-center">${activeCard.name}</div>
+            <div class="text-xs text-red-400 mt-1">ATK ${activeCard.atk}</div>
+            ${activeKey==='main' ? `<div class="text-[10px] text-blue-300 mt-1">${activeCard.skill}</div>` : ''}
+            
+            <div class="absolute -bottom-3 left-0 w-full px-1">
+                <div class="h-2 bg-gray-900 rounded-full overflow-hidden border border-gray-600">
+                    <div class="h-full bg-red-500 transition-all duration-300" style="width: ${hpPercent}%"></div>
+                </div>
+                <div class="text-[8px] text-center text-white">${currentHp}/${dbCard.hp}</div>
+            </div>
+        </div>
+        ${playerData.cards.sub && activeKey === 'main' ? '<div class="text-[10px] text-gray-500">Sub Ready</div>' : ''}
+    `;
 }
 
+// [修改] 處理戰鬥答題 (核心邏輯：扣血而非單純加分)
 async function handleBattleAnswer(roomId, userIdx, correctIdx, isHost) {
     const isCorrect = userIdx === correctIdx;
-    const scoreToAdd = isCorrect ? 100 : 0;
     if (navigator.vibrate) navigator.vibrate(isCorrect ? 50 : 200);
-    const updateField = isHost ? "host" : "guest";
+    
     const roomRef = doc(db, "rooms", roomId);
-    const roomSnap = await getDoc(roomRef);
-    const room = roomSnap.data();
-    const currentScore = isHost ? room.host.score : room.guest.score;
-    await updateDoc(roomRef, { [`${updateField}.score`]: currentScore + scoreToAdd, [`${updateField}.done`]: true });
-}
+    
+    await runTransaction(db, async (transaction) => {
+        const roomDoc = await transaction.get(roomRef);
+        const room = roomDoc.data();
+        
+        const me = isHost ? room.host : room.guest;
+        const opp = isHost ? room.guest : room.host;
+        const oppField = isHost ? "guest" : "host";
+        const meField = isHost ? "host" : "guest";
 
+        // 只有活著且答對才攻擊
+        if (!me.isDead && isCorrect) {
+            const myCardKey = me.activeCard;
+            const myCard = me.cards[myCardKey];
+            const myDbCard = CARD_DATABASE[myCard.id];
+            
+            let damage = myDbCard.atk;
+            
+            // 主卡發動技能
+            if (myCardKey === 'main') {
+                damage += (myDbCard.skillDmg || 0);
+            }
+
+            // 扣除對方當前卡牌 HP
+            const oppKey = opp.activeCard;
+            const oppCard = opp.cards[oppKey];
+            let newHp = oppCard.currentHp - damage;
+
+            if (newHp <= 0) {
+                newHp = 0;
+                // 判定死亡與切換邏輯
+                if (oppKey === 'main' && opp.cards.sub) {
+                    // 主卡死，副卡上
+                    transaction.update(roomRef, {
+                        [`${oppField}.cards.main.currentHp`]: 0,
+                        [`${oppField}.activeCard`]: 'sub'
+                    });
+                } else {
+                    // 全死，標記死亡並結束遊戲
+                    transaction.update(roomRef, {
+                        [`${oppField}.cards.${oppKey}.currentHp`]: 0,
+                        [`${oppField}.isDead`]: true,
+                        "status": "finished",
+                        "winner": me.uid,
+                        "loser": opp.uid
+                    });
+                }
+            } else {
+                // 僅扣血
+                transaction.update(roomRef, {
+                    [`${oppField}.cards.${oppKey}.currentHp`]: newHp
+                });
+            }
+        }
+
+        // 標記已作答
+        transaction.update(roomRef, { [`${meField}.done`]: true });
+    });
+}
 window.leaveBattle = async () => {
     if (battleUnsub) { battleUnsub(); battleUnsub = null; }
     if (currentBattleId) {
