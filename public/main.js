@@ -1731,10 +1731,36 @@ async function generateSharedQuiz(roomId) {
         await updateDoc(doc(db, "rooms", roomId), { currentQuestion: { q: q.data.q, opts: q.data.opts, ans: q.data.ans } });
     } catch (e) { console.error("Gen Error", e); } finally { isGenerating = false; }
 }
-// [修改] 開始配對 (需傳送卡牌與血量資訊)
+// [修正] 離開對戰 (確實清理房間)
+window.leaveBattle = async () => {
+    if (battleUnsub) { 
+        battleUnsub(); 
+        battleUnsub = null; 
+    }
+
+    if (currentBattleId) {
+        const roomIdToRemove = currentBattleId;
+        // 只有當我是房主，且房間還在 waiting 狀態時，才刪除房間
+        try {
+            const snap = await getDoc(doc(db, "rooms", roomIdToRemove));
+            if (snap.exists()) { 
+                const data = snap.data(); 
+                if (data.status === "waiting" && data.host.uid === auth.currentUser.uid) { 
+                    console.log("🗑️ 清理未配對的房間:", roomIdToRemove);
+                    await deleteDoc(doc(db, "rooms", roomIdToRemove)); 
+                } 
+            }
+        } catch (err) { console.error("清理房間失敗", err); }
+    }
+    
+    isBattleActive = false; 
+    currentBattleId = null; 
+    switchToPage('page-home');
+};
+
+// [修正] 開始配對 (增加隨機性與重試機制)
 window.startBattleMatchmaking = async () => {
     if (!auth.currentUser) { alert("Please login first!"); return; }
-    // [修改] 檢查是否有主卡
     if (!currentUserData.deck?.main) { alert("請先到卡牌中心設定「主卡」！"); switchToPage('page-cards'); return; }
 
     console.log("🚀 Matchmaking..."); 
@@ -1744,15 +1770,14 @@ window.startBattleMatchmaking = async () => {
     document.getElementById('battle-arena').classList.add('hidden');
     document.getElementById('battle-status-text').innerText = t('battle_searching');
 
-    const twoMinutesAgo = new Date(Date.now() - 2 * 60 * 1000);
+    // 只搜尋最近 1 分鐘內建立的房間，避免配對到死房間
+    const oneMinuteAgo = new Date(Date.now() - 60 * 1000);
     
-    // [修改] 建構戰鬥資料，包含 cards 狀態
     const myBattleData = { 
         uid: auth.currentUser.uid, 
         name: currentUserData.displayName || "Player", 
         equipped: currentUserData.equipped || { frame: '', avatar: '' },
         done: false,
-        // 新增：卡牌狀態與血量
         activeCard: "main",
         isDead: false,
         cards: {
@@ -1762,15 +1787,29 @@ window.startBattleMatchmaking = async () => {
     };
 
     try {
-        const q = query(collection(db, "rooms"), where("status", "==", "waiting"), where("createdAt", ">", twoMinutesAgo), limit(5));
+        // 搜尋等待中的房間
+        const q = query(
+            collection(db, "rooms"), 
+            where("status", "==", "waiting"), 
+            where("createdAt", ">", oneMinuteAgo), // 加入時間過濾
+            limit(10) // 增加搜尋範圍
+        );
+        
         const snapshot = await getDocs(q);
         let joinedRoomId = null;
 
         if (!snapshot.empty) {
-            const availableDocs = snapshot.docs.filter(d => { const data = d.data(); return data.host && data.host.uid !== auth.currentUser.uid; });
+            // 過濾掉自己開的房間
+            const availableDocs = snapshot.docs.filter(d => { 
+                const data = d.data(); 
+                return data.host && data.host.uid !== auth.currentUser.uid; 
+            });
+
             if (availableDocs.length > 0) {
+                // 隨機選一個加入
                 const targetDoc = availableDocs[Math.floor(Math.random() * availableDocs.length)];
                 const roomRef = doc(db, "rooms", targetDoc.id);
+                
                 try {
                     await runTransaction(db, async (transaction) => {
                         const sfDoc = await transaction.get(roomRef);
@@ -1789,17 +1828,29 @@ window.startBattleMatchmaking = async () => {
             currentBattleId = joinedRoomId;
             isBattleResultProcessed = false;
             document.getElementById('battle-status-text').innerText = t('battle_connecting');
+            listenToBattleRoom(currentBattleId);
         } else {
+            // 沒找到房間，自己建立
             document.getElementById('battle-status-text').innerText = "Waiting for challenger...";
-            const roomRef = await addDoc(collection(db, "rooms"), { host: myBattleData, guest: null, status: "waiting", round: 1, createdAt: serverTimestamp() });
+            const roomRef = await addDoc(collection(db, "rooms"), { 
+                host: myBattleData, 
+                guest: null, 
+                status: "waiting", 
+                round: 1, 
+                createdAt: serverTimestamp() 
+            });
             currentBattleId = roomRef.id;
             isBattleResultProcessed = false;
+            
+            // 隨機邀請線上玩家 (增加配對機率)
             inviteRandomPlayers(currentBattleId);
+            
+            listenToBattleRoom(currentBattleId);
         }
-        listenToBattleRoom(currentBattleId);
     } catch (e) {
         console.error("Match error", e);
-        alert("Match failed: " + e.message); leaveBattle();
+        alert("Match failed: " + e.message); 
+        leaveBattle();
     }
 };
 
@@ -2406,16 +2457,6 @@ async function handleBattleAnswer(roomId, userIdx, correctIdx, isHost) {
         console.error("Answer upload failed", e);
     }
 }
-window.leaveBattle = async () => {
-    if (battleUnsub) { battleUnsub(); battleUnsub = null; }
-    if (currentBattleId) {
-        const roomIdToRemove = currentBattleId;
-        getDoc(doc(db, "rooms", roomIdToRemove)).then(async (snap) => {
-            if (snap.exists()) { const data = snap.data(); if (data.status === "waiting" && data.host.uid === auth.currentUser.uid) { await deleteDoc(doc(db, "rooms", roomIdToRemove)); } }
-        }).catch(err => console.error(err));
-    }
-    isBattleActive = false; currentBattleId = null; switchToPage('page-home');
-};
 
 window.loadUserHistory = async () => {
     const ul = document.getElementById('history-list');
