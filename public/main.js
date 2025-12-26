@@ -912,6 +912,7 @@ function getTimeAgo(date) {
     return "Just now";
 }
 
+// [修改] 頁面切換函式
 window.switchToPage = (pageId) => {
     if (isBattleActive && pageId !== 'page-battle') {
         alert("Battle in progress!");
@@ -946,8 +947,12 @@ window.switchToPage = (pageId) => {
     if (pageId === 'page-settings') { renderInventory(); loadUserHistory(); }
     if (pageId === 'page-admin') loadAdminData();
     if (pageId === 'page-social') {
-        // 進入社交頁面時，預設顯示好友
         switchSocialTab('friends');
+    }
+    // [新增] 當進入卡牌頁面時，載入卡庫並顯示牌組
+    if (pageId === 'page-cards') {
+        loadMyCards();
+        updateDeckDisplay();
     }
     
     updateTexts();
