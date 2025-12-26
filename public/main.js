@@ -1769,7 +1769,7 @@ window.startBattleMatchmaking = async () => {
     document.getElementById('battle-lobby').classList.remove('hidden');
     document.getElementById('battle-arena').classList.add('hidden');
     document.getElementById('battle-status-text').innerText = t('battle_searching');
-
+    document.getElementById('battle-result').classList.add('hidden');
     // 只搜尋最近 1 分鐘內建立的房間，避免配對到死房間
     const oneMinuteAgo = new Date(Date.now() - 60 * 1000);
     
