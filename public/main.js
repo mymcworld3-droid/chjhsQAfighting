@@ -79,6 +79,18 @@ const CARD_DATABASE = {
     // --- 傳奇 (Rainbow) ---
     "c051": { name: "虛空魔神", hp: 500, atk: 120, rarity: "rainbow", trait: "毀滅", skill: "黑洞", skillDmg: 999 }
 };
+
+const getBattleCardData = (cid) => {
+    if (!cid || !CARD_DATABASE[cid]) return null;
+    const base = CARD_DATABASE[cid];
+    const lvl = (currentUserData.cardLevels && currentUserData.cardLevels[cid]) || 0;
+    return {
+        ...base,
+        id: cid,
+        atk: base.atk + (lvl * 5), // 🔥 這裡加入強化數值
+        currentHp: base.hp // HP 目前沒設強化，若有需要可改 base.hp + (lvl * 10)
+    };
+};
 // ==========================================
 // 🌍 國際化 (i18n) 設定
 // ==========================================
@@ -1744,8 +1756,8 @@ window.startBattleMatchmaking = async () => {
         activeCard: "main",
         isDead: false,
         cards: {
-            main: { ...CARD_DATABASE[currentUserData.deck.main], id: currentUserData.deck.main, currentHp: CARD_DATABASE[currentUserData.deck.main].hp },
-            sub: currentUserData.deck.sub ? { ...CARD_DATABASE[currentUserData.deck.sub], id: currentUserData.deck.sub, currentHp: CARD_DATABASE[currentUserData.deck.sub].hp } : null
+            main: getBattleCardData(currentUserData.deck.main),
+            sub: getBattleCardData(currentUserData.deck.sub)
         }
     };
 
