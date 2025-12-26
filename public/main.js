@@ -2219,3 +2219,33 @@ window.recalculateAllUserRanks = async () => {
     } catch (e) { console.error(e); alert("Recalculation Failed: " + e.message); } 
     finally { btn.innerHTML = originalText; btn.disabled = false; }
 };
+
+
+window.drawCard = async () => {
+    if (currentUserData.stats.totalScore < 500) return alert("積分不足 (需要 500)");
+    
+    // 隨機抽選
+    const keys = Object.keys(CARD_DATABASE);
+    const randomKey = keys[Math.floor(Math.random() * keys.length)];
+    const card = CARD_DATABASE[randomKey];
+
+    if (!confirm(`花費 500 積分召喚？`)) return;
+
+    try {
+        // 扣分並給卡
+        const userRef = doc(db, "users", auth.currentUser.uid);
+        await updateDoc(userRef, {
+            "stats.totalScore": currentUserData.stats.totalScore - 500,
+            "cards": arrayUnion(randomKey)
+        });
+        
+        // 更新本地
+        currentUserData.stats.totalScore -= 500;
+        if(!currentUserData.cards) currentUserData.cards = [];
+        currentUserData.cards.push(randomKey);
+        
+        alert(`🎉 恭喜獲得：${card.name}！\nHP: ${card.hp} | ATK: ${card.atk}\n技能: ${card.skill}`);
+        updateUIStats();
+        loadMyCards(); // 重新渲染卡牌列表
+    } catch(e) { console.error(e); alert("抽卡失敗"); }
+};
