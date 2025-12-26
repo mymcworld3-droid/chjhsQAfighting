@@ -1824,8 +1824,8 @@ async function acceptInvite(inviteId, roomId, toastElement) {
         activeCard: "main",
         isDead: false,
         cards: {
-            main: { ...CARD_DATABASE[currentUserData.deck.main], id: currentUserData.deck.main, currentHp: CARD_DATABASE[currentUserData.deck.main].hp },
-            sub: currentUserData.deck.sub ? { ...CARD_DATABASE[currentUserData.deck.sub], id: currentUserData.deck.sub, currentHp: CARD_DATABASE[currentUserData.deck.sub].hp } : null
+            main: getBattleCardData(currentUserData.deck.main),
+            sub: getBattleCardData(currentUserData.deck.sub)
         }
     };
 
