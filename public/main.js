@@ -1950,30 +1950,45 @@ let lastEnemyHp = -1;
 
 // [修改] 監聽戰鬥房間 (核心流程控制)
 function listenToBattleRoom(roomId) {
+    // 1. 清除舊的監聽器 (如果有的話)
     if (battleUnsub) battleUnsub();
     
+    // 2. 重置血量記錄 (用於判斷是否扣血並播放動畫)
     lastMyHp = -1;
     lastEnemyHp = -1;
+    
     // 用來記錄上一題的題目，分辨是否為新題目
     let lastQuestionText = ""; 
 
     console.log("📡 開始監聽對戰房間:", roomId);
 
+    // 3. 建立新的 Snapshot 監聽
     battleUnsub = onSnapshot(doc(db, "rooms", roomId), async (docSnap) => {
+        // 如果房間被刪除 (例如對手離開導致房間銷毀)，則離開戰鬥
         if (!docSnap.exists()) { leaveBattle(); return; }
 
         const room = docSnap.data();
         if (!auth.currentUser) return;
 
+        // 判斷我是 Host 還是 Guest
         const isHost = room.host.uid === auth.currentUser.uid;
         const myData = isHost ? room.host : room.guest;
         const oppData = isHost ? room.guest : room.host;
 
+        // --- 狀態 A: 遊戲進行中 (Ready) ---
         if (room.status === "ready") {
+            
+            // 🔥🔥🔥 [關鍵修正] 強制切換 UI 到戰鬥畫面 🔥🔥🔥
+            // 這三行確保玩家從「搜尋大廳」進入「戰鬥場景」
+            document.getElementById('battle-lobby').classList.add('hidden');
+            document.getElementById('battle-arena').classList.remove('hidden');
+            document.getElementById('battle-result').classList.add('hidden');
+            // ---------------------------------------------------
+
             const currentMyHp = (myData.cards.main.currentHp) + (myData.cards.sub?.currentHp || 0);
             const currentEnemyHp = (oppData.cards.main.currentHp) + (oppData.cards.sub?.currentHp || 0);
             
-            // 初始化血量記錄
+            // 初始化血量記錄 (剛進入房間時)
             if (lastMyHp === -1) {
                 lastMyHp = currentMyHp;
                 lastEnemyHp = currentEnemyHp;
@@ -1989,10 +2004,10 @@ function listenToBattleRoom(roomId) {
                 const myActiveCard = myData.cards[myData.activeCard];
                 const skillName = (myData.activeCard === 'main') ? myActiveCard.skill : "普通攻擊";
                 
-                // 🔥 戰鬥開始：強制隱藏題目遮罩，顯示戰鬥畫面
+                // 🔥 戰鬥動畫時：強制隱藏題目遮罩，顯示戰鬥畫面
                 document.getElementById('battle-quiz-overlay').classList.add('hidden');
                 
-                // 播放動畫 (假設動畫約 2 秒)
+                // 播放攻擊動畫
                 triggerBattleAnimation('my', dmg, skillName);
             }
 
@@ -2003,7 +2018,7 @@ function listenToBattleRoom(roomId) {
                 const enemyActiveCard = oppData.cards[oppData.activeCard];
                 const skillName = (oppData.activeCard === 'main') ? enemyActiveCard.skill : "普通攻擊";
                 
-                // 🔥 戰鬥開始：強制隱藏題目遮罩，顯示戰鬥畫面
+                // 🔥 戰鬥動畫時：強制隱藏題目遮罩
                 document.getElementById('battle-quiz-overlay').classList.add('hidden');
 
                 triggerBattleAnimation('enemy', dmg, skillName);
@@ -2090,7 +2105,7 @@ function listenToBattleRoom(roomId) {
             }
         }
         
-        // --- 4. 遊戲結束 ---
+        // --- 狀態 B: 遊戲結束 (Finished) ---
         if (room.status === "finished") {
              // 確保隱藏題目層，顯示結果層
              document.getElementById('battle-quiz-overlay').classList.add('hidden');
@@ -2104,6 +2119,7 @@ function listenToBattleRoom(roomId) {
              if(isWinner) {
                  titleEl.innerText = "🎉 勝利！";
                  titleEl.className = "text-3xl font-bold mb-2 text-green-400 animate-bounce";
+                 // 防止重複領取獎勵
                  if(!isBattleResultProcessed) {
                      isBattleResultProcessed = true;
                      processBattleWin(isHost ? room.guest : room.host, msgEl);
