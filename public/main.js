@@ -1758,12 +1758,11 @@ window.leaveBattle = async () => {
     switchToPage('page-home');
 };
 
-// [修正] 開始配對 (增加隨機性與重試機制)
 window.startBattleMatchmaking = async () => {
-    if (!auth.currentUser) { alert("Please login first!"); return; }
+    if (!auth.currentUser) { alert("請先登入！"); return; }
     if (!currentUserData.deck?.main) { alert("請先到卡牌中心設定「主卡」！"); switchToPage('page-cards'); return; }
 
-    console.log("🚀 Matchmaking..."); 
+    console.log("🚀 開始配對中..."); 
     isBattleActive = true;
     switchToPage('page-battle');
     document.getElementById('battle-lobby').classList.remove('hidden');
@@ -1771,8 +1770,8 @@ window.startBattleMatchmaking = async () => {
     document.getElementById('battle-status-text').innerText = t('battle_searching');
     document.getElementById('battle-result').classList.add('hidden');
 
-    // 只搜尋最近 1 分鐘內建立的房間，避免配對到死房間
-    const oneMinuteAgo = new Date(Date.now() - 60 * 1000);
+    // 🔥 修改 1: 放寬搜尋時間至 30 分鐘，避免與等待中的玩家錯過
+    const searchTimeRange = new Date(Date.now() - 30 * 60 * 1000);
     
     const myBattleData = { 
         uid: auth.currentUser.uid, 
@@ -1792,15 +1791,15 @@ window.startBattleMatchmaking = async () => {
         const q = query(
             collection(db, "rooms"), 
             where("status", "==", "waiting"), 
-            where("createdAt", ">", oneMinuteAgo), // 加入時間過濾
-            limit(10) // 增加搜尋範圍
+            where("createdAt", ">", searchTimeRange), 
+            limit(20) // 🔥 修改 2: 稍微增加搜尋數量
         );
         
         const snapshot = await getDocs(q);
         let joinedRoomId = null;
 
         if (!snapshot.empty) {
-            // 過濾掉自己開的房間
+            // 過濾掉自己開的房間 (以防萬一之前的沒清乾淨)
             const availableDocs = snapshot.docs.filter(d => { 
                 const data = d.data(); 
                 return data.host && data.host.uid !== auth.currentUser.uid; 
@@ -1814,43 +1813,58 @@ window.startBattleMatchmaking = async () => {
                 try {
                     await runTransaction(db, async (transaction) => {
                         const sfDoc = await transaction.get(roomRef);
-                        if (!sfDoc.exists()) throw "Doc missing";
+                        if (!sfDoc.exists()) throw "房間已不存在";
                         const data = sfDoc.data();
+                        
+                        // 再次確認狀態
                         if (data.status === "waiting" && !data.guest) {
                             transaction.update(roomRef, { guest: myBattleData, status: "ready" });
                             joinedRoomId = targetDoc.id;
-                        } else { throw "Room full"; }
+                        } else { 
+                            throw "房間已滿"; 
+                        }
                     });
-                } catch (e) { console.log("Match conflict", e); }
+                } catch (e) { 
+                    console.log("加入房間失敗 (可能剛好被搶走):", e); 
+                    // 如果加入失敗，不設 joinedRoomId，程式會往下走去自己開房間
+                }
             }
         }
 
         if (joinedRoomId) {
+            console.log("✅ 成功加入房間:", joinedRoomId);
             currentBattleId = joinedRoomId;
             isBattleResultProcessed = false;
             document.getElementById('battle-status-text').innerText = t('battle_connecting');
             listenToBattleRoom(currentBattleId);
         } else {
             // 沒找到房間，自己建立
-            document.getElementById('battle-status-text').innerText = "Waiting for challenger...";
+            console.log("⚠️ 無可用房間，建立新房間等待挑戰者...");
+            document.getElementById('battle-status-text').innerText = "正在等待挑戰者加入...";
+            
             const roomRef = await addDoc(collection(db, "rooms"), { 
                 host: myBattleData, 
                 guest: null, 
                 status: "waiting", 
                 round: 1, 
-                createdAt: serverTimestamp() 
+                createdAt: serverTimestamp() // 這裡使用的是 Server 時間，與查詢時的 Date.now() 本地時間要確保一致性
             });
             currentBattleId = roomRef.id;
             isBattleResultProcessed = false;
             
-            // 隨機邀請線上玩家 (增加配對機率)
+            // 隨機邀請線上玩家
             inviteRandomPlayers(currentBattleId);
             
             listenToBattleRoom(currentBattleId);
         }
     } catch (e) {
-        console.error("Match error", e);
-        alert("Match failed: " + e.message); 
+        console.error("配對過程發生錯誤:", e);
+        // 🔥 修改 3: 提示更具體的錯誤，如果是索引問題會在 Console 顯示
+        if (e.message && e.message.includes("index")) {
+            alert("系統錯誤：Firebase 索引缺失，請通知管理員查看 Console。");
+        } else {
+            alert("配對失敗: " + e.message); 
+        }
         leaveBattle();
     }
 };
