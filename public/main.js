@@ -1748,9 +1748,7 @@ async function generateSharedQuiz(roomId) {
     } finally { 
         isGenerating = false; 
     }
-}
-// [修正] 離開對戰 (確實清理房間)
-window.leaveBattle = async () => {
+}window.leaveBattle = async () => {
     if (battleUnsub) { 
         battleUnsub(); 
         battleUnsub = null; 
@@ -1758,21 +1756,21 @@ window.leaveBattle = async () => {
 
     if (currentBattleId) {
         const roomIdToRemove = currentBattleId;
-        // 只有當我是房主，且房間還在 waiting 狀態時，才刪除房間
         try {
             const snap = await getDoc(doc(db, "rooms", roomIdToRemove));
             if (snap.exists()) { 
                 const data = snap.data(); 
+                // 只有房主且在等待中才刪除
                 if (data.status === "waiting" && data.host.uid === auth.currentUser.uid) { 
-                    console.log("🗑️ 清理未配對的房間:", roomIdToRemove);
                     await deleteDoc(doc(db, "rooms", roomIdToRemove)); 
                 } 
             }
-        } catch (err) { console.error("清理房間失敗", err); }
+        } catch (err) { console.error(err); }
     }
     
     isBattleActive = false; 
     currentBattleId = null; 
+    isPlayingSequence = false; // [新增] 重置動畫旗標
     switchToPage('page-home');
 };
 
