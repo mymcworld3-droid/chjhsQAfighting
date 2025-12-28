@@ -1729,10 +1729,25 @@ let isGenerating = false;
 async function generateSharedQuiz(roomId) {
     if (isGenerating) return;
     isGenerating = true; 
+    
     try {
+        // [修改] 檢查是否為第一回合 (若是，則給予一點延遲，讓玩家先看到桌面)
+        const roomRef = doc(db, "rooms", roomId);
+        const snap = await getDoc(roomRef);
+        if (snap.exists() && snap.data().round === 1) {
+            console.log("🎲 第一回合，展示桌面中...");
+            await new Promise(r => setTimeout(r, 1500)); // 延遲 1.5 秒
+        }
+
         const q = await fetchOneQuestion(); 
-        await updateDoc(doc(db, "rooms", roomId), { currentQuestion: { q: q.data.q, opts: q.data.opts, ans: q.data.ans } });
-    } catch (e) { console.error("Gen Error", e); } finally { isGenerating = false; }
+        await updateDoc(roomRef, { 
+            currentQuestion: { q: q.data.q, opts: q.data.opts, ans: q.data.ans, exp: q.data.exp } // 確保包含解析
+        });
+    } catch (e) { 
+        console.error("Gen Error", e); 
+    } finally { 
+        isGenerating = false; 
+    }
 }
 // [修正] 離開對戰 (確實清理房間)
 window.leaveBattle = async () => {
