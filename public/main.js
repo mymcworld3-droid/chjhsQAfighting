@@ -2182,121 +2182,120 @@ function triggerMissAnimation(targetRole) {
         setTimeout(() => { if(missLabel.parentNode) missLabel.remove(); }, 1000);
     }
 }
-// [新增] 回合結算邏輯 (Host Only)
+// [改寫] 回合結算邏輯 (Host Only, 產生 Log)
 async function resolveRoundLogic(roomId, room) {
     const host = room.host;
     const guest = room.guest;
     
-    // 取得時間戳記 (如果是 null 則視為極大值，即超時)
-    const tHost = host.answerTime ? host.answerTime.toMillis() : Date.now();
-    const tGuest = guest.answerTime ? guest.answerTime.toMillis() : Date.now();
+    // 取得時間戳記 (超時或未答則視為最大值)
+    const tHost = host.answerTime ? host.answerTime.toMillis() : Date.now() + 10000;
+    const tGuest = guest.answerTime ? guest.answerTime.toMillis() : Date.now() + 10000;
 
-    // 建立行動佇列 (Action Queue)
-    // 邏輯：答對者加入攻擊佇列。若都答對，時間短者排前面。
-    let actions = [];
-
-    if (host.answerCorrect && guest.answerCorrect) {
-        if (tHost < tGuest) {
-            actions = ['host', 'guest']; // Host 較快
-        } else {
-            actions = ['guest', 'host']; // Guest 較快
-        }
-    } else if (host.answerCorrect) {
-        actions = ['host'];
-    } else if (guest.answerCorrect) {
-        actions = ['guest'];
+    // [核心] 決定攻擊順序：時間短者先
+    let turnOrder = [];
+    if (tHost < tGuest) {
+        turnOrder = ['host', 'guest'];
+    } else {
+        turnOrder = ['guest', 'host'];
     }
-    // 若都答錯，actions 為空，無人攻擊
 
     const roomRef = doc(db, "rooms", roomId);
 
     await runTransaction(db, async (transaction) => {
-        // 重新讀取以確保數據最新
         const freshDoc = await transaction.get(roomRef);
         if (!freshDoc.exists()) return;
         const freshRoom = freshDoc.data();
         
         let h = freshRoom.host;
         let g = freshRoom.guest;
-        let logMsg = "";
+        let battleLog = []; // 存放本回合的事件
 
-        // 執行攻擊迴圈
-        for (const attackerRole of actions) {
+        // 模擬執行攻擊
+        for (const attackerRole of turnOrder) {
             const attacker = attackerRole === 'host' ? h : g;
             const defender = attackerRole === 'host' ? g : h;
-            const defRole = attackerRole === 'host' ? 'guest' : 'host';
-
-            // 如果防守者已經死了，停止攻擊 (鞭屍邏輯可選)
+            
+            // 如果防守者已經死了，停止鞭屍
             if (defender.isDead) continue;
 
             const cardKey = attacker.activeCard;
             const card = attacker.cards[cardKey];
-            // 簡單傷害公式
-            let damage = card.atk; 
-            // 如果是主卡，加技能傷害
-            if (cardKey === 'main') damage += (card.skillDmg || 0);
 
-            // 扣血
-            const targetKey = defender.activeCard;
-            let newHp = defender.cards[targetKey].currentHp - damage;
-
-            if (newHp <= 0) {
-                newHp = 0;
-                // 死亡切換邏輯
-                if (targetKey === 'main' && defender.cards.sub) {
-                    // 主卡死，切副卡
-                    defender.activeCard = 'sub';
-                    logMsg = `${attacker.name} 擊敗了 ${defender.cards.main.name}！`;
-                } else {
-                    // 全死
-                    defender.isDead = true;
-                    logMsg = `${attacker.name} 獲得了勝利！`;
+            // 只有答對才攻擊
+            if (attacker.answerCorrect) {
+                let damage = card.atk; 
+                let skill = "普通攻擊";
+                if (cardKey === 'main') {
+                    damage += (card.skillDmg || 0);
+                    skill = card.skill;
                 }
-            }
 
-            // 更新記憶體中的數據
-            defender.cards[targetKey].currentHp = newHp;
+                // 扣血
+                const targetKey = defender.activeCard;
+                let newHp = defender.cards[targetKey].currentHp - damage;
+
+                if (newHp <= 0) {
+                    newHp = 0;
+                    // 死亡切換邏輯
+                    if (targetKey === 'main' && defender.cards.sub) {
+                        defender.activeCard = 'sub'; // 切換副卡
+                    } else {
+                        defender.isDead = true; // 全滅
+                    }
+                }
+                defender.cards[targetKey].currentHp = newHp;
+
+                // 寫入日誌 (命中)
+                battleLog.push({
+                    attacker: attackerRole,
+                    isHit: true,
+                    dmg: damage,
+                    skill: skill
+                });
+            } else {
+                // 答錯，攻擊失敗 (Miss)
+                battleLog.push({
+                    attacker: attackerRole,
+                    isHit: false,
+                    dmg: 0,
+                    skill: "MISS"
+                });
+            }
         }
 
         // 判斷遊戲是否結束
+        let status = "ready";
+        let winnerUid = null;
+        
         if (h.isDead || g.isDead || freshRoom.round >= 10) {
-             let winnerUid = null;
-             let loserUid = null;
-             
-             if (h.isDead && !g.isDead) { winnerUid = g.uid; loserUid = h.uid; }
-             else if (!h.isDead && g.isDead) { winnerUid = h.uid; loserUid = g.uid; }
+             status = "finished";
+             if (h.isDead && !g.isDead) { winnerUid = g.uid; }
+             else if (!h.isDead && g.isDead) { winnerUid = h.uid; }
              else {
-                 // 回合結束比血量
+                 // 回合結束比總血量
                  const hTotal = h.cards.main.currentHp + (h.cards.sub?.currentHp || 0);
                  const gTotal = g.cards.main.currentHp + (g.cards.sub?.currentHp || 0);
-                 if (hTotal > gTotal) { winnerUid = h.uid; loserUid = g.uid; }
-                 else if (gTotal > hTotal) { winnerUid = g.uid; loserUid = h.uid; }
+                 winnerUid = (hTotal >= gTotal) ? h.uid : g.uid;
              }
-
-             transaction.update(roomRef, {
-                 host: h,
-                 guest: g,
-                 status: "finished",
-                 winner: winnerUid,
-                 loser: loserUid,
-                 isResolving: false
-             });
-        } else {
-            // 進入下一回合
-            transaction.update(roomRef, {
-                host: h,
-                guest: g,
-                round: freshRoom.round + 1,
-                currentQuestion: null, // 清空題目以觸發生成
-                "host.done": false,
-                "guest.done": false,
-                "host.answerCorrect": null,
-                "guest.answerCorrect": null,
-                "host.answerTime": null,
-                "guest.answerTime": null,
-                isResolving: false
-            });
         }
+
+        // 更新資料庫
+        transaction.update(roomRef, {
+            host: h,
+            guest: g,
+            round: (status === "finished") ? freshRoom.round : freshRoom.round + 1,
+            battleLog: battleLog,
+            battleLogId: Date.now().toString(), // 用於觸發客戶端動畫
+            status: status,
+            winner: winnerUid,
+            // 重置答題狀態
+            "host.done": false,
+            "guest.done": false,
+            "host.answerCorrect": null,
+            "guest.answerCorrect": null,
+            "host.answerTime": null,
+            "guest.answerTime": null
+        });
     });
 }
 // 輔助函式：處理勝利結算 (避免主函式太長)
