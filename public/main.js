@@ -3290,7 +3290,7 @@ async function executeDraw(count, cost, guaranteedRarity = null) {
 
 let gachaSkip = false; // 用於跳過動畫
 
-// [修改] 輔助：更新戰鬥卡牌 UI (修正圖片路徑問題)
+// [修改] 輔助：更新戰鬥卡牌 UI (改用 assets 資料夾)
 function updateBattleCardUI(prefix, playerData) {
     if (!playerData) return;
     
@@ -3328,21 +3328,24 @@ function updateBattleCardUI(prefix, playerData) {
         container.className = `relative w-32 h-48 bg-slate-800 rounded-lg border-2 ${borderClass} transition-all duration-500 mb-6 overflow-hidden shadow-2xl`;
     }
 
-    // [修正] 使用英文檔名，並加上根目錄斜線 "/"
+    // [修正] 改為讀取 /assets/ 資料夾 (與其他圖片統一)，並加上時間戳記防止快取
+    // 請確認您的檔案是 .jpeg 還是 .jpg，這裡預設為 .jpeg
+    const ts = new Date().getTime(); // 強制刷新快取
     const CARD_IMAGES = {
-        "c041": "/card_picture/guardian.jpeg", // 對應 光之守護者
-        "c051": "/card_picture/void.jpeg"      // 對應 虛空魔神
+        "c041": `/assets/guardian.jpeg?v=${ts}`, // 對應 光之守護者
+        "c051": `/assets/void.jpeg?v=${ts}`      // 對應 虛空魔神
     };
 
     let innerContent = "";
 
     // 如果是主卡且有設定圖片，顯示圖片模式
-    if (activeKey === 'main' && CARD_IMAGES[activeCard.id]) {
-        // 使用 onerror 來偵測圖片是否載入失敗，若失敗則退回文字模式
+    if (activeKey === 'main' && (activeCard.id === 'c041' || activeCard.id === 'c051')) {
+        const imgPath = CARD_IMAGES[activeCard.id];
+        
         innerContent = `
-            <img src="${CARD_IMAGES[activeCard.id]}" 
+            <img src="${imgPath}" 
                  class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-110"
-                 onerror="this.style.display='none'; this.parentElement.querySelector('.fallback-text').style.display='flex'">
+                 onerror="console.log('圖片載入失敗:', this.src); this.style.display='none'; this.parentElement.querySelector('.fallback-text').style.display='flex'">
             
             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
             
@@ -3361,8 +3364,11 @@ function updateBattleCardUI(prefix, playerData) {
             </div>
 
             <div class="fallback-text hidden flex-col items-center justify-center h-full relative z-0">
-                <div class="text-3xl mb-2">🐉</div>
+                <div class="text-3xl mb-2">
+                     ${activeCard.id === 'c051' ? '🐲' : '🛡️'}
+                </div>
                 <div class="${nameColor} font-bold text-sm text-center">${activeCard.name}</div>
+                <div class="text-[8px] text-red-400 mt-1">(圖片未找到)</div>
             </div>
         `;
     } else {
