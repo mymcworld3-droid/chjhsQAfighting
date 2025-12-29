@@ -592,6 +592,7 @@ window.loadMyCards = () => {
         const div = document.createElement('div');
         div.className = `bg-slate-800 p-1.5 rounded-lg border-2 ${rConfig.border} relative overflow-hidden group hover:scale-[1.02] transition-transform aspect-[2/3] flex flex-col justify-between shadow-md cursor-pointer`;
         div.onclick = () => selectCardForSlot(currentSelectSlot || 'main');
+        const imgPath = `/card_picture/${card.name === '光之守護者' ? 'guardian.jpeg' : 'void.jpeg'}`; //
 
         div.innerHTML = `
             <div class="flex justify-between items-start z-10">
@@ -600,9 +601,15 @@ window.loadMyCards = () => {
             </div>
             
             <div class="flex-1 flex items-center justify-center my-1">
-                 <div class="text-3xl drop-shadow-lg filter grayscale-[0.3] group-hover:grayscale-0 transition-all duration-300">
-                    ${card.rarity === 'rainbow' || card.rarity === 'gold' ? '🐲' : (card.rarity === 'red' ? '👹' : '⚔️')}
-                 </div>
+                 <div class="flex-1 flex items-center justify-center my-1 overflow-hidden">
+                     <img src="/card_picture/${card.id === 'c041' ? 'guardian.jpeg' : (card.id === 'c051' ? 'void.jpeg' : '')}" 
+                          class="w-full h-full object-cover" 
+                          onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+         
+                     <div class="text-3xl hidden">
+                        ${card.rarity === 'rainbow' ? '🐲' : '⚔️'}
+                     </div>
+                </div>
             </div>
 
             <div class="z-10 bg-black/20 p-1.5 rounded backdrop-blur-sm">
