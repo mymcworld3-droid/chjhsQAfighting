@@ -3290,7 +3290,7 @@ async function executeDraw(count, cost, guaranteedRarity = null) {
 
 let gachaSkip = false; // 用於跳過動畫
 
-// [修改] 輔助：更新戰鬥卡牌 UI (改用 assets 資料夾)
+// [修正 1] 更新戰鬥卡牌 UI (支援副卡顯示圖片 + 強制 3:2 比例)
 function updateBattleCardUI(prefix, playerData) {
     if (!playerData) return;
     
@@ -3307,6 +3307,9 @@ function updateBattleCardUI(prefix, playerData) {
     const activeKey = playerData.activeCard; // 'main' or 'sub'
     const activeCard = playerData.cards[activeKey];
     
+    // 防呆：如果 activeCard 不存在 (例如數據錯誤)，直接返回
+    if (!activeCard) return;
+
     const dbCard = CARD_DATABASE[activeCard.id];
     if (!dbCard) return;
 
@@ -3322,30 +3325,30 @@ function updateBattleCardUI(prefix, playerData) {
     const nameColor = activeKey === 'main' ? 'text-yellow-400' : 'text-gray-300';
     const borderClass = activeKey === 'main' ? 'border-yellow-500' : 'border-gray-500';
     
-    // 更新卡片容器：保持 2:3 比例 (w-32 h-48)
+    // [重點修正] 更新卡片容器：固定 w-32 h-48 (即 128px : 192px，符合 2:3 寬高比，也就是 3:2 高寬比)
     const container = document.getElementById(`${idPrefix}-card-container`);
     if(container) {
         container.className = `relative w-32 h-48 bg-slate-800 rounded-lg border-2 ${borderClass} transition-all duration-500 mb-6 overflow-hidden shadow-2xl`;
     }
 
-    // [修正] 改為讀取 /assets/ 資料夾 (與其他圖片統一)，並加上時間戳記防止快取
-    // 請確認您的檔案是 .jpeg 還是 .jpg，這裡預設為 .jpeg
-    const ts = new Date().getTime(); // 強制刷新快取
+    // [重點修正] 圖片對應表 (使用絕對路徑 + 時間戳記防止快取)
+    // 請確認您的資料夾名稱是 card_picture (單數) 且檔名為小寫
+    const ts = new Date().getTime(); 
     const CARD_IMAGES = {
-        "c041": `/assets/guardian.jpeg?v=${ts}`, // 對應 光之守護者
-        "c051": `/assets/void.jpeg?v=${ts}`      // 對應 虛空魔神
+        "c041": `/card_picture/guardian.jpeg?v=${ts}`, // 光之守護者
+        "c051": `/card_picture/void.jpeg?v=${ts}`      // 虛空魔神
     };
 
     let innerContent = "";
+    
+    // 檢查是否有圖片 (移除 activeKey === 'main' 的限制，讓副卡上位也能顯示圖片)
+    const hasImage = CARD_IMAGES[activeCard.id];
 
-    // 如果是主卡且有設定圖片，顯示圖片模式
-    if (activeKey === 'main' && (activeCard.id === 'c041' || activeCard.id === 'c051')) {
-        const imgPath = CARD_IMAGES[activeCard.id];
-        
+    if (hasImage) {
         innerContent = `
-            <img src="${imgPath}" 
+            <img src="${hasImage}" 
                  class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-110"
-                 onerror="console.log('圖片載入失敗:', this.src); this.style.display='none'; this.parentElement.querySelector('.fallback-text').style.display='flex'">
+                 onerror="this.style.display='none'; this.parentElement.querySelector('.fallback-text').style.display='flex'">
             
             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
             
@@ -3364,15 +3367,14 @@ function updateBattleCardUI(prefix, playerData) {
             </div>
 
             <div class="fallback-text hidden flex-col items-center justify-center h-full relative z-0">
-                <div class="text-3xl mb-2">
-                     ${activeCard.id === 'c051' ? '🐲' : '🛡️'}
+                <div class="text-3xl mb-2 filter drop-shadow-lg animate-pulse">
+                    ${activeCard.id === 'c051' || activeCard.id === 'c041' ? '🐲' : '⚔️'}
                 </div>
                 <div class="${nameColor} font-bold text-sm text-center">${activeCard.name}</div>
-                <div class="text-[8px] text-red-400 mt-1">(圖片未找到)</div>
             </div>
         `;
     } else {
-        // 原本的樣式 (無圖片時顯示 Icon)
+        // 無圖片的預設樣式
         innerContent = `
             <div class="flex flex-col items-center justify-center h-full relative z-10">
                 <div class="text-[10px] uppercase tracking-widest text-gray-500 mb-1">${activeKey}</div>
@@ -3424,8 +3426,8 @@ function updateBattleCardUI(prefix, playerData) {
     }
 }
 
-// [修改] 顯示抽卡結果動畫 (修復第二次結果重複問題)
-window.currentDrawResults = null; // 新增全域變數
+// [修正 2] 顯示抽卡結果 (確保每次都使用最新的 results)
+window.currentDrawResults = []; // 初始化為空陣列
 
 function showDrawResults(results, totalRefund) {
     const overlay = document.getElementById('gacha-overlay');
@@ -3434,22 +3436,26 @@ function showDrawResults(results, totalRefund) {
     const magicCircle = document.getElementById('magic-circle');
     const orb = document.getElementById('summon-orb');
     
-    // [重要] 每次抽卡都更新全域結果
+    // [重要] 立即更新全域變數，確保 Skip 時拿到的是這一次的結果
     window.currentDrawResults = results;
+    console.log("抽卡結果更新:", results);
 
-    // 1. 重置狀態
+    // 1. 重置 UI 狀態
     gachaSkip = false;
     overlay.classList.remove('hidden');
     stage.classList.remove('hidden');
     resultsContainer.classList.add('hidden');
+    
+    // [重要] 徹底清空舊的卡片 DOM，防止殘留
+    document.getElementById('gacha-cards-grid').innerHTML = '';
+
+    // 重置動畫元素
     magicCircle.style.opacity = '0';
     orb.className = "w-10 h-10 rounded-full shadow-[0_0_50px_rgba(255,255,255,0.8)] relative z-10 transition-all duration-300"; 
     orb.style.backgroundColor = 'white';
-    
-    // [重要] 清空舊的結果 DOM，避免殘留
-    document.getElementById('gacha-cards-grid').innerHTML = '';
+    orb.style.boxShadow = 'none';
 
-    // 2. 決定顏色
+    // 2. 決定光球顏色 (取最高稀有度)
     let maxRarityVal = 0;
     const rarityMap = { 'gray': 0, 'blue': 1, 'purple': 2, 'red': 3, 'gold': 4, 'rainbow': 5 };
     const colorMap = {
@@ -3465,33 +3471,34 @@ function showDrawResults(results, totalRefund) {
         }
     });
 
-    // 3. 開始播放動畫
+    // 3. 播放動畫序列
     setTimeout(() => { magicCircle.style.opacity = '1'; }, 100);
 
     setTimeout(() => {
-        if(gachaSkip) return; // 如果已跳過，不改變樣式 (因為已經隱藏)
+        if(gachaSkip) return; 
         orb.style.backgroundColor = colorMap[bestRarity];
         orb.style.boxShadow = `0 0 60px ${colorMap[bestRarity]}`;
         orb.classList.add('anim-orb-charge');
     }, 500);
 
     setTimeout(() => {
-        // [重要] 只有在沒有跳過的情況下，使用 closure 中的 results 顯示
-        // 但其實用 window.currentDrawResults 也可以，這裡保持一致
+        // [重要] 使用傳入的 results (閉包) 來確保正確性
         if (!gachaSkip) {
             revealGachaResults(results);
         }
     }, 2300); 
 }
 
-// [修改] 跳過動畫函式
+// [修正 3] 跳過動畫 (使用正確的當次結果)
 window.skipGachaAnimation = () => {
+    if (gachaSkip) return; // 避免重複點擊
     gachaSkip = true;
+    
     const orb = document.getElementById('summon-orb');
     if(orb) orb.classList.remove('anim-orb-charge');
     
-    // [重要] 立即顯示結果，並確保使用當前全域變數中的最新結果
-    if (window.currentDrawResults) {
+    // 立即顯示結果
+    if (window.currentDrawResults && window.currentDrawResults.length > 0) {
         revealGachaResults(window.currentDrawResults);
     }
 };
