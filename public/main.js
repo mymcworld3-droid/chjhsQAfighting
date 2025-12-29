@@ -548,30 +548,27 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-// [修正] 載入我的卡庫 (縮小版樣式 + 完整變數定義)
+// [修正] 載入我的卡庫 (顯示特性效果)
 window.loadMyCards = () => {
     const list = document.getElementById('my-card-list');
     if(!list) return;
     list.innerHTML = "";
     
     if(!currentUserData.cards || currentUserData.cards.length === 0) {
-        // 修改 col-span 以適應新的 grid 欄位數
         list.innerHTML = `<div class="col-span-3 md:col-span-4 text-center text-gray-500 py-4">${t('msg_no_cards')}</div>`;
         return;
     }
 
-    // 確保 cardLevels 存在
     const levels = currentUserData.cardLevels || {};
     const uniqueCards = [...new Set(currentUserData.cards)];
 
-    // 排序：稀有度高 -> 低，等級高 -> 低
     uniqueCards.sort((a, b) => {
         const cardA = CARD_DATABASE[a];
         const cardB = CARD_DATABASE[b];
         const rarityOrder = ["rainbow", "gold", "red", "purple", "blue", "gray"];
         const rDiff = rarityOrder.indexOf(cardA.rarity) - rarityOrder.indexOf(cardB.rarity);
-        if (rDiff !== 0) return rDiff; // 稀有度優先
-        return (levels[b] || 0) - (levels[a] || 0); // 等級其次
+        if (rDiff !== 0) return rDiff;
+        return (levels[b] || 0) - (levels[a] || 0);
     });
 
     uniqueCards.forEach(cardId => {
@@ -579,26 +576,22 @@ window.loadMyCards = () => {
         if(!card) return;
         
         const lvl = levels[cardId] || 0;
-        const finalAtk = card.atk + (lvl * 5); // 基礎攻擊 + 等級加成
+        const finalAtk = card.atk + (lvl * 5);
         const rConfig = RARITY_CONFIG[card.rarity];
+        const traitDesc = TRAIT_DESCRIPTIONS[card.trait] || "";
 
-        // 定義徽章 (修正這裡的變數遺失問題)
         const isMain = currentUserData.deck && currentUserData.deck.main === cardId;
         const isSub = currentUserData.deck && currentUserData.deck.sub === cardId;
         let badge = "";
         if(isMain) badge = `<div class="absolute top-0 right-0 bg-yellow-600 text-[8px] px-1 text-white rounded-bl">Main</div>`;
         else if(isSub) badge = `<div class="absolute top-0 right-0 bg-gray-600 text-[8px] px-1 text-white rounded-bl">Sub</div>`;
 
-        // 星星顯示 (等級)
         let stars = "";
         for(let i=0; i<lvl; i++) stars += "★";
 
         const div = document.createElement('div');
-        // 設定樣式：縮小 padding, 字體, 並固定比例 2:3
         div.className = `bg-slate-800 p-1.5 rounded-lg border-2 ${rConfig.border} relative overflow-hidden group hover:scale-[1.02] transition-transform aspect-[2/3] flex flex-col justify-between shadow-md cursor-pointer`;
-        
-        // 點擊可以開啟詳情或裝備 (這裡加上 onclick 事件)
-        div.onclick = () => selectCardForSlot(currentSelectSlot || 'main'); // 如果沒有正在選的槽位，預設行為可以自行定義
+        div.onclick = () => selectCardForSlot(currentSelectSlot || 'main');
 
         div.innerHTML = `
             <div class="flex justify-between items-start z-10">
@@ -620,8 +613,10 @@ window.loadMyCards = () => {
                 <div class="pt-0.5 border-t border-white/10 text-[8px] ${rConfig.color} truncate">
                     ⚡ ${card.skill}
                 </div>
+                <div class="text-[8px] text-gray-300 truncate opacity-80">
+                    ✨ ${card.trait}: ${traitDesc}
+                </div>
             </div>
-            
             ${badge}
         `;
         list.appendChild(div);
