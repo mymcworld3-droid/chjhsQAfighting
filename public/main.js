@@ -578,7 +578,7 @@ window.loadMyCards = () => {
 
         const div = document.createElement('div');
         // 套用稀有度邊框與光暈
-        div.className = `bg-slate-800 p-3 rounded-xl border-2 ${rConfig.border} relative overflow-hidden group hover:scale-[1.02] transition-transform`;
+        div.className = `bg-slate-800 p-3 rounded-xl border-2 ${rConfig.border} relative overflow-hidden group hover:scale-[1.02] transition-transform aspect-[2/3] flex flex-col justify-between shadow-lg`;
         
         div.innerHTML = `
             <div class="flex justify-between items-start mb-2">
