@@ -2557,20 +2557,115 @@ function updateBattleCardUI(prefix, playerData) {
         </div>
     `;
 
-    // 3. 更新副卡指示燈 (透明度)
-    // 如果現在是主卡且還有副卡，顯示副卡指示燈；如果現在已經是副卡了，指示燈改為激活狀態或隱藏
+    // 3. 更新副卡指示燈 (顯示真實卡牌樣式)
     if (subIndicatorEl) {
-        if (activeKey === 'main' && playerData.cards.sub) {
-            subIndicatorEl.style.opacity = '0.5'; // 待機中
-            subIndicatorEl.innerHTML = '<span class="text-[8px] text-center block text-gray-400">Sub</span>';
-        } else if (activeKey === 'sub') {
-            subIndicatorEl.style.opacity = '1'; // 上場了 (或者可以選擇隱藏，因為卡片已經在中間了)
-            subIndicatorEl.classList.add('border-green-500'); // 亮起
-            subIndicatorEl.innerHTML = '<span class="text-[8px] text-center block text-green-400">Active</span>';
+        if (playerData.cards.sub) {
+            const subCardId = playerData.cards.sub.id;
+            // 這裡假設 subCard 資料結構裡有 id，或是從 CARD_DATABASE 撈
+            // 注意：battle data 的 sub 物件可能已經是展開後的資料
+            // 若 battle data 只有數值，我們嘗試從 CARD_DATABASE 匹配 rarity
+            
+            // 安全起見，重新對應一次樣式
+            const subBase = CARD_DATABASE[subCardId] || { name: "Sub", rarity: "gray" };
+            const subRConfig = RARITY_CONFIG[subBase.rarity] || RARITY_CONFIG.gray;
+            
+            // 判斷狀態
+            const isActive = activeKey === 'sub';
+            const isDead = playerData.cards.sub.currentHp <= 0;
+
+            // 設定樣式：有邊框、有背景，像一張小卡
+            subIndicatorEl.className = `absolute ${prefix==='my'?'bottom-4 left-4':'top-4 right-4'} w-12 h-16 bg-slate-800 rounded border-2 transition-all duration-300 flex flex-col items-center justify-center overflow-hidden z-10`;
+            
+            // 依狀態改變外觀
+            if (isDead) {
+                subIndicatorEl.classList.add('border-gray-700', 'opacity-30', 'grayscale');
+                subIndicatorEl.innerHTML = '<i class="fa-solid fa-skull text-gray-500"></i>';
+            } else if (isActive) {
+                subIndicatorEl.className += ` ${subRConfig.border} scale-110 shadow-[0_0_15px_rgba(255,255,255,0.5)]`;
+                subIndicatorEl.innerHTML = `
+                    <div class="text-[8px] ${subRConfig.color} font-bold truncate w-full text-center px-0.5">${subBase.name}</div>
+                    <div class="text-xs">⚔️</div>
+                    <div class="text-[8px] text-white">${playerData.cards.sub.currentHp}</div>
+                `;
+            } else {
+                // 待機中 (Main 在場上)
+                subIndicatorEl.className += ` ${subRConfig.border} opacity-80 hover:opacity-100 hover:scale-105`;
+                subIndicatorEl.innerHTML = `
+                    <div class="bg-black/50 w-full text-center text-[7px] text-gray-300 absolute top-0">WAIT</div>
+                    <div class="text-[8px] ${subRConfig.color} font-bold mt-2 truncate w-full text-center">${subBase.name}</div>
+                `;
+            }
         } else {
-            subIndicatorEl.style.opacity = '0.1'; // 無副卡或副卡已死
+            // 沒有副卡
+            subIndicatorEl.style.opacity = '0';
         }
     }
+    // [新增] 計算並顯示首頁最強卡牌
+window.updateHomeBestCard = () => {
+    const container = document.getElementById('home-best-card-display');
+    if (!container || !currentUserData || !currentUserData.cards || currentUserData.cards.length === 0) {
+        if(container) container.innerHTML = '<div class="text-gray-500 text-xs">No cards</div>';
+        return;
+    }
+
+    const levels = currentUserData.cardLevels || {};
+    const cards = currentUserData.cards;
+
+    // 尋找最強卡牌 (排序邏輯：稀有度 > 攻擊力)
+    let bestCardId = cards[0];
+    let bestScore = -1;
+
+    const rarityScore = { "rainbow": 5000, "gold": 4000, "red": 3000, "purple": 2000, "blue": 1000, "gray": 0 };
+
+    cards.forEach(id => {
+        const c = CARD_DATABASE[id];
+        if(!c) return;
+        const lvl = levels[id] || 0;
+        const finalAtk = c.atk + (lvl * 5);
+        
+        // 評分 = 稀有度分數 + 攻擊力
+        const score = (rarityScore[c.rarity] || 0) + finalAtk;
+        
+        if (score > bestScore) {
+            bestScore = score;
+            bestCardId = id;
+        }
+    });
+
+    // 渲染卡牌 (使用大的樣式)
+    const card = CARD_DATABASE[bestCardId];
+    const lvl = levels[bestCardId] || 0;
+    const finalAtk = card.atk + (lvl * 5);
+    const rConfig = RARITY_CONFIG[card.rarity];
+
+    // 使用 w-40 (寬度160px) 來顯示，並保持 2/3 比例
+    container.innerHTML = `
+        <div class="w-40 aspect-[2/3] bg-slate-800 rounded-xl border-4 ${rConfig.border} relative overflow-hidden flex flex-col justify-between p-3 shadow-2xl bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]">
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/60 pointer-events-none"></div>
+            
+            <div class="flex justify-between items-start z-10">
+                <span class="font-bold ${rConfig.color} text-lg drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">${card.name}</span>
+                <span class="text-xs text-yellow-500 font-mono border border-yellow-500/50 px-1.5 rounded bg-black/40">Lv.${lvl}</span>
+            </div>
+            
+            <div class="flex-1 flex items-center justify-center z-10">
+                <div class="text-6xl filter drop-shadow-[0_0_10px_rgba(255,255,255,0.3)] animate-pulse">
+                     ${card.rarity === 'rainbow' || card.rarity === 'gold' ? '🐲' : '⚔️'}
+                </div>
+            </div>
+
+            <div class="z-10 bg-slate-900/80 backdrop-blur rounded p-2 border border-white/10">
+                <div class="flex justify-between items-center">
+                    <span class="text-xs text-gray-400">ATK</span>
+                    <span class="text-xl font-black text-red-500 font-mono">${finalAtk}</span>
+                </div>
+                <div class="text-[10px] ${rConfig.color} mt-1 truncate">
+                    Trait: ${card.trait}
+                </div>
+            </div>
+        </div>
+    `;
+};
 }
 // [修改] 處理對戰答題 (標記 done)
 async function handleBattleAnswer(roomId, userIdx, correctIdx, isHost) {
