@@ -2938,7 +2938,8 @@ window.loadStoreItems = async () => {
 window.buyItem = async (pid, price) => {
     if (!currentUserData || !currentUserData.stats) return alert(t('loading'));
     if (currentUserData.stats.totalScore < price) return alert(t('msg_no_funds'));
-    if (!confirm(t('msg_buy_confirm', {price: price}))) return;
+    const isConfirmed = await openConfirm(t('msg_buy_confirm', {price: price}));
+    if (!isConfirmed) return;
 
     try {
         const userRef = doc(db, "users", auth.currentUser.uid);
