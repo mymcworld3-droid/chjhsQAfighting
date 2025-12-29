@@ -630,12 +630,12 @@ window.selectCardForSlot = (slot) => {
     renderModalCards();
 };
 
-// [修改] 渲染 Modal 中的卡牌列表 (加入顏色與固定比例)
+// [修改] 渲染 Modal 中的卡牌列表 (顯示特性)
 function renderModalCards() {
-    const list = document.getElementById('modal-card-list');
+    const list = document.getElementById('modal-card-list'); // 確保 HTML ID 正確
+    if(!list) return;
     list.innerHTML = "";
     
-    // 取得所有卡牌並排序 (強的在前面)
     const myCards = [...new Set(currentUserData.cards || [])]; 
     const levels = currentUserData.cardLevels || {};
 
@@ -653,12 +653,11 @@ function renderModalCards() {
         const lvl = levels[cardId] || 0;
         const finalAtk = card.atk + (lvl * 5);
         const rConfig = RARITY_CONFIG[card.rarity];
+        const traitDesc = TRAIT_DESCRIPTIONS[card.trait] || "";
 
         const div = document.createElement('div');
-        // 🔥 設定固定比例與稀有度邊框
         div.className = `cursor-pointer aspect-[2/3] bg-slate-800 p-2 rounded-lg border-2 ${rConfig.border} hover:scale-105 transition-transform flex flex-col justify-between relative overflow-hidden`;
         
-        // 標記目前是否已裝備
         let equipLabel = "";
         if(currentUserData.deck.main === cardId) equipLabel = "<span class='absolute top-0 right-0 bg-yellow-600 text-[9px] px-1 text-white'>Main</span>";
         else if(currentUserData.deck.sub === cardId) equipLabel = "<span class='absolute top-0 right-0 bg-gray-600 text-[9px] px-1 text-white'>Sub</span>";
@@ -673,6 +672,9 @@ function renderModalCards() {
                 <div class="flex justify-between text-[9px] text-gray-300">
                     <span>HP:${card.hp}</span>
                     <span class="text-red-300 font-bold">ATK:${finalAtk}</span>
+                </div>
+                <div class="text-[8px] text-gray-400 mt-0.5 truncate border-t border-white/10 pt-0.5">
+                    ✨ ${card.trait}: ${traitDesc}
                 </div>
             </div>
         `;
