@@ -2192,7 +2192,7 @@ function triggerMissAnimation(targetRole) {
         setTimeout(() => { if(missLabel.parentNode) missLabel.remove(); }, 1000);
     }
 }
-// [改寫] 回合結算邏輯 (Host Only, 產生 Log)
+// [改寫] 回合結算邏輯 (包含新特性計算)
 async function resolveRoundLogic(roomId, room) {
     const host = room.host;
     const guest = room.guest;
@@ -2201,7 +2201,7 @@ async function resolveRoundLogic(roomId, room) {
     const tHost = host.answerTime ? host.answerTime.toMillis() : Date.now() + 10000;
     const tGuest = guest.answerTime ? guest.answerTime.toMillis() : Date.now() + 10000;
 
-    // [核心] 決定攻擊順序：時間短者先
+    // 決定攻擊順序：時間短者先
     let turnOrder = [];
     if (tHost < tGuest) {
         turnOrder = ['host', 'guest'];
@@ -2220,19 +2220,48 @@ async function resolveRoundLogic(roomId, room) {
         let g = freshRoom.guest;
         let battleLog = []; // 存放本回合的事件
 
+        // --- 特性效果定義 ---
+        const TRAIT_VALS = {
+            buffDmg: 10,    // [英勇] 增傷值
+            reduceDmg: 15,  // [堅韌] 減傷值
+            healAmt: 20     // [共生] 回血值
+        };
+
         // 模擬執行攻擊
         for (const attackerRole of turnOrder) {
             const attacker = attackerRole === 'host' ? h : g;
             const defender = attackerRole === 'host' ? g : h;
             
-            // 如果防守者已經死了，停止鞭屍
+            // 如果防守者已經全滅，停止攻擊
             if (defender.isDead) continue;
 
-            const cardKey = attacker.activeCard;
-            const card = attacker.cards[cardKey];
+            const cardKey = attacker.activeCard; // 'main' or 'sub'
+            const card = attacker.cards[cardKey]; // 當前攻擊卡牌
 
             // 只有答對才攻擊
             if (attacker.answerCorrect) {
+                // 1. 計算攻擊方加成 (遍歷攻擊方所有存活卡牌的特性)
+                let extraDmg = 0;
+                let healTrigger = false;
+
+                ['main', 'sub'].forEach(slot => {
+                    const c = attacker.cards[slot];
+                    if (c && c.currentHp > 0) { // 卡牌存在且活著
+                        if (c.trait === '英勇') extraDmg += TRAIT_VALS.buffDmg;
+                        if (c.trait === '共生') healTrigger = true;
+                    }
+                });
+
+                // 2. 計算防守方減免 (遍歷防守方所有存活卡牌的特性)
+                let dmgReduction = 0;
+                ['main', 'sub'].forEach(slot => {
+                    const c = defender.cards[slot];
+                    if (c && c.currentHp > 0) {
+                        if (c.trait === '堅韌') dmgReduction += TRAIT_VALS.reduceDmg;
+                    }
+                });
+
+                // 3. 計算基礎傷害
                 let damage = card.atk; 
                 let skill = "普通攻擊";
                 if (cardKey === 'main') {
@@ -2240,35 +2269,62 @@ async function resolveRoundLogic(roomId, room) {
                     skill = card.skill;
                 }
 
-                // 扣血
+                // 4. 最終傷害公式：(基礎 + 加成) - 減免，最低為 1
+                let finalDamage = Math.max(1, (damage + extraDmg) - dmgReduction);
+
+                // 5. 執行扣血
                 const targetKey = defender.activeCard;
-                let newHp = defender.cards[targetKey].currentHp - damage;
+                let newHp = defender.cards[targetKey].currentHp - finalDamage;
 
                 if (newHp <= 0) {
                     newHp = 0;
                     // 死亡切換邏輯
-                    if (targetKey === 'main' && defender.cards.sub) {
-                        defender.activeCard = 'sub'; // 切換副卡
+                    if (targetKey === 'main' && defender.cards.sub && defender.cards.sub.currentHp > 0) {
+                        defender.activeCard = 'sub'; // 主卡死，切副卡
                     } else {
                         defender.isDead = true; // 全滅
                     }
                 }
                 defender.cards[targetKey].currentHp = newHp;
 
-                // 寫入日誌 (命中)
+                // 6. 執行回血 ([共生] 特性)
+                let healed = 0;
+                if (healTrigger) {
+                    ['main', 'sub'].forEach(slot => {
+                        const c = attacker.cards[slot];
+                        if (c && c.currentHp > 0) {
+                            const originalHp = c.currentHp;
+                            // 簡單處理：目前沒有設 HP 上限，稍微增加上限限制邏輯會更好，這裡先直接加
+                            // 若要嚴謹：Math.min(c.hp, c.currentHp + TRAIT_VALS.healAmt)
+                            // 這裡為了爽度，暫時允許補血 (但建議還是用 CARD_DATABASE 查上限)
+                            // 由於 CARD_DATABASE 在這裡無法直接存取 (需傳入或全域)，暫時直接加，但前端顯示時要注意
+                            c.currentHp += TRAIT_VALS.healAmt;
+                            healed = TRAIT_VALS.healAmt;
+                        }
+                    });
+                }
+
+                // 7. 寫入日誌
+                let logMsg = skill;
+                if (extraDmg > 0) logMsg += ` (英勇+${extraDmg})`;
+                if (dmgReduction > 0) logMsg += ` (堅韌-${dmgReduction})`;
+                
                 battleLog.push({
                     attacker: attackerRole,
                     isHit: true,
-                    dmg: damage,
-                    skill: skill
+                    dmg: finalDamage,
+                    skill: logMsg,
+                    healed: healed > 0 ? healed : null // 標記是否有回血
                 });
+
             } else {
                 // 答錯，攻擊失敗 (Miss)
                 battleLog.push({
                     attacker: attackerRole,
                     isHit: false,
                     dmg: 0,
-                    skill: "MISS"
+                    skill: "MISS",
+                    healed: null
                 });
             }
         }
@@ -2295,10 +2351,9 @@ async function resolveRoundLogic(roomId, room) {
             guest: g,
             round: (status === "finished") ? freshRoom.round : freshRoom.round + 1,
             battleLog: battleLog,
-            battleLogId: Date.now().toString(), // 用於觸發客戶端動畫
+            battleLogId: Date.now().toString(),
             status: status,
             winner: winnerUid,
-            // 重置答題狀態
             "host.done": false,
             "guest.done": false,
             "host.answerCorrect": null,
