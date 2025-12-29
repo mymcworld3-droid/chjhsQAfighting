@@ -3342,23 +3342,6 @@ function showDrawResults(results, totalRefund) {
     }, 2300); // 配合 CSS 動畫時間 (2.5s 的末端)
 }
 
-// 跳過動畫按鈕
-window.skipGachaAnimation = () => {
-    gachaSkip = true;
-    const orb = document.getElementById('summon-orb');
-    orb.classList.remove('anim-orb-charge'); // 停止光球動畫
-    
-    // 直接顯示結果，但需要全域變數或重新傳遞 results
-    // 由於 logic 比較複雜，這裡我們簡單做：讓動畫容器隱藏，顯示結果容器
-    // 注意：實際專案中，最好將 results 存為全域暫存，這裡為了簡單，假設 revealGachaResults 已經被排程，
-    // 我們縮短 timeout 或者直接操作 DOM (比較麻煩)。
-    
-    // 簡單解法：這裡只標記 gachaSkip，讓 timeout 內部的邏輯知道要加速
-    // 但因為 setTimeout 已經發出去了，比較好的做法是直接操作 DOM 樣式，
-    // 為了確保 results 資料能顯示，我們採取「加速渲染」策略：
-    // *如果您需要完美的 Skip，建議將 results 存在 window.currentDrawResults*
-};
-
 // 顯示卡牌列表
 function revealGachaResults(results) {
     const stage = document.getElementById('gacha-stage');
