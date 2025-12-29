@@ -76,19 +76,19 @@ const CARD_DATABASE = {
     "c012": { name: "鐵甲衛兵", hp: 130, atk: 20, rarity: "blue", trait: "堅韌", skill: "盾防", skillDmg: 5 }, // 提早獲得防禦特性
 
     // --- 罕見 (Purple) ---
-    "c021": { name: "暗影刺客", hp: 110, atk: 50, rarity: "purple", trait: "隱匿", skill: "背刺", skillDmg: 35 },
-    "c022": { name: "元素法師", hp: 120, atk: 45, rarity: "purple", trait: "魔力", skill: "火球", skillDmg: 30 },
+    "c021": { name: "暗影刺客", hp: 110, atk: 60, rarity: "purple", trait: "隱匿", skill: "背刺", skillDmg: 35 },
+    "c022": { name: "元素法師", hp: 120, atk: 55, rarity: "purple", trait: "魔力", skill: "火球", skillDmg: 30 },
 
     // --- 史詩 (Red) [平衡調整] ---
-    "c031": { name: "火焰幼龍", hp: 160, atk: 55, rarity: "red", trait: "英勇", skill: "龍息", skillDmg: 50 },
-    "c032": { name: "吸血鬼伯爵", hp: 150, atk: 50, rarity: "red", trait: "共生", skill: "血爆", skillDmg: 45 },
+    "c031": { name: "火焰幼龍", hp: 160, atk: 60, rarity: "red", trait: "英勇", skill: "龍息", skillDmg: 50 },
+    "c032": { name: "吸血鬼伯爵", hp: 180, atk: 50, rarity: "red", trait: "共生", skill: "血爆", skillDmg: 45 },
 
     // --- 神話 (Gold) [平衡調整] ---
-    "c041": { name: "光之守護者", hp: 220, atk: 65, rarity: "gold", trait: "堅韌", skill: "審判", skillDmg: 55 },
+    "c041": { name: "光之守護者", hp: 220, atk: 65, rarity: "gold", trait: "堅韌", skill: "審判", skillDmg: 30 },
 
     // --- 傳奇 (Rainbow) [大幅平衡] ---
     // 修正：原本 HP 500 / Skill 999 太過破壞平衡，調整為強大但可被擊敗的數值
-    "c051": { name: "虛空魔神", hp: 280, atk: 80, rarity: "rainbow", trait: "英勇", skill: "黑洞", skillDmg: 60 }
+    "c051": { name: "虛空魔神", hp: 250, atk: 70, rarity: "rainbow", trait: "英勇", skill: "黑洞", skillDmg: 55 }
 };
 
 // ... 在 CARD_DATABASE 定義之後 ...
