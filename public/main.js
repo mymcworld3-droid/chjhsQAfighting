@@ -3384,3 +3384,50 @@ window.closeCustomAlert = () => {
         }
     }, 300); // 等待動畫結束
 };
+
+// ==========================================
+// 🛠️ 自定義 Confirm 系統 (Promise based)
+// ==========================================
+let confirmResolver = null; // 用於儲存 Promise 的 resolve 函式
+
+window.openConfirm = (message) => {
+    const modal = document.getElementById('custom-confirm-modal');
+    const box = document.getElementById('custom-confirm-box');
+    const msgEl = document.getElementById('custom-confirm-msg');
+    
+    // 如果找不到 modal，降級使用原生 confirm
+    if (!modal || !msgEl) return Promise.resolve(confirm(message));
+
+    msgEl.innerText = message;
+    
+    // 顯示動畫
+    modal.classList.remove('hidden');
+    requestAnimationFrame(() => {
+        modal.classList.remove('opacity-0');
+        box.classList.remove('scale-95');
+        box.classList.add('scale-100');
+    });
+
+    // 回傳 Promise，暫停程式執行直到使用者點擊按鈕
+    return new Promise((resolve) => {
+        confirmResolver = resolve;
+    });
+};
+
+window.resolveCustomConfirm = (result) => {
+    const modal = document.getElementById('custom-confirm-modal');
+    const box = document.getElementById('custom-confirm-box');
+
+    // 隱藏動畫
+    modal.classList.add('opacity-0');
+    box.classList.remove('scale-100');
+    box.classList.add('scale-95');
+
+    setTimeout(() => {
+        modal.classList.add('hidden');
+        if (confirmResolver) {
+            confirmResolver(result); // 解開 Promise，回傳 true 或 false
+            confirmResolver = null;
+        }
+    }, 300);
+};
