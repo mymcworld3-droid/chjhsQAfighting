@@ -3290,7 +3290,7 @@ async function executeDraw(count, cost, guaranteedRarity = null) {
 
 let gachaSkip = false; // 用於跳過動畫
 
-// [修改] 輔助：更新戰鬥卡牌 UI (動態生成卡牌 HTML，支援圖片與 3:2 比例)
+// [修改] 輔助：更新戰鬥卡牌 UI (修正圖片路徑問題)
 function updateBattleCardUI(prefix, playerData) {
     if (!playerData) return;
     
@@ -3322,25 +3322,28 @@ function updateBattleCardUI(prefix, playerData) {
     const nameColor = activeKey === 'main' ? 'text-yellow-400' : 'text-gray-300';
     const borderClass = activeKey === 'main' ? 'border-yellow-500' : 'border-gray-500';
     
-    // [修改] 更新卡片容器：將高度改為 h-48 (12rem)，搭配 w-32 (8rem) 形成 2:3 (寬:高) 比例
-    // 同時加入 overflow-hidden 以便圖片裁切
+    // 更新卡片容器：保持 2:3 比例 (w-32 h-48)
     const container = document.getElementById(`${idPrefix}-card-container`);
     if(container) {
         container.className = `relative w-32 h-48 bg-slate-800 rounded-lg border-2 ${borderClass} transition-all duration-500 mb-6 overflow-hidden shadow-2xl`;
     }
 
-    // [新增] 特殊卡牌圖片對應表
+    // [修正] 使用英文檔名，並加上根目錄斜線 "/"
     const CARD_IMAGES = {
-        "c041": "card_picture/光之守護者.jpeg",
-        "c051": "card_picture/虛空魔神.jpeg"
+        "c041": "/card_picture/guardian.jpeg", // 對應 光之守護者
+        "c051": "/card_picture/void.jpeg"      // 對應 虛空魔神
     };
 
     let innerContent = "";
 
     // 如果是主卡且有設定圖片，顯示圖片模式
     if (activeKey === 'main' && CARD_IMAGES[activeCard.id]) {
+        // 使用 onerror 來偵測圖片是否載入失敗，若失敗則退回文字模式
         innerContent = `
-            <img src="${CARD_IMAGES[activeCard.id]}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-110">
+            <img src="${CARD_IMAGES[activeCard.id]}" 
+                 class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-110"
+                 onerror="this.style.display='none'; this.parentElement.querySelector('.fallback-text').style.display='flex'">
+            
             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
             
             <div class="absolute top-1 left-1 text-[8px] font-bold text-white bg-black/50 px-1.5 py-0.5 rounded border border-white/20 z-10">
@@ -3355,6 +3358,11 @@ function updateBattleCardUI(prefix, playerData) {
                 <div class="mt-1 text-[9px] text-cyan-300 bg-blue-900/60 px-1.5 py-0.5 rounded border border-blue-500/30 backdrop-blur-sm">
                     ${activeCard.skill}
                 </div>
+            </div>
+
+            <div class="fallback-text hidden flex-col items-center justify-center h-full relative z-0">
+                <div class="text-3xl mb-2">🐉</div>
+                <div class="${nameColor} font-bold text-sm text-center">${activeCard.name}</div>
             </div>
         `;
     } else {
