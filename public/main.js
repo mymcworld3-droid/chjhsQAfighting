@@ -2128,7 +2128,7 @@ async function playBattleSequence(logs, isHost) {
 
         if (log.isHit) {
             // 命中：播放攻擊特效與扣血
-            triggerBattleAnimation(role, log.dmg, log.skill);
+            triggerBattleAnimation(role, log.dmg, log.skill, log.healed);
             
             // 手動更新一次血條 UI (僅視覺)，配合動畫效果
             const bar = document.getElementById(`${targetRole}-hp-bar`);
