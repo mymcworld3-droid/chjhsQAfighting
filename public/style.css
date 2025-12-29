@@ -1055,3 +1055,101 @@ input:focus, textarea:focus {
     transform: translateY(20px);
     animation: fadeInUpShort 0.5s forwards;
 }
+/* ==========================================
+   🔥 對戰模式視覺升級 (Battle VFX)
+   ========================================== */
+
+/* 1. 攻擊衝刺動畫 (Lunge) */
+@keyframes lungeUp {
+    0% { transform: translateY(0) scale(1); }
+    40% { transform: translateY(-120px) scale(1.2); z-index: 50; box-shadow: 0 20px 30px rgba(0,0,0,0.5); }
+    100% { transform: translateY(0) scale(1); z-index: 1; }
+}
+
+@keyframes lungeDown {
+    0% { transform: translateY(0) scale(1); }
+    40% { transform: translateY(120px) scale(1.2); z-index: 50; box-shadow: 0 20px 30px rgba(0,0,0,0.5); }
+    100% { transform: translateY(0) scale(1); z-index: 1; }
+}
+
+.anim-lunge-up { animation: lungeUp 0.6s cubic-bezier(0.18, 0.89, 0.32, 1.28); }
+.anim-lunge-down { animation: lungeDown 0.6s cubic-bezier(0.18, 0.89, 0.32, 1.28); }
+
+/* 2. 刀光/打擊特效 (Slash/Impact) */
+.vfx-container {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 150px; height: 150px;
+    pointer-events: none;
+    z-index: 60;
+}
+
+.vfx-slash {
+    width: 100%; height: 10px;
+    background: white;
+    box-shadow: 0 0 10px #fff, 0 0 20px #ef4444;
+    position: absolute;
+    top: 50%; left: 0;
+    opacity: 0;
+    animation: slashAnim 0.3s ease-out forwards;
+}
+
+@keyframes slashAnim {
+    0% { transform: rotate(-45deg) scaleX(0); opacity: 0; }
+    50% { transform: rotate(-45deg) scaleX(1.5); opacity: 1; }
+    100% { transform: rotate(-45deg) scaleX(1); opacity: 0; }
+}
+
+/* 3. 技能施放光環 (Cast Aura) */
+@keyframes castAura {
+    0% { box-shadow: 0 0 0px rgba(59, 130, 246, 0); }
+    50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.8), inset 0 0 20px rgba(255,255,255,0.5); border-color: #60a5fa; }
+    100% { box-shadow: 0 0 0px rgba(59, 130, 246, 0); }
+}
+.anim-cast { animation: castAura 0.8s ease-out; }
+
+/* 4. 傷害數字優化 (Damage Number) */
+@keyframes dmgPop {
+    0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+    30% { transform: translate(-50%, -100%) scale(1.5); opacity: 1; }
+    80% { transform: translate(-50%, -120%) scale(1); opacity: 1; }
+    100% { transform: translate(-50%, -150%) scale(0.8); opacity: 0; }
+}
+
+.dmg-number {
+    position: absolute;
+    top: 40%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Arial Black', sans-serif;
+    font-weight: 900;
+    font-size: 3rem;
+    color: #fff;
+    text-shadow: 2px 2px 0 #ef4444, -1px -1px 0 #7f1d1d;
+    pointer-events: none;
+    z-index: 100;
+    animation: dmgPop 1.2s ease-out forwards;
+    white-space: nowrap;
+}
+
+.dmg-crit {
+    font-size: 4.5rem;
+    color: #fcd34d; /* 黃色爆擊 */
+    text-shadow: 3px 3px 0 #b45309;
+}
+
+.heal-number {
+    color: #4ade80; /* 綠色回血 */
+    text-shadow: 2px 2px 0 #14532d;
+    font-size: 2.5rem;
+}
+
+/* 5. 畫面震動 (Screen Shake) */
+@keyframes screenShake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-5px) rotate(-1deg); }
+    40% { transform: translateX(5px) rotate(1deg); }
+    60% { transform: translateX(-3px); }
+    80% { transform: translateX(3px); }
+}
+.anim-screen-shake { animation: screenShake 0.4s ease-in-out; }
