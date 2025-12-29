@@ -3353,6 +3353,7 @@ async function executeDraw(count, cost, guaranteedRarity = null) {
 
         // 重新載入卡片列表
         loadMyCards();
+        updateHomeBestCard()
 
     } catch (e) {
         console.error(e);
