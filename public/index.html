@@ -224,6 +224,7 @@
                 </div>
             </div>
         </div>
+
         <div id="page-cards" class="page-section hidden pb-20">
             <div class="sticky top-0 bg-slate-900/95 backdrop-blur-md z-20 p-4 border-b border-slate-800">
                 <h2 class="text-2xl font-bold text-purple-400 flex items-center gap-2">
@@ -233,17 +234,25 @@
 
             <div class="p-4">
                 <h3 class="text-white font-bold mb-2">⚔️ 出戰牌組 (Deck)</h3>
-                <div class="flex gap-4 mb-6">
-                    <div class="flex-1 bg-slate-800 border-2 border-yellow-500 rounded-xl p-2 relative text-center" onclick="selectCardForSlot('main')">
-                        <span class="absolute -top-3 left-2 bg-yellow-500 text-black text-xs font-bold px-2 rounded">主卡 (Main)</span>
-                        <div id="deck-main-display" class="mt-2 min-h-[100px] flex items-center justify-center text-gray-500">
-                            點擊選擇
+                
+                <div class="flex justify-center gap-6 mb-6">
+                    <div class="w-32 aspect-[2/3] bg-slate-800 border-2 border-yellow-500 rounded-xl relative overflow-hidden cursor-pointer hover:scale-105 transition-transform shadow-lg shadow-yellow-900/20 group" onclick="selectCardForSlot('main')">
+                        <span class="absolute top-0 left-0 bg-yellow-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-br z-20 shadow">Main</span>
+                        <div id="deck-main-display" class="w-full h-full flex items-center justify-center bg-slate-900/50">
+                            <div class="text-gray-500 text-xs">點擊選擇</div>
+                        </div>
+                        <div class="absolute inset-0 bg-black/30 hidden group-hover:flex items-center justify-center z-30 transition-all">
+                            <i class="fa-solid fa-pen text-white/90 drop-shadow-md"></i>
                         </div>
                     </div>
-                    <div class="flex-1 bg-slate-800 border-2 border-gray-500 rounded-xl p-2 relative text-center" onclick="selectCardForSlot('sub')">
-                        <span class="absolute -top-3 left-2 bg-gray-500 text-black text-xs font-bold px-2 rounded">副卡 (Sub)</span>
-                        <div id="deck-sub-display" class="mt-2 min-h-[100px] flex items-center justify-center text-gray-500">
-                            點擊選擇
+
+                    <div class="w-32 aspect-[2/3] bg-slate-800 border-2 border-gray-500 rounded-xl relative overflow-hidden cursor-pointer hover:scale-105 transition-transform shadow-lg group" onclick="selectCardForSlot('sub')">
+                        <span class="absolute top-0 left-0 bg-gray-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-br z-20 shadow">Sub</span>
+                        <div id="deck-sub-display" class="w-full h-full flex items-center justify-center bg-slate-900/50">
+                            <div class="text-gray-500 text-xs">點擊選擇</div>
+                        </div>
+                        <div class="absolute inset-0 bg-black/30 hidden group-hover:flex items-center justify-center z-30 transition-all">
+                            <i class="fa-solid fa-pen text-white/90 drop-shadow-md"></i>
                         </div>
                     </div>
                 </div>
