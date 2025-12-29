@@ -2149,47 +2149,123 @@ async function playBattleSequence(logs, isHost) {
         // 每個動作之間等待 1.5 秒
         await new Promise(r => setTimeout(r, 1500));
     }
-}
-// [修改] 觸發戰鬥動畫 (加入 attackerSide 參數)
-function triggerBattleAnimation(attackerSide, damage, skillName) {
+}// ==========================================
+// 🎨 戰鬥視覺特效系統 (VFX System)
+// ==========================================
+
+// [改寫] 觸發戰鬥動畫 (支援衝刺、特效、傷害飄字)
+async function triggerBattleAnimation(attackerSide, damage, skillName, isHeal = false) {
     // attackerSide: 'my' (我方攻擊) 或 'enemy' (敵方攻擊)
+    const attackerPrefix = attackerSide === 'my' ? 'my' : 'enemy';
+    const targetPrefix = attackerSide === 'my' ? 'enemy' : 'my';
     
-    const arena = document.getElementById('battle-arena');
-    arena.classList.add('animate-shake'); 
-    setTimeout(() => arena.classList.remove('animate-shake'), 500);
-
-    // 傷害顯示在「受害者」身上 (攻擊者的對面)
-    const targetPrefix = attackerSide === 'my' ? 'enemy' : 'my'; 
+    const attackerContainer = document.getElementById(`${attackerPrefix}-card-container`);
+    const targetContainer = document.getElementById(`${targetPrefix}-card-container`);
     const targetVisual = document.getElementById(`${targetPrefix}-card-visual`);
-    
-    if (targetVisual) {
-        const dmgLabel = document.createElement('div');
-        dmgLabel.className = "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-5xl font-black text-red-500 drop-shadow-[0_0_10px_rgba(255,0,0,0.8)] z-50 animate-bounce-up"; 
-        dmgLabel.innerText = `-${damage}`;
-        targetVisual.appendChild(dmgLabel);
 
-        // 技能名稱
-        if (skillName && skillName !== "普通攻擊") {
-            const skillLabel = document.createElement('div');
-            skillLabel.className = "absolute -top-12 left-1/2 -translate-x-1/2 text-yellow-300 font-bold text-2xl z-50 animate-ping-once whitespace-nowrap drop-shadow-md";
-            skillLabel.innerText = `⚡ ${skillName}!`;
-            targetVisual.appendChild(skillLabel);
-            setTimeout(() => { if(skillLabel.parentNode) skillLabel.remove(); }, 2000);
+    if (!attackerContainer || !targetContainer) return;
+
+    // 1. 技能詠唱特效 (如果是技能攻擊)
+    if (skillName && skillName !== "普通攻擊") {
+        attackerContainer.classList.add('anim-cast');
+        createFloatingText(attackerContainer, `⚡ ${skillName}!`, "text-yellow-300", -80);
+        await new Promise(r => setTimeout(r, 400)); // 等待詠唱
+        attackerContainer.classList.remove('anim-cast');
+    }
+
+    // 2. 執行物理衝刺 (Lunge)
+    const lungeClass = attackerSide === 'my' ? 'anim-lunge-up' : 'anim-lunge-down';
+    attackerContainer.classList.add(lungeClass);
+
+    // 3. 在衝刺動作的 "打擊點" (約 300ms) 生成受擊特效
+    setTimeout(() => {
+        // A. 播放音效 (瀏覽器震動)
+        if (navigator.vibrate) navigator.vibrate([50, 50, 100]);
+
+        // B. 畫面/卡片震動
+        const arena = document.getElementById('battle-arena');
+        arena.classList.add('anim-screen-shake');
+        targetContainer.classList.add('anim-shake'); // 使用 style.css 中原本定義的 shake
+        
+        setTimeout(() => {
+            arena.classList.remove('anim-screen-shake');
+            targetContainer.classList.remove('anim-shake');
+        }, 500);
+
+        // C. 產生刀光/爆炸特效
+        createSlashEffect(targetVisual);
+
+        // D. 顯示傷害數字
+        if (damage > 0) {
+            // 判斷是否為 "爆擊" (這裡簡單假設傷害 > 40 算大傷害)
+            const isCrit = damage >= 40; 
+            createDamageNumber(targetVisual, damage, isCrit);
         }
 
-        setTimeout(() => { if(dmgLabel.parentNode) dmgLabel.remove(); }, 2000);
-    }
+        // E. 顯示回血 (如果有)
+        // 這裡需要邏輯支援：如果是吸血技能，顯示在攻擊者身上
+        if (isHeal) {
+             // 假設回血是回在自己身上
+             const attackerVisual = document.getElementById(`${attackerPrefix}-card-visual`);
+             createDamageNumber(attackerVisual, `+${isHeal}`, false, true);
+        }
+
+    }, 300); // 配合 CSS lunge 動畫的時間點
+
+    // 4. 清除衝刺 class
+    setTimeout(() => {
+        attackerContainer.classList.remove(lungeClass);
+    }, 600);
 }
 
-// [新增] 攻擊失敗動畫
+// [新增] 產生刀光特效 DOM
+function createSlashEffect(parentEl) {
+    if (!parentEl) return;
+    const vfx = document.createElement('div');
+    vfx.className = 'vfx-container';
+    vfx.innerHTML = `<div class="vfx-slash"></div><div class="vfx-slash" style="animation-delay: 0.1s; transform: rotate(45deg);"></div>`; // 十字斬
+    parentEl.appendChild(vfx);
+    setTimeout(() => vfx.remove(), 500);
+}
+
+// [新增] 產生傷害飄字 DOM
+function createDamageNumber(parentEl, value, isCrit, isHeal = false) {
+    if (!parentEl) return;
+    const el = document.createElement('div');
+    el.innerText = isHeal ? value : `-${value}`;
+    
+    let classes = "dmg-number";
+    if (isCrit) classes += " dmg-crit";
+    if (isHeal) classes += " heal-number";
+    
+    el.className = classes;
+    
+    // 隨機一點點偏移，避免數字重疊
+    const randX = (Math.random() - 0.5) * 40;
+    el.style.left = `calc(50% + ${randX}px)`;
+
+    parentEl.appendChild(el);
+    setTimeout(() => el.remove(), 1200);
+}
+
+// [新增] 通用浮動文字 (用於技能名稱或 Miss)
+function createFloatingText(parentEl, text, colorClass = "text-white", topOffset = 0) {
+    if (!parentEl) return;
+    const el = document.createElement('div');
+    el.className = `absolute left-1/2 -translate-x-1/2 font-bold text-xl z-50 animate-bounce ${colorClass}`;
+    el.style.top = topOffset !== 0 ? `${topOffset}px` : '50%';
+    el.style.textShadow = "0 2px 4px rgba(0,0,0,0.8)";
+    el.innerText = text;
+    parentEl.appendChild(el);
+    setTimeout(() => el.remove(), 1500);
+}
+
+// [改寫] 攻擊失敗動畫
 function triggerMissAnimation(targetRole) {
-    const targetVisual = document.getElementById(`${targetRole}-card-visual`);
+    const targetPrefix = targetRole === 'my' ? 'my' : 'enemy';
+    const targetVisual = document.getElementById(`${targetPrefix}-card-visual`);
     if (targetVisual) {
-        const missLabel = document.createElement('div');
-        missLabel.className = "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-3xl font-black text-gray-400 bg-slate-900/80 px-2 rounded border border-gray-600 z-50 animate-bounce";
-        missLabel.innerText = "MISS";
-        targetVisual.appendChild(missLabel);
-        setTimeout(() => { if(missLabel.parentNode) missLabel.remove(); }, 1000);
+        createFloatingText(targetVisual, "MISS", "text-gray-400 text-3xl");
     }
 }
 // [改寫] 回合結算邏輯 (包含新特性計算)
