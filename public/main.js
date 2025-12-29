@@ -91,6 +91,20 @@ const CARD_DATABASE = {
     "c051": { name: "虛空魔神", hp: 280, atk: 80, rarity: "rainbow", trait: "英勇", skill: "黑洞", skillDmg: 60 }
 };
 
+// ... 在 CARD_DATABASE 定義之後 ...
+
+const TRAIT_DESCRIPTIONS = {
+    "堅韌": "全隊減傷15",
+    "英勇": "全隊增傷10",
+    "共生": "命中全隊回20",
+    "黏液": "暫無效果",
+    "貪婪": "暫無效果",
+    "迅捷": "暫無效果",
+    "隱匿": "暫無效果",
+    "魔力": "暫無效果",
+    "龍息": "暫無效果"
+};
+
 const getBattleCardData = (cid) => {
     if (!cid || !CARD_DATABASE[cid]) return null;
     const base = CARD_DATABASE[cid];
