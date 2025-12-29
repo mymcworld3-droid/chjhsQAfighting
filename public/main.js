@@ -84,11 +84,11 @@ const CARD_DATABASE = {
     "c032": { name: "吸血鬼伯爵", hp: 150, atk: 50, rarity: "red", trait: "共生", skill: "血爆", skillDmg: 45 },
 
     // --- 神話 (Gold) [平衡調整] ---
-    "c041": { name: "光之守護者", hp: 220, atk: 65, rarity: "gold", trait: "堅韌", skill: "審判", skillDmg: 70 },
+    "c041": { name: "光之守護者", hp: 220, atk: 65, rarity: "gold", trait: "堅韌", skill: "審判", skillDmg: 55 },
 
     // --- 傳奇 (Rainbow) [大幅平衡] ---
     // 修正：原本 HP 500 / Skill 999 太過破壞平衡，調整為強大但可被擊敗的數值
-    "c051": { name: "虛空魔神", hp: 280, atk: 80, rarity: "rainbow", trait: "英勇", skill: "黑洞", skillDmg: 100 }
+    "c051": { name: "虛空魔神", hp: 280, atk: 80, rarity: "rainbow", trait: "英勇", skill: "黑洞", skillDmg: 60 }
 };
 
 const getBattleCardData = (cid) => {
