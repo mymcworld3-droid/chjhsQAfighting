@@ -513,6 +513,7 @@ onAuthStateChanged(auth, async (user) => {
             checkAdminRole(currentUserData.isAdmin);
             updateUIStats();
             updateDeckDisplay();
+            updateHomeBestCard();
 
             if (!currentUserData.profile.educationLevel || currentUserData.profile.educationLevel === "") {
                 switchToPage('page-onboarding'); 
