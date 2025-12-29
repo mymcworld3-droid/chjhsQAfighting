@@ -3264,3 +3264,58 @@ window.addEventListener('beforeunload', () => {
         leaveBattle(); 
     }
 });
+// ==========================================
+// 🛠️ 自定義 Alert 系統 (覆寫原生 alert)
+// ==========================================
+let customAlertCallback = null; // 用於儲存按下確定後的 callback
+
+// 覆寫原生 alert
+window.alert = (message, callback = null) => {
+    const modal = document.getElementById('custom-alert-modal');
+    const box = document.getElementById('custom-alert-box');
+    const msgEl = document.getElementById('custom-alert-msg');
+    
+    if (!modal || !msgEl) {
+        console.warn("Custom alert modal not found, using console.");
+        console.log(message);
+        if(callback) callback();
+        return;
+    }
+
+    // 設定內容
+    msgEl.innerText = message;
+    customAlertCallback = callback;
+
+    // 顯示動畫
+    modal.classList.remove('hidden');
+    // 強制重繪以觸發 transition
+    requestAnimationFrame(() => {
+        modal.classList.remove('opacity-0');
+        box.classList.remove('scale-95');
+        box.classList.add('scale-100');
+    });
+
+    // 播放提示音效 (如果有的話)
+    if (navigator.vibrate) navigator.vibrate(50);
+};
+
+// 關閉 Alert
+window.closeCustomAlert = () => {
+    const modal = document.getElementById('custom-alert-modal');
+    const box = document.getElementById('custom-alert-box');
+
+    // 隱藏動畫
+    modal.classList.add('opacity-0');
+    box.classList.remove('scale-100');
+    box.classList.add('scale-95');
+
+    setTimeout(() => {
+        modal.classList.add('hidden');
+        // 如果有 callback (例如重整頁面)，則執行
+        if (customAlertCallback) {
+            const cb = customAlertCallback;
+            customAlertCallback = null;
+            cb();
+        }
+    }, 300); // 等待動畫結束
+};
