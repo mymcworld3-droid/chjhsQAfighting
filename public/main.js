@@ -58,29 +58,37 @@ const RARITY_CONFIG = {
     rainbow:{ name: "傳奇", color: "text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-green-500 to-blue-500 animate-pulse", border: "border-white shadow-[0_0_20px_rgba(255,255,255,0.8)]", prob: 0.002 } // 0.2%
 };
 
-// 為了測試，這裡擴充了一些卡牌
+// ==========================================
+// 0. 卡牌資料庫 (數值平衡調整版)
+// ==========================================
+// 特性說明：
+// [堅韌]: 受到傷害減少 15 點 (全隊生效)
+// [英勇]: 己方造成傷害增加 10 點 (全隊生效)
+// [共生]: 攻擊成功後，回復己方全體 20 點生命 (全隊生效)
+
 const CARD_DATABASE = {
     // --- 普通 (Gray) ---
-    "c001": { name: "史萊姆", hp: 50, atk: 10, rarity: "gray", trait: "黏液", skill: "撞擊", skillDmg: 5 },
-    "c002": { name: "哥布林", hp: 60, atk: 15, rarity: "gray", trait: "貪婪", skill: "偷襲", skillDmg: 8 },
+    "c001": { name: "史萊姆", hp: 60, atk: 15, rarity: "gray", trait: "黏液", skill: "撞擊", skillDmg: 5 },
+    "c002": { name: "哥布林", hp: 70, atk: 20, rarity: "gray", trait: "貪婪", skill: "偷襲", skillDmg: 8 },
     
     // --- 稀有 (Blue) ---
-    "c011": { name: "冰霜狼", hp: 80, atk: 25, rarity: "blue", trait: "迅捷", skill: "冰咬", skillDmg: 15 },
-    "c012": { name: "鐵甲衛兵", hp: 120, atk: 15, rarity: "blue", trait: "堅硬", skill: "盾防", skillDmg: 5 },
+    "c011": { name: "冰霜狼", hp: 90, atk: 30, rarity: "blue", trait: "迅捷", skill: "冰咬", skillDmg: 15 },
+    "c012": { name: "鐵甲衛兵", hp: 130, atk: 20, rarity: "blue", trait: "堅韌", skill: "盾防", skillDmg: 5 }, // 提早獲得防禦特性
 
     // --- 罕見 (Purple) ---
-    "c021": { name: "暗影刺客", hp: 90, atk: 45, rarity: "purple", trait: "隱匿", skill: "背刺", skillDmg: 35 },
-    "c022": { name: "元素法師", hp: 100, atk: 40, rarity: "purple", trait: "魔力", skill: "火球", skillDmg: 30 },
+    "c021": { name: "暗影刺客", hp: 110, atk: 50, rarity: "purple", trait: "隱匿", skill: "背刺", skillDmg: 35 },
+    "c022": { name: "元素法師", hp: 120, atk: 45, rarity: "purple", trait: "魔力", skill: "火球", skillDmg: 30 },
 
-    // --- 史詩 (Red) ---
-    "c031": { name: "火焰幼龍", hp: 150, atk: 55, rarity: "red", trait: "龍威", skill: "龍息", skillDmg: 50 },
-    "c032": { name: "吸血鬼伯爵", hp: 140, atk: 50, rarity: "red", trait: "吸血", skill: "血爆", skillDmg: 45 },
+    // --- 史詩 (Red) [平衡調整] ---
+    "c031": { name: "火焰幼龍", hp: 160, atk: 55, rarity: "red", trait: "英勇", skill: "龍息", skillDmg: 50 },
+    "c032": { name: "吸血鬼伯爵", hp: 150, atk: 50, rarity: "red", trait: "共生", skill: "血爆", skillDmg: 45 },
 
-    // --- 神話 (Gold) ---
-    "c041": { name: "光之守護者", hp: 250, atk: 70, rarity: "gold", trait: "聖光", skill: "審判", skillDmg: 80 },
+    // --- 神話 (Gold) [平衡調整] ---
+    "c041": { name: "光之守護者", hp: 220, atk: 65, rarity: "gold", trait: "堅韌", skill: "審判", skillDmg: 70 },
 
-    // --- 傳奇 (Rainbow) ---
-    "c051": { name: "虛空魔神", hp: 500, atk: 120, rarity: "rainbow", trait: "毀滅", skill: "黑洞", skillDmg: 999 }
+    // --- 傳奇 (Rainbow) [大幅平衡] ---
+    // 修正：原本 HP 500 / Skill 999 太過破壞平衡，調整為強大但可被擊敗的數值
+    "c051": { name: "虛空魔神", hp: 280, atk: 80, rarity: "rainbow", trait: "英勇", skill: "黑洞", skillDmg: 100 }
 };
 
 const getBattleCardData = (cid) => {
