@@ -1618,8 +1618,10 @@ function listenToSystemCommands() {
         // 如果伺服器的 Token 變了，代表管理員按下了重整按鈕
         if (serverToken && serverToken !== localReloadToken) {
             console.log("收到強制重整指令！");
-            alert("系統進行更新，即將重新整理網頁...");
-            location.reload();
+            // 使用 callback 確保玩家按了確定才重整
+            alert("系統進行更新，即將重新整理網頁...", () => {
+                location.reload();
+            });
         }
     });
 }
