@@ -2457,6 +2457,7 @@ async function processBattleWin(loserData, msgEl) {
         
         await updateDoc(userRef, { 
             "stats.totalScore": currentUserData.stats.totalScore,
+            "stats.totalCorrect": currentUserData.stats.totalCorrect,
             "stats.rankLevel": newRank,
             "cards": arrayUnion(...lootIds)
         });
@@ -2465,7 +2466,7 @@ async function processBattleWin(loserData, msgEl) {
         currentUserData.cards.push(...lootIds);
         currentUserData.stats.rankLevel = newRank;
 
-        msgEl.innerHTML = `獲得獎勵：<br>🏆 200 積分<br>🎴 戰利品卡牌 ${lootIds.length} 張`;
+        msgEl.innerHTML = `獲得獎勵：<br>🏆 200 積分<br>🎴 戰利品卡牌 ${lootIds.length} 張<br>💫加十階排位！`;
         updateUIStats();
     } catch (e) { 
         console.error("Loot failed", e); 
