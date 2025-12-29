@@ -612,21 +612,51 @@ window.selectCardForSlot = (slot) => {
     renderModalCards();
 };
 
-// [新增] 渲染 Modal 中的卡牌列表
+// [修改] 渲染 Modal 中的卡牌列表 (加入顏色與固定比例)
 function renderModalCards() {
     const list = document.getElementById('modal-card-list');
     list.innerHTML = "";
-    const myCards = [...new Set(currentUserData.cards || [])]; 
     
+    // 取得所有卡牌並排序 (強的在前面)
+    const myCards = [...new Set(currentUserData.cards || [])]; 
+    const levels = currentUserData.cardLevels || {};
+
+    myCards.sort((a, b) => {
+        const cA = CARD_DATABASE[a];
+        const cB = CARD_DATABASE[b];
+        const rarityOrder = ["rainbow", "gold", "red", "purple", "blue", "gray"];
+        return rarityOrder.indexOf(cA.rarity) - rarityOrder.indexOf(cB.rarity);
+    });
+
     myCards.forEach(cardId => {
         const card = CARD_DATABASE[cardId];
         if(!card) return;
         
+        const lvl = levels[cardId] || 0;
+        const finalAtk = card.atk + (lvl * 5);
+        const rConfig = RARITY_CONFIG[card.rarity];
+
         const div = document.createElement('div');
-        div.className = "bg-slate-700 p-2 rounded border border-slate-600 cursor-pointer hover:border-yellow-500 flex flex-col gap-1";
+        // 🔥 設定固定比例與稀有度邊框
+        div.className = `cursor-pointer aspect-[2/3] bg-slate-800 p-2 rounded-lg border-2 ${rConfig.border} hover:scale-105 transition-transform flex flex-col justify-between relative overflow-hidden`;
+        
+        // 標記目前是否已裝備
+        let equipLabel = "";
+        if(currentUserData.deck.main === cardId) equipLabel = "<span class='absolute top-0 right-0 bg-yellow-600 text-[9px] px-1 text-white'>Main</span>";
+        else if(currentUserData.deck.sub === cardId) equipLabel = "<span class='absolute top-0 right-0 bg-gray-600 text-[9px] px-1 text-white'>Sub</span>";
+
         div.innerHTML = `
-            <div class="font-bold text-white text-sm">${card.name}</div>
-            <div class="text-[10px] text-gray-300">HP:${card.hp} ATK:${card.atk}</div>
+            ${equipLabel}
+            <div class="font-bold ${rConfig.color} text-xs truncate">${card.name}</div>
+            <div class="flex-1 flex items-center justify-center text-3xl">
+                ${card.rarity === 'gray' ? '🛡️' : '⚔️'}
+            </div>
+            <div class="bg-black/30 rounded p-1">
+                <div class="flex justify-between text-[9px] text-gray-300">
+                    <span>HP:${card.hp}</span>
+                    <span class="text-red-300 font-bold">ATK:${finalAtk}</span>
+                </div>
+            </div>
         `;
         div.onclick = () => setDeckCard(cardId);
         list.appendChild(div);
