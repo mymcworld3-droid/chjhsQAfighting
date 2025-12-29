@@ -2609,6 +2609,7 @@ function updateBattleCardUI(prefix, playerData) {
             subIndicatorEl.style.opacity = '0';
         }
     }
+}
     // [新增] 計算並顯示首頁最強卡牌
 window.updateHomeBestCard = () => {
     const container = document.getElementById('home-best-card-display');
@@ -2675,7 +2676,6 @@ window.updateHomeBestCard = () => {
         </div>
     `;
 };
-}
 // [修改] 處理對戰答題 (標記 done)
 async function handleBattleAnswer(roomId, userIdx, correctIdx, isHost) {
     const isCorrect = userIdx === correctIdx;
