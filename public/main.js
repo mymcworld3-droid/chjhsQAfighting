@@ -730,7 +730,7 @@ async function processCardAcquisition(userRef, cardId, currentScore) {
         msg = `💰 ${cardName} 已滿等，返還 100 積分`;
     }
 
-    return { msg, refund, rarity, name: cardName };
+    return { msg, refund, rarity, name: cardName, id: cardId };
 }
 
 // [新增] 更新主畫面上的牌組顯示區塊
