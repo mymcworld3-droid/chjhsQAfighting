@@ -534,14 +534,15 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-// [修改] 載入我的卡庫 (支援等級與稀有度顯示)
+// [修正] 載入我的卡庫 (縮小版樣式 + 完整變數定義)
 window.loadMyCards = () => {
     const list = document.getElementById('my-card-list');
     if(!list) return;
     list.innerHTML = "";
     
     if(!currentUserData.cards || currentUserData.cards.length === 0) {
-        list.innerHTML = `<div class="col-span-2 text-center text-gray-500 py-4">${t('msg_no_cards')}</div>`;
+        // 修改 col-span 以適應新的 grid 欄位數
+        list.innerHTML = `<div class="col-span-3 md:col-span-4 text-center text-gray-500 py-4">${t('msg_no_cards')}</div>`;
         return;
     }
 
@@ -567,41 +568,48 @@ window.loadMyCards = () => {
         const finalAtk = card.atk + (lvl * 5); // 基礎攻擊 + 等級加成
         const rConfig = RARITY_CONFIG[card.rarity];
 
-        const isMain = currentUserData.deck.main === cardId;
-        const isSub = currentUserData.deck.sub === cardId;
+        // 定義徽章 (修正這裡的變數遺失問題)
+        const isMain = currentUserData.deck && currentUserData.deck.main === cardId;
+        const isSub = currentUserData.deck && currentUserData.deck.sub === cardId;
         let badge = "";
-        if(isMain) badge = `<span class="bg-yellow-600 text-[10px] px-1 rounded ml-1">Main</span>`;
-        else if(isSub) badge = `<span class="bg-gray-600 text-[10px] px-1 rounded ml-1">Sub</span>`;
+        if(isMain) badge = `<div class="absolute top-0 right-0 bg-yellow-600 text-[8px] px-1 text-white rounded-bl">Main</div>`;
+        else if(isSub) badge = `<div class="absolute top-0 right-0 bg-gray-600 text-[8px] px-1 text-white rounded-bl">Sub</div>`;
 
         // 星星顯示 (等級)
         let stars = "";
         for(let i=0; i<lvl; i++) stars += "★";
 
         const div = document.createElement('div');
-        // 套用稀有度邊框與光暈
-        div.className = `bg-slate-800 p-3 rounded-xl border-2 ${rConfig.border} relative overflow-hidden group hover:scale-[1.02] transition-transform aspect-[2/3] flex flex-col justify-between shadow-lg`;
+        // 設定樣式：縮小 padding, 字體, 並固定比例 2:3
+        div.className = `bg-slate-800 p-1.5 rounded-lg border-2 ${rConfig.border} relative overflow-hidden group hover:scale-[1.02] transition-transform aspect-[2/3] flex flex-col justify-between shadow-md cursor-pointer`;
         
+        // 點擊可以開啟詳情或裝備 (這裡加上 onclick 事件)
+        div.onclick = () => selectCardForSlot(currentSelectSlot || 'main'); // 如果沒有正在選的槽位，預設行為可以自行定義
+
         div.innerHTML = `
-            <div class="flex justify-between items-start mb-2">
-                <span class="font-bold ${rConfig.color} text-sm">${card.name} ${badge}</span>
-                <span class="text-xs text-yellow-500 font-mono tracking-tighter">${stars}</span>
+            <div class="flex justify-between items-start z-10">
+                <span class="font-bold ${rConfig.color} text-[10px] truncate pr-1 drop-shadow-md">${card.name}</span>
+                <span class="text-[9px] text-yellow-500 font-mono tracking-tighter bg-black/30 px-1 rounded">${stars}</span>
             </div>
-            <div class="flex justify-between items-end">
-                <div>
-                    <div class="text-[10px] text-gray-400">HP: ${card.hp}</div>
-                    <div class="text-[10px] text-gray-300">Trait: ${card.trait}</div>
+            
+            <div class="flex-1 flex items-center justify-center my-1">
+                 <div class="text-3xl drop-shadow-lg filter grayscale-[0.3] group-hover:grayscale-0 transition-all duration-300">
+                    ${card.rarity === 'rainbow' || card.rarity === 'gold' ? '🐲' : (card.rarity === 'red' ? '👹' : '⚔️')}
+                 </div>
+            </div>
+
+            <div class="z-10 bg-black/20 p-1.5 rounded backdrop-blur-sm">
+                <div class="flex justify-between items-end mb-0.5">
+                    <div class="text-[9px] text-gray-400">HP ${card.hp}</div>
+                    <div class="text-sm font-bold text-red-400 font-mono leading-none">⚔️${finalAtk}</div>
                 </div>
-                <div class="text-right">
-                    <div class="text-lg font-bold text-red-400 font-mono">⚔️${finalAtk}</div>
-                    <div class="text-[9px] text-gray-500">Base: ${card.atk}</div>
+                <div class="pt-0.5 border-t border-white/10 text-[8px] ${rConfig.color} truncate">
+                    ⚡ ${card.skill}
                 </div>
             </div>
-            <div class="mt-2 pt-2 border-t border-white/10 text-[10px] text-blue-300 truncate">
-                ⚡ ${card.skill} (${card.skillDmg})
-            </div>
+            
+            ${badge}
         `;
-        // 點擊事件 (如果需要詳情或裝備)
-        // div.onclick = ... 
         list.appendChild(div);
     });
 };
