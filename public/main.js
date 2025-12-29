@@ -3073,11 +3073,13 @@ window.recalculateAllUserRanks = async () => {
 };
 
 
-// 單抽
 window.drawSingleCard = async () => {
     const COST = 100;
     if (currentUserData.stats.totalScore < COST) return alert("積分不足！");
-    if (!confirm(`花費 ${COST} 積分進行單次召喚？`)) return;
+    
+    // 🔥 修改這裡：改用 await openConfirm
+    const isConfirmed = await openConfirm(`花費 ${COST} 積分進行單次召喚？`);
+    if (!isConfirmed) return;
 
     await executeDraw(1, COST);
 };
@@ -3086,9 +3088,12 @@ window.drawSingleCard = async () => {
 window.draw11Cards = async () => {
     const COST = 1000;
     if (currentUserData.stats.totalScore < COST) return alert("積分不足！");
-    if (!confirm(`花費 ${COST} 積分進行 11 連抽？\n(包含一張保底史詩以上)`)) return;
+    
+    // 🔥 修改這裡：改用 await openConfirm
+    const isConfirmed = await openConfirm(`花費 ${COST} 積分進行 11 連抽？\n(包含一張保底史詩以上)`);
+    if (!isConfirmed) return;
 
-    await executeDraw(11, COST, "red"); // minRarity = red (史詩)
+    await executeDraw(11, COST, "red"); 
 };
 
 // 通用執行抽卡邏輯
