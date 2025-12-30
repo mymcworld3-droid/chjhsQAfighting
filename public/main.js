@@ -822,10 +822,20 @@ async function processCardAcquisition(userRef, cardId, currentScore) {
     } 
     // 情況 C: 已滿等 -> 返還積分
     else {
-        refund = 100;
+        // [修正] 依照稀有度設定不同返還值
+        const refundMap = {
+            "gray": 20,     // 普通
+            "blue": 50,     // 稀有
+            "purple": 80,   // 罕見 (補間值)
+            "red": 100,     // 史詩
+            "rainbow": 200, // 傳奇
+            "gold": 500     // 神話
+        };
+        
+        refund = refundMap[rarity] || 20;
+        
         // 分數不扣反增 (因為外層已經扣了，這裡補回)
-        // 注意：外層是批次扣分，這裡是單張邏輯，我們回傳 refund 值由外層處理
-        msg = `💰 ${cardName} 已滿等，返還 100 積分`;
+        msg = `💰 ${cardName} 已滿等，返還 ${refund} 積分`;
     }
 
     return { msg, refund, rarity, name: cardName, id: cardId };
