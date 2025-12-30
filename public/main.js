@@ -642,14 +642,9 @@ window.loadMyCards = () => {
             </div>
             
             <div class="flex-1 flex items-center justify-center my-1">
-                 <div class="flex-1 flex items-center justify-center my-1 overflow-hidden">
-                     <img src="/card_picture/${card.id === 'c041' ? 'guardian.jpeg' : (card.id === 'c051' ? 'void.jpeg' : '')}" 
-                          class="w-full h-full object-cover" 
-                          onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
-         
-                     <div class="text-3xl hidden">
-                        ${card.rarity === 'rainbow' ? '🐲' : '⚔️'}
-                     </div>
+                 <div class="flex-1 flex items-center justify-center my-1 relative overflow-hidden rounded">
+                    ${getCardVisualHtml(cardId, card.rarity, "text-4xl")}
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none z-0"></div>
                 </div>
             </div>
 
