@@ -3382,18 +3382,7 @@ function updateBattleCardUI(prefix, playerData) {
         container.className = `relative w-32 h-48 bg-slate-800 rounded-lg border-2 ${borderClass} transition-all duration-500 mb-6 overflow-hidden shadow-2xl`;
     }
 
-    // [重點修正] 圖片對應表 (使用絕對路徑 + 時間戳記防止快取)
-    // 請確認您的資料夾名稱是 card_picture (單數) 且檔名為小寫
-    const ts = new Date().getTime(); 
-    const CARD_IMAGES = {
-        "c041": `/card_picture/guardian.jpeg?v=${ts}`, // 光之守護者
-        "c051": `/card_picture/void.jpeg?v=${ts}`      // 虛空魔神
-    };
-
-    let innerContent = "";
-    
-    // 檢查是否有圖片 (移除 activeKey === 'main' 的限制，讓副卡上位也能顯示圖片)
-    const hasImage = CARD_IMAGES[activeCard.id];
+    const hasImage = getCardImageUrl(activeCard.id); // 直接呼叫全域函式
 
     if (hasImage) {
         innerContent = `
