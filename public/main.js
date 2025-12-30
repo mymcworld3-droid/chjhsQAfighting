@@ -708,8 +708,8 @@ function renderModalCards() {
         div.innerHTML = `
             ${equipLabel}
             <div class="font-bold ${rConfig.color} text-xs truncate">${card.name}</div>
-            <div class="flex-1 flex items-center justify-center text-3xl">
-                ${card.rarity === 'gray' ? '🛡️' : '⚔️'}
+            <div class="flex-1 flex items-center justify-center relative overflow-hidden my-1 rounded">
+                 ${getCardVisualHtml(cardId, card.rarity, "text-3xl")}
             </div>
             <div class="bg-black/30 rounded p-1">
                 <div class="flex justify-between text-[9px] text-gray-300">
