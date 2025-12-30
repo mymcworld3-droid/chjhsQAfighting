@@ -116,6 +116,47 @@ const getBattleCardData = (cid) => {
         currentHp: base.hp // HP 目前沒設強化，若有需要可改 base.hp + (lvl * 10)
     };
 };
+
+// ==========================================
+// 🎨 卡片圖片管理系統
+// ==========================================
+// 請確保 public 資料夾下有 card_picture 資料夾
+const getCardImageUrl = (cardId) => {
+    // 定義特定卡片的圖片檔名
+    const imageMap = {
+        "c041": "guardian.jpeg", // 光之守護者
+        "c051": "void.jpeg",     // 虛空魔神
+        // 未來可以在這裡新增更多，例如 "c001": "slime.png"
+    };
+
+    if (imageMap[cardId]) {
+        // 加入時間戳記 v=1 避免快取問題
+        return `/card_picture/${imageMap[cardId]}?v=1`;
+    }
+    return null; // 沒有圖片則回傳 null
+};
+
+// 通用的圖片/Emoji 顯示 HTML 生成器
+const getCardVisualHtml = (cardId, rarity, sizeClass = "text-3xl") => {
+    const imgUrl = getCardImageUrl(cardId);
+    const defaultEmoji = (rarity === 'rainbow' || rarity === 'gold') ? '🐲' : (rarity === 'red' ? '👹' : '⚔️');
+    
+    if (imgUrl) {
+        return `
+            <img src="${imgUrl}" class="absolute inset-0 w-full h-full object-cover z-0" 
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+            <div class="${sizeClass} hidden w-full h-full items-center justify-center z-0">
+                ${defaultEmoji}
+            </div>
+        `;
+    } else {
+        return `
+            <div class="${sizeClass} w-full h-full flex items-center justify-center z-0">
+                ${defaultEmoji}
+            </div>
+        `;
+    }
+};
 // ==========================================
 // 🌍 國際化 (i18n) 設定
 // ==========================================
