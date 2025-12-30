@@ -50,12 +50,12 @@ let isPlayingSequence = false;       // 是否正在播放序列動畫中
 // ==========================================
 
 const RARITY_CONFIG = {
-    gray:   { name: "普通", color: "text-gray-400", border: "border-gray-500", prob: 0.50 },    // 50%
-    blue:   { name: "稀有", color: "text-blue-400", border: "border-blue-500", prob: 0.30 },    // 30%
-    purple: { name: "罕見", color: "text-purple-400", border: "border-purple-500", prob: 0.15 }, // 15%
-    red:    { name: "史詩", color: "text-red-500", border: "border-red-500", prob: 0.04 },      // 4%
-    gold:   { name: "神話", color: "text-yellow-400", border: "border-yellow-400 shadow-[0_0_15px_rgba(250,204,21,0.6)]", prob: 0.008 }, // 0.8%
-    rainbow:{ name: "傳奇", color: "text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-green-500 to-blue-500 animate-pulse", border: "border-white shadow-[0_0_20px_rgba(255,255,255,0.8)]", prob: 0.002 } // 0.2%
+    gray:   { name: "普通", color: "text-gray-400", border: "border-gray-500", prob: 0.60 },    // 60% (原 50%)
+    blue:   { name: "稀有", color: "text-blue-400", border: "border-blue-500", prob: 0.30 },    // 30% (維持)
+    purple: { name: "罕見", color: "text-purple-400", border: "border-purple-500", prob: 0.08 }, // 8%  (原 15%)
+    red:    { name: "史詩", color: "text-red-500", border: "border-red-500", prob: 0.015 },     // 1.5% (原 4%)
+    gold:   { name: "神話", color: "text-yellow-400", border: "border-yellow-400 shadow-[0_0_15px_rgba(250,204,21,0.6)]", prob: 0.004 }, // 0.4% (原 0.8%)
+    rainbow:{ name: "傳奇", color: "text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-green-500 to-blue-500 animate-pulse", border: "border-white shadow-[0_0_20px_rgba(255,255,255,0.8)]", prob: 0.001 } // 0.1% (原 0.2%)
 };
 
 // ==========================================
