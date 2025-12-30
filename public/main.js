@@ -2614,11 +2614,19 @@ window.updateHomeBestCard = () => {
                 <span class="text-xs text-yellow-500 font-mono border border-yellow-500/50 px-1.5 rounded bg-black/40">Lv.${lvl}</span>
             </div>
             
-            <div class="flex-1 flex items-center justify-center z-10">
-                <div class="text-6xl filter drop-shadow-[0_0_10px_rgba(255,255,255,0.3)] animate-pulse">
-                     ${card.rarity === 'rainbow' || card.rarity === 'gold' ? '🐲' : '⚔️'}
-                </div>
+            <div class="absolute inset-0 z-0">
+                ${getCardImageUrl(bestCardId) ? 
+                  `<img src="${getCardImageUrl(bestCardId)}" class="w-full h-full object-cover opacity-80">` : 
+                  `<div class="w-full h-full flex items-center justify-center text-6xl opacity-30">${card.rarity === 'rainbow' ? '🐲' : '⚔️'}</div>`
+                }
             </div>
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/90 z-0"></div>
+
+            <div class="flex justify-between items-start z-10 relative">
+               </div>
+
+            <div class="flex-1 z-10"></div> <div class="z-10 bg-slate-900/80 backdrop-blur rounded p-2 border border-white/10 relative">
+               </div>
 
             <div class="z-10 bg-slate-900/80 backdrop-blur rounded p-2 border border-white/10">
                 <div class="flex justify-between items-center">
