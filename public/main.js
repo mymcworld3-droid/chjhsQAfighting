@@ -589,7 +589,6 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-// [修正] 載入我的卡庫 (顯示特性效果)
 window.loadMyCards = () => {
     const list = document.getElementById('my-card-list');
     if(!list) return;
@@ -633,19 +632,17 @@ window.loadMyCards = () => {
         const div = document.createElement('div');
         div.className = `bg-slate-800 p-1.5 rounded-lg border-2 ${rConfig.border} relative overflow-hidden group hover:scale-[1.02] transition-transform aspect-[2/3] flex flex-col justify-between shadow-md cursor-pointer`;
         div.onclick = () => selectCardForSlot(currentSelectSlot || 'main');
-        const imgPath = `/card_picture/${card.name === '光之守護者' ? 'guardian.jpeg' : 'void.jpeg'}`; //
 
+        // [修正] 移除多餘的巢狀 div，確保圖片容器能撐開高度
         div.innerHTML = `
             <div class="flex justify-between items-start z-10">
                 <span class="font-bold ${rConfig.color} text-[10px] truncate pr-1 drop-shadow-md">${card.name}</span>
                 <span class="text-[9px] text-yellow-500 font-mono tracking-tighter bg-black/30 px-1 rounded">${stars}</span>
             </div>
             
-            <div class="flex-1 flex items-center justify-center my-1">
-                 <div class="flex-1 flex items-center justify-center my-1 relative overflow-hidden rounded">
-                    ${getCardVisualHtml(cardId, card.rarity, "text-4xl")}
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none z-0"></div>
-                </div>
+            <div class="flex-1 w-full relative overflow-hidden rounded my-1 bg-black/20">
+                 ${getCardVisualHtml(cardId, card.rarity, "text-4xl")}
+                 <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none z-0"></div>
             </div>
 
             <div class="z-10 bg-black/20 p-1.5 rounded backdrop-blur-sm">
