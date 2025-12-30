@@ -3617,10 +3617,8 @@ function renderGachaCard(res, index) {
             <div class="gacha-card-front ${glowClass} relative flex flex-col p-2 bg-slate-800 border-2 ${rConfig.border}">
                 ${statusBadge}
                 
-                <div class="flex-1 flex items-center justify-center">
-                    <div class="text-4xl animate-bounce">
-                        ${res.rarity === 'rainbow' || res.rarity === 'gold' ? '🐲' : '⚔️'}
-                    </div>
+                <div class="flex-1 flex items-center justify-center relative overflow-hidden my-2 rounded-lg bg-black/30">
+                    ${getCardVisualHtml(res.id, res.rarity, "text-5xl")} 
                 </div>
                 
                 <div class="mt-2 text-center">
