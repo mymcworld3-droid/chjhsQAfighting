@@ -3492,6 +3492,9 @@ function showDrawResults(results, totalRefund) {
     gachaSkip = false;
     overlay.classList.remove('hidden');
     stage.classList.remove('hidden');
+    
+    // [修正] 必須清除 inline style 的 display: flex，否則會覆蓋 classList 的 hidden
+    resultsContainer.style.display = ''; 
     resultsContainer.classList.add('hidden');
     
     // [重要] 徹底清空舊的卡片 DOM，防止殘留
@@ -3502,6 +3505,7 @@ function showDrawResults(results, totalRefund) {
     orb.className = "w-10 h-10 rounded-full shadow-[0_0_50px_rgba(255,255,255,0.8)] relative z-10 transition-all duration-300"; 
     orb.style.backgroundColor = 'white';
     orb.style.boxShadow = 'none';
+    orb.classList.remove('anim-orb-charge');
 
     // 2. 決定光球顏色 (取最高稀有度)
     let maxRarityVal = 0;
