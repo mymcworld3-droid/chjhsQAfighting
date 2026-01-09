@@ -3638,12 +3638,27 @@ function renderGachaCard(res, index) {
     return wrapper;
 }
 
-// 關閉抽卡畫面
+// 修改 main.js 中的 closeGacha
 window.closeGacha = () => {
     const overlay = document.getElementById('gacha-overlay');
+    const resultsContainer = document.getElementById('gacha-results-container');
+    const stage = document.getElementById('gacha-stage');
+    
+    // 1. 隱藏整個抽卡遮罩層
     overlay.classList.add('hidden');
-    // 重新整理卡包顯示 (原本邏輯)
-    loadMyCards();
+    
+    // 2. 重置內部容器狀態，避免下次開啟時閃現舊內容
+    resultsContainer.classList.add('hidden');
+    resultsContainer.style.display = 'none'; // 強制隱藏
+    stage.classList.remove('hidden'); // 回到準備召喚狀態
+    
+    // 3. 清空結果網格
+    document.getElementById('gacha-cards-grid').innerHTML = '';
+    
+    // 4. 重新整理資料顯示
+    loadMyCards();        // 重新載入背包列表
+    updateHomeBestCard(); // 更新首頁最強卡牌
+    updateUIStats();      // 更新積分顯示
 };
 
 window.addEventListener('beforeunload', () => {
