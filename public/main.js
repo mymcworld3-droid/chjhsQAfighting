@@ -1487,88 +1487,145 @@ function getSmartDifficulty() {
 
     return baseDiff;
 }
+// --- 完整 fetchOneQuestion：整合 AI 診斷與題庫模式 ---
 async function fetchOneQuestion() {
+    // 1. 取得設定與段位
     const settings = currentUserData.gameSettings || { source: 'ai', difficulty: 'medium' };
-    const rankName = getRankName(currentUserData.stats.rankLevel || 0); 
+    const rankName = getRankName(currentUserData.stats.rankLevel || 0);
 
+    // 2. 智慧難度判斷
     let finalDifficulty = settings.difficulty;
     if (!finalDifficulty || finalDifficulty === 'auto') {
         finalDifficulty = getSmartDifficulty();
     }
-    
-    // --- AI 模式 ---
+
+    // ==========================================
+    // 模式 A: AI 生成模式 (已加入能力模型診斷)
+    // ==========================================
     if (settings.source === 'ai') {
         const BACKEND_URL = "/api/generate-quiz";
         const level = currentUserData.profile.educationLevel || "General";
-        
+
+        // 2.1 決定出題科目 (根據強弱項權重)
         let rawWeakString = currentUserData.profile.weakSubjects || "";
         let rawStrongString = currentUserData.profile.strongSubjects || "";
         let weakArray = rawWeakString.split(/[,，\s]+/).filter(s => s.trim().length > 0);
         let strongArray = rawStrongString.split(/[,，\s]+/).filter(s => s.trim().length > 0);
-        const generalTopics = ["History", "Geography", "Science", "Math", "Chinese", "English"];
+        const generalTopics = ["History", "Geography", "Science", "Logic", "Language", "Tech"];
+        
         let targetSubject = "";
-        const rand = Math.random(); 
+        const rand = Math.random();
 
-        if (weakArray.length > 0 && rand < 0.6) targetSubject = weakArray[Math.floor(Math.random() * weakArray.length)];
-        else {
+        // 60% 機率出弱項，否則從強項或通用題庫出
+        if (weakArray.length > 0 && rand < 0.6) {
+            targetSubject = weakArray[Math.floor(Math.random() * weakArray.length)];
+        } else {
             const pool = [...strongArray, ...generalTopics];
             targetSubject = pool[Math.floor(Math.random() * pool.length)];
         }
-        
+
+        // 2.2 發送請求給後端 (包含 knowledgeMap)
         const response = await fetch(BACKEND_URL, {
-            method: "POST", headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ 
-                subject: targetSubject, level: level, rank: rankName, difficulty: finalDifficulty,
-                language: currentLang 
+            method: "POST", 
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                subject: targetSubject, 
+                level: level, 
+                rank: rankName, 
+                difficulty: finalDifficulty,
+                language: currentLang,
+                // 🔥 新增：傳送玩家知識地圖供後端診斷
+                knowledgeMap: currentUserData.stats.knowledgeMap || {}
             })
         });
-        
+
         if (!response.ok) throw new Error(`Server Error: ${response.status}`);
+        
+        // 2.3 解析 AI 回傳的資料
         const data = await response.json();
         let aiText = data.text;
+        // 防呆：有時候 AI 會多包一層 Markdown code block
         const jsonMatch = aiText.match(/\{[\s\S]*\}/);
         if (jsonMatch) aiText = jsonMatch[0];
         const rawData = JSON.parse(aiText);
-        
+
+        // 2.4 隨機打亂選項
         let allOptions = [rawData.correct, ...rawData.wrong];
         allOptions = shuffleArray(allOptions);
         const correctIndex = allOptions.indexOf(rawData.correct);
-        
+
         return {
             data: { q: rawData.q, opts: allOptions, ans: correctIndex, exp: rawData.exp },
             rank: rankName,
-            badge: `🎯 ${targetSubject}` 
+            badge: `🎯 ${targetSubject}`
         };
     } 
-    // --- 題庫模式 ---
+    // ==========================================
+    // 模式 B: 題庫模式 (載入 JSON 檔案)
+    // ==========================================
     else {
         let targetSource = settings.source; 
+        
+        // 3.1 如果尚未載入該題庫，或切換了題庫來源
         if (!currentBankData || currentBankData.sourcePath !== targetSource) {
             let filesToFetch = [];
-            if (targetSource.endsWith('.json')) { filesToFetch = [targetSource]; } 
-            else {
+            
+            // 判斷是單檔還是資料夾
+            if (targetSource.endsWith('.json')) { 
+                filesToFetch = [targetSource]; 
+            } else {
+                // 如果是資料夾，先確保檔案列表已載入
                 if (allBankFiles.length === 0) {
-                      try { const res = await fetch('/api/banks'); const data = await res.json(); allBankFiles = data.files || []; } catch (e) { console.error(e); }
+                      try { 
+                          const res = await fetch('/api/banks'); 
+                          const data = await res.json(); 
+                          allBankFiles = data.files || []; 
+                      } catch (e) { console.error(e); }
                 }
+                // 過濾出該資料夾下的所有檔案
                 filesToFetch = allBankFiles.filter(f => f.startsWith(targetSource + '/'));
-                if (filesToFetch.length === 0) { console.error("Empty folder:", targetSource); return switchToAI(); }
+                
+                if (filesToFetch.length === 0) { 
+                    console.error("Empty folder:", targetSource); 
+                    return switchToAI(); // 沒題目就切回 AI
+                }
             }
+
+            // 3.2 下載並合併所有題目
             try {
                 console.log(`📚 Loading ${filesToFetch.length} files...`);
-                const fetchPromises = filesToFetch.map(filePath => fetch(`/banks/${filePath}?t=${Date.now()}`).then(res => { if (!res.ok) throw new Error(); return res.json(); }).catch(err => []));
+                const fetchPromises = filesToFetch.map(filePath => 
+                    fetch(`/banks/${filePath}?t=${Date.now()}`)
+                        .then(res => { if (!res.ok) throw new Error(); return res.json(); })
+                        .catch(err => [])
+                );
                 const results = await Promise.all(fetchPromises);
                 const mergedQuestions = results.flat();
+                
                 if (mergedQuestions.length === 0) throw new Error("No questions");
                 currentBankData = { sourcePath: targetSource, questions: mergedQuestions };
-            } catch (e) { console.error("Bank Error:", e); alert("Bank load failed, switching to AI"); return switchToAI(); }
+            } catch (e) { 
+                console.error("Bank Error:", e); 
+                alert("Bank load failed, switching to AI"); 
+                return switchToAI(); 
+            }
         }
+
+        // 3.3 根據難度過濾題目
         const filteredQuestions = currentBankData.questions.filter(q => q.difficulty === finalDifficulty);
+        // 如果該難度沒題目，就從全部題目抽
         const pool = filteredQuestions.length > 0 ? filteredQuestions : currentBankData.questions;
+        
         if (pool.length === 0) throw new Error("Pool empty!");
+        
+        // 3.4 隨機抽取一題
         const rawData = pool[Math.floor(Math.random() * pool.length)];
         let allOptions = shuffleArray([rawData.correct, ...rawData.wrong]);
         const correctIndex = allOptions.indexOf(rawData.correct);
+        
+        // 顯示科目名稱 (去除 .json 副檔名)
         let displaySubject = rawData.subject || settings.source.split('/').pop().replace('.json', '');
+        
         return { 
             data: { q: rawData.q, opts: allOptions, ans: correctIndex, exp: rawData.exp }, 
             rank: rankName, 
