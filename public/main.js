@@ -300,6 +300,8 @@ const translations = {
         rank_master: "🟣 大師",
         rank_grandmaster: "🔥 宗師",
         rank_king: "👑 王者"
+        analysis_title: "能力分析圖譜",
+        analysis_desc: "基於近期答題表現分析 (正確率)"
     },
     'en': {
         app_title: "Rank-Up Quiz Battle",
@@ -424,6 +426,8 @@ const translations = {
         rank_master: "🟣 Master",
         rank_grandmaster: "🔥 Grandmaster",
         rank_king: "👑 King"
+        analysis_title: "能力分析圖譜",
+        analysis_desc: "基於近期答題表現分析 (正確率)"
     }
 };
 
