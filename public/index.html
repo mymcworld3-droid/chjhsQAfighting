@@ -495,6 +495,23 @@
                 </ul>
             </div>
 
+            <div class="bg-slate-800/80 backdrop-blur-md p-5 rounded-2xl border border-slate-700/50 mb-6 shadow-xl relative overflow-hidden">
+                <div class="absolute -top-10 -left-10 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    
+                <h3 class="font-bold text-white flex items-center gap-2 mb-4 relative z-10">
+                    <i class="fa-solid fa-chart-radar text-cyan-400 animate-pulse"></i> 
+                    <span data-i18n="analysis_title">能力分析圖譜</span>
+                </h3>
+
+                <div class="w-full aspect-square max-h-[300px] mx-auto relative z-10">
+                    <canvas id="knowledgeChart"></canvas>
+                </div>
+    
+                <div class="text-center mt-2">
+                    <p class="text-[10px] text-gray-500" data-i18n="analysis_desc">基於近期答題表現分析 (正確率)</p>
+                </div>
+            </div>
+
             <div class="bg-slate-800/80 backdrop-blur-md p-5 rounded-2xl border border-slate-700/50 mb-6 shadow-xl">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="font-bold text-white flex items-center gap-2">
