@@ -1167,14 +1167,13 @@ function getTimeAgo(date) {
     return "Just now";
 }
 
-// [修改] 頁面切換函式
+// 修改原本的 switchToPage
 window.switchToPage = (pageId) => {
     if (isBattleActive && pageId !== 'page-battle') {
         alert("Battle in progress!");
         return;
     }
     
-    // 如果離開社交頁面，關閉聊天室監聽
     if (pageId !== 'page-social' && chatUnsub) {
         chatUnsub();
         chatUnsub = null;
@@ -1199,12 +1198,18 @@ window.switchToPage = (pageId) => {
         }
     });
     
-    if (pageId === 'page-settings') { renderInventory(); loadUserHistory(); }
+    // --- 修改這裡 ---
+    if (pageId === 'page-settings') { 
+        renderInventory(); 
+        loadUserHistory(); 
+        renderKnowledgeGraph(); // 🔥 新增這一行：切換到設定頁時渲染雷達圖
+    }
+    // ----------------
+    
     if (pageId === 'page-admin') loadAdminData();
     if (pageId === 'page-social') {
         switchSocialTab('friends');
     }
-    // [新增] 當進入卡牌頁面時，載入卡庫並顯示牌組
     if (pageId === 'page-cards') {
         loadMyCards();
         updateDeckDisplay();
