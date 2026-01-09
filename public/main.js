@@ -2835,7 +2835,96 @@ window.loadUserHistory = async () => {
         });
     } catch (e) { console.error(e); ul.innerHTML = '<li class="text-center text-red-400 py-4">Error</li>'; }
 };
+// --- [新增] 知識圖譜雷達圖渲染函式 ---
+let knowledgeChartInstance = null; // 全域變數，儲存圖表實例以供銷毀
 
+window.renderKnowledgeGraph = () => {
+    const ctx = document.getElementById('knowledgeChart');
+    if (!ctx) return;
+
+    // 1. 銷毀舊圖表 (防止切換頁面時重複繪製導致閃爍)
+    if (knowledgeChartInstance) {
+        knowledgeChartInstance.destroy();
+    }
+
+    // 2. 準備數據
+    const map = currentUserData.stats.knowledgeMap || {};
+    let labels = Object.keys(map);
+    let dataValues = [];
+
+    // 如果沒有數據，顯示預設的空雷達圖 (美觀用)
+    if (labels.length === 0) {
+        labels = ["國文", "英文", "數學", "社會", "自然"];
+        dataValues = [20, 20, 20, 20, 20]; // 預設基礎值
+    } else {
+        // 計算每個科目的正確率 (Mastery Score)
+        dataValues = labels.map(label => {
+            const item = map[label];
+            if (!item || item.total === 0) return 0;
+            // 簡單計算：正確率 * 100
+            return Math.round((item.correct / item.total) * 100);
+        });
+    }
+
+    // 3. 設定 Chart.js
+    knowledgeChartInstance = new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: '知識掌握度',
+                data: dataValues,
+                backgroundColor: 'rgba(34, 211, 238, 0.2)', // 青色透明填充
+                borderColor: 'rgba(34, 211, 238, 1)',     // 青色邊框
+                pointBackgroundColor: 'rgba(255, 255, 255, 1)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgba(34, 211, 238, 1)',
+                borderWidth: 2,
+                pointRadius: 3
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                r: {
+                    angleLines: {
+                        color: 'rgba(255, 255, 255, 0.1)' // 放射線顏色
+                    },
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)' // 網格顏色
+                    },
+                    pointLabels: {
+                        color: '#9ca3af', // 標籤文字顏色 (Gray-400)
+                        font: {
+                            size: 12,
+                            family: "'Noto Sans TC', sans-serif"
+                        }
+                    },
+                    ticks: {
+                        display: false, // 不顯示刻度數字 (太雜)
+                        backdropColor: 'transparent'
+                    },
+                    suggestedMin: 0,
+                    suggestedMax: 100
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false // 隱藏圖例 (標題已經有了)
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `掌握度: ${context.raw}%`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+};
 window.loadAdminLogs = async () => {
     const ul = document.getElementById('admin-logs-list');
     if(!ul) return; 
