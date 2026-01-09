@@ -1591,47 +1591,60 @@ async function fillBuffer() {
 // ==========================================
 //  Quiz UI Logic
 // ==========================================
+// --- 修改 startQuizFlow：加入時間記錄 ---
 window.startQuizFlow = async () => {
     switchToPage('page-quiz');
     document.getElementById('quiz-container').classList.add('hidden');
     document.getElementById('feedback-section').classList.add('hidden');
     document.getElementById('btn-giveup').classList.remove('hidden');
+
+    // 記錄答題開始時間（用於能力模型分析）
+    window.quizStartTime = Date.now(); 
+
     const savedQuiz = localStorage.getItem('currentQuiz');
-    if (savedQuiz) { const q = JSON.parse(savedQuiz); renderQuiz(q.data, q.rank, q.badge); fillBuffer(); return; }
-    if (quizBuffer.length > 0) { const nextQ = quizBuffer.shift(); localStorage.setItem('currentQuiz', JSON.stringify(nextQ)); renderQuiz(nextQ.data, nextQ.rank, nextQ.badge); fillBuffer(); } 
+    if (savedQuiz) { 
+        const q = JSON.parse(savedQuiz); 
+        renderQuiz(q.data, q.rank, q.badge); 
+        fillBuffer(); 
+        return; 
+    }
+    if (quizBuffer.length > 0) { 
+        const nextQ = quizBuffer.shift(); 
+        localStorage.setItem('currentQuiz', JSON.stringify(nextQ)); 
+        renderQuiz(nextQ.data, nextQ.rank, nextQ.badge); 
+        fillBuffer(); 
+    } 
     else {
         document.getElementById('quiz-loading').classList.remove('hidden');
         document.getElementById('loading-text').innerText = t('loading_text');
-        try { const q = await fetchOneQuestion(); localStorage.setItem('currentQuiz', JSON.stringify(q)); renderQuiz(q.data, q.rank, q.badge); fillBuffer(); } 
-        catch (e) { console.error(e); alert("Failed to start"); switchToPage('page-home'); }
+        try { 
+            const q = await fetchOneQuestion(); 
+            localStorage.setItem('currentQuiz', JSON.stringify(q)); 
+            renderQuiz(q.data, q.rank, q.badge); 
+            fillBuffer(); 
+        } 
+        catch (e) { 
+            console.error(e); 
+            alert("Failed to start"); 
+            switchToPage('page-home'); 
+        }
     }
 };
 
-function renderQuiz(data, rank, topic) {
-    document.getElementById('quiz-loading').classList.add('hidden');
-    document.getElementById('quiz-container').classList.remove('hidden');
-    document.getElementById('quiz-badge').innerText = `${topic} | ${rank}`;
-    document.getElementById('question-text').innerText = data.q;
-    const container = document.getElementById('options-container');
-    container.innerHTML = ''; 
-    data.opts.forEach((optText, idx) => {
-        const btn = document.createElement('button');
-        btn.id = `option-btn-${idx}`;
-        btn.className = "w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 flex items-center gap-3 active:scale-95";
-        btn.innerHTML = `<span class="bg-slate-800 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-blue-400 border border-slate-600">${String.fromCharCode(65+idx)}</span><span class="flex-1">${optText}</span>`;
-        btn.onclick = () => handleAnswer(idx, data.ans, data.q, data.exp);
-        container.appendChild(btn);
-    });
-}
-
+// --- 重寫 handleAnswer：加入能力分析邏輯 ---
 async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
+    // 1. 計算答題耗時 (秒)
+    const timeTaken = (Date.now() - (window.quizStartTime || Date.now())) / 1000;
     const isCorrect = userIdx === correctIdx;
+    
+    // UI 處理
     const opts = document.querySelectorAll('[id^="option-btn-"]');
     opts.forEach((btn, idx) => {
         btn.onclick = null; btn.classList.add('btn-disabled');
         if (idx === correctIdx) btn.classList.add('btn-correct');
         else if (idx === userIdx && !isCorrect) btn.classList.add('btn-wrong');
     });
+    
     const fbSection = document.getElementById('feedback-section');
     const fbTitle = document.getElementById('feedback-title');
     const fbIcon = document.getElementById('feedback-icon');
@@ -1648,10 +1661,42 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         fbIcon.innerHTML = '<i class="fa-solid fa-circle-xmark text-red-400"></i>';
         if (navigator.vibrate) navigator.vibrate(200);
     }
+    
     localStorage.removeItem('currentQuiz');
     fbText.innerText = explanation || "AI did not provide explanation.";
 
+    // 2. 更新學生能力模型數據
     let stats = currentUserData.stats;
+    
+    // 初始化知識地圖與學習曲線
+    if (!stats.knowledgeMap) stats.knowledgeMap = {}; 
+    if (!stats.learningCurve) stats.learningCurve = [];
+
+    // 取得目前的科目分類（從 Badge 提取）
+    const badgeText = document.getElementById('quiz-badge').innerText;
+    const topic = badgeText.split('|')[0].replace('🎯', '').trim();
+
+    // 更新特定知識點數據
+    if (!stats.knowledgeMap[topic]) {
+        stats.knowledgeMap[topic] = { correct: 0, total: 0, avgTime: 0 };
+    }
+    stats.knowledgeMap[topic].total++;
+    if (isCorrect) stats.knowledgeMap[topic].correct++;
+    
+    // 使用滑動平均計算平均答題時間
+    const prevAvg = stats.knowledgeMap[topic].avgTime;
+    stats.knowledgeMap[topic].avgTime = prevAvg === 0 ? timeTaken : (prevAvg * 0.7 + timeTaken * 0.3);
+
+    // 記錄最近的學習軌跡
+    stats.learningCurve.push({
+        timestamp: Date.now(),
+        isCorrect: isCorrect,
+        time: timeTaken,
+        topic: topic
+    });
+    if (stats.learningCurve.length > 20) stats.learningCurve.shift();
+
+    // 原有的積分與段位邏輯
     stats.totalAnswered++;
     if (isCorrect) {
         stats.totalCorrect++; stats.currentStreak++;
@@ -1667,15 +1712,44 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     if (newRank > stats.rankLevel) {
         stats.rankLevel = newRank;
         fbTitle.innerHTML += ` <br><span class="text-yellow-400 text-sm animate-bounce">${t('msg_rank_up')} ${t(RANKS_KEYS[newRank])}!</span>`;
-        if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 200]);
     } else if (newRank < stats.rankLevel) {
         stats.rankLevel = newRank;
         fbTitle.innerHTML += ` <br><span class="text-red-400 text-sm">${t('msg_rank_down')} ${t(RANKS_KEYS[newRank])}...</span>`;
     }
 
-    updateDoc(doc(db, "users", auth.currentUser.uid), { stats: stats });
-    addDoc(collection(db, "exam_logs"), { uid: auth.currentUser.uid, email: auth.currentUser.email, question: questionText, isCorrect: isCorrect, rankAtTime: t(RANKS_KEYS[stats.rankLevel]), timestamp: serverTimestamp() }).catch(e => console.error(e));
-    updateUIStats(); fillBuffer();
+    // 寫入資料庫
+    await updateDoc(doc(db, "users", auth.currentUser.uid), { stats: stats });
+    
+    addDoc(collection(db, "exam_logs"), { 
+        uid: auth.currentUser.uid, 
+        email: auth.currentUser.email, 
+        question: questionText, 
+        isCorrect: isCorrect, 
+        timeTaken: timeTaken,
+        topic: topic,
+        rankAtTime: t(RANKS_KEYS[stats.rankLevel]), 
+        timestamp: serverTimestamp() 
+    }).catch(e => console.error(e));
+    
+    updateUIStats(); 
+    fillBuffer();
+}
+
+function renderQuiz(data, rank, topic) {
+    document.getElementById('quiz-loading').classList.add('hidden');
+    document.getElementById('quiz-container').classList.remove('hidden');
+    document.getElementById('quiz-badge').innerText = `${topic} | ${rank}`;
+    document.getElementById('question-text').innerText = data.q;
+    const container = document.getElementById('options-container');
+    container.innerHTML = ''; 
+    data.opts.forEach((optText, idx) => {
+        const btn = document.createElement('button');
+        btn.id = `option-btn-${idx}`;
+        btn.className = "w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 flex items-center gap-3 active:scale-95";
+        btn.innerHTML = `<span class="bg-slate-800 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-blue-400 border border-slate-600">${String.fromCharCode(65+idx)}</span><span class="flex-1">${optText}</span>`;
+        btn.onclick = () => handleAnswer(idx, data.ans, data.q, data.exp);
+        container.appendChild(btn);
+    });
 }
 
 window.giveUpQuiz = () => { if(confirm("Give up this question?")) handleAnswer(-1, -2, document.getElementById('question-text').innerText, "Skipped."); };
