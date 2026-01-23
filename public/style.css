@@ -1,3 +1,201 @@
+/* =========================================
+   Cyber-Glass Theme Core
+   ========================================= */
+
+/* 1. 全域變數 */
+:root {
+    --glass-bg: rgba(15, 23, 42, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --neon-cyan: #22d3ee;
+    --neon-pink: #e879f9;
+    --neon-blue: #3b82f6;
+}
+
+/* 2. 科幻字體設定 */
+.font-sci {
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 0.05em;
+}
+
+/* 3. 玻璃面板基礎 */
+.glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+.glass-strip {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(20px);
+}
+
+.glass-capsule {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 9999px;
+}
+
+/* 4. 賽博按鈕 */
+.btn-cyber-primary {
+    background: linear-gradient(135deg, #0284c7, #2563eb);
+    color: white;
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    box-shadow: 0 0 15px rgba(37, 99, 235, 0.3);
+    transition: all 0.3s ease;
+}
+.btn-cyber-primary:active {
+    transform: scale(0.96);
+    box-shadow: 0 0 5px rgba(37, 99, 235, 0.5);
+}
+
+.btn-cyber-ghost {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
+    transition: all 0.3s ease;
+}
+.btn-cyber-ghost:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.btn-cyber-accent {
+    background: linear-gradient(135deg, #d946ef, #8b5cf6);
+    color: white;
+    box-shadow: 0 0 15px rgba(217, 70, 239, 0.3);
+}
+
+/* 5. 輸入框樣式 */
+.input-cyber {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    outline: none;
+    transition: border-color 0.3s;
+}
+.input-cyber:focus {
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 10px rgba(34, 211, 238, 0.2);
+}
+
+/* 6. Dashboard Stat Card */
+.stat-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 1rem;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+.stat-card:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+.stat-label {
+    font-size: 10px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 4px;
+    letter-spacing: 0.05em;
+}
+.stat-value {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: bold;
+    font-size: 1.25rem;
+}
+.stat-icon {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    opacity: 0.8;
+}
+
+/* 7. 導航按鈕動畫 */
+.nav-btn.text-white .active-dot {
+    opacity: 1 !important;
+}
+.nav-btn.active-nav-btn i {
+    color: #22d3ee; /* Cyan */
+    filter: drop-shadow(0 0 5px #22d3ee);
+}
+.nav-btn.active-nav-btn .active-dot {
+    opacity: 1;
+}
+
+/* 8. 戰鬥卡片容器 (必須與 main.js 配合) */
+.battle-card-wrapper {
+    transition: all 0.3s ease;
+}
+
+/* 9. Loader 動畫 */
+.cyber-loader {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(34, 211, 238, 0.3);
+    border-top-color: #22d3ee;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* 10. Scrollbar */
+.custom-scrollbar::-webkit-scrollbar { width: 4px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 2px; }
+
+/* 11. Deck Slots */
+.deck-slot {
+    width: 80px;
+    height: 120px;
+    background: rgba(30, 41, 59, 0.5);
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.3s;
+}
+.deck-slot:hover { border-color: var(--neon-cyan); }
+.slot-label {
+    position: absolute;
+    top: 0; left: 0;
+    font-size: 8px;
+    font-weight: bold;
+    color: white;
+    padding: 2px 6px;
+    border-bottom-right-radius: 6px;
+    z-index: 10;
+}
+.slot-content {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+}
+.slot-hover {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.2s;
+    z-index: 20;
+    color: white;
+}
+.deck-slot:hover .slot-hover { opacity: 1; }
+
+/* 12. 商店 Tab */
+.store-tab.active {
+    background: linear-gradient(135deg, #db2777, #e11d48);
+    color: white;
+    box-shadow: 0 0 10px rgba(219, 39, 119, 0.5);
+}
+
 /* ==========================================
    基礎樣式
    ========================================== */
