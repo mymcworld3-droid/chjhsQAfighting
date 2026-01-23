@@ -3720,7 +3720,7 @@ async function executeDraw(count, cost, guaranteedRarity = null) {
 
 let gachaSkip = false; // 用於跳過動畫
 
-// [修正 1] 更新戰鬥卡牌 UI (支援副卡顯示圖片 + 強制 3:2 比例)
+// [修正版] 更新戰鬥卡牌 UI (修復 innerContent 變數未宣告的錯誤)
 function updateBattleCardUI(prefix, playerData) {
     if (!playerData) return;
     
@@ -3737,7 +3737,7 @@ function updateBattleCardUI(prefix, playerData) {
     const activeKey = playerData.activeCard; // 'main' or 'sub'
     const activeCard = playerData.cards[activeKey];
     
-    // 防呆
+    // 防呆：如果 activeCard 不存在 (例如數據錯誤)，直接返回
     if (!activeCard) return;
 
     const dbCard = CARD_DATABASE[activeCard.id];
@@ -3755,6 +3755,7 @@ function updateBattleCardUI(prefix, playerData) {
     const nameColor = activeKey === 'main' ? 'text-yellow-400' : 'text-gray-300';
     const borderClass = activeKey === 'main' ? 'border-yellow-500' : 'border-gray-500';
     
+    // 更新卡片容器樣式
     const container = document.getElementById(`${idPrefix}-card-container`);
     if(container) {
         container.className = `relative w-32 h-48 bg-slate-800 rounded-lg border-2 ${borderClass} transition-all duration-500 mb-6 overflow-hidden shadow-2xl`;
@@ -3762,7 +3763,7 @@ function updateBattleCardUI(prefix, playerData) {
 
     const hasImage = getCardImageUrl(activeCard.id); 
 
-    // 🔥🔥【修正重點】這裡原本漏了 let，導致 innerContent 變成未定義變數 🔥🔥
+    // 🔥🔥【關鍵修正】這裡加上了 let，宣告變數 🔥🔥
     let innerContent = ""; 
 
     if (hasImage) {
