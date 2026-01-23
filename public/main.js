@@ -2214,93 +2214,110 @@ async function acceptInvite(inviteId, roomId, toastElement) {
 let lastMyHp = -1;
 let lastEnemyHp = -1;
 
-// [修正版] 監聽對戰房間
 function listenToBattleRoom(roomId) {
+    // 1. 清除舊的監聽器與重置狀態
     if (battleUnsub) battleUnsub();
     
-    lastProcessedLogId = null;
-    isPlayingSequence = false;
-    let lastQuestionText = ""; 
+    lastProcessedLogId = null; // 重置動畫記錄，避免進房瞬間重複播放
+    isPlayingSequence = false; // 重置動畫播放旗標
+    let lastQuestionText = ""; // 用於判斷題目是否更新
 
     console.log("📡 開始監聽對戰房間:", roomId);
 
+    // 2. 開啟 Firestore 監聽
     battleUnsub = onSnapshot(doc(db, "rooms", roomId), async (docSnap) => {
+        // 如果房間被刪除 (例如對方離開)，則強制離開
         if (!docSnap.exists()) { leaveBattle(); return; }
 
         const room = docSnap.data();
         if (!auth.currentUser) return;
 
+        // 判斷身份
         const isHost = room.host.uid === auth.currentUser.uid;
         const myData = isHost ? room.host : room.guest;
         const oppData = isHost ? room.guest : room.host;
 
-        // --- 狀態: 遊戲進行中 ---
+        // ==========================================
+        // 狀態 A: 遊戲進行中 (Ready)
+        // ==========================================
         if (room.status === "ready") {
+            // 切換 UI 顯示 Arena
             document.getElementById('battle-lobby').classList.add('hidden');
             document.getElementById('battle-arena').classList.remove('hidden');
             document.getElementById('battle-result').classList.add('hidden');
+
             document.getElementById('battle-round').innerText = room.round;
 
-            // 1. 即時更新血條 (動畫播放中除外)
+            // 1. 即時更新血條 UI 
+            // (但在播放動畫期間暫停更新，避免數值跳動破壞體驗)
             if (!isPlayingSequence) {
                 updateBattleCardUI('my', myData);
                 updateBattleCardUI('enemy', oppData);
             }
 
-            // 2. 偵測並播放戰鬥動畫
+            // 2. [核心] 戰鬥動畫處理 (偵測到新的 battleLog)
             if (room.battleLog && room.battleLogId !== lastProcessedLogId && !isPlayingSequence) {
-                console.log("🎬 播放戰鬥動畫...");
+                console.log("🎬 偵測到新的戰鬥日誌，開始播放動畫...");
                 isPlayingSequence = true;
-                lastProcessedLogId = room.battleLogId;
+                lastProcessedLogId = room.battleLogId; // 標記已處理
                 
-                // 隱藏題目遮罩
-                document.getElementById('battle-quiz-overlay').classList.add('hidden'); 
-                document.getElementById('battle-quiz-overlay').style.display = 'none';
-                
-                // 播放
+                // 強制隱藏題目遮罩，讓玩家專心看戰鬥
+                const overlay = document.getElementById('battle-quiz-overlay');
+                overlay.classList.add('hidden');
+                overlay.style.display = 'none';
+
+                // 播放動畫序列 (await 等待播完)
                 await playBattleSequence(room.battleLog, isHost);
+                
                 isPlayingSequence = false;
 
-                // 動畫結束，房主負責清理並觸發下一題
+                // 動畫播完後，如果是房主，觸發下一回合 (清空題目以觸發生成)
                 if (isHost && room.status !== "finished") {
+                    console.log("🔄 動畫結束，房主生成下一題...");
                     await updateDoc(doc(db, "rooms", roomId), { 
-                        currentQuestion: null, 
-                        battleLog: null 
+                        currentQuestion: null, // 清空以觸發 Loading 狀態
+                        battleLog: null // 清空日誌
                     });
                     generateSharedQuiz(roomId);
                 }
-                return; 
+                return; // 動畫期間不往下執行，避免 UI 閃爍
             }
 
-            // 3. 題目顯示與過渡狀態處理
+            // 3. [核心] 題目顯示與 Loading 狀態切換
             const overlay = document.getElementById('battle-quiz-overlay');
+            const loadingEl = document.getElementById('battle-loading'); // 記得在 HTML 加這個
+            const quizBoxEl = document.getElementById('battle-quiz-box');
             
+            // 情況 A：有題目，且不在播放動畫 -> 顯示題目框
             if (room.currentQuestion && !isPlayingSequence && !room.battleLog) {
-                 // A. 有題目 -> 顯示題目 UI
                  window.currentBattleExp = room.currentQuestion.exp;
                  
+                 // 如果是新題目，才執行渲染 (避免重複刷)
                  if (room.currentQuestion.q !== lastQuestionText) {
                     lastQuestionText = room.currentQuestion.q;
+                    
                     overlay.classList.remove('hidden');
                     overlay.style.display = "flex";
 
-                    // 重置為答題狀態
-                    document.getElementById('battle-loading').classList.add('hidden');
-                    document.getElementById('battle-quiz-box').classList.remove('hidden');
+                    // 切換顯示：隱藏 Loading，顯示 題目
+                    if(loadingEl) loadingEl.classList.add('hidden');
+                    if(quizBoxEl) quizBoxEl.classList.remove('hidden');
+                    
                     document.getElementById('battle-feedback').classList.add('hidden');
                     document.getElementById('battle-waiting-msg').classList.add('hidden');
-                    
-                    // 啟用按鈕
+
+                    // 重置按鈕狀態
                     const btns = document.querySelectorAll('#battle-options button');
-                    btns.forEach(b => {
-                        b.disabled = false;
-                        b.classList.remove('opacity-50', 'cursor-not-allowed', 'bg-green-600', 'bg-red-600', 'border-green-400', 'border-red-400');
+                    btns.forEach(btn => {
+                        btn.disabled = false;
+                        btn.classList.remove('opacity-50', 'cursor-not-allowed', 'bg-green-600', 'bg-red-600', 'border-green-400', 'border-red-400');
                     });
 
-                    // 渲染文字
+                    // 渲染題目文字
                     document.getElementById('battle-q-text').innerText = room.currentQuestion.q;
                     const container = document.getElementById('battle-options');
                     container.innerHTML = '';
+                    
                     room.currentQuestion.opts.forEach((opt, idx) => {
                         const btn = document.createElement('button');
                         btn.className = "w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 active:scale-95 mb-2 flex items-center";
@@ -2309,26 +2326,33 @@ function listenToBattleRoom(roomId) {
                         container.appendChild(btn);
                     });
                  }
-            } else if (!room.currentQuestion && !isPlayingSequence && !room.battleLog) {
-                // B. 無題目且非動畫中 -> 顯示「準備下一回合」
-                // 這種情況發生在動畫剛播完，房主正在呼叫 AI API 時
+            } 
+            // 情況 B：沒有題目 (正在生成中) 且不在播放動畫 -> 顯示 Loading 畫面
+            else if (!room.currentQuestion && !isPlayingSequence && !room.battleLog) {
                 overlay.classList.remove('hidden');
                 overlay.style.display = "flex";
-                document.getElementById('battle-quiz-box').classList.add('hidden');
-                document.getElementById('battle-loading').classList.remove('hidden'); // 需在 HTML 確保有這個 ID
-                document.getElementById('battle-loading-text').innerText = "正在生成下一回合題目..."; // 需在 HTML 確保有這個 ID
+                
+                // 切換顯示：隱藏 題目，顯示 Loading
+                if(quizBoxEl) quizBoxEl.classList.add('hidden');
+                if(loadingEl) {
+                    loadingEl.classList.remove('hidden');
+                    const txtEl = document.getElementById('battle-loading-text');
+                    if(txtEl) txtEl.innerText = room.round === 1 ? "對戰即將開始..." : "正在生成下一回合題目...";
+                }
 
-                // 如果是第一回合，房主觸發生成
-                if (isHost && room.round === 1 && !isGenerating) {
+                // [防呆] 如果我是房主，且是第一回合，且尚未生成，則觸發生成
+                // (第二回合後的生成由動畫結束事件觸發，這裡只保險第一回合)
+                if (isHost && room.round === 1 && !window.isGenerating) {
                     generateSharedQuiz(roomId);
                 }
             }
 
-            // 4. 觸發結算 (Host Only)
+            // 4. [核心] 觸發回合結算 (僅房主執行)
             if (room.host?.done && room.guest?.done && isHost && !room.battleLog) {
                 if (!window.isWaitingForResolve) {
                     window.isWaitingForResolve = true;
-                    // 延遲 1 秒讓雙方都能看到最後一人的答題結果 (O/X)
+                    console.log("⏳ 雙方作答完畢，等待 1 秒後結算...");
+                    // 延遲 1 秒是為了讓後答者能看清楚自己的 O/X 結果
                     setTimeout(() => {
                         resolveRoundLogic(roomId, room);
                         window.isWaitingForResolve = false;
@@ -2337,35 +2361,33 @@ function listenToBattleRoom(roomId) {
             }
         }
         
-        // --- 狀態: 遊戲結束 ---
+        // ==========================================
+        // 狀態 B: 遊戲結束 (Finished)
+        // ==========================================
         if (room.status === "finished") {
-            // ... (保持原樣) ...
              document.getElementById('battle-quiz-overlay').classList.add('hidden');
              document.getElementById('battle-arena').classList.add('hidden');
              document.getElementById('battle-result').classList.remove('hidden');
              
-             // 停止重複處理
-             if(!isBattleResultProcessed) {
-                 isBattleResultProcessed = true;
-                 const isWinner = room.winner === auth.currentUser.uid;
-                 const titleEl = document.getElementById('battle-result-title');
-                 const msgEl = document.getElementById('battle-result-msg');
-
-                 if(isWinner) {
-                     titleEl.innerText = t('battle_win');
-                     titleEl.className = "text-3xl font-bold mb-2 text-green-400 animate-bounce";
-                     // 只有贏家才呼叫加分函式
+             const titleEl = document.getElementById('battle-result-title');
+             const msgEl = document.getElementById('battle-result-msg');
+             const isWinner = room.winner === auth.currentUser.uid;
+             
+             if(isWinner) {
+                 titleEl.innerText = t('battle_win');
+                 titleEl.className = "text-3xl font-bold mb-2 text-green-400 animate-bounce";
+                 if(!isBattleResultProcessed) {
+                     isBattleResultProcessed = true;
                      processBattleWin(isHost ? room.guest : room.host, msgEl);
-                 } else if (!room.winner) {
-                     titleEl.innerText = t('battle_draw');
-                     titleEl.className = "text-3xl font-bold mb-2 text-yellow-400";
-                     msgEl.innerText = "勢均力敵！雙方各獲得 50 積分";
-                     // 平手加分邏輯可選
-                 } else {
-                     titleEl.innerText = t('battle_lose');
-                     titleEl.className = "text-3xl font-bold mb-2 text-red-400";
-                     msgEl.innerText = "再接再厲！獲得參加獎 20 積分";
                  }
+             } else if (!room.winner) {
+                 titleEl.innerText = t('battle_draw');
+                 titleEl.className = "text-3xl font-bold mb-2 text-yellow-400";
+                 msgEl.innerText = "勢均力敵！雙方各獲得 50 積分";
+             } else {
+                 titleEl.innerText = t('battle_lose');
+                 titleEl.className = "text-3xl font-bold mb-2 text-red-400";
+                 msgEl.innerText = "再接再厲！獲得參加獎 20 積分";
              }
         }
     });
