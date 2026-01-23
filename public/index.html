@@ -1,16 +1,28 @@
+這是一份整合了**賽博琉璃風格 (Cyber-Glass)**、**平面化導航列 (含文字標籤)** 以及 **所有功能修復** 的完整 `public/index.html` 檔案。
+
+請直接將這份代碼 **完全覆蓋** 你原本的 `index.html`。
+
+### 📄 完整檔案：`public/index.html`
+
+```html
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title data-i18n="app_title">AI 每日升階答題戰</title>
+    <title data-i18n="app_title">RANK UP: AI Battle</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="font-sans h-[100dvh] flex flex-col overflow-hidden text-slate-100 selection:bg-cyan-500 selection:text-white">
+<body class="font-sans h-[100dvh] flex flex-col overflow-hidden text-slate-100 selection:bg-cyan-500 selection:text-white bg-slate-950">
 
     <div class="fixed inset-0 z-[-1] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
     <div class="fixed inset-0 z-[-2] bg-gradient-to-b from-slate-950 via-[#0f172a] to-slate-950"></div>
@@ -24,8 +36,8 @@
         </h1>
         
         <div class="flex items-center gap-3">
-            <button onclick="toggleLanguage()" class="btn-icon-sm">
-                <span id="lang-display" class="font-sci text-[10px] font-bold">EN</span>
+            <button onclick="toggleLanguage()" class="btn-icon-sm hover:text-cyan-400 transition">
+                <span id="lang-display" class="font-sci text-[10px] font-bold border border-white/20 px-2 py-1 rounded">EN</span>
             </button>
             <div id="user-info" class="glass-capsule px-3 py-1 text-xs font-bold text-cyan-300 flex items-center gap-2" data-i18n="not_logged_in">
                 GUEST
@@ -47,7 +59,7 @@
                 <h2 class="text-4xl font-black mb-2 font-sci tracking-widest text-white" data-i18n="welcome_title">WELCOME</h2>
                 <p class="text-gray-400 mb-10 text-sm tracking-wide" data-i18n="welcome_desc">AI QUATRO x PvP BATTLE x RANK SYSTEM</p>
                 
-                <button onclick="googleLogin()" class="btn-cyber-primary w-full max-w-xs py-4 rounded-xl font-bold flex items-center justify-center gap-3 group">
+                <button onclick="googleLogin()" class="btn-cyber-primary w-full max-w-xs py-4 rounded-xl font-bold flex items-center justify-center gap-3 group bg-slate-800 hover:bg-slate-700 transition border border-white/10">
                     <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5 h-5 bg-white rounded-full p-0.5">
                     <span data-i18n="btn_login_google">LOGIN SYSTEM</span>
                     <i class="fa-solid fa-arrow-right opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0"></i>
@@ -81,7 +93,7 @@
                         <label class="text-xs text-red-400 font-bold mb-1 block" data-i18n="ob_label_weak">WEAK</label>
                         <input type="text" id="ob-weak" class="input-cyber w-full" data-i18n-placeholder="ob_placeholder_weak">
                     </div>
-                    <button onclick="submitOnboarding()" class="btn-cyber-accent w-full py-3 rounded-xl font-bold mt-4" data-i18n="btn_start_journey">START</button>
+                    <button onclick="submitOnboarding()" class="btn-cyber-accent w-full py-3 rounded-xl font-bold mt-4 bg-gradient-to-r from-cyan-600 to-blue-600" data-i18n="btn_start_journey">START</button>
                 </div>
             </div>
         </div>
@@ -109,7 +121,7 @@
                 </div>
             </div>
 
-            <div class="relative mt-8 mb-8 flex justify-center perspective-container">
+            <div class="relative mt-8 mb-8 flex justify-center perspective-[1000px]">
                 <div id="home-best-card-container" class="transform transition-transform duration-500 hover:rotate-y-6 hover:scale-105 cursor-pointer" onclick="switchToPage('page-cards')">
                      <div id="home-best-card-display">
                          <div class="w-32 h-48 bg-slate-800/50 rounded-xl border border-white/10 flex items-center justify-center text-xs text-gray-500">No Card</div>
@@ -143,20 +155,20 @@
             </div>
 
             <div class="flex gap-4 pb-4">
-                <button id="btn-home-start" onclick="startQuizFlow()" class="btn-action-lg flex-1 bg-gradient-to-br from-blue-600 to-blue-800 shadow-blue-900/40 group">
-                    <i class="fa-solid fa-gamepad text-2xl mb-1 group-hover:scale-110 transition-transform"></i>
-                    <span class="font-sci text-sm font-bold tracking-widest" data-i18n="btn_solo">SOLO</span>
+                <button id="btn-home-start" onclick="startQuizFlow()" class="btn-cyber-primary flex-1 py-4 rounded-xl flex flex-col items-center justify-center gap-1 shadow-lg shadow-blue-900/40 group border border-blue-400/30">
+                    <i class="fa-solid fa-gamepad text-2xl mb-1 group-hover:scale-110 transition-transform text-white"></i>
+                    <span class="font-sci text-sm font-bold tracking-widest text-white" data-i18n="btn_solo">SOLO</span>
                 </button>
-                <button onclick="startBattleMatchmaking()" class="btn-action-lg flex-1 bg-gradient-to-br from-red-600 to-red-800 shadow-red-900/40 group">
-                    <i class="fa-solid fa-khanda text-2xl mb-1 group-hover:scale-110 transition-transform"></i>
-                    <span class="font-sci text-sm font-bold tracking-widest" data-i18n="btn_pvp">BATTLE</span>
+                <button onclick="startBattleMatchmaking()" class="btn-cyber-accent flex-1 py-4 rounded-xl flex flex-col items-center justify-center gap-1 shadow-lg shadow-red-900/40 group border border-red-400/30 bg-gradient-to-br from-red-600 to-red-800">
+                    <i class="fa-solid fa-khanda text-2xl mb-1 group-hover:scale-110 transition-transform text-white"></i>
+                    <span class="font-sci text-sm font-bold tracking-widest text-white" data-i18n="btn_pvp">BATTLE</span>
                 </button>
             </div>
         </div>
 
         <div id="page-quiz" class="page-section hidden px-4">
             <div id="quiz-loading" class="text-center mt-32 hidden">
-                <div class="cyber-loader mx-auto"></div>
+                <div class="cyber-loader mx-auto mb-6"></div>
                 <h3 class="text-xl font-bold mt-6 text-cyan-400 animate-pulse font-sci" data-i18n="loading_title">SYSTEM CALCULATING</h3>
                 <p class="text-xs text-gray-400 mt-2" id="loading-text" data-i18n="loading_text">Generating Question...</p>
             </div>
@@ -192,12 +204,13 @@
         </div>
 
         <div id="page-store" class="page-section hidden px-4">
-            <div class="flex justify-between items-center mb-4 mt-2">
+            <div class="sticky top-0 bg-slate-950/95 backdrop-blur-md z-20 py-4 border-b border-slate-800 flex justify-between items-center mb-4">
                 <h2 class="text-xl font-bold text-pink-400 flex items-center gap-2">
                     <i class="fa-solid fa-store"></i> <span data-i18n="store_title">STORE</span>
                 </h2>
-                <div class="glass-capsule px-3 py-1 text-yellow-400 text-xs font-mono border-yellow-500/30">
-                    <i class="fa-solid fa-coins"></i> <span id="store-user-points">0</span>
+                <div class="bg-slate-800 px-3 py-1 rounded-full border border-yellow-500/30 text-yellow-400 font-mono text-sm flex items-center gap-1 shadow-lg">
+                    <i class="fa-solid fa-coins text-yellow-300 animate-pulse"></i> 
+                    <span id="store-user-points">0</span>
                 </div>
             </div>
 
@@ -213,7 +226,17 @@
         </div>
 
         <div id="page-cards" class="page-section hidden px-4">
-            <div class="glass-panel p-4 rounded-2xl mb-6 mt-2 relative overflow-hidden">
+            <div class="sticky top-0 bg-slate-950/95 backdrop-blur-md z-20 py-4 border-b border-slate-800 flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-purple-400 flex items-center gap-2">
+                    <i class="fa-solid fa-dragon"></i> <span data-i18n="tab_cards">CARDS</span>
+                </h2>
+                <div class="bg-slate-800 px-3 py-1 rounded-full border border-yellow-500/30 text-yellow-400 font-mono text-sm flex items-center gap-1 shadow-lg">
+                     <i class="fa-solid fa-coins text-yellow-300 animate-pulse"></i> 
+                     <span id="cards-user-points">0</span>
+                </div>
+            </div>
+
+            <div class="glass-panel p-4 rounded-2xl mb-6 relative overflow-hidden">
                 <div class="absolute -right-4 -top-4 text-6xl text-purple-500/10"><i class="fa-solid fa-layer-group"></i></div>
                 <h3 class="text-sm font-bold text-purple-300 mb-4 uppercase tracking-widest">Active Deck</h3>
                 
@@ -241,10 +264,10 @@
                 <p class="text-[10px] text-purple-200 mb-3 relative z-10 opacity-70">Duplicate cards grant +5 ATK (Max +25)</p>
 
                 <div class="flex gap-2 relative z-10">
-                    <button onclick="drawSingleCard()" class="btn-cyber-ghost flex-1 py-2 text-xs border-purple-500/50 text-purple-300 hover:bg-purple-500/10">
+                    <button onclick="drawSingleCard()" class="btn-cyber-ghost flex-1 py-2 text-xs border-purple-500/50 text-purple-300 hover:bg-purple-500/10 transition">
                         1x (100 pts)
                     </button>
-                    <button onclick="draw11Cards()" class="btn-cyber-accent flex-1 py-2 text-xs bg-gradient-to-r from-yellow-600 to-orange-600 border-none text-white shadow-lg shadow-orange-900/50">
+                    <button onclick="draw11Cards()" class="btn-cyber-accent flex-1 py-2 text-xs bg-gradient-to-r from-yellow-600 to-orange-600 border-none text-white shadow-lg shadow-orange-900/50 transition transform active:scale-95">
                         11x (1000 pts) <span class="ml-1 text-[9px] bg-black/30 px-1 rounded">SR+</span>
                     </button>
                 </div>
@@ -264,7 +287,7 @@
                 </div>
                 <h2 class="text-2xl font-bold mb-2 font-sci text-white" data-i18n="battle_searching">SCANNING...</h2>
                 <p class="text-gray-500 text-xs mb-8 font-mono" id="battle-status-text">CONNECTING TO SERVER</p>
-                <button onclick="leaveBattle()" class="btn-cyber-ghost px-8 py-2 text-xs text-red-400 border-red-500/50 hover:bg-red-900/20">CANCEL</button>
+                <button onclick="leaveBattle()" class="btn-cyber-ghost px-8 py-2 text-xs text-red-400 border-red-500/50 hover:bg-red-900/20 transition">CANCEL</button>
             </div>
 
             <div id="battle-arena" class="hidden h-full flex flex-col relative z-10">
@@ -364,14 +387,14 @@
                     <p id="battle-result-msg" class="text-gray-500 font-mono text-xs tracking-widest">CALCULATING REWARDS...</p>
                 </div>
                 <div class="flex gap-4 w-full max-w-xs">
-                    <button onclick="leaveBattle()" class="btn-cyber-ghost flex-1 py-3 text-xs">HOME</button>
-                    <button onclick="startBattleMatchmaking()" class="btn-cyber-primary flex-1 py-3 text-xs">REMATCH</button>
+                    <button onclick="leaveBattle()" class="btn-cyber-ghost flex-1 py-3 text-xs border border-white/10 hover:bg-white/5 transition">HOME</button>
+                    <button onclick="startBattleMatchmaking()" class="btn-cyber-primary flex-1 py-3 text-xs transition">REMATCH</button>
                 </div>
             </div>
         </div>
 
         <div id="page-rank" class="page-section hidden px-4">
-            <h2 class="text-xl font-bold mb-4 flex items-center gap-2 text-yellow-400">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2 text-yellow-400 mt-4">
                 <i class="fa-solid fa-trophy"></i> <span data-i18n="rank_title">LEADERBOARD</span>
             </h2>
             <div class="glass-panel rounded-xl overflow-hidden shadow-lg border-t border-yellow-500/30">
@@ -389,7 +412,7 @@
         </div>
 
         <div id="page-settings" class="page-section hidden px-4">
-            <h2 class="text-xl font-bold mb-4 flex items-center gap-2 text-green-400">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2 text-green-400 mt-4">
                 <i class="fa-solid fa-sliders"></i> <span data-i18n="settings_title">SETTINGS</span>
             </h2>
             
@@ -406,6 +429,11 @@
                         <label class="text-[10px] font-bold text-gray-400 mb-1 block uppercase" data-i18n="label_level">Level</label>
                         <select id="set-level" class="input-cyber w-full">
                             <option value="國小中年級" data-i18n="level_elem_mid">國小 (中年級)</option>
+                            <option value="國小高年級" data-i18n="level_elem_high">國小 (高年級)</option>
+                            <option value="國中一年級" data-i18n="level_jh_1">國中 (一年級)</option>
+                            <option value="國中二年級" data-i18n="level_jh_2">國中 (二年級)</option>
+                            <option value="國中三年級" data-i18n="level_jh_3">國中 (三年級)</option>
+                            <option value="高中職" data-i18n="level_sh">高中 / 高職</option>
                             <option value="大學以上" data-i18n="level_univ">大學 / 社會人士</option>
                         </select>
                     </div>
@@ -438,7 +466,7 @@
                         </select>
                     </div>
 
-                    <button onclick="saveProfile()" class="btn-cyber-primary w-full py-3 rounded-xl font-bold mt-2" data-i18n="btn_update_settings">UPDATE SYSTEM</button>
+                    <button onclick="saveProfile()" class="btn-cyber-primary w-full py-3 rounded-xl font-bold mt-2 hover:brightness-110 transition" data-i18n="btn_update_settings">UPDATE SYSTEM</button>
                 </div>
             </div>
 
@@ -455,12 +483,12 @@
         </div>
 
         <div id="page-admin" class="page-section hidden px-4">
-            <h2 class="text-xl font-bold text-red-500 mb-4 font-sci">ADMIN CONSOLE</h2>
+            <h2 class="text-xl font-bold text-red-500 mb-4 font-sci mt-4">ADMIN CONSOLE</h2>
             <div class="glass-panel p-4 rounded-xl border border-red-500/20 mb-4">
                  <button onclick="recalculateAllUserRanks()" class="btn-cyber-ghost w-full py-2 text-xs mb-2 text-yellow-400 border-yellow-500/30">RECALC RANKS</button>
                  <button onclick="triggerGlobalReload()" class="btn-cyber-ghost w-full py-2 text-xs text-red-400 border-red-500/30">FORCE RELOAD</button>
              </div>
-             <div class="glass-panel p-4 rounded-xl mb-6" onclick="toggleAdminForm()">
+             <div class="glass-panel p-4 rounded-xl mb-6 cursor-pointer hover:bg-white/5 transition" onclick="toggleAdminForm()">
                  <h3 class="font-bold text-white flex justify-between items-center text-sm">
                      <span id="admin-form-title">ADD PRODUCT</span>
                      <i id="admin-form-arrow" class="fa-solid fa-chevron-up"></i>
@@ -479,45 +507,64 @@
                      
                      <div id="admin-asset-selector" class="hidden text-xs text-gray-500">Asset Selector Active</div> 
                      <select id="admin-asset-select" onchange="selectAdminImage(this.value)" class="hidden"></select>
-                     <img id="admin-asset-preview" class="hidden w-10 h-10 mt-2">
+                     <img id="admin-asset-preview" class="hidden w-10 h-10 mt-2 object-cover rounded">
 
                      <div class="flex gap-2">
                          <button onclick="saveProduct()" id="admin-btn-save" class="btn-cyber-primary flex-1 py-2 text-xs">SAVE</button>
-                         <button onclick="deleteProduct()" id="admin-btn-del" class="hidden btn-cyber-ghost w-10 text-red-400"><i class="fa-solid fa-trash"></i></button>
+                         <button onclick="deleteProduct()" id="admin-btn-del" class="hidden btn-cyber-ghost w-10 text-red-400 border-red-500/30"><i class="fa-solid fa-trash"></i></button>
                      </div>
                  </div>
              </div>
-             <div id="admin-product-list" class="space-y-2"></div>
+             <div id="admin-product-list" class="space-y-2 pb-24"></div>
         </div>
 
     </main>
 
-    <nav id="bottom-nav" class="fixed bottom-6 left-4 right-4 z-50 hidden transition-all duration-300">
-        <div class="glass-capsule h-16 px-1 flex items-center justify-between shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-white/10 backdrop-blur-xl bg-slate-900/80 mx-auto max-w-md">
-            <div class="flex w-full justify-between px-2" id="nav-grid">
-                <button onclick="switchToPage('page-home')" class="nav-btn group relative w-12 h-12 flex items-center justify-center rounded-full transition-all" data-target="page-home">
-                    <i class="fa-solid fa-house text-lg text-gray-500 group-hover:text-cyan-400 transition-colors"></i>
-                    <span class="active-dot absolute -bottom-1 w-1 h-1 bg-cyan-400 rounded-full opacity-0 shadow-[0_0_8px_cyan]"></span>
+    <nav id="bottom-nav" class="fixed bottom-4 left-4 right-4 z-50 hidden transition-all duration-300">
+        <div class="glass-capsule h-18 px-2 flex items-center justify-between shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-white/10 backdrop-blur-xl bg-slate-900/90 mx-auto max-w-md">
+            
+            <div class="flex w-full justify-between items-center h-full" id="nav-grid">
+                
+                <button onclick="switchToPage('page-home')" class="nav-btn group flex-1 flex flex-col items-center justify-center h-full transition-all active-nav-btn" data-target="page-home">
+                    <div class="relative p-1">
+                        <i class="fa-solid fa-house text-xl text-gray-500 group-hover:text-cyan-400 transition-colors mb-0.5"></i>
+                        <span class="active-dot absolute top-0 right-0 w-1.5 h-1.5 bg-cyan-400 rounded-full opacity-0 shadow-[0_0_8px_cyan]"></span>
+                    </div>
+                    <span class="text-[10px] font-bold text-gray-500 group-hover:text-cyan-400 transition-colors font-sci tracking-wider" data-i18n="nav_home">HOME</span>
                 </button>
 
-                <button onclick="loadStoreItems(); switchToPage('page-store')" class="nav-btn group relative w-12 h-12 flex items-center justify-center rounded-full transition-all" data-target="page-store">
-                    <i class="fa-solid fa-store text-lg text-gray-500 group-hover:text-pink-400 transition-colors"></i>
-                    <span class="active-dot absolute -bottom-1 w-1 h-1 bg-pink-400 rounded-full opacity-0 shadow-[0_0_8px_magenta]"></span>
+                <button onclick="loadStoreItems(); switchToPage('page-store')" class="nav-btn group flex-1 flex flex-col items-center justify-center h-full transition-all" data-target="page-store">
+                    <div class="relative p-1">
+                        <i class="fa-solid fa-store text-xl text-gray-500 group-hover:text-pink-400 transition-colors mb-0.5"></i>
+                        <span class="active-dot absolute top-0 right-0 w-1.5 h-1.5 bg-pink-400 rounded-full opacity-0 shadow-[0_0_8px_magenta]"></span>
+                    </div>
+                    <span class="text-[10px] font-bold text-gray-500 group-hover:text-pink-400 transition-colors font-sci tracking-wider" data-i18n="nav_store">STORE</span>
                 </button>
                 
-                <button onclick="switchToPage('page-cards')" class="nav-btn group relative w-14 h-14 -mt-8 bg-gradient-to-b from-purple-600 to-indigo-900 border-4 border-slate-950 rounded-full flex items-center justify-center shadow-lg shadow-purple-500/40 hover:scale-110 transition-transform hover:shadow-purple-500/60" data-target="page-cards">
-                    <i class="fa-solid fa-dragon text-xl text-white"></i>
+                <button onclick="switchToPage('page-cards')" class="nav-btn group flex-1 flex flex-col items-center justify-center h-full transition-all" data-target="page-cards">
+                    <div class="relative p-1">
+                        <i class="fa-solid fa-dragon text-xl text-gray-500 group-hover:text-purple-400 transition-colors mb-0.5"></i>
+                        <span class="active-dot absolute top-0 right-0 w-1.5 h-1.5 bg-purple-400 rounded-full opacity-0 shadow-[0_0_8px_purple]"></span>
+                    </div>
+                    <span class="text-[10px] font-bold text-gray-500 group-hover:text-purple-400 transition-colors font-sci tracking-wider" data-i18n="tab_cards">CARDS</span>
                 </button>
 
-                <button onclick="loadLeaderboard(); switchToPage('page-rank')" class="nav-btn group relative w-12 h-12 flex items-center justify-center rounded-full transition-all" data-target="page-rank">
-                    <i class="fa-solid fa-chart-simple text-lg text-gray-500 group-hover:text-yellow-400 transition-colors"></i>
-                    <span class="active-dot absolute -bottom-1 w-1 h-1 bg-yellow-400 rounded-full opacity-0 shadow-[0_0_8px_yellow]"></span>
+                <button onclick="loadLeaderboard(); switchToPage('page-rank')" class="nav-btn group flex-1 flex flex-col items-center justify-center h-full transition-all" data-target="page-rank">
+                    <div class="relative p-1">
+                        <i class="fa-solid fa-chart-simple text-xl text-gray-500 group-hover:text-yellow-400 transition-colors mb-0.5"></i>
+                        <span class="active-dot absolute top-0 right-0 w-1.5 h-1.5 bg-yellow-400 rounded-full opacity-0 shadow-[0_0_8px_yellow]"></span>
+                    </div>
+                    <span class="text-[10px] font-bold text-gray-500 group-hover:text-yellow-400 transition-colors font-sci tracking-wider" data-i18n="nav_rank">RANK</span>
                 </button>
 
-                <button onclick="switchToPage('page-settings')" class="nav-btn group relative w-12 h-12 flex items-center justify-center rounded-full transition-all" data-target="page-settings">
-                    <i class="fa-solid fa-gear text-lg text-gray-500 group-hover:text-green-400 transition-colors"></i>
-                    <span class="active-dot absolute -bottom-1 w-1 h-1 bg-green-400 rounded-full opacity-0 shadow-[0_0_8px_lime]"></span>
+                <button onclick="switchToPage('page-settings')" class="nav-btn group flex-1 flex flex-col items-center justify-center h-full transition-all" data-target="page-settings">
+                    <div class="relative p-1">
+                        <i class="fa-solid fa-gear text-xl text-gray-500 group-hover:text-green-400 transition-colors mb-0.5"></i>
+                        <span class="active-dot absolute top-0 right-0 w-1.5 h-1.5 bg-green-400 rounded-full opacity-0 shadow-[0_0_8px_lime]"></span>
+                    </div>
+                    <span class="text-[10px] font-bold text-gray-500 group-hover:text-green-400 transition-colors font-sci tracking-wider" data-i18n="nav_settings">SETTING</span>
                 </button>
+
             </div>
         </div>
     </nav>
@@ -547,7 +594,7 @@
                 <i class="fa-solid fa-terminal text-cyan-400"></i>
                 <span id="custom-alert-title">SYSTEM MSG</span>
             </h3>
-            <p id="custom-alert-msg" class="text-gray-300 mb-6 text-sm font-mono">...</p>
+            <p id="custom-alert-msg" class="text-gray-300 mb-6 text-sm font-mono leading-relaxed">...</p>
             <button onclick="closeCustomAlert()" class="btn-cyber-primary w-full py-3 rounded-lg font-bold">OK</button>
         </div>
     </div>
@@ -558,9 +605,9 @@
                 <i class="fa-solid fa-triangle-exclamation text-yellow-400"></i>
                 <span id="custom-confirm-title">CONFIRM</span>
             </h3>
-            <p id="custom-confirm-msg" class="text-gray-300 mb-6 text-sm font-mono">...</p>
+            <p id="custom-confirm-msg" class="text-gray-300 mb-6 text-sm font-mono leading-relaxed">...</p>
             <div class="flex gap-3">
-                <button onclick="resolveCustomConfirm(false)" class="flex-1 btn-cyber-ghost py-2 rounded-lg text-xs">CANCEL</button>
+                <button onclick="resolveCustomConfirm(false)" class="flex-1 btn-cyber-ghost py-2 rounded-lg text-xs hover:bg-white/10">CANCEL</button>
                 <button onclick="resolveCustomConfirm(true)" class="flex-1 btn-cyber-primary py-2 rounded-lg text-xs">PROCEED</button>
             </div>
         </div>
@@ -570,23 +617,38 @@
         <div class="glass-panel rounded-2xl w-full max-w-md max-h-[80vh] flex flex-col border border-white/10">
             <div class="p-4 border-b border-white/10 flex justify-between items-center">
                 <h3 class="text-white font-bold font-sci">SELECT UNIT</h3>
-                <button onclick="document.getElementById('card-selector-modal').classList.add('hidden')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+                <button onclick="document.getElementById('card-selector-modal').classList.add('hidden')" class="text-gray-400 hover:text-white transition"><i class="fa-solid fa-xmark text-xl"></i></button>
             </div>
             <div id="modal-card-list" class="p-4 overflow-y-auto grid grid-cols-3 gap-2"></div>
         </div>
     </div>
 
-    <div id="admin-debug-console" class="hidden fixed bottom-0 left-0 w-full h-48 bg-black/95 text-green-400 font-mono text-[10px] z-[9999] border-t border-green-900 flex flex-col transition-transform duration-300 translate-y-0">
-        <div class="flex justify-between items-center px-2 py-1 bg-gray-900 border-b border-gray-800">
-            <span>SYSTEM_LOG</span>
+    <div id="admin-debug-console" class="hidden fixed bottom-0 left-0 w-full h-64 bg-black/95 text-green-400 font-mono text-xs z-[9999] border-t-2 border-red-500 shadow-[0_-5px_20px_rgba(0,0,0,0.8)] flex flex-col transition-transform duration-300 translate-y-0">
+        <div class="flex justify-between items-center px-4 py-2 bg-gray-900 border-b border-gray-700">
+            <div class="flex items-center gap-2">
+                <span class="text-red-500 font-bold animate-pulse">🐞 SYSTEM DEBUGGER</span>
+                <span id="debug-count" class="bg-red-600 text-white px-2 py-0.5 rounded-full text-[10px]">0</span>
+            </div>
             <div class="flex gap-2">
-                <span id="debug-count" class="text-white">0</span>
-                <button onclick="document.getElementById('admin-debug-console').classList.add('translate-y-full')">HIDE</button>
+                <button onclick="document.getElementById('debug-logs').innerHTML=''; document.getElementById('debug-count').innerText='0'" class="px-3 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded text-[10px] transition">
+                    CLEAR
+                </button>
+                <button onclick="document.getElementById('admin-debug-console').classList.add('translate-y-full')" class="px-3 py-1 bg-red-900 hover:bg-red-800 text-white rounded text-[10px] transition">
+                    HIDE
+                </button>
             </div>
         </div>
-        <div id="debug-logs" class="flex-1 overflow-y-auto p-2 space-y-1"></div>
+        <div id="debug-logs" class="flex-1 overflow-y-auto p-4 space-y-2 font-mono scroll-smooth">
+            <div class="text-gray-500 italic">Waiting for logs...</div>
+        </div>
     </div>
+
+    <button id="btn-show-debug" class="hidden fixed bottom-24 right-4 z-[9998] bg-red-600 text-white w-8 h-8 rounded-full shadow-lg flex items-center justify-center opacity-50 hover:opacity-100 transition" onclick="document.getElementById('admin-debug-console').classList.remove('translate-y-full')">
+        <i class="fa-solid fa-bug text-xs"></i>
+    </button>
 
     <script type="module" src="main.js"></script>
 </body>
 </html>
+
+```
