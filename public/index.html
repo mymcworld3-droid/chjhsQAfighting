@@ -1,10 +1,3 @@
-這是一份整合了**賽博琉璃風格 (Cyber-Glass)**、**平面化導航列 (含文字標籤)** 以及 **所有功能修復** 的完整 `public/index.html` 檔案。
-
-請直接將這份代碼 **完全覆蓋** 你原本的 `index.html`。
-
-### 📄 完整檔案：`public/index.html`
-
-```html
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -98,70 +91,85 @@
             </div>
         </div>
 
-        <div id="page-home" class="page-section hidden px-4">
-            <div class="glass-panel mt-4 rounded-3xl p-6 relative overflow-hidden group border-t border-cyan-500/30">
-                <div class="absolute -top-10 -right-10 w-40 h-40 bg-cyan-500/20 rounded-full blur-[60px] pointer-events-none"></div>
+        <div id="page-home" class="page-section hidden px-4 relative">
+    
+            <div class="pb-4"> <div class="glass-panel mt-4 rounded-3xl p-6 relative overflow-hidden group border-t border-cyan-500/30">
+                    <div class="absolute -top-10 -right-10 w-40 h-40 bg-cyan-500/20 rounded-full blur-[60px] pointer-events-none"></div>
+            
+                    <div class="relative z-10 flex flex-col items-center text-center">
+                        <div class="text-[10px] font-bold text-cyan-300 tracking-[0.3em] mb-2 uppercase opacity-80">Current Rank</div>
                 
-                <div class="relative z-10 flex flex-col items-center text-center">
-                    <div class="text-[10px] font-bold text-cyan-300 tracking-[0.3em] mb-2 uppercase opacity-80">Current Rank</div>
-                    
-                    <h2 class="text-4xl md:text-5xl font-sci font-black text-white drop-shadow-[0_0_15px_rgba(34,211,238,0.6)] mb-5" id="display-rank">
-                        LOADING
-                    </h2>
+                        <h2 class="text-4xl md:text-5xl font-sci font-black text-white drop-shadow-[0_0_15px_rgba(34,211,238,0.6)] mb-5" id="display-rank">
+                            LOADING
+                        </h2>
 
-                    <div class="w-full max-w-[260px]">
-                        <div class="flex justify-between text-[10px] text-cyan-200 mb-1.5 font-sci tracking-wider">
-                            <span>NEXT RANK</span>
-                            <span><span id="display-stars" class="text-yellow-400 font-bold text-sm">0</span> <span class="text-xs opacity-50">/ 10</span></span>
-                        </div>
-                        <div class="h-2.5 bg-slate-900/60 rounded-full overflow-hidden border border-white/5 p-[1px]">
-                            <div id="progress-bar" class="h-full rounded-full bg-gradient-to-r from-cyan-400 to-blue-600 shadow-[0_0_10px_cyan] relative transition-all duration-1000" style="width: 0%"></div>
+                        <div class="w-full max-w-[260px]">
+                            <div class="flex justify-between text-[10px] text-cyan-200 mb-1.5 font-sci tracking-wider">
+                                <span>NEXT RANK</span>
+                                <span><span id="display-stars" class="text-yellow-400 font-bold text-sm">0</span> <span class="text-xs opacity-50">/ 10</span></span>
+                            </div>
+                            <div class="h-2.5 bg-slate-900/60 rounded-full overflow-hidden border border-white/5 p-[1px]">
+                                <div id="progress-bar" class="h-full rounded-full bg-gradient-to-r from-cyan-400 to-blue-600 shadow-[0_0_10px_cyan] relative transition-all duration-1000" style="width: 0%"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                <div class="relative mt-6 mb-6 flex justify-center perspective-[1000px]">
+                    <div id="home-best-card-container" class="transform transition-transform duration-500 hover:rotate-y-6 hover:scale-105 cursor-pointer z-10" onclick="switchToPage('page-cards')">
+                            <div id="home-best-card-display">
+                                <div class="w-32 h-48 bg-slate-800/50 rounded-xl border border-white/10 flex items-center justify-center text-xs text-gray-500">No Card</div>
+                            </div>
+                    </div>
+                    <div class="absolute -bottom-6 left-1/2 -translate-x-1/2 w-40 h-10 bg-blue-500/20 blur-xl rounded-[100%] pointer-events-none"></div>
+                    <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-sci text-blue-400 tracking-[0.2em] opacity-70">ACE GUARDIAN</div>
+                </div>
+    
+                <div class="grid grid-cols-2 gap-3 mb-4">
+                    <div class="stat-card group">
+                        <div class="stat-icon text-yellow-500"><i class="fa-solid fa-coins"></i></div>
+                        <span class="stat-label">TOTAL SCORE</span>
+                        <span id="display-score" class="stat-value text-yellow-400">0</span>
+                    </div>
+                    <div class="stat-card group">
+                        <div class="stat-icon text-blue-500"><i class="fa-solid fa-bullseye"></i></div>
+                        <span class="stat-label">ACCURACY</span>
+                        <span id="display-accuracy" class="stat-value text-blue-400">0%</span>
+                    </div>
+                    <div class="stat-card group">
+                        <div class="stat-icon text-orange-500"><i class="fa-solid fa-fire"></i></div>
+                        <span class="stat-label">STREAK</span>
+                        <span id="display-streak" class="stat-value text-orange-400">0</span>
+                    </div>
+                    <div class="stat-card group">
+                        <div class="stat-icon text-purple-500"><i class="fa-solid fa-crown"></i></div>
+                        <span class="stat-label">BEST RECORD</span>
+                        <span id="display-best-streak" class="stat-value text-purple-400">0</span>
+                    </div>
+                </div>
+
+                <div class="h-36 w-full"></div>
             </div>
 
-            <div class="relative mt-8 mb-8 flex justify-center perspective-[1000px]">
-                <div id="home-best-card-container" class="transform transition-transform duration-500 hover:rotate-y-6 hover:scale-105 cursor-pointer" onclick="switchToPage('page-cards')">
-                     <div id="home-best-card-display">
-                         <div class="w-32 h-48 bg-slate-800/50 rounded-xl border border-white/10 flex items-center justify-center text-xs text-gray-500">No Card</div>
-                     </div>
-                </div>
-                <div class="absolute -bottom-6 left-1/2 -translate-x-1/2 w-40 h-10 bg-blue-500/20 blur-xl rounded-[100%] pointer-events-none"></div>
-                <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-sci text-blue-400 tracking-[0.2em] opacity-70">ACE GUARDIAN</div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-3 mb-8">
-                <div class="stat-card group">
-                    <div class="stat-icon text-yellow-500"><i class="fa-solid fa-coins"></i></div>
-                    <span class="stat-label">TOTAL SCORE</span>
-                    <span id="display-score" class="stat-value text-yellow-400">0</span>
-                </div>
-                <div class="stat-card group">
-                    <div class="stat-icon text-blue-500"><i class="fa-solid fa-bullseye"></i></div>
-                    <span class="stat-label">ACCURACY</span>
-                    <span id="display-accuracy" class="stat-value text-blue-400">0%</span>
-                </div>
-                <div class="stat-card group">
-                    <div class="stat-icon text-orange-500"><i class="fa-solid fa-fire"></i></div>
-                    <span class="stat-label">STREAK</span>
-                    <span id="display-streak" class="stat-value text-orange-400">0</span>
-                </div>
-                <div class="stat-card group">
-                    <div class="stat-icon text-purple-500"><i class="fa-solid fa-crown"></i></div>
-                    <span class="stat-label">BEST RECORD</span>
-                    <span id="display-best-streak" class="stat-value text-purple-400">0</span>
-                </div>
-            </div>
-
-            <div class="flex gap-4 pb-4">
-                <button id="btn-home-start" onclick="startQuizFlow()" class="btn-cyber-primary flex-1 py-4 rounded-xl flex flex-col items-center justify-center gap-1 shadow-lg shadow-blue-900/40 group border border-blue-400/30">
-                    <i class="fa-solid fa-gamepad text-2xl mb-1 group-hover:scale-110 transition-transform text-white"></i>
-                    <span class="font-sci text-sm font-bold tracking-widest text-white" data-i18n="btn_solo">SOLO</span>
+            <div class="fixed bottom-24 left-4 right-4 flex gap-3 z-30">
+                <button id="btn-home-start" onclick="startQuizFlow()" class="btn-cyber-primary flex-1 py-3 rounded-xl flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(59,130,246,0.3)] border border-blue-400/40 group bg-slate-900/90 backdrop-blur-md hover:translate-y-[-2px] transition-all">
+                    <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center group-hover:bg-blue-500/40 transition border border-blue-500/30">
+                        <i class="fa-solid fa-gamepad text-blue-400 text-lg group-hover:scale-110 transition-transform"></i>
+                    </div>
+                    <div class="flex flex-col items-start">
+                        <span class="font-sci text-sm font-bold text-white tracking-widest" data-i18n="btn_solo">SOLO</span>
+                        <span class="text-[9px] text-blue-300 font-mono">Lv.UP CHALLENGE</span>
+                    </div>
                 </button>
-                <button onclick="startBattleMatchmaking()" class="btn-cyber-accent flex-1 py-4 rounded-xl flex flex-col items-center justify-center gap-1 shadow-lg shadow-red-900/40 group border border-red-400/30 bg-gradient-to-br from-red-600 to-red-800">
-                    <i class="fa-solid fa-khanda text-2xl mb-1 group-hover:scale-110 transition-transform text-white"></i>
-                    <span class="font-sci text-sm font-bold tracking-widest text-white" data-i18n="btn_pvp">BATTLE</span>
+
+                <button onclick="startBattleMatchmaking()" class="btn-cyber-accent flex-1 py-3 rounded-xl flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(239,68,68,0.3)] border border-red-400/40 group bg-slate-900/90 backdrop-blur-md hover:translate-y-[-2px] transition-all bg-gradient-to-r from-slate-900/90 to-red-950/50">
+                    <div class="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center group-hover:bg-red-500/40 transition border border-red-500/30">
+                        <i class="fa-solid fa-khanda text-red-400 text-lg group-hover:scale-110 transition-transform"></i>
+                    </div>
+                    <div class="flex flex-col items-start">
+                            <span class="font-sci text-sm font-bold text-white tracking-widest" data-i18n="btn_pvp">BATTLE</span>
+                            <span class="text-[9px] text-red-300 font-mono">ONLINE PVP</span>
+                    </div>
                 </button>
             </div>
         </div>
@@ -650,5 +658,3 @@
     <script type="module" src="main.js"></script>
 </body>
 </html>
-
-```
