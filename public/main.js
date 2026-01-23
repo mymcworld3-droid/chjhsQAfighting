@@ -3567,6 +3567,11 @@ window.filterStore = (type, btnElement) => {
 };
 
 function checkAdminRole(isAdmin) {
+    // 🔥 啟動除錯器 (如果是管理員)
+    if (isAdmin) {
+        if (window.setupAdminDebug) window.setupAdminDebug();
+    }
+
     const navGrid = document.getElementById('nav-grid');
     if (isAdmin && !document.getElementById('btn-admin-nav')) {
         navGrid.classList.remove('grid-cols-5'); 
