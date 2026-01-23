@@ -2,65 +2,68 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title data-i18n="app_title">AI 每日升階答題戰</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="font-sans h-[100dvh] flex flex-col overflow-hidden">
+<body class="font-sans h-[100dvh] flex flex-col overflow-hidden text-slate-100 selection:bg-cyan-500 selection:text-white">
 
-    <header class="p-4 bg-slate-800/90 backdrop-blur-md shadow-lg flex justify-between items-center z-10 border-b border-slate-700/50 relative">
-        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
+    <div class="fixed inset-0 z-[-1] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+    <div class="fixed inset-0 z-[-2] bg-gradient-to-b from-slate-950 via-[#0f172a] to-slate-950"></div>
+
+    <header class="fixed top-0 left-0 w-full z-40 px-4 py-3 flex justify-between items-center glass-strip border-b border-white/5">
+        <div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-50"></div>
         
-        <h1 class="text-xl font-bold text-yellow-400 flex items-center gap-2">
-            <i class="fa-solid fa-dragon animate-pulse"></i> 
-            <span class="bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-orange-500" data-i18n="app_name">升階答題戰</span>
+        <h1 class="text-lg font-black italic tracking-wider flex items-center gap-2 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+            <i class="fa-solid fa-dragon text-cyan-400 animate-pulse"></i> 
+            <span class="font-sci" data-i18n="app_name">RANK UP</span>
         </h1>
         
-        <div class="flex items-center gap-2">
-            <button onclick="toggleLanguage()" class="text-xs bg-slate-700/50 hover:bg-slate-600 text-white px-2 py-1 rounded border border-slate-600 transition">
-                <i class="fa-solid fa-globe"></i> <span id="lang-display">EN</span>
+        <div class="flex items-center gap-3">
+            <button onclick="toggleLanguage()" class="btn-icon-sm">
+                <span id="lang-display" class="font-sci text-[10px] font-bold">EN</span>
             </button>
-            <div id="user-info" class="text-xs text-gray-300 bg-slate-700/50 px-3 py-1 rounded-full backdrop-blur-sm border border-slate-600/50 hover:border-blue-500/50 transition-all" data-i18n="not_logged_in">
-                未登入
+            <div id="user-info" class="glass-capsule px-3 py-1 text-xs font-bold text-cyan-300 flex items-center gap-2" data-i18n="not_logged_in">
+                GUEST
             </div>
         </div>
     </header>
 
-    <main class="flex-1 overflow-y-auto p-4 relative scroll-smooth pb-16">
+    <main class="flex-1 overflow-y-auto relative scroll-smooth pb-28 pt-16 custom-scrollbar">
         
-        <div id="login-screen" class="flex flex-col items-center justify-center h-full">
-            <div class="text-center mb-8">
-                <i class="fa-solid fa-crown text-6xl text-yellow-500 mb-4 animate-bounce" style="filter: drop-shadow(0 0 20px rgba(250, 204, 21, 0.5));"></i>
-                <div class="flex gap-2 justify-center mb-4">
-                    <i class="fa-solid fa-star text-2xl text-yellow-400 animate-pulse" style="animation-delay: 0s;"></i>
-                    <i class="fa-solid fa-star text-2xl text-yellow-400 animate-pulse" style="animation-delay: 0.2s;"></i>
-                    <i class="fa-solid fa-star text-2xl text-yellow-400 animate-pulse" style="animation-delay: 0.4s;"></i>
+        <div id="login-screen" class="flex flex-col items-center justify-center min-h-[80vh] px-6 relative">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-cyan-500/20 rounded-full blur-[80px]"></div>
+
+            <div class="relative z-10 text-center">
+                <div class="mb-8 relative inline-block">
+                    <i class="fa-solid fa-crown text-7xl text-yellow-400 drop-shadow-[0_0_15px_rgba(250,204,21,0.6)] animate-bounce-slow"></i>
+                    <div class="absolute -bottom-2 -right-2 text-2xl animate-pulse">✨</div>
                 </div>
+                
+                <h2 class="text-4xl font-black mb-2 font-sci tracking-widest text-white" data-i18n="welcome_title">WELCOME</h2>
+                <p class="text-gray-400 mb-10 text-sm tracking-wide" data-i18n="welcome_desc">AI QUATRO x PvP BATTLE x RANK SYSTEM</p>
+                
+                <button onclick="googleLogin()" class="btn-cyber-primary w-full max-w-xs py-4 rounded-xl font-bold flex items-center justify-center gap-3 group">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5 h-5 bg-white rounded-full p-0.5">
+                    <span data-i18n="btn_login_google">LOGIN SYSTEM</span>
+                    <i class="fa-solid fa-arrow-right opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0"></i>
+                </button>
             </div>
-            <h2 class="text-4xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600" data-i18n="welcome_title">歡迎挑戰</h2>
-            <p class="text-gray-400 mb-8 text-sm" data-i18n="welcome_desc">AI 出題 x 真人對戰 x 段位系統</p>
-            <button onclick="googleLogin()" class="bg-white text-gray-800 hover:bg-gray-100 px-8 py-3 rounded-full font-bold shadow-lg transition flex items-center gap-2 transform hover:scale-105 hover:shadow-2xl">
-                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-6 h-6">
-                <span data-i18n="btn_login_google">使用 Google 登入</span>
-            </button>
         </div>
 
-        <div id="page-onboarding" class="page-section hidden absolute top-0 left-0 w-full h-full bg-slate-900 z-50 p-6 overflow-y-auto">
-            <div class="max-w-md mx-auto mt-10">
-                <div class="text-center mb-6">
-                    <i class="fa-solid fa-wand-magic-sparkles text-5xl text-blue-400 mb-3" style="filter: drop-shadow(0 0 15px rgba(59, 130, 246, 0.5));"></i>
-                </div>
-                <h2 class="text-2xl font-bold text-blue-400 mb-2 text-center" data-i18n="ob_title">👋 嗨！初次見面</h2>
-                <p class="text-gray-400 mb-6 text-center" data-i18n="ob_desc">設定資料讓題目更適合你：</p>
-                <div class="space-y-6">
-                    <div>
-                        <label class="block mb-2 text-sm font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-graduation-cap text-blue-400"></i> <span data-i18n="ob_label_level">你是幾年級學生？</span>
-                        </label>
-                        <select id="ob-level" class="w-full bg-slate-800 border border-slate-600 text-white rounded-lg p-3 outline-none focus:border-blue-500 transition-all">
+        <div id="page-onboarding" class="page-section hidden p-6">
+            <div class="glass-panel p-8 rounded-3xl max-w-md mx-auto mt-10 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-purple-500"></div>
+                <h2 class="text-2xl font-bold text-white mb-6 text-center" data-i18n="ob_title">INITIALIZE</h2>
+                
+                <div class="space-y-5">
+                    <div class="form-group">
+                        <label class="text-xs text-cyan-400 font-bold mb-1 block" data-i18n="ob_label_level">LEVEL</label>
+                        <select id="ob-level" class="input-cyber w-full">
                             <option value="國小中年級" data-i18n="level_elem_mid">國小 (中年級)</option>
                             <option value="國小高年級" data-i18n="level_elem_high">國小 (高年級)</option>
                             <option value="國中一年級" data-i18n="level_jh_1">國中 (一年級)</option>
@@ -70,706 +73,520 @@
                             <option value="大學以上" data-i18n="level_univ">大學 / 社會人士</option>
                         </select>
                     </div>
-                    <div>
-                        <label class="block mb-2 text-sm font-bold text-green-400 flex items-center gap-2">
-                            <i class="fa-solid fa-trophy"></i> <span data-i18n="ob_label_strong">擅長科目</span>
-                        </label>
-                        <input type="text" id="ob-strong" class="w-full bg-slate-800 border border-slate-600 text-white rounded-lg p-3 outline-none focus:border-green-500 transition-all" data-i18n-placeholder="ob_placeholder_strong" placeholder="例如：歷史, 英文">
+                    <div class="form-group">
+                        <label class="text-xs text-green-400 font-bold mb-1 block" data-i18n="ob_label_strong">STRONG</label>
+                        <input type="text" id="ob-strong" class="input-cyber w-full" data-i18n-placeholder="ob_placeholder_strong">
                     </div>
-                    <div>
-                        <label class="block mb-2 text-sm font-bold text-red-400 flex items-center gap-2">
-                            <i class="fa-solid fa-fire"></i> <span data-i18n="ob_label_weak">弱項科目</span>
-                        </label>
-                        <input type="text" id="ob-weak" class="w-full bg-slate-800 border border-slate-600 text-white rounded-lg p-3 outline-none focus:border-red-500 transition-all" data-i18n-placeholder="ob_placeholder_weak" placeholder="例如：數學, 理化">
+                    <div class="form-group">
+                        <label class="text-xs text-red-400 font-bold mb-1 block" data-i18n="ob_label_weak">WEAK</label>
+                        <input type="text" id="ob-weak" class="input-cyber w-full" data-i18n-placeholder="ob_placeholder_weak">
                     </div>
-                    <button onclick="submitOnboarding()" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold py-4 rounded-xl shadow-lg transform active:scale-95 transition flex items-center justify-center gap-2">
-                        <span data-i18n="btn_start_journey">開始旅程</span> <i class="fa-solid fa-rocket"></i>
-                    </button>
+                    <button onclick="submitOnboarding()" class="btn-cyber-accent w-full py-3 rounded-xl font-bold mt-4" data-i18n="btn_start_journey">START</button>
                 </div>
             </div>
         </div>
 
-        <div id="page-home" class="page-section hidden">
-            <div class="bg-gradient-to-br from-slate-800 to-slate-900 p-8 rounded-2xl shadow-xl text-center border border-slate-700 relative overflow-hidden">
-                <i class="fa-solid fa-trophy absolute -bottom-4 -right-4 text-9xl text-white opacity-5 transform rotate-12"></i>
+        <div id="page-home" class="page-section hidden px-4">
+            <div class="glass-panel mt-4 rounded-3xl p-6 relative overflow-hidden group border-t border-cyan-500/30">
+                <div class="absolute -top-10 -right-10 w-40 h-40 bg-cyan-500/20 rounded-full blur-[60px] pointer-events-none"></div>
                 
-                <div class="text-gray-400 text-xs uppercase tracking-widest mb-2 flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-crown text-yellow-500"></i>
-                    Current Rank
-                </div>
-                
-                <h2 class="text-5xl font-black mb-2 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-400 to-red-500 animate-pulse" id="display-rank">...</h2>
-                
-                <div class="flex justify-center items-center gap-2 mt-6 text-gray-300 bg-slate-800/50 inline-block px-4 py-1 rounded-full backdrop-blur-sm">
-                    <i class="fa-solid fa-star text-yellow-400 animate-pulse"></i>
-                    <span><span data-i18n="label_net_progress">淨勝</span>: <span id="display-stars" class="font-bold text-white text-lg">0</span> / 10</span>
-                </div>
-                
-                <div class="w-full bg-slate-950 rounded-full h-3 mt-6 overflow-hidden border border-slate-700 relative">
-                    <div id="progress-bar" class="bg-gradient-to-r from-blue-500 to-purple-600 h-3 rounded-full transition-all duration-1000 ease-out relative" style="width: 0%">
-                        <div class="absolute inset-0 bg-white/20 animate-pulse"></div>
+                <div class="relative z-10 flex flex-col items-center text-center">
+                    <div class="text-[10px] font-bold text-cyan-300 tracking-[0.3em] mb-2 uppercase opacity-80">Current Rank</div>
+                    
+                    <h2 class="text-4xl md:text-5xl font-sci font-black text-white drop-shadow-[0_0_15px_rgba(34,211,238,0.6)] mb-5" id="display-rank">
+                        LOADING
+                    </h2>
+
+                    <div class="w-full max-w-[260px]">
+                        <div class="flex justify-between text-[10px] text-cyan-200 mb-1.5 font-sci tracking-wider">
+                            <span>NEXT RANK</span>
+                            <span><span id="display-stars" class="text-yellow-400 font-bold text-sm">0</span> <span class="text-xs opacity-50">/ 10</span></span>
+                        </div>
+                        <div class="h-2.5 bg-slate-900/60 rounded-full overflow-hidden border border-white/5 p-[1px]">
+                            <div id="progress-bar" class="h-full rounded-full bg-gradient-to-r from-cyan-400 to-blue-600 shadow-[0_0_10px_cyan] relative transition-all duration-1000" style="width: 0%"></div>
+                        </div>
                     </div>
                 </div>
-                
-                <div class="flex gap-3 mt-8">
-                    <button id="btn-home-start" onclick="startQuizFlow()" class="flex-1 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 py-4 rounded-xl text-lg font-bold shadow-lg active:scale-95 transition flex items-center justify-center gap-2 group">
-                        <i class="fa-solid fa-play group-hover:animate-pulse"></i> <span data-i18n="btn_solo">單人挑戰</span>
-                    </button>
-                    <button onclick="startBattleMatchmaking()" class="flex-1 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 py-4 rounded-xl text-lg font-bold shadow-lg active:scale-95 transition flex items-center justify-center gap-2 border border-red-400/30 group">
-                        <i class="fa-solid fa-khanda group-hover:animate-bounce"></i> <span data-i18n="btn_pvp">雙人對戰</span>
-                    </button>
+            </div>
+
+            <div class="relative mt-8 mb-8 flex justify-center perspective-container">
+                <div id="home-best-card-container" class="transform transition-transform duration-500 hover:rotate-y-6 hover:scale-105 cursor-pointer" onclick="switchToPage('page-cards')">
+                     <div id="home-best-card-display">
+                         <div class="w-32 h-48 bg-slate-800/50 rounded-xl border border-white/10 flex items-center justify-center text-xs text-gray-500">No Card</div>
+                     </div>
+                </div>
+                <div class="absolute -bottom-6 left-1/2 -translate-x-1/2 w-40 h-10 bg-blue-500/20 blur-xl rounded-[100%] pointer-events-none"></div>
+                <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-sci text-blue-400 tracking-[0.2em] opacity-70">ACE GUARDIAN</div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 mb-8">
+                <div class="stat-card group">
+                    <div class="stat-icon text-yellow-500"><i class="fa-solid fa-coins"></i></div>
+                    <span class="stat-label">TOTAL SCORE</span>
+                    <span id="display-score" class="stat-value text-yellow-400">0</span>
+                </div>
+                <div class="stat-card group">
+                    <div class="stat-icon text-blue-500"><i class="fa-solid fa-bullseye"></i></div>
+                    <span class="stat-label">ACCURACY</span>
+                    <span id="display-accuracy" class="stat-value text-blue-400">0%</span>
+                </div>
+                <div class="stat-card group">
+                    <div class="stat-icon text-orange-500"><i class="fa-solid fa-fire"></i></div>
+                    <span class="stat-label">STREAK</span>
+                    <span id="display-streak" class="stat-value text-orange-400">0</span>
+                </div>
+                <div class="stat-card group">
+                    <div class="stat-icon text-purple-500"><i class="fa-solid fa-crown"></i></div>
+                    <span class="stat-label">BEST RECORD</span>
+                    <span id="display-best-streak" class="stat-value text-purple-400">0</span>
                 </div>
             </div>
-            <div id="home-best-card-container" class="mt-6 flex flex-col items-center justify-center">
-                <div class="text-xs text-yellow-400 font-bold mb-2 uppercase tracking-widest">
-                    <i class="fa-solid fa-crown"></i> MVP Card
-                </div>
-                <div id="home-best-card-display" class="transform hover:scale-105 transition-transform duration-300">
-                    <div class="text-gray-500 text-xs">Loading...</div>
-                </div>
-            </div>
-            <div class="grid grid-cols-2 gap-3 mt-4">
-                <div class="bg-slate-800/50 backdrop-blur-sm p-4 rounded-xl border border-slate-700 flex flex-col items-center hover:border-yellow-500/50 transition-all">
-                    <div class="text-xs text-gray-400 mb-1"><i class="fa-solid fa-coins text-yellow-500"></i> <span data-i18n="stat_score">總積分</span></div>
-                    <div class="text-2xl font-bold text-white" id="display-score">0</div>
-                </div>
-                <div class="bg-slate-800/50 backdrop-blur-sm p-4 rounded-xl border border-slate-700 flex flex-col items-center hover:border-blue-500/50 transition-all">
-                    <div class="text-xs text-gray-400 mb-1"><i class="fa-solid fa-bullseye text-blue-400"></i> <span data-i18n="stat_accuracy">正確率</span></div>
-                    <div class="text-2xl font-bold text-white" id="display-accuracy">0%</div>
-                </div>
-                <div class="bg-slate-800/50 backdrop-blur-sm p-4 rounded-xl border border-slate-700 flex flex-col items-center hover:border-orange-500/50 transition-all">
-                    <div class="text-xs text-gray-400 mb-1"><i class="fa-solid fa-fire text-orange-500"></i> <span data-i18n="stat_streak">當前連對</span></div>
-                    <div class="text-2xl font-bold text-orange-400" id="display-streak">0</div>
-                </div>
-                <div class="bg-slate-800/50 backdrop-blur-sm p-4 rounded-xl border border-slate-700 flex flex-col items-center hover:border-purple-500/50 transition-all">
-                    <div class="text-xs text-gray-400 mb-1"><i class="fa-solid fa-crown text-purple-500"></i> <span data-i18n="stat_best_streak">最佳連對</span></div>
-                    <div class="text-2xl font-bold text-purple-400" id="display-best-streak">0</div>
-                </div>
+
+            <div class="flex gap-4 pb-4">
+                <button id="btn-home-start" onclick="startQuizFlow()" class="btn-action-lg flex-1 bg-gradient-to-br from-blue-600 to-blue-800 shadow-blue-900/40 group">
+                    <i class="fa-solid fa-gamepad text-2xl mb-1 group-hover:scale-110 transition-transform"></i>
+                    <span class="font-sci text-sm font-bold tracking-widest" data-i18n="btn_solo">SOLO</span>
+                </button>
+                <button onclick="startBattleMatchmaking()" class="btn-action-lg flex-1 bg-gradient-to-br from-red-600 to-red-800 shadow-red-900/40 group">
+                    <i class="fa-solid fa-khanda text-2xl mb-1 group-hover:scale-110 transition-transform"></i>
+                    <span class="font-sci text-sm font-bold tracking-widest" data-i18n="btn_pvp">BATTLE</span>
+                </button>
             </div>
         </div>
 
-        <div id="page-quiz" class="page-section hidden pb-16">
+        <div id="page-quiz" class="page-section hidden px-4">
             <div id="quiz-loading" class="text-center mt-32 hidden">
-                <div class="loader"></div>
-                <h3 class="text-xl font-bold mt-4 text-blue-300" data-i18n="loading_title">雲端大腦運算中</h3>
-                <p class="text-xs text-gray-500 mt-2" id="loading-text" data-i18n="loading_text">AI 正在趕工出題中...</p>
+                <div class="cyber-loader mx-auto"></div>
+                <h3 class="text-xl font-bold mt-6 text-cyan-400 animate-pulse font-sci" data-i18n="loading_title">SYSTEM CALCULATING</h3>
+                <p class="text-xs text-gray-400 mt-2" id="loading-text" data-i18n="loading_text">Generating Question...</p>
             </div>
 
-            <div id="quiz-container" class="hidden">
-                <div class="bg-slate-800/90 backdrop-blur-sm p-6 rounded-xl mb-6 border-t-4 border-blue-500 shadow-lg relative">
-                    <span class="absolute top-4 right-4 bg-slate-900/80 text-xs px-2 py-1 rounded text-gray-400 backdrop-blur-sm" id="quiz-badge">...</span>
-                    <div class="text-4xl text-blue-500/20 absolute top-2 left-2"><i class="fa-solid fa-quote-left"></i></div>
-                    <h3 class="text-lg font-bold leading-relaxed mt-4 relative z-10" id="question-text">...</h3>
+            <div id="quiz-container" class="hidden mt-4">
+                <div class="glass-panel p-6 rounded-2xl mb-6 border-l-4 border-cyan-500 relative">
+                    <span class="absolute top-3 right-3 text-[10px] bg-slate-900/50 px-2 py-1 rounded border border-white/10 text-cyan-300 backdrop-blur-md" id="quiz-badge">TYPE</span>
+                    <div class="text-6xl text-cyan-500/10 absolute -top-2 -left-2"><i class="fa-solid fa-quote-left"></i></div>
+                    <h3 class="text-lg font-bold leading-relaxed relative z-10 text-white" id="question-text">...</h3>
                 </div>
 
                 <div id="options-container" class="space-y-3"></div>
 
-                <div id="feedback-section" class="hidden mt-6 bg-slate-800/90 backdrop-blur-sm border border-slate-700 rounded-xl p-5 shadow-2xl animate-fade-in-up">
+                <div id="feedback-section" class="hidden mt-6 glass-panel p-5 rounded-xl border border-white/10 animate-fade-in-up">
                     <div class="flex items-center gap-3 mb-3">
                         <div id="feedback-icon" class="text-2xl"></div>
-                        <h3 id="feedback-title" class="text-xl font-bold"></h3>
+                        <h3 id="feedback-title" class="text-lg font-bold font-sci"></h3>
                     </div>
-                    <div class="bg-slate-900/50 p-4 rounded-lg text-sm text-gray-300 leading-relaxed border border-slate-700/50 mb-4">
-                        <span class="text-blue-400 font-bold block mb-1"><i class="fa-solid fa-magnifying-glass"></i> <span data-i18n="label_analysis">AI 解析：</span></span>
+                    <div class="bg-slate-950/50 p-4 rounded-lg text-sm text-gray-300 leading-relaxed border border-white/5 mb-4">
+                        <span class="text-cyan-400 font-bold block mb-1 text-xs uppercase tracking-wider"><i class="fa-solid fa-magnifying-glass"></i> Analysis</span>
                         <span id="feedback-text"></span>
                     </div>
                     <div class="flex gap-3">
-                        <button onclick="switchToPage('page-home')" class="flex-1 bg-slate-700 hover:bg-slate-600 text-gray-300 py-3 rounded-lg font-bold transition" data-i18n="btn_back_home">
-                            返回大廳
-                        </button>
-                        <button onclick="nextQuestion()" class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white py-3 rounded-lg font-bold shadow-lg transition flex justify-center items-center gap-2">
-                            <span data-i18n="btn_next_q">下一題</span> <i class="fa-solid fa-arrow-right"></i>
-                        </button>
+                        <button onclick="switchToPage('page-home')" class="btn-cyber-ghost flex-1 py-3 rounded-lg text-xs" data-i18n="btn_back_home">HOME</button>
+                        <button onclick="nextQuestion()" class="btn-cyber-primary flex-1 py-3 rounded-lg text-xs" data-i18n="btn_next_q">NEXT</button>
                     </div>
                 </div>
                 
-                <button id="btn-giveup" onclick="giveUpQuiz()" class="mt-8 py-3 text-gray-500 text-sm w-full text-center hover:text-white border border-transparent hover:border-slate-700 rounded-lg transition">
-                    <i class="fa-solid fa-arrow-left"></i> <span data-i18n="btn_giveup">放棄此題 (換下一題)</span>
+                <button id="btn-giveup" onclick="giveUpQuiz()" class="mt-8 py-3 text-gray-600 text-xs w-full text-center hover:text-red-400 transition">
+                    <i class="fa-solid fa-arrow-left"></i> <span data-i18n="btn_giveup">ABORT MISSION</span>
                 </button>
             </div>
         </div>
-        
-        <div id="page-store" class="page-section hidden">
-            <div class="sticky top-0 bg-slate-900/95 backdrop-blur-sm z-20 pb-2 border-b border-slate-800">
-                <div class="flex justify-between items-center mb-3 p-2">
-                    <div class="flex items-center gap-3">
-                        <button onclick="switchToPage('page-home')" class="text-gray-400 hover:text-white p-2 transition-all hover:scale-110">
-                            <i class="fa-solid fa-arrow-left"></i>
-                        </button>
-                        <h2 class="text-xl font-bold text-pink-400 flex items-center gap-2">
-                            <i class="fa-solid fa-store animate-pulse"></i> <span data-i18n="store_title">道具商店</span>
-                        </h2>
-                    </div>
-                    <div class="bg-slate-800 px-3 py-1 rounded-full border border-yellow-500/30 text-yellow-400 font-mono text-sm flex items-center gap-1 hover:scale-105 transition-transform">
-                        <i class="fa-solid fa-coins animate-pulse"></i> 
-                        <span id="store-user-points">0</span>
-                    </div>
-                </div>
 
-                <div class="flex px-2 gap-2" id="store-tabs">
-                    <button onclick="filterStore('all', this)" class="store-tab active-tab flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-pink-600 text-white shadow-lg shadow-pink-900/50" data-i18n="tab_all">
-                        全部
-                    </button>
-                    <button onclick="filterStore('frame', this)" class="store-tab flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-slate-800 text-gray-400 hover:bg-slate-700">
-                        <i class="fa-regular fa-square"></i> <span data-i18n="tab_frame">相框</span>
-                    </button>
-                    <button onclick="filterStore('avatar', this)" class="store-tab flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-slate-800 text-gray-400 hover:bg-slate-700">
-                        <i class="fa-regular fa-user"></i> <span data-i18n="tab_avatar">頭像</span>
-                    </button>
-                </div>
-            </div>
-
-            <div id="store-grid" class="grid grid-cols-2 md:grid-cols-5 gap-3 p-2 pb-16 mt-2">
-                <div class="text-center col-span-2 md:col-span-5 py-10 text-gray-500">
-                    <div class="loader"></div> <span data-i18n="msg_loading_products">載入商品中...</span>
-                </div>
-            </div>
-        </div>
-
-        <div id="page-cards" class="page-section hidden pb-20">
-            <div class="sticky top-0 bg-slate-900/95 backdrop-blur-md z-20 p-4 border-b border-slate-800 flex justify-between items-center">
-                <h2 class="text-2xl font-bold text-purple-400 flex items-center gap-2">
-                    <i class="fa-solid fa-dragon"></i> 卡牌中心
+        <div id="page-store" class="page-section hidden px-4">
+            <div class="flex justify-between items-center mb-4 mt-2">
+                <h2 class="text-xl font-bold text-pink-400 flex items-center gap-2">
+                    <i class="fa-solid fa-store"></i> <span data-i18n="store_title">STORE</span>
                 </h2>
-                <div class="bg-slate-800 px-3 py-1 rounded-full border border-yellow-500/30 text-yellow-400 font-mono text-sm flex items-center gap-1 shadow-lg">
-                     <i class="fa-solid fa-coins text-yellow-300 animate-pulse"></i> 
-                     <span id="cards-user-points">0</span>
+                <div class="glass-capsule px-3 py-1 text-yellow-400 text-xs font-mono border-yellow-500/30">
+                    <i class="fa-solid fa-coins"></i> <span id="store-user-points">0</span>
                 </div>
             </div>
 
-            <div class="p-4">
-                <h3 class="text-white font-bold mb-2">⚔️ 出戰牌組 (Deck)</h3>
+            <div class="flex gap-2 mb-4 bg-slate-900/50 p-1 rounded-xl">
+                <button onclick="filterStore('all', this)" class="store-tab active flex-1 py-2 text-xs font-bold rounded-lg transition-all" data-i18n="tab_all">ALL</button>
+                <button onclick="filterStore('frame', this)" class="store-tab flex-1 py-2 text-xs font-bold rounded-lg transition-all" data-i18n="tab_frame">FRAMES</button>
+                <button onclick="filterStore('avatar', this)" class="store-tab flex-1 py-2 text-xs font-bold rounded-lg transition-all" data-i18n="tab_avatar">AVATARS</button>
+            </div>
+
+            <div id="store-grid" class="grid grid-cols-2 gap-3 pb-20">
+                <div class="col-span-2 text-center py-10 text-gray-500 text-xs font-mono">LOADING DATA...</div>
+            </div>
+        </div>
+
+        <div id="page-cards" class="page-section hidden px-4">
+            <div class="glass-panel p-4 rounded-2xl mb-6 mt-2 relative overflow-hidden">
+                <div class="absolute -right-4 -top-4 text-6xl text-purple-500/10"><i class="fa-solid fa-layer-group"></i></div>
+                <h3 class="text-sm font-bold text-purple-300 mb-4 uppercase tracking-widest">Active Deck</h3>
                 
-                <div class="flex justify-center gap-6 mb-6">
-                    <div class="w-32 aspect-[2/3] bg-slate-800 border-2 border-yellow-500 rounded-xl relative overflow-hidden cursor-pointer hover:scale-105 transition-transform shadow-lg shadow-yellow-900/20 group" onclick="selectCardForSlot('main')">
-                        <span class="absolute top-0 left-0 bg-yellow-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-br z-20 shadow">Main</span>
-                        <div id="deck-main-display" class="w-full h-full flex items-center justify-center bg-slate-900/50">
-                            <div class="text-gray-500 text-xs">點擊選擇</div>
+                <div class="flex justify-center gap-6">
+                    <div class="deck-slot group" onclick="selectCardForSlot('main')">
+                        <div class="slot-label bg-yellow-600">MAIN</div>
+                        <div id="deck-main-display" class="slot-content">
+                            <span class="text-[10px] text-gray-500">SELECT</span>
                         </div>
-                        <div class="absolute inset-0 bg-black/30 hidden group-hover:flex items-center justify-center z-30 transition-all">
-                            <i class="fa-solid fa-pen text-white/90 drop-shadow-md"></i>
-                        </div>
+                        <div class="slot-hover"><i class="fa-solid fa-pen"></i></div>
                     </div>
-
-                    <div class="w-32 aspect-[2/3] bg-slate-800 border-2 border-gray-500 rounded-xl relative overflow-hidden cursor-pointer hover:scale-105 transition-transform shadow-lg group" onclick="selectCardForSlot('sub')">
-                        <span class="absolute top-0 left-0 bg-gray-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-br z-20 shadow">Sub</span>
-                        <div id="deck-sub-display" class="w-full h-full flex items-center justify-center bg-slate-900/50">
-                            <div class="text-gray-500 text-xs">點擊選擇</div>
+                    <div class="deck-slot group" onclick="selectCardForSlot('sub')">
+                        <div class="slot-label bg-gray-600">SUB</div>
+                        <div id="deck-sub-display" class="slot-content">
+                            <span class="text-[10px] text-gray-500">SELECT</span>
                         </div>
-                        <div class="absolute inset-0 bg-black/30 hidden group-hover:flex items-center justify-center z-30 transition-all">
-                            <i class="fa-solid fa-pen text-white/90 drop-shadow-md"></i>
-                        </div>
+                        <div class="slot-hover"><i class="fa-solid fa-pen"></i></div>
                     </div>
                 </div>
-
-                <div class="bg-gradient-to-r from-purple-900 to-slate-900 rounded-2xl p-6 border border-purple-500/30 shadow-xl relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-purple-500/20 rounded-full blur-3xl"></div>
-                    <h3 class="text-xl font-bold text-white mb-2 relative z-10">🔮 召喚英靈</h3>
-                    <p class="text-xs text-purple-200 mb-4 relative z-10">
-                        重複卡牌自動強化 (+5 ATK，上限+5)。<br>
-                        滿等後重複獲得將返還 100 積分。
-                    </p>
-    
-                    <div class="flex gap-3 relative z-10">
-                        <button onclick="drawSingleCard()" class="flex-1 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-bold py-3 rounded-xl shadow-lg transition active:scale-95 text-sm">
-                            <div class="text-lg mb-1"><i class="fa-solid fa-ticket"></i> 單抽</div>
-                            <div class="text-xs opacity-80">100 積分</div>
-                        </button>
-                        <button onclick="draw11Cards()" class="flex-1 bg-gradient-to-r from-yellow-600 to-orange-500 hover:from-yellow-500 hover:to-orange-400 text-white font-bold py-3 rounded-xl shadow-lg transition active:scale-95 text-sm relative overflow-hidden group">
-                            <div class="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500 skew-x-12"></div>
-                            <div class="text-lg mb-1"><i class="fa-solid fa-layer-group"></i> 11 連抽</div>
-                            <div class="text-xs opacity-80">1000 積分</div>
-                            <div class="absolute top-0 right-0 bg-red-600 text-[10px] px-2 py-0.5 rounded-bl font-bold">必中罕見+</div>
-                        </button>
-                    </div>
-                </div>
-
-                <h3 class="text-white font-bold mt-8 mb-2">📦 我的卡庫</h3>
-                <div id="my-card-list" class="p-4 overflow-y-auto grid grid-cols-4 gap-2"></div>
             </div>
+
+            <div class="summon-banner mb-6 p-5 rounded-2xl relative overflow-hidden bg-gradient-to-r from-purple-900 to-slate-900 border border-purple-500/30">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-purple-500/20 rounded-full blur-3xl"></div>
+                <h3 class="font-bold text-white mb-1 relative z-10 font-sci">SUMMON GATE</h3>
+                <p class="text-[10px] text-purple-200 mb-3 relative z-10 opacity-70">Duplicate cards grant +5 ATK (Max +25)</p>
+
+                <div class="flex gap-2 relative z-10">
+                    <button onclick="drawSingleCard()" class="btn-cyber-ghost flex-1 py-2 text-xs border-purple-500/50 text-purple-300 hover:bg-purple-500/10">
+                        1x (100 pts)
+                    </button>
+                    <button onclick="draw11Cards()" class="btn-cyber-accent flex-1 py-2 text-xs bg-gradient-to-r from-yellow-600 to-orange-600 border-none text-white shadow-lg shadow-orange-900/50">
+                        11x (1000 pts) <span class="ml-1 text-[9px] bg-black/30 px-1 rounded">SR+</span>
+                    </button>
+                </div>
+            </div>
+
+            <h3 class="text-xs font-bold text-gray-400 mb-2 px-1 uppercase tracking-wider">Storage</h3>
+            <div id="my-card-list" class="grid grid-cols-3 gap-2 pb-20"></div>
         </div>
 
-        <div id="card-selector-modal" class="hidden fixed inset-0 bg-black/80 z-[60] flex items-center justify-center p-4">
-            <div class="bg-slate-800 rounded-xl w-full max-w-md max-h-[80vh] flex flex-col">
-                <div class="p-4 border-b border-slate-700 flex justify-between">
-                    <h3 class="text-white font-bold">選擇卡牌</h3>
-                    <button onclick="document.getElementById('card-selector-modal').classList.add('hidden')" class="text-gray-400"><i class="fa-solid fa-xmark"></i></button>
+        <div id="page-battle" class="page-section hidden h-full flex flex-col relative bg-slate-950">
+            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 pointer-events-none"></div>
+            
+            <div id="battle-lobby" class="absolute inset-0 z-20 bg-slate-900 flex flex-col items-center justify-center">
+                <div class="cyber-scanner mb-8 relative w-48 h-48 border border-cyan-500/30 rounded-full flex items-center justify-center">
+                    <div class="absolute inset-0 border-t-2 border-cyan-400 rounded-full animate-spin"></div>
+                    <i class="fa-solid fa-wifi text-4xl text-cyan-500 animate-pulse"></i>
                 </div>
-                <div id="modal-card-list" class="p-4 overflow-y-auto grid grid-cols-2 gap-2"></div>
-            </div>
-        </div>
-
-        <div id="page-battle" class="page-section hidden">
-            <div id="battle-lobby" class="flex flex-col items-center justify-center pt-20">
-                <div class="radar-scan mb-8">
-                    <div class="radar-line"></div>
-                </div>
-                <h2 class="text-2xl font-bold mb-2" data-i18n="battle_searching">正在搜尋對手...</h2>
-                <p class="text-gray-400 text-sm mb-8" id="battle-status-text" data-i18n="battle_connecting">正在連接對戰伺服器</p>
-                <button onclick="leaveBattle()" class="border border-red-500 text-red-400 px-6 py-2 rounded-full hover:bg-red-500/10 transition-all hover:scale-105" data-i18n="btn_cancel_match">取消配對</button>
+                <h2 class="text-2xl font-bold mb-2 font-sci text-white" data-i18n="battle_searching">SCANNING...</h2>
+                <p class="text-gray-500 text-xs mb-8 font-mono" id="battle-status-text">CONNECTING TO SERVER</p>
+                <button onclick="leaveBattle()" class="btn-cyber-ghost px-8 py-2 text-xs text-red-400 border-red-500/50 hover:bg-red-900/20">CANCEL</button>
             </div>
 
-            <div id="battle-arena" class="hidden h-full flex flex-col">
-                <div class="flex-1 bg-red-900/10 relative p-4 flex flex-col items-center justify-start border-b border-red-500/30">
-                    <div class="text-red-400 text-xs font-bold mb-1">ENEMY</div>
-                    <div id="enemy-card-container" class="relative w-32 h-44 bg-slate-800 rounded-lg border-2 border-red-500 transition-all duration-500">
-                        <div id="enemy-card-visual" class="w-full h-full flex flex-col items-center justify-center">?</div>
-                        <div class="absolute -bottom-6 left-0 w-full">
-                            <div class="h-2 bg-slate-900 rounded-full overflow-hidden border border-slate-600">
-                                <div id="enemy-hp-bar" class="h-full bg-red-500 transition-all duration-300" style="width: 100%"></div>
-                            </div>
-                            <div id="enemy-hp-text" class="text-[10px] text-center text-white mt-0.5">100/100</div>
+            <div id="battle-arena" class="hidden h-full flex flex-col relative z-10">
+                
+                <div class="p-4 pt-6 flex items-start justify-between relative z-20">
+                    <div class="flex-1 mr-4">
+                        <div class="flex justify-between items-end mb-1 px-1">
+                            <span class="text-red-400 font-bold font-sci text-[10px] tracking-widest">ENEMY SIGNAL</span>
+                            <span id="enemy-hp-text" class="text-red-400 font-sci text-xs font-bold">100/100</span>
+                        </div>
+                        <div class="h-3 bg-slate-900/80 transform skew-x-[-15deg] border border-red-900/50 p-[2px]">
+                            <div id="enemy-hp-bar" class="h-full bg-gradient-to-r from-red-600 to-red-500 shadow-[0_0_10px_red] transition-all duration-300 w-full"></div>
+                        </div>
+                        <div class="mt-2 flex justify-end">
+                            <div id="enemy-sub-card-indicator" class="w-8 h-10 bg-slate-800 border border-gray-600 rounded opacity-50 flex items-center justify-center text-[8px] text-gray-500">Sub</div>
                         </div>
                     </div>
-                    <div id="enemy-sub-card-indicator" class="absolute top-4 right-4 w-12 h-16 bg-slate-800 border border-gray-600 rounded opacity-50">
-                        <span class="text-[8px] text-center block text-gray-400">Sub</span>
+                    <div class="w-14 h-14 glass-panel rounded-lg border-red-500/50 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(239,68,68,0.3)]">
+                        <div id="enemy-card-visual" class="text-red-500 font-bold text-xl">?</div>
                     </div>
                 </div>
 
-                <div class="h-12 flex items-center justify-center bg-black/40 backdrop-blur">
-                    <div class="text-yellow-400 font-bold text-xl animate-pulse" id="battle-center-msg">VS</div>
-                </div>
-
-                <div class="flex-1 bg-blue-900/10 relative p-4 flex flex-col items-center justify-end border-t border-blue-500/30">
-                    <div id="my-sub-card-indicator" class="absolute bottom-4 left-4 w-12 h-16 bg-slate-800 border border-gray-600 rounded opacity-50">
-                        <span class="text-[8px] text-center block text-gray-400">Sub</span>
+                <div class="flex-1 flex flex-col items-center justify-center relative">
+                    <div class="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none">
+                        <i class="fa-solid fa-dragon text-9xl text-white transform scale-150"></i>
                     </div>
 
-                    <div id="my-card-container" class="relative w-32 h-44 bg-slate-800 rounded-lg border-2 border-blue-500 transition-all duration-500 mb-6">
-                        <div id="my-card-visual" class="w-full h-full p-2 flex flex-col relative overflow-hidden rounded-lg">
-                            </div>
-                         <div class="absolute -top-6 left-0 w-full">
-                            <div class="h-2 bg-slate-900 rounded-full overflow-hidden border border-slate-600">
-                                <div id="my-hp-bar" class="h-full bg-green-500 transition-all duration-300" style="width: 100%"></div>
-                            </div>
-                            <div id="my-hp-text" class="text-[10px] text-center text-white mt-0.5">100/100</div>
+                    <div class="w-full flex justify-between px-6 items-center h-48 relative">
+                        <div class="relative z-10 transform scale-90" id="enemy-card-container-wrapper">
+                             <div id="enemy-card-container" class="relative w-32 h-48 bg-slate-800 rounded-lg border-2 border-red-500/50 transition-all duration-500"></div>
+                        </div>
+
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0">
+                            <div class="text-5xl font-sci font-black italic text-transparent bg-clip-text bg-gradient-to-b from-yellow-300 to-yellow-600 drop-shadow-[0_0_20px_rgba(234,179,8,0.8)] animate-pulse" id="battle-center-msg">VS</div>
+                        </div>
+
+                        <div class="relative z-10 transform scale-100" id="my-card-container-wrapper">
+                             <div id="my-card-container" class="relative w-32 h-48 bg-slate-800 rounded-lg border-2 border-blue-500 transition-all duration-500"></div>
                         </div>
                     </div>
-                    <div class="text-blue-400 text-xs font-bold">YOU</div>
                 </div>
 
-                <div id="battle-quiz-overlay" class="absolute inset-0 z-50 bg-black/90 hidden flex-col justify-center p-6">
-                    <div id="battle-loading" class="text-center hidden">
-                        <div class="loader mx-auto mb-4"></div>
-                        <p class="text-gray-400" data-i18n="battle_generating">正在生成題目...</p>
+                <div class="p-4 pb-24 flex items-end justify-between relative z-20">
+                    <div class="w-16 h-16 glass-panel rounded-lg border-blue-500/50 flex items-center justify-center shrink-0 mr-4 shadow-[0_0_15px_rgba(59,130,246,0.3)]">
+                         <div id="my-card-visual-small" class="text-blue-400 font-bold">YOU</div>
                     </div>
                     
-                    <div id="battle-quiz-box" class="hidden">
-                        <div class="bg-slate-800 border-l-4 border-blue-500 p-4 rounded-r-xl mb-6 shadow-2xl">
-                            <h3 id="battle-q-text" class="text-white font-bold leading-relaxed">...</h3>
+                    <div class="flex-1">
+                        <div class="mb-2 flex justify-start">
+                            <div id="my-sub-card-indicator" class="w-8 h-10 bg-slate-800 border border-gray-600 rounded opacity-50 flex items-center justify-center text-[8px] text-gray-500">Sub</div>
                         </div>
-    
-                        <div id="battle-options" class="space-y-3"></div>
-
-                        <div id="battle-feedback" class="hidden mt-4 bg-slate-900/80 p-4 rounded-xl border border-slate-600 animate-fade-in-up">
-                            <div id="battle-fb-status" class="font-bold text-lg mb-2"></div>
-                            <div class="text-sm text-gray-300 bg-black/30 p-3 rounded">
-                                <span class="text-yellow-400 font-bold">解析：</span>
-                                <span id="battle-fb-text"></span>
-                            </div>
+                        
+                        <div class="flex justify-between items-end mb-1 px-1">
+                            <span id="my-hp-text" class="text-blue-400 font-sci text-sm font-bold">100/100</span>
+                            <span class="text-blue-400 font-bold font-sci text-[10px] tracking-widest">SYSTEM ONLINE</span>
                         </div>
-
-                        <div id="battle-waiting-msg" class="text-center text-gray-400 mt-4 hidden">
-                            <i class="fa-solid fa-hourglass-half animate-pulse"></i>
-                            <span data-i18n="battle_waiting_opp">等待對手作答中...</span>
+                        <div class="h-4 bg-slate-900/80 transform skew-x-[15deg] border border-blue-900/50 p-[2px]">
+                            <div id="my-hp-bar" class="h-full bg-gradient-to-l from-blue-500 to-cyan-400 shadow-[0_0_15px_cyan] transition-all duration-300 w-full"></div>
                         </div>
                     </div>
+                </div>
+
+                <div id="battle-quiz-overlay" class="absolute inset-0 z-50 bg-slate-950/95 backdrop-blur-md hidden flex-col justify-center p-6">
                     <div id="battle-loading" class="hidden flex flex-col items-center">
-                        <div class="loader mb-4"></div>
-                        <div id="battle-loading-text" class="text-white animate-pulse">準備中...</div>
+                        <div class="cyber-loader mb-6"></div>
+                        <div id="battle-loading-text" class="text-cyan-400 font-sci tracking-widest animate-pulse">SYNCING DATA...</div>
                     </div>
                     
-                    <div id="battle-round-info" class="absolute top-4 right-4 bg-black/50 px-3 py-1 rounded-full text-xs text-gray-300">
-                        回合 <span id="battle-round">1</span>/10
+                    <div id="battle-quiz-box" class="hidden w-full max-w-md mx-auto">
+                        <div class="glass-panel p-5 rounded-xl border-l-4 border-yellow-400 mb-6 relative">
+                            <span class="absolute top-2 right-2 text-[9px] font-mono text-gray-500">INCOMING QUERY</span>
+                            <h3 id="battle-q-text" class="text-white font-bold leading-relaxed mt-2">...</h3>
+                        </div>
+                        <div id="battle-options" class="space-y-3"></div>
+                        
+                        <div id="battle-feedback" class="hidden mt-4 glass-panel p-4 rounded-xl border border-white/10 animate-fade-in-up">
+                            <div id="battle-fb-status" class="font-bold text-lg mb-2 font-sci"></div>
+                            <div class="text-xs text-gray-300 bg-black/40 p-3 rounded font-mono">
+                                <span class="text-yellow-500">ANALYSIS:</span> <span id="battle-fb-text"></span>
+                            </div>
+                        </div>
+
+                        <div id="battle-waiting-msg" class="text-center text-gray-500 text-xs mt-6 hidden font-mono animate-pulse">
+                            WAITING FOR OPPONENT SIGNAL...
+                        </div>
+                    </div>
+                    
+                    <div id="battle-round-info" class="absolute top-4 right-4 glass-capsule px-3 py-1 text-xs text-gray-400 font-mono">
+                        ROUND <span id="battle-round" class="text-white">1</span>/10
                     </div>
                 </div>
             </div>
 
-            <div id="battle-result" class="hidden flex flex-col items-center justify-center pt-20">
-                <div class="text-center mb-8">
-                    <h2 id="battle-result-title" class="text-3xl font-bold mb-2" data-i18n="battle_ended">對戰結束</h2>
-                    <p id="battle-result-msg" class="text-gray-400" data-i18n="battle_calculating">計算結果中...</p>
+            <div id="battle-result" class="hidden absolute inset-0 z-50 bg-slate-950 flex flex-col items-center justify-center p-6">
+                <div class="text-center mb-10">
+                    <h2 id="battle-result-title" class="text-5xl font-black font-sci mb-2 tracking-tighter">FINISH</h2>
+                    <p id="battle-result-msg" class="text-gray-500 font-mono text-xs tracking-widest">CALCULATING REWARDS...</p>
                 </div>
-                
-                <div class="flex gap-3">
-                    <button onclick="leaveBattle()" class="bg-slate-700 hover:bg-slate-600 text-white px-6 py-3 rounded-lg font-bold transition-all hover:scale-105" data-i18n="btn_back_home">
-                        返回首頁
-                    </button>
-                    <button onclick="startBattleMatchmaking()" class="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white px-6 py-3 rounded-lg font-bold transition-all hover:scale-105" data-i18n="btn_play_again">
-                        再來一局
-                    </button>
+                <div class="flex gap-4 w-full max-w-xs">
+                    <button onclick="leaveBattle()" class="btn-cyber-ghost flex-1 py-3 text-xs">HOME</button>
+                    <button onclick="startBattleMatchmaking()" class="btn-cyber-primary flex-1 py-3 text-xs">REMATCH</button>
                 </div>
             </div>
         </div>
 
-        <div id="page-rank" class="page-section hidden">
-            <h2 class="text-2xl font-bold mb-4 flex items-center gap-2 text-yellow-400">
-                <i class="fa-solid fa-trophy animate-pulse"></i> <span data-i18n="rank_title">全服排行榜</span>
+        <div id="page-rank" class="page-section hidden px-4">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2 text-yellow-400">
+                <i class="fa-solid fa-trophy"></i> <span data-i18n="rank_title">LEADERBOARD</span>
             </h2>
-            <div class="bg-slate-800/90 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg border border-slate-700">
+            <div class="glass-panel rounded-xl overflow-hidden shadow-lg border-t border-yellow-500/30">
                 <table class="w-full text-left text-sm text-gray-300">
-                    <thead class="bg-slate-900/90 backdrop-blur-sm text-gray-400 uppercase text-xs">
+                    <thead class="bg-black/40 text-gray-500 font-mono text-[10px] uppercase tracking-wider">
                         <tr>
                             <th class="px-4 py-3 w-12">#</th>
-                            <th class="px-4 py-3" data-i18n="th_player">玩家</th>
-                            <th class="px-4 py-3 text-right" data-i18n="th_rank">段位</th>
+                            <th class="px-4 py-3" data-i18n="th_player">AGENT</th>
+                            <th class="px-4 py-3 text-right" data-i18n="th_rank">RATING</th>
                         </tr>
                     </thead>
-                    <tbody id="leaderboard-body"></tbody>
+                    <tbody id="leaderboard-body" class="divide-y divide-white/5"></tbody>
                 </table>
             </div>
         </div>
 
-        <div id="page-settings" class="page-section hidden">
-            <h2 class="text-2xl font-bold mb-4 flex items-center gap-2 text-green-400 animate-fade-in-up">
-                <i class="fa-solid fa-user-gear"></i> <span data-i18n="settings_title">個人設定</span>
+        <div id="page-settings" class="page-section hidden px-4">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2 text-green-400">
+                <i class="fa-solid fa-sliders"></i> <span data-i18n="settings_title">SETTINGS</span>
             </h2>
             
-            <div class="bg-slate-800/80 backdrop-blur-md p-6 rounded-2xl shadow-xl mb-6 border border-slate-700/50 space-y-5 relative overflow-hidden">
+            <div class="glass-panel p-6 rounded-2xl mb-6 relative overflow-hidden">
                 <div class="absolute -top-10 -right-10 w-32 h-32 bg-green-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
-                <div>
-                    <label class="block mb-2 text-sm font-bold text-gray-300 flex items-center gap-2">
-                        <i class="fa-solid fa-graduation-cap text-blue-400"></i> <span data-i18n="label_level">年級 / 身份</span>
-                    </label>
-                    <div class="relative">
-                        <select id="set-level" class="w-full bg-slate-900/50 border border-slate-600 text-white rounded-xl p-3 pl-4 appearance-none outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all cursor-pointer">
-                            <option value="國小中年級" data-i18n="level_elem_mid">國小 (中年級)</option>
-                            <option value="國小高年級" data-i18n="level_elem_high">國小 (高年級)</option>
-                            <option value="國中一年級" data-i18n="level_jh_1">國中 (一年級)</option>
-                            <option value="國中二年級" data-i18n="level_jh_2">國中 (二年級)</option>
-                            <option value="國中三年級" data-i18n="level_jh_3">國中 (三年級)</option>
-                            <option value="高中職" data-i18n="level_sh">高中 / 高職</option>
-                            <option value="大學以上" data-i18n="level_univ">大學 / 社會人士</option>
-                        </select>
-                        <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"></i>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block mb-2 text-sm font-bold text-gray-300 flex items-center gap-2">
-                        <i class="fa-solid fa-thumbs-up text-green-400"></i> <span data-i18n="label_strong">擅長科目</span>
-                    </label>
-                    <input type="text" id="set-strong" class="w-full bg-slate-900/50 border border-slate-600 text-white text-sm rounded-xl p-3 outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-all" data-i18n-placeholder="placeholder_strong">
-                </div>
-
-                <div>
-                    <label class="block mb-2 text-sm font-bold text-gray-300 flex items-center gap-2">
-                        <i class="fa-solid fa-dumbbell text-red-400"></i> <span data-i18n="label_weak">弱項 (加強練習)</span>
-                    </label>
-                    <input type="text" id="set-weak" class="w-full bg-slate-900/50 border border-slate-600 text-white text-sm rounded-xl p-3 outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all" data-i18n-placeholder="placeholder_weak">
-                </div>
-
-                <div class="grid grid-cols-2 gap-3 pt-2 border-t border-slate-700/50 mt-4">
-                    <div>
-                        <label class="block mb-2 text-sm font-bold text-yellow-400 flex items-center gap-2">
-                            <i class="fa-solid fa-book-open"></i> <span data-i18n="label_source">出題來源</span>
-                        </label>
-                        
-                        <div id="bank-selectors-container" class="space-y-2"></div>
-                        <input type="hidden" id="set-source-final-value" value="ai">
-                        <p id="bank-selection-hint" class="text-xs text-gray-500 mt-1" data-i18n="hint_select_bank">請依序選擇分類...</p>
+                <div class="space-y-4">
+                    <div class="form-group">
+                        <label class="text-[10px] font-bold text-gray-400 mb-1 block uppercase">ID / Email</label>
+                        <div class="text-sm font-mono text-cyan-200 truncate p-2 bg-slate-900/50 rounded border border-white/5" id="settings-email">...</div>
                     </div>
                     
-                    <div>
-                        <label class="block mb-2 text-sm font-bold text-purple-400 flex items-center gap-2">
-                            <i class="fa-solid fa-layer-group"></i> <span data-i18n="label_difficulty">題目難度</span>
-                        </label>
-                        <select id="set-difficulty" class="w-full bg-slate-900/50 border border-slate-600 text-white rounded-xl p-3 outline-none focus:border-purple-500 transition-all cursor-pointer">
-                            <option value="auto" selected>⚡ AI 智慧動態 (推薦)</option>
-                            <option value="easy" data-i18n="diff_easy">🟢 簡單 (Easy)</option>
-                            <option value="medium" data-i18n="diff_medium">🟡 中等 (Medium)</option>
-                            <option value="hard" data-i18n="diff_hard">🔴 困難 (Hard)</option>
+                    <div class="form-group">
+                        <label class="text-[10px] font-bold text-gray-400 mb-1 block uppercase" data-i18n="label_level">Level</label>
+                        <select id="set-level" class="input-cyber w-full">
+                            <option value="國小中年級" data-i18n="level_elem_mid">國小 (中年級)</option>
+                            <option value="大學以上" data-i18n="level_univ">大學 / 社會人士</option>
                         </select>
                     </div>
-                </div>
 
-                <button onclick="saveProfile()" class="w-full mt-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white px-4 py-3.5 rounded-xl font-bold transition-all shadow-lg hover:shadow-blue-900/30 hover:scale-[1.02] flex justify-center items-center gap-2">
-                    <i class="fa-solid fa-floppy-disk"></i> <span data-i18n="btn_update_settings">更新設定</span>
-                </button>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="form-group">
+                            <label class="text-[10px] font-bold text-green-500 mb-1 block uppercase">Strong</label>
+                            <input type="text" id="set-strong" class="input-cyber w-full text-xs">
+                        </div>
+                        <div class="form-group">
+                            <label class="text-[10px] font-bold text-red-500 mb-1 block uppercase">Weak</label>
+                            <input type="text" id="set-weak" class="input-cyber w-full text-xs">
+                        </div>
+                    </div>
+                    
+                    <div class="pt-2 border-t border-white/5 mt-2">
+                        <label class="text-[10px] font-bold text-yellow-500 mb-1 block uppercase" data-i18n="label_source">Source</label>
+                        <div id="bank-selectors-container" class="space-y-2"></div>
+                        <input type="hidden" id="set-source-final-value" value="ai">
+                        <p id="bank-selection-hint" class="text-[10px] text-gray-500 mt-1 font-mono">Select database...</p>
+                    </div>
+
+                    <div class="form-group">
+                         <label class="text-[10px] font-bold text-purple-400 mb-1 block uppercase" data-i18n="label_difficulty">Difficulty</label>
+                        <select id="set-difficulty" class="input-cyber w-full">
+                            <option value="auto" selected>⚡ AI AUTO</option>
+                            <option value="easy">🟢 EASY</option>
+                            <option value="medium">🟡 MEDIUM</option>
+                            <option value="hard">🔴 HARD</option>
+                        </select>
+                    </div>
+
+                    <button onclick="saveProfile()" class="btn-cyber-primary w-full py-3 rounded-xl font-bold mt-2" data-i18n="btn_update_settings">UPDATE SYSTEM</button>
+                </div>
             </div>
 
-            <div class="bg-slate-800/80 backdrop-blur-md p-5 rounded-2xl border border-slate-700/50 mb-6 shadow-xl">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-clock-rotate-left text-purple-400"></i> <span data-i18n="history_title">答題紀錄</span>
-                    </h3>
-                    <button onclick="loadUserHistory()" class="text-xs text-blue-400 hover:text-white p-2 rounded hover:bg-slate-700 transition">
-                        <i class="fa-solid fa-rotate"></i>
-                    </button>
-                </div>
-                <ul id="history-list" class="space-y-2 max-h-60 overflow-y-auto scrollbar-thin text-sm p-1">
-                    <li class="text-center text-gray-500 py-4" data-i18n="loading">載入中...</li>
-                </ul>
-            </div>
-
-            <div class="bg-slate-800/80 backdrop-blur-md p-5 rounded-2xl border border-slate-700/50 mb-6 shadow-xl relative overflow-hidden">
-                <div class="absolute -top-10 -left-10 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
-    
-                <h3 class="font-bold text-white flex items-center gap-2 mb-4 relative z-10">
-                    <i class="fa-solid fa-chart-radar text-cyan-400 animate-pulse"></i> 
-                    <span data-i18n="analysis_title">能力分析圖譜</span>
+            <div class="glass-panel p-5 rounded-2xl mb-6 relative">
+                 <h3 class="font-bold text-white flex items-center gap-2 mb-4">
+                    <i class="fa-solid fa-chart-radar text-cyan-400"></i> <span data-i18n="analysis_title">ANALYSIS</span>
                 </h3>
-
-                <div class="w-full aspect-square max-h-[300px] mx-auto relative z-10">
+                <div class="w-full aspect-square max-h-[250px] mx-auto">
                     <canvas id="knowledgeChart"></canvas>
                 </div>
-    
-                <div class="text-center mt-2">
-                    <p class="text-[10px] text-gray-500" data-i18n="analysis_desc">基於近期答題表現分析 (正確率)</p>
-                </div>
             </div>
 
-            <div class="bg-slate-800/80 backdrop-blur-md p-5 rounded-2xl border border-slate-700/50 mb-6 shadow-xl">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-backpack text-yellow-400"></i> <span data-i18n="inventory_title">我的背包</span>
-                    </h3>
-                    <span class="text-xs text-gray-500 bg-slate-900 px-2 py-1 rounded">Inventory</span>
-                </div>
-                <div id="settings-inventory-grid" class="grid grid-cols-4 gap-3">
-                    <div class="text-xs text-gray-500 col-span-4 text-center py-6 bg-slate-900/30 rounded-xl border border-dashed border-slate-700">
-                        <i class="fa-solid fa-box-open text-2xl mb-2 text-gray-600 block"></i>
-                        <span data-i18n="loading">載入中...</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-slate-800/80 backdrop-blur-md p-4 rounded-xl border border-slate-700/50 mb-6 flex justify-between items-center">
-                <div>
-                    <div class="text-[10px] text-gray-400 uppercase tracking-widest mb-0.5">Account</div>
-                    <div class="text-sm font-mono text-blue-200 truncate max-w-[200px]" id="settings-email">checking...</div>
-                </div>
-                <i class="fa-solid fa-id-card text-slate-600 text-2xl"></i>
-            </div>
-
-            <button onclick="logout()" class="w-full bg-gradient-to-r from-red-900/80 to-red-800/80 hover:from-red-800 hover:to-red-700 border border-red-700/50 text-red-100 px-4 py-3.5 rounded-xl transition-all shadow-lg hover:shadow-red-900/30 flex items-center justify-center gap-2 group">
-                <i class="fa-solid fa-right-from-bracket group-hover:-translate-x-1 transition-transform"></i> <span data-i18n="btn_logout">登出帳號</span>
-            </button>
+            <button onclick="logout()" class="w-full py-3 rounded-xl border border-red-800/50 text-red-400 hover:bg-red-900/20 transition text-xs font-bold tracking-widest" data-i18n="btn_logout">LOGOUT</button>
         </div>
 
-        <div id="page-admin" class="page-section hidden">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-red-400 flex items-center gap-2">
-                    <i class="fa-solid fa-shield-halved"></i> <span data-i18n="admin_title">管理後台</span>
-                </h2>
-                <button onclick="resetAdminForm()" class="text-xs bg-slate-700 hover:bg-slate-600 text-white px-3 py-2 rounded-lg transition-all shadow border border-slate-600 flex items-center gap-1">
-                    <i class="fa-solid fa-plus"></i> <span data-i18n="admin_new_mode">新增模式</span>
-                </button>
-            </div>
-            
-            <div class="bg-slate-800/90 backdrop-blur-md p-5 rounded-2xl border border-yellow-500/20 mb-6 shadow-xl">
-                <h3 class="font-bold text-white mb-3 flex items-center gap-2">
-                    <i class="fa-solid fa-wrench text-yellow-500"></i> <span data-i18n="admin_maintenance">系統維護</span>
-                </h3>
-                <button onclick="recalculateAllUserRanks()" class="w-full bg-yellow-600/80 hover:bg-yellow-500 text-white py-3 rounded-xl font-bold transition flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-rotate"></i> <span data-i18n="btn_recalc_rank">重算全服玩家段位</span>
-                </button>
-                <p class="text-[10px] text-gray-400 mt-2 mb-3">
-                    ⚠️ <span data-i18n="msg_recalc_warn">說明：這會遍歷所有使用者，根據其「總答對題數」重新設定段位。</span>
-                </p>
-                <button onclick="triggerGlobalReload()" class="w-full mt-2 bg-red-900/80 hover:bg-red-800 text-red-100 py-3 rounded-xl font-bold transition flex items-center justify-center gap-2 border border-red-700">
-                    <i class="fa-solid fa-bolt"></i> <span>強制全服重整 (Force Reload)</span>
-                </button>
-            </div>
+        <div id="page-admin" class="page-section hidden px-4">
+            <h2 class="text-xl font-bold text-red-500 mb-4 font-sci">ADMIN CONSOLE</h2>
+            <div class="glass-panel p-4 rounded-xl border border-red-500/20 mb-4">
+                 <button onclick="recalculateAllUserRanks()" class="btn-cyber-ghost w-full py-2 text-xs mb-2 text-yellow-400 border-yellow-500/30">RECALC RANKS</button>
+                 <button onclick="triggerGlobalReload()" class="btn-cyber-ghost w-full py-2 text-xs text-red-400 border-red-500/30">FORCE RELOAD</button>
+             </div>
+             <div class="glass-panel p-4 rounded-xl mb-6" onclick="toggleAdminForm()">
+                 <h3 class="font-bold text-white flex justify-between items-center text-sm">
+                     <span id="admin-form-title">ADD PRODUCT</span>
+                     <i id="admin-form-arrow" class="fa-solid fa-chevron-up"></i>
+                 </h3>
+                 <input type="hidden" id="admin-edit-id">
+                 <div id="admin-form-body" class="mt-4 space-y-3">
+                     <input type="text" id="admin-p-name" placeholder="Name" class="input-cyber w-full">
+                     <div class="flex gap-2">
+                         <input type="number" id="admin-p-price" placeholder="Price" class="input-cyber flex-1">
+                         <select id="admin-p-type" class="input-cyber flex-1">
+                             <option value="frame">Frame</option>
+                             <option value="avatar">Avatar</option>
+                         </select>
+                     </div>
+                     <input type="text" id="admin-p-value" placeholder="Value/Path" class="input-cyber w-full">
+                     
+                     <div id="admin-asset-selector" class="hidden text-xs text-gray-500">Asset Selector Active</div> 
+                     <select id="admin-asset-select" onchange="selectAdminImage(this.value)" class="hidden"></select>
+                     <img id="admin-asset-preview" class="hidden w-10 h-10 mt-2">
 
-            <div class="bg-slate-800/90 backdrop-blur-md p-5 rounded-2xl border border-red-500/20 mb-6 sticky top-2 z-20 shadow-2xl ring-1 ring-red-900/30 transition-all">
-                
-                <div class="flex justify-between items-center cursor-pointer border-b border-slate-700 pb-2 mb-2 hover:bg-white/5 rounded px-2 -mx-2 transition" onclick="toggleAdminForm()">
-                    <h3 class="font-bold text-white flex items-center gap-2">
-                        <span id="admin-form-title" data-i18n="admin_add_product">➕ 上架新商品</span>
-                    </h3>
-                    <i id="admin-form-arrow" class="fa-solid fa-chevron-up text-gray-400 transition-transform duration-300"></i>
-                </div>
-                
-                <input type="hidden" id="admin-edit-id"> 
-                
-                <div id="admin-form-body" class="space-y-4 origin-top transition-all duration-300">
-                    <div class="grid grid-cols-3 gap-3 pt-2">
-                        <div class="col-span-2">
-                            <label class="text-[10px] text-gray-400 block mb-1" data-i18n="admin_label_name">商品名稱</label>
-                            <input type="text" id="admin-p-name" placeholder="Name..." class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2.5 text-sm text-white focus:border-red-500 outline-none transition-colors">
-                        </div>
-                        <div>
-                            <label class="text-[10px] text-gray-400 block mb-1" data-i18n="admin_label_price">價格 (分)</label>
-                            <input type="number" id="admin-p-price" placeholder="0" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2.5 text-sm text-white focus:border-red-500 outline-none transition-colors font-mono text-center">
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="text-[10px] text-gray-400 block mb-1" data-i18n="admin_label_type">商品類型</label>
-                        <select id="admin-p-type" onchange="toggleAdminInputPlaceholder()" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2.5 text-sm text-white focus:border-red-500 outline-none cursor-pointer">
-                            <option value="frame">🖼️ Frame</option>
-                            <option value="avatar">👤 Avatar</option>
-                        </select>
-                    </div>
-
-                    <div class="bg-slate-900/50 p-3 rounded-xl border border-slate-700">
-                        <label class="text-[10px] text-gray-400 block mb-1" id="admin-value-label">Value / Path</label>
-                        <div class="flex gap-2 mb-2">
-                            <input type="text" id="admin-p-value" placeholder="CSS Class or Path..." class="flex-1 bg-slate-800 border border-slate-600 rounded-lg p-2.5 text-sm text-white font-mono focus:border-blue-500 outline-none">
-                        </div>
-
-                        <div id="admin-asset-selector" class="hidden">
-                            <div class="flex items-center gap-3 bg-slate-800 p-2 rounded-lg border border-slate-600">
-                                <div class="flex-1">
-                                    <label class="text-[10px] text-blue-300 block mb-1" data-i18n="admin_select_img">從伺服器選擇圖片：</label>
-                                    <select id="admin-asset-select" onchange="selectAdminImage(this.value)" class="w-full bg-slate-900 text-xs text-white p-2 rounded border border-slate-700 outline-none cursor-pointer">
-                                        <option value="">Loading...</option>
-                                    </select>
-                                </div>
-                                <div class="w-12 h-12 bg-black rounded-lg border border-slate-500 overflow-hidden flex-shrink-0">
-                                    <img id="admin-asset-preview" src="" class="w-full h-full object-cover hidden">
-                                </div>
-                            </div>
-                        </div>
-                        <p class="text-[10px] text-gray-500 mt-2 flex items-center gap-1" id="admin-hint">
-                            <i class="fa-solid fa-circle-info"></i> Info
-                        </p>
-                    </div>
-
-                    <div class="flex gap-3 pt-2">
-                        <button onclick="saveProduct()" id="admin-btn-save" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl text-sm shadow-lg transition-all hover:scale-[1.02]" data-i18n="btn_save_product">
-                            上架商品
-                        </button>
-                        <button onclick="deleteProduct()" id="admin-btn-del" class="hidden w-12 bg-slate-700 hover:bg-red-600 text-white rounded-xl text-sm transition-colors flex items-center justify-center border border-slate-600 hover:border-red-500">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-slate-800/90 backdrop-blur-md rounded-2xl overflow-hidden border border-slate-700 flex flex-col shadow-2xl pb-20">
-                <div class="p-4 bg-slate-900/80 border-b border-slate-700 font-bold text-xs text-gray-400 uppercase tracking-wider flex justify-between items-center">
-                    <span data-i18n="admin_inventory_title">📦 現有商品庫存</span>
-                    <button onclick="loadAdminProducts()" class="text-blue-400 hover:text-white p-1 rounded hover:bg-slate-700 transition"><i class="fa-solid fa-rotate"></i></button>
-                </div>
-                <div id="admin-product-list" class="p-3 space-y-2 max-h-[60vh] overflow-y-auto scrollbar-thin">
-                    <div class="text-center text-gray-500 py-8 text-xs" data-i18n="loading">載入中...</div>
-                </div>
-            </div>
+                     <div class="flex gap-2">
+                         <button onclick="saveProduct()" id="admin-btn-save" class="btn-cyber-primary flex-1 py-2 text-xs">SAVE</button>
+                         <button onclick="deleteProduct()" id="admin-btn-del" class="hidden btn-cyber-ghost w-10 text-red-400"><i class="fa-solid fa-trash"></i></button>
+                     </div>
+                 </div>
+             </div>
+             <div id="admin-product-list" class="space-y-2"></div>
         </div>
+
     </main>
-    <div id="toast-container" class="fixed top-16 right-4 z-[100] flex flex-col gap-2 w-72 pointer-events-none *:pointer-events-auto"></div>
-    <div id="gacha-overlay" class="hidden fixed inset-0 z-[200] bg-black flex flex-col items-center justify-center overflow-hidden">
-            
-            <div id="gacha-stage" class="relative w-full h-full flex items-center justify-center">
-                <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-slate-800/50 via-black to-black opacity-80"></div>
-                
-                <div id="magic-circle" class="w-[500px] h-[500px] border-4 border-white/20 rounded-full absolute animate-[spin_10s_linear_infinite] opacity-0 transition-opacity duration-1000 flex items-center justify-center">
-                    <div class="w-[350px] h-[350px] border-2 border-white/10 rounded-full rotate-45 border-dashed"></div>
-                    <div class="w-[450px] h-[450px] border border-white/10 rounded-full absolute"></div>
-                </div>
 
-                <div id="summon-orb" class="w-0 h-0 rounded-full bg-white shadow-[0_0_50px_rgba(255,255,255,0.8)] relative z-10 transition-all duration-300"></div>
-                
-                <div id="light-beams" class="absolute inset-0 opacity-0 pointer-events-none z-20">
-                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[2px] h-[100vh] bg-white rotate-45 shadow-[0_0_20px_white]"></div>
-                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[2px] h-[100vh] bg-white -rotate-45 shadow-[0_0_20px_white]"></div>
-                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[2px] bg-white shadow-[0_0_20px_white]"></div>
-                </div>
-            </div>
+    <nav id="bottom-nav" class="fixed bottom-6 left-4 right-4 z-50 hidden transition-all duration-300">
+        <div class="glass-capsule h-16 px-1 flex items-center justify-between shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-white/10 backdrop-blur-xl bg-slate-900/80 mx-auto max-w-md">
+            <div class="flex w-full justify-between px-2" id="nav-grid">
+                <button onclick="switchToPage('page-home')" class="nav-btn group relative w-12 h-12 flex items-center justify-center rounded-full transition-all" data-target="page-home">
+                    <i class="fa-solid fa-house text-lg text-gray-500 group-hover:text-cyan-400 transition-colors"></i>
+                    <span class="active-dot absolute -bottom-1 w-1 h-1 bg-cyan-400 rounded-full opacity-0 shadow-[0_0_8px_cyan]"></span>
+                </button>
 
-            <div id="gacha-results-container" class="hidden absolute inset-0 z-30 flex-col items-center justify-center p-4 bg-black/90 backdrop-blur-xl">
-                <h2 class="text-3xl font-bold text-white mb-6 animate-bounce tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-yellow-500">SUMMON RESULT</h2>
+                <button onclick="loadStoreItems(); switchToPage('page-store')" class="nav-btn group relative w-12 h-12 flex items-center justify-center rounded-full transition-all" data-target="page-store">
+                    <i class="fa-solid fa-store text-lg text-gray-500 group-hover:text-pink-400 transition-colors"></i>
+                    <span class="active-dot absolute -bottom-1 w-1 h-1 bg-pink-400 rounded-full opacity-0 shadow-[0_0_8px_magenta]"></span>
+                </button>
                 
-                <div id="gacha-cards-grid" class="grid grid-cols-2 md:grid-cols-5 gap-4 w-full max-w-5xl overflow-y-auto max-h-[70vh] p-4">
-                    </div>
+                <button onclick="switchToPage('page-cards')" class="nav-btn group relative w-14 h-14 -mt-8 bg-gradient-to-b from-purple-600 to-indigo-900 border-4 border-slate-950 rounded-full flex items-center justify-center shadow-lg shadow-purple-500/40 hover:scale-110 transition-transform hover:shadow-purple-500/60" data-target="page-cards">
+                    <i class="fa-solid fa-dragon text-xl text-white"></i>
+                </button>
 
-                <div class="mt-8 flex gap-4 opacity-0 animate-[fadeIn_1s_ease-out_forwards] delay-1000">
-                    <button onclick="closeGacha()" class="px-8 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-full font-bold border border-slate-500 transition-all hover:scale-105">
-                        收下卡牌
-                    </button>
-                </div>
-            </div>
-            
-            <button id="skip-gacha-btn" onclick="skipGachaAnimation()" class="absolute top-8 right-8 text-white/50 hover:text-white border border-white/20 px-4 py-1 rounded-full text-xs z-50">
-                SKIP >>
-            </button>
-    </div>
-    <div id="custom-alert-modal" class="hidden fixed inset-0 z-[300] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
-            <div class="bg-slate-800 border-2 border-slate-600 rounded-xl p-6 max-w-sm w-full shadow-2xl transform scale-95 transition-transform duration-300" id="custom-alert-box">
-                <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-circle-exclamation text-yellow-400 animate-pulse"></i>
-                    <span id="custom-alert-title">系統提示</span>
-                </h3>
-                
-                <p id="custom-alert-msg" class="text-gray-300 mb-8 text-sm leading-relaxed break-words font-medium">
-                    ...
-                </p>
-                
-                <button onclick="closeCustomAlert()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-3 rounded-lg shadow-lg border border-blue-400/30 transition-all hover:scale-[1.02] active:scale-95">
-                    <i class="fa-solid fa-check mr-2"></i> 確定
+                <button onclick="loadLeaderboard(); switchToPage('page-rank')" class="nav-btn group relative w-12 h-12 flex items-center justify-center rounded-full transition-all" data-target="page-rank">
+                    <i class="fa-solid fa-chart-simple text-lg text-gray-500 group-hover:text-yellow-400 transition-colors"></i>
+                    <span class="active-dot absolute -bottom-1 w-1 h-1 bg-yellow-400 rounded-full opacity-0 shadow-[0_0_8px_yellow]"></span>
+                </button>
+
+                <button onclick="switchToPage('page-settings')" class="nav-btn group relative w-12 h-12 flex items-center justify-center rounded-full transition-all" data-target="page-settings">
+                    <i class="fa-solid fa-gear text-lg text-gray-500 group-hover:text-green-400 transition-colors"></i>
+                    <span class="active-dot absolute -bottom-1 w-1 h-1 bg-green-400 rounded-full opacity-0 shadow-[0_0_8px_lime]"></span>
                 </button>
             </div>
-    </div>
-    <div id="custom-confirm-modal" class="hidden fixed inset-0 z-[300] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
-            <div class="bg-slate-800 border-2 border-slate-600 rounded-xl p-6 max-w-sm w-full shadow-2xl transform scale-95 transition-transform duration-300" id="custom-confirm-box">
-                <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-circle-question text-blue-400 animate-pulse"></i>
-                    <span id="custom-confirm-title">確認操作</span>
-                </h3>
-                
-                <p id="custom-confirm-msg" class="text-gray-300 mb-8 text-sm leading-relaxed break-words font-medium">
-                    ...
-                </p>
-                
-                <div class="flex gap-3">
-                    <button onclick="resolveCustomConfirm(false)" class="flex-1 bg-slate-700 hover:bg-slate-600 text-gray-300 font-bold py-3 rounded-lg border border-slate-600 transition-all hover:scale-[1.02]">
-                        <i class="fa-solid fa-xmark mr-1"></i> 取消
-                    </button>
-                    <button onclick="resolveCustomConfirm(true)" class="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-3 rounded-lg shadow-lg border border-blue-400/30 transition-all hover:scale-[1.02]">
-                        <i class="fa-solid fa-check mr-1"></i> 確定
-                    </button>
-                </div>
-            </div>
-    </div>
-
-    <nav id="bottom-nav" class="bg-slate-800/90 backdrop-blur-md border-t border-slate-700 fixed bottom-0 w-full z-50 hidden transition-all duration-300">
-        <div class="grid h-16 grid-cols-5 mx-auto font-medium" id="nav-grid">
-            <button onclick="switchToPage('page-home')" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group active-nav-btn" data-target="page-home">
-                <i class="fa-solid fa-house mb-1 text-lg group-hover:text-blue-400 transition-colors"></i><span class="text-[10px]" data-i18n="nav_home">首頁</span>
-            </button>
-            <button onclick="loadStoreItems(); switchToPage('page-store')" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group" data-target="page-store">
-                <i class="fa-solid fa-store mb-1 text-lg group-hover:text-pink-400 transition-colors"></i><span class="text-[10px]" data-i18n="nav_store">商店</span>
-            </button>
-            <button onclick="switchToPage('page-cards')" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group" data-target="page-cards">
-                <i class="fa-solid fa-scroll mb-1 text-lg group-hover:text-purple-400 transition-colors"></i>
-                <span class="text-[10px]">卡牌</span>
-            </button>
-            <button onclick="loadLeaderboard(); switchToPage('page-rank')" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group" data-target="page-rank">
-                <i class="fa-solid fa-chart-simple mb-1 text-lg group-hover:text-yellow-400 transition-colors"></i><span class="text-[10px]" data-i18n="nav_rank">排行</span>
-            </button>
-            <button onclick="switchToPage('page-settings')" class="flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group" data-target="page-settings">
-                <i class="fa-solid fa-user-gear mb-1 text-lg group-hover:text-green-400 transition-colors"></i><span class="text-[10px]" data-i18n="nav_settings">設定</span>
-            </button>
         </div>
     </nav>
-    <div id="admin-debug-console" class="hidden fixed bottom-0 left-0 w-full h-64 bg-black/95 text-green-400 font-mono text-xs z-[9999] border-t-2 border-red-500 shadow-[0_-5px_20px_rgba(0,0,0,0.8)] flex flex-col transition-transform duration-300 translate-y-0">
-        <div class="flex justify-between items-center px-4 py-2 bg-gray-900 border-b border-gray-700">
-            <div class="flex items-center gap-2">
-                <span class="text-red-500 font-bold animate-pulse">🐞 SYSTEM DEBUGGER</span>
-                <span id="debug-count" class="bg-red-600 text-white px-2 py-0.5 rounded-full text-[10px]">0</span>
+
+    <div id="toast-container" class="fixed top-20 right-4 z-[100] flex flex-col gap-2 w-72 pointer-events-none *:pointer-events-auto"></div>
+
+    <div id="gacha-overlay" class="hidden fixed inset-0 z-[200] bg-black flex flex-col items-center justify-center overflow-hidden">
+        <div id="gacha-stage" class="relative w-full h-full flex items-center justify-center">
+            <div id="magic-circle" class="w-[300px] h-[300px] md:w-[500px] md:h-[500px] border-2 border-cyan-500/30 rounded-full absolute animate-[spin_10s_linear_infinite] opacity-0 flex items-center justify-center">
+                <div class="w-[70%] h-[70%] border border-cyan-500/20 rounded-full border-dashed"></div>
             </div>
-            <div class="flex gap-2">
-                <button onclick="document.getElementById('debug-logs').innerHTML=''; document.getElementById('debug-count').innerText='0'" class="px-3 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded text-[10px] transition">
-                    CLEAR
-                </button>
-                <button onclick="document.getElementById('admin-debug-console').classList.add('translate-y-full')" class="px-3 py-1 bg-red-900 hover:bg-red-800 text-white rounded text-[10px] transition">
-                    HIDE
-                </button>
+            <div id="summon-orb" class="w-2 h-2 rounded-full bg-white shadow-[0_0_50px_white] relative z-10 transition-all duration-300"></div>
+        </div>
+        <div id="gacha-results-container" class="hidden absolute inset-0 z-30 flex-col items-center justify-center p-4 bg-slate-950/90 backdrop-blur-xl">
+            <h2 class="text-3xl font-bold text-white mb-6 font-sci tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-yellow-500">SUMMON RESULT</h2>
+            <div id="gacha-cards-grid" class="grid grid-cols-2 md:grid-cols-5 gap-3 w-full max-w-4xl overflow-y-auto max-h-[70vh] p-2"></div>
+            <div class="mt-8">
+                <button onclick="closeGacha()" class="btn-cyber-primary px-10 py-3 rounded-full font-bold">CONFIRM</button>
             </div>
         </div>
+        <button id="skip-gacha-btn" onclick="skipGachaAnimation()" class="absolute top-8 right-8 text-white/50 hover:text-white border border-white/20 px-4 py-1 rounded-full text-xs z-50 font-mono">SKIP >></button>
+    </div>
+
+    <div id="custom-alert-modal" class="hidden fixed inset-0 z-[300] bg-black/80 backdrop-blur-sm flex items-center justify-center p-6 opacity-0 transition-opacity duration-300">
+        <div class="glass-panel border-2 border-cyan-500/50 rounded-2xl p-6 max-w-xs w-full shadow-[0_0_30px_rgba(6,182,212,0.3)] transform scale-95 transition-transform duration-300" id="custom-alert-box">
+            <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2 font-sci">
+                <i class="fa-solid fa-terminal text-cyan-400"></i>
+                <span id="custom-alert-title">SYSTEM MSG</span>
+            </h3>
+            <p id="custom-alert-msg" class="text-gray-300 mb-6 text-sm font-mono">...</p>
+            <button onclick="closeCustomAlert()" class="btn-cyber-primary w-full py-3 rounded-lg font-bold">OK</button>
+        </div>
+    </div>
     
-        <div id="debug-logs" class="flex-1 overflow-y-auto p-4 space-y-2 font-mono scroll-smooth">
-            <div class="text-gray-500 italic">Waiting for logs...</div>
+    <div id="custom-confirm-modal" class="hidden fixed inset-0 z-[300] bg-black/80 backdrop-blur-sm flex items-center justify-center p-6 opacity-0 transition-opacity duration-300">
+        <div class="glass-panel border-2 border-yellow-500/50 rounded-2xl p-6 max-w-xs w-full shadow-[0_0_30px_rgba(234,179,8,0.3)] transform scale-95 transition-transform duration-300" id="custom-confirm-box">
+            <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2 font-sci">
+                <i class="fa-solid fa-triangle-exclamation text-yellow-400"></i>
+                <span id="custom-confirm-title">CONFIRM</span>
+            </h3>
+            <p id="custom-confirm-msg" class="text-gray-300 mb-6 text-sm font-mono">...</p>
+            <div class="flex gap-3">
+                <button onclick="resolveCustomConfirm(false)" class="flex-1 btn-cyber-ghost py-2 rounded-lg text-xs">CANCEL</button>
+                <button onclick="resolveCustomConfirm(true)" class="flex-1 btn-cyber-primary py-2 rounded-lg text-xs">PROCEED</button>
+            </div>
         </div>
     </div>
 
-    <button id="btn-show-debug" class="hidden fixed bottom-4 right-4 z-[9998] bg-red-600 text-white w-10 h-10 rounded-full shadow-lg flex items-center justify-center opacity-50 hover:opacity-100 transition" onclick="document.getElementById('admin-debug-console').classList.remove('translate-y-full')">
-        <i class="fa-solid fa-bug"></i>
-    </button>
-    
+    <div id="card-selector-modal" class="hidden fixed inset-0 bg-black/90 z-[60] flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="glass-panel rounded-2xl w-full max-w-md max-h-[80vh] flex flex-col border border-white/10">
+            <div class="p-4 border-b border-white/10 flex justify-between items-center">
+                <h3 class="text-white font-bold font-sci">SELECT UNIT</h3>
+                <button onclick="document.getElementById('card-selector-modal').classList.add('hidden')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <div id="modal-card-list" class="p-4 overflow-y-auto grid grid-cols-3 gap-2"></div>
+        </div>
+    </div>
+
+    <div id="admin-debug-console" class="hidden fixed bottom-0 left-0 w-full h-48 bg-black/95 text-green-400 font-mono text-[10px] z-[9999] border-t border-green-900 flex flex-col transition-transform duration-300 translate-y-0">
+        <div class="flex justify-between items-center px-2 py-1 bg-gray-900 border-b border-gray-800">
+            <span>SYSTEM_LOG</span>
+            <div class="flex gap-2">
+                <span id="debug-count" class="text-white">0</span>
+                <button onclick="document.getElementById('admin-debug-console').classList.add('translate-y-full')">HIDE</button>
+            </div>
+        </div>
+        <div id="debug-logs" class="flex-1 overflow-y-auto p-2 space-y-1"></div>
+    </div>
+
     <script type="module" src="main.js"></script>
 </body>
 </html>
