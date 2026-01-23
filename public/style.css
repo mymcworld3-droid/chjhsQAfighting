@@ -118,17 +118,32 @@
     margin-bottom: 0.5rem;
     opacity: 0.8;
 }
+/* 導航按鈕樣式更新 */
+.nav-btn {
+    position: relative;
+    /* 移除原本的固定寬高與圓形背景 */
+    background: transparent; 
+}
 
-/* 7. 導航按鈕動畫 */
-.nav-btn.text-white .active-dot {
+/* 當按鈕處於活躍狀態時的樣式 */
+.nav-btn.active-nav-btn i {
+    color: white !important;
+    filter: drop-shadow(0 0 5px currentColor);
+    transform: translateY(-2px); /* 微微上浮 */
+}
+
+.nav-btn.active-nav-btn span.text-\[10px\] {
+    color: white !important;
+    text-shadow: 0 0 5px currentColor;
+}
+
+.nav-btn.active-nav-btn .active-dot {
     opacity: 1 !important;
 }
-.nav-btn.active-nav-btn i {
-    color: #22d3ee; /* Cyan */
-    filter: drop-shadow(0 0 5px #22d3ee);
-}
-.nav-btn.active-nav-btn .active-dot {
-    opacity: 1;
+
+/* 確保文字在小螢幕上不換行 */
+.nav-btn span {
+    white-space: nowrap;
 }
 
 /* 8. 戰鬥卡片容器 (必須與 main.js 配合) */
