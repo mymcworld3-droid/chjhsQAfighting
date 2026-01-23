@@ -1973,32 +1973,57 @@ async function inviteRandomPlayers(roomId) {
     } catch (e) { console.error("邀請發送失敗", e); }
 }
 
-
-
+// [修正版] generateSharedQuiz：增加 AI 失敗後的備援機制，防止卡死
 let isGenerating = false;
+
 async function generateSharedQuiz(roomId) {
-    if (isGenerating) return;
+    if (isGenerating) return; 
     isGenerating = true; 
     
     try {
-        // [修改] 檢查是否為第一回合 (若是，則給予一點延遲，讓玩家先看到桌面)
         const roomRef = doc(db, "rooms", roomId);
         const snap = await getDoc(roomRef);
+        
+        // 第一回合給予一點延遲，讓玩家先看到桌面
         if (snap.exists() && snap.data().round === 1) {
             console.log("🎲 第一回合，展示桌面中...");
-            await new Promise(r => setTimeout(r, 1500)); // 延遲 1.5 秒
+            await new Promise(r => setTimeout(r, 1500));
         }
 
-        const q = await fetchOneQuestion(); 
+        let q = null;
+        try {
+            // 嘗試從 AI/題庫 取得題目
+            q = await fetchOneQuestion(); 
+        } catch (fetchError) {
+            console.error("⚠️ 主要出題失敗，啟用備用題目系統:", fetchError);
+            // 🔥 【關鍵修正】備用題目：防止 AI 掛掉時遊戲卡死
+            q = {
+                data: {
+                    q: "通訊受到干擾 (AI連線忙碌)，請選擇正確選項以校正系統：",
+                    opts: ["【點擊此處】修復連線並繼續戰鬥", "錯誤的雜訊 A", "錯誤的雜訊 B", "錯誤的雜訊 C"],
+                    ans: 0, // 第一個選項是正確答案
+                    exp: "由於 AI 服務暫時無法連線，系統自動派發了備用題目以維持戰鬥進行。"
+                }
+            };
+        }
+
+        // 寫入資料庫，讓雙方都能收到題目
         await updateDoc(roomRef, { 
-            currentQuestion: { q: q.data.q, opts: q.data.opts, ans: q.data.ans, exp: q.data.exp } // 確保包含解析
+            currentQuestion: { 
+                q: q.data.q, 
+                opts: q.data.opts, 
+                ans: q.data.ans, 
+                exp: q.data.exp 
+            } 
         });
     } catch (e) { 
-        console.error("Gen Error", e); 
+        console.error("Generate Critical Error", e); 
     } finally { 
         isGenerating = false; 
     }
-}window.leaveBattle = async () => {
+}
+
+window.leaveBattle = async () => {
     if (battleUnsub) { 
         battleUnsub(); 
         battleUnsub = null; 
