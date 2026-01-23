@@ -467,7 +467,87 @@ window.toggleLanguage = () => {
     localStorage.setItem('app_lang', currentLang);
     updateTexts();
 };
+// ==========================================
+// 🛠️ 管理員強力除錯工具
+// ==========================================
+window.setupAdminDebug = function() {
+    // 防止重複初始化
+    if (window.isDebugInit) return;
+    window.isDebugInit = true;
 
+    const consoleDiv = document.getElementById('admin-debug-console');
+    const logContainer = document.getElementById('debug-logs');
+    const debugCount = document.getElementById('debug-count');
+    const showBtn = document.getElementById('btn-show-debug');
+
+    if (!consoleDiv || !logContainer) return;
+
+    // 顯示介面
+    consoleDiv.classList.remove('hidden');
+    if(showBtn) showBtn.classList.remove('hidden');
+
+    console.log("🔧 Admin Debugger Active: Intercepting all errors...");
+
+    // 輔助函式：新增日誌
+    const addLog = (msg, type = 'info') => {
+        const div = document.createElement('div');
+        const time = new Date().toLocaleTimeString('en-US', { hour12: false }) + '.' + new Date().getMilliseconds();
+        
+        let colorClass = 'text-gray-300';
+        let prefix = '[LOG]';
+
+        if (type === 'error') {
+            colorClass = 'text-red-400 font-bold bg-red-900/20 p-1 rounded border-l-2 border-red-500';
+            prefix = '❌ [ERR]';
+            // 更新錯誤計數
+            let count = parseInt(debugCount.innerText) || 0;
+            debugCount.innerText = count + 1;
+        } else if (type === 'warn') {
+            colorClass = 'text-yellow-400';
+            prefix = '⚠️ [WARN]';
+        }
+
+        div.className = `break-words text-[11px] font-mono border-b border-white/5 pb-1 ${colorClass}`;
+        div.innerHTML = `<span class="opacity-50 mr-2">${time}</span><span class="mr-2">${prefix}</span>${msg}`;
+        
+        logContainer.prepend(div); // 最新訊息在最上面
+    };
+
+    // 1. 攔截 console.error (最重要，包含 try-catch 的錯誤)
+    const originalError = console.error;
+    console.error = function(...args) {
+        originalError.apply(console, args);
+        // 將物件轉為字串以便顯示
+        const msg = args.map(arg => {
+            if (arg instanceof Error) return `${arg.message}\n${arg.stack}`;
+            if (typeof arg === 'object') return JSON.stringify(arg, null, 2);
+            return String(arg);
+        }).join(' ');
+        addLog(msg, 'error');
+    };
+
+    // 2. 攔截全域錯誤 (語法錯誤、變數未定義)
+    window.onerror = function(msg, url, line, col, error) {
+        const stack = error ? error.stack : '';
+        addLog(`${msg}\nLocation: ${url}:${line}:${col}\n${stack}`, 'error');
+        return false; // 不阻止預設行為
+    };
+
+    // 3. 攔截 Promise 錯誤 (Fetch 失敗、Async 錯誤)
+    window.onunhandledrejection = function(event) {
+        addLog(`Unhandled Promise: ${event.reason}`, 'error');
+    };
+    
+    // 4. (選用) 攔截 console.log，只顯示帶有特定關鍵字的
+    const originalLog = console.log;
+    console.log = function(...args) {
+        originalLog.apply(console, args);
+        // 如果想看對戰流程，可以取消下面註解
+        // if (args[0] && typeof args[0] === 'string' && (args[0].includes('戰') || args[0].includes('Generate'))) {
+        //    addLog(args.join(' '), 'info');
+        // }
+    };
+};
 // ==========================================
 // 1. 定義新段位與升級門檻 (使用翻譯 Key)
 // ==========================================
