@@ -589,13 +589,24 @@ window.logout = () => {
     signOut(auth).then(() => location.reload()); 
 };
 
+// ==========================================
+// 🔐 登入狀態監聽 (核心邏輯)
+// ==========================================
 onAuthStateChanged(auth, async (user) => {
+    // 先更新一次介面文字
     updateTexts();
 
+    const userInfoEl = document.getElementById('user-info');
+
     if (user) {
+        // 🔥【關鍵修正】登入後移除 data-i18n 屬性，防止 updateTexts() 把它覆蓋回 "未登入"
+        if (userInfoEl) {
+            userInfoEl.removeAttribute('data-i18n'); 
+            userInfoEl.innerHTML = `<i class="fa-solid fa-user-astronaut"></i> ${user.displayName || '玩家'}`;
+        }
+
         document.getElementById('login-screen').classList.add('hidden');
         document.getElementById('bottom-nav').classList.remove('hidden');
-        document.getElementById('user-info').innerHTML = `<i class="fa-solid fa-user-astronaut"></i> ${user.displayName}`;
         document.getElementById('settings-email').innerText = user.email;
 
         injectSocialUI();
@@ -606,13 +617,13 @@ onAuthStateChanged(auth, async (user) => {
             
             if (docSnap.exists()) {
                 currentUserData = docSnap.data();
+                // 資料結構補全 (防呆)
                 if (!currentUserData.inventory) currentUserData.inventory = [];
                 if (!currentUserData.equipped) currentUserData.equipped = { frame: '', avatar: '' };
                 if (!currentUserData.friends) currentUserData.friends = []; 
                 if (!currentUserData.cards || currentUserData.cards.length === 0) {
                     currentUserData.cards = ["c001", "c002"];
                     currentUserData.deck = { main: "c001", sub: "c002" };
-                    // 這裡建議加上 updateDoc 寫回資料庫，以免玩家沒存檔
                     updateDoc(userRef, { 
                         cards: ["c001", "c002"],
                         deck: { main: "c001", sub: "c002" }
@@ -624,6 +635,7 @@ onAuthStateChanged(auth, async (user) => {
                     currentUserData.friendCode = code;
                 }
             } else {
+                // 新使用者初始化
                 const code = Math.random().toString(36).substring(2, 8).toUpperCase();
                 currentUserData = {
                     uid: user.uid, displayName: user.displayName, email: user.email,
@@ -643,9 +655,10 @@ onAuthStateChanged(auth, async (user) => {
                 await setDoc(userRef, currentUserData);
             }
 
+            // 啟動各項監聽服務
             startPresenceSystem();
-            startInvitationListener(); // 🔥 啟動邀請監聽
-            listenToSystemCommands();  // 🔥 啟動全域重整監聽
+            startInvitationListener(); 
+            listenToSystemCommands();  
             
             updateUserAvatarDisplay();
             updateSettingsInputs();
@@ -654,6 +667,7 @@ onAuthStateChanged(auth, async (user) => {
             updateDeckDisplay();
             updateHomeBestCard();
 
+            // 根據資料完整度導向
             if (!currentUserData.profile.educationLevel || currentUserData.profile.educationLevel === "") {
                 switchToPage('page-onboarding'); 
                 document.getElementById('bottom-nav').classList.add('hidden'); 
@@ -662,11 +676,22 @@ onAuthStateChanged(auth, async (user) => {
                 fillBuffer(); 
             }
 
-        } catch (error) { console.error(error); alert("Data Load Error"); }
+        } catch (error) { 
+            console.error("Login Data Error:", error); 
+            alert("資料載入失敗，請檢查網路"); 
+        }
     } else {
+        // 👋 登出狀態
+        if (userInfoEl) {
+            // 加回 data-i18n 屬性，讓它顯示翻譯的 "未登入"
+            userInfoEl.setAttribute('data-i18n', 'not_logged_in');
+            userInfoEl.innerText = t('not_logged_in');
+        }
+
         document.getElementById('login-screen').classList.remove('hidden');
         document.getElementById('bottom-nav').classList.add('hidden');
-        // 登出時取消監聽
+        
+        // 登出時取消監聽，節省資源
         if (inviteUnsub) inviteUnsub();
         if (systemUnsub) systemUnsub();
         if (chatUnsub) chatUnsub();
