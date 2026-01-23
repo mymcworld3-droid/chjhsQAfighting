@@ -1600,7 +1600,7 @@ async function fetchOneQuestion() {
         let rawStrongString = currentUserData.profile.strongSubjects || "";
         let weakArray = rawWeakString.split(/[,，\s]+/).filter(s => s.trim().length > 0);
         let strongArray = rawStrongString.split(/[,，\s]+/).filter(s => s.trim().length > 0);
-        const generalTopics = ["History", "Geography", "Science", "Logic", "Language", "Tech"];
+        const generalTopics = ["國文","英文","數學","社會","自然"];
         
         let targetSubject = "";
         const rand = Math.random();
