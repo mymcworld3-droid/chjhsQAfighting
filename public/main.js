@@ -3720,7 +3720,7 @@ async function executeDraw(count, cost, guaranteedRarity = null) {
 
 let gachaSkip = false; // 用於跳過動畫
 
-// [修正版] 更新戰鬥卡牌 UI (修復 innerContent 變數未宣告的錯誤)
+// [修正版] 更新戰鬥卡牌 UI (修復變數未宣告 + 新增卡面血量顯示)
 function updateBattleCardUI(prefix, playerData) {
     if (!playerData) return;
     
@@ -3747,7 +3747,7 @@ function updateBattleCardUI(prefix, playerData) {
     const currentHp = activeCard.currentHp;
     const hpPercent = Math.max(0, (currentHp / maxHp) * 100);
 
-    // 1. 更新血條
+    // 1. 更新卡片下方的血條
     hpBarEl.style.width = `${hpPercent}%`;
     hpTextEl.innerText = `${currentHp}/${maxHp}`;
 
@@ -3763,7 +3763,7 @@ function updateBattleCardUI(prefix, playerData) {
 
     const hasImage = getCardImageUrl(activeCard.id); 
 
-    // 🔥🔥【關鍵修正】這裡加上了 let，宣告變數 🔥🔥
+    // 🔥【修正 1】宣告變數，解決 ReferenceError 崩潰
     let innerContent = ""; 
 
     if (hasImage) {
@@ -3780,9 +3780,17 @@ function updateBattleCardUI(prefix, playerData) {
 
             <div class="absolute bottom-0 w-full p-2 flex flex-col items-center z-10">
                 <div class="${nameColor} font-bold text-sm text-center drop-shadow-[0_2px_2px_rgba(0,0,0,1)]">${activeCard.name}</div>
-                <div class="flex items-center gap-1 mt-0.5">
-                    <span class="text-xs text-red-400 font-black drop-shadow-md">⚔️${activeCard.atk}</span>
+                
+                <div class="flex items-center gap-2 mt-0.5 bg-black/40 px-2 py-0.5 rounded-full border border-white/10 backdrop-blur-sm">
+                    <span class="text-xs text-green-400 font-black drop-shadow-md flex items-center gap-0.5">
+                        <i class="fa-solid fa-heart text-[10px]"></i> ${currentHp}
+                    </span>
+                    <span class="text-gray-500 text-[10px]">|</span>
+                    <span class="text-xs text-red-400 font-black drop-shadow-md flex items-center gap-0.5">
+                        <i class="fa-solid fa-khanda text-[10px]"></i> ${activeCard.atk}
+                    </span>
                 </div>
+
                 <div class="mt-1 text-[9px] text-cyan-300 bg-blue-900/60 px-1.5 py-0.5 rounded border border-blue-500/30 backdrop-blur-sm">
                     ${activeCard.skill}
                 </div>
@@ -3804,7 +3812,12 @@ function updateBattleCardUI(prefix, playerData) {
                     ${activeKey === 'main' ? '🐉' : '🛡️'}
                 </div>
                 <div class="${nameColor} font-bold text-sm text-center">${activeCard.name}</div>
-                <div class="text-xs text-red-400 mt-1 font-mono">⚔️ ${activeCard.atk}</div>
+                
+                <div class="flex gap-2 mt-1">
+                    <div class="text-xs text-green-400 font-mono">HP ${currentHp}</div>
+                    <div class="text-xs text-red-400 font-mono">ATK ${activeCard.atk}</div>
+                </div>
+
                 ${activeKey === 'main' ? `<div class="text-[9px] text-blue-300 mt-2 text-center px-1">${activeCard.skill}</div>` : ''}
             </div>
         `;
