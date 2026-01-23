@@ -1292,6 +1292,16 @@ window.switchToPage = (pageId) => {
     const target = document.getElementById(pageId);
     if(target) { target.classList.remove('hidden'); target.classList.add('active-page'); }
     
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        // 先移除所有人的發光狀態
+        btn.classList.remove('active-nav-btn');
+        
+        // 只有目標頁面的按鈕加上發光狀態
+        if (btn.dataset.target === pageId) {
+            btn.classList.add('active-nav-btn');
+        }
+    });
+    
     document.querySelectorAll('#nav-grid button').forEach(btn => {
         if(isBattleActive) btn.classList.add('nav-locked');
         else btn.classList.remove('nav-locked');
