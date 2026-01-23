@@ -1350,6 +1350,9 @@ function updateUIStats() {
     starContainer.innerHTML = `<i class="fa-solid fa-star text-yellow-400 animate-pulse"></i> <span>${t('label_net_progress')}: <span id="display-stars" class="font-bold text-white text-lg">${currentStarsDisplay}</span> / ${maxStarsDisplay}</span>`;
 
     document.getElementById('display-score').innerText = stats.totalScore;
+
+    const cardPts = document.getElementById('cards-user-points');
+    if(cardPts) cardPts.innerText = stats.totalScore;
     document.getElementById('display-streak').innerText = stats.currentStreak;
     document.getElementById('display-best-streak').innerText = stats.bestStreak;
     
