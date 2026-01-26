@@ -127,18 +127,24 @@
 
 /* 當按鈕處於活躍狀態時的樣式 */
 .nav-btn.active-nav-btn i {
-    color: white !important;
-    filter: drop-shadow(0 0 5px currentColor);
+    /* 移除強制白色，改用 currentColor 讓它吃 HTML 設定的顏色 */
+    filter: drop-shadow(0 0 8px currentColor); /* 光暈跟隨顏色 */
     transform: translateY(-2px); /* 微微上浮 */
 }
 
 .nav-btn.active-nav-btn span.text-\[10px\] {
-    color: white !important;
-    text-shadow: 0 0 5px currentColor;
+    /* 移除強制白色 */
+    text-shadow: 0 0 8px currentColor; /* 文字光暈跟隨顏色 */
 }
 
 .nav-btn.active-nav-btn .active-dot {
-    opacity: 1 !important;
+    /* 🔥 關鍵：將原本的 opacity: 1 改為 none，隱藏右上角豆豆 */
+    display: none !important;
+}
+
+/* 確保文字在小螢幕上不換行 */
+.nav-btn span {
+    white-space: nowrap;
 }
 
 /* 確保文字在小螢幕上不換行 */
