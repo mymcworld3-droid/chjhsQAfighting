@@ -986,7 +986,7 @@ function injectSocialUI() {
     btn.id = "btn-social-nav";
     btn.setAttribute("onclick", "switchToPage('page-social')");
     btn.dataset.target = "page-social";
-    btn.className = "flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-white transition group";
+    btn.className = "nav-btn group w-full flex flex-col items-center justify-center h-full transition-all";
     btn.innerHTML = `<i class="fa-solid fa-users mb-1 text-lg group-hover:text-cyan-400 transition-colors"></i><span class="text-[10px]" data-i18n="nav_social">${t('nav_social')}</span>`;
     
     const settingsBtn = navGrid.lastElementChild;
