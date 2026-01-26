@@ -120,22 +120,39 @@ const getBattleCardData = (cid) => {
 // ==========================================
 // 🎨 卡片圖片管理系統
 // ==========================================
-// 請確保 public 資料夾下有 card_picture 資料夾
+// 請確保 public/card_picture 資料夾下有對應圖片
 const getCardImageUrl = (cardId) => {
-    // 定義特定卡片的圖片檔名
+    // 定義所有卡片的圖片檔名映射
     const imageMap = {
-        "c041": "guardian.jpeg", // 光之守護者
-        "c051": "void.jpeg",     // 虛空魔神
-        // 未來可以在這裡新增更多，例如 "c001": "slime.png"
+        // --- 普通 (Gray) ---
+        "c001": "slime.jpeg",           // 源生軟泥
+        "c002": "goblin.jpeg",          // 荒原掠奪者
+        
+        // --- 稀有 (Blue) ---
+        "c011": "frost_wolf.jpeg",      // 霜寒恐狼
+        "c012": "iron_guard.jpeg",      // 符文重甲兵
+
+        // --- 罕見 (Purple) ---
+        "c021": "shadow_assassin.jpeg", // 幽影之刃
+        "c022": "fire_mage.jpeg",       // 爆裂術士
+
+        // --- 史詩 (Red) ---
+        "c031": "flame_dragon.jpeg",    // 熾炎翼龍
+        "c032": "vampire.jpeg",         // 血色親王
+
+        // --- 神話 (Gold) ---
+        "c041": "guardian.jpeg",        // 輝耀熾天使
+
+        // --- 傳奇 (Rainbow) ---
+        "c051": "void.jpeg"             // 虛空魔神
     };
 
     if (imageMap[cardId]) {
-        // 加入時間戳記 v=1 避免快取問題
-        return `/card_picture/${imageMap[cardId]}?v=1`;
+        // 加入時間戳記 v=2 (更新版本號) 避免瀏覽器快取舊圖
+        return `/card_picture/${imageMap[cardId]}?v=2`;
     }
-    return null; // 沒有圖片則回傳 null
+    return null; // 沒有圖片則回傳 null (顯示 Emoji)
 };
-
 // 通用的圖片/Emoji 顯示 HTML 生成器
 const getCardVisualHtml = (cardId, rarity, sizeClass = "text-3xl") => {
     const imgUrl = getCardImageUrl(cardId);
