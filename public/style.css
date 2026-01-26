@@ -118,27 +118,35 @@
     margin-bottom: 0.5rem;
     opacity: 0.8;
 }
-/* 導航按鈕樣式更新 */
 .nav-btn {
     position: relative;
-    /* 移除原本的固定寬高與圓形背景 */
-    background: transparent; 
+    background: transparent;
+    overflow: visible !important; /* 關鍵修正 */
+    z-index: 10;
 }
 
-/* 當按鈕處於活躍狀態時的樣式 */
+/* 2. 關閉全域 button 的漣漪/背景特效 (防止溢出變醜) */
+.nav-btn::before,
+.nav-btn::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* 3. 活躍狀態：讓圖示與文字發光 (跟隨顏色) */
 .nav-btn.active-nav-btn i {
-    /* 移除強制白色，改用 currentColor 讓它吃 HTML 設定的顏色 */
-    filter: drop-shadow(0 0 8px currentColor); /* 光暈跟隨顏色 */
-    transform: translateY(-2px); /* 微微上浮 */
+    filter: drop-shadow(0 0 8px currentColor);
+    transform: translateY(-4px) scale(1.1); /* 讓它浮得更高一點，避免被下方切到 */
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .nav-btn.active-nav-btn span.text-\[10px\] {
-    /* 移除強制白色 */
-    text-shadow: 0 0 8px currentColor; /* 文字光暈跟隨顏色 */
+    text-shadow: 0 0 10px currentColor;
+    font-weight: 900;
+    opacity: 1;
 }
 
-.nav-btn.active-nav-btn .active-dot {
-    /* 🔥 關鍵：將原本的 opacity: 1 改為 none，隱藏右上角豆豆 */
+/* 4. 確保右上角的豆豆被隱藏 */
+.nav-btn .active-dot {
     display: none !important;
 }
 
