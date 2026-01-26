@@ -1936,7 +1936,15 @@ function renderQuiz(data, rank, topic) {
     });
 }
 
-window.giveUpQuiz = () => { if(confirm("Give up this question?")) handleAnswer(-1, -2, document.getElementById('question-text').innerText, "Skipped."); };
+// [修正] 放棄題目改用自定義彈窗
+window.giveUpQuiz = async () => { 
+    // 使用自定義的 openConfirm (支援 Promise等待)
+    const isConfirmed = await openConfirm("確定要放棄此題嗎？\n(將視為回答錯誤並中斷連勝)");
+    
+    if (isConfirmed) {
+        handleAnswer(-1, -2, document.getElementById('question-text').innerText, "Skipped."); 
+    }
+};
 window.nextQuestion = () => { startQuizFlow(); };
 
 // ==========================================
