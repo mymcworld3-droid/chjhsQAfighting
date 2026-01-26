@@ -134,11 +134,13 @@
     content: none !important;
 }
 
-/* 3. 活躍狀態：讓圖示與文字發光 (跟隨顏色) */
 .nav-btn.active-nav-btn i {
-    filter: drop-shadow(0 0 8px currentColor);
-    transform: translateY(-4px) scale(1.1); /* 讓它浮得更高一點，避免被下方切到 */
+    /* 改用 text-shadow，光暈就不會被切掉了！ */
+    text-shadow: 0 0 12px currentColor;
+    transform: translateY(-4px) scale(1.1); 
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    /* 確保濾鏡被移除 */
+    filter: none; 
 }
 
 .nav-btn.active-nav-btn span.text-\[10px\] {
