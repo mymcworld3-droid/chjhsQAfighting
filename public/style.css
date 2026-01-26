@@ -36,6 +36,8 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     border-radius: 9999px;
+    /* 🔥 新增這行：強制解除容器的裁切限制 */
+    overflow: visible !important;
 }
 
 /* 4. 賽博按鈕 */
@@ -120,9 +122,9 @@
 }
 .nav-btn {
     position: relative;
-    background: transparent;
-    overflow: visible !important; /* 關鍵修正 */
-    z-index: 10;
+    background: transparent; 
+    /* 🔥 新增這行：確保按鈕光暈可以超出邊框 */
+    overflow: visible !important;
 }
 
 /* 2. 關閉全域 button 的漣漪/背景特效 (防止溢出變醜) */
