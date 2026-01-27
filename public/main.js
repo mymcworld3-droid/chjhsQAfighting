@@ -1997,6 +1997,69 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     fillBuffer();
 }
 
+// --- 新增：結算單人挑戰 Session ---
+window.finishSoloSession = async () => {
+    // 1. 給予額外獎勵 (100 金幣)
+    const bonus = 100;
+    currentUserData.stats.totalScore += bonus;
+    
+    // 寫入獎勵到資料庫
+    try {
+        await updateDoc(doc(db, "users", auth.currentUser.uid), {
+            "stats.totalScore": currentUserData.stats.totalScore
+        });
+        updateUIStats();
+        // 播放慶祝音效
+        if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 200]);
+    } catch (e) {
+        console.error("Bonus Error", e);
+    }
+
+    // 2. 隱藏答題頁，顯示結算頁
+    document.getElementById('page-quiz').classList.add('hidden');
+    const resultPage = document.getElementById('page-solo-result');
+    resultPage.classList.remove('hidden');
+
+    // 3. 渲染結算數據
+    const acc = Math.round((soloSession.correctCount / soloSession.maxSteps) * 100);
+    document.getElementById('solo-result-acc').innerText = `${acc}%`;
+    document.getElementById('solo-result-acc').className = `text-3xl font-bold font-sci ${acc >= 60 ? 'text-green-400' : 'text-red-400'}`;
+
+    const list = document.getElementById('solo-history-list');
+    list.innerHTML = '';
+    
+    soloSession.history.forEach((log, idx) => {
+        const div = document.createElement('div');
+        div.className = `p-3 rounded-xl border border-white/5 bg-slate-900/60 flex flex-col gap-1 ${log.isCorrect ? 'border-l-4 border-l-green-500' : 'border-l-4 border-l-red-500'}`;
+        div.innerHTML = `
+            <div class="flex justify-between items-start">
+                <span class="text-[10px] text-gray-500 font-mono">Q${idx + 1}</span>
+                ${log.isCorrect 
+                    ? '<span class="text-green-400 text-[10px] font-bold">CORRECT</span>' 
+                    : '<span class="text-red-400 text-[10px] font-bold">WRONG</span>'}
+            </div>
+            <div class="text-xs text-white font-bold truncate">${log.q}</div>
+            <div class="text-[10px] text-gray-400 line-clamp-2 mt-1 bg-black/20 p-1 rounded">
+                ${log.exp}
+            </div>
+        `;
+        list.appendChild(div);
+    });
+
+    // 4. 重置 Session 狀態 (為下一次做準備)
+    soloSession.active = false;
+    soloSession.history = [];
+    
+    // 隱藏右上角進度條 (因為已經結束)
+    document.getElementById('solo-progress-panel').classList.add('hidden');
+};
+
+// --- 新增：關閉結算頁面 (回到大廳) ---
+window.closeSoloResult = () => {
+    document.getElementById('page-solo-result').classList.add('hidden');
+    switchToPage('page-home');
+};
+
 function renderQuiz(data, rank, topic) {
     document.getElementById('quiz-loading').classList.add('hidden');
     document.getElementById('quiz-container').classList.remove('hidden');
