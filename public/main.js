@@ -2015,10 +2015,7 @@ window.finishSoloSession = async () => {
         console.error("Bonus Error", e);
     }
 
-    // 2. 隱藏答題頁，顯示結算頁
-    document.getElementById('page-quiz').classList.add('hidden');
-    const resultPage = document.getElementById('page-solo-result');
-    resultPage.classList.remove('hidden');
+    window.switchToPage('page-solo-result');
 
     // 3. 渲染結算數據
     const acc = Math.round((soloSession.correctCount / soloSession.maxSteps) * 100);
