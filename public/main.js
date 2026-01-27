@@ -44,7 +44,15 @@ let currentSelectSlot = null;
 // --- 對戰動畫控制 (新增) ---
 let lastProcessedLogId = null;       // 記錄最後一次播放的戰鬥日誌 ID
 let isPlayingSequence = false;       // 是否正在播放序列動畫中
-
+// --- 單人挑戰 Session 狀態 ---
+let soloSession = {
+    active: false,
+    currentStep: 0,
+    maxSteps: 10,
+    correctCount: 0,
+    wrongCount: 0,
+    history: [] // 紀錄這 10 題的詳細狀況
+};
 // ==========================================
 // 0. 卡牌資料庫與稀有度設定
 // ==========================================
