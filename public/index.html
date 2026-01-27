@@ -105,8 +105,13 @@
 
                         <div class="w-full max-w-[260px]">
                             <div class="flex justify-between text-[10px] text-cyan-200 mb-1.5 font-sci tracking-wider">
-                                <span>NEXT RANK</span>
-                                <span><span id="display-stars" class="text-yellow-400 font-bold text-sm">0</span> <span class="text-xs opacity-50">/ 10</span></span>
+                                <div class="flex items-center gap-1">
+                                    <i class="fa-solid fa-star text-yellow-400 animate-pulse"></i> <span>NEXT RANK</span>
+                                </div>
+                                <span>
+                                    <span id="display-stars" class="text-yellow-400 font-bold text-sm">0</span> 
+                                    <span class="text-xs opacity-50">/ 10</span>
+                                </span>
                             </div>
                             <div class="h-2.5 bg-slate-900/60 rounded-full overflow-hidden border border-white/5 p-[1px]">
                                 <div id="progress-bar" class="h-full rounded-full bg-gradient-to-r from-cyan-400 to-blue-600 shadow-[0_0_10px_cyan] relative transition-all duration-1000" style="width: 0%"></div>
