@@ -1800,16 +1800,44 @@ async function fillBuffer() {
 // ==========================================
 //  Quiz UI Logic
 // ==========================================
-// --- 修改 startQuizFlow：加入時間記錄 ---
+// --- 修改後的 startQuizFlow：支援 10 題單位機制 ---
 window.startQuizFlow = async () => {
+    // 判斷是否為新的 Session
+    if (!soloSession.active) {
+        // 初始化 Session
+        soloSession = {
+            active: true,
+            currentStep: 1, // 從第 1 題開始
+            maxSteps: 10,
+            correctCount: 0,
+            wrongCount: 0,
+            history: []
+        };
+        console.log("🚀 Starting new Solo Unit (10 questions)");
+    } else {
+        console.log("🔄 Resuming Solo Unit:", soloSession.currentStep, "/ 10");
+    }
+
     switchToPage('page-quiz');
+    
+    // 更新 UI 顯示
     document.getElementById('quiz-container').classList.add('hidden');
     document.getElementById('feedback-section').classList.add('hidden');
     document.getElementById('btn-giveup').classList.remove('hidden');
 
-    // 記錄答題開始時間（用於能力模型分析）
+    // 顯示右上角進度面板
+    const progressPanel = document.getElementById('solo-progress-panel');
+    if (progressPanel) {
+        progressPanel.classList.remove('hidden');
+        document.getElementById('solo-current-step').innerText = soloSession.currentStep;
+        document.getElementById('solo-correct-count').innerText = soloSession.correctCount;
+        document.getElementById('solo-wrong-count').innerText = soloSession.wrongCount;
+    }
+
+    // 記錄答題開始時間
     window.quizStartTime = Date.now(); 
 
+    // --- 以下為原本的出題邏輯 ---
     const savedQuiz = localStorage.getItem('currentQuiz');
     if (savedQuiz) { 
         const q = JSON.parse(savedQuiz); 
@@ -1817,13 +1845,14 @@ window.startQuizFlow = async () => {
         fillBuffer(); 
         return; 
     }
+    
+    // 檢查 buffer
     if (quizBuffer.length > 0) { 
         const nextQ = quizBuffer.shift(); 
         localStorage.setItem('currentQuiz', JSON.stringify(nextQ)); 
         renderQuiz(nextQ.data, nextQ.rank, nextQ.badge); 
         fillBuffer(); 
-    } 
-    else {
+    } else {
         document.getElementById('quiz-loading').classList.remove('hidden');
         document.getElementById('loading-text').innerText = t('loading_text');
         try { 
@@ -1831,8 +1860,7 @@ window.startQuizFlow = async () => {
             localStorage.setItem('currentQuiz', JSON.stringify(q)); 
             renderQuiz(q.data, q.rank, q.badge); 
             fillBuffer(); 
-        } 
-        catch (e) { 
+        } catch (e) { 
             console.error(e); 
             alert("Failed to start"); 
             switchToPage('page-home'); 
