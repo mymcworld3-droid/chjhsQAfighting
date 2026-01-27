@@ -1925,13 +1925,13 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
             // 已完成 10 題
             nextBtn.innerHTML = '<i class="fa-solid fa-flag-checkered"></i> 完成結算 (FINISH)';
             nextBtn.className = "btn-cyber-accent flex-1 py-3 rounded-lg text-xs font-bold animate-pulse";
-            nextBtn.onclick = finishSoloSession; // 綁定到結算函式
+            nextBtn.onclick = window.finishSoloSession; // 綁定到結算函式
         } else {
             // 還沒完成，準備下一題
             soloSession.currentStep++;
             nextBtn.innerText = t('btn_next_q'); // "下一題"
             nextBtn.className = "btn-cyber-primary flex-1 py-3 rounded-lg text-xs";
-            nextBtn.onclick = nextQuestion; // 綁定到下一題函式
+            nextBtn.onclick = window.nextQuestion; // 綁定到下一題函式
         }
     }
 
