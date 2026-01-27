@@ -1868,13 +1868,12 @@ window.startQuizFlow = async () => {
     }
 };
 
-// --- 重寫 handleAnswer：加入能力分析邏輯 ---
+// --- 修改後的 handleAnswer：加入 Session 狀態與結算判斷 ---
 async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
-    // 1. 計算答題耗時 (秒)
     const timeTaken = (Date.now() - (window.quizStartTime || Date.now())) / 1000;
     const isCorrect = userIdx === correctIdx;
     
-    // UI 處理
+    // UI 處理：禁用按鈕
     const opts = document.querySelectorAll('[id^="option-btn-"]');
     opts.forEach((btn, idx) => {
         btn.onclick = null; btn.classList.add('btn-disabled');
@@ -1882,6 +1881,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         else if (idx === userIdx && !isCorrect) btn.classList.add('btn-wrong');
     });
     
+    // 顯示 Feedback 區塊
     const fbSection = document.getElementById('feedback-section');
     const fbTitle = document.getElementById('feedback-title');
     const fbIcon = document.getElementById('feedback-icon');
@@ -1902,29 +1902,56 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     localStorage.removeItem('currentQuiz');
     fbText.innerText = explanation || "AI did not provide explanation.";
 
-    // 2. 更新學生能力模型數據
+    // --- Solo Session 邏輯更新 ---
+    if (soloSession.active) {
+        // 更新計數
+        if (isCorrect) soloSession.correctCount++;
+        else soloSession.wrongCount++;
+        
+        // 記錄歷史 (用於結算頁面)
+        soloSession.history.push({
+            q: questionText,
+            isCorrect: isCorrect,
+            exp: explanation
+        });
+
+        // 更新右上角 UI
+        document.getElementById('solo-correct-count').innerText = soloSession.correctCount;
+        document.getElementById('solo-wrong-count').innerText = soloSession.wrongCount;
+
+        // 判斷按鈕行為：下一題 還是 查看結算？
+        const nextBtn = document.getElementById('btn-next-step');
+        if (soloSession.currentStep >= soloSession.maxSteps) {
+            // 已完成 10 題
+            nextBtn.innerHTML = '<i class="fa-solid fa-flag-checkered"></i> 完成結算 (FINISH)';
+            nextBtn.className = "btn-cyber-accent flex-1 py-3 rounded-lg text-xs font-bold animate-pulse";
+            nextBtn.onclick = finishSoloSession; // 綁定到結算函式
+        } else {
+            // 還沒完成，準備下一題
+            soloSession.currentStep++;
+            nextBtn.innerText = t('btn_next_q'); // "下一題"
+            nextBtn.className = "btn-cyber-primary flex-1 py-3 rounded-lg text-xs";
+            nextBtn.onclick = nextQuestion; // 綁定到下一題函式
+        }
+    }
+
+    // --- 以下為原本的數據更新邏輯 (保持不變，確保每一題都即時算分) ---
     let stats = currentUserData.stats;
-    
-    // 初始化知識地圖與學習曲線
     if (!stats.knowledgeMap) stats.knowledgeMap = {}; 
     if (!stats.learningCurve) stats.learningCurve = [];
 
-    // 取得目前的科目分類（從 Badge 提取）
     const badgeText = document.getElementById('quiz-badge').innerText;
     const topic = badgeText.split('|')[0].replace('🎯', '').trim();
 
-    // 更新特定知識點數據
     if (!stats.knowledgeMap[topic]) {
         stats.knowledgeMap[topic] = { correct: 0, total: 0, avgTime: 0 };
     }
     stats.knowledgeMap[topic].total++;
     if (isCorrect) stats.knowledgeMap[topic].correct++;
     
-    // 使用滑動平均計算平均答題時間
     const prevAvg = stats.knowledgeMap[topic].avgTime;
     stats.knowledgeMap[topic].avgTime = prevAvg === 0 ? timeTaken : (prevAvg * 0.7 + timeTaken * 0.3);
 
-    // 記錄最近的學習軌跡
     stats.learningCurve.push({
         timestamp: Date.now(),
         isCorrect: isCorrect,
@@ -1933,7 +1960,6 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     });
     if (stats.learningCurve.length > 20) stats.learningCurve.shift();
 
-    // 原有的積分與段位邏輯
     stats.totalAnswered++;
     if (isCorrect) {
         stats.totalCorrect++; stats.currentStreak++;
@@ -1954,7 +1980,6 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         fbTitle.innerHTML += ` <br><span class="text-red-400 text-sm">${t('msg_rank_down')} ${t(RANKS_KEYS[newRank])}...</span>`;
     }
 
-    // 寫入資料庫
     await updateDoc(doc(db, "users", auth.currentUser.uid), { stats: stats });
     
     addDoc(collection(db, "exam_logs"), { 
