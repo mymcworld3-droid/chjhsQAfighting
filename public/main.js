@@ -3246,37 +3246,36 @@ window.loadUserHistory = async () => {
 
 let knowledgeChartInstance = null;
 
-// 輔助：計算一群科目的平均分數
+// main.js - 替換 renderKnowledgeGraph
+
+// ... (calculateDomainScore 輔助函式保持不變，若遺失請補上) ...
 function calculateDomainScore(map, subjects) {
     let totalCorrect = 0;
     let totalQuestions = 0;
-
     subjects.forEach(subj => {
         if (map[subj]) {
-            // 把該科目下所有子題型的數據加總
             Object.values(map[subj]).forEach(subStats => {
                 totalCorrect += (subStats.correct || 0);
                 totalQuestions += (subStats.total || 0);
             });
         }
     });
-
-    if (totalQuestions === 0) return 20; // 預設 20 分讓圖表比較好看
+    if (totalQuestions === 0) return 20; 
     return Math.round((totalCorrect / totalQuestions) * 100);
 }
 
+// 主渲染函式
 window.renderKnowledgeGraph = (targetSubject = null) => {
     const ctx = document.getElementById('knowledgeChart');
     if (!ctx) return;
 
-    // 1. 自動產生按鈕 (9 科 + 總覽)
+    // 1. 自動產生按鈕 (保持原本邏輯)
     let controls = document.getElementById('chart-controls');
     if (!controls) {
         controls = document.createElement('div');
         controls.id = 'chart-controls';
         controls.className = "flex flex-wrap gap-2 justify-center mt-4 px-2";
         
-        // 定義按鈕：國英數 + 社會三科 + 自然三科
         const subjects = [
             { id: null, label: "全域總覽", color: "bg-blue-600" },
             { id: "國文", label: "國文", color: "bg-slate-600" },
@@ -3301,7 +3300,7 @@ window.renderKnowledgeGraph = (targetSubject = null) => {
         ctx.parentNode.insertBefore(controls, ctx.nextSibling);
     }
 
-    // 2. 更新按鈕狀態
+    // 更新按鈕樣式
     controls.querySelectorAll('button').forEach(btn => {
         const isActive = (btn.dataset.subj === (targetSubject || 'all'));
         if (isActive) {
@@ -3313,7 +3312,7 @@ window.renderKnowledgeGraph = (targetSubject = null) => {
         }
     });
 
-    // 3. 準備數據
+    // 2. 準備數據 (關鍵修改處)
     const map = currentUserData.stats.knowledgeMap || {};
     let labels = [];
     let dataValues = [];
@@ -3321,40 +3320,50 @@ window.renderKnowledgeGraph = (targetSubject = null) => {
     let chartColor = "rgba(34, 211, 238, 1)"; // 預設青色
 
     if (targetSubject) {
-        // --- 單科細項模式 (例如：歷史 -> 史料解析, 時空定位...) ---
+        // --- 單科細項模式 ---
         chartTitle = `${targetSubject} 能力分析`;
         
-        // 設定不同色系
-        if(["歷史","地理","公民"].includes(targetSubject)) chartColor = "rgba(245, 158, 11, 1)"; // 琥珀色
-        if(["物理","化學","生物"].includes(targetSubject)) chartColor = "rgba(16, 185, 129, 1)"; // 綠色
+        // 設定顏色
+        if(["歷史","地理","公民"].includes(targetSubject)) chartColor = "rgba(245, 158, 11, 1)"; 
+        if(["物理","化學","生物"].includes(targetSubject)) chartColor = "rgba(16, 185, 129, 1)"; 
 
-        if (map[targetSubject]) {
-            const subTopics = map[targetSubject];
-            labels = Object.keys(subTopics); // 取得該科所有子題型
-            dataValues = labels.map(topic => {
-                const s = subTopics[topic];
-                return s.total > 0 ? Math.round((s.correct / s.total) * 100) : 20;
-            });
+        // 🟥 關鍵修改：強制使用 SCHEMA 定義的標籤，而不是讀取 map
+        // 這樣即使沒數據，也會顯示出該有的軸
+        if (SUBJECT_SCHEMA_FRONTEND[targetSubject]) {
+            labels = SUBJECT_SCHEMA_FRONTEND[targetSubject];
+        } else {
+            // 防呆：如果是不在列表的科目，才嘗試讀取現有資料
+            labels = map[targetSubject] ? Object.keys(map[targetSubject]) : [];
         }
-        
+
+        // 填入數據 (若無數據則補 0)
+        dataValues = labels.map(topic => {
+            const s = map[targetSubject]?.[topic];
+            // 如果有練習過，計算正確率；沒練習過給 0
+            // 注意：為了美觀，可以考慮給個 10 分讓圖不要縮成一點，或是給 0 真實呈現
+            return (s && s.total > 0) ? Math.round((s.correct / s.total) * 100) : 0;
+        });
+
+        // 只有當連 SCHEMA 都找不到時，才顯示佔位符
         if (labels.length === 0) {
             labels = ["尚無數據", "請多練習", "累積數據"]; 
             dataValues = [0, 0, 0];
         }
+
     } else {
-        // --- 全域總覽模式 (5軸) ---
+        // --- 全域總覽模式 ---
         chartTitle = "五大領域綜合分析";
         labels = ["國文", "英文", "數學", "社會", "自然"];
         dataValues = [
             calculateDomainScore(map, ["國文"]),
             calculateDomainScore(map, ["英文"]),
             calculateDomainScore(map, ["數學"]),
-            calculateDomainScore(map, ["歷史", "地理", "公民"]), // 社會科聚合
-            calculateDomainScore(map, ["物理", "化學", "生物"])  // 自然科聚合
+            calculateDomainScore(map, ["歷史", "地理", "公民"]),
+            calculateDomainScore(map, ["物理", "化學", "生物"])
         ];
     }
 
-    // 4. 繪圖
+    // 3. 繪圖
     if (knowledgeChartInstance) knowledgeChartInstance.destroy();
 
     knowledgeChartInstance = new Chart(ctx, {
@@ -3382,9 +3391,13 @@ window.renderKnowledgeGraph = (targetSubject = null) => {
                 r: {
                     angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
                     grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                    pointLabels: { color: '#e5e7eb', font: { size: 12 } },
+                    pointLabels: { 
+                        color: '#e5e7eb', 
+                        font: { size: 12, family: "'Noto Sans TC', sans-serif" } // 優化字體
+                    },
                     suggestedMin: 0,
-                    suggestedMax: 100
+                    suggestedMax: 100,
+                    ticks: { display: false, backdropColor: 'transparent' } // 隱藏雜亂的刻度數字
                 }
             }
         }
