@@ -1656,73 +1656,65 @@ async function fetchOneQuestion() {
     const settings = currentUserData.gameSettings || { source: 'ai', difficulty: 'medium' };
     const rankName = getRankName(currentUserData.stats.rankLevel || 0);
 
-    // 2. 智慧難度判斷
+    // 2. 智慧難度判斷 (保持原樣)
     let finalDifficulty = settings.difficulty;
     if (!finalDifficulty || finalDifficulty === 'auto') {
         finalDifficulty = getSmartDifficulty();
     }
 
     // ==========================================
-    // 模式 A: AI 生成模式 (已加入能力模型診斷)
+    // 模式 A: AI 生成模式 (已支援 9 科)
     // ==========================================
     if (settings.source === 'ai') {
         const BACKEND_URL = "/api/generate-quiz";
-        const level = currentUserData.profile.educationLevel || "General";
-
-        // 2.1 決定出題科目 (根據強弱項權重)
-        let rawWeakString = currentUserData.profile.weakSubjects || "";
-        let rawStrongString = currentUserData.profile.strongSubjects || "";
-        let weakArray = rawWeakString.split(/[,，\s]+/).filter(s => s.trim().length > 0);
-        let strongArray = rawStrongString.split(/[,，\s]+/).filter(s => s.trim().length > 0);
-        const generalTopics = ["國文","英文","數學","社會","自然"];
         
-        let targetSubject = "";
-        const rand = Math.random();
-
-        // 60% 機率出弱項，否則從強項或通用題庫出
-        if (weakArray.length > 0 && rand < 0.6) {
-            targetSubject = weakArray[Math.floor(Math.random() * weakArray.length)];
-        } else {
-            const pool = [...strongArray, ...generalTopics];
-            targetSubject = pool[Math.floor(Math.random() * pool.length)];
-        }
-
-        // 2.2 發送請求給後端 (包含 knowledgeMap)
+        // 定義 9 大學科
+        const allSubjects = ["國文", "英文", "數學", "公民", "歷史", "地理", "物理", "化學", "生物"];
+        
+        // TODO: 這裡可以加入邏輯，例如 60% 機率出弱項科目
+        // 目前先隨機選一科
+        let targetSubject = allSubjects[Math.floor(Math.random() * allSubjects.length)];
+        
+        // 發送請求給後端
         const response = await fetch(BACKEND_URL, {
             method: "POST", 
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 subject: targetSubject, 
-                level: level, 
+                // specificTopic: "...", // 若要指定子題可傳入，否則後端隨機
+                level: currentUserData.profile.educationLevel || "General", 
                 rank: rankName, 
                 difficulty: finalDifficulty,
                 language: currentLang,
-                // 🔥 新增：傳送玩家知識地圖供後端診斷
-                knowledgeMap: currentUserData.stats.knowledgeMap || {}
+                knowledgeMap: currentUserData.stats.knowledgeMap || {} 
             })
         });
 
         if (!response.ok) throw new Error(`Server Error: ${response.status}`);
         
-        // 2.3 解析 AI 回傳的資料
         const data = await response.json();
         let aiText = data.text;
-        // 防呆：有時候 AI 會多包一層 Markdown code block
         const jsonMatch = aiText.match(/\{[\s\S]*\}/);
         if (jsonMatch) aiText = jsonMatch[0];
         const rawData = JSON.parse(aiText);
 
-        // 2.4 隨機打亂選項
+        // 隨機打亂選項
         let allOptions = [rawData.correct, ...rawData.wrong];
         allOptions = shuffleArray(allOptions);
         const correctIndex = allOptions.indexOf(rawData.correct);
 
+        // 儲存當前題目資訊 (用於統計)
+        localStorage.setItem('currentQuizData', JSON.stringify({
+            subject: rawData.subject || targetSubject,
+            sub_topic: rawData.sub_topic || "綜合"
+        }));
+
         return {
             data: { q: rawData.q, opts: allOptions, ans: correctIndex, exp: rawData.exp },
             rank: rankName,
-            badge: `🎯 ${targetSubject}`
+            badge: `🎯 ${rawData.subject} | ${rawData.sub_topic || '綜合'}`
         };
-    } 
+    }
     // ==========================================
     // 模式 B: 題庫模式 (載入 JSON 檔案)
     // ==========================================
