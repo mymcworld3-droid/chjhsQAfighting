@@ -1938,22 +1938,44 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         }
     }
 
-    // --- 以下為原本的數據更新邏輯 (保持不變，確保每一題都即時算分) ---
     let stats = currentUserData.stats;
     if (!stats.knowledgeMap) stats.knowledgeMap = {}; 
     if (!stats.learningCurve) stats.learningCurve = [];
 
-    const badgeText = document.getElementById('quiz-badge').innerText;
-    const topic = badgeText.split('|')[0].replace('🎯', '').trim();
-
-    if (!stats.knowledgeMap[topic]) {
-        stats.knowledgeMap[topic] = { correct: 0, total: 0, avgTime: 0 };
-    }
-    stats.knowledgeMap[topic].total++;
-    if (isCorrect) stats.knowledgeMap[topic].correct++;
+    // 1. 嘗試讀取 fetchOneQuestion 存入的詳細資訊
+    let subject = "綜合";
+    let subTopic = "綜合";
     
-    const prevAvg = stats.knowledgeMap[topic].avgTime;
-    stats.knowledgeMap[topic].avgTime = prevAvg === 0 ? timeTaken : (prevAvg * 0.7 + timeTaken * 0.3);
+    try {
+        const savedData = JSON.parse(localStorage.getItem('currentQuizData'));
+        if (savedData) {
+            subject = savedData.subject;
+            subTopic = savedData.sub_topic;
+        } else {
+            // Fallback: 如果是舊資料或題庫，嘗試從 badge 解析
+            const badgeText = document.getElementById('quiz-badge').innerText; 
+            // 假設 badge 格式為 "🎯 數學 |幾何"
+            const parts = badgeText.replace('🎯', '').split('|');
+            if(parts.length > 0) subject = parts[0].trim();
+            if(parts.length > 1) subTopic = parts[1].trim();
+        }
+    } catch(e) { console.error("Parse stats error", e); }
+
+    // 2. 初始化該科目的統計結構
+    if (!stats.knowledgeMap[subject]) stats.knowledgeMap[subject] = {};
+    
+    // 3. 初始化該子題的統計結構
+    if (!stats.knowledgeMap[subject][subTopic]) {
+        stats.knowledgeMap[subject][subTopic] = { correct: 0, total: 0, avgTime: 0 };
+    }
+
+    // 4. 更新數據
+    const topicStats = stats.knowledgeMap[subject][subTopic];
+    topicStats.total++;
+    if (isCorrect) topicStats.correct++;
+    
+    const prevAvg = topicStats.avgTime || 0;
+    topicStats.avgTime = prevAvg === 0 ? timeTaken : (prevAvg * 0.7 + timeTaken * 0.3);
 
     stats.learningCurve.push({
         timestamp: Date.now(),
