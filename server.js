@@ -118,50 +118,78 @@ app.get('/api/banks', (req, res) => {
     }
 });
 
+const SUBJECT_SCHEMA = {
+    "國文": ["字形字音字義", "詞語成語", "修辭句法", "國學常識", "白話閱讀", "文言閱讀", "跨文本比較", "圖表判讀"],
+    "英文": ["詞彙字彙", "綜合測驗(Cloze)", "文意選填", "篇章結構", "閱讀測驗"],
+    "數學": ["基礎計算", "應用素養", "幾何圖形", "代數函數", "邏輯證明", "統計機率"],
+    "公民": ["法律應用", "經濟圖表", "政治體制", "時事解析"],
+    "歷史": ["史料解析", "時空定位", "因果推導", "多重敘事"],
+    "地理": ["地形判讀", "區域分析", "GIS應用", "環境議題"],
+    "物理": ["力學圖表", "定性分析", "生活應用"],
+    "化學": ["混合概念", "數據判讀", "實務能源"],
+    "生物": ["實驗探究", "情境閱讀", "微觀宏觀"]
+};
 // ==========================================
 // API 2: 生成測驗題目 (包含自動審查機制)
 // ==========================================
 // --- 修改 API 2: 生成具備診斷功能的測驗題目 ---
 app.post('/api/generate-quiz', async (req, res) => {
-    // 接收知識地圖數據
-    const { subject, level, rank, difficulty, knowledgeMap } = req.body;
+    // 接收參數：subject (主科), specificTopic (指定子題, 可選)
+    let { subject, level, rank, difficulty, knowledgeMap, specificTopic } = req.body;
+    
     if (!subject) return res.status(400).json({ error: 'Subject is required' });
+
+    // 1. 決定子題型 (Topic)
+    // 如果前端沒指定，則由後端隨機選一個 (預設行為)
+    let targetTopic = specificTopic;
+    if (!targetTopic && SUBJECT_SCHEMA[subject]) {
+        targetTopic = getRandomItem(SUBJECT_SCHEMA[subject]);
+    }
+    // 防呆：如果是不認識的科目，給個預設值
+    if (!targetTopic) targetTopic = "綜合測驗";
+
+    // 2. 建構診斷資訊 (Diagnostic Info)
+    // 我們希望 AI 知道玩家在這個「特定子題」上的表現，而不只是整科
+    let diagnosticInfo = "";
+    if (knowledgeMap && knowledgeMap[subject] && knowledgeMap[subject][targetTopic]) {
+        const stats = knowledgeMap[subject][targetTopic];
+        const accuracy = stats.total > 0 ? ((stats.correct / stats.total) * 100).toFixed(1) : 0;
+        diagnosticInfo = `[玩家數據] 在「${subject}-${targetTopic}」題型上，正確率為 ${accuracy}% (共練習 ${stats.total} 題)。`;
+        
+        // 動態難度調整
+        if (stats.total > 3 && accuracy < 40) difficulty = "easy"; // 錯太多自動降難度
+        if (stats.total > 5 && accuracy > 80) difficulty = "hard"; // 太強自動升難度
+    }
 
     const randomSeed = Math.random().toString(36).substring(7);
 
-    // 根據知識地圖動態調整難度描述
-    let diagnosticInfo = "";
-    if (knowledgeMap && knowledgeMap[subject]) {
-        const stats = knowledgeMap[subject];
-        const accuracy = (stats.correct / stats.total) * 100;
-        diagnosticInfo = `玩家在此科目[${subject}]的正確率為 ${accuracy.toFixed(1)}%，平均答題時間為 ${stats.avgTime.toFixed(1)}秒。`;
-    }
-
+    // 3. 全新設計的 Prompt 結構
     const generationPrompt = `
         [系統指令]
-        角色：AI 智能教育診斷專家
-        任務：出一道單選題，並根據玩家能力進行調整。
-        隨機因子：${randomSeed}
-
-        [玩家背景數據]
-        學歷程度：${level || "一般"}
-        目前段位：${rank || "新手"}
-        指定難度：${difficulty || "medium"}
+        你是由 Google 開發的 AI 教育專家，請生成一道高品質的「單選題」。
+        
+        [出題規格]
+        1. **主科目**：${subject}
+        2. **指定題型**：${targetTopic} (請務必符合此題型的測驗目標)
+        3. **適用程度**：${level} (段位：${rank})
+        4. **難度設定**：${difficulty}
+        5. **隨機因子**：${randomSeed}
         ${diagnosticInfo}
 
-        [出題策略引導]
-        1. 針對「${subject}」領域出題。
-        2. 如果玩家正確率高且速度快，請增加題目複雜度，引入跨領域概念。
-        3. 如果玩家速度慢但正確率高，請出一些需要邏輯推理而非記憶性的題目。
-        4. 如果玩家正確率低，請將難度調至最低，並提供更詳細的解析。
+        [題型定義參考]
+        - 若為「閱讀測驗」或「史料解析」，請提供一段短文或引言作為題幹。
+        - 若為「素養題」或「情境題」，請設計一個生活化或學術情境。
+        - 若為「圖表題」，請用文字詳細描述圖表數據 (因目前無法生成圖片)。
 
-        [回傳純 JSON 格式]
+        [輸出格式 (JSON Only)]
+        請直接回傳 JSON，不要 markdown 標記：
         {
             "q": "題目敘述...",
-            "correct": "正確答案",
-            "wrong": ["錯1", "錯2", "錯3"],
-            "exp": "解析：請針對題目考查的知識點進行深度說明，並給予學習建議。",
-            "sub_topic": "此題細分的具體知識點"
+            "correct": "正確選項內容",
+            "wrong": ["錯誤選項1", "錯誤選項2", "錯誤選項3"],
+            "exp": "解析：針對 ${targetTopic} 概念進行解說...",
+            "subject": "${subject}",
+            "sub_topic": "${targetTopic}" 
         }
     `;
 
@@ -170,14 +198,16 @@ app.post('/api/generate-quiz', async (req, res) => {
 
     while (attempts < maxAttempts) {
         try {
-            console.log(`[Diagnostic Gen] Subject: ${subject}`);
+            console.log(`[Gen] ${subject} > ${targetTopic} (${difficulty})`); // Log 方便除錯
             const genResult = await model.generateContent(generationPrompt);
             let rawText = genResult.response.text();
             rawText = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
-
             const parsed = JSON.parse(rawText);
-            return res.json({ text: JSON.stringify(parsed) });
-
+        
+            // 確保回傳資料包含 sub_topic 供前端統計使用
+            if(!parsed.sub_topic) parsed.sub_topic = targetTopic;
+        
+            res.json({ text: JSON.stringify(parsed) });
         } catch (error) {
             console.error(`Attempt ${attempts + 1} failed:`, error.message);
             attempts++;
