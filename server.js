@@ -129,12 +129,8 @@ const SUBJECT_SCHEMA = {
     "化學": ["混合概念", "數據判讀", "實務能源"],
     "生物": ["實驗探究", "情境閱讀", "微觀宏觀"]
 };
-// ==========================================
-// API 2: 生成測驗題目 (包含自動審查機制)
-// ==========================================
-// ... (上面是 SUBJECT_SCHEMA 定義)
 
-// 🟥 1. 請務必補上這個輔助函式 (之前漏掉了)
+// 輔助函式：隨機選取
 function getRandomItem(arr) {
     if (!arr || arr.length === 0) return null;
     return arr[Math.floor(Math.random() * arr.length)];
@@ -174,7 +170,7 @@ app.post('/api/generate-quiz', async (req, res) => {
 
     const randomSeed = Math.random().toString(36).substring(7);
 
-    // 3. Prompt
+    // 3. Prompt (第一階段：生成)
     const generationPrompt = `
         [系統指令]
         你是由 Google 開發的 AI 教育專家，請生成一道高品質的「單選題」。
@@ -204,26 +200,59 @@ app.post('/api/generate-quiz', async (req, res) => {
         }
     `;
 
-    // 4. 呼叫 AI (包含重試機制)
+    // 4. 呼叫 AI (包含重試機制與雙重審查)
     let attempts = 0;
     const maxAttempts = 3;
 
     while (attempts < maxAttempts) {
         try {
-            console.log(`[Gen] ${subject} > ${targetTopic} (${difficulty})`); 
+            console.log(`[Gen] ${subject} > ${targetTopic} (${difficulty}) - Attempt ${attempts+1}`); 
+            
+            // --- 步驟 1: 初步生成 ---
             const genResult = await model.generateContent(generationPrompt);
             let rawText = genResult.response.text();
             
-            // 清理 JSON 格式
+            // 清理 Markdown (防止 AI 加了 ```json)
             rawText = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
+
+            // --- 步驟 2: 自我審查與修正 (Critic) ---
+            console.log(`[Validation] Validating output...`);
             
-            const parsed = JSON.parse(rawText);
+            const validationPrompt = `
+                [系統指令：嚴格審查員]
+                你現在是審題老師，請檢查以下 AI 生成的題目 JSON。
+                
+                [待審查 JSON]
+                ${rawText}
+
+                [審查標準]
+                1. **正確性**： "correct" 的答案是否絕對正確？
+                2. **唯一性**： "wrong" 選項中是否有正確答案？(確保只有一個正解)
+                3. **邏輯性**： 題目敘述是否通順？
+                4. **格式**： 是否符合 JSON 格式？
+
+                [輸出要求]
+                - 如果發現錯誤：請修正它，並輸出修正後的 **純 JSON**。
+                - 如果完全正確：請直接輸出原 JSON。
+                - 不要輸出任何解釋文字，只要 JSON。
+            `;
+
+            const valResult = await model.generateContent(validationPrompt);
+            let finalText = valResult.response.text();
             
-            // 補全資料
+            // 清理驗證後的文字
+            finalText = finalText.replace(/```json/g, '').replace(/```/g, '').trim();
+
+            // 測試能否解析 (確保是有效 JSON)
+            const parsed = JSON.parse(finalText); 
+
+            // 補全資料 (確保 metadata 不會因為審查而遺失)
             if(!parsed.sub_topic) parsed.sub_topic = targetTopic;
             if(!parsed.subject) parsed.subject = subject;
 
-            // 🟥 2. 關鍵修正：成功後必須 return 結束函式，否則會無限迴圈導致 Server 崩潰
+            console.log("✅ 審查通過，生成成功！");
+            
+            // 🟥 關鍵：成功後必須 return 結束函式，防止無限迴圈
             return res.json({ text: JSON.stringify(parsed) });
 
         } catch (error) {
