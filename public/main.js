@@ -3226,9 +3226,13 @@ window.loadUserHistory = async () => {
 };
 // main.js - 替換 renderKnowledgeGraph 函式
 
+// ==========================================
+// 📊 雷達圖分析系統 (含動態切換按鈕)
+// ==========================================
+
 let knowledgeChartInstance = null;
 
-// 輔助：計算五大領域平均分數 (自動加總該領域下所有科目的數據)
+// 輔助：計算五大領域平均分數
 function calculateDomainScore(map, subjects) {
     let totalCorrect = 0;
     let totalQuestions = 0;
@@ -3243,31 +3247,86 @@ function calculateDomainScore(map, subjects) {
         }
     });
 
-    if (totalQuestions === 0) return 20; // 預設基礎分 (美觀用)
+    if (totalQuestions === 0) return 20; // 預設基礎分，讓圖表不要縮成一點
     return Math.round((totalCorrect / totalQuestions) * 100);
 }
 
-// 主渲染函式：支援「全科」與「單科」切換
-// targetSubject: null (顯示五大領域) 或 "數學", "歷史" 等 (顯示該科子題)
+// 主渲染函式：支援自動產生切換按鈕
 window.renderKnowledgeGraph = (targetSubject = null) => {
     const ctx = document.getElementById('knowledgeChart');
     if (!ctx) return;
-    
-    // 銷毀舊圖表
-    if (knowledgeChartInstance) {
-        knowledgeChartInstance.destroy();
-        knowledgeChartInstance = null;
+
+    // --- 1. 自動注入控制按鈕 (如果介面上還沒有) ---
+    // 我們會檢查 canvas 後面是否已經有 id="chart-controls" 的區塊
+    let controls = document.getElementById('chart-controls');
+    if (!controls) {
+        controls = document.createElement('div');
+        controls.id = 'chart-controls';
+        controls.className = "flex flex-wrap gap-2 justify-center mt-6 px-2 animate-fade-in";
+        
+        // 定義按鈕清單與顏色樣式
+        const subjects = [
+            { id: null, label: "全域總覽", color: "bg-blue-600 shadow-blue-500/50" },
+            { id: "國文", label: "國文", color: "bg-slate-600" },
+            { id: "英文", label: "英文", color: "bg-slate-600" },
+            { id: "數學", label: "數學", color: "bg-slate-600" },
+            // 社會科群組 (黃/棕色系)
+            { id: "歷史", label: "歷史", color: "bg-amber-700" }, 
+            { id: "地理", label: "地理", color: "bg-amber-700" },
+            { id: "公民", label: "公民", color: "bg-amber-700" },
+            // 自然科群組 (綠色系)
+            { id: "物理", label: "物理", color: "bg-emerald-700" }, 
+            { id: "化學", label: "化學", color: "bg-emerald-700" },
+            { id: "生物", label: "生物", color: "bg-emerald-700" },
+        ];
+
+        subjects.forEach(subj => {
+            const btn = document.createElement('button');
+            btn.innerText = subj.label;
+            // 設定按鈕樣式
+            btn.className = `px-3 py-1.5 text-[11px] font-bold text-white rounded-full transition-all hover:scale-105 shadow-md border border-white/10 ${subj.color}`;
+            // 綁定點擊事件
+            btn.onclick = () => window.renderKnowledgeGraph(subj.id);
+            // 儲存 ID 以便後續比對 active 狀態
+            btn.dataset.subj = subj.id || 'all'; 
+            controls.appendChild(btn);
+        });
+
+        // 將按鈕區塊插入到 canvas 元素的後面
+        ctx.parentNode.insertBefore(controls, ctx.nextSibling);
     }
 
+    // --- 2. 更新按鈕的高亮狀態 (Active State) ---
+    const allBtns = controls.querySelectorAll('button');
+    allBtns.forEach(btn => {
+        const btnSubj = btn.dataset.subj;
+        const currentTarget = targetSubject || 'all';
+        
+        if (btnSubj === currentTarget) {
+            // 選中狀態：放大、加亮框、不透明
+            btn.classList.add('ring-2', 'ring-white', 'scale-110', 'opacity-100');
+            btn.classList.remove('opacity-40');
+        } else {
+            // 未選中狀態：半透明
+            btn.classList.remove('ring-2', 'ring-white', 'scale-110', 'opacity-100');
+            btn.classList.add('opacity-40');
+        }
+    });
+
+    // --- 3. 準備圖表數據 ---
     const map = currentUserData.stats.knowledgeMap || {};
     let labels = [];
     let dataValues = [];
     let chartTitle = "";
+    let chartColor = ""; // 動態改變圖表顏色
 
-    // 模式 A: 單科細項雷達圖 (當傳入 targetSubject 時)
+    // 模式 A: 單科細項雷達圖
     if (targetSubject) {
-        chartTitle = `${targetSubject} 能力分析`;
-        
+        chartTitle = `${targetSubject} 細項分析`;
+        chartColor = "rgba(250, 204, 21, 1)"; // 黃色系 (預設)
+        if(["物理","化學","生物"].includes(targetSubject)) chartColor = "rgba(52, 211, 153, 1)"; // 綠色系
+        if(["國文","英文","數學"].includes(targetSubject)) chartColor = "rgba(147, 197, 253, 1)"; // 藍色系
+
         if (map[targetSubject]) {
             const subTopics = map[targetSubject];
             labels = Object.keys(subTopics);
@@ -3277,18 +3336,18 @@ window.renderKnowledgeGraph = (targetSubject = null) => {
             });
         }
         
-        // 如果該科還沒有數據，顯示空狀態
+        // 該科無數據時的顯示
         if (labels.length === 0) {
             labels = ["尚無數據", "請多練習", "累積數據", "分析能力"]; 
             dataValues = [0, 0, 0, 0];
         }
     } 
-    // 模式 B: 全科總覽雷達圖 (五大領域)
+    // 模式 B: 全科總覽雷達圖
     else {
         chartTitle = "五大領域綜合分析";
+        chartColor = "rgba(34, 211, 238, 1)"; // 青色 (Cyan)
         labels = ["國文", "英文", "數學", "社會", "自然"];
         
-        // 社會 = 歷史+地理+公民 ; 自然 = 物理+化學+生物
         dataValues = [
             calculateDomainScore(map, ["國文"]),
             calculateDomainScore(map, ["英文"]),
@@ -3298,7 +3357,11 @@ window.renderKnowledgeGraph = (targetSubject = null) => {
         ];
     }
 
-    // 建立圖表
+    // --- 4. 繪製 Chart.js 圖表 ---
+    if (knowledgeChartInstance) {
+        knowledgeChartInstance.destroy();
+    }
+
     knowledgeChartInstance = new Chart(ctx, {
         type: 'radar',
         data: {
@@ -3306,12 +3369,12 @@ window.renderKnowledgeGraph = (targetSubject = null) => {
             datasets: [{
                 label: '掌握度 (%)',
                 data: dataValues,
-                backgroundColor: 'rgba(34, 211, 238, 0.2)', // Cyan-400 with opacity
-                borderColor: 'rgba(34, 211, 238, 1)',
+                backgroundColor: chartColor.replace('1)', '0.2)'), // 自動計算透明背景色
+                borderColor: chartColor,
                 pointBackgroundColor: '#fff',
                 pointBorderColor: '#fff',
                 pointHoverBackgroundColor: '#fff',
-                pointHoverBorderColor: 'rgba(34, 211, 238, 1)',
+                pointHoverBorderColor: chartColor,
                 borderWidth: 2,
                 pointRadius: 3
             }]
