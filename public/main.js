@@ -1406,9 +1406,20 @@ function updateUIStats() {
         progressPercent = 100;
     }
 
-    const starContainer = document.getElementById('display-stars').parentElement;
-    starContainer.innerHTML = `<i class="fa-solid fa-star text-yellow-400 animate-pulse"></i> <span>${t('label_net_progress')}: <span id="display-stars" class="font-bold text-white text-lg">${currentStarsDisplay}</span> / ${maxStarsDisplay}</span>`;
-
+    const starValEl = document.getElementById('display-stars');
+    if (starValEl) {
+        // 更新數值
+        starValEl.innerText = currentStarsDisplay;
+        
+        // 更新分母 (如果結構允許，或者直接操作父層但避免遞迴)
+        // 這裡我們用一個安全的方式：找到包含 "/ 10" 的那個兄弟元素或父元素文字
+        const parentSpan = starValEl.parentElement;
+        if (parentSpan) {
+            
+            parentSpan.innerHTML = `<span id="display-stars" class="text-yellow-400 font-bold text-sm">${currentStarsDisplay}</span> <span class="text-xs opacity-50">/ ${maxStarsDisplay}</span>`;
+            
+        }
+    }
     document.getElementById('display-score').innerText = stats.totalScore;
 
     const cardPts = document.getElementById('cards-user-points');
