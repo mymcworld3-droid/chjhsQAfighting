@@ -13,11 +13,9 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ⭐ 初始化 Gemini 2.5 模型
-// ⚠️ 警告：根據你的資料，此模型每日限制可能僅有 10-20 次
-// 如果遇到 429 錯誤，請改回 'gemini-2.0-flash-exp' 或 'gemini-1.5-flash'
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ 
-    model: "gemini-2.5-flash-lite", // 建議改回這個
+    model: "gemini-2.5-flash-lite", // 若遇 429 錯誤可改回 gemini-2.0-flash-exp
     generationConfig: { responseMimeType: "application/json" }
 });
 
@@ -53,39 +51,33 @@ app.post('/api/analyze-subjects', async (req, res) => {
 });
 
 // ==========================================
-// API 3: 取得伺服器上的圖片列表 (新增功能)
+// API 3: 取得伺服器上的圖片列表
 // ==========================================
 app.get('/api/assets', (req, res) => {
     const assetsDir = path.join(__dirname, 'public', 'assets');
     
-    // 讀取資料夾
     fs.readdir(assetsDir, (err, files) => {
         if (err) {
             console.error("無法讀取 assets 資料夾:", err);
             return res.status(500).json({ error: "無法讀取圖片列表" });
         }
         
-        // 過濾出圖片檔 (png, jpg, jpeg, webp, gif)
         const images = files.filter(file => /\.(png|jpg|jpeg|gif|webp)$/i.test(file));
-        
-        // 回傳格式：加上資料夾前綴 (例如: "assets/abc.png")
         const imagePaths = images.map(file => `assets/${file}`);
         res.json({ images: imagePaths });
     });
 });
 
 // ==========================================
-// API 4: 取得題庫檔案列表 (支援子資料夾)
+// API 4: 取得題庫檔案列表
 // ==========================================
 app.get('/api/banks', (req, res) => {
     const banksDir = path.join(__dirname, 'public', 'banks');
 
-    // 如果資料夾不存在，建立它
     if (!fs.existsSync(banksDir)) {
         fs.mkdirSync(banksDir);
     }
 
-    // 定義遞迴讀取函式
     const getFilesRecursively = (dir, fileList = [], rootDir = banksDir) => {
         const files = fs.readdirSync(dir);
         
@@ -94,13 +86,9 @@ app.get('/api/banks', (req, res) => {
             const stat = fs.statSync(filePath);
 
             if (stat.isDirectory()) {
-                // 如果是資料夾，繼續往下找
                 getFilesRecursively(filePath, fileList, rootDir);
             } else {
-                // 如果是檔案，且是 .json 結尾
                 if (file.endsWith('.json')) {
-                    // 計算相對路徑 (例如: "歷史/grade1.json")
-                    // 並將 Windows 的反斜線 (\) 統一轉為正斜線 (/)
                     const relativePath = path.relative(rootDir, filePath).split(path.sep).join('/');
                     fileList.push(relativePath);
                 }
@@ -118,6 +106,9 @@ app.get('/api/banks', (req, res) => {
     }
 });
 
+// ==========================================
+// 定義學科與子題型架構 (Knowledge Schema)
+// ==========================================
 const SUBJECT_SCHEMA = {
     "國文": ["字形字音字義", "詞語成語", "修辭句法", "國學常識", "白話閱讀", "文言閱讀", "跨文本比較", "圖表判讀"],
     "英文": ["詞彙字彙", "綜合測驗(Cloze)", "文意選填", "篇章結構", "閱讀測驗"],
@@ -130,17 +121,16 @@ const SUBJECT_SCHEMA = {
     "生物": ["實驗探究", "情境閱讀", "微觀宏觀"]
 };
 
-// 輔助函式：隨機選取
+// ⭐ 關鍵修正：必須定義這個輔助函式，否則會報錯
 function getRandomItem(arr) {
     if (!arr || arr.length === 0) return null;
     return arr[Math.floor(Math.random() * arr.length)];
 }
 
 // ==========================================
-// API 2: 生成測驗題目 (包含自動審查機制)
+// API 2: 生成測驗題目 (包含雙重審查機制)
 // ==========================================
 app.post('/api/generate-quiz', async (req, res) => {
-    // 接收參數
     let { subject, level, rank, difficulty, knowledgeMap, specificTopic } = req.body;
     
     // 防呆：如果前端沒傳 subject，隨機選一科
@@ -163,7 +153,6 @@ app.post('/api/generate-quiz', async (req, res) => {
         const accuracy = stats.total > 0 ? ((stats.correct / stats.total) * 100).toFixed(1) : 0;
         diagnosticInfo = `[玩家數據] 在「${subject}-${targetTopic}」題型上，正確率為 ${accuracy}% (共練習 ${stats.total} 題)。`;
         
-        // 動態難度
         if (stats.total > 3 && accuracy < 40) difficulty = "easy"; 
         if (stats.total > 5 && accuracy > 80) difficulty = "hard"; 
     }
@@ -212,7 +201,6 @@ app.post('/api/generate-quiz', async (req, res) => {
             const genResult = await model.generateContent(generationPrompt);
             let rawText = genResult.response.text();
             
-            // 清理 Markdown (防止 AI 加了 ```json)
             rawText = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
 
             // --- 步驟 2: 自我審查與修正 (Critic) ---
@@ -240,29 +228,24 @@ app.post('/api/generate-quiz', async (req, res) => {
             const valResult = await model.generateContent(validationPrompt);
             let finalText = valResult.response.text();
             
-            // 清理驗證後的文字
             finalText = finalText.replace(/```json/g, '').replace(/```/g, '').trim();
 
-            // 測試能否解析 (確保是有效 JSON)
             const parsed = JSON.parse(finalText); 
 
-            // 補全資料 (確保 metadata 不會因為審查而遺失)
             if(!parsed.sub_topic) parsed.sub_topic = targetTopic;
             if(!parsed.subject) parsed.subject = subject;
 
             console.log("✅ 審查通過，生成成功！");
             
-            // 🟥 關鍵：成功後必須 return 結束函式，防止無限迴圈
+            // 成功後結束函式
             return res.json({ text: JSON.stringify(parsed) });
 
         } catch (error) {
             console.error(`Attempt ${attempts + 1} failed:`, error.message);
             attempts++;
-            // 最後一次嘗試失敗才回傳錯誤
             if (attempts === maxAttempts) {
                 return res.status(500).json({ error: "AI 生成失敗，請稍後再試" });
             }
-            // 失敗的話會繼續 while 迴圈重試
         }
     }
 });
