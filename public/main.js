@@ -3224,48 +3224,91 @@ window.loadUserHistory = async () => {
         });
     } catch (e) { console.error(e); ul.innerHTML = '<li class="text-center text-red-400 py-4">Error</li>'; }
 };
-// --- [新增] 知識圖譜雷達圖渲染函式 ---
-let knowledgeChartInstance = null; // 全域變數，儲存圖表實例以供銷毀
+// main.js - 替換 renderKnowledgeGraph 函式
 
-window.renderKnowledgeGraph = () => {
+let knowledgeChartInstance = null;
+
+// 輔助：計算五大領域平均分數 (自動加總該領域下所有科目的數據)
+function calculateDomainScore(map, subjects) {
+    let totalCorrect = 0;
+    let totalQuestions = 0;
+
+    subjects.forEach(subj => {
+        if (map[subj]) {
+            // 遍歷該科目下所有子題 (例如 數學->幾何, 數學->代數)
+            Object.values(map[subj]).forEach(subStats => {
+                totalCorrect += (subStats.correct || 0);
+                totalQuestions += (subStats.total || 0);
+            });
+        }
+    });
+
+    if (totalQuestions === 0) return 20; // 預設基礎分 (美觀用)
+    return Math.round((totalCorrect / totalQuestions) * 100);
+}
+
+// 主渲染函式：支援「全科」與「單科」切換
+// targetSubject: null (顯示五大領域) 或 "數學", "歷史" 等 (顯示該科子題)
+window.renderKnowledgeGraph = (targetSubject = null) => {
     const ctx = document.getElementById('knowledgeChart');
     if (!ctx) return;
-
-    // 1. 銷毀舊圖表 (防止切換頁面時重複繪製導致閃爍)
+    
+    // 銷毀舊圖表
     if (knowledgeChartInstance) {
         knowledgeChartInstance.destroy();
+        knowledgeChartInstance = null;
     }
 
-    // 2. 準備數據
     const map = currentUserData.stats.knowledgeMap || {};
-    let labels = Object.keys(map);
+    let labels = [];
     let dataValues = [];
+    let chartTitle = "";
 
-    // 如果沒有數據，顯示預設的空雷達圖 (美觀用)
-    if (labels.length === 0) {
+    // 模式 A: 單科細項雷達圖 (當傳入 targetSubject 時)
+    if (targetSubject) {
+        chartTitle = `${targetSubject} 能力分析`;
+        
+        if (map[targetSubject]) {
+            const subTopics = map[targetSubject];
+            labels = Object.keys(subTopics);
+            dataValues = labels.map(topic => {
+                const s = subTopics[topic];
+                return s.total > 0 ? Math.round((s.correct / s.total) * 100) : 20;
+            });
+        }
+        
+        // 如果該科還沒有數據，顯示空狀態
+        if (labels.length === 0) {
+            labels = ["尚無數據", "請多練習", "累積數據", "分析能力"]; 
+            dataValues = [0, 0, 0, 0];
+        }
+    } 
+    // 模式 B: 全科總覽雷達圖 (五大領域)
+    else {
+        chartTitle = "五大領域綜合分析";
         labels = ["國文", "英文", "數學", "社會", "自然"];
-        dataValues = [20, 20, 20, 20, 20]; // 預設基礎值
-    } else {
-        // 計算每個科目的正確率 (Mastery Score)
-        dataValues = labels.map(label => {
-            const item = map[label];
-            if (!item || item.total === 0) return 0;
-            // 簡單計算：正確率 * 100
-            return Math.round((item.correct / item.total) * 100);
-        });
+        
+        // 社會 = 歷史+地理+公民 ; 自然 = 物理+化學+生物
+        dataValues = [
+            calculateDomainScore(map, ["國文"]),
+            calculateDomainScore(map, ["英文"]),
+            calculateDomainScore(map, ["數學"]),
+            calculateDomainScore(map, ["歷史", "地理", "公民"]),
+            calculateDomainScore(map, ["物理", "化學", "生物"])
+        ];
     }
 
-    // 3. 設定 Chart.js
+    // 建立圖表
     knowledgeChartInstance = new Chart(ctx, {
         type: 'radar',
         data: {
             labels: labels,
             datasets: [{
-                label: '知識掌握度',
+                label: '掌握度 (%)',
                 data: dataValues,
-                backgroundColor: 'rgba(34, 211, 238, 0.2)', // 青色透明填充
-                borderColor: 'rgba(34, 211, 238, 1)',     // 青色邊框
-                pointBackgroundColor: 'rgba(255, 255, 255, 1)',
+                backgroundColor: 'rgba(34, 211, 238, 0.2)', // Cyan-400 with opacity
+                borderColor: 'rgba(34, 211, 238, 1)',
+                pointBackgroundColor: '#fff',
                 pointBorderColor: '#fff',
                 pointHoverBackgroundColor: '#fff',
                 pointHoverBorderColor: 'rgba(34, 211, 238, 1)',
@@ -3276,39 +3319,26 @@ window.renderKnowledgeGraph = () => {
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: chartTitle,
+                    color: '#fff',
+                    font: { size: 16 }
+                },
+                legend: { display: false }
+            },
             scales: {
                 r: {
-                    angleLines: {
-                        color: 'rgba(255, 255, 255, 0.1)' // 放射線顏色
-                    },
-                    grid: {
-                        color: 'rgba(255, 255, 255, 0.1)' // 網格顏色
-                    },
+                    angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
+                    grid: { color: 'rgba(255, 255, 255, 0.1)' },
                     pointLabels: {
-                        color: '#9ca3af', // 標籤文字顏色 (Gray-400)
-                        font: {
-                            size: 12,
-                            family: "'Noto Sans TC', sans-serif"
-                        }
+                        color: '#9ca3af', // Gray-400
+                        font: { size: 12, family: "'Noto Sans TC', sans-serif" }
                     },
-                    ticks: {
-                        display: false, // 不顯示刻度數字 (太雜)
-                        backdropColor: 'transparent'
-                    },
+                    ticks: { display: false, backdropColor: 'transparent' },
                     suggestedMin: 0,
                     suggestedMax: 100
-                }
-            },
-            plugins: {
-                legend: {
-                    display: false // 隱藏圖例 (標題已經有了)
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            return `掌握度: ${context.raw}%`;
-                        }
-                    }
                 }
             }
         }
