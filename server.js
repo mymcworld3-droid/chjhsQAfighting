@@ -132,38 +132,49 @@ const SUBJECT_SCHEMA = {
 // ==========================================
 // API 2: 生成測驗題目 (包含自動審查機制)
 // ==========================================
-// --- 修改 API 2: 生成具備診斷功能的測驗題目 ---
+// ... (上面是 SUBJECT_SCHEMA 定義)
+
+// 🟥 1. 請務必補上這個輔助函式 (之前漏掉了)
+function getRandomItem(arr) {
+    if (!arr || arr.length === 0) return null;
+    return arr[Math.floor(Math.random() * arr.length)];
+}
+
+// ==========================================
+// API 2: 生成測驗題目 (包含自動審查機制)
+// ==========================================
 app.post('/api/generate-quiz', async (req, res) => {
-    // 接收參數：subject (主科), specificTopic (指定子題, 可選)
+    // 接收參數
     let { subject, level, rank, difficulty, knowledgeMap, specificTopic } = req.body;
     
-    if (!subject) return res.status(400).json({ error: 'Subject is required' });
+    // 防呆：如果前端沒傳 subject，隨機選一科
+    if (!subject) {
+        const allSubjects = Object.keys(SUBJECT_SCHEMA);
+        subject = getRandomItem(allSubjects);
+    }
 
     // 1. 決定子題型 (Topic)
-    // 如果前端沒指定，則由後端隨機選一個 (預設行為)
     let targetTopic = specificTopic;
     if (!targetTopic && SUBJECT_SCHEMA[subject]) {
         targetTopic = getRandomItem(SUBJECT_SCHEMA[subject]);
     }
-    // 防呆：如果是不認識的科目，給個預設值
     if (!targetTopic) targetTopic = "綜合測驗";
 
-    // 2. 建構診斷資訊 (Diagnostic Info)
-    // 我們希望 AI 知道玩家在這個「特定子題」上的表現，而不只是整科
+    // 2. 建構診斷資訊
     let diagnosticInfo = "";
     if (knowledgeMap && knowledgeMap[subject] && knowledgeMap[subject][targetTopic]) {
         const stats = knowledgeMap[subject][targetTopic];
         const accuracy = stats.total > 0 ? ((stats.correct / stats.total) * 100).toFixed(1) : 0;
         diagnosticInfo = `[玩家數據] 在「${subject}-${targetTopic}」題型上，正確率為 ${accuracy}% (共練習 ${stats.total} 題)。`;
         
-        // 動態難度調整
-        if (stats.total > 3 && accuracy < 40) difficulty = "easy"; // 錯太多自動降難度
-        if (stats.total > 5 && accuracy > 80) difficulty = "hard"; // 太強自動升難度
+        // 動態難度
+        if (stats.total > 3 && accuracy < 40) difficulty = "easy"; 
+        if (stats.total > 5 && accuracy > 80) difficulty = "hard"; 
     }
 
     const randomSeed = Math.random().toString(36).substring(7);
 
-    // 3. 全新設計的 Prompt 結構
+    // 3. Prompt
     const generationPrompt = `
         [系統指令]
         你是由 Google 開發的 AI 教育專家，請生成一道高品質的「單選題」。
@@ -179,10 +190,10 @@ app.post('/api/generate-quiz', async (req, res) => {
         [題型定義參考]
         - 若為「閱讀測驗」或「史料解析」，請提供一段短文或引言作為題幹。
         - 若為「素養題」或「情境題」，請設計一個生活化或學術情境。
-        - 若為「圖表題」，請用文字詳細描述圖表數據 (因目前無法生成圖片)。
+        - 若為「圖表題」，請用文字詳細描述圖表數據 (因目前無法生成圖片，請用文字描述圖表內容)。
 
         [輸出格式 (JSON Only)]
-        請直接回傳 JSON，不要 markdown 標記：
+        請直接回傳 JSON，不要 markdown 標記，格式如下：
         {
             "q": "題目敘述...",
             "correct": "正確選項內容",
@@ -193,25 +204,36 @@ app.post('/api/generate-quiz', async (req, res) => {
         }
     `;
 
+    // 4. 呼叫 AI (包含重試機制)
     let attempts = 0;
     const maxAttempts = 3;
 
     while (attempts < maxAttempts) {
         try {
-            console.log(`[Gen] ${subject} > ${targetTopic} (${difficulty})`); // Log 方便除錯
+            console.log(`[Gen] ${subject} > ${targetTopic} (${difficulty})`); 
             const genResult = await model.generateContent(generationPrompt);
             let rawText = genResult.response.text();
+            
+            // 清理 JSON 格式
             rawText = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
+            
             const parsed = JSON.parse(rawText);
-        
-            // 確保回傳資料包含 sub_topic 供前端統計使用
+            
+            // 補全資料
             if(!parsed.sub_topic) parsed.sub_topic = targetTopic;
-        
-            res.json({ text: JSON.stringify(parsed) });
+            if(!parsed.subject) parsed.subject = subject;
+
+            // 🟥 2. 關鍵修正：成功後必須 return 結束函式，否則會無限迴圈導致 Server 崩潰
+            return res.json({ text: JSON.stringify(parsed) });
+
         } catch (error) {
             console.error(`Attempt ${attempts + 1} failed:`, error.message);
             attempts++;
-            if (attempts === maxAttempts) return res.status(500).json({ error: "AI 思考超時" });
+            // 最後一次嘗試失敗才回傳錯誤
+            if (attempts === maxAttempts) {
+                return res.status(500).json({ error: "AI 生成失敗，請稍後再試" });
+            }
+            // 失敗的話會繼續 while 迴圈重試
         }
     }
 });
