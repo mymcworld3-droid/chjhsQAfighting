@@ -1892,159 +1892,207 @@ window.startQuizFlow = async () => {
 
 // public/main.js
 
+// --- 修改後的 handleAnswer：加入 Session 狀態與結算判斷 (已修補) ---
 async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
-    // 1. 防止重複點擊
-    if (isAnswering) return;
-    isAnswering = true;
+    if (!currentUserData) return; // 🛡️ 防呆：確保已登入
 
-    // 2. 停止倒數計時 & 計算花費時間
-    clearInterval(timerInterval);
     const timeTaken = (Date.now() - (window.quizStartTime || Date.now())) / 1000;
-    
-    // 3. 判斷對錯
     const isCorrect = userIdx === correctIdx;
-    const feedbackEl = document.getElementById('feedback');
-    const options = document.querySelectorAll('.option-btn');
-
-    // 4. UI 顯示對錯回饋
-    options.forEach((btn, idx) => {
-        btn.disabled = true; // 鎖定按鈕
+    
+    // 1. UI 處理：禁用按鈕並顯示正誤
+    const opts = document.querySelectorAll('[id^="option-btn-"]');
+    opts.forEach((btn, idx) => {
+        btn.onclick = null; 
+        btn.classList.add('btn-disabled'); // 建議在 CSS 定義此 class (opacity-50, cursor-not-allowed)
+        btn.classList.add('opacity-50', 'cursor-not-allowed'); // Tailwind 備用
+        
         if (idx === correctIdx) {
-            btn.classList.add('correct', 'ring-4', 'ring-green-400', 'scale-105');
-            btn.innerHTML += ' <i class="fas fa-check float-right mt-1"></i>';
+            btn.classList.add('bg-green-600', 'border-green-400', 'text-white', 'btn-correct');
         } else if (idx === userIdx && !isCorrect) {
-            btn.classList.add('wrong', 'opacity-50');
-            btn.innerHTML += ' <i class="fas fa-times float-right mt-1"></i>';
-        } else {
-            btn.classList.add('opacity-40');
+            btn.classList.add('bg-red-600', 'border-red-400', 'text-white', 'btn-wrong');
         }
     });
+    
+    // 2. 顯示 Feedback 區塊
+    const fbSection = document.getElementById('feedback-section');
+    const fbTitle = document.getElementById('feedback-title');
+    const fbIcon = document.getElementById('feedback-icon');
+    const fbText = document.getElementById('feedback-text');
+    const giveUpBtn = document.getElementById('btn-giveup');
+    
+    if (giveUpBtn) giveUpBtn.classList.add('hidden');
+    if (fbSection) fbSection.classList.remove('hidden');
 
-    if (isCorrect) {
-        playSound('correct');
-        feedbackEl.innerHTML = `<div class="text-green-400 font-bold text-xl mb-2 animate-bounce-in">🎉 正確！</div>`;
-        triggerConfetti();
+    if(isCorrect) {
+        fbTitle.innerText = t('msg_correct'); 
+        fbTitle.className = "text-xl font-bold text-green-400";
+        fbIcon.innerHTML = '<i class="fa-solid fa-circle-check text-green-400"></i>';
+        if (navigator.vibrate) navigator.vibrate(50);
     } else {
-        playSound('wrong');
-        feedbackEl.innerHTML = `<div class="text-red-400 font-bold text-xl mb-2 animate-shake">❌ 錯誤！</div>`;
+        fbTitle.innerText = t('msg_wrong'); 
+        fbTitle.className = "text-xl font-bold text-red-400";
+        fbIcon.innerHTML = '<i class="fa-solid fa-circle-xmark text-red-400"></i>';
         if (navigator.vibrate) navigator.vibrate(200);
     }
-
-    // 顯示解析
-    if (explanation) {
-        feedbackEl.innerHTML += `<div class="mt-3 text-left bg-slate-700/50 p-4 rounded-lg border-l-4 border-blue-400 text-sm leading-relaxed text-slate-200 shadow-inner">${explanation}</div>`;
-    }
-    feedbackEl.classList.remove('hidden');
-
-    // ==========================================
-    // 💾 數據儲存核心 (Data Persistence)
-    // ==========================================
     
-    // A. 準備統計物件
+    localStorage.removeItem('currentQuiz');
+    fbText.innerText = explanation || "AI did not provide explanation.";
+
+    // ==========================================
+    // 3. 處理 Solo Session (單人挑戰) 邏輯
+    // ==========================================
+    let isSoloMode = false;
+    if (soloSession && soloSession.active) {
+        isSoloMode = true;
+        // 更新 Session 計數
+        if (isCorrect) soloSession.correctCount++;
+        else soloSession.wrongCount++;
+        
+        // 記錄 Session 歷史
+        soloSession.history.push({
+            q: questionText,
+            isCorrect: isCorrect,
+            exp: explanation
+        });
+
+        // 更新右上角 UI
+        const elCorrect = document.getElementById('solo-correct-count');
+        const elWrong = document.getElementById('solo-wrong-count');
+        if (elCorrect) elCorrect.innerText = soloSession.correctCount;
+        if (elWrong) elWrong.innerText = soloSession.wrongCount;
+
+        // 判斷按鈕行為：下一題 還是 查看結算？
+        const nextBtn = document.getElementById('btn-next-step');
+        if (nextBtn) {
+            // 注意：這裡是判斷「答完這題後」是否達到上限
+            if (soloSession.currentStep >= soloSession.maxSteps) {
+                // 已完成最後一題
+                nextBtn.innerHTML = '<i class="fa-solid fa-flag-checkered"></i> 完成結算 (FINISH)';
+                nextBtn.className = "btn-cyber-accent flex-1 py-3 rounded-lg text-xs font-bold animate-pulse bg-yellow-600 text-white hover:bg-yellow-500 shadow-lg transition";
+                nextBtn.onclick = window.finishSoloSession; 
+            } else {
+                // 還沒完成，準備下一題
+                // 🔥 關鍵修正：確保在點擊下一題前，Step 數值不變，點擊後才由 nextQuestion 處理(或在此預備)
+                // 但為了 UI 顯示正確，我們這裡不直接 ++，而是讓 nextQuestion 呼叫 startQuizFlow 去處理 ++ 或是這裡預處理
+                // 原邏輯是在這裡 ++，這是可行的，因為 startQuizFlow 會讀取這個值
+                soloSession.currentStep++; 
+                
+                nextBtn.innerText = t('btn_next_q'); 
+                nextBtn.className = "btn-cyber-primary flex-1 py-3 rounded-lg text-xs bg-cyan-600 text-white hover:bg-cyan-500 transition";
+                nextBtn.onclick = window.nextQuestion; 
+            }
+        }
+    }
+
+    // ==========================================
+    // 4. 更新全域統計數據 (Global Stats)
+    // ==========================================
     let stats = currentUserData.stats;
     if (!stats.knowledgeMap) stats.knowledgeMap = {}; 
     if (!stats.learningCurve) stats.learningCurve = [];
 
-    // B. 獲取當前題目的科目與子題型 (從 fetchOneQuestion 存入的資料讀取)
+    // --- 解析科目與子題 (用於雷達圖) ---
     let subject = "綜合";
     let subTopic = "綜合";
     
     try {
         const savedData = JSON.parse(localStorage.getItem('currentQuizData'));
         if (savedData) {
-            subject = savedData.subject || "綜合";
-            subTopic = savedData.sub_topic || "綜合";
+            subject = savedData.subject;
+            subTopic = savedData.sub_topic;
+        } else {
+            // Fallback: 嘗試從 Badge 解析
+            const badgeEl = document.getElementById('quiz-badge');
+            if (badgeEl) {
+                const parts = badgeEl.innerText.replace('🎯', '').split('|');
+                if(parts.length > 0) subject = parts[0].trim();
+                if(parts.length > 1) subTopic = parts[1].trim();
+            }
         }
-    } catch(e) { 
-        console.error("無法讀取題目資訊:", e); 
-    }
+    } catch(e) { console.error("Parse stats error", e); }
 
-    // C. 初始化該科目的統計結構 (如果不存在)
+    // 初始化統計結構
     if (!stats.knowledgeMap[subject]) stats.knowledgeMap[subject] = {};
     if (!stats.knowledgeMap[subject][subTopic]) {
         stats.knowledgeMap[subject][subTopic] = { correct: 0, total: 0, avgTime: 0 };
     }
 
-    // D. 更新數據
+    // 更新詳細數據 (Knowledge Map) - 即使是挑戰模式也應該記錄「能力值」
     const topicStats = stats.knowledgeMap[subject][subTopic];
-    topicStats.total++; // 總題數 +1
-    if (isCorrect) topicStats.correct++; // 正確數 +1
-    
-    // 計算平均答題時間 (加權移動平均)
+    topicStats.total++;
+    if (isCorrect) topicStats.correct++;
     const prevAvg = topicStats.avgTime || 0;
     topicStats.avgTime = prevAvg === 0 ? timeTaken : (prevAvg * 0.7 + timeTaken * 0.3);
 
-    // E. 更新全域統計
-    stats.totalAnswered = (stats.totalAnswered || 0) + 1;
-    if (isCorrect) {
-        stats.correctCount = (stats.correctCount || 0) + 1;
-        stats.currentStreak = (stats.currentStreak || 0) + 1;
-        if (stats.currentStreak > (stats.maxStreak || 0)) stats.maxStreak = stats.currentStreak;
-        
-        // 積分計算 (基礎分 + 連勝加成 + 時間獎勵)
-        const baseScore = 10;
-        const streakBonus = Math.min(stats.currentStreak, 5) * 2;
-        const timeBonus = Math.max(0, Math.floor(15 - timeTaken)); 
-        const pointsEarned = baseScore + streakBonus + timeBonus;
-        
-        currentUserData.points = (currentUserData.points || 0) + pointsEarned;
-        currentUserData.coins = (currentUserData.coins || 0) + Math.floor(pointsEarned / 10); // 10分換1金幣
-        
-        showFloatingText(`+${pointsEarned} 分`, window.innerWidth / 2, window.innerHeight / 2, '#fbbf24');
-    } else {
-        stats.currentStreak = 0;
-    }
-
-    // 紀錄學習曲線 (只保留最近 20 筆)
+    // 更新學習曲線
     stats.learningCurve.push({
-        t: new Date().toISOString(),
-        r: isCorrect ? 1 : 0,
-        s: subject
+        timestamp: Date.now(),
+        isCorrect: isCorrect,
+        time: timeTaken,
+        topic: subject // Fix: topic -> subject
     });
     if (stats.learningCurve.length > 20) stats.learningCurve.shift();
 
-    // F. 段位檢查 (Rank Check)
-    const newRank = calculateRank(stats.points || currentUserData.points);
-    if (newRank > (stats.rankLevel || 0)) {
-        stats.rankLevel = newRank;
-        playSound('gacha_legend'); // 升級音效
-        showFloatingText(`🏆 晉升: ${getRankName(newRank)}`, window.innerWidth/2, window.innerHeight/3, '#facc15', 2000);
-    }
-
-    // ==========================================
-    // ☁️ 同步到 Firebase (Save to DB)
-    // ==========================================
-    if (auth.currentUser) {
-        try {
-            const userRef = doc(db, "users", auth.currentUser.uid);
-            await updateDoc(userRef, {
-                stats: stats,
-                points: currentUserData.points,
-                coins: currentUserData.coins
-            });
-            console.log(`[Firebase] 數據已儲存: ${subject} - ${subTopic}`);
-        } catch (error) {
-            console.error("Firebase 儲存失敗:", error);
-        }
-    }
-
-    // 5. 更新 UI 統計數據
-    updateUIStats();
-
-    // 6. 準備下一題 (延遲 3 秒)
-    setTimeout(() => {
-        isAnswering = false;
-        // 如果是單人模式，繼續下一題
-        if (!currentBattleId) {
-            renderQuiz();
-            // 順便預先加載下一題
-            fillBuffer();
+    // 🔥【關鍵修補】全域積分/連勝邏輯分離
+    // 如果是 Solo Mode，暫時「不」更新全域連勝與積分，以免重複計算或因挑戰失敗斷連勝
+    // 等到 finishSoloSession 再統一結算獎勵
+    if (!isSoloMode) {
+        stats.totalAnswered++;
+        if (isCorrect) {
+            stats.totalCorrect++; 
+            stats.currentStreak++;
+            if (stats.currentStreak > stats.bestStreak) stats.bestStreak = stats.currentStreak;
+            
+            // 積分公式：基礎10 + 段位加成 + 連勝加成
+            const scoreGain = 10 + (stats.rankLevel * 5) + (stats.currentStreak * 2);
+            stats.totalScore += scoreGain;
         } else {
-            // 多人模式邏輯 (保持原樣或依需求修改)
-            document.getElementById('quiz-area').classList.add('hidden');
-            document.getElementById('battle-area').classList.remove('hidden');
+            stats.currentStreak = 0; // 一般模式答錯斷連勝
         }
-    }, 3000); // 給玩家 3 秒看解析
+    } else {
+        // Solo Mode 僅記錄回答總數與正確數至全域 (可選)，但不處理連勝中斷
+        stats.totalAnswered++;
+        if (isCorrect) stats.totalCorrect++;
+        // Solo Mode 不在單題結算時給分，改由 finishSoloSession 給予「通關獎勵」
+    }
+
+    // 計算新段位 (Rank)
+    const netScore = getNetScore(stats);
+    const newRank = calculateRankFromScore(netScore);
+    
+    if (!isSoloMode && newRank > stats.rankLevel) {
+        stats.rankLevel = newRank;
+        fbTitle.innerHTML += ` <br><span class="text-yellow-400 text-sm animate-bounce">🎉 ${t('msg_rank_up')} ${t(RANKS_KEYS[newRank])}!</span>`;
+    } else if (!isSoloMode && newRank < stats.rankLevel) {
+        stats.rankLevel = newRank;
+        fbTitle.innerHTML += ` <br><span class="text-red-400 text-sm">⚠️ ${t('msg_rank_down')} ${t(RANKS_KEYS[newRank])}...</span>`;
+    }
+
+    // 5. 寫入資料庫 (Firebase)
+    try {
+        // 並行寫入 User Stats 與 Log
+        const p1 = updateDoc(doc(db, "users", auth.currentUser.uid), { stats: stats });
+        
+        const p2 = addDoc(collection(db, "exam_logs"), { 
+            uid: auth.currentUser.uid, 
+            email: auth.currentUser.email, 
+            question: questionText, 
+            isCorrect: isCorrect, 
+            timeTaken: timeTaken,
+            topic: subject, // Fix: topic variable might be undefined, use subject
+            mode: isSoloMode ? 'solo_challenge' : 'normal', // 標記模式
+            rankAtTime: t(RANKS_KEYS[stats.rankLevel]), 
+            timestamp: serverTimestamp() 
+        });
+
+        await Promise.all([p1, p2]);
+    } catch (e) {
+        console.error("Firebase Write Error:", e);
+        // 不阻擋 UI 流程，僅 Log
+    }
+    
+    updateUIStats(); 
+    fillBuffer();
 }
 
 window.finishSoloSession = async () => {
