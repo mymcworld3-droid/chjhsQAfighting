@@ -2200,13 +2200,57 @@ window.closeSoloResult = () => {
     switchToPage('page-home');
 };
 
-function renderQuiz(data, rank, topic) {
+async function generateVisualAid(imagePrompt) {
+    if (!imagePrompt || imagePrompt.trim() === "") return null;
+
+    try {
+        // 這裡假設後端有一個轉接 Gemini Image Generation 的 API
+        // 或者直接在前端封裝 (若安全性允許)
+        const response = await fetch('/api/generate-image', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt: imagePrompt })
+        });
+        const data = await response.json();
+        return data.url; // 回傳生成的圖片 Base64 或 URL
+    } catch (e) {
+        console.error("圖片生成失敗:", e);
+        return null;
+    }
+}
+
+// [修改] renderQuiz 函式
+async function renderQuiz(data, rank, topic) {
     document.getElementById('quiz-loading').classList.add('hidden');
     document.getElementById('quiz-container').classList.remove('hidden');
     document.getElementById('quiz-badge').innerText = `${topic} | ${rank}`;
-    document.getElementById('question-text').innerHTML = parseMarkdownImages(data.q);
+    
+    const questionTextEl = document.getElementById('question-text');
+    
+    // 1. 先顯示文字
+    questionTextEl.innerHTML = parseMarkdownImages(data.q);
+    
+    // 2. 處理動態圖片生成
+    if (data.image_prompt) {
+        const loadingPlaceholder = document.createElement('div');
+        loadingPlaceholder.className = "w-full h-40 bg-slate-800 animate-pulse rounded-lg flex items-center justify-center text-xs text-gray-500 my-2";
+        loadingPlaceholder.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles mr-2"></i> AI 正在繪製示意圖...`;
+        questionTextEl.appendChild(loadingPlaceholder);
+
+        const imageUrl = await generateVisualAid(data.image_prompt);
+        
+        loadingPlaceholder.remove(); // 移除載入中
+        if (imageUrl) {
+            const imgContainer = document.createElement('div');
+            imgContainer.className = "my-4 rounded-xl overflow-hidden border-2 border-white/10 shadow-2xl bg-black";
+            imgContainer.innerHTML = `<img src="${imageUrl}" class="w-full h-auto block" alt="AI Generated Aid">`;
+            questionTextEl.appendChild(imgContainer);
+        }
+    }
+
+    // 3. 渲染選項 (保持不變)
     const container = document.getElementById('options-container');
-    container.innerHTML = ''; 
+    container.innerHTML = '';
     data.opts.forEach((optText, idx) => {
         const btn = document.createElement('button');
         btn.id = `option-btn-${idx}`;
