@@ -41,6 +41,9 @@ let currentBankData = null;
 let presenceInterval = null; 
 let allBankFiles = [];
 let currentSelectSlot = null;
+
+let isAnswering = false;             // 防止答題連點
+let timerInterval = null;
 // --- 對戰動畫控制 (新增) ---
 let lastProcessedLogId = null;       // 記錄最後一次播放的戰鬥日誌 ID
 let isPlayingSequence = false;       // 是否正在播放序列動畫中
