@@ -2204,7 +2204,7 @@ function renderQuiz(data, rank, topic) {
     document.getElementById('quiz-loading').classList.add('hidden');
     document.getElementById('quiz-container').classList.remove('hidden');
     document.getElementById('quiz-badge').innerText = `${topic} | ${rank}`;
-    document.getElementById('question-text').innerText = data.q;
+    document.getElementById('question-text').innerHTML = parseMarkdownImages(data.q);
     const container = document.getElementById('options-container');
     container.innerHTML = ''; 
     data.opts.forEach((optText, idx) => {
