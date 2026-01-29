@@ -2200,62 +2200,86 @@ window.closeSoloResult = () => {
     switchToPage('page-home');
 };
 
+// [修改 public/main.js]
+
+// 1. [新增] 呼叫後端生成圖片的函式
 async function generateVisualAid(imagePrompt) {
     if (!imagePrompt || imagePrompt.trim() === "") return null;
 
     try {
-        // 這裡假設後端有一個轉接 Gemini Image Generation 的 API
-        // 或者直接在前端封裝 (若安全性允許)
         const response = await fetch('/api/generate-image', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ prompt: imagePrompt })
         });
+        
+        if (!response.ok) throw new Error("API Error");
+        
         const data = await response.json();
-        return data.url; // 回傳生成的圖片 Base64 或 URL
+        return data.url; // 回傳圖片 URL 或 Base64
     } catch (e) {
         console.error("圖片生成失敗:", e);
         return null;
     }
 }
 
-// [修改] renderQuiz 函式
+// 2. [修改] renderQuiz 函式 (取代原本的 renderQuiz)
 async function renderQuiz(data, rank, topic) {
     document.getElementById('quiz-loading').classList.add('hidden');
     document.getElementById('quiz-container').classList.remove('hidden');
     document.getElementById('quiz-badge').innerText = `${topic} | ${rank}`;
     
+    // 取得顯示題目的元素
     const questionTextEl = document.getElementById('question-text');
     
-    // 1. 先顯示文字
+    // A. 顯示題目文字 (保留原本 Markdown 圖片解析以相容舊題庫)
     questionTextEl.innerHTML = parseMarkdownImages(data.q);
     
-    // 2. 處理動態圖片生成
+    // B. [新增] 處理 AI 動態配圖
     if (data.image_prompt) {
-        const loadingPlaceholder = document.createElement('div');
-        loadingPlaceholder.className = "w-full h-40 bg-slate-800 animate-pulse rounded-lg flex items-center justify-center text-xs text-gray-500 my-2";
-        loadingPlaceholder.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles mr-2"></i> AI 正在繪製示意圖...`;
-        questionTextEl.appendChild(loadingPlaceholder);
+        // 1. 建立「繪製中」的 Loading 佔位區
+        const loadingDiv = document.createElement('div');
+        loadingDiv.id = "ai-image-loader";
+        loadingDiv.className = "w-full h-48 bg-slate-800/50 rounded-xl border border-white/10 animate-pulse flex flex-col items-center justify-center my-4 gap-2";
+        loadingDiv.innerHTML = `
+            <div class="text-3xl animate-bounce">🎨</div>
+            <div class="text-xs text-cyan-400 font-bold tracking-widest">NANO BANANA 繪製中...</div>
+            <div class="text-[9px] text-gray-500">Generating visual aid via Gemini 2.5</div>
+        `;
+        questionTextEl.appendChild(loadingDiv);
 
-        const imageUrl = await generateVisualAid(data.image_prompt);
-        
-        loadingPlaceholder.remove(); // 移除載入中
-        if (imageUrl) {
-            const imgContainer = document.createElement('div');
-            imgContainer.className = "my-4 rounded-xl overflow-hidden border-2 border-white/10 shadow-2xl bg-black";
-            imgContainer.innerHTML = `<img src="${imageUrl}" class="w-full h-auto block" alt="AI Generated Aid">`;
-            questionTextEl.appendChild(imgContainer);
-        }
+        // 2. 非同步呼叫生成 (不阻塞 UI)
+        generateVisualAid(data.image_prompt).then(imageUrl => {
+            const loader = document.getElementById('ai-image-loader');
+            if (loader) loader.remove(); // 移除 Loading
+
+            if (imageUrl) {
+                // 3. 圖片生成成功 -> 顯示圖片
+                const imgContainer = document.createElement('div');
+                imgContainer.className = "my-4 rounded-xl overflow-hidden border-2 border-cyan-500/30 shadow-[0_0_15px_rgba(6,182,212,0.3)] bg-black relative group transition-all hover:scale-[1.02]";
+                imgContainer.innerHTML = `
+                    <div class="absolute top-2 right-2 bg-black/60 text-[9px] text-cyan-300 px-2 py-1 rounded backdrop-blur border border-cyan-500/30">
+                        <i class="fa-solid fa-robot"></i> AI Generated
+                    </div>
+                    <img src="${imageUrl}" class="w-full h-auto object-cover min-h-[200px]" alt="AI Visual Aid">
+                `;
+                questionTextEl.appendChild(imgContainer);
+            } else {
+                // 4. 生成失敗 -> 悄悄失敗或顯示文字 (這裡選擇不顯示任何東西保持版面乾淨)
+                console.warn("AI 圖片生成無回應");
+            }
+        });
     }
 
-    // 3. 渲染選項 (保持不變)
+    // C. 渲染選項 (保持原本邏輯)
     const container = document.getElementById('options-container');
-    container.innerHTML = '';
+    container.innerHTML = ''; 
     data.opts.forEach((optText, idx) => {
         const btn = document.createElement('button');
         btn.id = `option-btn-${idx}`;
-        btn.className = "w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 flex items-center gap-3 active:scale-95";
-        btn.innerHTML = `<span class="bg-slate-800 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-blue-400 border border-slate-600">${String.fromCharCode(65+idx)}</span><span class="flex-1">${optText}</span>`;
+        // ... (按鈕樣式保持不變)
+        btn.className = "w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 flex items-center gap-3 active:scale-95 mb-2";
+        btn.innerHTML = `<span class="bg-slate-800 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-blue-400 border border-slate-600 shrink-0">${String.fromCharCode(65+idx)}</span><span class="flex-1">${optText}</span>`;
         btn.onclick = () => handleAnswer(idx, data.ans, data.q, data.exp);
         container.appendChild(btn);
     });
