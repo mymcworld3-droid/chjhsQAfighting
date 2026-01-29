@@ -512,7 +512,7 @@ window.toggleLanguage = () => {
     updateTexts();
 };
 // ==========================================
-// 🛠️ 管理員強力除錯工具 (已修正：支援 Log 顯示)
+// 🛠️ 管理員強力除錯工具 (已修正：支援 Error 物件解析)
 // ==========================================
 window.setupAdminDebug = function() {
     // 防止重複初始化
@@ -530,13 +530,32 @@ window.setupAdminDebug = function() {
     consoleDiv.classList.remove('hidden');
     if(showBtn) showBtn.classList.remove('hidden');
 
-    // 初始訊息
     const initMsg = document.createElement('div');
     initMsg.className = "text-green-400 text-[11px] font-mono border-b border-white/5 pb-1";
-    initMsg.innerText = "🔧 Admin Debugger Active: Capturing Image Logs...";
+    initMsg.innerText = "🔧 Admin Debugger Active: Error Tracing Enabled...";
     logContainer.prepend(initMsg);
 
-    // 輔助函式：新增日誌
+    // 🔥 [核心修正] 格式化參數，專門處理 Error 物件與物件迴圈
+    const formatLogArgs = (args) => {
+        return args.map(arg => {
+            // 1. 如果是錯誤物件，強制印出 message 與 stack
+            if (arg instanceof Error) {
+                return `[Error] ${arg.message}\n<span class="opacity-50 text-[9px]">${arg.stack}</span>`;
+            }
+            // 2. 如果是普通物件，嘗試轉 JSON
+            if (typeof arg === 'object') {
+                try {
+                    return JSON.stringify(arg, null, 2);
+                } catch (e) {
+                    return `[Object] (Circular)`;
+                }
+            }
+            // 3. 其他轉字串
+            return String(arg);
+        }).join(' ');
+    };
+
+    // 輔助函式：新增日誌到畫面
     const addLog = (msg, type = 'info') => {
         const div = document.createElement('div');
         const now = new Date();
@@ -547,43 +566,38 @@ window.setupAdminDebug = function() {
 
         if (type === 'error') {
             colorClass = 'text-red-400 font-bold bg-red-900/20 p-1 rounded border-l-2 border-red-500';
-            prefix = '❌ [ERR]';
+            prefix = '❌';
             // 更新錯誤計數
             let count = parseInt(debugCount.innerText) || 0;
             debugCount.innerText = count + 1;
         } else if (type === 'warn') {
-            colorClass = 'text-yellow-400';
-            prefix = '⚠️ [WARN]';
+            colorClass = 'text-yellow-400 bg-yellow-900/10';
+            prefix = '⚠️';
         } else if (msg.includes('[Front-Image]') || msg.includes('[UI-Render]')) {
-            // 🔥 特別高亮圖片生成的 Log (青色)
             colorClass = 'text-cyan-300 font-bold';
-            prefix = '🎨 [IMG]';
+            prefix = '🎨';
         }
 
         div.className = `break-words text-[11px] font-mono border-b border-white/5 pb-1 ${colorClass}`;
+        // 支援 HTML (讓 Stack Trace 可以換行)
         div.innerHTML = `<span class="opacity-50 mr-2 text-[9px]">${time}</span><span class="mr-1 opacity-75">${prefix}</span>${msg}`;
         
-        logContainer.prepend(div); // 最新訊息在最上面
+        logContainer.prepend(div);
     };
 
     // 1. 攔截 console.error
     const originalError = console.error;
     console.error = function(...args) {
         originalError.apply(console, args);
-        const msg = args.map(arg => {
-            if (arg instanceof Error) return `${arg.message}\n${arg.stack}`;
-            if (typeof arg === 'object') return JSON.stringify(arg, null, 2);
-            return String(arg);
-        }).join(' ');
-        addLog(msg, 'error');
+        // 使用新的格式化函式
+        addLog(formatLogArgs(args), 'error');
     };
 
-    // 2. [新增] 攔截 console.warn (圖片生成若無 Prompt 會發出警告)
+    // 2. 攔截 console.warn
     const originalWarn = console.warn;
     console.warn = function(...args) {
         originalWarn.apply(console, args);
-        const msg = args.map(arg => typeof arg === 'object' ? JSON.stringify(arg) : String(arg)).join(' ');
-        addLog(msg, 'warn');
+        addLog(formatLogArgs(args), 'warn');
     };
 
     // 3. 攔截全域錯誤
@@ -595,22 +609,19 @@ window.setupAdminDebug = function() {
 
     // 4. 攔截 Promise 錯誤
     window.onunhandledrejection = function(event) {
-        addLog(`Unhandled Promise: ${event.reason}`, 'error');
+        // 有些 Promise error 是物件，有些是字串
+        const reason = event.reason instanceof Error ? event.reason.message : event.reason;
+        addLog(`Unhandled Promise: ${reason}`, 'error');
     };
     
-    // 5. [關鍵修改] 攔截 console.log 並顯示圖片生成相關訊息
+    // 5. 攔截 console.log
     const originalLog = console.log;
     console.log = function(...args) {
         originalLog.apply(console, args);
         
-        // 將參數轉為字串
-        const msg = args.map(arg => (typeof arg === 'object' ? JSON.stringify(arg) : String(arg))).join(' ');
-
-        // 定義要顯示在 Debugger 上的關鍵字
-        // 包含我們剛加的 [Front-Image], [UI-Render] 以及原本對戰的關鍵字
-        const keywords = ['[Front-Image]', '[UI-Render]', 'Generate', '戰', 'API Error'];
+        const msg = formatLogArgs(args);
+        const keywords = ['[Front-Image]', '[UI-Render]', 'Generate', '戰', 'API Error', 'Prompt'];
         
-        // 只要訊息包含關鍵字，就顯示在畫面上
         if (keywords.some(k => msg.includes(k))) {
            addLog(msg, 'info');
         }
