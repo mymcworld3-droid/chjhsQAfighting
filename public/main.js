@@ -3294,7 +3294,7 @@ async function handleBattleAnswer(roomId, userIdx, correctIdx, isHost) {
     fbStatus.innerHTML = isCorrect 
         ? '<span class="text-green-400"><i class="fa-solid fa-check"></i> 回答正確！</span>' 
         : '<span class="text-red-400"><i class="fa-solid fa-xmark"></i> 回答錯誤...</span>';
-    fbText.innerText = currentExp;
+    fbText.innerHTML = parseMarkdownImages(currentExp);
 
     document.getElementById('battle-waiting-msg').classList.remove('hidden');
 
