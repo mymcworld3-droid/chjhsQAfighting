@@ -241,14 +241,15 @@ app.post('/api/generate-quiz', async (req, res) => {
         ${diagnosticInfo}
 
         [輸出格式 (JSON Only)]
-        請直接回傳 JSON，不要 markdown 標記：
+        請直接回傳 JSON：
         {
-            "q": "題目內容 (若為閱讀題請包含短文)",
+            "q": "題目內容 (若需要圖形輔助，請在文中適當位置提示「如下圖所示」)",
+            "image_prompt": "如果題目需要圖解(如幾何、電路、地圖、生物構造)，請提供一段 100 字內的英文詳細繪圖描述，否則留空。",
             "correct": "正確選項",
             "wrong": ["錯誤1", "錯誤2", "錯誤3"],
-            "exp": "解析：針對 ${targetTopic} 的概念解說...",
+            "exp": "解析內容...",
             "subject": "${subject}",
-            "sub_topic": "${targetTopic}" 
+            "sub_topic": "${targetTopic}"
         }
     `;
 
