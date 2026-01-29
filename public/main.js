@@ -512,7 +512,7 @@ window.toggleLanguage = () => {
     updateTexts();
 };
 // ==========================================
-// 🛠️ 管理員強力除錯工具
+// 🛠️ 管理員強力除錯工具 (已修正：支援 Log 顯示)
 // ==========================================
 window.setupAdminDebug = function() {
     // 防止重複初始化
@@ -530,12 +530,17 @@ window.setupAdminDebug = function() {
     consoleDiv.classList.remove('hidden');
     if(showBtn) showBtn.classList.remove('hidden');
 
-    console.log("🔧 Admin Debugger Active: Intercepting all errors...");
+    // 初始訊息
+    const initMsg = document.createElement('div');
+    initMsg.className = "text-green-400 text-[11px] font-mono border-b border-white/5 pb-1";
+    initMsg.innerText = "🔧 Admin Debugger Active: Capturing Logs...";
+    logContainer.prepend(initMsg);
 
     // 輔助函式：新增日誌
     const addLog = (msg, type = 'info') => {
         const div = document.createElement('div');
-        const time = new Date().toLocaleTimeString('en-US', { hour12: false }) + '.' + new Date().getMilliseconds();
+        const now = new Date();
+        const time = now.toLocaleTimeString('en-US', { hour12: false }) + '.' + String(now.getMilliseconds()).padStart(3, '0');
         
         let colorClass = 'text-gray-300';
         let prefix = '[LOG]';
@@ -549,19 +554,24 @@ window.setupAdminDebug = function() {
         } else if (type === 'warn') {
             colorClass = 'text-yellow-400';
             prefix = '⚠️ [WARN]';
+        } else if (type === 'success') {
+            colorClass = 'text-green-400';
+            prefix = '✅ [OK]';
+        } else if (msg.includes('[Front-Image]') || msg.includes('[UI-Render]')) {
+            // 特別高亮圖片生成的 Log
+            colorClass = 'text-cyan-300';
         }
 
         div.className = `break-words text-[11px] font-mono border-b border-white/5 pb-1 ${colorClass}`;
-        div.innerHTML = `<span class="opacity-50 mr-2">${time}</span><span class="mr-2">${prefix}</span>${msg}`;
+        div.innerHTML = `<span class="opacity-50 mr-2 text-[9px]">${time}</span><span class="mr-1 opacity-75">${prefix}</span>${msg}`;
         
         logContainer.prepend(div); // 最新訊息在最上面
     };
 
-    // 1. 攔截 console.error (最重要，包含 try-catch 的錯誤)
+    // 1. 攔截 console.error
     const originalError = console.error;
     console.error = function(...args) {
         originalError.apply(console, args);
-        // 將物件轉為字串以便顯示
         const msg = args.map(arg => {
             if (arg instanceof Error) return `${arg.message}\n${arg.stack}`;
             if (typeof arg === 'object') return JSON.stringify(arg, null, 2);
@@ -570,26 +580,41 @@ window.setupAdminDebug = function() {
         addLog(msg, 'error');
     };
 
-    // 2. 攔截全域錯誤 (語法錯誤、變數未定義)
+    // 2. [新增] 攔截 console.warn (我們剛才在圖片生成有用 warn)
+    const originalWarn = console.warn;
+    console.warn = function(...args) {
+        originalWarn.apply(console, args);
+        const msg = args.map(arg => typeof arg === 'object' ? JSON.stringify(arg) : String(arg)).join(' ');
+        addLog(msg, 'warn');
+    };
+
+    // 3. 攔截全域錯誤
     window.onerror = function(msg, url, line, col, error) {
         const stack = error ? error.stack : '';
         addLog(`${msg}\nLocation: ${url}:${line}:${col}\n${stack}`, 'error');
-        return false; // 不阻止預設行為
+        return false; 
     };
 
-    // 3. 攔截 Promise 錯誤 (Fetch 失敗、Async 錯誤)
+    // 4. 攔截 Promise 錯誤
     window.onunhandledrejection = function(event) {
         addLog(`Unhandled Promise: ${event.reason}`, 'error');
     };
     
-    // 4. (選用) 攔截 console.log，只顯示帶有特定關鍵字的
+    // 5. [關鍵修改] 攔截 console.log 並顯示圖片生成相關訊息
     const originalLog = console.log;
     console.log = function(...args) {
         originalLog.apply(console, args);
-        // 如果想看對戰流程，可以取消下面註解
-        // if (args[0] && typeof args[0] === 'string' && (args[0].includes('戰') || args[0].includes('Generate'))) {
-        //    addLog(args.join(' '), 'info');
-        // }
+        
+        // 將參數轉為字串
+        const msg = args.map(arg => (typeof arg === 'object' ? JSON.stringify(arg) : String(arg))).join(' ');
+
+        // 定義要顯示在 Debugger 上的關鍵字
+        // 包含我們剛加的 [Front-Image], [UI-Render] 以及原本對戰的關鍵字
+        const keywords = ['[Front-Image]', '[UI-Render]', 'Generate', '戰', 'API Error'];
+        
+        if (keywords.some(k => msg.includes(k))) {
+           addLog(msg, 'info');
+        }
     };
 };
 // ==========================================
