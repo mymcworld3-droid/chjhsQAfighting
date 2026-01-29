@@ -264,7 +264,7 @@ app.post('/api/generate-quiz', async (req, res) => {
             
             // 審查 Prompt (簡化版)
             const validationPrompt = `
-                請檢查以下 JSON 格式是否正確，且確認：答案 "correct" 只有一個、正確答案是否正確、錯誤答案中是否有正確答案、選項要在選項裡、不可為多選題。
+                請檢查以下 JSON 格式是否正確，且確認：答案 "correct" 只有一個、正確答案是否正確、錯誤答案中是否有正確答案、選項要在選項裡、不可為多選題、選項不可只有英文字母，要有文本。
                 並回傳修正後的純 JSON：
                 ${rawText}
             `;
