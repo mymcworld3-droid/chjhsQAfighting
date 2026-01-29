@@ -533,7 +533,7 @@ window.setupAdminDebug = function() {
     // 初始訊息
     const initMsg = document.createElement('div');
     initMsg.className = "text-green-400 text-[11px] font-mono border-b border-white/5 pb-1";
-    initMsg.innerText = "🔧 Admin Debugger Active: Capturing Logs...";
+    initMsg.innerText = "🔧 Admin Debugger Active: Capturing Image Logs...";
     logContainer.prepend(initMsg);
 
     // 輔助函式：新增日誌
@@ -554,12 +554,10 @@ window.setupAdminDebug = function() {
         } else if (type === 'warn') {
             colorClass = 'text-yellow-400';
             prefix = '⚠️ [WARN]';
-        } else if (type === 'success') {
-            colorClass = 'text-green-400';
-            prefix = '✅ [OK]';
         } else if (msg.includes('[Front-Image]') || msg.includes('[UI-Render]')) {
-            // 特別高亮圖片生成的 Log
-            colorClass = 'text-cyan-300';
+            // 🔥 特別高亮圖片生成的 Log (青色)
+            colorClass = 'text-cyan-300 font-bold';
+            prefix = '🎨 [IMG]';
         }
 
         div.className = `break-words text-[11px] font-mono border-b border-white/5 pb-1 ${colorClass}`;
@@ -580,7 +578,7 @@ window.setupAdminDebug = function() {
         addLog(msg, 'error');
     };
 
-    // 2. [新增] 攔截 console.warn (我們剛才在圖片生成有用 warn)
+    // 2. [新增] 攔截 console.warn (圖片生成若無 Prompt 會發出警告)
     const originalWarn = console.warn;
     console.warn = function(...args) {
         originalWarn.apply(console, args);
@@ -612,6 +610,7 @@ window.setupAdminDebug = function() {
         // 包含我們剛加的 [Front-Image], [UI-Render] 以及原本對戰的關鍵字
         const keywords = ['[Front-Image]', '[UI-Render]', 'Generate', '戰', 'API Error'];
         
+        // 只要訊息包含關鍵字，就顯示在畫面上
         if (keywords.some(k => msg.includes(k))) {
            addLog(msg, 'info');
         }
