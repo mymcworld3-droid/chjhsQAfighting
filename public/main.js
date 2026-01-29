@@ -2027,7 +2027,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     }
     
     localStorage.removeItem('currentQuiz');
-    fbText.innerText = explanation || "AI did not provide explanation.";
+    fbText.innerHTML = parseMarkdownImages(explanation) || "AI did not provide explanation.";
 
     // ==========================================
     // 🧠 模式邏輯分流
