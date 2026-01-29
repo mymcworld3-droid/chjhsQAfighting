@@ -238,7 +238,7 @@ app.post('/api/generate-quiz', async (req, res) => {
         5. **難度設定**：${difficulty}
         6. **隨機因子**：${randomSeed}
         ${diagnosticInfo}
-
+    
         [輸出格式 (JSON Only)]
         請直接回傳 JSON，不要 markdown 標記：
         {
@@ -250,6 +250,7 @@ app.post('/api/generate-quiz', async (req, res) => {
             "subject": "${subject}",
             "sub_topic": "${targetTopic}" 
         }
+        請檢查以下 JSON 格式是否正確，且確認：答案 "correct" 只有一個、正確答案是否正確、錯誤答案中是否有正確答案、選項要在選項裡、不可為多選題、選項不可只有英文字母要有文本、表格文本要記得換行
     `;
 
     // 6. 呼叫 AI (保持原本的雙重審查邏輯)
