@@ -2200,84 +2200,120 @@ window.closeSoloResult = () => {
     switchToPage('page-home');
 };
 
-// [修改 public/main.js]
+// [修改] public/main.js
 
-// 1. [新增] 呼叫後端生成圖片的函式
+// 1. [修改] 呼叫後端生成圖片的函式 (增加詳細 Log)
 async function generateVisualAid(imagePrompt) {
-    if (!imagePrompt || imagePrompt.trim() === "") return null;
+    console.log(`[Front-Image] 🚀 準備請求生成圖片, Prompt: "${imagePrompt.substring(0, 30)}..."`);
+    
+    if (!imagePrompt || imagePrompt.trim() === "") {
+        console.warn("[Front-Image] ⚠️ Prompt 為空，取消生成");
+        return null;
+    }
 
     try {
+        const startTime = Date.now();
+        console.log("[Front-Image] 📡 發送 Fetch 請求至 /api/generate-image...");
+        
         const response = await fetch('/api/generate-image', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ prompt: imagePrompt })
         });
         
-        if (!response.ok) throw new Error("API Error");
+        console.log(`[Front-Image] 📥 收到回應, Status: ${response.status}`);
+
+        if (!response.ok) {
+            throw new Error(`API Error: ${response.status} ${response.statusText}`);
+        }
         
         const data = await response.json();
-        return data.url; // 回傳圖片 URL 或 Base64
+        const duration = Date.now() - startTime;
+        
+        if (data.url) {
+            console.log(`[Front-Image] ✅ 圖片生成成功! (耗時: ${duration}ms)`);
+            console.log(`[Front-Image] URL 長度/預覽: ${data.url.length} chars, 開頭: ${data.url.substring(0, 50)}...`);
+            return data.url; 
+        } else {
+            console.warn("[Front-Image] ⚠️ 回傳資料中沒有 URL 欄位", data);
+            return null;
+        }
+
     } catch (e) {
-        console.error("圖片生成失敗:", e);
+        console.error("[Front-Image] ❌ 圖片生成請求失敗:", e);
         return null;
     }
 }
 
-// 2. [修改] renderQuiz 函式 (取代原本的 renderQuiz)
+// 2. [修改] renderQuiz 函式 (增加圖片載入監聽 Log)
 async function renderQuiz(data, rank, topic) {
     document.getElementById('quiz-loading').classList.add('hidden');
     document.getElementById('quiz-container').classList.remove('hidden');
     document.getElementById('quiz-badge').innerText = `${topic} | ${rank}`;
     
-    // 取得顯示題目的元素
     const questionTextEl = document.getElementById('question-text');
-    
-    // A. 顯示題目文字 (保留原本 Markdown 圖片解析以相容舊題庫)
     questionTextEl.innerHTML = parseMarkdownImages(data.q);
     
-    // B. [新增] 處理 AI 動態配圖
+    // B. [新增] 處理 AI 動態配圖 (含除錯)
     if (data.image_prompt) {
-        // 1. 建立「繪製中」的 Loading 佔位區
+        console.log("[UI-Render] 🎨 檢測到 image_prompt，開始處理圖片邏輯...");
+        
+        // 1. 建立 Loading 介面
         const loadingDiv = document.createElement('div');
         loadingDiv.id = "ai-image-loader";
         loadingDiv.className = "w-full h-48 bg-slate-800/50 rounded-xl border border-white/10 animate-pulse flex flex-col items-center justify-center my-4 gap-2";
         loadingDiv.innerHTML = `
             <div class="text-3xl animate-bounce">🎨</div>
             <div class="text-xs text-cyan-400 font-bold tracking-widest">NANO BANANA 繪製中...</div>
-            <div class="text-[9px] text-gray-500">Generating visual aid via Gemini 2.5</div>
+            <div class="text-[9px] text-gray-500">Generating visual aid...</div>
         `;
         questionTextEl.appendChild(loadingDiv);
 
-        // 2. 非同步呼叫生成 (不阻塞 UI)
+        // 2. 非同步呼叫
         generateVisualAid(data.image_prompt).then(imageUrl => {
+            console.log("[UI-Render] 🔄 生成 Promise 已返回");
+            
             const loader = document.getElementById('ai-image-loader');
-            if (loader) loader.remove(); // 移除 Loading
+            if (loader) loader.remove(); 
 
             if (imageUrl) {
-                // 3. 圖片生成成功 -> 顯示圖片
+                console.log("[UI-Render] 🖼️ 準備將圖片插入 DOM...");
+                
                 const imgContainer = document.createElement('div');
                 imgContainer.className = "my-4 rounded-xl overflow-hidden border-2 border-cyan-500/30 shadow-[0_0_15px_rgba(6,182,212,0.3)] bg-black relative group transition-all hover:scale-[1.02]";
+                
+                // 建立 img 標籤並綁定載入事件監聽
+                const img = document.createElement('img');
+                img.className = "w-full h-auto object-cover min-h-[200px]";
+                img.alt = "AI Visual Aid";
+                
+                // 監聽圖片實際載入狀況 (這是前端最容易失敗的地方，例如 base64 格式錯誤)
+                img.onload = () => console.log("[UI-Render] ✅ <IMG> 元素載入圖片成功！");
+                img.onerror = (e) => console.error("[UI-Render] ❌ <IMG> 元素載入失敗 (可能是格式錯誤或 404)", e);
+                
+                img.src = imageUrl;
+
                 imgContainer.innerHTML = `
                     <div class="absolute top-2 right-2 bg-black/60 text-[9px] text-cyan-300 px-2 py-1 rounded backdrop-blur border border-cyan-500/30">
                         <i class="fa-solid fa-robot"></i> AI Generated
                     </div>
-                    <img src="${imageUrl}" class="w-full h-auto object-cover min-h-[200px]" alt="AI Visual Aid">
                 `;
+                imgContainer.appendChild(img); // 將 img 插入容器
                 questionTextEl.appendChild(imgContainer);
             } else {
-                // 4. 生成失敗 -> 悄悄失敗或顯示文字 (這裡選擇不顯示任何東西保持版面乾淨)
-                console.warn("AI 圖片生成無回應");
+                console.warn("[UI-Render] ⚠️ 未獲得有效圖片 URL，跳過顯示。");
             }
         });
+    } else {
+        console.log("[UI-Render] ℹ️ 此題目沒有 image_prompt");
     }
 
-    // C. 渲染選項 (保持原本邏輯)
+    // C. 渲染選項 (保持不變)
     const container = document.getElementById('options-container');
     container.innerHTML = ''; 
     data.opts.forEach((optText, idx) => {
         const btn = document.createElement('button');
         btn.id = `option-btn-${idx}`;
-        // ... (按鈕樣式保持不變)
         btn.className = "w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 flex items-center gap-3 active:scale-95 mb-2";
         btn.innerHTML = `<span class="bg-slate-800 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-blue-400 border border-slate-600 shrink-0">${String.fromCharCode(65+idx)}</span><span class="flex-1">${optText}</span>`;
         btn.onclick = () => handleAnswer(idx, data.ans, data.q, data.exp);
