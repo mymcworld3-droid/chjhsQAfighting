@@ -2745,7 +2745,7 @@ function listenToBattleRoom(roomId) {
                     });
 
                     // 渲染文字
-                    document.getElementById('battle-q-text').innerText = room.currentQuestion.q;
+                    document.getElementById('battle-q-text').innerHTML = parseMarkdownImages(room.currentQuestion.q);
                     const container = document.getElementById('battle-options');
                     container.innerHTML = '';
                     room.currentQuestion.opts.forEach((opt, idx) => {
