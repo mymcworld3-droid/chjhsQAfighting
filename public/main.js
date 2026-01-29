@@ -1822,44 +1822,42 @@ async function fillBuffer() {
 // ==========================================
 //  Quiz UI Logic
 // ==========================================
-// --- 修改後的 startQuizFlow：支援 10 題單位機制 ---
-window.startQuizFlow = async () => {
-    // 判斷是否為新的 Session
-    if (!soloSession.active) {
-        // 初始化 Session
-        soloSession = {
-            active: true,
-            currentStep: 1, // 從第 1 題開始
-            maxSteps: 10,
-            correctCount: 0,
-            wrongCount: 0,
-            history: []
-        };
-        console.log("🚀 Starting new Solo Unit (10 questions)");
-    } else {
-        console.log("🔄 Resuming Solo Unit:", soloSession.currentStep, "/ 10");
+window.startQuizFlow = async (isNewSession = false) => {
+    // 如果不是透過 startSoloMode 進來的，且目前沒有 active session，預設為無限模式 (或跳出選擇)
+    if (!soloSession.active && !isNewSession) {
+        // 如果直接呼叫 startQuizFlow 而沒有 Session，強制呼叫選擇器
+        window.openSoloModeSelector();
+        return;
     }
 
     switchToPage('page-quiz');
     
-    // 更新 UI 顯示
+    // UI 重置
     document.getElementById('quiz-container').classList.add('hidden');
     document.getElementById('feedback-section').classList.add('hidden');
     document.getElementById('btn-giveup').classList.remove('hidden');
 
-    // 顯示右上角進度面板
+    // 根據模式顯示 UI
     const progressPanel = document.getElementById('solo-progress-panel');
-    if (progressPanel) {
-        progressPanel.classList.remove('hidden');
-        document.getElementById('solo-current-step').innerText = soloSession.currentStep;
-        document.getElementById('solo-correct-count').innerText = soloSession.correctCount;
-        document.getElementById('solo-wrong-count').innerText = soloSession.wrongCount;
+    if (soloSession.mode === 'challenge') {
+        if(progressPanel) {
+            progressPanel.classList.remove('hidden');
+            document.getElementById('solo-current-step').innerText = soloSession.currentStep;
+            document.getElementById('solo-correct-count').innerText = soloSession.correctCount;
+            document.getElementById('solo-wrong-count').innerText = soloSession.wrongCount;
+            
+            // 更新總題數顯示 (因為錯題會增加總數)
+            const maxEl = document.getElementById('solo-max-steps');
+            if(maxEl) maxEl.innerText = soloSession.maxSteps;
+        }
+    } else {
+        // 無限模式隱藏挑戰進度面板，改顯示簡單的連勝資訊 (原 UI 已有)
+        if(progressPanel) progressPanel.classList.add('hidden');
     }
 
-    // 記錄答題開始時間
     window.quizStartTime = Date.now(); 
 
-    // --- 以下為原本的出題邏輯 ---
+    // --- 出題邏輯 (保持不變) ---
     const savedQuiz = localStorage.getItem('currentQuiz');
     if (savedQuiz) { 
         const q = JSON.parse(savedQuiz); 
@@ -1868,7 +1866,6 @@ window.startQuizFlow = async () => {
         return; 
     }
     
-    // 檢查 buffer
     if (quizBuffer.length > 0) { 
         const nextQ = quizBuffer.shift(); 
         localStorage.setItem('currentQuiz', JSON.stringify(nextQ)); 
@@ -1890,37 +1887,120 @@ window.startQuizFlow = async () => {
     }
 };
 
+// ==========================================
+// 🆕 單人模式選擇與啟動邏輯
+// ==========================================
+
+// 1. 點擊「單人挑戰」按鈕時觸發此函式
+window.openSoloModeSelector = async () => {
+    // 這裡使用自定義彈窗或 SweetAlert，這裡示範用簡單的 confirm 流程
+    // 實務上建議在 index.html 做一個漂亮的 Modal，這裡用簡單的 UI 生成代替
+    
+    // 建立臨時的選擇 Modal
+    const modalId = 'solo-mode-selector';
+    let modal = document.getElementById(modalId);
+    
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = modalId;
+        modal.className = "fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm hidden";
+        modal.innerHTML = `
+            <div class="bg-slate-800 p-6 rounded-2xl border-2 border-slate-600 shadow-2xl max-w-sm w-full mx-4 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500 to-purple-500"></div>
+                <h3 class="text-xl font-bold text-white mb-4 text-center">⚔️ 選擇挑戰模式</h3>
+                
+                <div class="space-y-3">
+                    <button onclick="startSoloMode('infinite')" class="w-full p-4 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 border border-cyan-400/30 group transition-all relative overflow-hidden">
+                        <div class="flex items-center justify-between relative z-10">
+                            <div class="text-left">
+                                <div class="font-bold text-white text-lg"><i class="fa-solid fa-infinity"></i> 無限模式</div>
+                                <div class="text-xs text-cyan-200 mt-1">每題 +20 金幣，無止盡練功</div>
+                            </div>
+                            <div class="text-2xl opacity-50 group-hover:scale-110 transition">∞</div>
+                        </div>
+                    </button>
+
+                    <button onclick="startSoloMode('challenge')" class="w-full p-4 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 border border-pink-400/30 group transition-all relative overflow-hidden">
+                        <div class="flex items-center justify-between relative z-10">
+                            <div class="text-left">
+                                <div class="font-bold text-white text-lg"><i class="fa-solid fa-trophy"></i> 挑戰模式</div>
+                                <div class="text-xs text-pink-200 mt-1">基礎 10 題，錯題追加！<br>通關獎勵 200 金幣</div>
+                            </div>
+                            <div class="text-2xl opacity-50 group-hover:scale-110 transition">🎯</div>
+                        </div>
+                    </button>
+                </div>
+
+                <button onclick="document.getElementById('${modalId}').classList.add('hidden')" class="mt-4 w-full py-2 text-gray-400 hover:text-white text-sm">取消</button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+    
+    modal.classList.remove('hidden');
+};
+
+// 2. 實際啟動函式
+window.startSoloMode = (mode) => {
+    // 隱藏選擇視窗
+    const modal = document.getElementById('solo-mode-selector');
+    if(modal) modal.classList.add('hidden');
+
+    // 初始化 Session 狀態
+    soloSession = {
+        active: true,
+        mode: mode, // 'infinite' 或 'challenge'
+        currentStep: 1,
+        maxSteps: mode === 'challenge' ? 10 : 9999, // 無限模式設為無限大
+        correctCount: 0,
+        wrongCount: 0,
+        history: [] 
+    };
+
+    console.log(`🚀 Starting Solo: ${mode.toUpperCase()} Mode`);
+    
+    // 更新 UI 顯示 (隱藏/顯示進度面板)
+    const progressPanel = document.getElementById('solo-progress-panel');
+    if (progressPanel) {
+        if (mode === 'challenge') {
+            progressPanel.classList.remove('hidden');
+            // 重置面板文字
+            document.getElementById('solo-current-step').innerText = 1;
+            // 這裡假設 HTML 結構中有顯示總題數的地方，例如 <span id="solo-max-steps">10</span>
+            const maxEl = document.getElementById('solo-max-steps'); 
+            if(maxEl) maxEl.innerText = 10; 
+        } else {
+            // 無限模式可以隱藏進度條，或顯示「已答 X 題」
+            progressPanel.classList.add('hidden'); 
+        }
+    }
+
+    // 開始出題
+    window.startQuizFlow(true); // 傳入 true 表示是新開始
+};
+
 // public/main.js
 
-// --- 修改後的 handleAnswer：加入 Session 狀態與結算判斷 (已修補) ---
 async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
-    if (!currentUserData) return; // 🛡️ 防呆：確保已登入
+    if (!currentUserData) return;
 
     const timeTaken = (Date.now() - (window.quizStartTime || Date.now())) / 1000;
     const isCorrect = userIdx === correctIdx;
     
-    // 1. UI 處理：禁用按鈕並顯示正誤
+    // UI: 禁用按鈕與顯示正誤
     const opts = document.querySelectorAll('[id^="option-btn-"]');
     opts.forEach((btn, idx) => {
         btn.onclick = null; 
-        btn.classList.add('btn-disabled'); // 建議在 CSS 定義此 class (opacity-50, cursor-not-allowed)
-        btn.classList.add('opacity-50', 'cursor-not-allowed'); // Tailwind 備用
-        
-        if (idx === correctIdx) {
-            btn.classList.add('bg-green-600', 'border-green-400', 'text-white', 'btn-correct');
-        } else if (idx === userIdx && !isCorrect) {
-            btn.classList.add('bg-red-600', 'border-red-400', 'text-white', 'btn-wrong');
-        }
+        btn.classList.add('opacity-50', 'cursor-not-allowed');
+        if (idx === correctIdx) btn.classList.add('bg-green-600', 'border-green-400', 'text-white');
+        else if (idx === userIdx && !isCorrect) btn.classList.add('bg-red-600', 'border-red-400', 'text-white');
     });
     
-    // 2. 顯示 Feedback 區塊
     const fbSection = document.getElementById('feedback-section');
     const fbTitle = document.getElementById('feedback-title');
     const fbIcon = document.getElementById('feedback-icon');
     const fbText = document.getElementById('feedback-text');
-    const giveUpBtn = document.getElementById('btn-giveup');
-    
-    if (giveUpBtn) giveUpBtn.classList.add('hidden');
+    document.getElementById('btn-giveup').classList.add('hidden');
     if (fbSection) fbSection.classList.remove('hidden');
 
     if(isCorrect) {
@@ -1939,157 +2019,100 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     fbText.innerText = explanation || "AI did not provide explanation.";
 
     // ==========================================
-    // 3. 處理 Solo Session (單人挑戰) 邏輯
+    // 🧠 模式邏輯分流
     // ==========================================
-    let isSoloMode = false;
-    if (soloSession && soloSession.active) {
-        isSoloMode = true;
-        // 更新 Session 計數
+    const isInfinite = soloSession.mode === 'infinite';
+    const isChallenge = soloSession.mode === 'challenge';
+
+    if (soloSession.active) {
         if (isCorrect) soloSession.correctCount++;
         else soloSession.wrongCount++;
         
-        // 記錄 Session 歷史
-        soloSession.history.push({
-            q: questionText,
-            isCorrect: isCorrect,
-            exp: explanation
-        });
+        soloSession.history.push({ q: questionText, isCorrect: isCorrect, exp: explanation });
 
-        // 更新右上角 UI
+        // 🟥 挑戰模式特殊邏輯：答錯追加題目
+        if (isChallenge && !isCorrect) {
+            soloSession.maxSteps++; // 總題數 +1
+            fbTitle.innerHTML += `<div class="text-xs text-yellow-300 mt-1 animate-pulse">⚠️ 答錯懲罰：追加一題同類題目！</div>`;
+            // 更新 UI 上的總題數
+            const maxEl = document.getElementById('solo-max-steps');
+            if(maxEl) maxEl.innerText = soloSession.maxSteps;
+        }
+
+        // 更新計數面板
         const elCorrect = document.getElementById('solo-correct-count');
         const elWrong = document.getElementById('solo-wrong-count');
         if (elCorrect) elCorrect.innerText = soloSession.correctCount;
         if (elWrong) elWrong.innerText = soloSession.wrongCount;
 
-        // 判斷按鈕行為：下一題 還是 查看結算？
+        // 🟩 設定按鈕行為
         const nextBtn = document.getElementById('btn-next-step');
         if (nextBtn) {
-            // 注意：這裡是判斷「答完這題後」是否達到上限
-            if (soloSession.currentStep >= soloSession.maxSteps) {
-                // 已完成最後一題
-                nextBtn.innerHTML = '<i class="fa-solid fa-flag-checkered"></i> 完成結算 (FINISH)';
-                nextBtn.className = "btn-cyber-accent flex-1 py-3 rounded-lg text-xs font-bold animate-pulse bg-yellow-600 text-white hover:bg-yellow-500 shadow-lg transition";
+            // 挑戰模式且達到最大題數 -> 結算
+            if (isChallenge && soloSession.currentStep >= soloSession.maxSteps) {
+                nextBtn.innerHTML = '<i class="fa-solid fa-flag-checkered"></i> 完成挑戰 (領取獎勵)';
+                nextBtn.className = "btn-cyber-accent flex-1 py-3 rounded-lg text-xs font-bold animate-pulse bg-yellow-600 text-white shadow-lg";
                 nextBtn.onclick = window.finishSoloSession; 
             } else {
-                // 還沒完成，準備下一題
-                // 🔥 關鍵修正：確保在點擊下一題前，Step 數值不變，點擊後才由 nextQuestion 處理(或在此預備)
-                // 但為了 UI 顯示正確，我們這裡不直接 ++，而是讓 nextQuestion 呼叫 startQuizFlow 去處理 ++ 或是這裡預處理
-                // 原邏輯是在這裡 ++，這是可行的，因為 startQuizFlow 會讀取這個值
-                soloSession.currentStep++; 
-                
-                nextBtn.innerText = t('btn_next_q'); 
-                nextBtn.className = "btn-cyber-primary flex-1 py-3 rounded-lg text-xs bg-cyan-600 text-white hover:bg-cyan-500 transition";
+                // 無限模式 或 挑戰模式未結束 -> 下一題
+                soloSession.currentStep++; // 預備下一題序號
+                nextBtn.innerText = isInfinite ? `下一題 (目前連對: ${currentUserData.stats.currentStreak + (isCorrect?1:0)})` : t('btn_next_q');
+                nextBtn.className = "btn-cyber-primary flex-1 py-3 rounded-lg text-xs bg-cyan-600 text-white";
                 nextBtn.onclick = window.nextQuestion; 
             }
         }
     }
 
     // ==========================================
-    // 4. 更新全域統計數據 (Global Stats)
+    // 💰 全域統計與獎勵更新
     // ==========================================
     let stats = currentUserData.stats;
-    if (!stats.knowledgeMap) stats.knowledgeMap = {}; 
-    if (!stats.learningCurve) stats.learningCurve = [];
+    let scoreGain = 0;
 
-    // --- 解析科目與子題 (用於雷達圖) ---
-    let subject = "綜合";
-    let subTopic = "綜合";
-    
-    try {
-        const savedData = JSON.parse(localStorage.getItem('currentQuizData'));
-        if (savedData) {
-            subject = savedData.subject;
-            subTopic = savedData.sub_topic;
-        } else {
-            // Fallback: 嘗試從 Badge 解析
-            const badgeEl = document.getElementById('quiz-badge');
-            if (badgeEl) {
-                const parts = badgeEl.innerText.replace('🎯', '').split('|');
-                if(parts.length > 0) subject = parts[0].trim();
-                if(parts.length > 1) subTopic = parts[1].trim();
-            }
-        }
-    } catch(e) { console.error("Parse stats error", e); }
-
-    // 初始化統計結構
-    if (!stats.knowledgeMap[subject]) stats.knowledgeMap[subject] = {};
-    if (!stats.knowledgeMap[subject][subTopic]) {
-        stats.knowledgeMap[subject][subTopic] = { correct: 0, total: 0, avgTime: 0 };
-    }
-
-    // 更新詳細數據 (Knowledge Map) - 即使是挑戰模式也應該記錄「能力值」
-    const topicStats = stats.knowledgeMap[subject][subTopic];
-    topicStats.total++;
-    if (isCorrect) topicStats.correct++;
-    const prevAvg = topicStats.avgTime || 0;
-    topicStats.avgTime = prevAvg === 0 ? timeTaken : (prevAvg * 0.7 + timeTaken * 0.3);
-
-    // 更新學習曲線
-    stats.learningCurve.push({
-        timestamp: Date.now(),
-        isCorrect: isCorrect,
-        time: timeTaken,
-        topic: subject // Fix: topic -> subject
-    });
-    if (stats.learningCurve.length > 20) stats.learningCurve.shift();
-
-    // 🔥【關鍵修補】全域積分/連勝邏輯分離
-    // 如果是 Solo Mode，暫時「不」更新全域連勝與積分，以免重複計算或因挑戰失敗斷連勝
-    // 等到 finishSoloSession 再統一結算獎勵
-    if (!isSoloMode) {
+    // 1. 無限模式：即時更新全域狀態與金幣
+    if (isInfinite) {
         stats.totalAnswered++;
         if (isCorrect) {
             stats.totalCorrect++; 
             stats.currentStreak++;
             if (stats.currentStreak > stats.bestStreak) stats.bestStreak = stats.currentStreak;
             
-            // 積分公式：基礎10 + 段位加成 + 連勝加成
-            const scoreGain = 10 + (stats.rankLevel * 5) + (stats.currentStreak * 2);
-            stats.totalScore += scoreGain;
+            // 💰 無限模式獎勵：每題固定 20 (可加上連勝加成)
+            scoreGain = 20;
+            // 顯示獲得金幣提示
+            fbTitle.innerHTML += ` <span class="text-yellow-400 text-sm ml-2 border border-yellow-500 rounded px-1">+${scoreGain}💰</span>`;
         } else {
-            stats.currentStreak = 0; // 一般模式答錯斷連勝
+            stats.currentStreak = 0; // 答錯斷連勝
         }
-    } else {
-        // Solo Mode 僅記錄回答總數與正確數至全域 (可選)，但不處理連勝中斷
+        stats.totalScore += scoreGain;
+    }
+    // 2. 挑戰模式：僅記錄答題數，不即時給分 (保留到 finishSoloSession)
+    else if (isChallenge) {
         stats.totalAnswered++;
         if (isCorrect) stats.totalCorrect++;
-        // Solo Mode 不在單題結算時給分，改由 finishSoloSession 給予「通關獎勵」
+        // 不更新 currentStreak 以免挑戰模式影響首頁連勝紀錄
     }
 
-    // 計算新段位 (Rank)
+    // 更新段位
     const netScore = getNetScore(stats);
     const newRank = calculateRankFromScore(netScore);
-    
-    if (!isSoloMode && newRank > stats.rankLevel) {
-        stats.rankLevel = newRank;
-        fbTitle.innerHTML += ` <br><span class="text-yellow-400 text-sm animate-bounce">🎉 ${t('msg_rank_up')} ${t(RANKS_KEYS[newRank])}!</span>`;
-    } else if (!isSoloMode && newRank < stats.rankLevel) {
-        stats.rankLevel = newRank;
-        fbTitle.innerHTML += ` <br><span class="text-red-400 text-sm">⚠️ ${t('msg_rank_down')} ${t(RANKS_KEYS[newRank])}...</span>`;
-    }
+    if (newRank > stats.rankLevel) stats.rankLevel = newRank;
 
-    // 5. 寫入資料庫 (Firebase)
+    // 寫入資料庫
     try {
-        // 並行寫入 User Stats 與 Log
         const p1 = updateDoc(doc(db, "users", auth.currentUser.uid), { stats: stats });
-        
         const p2 = addDoc(collection(db, "exam_logs"), { 
             uid: auth.currentUser.uid, 
             email: auth.currentUser.email, 
             question: questionText, 
             isCorrect: isCorrect, 
             timeTaken: timeTaken,
-            topic: subject, // Fix: topic variable might be undefined, use subject
-            mode: isSoloMode ? 'solo_challenge' : 'normal', // 標記模式
-            rankAtTime: t(RANKS_KEYS[stats.rankLevel]), 
+            topic: "Solo", 
+            mode: soloSession.mode, // 記錄模式
             timestamp: serverTimestamp() 
         });
-
         await Promise.all([p1, p2]);
-    } catch (e) {
-        console.error("Firebase Write Error:", e);
-        // 不阻擋 UI 流程，僅 Log
-    }
+    } catch (e) { console.error("Firebase Error", e); }
     
     updateUIStats(); 
     fillBuffer();
