@@ -2119,21 +2119,18 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
 }
 
 window.finishSoloSession = async () => {
-    console.log("🏁 進入結算流程..."); // Debug 用
-
-    // 1. 【修正】先切換頁面，讓使用者立刻看到結果，避免網路卡住導致體驗不佳
+    // 1. 切換到結算頁面
     window.switchToPage('page-solo-result');
 
-    // 2. 計算並顯示結算數據
-    // 防止除以零的保護
-    const max = soloSession.maxSteps || 10;
-    const correct = soloSession.correctCount || 0;
+    // 2. 顯示數據
+    const max = soloSession.maxSteps;
+    const correct = soloSession.correctCount;
     const acc = Math.round((correct / max) * 100);
     
     const accEl = document.getElementById('solo-result-acc');
     if (accEl) {
         accEl.innerText = `${acc}%`;
-        accEl.className = `text-3xl font-bold font-sci ${acc >= 60 ? 'text-green-400' : 'text-red-400'}`;
+        accEl.className = `text-3xl font-bold font-sci ${acc >= 80 ? 'text-green-400' : (acc >= 60 ? 'text-yellow-400' : 'text-red-400')}`;
     }
 
     // 渲染歷史紀錄
@@ -2159,29 +2156,29 @@ window.finishSoloSession = async () => {
         });
     }
 
-    // 3. 後台處理獎勵與寫入 (非同步執行，不卡 UI)
-    const bonus = 100;
-    if (currentUserData && currentUserData.stats) {
-        currentUserData.stats.totalScore += bonus;
-        
-        try {
-            await updateDoc(doc(db, "users", auth.currentUser.uid), {
-                "stats.totalScore": currentUserData.stats.totalScore
-            });
-            updateUIStats();
-            // 播放慶祝音效
-            if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 200]);
-        } catch (e) {
-            console.error("Bonus Error (Network or Permission):", e);
-            // 即使寫入失敗，使用者已經看到結果畫面，體驗較好
+    // 3. 💰 發放挑戰獎勵 (僅限挑戰模式)
+    if (soloSession.mode === 'challenge') {
+        const bonus = 200;
+        if (currentUserData && currentUserData.stats) {
+            currentUserData.stats.totalScore += bonus;
+            
+            // 顯示獎勵動畫或文字
+            const titleEl = document.querySelector('#page-solo-result h2');
+            if(titleEl) titleEl.innerHTML = `挑戰完成！ <span class="text-yellow-400">+${bonus}💰</span>`;
+
+            try {
+                await updateDoc(doc(db, "users", auth.currentUser.uid), {
+                    "stats.totalScore": currentUserData.stats.totalScore
+                });
+                updateUIStats();
+                if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 200]);
+            } catch (e) { console.error("Bonus Error:", e); }
         }
     }
 
-    // 4. 重置 Session 狀態
+    // 4. 重置 Session
     soloSession.active = false;
     soloSession.history = [];
-    
-    // 隱藏右上角進度條
     const progressPanel = document.getElementById('solo-progress-panel');
     if (progressPanel) progressPanel.classList.add('hidden');
 };
