@@ -226,7 +226,6 @@ app.post('/api/generate-quiz', async (req, res) => {
 
     const randomSeed = Math.random().toString(36).substring(7);
 
-    // 5. Prompt 生成 (注入 topicDescription)
     const generationPrompt = `
         [系統指令]
         你是由 Google 開發的 AI 教育專家，請生成一道高品質的「單選題」。
@@ -234,22 +233,22 @@ app.post('/api/generate-quiz', async (req, res) => {
         [出題規格]
         1. **主科目**：${subject}
         2. **指定題型**：${targetTopic}
-        3. **題型要求**：${topicDescription} (請嚴格遵守此描述設計題目)
+        3. **題型要求**：${topicDescription}
         4. **適用程度**：${level} (段位：${rank})
         5. **難度設定**：${difficulty}
         6. **隨機因子**：${randomSeed}
         ${diagnosticInfo}
 
         [輸出格式 (JSON Only)]
-        請直接回傳 JSON：
+        請直接回傳 JSON，不要 markdown 標記：
         {
-            "q": "題目內容 (若需要圖形輔助，請在文中適當位置提示「如下圖所示」)",
-            "image_prompt": "如果題目需要圖解(如幾何、電路、地圖、生物構造)，請提供一段 100 字內的英文詳細繪圖描述，否則留空。",
+            "q": "題目內容 (不需要包含圖片 Markdown，若需要圖解請在文字中適當位置標註「(如圖所示)」)",
+            "image_prompt": "若本題適合配圖(如幾何圖形、生物構造、地圖、情境示意)，請提供一段 30-50 字的英文詳細繪圖指令(Prompt) 給 Nano Banana 模型；若不需配圖請留空。",
             "correct": "正確選項",
             "wrong": ["錯誤1", "錯誤2", "錯誤3"],
             "exp": "解析內容...",
             "subject": "${subject}",
-            "sub_topic": "${targetTopic}"
+            "sub_topic": "${targetTopic}" 
         }
     `;
 
@@ -283,6 +282,45 @@ app.post('/api/generate-quiz', async (req, res) => {
             attempts++;
             if (attempts === maxAttempts) return res.status(500).json({ error: "生成失敗" });
         }
+    }
+});
+
+app.post('/api/generate-image', async (req, res) => {
+    try {
+        const { prompt } = req.body;
+        if (!prompt) return res.status(400).json({ error: "No prompt provided" });
+
+        console.log(`[Nano Banana] Generating image for: ${prompt.substring(0, 30)}...`);
+
+        // 使用您指定的模型名稱
+        // 注意：請確認您的 API Key 權限包含存取此 Preview 模型
+        const imageModel = genAI.getGenerativeModel({ 
+            model: "gemini-2.5-flash-preview-image", // 您的 Nano Banana 模型 ID
+            generationConfig: { responseMimeType: "image/png" } // 假設模型直接回傳影像數據
+        });
+
+        // 呼叫模型生成
+        // 註：不同版本的 Gemini 生成圖片方式可能不同。
+        // 若是透過 Google GenAI SDK，通常是回傳 Base64 資料
+        const result = await imageModel.generateContent(prompt);
+        const response = await result.response;
+        
+        // 嘗試取得影像資料 (視 SDK 實作而定，通常是 base64 字串或 text 包含 url)
+        // 這裡假設模型回傳 Base64 字串或可以直接使用的 URL
+        let imageOutput = response.text(); 
+        
+        // 若回傳的是 Base64 但沒有前綴，幫忙補上 (依實際情況調整)
+        if (!imageOutput.startsWith('data:image') && !imageOutput.startsWith('http')) {
+             // 假設它是純 Base64
+             imageOutput = `data:image/png;base64,${imageOutput.trim()}`;
+        }
+
+        res.json({ url: imageOutput });
+
+    } catch (error) {
+        console.error("Image Generation Error:", error);
+        // 生成失敗時回傳 null，前端會顯示失敗圖示或隱藏
+        res.status(500).json({ error: "Generation failed", details: error.message });
     }
 });
 
