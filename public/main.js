@@ -2158,7 +2158,7 @@ window.finishSoloSession = async () => {
                         ? '<span class="text-green-400 text-[10px] font-bold">CORRECT</span>' 
                         : '<span class="text-red-400 text-[10px] font-bold">WRONG</span>'}
                 </div>
-                <div class="text-xs text-white font-bold truncate">${log.q}</div>
+                <div class="text-xs text-white font-bold mb-1">${parseMarkdownImages(log.q)}</div>
                 <div class="text-[10px] text-gray-400 line-clamp-2 mt-1 bg-black/20 p-1 rounded">
                     ${log.exp || 'No explanation'}
                 </div>
