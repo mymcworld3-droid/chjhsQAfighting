@@ -2035,7 +2035,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     setTimeout(() => {
         isAnswering = false;
         // 如果是單人模式，繼續下一題
-        if (!currentRoomId) {
+        if (!currentBattleId) {
             renderQuiz();
             // 順便預先加載下一題
             fillBuffer();
