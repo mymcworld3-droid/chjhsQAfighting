@@ -41,8 +41,6 @@ let currentBankData = null;
 let presenceInterval = null; 
 let allBankFiles = [];
 let currentSelectSlot = null;
-let currentUserData = null;
-let isAnswering = false;
 // --- 對戰動畫控制 (新增) ---
 let lastProcessedLogId = null;       // 記錄最後一次播放的戰鬥日誌 ID
 let isPlayingSequence = false;       // 是否正在播放序列動畫中
@@ -1889,167 +1887,161 @@ window.startQuizFlow = async () => {
     }
 };
 
-// public/main.js - 修正後的 handleAnswer
+// public/main.js
 
 async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     // 1. 防止重複點擊
     if (isAnswering) return;
     isAnswering = true;
 
+    // 2. 停止倒數計時 & 計算花費時間
+    clearInterval(timerInterval);
     const timeTaken = (Date.now() - (window.quizStartTime || Date.now())) / 1000;
-    const isCorrect = userIdx === correctIdx;
     
-    // --- UI 處理：按鈕鎖定與回饋 ---
-    const opts = document.querySelectorAll('[id^="option-btn-"]');
-    opts.forEach((btn, idx) => {
-        btn.onclick = null; 
-        btn.classList.add('btn-disabled');
+    // 3. 判斷對錯
+    const isCorrect = userIdx === correctIdx;
+    const feedbackEl = document.getElementById('feedback');
+    const options = document.querySelectorAll('.option-btn');
+
+    // 4. UI 顯示對錯回饋
+    options.forEach((btn, idx) => {
+        btn.disabled = true; // 鎖定按鈕
         if (idx === correctIdx) {
-            btn.classList.add('btn-correct', 'ring-2', 'ring-green-400'); // 加上綠色光圈
+            btn.classList.add('correct', 'ring-4', 'ring-green-400', 'scale-105');
+            btn.innerHTML += ' <i class="fas fa-check float-right mt-1"></i>';
         } else if (idx === userIdx && !isCorrect) {
-            btn.classList.add('btn-wrong');
+            btn.classList.add('wrong', 'opacity-50');
+            btn.innerHTML += ' <i class="fas fa-times float-right mt-1"></i>';
+        } else {
+            btn.classList.add('opacity-40');
         }
     });
-    
-    // 顯示 Feedback 區塊 (使用原本的 ID)
-    const fbSection = document.getElementById('feedback-section');
-    const fbTitle = document.getElementById('feedback-title');
-    const fbIcon = document.getElementById('feedback-icon');
-    const fbText = document.getElementById('feedback-text');
-    document.getElementById('btn-giveup').classList.add('hidden');
-    fbSection.classList.remove('hidden');
 
-    if(isCorrect) {
-        fbTitle.innerText = "回答正確！"; 
-        fbTitle.className = "text-xl font-bold text-green-400";
-        fbIcon.innerHTML = '<i class="fa-solid fa-circle-check text-green-400"></i>';
-        if (navigator.vibrate) navigator.vibrate(50);
+    if (isCorrect) {
+        playSound('correct');
+        feedbackEl.innerHTML = `<div class="text-green-400 font-bold text-xl mb-2 animate-bounce-in">🎉 正確！</div>`;
+        triggerConfetti();
     } else {
-        fbTitle.innerText = "回答錯誤..."; 
-        fbTitle.className = "text-xl font-bold text-red-400";
-        fbIcon.innerHTML = '<i class="fa-solid fa-circle-xmark text-red-400"></i>';
+        playSound('wrong');
+        feedbackEl.innerHTML = `<div class="text-red-400 font-bold text-xl mb-2 animate-shake">❌ 錯誤！</div>`;
         if (navigator.vibrate) navigator.vibrate(200);
     }
-    
-    localStorage.removeItem('currentQuiz');
-    fbText.innerText = explanation || "AI did not provide explanation.";
 
-    // --- Solo Session 邏輯 (保留原本功能) ---
-    if (soloSession.active) {
-        if (isCorrect) soloSession.correctCount++;
-        else soloSession.wrongCount++;
-        
-        soloSession.history.push({ q: questionText, isCorrect: isCorrect, exp: explanation });
-
-        document.getElementById('solo-correct-count').innerText = soloSession.correctCount;
-        document.getElementById('solo-wrong-count').innerText = soloSession.wrongCount;
-
-        const nextBtn = document.getElementById('btn-next-step');
-        if (soloSession.currentStep >= soloSession.maxSteps) {
-            nextBtn.innerHTML = '<i class="fa-solid fa-flag-checkered"></i> 完成結算 (FINISH)';
-            nextBtn.className = "btn-cyber-accent flex-1 py-3 rounded-lg text-xs font-bold animate-pulse";
-            nextBtn.onclick = window.finishSoloSession;
-        } else {
-            soloSession.currentStep++;
-            nextBtn.innerText = "下一題"; 
-            nextBtn.className = "btn-cyber-primary flex-1 py-3 rounded-lg text-xs";
-            nextBtn.onclick = () => { isAnswering = false; window.nextQuestion(); }; // 解鎖並下一題
-        }
-    } else {
-        // 非 Session 模式下，直接提供下一題按鈕功能
-        // 這裡可以根據您的需求添加單獨的下一題按鈕邏輯
-        setTimeout(() => isAnswering = false, 2000);
+    // 顯示解析
+    if (explanation) {
+        feedbackEl.innerHTML += `<div class="mt-3 text-left bg-slate-700/50 p-4 rounded-lg border-l-4 border-blue-400 text-sm leading-relaxed text-slate-200 shadow-inner">${explanation}</div>`;
     }
+    feedbackEl.classList.remove('hidden');
 
     // ==========================================
-    // 💾 雷達圖數據儲存核心 (Data Persistence)
+    // 💾 數據儲存核心 (Data Persistence)
     // ==========================================
+    
+    // A. 準備統計物件
     let stats = currentUserData.stats;
     if (!stats.knowledgeMap) stats.knowledgeMap = {}; 
     if (!stats.learningCurve) stats.learningCurve = [];
 
-    // 1. 讀取科目與子題型
+    // B. 獲取當前題目的科目與子題型 (從 fetchOneQuestion 存入的資料讀取)
     let subject = "綜合";
     let subTopic = "綜合";
     
     try {
-        // 優先從 localStorage 讀取 (AI 出題時會存)
         const savedData = JSON.parse(localStorage.getItem('currentQuizData'));
         if (savedData) {
             subject = savedData.subject || "綜合";
             subTopic = savedData.sub_topic || "綜合";
-        } else {
-            // Fallback: 從 Badge 解析 (題庫模式)
-            const badgeText = document.getElementById('quiz-badge').innerText; 
-            const parts = badgeText.replace('🎯', '').split('|');
-            if(parts.length > 0) subject = parts[0].trim();
-            if(parts.length > 1) subTopic = parts[1].trim();
         }
-    } catch(e) { console.error("Parse stats error", e); }
+    } catch(e) { 
+        console.error("無法讀取題目資訊:", e); 
+    }
 
-    // 2. 初始化統計結構
+    // C. 初始化該科目的統計結構 (如果不存在)
     if (!stats.knowledgeMap[subject]) stats.knowledgeMap[subject] = {};
     if (!stats.knowledgeMap[subject][subTopic]) {
         stats.knowledgeMap[subject][subTopic] = { correct: 0, total: 0, avgTime: 0 };
     }
 
-    // 3. 更新數據
+    // D. 更新數據
     const topicStats = stats.knowledgeMap[subject][subTopic];
-    topicStats.total++;
-    if (isCorrect) topicStats.correct++;
+    topicStats.total++; // 總題數 +1
+    if (isCorrect) topicStats.correct++; // 正確數 +1
     
+    // 計算平均答題時間 (加權移動平均)
     const prevAvg = topicStats.avgTime || 0;
     topicStats.avgTime = prevAvg === 0 ? timeTaken : (prevAvg * 0.7 + timeTaken * 0.3);
 
-    // 4. 更新全域統計與積分
-    stats.totalAnswered++;
+    // E. 更新全域統計
+    stats.totalAnswered = (stats.totalAnswered || 0) + 1;
     if (isCorrect) {
-        stats.totalCorrect++; 
-        stats.currentStreak++;
-        if (stats.currentStreak > stats.bestStreak) stats.bestStreak = stats.currentStreak;
+        stats.correctCount = (stats.correctCount || 0) + 1;
+        stats.currentStreak = (stats.currentStreak || 0) + 1;
+        if (stats.currentStreak > (stats.maxStreak || 0)) stats.maxStreak = stats.currentStreak;
         
-        // 積分計算 (基礎 10 + 段位加成 + 連勝加成)
-        stats.totalScore += 10 + (stats.rankLevel * 5) + (stats.currentStreak * 2);
+        // 積分計算 (基礎分 + 連勝加成 + 時間獎勵)
+        const baseScore = 10;
+        const streakBonus = Math.min(stats.currentStreak, 5) * 2;
+        const timeBonus = Math.max(0, Math.floor(15 - timeTaken)); 
+        const pointsEarned = baseScore + streakBonus + timeBonus;
+        
+        currentUserData.points = (currentUserData.points || 0) + pointsEarned;
+        currentUserData.coins = (currentUserData.coins || 0) + Math.floor(pointsEarned / 10); // 10分換1金幣
+        
+        showFloatingText(`+${pointsEarned} 分`, window.innerWidth / 2, window.innerHeight / 2, '#fbbf24');
     } else {
-        stats.currentStreak = 0; 
+        stats.currentStreak = 0;
     }
 
-    // 5. 段位升降判斷
-    const netScore = getNetScore(stats);
-    const newRank = calculateRankFromScore(netScore); // 使用原本的函式名
-    
-    if (newRank > stats.rankLevel) {
+    // 紀錄學習曲線 (只保留最近 20 筆)
+    stats.learningCurve.push({
+        t: new Date().toISOString(),
+        r: isCorrect ? 1 : 0,
+        s: subject
+    });
+    if (stats.learningCurve.length > 20) stats.learningCurve.shift();
+
+    // F. 段位檢查 (Rank Check)
+    const newRank = calculateRank(stats.points || currentUserData.points);
+    if (newRank > (stats.rankLevel || 0)) {
         stats.rankLevel = newRank;
-        fbTitle.innerHTML += ` <br><span class="text-yellow-400 text-sm animate-bounce">🎉 晉升至 ${getRankName(newRank)}!</span>`;
-    } else if (newRank < stats.rankLevel) {
-        stats.rankLevel = newRank;
-        fbTitle.innerHTML += ` <br><span class="text-red-400 text-sm">⚠️ 降級至 ${getRankName(newRank)}...</span>`;
+        playSound('gacha_legend'); // 升級音效
+        showFloatingText(`🏆 晉升: ${getRankName(newRank)}`, window.innerWidth/2, window.innerHeight/3, '#facc15', 2000);
     }
 
     // ==========================================
-    // ☁️ 同步到 Firebase
+    // ☁️ 同步到 Firebase (Save to DB)
     // ==========================================
-    try {
-        await updateDoc(doc(db, "users", auth.currentUser.uid), { stats: stats });
-        console.log(`[Firebase] 數據已更新: ${subject} > ${subTopic}`);
-    } catch(e) {
-        console.error("Firebase Update Failed:", e);
+    if (auth.currentUser) {
+        try {
+            const userRef = doc(db, "users", auth.currentUser.uid);
+            await updateDoc(userRef, {
+                stats: stats,
+                points: currentUserData.points,
+                coins: currentUserData.coins
+            });
+            console.log(`[Firebase] 數據已儲存: ${subject} - ${subTopic}`);
+        } catch (error) {
+            console.error("Firebase 儲存失敗:", error);
+        }
     }
-    
-    // 紀錄 Log (原本的功能)
-    addDoc(collection(db, "exam_logs"), { 
-        uid: auth.currentUser.uid, 
-        email: auth.currentUser.email, 
-        question: questionText, 
-        isCorrect: isCorrect, 
-        timeTaken: timeTaken,
-        topic: `${subject}-${subTopic}`,
-        rankAtTime: getRankName(stats.rankLevel), 
-        timestamp: serverTimestamp() 
-    }).catch(e => console.error(e));
-    
-    updateUIStats(); 
-    fillBuffer();
+
+    // 5. 更新 UI 統計數據
+    updateUIStats();
+
+    // 6. 準備下一題 (延遲 3 秒)
+    setTimeout(() => {
+        isAnswering = false;
+        // 如果是單人模式，繼續下一題
+        if (!currentRoomId) {
+            renderQuiz();
+            // 順便預先加載下一題
+            fillBuffer();
+        } else {
+            // 多人模式邏輯 (保持原樣或依需求修改)
+            document.getElementById('quiz-area').classList.add('hidden');
+            document.getElementById('battle-area').classList.remove('hidden');
+        }
+    }, 3000); // 給玩家 3 秒看解析
 }
 
 window.finishSoloSession = async () => {
