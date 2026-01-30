@@ -2853,7 +2853,8 @@ window.startBattleMatchmaking = async () => {
         if (e.message && e.message.includes("index")) {
             alert("系統錯誤：Firebase 需要建立複合索引 (status + createdAt)。請查看 Console 連結。");
         } else {
-            alert("配對失敗: " + e.message); 
+            // 🔥 修正：確保 error message 正確顯示
+            alert("配對失敗: " + (e.message || e)); 
         }
         leaveBattle();
     }
