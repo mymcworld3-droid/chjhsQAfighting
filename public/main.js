@@ -3621,7 +3621,8 @@ async function handleBattleAnswer(roomId, userIdx, correctIdx, isHost) {
         await updateDoc(roomRef, {
             [`${meField}.done`]: true,
             [`${meField}.answerCorrect`]: isCorrect,
-            [`${meField}.answerTime`]: serverTimestamp()
+            [`${meField}.answerTime`]: serverTimestamp(),
+            LastActiveTime: serverTimestamp()
         });
     } catch (e) { console.error(e); }
 }
