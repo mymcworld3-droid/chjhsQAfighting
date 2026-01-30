@@ -4473,12 +4473,12 @@ async function executeDraw(count, cost, guaranteedRarity = null) {
         updateUIStats();
 
         // 顯示結果彈窗 (可以使用簡單的 alert 或自定義 Modal)
-        // 這裡簡單用 alert 顯示文字摘要，或者你可以做一個漂亮的 Overlay
         showDrawResults(results, totalRefund);
 
         // 重新載入卡片列表
         loadMyCards();
-        updateHomeBestCard()
+        // 🔥 修正：補上分號，確保執行順序正確
+        window.updateHomeBestCard(); 
 
     } catch (e) {
         console.error(e);
