@@ -2280,68 +2280,18 @@ async function generateVisualAid(imagePrompt) {
     }
 }
 
-// 2. [修改] renderQuiz 函式 (增加圖片載入監聽 Log)
+// 2. [修改] renderQuiz 函式 (移除圖片載入邏輯)
 async function renderQuiz(data, rank, topic) {
     document.getElementById('quiz-loading').classList.add('hidden');
     document.getElementById('quiz-container').classList.remove('hidden');
     document.getElementById('quiz-badge').innerText = `${topic} | ${rank}`;
     
     const questionTextEl = document.getElementById('question-text');
+    // 只保留 Markdown 轉 HTML (若題目本身內含靜態圖 URL 仍可顯示)
     questionTextEl.innerHTML = parseMarkdownImages(data.q);
     
-    // B. [新增] 處理 AI 動態配圖 (含除錯)
-    if (data.image_prompt) {
-        console.log("[UI-Render] 🎨 檢測到 image_prompt，開始處理圖片邏輯...");
-        
-        // 1. 建立 Loading 介面
-        const loadingDiv = document.createElement('div');
-        loadingDiv.id = "ai-image-loader";
-        loadingDiv.className = "w-full h-48 bg-slate-800/50 rounded-xl border border-white/10 animate-pulse flex flex-col items-center justify-center my-4 gap-2";
-        loadingDiv.innerHTML = `
-            <div class="text-3xl animate-bounce">🎨</div>
-            <div class="text-xs text-cyan-400 font-bold tracking-widest">NANO BANANA 繪製中...</div>
-            <div class="text-[9px] text-gray-500">Generating visual aid...</div>
-        `;
-        questionTextEl.appendChild(loadingDiv);
-
-        // 2. 非同步呼叫
-        generateVisualAid(data.image_prompt).then(imageUrl => {
-            console.log("[UI-Render] 🔄 生成 Promise 已返回");
-            
-            const loader = document.getElementById('ai-image-loader');
-            if (loader) loader.remove(); 
-
-            if (imageUrl) {
-                console.log("[UI-Render] 🖼️ 準備將圖片插入 DOM...");
-                
-                const imgContainer = document.createElement('div');
-                imgContainer.className = "my-4 rounded-xl overflow-hidden border-2 border-cyan-500/30 shadow-[0_0_15px_rgba(6,182,212,0.3)] bg-black relative group transition-all hover:scale-[1.02]";
-                
-                // 建立 img 標籤並綁定載入事件監聽
-                const img = document.createElement('img');
-                img.className = "w-full h-auto object-cover min-h-[200px]";
-                img.alt = "AI Visual Aid";
-                
-                // 監聽圖片實際載入狀況 (這是前端最容易失敗的地方，例如 base64 格式錯誤)
-                img.onload = () => console.log("[UI-Render] ✅ <IMG> 元素載入圖片成功！");
-                img.onerror = (e) => console.error("[UI-Render] ❌ <IMG> 元素載入失敗 (可能是格式錯誤或 404)", e);
-                
-                img.src = imageUrl;
-
-                imgContainer.innerHTML = `
-                    <div class="absolute top-2 right-2 bg-black/60 text-[9px] text-cyan-300 px-2 py-1 rounded backdrop-blur border border-cyan-500/30">
-                        <i class="fa-solid fa-robot"></i> AI Generated
-                    </div>
-                `;
-                imgContainer.appendChild(img); // 將 img 插入容器
-                questionTextEl.appendChild(imgContainer);
-            } else {
-                console.warn("[UI-Render] ⚠️ 未獲得有效圖片 URL，跳過顯示。");
-            }
-        });
-    } else {
-        console.log("[UI-Render] ℹ️ 此題目沒有 image_prompt");
-    }
+    // 🔥 [已移除] AI 動態配圖邏輯 (原本的 B. 區塊已刪除)
+    // 因為後端不再回傳 image_prompt，且 generate-image API 已關閉。
 
     // C. 渲染選項 (保持不變)
     const container = document.getElementById('options-container');
