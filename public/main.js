@@ -2279,12 +2279,26 @@ async function renderQuiz(data, rank, topic) {
     });
 }
 
+// 在 main.js 中搜尋 window.giveUpQuiz 並替換
+
 window.giveUpQuiz = async () => { 
+    // 🔥 修正：防止連點造成的死循環
+    if (isAnswering) return; 
+    
     // 使用自定義的 openConfirm (支援 Promise等待)
     const isConfirmed = await openConfirm("確定要放棄此題嗎？\n(將視為回答錯誤並中斷連勝)");
     
     if (isConfirmed) {
-        handleAnswer(-1, -2, document.getElementById('question-text').innerText, "Skipped."); 
+        // 🔥 標記為處理中，避免重複觸發 nextQuestion
+        isAnswering = true; 
+        
+        // 視為回答錯誤 (-1)，但不扣分，僅中斷連勝
+        await handleAnswer(-1, -2, document.getElementById('question-text').innerText, "Skipped by player.");
+        
+        // 🔥 強制重置鎖定狀態 (handleAnswer 內部可能會解鎖，但放棄邏輯需確保安全)
+        setTimeout(() => {
+            isAnswering = false;
+        }, 500);
     }
 };
 
