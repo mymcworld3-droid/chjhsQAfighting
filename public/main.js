@@ -2289,11 +2289,27 @@ window.openReportModal = () => {
     const modal = document.getElementById('report-modal');
     const box = document.getElementById('report-box');
     
-    // 重置 UI 狀態
+    // 1. 重置 View 顯示狀態
     document.getElementById('report-input-view').classList.remove('hidden');
     document.getElementById('report-loading-view').classList.add('hidden');
     document.getElementById('report-result-view').classList.add('hidden');
+    
+    // 2. 清空輸入框
     document.getElementById('report-reason').value = '';
+
+    // 🔥 關鍵修正：強制清空結果頁的殘留資訊
+    document.getElementById('report-result-icon').innerHTML = '';
+    document.getElementById('report-result-title').innerText = '';
+    document.getElementById('report-result-msg').innerText = '';
+
+    // 🔥 關鍵修正：重置按鈕行為與樣式
+    // 避免按鈕還保留著上一題的「跳過並領獎」功能
+    const resultBtn = document.querySelector('#report-result-view button');
+    if (resultBtn) {
+        resultBtn.onclick = () => closeReportModal(); // 還原為僅關閉
+        resultBtn.innerText = "關閉";                 // 還原文字
+        resultBtn.className = "btn-cyber-ghost w-full py-2 text-xs"; // 還原樣式
+    }
 
     modal.classList.remove('hidden');
     requestAnimationFrame(() => {
