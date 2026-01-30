@@ -3687,15 +3687,14 @@ window.loadUserHistory = async () => {
         });
     } catch (e) { console.error(e); ul.innerHTML = '<li class="text-center text-red-400 py-4">Error</li>'; }
 };
-// main.js - 替換 renderKnowledgeGraph 函式
+// ==========================================
+// 📊 雷達圖與數據分析系統 (修正版)
+// ==========================================
 
-// main.js - 替換 renderKnowledgeGraph
-
+// 🔥 修正：全域變數只宣告一次，避免 SyntaxError
 let knowledgeChartInstance = null;
 
-// main.js - 替換 renderKnowledgeGraph
-
-// ... (calculateDomainScore 輔助函式保持不變，若遺失請補上) ...
+// 輔助函式：計算五大領域的綜合分數
 function calculateDomainScore(map, subjects) {
     let totalCorrect = 0;
     let totalQuestions = 0;
@@ -3707,12 +3706,9 @@ function calculateDomainScore(map, subjects) {
             });
         }
     });
-    if (totalQuestions === 0) return 20; 
+    if (totalQuestions === 0) return 20; // 基礎分
     return Math.round((totalCorrect / totalQuestions) * 100);
 }
-
-// 🔥 修正：移除多餘的重複變數宣告與註解，保留全域變數
-let knowledgeChartInstance = null;
 
 // 主渲染函式
 window.renderKnowledgeGraph = (targetSubject = null) => {
@@ -3743,7 +3739,7 @@ window.renderKnowledgeGraph = (targetSubject = null) => {
         subjects.forEach(subj => {
             const btn = document.createElement('button');
             btn.innerText = subj.label;
-            btn.className = `px-3 py-1 text-[10px] font-bold text-white rounded-full transition-all shadow-md border border-white/10 ${subj.color} opacity-60 hover:opacity-100 hover:scale-105`;
+            btn.className = `px-3 py-1 text-[10px] font-bold text-white rounded-full transition-all shadow-md border border-white/10 ${subj.color} opacity-60 hover:opacity-100 hover:scale-105 flex-shrink-0`; // 🔥 加入 flex-shrink-0
             btn.onclick = () => window.renderKnowledgeGraph(subj.id);
             btn.dataset.subj = subj.id || 'all'; 
             controls.appendChild(btn);
@@ -3763,7 +3759,7 @@ window.renderKnowledgeGraph = (targetSubject = null) => {
         }
     });
 
-    // 2. 準備數據 (關鍵修改處)
+    // 2. 準備數據
     const map = currentUserData.stats.knowledgeMap || {};
     let labels = [];
     let dataValues = [];
@@ -3778,23 +3774,19 @@ window.renderKnowledgeGraph = (targetSubject = null) => {
         if(["歷史","地理","公民"].includes(targetSubject)) chartColor = "rgba(245, 158, 11, 1)"; 
         if(["物理","化學","生物"].includes(targetSubject)) chartColor = "rgba(16, 185, 129, 1)"; 
 
-        // 🟥 關鍵修改：強制使用 SCHEMA 定義的標籤，而不是讀取 map
-        // 這樣即使沒數據，也會顯示出該有的軸
+        // 🔥 關鍵修改：強制使用 SCHEMA 定義的標籤，確保雷達圖形狀固定
         if (SUBJECT_SCHEMA_FRONTEND[targetSubject]) {
             labels = SUBJECT_SCHEMA_FRONTEND[targetSubject];
         } else {
-            // 防呆：如果是不在列表的科目，才嘗試讀取現有資料
             labels = map[targetSubject] ? Object.keys(map[targetSubject]) : [];
         }
 
         // 填入數據 (若無數據則補 0)
         dataValues = labels.map(topic => {
             const s = map[targetSubject]?.[topic];
-            // 如果有練習過，計算正確率；沒練習過給 0
             return (s && s.total > 0) ? Math.round((s.correct / s.total) * 100) : 0;
         });
 
-        // 只有當連 SCHEMA 都找不到時，才顯示佔位符
         if (labels.length === 0) {
             labels = ["尚無數據", "請多練習", "累積數據"]; 
             dataValues = [0, 0, 0];
@@ -3843,11 +3835,11 @@ window.renderKnowledgeGraph = (targetSubject = null) => {
                     grid: { color: 'rgba(255, 255, 255, 0.1)' },
                     pointLabels: { 
                         color: '#e5e7eb', 
-                        font: { size: 12, family: "'Noto Sans TC', sans-serif" } // 優化字體
+                        font: { size: 12, family: "'Noto Sans TC', sans-serif" } 
                     },
                     suggestedMin: 0,
                     suggestedMax: 100,
-                    ticks: { display: false, backdropColor: 'transparent' } // 隱藏雜亂的刻度數字
+                    ticks: { display: false, backdropColor: 'transparent' }
                 }
             }
         }
