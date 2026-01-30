@@ -2218,6 +2218,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     // 寫入資料庫
     try {
         const p1 = updateDoc(doc(db, "users", auth.currentUser.uid), { stats: stats });
+        // 🔥 修正：補上 rankAtTime 欄位，確保後台日誌能顯示當下段位
         const p2 = addDoc(collection(db, "exam_logs"), { 
             uid: auth.currentUser.uid, 
             email: auth.currentUser.email, 
@@ -2225,7 +2226,8 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
             isCorrect: isCorrect, 
             timeTaken: timeTaken,
             topic: "Solo", 
-            mode: soloSession.mode, // 記錄模式
+            mode: soloSession.mode, 
+            rankAtTime: getRankName(stats.rankLevel), // 🔥 新增此行
             timestamp: serverTimestamp() 
         });
         await Promise.all([p1, p2]);
@@ -2234,7 +2236,6 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     updateUIStats(); 
     fillBuffer();
 }
-
 window.finishSoloSession = async () => {
     // 1. 切換到結算頁面
     window.switchToPage('page-solo-result');
