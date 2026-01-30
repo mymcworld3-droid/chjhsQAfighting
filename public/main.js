@@ -3505,7 +3505,8 @@ async function resolveRoundLogic(roomId, room) {
         });
     });
 }
-// 輔助函式：處理勝利結算 (避免主函式太長)
+
+// 輔助函式：處理勝利結算
 async function processBattleWin(loserData, msgEl) {
     try {
         const lootIds = [];
@@ -3528,11 +3529,16 @@ async function processBattleWin(loserData, msgEl) {
             "cards": arrayUnion(...lootIds)
         });
 
-        // 更新本地
-        currentUserData.cards.push(...lootIds);
+        // 🔥 修正：檢查本地陣列，避免重複 push 導致顯示 bug
+        lootIds.forEach(id => {
+            if (!currentUserData.cards.includes(id)) {
+                currentUserData.cards.push(id);
+            }
+        });
+        
         currentUserData.stats.rankLevel = newRank;
 
-        msgEl.innerHTML = `獲得獎勵：<br>🏆 200 積分<br>🎴 戰利品卡牌 ${lootIds.length} 張<br>💫加十階排位！`;
+        msgEl.innerHTML = `獲得獎勵：<br>🏆 500 積分<br>🎴 戰利品卡牌 ${lootIds.length} 張<br>💫 積分結算完成！`;
         updateUIStats();
     } catch (e) { 
         console.error("Loot failed", e); 
