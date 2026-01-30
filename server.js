@@ -12,10 +12,10 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ⭐ 初始化 Gemini 2.5 模型
+// ⭐ 初始化 Gemini 2.5 模型 (保留用於生成文字)
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ 
-    model: "gemini-2.5-flash-lite", // 若遇 429 錯誤可改回 gemini-2.0-flash-exp
+    model: "gemini-2.5-flash-lite", 
     generationConfig: { responseMimeType: "application/json" }
 });
 
@@ -25,7 +25,7 @@ app.get('/', (req, res) => {
 });
 
 // ==========================================
-// API 1: 分析使用者輸入的弱項
+// API 1: 分析使用者輸入的弱項 (保持不變)
 // ==========================================
 app.post('/api/analyze-subjects', async (req, res) => {
     try {
@@ -51,7 +51,7 @@ app.post('/api/analyze-subjects', async (req, res) => {
 });
 
 // ==========================================
-// API 3: 取得伺服器上的圖片列表
+// API 3: 取得伺服器上的圖片列表 (保持不變，用於靜態資源)
 // ==========================================
 app.get('/api/assets', (req, res) => {
     const assetsDir = path.join(__dirname, 'public', 'assets');
@@ -69,7 +69,7 @@ app.get('/api/assets', (req, res) => {
 });
 
 // ==========================================
-// API 4: 取得題庫檔案列表
+// API 4: 取得題庫檔案列表 (保持不變)
 // ==========================================
 app.get('/api/banks', (req, res) => {
     const banksDir = path.join(__dirname, 'public', 'banks');
@@ -109,12 +109,7 @@ app.get('/api/banks', (req, res) => {
 // ==========================================
 // 定義學科與子題型架構 (Knowledge Schema)
 // ==========================================
-// server.js
-
-// ==========================================
-// 1. 定義學科與子題型架構 (含詳細指導語)
-// ==========================================
-// 這是您提供的完整題型架構，AI 將依據此描述出題
+// (這裡原本的 SUBJECT_DETAILS 和 SUBJECT_SCHEMA 保持不變，省略以節省篇幅)
 const SUBJECT_DETAILS = {
     "國文": {
         "字形字音字義": "測驗對日常常用字、古今異義字、一字多義的理解。",
@@ -176,25 +171,23 @@ const SUBJECT_DETAILS = {
     }
 };
 
-// 產生簡單的 Key-Value 對照表供程式邏輯使用
 const SUBJECT_SCHEMA = {};
 for (const [subj, details] of Object.entries(SUBJECT_DETAILS)) {
     SUBJECT_SCHEMA[subj] = Object.keys(details);
 }
 
-// 輔助函式
 function getRandomItem(arr) {
     if (!arr || arr.length === 0) return null;
     return arr[Math.floor(Math.random() * arr.length)];
 }
 
 // ==========================================
-// API 2: 生成測驗題目 (整合詳細描述 Prompt)
+// API 2: 生成測驗題目 (已修改：移除圖片 Prompt 請求)
 // ==========================================
 app.post('/api/generate-quiz', async (req, res) => {
     let { subject, level, rank, difficulty, knowledgeMap, specificTopic } = req.body;
     
-    // 1. 科目選擇 (若未指定則隨機)
+    // 1. 科目選擇
     if (!subject) {
         const allSubjects = Object.keys(SUBJECT_SCHEMA);
         subject = getRandomItem(allSubjects);
@@ -207,8 +200,7 @@ app.post('/api/generate-quiz', async (req, res) => {
     }
     if (!targetTopic) targetTopic = "綜合測驗";
 
-    // 3. 取得該題型的「詳細指導語」
-    // 這會讓 AI 知道「史料解析」具體是要考什麼，而不只是看標題
+    // 3. 取得詳細指導語
     let topicDescription = "";
     if (SUBJECT_DETAILS[subject] && SUBJECT_DETAILS[subject][targetTopic]) {
         topicDescription = SUBJECT_DETAILS[subject][targetTopic];
@@ -226,6 +218,7 @@ app.post('/api/generate-quiz', async (req, res) => {
 
     const randomSeed = Math.random().toString(36).substring(7);
 
+    // ⭐ [修改重點] Prompt 中移除了對 image_prompt 的請求
     const generationPrompt = `
         [系統指令]
         你是由 Google 開發的 AI 教育專家，請生成一道高品質的「單選題」。
@@ -242,8 +235,7 @@ app.post('/api/generate-quiz', async (req, res) => {
         [輸出格式 (JSON Only)]
         請直接回傳 JSON，不要 markdown 標記：
         {
-            "q": "題目內容 (不需要包含圖片 Markdown，若需要圖解請在文字中適當位置標註「(如圖所示)」)",
-            "image_prompt": "若本題適合配圖(如幾何圖形、生物構造、地圖、情境示意)，請提供一段 30-50 字的英文詳細繪圖指令(Prompt) 給 Nano Banana 模型；若不需配圖請留空。",
+            "q": "題目內容 (純文字描述，不需要請求圖片)",
             "correct": "正確選項",
             "wrong": ["錯誤1", "錯誤2", "錯誤3"],
             "exp": "解析內容...",
@@ -253,7 +245,7 @@ app.post('/api/generate-quiz', async (req, res) => {
         請檢查以下 JSON 格式是否正確，且確認：答案 "correct" 只有一個、正確答案是否正確、錯誤答案中是否有正確答案、選項要在選項裡、不可為多選題、選項不可只有英文字母要有文本、表格文本要記得換行
     `;
 
-    // 6. 呼叫 AI (保持原本的雙重審查邏輯)
+    // 6. 呼叫 AI
     let attempts = 0;
     const maxAttempts = 3;
 
@@ -286,73 +278,7 @@ app.post('/api/generate-quiz', async (req, res) => {
     }
 });
 
-// [修改] server.js 的 generate-image 路由
-
-app.post('/api/generate-image', async (req, res) => {
-    console.log("------------------------------------------------");
-    console.log("[Server-Image] 收到圖片生成請求");
-    
-    try {
-        const { prompt } = req.body;
-        if (!prompt) {
-            console.error("[Server-Image] ❌ 錯誤: No prompt provided");
-            return res.status(400).json({ error: "No prompt provided" });
-        }
-
-        console.log(`[Server-Image] Prompt: "${prompt.substring(0, 50)}..."`);
-        console.log("[Server-Image] 正在呼叫 Gemini Model (gemini-2.5-flash-preview-image)...");
-
-        // 使用指定的模型名稱
-        const imageModel = genAI.getGenerativeModel({ 
-            model: "gemini-2.5-flash-preview-image", 
-            generationConfig: { responseMimeType: "image/png" } 
-        });
-
-        // 呼叫模型生成
-        const result = await imageModel.generateContent(prompt);
-        console.log("[Server-Image] ✅ Model 回應成功");
-
-        const response = await result.response;
-        
-        // 除錯：檢查回應物件的結構
-        console.log("[Server-Image] Debug Response Keys:", Object.keys(response));
-        
-        // 嘗試取得文字 (Base64)
-        // 注意：如果模型拒絕生成 (Safety Ratings)，這裡可能會報錯
-        let imageOutput;
-        try {
-            imageOutput = response.text();
-            console.log(`[Server-Image] 取得 text() 成功，長度: ${imageOutput.length}`);
-        } catch (textError) {
-            console.error("[Server-Image] ❌ 無法取得 text()，可能是 Safety Block 或格式錯誤:", textError);
-            console.log("[Server-Image] 嘗試列印 candidates:", JSON.stringify(response.candidates, null, 2));
-            throw new Error("Model failed to generate valid text output");
-        }
-        
-        // 檢查是否為 Base64 並補全前綴
-        if (!imageOutput.startsWith('data:image') && !imageOutput.startsWith('http')) {
-             console.log("[Server-Image] 檢測到純 Base64，正在補上前綴...");
-             imageOutput = `data:image/png;base64,${imageOutput.trim()}`;
-        } else {
-             console.log("[Server-Image] 格式看起來已經是 URL 或完整 DataURI");
-        }
-
-        res.json({ url: imageOutput });
-        console.log("[Server-Image] ✅ Response 已發送給前端");
-
-    } catch (error) {
-        console.error("------------------------------------------------");
-        console.error("[Server-Image] ❌ 生成過程中發生例外錯誤:");
-        console.error(error);
-        // 如果有詳細的 Google Generative AI Error，通常在 error.message 或 error.response
-        if (error.response) {
-             console.error("[Server-Image] API Error Details:", JSON.stringify(error.response, null, 2));
-        }
-        console.error("------------------------------------------------");
-        
-        res.status(500).json({ error: "Generation failed", details: error.message });
-    }
-});
+// [已刪除] /api/generate-image 路由已移除，節省費用
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
