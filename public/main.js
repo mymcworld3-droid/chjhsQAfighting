@@ -3068,6 +3068,47 @@ function listenToBattleRoom(roomId) {
     });
 }
 
+window.claimTimeoutVictory = async (roomId) => {
+    if(!confirm("確定要判定對手斷線並結算嗎？\n(將根據目前擊殺的卡牌數發放獎勵)")) return;
+    
+    try {
+        const roomRef = doc(db, "rooms", roomId);
+        const snap = await getDoc(roomRef);
+        if(!snap.exists()) return;
+        
+        const room = snap.data();
+        const isHost = room.host.uid === auth.currentUser.uid;
+        const enemy = isHost ? room.guest : room.host;
+        
+        // 🔥 計算擊殺獎勵：一張卡 100 金幣
+        let killCount = 0;
+        if (enemy.cards.main.currentHp <= 0) killCount++;
+        if (enemy.cards.sub && enemy.cards.sub.currentHp <= 0) killCount++;
+        
+        const reward = killCount * REWARD_CONFIG.BATTLE_KILL;
+        
+        // 結算並刪除房間
+        await deleteDoc(roomRef); // 直接刪除房間避免再次進入
+        
+        // 發放獎勵
+        if (reward > 0) {
+            currentUserData.stats.totalScore += reward;
+            await updateDoc(doc(db, "users", auth.currentUser.uid), {
+                "stats.totalScore": currentUserData.stats.totalScore
+            });
+            alert(`對手已斷線。\n根據戰況，您擊殺了 ${killCount} 張卡牌\n獲得補償獎勵：${reward} 金幣！`);
+        } else {
+            alert("對手已斷線。\n可惜您尚未擊殺任何敵方卡牌，無法獲得補償金幣。");
+        }
+        
+        leaveBattle(); // 回大廳
+        
+    } catch(e) {
+        console.error(e);
+        alert("結算失敗，請稍後再試");
+    }
+};
+
 // [新增] 獨立的結算 UI 顯示函式 (避免重複代碼)
 function showBattleResultUI(room, isHost) {
      document.getElementById('battle-quiz-overlay').classList.add('hidden');
