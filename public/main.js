@@ -2237,47 +2237,10 @@ window.closeSoloResult = () => {
 
 // [修改] public/main.js
 
-// 1. [修改] 呼叫後端生成圖片的函式 (增加詳細 Log)
+// [修改] 圖片生成功能已移除 (節省費用)
 async function generateVisualAid(imagePrompt) {
-    console.log(`[Front-Image] 🚀 準備請求生成圖片, Prompt: "${imagePrompt.substring(0, 30)}..."`);
-    
-    if (!imagePrompt || imagePrompt.trim() === "") {
-        console.warn("[Front-Image] ⚠️ Prompt 為空，取消生成");
-        return null;
-    }
-
-    try {
-        const startTime = Date.now();
-        console.log("[Front-Image] 📡 發送 Fetch 請求至 /api/generate-image...");
-        
-        const response = await fetch('/api/generate-image', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ prompt: imagePrompt })
-        });
-        
-        console.log(`[Front-Image] 📥 收到回應, Status: ${response.status}`);
-
-        if (!response.ok) {
-            throw new Error(`API Error: ${response.status} ${response.statusText}`);
-        }
-        
-        const data = await response.json();
-        const duration = Date.now() - startTime;
-        
-        if (data.url) {
-            console.log(`[Front-Image] ✅ 圖片生成成功! (耗時: ${duration}ms)`);
-            console.log(`[Front-Image] URL 長度/預覽: ${data.url.length} chars, 開頭: ${data.url.substring(0, 50)}...`);
-            return data.url; 
-        } else {
-            console.warn("[Front-Image] ⚠️ 回傳資料中沒有 URL 欄位", data);
-            return null;
-        }
-
-    } catch (e) {
-        console.error("[Front-Image] ❌ 圖片生成請求失敗:", e);
-        return null;
-    }
+    // 直接回傳 null，不再發送請求
+    return null;
 }
 
 // 2. [修改] renderQuiz 函式 (移除圖片載入邏輯)
