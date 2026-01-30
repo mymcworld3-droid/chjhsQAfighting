@@ -2450,25 +2450,37 @@ window.submitReport = async () => {
             iconEl.innerHTML = '<i class="fa-solid fa-circle-check text-green-400 animate-bounce"></i>';
             titleEl.innerText = "回報成功！";
             titleEl.className = "text-lg font-bold mb-2 text-green-400";
-            msgEl.innerText = `AI 判定：${result.reason}\n\n獲得補償 20 金幣，題目已跳過。`;
+            
+            let extraMsg = "";
 
-            // 發放獎勵
+            // 發放獎勵 & 恢復連勝
             if (currentUserData && currentUserData.stats) {
-                currentUserData.stats.totalScore += 20;
-                await updateDoc(doc(db, "users", auth.currentUser.uid), { "stats.totalScore": currentUserData.stats.totalScore });
+                // 1. 發放金幣
+                currentUserData.stats.totalScore += REWARD_CONFIG.REPORT_BONUS;
+                
+                // 2. 🔥 關鍵修正：若有因答錯而損失的連勝，予以恢復
+                if (window.tempLostStreak > 0) {
+                    currentUserData.stats.currentStreak = window.tempLostStreak;
+                    extraMsg = "\n(✨ 已恢復因題目錯誤而中斷的連勝！)";
+                    window.tempLostStreak = 0; // 消耗掉
+                }
+
+                // 3. 寫入資料庫
+                await updateDoc(doc(db, "users", auth.currentUser.uid), { 
+                    "stats.totalScore": currentUserData.stats.totalScore,
+                    "stats.currentStreak": currentUserData.stats.currentStreak
+                });
+                
                 updateUIStats();
             }
+
+            msgEl.innerText = `AI 判定：${result.reason}\n\n獲得補償 ${REWARD_CONFIG.REPORT_BONUS} 金幣。${extraMsg}`;
 
             // 設定按鈕行為：跳下一題
             btn.onclick = () => {
                 closeReportModal();
-                
-                // 🔥 關鍵修正：必須先清除當前題目緩存，否則 startQuizFlow 會重新載入同一題
                 localStorage.removeItem('currentQuiz'); 
-                
                 fillBuffer(); 
-                
-                // 稍微延遲執行，讓彈窗關閉動畫順暢
                 setTimeout(() => startQuizFlow(), 300); 
             };
         } else {
