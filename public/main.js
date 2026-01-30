@@ -3611,7 +3611,8 @@ window.renderKnowledgeGraph = (targetSubject = null) => {
     if (!controls) {
         controls = document.createElement('div');
         controls.id = 'chart-controls';
-        controls.className = "flex flex-wrap gap-2 justify-center mt-4 px-2";
+        // 🔥 修改：加入 overflow-x-auto 和 flex-nowrap，防止按鈕換行導致破版，並隱藏捲軸
+        controls.className = "flex flex-nowrap gap-2 overflow-x-auto px-4 py-2 mt-4 w-full no-scrollbar mask-gradient";
         
         const subjects = [
             { id: null, label: "全域總覽", color: "bg-blue-600" },
