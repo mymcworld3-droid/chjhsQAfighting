@@ -4491,7 +4491,7 @@ async function executeDraw(count, cost, guaranteedRarity = null) {
 
 let gachaSkip = false; // 用於跳過動畫
 
-// [修正版] 更新戰鬥卡牌 UI (修復變數未宣告 + 新增卡面血量顯示)
+// [修正版] 更新戰鬥卡牌 UI
 function updateBattleCardUI(prefix, playerData) {
     if (!playerData) return;
     
@@ -4508,7 +4508,7 @@ function updateBattleCardUI(prefix, playerData) {
     const activeKey = playerData.activeCard; // 'main' or 'sub'
     const activeCard = playerData.cards[activeKey];
     
-    // 防呆：如果 activeCard 不存在 (例如數據錯誤)，直接返回
+    // 防呆：如果 activeCard 不存在，直接返回
     if (!activeCard) return;
 
     const dbCard = CARD_DATABASE[activeCard.id];
@@ -4533,8 +4533,8 @@ function updateBattleCardUI(prefix, playerData) {
     }
 
     const hasImage = getCardImageUrl(activeCard.id); 
-
-    // 🔥【修正 1】宣告變數，解決 ReferenceError 崩潰
+    
+    // 🔥 確保變數在此作用域宣告
     let innerContent = ""; 
 
     if (hasImage) {
@@ -4542,16 +4542,12 @@ function updateBattleCardUI(prefix, playerData) {
             <img src="${hasImage}" 
                  class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-110"
                  onerror="this.style.display='none'; this.parentElement.querySelector('.fallback-text').style.display='flex'">
-            
             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-            
             <div class="absolute top-1 left-1 text-[8px] font-bold text-white bg-black/50 px-1.5 py-0.5 rounded border border-white/20 z-10">
                 ${activeCard.rarity === 'rainbow' ? 'LEGEND' : (activeCard.rarity === 'gold' ? 'MYTHIC' : 'MAIN')}
             </div>
-
             <div class="absolute bottom-0 w-full p-2 flex flex-col items-center z-10">
                 <div class="${nameColor} font-bold text-sm text-center drop-shadow-[0_2px_2px_rgba(0,0,0,1)]">${activeCard.name}</div>
-                
                 <div class="flex items-center gap-2 mt-0.5 bg-black/40 px-2 py-0.5 rounded-full border border-white/10 backdrop-blur-sm">
                     <span class="text-xs text-green-400 font-black drop-shadow-md flex items-center gap-0.5">
                         <i class="fa-solid fa-heart text-[10px]"></i> ${currentHp}
@@ -4561,12 +4557,10 @@ function updateBattleCardUI(prefix, playerData) {
                         <i class="fa-solid fa-khanda text-[10px]"></i> ${activeCard.atk}
                     </span>
                 </div>
-
                 <div class="mt-1 text-[9px] text-cyan-300 bg-blue-900/60 px-1.5 py-0.5 rounded border border-blue-500/30 backdrop-blur-sm">
                     ${activeCard.skill}
                 </div>
             </div>
-
             <div class="fallback-text hidden flex-col items-center justify-center h-full relative z-0">
                 <div class="text-3xl mb-2 filter drop-shadow-lg animate-pulse">
                     ${activeCard.id === 'c051' || activeCard.id === 'c041' ? '🐲' : '⚔️'}
@@ -4575,7 +4569,6 @@ function updateBattleCardUI(prefix, playerData) {
             </div>
         `;
     } else {
-        // 無圖片的預設樣式
         innerContent = `
             <div class="flex flex-col items-center justify-center h-full relative z-10">
                 <div class="text-[10px] uppercase tracking-widest text-gray-500 mb-1">${activeKey}</div>
@@ -4583,12 +4576,10 @@ function updateBattleCardUI(prefix, playerData) {
                     ${activeKey === 'main' ? '🐉' : '🛡️'}
                 </div>
                 <div class="${nameColor} font-bold text-sm text-center">${activeCard.name}</div>
-                
                 <div class="flex gap-2 mt-1">
                     <div class="text-xs text-green-400 font-mono">HP ${currentHp}</div>
                     <div class="text-xs text-red-400 font-mono">ATK ${activeCard.atk}</div>
                 </div>
-
                 ${activeKey === 'main' ? `<div class="text-[9px] text-blue-300 mt-2 text-center px-1">${activeCard.skill}</div>` : ''}
             </div>
         `;
@@ -4596,17 +4587,16 @@ function updateBattleCardUI(prefix, playerData) {
 
     cardVisualEl.innerHTML = innerContent;
 
-    // 3. 更新副卡指示燈 (維持原樣)
+    // 副卡指示燈邏輯保持不變 (省略以節省篇幅)
     if (subIndicatorEl) {
+        // ... (原程式碼的副卡邏輯)
         if (playerData.cards.sub) {
             const subCardId = playerData.cards.sub.id;
             const subBase = CARD_DATABASE[subCardId] || { name: "Sub", rarity: "gray" };
             const subRConfig = RARITY_CONFIG[subBase.rarity] || RARITY_CONFIG.gray;
-            
             const isActive = activeKey === 'sub';
             const isDead = playerData.cards.sub.currentHp <= 0;
 
-            // 微調位置
             subIndicatorEl.className = `absolute ${prefix==='my'?'bottom-4 -left-2':'top-4 -right-2'} w-12 h-16 bg-slate-800 rounded border-2 transition-all duration-300 flex flex-col items-center justify-center overflow-hidden z-20 shadow-lg`;
             
             if (isDead) {
@@ -4614,17 +4604,10 @@ function updateBattleCardUI(prefix, playerData) {
                 subIndicatorEl.innerHTML = '<i class="fa-solid fa-skull text-gray-500"></i>';
             } else if (isActive) {
                 subIndicatorEl.className += ` ${subRConfig.border} scale-110 ring-2 ring-yellow-400 ring-offset-1 ring-offset-slate-900`;
-                subIndicatorEl.innerHTML = `
-                    <div class="text-[8px] ${subRConfig.color} font-bold truncate w-full text-center px-0.5">${subBase.name}</div>
-                    <div class="text-xs">⚔️</div>
-                    <div class="text-[8px] text-white">${playerData.cards.sub.currentHp}</div>
-                `;
+                subIndicatorEl.innerHTML = `<div class="text-[8px] ${subRConfig.color} font-bold truncate w-full text-center px-0.5">${subBase.name}</div><div class="text-xs">⚔️</div><div class="text-[8px] text-white">${playerData.cards.sub.currentHp}</div>`;
             } else {
                 subIndicatorEl.className += ` ${subRConfig.border} opacity-80 hover:opacity-100 hover:scale-105`;
-                subIndicatorEl.innerHTML = `
-                    <div class="bg-black/50 w-full text-center text-[7px] text-gray-300 absolute top-0">WAIT</div>
-                    <div class="text-[8px] ${subRConfig.color} font-bold mt-2 truncate w-full text-center">${subBase.name}</div>
-                `;
+                subIndicatorEl.innerHTML = `<div class="bg-black/50 w-full text-center text-[7px] text-gray-300 absolute top-0">WAIT</div><div class="text-[8px] ${subRConfig.color} font-bold mt-2 truncate w-full text-center">${subBase.name}</div>`;
             }
         } else {
             subIndicatorEl.style.opacity = '0';
