@@ -3558,10 +3558,10 @@ async function processBattleWin(loserData, msgEl) {
 // [修正] 計算並顯示首頁最強卡牌 (穩定版)
 window.updateHomeBestCard = () => {
     const container = document.getElementById('home-best-card-display');
-    // 防呆：如果還沒登入或沒數據
+    // 🔥 修正：增加 currentUserData 的安全檢查，防止登入延遲導致錯誤
     if (!container) return;
     if (!currentUserData || !currentUserData.cards || currentUserData.cards.length === 0) {
-        container.innerHTML = '<div class="text-gray-500 text-xs">No cards</div>';
+        container.innerHTML = '<div class="text-gray-500 text-xs text-center py-4">No cards equipped</div>';
         return;
     }
 
