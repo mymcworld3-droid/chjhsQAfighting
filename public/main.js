@@ -2348,6 +2348,9 @@ window.submitReport = async () => {
         const titleEl = document.getElementById('report-result-title');
         const msgEl = document.getElementById('report-result-msg');
 
+        // 重設按鈕事件 (避免重複綁定)
+        const btn = document.querySelector('#report-result-view button');
+
         if (result.valid) {
             // ✅ 回報成功：發獎勵 + 跳過
             iconEl.innerHTML = '<i class="fa-solid fa-circle-check text-green-400 animate-bounce"></i>';
@@ -2362,13 +2365,17 @@ window.submitReport = async () => {
                 updateUIStats();
             }
 
-            // 關閉視窗後跳下一題
-            const btn = document.querySelector('#report-result-view button');
+            // 設定按鈕行為：跳下一題
             btn.onclick = () => {
                 closeReportModal();
-                // 模擬直接換下一題 (視為無效題，不計分)
+                
+                // 🔥 關鍵修正：必須先清除當前題目緩存，否則 startQuizFlow 會重新載入同一題
+                localStorage.removeItem('currentQuiz'); 
+                
                 fillBuffer(); 
-                startQuizFlow(); 
+                
+                // 稍微延遲執行，讓彈窗關閉動畫順暢
+                setTimeout(() => startQuizFlow(), 300); 
             };
         } else {
             // ❌ 回報駁回
@@ -2376,6 +2383,9 @@ window.submitReport = async () => {
             titleEl.innerText = "回報駁回";
             titleEl.className = "text-lg font-bold mb-2 text-red-400";
             msgEl.innerText = `AI 判定：${result.reason}\n\n題目邏輯無誤，請繼續挑戰！`;
+            
+            // 設定按鈕行為：僅關閉視窗
+            btn.onclick = () => closeReportModal();
         }
 
     } catch (e) {
