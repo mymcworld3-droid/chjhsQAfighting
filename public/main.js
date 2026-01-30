@@ -2894,6 +2894,8 @@ async function acceptInvite(inviteId, roomId, toastElement) {
 // 全域變數 (記錄上一幀的血量)
 let lastMyHp = -1;
 let lastEnemyHp = -1;
+let battleTimeoutTimer = null;
+const BATTLE_TIMEOUT_LIMIT = 30; // 45秒無回應視為斷線
 
 // [修正版] 監聽對戰房間
 function listenToBattleRoom(roomId) {
@@ -2914,6 +2916,31 @@ function listenToBattleRoom(roomId) {
         const isHost = room.host.uid === auth.currentUser.uid;
         const myData = isHost ? room.host : room.guest;
         const oppData = isHost ? room.guest : room.host;
+
+        const now = Date.now();
+        const lastUpdate = room.lastActiveTime ? room.lastActiveTime.toMillis() : now; // 需在 handleBattleAnswer 更新此欄位
+        
+        // 清除舊計時器
+        if (battleTimeoutTimer) clearTimeout(battleTimeoutTimer);
+
+        // 如果遊戲還在進行中，啟動倒數檢查
+        if (room.status === "ready") {
+            // 顯示等待訊息
+            const waitingMsg = document.getElementById('battle-waiting-msg');
+            
+            // 如果是我答完了，且對手還沒答
+            if (myData.done && !oppData.done) {
+                 battleTimeoutTimer = setTimeout(() => {
+                     waitingMsg.innerHTML = `
+                        ⚠️ 對手回應逾時 <br>
+                        <button onclick="claimTimeoutVictory('${roomId}')" class="mt-2 px-4 py-1 bg-red-600 text-white rounded text-xs animate-pulse border border-red-400">
+                            領取斷線補償
+                        </button>
+                     `;
+                     waitingMsg.classList.remove('hidden');
+                 }, BATTLE_TIMEOUT_LIMIT * 1000);
+            }
+        }
 
         // ==========================================
         // 1. 優先處理戰鬥動畫 (無論狀態為何，只要有新 Log 都播放)
