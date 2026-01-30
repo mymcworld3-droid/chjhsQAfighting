@@ -1,4 +1,16 @@
-.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+/* style.css */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+/* 雷達圖按鈕遮罩效果 */
+.mask-gradient {
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
 
 /* =========================================
    Cyber-Glass Theme Core
