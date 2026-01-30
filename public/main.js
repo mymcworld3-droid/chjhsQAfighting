@@ -1237,15 +1237,19 @@ function escapeHtml(text) {
     if (!text) return text;
     return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
 }
-// 新增：將 Markdown 圖片語法 ![alt](url) 轉換為 HTML <img>
+// 新增：將 Markdown 圖片語法 ![alt](url) 轉換為 HTML <img>，並處理換行
 function parseMarkdownImages(text) {
     if (!text) return text;
-    // 匹配 ![alt](url) 格式
+
+    // 1. 🔥 修改：先將換行符號 (\n) 轉換為 <br>
+    let processedText = text.replace(/\n/g, '<br>');
+
+    // 2. 匹配 ![alt](url) 格式
     const markdownImageRegex = /!\[([^\]]*)\]\(([^)]+)\)/g;
-    return text.replace(markdownImageRegex, (match, alt, url) => {
-        return `<div class="my-3 rounded-lg overflow-hidden border border-white/10 shadow-lg bg-black/20">
-                    <img src="${url}" alt="${alt}" class="w-full h-auto block" onerror="this.parentElement.innerHTML='<p class=\'p-2 text-xs text-red-400\'>圖片載入失敗: ${url}</p>'">
-                </div>`;
+    
+    return processedText.replace(markdownImageRegex, (match, alt, url) => {
+        // 回傳圖片的 HTML 結構 (移除樣板字串中的換行，保持整潔)
+        return `<div class="my-3 rounded-lg overflow-hidden border border-white/10 shadow-lg bg-black/20"><img src="${url}" alt="${alt}" class="w-full h-auto block" onerror="this.parentElement.innerHTML='<p class=\'p-2 text-xs text-red-400\'>圖片載入失敗: ${url}</p>'"></div>`;
     });
 }
 
