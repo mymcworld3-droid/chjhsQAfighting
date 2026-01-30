@@ -2025,7 +2025,11 @@ window.startSoloMode = (mode) => {
     window.startQuizFlow(true); // 傳入 true 表示是新開始
 };
 
-// public/main.js
+/// 🔥 修改：在進入下一題前才清除舊題目，確保 startQuizFlow 能抓到新題目
+window.nextQuestion = () => { 
+    localStorage.removeItem('currentQuiz'); 
+    startQuizFlow(); 
+};
 
 async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     if (!currentUserData) return;
@@ -2061,7 +2065,9 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         if (navigator.vibrate) navigator.vibrate(200);
     }
     
-    localStorage.removeItem('currentQuiz');
+    // 🔥 修改：註解掉此行！保留題目資料，讓「回報問題」功能讀取得到
+    // localStorage.removeItem('currentQuiz'); 
+    
     fbText.innerHTML = parseMarkdownImages(explanation) || "AI did not provide explanation.";
 
     // ==========================================
