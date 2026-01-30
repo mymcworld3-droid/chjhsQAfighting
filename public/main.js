@@ -1920,6 +1920,7 @@ window.startQuizFlow = async (isNewSession = false) => {
         window.openSoloModeSelector();
         return;
     }
+    window.tempLostStreak = 0;
 
     switchToPage('page-quiz');
     
