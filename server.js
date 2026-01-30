@@ -278,6 +278,45 @@ app.post('/api/generate-quiz', async (req, res) => {
     }
 });
 
+app.post('/api/verify-report', async (req, res) => {
+    const { question, options, correctIndex, explanation, userReason } = req.body;
+    
+    // 取得正確答案的文字內容
+    const correctAnswerText = options[correctIndex];
+
+    const prompt = `
+        你是一名極度嚴格的考題審查員。玩家回報了一道題目有錯誤。
+        請仔細審查該題目是否存在：事實錯誤、邏輯漏洞、錯別字、選項歧義、答案錯誤、或排版嚴重混亂。
+        只要有任何一點小錯誤，都算「回報有效 (valid: true)」。
+        
+        [題目資訊]
+        題目: ${question}
+        選項: ${JSON.stringify(options)}
+        系統設定答案: ${correctAnswerText}
+        系統解析: ${explanation}
+        
+        [玩家回報理由]
+        ${userReason}
+        
+        請以 JSON 格式回傳審查結果：
+        {
+            "valid": boolean,  // true 代表題目真的有錯 (或玩家理由合理)，false 代表題目無誤
+            "reason": "請用繁體中文簡短說明判斷理由 (50字內)"
+        }
+    `;
+
+    try {
+        const result = await model.generateContent(prompt);
+        const responseText = result.response.text().replace(/```json/g, '').replace(/```/g, '').trim();
+        const json = JSON.parse(responseText);
+        res.json(json);
+    } catch (error) {
+        console.error("Report Verification Error:", error);
+        // 若 AI 發生錯誤，保守起見設為無效，並請玩家稍後再試
+        res.json({ valid: false, reason: "系統忙碌，無法完成審查。" });
+    }
+});
+
 // [已刪除] /api/generate-image 路由已移除，節省費用
 
 app.listen(port, () => {
