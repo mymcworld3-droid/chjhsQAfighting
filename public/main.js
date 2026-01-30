@@ -3593,7 +3593,11 @@ window.renderKnowledgeGraph = (targetSubject = null) => {
             btn.dataset.subj = subj.id || 'all'; 
             controls.appendChild(btn);
         });
-        ctx.parentNode.insertBefore(controls, ctx.nextSibling);
+        
+        // 🔥 修正：將按鈕列移出圖表容器 (wrapper)，避免因容器 max-height 限制導致按鈕被切掉或重疊
+        // 原本: ctx.parentNode.insertBefore(controls, ctx.nextSibling);
+        // 新邏輯: 插入到圖表容器 (ctx.parentNode) 的「後面」
+        ctx.parentNode.parentNode.insertBefore(controls, ctx.parentNode.nextSibling);
     }
 
     // 更新按鈕樣式
@@ -3608,7 +3612,7 @@ window.renderKnowledgeGraph = (targetSubject = null) => {
         }
     });
 
-    // 2. 準備數據 (關鍵修改處)
+    // 2. 準備數據
     const map = currentUserData.stats.knowledgeMap || {};
     let labels = [];
     let dataValues = [];
@@ -3623,24 +3627,19 @@ window.renderKnowledgeGraph = (targetSubject = null) => {
         if(["歷史","地理","公民"].includes(targetSubject)) chartColor = "rgba(245, 158, 11, 1)"; 
         if(["物理","化學","生物"].includes(targetSubject)) chartColor = "rgba(16, 185, 129, 1)"; 
 
-        // 🟥 關鍵修改：強制使用 SCHEMA 定義的標籤，而不是讀取 map
-        // 這樣即使沒數據，也會顯示出該有的軸
+        // 強制使用 SCHEMA 定義的標籤，確保軸向固定
         if (SUBJECT_SCHEMA_FRONTEND[targetSubject]) {
             labels = SUBJECT_SCHEMA_FRONTEND[targetSubject];
         } else {
-            // 防呆：如果是不在列表的科目，才嘗試讀取現有資料
             labels = map[targetSubject] ? Object.keys(map[targetSubject]) : [];
         }
 
         // 填入數據 (若無數據則補 0)
         dataValues = labels.map(topic => {
             const s = map[targetSubject]?.[topic];
-            // 如果有練習過，計算正確率；沒練習過給 0
-            // 注意：為了美觀，可以考慮給個 10 分讓圖不要縮成一點，或是給 0 真實呈現
             return (s && s.total > 0) ? Math.round((s.correct / s.total) * 100) : 0;
         });
 
-        // 只有當連 SCHEMA 都找不到時，才顯示佔位符
         if (labels.length === 0) {
             labels = ["尚無數據", "請多練習", "累積數據"]; 
             dataValues = [0, 0, 0];
@@ -3689,16 +3688,17 @@ window.renderKnowledgeGraph = (targetSubject = null) => {
                     grid: { color: 'rgba(255, 255, 255, 0.1)' },
                     pointLabels: { 
                         color: '#e5e7eb', 
-                        font: { size: 12, family: "'Noto Sans TC', sans-serif" } // 優化字體
+                        font: { size: 12, family: "'Noto Sans TC', sans-serif" } 
                     },
                     suggestedMin: 0,
                     suggestedMax: 100,
-                    ticks: { display: false, backdropColor: 'transparent' } // 隱藏雜亂的刻度數字
+                    ticks: { display: false, backdropColor: 'transparent' } 
                 }
             }
         }
     });
 };
+
 window.loadAdminLogs = async () => {
     const ul = document.getElementById('admin-logs-list');
     if(!ul) return; 
