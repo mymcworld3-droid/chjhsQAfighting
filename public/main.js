@@ -3710,6 +3710,9 @@ function calculateDomainScore(map, subjects) {
     return Math.round((totalCorrect / totalQuestions) * 100);
 }
 
+// 🔥 修正：移除多餘的重複變數宣告與註解，保留全域變數
+let knowledgeChartInstance = null;
+
 // 主渲染函式
 window.renderKnowledgeGraph = (targetSubject = null) => {
     const ctx = document.getElementById('knowledgeChart');
@@ -3787,7 +3790,6 @@ window.renderKnowledgeGraph = (targetSubject = null) => {
         dataValues = labels.map(topic => {
             const s = map[targetSubject]?.[topic];
             // 如果有練習過，計算正確率；沒練習過給 0
-            // 注意：為了美觀，可以考慮給個 10 分讓圖不要縮成一點，或是給 0 真實呈現
             return (s && s.total > 0) ? Math.round((s.correct / s.total) * 100) : 0;
         });
 
