@@ -3613,7 +3613,8 @@ window.updateHomeBestCard = () => {
         </div>
     `;
 };
-// [修改] 處理對戰答題 (標記 done)
+
+// [修正] 處理對戰答題 (標記 done)
 async function handleBattleAnswer(roomId, userIdx, correctIdx, isHost) {
     const isCorrect = userIdx === correctIdx;
     if (navigator.vibrate) navigator.vibrate(isCorrect ? 50 : 200);
@@ -3647,7 +3648,7 @@ async function handleBattleAnswer(roomId, userIdx, correctIdx, isHost) {
             [`${meField}.done`]: true,
             [`${meField}.answerCorrect`]: isCorrect,
             [`${meField}.answerTime`]: serverTimestamp(),
-            LastActiveTime: serverTimestamp()
+            lastActiveTime: serverTimestamp() // 🔥 修正：這裡改成小寫開頭，與監聽器一致
         });
     } catch (e) { console.error(e); }
 }
