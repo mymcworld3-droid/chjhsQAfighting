@@ -69,13 +69,6 @@ const RARITY_CONFIG = {
     rainbow:{ name: "傳奇", color: "text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-green-500 to-blue-500 animate-pulse", border: "border-white shadow-[0_0_20px_rgba(255,255,255,0.8)]", prob: 0.001 } // 0.1% (原 0.2%)
 };
 
-// 🔥 修正：補上遺失的獎勵設定常數
-const REWARD_CONFIG = {
-    SOLO_PER_Q: 20,      // 單人無限模式每題獎勵
-    REPORT_BONUS: 20,    // 回報問題補償獎勵
-    BATTLE_KILL: 100     // 對戰擊殺一張卡牌獎勵
-};
-
 // main.js - 請放在檔案最上方附近
 
 // 這是前端用的題型架構 (需與後端一致)
@@ -784,34 +777,6 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-async function setDeckCard(cardId) {
-    if (!currentSelectSlot) return;
-    
-    if (!currentUserData.deck) currentUserData.deck = { main: "", sub: "" };
-    
-    // 🔥 防呆修正：如果選擇的卡片已經在另一個槽位，則進行互換或清除
-    if (currentSelectSlot === 'main' && currentUserData.deck.sub === cardId) {
-        currentUserData.deck.sub = ""; // 或者互換: currentUserData.deck.main (原本的主卡)
-        alert("⚠️ 已將該卡片從副卡移除，設定為主卡。");
-    }
-    if (currentSelectSlot === 'sub' && currentUserData.deck.main === cardId) {
-        currentUserData.deck.main = "";
-        alert("⚠️ 已將該卡片從主卡移除，設定為副卡。");
-    }
-
-    currentUserData.deck[currentSelectSlot] = cardId;
-    
-    try {
-        await updateDoc(doc(db, "users", auth.currentUser.uid), { "deck": currentUserData.deck });
-        document.getElementById('card-selector-modal').classList.add('hidden');
-        updateDeckDisplay();
-        loadMyCards(); // 刷新列表標記
-    } catch(e) {
-        console.error(e);
-        alert("設定失敗");
-    }
-}
-
 window.loadMyCards = () => {
     const list = document.getElementById('my-card-list');
     if(!list) return;
@@ -854,20 +819,7 @@ window.loadMyCards = () => {
 
         const div = document.createElement('div');
         div.className = `bg-slate-800 p-1.5 rounded-lg border-2 ${rConfig.border} relative overflow-hidden group hover:scale-[1.02] transition-transform aspect-[2/3] flex flex-col justify-between shadow-md cursor-pointer`;
-        div.onclick = async () => {
-            const confirmMain = await openConfirm(`要將 [${card.name}] 裝備為主卡(Main)嗎？\n(取消則裝備為副卡)`);
-            if (confirmMain) {
-                currentSelectSlot = 'main';
-                setDeckCard(cardId);
-            } else {
-                // 如果按取消，再問是否裝副卡 (或直接裝副卡，視體驗而定，這裡做二次確認比較保險)
-                const confirmSub = await openConfirm(`那要將 [${card.name}] 裝備為副卡(Sub)嗎？`);
-                if(confirmSub) {
-                    currentSelectSlot = 'sub';
-                    setDeckCard(cardId);
-                }
-            }
-        };
+        div.onclick = () => selectCardForSlot(currentSelectSlot || 'main');
 
         // [修正] 移除多餘的巢狀 div，確保圖片容器能撐開高度
         div.innerHTML = `
@@ -1927,7 +1879,6 @@ window.startQuizFlow = async (isNewSession = false) => {
         window.openSoloModeSelector();
         return;
     }
-    window.tempLostStreak = 0;
 
     switchToPage('page-quiz');
     
@@ -2182,23 +2133,11 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
             stats.currentStreak++;
             if (stats.currentStreak > stats.bestStreak) stats.bestStreak = stats.currentStreak;
             
-            // 💰 無限模式獎勵
-            scoreGain = REWARD_CONFIG.SOLO_PER_Q;
+            // 💰 無限模式獎勵：每題固定 20 (可加上連勝加成)
+            scoreGain = 20;
+            // 顯示獲得金幣提示
             fbTitle.innerHTML += ` <span class="text-yellow-400 text-sm ml-2 border border-yellow-500 rounded px-1">+${scoreGain}💰</span>`;
-            
-            // 答對時，清空損失紀錄 (因為沒有損失)
-            window.tempLostStreak = 0; 
         } else {
-            // 🔥 關鍵修正：在歸零前，記錄損失的連勝數 (供回報補償使用)
-            window.tempLostStreak = stats.currentStreak;
-            
-            // 連勝中斷安慰獎 (保留您之前可能有的邏輯)
-            if (stats.currentStreak >= 5) {
-                const pityBonus = 10;
-                stats.totalScore += pityBonus;
-                fbTitle.innerHTML += `<div class="text-xs text-gray-400 mt-1">連勝中斷 (${stats.currentStreak})，獲得安慰獎 +${pityBonus}💰</div>`;
-            }
-            
             stats.currentStreak = 0; // 答錯斷連勝
         }
         stats.totalScore += scoreGain;
@@ -2218,7 +2157,6 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     // 寫入資料庫
     try {
         const p1 = updateDoc(doc(db, "users", auth.currentUser.uid), { stats: stats });
-        // 🔥 修正：補上 rankAtTime 欄位，確保後台日誌能顯示當下段位
         const p2 = addDoc(collection(db, "exam_logs"), { 
             uid: auth.currentUser.uid, 
             email: auth.currentUser.email, 
@@ -2226,8 +2164,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
             isCorrect: isCorrect, 
             timeTaken: timeTaken,
             topic: "Solo", 
-            mode: soloSession.mode, 
-            rankAtTime: getRankName(stats.rankLevel), // 🔥 新增此行
+            mode: soloSession.mode, // 記錄模式
             timestamp: serverTimestamp() 
         });
         await Promise.all([p1, p2]);
@@ -2236,6 +2173,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     updateUIStats(); 
     fillBuffer();
 }
+
 window.finishSoloSession = async () => {
     // 1. 切換到結算頁面
     window.switchToPage('page-solo-result');
@@ -2458,37 +2396,25 @@ window.submitReport = async () => {
             iconEl.innerHTML = '<i class="fa-solid fa-circle-check text-green-400 animate-bounce"></i>';
             titleEl.innerText = "回報成功！";
             titleEl.className = "text-lg font-bold mb-2 text-green-400";
-            
-            let extraMsg = "";
+            msgEl.innerText = `AI 判定：${result.reason}\n\n獲得補償 20 金幣，題目已跳過。`;
 
-            // 發放獎勵 & 恢復連勝
+            // 發放獎勵
             if (currentUserData && currentUserData.stats) {
-                // 1. 發放金幣
-                currentUserData.stats.totalScore += REWARD_CONFIG.REPORT_BONUS;
-                
-                // 2. 🔥 關鍵修正：若有因答錯而損失的連勝，予以恢復
-                if (window.tempLostStreak > 0) {
-                    currentUserData.stats.currentStreak = window.tempLostStreak;
-                    extraMsg = "\n(✨ 已恢復因題目錯誤而中斷的連勝！)";
-                    window.tempLostStreak = 0; // 消耗掉
-                }
-
-                // 3. 寫入資料庫
-                await updateDoc(doc(db, "users", auth.currentUser.uid), { 
-                    "stats.totalScore": currentUserData.stats.totalScore,
-                    "stats.currentStreak": currentUserData.stats.currentStreak
-                });
-                
+                currentUserData.stats.totalScore += 20;
+                await updateDoc(doc(db, "users", auth.currentUser.uid), { "stats.totalScore": currentUserData.stats.totalScore });
                 updateUIStats();
             }
-
-            msgEl.innerText = `AI 判定：${result.reason}\n\n獲得補償 ${REWARD_CONFIG.REPORT_BONUS} 金幣。${extraMsg}`;
 
             // 設定按鈕行為：跳下一題
             btn.onclick = () => {
                 closeReportModal();
+                
+                // 🔥 關鍵修正：必須先清除當前題目緩存，否則 startQuizFlow 會重新載入同一題
                 localStorage.removeItem('currentQuiz'); 
+                
                 fillBuffer(); 
+                
+                // 稍微延遲執行，讓彈窗關閉動畫順暢
                 setTimeout(() => startQuizFlow(), 300); 
             };
         } else {
@@ -2854,8 +2780,7 @@ window.startBattleMatchmaking = async () => {
         if (e.message && e.message.includes("index")) {
             alert("系統錯誤：Firebase 需要建立複合索引 (status + createdAt)。請查看 Console 連結。");
         } else {
-            // 🔥 修正：確保 error message 正確顯示
-            alert("配對失敗: " + (e.message || e)); 
+            alert("配對失敗: " + e.message); 
         }
         leaveBattle();
     }
@@ -2928,8 +2853,6 @@ async function acceptInvite(inviteId, roomId, toastElement) {
 // 全域變數 (記錄上一幀的血量)
 let lastMyHp = -1;
 let lastEnemyHp = -1;
-let battleTimeoutTimer = null;
-const BATTLE_TIMEOUT_LIMIT = 30; // 45秒無回應視為斷線
 
 // [修正版] 監聽對戰房間
 function listenToBattleRoom(roomId) {
@@ -2950,31 +2873,6 @@ function listenToBattleRoom(roomId) {
         const isHost = room.host.uid === auth.currentUser.uid;
         const myData = isHost ? room.host : room.guest;
         const oppData = isHost ? room.guest : room.host;
-
-        const now = Date.now();
-        const lastUpdate = room.lastActiveTime ? room.lastActiveTime.toMillis() : now; // 需在 handleBattleAnswer 更新此欄位
-        
-        // 清除舊計時器
-        if (battleTimeoutTimer) clearTimeout(battleTimeoutTimer);
-
-        // 如果遊戲還在進行中，啟動倒數檢查
-        if (room.status === "ready") {
-            // 顯示等待訊息
-            const waitingMsg = document.getElementById('battle-waiting-msg');
-            
-            // 如果是我答完了，且對手還沒答
-            if (myData.done && !oppData.done) {
-                 battleTimeoutTimer = setTimeout(() => {
-                     waitingMsg.innerHTML = `
-                        ⚠️ 對手回應逾時 <br>
-                        <button onclick="claimTimeoutVictory('${roomId}')" class="mt-2 px-4 py-1 bg-red-600 text-white rounded text-xs animate-pulse border border-red-400">
-                            領取斷線補償
-                        </button>
-                     `;
-                     waitingMsg.classList.remove('hidden');
-                 }, BATTLE_TIMEOUT_LIMIT * 1000);
-            }
-        }
 
         // ==========================================
         // 1. 優先處理戰鬥動畫 (無論狀態為何，只要有新 Log 都播放)
@@ -3101,47 +2999,6 @@ function listenToBattleRoom(roomId) {
         }
     });
 }
-
-window.claimTimeoutVictory = async (roomId) => {
-    if(!confirm("確定要判定對手斷線並結算嗎？\n(將根據目前擊殺的卡牌數發放獎勵)")) return;
-    
-    try {
-        const roomRef = doc(db, "rooms", roomId);
-        const snap = await getDoc(roomRef);
-        if(!snap.exists()) return;
-        
-        const room = snap.data();
-        const isHost = room.host.uid === auth.currentUser.uid;
-        const enemy = isHost ? room.guest : room.host;
-        
-        // 🔥 計算擊殺獎勵：一張卡 100 金幣
-        let killCount = 0;
-        if (enemy.cards.main.currentHp <= 0) killCount++;
-        if (enemy.cards.sub && enemy.cards.sub.currentHp <= 0) killCount++;
-        
-        const reward = killCount * REWARD_CONFIG.BATTLE_KILL;
-        
-        // 結算並刪除房間
-        await deleteDoc(roomRef); // 直接刪除房間避免再次進入
-        
-        // 發放獎勵
-        if (reward > 0) {
-            currentUserData.stats.totalScore += reward;
-            await updateDoc(doc(db, "users", auth.currentUser.uid), {
-                "stats.totalScore": currentUserData.stats.totalScore
-            });
-            alert(`對手已斷線。\n根據戰況，您擊殺了 ${killCount} 張卡牌\n獲得補償獎勵：${reward} 金幣！`);
-        } else {
-            alert("對手已斷線。\n可惜您尚未擊殺任何敵方卡牌，無法獲得補償金幣。");
-        }
-        
-        leaveBattle(); // 回大廳
-        
-    } catch(e) {
-        console.error(e);
-        alert("結算失敗，請稍後再試");
-    }
-};
 
 // [新增] 獨立的結算 UI 顯示函式 (避免重複代碼)
 function showBattleResultUI(room, isHost) {
@@ -3514,8 +3371,7 @@ async function resolveRoundLogic(roomId, room) {
         });
     });
 }
-
-// 輔助函式：處理勝利結算
+// 輔助函式：處理勝利結算 (避免主函式太長)
 async function processBattleWin(loserData, msgEl) {
     try {
         const lootIds = [];
@@ -3538,30 +3394,22 @@ async function processBattleWin(loserData, msgEl) {
             "cards": arrayUnion(...lootIds)
         });
 
-        // 🔥 修正：檢查本地陣列，避免重複 push 導致顯示 bug
-        lootIds.forEach(id => {
-            if (!currentUserData.cards.includes(id)) {
-                currentUserData.cards.push(id);
-            }
-        });
-        
+        // 更新本地
+        currentUserData.cards.push(...lootIds);
         currentUserData.stats.rankLevel = newRank;
 
-        msgEl.innerHTML = `獲得獎勵：<br>🏆 500 積分<br>🎴 戰利品卡牌 ${lootIds.length} 張<br>💫 積分結算完成！`;
+        msgEl.innerHTML = `獲得獎勵：<br>🏆 200 積分<br>🎴 戰利品卡牌 ${lootIds.length} 張<br>💫加十階排位！`;
         updateUIStats();
     } catch (e) { 
         console.error("Loot failed", e); 
         msgEl.innerText = "結算發生錯誤，請聯繫管理員";
     }
 }
-
-// [修正] 計算並顯示首頁最強卡牌 (穩定版)
+    // [新增] 計算並顯示首頁最強卡牌
 window.updateHomeBestCard = () => {
     const container = document.getElementById('home-best-card-display');
-    // 🔥 修正：增加 currentUserData 的安全檢查，防止登入延遲導致錯誤
-    if (!container) return;
-    if (!currentUserData || !currentUserData.cards || currentUserData.cards.length === 0) {
-        container.innerHTML = '<div class="text-gray-500 text-xs text-center py-4">No cards equipped</div>';
+    if (!container || !currentUserData || !currentUserData.cards || currentUserData.cards.length === 0) {
+        if(container) container.innerHTML = '<div class="text-gray-500 text-xs">No cards</div>';
         return;
     }
 
@@ -3572,12 +3420,11 @@ window.updateHomeBestCard = () => {
     let bestCardId = cards[0];
     let bestScore = -1;
 
-    // 稀有度權重
     const rarityScore = { "rainbow": 5000, "gold": 4000, "red": 3000, "purple": 2000, "blue": 1000, "gray": 0 };
 
     cards.forEach(id => {
         const c = CARD_DATABASE[id];
-        if(!c) return; // 防止資料庫對應不到
+        if(!c) return;
         const lvl = levels[id] || 0;
         const finalAtk = c.atk + (lvl * 5);
         
@@ -3590,46 +3437,49 @@ window.updateHomeBestCard = () => {
         }
     });
 
-    // 渲染卡牌
+    // 渲染卡牌 (使用大的樣式)
     const card = CARD_DATABASE[bestCardId];
     const lvl = levels[bestCardId] || 0;
     const finalAtk = card.atk + (lvl * 5);
     const rConfig = RARITY_CONFIG[card.rarity];
-    const imgUrl = getCardImageUrl(bestCardId);
 
-    // HTML 結構
+    // 使用 w-40 (寬度160px) 來顯示，並保持 2/3 比例
     container.innerHTML = `
-        <div class="w-40 aspect-[2/3] bg-slate-800 rounded-xl border-4 ${rConfig.border} relative overflow-hidden flex flex-col justify-between p-3 shadow-2xl bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] group hover:scale-105 transition-transform duration-300">
-            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/80 pointer-events-none z-10"></div>
+        <div class="w-40 aspect-[2/3] bg-slate-800 rounded-xl border-4 ${rConfig.border} relative overflow-hidden flex flex-col justify-between p-3 shadow-2xl bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]">
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/60 pointer-events-none"></div>
             
-            <div class="flex justify-between items-start z-20 relative">
-                <span class="font-bold ${rConfig.color} text-lg drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] truncate max-w-[70%]">${card.name}</span>
-                <span class="text-xs text-yellow-500 font-mono border border-yellow-500/50 px-1.5 rounded bg-black/60 backdrop-blur-sm">Lv.${lvl}</span>
+            <div class="flex justify-between items-start z-10">
+                <span class="font-bold ${rConfig.color} text-lg drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">${card.name}</span>
+                <span class="text-xs text-yellow-500 font-mono border border-yellow-500/50 px-1.5 rounded bg-black/40">Lv.${lvl}</span>
             </div>
             
-            <div class="absolute inset-0 z-0 flex items-center justify-center bg-slate-700/30">
-                ${imgUrl ? 
-                  `<img src="${imgUrl}" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">` : ''
+            <div class="absolute inset-0 z-0">
+                ${getCardImageUrl(bestCardId) ? 
+                  `<img src="${getCardImageUrl(bestCardId)}" class="w-full h-full object-cover opacity-80">` : 
+                  `<div class="w-full h-full flex items-center justify-center text-6xl opacity-30">${card.rarity === 'rainbow' ? '🐲' : '⚔️'}</div>`
                 }
-                <div class="${imgUrl ? 'hidden' : 'flex'} w-full h-full items-center justify-center text-7xl opacity-40 grayscale group-hover:grayscale-0 transition-all">
-                    ${card.rarity === 'rainbow' || card.rarity === 'gold' ? '🐲' : '⚔️'}
-                </div>
             </div>
-            
-            <div class="z-20 bg-slate-900/90 backdrop-blur-md rounded p-2 border border-white/10 mt-auto relative shadow-lg">
-                <div class="flex justify-between items-center border-b border-white/10 pb-1 mb-1">
-                    <span class="text-[10px] text-gray-400 uppercase tracking-wider">Attack</span>
-                    <span class="text-xl font-black text-red-500 font-mono drop-shadow-sm">${finalAtk}</span>
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/90 z-0"></div>
+
+            <div class="flex justify-between items-start z-10 relative">
+               </div>
+
+            <div class="flex-1 z-10"></div> <div class="z-10 bg-slate-900/80 backdrop-blur rounded p-2 border border-white/10 relative">
+               </div>
+
+            <div class="z-10 bg-slate-900/80 backdrop-blur rounded p-2 border border-white/10">
+                <div class="flex justify-between items-center">
+                    <span class="text-xs text-gray-400">ATK</span>
+                    <span class="text-xl font-black text-red-500 font-mono">${finalAtk}</span>
                 </div>
-                <div class="text-[10px] ${rConfig.color} truncate flex items-center gap-1">
-                    <span class="text-gray-500">Trait:</span> ${card.trait}
+                <div class="text-[10px] ${rConfig.color} mt-1 truncate">
+                    Trait: ${card.trait}
                 </div>
             </div>
         </div>
     `;
 };
-
-// [修正] 處理對戰答題 (標記 done)
+// [修改] 處理對戰答題 (標記 done)
 async function handleBattleAnswer(roomId, userIdx, correctIdx, isHost) {
     const isCorrect = userIdx === correctIdx;
     if (navigator.vibrate) navigator.vibrate(isCorrect ? 50 : 200);
@@ -3662,8 +3512,7 @@ async function handleBattleAnswer(roomId, userIdx, correctIdx, isHost) {
         await updateDoc(roomRef, {
             [`${meField}.done`]: true,
             [`${meField}.answerCorrect`]: isCorrect,
-            [`${meField}.answerTime`]: serverTimestamp(),
-            lastActiveTime: serverTimestamp() // 🔥 修正：這裡改成小寫開頭，與監聽器一致
+            [`${meField}.answerTime`]: serverTimestamp()
         });
     } catch (e) { console.error(e); }
 }
@@ -3687,14 +3536,15 @@ window.loadUserHistory = async () => {
         });
     } catch (e) { console.error(e); ul.innerHTML = '<li class="text-center text-red-400 py-4">Error</li>'; }
 };
-// ==========================================
-// 📊 雷達圖與數據分析系統 (修正版)
-// ==========================================
+// main.js - 替換 renderKnowledgeGraph 函式
 
-// 🔥 修正：全域變數只宣告一次，避免 SyntaxError
+// main.js - 替換 renderKnowledgeGraph
+
 let knowledgeChartInstance = null;
 
-// 輔助函式：計算五大領域的綜合分數
+// main.js - 替換 renderKnowledgeGraph
+
+// ... (calculateDomainScore 輔助函式保持不變，若遺失請補上) ...
 function calculateDomainScore(map, subjects) {
     let totalCorrect = 0;
     let totalQuestions = 0;
@@ -3706,7 +3556,7 @@ function calculateDomainScore(map, subjects) {
             });
         }
     });
-    if (totalQuestions === 0) return 20; // 基礎分
+    if (totalQuestions === 0) return 20; 
     return Math.round((totalCorrect / totalQuestions) * 100);
 }
 
@@ -3720,8 +3570,7 @@ window.renderKnowledgeGraph = (targetSubject = null) => {
     if (!controls) {
         controls = document.createElement('div');
         controls.id = 'chart-controls';
-        // 🔥 修改：加入 overflow-x-auto 和 flex-nowrap，防止按鈕換行導致破版，並隱藏捲軸
-        controls.className = "flex flex-nowrap gap-2 overflow-x-auto px-4 py-2 mt-4 w-full no-scrollbar mask-gradient";
+        controls.className = "flex flex-wrap gap-2 justify-center mt-4 px-2";
         
         const subjects = [
             { id: null, label: "全域總覽", color: "bg-blue-600" },
@@ -3739,7 +3588,7 @@ window.renderKnowledgeGraph = (targetSubject = null) => {
         subjects.forEach(subj => {
             const btn = document.createElement('button');
             btn.innerText = subj.label;
-            btn.className = `px-3 py-1 text-[10px] font-bold text-white rounded-full transition-all shadow-md border border-white/10 ${subj.color} opacity-60 hover:opacity-100 hover:scale-105 flex-shrink-0`; // 🔥 加入 flex-shrink-0
+            btn.className = `px-3 py-1 text-[10px] font-bold text-white rounded-full transition-all shadow-md border border-white/10 ${subj.color} opacity-60 hover:opacity-100 hover:scale-105`;
             btn.onclick = () => window.renderKnowledgeGraph(subj.id);
             btn.dataset.subj = subj.id || 'all'; 
             controls.appendChild(btn);
@@ -3759,7 +3608,7 @@ window.renderKnowledgeGraph = (targetSubject = null) => {
         }
     });
 
-    // 2. 準備數據
+    // 2. 準備數據 (關鍵修改處)
     const map = currentUserData.stats.knowledgeMap || {};
     let labels = [];
     let dataValues = [];
@@ -3774,19 +3623,24 @@ window.renderKnowledgeGraph = (targetSubject = null) => {
         if(["歷史","地理","公民"].includes(targetSubject)) chartColor = "rgba(245, 158, 11, 1)"; 
         if(["物理","化學","生物"].includes(targetSubject)) chartColor = "rgba(16, 185, 129, 1)"; 
 
-        // 🔥 關鍵修改：強制使用 SCHEMA 定義的標籤，確保雷達圖形狀固定
+        // 🟥 關鍵修改：強制使用 SCHEMA 定義的標籤，而不是讀取 map
+        // 這樣即使沒數據，也會顯示出該有的軸
         if (SUBJECT_SCHEMA_FRONTEND[targetSubject]) {
             labels = SUBJECT_SCHEMA_FRONTEND[targetSubject];
         } else {
+            // 防呆：如果是不在列表的科目，才嘗試讀取現有資料
             labels = map[targetSubject] ? Object.keys(map[targetSubject]) : [];
         }
 
         // 填入數據 (若無數據則補 0)
         dataValues = labels.map(topic => {
             const s = map[targetSubject]?.[topic];
+            // 如果有練習過，計算正確率；沒練習過給 0
+            // 注意：為了美觀，可以考慮給個 10 分讓圖不要縮成一點，或是給 0 真實呈現
             return (s && s.total > 0) ? Math.round((s.correct / s.total) * 100) : 0;
         });
 
+        // 只有當連 SCHEMA 都找不到時，才顯示佔位符
         if (labels.length === 0) {
             labels = ["尚無數據", "請多練習", "累積數據"]; 
             dataValues = [0, 0, 0];
@@ -3835,11 +3689,11 @@ window.renderKnowledgeGraph = (targetSubject = null) => {
                     grid: { color: 'rgba(255, 255, 255, 0.1)' },
                     pointLabels: { 
                         color: '#e5e7eb', 
-                        font: { size: 12, family: "'Noto Sans TC', sans-serif" } 
+                        font: { size: 12, family: "'Noto Sans TC', sans-serif" } // 優化字體
                     },
                     suggestedMin: 0,
                     suggestedMax: 100,
-                    ticks: { display: false, backdropColor: 'transparent' }
+                    ticks: { display: false, backdropColor: 'transparent' } // 隱藏雜亂的刻度數字
                 }
             }
         }
@@ -4473,12 +4327,12 @@ async function executeDraw(count, cost, guaranteedRarity = null) {
         updateUIStats();
 
         // 顯示結果彈窗 (可以使用簡單的 alert 或自定義 Modal)
+        // 這裡簡單用 alert 顯示文字摘要，或者你可以做一個漂亮的 Overlay
         showDrawResults(results, totalRefund);
 
         // 重新載入卡片列表
         loadMyCards();
-        // 🔥 修正：補上分號，確保執行順序正確
-        window.updateHomeBestCard(); 
+        updateHomeBestCard()
 
     } catch (e) {
         console.error(e);
@@ -4494,7 +4348,7 @@ async function executeDraw(count, cost, guaranteedRarity = null) {
 
 let gachaSkip = false; // 用於跳過動畫
 
-// [修正版] 更新戰鬥卡牌 UI
+// [修正版] 更新戰鬥卡牌 UI (修復變數未宣告 + 新增卡面血量顯示)
 function updateBattleCardUI(prefix, playerData) {
     if (!playerData) return;
     
@@ -4511,7 +4365,7 @@ function updateBattleCardUI(prefix, playerData) {
     const activeKey = playerData.activeCard; // 'main' or 'sub'
     const activeCard = playerData.cards[activeKey];
     
-    // 防呆：如果 activeCard 不存在，直接返回
+    // 防呆：如果 activeCard 不存在 (例如數據錯誤)，直接返回
     if (!activeCard) return;
 
     const dbCard = CARD_DATABASE[activeCard.id];
@@ -4536,8 +4390,8 @@ function updateBattleCardUI(prefix, playerData) {
     }
 
     const hasImage = getCardImageUrl(activeCard.id); 
-    
-    // 🔥 確保變數在此作用域宣告
+
+    // 🔥【修正 1】宣告變數，解決 ReferenceError 崩潰
     let innerContent = ""; 
 
     if (hasImage) {
@@ -4545,12 +4399,16 @@ function updateBattleCardUI(prefix, playerData) {
             <img src="${hasImage}" 
                  class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-110"
                  onerror="this.style.display='none'; this.parentElement.querySelector('.fallback-text').style.display='flex'">
+            
             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+            
             <div class="absolute top-1 left-1 text-[8px] font-bold text-white bg-black/50 px-1.5 py-0.5 rounded border border-white/20 z-10">
                 ${activeCard.rarity === 'rainbow' ? 'LEGEND' : (activeCard.rarity === 'gold' ? 'MYTHIC' : 'MAIN')}
             </div>
+
             <div class="absolute bottom-0 w-full p-2 flex flex-col items-center z-10">
                 <div class="${nameColor} font-bold text-sm text-center drop-shadow-[0_2px_2px_rgba(0,0,0,1)]">${activeCard.name}</div>
+                
                 <div class="flex items-center gap-2 mt-0.5 bg-black/40 px-2 py-0.5 rounded-full border border-white/10 backdrop-blur-sm">
                     <span class="text-xs text-green-400 font-black drop-shadow-md flex items-center gap-0.5">
                         <i class="fa-solid fa-heart text-[10px]"></i> ${currentHp}
@@ -4560,10 +4418,12 @@ function updateBattleCardUI(prefix, playerData) {
                         <i class="fa-solid fa-khanda text-[10px]"></i> ${activeCard.atk}
                     </span>
                 </div>
+
                 <div class="mt-1 text-[9px] text-cyan-300 bg-blue-900/60 px-1.5 py-0.5 rounded border border-blue-500/30 backdrop-blur-sm">
                     ${activeCard.skill}
                 </div>
             </div>
+
             <div class="fallback-text hidden flex-col items-center justify-center h-full relative z-0">
                 <div class="text-3xl mb-2 filter drop-shadow-lg animate-pulse">
                     ${activeCard.id === 'c051' || activeCard.id === 'c041' ? '🐲' : '⚔️'}
@@ -4572,6 +4432,7 @@ function updateBattleCardUI(prefix, playerData) {
             </div>
         `;
     } else {
+        // 無圖片的預設樣式
         innerContent = `
             <div class="flex flex-col items-center justify-center h-full relative z-10">
                 <div class="text-[10px] uppercase tracking-widest text-gray-500 mb-1">${activeKey}</div>
@@ -4579,10 +4440,12 @@ function updateBattleCardUI(prefix, playerData) {
                     ${activeKey === 'main' ? '🐉' : '🛡️'}
                 </div>
                 <div class="${nameColor} font-bold text-sm text-center">${activeCard.name}</div>
+                
                 <div class="flex gap-2 mt-1">
                     <div class="text-xs text-green-400 font-mono">HP ${currentHp}</div>
                     <div class="text-xs text-red-400 font-mono">ATK ${activeCard.atk}</div>
                 </div>
+
                 ${activeKey === 'main' ? `<div class="text-[9px] text-blue-300 mt-2 text-center px-1">${activeCard.skill}</div>` : ''}
             </div>
         `;
@@ -4590,16 +4453,17 @@ function updateBattleCardUI(prefix, playerData) {
 
     cardVisualEl.innerHTML = innerContent;
 
-    // 副卡指示燈邏輯保持不變 (省略以節省篇幅)
+    // 3. 更新副卡指示燈 (維持原樣)
     if (subIndicatorEl) {
-        // ... (原程式碼的副卡邏輯)
         if (playerData.cards.sub) {
             const subCardId = playerData.cards.sub.id;
             const subBase = CARD_DATABASE[subCardId] || { name: "Sub", rarity: "gray" };
             const subRConfig = RARITY_CONFIG[subBase.rarity] || RARITY_CONFIG.gray;
+            
             const isActive = activeKey === 'sub';
             const isDead = playerData.cards.sub.currentHp <= 0;
 
+            // 微調位置
             subIndicatorEl.className = `absolute ${prefix==='my'?'bottom-4 -left-2':'top-4 -right-2'} w-12 h-16 bg-slate-800 rounded border-2 transition-all duration-300 flex flex-col items-center justify-center overflow-hidden z-20 shadow-lg`;
             
             if (isDead) {
@@ -4607,10 +4471,17 @@ function updateBattleCardUI(prefix, playerData) {
                 subIndicatorEl.innerHTML = '<i class="fa-solid fa-skull text-gray-500"></i>';
             } else if (isActive) {
                 subIndicatorEl.className += ` ${subRConfig.border} scale-110 ring-2 ring-yellow-400 ring-offset-1 ring-offset-slate-900`;
-                subIndicatorEl.innerHTML = `<div class="text-[8px] ${subRConfig.color} font-bold truncate w-full text-center px-0.5">${subBase.name}</div><div class="text-xs">⚔️</div><div class="text-[8px] text-white">${playerData.cards.sub.currentHp}</div>`;
+                subIndicatorEl.innerHTML = `
+                    <div class="text-[8px] ${subRConfig.color} font-bold truncate w-full text-center px-0.5">${subBase.name}</div>
+                    <div class="text-xs">⚔️</div>
+                    <div class="text-[8px] text-white">${playerData.cards.sub.currentHp}</div>
+                `;
             } else {
                 subIndicatorEl.className += ` ${subRConfig.border} opacity-80 hover:opacity-100 hover:scale-105`;
-                subIndicatorEl.innerHTML = `<div class="bg-black/50 w-full text-center text-[7px] text-gray-300 absolute top-0">WAIT</div><div class="text-[8px] ${subRConfig.color} font-bold mt-2 truncate w-full text-center">${subBase.name}</div>`;
+                subIndicatorEl.innerHTML = `
+                    <div class="bg-black/50 w-full text-center text-[7px] text-gray-300 absolute top-0">WAIT</div>
+                    <div class="text-[8px] ${subRConfig.color} font-bold mt-2 truncate w-full text-center">${subBase.name}</div>
+                `;
             }
         } else {
             subIndicatorEl.style.opacity = '0';
