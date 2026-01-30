@@ -2395,7 +2395,6 @@ window.submitReport = async () => {
     }
 };
 
-window.nextQuestion = () => { startQuizFlow(); };
 
 // ==========================================
 //  🚀 隨機邀請系統 & 對戰邏輯
