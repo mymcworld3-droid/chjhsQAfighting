@@ -777,6 +777,34 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
+async function setDeckCard(cardId) {
+    if (!currentSelectSlot) return;
+    
+    if (!currentUserData.deck) currentUserData.deck = { main: "", sub: "" };
+    
+    // 🔥 防呆修正：如果選擇的卡片已經在另一個槽位，則進行互換或清除
+    if (currentSelectSlot === 'main' && currentUserData.deck.sub === cardId) {
+        currentUserData.deck.sub = ""; // 或者互換: currentUserData.deck.main (原本的主卡)
+        alert("⚠️ 已將該卡片從副卡移除，設定為主卡。");
+    }
+    if (currentSelectSlot === 'sub' && currentUserData.deck.main === cardId) {
+        currentUserData.deck.main = "";
+        alert("⚠️ 已將該卡片從主卡移除，設定為副卡。");
+    }
+
+    currentUserData.deck[currentSelectSlot] = cardId;
+    
+    try {
+        await updateDoc(doc(db, "users", auth.currentUser.uid), { "deck": currentUserData.deck });
+        document.getElementById('card-selector-modal').classList.add('hidden');
+        updateDeckDisplay();
+        loadMyCards(); // 刷新列表標記
+    } catch(e) {
+        console.error(e);
+        alert("設定失敗");
+    }
+}
+
 window.loadMyCards = () => {
     const list = document.getElementById('my-card-list');
     if(!list) return;
@@ -819,7 +847,20 @@ window.loadMyCards = () => {
 
         const div = document.createElement('div');
         div.className = `bg-slate-800 p-1.5 rounded-lg border-2 ${rConfig.border} relative overflow-hidden group hover:scale-[1.02] transition-transform aspect-[2/3] flex flex-col justify-between shadow-md cursor-pointer`;
-        div.onclick = () => selectCardForSlot(currentSelectSlot || 'main');
+        div.onclick = async () => {
+            const confirmMain = await openConfirm(`要將 [${card.name}] 裝備為主卡(Main)嗎？\n(取消則裝備為副卡)`);
+            if (confirmMain) {
+                currentSelectSlot = 'main';
+                setDeckCard(cardId);
+            } else {
+                // 如果按取消，再問是否裝副卡 (或直接裝副卡，視體驗而定，這裡做二次確認比較保險)
+                const confirmSub = await openConfirm(`那要將 [${card.name}] 裝備為副卡(Sub)嗎？`);
+                if(confirmSub) {
+                    currentSelectSlot = 'sub';
+                    setDeckCard(cardId);
+                }
+            }
+        };
 
         // [修正] 移除多餘的巢狀 div，確保圖片容器能撐開高度
         div.innerHTML = `
