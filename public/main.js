@@ -3553,11 +3553,14 @@ async function processBattleWin(loserData, msgEl) {
         msgEl.innerText = "結算發生錯誤，請聯繫管理員";
     }
 }
-    // [新增] 計算並顯示首頁最強卡牌
+
+// [修正] 計算並顯示首頁最強卡牌 (穩定版)
 window.updateHomeBestCard = () => {
     const container = document.getElementById('home-best-card-display');
-    if (!container || !currentUserData || !currentUserData.cards || currentUserData.cards.length === 0) {
-        if(container) container.innerHTML = '<div class="text-gray-500 text-xs">No cards</div>';
+    // 防呆：如果還沒登入或沒數據
+    if (!container) return;
+    if (!currentUserData || !currentUserData.cards || currentUserData.cards.length === 0) {
+        container.innerHTML = '<div class="text-gray-500 text-xs">No cards</div>';
         return;
     }
 
@@ -3568,11 +3571,12 @@ window.updateHomeBestCard = () => {
     let bestCardId = cards[0];
     let bestScore = -1;
 
+    // 稀有度權重
     const rarityScore = { "rainbow": 5000, "gold": 4000, "red": 3000, "purple": 2000, "blue": 1000, "gray": 0 };
 
     cards.forEach(id => {
         const c = CARD_DATABASE[id];
-        if(!c) return;
+        if(!c) return; // 防止資料庫對應不到
         const lvl = levels[id] || 0;
         const finalAtk = c.atk + (lvl * 5);
         
@@ -3585,43 +3589,39 @@ window.updateHomeBestCard = () => {
         }
     });
 
-    // 渲染卡牌 (使用大的樣式)
+    // 渲染卡牌
     const card = CARD_DATABASE[bestCardId];
     const lvl = levels[bestCardId] || 0;
     const finalAtk = card.atk + (lvl * 5);
     const rConfig = RARITY_CONFIG[card.rarity];
+    const imgUrl = getCardImageUrl(bestCardId);
 
-    // 使用 w-40 (寬度160px) 來顯示，並保持 2/3 比例
+    // HTML 結構
     container.innerHTML = `
-        <div class="w-40 aspect-[2/3] bg-slate-800 rounded-xl border-4 ${rConfig.border} relative overflow-hidden flex flex-col justify-between p-3 shadow-2xl bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]">
-            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/60 pointer-events-none"></div>
+        <div class="w-40 aspect-[2/3] bg-slate-800 rounded-xl border-4 ${rConfig.border} relative overflow-hidden flex flex-col justify-between p-3 shadow-2xl bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] group hover:scale-105 transition-transform duration-300">
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/80 pointer-events-none z-10"></div>
             
-            <div class="flex justify-between items-start z-10">
-                <span class="font-bold ${rConfig.color} text-lg drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">${card.name}</span>
-                <span class="text-xs text-yellow-500 font-mono border border-yellow-500/50 px-1.5 rounded bg-black/40">Lv.${lvl}</span>
+            <div class="flex justify-between items-start z-20 relative">
+                <span class="font-bold ${rConfig.color} text-lg drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] truncate max-w-[70%]">${card.name}</span>
+                <span class="text-xs text-yellow-500 font-mono border border-yellow-500/50 px-1.5 rounded bg-black/60 backdrop-blur-sm">Lv.${lvl}</span>
             </div>
             
-            <div class="absolute inset-0 z-0">
-                ${getCardImageUrl(bestCardId) ? 
-                  `<img src="${getCardImageUrl(bestCardId)}" class="w-full h-full object-cover opacity-80">` : 
-                  `<div class="w-full h-full flex items-center justify-center text-6xl opacity-30">${card.rarity === 'rainbow' ? '🐲' : '⚔️'}</div>`
+            <div class="absolute inset-0 z-0 flex items-center justify-center bg-slate-700/30">
+                ${imgUrl ? 
+                  `<img src="${imgUrl}" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">` : ''
                 }
-            </div>
-            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/90 z-0"></div>
-
-            <div class="flex justify-between items-start z-10 relative">
-               </div>
-
-            <div class="flex-1 z-10"></div> <div class="z-10 bg-slate-900/80 backdrop-blur rounded p-2 border border-white/10 relative">
-               </div>
-
-            <div class="z-10 bg-slate-900/80 backdrop-blur rounded p-2 border border-white/10">
-                <div class="flex justify-between items-center">
-                    <span class="text-xs text-gray-400">ATK</span>
-                    <span class="text-xl font-black text-red-500 font-mono">${finalAtk}</span>
+                <div class="${imgUrl ? 'hidden' : 'flex'} w-full h-full items-center justify-center text-7xl opacity-40 grayscale group-hover:grayscale-0 transition-all">
+                    ${card.rarity === 'rainbow' || card.rarity === 'gold' ? '🐲' : '⚔️'}
                 </div>
-                <div class="text-[10px] ${rConfig.color} mt-1 truncate">
-                    Trait: ${card.trait}
+            </div>
+            
+            <div class="z-20 bg-slate-900/90 backdrop-blur-md rounded p-2 border border-white/10 mt-auto relative shadow-lg">
+                <div class="flex justify-between items-center border-b border-white/10 pb-1 mb-1">
+                    <span class="text-[10px] text-gray-400 uppercase tracking-wider">Attack</span>
+                    <span class="text-xl font-black text-red-500 font-mono drop-shadow-sm">${finalAtk}</span>
+                </div>
+                <div class="text-[10px] ${rConfig.color} truncate flex items-center gap-1">
+                    <span class="text-gray-500">Trait:</span> ${card.trait}
                 </div>
             </div>
         </div>
