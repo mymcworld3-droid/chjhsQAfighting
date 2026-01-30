@@ -69,6 +69,13 @@ const RARITY_CONFIG = {
     rainbow:{ name: "傳奇", color: "text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-green-500 to-blue-500 animate-pulse", border: "border-white shadow-[0_0_20px_rgba(255,255,255,0.8)]", prob: 0.001 } // 0.1% (原 0.2%)
 };
 
+// 🔥 修正：補上遺失的獎勵設定常數
+const REWARD_CONFIG = {
+    SOLO_PER_Q: 20,      // 單人無限模式每題獎勵
+    REPORT_BONUS: 20,    // 回報問題補償獎勵
+    BATTLE_KILL: 100     // 對戰擊殺一張卡牌獎勵
+};
+
 // main.js - 請放在檔案最上方附近
 
 // 這是前端用的題型架構 (需與後端一致)
