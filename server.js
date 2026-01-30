@@ -220,6 +220,7 @@ app.post('/api/generate-quiz', async (req, res) => {
     const generationPrompt = `
         [系統指令]
         你是由 Google 開發的 AI 教育專家，請生成一道高品質的「單選題」。
+        題目有需要換行時可以打\n。
         
         [出題規格]
         1. **主科目**：${subject}
@@ -240,7 +241,7 @@ app.post('/api/generate-quiz', async (req, res) => {
             "subject": "${subject}",
             "sub_topic": "${targetTopic}" 
         }
-        請檢查以下 JSON 格式是否正確，且確認：答案 "correct" 只有一個、正確答案是否正確、錯誤答案中是否有正確答案、選項要在選項裡、不可為多選題、選項不可只有英文字母要有文本、表格文本要記得換行
+        請檢查以下 JSON 格式是否正確，且確認：答案 "correct" 只有一個、正確答案是否正確、錯誤答案中是否有正確答案、選項要在選項裡不可在題目裡、不可為多選題、表格文本要記得換行
     `;
 
     // 6. 呼叫 AI
@@ -255,7 +256,7 @@ app.post('/api/generate-quiz', async (req, res) => {
             
             // 審查 Prompt (簡化版)
             const validationPrompt = `
-                請檢查以下 JSON 格式是否正確，且確認：答案 "correct" 只有一個、正確答案是否正確、錯誤答案中是否有正確答案、選項要在選項裡、不可為多選題、選項不可只有英文字母要有文本、表格文本要記得換行。
+                請檢查以下 JSON 格式是否正確，且確認：答案 "correct" 只有一個、正確答案是否正確、錯誤答案中是否有正確答案、選項要在選項裡、不可為多選題、表格文本要記得換行。
                 並回傳修正後的純 JSON：
                 ${rawText}
             `;
