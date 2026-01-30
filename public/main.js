@@ -2175,11 +2175,23 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
             stats.currentStreak++;
             if (stats.currentStreak > stats.bestStreak) stats.bestStreak = stats.currentStreak;
             
-            // 💰 無限模式獎勵：每題固定 20 (可加上連勝加成)
-            scoreGain = 20;
-            // 顯示獲得金幣提示
+            // 💰 無限模式獎勵
+            scoreGain = REWARD_CONFIG.SOLO_PER_Q;
             fbTitle.innerHTML += ` <span class="text-yellow-400 text-sm ml-2 border border-yellow-500 rounded px-1">+${scoreGain}💰</span>`;
+            
+            // 答對時，清空損失紀錄 (因為沒有損失)
+            window.tempLostStreak = 0; 
         } else {
+            // 🔥 關鍵修正：在歸零前，記錄損失的連勝數 (供回報補償使用)
+            window.tempLostStreak = stats.currentStreak;
+            
+            // 連勝中斷安慰獎 (保留您之前可能有的邏輯)
+            if (stats.currentStreak >= 5) {
+                const pityBonus = 10;
+                stats.totalScore += pityBonus;
+                fbTitle.innerHTML += `<div class="text-xs text-gray-400 mt-1">連勝中斷 (${stats.currentStreak})，獲得安慰獎 +${pityBonus}💰</div>`;
+            }
+            
             stats.currentStreak = 0; // 答錯斷連勝
         }
         stats.totalScore += scoreGain;
