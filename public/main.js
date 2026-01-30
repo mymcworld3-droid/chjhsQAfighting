@@ -2269,7 +2269,6 @@ async function renderQuiz(data, rank, topic) {
     });
 }
 
-// [修正] 放棄題目改用自定義彈窗
 window.giveUpQuiz = async () => { 
     // 使用自定義的 openConfirm (支援 Promise等待)
     const isConfirmed = await openConfirm("確定要放棄此題嗎？\n(將視為回答錯誤並中斷連勝)");
@@ -2278,6 +2277,114 @@ window.giveUpQuiz = async () => {
         handleAnswer(-1, -2, document.getElementById('question-text').innerText, "Skipped."); 
     }
 };
+
+// 🔥 新增：回報問題相關邏輯
+window.openReportModal = () => {
+    const modal = document.getElementById('report-modal');
+    const box = document.getElementById('report-box');
+    
+    // 重置 UI 狀態
+    document.getElementById('report-input-view').classList.remove('hidden');
+    document.getElementById('report-loading-view').classList.add('hidden');
+    document.getElementById('report-result-view').classList.add('hidden');
+    document.getElementById('report-reason').value = '';
+
+    modal.classList.remove('hidden');
+    requestAnimationFrame(() => {
+        modal.classList.remove('opacity-0');
+        box.classList.remove('scale-95');
+        box.classList.add('scale-100');
+    });
+};
+
+window.closeReportModal = () => {
+    const modal = document.getElementById('report-modal');
+    const box = document.getElementById('report-box');
+    modal.classList.add('opacity-0');
+    box.classList.remove('scale-100');
+    box.classList.add('scale-95');
+    setTimeout(() => modal.classList.add('hidden'), 300);
+};
+
+window.submitReport = async () => {
+    const reason = document.getElementById('report-reason').value.trim();
+    if (!reason) return alert("請輸入回報原因！");
+
+    // 切換至 Loading 介面
+    document.getElementById('report-input-view').classList.add('hidden');
+    document.getElementById('report-loading-view').classList.remove('hidden');
+    document.getElementById('report-loading-view').style.display = 'flex';
+
+    // 取得當前題目資訊
+    const currentQData = JSON.parse(localStorage.getItem('currentQuiz') || '{}');
+    if (!currentQData || !currentQData.data) {
+        alert("找不到題目資料");
+        closeReportModal();
+        return;
+    }
+
+    try {
+        const res = await fetch('/api/verify-report', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                question: currentQData.data.q,
+                options: currentQData.data.opts,
+                correctIndex: currentQData.data.ans,
+                explanation: currentQData.data.exp,
+                userReason: reason
+            })
+        });
+
+        const result = await res.json();
+
+        // 切換至結果介面
+        document.getElementById('report-loading-view').classList.add('hidden');
+        document.getElementById('report-loading-view').style.display = '';
+        document.getElementById('report-result-view').classList.remove('hidden');
+        document.getElementById('report-result-view').style.display = 'flex';
+
+        const iconEl = document.getElementById('report-result-icon');
+        const titleEl = document.getElementById('report-result-title');
+        const msgEl = document.getElementById('report-result-msg');
+
+        if (result.valid) {
+            // ✅ 回報成功：發獎勵 + 跳過
+            iconEl.innerHTML = '<i class="fa-solid fa-circle-check text-green-400 animate-bounce"></i>';
+            titleEl.innerText = "回報成功！";
+            titleEl.className = "text-lg font-bold mb-2 text-green-400";
+            msgEl.innerText = `AI 判定：${result.reason}\n\n獲得補償 20 金幣，題目已跳過。`;
+
+            // 發放獎勵
+            if (currentUserData && currentUserData.stats) {
+                currentUserData.stats.totalScore += 20;
+                await updateDoc(doc(db, "users", auth.currentUser.uid), { "stats.totalScore": currentUserData.stats.totalScore });
+                updateUIStats();
+            }
+
+            // 關閉視窗後跳下一題
+            const btn = document.querySelector('#report-result-view button');
+            btn.onclick = () => {
+                closeReportModal();
+                // 模擬直接換下一題 (視為無效題，不計分)
+                fillBuffer(); 
+                startQuizFlow(); 
+            };
+        } else {
+            // ❌ 回報駁回
+            iconEl.innerHTML = '<i class="fa-solid fa-circle-xmark text-red-400"></i>';
+            titleEl.innerText = "回報駁回";
+            titleEl.className = "text-lg font-bold mb-2 text-red-400";
+            msgEl.innerText = `AI 判定：${result.reason}\n\n題目邏輯無誤，請繼續挑戰！`;
+        }
+
+    } catch (e) {
+        console.error(e);
+        alert("連線錯誤，請稍後再試");
+        closeReportModal();
+    }
+};
+
 window.nextQuestion = () => { startQuizFlow(); };
 
 // ==========================================
