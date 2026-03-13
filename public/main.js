@@ -1866,8 +1866,11 @@ window.openSoloModeSelector = async () => {
     }
 };
 
-//🔥 新增：單人模式專用遞迴選單
-window.renderSoloUnitSelectors = (tree, currentPath) => {
+JavaScript
+// 🔥 main.js 修正：支援讀取 JSON 內容的遞迴選單
+let soloSelectedUnitDetail = ""; // 儲存具體的單元名稱 (如：自我與生命價值)
+
+window.renderSoloUnitSelectors = async (tree, currentPath) => {
     const container = document.getElementById('solo-unit-selectors-container');
     const hint = document.getElementById('solo-unit-hint');
     if (!container) return;
@@ -1875,9 +1878,9 @@ window.renderSoloUnitSelectors = (tree, currentPath) => {
     container.innerHTML = ''; 
     let selectedParts = currentPath ? currentPath.split('/') : [];
 
-    const createSelect = (level, currentNode) => {
+    const createSelect = async (level, currentNode) => {
         const select = document.createElement('select');
-        select.className = "w-full bg-slate-900/50 border border-slate-600 text-white rounded-lg p-2 text-xs outline-none focus:border-cyan-500 transition-all cursor-pointer mb-2";
+        select.className = "w-full bg-slate-900/50 border border-slate-600 text-white rounded-lg p-2 text-xs outline-none focus:border-cyan-500 mb-2 cursor-pointer";
         
         const defaultOpt = document.createElement('option');
         defaultOpt.value = "";
@@ -1890,7 +1893,7 @@ window.renderSoloUnitSelectors = (tree, currentPath) => {
         keys.forEach(key => {
             const opt = document.createElement('option');
             opt.value = key;
-            opt.innerText = key;
+            opt.innerText = key.replace('.json', '');
             if (selectedParts[level] === key) opt.selected = true;
             select.appendChild(opt);
         });
@@ -1899,22 +1902,64 @@ window.renderSoloUnitSelectors = (tree, currentPath) => {
             const val = e.target.value;
             const newParts = selectedParts.slice(0, level);
             newParts.push(val);
-            const newPath = newParts.join('/');
-            
-            soloSelectedUnitPath = newPath;
-            hint.innerText = `✅ 已鎖定：${newPath}`;
-            hint.className = "text-[10px] text-cyan-400 mt-2 font-mono";
-            
-            renderSoloUnitSelectors(tree, newPath);
+            soloSelectedUnitPath = newParts.join('/');
+            soloSelectedUnitDetail = ""; // 切換檔案時清空具體單元
+            renderSoloUnitSelectors(tree, soloSelectedUnitPath);
         };
-
         container.appendChild(select);
 
         const currentVal = selectedParts[level];
         if (currentVal && currentNode.children[currentVal]) {
-            createSelect(level + 1, currentNode.children[currentVal]);
+            const nextNode = currentNode.children[currentVal];
+            
+            // 🔥 重點：如果這是一個檔案，則讀取內部單元列表
+            if (nextNode.type === 'file') {
+                await renderInnerUnitSelect(nextNode.fullPath);
+            } else {
+                createSelect(level + 1, nextNode);
+            }
         }
     };
+
+    // 渲染內部單元 (第三層)
+    async function renderInnerUnitSelect(filePath) {
+        try {
+            const res = await fetch(`/middle_school_unit_name/${filePath}`);
+            if (!res.ok) throw new Error(`無法讀取單元檔案: ${filePath}`);
+            const units = await res.json(); // 假設您已改為 JSON
+
+            const select = document.createElement('select');
+            select.className = "w-full bg-slate-900/50 border border-cyan-500/50 text-cyan-200 rounded-lg p-2 text-xs outline-none mb-2 animate-pulse";
+            
+            const defaultOpt = document.createElement('option');
+            defaultOpt.value = "";
+            defaultOpt.innerText = "-- 選擇具體單元 --";
+            defaultOpt.selected = !soloSelectedUnitDetail;
+            select.appendChild(defaultOpt);
+
+            units.forEach(u => {
+                const opt = document.createElement('option');
+                opt.value = u.name;
+                opt.innerText = u.name;
+                if (soloSelectedUnitDetail === u.name) opt.selected = true;
+                select.appendChild(opt);
+            });
+
+            select.onchange = (e) => {
+                soloSelectedUnitDetail = e.target.value;
+                hint.innerText = `✅ 已鎖定：${soloSelectedUnitDetail}`;
+                hint.className = "text-[10px] text-green-400 mt-2 font-mono";
+            };
+            container.appendChild(select);
+        } catch (e) {
+            console.error("[Unit-Menu-Error]", e); // 錯誤會顯示在您的 Debugger
+            const errDiv = document.createElement('div');
+            errDiv.className = "text-[10px] text-red-400";
+            errDiv.innerText = "該檔案格式錯誤或不存在";
+            container.appendChild(errDiv);
+        }
+    }
+
     createSelect(0, tree);
 };
 
