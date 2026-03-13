@@ -1997,7 +1997,7 @@ window.startSoloMode = (mode) => {
     window.startQuizFlow(true);
 };
 
-//🔥 完整的 fetchOneQuestion 函式
+//🔥 完整的 fetchOneQuestion 函式 (已加上知識點防呆提示)
 async function fetchOneQuestion() {
     const settings = currentUserData.gameSettings || { source: 'ai', difficulty: 'medium' };
     const rankName = getRankName(currentUserData.stats.rankLevel || 0);
@@ -2009,7 +2009,12 @@ async function fetchOneQuestion() {
         // 1. 決定科目與具體單元
         const parts = soloSession.unitPath.split('/');
         const subject = parts[0]; 
-        const targetTopic = window.soloSelectedUnitDetail || soloSession.unitPath;
+        
+        // 🔥 將知識點串接進 targetTopic，強制 AI 只考這些內容
+        let targetTopic = window.soloSelectedUnitDetail || soloSession.unitPath;
+        if (window.soloSelectedUnitSubTopics && window.soloSelectedUnitSubTopics.length > 0) {
+            targetTopic += ` (請嚴格限制在此範圍出題。包含知識點：${window.soloSelectedUnitSubTopics.join('、')})`;
+        }
 
         // 2. 弱點邏輯：如果是弱點科目考 easy (基礎)，否則考 hard (難)
         const weakSubjects = (currentUserData.profile.weakSubjects || "").split(',').map(s => s.trim());
