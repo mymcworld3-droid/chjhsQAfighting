@@ -1869,6 +1869,7 @@ window.openSoloModeSelector = async () => {
 // 🔥 main.js 修正：支援讀取 JSON 內容的遞迴選單
 let soloSelectedUnitDetail = ""; // 儲存具體的單元名稱 (如：自我與生命價值)
 
+//🔥 修正：遞迴選單，支援讀取 JSON 內的單元並記錄其知識點 (sub_topics)
 window.renderSoloUnitSelectors = async (tree, currentPath) => {
     const container = document.getElementById('solo-unit-selectors-container');
     const hint = document.getElementById('solo-unit-hint');
@@ -1879,7 +1880,7 @@ window.renderSoloUnitSelectors = async (tree, currentPath) => {
 
     const createSelect = async (level, currentNode) => {
         const select = document.createElement('select');
-        select.className = "w-full bg-slate-900/50 border border-slate-600 text-white rounded-lg p-2 text-xs outline-none focus:border-cyan-500 mb-2 cursor-pointer";
+        select.className = "w-full bg-slate-900/50 border border-slate-600 text-white rounded-lg p-2 text-xs outline-none focus:border-cyan-500 mb-2";
         
         const defaultOpt = document.createElement('option');
         defaultOpt.value = "";
@@ -1888,8 +1889,7 @@ window.renderSoloUnitSelectors = async (tree, currentPath) => {
         if (!selectedParts[level]) defaultOpt.selected = true;
         select.appendChild(defaultOpt);
 
-        const keys = Object.keys(currentNode.children);
-        keys.forEach(key => {
+        Object.keys(currentNode.children).forEach(key => {
             const opt = document.createElement('option');
             opt.value = key;
             opt.innerText = key.replace('.json', '');
@@ -1902,7 +1902,8 @@ window.renderSoloUnitSelectors = async (tree, currentPath) => {
             const newParts = selectedParts.slice(0, level);
             newParts.push(val);
             soloSelectedUnitPath = newParts.join('/');
-            soloSelectedUnitDetail = ""; // 切換檔案時清空具體單元
+            window.soloSelectedUnitDetail = ""; // 切換檔案時重置單元
+            window.soloSelectedUnitSubTopics = []; // 重置知識點
             renderSoloUnitSelectors(tree, soloSelectedUnitPath);
         };
         container.appendChild(select);
@@ -1910,56 +1911,54 @@ window.renderSoloUnitSelectors = async (tree, currentPath) => {
         const currentVal = selectedParts[level];
         if (currentVal && currentNode.children[currentVal]) {
             const nextNode = currentNode.children[currentVal];
-            
-            // 🔥 重點：如果這是一個檔案，則讀取內部單元列表
             if (nextNode.type === 'file') {
                 await renderInnerUnitSelect(nextNode.fullPath);
             } else {
-                createSelect(level + 1, nextNode);
+                await createSelect(level + 1, nextNode);
             }
         }
     };
 
-    // 渲染內部單元 (第三層)
+    // 渲染 JSON 檔案內部的具體單元
     async function renderInnerUnitSelect(filePath) {
         try {
             const res = await fetch(`/middle_school_unit_name/${filePath}`);
-            if (!res.ok) throw new Error(`無法讀取單元檔案: ${filePath}`);
-            const units = await res.json(); // 假設您已改為 JSON
+            if (!res.ok) throw new Error("File not found");
+            const units = await res.json();
 
             const select = document.createElement('select');
             select.className = "w-full bg-slate-900/50 border border-cyan-500/50 text-cyan-200 rounded-lg p-2 text-xs outline-none mb-2 animate-pulse";
-            
             const defaultOpt = document.createElement('option');
             defaultOpt.value = "";
             defaultOpt.innerText = "-- 選擇具體單元 --";
-            defaultOpt.selected = !soloSelectedUnitDetail;
+            defaultOpt.selected = !window.soloSelectedUnitDetail;
             select.appendChild(defaultOpt);
 
             units.forEach(u => {
                 const opt = document.createElement('option');
                 opt.value = u.name;
                 opt.innerText = u.name;
-                if (soloSelectedUnitDetail === u.name) opt.selected = true;
+                if (window.soloSelectedUnitDetail === u.name) {
+                    opt.selected = true;
+                    window.soloSelectedUnitSubTopics = u.sub_topics || []; // 恢復知識點
+                }
                 select.appendChild(opt);
             });
 
             select.onchange = (e) => {
-                soloSelectedUnitDetail = e.target.value;
-                hint.innerText = `✅ 已鎖定：${soloSelectedUnitDetail}`;
+                window.soloSelectedUnitDetail = e.target.value;
+                const selectedUnit = units.find(u => u.name === window.soloSelectedUnitDetail);
+                window.soloSelectedUnitSubTopics = selectedUnit ? (selectedUnit.sub_topics || []) : []; // 🔥 記錄該單元的知識點
+                
+                hint.innerText = `✅ 已選取：${window.soloSelectedUnitDetail}`;
                 hint.className = "text-[10px] text-green-400 mt-2 font-mono";
             };
             container.appendChild(select);
         } catch (e) {
-            console.error("[Unit-Menu-Error]", e); // 錯誤會顯示在您的 Debugger
-            const errDiv = document.createElement('div');
-            errDiv.className = "text-[10px] text-red-400";
-            errDiv.innerText = "該檔案格式錯誤或不存在";
-            container.appendChild(errDiv);
+            console.error("[JSON-Error] 讀取單元內容失敗:", e);
         }
     }
-
-    createSelect(0, tree);
+    await createSelect(0, tree);
 };
 
 //🔥 修改：startSoloMode，確保有選擇單元路徑
