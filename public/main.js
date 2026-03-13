@@ -2168,7 +2168,7 @@ async function fetchOneQuestion() {
 
 /// 🔥 修改：在進入下一題前才清除舊題目，確保 startQuizFlow 能抓到新題目
 window.nextQuestion = () => { 
-    localStorage.removeItem('currentQuiz'); 
+    window.currentActiveQuiz = null; 
     startQuizFlow(); 
 };
 
