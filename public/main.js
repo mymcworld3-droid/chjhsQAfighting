@@ -1719,144 +1719,6 @@ function getSmartDifficulty() {
 
     return baseDiff;
 }
-// --- 完整 fetchOneQuestion：整合 AI 診斷與題庫模式 ---
-async function fetchOneQuestion() {
-    // 1. 取得設定與段位
-    const settings = currentUserData.gameSettings || { source: 'ai', difficulty: 'medium' };
-    const rankName = getRankName(currentUserData.stats.rankLevel || 0);
-
-    // 2. 智慧難度判斷 (保持原樣)
-    let finalDifficulty = settings.difficulty;
-    if (!finalDifficulty || finalDifficulty === 'auto') {
-        finalDifficulty = getSmartDifficulty();
-    }
-
-    // ==========================================
-    // 模式 A: AI 生成模式 (已支援 9 科)
-    // ==========================================
-    if (settings.source === 'ai') {
-        const BACKEND_URL = "/api/generate-quiz";
-        
-        // 定義 9 大學科
-        const allSubjects = ["國文", "英文", "數學", "公民", "歷史", "地理", "物理", "化學", "生物"];
-        
-        // TODO: 這裡可以加入邏輯，例如 60% 機率出弱項科目
-        // 目前先隨機選一科
-        let targetSubject = allSubjects[Math.floor(Math.random() * allSubjects.length)];
-        
-        // 發送請求給後端
-        const response = await fetch(BACKEND_URL, {
-            method: "POST", 
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                subject: targetSubject, 
-                // specificTopic: "...", // 若要指定子題可傳入，否則後端隨機
-                level: currentUserData.profile.educationLevel || "General", 
-                rank: rankName, 
-                difficulty: finalDifficulty,
-                language: currentLang,
-                knowledgeMap: currentUserData.stats.knowledgeMap || {} 
-            })
-        });
-
-        if (!response.ok) throw new Error(`Server Error: ${response.status}`);
-        
-        const data = await response.json();
-        let aiText = data.text;
-        const jsonMatch = aiText.match(/\{[\s\S]*\}/);
-        if (jsonMatch) aiText = jsonMatch[0];
-        const rawData = JSON.parse(aiText);
-
-        // 隨機打亂選項
-        let allOptions = [rawData.correct, ...rawData.wrong];
-        allOptions = shuffleArray(allOptions);
-        const correctIndex = allOptions.indexOf(rawData.correct);
-
-        // 儲存當前題目資訊 (用於統計)
-        localStorage.setItem('currentQuizData', JSON.stringify({
-            subject: rawData.subject || targetSubject,
-            sub_topic: rawData.sub_topic || "綜合"
-        }));
-
-        return {
-            data: { q: rawData.q, opts: allOptions, ans: correctIndex, exp: rawData.exp },
-            rank: rankName,
-            badge: `🎯 ${rawData.subject} | ${rawData.sub_topic || '綜合'}`
-        };
-    }
-    // ==========================================
-    // 模式 B: 題庫模式 (載入 JSON 檔案)
-    // ==========================================
-    else {
-        let targetSource = settings.source; 
-        
-        // 3.1 如果尚未載入該題庫，或切換了題庫來源
-        if (!currentBankData || currentBankData.sourcePath !== targetSource) {
-            let filesToFetch = [];
-            
-            // 判斷是單檔還是資料夾
-            if (targetSource.endsWith('.json')) { 
-                filesToFetch = [targetSource]; 
-            } else {
-                // 如果是資料夾，先確保檔案列表已載入
-                if (allBankFiles.length === 0) {
-                      try { 
-                          const res = await fetch('/api/banks'); 
-                          const data = await res.json(); 
-                          allBankFiles = data.files || []; 
-                      } catch (e) { console.error(e); }
-                }
-                // 過濾出該資料夾下的所有檔案
-                filesToFetch = allBankFiles.filter(f => f.startsWith(targetSource + '/'));
-                
-                if (filesToFetch.length === 0) { 
-                    console.error("Empty folder:", targetSource); 
-                    return switchToAI(); // 沒題目就切回 AI
-                }
-            }
-
-            // 3.2 下載並合併所有題目
-            try {
-                console.log(`📚 Loading ${filesToFetch.length} files...`);
-                const fetchPromises = filesToFetch.map(filePath => 
-                    fetch(`/banks/${filePath}?t=${Date.now()}`)
-                        .then(res => { if (!res.ok) throw new Error(); return res.json(); })
-                        .catch(err => [])
-                );
-                const results = await Promise.all(fetchPromises);
-                const mergedQuestions = results.flat();
-                
-                if (mergedQuestions.length === 0) throw new Error("No questions");
-                currentBankData = { sourcePath: targetSource, questions: mergedQuestions };
-            } catch (e) { 
-                console.error("Bank Error:", e); 
-                alert("Bank load failed, switching to AI"); 
-                return switchToAI(); 
-            }
-        }
-
-        // 3.3 根據難度過濾題目
-        const filteredQuestions = currentBankData.questions.filter(q => q.difficulty === finalDifficulty);
-        // 如果該難度沒題目，就從全部題目抽
-        const pool = filteredQuestions.length > 0 ? filteredQuestions : currentBankData.questions;
-        
-        if (pool.length === 0) throw new Error("Pool empty!");
-        
-        // 3.4 隨機抽取一題
-        const rawData = pool[Math.floor(Math.random() * pool.length)];
-        let allOptions = shuffleArray([rawData.correct, ...rawData.wrong]);
-        const correctIndex = allOptions.indexOf(rawData.correct);
-        
-        // 顯示科目名稱 (去除 .json 副檔名)
-        let displaySubject = rawData.subject || settings.source.split('/').pop().replace('.json', '');
-        
-        return { 
-            data: { q: rawData.q, opts: allOptions, ans: correctIndex, exp: rawData.exp }, 
-            rank: rankName, 
-            badge: `🎯 ${displaySubject} | ${finalDifficulty.toUpperCase()}` 
-        };
-    }
-}
 
 async function fillBuffer() {
     if (isFetchingBuffer || quizBuffer.length >= BUFFER_SIZE) return;
@@ -1941,12 +1803,11 @@ window.startQuizFlow = async (isNewSession = false) => {
 // 🆕 單人模式選擇與啟動邏輯
 // ==========================================
 
-// 1. 點擊「單人挑戰」按鈕時觸發此函式
+//🔥 全域變數新增
+let soloSelectedUnitPath = ""; 
+
+//🔥 修改：單人模式選擇器，加入單元選單與遞迴邏輯
 window.openSoloModeSelector = async () => {
-    // 這裡使用自定義彈窗或 SweetAlert，這裡示範用簡單的 confirm 流程
-    // 實務上建議在 index.html 做一個漂亮的 Modal，這裡用簡單的 UI 生成代替
-    
-    // 建立臨時的選擇 Modal
     const modalId = 'solo-mode-selector';
     let modal = document.getElementById(modalId);
     
@@ -1955,79 +1816,301 @@ window.openSoloModeSelector = async () => {
         modal.id = modalId;
         modal.className = "fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm hidden";
         modal.innerHTML = `
-            <div class="bg-slate-800 p-6 rounded-2xl border-2 border-slate-600 shadow-2xl max-w-sm w-full mx-4 relative overflow-hidden">
+            <div class="bg-slate-800 p-6 rounded-2xl border-2 border-slate-600 shadow-2xl max-w-2xl w-full mx-4 relative overflow-hidden">
                 <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500 to-purple-500"></div>
-                <h3 class="text-xl font-bold text-white mb-4 text-center">⚔️ 選擇挑戰模式</h3>
+                <h3 class="text-xl font-bold text-white mb-6 text-center">⚔️ 準備挑戰</h3>
                 
-                <div class="space-y-3">
-                    <button onclick="startSoloMode('infinite')" class="w-full p-4 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 border border-cyan-400/30 group transition-all relative overflow-hidden">
-                        <div class="flex items-center justify-between relative z-10">
-                            <div class="text-left">
-                                <div class="font-bold text-white text-lg"><i class="fa-solid fa-infinity"></i> 無限模式</div>
-                                <div class="text-xs text-cyan-200 mt-1">每題 +20 金幣，無止盡練功</div>
-                            </div>
-                            <div class="text-2xl opacity-50 group-hover:scale-110 transition">∞</div>
-                        </div>
-                    </button>
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="flex-1 space-y-3">
+                        <div class="text-xs text-gray-400 font-bold mb-2 uppercase tracking-widest">1. 選擇模式</div>
+                        <button onclick="startSoloMode('infinite')" class="w-full p-4 rounded-xl bg-gradient-to-r from-blue-600/20 to-cyan-600/20 hover:from-blue-600/40 hover:to-cyan-600/40 border border-cyan-400/30 group transition-all text-left">
+                            <div class="font-bold text-white"><i class="fa-solid fa-infinity"></i> 無限模式</div>
+                            <div class="text-[10px] text-cyan-200 mt-1">每題 +20 積分，無盡練功</div>
+                        </button>
 
-                    <button onclick="startSoloMode('challenge')" class="w-full p-4 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 border border-pink-400/30 group transition-all relative overflow-hidden">
-                        <div class="flex items-center justify-between relative z-10">
-                            <div class="text-left">
-                                <div class="font-bold text-white text-lg"><i class="fa-solid fa-trophy"></i> 挑戰模式</div>
-                                <div class="text-xs text-pink-200 mt-1">基礎 10 題，錯題追加！<br>通關獎勵 200 金幣</div>
-                            </div>
-                            <div class="text-2xl opacity-50 group-hover:scale-110 transition">🎯</div>
+                        <button onclick="startSoloMode('challenge')" class="w-full p-4 rounded-xl bg-gradient-to-r from-purple-600/20 to-pink-600/20 hover:from-purple-500/40 hover:to-pink-500/40 border border-pink-400/30 group transition-all text-left">
+                            <div class="font-bold text-white"><i class="fa-solid fa-trophy"></i> 挑戰模式</div>
+                            <div class="text-[10px] text-pink-200 mt-1">10題挑戰，錯題追加！獎勵 200 分</div>
+                        </button>
+                    </div>
+
+                    <div class="flex-1 border-l border-white/10 pl-0 md:pl-6">
+                        <div class="text-xs text-yellow-500 font-bold mb-2 uppercase tracking-widest">2. 指定出題單元</div>
+                        <div id="solo-unit-selectors-container" class="space-y-2">
+                            <div class="text-center py-4 text-gray-500 text-xs">載入單元資料中...</div>
                         </div>
-                    </button>
+                        <p id="solo-unit-hint" class="text-[10px] text-gray-500 mt-2 font-mono italic">請選擇學科與進度</p>
+                    </div>
                 </div>
 
-                <button onclick="document.getElementById('${modalId}').classList.add('hidden')" class="mt-4 w-full py-2 text-gray-400 hover:text-white text-sm">取消</button>
+                <div class="mt-6 pt-4 border-t border-white/5 flex justify-end">
+                    <button onclick="document.getElementById('${modalId}').classList.add('hidden')" class="px-6 py-2 text-gray-400 hover:text-white text-sm transition">取消</button>
+                </div>
             </div>
         `;
         document.body.appendChild(modal);
     }
     
     modal.classList.remove('hidden');
+
+    try {
+        const res = await fetch('/api/units');
+        const data = await res.json();
+        if (data.files && Array.isArray(data.files)) {
+            const tree = buildPathTree(data.files);
+            renderSoloUnitSelectors(tree, "");
+        }
+    } catch (e) {
+        console.error("Failed to load units", e);
+        document.getElementById('solo-unit-selectors-container').innerHTML = '<div class="text-red-400 text-xs">無法讀取單元資料</div>';
+    }
 };
 
-// 2. 實際啟動函式
+//🔥 新增：單人模式專用遞迴選單
+window.renderSoloUnitSelectors = (tree, currentPath) => {
+    const container = document.getElementById('solo-unit-selectors-container');
+    const hint = document.getElementById('solo-unit-hint');
+    if (!container) return;
+    
+    container.innerHTML = ''; 
+    let selectedParts = currentPath ? currentPath.split('/') : [];
+
+    const createSelect = (level, currentNode) => {
+        const select = document.createElement('select');
+        select.className = "w-full bg-slate-900/50 border border-slate-600 text-white rounded-lg p-2 text-xs outline-none focus:border-cyan-500 transition-all cursor-pointer mb-2";
+        
+        const defaultOpt = document.createElement('option');
+        defaultOpt.value = "";
+        defaultOpt.innerText = level === 0 ? "-- 選擇學科 --" : "-- 選擇學期/章節 --";
+        defaultOpt.disabled = true;
+        if (!selectedParts[level]) defaultOpt.selected = true;
+        select.appendChild(defaultOpt);
+
+        const keys = Object.keys(currentNode.children);
+        keys.forEach(key => {
+            const opt = document.createElement('option');
+            opt.value = key;
+            opt.innerText = key;
+            if (selectedParts[level] === key) opt.selected = true;
+            select.appendChild(opt);
+        });
+
+        select.onchange = (e) => {
+            const val = e.target.value;
+            const newParts = selectedParts.slice(0, level);
+            newParts.push(val);
+            const newPath = newParts.join('/');
+            
+            soloSelectedUnitPath = newPath;
+            hint.innerText = `✅ 已鎖定：${newPath}`;
+            hint.className = "text-[10px] text-cyan-400 mt-2 font-mono";
+            
+            renderSoloUnitSelectors(tree, newPath);
+        };
+
+        container.appendChild(select);
+
+        const currentVal = selectedParts[level];
+        if (currentVal && currentNode.children[currentVal]) {
+            createSelect(level + 1, currentNode.children[currentVal]);
+        }
+    };
+    createSelect(0, tree);
+};
+
+//🔥 修改：startSoloMode，確保有選擇單元路徑
 window.startSoloMode = (mode) => {
-    // 隱藏選擇視窗
+    if (!soloSelectedUnitPath) {
+        alert("請先在右側選擇要挑戰的單元！");
+        return;
+    }
+
     const modal = document.getElementById('solo-mode-selector');
     if(modal) modal.classList.add('hidden');
 
-    // 初始化 Session 狀態
     soloSession = {
         active: true,
-        mode: mode, // 'infinite' 或 'challenge'
+        mode: mode,
         currentStep: 1,
-        maxSteps: mode === 'challenge' ? 10 : 9999, // 無限模式設為無限大
+        maxSteps: mode === 'challenge' ? 10 : 9999,
         correctCount: 0,
         wrongCount: 0,
-        history: [] 
+        history: [],
+        unitPath: soloSelectedUnitPath // 🔥 存入選定的單元路徑
     };
 
-    console.log(`🚀 Starting Solo: ${mode.toUpperCase()} Mode`);
-    
-    // 更新 UI 顯示 (隱藏/顯示進度面板)
     const progressPanel = document.getElementById('solo-progress-panel');
     if (progressPanel) {
         if (mode === 'challenge') {
             progressPanel.classList.remove('hidden');
-            // 重置面板文字
             document.getElementById('solo-current-step').innerText = 1;
-            // 這裡假設 HTML 結構中有顯示總題數的地方，例如 <span id="solo-max-steps">10</span>
             const maxEl = document.getElementById('solo-max-steps'); 
             if(maxEl) maxEl.innerText = 10; 
         } else {
-            // 無限模式可以隱藏進度條，或顯示「已答 X 題」
             progressPanel.classList.add('hidden'); 
         }
     }
 
-    // 開始出題
-    window.startQuizFlow(true); // 傳入 true 表示是新開始
+    window.startQuizFlow(true);
 };
+
+//🔥 修改：fetchOneQuestion，整合單元出題與弱點難度邏輯
+async function fetchOneQuestion() {
+    const settings = currentUserData.gameSettings || { source: 'ai', difficulty: 'medium' };
+    const rankName = getRankName(currentUserData.stats.rankLevel || 0);
+
+    // ==========================================
+    // 🧠 模式 A: 單人挑戰模式 (基於單元與弱點邏輯)
+    // ==========================================
+    if (soloSession.active && soloSession.unitPath) {
+        const parts = soloSession.unitPath.split('/');
+        const subject = parts[0]; // 取得第一層科目 (例如: 公民)
+        const unitDetail = soloSession.unitPath; // 完整路徑 (例如: 公民/七上/自我與生命價值)
+
+        // 判斷難度：如果是弱點科目考 easy，否則考 hard
+        const weakSubjects = currentUserData.profile.weakSubjects || "";
+        let finalDifficulty = "hard";
+        if (weakSubjects.includes(subject)) {
+            finalDifficulty = "easy";
+        }
+
+        const BACKEND_URL = "/api/generate-quiz";
+        const response = await fetch(BACKEND_URL, {
+            method: "POST", 
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                subject: subject, 
+                specificTopic: unitDetail, 
+                level: currentUserData.profile.educationLevel || "General", 
+                rank: rankName, 
+                difficulty: finalDifficulty,
+                language: currentLang,
+                knowledgeMap: currentUserData.stats.knowledgeMap || {} 
+            })
+        });
+
+        if (!response.ok) throw new Error(`Server Error: ${response.status}`);
+        
+        const data = await response.json();
+        let aiText = data.text;
+        const jsonMatch = aiText.match(/\{[\s\S]*\}/);
+        if (jsonMatch) aiText = jsonMatch[0];
+        const rawData = JSON.parse(aiText);
+
+        let allOptions = [rawData.correct, ...rawData.wrong];
+        allOptions = shuffleArray(allOptions);
+        const correctIndex = allOptions.indexOf(rawData.correct);
+
+        localStorage.setItem('currentQuizData', JSON.stringify({
+            subject: rawData.subject || subject,
+            sub_topic: rawData.sub_topic || unitDetail
+        }));
+
+        return {
+            data: { q: rawData.q, opts: allOptions, ans: correctIndex, exp: rawData.exp },
+            rank: rankName,
+            badge: `🎯 ${subject} | ${finalDifficulty === 'easy' ? '基礎' : '進階'}`
+        };
+    }
+
+    // ==========================================
+    // 模式 B: 一般模式 (AI 或 題庫)
+    // ==========================================
+    let finalDifficulty = settings.difficulty;
+    if (!finalDifficulty || finalDifficulty === 'auto') {
+        finalDifficulty = getSmartDifficulty();
+    }
+
+    if (settings.source === 'ai') {
+        const BACKEND_URL = "/api/generate-quiz";
+        const allSubjects = ["國文", "英文", "數學", "公民", "歷史", "地理", "物理", "化學", "生物"];
+        let targetSubject = allSubjects[Math.floor(Math.random() * allSubjects.length)];
+        
+        const response = await fetch(BACKEND_URL, {
+            method: "POST", 
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                subject: targetSubject, 
+                level: currentUserData.profile.educationLevel || "General", 
+                rank: rankName, 
+                difficulty: finalDifficulty,
+                language: currentLang,
+                knowledgeMap: currentUserData.stats.knowledgeMap || {} 
+            })
+        });
+
+        if (!response.ok) throw new Error(`Server Error: ${response.status}`);
+        const data = await response.json();
+        let aiText = data.text;
+        const jsonMatch = aiText.match(/\{[\s\S]*\}/);
+        if (jsonMatch) aiText = jsonMatch[0];
+        const rawData = JSON.parse(aiText);
+
+        let allOptions = [rawData.correct, ...rawData.wrong];
+        allOptions = shuffleArray(allOptions);
+        const correctIndex = allOptions.indexOf(rawData.correct);
+
+        localStorage.setItem('currentQuizData', JSON.stringify({
+            subject: rawData.subject || targetSubject,
+            sub_topic: rawData.sub_topic || "綜合"
+        }));
+
+        return {
+            data: { q: rawData.q, opts: allOptions, ans: correctIndex, exp: rawData.exp },
+            rank: rankName,
+            badge: `🎯 ${rawData.subject} | ${rawData.sub_topic || '綜合'}`
+        };
+    } else {
+        // 題庫模式
+        let targetSource = settings.source; 
+        if (!currentBankData || currentBankData.sourcePath !== targetSource) {
+            let filesToFetch = [];
+            if (targetSource.endsWith('.json')) { 
+                filesToFetch = [targetSource]; 
+            } else {
+                if (allBankFiles.length === 0) {
+                    try { 
+                        const res = await fetch('/api/banks'); 
+                        const data = await res.json(); 
+                        allBankFiles = data.files || []; 
+                    } catch (e) { console.error(e); }
+                }
+                filesToFetch = allBankFiles.filter(f => f.startsWith(targetSource + '/'));
+                if (filesToFetch.length === 0) return switchToAI();
+            }
+
+            try {
+                const fetchPromises = filesToFetch.map(filePath => 
+                    fetch(`/banks/${filePath}?t=${Date.now()}`)
+                        .then(res => { if (!res.ok) throw new Error(); return res.json(); })
+                        .catch(err => [])
+                );
+                const results = await Promise.all(fetchPromises);
+                const mergedQuestions = results.flat();
+                if (mergedQuestions.length === 0) throw new Error("No questions");
+                currentBankData = { sourcePath: targetSource, questions: mergedQuestions };
+            } catch (e) { 
+                console.error("Bank Error:", e); 
+                return switchToAI(); 
+            }
+        }
+
+        const filteredQuestions = currentBankData.questions.filter(q => q.difficulty === finalDifficulty);
+        const pool = filteredQuestions.length > 0 ? filteredQuestions : currentBankData.questions;
+        if (pool.length === 0) throw new Error("Pool empty!");
+        
+        const rawData = pool[Math.floor(Math.random() * pool.length)];
+        let allOptions = shuffleArray([rawData.correct, ...rawData.wrong]);
+        const correctIndex = allOptions.indexOf(rawData.correct);
+        let displaySubject = rawData.subject || settings.source.split('/').pop().replace('.json', '');
+        
+        return { 
+            data: { q: rawData.q, opts: allOptions, ans: correctIndex, exp: rawData.exp }, 
+            rank: rankName, 
+            badge: `🎯 ${displaySubject} | ${finalDifficulty.toUpperCase()}` 
+        };
+    }
+}
 
 /// 🔥 修改：在進入下一題前才清除舊題目，確保 startQuizFlow 能抓到新題目
 window.nextQuestion = () => { 
