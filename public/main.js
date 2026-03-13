@@ -1866,7 +1866,6 @@ window.openSoloModeSelector = async () => {
     }
 };
 
-JavaScript
 // 🔥 main.js 修正：支援讀取 JSON 內容的遞迴選單
 let soloSelectedUnitDetail = ""; // 儲存具體的單元名稱 (如：自我與生命價值)
 
