@@ -1734,6 +1734,7 @@ async function fillBuffer() {
 // ==========================================
 //  Quiz UI Logic
 // ==========================================
+//🔥 移除了 localStorage 讀取機制的 startQuizFlow
 window.startQuizFlow = async (isNewSession = false) => {
     // 如果不是透過 startSoloMode 進來的，且目前沒有 active session，預設為無限模式 (或跳出選擇)
     if (!soloSession.active && !isNewSession) {
@@ -1769,18 +1770,12 @@ window.startQuizFlow = async (isNewSession = false) => {
 
     window.quizStartTime = Date.now(); 
 
-    // --- 出題邏輯 (保持不變) ---
-    const savedQuiz = localStorage.getItem('currentQuiz');
-    if (savedQuiz) { 
-        const q = JSON.parse(savedQuiz); 
-        renderQuiz(q.data, q.rank, q.badge); 
-        fillBuffer(); 
-        return; 
-    }
-    
+    // 🔥 刪除了原本讀取 localStorage.getItem('currentQuiz') 的行為，
+    // 確保玩家每次刷新或重啟都會產生/抽取全新的題目！
+
     if (quizBuffer.length > 0) { 
         const nextQ = quizBuffer.shift(); 
-        localStorage.setItem('currentQuiz', JSON.stringify(nextQ)); 
+        window.currentActiveQuiz = nextQ; // 供回報系統使用
         renderQuiz(nextQ.data, nextQ.rank, nextQ.badge); 
         fillBuffer(); 
     } else {
@@ -1788,7 +1783,7 @@ window.startQuizFlow = async (isNewSession = false) => {
         document.getElementById('loading-text').innerText = t('loading_text');
         try { 
             const q = await fetchOneQuestion(); 
-            localStorage.setItem('currentQuiz', JSON.stringify(q)); 
+            window.currentActiveQuiz = q; // 供回報系統使用
             renderQuiz(q.data, q.rank, q.badge); 
             fillBuffer(); 
         } catch (e) { 
