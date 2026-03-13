@@ -2492,8 +2492,8 @@ window.submitReport = async () => {
     document.getElementById('report-loading-view').classList.remove('hidden');
     document.getElementById('report-loading-view').style.display = 'flex';
 
-    // 取得當前題目資訊
-    const currentQData = JSON.parse(localStorage.getItem('currentQuiz') || '{}');
+    // 取得當前題目資訊 (由記憶體變數取得)
+    const currentQData = window.currentActiveQuiz;
     if (!currentQData || !currentQData.data) {
         alert("找不到題目資料");
         closeReportModal();
@@ -2546,9 +2546,8 @@ window.submitReport = async () => {
             btn.onclick = () => {
                 closeReportModal();
                 
-                // 🔥 關鍵修正：必須先清除當前題目緩存，否則 startQuizFlow 會重新載入同一題
-                localStorage.removeItem('currentQuiz'); 
-                
+                // 清除暫存
+                window.currentActiveQuiz = null; 
                 fillBuffer(); 
                 
                 // 稍微延遲執行，讓彈窗關閉動畫順暢
