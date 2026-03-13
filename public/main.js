@@ -1999,63 +1999,72 @@ window.startSoloMode = (mode) => {
     window.startQuizFlow(true);
 };
 
-//🔥 修改：fetchOneQuestion，整合單元出題與弱點難度邏輯
+//🔥 完整的 fetchOneQuestion 函式
 async function fetchOneQuestion() {
     const settings = currentUserData.gameSettings || { source: 'ai', difficulty: 'medium' };
     const rankName = getRankName(currentUserData.stats.rankLevel || 0);
 
     // ==========================================
-    // 🧠 模式 A: 單人挑戰模式 (基於單元與弱點邏輯)
+    // 🧠 模式 A: 單人挑戰模式 (選定單元 + 弱點難度邏輯)
     // ==========================================
     if (soloSession.active && soloSession.unitPath) {
+        // 1. 決定科目與具體單元
         const parts = soloSession.unitPath.split('/');
-        const subject = parts[0]; // 取得第一層科目 (例如: 公民)
-        const unitDetail = soloSession.unitPath; // 完整路徑 (例如: 公民/七上/自我與生命價值)
+        const subject = parts[0]; 
+        const targetTopic = window.soloSelectedUnitDetail || soloSession.unitPath;
 
-        // 判斷難度：如果是弱點科目考 easy，否則考 hard
-        const weakSubjects = currentUserData.profile.weakSubjects || "";
-        let finalDifficulty = "hard";
-        if (weakSubjects.includes(subject)) {
-            finalDifficulty = "easy";
+        // 2. 弱點邏輯：如果是弱點科目考 easy (基礎)，否則考 hard (難)
+        const weakSubjects = (currentUserData.profile.weakSubjects || "").split(',').map(s => s.trim());
+        const isWeak = weakSubjects.includes(subject);
+        let finalDifficulty = isWeak ? "easy" : "hard";
+
+        // 在 Debugger 輸出狀態，方便除錯
+        console.log(`[Solo-Gen] 模式: ${soloSession.mode}, 科目: ${subject}, 單元: ${targetTopic}, 難度: ${finalDifficulty}`);
+
+        try {
+            const BACKEND_URL = "/api/generate-quiz";
+            const response = await fetch(BACKEND_URL, {
+                method: "POST", 
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    subject: subject, 
+                    specificTopic: targetTopic, 
+                    level: currentUserData.profile.educationLevel || "General", 
+                    rank: rankName, 
+                    difficulty: finalDifficulty,
+                    language: currentLang,
+                    knowledgeMap: currentUserData.stats.knowledgeMap || {} 
+                })
+            });
+
+            if (!response.ok) throw new Error(`Server Error: ${response.status}`);
+            
+            const data = await response.json();
+            let aiText = data.text;
+            const jsonMatch = aiText.match(/\{[\s\S]*\}/);
+            if (jsonMatch) aiText = jsonMatch[0];
+            const rawData = JSON.parse(aiText);
+
+            let allOptions = [rawData.correct, ...rawData.wrong];
+            allOptions = shuffleArray(allOptions);
+            const correctIndex = allOptions.indexOf(rawData.correct);
+
+            // 存儲目前題目資訊供回報問題使用
+            localStorage.setItem('currentQuizData', JSON.stringify({
+                subject: rawData.subject || subject,
+                sub_topic: rawData.sub_topic || targetTopic
+            }));
+
+            return {
+                data: { q: rawData.q, opts: allOptions, ans: correctIndex, exp: rawData.exp },
+                rank: rankName,
+                // Badge 根據難度邏輯動態顯示
+                badge: `🎯 ${subject} | ${finalDifficulty === 'easy' ? '基礎強化' : '進階挑戰'}`
+            };
+        } catch (e) {
+            console.error("[Fetch-Solo-Error] 單人模式生成失敗:", e);
+            throw e;
         }
-
-        const BACKEND_URL = "/api/generate-quiz";
-        const response = await fetch(BACKEND_URL, {
-            method: "POST", 
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                subject: subject, 
-                specificTopic: unitDetail, 
-                level: currentUserData.profile.educationLevel || "General", 
-                rank: rankName, 
-                difficulty: finalDifficulty,
-                language: currentLang,
-                knowledgeMap: currentUserData.stats.knowledgeMap || {} 
-            })
-        });
-
-        if (!response.ok) throw new Error(`Server Error: ${response.status}`);
-        
-        const data = await response.json();
-        let aiText = data.text;
-        const jsonMatch = aiText.match(/\{[\s\S]*\}/);
-        if (jsonMatch) aiText = jsonMatch[0];
-        const rawData = JSON.parse(aiText);
-
-        let allOptions = [rawData.correct, ...rawData.wrong];
-        allOptions = shuffleArray(allOptions);
-        const correctIndex = allOptions.indexOf(rawData.correct);
-
-        localStorage.setItem('currentQuizData', JSON.stringify({
-            subject: rawData.subject || subject,
-            sub_topic: rawData.sub_topic || unitDetail
-        }));
-
-        return {
-            data: { q: rawData.q, opts: allOptions, ans: correctIndex, exp: rawData.exp },
-            rank: rankName,
-            badge: `🎯 ${subject} | ${finalDifficulty === 'easy' ? '基礎' : '進階'}`
-        };
     }
 
     // ==========================================
@@ -2071,40 +2080,44 @@ async function fetchOneQuestion() {
         const allSubjects = ["國文", "英文", "數學", "公民", "歷史", "地理", "物理", "化學", "生物"];
         let targetSubject = allSubjects[Math.floor(Math.random() * allSubjects.length)];
         
-        const response = await fetch(BACKEND_URL, {
-            method: "POST", 
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                subject: targetSubject, 
-                level: currentUserData.profile.educationLevel || "General", 
-                rank: rankName, 
-                difficulty: finalDifficulty,
-                language: currentLang,
-                knowledgeMap: currentUserData.stats.knowledgeMap || {} 
-            })
-        });
+        try {
+            const response = await fetch(BACKEND_URL, {
+                method: "POST", 
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    subject: targetSubject, 
+                    level: currentUserData.profile.educationLevel || "General", 
+                    rank: rankName, 
+                    difficulty: finalDifficulty,
+                    language: currentLang,
+                    knowledgeMap: currentUserData.stats.knowledgeMap || {} 
+                })
+            });
 
-        if (!response.ok) throw new Error(`Server Error: ${response.status}`);
-        const data = await response.json();
-        let aiText = data.text;
-        const jsonMatch = aiText.match(/\{[\s\S]*\}/);
-        if (jsonMatch) aiText = jsonMatch[0];
-        const rawData = JSON.parse(aiText);
+            if (!response.ok) throw new Error(`Server Error: ${response.status}`);
+            const data = await response.json();
+            let aiText = data.text;
+            const jsonMatch = aiText.match(/\{[\s\S]*\}/);
+            if (jsonMatch) aiText = jsonMatch[0];
+            const rawData = JSON.parse(aiText);
 
-        let allOptions = [rawData.correct, ...rawData.wrong];
-        allOptions = shuffleArray(allOptions);
-        const correctIndex = allOptions.indexOf(rawData.correct);
+            let allOptions = shuffleArray([rawData.correct, ...rawData.wrong]);
+            const correctIndex = allOptions.indexOf(rawData.correct);
 
-        localStorage.setItem('currentQuizData', JSON.stringify({
-            subject: rawData.subject || targetSubject,
-            sub_topic: rawData.sub_topic || "綜合"
-        }));
+            localStorage.setItem('currentQuizData', JSON.stringify({
+                subject: rawData.subject || targetSubject,
+                sub_topic: rawData.sub_topic || "綜合"
+            }));
 
-        return {
-            data: { q: rawData.q, opts: allOptions, ans: correctIndex, exp: rawData.exp },
-            rank: rankName,
-            badge: `🎯 ${rawData.subject} | ${rawData.sub_topic || '綜合'}`
-        };
+            return {
+                data: { q: rawData.q, opts: allOptions, ans: correctIndex, exp: rawData.exp },
+                rank: rankName,
+                badge: `🎯 ${rawData.subject} | ${rawData.sub_topic || '綜合'}`
+            };
+        } catch (e) {
+            console.error("[Fetch-AI-Error] AI 一般模式生成失敗:", e);
+            throw e;
+        }
     } else {
         // 題庫模式
         let targetSource = settings.source; 
@@ -2135,15 +2148,13 @@ async function fetchOneQuestion() {
                 if (mergedQuestions.length === 0) throw new Error("No questions");
                 currentBankData = { sourcePath: targetSource, questions: mergedQuestions };
             } catch (e) { 
-                console.error("Bank Error:", e); 
+                console.error("[Fetch-Bank-Error] 題庫讀取失敗:", e); 
                 return switchToAI(); 
             }
         }
 
         const filteredQuestions = currentBankData.questions.filter(q => q.difficulty === finalDifficulty);
         const pool = filteredQuestions.length > 0 ? filteredQuestions : currentBankData.questions;
-        if (pool.length === 0) throw new Error("Pool empty!");
-        
         const rawData = pool[Math.floor(Math.random() * pool.length)];
         let allOptions = shuffleArray([rawData.correct, ...rawData.wrong]);
         const correctIndex = allOptions.indexOf(rawData.correct);
