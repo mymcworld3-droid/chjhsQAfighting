@@ -316,6 +316,40 @@ app.post('/api/verify-report', async (req, res) => {
     }
 });
 
+// ==========================================
+// API 5: 取得中學單元列表 (遞迴讀取)
+// ==========================================
+app.get('/api/units', (req, res) => {
+    const unitsDir = path.join(__dirname, 'public', 'middle_school_unit_name');
+
+    if (!fs.existsSync(unitsDir)) {
+        fs.mkdirSync(unitsDir, { recursive: true });
+    }
+
+    const getFilesRecursively = (dir, fileList = [], rootDir = unitsDir) => {
+        const files = fs.readdirSync(dir);
+        files.forEach(file => {
+            const filePath = path.join(dir, file);
+            const stat = fs.statSync(filePath);
+            if (stat.isDirectory()) {
+                getFilesRecursively(filePath, fileList, rootDir);
+            } else {
+                // 讀取所有檔案，不限 JSON
+                const relativePath = path.relative(rootDir, filePath).split(path.sep).join('/');
+                fileList.push(relativePath);
+            }
+        });
+        return fileList;
+    };
+
+    try {
+        const allFiles = getFilesRecursively(unitsDir);
+        res.json({ files: allFiles });
+    } catch (e) {
+        console.error("讀取單元資料失敗:", e);
+        res.json({ files: [] });
+    }
+});
 // [已刪除] /api/generate-image 路由已移除，節省費用
 
 app.listen(port, () => {
