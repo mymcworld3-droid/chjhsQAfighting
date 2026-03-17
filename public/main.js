@@ -1798,11 +1798,21 @@ window.startQuizFlow = async (isNewSession = false) => {
 // 🆕 單人模式選擇與啟動邏輯
 // ==========================================
 
-//🔥 全域變數新增
-let soloSelectedUnitPath = ""; 
+// ==========================================
+// 🆕 單人模式選擇與啟動邏輯 (支援複選與資料夾)
+// ==========================================
 
-//🔥 修改：單人模式選擇器，加入單元選單與遞迴邏輯
+//🔥 全域變數新增：儲存已選清單與目前正在瀏覽的項目
+window.soloSelectedUnits = []; 
+window.currentBrowsingUnit = null; 
+window.soloSelectedUnitDetail = ""; 
+
+//🔥 修改：單人模式選擇器，加入清單 UI 與加入按鈕
 window.openSoloModeSelector = async () => {
+    // 初始化全域陣列防呆
+    if (!window.soloSelectedUnits) window.soloSelectedUnits = [];
+    window.currentBrowsingUnit = null;
+
     const modalId = 'solo-mode-selector';
     let modal = document.getElementById(modalId);
     
@@ -1830,11 +1840,24 @@ window.openSoloModeSelector = async () => {
                     </div>
 
                     <div class="flex-1 border-l border-white/10 pl-0 md:pl-6">
-                        <div class="text-xs text-yellow-500 font-bold mb-2 uppercase tracking-widest">2. 指定出題單元</div>
+                        <div class="text-xs text-yellow-500 font-bold mb-2 uppercase tracking-widest">2. 指定出題單元 (可複選)</div>
                         <div id="solo-unit-selectors-container" class="space-y-2">
                             <div class="text-center py-4 text-gray-500 text-xs">載入單元資料中...</div>
                         </div>
-                        <p id="solo-unit-hint" class="text-[10px] text-gray-500 mt-2 font-mono italic">請選擇學科與進度</p>
+                        
+                        <div class="flex items-center justify-between mt-2 h-6">
+                            <p id="solo-unit-hint" class="text-[10px] text-gray-500 font-mono italic">請選擇學科與進度</p>
+                            <button onclick="addCurrentUnitToSelection()" id="btn-add-unit" class="hidden bg-cyan-600 hover:bg-cyan-500 text-white text-[10px] font-bold px-3 py-1 rounded shadow transition-all active:scale-95">
+                                <i class="fa-solid fa-plus"></i> 加入
+                            </button>
+                        </div>
+
+                        <div class="mt-4 pt-3 border-t border-white/10">
+                            <div class="text-xs text-green-400 font-bold mb-2">已選清單：</div>
+                            <div id="solo-selected-units-list" class="max-h-[85px] overflow-y-auto custom-scrollbar pr-1">
+                                <div class="text-[10px] text-gray-500 text-center py-2">尚未選擇任何單元</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -1847,6 +1870,7 @@ window.openSoloModeSelector = async () => {
     }
     
     modal.classList.remove('hidden');
+    window.renderSelectedUnitsList(); // 每次打開渲染目前的清單
 
     try {
         const res = await fetch('/api/units');
@@ -1861,13 +1885,11 @@ window.openSoloModeSelector = async () => {
     }
 };
 
-// 🔥 main.js 修正：支援讀取 JSON 內容的遞迴選單
-let soloSelectedUnitDetail = ""; // 儲存具體的單元名稱 (如：自我與生命價值)
-
-//🔥 修正：遞迴選單，支援讀取 JSON 內的單元並記錄其知識點 (sub_topics)
+//🔥 修正：遞迴選單，更新目前瀏覽節點狀態 (支援選擇整個資料夾)
 window.renderSoloUnitSelectors = async (tree, currentPath) => {
     const container = document.getElementById('solo-unit-selectors-container');
     const hint = document.getElementById('solo-unit-hint');
+    const btnAdd = document.getElementById('btn-add-unit');
     if (!container) return;
     
     container.innerHTML = ''; 
@@ -1875,7 +1897,7 @@ window.renderSoloUnitSelectors = async (tree, currentPath) => {
 
     const createSelect = async (level, currentNode) => {
         const select = document.createElement('select');
-        select.className = "w-full bg-slate-900/50 border border-slate-600 text-white rounded-lg p-2 text-xs outline-none focus:border-cyan-500 mb-2";
+        select.className = "w-full bg-slate-900/50 border border-slate-600 text-white rounded-lg p-2 text-xs outline-none focus:border-cyan-500 mb-2 cursor-pointer";
         
         const defaultOpt = document.createElement('option');
         defaultOpt.value = "";
@@ -1896,10 +1918,16 @@ window.renderSoloUnitSelectors = async (tree, currentPath) => {
             const val = e.target.value;
             const newParts = selectedParts.slice(0, level);
             newParts.push(val);
-            soloSelectedUnitPath = newParts.join('/');
-            window.soloSelectedUnitDetail = ""; // 切換檔案時重置單元
-            window.soloSelectedUnitSubTopics = []; // 重置知識點
-            renderSoloUnitSelectors(tree, soloSelectedUnitPath);
+            const newPath = newParts.join('/');
+            
+            window.soloSelectedUnitDetail = ""; // 重置細項
+            window.currentBrowsingUnit = { path: newPath, detail: "", sub_topics: [] }; // 設定當前為此目錄
+            
+            hint.innerText = `✅ 目錄：${newPath.replace('.json', '')}`;
+            hint.className = "text-[10px] text-cyan-400 font-mono truncate max-w-[200px] inline-block";
+            btnAdd.classList.remove('hidden');
+
+            renderSoloUnitSelectors(tree, newPath);
         };
         container.appendChild(select);
 
@@ -1914,7 +1942,6 @@ window.renderSoloUnitSelectors = async (tree, currentPath) => {
         }
     };
 
-    // 渲染 JSON 檔案內部的具體單元
     async function renderInnerUnitSelect(filePath) {
         try {
             const res = await fetch(`/middle_school_unit_name/${filePath}`);
@@ -1922,10 +1949,10 @@ window.renderSoloUnitSelectors = async (tree, currentPath) => {
             const units = await res.json();
 
             const select = document.createElement('select');
-            select.className = "w-full bg-slate-900/50 border border-cyan-500/50 text-cyan-200 rounded-lg p-2 text-xs outline-none mb-2 animate-pulse";
+            select.className = "w-full bg-slate-900/50 border border-cyan-500/50 text-cyan-200 rounded-lg p-2 text-xs outline-none mb-2 animate-pulse cursor-pointer";
             const defaultOpt = document.createElement('option');
             defaultOpt.value = "";
-            defaultOpt.innerText = "-- 選擇具體單元 --";
+            defaultOpt.innerText = "-- 選擇具體單元 (選填) --";
             defaultOpt.selected = !window.soloSelectedUnitDetail;
             select.appendChild(defaultOpt);
 
@@ -1933,33 +1960,105 @@ window.renderSoloUnitSelectors = async (tree, currentPath) => {
                 const opt = document.createElement('option');
                 opt.value = u.name;
                 opt.innerText = u.name;
-                if (window.soloSelectedUnitDetail === u.name) {
-                    opt.selected = true;
-                    window.soloSelectedUnitSubTopics = u.sub_topics || []; // 恢復知識點
-                }
+                if (window.soloSelectedUnitDetail === u.name) opt.selected = true;
                 select.appendChild(opt);
             });
 
             select.onchange = (e) => {
-                window.soloSelectedUnitDetail = e.target.value;
-                const selectedUnit = units.find(u => u.name === window.soloSelectedUnitDetail);
-                window.soloSelectedUnitSubTopics = selectedUnit ? (selectedUnit.sub_topics || []) : []; // 🔥 記錄該單元的知識點
-                
-                hint.innerText = `✅ 已選取：${window.soloSelectedUnitDetail}`;
-                hint.className = "text-[10px] text-green-400 mt-2 font-mono";
+                const val = e.target.value;
+                if (!val) {
+                    window.soloSelectedUnitDetail = "";
+                    window.currentBrowsingUnit = { path: filePath, detail: "", sub_topics: [] };
+                    hint.innerText = `✅ 目錄：${filePath.replace('.json', '')}`;
+                } else {
+                    window.soloSelectedUnitDetail = val;
+                    const selectedUnit = units.find(u => u.name === val);
+                    window.currentBrowsingUnit = { 
+                        path: filePath, 
+                        detail: val, 
+                        sub_topics: selectedUnit ? (selectedUnit.sub_topics || []) : [] 
+                    };
+                    hint.innerText = `✅ 單元：${val}`;
+                }
+                hint.className = "text-[10px] text-green-400 font-mono truncate max-w-[200px] inline-block";
+                btnAdd.classList.remove('hidden');
             };
             container.appendChild(select);
         } catch (e) {
-            console.error("[JSON-Error] 讀取單元內容失敗:", e);
+            console.error("[JSON-Error]", e);
         }
     }
     await createSelect(0, tree);
 };
 
-//🔥 修改：startSoloMode，確保有選擇單元路徑
+//🔥 新增：加入選定項目至清單
+window.addCurrentUnitToSelection = () => {
+    if (!window.currentBrowsingUnit) return;
+    if (!window.soloSelectedUnits) window.soloSelectedUnits = [];
+    
+    // 檢查是否已存在
+    const exists = window.soloSelectedUnits.some(u => 
+        u.path === window.currentBrowsingUnit.path && 
+        u.detail === window.currentBrowsingUnit.detail
+    );
+    if (exists) {
+        alert("這個單元/目錄已經在清單中了！");
+        return;
+    }
+    
+    window.soloSelectedUnits.push({ ...window.currentBrowsingUnit });
+    window.renderSelectedUnitsList();
+    
+    // 視覺反饋
+    const btn = document.getElementById('btn-add-unit');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<i class="fa-solid fa-check"></i> 成功';
+    btn.classList.add('bg-green-500');
+    setTimeout(() => {
+        btn.innerHTML = originalText;
+        btn.classList.remove('bg-green-500');
+    }, 1000);
+};
+
+//🔥 新增：從清單移除項目
+window.removeSelectedUnit = (index) => {
+    window.soloSelectedUnits.splice(index, 1);
+    window.renderSelectedUnitsList();
+};
+
+//🔥 新增：渲染已選清單 UI
+window.renderSelectedUnitsList = () => {
+    const list = document.getElementById('solo-selected-units-list');
+    if (!list) return;
+    
+    if (!window.soloSelectedUnits || window.soloSelectedUnits.length === 0) {
+        list.innerHTML = '<div class="text-[10px] text-gray-500 text-center py-2 border border-dashed border-gray-600 rounded">尚未選擇，請在上方選取後點擊「加入」</div>';
+        return;
+    }
+    
+    list.innerHTML = '';
+    window.soloSelectedUnits.forEach((unit, idx) => {
+        const div = document.createElement('div');
+        div.className = "flex justify-between items-center bg-slate-700/60 px-2 py-1.5 rounded border border-slate-600 mb-1 group hover:bg-slate-600 transition-colors";
+        
+        let label = unit.detail 
+            ? `<span class="text-gray-400">[${unit.path.replace('.json', '')}]</span> <span class="text-cyan-200">${unit.detail}</span>` 
+            : `<span class="text-cyan-200">📂 ${unit.path.replace('.json', '')} <span class="text-[9px] text-gray-400">(整個目錄)</span></span>`;
+        
+        div.innerHTML = `
+            <div class="text-[10px] truncate w-[90%]" title="${unit.detail || unit.path}">${label}</div>
+            <button onclick="removeSelectedUnit(${idx})" class="text-gray-500 hover:text-red-400 transition-colors px-1">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        `;
+        list.appendChild(div);
+    });
+};
+
+//🔥 修改：startSoloMode，確保有「已選清單」，並寫入 session
 window.startSoloMode = (mode) => {
-    if (!soloSelectedUnitPath) {
-        alert("請先在右側選擇要挑戰的單元！");
+    if (!window.soloSelectedUnits || window.soloSelectedUnits.length === 0) {
+        alert("請先在右側加入至少一個要挑戰的單元或目錄！");
         return;
     }
 
@@ -1974,7 +2073,7 @@ window.startSoloMode = (mode) => {
         correctCount: 0,
         wrongCount: 0,
         history: [],
-        unitPath: soloSelectedUnitPath // 🔥 存入選定的單元路徑
+        selectedUnits: [...window.soloSelectedUnits] // 🔥 存入複選陣列
     };
 
     const progressPanel = document.getElementById('solo-progress-panel');
@@ -1992,32 +2091,34 @@ window.startSoloMode = (mode) => {
     window.startQuizFlow(true);
 };
 
-//🔥 完整的 fetchOneQuestion 函式 (已加上知識點防呆提示)
+//🔥 修改：fetchOneQuestion，隨機從清單抽取，並且如果是有子單元，強制傳送知識點給 AI
 async function fetchOneQuestion() {
     const settings = currentUserData.gameSettings || { source: 'ai', difficulty: 'medium' };
     const rankName = getRankName(currentUserData.stats.rankLevel || 0);
 
     // ==========================================
-    // 🧠 模式 A: 單人挑戰模式 (選定單元 + 弱點難度邏輯)
+    // 🧠 模式 A: 單人挑戰模式 (複選單元出題)
     // ==========================================
-    if (soloSession.active && soloSession.unitPath) {
-        // 1. 決定科目與具體單元
-        const parts = soloSession.unitPath.split('/');
+    if (soloSession.active && soloSession.selectedUnits && soloSession.selectedUnits.length > 0) {
+        
+        // 1. 從已選清單中隨機抽取一個項目作為本次出題範圍
+        const randomUnit = soloSession.selectedUnits[Math.floor(Math.random() * soloSession.selectedUnits.length)];
+        
+        const parts = randomUnit.path.split('/');
         const subject = parts[0]; 
         
-        // 🔥 將知識點串接進 targetTopic，強制 AI 只考這些內容
-        let targetTopic = window.soloSelectedUnitDetail || soloSession.unitPath;
-        if (window.soloSelectedUnitSubTopics && window.soloSelectedUnitSubTopics.length > 0) {
-            targetTopic += ` (請嚴格限制在此範圍出題。包含知識點：${window.soloSelectedUnitSubTopics.join('、')})`;
+        // 🔥 如果是有子單元，將知識點串接進 targetTopic，強制 AI 只考這些內容
+        let targetTopic = randomUnit.detail || randomUnit.path;
+        if (randomUnit.sub_topics && randomUnit.sub_topics.length > 0) {
+            targetTopic += ` (請嚴格限制在此範圍出題。包含知識點：${randomUnit.sub_topics.join('、')})`;
         }
 
-        // 2. 弱點邏輯：如果是弱點科目考 easy (基礎)，否則考 hard (難)
+        // 2. 弱點邏輯
         const weakSubjects = (currentUserData.profile.weakSubjects || "").split(',').map(s => s.trim());
         const isWeak = weakSubjects.includes(subject);
         let finalDifficulty = isWeak ? "easy" : "hard";
 
-        // 在 Debugger 輸出狀態，方便除錯
-        console.log(`[Solo-Gen] 模式: ${soloSession.mode}, 科目: ${subject}, 單元: ${targetTopic}, 難度: ${finalDifficulty}`);
+        console.log(`[Solo-Gen] 隨機選中: ${randomUnit.detail || randomUnit.path}, 難度: ${finalDifficulty}`);
 
         try {
             const BACKEND_URL = "/api/generate-quiz";
@@ -2047,16 +2148,9 @@ async function fetchOneQuestion() {
             allOptions = shuffleArray(allOptions);
             const correctIndex = allOptions.indexOf(rawData.correct);
 
-            // 存儲目前題目資訊供回報問題使用
-            localStorage.setItem('currentQuizData', JSON.stringify({
-                subject: rawData.subject || subject,
-                sub_topic: rawData.sub_topic || targetTopic
-            }));
-
             return {
                 data: { q: rawData.q, opts: allOptions, ans: correctIndex, exp: rawData.exp },
                 rank: rankName,
-                // Badge 根據難度邏輯動態顯示
                 badge: `🎯 ${subject} | ${finalDifficulty === 'easy' ? '基礎強化' : '進階挑戰'}`
             };
         } catch (e) {
@@ -2101,11 +2195,6 @@ async function fetchOneQuestion() {
 
             let allOptions = shuffleArray([rawData.correct, ...rawData.wrong]);
             const correctIndex = allOptions.indexOf(rawData.correct);
-
-            localStorage.setItem('currentQuizData', JSON.stringify({
-                subject: rawData.subject || targetSubject,
-                sub_topic: rawData.sub_topic || "綜合"
-            }));
 
             return {
                 data: { q: rawData.q, opts: allOptions, ans: correctIndex, exp: rawData.exp },
