@@ -1798,10 +1798,10 @@ window.startQuizFlow = async (isNewSession = false) => {
 // 🆕 單人模式選擇與啟動邏輯
 // ==========================================
 
-//🔥 全域變數新增
+// 🔥 新增：儲存單人模式選定的單元路徑
 let soloSelectedUnitPath = ""; 
 
-//🔥 修改：單人模式選擇器，加入單元選單與遞迴邏輯
+// 🔥 修改：單人模式選擇器，加入單元選單
 window.openSoloModeSelector = async () => {
     const modalId = 'solo-mode-selector';
     let modal = document.getElementById(modalId);
@@ -1848,10 +1848,11 @@ window.openSoloModeSelector = async () => {
     
     modal.classList.remove('hidden');
 
+    // 🔥 加載單元遞回選單
     try {
-        const res = await fetch('/api/units');
+        const res = await fetch('/api/units'); // 假設後端有 /api/units 回傳 middle_school_unit_name 結構
         const data = await res.json();
-        if (data.files && Array.isArray(data.files)) {
+        if (data.files) {
             const tree = buildPathTree(data.files);
             renderSoloUnitSelectors(tree, "");
         }
@@ -1859,6 +1860,59 @@ window.openSoloModeSelector = async () => {
         console.error("Failed to load units", e);
         document.getElementById('solo-unit-selectors-container').innerHTML = '<div class="text-red-400 text-xs">無法讀取單元資料</div>';
     }
+};
+
+// 🔥 新增：專為單人模式設計的遞回選單渲染器
+window.renderSoloUnitSelectors = (tree, currentPath) => {
+    const container = document.getElementById('solo-unit-selectors-container');
+    const hint = document.getElementById('solo-unit-hint');
+    if (!container) return;
+    
+    container.innerHTML = ''; 
+    let selectedParts = currentPath ? currentPath.split('/') : [];
+
+    const createSelect = (level, currentNode) => {
+        const select = document.createElement('select');
+        select.className = "w-full bg-slate-900/50 border border-slate-600 text-white rounded-lg p-2 text-xs outline-none focus:border-cyan-500 transition-all cursor-pointer mb-2";
+        
+        const defaultOpt = document.createElement('option');
+        defaultOpt.value = "";
+        defaultOpt.innerText = level === 0 ? "-- 選擇學科 --" : "-- 選擇學期/章節 --";
+        defaultOpt.disabled = true;
+        if (!selectedParts[level]) defaultOpt.selected = true;
+        select.appendChild(defaultOpt);
+
+        const keys = Object.keys(currentNode.children);
+        keys.forEach(key => {
+            const opt = document.createElement('option');
+            opt.value = key;
+            opt.innerText = key;
+            if (selectedParts[level] === key) opt.selected = true;
+            select.appendChild(opt);
+        });
+
+        select.onchange = (e) => {
+            const val = e.target.value;
+            const newParts = selectedParts.slice(0, level);
+            newParts.push(val);
+            const newPath = newParts.join('/');
+            
+            // 更新全域變數
+            soloSelectedUnitPath = newPath;
+            hint.innerText = `✅ 已鎖定：${newPath}`;
+            hint.className = "text-[10px] text-cyan-400 mt-2 font-mono";
+            
+            renderSoloUnitSelectors(tree, newPath);
+        };
+
+        container.appendChild(select);
+
+        const currentVal = selectedParts[level];
+        if (currentVal && currentNode.children[currentVal]) {
+            createSelect(level + 1, currentNode.children[currentVal]);
+        }
+    };
+    createSelect(0, tree);
 };
 
 // 🔥 main.js 修正：支援讀取 JSON 內容的遞迴選單
