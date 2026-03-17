@@ -1719,144 +1719,6 @@ function getSmartDifficulty() {
 
     return baseDiff;
 }
-// --- 完整 fetchOneQuestion：整合 AI 診斷與題庫模式 ---
-async function fetchOneQuestion() {
-    // 1. 取得設定與段位
-    const settings = currentUserData.gameSettings || { source: 'ai', difficulty: 'medium' };
-    const rankName = getRankName(currentUserData.stats.rankLevel || 0);
-
-    // 2. 智慧難度判斷 (保持原樣)
-    let finalDifficulty = settings.difficulty;
-    if (!finalDifficulty || finalDifficulty === 'auto') {
-        finalDifficulty = getSmartDifficulty();
-    }
-
-    // ==========================================
-    // 模式 A: AI 生成模式 (已支援 9 科)
-    // ==========================================
-    if (settings.source === 'ai') {
-        const BACKEND_URL = "/api/generate-quiz";
-        
-        // 定義 9 大學科
-        const allSubjects = ["國文", "英文", "數學", "公民", "歷史", "地理", "物理", "化學", "生物"];
-        
-        // TODO: 這裡可以加入邏輯，例如 60% 機率出弱項科目
-        // 目前先隨機選一科
-        let targetSubject = allSubjects[Math.floor(Math.random() * allSubjects.length)];
-        
-        // 發送請求給後端
-        const response = await fetch(BACKEND_URL, {
-            method: "POST", 
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                subject: targetSubject, 
-                // specificTopic: "...", // 若要指定子題可傳入，否則後端隨機
-                level: currentUserData.profile.educationLevel || "General", 
-                rank: rankName, 
-                difficulty: finalDifficulty,
-                language: currentLang,
-                knowledgeMap: currentUserData.stats.knowledgeMap || {} 
-            })
-        });
-
-        if (!response.ok) throw new Error(`Server Error: ${response.status}`);
-        
-        const data = await response.json();
-        let aiText = data.text;
-        const jsonMatch = aiText.match(/\{[\s\S]*\}/);
-        if (jsonMatch) aiText = jsonMatch[0];
-        const rawData = JSON.parse(aiText);
-
-        // 隨機打亂選項
-        let allOptions = [rawData.correct, ...rawData.wrong];
-        allOptions = shuffleArray(allOptions);
-        const correctIndex = allOptions.indexOf(rawData.correct);
-
-        // 儲存當前題目資訊 (用於統計)
-        localStorage.setItem('currentQuizData', JSON.stringify({
-            subject: rawData.subject || targetSubject,
-            sub_topic: rawData.sub_topic || "綜合"
-        }));
-
-        return {
-            data: { q: rawData.q, opts: allOptions, ans: correctIndex, exp: rawData.exp },
-            rank: rankName,
-            badge: `🎯 ${rawData.subject} | ${rawData.sub_topic || '綜合'}`
-        };
-    }
-    // ==========================================
-    // 模式 B: 題庫模式 (載入 JSON 檔案)
-    // ==========================================
-    else {
-        let targetSource = settings.source; 
-        
-        // 3.1 如果尚未載入該題庫，或切換了題庫來源
-        if (!currentBankData || currentBankData.sourcePath !== targetSource) {
-            let filesToFetch = [];
-            
-            // 判斷是單檔還是資料夾
-            if (targetSource.endsWith('.json')) { 
-                filesToFetch = [targetSource]; 
-            } else {
-                // 如果是資料夾，先確保檔案列表已載入
-                if (allBankFiles.length === 0) {
-                      try { 
-                          const res = await fetch('/api/banks'); 
-                          const data = await res.json(); 
-                          allBankFiles = data.files || []; 
-                      } catch (e) { console.error(e); }
-                }
-                // 過濾出該資料夾下的所有檔案
-                filesToFetch = allBankFiles.filter(f => f.startsWith(targetSource + '/'));
-                
-                if (filesToFetch.length === 0) { 
-                    console.error("Empty folder:", targetSource); 
-                    return switchToAI(); // 沒題目就切回 AI
-                }
-            }
-
-            // 3.2 下載並合併所有題目
-            try {
-                console.log(`📚 Loading ${filesToFetch.length} files...`);
-                const fetchPromises = filesToFetch.map(filePath => 
-                    fetch(`/banks/${filePath}?t=${Date.now()}`)
-                        .then(res => { if (!res.ok) throw new Error(); return res.json(); })
-                        .catch(err => [])
-                );
-                const results = await Promise.all(fetchPromises);
-                const mergedQuestions = results.flat();
-                
-                if (mergedQuestions.length === 0) throw new Error("No questions");
-                currentBankData = { sourcePath: targetSource, questions: mergedQuestions };
-            } catch (e) { 
-                console.error("Bank Error:", e); 
-                alert("Bank load failed, switching to AI"); 
-                return switchToAI(); 
-            }
-        }
-
-        // 3.3 根據難度過濾題目
-        const filteredQuestions = currentBankData.questions.filter(q => q.difficulty === finalDifficulty);
-        // 如果該難度沒題目，就從全部題目抽
-        const pool = filteredQuestions.length > 0 ? filteredQuestions : currentBankData.questions;
-        
-        if (pool.length === 0) throw new Error("Pool empty!");
-        
-        // 3.4 隨機抽取一題
-        const rawData = pool[Math.floor(Math.random() * pool.length)];
-        let allOptions = shuffleArray([rawData.correct, ...rawData.wrong]);
-        const correctIndex = allOptions.indexOf(rawData.correct);
-        
-        // 顯示科目名稱 (去除 .json 副檔名)
-        let displaySubject = rawData.subject || settings.source.split('/').pop().replace('.json', '');
-        
-        return { 
-            data: { q: rawData.q, opts: allOptions, ans: correctIndex, exp: rawData.exp }, 
-            rank: rankName, 
-            badge: `🎯 ${displaySubject} | ${finalDifficulty.toUpperCase()}` 
-        };
-    }
-}
 
 async function fillBuffer() {
     if (isFetchingBuffer || quizBuffer.length >= BUFFER_SIZE) return;
@@ -1872,6 +1734,7 @@ async function fillBuffer() {
 // ==========================================
 //  Quiz UI Logic
 // ==========================================
+//🔥 移除了 localStorage 讀取機制的 startQuizFlow
 window.startQuizFlow = async (isNewSession = false) => {
     // 如果不是透過 startSoloMode 進來的，且目前沒有 active session，預設為無限模式 (或跳出選擇)
     if (!soloSession.active && !isNewSession) {
@@ -1907,18 +1770,12 @@ window.startQuizFlow = async (isNewSession = false) => {
 
     window.quizStartTime = Date.now(); 
 
-    // --- 出題邏輯 (保持不變) ---
-    const savedQuiz = localStorage.getItem('currentQuiz');
-    if (savedQuiz) { 
-        const q = JSON.parse(savedQuiz); 
-        renderQuiz(q.data, q.rank, q.badge); 
-        fillBuffer(); 
-        return; 
-    }
-    
+    // 🔥 刪除了原本讀取 localStorage.getItem('currentQuiz') 的行為，
+    // 確保玩家每次刷新或重啟都會產生/抽取全新的題目！
+
     if (quizBuffer.length > 0) { 
         const nextQ = quizBuffer.shift(); 
-        localStorage.setItem('currentQuiz', JSON.stringify(nextQ)); 
+        window.currentActiveQuiz = nextQ; // 供回報系統使用
         renderQuiz(nextQ.data, nextQ.rank, nextQ.badge); 
         fillBuffer(); 
     } else {
@@ -1926,7 +1783,7 @@ window.startQuizFlow = async (isNewSession = false) => {
         document.getElementById('loading-text').innerText = t('loading_text');
         try { 
             const q = await fetchOneQuestion(); 
-            localStorage.setItem('currentQuiz', JSON.stringify(q)); 
+            window.currentActiveQuiz = q; // 供回報系統使用
             renderQuiz(q.data, q.rank, q.badge); 
             fillBuffer(); 
         } catch (e) { 
@@ -1941,12 +1798,21 @@ window.startQuizFlow = async (isNewSession = false) => {
 // 🆕 單人模式選擇與啟動邏輯
 // ==========================================
 
-// 1. 點擊「單人挑戰」按鈕時觸發此函式
+// ==========================================
+// 🆕 單人模式選擇與啟動邏輯 (支援複選與資料夾)
+// ==========================================
+
+//🔥 全域變數新增：儲存已選清單與目前正在瀏覽的項目
+window.soloSelectedUnits = []; 
+window.currentBrowsingUnit = null; 
+window.soloSelectedUnitDetail = ""; 
+
+//🔥 修改：單人模式選擇器，加入清單 UI 與加入按鈕
 window.openSoloModeSelector = async () => {
-    // 這裡使用自定義彈窗或 SweetAlert，這裡示範用簡單的 confirm 流程
-    // 實務上建議在 index.html 做一個漂亮的 Modal，這裡用簡單的 UI 生成代替
-    
-    // 建立臨時的選擇 Modal
+    // 初始化全域陣列防呆
+    if (!window.soloSelectedUnits) window.soloSelectedUnits = [];
+    window.currentBrowsingUnit = null;
+
     const modalId = 'solo-mode-selector';
     let modal = document.getElementById(modalId);
     
@@ -1955,83 +1821,443 @@ window.openSoloModeSelector = async () => {
         modal.id = modalId;
         modal.className = "fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm hidden";
         modal.innerHTML = `
-            <div class="bg-slate-800 p-6 rounded-2xl border-2 border-slate-600 shadow-2xl max-w-sm w-full mx-4 relative overflow-hidden">
+            <div class="bg-slate-800 p-6 rounded-2xl border-2 border-slate-600 shadow-2xl max-w-2xl w-full mx-4 relative overflow-hidden">
                 <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500 to-purple-500"></div>
-                <h3 class="text-xl font-bold text-white mb-4 text-center">⚔️ 選擇挑戰模式</h3>
+                <h3 class="text-xl font-bold text-white mb-6 text-center">⚔️ 準備挑戰</h3>
                 
-                <div class="space-y-3">
-                    <button onclick="startSoloMode('infinite')" class="w-full p-4 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 border border-cyan-400/30 group transition-all relative overflow-hidden">
-                        <div class="flex items-center justify-between relative z-10">
-                            <div class="text-left">
-                                <div class="font-bold text-white text-lg"><i class="fa-solid fa-infinity"></i> 無限模式</div>
-                                <div class="text-xs text-cyan-200 mt-1">每題 +20 金幣，無止盡練功</div>
-                            </div>
-                            <div class="text-2xl opacity-50 group-hover:scale-110 transition">∞</div>
-                        </div>
-                    </button>
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="flex-1 space-y-3">
+                        <div class="text-xs text-gray-400 font-bold mb-2 uppercase tracking-widest">1. 選擇模式</div>
+                        <button onclick="startSoloMode('infinite')" class="w-full p-4 rounded-xl bg-gradient-to-r from-blue-600/20 to-cyan-600/20 hover:from-blue-600/40 hover:to-cyan-600/40 border border-cyan-400/30 group transition-all text-left">
+                            <div class="font-bold text-white"><i class="fa-solid fa-infinity"></i> 無限模式</div>
+                            <div class="text-[10px] text-cyan-200 mt-1">每題 +20 積分，無盡練功</div>
+                        </button>
 
-                    <button onclick="startSoloMode('challenge')" class="w-full p-4 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 border border-pink-400/30 group transition-all relative overflow-hidden">
-                        <div class="flex items-center justify-between relative z-10">
-                            <div class="text-left">
-                                <div class="font-bold text-white text-lg"><i class="fa-solid fa-trophy"></i> 挑戰模式</div>
-                                <div class="text-xs text-pink-200 mt-1">基礎 10 題，錯題追加！<br>通關獎勵 200 金幣</div>
-                            </div>
-                            <div class="text-2xl opacity-50 group-hover:scale-110 transition">🎯</div>
+                        <button onclick="startSoloMode('challenge')" class="w-full p-4 rounded-xl bg-gradient-to-r from-purple-600/20 to-pink-600/20 hover:from-purple-500/40 hover:to-pink-500/40 border border-pink-400/30 group transition-all text-left">
+                            <div class="font-bold text-white"><i class="fa-solid fa-trophy"></i> 挑戰模式</div>
+                            <div class="text-[10px] text-pink-200 mt-1">10題挑戰，錯題追加！獎勵 200 分</div>
+                        </button>
+                    </div>
+
+                    <div class="flex-1 border-l border-white/10 pl-0 md:pl-6">
+                        <div class="text-xs text-yellow-500 font-bold mb-2 uppercase tracking-widest">2. 指定出題單元 (可複選)</div>
+                        <div id="solo-unit-selectors-container" class="space-y-2">
+                            <div class="text-center py-4 text-gray-500 text-xs">載入單元資料中...</div>
                         </div>
-                    </button>
+                        
+                        <div class="flex items-center justify-between mt-2 h-6">
+                            <p id="solo-unit-hint" class="text-[10px] text-gray-500 font-mono italic">請選擇學科與進度</p>
+                            <button onclick="addCurrentUnitToSelection()" id="btn-add-unit" class="hidden bg-cyan-600 hover:bg-cyan-500 text-white text-[10px] font-bold px-3 py-1 rounded shadow transition-all active:scale-95">
+                                <i class="fa-solid fa-plus"></i> 加入
+                            </button>
+                        </div>
+
+                        <div class="mt-4 pt-3 border-t border-white/10">
+                            <div class="text-xs text-green-400 font-bold mb-2">已選清單：</div>
+                            <div id="solo-selected-units-list" class="max-h-[85px] overflow-y-auto custom-scrollbar pr-1">
+                                <div class="text-[10px] text-gray-500 text-center py-2">尚未選擇任何單元</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <button onclick="document.getElementById('${modalId}').classList.add('hidden')" class="mt-4 w-full py-2 text-gray-400 hover:text-white text-sm">取消</button>
+                <div class="mt-6 pt-4 border-t border-white/5 flex justify-end">
+                    <button onclick="document.getElementById('${modalId}').classList.add('hidden')" class="px-6 py-2 text-gray-400 hover:text-white text-sm transition">取消</button>
+                </div>
             </div>
         `;
         document.body.appendChild(modal);
     }
     
     modal.classList.remove('hidden');
+    window.renderSelectedUnitsList(); // 每次打開渲染目前的清單
+
+    try {
+        const res = await fetch('/api/units');
+        const data = await res.json();
+        if (data.files && Array.isArray(data.files)) {
+            const tree = buildPathTree(data.files);
+            renderSoloUnitSelectors(tree, "");
+        }
+    } catch (e) {
+        console.error("Failed to load units", e);
+        document.getElementById('solo-unit-selectors-container').innerHTML = '<div class="text-red-400 text-xs">無法讀取單元資料</div>';
+    }
 };
 
-// 2. 實際啟動函式
+//🔥 修正：遞迴選單，更新目前瀏覽節點狀態 (支援選擇整個資料夾)
+window.renderSoloUnitSelectors = async (tree, currentPath) => {
+    const container = document.getElementById('solo-unit-selectors-container');
+    const hint = document.getElementById('solo-unit-hint');
+    const btnAdd = document.getElementById('btn-add-unit');
+    if (!container) return;
+    
+    container.innerHTML = ''; 
+    let selectedParts = currentPath ? currentPath.split('/') : [];
+
+    const createSelect = async (level, currentNode) => {
+        const select = document.createElement('select');
+        select.className = "w-full bg-slate-900/50 border border-slate-600 text-white rounded-lg p-2 text-xs outline-none focus:border-cyan-500 mb-2 cursor-pointer";
+        
+        const defaultOpt = document.createElement('option');
+        defaultOpt.value = "";
+        defaultOpt.innerText = level === 0 ? "-- 選擇學科 --" : "-- 選擇學期/章節 --";
+        defaultOpt.disabled = true;
+        if (!selectedParts[level]) defaultOpt.selected = true;
+        select.appendChild(defaultOpt);
+
+        Object.keys(currentNode.children).forEach(key => {
+            const opt = document.createElement('option');
+            opt.value = key;
+            opt.innerText = key.replace('.json', '');
+            if (selectedParts[level] === key) opt.selected = true;
+            select.appendChild(opt);
+        });
+
+        select.onchange = (e) => {
+            const val = e.target.value;
+            const newParts = selectedParts.slice(0, level);
+            newParts.push(val);
+            const newPath = newParts.join('/');
+            
+            window.soloSelectedUnitDetail = ""; // 重置細項
+            window.currentBrowsingUnit = { path: newPath, detail: "", sub_topics: [] }; // 設定當前為此目錄
+            
+            hint.innerText = `✅ 目錄：${newPath.replace('.json', '')}`;
+            hint.className = "text-[10px] text-cyan-400 font-mono truncate max-w-[200px] inline-block";
+            btnAdd.classList.remove('hidden');
+
+            renderSoloUnitSelectors(tree, newPath);
+        };
+        container.appendChild(select);
+
+        const currentVal = selectedParts[level];
+        if (currentVal && currentNode.children[currentVal]) {
+            const nextNode = currentNode.children[currentVal];
+            if (nextNode.type === 'file') {
+                await renderInnerUnitSelect(nextNode.fullPath);
+            } else {
+                await createSelect(level + 1, nextNode);
+            }
+        }
+    };
+
+    async function renderInnerUnitSelect(filePath) {
+        try {
+            const res = await fetch(`/middle_school_unit_name/${filePath}`);
+            if (!res.ok) throw new Error("File not found");
+            const units = await res.json();
+
+            const select = document.createElement('select');
+            select.className = "w-full bg-slate-900/50 border border-cyan-500/50 text-cyan-200 rounded-lg p-2 text-xs outline-none mb-2 animate-pulse cursor-pointer";
+            const defaultOpt = document.createElement('option');
+            defaultOpt.value = "";
+            defaultOpt.innerText = "-- 選擇具體單元 (選填) --";
+            defaultOpt.selected = !window.soloSelectedUnitDetail;
+            select.appendChild(defaultOpt);
+
+            units.forEach(u => {
+                const opt = document.createElement('option');
+                opt.value = u.name;
+                opt.innerText = u.name;
+                if (window.soloSelectedUnitDetail === u.name) opt.selected = true;
+                select.appendChild(opt);
+            });
+
+            select.onchange = (e) => {
+                const val = e.target.value;
+                if (!val) {
+                    window.soloSelectedUnitDetail = "";
+                    window.currentBrowsingUnit = { path: filePath, detail: "", sub_topics: [] };
+                    hint.innerText = `✅ 目錄：${filePath.replace('.json', '')}`;
+                } else {
+                    window.soloSelectedUnitDetail = val;
+                    const selectedUnit = units.find(u => u.name === val);
+                    window.currentBrowsingUnit = { 
+                        path: filePath, 
+                        detail: val, 
+                        sub_topics: selectedUnit ? (selectedUnit.sub_topics || []) : [] 
+                    };
+                    hint.innerText = `✅ 單元：${val}`;
+                }
+                hint.className = "text-[10px] text-green-400 font-mono truncate max-w-[200px] inline-block";
+                btnAdd.classList.remove('hidden');
+            };
+            container.appendChild(select);
+        } catch (e) {
+            console.error("[JSON-Error]", e);
+        }
+    }
+    await createSelect(0, tree);
+};
+
+//🔥 新增：加入選定項目至清單
+window.addCurrentUnitToSelection = () => {
+    if (!window.currentBrowsingUnit) return;
+    if (!window.soloSelectedUnits) window.soloSelectedUnits = [];
+    
+    // 檢查是否已存在
+    const exists = window.soloSelectedUnits.some(u => 
+        u.path === window.currentBrowsingUnit.path && 
+        u.detail === window.currentBrowsingUnit.detail
+    );
+    if (exists) {
+        alert("這個單元/目錄已經在清單中了！");
+        return;
+    }
+    
+    window.soloSelectedUnits.push({ ...window.currentBrowsingUnit });
+    window.renderSelectedUnitsList();
+    
+    // 視覺反饋
+    const btn = document.getElementById('btn-add-unit');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<i class="fa-solid fa-check"></i> 成功';
+    btn.classList.add('bg-green-500');
+    setTimeout(() => {
+        btn.innerHTML = originalText;
+        btn.classList.remove('bg-green-500');
+    }, 1000);
+};
+
+//🔥 新增：從清單移除項目
+window.removeSelectedUnit = (index) => {
+    window.soloSelectedUnits.splice(index, 1);
+    window.renderSelectedUnitsList();
+};
+
+//🔥 新增：渲染已選清單 UI
+window.renderSelectedUnitsList = () => {
+    const list = document.getElementById('solo-selected-units-list');
+    if (!list) return;
+    
+    if (!window.soloSelectedUnits || window.soloSelectedUnits.length === 0) {
+        list.innerHTML = '<div class="text-[10px] text-gray-500 text-center py-2 border border-dashed border-gray-600 rounded">尚未選擇，請在上方選取後點擊「加入」</div>';
+        return;
+    }
+    
+    list.innerHTML = '';
+    window.soloSelectedUnits.forEach((unit, idx) => {
+        const div = document.createElement('div');
+        div.className = "flex justify-between items-center bg-slate-700/60 px-2 py-1.5 rounded border border-slate-600 mb-1 group hover:bg-slate-600 transition-colors";
+        
+        let label = unit.detail 
+            ? `<span class="text-gray-400">[${unit.path.replace('.json', '')}]</span> <span class="text-cyan-200">${unit.detail}</span>` 
+            : `<span class="text-cyan-200">📂 ${unit.path.replace('.json', '')} <span class="text-[9px] text-gray-400">(整個目錄)</span></span>`;
+        
+        div.innerHTML = `
+            <div class="text-[10px] truncate w-[90%]" title="${unit.detail || unit.path}">${label}</div>
+            <button onclick="removeSelectedUnit(${idx})" class="text-gray-500 hover:text-red-400 transition-colors px-1">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        `;
+        list.appendChild(div);
+    });
+};
+
+//🔥 修改：startSoloMode，確保有「已選清單」，並寫入 session
 window.startSoloMode = (mode) => {
-    // 隱藏選擇視窗
+    if (!window.soloSelectedUnits || window.soloSelectedUnits.length === 0) {
+        alert("請先在右側加入至少一個要挑戰的單元或目錄！");
+        return;
+    }
+
     const modal = document.getElementById('solo-mode-selector');
     if(modal) modal.classList.add('hidden');
 
-    // 初始化 Session 狀態
     soloSession = {
         active: true,
-        mode: mode, // 'infinite' 或 'challenge'
+        mode: mode,
         currentStep: 1,
-        maxSteps: mode === 'challenge' ? 10 : 9999, // 無限模式設為無限大
+        maxSteps: mode === 'challenge' ? 10 : 9999,
         correctCount: 0,
         wrongCount: 0,
-        history: [] 
+        history: [],
+        selectedUnits: [...window.soloSelectedUnits] // 🔥 存入複選陣列
     };
 
-    console.log(`🚀 Starting Solo: ${mode.toUpperCase()} Mode`);
-    
-    // 更新 UI 顯示 (隱藏/顯示進度面板)
     const progressPanel = document.getElementById('solo-progress-panel');
     if (progressPanel) {
         if (mode === 'challenge') {
             progressPanel.classList.remove('hidden');
-            // 重置面板文字
             document.getElementById('solo-current-step').innerText = 1;
-            // 這裡假設 HTML 結構中有顯示總題數的地方，例如 <span id="solo-max-steps">10</span>
             const maxEl = document.getElementById('solo-max-steps'); 
             if(maxEl) maxEl.innerText = 10; 
         } else {
-            // 無限模式可以隱藏進度條，或顯示「已答 X 題」
             progressPanel.classList.add('hidden'); 
         }
     }
 
-    // 開始出題
-    window.startQuizFlow(true); // 傳入 true 表示是新開始
+    window.startQuizFlow(true);
 };
+
+//🔥 修改：fetchOneQuestion，隨機從清單抽取，並且如果是有子單元，強制傳送知識點給 AI
+async function fetchOneQuestion() {
+    const settings = currentUserData.gameSettings || { source: 'ai', difficulty: 'medium' };
+    const rankName = getRankName(currentUserData.stats.rankLevel || 0);
+
+    // ==========================================
+    // 🧠 模式 A: 單人挑戰模式 (複選單元出題)
+    // ==========================================
+    if (soloSession.active && soloSession.selectedUnits && soloSession.selectedUnits.length > 0) {
+        
+        // 1. 從已選清單中隨機抽取一個項目作為本次出題範圍
+        const randomUnit = soloSession.selectedUnits[Math.floor(Math.random() * soloSession.selectedUnits.length)];
+        
+        const parts = randomUnit.path.split('/');
+        const subject = parts[0]; 
+        
+        // 🔥 如果是有子單元，將知識點串接進 targetTopic，強制 AI 只考這些內容
+        let targetTopic = randomUnit.detail || randomUnit.path;
+        if (randomUnit.sub_topics && randomUnit.sub_topics.length > 0) {
+            targetTopic += ` (請嚴格限制在此範圍出題。包含知識點：${randomUnit.sub_topics.join('、')})`;
+        }
+
+        // 2. 弱點邏輯
+        const weakSubjects = (currentUserData.profile.weakSubjects || "").split(',').map(s => s.trim());
+        const isWeak = weakSubjects.includes(subject);
+        let finalDifficulty = isWeak ? "easy" : "hard";
+
+        console.log(`[Solo-Gen] 隨機選中: ${randomUnit.detail || randomUnit.path}, 難度: ${finalDifficulty}`);
+
+        try {
+            const BACKEND_URL = "/api/generate-quiz";
+            const response = await fetch(BACKEND_URL, {
+                method: "POST", 
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    subject: subject, 
+                    specificTopic: targetTopic, 
+                    level: currentUserData.profile.educationLevel || "General", 
+                    rank: rankName, 
+                    difficulty: finalDifficulty,
+                    language: currentLang,
+                    knowledgeMap: currentUserData.stats.knowledgeMap || {} 
+                })
+            });
+
+            if (!response.ok) throw new Error(`Server Error: ${response.status}`);
+            
+            const data = await response.json();
+            let aiText = data.text;
+            const jsonMatch = aiText.match(/\{[\s\S]*\}/);
+            if (jsonMatch) aiText = jsonMatch[0];
+            const rawData = JSON.parse(aiText);
+
+            let allOptions = [rawData.correct, ...rawData.wrong];
+            allOptions = shuffleArray(allOptions);
+            const correctIndex = allOptions.indexOf(rawData.correct);
+
+            return {
+                data: { q: rawData.q, opts: allOptions, ans: correctIndex, exp: rawData.exp },
+                rank: rankName,
+                badge: `🎯 ${subject} | ${finalDifficulty === 'easy' ? '基礎強化' : '進階挑戰'}`
+            };
+        } catch (e) {
+            console.error("[Fetch-Solo-Error] 單人模式生成失敗:", e);
+            throw e;
+        }
+    }
+
+    // ==========================================
+    // 模式 B: 一般模式 (AI 或 題庫)
+    // ==========================================
+    let finalDifficulty = settings.difficulty;
+    if (!finalDifficulty || finalDifficulty === 'auto') {
+        finalDifficulty = getSmartDifficulty();
+    }
+
+    if (settings.source === 'ai') {
+        const BACKEND_URL = "/api/generate-quiz";
+        const allSubjects = ["國文", "英文", "數學", "公民", "歷史", "地理", "物理", "化學", "生物"];
+        let targetSubject = allSubjects[Math.floor(Math.random() * allSubjects.length)];
+        
+        try {
+            const response = await fetch(BACKEND_URL, {
+                method: "POST", 
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    subject: targetSubject, 
+                    level: currentUserData.profile.educationLevel || "General", 
+                    rank: rankName, 
+                    difficulty: finalDifficulty,
+                    language: currentLang,
+                    knowledgeMap: currentUserData.stats.knowledgeMap || {} 
+                })
+            });
+
+            if (!response.ok) throw new Error(`Server Error: ${response.status}`);
+            const data = await response.json();
+            let aiText = data.text;
+            const jsonMatch = aiText.match(/\{[\s\S]*\}/);
+            if (jsonMatch) aiText = jsonMatch[0];
+            const rawData = JSON.parse(aiText);
+
+            let allOptions = shuffleArray([rawData.correct, ...rawData.wrong]);
+            const correctIndex = allOptions.indexOf(rawData.correct);
+
+            return {
+                data: { q: rawData.q, opts: allOptions, ans: correctIndex, exp: rawData.exp },
+                rank: rankName,
+                badge: `🎯 ${rawData.subject} | ${rawData.sub_topic || '綜合'}`
+            };
+        } catch (e) {
+            console.error("[Fetch-AI-Error] AI 一般模式生成失敗:", e);
+            throw e;
+        }
+    } else {
+        // 題庫模式
+        let targetSource = settings.source; 
+        if (!currentBankData || currentBankData.sourcePath !== targetSource) {
+            let filesToFetch = [];
+            if (targetSource.endsWith('.json')) { 
+                filesToFetch = [targetSource]; 
+            } else {
+                if (allBankFiles.length === 0) {
+                    try { 
+                        const res = await fetch('/api/banks'); 
+                        const data = await res.json(); 
+                        allBankFiles = data.files || []; 
+                    } catch (e) { console.error(e); }
+                }
+                filesToFetch = allBankFiles.filter(f => f.startsWith(targetSource + '/'));
+                if (filesToFetch.length === 0) return switchToAI();
+            }
+
+            try {
+                const fetchPromises = filesToFetch.map(filePath => 
+                    fetch(`/banks/${filePath}?t=${Date.now()}`)
+                        .then(res => { if (!res.ok) throw new Error(); return res.json(); })
+                        .catch(err => [])
+                );
+                const results = await Promise.all(fetchPromises);
+                const mergedQuestions = results.flat();
+                if (mergedQuestions.length === 0) throw new Error("No questions");
+                currentBankData = { sourcePath: targetSource, questions: mergedQuestions };
+            } catch (e) { 
+                console.error("[Fetch-Bank-Error] 題庫讀取失敗:", e); 
+                return switchToAI(); 
+            }
+        }
+
+        const filteredQuestions = currentBankData.questions.filter(q => q.difficulty === finalDifficulty);
+        const pool = filteredQuestions.length > 0 ? filteredQuestions : currentBankData.questions;
+        const rawData = pool[Math.floor(Math.random() * pool.length)];
+        let allOptions = shuffleArray([rawData.correct, ...rawData.wrong]);
+        const correctIndex = allOptions.indexOf(rawData.correct);
+        let displaySubject = rawData.subject || settings.source.split('/').pop().replace('.json', '');
+        
+        return { 
+            data: { q: rawData.q, opts: allOptions, ans: correctIndex, exp: rawData.exp }, 
+            rank: rankName, 
+            badge: `🎯 ${displaySubject} | ${finalDifficulty.toUpperCase()}` 
+        };
+    }
+}
 
 /// 🔥 修改：在進入下一題前才清除舊題目，確保 startQuizFlow 能抓到新題目
 window.nextQuestion = () => { 
-    localStorage.removeItem('currentQuiz'); 
+    window.currentActiveQuiz = null; 
     startQuizFlow(); 
 };
 
@@ -2355,8 +2581,8 @@ window.submitReport = async () => {
     document.getElementById('report-loading-view').classList.remove('hidden');
     document.getElementById('report-loading-view').style.display = 'flex';
 
-    // 取得當前題目資訊
-    const currentQData = JSON.parse(localStorage.getItem('currentQuiz') || '{}');
+    // 取得當前題目資訊 (由記憶體變數取得)
+    const currentQData = window.currentActiveQuiz;
     if (!currentQData || !currentQData.data) {
         alert("找不到題目資料");
         closeReportModal();
@@ -2409,9 +2635,8 @@ window.submitReport = async () => {
             btn.onclick = () => {
                 closeReportModal();
                 
-                // 🔥 關鍵修正：必須先清除當前題目緩存，否則 startQuizFlow 會重新載入同一題
-                localStorage.removeItem('currentQuiz'); 
-                
+                // 清除暫存
+                window.currentActiveQuiz = null; 
                 fillBuffer(); 
                 
                 // 稍微延遲執行，讓彈窗關閉動畫順暢
@@ -3072,69 +3297,205 @@ async function playBattleSequence(logs, isHost) {
 // 🎨 戰鬥視覺特效系統 (VFX System)
 // ==========================================
 
-// [改寫] 觸發戰鬥動畫 (支援衝刺、特效、傷害飄字)
+// [修正版] 更新戰鬥卡牌 UI (修復小圖被大卡片撐破的問題)
+function updateBattleCardUI(prefix, playerData) {
+    if (!playerData) return;
+    
+    // 定義 ID 對應
+    const idPrefix = prefix === 'my' ? 'my' : 'enemy';
+    
+    const container = document.getElementById(`${idPrefix}-card-container`); // 🔥 正確指向中央大卡片
+    const miniVisualEl = document.getElementById(`${idPrefix}-card-visual`); // 🔥 小頭像
+    const hpBarEl = document.getElementById(`${idPrefix}-hp-bar`);
+    const hpTextEl = document.getElementById(`${idPrefix}-hp-text`);
+    const subIndicatorEl = document.getElementById(`${idPrefix}-sub-card-indicator`);
+
+    if (!container || !hpBarEl) return;
+
+    const activeKey = playerData.activeCard; // 'main' or 'sub'
+    const activeCard = playerData.cards[activeKey];
+    
+    if (!activeCard) return;
+
+    const dbCard = CARD_DATABASE[activeCard.id];
+    if (!dbCard) return;
+
+    const maxHp = dbCard.hp;
+    const currentHp = activeCard.currentHp;
+    const hpPercent = Math.max(0, (currentHp / maxHp) * 100);
+
+    // 1. 更新卡片下方的血條
+    hpBarEl.style.width = `${hpPercent}%`;
+    hpTextEl.innerText = `${currentHp}/${maxHp}`;
+
+    // 2. 更新卡面視覺
+    const nameColor = activeKey === 'main' ? 'text-yellow-400' : 'text-gray-300';
+    const borderClass = activeKey === 'main' ? 'border-yellow-500' : 'border-gray-500';
+    
+    container.className = `relative w-32 h-48 bg-slate-800 rounded-lg border-2 ${borderClass} transition-all duration-500 mb-6 overflow-hidden shadow-2xl`;
+
+    const hasImage = getCardImageUrl(activeCard.id); 
+    let innerContent = ""; 
+
+    if (hasImage) {
+        innerContent = `
+            <img src="${hasImage}" 
+                 class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-110"
+                 onerror="this.style.display='none'; this.parentElement.querySelector('.fallback-text').style.display='flex'">
+            
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+            
+            <div class="absolute top-1 left-1 text-[8px] font-bold text-white bg-black/50 px-1.5 py-0.5 rounded border border-white/20 z-10">
+                ${activeCard.rarity === 'rainbow' ? 'LEGEND' : (activeCard.rarity === 'gold' ? 'MYTHIC' : 'MAIN')}
+            </div>
+
+            <div class="absolute bottom-0 w-full p-2 flex flex-col items-center z-10">
+                <div class="${nameColor} font-bold text-sm text-center drop-shadow-[0_2px_2px_rgba(0,0,0,1)]">${activeCard.name}</div>
+                
+                <div class="flex items-center gap-2 mt-0.5 bg-black/40 px-2 py-0.5 rounded-full border border-white/10 backdrop-blur-sm">
+                    <span class="text-xs text-green-400 font-black drop-shadow-md flex items-center gap-0.5">
+                        <i class="fa-solid fa-heart text-[10px]"></i> ${currentHp}
+                    </span>
+                    <span class="text-gray-500 text-[10px]">|</span>
+                    <span class="text-xs text-red-400 font-black drop-shadow-md flex items-center gap-0.5">
+                        <i class="fa-solid fa-khanda text-[10px]"></i> ${activeCard.atk}
+                    </span>
+                </div>
+
+                <div class="mt-1 text-[9px] text-cyan-300 bg-blue-900/60 px-1.5 py-0.5 rounded border border-blue-500/30 backdrop-blur-sm">
+                    ${activeCard.skill}
+                </div>
+            </div>
+
+            <div class="fallback-text hidden flex-col items-center justify-center h-full relative z-0">
+                <div class="text-3xl mb-2 filter drop-shadow-lg animate-pulse">
+                    ${activeCard.id === 'c051' || activeCard.id === 'c041' ? '🐲' : '⚔️'}
+                </div>
+                <div class="${nameColor} font-bold text-sm text-center">${activeCard.name}</div>
+            </div>
+        `;
+    } else {
+        innerContent = `
+            <div class="flex flex-col items-center justify-center h-full relative z-10">
+                <div class="text-[10px] uppercase tracking-widest text-gray-500 mb-1">${activeKey}</div>
+                <div class="text-3xl mb-2 filter drop-shadow-lg animate-pulse">
+                    ${activeKey === 'main' ? '🐉' : '🛡️'}
+                </div>
+                <div class="${nameColor} font-bold text-sm text-center">${activeCard.name}</div>
+                
+                <div class="flex gap-2 mt-1">
+                    <div class="text-xs text-green-400 font-mono">HP ${currentHp}</div>
+                    <div class="text-xs text-red-400 font-mono">ATK ${activeCard.atk}</div>
+                </div>
+
+                ${activeKey === 'main' ? `<div class="text-[9px] text-blue-300 mt-2 text-center px-1">${activeCard.skill}</div>` : ''}
+            </div>
+        `;
+    }
+
+    // 🔥 將內容寫入中央卡片容器
+    container.innerHTML = innerContent;
+
+    // 🔥 獨立更新小頭像框
+    if (miniVisualEl) {
+        miniVisualEl.innerHTML = activeCard.id === 'c051' || activeCard.id === 'c041' ? '🐲' : '⚔️';
+    }
+
+    // 3. 更新副卡指示燈
+    if (subIndicatorEl) {
+        if (playerData.cards.sub) {
+            const subCardId = playerData.cards.sub.id;
+            const subBase = CARD_DATABASE[subCardId] || { name: "Sub", rarity: "gray" };
+            const subRConfig = RARITY_CONFIG[subBase.rarity] || RARITY_CONFIG.gray;
+            
+            const isActive = activeKey === 'sub';
+            const isDead = playerData.cards.sub.currentHp <= 0;
+
+            subIndicatorEl.className = `absolute ${prefix==='my'?'bottom-4 -left-2':'top-4 -right-2'} w-12 h-16 bg-slate-800 rounded border-2 transition-all duration-300 flex flex-col items-center justify-center overflow-hidden z-20 shadow-lg`;
+            
+            if (isDead) {
+                subIndicatorEl.classList.add('border-gray-700', 'opacity-30', 'grayscale');
+                subIndicatorEl.innerHTML = '<i class="fa-solid fa-skull text-gray-500"></i>';
+            } else if (isActive) {
+                subIndicatorEl.className += ` ${subRConfig.border} scale-110 ring-2 ring-yellow-400 ring-offset-1 ring-offset-slate-900`;
+                subIndicatorEl.innerHTML = `
+                    <div class="text-[8px] ${subRConfig.color} font-bold truncate w-full text-center px-0.5">${subBase.name}</div>
+                    <div class="text-xs">⚔️</div>
+                    <div class="text-[8px] text-white">${playerData.cards.sub.currentHp}</div>
+                `;
+            } else {
+                subIndicatorEl.className += ` ${subRConfig.border} opacity-80 hover:opacity-100 hover:scale-105`;
+                subIndicatorEl.innerHTML = `
+                    <div class="bg-black/50 w-full text-center text-[7px] text-gray-300 absolute top-0">WAIT</div>
+                    <div class="text-[8px] ${subRConfig.color} font-bold mt-2 truncate w-full text-center">${subBase.name}</div>
+                `;
+            }
+        } else {
+            subIndicatorEl.style.opacity = '0';
+        }
+    }
+}
+
+// [修正版] 觸發戰鬥動畫 (綁定在 wrapper 避免特效被裁切)
 async function triggerBattleAnimation(attackerSide, damage, skillName, isHeal = false) {
-    // attackerSide: 'my' (我方攻擊) 或 'enemy' (敵方攻擊)
     const attackerPrefix = attackerSide === 'my' ? 'my' : 'enemy';
     const targetPrefix = attackerSide === 'my' ? 'enemy' : 'my';
     
-    const attackerContainer = document.getElementById(`${attackerPrefix}-card-container`);
-    const targetContainer = document.getElementById(`${targetPrefix}-card-container`);
-    const targetVisual = document.getElementById(`${targetPrefix}-card-visual`);
+    // 🔥 全部改為抓取外圍的 wrapper，防止 overflow:hidden 吃掉特效
+    const attackerWrapper = document.getElementById(`${attackerPrefix}-card-container-wrapper`);
+    const targetWrapper = document.getElementById(`${targetPrefix}-card-container-wrapper`);
 
-    if (!attackerContainer || !targetContainer) return;
+    if (!attackerWrapper || !targetWrapper) return;
 
-    // 1. 技能詠唱特效 (如果是技能攻擊)
+    // 1. 技能詠唱特效
     if (skillName && skillName !== "普通攻擊") {
-        attackerContainer.classList.add('anim-cast');
-        createFloatingText(attackerContainer, `⚡ ${skillName}!`, "text-yellow-300", -80);
-        await new Promise(r => setTimeout(r, 400)); // 等待詠唱
-        attackerContainer.classList.remove('anim-cast');
+        attackerWrapper.classList.add('anim-cast');
+        createFloatingText(attackerWrapper, `⚡ ${skillName}!`, "text-yellow-300", -40);
+        await new Promise(r => setTimeout(r, 400)); 
+        attackerWrapper.classList.remove('anim-cast');
     }
 
     // 2. 執行物理衝刺 (Lunge)
     const lungeClass = attackerSide === 'my' ? 'anim-lunge-up' : 'anim-lunge-down';
-    attackerContainer.classList.add(lungeClass);
+    attackerWrapper.classList.add(lungeClass);
 
-    // 3. 在衝刺動作的 "打擊點" (約 300ms) 生成受擊特效
+    // 3. 打擊特效
     setTimeout(() => {
-        // A. 播放音效 (瀏覽器震動)
         if (navigator.vibrate) navigator.vibrate([50, 50, 100]);
 
-        // B. 畫面/卡片震動
         const arena = document.getElementById('battle-arena');
         arena.classList.add('anim-screen-shake');
-        targetContainer.classList.add('anim-shake'); // 使用 style.css 中原本定義的 shake
+        targetWrapper.classList.add('anim-shake'); 
         
         setTimeout(() => {
             arena.classList.remove('anim-screen-shake');
-            targetContainer.classList.remove('anim-shake');
+            targetWrapper.classList.remove('anim-shake');
         }, 500);
 
-        // C. 產生刀光/爆炸特效
-        createSlashEffect(targetVisual);
+        createSlashEffect(targetWrapper);
 
-        // D. 顯示傷害數字
         if (damage > 0) {
-            // 判斷是否為 "爆擊" (這裡簡單假設傷害 > 40 算大傷害)
             const isCrit = damage >= 40; 
-            createDamageNumber(targetVisual, damage, isCrit);
+            createDamageNumber(targetWrapper, damage, isCrit);
         }
 
-        // E. 顯示回血 (如果有)
-        // 這裡需要邏輯支援：如果是吸血技能，顯示在攻擊者身上
         if (isHeal) {
-             // 假設回血是回在自己身上
-             const attackerVisual = document.getElementById(`${attackerPrefix}-card-visual`);
-             createDamageNumber(attackerVisual, `+${isHeal}`, false, true);
+             createDamageNumber(attackerWrapper, `+${isHeal}`, false, true);
         }
+    }, 300);
 
-    }, 300); // 配合 CSS lunge 動畫的時間點
-
-    // 4. 清除衝刺 class
     setTimeout(() => {
-        attackerContainer.classList.remove(lungeClass);
+        attackerWrapper.classList.remove(lungeClass);
     }, 600);
+}
+
+// [修正版] 攻擊失敗動畫
+function triggerMissAnimation(targetRole) {
+    const targetPrefix = targetRole === 'my' ? 'my' : 'enemy';
+    const targetWrapper = document.getElementById(`${targetPrefix}-card-container-wrapper`);
+    if (targetWrapper) {
+        createFloatingText(targetWrapper, "MISS", "text-gray-400 text-3xl");
+    }
 }
 
 // [新增] 產生刀光特效 DOM
@@ -3177,15 +3538,6 @@ function createFloatingText(parentEl, text, colorClass = "text-white", topOffset
     el.innerText = text;
     parentEl.appendChild(el);
     setTimeout(() => el.remove(), 1500);
-}
-
-// [改寫] 攻擊失敗動畫
-function triggerMissAnimation(targetRole) {
-    const targetPrefix = targetRole === 'my' ? 'my' : 'enemy';
-    const targetVisual = document.getElementById(`${targetPrefix}-card-visual`);
-    if (targetVisual) {
-        createFloatingText(targetVisual, "MISS", "text-gray-400 text-3xl");
-    }
 }
 
 // [修正版] 回合結算邏輯
@@ -4348,146 +4700,7 @@ async function executeDraw(count, cost, guaranteedRarity = null) {
 
 let gachaSkip = false; // 用於跳過動畫
 
-// [修正版] 更新戰鬥卡牌 UI (修復變數未宣告 + 新增卡面血量顯示)
-function updateBattleCardUI(prefix, playerData) {
-    if (!playerData) return;
-    
-    // 定義 ID 對應
-    const idPrefix = prefix === 'my' ? 'my' : 'enemy';
-    
-    const cardVisualEl = document.getElementById(`${idPrefix}-card-visual`);
-    const hpBarEl = document.getElementById(`${idPrefix}-hp-bar`);
-    const hpTextEl = document.getElementById(`${idPrefix}-hp-text`);
-    const subIndicatorEl = document.getElementById(`${idPrefix}-sub-card-indicator`);
 
-    if (!cardVisualEl || !hpBarEl) return;
-
-    const activeKey = playerData.activeCard; // 'main' or 'sub'
-    const activeCard = playerData.cards[activeKey];
-    
-    // 防呆：如果 activeCard 不存在 (例如數據錯誤)，直接返回
-    if (!activeCard) return;
-
-    const dbCard = CARD_DATABASE[activeCard.id];
-    if (!dbCard) return;
-
-    const maxHp = dbCard.hp;
-    const currentHp = activeCard.currentHp;
-    const hpPercent = Math.max(0, (currentHp / maxHp) * 100);
-
-    // 1. 更新卡片下方的血條
-    hpBarEl.style.width = `${hpPercent}%`;
-    hpTextEl.innerText = `${currentHp}/${maxHp}`;
-
-    // 2. 更新卡面視覺
-    const nameColor = activeKey === 'main' ? 'text-yellow-400' : 'text-gray-300';
-    const borderClass = activeKey === 'main' ? 'border-yellow-500' : 'border-gray-500';
-    
-    // 更新卡片容器樣式
-    const container = document.getElementById(`${idPrefix}-card-container`);
-    if(container) {
-        container.className = `relative w-32 h-48 bg-slate-800 rounded-lg border-2 ${borderClass} transition-all duration-500 mb-6 overflow-hidden shadow-2xl`;
-    }
-
-    const hasImage = getCardImageUrl(activeCard.id); 
-
-    // 🔥【修正 1】宣告變數，解決 ReferenceError 崩潰
-    let innerContent = ""; 
-
-    if (hasImage) {
-        innerContent = `
-            <img src="${hasImage}" 
-                 class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-110"
-                 onerror="this.style.display='none'; this.parentElement.querySelector('.fallback-text').style.display='flex'">
-            
-            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-            
-            <div class="absolute top-1 left-1 text-[8px] font-bold text-white bg-black/50 px-1.5 py-0.5 rounded border border-white/20 z-10">
-                ${activeCard.rarity === 'rainbow' ? 'LEGEND' : (activeCard.rarity === 'gold' ? 'MYTHIC' : 'MAIN')}
-            </div>
-
-            <div class="absolute bottom-0 w-full p-2 flex flex-col items-center z-10">
-                <div class="${nameColor} font-bold text-sm text-center drop-shadow-[0_2px_2px_rgba(0,0,0,1)]">${activeCard.name}</div>
-                
-                <div class="flex items-center gap-2 mt-0.5 bg-black/40 px-2 py-0.5 rounded-full border border-white/10 backdrop-blur-sm">
-                    <span class="text-xs text-green-400 font-black drop-shadow-md flex items-center gap-0.5">
-                        <i class="fa-solid fa-heart text-[10px]"></i> ${currentHp}
-                    </span>
-                    <span class="text-gray-500 text-[10px]">|</span>
-                    <span class="text-xs text-red-400 font-black drop-shadow-md flex items-center gap-0.5">
-                        <i class="fa-solid fa-khanda text-[10px]"></i> ${activeCard.atk}
-                    </span>
-                </div>
-
-                <div class="mt-1 text-[9px] text-cyan-300 bg-blue-900/60 px-1.5 py-0.5 rounded border border-blue-500/30 backdrop-blur-sm">
-                    ${activeCard.skill}
-                </div>
-            </div>
-
-            <div class="fallback-text hidden flex-col items-center justify-center h-full relative z-0">
-                <div class="text-3xl mb-2 filter drop-shadow-lg animate-pulse">
-                    ${activeCard.id === 'c051' || activeCard.id === 'c041' ? '🐲' : '⚔️'}
-                </div>
-                <div class="${nameColor} font-bold text-sm text-center">${activeCard.name}</div>
-            </div>
-        `;
-    } else {
-        // 無圖片的預設樣式
-        innerContent = `
-            <div class="flex flex-col items-center justify-center h-full relative z-10">
-                <div class="text-[10px] uppercase tracking-widest text-gray-500 mb-1">${activeKey}</div>
-                <div class="text-3xl mb-2 filter drop-shadow-lg animate-pulse">
-                    ${activeKey === 'main' ? '🐉' : '🛡️'}
-                </div>
-                <div class="${nameColor} font-bold text-sm text-center">${activeCard.name}</div>
-                
-                <div class="flex gap-2 mt-1">
-                    <div class="text-xs text-green-400 font-mono">HP ${currentHp}</div>
-                    <div class="text-xs text-red-400 font-mono">ATK ${activeCard.atk}</div>
-                </div>
-
-                ${activeKey === 'main' ? `<div class="text-[9px] text-blue-300 mt-2 text-center px-1">${activeCard.skill}</div>` : ''}
-            </div>
-        `;
-    }
-
-    cardVisualEl.innerHTML = innerContent;
-
-    // 3. 更新副卡指示燈 (維持原樣)
-    if (subIndicatorEl) {
-        if (playerData.cards.sub) {
-            const subCardId = playerData.cards.sub.id;
-            const subBase = CARD_DATABASE[subCardId] || { name: "Sub", rarity: "gray" };
-            const subRConfig = RARITY_CONFIG[subBase.rarity] || RARITY_CONFIG.gray;
-            
-            const isActive = activeKey === 'sub';
-            const isDead = playerData.cards.sub.currentHp <= 0;
-
-            // 微調位置
-            subIndicatorEl.className = `absolute ${prefix==='my'?'bottom-4 -left-2':'top-4 -right-2'} w-12 h-16 bg-slate-800 rounded border-2 transition-all duration-300 flex flex-col items-center justify-center overflow-hidden z-20 shadow-lg`;
-            
-            if (isDead) {
-                subIndicatorEl.classList.add('border-gray-700', 'opacity-30', 'grayscale');
-                subIndicatorEl.innerHTML = '<i class="fa-solid fa-skull text-gray-500"></i>';
-            } else if (isActive) {
-                subIndicatorEl.className += ` ${subRConfig.border} scale-110 ring-2 ring-yellow-400 ring-offset-1 ring-offset-slate-900`;
-                subIndicatorEl.innerHTML = `
-                    <div class="text-[8px] ${subRConfig.color} font-bold truncate w-full text-center px-0.5">${subBase.name}</div>
-                    <div class="text-xs">⚔️</div>
-                    <div class="text-[8px] text-white">${playerData.cards.sub.currentHp}</div>
-                `;
-            } else {
-                subIndicatorEl.className += ` ${subRConfig.border} opacity-80 hover:opacity-100 hover:scale-105`;
-                subIndicatorEl.innerHTML = `
-                    <div class="bg-black/50 w-full text-center text-[7px] text-gray-300 absolute top-0">WAIT</div>
-                    <div class="text-[8px] ${subRConfig.color} font-bold mt-2 truncate w-full text-center">${subBase.name}</div>
-                `;
-            }
-        } else {
-            subIndicatorEl.style.opacity = '0';
-        }
-    }
-}
 
 // [修正 2] 顯示抽卡結果 (確保每次都使用最新的 results)
 window.currentDrawResults = []; // 初始化為空陣列
