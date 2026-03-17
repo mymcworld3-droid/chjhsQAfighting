@@ -3297,69 +3297,205 @@ async function playBattleSequence(logs, isHost) {
 // 🎨 戰鬥視覺特效系統 (VFX System)
 // ==========================================
 
-// [改寫] 觸發戰鬥動畫 (支援衝刺、特效、傷害飄字)
+// [修正版] 更新戰鬥卡牌 UI (修復小圖被大卡片撐破的問題)
+function updateBattleCardUI(prefix, playerData) {
+    if (!playerData) return;
+    
+    // 定義 ID 對應
+    const idPrefix = prefix === 'my' ? 'my' : 'enemy';
+    
+    const container = document.getElementById(`${idPrefix}-card-container`); // 🔥 正確指向中央大卡片
+    const miniVisualEl = document.getElementById(`${idPrefix}-card-visual`); // 🔥 小頭像
+    const hpBarEl = document.getElementById(`${idPrefix}-hp-bar`);
+    const hpTextEl = document.getElementById(`${idPrefix}-hp-text`);
+    const subIndicatorEl = document.getElementById(`${idPrefix}-sub-card-indicator`);
+
+    if (!container || !hpBarEl) return;
+
+    const activeKey = playerData.activeCard; // 'main' or 'sub'
+    const activeCard = playerData.cards[activeKey];
+    
+    if (!activeCard) return;
+
+    const dbCard = CARD_DATABASE[activeCard.id];
+    if (!dbCard) return;
+
+    const maxHp = dbCard.hp;
+    const currentHp = activeCard.currentHp;
+    const hpPercent = Math.max(0, (currentHp / maxHp) * 100);
+
+    // 1. 更新卡片下方的血條
+    hpBarEl.style.width = `${hpPercent}%`;
+    hpTextEl.innerText = `${currentHp}/${maxHp}`;
+
+    // 2. 更新卡面視覺
+    const nameColor = activeKey === 'main' ? 'text-yellow-400' : 'text-gray-300';
+    const borderClass = activeKey === 'main' ? 'border-yellow-500' : 'border-gray-500';
+    
+    container.className = `relative w-32 h-48 bg-slate-800 rounded-lg border-2 ${borderClass} transition-all duration-500 mb-6 overflow-hidden shadow-2xl`;
+
+    const hasImage = getCardImageUrl(activeCard.id); 
+    let innerContent = ""; 
+
+    if (hasImage) {
+        innerContent = `
+            <img src="${hasImage}" 
+                 class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-110"
+                 onerror="this.style.display='none'; this.parentElement.querySelector('.fallback-text').style.display='flex'">
+            
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+            
+            <div class="absolute top-1 left-1 text-[8px] font-bold text-white bg-black/50 px-1.5 py-0.5 rounded border border-white/20 z-10">
+                ${activeCard.rarity === 'rainbow' ? 'LEGEND' : (activeCard.rarity === 'gold' ? 'MYTHIC' : 'MAIN')}
+            </div>
+
+            <div class="absolute bottom-0 w-full p-2 flex flex-col items-center z-10">
+                <div class="${nameColor} font-bold text-sm text-center drop-shadow-[0_2px_2px_rgba(0,0,0,1)]">${activeCard.name}</div>
+                
+                <div class="flex items-center gap-2 mt-0.5 bg-black/40 px-2 py-0.5 rounded-full border border-white/10 backdrop-blur-sm">
+                    <span class="text-xs text-green-400 font-black drop-shadow-md flex items-center gap-0.5">
+                        <i class="fa-solid fa-heart text-[10px]"></i> ${currentHp}
+                    </span>
+                    <span class="text-gray-500 text-[10px]">|</span>
+                    <span class="text-xs text-red-400 font-black drop-shadow-md flex items-center gap-0.5">
+                        <i class="fa-solid fa-khanda text-[10px]"></i> ${activeCard.atk}
+                    </span>
+                </div>
+
+                <div class="mt-1 text-[9px] text-cyan-300 bg-blue-900/60 px-1.5 py-0.5 rounded border border-blue-500/30 backdrop-blur-sm">
+                    ${activeCard.skill}
+                </div>
+            </div>
+
+            <div class="fallback-text hidden flex-col items-center justify-center h-full relative z-0">
+                <div class="text-3xl mb-2 filter drop-shadow-lg animate-pulse">
+                    ${activeCard.id === 'c051' || activeCard.id === 'c041' ? '🐲' : '⚔️'}
+                </div>
+                <div class="${nameColor} font-bold text-sm text-center">${activeCard.name}</div>
+            </div>
+        `;
+    } else {
+        innerContent = `
+            <div class="flex flex-col items-center justify-center h-full relative z-10">
+                <div class="text-[10px] uppercase tracking-widest text-gray-500 mb-1">${activeKey}</div>
+                <div class="text-3xl mb-2 filter drop-shadow-lg animate-pulse">
+                    ${activeKey === 'main' ? '🐉' : '🛡️'}
+                </div>
+                <div class="${nameColor} font-bold text-sm text-center">${activeCard.name}</div>
+                
+                <div class="flex gap-2 mt-1">
+                    <div class="text-xs text-green-400 font-mono">HP ${currentHp}</div>
+                    <div class="text-xs text-red-400 font-mono">ATK ${activeCard.atk}</div>
+                </div>
+
+                ${activeKey === 'main' ? `<div class="text-[9px] text-blue-300 mt-2 text-center px-1">${activeCard.skill}</div>` : ''}
+            </div>
+        `;
+    }
+
+    // 🔥 將內容寫入中央卡片容器
+    container.innerHTML = innerContent;
+
+    // 🔥 獨立更新小頭像框
+    if (miniVisualEl) {
+        miniVisualEl.innerHTML = activeCard.id === 'c051' || activeCard.id === 'c041' ? '🐲' : '⚔️';
+    }
+
+    // 3. 更新副卡指示燈
+    if (subIndicatorEl) {
+        if (playerData.cards.sub) {
+            const subCardId = playerData.cards.sub.id;
+            const subBase = CARD_DATABASE[subCardId] || { name: "Sub", rarity: "gray" };
+            const subRConfig = RARITY_CONFIG[subBase.rarity] || RARITY_CONFIG.gray;
+            
+            const isActive = activeKey === 'sub';
+            const isDead = playerData.cards.sub.currentHp <= 0;
+
+            subIndicatorEl.className = `absolute ${prefix==='my'?'bottom-4 -left-2':'top-4 -right-2'} w-12 h-16 bg-slate-800 rounded border-2 transition-all duration-300 flex flex-col items-center justify-center overflow-hidden z-20 shadow-lg`;
+            
+            if (isDead) {
+                subIndicatorEl.classList.add('border-gray-700', 'opacity-30', 'grayscale');
+                subIndicatorEl.innerHTML = '<i class="fa-solid fa-skull text-gray-500"></i>';
+            } else if (isActive) {
+                subIndicatorEl.className += ` ${subRConfig.border} scale-110 ring-2 ring-yellow-400 ring-offset-1 ring-offset-slate-900`;
+                subIndicatorEl.innerHTML = `
+                    <div class="text-[8px] ${subRConfig.color} font-bold truncate w-full text-center px-0.5">${subBase.name}</div>
+                    <div class="text-xs">⚔️</div>
+                    <div class="text-[8px] text-white">${playerData.cards.sub.currentHp}</div>
+                `;
+            } else {
+                subIndicatorEl.className += ` ${subRConfig.border} opacity-80 hover:opacity-100 hover:scale-105`;
+                subIndicatorEl.innerHTML = `
+                    <div class="bg-black/50 w-full text-center text-[7px] text-gray-300 absolute top-0">WAIT</div>
+                    <div class="text-[8px] ${subRConfig.color} font-bold mt-2 truncate w-full text-center">${subBase.name}</div>
+                `;
+            }
+        } else {
+            subIndicatorEl.style.opacity = '0';
+        }
+    }
+}
+
+// [修正版] 觸發戰鬥動畫 (綁定在 wrapper 避免特效被裁切)
 async function triggerBattleAnimation(attackerSide, damage, skillName, isHeal = false) {
-    // attackerSide: 'my' (我方攻擊) 或 'enemy' (敵方攻擊)
     const attackerPrefix = attackerSide === 'my' ? 'my' : 'enemy';
     const targetPrefix = attackerSide === 'my' ? 'enemy' : 'my';
     
-    const attackerContainer = document.getElementById(`${attackerPrefix}-card-container`);
-    const targetContainer = document.getElementById(`${targetPrefix}-card-container`);
-    const targetVisual = document.getElementById(`${targetPrefix}-card-visual`);
+    // 🔥 全部改為抓取外圍的 wrapper，防止 overflow:hidden 吃掉特效
+    const attackerWrapper = document.getElementById(`${attackerPrefix}-card-container-wrapper`);
+    const targetWrapper = document.getElementById(`${targetPrefix}-card-container-wrapper`);
 
-    if (!attackerContainer || !targetContainer) return;
+    if (!attackerWrapper || !targetWrapper) return;
 
-    // 1. 技能詠唱特效 (如果是技能攻擊)
+    // 1. 技能詠唱特效
     if (skillName && skillName !== "普通攻擊") {
-        attackerContainer.classList.add('anim-cast');
-        createFloatingText(attackerContainer, `⚡ ${skillName}!`, "text-yellow-300", -80);
-        await new Promise(r => setTimeout(r, 400)); // 等待詠唱
-        attackerContainer.classList.remove('anim-cast');
+        attackerWrapper.classList.add('anim-cast');
+        createFloatingText(attackerWrapper, `⚡ ${skillName}!`, "text-yellow-300", -40);
+        await new Promise(r => setTimeout(r, 400)); 
+        attackerWrapper.classList.remove('anim-cast');
     }
 
     // 2. 執行物理衝刺 (Lunge)
     const lungeClass = attackerSide === 'my' ? 'anim-lunge-up' : 'anim-lunge-down';
-    attackerContainer.classList.add(lungeClass);
+    attackerWrapper.classList.add(lungeClass);
 
-    // 3. 在衝刺動作的 "打擊點" (約 300ms) 生成受擊特效
+    // 3. 打擊特效
     setTimeout(() => {
-        // A. 播放音效 (瀏覽器震動)
         if (navigator.vibrate) navigator.vibrate([50, 50, 100]);
 
-        // B. 畫面/卡片震動
         const arena = document.getElementById('battle-arena');
         arena.classList.add('anim-screen-shake');
-        targetContainer.classList.add('anim-shake'); // 使用 style.css 中原本定義的 shake
+        targetWrapper.classList.add('anim-shake'); 
         
         setTimeout(() => {
             arena.classList.remove('anim-screen-shake');
-            targetContainer.classList.remove('anim-shake');
+            targetWrapper.classList.remove('anim-shake');
         }, 500);
 
-        // C. 產生刀光/爆炸特效
-        createSlashEffect(targetVisual);
+        createSlashEffect(targetWrapper);
 
-        // D. 顯示傷害數字
         if (damage > 0) {
-            // 判斷是否為 "爆擊" (這裡簡單假設傷害 > 40 算大傷害)
             const isCrit = damage >= 40; 
-            createDamageNumber(targetVisual, damage, isCrit);
+            createDamageNumber(targetWrapper, damage, isCrit);
         }
 
-        // E. 顯示回血 (如果有)
-        // 這裡需要邏輯支援：如果是吸血技能，顯示在攻擊者身上
         if (isHeal) {
-             // 假設回血是回在自己身上
-             const attackerVisual = document.getElementById(`${attackerPrefix}-card-visual`);
-             createDamageNumber(attackerVisual, `+${isHeal}`, false, true);
+             createDamageNumber(attackerWrapper, `+${isHeal}`, false, true);
         }
+    }, 300);
 
-    }, 300); // 配合 CSS lunge 動畫的時間點
-
-    // 4. 清除衝刺 class
     setTimeout(() => {
-        attackerContainer.classList.remove(lungeClass);
+        attackerWrapper.classList.remove(lungeClass);
     }, 600);
+}
+
+// [修正版] 攻擊失敗動畫
+function triggerMissAnimation(targetRole) {
+    const targetPrefix = targetRole === 'my' ? 'my' : 'enemy';
+    const targetWrapper = document.getElementById(`${targetPrefix}-card-container-wrapper`);
+    if (targetWrapper) {
+        createFloatingText(targetWrapper, "MISS", "text-gray-400 text-3xl");
+    }
 }
 
 // [新增] 產生刀光特效 DOM
@@ -3402,15 +3538,6 @@ function createFloatingText(parentEl, text, colorClass = "text-white", topOffset
     el.innerText = text;
     parentEl.appendChild(el);
     setTimeout(() => el.remove(), 1500);
-}
-
-// [改寫] 攻擊失敗動畫
-function triggerMissAnimation(targetRole) {
-    const targetPrefix = targetRole === 'my' ? 'my' : 'enemy';
-    const targetVisual = document.getElementById(`${targetPrefix}-card-visual`);
-    if (targetVisual) {
-        createFloatingText(targetVisual, "MISS", "text-gray-400 text-3xl");
-    }
 }
 
 // [修正版] 回合結算邏輯
@@ -4573,146 +4700,7 @@ async function executeDraw(count, cost, guaranteedRarity = null) {
 
 let gachaSkip = false; // 用於跳過動畫
 
-// [修正版] 更新戰鬥卡牌 UI (修復變數未宣告 + 新增卡面血量顯示)
-function updateBattleCardUI(prefix, playerData) {
-    if (!playerData) return;
-    
-    // 定義 ID 對應
-    const idPrefix = prefix === 'my' ? 'my' : 'enemy';
-    
-    const cardVisualEl = document.getElementById(`${idPrefix}-card-visual`);
-    const hpBarEl = document.getElementById(`${idPrefix}-hp-bar`);
-    const hpTextEl = document.getElementById(`${idPrefix}-hp-text`);
-    const subIndicatorEl = document.getElementById(`${idPrefix}-sub-card-indicator`);
 
-    if (!cardVisualEl || !hpBarEl) return;
-
-    const activeKey = playerData.activeCard; // 'main' or 'sub'
-    const activeCard = playerData.cards[activeKey];
-    
-    // 防呆：如果 activeCard 不存在 (例如數據錯誤)，直接返回
-    if (!activeCard) return;
-
-    const dbCard = CARD_DATABASE[activeCard.id];
-    if (!dbCard) return;
-
-    const maxHp = dbCard.hp;
-    const currentHp = activeCard.currentHp;
-    const hpPercent = Math.max(0, (currentHp / maxHp) * 100);
-
-    // 1. 更新卡片下方的血條
-    hpBarEl.style.width = `${hpPercent}%`;
-    hpTextEl.innerText = `${currentHp}/${maxHp}`;
-
-    // 2. 更新卡面視覺
-    const nameColor = activeKey === 'main' ? 'text-yellow-400' : 'text-gray-300';
-    const borderClass = activeKey === 'main' ? 'border-yellow-500' : 'border-gray-500';
-    
-    // 更新卡片容器樣式
-    const container = document.getElementById(`${idPrefix}-card-container`);
-    if(container) {
-        container.className = `relative w-32 h-48 bg-slate-800 rounded-lg border-2 ${borderClass} transition-all duration-500 mb-6 overflow-hidden shadow-2xl`;
-    }
-
-    const hasImage = getCardImageUrl(activeCard.id); 
-
-    // 🔥【修正 1】宣告變數，解決 ReferenceError 崩潰
-    let innerContent = ""; 
-
-    if (hasImage) {
-        innerContent = `
-            <img src="${hasImage}" 
-                 class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-110"
-                 onerror="this.style.display='none'; this.parentElement.querySelector('.fallback-text').style.display='flex'">
-            
-            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-            
-            <div class="absolute top-1 left-1 text-[8px] font-bold text-white bg-black/50 px-1.5 py-0.5 rounded border border-white/20 z-10">
-                ${activeCard.rarity === 'rainbow' ? 'LEGEND' : (activeCard.rarity === 'gold' ? 'MYTHIC' : 'MAIN')}
-            </div>
-
-            <div class="absolute bottom-0 w-full p-2 flex flex-col items-center z-10">
-                <div class="${nameColor} font-bold text-sm text-center drop-shadow-[0_2px_2px_rgba(0,0,0,1)]">${activeCard.name}</div>
-                
-                <div class="flex items-center gap-2 mt-0.5 bg-black/40 px-2 py-0.5 rounded-full border border-white/10 backdrop-blur-sm">
-                    <span class="text-xs text-green-400 font-black drop-shadow-md flex items-center gap-0.5">
-                        <i class="fa-solid fa-heart text-[10px]"></i> ${currentHp}
-                    </span>
-                    <span class="text-gray-500 text-[10px]">|</span>
-                    <span class="text-xs text-red-400 font-black drop-shadow-md flex items-center gap-0.5">
-                        <i class="fa-solid fa-khanda text-[10px]"></i> ${activeCard.atk}
-                    </span>
-                </div>
-
-                <div class="mt-1 text-[9px] text-cyan-300 bg-blue-900/60 px-1.5 py-0.5 rounded border border-blue-500/30 backdrop-blur-sm">
-                    ${activeCard.skill}
-                </div>
-            </div>
-
-            <div class="fallback-text hidden flex-col items-center justify-center h-full relative z-0">
-                <div class="text-3xl mb-2 filter drop-shadow-lg animate-pulse">
-                    ${activeCard.id === 'c051' || activeCard.id === 'c041' ? '🐲' : '⚔️'}
-                </div>
-                <div class="${nameColor} font-bold text-sm text-center">${activeCard.name}</div>
-            </div>
-        `;
-    } else {
-        // 無圖片的預設樣式
-        innerContent = `
-            <div class="flex flex-col items-center justify-center h-full relative z-10">
-                <div class="text-[10px] uppercase tracking-widest text-gray-500 mb-1">${activeKey}</div>
-                <div class="text-3xl mb-2 filter drop-shadow-lg animate-pulse">
-                    ${activeKey === 'main' ? '🐉' : '🛡️'}
-                </div>
-                <div class="${nameColor} font-bold text-sm text-center">${activeCard.name}</div>
-                
-                <div class="flex gap-2 mt-1">
-                    <div class="text-xs text-green-400 font-mono">HP ${currentHp}</div>
-                    <div class="text-xs text-red-400 font-mono">ATK ${activeCard.atk}</div>
-                </div>
-
-                ${activeKey === 'main' ? `<div class="text-[9px] text-blue-300 mt-2 text-center px-1">${activeCard.skill}</div>` : ''}
-            </div>
-        `;
-    }
-
-    cardVisualEl.innerHTML = innerContent;
-
-    // 3. 更新副卡指示燈 (維持原樣)
-    if (subIndicatorEl) {
-        if (playerData.cards.sub) {
-            const subCardId = playerData.cards.sub.id;
-            const subBase = CARD_DATABASE[subCardId] || { name: "Sub", rarity: "gray" };
-            const subRConfig = RARITY_CONFIG[subBase.rarity] || RARITY_CONFIG.gray;
-            
-            const isActive = activeKey === 'sub';
-            const isDead = playerData.cards.sub.currentHp <= 0;
-
-            // 微調位置
-            subIndicatorEl.className = `absolute ${prefix==='my'?'bottom-4 -left-2':'top-4 -right-2'} w-12 h-16 bg-slate-800 rounded border-2 transition-all duration-300 flex flex-col items-center justify-center overflow-hidden z-20 shadow-lg`;
-            
-            if (isDead) {
-                subIndicatorEl.classList.add('border-gray-700', 'opacity-30', 'grayscale');
-                subIndicatorEl.innerHTML = '<i class="fa-solid fa-skull text-gray-500"></i>';
-            } else if (isActive) {
-                subIndicatorEl.className += ` ${subRConfig.border} scale-110 ring-2 ring-yellow-400 ring-offset-1 ring-offset-slate-900`;
-                subIndicatorEl.innerHTML = `
-                    <div class="text-[8px] ${subRConfig.color} font-bold truncate w-full text-center px-0.5">${subBase.name}</div>
-                    <div class="text-xs">⚔️</div>
-                    <div class="text-[8px] text-white">${playerData.cards.sub.currentHp}</div>
-                `;
-            } else {
-                subIndicatorEl.className += ` ${subRConfig.border} opacity-80 hover:opacity-100 hover:scale-105`;
-                subIndicatorEl.innerHTML = `
-                    <div class="bg-black/50 w-full text-center text-[7px] text-gray-300 absolute top-0">WAIT</div>
-                    <div class="text-[8px] ${subRConfig.color} font-bold mt-2 truncate w-full text-center">${subBase.name}</div>
-                `;
-            }
-        } else {
-            subIndicatorEl.style.opacity = '0';
-        }
-    }
-}
 
 // [修正 2] 顯示抽卡結果 (確保每次都使用最新的 results)
 window.currentDrawResults = []; // 初始化為空陣列
