@@ -1,0 +1,60 @@
+{
+  "middle_school_english_courses": {
+    "英文": {
+      "七年級": {
+        "第一學期": {
+          "核心語法": ["Be動詞現在式", "人稱代名詞所有格", "指示代名詞", "現在進行式", "祈使句"],
+          "各版本情境主題": {
+            "翰林版": ["Welcome to Taiwan", "My Family", "Daily Routines"],
+            "康軒版": ["Greetings & Self-intro", "My Home & Room", "Hobbies"],
+            "南一版": ["Meeting New Friends", "Pets & Family", "School Rules"]
+          }
+        },
+        "第二學期": {
+          "核心語法": ["可數與不可數名詞", "數量詞", "現在簡單式(第三人稱單數)", "頻率副詞", "助動詞 Can"],
+          "各版本情境主題": {
+            "翰林版": ["Shopping & Food", "Free Time & Sports", "Weather & Seasons"],
+            "康軒版": ["Fruit & Markets", "Weekend Habits", "Abilities & Festivals"],
+            "南一版": ["Supermarket & Cooking", "Occupations", "Birthdays & Weather"]
+          }
+        }
+      },
+      "八年級": {
+        "第一學期": {
+          "核心語法": ["過去簡單式(Be & V)", "過去進行式", "授與動詞", "助動詞 Have to/Must/Should"],
+          "各版本情境主題": {
+            "翰林版": ["Summer Vacation", "Travel & Directions", "Health & Illness"],
+            "康軒版": ["Childhood Memories", "Public Transportation", "Medical Care"],
+            "南一版": ["Night Market Experiences", "City Maps & Directions", "Dining Table Manners"]
+          }
+        },
+        "第二學期": {
+          "核心語法": ["未來式(Will/Be going to)", "比較級與最高級", "連綴動詞", "感官動詞(V/V-ing)"],
+          "各版本情境主題": {
+            "翰林版": ["Future Career", "Comparison of Life", "Sensory Experiences"],
+            "康軒版": ["Future Plans & Tech", "Nature & World Records", "Music & Feelings"],
+            "南一版": ["Weather Forecasts", "Animal Comparison", "Cooking Contests"]
+          }
+        }
+      },
+      "九年級": {
+        "第一學期": {
+          "核心語法": ["現在完成式", "被動語態", "使役動詞", "名詞子句/間接問句"],
+          "各版本情境主題": {
+            "翰林版": ["Travel Experiences", "Tech & Environment", "Social Media & Communication"],
+            "康軒版": ["Moving to New Places", "Green Living", "Pop Culture & News"],
+            "南一版": ["Personal Achievements", "Global Industry", "Social Pressure"]
+          }
+        },
+        "第二學期": {
+          "核心語法": ["關係代名詞(形容詞子句)", "進階閱讀策略", "綜合文法複習"],
+          "各版本情境主題": {
+            "翰林版": ["Career Planning", "Review & Reading Strategies"],
+            "康軒版": ["Ideal Housing", "Final Exam Prep"],
+            "南一版": ["Advanced Character Description", "Overall Review"]
+          }
+        }
+      }
+    }
+  }
+}
