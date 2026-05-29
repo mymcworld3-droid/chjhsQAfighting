@@ -2101,34 +2101,34 @@ window.startSoloMode = (mode) => {
     window.startQuizFlow(true);
 };
 
-//🔥 修改：fetchOneQuestion，隨機從清單抽取，並且如果是有子單元，強制傳送知識點給 AI
+//🔥 修改：優化單人模式的 AI 出題邏輯，精準提取複選清單中的知識細項傳送至後端
 async function fetchOneQuestion() {
     const settings = currentUserData.gameSettings || { source: 'ai', difficulty: 'medium' };
     const rankName = getRankName(currentUserData.stats.rankLevel || 0);
 
-    // ==========================================
-    // 🧠 模式 A: 單人挑戰模式 (複選單元出題)
-    // ==========================================
     if (soloSession.active && soloSession.selectedUnits && soloSession.selectedUnits.length > 0) {
-        
-        // 1. 從已選清單中隨機抽取一個項目作為本次出題範圍
+        // 1. 從玩家的複選清單中，隨機抽取一個已選單元作為本次出題核心
         const randomUnit = soloSession.selectedUnits[Math.floor(Math.random() * soloSession.selectedUnits.length)];
         
+        // 從路徑解析學科名稱 (例如: "國文/chinese.json" -> "國文")
         const parts = randomUnit.path.split('/');
         const subject = parts[0]; 
         
-        // 🔥 如果是有子單元，將知識點串接進 targetTopic，強制 AI 只考這些內容
-        let targetTopic = randomUnit.detail || randomUnit.path;
+        // 建立特定出題主題。如果內含知識點細項，則強制串接指導語，命令 AI 嚴格遵守
+        let targetTopic = randomUnit.detail || randomUnit.path.replace('.json', '');
         if (randomUnit.sub_topics && randomUnit.sub_topics.length > 0) {
-            targetTopic += ` (請嚴格限制在此範圍出題。包含知識點：${randomUnit.sub_topics.join('、')})`;
+            targetTopic += ` (核心考點細項：${randomUnit.sub_topics.join('、')})`;
         }
 
-        // 2. 弱點邏輯
+        // 2. 弱點分析動態難度校準
         const weakSubjects = (currentUserData.profile.weakSubjects || "").split(',').map(s => s.trim());
         const isWeak = weakSubjects.includes(subject);
-        let finalDifficulty = isWeak ? "easy" : "hard";
+        let finalDifficulty = isWeak ? "easy" : settings.difficulty;
+        if (!finalDifficulty || finalDifficulty === 'auto') {
+            finalDifficulty = getSmartDifficulty();
+        }
 
-        console.log(`[Solo-Gen] 隨機選中: ${randomUnit.detail || randomUnit.path}, 難度: ${finalDifficulty}`);
+        console.log(`[AI-出題邏輯更新] 學科: ${subject} | 範圍: ${targetTopic} | 難度: ${finalDifficulty}`);
 
         try {
             const BACKEND_URL = "/api/generate-quiz";
@@ -2138,7 +2138,7 @@ async function fetchOneQuestion() {
                 body: JSON.stringify({
                     subject: subject, 
                     specificTopic: targetTopic, 
-                    level: currentUserData.profile.educationLevel || "General", 
+                    level: currentUserData.profile.educationLevel || "國中", 
                     rank: rankName, 
                     difficulty: finalDifficulty,
                     language: currentLang,
@@ -2161,17 +2161,15 @@ async function fetchOneQuestion() {
             return {
                 data: { q: rawData.q, opts: allOptions, ans: correctIndex, exp: rawData.exp },
                 rank: rankName,
-                badge: `🎯 ${subject} | ${finalDifficulty === 'easy' ? '基礎強化' : '進階挑戰'}`
+                badge: `🎯 ${subject} | ${rawData.sub_topic || '精選'}`
             };
         } catch (e) {
-            console.error("[Fetch-Solo-Error] 單人模式生成失敗:", e);
+            console.error("[AI-出題失敗] 啟用單人模式複選出題降級備援機制:", e);
             throw e;
         }
     }
 
-    // ==========================================
-    // 模式 B: 一般模式 (AI 或 題庫)
-    // ==========================================
+    // --- 以下為一般模式 (AI 隨機 或 固定題庫出題)，保持原程式碼邏輯結構不變 ---
     let finalDifficulty = settings.difficulty;
     if (!finalDifficulty || finalDifficulty === 'auto') {
         finalDifficulty = getSmartDifficulty();
@@ -2216,7 +2214,6 @@ async function fetchOneQuestion() {
             throw e;
         }
     } else {
-        // 題庫模式
         let targetSource = settings.source; 
         if (!currentBankData || currentBankData.sourcePath !== targetSource) {
             let filesToFetch = [];
