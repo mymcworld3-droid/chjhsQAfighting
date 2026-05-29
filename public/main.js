@@ -1885,7 +1885,7 @@ window.openSoloModeSelector = async () => {
     }
 };
 
-//🔥 修正：遞迴選單，更新目前瀏覽節點狀態 (支援選擇整個資料夾)
+//🔥 修改：國中單元多階層遞迴選擇器，全面支援新版學科 JSON 結構 (如 chinese.json, english.json)
 window.renderSoloUnitSelectors = async (tree, currentPath) => {
     const container = document.getElementById('solo-unit-selectors-container');
     const hint = document.getElementById('solo-unit-hint');
@@ -1897,7 +1897,7 @@ window.renderSoloUnitSelectors = async (tree, currentPath) => {
 
     const createSelect = async (level, currentNode) => {
         const select = document.createElement('select');
-        select.className = "w-full bg-slate-900/50 border border-slate-600 text-white rounded-lg p-2 text-xs outline-none focus:border-cyan-500 mb-2 cursor-pointer";
+        select.className = "w-full bg-slate-900/50 border border border-slate-600 text-white rounded-lg p-2 text-xs outline-none focus:border-cyan-500 mb-2 cursor-pointer";
         
         const defaultOpt = document.createElement('option');
         defaultOpt.value = "";
@@ -1920,8 +1920,8 @@ window.renderSoloUnitSelectors = async (tree, currentPath) => {
             newParts.push(val);
             const newPath = newParts.join('/');
             
-            window.soloSelectedUnitDetail = ""; // 重置細項
-            window.currentBrowsingUnit = { path: newPath, detail: "", sub_topics: [] }; // 設定當前為此目錄
+            window.soloSelectedUnitDetail = ""; 
+            window.currentBrowsingUnit = { path: newPath, detail: "", sub_topics: [] }; 
             
             hint.innerText = `✅ 目錄：${newPath.replace('.json', '')}`;
             hint.className = "text-[10px] text-cyan-400 font-mono truncate max-w-[200px] inline-block";
@@ -1942,6 +1942,7 @@ window.renderSoloUnitSelectors = async (tree, currentPath) => {
         }
     };
 
+    //🔥 內部優化函式：支援讀取全新結構化的國文、英文、數學等學科 JSON 檔
     async function renderInnerUnitSelect(filePath) {
         try {
             const res = await fetch(`/middle_school_unit_name/${filePath}`);
@@ -1949,18 +1950,23 @@ window.renderSoloUnitSelectors = async (tree, currentPath) => {
             const units = await res.json();
 
             const select = document.createElement('select');
-            select.className = "w-full bg-slate-900/50 border border-cyan-500/50 text-cyan-200 rounded-lg p-2 text-xs outline-none mb-2 animate-pulse cursor-pointer";
+            select.className = "w-full bg-slate-900/50 border border border-cyan-500/50 text-cyan-200 rounded-lg p-2 text-xs outline-none mb-2 animate-pulse cursor-pointer";
             const defaultOpt = document.createElement('option');
             defaultOpt.value = "";
             defaultOpt.innerText = "-- 選擇具體單元 (選填) --";
             defaultOpt.selected = !window.soloSelectedUnitDetail;
             select.appendChild(defaultOpt);
 
+            //🔥 同步支援兩種格式：舊版物件陣列 [{name: 'xxx'}] 與 新版具有主鍵的單元結構
             units.forEach(u => {
                 const opt = document.createElement('option');
-                opt.value = u.name;
-                opt.innerText = u.name;
-                if (window.soloSelectedUnitDetail === u.name) opt.selected = true;
+                // 兼容 u.name (舊版) 或 u.unit / u.title (全新版本結構)
+                const unitName = u.name || u.unit || u.title || (typeof u === 'string' ? u : "");
+                if (!unitName) return;
+
+                opt.value = unitName;
+                opt.innerText = unitName;
+                if (window.soloSelectedUnitDetail === unitName) opt.selected = true;
                 select.appendChild(opt);
             });
 
@@ -1972,11 +1978,15 @@ window.renderSoloUnitSelectors = async (tree, currentPath) => {
                     hint.innerText = `✅ 目錄：${filePath.replace('.json', '')}`;
                 } else {
                     window.soloSelectedUnitDetail = val;
-                    const selectedUnit = units.find(u => u.name === val);
+                    // 尋找對應的單元物件以抓取對應的知識點 (details 或 sub_topics)
+                    const selectedUnit = units.find(u => (u.name === val || u.unit === val || u.title === val));
+                    //🔥 智慧映射：將新版 JSON 的 details 欄位自動映射為前端出題所需的 sub_topics
+                    const rawTopics = selectedUnit ? (selectedUnit.sub_topics || selectedUnit.details || []) : [];
+                    
                     window.currentBrowsingUnit = { 
                         path: filePath, 
                         detail: val, 
-                        sub_topics: selectedUnit ? (selectedUnit.sub_topics || []) : [] 
+                        sub_topics: Array.isArray(rawTopics) ? rawTopics : [rawTopics]
                     };
                     hint.innerText = `✅ 單元：${val}`;
                 }
@@ -1985,7 +1995,7 @@ window.renderSoloUnitSelectors = async (tree, currentPath) => {
             };
             container.appendChild(select);
         } catch (e) {
-            console.error("[JSON-Error]", e);
+            console.error("[JSON-Error] 讀取學科單元檔案失敗:", e);
         }
     }
     await createSelect(0, tree);
