@@ -1603,24 +1603,50 @@ window.renderCascadingSelectors = (tree, currentPath) => {
     createSelect(0, tree);
 };
 
+window.toggleSourceMode = () => {
+    const mode = document.getElementById('set-source-mode').value;
+    const bankContainer = document.getElementById('bank-source-container');
+    const focusedContainer = document.getElementById('focused-source-container');
+    
+    if (mode === 'bank') {
+        bankContainer.classList.remove('hidden');
+        focusedContainer.classList.add('hidden');
+    } else if (mode === 'focused') {
+        bankContainer.classList.add('hidden');
+        focusedContainer.classList.remove('hidden');
+    } else {
+        bankContainer.classList.add('hidden');
+        focusedContainer.classList.add('hidden');
+    }
+};
+
 async function updateSettingsInputs() {
     if (currentUserData && currentUserData.profile) {
         document.getElementById('set-level').value = currentUserData.profile.educationLevel || "國中一年級";
         document.getElementById('set-strong').value = currentUserData.profile.strongSubjects || "";
         document.getElementById('set-weak').value = currentUserData.profile.weakSubjects || "";
-        const settings = currentUserData.gameSettings || { source: 'ai', difficulty: 'medium' };
+        
+        const settings = currentUserData.gameSettings || { sourceMode: 'random', source: 'ai', difficulty: 'medium', focusedUnits: [] };
+        
         const diffSelect = document.getElementById('set-difficulty');
-        if(diffSelect) diffSelect.value = settings.difficulty;
-        const container = document.getElementById('bank-selectors-container');
+        if(diffSelect) diffSelect.value = settings.difficulty || 'auto';
+        
+        const sourceModeSelect = document.getElementById('set-source-mode');
+        if(sourceModeSelect) {
+            sourceModeSelect.value = settings.sourceMode || 'random';
+            window.toggleSourceMode();
+        }
+
+        // 初始化題庫選擇
         const hiddenInput = document.getElementById('set-source-final-value');
         const hint = document.getElementById('bank-selection-hint');
-        if (container) {
-            hiddenInput.value = settings.source;
+        if (hiddenInput) {
+            hiddenInput.value = settings.source || 'ai';
             if(settings.source === 'ai') {
                 hint.innerText = "Mode: AI";
                 hint.className = "text-xs text-green-400 mt-1";
             } else {
-                hint.innerText = `Selected: ${settings.source.replace('.json', '')}`;
+                hint.innerText = `Selected: ${(settings.source||'').replace('.json', '')}`;
                 hint.className = "text-xs text-blue-400 mt-1";
             }
             try {
@@ -1629,9 +1655,23 @@ async function updateSettingsInputs() {
                 if (data.files && Array.isArray(data.files)) {
                     allBankFiles = data.files;
                     const tree = buildPathTree(data.files);
-                    renderCascadingSelectors(tree, settings.source);
+                    renderCascadingSelectors(tree, settings.source || 'ai');
                 }
-            } catch (e) { console.error("Error loading banks", e); container.innerHTML = '<div class="text-red-400 text-xs">Load Failed</div>'; }
+            } catch (e) { console.error("Error loading banks", e); }
+        }
+
+        // 初始化專注練習清單
+        window.soloSelectedUnits = settings.focusedUnits || [];
+        window.renderSelectedUnitsList();
+        try {
+            const res = await fetch('/api/units');
+            const data = await res.json();
+            if (data.files && Array.isArray(data.files)) {
+                const tree = buildPathTree(data.files);
+                renderSoloUnitSelectors(tree, "");
+            }
+        } catch (e) {
+            console.error("Failed to load units", e);
         }
     }
 }
