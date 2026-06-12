@@ -180,11 +180,14 @@ function getRandomItem(arr) {
 }
 
 // ==========================================
-// API 2: 生成測驗題目 (已修改：移除圖片 Prompt 請求)
+// API 2: 生成測驗題目 (優化版：單次請求 + 安全 JSON 解析)
 // ==========================================
 app.post('/api/generate-quiz', async (req, res) => {
-    let { subject, level, rank, difficulty, knowledgeMap, specificTopic } = req.body;
+    // 兼容前端可能傳來的 specificTopic 或 topic
+    let { subject, level, rank, difficulty, knowledgeMap, specificTopic, topic } = req.body;
     
+    let targetTopic = specificTopic || topic;
+
     // 1. 科目選擇
     if (!subject) {
         const allSubjects = Object.keys(SUBJECT_SCHEMA);
@@ -192,7 +195,6 @@ app.post('/api/generate-quiz', async (req, res) => {
     }
 
     // 2. 子題型選擇
-    let targetTopic = specificTopic;
     if (!targetTopic && SUBJECT_SCHEMA[subject]) {
         targetTopic = getRandomItem(SUBJECT_SCHEMA[subject]);
     }
@@ -216,7 +218,6 @@ app.post('/api/generate-quiz', async (req, res) => {
 
     const randomSeed = Math.random().toString(36).substring(7);
 
-    // ⭐ [修改重點] Prompt 中移除了對 image_prompt 的請求
     const generationPrompt = `
         [系統指令]
         你是由 Google 開發的 AI 教育專家，請生成一道高品質的「單選題」。
@@ -234,36 +235,33 @@ app.post('/api/generate-quiz', async (req, res) => {
         [輸出格式 (JSON Only)]
         請直接回傳 JSON，不要 markdown 標記：
         {
-            "q": "題目內容 (純文字描述，不需要請求圖片)",
+            "q": "題目內容 (純文字描述)",
             "correct": "正確選項",
             "wrong": ["錯誤1", "錯誤2", "錯誤3"],
             "exp": "解析內容...",
             "subject": "${subject}",
             "sub_topic": "${targetTopic}" 
         }
-        請檢查以下 JSON 格式是否正確，且確認：答案 "correct" 只有一個、正確答案是否正確、錯誤答案中是否有正確答案、選項要在選項裡不可在題目裡、不可為多選題、表格文本要記得換行
+        請檢查：答案 "correct" 只有一個、錯誤答案中沒有正確答案、選項必須在選項裡不可在題目裡、不可為多選題。
     `;
 
-    // 6. 呼叫 AI
+    // 6. 呼叫 AI (取消雙重呼叫，改為直接解析)
     let attempts = 0;
     const maxAttempts = 3;
 
     while (attempts < maxAttempts) {
         try {
-            console.log(`[Gen] ${subject} > ${targetTopic} (${difficulty})`); 
+            console.log(`[Gen] ${subject} > ${targetTopic} (${difficulty}) - 嘗試 ${attempts + 1}`); 
             const genResult = await model.generateContent(generationPrompt);
-            let rawText = genResult.response.text().replace(/```json/g, '').replace(/```/g, '').trim();
+            const rawText = genResult.response.text();
             
-            // 審查 Prompt (簡化版)
-            const validationPrompt = `
-                請檢查以下 JSON 格式是否正確，且確認：答案 "correct" 只有一個、正確答案是否正確、錯誤答案中是否有正確答案、選項要在選項裡、不可為多選題、表格文本要記得換行。
-                並回傳修正後的純 JSON：
-                ${rawText}
-            `;
-            const valResult = await model.generateContent(validationPrompt);
-            let finalText = valResult.response.text().replace(/```json/g, '').replace(/```/g, '').trim();
+            // 使用正則表達式，安全提取大括號內的 JSON 內容
+            const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+            if (!jsonMatch) {
+                throw new Error("AI 回應中未找到 JSON 結構");
+            }
             
-            const parsed = JSON.parse(finalText);
+            const parsed = JSON.parse(jsonMatch[0]);
             if(!parsed.sub_topic) parsed.sub_topic = targetTopic;
             if(!parsed.subject) parsed.subject = subject;
 
