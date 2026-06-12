@@ -2209,7 +2209,6 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     const timeTaken = (Date.now() - (window.quizStartTime || Date.now())) / 1000;
     const isCorrect = userIdx === correctIdx;
     
-    // UI: 禁用按鈕與顯示正誤
     const opts = document.querySelectorAll('[id^="option-btn-"]');
     opts.forEach((btn, idx) => {
         btn.onclick = null; 
@@ -2237,16 +2236,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         if (navigator.vibrate) navigator.vibrate(200);
     }
     
-    // 🔥 修改：註解掉此行！保留題目資料，讓「回報問題」功能讀取得到
-    // localStorage.removeItem('currentQuiz'); 
-    
     fbText.innerHTML = parseMarkdownImages(explanation) || "AI did not provide explanation.";
-
-    // ==========================================
-    // 🧠 模式邏輯分流
-    // ==========================================
-    const isInfinite = soloSession.mode === 'infinite';
-    const isChallenge = soloSession.mode === 'challenge';
 
     if (soloSession.active) {
         if (isCorrect) soloSession.correctCount++;
@@ -2254,75 +2244,40 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         
         soloSession.history.push({ q: questionText, isCorrect: isCorrect, exp: explanation });
 
-        // 🟥 挑戰模式特殊邏輯：答錯追加題目
-        if (isChallenge && !isCorrect) {
-            soloSession.maxSteps++; // 總題數 +1
-            fbTitle.innerHTML += `<div class="text-xs text-yellow-300 mt-1 animate-pulse">⚠️ 答錯懲罰：追加一題同類題目！</div>`;
-            // 更新 UI 上的總題數
-            const maxEl = document.getElementById('solo-max-steps');
-            if(maxEl) maxEl.innerText = soloSession.maxSteps;
-        }
-
-        // 更新計數面板
         const elCorrect = document.getElementById('solo-correct-count');
         const elWrong = document.getElementById('solo-wrong-count');
         if (elCorrect) elCorrect.innerText = soloSession.correctCount;
         if (elWrong) elWrong.innerText = soloSession.wrongCount;
 
-        // 🟩 設定按鈕行為
         const nextBtn = document.getElementById('btn-next-step');
         if (nextBtn) {
-            // 挑戰模式且達到最大題數 -> 結算
-            if (isChallenge && soloSession.currentStep >= soloSession.maxSteps) {
-                nextBtn.innerHTML = '<i class="fa-solid fa-flag-checkered"></i> 完成挑戰 (領取獎勵)';
-                nextBtn.className = "btn-cyber-accent flex-1 py-3 rounded-lg text-xs font-bold animate-pulse bg-yellow-600 text-white shadow-lg";
-                nextBtn.onclick = window.finishSoloSession; 
-            } else {
-                // 無限模式 或 挑戰模式未結束 -> 下一題
-                soloSession.currentStep++; // 預備下一題序號
-                nextBtn.innerText = isInfinite ? `下一題 (目前連對: ${currentUserData.stats.currentStreak + (isCorrect?1:0)})` : t('btn_next_q');
-                nextBtn.className = "btn-cyber-primary flex-1 py-3 rounded-lg text-xs bg-cyan-600 text-white";
-                nextBtn.onclick = window.nextQuestion; 
-            }
+            soloSession.currentStep++;
+            nextBtn.innerText = `下一題 (目前連對: ${currentUserData.stats.currentStreak + (isCorrect?1:0)})`;
+            nextBtn.className = "btn-cyber-primary flex-1 py-3 rounded-lg text-xs bg-cyan-600 text-white";
+            nextBtn.onclick = window.nextQuestion; 
         }
     }
 
-    // ==========================================
-    // 💰 全域統計與獎勵更新
-    // ==========================================
     let stats = currentUserData.stats;
     let scoreGain = 0;
 
-    // 1. 無限模式：即時更新全域狀態與金幣
-    if (isInfinite) {
-        stats.totalAnswered++;
-        if (isCorrect) {
-            stats.totalCorrect++; 
-            stats.currentStreak++;
-            if (stats.currentStreak > stats.bestStreak) stats.bestStreak = stats.currentStreak;
-            
-            // 💰 無限模式獎勵：每題固定 20 (可加上連勝加成)
-            scoreGain = 20;
-            // 顯示獲得金幣提示
-            fbTitle.innerHTML += ` <span class="text-yellow-400 text-sm ml-2 border border-yellow-500 rounded px-1">+${scoreGain}💰</span>`;
-        } else {
-            stats.currentStreak = 0; // 答錯斷連勝
-        }
-        stats.totalScore += scoreGain;
+    stats.totalAnswered++;
+    if (isCorrect) {
+        stats.totalCorrect++; 
+        stats.currentStreak++;
+        if (stats.currentStreak > stats.bestStreak) stats.bestStreak = stats.currentStreak;
+        
+        scoreGain = 20; // 無限模式獎勵
+        fbTitle.innerHTML += ` <span class="text-yellow-400 text-sm ml-2 border border-yellow-500 rounded px-1">+${scoreGain}💰</span>`;
+    } else {
+        stats.currentStreak = 0; 
     }
-    // 2. 挑戰模式：僅記錄答題數，不即時給分 (保留到 finishSoloSession)
-    else if (isChallenge) {
-        stats.totalAnswered++;
-        if (isCorrect) stats.totalCorrect++;
-        // 不更新 currentStreak 以免挑戰模式影響首頁連勝紀錄
-    }
+    stats.totalScore += scoreGain;
 
-    // 更新段位
     const netScore = getNetScore(stats);
     const newRank = calculateRankFromScore(netScore);
     if (newRank > stats.rankLevel) stats.rankLevel = newRank;
 
-    // 寫入資料庫
     try {
         const p1 = updateDoc(doc(db, "users", auth.currentUser.uid), { stats: stats });
         const p2 = addDoc(collection(db, "exam_logs"), { 
@@ -2332,7 +2287,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
             isCorrect: isCorrect, 
             timeTaken: timeTaken,
             topic: "Solo", 
-            mode: soloSession.mode, // 記錄模式
+            mode: 'infinite', 
             timestamp: serverTimestamp() 
         });
         await Promise.all([p1, p2]);
