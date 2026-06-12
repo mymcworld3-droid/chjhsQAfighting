@@ -2063,42 +2063,6 @@ window.renderSelectedUnitsList = () => {
     });
 };
 
-//🔥 修改：startSoloMode，確保有「已選清單」，並寫入 session
-window.startSoloMode = (mode) => {
-    if (!window.soloSelectedUnits || window.soloSelectedUnits.length === 0) {
-        alert("請先在右側加入至少一個要挑戰的單元或目錄！");
-        return;
-    }
-
-    const modal = document.getElementById('solo-mode-selector');
-    if(modal) modal.classList.add('hidden');
-
-    soloSession = {
-        active: true,
-        mode: mode,
-        currentStep: 1,
-        maxSteps: mode === 'challenge' ? 10 : 9999,
-        correctCount: 0,
-        wrongCount: 0,
-        history: [],
-        selectedUnits: [...window.soloSelectedUnits] // 🔥 存入複選陣列
-    };
-
-    const progressPanel = document.getElementById('solo-progress-panel');
-    if (progressPanel) {
-        if (mode === 'challenge') {
-            progressPanel.classList.remove('hidden');
-            document.getElementById('solo-current-step').innerText = 1;
-            const maxEl = document.getElementById('solo-max-steps'); 
-            if(maxEl) maxEl.innerText = 10; 
-        } else {
-            progressPanel.classList.add('hidden'); 
-        }
-    }
-
-    window.startQuizFlow(true);
-};
-
 //🔥 修改：優化單人模式的 AI 出題邏輯，精準提取複選清單中的知識細項傳送至後端
 async function fetchOneQuestion() {
     const settings = currentUserData.gameSettings || { source: 'ai', difficulty: 'medium' };
