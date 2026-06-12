@@ -1703,20 +1703,56 @@ window.saveProfile = async () => {
     const level = document.getElementById('set-level').value;
     const rawStrong = document.getElementById('set-strong').value;
     const rawWeak = document.getElementById('set-weak').value;
+    const sourceMode = document.getElementById('set-source-mode').value;
     const source = document.getElementById('set-source-final-value').value; 
     const difficulty = document.getElementById('set-difficulty').value;
-    if (!source) { alert("Please select source"); return; }
+
+    if (sourceMode === 'bank' && (!source || source === 'ai')) { alert("請選擇題庫檔案！"); return; }
+    if (sourceMode === 'focused' && (!window.soloSelectedUnits || window.soloSelectedUnits.length === 0)) { alert("請至少加入一個單元！"); return; }
+
     const btn = document.querySelector('button[onclick="saveProfile()"]');
     btn.innerText = "Saving..."; btn.disabled = true;
+    
     const cleanStrong = await getCleanSubjects(rawStrong);
     const cleanWeak = await getCleanSubjects(rawWeak);
     document.getElementById('set-strong').value = cleanStrong;
     document.getElementById('set-weak').value = cleanWeak;
-    await updateDoc(doc(db, "users", auth.currentUser.uid), { "profile.educationLevel": level, "profile.strongSubjects": cleanStrong, "profile.weakSubjects": cleanWeak, "gameSettings": { source, difficulty } });
-    currentUserData.profile.educationLevel = level; currentUserData.profile.strongSubjects = cleanStrong; currentUserData.profile.weakSubjects = cleanWeak; currentUserData.gameSettings = { source, difficulty };
-    currentBankData = null; localStorage.removeItem('currentQuiz'); quizBuffer = []; fillBuffer();
-    btn.innerText = "Saved!"; setTimeout(() => { btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Update`; btn.disabled = false; }, 2000);
+    
+    const newSettings = { 
+        sourceMode: sourceMode, 
+        source: source, 
+        difficulty: difficulty,
+        focusedUnits: [...(window.soloSelectedUnits || [])]
+    };
+
+    await updateDoc(doc(db, "users", auth.currentUser.uid), { 
+        "profile.educationLevel": level, 
+        "profile.strongSubjects": cleanStrong, 
+        "profile.weakSubjects": cleanWeak, 
+        "gameSettings": newSettings 
+    });
+    
+    currentUserData.profile.educationLevel = level; 
+    currentUserData.profile.strongSubjects = cleanStrong; 
+    currentUserData.profile.weakSubjects = cleanWeak; 
+    currentUserData.gameSettings = newSettings;
+    
+    currentBankData = null; 
+    localStorage.removeItem('currentQuiz'); 
+    quizBuffer = []; 
+    fillBuffer();
+    
+    btn.innerText = "Saved!"; 
+    setTimeout(() => { btn.innerHTML = `UPDATE SYSTEM`; btn.disabled = false; }, 2000);
 };
+
+async function switchToAI() {
+    await updateDoc(doc(db, "users", auth.currentUser.uid), { "gameSettings.sourceMode": 'random' });
+    currentUserData.gameSettings.sourceMode = 'random';
+    const sm = document.getElementById('set-source-mode');
+    if(sm) { sm.value = 'random'; toggleSourceMode(); }
+    return fetchOneQuestion(); 
+}
 
 // ==========================================
 //  出題核心 (AI / 題庫 - 支援資料夾混合)
