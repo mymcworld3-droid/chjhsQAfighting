@@ -516,10 +516,36 @@
                     </div>
                     
                     <div class="pt-2 border-t border-white/5 mt-2">
-                        <label class="text-[10px] font-bold text-yellow-500 mb-1 block uppercase" data-i18n="label_source">Source</label>
-                        <div id="bank-selectors-container" class="space-y-2"></div>
-                        <input type="hidden" id="set-source-final-value" value="ai">
-                        <p id="bank-selection-hint" class="text-[10px] text-gray-500 mt-1 font-mono">Select database...</p>
+                        <label class="text-[10px] font-bold text-yellow-500 mb-1 block uppercase">出題模式 (Source Mode)</label>
+                        <select id="set-source-mode" class="input-cyber w-full mb-3" onchange="toggleSourceMode()">
+                            <option value="random">🌟 綜合題目 (隨機出題)</option>
+                            <option value="focused">🎯 專注練習 (自訂單元)</option>
+                            <option value="bank">📚 題庫練習 (固定題庫)</option>
+                        </select>
+
+                        <div id="bank-source-container" class="hidden bg-slate-900/50 p-3 rounded-lg border border-white/5">
+                            <div id="bank-selectors-container" class="space-y-2"></div>
+                            <input type="hidden" id="set-source-final-value" value="ai">
+                            <p id="bank-selection-hint" class="text-[10px] text-gray-500 mt-1 font-mono">Select database...</p>
+                        </div>
+
+                        <div id="focused-source-container" class="hidden bg-slate-900/50 p-3 rounded-lg border border-white/5">
+                            <div id="solo-unit-selectors-container" class="space-y-2">
+                                <div class="text-center py-2 text-gray-500 text-xs">載入單元資料中...</div>
+                            </div>
+                            <div class="flex items-center justify-between mt-2 h-6">
+                                <p id="solo-unit-hint" class="text-[10px] text-gray-500 font-mono italic">請選擇學科與進度</p>
+                                <button onclick="addCurrentUnitToSelection()" id="btn-add-unit" type="button" class="hidden bg-cyan-600 hover:bg-cyan-500 text-white text-[10px] font-bold px-3 py-1 rounded shadow transition-all active:scale-95">
+                                    <i class="fa-solid fa-plus"></i> 加入
+                                </button>
+                            </div>
+                            <div class="mt-3 pt-3 border-t border-white/10">
+                                <div class="text-xs text-green-400 font-bold mb-2">已選清單：</div>
+                                <div id="solo-selected-units-list" class="max-h-[120px] overflow-y-auto custom-scrollbar pr-1 space-y-1">
+                                    <div class="text-[10px] text-gray-500 text-center py-2">尚未選擇任何單元</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="form-group">
