@@ -2051,38 +2051,34 @@ window.renderSelectedUnitsList = () => {
     });
 };
 
-//🔥 修改：優化單人模式的 AI 出題邏輯，精準提取複選清單中的知識細項傳送至後端
 async function fetchOneQuestion() {
-    const settings = currentUserData.gameSettings || { source: 'ai', difficulty: 'medium' };
+    const settings = currentUserData.gameSettings || { sourceMode: 'random', source: 'ai', difficulty: 'auto', focusedUnits: [] };
     const rankName = getRankName(currentUserData.stats.rankLevel || 0);
+    let finalDifficulty = settings.difficulty;
+    if (!finalDifficulty || finalDifficulty === 'auto') {
+        finalDifficulty = getSmartDifficulty();
+    }
 
-    if (soloSession.active && soloSession.selectedUnits && soloSession.selectedUnits.length > 0) {
-        // 1. 從玩家的複選清單中，隨機抽取一個已選單元作為本次出題核心
-        const randomUnit = soloSession.selectedUnits[Math.floor(Math.random() * soloSession.selectedUnits.length)];
-        
-        // 從路徑解析學科名稱 (例如: "國文/chinese.json" -> "國文")
+    const sourceMode = settings.sourceMode || 'random';
+
+    // 1. 專注練習 (AI)
+    if (sourceMode === 'focused' && settings.focusedUnits && settings.focusedUnits.length > 0) {
+        const randomUnit = settings.focusedUnits[Math.floor(Math.random() * settings.focusedUnits.length)];
         const parts = randomUnit.path.split('/');
         const subject = parts[0]; 
         
-        // 建立特定出題主題。如果內含知識點細項，則強制串接指導語，命令 AI 嚴格遵守
         let targetTopic = randomUnit.detail || randomUnit.path.replace('.json', '');
         if (randomUnit.sub_topics && randomUnit.sub_topics.length > 0) {
             targetTopic += ` (核心考點細項：${randomUnit.sub_topics.join('、')})`;
         }
 
-        // 2. 弱點分析動態難度校準
         const weakSubjects = (currentUserData.profile.weakSubjects || "").split(',').map(s => s.trim());
-        const isWeak = weakSubjects.includes(subject);
-        let finalDifficulty = isWeak ? "easy" : settings.difficulty;
-        if (!finalDifficulty || finalDifficulty === 'auto') {
-            finalDifficulty = getSmartDifficulty();
-        }
+        if (weakSubjects.includes(subject)) finalDifficulty = "easy";
 
-        console.log(`[AI-出題邏輯更新] 學科: ${subject} | 範圍: ${targetTopic} | 難度: ${finalDifficulty}`);
+        console.log(`[AI-專注出題] 學科: ${subject} | 範圍: ${targetTopic} | 難度: ${finalDifficulty}`);
 
         try {
-            const BACKEND_URL = "/api/generate-quiz";
-            const response = await fetch(BACKEND_URL, {
+            const response = await fetch("/api/generate-quiz", {
                 method: "POST", 
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -2095,43 +2091,80 @@ async function fetchOneQuestion() {
                     knowledgeMap: currentUserData.stats.knowledgeMap || {} 
                 })
             });
-
             if (!response.ok) throw new Error(`Server Error: ${response.status}`);
-            
             const data = await response.json();
             let aiText = data.text;
             const jsonMatch = aiText.match(/\{[\s\S]*\}/);
             if (jsonMatch) aiText = jsonMatch[0];
             const rawData = JSON.parse(aiText);
 
-            let allOptions = [rawData.correct, ...rawData.wrong];
-            allOptions = shuffleArray(allOptions);
-            const correctIndex = allOptions.indexOf(rawData.correct);
-
+            let allOptions = shuffleArray([rawData.correct, ...rawData.wrong]);
             return {
-                data: { q: rawData.q, opts: allOptions, ans: correctIndex, exp: rawData.exp },
+                data: { q: rawData.q, opts: allOptions, ans: allOptions.indexOf(rawData.correct), exp: rawData.exp },
                 rank: rankName,
                 badge: `🎯 ${subject} | ${rawData.sub_topic || '精選'}`
             };
         } catch (e) {
-            console.error("[AI-出題失敗] 啟用單人模式複選出題降級備援機制:", e);
+            console.error("[AI-出題失敗]", e);
             throw e;
         }
-    }
+    } 
+    // 2. 題庫練習 (原本的 file based)
+    else if (sourceMode === 'bank') {
+        let targetSource = settings.source; 
+        if (!currentBankData || currentBankData.sourcePath !== targetSource) {
+            let filesToFetch = [];
+            if (targetSource && targetSource.endsWith('.json')) { 
+                filesToFetch = [targetSource]; 
+            } else if (targetSource && targetSource !== 'ai') {
+                if (allBankFiles.length === 0) {
+                    try { 
+                        const res = await fetch('/api/banks'); 
+                        const data = await res.json(); 
+                        allBankFiles = data.files || []; 
+                    } catch (e) { console.error(e); }
+                }
+                filesToFetch = allBankFiles.filter(f => f.startsWith(targetSource + '/'));
+                if (filesToFetch.length === 0) return await switchToAI();
+            } else {
+                return await switchToAI();
+            }
 
-    // --- 以下為一般模式 (AI 隨機 或 固定題庫出題)，保持原程式碼邏輯結構不變 ---
-    let finalDifficulty = settings.difficulty;
-    if (!finalDifficulty || finalDifficulty === 'auto') {
-        finalDifficulty = getSmartDifficulty();
-    }
+            try {
+                const fetchPromises = filesToFetch.map(filePath => 
+                    fetch(`/banks/${filePath}?t=${Date.now()}`)
+                        .then(res => { if (!res.ok) throw new Error(); return res.json(); })
+                        .catch(err => [])
+                );
+                const results = await Promise.all(fetchPromises);
+                const mergedQuestions = results.flat();
+                if (mergedQuestions.length === 0) throw new Error("No questions");
+                currentBankData = { sourcePath: targetSource, questions: mergedQuestions };
+            } catch (e) { 
+                console.error("[Fetch-Bank-Error] 題庫讀取失敗:", e); 
+                return await switchToAI(); 
+            }
+        }
 
-    if (settings.source === 'ai') {
-        const BACKEND_URL = "/api/generate-quiz";
+        const filteredQuestions = currentBankData.questions.filter(q => q.difficulty === finalDifficulty);
+        const pool = filteredQuestions.length > 0 ? filteredQuestions : currentBankData.questions;
+        const rawData = pool[Math.floor(Math.random() * pool.length)];
+        let allOptions = shuffleArray([rawData.correct, ...rawData.wrong]);
+        let displaySubject = rawData.subject || settings.source.split('/').pop().replace('.json', '');
+        
+        return { 
+            data: { q: rawData.q, opts: allOptions, ans: allOptions.indexOf(rawData.correct), exp: rawData.exp }, 
+            rank: rankName, 
+            badge: `🎯 ${displaySubject} | ${finalDifficulty.toUpperCase()}` 
+        };
+    } 
+    // 3. 綜合題目 (AI Random)
+    else {
         const allSubjects = ["國文", "英文", "數學", "公民", "歷史", "地理", "物理", "化學", "生物"];
         let targetSubject = allSubjects[Math.floor(Math.random() * allSubjects.length)];
         
         try {
-            const response = await fetch(BACKEND_URL, {
+            const response = await fetch("/api/generate-quiz", {
                 method: "POST", 
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -2152,10 +2185,8 @@ async function fetchOneQuestion() {
             const rawData = JSON.parse(aiText);
 
             let allOptions = shuffleArray([rawData.correct, ...rawData.wrong]);
-            const correctIndex = allOptions.indexOf(rawData.correct);
-
             return {
-                data: { q: rawData.q, opts: allOptions, ans: correctIndex, exp: rawData.exp },
+                data: { q: rawData.q, opts: allOptions, ans: allOptions.indexOf(rawData.correct), exp: rawData.exp },
                 rank: rankName,
                 badge: `🎯 ${rawData.subject} | ${rawData.sub_topic || '綜合'}`
             };
@@ -2163,52 +2194,6 @@ async function fetchOneQuestion() {
             console.error("[Fetch-AI-Error] AI 一般模式生成失敗:", e);
             throw e;
         }
-    } else {
-        let targetSource = settings.source; 
-        if (!currentBankData || currentBankData.sourcePath !== targetSource) {
-            let filesToFetch = [];
-            if (targetSource.endsWith('.json')) { 
-                filesToFetch = [targetSource]; 
-            } else {
-                if (allBankFiles.length === 0) {
-                    try { 
-                        const res = await fetch('/api/banks'); 
-                        const data = await res.json(); 
-                        allBankFiles = data.files || []; 
-                    } catch (e) { console.error(e); }
-                }
-                filesToFetch = allBankFiles.filter(f => f.startsWith(targetSource + '/'));
-                if (filesToFetch.length === 0) return switchToAI();
-            }
-
-            try {
-                const fetchPromises = filesToFetch.map(filePath => 
-                    fetch(`/banks/${filePath}?t=${Date.now()}`)
-                        .then(res => { if (!res.ok) throw new Error(); return res.json(); })
-                        .catch(err => [])
-                );
-                const results = await Promise.all(fetchPromises);
-                const mergedQuestions = results.flat();
-                if (mergedQuestions.length === 0) throw new Error("No questions");
-                currentBankData = { sourcePath: targetSource, questions: mergedQuestions };
-            } catch (e) { 
-                console.error("[Fetch-Bank-Error] 題庫讀取失敗:", e); 
-                return switchToAI(); 
-            }
-        }
-
-        const filteredQuestions = currentBankData.questions.filter(q => q.difficulty === finalDifficulty);
-        const pool = filteredQuestions.length > 0 ? filteredQuestions : currentBankData.questions;
-        const rawData = pool[Math.floor(Math.random() * pool.length)];
-        let allOptions = shuffleArray([rawData.correct, ...rawData.wrong]);
-        const correctIndex = allOptions.indexOf(rawData.correct);
-        let displaySubject = rawData.subject || settings.source.split('/').pop().replace('.json', '');
-        
-        return { 
-            data: { q: rawData.q, opts: allOptions, ans: correctIndex, exp: rawData.exp }, 
-            rank: rankName, 
-            badge: `🎯 ${displaySubject} | ${finalDifficulty.toUpperCase()}` 
-        };
     }
 }
 
