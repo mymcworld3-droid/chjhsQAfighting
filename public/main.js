@@ -1810,48 +1810,36 @@ async function fillBuffer() {
 // ==========================================
 //  Quiz UI Logic
 // ==========================================
-//🔥 移除了 localStorage 讀取機制的 startQuizFlow
 window.startQuizFlow = async (isNewSession = false) => {
-    // 如果不是透過 startSoloMode 進來的，且目前沒有 active session，預設為無限模式 (或跳出選擇)
     if (!soloSession.active && !isNewSession) {
-        // 如果直接呼叫 startQuizFlow 而沒有 Session，強制呼叫選擇器
-        window.openSoloModeSelector();
-        return;
+        // 直接默認啟動無限模式
+        soloSession = {
+            active: true,
+            mode: 'infinite',
+            correctCount: 0,
+            wrongCount: 0,
+            history: []
+        };
     }
 
     switchToPage('page-quiz');
     
-    // UI 重置
     document.getElementById('quiz-container').classList.add('hidden');
     document.getElementById('feedback-section').classList.add('hidden');
     document.getElementById('btn-giveup').classList.remove('hidden');
 
-    // 根據模式顯示 UI
     const progressPanel = document.getElementById('solo-progress-panel');
-    if (soloSession.mode === 'challenge') {
-        if(progressPanel) {
-            progressPanel.classList.remove('hidden');
-            document.getElementById('solo-current-step').innerText = soloSession.currentStep;
-            document.getElementById('solo-correct-count').innerText = soloSession.correctCount;
-            document.getElementById('solo-wrong-count').innerText = soloSession.wrongCount;
-            
-            // 更新總題數顯示 (因為錯題會增加總數)
-            const maxEl = document.getElementById('solo-max-steps');
-            if(maxEl) maxEl.innerText = soloSession.maxSteps;
-        }
-    } else {
-        // 無限模式隱藏挑戰進度面板，改顯示簡單的連勝資訊 (原 UI 已有)
-        if(progressPanel) progressPanel.classList.add('hidden');
+    if (progressPanel) {
+        progressPanel.classList.remove('hidden');
+        document.getElementById('solo-correct-count').innerText = soloSession.correctCount;
+        document.getElementById('solo-wrong-count').innerText = soloSession.wrongCount;
     }
 
     window.quizStartTime = Date.now(); 
 
-    // 🔥 刪除了原本讀取 localStorage.getItem('currentQuiz') 的行為，
-    // 確保玩家每次刷新或重啟都會產生/抽取全新的題目！
-
     if (quizBuffer.length > 0) { 
         const nextQ = quizBuffer.shift(); 
-        window.currentActiveQuiz = nextQ; // 供回報系統使用
+        window.currentActiveQuiz = nextQ; 
         renderQuiz(nextQ.data, nextQ.rank, nextQ.badge); 
         fillBuffer(); 
     } else {
@@ -1859,7 +1847,7 @@ window.startQuizFlow = async (isNewSession = false) => {
         document.getElementById('loading-text').innerText = t('loading_text');
         try { 
             const q = await fetchOneQuestion(); 
-            window.currentActiveQuiz = q; // 供回報系統使用
+            window.currentActiveQuiz = q; 
             renderQuiz(q.data, q.rank, q.badge); 
             fillBuffer(); 
         } catch (e) { 
