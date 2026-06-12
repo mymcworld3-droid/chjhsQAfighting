@@ -1765,11 +1765,6 @@ function shuffleArray(array) {
     return array;
 }
 
-async function switchToAI() {
-    await updateDoc(doc(db, "users", auth.currentUser.uid), { "gameSettings.source": 'ai' });
-    currentUserData.gameSettings.source = 'ai';
-    return fetchOneQuestion(); 
-}
 // [新增] 智慧難度判斷邏輯
 function getSmartDifficulty() {
     if (!currentUserData || !currentUserData.stats) return 'easy';
