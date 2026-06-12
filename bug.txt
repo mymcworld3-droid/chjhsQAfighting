@@ -1,0 +1,26 @@
+(index):64 cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation
+
+/api/generate-quiz:1 
+ Failed to load resource: the server responded with a status of 500 ()
+main.js:2189 [Fetch-AI-Error] AI 一般模式生成失敗: Error: Server Error: 500
+    at fetchOneQuestion (main.js:2175:37)
+    at async fillBuffer (main.js:1799:30)
+main.js:1802 Background fetch failed Error: Server Error: 500
+    at fetchOneQuestion (main.js:2175:37)
+    at async fillBuffer (main.js:1799:30)
+/api/generate-quiz:1 
+ Failed to load resource: the server responded with a status of 500 ()
+main.js:2189 [Fetch-AI-Error] AI 一般模式生成失敗: Error: Server Error: 500
+    at fetchOneQuestion (main.js:2175:37)
+    at async window.startQuizFlow (main.js:1844:23)
+main.js:1849 Error: Server Error: 500
+    at fetchOneQuestion (main.js:2175:37)
+    at async window.startQuizFlow (main.js:1844:23)
+/api/generate-quiz:1 
+ Failed to load resource: the server responded with a status of 500 ()
+main.js:2189 [Fetch-AI-Error] AI 一般模式生成失敗: Error: Server Error: 500
+    at fetchOneQuestion (main.js:2175:37)
+    at async window.startQuizFlow (main.js:1844:23)
+main.js:1849 Error: Server Error: 500
+    at fetchOneQuestion (main.js:2175:37)
+    at async window.startQuizFlow (main.js:1844:23)
