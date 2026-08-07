@@ -3040,6 +3040,14 @@ function listenToBattleRoom(roomId) {
         // 3. 一般狀態: 遊戲進行中
         // ==========================================
         if (room.status === "ready") {
+            // 🔥 邏輯優化 3: 房主端發現有人加入時，先播放動畫再進入戰鬥畫面
+            if (isHost && !window.hasSeenOpponent && room.guest) {
+                window.hasSeenOpponent = true;
+                isPlayingSequence = true; // 暫停其他渲染
+                await window.showOpponentFoundAnimation(room.guest);
+                isPlayingSequence = false;
+            }
+
             document.getElementById('battle-lobby').classList.add('hidden');
             document.getElementById('battle-arena').classList.remove('hidden');
             document.getElementById('battle-result').classList.add('hidden');
@@ -3085,6 +3093,14 @@ function listenToBattleRoom(roomId) {
                         btn.onclick = () => handleBattleAnswer(roomId, idx, room.currentQuestion.ans, isHost);
                         container.appendChild(btn);
                     });
+                    
+                    // 🔥 觸發 MathJax 重新掃描數學符號 (PvP 模式支援)
+                    if (window.MathJax) {
+                        window.MathJax.typesetPromise([
+                            document.getElementById('battle-q-text'),
+                            document.getElementById('battle-options')
+                        ]).catch((err) => console.log('MathJax Error:', err.message));
+                    }
                  }
             } else {
                 // B. 無題目 -> 顯示等待畫面 (等待房主出題)
