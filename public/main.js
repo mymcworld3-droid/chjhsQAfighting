@@ -1414,8 +1414,12 @@ window.switchToPage = (pageId) => {
     // --- 修改這裡 ---
     if (pageId === 'page-settings') { 
         renderInventory(); 
-        loadUserHistory(); 
         if (window.renderKnowledgeGraph) window.renderKnowledgeGraph(); // 渲染圖譜
+    }
+    
+    // 🔥 加上這段：切換到紀錄頁面時，載入答題歷史
+    if (pageId === 'page-history') {
+        loadUserHistory();
     }
     // ----------------
     
