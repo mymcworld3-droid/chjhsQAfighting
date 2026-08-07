@@ -3169,259 +3169,192 @@ function showBattleResultUI(room, isHost) {
      }
 }
 
+// ==========================================
+// 🎨 全新戰鬥視覺特效系統 (VFX System - Promise Based)
+// ==========================================
+
 async function playBattleSequence(logs, isHost) {
     if (!logs || logs.length === 0) return;
 
     for (const log of logs) {
-        // 判斷這一條 log 是誰發動攻擊
         const isMeAttacking = (isHost && log.attacker === 'host') || (!isHost && log.attacker === 'guest');
         const role = isMeAttacking ? 'my' : 'enemy';
         const targetRole = isMeAttacking ? 'enemy' : 'my';
-        
-        // 可選：顯示回合提示 (如「我方攻擊！」)
-        // ...
 
-        await new Promise(r => setTimeout(r, 500)); // 蓄力時間
+        // 戰鬥前奏的微小停頓
+        await new Promise(r => setTimeout(r, 600)); 
 
         if (log.isHit) {
-            // 命中：播放攻擊特效與扣血
-            triggerBattleAnimation(role, log.dmg, log.skill, log.healed);
-            
-            // 手動更新一次血條 UI (僅視覺)，配合動畫效果
-            const bar = document.getElementById(`${targetRole}-hp-bar`);
-            const txt = document.getElementById(`${targetRole}-hp-text`);
-            if(bar && txt) {
-                const currentText = txt.innerText.split('/');
-                let cur = parseInt(currentText[0]);
-                const max = parseInt(currentText[1]);
-                cur = Math.max(0, cur - log.dmg);
-                bar.style.width = `${(cur/max)*100}%`;
-                txt.innerText = `${cur}/${max}`;
-            }
+            // 命中：等待整個攻擊動畫與扣血邏輯執行完畢
+            await triggerBattleAnimation(role, targetRole, log.dmg, log.skill, log.healed);
         } else {
-            // [新增] 未命中 (MISS)：顯示攻擊失敗
-            triggerMissAnimation(targetRole);
+            // 未命中：播放 Miss 動畫
+            await triggerMissAnimation(role, targetRole);
         }
         
-        // 每個動作之間等待 1.5 秒
-        await new Promise(r => setTimeout(r, 1500));
-    }
-}// ==========================================
-// 🎨 戰鬥視覺特效系統 (VFX System)
-// ==========================================
-
-// [修正版] 更新戰鬥卡牌 UI (修復小圖被大卡片撐破的問題)
-function updateBattleCardUI(prefix, playerData) {
-    if (!playerData) return;
-    
-    // 定義 ID 對應
-    const idPrefix = prefix === 'my' ? 'my' : 'enemy';
-    
-    const container = document.getElementById(`${idPrefix}-card-container`); // 🔥 正確指向中央大卡片
-    const miniVisualEl = document.getElementById(`${idPrefix}-card-visual`); // 🔥 小頭像
-    const hpBarEl = document.getElementById(`${idPrefix}-hp-bar`);
-    const hpTextEl = document.getElementById(`${idPrefix}-hp-text`);
-    const subIndicatorEl = document.getElementById(`${idPrefix}-sub-card-indicator`);
-
-    if (!container || !hpBarEl) return;
-
-    const activeKey = playerData.activeCard; // 'main' or 'sub'
-    const activeCard = playerData.cards[activeKey];
-    
-    if (!activeCard) return;
-
-    const dbCard = CARD_DATABASE[activeCard.id];
-    if (!dbCard) return;
-
-    const maxHp = dbCard.hp;
-    const currentHp = activeCard.currentHp;
-    const hpPercent = Math.max(0, (currentHp / maxHp) * 100);
-
-    // 1. 更新卡片下方的血條
-    hpBarEl.style.width = `${hpPercent}%`;
-    hpTextEl.innerText = `${currentHp}/${maxHp}`;
-
-    // 2. 更新卡面視覺
-    const nameColor = activeKey === 'main' ? 'text-yellow-400' : 'text-gray-300';
-    const borderClass = activeKey === 'main' ? 'border-yellow-500' : 'border-gray-500';
-    
-    container.className = `relative w-32 h-48 bg-slate-800 rounded-lg border-2 ${borderClass} transition-all duration-500 mb-6 overflow-hidden shadow-2xl`;
-
-    const hasImage = getCardImageUrl(activeCard.id); 
-    let innerContent = ""; 
-
-    if (hasImage) {
-        innerContent = `
-            <img src="${hasImage}" 
-                 class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-110"
-                 onerror="this.style.display='none'; this.parentElement.querySelector('.fallback-text').style.display='flex'">
-            
-            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-            
-            <div class="absolute top-1 left-1 text-[8px] font-bold text-white bg-black/50 px-1.5 py-0.5 rounded border border-white/20 z-10">
-                ${activeCard.rarity === 'rainbow' ? 'LEGEND' : (activeCard.rarity === 'gold' ? 'MYTHIC' : 'MAIN')}
-            </div>
-
-            <div class="absolute bottom-0 w-full p-2 flex flex-col items-center z-10">
-                <div class="${nameColor} font-bold text-sm text-center drop-shadow-[0_2px_2px_rgba(0,0,0,1)]">${activeCard.name}</div>
-                
-                <div class="flex items-center gap-2 mt-0.5 bg-black/40 px-2 py-0.5 rounded-full border border-white/10 backdrop-blur-sm">
-                    <span class="text-xs text-green-400 font-black drop-shadow-md flex items-center gap-0.5">
-                        <i class="fa-solid fa-heart text-[10px]"></i> ${currentHp}
-                    </span>
-                    <span class="text-gray-500 text-[10px]">|</span>
-                    <span class="text-xs text-red-400 font-black drop-shadow-md flex items-center gap-0.5">
-                        <i class="fa-solid fa-khanda text-[10px]"></i> ${activeCard.atk}
-                    </span>
-                </div>
-
-                <div class="mt-1 text-[9px] text-cyan-300 bg-blue-900/60 px-1.5 py-0.5 rounded border border-blue-500/30 backdrop-blur-sm">
-                    ${activeCard.skill}
-                </div>
-            </div>
-
-            <div class="fallback-text hidden flex-col items-center justify-center h-full relative z-0">
-                <div class="text-3xl mb-2 filter drop-shadow-lg animate-pulse">
-                    ${activeCard.id === 'c051' || activeCard.id === 'c041' ? '🐲' : '⚔️'}
-                </div>
-                <div class="${nameColor} font-bold text-sm text-center">${activeCard.name}</div>
-            </div>
-        `;
-    } else {
-        innerContent = `
-            <div class="flex flex-col items-center justify-center h-full relative z-10">
-                <div class="text-[10px] uppercase tracking-widest text-gray-500 mb-1">${activeKey}</div>
-                <div class="text-3xl mb-2 filter drop-shadow-lg animate-pulse">
-                    ${activeKey === 'main' ? '🐉' : '🛡️'}
-                </div>
-                <div class="${nameColor} font-bold text-sm text-center">${activeCard.name}</div>
-                
-                <div class="flex gap-2 mt-1">
-                    <div class="text-xs text-green-400 font-mono">HP ${currentHp}</div>
-                    <div class="text-xs text-red-400 font-mono">ATK ${activeCard.atk}</div>
-                </div>
-
-                ${activeKey === 'main' ? `<div class="text-[9px] text-blue-300 mt-2 text-center px-1">${activeCard.skill}</div>` : ''}
-            </div>
-        `;
-    }
-
-    // 🔥 將內容寫入中央卡片容器
-    container.innerHTML = innerContent;
-
-    // 🔥 獨立更新小頭像框
-    if (miniVisualEl) {
-        miniVisualEl.innerHTML = activeCard.id === 'c051' || activeCard.id === 'c041' ? '🐲' : '⚔️';
-    }
-
-    // 3. 更新副卡指示燈
-    if (subIndicatorEl) {
-        if (playerData.cards.sub) {
-            const subCardId = playerData.cards.sub.id;
-            const subBase = CARD_DATABASE[subCardId] || { name: "Sub", rarity: "gray" };
-            const subRConfig = RARITY_CONFIG[subBase.rarity] || RARITY_CONFIG.gray;
-            
-            const isActive = activeKey === 'sub';
-            const isDead = playerData.cards.sub.currentHp <= 0;
-
-            subIndicatorEl.className = `absolute ${prefix==='my'?'bottom-4 -left-2':'top-4 -right-2'} w-12 h-16 bg-slate-800 rounded border-2 transition-all duration-300 flex flex-col items-center justify-center overflow-hidden z-20 shadow-lg`;
-            
-            if (isDead) {
-                subIndicatorEl.classList.add('border-gray-700', 'opacity-30', 'grayscale');
-                subIndicatorEl.innerHTML = '<i class="fa-solid fa-skull text-gray-500"></i>';
-            } else if (isActive) {
-                subIndicatorEl.className += ` ${subRConfig.border} scale-110 ring-2 ring-yellow-400 ring-offset-1 ring-offset-slate-900`;
-                subIndicatorEl.innerHTML = `
-                    <div class="text-[8px] ${subRConfig.color} font-bold truncate w-full text-center px-0.5">${subBase.name}</div>
-                    <div class="text-xs">⚔️</div>
-                    <div class="text-[8px] text-white">${playerData.cards.sub.currentHp}</div>
-                `;
-            } else {
-                subIndicatorEl.className += ` ${subRConfig.border} opacity-80 hover:opacity-100 hover:scale-105`;
-                subIndicatorEl.innerHTML = `
-                    <div class="bg-black/50 w-full text-center text-[7px] text-gray-300 absolute top-0">WAIT</div>
-                    <div class="text-[8px] ${subRConfig.color} font-bold mt-2 truncate w-full text-center">${subBase.name}</div>
-                `;
-            }
-        } else {
-            subIndicatorEl.style.opacity = '0';
-        }
+        // 每個動作完全結束後，給予玩家一點喘息時間
+        await new Promise(r => setTimeout(r, 1000));
     }
 }
 
-// [修正版] 觸發戰鬥動畫 (綁定在 wrapper 避免特效被裁切)
-async function triggerBattleAnimation(attackerSide, damage, skillName, isHeal = false) {
-    const attackerPrefix = attackerSide === 'my' ? 'my' : 'enemy';
-    const targetPrefix = attackerSide === 'my' ? 'enemy' : 'my';
-    
-    // 🔥 全部改為抓取外圍的 wrapper，防止 overflow:hidden 吃掉特效
-    const attackerWrapper = document.getElementById(`${attackerPrefix}-card-container-wrapper`);
-    const targetWrapper = document.getElementById(`${targetPrefix}-card-container-wrapper`);
+// 觸發打擊動畫 (回傳 Promise 以完美同步時間軸)
+async function triggerBattleAnimation(attackerPrefix, targetPrefix, damage, skillName, isHeal = false) {
+    return new Promise(resolve => {
+        const attackerWrapper = document.getElementById(`${attackerPrefix}-card-container-wrapper`);
+        const targetWrapper = document.getElementById(`${targetPrefix}-card-container-wrapper`);
 
-    if (!attackerWrapper || !targetWrapper) return;
+        if (!attackerWrapper || !targetWrapper) return resolve();
 
-    // 1. 技能詠唱特效
-    if (skillName && skillName !== "普通攻擊") {
-        attackerWrapper.classList.add('anim-cast');
-        createFloatingText(attackerWrapper, `⚡ ${skillName}!`, "text-yellow-300", -40);
-        await new Promise(r => setTimeout(r, 400)); 
-        attackerWrapper.classList.remove('anim-cast');
-    }
+        let castDelay = 0;
 
-    // 2. 執行物理衝刺 (Lunge)
-    const lungeClass = attackerSide === 'my' ? 'anim-lunge-up' : 'anim-lunge-down';
-    attackerWrapper.classList.add(lungeClass);
+        // 1. 技能詠唱特效 (如果有技能)
+        if (skillName && skillName !== "普通攻擊") {
+            attackerWrapper.classList.add('anim-cast');
+            createFloatingText(attackerWrapper, `⚡ ${skillName}!`, "text-yellow-300 font-black", -40);
+            castDelay = 500; // 詠唱延長 0.5 秒
+        }
 
-    // 3. 打擊特效
-    setTimeout(() => {
-        if (navigator.vibrate) navigator.vibrate([50, 50, 100]);
-
-        const arena = document.getElementById('battle-arena');
-        arena.classList.add('anim-screen-shake');
-        targetWrapper.classList.add('anim-shake'); 
-        
         setTimeout(() => {
-            arena.classList.remove('anim-screen-shake');
-            targetWrapper.classList.remove('anim-shake');
-        }, 500);
+            if (skillName && skillName !== "普通攻擊") attackerWrapper.classList.remove('anim-cast');
 
-        createSlashEffect(targetWrapper);
+            // 2. 執行物理衝刺 (Lunge)
+            const lungeClass = attackerPrefix === 'my' ? 'anim-lunge-up' : 'anim-lunge-down';
+            attackerWrapper.classList.add(lungeClass);
 
-        if (damage > 0) {
-            const isCrit = damage >= 40; 
-            createDamageNumber(targetWrapper, damage, isCrit);
-        }
+            // 3. 完美抓準衝刺到一半的時間點 (300ms) 觸發打擊！
+            setTimeout(() => {
+                if (navigator.vibrate) navigator.vibrate([50, 50, 100]);
 
-        if (isHeal) {
-             createDamageNumber(attackerWrapper, `+${isHeal}`, false, true);
-        }
-    }, 300);
+                const arena = document.getElementById('battle-arena');
+                const isCrit = damage >= 40; // 大於等於 40 視為爆擊
 
-    setTimeout(() => {
-        attackerWrapper.classList.remove(lungeClass);
-    }, 600);
+                // 爆擊加強畫面震動與閃爍
+                if (isCrit) {
+                    arena.classList.add('anim-screen-shake-hard');
+                    createFlashEffect('bg-red-600/40'); // 全螢幕閃紅血光
+                } else {
+                    arena.classList.add('anim-screen-shake');
+                }
+
+                targetWrapper.classList.add('anim-shake'); 
+                
+                // 動畫復原
+                setTimeout(() => {
+                    arena.classList.remove('anim-screen-shake', 'anim-screen-shake-hard');
+                    targetWrapper.classList.remove('anim-shake');
+                }, 500);
+
+                // 渲染刀光
+                createSlashEffect(targetWrapper, isCrit);
+
+                // 🔥 同步扣血與跳字 (原本提早扣血的問題在這裡修復)
+                if (damage > 0) {
+                    createDamageNumber(targetWrapper, damage, isCrit);
+                    updateHpBarVisual(targetPrefix, -damage); 
+                }
+
+                // 🔥 同步回血與跳字
+                if (isHeal) {
+                    createDamageNumber(attackerWrapper, `+${isHeal}`, false, true);
+                    updateHpBarVisual(attackerPrefix, isHeal); 
+                    attackerWrapper.classList.add('shadow-[0_0_30px_rgba(74,222,128,0.8)]'); // 綠色回血光環
+                    setTimeout(()=> attackerWrapper.classList.remove('shadow-[0_0_30px_rgba(74,222,128,0.8)]'), 600);
+                }
+
+            }, 300); // 這個 300ms 必須跟 CSS lunge 曲線對齊
+
+            // 4. 退回原位並結束 Promise
+            setTimeout(() => {
+                attackerWrapper.classList.remove(lungeClass);
+                resolve(); // 告知主迴圈這個攻擊完全結束了
+            }, 600);
+
+        }, castDelay);
+    });
 }
 
-// [修正版] 攻擊失敗動畫
-function triggerMissAnimation(targetRole) {
-    const targetPrefix = targetRole === 'my' ? 'my' : 'enemy';
-    const targetWrapper = document.getElementById(`${targetPrefix}-card-container-wrapper`);
-    if (targetWrapper) {
-        createFloatingText(targetWrapper, "MISS", "text-gray-400 text-3xl");
+// 攻擊失敗動畫 (假動作)
+async function triggerMissAnimation(attackerPrefix, targetPrefix) {
+    return new Promise(resolve => {
+        const attackerWrapper = document.getElementById(`${attackerPrefix}-card-container-wrapper`);
+        const targetWrapper = document.getElementById(`${targetPrefix}-card-container-wrapper`);
+        if (!attackerWrapper || !targetWrapper) return resolve();
+
+        // 假動作前傾
+        const offset = attackerPrefix === 'my' ? '-30px' : '30px';
+        attackerWrapper.style.transform = `translateY(${offset})`;
+        attackerWrapper.style.transition = "transform 0.2s ease-in-out";
+
+        setTimeout(() => {
+            // 收回並顯示 MISS
+            attackerWrapper.style.transform = "translateY(0)";
+            createFloatingText(targetWrapper, "MISS", "text-gray-400 font-mono italic", -20);
+            
+            setTimeout(() => resolve(), 600);
+        }, 300);
+    });
+}
+
+// 獨立抽出的血條視覺更新函式 (僅更改 DOM)
+function updateHpBarVisual(prefix, deltaAmount) {
+    const bar = document.getElementById(`${prefix}-hp-bar`);
+    const txt = document.getElementById(`${prefix}-hp-text`);
+    if (bar && txt) {
+        const currentText = txt.innerText.split('/');
+        if (currentText.length !== 2) return;
+        
+        let cur = parseInt(currentText[0]);
+        const max = parseInt(currentText[1]);
+
+        cur = Math.max(0, Math.min(max, cur + deltaAmount)); // 確保不小於0或超過上限
+        bar.style.width = `${(cur/max)*100}%`;
+        txt.innerText = `${cur}/${max}`;
+
+        // 讓血條閃爍一下
+        bar.classList.add('hp-flash');
+        setTimeout(() => bar.classList.remove('hp-flash'), 150);
     }
 }
 
-// [新增] 產生刀光特效 DOM
-function createSlashEffect(parentEl) {
+// 產生刀光特效 DOM (支援爆擊特效)
+function createSlashEffect(parentEl, isCrit) {
     if (!parentEl) return;
     const vfx = document.createElement('div');
     vfx.className = 'vfx-container';
-    vfx.innerHTML = `<div class="vfx-slash"></div><div class="vfx-slash" style="animation-delay: 0.1s; transform: rotate(45deg);"></div>`; // 十字斬
+
+    if (isCrit) {
+        // 爆擊：血色三連爪擊
+        vfx.innerHTML = `
+            <div class="vfx-slash bg-red-400 shadow-[0_0_20px_#7f1d1d]" style="transform: rotate(20deg) translateY(-30px) scaleX(1.2);"></div>
+            <div class="vfx-slash bg-white shadow-[0_0_20px_#ef4444]" style="animation-delay: 0.1s; transform: rotate(20deg) scaleX(1.5);"></div>
+            <div class="vfx-slash bg-red-400 shadow-[0_0_20px_#7f1d1d]" style="animation-delay: 0.2s; transform: rotate(20deg) translateY(30px) scaleX(1.2);"></div>
+        `;
+    } else {
+        // 普通：十字斬
+        vfx.innerHTML = `<div class="vfx-slash"></div><div class="vfx-slash" style="animation-delay: 0.1s; transform: rotate(45deg);"></div>`;
+    }
     parentEl.appendChild(vfx);
-    setTimeout(() => vfx.remove(), 500);
+    setTimeout(() => vfx.remove(), 800);
 }
 
-// [新增] 產生傷害飄字 DOM
+// 全螢幕閃光特效 (用於爆擊)
+function createFlashEffect(bgClass) {
+    const overlay = document.createElement('div');
+    overlay.className = `fixed inset-0 z-[100] ${bgClass} pointer-events-none opacity-0 transition-opacity duration-100 mix-blend-overlay`;
+    document.body.appendChild(overlay);
+
+    requestAnimationFrame(() => {
+        overlay.classList.remove('opacity-0');
+        overlay.classList.add('opacity-100');
+        setTimeout(() => {
+            overlay.classList.remove('opacity-100');
+            overlay.classList.add('opacity-0');
+            setTimeout(() => overlay.remove(), 100);
+        }, 50);
+    });
+}
+
+// 產生傷害飄字 DOM
 function createDamageNumber(parentEl, value, isCrit, isHeal = false) {
     if (!parentEl) return;
     const el = document.createElement('div');
@@ -3433,21 +3366,20 @@ function createDamageNumber(parentEl, value, isCrit, isHeal = false) {
     
     el.className = classes;
     
-    // 隨機一點點偏移，避免數字重疊
-    const randX = (Math.random() - 0.5) * 40;
+    // 隨機一點點 X 軸偏移，避免數字重疊
+    const randX = (Math.random() - 0.5) * 60;
     el.style.left = `calc(50% + ${randX}px)`;
 
     parentEl.appendChild(el);
     setTimeout(() => el.remove(), 1200);
 }
 
-// [新增] 通用浮動文字 (用於技能名稱或 Miss)
+// 通用浮動文字 (用於技能名稱或 Miss)
 function createFloatingText(parentEl, text, colorClass = "text-white", topOffset = 0) {
     if (!parentEl) return;
     const el = document.createElement('div');
-    el.className = `absolute left-1/2 -translate-x-1/2 font-bold text-xl z-50 animate-bounce ${colorClass}`;
+    el.className = `absolute left-1/2 -translate-x-1/2 text-2xl z-50 animate-[bounceIn_0.6s_ease-out] ${colorClass} whitespace-nowrap drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]`;
     el.style.top = topOffset !== 0 ? `${topOffset}px` : '50%';
-    el.style.textShadow = "0 2px 4px rgba(0,0,0,0.8)";
     el.innerText = text;
     parentEl.appendChild(el);
     setTimeout(() => el.remove(), 1500);
