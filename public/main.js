@@ -2338,9 +2338,6 @@ async function renderQuiz(data, rank, topic) {
     const questionTextEl = document.getElementById('question-text');
     // 只保留 Markdown 轉 HTML (若題目本身內含靜態圖 URL 仍可顯示)
     questionTextEl.innerHTML = parseMarkdownImages(data.q);
-    
-    // 🔥 [已移除] AI 動態配圖邏輯 (原本的 B. 區塊已刪除)
-    // 因為後端不再回傳 image_prompt，且 generate-image API 已關閉。
 
     // C. 渲染選項 (保持不變)
     const container = document.getElementById('options-container');
@@ -2348,7 +2345,8 @@ async function renderQuiz(data, rank, topic) {
     data.opts.forEach((optText, idx) => {
         const btn = document.createElement('button');
         btn.id = `option-btn-${idx}`;
-        btn.className = "w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 flex items-center gap-3 active:scale-95 mb-// ... 原本 renderQuiz 裡面的選項渲染邏輯
+        // 🔥 這裡修復了斷裂的字串與 class 名稱
+        btn.className = "w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 flex items-center gap-3 active:scale-95 mb-2";
         btn.innerHTML = `<span class="bg-slate-800 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-blue-400 border border-slate-600 shrink-0">${String.fromCharCode(65+idx)}</span><span class="flex-1">${optText}</span>`;
         btn.onclick = () => handleAnswer(idx, data.ans, data.q, data.exp);
         container.appendChild(btn);
