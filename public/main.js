@@ -2310,7 +2310,12 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
             timeTaken: timeTaken,
             topic: "Solo", 
             mode: 'infinite', 
-            timestamp: serverTimestamp() 
+            timestamp: serverTimestamp(),
+            // 🔥 新增：將選項、玩家選擇、正確答案與解析一併存進資料庫
+            options: window.currentActiveQuiz?.data?.opts || [],
+            correctIdx: correctIdx,
+            userIdx: userIdx,
+            explanation: explanation || ""
         });
         await Promise.all([p1, p2]);
     } catch (e) { console.error("Firebase Error", e); }
