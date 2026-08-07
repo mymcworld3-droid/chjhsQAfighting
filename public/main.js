@@ -2753,6 +2753,31 @@ window.leaveBattle = async () => {
     switchToPage('page-home');
 };
 
+// 🔥 新增：發現對手時的震撼動畫 (請將此函式加在 window.startBattleMatchmaking 之前)
+window.showOpponentFoundAnimation = async (oppData) => {
+    document.getElementById('battle-status-text').innerText = "OPPONENT FOUND!";
+    document.getElementById('battle-status-text').classList.add('text-red-400', 'font-bold');
+    
+    const oppUI = document.getElementById('match-opp');
+    const oppAvatar = oppData.equipped?.avatar || '';
+    const oppRank = getRankName(oppData.rankLevel || 0);
+    
+    if (navigator.vibrate) navigator.vibrate([100, 50, 200]);
+
+    oppUI.innerHTML = `
+        <div class="w-20 h-20 md:w-24 md:h-24 rounded-full border-4 border-red-500 shadow-[0_0_30px_rgba(239,68,68,0.8)] flex items-center justify-center overflow-hidden bg-slate-800 p-1 transform scale-0 animate-[tabPop_0.4s_ease-out_forwards]">
+            <img src="${oppAvatar}" class="w-full h-full rounded-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+            <i class="fa-solid fa-user text-3xl text-red-500/50 hidden"></i>
+        </div>
+        <div class="mt-4 text-red-400 font-bold font-sci text-sm md:text-lg tracking-wider animate-[fadeInUpShort_0.5s_forwards] truncate w-24 text-center">${oppData.name}</div>
+        <div class="text-[10px] md:text-xs text-red-500 font-mono animate-[fadeInUpShort_0.7s_forwards]">${oppRank}</div>
+    `;
+
+    // 停留 2 秒讓雙方看清對手
+    await new Promise(r => setTimeout(r, 2000));
+    document.getElementById('battle-status-text').classList.remove('text-red-400', 'font-bold');
+};
+
 window.startBattleMatchmaking = async () => {
     if (!auth.currentUser) { alert("請先登入！"); return; }
     if (!currentUserData.deck?.main) { alert("請先到卡牌中心設定「主卡」！"); switchToPage('page-cards'); return; }
