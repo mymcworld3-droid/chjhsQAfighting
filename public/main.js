@@ -2348,11 +2348,19 @@ async function renderQuiz(data, rank, topic) {
     data.opts.forEach((optText, idx) => {
         const btn = document.createElement('button');
         btn.id = `option-btn-${idx}`;
-        btn.className = "w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 flex items-center gap-3 active:scale-95 mb-2";
+        btn.className = "w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 flex items-center gap-3 active:scale-95 mb-// ... 原本 renderQuiz 裡面的選項渲染邏輯
         btn.innerHTML = `<span class="bg-slate-800 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-blue-400 border border-slate-600 shrink-0">${String.fromCharCode(65+idx)}</span><span class="flex-1">${optText}</span>`;
         btn.onclick = () => handleAnswer(idx, data.ans, data.q, data.exp);
         container.appendChild(btn);
     });
+
+    // 🔥 新增：讓 MathJax 掃描畫面並將 $ $ 轉換成數學符號
+    if (window.MathJax) {
+        window.MathJax.typesetPromise([
+            document.getElementById('question-text'),
+            document.getElementById('options-container')
+        ]).catch((err) => console.log(err.message));
+    }
 }
 
 // 在 main.js 中搜尋 window.giveUpQuiz 並替換
