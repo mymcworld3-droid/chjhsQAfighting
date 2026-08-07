@@ -1634,6 +1634,7 @@ window.toggleSourceMode = () => {
 
 async function updateSettingsInputs() {
     if (currentUserData && currentUserData.profile) {
+        document.getElementById('set-display-name').value = currentUserData.displayName || "";
         document.getElementById('set-level').value = currentUserData.profile.educationLevel || "國中一年級";
         document.getElementById('set-strong').value = currentUserData.profile.strongSubjects || "";
         document.getElementById('set-weak').value = currentUserData.profile.weakSubjects || "";
