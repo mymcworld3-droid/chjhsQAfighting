@@ -249,8 +249,10 @@
                 <button onclick="filterStore('avatar', this)" class="store-tab flex-1 py-2 text-xs font-bold rounded-lg transition-all" data-i18n="tab_avatar">AVATARS</button>
             </div>
 
-            <div id="store-grid" class="grid grid-cols-2 gap-3 pb-20">
-                <div class="col-span-2 text-center py-10 text-gray-500 text-xs font-mono">LOADING DATA...</div>
+            <!-- 使用 Tailwind 的響應式網格 (sm, md, lg, xl) 自動調整欄數 -->
+            <div id="store-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 pb-20">
+                <!-- 改為 col-span-full 確保載入文字在任何欄數下都能置中 -->
+                <div class="col-span-full text-center py-10 text-gray-500 text-xs font-mono">LOADING DATA...</div>
             </div>
         </div>
 
