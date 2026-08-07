@@ -3834,6 +3834,7 @@ window.loadUserHistory = async (isLoadMore = false) => {
                 if (panel) panel.classList.toggle('hidden');
             };
 
+            // ... 前面的 snap.forEach 迴圈 ...
             li.innerHTML = `
                 <div class="flex justify-between mb-1">
                     <span class="text-gray-400 font-mono">${time}</span>
@@ -3847,9 +3848,13 @@ window.loadUserHistory = async (isLoadMore = false) => {
                 ${detailsHtml}
             `;
             ul.appendChild(li);
-        });
+        }); // 迴圈結束在這裡
 
-        // 判斷是否還有資料：如果這批抓滿 20 筆，就顯示加載更多按鈕
+        // 🔥 新增這段：資料載入完畢後，要求 MathJax 重新掃描歷史清單
+        if (window.MathJax) {
+            window.MathJax.typesetPromise([ul]).catch((err) => console.log('MathJax Error:', err.message));
+        }
+
         if (loadMoreBtn) {
             if (snap.docs.length === 20) {
                 loadMoreBtn.classList.remove('hidden');
