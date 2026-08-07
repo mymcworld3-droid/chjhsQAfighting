@@ -1399,3 +1399,25 @@ input:focus, textarea:focus {
     80% { transform: translateX(3px); }
 }
 .anim-screen-shake { animation: screenShake 0.4s ease-in-out; }
+
+/* ==========================================
+   🔥 進階戰鬥特效 (Critical Hits & Miss)
+   ========================================== */
+@keyframes screenShakeHard {
+    0%, 100% { transform: translate(0, 0) scale(1); filter: brightness(1); }
+    20% { transform: translate(-15px, 15px) scale(1.05) rotate(-3deg); filter: brightness(1.3) drop-shadow(0 0 20px rgba(239, 68, 68, 0.8)); }
+    40% { transform: translate(15px, -15px) scale(1.05) rotate(3deg); filter: brightness(0.7); }
+    60% { transform: translate(-10px, 10px) scale(1.02) rotate(-1deg); }
+    80% { transform: translate(10px, -10px) scale(1.02) rotate(1deg); }
+}
+
+.anim-screen-shake-hard { 
+    animation: screenShakeHard 0.5s cubic-bezier(.36,.07,.19,.97) both; 
+    z-index: 100;
+}
+
+/* 讓血條受傷時也能閃爍 */
+.hp-flash {
+    filter: brightness(2) contrast(1.5);
+    transition: filter 0.1s;
+}
