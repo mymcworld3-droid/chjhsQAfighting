@@ -4,7 +4,7 @@ import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChang
 import { 
     getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, addDoc, 
     query, orderBy, limit, getDocs, serverTimestamp, where, onSnapshot, runTransaction, 
-    arrayUnion, arrayRemove, writeBatch 
+    arrayUnion, arrayRemove, writeBatch, startAfter 
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // Firebase Config
