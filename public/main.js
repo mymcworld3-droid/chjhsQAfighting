@@ -782,13 +782,19 @@ window.loadMyCards = () => {
     if(!list) return;
     list.innerHTML = "";
     
+    // 更新上方的圖鑑數量計數器
+    const countEl = document.getElementById('storage-count');
+    
     if(!currentUserData.cards || currentUserData.cards.length === 0) {
-        list.innerHTML = `<div class="col-span-3 md:col-span-4 text-center text-gray-500 py-4">${t('msg_no_cards')}</div>`;
+        if (countEl) countEl.innerText = "0 Cards";
+        list.innerHTML = `<div class="col-span-full text-center text-gray-500 py-10 bg-slate-900/50 rounded-xl border border-dashed border-slate-700 mt-2">${t('msg_no_cards')}</div>`;
         return;
     }
 
     const levels = currentUserData.cardLevels || {};
     const uniqueCards = [...new Set(currentUserData.cards)];
+    
+    if (countEl) countEl.innerText = `${uniqueCards.length} Cards`;
 
     uniqueCards.sort((a, b) => {
         const cardA = CARD_DATABASE[a];
