@@ -4429,7 +4429,7 @@ window.loadStoreItems = async () => {
         const snap = await getDocs(q);
         grid.innerHTML = '';
         
-        if (snap.empty) { grid.innerHTML = '<div class="col-span-2 text-center text-gray-500">Store is empty...</div>'; return; }
+        if (snap.empty) { grid.innerHTML = '<div class="col-span-full text-center text-gray-500 py-10">Store is empty...</div>'; return; }
 
         snap.forEach(doc => {
             const item = doc.data();
@@ -4440,20 +4440,23 @@ window.loadStoreItems = async () => {
             let visual = renderVisual(item.type, item.value, "w-14 h-14");
             let btnAction = '';
             if (isEquipped) {
-                btnAction = `<button class="w-full mt-2 bg-green-600 text-white text-xs py-1.5 rounded cursor-default opacity-50">${t('btn_equipped')}</button>`;
+                btnAction = `<button class="w-full mt-auto bg-green-600 text-white text-xs py-2 rounded cursor-default opacity-50 font-bold tracking-wider">${t('btn_equipped')}</button>`;
             } else if (isOwned) {
-                btnAction = `<button onclick="equipItem('${item.type}', '${pid}', '${item.value}')" class="w-full mt-2 bg-slate-600 hover:bg-slate-500 text-white text-xs py-1.5 rounded">${t('btn_equip')}</button>`;
+                btnAction = `<button onclick="equipItem('${item.type}', '${pid}', '${item.value}')" class="w-full mt-auto bg-slate-600 hover:bg-slate-500 text-white text-xs py-2 rounded font-bold tracking-wider">${t('btn_equip')}</button>`;
             } else {
-                btnAction = `<button onclick="buyItem('${pid}', ${item.price})" class="w-full mt-2 bg-blue-600 hover:bg-blue-500 text-white text-xs py-1.5 rounded flex items-center justify-center gap-1"><i class="fa-solid fa-coins text-yellow-300"></i> ${item.price}</button>`;
+                btnAction = `<button onclick="buyItem('${pid}', ${item.price})" class="w-full mt-auto bg-blue-600 hover:bg-blue-500 text-white text-xs py-2 rounded flex items-center justify-center gap-1 font-bold"><i class="fa-solid fa-coins text-yellow-300"></i> ${item.price}</button>`;
             }
 
             const card = document.createElement('div');
-            card.className = `store-card ${item.type}-item relative`;
+            // 加入 flex 排版讓商品卡片撐滿高度，且視覺置中，加上一點背景與邊框美化
+            card.className = `store-card ${item.type}-item relative flex flex-col items-center text-center bg-slate-800/60 p-4 rounded-xl border border-slate-700 h-full`;
             card.innerHTML = `
-                ${isOwned ? '<div class="absolute top-2 right-2 text-green-400 text-xs"><i class="fa-solid fa-check"></i></div>' : ''}
-                ${visual}
-                <div class="text-sm font-bold text-white mt-2">${item.name}</div>
-                <div class="text-xs text-gray-400 mb-1">${item.type === 'frame' ? 'Frame' : 'Avatar'}</div>
+                ${isOwned ? '<div class="absolute top-2 right-2 text-green-400 text-[10px] bg-green-900/40 w-5 h-5 flex items-center justify-center rounded-full border border-green-500/50"><i class="fa-solid fa-check"></i></div>' : ''}
+                <div class="flex-1 flex flex-col items-center justify-center w-full mb-3">
+                    ${visual}
+                    <div class="text-sm font-bold text-white mt-3 truncate w-full px-1">${item.name}</div>
+                    <div class="text-[10px] text-gray-400 mt-1 uppercase tracking-wider">${item.type === 'frame' ? 'Frame' : 'Avatar'}</div>
+                </div>
                 ${btnAction}
             `;
             grid.appendChild(card);
