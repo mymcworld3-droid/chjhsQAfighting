@@ -824,8 +824,10 @@ window.loadMyCards = () => {
         for(let i=0; i<lvl; i++) stars += "★";
 
         const div = document.createElement('div');
-        div.className = `bg-slate-800 p-1.5 rounded-lg border-2 ${rConfig.border} relative overflow-hidden group hover:scale-[1.02] transition-transform aspect-[2/3] flex flex-col justify-between shadow-md cursor-pointer`;
-        div.onclick = () => selectCardForSlot(currentSelectSlot || 'main');
+        // 🔥 移除了 cursor-pointer，讓它變成純展示的樣式
+        div.className = `bg-slate-800 p-1.5 rounded-lg border-2 ${rConfig.border} relative overflow-hidden group hover:scale-[1.02] transition-transform aspect-[2/3] flex flex-col justify-between shadow-md`;
+        
+        // 🔥 刪除了 div.onclick 的事件綁定，點擊就不會再跳出選擇視窗了
 
         // [修正] 移除多餘的巢狀 div，確保圖片容器能撐開高度
         div.innerHTML = `
