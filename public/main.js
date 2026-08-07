@@ -3706,15 +3706,15 @@ window.loadUserHistory = async () => {
         });
     } catch (e) { console.error(e); ul.innerHTML = '<li class="text-center text-red-400 py-4">Error</li>'; }
 };
-// main.js - 替換 renderKnowledgeGraph 函式
 
-// main.js - 替換 renderKnowledgeGraph
+
+// ==========================================
+// 📊 全新能力分析圖譜演算法 (Radar Chart)
+// ==========================================
 
 let knowledgeChartInstance = null;
 
-// main.js - 替換 renderKnowledgeGraph
-
-// ... (calculateDomainScore 輔助函式保持不變，若遺失請補上) ...
+// 輔助函式：計算五大領域的綜合正確率
 function calculateDomainScore(map, subjects) {
     let totalCorrect = 0;
     let totalQuestions = 0;
@@ -3726,7 +3726,7 @@ function calculateDomainScore(map, subjects) {
             });
         }
     });
-    if (totalQuestions === 0) return 20; 
+    if (totalQuestions === 0) return 0; // 無數據時顯示 0
     return Math.round((totalCorrect / totalQuestions) * 100);
 }
 
@@ -3735,89 +3735,82 @@ window.renderKnowledgeGraph = (targetSubject = null) => {
     const ctx = document.getElementById('knowledgeChart');
     if (!ctx) return;
 
-    // 1. 自動產生按鈕 (保持原本邏輯)
-    let controls = document.getElementById('chart-controls');
-    if (!controls) {
-        controls = document.createElement('div');
-        controls.id = 'chart-controls';
-        controls.className = "flex flex-wrap gap-2 justify-center mt-4 px-2";
-        
-        const subjects = [
-            { id: null, label: "全域總覽", color: "bg-blue-600" },
-            { id: "國文", label: "國文", color: "bg-slate-600" },
-            { id: "英文", label: "英文", color: "bg-slate-600" },
-            { id: "數學", label: "數學", color: "bg-slate-600" },
-            { id: "歷史", label: "歷史", color: "bg-amber-700" }, 
-            { id: "地理", label: "地理", color: "bg-amber-700" },
-            { id: "公民", label: "公民", color: "bg-amber-700" },
-            { id: "物理", label: "物理", color: "bg-emerald-700" }, 
-            { id: "化學", label: "化學", color: "bg-emerald-700" },
-            { id: "生物", label: "生物", color: "bg-emerald-700" },
-        ];
+    // 安全取得使用者知識圖譜數據 (如果尚未產生則給空物件)
+    const map = (currentUserData && currentUserData.stats && currentUserData.stats.knowledgeMap) ? currentUserData.stats.knowledgeMap : {};
 
-        subjects.forEach(subj => {
-            const btn = document.createElement('button');
-            btn.innerText = subj.label;
-            btn.className = `px-3 py-1 text-[10px] font-bold text-white rounded-full transition-all shadow-md border border-white/10 ${subj.color} opacity-60 hover:opacity-100 hover:scale-105`;
-            btn.onclick = () => window.renderKnowledgeGraph(subj.id);
-            btn.dataset.subj = subj.id || 'all'; 
-            controls.appendChild(btn);
+    // 1. 生成與更新切換按鈕 (放置於專屬的 chart-controls 容器內)
+    const controls = document.getElementById('chart-controls');
+    if (controls) {
+        // 如果還沒有按鈕，就初始化它們
+        if (controls.children.length === 0) {
+            const subjects = [
+                { id: null, label: "總覽", color: "border-blue-500 text-blue-400" },
+                { id: "國文", label: "國文", color: "border-slate-400 text-slate-300" },
+                { id: "英文", label: "英文", color: "border-slate-400 text-slate-300" },
+                { id: "數學", label: "數學", color: "border-slate-400 text-slate-300" },
+                { id: "歷史", label: "歷史", color: "border-amber-500 text-amber-400" }, 
+                { id: "地理", label: "地理", color: "border-amber-500 text-amber-400" },
+                { id: "公民", label: "公民", color: "border-amber-500 text-amber-400" },
+                { id: "物理", label: "物理", color: "border-emerald-500 text-emerald-400" }, 
+                { id: "化學", label: "化學", color: "border-emerald-500 text-emerald-400" },
+                { id: "生物", label: "生物", color: "border-emerald-500 text-emerald-400" },
+            ];
+
+            subjects.forEach(subj => {
+                const btn = document.createElement('button');
+                btn.innerText = subj.label;
+                btn.className = `px-3 py-1.5 text-[10px] font-bold rounded-lg transition-all shadow-md border ${subj.color} bg-slate-800 opacity-50 hover:opacity-100`;
+                btn.onclick = () => window.renderKnowledgeGraph(subj.id);
+                btn.dataset.subj = subj.id || 'all'; 
+                controls.appendChild(btn);
+            });
+        }
+
+        // 更新按鈕高亮狀態
+        controls.querySelectorAll('button').forEach(btn => {
+            const isActive = (btn.dataset.subj === (targetSubject || 'all'));
+            if (isActive) {
+                btn.classList.remove('opacity-50', 'bg-slate-800');
+                btn.classList.add('opacity-100', 'bg-white/10', 'ring-1', 'ring-white', 'scale-105');
+            } else {
+                btn.classList.add('opacity-50', 'bg-slate-800');
+                btn.classList.remove('opacity-100', 'bg-white/10', 'ring-1', 'ring-white', 'scale-105');
+            }
         });
-        
-        // 🔥 修正：將按鈕列移出圖表容器 (wrapper)，避免因容器 max-height 限制導致按鈕被切掉或重疊
-        // 原本: ctx.parentNode.insertBefore(controls, ctx.nextSibling);
-        // 新邏輯: 插入到圖表容器 (ctx.parentNode) 的「後面」
-        ctx.parentNode.parentNode.insertBefore(controls, ctx.parentNode.nextSibling);
     }
 
-    // 更新按鈕樣式
-    controls.querySelectorAll('button').forEach(btn => {
-        const isActive = (btn.dataset.subj === (targetSubject || 'all'));
-        if (isActive) {
-            btn.classList.remove('opacity-60');
-            btn.classList.add('opacity-100', 'ring-2', 'ring-white', 'scale-110');
-        } else {
-            btn.classList.add('opacity-60');
-            btn.classList.remove('opacity-100', 'ring-2', 'ring-white', 'scale-110');
-        }
-    });
-
-    // 2. 準備數據
-    const map = currentUserData.stats.knowledgeMap || {};
+    // 2. 準備圖表資料與賽博龐克配色
     let labels = [];
     let dataValues = [];
     let chartTitle = "";
-    let chartColor = "rgba(34, 211, 238, 1)"; // 預設青色
+    let chartColor = "rgba(34, 211, 238, 1)";     // 亮青色邊框
+    let chartBgColor = "rgba(34, 211, 238, 0.2)"; // 青色半透明背景
 
     if (targetSubject) {
         // --- 單科細項模式 ---
-        chartTitle = `${targetSubject} 能力分析`;
+        chartTitle = `[ ${targetSubject} ] 核心能力解析`;
         
-        // 設定顏色
-        if(["歷史","地理","公民"].includes(targetSubject)) chartColor = "rgba(245, 158, 11, 1)"; 
-        if(["物理","化學","生物"].includes(targetSubject)) chartColor = "rgba(16, 185, 129, 1)"; 
-
-        // 強制使用 SCHEMA 定義的標籤，確保軸向固定
-        if (SUBJECT_SCHEMA_FRONTEND[targetSubject]) {
-            labels = SUBJECT_SCHEMA_FRONTEND[targetSubject];
-        } else {
-            labels = map[targetSubject] ? Object.keys(map[targetSubject]) : [];
+        // 依照文組/理組套用不同主題色
+        if(["歷史","地理","公民"].includes(targetSubject)) {
+            chartColor = "rgba(245, 158, 11, 1)"; // 琥珀色
+            chartBgColor = "rgba(245, 158, 11, 0.2)";
+        } else if(["物理","化學","生物"].includes(targetSubject)) {
+            chartColor = "rgba(16, 185, 129, 1)"; // 翡翠綠
+            chartBgColor = "rgba(16, 185, 129, 0.2)";
         }
 
-        // 填入數據 (若無數據則補 0)
+        // 從前端定義的 Schema 取得軸向 (確保雷達圖即使沒資料也不會變形)
+        labels = window.SUBJECT_SCHEMA_FRONTEND?.[targetSubject] || (map[targetSubject] ? Object.keys(map[targetSubject]) : ["尚無資料"]);
+
+        // 填入答題正確率
         dataValues = labels.map(topic => {
             const s = map[targetSubject]?.[topic];
             return (s && s.total > 0) ? Math.round((s.correct / s.total) * 100) : 0;
         });
 
-        if (labels.length === 0) {
-            labels = ["尚無數據", "請多練習", "累積數據"]; 
-            dataValues = [0, 0, 0];
-        }
-
     } else {
         // --- 全域總覽模式 ---
-        chartTitle = "五大領域綜合分析";
+        chartTitle = "五大領域綜合分析 (Overall)";
         labels = ["國文", "英文", "數學", "社會", "自然"];
         dataValues = [
             calculateDomainScore(map, ["國文"]),
@@ -3826,9 +3819,11 @@ window.renderKnowledgeGraph = (targetSubject = null) => {
             calculateDomainScore(map, ["歷史", "地理", "公民"]),
             calculateDomainScore(map, ["物理", "化學", "生物"])
         ];
+        chartColor = "rgba(59, 130, 246, 1)"; // 賽博藍
+        chartBgColor = "rgba(59, 130, 246, 0.2)";
     }
 
-    // 3. 繪圖
+    // 3. 繪製 Chart.js 雷達圖
     if (knowledgeChartInstance) knowledgeChartInstance.destroy();
 
     knowledgeChartInstance = new Chart(ctx, {
@@ -3838,31 +3833,59 @@ window.renderKnowledgeGraph = (targetSubject = null) => {
             datasets: [{
                 label: '掌握度 (%)',
                 data: dataValues,
-                backgroundColor: chartColor.replace('1)', '0.2)'),
+                backgroundColor: chartBgColor,
                 borderColor: chartColor,
-                pointBackgroundColor: '#fff',
+                pointBackgroundColor: chartColor,
                 pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: chartColor,
                 borderWidth: 2,
-                pointRadius: 3
+                pointRadius: 3,
+                pointHoverRadius: 6
             }]
         },
         options: {
+            responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                title: { display: true, text: chartTitle, color: '#fff', font: { size: 16 } },
-                legend: { display: false }
+                title: { 
+                    display: true, 
+                    text: chartTitle, 
+                    color: '#e2e8f0', 
+                    font: { size: 14, family: "'Orbitron', sans-serif" },
+                    padding: { bottom: 15 }
+                },
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                    titleColor: chartColor,
+                    bodyColor: '#fff',
+                    borderColor: chartColor,
+                    borderWidth: 1,
+                    padding: 10,
+                    boxPadding: 4,
+                    callbacks: {
+                        label: function(context) { return ` 正確率: ${context.raw}%`; }
+                    }
+                }
             },
             scales: {
                 r: {
                     angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
-                    grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                    grid: { color: 'rgba(255, 255, 255, 0.1)', circular: true }, // 圓形網格更有科幻感
                     pointLabels: { 
-                        color: '#e5e7eb', 
-                        font: { size: 12, family: "'Noto Sans TC', sans-serif" } 
+                        color: '#94a3b8', 
+                        font: { size: 10, family: "'Noto Sans TC', sans-serif" } 
                     },
                     suggestedMin: 0,
                     suggestedMax: 100,
-                    ticks: { display: false, backdropColor: 'transparent' } 
+                    ticks: { 
+                        display: true, 
+                        stepSize: 25, 
+                        backdropColor: 'transparent',
+                        color: 'rgba(255, 255, 255, 0.3)',
+                        font: { size: 8 }
+                    } 
                 }
             }
         }
