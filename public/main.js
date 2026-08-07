@@ -2784,19 +2784,38 @@ window.startBattleMatchmaking = async () => {
 
     console.log("🚀 開始配對中..."); 
     isBattleActive = true;
+    window.hasSeenOpponent = false; // 🔥 重置對手發現標記
+    
     switchToPage('page-battle');
     document.getElementById('battle-lobby').classList.remove('hidden');
     document.getElementById('battle-arena').classList.add('hidden');
-    document.getElementById('battle-status-text').innerText = t('battle_searching');
     document.getElementById('battle-result').classList.add('hidden');
 
-    // 🔥 修正 1: 縮短搜尋時間至 3 分鐘 (避免配對到 30 分鐘前早已關閉視窗的殭屍房間)
-    const searchTimeRange = new Date(Date.now() - 3 * 60 * 1000);
+    // 🔥 更新我方配對雷達 UI
+    document.getElementById('battle-status-text').innerText = "SEARCHING FOR OPPONENTS...";
+    document.getElementById('match-me-name').innerText = currentUserData.displayName || "Player";
+    document.getElementById('match-me-rank').innerText = getRankName(currentUserData.stats?.rankLevel || 0);
+    const myAvatar = document.getElementById('match-me-avatar');
+    myAvatar.src = currentUserData.equipped?.avatar || '';
+    myAvatar.style.display = myAvatar.src ? 'block' : 'none';
+
+    // 🔥 重置對手雷達 UI 為掃描狀態
+    document.getElementById('match-opp').innerHTML = `
+        <div class="w-20 h-20 md:w-24 md:h-24 rounded-full border-4 border-red-500/30 border-dashed animate-[spin_3s_linear_infinite] flex items-center justify-center overflow-hidden bg-slate-900/50 p-1 relative">
+            <i class="fa-solid fa-question text-3xl md:text-4xl text-red-500/50 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 mt-0"></i>
+        </div>
+        <div class="mt-4 text-red-400 font-bold font-sci text-sm md:text-lg animate-pulse tracking-wider">SEARCHING</div>
+        <div class="text-[10px] md:text-xs text-red-500/50 font-mono">ESTIMATING...</div>
+    `;
+
+    // 🔥 邏輯優化 1: 縮短搜尋時間至 1 分鐘，避免配對到殭屍房間
+    const searchTimeRange = new Date(Date.now() - 1 * 60 * 1000);
     
     const myBattleData = { 
         uid: auth.currentUser.uid, 
         name: currentUserData.displayName || "Player", 
         equipped: currentUserData.equipped || { frame: '', avatar: '' },
+        rankLevel: currentUserData.stats?.rankLevel || 0, // 加入段位供顯示
         done: false,
         activeCard: "main",
         isDead: false,
@@ -2809,70 +2828,61 @@ window.startBattleMatchmaking = async () => {
     let joinedRoomId = null;
 
     try {
-        // 搜尋等待中的房間
+        // 🔥 邏輯優化 2: 優先加入「等待最久」的房間
         const q = query(
             collection(db, "rooms"), 
             where("status", "==", "waiting"), 
             where("createdAt", ">", searchTimeRange), 
-            limit(20)
+            orderBy("createdAt", "asc"),
+            limit(10)
         );
         
         const snapshot = await getDocs(q);
 
         if (!snapshot.empty) {
-            // 過濾掉自己開的房間
             let availableDocs = snapshot.docs.filter(d => { 
                 const data = d.data(); 
                 return data.host && data.host.uid !== auth.currentUser.uid; 
             });
 
-            // 🔥 修正 2: 洗牌 (Shuffle) 房間列表，避免大家都搶同一個
-            for (let i = availableDocs.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [availableDocs[i], availableDocs[j]] = [availableDocs[j], availableDocs[i]];
-            }
-
-            // 🔥 修正 3: 嘗試「每一個」可用房間，而不是試一個失敗就放棄
             for (const targetDoc of availableDocs) {
                 console.log(`嘗試加入房間: ${targetDoc.id}`);
                 const roomRef = doc(db, "rooms", targetDoc.id);
+                let targetData = null;
                 
                 try {
                     await runTransaction(db, async (transaction) => {
                         const sfDoc = await transaction.get(roomRef);
                         if (!sfDoc.exists()) throw "房間已不存在";
-                        const data = sfDoc.data();
+                        targetData = sfDoc.data();
                         
-                        // 再次確認狀態
-                        if (data.status === "waiting" && !data.guest) {
+                        if (targetData.status === "waiting" && !targetData.guest) {
                             transaction.update(roomRef, { guest: myBattleData, status: "ready" });
                         } else { 
                             throw "房間已滿"; 
                         }
                     });
 
-                    // 如果交易成功沒報錯，代表加入成功
                     joinedRoomId = targetDoc.id;
-                    break; // 成功加入，跳出迴圈
+                    
+                    // 🔥 作客端：配對成功，播放發現對手動畫
+                    await window.showOpponentFoundAnimation(targetData.host);
+                    break; 
 
                 } catch (e) { 
                     console.log(`加入房間 ${targetDoc.id} 失敗:`, e); 
-                    // 繼續嘗試下一個房間
                 }
             }
         }
 
         if (joinedRoomId) {
-            // --- 加入成功 ---
             console.log("✅ 成功加入房間:", joinedRoomId);
             currentBattleId = joinedRoomId;
             isBattleResultProcessed = false;
-            document.getElementById('battle-status-text').innerText = t('battle_connecting');
             listenToBattleRoom(currentBattleId);
         } else {
-            // --- 無房間可加，自己建立 ---
-            console.log("⚠️ 無可用房間 (或嘗試失敗)，建立新房間等待挑戰者...");
-            document.getElementById('battle-status-text').innerText = "正在等待挑戰者加入...";
+            console.log("⚠️ 無可用房間，建立新房間等待挑戰者...");
+            document.getElementById('battle-status-text').innerText = "WAITING FOR CHALLENGER SIGNAL (Timeout: 60s)...";
             
             const roomRef = await addDoc(collection(db, "rooms"), { 
                 host: myBattleData, 
@@ -2884,9 +2894,7 @@ window.startBattleMatchmaking = async () => {
             currentBattleId = roomRef.id;
             isBattleResultProcessed = false;
             
-            // 隨機邀請線上玩家 (選擇性)
             inviteRandomPlayers(currentBattleId);
-            
             listenToBattleRoom(currentBattleId);
         }
     } catch (e) {
