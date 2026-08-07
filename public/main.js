@@ -3770,8 +3770,76 @@ window.loadUserHistory = async (isLoadMore = false) => {
             const log = doc.data();
             const time = log.timestamp ? new Date(log.timestamp.toDate()).toLocaleString() : '--';
             const li = document.createElement('li');
-            li.className = `p-3 rounded-lg text-xs border-l-4 mb-2 bg-slate-700/50 ${log.isCorrect ? 'border-green-500' : 'border-red-500'}`;
-            li.innerHTML = `<div class="flex justify-between mb-1"><span class="text-gray-400 font-mono">${time}</span><span class="${log.isCorrect ? 'text-green-400' : 'text-red-400'} font-bold">${log.isCorrect ? 'Correct' : 'Wrong'}</span></div><div class="text-white mb-2 text-sm">${log.question}</div><div class="text-gray-500 text-right">${log.rankAtTime || '單人模式'}</div>`;
+            
+            // 加入 hover 效果與滑鼠游標樣式，提示可點擊
+            li.className = `p-3 rounded-lg text-xs border-l-4 mb-2 bg-slate-700/50 hover:bg-slate-600/60 transition cursor-pointer ${log.isCorrect ? 'border-green-500' : 'border-red-500'}`;
+            
+            // 🔥 建立隱藏的詳細資料區塊 HTML
+            let detailsHtml = '';
+            if (log.options && log.options.length > 0) {
+                // 渲染四個選項，並標示對錯顏色
+                const optsHtml = log.options.map((opt, i) => {
+                    let isUserAns = (i === log.userIdx);
+                    let isCorrectAns = (i === log.correctIdx);
+                    
+                    let bgClass = "bg-slate-800/50";
+                    let textClass = "text-gray-400";
+                    let icon = "";
+                    
+                    if (isCorrectAns) {
+                        bgClass = "bg-green-900/30 border border-green-500/50";
+                        textClass = "text-green-400 font-bold";
+                        icon = "<i class='fa-solid fa-check ml-1'></i>";
+                    } else if (isUserAns) {
+                        bgClass = "bg-red-900/30 border border-red-500/50";
+                        textClass = "text-red-400";
+                        icon = "<i class='fa-solid fa-xmark ml-1'></i>";
+                    }
+
+                    return `<div class="p-2 mb-1 rounded text-[11px] ${bgClass} ${textClass} flex items-start gap-2">
+                        <span class="shrink-0 w-4">${String.fromCharCode(65+i)}.</span>
+                        <span class="flex-1">${opt} ${icon}</span>
+                    </div>`;
+                }).join('');
+
+                detailsHtml = `
+                    <div class="hidden mt-3 pt-3 border-t border-white/10 details-panel transition-all">
+                        <div class="space-y-1 mb-2">${optsHtml}</div>
+                        <div class="bg-slate-900/80 p-3 rounded-lg text-gray-300 border border-white/5 text-[11px] leading-relaxed">
+                            <span class="text-cyan-400 font-bold mb-1 block"><i class="fa-solid fa-magnifying-glass"></i> AI 解析：</span>
+                            ${parseMarkdownImages(log.explanation) || "無解析"}
+                        </div>
+                    </div>
+                `;
+            } else {
+                // 針對以前沒有存到詳細資料的舊紀錄
+                detailsHtml = `
+                    <div class="hidden mt-3 pt-3 border-t border-white/10 details-panel transition-all text-gray-500 text-center text-[10px]">
+                        (此為早期紀錄，未保留選項與解析資料)
+                    </div>
+                `;
+            }
+
+            // 綁定點擊展開/收合事件
+            li.onclick = function(e) {
+                // 若玩家點擊的是解析文字本身 (為了反白複製等)，不要觸發收合
+                if (e.target.closest('.details-panel')) return;
+                const panel = this.querySelector('.details-panel');
+                if (panel) panel.classList.toggle('hidden');
+            };
+
+            li.innerHTML = `
+                <div class="flex justify-between mb-1">
+                    <span class="text-gray-400 font-mono">${time}</span>
+                    <span class="${log.isCorrect ? 'text-green-400' : 'text-red-400'} font-bold">${log.isCorrect ? 'Correct' : 'Wrong'}</span>
+                </div>
+                <div class="text-white mb-2 text-sm">${log.question}</div>
+                <div class="flex justify-between items-center text-gray-500 mt-2">
+                    <span class="text-[10px] text-cyan-500/70 opacity-80"><i class="fa-solid fa-chevron-down"></i> 點擊展開詳解</span>
+                    <span class="text-right">${log.rankAtTime || '單人模式'}</span>
+                </div>
+                ${detailsHtml}
+            `;
             ul.appendChild(li);
         });
 
