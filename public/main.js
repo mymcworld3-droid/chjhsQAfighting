@@ -1414,8 +1414,7 @@ window.switchToPage = (pageId) => {
     // --- 修改這裡 ---
     if (pageId === 'page-settings') { 
         renderInventory(); 
-        loadUserHistory(); 
-        renderKnowledgeGraph(); // 🔥 新增這一行：切換到設定頁時渲染雷達圖
+        loadUserHistory();
     }
     // ----------------
     
