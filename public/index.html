@@ -397,57 +397,57 @@
                 <div class="p-4 flex items-start justify-end relative z-20">
                     <div class="flex-1 text-right flex flex-col items-end">
                         <div class="mb-1">
-                            <div id="enemy-sub-card-indicator" class="w-8 h-10 bg-slate-800 border border-gray-600 rounded opacity-50 flex items-center justify-center text-[8px] text-gray-500 shadow-md">Sub</div>
+                            <div id="enemy-sub-card-indicator" class="w-8 h-10 bg-slate-800 border border-gray-600 rounded opacity-50 flex items-center justify-center text-[8px] text-gray-500 shadow-md transition-all duration-300">Sub</div>
                         </div>
-                        <div class="w-full max-w-[200px] flex justify-between items-end mb-1 px-1">
-                            <span class="text-red-400 font-bold font-sci text-[10px] tracking-widest">ENEMY TARGET</span>
-                            <span id="enemy-hp-text" class="text-red-400 font-sci text-sm font-bold">100/100</span>
+                        <div class="w-full max-w-[200px] md:max-w-[300px] flex justify-between items-end mb-1 px-1 transition-all duration-300">
+                            <span class="text-red-400 font-bold font-sci text-[10px] md:text-xs tracking-widest">ENEMY TARGET</span>
+                            <span id="enemy-hp-text" class="text-red-400 font-sci text-sm md:text-lg font-bold">100/100</span>
                         </div>
-                        <div class="w-full max-w-[200px] h-4 bg-slate-900/80 transform skew-x-[-15deg] border border-red-900/50 p-[2px] flex justify-end">
+                        <div class="w-full max-w-[200px] md:max-w-[300px] h-4 md:h-5 bg-slate-900/80 transform skew-x-[-15deg] border border-red-900/50 p-[2px] flex justify-end transition-all duration-300">
                             <div id="enemy-hp-bar" class="h-full bg-gradient-to-l from-orange-400 to-red-500 shadow-[0_0_15px_red] transition-all duration-300 w-full"></div>
                         </div>
                     </div>
-                    <div class="w-14 h-14 glass-panel rounded-lg border-red-500/50 flex items-center justify-center shrink-0 ml-4 shadow-[0_0_15px_rgba(239,68,68,0.3)]">
-                         <div id="enemy-card-visual" class="text-red-400 font-bold text-xl drop-shadow-md">?</div>
+                    <div class="w-14 h-14 md:w-20 md:h-20 glass-panel rounded-lg border-red-500/50 flex items-center justify-center shrink-0 ml-4 shadow-[0_0_15px_rgba(239,68,68,0.3)] transition-all duration-300">
+                         <div id="enemy-card-visual" class="text-red-400 font-bold text-xl md:text-3xl drop-shadow-md">?</div>
                     </div>
                 </div>
 
                 <!-- 戰場交鋒區 (畫面中央) -->
                 <div class="flex-1 flex flex-col items-center justify-center relative py-2">
                     <div class="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none">
-                        <i class="fa-solid fa-dragon text-9xl text-white transform scale-150"></i>
+                        <i class="fa-solid fa-dragon text-9xl md:text-[15rem] text-white transform scale-150 transition-all duration-300"></i>
                     </div>
 
-                    <div class="w-full flex flex-col items-center justify-center gap-6 relative z-10">
-                        <div class="relative z-10 transform scale-90" id="enemy-card-container-wrapper">
-                             <div id="enemy-card-container" class="relative w-32 h-48 bg-slate-800 rounded-lg border-2 border-red-500/50 shadow-2xl"></div>
+                    <div class="w-full flex flex-col md:flex-row items-center justify-center gap-6 md:gap-16 lg:gap-24 relative z-10 transition-all duration-300">
+                        <div class="relative z-10 transform scale-90 md:scale-100" id="enemy-card-container-wrapper">
+                             <div id="enemy-card-container" class="relative w-32 h-48 md:w-44 md:h-[16.5rem] lg:w-48 lg:h-72 bg-slate-800 rounded-lg border-2 border-red-500/50 shadow-2xl md:!mt-0 transition-all duration-300"></div>
                         </div>
 
-                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0">
-                            <div class="text-5xl font-sci font-black italic text-transparent bg-clip-text bg-gradient-to-b from-yellow-300 to-yellow-600 drop-shadow-[0_0_20px_rgba(234,179,8,0.8)] animate-pulse" id="battle-center-msg">VS</div>
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 md:static md:translate-x-0 md:translate-y-0">
+                            <div class="text-5xl md:text-7xl font-sci font-black italic text-transparent bg-clip-text bg-gradient-to-b from-yellow-300 to-yellow-600 drop-shadow-[0_0_20px_rgba(234,179,8,0.8)] animate-pulse transition-all duration-300" id="battle-center-msg">VS</div>
                         </div>
 
-                        <div class="relative z-10 transform scale-100" id="my-card-container-wrapper">
-                             <div id="my-card-container" class="relative w-32 h-48 bg-slate-800 rounded-lg border-2 border-blue-500 shadow-2xl"></div>
+                        <div class="relative z-10 transform scale-100 md:scale-110" id="my-card-container-wrapper">
+                             <div id="my-card-container" class="relative w-32 h-48 md:w-44 md:h-[16.5rem] lg:w-48 lg:h-72 bg-slate-800 rounded-lg border-2 border-blue-500 shadow-2xl md:!mb-0 transition-all duration-300"></div>
                         </div>
                     </div>
                 </div>
 
                 <!-- 我方狀態區 (畫面底部) -->
                 <div class="p-4 pb-24 flex items-end justify-start relative z-20">
-                    <div class="w-14 h-14 glass-panel rounded-lg border-blue-500/50 flex items-center justify-center shrink-0 mr-4 shadow-[0_0_15px_rgba(59,130,246,0.3)]">
-                         <div id="my-card-visual" class="text-blue-400 font-bold text-xl drop-shadow-md">YOU</div>
+                    <div class="w-14 h-14 md:w-20 md:h-20 glass-panel rounded-lg border-blue-500/50 flex items-center justify-center shrink-0 mr-4 shadow-[0_0_15px_rgba(59,130,246,0.3)] transition-all duration-300">
+                         <div id="my-card-visual" class="text-blue-400 font-bold text-xl md:text-3xl drop-shadow-md">YOU</div>
                     </div>
                     
                     <div class="flex-1 flex flex-col items-start">
                         <div class="mb-1">
-                            <div id="my-sub-card-indicator" class="w-8 h-10 bg-slate-800 border border-gray-600 rounded opacity-50 flex items-center justify-center text-[8px] text-gray-500 shadow-md">Sub</div>
+                            <div id="my-sub-card-indicator" class="w-8 h-10 bg-slate-800 border border-gray-600 rounded opacity-50 flex items-center justify-center text-[8px] text-gray-500 shadow-md transition-all duration-300">Sub</div>
                         </div>
-                        <div class="w-full max-w-[200px] flex justify-between items-end mb-1 px-1">
-                            <span id="my-hp-text" class="text-blue-400 font-sci text-sm font-bold">100/100</span>
-                            <span class="text-blue-400 font-bold font-sci text-[10px] tracking-widest">SYSTEM ONLINE</span>
+                        <div class="w-full max-w-[200px] md:max-w-[300px] flex justify-between items-end mb-1 px-1 transition-all duration-300">
+                            <span id="my-hp-text" class="text-blue-400 font-sci text-sm md:text-lg font-bold">100/100</span>
+                            <span class="text-blue-400 font-bold font-sci text-[10px] md:text-xs tracking-widest">SYSTEM ONLINE</span>
                         </div>
-                        <div class="w-full max-w-[200px] h-4 bg-slate-900/80 transform skew-x-[15deg] border border-blue-900/50 p-[2px]">
+                        <div class="w-full max-w-[200px] md:max-w-[300px] h-4 md:h-5 bg-slate-900/80 transform skew-x-[15deg] border border-blue-900/50 p-[2px] transition-all duration-300">
                             <div id="my-hp-bar" class="h-full bg-gradient-to-r from-cyan-400 to-blue-500 shadow-[0_0_15px_cyan] transition-all duration-300 w-full"></div>
                         </div>
                     </div>
