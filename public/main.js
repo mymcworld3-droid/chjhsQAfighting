@@ -1414,7 +1414,8 @@ window.switchToPage = (pageId) => {
     // --- 修改這裡 ---
     if (pageId === 'page-settings') { 
         renderInventory(); 
-        loadUserHistory();
+        loadUserHistory(); 
+        if (window.renderKnowledgeGraph) window.renderKnowledgeGraph(); // 渲染圖譜
     }
     // ----------------
     
