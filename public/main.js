@@ -1713,6 +1713,7 @@ window.submitOnboarding = async () => {
 };
 
 window.saveProfile = async () => {
+    const displayName = document.getElementById('set-display-name').value.trim();
     const level = document.getElementById('set-level').value;
     const rawStrong = document.getElementById('set-strong').value;
     const rawWeak = document.getElementById('set-weak').value;
@@ -1720,6 +1721,7 @@ window.saveProfile = async () => {
     const source = document.getElementById('set-source-final-value').value; 
     const difficulty = document.getElementById('set-difficulty').value;
 
+    if (!displayName) { alert("名稱不能為空！"); return; }
     if (sourceMode === 'bank' && (!source || source === 'ai')) { alert("請選擇題庫檔案！"); return; }
     if (sourceMode === 'focused' && (!window.soloSelectedUnits || window.soloSelectedUnits.length === 0)) { alert("請至少加入一個單元！"); return; }
 
@@ -1739,17 +1741,23 @@ window.saveProfile = async () => {
     };
 
     await updateDoc(doc(db, "users", auth.currentUser.uid), { 
+        "displayName": displayName,
         "profile.educationLevel": level, 
         "profile.strongSubjects": cleanStrong, 
         "profile.weakSubjects": cleanWeak, 
         "gameSettings": newSettings 
     });
     
+    currentUserData.displayName = displayName;
     currentUserData.profile.educationLevel = level; 
     currentUserData.profile.strongSubjects = cleanStrong; 
     currentUserData.profile.weakSubjects = cleanWeak; 
     currentUserData.gameSettings = newSettings;
     
+    // 更新畫面上方顯示的名稱
+    const userInfoEl = document.getElementById('user-info');
+    if (userInfoEl) userInfoEl.innerHTML = `<i class="fa-solid fa-user-astronaut"></i> ${displayName}`;
+
     currentBankData = null; 
     localStorage.removeItem('currentQuiz'); 
     quizBuffer = []; 
