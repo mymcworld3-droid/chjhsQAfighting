@@ -2269,6 +2269,29 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     }
     stats.totalScore += scoreGain;
 
+    // 🔥 [新增] 解析當前題目分類，並更新知識圖譜 (knowledgeMap) 數據
+    if (window.currentActiveQuiz && window.currentActiveQuiz.badge) {
+        // 從 badge (例如 "🎯 國文 | 字形字音字義") 中拆解出學科與單元
+        const parts = window.currentActiveQuiz.badge.replace('🎯 ', '').split(' | ');
+        if (parts.length >= 2) {
+            const subject = parts[0].trim();
+            const subTopic = parts[1].trim();
+
+            // 防呆：如果尚未有該科目的資料結構，先幫它初始化
+            if (!stats.knowledgeMap) stats.knowledgeMap = {};
+            if (!stats.knowledgeMap[subject]) stats.knowledgeMap[subject] = {};
+            if (!stats.knowledgeMap[subject][subTopic]) {
+                stats.knowledgeMap[subject][subTopic] = { total: 0, correct: 0 };
+            }
+
+            // 寫入數據：總答題數 +1，若答對則 correct +1
+            stats.knowledgeMap[subject][subTopic].total += 1;
+            if (isCorrect) {
+                stats.knowledgeMap[subject][subTopic].correct += 1;
+            }
+        }
+    }
+
     const netScore = getNetScore(stats);
     const newRank = calculateRankFromScore(netScore);
     if (newRank > stats.rankLevel) stats.rankLevel = newRank;
