@@ -3714,24 +3714,81 @@ async function handleBattleAnswer(roomId, userIdx, correctIdx, isHost) {
     } catch (e) { console.error(e); }
 }
 
-window.loadUserHistory = async () => {
+let lastVisibleHistoryDoc = null; // 🔥 記錄最後一筆文件，用於分頁
+
+window.loadUserHistory = async (isLoadMore = false) => {
     const ul = document.getElementById('history-list');
+    const loadMoreBtn = document.getElementById('btn-load-more-history');
     if(!ul) return; 
-    ul.innerHTML = `<li class="text-center py-10"><div class="loader"></div></li>`;
+    
+    // 首次載入時：清空列表與重置指標
+    if (!isLoadMore) {
+        ul.innerHTML = `<li class="text-center py-10"><div class="loader"></div></li>`;
+        lastVisibleHistoryDoc = null;
+        if (loadMoreBtn) loadMoreBtn.classList.add('hidden');
+    } else {
+        // 加載更多時：按鈕變成讀取中
+        if (loadMoreBtn) {
+            loadMoreBtn.innerText = "載入中...";
+            loadMoreBtn.disabled = true;
+        }
+    }
+
     try {
-        const q = query(collection(db, "exam_logs"), where("uid", "==", auth.currentUser.uid), orderBy("timestamp", "desc"), limit(20));
+        let q;
+        const baseQueryArgs = [
+            collection(db, "exam_logs"),
+            where("uid", "==", auth.currentUser.uid),
+            orderBy("timestamp", "desc")
+        ];
+
+        if (isLoadMore && lastVisibleHistoryDoc) {
+            q = query(...baseQueryArgs, startAfter(lastVisibleHistoryDoc), limit(20));
+        } else {
+            q = query(...baseQueryArgs, limit(20));
+        }
+
         const snap = await getDocs(q);
-        ul.innerHTML = '';
-        if (snap.empty) { ul.innerHTML = `<li class="text-center text-gray-500 py-4">No History</li>`; return; }
+        
+        if (!isLoadMore) ul.innerHTML = ''; // 首次載入成功後清空 loader
+
+        if (snap.empty) { 
+            if (!isLoadMore) ul.innerHTML = `<li class="text-center text-gray-500 py-4">目前還沒有答題紀錄</li>`;
+            if (loadMoreBtn) loadMoreBtn.classList.add('hidden');
+            return; 
+        }
+
+        // 記錄最後一筆供下次載入使用
+        lastVisibleHistoryDoc = snap.docs[snap.docs.length - 1];
+
         snap.forEach(doc => {
             const log = doc.data();
             const time = log.timestamp ? new Date(log.timestamp.toDate()).toLocaleString() : '--';
             const li = document.createElement('li');
             li.className = `p-3 rounded-lg text-xs border-l-4 mb-2 bg-slate-700/50 ${log.isCorrect ? 'border-green-500' : 'border-red-500'}`;
-            li.innerHTML = `<div class="flex justify-between mb-1"><span class="text-gray-400 font-mono">${time}</span><span class="${log.isCorrect ? 'text-green-400' : 'text-red-400'} font-bold">${log.isCorrect ? 'Correct' : 'Wrong'}</span></div><div class="text-white mb-2 text-sm">${log.question}</div><div class="text-gray-500 text-right">${log.rankAtTime}</div>`;
+            li.innerHTML = `<div class="flex justify-between mb-1"><span class="text-gray-400 font-mono">${time}</span><span class="${log.isCorrect ? 'text-green-400' : 'text-red-400'} font-bold">${log.isCorrect ? 'Correct' : 'Wrong'}</span></div><div class="text-white mb-2 text-sm">${log.question}</div><div class="text-gray-500 text-right">${log.rankAtTime || '單人模式'}</div>`;
             ul.appendChild(li);
         });
-    } catch (e) { console.error(e); ul.innerHTML = '<li class="text-center text-red-400 py-4">Error</li>'; }
+
+        // 判斷是否還有資料：如果這批抓滿 20 筆，就顯示加載更多按鈕
+        if (loadMoreBtn) {
+            if (snap.docs.length === 20) {
+                loadMoreBtn.classList.remove('hidden');
+                loadMoreBtn.innerText = "加載更多...";
+                loadMoreBtn.disabled = false;
+            } else {
+                loadMoreBtn.classList.add('hidden');
+            }
+        }
+
+    } catch (e) { 
+        console.error(e); 
+        if (!isLoadMore) ul.innerHTML = '<li class="text-center text-red-400 py-4">載入失敗，請稍後再試</li>';
+        if (loadMoreBtn) {
+            loadMoreBtn.innerText = "加載更多...";
+            loadMoreBtn.disabled = false;
+        }
+    }
 };
 
 
