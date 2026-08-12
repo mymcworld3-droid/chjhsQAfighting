@@ -378,11 +378,16 @@ function validateQuizQuestion(question, expectedSubject, expectedTopic) {
 // 只有程式檢查出可疑題目才會呼叫
 // ==========================================
 
-async function reviewQuizQuestion(question, expectedSubject, expectedTopic, basicIssues = []) {
+async function reviewQuizQuestion(
+    question,
+    expectedSubject,
+    expectedTopic,
+    basicIssues = []
+) {
     const reviewPrompt = `
-你是一名極度嚴格的高中／國中考題品質審查員。
+你是一名嚴格的考題修正 AI。
 
-你的任務不是重新出題，而是判斷下面這一道 AI 生成的單選題是否可以直接給學生作答。
+你的任務不是重新出題，而是「修正」下面這一道已經被程式判定為可疑的單選題。
 
 【目標學科】
 ${expectedSubject}
@@ -390,119 +395,107 @@ ${expectedSubject}
 【目標題型】
 ${expectedTopic}
 
-【程式初步檢查發現】
-${JSON.stringify(basicIssues, null, 2)}
+【程式初步檢查問題】
+${JSON.stringify(basicIssues)}
 
-【待審核題目】
-${JSON.stringify(question, null, 2)}
+【原始題目】
+${JSON.stringify(question)}
 
-請依照以下標準逐項審查：
+請修正所有會造成題目無法直接使用的問題。
 
-1. 題目是否真的符合指定學科。
-2. 題目是否真的符合指定題型。
-3. 是否只有一個合理的正確答案。
-4. 三個錯誤選項是否真的錯。
-5. 是否存在兩個以上合理答案。
-6. 題目敘述是否有歧義。
-7. 題目與選項是否有邏輯矛盾。
-8. 正確答案是否真的能由題目資訊推出。
-9. 解析是否與答案一致。
-10. 是否存在明顯事實錯誤。
-11. 是否有嚴重錯字、格式問題。
-12. 是否符合單選題形式。
-13. 是否存在「沒有標準答案」的情況。
+必須確認：
+
+1. 題目符合指定學科。
+2. 題目符合指定題型。
+3. 只有一個合理正確答案。
+4. 三個 wrong 都必須是錯誤答案。
+5. 四個選項不可重複。
+6. 題目資訊足夠解題。
+7. 不得存在明顯歧義。
+8. 正確答案與解析一致。
+9. 不得存在明顯事實錯誤。
+10. 必須是四選一單選題。
+11. 不得使用「以上皆是」。
+12. 不得使用「以上皆非」。
+13. 英文題解析使用繁體中文。
+14. 數學題必須重新確認計算結果。
+15. 歷史、公民、地理、科學題不得虛構資料。
 
 重要：
 
-- 不要因為題目稍微簡單就判定錯誤。
-- 不要因為有不同解法就判定錯誤。
-- 只有在答案、事實、邏輯或題型存在實質問題時才判定不通過。
-- 如果題目可以直接給學生作答，就通過。
-- 如果可以小幅修正後變成好題目，可以提出修正。
-- 如果無法可靠修正，必須判定不通過。
+- 優先修正原題。
+- 不要無理由改變題目主題。
+- 如果原題可以修正，就修正。
+- 如果原題完全無法可靠修正，可以重新設計一道符合相同 subject / sub_topic 的題目。
+- 最終一定要回傳完整題目。
+- 不要回傳 null。
+- 不要輸出 Markdown。
+- 只能輸出 JSON。
 
-請只回傳 JSON：
-
-{
-    "approved": true,
-    "confidence": 0.95,
-    "reason": "簡短說明",
-    "issues": [],
-    "fixedQuestion": null
-}
-
-如果題目需要修正，而且你能確定正確修改方式：
+輸出格式：
 
 {
-    "approved": true,
-    "confidence": 0.9,
-    "reason": "修正後可以使用",
-    "issues": ["原本的問題"],
-    "fixedQuestion": {
-        "q": "...",
-        "correct": "...",
-        "wrong": ["...", "...", "..."],
-        "exp": "...",
-        "subject": "${expectedSubject}",
-        "sub_topic": "${expectedTopic}"
-    }
-}
-
-如果無法可靠修正：
-
-{
-    "approved": false,
-    "confidence": 0.95,
-    "reason": "原因",
-    "issues": ["問題1", "問題2"],
-    "fixedQuestion": null
+    "q": "修正後題目",
+    "correct": "正確答案",
+    "wrong": [
+        "錯誤答案1",
+        "錯誤答案2",
+        "錯誤答案3"
+    ],
+    "exp": "繁體中文解析",
+    "subject": "${expectedSubject}",
+    "sub_topic": "${expectedTopic}"
 }
 `;
 
     try {
         const result = await reviewModel.generateContent(reviewPrompt);
 
-        const rawText = result.response.text()
-            .replace(/```json/g, "")
+        let rawText = result.response
+            .text()
+            .replace(/```json/gi, "")
             .replace(/```/g, "")
             .trim();
 
-        const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+        const firstBrace = rawText.indexOf("{");
+        const lastBrace = rawText.lastIndexOf("}");
 
-        if (!jsonMatch) {
-            throw new Error("審核模型沒有回傳有效 JSON");
+        if (
+            firstBrace === -1 ||
+            lastBrace === -1 ||
+            lastBrace <= firstBrace
+        ) {
+            throw new Error("Gemini 修正結果不是有效 JSON");
         }
 
-        const review = JSON.parse(jsonMatch[0]);
+        rawText = rawText.substring(
+            firstBrace,
+            lastBrace + 1
+        );
 
-        return {
-            approved: review.approved === true,
-            confidence:
-                typeof review.confidence === "number"
-                    ? review.confidence
-                    : 0,
-            reason: review.reason || "",
-            issues: Array.isArray(review.issues)
-                ? review.issues
-                : [],
-            fixedQuestion:
-                review.fixedQuestion &&
-                typeof review.fixedQuestion === "object"
-                    ? review.fixedQuestion
-                    : null
-        };
+        const fixedQuestion = JSON.parse(rawText);
+
+        if (
+            !fixedQuestion ||
+            typeof fixedQuestion !== "object" ||
+            Array.isArray(fixedQuestion)
+        ) {
+            throw new Error("Gemini 修正結果不是有效物件");
+        }
+
+        // 強制使用系統分類
+        fixedQuestion.subject = expectedSubject;
+        fixedQuestion.sub_topic = expectedTopic;
+
+        return fixedQuestion;
 
     } catch (error) {
-        console.error("[Review] Gemini 審核失敗:", error.message);
+        console.error(
+            "[Review] Gemini 修正失敗:",
+            error.message
+        );
 
-        // 審核模型故障時，不直接把可疑題目送給玩家
-        return {
-            approved: false,
-            confidence: 0,
-            reason: "AI 審核服務暫時無法使用",
-            issues: ["review_model_error"],
-            fixedQuestion: null
-        };
+        return null;
     }
 }
 
