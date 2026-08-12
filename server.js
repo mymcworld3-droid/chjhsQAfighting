@@ -538,117 +538,306 @@ async function reviewQuizQuestion(
     basicIssues = []
 ) {
     const reviewPrompt = `
-你是一名嚴格的考題修正 AI。
+你是一名極度嚴格的臺灣國高中考題品質審核 AI。
 
-你的任務不是重新出題，而是「修正」下面這一道已經被程式判定為可疑的單選題。
+你的任務是審核一題已經由其他 AI 產生、且被程式初步判定為可疑的四選一單選題。
 
-【目標學科】
+你不是單純判斷格式，而是必須檢查：
+
+1. 題目是否真的可以作答。
+2. 是否只有一個合理答案。
+3. 三個 wrong 是否真的錯誤。
+4. 題目與答案是否存在歧義。
+5. 是否有事實錯誤。
+6. 是否有數學計算錯誤。
+7. 是否有歷史、公民、地理、科學概念錯誤。
+8. 是否符合指定學科。
+9. 是否符合指定子題型。
+10. 解析是否支持答案。
+11. 是否是四選一單選題。
+12. 是否存在「以上皆是」、「以上皆非」。
+13. 是否存在明顯排版或 JSON 問題。
+
+【指定學科】
 ${expectedSubject}
 
-【目標題型】
+【指定題型】
 ${expectedTopic}
 
 【程式初步檢查問題】
-${JSON.stringify(basicIssues)}
+${JSON.stringify(basicIssues, null, 2)}
 
 【原始題目】
-${JSON.stringify(question)}
+${JSON.stringify(question, null, 2)}
 
-請修正所有會造成題目無法直接使用的問題。
+━━━━━━━━━━━━━━━━━━
+【審核規則】
+━━━━━━━━━━━━━━━━━━
 
-必須確認：
+如果原題可以可靠修正：
 
-1. 題目符合指定學科。
-2. 題目符合指定題型。
-3. 只有一個合理正確答案。
-4. 三個 wrong 都必須是錯誤答案。
-5. 四個選項不可重複。
-6. 題目資訊足夠解題。
-7. 不得存在明顯歧義。
-8. 正確答案與解析一致。
-9. 不得存在明顯事實錯誤。
-10. 必須是四選一單選題。
-11. 不得使用「以上皆是」。
-12. 不得使用「以上皆非」。
-13. 英文題解析使用繁體中文。
-14. 數學題必須重新確認計算結果。
-15. 歷史、公民、地理、科學題不得虛構資料。
-
-重要：
-
-- 優先修正原題。
+- 修正原題。
 - 不要無理由改變題目主題。
-- 如果原題可以修正，就修正。
-- 如果原題完全無法可靠修正，可以重新設計一道符合相同 subject / sub_topic 的題目。
-- 最終一定要回傳完整題目。
-- 不要回傳 null。
-- 不要輸出 Markdown。
-- 只能輸出 JSON。
+- 保留原題核心概念。
+- 確保最後只有一個正確答案。
+- 重新確認所有 wrong。
+- 重新確認解析。
 
-輸出格式：
+如果原題完全無法可靠修正：
+
+- 可以重新設計一道相同 subject / sub_topic 的題目。
+
+如果原題本身其實沒有真正錯誤：
+
+- 可以保留原題。
+- fixedQuestion 必須仍然回傳完整題目。
+
+━━━━━━━━━━━━━━━━━━
+【非常重要】
+━━━━━━━━━━━━━━━━━━
+
+你必須自行重新判斷：
+
+A. 題目是否只有一個最佳答案？
+B. wrong 是否真的錯？
+C. 題目資訊是否足夠？
+D. 是否符合指定題型？
+E. 是否存在語意歧義？
+F. 是否存在事實錯誤？
+G. 解析是否正確？
+H. 是否為四選一單選題？
+
+不要因為程式檢查有問題，就盲目認定題目錯誤。
+
+━━━━━━━━━━━━━━━━━━
+【輸出格式】
+━━━━━━━━━━━━━━━━━━
+
+只能輸出 JSON。
+
+不要輸出 Markdown。
+不要輸出 ```json。
+不要輸出任何額外文字。
+
+格式：
 
 {
-    "q": "修正後題目",
-    "correct": "正確答案",
-    "wrong": [
-        "錯誤答案1",
-        "錯誤答案2",
-        "錯誤答案3"
-    ],
-    "exp": "繁體中文解析",
-    "subject": "${expectedSubject}",
-    "sub_topic": "${expectedTopic}"
+    "approved": true,
+    "confidence": 0.95,
+    "reason": "簡短說明審核結果",
+    "fixedQuestion": {
+        "q": "題目",
+        "correct": "正確答案",
+        "wrong": [
+            "錯誤答案1",
+            "錯誤答案2",
+            "錯誤答案3"
+        ],
+        "exp": "繁體中文解析",
+        "subject": "${expectedSubject}",
+        "sub_topic": "${expectedTopic}"
+    }
 }
+
+【approved 定義】
+
+true：
+代表這題經過你的審核後，可以安全給玩家使用。
+
+false：
+代表這題即使修正後仍然無法可靠使用。
+
+【confidence】
+
+必須是 0 到 1 之間的數字。
+
+0.95 = 非常確定
+0.85 = 高度確定
+0.75 = 可以接受
+低於 0.75 = 不夠確定
+
+即使原題完全沒問題，也必須回傳 fixedQuestion。
+
 `;
-
+    
     try {
-        const result = await reviewModel.generateContent(reviewPrompt);
+        const result =
+            await reviewModel.generateContent(
+                reviewPrompt
+            );
 
-        let rawText = result.response
-            .text()
-            .replace(/```json/gi, "")
-            .replace(/```/g, "")
-            .trim();
+        let rawText =
+            result.response
+                .text()
+                .trim();
 
-        const firstBrace = rawText.indexOf("{");
-        const lastBrace = rawText.lastIndexOf("}");
+        console.log(
+            "[Review] Gemini Raw Response:",
+            rawText.substring(0, 4000)
+        );
+
+        // ==========================================
+        // 清理 Markdown
+        // ==========================================
+
+        rawText =
+            rawText
+                .replace(/```json/gi, "")
+                .replace(/```/g, "")
+                .replace(/^\uFEFF/, "")
+                .trim();
+
+        // ==========================================
+        // 擷取 JSON
+        // ==========================================
+
+        const firstBrace =
+            rawText.indexOf("{");
+
+        const lastBrace =
+            rawText.lastIndexOf("}");
 
         if (
             firstBrace === -1 ||
             lastBrace === -1 ||
             lastBrace <= firstBrace
         ) {
-            throw new Error("Gemini 修正結果不是有效 JSON");
+            throw new Error(
+                "Gemini 審核結果找不到有效 JSON"
+            );
         }
 
-        rawText = rawText.substring(
-            firstBrace,
-            lastBrace + 1
-        );
+        rawText =
+            rawText.substring(
+                firstBrace,
+                lastBrace + 1
+            );
 
-        const fixedQuestion = JSON.parse(rawText);
+        let review;
+
+        try {
+            review = JSON.parse(rawText);
+        } catch (parseError) {
+
+            console.error(
+                "[Review] JSON.parse 第一次失敗:",
+                parseError.message
+            );
+
+            // 移除控制字元
+            rawText =
+                rawText.replace(
+                    /[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,
+                    ""
+                );
+
+            review = JSON.parse(rawText);
+        }
+
+        // ==========================================
+        // 基本格式驗證
+        // ==========================================
+
+        if (
+            !review ||
+            typeof review !== "object" ||
+            Array.isArray(review)
+        ) {
+            throw new Error(
+                "Gemini 審核結果不是有效物件"
+            );
+        }
+
+        // ==========================================
+        // approved
+        // ==========================================
+
+        const approved =
+            review.approved === true;
+
+        // ==========================================
+        // confidence
+        // ==========================================
+
+        let confidence =
+            Number(review.confidence);
+
+        if (!Number.isFinite(confidence)) {
+            confidence = 0;
+        }
+
+        confidence =
+            Math.max(
+                0,
+                Math.min(1, confidence)
+            );
+
+        // ==========================================
+        // fixedQuestion
+        // ==========================================
+
+        let fixedQuestion =
+            review.fixedQuestion;
 
         if (
             !fixedQuestion ||
             typeof fixedQuestion !== "object" ||
             Array.isArray(fixedQuestion)
         ) {
-            throw new Error("Gemini 修正結果不是有效物件");
+            /*
+             * 如果 Gemini 沒有回傳 fixedQuestion，
+             * 但它認為原題可以使用，
+             * 就使用原題作為 fallback。
+             */
+
+            if (approved) {
+                fixedQuestion = {
+                    ...question
+                };
+            } else {
+                fixedQuestion = null;
+            }
         }
 
-        // 強制使用系統分類
-        fixedQuestion.subject = expectedSubject;
-        fixedQuestion.sub_topic = expectedTopic;
+        // ==========================================
+        // 強制分類
+        // ==========================================
 
-        return fixedQuestion;
+        if (fixedQuestion) {
+            fixedQuestion.subject =
+                expectedSubject;
+
+            fixedQuestion.sub_topic =
+                expectedTopic;
+        }
+
+        // ==========================================
+        // Gemini 回傳統一格式
+        // ==========================================
+
+        return {
+            approved,
+            confidence,
+            reason:
+                typeof review.reason === "string"
+                    ? review.reason
+                    : "",
+            fixedQuestion
+        };
 
     } catch (error) {
+
         console.error(
-            "[Review] Gemini 修正失敗:",
+            "[Review] Gemini 審核失敗:",
             error.message
         );
 
-        return null;
+        return {
+            approved: false,
+            confidence: 0,
+            reason: "Gemini 審核失敗",
+            fixedQuestion: null
+        };
     }
 }
 
