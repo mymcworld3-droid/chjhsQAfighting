@@ -941,15 +941,22 @@ app.post('/api/generate-quiz', async (req, res) => {
         topic
     } = req.body;
 
-    let targetTopic = specificTopic || topic;
+    let targetTopic =
+        specificTopic || topic;
 
     // ==========================================
     // 1. 決定科目
     // ==========================================
 
-    if (!subject || !SUBJECT_SCHEMA[subject]) {
-        const allSubjects = Object.keys(SUBJECT_SCHEMA);
-        subject = getRandomItem(allSubjects);
+    if (
+        !subject ||
+        !SUBJECT_SCHEMA[subject]
+    ) {
+        const allSubjects =
+            Object.keys(SUBJECT_SCHEMA);
+
+        subject =
+            getRandomItem(allSubjects);
     }
 
     // ==========================================
@@ -959,11 +966,14 @@ app.post('/api/generate-quiz', async (req, res) => {
     if (
         !targetTopic ||
         !SUBJECT_SCHEMA[subject] ||
-        !SUBJECT_SCHEMA[subject].includes(targetTopic)
+        !SUBJECT_SCHEMA[subject].includes(
+            targetTopic
+        )
     ) {
-        targetTopic = getRandomItem(
-            SUBJECT_SCHEMA[subject]
-        );
+        targetTopic =
+            getRandomItem(
+                SUBJECT_SCHEMA[subject]
+            );
     }
 
     if (!targetTopic) {
@@ -971,11 +981,12 @@ app.post('/api/generate-quiz', async (req, res) => {
     }
 
     // ==========================================
-    // 3. 取得題型說明
+    // 3. 題型說明
     // ==========================================
 
     const topicDescription =
-        SUBJECT_DETAILS[subject]?.[targetTopic] || "";
+        SUBJECT_DETAILS[subject]?.[targetTopic] ||
+        "";
 
     // ==========================================
     // 4. 玩家能力診斷
@@ -988,27 +999,37 @@ app.post('/api/generate-quiz', async (req, res) => {
         knowledgeMap[subject] &&
         knowledgeMap[subject][targetTopic]
     ) {
+
         const stats =
             knowledgeMap[subject][targetTopic];
 
-        const total = Number(stats.total || 0);
-        const correct = Number(stats.correct || 0);
+        const total =
+            Number(stats.total || 0);
+
+        const correct =
+            Number(stats.correct || 0);
 
         const accuracy =
             total > 0
                 ? ((correct / total) * 100).toFixed(1)
-                : 0;
+                : "0.0";
 
         diagnosticInfo =
-            `[玩家數據] 「${subject}-${targetTopic}」`
-            + `正確率 ${accuracy}%`
-            + `，已練習 ${total} 題。`;
+            `[玩家數據] 「${subject}-${targetTopic}」` +
+            `正確率 ${accuracy}%` +
+            `，已練習 ${total} 題。`;
 
-        if (total >= 4 && accuracy < 40) {
+        if (
+            total >= 4 &&
+            Number(accuracy) < 40
+        ) {
             difficulty = "easy";
         }
 
-        if (total >= 6 && accuracy > 80) {
+        if (
+            total >= 6 &&
+            Number(accuracy) > 80
+        ) {
             difficulty = "hard";
         }
     }
@@ -1017,22 +1038,33 @@ app.post('/api/generate-quiz', async (req, res) => {
     // 5. 安全預設值
     // ==========================================
 
-    level = level || "高中";
-    rank = rank || "一般";
-    difficulty = difficulty || "medium";
+    level =
+        level || "高中";
+
+    rank =
+        rank || "一般";
+
+    difficulty =
+        difficulty || "medium";
 
     // ==========================================
-    // 6. 防止同一次請求產生完全相同題目
+    // 6. 隨機種子
     // ==========================================
 
     const randomSeed =
-        `${Date.now()}-${Math.random().toString(36).substring(2, 10)}`;
+        `${Date.now()}-${Math.random()
+            .toString(36)
+            .substring(2, 10)}`;
 
     // ==========================================
-    // 7. 最多進行幾次 Gemma 重新生成
+    // 7. Gemma 最大生成次數
     // ==========================================
 
-    const MAX_GENERATION_ATTEMPTS = 2;
+    const MAX_GENERATION_ATTEMPTS = 3;
+
+    // ==========================================
+    // 8. 開始生成
+    // ==========================================
 
     for (
         let attempt = 1;
@@ -1043,19 +1075,19 @@ app.post('/api/generate-quiz', async (req, res) => {
         try {
 
             console.log(
-                `[Quiz] ${subject} > ${targetTopic}`
-                + ` | difficulty=${difficulty}`
-                + ` | generation=${attempt}/${MAX_GENERATION_ATTEMPTS}`
+                `[Quiz] ${subject} > ${targetTopic}` +
+                ` | difficulty=${difficulty}` +
+                ` | generation=${attempt}/${MAX_GENERATION_ATTEMPTS}`
             );
 
             // ==========================================
-            // 8. Gemma 出題 Prompt
+            // Gemma 出題 Prompt
             // ==========================================
 
             const generationPrompt = `
 你是專業的臺灣國高中考題設計 AI。
 
-請產生「一道」高品質、可直接讓學生作答的四選一單選題。
+請產生「一道」高品質、可以直接讓學生作答的四選一單選題。
 
 【基本設定】
 
@@ -1095,53 +1127,33 @@ ${randomSeed}-${attempt}
 6. 不可出現兩個都可以被判定為正確的答案。
 7. 題目本身必須提供足夠資訊解題。
 8. 不可以要求學生猜測出題者想法。
-9. 不可以用模糊或沒有明確定義的敘述。
+9. 不可以使用模糊或沒有明確定義的敘述。
 10. 解析必須真正解釋為什麼正確答案正確。
-11. 三個錯誤選項也要有合理的干擾性。
+11. 三個錯誤選項也要具有合理干擾性。
 12. 不要把答案直接寫在題幹。
-13. 不要把正確答案的文字直接複製成題目提示。
+13. 不要把正確答案直接複製到題幹作為提示。
 14. 不要出多選題。
 15. 不要出「以上皆是」。
 16. 不要出「以上皆非」。
-17. 不要讓正確答案因為文字長度、語氣或格式特別突出。
-18. 避免無意義的純記憶題，除非該題型本身就是知識記憶。
-19. 如果是數學題，必須確認計算結果。
+17. 不要讓正確答案因為文字長度或格式特別突出。
+18. 避免沒有意義的純記憶題，除非該題型本身就是知識記憶。
+19. 如果是數學題，必須重新確認計算結果。
 20. 如果是科學題，必須確認概念與因果關係。
-21. 如果是歷史、公民、地理題，不可以虛構史實、法規或地理資料。
-22. 英文題解析使用繁體中文。
-23. 解析不可只是重複答案，必須說明判斷依據。
+21. 如果是歷史、公民、地理題，不可以虛構資料。
+22. 英文題解析必須使用繁體中文。
+23. 解析不可只是重複答案。
+24. 題目必須是四選一單選題。
 
 ━━━━━━━━━━━━━━━━━━
-【題目品質自我檢查】
+【輸出】
 ━━━━━━━━━━━━━━━━━━
 
-生成前請自行檢查：
+只能輸出 JSON object。
 
-A. 題目是否只有一個答案？
-B. 三個干擾選項是否真的錯？
-C. 題目資訊是否足夠？
-D. 是否符合指定題型？
-E. 解析是否支持答案？
-F. 是否存在語意歧義？
-G. 是否存在事實錯誤？
-
-如果任一項無法確認，請重新設計題目。
-
-━━━━━━━━━━━━━━━━━━
-【輸出規則】
-━━━━━━━━━━━━━━━━━━
-
-只能輸出一個 JSON object。
-
-第一個字元必須是 {
-最後一個字元必須是 }
-
-不要輸出 Markdown。
-不要輸出任何說明文字。
-不要輸出 JSON code fence。
+不要 Markdown。
+不要 code fence。
+不要額外說明。
 不要增加其他欄位。
-
-JSON 結構必須如下：
 
 {
     "q": "題目",
@@ -1158,7 +1170,7 @@ JSON 結構必須如下：
 `;
 
             // ==========================================
-            // 9. 第一階段：Gemma 4 31B IT 出題
+            // 9. Gemma 第一階段出題
             // ==========================================
 
             const genResult =
@@ -1172,95 +1184,19 @@ JSON 結構必須如下：
                     .trim();
 
             console.log(
-                `[Quiz] Gemma Raw Response:`
-                + ` ${rawText.substring(0, 3000)}`
+                "[Quiz] Gemma Raw Response:",
+                rawText.substring(0, 3000)
             );
 
             // ==========================================
-            // 10. 安全解析 Gemma JSON
+            // 10. 解析 JSON
             // ==========================================
 
-            let cleanedText = rawText;
-
-            cleanedText = cleanedText
-                .replace(/```json/gi, "")
-                .replace(/```/g, "")
-                .replace(/^\uFEFF/, "")
-                .trim();
-
-            const firstBrace =
-                cleanedText.indexOf("{");
-
-            const lastBrace =
-                cleanedText.lastIndexOf("}");
-
-            if (
-                firstBrace === -1 ||
-                lastBrace === -1 ||
-                lastBrace <= firstBrace
-            ) {
-                throw new Error(
-                    "Gemma 回應中找不到完整 JSON"
-                );
-            }
-
-            cleanedText =
-                cleanedText.substring(
-                    firstBrace,
-                    lastBrace + 1
-                );
-
-            let question;
-
-            try {
-
-                question =
-                    JSON.parse(cleanedText);
-
-            } catch (parseError) {
-
-                console.error(
-                    "[Quiz] Gemma JSON.parse 第一次失敗:",
-                    parseError.message
-                );
-
-                console.error(
-                    "[Quiz] Gemma 原始回應:",
-                    rawText
-                );
-
-                // 移除 JSON 不允許的控制字元
-                cleanedText =
-                    cleanedText.replace(
-                        /[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,
-                        ""
-                    );
-
-                try {
-
-                    question =
-                        JSON.parse(cleanedText);
-
-                } catch (secondParseError) {
-
-                    console.error(
-                        "[Quiz] Gemma JSON.parse 第二次仍然失敗:",
-                        secondParseError.message
-                    );
-
-                    console.error(
-                        "[Quiz] 嘗試解析的內容:",
-                        cleanedText
-                    );
-
-                    throw new Error(
-                        "Gemma JSON 解析失敗"
-                    );
-                }
-            }
+            let question =
+                parseAIJson(rawText);
 
             // ==========================================
-            // 11. 確保資料是物件
+            // 11. 確認物件
             // ==========================================
 
             if (
@@ -1269,19 +1205,22 @@ JSON 結構必須如下：
                 Array.isArray(question)
             ) {
                 throw new Error(
-                    "Gemma 回傳的 JSON 不是有效物件"
+                    "Gemma 回傳不是有效題目物件"
                 );
             }
 
             // ==========================================
-            // 12. 強制補回系統分類
+            // 12. 強制系統分類
             // ==========================================
 
-            question.subject = subject;
-            question.sub_topic = targetTopic;
+            question.subject =
+                subject;
+
+            question.sub_topic =
+                targetTopic;
 
             // ==========================================
-            // 13. 第一階段：Node.js 自動品質檢查
+            // 13. Node.js 第一階段檢查
             // ==========================================
 
             const validation =
@@ -1292,40 +1231,43 @@ JSON 結構必須如下：
                 );
 
             console.log(
-                `[Quiz Check] passed=${validation.passed}`,
-                validation.issues
+                "[Quiz Check]",
+                JSON.stringify(
+                    validation,
+                    null,
+                    2
+                )
             );
 
             // ==========================================
             // 14. 完全通過
-            //
-            // 不浪費 Gemini API
             // ==========================================
 
             if (validation.passed) {
 
                 console.log(
-                    "[Quiz] ✓ 通過自動品質檢查"
+                    "[Quiz] ✓ Node.js 品質檢查通過"
                 );
 
                 return res.json({
-                    text: JSON.stringify(question),
+                    text: JSON.stringify(
+                        question
+                    ),
                     quality: {
                         status: "passed",
                         reviewer: "program",
-                        corrected: false
+                        corrected: false,
+                        generationAttempt: attempt
                     }
                 });
             }
 
             // ==========================================
-            // 15. 可疑題目
-            //
-            // 只有這裡才呼叫 Gemini
+            // 15. 可疑 → Gemini 審核
             // ==========================================
 
             console.log(
-                "[Quiz] ⚠ 可疑題目，送 Gemini 審核",
+                "[Quiz] ⚠ Node.js 判定可疑",
                 validation.issues
             );
 
@@ -1338,109 +1280,143 @@ JSON 結構必須如下：
                 );
 
             console.log(
-                `[Quiz Review] approved=${review.approved}`
-                + ` confidence=${review.confidence}`
+                "[Quiz Review]",
+                JSON.stringify(
+                    {
+                        approved:
+                            review.approved,
+                        confidence:
+                            review.confidence,
+                        reason:
+                            review.reason
+                    },
+                    null,
+                    2
+                )
             );
 
             // ==========================================
-            // 16. Gemini 判定通過
+            // 16. Gemini 不接受
             // ==========================================
 
             if (
-                review.approved &&
-                review.confidence >= 0.75
+                !review.approved ||
+                review.confidence < 0.75
             ) {
 
-                // ------------------------------------------
-                // Gemini 有提供修正版
-                // ------------------------------------------
+                console.log(
+                    "[Quiz] ✗ Gemini 審核不通過" +
+                    " → Gemma 重新生成"
+                );
 
-                if (review.fixedQuestion) {
-
-                    const fixed =
-                        review.fixedQuestion;
-
-                    fixed.subject = subject;
-                    fixed.sub_topic = targetTopic;
-
-                    const fixedValidation =
-                        validateQuizQuestion(
-                            fixed,
-                            subject,
-                            targetTopic
-                        );
-
-                    // ------------------------------------------
-                    // 修正版再次經過 Node.js 檢查
-                    // ------------------------------------------
-
-                    if (fixedValidation.passed) {
-
-                        console.log(
-                            "[Quiz] ✓ Gemini 修正後通過"
-                        );
-
-                        return res.json({
-                            text: JSON.stringify(fixed),
-                            quality: {
-                                status: "reviewed",
-                                reviewer: "gemini",
-                                corrected: true
-                            }
-                        });
-                    }
-
-                    console.log(
-                        "[Quiz] Gemini 修正版仍有問題",
-                        fixedValidation.issues
-                    );
-
-                } else {
-
-                    // ------------------------------------------
-                    // Gemini 認為原題可以直接使用
-                    // ------------------------------------------
-
-                    console.log(
-                        "[Quiz] ✓ Gemini 審核通過"
-                    );
-
-                    return res.json({
-                        text: JSON.stringify(question),
-                        quality: {
-                            status: "reviewed",
-                            reviewer: "gemini",
-                            corrected: false
-                        }
-                    });
-                }
+                continue;
             }
 
             // ==========================================
-            // 17. Gemini 判定不通過
-            //
-            // 不把可疑題目送給玩家
-            // 下一輪重新叫 Gemma 出題
+            // 17. 取得 Gemini 修正版
+            // ==========================================
+
+            if (
+                !review.fixedQuestion ||
+                typeof review.fixedQuestion !== "object"
+            ) {
+
+                console.log(
+                    "[Quiz] ✗ Gemini 沒有提供有效修正版" +
+                    " → Gemma 重新生成"
+                );
+
+                continue;
+            }
+
+            const fixedQuestion =
+                review.fixedQuestion;
+
+            // ==========================================
+            // 18. 強制系統分類
+            // ==========================================
+
+            fixedQuestion.subject =
+                subject;
+
+            fixedQuestion.sub_topic =
+                targetTopic;
+
+            // ==========================================
+            // 19. Gemini 修正版再次由 Node.js 檢查
+            // ==========================================
+
+            const fixedValidation =
+                validateQuizQuestion(
+                    fixedQuestion,
+                    subject,
+                    targetTopic
+                );
+
+            console.log(
+                "[Quiz Fixed Check]",
+                JSON.stringify(
+                    fixedValidation,
+                    null,
+                    2
+                )
+            );
+
+            // ==========================================
+            // 20. 修正版通過
+            // ==========================================
+
+            if (fixedValidation.passed) {
+
+                console.log(
+                    "[Quiz] ✓ Gemini 修正後通過 Node.js 檢查"
+                );
+
+                return res.json({
+                    text: JSON.stringify(
+                        fixedQuestion
+                    ),
+                    quality: {
+                        status: "reviewed",
+                        reviewer: "gemini",
+                        corrected: true,
+                        confidence:
+                            review.confidence,
+                        reviewReason:
+                            review.reason,
+                        generationAttempt:
+                            attempt
+                    }
+                });
+            }
+
+            // ==========================================
+            // 21. Gemini 修正版仍有問題
             // ==========================================
 
             console.log(
-                "[Quiz] ✗ Gemini 判定不通過"
-                + " → Gemma 重新生成"
+                "[Quiz] ✗ Gemini 修正版仍然有問題",
+                fixedValidation.issues
+            );
+
+            console.log(
+                "[Quiz] → Gemma 重新生成"
             );
 
         } catch (error) {
 
             console.error(
                 `[Quiz] Generation attempt ${attempt} failed:`,
-                error.message
+                error
             );
 
             // ==========================================
-            // 最後一次失敗
+            // 最後一次
             // ==========================================
 
             if (
-                attempt === MAX_GENERATION_ATTEMPTS
+                attempt ===
+                MAX_GENERATION_ATTEMPTS
             ) {
 
                 console.error(
@@ -1454,25 +1430,22 @@ JSON 結構必須如下：
                 });
             }
 
-            // ==========================================
-            // 尚未達到最大次數
-            // 下一輪重新生成
-            // ==========================================
-
             console.log(
-                `[Quiz] 將進行下一次生成：`
-                + `${attempt + 1}/${MAX_GENERATION_ATTEMPTS}`
+                `[Quiz] 將進行下一次生成：` +
+                `${attempt + 1}/` +
+                `${MAX_GENERATION_ATTEMPTS}`
             );
         }
     }
 
     // ==========================================
-    // 理論上不應該走到這裡
+    // 理論上不應該到這裡
     // ==========================================
 
     return res.status(500).json({
         error: "生成失敗",
-        message: "AI 題目生成流程結束但沒有取得有效題目。"
+        message:
+            "AI 題目生成流程結束但沒有取得有效題目。"
     });
 });
 
