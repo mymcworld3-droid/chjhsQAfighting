@@ -208,54 +208,64 @@ function getRandomItem(arr) {
 function validateQuizQuestion(question, expectedSubject, expectedTopic) {
     const issues = [];
 
-    // ------------------------------------------
+    // ==========================================
     // 1. 基本結構
-    // ------------------------------------------
+    // ==========================================
 
-    if (!question || typeof question !== "object") {
-        issues.push("題目資料不是有效物件");
+    if (!question || typeof question !== "object" || Array.isArray(question)) {
         return {
             passed: false,
             suspicious: true,
-            issues
+            issues: ["題目資料不是有效物件"]
         };
     }
 
-    if (typeof question.q !== "string" || question.q.trim().length < 8) {
+    if (
+        typeof question.q !== "string" ||
+        question.q.trim().length < 8
+    ) {
         issues.push("題目內容太短或不存在");
     }
 
-    if (typeof question.correct !== "string" || question.correct.trim().length === 0) {
+    if (
+        typeof question.correct !== "string" ||
+        question.correct.trim().length === 0
+    ) {
         issues.push("缺少正確答案");
     }
 
     if (!Array.isArray(question.wrong)) {
         issues.push("wrong 必須是陣列");
-    }
-
-    if (!Array.isArray(question.wrong) || question.wrong.length !== 3) {
+    } else if (question.wrong.length !== 3) {
         issues.push("錯誤選項必須剛好 3 個");
     }
 
-    if (typeof question.exp !== "string" || question.exp.trim().length < 10) {
+    if (
+        typeof question.exp !== "string" ||
+        question.exp.trim().length < 10
+    ) {
         issues.push("解析不存在或過短");
     }
 
-    // ------------------------------------------
+    // ==========================================
     // 2. 學科 / 題型一致性
-    // ------------------------------------------
+    // ==========================================
 
-    if (question.subject && question.subject !== expectedSubject) {
-        issues.push(`subject 不一致：${question.subject}`);
+    if (question.subject !== expectedSubject) {
+        issues.push(
+            `subject 不一致：${question.subject}，預期：${expectedSubject}`
+        );
     }
 
-    if (question.sub_topic && question.sub_topic !== expectedTopic) {
-        issues.push(`sub_topic 不一致：${question.sub_topic}`);
+    if (question.sub_topic !== expectedTopic) {
+        issues.push(
+            `sub_topic 不一致：${question.sub_topic}，預期：${expectedTopic}`
+        );
     }
 
-    // ------------------------------------------
+    // ==========================================
     // 3. 選項檢查
-    // ------------------------------------------
+    // ==========================================
 
     if (
         typeof question.correct === "string" &&
@@ -263,108 +273,251 @@ function validateQuizQuestion(question, expectedSubject, expectedTopic) {
     ) {
         const allOptions = [
             question.correct.trim(),
-            ...question.wrong.map(x =>
-                typeof x === "string" ? x.trim() : ""
+            ...question.wrong.map(option =>
+                typeof option === "string"
+                    ? option.trim()
+                    : ""
             )
         ];
 
-        // 空選項
-        if (allOptions.some(x => !x)) {
+        // ------------------------------------------
+        // 3-1. 必須剛好四個選項
+        // ------------------------------------------
+
+        if (allOptions.length !== 4) {
+            issues.push("題目必須剛好有四個選項");
+        }
+
+        // ------------------------------------------
+        // 3-2. 不可有空白選項
+        // ------------------------------------------
+
+        if (allOptions.some(option => !option)) {
             issues.push("存在空白選項");
         }
 
-        // 選項重複
-        const normalizedOptions = allOptions.map(x =>
-            x
+        // ------------------------------------------
+        // 3-3. 選項不能重複
+        // ------------------------------------------
+
+        const normalizeOption = value => {
+            return String(value)
                 .replace(/\s+/g, "")
-                .replace(/[，。！？、,.!?]/g, "")
+                .replace(/[，。！？、,.!?；;：:（）()「」『』【】[\]{}]/g, "")
                 .toLowerCase()
-        );
+                .trim();
+        };
 
-        const uniqueOptions = new Set(normalizedOptions);
+        const normalizedOptions =
+            allOptions.map(normalizeOption);
 
-        if (uniqueOptions.size !== allOptions.length) {
+        const uniqueOptions =
+            new Set(normalizedOptions);
+
+        if (
+            normalizedOptions.length === 4 &&
+            uniqueOptions.size !== 4
+        ) {
             issues.push("選項存在重複");
         }
 
-        // 正確答案不得出現在錯誤選項
-        const correctNormalized = normalizedOptions[0];
+        // ------------------------------------------
+        // 3-4. 正確答案不可出現在 wrong
+        // ------------------------------------------
+
+        const correctNormalized =
+            normalizedOptions[0];
 
         for (let i = 1; i < normalizedOptions.length; i++) {
             if (
+                correctNormalized &&
                 normalizedOptions[i] &&
                 normalizedOptions[i] === correctNormalized
             ) {
-                issues.push("正確答案與錯誤答案重複");
+                issues.push(
+                    "正確答案與錯誤答案重複"
+                );
+                break;
             }
         }
 
-        // 選項不應該直接複製整段題目
-        const questionNormalized = question.q
-            .replace(/\s+/g, "")
-            .toLowerCase();
+        // ------------------------------------------
+        // 3-5. 選項不應該直接複製整段題目
+        // ------------------------------------------
+
+        const questionNormalized =
+            normalizeOption(question.q);
 
         for (const option of normalizedOptions) {
             if (
                 option.length >= 8 &&
                 questionNormalized.includes(option)
             ) {
-                issues.push("選項可能直接出現在題幹中");
+                issues.push(
+                    "選項可能直接出現在題幹中"
+                );
                 break;
             }
         }
     }
 
-    // ------------------------------------------
-    // 4. 題目是否看起來像多選題
-    // ------------------------------------------
+    // ==========================================
+    // 4. 題目是否疑似多選題
+    // ==========================================
 
     const multiChoicePatterns = [
         /複選/,
         /多選/,
         /選出所有/,
-        /下列何者.*(皆|全部)/,
+        /以下.*何者.*皆/,
+        /下列.*何者.*皆/,
         /有幾項/,
-        /正確的是.*(項|項目)/
+        /正確的是.*項/,
+        /正確的有.*項/
     ];
 
-    if (multiChoicePatterns.some(pattern => pattern.test(question.q))) {
+    if (
+        typeof question.q === "string" &&
+        multiChoicePatterns.some(
+            pattern => pattern.test(question.q)
+        )
+    ) {
         issues.push("題目可能不是單選題");
     }
 
-    // ------------------------------------------
-    // 5. 明顯格式問題
-    // ------------------------------------------
+    // ==========================================
+    // 5. 禁止「以上皆是 / 以上皆非」
+    // ==========================================
 
-    if (/[{}[\]]/.test(question.q)) {
-        issues.push("題目可能殘留 JSON / 程式格式");
-    }
+    const forbiddenAnswerPatterns = [
+        /以上皆是/,
+        /以上皆非/,
+        /以上皆對/,
+        /以上皆錯/,
+        /以上選項皆/
+    ];
 
-    if (/^```|```$/.test(question.q.trim())) {
-        issues.push("題目包含 Markdown code fence");
-    }
+    const allAnswerTexts = [
+        question.correct,
+        ...(Array.isArray(question.wrong)
+            ? question.wrong
+            : [])
+    ];
 
-    // ------------------------------------------
-    // 6. 解析與答案基本一致性
-    // ------------------------------------------
-
-    if (
-        question.exp &&
-        question.correct &&
-        typeof question.exp === "string"
-    ) {
-        const explanation = question.exp.toLowerCase();
-        const answer = question.correct.trim().toLowerCase();
-
-        // 如果正確答案是文字選項，
-        // 解析完全沒提到答案，標記為可疑而不是直接判錯
+    for (const answer of allAnswerTexts) {
         if (
-            answer.length >= 2 &&
-            !explanation.includes(answer)
+            typeof answer === "string" &&
+            forbiddenAnswerPatterns.some(
+                pattern => pattern.test(answer)
+            )
         ) {
-            issues.push("解析沒有明確對應正確答案");
+            issues.push(
+                "選項包含禁止使用的「以上皆是／以上皆非」類型"
+            );
+            break;
         }
     }
+
+    // ==========================================
+    // 6. 題目格式問題
+    // ==========================================
+
+    if (
+        typeof question.q === "string" &&
+        /```/.test(question.q)
+    ) {
+        issues.push(
+            "題目包含 Markdown code fence"
+        );
+    }
+
+    if (
+        typeof question.q === "string" &&
+        /^\s*[{[]/.test(question.q)
+    ) {
+        issues.push(
+            "題目可能殘留 JSON / 程式格式"
+        );
+    }
+
+    // ==========================================
+    // 7. 解析基本一致性
+    // ==========================================
+
+    if (
+        typeof question.exp === "string" &&
+        typeof question.correct === "string"
+    ) {
+        const explanation =
+            question.exp.trim().toLowerCase();
+
+        const answer =
+            question.correct.trim().toLowerCase();
+
+        /*
+         * 不要求解析一定要逐字出現答案。
+         *
+         * 原本的：
+         *
+         * !explanation.includes(answer)
+         *
+         * 很容易誤判。
+         *
+         * 例如：
+         *
+         * correct = "B"
+         * exp = "因為需求增加會使均衡價格上升，因此選擇 B。"
+         *
+         * 這種可以。
+         *
+         * 但如果答案是很長的一整句，
+         * 解析不一定需要完整複製。
+         */
+
+        if (
+            answer.length >= 2 &&
+            answer.length <= 20 &&
+            !explanation.includes(answer)
+        ) {
+            issues.push(
+                "解析可能沒有明確對應正確答案"
+            );
+        }
+    }
+
+    // ==========================================
+    // 8. 解析不可太像空白模板
+    // ==========================================
+
+    if (typeof question.exp === "string") {
+        const genericExplanations = [
+            "因為這是正確答案",
+            "因此答案是此選項",
+            "由題目可知",
+            "依題意可知"
+        ];
+
+        const explanation =
+            question.exp
+                .replace(/\s+/g, "")
+                .trim();
+
+        if (
+            genericExplanations.some(
+                text =>
+                    explanation ===
+                    text.replace(/\s+/g, "")
+            )
+        ) {
+            issues.push(
+                "解析過於簡略，沒有實際說明判斷依據"
+            );
+        }
+    }
+
+    // ==========================================
+    // 9. 最終結果
+    // ==========================================
 
     return {
         passed: issues.length === 0,
