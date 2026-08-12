@@ -744,8 +744,8 @@ G. 是否存在事實錯誤？
     "sub_topic": "${targetTopic}"
 }
 
-不要輸出 Markdown。
-不要輸出 ```json。
+不要輸出 JSON Markdown 標記。
+不要輸出其他文字。
 不要增加其他欄位。
 `;
 
