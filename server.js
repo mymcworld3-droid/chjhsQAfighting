@@ -756,192 +756,88 @@ G. 是否存在事實錯誤？
             const genResult =
                 await gemmaModel.generateContent(generationPrompt);
 
-            const rawText =
-                genResult.response.text()
-                    .replace(/```json/g, "")
-                    .replace(/```/g, "")
-                    .trim();
+                    const rawText = genResult.response.text().trim();
 
-            const jsonMatch =
-                rawText.match(/\{[\s\S]*\}/);
+        console.log(
+            `[Gemma Raw Response] ${rawText.substring(0, 3000)}`
+        );
 
-            if (!jsonMatch) {
-                throw new Error(
-                    "Gemma 回應中找不到 JSON"
-                );
-            }
+        // ------------------------------------------
+        // 嘗試從模型回應中安全取得 JSON
+        // ------------------------------------------
 
-            let question;
+        let question;
 
-            try {
-                question =
-                    JSON.parse(jsonMatch[0]);
-            } catch (parseError) {
-                throw new Error(
-                    "Gemma JSON 解析失敗"
-                );
-            }
+        try {
+            let cleanedText = rawText
+                .replace(/```json/gi, "")
+                .replace(/```/g, "")
+                .trim();
 
-            // ==========================================
-            // 10. 強制補回系統分類
-            // ==========================================
-
-            question.subject = subject;
-            question.sub_topic = targetTopic;
-
-            // ==========================================
-            // 11. 第一階段：程式品質檢查
-            // ==========================================
-
-            const validation =
-                validateQuizQuestion(
-                    question,
-                    subject,
-                    targetTopic
-                );
-
-            console.log(
-                `[Quiz Check] passed=${validation.passed}`,
-                validation.issues
-            );
-
-            // ==========================================
-            // 12. 如果完全通過
-            //
-            // 不需要浪費 Gemini API
-            // ==========================================
-
-            if (validation.passed) {
-
-                console.log(
-                    `[Quiz] ✓ 通過自動品質檢查`
-                );
-
-                return res.json({
-                    text: JSON.stringify(question),
-                    quality: {
-                        status: "passed",
-                        reviewer: "program"
-                    }
-                });
-            }
-
-            // ==========================================
-            // 13. 可疑 → Gemini Flash Lite 審核
-            // ==========================================
-
-            console.log(
-                `[Quiz] ⚠ 可疑題目，送 Gemini 審核`,
-                validation.issues
-            );
-
-            const review =
-                await reviewQuizQuestion(
-                    question,
-                    subject,
-                    targetTopic,
-                    validation.issues
-                );
-
-            console.log(
-                `[Quiz Review] approved=${review.approved}`
-                + ` confidence=${review.confidence}`
-            );
-
-            // ==========================================
-            // 14. Gemini 判定通過
-            // ==========================================
+            const firstBrace = cleanedText.indexOf("{");
+            const lastBrace = cleanedText.lastIndexOf("}");
 
             if (
-                review.approved &&
-                review.confidence >= 0.75
+                firstBrace === -1 ||
+                lastBrace === -1 ||
+                lastBrace <= firstBrace
             ) {
+                throw new Error(
+                    "Gemma 回應中沒有找到完整 JSON 物件"
+                );
+            }
 
-                // 如果 Gemini 提供修正版
-                if (review.fixedQuestion) {
+            cleanedText = cleanedText.substring(
+                firstBrace,
+                lastBrace + 1
+            );
 
-                    const fixed =
-                        review.fixedQuestion;
+            try {
+                question = JSON.parse(cleanedText);
+            } catch (firstError) {
+                console.warn(
+                    "[Gemma] 第一次 JSON.parse 失敗，嘗試修復..."
+                );
 
-                    fixed.subject = subject;
-                    fixed.sub_topic = targetTopic;
-
-                    const fixedValidation =
-                        validateQuizQuestion(
-                            fixed,
-                            subject,
-                            targetTopic
-                        );
-
-                    // 修正版也必須重新經過程式檢查
-                    if (fixedValidation.passed) {
-
-                        console.log(
-                            `[Quiz] ✓ Gemini 修正後通過`
-                        );
-
-                        return res.json({
-                            text: JSON.stringify(fixed),
-                            quality: {
-                                status: "reviewed",
-                                reviewer: "gemini",
-                                corrected: true
-                            }
-                        });
-                    }
-
-                    console.log(
-                        `[Quiz] Gemini 修正版仍有問題`,
-                        fixedValidation.issues
+                cleanedText = cleanedText
+                    .replace(/^\uFEFF/, "")
+                    .replace(
+                        /[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,
+                        ""
                     );
 
-                } else {
-
-                    console.log(
-                        `[Quiz] ✓ Gemini 審核通過`
+                try {
+                    question = JSON.parse(cleanedText);
+                } catch (secondError) {
+                    console.error(
+                        "[Gemma] JSON 解析最終失敗"
                     );
 
-                    return res.json({
-                        text: JSON.stringify(question),
-                        quality: {
-                            status: "reviewed",
-                            reviewer: "gemini",
-                            corrected: false
-                        }
-                    });
+                    console.error(
+                        "[Gemma] 原始回應:",
+                        rawText
+                    );
+
+                    console.error(
+                        "[Gemma] 嘗試解析內容:",
+                        cleanedText
+                    );
+
+                    throw new Error(
+                        "Gemma JSON 解析失敗"
+                    );
                 }
             }
 
-            // ==========================================
-            // 15. Gemini 判定不通過
-            //
-            // 不把爛題目送給玩家
-            // 下一輪重新叫 Gemma 出題
-            // ==========================================
-
-            console.log(
-                `[Quiz] ✗ Gemini 判定不通過`
-                + ` → Gemma 重新生成`
-            );
-
-        } catch (error) {
-
+        } catch (parseError) {
             console.error(
-                `[Quiz] Generation attempt ${attempt} failed:`,
-                error.message
+                "[Gemma] JSON 處理錯誤:",
+                parseError.message
             );
 
-            // 最後一次才直接回傳錯誤
-            if (
-                attempt === MAX_GENERATION_ATTEMPTS
-            ) {
-
-                return res.status(500).json({
-                    error: "生成失敗",
-                    message:
-                        "AI 題目品質管線多次嘗試後仍無法產生合格題目。"
-                });
-            }
+            throw new Error(
+                "Gemma JSON 解析失敗"
+            );
         }
     }
 
