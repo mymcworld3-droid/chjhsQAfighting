@@ -4286,8 +4286,157 @@ window.updateUserAvatarDisplay = () => {
 // ==========================================
 // Admin & Store
 // ==========================================
+// ==========================================
+// 📊 [新增] 實驗數據統計系統 (Admin)
+// ==========================================
+let adminSubjectChartInstance = null;
+
+window.loadAdminStatistics = async () => {
+    if (!currentUserData || !currentUserData.isAdmin) return;
+    
+    const btn = document.querySelector('button[onclick="loadAdminStatistics()"]');
+    if(btn) { 
+        btn.disabled = true; 
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 計算中...'; 
+    }
+
+    try {
+        // 取得所有使用者資料進行聚合統計
+        const usersRef = collection(db, "users");
+        const snapshot = await getDocs(usersRef);
+        
+        let totalUsers = snapshot.size;
+        let activeUsers = 0;
+        let globalTotalAnswered = 0;
+        let globalTotalCorrect = 0;
+        
+        // 用來統計各科目的數據: { "國文": { correct: 0, total: 0 }, "數學": { ... } }
+        let subjectStats = {};
+        
+        // 定義活躍時間 (7天內有登入視為活躍)
+        const now = new Date();
+        const sevenDaysAgo = new Date(now.getTime() - (7 * 24 * 60 * 60 * 1000));
+
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            
+            // 1. 活躍狀態判定
+            if (data.lastActive) {
+                const lastActiveDate = data.lastActive.toDate();
+                if (lastActiveDate > sevenDaysAgo) activeUsers++;
+            } else {
+                // 如果沒有 lastActive 但有剛建立帳號的時間，也算活躍
+                activeUsers++;
+            }
+
+            // 2. 總題數與總正確率統計
+            const stats = data.stats || {};
+            globalTotalAnswered += (stats.totalAnswered || 0);
+            globalTotalCorrect += (stats.totalCorrect || 0);
+
+            // 3. 遍歷 KnowledgeMap 統計各科總正確率
+            if (stats.knowledgeMap) {
+                for (const [subject, topics] of Object.entries(stats.knowledgeMap)) {
+                    if (!subjectStats[subject]) {
+                        subjectStats[subject] = { correct: 0, total: 0 };
+                    }
+                    
+                    // 累加該科底下所有子題型的數據
+                    for (const [topic, topicData] of Object.entries(topics)) {
+                        subjectStats[subject].correct += (topicData.correct || 0);
+                        subjectStats[subject].total += (topicData.total || 0);
+                    }
+                }
+            }
+        });
+
+        // --- 更新 UI 數字 ---
+        document.getElementById('admin-stat-total-users').innerText = totalUsers;
+        document.getElementById('admin-stat-active-users').innerText = activeUsers;
+        document.getElementById('admin-stat-total-q').innerText = globalTotalAnswered;
+        
+        const globalAcc = globalTotalAnswered > 0 ? ((globalTotalCorrect / globalTotalAnswered) * 100).toFixed(1) : "0.0";
+        document.getElementById('admin-stat-accuracy').innerText = `${globalAcc}%`;
+
+        // --- 處理 Chart.js 圖表資料 ---
+        const labels = [];
+        const accuracyData = [];
+        
+        // 將 Object 轉為 Array 並過濾掉沒有題目的科目
+        for (const [subject, data] of Object.entries(subjectStats)) {
+            if (data.total > 0) {
+                labels.push(subject);
+                accuracyData.push(((data.correct / data.total) * 100).toFixed(1));
+            }
+        }
+
+        const ctx = document.getElementById('adminSubjectChart');
+        if (ctx) {
+            if (adminSubjectChartInstance) adminSubjectChartInstance.destroy();
+            
+            adminSubjectChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels.length > 0 ? labels : ['尚無實驗數據'],
+                    datasets: [{
+                        label: '各科平均正確率 (%)',
+                        data: accuracyData.length > 0 ? accuracyData : [0],
+                        backgroundColor: 'rgba(34, 211, 238, 0.6)',
+                        borderColor: 'rgba(34, 211, 238, 1)',
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        hoverBackgroundColor: 'rgba(34, 211, 238, 0.9)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        title: { 
+                            display: true, 
+                            text: '實驗組各科正確率分佈', 
+                            color: '#94a3b8', 
+                            font: { family: "'Noto Sans TC', sans-serif" } 
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => ` 正確率: ${context.raw}%`
+                            }
+                        }
+                    },
+                    scales: {
+                        y: { 
+                            beginAtZero: true, 
+                            max: 100, 
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            ticks: { color: '#94a3b8', callback: (val) => val + '%' }
+                        },
+                        x: { 
+                            grid: { display: false },
+                            ticks: { color: '#94a3b8', font: { size: 12 } }
+                        }
+                    }
+                }
+            });
+        }
+
+    } catch (e) {
+        console.error("載入數據統計失敗", e);
+        alert("讀取統計數據失敗，請檢查資料庫權限");
+    } finally {
+        if(btn) { 
+            btn.disabled = false; 
+            btn.innerHTML = '<i class="fa-solid fa-rotate"></i> 重新計算數據'; 
+        }
+    }
+};
+
+// 修改原本的 loadAdminData，確保進來頁面時自動載入數據
 window.loadAdminData = async () => {
     loadAdminLogs(); 
+    loadAdminStatistics(); // 🔥 新增這一行：自動觸發統計計算
+    
     const listContainer = document.getElementById('admin-product-list');
     listContainer.innerHTML = `<div class="text-center text-gray-500">${t('loading')}</div>`;
 
