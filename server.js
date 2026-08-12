@@ -632,7 +632,7 @@ app.post('/api/generate-quiz', async (req, res) => {
     // 7. 最多進行幾次 Gemma 重新生成
     // ==========================================
 
-    const MAX_GENERATION_ATTEMPTS = 4;
+    const MAX_GENERATION_ATTEMPTS = 2;
 
     for (
         let attempt = 1;
