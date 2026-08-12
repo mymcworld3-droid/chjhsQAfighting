@@ -4287,9 +4287,24 @@ window.updateUserAvatarDisplay = () => {
 // Admin & Store
 // ==========================================
 // ==========================================
-// 📊 [新增] 實驗數據統計系統 (Admin)
+// 📊 [新增] 實驗數據統計系統 (含動態折線圖與長條圖)
 // ==========================================
-let adminSubjectChartInstance = null;
+let adminChartInstance = null;
+let currentAdminChartType = 'accuracy'; // 預設顯示正確率
+// 儲存從資料庫撈出並分群好的資料
+let adminChartData = {
+    registrations: {}, // { '2026-10-01': 5, ... }
+    active: {},
+    questions: {},
+    accuracy: { labels: [], data: [] }
+};
+
+// 輔助函式：將 Firebase Timestamp 轉為 YYYY-MM-DD 格式 (避免時區問題)
+function formatDateKey(timestamp) {
+    if (!timestamp) return null;
+    const d = timestamp.toDate();
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
 
 window.loadAdminStatistics = async () => {
     if (!currentUserData || !currentUserData.isAdmin) return;
@@ -4297,51 +4312,53 @@ window.loadAdminStatistics = async () => {
     const btn = document.querySelector('button[onclick="loadAdminStatistics()"]');
     if(btn) { 
         btn.disabled = true; 
-        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 計算中...'; 
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 計算與繪圖中...'; 
     }
 
     try {
-        // 取得所有使用者資料進行聚合統計
+        // --- 1. 抓取所有使用者資料 (用於註冊、活躍、正確率) ---
         const usersRef = collection(db, "users");
         const snapshot = await getDocs(usersRef);
         
         let totalUsers = snapshot.size;
-        let activeUsers = 0;
+        let activeUsersCount = 0;
         let globalTotalAnswered = 0;
         let globalTotalCorrect = 0;
         
-        // 用來統計各科目的數據: { "國文": { correct: 0, total: 0 }, "數學": { ... } }
-        let subjectStats = {};
-        
-        // 定義活躍時間 (7天內有登入視為活躍)
         const now = new Date();
         const sevenDaysAgo = new Date(now.getTime() - (7 * 24 * 60 * 60 * 1000));
+
+        let regMap = {};
+        let activeMap = {};
+        let subjectStats = {};
 
         snapshot.forEach(doc => {
             const data = doc.data();
             
-            // 1. 活躍狀態判定
+            // 處理活躍時間分群
             if (data.lastActive) {
-                const lastActiveDate = data.lastActive.toDate();
-                if (lastActiveDate > sevenDaysAgo) activeUsers++;
-            } else {
-                // 如果沒有 lastActive 但有剛建立帳號的時間，也算活躍
-                activeUsers++;
+                const activeDateObj = data.lastActive.toDate();
+                if (activeDateObj > sevenDaysAgo) activeUsersCount++;
+                
+                const dateKey = formatDateKey(data.lastActive);
+                activeMap[dateKey] = (activeMap[dateKey] || 0) + 1;
             }
 
-            // 2. 總題數與總正確率統計
+            // 處理註冊時間分群 (若無 createdAt 則以 lastActive 或今天代替)
+            const createTimestamp = data.createdAt || data.lastActive; 
+            if (createTimestamp) {
+                const dateKey = formatDateKey(createTimestamp);
+                regMap[dateKey] = (regMap[dateKey] || 0) + 1;
+            }
+
+            // 處理正確率
             const stats = data.stats || {};
             globalTotalAnswered += (stats.totalAnswered || 0);
             globalTotalCorrect += (stats.totalCorrect || 0);
 
-            // 3. 遍歷 KnowledgeMap 統計各科總正確率
             if (stats.knowledgeMap) {
                 for (const [subject, topics] of Object.entries(stats.knowledgeMap)) {
-                    if (!subjectStats[subject]) {
-                        subjectStats[subject] = { correct: 0, total: 0 };
-                    }
-                    
-                    // 累加該科底下所有子題型的數據
+                    if (!subjectStats[subject]) subjectStats[subject] = { correct: 0, total: 0 };
                     for (const [topic, topicData] of Object.entries(topics)) {
                         subjectStats[subject].correct += (topicData.correct || 0);
                         subjectStats[subject].total += (topicData.total || 0);
@@ -4350,80 +4367,48 @@ window.loadAdminStatistics = async () => {
             }
         });
 
-        // --- 更新 UI 數字 ---
-        document.getElementById('admin-stat-total-users').innerText = totalUsers;
-        document.getElementById('admin-stat-active-users').innerText = activeUsers;
-        document.getElementById('admin-stat-total-q').innerText = globalTotalAnswered;
+        // --- 2. 抓取作答紀錄 (用於作答時間數量折線圖) ---
+        // 為了避免超量讀取，這裡抓取最近 2000 筆資料來呈現趨勢
+        const logsRef = collection(db, "exam_logs");
+        const qSnap = await getDocs(query(logsRef, orderBy("timestamp", "desc"), limit(2000)));
+        let qMap = {};
         
+        qSnap.forEach(doc => {
+            const data = doc.data();
+            if (data.timestamp) {
+                const dateKey = formatDateKey(data.timestamp);
+                qMap[dateKey] = (qMap[dateKey] || 0) + 1;
+            }
+        });
+
+        // --- 3. 整理圖表結構並存入全域變數 ---
+        adminChartData.registrations = regMap;
+        adminChartData.active = activeMap;
+        adminChartData.questions = qMap;
+
+        const accLabels = [];
+        const accData = [];
+        for (const [subject, data] of Object.entries(subjectStats)) {
+            if (data.total > 0) {
+                accLabels.push(subject);
+                accData.push(((data.correct / data.total) * 100).toFixed(1));
+            }
+        }
+        adminChartData.accuracy = { labels: accLabels, data: accData };
+
+        // --- 4. 更新上方四格數字 UI ---
+        document.getElementById('admin-stat-total-users').innerText = totalUsers;
+        document.getElementById('admin-stat-active-users').innerText = activeUsersCount;
+        document.getElementById('admin-stat-total-q').innerText = globalTotalAnswered;
         const globalAcc = globalTotalAnswered > 0 ? ((globalTotalCorrect / globalTotalAnswered) * 100).toFixed(1) : "0.0";
         document.getElementById('admin-stat-accuracy').innerText = `${globalAcc}%`;
 
-        // --- 處理 Chart.js 圖表資料 ---
-        const labels = [];
-        const accuracyData = [];
-        
-        // 將 Object 轉為 Array 並過濾掉沒有題目的科目
-        for (const [subject, data] of Object.entries(subjectStats)) {
-            if (data.total > 0) {
-                labels.push(subject);
-                accuracyData.push(((data.correct / data.total) * 100).toFixed(1));
-            }
-        }
-
-        const ctx = document.getElementById('adminSubjectChart');
-        if (ctx) {
-            if (adminSubjectChartInstance) adminSubjectChartInstance.destroy();
-            
-            adminSubjectChartInstance = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels.length > 0 ? labels : ['尚無實驗數據'],
-                    datasets: [{
-                        label: '各科平均正確率 (%)',
-                        data: accuracyData.length > 0 ? accuracyData : [0],
-                        backgroundColor: 'rgba(34, 211, 238, 0.6)',
-                        borderColor: 'rgba(34, 211, 238, 1)',
-                        borderWidth: 1,
-                        borderRadius: 4,
-                        hoverBackgroundColor: 'rgba(34, 211, 238, 0.9)'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        title: { 
-                            display: true, 
-                            text: '實驗組各科正確率分佈', 
-                            color: '#94a3b8', 
-                            font: { family: "'Noto Sans TC', sans-serif" } 
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: (context) => ` 正確率: ${context.raw}%`
-                            }
-                        }
-                    },
-                    scales: {
-                        y: { 
-                            beginAtZero: true, 
-                            max: 100, 
-                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                            ticks: { color: '#94a3b8', callback: (val) => val + '%' }
-                        },
-                        x: { 
-                            grid: { display: false },
-                            ticks: { color: '#94a3b8', font: { size: 12 } }
-                        }
-                    }
-                }
-            });
-        }
+        // --- 5. 渲染圖表 ---
+        switchAdminChart(currentAdminChartType);
 
     } catch (e) {
         console.error("載入數據統計失敗", e);
-        alert("讀取統計數據失敗，請檢查資料庫權限");
+        alert("讀取統計數據失敗");
     } finally {
         if(btn) { 
             btn.disabled = false; 
@@ -4432,10 +4417,115 @@ window.loadAdminStatistics = async () => {
     }
 };
 
-// 修改原本的 loadAdminData，確保進來頁面時自動載入數據
+// ==========================================
+// 切換圖表核心邏輯
+// ==========================================
+window.switchAdminChart = (type) => {
+    currentAdminChartType = type;
+    
+    // 更新按鈕高亮狀態
+    document.querySelectorAll('.admin-stat-card').forEach(card => {
+        card.classList.remove('border-cyan-500/50', 'shadow-[0_0_15px_rgba(34,211,238,0.2)]');
+        card.classList.add('border-white/5');
+    });
+    const activeCard = document.getElementById(`admin-card-${type}`);
+    if (activeCard) {
+        activeCard.classList.remove('border-white/5');
+        activeCard.classList.add('border-cyan-500/50', 'shadow-[0_0_15px_rgba(34,211,238,0.2)]');
+    }
+
+    const ctx = document.getElementById('adminMainChart');
+    if (!ctx) return;
+    if (adminChartInstance) adminChartInstance.destroy();
+
+    // 輔助：生成時間序列折線圖 Config
+    const buildTimeSeriesConfig = (dataMap, labelTitle, lineColor, fillColor) => {
+        // 將日期排序
+        const sortedDates = Object.keys(dataMap).sort();
+        const dataValues = sortedDates.map(date => dataMap[date]);
+        
+        return {
+            type: 'line',
+            data: {
+                labels: sortedDates.length > 0 ? sortedDates : ['無資料'],
+                datasets: [{
+                    label: labelTitle,
+                    data: dataValues.length > 0 ? dataValues : [0],
+                    borderColor: lineColor,
+                    backgroundColor: fillColor,
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.3, // 曲線平滑度
+                    pointBackgroundColor: lineColor,
+                    pointRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    title: { display: true, text: labelTitle, color: '#e2e8f0', font: { size: 14 } }
+                },
+                scales: {
+                    y: { beginAtZero: true, grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: '#94a3b8', stepSize: 1 } },
+                    x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+                }
+            }
+        };
+    };
+
+    let chartConfig = {};
+
+    // 根據點擊類型生成不同圖表
+    if (type === 'registrations') {
+        chartConfig = buildTimeSeriesConfig(adminChartData.registrations, '每日註冊人數趨勢', '#f8fafc', 'rgba(248, 250, 252, 0.1)'); // 白色
+    } 
+    else if (type === 'active') {
+        chartConfig = buildTimeSeriesConfig(adminChartData.active, '每日登入活躍人數', '#4ade80', 'rgba(74, 222, 128, 0.1)'); // 綠色
+    } 
+    else if (type === 'questions') {
+        chartConfig = buildTimeSeriesConfig(adminChartData.questions, '每日作答總題數 (近2000筆估計)', '#facc15', 'rgba(250, 204, 21, 0.1)'); // 黃色
+    } 
+    else if (type === 'accuracy') {
+        chartConfig = {
+            type: 'bar',
+            data: {
+                labels: adminChartData.accuracy.labels.length > 0 ? adminChartData.accuracy.labels : ['尚無實驗數據'],
+                datasets: [{
+                    label: '各科平均正確率 (%)',
+                    data: adminChartData.accuracy.data.length > 0 ? adminChartData.accuracy.data : [0],
+                    backgroundColor: 'rgba(34, 211, 238, 0.6)',
+                    borderColor: '#22d3ee',
+                    borderWidth: 1,
+                    borderRadius: 4,
+                    hoverBackgroundColor: 'rgba(34, 211, 238, 0.9)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    title: { display: true, text: '實驗組各科正確率分佈', color: '#e2e8f0', font: { size: 14 } },
+                    tooltip: { callbacks: { label: (ctx) => ` 正確率: ${ctx.raw}%` } }
+                },
+                scales: {
+                    y: { beginAtZero: true, max: 100, grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: '#94a3b8', callback: (v) => v + '%' } },
+                    x: { grid: { display: false }, ticks: { color: '#94a3b8', font: { size: 12 } } }
+                }
+            }
+        };
+    }
+
+    // 實例化圖表
+    adminChartInstance = new Chart(ctx, chartConfig);
+};
+
+// (請確認保留原本的 loadAdminData 定義，以供網頁載入時呼叫)
 window.loadAdminData = async () => {
     loadAdminLogs(); 
-    loadAdminStatistics(); // 🔥 新增這一行：自動觸發統計計算
+    loadAdminStatistics(); // 進入後台時自動抓取並顯示數據
     
     const listContainer = document.getElementById('admin-product-list');
     listContainer.innerHTML = `<div class="text-center text-gray-500">${t('loading')}</div>`;
