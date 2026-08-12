@@ -14,9 +14,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // ⭐ 初始化 Gemini 2.5 模型 (保留用於生成文字)
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ 
-    model: "gemini-3.5-flash-lite", 
-    generationConfig: { responseMimeType: "application/json" }
+const model = genAI.getGenerativeModel({
+    model: "gemma-4-31b-it"
 });
 
 // 根目錄路由
