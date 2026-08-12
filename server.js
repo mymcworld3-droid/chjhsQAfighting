@@ -12,12 +12,11 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ⭐ 初始化 Gemma 模型
+// ⭐ 初始化 Gemini 2.5 模型 (保留用於生成文字)
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ 
-    model: "gemma-4-31b" 
-    // 🚨 修正：移除了 responseMimeType: "application/json"
-    // 因為 Gemma 模型不支援此強制屬性，帶上它會導致 API 回傳 400 錯誤並觸發 500 Server Error
+    model: "gemini-3.5-flash-lite", 
+    generationConfig: { responseMimeType: "application/json" }
 });
 
 // 根目錄路由
@@ -26,7 +25,7 @@ app.get('/', (req, res) => {
 });
 
 // ==========================================
-// API 1: 分析使用者輸入的弱項
+// API 1: 分析使用者輸入的弱項 (保持不變)
 // ==========================================
 app.post('/api/analyze-subjects', async (req, res) => {
     try {
@@ -40,14 +39,8 @@ app.post('/api/analyze-subjects', async (req, res) => {
         `;
 
         const result = await model.generateContent(prompt);
-        const rawText = result.response.text();
-        
-        // 🚨 修正：過濾 Gemma 思考區塊與安全提取 JSON
-        let cleanedText = rawText.replace(/<\|?think\|?>[\s\S]*?<\/\|?think\|?>/gi, '');
-        let startIdx = cleanedText.indexOf('{');
-        let endIdx = cleanedText.lastIndexOf('}');
-        let jsonText = cleanedText.substring(startIdx, endIdx + 1);
-        
+        const response = await result.response;
+        let jsonText = response.text().replace(/```json/g, '').replace(/```/g, '').trim();
         const parsed = JSON.parse(jsonText);
         res.json({ subjects: parsed.subjects });
 
@@ -58,7 +51,7 @@ app.post('/api/analyze-subjects', async (req, res) => {
 });
 
 // ==========================================
-// API 3: 取得伺服器上的圖片列表
+// API 3: 取得伺服器上的圖片列表 (保持不變，用於靜態資源)
 // ==========================================
 app.get('/api/assets', (req, res) => {
     const assetsDir = path.join(__dirname, 'public', 'assets');
@@ -76,7 +69,7 @@ app.get('/api/assets', (req, res) => {
 });
 
 // ==========================================
-// API 4: 取得題庫檔案列表
+// API 4: 取得題庫檔案列表 (保持不變)
 // ==========================================
 app.get('/api/banks', (req, res) => {
     const banksDir = path.join(__dirname, 'public', 'banks');
@@ -116,6 +109,7 @@ app.get('/api/banks', (req, res) => {
 // ==========================================
 // 定義學科與子題型架構 (Knowledge Schema)
 // ==========================================
+// (這裡原本的 SUBJECT_DETAILS 和 SUBJECT_SCHEMA 保持不變，省略以節省篇幅)
 const SUBJECT_DETAILS = {
     "國文": {
         "字形字音字義": "測驗對日常常用字、古今異義字、一字多義的理解。",
@@ -165,7 +159,7 @@ const SUBJECT_DETAILS = {
     },
     "化學": {
         "混合單元": "同一題組可能同時考物質性質、原子結構與化學反應（如莫耳數計量）。",
-        "數據判讀": "溶解度曲線、飽滿水氣壓圖表，或根據實驗步驟推論未知化合物成分。",
+        "數據判讀": "溶解度曲線、飽和水氣壓圖表，或根據實驗步驟推論未知化合物成分。",
         "實務能源": "綠色能源（鋰離子電池、儲氫材料）與環境保護（海洋淡化、碳捕獲）等素養題材常見。"
     },
     "生物": {
@@ -186,28 +180,33 @@ function getRandomItem(arr) {
 }
 
 // ==========================================
-// API 2: 生成測驗題目 
+// API 2: 生成測驗題目 (優化版：單次請求 + 安全 JSON 解析)
 // ==========================================
 app.post('/api/generate-quiz', async (req, res) => {
+    // 兼容前端可能傳來的 specificTopic 或 topic
     let { subject, level, rank, difficulty, knowledgeMap, specificTopic, topic } = req.body;
     
     let targetTopic = specificTopic || topic;
 
+    // 1. 科目選擇
     if (!subject) {
         const allSubjects = Object.keys(SUBJECT_SCHEMA);
         subject = getRandomItem(allSubjects);
     }
 
+    // 2. 子題型選擇
     if (!targetTopic && SUBJECT_SCHEMA[subject]) {
         targetTopic = getRandomItem(SUBJECT_SCHEMA[subject]);
     }
     if (!targetTopic) targetTopic = "綜合測驗";
 
+    // 3. 取得詳細指導語
     let topicDescription = "";
     if (SUBJECT_DETAILS[subject] && SUBJECT_DETAILS[subject][targetTopic]) {
         topicDescription = SUBJECT_DETAILS[subject][targetTopic];
     }
 
+    // 4. 建構診斷資訊
     let diagnosticInfo = "";
     if (knowledgeMap && knowledgeMap[subject] && knowledgeMap[subject][targetTopic]) {
         const stats = knowledgeMap[subject][targetTopic];
@@ -246,6 +245,7 @@ app.post('/api/generate-quiz', async (req, res) => {
         請檢查：答案 "correct" 只有一個、錯誤答案中沒有正確答案、選項必須在選項裡不可在題目裡、不可為多選題。
     `;
 
+    // 6. 呼叫 AI (取消雙重呼叫，改為直接解析)
     let attempts = 0;
     const maxAttempts = 3;
 
@@ -255,17 +255,13 @@ app.post('/api/generate-quiz', async (req, res) => {
             const genResult = await model.generateContent(generationPrompt);
             const rawText = genResult.response.text();
             
-            // 🚨 修正：過濾 Gemma 思考區塊與安全提取 JSON，防止正則崩潰
-            let cleanedText = rawText.replace(/<\|?think\|?>[\s\S]*?<\/\|?think\|?>/gi, '');
-            let startIdx = cleanedText.indexOf('{');
-            let endIdx = cleanedText.lastIndexOf('}');
-            
-            if (startIdx === -1 || endIdx === -1) {
+            // 使用正則表達式，安全提取大括號內的 JSON 內容
+            const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+            if (!jsonMatch) {
                 throw new Error("AI 回應中未找到 JSON 結構");
             }
             
-            const parsed = JSON.parse(cleanedText.substring(startIdx, endIdx + 1));
-            
+            const parsed = JSON.parse(jsonMatch[0]);
             if(!parsed.sub_topic) parsed.sub_topic = targetTopic;
             if(!parsed.subject) parsed.subject = subject;
 
@@ -279,12 +275,10 @@ app.post('/api/generate-quiz', async (req, res) => {
     }
 });
 
-// ==========================================
-// API: 回報審查 
-// ==========================================
 app.post('/api/verify-report', async (req, res) => {
     const { question, options, correctIndex, explanation, userReason } = req.body;
     
+    // 取得正確答案的文字內容
     const correctAnswerText = options[correctIndex];
 
     const prompt = `
@@ -310,18 +304,12 @@ app.post('/api/verify-report', async (req, res) => {
 
     try {
         const result = await model.generateContent(prompt);
-        const rawText = result.response.text();
-        
-        // 🚨 修正：過濾 Gemma 思考區塊與安全提取 JSON
-        let cleanedText = rawText.replace(/<\|?think\|?>[\s\S]*?<\/\|?think\|?>/gi, '');
-        let startIdx = cleanedText.indexOf('{');
-        let endIdx = cleanedText.lastIndexOf('}');
-        let jsonText = cleanedText.substring(startIdx, endIdx + 1);
-        
-        const json = JSON.parse(jsonText);
+        const responseText = result.response.text().replace(/```json/g, '').replace(/```/g, '').trim();
+        const json = JSON.parse(responseText);
         res.json(json);
     } catch (error) {
         console.error("Report Verification Error:", error);
+        // 若 AI 發生錯誤，保守起見設為無效，並請玩家稍後再試
         res.json({ valid: false, reason: "系統忙碌，無法完成審查。" });
     }
 });
@@ -329,6 +317,7 @@ app.post('/api/verify-report', async (req, res) => {
 // ==========================================
 // API 5: 取得中學單元列表 (遞迴讀取)
 // ==========================================
+// 🔥 server.js 修正：新增單元列表 API
 app.get('/api/units', (req, res) => {
     const unitsDir = path.join(__dirname, 'public', 'middle_school_unit_name');
     if (!fs.existsSync(unitsDir)) fs.mkdirSync(unitsDir, { recursive: true });
@@ -345,6 +334,7 @@ app.get('/api/units', (req, res) => {
     try { res.json({ files: getFiles(unitsDir) }); } 
     catch (e) { console.error("API Error (/api/units):", e); res.json({ files: [] }); }
 });
+// [已刪除] /api/generate-image 路由已移除，節省費用
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
