@@ -179,137 +179,381 @@ function getRandomItem(arr) {
 }
 
 // ==========================================
-// API 2: 生成測驗題目 (優化版：單次請求 + 安全 JSON 解析)
+// API 2: 生成測驗題目
+// Gemma 4 31B
+// 流程：
+// Gemma 直接生成
+// → Node.js 基本 JSON 檢查
+// → 通過：直接回傳
+// → 失敗：整題丟掉
+// → 重新生成
+//
+// 不進行 AI 審核
+// 不進行品質修正
 // ==========================================
+
 app.post('/api/generate-quiz', async (req, res) => {
-    // 兼容前端可能傳來的 specificTopic 或 topic
-    let { subject, level, rank, difficulty, knowledgeMap, specificTopic, topic } = req.body;
-    
+
+    let {
+        subject,
+        level,
+        rank,
+        difficulty,
+        knowledgeMap,
+        specificTopic,
+        topic
+    } = req.body;
+
     let targetTopic = specificTopic || topic;
 
+    // ==========================================
     // 1. 科目選擇
+    // ==========================================
+
     if (!subject) {
         const allSubjects = Object.keys(SUBJECT_SCHEMA);
         subject = getRandomItem(allSubjects);
     }
 
+    // ==========================================
     // 2. 子題型選擇
+    // ==========================================
+
     if (!targetTopic && SUBJECT_SCHEMA[subject]) {
         targetTopic = getRandomItem(SUBJECT_SCHEMA[subject]);
     }
-    if (!targetTopic) targetTopic = "綜合測驗";
 
-    // 3. 取得詳細指導語
+    if (!targetTopic) {
+        targetTopic = "綜合測驗";
+    }
+
+    // ==========================================
+    // 3. 取得題型說明
+    // ==========================================
+
     let topicDescription = "";
-    if (SUBJECT_DETAILS[subject] && SUBJECT_DETAILS[subject][targetTopic]) {
-        topicDescription = SUBJECT_DETAILS[subject][targetTopic];
+
+    if (
+        SUBJECT_DETAILS[subject] &&
+        SUBJECT_DETAILS[subject][targetTopic]
+    ) {
+        topicDescription =
+            SUBJECT_DETAILS[subject][targetTopic];
     }
 
-    // 4. 建構診斷資訊
+    // ==========================================
+    // 4. 建構玩家診斷資訊
+    // ==========================================
+
     let diagnosticInfo = "";
-    if (knowledgeMap && knowledgeMap[subject] && knowledgeMap[subject][targetTopic]) {
-        const stats = knowledgeMap[subject][targetTopic];
-        const accuracy = stats.total > 0 ? ((stats.correct / stats.total) * 100).toFixed(1) : 0;
-        diagnosticInfo = `[玩家數據] 在「${subject}-${targetTopic}」上正確率為 ${accuracy}% (已練 ${stats.total} 題)。`;
-        if (stats.total > 3 && accuracy < 40) difficulty = "easy"; 
-        if (stats.total > 5 && accuracy > 80) difficulty = "hard"; 
+
+    if (
+        knowledgeMap &&
+        knowledgeMap[subject] &&
+        knowledgeMap[subject][targetTopic]
+    ) {
+
+        const stats =
+            knowledgeMap[subject][targetTopic];
+
+        const accuracy =
+            stats.total > 0
+                ? ((stats.correct / stats.total) * 100).toFixed(1)
+                : 0;
+
+        diagnosticInfo =
+            `[玩家數據] 在「${subject}-${targetTopic}」上正確率為 ${accuracy}% (已練 ${stats.total} 題)。`;
+
+        // 保留你原本的難度自動調整機制
+        if (stats.total > 3 && accuracy < 40) {
+            difficulty = "easy";
+        }
+
+        if (stats.total > 5 && accuracy > 80) {
+            difficulty = "hard";
+        }
     }
 
-    const randomSeed = Math.random().toString(36).substring(7);
+    // ==========================================
+    // 5. 每一次重新生成，都建立新的 randomSeed
+    // ==========================================
 
-    const generationPrompt = `
-        [系統指令]
-        你是由 Google 開發的 AI 教育專家，請生成一道高品質的「單選題」。
-        題目有需要換行時可以打\n。
-        
-        [出題規格]
-        1. **主科目**：${subject}
-        2. **指定題型**：${targetTopic}
-        3. **題型要求**：${topicDescription}
-        4. **適用程度**：${level} (段位：${rank})
-        5. **難度設定**：${difficulty}
-        6. **隨機因子**：${randomSeed}
-        ${diagnosticInfo}
-    
-        [輸出格式 (JSON Only)]
-        請直接回傳 JSON，不要 markdown 標記：
-        {
-            "q": "題目內容 (純文字描述)",
-            "correct": "正確選項",
-            "wrong": ["錯誤1", "錯誤2", "錯誤3"],
-            "exp": "解析內容...",
-            "subject": "${subject}",
-            "sub_topic": "${targetTopic}" 
-        }
-        請檢查：答案 "correct" 只有一個、錯誤答案中沒有正確答案、選項必須在選項裡不可在題目裡、不可為多選題。
-    `;
-
-    // 6. 呼叫 AI (取消雙重呼叫，改為直接解析)
-    let attempts = 0;
     const maxAttempts = 3;
 
-    while (attempts < maxAttempts) {
-        try {
-            console.log(`[Gen] ${subject} > ${targetTopic} (${difficulty}) - 嘗試 ${attempts + 1}`); 
-            const genResult = await model.generateContent(generationPrompt);
-            const rawText = genResult.response.text();
-            
-            // 使用正則表達式，安全提取大括號內的 JSON 內容
-            const jsonMatch = rawText.match(/\{[\s\S]*\}/);
-            if (!jsonMatch) {
-                throw new Error("AI 回應中未找到 JSON 結構");
-            }
-            
-            const parsed = JSON.parse(jsonMatch[0]);
-            if(!parsed.sub_topic) parsed.sub_topic = targetTopic;
-            if(!parsed.subject) parsed.subject = subject;
+    // ==========================================
+    // 6. 開始生成
+    // ==========================================
 
-            return res.json({ text: JSON.stringify(parsed) });
+    for (let attempts = 1; attempts <= maxAttempts; attempts++) {
+
+        const randomSeed =
+            Math.random().toString(36).substring(2, 10);
+
+        const generationPrompt = `
+你是一名 AI 教育題目生成器。
+
+請生成一道高品質的「單選題」。
+
+【出題資訊】
+
+主科目：
+${subject}
+
+指定題型：
+${targetTopic}
+
+題型要求：
+${topicDescription}
+
+適用程度：
+${level}
+
+段位：
+${rank}
+
+難度：
+${difficulty}
+
+${diagnosticInfo}
+
+隨機因子：
+${randomSeed}
+
+
+【重要要求】
+
+1. 必須是單選題。
+2. 只能有一個正確答案。
+3. 必須提供 3 個錯誤選項。
+4. correct 必須與 wrong 中的其中一個選項完全對應。
+5. wrong 不可以包含正確答案。
+6. 題目本身不要直接透露答案。
+7. 選項必須是可以直接讓玩家選擇的內容。
+8. 解析使用繁體中文。
+9. 只輸出 JSON。
+10. 不要輸出 Markdown。
+11. 不要輸出 JSON 以外的任何文字。
+
+
+【JSON 格式】
+
+{
+    "q": "題目內容",
+    "correct": "正確選項",
+    "wrong": [
+        "錯誤選項1",
+        "錯誤選項2",
+        "錯誤選項3"
+    ],
+    "exp": "解析內容",
+    "subject": "${subject}",
+    "sub_topic": "${targetTopic}"
+}
+`;
+
+        try {
+
+            console.log(
+                `[Gemma Gen] ${subject} > ${targetTopic} (${difficulty}) - 嘗試 ${attempts}/${maxAttempts}`
+            );
+
+            // ==========================================
+            // Gemma 直接生成
+            // ==========================================
+
+            const genResult =
+                await model.generateContent(generationPrompt);
+
+            const rawText =
+                genResult.response.text();
+
+            console.log(
+                `[Gemma Raw] ${rawText.substring(0, 300)}`
+            );
+
+            // ==========================================
+            // Node.js 基本 JSON 解析
+            // ==========================================
+
+            const jsonMatch =
+                rawText.match(/\{[\s\S]*\}/);
+
+            if (!jsonMatch) {
+                throw new Error(
+                    "找不到 JSON"
+                );
+            }
+
+            const parsed =
+                JSON.parse(jsonMatch[0]);
+
+            // ==========================================
+            // Node.js 基本結構檢查
+            //
+            // 注意：
+            // 這裡只檢查「格式」
+            // 不做 AI 品質判斷
+            // 不修改內容
+            // ==========================================
+
+            if (
+                !parsed ||
+                typeof parsed !== "object"
+            ) {
+                throw new Error(
+                    "JSON 不是物件"
+                );
+            }
+
+            if (
+                typeof parsed.q !== "string" ||
+                parsed.q.trim() === ""
+            ) {
+                throw new Error(
+                    "缺少 q"
+                );
+            }
+
+            if (
+                typeof parsed.correct !== "string" ||
+                parsed.correct.trim() === ""
+            ) {
+                throw new Error(
+                    "缺少 correct"
+                );
+            }
+
+            if (
+                !Array.isArray(parsed.wrong)
+            ) {
+                throw new Error(
+                    "wrong 不是陣列"
+                );
+            }
+
+            if (
+                parsed.wrong.length !== 3
+            ) {
+                throw new Error(
+                    "wrong 必須有 3 個選項"
+                );
+            }
+
+            if (
+                parsed.wrong.some(
+                    item =>
+                        typeof item !== "string" ||
+                        item.trim() === ""
+                )
+            ) {
+                throw new Error(
+                    "wrong 包含無效選項"
+                );
+            }
+
+            if (
+                typeof parsed.exp !== "string"
+            ) {
+                throw new Error(
+                    "缺少 exp"
+                );
+            }
+
+            // ==========================================
+            // 基本答案檢查
+            //
+            // 只檢查資料結構與明顯錯誤
+            // 不做內容品質修正
+            // ==========================================
+
+            if (
+                parsed.wrong.includes(
+                    parsed.correct
+                )
+            ) {
+                throw new Error(
+                    "correct 同時存在於 wrong"
+                );
+            }
+
+            const allOptions = [
+                parsed.correct,
+                ...parsed.wrong
+            ];
+
+            const uniqueOptions =
+                new Set(allOptions);
+
+            if (
+                uniqueOptions.size !== 4
+            ) {
+                throw new Error(
+                    "選項存在重複"
+                );
+            }
+
+            // ==========================================
+            // 補上系統欄位
+            //
+            // 這不是品質修正，
+            // 只是確保 API 回傳欄位存在。
+            // ==========================================
+
+            if (!parsed.subject) {
+                parsed.subject = subject;
+            }
+
+            if (!parsed.sub_topic) {
+                parsed.sub_topic = targetTopic;
+            }
+
+            // ==========================================
+            // 通過基本檢查
+            //
+            // 直接回傳
+            // 不再呼叫任何 Gemini 審核
+            // ==========================================
+
+            console.log(
+                `[Gemma OK] ${subject} > ${targetTopic}`
+            );
+
+            return res.json({
+                text: JSON.stringify(parsed)
+            });
 
         } catch (error) {
-            console.error(`Attempt ${attempts + 1} failed:`, error.message);
-            attempts++;
-            if (attempts === maxAttempts) return res.status(500).json({ error: "生成失敗" });
+
+            // ==========================================
+            // 這一題直接丟掉
+            // 不修正
+            // 不審核
+            // 不要求 AI 修改
+            // ==========================================
+
+            console.error(
+                `[Gemma Reject] 嘗試 ${attempts}:`,
+                error.message
+            );
+
+            // 如果還有次數，就重新生成
+            if (attempts < maxAttempts) {
+
+                console.log(
+                    `[Gemma Retry] 丟棄這一題，重新生成...`
+                );
+
+                continue;
+            }
+
+            // ==========================================
+            // 3 次都失敗
+            // ==========================================
+
+            return res.status(500).json({
+                error: "生成失敗"
+            });
         }
-    }
-});
-
-app.post('/api/verify-report', async (req, res) => {
-    const { question, options, correctIndex, explanation, userReason } = req.body;
-    
-    // 取得正確答案的文字內容
-    const correctAnswerText = options[correctIndex];
-
-    const prompt = `
-        你是一名極度嚴格的考題審查員。玩家回報了一道題目有錯誤。
-        請仔細審查該題目是否存在：事實錯誤、邏輯漏洞、錯別字、選項歧義、答案錯誤、或排版嚴重混亂。
-        只要有任何一點小錯誤，都算「回報有效 (valid: true)」。
-        
-        [題目資訊]
-        題目: ${question}
-        選項: ${JSON.stringify(options)}
-        系統設定答案: ${correctAnswerText}
-        系統解析: ${explanation}
-        
-        [玩家回報理由]
-        ${userReason}
-        
-        請以 JSON 格式回傳審查結果：
-        {
-            "valid": boolean,  // true 代表題目真的有錯 (或玩家理由合理)，false 代表題目無誤
-            "reason": "請用繁體中文簡短說明判斷理由 (50字內)"
-        }
-    `;
-
-    try {
-        const result = await model.generateContent(prompt);
-        const responseText = result.response.text().replace(/```json/g, '').replace(/```/g, '').trim();
-        const json = JSON.parse(responseText);
-        res.json(json);
-    } catch (error) {
-        console.error("Report Verification Error:", error);
-        // 若 AI 發生錯誤，保守起見設為無效，並請玩家稍後再試
-        res.json({ valid: false, reason: "系統忙碌，無法完成審查。" });
     }
 });
 
