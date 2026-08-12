@@ -839,7 +839,6 @@ G. 是否存在事實錯誤？
                 "Gemma JSON 解析失敗"
             );
         }
-    }
 
     return res.status(500).json({
         error: "生成失敗"
