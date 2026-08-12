@@ -21,7 +21,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 // 第一階段：主要出題模型
 // 注意：這裡的模型名稱請依你的 API 帳號實際可用名稱設定
 const gemmaModel = genAI.getGenerativeModel({
-    model: process.env.GEMMA_MODEL || "gemma-4-31b",
+    model: process.env.GEMMA_MODEL || "gemma-4-31b-it",
     generationConfig: {
         responseMimeType: "application/json",
         temperature: 0.8
