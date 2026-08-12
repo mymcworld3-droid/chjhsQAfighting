@@ -681,7 +681,7 @@ H. 是否為四選一單選題？
 只能輸出 JSON。
 
 不要輸出 Markdown。
-不要輸出 ```json。
+不要輸出 Markdown code fence。
 不要輸出任何額外文字。
 
 格式：
