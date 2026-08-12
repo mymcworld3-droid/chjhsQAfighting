@@ -667,29 +667,29 @@
                     <i class="fa-solid fa-chart-line"></i> 實驗數據統計儀表板
                 </h3>
                 
-                <!-- 數據卡片網格 -->
+                <!-- 數據卡片網格 (加入點擊事件) -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4 relative z-10">
-                    <div class="bg-slate-900/60 p-3 rounded-lg border border-white/5 text-center">
+                    <div onclick="switchAdminChart('registrations')" id="admin-card-registrations" class="admin-stat-card cursor-pointer bg-slate-900/60 hover:bg-slate-800 p-3 rounded-lg border border-white/5 text-center transition-all">
                         <div class="text-[10px] text-gray-400 mb-1">總註冊帳戶數</div>
                         <div id="admin-stat-total-users" class="text-xl font-bold text-white font-mono">0</div>
                     </div>
-                    <div class="bg-slate-900/60 p-3 rounded-lg border border-white/5 text-center">
+                    <div onclick="switchAdminChart('active')" id="admin-card-active" class="admin-stat-card cursor-pointer bg-slate-900/60 hover:bg-slate-800 p-3 rounded-lg border border-white/5 text-center transition-all">
                         <div class="text-[10px] text-gray-400 mb-1">近期活躍 (7天內)</div>
                         <div id="admin-stat-active-users" class="text-xl font-bold text-green-400 font-mono">0</div>
                     </div>
-                    <div class="bg-slate-900/60 p-3 rounded-lg border border-white/5 text-center">
+                    <div onclick="switchAdminChart('questions')" id="admin-card-questions" class="admin-stat-card cursor-pointer bg-slate-900/60 hover:bg-slate-800 p-3 rounded-lg border border-white/5 text-center transition-all">
                         <div class="text-[10px] text-gray-400 mb-1">平台總作答題數</div>
                         <div id="admin-stat-total-q" class="text-xl font-bold text-yellow-400 font-mono">0</div>
                     </div>
-                    <div class="bg-slate-900/60 p-3 rounded-lg border border-white/5 text-center">
+                    <div onclick="switchAdminChart('accuracy')" id="admin-card-accuracy" class="admin-stat-card cursor-pointer bg-slate-900/60 hover:bg-slate-800 p-3 rounded-lg border border-cyan-500/50 shadow-[0_0_15px_rgba(34,211,238,0.2)] text-center transition-all">
                         <div class="text-[10px] text-gray-400 mb-1">全站平均正確率</div>
                         <div id="admin-stat-accuracy" class="text-xl font-bold text-blue-400 font-mono">0%</div>
                     </div>
                 </div>
 
-                <!-- 各科正確率圖表 -->
-                <div class="w-full h-56 relative bg-slate-900/60 rounded-lg p-2 border border-white/5 z-10">
-                    <canvas id="adminSubjectChart"></canvas>
+                <!-- 共用的圖表顯示區 (修改 ID) -->
+                <div class="w-full h-64 relative bg-slate-900/60 rounded-lg p-3 border border-white/5 z-10 mt-2">
+                    <canvas id="adminMainChart"></canvas>
                 </div>
                 
                 <div class="mt-3 text-right relative z-10">
