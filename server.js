@@ -12,12 +12,33 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ⭐ 初始化 Gemini 2.5 模型 (保留用於生成文字)
+// ==========================================
+// AI 模型設定
+// ==========================================
+
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ 
-    model: "gemini-3.5-flash-lite", 
-    generationConfig: { responseMimeType: "application/json" }
+
+// 第一階段：主要出題模型
+// 注意：這裡的模型名稱請依你的 API 帳號實際可用名稱設定
+const gemmaModel = genAI.getGenerativeModel({
+    model: process.env.GEMMA_MODEL || "gemma-4-31b",
+    generationConfig: {
+        responseMimeType: "application/json",
+        temperature: 0.8
+    }
 });
+
+// 第二階段：品質審核模型
+const reviewModel = genAI.getGenerativeModel({
+    model: process.env.GEMINI_REVIEW_MODEL || "gemini-3.5-flash-lite",
+    generationConfig: {
+        responseMimeType: "application/json",
+        temperature: 0.1
+    }
+});
+
+// 保留原本 model，給其他 API 使用
+const model = reviewModel;
 
 // 根目錄路由
 app.get('/', (req, res) => {
