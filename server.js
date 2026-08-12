@@ -200,6 +200,71 @@ function getRandomItem(arr) {
     return arr[Math.floor(Math.random() * arr.length)];
 }
 
+function parseAIJson(rawText) {
+    if (typeof rawText !== "string") {
+        throw new Error("AI 回應不是文字");
+    }
+
+    let cleanedText =
+        rawText
+            .replace(/```json/gi, "")
+            .replace(/```/g, "")
+            .replace(/^\uFEFF/, "")
+            .trim();
+
+    const firstBrace =
+        cleanedText.indexOf("{");
+
+    const lastBrace =
+        cleanedText.lastIndexOf("}");
+
+    if (
+        firstBrace === -1 ||
+        lastBrace === -1 ||
+        lastBrace <= firstBrace
+    ) {
+        throw new Error(
+            "AI 回應中找不到完整 JSON"
+        );
+    }
+
+    cleanedText =
+        cleanedText.substring(
+            firstBrace,
+            lastBrace + 1
+        );
+
+    // 第一次解析
+    try {
+        return JSON.parse(cleanedText);
+    } catch (firstError) {
+        console.error(
+            "[AI JSON] 第一次 JSON.parse 失敗:",
+            firstError.message
+        );
+    }
+
+    // 移除非法控制字元後再試一次
+    cleanedText =
+        cleanedText.replace(
+            /[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,
+            ""
+        );
+
+    try {
+        return JSON.parse(cleanedText);
+    } catch (secondError) {
+        console.error(
+            "[AI JSON] 第二次 JSON.parse 失敗:",
+            secondError.message
+        );
+
+        throw new Error(
+            "AI JSON 解析失敗"
+        );
+    }
+}
+
 // ==========================================
 // 題目自動品質檢查
 // 不呼叫 AI，先用程式快速過濾明顯錯誤
