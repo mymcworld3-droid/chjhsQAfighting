@@ -201,99 +201,753 @@ function getRandomItem(arr) {
 }
 
 // ==========================================
-// API 2: 生成測驗題目 (優化版：單次請求 + 安全 JSON 解析)
+// 題目自動品質檢查
+// 不呼叫 AI，先用程式快速過濾明顯錯誤
 // ==========================================
+
+function validateQuizQuestion(question, expectedSubject, expectedTopic) {
+    const issues = [];
+
+    // ------------------------------------------
+    // 1. 基本結構
+    // ------------------------------------------
+
+    if (!question || typeof question !== "object") {
+        issues.push("題目資料不是有效物件");
+        return {
+            passed: false,
+            suspicious: true,
+            issues
+        };
+    }
+
+    if (typeof question.q !== "string" || question.q.trim().length < 8) {
+        issues.push("題目內容太短或不存在");
+    }
+
+    if (typeof question.correct !== "string" || question.correct.trim().length === 0) {
+        issues.push("缺少正確答案");
+    }
+
+    if (!Array.isArray(question.wrong)) {
+        issues.push("wrong 必須是陣列");
+    }
+
+    if (!Array.isArray(question.wrong) || question.wrong.length !== 3) {
+        issues.push("錯誤選項必須剛好 3 個");
+    }
+
+    if (typeof question.exp !== "string" || question.exp.trim().length < 10) {
+        issues.push("解析不存在或過短");
+    }
+
+    // ------------------------------------------
+    // 2. 學科 / 題型一致性
+    // ------------------------------------------
+
+    if (question.subject && question.subject !== expectedSubject) {
+        issues.push(`subject 不一致：${question.subject}`);
+    }
+
+    if (question.sub_topic && question.sub_topic !== expectedTopic) {
+        issues.push(`sub_topic 不一致：${question.sub_topic}`);
+    }
+
+    // ------------------------------------------
+    // 3. 選項檢查
+    // ------------------------------------------
+
+    if (
+        typeof question.correct === "string" &&
+        Array.isArray(question.wrong)
+    ) {
+        const allOptions = [
+            question.correct.trim(),
+            ...question.wrong.map(x =>
+                typeof x === "string" ? x.trim() : ""
+            )
+        ];
+
+        // 空選項
+        if (allOptions.some(x => !x)) {
+            issues.push("存在空白選項");
+        }
+
+        // 選項重複
+        const normalizedOptions = allOptions.map(x =>
+            x
+                .replace(/\s+/g, "")
+                .replace(/[，。！？、,.!?]/g, "")
+                .toLowerCase()
+        );
+
+        const uniqueOptions = new Set(normalizedOptions);
+
+        if (uniqueOptions.size !== allOptions.length) {
+            issues.push("選項存在重複");
+        }
+
+        // 正確答案不得出現在錯誤選項
+        const correctNormalized = normalizedOptions[0];
+
+        for (let i = 1; i < normalizedOptions.length; i++) {
+            if (
+                normalizedOptions[i] &&
+                normalizedOptions[i] === correctNormalized
+            ) {
+                issues.push("正確答案與錯誤答案重複");
+            }
+        }
+
+        // 選項不應該直接複製整段題目
+        const questionNormalized = question.q
+            .replace(/\s+/g, "")
+            .toLowerCase();
+
+        for (const option of normalizedOptions) {
+            if (
+                option.length >= 8 &&
+                questionNormalized.includes(option)
+            ) {
+                issues.push("選項可能直接出現在題幹中");
+                break;
+            }
+        }
+    }
+
+    // ------------------------------------------
+    // 4. 題目是否看起來像多選題
+    // ------------------------------------------
+
+    const multiChoicePatterns = [
+        /複選/,
+        /多選/,
+        /選出所有/,
+        /下列何者.*(皆|全部)/,
+        /有幾項/,
+        /正確的是.*(項|項目)/
+    ];
+
+    if (multiChoicePatterns.some(pattern => pattern.test(question.q))) {
+        issues.push("題目可能不是單選題");
+    }
+
+    // ------------------------------------------
+    // 5. 明顯格式問題
+    // ------------------------------------------
+
+    if (/[{}[\]]/.test(question.q)) {
+        issues.push("題目可能殘留 JSON / 程式格式");
+    }
+
+    if (/^```|```$/.test(question.q.trim())) {
+        issues.push("題目包含 Markdown code fence");
+    }
+
+    // ------------------------------------------
+    // 6. 解析與答案基本一致性
+    // ------------------------------------------
+
+    if (
+        question.exp &&
+        question.correct &&
+        typeof question.exp === "string"
+    ) {
+        const explanation = question.exp.toLowerCase();
+        const answer = question.correct.trim().toLowerCase();
+
+        // 如果正確答案是文字選項，
+        // 解析完全沒提到答案，標記為可疑而不是直接判錯
+        if (
+            answer.length >= 2 &&
+            !explanation.includes(answer)
+        ) {
+            issues.push("解析沒有明確對應正確答案");
+        }
+    }
+
+    return {
+        passed: issues.length === 0,
+        suspicious: issues.length > 0,
+        issues
+    };
+}
+
+// ==========================================
+// Gemini 第二階段題目審核
+// 只有程式檢查出可疑題目才會呼叫
+// ==========================================
+
+async function reviewQuizQuestion(question, expectedSubject, expectedTopic, basicIssues = []) {
+    const reviewPrompt = `
+你是一名極度嚴格的高中／國中考題品質審查員。
+
+你的任務不是重新出題，而是判斷下面這一道 AI 生成的單選題是否可以直接給學生作答。
+
+【目標學科】
+${expectedSubject}
+
+【目標題型】
+${expectedTopic}
+
+【程式初步檢查發現】
+${JSON.stringify(basicIssues, null, 2)}
+
+【待審核題目】
+${JSON.stringify(question, null, 2)}
+
+請依照以下標準逐項審查：
+
+1. 題目是否真的符合指定學科。
+2. 題目是否真的符合指定題型。
+3. 是否只有一個合理的正確答案。
+4. 三個錯誤選項是否真的錯。
+5. 是否存在兩個以上合理答案。
+6. 題目敘述是否有歧義。
+7. 題目與選項是否有邏輯矛盾。
+8. 正確答案是否真的能由題目資訊推出。
+9. 解析是否與答案一致。
+10. 是否存在明顯事實錯誤。
+11. 是否有嚴重錯字、格式問題。
+12. 是否符合單選題形式。
+13. 是否存在「沒有標準答案」的情況。
+
+重要：
+
+- 不要因為題目稍微簡單就判定錯誤。
+- 不要因為有不同解法就判定錯誤。
+- 只有在答案、事實、邏輯或題型存在實質問題時才判定不通過。
+- 如果題目可以直接給學生作答，就通過。
+- 如果可以小幅修正後變成好題目，可以提出修正。
+- 如果無法可靠修正，必須判定不通過。
+
+請只回傳 JSON：
+
+{
+    "approved": true,
+    "confidence": 0.95,
+    "reason": "簡短說明",
+    "issues": [],
+    "fixedQuestion": null
+}
+
+如果題目需要修正，而且你能確定正確修改方式：
+
+{
+    "approved": true,
+    "confidence": 0.9,
+    "reason": "修正後可以使用",
+    "issues": ["原本的問題"],
+    "fixedQuestion": {
+        "q": "...",
+        "correct": "...",
+        "wrong": ["...", "...", "..."],
+        "exp": "...",
+        "subject": "${expectedSubject}",
+        "sub_topic": "${expectedTopic}"
+    }
+}
+
+如果無法可靠修正：
+
+{
+    "approved": false,
+    "confidence": 0.95,
+    "reason": "原因",
+    "issues": ["問題1", "問題2"],
+    "fixedQuestion": null
+}
+`;
+
+    try {
+        const result = await reviewModel.generateContent(reviewPrompt);
+
+        const rawText = result.response.text()
+            .replace(/```json/g, "")
+            .replace(/```/g, "")
+            .trim();
+
+        const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+
+        if (!jsonMatch) {
+            throw new Error("審核模型沒有回傳有效 JSON");
+        }
+
+        const review = JSON.parse(jsonMatch[0]);
+
+        return {
+            approved: review.approved === true,
+            confidence:
+                typeof review.confidence === "number"
+                    ? review.confidence
+                    : 0,
+            reason: review.reason || "",
+            issues: Array.isArray(review.issues)
+                ? review.issues
+                : [],
+            fixedQuestion:
+                review.fixedQuestion &&
+                typeof review.fixedQuestion === "object"
+                    ? review.fixedQuestion
+                    : null
+        };
+
+    } catch (error) {
+        console.error("[Review] Gemini 審核失敗:", error.message);
+
+        // 審核模型故障時，不直接把可疑題目送給玩家
+        return {
+            approved: false,
+            confidence: 0,
+            reason: "AI 審核服務暫時無法使用",
+            issues: ["review_model_error"],
+            fixedQuestion: null
+        };
+    }
+}
+
+// ==========================================
+// API 2: 生成測驗題目
+//
+// 新版流程：
+//
+// Gemma 4 31B
+//      ↓
+// 程式自動品質檢查
+//      ↓
+// ┌────┴────┐
+// ↓         ↓
+// 通過      可疑
+// ↓         ↓
+// 返回    Gemini 審核
+//            ↓
+//       ┌────┴────┐
+//       ↓         ↓
+//     通過       不通過
+//       ↓         ↓
+//      返回    Gemma 重新生成
+//
+// ==========================================
+
 app.post('/api/generate-quiz', async (req, res) => {
-    // 兼容前端可能傳來的 specificTopic 或 topic
-    let { subject, level, rank, difficulty, knowledgeMap, specificTopic, topic } = req.body;
-    
+
+    let {
+        subject,
+        level,
+        rank,
+        difficulty,
+        knowledgeMap,
+        specificTopic,
+        topic
+    } = req.body;
+
     let targetTopic = specificTopic || topic;
 
-    // 1. 科目選擇
-    if (!subject) {
+    // ==========================================
+    // 1. 決定科目
+    // ==========================================
+
+    if (!subject || !SUBJECT_SCHEMA[subject]) {
         const allSubjects = Object.keys(SUBJECT_SCHEMA);
         subject = getRandomItem(allSubjects);
     }
 
-    // 2. 子題型選擇
-    if (!targetTopic && SUBJECT_SCHEMA[subject]) {
+    // ==========================================
+    // 2. 決定子題型
+    // ==========================================
+
+    if (
+        !targetTopic ||
+        !SUBJECT_SCHEMA[subject] ||
+        !SUBJECT_SCHEMA[subject].includes(targetTopic)
+    ) {
         targetTopic = getRandomItem(SUBJECT_SCHEMA[subject]);
     }
-    if (!targetTopic) targetTopic = "綜合測驗";
 
-    // 3. 取得詳細指導語
-    let topicDescription = "";
-    if (SUBJECT_DETAILS[subject] && SUBJECT_DETAILS[subject][targetTopic]) {
-        topicDescription = SUBJECT_DETAILS[subject][targetTopic];
+    if (!targetTopic) {
+        targetTopic = "綜合測驗";
     }
 
-    // 4. 建構診斷資訊
+    // ==========================================
+    // 3. 取得題型說明
+    // ==========================================
+
+    const topicDescription =
+        SUBJECT_DETAILS[subject]?.[targetTopic] || "";
+
+    // ==========================================
+    // 4. 玩家能力診斷
+    // ==========================================
+
     let diagnosticInfo = "";
-    if (knowledgeMap && knowledgeMap[subject] && knowledgeMap[subject][targetTopic]) {
+
+    if (
+        knowledgeMap &&
+        knowledgeMap[subject] &&
+        knowledgeMap[subject][targetTopic]
+    ) {
         const stats = knowledgeMap[subject][targetTopic];
-        const accuracy = stats.total > 0 ? ((stats.correct / stats.total) * 100).toFixed(1) : 0;
-        diagnosticInfo = `[玩家數據] 在「${subject}-${targetTopic}」上正確率為 ${accuracy}% (已練 ${stats.total} 題)。`;
-        if (stats.total > 3 && accuracy < 40) difficulty = "easy"; 
-        if (stats.total > 5 && accuracy > 80) difficulty = "hard"; 
+
+        const total = Number(stats.total || 0);
+        const correct = Number(stats.correct || 0);
+
+        const accuracy =
+            total > 0
+                ? ((correct / total) * 100).toFixed(1)
+                : 0;
+
+        diagnosticInfo =
+            `[玩家數據] 「${subject}-${targetTopic}」`
+            + `正確率 ${accuracy}%`
+            + `，已練習 ${total} 題。`;
+
+        // 不要太少資料就調整難度
+        if (total >= 4 && accuracy < 40) {
+            difficulty = "easy";
+        }
+
+        if (total >= 6 && accuracy > 80) {
+            difficulty = "hard";
+        }
     }
 
-    const randomSeed = Math.random().toString(36).substring(7);
+    // ==========================================
+    // 5. 安全預設值
+    // ==========================================
 
-    const generationPrompt = `
-        [系統指令]
-        你是由 Google 開發的 AI 教育專家，請生成一道高品質的「單選題」。
-        題目有需要換行時可以打\n。
-        
-        [出題規格]
-        1. **主科目**：${subject}
-        2. **指定題型**：${targetTopic}
-        3. **題型要求**：${topicDescription}
-        4. **適用程度**：${level} (段位：${rank})
-        5. **難度設定**：${difficulty}
-        6. **隨機因子**：${randomSeed}
-        ${diagnosticInfo}
-    
-        [輸出格式 (JSON Only)]
-        請直接回傳 JSON，不要 markdown 標記：
-        {
-            "q": "題目內容 (純文字描述)",
-            "correct": "正確選項",
-            "wrong": ["錯誤1", "錯誤2", "錯誤3"],
-            "exp": "解析內容...",
-            "subject": "${subject}",
-            "sub_topic": "${targetTopic}" 
-        }
-        請檢查：答案 "correct" 只有一個、錯誤答案中沒有正確答案、選項必須在選項裡不可在題目裡、不可為多選題。
-    `;
+    level = level || "高中";
+    rank = rank || "一般";
+    difficulty = difficulty || "medium";
 
-    // 6. 呼叫 AI (取消雙重呼叫，改為直接解析)
-    let attempts = 0;
-    const maxAttempts = 3;
+    // ==========================================
+    // 6. 防止同一個請求一直產生完全相同的題目
+    // ==========================================
 
-    while (attempts < maxAttempts) {
+    const randomSeed =
+        `${Date.now()}-${Math.random().toString(36).substring(2, 10)}`;
+
+    // ==========================================
+    // 7. 最多進行幾次 Gemma 重新生成
+    // ==========================================
+
+    const MAX_GENERATION_ATTEMPTS = 4;
+
+    for (
+        let attempt = 1;
+        attempt <= MAX_GENERATION_ATTEMPTS;
+        attempt++
+    ) {
+
         try {
-            console.log(`[Gen] ${subject} > ${targetTopic} (${difficulty}) - 嘗試 ${attempts + 1}`); 
-            const genResult = await model.generateContent(generationPrompt);
-            const rawText = genResult.response.text();
-            
-            // 使用正則表達式，安全提取大括號內的 JSON 內容
-            const jsonMatch = rawText.match(/\{[\s\S]*\}/);
-            if (!jsonMatch) {
-                throw new Error("AI 回應中未找到 JSON 結構");
-            }
-            
-            const parsed = JSON.parse(jsonMatch[0]);
-            if(!parsed.sub_topic) parsed.sub_topic = targetTopic;
-            if(!parsed.subject) parsed.subject = subject;
 
-            return res.json({ text: JSON.stringify(parsed) });
+            console.log(
+                `[Quiz] ${subject} > ${targetTopic}`
+                + ` | difficulty=${difficulty}`
+                + ` | generation=${attempt}/${MAX_GENERATION_ATTEMPTS}`
+            );
+
+            // ==========================================
+            // 8. 每次重新生成都建立不同 prompt
+            // ==========================================
+
+            const generationPrompt = `
+你是專業的臺灣國高中考題設計 AI。
+
+請產生「一道」高品質、可直接讓學生作答的四選一單選題。
+
+【基本設定】
+
+學科：
+${subject}
+
+題型：
+${targetTopic}
+
+題型要求：
+${topicDescription}
+
+程度：
+${level}
+
+段位：
+${rank}
+
+難度：
+${difficulty}
+
+玩家診斷：
+${diagnosticInfo || "目前沒有足夠玩家資料。"}
+
+本次生成識別碼：
+${randomSeed}-${attempt}
+
+━━━━━━━━━━━━━━━━━━
+【出題原則】
+━━━━━━━━━━━━━━━━━━
+
+1. 題目必須符合「${subject}」。
+2. 題目必須符合「${targetTopic}」。
+3. 必須只有一個最佳答案。
+4. 必須有三個合理但錯誤的干擾選項。
+5. 四個選項不可重複。
+6. 不可出現兩個都可以被判定為正確的答案。
+7. 題目本身必須提供足夠資訊解題。
+8. 不可以要求學生猜測出題者想法。
+9. 不可以用模糊或沒有明確定義的敘述。
+10. 解析必須真正解釋為什麼正確答案正確。
+11. 三個錯誤選項也要有合理的干擾性。
+12. 不要把答案直接寫在題幹。
+13. 不要把正確答案的文字直接複製成題目提示。
+14. 不要出多選題。
+15. 不要出「以上皆是」。
+16. 不要出「以上皆非」。
+17. 不要讓正確答案因為文字長度、語氣或格式特別突出。
+18. 避免無意義的純記憶題，除非該題型本身就是知識記憶。
+19. 如果是數學題，必須確認計算結果。
+20. 如果是科學題，必須確認概念與因果關係。
+21. 如果是歷史、公民、地理題，不可以虛構史實、法規或地理資料。
+22. 英文題解析使用繁體中文。
+23. 解析不可只是重複答案，必須說明判斷依據。
+
+━━━━━━━━━━━━━━━━━━
+【題目品質】
+━━━━━━━━━━━━━━━━━━
+
+請在生成前自行進行一次內部檢查：
+
+A. 題目是否只有一個答案？
+B. 三個干擾選項是否真的錯？
+C. 題目資訊是否足夠？
+D. 是否符合指定題型？
+E. 解析是否支持答案？
+F. 是否存在語意歧義？
+G. 是否存在事實錯誤？
+
+如果任一項無法確認，請重新設計題目。
+
+━━━━━━━━━━━━━━━━━━
+【輸出格式】
+━━━━━━━━━━━━━━━━━━
+
+只能輸出 JSON：
+
+{
+    "q": "題目",
+    "correct": "正確答案",
+    "wrong": [
+        "錯誤答案1",
+        "錯誤答案2",
+        "錯誤答案3"
+    ],
+    "exp": "繁體中文解析",
+    "subject": "${subject}",
+    "sub_topic": "${targetTopic}"
+}
+
+不要輸出 Markdown。
+不要輸出 ```json。
+不要增加其他欄位。
+`;
+
+            // ==========================================
+            // 9. 第一階段：Gemma 4 31B 出題
+            // ==========================================
+
+            const genResult =
+                await gemmaModel.generateContent(generationPrompt);
+
+            const rawText =
+                genResult.response.text()
+                    .replace(/```json/g, "")
+                    .replace(/```/g, "")
+                    .trim();
+
+            const jsonMatch =
+                rawText.match(/\{[\s\S]*\}/);
+
+            if (!jsonMatch) {
+                throw new Error(
+                    "Gemma 回應中找不到 JSON"
+                );
+            }
+
+            let question;
+
+            try {
+                question =
+                    JSON.parse(jsonMatch[0]);
+            } catch (parseError) {
+                throw new Error(
+                    "Gemma JSON 解析失敗"
+                );
+            }
+
+            // ==========================================
+            // 10. 強制補回系統分類
+            // ==========================================
+
+            question.subject = subject;
+            question.sub_topic = targetTopic;
+
+            // ==========================================
+            // 11. 第一階段：程式品質檢查
+            // ==========================================
+
+            const validation =
+                validateQuizQuestion(
+                    question,
+                    subject,
+                    targetTopic
+                );
+
+            console.log(
+                `[Quiz Check] passed=${validation.passed}`,
+                validation.issues
+            );
+
+            // ==========================================
+            // 12. 如果完全通過
+            //
+            // 不需要浪費 Gemini API
+            // ==========================================
+
+            if (validation.passed) {
+
+                console.log(
+                    `[Quiz] ✓ 通過自動品質檢查`
+                );
+
+                return res.json({
+                    text: JSON.stringify(question),
+                    quality: {
+                        status: "passed",
+                        reviewer: "program"
+                    }
+                });
+            }
+
+            // ==========================================
+            // 13. 可疑 → Gemini Flash Lite 審核
+            // ==========================================
+
+            console.log(
+                `[Quiz] ⚠ 可疑題目，送 Gemini 審核`,
+                validation.issues
+            );
+
+            const review =
+                await reviewQuizQuestion(
+                    question,
+                    subject,
+                    targetTopic,
+                    validation.issues
+                );
+
+            console.log(
+                `[Quiz Review] approved=${review.approved}`
+                + ` confidence=${review.confidence}`
+            );
+
+            // ==========================================
+            // 14. Gemini 判定通過
+            // ==========================================
+
+            if (
+                review.approved &&
+                review.confidence >= 0.75
+            ) {
+
+                // 如果 Gemini 提供修正版
+                if (review.fixedQuestion) {
+
+                    const fixed =
+                        review.fixedQuestion;
+
+                    fixed.subject = subject;
+                    fixed.sub_topic = targetTopic;
+
+                    const fixedValidation =
+                        validateQuizQuestion(
+                            fixed,
+                            subject,
+                            targetTopic
+                        );
+
+                    // 修正版也必須重新經過程式檢查
+                    if (fixedValidation.passed) {
+
+                        console.log(
+                            `[Quiz] ✓ Gemini 修正後通過`
+                        );
+
+                        return res.json({
+                            text: JSON.stringify(fixed),
+                            quality: {
+                                status: "reviewed",
+                                reviewer: "gemini",
+                                corrected: true
+                            }
+                        });
+                    }
+
+                    console.log(
+                        `[Quiz] Gemini 修正版仍有問題`,
+                        fixedValidation.issues
+                    );
+
+                } else {
+
+                    console.log(
+                        `[Quiz] ✓ Gemini 審核通過`
+                    );
+
+                    return res.json({
+                        text: JSON.stringify(question),
+                        quality: {
+                            status: "reviewed",
+                            reviewer: "gemini",
+                            corrected: false
+                        }
+                    });
+                }
+            }
+
+            // ==========================================
+            // 15. Gemini 判定不通過
+            //
+            // 不把爛題目送給玩家
+            // 下一輪重新叫 Gemma 出題
+            // ==========================================
+
+            console.log(
+                `[Quiz] ✗ Gemini 判定不通過`
+                + ` → Gemma 重新生成`
+            );
 
         } catch (error) {
-            console.error(`Attempt ${attempts + 1} failed:`, error.message);
-            attempts++;
-            if (attempts === maxAttempts) return res.status(500).json({ error: "生成失敗" });
+
+            console.error(
+                `[Quiz] Generation attempt ${attempt} failed:`,
+                error.message
+            );
+
+            // 最後一次才直接回傳錯誤
+            if (
+                attempt === MAX_GENERATION_ATTEMPTS
+            ) {
+
+                return res.status(500).json({
+                    error: "生成失敗",
+                    message:
+                        "AI 題目品質管線多次嘗試後仍無法產生合格題目。"
+                });
+            }
         }
     }
+
+    return res.status(500).json({
+        error: "生成失敗"
+    });
 });
 
 app.post('/api/verify-report', async (req, res) => {
