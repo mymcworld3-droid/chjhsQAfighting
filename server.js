@@ -290,65 +290,33 @@ app.post('/api/generate-quiz', async (req, res) => {
             Math.random().toString(36).substring(2, 10);
 
         const generationPrompt = `
-你是一名 AI 教育題目生成器。
+生成一道「${subject}」的「${targetTopic}」單選題。
 
-請生成一道高品質的「單選題」。
-
-【出題資訊】
-
-主科目：
-${subject}
-
-指定題型：
-${targetTopic}
+程度：${level}
+段位：${rank}
+難度：${difficulty}
 
 題型要求：
 ${topicDescription}
 
-適用程度：
-${level}
-
-段位：
-${rank}
-
-難度：
-${difficulty}
-
 ${diagnosticInfo}
 
-隨機因子：
-${randomSeed}
-
-
-【重要要求】
-
-1. 必須是單選題。
-2. 只能有一個正確答案。
-3. 必須提供 3 個錯誤選項。
-4. correct 必須與 wrong 中的其中一個選項完全對應。
-5. wrong 不可以包含正確答案。
-6. 題目本身不要直接透露答案。
-7. 選項必須是可以直接讓玩家選擇的內容。
-8. 解析使用繁體中文。
-9. 只輸出 JSON。
-10. 不要輸出 Markdown。
-11. 不要輸出 JSON 以外的任何文字。
-
-
-【JSON 格式】
+只輸出 JSON，不要 Markdown：
 
 {
-    "q": "題目內容",
-    "correct": "正確選項",
-    "wrong": [
-        "錯誤選項1",
-        "錯誤選項2",
-        "錯誤選項3"
-    ],
-    "exp": "解析內容",
-    "subject": "${subject}",
-    "sub_topic": "${targetTopic}"
+  "q": "題目",
+  "correct": "正確答案",
+  "wrong": ["錯誤1", "錯誤2", "錯誤3"],
+  "exp": "繁體中文解析",
+  "subject": "${subject}",
+  "sub_topic": "${targetTopic}"
 }
+
+要求：
+- 只有一個正確答案
+- wrong 必須正好 3 個
+- correct 不得出現在 wrong
+- 四個選項不得重複
 `;
 
         try {
