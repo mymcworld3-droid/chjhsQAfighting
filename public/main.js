@@ -4093,6 +4093,11 @@ window.renderKnowledgeGraph = (targetSubject = null) => {
     // 安全取得使用者知識圖譜數據 (如果尚未產生則給空物件)
     const map = (currentUserData && currentUserData.stats && currentUserData.stats.knowledgeMap) ? currentUserData.stats.knowledgeMap : {};
 
+    // 🔥 呼叫我們剛剛寫的：更新全服前幾%顯示
+    if (window.updatePercentileDisplay) {
+        window.updatePercentileDisplay(targetSubject, map);
+    }
+
     // 1. 生成與更新切換按鈕 (放置於專屬的 chart-controls 容器內)
     const controls = document.getElementById('chart-controls');
     if (controls) {
