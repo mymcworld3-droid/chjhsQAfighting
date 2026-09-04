@@ -3993,6 +3993,98 @@ function calculateDomainScore(map, subjects) {
     return Math.round((totalCorrect / totalQuestions) * 100);
 }
 
+// ==========================================
+// 📊 全服排名百分比 (Top X%) 計算系統
+// ==========================================
+let globalUsersStatsCache = null; // 快取全服資料，避免切換科目時重複發送請求
+
+async function fetchAllUsersForPercentile() {
+    if (globalUsersStatsCache) return globalUsersStatsCache;
+    try {
+        const snap = await getDocs(collection(db, "users"));
+        const users = [];
+        snap.forEach(doc => users.push(doc.data()));
+        globalUsersStatsCache = users; // 暫存起來
+        return users;
+    } catch (e) {
+        console.error("[Percentile Error] 無法取得全服資料:", e);
+        return [];
+    }
+}
+
+window.updatePercentileDisplay = async (targetSubject, myMap) => {
+    const displayDiv = document.getElementById('percentile-display');
+    const textEl = document.getElementById('percentile-text');
+    if (!displayDiv || !textEl) return;
+
+    displayDiv.classList.remove('hidden');
+    textEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-cyan-400 text-xl"></i> <span class="text-gray-400 ml-2">雲端運算中...</span>';
+
+    const allUsers = await fetchAllUsersForPercentile();
+    if (!allUsers || allUsers.length <= 1) {
+        textEl.innerHTML = '<span class="text-gray-400">數據收集中，目前暫無足夠的全服資料。</span>';
+        return;
+    }
+
+    let myScore = 0;
+    let othersScores = [];
+
+    // 1. 決定計算模式 (綜合 vs 單科)
+    if (targetSubject) {
+        // 單科模式
+        myScore = calculateDomainScore(myMap, [targetSubject]);
+        allUsers.forEach(u => {
+            const uMap = (u.stats && u.stats.knowledgeMap) ? u.stats.knowledgeMap : {};
+            othersScores.push(calculateDomainScore(uMap, [targetSubject]));
+        });
+    } else {
+        // 綜合模式 (五大領域平均)
+        const domains = [ ["國文"], ["英文"], ["數學"], ["歷史", "地理", "公民"], ["物理", "化學", "生物"] ];
+        const calcOverall = (userMap) => {
+            let total = 0;
+            domains.forEach(d => total += calculateDomainScore(userMap, d));
+            return total / domains.length;
+        };
+        
+        myScore = calcOverall(myMap);
+        allUsers.forEach(u => {
+            const uMap = (u.stats && u.stats.knowledgeMap) ? u.stats.knowledgeMap : {};
+            othersScores.push(calcOverall(uMap));
+        });
+    }
+
+    // 2. 計算贏過多少人
+    let worseCount = 0;
+    let equalCount = 0;
+    othersScores.forEach(score => {
+        if (score < myScore) worseCount++;
+        else if (score === myScore) equalCount++;
+    });
+
+    // 3. 計算 PR 值與前幾 %
+    // 同分者算贏過一半的人，較為平滑
+    const percentile = (worseCount + Math.floor(equalCount / 2)) / allUsers.length;
+    let topPercent = Math.round((1 - percentile) * 100);
+
+    // 防呆處理 (極端值修飾)
+    if (topPercent <= 0) topPercent = 1; 
+    if (topPercent >= 100 && myScore > 0) topPercent = 99;
+    if (myScore === 0) topPercent = 100; // 如果都沒作答過，就是 100% (墊底)
+
+    const beatPercent = 100 - topPercent;
+    const title = targetSubject ? targetSubject : '綜合能力';
+
+    // 4. 渲染結果 (套用你的 Cyberpunk 樣式)
+    textEl.innerHTML = `
+        <span class="text-gray-300">你的 <span class="text-white font-black">${title}</span> 擊敗了全服</span> 
+        <span class="text-2xl text-yellow-400 font-black font-sci tracking-wider mx-1 drop-shadow-[0_0_8px_rgba(250,204,21,0.8)]">${beatPercent}%</span> 
+        <span class="text-gray-300">的玩家</span>
+        <div class="mt-1.5 text-xs text-cyan-300 bg-cyan-900/30 inline-block px-3 py-1 rounded-full border border-cyan-500/30">
+            <i class="fa-solid fa-ranking-star mr-1"></i> 位於全服前 <span class="font-bold text-white font-mono">${topPercent} %</span>
+        </div>
+    `;
+};
+
 // 主渲染函式
 window.renderKnowledgeGraph = (targetSubject = null) => {
     const ctx = document.getElementById('knowledgeChart');
