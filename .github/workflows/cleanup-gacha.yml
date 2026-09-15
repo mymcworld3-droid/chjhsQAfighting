@@ -1,0 +1,46 @@
+name: One-time gacha cleanup
+
+on:
+  push:
+    branches: [ "修仙世界" ]
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    if: github.event.head_commit.message != 'Remove gacha/card systems from main-legacy.js'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 修仙世界
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Run cleanup
+        run: python tools/remove-gacha.py
+      - name: Validate no gacha/card code remains
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          s = Path('public/main-legacy.js').read_text(encoding='utf-8').lower()
+          forbidden = [
+              'card_database', 'rarity_config', 'drawsinglecard', 'draw11cards',
+              'executedraw', 'pickrandomcardid', 'processcardacquisition',
+              'gachaskip', 'showdrawresults', 'revealgacharesults',
+              'rendergachacard', 'skipgachaanimation', 'cardlevels'
+          ]
+          hit = [x for x in forbidden if x in s]
+          if hit:
+              raise SystemExit('Forbidden gacha/card identifiers remain: ' + ', '.join(hit))
+          print('Validation passed')
+          PY
+      - name: Commit cleaned file
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/main-legacy.js
+          git commit -m "Remove gacha/card systems from main-legacy.js" || exit 0
+          git push origin "HEAD:修仙世界"
