@@ -1,15 +1,33 @@
-/* 修煉頁緊湊版：子分頁靠上、縮小，金丹主畫面盡量一屏顯示。 */
+/* 修煉頁一屏版：子分頁靠上、縮小；進入修煉時不需要上下捲動。 */
+
+/* 只有修煉頁顯示時鎖住 main，離開修煉頁後其他頁面照常可捲動。 */
+body.xianxia-theme main:has(#page-training.active-page) {
+  overflow-y: hidden !important;
+  scroll-behavior: auto !important;
+}
+
 body.xianxia-theme .training-page-v3 {
+  box-sizing: border-box;
+  width: min(100%, 820px);
   max-width: 820px;
+  height: calc(100dvh - 176px);
+  min-height: 0;
   margin: 0 auto;
   padding-top: 0;
-  padding-bottom: 96px;
+  padding-bottom: 0;
+  overflow: hidden;
+}
+
+body.xianxia-theme .training-page-v3.active-page {
+  display: grid !important;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  align-content: stretch;
 }
 
 body.xianxia-theme .training-page-heading-v3 {
   align-items: center;
-  margin: 0 0 6px;
-  min-height: 48px;
+  margin: 0 0 4px;
+  min-height: 42px;
 }
 
 body.xianxia-theme .training-eyebrow-v3 {
@@ -18,141 +36,183 @@ body.xianxia-theme .training-eyebrow-v3 {
 
 body.xianxia-theme .training-page-heading-v3 h2 {
   margin: 0;
-  font-size: 23px;
-  line-height: 1.15;
+  font-size: 22px;
+  line-height: 1.1;
 }
 
 body.xianxia-theme .training-realm-seal-v3 {
-  width: 44px;
-  height: 44px;
-  border-radius: 15px;
-  font-size: 12px;
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  font-size: 11px;
 }
 
-/* 金丹 / 背包改成靠左上角的小型分頁，不再撐滿整列。 */
+/* 金丹 / 背包：靠頁面頂部的小型切換鍵。 */
 body.xianxia-theme .training-subtabs-v3 {
   width: max-content;
   max-width: 100%;
   gap: 4px;
   padding: 3px;
-  margin: 0 0 8px;
-  border-radius: 13px;
+  margin: 0 0 6px;
+  border-radius: 12px;
 }
 
 body.xianxia-theme .training-subtab-v3 {
   flex: 0 0 auto;
-  min-width: 78px;
-  min-height: 34px;
-  padding: 0 12px;
-  gap: 6px;
-  border-radius: 10px;
-  font-size: 11px;
+  min-width: 72px;
+  min-height: 31px;
+  padding: 0 10px;
+  gap: 5px;
+  border-radius: 9px;
+  font-size: 10px;
 }
 
 body.xianxia-theme .training-subtab-v3 i {
-  font-size: 11px;
+  font-size: 10px;
 }
 
-/* 縮短主卡高度，避免修煉頁為了留白而需要額外捲動。 */
+/* 第三列吃掉剩餘高度，不再靠 min-height 把頁面撐長。 */
+body.xianxia-theme #training-tab-content {
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
 body.xianxia-theme .core-minimal-card {
-  min-height: 500px;
-  padding: 12px 20px 20px;
-  border-radius: 24px;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  padding: 4px 18px 10px;
+  border-radius: 22px;
+  overflow: hidden;
 }
 
+body.xianxia-theme .core-minimal-center {
+  width: min(100%, 430px);
+  max-height: 100%;
+}
+
+/* 金丹尺寸隨視窗高度縮放，低螢幕也不需要下拉。 */
 body.xianxia-theme .golden-core-stage-v3 {
-  width: 230px;
-  height: 230px;
+  width: clamp(150px, 27vh, 220px);
+  height: clamp(150px, 27vh, 220px);
+  margin-bottom: 0;
 }
 
-body.xianxia-theme .golden-core-halo-v3.halo-a { inset: 24px; }
-body.xianxia-theme .golden-core-halo-v3.halo-b { inset: 44px; }
-body.xianxia-theme .golden-core-orbit-v3 { width: 164px; height: 68px; }
+body.xianxia-theme .golden-core-halo-v3.halo-a { inset: 11%; }
+body.xianxia-theme .golden-core-halo-v3.halo-b { inset: 20%; }
+body.xianxia-theme .golden-core-orbit-v3 {
+  width: 72%;
+  height: 30%;
+}
 body.xianxia-theme .golden-core-sphere-v3 {
-  width: 102px;
-  height: 102px;
-  font-size: 31px;
+  width: clamp(72px, 12vh, 98px);
+  height: clamp(72px, 12vh, 98px);
+  font-size: clamp(24px, 4vh, 30px);
 }
 body.xianxia-theme .golden-core-shadow-v3 {
-  bottom: 31px;
-  width: 90px;
+  bottom: 13%;
+  width: 40%;
 }
 
 body.xianxia-theme .core-minimal-name {
   margin-top: -2px;
-  font-size: 22px;
+  font-size: clamp(17px, 2.6vh, 21px);
+  line-height: 1.15;
 }
 
 body.xianxia-theme .core-minimal-grade {
-  margin: 5px 0 14px;
-  padding: 5px 11px;
+  margin: 4px 0 9px;
+  padding: 4px 10px;
+  font-size: 11px;
+}
+
+body.xianxia-theme .core-wash-row {
+  grid-template-columns: 1fr 42px;
+  gap: 7px;
 }
 
 body.xianxia-theme .core-wash-btn,
 body.xianxia-theme .core-equip-btn,
 body.xianxia-theme .core-info-btn {
-  min-height: 46px;
-  border-radius: 15px;
-}
-
-body.xianxia-theme .core-wash-row {
-  grid-template-columns: 1fr 46px;
-  gap: 8px;
+  min-height: 42px;
+  border-radius: 14px;
+  font-size: 12px;
 }
 
 body.xianxia-theme .core-info-btn {
-  width: 46px;
-  font-size: 16px;
+  width: 42px;
+  border-radius: 50%;
+  font-size: 15px;
 }
 
 body.xianxia-theme .core-equip-btn {
-  margin-top: 8px;
+  margin-top: 7px;
 }
 
-/* 背包沒有金丹，空畫面也不要撐得太高。 */
+/* 背包不是金丹收藏區，空畫面也固定在當前視窗內。 */
 body.xianxia-theme .training-v3-empty {
-  min-height: 220px;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
   border-radius: 20px;
+}
+
+/* 較矮的手機 / 小視窗再縮一級。 */
+@media (max-height: 740px) {
+  body.xianxia-theme .training-page-heading-v3 {
+    min-height: 34px;
+    margin-bottom: 2px;
+  }
+
+  body.xianxia-theme .training-page-heading-v3 h2 { font-size: 18px; }
+  body.xianxia-theme .training-realm-seal-v3 {
+    width: 34px;
+    height: 34px;
+    border-radius: 11px;
+    font-size: 9px;
+  }
+
+  body.xianxia-theme .training-subtabs-v3 { margin-bottom: 4px; }
+  body.xianxia-theme .training-subtab-v3 {
+    min-width: 64px;
+    min-height: 27px;
+    padding: 0 8px;
+    font-size: 9px;
+  }
+
+  body.xianxia-theme .golden-core-stage-v3 {
+    width: clamp(132px, 24vh, 178px);
+    height: clamp(132px, 24vh, 178px);
+  }
+
+  body.xianxia-theme .golden-core-sphere-v3 {
+    width: clamp(64px, 10vh, 82px);
+    height: clamp(64px, 10vh, 82px);
+  }
+
+  body.xianxia-theme .core-minimal-name { font-size: 17px; }
+  body.xianxia-theme .core-minimal-grade { margin-bottom: 6px; }
+  body.xianxia-theme .core-wash-btn,
+  body.xianxia-theme .core-equip-btn,
+  body.xianxia-theme .core-info-btn { min-height: 38px; }
+  body.xianxia-theme .core-wash-row { grid-template-columns: 1fr 38px; }
+  body.xianxia-theme .core-info-btn { width: 38px; }
+  body.xianxia-theme .core-equip-btn { margin-top: 5px; }
 }
 
 @media (max-width: 640px) {
   body.xianxia-theme .training-page-v3 {
-    padding-left: 12px !important;
-    padding-right: 12px !important;
-    padding-bottom: 92px;
+    width: 100%;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
   }
 
-  body.xianxia-theme .training-page-heading-v3 {
-    min-height: 42px;
-    margin-bottom: 4px;
+  body.xianxia-theme .training-subtabs-v3 {
+    margin-left: 0;
   }
-
-  body.xianxia-theme .training-page-heading-v3 h2 { font-size: 20px; }
-  body.xianxia-theme .training-realm-seal-v3 {
-    width: 39px;
-    height: 39px;
-    border-radius: 13px;
-    font-size: 11px;
-  }
-
-  body.xianxia-theme .training-subtabs-v3 { margin-bottom: 6px; }
-  body.xianxia-theme .training-subtab-v3 {
-    min-width: 70px;
-    min-height: 31px;
-    padding: 0 10px;
-    font-size: 10px;
-  }
-
-  body.xianxia-theme .core-minimal-card {
-    min-height: 470px;
-    padding: 6px 14px 16px;
-  }
-
-  body.xianxia-theme .golden-core-stage-v3 {
-    width: 212px;
-    height: 212px;
-  }
-  body.xianxia-theme .golden-core-orbit-v3 { width: 150px; height: 62px; }
-  body.xianxia-theme .golden-core-sphere-v3 { width: 94px; height: 94px; }
-  body.xianxia-theme .golden-core-shadow-v3 { bottom: 27px; }
 }
