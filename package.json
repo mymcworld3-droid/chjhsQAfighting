@@ -4,6 +4,7 @@
   "description": "Backend API for Gemini Quiz Game",
   "main": "server.js",
   "scripts": {
+    "test": "node --test tests/*.test.cjs",
     "start": "node server.js",
     "dev": "node server.js"
   },

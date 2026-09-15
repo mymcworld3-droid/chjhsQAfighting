@@ -7,6 +7,8 @@ import {
     arrayUnion, arrayRemove, writeBatch, startAfter 
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+import { applyCultivationReward, showCultivationFeedback } from './cultivation-rules.js';
+
 // Firebase Config
 const firebaseConfig = {
     apiKey: "AIzaSyDifdJmLTmwQATz__xUHSkXZ_xXOWyX-wU",
@@ -45,6 +47,7 @@ let allBankFiles = [];
 let currentSelectSlot = null;
 
 let isAnswering = false;             // 防止答題連點
+const answeredSoloQuizzes = new WeakSet();
 let timerInterval = null;
 // --- 對戰動畫控制 (新增) ---
 let lastProcessedLogId = null;       // 記錄最後一次播放的戰鬥日誌 ID
@@ -1060,6 +1063,16 @@ function updateUIStats() {
     
     document.getElementById('display-score').innerText = stats.totalScore;
 
+    // 面板與主題輪詢都使用同一份 currentUserData，避免短暫更新後跳回舊值。
+    window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', {
+        detail: {
+            uid: currentUserData.uid,
+            totalScore: Number(stats.totalScore) || 0,
+            currentStreak: stats.currentStreak,
+            stats
+        }
+    }));
+
     const storePts = document.getElementById('store-user-points');
     if(storePts) storePts.innerText = stats.gold || 0;
     
@@ -1785,6 +1798,11 @@ window.nextQuestion = () => {
 
 async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     if (!currentUserData) return;
+    const quiz = window.currentActiveQuiz;
+    if (quiz) {
+        if (answeredSoloQuizzes.has(quiz)) return;
+        answeredSoloQuizzes.add(quiz);
+    }
 
     const timeTaken = (Date.now() - (window.quizStartTime || Date.now())) / 1000;
     const isCorrect = userIdx === correctIdx;
@@ -1840,6 +1858,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
 
     let stats = currentUserData.stats;
     let scoreGain = 0;
+    const cultivationReward = applyCultivationReward(stats, isCorrect);
 
     stats.totalAnswered++;
     if (isCorrect) {
@@ -1848,7 +1867,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         if (stats.currentStreak > stats.bestStreak) stats.bestStreak = stats.currentStreak;
         
         scoreGain = 20; // 無限模式獎勵
-        fbTitle.innerHTML += ` <span class="text-yellow-400 text-sm ml-2 border border-yellow-500 rounded px-1">+${scoreGain}💰</span>`;
+        fbTitle.innerHTML += ` <span class="text-yellow-400 text-sm ml-2 border border-yellow-500 rounded px-1">+${scoreGain}💰 · +${cultivationReward.gain} 修為</span>`;
     } else {
         stats.currentStreak = 0; 
     }
@@ -1875,8 +1894,11 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     const newRank = calculateRankFromScore(stats.totalScore || 0);
     if (newRank > stats.rankLevel) stats.rankLevel = newRank;
 
+    updateUIStats();
+
     try {
-        const p1 = updateDoc(doc(db, "users", auth.currentUser.uid), { stats: stats });
+        const p1 = updateDoc(doc(db, "users", auth.currentUser.uid), { stats: stats })
+            .then(() => showCultivationFeedback(cultivationReward, isCorrect));
         const p2 = addDoc(collection(db, "exam_logs"), { 
             uid: auth.currentUser.uid, 
             email: auth.currentUser.email, 
@@ -1894,7 +1916,6 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         await Promise.all([p1, p2]);
     } catch (e) { console.error("Firebase Error", e); }
     
-    updateUIStats(); 
     fillBuffer();
 }
 
