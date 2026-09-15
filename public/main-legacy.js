@@ -2070,10 +2070,10 @@ window.submitReport = async () => {
             titleEl.className = "text-lg font-bold mb-2 text-green-400";
             msgEl.innerText = `AI 判定：${result.reason}\n\n獲得補償 20 金幣，題目已跳過。`;
 
-            // 發放獎勵
+            // 發放獎勵 (改發金幣)
             if (currentUserData && currentUserData.stats) {
-                currentUserData.stats.totalScore += 20;
-                await updateDoc(doc(db, "users", auth.currentUser.uid), { "stats.totalScore": currentUserData.stats.totalScore });
+                currentUserData.stats.gold = (currentUserData.stats.gold || 0) + 20;
+                await updateDoc(doc(db, "users", auth.currentUser.uid), { "stats.gold": currentUserData.stats.gold });
                 updateUIStats();
             }
 
