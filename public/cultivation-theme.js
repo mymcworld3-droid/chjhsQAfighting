@@ -105,9 +105,13 @@
     style.textContent = `
       :root { --xq-gold:#e9c46a; --xq-purple:#9b8cff; }
       body { background: radial-gradient(circle at 50% 15%, rgba(74,68,122,.28), transparent 34%), #080b16 !important; }
+      
+      /* 🔥 刪除 (隱藏) 舊版首頁最上方的 Current Rank 欄位 */
+      #page-home .pb-4 > .glass-panel:first-child { display: none !important; }
+      
       .xiuxian-panel { margin:0 auto 16px; padding:18px; border:1px solid rgba(233,196,106,.25); border-radius:22px; background:linear-gradient(145deg,rgba(24,27,48,.96),rgba(12,15,29,.96)); box-shadow:0 12px 40px rgba(0,0,0,.25), inset 0 1px rgba(255,255,255,.05); }
       .xiuxian-kicker { color:var(--xq-gold); font-size:10px; letter-spacing:.28em; font-weight:900; }
-      .xiuxian-realm { font-size:30px; font-weight:900; color:#fff; margin:4px 0 0; text-shadow:0 0 18px rgba(233,196,106,.28); }
+      .xiuxian-realm { font-size:28px; font-weight:900; color:#fff; margin:0; text-shadow:0 0 18px rgba(233,196,106,.28); line-height: 1.1; }
       .xiuxian-sub { color:#aab0c5; font-size:11px; margin-top:2px; }
       .xiuxian-bar { height:9px; margin-top:12px; border-radius:999px; overflow:hidden; background:#090c18; border:1px solid rgba(255,255,255,.08); }
       .xiuxian-bar>div { height:100%; border-radius:inherit; background:linear-gradient(90deg,#8b5cf6,#e9c46a); box-shadow:0 0 14px rgba(233,196,106,.35); transition:width .5s ease; }
@@ -123,7 +127,6 @@
     document.head.appendChild(style);
   }
 
-  // 🔥 修正 1：利用 querySelectorAll 將符合的標籤改名，並拔除原版追蹤標記，防止閃爍
   function text(selector, value) { 
     document.querySelectorAll(selector).forEach(el => {
       if (el.textContent !== value) {
@@ -146,12 +149,16 @@
     panel.id = 'xiuxian-panel'; 
     panel.className = 'xiuxian-panel';
     
+    // 🔥 加入了頭像容器 xiuxian-avatar-slot
     panel.innerHTML = `
       <div class="xiuxian-kicker">仙途修行 · Cultivation Path</div>
-      <div class="xiuxian-row" style="align-items:flex-end">
-        <div>
-          <div id="xiuxian-realm" class="xiuxian-realm">🌱 凡人</div>
-          <div id="xiuxian-sub" class="xiuxian-sub">初入仙途</div>
+      <div class="xiuxian-row" style="align-items:center; margin-top:12px;">
+        <div style="display:flex; gap:12px; align-items:center;">
+          <div id="xiuxian-avatar-slot" style="transform: scale(0.9); transform-origin: left center;"></div>
+          <div>
+            <div id="xiuxian-realm" class="xiuxian-realm">🌱 凡人</div>
+            <div id="xiuxian-sub" class="xiuxian-sub">初入仙途</div>
+          </div>
         </div>
         <div style="text-align:right">
           <div class="xiuxian-label">當前修為</div>
@@ -204,11 +211,24 @@
     const realm = realmFor(value);
     const next = nextRealm(value);
     
+    // 🔥 將原始生成的頭像移動到仙途修行的面板裡
+    const avatarContainer = document.getElementById('home-avatar-container');
+    const avatarSlot = document.getElementById('xiuxian-avatar-slot');
+    if (avatarContainer && avatarSlot && avatarContainer.parentNode !== avatarSlot) {
+        // 拔除舊版用來將頭像定位在畫面左上角的 class
+        avatarContainer.className = '';
+        avatarSlot.appendChild(avatarContainer);
+    }
+
     const rank = document.getElementById('display-rank'); 
     const targetRank = `${realm.emoji} ${realm.name} ${realm.sub}`;
     if (rank && rank.textContent !== targetRank) {
       rank.textContent = targetRank;
     }
+    
+    // 更新仙途修行的仙位名稱
+    const realmEl = document.getElementById('xiuxian-realm');
+    if (realmEl) realmEl.textContent = `${realm.emoji} ${realm.name}`;
     
     const scoreEl = document.getElementById('xiuxian-score'); 
     if (scoreEl) scoreEl.textContent = `${value.toLocaleString()} 修為`;
@@ -238,7 +258,6 @@
     render(); 
     setInterval(render, 1200); 
 
-    // 🔥 修正 2：針對段位名稱 (display-rank) 設立即時監聽，一旦原版系統偷改，我們毫秒內改回來
     const rankEl = document.getElementById('display-rank');
     if (rankEl) {
       new MutationObserver(() => {
@@ -251,7 +270,6 @@
       }).observe(rankEl, { childList: true, characterData: true, subtree: true });
     }
 
-    // 🔥 修正 3：攔截全域語言切換與文字更新，讓原版系統更新完的下一瞬間立刻套用修仙主題
     if (typeof window.updateTexts === 'function') {
       const originalUpdateTexts = window.updateTexts;
       window.updateTexts = function() {
