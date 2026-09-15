@@ -6,7 +6,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
 (function () {
   'use strict';
 
-  const GOLDEN_CORE_SCORE = 150;
+  const GOLDEN_CORE_SCORE = 300;
   const WASH_COST = 100;
   const STATE_KEY = 'xiuxian_training_state_v4';
   const LEGACY_KEYS = [
@@ -16,7 +16,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   ];
   const CSS_HREF = 'cultivation-training-v3.css';
   const REMOTE_FIELD = 'cultivationTraining';
-  const REALM_THRESHOLDS = [200, 300, 450, 650, 900, 1200, 1600];
+  const REALM_THRESHOLDS = [500, 800, 1200, 1800, 2600, 3600, 5000];
 
   const GRADE_WEIGHTS = [
     { grade: 9, chance: 25 },
@@ -198,7 +198,6 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     const base = defaultState();
     if (!raw || typeof raw !== 'object') return base;
 
-    // 舊版可能有 equipped / preview / inventory 多顆金丹；升級後只保留一顆。
     const chosen = normalizeCore(raw.core || raw.preview || raw.equipped, base.core);
     let equipped = true;
     if (typeof raw.equipped === 'boolean') equipped = raw.equipped;
@@ -211,7 +210,6 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       core: chosen,
       equipped,
       counters: { ...base.counters, ...(raw.counters || {}) },
-      // 背包只保留非金丹物品；舊版金丹 inventory 全部丟棄。
       items: Array.isArray(raw.items) ? raw.items : []
     };
   }
@@ -454,7 +452,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
         <div><span>溫馨提醒</span><p>${type.warning}</p></div>
         <div><span>備註</span><p>${type.note}</p></div>
       </div>
-    `);
+    `;
   }
 
   function bindCoreActions() {
@@ -492,7 +490,6 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
 
     try {
       const fresh = randomCore();
-      // 洗髓是直接重塑唯一的一顆金丹，不生成第二顆。
       state.core = fresh;
       state.equipped = false;
       userData.stats.gold = stones - WASH_COST;
@@ -548,7 +545,6 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     document.body.classList.remove('cultivation-training-unlocked');
   }
 
-  // 只有唯一金丹被裝配時，其特性才會進入答題結算。
   window.resolveGoldenCoreCultivationReward = function ({ stats, isCorrect }) {
     if (!isUnlocked() || !state.equipped || !state.core) {
       return { bonusGain: 0, message: '' };
