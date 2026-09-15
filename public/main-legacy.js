@@ -3006,21 +3006,24 @@ async function resolveRoundLogic(roomId, room) {
         });
     });
 }
-// Battle victory reward (card-free).
+// Battle victory reward
 async function processBattleWin(loserData, msgEl) {
     try {
         const userRef = doc(db, "users", auth.currentUser.uid);
-        currentUserData.stats.totalScore += 500;
+        currentUserData.stats.gold = (currentUserData.stats.gold || 0) + 500;
+        currentUserData.stats.totalScore += 10; // 勝出獲得 10 點修為
         currentUserData.stats.totalCorrect += 5;
-        const currentNetScore = getNetScore(currentUserData.stats);
-        const newRank = calculateRankFromScore(currentNetScore);
+        
+        const currentScore = currentUserData.stats.totalScore || 0;
+        const newRank = calculateRankFromScore(currentScore);
         await updateDoc(userRef, {
             "stats.totalScore": currentUserData.stats.totalScore,
+            "stats.gold": currentUserData.stats.gold,
             "stats.totalCorrect": currentUserData.stats.totalCorrect,
             "stats.rankLevel": newRank
         });
         currentUserData.stats.rankLevel = newRank;
-        msgEl.innerHTML = `獲得獎勵：<br>🏆 500 積分`;
+        msgEl.innerHTML = `獲得獎勵：<br>💰 500 金幣<br>✨ 10 修為`;
         updateUIStats();
     } catch (e) {
         console.error("Reward failed", e);
