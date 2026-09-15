@@ -11,6 +11,7 @@ import './cultivation-core-equip-warning.js';
 import './cultivation-combat-stats.js';
 import './cultivation-status-panel.js';
 import './realm-breakthrough-feedback.js';
+import './cultivation-rank-sync.js';
 import './newbie-tutorial.js';
 
 // 恢復原本的科幻／電腦字體。
