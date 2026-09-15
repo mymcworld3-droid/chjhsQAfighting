@@ -68,11 +68,11 @@ let currentLang = localStorage.getItem('app_lang') || 'zh-TW';
 
 const translations = {
     'zh-TW': {
-        app_title: "AI 每日升階答題戰",
-        app_name: "升階答題戰",
+        app_title: "青雲問道 · 以學入道",
+        app_name: "青雲問道",
         not_logged_in: "未登入",
-        welcome_title: "歡迎挑戰",
-        welcome_desc: "AI 出題 x 真人對戰 x 段位系統",
+        welcome_title: "一念起，入仙途",
+        welcome_desc: "以知識為靈根，以每一題為修行。",
         btn_login_google: "使用 Google 登入",
         
         // Onboarding
@@ -205,11 +205,11 @@ const translations = {
         analysis_desc: "基於近期答題表現分析 (正確率)"
     },
     'en': {
-        app_title: "Rank-Up Quiz Battle",
-        app_name: "Quiz Battle",
+        app_title: "Qingyun · The Path of Learning",
+        app_name: "Qingyun",
         not_logged_in: "Guest",
-        welcome_title: "Welcome Challenger",
-        welcome_desc: "AI Quizzes x PvP Battles x Ranking System",
+        welcome_title: "Begin Your Journey",
+        welcome_desc: "Cultivate knowledge, one question at a time.",
         btn_login_google: "Login with Google",
         
         ob_title: "👋 Hi there!",
