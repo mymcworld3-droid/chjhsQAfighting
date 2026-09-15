@@ -1066,17 +1066,26 @@ function updateUIStats() {
             
         }
     }
+    // (保留原本這行，因為修仙主題面板需要讀取 display-score)
     document.getElementById('display-score').innerText = stats.totalScore;
 
+    // 🔥 將商店與卡牌頁面的積分，改為綁定 stats.gold
+    const storePts = document.getElementById('store-user-points');
+    if(storePts) storePts.innerText = stats.gold || 0;
+    
     const cardPts = document.getElementById('cards-user-points');
-    if(cardPts) cardPts.innerText = stats.totalScore;
+    if(cardPts) cardPts.innerText = stats.gold || 0;
+
     document.getElementById('display-streak').innerText = stats.currentStreak;
     document.getElementById('display-best-streak').innerText = stats.bestStreak;
     
     const accuracy = stats.totalAnswered > 0 ? ((stats.totalCorrect / stats.totalAnswered) * 100).toFixed(1) : "0.0";
     document.getElementById('display-accuracy').innerText = accuracy + "%";
     
-    setTimeout(() => { document.getElementById('progress-bar').style.width = `${progressPercent}%`; }, 100);
+    setTimeout(() => { 
+        const pb = document.getElementById('progress-bar');
+        if (pb) pb.style.width = `${progressPercent}%`; 
+    }, 100);
 }
 
 function buildPathTree(paths) {
