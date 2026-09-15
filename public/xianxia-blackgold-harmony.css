@@ -197,3 +197,43 @@ body.xianxia-theme #page-social button {
 body.xianxia-theme #page-social button:not([class*="from-"]):hover {
   border-color: rgba(216,177,93,.48) !important;
 }
+
+/* 圓角加強：黑金介面統一改成更柔和的大圓角。 */
+body.xianxia-theme .glass-panel,
+body.xianxia-theme .xiuxian-panel,
+body.xianxia-theme .stat-card,
+body.xianxia-theme :is(.modal-content, .shop-card, .item-card, .rank-card, .history-card, .achievement-card) {
+  border-radius: 20px !important;
+}
+
+body.xianxia-theme :is(.btn-cyber-primary, .btn-cyber-accent, .btn-cyber-ghost, .xiuxian-btn),
+body.xianxia-theme .home-actions > button,
+body.xianxia-theme #options-container > button,
+body.xianxia-theme #nav-grid button {
+  border-radius: 16px !important;
+}
+
+body.xianxia-theme :is(.input-cyber, input:not([type="checkbox"]):not([type="radio"]), select, textarea) {
+  border-radius: 14px !important;
+}
+
+body.xianxia-theme #quiz-container > .glass-panel:first-child,
+body.xianxia-theme #percentile-display,
+body.xianxia-theme .xiuxian-toast {
+  border-radius: 18px !important;
+}
+
+body.xianxia-theme #page-social > div,
+body.xianxia-theme #page-social [class*="rounded-lg"],
+body.xianxia-theme #page-social [class*="rounded-xl"],
+body.xianxia-theme #page-social [class*="rounded-2xl"],
+body.xianxia-theme #page-social [class*="rounded-3xl"] {
+  border-radius: 18px !important;
+}
+
+/* 保留圓形圖示、頭像與膠囊元件原本的完整圓形。 */
+body.xianxia-theme .rounded-full,
+body.xianxia-theme .glass-capsule,
+body.xianxia-theme [class*="rounded-full"] {
+  border-radius: 9999px !important;
+}
