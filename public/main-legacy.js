@@ -57,151 +57,6 @@ let soloSession = {
     history: [] // 紀錄這 10 題的詳細狀況
 };
 // ==========================================
-// 0. 卡牌資料庫與稀有度設定
-// ==========================================
-
-const RARITY_CONFIG = {
-    gray:   { name: "普通", color: "text-gray-400", border: "border-gray-500", prob: 0.60 },    // 60% (原 50%)
-    blue:   { name: "稀有", color: "text-blue-400", border: "border-blue-500", prob: 0.30 },    // 30% (維持)
-    purple: { name: "罕見", color: "text-purple-400", border: "border-purple-500", prob: 0.08 }, // 8%  (原 15%)
-    red:    { name: "史詩", color: "text-red-500", border: "border-red-500", prob: 0.015 },     // 1.5% (原 4%)
-    gold:   { name: "神話", color: "text-yellow-400", border: "border-yellow-400 shadow-[0_0_15px_rgba(250,204,21,0.6)]", prob: 0.004 }, // 0.4% (原 0.8%)
-    rainbow:{ name: "傳奇", color: "text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-green-500 to-blue-500 animate-pulse", border: "border-white shadow-[0_0_20px_rgba(255,255,255,0.8)]", prob: 0.001 } // 0.1% (原 0.2%)
-};
-
-// main.js - 請放在檔案最上方附近
-
-// 這是前端用的題型架構 (需與後端一致)
-// 即使還沒答題，雷達圖也能依據此架構顯示正確的軸向
-const SUBJECT_SCHEMA_FRONTEND = {
-    "國文": ["字形字音字義", "詞語與成語", "修辭與句法", "國學與文化常識", "白話文閱讀", "文言文閱讀", "跨文本比較", "圖表與情境閱讀"],
-    "英文": ["詞彙與字彙", "綜合測驗(Cloze)", "文意選填(Matching)", "篇章結構", "閱讀測驗"],
-    "數學": ["基礎計算", "應用素養", "幾何圖形", "代數與函數", "證明題", "統計與機率"],
-    "公民": ["法律應用", "經濟圖表", "政治體制", "時事解析"],
-    "歷史": ["史料解析", "時空定位", "因果推導", "多重敘事"],
-    "地理": ["地形判讀", "區域分析", "GIS應用", "環境議題"],
-    "物理": ["運動與力學", "定性分析", "生活應用"],
-    "化學": ["混合單元", "數據判讀", "實務能源"],
-    "生物": ["實驗探究", "情境閱讀", "微觀與宏觀"]
-};
-
-// ==========================================
-// 0. 卡牌資料庫 (數值平衡調整版)
-// ==========================================
-// 特性說明：
-// [堅韌]: 受到傷害減少 15 點 (全隊生效)
-// [英勇]: 己方造成傷害增加 10 點 (全隊生效)
-// [共生]: 攻擊成功後，回復己方全體 20 點生命 (全隊生效)
-
-const CARD_DATABASE = {
-    // --- 普通 (Gray) ---
-    "c001": { name: "史萊姆", hp: 60, atk: 15, rarity: "gray", trait: "黏液", skill: "撞擊", skillDmg: 5 },
-    "c002": { name: "哥布林", hp: 70, atk: 20, rarity: "gray", trait: "貪婪", skill: "偷襲", skillDmg: 8 },
-    
-    // --- 稀有 (Blue) ---
-    "c011": { name: "冰霜狼", hp: 90, atk: 30, rarity: "blue", trait: "迅捷", skill: "冰咬", skillDmg: 15 },
-    "c012": { name: "鐵甲衛兵", hp: 130, atk: 20, rarity: "blue", trait: "堅韌", skill: "盾防", skillDmg: 5 }, // 提早獲得防禦特性
-
-    // --- 罕見 (Purple) ---
-    "c021": { name: "暗影刺客", hp: 110, atk: 60, rarity: "purple", trait: "隱匿", skill: "背刺", skillDmg: 35 },
-    "c022": { name: "元素法師", hp: 120, atk: 55, rarity: "purple", trait: "魔力", skill: "火球", skillDmg: 30 },
-
-    // --- 史詩 (Red) [平衡調整] ---
-    "c031": { name: "火焰幼龍", hp: 160, atk: 60, rarity: "red", trait: "英勇", skill: "龍息", skillDmg: 50 },
-    "c032": { name: "吸血鬼伯爵", hp: 180, atk: 50, rarity: "red", trait: "共生", skill: "血爆", skillDmg: 45 },
-
-    // --- 神話 (Gold) [平衡調整] ---
-    "c041": { name: "光之守護者", hp: 220, atk: 65, rarity: "gold", trait: "堅韌", skill: "審判", skillDmg: 30 },
-
-    // --- 傳奇 (Rainbow) [大幅平衡] ---
-    // 修正：原本 HP 500 / Skill 999 太過破壞平衡，調整為強大但可被擊敗的數值
-    "c051": { name: "虛空魔神", hp: 250, atk: 70, rarity: "rainbow", trait: "英勇", skill: "黑洞", skillDmg: 55 }
-};
-
-// ... 在 CARD_DATABASE 定義之後 ...
-
-const TRAIT_DESCRIPTIONS = {
-    "堅韌": "全隊減傷15",
-    "英勇": "全隊增傷10",
-    "共生": "命中全隊回20",
-    "黏液": "暫無效果",
-    "貪婪": "暫無效果",
-    "迅捷": "暫無效果",
-    "隱匿": "暫無效果",
-    "魔力": "暫無效果",
-    "龍息": "暫無效果"
-};
-
-const getBattleCardData = (cid) => {
-    if (!cid || !CARD_DATABASE[cid]) return null;
-    const base = CARD_DATABASE[cid];
-    const lvl = (currentUserData.cardLevels && currentUserData.cardLevels[cid]) || 0;
-    return {
-        ...base,
-        id: cid,
-        atk: base.atk + (lvl * 5), // 🔥 這裡加入強化數值
-        currentHp: base.hp // HP 目前沒設強化，若有需要可改 base.hp + (lvl * 10)
-    };
-};
-
-// ==========================================
-// 🎨 卡片圖片管理系統
-// ==========================================
-// 請確保 public/card_picture 資料夾下有對應圖片
-const getCardImageUrl = (cardId) => {
-    // 定義所有卡片的圖片檔名映射
-    const imageMap = {
-        // --- 普通 (Gray) ---
-        "c001": "slime.jpeg",           // 源生軟泥
-        "c002": "goblin.jpeg",          // 荒原掠奪者
-        
-        // --- 稀有 (Blue) ---
-        "c011": "frost_wolf.jpeg",      // 霜寒恐狼
-        "c012": "iron_guard.jpeg",      // 符文重甲兵
-
-        // --- 罕見 (Purple) ---
-        "c021": "shadow_assassin.jpeg", // 幽影之刃
-        "c022": "fire_mage.jpeg",       // 爆裂術士
-
-        // --- 史詩 (Red) ---
-        "c031": "flame_dragon.jpeg",    // 熾炎翼龍
-        "c032": "vampire.jpeg",         // 血色親王
-
-        // --- 神話 (Gold) ---
-        "c041": "guardian.jpeg",        // 輝耀熾天使
-
-        // --- 傳奇 (Rainbow) ---
-        "c051": "void.jpeg"             // 虛空魔神
-    };
-
-    if (imageMap[cardId]) {
-        // 加入時間戳記 v=2 (更新版本號) 避免瀏覽器快取舊圖
-        return `/card_picture/${imageMap[cardId]}?v=2`;
-    }
-    return null; // 沒有圖片則回傳 null (顯示 Emoji)
-};
-// 通用的圖片/Emoji 顯示 HTML 生成器
-const getCardVisualHtml = (cardId, rarity, sizeClass = "text-3xl") => {
-    const imgUrl = getCardImageUrl(cardId);
-    const defaultEmoji = (rarity === 'rainbow' || rarity === 'gold') ? '🐲' : (rarity === 'red' ? '👹' : '⚔️');
-    
-    if (imgUrl) {
-        return `
-            <img src="${imgUrl}" class="absolute inset-0 w-full h-full object-cover z-0" 
-                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-            <div class="${sizeClass} hidden w-full h-full items-center justify-center z-0">
-                ${defaultEmoji}
-            </div>
-        `;
-    } else {
-        return `
-            <div class="${sizeClass} w-full h-full flex items-center justify-center z-0">
-                ${defaultEmoji}
-            </div>
-        `;
-    }
-};
-// ==========================================
 // 🌍 國際化 (i18n) 設定
 // ==========================================
 let currentLang = localStorage.getItem('app_lang') || 'zh-TW';
@@ -268,7 +123,6 @@ const translations = {
         msg_no_funds: "積分不足！",
         // 加在 translations['zh-TW'] 裡面
         admin_inventory_title: "📦 現有商品庫存",
-        tab_cards: "卡牌", // 導航欄用到
 
         // Battle
         battle_searching: "正在搜尋對手...",
@@ -323,8 +177,6 @@ const translations = {
         btn_save_product: "上架商品",
         admin_inventory_title: "📦 現有商品庫存",
         tab_cards: "卡牌",
-        btn_draw: "召喚 (500分)",
-        msg_no_cards: "你還沒有卡牌，快去召喚！",
 
         // Nav
         nav_home: "首頁",
@@ -450,9 +302,6 @@ const translations = {
         admin_select_img: "Select Image:",
         btn_save_product: "Save Product",
         admin_inventory_title: "📦 Current Inventory",
-        tab_cards: "Cards",
-        btn_draw: "Summon (500pts)",
-        msg_no_cards: "No cards yet. Summon now!",
 
         nav_home: "Home",
         nav_quiz: "Quiz",
@@ -699,14 +548,7 @@ onAuthStateChanged(auth, async (user) => {
                 // 資料結構補全 (防呆)
                 if (!currentUserData.inventory) currentUserData.inventory = [];
                 if (!currentUserData.equipped) currentUserData.equipped = { frame: '', avatar: '' };
-                if (!currentUserData.friends) currentUserData.friends = []; 
-                if (!currentUserData.cards || currentUserData.cards.length === 0) {
-                    currentUserData.cards = ["c001", "c002"];
-                    currentUserData.deck = { main: "c001", sub: "c002" };
-                    updateDoc(userRef, { 
-                        cards: ["c001", "c002"],
-                        deck: { main: "c001", sub: "c002" }
-                    });
+                if (!currentUserData.friends) currentUserData.friends = [];);
                 }
                 if (!currentUserData.friendCode) {
                     const code = Math.random().toString(36).substring(2, 8).toUpperCase();
@@ -719,9 +561,7 @@ onAuthStateChanged(auth, async (user) => {
                 currentUserData = {
                     uid: user.uid, displayName: user.displayName, email: user.email,
                     profile: { educationLevel: "", strongSubjects: "", weakSubjects: "" },
-                    inventory: [], 
-                    cards: ["c001", "c002"], 
-                    deck: { main: "c001", sub: "c002" },
+                    inventory: [],
                     equipped: { frame: '', avatar: '' }, 
                     stats: { 
                         rankLevel: 0, currentStars: 0, totalScore: 0,
@@ -743,8 +583,6 @@ onAuthStateChanged(auth, async (user) => {
             updateSettingsInputs();
             checkAdminRole(currentUserData.isAdmin);
             updateUIStats();
-            updateDeckDisplay();
-            updateHomeBestCard();
 
             // 根據資料完整度導向
             if (!currentUserData.profile.educationLevel || currentUserData.profile.educationLevel === "") {
@@ -777,288 +615,6 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-window.loadMyCards = () => {
-    const list = document.getElementById('my-card-list');
-    if(!list) return;
-    list.innerHTML = "";
-    
-    // 更新上方的圖鑑數量計數器
-    const countEl = document.getElementById('storage-count');
-    
-    if(!currentUserData.cards || currentUserData.cards.length === 0) {
-        if (countEl) countEl.innerText = "0 Cards";
-        list.innerHTML = `<div class="col-span-full text-center text-gray-500 py-10 bg-slate-900/50 rounded-xl border border-dashed border-slate-700 mt-2">${t('msg_no_cards')}</div>`;
-        return;
-    }
-
-    const levels = currentUserData.cardLevels || {};
-    const uniqueCards = [...new Set(currentUserData.cards)];
-    
-    if (countEl) countEl.innerText = `${uniqueCards.length} Cards`;
-
-    uniqueCards.sort((a, b) => {
-        const cardA = CARD_DATABASE[a];
-        const cardB = CARD_DATABASE[b];
-        const rarityOrder = ["rainbow", "gold", "red", "purple", "blue", "gray"];
-        const rDiff = rarityOrder.indexOf(cardA.rarity) - rarityOrder.indexOf(cardB.rarity);
-        if (rDiff !== 0) return rDiff;
-        return (levels[b] || 0) - (levels[a] || 0);
-    });
-
-    uniqueCards.forEach(cardId => {
-        const card = CARD_DATABASE[cardId];
-        if(!card) return;
-        
-        const lvl = levels[cardId] || 0;
-        const finalAtk = card.atk + (lvl * 5);
-        const rConfig = RARITY_CONFIG[card.rarity];
-        const traitDesc = TRAIT_DESCRIPTIONS[card.trait] || "";
-
-        const isMain = currentUserData.deck && currentUserData.deck.main === cardId;
-        const isSub = currentUserData.deck && currentUserData.deck.sub === cardId;
-        let badge = "";
-        if(isMain) badge = `<div class="absolute top-0 right-0 bg-yellow-600 text-[8px] px-1 text-white rounded-bl">Main</div>`;
-        else if(isSub) badge = `<div class="absolute top-0 right-0 bg-gray-600 text-[8px] px-1 text-white rounded-bl">Sub</div>`;
-
-        let stars = "";
-        for(let i=0; i<lvl; i++) stars += "★";
-
-        const div = document.createElement('div');
-        // 🔥 移除了 cursor-pointer，讓它變成純展示的樣式
-        div.className = `bg-slate-800 p-1.5 rounded-lg border-2 ${rConfig.border} relative overflow-hidden group hover:scale-[1.02] transition-transform aspect-[2/3] flex flex-col justify-between shadow-md`;
-        
-        // 🔥 刪除了 div.onclick 的事件綁定，點擊就不會再跳出選擇視窗了
-
-        // [修正] 移除多餘的巢狀 div，確保圖片容器能撐開高度
-        div.innerHTML = `
-            <div class="flex justify-between items-start z-10">
-                <span class="font-bold ${rConfig.color} text-[10px] truncate pr-1 drop-shadow-md">${card.name}</span>
-                <span class="text-[9px] text-yellow-500 font-mono tracking-tighter bg-black/30 px-1 rounded">${stars}</span>
-            </div>
-            
-            <div class="flex-1 w-full relative overflow-hidden rounded my-1 bg-black/20">
-                 ${getCardVisualHtml(cardId, card.rarity, "text-4xl")}
-                 <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none z-0"></div>
-            </div>
-
-            <div class="z-10 bg-black/20 p-1.5 rounded backdrop-blur-sm">
-                <div class="flex justify-between items-end mb-0.5">
-                    <div class="text-[9px] text-gray-400">HP ${card.hp}</div>
-                    <div class="text-sm font-bold text-red-400 font-mono leading-none">⚔️${finalAtk}</div>
-                </div>
-                <div class="pt-0.5 border-t border-white/10 text-[8px] ${rConfig.color} truncate">
-                    ⚡ ${card.skill}
-                </div>
-                <div class="text-[8px] text-gray-300 truncate opacity-80">
-                    ✨ ${card.trait}: ${traitDesc}
-                </div>
-            </div>
-            ${badge}
-        `;
-        list.appendChild(div);
-    });
-};
-
-// [新增] 開啟選擇卡牌 Modal
-window.selectCardForSlot = (slot) => {
-    currentSelectSlot = slot;
-    document.getElementById('card-selector-modal').classList.remove('hidden');
-    renderModalCards();
-};
-
-// [修改] 渲染 Modal 中的卡牌列表 (顯示特性)
-function renderModalCards() {
-    const list = document.getElementById('modal-card-list'); // 確保 HTML ID 正確
-    if(!list) return;
-    list.innerHTML = "";
-    
-    const myCards = [...new Set(currentUserData.cards || [])]; 
-    const levels = currentUserData.cardLevels || {};
-
-    myCards.sort((a, b) => {
-        const cA = CARD_DATABASE[a];
-        const cB = CARD_DATABASE[b];
-        const rarityOrder = ["rainbow", "gold", "red", "purple", "blue", "gray"];
-        return rarityOrder.indexOf(cA.rarity) - rarityOrder.indexOf(cB.rarity);
-    });
-
-    myCards.forEach(cardId => {
-        const card = CARD_DATABASE[cardId];
-        if(!card) return;
-        
-        const lvl = levels[cardId] || 0;
-        const finalAtk = card.atk + (lvl * 5);
-        const rConfig = RARITY_CONFIG[card.rarity];
-        const traitDesc = TRAIT_DESCRIPTIONS[card.trait] || "";
-
-        const div = document.createElement('div');
-        div.className = `cursor-pointer aspect-[2/3] bg-slate-800 p-2 rounded-lg border-2 ${rConfig.border} hover:scale-105 transition-transform flex flex-col justify-between relative overflow-hidden`;
-        
-        let equipLabel = "";
-        if(currentUserData.deck.main === cardId) equipLabel = "<span class='absolute top-0 right-0 bg-yellow-600 text-[9px] px-1 text-white'>Main</span>";
-        else if(currentUserData.deck.sub === cardId) equipLabel = "<span class='absolute top-0 right-0 bg-gray-600 text-[9px] px-1 text-white'>Sub</span>";
-
-        div.innerHTML = `
-            ${equipLabel}
-            <div class="font-bold ${rConfig.color} text-xs truncate">${card.name}</div>
-            <div class="flex-1 flex items-center justify-center relative overflow-hidden my-1 rounded">
-                 ${getCardVisualHtml(cardId, card.rarity, "text-3xl")}
-            </div>
-            <div class="bg-black/30 rounded p-1">
-                <div class="flex justify-between text-[9px] text-gray-300">
-                    <span>HP:${card.hp}</span>
-                    <span class="text-red-300 font-bold">ATK:${finalAtk}</span>
-                </div>
-                <div class="text-[8px] text-gray-400 mt-0.5 truncate border-t border-white/10 pt-0.5">
-                    ✨ ${card.trait}: ${traitDesc}
-                </div>
-            </div>
-        `;
-        div.onclick = () => setDeckCard(cardId);
-        list.appendChild(div);
-    });
-}
-
-// [新增] 設定牌組 (寫入資料庫)
-async function setDeckCard(cardId) {
-    if (!currentSelectSlot) return;
-    
-    if (!currentUserData.deck) currentUserData.deck = { main: "", sub: "" };
-    
-    // 防呆：主副卡若設為同一張，則互換或清空
-    if (currentSelectSlot === 'main' && currentUserData.deck.sub === cardId) currentUserData.deck.sub = "";
-    if (currentSelectSlot === 'sub' && currentUserData.deck.main === cardId) currentUserData.deck.main = "";
-
-    currentUserData.deck[currentSelectSlot] = cardId;
-    
-    try {
-        await updateDoc(doc(db, "users", auth.currentUser.uid), { "deck": currentUserData.deck });
-        document.getElementById('card-selector-modal').classList.add('hidden');
-        updateDeckDisplay();
-        loadMyCards(); // 刷新列表標記
-    } catch(e) {
-        console.error(e);
-        alert("設定失敗");
-    }
-}
-
-// ==========================================
-// 核心：抽卡與合成系統
-// ==========================================
-
-// 根據權重隨機抽取一張卡
-function pickRandomCardId(minRarity = null) {
-    const rand = Math.random();
-    let cumulative = 0;
-    let targetRarity = "gray"; // 預設
-
-    // 定義稀有度順序 (低到高)
-    const order = ["gray", "blue", "purple", "red", "gold", "rainbow"];
-    const minIndex = minRarity ? order.indexOf(minRarity) : 0;
-
-    // 計算符合保底條件的總機率 (Normalization)
-    let validPoolProb = 0;
-    if (minRarity) {
-        for (let i = minIndex; i < order.length; i++) {
-            validPoolProb += RARITY_CONFIG[order[i]].prob;
-        }
-    }
-
-    // 擲骰子
-    for (let i = 0; i < order.length; i++) {
-        const r = order[i];
-        // 如果有保底要求，跳過低階卡
-        if (minRarity && i < minIndex) continue;
-
-        let prob = RARITY_CONFIG[r].prob;
-        
-        // 如果有保底，需重新分配機率 (讓剩下高等級的機率加總為 1)
-        if (minRarity) prob = prob / validPoolProb;
-
-        cumulative += prob;
-        if (rand <= cumulative) {
-            targetRarity = r;
-            break;
-        }
-    }
-
-    // 從該稀有度中隨機選一張
-    const pool = Object.keys(CARD_DATABASE).filter(id => CARD_DATABASE[id].rarity === targetRarity);
-    if (pool.length === 0) return "c001"; // Fallback
-    return pool[Math.floor(Math.random() * pool.length)];
-}
-
-// 處理卡牌獲取 (合成/返還邏輯)
-async function processCardAcquisition(userRef, cardId, currentScore) {
-    // 確保 cardLevels 存在
-    if (!currentUserData.cardLevels) currentUserData.cardLevels = {};
-    const currentLevel = currentUserData.cardLevels[cardId] || 0;
-    const cardName = CARD_DATABASE[cardId].name;
-    const rarity = CARD_DATABASE[cardId].rarity;
-    let msg = "";
-    let refund = 0;
-
-    // 情況 A: 尚未擁有 -> 獲得新卡
-    if (!currentUserData.cards.includes(cardId)) {
-        await updateDoc(userRef, { 
-            "cards": arrayUnion(cardId),
-            [`cardLevels.${cardId}`]: 0 // 初始等級 0
-        });
-        currentUserData.cards.push(cardId);
-        currentUserData.cardLevels[cardId] = 0;
-        msg = `✨ 獲得新卡：${cardName}`;
-    } 
-    // 情況 B: 已擁有且等級 < 5 -> 自動合成 (+5 ATK)
-    else if (currentLevel < 5) {
-        await updateDoc(userRef, { 
-            [`cardLevels.${cardId}`]: currentLevel + 1 
-        });
-        currentUserData.cardLevels[cardId] = currentLevel + 1;
-        msg = `⬆️ ${cardName} 強化至 +${currentLevel + 1} (ATK+5)`;
-    } 
-    // 情況 C: 已滿等 -> 返還積分
-    else {
-        // [修正] 依照稀有度設定不同返還值
-        const refundMap = {
-            "gray": 20,     // 普通
-            "blue": 50,     // 稀有
-            "purple": 80,   // 罕見 (補間值)
-            "red": 100,     // 史詩
-            "rainbow": 200, // 傳奇
-            "gold": 500     // 神話
-        };
-        
-        refund = refundMap[rarity] || 20;
-        
-        // 分數不扣反增 (因為外層已經扣了，這裡補回)
-        msg = `💰 ${cardName} 已滿等，返還 ${refund} 積分`;
-    }
-
-    return { msg, refund, rarity, name: cardName, id: cardId };
-}
-
-// [新增] 更新主畫面上的牌組顯示區塊
-function updateDeckDisplay() {
-    const mainId = currentUserData.deck?.main;
-    const subId = currentUserData.deck?.sub;
-    
-    const mainEl = document.getElementById('deck-main-display');
-    const subEl = document.getElementById('deck-sub-display');
-    
-    if (mainId && CARD_DATABASE[mainId]) {
-        const c = CARD_DATABASE[mainId];
-        mainEl.innerHTML = `<div class="text-yellow-400 font-bold">${c.name}</div><div class="text-xs text-white">HP:${c.hp}</div><div class="text-[10px] text-red-300">${c.skill}</div>`;
-    } else {
-        mainEl.innerHTML = "點擊選擇";
-    }
-
-    if (subId && CARD_DATABASE[subId]) {
-        const c = CARD_DATABASE[subId];
-        subEl.innerHTML = `<div class="text-gray-300 font-bold">${c.name}</div><div class="text-xs text-white">HP:${c.hp}</div>`;
-    } else {
-        subEl.innerHTML = "點擊選擇";
-    }
-}
 // ==========================================
 //  Social & UI Injection (Tabbed Chat)
 // ==========================================
@@ -1434,10 +990,6 @@ window.switchToPage = (pageId) => {
     if (pageId === 'page-admin') loadAdminData();
     if (pageId === 'page-social') {
         switchSocialTab('friends');
-    }
-    if (pageId === 'page-cards') {
-        loadMyCards();
-        updateDeckDisplay();
     }
     
     updateTexts();
@@ -2798,20 +2350,21 @@ async function acceptInvite(inviteId, roomId, toastElement) {
 
     // 2. 防呆檢查
     if (isBattleActive) { alert("你正在對戰中，無法加入！"); return; }
-    if (!currentUserData.deck?.main) { alert("請先設定主卡！"); return; }
 
     // 3. 準備戰鬥資料
-    const myBattleData = { 
-        uid: auth.currentUser.uid, 
-        name: currentUserData.displayName, 
-        equipped: currentUserData.equipped,
+    const myBattleData = {
+        uid: auth.currentUser.uid,
+        name: currentUserData.displayName || "Player",
+        equipped: currentUserData.equipped || { frame: '', avatar: '' },
+        rankLevel: currentUserData.stats?.rankLevel || 0,
         done: false,
-        activeCard: "main",
+        answerCorrect: null,
+        answerTime: null,
         isDead: false,
-        cards: {
-            main: getBattleCardData(currentUserData.deck.main),
-            sub: getBattleCardData(currentUserData.deck.sub)
-        }
+        hp: 100,
+        maxHp: 100,
+        atk: 20
+    }
     };
 
     // 4. 切換頁面並顯示「連線中」 (避免畫面卡住)
@@ -2857,7 +2410,6 @@ let lastEnemyHp = -1;
 
 window.startBattleMatchmaking = async () => {
     if (!auth.currentUser) { alert("請先登入！"); return; }
-    if (!currentUserData.deck?.main) { alert("請先到卡牌中心設定「主卡」！"); switchToPage('page-cards'); return; }
 
     console.log("🚀 開始配對中..."); 
     isBattleActive = true;
@@ -2891,12 +2443,7 @@ window.startBattleMatchmaking = async () => {
         equipped: currentUserData.equipped || { frame: '', avatar: '' },
         rankLevel: currentUserData.stats?.rankLevel || 0,
         done: false,
-        activeCard: "main",
         isDead: false,
-        cards: {
-            main: getBattleCardData(currentUserData.deck.main),
-            sub: getBattleCardData(currentUserData.deck.sub)
-        }
     };
 
     let joinedRoomId = null;
@@ -3165,143 +2712,32 @@ async function playBattleSequence(logs, isHost) {
     }
 }
 
-// [修正版] 更新戰鬥卡牌 UI (修復小圖被大卡片撐破的問題)
+// Generic battle participant UI (card-free).
 function updateBattleCardUI(prefix, playerData) {
     if (!playerData) return;
-    
-    // 定義 ID 對應
     const idPrefix = prefix === 'my' ? 'my' : 'enemy';
-    
-    const container = document.getElementById(`${idPrefix}-card-container`); // 🔥 正確指向中央大卡片
-    const miniVisualEl = document.getElementById(`${idPrefix}-card-visual`); // 🔥 小頭像
+    const container = document.getElementById(`${idPrefix}-card-container`);
+    const miniVisualEl = document.getElementById(`${idPrefix}-card-visual`);
     const hpBarEl = document.getElementById(`${idPrefix}-hp-bar`);
     const hpTextEl = document.getElementById(`${idPrefix}-hp-text`);
     const subIndicatorEl = document.getElementById(`${idPrefix}-sub-card-indicator`);
-
     if (!container || !hpBarEl) return;
 
-    const activeKey = playerData.activeCard; // 'main' or 'sub'
-    const activeCard = playerData.cards[activeKey];
-    
-    if (!activeCard) return;
-
-    const dbCard = CARD_DATABASE[activeCard.id];
-    if (!dbCard) return;
-
-    const maxHp = dbCard.hp;
-    const currentHp = activeCard.currentHp;
-    const hpPercent = Math.max(0, (currentHp / maxHp) * 100);
-
-    // 1. 更新卡片下方的血條
+    const maxHp = Number(playerData.maxHp || 100);
+    const currentHp = Math.max(0, Number(playerData.hp ?? maxHp));
+    const hpPercent = Math.max(0, Math.min(100, (currentHp / maxHp) * 100));
     hpBarEl.style.width = `${hpPercent}%`;
-    hpTextEl.innerText = `${currentHp}/${maxHp}`;
-
-    // 2. 更新卡面視覺
-    const nameColor = activeKey === 'main' ? 'text-yellow-400' : 'text-gray-300';
-    const borderClass = activeKey === 'main' ? 'border-yellow-500' : 'border-gray-500';
-    
-    container.className = `relative w-32 h-48 bg-slate-800 rounded-lg border-2 ${borderClass} transition-all duration-500 mb-6 overflow-hidden shadow-2xl`;
-
-    const hasImage = getCardImageUrl(activeCard.id); 
-    let innerContent = ""; 
-
-    if (hasImage) {
-        innerContent = `
-            <img src="${hasImage}" 
-                 class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-110"
-                 onerror="this.style.display='none'; this.parentElement.querySelector('.fallback-text').style.display='flex'">
-            
-            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-            
-            <div class="absolute top-1 left-1 text-[8px] font-bold text-white bg-black/50 px-1.5 py-0.5 rounded border border-white/20 z-10">
-                ${activeCard.rarity === 'rainbow' ? 'LEGEND' : (activeCard.rarity === 'gold' ? 'MYTHIC' : 'MAIN')}
-            </div>
-
-            <div class="absolute bottom-0 w-full p-2 flex flex-col items-center z-10">
-                <div class="${nameColor} font-bold text-sm text-center drop-shadow-[0_2px_2px_rgba(0,0,0,1)]">${activeCard.name}</div>
-                
-                <div class="flex items-center gap-2 mt-0.5 bg-black/40 px-2 py-0.5 rounded-full border border-white/10 backdrop-blur-sm">
-                    <span class="text-xs text-green-400 font-black drop-shadow-md flex items-center gap-0.5">
-                        <i class="fa-solid fa-heart text-[10px]"></i> ${currentHp}
-                    </span>
-                    <span class="text-gray-500 text-[10px]">|</span>
-                    <span class="text-xs text-red-400 font-black drop-shadow-md flex items-center gap-0.5">
-                        <i class="fa-solid fa-khanda text-[10px]"></i> ${activeCard.atk}
-                    </span>
-                </div>
-
-                <div class="mt-1 text-[9px] text-cyan-300 bg-blue-900/60 px-1.5 py-0.5 rounded border border-blue-500/30 backdrop-blur-sm">
-                    ${activeCard.skill}
-                </div>
-            </div>
-
-            <div class="fallback-text hidden flex-col items-center justify-center h-full relative z-0">
-                <div class="text-3xl mb-2 filter drop-shadow-lg animate-pulse">
-                    ${activeCard.id === 'c051' || activeCard.id === 'c041' ? '🐲' : '⚔️'}
-                </div>
-                <div class="${nameColor} font-bold text-sm text-center">${activeCard.name}</div>
-            </div>
-        `;
-    } else {
-        innerContent = `
-            <div class="flex flex-col items-center justify-center h-full relative z-10">
-                <div class="text-[10px] uppercase tracking-widest text-gray-500 mb-1">${activeKey}</div>
-                <div class="text-3xl mb-2 filter drop-shadow-lg animate-pulse">
-                    ${activeKey === 'main' ? '🐉' : '🛡️'}
-                </div>
-                <div class="${nameColor} font-bold text-sm text-center">${activeCard.name}</div>
-                
-                <div class="flex gap-2 mt-1">
-                    <div class="text-xs text-green-400 font-mono">HP ${currentHp}</div>
-                    <div class="text-xs text-red-400 font-mono">ATK ${activeCard.atk}</div>
-                </div>
-
-                ${activeKey === 'main' ? `<div class="text-[9px] text-blue-300 mt-2 text-center px-1">${activeCard.skill}</div>` : ''}
-            </div>
-        `;
-    }
-
-    // 🔥 將內容寫入中央卡片容器
-    container.innerHTML = innerContent;
-
-    // 🔥 獨立更新小頭像框
-    if (miniVisualEl) {
-        miniVisualEl.innerHTML = activeCard.id === 'c051' || activeCard.id === 'c041' ? '🐲' : '⚔️';
-    }
-
-    // 3. 更新副卡指示燈
-    if (subIndicatorEl) {
-        if (playerData.cards.sub) {
-            const subCardId = playerData.cards.sub.id;
-            const subBase = CARD_DATABASE[subCardId] || { name: "Sub", rarity: "gray" };
-            const subRConfig = RARITY_CONFIG[subBase.rarity] || RARITY_CONFIG.gray;
-            
-            const isActive = activeKey === 'sub';
-            const isDead = playerData.cards.sub.currentHp <= 0;
-
-            subIndicatorEl.className = `absolute ${prefix==='my'?'bottom-4 -left-2':'top-4 -right-2'} w-12 h-16 bg-slate-800 rounded border-2 transition-all duration-300 flex flex-col items-center justify-center overflow-hidden z-20 shadow-lg`;
-            
-            if (isDead) {
-                subIndicatorEl.classList.add('border-gray-700', 'opacity-30', 'grayscale');
-                subIndicatorEl.innerHTML = '<i class="fa-solid fa-skull text-gray-500"></i>';
-            } else if (isActive) {
-                subIndicatorEl.className += ` ${subRConfig.border} scale-110 ring-2 ring-yellow-400 ring-offset-1 ring-offset-slate-900`;
-                subIndicatorEl.innerHTML = `
-                    <div class="text-[8px] ${subRConfig.color} font-bold truncate w-full text-center px-0.5">${subBase.name}</div>
-                    <div class="text-xs">⚔️</div>
-                    <div class="text-[8px] text-white">${playerData.cards.sub.currentHp}</div>
-                `;
-            } else {
-                subIndicatorEl.className += ` ${subRConfig.border} opacity-80 hover:opacity-100 hover:scale-105`;
-                subIndicatorEl.innerHTML = `
-                    <div class="bg-black/50 w-full text-center text-[7px] text-gray-300 absolute top-0">WAIT</div>
-                    <div class="text-[8px] ${subRConfig.color} font-bold mt-2 truncate w-full text-center">${subBase.name}</div>
-                `;
-            }
-        } else {
-            subIndicatorEl.style.opacity = '0';
-        }
-    }
+    if (hpTextEl) hpTextEl.innerText = `${currentHp}/${maxHp}`;
+    container.className = `relative w-32 h-48 bg-slate-800 rounded-lg border-2 ${prefix === 'my' ? 'border-cyan-500' : 'border-red-500'} transition-all duration-500 mb-6 overflow-hidden shadow-2xl`;
+    container.innerHTML = `
+        <div class="absolute inset-0 flex flex-col items-center justify-center p-3 text-center">
+            <div class="text-4xl mb-3">${prefix === 'my' ? '⚔️' : '👹'}</div>
+            <div class="font-bold text-sm ${prefix === 'my' ? 'text-cyan-300' : 'text-red-300'}">${playerData.name || 'Player'}</div>
+            <div class="text-xs text-green-400 font-mono mt-2">HP ${currentHp}</div>
+            <div class="text-xs text-red-300 font-mono">ATK ${Number(playerData.atk || 20)}</div>
+        </div>`;
+    if (miniVisualEl) miniVisualEl.innerHTML = prefix === 'my' ? '⚔️' : '👹';
+    if (subIndicatorEl) { subIndicatorEl.innerHTML = ''; subIndicatorEl.style.opacity = '0'; }
 }
 // 觸發打擊動畫 (回傳 Promise 以完美同步時間軸)
 async function triggerBattleAnimation(attackerPrefix, targetPrefix, damage, skillName, isHeal = false) {
@@ -3491,297 +2927,81 @@ function createFloatingText(parentEl, text, colorClass = "text-white", topOffset
     setTimeout(() => el.remove(), 1500);
 }
 
-// [修正版] 回合結算邏輯
+// Card-free round resolution.
 async function resolveRoundLogic(roomId, room) {
     const host = room.host;
     const guest = room.guest;
-    
-    // 取得時間戳記 (防止 null 報錯)
     const tHost = host.answerTime ? host.answerTime.toMillis() : Date.now() + 999999;
     const tGuest = guest.answerTime ? guest.answerTime.toMillis() : Date.now() + 999999;
-
-    // 決定攻擊順序：答對且時間短者先攻；若都錯則無所謂
-    let turnOrder = [];
+    let turnOrder;
     if (host.answerCorrect && !guest.answerCorrect) turnOrder = ['host', 'guest'];
     else if (!host.answerCorrect && guest.answerCorrect) turnOrder = ['guest', 'host'];
-    else if (tHost < tGuest) turnOrder = ['host', 'guest'];
-    else turnOrder = ['guest', 'host'];
+    else turnOrder = tHost < tGuest ? ['host', 'guest'] : ['guest', 'host'];
 
     const roomRef = doc(db, "rooms", roomId);
-
     await runTransaction(db, async (transaction) => {
         const freshDoc = await transaction.get(roomRef);
         if (!freshDoc.exists()) return;
-        
-        // 重新讀取最新數據，避免覆蓋並行寫入
         const freshRoom = freshDoc.data();
-        let h = freshRoom.host;
-        let g = freshRoom.guest;
-        let battleLog = []; 
+        let h = { ...freshRoom.host };
+        let g = { ...freshRoom.guest };
+        h.maxHp = Number(h.maxHp || 100); h.hp = Number(h.hp ?? h.maxHp); h.atk = Number(h.atk || 20);
+        g.maxHp = Number(g.maxHp || 100); g.hp = Number(g.hp ?? g.maxHp); g.atk = Number(g.atk || 20);
+        const battleLog = [];
 
-        const TRAIT_VALS = {
-            buffDmg: 10,    // [英勇]
-            reduceDmg: 15,  // [堅韌]
-            healAmt: 20     // [共生]
-        };
-
-        // 模擬執行攻擊
         for (const attackerRole of turnOrder) {
-            // 動態判斷攻防角色 (因為上一輪攻擊可能導致死亡狀態改變)
             const attacker = attackerRole === 'host' ? h : g;
             const defender = attackerRole === 'host' ? g : h;
-            
-            if (defender.isDead) continue; // 對手已死，鞭屍無效
-
-            // ⚠️ 修正：重新獲取當前活著的 activeCard，因為可能剛剛被打死切換了
-            let cardKey = attacker.activeCard; 
-            // 如果當前主卡死了但副卡活著，強制切換（防呆）
-            if (attacker.cards[cardKey].currentHp <= 0 && attacker.cards.sub?.currentHp > 0) {
-                 cardKey = 'sub';
-                 attacker.activeCard = 'sub';
-            }
-            
-            const card = attacker.cards[cardKey];
-            if (card.currentHp <= 0) continue; // 攻擊者自己也死了，無法攻擊
-
-            // 只有答對才攻擊
+            if (defender.hp <= 0 || attacker.hp <= 0) continue;
             if (attacker.answerCorrect) {
-                // 1. 計算攻擊方加成 (遍歷全隊)
-                let extraDmg = 0;
-                let healTrigger = false;
-
-                ['main', 'sub'].forEach(slot => {
-                    const c = attacker.cards[slot];
-                    if (c && c.currentHp > 0) {
-                        if (c.trait === '英勇') extraDmg += TRAIT_VALS.buffDmg;
-                        if (c.trait === '共生') healTrigger = true;
-                    }
-                });
-
-                // 2. 計算防守方減免
-                let dmgReduction = 0;
-                ['main', 'sub'].forEach(slot => {
-                    const c = defender.cards[slot];
-                    if (c && c.currentHp > 0) {
-                        if (c.trait === '堅韌') dmgReduction += TRAIT_VALS.reduceDmg;
-                    }
-                });
-
-                // 3. 基礎傷害
-                let damage = card.atk; 
-                let skill = "普通攻擊";
-                if (cardKey === 'main') {
-                    damage += (card.skillDmg || 0);
-                    skill = card.skill || "技能攻擊";
-                }
-
-                // 4. 最終傷害 (保底 1 點)
-                let finalDamage = Math.max(1, (damage + extraDmg) - dmgReduction);
-
-                // 5. 扣血邏輯
-                const targetKey = defender.activeCard;
-                const targetCard = defender.cards[targetKey];
-                let newHp = targetCard.currentHp - finalDamage;
-
-                if (newHp <= 0) {
-                    newHp = 0;
-                    // 死亡切換
-                    if (targetKey === 'main' && defender.cards.sub && defender.cards.sub.currentHp > 0) {
-                        defender.activeCard = 'sub'; // 切換副卡
-                    } else {
-                        defender.isDead = true; // 全滅
-                    }
-                }
-                defender.cards[targetKey].currentHp = newHp;
-
-                // 6. 回血邏輯 (⚠️ 修正：加入 MaxHP 上限檢查)
-                let healed = 0;
-                if (healTrigger) {
-                    ['main', 'sub'].forEach(slot => {
-                        const c = attacker.cards[slot];
-                        if (c && c.currentHp > 0) {
-                            // 查找原始資料庫的 HP 上限
-                            const dbCard = CARD_DATABASE[c.id];
-                            const maxHp = dbCard ? dbCard.hp : 999; // 防呆
-                            
-                            if (c.currentHp < maxHp) {
-                                const flow = Math.min(maxHp - c.currentHp, TRAIT_VALS.healAmt);
-                                c.currentHp += flow;
-                                healed += flow; // 記錄總回血量
-                            }
-                        }
-                    });
-                }
-
-                // 7. 寫入日誌
-                let logMsg = skill;
-                if (extraDmg > 0) logMsg += `(+${extraDmg})`;
-                if (dmgReduction > 0) logMsg += `(盾-${dmgReduction})`;
-                
-                battleLog.push({
-                    attacker: attackerRole,
-                    isHit: true,
-                    dmg: finalDamage,
-                    skill: logMsg,
-                    healed: healed > 0 ? healed : null
-                });
-
+                const damage = Math.max(1, attacker.atk);
+                defender.hp = Math.max(0, defender.hp - damage);
+                if (defender.hp === 0) defender.isDead = true;
+                battleLog.push({ attacker: attackerRole, isHit: true, dmg: damage, skill: '答題攻擊', healed: null });
             } else {
-                // 答錯 MISS
-                battleLog.push({
-                    attacker: attackerRole,
-                    isHit: false,
-                    dmg: 0,
-                    skill: "MISS",
-                    healed: null
-                });
+                battleLog.push({ attacker: attackerRole, isHit: false, dmg: 0, skill: 'MISS', healed: null });
             }
         }
 
-        // 判斷勝負
-        let status = "ready";
+        let status = 'ready';
         let winnerUid = null;
-        
         if (h.isDead || g.isDead || freshRoom.round >= 10) {
-             status = "finished";
-             if (h.isDead && !g.isDead) { winnerUid = g.uid; }
-             else if (!h.isDead && g.isDead) { winnerUid = h.uid; }
-             else {
-                 // 判斷總血量
-                 const hTotal = h.cards.main.currentHp + (h.cards.sub?.currentHp || 0);
-                 const gTotal = g.cards.main.currentHp + (g.cards.sub?.currentHp || 0);
-                 if (hTotal > gTotal) winnerUid = h.uid;
-                 else if (gTotal > hTotal) winnerUid = g.uid;
-                 else winnerUid = null; // 平手
-             }
+            status = 'finished';
+            if (h.hp > g.hp) winnerUid = h.uid;
+            else if (g.hp > h.hp) winnerUid = g.uid;
         }
 
-        // 寫入 DB
         transaction.update(roomRef, {
-            host: h,
-            guest: g,
-            round: (status === "finished") ? freshRoom.round : freshRoom.round + 1,
-            battleLog: battleLog,
-            battleLogId: Date.now().toString(), // 觸發前端動畫
-            status: status,
-            winner: winnerUid,
-            "host.done": false,
-            "guest.done": false,
-            "host.answerCorrect": null,
-            "guest.answerCorrect": null,
-            "host.answerTime": null,
-            "guest.answerTime": null
+            host: h, guest: g,
+            round: status === 'finished' ? freshRoom.round : freshRoom.round + 1,
+            battleLog, battleLogId: Date.now().toString(), status, winner: winnerUid,
+            'host.done': false, 'guest.done': false,
+            'host.answerCorrect': null, 'guest.answerCorrect': null,
+            'host.answerTime': null, 'guest.answerTime': null
         });
     });
 }
-// 輔助函式：處理勝利結算 (避免主函式太長)
+// Battle victory reward (card-free).
 async function processBattleWin(loserData, msgEl) {
     try {
-        const lootIds = [];
-        if (loserData.cards.main) lootIds.push(loserData.cards.main.id);
-        if (loserData.cards.sub) lootIds.push(loserData.cards.sub.id);
-
         const userRef = doc(db, "users", auth.currentUser.uid);
-        
-        // 加分並獲得卡牌
         currentUserData.stats.totalScore += 500;
-        currentUserData.stats.totalCorrect += 5; 
-        
+        currentUserData.stats.totalCorrect += 5;
         const currentNetScore = getNetScore(currentUserData.stats);
         const newRank = calculateRankFromScore(currentNetScore);
-        
-        await updateDoc(userRef, { 
+        await updateDoc(userRef, {
             "stats.totalScore": currentUserData.stats.totalScore,
             "stats.totalCorrect": currentUserData.stats.totalCorrect,
-            "stats.rankLevel": newRank,
-            "cards": arrayUnion(...lootIds)
+            "stats.rankLevel": newRank
         });
-
-        // 更新本地
-        currentUserData.cards.push(...lootIds);
         currentUserData.stats.rankLevel = newRank;
-
-        msgEl.innerHTML = `獲得獎勵：<br>🏆 200 積分<br>🎴 戰利品卡牌 ${lootIds.length} 張<br>💫加十階排位！`;
+        msgEl.innerHTML = `獲得獎勵：<br>🏆 500 積分`;
         updateUIStats();
-    } catch (e) { 
-        console.error("Loot failed", e); 
+    } catch (e) {
+        console.error("Reward failed", e);
         msgEl.innerText = "結算發生錯誤，請聯繫管理員";
     }
 }
-    // [新增] 計算並顯示首頁最強卡牌
-window.updateHomeBestCard = () => {
-    const container = document.getElementById('home-best-card-display');
-    if (!container || !currentUserData || !currentUserData.cards || currentUserData.cards.length === 0) {
-        if(container) container.innerHTML = '<div class="text-gray-500 text-xs">No cards</div>';
-        return;
-    }
-
-    const levels = currentUserData.cardLevels || {};
-    const cards = currentUserData.cards;
-
-    // 尋找最強卡牌 (排序邏輯：稀有度 > 攻擊力)
-    let bestCardId = cards[0];
-    let bestScore = -1;
-
-    const rarityScore = { "rainbow": 5000, "gold": 4000, "red": 3000, "purple": 2000, "blue": 1000, "gray": 0 };
-
-    cards.forEach(id => {
-        const c = CARD_DATABASE[id];
-        if(!c) return;
-        const lvl = levels[id] || 0;
-        const finalAtk = c.atk + (lvl * 5);
-        
-        // 評分 = 稀有度分數 + 攻擊力
-        const score = (rarityScore[c.rarity] || 0) + finalAtk;
-        
-        if (score > bestScore) {
-            bestScore = score;
-            bestCardId = id;
-        }
-    });
-
-    // 渲染卡牌 (使用大的樣式)
-    const card = CARD_DATABASE[bestCardId];
-    const lvl = levels[bestCardId] || 0;
-    const finalAtk = card.atk + (lvl * 5);
-    const rConfig = RARITY_CONFIG[card.rarity];
-
-    // 使用 w-40 (寬度160px) 來顯示，並保持 2/3 比例
-    container.innerHTML = `
-        <div class="w-40 aspect-[2/3] bg-slate-800 rounded-xl border-4 ${rConfig.border} relative overflow-hidden flex flex-col justify-between p-3 shadow-2xl bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]">
-            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/60 pointer-events-none"></div>
-            
-            <div class="flex justify-between items-start z-10">
-                <span class="font-bold ${rConfig.color} text-lg drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">${card.name}</span>
-                <span class="text-xs text-yellow-500 font-mono border border-yellow-500/50 px-1.5 rounded bg-black/40">Lv.${lvl}</span>
-            </div>
-            
-            <div class="absolute inset-0 z-0">
-                ${getCardImageUrl(bestCardId) ? 
-                  `<img src="${getCardImageUrl(bestCardId)}" class="w-full h-full object-cover opacity-80">` : 
-                  `<div class="w-full h-full flex items-center justify-center text-6xl opacity-30">${card.rarity === 'rainbow' ? '🐲' : '⚔️'}</div>`
-                }
-            </div>
-            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/90 z-0"></div>
-
-            <div class="flex justify-between items-start z-10 relative">
-               </div>
-
-            <div class="flex-1 z-10"></div> <div class="z-10 bg-slate-900/80 backdrop-blur rounded p-2 border border-white/10 relative">
-               </div>
-
-            <div class="z-10 bg-slate-900/80 backdrop-blur rounded p-2 border border-white/10">
-                <div class="flex justify-between items-center">
-                    <span class="text-xs text-gray-400">ATK</span>
-                    <span class="text-xl font-black text-red-500 font-mono">${finalAtk}</span>
-                </div>
-                <div class="text-[10px] ${rConfig.color} mt-1 truncate">
-                    Trait: ${card.trait}
-                </div>
-            </div>
-        </div>
-    `;
-};
 // [修改] 處理對戰答題 (標記 done)
 async function handleBattleAnswer(roomId, userIdx, correctIdx, isHost) {
     const isCorrect = userIdx === correctIdx;
@@ -5049,288 +4269,6 @@ window.recalculateAllUserRanks = async () => {
     finally { btn.innerHTML = originalText; btn.disabled = false; }
 };
 
-
-window.drawSingleCard = async () => {
-    const COST = 100;
-    if (currentUserData.stats.totalScore < COST) return alert("積分不足！");
-    
-    // 🔥 修改這裡：改用 await openConfirm
-    const isConfirmed = await openConfirm(`花費 ${COST} 積分進行單次召喚？`);
-    if (!isConfirmed) return;
-
-    await executeDraw(1, COST);
-};
-
-// 11連抽 (保底)
-window.draw11Cards = async () => {
-    const COST = 1000;
-    if (currentUserData.stats.totalScore < COST) return alert("積分不足！");
-    
-    // 🔥 修改這裡：改用 await openConfirm，並更新提示文字為「罕見」
-    const isConfirmed = await openConfirm(`花費 ${COST} 積分進行 11 連抽？\n(包含一張保底罕見以上)`);
-    if (!isConfirmed) return;
-
-    // 🔥 修改這裡：保底參數改為 "purple"
-    await executeDraw(11, COST, "purple"); 
-};
-
-// 通用執行抽卡邏輯
-async function executeDraw(count, cost, guaranteedRarity = null) {
-    const btn = document.querySelector('button[onclick^="draw"]'); // 簡單鎖定按鈕
-    if(btn) btn.disabled = true;
-
-    try {
-        const userRef = doc(db, "users", auth.currentUser.uid);
-        let currentScore = currentUserData.stats.totalScore;
-        
-        // 先扣款 (前端顯示)
-        currentScore -= cost;
-        currentUserData.stats.totalScore = currentScore;
-        updateUIStats();
-
-        let totalRefund = 0;
-        let results = [];
-        let htmlResults = "";
-
-        // 執行抽卡迴圈
-        for (let i = 0; i < count; i++) {
-            // 如果是 11 連抽的最後一張，且有設定保底
-            let minR = null;
-            if (guaranteedRarity && i === count - 1) minR = guaranteedRarity;
-
-            const cardId = pickRandomCardId(minR);
-            const res = await processCardAcquisition(userRef, cardId, currentScore);
-            
-            totalRefund += res.refund;
-            results.push(res);
-            
-            // 建立結果 HTML (用於彈窗顯示)
-            const rConfig = RARITY_CONFIG[res.rarity];
-            htmlResults += `
-                <div class="flex justify-between items-center bg-slate-800 p-2 rounded mb-1 border-l-4 ${rConfig.border.replace('border', 'border-l')}">
-                    <span class="${rConfig.color} font-bold text-xs">[${rConfig.name}]</span>
-                    <span class="text-white text-sm flex-1 ml-2">${res.name}</span>
-                    <span class="text-[10px] text-gray-400">${res.refund > 0 ? '💰+100' : (res.msg.includes('強化') ? '⚡+5' : '🆕')}</span>
-                </div>
-            `;
-        }
-
-        // 處理扣款與返還的最終寫入
-        const finalScore = currentScore + totalRefund;
-        await updateDoc(userRef, { "stats.totalScore": finalScore });
-        currentUserData.stats.totalScore = finalScore;
-        updateUIStats();
-
-        // 顯示結果彈窗 (可以使用簡單的 alert 或自定義 Modal)
-        // 這裡簡單用 alert 顯示文字摘要，或者你可以做一個漂亮的 Overlay
-        showDrawResults(results, totalRefund);
-
-        // 重新載入卡片列表
-        loadMyCards();
-        updateHomeBestCard()
-
-    } catch (e) {
-        console.error(e);
-        alert("召喚失敗，請稍後再試");
-    } finally {
-        if(btn) btn.disabled = false;
-    }
-}
-
-// ==========================================
-// 🎨 新版抽卡動畫系統
-// ==========================================
-
-let gachaSkip = false; // 用於跳過動畫
-
-
-
-// [修正 2] 顯示抽卡結果 (確保每次都使用最新的 results)
-window.currentDrawResults = []; // 初始化為空陣列
-
-function showDrawResults(results, totalRefund) {
-    const overlay = document.getElementById('gacha-overlay');
-    const stage = document.getElementById('gacha-stage');
-    const resultsContainer = document.getElementById('gacha-results-container');
-    const magicCircle = document.getElementById('magic-circle');
-    const orb = document.getElementById('summon-orb');
-    
-    // [重要] 立即更新全域變數，確保 Skip 時拿到的是這一次的結果
-    window.currentDrawResults = results;
-    console.log("抽卡結果更新:", results);
-
-    // 1. 重置 UI 狀態
-    gachaSkip = false;
-    overlay.classList.remove('hidden');
-    stage.classList.remove('hidden');
-    
-    // [修正] 必須清除 inline style 的 display: flex，否則會覆蓋 classList 的 hidden
-    resultsContainer.style.display = ''; 
-    resultsContainer.classList.add('hidden');
-    
-    // [重要] 徹底清空舊的卡片 DOM，防止殘留
-    document.getElementById('gacha-cards-grid').innerHTML = '';
-
-    // 重置動畫元素
-    magicCircle.style.opacity = '0';
-    orb.className = "w-10 h-10 rounded-full shadow-[0_0_50px_rgba(255,255,255,0.8)] relative z-10 transition-all duration-300"; 
-    orb.style.backgroundColor = 'white';
-    orb.style.boxShadow = 'none';
-    orb.classList.remove('anim-orb-charge');
-
-    // 2. 決定光球顏色 (取最高稀有度)
-    let maxRarityVal = 0;
-    const rarityMap = { 'gray': 0, 'blue': 1, 'purple': 2, 'red': 3, 'gold': 4, 'rainbow': 5 };
-    const colorMap = {
-        'gray': '#9ca3af', 'blue': '#3b82f6', 'purple': '#a855f7',
-        'red': '#ef4444', 'gold': '#eab308', 'rainbow': '#ffffff'
-    };
-    
-    let bestRarity = 'gray';
-    results.forEach(r => {
-        if (rarityMap[r.rarity] > maxRarityVal) {
-            maxRarityVal = rarityMap[r.rarity];
-            bestRarity = r.rarity;
-        }
-    });
-
-    // 3. 播放動畫序列
-    setTimeout(() => { magicCircle.style.opacity = '1'; }, 100);
-
-    setTimeout(() => {
-        if(gachaSkip) return; 
-        orb.style.backgroundColor = colorMap[bestRarity];
-        orb.style.boxShadow = `0 0 60px ${colorMap[bestRarity]}`;
-        orb.classList.add('anim-orb-charge');
-    }, 500);
-
-    setTimeout(() => {
-        // [重要] 使用傳入的 results (閉包) 來確保正確性
-        if (!gachaSkip) {
-            revealGachaResults(results);
-        }
-    }, 2300); 
-}
-
-// [修正 3] 跳過動畫 (使用正確的當次結果)
-window.skipGachaAnimation = () => {
-    if (gachaSkip) return; // 避免重複點擊
-    gachaSkip = true;
-    
-    const orb = document.getElementById('summon-orb');
-    if(orb) orb.classList.remove('anim-orb-charge');
-    
-    // 立即顯示結果
-    if (window.currentDrawResults && window.currentDrawResults.length > 0) {
-        revealGachaResults(window.currentDrawResults);
-    }
-};
-
-// 顯示卡牌列表
-function revealGachaResults(results) {
-    const stage = document.getElementById('gacha-stage');
-    const resultsContainer = document.getElementById('gacha-results-container');
-    const grid = document.getElementById('gacha-cards-grid');
-    
-    // 閃白屏特效
-    document.getElementById('gacha-overlay').classList.add('anim-flash');
-    setTimeout(() => document.getElementById('gacha-overlay').classList.remove('anim-flash'), 500);
-
-    stage.classList.add('hidden');
-    resultsContainer.classList.remove('hidden');
-    resultsContainer.style.display = 'flex'; // 確保 flex 佈局
-
-    grid.innerHTML = '';
-
-    // 生成卡牌 DOM
-    results.forEach((res, index) => {
-        const cardHtml = renderGachaCard(res, index);
-        grid.appendChild(cardHtml);
-    });
-
-    // 依序翻牌 (Staggered Flip)
-    const cards = document.querySelectorAll('.gacha-card-wrapper');
-    cards.forEach((card, idx) => {
-        setTimeout(() => {
-            card.classList.add('flipped');
-            if (navigator.vibrate) navigator.vibrate(20); // 震動反饋
-        }, 500 + (idx * 200)); // 每張卡間隔 0.2 秒翻開
-    });
-}
-
-// 產生單張卡牌的 HTML
-function renderGachaCard(res, index) {
-    const rConfig = RARITY_CONFIG[res.rarity];
-    const wrapper = document.createElement('div');
-    
-    // 不同的稀有度對應不同的邊框 Glow Class
-    const glowClass = `glow-${res.rarity}`;
-    
-    wrapper.className = `gacha-card-wrapper card-entry`;
-    wrapper.style.animationDelay = `${index * 0.1}s`; // 進場延遲
-
-    // 內容：判斷是強化還是新卡
-    const isUpgrade = res.msg.includes('強化');
-    const isRefund = res.refund > 0;
-    
-    let statusBadge = '';
-    if (isRefund) statusBadge = '<span class="absolute top-2 right-2 bg-yellow-500 text-black text-[10px] font-bold px-1 rounded">💰 GET</span>';
-    else if (isUpgrade) statusBadge = '<span class="absolute top-2 right-2 bg-green-500 text-white text-[10px] font-bold px-1 rounded">UP</span>';
-    else statusBadge = '<span class="absolute top-2 right-2 bg-red-500 text-white text-[10px] font-bold px-1 rounded">NEW</span>';
-
-    // 取得卡牌詳細數據 (從 CARD_DATABASE) - *注意：需要用 res.name 反查 ID 或是修改 executeDraw 回傳 ID*
-    // 為了簡化，這裡直接用 res.name 顯示
-    // 如果您在 executeDraw 回傳物件中加入了 `id: cardId` 會更好，這裡假設我們只有 name 和 rarity
-
-    wrapper.innerHTML = `
-        <div class="gacha-card-inner">
-            <div class="gacha-card-back ${glowClass}"></div>
-            
-            <div class="gacha-card-front ${glowClass} relative flex flex-col p-2 bg-slate-800 border-2 ${rConfig.border}">
-                ${statusBadge}
-                
-                <div class="flex-1 flex items-center justify-center relative overflow-hidden my-2 rounded-lg bg-black/30">
-                    ${getCardVisualHtml(res.id, res.rarity, "text-5xl")} 
-                </div>
-                
-                <div class="mt-2 text-center">
-                    <div class="${rConfig.color} font-bold text-xs truncate">${res.name}</div>
-                    <div class="text-[10px] text-gray-400 mt-1">
-                        ${isRefund ? `返還 ${res.refund}` : (isUpgrade ? 'ATK +5' : '獲得')}
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    // 點擊可以手動翻牌 (如果還沒翻)
-    wrapper.onclick = () => wrapper.classList.add('flipped');
-    
-    return wrapper;
-}
-
-// 修改 main.js 中的 closeGacha
-window.closeGacha = () => {
-    const overlay = document.getElementById('gacha-overlay');
-    const resultsContainer = document.getElementById('gacha-results-container');
-    const stage = document.getElementById('gacha-stage');
-    
-    // 1. 隱藏整個抽卡遮罩層
-    overlay.classList.add('hidden');
-    
-    // 2. 重置內部容器狀態，避免下次開啟時閃現舊內容
-    resultsContainer.classList.add('hidden');
-    resultsContainer.style.display = 'none'; // 強制隱藏
-    stage.classList.remove('hidden'); // 回到準備召喚狀態
-    
-    // 3. 清空結果網格
-    document.getElementById('gacha-cards-grid').innerHTML = '';
-    
-    // 4. 重新整理資料顯示
-    loadMyCards();        // 重新載入背包列表
-    updateHomeBestCard(); // 更新首頁最強卡牌
-    updateUIStats();      // 更新積分顯示
-};
 
 window.addEventListener('beforeunload', () => {
     if (isBattleActive && currentBattleId) {
