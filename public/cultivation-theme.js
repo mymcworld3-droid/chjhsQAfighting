@@ -31,10 +31,16 @@
   let state = loadState();
 
   function loadState() {
-    try { return JSON.parse(localStorage.getItem(KEY)) || { meditation: 0, lastMeditation: '' }; }
-    catch (_) { return { meditation: 0, lastMeditation: '' }; }
+    try { 
+      return JSON.parse(localStorage.getItem(KEY)) || { meditation: 0, lastMeditation: '' }; 
+    } catch (_) { 
+      return { meditation: 0, lastMeditation: '' }; 
+    }
   }
-  function saveState() { localStorage.setItem(KEY, JSON.stringify(state)); }
+
+  function saveState() { 
+    localStorage.setItem(KEY, JSON.stringify(state)); 
+  }
 
   function score() {
     const el = document.getElementById('display-score');
@@ -42,41 +48,60 @@
     const n = String(el.textContent || '').replace(/[^0-9.-]/g, '');
     return Math.max(0, Number(n) || 0);
   }
+
   function realmFor(value) {
     let current = REALMS[0];
-    REALMS.forEach((r) => { if (value >= r.need) current = r; });
+    REALMS.forEach((r) => { 
+      if (value >= r.need) current = r; 
+    });
     return current;
   }
-  function nextRealm(value) { return REALMS.find((r) => r.need > value) || null; }
+
+  function nextRealm(value) { 
+    return REALMS.find((r) => r.need > value) || null; 
+  }
+
   function pct(value) {
-    const current = realmFor(value), next = nextRealm(value);
+    const current = realmFor(value);
+    const next = nextRealm(value);
     if (!next) return 100;
     return Math.max(0, Math.min(100, ((value - current.need) / (next.need - current.need)) * 100));
   }
+
   function todayKey() {
     const d = new Date();
     return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
   }
+
   function toast(message) {
     const el = document.createElement('div');
-    el.className = 'xiuxian-toast'; el.textContent = message;
+    el.className = 'xiuxian-toast'; 
+    el.textContent = message;
     document.body.appendChild(el);
     setTimeout(() => el.classList.add('show'), 20);
     setTimeout(() => el.remove(), 2800);
   }
+
   function meditate() {
     const today = todayKey();
-    if (state.lastMeditation === today) { toast('今日已閉關，明日再來吸納靈氣。'); return; }
+    if (state.lastMeditation === today) { 
+      toast('今日已閉關，明日再來吸納靈氣。'); 
+      return; 
+    }
+    
     state.lastMeditation = today;
     state.meditation = (state.meditation || 0) + 1;
     saveState();
+    
     toast(`閉關完成！道心穩固（累計 ${state.meditation} 日）`);
     render();
   }
 
   function injectStyle() {
     if (document.getElementById('xiuxian-theme-style')) return;
-    const style = document.createElement('style'); style.id = 'xiuxian-theme-style';
+    
+    const style = document.createElement('style'); 
+    style.id = 'xiuxian-theme-style';
     style.textContent = `
       :root { --xq-gold:#e9c46a; --xq-purple:#9b8cff; }
       body { background: radial-gradient(circle at 50% 15%, rgba(74,68,122,.28), transparent 34%), #080b16 !important; }
@@ -98,54 +123,147 @@
     document.head.appendChild(style);
   }
 
-  function text(selector, value) { const el = document.querySelector(selector); if (el) el.textContent = value; }
+  // 🔥 修正 1：利用 querySelectorAll 將符合的標籤改名，並拔除原版追蹤標記，防止閃爍
+  function text(selector, value) { 
+    document.querySelectorAll(selector).forEach(el => {
+      if (el.textContent !== value) {
+        el.textContent = value;
+      }
+      el.removeAttribute('data-i18n'); 
+    });
+  }
 
   function addHomePanel() {
     if (document.getElementById('xiuxian-panel')) return;
+    
     const home = document.getElementById('page-home');
     if (!home) return;
+    
     const anchor = home.querySelector('.grid.grid-cols-2');
     if (!anchor) return;
+    
     const panel = document.createElement('section');
-    panel.id = 'xiuxian-panel'; panel.className = 'xiuxian-panel';
+    panel.id = 'xiuxian-panel'; 
+    panel.className = 'xiuxian-panel';
+    
     panel.innerHTML = `
       <div class="xiuxian-kicker">仙途修行 · Cultivation Path</div>
       <div class="xiuxian-row" style="align-items:flex-end">
-        <div><div id="xiuxian-realm" class="xiuxian-realm">🌱 凡人</div><div id="xiuxian-sub" class="xiuxian-sub">初入仙途</div></div>
-        <div style="text-align:right"><div class="xiuxian-label">當前修為</div><div id="xiuxian-score" class="xiuxian-value">0</div></div>
+        <div>
+          <div id="xiuxian-realm" class="xiuxian-realm">🌱 凡人</div>
+          <div id="xiuxian-sub" class="xiuxian-sub">初入仙途</div>
+        </div>
+        <div style="text-align:right">
+          <div class="xiuxian-label">當前修為</div>
+          <div id="xiuxian-score" class="xiuxian-value">0</div>
+        </div>
       </div>
       <div class="xiuxian-bar"><div id="xiuxian-progress" style="width:0%"></div></div>
-      <div class="xiuxian-row"><span id="xiuxian-progress-label" class="xiuxian-label">距離下一境界</span><span id="xiuxian-next" class="xiuxian-value">5</span></div>
-      <div class="xiuxian-actions"><button id="xiuxian-meditate" class="xiuxian-btn">🧘 今日閉關</button><button id="xiuxian-path" class="xiuxian-btn">📜 修仙境界</button></div>
+      <div class="xiuxian-row">
+        <span id="xiuxian-progress-label" class="xiuxian-label">距離下一境界</span>
+        <span id="xiuxian-next" class="xiuxian-value">5</span>
+      </div>
+      <div class="xiuxian-actions">
+        <button id="xiuxian-meditate" class="xiuxian-btn">🧘 今日閉關</button>
+        <button id="xiuxian-path" class="xiuxian-btn">📜 修仙境界</button>
+      </div>
     `;
+    
     anchor.parentNode.insertBefore(panel, anchor);
+    
     document.getElementById('xiuxian-meditate').addEventListener('click', meditate);
-    document.getElementById('xiuxian-path').addEventListener('click', () => alert(REALMS.map(r => `${r.emoji} ${r.name} ${r.sub}：${r.need} 修為起`).join('\n')));
+    document.getElementById('xiuxian-path').addEventListener('click', () => {
+      alert(REALMS.map(r => `${r.emoji} ${r.name} ${r.sub}：${r.need} 修為起`).join('\n'));
+    });
   }
 
   function rewriteLabels() {
-    // 首頁名稱、歡迎標題、答題紀錄名稱保持原版，不改名。
-    text('[data-i18n="btn_solo"]','問道試煉'); text('[data-i18n="btn_pvp"]','鬥法論道');
-    text('[data-i18n="nav_home"]','仙府'); text('[data-i18n="nav_quiz"]','問道'); text('[data-i18n="nav_rank"]','仙榜');
-    text('[data-i18n="nav_settings"]','洞府'); text('[data-i18n="nav_social"]','仙盟'); text('[data-i18n="inventory_title"]','法寶庫');
-    text('[data-i18n="rank_title"]','九州仙榜'); text('[data-i18n="th_rank"]','境界');
-    text('[data-i18n="stat_score"]','修為'); text('[data-i18n="stat_streak"]','道心'); text('[data-i18n="stat_best_streak"]','最高道心');
-    text('[data-i18n="btn_next_q"]','繼續悟道'); text('[data-i18n="btn_back_home"]','返回仙府');
+    text('[data-i18n="btn_solo"]', '問道試煉'); 
+    text('[data-i18n="btn_pvp"]', '鬥法論道');
+    text('[data-i18n="nav_home"]', '仙府'); 
+    text('[data-i18n="nav_quiz"]', '問道'); 
+    text('[data-i18n="nav_rank"]', '仙榜');
+    text('[data-i18n="nav_settings"]', '洞府'); 
+    text('[data-i18n="nav_social"]', '仙盟'); 
+    text('[data-i18n="inventory_title"]', '法寶庫');
+    text('[data-i18n="rank_title"]', '九州仙榜'); 
+    text('[data-i18n="th_rank"]', '境界');
+    text('[data-i18n="stat_score"]', '修為'); 
+    text('[data-i18n="stat_streak"]', '道心'); 
+    text('[data-i18n="stat_best_streak"]', '最高道心');
+    text('[data-i18n="btn_next_q"]', '繼續悟道'); 
+    text('[data-i18n="btn_back_home"]', '返回仙府');
   }
 
   function render() {
-    injectStyle(); addHomePanel(); rewriteLabels();
-    const value = score(), realm = realmFor(value), next = nextRealm(value);
-    const rank = document.getElementById('display-rank'); if (rank) rank.textContent = `${realm.emoji} ${realm.name} ${realm.sub}`;
-    const scoreEl = document.getElementById('xiuxian-score'); if (scoreEl) scoreEl.textContent = `${value.toLocaleString()} 修為`;
-    const sub = document.getElementById('xiuxian-sub'); if (sub) sub.textContent = realm.sub;
-    const bar = document.getElementById('xiuxian-progress'); if (bar) bar.style.width = `${pct(value)}%`;
-    const nextEl = document.getElementById('xiuxian-next'); if (nextEl) nextEl.textContent = next ? `${Math.max(0,next.need-value).toLocaleString()} 修為` : '已登仙';
-    const label = document.getElementById('xiuxian-progress-label'); if (label) label.textContent = next ? `下一境界：${next.name} ${next.sub}` : '已登仙，繼續悟道';
+    injectStyle(); 
+    addHomePanel(); 
+    rewriteLabels();
+
+    const value = score();
+    const realm = realmFor(value);
+    const next = nextRealm(value);
+    
+    const rank = document.getElementById('display-rank'); 
+    const targetRank = `${realm.emoji} ${realm.name} ${realm.sub}`;
+    if (rank && rank.textContent !== targetRank) {
+      rank.textContent = targetRank;
+    }
+    
+    const scoreEl = document.getElementById('xiuxian-score'); 
+    if (scoreEl) scoreEl.textContent = `${value.toLocaleString()} 修為`;
+    
+    const sub = document.getElementById('xiuxian-sub'); 
+    if (sub) sub.textContent = realm.sub;
+    
+    const bar = document.getElementById('xiuxian-progress'); 
+    if (bar) bar.style.width = `${pct(value)}%`;
+    
+    const nextEl = document.getElementById('xiuxian-next'); 
+    if (nextEl) nextEl.textContent = next ? `${Math.max(0, next.need - value).toLocaleString()} 修為` : '已登仙';
+    
+    const label = document.getElementById('xiuxian-progress-label'); 
+    if (label) label.textContent = next ? `下一境界：${next.name} ${next.sub}` : '已登仙，繼續悟道';
+    
     const med = document.getElementById('xiuxian-meditate');
-    if (med) { const done = state.lastMeditation === todayKey(); med.textContent = done ? '✅ 今日已閉關' : '🧘 今日閉關'; med.disabled = done; med.style.opacity = done ? '.55' : '1'; }
+    if (med) { 
+      const done = state.lastMeditation === todayKey(); 
+      med.textContent = done ? '✅ 今日已閉關' : '🧘 今日閉關'; 
+      med.disabled = done; 
+      med.style.opacity = done ? '.55' : '1'; 
+    }
   }
 
-  function boot() { render(); setInterval(render, 1200); }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once:true }); else boot();
+  function boot() { 
+    render(); 
+    setInterval(render, 1200); 
+
+    // 🔥 修正 2：針對段位名稱 (display-rank) 設立即時監聽，一旦原版系統偷改，我們毫秒內改回來
+    const rankEl = document.getElementById('display-rank');
+    if (rankEl) {
+      new MutationObserver(() => {
+        const value = score();
+        const realm = realmFor(value);
+        const targetRank = `${realm.emoji} ${realm.name} ${realm.sub}`;
+        if (rankEl.textContent !== targetRank) {
+          rankEl.textContent = targetRank;
+        }
+      }).observe(rankEl, { childList: true, characterData: true, subtree: true });
+    }
+
+    // 🔥 修正 3：攔截全域語言切換與文字更新，讓原版系統更新完的下一瞬間立刻套用修仙主題
+    if (typeof window.updateTexts === 'function') {
+      const originalUpdateTexts = window.updateTexts;
+      window.updateTexts = function() {
+        originalUpdateTexts.apply(this, arguments);
+        setTimeout(render, 0); 
+      };
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot, { once: true }); 
+  } else {
+    boot();
+  }
 })();
