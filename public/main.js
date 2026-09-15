@@ -7,6 +7,7 @@ import './five-immortals.js';
 import './cultivation-training-v4.js';
 import './cultivation-core-visual.js';
 import './cultivation-core-equip-warning.js';
+import './cultivation-combat-stats.js';
 import './cultivation-status-panel.js';
 
 // 恢復原本的科幻／電腦字體。
