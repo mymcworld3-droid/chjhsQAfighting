@@ -16,14 +16,14 @@
     { name: '築基', sub: '初期', need: 60, emoji: '🪨' },
     { name: '築基', sub: '中期', need: 80, emoji: '🪨' },
     { name: '築基', sub: '後期', need: 100, emoji: '🪨' },
-    { name: '金丹', sub: '丹成一品', need: 150, emoji: '☀️' },
-    { name: '元嬰', sub: '元嬰出竅', need: 200, emoji: '✨' },
-    { name: '化神', sub: '神念通天', need: 300, emoji: '🔮' },
-    { name: '煉虛', sub: '虛空悟道', need: 450, emoji: '🌌' },
-    { name: '合體', sub: '天地合一', need: 650, emoji: '☯️' },
-    { name: '大乘', sub: '大道將成', need: 900, emoji: '⚡' },
-    { name: '渡劫', sub: '雷劫問道', need: 1200, emoji: '⛈️' },
-    { name: '真仙', sub: '踏入仙門', need: 1600, emoji: '🪽' }
+    { name: '金丹', sub: '丹成一品', need: 300, emoji: '☀️' },
+    { name: '元嬰', sub: '元嬰出竅', need: 500, emoji: '✨' },
+    { name: '化神', sub: '神念通天', need: 800, emoji: '🔮' },
+    { name: '煉虛', sub: '虛空悟道', need: 1200, emoji: '🌌' },
+    { name: '合體', sub: '天地合一', need: 1800, emoji: '☯️' },
+    { name: '大乘', sub: '大道將成', need: 2600, emoji: '⚡' },
+    { name: '渡劫', sub: '雷劫問道', need: 3600, emoji: '⛈️' },
+    { name: '真仙', sub: '踏入仙門', need: 5000, emoji: '🪽' }
   ];
 
   function realmFor(value) {
@@ -36,7 +36,7 @@
   }
 
   function nextRealm(value) {
-    return REALMS.find(realm => realm.need > value) || null;
+    return REALMS.find((realm) => realm.need > value) || null;
   }
 
   function refresh(score) {
@@ -72,6 +72,8 @@
     labelEl.textContent = `下一境界：${next.name} ${next.sub}`;
     return true;
   }
+
+  window.refreshXiuxianLiveSync = refresh;
 
   window.addEventListener('xiuxian:stats-updated', (event) => {
     const score = event.detail?.totalScore;
