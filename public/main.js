@@ -23,7 +23,19 @@ function restoreComputerFont() {
   );
 }
 
+// 載入仙界金白配色，置於既有 xianxia.css 之後，僅覆蓋視覺色彩。
+function loadCelestialGoldTheme() {
+  const themeHref = 'xianxia-gold.css';
+  if (document.querySelector(`link[href="${themeHref}"]`)) return;
+
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = themeHref;
+  document.head.appendChild(link);
+}
+
 restoreComputerFont();
+loadCelestialGoldTheme();
 
 // 僅移除已確認的歷史抽卡 UI。
 // 不再依按鈕文字刪除元素，避免誤刪現有的卡牌/道具/管理功能。
