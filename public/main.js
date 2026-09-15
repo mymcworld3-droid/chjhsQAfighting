@@ -4,12 +4,14 @@ import './cultivation-theme.js';
 import './cultivation-rules.js';
 import './xiuxian-live-sync.js';
 import './five-immortals.js';
+import './cultivation-progression-v2.js';
 import './cultivation-training-v4.js';
 import './cultivation-core-visual.js';
 import './cultivation-core-equip-warning.js';
 import './cultivation-combat-stats.js';
 import './cultivation-status-panel.js';
 import './realm-breakthrough-feedback.js';
+import './newbie-tutorial.js';
 
 // 恢復原本的科幻／電腦字體。
 // Orbitron 負責英文字母與數字；中文字沒有對應字形時自動使用 Noto Sans TC。
