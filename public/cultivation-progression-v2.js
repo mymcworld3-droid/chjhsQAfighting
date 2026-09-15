@@ -41,7 +41,6 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   let migrating = false;
   let migratedUid = null;
   let pillBusy = false;
-  let battleWrapped = false;
 
   function realms() {
     return Array.isArray(window.XIUXIAN_REALMS) && window.XIUXIAN_REALMS.length
@@ -49,20 +48,24 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       : FALLBACK_REALMS;
   }
 
+  function userData() {
+    return window.getCurrentUserData?.() || null;
+  }
+
   function score() {
-    return Math.max(0, Number(window.getCurrentUserData?.()?.stats?.totalScore) || 0);
+    return Math.max(0, Number(userData()?.stats?.totalScore) || 0);
   }
 
   function realmIndexFor(value) {
     let index = 0;
     realms().forEach((realm, i) => {
-      if (value >= Number(realm.need || 0)) index = i;
+      if (Number(value) >= Number(realm.need || 0)) index = i;
     });
     return index;
   }
 
-  function remainingTo(need) {
-    return Math.max(0, need - score());
+  function pillCount() {
+    return Math.max(0, Number(userData()?.stats?.[PILL_FIELD]) || 0);
   }
 
   function ensureStyle() {
@@ -70,28 +73,18 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     const style = document.createElement('style');
     style.id = 'progression-v2-style';
     style.textContent = `
-      .progression-locked { position:relative !important; opacity:.52 !important; filter:saturate(.55); }
-      .progression-lock-badge { position:absolute; right:8px; top:7px; z-index:8; display:grid; place-items:center; width:20px; height:20px; border-radius:50%; color:#e8c56f; border:1px solid rgba(216,177,93,.35); background:rgba(8,8,8,.92); font-size:8px; box-shadow:0 0 16px rgba(216,177,93,.12); }
-      .progression-modal-backdrop { position:fixed; inset:0; z-index:6900; display:grid; place-items:center; padding:18px; background:rgba(0,0,0,.82); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); }
-      .progression-modal { width:min(100%,470px); border:1px solid rgba(216,177,93,.4); border-radius:28px; padding:23px; text-align:center; background:linear-gradient(145deg,rgba(27,22,13,.99),rgba(7,7,7,.99)); box-shadow:0 35px 100px rgba(0,0,0,.68),0 0 42px rgba(216,177,93,.08); }
-      .progression-modal-icon { width:62px; height:62px; margin:0 auto 12px; display:grid; place-items:center; border-radius:50%; color:#f1ce78; border:1px solid rgba(230,190,92,.48); background:radial-gradient(circle at 35% 30%,rgba(216,177,93,.24),rgba(14,10,5,.95)); box-shadow:0 0 32px rgba(216,177,93,.18); font-size:24px; }
-      .progression-modal h3 { margin:0 0 8px; color:#f5ead5; font-size:21px; font-weight:900; }
-      .progression-modal p { margin:0; color:#b8aa90; font-size:12px; line-height:1.75; }
-      .progression-modal strong { color:#e5c46f; }
-      .progression-summary { margin:15px 0; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; text-align:left; }
-      .progression-summary > div { min-width:0; padding:10px; border-radius:14px; border:1px solid rgba(216,177,93,.13); background:rgba(255,255,255,.025); }
-      .progression-summary span { display:block; color:#887c67; font-size:8px; }
-      .progression-summary b { display:block; margin-top:3px; color:#ead9af; font-size:13px; }
-      .progression-modal button { width:100%; min-height:44px; margin-top:16px; border-radius:15px; color:#fff1c9; border:1px solid #d8b15d; background:linear-gradient(135deg,#a87827,#5c3a0d); font-size:12px; font-weight:900; }
-      .revival-pill-card { grid-column:span 2; position:relative; display:grid; grid-template-columns:54px minmax(0,1fr) auto; align-items:center; gap:10px; padding:12px; border-radius:17px; border:1px solid rgba(216,177,93,.25); background:radial-gradient(circle at 12% 20%,rgba(216,177,93,.10),transparent 36%),linear-gradient(145deg,rgba(19,16,10,.94),rgba(8,8,8,.96)); box-shadow:0 14px 34px rgba(0,0,0,.22); }
-      .revival-pill-orb { width:50px; height:50px; display:grid; place-items:center; border-radius:50%; color:#ffdf86; font-size:20px; border:1px solid rgba(247,205,101,.62); background:radial-gradient(circle at 35% 28%,#f7d873 0 7%,#9c6018 25%,#3b1e08 70%,#130a03 100%); box-shadow:inset 7px 7px 13px rgba(255,241,188,.13),0 0 25px rgba(216,177,93,.25); }
-      .revival-pill-copy { min-width:0; }
-      .revival-pill-copy strong { display:block; color:#f2e5c8; font-size:12px; }
-      .revival-pill-copy small { display:block; margin-top:3px; color:#958872; font-size:9px; line-height:1.4; }
-      .revival-pill-count { color:#d9b85e !important; }
-      .revival-pill-use { min-height:36px; padding:0 11px; border-radius:12px; color:#f7e5b3; border:1px solid rgba(216,177,93,.38); background:rgba(216,177,93,.08); font-size:9px; font-weight:900; }
-      .revival-pill-use:disabled { opacity:.45; }
-      @media(max-width:520px){ .revival-pill-card{grid-template-columns:46px minmax(0,1fr);}.revival-pill-orb{width:43px;height:43px}.revival-pill-use{grid-column:1/-1;width:100%}.progression-summary{grid-template-columns:1fr 1fr;} }
+      .progression-locked{position:relative!important;opacity:.52!important;filter:saturate(.55)}
+      .progression-lock-badge{position:absolute;right:8px;top:7px;z-index:8;display:grid;place-items:center;width:20px;height:20px;border-radius:50%;color:#e8c56f;border:1px solid rgba(216,177,93,.35);background:rgba(8,8,8,.92);font-size:8px}
+      .progression-modal-backdrop{position:fixed;inset:0;z-index:6900;display:grid;place-items:center;padding:18px;background:rgba(0,0,0,.82);backdrop-filter:blur(12px)}
+      .progression-modal{width:min(100%,470px);border:1px solid rgba(216,177,93,.4);border-radius:28px;padding:23px;text-align:center;background:linear-gradient(145deg,rgba(27,22,13,.99),rgba(7,7,7,.99));box-shadow:0 35px 100px rgba(0,0,0,.68)}
+      .progression-modal-icon{width:62px;height:62px;margin:0 auto 12px;display:grid;place-items:center;border-radius:50%;color:#f1ce78;border:1px solid rgba(230,190,92,.48);background:radial-gradient(circle at 35% 30%,rgba(216,177,93,.24),rgba(14,10,5,.95));font-size:24px}
+      .progression-modal h3{margin:0 0 8px;color:#f5ead5;font-size:21px;font-weight:900}.progression-modal p{margin:0;color:#b8aa90;font-size:12px;line-height:1.75}.progression-modal strong{color:#e5c46f}
+      .progression-summary{margin:15px 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;text-align:left}.progression-summary>div{padding:10px;border-radius:14px;border:1px solid rgba(216,177,93,.13);background:rgba(255,255,255,.025)}.progression-summary span{display:block;color:#887c67;font-size:8px}.progression-summary b{display:block;margin-top:3px;color:#ead9af;font-size:13px}
+      .progression-modal button{width:100%;min-height:44px;margin-top:16px;border-radius:15px;color:#fff1c9;border:1px solid #d8b15d;background:linear-gradient(135deg,#a87827,#5c3a0d);font-size:12px;font-weight:900}
+      .revival-pill-card{grid-column:span 2;display:grid;grid-template-columns:54px minmax(0,1fr) auto;align-items:center;gap:10px;padding:12px;border-radius:17px;border:1px solid rgba(216,177,93,.25);background:linear-gradient(145deg,rgba(19,16,10,.94),rgba(8,8,8,.96))}
+      .revival-pill-orb{width:50px;height:50px;display:grid;place-items:center;border-radius:50%;color:#ffdf86;font-size:20px;border:1px solid rgba(247,205,101,.62);background:radial-gradient(circle at 35% 28%,#f7d873 0 7%,#9c6018 25%,#3b1e08 70%,#130a03 100%);box-shadow:0 0 25px rgba(216,177,93,.25)}
+      .revival-pill-copy strong{display:block;color:#f2e5c8;font-size:12px}.revival-pill-copy small{display:block;margin-top:3px;color:#958872;font-size:9px;line-height:1.4}.revival-pill-count{color:#d9b85e!important}.revival-pill-use{min-height:36px;padding:0 11px;border-radius:12px;color:#f7e5b3;border:1px solid rgba(216,177,93,.38);background:rgba(216,177,93,.08);font-size:9px;font-weight:900}.revival-pill-use:disabled{opacity:.45}
+      @media(max-width:520px){.revival-pill-card{grid-template-columns:46px minmax(0,1fr)}.revival-pill-orb{width:43px;height:43px}.revival-pill-use{grid-column:1/-1;width:100%}}
     `;
     document.head.appendChild(style);
   }
@@ -102,21 +95,22 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     const backdrop = document.createElement('div');
     backdrop.id = 'progression-v2-modal';
     backdrop.className = 'progression-modal-backdrop';
-    backdrop.innerHTML = `
-      <section class="progression-modal" role="dialog" aria-modal="true">
-        <div class="progression-modal-icon">${icon}</div>
-        <h3>${title}</h3>
-        <p>${body}</p>
-        ${summary}
-        <button type="button">${button}</button>
-      </section>
-    `;
+    backdrop.innerHTML = `<section class="progression-modal" role="dialog" aria-modal="true"><div class="progression-modal-icon">${icon}</div><h3>${title}</h3><p>${body}</p>${summary}<button type="button">${button}</button></section>`;
     backdrop.querySelector('button')?.addEventListener('click', () => backdrop.remove());
     document.body.appendChild(backdrop);
   }
 
+  function toast(message) {
+    const el = document.createElement('div');
+    el.className = 'xiuxian-toast';
+    el.textContent = message;
+    document.body.appendChild(el);
+    requestAnimationFrame(() => el.classList.add('show'));
+    setTimeout(() => el.remove(), 2400);
+  }
+
   function showLocked(kind = '多人功能') {
-    const left = remainingTo(FOUNDATION_SCORE);
+    const left = Math.max(0, FOUNDATION_SCORE - score());
     modal({
       icon: '<i class="fa-solid fa-lock"></i>',
       title: `${kind}尚未開啟`,
@@ -125,19 +119,16 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     });
   }
 
-  function migrationMarker(data) {
-    return data?.[MIGRATION_FIELD] || null;
-  }
-
   async function ensureLegacyMigration() {
     if (migrating) return;
-    const data = window.getCurrentUserData?.();
-    const auth = getAuth(getApp());
+    const data = userData();
+    let auth;
+    try { auth = getAuth(getApp()); } catch (_) { return; }
     const user = auth.currentUser;
     if (!data?.stats || !user) return;
     if (migratedUid === user.uid) return;
 
-    const existing = migrationMarker(data);
+    const existing = data[MIGRATION_FIELD];
     if (Number(existing?.version) >= MIGRATION_VERSION) {
       migratedUid = user.uid;
       return;
@@ -154,36 +145,33 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
         await updateDoc(doc(getFirestore(getApp()), 'users', user.uid), { [MIGRATION_FIELD]: marker });
         data[MIGRATION_FIELD] = marker;
         migratedUid = user.uid;
+        window.dispatchEvent(new CustomEvent('xiuxian:migration-ready', { detail: marker }));
         return;
       }
 
       const deducted = Math.max(0, originalScore - FOUNDATION_SCORE);
-      const pillCount = Math.ceil((deducted / 2) / PILL_GAIN);
-      const spiritStoneCompensation = Math.round((deducted / 2) * 2);
-      const oldGold = Math.max(0, Number(data.stats.gold) || 0);
-      const oldPills = Math.max(0, Number(data.stats[PILL_FIELD]) || 0);
-      const newPills = oldPills + pillCount;
-      const newGold = oldGold + spiritStoneCompensation;
+      const grantedPills = Math.ceil((deducted / 2) / PILL_GAIN);
+      const spiritStones = Math.round((deducted / 2) * 2);
+      const newGold = Math.max(0, Number(data.stats.gold) || 0) + spiritStones;
+      const newPills = pillCount() + grantedPills;
       const marker = {
         version: MIGRATION_VERSION,
         eligible: true,
         originalScore,
         resetScore: FOUNDATION_SCORE,
         deducted,
-        revivalPills: pillCount,
-        spiritStones: spiritStoneCompensation,
+        revivalPills: grantedPills,
+        spiritStones,
         migratedAt: now
       };
 
-      const patch = {
+      await updateDoc(doc(getFirestore(getApp()), 'users', user.uid), {
         'stats.totalScore': FOUNDATION_SCORE,
         'stats.rankLevel': realmIndexFor(FOUNDATION_SCORE),
         'stats.gold': newGold,
         [`stats.${PILL_FIELD}`]: newPills,
         [MIGRATION_FIELD]: marker
-      };
-
-      await updateDoc(doc(getFirestore(getApp()), 'users', user.uid), patch);
+      });
 
       data.stats.totalScore = FOUNDATION_SCORE;
       data.stats.rankLevel = realmIndexFor(FOUNDATION_SCORE);
@@ -194,23 +182,15 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
 
       const displayScore = document.getElementById('display-score');
       if (displayScore) displayScore.textContent = String(FOUNDATION_SCORE);
-      window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', {
-        detail: { totalScore: FOUNDATION_SCORE, gold: newGold, migration: true }
-      }));
+      window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', { detail: { totalScore: FOUNDATION_SCORE, gold: newGold, migration: true } }));
+      window.dispatchEvent(new CustomEvent('xiuxian:migration-ready', { detail: marker }));
       window.refreshCultivationRealmUI?.();
 
-      const summary = `
-        <div class="progression-summary">
-          <div><span>原修為</span><b>${originalScore.toLocaleString()}</b></div>
-          <div><span>調整後</span><b>60 · 築基初期</b></div>
-          <div><span>回魂聚靈丹</span><b>× ${pillCount}</b></div>
-          <div><span>補償靈石</span><b>+${spiritStoneCompensation.toLocaleString()}</b></div>
-        </div>`;
       modal({
         icon: '<i class="fa-solid fa-scroll"></i>',
         title: '舊版更新補償',
-        body: `因金丹機制與後期境界重新平衡，舊版已達金丹以上的修士統一回調至築基初期。被扣除修為的一半折算為 <strong>回魂聚靈丹</strong>（每顆 +100 修為，無條件進位），另一半乘 2 折算為靈石。回魂聚靈丹可在 <strong>洞府 → 法寶庫</strong> 使用。`,
-        summary
+        body: '因金丹機制與後期境界重新平衡，舊版已達金丹以上的修士統一回調至築基初期。被扣除修為的一半折算為 <strong>回魂聚靈丹</strong>（每顆 +100 修為，無條件進位），另一半乘 2 折算為靈石。回魂聚靈丹可在 <strong>洞府 → 法寶庫</strong> 使用。',
+        summary: `<div class="progression-summary"><div><span>原修為</span><b>${originalScore.toLocaleString()}</b></div><div><span>調整後</span><b>60 · 築基初期</b></div><div><span>回魂聚靈丹</span><b>× ${grantedPills}</b></div><div><span>補償靈石</span><b>+${spiritStones.toLocaleString()}</b></div></div>`
       });
     } catch (error) {
       console.error('Progression migration failed:', error);
@@ -219,23 +199,18 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     }
   }
 
-  function pillCount() {
-    return Math.max(0, Number(window.getCurrentUserData?.()?.stats?.[PILL_FIELD]) || 0);
-  }
-
   async function useRevivalPill() {
     if (pillBusy || pillCount() <= 0) return;
-    const data = window.getCurrentUserData?.();
-    const auth = getAuth(getApp());
+    const data = userData();
+    let auth;
+    try { auth = getAuth(getApp()); } catch (_) { return; }
     const user = auth.currentUser;
     if (!data?.stats || !user) return;
 
     pillBusy = true;
     syncInventoryCard();
-    const oldScore = Math.max(0, Number(data.stats.totalScore) || 0);
-    const oldCount = pillCount();
-    const newScore = oldScore + PILL_GAIN;
-    const newCount = oldCount - 1;
+    const newScore = Math.max(0, Number(data.stats.totalScore) || 0) + PILL_GAIN;
+    const newCount = pillCount() - 1;
 
     try {
       await updateDoc(doc(getFirestore(getApp()), 'users', user.uid), {
@@ -248,9 +223,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       data.stats[PILL_FIELD] = newCount;
       const displayScore = document.getElementById('display-score');
       if (displayScore) displayScore.textContent = String(newScore);
-      window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', {
-        detail: { totalScore: newScore, revivalPills: newCount }
-      }));
+      window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', { detail: { totalScore: newScore, revivalPills: newCount } }));
       window.refreshCultivationRealmUI?.();
       toast(`服用回魂聚靈丹，修為 +${PILL_GAIN}`);
     } catch (error) {
@@ -258,56 +231,46 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       toast('丹藥服用失敗，請稍後再試。');
     } finally {
       pillBusy = false;
-      syncInventoryCard();
+      syncInventoryCard(true);
     }
   }
 
-  function toast(message) {
-    const el = document.createElement('div');
-    el.className = 'xiuxian-toast';
-    el.textContent = message;
-    document.body.appendChild(el);
-    requestAnimationFrame(() => el.classList.add('show'));
-    setTimeout(() => el.remove(), 2400);
-  }
-
-  function syncInventoryCard() {
+  function syncInventoryCard(force = false) {
     const container = document.getElementById('settings-inventory-grid');
     if (!container) return;
     const count = pillCount();
     const existing = document.getElementById('revival-pill-card');
+
     if (count <= 0) {
       existing?.remove();
       return;
     }
 
+    const signature = `${count}:${pillBusy ? 1 : 0}`;
+    if (!force && existing?.dataset.signature === signature) return;
+
     ensureStyle();
     const card = existing || document.createElement('div');
     card.id = 'revival-pill-card';
     card.className = 'revival-pill-card';
-    card.innerHTML = `
-      <div class="revival-pill-orb">丹</div>
-      <div class="revival-pill-copy">
-        <strong>回魂聚靈丹 <span class="revival-pill-count">× ${count}</span></strong>
-        <small>舊版更新補償 · 服用一顆立即增加 ${PILL_GAIN} 修為。</small>
-      </div>
-      <button type="button" class="revival-pill-use" ${pillBusy ? 'disabled' : ''}>${pillBusy ? '服用中…' : `服用 +${PILL_GAIN}`}</button>
-    `;
+    card.dataset.signature = signature;
+    card.innerHTML = `<div class="revival-pill-orb">丹</div><div class="revival-pill-copy"><strong>回魂聚靈丹 <span class="revival-pill-count">× ${count}</span></strong><small>舊版更新補償 · 服用一顆立即增加 ${PILL_GAIN} 修為。</small></div><button type="button" class="revival-pill-use" ${pillBusy ? 'disabled' : ''}>${pillBusy ? '服用中…' : `服用 +${PILL_GAIN}`}</button>`;
     card.querySelector('.revival-pill-use')?.addEventListener('click', useRevivalPill);
     if (!existing) container.prepend(card);
   }
 
   function wrapMultiplayer() {
-    if (battleWrapped || typeof window.startBattleMatchmaking !== 'function') return;
-    const original = window.startBattleMatchmaking;
-    window.startBattleMatchmaking = function (...args) {
+    const current = window.startBattleMatchmaking;
+    if (typeof current !== 'function' || current.__foundationGuarded) return;
+    const guarded = function (...args) {
       if (score() < FOUNDATION_SCORE) {
         showLocked('鬥法配對');
         return;
       }
-      return original.apply(this, args);
+      return current.apply(this, args);
     };
-    battleWrapped = true;
+    Object.defineProperty(guarded, '__foundationGuarded', { value: true });
+    window.startBattleMatchmaking = guarded;
   }
 
   function markLock(button, locked) {
@@ -319,8 +282,9 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       badge.className = 'progression-lock-badge';
       badge.innerHTML = '<i class="fa-solid fa-lock"></i>';
       button.appendChild(badge);
+    } else if (!locked) {
+      badge?.remove();
     }
-    if (!locked) badge?.remove();
   }
 
   function syncMultiplayerLocks() {
@@ -340,10 +304,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   }
 
   function exposeRules() {
-    window.XIUXIAN_UNLOCKS = Object.freeze({
-      multiplayer: FOUNDATION_SCORE,
-      goldenCore: GOLDEN_CORE_SCORE
-    });
+    window.XIUXIAN_UNLOCKS = Object.freeze({ multiplayer: FOUNDATION_SCORE, goldenCore: GOLDEN_CORE_SCORE });
     window.getXiuxianRealmIndex = realmIndexFor;
   }
 
@@ -360,16 +321,13 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     exposeRules();
     document.addEventListener('click', interceptLockedClicks, true);
     sync();
-    setInterval(sync, 350);
+    setInterval(sync, 500);
     new MutationObserver(() => {
       syncMultiplayerLocks();
       syncInventoryCard();
     }).observe(document.body, { childList: true, subtree: true });
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', boot, { once: true });
-  } else {
-    boot();
-  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
 })();
