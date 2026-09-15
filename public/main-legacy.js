@@ -577,7 +577,7 @@ onAuthStateChanged(auth, async (user) => {
                     inventory: [],
                     equipped: { frame: '', avatar: '' }, 
                     stats: { 
-                        rankLevel: 0, currentStars: 0, totalScore: 0,
+                        rankLevel: 0, currentStars: 0, totalScore: 0, gold: 0,
                         currentStreak: 0, bestStreak: 0, totalCorrect: 0, totalAnswered: 0
                     },
                     friends: [], 
