@@ -4,7 +4,8 @@ import './cultivation-theme.js';
 import './cultivation-rules.js';
 import './five-immortals.js';
 
-// 防止歷史版本的抽卡入口或殘留 UI 回到畫面。
+// 僅移除已確認的歷史抽卡 UI。
+// 不再依按鈕文字刪除元素，避免誤刪現有的卡牌/道具/管理功能。
 const LEGACY_SELECTORS = [
   '.summon-banner',
   '#page-cards',
@@ -18,22 +19,25 @@ function removeLegacyGachaUI() {
     document.querySelectorAll(selector).forEach((node) => node.remove());
   });
 
-  document.querySelectorAll('button, a, [role="button"]').forEach((node) => {
-    const text = (node.textContent || '').trim();
-    if (/卡牌|Cards|召喚|Summon|抽卡|Gacha/i.test(text)) node.remove();
-  });
-
+  // 清掉舊版全域入口，但保留可能被其他模組使用的 DOM。
   window.drawSingleCard = undefined;
   window.draw11Cards = undefined;
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', removeLegacyGachaUI, { once: true });
-} else {
+function bootLegacyCleanup() {
   removeLegacyGachaUI();
+
+  // 只觀察 body，且 observer 本身不做文字掃描。
+  // 這樣新 UI 動態插入時仍能清掉舊 selector，同時避免破壞正常按鈕。
+  if (!document.body) return;
+  new MutationObserver(removeLegacyGachaUI).observe(document.body, {
+    childList: true,
+    subtree: true
+  });
 }
 
-new MutationObserver(removeLegacyGachaUI).observe(document.documentElement, {
-  childList: true,
-  subtree: true
-});
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bootLegacyCleanup, { once: true });
+} else {
+  bootLegacyCleanup();
+}
