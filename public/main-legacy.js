@@ -2364,7 +2364,6 @@ async function acceptInvite(inviteId, roomId, toastElement) {
         hp: 100,
         maxHp: 100,
         atk: 20
-    }
     };
 
     // 4. 切換頁面並顯示「連線中」 (避免畫面卡住)
@@ -2437,13 +2436,18 @@ window.startBattleMatchmaking = async () => {
 
     const searchTimeRange = new Date(Date.now() - 1 * 60 * 1000);
     
-    const myBattleData = { 
-        uid: auth.currentUser.uid, 
-        name: currentUserData.displayName || "Player", 
+    const myBattleData = {
+        uid: auth.currentUser.uid,
+        name: currentUserData.displayName || "Player",
         equipped: currentUserData.equipped || { frame: '', avatar: '' },
         rankLevel: currentUserData.stats?.rankLevel || 0,
         done: false,
+        answerCorrect: null,
+        answerTime: null,
         isDead: false,
+        hp: 100,
+        maxHp: 100,
+        atk: 20
     };
 
     let joinedRoomId = null;
