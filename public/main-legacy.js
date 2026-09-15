@@ -477,29 +477,42 @@ window.setupAdminDebug = function() {
     };
 };
 // ==========================================
-// 1. 定義新段位與升級門檻 (使用翻譯 Key)
+// 1. 定義修仙境界與升級門檻 (取代舊版段位)
 // ==========================================
-const RANKS_KEYS = ["rank_bronze", "rank_silver", "rank_gold", "rank_diamond", "rank_star", "rank_master", "rank_grandmaster", "rank_king"];
+const REALMS = [
+    { name: '凡人', sub: '初入仙途', need: 0, emoji: '🌱' },
+    { name: '煉氣', sub: '一層', need: 5, emoji: '🌬️' },
+    { name: '煉氣', sub: '二層', need: 10, emoji: '🌬️' },
+    { name: '煉氣', sub: '三層', need: 15, emoji: '🌬️' },
+    { name: '煉氣', sub: '四層', need: 20, emoji: '🌬️' },
+    { name: '煉氣', sub: '五層', need: 25, emoji: '🌬️' },
+    { name: '煉氣', sub: '六層', need: 30, emoji: '🌬️' },
+    { name: '煉氣', sub: '七層', need: 35, emoji: '🌬️' },
+    { name: '煉氣', sub: '八層', need: 40, emoji: '🌬️' },
+    { name: '煉氣', sub: '九層', need: 45, emoji: '🌬️' },
+    { name: '築基', sub: '初期', need: 60, emoji: '🪨' },
+    { name: '築基', sub: '中期', need: 80, emoji: '🪨' },
+    { name: '築基', sub: '後期', need: 100, emoji: '🪨' },
+    { name: '金丹', sub: '丹成一品', need: 150, emoji: '☀️' },
+    { name: '元嬰', sub: '元嬰出竅', need: 200, emoji: '✨' },
+    { name: '化神', sub: '神念通天', need: 300, emoji: '🔮' },
+    { name: '煉虛', sub: '虛空悟道', need: 450, emoji: '🌌' },
+    { name: '合體', sub: '天地合一', need: 650, emoji: '☯️' },
+    { name: '大乘', sub: '大道將成', need: 900, emoji: '⚡' },
+    { name: '渡劫', sub: '雷劫問道', need: 1200, emoji: '⛈️' },
+    { name: '真仙', sub: '踏入仙門', need: 1600, emoji: '🪽' }
+];
 
 function getRankName(level) {
-    const idx = Math.min(level || 0, RANKS_KEYS.length - 1);
-    return t(RANKS_KEYS[idx]);
+    const idx = Math.min(level || 0, REALMS.length - 1);
+    const r = REALMS[idx];
+    return `${r.emoji} ${r.name} ${r.sub}`;
 }
 
-const RANK_THRESHOLDS = [0, 20, 50, 90, 140, 200, 270, 360];
-
-function getNetScore(stats) {
-    if (!stats) return 0;
-    const totalCorrect = stats.totalCorrect || 0;
-    const totalAnswered = stats.totalAnswered || 0;
-    const totalWrong = totalAnswered - totalCorrect;
-    return Math.max(0, totalCorrect - totalWrong);
-}
-
-function calculateRankFromScore(netScore) {
+function calculateRankFromScore(totalScore) {
     let rank = 0;
-    for (let i = RANK_THRESHOLDS.length - 1; i >= 0; i--) {
-        if (netScore >= RANK_THRESHOLDS[i]) {
+    for (let i = REALMS.length - 1; i >= 0; i--) {
+        if (totalScore >= REALMS[i].need) {
             rank = i;
             break;
         }
