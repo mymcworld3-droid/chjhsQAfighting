@@ -4112,7 +4112,7 @@ window.renderInventory = async (filterType = 'frame') => {
 
 window.loadStoreItems = async () => {
     const grid = document.getElementById('store-grid');
-    document.getElementById('store-user-points').innerText = currentUserData.stats.totalScore;
+    document.getElementById('store-user-points').innerText = currentUserData.stats.gold || 0;
     
     try {
         const q = query(collection(db, "products"), orderBy("price", "asc"));
