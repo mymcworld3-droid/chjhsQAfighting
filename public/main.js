@@ -23,7 +23,7 @@ function restoreComputerFont() {
   );
 }
 
-// 載入仙界金白配色，置於既有 xianxia.css 之後，僅覆蓋視覺色彩。
+// 載入黑金主題，置於既有 xianxia.css 之後，僅覆蓋視覺色彩。
 function loadCelestialGoldTheme() {
   const themeHref = 'xianxia-gold.css';
   if (document.querySelector(`link[href="${themeHref}"]`)) return;
@@ -34,8 +34,62 @@ function loadCelestialGoldTheme() {
   document.head.appendChild(link);
 }
 
+// 再載入一層黑金補強，專門攔截舊版 Tailwind / Cyber UI 殘留的藍、青色。
+function loadBlackGoldHarmonyTheme() {
+  const themeHref = 'xianxia-blackgold-harmony.css';
+  if (document.querySelector(`link[href="${themeHref}"]`)) return;
+
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = themeHref;
+  document.head.appendChild(link);
+}
+
+// Chart.js 的 canvas 顏色不受 CSS 控制，因此在繪圖前把舊藍青色轉成暖金。
+function registerBlackGoldChartTheme() {
+  if (!window.Chart || window.__blackGoldChartThemeRegistered) return;
+
+  const isLegacyBlue = (value) => {
+    if (typeof value !== 'string') return false;
+    const c = value.toLowerCase().replace(/\s+/g, '');
+    return c.includes('#22d3ee') ||
+      c.includes('#3b82f6') ||
+      c.includes('#06b6d4') ||
+      c.includes('#0ea5e9') ||
+      c.includes('34,211,238') ||
+      c.includes('59,130,246') ||
+      c.includes('6,182,212') ||
+      c.includes('14,165,233') ||
+      c === 'cyan' || c === 'blue';
+  };
+
+  const remap = (value, kind) => {
+    if (Array.isArray(value)) return value.map((item) => remap(item, kind));
+    if (!isLegacyBlue(value)) return value;
+    return kind === 'border' ? '#d8b15d' : 'rgba(216, 177, 93, 0.66)';
+  };
+
+  window.Chart.register({
+    id: 'blackGoldPalette',
+    beforeUpdate(chart) {
+      (chart.data?.datasets || []).forEach((dataset) => {
+        dataset.backgroundColor = remap(dataset.backgroundColor, 'background');
+        dataset.borderColor = remap(dataset.borderColor, 'border');
+        dataset.hoverBackgroundColor = remap(dataset.hoverBackgroundColor, 'background');
+        dataset.hoverBorderColor = remap(dataset.hoverBorderColor, 'border');
+        dataset.pointBackgroundColor = remap(dataset.pointBackgroundColor, 'background');
+        dataset.pointBorderColor = remap(dataset.pointBorderColor, 'border');
+      });
+    }
+  });
+
+  window.__blackGoldChartThemeRegistered = true;
+}
+
 restoreComputerFont();
 loadCelestialGoldTheme();
+loadBlackGoldHarmonyTheme();
+registerBlackGoldChartTheme();
 
 // 僅移除已確認的歷史抽卡 UI。
 // 不再依按鈕文字刪除元素，避免誤刪現有的卡牌/道具/管理功能。
