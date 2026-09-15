@@ -1,0 +1,307 @@
+/* 修煉頁狀態：第三個小分頁，於一屏內顯示目前金丹與玩家基本數值。 */
+body.xianxia-theme .training-status-tab {
+  min-width: 72px;
+}
+
+body.xianxia-theme .training-status-panel {
+  box-sizing: border-box;
+  width: min(100%, 720px);
+  height: 100%;
+  min-height: 0;
+  margin: 0 auto;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 10px;
+  overflow: hidden;
+}
+
+body.xianxia-theme .status-section {
+  min-width: 0;
+  border: 1px solid rgba(216,177,93,.16);
+  border-radius: 20px;
+  background: linear-gradient(145deg, rgba(18,18,18,.88), rgba(7,7,7,.82));
+  box-shadow: inset 0 1px rgba(255,255,255,.025);
+}
+
+body.xianxia-theme .status-section-title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 13px 0;
+}
+
+body.xianxia-theme .status-section-title span {
+  color: #ebdfc6;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+body.xianxia-theme .status-section-title small {
+  color: #8d7950;
+  font-size: 8px;
+  letter-spacing: .16em;
+  font-family: var(--xq-serif);
+}
+
+body.xianxia-theme .status-core-section {
+  padding-bottom: 10px;
+}
+
+body.xianxia-theme .status-core-row {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 74px minmax(0, 1fr);
+  align-items: center;
+  gap: 13px;
+  padding: 8px 13px 3px;
+}
+
+body.xianxia-theme .status-core-orb {
+  position: relative;
+  width: 68px;
+  height: 68px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff0bd;
+  font-size: 21px;
+  border: 1px solid rgba(255,226,150,.54);
+  box-shadow:
+    inset -9px -11px 16px rgba(0,0,0,.34),
+    inset 7px 6px 12px rgba(255,248,216,.15),
+    0 0 22px rgba(216,177,93,.22);
+  animation: statusCoreFloat 3.4s ease-in-out infinite;
+}
+
+body.xianxia-theme .status-core-orb::before,
+body.xianxia-theme .status-core-orb::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+body.xianxia-theme .status-core-orb::before {
+  inset: -7px;
+  border: 1px solid rgba(216,177,93,.25);
+  animation: statusCoreSpin 8s linear infinite;
+}
+
+body.xianxia-theme .status-core-orb::after {
+  inset: -13px;
+  border: 1px dashed rgba(216,177,93,.16);
+  animation: statusCoreSpinReverse 12s linear infinite;
+}
+
+body.xianxia-theme .status-core-orb > span {
+  position: relative;
+  z-index: 2;
+  text-shadow: 0 0 12px rgba(255,235,178,.50);
+}
+
+body.xianxia-theme .status-core-orb > i {
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  opacity: .42;
+  background: repeating-conic-gradient(from 15deg, rgba(255,238,185,.50) 0 1deg, transparent 1deg 31deg);
+  -webkit-mask: radial-gradient(circle, transparent 0 50%, #000 52% 57%, transparent 59%);
+  mask: radial-gradient(circle, transparent 0 50%, #000 52% 57%, transparent 59%);
+  animation: statusCoreSpin 7s linear infinite;
+}
+
+body.xianxia-theme .status-core-copy {
+  min-width: 0;
+}
+
+body.xianxia-theme .status-core-topline {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 4px;
+}
+
+body.xianxia-theme .status-core-grade,
+body.xianxia-theme .status-core-equipped {
+  display: inline-flex;
+  align-items: center;
+  min-height: 20px;
+  padding: 0 7px;
+  border-radius: 999px;
+  font-size: 8px;
+  font-weight: 900;
+}
+
+body.xianxia-theme .status-core-grade {
+  color: #e5c46f;
+  border: 1px solid rgba(216,177,93,.28);
+  background: rgba(216,177,93,.07);
+}
+
+body.xianxia-theme .status-core-equipped.on {
+  color: #d8c184;
+  border: 1px solid rgba(216,177,93,.20);
+  background: rgba(216,177,93,.055);
+}
+
+body.xianxia-theme .status-core-equipped.off {
+  color: #8d8370;
+  border: 1px solid rgba(140,130,110,.14);
+  background: rgba(255,255,255,.025);
+}
+
+body.xianxia-theme .status-core-copy h3 {
+  margin: 0 0 3px;
+  color: #f3e9d5;
+  font-size: 17px;
+  font-weight: 900;
+  line-height: 1.15;
+}
+
+body.xianxia-theme .status-core-copy p {
+  margin: 0;
+  color: #a99c83;
+  font-size: 10px;
+  line-height: 1.55;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+body.xianxia-theme .status-core-empty {
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  color: #958a75;
+  font-size: 11px;
+}
+
+body.xianxia-theme .status-player-section {
+  min-height: 0;
+  padding-bottom: 11px;
+  overflow: hidden;
+}
+
+body.xianxia-theme .status-stat-grid {
+  height: calc(100% - 30px);
+  min-height: 0;
+  padding: 8px 11px 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+}
+
+body.xianxia-theme .status-stat-card {
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 29px minmax(0, 1fr);
+  align-items: center;
+  gap: 7px;
+  padding: 7px 8px;
+  border-radius: 14px;
+  border: 1px solid rgba(216,177,93,.105);
+  background: rgba(255,255,255,.016);
+}
+
+body.xianxia-theme .status-stat-icon {
+  width: 29px;
+  height: 29px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  color: #d9b45b;
+  background: rgba(216,177,93,.07);
+  border: 1px solid rgba(216,177,93,.14);
+  font-size: 11px;
+}
+
+body.xianxia-theme .status-stat-copy {
+  min-width: 0;
+  display: grid;
+  line-height: 1.1;
+}
+
+body.xianxia-theme .status-stat-copy > span {
+  color: #8f8572;
+  font-size: 8px;
+}
+
+body.xianxia-theme .status-stat-copy > strong {
+  margin-top: 3px;
+  color: #eee3cc;
+  font-size: 12px;
+  font-weight: 900;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+body.xianxia-theme .status-stat-copy > small {
+  margin-top: 2px;
+  color: #786f60;
+  font-size: 7px;
+}
+
+@keyframes statusCoreFloat {
+  0%,100% { transform: translateY(1px); }
+  50% { transform: translateY(-3px); }
+}
+@keyframes statusCoreSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes statusCoreSpinReverse {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+@media (max-width: 640px) {
+  body.xianxia-theme .training-status-tab { min-width: 62px; }
+  body.xianxia-theme .training-status-panel { gap: 7px; }
+  body.xianxia-theme .status-core-row {
+    grid-template-columns: 62px minmax(0, 1fr);
+    gap: 9px;
+    padding: 6px 10px 2px;
+  }
+  body.xianxia-theme .status-core-orb { width: 56px; height: 56px; font-size: 18px; }
+  body.xianxia-theme .status-core-copy h3 { font-size: 15px; }
+  body.xianxia-theme .status-stat-grid {
+    padding: 7px 8px 0;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    gap: 5px;
+  }
+  body.xianxia-theme .status-stat-card {
+    grid-template-columns: 25px minmax(0, 1fr);
+    gap: 5px;
+    padding: 5px 6px;
+    border-radius: 12px;
+  }
+  body.xianxia-theme .status-stat-icon { width: 25px; height: 25px; border-radius: 8px; font-size: 9px; }
+  body.xianxia-theme .status-stat-copy > strong { font-size: 10px; }
+}
+
+@media (max-height: 700px) {
+  body.xianxia-theme .status-section-title { padding-top: 7px; }
+  body.xianxia-theme .status-core-section { padding-bottom: 6px; }
+  body.xianxia-theme .status-core-orb { width: 50px; height: 50px; }
+  body.xianxia-theme .status-core-row { grid-template-columns: 56px minmax(0, 1fr); padding-top: 4px; }
+  body.xianxia-theme .status-core-copy h3 { font-size: 14px; }
+  body.xianxia-theme .status-core-copy p { font-size: 9px; -webkit-line-clamp: 1; }
+  body.xianxia-theme .status-stat-grid { height: calc(100% - 27px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.xianxia-theme .status-core-orb,
+  body.xianxia-theme .status-core-orb::before,
+  body.xianxia-theme .status-core-orb::after,
+  body.xianxia-theme .status-core-orb > i {
+    animation: none !important;
+  }
+}
