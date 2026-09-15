@@ -278,6 +278,14 @@
       }).observe(rankEl, { childList: true, characterData: true, subtree: true });
     }
 
+    // 🔥 新增：監聽底層總修為 (display-score) 的變化，達成無延遲時時更新
+    const scoreEl = document.getElementById('display-score');
+    if (scoreEl) {
+      new MutationObserver(() => {
+        render(); 
+      }).observe(scoreEl, { childList: true, characterData: true, subtree: true });
+    }
+
     if (typeof window.updateTexts === 'function') {
       const originalUpdateTexts = window.updateTexts;
       window.updateTexts = function() {
