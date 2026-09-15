@@ -2,18 +2,15 @@ import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.j
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
-// 修仙戰鬥基礎數值。缺少欄位的舊玩家會自動補上，但既有數值絕不覆蓋。
+// 修仙戰鬥基礎數值：目前只保留攻擊力與生命值。
+// 缺少欄位的舊玩家會自動補上，但既有數值絕不覆蓋。
 (function () {
   'use strict';
 
   const DEFAULTS = Object.freeze({
     attack: 200,
     hp: 1000,
-    maxHp: 1000,
-    defense: 100,
-    speed: 100,
-    critRate: 5,
-    critDamage: 150
+    maxHp: 1000
   });
 
   let initializedUid = null;
@@ -30,11 +27,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     return {
       attack: Math.max(0, finiteNumber(stats.attack, DEFAULTS.attack)),
       hp,
-      maxHp,
-      defense: Math.max(0, finiteNumber(stats.defense, DEFAULTS.defense)),
-      speed: Math.max(0, finiteNumber(stats.speed, DEFAULTS.speed)),
-      critRate: Math.max(0, finiteNumber(stats.critRate, DEFAULTS.critRate)),
-      critDamage: Math.max(0, finiteNumber(stats.critDamage, DEFAULTS.critDamage))
+      maxHp
     };
   }
 
