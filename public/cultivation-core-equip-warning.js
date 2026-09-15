@@ -1,18 +1,29 @@
-// 低品質金丹裝配提醒：七～九品在真正裝配前再次確認。
+// 金丹品質下降提醒：若洗髓後品質比上一次已裝配金丹差，裝配前再次確認。
 (function () {
   'use strict';
 
-  const LOW_QUALITY_MIN_GRADE = 7;
+  const BASELINE_KEY = 'xiuxian_core_equipped_grade_before_wash_v1';
   const BYPASS_ATTR = 'data-core-warning-bypass';
 
   function currentCoreState() {
     return window.getGoldenCoreState?.() || null;
   }
 
-  function qualityText(grade) {
-    if (grade >= 9) return '九品初成，丹力尚淺';
-    if (grade === 8) return '八品丹成，品質偏低';
-    return '七品金丹，仍有不少洗髓空間';
+  function clampGrade(value) {
+    return Math.min(9, Math.max(1, Number(value) || 9));
+  }
+
+  function readBaseline() {
+    const grade = Number(localStorage.getItem(BASELINE_KEY));
+    return Number.isFinite(grade) && grade >= 1 && grade <= 9 ? grade : null;
+  }
+
+  function writeBaseline(grade) {
+    localStorage.setItem(BASELINE_KEY, String(clampGrade(grade)));
+  }
+
+  function clearBaseline() {
+    localStorage.removeItem(BASELINE_KEY);
   }
 
   function ensureStyle() {
@@ -27,59 +38,71 @@
         display: grid;
         place-items: center;
         padding: 18px;
-        background: rgba(0,0,0,.78);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+        background: rgba(0,0,0,.80);
+        backdrop-filter: blur(11px);
+        -webkit-backdrop-filter: blur(11px);
       }
       .core-equip-warning {
-        width: min(100%, 430px);
-        padding: 22px;
-        border-radius: 26px;
-        border: 1px solid rgba(216,177,93,.42);
-        background: linear-gradient(150deg, rgba(25,21,13,.98), rgba(8,8,8,.99));
-        box-shadow: 0 28px 80px rgba(0,0,0,.58), inset 0 1px rgba(255,255,255,.035);
+        width: min(100%, 440px);
+        padding: 23px;
+        border-radius: 27px;
+        border: 1px solid rgba(216,177,93,.45);
+        background: linear-gradient(150deg, rgba(27,22,13,.99), rgba(8,8,8,.99));
+        box-shadow: 0 30px 86px rgba(0,0,0,.62), inset 0 1px rgba(255,255,255,.04);
         text-align: center;
       }
       .core-equip-warning-mark {
-        width: 54px;
-        height: 54px;
+        width: 58px;
+        height: 58px;
         margin: 0 auto 13px;
         display: grid;
         place-items: center;
         border-radius: 50%;
-        border: 1px solid rgba(232,190,92,.55);
-        color: #f0c96d;
-        background: radial-gradient(circle at 35% 30%, rgba(216,177,93,.22), rgba(20,15,7,.9));
-        box-shadow: 0 0 26px rgba(216,177,93,.16);
-        font-size: 22px;
+        border: 1px solid rgba(232,190,92,.62);
+        color: #f3cd72;
+        background: radial-gradient(circle at 35% 30%, rgba(216,177,93,.24), rgba(20,15,7,.92));
+        box-shadow: 0 0 30px rgba(216,177,93,.20);
+        font-size: 24px;
         font-weight: 900;
       }
       .core-equip-warning h3 {
         margin: 0 0 8px;
-        color: #f5ead4;
+        color: #f6ecd7;
         font-size: 20px;
         font-weight: 900;
       }
+      .core-equip-warning-compare {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        margin: 13px 0;
+      }
       .core-equip-warning-grade {
-        display: inline-flex;
-        margin-bottom: 10px;
-        padding: 5px 10px;
+        min-width: 82px;
+        padding: 7px 11px;
         border-radius: 999px;
         border: 1px solid rgba(216,177,93,.28);
-        color: #dfbd68;
         background: rgba(216,177,93,.07);
-        font-size: 11px;
+        font-size: 12px;
         font-weight: 900;
       }
+      .core-equip-warning-grade.old { color: #ead18c; }
+      .core-equip-warning-grade.new {
+        color: #f0b870;
+        border-color: rgba(226,155,76,.42);
+        background: rgba(168,93,31,.10);
+      }
+      .core-equip-warning-arrow { color: #8f8168; font-size: 13px; }
       .core-equip-warning p {
         margin: 0;
-        color: #b6aa91;
+        color: #b7ab92;
         font-size: 12px;
         line-height: 1.8;
       }
       .core-equip-warning-note {
-        margin-top: 10px !important;
-        color: #857a67 !important;
+        margin-top: 9px !important;
+        color: #877b66 !important;
         font-size: 10px !important;
       }
       .core-equip-warning-actions {
@@ -89,7 +112,7 @@
         margin-top: 18px;
       }
       .core-equip-warning-actions button {
-        min-height: 44px;
+        min-height: 45px;
         border-radius: 15px;
         font-size: 12px;
         font-weight: 900;
@@ -106,7 +129,10 @@
         background: linear-gradient(135deg, #a87827, #5e3c0f);
         box-shadow: 0 8px 22px rgba(172,121,33,.14);
       }
-      .core-equip-warning-actions button:hover { transform: translateY(-1px); filter: brightness(1.08); }
+      .core-equip-warning-actions button:hover {
+        transform: translateY(-1px);
+        filter: brightness(1.08);
+      }
     `;
     document.head.appendChild(style);
   }
@@ -115,21 +141,24 @@
     document.getElementById('core-equip-warning-modal')?.remove();
   }
 
-  function showWarning(button, state) {
+  function showWarning(button, oldGrade, newGrade, state) {
     closeModal();
     ensureStyle();
 
-    const grade = Math.min(9, Math.max(1, Number(state?.grade) || 9));
     const modal = document.createElement('div');
     modal.id = 'core-equip-warning-modal';
     modal.className = 'core-equip-warning-backdrop';
     modal.innerHTML = `
-      <section class="core-equip-warning" role="dialog" aria-modal="true" aria-label="低品質金丹提醒">
+      <section class="core-equip-warning" role="dialog" aria-modal="true" aria-label="金丹品質下降提醒">
         <div class="core-equip-warning-mark">!</div>
-        <h3>確定要裝配這顆金丹？</h3>
-        <div class="core-equip-warning-grade">${grade} 品 · ${state?.name || '金丹'}</div>
-        <p>${qualityText(grade)}，裝配後特性效果也會依此品質計算。</p>
-        <p class="core-equip-warning-note">你仍然可以裝配；若想追求更強效果，也可以先繼續洗髓。</p>
+        <h3>金丹品質下降</h3>
+        <div class="core-equip-warning-compare">
+          <span class="core-equip-warning-grade old">原本 ${oldGrade} 品</span>
+          <i class="fa-solid fa-arrow-right core-equip-warning-arrow"></i>
+          <span class="core-equip-warning-grade new">現在 ${newGrade} 品</span>
+        </div>
+        <p>目前的「${state?.name || '金丹'}」品質比上一次已裝配的金丹低，特性效果也可能較弱。</p>
+        <p class="core-equip-warning-note">一品最佳、九品最低。若仍要更換，可以繼續裝配。</p>
         <div class="core-equip-warning-actions">
           <button type="button" class="core-equip-warning-cancel">先不裝配</button>
           <button type="button" class="core-equip-warning-confirm">仍然裝配</button>
@@ -151,6 +180,19 @@
   }
 
   document.addEventListener('click', (event) => {
+    const washButton = event.target?.closest?.('#wash-golden-core');
+    if (washButton && !washButton.disabled) {
+      const state = currentCoreState();
+      // 只在開始洗掉「已裝配」金丹時建立比較基準。
+      // 若連續洗髓但尚未裝配，仍保留最初那顆已裝配金丹的品質作比較。
+      if (state?.equipped && Number.isFinite(Number(state.grade))) {
+        writeBaseline(state.grade);
+      } else if (readBaseline() == null && Number.isFinite(Number(state?.grade))) {
+        writeBaseline(state.grade);
+      }
+      return;
+    }
+
     const button = event.target?.closest?.('#equip-current-core');
     if (!button || button.disabled) return;
 
@@ -160,12 +202,21 @@
     }
 
     const state = currentCoreState();
-    const grade = Number(state?.grade);
-    if (!Number.isFinite(grade) || grade < LOW_QUALITY_MIN_GRADE) return;
+    const newGrade = Number(state?.grade);
+    const oldGrade = readBaseline();
+    if (!Number.isFinite(newGrade) || oldGrade == null) return;
+
+    // 品階數字越大代表品質越差：例如三品 -> 五品就是降級。
+    if (newGrade <= oldGrade) return;
 
     event.preventDefault();
     event.stopPropagation();
     event.stopImmediatePropagation();
-    showWarning(button, state);
+    showWarning(button, oldGrade, clampGrade(newGrade), state);
   }, true);
+
+  // 若載入時已經是正常裝配狀態，舊的比較基準可以清掉；
+  // 下一次洗髓時會重新記錄當下已裝配金丹的品質。
+  const initial = currentCoreState();
+  if (initial?.equipped) clearBaseline();
 })();
