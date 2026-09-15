@@ -43,12 +43,16 @@
   }
 
   function score() {
-    const el = document.getElementById('display-score');
-    if (!el) return 0;
-    const n = String(el.textContent || '').replace(/[^0-9.-]/g, '');
-    return Math.max(0, Number(n) || 0);
+    // 🔥 直接從 main-legacy 的記憶體讀取真正的「修為 (totalScore)」，不再依賴畫面文字
+    if (typeof window.getCurrentUserData === 'function') {
+        const user = window.getCurrentUserData();
+        if (user && user.stats) {
+            return Math.max(0, Number(user.stats.totalScore) || 0);
+        }
+    }
+    return 0;
   }
-
+  
   function realmFor(value) {
     let current = REALMS[0];
     REALMS.forEach((r) => { 
@@ -195,11 +199,15 @@
     text('[data-i18n="inventory_title"]', '法寶庫');
     text('[data-i18n="rank_title"]', '九州仙榜'); 
     text('[data-i18n="th_rank"]', '境界');
-    text('[data-i18n="stat_score"]', '修為'); 
-    text('[data-i18n="stat_streak"]', '道心'); 
-    text('[data-i18n="stat_best_streak"]', '最高道心');
     text('[data-i18n="btn_next_q"]', '繼續悟道'); 
     text('[data-i18n="btn_back_home"]', '返回仙府');
+    
+    // 🔥 手動修改原本首頁的四格面板標題，更符合修仙主題
+    document.querySelectorAll('.stat-label').forEach(el => {
+        if (el.innerText === 'ACCURACY') el.innerText = '悟性 (正確率)';
+        if (el.innerText === 'STREAK') el.innerText = '當前道心';
+        if (el.innerText === 'BEST RECORD') el.innerText = '最高道心';
+    });
   }
 
   function render() {
