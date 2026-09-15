@@ -1,19 +1,39 @@
-// 修仙世界入口：先載入核心遊戲，再套用修仙主題、修為規則與五大仙位玩法。
+// 核心登入／遊戲模組必須優先且獨立載入。
+// 任一附加修仙功能載入失敗，都不能再阻斷 Google 登入。
 import './main-legacy.js';
-import './cultivation-theme.js';
-import './cultivation-rules.js';
-import './xiuxian-live-sync.js';
-import './five-immortals.js';
-import './cultivation-progression-v2.js';
-import './golden-core-access-guard.js';
-import './cultivation-training-v4.js';
-import './cultivation-core-visual.js';
-import './cultivation-core-equip-warning.js';
-import './cultivation-combat-stats.js';
-import './cultivation-status-panel.js';
-import './realm-breakthrough-feedback.js';
-import './cultivation-rank-sync.js';
-import './newbie-tutorial.js';
+
+const XIUXIAN_FEATURE_MODULES = [
+  './cultivation-theme.js',
+  './cultivation-rules.js',
+  './xiuxian-live-sync.js',
+  './five-immortals.js',
+  './cultivation-progression-v2.js',
+  './golden-core-access-guard.js',
+  './cultivation-training-v4.js',
+  './cultivation-core-visual.js',
+  './cultivation-core-equip-warning.js',
+  './cultivation-combat-stats.js',
+  './cultivation-status-panel.js',
+  './realm-breakthrough-feedback.js',
+  './cultivation-rank-sync.js',
+  './newbie-tutorial.js'
+];
+
+async function loadXiuxianFeaturesSafely() {
+  for (const modulePath of XIUXIAN_FEATURE_MODULES) {
+    try {
+      // 依序載入，保證進度遷移 → 金丹守門 → 金丹系統等相依順序不變。
+      await import(modulePath);
+    } catch (error) {
+      // 附加功能故障時只停用該功能，絕不影響登入與核心答題。
+      console.error(`[Xiuxian] Failed to load optional module: ${modulePath}`, error);
+    }
+  }
+
+  window.dispatchEvent(new CustomEvent('xiuxian:features-ready'));
+}
+
+loadXiuxianFeaturesSafely();
 
 // 恢復原本的科幻／電腦字體。
 // Orbitron 負責英文字母與數字；中文字沒有對應字形時自動使用 Noto Sans TC。
