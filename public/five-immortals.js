@@ -1,82 +1,21 @@
-// 九州五大仙：全服固定五席，每席以 Firestore 文件原子搶占。
+// 九州五大仙：全服固定五席，每席以 Firestore 交易原子搶占。
 (function () {
   'use strict';
-
   const ROLES = [
-    { id: 'ru-xian', name: '儒仙', subject: '國文', icon: '📚', desc: '以文載道' },
-    { id: 'fa-xian', name: '法仙', subject: '社會', icon: '⚖️', desc: '洞察世事' },
-    { id: 'suan-xian', name: '算仙', subject: '數學', icon: '🧮', desc: '推演天機' },
-    { id: 'xuan-xian', name: '玄仙', subject: '自然', icon: '🔬', desc: '參悟天地' },
-    { id: 'wai-xian', name: '外仙', subject: '英文', icon: '🌐', desc: '通達萬邦' }
+    { id:'ru-xian',name:'儒仙',subject:'國文',icon:'📚',desc:'以文載道' },
+    { id:'fa-xian',name:'法仙',subject:'社會',icon:'⚖️',desc:'洞察世事' },
+    { id:'suan-xian',name:'算仙',subject:'數學',icon:'🧮',desc:'推演天機' },
+    { id:'xuan-xian',name:'玄仙',subject:'自然',icon:'🔬',desc:'參悟天地' },
+    { id:'wai-xian',name:'外仙',subject:'英文',icon:'🌐',desc:'通達萬邦' }
   ];
-
-  let db = null;
-  let auth = null;
-  let fs = null;
-  let owners = {};
-  let claiming = false;
-
-  const css = `
-    .five-immortals{margin:16px auto;padding:18px;border:1px solid rgba(233,196,106,.25);border-radius:22px;background:linear-gradient(145deg,rgba(31,25,45,.97),rgba(12,15,29,.97));box-shadow:0 12px 40px rgba(0,0,0,.22)}
-    .five-immortals h3{margin:0;color:#f6e6b0;font-size:18px;font-weight:900}.five-immortals p{margin:4px 0 0;color:#8f96ad;font-size:10px}
-    .immortal-list{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}.immortal{padding:12px;border:1px solid rgba(255,255,255,.08);border-radius:15px;background:rgba(255,255,255,.025);min-height:92px}.immortal:nth-child(5){grid-column:1/-1}
-    .immortal-name{font-size:15px;font-weight:900;color:#fff}.immortal-subject{font-size:10px;font-weight:800;color:#c8a85c;margin-top:2px}.immortal-owner{font-size:10px;color:#aab0c5;margin-top:8px}.immortal-btn{margin-top:7px;padding:6px 9px;border-radius:9px;border:1px solid rgba(233,196,106,.3);background:rgba(233,196,106,.08);color:#f6e6b0;font-size:10px;font-weight:900;cursor:pointer}.immortal-status{margin-top:7px;color:#7ee2b8;font-size:10px;font-weight:900}
-  `;
-
-  function toast(msg){
-    const e=document.createElement('div');e.textContent=msg;e.style.cssText='position:fixed;left:50%;bottom:110px;transform:translateX(-50%);z-index:999;padding:10px 16px;border-radius:999px;background:#111528;color:#f6e6b0;border:1px solid rgba(233,196,106,.35);font-size:12px';document.body.appendChild(e);setTimeout(()=>e.remove(),2600);
-  }
-
-  async function connect(){
-    try{
-      const [{initializeApp},a,f]=await Promise.all([
-        import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js'),
-        import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js'),
-        import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js')
-      ]);
-      const app=initializeApp({apiKey:'AIzaSyDifdJmLTmwQATz__xUHSkXZ_xXOWyX-wU',authDomain:'question-learning.firebaseapp.com',projectId:'question-learning',storageBucket:'question-learning.firebasestorage.app',messagingSenderId:'1058543232092',appId:'1:1058543232092:web:3fcc40f5f069b6df307299'},'five-immortals');
-      auth=a.getAuth(app);db=f.getFirestore(app);fs=f;
-      await load();
-    }catch(e){console.warn('五大仙連線失敗',e);render();}
-  }
-
-  async function load(){
-    if(!db)return;
-    try{const snap=await fs.getDocs(fs.collection(db,'worldImmortals'));owners={};snap.forEach(d=>owners[d.id]=d.data());}catch(e){console.warn('五大仙讀取失敗',e)}
-    render();
-  }
-
-  async function claim(id){
-    if(claiming)return;
-    const user=auth&&auth.currentUser;if(!user){toast('請先登入，才能問鼎仙位。');return;}
-    if(owners[id]){toast('此仙位已有仙主。');return;}
-    claiming=true;
-    try{
-      const ref=fs.doc(db,'worldImmortals',id);
-      await fs.runTransaction(db,async tx=>{
-        const snap=await tx.get(ref);if(snap.exists())throw new Error('TAKEN');
-        tx.set(ref,{uid:user.uid,displayName:user.displayName||'無名仙客',photoURL:user.photoURL||'',role:id,claimedAt:fs.serverTimestamp()});
-      });
-      toast('問鼎成功！恭喜登臨仙位。');await load();
-    }catch(e){toast(e.message==='TAKEN'?'慢了一步，此仙位已被他人問鼎。':'仙位爭奪失敗，請稍後再試。');await load();}
-    finally{claiming=false;}
-  }
-
-  function render(){
-    const grid=document.getElementById('five-immortal-list');if(!grid)return;
-    const uid=auth&&auth.currentUser?auth.currentUser.uid:'';
-    grid.innerHTML=ROLES.map(r=>{const o=owners[r.id];const mine=o&&o.uid===uid;return `<div class="immortal"><div class="immortal-name">${r.icon} ${r.name}</div><div class="immortal-subject">${r.subject} · ${r.desc}</div>${o?`<div class="immortal-owner">👤 ${o.displayName||'無名仙客'}</div><div class="immortal-status">${mine?'✦ 你已登臨此位':'✦ 此席已有仙主'}</div>`:`<div class="immortal-owner">此席尚無仙主</div><button class="immortal-btn" data-immortal="${r.id}">問鼎 ${r.name}</button>`}</div>`}).join('');
-    grid.querySelectorAll('[data-immortal]').forEach(b=>b.onclick=()=>claim(b.dataset.immortal));
-  }
-
-  function mount(){
-    if(!document.getElementById('five-immortals-style')){const s=document.createElement('style');s.id='five-immortals-style';s.textContent=css;document.head.appendChild(s)}
-    const home=document.getElementById('page-home');if(!home||document.getElementById('five-immortals'))return;
-    const anchor=document.getElementById('xiuxian-panel')||home.querySelector('.grid.grid-cols-2');if(!anchor)return;
-    const box=document.createElement('section');box.id='five-immortals';box.className='five-immortals';box.innerHTML='<h3>☯️ 九州五大仙</h3><p>全服僅有五席 · 儒仙（國文）· 法仙（社會）· 算仙（數學）· 玄仙（自然）· 外仙（英文）</p><div id="five-immortal-list" class="immortal-list"></div>';
-    anchor.parentNode.insertBefore(box,anchor.nextSibling);render();connect();
-  }
-
+  let db=null,auth=null,fs=null,owners={},claiming=false;
+  const css=`.five-immortals{margin:16px auto;padding:18px;border:1px solid rgba(233,196,106,.25);border-radius:22px;background:linear-gradient(145deg,rgba(31,25,45,.97),rgba(12,15,29,.97));box-shadow:0 12px 40px rgba(0,0,0,.22)}.five-immortals h3{margin:0;color:#f6e6b0;font-size:18px;font-weight:900}.five-immortals p{margin:4px 0 0;color:#8f96ad;font-size:10px}.immortal-list{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}.immortal{padding:12px;border:1px solid rgba(255,255,255,.08);border-radius:15px;background:rgba(255,255,255,.025);min-height:92px}.immortal:nth-child(5){grid-column:1/-1}.immortal-name{font-size:15px;font-weight:900;color:#fff}.immortal-subject{font-size:10px;font-weight:800;color:#c8a85c;margin-top:2px}.immortal-owner{font-size:10px;color:#aab0c5;margin-top:8px}.immortal-btn{margin-top:7px;padding:6px 9px;border-radius:9px;border:1px solid rgba(233,196,106,.3);background:rgba(233,196,106,.08);color:#f6e6b0;font-size:10px;font-weight:900;cursor:pointer}.immortal-status{margin-top:7px;color:#7ee2b8;font-size:10px;font-weight:900}`;
+  function toast(msg){const e=document.createElement('div');e.textContent=msg;e.style.cssText='position:fixed;left:50%;bottom:110px;transform:translateX(-50%);z-index:999;padding:10px 16px;border-radius:999px;background:#111528;color:#f6e6b0;border:1px solid rgba(233,196,106,.35);font-size:12px';document.body.appendChild(e);setTimeout(()=>e.remove(),2600)}
+  async function connect(){try{const[{initializeApp},a,f]=await Promise.all([import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js'),import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js'),import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js')]);const app=initializeApp({apiKey:'AIzaSyDifdJmLTmwQATz__xUHSkXZ_xXOWyX-wU',authDomain:'question-learning.firebaseapp.com',projectId:'question-learning',storageBucket:'question-learning.firebasestorage.app',messagingSenderId:'1058543232092',appId:'1:1058543232092:web:3fcc40f5f069b6df307299'},'five-immortals');auth=a.getAuth(app);db=f.getFirestore(app);fs=f;await load()}catch(e){console.warn('五大仙連線失敗',e);render()}}
+  async function load(){if(!db)return;try{const snap=await fs.getDocs(fs.collection(db,'worldImmortals'));owners={};snap.forEach(d=>owners[d.id]=d.data())}catch(e){console.warn('五大仙讀取失敗',e)}render()}
+  async function claim(id){if(claiming)return;const user=auth&&auth.currentUser;if(!user){toast('請先登入，才能問鼎仙位。');return}if(owners[id]){toast('此仙位已有仙主。');return}claiming=true;try{const ref=fs.doc(db,'worldImmortals',id);await fs.runTransaction(db,async tx=>{const refs=ROLES.map(r=>fs.doc(db,'worldImmortals',r.id));const snaps=await Promise.all(refs.map(r=>tx.get(r)));if(snaps.some(s=>s.exists()&&s.data().uid===user.uid))throw new Error('ALREADY_HAS_ROLE');const target=snaps[ROLES.findIndex(r=>r.id===id)];if(target.exists())throw new Error('TAKEN');tx.set(ref,{uid:user.uid,displayName:user.displayName||'無名仙客',photoURL:user.photoURL||'',role:id,claimedAt:fs.serverTimestamp()})});toast('問鼎成功！恭喜登臨仙位。');await load()}catch(e){toast(e.message==='TAKEN'?'慢了一步，此仙位已被他人問鼎。':e.message==='ALREADY_HAS_ROLE'?'你已經擁有一席仙位，不可再占第二席。':'仙位爭奪失敗，請稍後再試。');await load()}finally{claiming=false}}
+  function render(){const grid=document.getElementById('five-immortal-list');if(!grid)return;const uid=auth&&auth.currentUser?auth.currentUser.uid:'';grid.innerHTML=ROLES.map(r=>{const o=owners[r.id],mine=o&&o.uid===uid;return `<div class="immortal"><div class="immortal-name">${r.icon} ${r.name}</div><div class="immortal-subject">${r.subject} · ${r.desc}</div>${o?`<div class="immortal-owner">👤 ${o.displayName||'無名仙客'}</div><div class="immortal-status">${mine?'✦ 你已登臨此位':'✦ 此席已有仙主'}</div>`:`<div class="immortal-owner">此席尚無仙主</div><button class="immortal-btn" data-immortal="${r.id}">問鼎 ${r.name}</button>`}</div>`}).join('');grid.querySelectorAll('[data-immortal]').forEach(b=>b.onclick=()=>claim(b.dataset.immortal))}
+  function mount(){if(!document.getElementById('five-immortals-style')){const s=document.createElement('style');s.id='five-immortals-style';s.textContent=css;document.head.appendChild(s)}const home=document.getElementById('page-home');if(!home||document.getElementById('five-immortals'))return;const anchor=document.getElementById('xiuxian-panel')||home.querySelector('.grid.grid-cols-2');if(!anchor)return;const box=document.createElement('section');box.id='five-immortals';box.className='five-immortals';box.innerHTML='<h3>☯️ 九州五大仙</h3><p>全服僅有五席 · 儒仙（國文）· 法仙（社會）· 算仙（數學）· 玄仙（自然）· 外仙（英文）</p><div id="five-immortal-list" class="immortal-list"></div>';anchor.parentNode.insertBefore(box,anchor.nextSibling);render();connect()}
   function boot(){mount();setInterval(()=>{if(!document.getElementById('five-immortals'))mount()},1000)}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
