@@ -4,7 +4,7 @@ import './cultivation-theme.js';
 import './cultivation-rules.js';
 import './xiuxian-live-sync.js';
 import './five-immortals.js';
-import './cultivation-training.js';
+import './cultivation-training-v2.js';
 
 // 恢復原本的科幻／電腦字體。
 // Orbitron 負責英文字母與數字；中文字沒有對應字形時自動使用 Noto Sans TC。
