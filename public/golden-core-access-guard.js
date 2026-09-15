@@ -1,4 +1,4 @@
-// 金丹入口守門：只有「舊版進度遷移已確認完成」且修為達 300 時，才允許金丹頁存在／顯示。
+// 金丹入口守門：只有「舊版進度遷移已確認完成」且修為達 300 時，才允許金丹頁與金丹效果存在。
 (function () {
   'use strict';
 
@@ -6,6 +6,7 @@
   const MIGRATION_FIELD = 'progressionMigrationV2';
   const MIGRATION_VERSION = 2;
   const STYLE_ID = 'golden-core-access-guard-style';
+  const WRAP_FLAG = '__goldenCoreAccessGuarded';
   let lastAllowed = null;
 
   function installStyle() {
@@ -54,8 +55,41 @@
     document.body?.classList.remove('cultivation-training-unlocked');
   }
 
+  function installRuntimeGuards() {
+    const resolver = window.resolveGoldenCoreCultivationReward;
+    if (typeof resolver === 'function' && !resolver[WRAP_FLAG]) {
+      const originalResolver = resolver;
+      const guardedResolver = function (payload) {
+        if (!allowed()) {
+          return {
+            bonusGain: 0,
+            forceShield: false,
+            preserveShield: false,
+            message: ''
+          };
+        }
+        return originalResolver.call(this, payload);
+      };
+      Object.defineProperty(guardedResolver, WRAP_FLAG, { value: true });
+      window.resolveGoldenCoreCultivationReward = guardedResolver;
+    }
+
+    const getter = window.getGoldenCoreState;
+    if (typeof getter === 'function' && !getter[WRAP_FLAG]) {
+      const originalGetter = getter;
+      const guardedGetter = function () {
+        if (!allowed()) return null;
+        return originalGetter.call(this);
+      };
+      Object.defineProperty(guardedGetter, WRAP_FLAG, { value: true });
+      window.getGoldenCoreState = guardedGetter;
+    }
+  }
+
   function enforce() {
     installStyle();
+    installRuntimeGuards();
+
     const canOpen = allowed();
     document.documentElement.classList.toggle('golden-core-access-ready', canOpen);
     document.body?.classList.toggle('golden-core-access-ready', canOpen);
@@ -79,6 +113,7 @@
   window.GOLDEN_CORE_UNLOCK_SCORE = GOLDEN_CORE_SCORE;
 
   installStyle();
+  queueMicrotask(installRuntimeGuards);
 
   function boot() {
     enforce();
@@ -87,6 +122,7 @@
     window.addEventListener('golden-core-state-changed', enforce);
 
     new MutationObserver(() => {
+      installRuntimeGuards();
       // 舊模組若在鎖定期間重新建立入口，會立即被移除；CSS 同時避免任何閃現。
       if (!allowed() && (document.getElementById('nav-training') || document.getElementById('page-training'))) {
         removeLockedTrainingUI();
