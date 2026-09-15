@@ -52,8 +52,19 @@
     };
   }
 
-  function currentCoreMarkup() {
+  function currentCoreSnapshot() {
     const core = window.getGoldenCoreState?.();
+    if (!core) return null;
+    return {
+      type: core.type || 'taichu',
+      name: core.name || '金丹',
+      grade: Number(core.grade) || 9,
+      effect: core.effect || '尚無特性資料',
+      equipped: !!core.equipped
+    };
+  }
+
+  function currentCoreMarkup(core) {
     if (!core) {
       return `
         <div class="status-core-empty">
@@ -64,7 +75,6 @@
     }
 
     const meta = CORE_META[core.type] || CORE_META.taichu;
-    const equipped = !!core.equipped;
     return `
       <div class="status-core-row">
         <div class="status-core-orb core-tone-${meta.tone}" aria-hidden="true">
@@ -74,10 +84,10 @@
         <div class="status-core-copy">
           <div class="status-core-topline">
             <span class="status-core-grade">${escapeHtml(core.grade)} 品</span>
-            <span class="status-core-equipped ${equipped ? 'on' : 'off'}">${equipped ? '已裝配' : '未裝配'}</span>
+            <span class="status-core-equipped ${core.equipped ? 'on' : 'off'}">${core.equipped ? '已裝配' : '未裝配'}</span>
           </div>
-          <h3>${escapeHtml(core.name || '金丹')}</h3>
-          <p>${escapeHtml(core.effect || '尚無特性資料')}</p>
+          <h3>${escapeHtml(core.name)}</h3>
+          <p>${escapeHtml(core.effect)}</p>
         </div>
       </div>
     `;
@@ -96,13 +106,20 @@
     `;
   }
 
-  function statusMarkup() {
-    const player = getPlayerSnapshot();
+  function statusSnapshot() {
+    return {
+      player: getPlayerSnapshot(),
+      core: currentCoreSnapshot()
+    };
+  }
+
+  function statusMarkup(snapshot) {
+    const player = snapshot.player;
     return `
       <section class="training-status-panel">
         <div class="status-section status-core-section">
           <div class="status-section-title"><span>目前金丹</span><small>CURRENT CORE</small></div>
-          ${currentCoreMarkup()}
+          ${currentCoreMarkup(snapshot.core)}
         </div>
 
         <div class="status-section status-player-section">
@@ -124,8 +141,15 @@
     if (!statusActive || rendering) return;
     const content = document.getElementById('training-tab-content');
     if (!content) return;
+
+    const snapshot = statusSnapshot();
+    const key = JSON.stringify(snapshot);
+    const alreadyShowing = !!content.querySelector(':scope > .training-status-panel');
+    if (alreadyShowing && content.dataset.statusSnapshot === key) return;
+
     rendering = true;
-    content.innerHTML = statusMarkup();
+    content.innerHTML = statusMarkup(snapshot);
+    content.dataset.statusSnapshot = key;
     rendering = false;
   }
 
@@ -164,7 +188,7 @@
     button.className = 'training-subtab-v3 training-status-tab';
     button.setAttribute('role', 'tab');
     button.setAttribute('aria-selected', 'false');
-    button.innerHTML = '<i class="fa-solid fa-user-astronaut"></i><span>狀態</span>';
+    button.innerHTML = '<i class="fa-solid fa-chart-simple"></i><span>狀態</span>';
     button.addEventListener('click', activateStatus);
     tabs.appendChild(button);
   }
@@ -190,6 +214,7 @@
     sync();
 
     new MutationObserver(() => {
+      // 只負責補回分頁；狀態內容有快照比對，不會因自身 render 形成循環。
       sync();
     }).observe(document.body, { childList: true, subtree: true });
 
