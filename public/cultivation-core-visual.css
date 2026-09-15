@@ -1,272 +1,507 @@
-/* 金丹品質視覺：九品樸素，一品最精緻。維持黑金主題，不使用刺眼霓虹。 */
+/* 金丹品質視覺 v2：金丹更大、更精緻；品質越高，丹紋、金光、符文、靈霧與星塵越華麗。 */
 .golden-core-stage-v3 {
   --quality-gold: 216, 177, 93;
-  --quality-pale: 255, 232, 166;
+  --quality-pale: 255, 235, 177;
+  --quality-white: 255, 249, 225;
+  --quality-amber: 245, 188, 74;
   isolation: isolate;
+  width: clamp(190px, 31vh, 270px) !important;
+  height: clamp(190px, 31vh, 270px) !important;
+  overflow: visible !important;
 }
 
 .golden-core-stage-v3 .golden-core-sphere-v3 {
   overflow: hidden;
-}
-
-.golden-core-stage-v3 .golden-core-sphere-v3 > span:not(.core-inner-seal):not(.core-inner-vein) {
+  width: clamp(92px, 15vh, 126px) !important;
+  height: clamp(92px, 15vh, 126px) !important;
   position: relative;
-  z-index: 6;
+  background-blend-mode: screen, normal;
+  transform-style: preserve-3d;
 }
 
+.golden-core-stage-v3 .golden-core-sphere-v3 > span:not(.core-inner-seal):not(.core-inner-vein):not(.core-surface-runes):not(.core-liquid-light):not(.core-specular-glint):not(.core-shimmer-sweep) {
+  position: relative;
+  z-index: 12;
+}
+
+.core-celestial-aura,
 .core-quality-rays,
+.core-ray-burst,
+.core-aether-mist,
+.core-rune-ring,
+.core-arc-light,
 .core-dan-pattern,
 .core-quality-sparks,
+.core-quality-spark,
 .core-inner-seal,
 .core-inner-vein,
-.core-quality-spark {
+.core-surface-runes,
+.core-liquid-light,
+.core-specular-glint,
+.core-shimmer-sweep {
   pointer-events: none;
+  position: absolute;
 }
 
-/* 球體內部丹紋 */
-.core-inner-seal {
-  position: absolute;
-  inset: 13%;
-  z-index: 2;
+/* ===== 外放光場 ===== */
+.core-celestial-aura {
+  z-index: -3;
+  left: 50%;
+  top: 50%;
+  width: 82%;
+  height: 82%;
+  transform: translate(-50%, -50%);
   border-radius: 50%;
   opacity: .08;
-  background:
-    conic-gradient(from 8deg,
-      transparent 0 8%, rgba(var(--quality-pale),.58) 9% 10%, transparent 11% 24%,
-      rgba(var(--quality-pale),.36) 25% 26%, transparent 27% 44%,
-      rgba(var(--quality-pale),.52) 45% 46%, transparent 47% 66%,
-      rgba(var(--quality-pale),.34) 67% 68%, transparent 69% 100%);
-  -webkit-mask: radial-gradient(circle, transparent 0 34%, #000 36% 43%, transparent 45% 57%, #000 59% 61%, transparent 63%);
-  mask: radial-gradient(circle, transparent 0 34%, #000 36% 43%, transparent 45% 57%, #000 59% 61%, transparent 63%);
+  background: radial-gradient(circle,
+    rgba(var(--quality-white), .16) 0 16%,
+    rgba(var(--quality-gold), .14) 31%,
+    rgba(var(--quality-gold), .055) 52%,
+    transparent 72%);
+  filter: blur(8px);
 }
 
-.core-inner-vein {
-  position: absolute;
-  z-index: 3;
-  width: 72%;
-  height: 24%;
-  left: 14%;
-  top: 38%;
-  border-radius: 50%;
-  border-top: 1px solid rgba(var(--quality-pale),.36);
-  border-bottom: 1px solid rgba(var(--quality-gold),.20);
-  opacity: 0;
-  filter: drop-shadow(0 0 3px rgba(var(--quality-gold),.14));
-}
-.core-inner-vein.vein-a { transform: rotate(24deg); }
-.core-inner-vein.vein-b { transform: rotate(-48deg) scale(.82); }
-
-/* 丹體外部三層丹紋 */
-.core-dan-pattern {
-  position: absolute;
-  z-index: 4;
-  left: 50%;
-  top: 50%;
-  width: 48%;
-  height: 48%;
-  border-radius: 50%;
-  transform: translate(-50%,-50%);
-  opacity: 0;
-  border: 1px solid rgba(var(--quality-pale),.38);
-  box-shadow: inset 0 0 9px rgba(var(--quality-gold),.06), 0 0 8px rgba(var(--quality-gold),.07);
-}
-.core-dan-pattern.pattern-a {
-  border-style: solid dashed solid dashed;
-  width: 50%;
-  height: 50%;
-}
-.core-dan-pattern.pattern-b {
-  width: 42%;
-  height: 42%;
-  border-style: dashed solid dashed solid;
-  transform: translate(-50%,-50%) rotate(45deg);
-}
-.core-dan-pattern.pattern-c {
-  width: 34%;
-  height: 34%;
-  border-width: 1px 0;
-  transform: translate(-50%,-50%) rotate(90deg);
-}
-
-/* 四品以上才出現外放金芒 */
 .core-quality-rays {
-  position: absolute;
-  z-index: 0;
+  z-index: -2;
   left: 50%;
   top: 50%;
-  width: 74%;
-  height: 74%;
-  transform: translate(-50%,-50%);
+  width: 92%;
+  height: 92%;
+  transform: translate(-50%, -50%);
   border-radius: 50%;
   opacity: 0;
   background: repeating-conic-gradient(
     from 0deg,
-    rgba(var(--quality-gold),.16) 0deg 1.2deg,
-    transparent 1.2deg 16deg
+    rgba(var(--quality-pale), .28) 0deg 1deg,
+    transparent 1deg 8deg,
+    rgba(var(--quality-gold), .12) 8deg 9deg,
+    transparent 9deg 18deg
   );
-  -webkit-mask: radial-gradient(circle, transparent 0 54%, #000 63%, transparent 82%);
-  mask: radial-gradient(circle, transparent 0 54%, #000 63%, transparent 82%);
-  filter: blur(.2px) drop-shadow(0 0 7px rgba(var(--quality-gold),.12));
+  -webkit-mask: radial-gradient(circle, transparent 0 43%, #000 53%, rgba(0,0,0,.85) 70%, transparent 86%);
+  mask: radial-gradient(circle, transparent 0 43%, #000 53%, rgba(0,0,0,.85) 70%, transparent 86%);
+  filter: blur(.3px) drop-shadow(0 0 10px rgba(var(--quality-gold), .14));
 }
 
-/* 靈光粒子 */
-.core-quality-sparks {
+.core-ray-burst {
+  z-index: -4;
+  left: 50%;
+  top: 50%;
+  width: 116%;
+  height: 116%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  opacity: 0;
+  background: repeating-conic-gradient(
+    from 6deg,
+    transparent 0deg 10deg,
+    rgba(var(--quality-pale), .16) 10deg 10.8deg,
+    transparent 10.8deg 22deg
+  );
+  -webkit-mask: radial-gradient(circle, transparent 0 60%, #000 68%, transparent 90%);
+  mask: radial-gradient(circle, transparent 0 60%, #000 68%, transparent 90%);
+  filter: drop-shadow(0 0 9px rgba(var(--quality-gold), .18));
+}
+
+.core-aether-mist {
+  z-index: -5;
+  left: 50%;
+  top: 50%;
+  width: 112%;
+  height: 72%;
+  transform: translate(-50%, -50%) rotate(-10deg);
+  border-radius: 50%;
+  opacity: 0;
+  background:
+    radial-gradient(ellipse at 25% 45%, rgba(var(--quality-gold), .14), transparent 42%),
+    radial-gradient(ellipse at 72% 58%, rgba(var(--quality-pale), .10), transparent 38%),
+    radial-gradient(ellipse at 52% 50%, rgba(var(--quality-gold), .08), transparent 62%);
+  filter: blur(13px);
+}
+
+/* ===== 符文光輪 ===== */
+.core-rune-ring {
+  left: 50%;
+  top: 50%;
+  border-radius: 50%;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  border: 1px dashed rgba(var(--quality-pale), .26);
+  box-shadow: inset 0 0 13px rgba(var(--quality-gold), .05), 0 0 14px rgba(var(--quality-gold), .06);
+}
+
+.core-rune-ring::before,
+.core-rune-ring::after {
+  content: '◇  ·  玄  ·  丹  ·  道  ·  ✦  ·  氣  ·  ◇';
   position: absolute;
-  inset: 0;
+  inset: -10px;
+  display: grid;
+  place-items: start center;
+  color: rgba(var(--quality-pale), .50);
+  font-size: 8px;
+  letter-spacing: .36em;
+  text-shadow: 0 0 6px rgba(var(--quality-gold), .28);
+}
+.core-rune-ring::after { transform: rotate(180deg); }
+.core-rune-ring.rune-outer { width: 78%; height: 78%; }
+.core-rune-ring.rune-inner { width: 63%; height: 63%; border-style: solid dashed; }
+
+/* ===== 四道交錯弧光 ===== */
+.core-arc-light {
+  z-index: 5;
+  left: 50%;
+  top: 50%;
+  width: 66%;
+  height: 28%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  opacity: 0;
+  border-top: 1px solid rgba(var(--quality-white), .56);
+  border-bottom: 1px solid rgba(var(--quality-gold), .12);
+  filter: drop-shadow(0 0 5px rgba(var(--quality-gold), .24));
+}
+.core-arc-light.arc-1 { transform: translate(-50%, -50%) rotate(18deg); }
+.core-arc-light.arc-2 { transform: translate(-50%, -50%) rotate(72deg); }
+.core-arc-light.arc-3 { transform: translate(-50%, -50%) rotate(132deg); }
+.core-arc-light.arc-4 { transform: translate(-50%, -50%) rotate(-36deg) scale(.84); }
+
+/* ===== 丹體內部：液態流光與丹紋 ===== */
+.core-inner-seal {
+  inset: 10%;
+  z-index: 4;
+  border-radius: 50%;
+  opacity: .07;
+  background:
+    conic-gradient(from 8deg,
+      transparent 0 7%, rgba(var(--quality-pale),.62) 8% 9%, transparent 10% 20%,
+      rgba(var(--quality-pale),.32) 21% 23%, transparent 24% 37%,
+      rgba(var(--quality-white),.55) 38% 39%, transparent 40% 55%,
+      rgba(var(--quality-gold),.44) 56% 58%, transparent 59% 73%,
+      rgba(var(--quality-pale),.52) 74% 75%, transparent 76% 100%);
+  -webkit-mask: radial-gradient(circle, transparent 0 27%, #000 29% 36%, transparent 38% 48%, #000 50% 53%, transparent 55% 64%, #000 66% 68%, transparent 70%);
+  mask: radial-gradient(circle, transparent 0 27%, #000 29% 36%, transparent 38% 48%, #000 50% 53%, transparent 55% 64%, #000 66% 68%, transparent 70%);
+}
+
+.core-inner-vein {
+  z-index: 6;
+  width: 76%;
+  height: 25%;
+  left: 12%;
+  top: 38%;
+  border-radius: 50%;
+  border-top: 1px solid rgba(var(--quality-white), .43);
+  border-bottom: 1px solid rgba(var(--quality-gold), .22);
+  opacity: 0;
+  filter: drop-shadow(0 0 3px rgba(var(--quality-gold), .18));
+}
+.core-inner-vein.vein-a { transform: rotate(22deg); }
+.core-inner-vein.vein-b { transform: rotate(-47deg) scale(.82); }
+.core-inner-vein.vein-c { transform: rotate(83deg) scale(.66); }
+
+.core-surface-runes {
+  inset: 20%;
   z-index: 7;
+  border-radius: 50%;
+  opacity: 0;
+  background: repeating-conic-gradient(from 14deg,
+    transparent 0deg 19deg,
+    rgba(var(--quality-white), .40) 20deg 21deg,
+    transparent 22deg 39deg);
+  -webkit-mask: radial-gradient(circle, transparent 0 49%, #000 51% 58%, transparent 60%);
+  mask: radial-gradient(circle, transparent 0 49%, #000 51% 58%, transparent 60%);
+}
+
+.core-liquid-light {
+  inset: -18%;
+  z-index: 2;
+  border-radius: 45%;
+  opacity: .08;
+  background:
+    radial-gradient(ellipse at 30% 24%, rgba(255,255,255,.30), transparent 22%),
+    conic-gradient(from 120deg, transparent, rgba(var(--quality-pale), .18), transparent 32%, rgba(var(--quality-gold), .16), transparent 63%);
+  filter: blur(4px);
+}
+
+.core-specular-glint {
+  z-index: 10;
+  left: 23%;
+  top: 18%;
+  width: 22%;
+  height: 13%;
+  transform: rotate(-28deg);
+  border-radius: 50%;
+  opacity: .24;
+  background: radial-gradient(ellipse, rgba(255,255,255,.72), rgba(255,255,255,.12) 48%, transparent 72%);
+  filter: blur(.6px);
+}
+
+.core-shimmer-sweep {
+  z-index: 9;
+  top: -30%;
+  left: -48%;
+  width: 34%;
+  height: 160%;
+  transform: rotate(25deg);
+  opacity: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,251,231,.32), transparent);
+  filter: blur(2px);
+}
+
+/* ===== 外部丹紋 ===== */
+.core-dan-pattern {
+  z-index: 4;
+  left: 50%;
+  top: 50%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  border: 1px solid rgba(var(--quality-pale), .38);
+  box-shadow: inset 0 0 9px rgba(var(--quality-gold), .06), 0 0 9px rgba(var(--quality-gold), .08);
+}
+.core-dan-pattern.pattern-a { width: 49%; height: 49%; border-style: solid dashed; }
+.core-dan-pattern.pattern-b { width: 41%; height: 41%; border-style: dashed solid; transform: translate(-50%,-50%) rotate(45deg); }
+.core-dan-pattern.pattern-c { width: 33%; height: 33%; border-width: 1px 0; transform: translate(-50%,-50%) rotate(90deg); }
+.core-dan-pattern.pattern-d { width: 57%; height: 57%; border-style: dotted; transform: translate(-50%,-50%) rotate(20deg); }
+
+/* ===== 星塵／靈光粒子 ===== */
+.core-quality-sparks {
+  inset: 0;
+  z-index: 11;
 }
 .core-quality-spark {
-  position: absolute;
   width: 4px;
   height: 4px;
   border-radius: 50%;
   opacity: 0;
-  background: #f4d98f;
-  box-shadow: 0 0 7px rgba(var(--quality-pale),.65), 0 0 13px rgba(var(--quality-gold),.28);
-  animation: coreQualitySpark 2.7s ease-in-out infinite;
-  animation-delay: calc(var(--spark-index) * -0.22s);
+  background: #f8df9b;
+  box-shadow: 0 0 7px rgba(var(--quality-white), .72), 0 0 15px rgba(var(--quality-gold), .34);
+  animation: coreQualitySpark 2.5s ease-in-out infinite;
+  animation-delay: calc(var(--spark-index) * -0.17s);
 }
-.core-quality-spark:nth-child(1) { left:17%; top:29%; }
-.core-quality-spark:nth-child(2) { right:17%; top:34%; }
-.core-quality-spark:nth-child(3) { left:24%; bottom:22%; }
-.core-quality-spark:nth-child(4) { right:24%; bottom:20%; }
-.core-quality-spark:nth-child(5) { left:10%; top:52%; }
-.core-quality-spark:nth-child(6) { right:9%; top:55%; }
-.core-quality-spark:nth-child(7) { left:34%; top:11%; }
-.core-quality-spark:nth-child(8) { right:31%; top:12%; }
-.core-quality-spark:nth-child(9) { left:46%; bottom:8%; }
-.core-quality-spark:nth-child(10) { right:45%; top:5%; }
+.core-quality-spark:nth-child(1) { left:15%; top:29%; }
+.core-quality-spark:nth-child(2) { right:15%; top:31%; }
+.core-quality-spark:nth-child(3) { left:22%; bottom:20%; }
+.core-quality-spark:nth-child(4) { right:21%; bottom:18%; }
+.core-quality-spark:nth-child(5) { left:7%; top:51%; }
+.core-quality-spark:nth-child(6) { right:7%; top:55%; }
+.core-quality-spark:nth-child(7) { left:33%; top:8%; }
+.core-quality-spark:nth-child(8) { right:30%; top:9%; }
+.core-quality-spark:nth-child(9) { left:46%; bottom:5%; }
+.core-quality-spark:nth-child(10) { right:44%; top:2%; }
+.core-quality-spark:nth-child(11) { left:3%; top:38%; }
+.core-quality-spark:nth-child(12) { right:3%; top:39%; }
+.core-quality-spark:nth-child(13) { left:14%; bottom:8%; }
+.core-quality-spark:nth-child(14) { right:12%; bottom:9%; }
+.core-quality-spark:nth-child(15) { left:25%; top:2%; }
+.core-quality-spark:nth-child(16) { right:22%; top:3%; }
+.core-quality-spark:nth-child(17) { left:50%; top:-1%; }
+.core-quality-spark:nth-child(18) { left:51%; bottom:0; }
 
-/* 九、八、七品：只有很淡的天然丹紋。 */
-.core-grade-9 .core-inner-seal { opacity:.07; }
+/* ===== 品質階梯 ===== */
+/* 九～七品：樸素，但仍有立體高光。 */
+.core-grade-9 .core-inner-seal { opacity:.08; }
 .core-grade-9 .pattern-a { opacity:.08; }
+.core-grade-9 .core-celestial-aura { opacity:.08; }
 
-.core-grade-8 .core-inner-seal { opacity:.11; }
-.core-grade-8 .pattern-a { opacity:.13; }
-.core-grade-8 .core-inner-vein.vein-a { opacity:.12; }
+.core-grade-8 .core-inner-seal { opacity:.13; }
+.core-grade-8 .pattern-a { opacity:.14; }
+.core-grade-8 .core-inner-vein.vein-a { opacity:.13; }
+.core-grade-8 .core-celestial-aura { opacity:.11; }
 
-.core-grade-7 .core-inner-seal { opacity:.16; }
-.core-grade-7 .pattern-a { opacity:.20; }
+.core-grade-7 .core-inner-seal { opacity:.18; }
+.core-grade-7 .pattern-a { opacity:.21; }
 .core-grade-7 .pattern-b { opacity:.08; }
-.core-grade-7 .core-inner-vein.vein-a { opacity:.20; }
+.core-grade-7 .core-inner-vein.vein-a { opacity:.21; }
+.core-grade-7 .core-celestial-aura { opacity:.14; }
+.core-grade-7 .core-quality-spark:nth-child(-n+1) { opacity:.38; }
 
-/* 六～四品：丹紋完整，開始出現金邊與靈光。 */
-.core-grade-6 .core-inner-seal { opacity:.22; }
-.core-grade-6 .pattern-a { opacity:.28; }
-.core-grade-6 .pattern-b { opacity:.13; }
-.core-grade-6 .core-inner-vein { opacity:.22; }
-.core-grade-6 .core-quality-spark:nth-child(-n+2) { opacity:.46; }
+/* 六～四品：完整丹紋、可見光暈與靈塵。 */
+.core-grade-6 .core-inner-seal { opacity:.24; }
+.core-grade-6 .pattern-a { opacity:.30; }
+.core-grade-6 .pattern-b { opacity:.14; }
+.core-grade-6 .core-inner-vein { opacity:.23; }
+.core-grade-6 .core-celestial-aura { opacity:.18; }
+.core-grade-6 .core-quality-spark:nth-child(-n+3) { opacity:.50; }
+.core-grade-6 .core-shimmer-sweep { opacity:.12; animation:coreShimmer 4.8s ease-in-out infinite; }
 
-.core-grade-5 .core-inner-seal { opacity:.28; }
-.core-grade-5 .pattern-a { opacity:.34; }
-.core-grade-5 .pattern-b { opacity:.20; }
-.core-grade-5 .core-inner-vein { opacity:.29; }
-.core-grade-5 .core-quality-spark:nth-child(-n+3) { opacity:.56; }
-.core-grade-5 .golden-core-sphere-v3 {
-  box-shadow: inset -18px -20px 30px rgba(0,0,0,.33), inset 12px 10px 24px rgba(255,248,216,.17), 0 0 40px rgba(var(--quality-gold),.27);
-}
+.core-grade-5 .core-inner-seal { opacity:.31; }
+.core-grade-5 .pattern-a { opacity:.38; }
+.core-grade-5 .pattern-b { opacity:.23; }
+.core-grade-5 .core-inner-vein { opacity:.31; }
+.core-grade-5 .core-celestial-aura { opacity:.23; }
+.core-grade-5 .core-quality-rays { opacity:.11; }
+.core-grade-5 .core-quality-spark:nth-child(-n+5) { opacity:.61; }
+.core-grade-5 .core-shimmer-sweep { opacity:.16; animation:coreShimmer 4.3s ease-in-out infinite; }
+.core-grade-5 .golden-core-sphere-v3 { box-shadow: inset -20px -22px 34px rgba(0,0,0,.32), inset 13px 11px 25px rgba(255,248,216,.18), 0 0 44px rgba(var(--quality-gold),.30); }
 
-.core-grade-4 .core-inner-seal { opacity:.35; }
-.core-grade-4 .pattern-a { opacity:.42; }
-.core-grade-4 .pattern-b { opacity:.27; }
-.core-grade-4 .pattern-c { opacity:.13; }
-.core-grade-4 .core-inner-vein { opacity:.36; }
-.core-grade-4 .core-quality-rays { opacity:.18; }
-.core-grade-4 .core-quality-spark:nth-child(-n+4) { opacity:.66; }
-.core-grade-4 .golden-core-sphere-v3 {
-  border-color:rgba(255,225,147,.70);
-  box-shadow: inset -18px -20px 30px rgba(0,0,0,.32), inset 12px 10px 24px rgba(255,248,216,.20), 0 0 44px rgba(var(--quality-gold),.31);
-}
+.core-grade-4 .core-inner-seal { opacity:.39; }
+.core-grade-4 .pattern-a { opacity:.46; }
+.core-grade-4 .pattern-b { opacity:.31; }
+.core-grade-4 .pattern-c { opacity:.15; }
+.core-grade-4 .core-inner-vein { opacity:.39; }
+.core-grade-4 .core-surface-runes { opacity:.12; }
+.core-grade-4 .core-celestial-aura { opacity:.30; }
+.core-grade-4 .core-quality-rays { opacity:.22; animation:coreRayBreath 3.7s ease-in-out infinite; }
+.core-grade-4 .core-quality-spark:nth-child(-n+7) { opacity:.72; }
+.core-grade-4 .core-rune-ring.rune-inner { opacity:.12; }
+.core-grade-4 .core-shimmer-sweep { opacity:.20; animation:coreShimmer 3.8s ease-in-out infinite; }
+.core-grade-4 .golden-core-sphere-v3 { border-color:rgba(255,226,151,.74); box-shadow: inset -20px -22px 34px rgba(0,0,0,.30), inset 13px 11px 25px rgba(255,248,216,.22), 0 0 50px rgba(var(--quality-gold),.36); }
 
-/* 三、二品：旋轉丹紋、更多靈光粒子、雙層金暈。 */
-.core-grade-3 .core-inner-seal { opacity:.43; }
-.core-grade-3 .core-inner-vein { opacity:.44; }
-.core-grade-3 .pattern-a { opacity:.54; animation:corePatternSpin 16s linear infinite; }
-.core-grade-3 .pattern-b { opacity:.38; animation:corePatternSpinReverse 12s linear infinite; }
-.core-grade-3 .pattern-c { opacity:.20; }
-.core-grade-3 .core-quality-rays { opacity:.27; animation:coreRayBreath 3.4s ease-in-out infinite; }
-.core-grade-3 .core-quality-spark:nth-child(-n+6) { opacity:.76; }
-.core-grade-3 .golden-core-halo-v3 { border-color:rgba(var(--quality-gold),.27); }
-.core-grade-3 .golden-core-sphere-v3 {
-  border-color:rgba(255,230,160,.82);
-  box-shadow: inset -18px -20px 30px rgba(0,0,0,.30), inset 12px 10px 24px rgba(255,248,216,.23), 0 0 48px rgba(var(--quality-gold),.36), 0 0 18px rgba(var(--quality-pale),.12);
-}
+/* 三品：符文環、旋轉丹紋、弧光開始明顯。 */
+.core-grade-3 .core-inner-seal { opacity:.48; animation:coreSealPulse 3.5s ease-in-out infinite; }
+.core-grade-3 .core-inner-vein { opacity:.47; }
+.core-grade-3 .core-surface-runes { opacity:.22; animation:coreSurfaceSpin 14s linear infinite; }
+.core-grade-3 .pattern-a { opacity:.58; animation:corePatternSpin 15s linear infinite; }
+.core-grade-3 .pattern-b { opacity:.42; animation:corePatternSpinReverse 11s linear infinite; }
+.core-grade-3 .pattern-c { opacity:.24; }
+.core-grade-3 .pattern-d { opacity:.12; animation:corePatternSpin 22s linear infinite; }
+.core-grade-3 .core-celestial-aura { opacity:.38; animation:coreAuraBreath 3.1s ease-in-out infinite; }
+.core-grade-3 .core-quality-rays { opacity:.34; animation:coreRayBreath 3.1s ease-in-out infinite; }
+.core-grade-3 .core-quality-spark:nth-child(-n+10) { opacity:.82; }
+.core-grade-3 .core-rune-ring.rune-inner { opacity:.24; animation:coreRuneSpin 18s linear infinite; }
+.core-grade-3 .core-arc-light.arc-1,
+.core-grade-3 .core-arc-light.arc-2 { opacity:.34; animation:coreArcPulse 3.6s ease-in-out infinite; }
+.core-grade-3 .core-aether-mist { opacity:.16; animation:coreMistDrift 7s ease-in-out infinite; }
+.core-grade-3 .core-shimmer-sweep { opacity:.25; animation:coreShimmer 3.3s ease-in-out infinite; }
+.core-grade-3 .core-liquid-light { opacity:.18; animation:coreLiquidRotate 12s linear infinite; }
+.core-grade-3 .golden-core-sphere-v3 { border-color:rgba(255,233,170,.86); box-shadow: inset -20px -22px 34px rgba(0,0,0,.28), inset 13px 11px 25px rgba(255,248,216,.25), 0 0 58px rgba(var(--quality-gold),.43), 0 0 22px rgba(var(--quality-pale),.13); }
 
-.core-grade-2 .core-inner-seal { opacity:.52; }
-.core-grade-2 .core-inner-vein { opacity:.52; }
-.core-grade-2 .pattern-a { opacity:.66; animation:corePatternSpin 13s linear infinite; }
-.core-grade-2 .pattern-b { opacity:.50; animation:corePatternSpinReverse 10s linear infinite; }
-.core-grade-2 .pattern-c { opacity:.31; }
-.core-grade-2 .core-quality-rays { opacity:.38; animation:coreRayBreath 3s ease-in-out infinite; }
-.core-grade-2 .core-quality-spark:nth-child(-n+8) { opacity:.86; }
-.core-grade-2 .golden-core-halo-v3.halo-a { border-color:rgba(255,220,132,.38); box-shadow:0 0 30px rgba(var(--quality-gold),.15); }
-.core-grade-2 .golden-core-halo-v3.halo-b { border-color:rgba(var(--quality-pale),.27); }
-.core-grade-2 .golden-core-sphere-v3 {
-  border:1px solid rgba(255,235,179,.92);
-  box-shadow: inset -18px -20px 30px rgba(0,0,0,.28), inset 12px 10px 24px rgba(255,248,216,.27), 0 0 55px rgba(var(--quality-gold),.42), 0 0 24px rgba(var(--quality-pale),.16);
-}
+/* 二品：雙符文環、更強日冕與長芒。 */
+.core-grade-2 .core-inner-seal { opacity:.58; animation:coreSealPulse 3s ease-in-out infinite; }
+.core-grade-2 .core-inner-vein { opacity:.58; }
+.core-grade-2 .core-surface-runes { opacity:.34; animation:coreSurfaceSpin 10s linear infinite; }
+.core-grade-2 .pattern-a { opacity:.70; animation:corePatternSpin 12s linear infinite; }
+.core-grade-2 .pattern-b { opacity:.55; animation:corePatternSpinReverse 9s linear infinite; }
+.core-grade-2 .pattern-c { opacity:.36; animation:corePatternSpin 17s linear infinite; }
+.core-grade-2 .pattern-d { opacity:.18; animation:corePatternSpinReverse 22s linear infinite; }
+.core-grade-2 .core-celestial-aura { opacity:.52; animation:coreAuraBreath 2.7s ease-in-out infinite; }
+.core-grade-2 .core-quality-rays { opacity:.48; animation:coreRayBreath 2.7s ease-in-out infinite; }
+.core-grade-2 .core-ray-burst { opacity:.22; animation:coreBurstRotate 20s linear infinite; }
+.core-grade-2 .core-quality-spark:nth-child(-n+14) { opacity:.91; }
+.core-grade-2 .core-rune-ring.rune-inner { opacity:.36; animation:coreRuneSpin 14s linear infinite; }
+.core-grade-2 .core-rune-ring.rune-outer { opacity:.20; animation:coreRuneSpinReverse 21s linear infinite; }
+.core-grade-2 .core-arc-light { opacity:.42; animation:coreArcPulse 3.1s ease-in-out infinite; }
+.core-grade-2 .core-aether-mist { opacity:.23; animation:coreMistDrift 6s ease-in-out infinite; }
+.core-grade-2 .core-shimmer-sweep { opacity:.30; animation:coreShimmer 2.9s ease-in-out infinite; }
+.core-grade-2 .core-liquid-light { opacity:.25; animation:coreLiquidRotate 9s linear infinite; }
+.core-grade-2 .golden-core-halo-v3.halo-a { border-color:rgba(255,224,141,.45); box-shadow:0 0 36px rgba(var(--quality-gold),.18); }
+.core-grade-2 .golden-core-sphere-v3 { border:1px solid rgba(255,239,190,.95); box-shadow: inset -20px -22px 34px rgba(0,0,0,.25), inset 13px 11px 25px rgba(255,250,225,.30), 0 0 70px rgba(var(--quality-gold),.52), 0 0 31px rgba(var(--quality-pale),.20); }
 
-/* 一品：完整丹紋、金環、放射金芒與十枚靈光。 */
-.core-grade-1 .core-inner-seal { opacity:.66; animation:coreSealPulse 3.2s ease-in-out infinite; }
-.core-grade-1 .core-inner-vein { opacity:.66; }
-.core-grade-1 .pattern-a { opacity:.82; animation:corePatternSpin 10s linear infinite; border-color:rgba(255,239,190,.70); }
-.core-grade-1 .pattern-b { opacity:.68; animation:corePatternSpinReverse 7.5s linear infinite; border-color:rgba(233,190,91,.62); }
-.core-grade-1 .pattern-c { opacity:.48; animation:corePatternSpin 6.5s linear infinite; }
-.core-grade-1 .core-quality-rays { opacity:.58; animation:coreRayBreath 2.5s ease-in-out infinite; }
-.core-grade-1 .core-quality-spark { opacity:.96; width:5px; height:5px; }
-.core-grade-1 .golden-core-halo-v3.halo-a {
-  border-color:rgba(255,226,151,.58);
-  box-shadow:0 0 34px rgba(var(--quality-gold),.22), inset 0 0 20px rgba(var(--quality-pale),.06);
-}
-.core-grade-1 .golden-core-halo-v3.halo-b { border-color:rgba(255,239,194,.40); }
-.core-grade-1 .golden-core-orbit-v3 { border-color:rgba(255,222,144,.48); box-shadow:0 0 12px rgba(var(--quality-gold),.10); }
+/* 一品：全特效開啟——極品金丹。 */
+.core-grade-1 .core-inner-seal { opacity:.76; animation:coreSealPulse 2.6s ease-in-out infinite; }
+.core-grade-1 .core-inner-vein { opacity:.72; filter:drop-shadow(0 0 5px rgba(var(--quality-pale),.30)); }
+.core-grade-1 .core-surface-runes { opacity:.52; animation:coreSurfaceSpin 7s linear infinite; }
+.core-grade-1 .pattern-a { opacity:.92; animation:corePatternSpin 9s linear infinite; border-color:rgba(255,244,207,.82); }
+.core-grade-1 .pattern-b { opacity:.79; animation:corePatternSpinReverse 6.8s linear infinite; border-color:rgba(239,195,92,.72); }
+.core-grade-1 .pattern-c { opacity:.60; animation:corePatternSpin 5.8s linear infinite; }
+.core-grade-1 .pattern-d { opacity:.36; animation:corePatternSpinReverse 12s linear infinite; border-color:rgba(255,229,157,.58); }
+.core-grade-1 .core-celestial-aura { opacity:.76; animation:coreAuraBreath 2.2s ease-in-out infinite; }
+.core-grade-1 .core-quality-rays { opacity:.72; animation:coreRayBreath 2.15s ease-in-out infinite; }
+.core-grade-1 .core-ray-burst { opacity:.42; animation:coreBurstRotate 14s linear infinite; }
+.core-grade-1 .core-quality-spark { opacity:1; width:5px; height:5px; box-shadow:0 0 8px rgba(var(--quality-white),.90),0 0 18px rgba(var(--quality-gold),.48); }
+.core-grade-1 .core-rune-ring.rune-inner { opacity:.58; animation:coreRuneSpin 10s linear infinite; }
+.core-grade-1 .core-rune-ring.rune-outer { opacity:.42; animation:coreRuneSpinReverse 16s linear infinite; }
+.core-grade-1 .core-arc-light { opacity:.58; animation:coreArcPulse 2.6s ease-in-out infinite; }
+.core-grade-1 .core-arc-light.arc-3 { animation-delay:-.8s; }
+.core-grade-1 .core-arc-light.arc-4 { animation-delay:-1.4s; }
+.core-grade-1 .core-aether-mist { opacity:.34; animation:coreMistDrift 5.2s ease-in-out infinite; }
+.core-grade-1 .core-shimmer-sweep { opacity:.40; animation:coreShimmer 2.4s ease-in-out infinite; }
+.core-grade-1 .core-liquid-light { opacity:.34; animation:coreLiquidRotate 6.5s linear infinite; }
+.core-grade-1 .core-specular-glint { opacity:.55; animation:coreGlint 2.8s ease-in-out infinite; }
+.core-grade-1 .golden-core-halo-v3.halo-a { border-color:rgba(255,230,159,.70); box-shadow:0 0 46px rgba(var(--quality-gold),.30),inset 0 0 22px rgba(var(--quality-pale),.08); }
+.core-grade-1 .golden-core-halo-v3.halo-b { border-color:rgba(255,242,204,.48); box-shadow:0 0 24px rgba(var(--quality-gold),.13); }
+.core-grade-1 .golden-core-orbit-v3 { border-color:rgba(255,227,153,.62); box-shadow:0 0 16px rgba(var(--quality-gold),.18); }
 .core-grade-1 .golden-core-sphere-v3 {
-  border:1px solid rgba(255,242,204,.98);
+  border:1px solid rgba(255,248,222,1);
   box-shadow:
-    inset -18px -20px 30px rgba(0,0,0,.25),
-    inset 12px 10px 24px rgba(255,250,225,.31),
-    inset 0 0 18px rgba(255,224,143,.13),
-    0 0 62px rgba(var(--quality-gold),.50),
-    0 0 28px rgba(var(--quality-pale),.21);
+    inset -22px -24px 38px rgba(0,0,0,.22),
+    inset 14px 12px 28px rgba(255,252,233,.36),
+    inset 0 0 22px rgba(255,226,147,.18),
+    0 0 82px rgba(var(--quality-gold),.66),
+    0 0 40px rgba(var(--quality-pale),.27),
+    0 0 15px rgba(255,255,255,.18);
+}
+.core-grade-1 .golden-core-sphere-v3::before {
+  content:'';
+  position:absolute;
+  inset:3%;
+  z-index:3;
+  border-radius:50%;
+  border:1px solid rgba(255,250,230,.34);
+  box-shadow:inset 0 0 18px rgba(255,240,196,.13),0 0 9px rgba(var(--quality-pale),.12);
 }
 .core-grade-1 .golden-core-sphere-v3::after {
   content:'';
   position:absolute;
-  inset:5%;
-  z-index:1;
+  inset:9%;
+  z-index:3;
   border-radius:50%;
-  border:1px solid rgba(255,247,219,.22);
-  box-shadow:inset 0 0 13px rgba(255,238,187,.10);
+  border:1px dashed rgba(255,232,163,.24);
+  animation:coreInnerRingSpin 7s linear infinite;
 }
 
-@keyframes corePatternSpin {
-  from { transform:translate(-50%,-50%) rotate(0deg); }
-  to { transform:translate(-50%,-50%) rotate(360deg); }
+/* ===== 動畫 ===== */
+@keyframes corePatternSpin { from{transform:translate(-50%,-50%) rotate(0deg)} to{transform:translate(-50%,-50%) rotate(360deg)} }
+@keyframes corePatternSpinReverse { from{transform:translate(-50%,-50%) rotate(45deg)} to{transform:translate(-50%,-50%) rotate(-315deg)} }
+@keyframes coreRayBreath { 0%,100%{filter:brightness(.85) drop-shadow(0 0 7px rgba(var(--quality-gold),.11));transform:translate(-50%,-50%) scale(.95)} 50%{filter:brightness(1.18) drop-shadow(0 0 16px rgba(var(--quality-gold),.25));transform:translate(-50%,-50%) scale(1.06)} }
+@keyframes coreQualitySpark { 0%,100%{transform:scale(.55) translateY(3px);filter:brightness(.76);opacity:.35} 45%{transform:scale(1.25) translateY(-5px);filter:brightness(1.30);opacity:1} 70%{transform:scale(.85) translate(2px,-1px);opacity:.70} }
+@keyframes coreSealPulse { 0%,100%{transform:rotate(0deg) scale(.97)} 50%{transform:rotate(10deg) scale(1.055)} }
+@keyframes coreSurfaceSpin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+@keyframes coreAuraBreath { 0%,100%{transform:translate(-50%,-50%) scale(.91);filter:blur(9px) brightness(.86)} 50%{transform:translate(-50%,-50%) scale(1.10);filter:blur(11px) brightness(1.20)} }
+@keyframes coreRuneSpin { from{transform:translate(-50%,-50%) rotate(0deg)} to{transform:translate(-50%,-50%) rotate(360deg)} }
+@keyframes coreRuneSpinReverse { from{transform:translate(-50%,-50%) rotate(0deg)} to{transform:translate(-50%,-50%) rotate(-360deg)} }
+@keyframes coreArcPulse { 0%,100%{filter:drop-shadow(0 0 3px rgba(var(--quality-gold),.15));opacity:.25} 50%{filter:drop-shadow(0 0 9px rgba(var(--quality-pale),.40));opacity:.72} }
+@keyframes coreBurstRotate { from{transform:translate(-50%,-50%) rotate(0deg)} to{transform:translate(-50%,-50%) rotate(360deg)} }
+@keyframes coreMistDrift { 0%,100%{transform:translate(-50%,-50%) rotate(-10deg) scale(.92)} 50%{transform:translate(-47%,-53%) rotate(7deg) scale(1.08)} }
+@keyframes coreLiquidRotate { from{transform:rotate(0deg) scale(1)} 50%{transform:rotate(180deg) scale(1.08)} to{transform:rotate(360deg) scale(1)} }
+@keyframes coreShimmer { 0%,18%{left:-48%;opacity:0} 38%{opacity:.45} 54%{left:114%;opacity:.18} 55%,100%{left:114%;opacity:0} }
+@keyframes coreGlint { 0%,100%{transform:rotate(-28deg) scale(.8);opacity:.24} 50%{transform:rotate(-28deg) scale(1.25);opacity:.72} }
+@keyframes coreInnerRingSpin { from{transform:rotate(0deg)} to{transform:rotate(-360deg)} }
+
+/* hover 時高品金丹再爆發一點光芒 */
+.golden-core-stage-v3.clickable:hover.core-quality-high .core-quality-rays,
+.golden-core-stage-v3.clickable:hover.core-quality-supreme .core-quality-rays { filter:brightness(1.24) drop-shadow(0 0 18px rgba(var(--quality-gold),.30)); }
+.golden-core-stage-v3.clickable:hover.core-quality-supreme .core-celestial-aura { opacity:.94; }
+
+/* 低高度裝置仍保持一屏，不犧牲主要視覺。 */
+@media (max-height: 740px) {
+  .golden-core-stage-v3 {
+    width: clamp(170px, 27vh, 218px) !important;
+    height: clamp(170px, 27vh, 218px) !important;
+  }
+  .golden-core-stage-v3 .golden-core-sphere-v3 {
+    width: clamp(82px, 13vh, 104px) !important;
+    height: clamp(82px, 13vh, 104px) !important;
+  }
+  .core-rune-ring::before,
+  .core-rune-ring::after { font-size:6px; }
 }
-@keyframes corePatternSpinReverse {
-  from { transform:translate(-50%,-50%) rotate(45deg); }
-  to { transform:translate(-50%,-50%) rotate(-315deg); }
-}
-@keyframes coreRayBreath {
-  0%,100% { filter:brightness(.88) drop-shadow(0 0 5px rgba(var(--quality-gold),.09)); transform:translate(-50%,-50%) scale(.96); }
-  50% { filter:brightness(1.08) drop-shadow(0 0 10px rgba(var(--quality-gold),.16)); transform:translate(-50%,-50%) scale(1.035); }
-}
-@keyframes coreQualitySpark {
-  0%,100% { transform:scale(.65) translateY(2px); filter:brightness(.85); }
-  50% { transform:scale(1.18) translateY(-3px); filter:brightness(1.18); }
-}
-@keyframes coreSealPulse {
-  0%,100% { transform:rotate(0deg) scale(.98); }
-  50% { transform:rotate(8deg) scale(1.035); }
+
+@media (max-width: 420px) {
+  .golden-core-stage-v3 {
+    width: min(62vw, 245px) !important;
+    height: min(62vw, 245px) !important;
+  }
+  .golden-core-stage-v3 .golden-core-sphere-v3 {
+    width: min(29vw, 116px) !important;
+    height: min(29vw, 116px) !important;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .core-grade-1 .core-inner-seal,
-  .core-grade-1 .core-dan-pattern,
-  .core-grade-2 .core-dan-pattern,
-  .core-grade-3 .core-dan-pattern,
+  .core-inner-seal,
+  .core-dan-pattern,
   .core-quality-rays,
-  .core-quality-spark {
+  .core-quality-spark,
+  .core-ray-burst,
+  .core-celestial-aura,
+  .core-rune-ring,
+  .core-arc-light,
+  .core-aether-mist,
+  .core-shimmer-sweep,
+  .core-liquid-light,
+  .core-specular-glint,
+  .core-surface-runes,
+  .golden-core-sphere-v3::after {
     animation:none !important;
   }
 }
