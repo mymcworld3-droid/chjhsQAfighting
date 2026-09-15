@@ -20,11 +20,7 @@
   const FALLBACK_COMBAT = {
     attack: 200,
     hp: 1000,
-    maxHp: 1000,
-    defense: 100,
-    speed: 100,
-    critRate: 5,
-    critDamage: 150
+    maxHp: 1000
   };
 
   function loadStyle() {
@@ -53,11 +49,7 @@
     return {
       attack: Number.isFinite(Number(stats.attack)) ? Number(stats.attack) : FALLBACK_COMBAT.attack,
       hp: Number.isFinite(Number(stats.hp)) ? Number(stats.hp) : maxHp,
-      maxHp,
-      defense: Number.isFinite(Number(stats.defense)) ? Number(stats.defense) : FALLBACK_COMBAT.defense,
-      speed: Number.isFinite(Number(stats.speed)) ? Number(stats.speed) : FALLBACK_COMBAT.speed,
-      critRate: Number.isFinite(Number(stats.critRate)) ? Number(stats.critRate) : FALLBACK_COMBAT.critRate,
-      critDamage: Number.isFinite(Number(stats.critDamage)) ? Number(stats.critDamage) : FALLBACK_COMBAT.critDamage
+      maxHp
     };
   }
 
@@ -133,13 +125,9 @@
 
         <div class="status-section status-player-section">
           <div class="status-section-title"><span>戰鬥數值</span><small>COMBAT STATUS</small></div>
-          <div class="status-stat-grid">
+          <div class="status-stat-grid status-stat-grid-simple">
             ${statCard('fa-khanda', '攻擊力', Math.round(player.attack).toLocaleString(), '基礎 200')}
             ${statCard('fa-heart', '生命值', `${Math.round(player.hp).toLocaleString()} / ${Math.round(player.maxHp).toLocaleString()}`, '基礎 1000')}
-            ${statCard('fa-shield-halved', '防禦力', Math.round(player.defense).toLocaleString(), '基礎 100')}
-            ${statCard('fa-wind', '速度', Math.round(player.speed).toLocaleString(), '基礎 100')}
-            ${statCard('fa-crosshairs', '暴擊率', `${player.critRate}%`, '基礎 5%')}
-            ${statCard('fa-burst', '暴擊傷害', `${player.critDamage}%`, '基礎 150%')}
           </div>
         </div>
       </section>
