@@ -20,26 +20,15 @@
     localStorage.setItem(CONFIG.stateKey, JSON.stringify(state));
   }
 
+  // 必須使用主遊戲已登入的 Firebase App/Auth。
+  // 之前使用獨立 app 名稱會造成 auth.currentUser 為 null，導致修為規則看不到登入玩家。
   async function getFirebase() {
-    const [{ initializeApp }, authModule, firestoreModule] = await Promise.all([
+    const [appModule, authModule, firestoreModule] = await Promise.all([
       import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js'),
       import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js'),
       import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js')
     ]);
-    let app;
-    try {
-      app = initializeApp({
-        apiKey: 'AIzaSyDifdJmLTmwQATz__xUHSkXZ_xXOWyX-wU',
-        authDomain: 'question-learning.firebaseapp.com',
-        projectId: 'question-learning',
-        storageBucket: 'question-learning.firebasestorage.app',
-        messagingSenderId: '1058543232092',
-        appId: '1:1058543232092:web:3fcc40f5f069b6df307299'
-      }, 'cultivation-rules');
-    } catch (_) {
-      const { getApp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
-      app = getApp('cultivation-rules');
-    }
+    const app = appModule.getApp();
     return {
       auth: authModule.getAuth(app),
       db: firestoreModule.getFirestore(app),
@@ -88,8 +77,6 @@
         const stats = data.stats || {};
         const currentScore = Math.max(0, Number(stats.totalScore) || 0);
 
-        // 正確題：移除舊系統 +20，再加入修仙制 5/10。
-        // 錯誤題：修為維持不變；若有道心護體，消耗護體效果。
         let cultivationScore = currentScore;
         if (isCorrect) {
           cultivationScore = Math.max(0, currentScore - 20 + earned);
@@ -141,7 +128,6 @@
       const hadShield = !!state.shield;
       const isCorrect = answer.userIdx === answer.correctIdx;
 
-      // 等舊核心完成 Firestore 寫入後再校正，避免兩邊同時寫入互相覆蓋。
       setTimeout(() => reconcileAnswer(isCorrect, beforeStreak, hadShield), 450);
     }, false);
   }
