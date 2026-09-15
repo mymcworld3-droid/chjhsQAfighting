@@ -46,6 +46,17 @@ function loadBlackGoldHarmonyTheme() {
   document.head.appendChild(link);
 }
 
+// 修煉頁緊湊版：分頁按鈕靠上並縮小，減少不必要的捲動。
+function loadCompactTrainingLayout() {
+  const themeHref = 'cultivation-training-compact.css';
+  if (document.querySelector(`link[href="${themeHref}"]`)) return;
+
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = themeHref;
+  document.head.appendChild(link);
+}
+
 // Chart.js 的 canvas 顏色不受 CSS 控制，因此在繪圖前把舊藍青色轉成暖金。
 function registerBlackGoldChartTheme() {
   if (!window.Chart || window.__blackGoldChartThemeRegistered) return;
@@ -90,6 +101,7 @@ function registerBlackGoldChartTheme() {
 restoreComputerFont();
 loadCelestialGoldTheme();
 loadBlackGoldHarmonyTheme();
+loadCompactTrainingLayout();
 registerBlackGoldChartTheme();
 
 // 僅移除已確認的歷史抽卡 UI。
