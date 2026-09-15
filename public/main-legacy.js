@@ -4156,7 +4156,10 @@ window.loadStoreItems = async () => {
 
 window.buyItem = async (pid, price) => {
     if (!currentUserData || !currentUserData.stats) return alert(t('loading'));
-    if (currentUserData.stats.totalScore < price) return alert(t('msg_no_funds'));
+    
+    // 🔥 檢查與扣除皆改為 gold
+    const currentGold = currentUserData.stats.gold || 0;
+    if (currentGold < price) return alert(t('msg_no_funds'));
     const isConfirmed = await openConfirm(t('msg_buy_confirm', {price: price}));
     if (!isConfirmed) return;
 
@@ -4166,11 +4169,11 @@ window.buyItem = async (pid, price) => {
         if(newInventory.includes(pid)) return alert("You already own this item");
         
         newInventory.push(pid);
-        const newScore = currentUserData.stats.totalScore - price;
-        currentUserData.stats.totalScore = newScore;
+        const newGold = currentGold - price;
+        currentUserData.stats.gold = newGold;
         currentUserData.inventory = newInventory;
 
-        await updateDoc(userRef, { "stats.totalScore": newScore, "inventory": newInventory });
+        await updateDoc(userRef, { "stats.gold": newGold, "inventory": newInventory });
 
         alert(t('msg_buy_success'));
         updateUIStats();
