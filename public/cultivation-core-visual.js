@@ -1,4 +1,4 @@
-// 金丹視覺精緻度：依一品～九品逐級增加丹紋、金光、靈氣粒子。
+// 金丹視覺精緻度：依一品～九品逐級增加丹紋、金光、靈氣、符文與粒子。
 (function () {
   'use strict';
 
@@ -27,25 +27,46 @@
     return span;
   }
 
+  function ensureChild(parent, selector, className) {
+    let node = parent.querySelector(selector);
+    if (!node) {
+      node = createDecoration(className);
+      parent.appendChild(node);
+    }
+    return node;
+  }
+
   function decorateStage(stage, grade) {
     for (let i = 1; i <= 9; i += 1) stage.classList.remove(`core-grade-${i}`);
     stage.classList.remove('core-quality-low', 'core-quality-mid', 'core-quality-high', 'core-quality-supreme');
     stage.classList.add(`core-grade-${grade}`, `core-quality-${qualityTier(grade)}`);
     stage.dataset.coreGrade = String(grade);
 
-    if (!stage.querySelector('.core-quality-rays')) {
-      stage.appendChild(createDecoration('core-quality-rays'));
+    // 外層：日冕、放射金芒、靈霧、符文光輪。
+    ensureChild(stage, '.core-celestial-aura', 'core-celestial-aura');
+    ensureChild(stage, '.core-quality-rays', 'core-quality-rays');
+    ensureChild(stage, '.core-ray-burst', 'core-ray-burst');
+    ensureChild(stage, '.core-aether-mist', 'core-aether-mist');
+    ensureChild(stage, '.core-rune-ring.rune-outer', 'core-rune-ring rune-outer');
+    ensureChild(stage, '.core-rune-ring.rune-inner', 'core-rune-ring rune-inner');
+
+    // 四道交錯弧光，高品金丹會像有氣流繞行。
+    if (!stage.querySelector('.core-arc-light.arc-1')) {
+      for (let i = 1; i <= 4; i += 1) stage.appendChild(createDecoration(`core-arc-light arc-${i}`));
     }
 
+    // 丹體外部丹紋。
     if (!stage.querySelector('.core-dan-pattern.pattern-a')) {
       stage.appendChild(createDecoration('core-dan-pattern pattern-a'));
       stage.appendChild(createDecoration('core-dan-pattern pattern-b'));
       stage.appendChild(createDecoration('core-dan-pattern pattern-c'));
+      stage.appendChild(createDecoration('core-dan-pattern pattern-d'));
     }
 
+    // 外部星塵／靈光，最多 18 顆；品階控制實際可見數量。
     if (!stage.querySelector('.core-quality-sparks')) {
       const sparks = createDecoration('core-quality-sparks');
-      for (let i = 0; i < 10; i += 1) {
+      for (let i = 0; i < 18; i += 1) {
         const spark = createDecoration('core-quality-spark');
         spark.style.setProperty('--spark-index', String(i));
         sparks.appendChild(spark);
@@ -54,10 +75,15 @@
     }
 
     const sphere = stage.querySelector('.golden-core-sphere-v3');
-    if (sphere && !sphere.querySelector('.core-inner-seal')) {
-      sphere.appendChild(createDecoration('core-inner-seal'));
-      sphere.appendChild(createDecoration('core-inner-vein vein-a'));
-      sphere.appendChild(createDecoration('core-inner-vein vein-b'));
+    if (sphere) {
+      ensureChild(sphere, '.core-inner-seal', 'core-inner-seal');
+      ensureChild(sphere, '.core-inner-vein.vein-a', 'core-inner-vein vein-a');
+      ensureChild(sphere, '.core-inner-vein.vein-b', 'core-inner-vein vein-b');
+      ensureChild(sphere, '.core-inner-vein.vein-c', 'core-inner-vein vein-c');
+      ensureChild(sphere, '.core-surface-runes', 'core-surface-runes');
+      ensureChild(sphere, '.core-liquid-light', 'core-liquid-light');
+      ensureChild(sphere, '.core-specular-glint', 'core-specular-glint');
+      ensureChild(sphere, '.core-shimmer-sweep', 'core-shimmer-sweep');
     }
   }
 
@@ -88,8 +114,8 @@
       }).observe(root, { childList: true, subtree: true });
     }
 
-    // 洗髓會重新渲染金丹；定期同步一次避免任何動態流程漏掉視覺品階。
-    setInterval(scheduleDecorate, 1200);
+    // 洗髓會重建 DOM；定期同步避免任何動態流程漏掉新品階外觀。
+    setInterval(scheduleDecorate, 1100);
   }
 
   if (document.readyState === 'loading') {
