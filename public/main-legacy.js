@@ -1010,11 +1010,12 @@ window.switchToPage = (pageId) => {
     updateTexts();
 };
 
+window.updateUIStats = updateUIStats; // 🔥 新增：將函式暴露給全域，讓修仙規則可以呼叫它來刷新畫面
 function updateUIStats() {
     if(!currentUserData) return;
     const stats = currentUserData.stats;
-    const currentScore = stats.totalScore || 0;
-    const realRankLevel = calculateRankFromScore(currentScore);
+    const currentNetScore = getNetScore(stats);
+    const realRankLevel = calculateRankFromScore(currentNetScore);
     
     if (stats.rankLevel !== realRankLevel) { stats.rankLevel = realRankLevel; }
     
