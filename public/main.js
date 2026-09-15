@@ -1,6 +1,7 @@
-// 修仙世界入口：先載入核心遊戲，再套用修仙主題與境界玩法。
+// 修仙世界入口：先載入核心遊戲，再套用修仙主題與五大仙位玩法。
 import './main-legacy.js';
 import './cultivation-theme.js';
+import './five-immortals.js';
 
 // 防止歷史版本的抽卡入口或殘留 UI 回到畫面。
 const LEGACY_SELECTORS = [
