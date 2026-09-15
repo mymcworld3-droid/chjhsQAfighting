@@ -1871,8 +1871,8 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         }
     }
 
-    const netScore = getNetScore(stats);
-    const newRank = calculateRankFromScore(netScore);
+    const currentScore = stats.totalScore || 0;
+    const newRank = calculateRankFromScore(currentScore);
     if (newRank > stats.rankLevel) stats.rankLevel = newRank;
 
     try {
