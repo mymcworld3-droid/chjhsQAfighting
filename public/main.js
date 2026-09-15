@@ -1,8 +1,9 @@
-// Gacha-free entry point for the 修仙世界 branch.
-// The previous main.js is retained as main-legacy.js for rollback/reference only.
+// 修仙世界入口：先載入核心遊戲，再套用修仙主題與境界玩法。
 import './main-legacy.js';
+import './cultivation-theme.js';
 
-const GACHA_SELECTORS = [
+// 防止歷史版本的抽卡入口或殘留 UI 回到畫面。
+const LEGACY_SELECTORS = [
   '.summon-banner',
   '#page-cards',
   '[onclick="drawSingleCard()"]',
@@ -11,7 +12,7 @@ const GACHA_SELECTORS = [
 ];
 
 function removeLegacyGachaUI() {
-  GACHA_SELECTORS.forEach((selector) => {
+  LEGACY_SELECTORS.forEach((selector) => {
     document.querySelectorAll(selector).forEach((node) => node.remove());
   });
 
@@ -20,7 +21,6 @@ function removeLegacyGachaUI() {
     if (/卡牌|Cards|召喚|Summon|抽卡|Gacha/i.test(text)) node.remove();
   });
 
-  // Make the old draw entry points unavailable even if legacy code exposed them.
   window.drawSingleCard = undefined;
   window.draw11Cards = undefined;
 }
