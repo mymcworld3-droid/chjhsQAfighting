@@ -89,7 +89,8 @@
 
         let cultivationScore = currentScore;
         if (isCorrect) {
-          cultivationScore = Math.max(0, currentScore - 20 + earned);
+          // 🔥 修正：因為主程式已經不再將金幣混入 totalScore，這裡直接乾淨地加上 earned 修為即可
+          cultivationScore = currentScore + earned;
         } else if (hadShield) {
           cultivationScore = currentScore;
         }
