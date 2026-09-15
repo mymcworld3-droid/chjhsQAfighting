@@ -1849,6 +1849,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         if (stats.currentStreak > stats.bestStreak) stats.bestStreak = stats.currentStreak;
         
         scoreGain = 20; // 無限模式獎勵
+        stats.gold = (stats.gold || 0) + scoreGain; // 🔥 修正：真正將金幣加入記憶體數據中
         fbTitle.innerHTML += ` <span class="text-yellow-400 text-sm ml-2 border border-yellow-500 rounded px-1">+${scoreGain}💰</span>`;
     } else {
         stats.currentStreak = 0; 
