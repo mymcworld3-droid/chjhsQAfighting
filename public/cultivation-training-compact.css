@@ -1,4 +1,4 @@
-/* 修煉頁一屏版：子分頁靠上、縮小；進入修煉時不需要上下捲動。 */
+/* 修煉頁一屏極簡版：移除頁首「修煉 / 金丹」與外框，只保留核心操作。 */
 
 /* 只有修煉頁顯示時鎖住 main，離開修煉頁後其他頁面照常可捲動。 */
 body.xianxia-theme main:has(#page-training.active-page) {
@@ -20,50 +20,35 @@ body.xianxia-theme .training-page-v3 {
 
 body.xianxia-theme .training-page-v3.active-page {
   display: grid !important;
-  grid-template-rows: auto auto minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
   align-content: stretch;
 }
 
+/* 移除修煉頁上方「修煉」標題與右側「金丹」印章。 */
 body.xianxia-theme .training-page-heading-v3 {
-  align-items: center;
-  margin: 0 0 4px;
-  min-height: 42px;
+  display: none !important;
 }
 
-body.xianxia-theme .training-eyebrow-v3 {
-  display: none;
-}
-
-body.xianxia-theme .training-page-heading-v3 h2 {
-  margin: 0;
-  font-size: 22px;
-  line-height: 1.1;
-}
-
-body.xianxia-theme .training-realm-seal-v3 {
-  width: 40px;
-  height: 40px;
-  border-radius: 14px;
-  font-size: 11px;
-}
-
-/* 金丹 / 背包：靠頁面頂部的小型切換鍵。 */
+/* 金丹 / 背包：直接浮在頁面上方，不再有外層框。 */
 body.xianxia-theme .training-subtabs-v3 {
   width: max-content;
   max-width: 100%;
   gap: 4px;
-  padding: 3px;
-  margin: 0 0 6px;
-  border-radius: 12px;
+  padding: 0;
+  margin: 0 0 4px;
+  border: 0 !important;
+  border-radius: 0;
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
 body.xianxia-theme .training-subtab-v3 {
   flex: 0 0 auto;
-  min-width: 72px;
-  min-height: 31px;
-  padding: 0 10px;
+  min-width: 68px;
+  min-height: 29px;
+  padding: 0 9px;
   gap: 5px;
-  border-radius: 9px;
+  border-radius: 10px;
   font-size: 10px;
 }
 
@@ -71,13 +56,14 @@ body.xianxia-theme .training-subtab-v3 i {
   font-size: 10px;
 }
 
-/* 第三列吃掉剩餘高度，不再靠 min-height 把頁面撐長。 */
+/* 內容吃掉剩餘高度，不再靠 min-height 把頁面撐長。 */
 body.xianxia-theme #training-tab-content {
   min-height: 0;
   height: 100%;
   overflow: hidden;
 }
 
+/* 移除中央金丹外的大框、底色與陰影。 */
 body.xianxia-theme .core-minimal-card {
   box-sizing: border-box;
   width: 100%;
@@ -85,8 +71,11 @@ body.xianxia-theme .core-minimal-card {
   min-height: 0;
   display: grid;
   place-items: center;
-  padding: 4px 18px 10px;
-  border-radius: 22px;
+  padding: 0 18px 8px;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
   overflow: hidden;
 }
 
@@ -97,8 +86,8 @@ body.xianxia-theme .core-minimal-center {
 
 /* 金丹尺寸隨視窗高度縮放，低螢幕也不需要下拉。 */
 body.xianxia-theme .golden-core-stage-v3 {
-  width: clamp(150px, 27vh, 220px);
-  height: clamp(150px, 27vh, 220px);
+  width: clamp(150px, 28vh, 225px);
+  height: clamp(150px, 28vh, 225px);
   margin-bottom: 0;
 }
 
@@ -153,41 +142,31 @@ body.xianxia-theme .core-equip-btn {
   margin-top: 7px;
 }
 
-/* 背包不是金丹收藏區，空畫面也固定在當前視窗內。 */
+/* 背包頁同樣移除大框，只保留內容。 */
 body.xianxia-theme .training-v3-empty {
   box-sizing: border-box;
   width: 100%;
   height: 100%;
   min-height: 0;
-  border-radius: 20px;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
 /* 較矮的手機 / 小視窗再縮一級。 */
 @media (max-height: 740px) {
-  body.xianxia-theme .training-page-heading-v3 {
-    min-height: 34px;
-    margin-bottom: 2px;
-  }
-
-  body.xianxia-theme .training-page-heading-v3 h2 { font-size: 18px; }
-  body.xianxia-theme .training-realm-seal-v3 {
-    width: 34px;
-    height: 34px;
-    border-radius: 11px;
-    font-size: 9px;
-  }
-
-  body.xianxia-theme .training-subtabs-v3 { margin-bottom: 4px; }
+  body.xianxia-theme .training-subtabs-v3 { margin-bottom: 2px; }
   body.xianxia-theme .training-subtab-v3 {
-    min-width: 64px;
+    min-width: 62px;
     min-height: 27px;
     padding: 0 8px;
     font-size: 9px;
   }
 
   body.xianxia-theme .golden-core-stage-v3 {
-    width: clamp(132px, 24vh, 178px);
-    height: clamp(132px, 24vh, 178px);
+    width: clamp(132px, 25vh, 182px);
+    height: clamp(132px, 25vh, 182px);
   }
 
   body.xianxia-theme .golden-core-sphere-v3 {
