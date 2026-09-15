@@ -4268,8 +4268,7 @@ window.recalculateAllUserRanks = async () => {
         const updates = snapshot.docs.map(async (userDoc) => {
             const data = userDoc.data();
             const stats = data.stats || {};
-            const currentScore = stats.totalScore || 0;
-            const correctRank = calculateRankFromScore(currentScore);
+            const correctRank = calculateRankFromScore(stats.totalScore || 0);
             
             if (stats.rankLevel !== correctRank) {
                 count++;
