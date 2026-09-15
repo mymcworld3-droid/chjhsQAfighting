@@ -1,4 +1,4 @@
-// 修煉頁「狀態」分頁：顯示目前金丹與玩家基本數值。
+// 修煉頁「狀態」分頁：顯示目前金丹與玩家戰鬥數值。
 (function () {
   'use strict';
 
@@ -15,6 +15,16 @@
     wugou: { icon: '◇', tone: 'silver' },
     thunder: { icon: 'ϟ', tone: 'thunder' },
     reverse: { icon: '↺', tone: 'violet' }
+  };
+
+  const FALLBACK_COMBAT = {
+    attack: 200,
+    hp: 1000,
+    maxHp: 1000,
+    defense: 100,
+    speed: 100,
+    critRate: 5,
+    critDamage: 150
   };
 
   function loadStyle() {
@@ -34,21 +44,20 @@
       .replaceAll("'", '&#039;');
   }
 
-  function readText(id, fallback = '0') {
-    const value = document.getElementById(id)?.textContent?.trim();
-    return value || fallback;
-  }
+  function getCombatSnapshot() {
+    const live = window.getCombatStats?.();
+    if (live) return live;
 
-  function getPlayerSnapshot() {
-    const data = window.getCurrentUserData?.() || {};
-    const stats = data.stats || {};
+    const stats = window.getCurrentUserData?.()?.stats || {};
+    const maxHp = Number.isFinite(Number(stats.maxHp)) ? Number(stats.maxHp) : FALLBACK_COMBAT.maxHp;
     return {
-      realm: readText('display-rank', '金丹'),
-      score: Number(stats.totalScore ?? readText('display-score', '0')) || 0,
-      gold: Number(stats.gold) || 0,
-      accuracy: readText('display-accuracy', '0%'),
-      streak: Number(stats.currentStreak ?? readText('display-streak', '0')) || 0,
-      bestStreak: Number(stats.bestStreak ?? stats.maxStreak ?? readText('display-best-streak', '0')) || 0
+      attack: Number.isFinite(Number(stats.attack)) ? Number(stats.attack) : FALLBACK_COMBAT.attack,
+      hp: Number.isFinite(Number(stats.hp)) ? Number(stats.hp) : maxHp,
+      maxHp,
+      defense: Number.isFinite(Number(stats.defense)) ? Number(stats.defense) : FALLBACK_COMBAT.defense,
+      speed: Number.isFinite(Number(stats.speed)) ? Number(stats.speed) : FALLBACK_COMBAT.speed,
+      critRate: Number.isFinite(Number(stats.critRate)) ? Number(stats.critRate) : FALLBACK_COMBAT.critRate,
+      critDamage: Number.isFinite(Number(stats.critDamage)) ? Number(stats.critDamage) : FALLBACK_COMBAT.critDamage
     };
   }
 
@@ -108,7 +117,7 @@
 
   function statusSnapshot() {
     return {
-      player: getPlayerSnapshot(),
+      player: getCombatSnapshot(),
       core: currentCoreSnapshot()
     };
   }
@@ -123,14 +132,14 @@
         </div>
 
         <div class="status-section status-player-section">
-          <div class="status-section-title"><span>玩家數值</span><small>STATUS</small></div>
+          <div class="status-section-title"><span>戰鬥數值</span><small>COMBAT STATUS</small></div>
           <div class="status-stat-grid">
-            ${statCard('fa-mountain-sun', '境界', player.realm)}
-            ${statCard('fa-fire-flame-curved', '修為', player.score.toLocaleString())}
-            ${statCard('fa-coins', '靈石', player.gold.toLocaleString())}
-            ${statCard('fa-bullseye', '悟性', player.accuracy)}
-            ${statCard('fa-fire', '當前道心', player.streak.toLocaleString())}
-            ${statCard('fa-crown', '最高道心', player.bestStreak.toLocaleString())}
+            ${statCard('fa-khanda', '攻擊力', Math.round(player.attack).toLocaleString(), '基礎 200')}
+            ${statCard('fa-heart', '生命值', `${Math.round(player.hp).toLocaleString()} / ${Math.round(player.maxHp).toLocaleString()}`, '基礎 1000')}
+            ${statCard('fa-shield-halved', '防禦力', Math.round(player.defense).toLocaleString(), '基礎 100')}
+            ${statCard('fa-wind', '速度', Math.round(player.speed).toLocaleString(), '基礎 100')}
+            ${statCard('fa-crosshairs', '暴擊率', `${player.critRate}%`, '基礎 5%')}
+            ${statCard('fa-burst', '暴擊傷害', `${player.critDamage}%`, '基礎 150%')}
           </div>
         </div>
       </section>
@@ -168,6 +177,7 @@
     setNativeTabsInactive(page);
     button.classList.add('active');
     button.setAttribute('aria-selected', 'true');
+    window.ensureCombatStats?.();
     renderStatus();
   }
 
@@ -212,13 +222,12 @@
   function boot() {
     loadStyle();
     sync();
+    window.addEventListener('combat-stats-ready', renderStatus);
 
     new MutationObserver(() => {
-      // 只負責補回分頁；狀態內容有快照比對，不會因自身 render 形成循環。
       sync();
     }).observe(document.body, { childList: true, subtree: true });
 
-    // 玩家數值與金丹狀態可能在答題、洗髓、裝配後更新；狀態頁開啟時同步刷新。
     setInterval(() => {
       if (statusActive) renderStatus();
     }, 1000);
