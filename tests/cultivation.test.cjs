@@ -101,7 +101,7 @@ test('correct answer updates saved stats and the top panel immediately', async (
   const h = setup(4);
   const pending = h.answer();
   assert.equal(h.nodes.get('xiuxian-score').textContent, '5 修為');
-  assert.equal(h.nodes.get('xiuxian-realm').textContent, '🌬️ 煉氣');
+  assert.equal(h.nodes.get('xiuxian-realm').textContent, '煉氣');
   assert.equal(h.nodes.get('xiuxian-sub').textContent, '一層');
   assert.equal(h.nodes.get('xiuxian-progress').style.width, '0%');
   assert.equal(h.nodes.get('xiuxian-next').textContent, '5 修為');

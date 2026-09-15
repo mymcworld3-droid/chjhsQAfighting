@@ -101,36 +101,6 @@
     render();
   }
 
-  function injectStyle() {
-    if (document.getElementById('xiuxian-theme-style')) return;
-    
-    const style = document.createElement('style'); 
-    style.id = 'xiuxian-theme-style';
-    style.textContent = `
-      :root { --xq-gold:#e9c46a; --xq-purple:#9b8cff; }
-      body { background: radial-gradient(circle at 50% 15%, rgba(74,68,122,.28), transparent 34%), #080b16 !important; }
-      
-      /* 🔥 刪除 (隱藏) 舊版首頁最上方的 Current Rank 欄位 */
-      #page-home .pb-4 > .glass-panel:first-child { display: none !important; }
-      
-      .xiuxian-panel { margin:0 auto 16px; padding:18px; border:1px solid rgba(233,196,106,.25); border-radius:22px; background:linear-gradient(145deg,rgba(24,27,48,.96),rgba(12,15,29,.96)); box-shadow:0 12px 40px rgba(0,0,0,.25), inset 0 1px rgba(255,255,255,.05); }
-      .xiuxian-kicker { color:var(--xq-gold); font-size:10px; letter-spacing:.28em; font-weight:900; }
-      .xiuxian-realm { font-size:28px; font-weight:900; color:#fff; margin:0; text-shadow:0 0 18px rgba(233,196,106,.28); line-height: 1.1; }
-      .xiuxian-sub { color:#aab0c5; font-size:11px; margin-top:2px; }
-      .xiuxian-bar { height:9px; margin-top:12px; border-radius:999px; overflow:hidden; background:#090c18; border:1px solid rgba(255,255,255,.08); }
-      .xiuxian-bar>div { height:100%; border-radius:inherit; background:linear-gradient(90deg,#8b5cf6,#e9c46a); box-shadow:0 0 14px rgba(233,196,106,.35); transition:width .5s ease; }
-      .xiuxian-row { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-top:8px; }
-      .xiuxian-label { color:#9da4bc; font-size:10px; }
-      .xiuxian-value { color:#f3d98b; font-weight:900; font-size:12px; }
-      .xiuxian-actions { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:14px; }
-      .xiuxian-btn { border:1px solid rgba(233,196,106,.25); border-radius:12px; padding:10px 8px; color:#f6e6b0; background:rgba(233,196,106,.08); font-size:11px; font-weight:900; cursor:pointer; }
-      .xiuxian-btn:hover { background:rgba(233,196,106,.16); transform:translateY(-1px); }
-      .xiuxian-toast { position:fixed; left:50%; bottom:105px; transform:translate(-50%,15px); z-index:100; opacity:0; pointer-events:none; padding:10px 16px; border:1px solid rgba(233,196,106,.35); border-radius:999px; background:rgba(12,15,29,.95); color:#f7e8b5; font-size:12px; box-shadow:0 10px 30px rgba(0,0,0,.35); transition:.25s ease; }
-      .xiuxian-toast.show { opacity:1; transform:translate(-50%,0); }
-    `;
-    document.head.appendChild(style);
-  }
-
   function text(selector, value) { 
     document.querySelectorAll(selector).forEach(el => {
       if (el.textContent !== value) {
@@ -153,33 +123,32 @@
     panel.id = 'xiuxian-panel'; 
     panel.className = 'xiuxian-panel';
     
-    // 🔥 加入了頭像容器 xiuxian-avatar-slot
+    panel.setAttribute('aria-label', '仙途修行');
     panel.innerHTML = `
-      <div class="xiuxian-kicker">仙途修行 · Cultivation Path</div>
-      <div class="xiuxian-row" style="align-items:center; margin-top:12px;">
-        <div style="display:flex; gap:12px; align-items:center;">
-          <div id="xiuxian-avatar-slot" style="transform: scale(0.9); transform-origin: left center;"></div>
-          <div>
-            <div id="xiuxian-realm" class="xiuxian-realm">🌱 凡人</div>
-            <div id="xiuxian-sub" class="xiuxian-sub">初入仙途</div>
-          </div>
+      <div class="xiuxian-kicker">修行境界 ／ CULTIVATION</div>
+      <p class="xiuxian-invocation">心向青雲，步履不停。</p>
+      <div class="xiuxian-identity">
+        <div id="xiuxian-avatar-slot"></div>
+        <div>
+          <div id="xiuxian-realm" class="xiuxian-realm">凡人</div>
+          <div id="xiuxian-sub" class="xiuxian-sub">初入仙途</div>
         </div>
-        <div style="text-align:right">
-          <div class="xiuxian-label">當前修為</div>
-          <div id="xiuxian-score" class="xiuxian-value">0</div>
-        </div>
+      </div>
+      <div class="xiuxian-row">
+        <span class="xiuxian-label">當前修為</span>
+        <span id="xiuxian-score" class="xiuxian-value" aria-live="polite" aria-atomic="true">0 修為</span>
       </div>
       <div class="xiuxian-bar"><div id="xiuxian-progress" style="width:0%"></div></div>
       <div class="xiuxian-row">
         <span id="xiuxian-progress-label" class="xiuxian-label">距離下一境界</span>
-        <span id="xiuxian-next" class="xiuxian-value">5</span>
+        <span id="xiuxian-next" class="xiuxian-value">5 修為</span>
       </div>
       <div class="xiuxian-actions">
-        <button id="xiuxian-meditate" class="xiuxian-btn">🧘 今日閉關</button>
-        <button id="xiuxian-path" class="xiuxian-btn">📜 修仙境界</button>
+        <button id="xiuxian-meditate" class="xiuxian-btn">今日閉關</button>
+        <button id="xiuxian-path" class="xiuxian-btn">境界圖錄</button>
       </div>
     `;
-    
+
     anchor.parentNode.insertBefore(panel, anchor);
     
     document.getElementById('xiuxian-meditate').addEventListener('click', meditate);
@@ -191,7 +160,9 @@
   function rewriteLabels() {
     text('[data-i18n="btn_solo"]', '問道試煉'); 
     text('[data-i18n="btn_pvp"]', '鬥法論道');
-    text('[data-i18n="nav_home"]', '仙府'); 
+    text('[data-i18n="nav_home"]', '仙府');
+    text('[data-i18n="nav_store"]', '坊市');
+    text('[data-i18n="store_title"]', '雲間坊市');
     text('[data-i18n="nav_quiz"]', '問道'); 
     text('[data-i18n="nav_rank"]', '仙榜');
     text('[data-i18n="nav_settings"]', '洞府'); 
@@ -211,7 +182,6 @@
   }
 
   function render() {
-    injectStyle(); 
     addHomePanel(); 
     rewriteLabels();
 
@@ -236,10 +206,12 @@
     
     // 更新仙途修行的仙位名稱
     const realmEl = document.getElementById('xiuxian-realm');
-    if (realmEl) realmEl.textContent = `${realm.emoji} ${realm.name}`;
+    if (realmEl) realmEl.textContent = realm.name;
     
     const scoreEl = document.getElementById('xiuxian-score'); 
-    if (scoreEl) scoreEl.textContent = `${value.toLocaleString()} 修為`;
+    if (scoreEl && scoreEl.textContent !== `${value.toLocaleString()} 修為`) {
+      scoreEl.textContent = `${value.toLocaleString()} 修為`;
+    }
     
     const sub = document.getElementById('xiuxian-sub'); 
     if (sub) sub.textContent = realm.sub;
@@ -256,7 +228,7 @@
     const med = document.getElementById('xiuxian-meditate');
     if (med) { 
       const done = state.lastMeditation === todayKey(); 
-      med.textContent = done ? '✅ 今日已閉關' : '🧘 今日閉關'; 
+      med.textContent = done ? '今日已閉關' : '今日閉關';
       med.disabled = done; 
       med.style.opacity = done ? '.55' : '1'; 
     }

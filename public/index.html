@@ -2,8 +2,8 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title data-i18n="app_title">RANK UP: AI Battle</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title data-i18n="app_title">青雲問道 · 以學入道</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -11,9 +11,10 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="xianxia.css">
     
     <!-- 🔥 新增 MathJax 設定檔，強制識別 $ 符號 -->
     <script>
@@ -29,21 +30,16 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
-<body class="font-sans h-[100dvh] flex flex-col overflow-hidden text-slate-100 selection:bg-cyan-500 selection:text-white bg-slate-950">
-
-    <div class="fixed inset-0 z-[-1] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-    <div class="fixed inset-0 z-[-2] bg-gradient-to-b from-slate-950 via-[#0f172a] to-slate-950"></div>
+<body class="xianxia-theme font-sans h-[100dvh] flex flex-col overflow-hidden text-slate-100 selection:bg-cyan-500 selection:text-white bg-slate-950">
 
     <header class="fixed top-0 left-0 w-full z-40 px-4 py-3 flex justify-between items-center glass-strip border-b border-white/5">
-        <div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-50"></div>
-        
-        <h1 class="text-lg font-black italic tracking-wider flex items-center gap-2 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
-            <i class="fa-solid fa-dragon text-cyan-400 animate-pulse"></i> 
-            <span class="font-sci" data-i18n="app_name">RANK UP</span>
+        <h1 class="xianxia-brand">
+            <span class="xianxia-seal" aria-hidden="true">道</span>
+            <span><span data-i18n="app_name">青雲問道</span><small>以學入道 · 積微成仙</small></span>
         </h1>
-        
+
         <div class="flex items-center gap-3">
-            <button onclick="toggleLanguage()" class="btn-icon-sm hover:text-cyan-400 transition">
+            <button aria-label="切換語言" onclick="toggleLanguage()" class="btn-icon-sm hover:text-cyan-400 transition">
                 <span id="lang-display" class="font-sci text-[10px] font-bold border border-white/20 px-2 py-1 rounded">EN</span>
             </button>
             <div id="user-info" class="glass-capsule px-3 py-1 text-xs font-bold text-cyan-300 flex items-center gap-2" data-i18n="not_logged_in">
@@ -55,20 +51,15 @@
     <main class="flex-1 overflow-y-auto relative scroll-smooth pb-28 pt-16 custom-scrollbar">
         
         <div id="login-screen" class="flex flex-col items-center justify-center min-h-[80vh] px-6 relative">
-            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-cyan-500/20 rounded-full blur-[80px]"></div>
-
-            <div class="relative z-10 text-center">
-                <div class="mb-8 relative inline-block">
-                    <i class="fa-solid fa-crown text-7xl text-yellow-400 drop-shadow-[0_0_15px_rgba(250,204,21,0.6)] animate-bounce-slow"></i>
-                    <div class="absolute -bottom-2 -right-2 text-2xl animate-pulse">✨</div>
-                </div>
-                
-                <h2 class="text-4xl font-black mb-2 font-sci tracking-widest text-white" data-i18n="welcome_title">WELCOME</h2>
-                <p class="text-gray-400 mb-10 text-sm tracking-wide" data-i18n="welcome_desc">AI QUATRO x PvP BATTLE x RANK SYSTEM</p>
+            <div class="xianxia-login-art" aria-hidden="true"></div>
+            <div class="relative z-10 text-center xianxia-login-card">
+                <div class="xianxia-login-emblem" aria-hidden="true">道</div>
+                <h2 class="text-4xl font-black mb-2 font-sci tracking-widest text-white" data-i18n="welcome_title">一念起，入仙途</h2>
+                <p class="text-gray-400 mb-10 text-sm tracking-wide" data-i18n="welcome_desc">以知識為靈根，以每一題為修行。</p>
                 
                 <button onclick="googleLogin()" class="btn-cyber-primary w-full max-w-xs py-4 rounded-xl font-bold flex items-center justify-center gap-3 group bg-slate-800 hover:bg-slate-700 transition border border-white/10">
                     <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5 h-5 bg-white rounded-full p-0.5">
-                    <span data-i18n="btn_login_google">LOGIN SYSTEM</span>
+                    <span data-i18n="btn_login_google">以 Google 登入，開啟修行</span>
                     <i class="fa-solid fa-arrow-right opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0"></i>
                 </button>
             </div>
@@ -106,6 +97,10 @@
         </div>
 
         <div id="page-home" class="page-section hidden px-4 relative">
+            <div class="xianxia-page-heading">
+                <div><div class="xianxia-eyebrow">青雲山境 ／ 修行手札</div><h2>仙府</h2><p>山靜日長，今日亦是問道之時。</p></div>
+                <span class="xianxia-chapter" aria-hidden="true">壹 · 仙途</span>
+            </div>
     
             <div class="pb-4"> <div class="glass-panel mt-4 rounded-3xl p-6 relative overflow-hidden group border-t border-cyan-500/30">
                     <div class="absolute -top-10 -right-10 w-40 h-40 bg-cyan-500/20 rounded-full blur-[60px] pointer-events-none"></div>
@@ -134,40 +129,40 @@
                     </div>
                 </div>
     
-                <div class="grid grid-cols-2 gap-3 mb-4">
+                <div class="grid grid-cols-2 gap-3 mb-4 home-stats">
                     <div class="stat-card group">
                         <div class="stat-icon text-yellow-500"><i class="fa-solid fa-coins"></i></div>
-                        <span class="stat-label">TOTAL SCORE</span>
+                        <span class="stat-label">累積修為</span>
                         <span id="display-score" class="stat-value text-yellow-400">0</span>
                     </div>
                     <div class="stat-card group">
                         <div class="stat-icon text-blue-500"><i class="fa-solid fa-bullseye"></i></div>
-                        <span class="stat-label">ACCURACY</span>
+                        <span class="stat-label">悟性</span>
                         <span id="display-accuracy" class="stat-value text-blue-400">0%</span>
                     </div>
                     <div class="stat-card group">
                         <div class="stat-icon text-orange-500"><i class="fa-solid fa-fire"></i></div>
-                        <span class="stat-label">STREAK</span>
+                        <span class="stat-label">當前道心</span>
                         <span id="display-streak" class="stat-value text-orange-400">0</span>
                     </div>
                     <div class="stat-card group">
                         <div class="stat-icon text-purple-500"><i class="fa-solid fa-crown"></i></div>
-                        <span class="stat-label">BEST RECORD</span>
+                        <span class="stat-label">最高道心</span>
                         <span id="display-best-streak" class="stat-value text-purple-400">0</span>
                     </div>
                 </div>
 
-                <div class="h-36 w-full"></div>
+
             </div>
 
-            <div class="fixed bottom-24 left-4 right-4 flex gap-3 z-30">
+            <div class="home-actions">
                 <button id="btn-home-start" onclick="startQuizFlow()" class="btn-cyber-primary flex-1 py-3 rounded-xl flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(59,130,246,0.3)] border border-blue-400/40 group bg-slate-900/90 backdrop-blur-md hover:translate-y-[-2px] transition-all">
                     <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center group-hover:bg-blue-500/40 transition border border-blue-500/30">
-                        <i class="fa-solid fa-gamepad text-blue-400 text-lg group-hover:scale-110 transition-transform"></i>
+                        <i class="fa-solid fa-scroll text-blue-400 text-lg group-hover:scale-110 transition-transform"></i>
                     </div>
                     <div class="flex flex-col items-start">
-                        <span class="font-sci text-sm font-bold text-white tracking-widest" data-i18n="btn_solo">SOLO</span>
-                        <span class="text-[9px] text-blue-300 font-mono">Lv.UP CHALLENGE</span>
+                        <span class="font-sci text-sm font-bold text-white tracking-widest" data-i18n="btn_solo">問道試煉</span>
+                        <span class="text-[9px] text-blue-300 font-mono">答題悟道 · 積累修為</span>
                     </div>
                 </button>
 
@@ -176,11 +171,12 @@
                         <i class="fa-solid fa-khanda text-red-400 text-lg group-hover:scale-110 transition-transform"></i>
                     </div>
                     <div class="flex flex-col items-start">
-                            <span class="font-sci text-sm font-bold text-white tracking-widest" data-i18n="btn_pvp">BATTLE</span>
-                            <span class="text-[9px] text-red-300 font-mono">ONLINE PVP</span>
+                            <span class="font-sci text-sm font-bold text-white tracking-widest" data-i18n="btn_pvp">鬥法論道</span>
+                            <span class="text-[9px] text-red-300 font-mono">切磋學識 · 道友同修</span>
                     </div>
                 </button>
             </div>
+            <p class="xianxia-footnote">千里仙途，始於一問</p>
         </div>
 
         <div id="page-quiz" class="page-section hidden px-4">
@@ -216,7 +212,7 @@
                         <h3 id="feedback-title" class="text-lg font-bold font-sci"></h3>
                     </div>
                     <div class="bg-slate-950/50 p-4 rounded-lg text-sm text-gray-300 leading-relaxed border border-white/5 mb-4">
-                        <span class="text-cyan-400 font-bold block mb-1 text-xs uppercase tracking-wider"><i class="fa-solid fa-magnifying-glass"></i> Analysis</span>
+                        <span class="text-cyan-400 font-bold block mb-1 text-xs uppercase tracking-wider"><i class="fa-solid fa-magnifying-glass"></i> 題解參悟</span>
                         <span id="feedback-text"></span>
                     </div>
                     <div class="flex gap-3">

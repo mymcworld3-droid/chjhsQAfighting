@@ -53,7 +53,7 @@
 
     if (!scoreEl || !realmEl || !subEl || !barEl || !nextEl || !labelEl) return false;
 
-    realmEl.textContent = `${realm.emoji} ${realm.name}`;
+    realmEl.textContent = realm.name;
     subEl.textContent = realm.sub;
     scoreEl.textContent = `${value.toLocaleString()} 修為`;
 

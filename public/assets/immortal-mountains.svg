@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 820" fill="none">
+  <defs>
+    <linearGradient id="sky" x2="0" y2="820" gradientUnits="userSpaceOnUse"><stop stop-color="#1d3d39"/><stop offset="1" stop-color="#0b2222"/></linearGradient>
+    <linearGradient id="far" x2="0" y2="720" gradientUnits="userSpaceOnUse"><stop stop-color="#779084"/><stop offset="1" stop-color="#294b45"/></linearGradient>
+    <linearGradient id="near" x2="0" y2="820" gradientUnits="userSpaceOnUse"><stop stop-color="#254d43"/><stop offset="1" stop-color="#071c1c"/></linearGradient>
+    <linearGradient id="mist"><stop stop-color="#b7c5a7" stop-opacity="0"/><stop offset=".55" stop-color="#b7c5a7" stop-opacity=".2"/><stop offset="1" stop-color="#b7c5a7" stop-opacity="0"/></linearGradient>
+    <radialGradient id="halo"><stop stop-color="#e6ca8a" stop-opacity=".22"/><stop offset="1" stop-color="#e6ca8a" stop-opacity="0"/></radialGradient>
+    <pattern id="grain" width="7" height="9" patternUnits="userSpaceOnUse"><circle cx="1" cy="2" r=".5" fill="#dddfc0" opacity=".13"/><circle cx="5" cy="7" r=".4" fill="#091c1b" opacity=".25"/></pattern>
+  </defs>
+  <path fill="url(#sky)" d="M0 0h1440v820H0z"/>
+  <circle cx="1030" cy="215" r="205" fill="url(#halo)"/>
+  <circle cx="1030" cy="215" r="62" fill="#d6bd83" opacity=".78"/>
+  <circle cx="1030" cy="215" r="78" stroke="#c5b77e" stroke-opacity=".2"/>
+  <path d="m0 510 81-52 55 25 90-106 40 24 100-145 42 56 23-16 74 105 44-37 64 64 92-159 42 54 49-96 78 121 37-13 80 113 93-94 35 36 61-132 33 42 99-170 47 104 76-17 87 207v403H0Z" fill="url(#far)" opacity=".55"/>
+  <path d="m286 455 85-134 11 115 48-33 29 90m227-70 41-91 7 71 32 33m213 28 54-51-9 75m164-101 42-62-21 106" stroke="#9aa18b" stroke-opacity=".23" stroke-width="2"/>
+  <path d="m0 618 63-71 82 55 91-74 88 30 61-73 49 34 91-119 25 44 29-10 32 71 40-44 66 73 69-13 55 39 83-108 30 34 61-82 38 38 68-159 25 48 25-24 62 110 33-6 54 101 87-55 46 45 79-49 34 62 20-18 96 79v244H0Z" fill="#355c50" opacity=".8"/>
+  <path d="m928 495 43-88 21 47 17-25 27 68-22-3-23-39-35 68m-428 9 21-68 23 41 18-5 34 50" fill="#75917a" opacity=".32"/>
+  <path d="M38 571c219-44 396 34 629-3s422-75 733-12M-64 634c285-81 560 47 839-7s486-50 741-20" stroke="url(#mist)" stroke-width="38"/>
+  <path d="m0 707 94-55 54 17 89-105 24 23 44-31 88 96 66-35 68 39 93-39 92 70 64-23 100 46 57-50 27 12 57-97 51 26 90-66 41 22 76-91 38 42 60-8 120 114v211H0Z" fill="url(#near)"/>
+  <path d="m1006 626 23-67 48-36 29 31 21-37 63 81-41-19-36-20-40 20-27-1Z" fill="#4e7561" opacity=".4"/>
+  <!-- 山門與懸崖上的殿閣 -->
+  <g fill="#102d2a" stroke="#a5a27b" stroke-width="1.4" stroke-linejoin="round">
+    <path d="M1091 500h107v-13h-107z"/>
+    <path d="M1107 487v-39h76v39m-65 0v-31h13v31m27 0v-31h14v31"/>
+    <path d="M1090 448q27-3 55-29 29 26 56 29-47 11-111 0Z"/>
+    <path d="M1105 425q20-4 40-24 20 20 41 24-36 8-81 0Z"/>
+    <path d="M1145 401v-11m-55 58-7-7m118 7 7-7"/>
+    <path d="M1082 508h124v9h-124zM1131 517v20h28v-20"/>
+  </g>
+  <path d="M1146 538c-48 33-76 63-42 86s-18 49-78 62" stroke="#aaa282" stroke-opacity=".38" stroke-width="3"/>
+  <g fill="#0c2624">
+    <path d="m1233 646 5-96h4l4 96zm-21-80 29-26 25 26zm-9 18 37-31 36 31zm-8 20 45-35 44 35z"/>
+    <path d="m1361 707 6-141h5l5 141zm-25-119 34-33 32 33zm-11 25 45-40 47 40zm-10 24 55-43 59 43z"/>
+    <path d="m94 751 6-124h5l4 124zm-17-103 25-33 26 33zm-13 21 38-36 42 36zm-8 23 46-40 49 40z"/>
+  </g>
+  <g stroke="#d2c99e" stroke-width="1.8" opacity=".65"><path d="m797 200 12-3 8 5m48-40 10-2 7 4m21 71 9-3 7 3"/></g>
+  <path d="M0 736c259-53 397 14 652 0s558-65 788-14v98H0Z" fill="#071b1b" opacity=".6"/>
+  <path fill="url(#grain)" d="M0 0h1440v820H0z"/>
+</svg>

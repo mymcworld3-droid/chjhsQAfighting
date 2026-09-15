@@ -10,6 +10,7 @@ import './five-immortals.js';
 const LEGACY_SELECTORS = [
   '.summon-banner',
   '#page-cards',
+  '#nav-grid [data-target="page-cards"]',
   '[onclick="drawSingleCard()"]',
   '[onclick="draw11Cards()"]',
   '#home-best-card-container'
