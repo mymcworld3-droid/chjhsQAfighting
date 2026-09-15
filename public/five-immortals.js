@@ -1,4 +1,4 @@
-// 九州五大仙：全服固定五席，講台化設計，最高分者立於正中央。
+// 九州五大仙：全服固定五席，講台化設計，最高分者立於正中央，並支援完整頭像框特效。
 (function () {
     'use strict';
 
@@ -19,7 +19,7 @@
         .five-immortals h3 { margin:0; color:#f6e6b0; font-size:18px; font-weight:900; text-align: center; letter-spacing: 0.1em; }
         .five-immortals p { margin:6px 0 0; color:#8f96ad; font-size:10px; text-align: center; letter-spacing: 0.05em; }
         
-        .podium-container { display: flex; justify-content: center; align-items: flex-end; gap: 6px; margin-top: 35px; min-height: 200px; }
+        .podium-container { display: flex; justify-content: center; align-items: flex-end; gap: 6px; margin-top: 45px; min-height: 200px; }
         
         .podium-slot { display: flex; flex-direction: column; align-items: center; width: 19%; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(233,196,106,.15); border-bottom: none; border-radius: 8px 8px 0 0; padding: 10px 2px 4px; position: relative; transition: all 0.3s ease; }
         .podium-slot:hover { background: rgba(255, 255, 255, 0.08); }
@@ -31,16 +31,13 @@
         .rank-4 { order: 1; height: 105px; }
         .rank-5 { order: 5; height: 90px; }
         
-        /* 頭像框設計 */
-        .avatar-box { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #aab0c5; background: #111528; position: absolute; top: -20px; left: 50%; transform: translateX(-50%); overflow: hidden; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 8px rgba(0,0,0,0.5); z-index: 2; }
-        .rank-1 .avatar-box { width: 56px; height: 56px; top: -28px; border-color: #f6e6b0; box-shadow: 0 0 15px rgba(233,196,106,0.5); }
-        .avatar-img { width: 100%; height: 100%; object-fit: cover; }
-        .no-avatar { font-size: 14px; color: #475569; font-weight: bold; }
-        .rank-1 .no-avatar { font-size: 18px; }
+        /* 頭像框懸浮定位 */
+        .avatar-wrapper { position: absolute; top: -24px; left: 50%; transform: translateX(-50%); z-index: 10; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5)); }
+        .rank-1 .avatar-wrapper { top: -36px; filter: drop-shadow(0 0 15px rgba(233,196,106,0.6)); }
         
         /* 文字排版 */
         .immortal-name { font-size: 11px; font-weight: 900; color: #fff; margin-top: 22px; text-align: center; }
-        .rank-1 .immortal-name { font-size: 14px; color: #f6e6b0; margin-top: 30px; }
+        .rank-1 .immortal-name { font-size: 14px; color: #f6e6b0; margin-top: 32px; }
         .immortal-subject { font-size: 9px; font-weight: 800; color: #c8a85c; margin-top: 4px; text-align: center; }
         
         .immortal-owner-box { margin-top: auto; width: 100%; display: flex; flex-direction: column; align-items: center; }
@@ -58,6 +55,33 @@
         e.style.cssText = 'position:fixed;left:50%;bottom:110px;transform:translateX(-50%);z-index:999;padding:10px 16px;border-radius:999px;background:#111528;color:#f6e6b0;border:1px solid rgba(233,196,106,.35);font-size:12px';
         document.body.appendChild(e);
         setTimeout(() => e.remove(), 2600);
+    }
+
+    // 內建頭像生成器，支援最新外框特效
+    function getAvatarHtml(equipped, sizeClass = "w-10 h-10") {
+        if (!equipped) equipped = { frame: '', avatar: '' };
+        const frame = equipped.frame || '';
+        const avatar = equipped.avatar || '';
+        const isFrameImg = frame && (frame.includes('.') || frame.includes('/'));
+
+        const imgContent = avatar 
+            ? `<img src="${avatar}" class="w-full h-full object-cover" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"> <i class="fa-solid fa-user text-gray-400 absolute hidden"></i>`
+            : `<i class="fa-solid fa-user text-gray-500 text-lg"></i>`;
+
+        const borderClass = frame ? '' : 'border-2 border-slate-600';
+        const cssFrameClass = (!isFrameImg && frame) ? frame : '';
+
+        const frameImgElement = isFrameImg 
+            ? `<img src="${frame}" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); height: 145%; width: auto; max-width: none; z-index: 50; pointer-events: none;">` 
+            : '';
+
+        return `
+        <div class="${sizeClass} rounded-full bg-slate-800 flex items-center justify-center relative ${borderClass} ${cssFrameClass}" style="overflow: visible !important;">
+            <div class="w-full h-full rounded-full overflow-hidden flex items-center justify-center bg-slate-800 relative z-0">
+                ${imgContent}
+            </div>
+            ${frameImgElement}
+        </div>`;
     }
 
     async function connect() {
@@ -93,7 +117,7 @@
                 }
             });
 
-            // 根據取得的 uid 去 users 集合抓取最新頭像與積分
+            // 根據取得的 uid 去 users 集合抓取最新的 積分與裝備(頭像框)
             const userScores = {};
             if (uids.length > 0) {
                 const q = fs.query(fs.collection(db, 'users'), fs.where(fs.documentId(), 'in', uids));
@@ -102,20 +126,16 @@
                     const userData = d.data();
                     userScores[d.id] = {
                         score: userData.stats?.totalScore || 0,
-                        avatar: userData.equipped?.avatar || ''
+                        equipped: userData.equipped || { frame: '', avatar: '' }
                     };
                 });
             }
 
-            // 將抓到的分數與頭像綁定回仙主身上
+            // 將抓到的分數與裝備綁定回仙主身上
             Object.keys(owners).forEach(roleId => {
                 const uid = owners[roleId].uid;
                 owners[roleId].score = userScores[uid]?.score || 0;
-                
-                // 如果即時資料庫有頭像就用最新的，否則退回原本搶占時存的
-                if (userScores[uid]?.avatar) {
-                    owners[roleId].photoURL = userScores[uid].avatar;
-                }
+                owners[roleId].equipped = userScores[uid]?.equipped || null;
             });
 
         } catch (e) {
@@ -151,18 +171,9 @@
                     throw new Error('TAKEN');
                 }
 
-                // 搶占時順便去 users 拿取目前裝備的頭像
-                const userRef = fs.doc(db, 'users', user.uid);
-                const userSnap = await tx.get(userRef);
-                let photoURL = user.photoURL || '';
-                if (userSnap.exists()) {
-                    photoURL = userSnap.data().equipped?.avatar || photoURL;
-                }
-
                 tx.set(ref, {
                     uid: user.uid,
                     displayName: user.displayName || '無名仙客',
-                    photoURL: photoURL,
                     role: id,
                     claimedAt: fs.serverTimestamp()
                 });
@@ -189,14 +200,14 @@
         
         const uid = auth && auth.currentUser ? auth.currentUser.uid : '';
         
-        // 依照積分高低進行排名 (分數高者在前面)
+        // 依照積分高低進行排名 (分數高者排前)
         const sortedRoles = [...ROLES].sort((a, b) => {
             const scoreA = owners[a.id]?.score || 0;
             const scoreB = owners[b.id]?.score || 0;
             return scoreB - scoreA;
         });
 
-        // 將排名資訊配對回原始陣列，以決定講台高度 CSS 類別 (rank-1 ~ rank-5)
+        // 將排名資訊配對回原始陣列，以決定講台高度 (rank-1 ~ rank-5)
         const renderData = ROLES.map(r => {
             const o = owners[r.id];
             const rankIndex = sortedRoles.findIndex(sr => sr.id === r.id);
@@ -213,14 +224,13 @@
         // 渲染講台 HTML
         container.innerHTML = renderData.map(r => {
             const o = r.owner;
-            const avatarSrc = o && o.photoURL ? o.photoURL : '';
-            const avatarHtml = avatarSrc 
-                ? `<img src="${avatarSrc}" class="avatar-img">` 
-                : `<span class="no-avatar">?</span>`;
+            // 第一名頭像較大，其餘為一般大小
+            const sizeClass = r.rankClass === 'rank-1' ? "w-14 h-14" : "w-10 h-10";
+            const avatarHtml = getAvatarHtml(o ? o.equipped : null, sizeClass);
             
             return `
                 <div class="podium-slot ${r.rankClass}">
-                    <div class="avatar-box">
+                    <div class="avatar-wrapper">
                         ${avatarHtml}
                     </div>
                     <div class="immortal-name">${r.name}</div>
