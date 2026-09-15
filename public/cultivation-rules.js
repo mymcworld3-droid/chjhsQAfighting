@@ -102,6 +102,19 @@
           'stats.cultivationShield': nextShield
         });
 
+        // 🔥 修正：將計算後的修為與狀態同步回記憶體，防止被 main-legacy.js 的舊資料覆蓋
+        if (window.currentUserData && window.currentUserData.stats) {
+          window.currentUserData.stats.totalScore = cultivationScore;
+          window.currentUserData.stats.currentStreak = nextStreak;
+          window.currentUserData.stats.bestStreak = Math.max(Number(window.currentUserData.stats.bestStreak) || 0, nextStreak);
+          window.currentUserData.stats.cultivationShield = nextShield;
+          
+          // 強制觸發主程式的 UI 更新，讓畫面上的修為即時跳動
+          if (typeof window.updateUIStats === 'function') {
+            window.updateUIStats();
+          }
+        }
+
         state.streak = nextStreak;
         state.shield = nextShield;
         saveState(state);
