@@ -2,6 +2,7 @@
 import './main-legacy.js';
 import './cultivation-theme.js';
 import './cultivation-rules.js';
+import './xiuxian-live-sync.js';
 import './five-immortals.js';
 
 // 僅移除已確認的歷史抽卡 UI。
