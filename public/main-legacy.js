@@ -1848,28 +1848,23 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         if (stats.currentStreak > stats.bestStreak) stats.bestStreak = stats.currentStreak;
         
         scoreGain = 20; // 無限模式獎勵
-        stats.gold = (stats.gold || 0) + scoreGain; // 🔥 修正：真正將金幣加入記憶體數據中
         fbTitle.innerHTML += ` <span class="text-yellow-400 text-sm ml-2 border border-yellow-500 rounded px-1">+${scoreGain}💰</span>`;
     } else {
         stats.currentStreak = 0; 
     }
 
-    // 🔥 [新增] 解析當前題目分類，並更新知識圖譜 (knowledgeMap) 數據
     if (window.currentActiveQuiz && window.currentActiveQuiz.badge) {
-        // 從 badge (例如 "🎯 國文 | 字形字音字義") 中拆解出學科與單元
         const parts = window.currentActiveQuiz.badge.replace('🎯 ', '').split(' | ');
         if (parts.length >= 2) {
             const subject = parts[0].trim();
             const subTopic = parts[1].trim();
 
-            // 防呆：如果尚未有該科目的資料結構，先幫它初始化
             if (!stats.knowledgeMap) stats.knowledgeMap = {};
             if (!stats.knowledgeMap[subject]) stats.knowledgeMap[subject] = {};
             if (!stats.knowledgeMap[subject][subTopic]) {
                 stats.knowledgeMap[subject][subTopic] = { total: 0, correct: 0 };
             }
 
-            // 寫入數據：總答題數 +1，若答對則 correct +1
             stats.knowledgeMap[subject][subTopic].total += 1;
             if (isCorrect) {
                 stats.knowledgeMap[subject][subTopic].correct += 1;
@@ -1877,8 +1872,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         }
     }
 
-    const currentScore = stats.totalScore || 0;
-    const newRank = calculateRankFromScore(currentScore);
+    const newRank = calculateRankFromScore(stats.totalScore || 0);
     if (newRank > stats.rankLevel) stats.rankLevel = newRank;
 
     try {
@@ -1892,7 +1886,6 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
             topic: "Solo", 
             mode: 'infinite', 
             timestamp: serverTimestamp(),
-            // 🔥 新增：將選項、玩家選擇、正確答案與解析一併存進資料庫
             options: window.currentActiveQuiz?.data?.opts || [],
             correctIdx: correctIdx,
             userIdx: userIdx,
