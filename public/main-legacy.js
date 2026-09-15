@@ -1014,8 +1014,9 @@ window.updateUIStats = updateUIStats; // 🔥 新增：將函式暴露給全域�
 function updateUIStats() {
     if(!currentUserData) return;
     const stats = currentUserData.stats;
-    const currentNetScore = getNetScore(stats);
-    const realRankLevel = calculateRankFromScore(currentNetScore);
+    
+    const currentScore = stats.totalScore || 0;
+    const realRankLevel = calculateRankFromScore(currentScore);
     
     if (stats.rankLevel !== realRankLevel) { stats.rankLevel = realRankLevel; }
     
@@ -1025,24 +1026,27 @@ function updateUIStats() {
     if(typeof stats.totalAnswered === 'undefined') stats.totalAnswered = 0;
 
     const rankIndex = Math.min(stats.rankLevel, REALMS.length - 1);
+    const currentRealm = REALMS[rankIndex];
     const rankEl = document.getElementById('display-rank');
-    if (rankEl) {
-        rankEl.innerText = getRankName(rankIndex); 
-        rankEl.className = `text-5xl font-black mb-2 text-yellow-400`;
-    }
+    rankEl.innerText = getRankName(stats.rankLevel); 
+    rankEl.className = `text-5xl font-black mb-2 text-white`;
 
     let progressPercent = 100;
-    let currentStarsDisplay = currentScore;
-    let maxStarsDisplay = "∞";
+    let currentStarsDisplay = 10;
+    let maxStarsDisplay = 10;
 
     if (rankIndex < REALMS.length - 1) {
-        const currentBase = REALMS[rankIndex].need;
+        const currentBase = currentRealm.need;
         const nextBase = REALMS[rankIndex + 1].need;
         const required = nextBase - currentBase;
         const earned = currentScore - currentBase;
         progressPercent = Math.max(0, Math.min((earned / required) * 100, 100));
         currentStarsDisplay = Math.max(0, earned);
         maxStarsDisplay = required;
+    } else {
+        currentStarsDisplay = currentScore - currentRealm.need;
+        maxStarsDisplay = "∞";
+        progressPercent = 100;
     }
 
     const starValEl = document.getElementById('display-stars');
@@ -1054,14 +1058,8 @@ function updateUIStats() {
         }
     }
     
-    // 🔥 將首頁的四格面板第一格改為顯示「金幣(靈石)」，並動態修改標題
-    const scoreLabel = document.querySelector('.stat-card .stat-label');
-    if (scoreLabel && (scoreLabel.innerText === 'TOTAL SCORE' || scoreLabel.innerText === '修為')) {
-        scoreLabel.innerText = '靈石 (金幣)';
-    }
-    document.getElementById('display-score').innerText = stats.gold || 0; // 首頁面板正式綁定金幣
+    document.getElementById('display-score').innerText = stats.totalScore;
 
-    // 將商店與卡牌頁面的積分也綁定為金幣 (gold)
     const storePts = document.getElementById('store-user-points');
     if(storePts) storePts.innerText = stats.gold || 0;
     
