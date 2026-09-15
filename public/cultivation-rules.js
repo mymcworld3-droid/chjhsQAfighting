@@ -12,7 +12,6 @@
     stateKeyPrefix: 'xiuxian_growth_v2:'
   };
 
-  // 每個 quiz object 只處理一次，避免 click bubbling / 重複 listener 造成重複結算。
   const processedQuizzes = new WeakSet();
 
   function getUserStateKey(uid) {
@@ -83,8 +82,6 @@
   }
 
   async function waitForMainAnswerCommit(userRef, getDoc, beforeAnswered, attempts = 8) {
-    // main-legacy 在 handleAnswer 開頭就遞增 totalAnswered；等它寫入後再校正 totalScore，
-    // 避免本模組與主流程同時寫入造成 last-write-wins 的隱性競態。
     for (let i = 0; i < attempts; i++) {
       const snap = await getDoc(userRef);
       if (snap.exists()) {
@@ -104,13 +101,8 @@
 
     const userRef = doc(db, 'users', uid);
     const localState = loadState(uid);
+    const signature = JSON.stringify([quiz.data.q, quiz.data.ans, quiz.badge || '']);
 
-    // 以題目內容 + 正解作為額外防重標記；真正的 session 防重則靠 WeakSet。
-    const signature = JSON.stringify([
-      quiz.data.q,
-      quiz.data.ans,
-      quiz.badge || ''
-    ]);
     if (localState.lastQuizSignature === signature && localState.lastQuizUid === uid) return;
 
     const beforeSnap = await getDoc(userRef);
@@ -124,8 +116,6 @@
 
     const committedStats = committedSnap.data().stats || {};
     const committedAnswered = Number(committedStats.totalAnswered) || 0;
-
-    // 如果主流程沒有真的完成答題寫入，就不要自行修改玩家資料。
     if (committedAnswered <= beforeAnswered) return;
 
     await runTransaction(db, async (transaction) => {
@@ -135,17 +125,13 @@
       const data = fresh.data();
       const stats = { ...(data.stats || {}) };
       const currentAnswered = Number(stats.totalAnswered) || 0;
-
-      // 防止重試/重連再次修正同一題：以本次答題後的 totalAnswered 為同步點。
       if (currentAnswered <= beforeAnswered) return;
 
       if (isCorrect) {
-        // main-legacy 已先 +20；修仙規則要求這一題淨 +1，所以校正 -19。
         const currentScore = Math.max(0, Number(stats.totalScore) || 0);
         stats.totalScore = Math.max(0, currentScore - CONFIG.legacySoloAnswerGain + CONFIG.cultivationGain);
       }
 
-      // streak 由 main-legacy 計算，本模組只負責護盾。
       const streakAfterAnswer = Number(stats.currentStreak) || 0;
       const previousShield = !!stats.cultivationShield;
       const nextShield = isCorrect && beforeStreak >= CONFIG.bonusAfterStreak
@@ -156,11 +142,20 @@
       transaction.update(userRef, { stats });
     });
 
-    // 同步前端快取，避免下一次 UI refresh 把 Firestore 正確值覆蓋掉。
     const finalSnap = await getDoc(userRef);
     if (finalSnap.exists()) {
       const finalData = finalSnap.data();
       if (window.currentUserData) window.currentUserData = finalData;
+
+      // 通知首頁「仙途修行」立即刷新，不必等待下一次輪詢或重新載入頁面。
+      window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', {
+        detail: {
+          uid,
+          totalScore: Number(finalData.stats?.totalScore) || 0,
+          currentStreak: Number(finalData.stats?.currentStreak) || 0,
+          stats: finalData.stats || {}
+        }
+      }));
     }
 
     const finalStats = finalSnap.exists() ? (finalSnap.data().stats || {}) : {};
@@ -208,7 +203,6 @@
       processedQuizzes.add(answer.quiz);
 
       const isCorrect = answer.userIdx === answer.correctIdx;
-      // 稍微延後只負責給主程式時間更新 UI；真正的同步會等待 totalAnswered 變化。
       setTimeout(() => {
         reconcileAnswer(isCorrect, uid, answer.quiz).catch(error => {
           console.warn('修為同步失敗', error);
