@@ -5,6 +5,26 @@ import './cultivation-rules.js';
 import './xiuxian-live-sync.js';
 import './five-immortals.js';
 
+// 恢復原本的科幻／電腦字體。
+// Orbitron 負責英文字母與數字；中文字沒有對應字形時自動使用 Noto Sans TC。
+function restoreComputerFont() {
+  const fontHref = 'https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap';
+
+  if (!document.querySelector(`link[href="${fontHref}"]`)) {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = fontHref;
+    document.head.appendChild(link);
+  }
+
+  document.documentElement.style.setProperty(
+    '--xq-serif',
+    "'Orbitron', 'Noto Sans TC', sans-serif"
+  );
+}
+
+restoreComputerFont();
+
 // 僅移除已確認的歷史抽卡 UI。
 // 不再依按鈕文字刪除元素，避免誤刪現有的卡牌/道具/管理功能。
 const LEGACY_SELECTORS = [
