@@ -1862,7 +1862,6 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     } else {
         stats.currentStreak = 0; 
     }
-    stats.totalScore += scoreGain;
 
     // 🔥 [新增] 解析當前題目分類，並更新知識圖譜 (knowledgeMap) 數據
     if (window.currentActiveQuiz && window.currentActiveQuiz.badge) {
