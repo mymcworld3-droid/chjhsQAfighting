@@ -548,8 +548,8 @@ onAuthStateChanged(auth, async (user) => {
                 // 資料結構補全 (防呆)
                 if (!currentUserData.inventory) currentUserData.inventory = [];
                 if (!currentUserData.equipped) currentUserData.equipped = { frame: '', avatar: '' };
-                if (!currentUserData.friends) currentUserData.friends = [];);
-                }
+                if (!currentUserData.friends) currentUserData.friends = [];
+                
                 if (!currentUserData.friendCode) {
                     const code = Math.random().toString(36).substring(2, 8).toUpperCase();
                     await updateDoc(userRef, { friendCode: code });
