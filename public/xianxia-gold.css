@@ -1,38 +1,38 @@
-/* 仙界金白主題：以雲白、象牙白與暖金取代原本的深綠／青玉配色。 */
+/* 黑金仙界主題：以墨黑、曜石黑與暖金為主，白色只保留在主要文字。 */
 
 :root {
-  --xq-ink: #3a2b16;
-  --xq-surface: #fffaf0;
-  --xq-jade: #c4973d;
-  --xq-gold: #c89d45;
-  --xq-paper: #fffdf7;
-  --xq-muted: #8f7b59;
-  --xq-line: rgba(184, 139, 52, .34);
-  --glass-bg: rgba(255, 252, 244, .91);
+  --xq-ink: #090909;
+  --xq-surface: #111111;
+  --xq-jade: #d6ad55;
+  --xq-gold: #d8b15d;
+  --xq-paper: #f5f1e8;
+  --xq-muted: #aaa08b;
+  --xq-line: rgba(216,177,93,.30);
+  --glass-bg: rgba(12,12,12,.92);
   --glass-border: var(--xq-line);
-  --neon-cyan: #d3ad5c;
-  --neon-blue: #b8872f;
-  --neon-pink: #efd9a5;
+  --neon-cyan: #d8b15d;
+  --neon-blue: #b98a34;
+  --neon-pink: #ead8ad;
 }
 
 body.xianxia-theme {
-  color: #4a3820;
-  background: #f7f1e4 !important;
+  color: var(--xq-paper);
+  background: #070707 !important;
 }
 
 body.xianxia-theme::before {
   background:
-    linear-gradient(110deg, rgba(255,255,255,.88), rgba(252,245,226,.82)),
-    radial-gradient(circle at 78% 8%, rgba(255,255,255,.98), rgba(245,224,177,.26) 32%, transparent 58%),
+    linear-gradient(115deg, rgba(0,0,0,.91), rgba(12,10,6,.84)),
+    radial-gradient(circle at 78% 8%, rgba(215,174,87,.10), transparent 38%),
     url('assets/immortal-mountains.svg') center / cover;
-  filter: saturate(.55) sepia(.12) brightness(1.18);
+  filter: grayscale(.55) sepia(.22) brightness(.42) contrast(1.12);
 }
 
 body.xianxia-theme header,
 body.xianxia-theme .glass-strip {
-  background: rgba(255, 252, 244, .92);
-  border-color: rgba(184,139,52,.34);
-  box-shadow: 0 8px 26px rgba(117,85,32,.09);
+  background: rgba(8,8,8,.94);
+  border-color: rgba(216,177,93,.28);
+  box-shadow: 0 8px 26px rgba(0,0,0,.45);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
 }
@@ -40,203 +40,202 @@ body.xianxia-theme .glass-strip {
 body.xianxia-theme .xianxia-brand,
 body.xianxia-theme #user-info,
 body.xianxia-theme :is(.text-white, .text-slate-100) {
-  color: #4a3820;
+  color: #f4efe4;
 }
 
 body.xianxia-theme .xianxia-seal {
-  color: #a87720;
-  border-color: #c79b43;
-  outline-color: rgba(199,155,67,.28);
-  background: rgba(255,250,237,.75);
+  color: #e0b960;
+  border-color: #b58a36;
+  outline-color: rgba(216,177,93,.20);
+  background: rgba(22,18,10,.86);
 }
 
 body.xianxia-theme .glass-panel {
-  background: linear-gradient(145deg, rgba(255,255,255,.94), rgba(250,241,220,.91));
-  border-color: rgba(184,139,52,.34);
-  box-shadow: 0 16px 38px rgba(99,69,21,.10), inset 0 1px rgba(255,255,255,.95);
-  color: #4a3820;
+  background: linear-gradient(145deg, rgba(20,20,20,.96), rgba(8,8,8,.95));
+  border-color: rgba(216,177,93,.26);
+  box-shadow: 0 16px 38px rgba(0,0,0,.42), inset 0 1px rgba(255,255,255,.025);
+  color: #f4efe4;
 }
 
 body.xianxia-theme .glass-capsule {
-  background: rgba(255,255,255,.64);
-  border-color: rgba(184,139,52,.30);
+  background: rgba(18,18,18,.78);
+  border-color: rgba(216,177,93,.24);
 }
 
 body.xianxia-theme :is(.text-cyan-300, .text-cyan-400, .text-blue-400, .text-pink-400, .text-purple-400) {
-  color: #b58227;
+  color: #d8b15d;
 }
 
 body.xianxia-theme :is(.text-gray-400, .text-gray-500, .text-gray-600, .stat-label) {
-  color: #8a7653;
+  color: #aaa08b;
 }
 
 body.xianxia-theme :is(.bg-slate-950, .bg-slate-900, .bg-slate-800) {
-  background-color: #fffaf0;
+  background-color: #101010;
 }
 
 body.xianxia-theme :is(.border-cyan-500, .border-slate-800) {
-  border-color: rgba(184,139,52,.35);
+  border-color: rgba(216,177,93,.28);
 }
 
 body.xianxia-theme .btn-cyber-primary {
-  background: linear-gradient(135deg, #f7e6b7, #d6ad58);
-  color: #4a3414;
-  border-color: #c69539;
-  box-shadow: 0 8px 20px rgba(171,126,41,.16), inset 0 1px rgba(255,255,255,.7);
+  background: linear-gradient(135deg, #c89b43, #7c581d);
+  color: #fff8e8;
+  border-color: #d8b15d;
+  box-shadow: 0 8px 20px rgba(194,145,52,.16), inset 0 1px rgba(255,255,255,.12);
 }
 
 body.xianxia-theme .btn-cyber-accent {
-  background: linear-gradient(135deg, #d7aa4e, #a97722);
-  color: #fffdf6;
-  border-color: #d8b96d;
-  box-shadow: 0 8px 22px rgba(143,99,23,.20);
+  background: linear-gradient(135deg, #171717, #0a0a0a);
+  color: #e4bd66;
+  border-color: #9e752e;
+  box-shadow: 0 8px 22px rgba(0,0,0,.28);
 }
 
 body.xianxia-theme .btn-cyber-ghost,
 body.xianxia-theme .xiuxian-btn {
-  background: rgba(255,252,243,.76);
-  color: #6b4d1e;
-  border-color: rgba(184,139,52,.34);
+  background: rgba(16,16,16,.92);
+  color: #d9c69c;
+  border-color: rgba(216,177,93,.28);
 }
 
 body.xianxia-theme :is(.btn-cyber-primary, .btn-cyber-accent, .btn-cyber-ghost, .xiuxian-btn):hover {
-  border-color: #b9872d;
-  box-shadow: 0 10px 24px rgba(157,112,31,.18);
+  border-color: #e2bd68;
+  box-shadow: 0 0 20px rgba(216,177,93,.12);
 }
 
 body.xianxia-theme .input-cyber {
-  background: rgba(255,255,255,.82);
-  color: #4a3820;
-  border-color: rgba(184,139,52,.32);
+  background: rgba(8,8,8,.90);
+  color: #f1ecdf;
+  border-color: rgba(216,177,93,.25);
 }
-
-body.xianxia-theme .input-cyber::placeholder { color: #a49374; }
-body.xianxia-theme select option { background: #fffaf0; color: #4a3820; }
+body.xianxia-theme .input-cyber::placeholder { color: #827967; }
+body.xianxia-theme select option { background: #111; color: #f1ecdf; }
 
 body.xianxia-theme .xianxia-eyebrow,
-body.xianxia-theme .xiuxian-kicker { color: #b47f22; }
+body.xianxia-theme .xiuxian-kicker { color: #d8b15d; }
 body.xianxia-theme .xianxia-page-heading p,
-body.xianxia-theme .xianxia-brand small { color: #8c7958; }
-body.xianxia-theme .xianxia-chapter { color: #a78342; }
+body.xianxia-theme .xianxia-brand small { color: #9d9380; }
+body.xianxia-theme .xianxia-chapter { color: #b99753; }
 
 /* 仙府主視覺 */
 body.xianxia-theme .xiuxian-panel {
-  background: linear-gradient(135deg, #fffdf7, #f2dfb4);
-  border-color: rgba(173,124,35,.44);
-  box-shadow: 0 18px 48px rgba(127,88,23,.14), inset 0 1px rgba(255,255,255,.95);
-  color: #4a3820;
+  background: linear-gradient(135deg, #171717, #0a0a0a);
+  border-color: rgba(216,177,93,.34);
+  box-shadow: 0 18px 48px rgba(0,0,0,.48), inset 0 1px rgba(255,255,255,.025);
+  color: #f4efe4;
 }
 
 body.xianxia-theme .xiuxian-panel::before {
   background:
-    linear-gradient(95deg, rgba(255,253,247,.96) 0%, rgba(250,240,216,.87) 52%, rgba(246,222,169,.54)),
+    linear-gradient(95deg, rgba(8,8,8,.97) 0%, rgba(15,13,9,.90) 52%, rgba(35,27,12,.54)),
     url('assets/immortal-mountains.svg') 68% center / cover;
-  filter: saturate(.42) sepia(.20) brightness(1.12);
+  filter: grayscale(.58) sepia(.30) brightness(.42) contrast(1.10);
 }
 
 body.xianxia-theme .xiuxian-panel::after {
-  border-color: rgba(180,129,38,.22);
+  border-color: rgba(216,177,93,.18);
 }
 
 body.xianxia-theme .xiuxian-invocation,
 body.xianxia-theme .xiuxian-sub,
-body.xianxia-theme .xiuxian-label { color: #7d6846; }
+body.xianxia-theme .xiuxian-label { color: #b0a58f; }
 
 body.xianxia-theme .xiuxian-realm {
-  color: #7d5719;
-  text-shadow: 0 1px 0 rgba(255,255,255,.9), 0 5px 20px rgba(164,112,27,.13);
+  color: #f0d592;
+  text-shadow: 0 0 16px rgba(216,177,93,.12);
 }
 
 body.xianxia-theme .xiuxian-value,
 body.xianxia-theme #xiuxian-score {
-  color: #a8741f;
+  color: #e0b960;
 }
 
 body.xianxia-theme .xiuxian-bar {
-  background: rgba(203,174,116,.18);
-  border-color: rgba(176,128,40,.28);
+  background: rgba(255,255,255,.035);
+  border-color: rgba(216,177,93,.24);
 }
 
 body.xianxia-theme .xiuxian-bar > div {
-  background: linear-gradient(90deg, #f5dfa6, #c58e2d, #f3d98f);
-  box-shadow: 0 0 14px rgba(203,151,54,.30);
+  background: linear-gradient(90deg, #7d581d, #d8b15d, #f0d58e);
+  box-shadow: 0 0 14px rgba(216,177,93,.22);
 }
 
 body.xianxia-theme .xiuxian-toast {
-  background: rgba(255,250,238,.96);
-  color: #553d19;
-  border-color: rgba(184,139,52,.38);
-  box-shadow: 0 12px 32px rgba(112,76,20,.16);
+  background: rgba(11,11,11,.97);
+  color: #f2eadb;
+  border-color: rgba(216,177,93,.32);
+  box-shadow: 0 12px 32px rgba(0,0,0,.48);
 }
 
 /* 首頁資訊卡 */
 body.xianxia-theme .stat-card {
-  background: linear-gradient(145deg, rgba(255,255,255,.92), rgba(248,234,201,.82));
-  border-color: rgba(184,139,52,.30);
-  box-shadow: 0 10px 28px rgba(115,80,24,.08);
+  background: linear-gradient(145deg, rgba(20,20,20,.95), rgba(8,8,8,.92));
+  border-color: rgba(216,177,93,.24);
+  box-shadow: 0 10px 28px rgba(0,0,0,.36);
 }
-body.xianxia-theme .stat-card .stat-icon { color: #c08b2e; }
-body.xianxia-theme .stat-card .stat-value { color: #8d611b; }
-body.xianxia-theme .stat-card .stat-label { color: #846f4e; }
+body.xianxia-theme .stat-card .stat-icon { color: #d2a84f; }
+body.xianxia-theme .stat-card .stat-value { color: #efd28b; }
+body.xianxia-theme .stat-card .stat-label { color: #aaa08c; }
 
 body.xianxia-theme .home-actions > button {
-  background: linear-gradient(145deg, rgba(255,255,255,.92), rgba(249,238,213,.86));
-  border-color: rgba(184,139,52,.32);
-  color: #4a3820;
+  background: linear-gradient(145deg, rgba(19,19,19,.95), rgba(9,9,9,.93));
+  border-color: rgba(216,177,93,.25);
+  color: #f3ede0;
 }
 body.xianxia-theme .home-actions > button > div:first-child {
-  background: rgba(220,181,99,.16);
-  border-color: rgba(184,139,52,.34);
+  background: rgba(216,177,93,.08);
+  border-color: rgba(216,177,93,.24);
 }
-body.xianxia-theme .home-actions i { color: #b47d21; }
+body.xianxia-theme .home-actions i { color: #d6ad55; }
 body.xianxia-theme .home-actions .font-mono,
-body.xianxia-theme .xianxia-footnote { color: #897451; }
+body.xianxia-theme .xianxia-footnote { color: #9e947f; }
 
-/* 題目區：保留宣紙感，但移除綠色選項。 */
+/* 題目區：改成黑金卷軸感，降低亮度。 */
 body.xianxia-theme #quiz-container > .glass-panel:first-child {
-  background: linear-gradient(120deg, #fffdf7, #f2e2bc);
-  color: #4c3a20;
-  border-color: #d1aa5a;
-  border-left-color: #bd8931;
-  box-shadow: 0 14px 35px rgba(102,70,21,.13), inset 0 0 35px rgba(188,142,53,.08);
+  background: linear-gradient(120deg, #181818, #0b0b0b);
+  color: #f2ecdf;
+  border-color: #8f6928;
+  border-left-color: #d0a34a;
+  box-shadow: 0 14px 35px rgba(0,0,0,.46), inset 0 0 35px rgba(216,177,93,.035);
 }
-body.xianxia-theme #question-text { color: #4a3820; }
+body.xianxia-theme #question-text { color: #f2ecdf; }
 body.xianxia-theme #quiz-badge {
-  color: #7b581d;
-  background: rgba(205,164,83,.14);
-  border-color: rgba(179,131,42,.34);
+  color: #d6b66f;
+  background: rgba(216,177,93,.08);
+  border-color: rgba(216,177,93,.25);
 }
 body.xianxia-theme #options-container > button {
-  background: linear-gradient(145deg, #fffefa, #f7ecd4);
-  border-color: rgba(184,139,52,.34);
-  color: #4a3820;
-  box-shadow: 0 6px 18px rgba(111,75,18,.06);
+  background: linear-gradient(145deg, #161616, #090909);
+  border-color: rgba(216,177,93,.24);
+  color: #eee8dc;
+  box-shadow: 0 6px 18px rgba(0,0,0,.30);
 }
 body.xianxia-theme #options-container > button:not(.cursor-not-allowed):hover {
-  border-color: #c38f30;
-  background: linear-gradient(145deg, #fffdf6, #f2ddb1);
+  border-color: #c99a3d;
+  background: linear-gradient(145deg, #211b10, #0f0d09);
 }
 body.xianxia-theme #options-container > button > span:first-child {
-  background: rgba(209,170,91,.16);
-  color: #9e6f1d;
-  border-color: rgba(181,132,42,.34);
+  background: rgba(216,177,93,.08);
+  color: #d7b45f;
+  border-color: rgba(216,177,93,.25);
 }
 
 /* 底部導航 */
-body.xianxia-theme #nav-grid button :is(i, span) { color: #8d7958; }
+body.xianxia-theme #nav-grid button :is(i, span) { color: #9c927e; }
 body.xianxia-theme #nav-grid button.active-nav-btn {
-  background: linear-gradient(180deg, rgba(231,199,128,.20), rgba(255,255,255,.04));
-  border-top-color: #c69539;
+  background: linear-gradient(180deg, rgba(216,177,93,.11), rgba(0,0,0,.02));
+  border-top-color: #d2aa54;
 }
 body.xianxia-theme #nav-grid button.active-nav-btn :is(i, span),
-body.xianxia-theme #nav-grid button:hover i { color: #a8731c; }
+body.xianxia-theme #nav-grid button:hover i { color: #ddb660; }
 
-/* 常見動態卡片／彈窗也統一成金白，避免殘留大片綠色。 */
+/* 常見動態卡片／彈窗也統一成黑金。 */
 body.xianxia-theme :is(.modal-content, .shop-card, .item-card, .rank-card, .history-card, .achievement-card) {
-  background: linear-gradient(145deg, rgba(255,255,255,.96), rgba(249,238,213,.92));
-  border-color: rgba(184,139,52,.32);
-  color: #4a3820;
+  background: linear-gradient(145deg, rgba(20,20,20,.97), rgba(8,8,8,.95));
+  border-color: rgba(216,177,93,.25);
+  color: #f2ecdf;
 }
 
-body.xianxia-theme hr { border-color: rgba(184,139,52,.23); }
-body.xianxia-theme ::selection { background: #e6c77e; color: #4a3210; }
+body.xianxia-theme hr { border-color: rgba(216,177,93,.18); }
+body.xianxia-theme ::selection { background: #b68a35; color: #080808; }
