@@ -18,6 +18,15 @@ const statusPanel = read('cultivation-status-panel.js');
 const visual = read('cultivation-core-visual.js');
 const equipWarning = read('cultivation-core-equip-warning.js');
 
+test('login core is isolated from optional cultivation module failures', () => {
+  const staticImports = main.match(/^import\s+['"][^'"]+['"];$/gm) || [];
+  assert.deepEqual(staticImports, ["import './main-legacy.js';"]);
+  assert.match(main, /const XIUXIAN_FEATURE_MODULES = \[/);
+  assert.match(main, /await import\(modulePath\)/);
+  assert.match(main, /catch \(error\)/);
+  assert.match(main, /Failed to load optional module/);
+});
+
 test('Golden Core UI and effects are gated behind completed migration and 300 cultivation', () => {
   assert.match(training, /const GOLDEN_CORE_SCORE = 300;/);
   assert.match(guard, /const GOLDEN_CORE_SCORE = 300;/);
@@ -28,11 +37,17 @@ test('Golden Core UI and effects are gated behind completed migration and 300 cu
   assert.match(guard, /getGoldenCoreState/);
   assert.match(guard, /if \(!allowed\(\)\) return null;/);
 
-  const progressionIndex = main.indexOf("import './cultivation-progression-v2.js';");
-  const guardIndex = main.indexOf("import './golden-core-access-guard.js';");
-  const trainingIndex = main.indexOf("import './cultivation-training-v4.js';");
+  const progressionIndex = main.indexOf("'./cultivation-progression-v2.js'");
+  const guardIndex = main.indexOf("'./golden-core-access-guard.js'");
+  const trainingIndex = main.indexOf("'./cultivation-training-v4.js'");
   assert.ok(progressionIndex >= 0 && guardIndex > progressionIndex && trainingIndex > guardIndex,
     'progression migration and guard must load before Golden Core UI');
+});
+
+test('compensation inventory rendering is idempotent and cannot self-trigger forever', () => {
+  assert.match(progression, /const signature = `\$\{count\}:\$\{pillBusy \? 1 : 0\}`;/);
+  assert.match(progression, /existing\?\.dataset\.signature === signature/);
+  assert.match(progression, /card\.dataset\.signature = signature/);
 });
 
 test('multiplayer unlock remains Foundation Establishment at 60 cultivation', () => {
@@ -45,14 +60,14 @@ test('multiplayer unlock remains Foundation Establishment at 60 cultivation', ()
 
 test('post-Golden-Core realm curve is consistent across active realm renderers', () => {
   const expected = [
-    ["金丹", 300],
-    ["元嬰", 500],
-    ["化神", 800],
-    ["煉虛", 1200],
-    ["合體", 1800],
-    ["大乘", 2600],
-    ["渡劫", 3600],
-    ["真仙", 5000]
+    ['金丹', 300],
+    ['元嬰', 500],
+    ['化神', 800],
+    ['煉虛', 1200],
+    ['合體', 1800],
+    ['大乘', 2600],
+    ['渡劫', 3600],
+    ['真仙', 5000]
   ];
 
   for (const source of [theme, liveSync, breakthrough]) {
