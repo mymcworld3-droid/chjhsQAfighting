@@ -75,20 +75,10 @@
 
   window.addEventListener('xiuxian:stats-updated', (event) => {
     const score = event.detail?.totalScore;
-    if (typeof score === 'number') refresh(score);
-    else if (score != null) refresh(Number(score));
-  });
-
-  // 面板可能由 cultivation-theme 稍後建立，因此事件早到時補一次刷新。
-  const observer = new MutationObserver(() => {
-    const score = window.getCurrentUserData?.()?.stats?.totalScore;
-    if (score != null) refresh(score);
+    if (score != null) refresh(Number(score));
   });
 
   function boot() {
-    if (document.body) {
-      observer.observe(document.body, { childList: true, subtree: true });
-    }
     const score = window.getCurrentUserData?.()?.stats?.totalScore;
     if (score != null) refresh(score);
   }
