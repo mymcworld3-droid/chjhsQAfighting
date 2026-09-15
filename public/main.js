@@ -5,6 +5,7 @@ import './cultivation-rules.js';
 import './xiuxian-live-sync.js';
 import './five-immortals.js';
 import './cultivation-progression-v2.js';
+import './golden-core-access-guard.js';
 import './cultivation-training-v4.js';
 import './cultivation-core-visual.js';
 import './cultivation-core-equip-warning.js';
