@@ -1,0 +1,91 @@
+// 仙途修行即時同步：收到修為變更事件後立即更新首頁面板。
+(function () {
+  'use strict';
+
+  const REALMS = [
+    { name: '凡人', sub: '初入仙途', need: 0, emoji: '🌱' },
+    { name: '煉氣', sub: '一層', need: 5, emoji: '🌬️' },
+    { name: '煉氣', sub: '二層', need: 10, emoji: '🌬️' },
+    { name: '煉氣', sub: '三層', need: 15, emoji: '🌬️' },
+    { name: '煉氣', sub: '四層', need: 20, emoji: '🌬️' },
+    { name: '煉氣', sub: '五層', need: 25, emoji: '🌬️' },
+    { name: '煉氣', sub: '六層', need: 30, emoji: '🌬️' },
+    { name: '煉氣', sub: '七層', need: 35, emoji: '🌬️' },
+    { name: '煉氣', sub: '八層', need: 40, emoji: '🌬️' },
+    { name: '煉氣', sub: '九層', need: 45, emoji: '🌬️' },
+    { name: '築基', sub: '初期', need: 60, emoji: '🪨' },
+    { name: '築基', sub: '中期', need: 80, emoji: '🪨' },
+    { name: '築基', sub: '後期', need: 100, emoji: '🪨' },
+    { name: '金丹', sub: '丹成一品', need: 150, emoji: '☀️' },
+    { name: '元嬰', sub: '元嬰出竅', need: 200, emoji: '✨' },
+    { name: '化神', sub: '神念通天', need: 300, emoji: '🔮' },
+    { name: '煉虛', sub: '虛空悟道', need: 450, emoji: '🌌' },
+    { name: '合體', sub: '天地合一', need: 650, emoji: '☯️' },
+    { name: '大乘', sub: '大道將成', need: 900, emoji: '⚡' },
+    { name: '渡劫', sub: '雷劫問道', need: 1200, emoji: '⛈️' },
+    { name: '真仙', sub: '踏入仙門', need: 1600, emoji: '🪽' }
+  ];
+
+  function realmFor(value) {
+    let current = REALMS[0];
+    for (const realm of REALMS) {
+      if (value >= realm.need) current = realm;
+      else break;
+    }
+    return current;
+  }
+
+  function nextRealm(value) {
+    return REALMS.find(realm => realm.need > value) || null;
+  }
+
+  function refresh(score) {
+    const value = Math.max(0, Number(score) || 0);
+    const realm = realmFor(value);
+    const next = nextRealm(value);
+
+    const scoreEl = document.getElementById('xiuxian-score');
+    const realmEl = document.getElementById('xiuxian-realm');
+    const subEl = document.getElementById('xiuxian-sub');
+    const barEl = document.getElementById('xiuxian-progress');
+    const nextEl = document.getElementById('xiuxian-next');
+    const labelEl = document.getElementById('xiuxian-progress-label');
+
+    if (!scoreEl || !realmEl || !subEl || !barEl || !nextEl || !labelEl) return false;
+
+    realmEl.textContent = `${realm.emoji} ${realm.name}`;
+    subEl.textContent = realm.sub;
+    scoreEl.textContent = `${value.toLocaleString()} 修為`;
+
+    if (!next) {
+      barEl.style.width = '100%';
+      nextEl.textContent = '已登仙';
+      labelEl.textContent = '已登仙，繼續悟道';
+      return true;
+    }
+
+    const percent = Math.max(0, Math.min(100,
+      ((value - realm.need) / (next.need - realm.need)) * 100
+    ));
+    barEl.style.width = `${percent}%`;
+    nextEl.textContent = `${Math.max(0, next.need - value).toLocaleString()} 修為`;
+    labelEl.textContent = `下一境界：${next.name} ${next.sub}`;
+    return true;
+  }
+
+  window.addEventListener('xiuxian:stats-updated', (event) => {
+    const score = event.detail?.totalScore;
+    if (score != null) refresh(Number(score));
+  });
+
+  function boot() {
+    const score = window.getCurrentUserData?.()?.stats?.totalScore;
+    if (score != null) refresh(score);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot, { once: true });
+  } else {
+    boot();
+  }
+})();
