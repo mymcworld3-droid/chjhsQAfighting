@@ -107,3 +107,93 @@ body.xianxia-theme .cyber-loader {
 body.xianxia-theme :is(.ring-cyan-400, .ring-cyan-500, .ring-blue-400, .ring-blue-500) {
   --tw-ring-color: rgba(216,177,93,.45) !important;
 }
+
+/* 社交中心：舊版除了 cyan/blue 還使用大量 slate 藍灰，整頁統一成黑金。 */
+body.xianxia-theme #page-social {
+  color: #f2ecdf;
+}
+
+body.xianxia-theme #page-social > div,
+body.xianxia-theme #page-social [class*="bg-slate-900"],
+body.xianxia-theme #page-social [class*="bg-slate-950"] {
+  background-color: rgba(9,9,9,.96) !important;
+}
+
+body.xianxia-theme #page-social [class*="bg-slate-800"] {
+  background-color: #151515 !important;
+}
+
+body.xianxia-theme #page-social [class*="bg-slate-700"] {
+  background-color: #1d1b17 !important;
+}
+
+body.xianxia-theme #page-social [class*="border-slate-"] {
+  border-color: rgba(216,177,93,.22) !important;
+}
+
+body.xianxia-theme #page-social [class*="text-slate-"],
+body.xianxia-theme #page-social .text-gray-300,
+body.xianxia-theme #page-social .text-gray-400,
+body.xianxia-theme #page-social .text-gray-500 {
+  color: #aaa08b !important;
+}
+
+body.xianxia-theme #page-social [class*="text-cyan-"],
+body.xianxia-theme #page-social [class*="text-blue-"] {
+  color: #ddb660 !important;
+}
+
+body.xianxia-theme #page-social [class*="bg-cyan-"],
+body.xianxia-theme #page-social [class*="bg-blue-"] {
+  background-color: rgba(216,177,93,.11) !important;
+}
+
+body.xianxia-theme #page-social [class*="border-cyan-"],
+body.xianxia-theme #page-social [class*="border-blue-"] {
+  border-color: rgba(216,177,93,.34) !important;
+}
+
+body.xianxia-theme #page-social [class*="from-cyan-"],
+body.xianxia-theme #page-social [class*="from-blue-"],
+body.xianxia-theme #page-social [class*="to-cyan-"],
+body.xianxia-theme #page-social [class*="to-blue-"] {
+  background-image: linear-gradient(135deg, #c89b43, #79551b) !important;
+  color: #fff8e8 !important;
+}
+
+body.xianxia-theme #page-social [class*="hover:from-cyan-"]:hover,
+body.xianxia-theme #page-social [class*="hover:from-blue-"]:hover,
+body.xianxia-theme #page-social [class*="hover:to-cyan-"]:hover,
+body.xianxia-theme #page-social [class*="hover:to-blue-"]:hover {
+  background-image: linear-gradient(135deg, #e0bb64, #956b25) !important;
+}
+
+body.xianxia-theme #page-social input,
+body.xianxia-theme #page-social textarea,
+body.xianxia-theme #page-social select {
+  background: #0b0b0b !important;
+  color: #f2ecdf !important;
+  border-color: rgba(216,177,93,.26) !important;
+}
+
+body.xianxia-theme #page-social input:focus,
+body.xianxia-theme #page-social textarea:focus,
+body.xianxia-theme #page-social select:focus {
+  border-color: #d8b15d !important;
+  box-shadow: 0 0 0 3px rgba(216,177,93,.10) !important;
+}
+
+body.xianxia-theme #page-social h2,
+body.xianxia-theme #page-social h3,
+body.xianxia-theme #page-social .fa-comments,
+body.xianxia-theme #page-social .fa-user-plus {
+  color: #ddb660 !important;
+}
+
+body.xianxia-theme #page-social button {
+  border-color: rgba(216,177,93,.24);
+}
+
+body.xianxia-theme #page-social button:not([class*="from-"]):hover {
+  border-color: rgba(216,177,93,.48) !important;
+}
