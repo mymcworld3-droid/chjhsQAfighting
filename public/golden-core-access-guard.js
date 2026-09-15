@@ -41,15 +41,17 @@
   }
 
   function removeLockedTrainingUI() {
-    document.getElementById('nav-training')?.remove();
-    document.getElementById('page-training')?.remove();
-    document.body?.classList.remove('cultivation-training-unlocked');
+    const page = document.getElementById('page-training');
+    const wasVisible = !!page && !page.classList.contains('hidden');
 
-    // 若舊程式在權限變更前已切進修煉頁，立刻安全退回仙府。
-    const visibleTraining = document.querySelector('#page-training:not(.hidden)');
-    if (visibleTraining && typeof window.switchToPage === 'function') {
+    // 若權限變更時正停留在修煉頁，先安全退回仙府，再刪除頁面節點。
+    if (wasVisible && typeof window.switchToPage === 'function') {
       window.switchToPage('page-home');
     }
+
+    document.getElementById('nav-training')?.remove();
+    page?.remove();
+    document.body?.classList.remove('cultivation-training-unlocked');
   }
 
   function enforce() {
