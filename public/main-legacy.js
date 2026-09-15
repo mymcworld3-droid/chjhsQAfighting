@@ -1053,10 +1053,14 @@ function updateUIStats() {
         }
     }
     
-    // 首頁面板讀取用的修為分數
-    document.getElementById('display-score').innerText = stats.totalScore;
+    // 🔥 將首頁的四格面板第一格改為顯示「金幣(靈石)」，並動態修改標題
+    const scoreLabel = document.querySelector('.stat-card .stat-label');
+    if (scoreLabel && (scoreLabel.innerText === 'TOTAL SCORE' || scoreLabel.innerText === '修為')) {
+        scoreLabel.innerText = '靈石 (金幣)';
+    }
+    document.getElementById('display-score').innerText = stats.gold || 0; // 首頁面板正式綁定金幣
 
-    // 將商店與卡牌頁面的積分綁定為金幣 (gold)
+    // 將商店與卡牌頁面的積分也綁定為金幣 (gold)
     const storePts = document.getElementById('store-user-points');
     if(storePts) storePts.innerText = stats.gold || 0;
     
