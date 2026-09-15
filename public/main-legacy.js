@@ -24,6 +24,8 @@ const db = getFirestore();
 const provider = new GoogleAuthProvider();
 
 let currentUserData = null;
+// 🔥 新增這行：將玩家資料開放給修仙模組讀取
+window.getCurrentUserData = () => currentUserData;
 
 // --- 全域狀態變數 ---
 let isBattleResultProcessed = false; // 防止重複領取獎勵
