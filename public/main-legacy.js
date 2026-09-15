@@ -1011,8 +1011,8 @@ window.switchToPage = (pageId) => {
 function updateUIStats() {
     if(!currentUserData) return;
     const stats = currentUserData.stats;
-    const currentNetScore = getNetScore(stats);
-    const realRankLevel = calculateRankFromScore(currentNetScore);
+    const currentScore = stats.totalScore || 0;
+    const realRankLevel = calculateRankFromScore(currentScore);
     
     if (stats.rankLevel !== realRankLevel) { stats.rankLevel = realRankLevel; }
     
@@ -1021,55 +1021,40 @@ function updateUIStats() {
     if(typeof stats.totalCorrect === 'undefined') stats.totalCorrect = 0;
     if(typeof stats.totalAnswered === 'undefined') stats.totalAnswered = 0;
 
-    const rankColors = [
-        "text-orange-600", "text-gray-300", "text-yellow-400", "text-blue-600",
-        "text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-red-500",
-        "text-purple-400 drop-shadow-[0_0_10px_rgba(168,85,247,0.8)]",
-        "text-red-500 drop-shadow-[0_0_15px_rgba(239,68,68,0.8)] animate-pulse",
-        "text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-yellow-500 to-yellow-200 drop-shadow-[0_0_20px_rgba(234,179,8,0.8)]"
-    ];
-
-    const rankIndex = Math.min(stats.rankLevel, RANKS_KEYS.length - 1);
+    const rankIndex = Math.min(stats.rankLevel, REALMS.length - 1);
     const rankEl = document.getElementById('display-rank');
-    rankEl.innerText = t(RANKS_KEYS[rankIndex]); 
-    rankEl.className = `text-5xl font-black mb-2 ${rankColors[rankIndex] || "text-white"}`;
+    if (rankEl) {
+        rankEl.innerText = getRankName(rankIndex); 
+        rankEl.className = `text-5xl font-black mb-2 text-yellow-400`;
+    }
 
     let progressPercent = 100;
-    let currentStarsDisplay = 10;
-    let maxStarsDisplay = 10;
+    let currentStarsDisplay = currentScore;
+    let maxStarsDisplay = "∞";
 
-    if (rankIndex < RANK_THRESHOLDS.length - 1) {
-        const currentBase = RANK_THRESHOLDS[rankIndex];
-        const nextBase = RANK_THRESHOLDS[rankIndex + 1];
+    if (rankIndex < REALMS.length - 1) {
+        const currentBase = REALMS[rankIndex].need;
+        const nextBase = REALMS[rankIndex + 1].need;
         const required = nextBase - currentBase;
-        const earned = currentNetScore - currentBase;
+        const earned = currentScore - currentBase;
         progressPercent = Math.max(0, Math.min((earned / required) * 100, 100));
         currentStarsDisplay = Math.max(0, earned);
         maxStarsDisplay = required;
-    } else {
-        currentStarsDisplay = currentNetScore - RANK_THRESHOLDS[RANK_THRESHOLDS.length - 1];
-        maxStarsDisplay = "∞";
-        progressPercent = 100;
     }
 
     const starValEl = document.getElementById('display-stars');
     if (starValEl) {
-        // 更新數值
         starValEl.innerText = currentStarsDisplay;
-        
-        // 更新分母 (如果結構允許，或者直接操作父層但避免遞迴)
-        // 這裡我們用一個安全的方式：找到包含 "/ 10" 的那個兄弟元素或父元素文字
         const parentSpan = starValEl.parentElement;
         if (parentSpan) {
-            
             parentSpan.innerHTML = `<span id="display-stars" class="text-yellow-400 font-bold text-sm">${currentStarsDisplay}</span> <span class="text-xs opacity-50">/ ${maxStarsDisplay}</span>`;
-            
         }
     }
-    // (保留原本這行，因為修仙主題面板需要讀取 display-score)
+    
+    // 首頁面板讀取用的修為分數
     document.getElementById('display-score').innerText = stats.totalScore;
 
-    // 🔥 將商店與卡牌頁面的積分，改為綁定 stats.gold
+    // 將商店與卡牌頁面的積分綁定為金幣 (gold)
     const storePts = document.getElementById('store-user-points');
     if(storePts) storePts.innerText = stats.gold || 0;
     
