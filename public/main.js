@@ -22,6 +22,9 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/golden-core-tutorial.js'
 ];
 
+let xiuxianFeatureLoadStarted = false;
+let xiuxianReadyTimer = null;
+
 async function loadXiuxianFeaturesSafely() {
   for (const modulePath of XIUXIAN_FEATURE_MODULES) {
     try {
@@ -33,7 +36,38 @@ async function loadXiuxianFeaturesSafely() {
   window.dispatchEvent(new CustomEvent('xiuxian:features-ready'));
 }
 
-loadXiuxianFeaturesSafely();
+function cultivationUserDataReady() {
+  try {
+    return !!window.getCurrentUserData?.()?.stats;
+  } catch (_) {
+    return false;
+  }
+}
+
+function startXiuxianFeaturesWhenReady() {
+  if (xiuxianFeatureLoadStarted) return;
+
+  // 修仙附加功能一律等登入核心完成使用者資料載入後才啟動。
+  // 這可避免 observer / timer / Firebase 附加邏輯介入 Google 登入畫面。
+  if (cultivationUserDataReady()) {
+    xiuxianFeatureLoadStarted = true;
+    if (xiuxianReadyTimer) clearTimeout(xiuxianReadyTimer);
+    xiuxianReadyTimer = null;
+    loadXiuxianFeaturesSafely();
+    return;
+  }
+
+  xiuxianReadyTimer = setTimeout(startXiuxianFeaturesWhenReady, 250);
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', startXiuxianFeaturesWhenReady, { once: true });
+} else {
+  startXiuxianFeaturesWhenReady();
+}
+
+// 若未來核心登入流程主動派發 ready event，也能立即開始，不必等下一次輪詢。
+window.addEventListener('xiuxian:user-ready', startXiuxianFeaturesWhenReady);
 
 function restoreComputerFont() {
   const fontHref = 'https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap';
