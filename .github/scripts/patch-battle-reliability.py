@@ -72,6 +72,7 @@ if 'const submitted = await runTransaction' not in s[start:end]:
           [`${state.role}.lastSeenAtMs`]: nowMs(),
           updatedAt: serverTimestamp()
         };
+        // 關鍵規則：題目本身不倒數；第一位玩家提交答案後，才建立 25 秒應答窗。
         if (!otherAnswered && !room.answerWindowStartedAt && !room.answerWindowStartedAtMs) {
           patch.answerWindowStartedAt = serverTimestamp();
           patch.answerWindowStartedAtMs = nowMs();
