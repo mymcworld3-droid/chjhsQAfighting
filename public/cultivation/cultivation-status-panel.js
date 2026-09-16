@@ -1,4 +1,4 @@
-// 修煉頁「狀態」分頁：顯示目前金丹與玩家戰鬥數值。
+// 修煉頁「狀態」分頁：顯示目前裝備金丹與玩家戰鬥數值。
 (function () {
   'use strict';
 
@@ -55,13 +55,13 @@
 
   function currentCoreSnapshot() {
     const core = window.getGoldenCoreState?.();
-    if (!core) return null;
+    if (!core || !core.equipped) return null;
     return {
       type: core.type || 'taichu',
       name: core.name || '金丹',
       grade: Number(core.grade) || 9,
       effect: core.effect || '尚無特性資料',
-      equipped: !!core.equipped
+      equipped: true
     };
   }
 
@@ -70,7 +70,7 @@
       return `
         <div class="status-core-empty">
           <i class="fa-solid fa-circle-notch"></i>
-          <span>尚未形成金丹</span>
+          <span>目前未裝備金丹</span>
         </div>
       `;
     }
@@ -85,7 +85,7 @@
         <div class="status-core-copy">
           <div class="status-core-topline">
             <span class="status-core-grade">${escapeHtml(core.grade)} 品</span>
-            <span class="status-core-equipped ${core.equipped ? 'on' : 'off'}">${core.equipped ? '已裝配' : '未裝配'}</span>
+            <span class="status-core-equipped on">已裝備</span>
           </div>
           <h3>${escapeHtml(core.name)}</h3>
           <p>${escapeHtml(core.effect)}</p>
@@ -119,7 +119,7 @@
     return `
       <section class="training-status-panel">
         <div class="status-section status-core-section">
-          <div class="status-section-title"><span>目前金丹</span><small>CURRENT CORE</small></div>
+          <div class="status-section-title"><span>目前裝備金丹</span><small>EQUIPPED CORE</small></div>
           ${currentCoreMarkup(snapshot.core)}
         </div>
 
