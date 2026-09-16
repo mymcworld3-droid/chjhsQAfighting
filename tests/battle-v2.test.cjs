@@ -124,7 +124,7 @@ test('25 second countdown starts only after the first player answers', () => {
   assert.match(battleSource, /題目本身不倒數；第一位玩家提交答案後/);
   assert.match(battleSource, /if \(!otherAnswered && !room\.answerWindowStartedAt && !room\.answerWindowStartedAtMs\)/);
   assert.match(battleSource, /timerEl\.textContent = '等待首答'/);
-  assert.match(battleSource, /hostAnswer \|\| guestAnswer/);
+  assert.match(battleSource, /hostSubmitted \|\| guestSubmitted/);
   assert.match(battleSource, /timeoutMissingAnswer/);
   assert.match(battleSource, /你的 25 秒倒數已開始/);
 });
@@ -174,4 +174,20 @@ test('arena has xianxia combat feedback, impact animation and responsive mobile 
   assert.match(cssSource, /@keyframes bv2damage/);
   assert.match(cssSource, /@media\(max-width:620px\)/);
   assert.match(cssSource, /prefers-reduced-motion/);
+});
+
+
+test('Battle v2 keeps reconciling simultaneous waiting rooms and scans a wider waiting-room window', () => {
+  assert.match(battleSource, /MATCH_SCAN_LIMIT = 80/);
+  assert.match(battleSource, /function scheduleReconcile/);
+  assert.match(battleSource, /limit\(MATCH_SCAN_LIMIT\)/);
+  assert.match(battleSource, /同時按配對/);
+});
+
+test('Battle v2 never leaves answer buttons locked after a no-op transaction', () => {
+  assert.match(battleSource, /function hasSubmittedAnswer/);
+  assert.match(battleSource, /const submitted = await runTransaction/);
+  assert.match(battleSource, /if \(!submitted\)/);
+  assert.match(battleSource, /state\.pendingAnswer = null/);
+  assert.match(battleSource, /serverTimestamp 落地後/);
 });

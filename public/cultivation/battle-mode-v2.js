@@ -16,6 +16,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js';
   const HEARTBEAT_MS = 8000;
   const PREPARE_LEASE_MS = 7000;
   const MATCH_RECONCILE_MS = 1100;
+  const MATCH_SCAN_LIMIT = 80;
   const INTRO_DURATION_MS = 4800;
   const ANSWER_WINDOW_MS = 25000;
 
@@ -269,8 +270,12 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js';
     return created > 0 && nowMs() - created > BATTLE_V2.waitingRoomTtlMs;
   }
 
+  function hasSubmittedAnswer(player, round) {
+    return !!player && Number(player.answerRound) === Number(round) && typeof player.answerCorrect === 'boolean';
+  }
+
   function answerObject(player, round) {
-    if (!player || Number(player.answerRound) !== Number(round) || typeof player.answerCorrect !== 'boolean') return null;
+    if (!hasSubmittedAnswer(player, round)) return null;
     // 速度判定只採 Firestore serverTimestamp；answerClientAt 僅供除錯，不能決定勝負。
     const atMs = timestampMs(player.answerAt, 0);
     if (!atMs) return null;
@@ -301,7 +306,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js';
 
   async function findAndClaimRoom(myData, onlyRoomId = null) {
     if (onlyRoomId) return await claimWaitingRoom(roomRef(onlyRoomId), myData) ? onlyRoomId : null;
-    const snap = await getDocs(query(collection(db(), ROOM_COLLECTION), where('status', '==', 'waiting'), limit(20)));
+    const snap = await getDocs(query(collection(db(), ROOM_COLLECTION), where('status', '==', 'waiting'), limit(MATCH_SCAN_LIMIT)));
     const candidates = snap.docs.filter((entry) => {
       const room = entry.data();
       return Number(room.modeVersion) === BATTLE_V2.modeVersion && room.host?.uid !== myData.uid && !room.guest && !isRoomStale(room);
@@ -329,12 +334,23 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js';
     return ref.id;
   }
 
+  function scheduleReconcile(delay = MATCH_RECONCILE_MS) {
+    if (state.reconcile || state.role !== 'host' || !state.roomId) return;
+    state.reconcile = setTimeout(async () => {
+      state.reconcile = null;
+      await reconcileOwnWaitingRoom();
+      // 只要仍在自己的等待房，就持續尋找另一個同時建立的等待房。
+      // 修正兩名玩家同時按配對、各自成為房主後永久互相等不到的情況。
+      if (state.roomId && state.role === 'host' && state.room?.status === 'waiting') scheduleReconcile();
+    }, delay);
+  }
+
   async function reconcileOwnWaitingRoom() {
     const ownId = state.roomId;
     if (!ownId || state.role !== 'host' || state.room?.status !== 'waiting') return;
     const myData = playerSnapshot();
     try {
-      const snap = await getDocs(query(collection(db(), ROOM_COLLECTION), where('status', '==', 'waiting'), limit(20)));
+      const snap = await getDocs(query(collection(db(), ROOM_COLLECTION), where('status', '==', 'waiting'), limit(MATCH_SCAN_LIMIT)));
       const target = snap.docs.filter((entry) => {
         const room = entry.data();
         return entry.id < ownId && Number(room.modeVersion) === BATTLE_V2.modeVersion && room.host?.uid !== myData.uid && !room.guest && !isRoomStale(room);
@@ -508,44 +524,69 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js';
 
   async function submitAnswer(choice) {
     if (!state.roomId || !state.role || state.room?.status !== 'playing') return;
-    const round = Number(state.room.round); const mine = playerForRole(state.room, state.role); if (answerObject(mine, round) || state.pendingAnswer?.round === round) return;
-    const questionId = state.room.currentQuestion?.id; if (!questionId) return;
+    const round = Number(state.room.round);
+    const mine = playerForRole(state.room, state.role);
+    if (hasSubmittedAnswer(mine, round) || state.pendingAnswer?.round === round) return;
+    const questionId = state.room.currentQuestion?.id;
+    if (!questionId) return;
+
     state.pendingAnswer = { round, choice };
     renderQuestion(state.room, mine);
     try {
-      await runTransaction(db(), async (tx) => {
-        const ref = roomRef(); const snap = await tx.get(ref); if (!snap.exists()) return;
-        const room = snap.data(); if (room.status !== 'playing' || Number(room.round) !== round || room.currentQuestion?.id !== questionId) return;
-        const player = playerForRole(room, state.role); if (answerObject(player, round)) return;
+      const submitted = await runTransaction(db(), async (tx) => {
+        const ref = roomRef();
+        const snap = await tx.get(ref);
+        if (!snap.exists()) return false;
+        const room = snap.data();
+        if (room.status !== 'playing' || Number(room.round) !== round || room.currentQuestion?.id !== questionId) return false;
+        const player = playerForRole(room, state.role);
+        if (hasSubmittedAnswer(player, round)) return false;
+
         const other = playerForRole(room, otherRole(state.role));
-        const otherAnswered = !!answerObject(other, round);
+        const otherAnswered = hasSubmittedAnswer(other, round);
         const patch = {
           [`${state.role}.answerChoice`]: choice,
           [`${state.role}.answerCorrect`]: Number(choice) === Number(room.currentQuestion.ans),
-          [`${state.role}.answerAt`]: serverTimestamp(), [`${state.role}.answerClientAt`]: nowMs(), [`${state.role}.answerRound`]: round,
-          [`${state.role}.timedOut`]: false, [`${state.role}.lastSeenAtMs`]: nowMs(), updatedAt: serverTimestamp()
+          [`${state.role}.answerAt`]: serverTimestamp(),
+          [`${state.role}.answerClientAt`]: nowMs(),
+          [`${state.role}.answerRound`]: round,
+          [`${state.role}.timedOut`]: false,
+          [`${state.role}.lastSeenAtMs`]: nowMs(),
+          updatedAt: serverTimestamp()
         };
         // 關鍵規則：題目本身不倒數；第一位玩家提交答案後，才建立 25 秒應答窗。
         if (!otherAnswered && !room.answerWindowStartedAt && !room.answerWindowStartedAtMs) {
-          patch.answerWindowStartedAt = serverTimestamp(); patch.answerWindowStartedAtMs = nowMs(); patch.firstAnswerUid = me().uid;
+          patch.answerWindowStartedAt = serverTimestamp();
+          patch.answerWindowStartedAtMs = nowMs();
+          patch.firstAnswerUid = me().uid;
         }
         tx.update(ref, patch);
+        return true;
       });
+
+      // transaction 無動作時解除本機鎖定，避免答案按鈕永久卡住。
+      if (!submitted) {
+        state.pendingAnswer = null;
+        if (state.room) renderQuestion(state.room, playerForRole(state.room, state.role));
+      }
     } catch (error) {
-      state.pendingAnswer = null; renderQuestion(state.room, mine); console.error('[Battle v2] answer submit failed:', error); toast('答案送出失敗，請再點一次。');
+      state.pendingAnswer = null;
+      if (state.room) renderQuestion(state.room, playerForRole(state.room, state.role));
+      console.error('[Battle v2] answer submit failed:', error);
+      toast('答案送出失敗，請再點一次。');
     }
   }
 
   async function timeoutMissingAnswer(room) {
     const round = Number(room.round); if (state.timeoutRound === round || room.status !== 'playing') return;
-    const hostAnswered = !!answerObject(room.host, round); const guestAnswered = !!answerObject(room.guest, round);
+    const hostAnswered = hasSubmittedAnswer(room.host, round); const guestAnswered = hasSubmittedAnswer(room.guest, round);
     if (hostAnswered === guestAnswered) return;
     state.timeoutRound = round;
     try {
       await runTransaction(db(), async (tx) => {
         const ref = roomRef(); const snap = await tx.get(ref); if (!snap.exists()) return; const fresh = snap.data();
         if (fresh.status !== 'playing' || Number(fresh.round) !== round) return;
-        const h = !!answerObject(fresh.host, round); const g = !!answerObject(fresh.guest, round); if (h === g) return;
+        const h = hasSubmittedAnswer(fresh.host, round); const g = hasSubmittedAnswer(fresh.guest, round); if (h === g) return;
         const role = h ? 'guest' : 'host';
         tx.update(ref, { [`${role}.answerChoice`]: null, [`${role}.answerCorrect`]: false, [`${role}.answerAt`]: serverTimestamp(), [`${role}.answerClientAt`]: nowMs(), [`${role}.answerRound`]: round, [`${role}.timedOut`]: true, updatedAt: serverTimestamp() });
       });
@@ -658,9 +699,14 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js';
 
     if (room.status === 'intro') { updateIntroText(room); advanceIntro(room); }
     else if (room.status === 'playing' && room.currentQuestion) {
-      const hostAnswer = answerObject(room.host, room.round); const guestAnswer = answerObject(room.guest, room.round);
-      if (hostAnswer && guestAnswer) settleRound(room);
-      else if (hostAnswer || guestAnswer) {
+      const hostSubmitted = hasSubmittedAnswer(room.host, room.round);
+      const guestSubmitted = hasSubmittedAnswer(room.guest, room.round);
+      const hostAnswer = answerObject(room.host, room.round);
+      const guestAnswer = answerObject(room.guest, room.round);
+      if (hostSubmitted && guestSubmitted) {
+        // 等 Firestore serverTimestamp 落地後再用伺服器時間判定速度。
+        if (hostAnswer && guestAnswer) settleRound(room);
+      } else if (hostSubmitted || guestSubmitted) {
         const started = timestampMs(room.answerWindowStartedAt, Number(room.answerWindowStartedAtMs) || 0);
         const duration = Math.max(5000, Number(room.responseWindowMs) || ANSWER_WINDOW_MS);
         const left = started ? Math.max(0, duration - (nowMs() - started)) : duration;
@@ -702,7 +748,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js';
     if (!snap.exists()) { toast('鬥法房間已不存在。'); resetRuntime(); window.switchToPage?.('page-home'); return; }
     const room = snap.data(); if (Number(room.modeVersion) !== BATTLE_V2.modeVersion) return; state.room = room;
     const uid = me()?.uid; if (room.host?.uid === uid) state.role = 'host'; else if (room.guest?.uid === uid) state.role = 'guest'; else return;
-    if (room.status === 'waiting') renderLobby(room); else if (room.status === 'intro') renderIntro(room); else if (['playing', 'settled', 'preparing'].includes(room.status)) renderArena(room); else if (room.status === 'finished') renderResult(room);
+    if (room.status === 'waiting') { renderLobby(room); if (state.role === 'host') scheduleReconcile(); } else if (room.status === 'intro') renderIntro(room); else if (['playing', 'settled', 'preparing'].includes(room.status)) renderArena(room); else if (room.status === 'finished') renderResult(room);
     if (room.status === 'playing' && answerObject(room.host, room.round) && answerObject(room.guest, room.round)) settleRound(room);
   }
 
@@ -719,7 +765,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js';
     try {
       await window.ensureCombatStats?.(); const myData = playerSnapshot(); setText('bv2-match-me', myData.name); setText('bv2-match-me-core', `本命金丹：${playerCoreLabel(myData)}`);
       const joined = await findAndClaimRoom(myData); if (joined) { state.role = 'guest'; subscribeRoom(joined); return; }
-      setText('bv2-lobby-status', '目前沒有可加入的道友，正在開啟鬥法臺…'); const created = await createWaitingRoom(myData); state.role = 'host'; subscribeRoom(created); state.reconcile = setTimeout(reconcileOwnWaitingRoom, MATCH_RECONCILE_MS);
+      setText('bv2-lobby-status', '目前沒有可加入的道友，正在開啟鬥法臺…'); const created = await createWaitingRoom(myData); state.role = 'host'; subscribeRoom(created); scheduleReconcile();
     } catch (error) { console.error('[Battle v2] matchmaking failed:', error); toast('配對失敗，請稍後再試。'); resetRuntime(); window.switchToPage?.('page-home'); }
     finally { state.starting = false; }
   }
