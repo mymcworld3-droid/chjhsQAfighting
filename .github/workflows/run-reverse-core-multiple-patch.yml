@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - '.github/reverse-core-multiple-trigger'
+      - '.github/workflows/run-reverse-core-multiple-patch.yml'
 
 permissions:
   contents: write
