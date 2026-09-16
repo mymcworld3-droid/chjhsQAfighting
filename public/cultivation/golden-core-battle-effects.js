@@ -21,7 +21,7 @@
   }
 
   window.getEquippedGoldenCoreBattleSnapshot = function () {
-    const core = window.getGoldenCoreState?.();
+    const core = window.getEquippedGoldenCoreState?.() || null;
     if (!core?.equipped) return null;
     return {
       type: core.type,

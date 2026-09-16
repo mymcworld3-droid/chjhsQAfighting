@@ -55,7 +55,7 @@
   }
 
   function currentCoreSnapshot() {
-    const core = window.getGoldenCoreState?.();
+    const core = window.getEquippedGoldenCoreState?.() || null;
     if (!core || !core.equipped) return null;
     return {
       type: core.type || 'taichu',

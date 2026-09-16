@@ -214,9 +214,13 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   }
 
   function defaultState() {
+    const core = starterCore();
     return {
       announced: false,
-      core: starterCore(),
+      // core 是洗髓後目前正在查看／準備裝配的候選丹。
+      core,
+      // equippedCore 才是真正作用中的金丹；洗髓不會把它清掉。
+      equippedCore: { ...core },
       equipped: true,
       counters: { correct: 0, mistakes: 0 },
       items: []
@@ -227,16 +231,28 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     const base = defaultState();
     if (!raw || typeof raw !== 'object') return base;
 
-    const chosen = normalizeCore(raw.core || raw.preview || raw.equipped, base.core);
-    let equipped = true;
-    if (typeof raw.equipped === 'boolean') equipped = raw.equipped;
-    else if (raw.preview && raw.equipped && raw.preview.instanceId && raw.equipped.instanceId) {
-      equipped = raw.preview.instanceId === raw.equipped.instanceId;
+    const legacyEquippedObject = raw.equipped && typeof raw.equipped === 'object' ? raw.equipped : null;
+    const chosen = normalizeCore(raw.core || raw.preview || legacyEquippedObject, base.core);
+
+    let equippedCore = normalizeCore(raw.equippedCore || legacyEquippedObject, null);
+    if (!equippedCore && raw.equipped === true) equippedCore = { ...chosen };
+    // 很舊的資料沒有 equipped 欄位時，原本金丹就是已裝配狀態。
+    if (!equippedCore && typeof raw.equipped === 'undefined' && !raw.preview) equippedCore = { ...chosen };
+
+    let equipped = false;
+    if (typeof raw.equipped === 'boolean') equipped = raw.equipped && !!equippedCore;
+    else if (raw.preview && legacyEquippedObject && raw.preview.instanceId && legacyEquippedObject.instanceId) {
+      equipped = raw.preview.instanceId === legacyEquippedObject.instanceId;
+    } else if (equippedCore) {
+      equipped = chosen.type === equippedCore.type &&
+        clampGrade(chosen.grade) === clampGrade(equippedCore.grade) &&
+        Number(chosen.createdAt || 0) === Number(equippedCore.createdAt || 0);
     }
 
     return {
       announced: !!raw.announced,
       core: chosen,
+      equippedCore,
       equipped,
       counters: { ...base.counters, ...(raw.counters || {}) },
       items: Array.isArray(raw.items) ? raw.items : []
@@ -265,6 +281,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     return {
       announced: state.announced,
       core: state.core,
+      equippedCore: state.equippedCore,
       equipped: state.equipped,
       counters: state.counters,
       items: state.items
@@ -514,12 +531,14 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     busy = true;
     renderTrainingPage();
     const previousCore = { ...state.core };
+    const previousEquippedCore = state.equippedCore ? { ...state.equippedCore } : null;
     const previousEquipped = state.equipped;
     const previousGold = stones;
 
     try {
       const fresh = randomCore();
       state.core = fresh;
+      // 洗髓只產生候選丹；原本裝備中的丹繼續生效，直到玩家主動裝配新丹。
       state.equipped = false;
       userData.stats.gold = stones - WASH_COST;
       await persistRemote({ 'stats.gold': stones - WASH_COST });
@@ -527,6 +546,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     } catch (error) {
       console.error('Wash golden core failed:', error);
       state.core = previousCore;
+      state.equippedCore = previousEquippedCore;
       state.equipped = previousEquipped;
       userData.stats.gold = previousGold;
       saveLocal();
@@ -540,13 +560,17 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   async function equipCore() {
     if (busy || state.equipped) return;
     busy = true;
+    const previousEquippedCore = state.equippedCore ? { ...state.equippedCore } : null;
+    state.equippedCore = { ...state.core };
     state.equipped = true;
     renderTrainingPage();
     try {
       await persistRemote();
       toast(`已裝配：${state.core.grade} 品 ${coreType(state.core.type).name}`);
+      window.dispatchEvent(new CustomEvent('golden-core-equipped-changed'));
     } catch (error) {
       console.error('Equip golden core failed:', error);
+      state.equippedCore = previousEquippedCore;
       state.equipped = false;
       saveLocal();
       toast('裝配失敗，請稍後再試。');
@@ -575,12 +599,13 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   }
 
   window.resolveGoldenCoreCultivationReward = function ({ stats, isCorrect }) {
-    if (!isUnlocked() || !state.equipped || !state.core) {
+    const equippedCore = state.equippedCore;
+    if (!isUnlocked() || !equippedCore) {
       return { bonusGain: 0, message: '' };
     }
 
-    const type = coreType(state.core.type);
-    const grade = clampGrade(state.core.grade);
+    const type = coreType(equippedCore.type);
+    const grade = clampGrade(equippedCore.grade);
     const previousStreak = Math.max(0, Number(stats?.currentStreak) || 0);
     const score = Math.max(0, Number(stats?.totalScore) || 0);
 
@@ -605,6 +630,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     };
   };
 
+  // 候選丹：供金丹頁與「品質下降警告」使用。
   window.getGoldenCoreState = function () {
     if (!isUnlocked()) return null;
     const type = coreType(state.core.type);
@@ -615,6 +641,21 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       effect: type.effect(state.core.grade),
       equipped: state.equipped,
       core: { ...state.core }
+    };
+  };
+
+  // 真正裝備中的丹：狀態頁、修為效果與鬥法只能讀這一份。
+  window.getEquippedGoldenCoreState = function () {
+    if (!isUnlocked() || !state.equippedCore) return null;
+    const core = state.equippedCore;
+    const type = coreType(core.type);
+    return {
+      type: core.type,
+      name: type.name,
+      grade: core.grade,
+      effect: type.effect(core.grade),
+      equipped: true,
+      core: { ...core }
     };
   };
 
