@@ -3148,6 +3148,10 @@ window.loadUserHistory = async (isLoadMore = false) => {
         snap.forEach(doc => {
             const log = doc.data();
             const time = log.timestamp ? new Date(log.timestamp.toDate()).toLocaleString() : '--';
+            if (log.mode === 'dongtian' && typeof window.renderDongtianHistoryLog === 'function') {
+                const groupedDongtianLog = window.renderDongtianHistoryLog(log, time);
+                if (groupedDongtianLog) { ul.appendChild(groupedDongtianLog); return; }
+            }
             const li = document.createElement('li');
             
             // 加入 hover 效果與滑鼠游標樣式，提示可點擊

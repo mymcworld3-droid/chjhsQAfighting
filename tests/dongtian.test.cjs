@@ -7,6 +7,9 @@ const { execFileSync } = require('node:child_process');
 const root = join(__dirname, '..');
 const apiSource = readFileSync(join(root, 'dongtian-api.js'), 'utf8');
 const uiSource = readFileSync(join(root, 'public/cultivation/dongtian.js'), 'utf8');
+const serverSource = readFileSync(join(root, 'server.js'), 'utf8');
+const mainSource = readFileSync(join(root, 'public/main.js'), 'utf8');
+const legacySource = readFileSync(join(root, 'public/main-legacy.js'), 'utf8');
 
 const api = require('../dongtian-api.js').__test;
 
@@ -79,4 +82,13 @@ test('Dongtian API supports multimodal Gemini and OpenAI-compatible payloads', (
   assert.match(apiSource, /type: 'image_url'/);
   assert.match(apiSource, /MAX_IMAGES = 8/);
   assert.match(apiSource, /maxOutputTokens: 16384/);
+});
+
+
+test('Dongtian is wired into server, feature loading, and grouped history', () => {
+  assert.match(serverSource, /registerDongtianApi\(app\)/);
+  assert.match(serverSource, /express\.json\(\{ limit: '20mb' \}\)/);
+  assert.match(mainSource, /'\.\/cultivation\/dongtian\.js'/);
+  assert.match(legacySource, /log\.mode === 'dongtian'/);
+  assert.match(legacySource, /window\.renderDongtianHistoryLog\(log, time\)/);
 });

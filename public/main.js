@@ -23,6 +23,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/realm-breakthrough-feedback.js',
   './cultivation/cultivation-rank-sync.js',
   './cultivation/dongfu-settings-collapsible.js',
+  './cultivation/dongtian.js',
   './cultivation/newbie-tutorial-v2.js',
   './cultivation/golden-core-tutorial.js',
   './cultivation/admin-self-transfer.js'

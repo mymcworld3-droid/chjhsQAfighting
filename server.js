@@ -3,14 +3,16 @@ const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 const aiRouter = require('./ai-router');
+const registerDongtianApi = require('./dongtian-api');
 require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '20mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
+registerDongtianApi(app);
 
 // 根目錄路由
 app.get('/', (req, res) => {
