@@ -19,8 +19,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Apply Dongtian moderation patch
-        if: github.event_name == 'push' && github.event.head_commit.message == 'chore: run Dongtian moderation patch'
-        run: python .github/scripts/add-dongtian-moderation.py
+        run: python .github/scripts/run-dongtian-moderation-patch.py
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -30,7 +29,6 @@ jobs:
       - name: Run tests
         run: npm test
       - name: Commit Dongtian moderation feature
-        if: github.event_name == 'push' && github.event.head_commit.message == 'chore: run Dongtian moderation patch'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
