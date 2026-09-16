@@ -92,3 +92,19 @@ test('Dongtian is wired into server, feature loading, and grouped history', () =
   assert.match(legacySource, /log\.mode === 'dongtian'/);
   assert.match(legacySource, /window\.renderDongtianHistoryLog\(log, time\)/);
 });
+
+
+test('Dongtian does not persist raw creator source material and owner library has no artificial cap', () => {
+  const saveBlock = uiSource.slice(uiSource.indexOf('async function saveGeneratedDongtian'), uiSource.indexOf('async function loadOwnDongtians'));
+  assert.doesNotMatch(saveBlock, /sourceText:/);
+  assert.match(uiSource, /where\('ownerUid', '==', uid\(\)\)\)\)/);
+  assert.doesNotMatch(uiSource, /where\('ownerUid', '==', uid\(\)\), limit\(80\)/);
+});
+
+test('Dongtian subject matching understands grouped school subjects', () => {
+  assert.match(uiSource, /function subjectFamily/);
+  assert.match(uiSource, /'生物理化'/);
+  assert.match(uiSource, /'自然'/);
+  assert.match(uiSource, /'歷史地理公民'/);
+  assert.match(uiSource, /subjectFamily\(subject\) === caveFamily/);
+});
