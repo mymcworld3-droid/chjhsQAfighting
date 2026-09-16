@@ -191,3 +191,9 @@ test('Battle v2 never leaves answer buttons locked after a no-op transaction', (
   assert.match(battleSource, /state\.pendingAnswer = null/);
   assert.match(battleSource, /serverTimestamp 落地後/);
 });
+
+
+test('Battle v2 hidden phases cannot be overridden by phase display styles', () => {
+  assert.match(cssSource, /\.battle-v2-page \.hidden\{display:none!important\}/);
+  assert.match(battleSource, /classList\.toggle\('hidden', key !== name\)/);
+});
