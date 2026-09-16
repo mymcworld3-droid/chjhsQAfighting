@@ -94,7 +94,7 @@
     state.lastMeditation = today;
     state.meditation = (state.meditation || 0) + 1;
     saveState();
-    toast(`閉關完成！道心穩固（累計 ${state.meditation} 日）`);
+    toast(`閉關完成！靈氣沉澱（累計 ${state.meditation} 日）`);
     render();
   }
 
@@ -166,8 +166,8 @@
 
     document.querySelectorAll('.stat-label').forEach((el) => {
       if (el.innerText === 'ACCURACY') el.innerText = '悟性 (正確率)';
-      if (el.innerText === 'STREAK') el.innerText = '當前道心';
-      if (el.innerText === 'BEST RECORD') el.innerText = '最高道心';
+      if (el.innerText === 'STREAK' || el.innerText === '當前道心') el.innerText = '當前連勝';
+      if (el.innerText === 'BEST RECORD' || el.innerText === '最高道心') el.innerText = '最高連勝';
     });
   }
 
