@@ -19,7 +19,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Apply gameplay polish bundle
-        if: github.event_name == 'push' && github.event.head_commit.message == 'apply gameplay polish retry'
+        if: github.event_name == 'push' && github.event.head_commit.message == 'apply gameplay polish final'
         run: |
           python .github/scripts/fix-polish-script.py
           python .github/scripts/apply-polish-bundle.py
@@ -32,7 +32,7 @@ jobs:
       - name: Run tests
         run: npm test
       - name: Commit gameplay polish bundle
-        if: github.event_name == 'push' && github.event.head_commit.message == 'apply gameplay polish retry'
+        if: github.event_name == 'push' && github.event.head_commit.message == 'apply gameplay polish final'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
