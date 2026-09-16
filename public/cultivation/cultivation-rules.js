@@ -46,7 +46,21 @@ export function applyCultivationReward(stats, isCorrect) {
   };
 }
 
+function showGoldenCoreTrigger(reward) {
+  const message = reward?.goldenCoreMessage || (reward?.goldenCoreMindReady ? '金丹道心護體成形' : '');
+  if (!message || typeof window.showGoldenCoreActivation !== 'function') return;
+  const core = window.getEquippedGoldenCoreState?.() || {};
+  window.showGoldenCoreActivation({
+    type: core.type,
+    name: core.name || '金丹',
+    message,
+    kind: reward?.bonusGain > 0 ? `修為額外 +${reward.bonusGain}` : '金丹道心效果'
+  });
+}
+
 export function showCultivationFeedback(reward, isCorrect) {
+  showGoldenCoreTrigger(reward);
+
   if (isCorrect) {
     const extras = [];
     if (reward.goldenCoreMindReady) extras.push('金丹道心凝聚');
