@@ -218,6 +218,55 @@ function normalizeResult(raw, creatorLevel) {
 }
 
 
+
+function buildDongtianDoubleCheckPrompt(dongtian) {
+  return `
+[任務]
+你是第二位獨立的洞天品質審核員。這份洞天已由另一個 AI 生成，請逐題重新檢查，而不是假設它正確。
+
+[洞天 JSON]
+${JSON.stringify(dongtian)}
+
+[必查項目]
+1. 每一題題幹事實、數學與邏輯是否成立。
+2. correct 是否唯一正確，三個 wrong 是否確實錯誤且不重複。
+3. exp 是否和正解一致，計算與推理無誤。
+4. 題目程度、難度、科目是否合理。
+5. 題組是否有明顯重複、互相矛盾，題序是否由基礎到理解／應用。
+6. 洞天名稱、主要科目與程度是否和整組題目相符。
+
+[輸出 JSON Only]
+{
+  "approved": true,
+  "confidence": 0.0,
+  "summary": "整體審核理由",
+  "issues": [
+    { "questionId": "DT-001", "issue": "具體錯誤" }
+  ]
+}`;
+}
+
+function normalizeDongtianDoubleCheck(raw) {
+  const data = raw && typeof raw === 'object' ? raw : {};
+  const issues = Array.isArray(data.issues) ? data.issues.map((item) => ({
+    questionId: cleanText(item?.questionId, 40),
+    issue: cleanText(item?.issue, 800)
+  })).filter((item) => item.issue).slice(0, 30) : [];
+  return {
+    approved: data.approved === true,
+    confidence: Math.max(0, Math.min(1, Number(data.confidence) || 0)),
+    summary: cleanText(data.summary, 1200),
+    issues
+  };
+}
+
+async function verifyGeneratedDongtian(dongtian) {
+  const run = await aiRouter.generateJSON(buildDongtianDoubleCheckPrompt(dongtian), { timeoutMs: 60000 });
+  const review = normalizeDongtianDoubleCheck(run.data);
+  review.passed = review.approved && review.confidence >= 0.8 && review.issues.length === 0;
+  return { review, provider: run.provider, model: run.model };
+}
+
 function normalizeQuestionSnapshot(input) {
   const item = input && typeof input === 'object' ? input : {};
   const wrong = Array.isArray(item.wrong) ? item.wrong.map((x) => cleanText(x, 800)).filter(Boolean).slice(0, 3) : [];
@@ -459,6 +508,46 @@ module.exports = function registerDongtianApi(app) {
     }
   });
 
+  app.post('/api/revise-owned-dongtian-question', async (req, res) => {
+    try {
+      const original = normalizeQuestionSnapshot(req.body?.originalQuestion);
+      const hint = cleanText(req.body?.hint, MAX_REVISION_HINT);
+      const dongtian = req.body?.dongtian && typeof req.body.dongtian === 'object' ? req.body.dongtian : {};
+      if (!original.q || !original.correct || original.wrong.length !== 3 || hint.length < 8) {
+        return res.status(400).json({ error: '修改提示詞必須具體指出原題哪裡錯誤、不精確或有歧義' });
+      }
+
+      const first = await aiRouter.generateJSON(buildQuestionReviewPrompt(original, hint, dongtian), { timeoutMs: 50000 });
+      const review = normalizeQuestionReview(first.data);
+      let verification = { confirmError: false, confidence: 0, summary: '' };
+      if (review.hasError && review.confidence >= 0.65) {
+        const second = await aiRouter.generateJSON(buildQuestionReviewVerificationPrompt(original, hint, review, dongtian), { timeoutMs: 50000 });
+        verification = normalizeReviewVerification(second.data);
+      }
+      const issueConfirmed = review.hasError && review.confidence >= 0.75 && verification.confirmError && verification.confidence >= 0.75;
+      if (!issueConfirmed) {
+        return res.status(422).json({
+          error: 'AI 無法確認提示詞所指出的是原題的實質錯誤；請明確說明錯誤答案、歧義、條件不足、計算或事實問題',
+          review,
+          verification
+        });
+      }
+
+      const issue = [review.summary, review.evidence, verification.summary].filter(Boolean).join('；');
+      const rewrite = await aiRouter.generateJSON(buildRevisionPrompt(original, hint, issue, dongtian), { timeoutMs: 60000 });
+      const revised = normalizeStandaloneQuestion(rewrite.data, original);
+      const validationRun = await aiRouter.generateJSON(buildRevisionValidationPrompt(original, revised, issue, hint, dongtian), { timeoutMs: 60000 });
+      const validation = normalizeRevisionValidation(validationRun.data);
+      if (!validation.accepted) {
+        return res.status(422).json({ error: '主動修改未通過最終審核：不得改變原題本質', validation });
+      }
+      res.json({ revised, review, verification, validation });
+    } catch (error) {
+      console.error('[Dongtian owner revision]', error);
+      res.status(500).json({ error: error?.message || '主人題目修改失敗' });
+    }
+  });
+
   app.post('/api/revise-dongtian-question', async (req, res) => {
     try {
       const original = normalizeQuestionSnapshot(req.body?.originalQuestion);
@@ -505,7 +594,11 @@ module.exports = function registerDongtianApi(app) {
       const prompt = buildPrompt(text, creatorLevel, images.length);
       const routed = await generateMultimodalJSON(prompt, images);
       const dongtian = normalizeResult(routed.data, creatorLevel);
-      res.json({ dongtian, provider: routed.provider, model: routed.model });
+      const doubleCheck = await verifyGeneratedDongtian(dongtian);
+      if (!doubleCheck.review.passed) {
+        return res.status(422).json({ error: '洞天第二次 AI 複核未通過，為避免錯題不予建立，請重新生成。', doubleCheck: doubleCheck.review });
+      }
+      res.json({ dongtian, provider: routed.provider, model: routed.model, doubleCheck: doubleCheck.review, doubleCheckProvider: doubleCheck.provider, doubleCheckModel: doubleCheck.model });
     } catch (error) {
       console.error('[Dongtian API]', error);
       res.status(500).json({ error: error?.message || '洞天生成失敗' });

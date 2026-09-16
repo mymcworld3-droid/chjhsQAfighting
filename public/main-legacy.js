@@ -601,6 +601,11 @@ onAuthStateChanged(auth, async (user) => {
             updateSettingsInputs();
             checkAdminRole(currentUserData.isAdmin);
             updateUIStats();
+            // saved game identity wins over Google profile in every game session
+            if (userInfoEl) {
+                userInfoEl.removeAttribute('data-i18n');
+                userInfoEl.innerHTML = `<i class="fa-solid fa-user-astronaut"></i> ${currentUserData.displayName || user.displayName || '玩家'}`;
+            }
 
             // 根據資料完整度導向
             if (!currentUserData.profile.educationLevel || currentUserData.profile.educationLevel === "") {

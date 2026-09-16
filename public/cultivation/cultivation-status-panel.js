@@ -78,7 +78,7 @@
 
     const meta = CORE_META[core.type] || CORE_META.taichu;
     return `
-      <div class="status-core-row">
+      <div class="status-core-row" data-status-core-detail role="button" tabindex="0" title="查看金丹詳細">
         <div class="status-core-orb core-tone-${meta.tone}" aria-hidden="true">
           <span>${meta.icon}</span>
           <i></i>
@@ -148,6 +148,10 @@
     rendering = true;
     content.innerHTML = statusMarkup(snapshot);
     content.dataset.statusSnapshot = key;
+    const coreButton = content.querySelector('[data-status-core-detail]');
+    const openDetail = () => snapshot.core && window.openGoldenCoreDetails?.(snapshot.core);
+    coreButton?.addEventListener('click', openDetail);
+    coreButton?.addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openDetail(); } });
     rendering = false;
   }
 

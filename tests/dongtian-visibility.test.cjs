@@ -20,7 +20,7 @@ test('Dongtian always has a visible Firebase-free launcher in Dongfu', () => {
 });
 
 test('main bundle is cache-busted so a stale client cannot hide Dongtian', () => {
-  assert.match(index, /<script type="module" src="main\.js\?v=20260916-dongtian3"><\/script>/);
+  assert.match(index, /<script type="module" src="main\.js\?v=[^"]+"><\/script>/);
 });
 
 test('full Dongtian implementation and API remain wired behind the launcher', () => {

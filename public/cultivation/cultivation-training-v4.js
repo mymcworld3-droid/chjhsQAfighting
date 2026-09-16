@@ -173,14 +173,14 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     },
     {
       id: 'reverse', name: '陰陽反轉丹', icon: '↺', tone: 'violet',
-      effect(grade) { return `連續悟道達 ${Math.max(2, grade + 1)} 次的那一次，額外 +3 修為。`; },
+      effect(grade) { const n = Math.max(2, grade + 1); return `每逢連續悟道達 ${n} 次的倍數（如 ${n}、${n * 2}、${n * 3}…），額外 +3 修為。`; },
       ability: '陰陽翻轉，在指定連勝節點爆發丹力。',
       upkeep: '保持連勝直到觸發節點。',
       warning: '只在達到指定連勝的那一次觸發。',
       note: '能逆轉陰陽、倒轉氣機。目前仍無法把星期一反轉成星期五，相關研究經費持續申請中。',
       resolve({ isCorrect, grade, previousStreak }) {
         const threshold = Math.max(2, grade + 1);
-        return isCorrect && previousStreak + 1 === threshold
+        return isCorrect && (previousStreak + 1) % threshold === 0
           ? { bonusGain: 3, message: `${this.name}陰陽反轉，額外 +3 修為` }
           : {};
       }
@@ -431,7 +431,13 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     button.innerHTML = `<div class="relative p-1 training-nav-orb"><i class="fa-solid fa-fire-flame-curved text-lg"></i></div><span class="text-[10px] mt-1">修煉</span>`;
     button.addEventListener('click', () => {
       window.switchToPage?.('page-training');
+      window.scrollTo?.({ top: 0, left: 0, behavior: 'auto' });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      const trainingPage = document.getElementById('page-training');
+      if (trainingPage) trainingPage.scrollTop = 0;
       renderTrainingPage();
+      requestAnimationFrame(() => window.scrollTo?.({ top: 0, left: 0, behavior: 'auto' }));
     });
     homeButton.insertAdjacentElement('afterend', button);
   }
@@ -498,16 +504,17 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     const type = coreType(core.type);
     modalShell('training-v3-detail-modal', `${core.grade} 品 · ${type.name}`, `
       <div class="training-v3-detail-top">${coreVisualMarkup(core, false)}</div>
-      <div class="training-v3-lore">
-        <div><span>本命丹源</span><p>此丹並非外來丹藥，而是修士在自身靈田／丹田中凝聚，並可透過洗髓重塑丹性與品級的本命金丹。</p></div>
-        <div><span>特性效果</span><p>${type.effect(core.grade)}</p></div>
-        <div><span>神通</span><p>${type.ability}</p></div>
-        <div><span>修煉代價</span><p>${type.upkeep}</p></div>
-        <div><span>溫馨提醒</span><p>${type.warning}</p></div>
-        <div><span>備註</span><p>${type.note}</p></div>
+      <div class="training-v3-lore training-core-detail-two">
+        <div class="training-core-feature"><span>特性</span><p><strong>效果：</strong>${type.effect(core.grade)}</p><p><strong>神通：</strong>${type.ability}</p><p><strong>修煉：</strong>${type.upkeep}</p><p><strong>提醒：</strong>${type.warning}</p></div>
+        <div class="training-core-story"><span>故事</span><p>${type.note}</p><p>此丹並非外來丹藥，而是修士在自身靈田／丹田中凝聚，並可透過洗髓重塑丹性與品級的本命金丹。</p></div>
       </div>
     `);
   }
+
+  window.openGoldenCoreDetails = function (coreLike) {
+    if (!coreLike) return;
+    showCoreDetails({ type: coreLike.type || 'taichu', grade: clampGrade(coreLike.grade) });
+  };
 
   function bindCoreActions() {
     document.getElementById('training-core-orb')?.addEventListener('click', () => showCoreDetails(state.core));

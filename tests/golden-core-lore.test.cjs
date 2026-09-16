@@ -12,7 +12,8 @@ test('Golden Cores are innate spirit-field cores, not external consumable pills'
   const tutorial = read('public/cultivation/golden-core-tutorial.js');
 
   assert.match(training, /自身靈田／丹田中凝聚的本命金丹/);
-  assert.match(training, /本命丹源/);
+  assert.match(training, /training-core-feature/);
+  assert.match(training, /training-core-story/);
   assert.match(training, /此丹並非外來丹藥/);
   assert.match(training, /調御此丹相/);
   assert.doesNotMatch(training, /已裝配此金丹/);

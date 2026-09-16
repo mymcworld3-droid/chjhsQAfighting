@@ -62,23 +62,13 @@
   function patchDetailModal() {
     const state = window.getGoldenCoreState?.() || null;
     if (state?.type !== 'reverse') return;
-
     const modal = document.getElementById('training-v3-detail-modal');
     if (!modal || modal.dataset.reverseMultiplesPatched === '1') return;
-
-    const rows = Array.from(modal.querySelectorAll('.training-v3-lore > div'));
-    const setRow = (label, text) => {
-      const row = rows.find((item) => item.querySelector('span')?.textContent?.trim() === label);
-      const paragraph = row?.querySelector('p');
-      if (paragraph) paragraph.textContent = text;
-    };
-
-    const threshold = thresholdForGrade(state.grade);
-    setRow('特性效果', effectText(state.grade));
-    setRow('神通', '陰陽翻轉，在指定連勝的倍數節點反覆爆發丹力。');
-    setRow('修煉代價', '保持連勝，倍數越往後仍可持續觸發。');
-    setRow('溫馨提醒', '一旦連勝中斷，倍數計數會從頭重新累積。');
-    setRow('備註', `例如門檻為 ${threshold} 時，會在 ${threshold}、${threshold * 2}、${threshold * 3}… 觸發。至於把星期一反轉成星期五，研究經費仍在申請中。`);
+    const feature = modal.querySelector('.training-core-feature');
+    if (feature) {
+      const first = feature.querySelector('p');
+      if (first) first.innerHTML = `<strong>效果：</strong>${effectText(state.grade)}`;
+    }
     modal.dataset.reverseMultiplesPatched = '1';
   }
 

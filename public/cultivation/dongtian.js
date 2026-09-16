@@ -142,6 +142,13 @@ import {
         repairButton.disabled = false;
         return;
       }
+      const manageButton = event.target.closest('[data-dt-manage]');
+      if (manageButton) {
+        manageButton.disabled = true;
+        await openOwnerQuestionManager(manageButton.dataset.dtManage).catch((error) => toast(error.message || '無法開啟題目管理'));
+        manageButton.disabled = false;
+        return;
+      }
       const button = event.target.closest('[data-dt-play]');
       if (!button) return;
       const id = button.dataset.dtPlay;
@@ -271,7 +278,7 @@ import {
     const now = Date.now();
     const metadata = {
       ownerUid: uid(),
-      ownerName: user.displayName || auth.currentUser?.displayName || '無名修士',
+      ownerName: window.getPlayerDisplayName?.(user, auth.currentUser?.displayName || '無名修士') || user.displayName || auth.currentUser?.displayName || '無名修士',
       name: generated.name,
       level: generated.level,
       levelOrder: Number(generated.levelOrder),
@@ -317,7 +324,7 @@ import {
             <div><div class="dt-item-name">${escapeHtml(item.name)}</div><div class="dt-item-meta">${escapeHtml(item.coverageSummary || '固定題序知識秘境')}</div></div>
             ${suspended
               ? `<button type="button" class="dt-repair" data-dt-repair="${item.id}"><i class="fa-solid fa-screwdriver-wrench"></i> 修復題目</button>`
-              : `<button type="button" class="dt-play" data-dt-play="${item.id}"><i class="fa-solid fa-play"></i> 進入</button>`}
+              : `<div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end"><button type="button" class="dt-play" data-dt-play="${item.id}"><i class="fa-solid fa-play"></i> 進入</button><button type="button" class="dt-repair" data-dt-manage="${item.id}"><i class="fa-solid fa-pen-ruler"></i> 題目管理</button></div>`}
           </div>
           <div class="dt-tags"><span class="dt-tag">${escapeHtml(item.level)}</span><span class="dt-tag">${difficultyLabel(item.difficulty)}</span><span class="dt-tag">${escapeHtml(item.subject)}</span><span class="dt-tag">${Number(item.questionCount) || 0} 題</span><span class="dt-tag">完成 ${Number(item.completionCount) || 0} 次</span>${suspended ? '<span class="dt-tag dt-status-bad">已封印 · 待修復</span>' : ''}</div>
           <div class="dt-owner-reward">${suspended ? `AI 已確認第 ${Number(item.flaggedQuestionIndex || 0) + 1} 題有誤；修復通過二次 AI 驗證前，其他修士不會再遇到此洞天。` : `其他不同修士首次完成：洞天主人 +${OWNER_CULTIVATION_REWARD} 修為、+${OWNER_GOLD_REWARD} 金幣 · 玩家洞天獎勵內容目前待開放`}</div>
@@ -382,7 +389,10 @@ import {
     try {
       const found = await findEncounter();
       if (!found) return false;
-      await enterDongtian(found, { source: 'encounter', encountered: true });
+      await markEncountered(found);
+      const accepted = await offerDongtianEncounter(found);
+      if (!accepted) return false;
+      await enterDongtian(found, { source: 'encounter', encountered: false, alreadyEncountered: true });
       return true;
     } catch (error) {
       console.warn('[Dongtian encounter]', error);
@@ -390,6 +400,17 @@ import {
     } finally {
       state.encounterBusy = false;
     }
+  }
+
+
+  function offerDongtianEncounter(dongtian) {
+    return new Promise((resolve) => {
+      const overlay = ensureOverlay();
+      const owner = dongtian.ownerName || '無名修士';
+      overlay.innerHTML = `<div class="dt-encounter"><div class="dt-portal"></div><div class="dt-encounter-copy"><span>天地異象 · 發現洞天</span><h2>${escapeHtml(dongtian.name)}</h2><p>你感應到其他修士留下的知識秘境。每位修士只會遇見同一座洞天一次，是否現在進入？</p><div style="margin:14px auto;max-width:520px;padding:12px;border:1px solid rgba(205,154,255,.18);border-radius:14px;background:rgba(0,0,0,.2);font-size:9px;line-height:1.8;color:#bca9c4;text-align:left"><strong style="color:#eadcff">洞天主人：</strong>${escapeHtml(owner)}<br><strong>程度：</strong>${escapeHtml(dongtian.level)}　<strong>難度：</strong>${difficultyLabel(dongtian.difficulty)}<br><strong>科目：</strong>${escapeHtml(dongtian.subject)}　<strong>題數：</strong>${dongtian.questions?.length || dongtian.questionCount || 0}</div><div style="display:flex;gap:9px;justify-content:center;flex-wrap:wrap"><button id="dt-decline-encounter" class="dt-back" type="button">略過洞天，繼續一般修行</button><button id="dt-enter-encounter" class="dt-next" style="width:auto;padding:0 20px;margin:0" type="button">進入洞天</button></div></div></div>`;
+      document.getElementById('dt-enter-encounter').onclick = () => { overlay.remove(); resolve(true); };
+      document.getElementById('dt-decline-encounter').onclick = () => { overlay.remove(); resolve(false); };
+    });
   }
 
   async function markEncountered(dongtian) {
@@ -405,7 +426,7 @@ import {
     if (!dongtian?.questions?.length || state.session) return;
     if (dongtian.status && dongtian.status !== 'active') { toast('此洞天已封印，等待主人修復。'); return; }
     if (options.encountered) await markEncountered(dongtian);
-    else updateDoc(doc(db, INDEX_COLLECTION, dongtian.id), { playCount: increment(1) }).catch(() => {});
+    else if (!options.alreadyEncountered) updateDoc(doc(db, INDEX_COLLECTION, dongtian.id), { playCount: increment(1) }).catch(() => {});
     state.session = {
       dongtian,
       source: options.source || 'owner',
@@ -637,6 +658,81 @@ import {
       status.textContent = error.message || '題目回報失敗。';
       submit.disabled = false;
       submit.textContent = '重新送審';
+    } finally {
+      state.moderationBusy = false;
+    }
+  }
+
+
+  async function openOwnerQuestionManager(dongtianId) {
+    if (!uid() || state.moderationBusy) return;
+    const snap = await getDoc(doc(db, DATA_COLLECTION, dongtianId));
+    if (!snap.exists()) throw new Error('洞天資料不存在');
+    const dongtian = { id: snap.id, ...snap.data() };
+    if (dongtian.ownerUid !== uid()) throw new Error('只有洞天主人可以管理題目');
+    if (dongtian.status !== 'active') throw new Error('封印中的洞天請使用「修復題目」');
+    removeModerationModal();
+    const modal = document.createElement('div');
+    modal.id = 'dt-moderation-modal';
+    modal.className = 'dt-modal';
+    modal.innerHTML = `<div class="dt-modal-card"><h3><i class="fa-solid fa-pen-ruler" style="color:#c4b5fd"></i> 主人題目管理</h3><p class="dt-modal-note">可主動修正自己發現的錯題，但不能任意換題。請先選題，再在修改提示詞中具體指出原題哪裡錯誤、不精確、條件不足或有歧義；AI 確認問題存在後才會允許修改。</p><div style="display:grid;gap:7px;max-height:52vh;overflow:auto">${dongtian.questions.map((q, index) => `<button type="button" class="dt-modal-cancel" style="text-align:left;min-height:48px" data-owner-edit-index="${index}"><strong>${index + 1}. ${escapeHtml(q.q)}</strong><br><span style="opacity:.65">${escapeHtml(q.subject || dongtian.subject)} · ${difficultyLabel(q.difficulty)}</span></button>`).join('')}</div><div class="dt-modal-actions"><button type="button" class="dt-modal-cancel" data-close-owner-manager>關閉</button></div></div>`;
+    document.body.appendChild(modal);
+    modal.querySelector('[data-close-owner-manager]').onclick = removeModerationModal;
+    modal.querySelectorAll('[data-owner-edit-index]').forEach((button) => {
+      button.onclick = () => openOwnerQuestionRevision(dongtian, Number(button.dataset.ownerEditIndex));
+    });
+  }
+
+  function openOwnerQuestionRevision(dongtian, questionIndex) {
+    const question = dongtian.questions?.[questionIndex];
+    if (!question) return;
+    removeModerationModal();
+    const modal = document.createElement('div');
+    modal.id = 'dt-moderation-modal';
+    modal.className = 'dt-modal';
+    modal.innerHTML = `<div class="dt-modal-card"><h3>主動修正第 ${questionIndex + 1} 題</h3><p class="dt-modal-note">修改提示詞必須先指出這一題具體哪裡不正確。AI 會先審核你的指控是否成立，再保持核心知識點、科目、程度與難度不變進行修正。</p><div class="dt-modal-question"><strong>${escapeHtml(question.q)}</strong><br><br><span style="color:#86efac">正解：${escapeHtml(question.correct)}</span><br><span style="color:#c4b5fd">其他選項：${(question.wrong || []).map((item) => escapeHtml(item)).join(' ／ ')}</span><br><br><span style="color:#aaa">解析：${escapeHtml(question.exp || '')}</span></div><textarea id="dt-owner-revision-hint" maxlength="1600" placeholder="例：這題把速度與速率混為一談，題幹的條件不足，導致 A 和 C 都可能成立。請補上方向條件並保持原本考速度概念。"></textarea><div id="dt-owner-revision-status" class="dt-modal-note">若 AI 無法確認你指出的是實質錯誤，修改會被拒絕。</div><div class="dt-modal-actions"><button type="button" class="dt-modal-cancel">取消</button><button id="dt-owner-revision-submit" type="button" class="dt-modal-submit">AI 審錯後修正</button></div></div>`;
+    document.body.appendChild(modal);
+    modal.querySelector('.dt-modal-cancel').onclick = removeModerationModal;
+    modal.querySelector('#dt-owner-revision-submit').onclick = () => submitOwnerQuestionRevision(modal, dongtian, question, questionIndex);
+  }
+
+  async function submitOwnerQuestionRevision(modal, dongtian, originalQuestion, questionIndex) {
+    if (state.moderationBusy) return;
+    const hint = modal.querySelector('#dt-owner-revision-hint')?.value?.trim() || '';
+    if (hint.length < 8) { toast('請具體指出題目錯誤或不正確之處。'); return; }
+    const submit = modal.querySelector('#dt-owner-revision-submit');
+    const status = modal.querySelector('#dt-owner-revision-status');
+    state.moderationBusy = true;
+    submit.disabled = true;
+    submit.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> 審錯＋修正中…';
+    try {
+      const response = await fetch('/api/revise-owned-dongtian-question', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ originalQuestion, hint, dongtian: { id: dongtian.id, name: dongtian.name, level: dongtian.level, difficulty: dongtian.difficulty, subject: dongtian.subject } })
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok || !payload.revised) throw new Error(payload.error || `題目修改失敗 (${response.status})`);
+      const dataRef = doc(db, DATA_COLLECTION, dongtian.id);
+      await runTransaction(db, async (tx) => {
+        const liveSnap = await tx.get(dataRef);
+        if (!liveSnap.exists()) throw new Error('洞天資料不存在');
+        const live = liveSnap.data();
+        if (live.ownerUid !== uid()) throw new Error('只有洞天主人可以修改');
+        if (live.status !== 'active') throw new Error('洞天狀態已改變，請重新讀取');
+        const liveQuestion = live.questions?.[questionIndex];
+        if (!liveQuestion || liveQuestion.id !== originalQuestion.id) throw new Error('題目版本已改變，請重新讀取');
+        const questions = [...live.questions];
+        questions[questionIndex] = { ...payload.revised, id: liveQuestion.id, subject: liveQuestion.subject, difficulty: liveQuestion.difficulty };
+        tx.update(dataRef, { questions, revisionCount: increment(1), lastRevisedAt: serverTimestamp(), lastRevisedAtMs: Date.now() });
+      });
+      removeModerationModal();
+      toast('題目已通過「錯誤成立＋本質不變」雙重審核並更新。');
+      state.listLoaded = false;
+      await loadOwnDongtians(true);
+    } catch (error) {
+      status.innerHTML = `<span style="color:#fca5a5">${escapeHtml(error.message || '修改失敗')}</span><br>請重新說明題目具體錯誤，不能只要求換題或調整風格。`;
+      submit.disabled = false;
+      submit.textContent = '重新審錯並修正';
     } finally {
       state.moderationBusy = false;
     }
