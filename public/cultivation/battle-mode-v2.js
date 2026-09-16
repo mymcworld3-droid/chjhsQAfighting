@@ -1,0 +1,1190 @@
+import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+import {
+  getFirestore, doc, getDoc, collection, query, where, limit, getDocs,
+  addDoc, updateDoc, deleteDoc, onSnapshot, runTransaction, serverTimestamp
+} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js';
+
+// Battle v2: matchmaking / room ownership / round settlement / disconnect recovery are isolated
+// from main-legacy.js so PvP failures cannot interfere with login or solo quiz.
+(function () {
+  'use strict';
+
+  const FOUNDATION_SCORE = 60;
+  const ROOM_COLLECTION = 'rooms';
+  const HEARTBEAT_MS = 8000;
+  const PREPARE_LEASE_MS = 7000;
+  const MATCH_RECONCILE_MS = 1200;
+
+  const state = {
+    roomId: null,
+    role: null,
+    room: null,
+    unsub: null,
+    tick: null,
+    heartbeat: null,
+    reconcile: null,
+    starting: false,
+    leaving: false,
+    settlingRound: null,
+    timeoutRound: null,
+    preparingRound: null,
+    advancingRound: null,
+    disconnectClaimRound: null,
+    renderedQuestionId: null,
+    seenActivationKeys: new Set(),
+    resultRecordedRoom: null,
+    localCreatedRoomId: null
+  };
+
+  function auth() { return getAuth(getApp()); }
+  function db() { return getFirestore(getApp()); }
+  function me() { return auth().currentUser; }
+  function userData() { return window.getCurrentUserData?.() || null; }
+  function score() { return Math.max(0, Number(userData()?.stats?.totalScore) || 0); }
+
+  function finite(value, fallback) {
+    const n = Number(value);
+    return Number.isFinite(n) ? n : fallback;
+  }
+
+  function nowMs() { return Date.now(); }
+
+  function timestampMs(value, fallback = 0) {
+    if (value && typeof value.toMillis === 'function') return value.toMillis();
+    const n = Number(value);
+    return Number.isFinite(n) ? n : fallback;
+  }
+
+  function escapeHtml(value) {
+    return String(value ?? '')
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#039;');
+  }
+
+  function randomId(prefix = 'q') {
+    if (globalThis.crypto?.randomUUID) return `${prefix}-${crypto.randomUUID()}`;
+    return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+  }
+
+  function ensureStyle() {
+    const href = 'styles/battle-mode-v2.css';
+    if (document.querySelector(`link[href="${href}"]`)) return;
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = href;
+    document.head.appendChild(link);
+  }
+
+  function toast(message) {
+    const old = document.getElementById('battle-v2-toast');
+    old?.remove();
+    const el = document.createElement('div');
+    el.id = 'battle-v2-toast';
+    el.className = 'battle-v2-toast';
+    el.textContent = message;
+    document.body.appendChild(el);
+    requestAnimationFrame(() => el.classList.add('show'));
+    setTimeout(() => el.remove(), 2600);
+  }
+
+  function ensurePage() {
+    ensureStyle();
+    const page = document.getElementById('page-battle');
+    if (!page) return null;
+    if (page.dataset.battleV2 === '1') return page;
+
+    page.dataset.battleV2 = '1';
+    page.className = 'page-section hidden battle-v2-page';
+    page.innerHTML = `
+      <div class="bv2-shell">
+        <header class="bv2-head">
+          <div>
+            <span class="bv2-eyebrow">MATCHMAKING v2 ／ 論道鬥法</span>
+            <h2>配對鬥法</h2>
+          </div>
+          <div class="bv2-head-actions">
+            <span id="bv2-room-badge" class="bv2-room-badge">尚未配對</span>
+            <button id="bv2-leave-top" type="button" class="bv2-icon-btn" aria-label="離開鬥法"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+        </header>
+
+        <section id="bv2-lobby" class="bv2-panel bv2-lobby">
+          <div class="bv2-radar"><span></span></div>
+          <div class="bv2-lobby-copy">
+            <span class="bv2-kicker">尋覓道友</span>
+            <h3 id="bv2-lobby-title">正在搜尋對手</h3>
+            <p id="bv2-lobby-status">建立安全配對中…</p>
+          </div>
+          <div class="bv2-match-pair">
+            <div class="bv2-match-card">
+              <span>我方</span><strong id="bv2-match-me">修士</strong><small id="bv2-match-me-core">本命金丹：—</small>
+            </div>
+            <div class="bv2-vs">VS</div>
+            <div class="bv2-match-card enemy">
+              <span>對手</span><strong id="bv2-match-enemy">搜尋中…</strong><small id="bv2-match-enemy-core">等待道友入場</small>
+            </div>
+          </div>
+          <button id="bv2-cancel" class="bv2-btn ghost" type="button">取消配對</button>
+        </section>
+
+        <section id="bv2-arena" class="bv2-arena hidden">
+          <div class="bv2-scoreboard">
+            <article class="bv2-fighter enemy">
+              <div class="bv2-fighter-head"><div><span>對手</span><strong id="bv2-enemy-name">—</strong></div><b id="bv2-enemy-hp-text">1000 / 1000</b></div>
+              <div class="bv2-hp"><i id="bv2-enemy-hp"></i></div>
+              <small id="bv2-enemy-core">本命金丹：—</small>
+            </article>
+            <div class="bv2-round-seal"><span>ROUND</span><b id="bv2-round">1 / ${BATTLE_V2.maxRounds}</b></div>
+            <article class="bv2-fighter me">
+              <div class="bv2-fighter-head"><div><span>我方</span><strong id="bv2-my-name">—</strong></div><b id="bv2-my-hp-text">1000 / 1000</b></div>
+              <div class="bv2-hp"><i id="bv2-my-hp"></i></div>
+              <small id="bv2-my-core">本命金丹：—</small>
+            </article>
+          </div>
+
+          <div class="bv2-question-card">
+            <div class="bv2-question-meta">
+              <span id="bv2-phase">等待出題</span>
+              <span id="bv2-timer">25.0s</span>
+            </div>
+            <div class="bv2-timer-track"><i id="bv2-timer-bar"></i></div>
+            <h3 id="bv2-question">正在凝聚題目…</h3>
+            <div id="bv2-options" class="bv2-options"></div>
+            <div id="bv2-explanation" class="bv2-explanation hidden"></div>
+            <p id="bv2-answer-status" class="bv2-answer-status">雙方使用同一題，答題後等待回合結算。</p>
+          </div>
+
+          <div class="bv2-log-wrap">
+            <div class="bv2-log-title"><span>鬥法紀錄</span><small>SERVER-SYNCED</small></div>
+            <div id="bv2-log" class="bv2-log"><p>尚無攻防紀錄。</p></div>
+          </div>
+        </section>
+
+        <section id="bv2-result" class="bv2-result hidden">
+          <div id="bv2-result-emblem" class="bv2-result-emblem">道</div>
+          <span class="bv2-kicker">鬥法終了</span>
+          <h3 id="bv2-result-title">勝負已分</h3>
+          <p id="bv2-result-msg">正在寫入戰績…</p>
+          <div id="bv2-result-stats" class="bv2-result-stats"></div>
+          <div class="bv2-result-actions">
+            <button id="bv2-home" class="bv2-btn ghost" type="button">返回仙府</button>
+            <button id="bv2-rematch" class="bv2-btn primary" type="button">重新配對</button>
+          </div>
+        </section>
+      </div>`;
+
+    page.querySelector('#bv2-cancel')?.addEventListener('click', () => exitBattle({ navigate: true, forfeit: true }));
+    page.querySelector('#bv2-leave-top')?.addEventListener('click', () => exitBattle({ navigate: true, forfeit: true }));
+    page.querySelector('#bv2-home')?.addEventListener('click', () => exitBattle({ navigate: true, forfeit: false }));
+    page.querySelector('#bv2-rematch')?.addEventListener('click', async () => {
+      await exitBattle({ navigate: false, forfeit: false });
+      startMatchmaking();
+    });
+    return page;
+  }
+
+  function showSection(name) {
+    const page = ensurePage();
+    if (!page) return;
+    page.querySelector('#bv2-lobby')?.classList.toggle('hidden', name !== 'lobby');
+    page.querySelector('#bv2-arena')?.classList.toggle('hidden', name !== 'arena');
+    page.querySelector('#bv2-result')?.classList.toggle('hidden', name !== 'result');
+  }
+
+  function setText(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = String(value ?? '');
+  }
+
+  function playerCoreLabel(player) {
+    return player?.goldenCore?.name ? `${player.goldenCore.name} · ${player.goldenCore.grade}品` : '未調御金丹';
+  }
+
+  function combatSnapshot() {
+    const stats = window.getCombatStats?.() || window.getCombatStatDefaults?.() || { attack: 200, hp: 1000, maxHp: 1000 };
+    const maxHp = Math.max(1, Math.round(finite(stats.maxHp, 1000)));
+    return {
+      attack: Math.max(1, Math.round(finite(stats.attack, 200))),
+      hp: maxHp,
+      maxHp
+    };
+  }
+
+  function playerSnapshot() {
+    const user = me();
+    const data = userData() || {};
+    const combat = combatSnapshot();
+    return {
+      uid: user.uid,
+      name: data.displayName || user.displayName || '無名修士',
+      rankLevel: Math.max(0, Number(data.stats?.rankLevel) || 0),
+      totalScore: Math.max(0, Number(data.stats?.totalScore) || 0),
+      atk: combat.attack,
+      hp: combat.maxHp,
+      maxHp: combat.maxHp,
+      goldenCore: window.getEquippedGoldenCoreBattleSnapshot?.() || null,
+      answerChoice: null,
+      answerCorrect: null,
+      answerAt: null,
+      answerRound: null,
+      timedOut: false,
+      lastSeenAtMs: nowMs()
+    };
+  }
+
+  function normalizeQuestion(raw) {
+    const source = Array.isArray(raw) ? raw[0] : (raw?.questions?.[0] || raw || {});
+    const q = String(source.q ?? source.question ?? '').trim();
+    const opts = Array.isArray(source.opts) ? source.opts : (Array.isArray(source.options) ? source.options : []);
+    let ans = source.ans ?? source.answer ?? source.correctIndex;
+    if (typeof ans === 'string' && /^[A-Da-d]$/.test(ans.trim())) ans = ans.trim().toUpperCase().charCodeAt(0) - 65;
+    if (!Number.isInteger(Number(ans)) && typeof ans === 'string') ans = opts.findIndex((item) => String(item) === ans);
+    ans = Number(ans);
+    if (!q || opts.length < 2 || !Number.isInteger(ans) || ans < 0 || ans >= opts.length) throw new Error('invalid quiz payload');
+    return {
+      id: randomId('bv2q'),
+      q,
+      opts: opts.slice(0, 6).map((item) => String(item)),
+      ans,
+      exp: String(source.exp ?? source.explanation ?? '此題暫無解析。'),
+      subject: String(source.subject ?? source.topic ?? '綜合')
+    };
+  }
+
+  function fallbackQuestion() {
+    const seed = Math.floor(Math.random() * 20) + 2;
+    const b = Math.floor(Math.random() * 9) + 1;
+    const answer = seed + b;
+    const opts = [answer, answer + 1, Math.max(0, answer - 1), answer + 2]
+      .sort(() => Math.random() - 0.5);
+    return {
+      id: randomId('fallback'),
+      q: `備援題：${seed} + ${b} = ?`,
+      opts: opts.map(String),
+      ans: opts.indexOf(answer),
+      exp: `${seed} + ${b} = ${answer}。`,
+      subject: '基礎數學'
+    };
+  }
+
+  async function generateQuestion() {
+    const data = userData() || {};
+    const settings = data.settings || {};
+    const weak = Array.isArray(settings.weakSubjects) ? settings.weakSubjects[0] : (settings.weak || data.weakSubjects?.[0]);
+    const payload = {
+      subject: weak || '綜合',
+      level: settings.level || data.level || data.educationLevel || '國中',
+      rank: data.stats?.rankLevel || 0,
+      difficulty: settings.difficulty || data.difficulty || 'medium'
+    };
+
+    try {
+      const response = await fetch('/api/generate-quiz', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (!response.ok) throw new Error(`quiz api ${response.status}`);
+      const body = await response.json();
+      let raw = body?.text ?? body;
+      if (typeof raw === 'string') {
+        raw = raw.replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/i, '').trim();
+        raw = JSON.parse(raw);
+      }
+      return normalizeQuestion(raw);
+    } catch (error) {
+      console.warn('[Battle v2] quiz API unavailable; using fallback question:', error);
+      toast('AI 出題暫時失敗，已切換備援題，不中斷鬥法。');
+      return fallbackQuestion();
+    }
+  }
+
+  function roomRef(roomId = state.roomId) {
+    return roomId ? doc(db(), ROOM_COLLECTION, roomId) : null;
+  }
+
+  function isRoomStale(room) {
+    const created = timestampMs(room?.createdAt, Number(room?.createdAtMs) || 0);
+    return created > 0 && nowMs() - created > BATTLE_V2.waitingRoomTtlMs;
+  }
+
+  async function claimWaitingRoom(targetRef, myData) {
+    let claimed = false;
+    await runTransaction(db(), async (tx) => {
+      const snap = await tx.get(targetRef);
+      if (!snap.exists()) return;
+      const room = snap.data();
+      if (Number(room.modeVersion) !== BATTLE_V2.modeVersion) return;
+      if (room.status !== 'waiting' || room.guest || room.host?.uid === myData.uid || isRoomStale(room)) return;
+      tx.update(targetRef, {
+        guest: myData,
+        status: 'playing',
+        matchedAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
+      claimed = true;
+    });
+    return claimed;
+  }
+
+  async function findAndClaimRoom(myData, onlyRoomId = null) {
+    if (onlyRoomId) {
+      const ref = roomRef(onlyRoomId);
+      return await claimWaitingRoom(ref, myData) ? onlyRoomId : null;
+    }
+
+    const q = query(collection(db(), ROOM_COLLECTION), where('status', '==', 'waiting'), limit(20));
+    const snap = await getDocs(q);
+    const candidates = snap.docs
+      .filter((entry) => {
+        const room = entry.data();
+        return Number(room.modeVersion) === BATTLE_V2.modeVersion && room.host?.uid !== myData.uid && !room.guest && !isRoomStale(room);
+      })
+      .sort((a, b) => {
+        const at = timestampMs(a.data().createdAt, Number(a.data().createdAtMs) || 0);
+        const bt = timestampMs(b.data().createdAt, Number(b.data().createdAtMs) || 0);
+        return at - bt || a.id.localeCompare(b.id);
+      });
+
+    for (const candidate of candidates) {
+      try {
+        if (await claimWaitingRoom(candidate.ref, myData)) return candidate.id;
+      } catch (error) {
+        console.warn('[Battle v2] room claim raced; trying next room:', error);
+      }
+    }
+    return null;
+  }
+
+  async function createWaitingRoom(myData) {
+    const question = await generateQuestion();
+    const ref = await addDoc(collection(db(), ROOM_COLLECTION), {
+      modeVersion: BATTLE_V2.modeVersion,
+      mode: 'matchmaking',
+      host: myData,
+      guest: null,
+      status: 'waiting',
+      round: 1,
+      maxRounds: BATTLE_V2.maxRounds,
+      roundDurationMs: BATTLE_V2.roundDurationMs,
+      currentQuestion: question,
+      settledRound: 0,
+      battleLog: [],
+      battleLogId: '',
+      winner: null,
+      finishReason: '',
+      hostResultRecorded: false,
+      guestResultRecorded: false,
+      createdAt: serverTimestamp(),
+      createdAtMs: nowMs(),
+      roundStartedAt: serverTimestamp(),
+      roundStartedAtMs: nowMs(),
+      updatedAt: serverTimestamp()
+    });
+    state.localCreatedRoomId = ref.id;
+    return ref.id;
+  }
+
+  async function reconcileOwnWaitingRoom() {
+    const ownId = state.roomId;
+    if (!ownId || state.role !== 'host' || state.room?.status !== 'waiting') return;
+    const myData = playerSnapshot();
+    try {
+      const q = query(collection(db(), ROOM_COLLECTION), where('status', '==', 'waiting'), limit(20));
+      const snap = await getDocs(q);
+      const smaller = snap.docs
+        .filter((entry) => {
+          const room = entry.data();
+          return entry.id < ownId && Number(room.modeVersion) === BATTLE_V2.modeVersion && room.host?.uid !== myData.uid && !room.guest && !isRoomStale(room);
+        })
+        .sort((a, b) => a.id.localeCompare(b.id))[0];
+      if (!smaller) return;
+      if (!(await claimWaitingRoom(smaller.ref, myData))) return;
+
+      detachRoomListener();
+      try { await deleteDoc(roomRef(ownId)); } catch (_) {}
+      state.roomId = smaller.id;
+      state.role = 'guest';
+      state.localCreatedRoomId = null;
+      subscribeRoom(smaller.id);
+    } catch (error) {
+      console.warn('[Battle v2] simultaneous-room reconciliation skipped:', error);
+    }
+  }
+
+  function detachRoomListener() {
+    if (state.unsub) {
+      try { state.unsub(); } catch (_) {}
+      state.unsub = null;
+    }
+  }
+
+  function stopTimers() {
+    if (state.tick) clearInterval(state.tick);
+    if (state.heartbeat) clearInterval(state.heartbeat);
+    if (state.reconcile) clearTimeout(state.reconcile);
+    state.tick = null;
+    state.heartbeat = null;
+    state.reconcile = null;
+  }
+
+  function resetRuntime({ keepRoomId = false } = {}) {
+    detachRoomListener();
+    stopTimers();
+    if (!keepRoomId) state.roomId = null;
+    state.role = null;
+    state.room = null;
+    state.starting = false;
+    state.leaving = false;
+    state.settlingRound = null;
+    state.timeoutRound = null;
+    state.preparingRound = null;
+    state.advancingRound = null;
+    state.disconnectClaimRound = null;
+    state.renderedQuestionId = null;
+    state.seenActivationKeys.clear();
+    state.resultRecordedRoom = null;
+    state.localCreatedRoomId = null;
+  }
+
+  function playerForRole(room, role) { return role === 'host' ? room?.host : room?.guest; }
+  function otherRole(role) { return role === 'host' ? 'guest' : 'host'; }
+
+  function answerObject(player, round) {
+    if (!player || Number(player.answerRound) !== Number(round) || typeof player.answerCorrect !== 'boolean') return null;
+    const at = timestampMs(player.answerAt, Number(player.answerClientAt) || 0);
+    return {
+      correct: player.answerCorrect,
+      atMs: at || Number.MAX_SAFE_INTEGER,
+      choice: player.answerChoice,
+      timedOut: !!player.timedOut
+    };
+  }
+
+  function battlePlayer(player, round) {
+    return { ...player, answer: answerObject(player, round) };
+  }
+
+  function renderLobby(room) {
+    showSection('lobby');
+    const mine = state.role ? playerForRole(room, state.role) : playerSnapshot();
+    const opp = state.role ? playerForRole(room, otherRole(state.role)) : null;
+    setText('bv2-match-me', mine?.name || '修士');
+    setText('bv2-match-me-core', `本命金丹：${playerCoreLabel(mine)}`);
+    setText('bv2-room-badge', state.roomId ? `ROOM ${state.roomId.slice(0, 6).toUpperCase()}` : 'SEARCHING');
+
+    if (opp) {
+      setText('bv2-lobby-title', '已尋得對手');
+      setText('bv2-lobby-status', '雙方靈識已連線，準備開戰。');
+      setText('bv2-match-enemy', opp.name || '道友');
+      setText('bv2-match-enemy-core', playerCoreLabel(opp));
+    } else {
+      setText('bv2-lobby-title', '正在搜尋對手');
+      setText('bv2-lobby-status', '使用交易鎖定房間，避免重複配對。');
+      setText('bv2-match-enemy', '搜尋中…');
+      setText('bv2-match-enemy-core', '等待道友入場');
+    }
+  }
+
+  function setHp(prefix, player) {
+    const hp = Math.max(0, Number(player?.hp) || 0);
+    const maxHp = Math.max(1, Number(player?.maxHp) || 1000);
+    setText(`bv2-${prefix}-hp-text`, `${Math.round(hp)} / ${Math.round(maxHp)}`);
+    const bar = document.getElementById(`bv2-${prefix}-hp`);
+    if (bar) bar.style.width = `${Math.max(0, Math.min(100, hp / maxHp * 100))}%`;
+  }
+
+  function renderLogs(room) {
+    const el = document.getElementById('bv2-log');
+    if (!el) return;
+    const logs = Array.isArray(room?.battleLog) ? room.battleLog.slice(-8).reverse() : [];
+    if (!logs.length) {
+      el.innerHTML = '<p>尚無攻防紀錄。</p>';
+      return;
+    }
+    el.innerHTML = logs.map((entry) => {
+      const actor = entry.actorName || (entry.actorUid === me()?.uid ? '你' : '對手');
+      if (entry.type === 'attack') {
+        return `<p><b>${escapeHtml(actor)}</b> 出手造成 <strong>${Number(entry.damage) || 0}</strong> 傷害${entry.skill ? ` · ${escapeHtml(entry.skill)}` : ''}</p>`;
+      }
+      if (entry.type === 'counter') {
+        return `<p class="counter"><b>${escapeHtml(actor)}</b> 雷光反擊 <strong>${Number(entry.damage) || 0}</strong> 傷害${entry.skill ? ` · ${escapeHtml(entry.skill)}` : ''}</p>`;
+      }
+      if (entry.type === 'round') return `<p>${escapeHtml(entry.message || '回合結算')}</p>`;
+      return `<p>${escapeHtml(entry.message || '')}</p>`;
+    }).join('');
+  }
+
+  function announceActivations(room) {
+    const batch = room?.lastSettlement?.activations;
+    if (!Array.isArray(batch)) return;
+    batch.forEach((activation, index) => {
+      const key = `${room.battleLogId || room.round}:${index}:${activation.ownerUid}:${activation.skill}`;
+      if (state.seenActivationKeys.has(key)) return;
+      state.seenActivationKeys.add(key);
+      if (activation.ownerUid === me()?.uid && typeof window.showGoldenCoreActivation === 'function') {
+        window.showGoldenCoreActivation({
+          type: activation.type,
+          name: activation.name || '金丹',
+          message: activation.message || activation.skill,
+          kind: activation.kind || '鬥法金丹效果'
+        });
+      }
+    });
+  }
+
+  function renderQuestion(room, mine) {
+    const question = room.currentQuestion;
+    const qEl = document.getElementById('bv2-question');
+    const optionsEl = document.getElementById('bv2-options');
+    const expEl = document.getElementById('bv2-explanation');
+    if (!qEl || !optionsEl || !expEl) return;
+
+    if (!question) {
+      qEl.textContent = room.status === 'preparing' ? '下一題凝聚中…' : '等待題目同步…';
+      optionsEl.innerHTML = '';
+      expEl.classList.add('hidden');
+      setText('bv2-answer-status', room.status === 'preparing' ? '題目由其中一方取得生成權，逾時會自動移交。' : '等待伺服器同步。');
+      return;
+    }
+
+    if (state.renderedQuestionId !== question.id) {
+      state.renderedQuestionId = question.id;
+      qEl.textContent = question.q;
+      optionsEl.innerHTML = '';
+      question.opts.forEach((option, index) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'bv2-option';
+        btn.dataset.index = String(index);
+        btn.innerHTML = `<span>${String.fromCharCode(65 + index)}</span><b>${escapeHtml(option)}</b>`;
+        btn.addEventListener('click', () => submitAnswer(index));
+        optionsEl.appendChild(btn);
+      });
+      expEl.classList.add('hidden');
+      expEl.textContent = '';
+      try { window.MathJax?.typesetPromise?.([qEl, optionsEl]); } catch (_) {}
+    }
+
+    const answered = answerObject(mine, room.round);
+    const settled = room.status === 'settled' || room.status === 'finished';
+    [...optionsEl.querySelectorAll('.bv2-option')].forEach((btn) => {
+      const idx = Number(btn.dataset.index);
+      btn.disabled = !!answered || settled || room.status !== 'playing';
+      btn.classList.toggle('selected', answered?.choice === idx);
+      btn.classList.toggle('correct', settled && idx === Number(question.ans));
+      btn.classList.toggle('wrong', settled && answered?.choice === idx && idx !== Number(question.ans));
+    });
+
+    if (settled) {
+      expEl.textContent = `解析：${question.exp || '此題暫無解析。'}`;
+      expEl.classList.remove('hidden');
+      setText('bv2-answer-status', '本回合已結算，稍後進入下一題。');
+    } else if (answered) {
+      setText('bv2-answer-status', answered.timedOut ? '本題已逾時，等待對手結算。' : '答案已送出，等待對手作答。');
+    } else {
+      setText('bv2-answer-status', '選定答案後即鎖定；雙方使用完全相同的題目。');
+    }
+  }
+
+  function renderArena(room) {
+    showSection('arena');
+    const mine = playerForRole(room, state.role);
+    const enemy = playerForRole(room, otherRole(state.role));
+    if (!mine || !enemy) return;
+
+    setText('bv2-room-badge', `ROOM ${state.roomId.slice(0, 6).toUpperCase()}`);
+    setText('bv2-round', `${room.round} / ${room.maxRounds || BATTLE_V2.maxRounds}`);
+    setText('bv2-my-name', mine.name || '我方');
+    setText('bv2-enemy-name', enemy.name || '對手');
+    setText('bv2-my-core', `本命金丹：${playerCoreLabel(mine)}`);
+    setText('bv2-enemy-core', `本命金丹：${playerCoreLabel(enemy)}`);
+    setHp('my', mine);
+    setHp('enemy', enemy);
+    renderQuestion(room, mine);
+    renderLogs(room);
+    announceActivations(room);
+
+    const phase = room.status === 'playing' ? '答題交鋒' : room.status === 'settled' ? '回合結算' : '凝聚下一題';
+    setText('bv2-phase', phase);
+  }
+
+  function renderResult(room) {
+    showSection('result');
+    const uid = me()?.uid;
+    const isDraw = room.winner === 'draw' || !room.winner;
+    const won = room.winner === uid;
+    const title = isDraw ? '道法相當 · 平局' : won ? '鬥法勝利' : '此局惜敗';
+    const reason = room.finishReason === 'forfeit' ? '對手離場，鬥法提前結束。'
+      : room.finishReason === 'disconnect' ? '對手失去靈識連線，判定離場。'
+      : room.finishReason === 'round-limit' ? `已達 ${room.maxRounds || BATTLE_V2.maxRounds} 回合上限，以剩餘生命判定。`
+      : room.finishReason === 'double-ko' ? '雙方同時力竭。'
+      : '一方生命歸零，勝負已分。';
+    setText('bv2-result-title', title);
+    setText('bv2-result-msg', reason);
+    setText('bv2-result-emblem', isDraw ? '和' : won ? '勝' : '敗');
+
+    const mine = playerForRole(room, state.role);
+    const enemy = playerForRole(room, otherRole(state.role));
+    const statsEl = document.getElementById('bv2-result-stats');
+    if (statsEl) {
+      statsEl.innerHTML = `<div><span>你的生命</span><b>${Math.max(0, Number(mine?.hp) || 0)}</b></div><div><span>對手生命</span><b>${Math.max(0, Number(enemy?.hp) || 0)}</b></div><div><span>總回合</span><b>${room.round}</b></div><div><span>結果</span><b>${isDraw ? '平局' : won ? '勝' : '敗'}</b></div>`;
+    }
+    recordBattleResult(room).catch((error) => console.warn('[Battle v2] result record skipped:', error));
+  }
+
+  async function submitAnswer(choice) {
+    if (!state.roomId || !state.role || !state.room || state.room.status !== 'playing') return;
+    const round = Number(state.room.round);
+    const mine = playerForRole(state.room, state.role);
+    if (answerObject(mine, round)) return;
+    const question = state.room.currentQuestion;
+    if (!question) return;
+
+    const ref = roomRef();
+    try {
+      await runTransaction(db(), async (tx) => {
+        const snap = await tx.get(ref);
+        if (!snap.exists()) return;
+        const room = snap.data();
+        if (room.status !== 'playing' || Number(room.round) !== round || room.currentQuestion?.id !== question.id) return;
+        const player = playerForRole(room, state.role);
+        if (answerObject(player, round)) return;
+        tx.update(ref, {
+          [`${state.role}.answerChoice`]: choice,
+          [`${state.role}.answerCorrect`]: Number(choice) === Number(room.currentQuestion.ans),
+          [`${state.role}.answerAt`]: serverTimestamp(),
+          [`${state.role}.answerClientAt`]: nowMs(),
+          [`${state.role}.answerRound`]: round,
+          [`${state.role}.timedOut`]: false,
+          [`${state.role}.lastSeenAtMs`]: nowMs(),
+          updatedAt: serverTimestamp()
+        });
+      });
+    } catch (error) {
+      console.error('[Battle v2] answer submit failed:', error);
+      toast('答案送出失敗，請再點一次。');
+    }
+  }
+
+  async function timeoutMissingAnswers(room) {
+    const round = Number(room.round);
+    if (state.timeoutRound === round || room.status !== 'playing') return;
+    state.timeoutRound = round;
+    try {
+      await runTransaction(db(), async (tx) => {
+        const ref = roomRef();
+        const snap = await tx.get(ref);
+        if (!snap.exists()) return;
+        const fresh = snap.data();
+        if (fresh.status !== 'playing' || Number(fresh.round) !== round) return;
+        const patch = { updatedAt: serverTimestamp() };
+        ['host', 'guest'].forEach((role) => {
+          const player = fresh[role];
+          if (player && !answerObject(player, round)) {
+            patch[`${role}.answerChoice`] = null;
+            patch[`${role}.answerCorrect`] = false;
+            patch[`${role}.answerAt`] = serverTimestamp();
+            patch[`${role}.answerClientAt`] = nowMs();
+            patch[`${role}.answerRound`] = round;
+            patch[`${role}.timedOut`] = true;
+          }
+        });
+        tx.update(ref, patch);
+      });
+    } catch (error) {
+      console.warn('[Battle v2] timeout settlement raced:', error);
+    } finally {
+      setTimeout(() => { if (state.timeoutRound === round) state.timeoutRound = null; }, 1200);
+    }
+  }
+
+  async function settleRound(room) {
+    const round = Number(room.round);
+    if (state.settlingRound === round || room.status !== 'playing') return;
+    const hostAnswer = answerObject(room.host, round);
+    const guestAnswer = answerObject(room.guest, round);
+    if (!hostAnswer || !guestAnswer || !hostAnswer.atMs || !guestAnswer.atMs) return;
+    state.settlingRound = round;
+
+    try {
+      await runTransaction(db(), async (tx) => {
+        const ref = roomRef();
+        const snap = await tx.get(ref);
+        if (!snap.exists()) return;
+        const fresh = snap.data();
+        if (fresh.status !== 'playing' || Number(fresh.round) !== round || Number(fresh.settledRound) >= round) return;
+        const hAnswer = answerObject(fresh.host, round);
+        const gAnswer = answerObject(fresh.guest, round);
+        if (!hAnswer || !gAnswer || !hAnswer.atMs || !gAnswer.atMs) return;
+
+        const outcome = settleBattleRound({
+          roomId: state.roomId,
+          round,
+          host: battlePlayer(fresh.host, round),
+          guest: battlePlayer(fresh.guest, round),
+          tieWindowMs: BATTLE_V2.tieWindowMs,
+          maxRounds: fresh.maxRounds || BATTLE_V2.maxRounds
+        });
+
+        const names = { host: fresh.host?.name || '我方', guest: fresh.guest?.name || '對手' };
+        const roundLogs = outcome.logs.map((entry) => ({
+          ...entry,
+          actorName: names[entry.actorRole] || '修士',
+          round,
+          id: randomId(`log-${round}`)
+        }));
+        if (!roundLogs.length) {
+          roundLogs.push({ type: 'round', round, id: randomId(`log-${round}`), message: '雙方本回合皆未形成有效攻勢。' });
+        }
+        const battleLog = [...(Array.isArray(fresh.battleLog) ? fresh.battleLog : []), ...roundLogs].slice(-20);
+        const common = {
+          'host.hp': outcome.hostHp,
+          'guest.hp': outcome.guestHp,
+          'host.isDead': outcome.hostHp <= 0,
+          'guest.isDead': outcome.guestHp <= 0,
+          settledRound: round,
+          battleLog,
+          battleLogId: `${round}-${nowMs()}`,
+          lastSettlement: {
+            round,
+            attackers: outcome.attackers,
+            activations: outcome.activations,
+            hostHp: outcome.hostHp,
+            guestHp: outcome.guestHp,
+            settledAtMs: nowMs()
+          },
+          updatedAt: serverTimestamp()
+        };
+
+        if (outcome.finished) {
+          tx.update(ref, {
+            ...common,
+            status: 'finished',
+            winner: outcome.winnerUid,
+            finishReason: outcome.finishReason,
+            finishedAt: serverTimestamp()
+          });
+        } else {
+          tx.update(ref, {
+            ...common,
+            status: 'settled',
+            nextRoundAtMs: nowMs() + BATTLE_V2.nextRoundDelayMs
+          });
+        }
+      });
+    } catch (error) {
+      console.warn('[Battle v2] settlement raced:', error);
+    } finally {
+      setTimeout(() => { if (state.settlingRound === round) state.settlingRound = null; }, 800);
+    }
+  }
+
+  async function advanceFromSettled(room) {
+    const round = Number(room.round);
+    if (state.advancingRound === round || room.status !== 'settled' || nowMs() < Number(room.nextRoundAtMs || 0)) return;
+    state.advancingRound = round;
+    try {
+      await runTransaction(db(), async (tx) => {
+        const ref = roomRef();
+        const snap = await tx.get(ref);
+        if (!snap.exists()) return;
+        const fresh = snap.data();
+        if (fresh.status !== 'settled' || Number(fresh.round) !== round || nowMs() < Number(fresh.nextRoundAtMs || 0)) return;
+        const nextRound = round + 1;
+        tx.update(ref, {
+          status: 'preparing',
+          round: nextRound,
+          currentQuestion: null,
+          questionOwnerUid: me().uid,
+          questionClaimedAtMs: nowMs(),
+          'host.answerChoice': null,
+          'host.answerCorrect': null,
+          'host.answerAt': null,
+          'host.answerClientAt': null,
+          'host.answerRound': null,
+          'host.timedOut': false,
+          'guest.answerChoice': null,
+          'guest.answerCorrect': null,
+          'guest.answerAt': null,
+          'guest.answerClientAt': null,
+          'guest.answerRound': null,
+          'guest.timedOut': false,
+          updatedAt: serverTimestamp()
+        });
+      });
+    } catch (error) {
+      console.warn('[Battle v2] next-round transition raced:', error);
+    } finally {
+      setTimeout(() => { if (state.advancingRound === round) state.advancingRound = null; }, 800);
+    }
+  }
+
+  async function prepareRound(room) {
+    const round = Number(room.round);
+    if (state.preparingRound === round || room.status !== 'preparing' || room.currentQuestion || room.questionOwnerUid !== me()?.uid) return;
+    state.preparingRound = round;
+    try {
+      const question = await generateQuestion();
+      await runTransaction(db(), async (tx) => {
+        const ref = roomRef();
+        const snap = await tx.get(ref);
+        if (!snap.exists()) return;
+        const fresh = snap.data();
+        if (fresh.status !== 'preparing' || Number(fresh.round) !== round || fresh.currentQuestion || fresh.questionOwnerUid !== me().uid) return;
+        tx.update(ref, {
+          status: 'playing',
+          currentQuestion: question,
+          questionOwnerUid: null,
+          questionClaimedAtMs: null,
+          roundStartedAt: serverTimestamp(),
+          roundStartedAtMs: nowMs(),
+          updatedAt: serverTimestamp()
+        });
+      });
+    } catch (error) {
+      console.error('[Battle v2] next question failed:', error);
+    } finally {
+      state.preparingRound = null;
+    }
+  }
+
+  async function takeoverQuestionLease(room) {
+    if (room.status !== 'preparing' || room.currentQuestion || room.questionOwnerUid === me()?.uid) return;
+    if (nowMs() - Number(room.questionClaimedAtMs || 0) < PREPARE_LEASE_MS) return;
+    try {
+      await runTransaction(db(), async (tx) => {
+        const ref = roomRef();
+        const snap = await tx.get(ref);
+        if (!snap.exists()) return;
+        const fresh = snap.data();
+        if (fresh.status !== 'preparing' || fresh.currentQuestion) return;
+        if (nowMs() - Number(fresh.questionClaimedAtMs || 0) < PREPARE_LEASE_MS) return;
+        tx.update(ref, {
+          questionOwnerUid: me().uid,
+          questionClaimedAtMs: nowMs(),
+          updatedAt: serverTimestamp()
+        });
+      });
+    } catch (_) {}
+  }
+
+  async function heartbeat() {
+    if (!state.roomId || !state.role || !state.room || !['waiting', 'playing', 'settled', 'preparing'].includes(state.room.status)) return;
+    try {
+      await updateDoc(roomRef(), {
+        [`${state.role}.lastSeenAtMs`]: nowMs(),
+        updatedAt: serverTimestamp()
+      });
+    } catch (_) {}
+  }
+
+  async function claimDisconnectedOpponent(room) {
+    if (!state.role || !['playing', 'settled', 'preparing'].includes(room.status)) return;
+    const enemyRole = otherRole(state.role);
+    const enemy = playerForRole(room, enemyRole);
+    if (!enemy?.uid || nowMs() - Number(enemy.lastSeenAtMs || 0) <= BATTLE_V2.disconnectTtlMs) return;
+    const round = Number(room.round);
+    if (state.disconnectClaimRound === round) return;
+    state.disconnectClaimRound = round;
+    try {
+      await runTransaction(db(), async (tx) => {
+        const ref = roomRef();
+        const snap = await tx.get(ref);
+        if (!snap.exists()) return;
+        const fresh = snap.data();
+        if (!['playing', 'settled', 'preparing'].includes(fresh.status)) return;
+        const opp = playerForRole(fresh, enemyRole);
+        if (!opp?.uid || nowMs() - Number(opp.lastSeenAtMs || 0) <= BATTLE_V2.disconnectTtlMs) return;
+        tx.update(ref, {
+          status: 'finished',
+          winner: me().uid,
+          finishReason: 'disconnect',
+          finishedAt: serverTimestamp(),
+          updatedAt: serverTimestamp()
+        });
+      });
+    } catch (_) {
+    } finally {
+      setTimeout(() => { if (state.disconnectClaimRound === round) state.disconnectClaimRound = null; }, 3000);
+    }
+  }
+
+  function tickRoom() {
+    const room = state.room;
+    if (!room || !state.roomId) return;
+    const timerEl = document.getElementById('bv2-timer');
+    const barEl = document.getElementById('bv2-timer-bar');
+
+    if (room.status === 'playing' && room.currentQuestion) {
+      const start = timestampMs(room.roundStartedAt, Number(room.roundStartedAtMs) || nowMs());
+      const duration = Math.max(5000, Number(room.roundDurationMs) || BATTLE_V2.roundDurationMs);
+      const left = Math.max(0, duration - (nowMs() - start));
+      if (timerEl) timerEl.textContent = `${(left / 1000).toFixed(1)}s`;
+      if (barEl) barEl.style.width = `${Math.max(0, Math.min(100, left / duration * 100))}%`;
+      if (left <= 0) timeoutMissingAnswers(room);
+    } else if (room.status === 'settled') {
+      const left = Math.max(0, Number(room.nextRoundAtMs || 0) - nowMs());
+      if (timerEl) timerEl.textContent = `${(left / 1000).toFixed(1)}s`;
+      if (barEl) barEl.style.width = `${Math.max(0, Math.min(100, left / BATTLE_V2.nextRoundDelayMs * 100))}%`;
+      if (left <= 0) advanceFromSettled(room);
+    } else {
+      if (timerEl) timerEl.textContent = 'SYNC';
+      if (barEl) barEl.style.width = '100%';
+    }
+
+    if (room.status === 'preparing') {
+      if (room.questionOwnerUid === me()?.uid) prepareRound(room);
+      else takeoverQuestionLease(room);
+    }
+    claimDisconnectedOpponent(room);
+  }
+
+  async function recordBattleResult(room) {
+    if (!state.roomId || state.resultRecordedRoom === state.roomId || !state.role) return;
+    state.resultRecordedRoom = state.roomId;
+    const userRef = doc(db(), 'users', me().uid);
+    const ref = roomRef();
+    try {
+      await runTransaction(db(), async (tx) => {
+        const roomSnap = await tx.get(ref);
+        const userSnap = await tx.get(userRef);
+        if (!roomSnap.exists() || !userSnap.exists()) return;
+        const freshRoom = roomSnap.data();
+        if (freshRoom.status !== 'finished') return;
+        const marker = state.role === 'host' ? 'hostResultRecorded' : 'guestResultRecorded';
+        if (freshRoom[marker]) return;
+
+        const userDoc = userSnap.data();
+        const stats = userDoc.stats || {};
+        const draw = freshRoom.winner === 'draw' || !freshRoom.winner;
+        const won = freshRoom.winner === me().uid;
+        const patch = {
+          'stats.battleMatches': Math.max(0, Number(stats.battleMatches) || 0) + 1,
+          [marker]: true
+        };
+        if (draw) patch['stats.battleDraws'] = Math.max(0, Number(stats.battleDraws) || 0) + 1;
+        else if (won) patch['stats.battleWins'] = Math.max(0, Number(stats.battleWins) || 0) + 1;
+        else patch['stats.battleLosses'] = Math.max(0, Number(stats.battleLosses) || 0) + 1;
+
+        tx.update(userRef, Object.fromEntries(Object.entries(patch).filter(([key]) => key.startsWith('stats.'))));
+        tx.update(ref, { [marker]: true, updatedAt: serverTimestamp() });
+      });
+
+      const data = userData();
+      if (data?.stats) {
+        const draw = room.winner === 'draw' || !room.winner;
+        const won = room.winner === me().uid;
+        data.stats.battleMatches = Math.max(0, Number(data.stats.battleMatches) || 0) + 1;
+        if (draw) data.stats.battleDraws = Math.max(0, Number(data.stats.battleDraws) || 0) + 1;
+        else if (won) data.stats.battleWins = Math.max(0, Number(data.stats.battleWins) || 0) + 1;
+        else data.stats.battleLosses = Math.max(0, Number(data.stats.battleLosses) || 0) + 1;
+        window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', { detail: { battle: true } }));
+      }
+    } catch (error) {
+      state.resultRecordedRoom = null;
+      throw error;
+    }
+  }
+
+  function onRoomSnapshot(snap) {
+    if (!snap.exists()) {
+      toast('鬥法房間已不存在。');
+      resetRuntime();
+      window.switchToPage?.('page-home');
+      return;
+    }
+    const room = snap.data();
+    if (Number(room.modeVersion) !== BATTLE_V2.modeVersion) return;
+    state.room = room;
+
+    const uid = me()?.uid;
+    if (room.host?.uid === uid) state.role = 'host';
+    else if (room.guest?.uid === uid) state.role = 'guest';
+    else return;
+
+    if (room.status === 'waiting') renderLobby(room);
+    else if (['playing', 'settled', 'preparing'].includes(room.status)) renderArena(room);
+    else if (room.status === 'finished') renderResult(room);
+
+    if (room.status === 'playing') {
+      const h = answerObject(room.host, room.round);
+      const g = answerObject(room.guest, room.round);
+      if (h && g && h.atMs && g.atMs) settleRound(room);
+    }
+  }
+
+  function subscribeRoom(roomId) {
+    detachRoomListener();
+    state.roomId = roomId;
+    state.unsub = onSnapshot(roomRef(roomId), onRoomSnapshot, (error) => {
+      console.error('[Battle v2] room listener failed:', error);
+      toast('鬥法同步中斷，正在保留目前房間。');
+    });
+    if (!state.tick) state.tick = setInterval(tickRoom, 250);
+    if (!state.heartbeat) state.heartbeat = setInterval(heartbeat, HEARTBEAT_MS);
+    heartbeat();
+  }
+
+  async function startMatchmaking() {
+    if (state.starting) return;
+    if (score() < FOUNDATION_SCORE) {
+      toast(`需達築基初期（${FOUNDATION_SCORE} 修為）才可配對鬥法。`);
+      return;
+    }
+    if (!me()) {
+      alert('請先登入！');
+      return;
+    }
+    if (state.roomId && state.room && state.room.status !== 'finished') {
+      window.switchToPage?.('page-battle');
+      return;
+    }
+
+    state.starting = true;
+    resetRuntime();
+    state.starting = true;
+    ensurePage();
+    window.switchToPage?.('page-battle');
+    showSection('lobby');
+    renderLobby(null);
+
+    try {
+      await window.ensureCombatStats?.();
+      const myData = playerSnapshot();
+      setText('bv2-match-me', myData.name);
+      setText('bv2-match-me-core', `本命金丹：${playerCoreLabel(myData)}`);
+      setText('bv2-lobby-status', '搜尋可加入的 Battle v2 房間…');
+
+      const joined = await findAndClaimRoom(myData);
+      if (joined) {
+        state.role = 'guest';
+        subscribeRoom(joined);
+        return;
+      }
+
+      setText('bv2-lobby-status', '目前沒有可加入的道友，正在建立房間與題目…');
+      const created = await createWaitingRoom(myData);
+      state.role = 'host';
+      subscribeRoom(created);
+      state.reconcile = setTimeout(reconcileOwnWaitingRoom, MATCH_RECONCILE_MS);
+    } catch (error) {
+      console.error('[Battle v2] matchmaking failed:', error);
+      toast('配對失敗，請稍後再試。');
+      resetRuntime();
+      window.switchToPage?.('page-home');
+    } finally {
+      state.starting = false;
+    }
+  }
+
+  async function forfeitCurrentRoom() {
+    if (!state.roomId || !state.role || !state.room) return;
+    const ref = roomRef();
+    const room = state.room;
+    try {
+      if (room.status === 'waiting' && state.role === 'host') {
+        await deleteDoc(ref);
+        return;
+      }
+      if (!['playing', 'settled', 'preparing'].includes(room.status)) return;
+      await runTransaction(db(), async (tx) => {
+        const snap = await tx.get(ref);
+        if (!snap.exists()) return;
+        const fresh = snap.data();
+        if (!['playing', 'settled', 'preparing'].includes(fresh.status)) return;
+        const opponent = playerForRole(fresh, otherRole(state.role));
+        tx.update(ref, {
+          status: 'finished',
+          winner: opponent?.uid || 'draw',
+          finishReason: 'forfeit',
+          finishedAt: serverTimestamp(),
+          updatedAt: serverTimestamp()
+        });
+      });
+    } catch (error) {
+      console.warn('[Battle v2] leave-room update skipped:', error);
+    }
+  }
+
+  async function exitBattle({ navigate = true, forfeit = true } = {}) {
+    if (state.leaving) return;
+    state.leaving = true;
+    try {
+      if (forfeit) await forfeitCurrentRoom();
+    } finally {
+      resetRuntime();
+      if (navigate) window.switchToPage?.('page-home');
+    }
+  }
+
+  async function joinSpecificRoom(roomId) {
+    if (score() < FOUNDATION_SCORE || !me() || !roomId) return false;
+    const myData = playerSnapshot();
+    try {
+      const joined = await findAndClaimRoom(myData, roomId);
+      if (!joined) return false;
+      resetRuntime();
+      state.role = 'guest';
+      ensurePage();
+      window.switchToPage?.('page-battle');
+      subscribeRoom(joined);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  async function recoverBattleSession() {
+    if (state.roomId || !me() || score() < FOUNDATION_SCORE) return;
+    const uid = me().uid;
+    try {
+      const [hostRooms, guestRooms] = await Promise.all([
+        getDocs(query(collection(db(), ROOM_COLLECTION), where('host.uid', '==', uid), limit(5))),
+        getDocs(query(collection(db(), ROOM_COLLECTION), where('guest.uid', '==', uid), limit(5)))
+      ]);
+      const active = [...hostRooms.docs, ...guestRooms.docs]
+        .filter((entry, index, arr) => arr.findIndex((item) => item.id === entry.id) === index)
+        .filter((entry) => {
+          const room = entry.data();
+          return Number(room.modeVersion) === BATTLE_V2.modeVersion && ['waiting', 'playing', 'settled', 'preparing'].includes(room.status) && !(room.status === 'waiting' && isRoomStale(room));
+        })
+        .sort((a, b) => timestampMs(b.data().updatedAt, b.data().createdAtMs) - timestampMs(a.data().updatedAt, a.data().createdAtMs))[0];
+      if (!active) return;
+
+      const room = active.data();
+      state.role = room.host?.uid === uid ? 'host' : 'guest';
+      ensurePage();
+      window.switchToPage?.('page-battle');
+      subscribeRoom(active.id);
+      toast('已恢復上次尚未結束的鬥法房間。');
+    } catch (error) {
+      console.warn('[Battle v2] session recovery skipped:', error);
+    }
+  }
+
+  // Override legacy entry points only after the user profile is ready.
+  window.startBattleMatchmaking = startMatchmaking;
+  window.leaveBattle = () => exitBattle({ navigate: true, forfeit: true });
+  window.joinBattleRoomV2 = joinSpecificRoom;
+  window.getBattleV2State = () => ({
+    roomId: state.roomId,
+    role: state.role,
+    status: state.room?.status || 'idle',
+    round: state.room?.round || 0,
+    modeVersion: BATTLE_V2.modeVersion
+  });
+
+  function boot() {
+    ensurePage();
+    setTimeout(recoverBattleSession, 700);
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+})();
