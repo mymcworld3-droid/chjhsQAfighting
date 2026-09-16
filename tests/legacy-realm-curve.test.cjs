@@ -1,0 +1,30 @@
+const assert = require('node:assert/strict');
+const { test } = require('node:test');
+const { readFileSync } = require('node:fs');
+const { join } = require('node:path');
+
+const legacy = readFileSync(join(__dirname, '../public/main-legacy.js'), 'utf8');
+
+test('legacy login core uses the same cultivation realm curve', () => {
+  const expected = [
+    ['金丹', 120],
+    ['元嬰', 500],
+    ['化神', 800],
+    ['煉虛', 1200],
+    ['合體', 1800],
+    ['大乘', 2600],
+    ['渡劫', 3600],
+    ['真仙', 5000]
+  ];
+
+  for (const [name, need] of expected) {
+    assert.match(
+      legacy,
+      new RegExp(`name: '${name}'.*need: ${need}`),
+      `${name} must start at ${need} cultivation in main-legacy.js`
+    );
+  }
+
+  assert.doesNotMatch(legacy, /name: '金丹'.*need: 150/);
+  assert.doesNotMatch(legacy, /name: '金丹'.*need: 300/);
+});
