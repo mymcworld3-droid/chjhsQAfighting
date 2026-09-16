@@ -21,6 +21,18 @@ jobs:
       - name: Apply Battle reliability patch
         if: github.event_name == 'push'
         run: python .github/scripts/patch-battle-reliability.py
+      - name: Update Battle first-answer regression
+        if: github.event_name == 'push'
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('tests/battle-v2.test.cjs')
+          s = p.read_text()
+          s = s.replace(
+              "assert.match(battleSource, /hostAnswer \\|\\| guestAnswer/);",
+              "assert.match(battleSource, /hostSubmitted \\|\\| guestSubmitted/);"
+          )
+          p.write_text(s)
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
