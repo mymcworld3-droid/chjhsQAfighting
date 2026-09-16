@@ -6,24 +6,13 @@ on:
   pull_request:
     branches: [main]
 
-permissions:
-  contents: write
-
 jobs:
   test:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 5
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Apply gameplay polish bundle
-        if: github.event_name == 'push' && github.event.head_commit.message == 'apply gameplay polish with updated tests'
-        run: |
-          python .github/scripts/fix-polish-script.py
-          python .github/scripts/apply-polish-bundle.py
-          python .github/scripts/fix-polish-tests.py
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -32,11 +21,3 @@ jobs:
         run: npm install --no-audit --no-fund
       - name: Run tests
         run: npm test
-      - name: Commit gameplay polish bundle
-        if: github.event_name == 'push' && github.event.head_commit.message == 'apply gameplay polish with updated tests'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add server.js public/main.js public/index.html public/main-legacy.js dongtian-api.js public/cultivation/dongtian.js public/cultivation/cultivation-training-v4.js public/cultivation/cultivation-status-panel.js public/cultivation/reverse-core-multiples.js tests/polish-bundle.test.cjs tests/dongtian-visibility.test.cjs tests/golden-core-lore.test.cjs
-          git diff --cached --quiet || git commit -m "feat: polish Dongtian identity training and Golden Core UX"
-          git push
