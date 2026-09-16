@@ -1,9 +1,9 @@
-// 兩階段修煉守門：築基 60 開修煉背包；金丹 300 才開金丹、狀態與金丹效果。
+// 兩階段修煉守門：築基 60 開修煉背包；金丹 120 才開金丹、狀態與金丹效果。
 (function () {
   'use strict';
 
   const FOUNDATION_SCORE = 60;
-  const GOLDEN_CORE_SCORE = 300;
+  const GOLDEN_CORE_SCORE = 120;
   const MIGRATION_FIELD = 'progressionMigrationV2';
   const MIGRATION_VERSION = 2;
   const STYLE_ID = 'golden-core-access-guard-style';
