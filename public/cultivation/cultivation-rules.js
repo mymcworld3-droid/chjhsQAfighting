@@ -1,5 +1,5 @@
 // 修為與答題統計由主流程一次儲存，避免另一次讀寫扣回獎勵。
-// 一般答題只提供固定基礎修為；所有額外修為與「金丹道心」效果只能由已裝配金丹觸發。
+// 一般答題只提供固定基礎修為；所有額外修為與「金丹道心」效果只能由目前調御中的本命金丹觸發。
 const CULTIVATION_GAIN = 1;
 
 export function applyCultivationReward(stats, isCorrect) {

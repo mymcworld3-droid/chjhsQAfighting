@@ -1,4 +1,4 @@
-// 修煉頁「狀態」分頁：顯示目前裝備金丹與玩家戰鬥數值。
+// 修煉頁「狀態」分頁：顯示目前調御中的本命金丹與玩家戰鬥數值。
 (function () {
   'use strict';
 
@@ -71,7 +71,7 @@
       return `
         <div class="status-core-empty">
           <i class="fa-solid fa-circle-notch"></i>
-          <span>目前未裝備金丹</span>
+          <span>目前沒有調御中的金丹丹相</span>
         </div>
       `;
     }
@@ -86,7 +86,7 @@
         <div class="status-core-copy">
           <div class="status-core-topline">
             <span class="status-core-grade">${escapeHtml(core.grade)} 品</span>
-            <span class="status-core-equipped on">已裝備</span>
+            <span class="status-core-equipped on">調御中</span>
           </div>
           <h3>${escapeHtml(core.name)}</h3>
           <p>${escapeHtml(core.effect)}</p>
@@ -120,7 +120,7 @@
     return `
       <section class="training-status-panel">
         <div class="status-section status-core-section">
-          <div class="status-section-title"><span>目前裝備金丹</span><small>EQUIPPED CORE</small></div>
+          <div class="status-section-title"><span>目前調御金丹</span><small>ATTUNED CORE</small></div>
           ${currentCoreMarkup(snapshot.core)}
         </div>
 

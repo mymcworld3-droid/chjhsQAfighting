@@ -1,4 +1,4 @@
-// 金丹品質下降提醒：若洗髓後品質比上一次已裝配金丹差，裝配前再次確認。
+// 金丹品質下降提醒：若洗髓後候選丹相品質比上一次調御的金丹差，切換丹相前再次確認。
 (function () {
   'use strict';
 
@@ -157,11 +157,11 @@
           <i class="fa-solid fa-arrow-right core-equip-warning-arrow"></i>
           <span class="core-equip-warning-grade new">現在 ${newGrade} 品</span>
         </div>
-        <p>目前的「${state?.name || '金丹'}」品質比上一次已裝配的金丹低，特性效果也可能較弱。</p>
-        <p class="core-equip-warning-note">一品最佳、九品最低。若仍要更換，可以繼續裝配。</p>
+        <p>目前候選丹相「${state?.name || '金丹'}」的品質比正在調御的本命金丹低，特性效果也可能較弱。</p>
+        <p class="core-equip-warning-note">一品最佳、九品最低。若仍要改換丹相，可以繼續調御。</p>
         <div class="core-equip-warning-actions">
-          <button type="button" class="core-equip-warning-cancel">先不裝配</button>
-          <button type="button" class="core-equip-warning-confirm">仍然裝配</button>
+          <button type="button" class="core-equip-warning-cancel">先不調御</button>
+          <button type="button" class="core-equip-warning-confirm">仍然調御</button>
         </div>
       </section>
     `;
@@ -183,8 +183,8 @@
     const washButton = event.target?.closest?.('#wash-golden-core');
     if (washButton && !washButton.disabled) {
       const state = currentCoreState();
-      // 只在開始洗掉「已裝配」金丹時建立比較基準。
-      // 若連續洗髓但尚未裝配，仍保留最初那顆已裝配金丹的品質作比較。
+      // 只在開始洗髓「目前調御」的本命金丹時建立比較基準。
+      // 若連續洗髓但尚未調御新丹相，仍保留原本調御金丹的品質作比較。
       if (state?.equipped && Number.isFinite(Number(state.grade))) {
         writeBaseline(state.grade);
       } else if (readBaseline() == null && Number.isFinite(Number(state?.grade))) {
@@ -215,8 +215,8 @@
     showWarning(button, oldGrade, clampGrade(newGrade), state);
   }, true);
 
-  // 若載入時已經是正常裝配狀態，舊的比較基準可以清掉；
-  // 下一次洗髓時會重新記錄當下已裝配金丹的品質。
+  // 若載入時已經是正常調御狀態，舊的比較基準可以清掉；
+  // 下一次洗髓時會重新記錄當下調御金丹的品質。
   const initial = currentCoreState();
   if (initial?.equipped) clearBaseline();
 })();

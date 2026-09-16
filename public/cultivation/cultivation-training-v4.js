@@ -2,7 +2,7 @@ import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.j
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
-// 修煉 v4：玩家永遠只有一顆金丹；洗髓直接重塑該金丹，金丹不進背包。
+// 修煉 v4：金丹是修士在自身靈田／丹田中凝聚的本命金丹；玩家永遠只有一顆，洗髓只重塑其丹性與品級。
 (function () {
   'use strict';
 
@@ -77,7 +77,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       ability: '潮汐入丹，悟道與鬥法皆可借海勢增幅。',
       upkeep: '每日觀水片刻，平心定氣。',
       warning: '巨浪只在鬥法結算中造成額外傷害。',
-      note: '修為翻倍指基礎 +1 再額外 +1。',
+      note: '金丹內自成一片汪洋。據說大成後可號令萬水；目前最明顯的副作用，是看見水龍頭沒關會產生一種莫名的責任感。',
       resolve({ isCorrect, grade }) {
         if (!isCorrect) return {};
         const chance = chanceByGrade(grade, 10, 5, 50);
@@ -92,7 +92,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       ability: '以太初元氣反覆回補修行底蘊。',
       upkeep: '每日清晨靜坐片刻。',
       warning: '計數只累積悟道成功次數。',
-      note: '9 品每 10 次；1 品每 2 次。',
+      note: '太初元氣可返本歸元，但無法返還已交出去的作業、已讀的訊息，以及手滑花掉的靈石。',
       resolve({ isCorrect, grade, counters }) {
         if (!isCorrect) return {};
         const interval = Math.max(2, grade + 1);
@@ -106,8 +106,8 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       effect(grade) { return `連續悟道達 ${Math.max(1, Math.ceil(grade / 3)) + 1} 次，即凝聚金丹道心護體。`; },
       ability: '凝神斂念，以連續悟道穩固金丹道心。',
       upkeep: '保持專注即可。',
-      warning: '一般連勝本身沒有護體，必須裝備本丹才會觸發。',
-      note: '9 品約需 4 連勝；1 品約需 2 連勝。',
+      warning: '一般連勝本身沒有護體，必須調御此丹相才會觸發。',
+      note: '金丹會替你隔絕雜念。師尊叫三次都沒回應時，通常會改用物理方式突破你的靜音結界。',
       resolve({ isCorrect, grade, previousStreak }) {
         if (!isCorrect) return {};
         const threshold = Math.max(1, Math.ceil(grade / 3));
@@ -122,7 +122,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       ability: '越近瓶頸，丹力越能衝擊境界壁障。',
       upkeep: '突破前保持穩定悟道。',
       warning: '只在接近下一境界的指定比例區間生效。',
-      note: '9 品為最後 20%；1 品為最後 60%。',
+      note: '專治修行瓶頸。對真正的牆壁沒有作用，請勿以額頭驗證丹力。',
       resolve({ isCorrect, grade, score }) {
         if (!isCorrect || !inBreakthroughZone(score, grade)) return {};
         return { bonusGain: 2, message: `${this.name}衝破瓶頸，額外 +2 修為` };
@@ -134,7 +134,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       ability: '連勝越久，星月之力越穩定。',
       upkeep: '維持連續悟道。',
       warning: '中斷連勝後需重新累積。',
-      note: '9 品先達 9 次；1 品先達 1 次。',
+      note: '陰天時可打開天氣 App 對著月亮圖示修煉；丹師表示「理論上應該差不多」。',
       resolve({ isCorrect, grade, previousStreak }) {
         return isCorrect && previousStreak >= Math.max(1, grade)
           ? { bonusGain: 2, message: `${this.name}引星吞月，額外 +2 修為` }
@@ -147,7 +147,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       ability: '失誤之際清心去垢，反而護住道心。',
       upkeep: '答錯後重新定神即可。',
       warning: '只產生金丹道心，不屬於舊版通用道心系統。',
-      note: '9 品 20%；1 品 100%。',
+      note: '號稱心如明鏡、萬念不生。答錯時仍可能先懷疑答案，再懷疑出題老師。',
       resolve({ isCorrect, grade }) {
         if (isCorrect) return {};
         const chance = chanceByGrade(grade, 20, 10, 100);
@@ -165,7 +165,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       ability: '以雷劫淬丹，突破與受擊皆可引雷。',
       upkeep: '雷意需在實戰中承受攻擊才會反擊。',
       warning: '若該次攻擊已使你倒下，則不再發動反擊。',
-      note: '突破區間 9 品 20%／1 品 60%；反擊 9 品 10%／1 品 90%。',
+      note: '丹中雷光常年遊走。有人研究能不能順便替手機充電；手機沒充到，頭髮倒先充滿了。',
       resolve({ isCorrect, grade, score }) {
         if (!isCorrect || !inBreakthroughZone(score, grade)) return {};
         return { bonusGain: 1, message: `${this.name}雷劫淬體，額外 +1 修為` };
@@ -177,7 +177,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       ability: '陰陽翻轉，在指定連勝節點爆發丹力。',
       upkeep: '保持連勝直到觸發節點。',
       warning: '只在達到指定連勝的那一次觸發。',
-      note: '9 品需 10 連勝；1 品需 2 連勝。',
+      note: '能逆轉陰陽、倒轉氣機。目前仍無法把星期一反轉成星期五，相關研究經費持續申請中。',
       resolve({ isCorrect, grade, previousStreak }) {
         const threshold = Math.max(2, grade + 1);
         return isCorrect && previousStreak + 1 === threshold
@@ -191,7 +191,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       ability: '丹心化劍，命中後有機率萬劍追擊。',
       upkeep: '只在鬥法攻擊命中時判定。',
       warning: '本丹沒有額外修為效果。',
-      note: '9 品 10%；1 品 50%。',
+      note: '一念萬劍生。初成時偶爾只聽見腦中「鏘」的一聲，但本人通常會堅稱萬劍只是尚未抵達。',
       resolve() { return {}; }
     }
   ];
@@ -217,9 +217,9 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     const core = starterCore();
     return {
       announced: false,
-      // core 是洗髓後目前正在查看／準備裝配的候選丹。
+      // core 是洗髓後目前正在查看／準備調御的候選丹相。
       core,
-      // equippedCore 才是真正作用中的金丹；洗髓不會把它清掉。
+      // equippedCore 才是目前真正調御、正在作用中的本命金丹；洗髓不會把它清掉。
       equippedCore: { ...core },
       equipped: true,
       counters: { correct: 0, mistakes: 0 },
@@ -376,7 +376,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
           </div>
 
           <button id="equip-current-core" type="button" class="core-equip-btn ${state.equipped ? 'equipped' : ''}" ${state.equipped || busy ? 'disabled' : ''}>
-            ${state.equipped ? '<i class="fa-solid fa-circle-check"></i> 已裝配此金丹' : '<i class="fa-solid fa-circle-dot"></i> 裝配此金丹'}
+            ${state.equipped ? '<i class="fa-solid fa-circle-check"></i> 已調御此丹相' : '<i class="fa-solid fa-circle-dot"></i> 調御此丹相'}
           </button>
         </div>
       </section>
@@ -390,7 +390,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
         <section class="training-v3-empty">
           <i class="fa-solid fa-box-open"></i>
           <h3>背包尚空</h3>
-          <p>金丹屬於丹田本命之物，不會放入背包。</p>
+          <p>金丹由修士自身靈田／丹田凝聚，屬於本命之物，不會放入背包。</p>
         </section>
       `;
     }
@@ -499,6 +499,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     modalShell('training-v3-detail-modal', `${core.grade} 品 · ${type.name}`, `
       <div class="training-v3-detail-top">${coreVisualMarkup(core, false)}</div>
       <div class="training-v3-lore">
+        <div><span>本命丹源</span><p>此丹並非外來丹藥，而是修士在自身靈田／丹田中凝聚，並可透過洗髓重塑丹性與品級的本命金丹。</p></div>
         <div><span>特性效果</span><p>${type.effect(core.grade)}</p></div>
         <div><span>神通</span><p>${type.ability}</p></div>
         <div><span>修煉代價</span><p>${type.upkeep}</p></div>
@@ -573,14 +574,14 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     renderTrainingPage();
     try {
       await persistRemote();
-      toast(`已裝配：${state.core.grade} 品 ${coreType(state.core.type).name}`);
+      toast(`已調御丹相：${state.core.grade} 品 ${coreType(state.core.type).name}`);
       window.dispatchEvent(new CustomEvent('golden-core-equipped-changed'));
     } catch (error) {
       console.error('Equip golden core failed:', error);
       state.equippedCore = previousEquippedCore;
       state.equipped = false;
       saveLocal();
-      toast('裝配失敗，請稍後再試。');
+      toast('調御失敗，請稍後再試。');
     } finally {
       busy = false;
       renderTrainingPage();
@@ -637,7 +638,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     };
   };
 
-  // 候選丹：供金丹頁與「品質下降警告」使用。
+  // 候選丹相：供金丹頁與「品質下降警告」使用。
   window.getGoldenCoreState = function () {
     if (!isUnlocked()) return null;
     const type = coreType(state.core.type);
@@ -651,7 +652,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     };
   };
 
-  // 真正裝備中的丹：狀態頁、修為效果與鬥法只能讀這一份。
+  // 真正調御中的本命金丹：狀態頁、修為效果與鬥法只能讀這一份。
   window.getEquippedGoldenCoreState = function () {
     if (!isUnlocked() || !state.equippedCore) return null;
     const core = state.equippedCore;
