@@ -57,3 +57,22 @@ test('full Dongtian implementation and API remain wired behind the launcher', ()
   assert.match(server, /registerDongtianApi\(app\)/);
 });
 ''')
+
+# 4) Existing bootstrap tests must allow the cache-busted main URL and the safe DOM-only launcher.
+paths_test = Path('tests/browser-module-paths.test.cjs')
+paths = paths_test.read_text()
+paths = paths.replace(
+    "  assert.match(index, /<script type=\"module\" src=\"main\\.js\"><\\/script>/);",
+    "  assert.match(index, /<script type=\"module\" src=\"main\\.js(?:\\?[^\"]+)?\"><\\/script>/);",
+    1
+)
+paths_test.write_text(paths)
+
+gates_test = Path('tests/progression-gates.test.cjs')
+gates = gates_test.read_text()
+gates = gates.replace(
+    "  assert.deepEqual(staticImports, [\"import './main-legacy.js';\"]);",
+    "  assert.deepEqual(staticImports, [\"import './main-legacy.js';\", \"import './cultivation/dongtian-entry.js';\"]);\n  const dongtianEntry = read('dongtian-entry.js');\n  assert.doesNotMatch(dongtianEntry, /firebasejs|firebase-firestore|getFirestore|getAuth/);",
+    1
+)
+gates_test.write_text(gates)
