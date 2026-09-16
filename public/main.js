@@ -8,6 +8,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/xiuxian-live-sync.js',
   './cultivation/five-immortals.js',
   './cultivation/cultivation-progression-v2.js',
+  './cultivation/cultivation-inventory.js',
   './cultivation/golden-core-access-guard.js',
   './cultivation/foundation-training-page.js',
   './cultivation/cultivation-training-v4.js',
