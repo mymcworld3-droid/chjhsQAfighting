@@ -1,0 +1,224 @@
+name: Harden Battle v2 races
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/battle-v2-race-trigger'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Harden matchmaking races
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('public/cultivation/battle-mode-v2.js')
+          s = p.read_text()
+
+          old = """      tx.update(targetRef, {
+        guest: myData,
+        status: 'playing',
+        matchedAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });"""
+          new = """      tx.update(targetRef, {
+        guest: myData,
+        status: 'playing',
+        matchedAt: serverTimestamp(),
+        // 第一題從真正配對成功才開始計時，不能把房主等待對手的時間算進去。
+        roundStartedAt: serverTimestamp(),
+        roundStartedAtMs: nowMs(),
+        'host.answerChoice': null,
+        'host.answerCorrect': null,
+        'host.answerAt': null,
+        'host.answerClientAt': null,
+        'host.answerRound': null,
+        'host.timedOut': false,
+        updatedAt: serverTimestamp()
+      });"""
+          if old not in s: raise SystemExit('claim block not found')
+          s = s.replace(old, new, 1)
+
+          old = """      .sort((a, b) => {
+        const at = timestampMs(a.data().createdAt, Number(a.data().createdAtMs) || 0);
+        const bt = timestampMs(b.data().createdAt, Number(b.data().createdAtMs) || 0);
+        return at - bt || a.id.localeCompare(b.id);
+      });"""
+          new = """      .sort((a, b) => {
+        // 優先配到修為較接近的對手；差距相同時再選等待較久的房間。
+        const aGap = Math.abs((Number(a.data().host?.totalScore) || 0) - (Number(myData.totalScore) || 0));
+        const bGap = Math.abs((Number(b.data().host?.totalScore) || 0) - (Number(myData.totalScore) || 0));
+        const at = timestampMs(a.data().createdAt, Number(a.data().createdAtMs) || 0);
+        const bt = timestampMs(b.data().createdAt, Number(b.data().createdAtMs) || 0);
+        return aGap - bGap || at - bt || a.id.localeCompare(b.id);
+      });"""
+          if old not in s: raise SystemExit('candidate sort block not found')
+          s = s.replace(old, new, 1)
+
+          old = """      if (!smaller) return;
+      if (!(await claimWaitingRoom(smaller.ref, myData))) return;
+
+      detachRoomListener();
+      try { await deleteDoc(roomRef(ownId)); } catch (_) {}
+      state.roomId = smaller.id;
+      state.role = 'guest';
+      state.localCreatedRoomId = null;
+      subscribeRoom(smaller.id);"""
+          new = """      if (!smaller) return;
+
+      // 同一筆 transaction 同時確認「自己的房還沒被加入」與「目標房仍可加入」。
+      // 如此不會在對手剛加入自己的房間時，又把自己的房間刪掉造成幽靈戰局。
+      let merged = false;
+      await runTransaction(db(), async (tx) => {
+        const ownRef = roomRef(ownId);
+        const [ownSnap, targetSnap] = await Promise.all([tx.get(ownRef), tx.get(smaller.ref)]);
+        if (!ownSnap.exists() || !targetSnap.exists()) return;
+        const ownRoom = ownSnap.data();
+        const targetRoom = targetSnap.data();
+        if (ownRoom.status !== 'waiting' || ownRoom.guest || ownRoom.host?.uid !== myData.uid) return;
+        if (targetRoom.status !== 'waiting' || targetRoom.guest || targetRoom.host?.uid === myData.uid) return;
+        if (Number(targetRoom.modeVersion) !== BATTLE_V2.modeVersion || isRoomStale(targetRoom)) return;
+        tx.update(smaller.ref, {
+          guest: myData,
+          status: 'playing',
+          matchedAt: serverTimestamp(),
+          roundStartedAt: serverTimestamp(),
+          roundStartedAtMs: nowMs(),
+          'host.answerChoice': null,
+          'host.answerCorrect': null,
+          'host.answerAt': null,
+          'host.answerClientAt': null,
+          'host.answerRound': null,
+          'host.timedOut': false,
+          updatedAt: serverTimestamp()
+        });
+        tx.delete(ownRef);
+        merged = true;
+      });
+      if (!merged) return;
+
+      detachRoomListener();
+      state.roomId = smaller.id;
+      state.role = 'guest';
+      state.localCreatedRoomId = null;
+      subscribeRoom(smaller.id);"""
+          if old not in s: raise SystemExit('reconcile block not found')
+          s = s.replace(old, new, 1)
+
+          old = """  function answerObject(player, round) {
+    if (!player || Number(player.answerRound) !== Number(round) || typeof player.answerCorrect !== 'boolean') return null;
+    const at = timestampMs(player.answerAt, Number(player.answerClientAt) || 0);
+    return {
+      correct: player.answerCorrect,
+      atMs: at || Number.MAX_SAFE_INTEGER,
+      choice: player.answerChoice,
+      timedOut: !!player.timedOut
+    };
+  }"""
+          new = """  function answerObject(player, round) {
+    if (!player || Number(player.answerRound) !== Number(round) || typeof player.answerCorrect !== 'boolean') return null;
+    // 勝負速度只採 Firestore serverTimestamp；client 時鐘不能決定誰比較快。
+    const at = timestampMs(player.answerAt, 0);
+    if (!at) return null;
+    return {
+      correct: player.answerCorrect,
+      atMs: at,
+      choice: player.answerChoice,
+      timedOut: !!player.timedOut
+    };
+  }"""
+          if old not in s: raise SystemExit('answerObject block not found')
+          s = s.replace(old, new, 1)
+
+          old = """  async function forfeitCurrentRoom() {
+    if (!state.roomId || !state.role || !state.room) return;
+    const ref = roomRef();
+    const room = state.room;
+    try {
+      if (room.status === 'waiting' && state.role === 'host') {
+        await deleteDoc(ref);
+        return;
+      }
+      if (!['playing', 'settled', 'preparing'].includes(room.status)) return;
+      await runTransaction(db(), async (tx) => {
+        const snap = await tx.get(ref);
+        if (!snap.exists()) return;
+        const fresh = snap.data();
+        if (!['playing', 'settled', 'preparing'].includes(fresh.status)) return;
+        const opponent = playerForRole(fresh, otherRole(state.role));
+        tx.update(ref, {
+          status: 'finished',
+          winner: opponent?.uid || 'draw',
+          finishReason: 'forfeit',
+          finishedAt: serverTimestamp(),
+          updatedAt: serverTimestamp()
+        });
+      });
+    } catch (error) {
+      console.warn('[Battle v2] leave-room update skipped:', error);
+    }
+  }"""
+          new = """  async function forfeitCurrentRoom() {
+    if (!state.roomId || !state.role || !state.room) return;
+    const ref = roomRef();
+    try {
+      // 不相信本地 snapshot 的 waiting/playing 狀態；離開當下重新在 transaction 讀一次。
+      await runTransaction(db(), async (tx) => {
+        const snap = await tx.get(ref);
+        if (!snap.exists()) return;
+        const fresh = snap.data();
+        if (fresh.status === 'waiting' && state.role === 'host' && !fresh.guest) {
+          tx.delete(ref);
+          return;
+        }
+        if (!['playing', 'settled', 'preparing'].includes(fresh.status)) return;
+        const actualRole = fresh.host?.uid === me()?.uid ? 'host' : fresh.guest?.uid === me()?.uid ? 'guest' : state.role;
+        const opponent = playerForRole(fresh, otherRole(actualRole));
+        tx.update(ref, {
+          status: 'finished',
+          winner: opponent?.uid || 'draw',
+          finishReason: 'forfeit',
+          finishedAt: serverTimestamp(),
+          updatedAt: serverTimestamp()
+        });
+      });
+    } catch (error) {
+      console.warn('[Battle v2] leave-room update skipped:', error);
+    }
+  }"""
+          if old not in s: raise SystemExit('forfeit block not found')
+          s = s.replace(old, new, 1)
+
+          p.write_text(s)
+
+          t = Path('tests/battle-v2.test.cjs')
+          ts = t.read_text()
+          marker = "  assert.match(battleSource, /reconcileOwnWaitingRoom/);"
+          replacement = """  assert.match(battleSource, /reconcileOwnWaitingRoom/);
+  assert.match(battleSource, /tx\\.delete\\(ownRef\\)/);
+  assert.match(battleSource, /aGap - bGap/);
+  assert.match(battleSource, /第一題從真正配對成功才開始計時/);"""
+          if marker not in ts: raise SystemExit('test marker not found')
+          ts = ts.replace(marker, replacement, 1)
+          marker2 = "  assert.match(battleSource, /serverTimestamp\\(\\)/);"
+          replacement2 = """  assert.match(battleSource, /serverTimestamp\\(\\)/);
+  assert.match(battleSource, /client 時鐘不能決定誰比較快/);"""
+          ts = ts.replace(marker2, replacement2, 1)
+          t.write_text(ts)
+      - name: Run tests
+        run: npm test
+      - name: Commit hardened Battle v2
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/cultivation/battle-mode-v2.js tests/battle-v2.test.cjs
+          git diff --cached --quiet || git commit -m "fix: harden Battle v2 matchmaking races"
+          git push
