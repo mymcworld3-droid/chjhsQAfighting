@@ -28,10 +28,25 @@ export function applyCultivationReward(stats, isCorrect) {
     }
   }
 
-  // 額外修為只能來自金丹；一般連勝本身不再提供任何修為加成。
+  // 額外修為可來自金丹；一般連勝本身不再提供任何修為加成。
   const bonusGain = isCorrect ? Math.max(0, Number(goldenCoreEffect.bonusGain) || 0) : 0;
   const baseGain = isCorrect ? (isGoldenCoreOrAbove ? GOLDEN_CORE_GAIN : PRE_GOLDEN_CORE_GAIN) : 0;
-  const gain = baseGain + bonusGain;
+  const preArtifactGain = baseGain + bonusGain;
+
+  // 法寶倍率作用在「本次實際可獲得的全部修為」上，因此也會包含金丹額外修為。
+  let artifactEffect = { gain: preArtifactGain, bonusGain: 0, multiplier: 1, message: '' };
+  if (isCorrect && typeof window.applyArtifactCultivationGain === 'function') {
+    try {
+      artifactEffect = {
+        ...artifactEffect,
+        ...(window.applyArtifactCultivationGain(preArtifactGain) || {})
+      };
+    } catch (error) {
+      console.warn('Artifact cultivation reward effect skipped:', error);
+    }
+  }
+  const gain = isCorrect ? Math.max(0, Number(artifactEffect.gain) || preArtifactGain) : 0;
+  const artifactBonusGain = isCorrect ? Math.max(0, gain - preArtifactGain) : 0;
   const goldenCoreMindReady = !!goldenCoreEffect.forceShield;
 
   // 已有金丹道心，或本次答錯當下由金丹凝聚出的道心，都能擋下這一次 -1。
@@ -58,6 +73,9 @@ export function applyCultivationReward(stats, isCorrect) {
     gain,
     baseGain,
     bonusGain,
+    artifactBonusGain,
+    artifactMultiplier: Number(artifactEffect.multiplier) || 1,
+    artifactMessage: artifactEffect.message || '',
     penalty,
     isGoldenCoreOrAbove,
     goldenCoreMindReady,
@@ -92,6 +110,7 @@ export function showCultivationFeedback(reward, isCorrect) {
     const extras = [];
     if (reward.goldenCoreMindReady) extras.push('金丹道心凝聚');
     if (reward.goldenCoreMessage) extras.push(reward.goldenCoreMessage);
+    if (reward.artifactMessage) extras.push(reward.artifactMessage);
     showToast(`悟道成功！修為 +${reward.gain}${extras.length ? `，${extras.join('；')}` : ''}`);
     return;
   }
