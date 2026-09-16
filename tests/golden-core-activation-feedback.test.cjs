@@ -7,11 +7,13 @@ function read(rel) {
   return fs.readFileSync(path.join(__dirname, '..', rel), 'utf8');
 }
 
-test('Golden Core activation feedback module is loaded and exposes a queued banner', () => {
-  const rules = read('public/cultivation/cultivation-rules.js');
+test('Golden Core activation feedback module is loaded before reward rules and exposes a queued banner', () => {
+  const main = read('public/main.js');
   const feedback = read('public/cultivation/golden-core-activation-feedback.js');
 
-  assert.match(rules, /import '\.\/golden-core-activation-feedback\.js';/);
+  const feedbackIndex = main.indexOf('./cultivation/golden-core-activation-feedback.js');
+  const rulesIndex = main.indexOf('./cultivation/cultivation-rules.js');
+  assert.ok(feedbackIndex >= 0 && rulesIndex >= 0 && feedbackIndex < rulesIndex);
   assert.match(feedback, /window\.showGoldenCoreActivation\s*=\s*function/);
   assert.match(feedback, /金丹神通發動/);
   assert.match(feedback, /const queue = \[\]/);
