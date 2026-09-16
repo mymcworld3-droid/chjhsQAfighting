@@ -136,7 +136,7 @@ test('each new quiz awards once, including a repeated question', async () => {
   assert.equal(h.nodes.get('xiuxian-progress').style.width, '80%');
 });
 
-test('wrong and skipped answers preserve cultivation and reset the streak', async () => {
+test('wrong and skipped answers preserve cultivation below Golden Core and reset the streak', async () => {
   const h = setup(25);
   h.context.currentUserData.stats.currentStreak = 4;
   h.context.currentUserData.stats.cultivationShield = true;
@@ -164,11 +164,34 @@ test('ordinary streaks never create Dao-heart shields or bonus cultivation', asy
   assert.equal(h.context.currentUserData.stats.goldenCoreShield, undefined);
 });
 
+test('Golden Core realm changes base cultivation to +2 correct and -1 wrong', async () => {
+  const h = setup(119);
+
+  await h.answer();
+  assert.equal(h.context.currentUserData.stats.totalScore, 120);
+
+  h.newQuiz();
+  await h.answer();
+  assert.equal(h.context.currentUserData.stats.totalScore, 122);
+
+  h.newQuiz();
+  await h.answer(1, 0);
+  assert.equal(h.context.currentUserData.stats.totalScore, 121);
+
+  h.newQuiz();
+  await h.answer(-1, -2);
+  assert.equal(h.context.currentUserData.stats.totalScore, 120);
+
+  h.newQuiz();
+  await h.answer(1, 0);
+  assert.equal(h.context.currentUserData.stats.totalScore, 119);
+});
+
 test('Golden Core alone may create its own Dao-heart state and cultivation bonus', async () => {
   const h = setup(120);
   h.context.window.resolveGoldenCoreCultivationReward = () => ({ bonusGain: 2, forceShield: true, message: '金丹生效' });
   await h.answer();
-  assert.equal(h.context.currentUserData.stats.totalScore, 123);
+  assert.equal(h.context.currentUserData.stats.totalScore, 124);
   assert.equal(h.context.currentUserData.stats.goldenCoreShield, true);
   assert.equal(Object.prototype.hasOwnProperty.call(h.context.currentUserData.stats, 'cultivationShield'), false);
 });
@@ -184,10 +207,10 @@ test('legacy missing or string scores become numeric cultivation totals', async 
 });
 
 
-test('wrong-answer Golden Core effect may directly form Golden Core Dao-heart', async () => {
+test('wrong-answer Golden Core effect may directly form Golden Core Dao-heart while applying the miss penalty', async () => {
   const h = setup(120);
   h.context.window.resolveGoldenCoreCultivationReward = () => ({ forceShield: true, message: '清心護體' });
   await h.answer(1, 0);
-  assert.equal(h.context.currentUserData.stats.totalScore, 120);
+  assert.equal(h.context.currentUserData.stats.totalScore, 119);
   assert.equal(h.context.currentUserData.stats.goldenCoreShield, true);
 });
