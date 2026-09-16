@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
-const { GoogleGenerativeAI } = require('@google/generative-ai');
+const aiRouter = require('./ai-router');
 require('dotenv').config();
 
 const app = express();
@@ -12,16 +12,19 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ⭐ 初始化 Gemini 2.5 模型 (保留用於生成文字)
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ 
-    model: "gemini-3.5-flash-lite", 
-    generationConfig: { responseMimeType: "application/json" }
-});
-
 // 根目錄路由
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// 僅回傳已配置 provider 的名稱與模型，不暴露 API key。
+app.get('/api/ai-status', (req, res) => {
+    const providers = aiRouter.getStatus();
+    res.json({
+        strategy: process.env.AI_PROVIDER_STRATEGY || 'round-robin',
+        count: providers.length,
+        providers
+    });
 });
 
 // ==========================================
@@ -38,11 +41,8 @@ app.post('/api/analyze-subjects', async (req, res) => {
             要求：統一用繁體中文正式名稱，回傳純 JSON { "subjects": "科目A, 科目B" }。
         `;
 
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        let jsonText = response.text().replace(/```json/g, '').replace(/```/g, '').trim();
-        const parsed = JSON.parse(jsonText);
-        res.json({ subjects: parsed.subjects });
+        const routed = await aiRouter.generateJSON(prompt);
+        res.json({ subjects: routed.data.subjects, provider: routed.provider });
 
     } catch (error) {
         console.error("Analyze Error:", error);
@@ -220,7 +220,7 @@ app.post('/api/generate-quiz', async (req, res) => {
 
     const generationPrompt = `
         [系統指令]
-        你是由 Google 開發的 AI 教育專家，請生成一道高品質的「單選題」。
+        你是一名 AI 教育專家，請生成一道高品質的「單選題」。
         題目有需要換行時可以打\n。
         
         [出題規格]
@@ -252,20 +252,12 @@ app.post('/api/generate-quiz', async (req, res) => {
     while (attempts < maxAttempts) {
         try {
             console.log(`[Gen] ${subject} > ${targetTopic} (${difficulty}) - 嘗試 ${attempts + 1}`); 
-            const genResult = await model.generateContent(generationPrompt);
-            const rawText = genResult.response.text();
-            
-            // 使用正則表達式，安全提取大括號內的 JSON 內容
-            const jsonMatch = rawText.match(/\{[\s\S]*\}/);
-            if (!jsonMatch) {
-                throw new Error("AI 回應中未找到 JSON 結構");
-            }
-            
-            const parsed = JSON.parse(jsonMatch[0]);
+            const routed = await aiRouter.generateJSON(generationPrompt);
+            const parsed = routed.data;
             if(!parsed.sub_topic) parsed.sub_topic = targetTopic;
             if(!parsed.subject) parsed.subject = subject;
 
-            return res.json({ text: JSON.stringify(parsed) });
+            return res.json({ text: JSON.stringify(parsed), provider: routed.provider });
 
         } catch (error) {
             console.error(`Attempt ${attempts + 1} failed:`, error.message);
@@ -303,10 +295,8 @@ app.post('/api/verify-report', async (req, res) => {
     `;
 
     try {
-        const result = await model.generateContent(prompt);
-        const responseText = result.response.text().replace(/```json/g, '').replace(/```/g, '').trim();
-        const json = JSON.parse(responseText);
-        res.json(json);
+        const routed = await aiRouter.generateJSON(prompt);
+        res.json({ ...routed.data, provider: routed.provider });
     } catch (error) {
         console.error("Report Verification Error:", error);
         // 若 AI 發生錯誤，保守起見設為無效，並請玩家稍後再試
