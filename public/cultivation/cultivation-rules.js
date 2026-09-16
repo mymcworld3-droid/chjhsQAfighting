@@ -25,11 +25,14 @@ export function applyCultivationReward(stats, isCorrect) {
   // 額外修為只能來自金丹；一般連勝本身不再提供任何修為加成。
   const bonusGain = isCorrect ? Math.max(0, Number(goldenCoreEffect.bonusGain) || 0) : 0;
   const gain = isCorrect ? CULTIVATION_GAIN + bonusGain : 0;
-  const goldenCoreMindReady = isCorrect && !!goldenCoreEffect.forceShield;
+  const goldenCoreMindReady = !!goldenCoreEffect.forceShield;
 
   if (isCorrect) {
     stats.totalScore += gain;
     if (goldenCoreMindReady) stats.goldenCoreShield = true;
+  } else if (goldenCoreMindReady) {
+    // 部分金丹（例如無垢清心丹）可在答錯時直接凝聚金丹道心。
+    stats.goldenCoreShield = true;
   } else {
     stats.goldenCoreShield = !!goldenCoreEffect.preserveShield && !!stats.goldenCoreShield;
   }
@@ -38,7 +41,7 @@ export function applyCultivationReward(stats, isCorrect) {
     gain,
     bonusGain,
     goldenCoreMindReady,
-    preservedGoldenCoreMind: !isCorrect && !!goldenCoreEffect.preserveShield && !!stats.goldenCoreShield,
+    preservedGoldenCoreMind: !isCorrect && !goldenCoreMindReady && !!goldenCoreEffect.preserveShield && !!stats.goldenCoreShield,
     goldenCoreMessage: goldenCoreEffect.message || ''
   };
 }
@@ -49,6 +52,11 @@ export function showCultivationFeedback(reward, isCorrect) {
     if (reward.goldenCoreMindReady) extras.push('金丹道心凝聚');
     if (reward.goldenCoreMessage) extras.push(reward.goldenCoreMessage);
     showToast(`悟道成功！修為 +${reward.gain}${extras.length ? `，${extras.join('；')}` : ''}`);
+    return;
+  }
+
+  if (reward.goldenCoreMindReady) {
+    showToast(`本次失誤，修為不減；${reward.goldenCoreMessage || '金丹道心護體成形'}`);
     return;
   }
 
