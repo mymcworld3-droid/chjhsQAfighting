@@ -64,13 +64,13 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       note: '凡人期先靠問道累積修為，一步一步往築基前進。'
     },
     {
-      page: 'page-settings', target: '#set-source-mode', kicker: '第九步 · 範圍選擇', title: '決定題目從哪裡來',
-      body: '在洞府的「出題模式」可以控制範圍：<strong>綜合題目</strong>適合日常練習；<strong>指定題庫</strong>可以鎖定特定題庫；<strong>專注練習</strong>只練你挑選的內容。',
+      page: 'page-settings', target: '#set-source-mode', settingsSection: 'scope', kicker: '第九步 · 範圍選擇', title: '展開「範圍設定」決定題目從哪裡來',
+      body: '洞府現在把出題來源獨立放在可收合的<strong>範圍設定</strong>。展開後可選：<strong>綜合題目</strong>、<strong>指定題庫</strong>或<strong>專注練習</strong>。',
       note: '考前複習建議使用指定題庫或專注練習。'
     },
     {
-      page: 'page-settings', target: '#set-difficulty', kicker: '第十步 · 難度', title: '再選擇題目難度',
-      body: '難度可以交給 AI AUTO 自動調整，也可以固定為簡單、中等或困難。範圍決定「考什麼」，難度決定「考多深」。',
+      page: 'page-settings', target: '#set-difficulty', settingsSection: 'profile', kicker: '第十步 · 難度', title: '展開「個人資料」調整難度',
+      body: '洞府的<strong>個人資料</strong>收合區保留程度、強弱科與難度設定。難度可以交給 AI AUTO 自動調整，也可以固定為簡單、中等或困難。',
       note: '剛開始可以先使用 AUTO 或中等。'
     },
     {
@@ -250,6 +250,9 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     if(!active) return;
     const step=steps[index];
     navigate(step.page);
+    if (step.settingsSection && typeof window.openDongfuSettingsSection === 'function') {
+      window.openDongfuSettingsSection(step.settingsSection, { scroll: false, persist: false });
+    }
     if (step.demo) installExampleQuiz(); else cleanupExampleQuiz();
     let layer=document.getElementById('newbie-tutorial-layer');
     if(!layer){ layer=document.createElement('div'); layer.id='newbie-tutorial-layer'; layer.innerHTML='<div class="newbie-tutorial-dim"></div><div class="newbie-tutorial-spotlight"></div><section class="newbie-tutorial-card"></section>'; document.body.appendChild(layer); }
