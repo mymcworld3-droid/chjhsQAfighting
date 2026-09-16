@@ -7,7 +7,7 @@ function read(rel) {
   return fs.readFileSync(path.join(__dirname, '..', rel), 'utf8');
 }
 
-test('training navigation resets the actual main scroll container', () => {
+test('training navigation resets the actual main scroll container before locking the page', () => {
   const main = read('public/main.js');
   const guard = read('public/cultivation/training-scroll-fix.js');
 
@@ -19,12 +19,16 @@ test('training navigation resets the actual main scroll container', () => {
   assert.match(guard, /#nav-training, \[data-target="page-training"\]/);
 });
 
-test('compact training layout never traps or clips overflow', () => {
+test('training page is one non-scrollable viewport without clipping its core controls', () => {
   const css = read('public/styles/cultivation-training-compact.css');
 
-  assert.match(css, /main:has\(#page-training\.active-page\)[\s\S]*overflow-y: auto !important/);
-  assert.doesNotMatch(css, /main:has\(#page-training\.active-page\)[\s\S]{0,180}overflow-y: hidden !important/);
-  assert.match(css, /\.training-page-v3 \{[\s\S]*height: auto;[\s\S]*overflow: visible;/);
-  assert.match(css, /#training-tab-content \{[\s\S]*height: auto;[\s\S]*overflow: visible;/);
-  assert.match(css, /\.core-minimal-card \{[\s\S]*height: auto;[\s\S]*overflow: visible;/);
+  assert.match(css, /main:has\(#page-training\.active-page\)[\s\S]*overflow-y: hidden !important/);
+  assert.match(css, /--training-viewport-height: calc\(100dvh - 11rem/);
+  assert.match(css, /\.training-page-v3 \{[\s\S]*height: var\(--training-viewport-height\);[\s\S]*overflow: hidden;/);
+  assert.match(css, /\.training-page-v3\.active-page \{[\s\S]*grid-template-rows: auto minmax\(0, 1fr\)/);
+  assert.match(css, /#training-tab-content \{[\s\S]*height: 100%;[\s\S]*overflow: hidden;/);
+  assert.match(css, /\.core-minimal-center \{[\s\S]*grid-template-rows: minmax\(0, 1fr\) auto auto auto auto/);
+  assert.match(css, /\.golden-core-stage-v3 \{[\s\S]*height: min\(100%, 220px\)/);
+  assert.match(css, /@media \(max-height: 590px\)/);
+  assert.match(css, /\.core-wash-btn,[\s\S]*\.core-equip-btn,[\s\S]*\.core-info-btn[\s\S]*height: 30px/);
 });
