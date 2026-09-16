@@ -31,15 +31,17 @@ test('login core is isolated from optional cultivation module failures', () => {
   assert.match(main, /\.\/cultivation\/cultivation-theme\.js/);
 });
 
-test('Foundation opens training at 60 with backpack only while Golden Core waits for 300', () => {
+test('Foundation opens training at 60 with backpack only while Golden Core waits for 120', () => {
   assert.match(progression, /const FOUNDATION_SCORE = 60;/);
+  assert.match(progression, /const GOLDEN_CORE_SCORE = 120;/);
   assert.match(guard, /const FOUNDATION_SCORE = 60;/);
-  assert.match(guard, /const GOLDEN_CORE_SCORE = 300;/);
+  assert.match(guard, /const GOLDEN_CORE_SCORE = 120;/);
   assert.match(guard, /migrationReady\(\) && score\(\) >= FOUNDATION_SCORE/);
   assert.match(guard, /migrationReady\(\) && score\(\) >= GOLDEN_CORE_SCORE/);
   assert.match(guard, /\[data-training-tab="core"\]/);
   assert.match(guard, /#training-status-tab/);
 
+  assert.match(foundationTraining, /const GOLDEN_CORE_SCORE = 120;/);
   assert.match(foundationTraining, /value >= FOUNDATION_SCORE && value < GOLDEN_CORE_SCORE/);
   assert.match(foundationTraining, /data-training-tab="bag"/);
   assert.doesNotMatch(foundationTraining, /data-training-tab="core"/);
@@ -54,8 +56,8 @@ test('Foundation opens training at 60 with backpack only while Golden Core waits
     'migration, shared inventory, guard, Foundation page and full Golden Core UI load in order');
 });
 
-test('Golden Core UI and effects remain gated behind migration and 300 cultivation', () => {
-  assert.match(training, /const GOLDEN_CORE_SCORE = 300;/);
+test('Golden Core UI and effects remain gated behind migration and 120 cultivation', () => {
+  assert.match(training, /const GOLDEN_CORE_SCORE = 120;/);
   assert.match(guard, /function coreAllowed\(\)/);
   assert.match(guard, /if \(!coreAllowed\(\)\)/);
   assert.match(guard, /resolveGoldenCoreCultivationReward/);
@@ -94,7 +96,7 @@ test('multiplayer unlock remains Foundation Establishment at 60 cultivation', ()
 
 test('post-Golden-Core realm curve is consistent across active realm renderers', () => {
   const expected = [
-    ['金丹', 300], ['元嬰', 500], ['化神', 800], ['煉虛', 1200],
+    ['金丹', 120], ['元嬰', 500], ['化神', 800], ['煉虛', 1200],
     ['合體', 1800], ['大乘', 2600], ['渡劫', 3600], ['真仙', 5000]
   ];
   for (const source of [theme, liveSync, breakthrough]) {
