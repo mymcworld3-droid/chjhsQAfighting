@@ -1,0 +1,75 @@
+name: One-time Dao-heart cleanup
+
+on:
+  push:
+    paths:
+      - '.github/workflows/patch-dao-heart-cleanup.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Patch Golden Core terminology and regression tests
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          training = Path('public/cultivation/cultivation-training-v4.js')
+          text = training.read_text()
+          replacements = {
+              '即可形成道心護體。': '即可凝聚金丹道心。',
+              '凝神，道心護體成形': '凝神，金丹道心成形',
+              '保留既有道心護體。': '保留既有金丹道心。',
+              '本丹只保護道心': '本丹只守金丹道心',
+              '護住道心，護體未散': '護住金丹道心，道心未散',
+              '直接形成道心護體。': '直接凝聚金丹道心。',
+              '雷光護體': '雷光凝成金丹道心',
+              'hasShield: !!stats?.cultivationShield': 'hasShield: !!stats?.goldenCoreShield',
+          }
+          for old, new in replacements.items():
+              if old not in text:
+                  raise SystemExit(f'Missing Golden Core text: {old}')
+              text = text.replace(old, new)
+          training.write_text(text)
+
+          index = Path('public/index.html')
+          html = index.read_text()
+          if '當前道心' not in html or '最高道心' not in html:
+              raise SystemExit('Missing legacy Dao-heart labels in index.html')
+          html = html.replace('當前道心', '當前連勝').replace('最高道心', '最高連勝')
+          index.write_text(html)
+
+          tests = Path('tests/cultivation.test.cjs')
+          t = tests.read_text()
+          old1 = "  assert.equal(h.context.currentUserData.stats.cultivationShield, true);"
+          new1 = "  assert.equal(Object.prototype.hasOwnProperty.call(h.context.currentUserData.stats, 'cultivationShield'), false);\n  assert.equal(h.context.currentUserData.stats.goldenCoreShield, undefined);"
+          old2 = "  assert.equal(h.context.currentUserData.stats.cultivationShield, false);"
+          new2 = "  assert.equal(Object.prototype.hasOwnProperty.call(h.context.currentUserData.stats, 'cultivationShield'), false);\n  assert.equal(h.context.currentUserData.stats.goldenCoreShield, false);"
+          if old1 not in t or old2 not in t:
+              raise SystemExit('Missing old shield assertions')
+          t = t.replace(old1, new1, 1).replace(old2, new2, 1)
+
+          marker = "test('legacy missing or string scores become numeric cultivation totals', async () => {"
+          extra = """test('ordinary streaks never create Dao-heart shields or bonus cultivation', async () => {\n  const h = setup();\n  for (let i = 0; i < 10; i++) {\n    if (i) h.newQuiz();\n    await h.answer();\n  }\n  assert.equal(h.context.currentUserData.stats.totalScore, 10);\n  assert.equal(h.context.currentUserData.stats.currentStreak, 10);\n  assert.equal(Object.prototype.hasOwnProperty.call(h.context.currentUserData.stats, 'cultivationShield'), false);\n  assert.equal(h.context.currentUserData.stats.goldenCoreShield, undefined);\n});\n\ntest('Golden Core alone may create its own Dao-heart state and cultivation bonus', async () => {\n  const h = setup(120);\n  h.context.window.resolveGoldenCoreCultivationReward = () => ({ bonusGain: 2, forceShield: true, message: '金丹生效' });\n  await h.answer();\n  assert.equal(h.context.currentUserData.stats.totalScore, 123);\n  assert.equal(h.context.currentUserData.stats.goldenCoreShield, true);\n  assert.equal(Object.prototype.hasOwnProperty.call(h.context.currentUserData.stats, 'cultivationShield'), false);\n});\n\n"""
+          if marker not in t:
+              raise SystemExit('Missing test insertion marker')
+          t = t.replace(marker, extra + marker, 1)
+          tests.write_text(t)
+          PY
+      - name: Commit cleanup
+        run: |
+          if git diff --quiet; then
+            echo 'No changes needed.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/cultivation/cultivation-training-v4.js public/index.html tests/cultivation.test.cjs
+          git commit -m 'refactor: keep Dao-heart mechanics Golden-Core-only'
+          git push
