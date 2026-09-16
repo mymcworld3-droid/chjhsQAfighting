@@ -11,6 +11,7 @@ const theme = read('cultivation-theme.js');
 const liveSync = read('xiuxian-live-sync.js');
 const breakthrough = read('realm-breakthrough-feedback.js');
 const progression = read('cultivation-progression-v2.js');
+const inventory = read('cultivation-inventory.js');
 const guard = read('golden-core-access-guard.js');
 const foundationTraining = read('foundation-training-page.js');
 const training = read('cultivation-training-v4.js');
@@ -45,11 +46,12 @@ test('Foundation opens training at 60 with backpack only while Golden Core waits
   assert.doesNotMatch(foundationTraining, /training-status-tab/);
 
   const progressionIndex = main.indexOf("'./cultivation/cultivation-progression-v2.js'");
+  const inventoryIndex = main.indexOf("'./cultivation/cultivation-inventory.js'");
   const guardIndex = main.indexOf("'./cultivation/golden-core-access-guard.js'");
   const foundationIndex = main.indexOf("'./cultivation/foundation-training-page.js'");
   const trainingIndex = main.indexOf("'./cultivation/cultivation-training-v4.js'");
-  assert.ok(progressionIndex >= 0 && guardIndex > progressionIndex && foundationIndex > guardIndex && trainingIndex > foundationIndex,
-    'migration, guard, Foundation page and full Golden Core UI load in order');
+  assert.ok(progressionIndex >= 0 && inventoryIndex > progressionIndex && guardIndex > inventoryIndex && foundationIndex > guardIndex && trainingIndex > foundationIndex,
+    'migration, shared inventory, guard, Foundation page and full Golden Core UI load in order');
 });
 
 test('Golden Core UI and effects remain gated behind migration and 300 cultivation', () => {
@@ -65,6 +67,22 @@ test('compensation inventory rendering is idempotent and cannot self-trigger for
   assert.match(progression, /const signature = `\$\{count\}:\$\{pillBusy \? 1 : 0\}`;/);
   assert.match(progression, /existing\?\.dataset\.signature === signature/);
   assert.match(progression, /card\.dataset\.signature = signature/);
+});
+
+test('revival pill is a cultivation backpack consumable, not a Golden Core', () => {
+  assert.match(inventory, /const PILL_FIELD = 'revivalPills';/);
+  assert.match(inventory, /const PILL_GAIN = 100;/);
+  assert.match(inventory, /type: 'consumable'/);
+  assert.match(inventory, /cultivationGain: PILL_GAIN/);
+  assert.match(inventory, /training-tab-content/);
+  assert.match(inventory, /data-training-tab="bag"/);
+  assert.match(inventory, /'stats\.totalScore': newScore/);
+  assert.match(inventory, /`stats\.\$\{PILL_FIELD\}`/);
+  assert.match(inventory, /修煉 → 背包/);
+  assert.match(inventory, /#settings-inventory-grid #revival-pill-card\{display:none!important\}/);
+  assert.match(main, /cultivation\/cultivation-inventory\.js/);
+  assert.doesNotMatch(inventory, /getGoldenCoreState/);
+  assert.doesNotMatch(inventory, /cultivationTraining/);
 });
 
 test('multiplayer unlock remains Foundation Establishment at 60 cultivation', () => {
