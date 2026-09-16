@@ -41,3 +41,14 @@ test('old Five Immortals records migrate safely as zero challenge score', () => 
   assert.match(source, /Number\(owners\[id\]\?\.challengeScore\) \|\| 0/);
   assert.match(source, /owner\.challengeScore = Math\.max\(0, Number\(owner\.challengeScore\) \|\| 0\)/);
 });
+
+
+test('Five Immortals hides game instructions behind a circular info button', () => {
+  assert.match(source, /id=\"five-immortals-help\"/);
+  assert.match(source, /class=\"five-immortals-help\"/);
+  assert.match(source, /id=\"five-immortals-guide\"[\s\S]*hidden/);
+  assert.match(source, /guide\.hidden = !guide\.hidden/);
+  assert.match(source, /aria-expanded/);
+  assert.match(source, /同分不換榜/);
+  assert.match(source, /每名修士同時只能據有一席仙位/);
+});
