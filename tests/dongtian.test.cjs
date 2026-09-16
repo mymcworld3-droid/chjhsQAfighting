@@ -157,3 +157,19 @@ test('Standalone revision normalization cannot change id, subject, or difficulty
   assert.equal(revised.subject, '數學');
   assert.equal(revised.q, '修正題');
 });
+
+
+test('Question report only appears after answering, so it cannot reveal the answer early', () => {
+  const runner = uiSource.slice(uiSource.indexOf('function renderRunner'), uiSource.indexOf('function answerDongtian'));
+  const answer = uiSource.slice(uiSource.indexOf('function answerDongtian'), uiSource.indexOf('function removeModerationModal'));
+  assert.doesNotMatch(runner, /dt-report-question/);
+  assert.match(answer, /dt-report-question/);
+  assert.match(answer, /document\.getElementById\('dt-report-question'\)\.onclick = openQuestionReport/);
+});
+
+test('Completion reward transaction rechecks active status to prevent seal/reward races', () => {
+  const completion = uiSource.slice(uiSource.indexOf('async function completeProgress'), uiSource.indexOf('async function writeDongtianHistory'));
+  assert.match(completion, /const \[playSnap, indexSnap\] = await Promise\.all/);
+  assert.match(completion, /indexSnap\.data\(\)\?\.status !== 'active'/);
+  assert.match(completion, /洞天已封印，本次不進行通關結算/);
+});
