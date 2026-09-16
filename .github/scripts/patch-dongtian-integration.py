@@ -35,7 +35,46 @@ if "window.renderDongtianHistoryLog(log, time)" not in legacy:
     legacy = legacy.replace(needle, replacement, 1)
 legacy_path.write_text(legacy)
 
-# Extend regression coverage to integration wiring.
+# public/cultivation/dongtian.js: do not persist raw source text and make subject-family matching robust.
+ui_path = Path('public/cultivation/dongtian.js')
+ui = ui_path.read_text()
+ui = ui.replace(
+    "      ...metadata,\n      sourceText: String(sourceText || '').slice(0, 16000),\n      questions: generated.questions",
+    "      ...metadata,\n      questions: generated.questions",
+    1
+)
+ui = ui.replace(
+    "const snap = await getDocs(query(collection(db, INDEX_COLLECTION), where('ownerUid', '==', uid()), limit(80)));",
+    "const snap = await getDocs(query(collection(db, INDEX_COLLECTION), where('ownerUid', '==', uid())));",
+    1
+)
+old_match = """  function subjectMatches(caveSubject, practiceSubjects) {
+    if (!caveSubject || caveSubject === '綜合') return true;
+    if (practiceSubjects.includes('綜合')) return true;
+    return practiceSubjects.includes(caveSubject);
+  }
+"""
+new_match = """  function subjectFamily(subject) {
+    const value = String(subject || '').trim();
+    if (['自然', '生物理化', '物理', '化學', '生物'].includes(value)) return '自然';
+    if (['社會', '歷史地理公民', '歷史', '地理', '公民'].includes(value)) return '社會';
+    return value;
+  }
+
+  function subjectMatches(caveSubject, practiceSubjects) {
+    if (!caveSubject || caveSubject === '綜合') return true;
+    if (practiceSubjects.includes('綜合')) return true;
+    const caveFamily = subjectFamily(caveSubject);
+    return practiceSubjects.some((subject) => subject === caveSubject || subjectFamily(subject) === caveFamily);
+  }
+"""
+if old_match in ui:
+    ui = ui.replace(old_match, new_match, 1)
+elif "function subjectFamily(subject)" not in ui:
+    raise SystemExit('Dongtian subject matching marker not found')
+ui_path.write_text(ui)
+
+# Extend regression coverage to integration wiring and privacy/pool behavior.
 test_path = Path('tests/dongtian.test.cjs')
 test = test_path.read_text()
 if "const serverSource = readFileSync" not in test:
@@ -53,6 +92,24 @@ test('Dongtian is wired into server, feature loading, and grouped history', () =
   assert.match(mainSource, /'\.\/cultivation\/dongtian\.js'/);
   assert.match(legacySource, /log\.mode === 'dongtian'/);
   assert.match(legacySource, /window\.renderDongtianHistoryLog\(log, time\)/);
+});
+'''
+if "Dongtian does not persist raw creator source material" not in test:
+    test += r'''
+
+test('Dongtian does not persist raw creator source material and owner library has no artificial cap', () => {
+  const saveBlock = uiSource.slice(uiSource.indexOf('async function saveGeneratedDongtian'), uiSource.indexOf('async function loadOwnDongtians'));
+  assert.doesNotMatch(saveBlock, /sourceText:/);
+  assert.match(uiSource, /where\('ownerUid', '==', uid\(\)\)\)\)/);
+  assert.doesNotMatch(uiSource, /where\('ownerUid', '==', uid\(\)\), limit\(80\)/);
+});
+
+test('Dongtian subject matching understands grouped school subjects', () => {
+  assert.match(uiSource, /function subjectFamily/);
+  assert.match(uiSource, /'生物理化'/);
+  assert.match(uiSource, /'自然'/);
+  assert.match(uiSource, /'歷史地理公民'/);
+  assert.match(uiSource, /subjectFamily\(subject\) === caveFamily/);
 });
 '''
 test_path.write_text(test)
