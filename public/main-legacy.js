@@ -2382,6 +2382,7 @@ async function acceptInvite(inviteId, roomId, toastElement) {
         uid: auth.currentUser.uid,
         name: currentUserData.displayName || "Player",
         equipped: currentUserData.equipped || { frame: '', avatar: '' },
+        goldenCore: window.getEquippedGoldenCoreBattleSnapshot?.() || null,
         rankLevel: currentUserData.stats?.rankLevel || 0,
         done: false,
         answerCorrect: null,
@@ -2984,10 +2985,34 @@ async function resolveRoundLogic(roomId, room) {
             const defender = attackerRole === 'host' ? g : h;
             if (defender.hp <= 0 || attacker.hp <= 0) continue;
             if (attacker.answerCorrect) {
-                const damage = Math.max(1, attacker.atk);
-                defender.hp = Math.max(0, defender.hp - damage);
+                const baseDamage = Math.max(1, attacker.atk);
+                const attackEffect = window.resolveGoldenCoreBattleAttack?.({ attacker, defender, baseDamage }) || {};
+                const extraDamage = Math.max(0, Number(attackEffect.extraDamage) || 0);
+                const intendedDamage = baseDamage + extraDamage;
+                const defenderHpBefore = Math.max(0, Number(defender.hp) || 0);
+                const receivedDamage = Math.min(defenderHpBefore, intendedDamage);
+                defender.hp = Math.max(0, defenderHpBefore - intendedDamage);
                 if (defender.hp === 0) defender.isDead = true;
-                battleLog.push({ attacker: attackerRole, isHit: true, dmg: damage, skill: '答題攻擊', healed: null });
+                battleLog.push({
+                    attacker: attackerRole, isHit: true, dmg: intendedDamage,
+                    skill: attackEffect.skill || '答題攻擊', healed: null
+                });
+
+                if (defender.hp > 0 && receivedDamage > 0) {
+                    const counterEffect = window.resolveGoldenCoreBattleCounter?.({
+                        defender, attacker, receivedDamage
+                    }) || {};
+                    const reflectDamage = Math.max(0, Number(counterEffect.reflectDamage) || 0);
+                    if (reflectDamage > 0) {
+                        const defenderRole = attackerRole === 'host' ? 'guest' : 'host';
+                        attacker.hp = Math.max(0, Number(attacker.hp || 0) - reflectDamage);
+                        if (attacker.hp === 0) attacker.isDead = true;
+                        battleLog.push({
+                            attacker: defenderRole, isHit: true, dmg: reflectDamage,
+                            skill: counterEffect.skill || '萬劫雷霆丹・雷光反擊', healed: null
+                        });
+                    }
+                }
             } else {
                 battleLog.push({ attacker: attackerRole, isHit: false, dmg: 0, skill: 'MISS', healed: null });
             }

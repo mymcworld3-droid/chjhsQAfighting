@@ -46,29 +46,53 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     return Math.random() * 100 < chance;
   }
 
+  function breakthroughPercent(grade) {
+    return 20 + (9 - clampGrade(grade)) * 5;
+  }
+
+  function inBreakthroughZone(score, grade) {
+    const value = Math.max(0, Number(score) || 0);
+    const thresholds = [GOLDEN_CORE_SCORE, ...REALM_THRESHOLDS];
+    const next = thresholds.find((need) => need > value);
+    if (!next) return false;
+
+    let previous = GOLDEN_CORE_SCORE;
+    for (const need of thresholds) {
+      if (need <= value) previous = need;
+      else break;
+    }
+
+    const span = Math.max(1, next - previous);
+    const range = span * (breakthroughPercent(grade) / 100);
+    return next - value <= range;
+  }
+
   const CORE_TYPES = [
     {
       id: 'ocean', name: '大海無垠丹', icon: '≈', tone: 'ocean',
-      effect(grade) { return `獲取修為時有 ${chanceByGrade(grade, 50, 5, 90)}% 機率，使本次基礎修為增加一倍。`; },
-      ability: '能自由操縱、憑空生成汪洋海水。',
-      upkeep: '需日日飲五湖之水。',
-      warning: '將水納入腹中時請確保此水無主，以免遭遇牢獄之災。',
-      note: '召喚出的水是鹹的，不宜飲用。',
+      effect(grade) {
+        const chance = chanceByGrade(grade, 10, 5, 50);
+        return `獲得修為時有 ${chance}% 機率使本次基礎修為翻倍；鬥法攻擊時有 ${chance}% 機率召喚千尺巨浪，額外造成 100 傷害。`;
+      },
+      ability: '潮汐入丹，悟道與鬥法皆可借海勢增幅。',
+      upkeep: '每日觀水片刻，平心定氣。',
+      warning: '巨浪只在鬥法結算中造成額外傷害。',
+      note: '修為翻倍指基礎 +1 再額外 +1。',
       resolve({ isCorrect, grade }) {
         if (!isCorrect) return {};
-        const chance = chanceByGrade(grade, 50, 5, 90);
+        const chance = chanceByGrade(grade, 10, 5, 50);
         return randomPercent(chance)
-          ? { bonusGain: 1, message: `${this.name}潮聲大作，本次修為翻倍` }
+          ? { bonusGain: 1, message: `${this.name}潮聲大作，本次基礎修為翻倍` }
           : {};
       }
     },
     {
       id: 'taichu', name: '太初回元丹', icon: '☀', tone: 'gold',
       effect(grade) { return `每累積 ${Math.max(2, grade + 1)} 次悟道成功，額外獲得 1 修為。`; },
-      ability: '可將昨夜的疲憊暫時塞回昨夜。',
-      upkeep: '每日清晨面向東方吸三口「看起來很貴」的空氣。',
-      warning: '若所在地空氣品質不佳，請勿為修仙硬吸。',
-      note: '丹方聲稱可返本歸元，但無法返還已繳交的作業。',
+      ability: '以太初元氣反覆回補修行底蘊。',
+      upkeep: '每日清晨靜坐片刻。',
+      warning: '計數只累積悟道成功次數。',
+      note: '9 品每 10 次；1 品每 2 次。',
       resolve({ isCorrect, grade, counters }) {
         if (!isCorrect) return {};
         const interval = Math.max(2, grade + 1);
@@ -79,91 +103,96 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     },
     {
       id: 'ningxin', name: '凝心靜音丹', icon: '◈', tone: 'ivory',
-      effect(grade) { return `連續悟道達 ${Math.max(1, Math.ceil(grade / 3)) + 1} 次即可凝聚金丹道心。`; },
-      ability: '可將周圍雜音視為「與本道無關」。',
-      upkeep: '每日靜坐一刻鐘，手機需反扣桌面。',
-      warning: '靜音效果過強時，師尊喊你吃飯也可能聽不見。',
-      note: '對樓上裝修聲的實際效果仍在研究中。',
+      effect(grade) { return `連續悟道達 ${Math.max(1, Math.ceil(grade / 3)) + 1} 次，即凝聚金丹道心護體。`; },
+      ability: '凝神斂念，以連續悟道穩固金丹道心。',
+      upkeep: '保持專注即可。',
+      warning: '一般連勝本身沒有護體，必須裝備本丹才會觸發。',
+      note: '9 品約需 4 連勝；1 品約需 2 連勝。',
       resolve({ isCorrect, grade, previousStreak }) {
         if (!isCorrect) return {};
         const threshold = Math.max(1, Math.ceil(grade / 3));
         return previousStreak >= threshold
-          ? { forceShield: true, message: `${this.name}凝神，金丹道心成形` }
+          ? { forceShield: true, message: `${this.name}凝神，金丹道心護體成形` }
           : {};
       }
     },
     {
-      id: 'pojing', name: '破境拆牆丹', icon: '✦', tone: 'amber',
-      effect(grade) { return `距離下一境界 ${Math.max(2, (10 - grade) * 2)} 修為內時，悟道成功額外 +1 修為。`; },
-      ability: '對「瓶頸」一詞具有非常字面的理解。',
-      upkeep: '每日尋找一堵不存在的牆並將其推倒。',
-      warning: '請勿拿鄰居家的牆驗證藥效。',
-      note: '對真正的牆無效，對心理障礙偶爾有效。',
+      id: 'pojing', name: '破境衝仙丹', icon: '✦', tone: 'amber',
+      effect(grade) { return `進入下一境界前最後 ${breakthroughPercent(grade)}% 的修為區間時，悟道成功額外 +2 修為。`; },
+      ability: '越近瓶頸，丹力越能衝擊境界壁障。',
+      upkeep: '突破前保持穩定悟道。',
+      warning: '只在接近下一境界的指定比例區間生效。',
+      note: '9 品為最後 20%；1 品為最後 60%。',
       resolve({ isCorrect, grade, score }) {
-        if (!isCorrect) return {};
-        const next = REALM_THRESHOLDS.find((need) => need > score);
-        const range = Math.max(2, (10 - grade) * 2);
-        return next && next - score <= range
-          ? { bonusGain: 1, message: `${this.name}助你破境，額外 +1 修為` }
-          : {};
+        if (!isCorrect || !inBreakthroughZone(score, grade)) return {};
+        return { bonusGain: 2, message: `${this.name}衝破瓶頸，額外 +2 修為` };
       }
     },
     {
       id: 'xingchen', name: '星辰吞月丹', icon: '✧', tone: 'pale',
-      effect(grade) { return `連續悟道達 ${Math.max(1, grade)} 次後，每次成功額外 +1 修為。`; },
-      ability: '夜間仰頭時會覺得星星跟你很熟。',
-      upkeep: '每月需選一晚認真看月亮五分鐘。',
-      warning: '太陽也是星星，但請勿直視以追求九倍效率。',
-      note: '陰天時可看天氣 App 圖示代替，藥師說勉強算。',
+      effect(grade) { return `連續悟道達 ${Math.max(1, grade)} 次後，之後每次成功額外 +2 修為。`; },
+      ability: '連勝越久，星月之力越穩定。',
+      upkeep: '維持連續悟道。',
+      warning: '中斷連勝後需重新累積。',
+      note: '9 品先達 9 次；1 品先達 1 次。',
       resolve({ isCorrect, grade, previousStreak }) {
         return isCorrect && previousStreak >= Math.max(1, grade)
-          ? { bonusGain: 1, message: `${this.name}引星入體，額外 +1 修為` }
+          ? { bonusGain: 2, message: `${this.name}引星吞月，額外 +2 修為` }
           : {};
       }
     },
     {
-      id: 'wugou', name: '無垢摸魚丹', icon: '◇', tone: 'silver',
-      effect(grade) { return `答錯時有 ${chanceByGrade(grade, 10, 8, 74)}% 機率保留既有金丹道心。`; },
-      ability: '可在心中迅速建立「我其實有在做事」的結界。',
-      upkeep: '每日需合理休息，不得把合理二字刪掉。',
-      warning: '本丹只守金丹道心，不保護瀏覽器歷史紀錄。',
-      note: '摸魚太久仍會被現實世界的師尊發現。',
-      resolve({ isCorrect, grade, hasShield }) {
-        if (isCorrect || !hasShield) return {};
-        const chance = chanceByGrade(grade, 10, 8, 74);
-        return randomPercent(chance)
-          ? { preserveShield: true, message: `${this.name}護住金丹道心，道心未散` }
-          : {};
-      }
-    },
-    {
-      id: 'thunder', name: '雷公安眠丹', icon: 'ϟ', tone: 'thunder',
-      effect(grade) { return `悟道成功時有 ${chanceByGrade(grade, 8, 5, 48)}% 機率直接凝聚金丹道心。`; },
-      ability: '掌心偶爾冒出非常有禮貌的小閃電。',
-      upkeep: '雷雨天需早睡，因為雷公正在值夜班。',
-      warning: '理論上可替手機充電；實測後手機通常不再需要充電。',
-      note: '安眠是指別人被雷聲嚇醒後，你會顯得睡得特別安穩。',
+      id: 'wugou', name: '無垢清心丹', icon: '◇', tone: 'silver',
+      effect(grade) { return `答錯時有 ${chanceByGrade(grade, 20, 10, 100)}% 機率凝聚金丹道心護體。`; },
+      ability: '失誤之際清心去垢，反而護住道心。',
+      upkeep: '答錯後重新定神即可。',
+      warning: '只產生金丹道心，不屬於舊版通用道心系統。',
+      note: '9 品 20%；1 品 100%。',
       resolve({ isCorrect, grade }) {
-        if (!isCorrect) return {};
-        const chance = chanceByGrade(grade, 8, 5, 48);
+        if (isCorrect) return {};
+        const chance = chanceByGrade(grade, 20, 10, 100);
         return randomPercent(chance)
-          ? { forceShield: true, message: `${this.name}雷光凝成金丹道心` }
+          ? { forceShield: true, message: `${this.name}清心去垢，金丹道心護體成形` }
           : {};
       }
     },
     {
-      id: 'reverse', name: '倒反天罡丹', icon: '↺', tone: 'violet',
-      effect(grade) { return `連續悟道達 ${Math.max(2, grade + 1)} 次時，額外獲得 2 修為。`; },
-      ability: '偶爾能把「我不會」倒轉成「會不我」，效果主要是讓敵人困惑。',
-      upkeep: '每日倒著讀一句話，但不建議倒著走樓梯。',
-      warning: '施術前請先確認手上的湯與咖啡已放下。',
-      note: '目前尚未成功將星期一倒轉成星期五。',
+      id: 'thunder', name: '萬劫雷霆丹', icon: '⚡', tone: 'thunder',
+      effect(grade) {
+        const counterChance = chanceByGrade(grade, 10, 10, 90);
+        return `進入下一境界前最後 ${breakthroughPercent(grade)}% 的修為區間時，悟道成功額外 +1 修為；鬥法受到攻擊時有 ${counterChance}% 機率雷光反擊，造成等同本次實際承受傷害的反擊傷害。`;
+      },
+      ability: '以雷劫淬丹，突破與受擊皆可引雷。',
+      upkeep: '雷意需在實戰中承受攻擊才會反擊。',
+      warning: '若該次攻擊已使你倒下，則不再發動反擊。',
+      note: '突破區間 9 品 20%／1 品 60%；反擊 9 品 10%／1 品 90%。',
+      resolve({ isCorrect, grade, score }) {
+        if (!isCorrect || !inBreakthroughZone(score, grade)) return {};
+        return { bonusGain: 1, message: `${this.name}雷劫淬體，額外 +1 修為` };
+      }
+    },
+    {
+      id: 'reverse', name: '陰陽反轉丹', icon: '↺', tone: 'violet',
+      effect(grade) { return `連續悟道達 ${Math.max(2, grade + 1)} 次的那一次，額外 +3 修為。`; },
+      ability: '陰陽翻轉，在指定連勝節點爆發丹力。',
+      upkeep: '保持連勝直到觸發節點。',
+      warning: '只在達到指定連勝的那一次觸發。',
+      note: '9 品需 10 連勝；1 品需 2 連勝。',
       resolve({ isCorrect, grade, previousStreak }) {
         const threshold = Math.max(2, grade + 1);
         return isCorrect && previousStreak + 1 === threshold
-          ? { bonusGain: 2, message: `${this.name}倒轉氣機，額外 +2 修為` }
+          ? { bonusGain: 3, message: `${this.name}陰陽反轉，額外 +3 修為` }
           : {};
       }
+    },
+    {
+      id: 'sword', name: '破鋒劍心丹', icon: '⚔', tone: 'silver',
+      effect(grade) { return `鬥法發動攻擊時有 ${chanceByGrade(grade, 10, 5, 50)}% 機率召喚萬劍追擊，額外造成 200 傷害。`; },
+      ability: '丹心化劍，命中後有機率萬劍追擊。',
+      upkeep: '只在鬥法攻擊命中時判定。',
+      warning: '本丹沒有額外修為效果。',
+      note: '9 品 10%；1 品 50%。',
+      resolve() { return {}; }
     }
   ];
 

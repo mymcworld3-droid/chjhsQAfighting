@@ -182,3 +182,12 @@ test('legacy missing or string scores become numeric cultivation totals', async 
     assert.equal(h.nodes.get('xiuxian-score').textContent, expected + ' 修為');
   }
 });
+
+
+test('wrong-answer Golden Core effect may directly form Golden Core Dao-heart', async () => {
+  const h = setup(120);
+  h.context.window.resolveGoldenCoreCultivationReward = () => ({ forceShield: true, message: '清心護體' });
+  await h.answer(1, 0);
+  assert.equal(h.context.currentUserData.stats.totalScore, 120);
+  assert.equal(h.context.currentUserData.stats.goldenCoreShield, true);
+});

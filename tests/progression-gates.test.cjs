@@ -21,6 +21,8 @@ const combat = read('cultivation-combat-stats.js');
 const statusPanel = read('cultivation-status-panel.js');
 const visual = read('cultivation-core-visual.js');
 const equipWarning = read('cultivation-core-equip-warning.js');
+const battleEffects = read('golden-core-battle-effects.js');
+const legacy = readRoot('main-legacy.js');
 
 test('login core is isolated from optional cultivation module failures', () => {
   const staticImports = main.match(/^import\s+['"][^'"]+['"];$/gm) || [];
@@ -163,4 +165,28 @@ test('Golden Core visual and lower-quality equip warning remain active', () => {
   assert.match(main, /cultivation\/cultivation-core-equip-warning\.js/);
   assert.match(main, /cultivation\/cultivation-status-panel\.js/);
   assert.match(main, /cultivation\/realm-breakthrough-feedback\.js/);
+});
+
+
+test('Golden Core roster matches the nine current pills and battle effects', () => {
+  for (const name of [
+    '大海無垠丹', '太初回元丹', '凝心靜音丹', '破境衝仙丹', '星辰吞月丹',
+    '無垢清心丹', '萬劫雷霆丹', '陰陽反轉丹', '破鋒劍心丹'
+  ]) assert.match(training, new RegExp(name));
+  for (const oldName of ['破境拆牆丹', '無垢摸魚丹', '雷公安眠丹', '倒反天罡丹']) {
+    assert.doesNotMatch(training, new RegExp(oldName));
+  }
+  assert.match(training, /chanceByGrade\(grade, 10, 5, 50\)/);
+  assert.match(training, /breakthroughPercent\(grade\)/);
+  assert.match(training, /chanceByGrade\(grade, 20, 10, 100\)/);
+  assert.match(training, /bonusGain: 3/);
+  assert.match(statusPanel, /sword: \{ icon: '⚔', tone: 'silver' \}/);
+  assert.match(battleEffects, /extraDamage: 100/);
+  assert.match(battleEffects, /extraDamage: 200/);
+  assert.match(battleEffects, /chanceByGrade\(core\.grade, 10, 10, 90\)/);
+  assert.match(battleEffects, /reflectDamage: damage/);
+  assert.match(main, /cultivation\/golden-core-battle-effects\.js/);
+  assert.match(legacy, /goldenCore: window\.getEquippedGoldenCoreBattleSnapshot/);
+  assert.match(legacy, /resolveGoldenCoreBattleAttack/);
+  assert.match(legacy, /resolveGoldenCoreBattleCounter/);
 });

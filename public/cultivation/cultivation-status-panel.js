@@ -14,7 +14,8 @@
     xingchen: { icon: '✧', tone: 'pale' },
     wugou: { icon: '◇', tone: 'silver' },
     thunder: { icon: 'ϟ', tone: 'thunder' },
-    reverse: { icon: '↺', tone: 'violet' }
+    reverse: { icon: '↺', tone: 'violet' },
+    sword: { icon: '⚔', tone: 'silver' }
   };
 
   const FALLBACK_COMBAT = {
