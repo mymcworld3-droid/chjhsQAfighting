@@ -15,7 +15,7 @@
     { name: '煉氣', sub: '八層', need: 40, emoji: '🌬️' },
     { name: '煉氣', sub: '九層', need: 45, emoji: '🌬️' },
     { name: '築基', sub: '初期', need: 60, emoji: '🪨' },
-    { name: '築基', sub: '中期', need: 80, emoji: '🪨️' },
+    { name: '築基', sub: '中期', need: 80, emoji: '🪨' },
     { name: '築基', sub: '後期', need: 100, emoji: '🪨' },
     { name: '金丹', sub: '丹成一品', need: 120, emoji: '☀️' },
     { name: '元嬰', sub: '元嬰出竅', need: 500, emoji: '✨' },
