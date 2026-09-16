@@ -3,9 +3,10 @@ const { test } = require('node:test');
 const { readFileSync } = require('node:fs');
 const { join } = require('node:path');
 
-const read = name => readFileSync(join(__dirname, '../public', name), 'utf8');
+const readRoot = name => readFileSync(join(__dirname, '../public', name), 'utf8');
+const read = name => readFileSync(join(__dirname, '../public/cultivation', name), 'utf8');
 
-const main = read('main.js');
+const main = readRoot('main.js');
 const theme = read('cultivation-theme.js');
 const liveSync = read('xiuxian-live-sync.js');
 const breakthrough = read('realm-breakthrough-feedback.js');
@@ -26,6 +27,7 @@ test('login core is isolated from optional cultivation module failures', () => {
   assert.match(main, /const XIUXIAN_FEATURE_MODULES = \[/);
   assert.match(main, /await import\(modulePath\)/);
   assert.match(main, /Failed to load optional module/);
+  assert.match(main, /\.\/cultivation\/cultivation-theme\.js/);
 });
 
 test('Foundation opens training at 60 with backpack only while Golden Core waits for 300', () => {
@@ -42,10 +44,10 @@ test('Foundation opens training at 60 with backpack only while Golden Core waits
   assert.doesNotMatch(foundationTraining, /data-training-tab="core"/);
   assert.doesNotMatch(foundationTraining, /training-status-tab/);
 
-  const progressionIndex = main.indexOf("'./cultivation-progression-v2.js'");
-  const guardIndex = main.indexOf("'./golden-core-access-guard.js'");
-  const foundationIndex = main.indexOf("'./foundation-training-page.js'");
-  const trainingIndex = main.indexOf("'./cultivation-training-v4.js'");
+  const progressionIndex = main.indexOf("'./cultivation/cultivation-progression-v2.js'");
+  const guardIndex = main.indexOf("'./cultivation/golden-core-access-guard.js'");
+  const foundationIndex = main.indexOf("'./cultivation/foundation-training-page.js'");
+  const trainingIndex = main.indexOf("'./cultivation/cultivation-training-v4.js'");
   assert.ok(progressionIndex >= 0 && guardIndex > progressionIndex && foundationIndex > guardIndex && trainingIndex > foundationIndex,
     'migration, guard, Foundation page and full Golden Core UI load in order');
 });
@@ -111,8 +113,8 @@ test('Golden Core tutorial is a separate post-unlock tutorial', () => {
   assert.match(coreTutorial, /wash-golden-core/);
   assert.match(coreTutorial, /training-status-tab/);
   assert.match(coreTutorial, /金丹教學/);
-  assert.match(main, /newbie-tutorial-v2\.js/);
-  assert.match(main, /golden-core-tutorial\.js/);
+  assert.match(main, /cultivation\/newbie-tutorial-v2\.js/);
+  assert.match(main, /cultivation\/golden-core-tutorial\.js/);
   assert.doesNotMatch(main, /'\.\/newbie-tutorial\.js'/);
 });
 
@@ -137,8 +139,8 @@ test('Golden Core visual and lower-quality equip warning remain active', () => {
   assert.match(visual, /core-quality-sparks/);
   assert.match(equipWarning, /金丹品質下降/);
   assert.match(equipWarning, /if \(newGrade <= oldGrade\) return;/);
-  assert.match(main, /cultivation-core-visual\.js/);
-  assert.match(main, /cultivation-core-equip-warning\.js/);
-  assert.match(main, /cultivation-status-panel\.js/);
-  assert.match(main, /realm-breakthrough-feedback\.js/);
+  assert.match(main, /cultivation\/cultivation-core-visual\.js/);
+  assert.match(main, /cultivation\/cultivation-core-equip-warning\.js/);
+  assert.match(main, /cultivation\/cultivation-status-panel\.js/);
+  assert.match(main, /cultivation\/realm-breakthrough-feedback\.js/);
 });

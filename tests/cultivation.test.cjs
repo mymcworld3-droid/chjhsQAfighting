@@ -4,12 +4,11 @@ const { readFileSync } = require('node:fs');
 const { join } = require('node:path');
 const vm = require('node:vm');
 
-const read = name => readFileSync(join(__dirname, '../public', name), 'utf8');
-const main = read('main-legacy.js');
+const readRoot = name => readFileSync(join(__dirname, '../public', name), 'utf8');
+const read = name => readFileSync(join(__dirname, '../public/cultivation', name), 'utf8');
+const main = readRoot('main-legacy.js');
 const theme = read('cultivation-theme.js');
 
-// Run the actual answer handler, UI updater, reward rules and both panel
-// renderers with in-memory Firebase and DOM doubles (no live account writes).
 function section(source, start, end) {
   const a = source.indexOf(start);
   const b = source.indexOf(end, a);
@@ -111,10 +110,8 @@ test('correct answer updates saved stats and the top panel immediately', async (
   assert.equal(h.writes[0].data.stats.rankLevel, 1);
   assert.equal(h.writes[0].data.stats.totalCorrect, 1);
   assert.equal(h.logs.length, 1);
-  // The theme's periodic render must not replace the reward with stale state.
   h.context.render();
   assert.equal(h.nodes.get('xiuxian-score').textContent, '5 修為');
-  // Simulate signing in again from persisted Firebase data.
   h.context.currentUserData = { uid: 'test-user', ...h.writes[0].data };
   h.context.updateUIStats();
   h.context.render();
