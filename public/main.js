@@ -9,6 +9,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './five-immortals.js',
   './cultivation-progression-v2.js',
   './golden-core-access-guard.js',
+  './foundation-training-page.js',
   './cultivation-training-v4.js',
   './cultivation-core-visual.js',
   './cultivation-core-equip-warning.js',
@@ -16,13 +17,14 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation-status-panel.js',
   './realm-breakthrough-feedback.js',
   './cultivation-rank-sync.js',
-  './newbie-tutorial.js'
+  './newbie-tutorial-v2.js',
+  './golden-core-tutorial.js'
 ];
 
 async function loadXiuxianFeaturesSafely() {
   for (const modulePath of XIUXIAN_FEATURE_MODULES) {
     try {
-      // 依序載入，保證進度遷移 → 金丹守門 → 金丹系統等相依順序不變。
+      // 依序載入，保證進度遷移 → 權限守門 → 築基背包 → 金丹系統等相依順序不變。
       await import(modulePath);
     } catch (error) {
       // 附加功能故障時只停用該功能，絕不影響登入與核心答題。
