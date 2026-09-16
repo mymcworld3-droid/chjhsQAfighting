@@ -13,6 +13,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/golden-core-access-guard.js',
   './cultivation/foundation-training-page.js',
   './cultivation/cultivation-training-v4.js',
+  './cultivation/reverse-core-multiples.js',
   './cultivation/golden-core-battle-effects.js',
   './cultivation/cultivation-core-visual.js',
   './cultivation/cultivation-core-equip-warning.js',
