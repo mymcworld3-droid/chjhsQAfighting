@@ -1,295 +1,308 @@
-// 九州五大仙：全服固定五席，講台化設計，最高分者立於正中央，並支援完整頭像框特效。
+// 九州五大仙：渡劫以上修士，以國中程度連答問鼎。答錯即止，連答紀錄嚴格超過在榜者才可奪位。
 (function () {
-    'use strict';
+  'use strict';
 
-    // 移除表情符號，保持嚴肅修仙感
-    const ROLES = [
-        { id: 'ru-xian', name: '儒仙', subject: '國文', desc: '以文載道' },
-        { id: 'fa-xian', name: '法仙', subject: '社會', desc: '洞察世事' },
-        { id: 'suan-xian', name: '算仙', subject: '數學', desc: '推演天機' },
-        { id: 'xuan-xian', name: '玄仙', subject: '自然', desc: '參悟天地' },
-        { id: 'wai-xian', name: '外仙', subject: '英文', desc: '通達萬邦' }
-    ];
+  const TRIBULATION_SCORE = 3600;
+  const QUIZ_LEVEL = '國中三年級';
+  const QUIZ_DIFFICULTY = 'medium';
+  const ROLES = [
+    { id: 'ru-xian', name: '儒仙', subject: '國文', desc: '以文載道' },
+    { id: 'fa-xian', name: '法仙', subject: '社會', desc: '洞察世事' },
+    { id: 'suan-xian', name: '算仙', subject: '數學', desc: '推演天機' },
+    { id: 'xuan-xian', name: '玄仙', subject: '自然', desc: '參悟天地' },
+    { id: 'wai-xian', name: '外仙', subject: '英文', desc: '通達萬邦' }
+  ];
 
-    let db = null, auth = null, fs = null, owners = {}, claiming = false;
+  let db = null;
+  let auth = null;
+  let fs = null;
+  let owners = {};
+  let challenge = null;
+  let sessionSerial = 0;
 
-    // 全新講台與頭像 CSS 設計
-    const css = `
-        .five-immortals { margin:0 0 16px; padding:20px 14px; border:1px solid rgba(233,196,106,.25); border-radius:22px; background:linear-gradient(145deg,rgba(31,25,45,.97),rgba(12,15,29,.97)); box-shadow:0 12px 40px rgba(0,0,0,.22); overflow: hidden; }
-        .five-immortals h3 { margin:0; color:#f6e6b0; font-size:18px; font-weight:900; text-align: center; letter-spacing: 0.1em; }
-        .five-immortals p { margin:6px 0 0; color:#8f96ad; font-size:10px; text-align: center; letter-spacing: 0.05em; }
-        
-        .podium-container { display: flex; justify-content: center; align-items: flex-end; gap: 6px; margin-top: 45px; min-height: 200px; }
-        
-        .podium-slot { display: flex; flex-direction: column; align-items: center; width: 19%; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(233,196,106,.15); border-bottom: none; border-radius: 8px 8px 0 0; padding: 10px 2px 4px; position: relative; transition: all 0.3s ease; }
-        .podium-slot:hover { background: rgba(255, 255, 255, 0.08); }
-        
-        /* 講台高低排序：Rank 1 為正中央 */
-        .rank-1 { order: 3; height: 180px; background: linear-gradient(to top, rgba(233,196,106,.15), rgba(255,255,255,0.02)); border-color: rgba(233,196,106,.5); box-shadow: 0 -10px 20px rgba(233,196,106,0.1); }
-        .rank-2 { order: 2; height: 145px; }
-        .rank-3 { order: 4; height: 130px; }
-        .rank-4 { order: 1; height: 105px; }
-        .rank-5 { order: 5; height: 90px; }
-        
-        /* 頭像框懸浮定位 */
-        .avatar-wrapper { position: absolute; top: -24px; left: 50%; transform: translateX(-50%); z-index: 10; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5)); }
-        .rank-1 .avatar-wrapper { top: -36px; filter: drop-shadow(0 0 15px rgba(233,196,106,0.6)); }
-        
-        /* 文字排版 */
-        .immortal-name { font-size: 11px; font-weight: 900; color: #fff; margin-top: 22px; text-align: center; }
-        .rank-1 .immortal-name { font-size: 14px; color: #f6e6b0; margin-top: 32px; }
-        .immortal-subject { font-size: 9px; font-weight: 800; color: #c8a85c; margin-top: 4px; text-align: center; }
-        
-        .immortal-owner-box { margin-top: auto; width: 100%; display: flex; flex-direction: column; align-items: center; }
-        .immortal-owner { font-size: 10px; color: #aab0c5; text-align: center; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%; padding: 0 2px; }
-        
-        /* 按鈕與狀態 */
-        .immortal-btn { margin-top: 6px; padding: 4px 0; width: 90%; border-radius: 4px; border: 1px solid rgba(233,196,106,.4); background: rgba(233,196,106,.15); color: #f6e6b0; font-size: 10px; font-weight: 900; cursor: pointer; transition: transform 0.2s; margin-bottom: 2px; }
-        .immortal-btn:hover { background: rgba(233,196,106,.25); transform: scale(1.05); }
-        .immortal-status { margin-top: 6px; margin-bottom: 2px; color: #7ee2b8; font-size: 9px; font-weight: 900; text-align: center; background: rgba(126,226,184,0.1); padding: 3px 0; border-radius: 4px; width: 90%; }
-    `;
+  const css = `
+    .five-immortals{margin:0 0 16px;padding:20px 14px;border:1px solid rgba(216,177,93,.24);border-radius:24px;background:linear-gradient(145deg,rgba(27,22,13,.97),rgba(7,7,7,.98));box-shadow:0 20px 60px rgba(0,0,0,.32);overflow:hidden}.five-immortals h3{margin:0;color:#f5e7c3;font-size:19px;font-weight:900;text-align:center;letter-spacing:.12em}.five-immortals>p{margin:7px 0 0;color:#95866b;font-size:10px;text-align:center;line-height:1.7}.five-immortal-rule{margin:14px auto 0;max-width:720px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.five-immortal-rule div{padding:9px;border:1px solid rgba(216,177,93,.12);border-radius:12px;background:rgba(216,177,93,.03);text-align:center}.five-immortal-rule span{display:block;color:#756a58;font-size:7px}.five-immortal-rule b{display:block;margin-top:3px;color:#d8ba72;font-size:10px}.podium-container{display:flex;justify-content:center;align-items:flex-end;gap:6px;margin-top:48px;min-height:220px}.podium-slot{display:flex;flex-direction:column;align-items:center;width:19%;min-width:0;background:rgba(255,255,255,.025);border:1px solid rgba(216,177,93,.14);border-bottom:none;border-radius:9px 9px 0 0;padding:10px 3px 6px;position:relative}.rank-1{order:3;height:190px;background:linear-gradient(to top,rgba(216,177,93,.14),rgba(255,255,255,.02));border-color:rgba(216,177,93,.46)}.rank-2{order:2;height:158px}.rank-3{order:4;height:142px}.rank-4{order:1;height:124px}.rank-5{order:5;height:108px}.avatar-wrapper{position:absolute;top:-25px;left:50%;transform:translateX(-50%);z-index:4}.rank-1 .avatar-wrapper{top:-37px;filter:drop-shadow(0 0 14px rgba(216,177,93,.45))}.immortal-name{font-size:11px;font-weight:900;color:#f2e4c4;margin-top:23px;text-align:center}.rank-1 .immortal-name{font-size:14px;color:#f6dc93;margin-top:34px}.immortal-subject{font-size:8px;font-weight:900;color:#b89a55;margin-top:3px}.immortal-owner-box{margin-top:auto;width:100%;display:flex;flex-direction:column;align-items:center;gap:3px}.immortal-owner{font-size:9px;color:#b6a98c;text-align:center;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%}.immortal-record{font-size:8px;color:#d7b96d;font-weight:900}.immortal-status{font-size:7px;color:#8d8067}.immortal-btn{margin-top:4px;padding:5px 3px;width:94%;border-radius:7px;border:1px solid rgba(216,177,93,.38);background:rgba(216,177,93,.09);color:#f0d997;font-size:9px;font-weight:900;cursor:pointer}.immortal-btn:disabled{opacity:.36;cursor:not-allowed}.five-locked{margin-top:14px;text-align:center;color:#9f725f;font-size:9px}.fi-backdrop{position:fixed;inset:0;z-index:8200;display:grid;place-items:center;padding:16px;background:rgba(0,0,0,.86);backdrop-filter:blur(12px)}.fi-modal{width:min(100%,650px);max-height:90dvh;overflow:auto;border:1px solid rgba(216,177,93,.35);border-radius:26px;background:radial-gradient(circle at 50% 0,rgba(216,177,93,.12),transparent 30%),linear-gradient(145deg,#1a150c,#070707);box-shadow:0 35px 110px rgba(0,0,0,.7);padding:22px;color:#eee1c1}.fi-head{display:flex;justify-content:space-between;gap:10px;align-items:start}.fi-kicker{font-size:8px;letter-spacing:.2em;color:#a58a50;font-weight:900}.fi-head h3{margin:4px 0 0;font-size:24px;color:#f4e2b9}.fi-close{width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.08);background:#10100e;color:#aa9a7b}.fi-scoreboard{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:16px 0}.fi-scoreboard div{padding:10px;border:1px solid rgba(216,177,93,.12);border-radius:12px;background:rgba(255,255,255,.02);text-align:center}.fi-scoreboard span{display:block;color:#756b59;font-size:7px}.fi-scoreboard b{display:block;margin-top:4px;color:#e0bd69;font-size:16px}.fi-note{padding:9px 11px;border-left:2px solid #b78c39;background:rgba(216,177,93,.04);color:#97886d;font-size:9px;line-height:1.6}.fi-loading{padding:48px 10px;text-align:center;color:#aa9564;font-size:11px}.fi-question{margin-top:16px;padding:16px;border:1px solid rgba(216,177,93,.14);border-radius:18px;background:rgba(255,255,255,.02)}.fi-question h4{margin:0;color:#f0e2c4;font-size:17px;line-height:1.65}.fi-options{display:grid;gap:8px;margin-top:14px}.fi-option{min-height:48px;display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:12px;border:1px solid rgba(216,177,93,.14);background:rgba(255,255,255,.025);color:#d8c7a4;text-align:left}.fi-option:hover:not(:disabled){border-color:rgba(216,177,93,.42);background:rgba(216,177,93,.06)}.fi-option span{width:25px;height:25px;flex:0 0 25px;display:grid;place-items:center;border-radius:50%;border:1px solid rgba(216,177,93,.24);color:#dabb68;font-size:9px}.fi-option.correct{border-color:rgba(92,170,112,.55);background:rgba(61,126,76,.12)}.fi-option.wrong{border-color:rgba(190,83,66,.55);background:rgba(143,52,42,.12)}.fi-result{text-align:center;padding:28px 8px 10px}.fi-result-seal{width:74px;height:74px;margin:0 auto 12px;display:grid;place-items:center;border-radius:50%;border:1px solid rgba(216,177,93,.4);color:#e4bf65;font:900 30px serif}.fi-result h4{margin:0;color:#f1e1bb;font-size:23px}.fi-result p{color:#9b8d72;font-size:10px;line-height:1.7}.fi-actions{display:flex;justify-content:center;gap:8px;margin-top:15px}.fi-actions button{min-height:40px;padding:0 16px;border-radius:12px;font-size:10px;font-weight:900}.fi-primary{border:1px solid #c69b41;background:linear-gradient(135deg,#9a6d22,#5d3a0c);color:#fff0c7}.fi-ghost{border:1px solid rgba(216,177,93,.2);background:rgba(216,177,93,.04);color:#c8b68d}@media(max-width:640px){.podium-container{gap:3px}.podium-slot{padding-left:1px;padding-right:1px}.immortal-owner{font-size:7px}.immortal-btn{font-size:7px}.five-immortal-rule{grid-template-columns:1fr}.fi-scoreboard{grid-template-columns:repeat(3,1fr)}}
+  `;
 
-    function toast(msg) {
-        const e = document.createElement('div');
-        e.textContent = msg;
-        e.style.cssText = 'position:fixed;left:50%;bottom:110px;transform:translateX(-50%);z-index:999;padding:10px 16px;border-radius:999px;background:#111528;color:#f6e6b0;border:1px solid rgba(233,196,106,.35);font-size:12px';
-        document.body.appendChild(e);
-        setTimeout(() => e.remove(), 2600);
+  function userData() { return window.getCurrentUserData?.() || null; }
+  function currentScore() { return Math.max(0, Number(userData()?.stats?.totalScore) || 0); }
+  function eligible() { return currentScore() >= TRIBULATION_SCORE; }
+  function roleById(id) { return ROLES.find((r) => r.id === id) || null; }
+  function ownerRecord(id) { return Math.max(0, Number(owners[id]?.challengeScore) || 0); }
+  function escapeHtml(value) { return String(value ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;'); }
+
+  function toast(message) {
+    const el = document.createElement('div');
+    el.textContent = message;
+    el.style.cssText = 'position:fixed;left:50%;bottom:110px;transform:translateX(-50%);z-index:8500;padding:10px 16px;border-radius:999px;background:#11100c;color:#f3dfaa;border:1px solid rgba(216,177,93,.38);font-size:11px;font-weight:800;box-shadow:0 15px 45px rgba(0,0,0,.45)';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 2600);
+  }
+
+  function avatarHtml(equipped, large = false) {
+    const size = large ? 56 : 42;
+    const frame = equipped?.frame || '';
+    const avatar = equipped?.avatar || '';
+    const isFrameImage = frame && (frame.includes('.') || frame.includes('/'));
+    const frameClass = frame && !isFrameImage ? frame : '';
+    return `<div class="${frameClass}" style="width:${size}px;height:${size}px;border-radius:50%;position:relative;background:#181612;border:1px solid rgba(216,177,93,.22);display:grid;place-items:center;overflow:visible"><div style="width:100%;height:100%;border-radius:50%;overflow:hidden;display:grid;place-items:center">${avatar ? `<img src="${avatar}" style="width:100%;height:100%;object-fit:cover" onerror="this.remove()">` : '<i class="fa-solid fa-user" style="color:#776b57"></i>'}</div>${isFrameImage ? `<img src="${frame}" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);height:145%;max-width:none;pointer-events:none">` : ''}</div>`;
+  }
+
+  async function connect() {
+    try {
+      const [appModule, authModule, firestoreModule] = await Promise.all([
+        import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js'),
+        import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js'),
+        import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js')
+      ]);
+      const app = appModule.getApp();
+      auth = authModule.getAuth(app);
+      db = firestoreModule.getFirestore(app);
+      fs = firestoreModule;
+      await loadOwners();
+    } catch (error) {
+      console.warn('五仙問鼎連線失敗', error);
+      render();
     }
+  }
 
-    // 內建頭像生成器，支援最新外框特效
-    function getAvatarHtml(equipped, sizeClass = "w-10 h-10") {
-        if (!equipped) equipped = { frame: '', avatar: '' };
-        const frame = equipped.frame || '';
-        const avatar = equipped.avatar || '';
-        const isFrameImg = frame && (frame.includes('.') || frame.includes('/'));
-
-        const imgContent = avatar 
-            ? `<img src="${avatar}" class="w-full h-full object-cover" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"> <i class="fa-solid fa-user text-gray-400 absolute hidden"></i>`
-            : `<i class="fa-solid fa-user text-gray-500 text-lg"></i>`;
-
-        const borderClass = frame ? '' : 'border-2 border-slate-600';
-        const cssFrameClass = (!isFrameImg && frame) ? frame : '';
-
-        const frameImgElement = isFrameImg 
-            ? `<img src="${frame}" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); height: 145%; width: auto; max-width: none; z-index: 50; pointer-events: none;">` 
-            : '';
-
-        return `
-        <div class="${sizeClass} rounded-full bg-slate-800 flex items-center justify-center relative ${borderClass} ${cssFrameClass}" style="overflow: visible !important;">
-            <div class="w-full h-full rounded-full overflow-hidden flex items-center justify-center bg-slate-800 relative z-0">
-                ${imgContent}
-            </div>
-            ${frameImgElement}
-        </div>`;
-    }
-
-    async function connect() {
-        try {
-            const [appModule, a, f] = await Promise.all([
-                import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js'),
-                import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js'),
-                import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js')
-            ]);
-            const app = appModule.getApp();
-            auth = a.getAuth(app);
-            db = f.getFirestore(app);
-            fs = f;
-            await load();
-        } catch (e) {
-            console.warn('五大仙連線失敗', e);
-            render();
-        }
-    }
-
-    async function load() {
-        if (!db) return;
-        try {
-            const snap = await fs.getDocs(fs.collection(db, 'worldImmortals'));
-            owners = {};
-            const uids = [];
-            
-            snap.forEach(d => {
-                const data = d.data();
-                owners[d.id] = data;
-                if (data.uid && !uids.includes(data.uid)) {
-                    uids.push(data.uid);
-                }
-            });
-
-            // 根據取得的 uid 去 users 集合抓取最新的 積分與裝備(頭像框)
-            const userScores = {};
-            if (uids.length > 0) {
-                const q = fs.query(fs.collection(db, 'users'), fs.where(fs.documentId(), 'in', uids));
-                const usersSnap = await fs.getDocs(q);
-                usersSnap.forEach(d => {
-                    const userData = d.data();
-                    userScores[d.id] = {
-                        score: userData.stats?.totalScore || 0,
-                        equipped: userData.equipped || { frame: '', avatar: '' }
-                    };
-                });
-            }
-
-            // 將抓到的分數與裝備綁定回仙主身上
-            Object.keys(owners).forEach(roleId => {
-                const uid = owners[roleId].uid;
-                owners[roleId].score = userScores[uid]?.score || 0;
-                owners[roleId].equipped = userScores[uid]?.equipped || null;
-            });
-
-        } catch (e) {
-            console.warn('五大仙讀取失敗', e);
-        }
-        render();
-    }
-
-    async function claim(id) {
-        if (claiming) return;
-        const user = auth && auth.currentUser;
-        if (!user) {
-            toast('請先登入，才能問鼎仙位。');
-            return;
-        }
-        if (owners[id]) {
-            toast('此仙位已有仙主。');
-            return;
-        }
-        
-        claiming = true;
-        try {
-            const ref = fs.doc(db, 'worldImmortals', id);
-            await fs.runTransaction(db, async tx => {
-                const refs = ROLES.map(r => fs.doc(db, 'worldImmortals', r.id));
-                const snaps = await Promise.all(refs.map(r => tx.get(r)));
-                
-                if (snaps.some(s => s.exists() && s.data().uid === user.uid)) {
-                    throw new Error('ALREADY_HAS_ROLE');
-                }
-                const target = snaps[ROLES.findIndex(r => r.id === id)];
-                if (target.exists()) {
-                    throw new Error('TAKEN');
-                }
-
-                tx.set(ref, {
-                    uid: user.uid,
-                    displayName: user.displayName || '無名仙客',
-                    role: id,
-                    claimedAt: fs.serverTimestamp()
-                });
-            });
-            toast('問鼎成功！恭喜登臨仙位。');
-            await load();
-        } catch (e) {
-            if (e.message === 'TAKEN') {
-                toast('慢了一步，此仙位已被他人問鼎。');
-            } else if (e.message === 'ALREADY_HAS_ROLE') {
-                toast('你已經擁有一席仙位，不可再占第二席。');
-            } else {
-                toast('仙位爭奪失敗，請稍後再試。');
-            }
-            await load();
-        } finally {
-            claiming = false;
-        }
-    }
-
-    function render() {
-        const container = document.getElementById('five-immortal-list');
-        if (!container) return;
-        
-        const uid = auth && auth.currentUser ? auth.currentUser.uid : '';
-        
-        // 依照積分高低進行排名 (分數高者排前)
-        const sortedRoles = [...ROLES].sort((a, b) => {
-            const scoreA = owners[a.id]?.score || 0;
-            const scoreB = owners[b.id]?.score || 0;
-            return scoreB - scoreA;
+  async function loadOwners() {
+    if (!db) return;
+    try {
+      const snap = await fs.getDocs(fs.collection(db, 'worldImmortals'));
+      owners = {};
+      const uids = [];
+      snap.forEach((docSnap) => {
+        const data = docSnap.data();
+        owners[docSnap.id] = data;
+        if (data.uid && !uids.includes(data.uid)) uids.push(data.uid);
+      });
+      const profiles = {};
+      for (let i = 0; i < uids.length; i += 10) {
+        const batch = uids.slice(i, i + 10);
+        const q = fs.query(fs.collection(db, 'users'), fs.where(fs.documentId(), 'in', batch));
+        const usersSnap = await fs.getDocs(q);
+        usersSnap.forEach((docSnap) => {
+          const data = docSnap.data();
+          profiles[docSnap.id] = { displayName: data.displayName || data.name || '無名仙客', equipped: data.equipped || null, totalScore: Math.max(0, Number(data.stats?.totalScore) || 0) };
         });
-
-        // 將排名資訊配對回原始陣列，以決定講台高度 (rank-1 ~ rank-5)
-        const renderData = ROLES.map(r => {
-            const o = owners[r.id];
-            const rankIndex = sortedRoles.findIndex(sr => sr.id === r.id);
-            const rankNum = rankIndex + 1; 
-            
-            return {
-                ...r,
-                owner: o,
-                rankClass: `rank-${rankNum}`,
-                isMine: o && o.uid === uid
-            };
-        });
-
-        // 渲染講台 HTML
-        container.innerHTML = renderData.map(r => {
-            const o = r.owner;
-            // 第一名頭像較大，其餘為一般大小
-            const sizeClass = r.rankClass === 'rank-1' ? "w-14 h-14" : "w-10 h-10";
-            const avatarHtml = getAvatarHtml(o ? o.equipped : null, sizeClass);
-            
-            return `
-                <div class="podium-slot ${r.rankClass}">
-                    <div class="avatar-wrapper">
-                        ${avatarHtml}
-                    </div>
-                    <div class="immortal-name">${r.name}</div>
-                    <div class="immortal-subject">${r.subject}</div>
-                    
-                    <div class="immortal-owner-box">
-                        ${o ? `
-                        <div class="immortal-owner">${o.displayName || '無名仙客'}</div>
-                        <div class="immortal-status">${r.isMine ? '你的仙位' : '已有仙主'}</div>
-                        ` : `
-                        <div class="immortal-owner" style="color: #475569;">尚無仙主</div>
-                        <button class="immortal-btn" data-immortal="${r.id}">問鼎</button>
-                        `}
-                    </div>
-                </div>
-            `;
-        }).join('');
-        
-        container.querySelectorAll('[data-immortal]').forEach(b => {
-            b.onclick = () => claim(b.dataset.immortal);
-        });
+      }
+      Object.values(owners).forEach((owner) => {
+        const profile = profiles[owner.uid] || {};
+        owner.displayName = profile.displayName || owner.displayName || '無名仙客';
+        owner.equipped = profile.equipped || owner.equipped || null;
+        owner.totalScore = profile.totalScore || 0;
+        owner.challengeScore = Math.max(0, Number(owner.challengeScore) || 0);
+      });
+    } catch (error) {
+      console.warn('五仙榜讀取失敗', error);
     }
+    render();
+  }
 
-    function mount() {
-        if (!document.getElementById('five-immortals-style')) {
-            const s = document.createElement('style');
-            s.id = 'five-immortals-style';
-            s.textContent = css;
-            document.head.appendChild(s);
-        }
-        
-        const rank = document.getElementById('page-rank');
-        if (!rank || document.getElementById('five-immortals')) return;
-        
-        const box = document.createElement('section');
-        box.id = 'five-immortals';
-        box.className = 'five-immortals';
-        box.innerHTML = `
-            <h3>九州五大仙</h3>
-            <p>全服僅有五席 · 儒仙 · 法仙 · 算仙 · 玄仙 · 外仙</p>
-            <div id="five-immortal-list" class="podium-container"></div>
-        `;
-        
-        const first = rank.firstElementChild;
-        rank.insertBefore(box, first || null);
-        render();
-        connect();
-    }
+  function normalizeQuestion(raw) {
+    const source = Array.isArray(raw) ? raw[0] : (raw?.questions?.[0] || raw || {});
+    const question = String(source.q ?? source.question ?? '').trim();
+    const options = Array.isArray(source.opts) ? source.opts : (Array.isArray(source.options) ? source.options : []);
+    let answer = source.ans ?? source.answer ?? source.correctIndex;
+    if (typeof answer === 'string' && /^[A-Da-d]$/.test(answer.trim())) answer = answer.trim().toUpperCase().charCodeAt(0) - 65;
+    if (!Number.isInteger(Number(answer)) && typeof answer === 'string') answer = options.findIndex((item) => String(item) === answer);
+    answer = Number(answer);
+    if (!question || options.length < 2 || !Number.isInteger(answer) || answer < 0 || answer >= options.length) throw new Error('INVALID_QUESTION');
+    return { question, options: options.map(String).slice(0, 6), answer, explanation: String(source.exp ?? source.explanation ?? '') };
+  }
 
-    function boot() {
-        mount();
-        setInterval(() => {
-            if (!document.getElementById('five-immortals')) mount();
-        }, 1000);
+  async function fetchChallengeQuestion(role) {
+    const response = await fetch('/api/generate-quiz', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ subject: role.subject, level: QUIZ_LEVEL, difficulty: QUIZ_DIFFICULTY, rank: userData()?.stats?.rankLevel || 0, specificTopic: `${role.subject}國中程度綜合題。題目需有唯一明確答案。` })
+    });
+    if (!response.ok) throw new Error(`QUIZ_API_${response.status}`);
+    const body = await response.json();
+    let raw = body?.text ?? body;
+    if (typeof raw === 'string') {
+      raw = raw.replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/i, '').trim();
+      raw = JSON.parse(raw);
     }
+    return normalizeQuestion(raw);
+  }
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', boot, { once: true });
-    } else {
-        boot();
+  function ensureModal() {
+    document.getElementById('five-immortal-challenge')?.remove();
+    const backdrop = document.createElement('div');
+    backdrop.id = 'five-immortal-challenge';
+    backdrop.className = 'fi-backdrop';
+    backdrop.innerHTML = `<section class="fi-modal" role="dialog" aria-modal="true"><div class="fi-head"><div><span class="fi-kicker">渡劫問鼎 · ENDLESS TRIAL</span><h3 id="fi-title">五仙問鼎</h3></div><button class="fi-close" type="button">×</button></div><div class="fi-scoreboard"><div><span>本次連答</span><b id="fi-streak">0</b></div><div><span>在榜紀錄</span><b id="fi-target">0</b></div><div><span>資格</span><b>渡劫+</b></div></div><div class="fi-note">固定國中程度。沒有總題數，也沒有挑戰次數限制；一路答到第一次錯誤為止。要奪位，必須<strong>嚴格超過</strong>目前仙主紀錄，同分不換榜。</div><div id="fi-body"></div></section>`;
+    backdrop.querySelector('.fi-close').onclick = () => closeChallenge();
+    backdrop.addEventListener('click', (event) => { if (event.target === backdrop) closeChallenge(); });
+    document.body.appendChild(backdrop);
+  }
+
+  function closeChallenge() {
+    if (challenge?.active && challenge.streak > 0 && !confirm('問鼎尚未答錯，現在離開會放棄本次連答紀錄。確定離開？')) return;
+    sessionSerial += 1;
+    challenge = null;
+    document.getElementById('five-immortal-challenge')?.remove();
+  }
+
+  async function startChallenge(roleId) {
+    const role = roleById(roleId);
+    const user = auth?.currentUser;
+    if (!role || !user) { toast('請先登入，才能問鼎五仙。'); return; }
+    if (!eligible()) { toast(`只有渡劫以上修士（${TRIBULATION_SCORE} 修為）能問鼎五仙。`); return; }
+    const serial = ++sessionSerial;
+    challenge = { active: true, serial, role, streak: 0, target: ownerRecord(roleId), busy: false, question: null };
+    ensureModal();
+    document.getElementById('fi-title').textContent = `問鼎${role.name} · ${role.subject}`;
+    document.getElementById('fi-target').textContent = String(challenge.target);
+    await nextQuestion(serial);
+  }
+
+  async function nextQuestion(serial) {
+    if (!challenge?.active || challenge.serial !== serial) return;
+    const body = document.getElementById('fi-body');
+    if (!body) return;
+    challenge.busy = true;
+    body.innerHTML = `<div class="fi-loading"><i class="fa-solid fa-circle-notch fa-spin"></i><br><br>天機凝題中…</div>`;
+    try {
+      const question = await fetchChallengeQuestion(challenge.role);
+      if (!challenge?.active || challenge.serial !== serial) return;
+      challenge.question = question;
+      challenge.busy = false;
+      renderQuestion(serial);
+    } catch (error) {
+      console.warn('五仙問鼎出題失敗', error);
+      if (!challenge?.active || challenge.serial !== serial) return;
+      challenge.busy = false;
+      body.innerHTML = `<div class="fi-result"><div class="fi-result-seal">候</div><h4>天機暫時紊亂</h4><p>這次不算答錯，也不會中止連答。可以直接重新取題。</p><div class="fi-actions"><button id="fi-retry-question" class="fi-primary">重新取題</button></div></div>`;
+      document.getElementById('fi-retry-question').onclick = () => nextQuestion(serial);
     }
+  }
+
+  function renderQuestion(serial) {
+    if (!challenge?.active || challenge.serial !== serial || !challenge.question) return;
+    const body = document.getElementById('fi-body');
+    const q = challenge.question;
+    document.getElementById('fi-streak').textContent = String(challenge.streak);
+    body.innerHTML = `<div class="fi-question"><h4>${escapeHtml(q.question)}</h4><div class="fi-options">${q.options.map((option, index) => `<button type="button" class="fi-option" data-answer="${index}"><span>${String.fromCharCode(65 + index)}</span><b>${escapeHtml(option)}</b></button>`).join('')}</div></div>`;
+    body.querySelectorAll('[data-answer]').forEach((button) => { button.onclick = () => answerChallenge(Number(button.dataset.answer), serial); });
+    try { window.MathJax?.typesetPromise?.([body]); } catch (_) {}
+  }
+
+  async function answerChallenge(choice, serial) {
+    if (!challenge?.active || challenge.serial !== serial || challenge.busy || !challenge.question) return;
+    challenge.busy = true;
+    const q = challenge.question;
+    const body = document.getElementById('fi-body');
+    const buttons = [...body.querySelectorAll('[data-answer]')];
+    buttons.forEach((button) => {
+      button.disabled = true;
+      const index = Number(button.dataset.answer);
+      if (index === q.answer) button.classList.add('correct');
+      else if (index === choice) button.classList.add('wrong');
+    });
+    if (choice === q.answer) {
+      challenge.streak += 1;
+      document.getElementById('fi-streak').textContent = String(challenge.streak);
+      setTimeout(() => nextQuestion(serial), 550);
+      return;
+    }
+    challenge.active = false;
+    await finishChallenge(serial);
+  }
+
+  async function finishChallenge(serial) {
+    if (!challenge || challenge.serial !== serial) return;
+    const role = challenge.role;
+    const streak = challenge.streak;
+    const user = auth?.currentUser;
+    let result = 'miss';
+    let liveTarget = challenge.target;
+    try {
+      const roleRef = fs.doc(db, 'worldImmortals', role.id);
+      const userRef = fs.doc(db, 'users', user.uid);
+      await fs.runTransaction(db, async (tx) => {
+        const refs = ROLES.map((item) => fs.doc(db, 'worldImmortals', item.id));
+        const [userSnap, ...roleSnaps] = await Promise.all([tx.get(userRef), ...refs.map((ref) => tx.get(ref))]);
+        if (!userSnap.exists()) throw new Error('NO_USER');
+        const latestUser = userSnap.data();
+        if ((Number(latestUser.stats?.totalScore) || 0) < TRIBULATION_SCORE) throw new Error('NOT_TRIBULATION');
+        const targetIndex = ROLES.findIndex((item) => item.id === role.id);
+        const targetSnap = roleSnaps[targetIndex];
+        const targetData = targetSnap.exists() ? targetSnap.data() : null;
+        liveTarget = Math.max(0, Number(targetData?.challengeScore) || 0);
+        const alreadyOwnsOther = roleSnaps.some((snap, index) => snap.exists() && snap.data().uid === user.uid && index !== targetIndex);
+        if (alreadyOwnsOther) throw new Error('ALREADY_IMMORTAL');
+        if (streak <= liveTarget) return;
+        tx.set(roleRef, { uid: user.uid, displayName: latestUser.displayName || user.displayName || '無名仙客', role: role.id, subject: role.subject, challengeScore: streak, previousRecord: liveTarget, claimedAt: fs.serverTimestamp(), challengeLevel: QUIZ_LEVEL, challengeDifficulty: QUIZ_DIFFICULTY });
+        result = targetData?.uid === user.uid ? 'improved' : 'claimed';
+      });
+    } catch (error) {
+      if (error.message === 'NOT_TRIBULATION') result = 'not-eligible';
+      else if (error.message === 'ALREADY_IMMORTAL') result = 'already-other';
+      else { console.error('五仙問鼎結算失敗', error); result = 'error'; }
+    }
+    await loadOwners();
+    showChallengeResult(result, streak, liveTarget, role, serial);
+  }
+
+  function showChallengeResult(result, streak, target, role, serial) {
+    const body = document.getElementById('fi-body');
+    if (!body || !challenge || challenge.serial !== serial) return;
+    const success = result === 'claimed' || result === 'improved';
+    const title = result === 'claimed' ? `問鼎成功 · 登臨${role.name}` : result === 'improved' ? `仙位鞏固 · 新紀錄 ${streak}` : result === 'already-other' ? '你已位列五仙' : result === 'not-eligible' ? '境界已不足' : result === 'error' ? '天道結算失敗' : streak === target ? '只差一步 · 同分不換榜' : '問鼎未成';
+    const message = success ? `本次連答 ${streak} 題，超過原紀錄 ${target} 題。` : result === 'already-other' ? '一名修士同時只能據有一席仙位；可回到自己的仙位刷新紀錄。' : result === 'not-eligible' ? '真正寫榜前再次驗證修為，只有渡劫以上修士可以成為五仙。' : result === 'error' ? '這次沒有改動榜單，可以立即重新挑戰。' : `本次連答 ${streak} 題；目前${role.name}紀錄為 ${target} 題。必須嚴格超過才能奪位。`;
+    body.innerHTML = `<div class="fi-result"><div class="fi-result-seal">${success ? '仙' : '問'}</div><h4>${title}</h4><p>${message}</p><div class="fi-actions"><button id="fi-close-result" class="fi-ghost">返回榜單</button><button id="fi-again" class="fi-primary">再次問鼎</button></div></div>`;
+    document.getElementById('fi-close-result').onclick = () => closeChallenge();
+    document.getElementById('fi-again').onclick = () => startChallenge(role.id);
+  }
+
+  function render() {
+    const container = document.getElementById('five-immortal-list');
+    if (!container) return;
+    const uid = auth?.currentUser?.uid || '';
+    const sorted = [...ROLES].sort((a, b) => ownerRecord(b.id) - ownerRecord(a.id) || a.id.localeCompare(b.id));
+    const renderData = ROLES.map((role) => ({ ...role, rank: sorted.findIndex((item) => item.id === role.id) + 1, owner: owners[role.id] || null }));
+    container.innerHTML = renderData.map((role) => {
+      const owner = role.owner;
+      const mine = owner?.uid === uid;
+      const canTry = !!uid && eligible();
+      return `<div class="podium-slot rank-${role.rank}"><div class="avatar-wrapper">${avatarHtml(owner?.equipped, role.rank === 1)}</div><div class="immortal-name">${role.name}</div><div class="immortal-subject">${role.subject} · ${role.desc}</div><div class="immortal-owner-box">${owner ? `<div class="immortal-owner">${escapeHtml(owner.displayName || '無名仙客')}</div><div class="immortal-record">連答 ${ownerRecord(role.id)} 題</div><div class="immortal-status">${mine ? '你的仙位' : '在榜仙主'}</div>` : `<div class="immortal-owner" style="color:#625949">仙位懸空</div><div class="immortal-record">紀錄 0 題</div>`}<button class="immortal-btn" data-immortal="${role.id}" ${canTry ? '' : 'disabled'}>${mine ? '刷新紀錄' : owner ? '挑戰仙主' : '問鼎仙位'}</button></div></div>`;
+    }).join('');
+    container.querySelectorAll('[data-immortal]').forEach((button) => { button.onclick = () => startChallenge(button.dataset.immortal); });
+    const lock = document.getElementById('five-immortal-lock');
+    if (lock) lock.textContent = eligible() ? '你已達渡劫境，可不限次挑戰五仙；每名修士同時僅能據有一席。' : `五仙問鼎需渡劫境以上（${TRIBULATION_SCORE} 修為）。目前修為：${currentScore()}。`;
+  }
+
+  function mount() {
+    if (!document.getElementById('five-immortals-style')) {
+      const style = document.createElement('style');
+      style.id = 'five-immortals-style';
+      style.textContent = css;
+      document.head.appendChild(style);
+    }
+    const rank = document.getElementById('page-rank');
+    if (!rank) return;
+    let box = document.getElementById('five-immortals');
+    if (!box) {
+      box = document.createElement('section');
+      box.id = 'five-immortals';
+      box.className = 'five-immortals';
+      box.innerHTML = `<h3>九州五大仙</h3><p>渡劫以上方可問鼎 · 國中程度連答 · 一錯即止 · 超越紀錄者登仙</p><div class="five-immortal-rule"><div><span>境界門檻</span><b>渡劫 · 3600 修為</b></div><div><span>問鼎方式</span><b>連續答對直到答錯</b></div><div><span>挑戰限制</span><b>無限次嘗試</b></div></div><div id="five-immortal-list" class="podium-container"></div><div id="five-immortal-lock" class="five-locked"></div>`;
+      const anchor = rank.querySelector('.glass-panel') || rank.firstElementChild;
+      if (anchor) anchor.before(box); else rank.prepend(box);
+    }
+    render();
+  }
+
+  function boot() {
+    mount();
+    connect();
+    window.addEventListener('xiuxian:stats-updated', render);
+    window.addEventListener('focus', () => { if (db) loadOwners(); });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
 })();
