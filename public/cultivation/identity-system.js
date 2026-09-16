@@ -1,6 +1,8 @@
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import {
+  getFirestore, doc, updateDoc, collection, query, where, getDocs, writeBatch
+} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
 (function () {
   'use strict';
@@ -11,6 +13,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   const db = getFirestore(getApp());
   let syncing = false;
   let baseSaveProfile = null;
+  let propagatedKey = '';
 
   function data() { return window.getCurrentUserData?.() || null; }
   function isAdmin(player = data()) { return player?.isAdmin === true; }
@@ -42,17 +45,54 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     document.querySelectorAll('[data-self-player-name]').forEach((node) => { node.textContent = name; });
   }
 
+  async function propagateNameSnapshots(force = false) {
+    const user = auth.currentUser;
+    const player = data();
+    if (!user || !player) return;
+    const name = window.getPlayerDisplayName(player);
+    const key = `${user.uid}|${name}`;
+    if (!force && propagatedKey === key) return;
+
+    try {
+      const [indexSnap, dataSnap, immortalSnap] = await Promise.all([
+        getDocs(query(collection(db, 'dongtianIndex'), where('ownerUid', '==', user.uid))),
+        getDocs(query(collection(db, 'dongtians'), where('ownerUid', '==', user.uid))),
+        getDocs(query(collection(db, 'worldImmortals'), where('uid', '==', user.uid)))
+      ]);
+      const refs = [
+        ...indexSnap.docs.map((entry) => entry.ref),
+        ...dataSnap.docs.map((entry) => entry.ref),
+        ...immortalSnap.docs.map((entry) => entry.ref)
+      ];
+      for (let start = 0; start < refs.length; start += 450) {
+        const batch = writeBatch(db);
+        refs.slice(start, start + 450).forEach((ref) => batch.update(ref, ref.parent.id === 'worldImmortals' ? { displayName: name } : { ownerName: name }));
+        await batch.commit();
+      }
+      propagatedKey = key;
+      window.dispatchEvent(new CustomEvent('player-name-snapshots-updated', { detail: { displayName: name } }));
+    } catch (error) {
+      // Snapshot propagation is best-effort. The canonical users/{uid}.displayName remains the source of truth.
+      console.warn('[Identity] failed to propagate saved name snapshots', error);
+    }
+  }
+
   async function normalizeStoredIdentity() {
     const player = data();
     const user = auth.currentUser;
     if (!player || !user || syncing) return;
     const desired = publicName(player.displayName || user.displayName || '無名修士', isAdmin(player));
-    if (player.displayName === desired) { syncVisibleName(); return; }
+    if (player.displayName === desired) {
+      syncVisibleName();
+      propagateNameSnapshots().catch(() => {});
+      return;
+    }
     syncing = true;
     try {
       await updateDoc(doc(db, 'users', user.uid), { displayName: desired });
       player.displayName = desired;
       syncVisibleName();
+      await propagateNameSnapshots(true);
       window.dispatchEvent(new CustomEvent('player-name-updated', { detail: { displayName: desired } }));
     } catch (error) {
       console.warn('[Identity] failed to normalize stored name', error);
@@ -92,6 +132,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
         await baseSaveProfile.apply(this, args);
         player.displayName = input.value;
         syncVisibleName();
+        await propagateNameSnapshots(true);
         window.dispatchEvent(new CustomEvent('player-name-updated', { detail: { displayName: player.displayName } }));
       } catch (error) {
         input.value = oldText;
