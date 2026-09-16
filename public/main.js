@@ -109,8 +109,9 @@ function loadBlackGoldHarmonyTheme() {
 }
 
 function loadCompactTrainingLayout() {
-  const themeHref = 'styles/cultivation-training-compact.css';
+  const themeHref = 'styles/cultivation-training-compact.css?v=20260917-fit1';
   if (document.querySelector(`link[href="${themeHref}"]`)) return;
+  document.querySelectorAll('link[href^="styles/cultivation-training-compact.css"]').forEach((node) => node.remove());
   const link = document.createElement('link');
   link.rel = 'stylesheet';
   link.href = themeHref;
