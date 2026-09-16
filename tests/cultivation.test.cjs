@@ -129,7 +129,8 @@ test('each new quiz awards once, including a repeated question', async () => {
   assert.equal(h.writes.length, 4);
   assert.equal(h.context.currentUserData.stats.totalScore, 4);
   assert.equal(h.context.currentUserData.stats.currentStreak, 4);
-  assert.equal(h.context.currentUserData.stats.cultivationShield, true);
+  assert.equal(Object.prototype.hasOwnProperty.call(h.context.currentUserData.stats, 'cultivationShield'), false);
+  assert.equal(h.context.currentUserData.stats.goldenCoreShield, undefined);
   h.context.render();
   assert.equal(h.nodes.get('xiuxian-score').textContent, '4 修為');
   assert.equal(h.nodes.get('xiuxian-progress').style.width, '80%');
@@ -142,12 +143,34 @@ test('wrong and skipped answers preserve cultivation and reset the streak', asyn
   await h.answer(1, 0);
   assert.equal(h.context.currentUserData.stats.totalScore, 25);
   assert.equal(h.context.currentUserData.stats.currentStreak, 0);
-  assert.equal(h.context.currentUserData.stats.cultivationShield, false);
+  assert.equal(Object.prototype.hasOwnProperty.call(h.context.currentUserData.stats, 'cultivationShield'), false);
+  assert.equal(h.context.currentUserData.stats.goldenCoreShield, false);
   h.newQuiz();
   await h.answer(-1, -2);
   assert.equal(h.writes[1].data.stats.totalScore, 25);
   assert.equal(h.writes[1].data.stats.totalAnswered, 2);
   assert.equal(h.nodes.get('xiuxian-score').textContent, '25 修為');
+});
+
+test('ordinary streaks never create Dao-heart shields or bonus cultivation', async () => {
+  const h = setup();
+  for (let i = 0; i < 10; i++) {
+    if (i) h.newQuiz();
+    await h.answer();
+  }
+  assert.equal(h.context.currentUserData.stats.totalScore, 10);
+  assert.equal(h.context.currentUserData.stats.currentStreak, 10);
+  assert.equal(Object.prototype.hasOwnProperty.call(h.context.currentUserData.stats, 'cultivationShield'), false);
+  assert.equal(h.context.currentUserData.stats.goldenCoreShield, undefined);
+});
+
+test('Golden Core alone may create its own Dao-heart state and cultivation bonus', async () => {
+  const h = setup(120);
+  h.context.window.resolveGoldenCoreCultivationReward = () => ({ bonusGain: 2, forceShield: true, message: '金丹生效' });
+  await h.answer();
+  assert.equal(h.context.currentUserData.stats.totalScore, 123);
+  assert.equal(h.context.currentUserData.stats.goldenCoreShield, true);
+  assert.equal(Object.prototype.hasOwnProperty.call(h.context.currentUserData.stats, 'cultivationShield'), false);
 });
 
 test('legacy missing or string scores become numeric cultivation totals', async () => {

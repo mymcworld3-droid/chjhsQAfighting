@@ -79,7 +79,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     },
     {
       id: 'ningxin', name: '凝心靜音丹', icon: '◈', tone: 'ivory',
-      effect(grade) { return `連續悟道達 ${Math.max(1, Math.ceil(grade / 3)) + 1} 次即可形成道心護體。`; },
+      effect(grade) { return `連續悟道達 ${Math.max(1, Math.ceil(grade / 3)) + 1} 次即可凝聚金丹道心。`; },
       ability: '可將周圍雜音視為「與本道無關」。',
       upkeep: '每日靜坐一刻鐘，手機需反扣桌面。',
       warning: '靜音效果過強時，師尊喊你吃飯也可能聽不見。',
@@ -88,7 +88,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
         if (!isCorrect) return {};
         const threshold = Math.max(1, Math.ceil(grade / 3));
         return previousStreak >= threshold
-          ? { forceShield: true, message: `${this.name}凝神，道心護體成形` }
+          ? { forceShield: true, message: `${this.name}凝神，金丹道心成形` }
           : {};
       }
     },
@@ -123,22 +123,22 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     },
     {
       id: 'wugou', name: '無垢摸魚丹', icon: '◇', tone: 'silver',
-      effect(grade) { return `答錯時有 ${chanceByGrade(grade, 10, 8, 74)}% 機率保留既有道心護體。`; },
+      effect(grade) { return `答錯時有 ${chanceByGrade(grade, 10, 8, 74)}% 機率保留既有金丹道心。`; },
       ability: '可在心中迅速建立「我其實有在做事」的結界。',
       upkeep: '每日需合理休息，不得把合理二字刪掉。',
-      warning: '本丹只保護道心，不保護瀏覽器歷史紀錄。',
+      warning: '本丹只守金丹道心，不保護瀏覽器歷史紀錄。',
       note: '摸魚太久仍會被現實世界的師尊發現。',
       resolve({ isCorrect, grade, hasShield }) {
         if (isCorrect || !hasShield) return {};
         const chance = chanceByGrade(grade, 10, 8, 74);
         return randomPercent(chance)
-          ? { preserveShield: true, message: `${this.name}護住道心，護體未散` }
+          ? { preserveShield: true, message: `${this.name}護住金丹道心，道心未散` }
           : {};
       }
     },
     {
       id: 'thunder', name: '雷公安眠丹', icon: 'ϟ', tone: 'thunder',
-      effect(grade) { return `悟道成功時有 ${chanceByGrade(grade, 8, 5, 48)}% 機率直接形成道心護體。`; },
+      effect(grade) { return `悟道成功時有 ${chanceByGrade(grade, 8, 5, 48)}% 機率直接凝聚金丹道心。`; },
       ability: '掌心偶爾冒出非常有禮貌的小閃電。',
       upkeep: '雷雨天需早睡，因為雷公正在值夜班。',
       warning: '理論上可替手機充電；實測後手機通常不再需要充電。',
@@ -147,7 +147,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
         if (!isCorrect) return {};
         const chance = chanceByGrade(grade, 8, 5, 48);
         return randomPercent(chance)
-          ? { forceShield: true, message: `${this.name}雷光護體` }
+          ? { forceShield: true, message: `${this.name}雷光凝成金丹道心` }
           : {};
       }
     },
@@ -564,7 +564,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       previousStreak,
       score,
       counters: state.counters,
-      hasShield: !!stats?.cultivationShield
+      hasShield: !!stats?.goldenCoreShield
     }) || {};
 
     saveLocal();
