@@ -11,7 +11,7 @@ if 'openOwnerQuestionManager(manageButton.dataset.dtManage)' not in dt:
     dt = replace_once(dt, play_marker, manage_insert + play_marker, 'dongtian library manage handling')
 
 # Encounter asks first, and encounter record is consumed even if declined.'''
-new, count = pattern.subn(replacement, s, count=1)
+new, count = pattern.subn(lambda _match: replacement, s, count=1)
 if count != 1:
     raise SystemExit('could not patch apply-polish listener section')
 p.write_text(new)
