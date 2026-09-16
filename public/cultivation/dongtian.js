@@ -16,6 +16,7 @@ import {
   const INDEX_COLLECTION = 'dongtianIndex';
   const DATA_COLLECTION = 'dongtians';
   const PLAY_COLLECTION = 'dongtianPlays';
+  const REPORT_COLLECTION = 'dongtianReports';
 
   const auth = getAuth(getApp());
   const db = getFirestore(getApp());
@@ -26,7 +27,8 @@ import {
     generating: false,
     encounterBusy: false,
     originalStartQuizFlow: null,
-    listLoaded: false
+    listLoaded: false,
+    moderationBusy: false
   };
 
   function userData() { return window.getCurrentUserData?.() || null; }
@@ -61,6 +63,7 @@ import {
     .dt-upload-row{display:flex;align-items:center;gap:8px;margin-top:9px;flex-wrap:wrap}.dt-upload{display:inline-flex;align-items:center;gap:7px;min-height:36px;padding:0 12px;border-radius:11px;border:1px solid rgba(187,134,252,.25);background:rgba(164,103,224,.06);color:#d9b8ff;font-size:9px;font-weight:900;cursor:pointer}.dt-upload input{display:none}.dt-image-count{color:#72667a;font-size:8px}.dt-previews{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:7px;margin-top:9px}.dt-preview{position:relative;aspect-ratio:1;border-radius:11px;overflow:hidden;border:1px solid rgba(255,255,255,.08);background:#090909}.dt-preview img{width:100%;height:100%;object-fit:cover}.dt-preview button{position:absolute;right:4px;top:4px;width:22px;height:22px;border:0;border-radius:50%;background:rgba(0,0,0,.72);color:#f3d8ff;font-size:9px}
     .dt-generate{width:100%;min-height:42px;margin-top:11px;border-radius:13px;border:1px solid rgba(190,137,251,.45);background:linear-gradient(135deg,#71429f,#3d205a);color:#f8eaff;font-size:10px;font-weight:900;letter-spacing:.08em}.dt-generate:disabled{opacity:.45;cursor:wait}.dt-generate small{display:block;margin-top:2px;color:#c9aedc;font-size:7px;font-weight:700}
     .dt-library{padding-top:3px}.dt-list{display:grid;gap:8px}.dt-empty{padding:22px 12px;border:1px dashed rgba(216,177,93,.14);border-radius:14px;text-align:center;color:#6f6575;font-size:9px}.dt-item{padding:11px;border:1px solid rgba(216,177,93,.13);border-radius:15px;background:rgba(255,255,255,.018)}.dt-item-top{display:flex;justify-content:space-between;gap:10px;align-items:start}.dt-item-name{color:#eadcf1;font-size:11px;font-weight:900}.dt-item-meta{margin-top:4px;color:#8b7d91;font-size:8px;line-height:1.55}.dt-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}.dt-tag{padding:3px 7px;border:1px solid rgba(216,177,93,.12);border-radius:999px;background:rgba(216,177,93,.03);color:#b9a88c;font-size:7px}.dt-play{flex:0 0 auto;min-height:31px;padding:0 10px;border-radius:10px;border:1px solid rgba(187,134,252,.28);background:rgba(164,103,224,.08);color:#dabaff;font-size:8px;font-weight:900}.dt-owner-reward{margin-top:9px;color:#766a7c;font-size:7px}
+    .dt-item.suspended{border-color:rgba(248,113,113,.28);background:linear-gradient(135deg,rgba(127,29,29,.08),rgba(255,255,255,.012))}.dt-status-bad{color:#fca5a5!important;border-color:rgba(248,113,113,.28)!important}.dt-repair{flex:0 0 auto;min-height:31px;padding:0 10px;border-radius:10px;border:1px solid rgba(248,113,113,.34);background:rgba(127,29,29,.16);color:#fecaca;font-size:8px;font-weight:900}.dt-question-title-row{display:flex;align-items:flex-start;gap:10px}.dt-question-title-row h3{flex:1}.dt-report-question{flex:0 0 auto;min-height:30px;padding:0 9px;border-radius:9px;border:1px solid rgba(251,191,36,.24);background:rgba(120,53,15,.1);color:#fcd34d;font-size:8px;font-weight:900}.dt-modal{position:fixed;inset:0;z-index:9950;display:grid;place-items:center;padding:16px;background:rgba(0,0,0,.82);backdrop-filter:blur(8px)}.dt-modal-card{width:min(100%,620px);max-height:88dvh;overflow:auto;padding:18px;border:1px solid rgba(203,151,251,.24);border-radius:20px;background:linear-gradient(145deg,#171119,#09080a);box-shadow:0 24px 90px rgba(0,0,0,.65)}.dt-modal-card h3{margin:0;color:#f1e5f7;font-size:15px}.dt-modal-note{margin:7px 0 12px;color:#93849a;font-size:9px;line-height:1.7}.dt-modal-question{padding:11px;border:1px solid rgba(255,255,255,.07);border-radius:12px;background:rgba(0,0,0,.22);color:#d9cedd;font-size:10px;line-height:1.7}.dt-modal textarea{width:100%;min-height:105px;margin-top:10px;padding:10px 11px;resize:vertical;border:1px solid rgba(216,177,93,.17);border-radius:12px;background:#09080a;color:#eee3f2;font-size:10px;outline:none}.dt-modal-actions{display:flex;gap:8px;margin-top:11px}.dt-modal-actions button{flex:1;min-height:38px;border-radius:11px;font-size:8px;font-weight:900}.dt-modal-cancel{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:#aaa}.dt-modal-submit{border:1px solid rgba(203,151,251,.35);background:linear-gradient(135deg,#72419a,#3f2452);color:#f5e7ff}.dt-modal-submit:disabled{opacity:.5;cursor:wait}.dt-ai-review{margin-top:10px;padding:10px;border-left:2px solid #ef4444;background:rgba(127,29,29,.08);color:#d8b4b4;font-size:9px;line-height:1.7}.dt-sealed{text-align:center;min-height:100dvh;display:grid;place-items:center;padding:24px}.dt-sealed-box{max-width:520px}.dt-sealed-icon{width:76px;height:76px;margin:0 auto 14px;display:grid;place-items:center;border-radius:50%;border:1px solid rgba(248,113,113,.35);color:#fca5a5;font-size:28px;box-shadow:0 0 50px rgba(239,68,68,.12)}
     .dt-overlay{position:fixed;inset:0;z-index:9100;background:radial-gradient(circle at 50% 45%,rgba(125,66,174,.22),transparent 32%),linear-gradient(180deg,#080609,#020202);color:#f0e5f4;overflow:auto}.dt-encounter{min-height:100dvh;display:grid;place-items:center;padding:24px;text-align:center;overflow:hidden;position:relative}.dt-portal{position:absolute;width:min(70vw,420px);aspect-ratio:1;border-radius:50%;border:1px solid rgba(204,154,255,.28);box-shadow:0 0 80px rgba(141,75,196,.18),inset 0 0 70px rgba(183,114,245,.08);animation:dtPortal 2.4s ease-in-out infinite alternate}.dt-portal:before,.dt-portal:after{content:"";position:absolute;inset:11%;border-radius:50%;border:1px dashed rgba(224,188,255,.22);animation:dtSpin 9s linear infinite}.dt-portal:after{inset:25%;animation-direction:reverse;animation-duration:6s}.dt-encounter-copy{position:relative;z-index:2;max-width:560px}.dt-encounter-copy span{font-size:8px;letter-spacing:.28em;color:#a27bbb;font-weight:900}.dt-encounter-copy h2{margin:10px 0 8px;font-size:clamp(28px,8vw,54px);color:#f0dfff;text-shadow:0 0 32px rgba(203,150,255,.3)}.dt-encounter-copy p{color:#9a88a3;font-size:10px}.dt-encounter-copy b{display:inline-block;margin-top:13px;padding:6px 11px;border:1px solid rgba(205,154,255,.24);border-radius:999px;color:#d5b4ed;font-size:8px}@keyframes dtPortal{to{transform:scale(1.05);box-shadow:0 0 120px rgba(141,75,196,.28),inset 0 0 90px rgba(183,114,245,.14)}}@keyframes dtSpin{to{transform:rotate(360deg)}}
     .dt-runner{width:min(100%,760px);margin:0 auto;padding:16px 14px 90px}.dt-run-head{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 0 13px;border-bottom:1px solid rgba(216,177,93,.12)}.dt-run-head small{display:block;color:#856d91;font-size:7px;letter-spacing:.16em}.dt-run-head strong{display:block;margin-top:3px;color:#f0e0f7;font-size:15px}.dt-exit{width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,.09);background:#0d0a0e;color:#a891b3}.dt-run-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:12px 0}.dt-run-meta div{padding:8px;border:1px solid rgba(216,177,93,.1);border-radius:11px;background:rgba(255,255,255,.018);text-align:center}.dt-run-meta span{display:block;color:#756a7b;font-size:7px}.dt-run-meta b{display:block;margin-top:3px;color:#cbb4d6;font-size:9px}.dt-progress{height:4px;border-radius:999px;background:#171119;overflow:hidden}.dt-progress i{display:block;height:100%;background:linear-gradient(90deg,#6d3b94,#c994ec);transition:width .3s}
     .dt-question{margin-top:14px;padding:17px;border:1px solid rgba(193,137,247,.17);border-radius:20px;background:linear-gradient(145deg,rgba(27,18,31,.9),rgba(7,6,8,.98));box-shadow:0 20px 55px rgba(0,0,0,.32)}.dt-question h3{margin:0;color:#f1e7f5;font-size:16px;line-height:1.65}.dt-options{display:grid;gap:8px;margin-top:14px}.dt-option{min-height:50px;padding:9px 11px;display:flex;align-items:center;gap:9px;border:1px solid rgba(216,177,93,.12);border-radius:13px;background:rgba(255,255,255,.02);color:#d6c9db;text-align:left}.dt-option span{width:25px;height:25px;flex:0 0 25px;display:grid;place-items:center;border-radius:50%;border:1px solid rgba(197,144,247,.2);color:#cca1ee;font-size:8px}.dt-option.correct{border-color:rgba(74,222,128,.45);background:rgba(22,101,52,.12);color:#d1fae5}.dt-option.wrong{border-color:rgba(248,113,113,.45);background:rgba(127,29,29,.12);color:#fecaca}.dt-option:disabled{cursor:default}.dt-explain{margin-top:12px;padding:12px;border-left:2px solid #9256b8;background:rgba(139,82,176,.06);color:#b7a8bd;font-size:10px;line-height:1.75}.dt-next{width:100%;min-height:42px;margin-top:12px;border-radius:13px;border:1px solid rgba(197,144,247,.35);background:linear-gradient(135deg,#74429e,#422257);color:#f5e5ff;font-size:9px;font-weight:900}
@@ -132,6 +135,13 @@ import {
     card.querySelector('#dt-images').addEventListener('change', handleFiles);
     card.querySelector('#dt-generate').onclick = generateDongtian;
     card.querySelector('#dt-list').addEventListener('click', async (event) => {
+      const repairButton = event.target.closest('[data-dt-repair]');
+      if (repairButton) {
+        repairButton.disabled = true;
+        await openDongtianRepair(repairButton.dataset.dtRepair).catch((error) => toast(error.message || '無法開啟修復介面'));
+        repairButton.disabled = false;
+        return;
+      }
       const button = event.target.closest('[data-dt-play]');
       if (!button) return;
       const id = button.dataset.dtPlay;
@@ -139,7 +149,9 @@ import {
       try {
         const snap = await getDoc(doc(db, DATA_COLLECTION, id));
         if (!snap.exists()) throw new Error('洞天資料不存在');
-        await enterDongtian({ id: snap.id, ...snap.data() }, { source: 'owner', encountered: false });
+        const data = { id: snap.id, ...snap.data() };
+        if (data.status !== 'active') throw new Error('此洞天目前已封印，請先完成題目修復。');
+        await enterDongtian(data, { source: 'owner', encountered: false });
       } catch (error) {
         toast(error.message || '無法進入洞天');
         button.disabled = false;
@@ -297,15 +309,20 @@ import {
         list.innerHTML = '<div class="dt-empty">你還沒有開闢洞天。上傳圖片或貼上文字，就能把想練的內容煉成一座知識秘境。</div>';
         return;
       }
-      list.innerHTML = items.map((item) => `
-        <article class="dt-item">
+      list.innerHTML = items.map((item) => {
+        const suspended = item.status === 'suspended';
+        return `
+        <article class="dt-item ${suspended ? 'suspended' : ''}">
           <div class="dt-item-top">
             <div><div class="dt-item-name">${escapeHtml(item.name)}</div><div class="dt-item-meta">${escapeHtml(item.coverageSummary || '固定題序知識秘境')}</div></div>
-            <button type="button" class="dt-play" data-dt-play="${item.id}"><i class="fa-solid fa-play"></i> 進入</button>
+            ${suspended
+              ? `<button type="button" class="dt-repair" data-dt-repair="${item.id}"><i class="fa-solid fa-screwdriver-wrench"></i> 修復題目</button>`
+              : `<button type="button" class="dt-play" data-dt-play="${item.id}"><i class="fa-solid fa-play"></i> 進入</button>`}
           </div>
-          <div class="dt-tags"><span class="dt-tag">${escapeHtml(item.level)}</span><span class="dt-tag">${difficultyLabel(item.difficulty)}</span><span class="dt-tag">${escapeHtml(item.subject)}</span><span class="dt-tag">${Number(item.questionCount) || 0} 題</span><span class="dt-tag">完成 ${Number(item.completionCount) || 0} 次</span></div>
-          <div class="dt-owner-reward">其他不同修士首次完成：洞天主人 +${OWNER_CULTIVATION_REWARD} 修為、+${OWNER_GOLD_REWARD} 金幣 · 玩家洞天獎勵內容目前待開放</div>
-        </article>`).join('');
+          <div class="dt-tags"><span class="dt-tag">${escapeHtml(item.level)}</span><span class="dt-tag">${difficultyLabel(item.difficulty)}</span><span class="dt-tag">${escapeHtml(item.subject)}</span><span class="dt-tag">${Number(item.questionCount) || 0} 題</span><span class="dt-tag">完成 ${Number(item.completionCount) || 0} 次</span>${suspended ? '<span class="dt-tag dt-status-bad">已封印 · 待修復</span>' : ''}</div>
+          <div class="dt-owner-reward">${suspended ? `AI 已確認第 ${Number(item.flaggedQuestionIndex || 0) + 1} 題有誤；修復通過二次 AI 驗證前，其他修士不會再遇到此洞天。` : `其他不同修士首次完成：洞天主人 +${OWNER_CULTIVATION_REWARD} 修為、+${OWNER_GOLD_REWARD} 金幣 · 玩家洞天獎勵內容目前待開放`}</div>
+        </article>`;
+      }).join('');
     } catch (error) {
       console.warn('[Dongtian list]', error);
       list.innerHTML = '<div class="dt-empty">洞天名冊暫時無法讀取。</div>';
@@ -386,6 +403,7 @@ import {
 
   async function enterDongtian(dongtian, options = {}) {
     if (!dongtian?.questions?.length || state.session) return;
+    if (dongtian.status && dongtian.status !== 'active') { toast('此洞天已封印，等待主人修復。'); return; }
     if (options.encountered) await markEncountered(dongtian);
     else updateDoc(doc(db, INDEX_COLLECTION, dongtian.id), { playCount: increment(1) }).catch(() => {});
     state.session = {
@@ -428,8 +446,9 @@ import {
     s.answered = false;
     const optionObjects = shuffle([{ text: q.correct, correct: true }, ...(q.wrong || []).map((text) => ({ text, correct: false }))]);
     s.currentOptions = optionObjects;
-    overlay.innerHTML = `<main class="dt-runner"><header class="dt-run-head"><div><small>洞天試煉 · FIXED SEQUENCE</small><strong>${escapeHtml(s.dongtian.name)}</strong></div><button id="dt-exit" class="dt-exit" type="button" aria-label="退出洞天"><i class="fa-solid fa-door-open"></i></button></header><div class="dt-run-meta"><div><span>題序</span><b>${s.index + 1} / ${s.dongtian.questions.length}</b></div><div><span>科目</span><b>${escapeHtml(q.subject || s.dongtian.subject)}</b></div><div><span>難度</span><b>${difficultyLabel(q.difficulty)}</b></div></div><div class="dt-progress"><i style="width:${((s.index) / s.dongtian.questions.length) * 100}%"></i></div><section class="dt-question"><h3>${escapeHtml(q.q)}</h3><div id="dt-options" class="dt-options">${optionObjects.map((option, index) => `<button class="dt-option" type="button" data-dt-answer="${index}"><span>${String.fromCharCode(65 + index)}</span><b>${escapeHtml(option.text)}</b></button>`).join('')}</div><div id="dt-explain-slot"></div></section></main>`;
+    overlay.innerHTML = `<main class="dt-runner"><header class="dt-run-head"><div><small>洞天試煉 · FIXED SEQUENCE</small><strong>${escapeHtml(s.dongtian.name)}</strong></div><button id="dt-exit" class="dt-exit" type="button" aria-label="退出洞天"><i class="fa-solid fa-door-open"></i></button></header><div class="dt-run-meta"><div><span>題序</span><b>${s.index + 1} / ${s.dongtian.questions.length}</b></div><div><span>科目</span><b>${escapeHtml(q.subject || s.dongtian.subject)}</b></div><div><span>難度</span><b>${difficultyLabel(q.difficulty)}</b></div></div><div class="dt-progress"><i style="width:${((s.index) / s.dongtian.questions.length) * 100}%"></i></div><section class="dt-question"><div class="dt-question-title-row"><h3>${escapeHtml(q.q)}</h3><button id="dt-report-question" class="dt-report-question" type="button"><i class="fa-solid fa-triangle-exclamation"></i> 問題回報</button></div><div id="dt-options" class="dt-options">${optionObjects.map((option, index) => `<button class="dt-option" type="button" data-dt-answer="${index}"><span>${String.fromCharCode(65 + index)}</span><b>${escapeHtml(option.text)}</b></button>`).join('')}</div><div id="dt-explain-slot"></div></section></main>`;
     overlay.querySelector('#dt-exit').onclick = exitDongtian;
+    overlay.querySelector('#dt-report-question').onclick = openQuestionReport;
     overlay.querySelectorAll('[data-dt-answer]').forEach((button) => button.onclick = () => answerDongtian(Number(button.dataset.dtAnswer)));
     try { window.MathJax?.typesetPromise?.([overlay]); } catch (_) {}
   }
@@ -462,11 +481,265 @@ import {
     });
     const slot = document.getElementById('dt-explain-slot');
     slot.innerHTML = `<div class="dt-explain"><strong style="color:${isCorrect ? '#86efac' : '#fca5a5'}">${isCorrect ? '答對 · 靈機相合' : '答錯 · 參悟解析'}</strong><br>${escapeHtml(q.exp)}</div><button id="dt-next" type="button" class="dt-next">${s.index + 1 >= s.dongtian.questions.length ? '完成洞天' : '前往下一境'}</button>`;
-    document.getElementById('dt-next').onclick = () => {
+    document.getElementById('dt-next').onclick = async () => {
+      if (!(await ensureSessionDongtianActive())) return;
       if (s.index + 1 >= s.dongtian.questions.length) finishDongtian();
       else { s.index += 1; renderRunner(); }
     };
     try { window.MathJax?.typesetPromise?.([slot]); } catch (_) {}
+  }
+
+
+  function removeModerationModal() {
+    document.getElementById('dt-moderation-modal')?.remove();
+  }
+
+  function questionIssueText(dongtian) {
+    return String(dongtian?.aiReviewSummary || dongtian?.flaggedReason || 'AI 已確認此題存在實質錯誤。');
+  }
+
+  async function ensureSessionDongtianActive() {
+    const s = state.session;
+    if (!s) return false;
+    try {
+      const snap = await getDoc(doc(db, INDEX_COLLECTION, s.dongtian.id));
+      if (snap.exists() && snap.data()?.status !== 'active') {
+        await sealCurrentSession('此洞天剛被 AI 確認有錯並已封印，等待洞天主人修復。');
+        return false;
+      }
+    } catch (error) {
+      console.warn('[Dongtian status check]', error);
+    }
+    return true;
+  }
+
+  async function sealCurrentSession(message) {
+    const s = state.session;
+    if (!s) return;
+    s.dongtian.status = 'suspended';
+    await writeDongtianHistory(s, false).catch(() => {});
+    const source = s.source;
+    const overlay = ensureOverlay();
+    overlay.innerHTML = `<div class="dt-sealed"><div class="dt-sealed-box"><div class="dt-sealed-icon"><i class="fa-solid fa-lock"></i></div><h2 style="color:#fecaca;margin:0 0 8px">洞天暫時封印</h2><p style="color:#a78b8b;font-size:10px;line-height:1.8">${escapeHtml(message || '此洞天題目已確認有誤，暫停開放。')}</p><button id="dt-sealed-back" class="dt-back" type="button">返回</button></div></div>`;
+    document.getElementById('dt-sealed-back').onclick = () => {
+      state.session = null;
+      overlay.remove();
+      window.switchToPage?.(source === 'owner' ? 'page-settings' : 'page-home');
+      if (source === 'owner') loadOwnDongtians(true);
+    };
+  }
+
+  function openQuestionReport() {
+    const s = state.session;
+    if (!s || state.moderationBusy) return;
+    const q = s.dongtian.questions[s.index];
+    if (!q) return;
+    removeModerationModal();
+    const modal = document.createElement('div');
+    modal.id = 'dt-moderation-modal';
+    modal.className = 'dt-modal';
+    modal.innerHTML = `<div class="dt-modal-card"><h3><i class="fa-solid fa-triangle-exclamation" style="color:#fbbf24"></i> 回報洞天題目</h3><p class="dt-modal-note">請具體說明哪裡有錯。AI 會先審核，再由第二個獨立判定複核；只有兩次都確認為實質錯誤，洞天才會被封印。</p><div class="dt-modal-question"><strong>第 ${s.index + 1} 題</strong><br>${escapeHtml(q.q)}<br><br><span style="color:#86efac">目前標示答案：${escapeHtml(q.correct)}</span></div><textarea id="dt-report-reason" maxlength="1200" placeholder="例如：題目條件不足，A 與 C 都可能成立；或解析中的計算 3×4 寫成 15……"></textarea><div id="dt-report-status" class="dt-modal-note"></div><div class="dt-modal-actions"><button type="button" class="dt-modal-cancel">取消</button><button id="dt-report-submit" type="button" class="dt-modal-submit">交由 AI 審核</button></div></div>`;
+    document.body.appendChild(modal);
+    modal.querySelector('.dt-modal-cancel').onclick = removeModerationModal;
+    modal.querySelector('#dt-report-submit').onclick = () => submitQuestionReport(modal, q, s.index);
+  }
+
+  async function submitQuestionReport(modal, question, questionIndex) {
+    if (state.moderationBusy || !state.session) return;
+    const reason = modal.querySelector('#dt-report-reason')?.value?.trim() || '';
+    if (reason.length < 4) { toast('請具體描述題目問題。'); return; }
+    const submit = modal.querySelector('#dt-report-submit');
+    const status = modal.querySelector('#dt-report-status');
+    state.moderationBusy = true;
+    submit.disabled = true;
+    submit.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> 雙重 AI 審核中…';
+    status.textContent = '第一階段檢查題目本身；若疑似有誤，會再交由第二階段獨立複核。';
+    const s = state.session;
+    try {
+      const response = await fetch('/api/review-dongtian-question', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          question,
+          reason,
+          dongtian: { id: s.dongtian.id, name: s.dongtian.name, level: s.dongtian.level, difficulty: s.dongtian.difficulty, subject: s.dongtian.subject }
+        })
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(payload.error || `AI 審核失敗 (${response.status})`);
+
+      if (!payload.confirmed) {
+        status.innerHTML = `<span style="color:#fcd34d">AI 未能確認題目有實質錯誤，因此洞天維持開放。</span><br>${escapeHtml(payload.verification?.summary || payload.review?.summary || '')}`;
+        addDoc(collection(db, REPORT_COLLECTION), {
+          dongtianId: s.dongtian.id,
+          reporterUid: uid(),
+          reporterName: userData()?.displayName || auth.currentUser?.displayName || '無名修士',
+          questionId: question.id,
+          questionIndex,
+          questionSnapshot: question,
+          reason,
+          aiReview: payload.review || null,
+          aiVerification: payload.verification || null,
+          status: 'not_confirmed',
+          createdAt: serverTimestamp(),
+          createdAtMs: Date.now()
+        }).catch(() => {});
+        submit.disabled = false;
+        submit.textContent = '重新送審';
+        return;
+      }
+
+      status.textContent = '雙重 AI 審核皆確認有誤，正在封印洞天並通知主人修復…';
+      const reportRef = doc(collection(db, REPORT_COLLECTION));
+      const dataRef = doc(db, DATA_COLLECTION, s.dongtian.id);
+      const indexRef = doc(db, INDEX_COLLECTION, s.dongtian.id);
+      await runTransaction(db, async (tx) => {
+        const [dataSnap, indexSnap] = await Promise.all([tx.get(dataRef), tx.get(indexRef)]);
+        if (!dataSnap.exists() || !indexSnap.exists()) throw new Error('洞天資料不存在');
+        const live = dataSnap.data();
+        if (live.status !== 'active') throw new Error('此洞天已由其他回報封印');
+        const liveQuestion = live.questions?.[questionIndex];
+        if (!liveQuestion || liveQuestion.id !== question.id) throw new Error('題目版本已變更，請重新進入洞天後再回報');
+        const moderation = {
+          status: 'suspended',
+          moderationStatus: 'needs_revision',
+          activeReportId: reportRef.id,
+          flaggedQuestionId: question.id,
+          flaggedQuestionIndex: questionIndex,
+          flaggedReason: reason,
+          aiReviewSummary: payload.verification?.summary || payload.review?.summary || '',
+          suspendedAt: serverTimestamp(),
+          suspendedAtMs: Date.now()
+        };
+        tx.set(reportRef, {
+          dongtianId: s.dongtian.id,
+          dongtianName: s.dongtian.name,
+          ownerUid: live.ownerUid || '',
+          reporterUid: uid(),
+          reporterName: userData()?.displayName || auth.currentUser?.displayName || '無名修士',
+          questionId: question.id,
+          questionIndex,
+          questionSnapshot: question,
+          reason,
+          aiReview: payload.review || null,
+          aiVerification: payload.verification || null,
+          status: 'confirmed',
+          createdAt: serverTimestamp(),
+          createdAtMs: Date.now()
+        });
+        tx.update(dataRef, moderation);
+        tx.update(indexRef, moderation);
+      });
+      removeModerationModal();
+      await sealCurrentSession('AI 雙重審核已確認本題有誤。整座洞天已停止開放，等待洞天主人以修改提示詞修復。');
+    } catch (error) {
+      console.error('[Dongtian report]', error);
+      status.textContent = error.message || '題目回報失敗。';
+      submit.disabled = false;
+      submit.textContent = '重新送審';
+    } finally {
+      state.moderationBusy = false;
+    }
+  }
+
+  async function openDongtianRepair(dongtianId) {
+    if (!uid() || state.moderationBusy) return;
+    const snap = await getDoc(doc(db, DATA_COLLECTION, dongtianId));
+    if (!snap.exists()) throw new Error('洞天資料不存在');
+    const dongtian = { id: snap.id, ...snap.data() };
+    if (dongtian.ownerUid !== uid()) throw new Error('只有洞天主人可以修復');
+    if (dongtian.status !== 'suspended' || dongtian.moderationStatus !== 'needs_revision') throw new Error('此洞天目前不需要修復');
+    const questionIndex = Number(dongtian.flaggedQuestionIndex);
+    const question = dongtian.questions?.[questionIndex];
+    if (!question) throw new Error('待修復題目不存在');
+
+    removeModerationModal();
+    const modal = document.createElement('div');
+    modal.id = 'dt-moderation-modal';
+    modal.className = 'dt-modal';
+    modal.innerHTML = `<div class="dt-modal-card"><h3><i class="fa-solid fa-screwdriver-wrench" style="color:#fca5a5"></i> 修復封印題目</h3><p class="dt-modal-note">你不能直接自由改題。請輸入「修改提示詞」，AI 只會在原題核心知識點與學習目標不變的前提下修正題幹／選項／答案／解析；生成後還會再經第二次 AI 嚴格驗證，全部通過才重新開放洞天。</p><div class="dt-modal-question"><strong>第 ${questionIndex + 1} 題 · ${escapeHtml(question.subject || dongtian.subject)} · ${difficultyLabel(question.difficulty)}</strong><br>${escapeHtml(question.q)}<br><br><span style="color:#86efac">原標示答案：${escapeHtml(question.correct)}</span></div><div class="dt-ai-review"><strong>封印原因</strong><br>${escapeHtml(questionIssueText(dongtian))}<br><span style="opacity:.75">玩家回報：${escapeHtml(dongtian.flaggedReason || '')}</span></div><textarea id="dt-revision-hint" maxlength="1600" placeholder="例：請補上缺少的條件，讓答案只能是原本要考的那個概念；數字可微調，但不要改變知識點。"></textarea><div id="dt-repair-status" class="dt-modal-note">若提示詞要求換知識點、換章節或把題目改成另一題，AI 會忽略或在驗證階段拒絕。</div><div class="dt-modal-actions"><button type="button" class="dt-modal-cancel">取消</button><button id="dt-repair-submit" type="button" class="dt-modal-submit">AI 修復並驗證</button></div></div>`;
+    document.body.appendChild(modal);
+    modal.querySelector('.dt-modal-cancel').onclick = removeModerationModal;
+    modal.querySelector('#dt-repair-submit').onclick = () => submitDongtianRepair(modal, dongtian, question, questionIndex);
+  }
+
+  async function submitDongtianRepair(modal, dongtian, originalQuestion, questionIndex) {
+    if (state.moderationBusy) return;
+    const hint = modal.querySelector('#dt-revision-hint')?.value?.trim() || '';
+    if (hint.length < 4) { toast('請輸入具體的修改提示詞。'); return; }
+    const submit = modal.querySelector('#dt-repair-submit');
+    const status = modal.querySelector('#dt-repair-status');
+    state.moderationBusy = true;
+    submit.disabled = true;
+    submit.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> 修復＋二次驗證中…';
+    status.textContent = '第一個 AI 依提示詞修復；第二個 AI 將比較原題與修正版，檢查是否偷換知識點。';
+    try {
+      const response = await fetch('/api/revise-dongtian-question', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          originalQuestion,
+          hint,
+          issue: questionIssueText(dongtian),
+          dongtian: { id: dongtian.id, name: dongtian.name, level: dongtian.level, difficulty: dongtian.difficulty, subject: dongtian.subject }
+        })
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok || !payload.revised) throw new Error(payload.error || `題目修復失敗 (${response.status})`);
+      const revised = payload.revised;
+
+      status.textContent = '修正版已通過 AI 本質一致性與正確性驗證，正在重新開放洞天…';
+      const dataRef = doc(db, DATA_COLLECTION, dongtian.id);
+      const indexRef = doc(db, INDEX_COLLECTION, dongtian.id);
+      const reportId = dongtian.activeReportId || '';
+      await runTransaction(db, async (tx) => {
+        const [dataSnap, indexSnap] = await Promise.all([tx.get(dataRef), tx.get(indexRef)]);
+        if (!dataSnap.exists() || !indexSnap.exists()) throw new Error('洞天資料不存在');
+        const live = dataSnap.data();
+        if (live.ownerUid !== uid()) throw new Error('只有洞天主人可以修復');
+        if (live.status !== 'suspended' || live.activeReportId !== reportId) throw new Error('洞天封印狀態已改變，請重新讀取');
+        const liveQuestion = live.questions?.[questionIndex];
+        if (!liveQuestion || liveQuestion.id !== originalQuestion.id) throw new Error('題目版本已改變，請重新讀取');
+        const questions = [...live.questions];
+        questions[questionIndex] = { ...revised, id: liveQuestion.id, difficulty: liveQuestion.difficulty, subject: liveQuestion.subject };
+        const cleared = {
+          status: 'active',
+          moderationStatus: 'clear',
+          activeReportId: null,
+          flaggedQuestionId: null,
+          flaggedQuestionIndex: null,
+          flaggedReason: null,
+          aiReviewSummary: null,
+          lastRevisedAt: serverTimestamp(),
+          lastRevisedAtMs: Date.now(),
+          revisionCount: increment(1)
+        };
+        tx.update(dataRef, { ...cleared, questions });
+        tx.update(indexRef, cleared);
+        if (reportId) {
+          tx.set(doc(db, REPORT_COLLECTION, reportId), {
+            status: 'resolved',
+            resolvedAt: serverTimestamp(),
+            resolvedAtMs: Date.now(),
+            resolutionHint: hint,
+            revisedQuestion: questions[questionIndex],
+            validation: payload.validation || null,
+            resolvedByUid: uid()
+          }, { merge: true });
+        }
+      });
+      removeModerationModal();
+      toast('題目修復通過嚴格驗證，洞天已重新開放。');
+      state.listLoaded = false;
+      await loadOwnDongtians(true);
+    } catch (error) {
+      console.error('[Dongtian repair]', error);
+      status.innerHTML = `<span style="color:#fca5a5">${escapeHtml(error.message || '修復失敗')}</span><br>洞天仍維持封印；請調整修改提示詞後再試。`;
+      submit.disabled = false;
+      submit.textContent = '重新修復並驗證';
+    } finally {
+      state.moderationBusy = false;
+    }
   }
 
   function rewardTier(accuracy) {
@@ -479,6 +752,7 @@ import {
   async function finishDongtian() {
     const s = state.session;
     if (!s) return;
+    if (!(await ensureSessionDongtianActive())) return;
     const correct = s.answers.filter((a) => a.isCorrect).length;
     const total = s.dongtian.questions.length;
     const accuracy = total ? correct / total : 0;

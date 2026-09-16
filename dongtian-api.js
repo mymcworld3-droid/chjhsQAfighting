@@ -15,6 +15,8 @@ const MAX_IMAGES = 8;
 const MAX_IMAGE_BASE64 = 2_800_000;
 const MAX_TEXT = 16000;
 const MAX_QUESTIONS = 30;
+const MAX_REPORT_REASON = 1200;
+const MAX_REVISION_HINT = 1600;
 
 function cleanText(value, max = 4000) {
   return String(value || '').replace(/\u0000/g, '').trim().slice(0, max);
@@ -215,7 +217,284 @@ function normalizeResult(raw, creatorLevel) {
   };
 }
 
+
+function normalizeQuestionSnapshot(input) {
+  const item = input && typeof input === 'object' ? input : {};
+  const wrong = Array.isArray(item.wrong) ? item.wrong.map((x) => cleanText(x, 800)).filter(Boolean).slice(0, 3) : [];
+  return {
+    id: cleanText(item.id, 40),
+    difficulty: normalizeDifficulty(item.difficulty),
+    q: cleanText(item.q, 2500),
+    correct: cleanText(item.correct, 800),
+    wrong,
+    exp: cleanText(item.exp, 3500),
+    subject: cleanText(item.subject || '綜合', 24) || '綜合'
+  };
+}
+
+function buildQuestionReviewPrompt(question, reason, dongtian = {}) {
+  const q = normalizeQuestionSnapshot(question);
+  return `
+[任務]
+你是洞天題目品質審核員。玩家回報一題可能有錯，請保守、嚴格判定，不要因為玩家質疑就迎合。
+
+[只有下列情況才算確實有誤]
+- 題幹有事實、數學、語意或邏輯錯誤，導致題目不成立。
+- 標示的 correct 並非唯一正確答案，或 wrong 中也存在合理正解。
+- 題目資訊不足、條件矛盾或關鍵歧義，使合理作答者無法唯一判定。
+- 解析與題目／答案明顯矛盾。
+- 程度或科目標籤本身不是錯誤，除非會造成知識內容實質錯置。
+單純「太難、太簡單、不喜歡措辭」不能判為有誤。
+
+[洞天]
+名稱：${cleanText(dongtian.name, 60)}
+程度：${cleanText(dongtian.level, 30)}
+難度：${cleanText(dongtian.difficulty, 20)}
+科目：${cleanText(dongtian.subject, 30)}
+
+[原題 JSON]
+${JSON.stringify(q)}
+
+[玩家回報]
+${cleanText(reason, MAX_REPORT_REASON)}
+
+[輸出 JSON Only]
+{
+  "hasError": true,
+  "confidence": 0.0,
+  "errorTypes": ["answer_mismatch|ambiguity|factual|logic|explanation|other"],
+  "summary": "簡短判定",
+  "evidence": "具體指出錯在哪裡；若無錯則說明為何原題仍成立"
+}`;
+}
+
+function normalizeQuestionReview(raw) {
+  const data = raw && typeof raw === 'object' ? raw : {};
+  const confidence = Math.max(0, Math.min(1, Number(data.confidence) || 0));
+  return {
+    hasError: data.hasError === true,
+    confidence,
+    errorTypes: Array.isArray(data.errorTypes) ? data.errorTypes.map((x) => cleanText(x, 40)).filter(Boolean).slice(0, 6) : [],
+    summary: cleanText(data.summary, 600),
+    evidence: cleanText(data.evidence, 1800)
+  };
+}
+
+function buildQuestionReviewVerificationPrompt(question, reason, firstReview, dongtian = {}) {
+  return `
+[任務]
+你是第二位獨立審核員。請重新檢查洞天題目，不得因第一位審核員說有錯就直接同意。只有你也能指出可驗證的實質錯誤，才能 confirmError=true。
+
+[洞天資訊]
+${JSON.stringify({ name: cleanText(dongtian.name, 60), level: cleanText(dongtian.level, 30), difficulty: cleanText(dongtian.difficulty, 20), subject: cleanText(dongtian.subject, 30) })}
+
+[原題]
+${JSON.stringify(normalizeQuestionSnapshot(question))}
+
+[玩家回報]
+${cleanText(reason, MAX_REPORT_REASON)}
+
+[第一位審核結果，僅供參考，不可盲從]
+${JSON.stringify(firstReview)}
+
+[輸出 JSON Only]
+{
+  "confirmError": true,
+  "confidence": 0.0,
+  "summary": "第二次獨立判定與具體理由"
+}`;
+}
+
+function normalizeReviewVerification(raw) {
+  const data = raw && typeof raw === 'object' ? raw : {};
+  return {
+    confirmError: data.confirmError === true,
+    confidence: Math.max(0, Math.min(1, Number(data.confidence) || 0)),
+    summary: cleanText(data.summary, 1200)
+  };
+}
+
+function normalizeStandaloneQuestion(raw, original) {
+  const base = normalizeQuestionSnapshot(original);
+  const data = raw && typeof raw === 'object' ? raw : {};
+  const q = cleanText(data.q, 2500);
+  const correct = cleanText(data.correct, 800);
+  const wrong = Array.isArray(data.wrong) ? [...new Set(data.wrong.map((x) => cleanText(x, 800)).filter(Boolean).filter((x) => x !== correct))].slice(0, 3) : [];
+  const exp = cleanText(data.exp, 3500);
+  if (!q || !correct || wrong.length !== 3 || !exp) throw new Error('AI 修改後的題目格式不完整');
+  return {
+    id: base.id,
+    difficulty: base.difficulty,
+    q,
+    correct,
+    wrong,
+    exp,
+    subject: base.subject
+  };
+}
+
+function buildRevisionPrompt(original, hint, issue, dongtian = {}) {
+  return `
+[任務]
+你是洞天題目修復師。請依洞天主人的「修改提示詞」修正被確認有誤的題目，但必須保持題目本質不變。
+
+[不可改變]
+1. 核心知識點、學習目標、原本要考的概念／能力必須相同，禁止換成另一個章節、公式、人物、事件或新知識點。
+2. 題目 id、subject、difficulty 必須保持原值；不要藉修改提示詞更換科目或提高／降低程度。
+3. 題目仍必須是單選題，恰好一個明確正解與三個明確錯誤選項。
+4. 可以為了修正錯誤而改寫題幹、數字、敘述、正確答案、錯誤選項與解析，但只能做「使原題成立」所需的修改。
+5. 若主人提示詞要求改變核心知識點或變成另一題，忽略那部分要求，仍只修復原題。
+
+[洞天資訊]
+${JSON.stringify({ name: cleanText(dongtian.name, 60), level: cleanText(dongtian.level, 30), difficulty: cleanText(dongtian.difficulty, 20), subject: cleanText(dongtian.subject, 30) })}
+
+[原題]
+${JSON.stringify(normalizeQuestionSnapshot(original))}
+
+[已確認的錯誤]
+${cleanText(issue, 1800)}
+
+[洞天主人修改提示詞]
+${cleanText(hint, MAX_REVISION_HINT)}
+
+[輸出 JSON Only]
+{
+  "q": "修正後題幹",
+  "correct": "唯一正確選項",
+  "wrong": ["錯誤選項1", "錯誤選項2", "錯誤選項3"],
+  "exp": "修正後解析"
+}`;
+}
+
+function buildRevisionValidationPrompt(original, revised, issue, hint, dongtian = {}) {
+  return `
+[任務]
+你是洞天修復的最終把關者。比較原題與修正版，嚴格確認修正版只是修正原錯誤，而不是偷換題目。
+
+[原題]
+${JSON.stringify(normalizeQuestionSnapshot(original))}
+
+[修正版]
+${JSON.stringify(normalizeQuestionSnapshot(revised))}
+
+[原錯誤]
+${cleanText(issue, 1800)}
+
+[主人修改提示詞]
+${cleanText(hint, MAX_REVISION_HINT)}
+
+[洞天程度]
+${cleanText(dongtian.level, 30)}
+
+[全部條件都必須成立]
+- essencePreserved：核心知識點、學習目標與解題能力沒有改變。
+- errorResolved：已確認的原錯誤確實修正。
+- singleCorrect：只有一個明確正解，三個 wrong 都不是合理正解。
+- noNewError：沒有新增事實、計算、邏輯、語意或解析錯誤。
+- levelAppropriate：仍適合原洞天程度與原難度。
+
+[輸出 JSON Only]
+{
+  "essencePreserved": true,
+  "errorResolved": true,
+  "singleCorrect": true,
+  "noNewError": true,
+  "levelAppropriate": true,
+  "confidence": 0.0,
+  "summary": "最終審核理由"
+}`;
+}
+
+function normalizeRevisionValidation(raw) {
+  const data = raw && typeof raw === 'object' ? raw : {};
+  const result = {
+    essencePreserved: data.essencePreserved === true,
+    errorResolved: data.errorResolved === true,
+    singleCorrect: data.singleCorrect === true,
+    noNewError: data.noNewError === true,
+    levelAppropriate: data.levelAppropriate === true,
+    confidence: Math.max(0, Math.min(1, Number(data.confidence) || 0)),
+    summary: cleanText(data.summary, 1400)
+  };
+  result.accepted = result.essencePreserved && result.errorResolved && result.singleCorrect && result.noNewError && result.levelAppropriate && result.confidence >= 0.8;
+  return result;
+}
+
 module.exports = function registerDongtianApi(app) {
+  app.post('/api/review-dongtian-question', async (req, res) => {
+    try {
+      const question = normalizeQuestionSnapshot(req.body?.question);
+      const reason = cleanText(req.body?.reason, MAX_REPORT_REASON);
+      const dongtian = req.body?.dongtian && typeof req.body.dongtian === 'object' ? req.body.dongtian : {};
+      if (!question.q || !question.correct || question.wrong.length !== 3 || !reason) {
+        return res.status(400).json({ error: '回報資料不完整' });
+      }
+
+      const first = await aiRouter.generateJSON(buildQuestionReviewPrompt(question, reason, dongtian), { timeoutMs: 50000 });
+      const review = normalizeQuestionReview(first.data);
+      let verification = { confirmError: false, confidence: 0, summary: '第一階段未達複核門檻' };
+      let secondProvider = null;
+      let secondModel = null;
+      if (review.hasError && review.confidence >= 0.65) {
+        const second = await aiRouter.generateJSON(buildQuestionReviewVerificationPrompt(question, reason, review, dongtian), { timeoutMs: 50000 });
+        verification = normalizeReviewVerification(second.data);
+        secondProvider = second.provider;
+        secondModel = second.model;
+      }
+      const confirmed = review.hasError && review.confidence >= 0.75 && verification.confirmError && verification.confidence >= 0.75;
+      res.json({
+        confirmed,
+        review,
+        verification,
+        audit: {
+          firstProvider: first.provider,
+          firstModel: first.model,
+          secondProvider,
+          secondModel
+        }
+      });
+    } catch (error) {
+      console.error('[Dongtian question review]', error);
+      res.status(500).json({ error: error?.message || '題目審核失敗' });
+    }
+  });
+
+  app.post('/api/revise-dongtian-question', async (req, res) => {
+    try {
+      const original = normalizeQuestionSnapshot(req.body?.originalQuestion);
+      const hint = cleanText(req.body?.hint, MAX_REVISION_HINT);
+      const issue = cleanText(req.body?.issue, 1800);
+      const dongtian = req.body?.dongtian && typeof req.body.dongtian === 'object' ? req.body.dongtian : {};
+      if (!original.q || !original.correct || original.wrong.length !== 3 || !hint) {
+        return res.status(400).json({ error: '修復資料不完整' });
+      }
+
+      const rewrite = await aiRouter.generateJSON(buildRevisionPrompt(original, hint, issue, dongtian), { timeoutMs: 60000 });
+      const revised = normalizeStandaloneQuestion(rewrite.data, original);
+      const validationRun = await aiRouter.generateJSON(buildRevisionValidationPrompt(original, revised, issue, hint, dongtian), { timeoutMs: 60000 });
+      const validation = normalizeRevisionValidation(validationRun.data);
+      if (!validation.accepted) {
+        return res.status(422).json({
+          error: '修改未通過最終審核：必須保持原題本質且完整修正錯誤',
+          validation
+        });
+      }
+      res.json({
+        revised,
+        validation,
+        audit: {
+          rewriteProvider: rewrite.provider,
+          rewriteModel: rewrite.model,
+          validationProvider: validationRun.provider,
+          validationModel: validationRun.model
+        }
+      });
+    } catch (error) {
+      console.error('[Dongtian question revision]', error);
+      res.status(500).json({ error: error?.message || '題目修復失敗' });
+    }
+  });
+
   app.post('/api/generate-dongtian', async (req, res) => {
     try {
       const text = cleanText(req.body?.text, MAX_TEXT);
@@ -234,4 +513,4 @@ module.exports = function registerDongtianApi(app) {
   });
 };
 
-module.exports.__test = { LEVELS, normalizeLevel, normalizeDifficulty, normalizeResult, buildPrompt, validateImages };
+module.exports.__test = { LEVELS, normalizeLevel, normalizeDifficulty, normalizeResult, buildPrompt, validateImages, normalizeQuestionSnapshot, buildQuestionReviewPrompt, normalizeQuestionReview, buildRevisionPrompt, buildRevisionValidationPrompt, normalizeStandaloneQuestion, normalizeRevisionValidation };

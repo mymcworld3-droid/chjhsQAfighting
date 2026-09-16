@@ -108,3 +108,52 @@ test('Dongtian subject matching understands grouped school subjects', () => {
   assert.match(uiSource, /'歷史地理公民'/);
   assert.match(uiSource, /subjectFamily\(subject\) === caveFamily/);
 });
+
+
+test('Dongtian question reports require double AI confirmation before sealing the whole cave', () => {
+  assert.match(apiSource, /\/api\/review-dongtian-question/);
+  assert.match(apiSource, /buildQuestionReviewVerificationPrompt/);
+  assert.match(apiSource, /review\.hasError && review\.confidence >= 0\.75/);
+  assert.match(apiSource, /verification\.confirmError && verification\.confidence >= 0\.75/);
+  assert.match(uiSource, /id=\"dt-report-question\"/);
+  assert.match(uiSource, /REPORT_COLLECTION = 'dongtianReports'/);
+  assert.match(uiSource, /status: 'suspended'/);
+  assert.match(uiSource, /moderationStatus: 'needs_revision'/);
+  assert.match(uiSource, /activeReportId: reportRef\.id/);
+  assert.match(uiSource, /writeDongtianHistory\(s, false\)/);
+});
+
+test('Suspended Dongtians are excluded from encounters and owners receive a repair action', () => {
+  assert.match(uiSource, /where\('status', '==', 'active'\)/);
+  assert.match(uiSource, /data-dt-repair/);
+  assert.match(uiSource, /已封印 · 待修復/);
+  assert.match(uiSource, /if \(dongtian\.status && dongtian\.status !== 'active'\)/);
+  assert.match(uiSource, /ensureSessionDongtianActive/);
+});
+
+test('Owner repair is prompt-only, preserves question identity, and requires a second AI validation', () => {
+  assert.match(apiSource, /\/api\/revise-dongtian-question/);
+  assert.match(apiSource, /核心知識點、學習目標、原本要考的概念/);
+  assert.match(apiSource, /essencePreserved/);
+  assert.match(apiSource, /errorResolved/);
+  assert.match(apiSource, /singleCorrect/);
+  assert.match(apiSource, /noNewError/);
+  assert.match(apiSource, /levelAppropriate/);
+  assert.match(apiSource, /confidence >= 0\.8/);
+  assert.match(uiSource, /id=\"dt-revision-hint\"/);
+  assert.match(uiSource, /只有洞天主人可以修復/);
+  assert.match(uiSource, /questions\[questionIndex\] = \{ \.\.\.revised, id: liveQuestion\.id, difficulty: liveQuestion\.difficulty, subject: liveQuestion\.subject \}/);
+  assert.match(uiSource, /status: 'active'/);
+  assert.match(uiSource, /status: 'resolved'/);
+});
+
+test('Standalone revision normalization cannot change id, subject, or difficulty', () => {
+  const original = { id: 'DT-007', difficulty: 'hard', q: '原題', correct: '甲', wrong: ['乙','丙','丁'], exp: '原解析', subject: '數學' };
+  const revised = api.normalizeStandaloneQuestion({
+    id: 'HACK', difficulty: 'easy', subject: '歷史', q: '修正題', correct: '1', wrong: ['2','3','4'], exp: '修正解析'
+  }, original);
+  assert.equal(revised.id, 'DT-007');
+  assert.equal(revised.difficulty, 'hard');
+  assert.equal(revised.subject, '數學');
+  assert.equal(revised.q, '修正題');
+});
