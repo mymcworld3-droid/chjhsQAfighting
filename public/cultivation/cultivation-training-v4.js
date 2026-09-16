@@ -235,12 +235,19 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     const chosen = normalizeCore(raw.core || raw.preview || legacyEquippedObject, base.core);
 
     let equippedCore = normalizeCore(raw.equippedCore || legacyEquippedObject, null);
+    let repairedLegacyWashState = false;
     if (!equippedCore && raw.equipped === true) equippedCore = { ...chosen };
     // 很舊的資料沒有 equipped 欄位時，原本金丹就是已裝配狀態。
     if (!equippedCore && typeof raw.equipped === 'undefined' && !raw.preview) equippedCore = { ...chosen };
+    // v4 舊版洗髓會把原裝備丹覆蓋後只留下 equipped=false。舊丹已無法還原，
+    // 因此僅對「沒有 equippedCore 的舊格式」做一次修復：讓目前金丹成為裝備丹，避免狀態頁永久空白。
+    if (!equippedCore && raw.equipped === false && !Object.prototype.hasOwnProperty.call(raw, 'equippedCore')) {
+      equippedCore = { ...chosen };
+      repairedLegacyWashState = true;
+    }
 
-    let equipped = false;
-    if (typeof raw.equipped === 'boolean') equipped = raw.equipped && !!equippedCore;
+    let equipped = repairedLegacyWashState;
+    if (!repairedLegacyWashState && typeof raw.equipped === 'boolean') equipped = raw.equipped && !!equippedCore;
     else if (raw.preview && legacyEquippedObject && raw.preview.instanceId && legacyEquippedObject.instanceId) {
       equipped = raw.preview.instanceId === legacyEquippedObject.instanceId;
     } else if (equippedCore) {
