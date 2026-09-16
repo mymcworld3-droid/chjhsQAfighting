@@ -20,6 +20,16 @@
     return { ...core, grade: clampGrade(core.grade) };
   }
 
+  function showActivation(core, message, kind) {
+    if (!core || typeof window.showGoldenCoreActivation !== 'function') return;
+    window.showGoldenCoreActivation({
+      type: core.type,
+      name: core.name || '金丹',
+      message,
+      kind
+    });
+  }
+
   window.getEquippedGoldenCoreBattleSnapshot = function () {
     const core = window.getEquippedGoldenCoreState?.() || null;
     if (!core?.equipped) return null;
@@ -37,10 +47,12 @@
     if (core.type === 'ocean') {
       const chance = chanceByGrade(core.grade, 10, 5, 50);
       if (triggered(chance)) {
+        const message = `千尺巨浪席捲戰場，額外造成 100 傷害（${chance}%）`;
+        showActivation(core, message, '鬥法攻擊效果');
         return {
           extraDamage: 100,
           skill: '大海無垠丹・千尺巨浪',
-          message: `大海無垠丹觸發，額外造成 100 傷害（${chance}%）`
+          message
         };
       }
     }
@@ -48,10 +60,12 @@
     if (core.type === 'sword') {
       const chance = chanceByGrade(core.grade, 10, 5, 50);
       if (triggered(chance)) {
+        const message = `萬劍追擊，額外造成 200 傷害（${chance}%）`;
+        showActivation(core, message, '鬥法攻擊效果');
         return {
           extraDamage: 200,
           skill: '破鋒劍心丹・萬劍追擊',
-          message: `破鋒劍心丹觸發，額外造成 200 傷害（${chance}%）`
+          message
         };
       }
     }
@@ -69,10 +83,12 @@
     const damage = Math.max(0, Math.round(Number(receivedDamage) || 0));
     if (!damage) return { reflectDamage: 0 };
 
+    const message = `雷光反擊，返還 ${damage} 傷害（${chance}%）`;
+    showActivation(core, message, '鬥法受擊效果');
     return {
       reflectDamage: damage,
       skill: '萬劫雷霆丹・雷光反擊',
-      message: `萬劫雷霆丹觸發，反擊 ${damage} 傷害（${chance}%）`
+      message
     };
   };
 })();
