@@ -6,9 +6,6 @@ on:
   pull_request:
     branches: [main]
 
-permissions:
-  contents: write
-
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -16,11 +13,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Apply Dongfu collapsible settings patch
-        if: github.event_name == 'push'
-        run: python .github/scripts/patch-dongfu-collapsible.py
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -29,11 +21,3 @@ jobs:
         run: npm install --no-audit --no-fund
       - name: Run tests
         run: npm test
-      - name: Commit Dongfu settings refactor
-        if: github.event_name == 'push'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add public/main.js public/cultivation/dongfu-settings-collapsible.js public/cultivation/newbie-tutorial-v2.js tests/dongfu-settings-collapsible.test.cjs
-          git diff --cached --quiet || git commit -m "feat: make Dongfu settings collapsible"
-          git push
