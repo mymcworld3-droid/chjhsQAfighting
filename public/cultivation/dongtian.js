@@ -234,7 +234,7 @@ import {
       });
       const payload = await response.json().catch(() => ({}));
       if (!response.ok || !payload.dongtian) throw new Error(payload.error || `洞天生成失敗 (${response.status})`);
-      await saveGeneratedDongtian(payload.dongtian, text, state.files.length);
+      await saveGeneratedDongtian(payload.dongtian, state.files.length);
       status.textContent = `洞天「${payload.dongtian.name}」已凝成，共 ${payload.dongtian.questionCount} 題。`;
       document.getElementById('dt-source-text').value = '';
       state.files.forEach((item) => URL.revokeObjectURL(item.url));
@@ -252,7 +252,7 @@ import {
     }
   }
 
-  async function saveGeneratedDongtian(generated, sourceText, sourceImageCount) {
+  async function saveGeneratedDongtian(generated, sourceImageCount) {
     const user = userData() || {};
     const fullRef = doc(collection(db, DATA_COLLECTION));
     const id = fullRef.id;
@@ -278,7 +278,6 @@ import {
     const batch = writeBatch(db);
     batch.set(fullRef, {
       ...metadata,
-      sourceText: String(sourceText || '').slice(0, 16000),
       questions: generated.questions
     });
     batch.set(doc(db, INDEX_COLLECTION, id), metadata);
@@ -291,7 +290,7 @@ import {
     if (!list) return;
     list.innerHTML = '<div class="dt-empty"><i class="fa-solid fa-circle-notch fa-spin"></i> 讀取洞天名冊…</div>';
     try {
-      const snap = await getDocs(query(collection(db, INDEX_COLLECTION), where('ownerUid', '==', uid()), limit(80)));
+      const snap = await getDocs(query(collection(db, INDEX_COLLECTION), where('ownerUid', '==', uid())));
       const items = snap.docs.map((entry) => ({ id: entry.id, ...entry.data() })).sort((a, b) => Number(b.createdAtMs || 0) - Number(a.createdAtMs || 0));
       state.listLoaded = true;
       if (!items.length) {
@@ -326,10 +325,18 @@ import {
     return ['綜合'];
   }
 
+  function subjectFamily(subject) {
+    const value = String(subject || '').trim();
+    if (['自然', '生物理化', '物理', '化學', '生物'].includes(value)) return '自然';
+    if (['社會', '歷史地理公民', '歷史', '地理', '公民'].includes(value)) return '社會';
+    return value;
+  }
+
   function subjectMatches(caveSubject, practiceSubjects) {
     if (!caveSubject || caveSubject === '綜合') return true;
     if (practiceSubjects.includes('綜合')) return true;
-    return practiceSubjects.includes(caveSubject);
+    const caveFamily = subjectFamily(caveSubject);
+    return practiceSubjects.some((subject) => subject === caveSubject || subjectFamily(subject) === caveFamily);
   }
 
   async function findEncounter() {
