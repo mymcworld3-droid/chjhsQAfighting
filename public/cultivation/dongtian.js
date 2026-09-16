@@ -945,6 +945,23 @@ import {
     };
   }
 
+  // 法寶通用引擎只取得當前題目的安全索引，不接觸洞天其他流程。
+  window.getDongtianArtifactQuestionContext = function () {
+    const s = state.session;
+    const question = s?.dongtian?.questions?.[s.index];
+    if (!s || !question || !Array.isArray(s.currentOptions)) return null;
+    const correctIndex = s.currentOptions.findIndex((item) => item?.correct);
+    if (correctIndex < 0) return null;
+    return {
+      context: 'dongtian',
+      key: `dongtian:${s.runId}:${s.index}:${question.id}`,
+      correctIndex,
+      answered: !!s.answered,
+      buttonsSelector: '#dongtian-overlay [data-dt-answer]',
+      containerSelector: '#dt-options'
+    };
+  };
+
   window.renderDongtianHistoryLog = function (log, time) {
     if (log?.mode !== 'dongtian') return null;
     const answers = Array.isArray(log.dongtianAnswers) ? log.dongtianAnswers : [];

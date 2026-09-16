@@ -807,6 +807,24 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js';
     } catch (error) { console.warn('[Battle v2] session recovery skipped:', error); }
   }
 
+  // 法寶通用引擎只需要這個唯讀橋接，不必知道 Battle v2 的內部 state 結構。
+  window.getBattleArtifactQuestionContext = function () {
+    const room = state.room;
+    const question = room?.currentQuestion;
+    if (!room || !question || !state.roomId || !state.role) return null;
+    const mine = playerForRole(room, state.role);
+    const round = Number(room.round);
+    const answered = hasSubmittedAnswer(mine, round) || state.pendingAnswer?.round === round || room.status !== 'playing';
+    return {
+      context: 'battle',
+      key: `battle:${state.roomId}:${round}:${question.id}`,
+      correctIndex: Number(question.ans),
+      answered,
+      buttonsSelector: '#bv2-options .bv2-option',
+      containerSelector: '#bv2-options'
+    };
+  };
+
   window.startBattleMatchmaking = startMatchmaking;
   window.leaveBattle = () => exitBattle({ navigate: true, forfeit: true });
   window.joinBattleRoomV2 = joinSpecificRoom;
