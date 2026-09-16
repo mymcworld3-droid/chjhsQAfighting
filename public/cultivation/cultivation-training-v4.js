@@ -6,7 +6,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
 (function () {
   'use strict';
 
-  const GOLDEN_CORE_SCORE = 300;
+  const GOLDEN_CORE_SCORE = 120;
   const WASH_COST = 100;
   const STATE_KEY = 'xiuxian_training_state_v4';
   const LEGACY_KEYS = [
@@ -452,7 +452,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
         <div><span>溫馨提醒</span><p>${type.warning}</p></div>
         <div><span>備註</span><p>${type.note}</p></div>
       </div>
-    `;
+    `);
   }
 
   function bindCoreActions() {
