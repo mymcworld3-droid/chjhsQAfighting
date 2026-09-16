@@ -1,6 +1,7 @@
 // 核心登入／遊戲模組必須優先且獨立載入。
 // 任一附加修仙功能載入失敗，都不能再阻斷 Google 登入。
 import './main-legacy.js';
+import './cultivation/dongtian-entry.js';
 
 const XIUXIAN_FEATURE_MODULES = [
   './cultivation/cultivation-theme.js',
