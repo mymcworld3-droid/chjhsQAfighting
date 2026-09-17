@@ -25,10 +25,12 @@ test('material catalog provides editable materials and default recipes for every
   }
 });
 
-test('material catalog and recipes sync from one global Firestore config document', () => {
+test('material catalog and recipes sync from one global Firestore config document with legacy backfill', () => {
   assert.match(sync, /CONFIG_DOC = 'materialCatalogV1'/);
   assert.match(sync, /onSnapshot\(ref/);
-  assert.match(sync, /replaceMaterialCatalog\(data\.items, 'firestore'\)/);
+  assert.match(sync, /mergeMaterialCatalogWithDefaults\(data\.items\)/);
+  assert.match(sync, /replaceMaterialCatalog\(items, needsBackfill \? 'firestore-backfill' : 'firestore'\)/);
+  assert.match(sync, /materialCatalogSchemaVersion: MATERIAL_CATALOG_SCHEMA_VERSION/);
   assert.match(sync, /replaceArtifactRecipes\(data\.recipes, 'firestore'\)/);
 });
 
