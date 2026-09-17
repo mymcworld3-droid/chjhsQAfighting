@@ -81,7 +81,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
       .refinery-panel{min-width:0;padding:14px;border:1px solid rgba(216,177,93,.2);border-radius:18px;background:linear-gradient(145deg,rgba(21,17,10,.96),rgba(7,7,7,.97));box-shadow:0 16px 42px rgba(0,0,0,.3)}
       .refinery-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:11px}.refinery-head h3{margin:0;color:#f1e1bc;font-size:13px}.refinery-head p{margin:4px 0 0;color:#8d816c;font-size:8px;line-height:1.55}.refinery-badge{padding:5px 8px;border:1px solid rgba(216,177,93,.15);border-radius:999px;color:#cdb46f;font-size:7px;white-space:nowrap}
       .refinery-material-list{display:grid;gap:7px;max-height:430px;overflow:auto;padding-right:3px}.refinery-material{display:grid;grid-template-columns:42px minmax(0,1fr) auto;gap:9px;align-items:center;width:100%;padding:9px;border:1px solid rgba(255,255,255,.065);border-radius:12px;background:rgba(255,255,255,.018);text-align:left}.refinery-material:not(:disabled):hover{border-color:rgba(216,177,93,.36);background:rgba(216,177,93,.055)}.refinery-material:disabled{opacity:.4;cursor:not-allowed}.refinery-mat-icon{width:40px;height:40px;display:grid;place-items:center;border:1px solid rgba(216,177,93,.25);border-radius:11px;background:#171006;color:#efd17c;font-size:12px;font-weight:900}.refinery-mat-copy strong{display:block;color:#ede1c8;font-size:10px}.refinery-mat-copy small{display:block;margin-top:3px;color:#81745f;font-size:7px}.refinery-mat-qty{color:#d5b96e;font-size:8px;font-weight:900;white-space:nowrap}.refinery-empty{padding:22px 12px;text-align:center;color:#82745f;font-size:9px;border:1px dashed rgba(216,177,93,.13);border-radius:13px;line-height:1.7}
-      .refinery-slots{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:12px 0}.refinery-slot{aspect-ratio:1;min-height:72px;display:grid;place-items:center;padding:6px;border:1px solid rgba(216,177,93,.18);border-radius:13px;background:radial-gradient(circle at 50% 35%,rgba(216,177,93,.07),rgba(255,255,255,.012));color:#6f6657;position:relative}.refinery-slot.filled{border-color:rgba(216,177,93,.42);color:#efd17c;background:radial-gradient(circle at 50% 35%,rgba(216,177,93,.14),rgba(38,24,6,.18))}.refinery-slot .idx{position:absolute;top:5px;left:6px;color:#675c4d;font-size:6px}.refinery-slot .remove{position:absolute;top:4px;right:5px;color:#a98566;font-size:7px}.refinery-slot .icon{font-size:17px;font-weight:900}.refinery-slot .name{display:block;margin-top:3px;color:#d9c89f;font-size:6px;text-align:center}
+      .refinery-slots{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:12px 0}.refinery-slot{aspect-ratio:1;min-height:72px;display:grid;place-items:center;padding:6px;border:1px solid rgba(216,177,93,.18);border-radius:13px;background:radial-gradient(circle at 50% 35%,rgba(216,177,93,.07),rgba(255,255,255,.012));color:#6f6657;position:relative}.refinery-slot.filled{border-color:rgba(216,177,93,.42);color:#efd17c;background:radial-gradient(circle at 50% 35%,rgba(216,177,93,.14),rgba(38,24,6,.18))}.refinery-slot .idx{position:absolute;top:5px;left:6px;color:#675c4d;font-size:6px}.refinery-slot .remove{position:absolute;top:4px;right:5px;color:#a98566;font-size:7px}.refinery-slot .icon{font-size:17px;font-weight:900}.refinery-slot .name{display:block;margin-top:3px;color:#d9c89f;font-size:6px;text-align:center}.refinery-slot:not(.filled) .remove,.refinery-slot:not(.filled) .name{display:none}
       .refinery-summary,.refinery-match{padding:8px 9px;border-radius:11px;font-size:8px;line-height:1.6}.refinery-summary{min-height:35px;background:rgba(216,177,93,.035);color:#93846d}.refinery-summary strong{color:#d5bb79}.refinery-match{margin-top:8px;border:1px solid rgba(216,177,93,.13);color:#93846d}.refinery-match.ready{border-color:rgba(134,239,172,.2);color:#b9d6b4}.refinery-match.error{border-color:rgba(248,113,113,.18);color:#d7a0a0}.refinery-match b{color:#ead79f}.refinery-actions{display:flex;gap:8px;margin-top:10px}.refinery-clear,.refinery-craft{min-height:42px;border-radius:12px;font-size:9px;font-weight:900}.refinery-clear{width:34%;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.025);color:#9f9585}.refinery-craft{flex:1;border:1px solid rgba(216,177,93,.42);background:linear-gradient(135deg,#8f651e,#4b2f09);color:#fff0bd}.refinery-clear:disabled,.refinery-craft:disabled{opacity:.4;cursor:not-allowed}.refinery-note{margin-top:8px;color:#6f6556;font-size:7px;line-height:1.55}.refinery-note b{color:#aa9360}
       @media(max-width:760px){.cultivation-refinery{grid-template-columns:1fr}.refinery-material-list{max-height:300px}.refinery-slot{min-height:62px}}
       @media(max-width:430px){.refinery-slots{gap:5px}.refinery-slot{min-height:55px;border-radius:10px}.refinery-material{grid-template-columns:38px minmax(0,1fr) auto}.refinery-mat-icon{width:36px;height:36px}}
@@ -171,7 +171,9 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
     }).join('') : '<div class="refinery-empty"><i class="fa-solid fa-box-open"></i><br>目前沒有煉器材料。<br>可透過問道與洞天取得。</div>';
     const slotHtml = selected.map((id, index) => {
       const m = id ? getMaterialById(id) : null;
-      return m ? `<button type="button" class="refinery-slot filled" data-refinery-slot="${index}" data-refinery-material-id="${esc(m.id)}" data-material-realm="${esc(m.realm || '凡人')}" style="--material-realm-color:${esc(materialRealmColor(m.realm))}" title="點擊取回"><span class="idx">${index + 1}</span><span class="remove">×</span><span><span class="icon">${esc(m.icon || '材')}</span><span class="name">${esc(m.name)}</span></span></button>` : `<button type="button" class="refinery-slot" disabled><span class="idx">${index + 1}</span><span class="icon">＋</span></button>`;
+      const realm = m?.realm || '';
+      const color = m ? materialRealmColor(realm) : '';
+      return `<button type="button" class="refinery-slot ${m ? 'filled' : ''}" data-refinery-slot="${index}" ${m ? `data-refinery-material-id="${esc(m.id)}" data-material-realm="${esc(realm)}" style="--material-realm-color:${esc(color)}"` : 'disabled'} title="${m ? '點擊取回' : '空煉器格'}"><span class="idx">${index + 1}</span><span class="remove">×</span><span><span class="icon">${esc(m?.icon || '＋')}</span><span class="name">${esc(m?.name || '')}</span></span></button>`;
     }).join('');
     const summary = Object.entries(counts).map(([id, q]) => `${getMaterialById(id)?.name || id} ×${q}`).join(' · ') || '尚未投入材料';
     let matchClass = '', matchText = '放入材料後，依各材料數量自動辨識法寶配方。';
@@ -186,7 +188,105 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
       matchClass = 'error';
       matchText = '目前材料數量不符合任何法寶配方；格子順序不影響判定。';
     }
-    return `<section class="cultivation-refinery"><article class="refinery-panel"><div class="refinery-head"><div><h3><i class="fa-solid fa-gem"></i> 持有材料</h3><p>點擊材料，即放入右側第一個空格。</p></div><span class="refinery-badge">${ownedMaterials.length} 種</span></div><div class="refinery-material-list">${materialHtml}</div></article><article class="refinery-panel"><div class="refinery-head"><div><h3><i class="fa-solid fa-fire-burner"></i> 八方煉器陣</h3><p>8 格，每格只能放 1 個材料；點已放入的格子可取回。</p></div><span class="refinery-badge">${used}/${SLOT_COUNT}</span></div><div class="refinery-slots">${slotHtml}</div><div class="refinery-summary"><strong>投入：</strong>${esc(summary)}</div><div class="refinery-match ${matchClass}">${matchText}</div><div class="refinery-actions"><button type="button" class="refinery-clear" data-refinery-clear ${!used || busy ? 'disabled' : ''}>清空</button><button type="button" class="refinery-craft" data-refinery-craft ${matching.length !== 1 || busy ? 'disabled' : ''}>${busy ? '煉製中…' : '<i class="fa-solid fa-fire"></i> 煉器'}</button></div><div class="refinery-note"><b>配方判定：</b>只比較每種材料的數量，與放入第幾格無關；多一個或少一個材料都不成立。</div></article></section>`;
+    const matchPrefix = used && matching.length === 1 ? '配方吻合：' : '';
+    const matchPlain = used && matching.length === 1
+      ? `${matching[0].icon || '◆'} ${matching[0].name} · 將煉製 ×${Math.max(1, Math.floor(Number(matching[0].craft?.yield) || 1))}`
+      : (used && matching.length > 1
+        ? '這組材料同時符合多個法寶配方，需由管理員將配方調整為唯一。'
+        : (used ? '目前材料數量不符合任何法寶配方；格子順序不影響判定。' : '放入材料後，依各材料數量自動辨識法寶配方。'));
+    return `<section class="cultivation-refinery"><article class="refinery-panel"><div class="refinery-head"><div><h3><i class="fa-solid fa-gem"></i> 持有材料</h3><p>點擊材料，即放入右側第一個空格。</p></div><span class="refinery-badge">${ownedMaterials.length} 種</span></div><div class="refinery-material-list">${materialHtml}</div></article><article class="refinery-panel"><div class="refinery-head"><div><h3><i class="fa-solid fa-fire-burner"></i> 八方煉器陣</h3><p>8 格，每格只能放 1 個材料；點已放入的格子可取回。</p></div><span class="refinery-badge" data-refinery-used-badge>${used}/${SLOT_COUNT}</span></div><div class="refinery-slots">${slotHtml}</div><div class="refinery-summary"><strong>投入：</strong><span data-refinery-summary-text>${esc(summary)}</span></div><div class="refinery-match ${matchClass}" data-refinery-match><b data-refinery-match-prefix>${esc(matchPrefix)}</b><span data-refinery-match-text>${esc(matchPlain)}</span></div><div class="refinery-actions"><button type="button" class="refinery-clear" data-refinery-clear ${!used || busy ? 'disabled' : ''}>清空</button><button type="button" class="refinery-craft" data-refinery-craft ${matching.length !== 1 || busy ? 'disabled' : ''}><i class="fa-solid fa-fire"></i> <span data-refinery-craft-label>${busy ? '煉製中…' : '煉器'}</span></button></div><div class="refinery-note"><b>配方判定：</b>只比較每種材料的數量，與放入第幾格無關；多一個或少一個材料都不成立。</div></article></section>`;
+  }
+
+  function setText(node, value) {
+    if (!node) return;
+    const text = String(value ?? '');
+    if (node.childNodes.length === 1 && node.firstChild?.nodeType === Node.TEXT_NODE) {
+      if (node.firstChild.nodeValue !== text) node.firstChild.nodeValue = text;
+      return;
+    }
+    if (!node.childNodes.length) {
+      node.appendChild(document.createTextNode(text));
+      return;
+    }
+    if (node.textContent !== text) node.textContent = text;
+  }
+
+  function syncSelectionView() {
+    const page = document.getElementById('page-training');
+    const content = page?.querySelector('#training-tab-content');
+    if (!content?.querySelector('.cultivation-refinery')) {
+      render(true);
+      return;
+    }
+
+    const inv = inventory();
+    const counts = selectedCounts();
+    const used = selected.filter(Boolean).length;
+    const matching = matches();
+
+    content.querySelectorAll('[data-refinery-material]').forEach((button) => {
+      const id = button.dataset.refineryMaterial;
+      const owned = Number(inv[id]) || 0;
+      const placed = Number(counts[id]) || 0;
+      const remaining = Math.max(0, owned - placed);
+      button.disabled = remaining <= 0 || used >= SLOT_COUNT || busy;
+      const meta = button.querySelector('.refinery-mat-copy small');
+      const material = getMaterialById(id);
+      setText(meta, `${material?.category || '材料'} · 已放入 ${placed}`);
+      setText(button.querySelector('.refinery-mat-qty'), `可用 ${remaining}/${owned}`);
+    });
+
+    content.querySelectorAll('[data-refinery-slot]').forEach((button) => {
+      const index = Number(button.dataset.refinerySlot);
+      const id = selected[index] || '';
+      const material = id ? getMaterialById(id) : null;
+      button.classList.toggle('filled', !!material);
+      button.disabled = !material || busy;
+      button.title = material ? '點擊取回' : '空煉器格';
+      if (material) {
+        button.dataset.refineryMaterialId = material.id;
+        button.dataset.materialRealm = material.realm || '凡人';
+        button.style.setProperty('--material-realm-color', materialRealmColor(material.realm));
+      } else {
+        delete button.dataset.refineryMaterialId;
+        delete button.dataset.materialRealm;
+        button.style.removeProperty('--material-realm-color');
+      }
+      setText(button.querySelector('.icon'), material?.icon || '＋');
+      setText(button.querySelector('.name'), material?.name || '');
+    });
+
+    setText(content.querySelector('[data-refinery-used-badge]'), `${used}/${SLOT_COUNT}`);
+    const summary = Object.entries(counts).map(([id, q]) => `${getMaterialById(id)?.name || id} ×${q}`).join(' · ') || '尚未投入材料';
+    setText(content.querySelector('[data-refinery-summary-text]'), summary);
+
+    const matchNode = content.querySelector('[data-refinery-match]');
+    matchNode?.classList.remove('ready', 'error');
+    let prefix = '';
+    let message = '放入材料後，依各材料數量自動辨識法寶配方。';
+    if (used && matching.length === 1) {
+      const item = matching[0];
+      matchNode?.classList.add('ready');
+      prefix = '配方吻合：';
+      message = `${item.icon || '◆'} ${item.name} · 將煉製 ×${Math.max(1, Math.floor(Number(item.craft?.yield) || 1))}`;
+    } else if (used && matching.length > 1) {
+      matchNode?.classList.add('error');
+      message = '這組材料同時符合多個法寶配方，需由管理員將配方調整為唯一。';
+    } else if (used) {
+      matchNode?.classList.add('error');
+      message = '目前材料數量不符合任何法寶配方；格子順序不影響判定。';
+    }
+    setText(content.querySelector('[data-refinery-match-prefix]'), prefix);
+    setText(content.querySelector('[data-refinery-match-text]'), message);
+
+    const clearButton = content.querySelector('[data-refinery-clear]');
+    if (clearButton) clearButton.disabled = !used || busy;
+    const craftButton = content.querySelector('[data-refinery-craft]');
+    if (craftButton) craftButton.disabled = matching.length !== 1 || busy;
+    setText(content.querySelector('[data-refinery-craft-label]'), busy ? '煉製中…' : '煉器');
+
+    // Selection changes are now reflected without replacing refinery innerHTML.
+    content.dataset.refineryRenderKey = currentSignature();
   }
 
   function bindContent(content) {
