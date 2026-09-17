@@ -27,6 +27,23 @@ test('non-admin cannot claim Kyushu and name changes require AI review', () => {
   assert.equal(identityApi.RESERVED.test('九州劍仙'), true);
 });
 
+test('name rendering is idempotent so MutationObserver cannot self-trigger forever', () => {
+  assert.match(identity, /userInfo\.dataset\.gameDisplayName !== name/);
+  assert.match(identity, /userInfo\.dataset\.gameDisplayName = name/);
+  assert.match(identity, /userInfo\.replaceChildren/);
+  assert.doesNotMatch(identity, /userInfo\.innerHTML\s*=\s*`<i class="fa-solid fa-user-astronaut"><\/i> \$\{name\}`/);
+});
+
+test('name save finishes before optional snapshot propagation and AI review has timeout protection', () => {
+  assert.match(identity, /const NAME_REVIEW_TIMEOUT_MS = 12000/);
+  assert.match(identity, /new AbortController\(\)/);
+  assert.match(identity, /signal: controller\.signal/);
+  assert.match(identity, /名稱 AI 審核逾時/);
+  assert.match(identity, /queueSnapshotPropagation\(true\)/);
+  assert.doesNotMatch(identity, /await propagateNameSnapshots\(true\)/);
+  assert.match(identity, /if \(saveBusy\) return/);
+});
+
 test('Dongtian generation performs a second independent AI correctness check', () => {
   assert.match(dongtianApi, /buildDongtianDoubleCheckPrompt/);
   assert.match(dongtianApi, /verifyGeneratedDongtian/);
