@@ -39,6 +39,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/admin-artifact-manager.js',
   './cultivation/admin-artifact-delete.js',
   './cultivation/admin-material-manager.js',
+  './cultivation/admin-recipe-editor-enhancement.js',
   './cultivation/admin-material-drop-manager.js',
   './cultivation/admin-panel-collapsible.js'
 ];
