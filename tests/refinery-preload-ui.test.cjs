@@ -1,0 +1,55 @@
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+
+function read(rel) {
+  return fs.readFileSync(path.join(__dirname, '..', rel), 'utf8');
+}
+
+const refinery = read('public/cultivation/cultivation-refinery-v2.js');
+const training = read('public/cultivation/cultivation-training-v4.js');
+const trainingCss = read('public/cultivation-training-v3.css');
+const main = read('public/main.js');
+
+test('held refinery materials use an adaptive square multi-column grid', () => {
+  assert.match(refinery, /grid-template-columns:repeat\(auto-fill,minmax\(96px,1fr\)\)/);
+  assert.match(refinery, /\.refinery-material\{[^}]*aspect-ratio:1/);
+  assert.match(refinery, /\.refinery-mat-qty\{position:absolute/);
+  assert.match(refinery, /@media\(max-width:430px\)\{\.refinery-material-list\{grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
+});
+
+test('training page creates refinery tab and a complete stable shell up front', () => {
+  assert.match(training, /data-training-tab="refinery"/);
+  assert.match(training, /function refineryShellMarkup\(\)/);
+  assert.match(training, /refinery-shell-material-grid/);
+  assert.match(training, /refinery-shell-slots/);
+  assert.match(training, /refinery-shell-summary/);
+  assert.match(training, /refinery-shell-match/);
+  assert.match(training, /refinery-shell-actions/);
+  assert.match(training, /xiuxian:refinery-open-request/);
+});
+
+test('preloaded refinery shell has base styling before refinery hydration', () => {
+  assert.match(trainingCss, /\.refinery-shell\{/);
+  assert.match(trainingCss, /\.refinery-shell-material-grid\{/);
+  assert.match(trainingCss, /\.refinery-shell-slots\{/);
+  assert.match(trainingCss, /grid-template-columns:repeat\(auto-fill,minmax\(96px,1fr\)\)/);
+});
+
+test('refinery hydrates an already-active preloaded tab', () => {
+  assert.match(refinery, /refineryOpenBound/);
+  assert.match(refinery, /xiuxian:refinery-open-request/);
+  assert.match(refinery, /if \(tabActive\(page\)\) \{\s*active = true;\s*render\(\);/);
+});
+
+test('visual training modules load consecutively before secondary systems', () => {
+  const trainingPos = main.indexOf("'./cultivation/cultivation-training-v4.js'");
+  const layoutPos = main.indexOf("'./cultivation/training-fluid-layout.js'");
+  const refineryPos = main.indexOf("'./cultivation/cultivation-refinery-v2.js'");
+  const bagPos = main.indexOf("'./cultivation/unified-inventory-grid.js'");
+  const battlePos = main.indexOf("'./cultivation/battle-v3-stability-ui.js'");
+  assert.ok(trainingPos >= 0 && layoutPos > trainingPos);
+  assert.ok(refineryPos > layoutPos && bagPos > refineryPos);
+  assert.ok(battlePos > bagPos);
+});
