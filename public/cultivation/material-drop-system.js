@@ -4,13 +4,16 @@ import { getFirestore, doc, onSnapshot, runTransaction } from 'https://www.gstat
 import { MATERIAL_CATALOG, getMaterialById } from './material-catalog.js';
 
 // 問道答對與洞天首次通關材料掉落。
-// 掉落率由 gameConfig/materialDropV1 控制；每種材料各自獨立抽取，因此同一次可能獲得多種材料。
+// 掉落率由 gameConfig/materialDropV1 控制；每種材料先各自獨立抽取。
+// 問道命中時每種材料 +1；洞天若至少命中一種材料，則本次總獎勵擴充為 3～10 個並分配到命中的材料種類。
 (function () {
   'use strict';
 
   const FIELD = 'materialSystem';
   const CONFIG_COLLECTION = 'gameConfig';
   const CONFIG_DOC = 'materialDropV1';
+  const DONGTIAN_MIN_MATERIALS = 3;
+  const DONGTIAN_MAX_MATERIALS = 10;
   const rewardedQuizObjects = new WeakSet();
   let unwatch = null;
   let lastAnswered = null;
@@ -88,6 +91,29 @@ import { MATERIAL_CATALOG, getMaterialById } from './material-catalog.js';
     });
   }
 
+  function expandDongtianDrops(drops) {
+    if (!Array.isArray(drops) || !drops.length) return [];
+    const compact = new Map();
+    drops.forEach((drop) => {
+      const materialId = String(drop?.materialId || '').trim();
+      if (!materialId || !getMaterialById(materialId)) return;
+      compact.set(materialId, Math.max(1, Math.floor(Number(drop?.quantity) || 1)));
+    });
+    const materialIds = [...compact.keys()];
+    if (!materialIds.length) return [];
+
+    const rolledTotal = DONGTIAN_MIN_MATERIALS + Math.floor(Math.random() * (DONGTIAN_MAX_MATERIALS - DONGTIAN_MIN_MATERIALS + 1));
+    const currentTotal = [...compact.values()].reduce((sum, quantity) => sum + quantity, 0);
+    const targetTotal = Math.max(currentTotal, rolledTotal);
+    let remaining = targetTotal - currentTotal;
+    while (remaining > 0) {
+      const materialId = materialIds[Math.floor(Math.random() * materialIds.length)];
+      compact.set(materialId, (compact.get(materialId) || 0) + 1);
+      remaining -= 1;
+    }
+    return [...compact.entries()].map(([materialId, quantity]) => ({ materialId, quantity }));
+  }
+
   async function grantDrops(source, drops) {
     if (!Array.isArray(drops) || !drops.length) return [];
     const user = authUser();
@@ -130,7 +156,8 @@ import { MATERIAL_CATALOG, getMaterialById } from './material-catalog.js';
   }
 
   function enqueueRoll(source) {
-    const drops = roll(source);
+    const rolledDrops = roll(source);
+    const drops = source === 'dongtian' ? expandDongtianDrops(rolledDrops) : rolledDrops;
     if (!drops.length) return;
     grantQueue = grantQueue.then(() => grantDrops(source, drops)).catch((error) => {
       console.warn('[Material drop]', error);
