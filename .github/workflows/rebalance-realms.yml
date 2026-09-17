@@ -1,0 +1,49 @@
+name: Rebalance realms
+
+on:
+  push:
+    paths:
+      - 'scripts/rebalance-realms.cjs'
+      - '.github/workflows/rebalance-realms.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  rebalance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Normalize migration script quoting
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('scripts/rebalance-realms.cjs')
+          s = p.read_text()
+          old = "new RegExp(\\\\`name: '\\\\${name}'.*need: \\\\${need}\\\\`)"
+          new = "new RegExp(\"name: '\" + name + \"'.*need: \" + need)"
+          s = s.replace(old, new)
+          p.write_text(s)
+          PY
+      - name: Apply realm rebalance
+        run: node scripts/rebalance-realms.cjs
+      - name: Run regression tests
+        run: |
+          npm install --no-audit --no-fund
+          npm test
+      - name: Commit rebalance
+        run: |
+          if git diff --quiet && git diff --cached --quiet; then
+            echo 'No changes to commit.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'feat: rebalance cultivation realm pacing'
+          git push origin HEAD:main
