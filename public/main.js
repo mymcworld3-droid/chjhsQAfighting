@@ -28,6 +28,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/cultivation-refinery-v2.js',
   './cultivation/training-fluid-layout.js',
   './cultivation/market-fluid-layout.js',
+  './cultivation/material-realm-ui.js',
   './cultivation/material-drop-system.js',
   './cultivation/battle-v3-stability-ui.js',
   './cultivation/battle-mode-v2.js',
@@ -43,8 +44,8 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/admin-artifact-manager.js',
   './cultivation/admin-artifact-delete.js',
   './cultivation/admin-material-manager.js',
+  './cultivation/admin-material-realm-editor.js',
   './cultivation/admin-recipe-editor-enhancement.js',
-  './cultivation/admin-material-drop-manager.js',
   './cultivation/admin-panel-collapsible.js'
 ];
 
