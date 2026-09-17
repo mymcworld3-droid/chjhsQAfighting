@@ -9,11 +9,13 @@ import {
 
   const ADMIN_TITLE = '《九州》';
   const RESERVED_RE = /《?\s*九州\s*》?/g;
+  const NAME_REVIEW_TIMEOUT_MS = 12000;
   const auth = getAuth(getApp());
   const db = getFirestore(getApp());
   let syncing = false;
   let baseSaveProfile = null;
   let propagatedKey = '';
+  let saveBusy = false;
 
   function data() { return window.getCurrentUserData?.() || null; }
   function isAdmin(player = data()) { return player?.isAdmin === true; }
@@ -40,9 +42,18 @@ import {
     const userInfo = document.getElementById('user-info');
     if (userInfo) {
       userInfo.removeAttribute('data-i18n');
-      userInfo.innerHTML = `<i class="fa-solid fa-user-astronaut"></i> ${name}`;
+      // MutationObserver 會監聽這個節點；只有名稱真的改變時才碰 DOM，
+      // 避免「observer -> innerHTML -> observer」無限迴圈造成整頁卡死。
+      if (userInfo.dataset.gameDisplayName !== name) {
+        userInfo.dataset.gameDisplayName = name;
+        const icon = document.createElement('i');
+        icon.className = 'fa-solid fa-user-astronaut';
+        userInfo.replaceChildren(icon, document.createTextNode(` ${name}`));
+      }
     }
-    document.querySelectorAll('[data-self-player-name]').forEach((node) => { node.textContent = name; });
+    document.querySelectorAll('[data-self-player-name]').forEach((node) => {
+      if (node.textContent !== name) node.textContent = name;
+    });
   }
 
   async function propagateNameSnapshots(force = false) {
@@ -77,6 +88,13 @@ import {
     }
   }
 
+  function queueSnapshotPropagation(force = false) {
+    // 舊洞天／五仙名稱只是快照，不得阻塞玩家改名主流程。
+    Promise.resolve().then(() => propagateNameSnapshots(force)).catch((error) => {
+      console.warn('[Identity] background snapshot propagation failed', error);
+    });
+  }
+
   async function normalizeStoredIdentity() {
     const player = data();
     const user = auth.currentUser;
@@ -84,7 +102,7 @@ import {
     const desired = publicName(player.displayName || user.displayName || '無名修士', isAdmin(player));
     if (player.displayName === desired) {
       syncVisibleName();
-      propagateNameSnapshots().catch(() => {});
+      queueSnapshotPropagation(false);
       return;
     }
     syncing = true;
@@ -92,7 +110,7 @@ import {
       await updateDoc(doc(db, 'users', user.uid), { displayName: desired });
       player.displayName = desired;
       syncVisibleName();
-      await propagateNameSnapshots(true);
+      queueSnapshotPropagation(true);
       window.dispatchEvent(new CustomEvent('player-name-updated', { detail: { displayName: desired } }));
     } catch (error) {
       console.warn('[Identity] failed to normalize stored name', error);
@@ -105,12 +123,25 @@ import {
     const base = stripReserved(rawName);
     if (base.length < 2) throw new Error('名稱至少需要 2 個字元。');
     if (base.length > 24) throw new Error('名稱最多 24 個字元。');
-    const response = await fetch('/api/review-player-name', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: base })
-    });
-    const payload = await response.json().catch(() => ({}));
-    if (!response.ok || payload.approved !== true) throw new Error(payload.error || payload.reason || '名稱未通過 AI 審核。');
-    return stripReserved(payload.normalizedName || base);
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), NAME_REVIEW_TIMEOUT_MS);
+    try {
+      const response = await fetch('/api/review-player-name', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: base }),
+        signal: controller.signal
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok || payload.approved !== true) throw new Error(payload.error || payload.reason || '名稱未通過 AI 審核。');
+      return stripReserved(payload.normalizedName || base);
+    } catch (error) {
+      if (error?.name === 'AbortError') throw new Error('名稱 AI 審核逾時，請再試一次。');
+      throw error;
+    } finally {
+      clearTimeout(timeout);
+    }
   }
 
   function installSaveProfileGuard() {
@@ -120,23 +151,35 @@ import {
       const input = document.getElementById('set-display-name');
       const player = data();
       if (!input || !player) return baseSaveProfile.apply(this, args);
+      if (saveBusy) return;
+
       const requested = input.value.trim();
       if (!isAdmin(player) && /九州/.test(requested)) {
         alert('「九州」為管理員專屬稱號，其他修士不能使用。');
         return;
       }
+
       const oldText = input.value;
+      saveBusy = true;
       try {
         const approvedBase = await reviewBaseName(requested);
-        input.value = publicName(approvedBase, isAdmin(player));
+        const approvedName = publicName(approvedBase, isAdmin(player));
+        input.value = approvedName;
+
+        // canonical users/{uid}.displayName 與其餘設定先完成儲存；成功後 UI 立即更新。
         await baseSaveProfile.apply(this, args);
-        player.displayName = input.value;
+        player.displayName = approvedName;
+        input.value = approvedName;
         syncVisibleName();
-        await propagateNameSnapshots(true);
-        window.dispatchEvent(new CustomEvent('player-name-updated', { detail: { displayName: player.displayName } }));
+        window.dispatchEvent(new CustomEvent('player-name-updated', { detail: { displayName: approvedName } }));
+
+        // 洞天／五仙舊快照在背景同步，失敗或資料很多都不能拖住改名介面。
+        queueSnapshotPropagation(true);
       } catch (error) {
         input.value = oldText;
         alert(error.message || '名稱審核失敗，請稍後再試。');
+      } finally {
+        saveBusy = false;
       }
     };
   }
@@ -146,7 +189,9 @@ import {
     normalizeStoredIdentity();
     syncVisibleName();
     const target = document.getElementById('user-info');
-    if (target) new MutationObserver(syncVisibleName).observe(target, { childList: true, subtree: true, characterData: true });
+    if (target) {
+      new MutationObserver(() => syncVisibleName()).observe(target, { childList: true, subtree: true, characterData: true });
+    }
     window.addEventListener('focus', syncVisibleName);
     window.addEventListener('xiuxian:user-ready', () => { installSaveProfileGuard(); normalizeStoredIdentity(); syncVisibleName(); });
   }
