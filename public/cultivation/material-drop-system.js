@@ -120,6 +120,10 @@ import { MATERIAL_CATALOG, getMaterialById } from './material-catalog.js';
     window.dispatchEvent(new CustomEvent('material-system-updated', {
       detail: { ...committed, dropSource: source, drops: normalizedDrops }
     }));
+    // material-system.js 已監聽 stats 更新作為重繪訊號；此事件不帶 stats，因此不會再次觸發問道掉落判定。
+    window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', {
+      detail: { materialDropped: true, dropSource: source }
+    }));
     const label = normalizedDrops.map(({ materialId, quantity }) => `${getMaterialById(materialId)?.name || materialId} ×${quantity}`).join('、');
     toast(`${source === 'dongtian' ? '洞天機緣' : '問道機緣'}：獲得 ${label}`);
     return normalizedDrops;
