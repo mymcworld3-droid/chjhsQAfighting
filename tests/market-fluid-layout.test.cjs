@@ -27,3 +27,8 @@ test('market category tabs span the available width', () => {
   assert.match(layout, /#page-store > div:has\(> \.store-tab\)[\s\S]*grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
   assert.match(layout, /#page-store \.store-tab\{[\s\S]*width:100%/);
 });
+
+test('market avatar frame previews stay compact without changing equipped frames elsewhere', () => {
+  assert.match(layout, /#store-grid img\[class~="h-\[140%\]"\]\{[\s\S]*height:118%!important;[\s\S]*max-width:118%!important;/);
+  assert.match(layout, /#store-grid img:not\(\[class~="h-\[140%\]"\]\)/);
+});
