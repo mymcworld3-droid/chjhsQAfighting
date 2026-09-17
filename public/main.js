@@ -22,7 +22,9 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/cultivation-core-equip-warning.js',
   './cultivation/cultivation-combat-stats.js',
   './cultivation/artifact-catalog-sync.js',
+  './cultivation/material-catalog-sync.js',
   './cultivation/artifact-system.js',
+  './cultivation/material-system.js',
   './cultivation/battle-mode-v2.js',
   './cultivation/cultivation-status-panel.js',
   './cultivation/realm-breakthrough-feedback.js',
@@ -34,6 +36,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/admin-self-transfer.js',
   './cultivation/admin-artifact-manager.js',
   './cultivation/admin-artifact-delete.js',
+  './cultivation/admin-material-manager.js',
   './cultivation/admin-panel-collapsible.js'
 ];
 
