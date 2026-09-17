@@ -52,6 +52,25 @@ test('admin editor exposes generic effect fields instead of hard-coding individu
   }
 });
 
+test('artifact editor shows a right-side supported-effect guide with one-click add buttons', () => {
+  assert.match(manager, /EFFECT_GUIDE/);
+  assert.match(manager, /可用功能/);
+  assert.match(manager, /aam-editor-layout/);
+  assert.match(manager, /aam-guide/);
+  assert.match(manager, /data-aam-add-effect-type/);
+  assert.match(manager, /defaultEffect\(type\)/);
+  for (const type of ['equip_attack_flat', 'equip_attack_percent', 'equip_hp_flat', 'equip_hp_percent', 'timed_attack_multiplier', 'timed_cultivation_multiplier', 'remove_wrong_option']) {
+    assert.match(manager, new RegExp(type));
+  }
+});
+
+test('artifact category is a dropdown while preserving legacy custom categories', () => {
+  assert.match(manager, /ARTIFACT_CATEGORIES = Object\.freeze\(\['消耗法寶', '裝備法寶'\]\)/);
+  assert.match(manager, /<select id="aam-category">/);
+  assert.doesNotMatch(manager, /<input id="aam-category"/);
+  assert.match(manager, /if \(!options\.includes\(value\)\) options\.push\(value\)/);
+});
+
 test('all major admin areas can collapse and dynamic admin panels are wrapped too', () => {
   assert.match(collapsible, /數據統計/);
   assert.match(collapsible, /系統管理/);
