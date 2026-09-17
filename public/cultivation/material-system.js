@@ -88,9 +88,13 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
     if (!card) return;
     const gold = Math.max(0, Number(userData()?.stats?.gold) || 0);
     const goldNode = card.querySelector('#material-store-gold');
-    if (goldNode) goldNode.textContent = `金幣 ${gold.toLocaleString()}`;
+    const goldText = `金幣 ${gold.toLocaleString()}`;
+    if (goldNode && goldNode.textContent !== goldText) goldNode.textContent = goldText;
     const list = card.querySelector('#material-store-list');
     if (!list) return;
+    const renderKey = `${gold}|${purchaseBusy}|${MATERIAL_CATALOG.map((item) => `${item.id}:${item.name}:${item.icon}:${item.category}:${item.buyGold}:${materialQuantity(item.id)}`).join('|')}`;
+    if (list.dataset.renderKey === renderKey) return;
+    list.dataset.renderKey = renderKey;
     list.innerHTML = MATERIAL_CATALOG.map((item) => {
       const qty = materialQuantity(item.id);
       const price = Math.max(0, Number(item.buyGold) || 0);
