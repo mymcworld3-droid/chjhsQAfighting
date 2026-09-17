@@ -111,3 +111,27 @@ body.xianxia-theme .training-page-v3 { max-width:900px; margin:0 auto; padding-b
   .core-minimal-name { font-size:22px; }
   .training-v3-bag-grid { grid-template-columns:1fr; }
 }
+
+
+/* Refinery shell is present with the training page so the layout does not jump while feature modules hydrate. */
+.refinery-shell{width:100%;display:grid;grid-template-columns:minmax(280px,.9fr) minmax(390px,1.1fr);gap:14px;align-items:stretch}
+.refinery-shell .refinery-panel{min-width:0;padding:14px;border:1px solid rgba(216,177,93,.2);border-radius:18px;background:linear-gradient(145deg,rgba(21,17,10,.96),rgba(7,7,7,.97));box-shadow:0 16px 42px rgba(0,0,0,.3)}
+.refinery-shell .refinery-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:11px}
+.refinery-shell .refinery-head h3{margin:0;color:#f1e1bc;font-size:13px}
+.refinery-shell .refinery-head p{margin:4px 0 0;color:#8d816c;font-size:8px;line-height:1.55}
+.refinery-shell .refinery-badge{padding:5px 8px;border:1px solid rgba(216,177,93,.15);border-radius:999px;color:#cdb46f;font-size:7px;white-space:nowrap}
+.refinery-shell-material-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px;align-content:start}
+.refinery-shell-material{aspect-ratio:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:8px;border:1px solid rgba(255,255,255,.055);border-radius:14px;background:rgba(255,255,255,.014);color:#675f52}
+.refinery-shell-icon{width:42px;height:42px;border-radius:12px;background:linear-gradient(110deg,rgba(216,177,93,.08),rgba(255,255,255,.025),rgba(216,177,93,.08));border:1px solid rgba(216,177,93,.12)}
+.refinery-shell-line{width:62%;height:6px;border-radius:999px;background:rgba(216,177,93,.09)}
+.refinery-shell-material small{font-size:6px;color:#625b50}
+.refinery-shell-slots{display:grid;grid-template-columns:repeat(4,minmax(64px,1fr));gap:8px;margin:12px 0}
+.refinery-shell-slot{aspect-ratio:1;min-height:72px;display:grid;place-items:center;position:relative;border:1px solid rgba(216,177,93,.16);border-radius:13px;background:radial-gradient(circle at 50% 35%,rgba(216,177,93,.05),rgba(255,255,255,.01));color:#5f584c}
+.refinery-shell-slot .idx{position:absolute;top:5px;left:6px;font-size:6px}
+.refinery-shell-summary,.refinery-shell-match{padding:8px 9px;border-radius:11px;background:rgba(216,177,93,.03);color:#857966;font-size:8px;line-height:1.6}
+.refinery-shell-match{margin-top:8px;border:1px solid rgba(216,177,93,.1)}
+.refinery-shell-actions{display:flex;gap:8px;margin-top:10px}
+.refinery-shell-actions button{min-height:42px;border-radius:12px;border:1px solid rgba(216,177,93,.14);background:rgba(216,177,93,.035);color:#736a5b;font-size:9px;font-weight:900}
+.refinery-shell-actions button:first-child{width:34%}.refinery-shell-actions button:last-child{flex:1}
+@media(max-width:900px){.refinery-shell{grid-template-columns:1fr}}
+@media(max-width:430px){.refinery-shell-material-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.refinery-shell-slots{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}.refinery-shell-slot{min-height:55px}}
