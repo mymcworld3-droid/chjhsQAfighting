@@ -33,6 +33,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/golden-core-tutorial.js',
   './cultivation/admin-self-transfer.js',
   './cultivation/admin-artifact-manager.js',
+  './cultivation/admin-artifact-delete.js',
   './cultivation/admin-panel-collapsible.js'
 ];
 
