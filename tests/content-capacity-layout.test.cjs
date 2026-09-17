@@ -10,26 +10,38 @@ function read(rel) {
 const layout = read('public/cultivation/content-capacity-layout.js');
 const main = read('public/main.js');
 
-test('training content is no longer clipped and uses available viewport height', () => {
+test('training content measures the real space above bottom navigation', () => {
+  assert.match(layout, /NAV_ID = 'bottom-nav'/);
+  assert.match(layout, /function updateTrainingFillHeight\(\)/);
+  assert.match(layout, /nav\.getBoundingClientRect\(\)/);
+  assert.match(layout, /page\.getBoundingClientRect\(\)/);
+  assert.match(layout, /--training-fill-height/);
+  assert.match(layout, /--training-content-height/);
+  assert.match(layout, /navTop - pageRect\.top - safeGap/);
+  assert.match(layout, /navTop - contentTop - safeGap/);
+  assert.match(layout, /visualViewport\?\.height/);
+});
+
+test('training content is not clipped and golden core can use the available height', () => {
   assert.match(layout, /#page-training #training-tab-content/);
   assert.match(layout, /overflow:visible!important/);
-  assert.match(layout, /min-height:calc\(100dvh - 260px\)!important/);
+  assert.match(layout, /min-height:var\(--training-content-height/);
   assert.match(layout, /golden-core-stage-v3/);
   assert.match(layout, /height:clamp\(240px,44dvh,430px\)!important/);
 });
 
-test('refinery keeps long material lists scrollable without hiding the craft side', () => {
+test('refinery fills available content height and keeps long material lists scrollable', () => {
   assert.match(layout, /#page-training \.cultivation-refinery/);
-  assert.match(layout, /#page-training \.refinery-panel/);
+  assert.match(layout, /min-height:var\(--training-content-height/);
   assert.match(layout, /#page-training \.refinery-material-list/);
-  assert.match(layout, /max-height:calc\(100dvh - 395px\)!important/);
+  assert.match(layout, /calc\(var\(--training-content-height/);
   assert.match(layout, /overscroll-behavior:contain!important/);
 });
 
 test('bag and inventory can contain many items safely', () => {
   assert.match(layout, /training-v3-bag-grid/);
   assert.match(layout, /cultivation-inventory-grid/);
-  assert.match(layout, /max-height:calc\(100dvh - 270px\)!important/);
+  assert.match(layout, /max-height:var\(--training-content-height/);
   assert.match(layout, /scrollbar-gutter:stable/);
 });
 
