@@ -43,13 +43,14 @@ test('refinery hydrates an already-active preloaded tab', () => {
   assert.match(refinery, /if \(tabActive\(page\)\) \{\s*active = true;\s*render\(\);/);
 });
 
-test('visual training modules load consecutively before secondary systems', () => {
+test('stable shell is created early while hydrated modules keep safe dependency order', () => {
   const trainingPos = main.indexOf("'./cultivation/cultivation-training-v4.js'");
-  const layoutPos = main.indexOf("'./cultivation/training-fluid-layout.js'");
-  const refineryPos = main.indexOf("'./cultivation/cultivation-refinery-v2.js'");
+  const materialPos = main.indexOf("'./cultivation/material-system.js'");
   const bagPos = main.indexOf("'./cultivation/unified-inventory-grid.js'");
+  const refineryPos = main.indexOf("'./cultivation/cultivation-refinery-v2.js'");
+  const layoutPos = main.indexOf("'./cultivation/training-fluid-layout.js'");
   const battlePos = main.indexOf("'./cultivation/battle-v3-stability-ui.js'");
-  assert.ok(trainingPos >= 0 && layoutPos > trainingPos);
-  assert.ok(refineryPos > layoutPos && bagPos > refineryPos);
-  assert.ok(battlePos > bagPos);
+  assert.ok(trainingPos >= 0 && materialPos > trainingPos);
+  assert.ok(bagPos > materialPos && refineryPos > bagPos);
+  assert.ok(layoutPos > refineryPos && battlePos > layoutPos);
 });
