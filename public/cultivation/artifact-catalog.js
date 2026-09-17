@@ -1,15 +1,16 @@
-// 法寶清單：新增法寶時只需要在這個陣列增加一筆。
+// 法寶清單：內建清單是預設值與遠端設定失敗時的備援。
+// 正式遊戲執行時可由 artifact-catalog-sync.js 用 Firestore 全站設定替換同一個陣列。
+// 因為 artifact-system.js 始終持有這個陣列的同一個 reference，所以管理員新增／編輯後，
+// 煉器室、裝備、限時效果、問道／鬥法／洞天法寶都不需要各自修改。
 //
 // 支援的通用 effect.type：
-// - equip_attack_flat          裝備後固定增加攻擊
-// - equip_attack_percent       裝備後按比例增加攻擊，例如 value: 0.2 = +20%
-// - equip_hp_flat              裝備後固定增加生命上限
-// - equip_hp_percent           裝備後按比例增加生命上限
-// - timed_attack_multiplier    使用後一段時間攻擊倍率，例如 multiplier: 1.5
+// - equip_attack_flat            裝備後固定增加攻擊
+// - equip_attack_percent         裝備後按比例增加攻擊，例如 value: 0.2 = +20%
+// - equip_hp_flat                裝備後固定增加生命上限
+// - equip_hp_percent             裝備後按比例增加生命上限
+// - timed_attack_multiplier      使用後一段時間攻擊倍率，例如 multiplier: 1.5
 // - timed_cultivation_multiplier 使用後一段時間修為倍率，例如 multiplier: 2
-// - remove_wrong_option        問道／鬥法／洞天時移除一個錯誤選項
-//
-// 一件法寶可以同時放多個 effects，因此不必為組合法寶另外改引擎。
+// - remove_wrong_option          問道／鬥法／洞天時移除一個錯誤選項
 
 export const ARTIFACT_REALMS = Object.freeze([
   { id: 'mortal', name: '凡人', order: 0, need: 0 },
@@ -25,7 +26,17 @@ export const ARTIFACT_REALMS = Object.freeze([
   { id: 'immortal', name: '真仙', order: 10, need: 5000 }
 ]);
 
-export const ARTIFACT_CATALOG = Object.freeze([
+export const SUPPORTED_ARTIFACT_EFFECTS = Object.freeze([
+  'equip_attack_flat',
+  'equip_attack_percent',
+  'equip_hp_flat',
+  'equip_hp_percent',
+  'timed_attack_multiplier',
+  'timed_cultivation_multiplier',
+  'remove_wrong_option'
+]);
+
+const DEFAULT_ARTIFACT_CATALOG = [
   {
     id: 'seven-treasure-ruler',
     name: '七寶玲瓏尺',
@@ -102,7 +113,83 @@ export const ARTIFACT_CATALOG = Object.freeze([
       { type: 'equip_hp_flat', value: 900 }
     ]
   }
-]);
+];
+
+function clone(value) {
+  return JSON.parse(JSON.stringify(value));
+}
+
+function finite(value, fallback = 0) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number : fallback;
+}
+
+export function normalizeArtifactDefinition(raw = {}) {
+  const item = {
+    id: String(raw.id || '').trim(),
+    name: String(raw.name || '').trim(),
+    icon: String(raw.icon || '◆').trim().slice(0, 4) || '◆',
+    realm: String(raw.realm || '凡人').trim(),
+    category: String(raw.category || '法寶').trim(),
+    description: String(raw.description || '').trim(),
+    craft: {
+      gold: Math.max(0, Math.floor(finite(raw.craft?.gold, 0))),
+      yield: Math.max(1, Math.floor(finite(raw.craft?.yield, 1)))
+    },
+    effects: Array.isArray(raw.effects) ? raw.effects.map((effect) => {
+      const next = { type: String(effect?.type || '').trim() };
+      if ('value' in (effect || {})) next.value = finite(effect.value, 0);
+      if ('multiplier' in (effect || {})) next.multiplier = Math.max(0, finite(effect.multiplier, 1));
+      if ('durationMs' in (effect || {})) next.durationMs = Math.max(1000, Math.floor(finite(effect.durationMs, 1000)));
+      if (Array.isArray(effect?.contexts)) next.contexts = effect.contexts.filter((v) => ['quiz', 'battle', 'dongtian'].includes(v));
+      if ('perQuestion' in (effect || {})) next.perQuestion = Math.max(1, Math.floor(finite(effect.perQuestion, 1)));
+      if (effect?.stacking === 'extend') next.stacking = 'extend';
+      return next;
+    }).filter((effect) => effect.type) : []
+  };
+  if (raw.equipSlot) item.equipSlot = String(raw.equipSlot).trim();
+  return item;
+}
+
+export function validateArtifactCatalog(items) {
+  if (!Array.isArray(items) || !items.length) throw new Error('法寶清單不可為空');
+  const seen = new Set();
+  return items.map((raw) => {
+    const item = normalizeArtifactDefinition(raw);
+    if (!/^[a-z0-9][a-z0-9-]{1,63}$/.test(item.id)) throw new Error(`法寶 ID 不合法：${item.id || '空白'}`);
+    if (seen.has(item.id)) throw new Error(`法寶 ID 重複：${item.id}`);
+    seen.add(item.id);
+    if (!item.name) throw new Error(`法寶 ${item.id} 缺少名稱`);
+    if (!ARTIFACT_REALMS.some((realm) => realm.name === item.realm)) throw new Error(`法寶 ${item.name} 使用未知境界：${item.realm}`);
+    if (!item.effects.length) throw new Error(`法寶 ${item.name} 至少需要一個效果`);
+    item.effects.forEach((effect) => {
+      if (!SUPPORTED_ARTIFACT_EFFECTS.includes(effect.type)) throw new Error(`法寶 ${item.name} 使用尚未支援的效果：${effect.type}`);
+      if (effect.type.startsWith('timed_') && (!(effect.multiplier > 0) || !(effect.durationMs >= 1000))) throw new Error(`法寶 ${item.name} 的限時效果數值不合法`);
+      if (effect.type === 'remove_wrong_option' && (!Array.isArray(effect.contexts) || !effect.contexts.length)) throw new Error(`法寶 ${item.name} 至少要指定一個答題場景`);
+    });
+    const needsSlot = item.effects.some((effect) => effect.type.startsWith('equip_'));
+    if (needsSlot && !item.equipSlot) throw new Error(`裝備法寶 ${item.name} 必須指定裝備欄位`);
+    return item;
+  });
+}
+
+export const ARTIFACT_CATALOG = DEFAULT_ARTIFACT_CATALOG.map(normalizeArtifactDefinition);
+
+export function getDefaultArtifactCatalog() {
+  return clone(DEFAULT_ARTIFACT_CATALOG.map(normalizeArtifactDefinition));
+}
+
+export function replaceArtifactCatalog(items, source = 'runtime') {
+  const normalized = validateArtifactCatalog(items);
+  ARTIFACT_CATALOG.splice(0, ARTIFACT_CATALOG.length, ...normalized);
+  if (typeof window !== 'undefined') {
+    window.XIUXIAN_ARTIFACT_CATALOG = ARTIFACT_CATALOG;
+    window.dispatchEvent(new CustomEvent('artifact-catalog-updated', { detail: { source, count: ARTIFACT_CATALOG.length } }));
+    // 舊引擎已監聽此事件，用同一條更新路徑重繪煉器室。
+    window.dispatchEvent(new CustomEvent('artifact-system-updated', { detail: { catalogChanged: true, source } }));
+  }
+  return ARTIFACT_CATALOG;
+}
 
 export function getArtifactById(id) {
   return ARTIFACT_CATALOG.find((item) => item.id === id) || null;
