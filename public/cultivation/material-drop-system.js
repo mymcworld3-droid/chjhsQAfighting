@@ -1,70 +1,31 @@
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-import { getFirestore, doc, onSnapshot, runTransaction } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-import { MATERIAL_CATALOG, getMaterialById } from './material-catalog.js';
+import { getFirestore, doc, runTransaction } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { MATERIAL_CATALOG, getMaterialById, materialDropRateFor, materialRealmForScore } from './material-catalog.js';
 
 // 問道答對與洞天首次通關材料掉落。
-// 掉落率由 gameConfig/materialDropV1 控制；每種材料先各自獨立抽取。
+// 材料掉率不再由管理員手動百分比控制，而由「材料境界 × 玩家境界」自動決定：
+// - 玩家未達材料境界：該材料不會出現。
+// - 玩家達到同境界：依該材料境界的基礎稀有度抽取。
+// - 玩家高出材料境界：舊境界材料的掉率逐步提高。
 // 問道命中時每種材料 +1；洞天若至少命中一種材料，則本次總獎勵擴充為 3～10 個並分配到命中的材料種類。
 (function () {
   'use strict';
 
   const FIELD = 'materialSystem';
-  const CONFIG_COLLECTION = 'gameConfig';
-  const CONFIG_DOC = 'materialDropV1';
   const DONGTIAN_MIN_MATERIALS = 3;
   const DONGTIAN_MAX_MATERIALS = 10;
   const rewardedQuizObjects = new WeakSet();
-  let unwatch = null;
   let lastAnswered = null;
   let lastCorrect = null;
-  let rules = {};
   let grantQueue = Promise.resolve();
-
-  const BUILTIN_RATES = Object.freeze({
-    'spirit-iron': { quizRate: 0.04, dongtianRate: 0.20 },
-    'spirit-wood': { quizRate: 0.05, dongtianRate: 0.22 },
-    'spirit-crystal': { quizRate: 0.03, dongtianRate: 0.15 },
-    'beast-core-shard': { quizRate: 0.02, dongtianRate: 0.10 },
-    'talisman-paper': { quizRate: 0.06, dongtianRate: 0.25 }
-  });
 
   function userData() { return window.getCurrentUserData?.() || null; }
   function authUser() {
     try { return getAuth(getApp()).currentUser; } catch (_) { return null; }
   }
   function database() { return getFirestore(getApp()); }
-  function clampRate(value, fallback = 0) {
-    const number = Number(value);
-    return Number.isFinite(number) ? Math.max(0, Math.min(1, number)) : fallback;
-  }
-  function defaultRule(materialId) {
-    const builtIn = BUILTIN_RATES[materialId];
-    return builtIn ? { ...builtIn } : { quizRate: 0.03, dongtianRate: 0.15 };
-  }
-  function normalizeRule(raw, materialId) {
-    const fallback = defaultRule(materialId);
-    return {
-      quizRate: clampRate(raw?.quizRate, fallback.quizRate),
-      dongtianRate: clampRate(raw?.dongtianRate, fallback.dongtianRate)
-    };
-  }
-  function normalizeRules(raw = {}) {
-    const source = raw && typeof raw === 'object' && !Array.isArray(raw) ? raw : {};
-    const next = {};
-    MATERIAL_CATALOG.forEach((material) => {
-      next[material.id] = normalizeRule(source[material.id], material.id);
-    });
-    return next;
-  }
-  function publishRules() {
-    window.XIUXIAN_MATERIAL_DROP_RULES = JSON.parse(JSON.stringify(rules));
-    window.dispatchEvent(new CustomEvent('material-drop-rules-updated', { detail: window.XIUXIAN_MATERIAL_DROP_RULES }));
-  }
-  function setRules(raw) {
-    rules = normalizeRules(raw);
-    publishRules();
-  }
+  function currentScore() { return Math.max(0, Number(userData()?.stats?.totalScore) || 0); }
   function normalizeMaterialSystem(raw = {}) {
     const inventory = {};
     Object.entries(raw?.inventory || {}).forEach(([id, value]) => {
@@ -78,15 +39,15 @@ import { MATERIAL_CATALOG, getMaterialById } from './material-catalog.js';
     const el = document.createElement('div');
     el.id = 'material-drop-toast';
     el.textContent = message;
-    el.style.cssText = 'position:fixed;left:50%;bottom:178px;z-index:10120;max-width:calc(100vw - 28px);transform:translateX(-50%);padding:10px 15px;border:1px solid rgba(167,139,250,.48);border-radius:999px;background:rgba(10,8,18,.97);color:#eadcff;font-size:10px;font-weight:900;box-shadow:0 16px 48px rgba(0,0,0,.55)';
+    el.style.cssText = 'position:fixed;left:50%;bottom:178px;z-index:10120;max-width:calc(100vw - 28px);transform:translateX(-50%);padding:10px 15px;border:1px solid rgba(216,177,93,.48);border-radius:999px;background:rgba(10,8,12,.97);color:#f4e8c6;font-size:10px;font-weight:900;box-shadow:0 16px 48px rgba(0,0,0,.55)';
     document.body.appendChild(el);
     setTimeout(() => el.remove(), 3600);
   }
 
   function roll(source) {
-    const key = source === 'dongtian' ? 'dongtianRate' : 'quizRate';
+    const score = currentScore();
     return MATERIAL_CATALOG.flatMap((material) => {
-      const rate = clampRate(rules[material.id]?.[key], defaultRule(material.id)[key]);
+      const rate = materialDropRateFor(material, score, source);
       return rate > 0 && Math.random() < rate ? [{ materialId: material.id, quantity: 1 }] : [];
     });
   }
@@ -146,11 +107,13 @@ import { MATERIAL_CATALOG, getMaterialById } from './material-catalog.js';
     window.dispatchEvent(new CustomEvent('material-system-updated', {
       detail: { ...committed, dropSource: source, drops: normalizedDrops }
     }));
-    // material-system.js 已監聽 stats 更新作為重繪訊號；此事件不帶 stats，因此不會再次觸發問道掉落判定。
     window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', {
       detail: { materialDropped: true, dropSource: source }
     }));
-    const label = normalizedDrops.map(({ materialId, quantity }) => `${getMaterialById(materialId)?.name || materialId} ×${quantity}`).join('、');
+    const label = normalizedDrops.map(({ materialId, quantity }) => {
+      const item = getMaterialById(materialId);
+      return `${item?.name || materialId}（${item?.realm || '未知境界'}）×${quantity}`;
+    }).join('、');
     toast(`${source === 'dongtian' ? '洞天機緣' : '問道機緣'}：獲得 ${label}`);
     return normalizedDrops;
   }
@@ -211,28 +174,27 @@ import { MATERIAL_CATALOG, getMaterialById } from './material-catalog.js';
     });
   }
 
-  function watchConfig() {
-    if (unwatch) return;
-    try {
-      unwatch = onSnapshot(doc(database(), CONFIG_COLLECTION, CONFIG_DOC), (snap) => {
-        setRules(snap.exists() ? snap.data()?.rules : {});
-      }, (error) => {
-        console.warn('[Material drop config]', error);
-        setRules({});
-      });
-    } catch (error) {
-      console.warn('[Material drop config]', error);
-      setRules({});
-    }
+  function publishRealmDropState() {
+    const score = currentScore();
+    window.XIUXIAN_MATERIAL_DROP_STATE = {
+      score,
+      playerRealm: materialRealmForScore(score),
+      rates: Object.fromEntries(MATERIAL_CATALOG.map((material) => [material.id, {
+        quizRate: materialDropRateFor(material, score, 'quiz'),
+        dongtianRate: materialDropRateFor(material, score, 'dongtian')
+      }]))
+    };
   }
 
   function boot() {
-    setRules({});
     syncQuizBaseline();
-    watchConfig();
-    window.addEventListener('xiuxian:stats-updated', onStatsUpdated);
-    window.addEventListener('xiuxian:user-ready', () => { syncQuizBaseline(); watchConfig(); });
-    window.addEventListener('material-catalog-updated', () => setRules(rules));
+    publishRealmDropState();
+    window.addEventListener('xiuxian:stats-updated', (event) => {
+      onStatsUpdated(event);
+      publishRealmDropState();
+    });
+    window.addEventListener('xiuxian:user-ready', () => { syncQuizBaseline(); publishRealmDropState(); });
+    window.addEventListener('material-catalog-updated', publishRealmDropState);
     scanDongtianResult();
     new MutationObserver(scanDongtianResult).observe(document.body, { childList: true, subtree: true });
   }
