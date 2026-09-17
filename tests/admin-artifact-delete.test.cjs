@@ -13,7 +13,7 @@ const main = read('public/main.js');
 test('artifact delete is admin-only, confirmed, persisted, and refreshes the runtime catalog', () => {
   assert.match(del, /isAdmin\(\)/);
   assert.match(del, /window\.confirm/);
-  assert.match(del, /ARTIFACT_CATALOG\.filter\(\(item\) => item\.id !== itemId\)/);
+  assert.match(del, /ARTIFACT_CATALOG\s*\.filter\(\(item\) => item\.id !== itemId\)/);
   assert.match(del, /validateArtifactCatalog\(next\)/);
   assert.match(del, /userSnap\.data\(\)\?\.isAdmin !== true/);
   assert.match(del, /tx\.set\(configRef/);
