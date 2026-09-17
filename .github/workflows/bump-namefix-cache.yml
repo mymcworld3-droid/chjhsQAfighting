@@ -1,0 +1,39 @@
+name: Bump name fix cache
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/bump-namefix-cache.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Bump main module cache key
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('public/index.html')
+          s = p.read_text()
+          old = 'main.js?v=20260916-polish4'
+          new = 'main.js?v=20260917-namefix1'
+          if old in s:
+              p.write_text(s.replace(old, new, 1))
+          elif new not in s:
+              raise SystemExit('main.js cache key not found')
+          PY
+      - name: Commit cache bump
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/index.html
+          git diff --cached --quiet || git commit -m "fix: bust cache for name update repair"
+          git push
