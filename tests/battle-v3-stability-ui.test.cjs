@@ -26,8 +26,8 @@ test('battle quiz compatibility bridges the shared correct/wrong API schema to o
 test('battle stability layer preserves the original payload while enriching generate-quiz responses', () => {
   assert.match(fix, /url\.includes\('\/api\/generate-quiz'\)/);
   assert.match(fix, /response\.clone\(\)\.json\(\)/);
-  assert.match(fix, /text: JSON\.stringify\(enrichQuestion\(parsed\)\)/);
-  assert.match(fix, /provider/);
+  assert.match(fix, /return \{ \.\.\.payload, text: JSON\.stringify\(enrichQuestion\(parsed\)\) \}/);
+  assert.match(fix, /const enriched = enrichPayload\(payload\)/);
   assert.doesNotMatch(fix, /\/api\/generate-battle-quiz/);
 });
 
