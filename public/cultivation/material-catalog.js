@@ -2,11 +2,12 @@
 // 材料清單與配方可由 material-catalog-sync.js 以 Firestore 全站設定覆蓋。
 
 export const MATERIAL_CATEGORIES = Object.freeze(['礦石', '靈木', '晶石', '妖獸材料', '符材', '其他']);
+export const MAX_ARTIFACT_RECIPE_MATERIALS = 8;
 
 const DEFAULT_MATERIAL_CATALOG = [
   { id: 'spirit-iron', name: '玄鐵', icon: '鐵', category: '礦石', description: '常見煉器礦材，可鍛造兵刃與護具。', buyGold: 18 },
   { id: 'spirit-wood', name: '靈木', icon: '木', category: '靈木', description: '蘊含靈氣的木材，適合法尺、玉佩與靈器骨架。', buyGold: 14 },
-  { id: 'spirit-crystal', name: '靈晶', icon: '晶', category: '晶石', description: '凝聚靈力的晶石，常用於高階法寶核心。', buyGold: 28 },
+  { id: 'spirit-crystal', name: '靈晶', icon: '晶石', category: '晶石', description: '凝聚靈力的晶石，常用於高階法寶核心。', buyGold: 28 },
   { id: 'beast-core-shard', name: '妖丹碎片', icon: '丹', category: '妖獸材料', description: '妖獸內丹碎片，可為法寶注入爆發性的靈力。', buyGold: 35 },
   { id: 'talisman-paper', name: '靈符紙', icon: '符', category: '符材', description: '承載符紋與陣法的基礎材料。', buyGold: 10 }
 ];
@@ -29,8 +30,8 @@ const DEFAULT_ARTIFACT_RECIPES = {
     { materialId: 'spirit-crystal', quantity: 2 }
   ],
   'void-sword': [
-    { materialId: 'spirit-iron', quantity: 5 },
-    { materialId: 'spirit-crystal', quantity: 4 },
+    { materialId: 'spirit-iron', quantity: 4 },
+    { materialId: 'spirit-crystal', quantity: 2 },
     { materialId: 'beast-core-shard', quantity: 2 }
   ],
   'longevity-jade': [
@@ -113,6 +114,10 @@ export function validateArtifactRecipes(rawRecipes = {}) {
     recipe.forEach((row) => {
       if (!getMaterialById(row.materialId)) throw new Error(`配方 ${id} 使用不存在的材料：${row.materialId}`);
     });
+    const totalMaterials = recipe.reduce((sum, row) => sum + Math.max(0, Number(row.quantity) || 0), 0);
+    if (totalMaterials > MAX_ARTIFACT_RECIPE_MATERIALS) {
+      throw new Error(`配方 ${id} 共需 ${totalMaterials} 個材料，超過煉器陣 ${MAX_ARTIFACT_RECIPE_MATERIALS} 格上限`);
+    }
     if (recipe.length) result[id] = recipe;
   });
   return result;
