@@ -27,6 +27,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/material-system.js',
   './cultivation/cultivation-refinery-v2.js',
   './cultivation/training-fluid-layout.js',
+  './cultivation/market-fluid-layout.js',
   './cultivation/material-drop-system.js',
   './cultivation/battle-v3-stability-ui.js',
   './cultivation/battle-mode-v2.js',
