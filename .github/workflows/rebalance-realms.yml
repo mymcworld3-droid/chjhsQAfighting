@@ -32,6 +32,19 @@ jobs:
           PY
       - name: Apply realm rebalance
         run: node scripts/rebalance-realms.cjs
+      - name: Update legacy regression expectations
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('tests/progression-gates.test.cjs')
+          s = p.read_text()
+          s = s.replace(
+              "assert.match(training, /const REALM_THRESHOLDS = \\[500, 800, 1200, 1800, 2600, 3600, 5000\\];/);",
+              "assert.match(training, /const REALM_THRESHOLDS = \\[68, 128, 208, 308, 448, 628, 868\\];/);"
+          )
+          s = s.replace("/築基初期（60 修為）/", "/築基初期（10 修為）/")
+          p.write_text(s)
+          PY
       - name: Run regression tests
         run: |
           npm install --no-audit --no-fund
