@@ -58,9 +58,17 @@
         box-sizing:border-box;
       }
 
-      body.xianxia-theme #store-grid img{
+      body.xianxia-theme #store-grid img:not([class~="h-[140%]"]){
         max-width:100%;
         height:auto;
+      }
+
+      /* 坊市中的頭像框只縮商品預覽，不影響玩家實際裝備後的頭像框。 */
+      body.xianxia-theme #store-grid img[class~="h-[140%]"]{
+        height:118%!important;
+        width:auto!important;
+        max-width:118%!important;
+        object-fit:contain!important;
       }
 
       @media (min-width:1500px){
