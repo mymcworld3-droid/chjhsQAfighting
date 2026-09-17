@@ -2,7 +2,7 @@ import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.j
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, runTransaction } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { ARTIFACT_CATALOG } from './artifact-catalog.js';
-import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe } from './material-catalog.js';
+import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe, materialRealmColor } from './material-catalog.js';
 
 (function () {
   'use strict';
@@ -166,11 +166,12 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe 
       const owned = Number(inv[m.id]) || 0;
       const placed = Number(counts[m.id]) || 0;
       const remaining = Math.max(0, owned - placed);
-      return `<button type="button" class="refinery-material" data-refinery-material="${esc(m.id)}" ${remaining <= 0 || used >= SLOT_COUNT || busy ? 'disabled' : ''}><span class="refinery-mat-icon">${esc(m.icon || '材')}</span><span class="refinery-mat-copy"><strong>${esc(m.name)}</strong><small>${esc(m.category || '材料')} · 已放入 ${placed}</small></span><span class="refinery-mat-qty">可用 ${remaining}/${owned}</span></button>`;
+      const color = materialRealmColor(m.realm);
+      return `<button type="button" class="refinery-material" data-refinery-material="${esc(m.id)}" data-material-realm="${esc(m.realm || '凡人')}" style="--material-realm-color:${esc(color)}" ${remaining <= 0 || used >= SLOT_COUNT || busy ? 'disabled' : ''}><span class="refinery-mat-icon">${esc(m.icon || '材')}</span><span class="refinery-mat-copy"><strong>${esc(m.name)}</strong><small>${esc(m.category || '材料')} · 已放入 ${placed}</small><span class="material-realm-badge">${esc(m.realm || '凡人')}</span></span><span class="refinery-mat-qty">可用 ${remaining}/${owned}</span></button>`;
     }).join('') : '<div class="refinery-empty"><i class="fa-solid fa-box-open"></i><br>目前沒有煉器材料。<br>可透過問道與洞天取得。</div>';
     const slotHtml = selected.map((id, index) => {
       const m = id ? getMaterialById(id) : null;
-      return m ? `<button type="button" class="refinery-slot filled" data-refinery-slot="${index}" title="點擊取回"><span class="idx">${index + 1}</span><span class="remove">×</span><span><span class="icon">${esc(m.icon || '材')}</span><span class="name">${esc(m.name)}</span></span></button>` : `<button type="button" class="refinery-slot" disabled><span class="idx">${index + 1}</span><span class="icon">＋</span></button>`;
+      return m ? `<button type="button" class="refinery-slot filled" data-refinery-slot="${index}" data-refinery-material-id="${esc(m.id)}" data-material-realm="${esc(m.realm || '凡人')}" style="--material-realm-color:${esc(materialRealmColor(m.realm))}" title="點擊取回"><span class="idx">${index + 1}</span><span class="remove">×</span><span><span class="icon">${esc(m.icon || '材')}</span><span class="name">${esc(m.name)}</span></span></button>` : `<button type="button" class="refinery-slot" disabled><span class="idx">${index + 1}</span><span class="icon">＋</span></button>`;
     }).join('');
     const summary = Object.entries(counts).map(([id, q]) => `${getMaterialById(id)?.name || id} ×${q}`).join(' · ') || '尚未投入材料';
     let matchClass = '', matchText = '放入材料後，依各材料數量自動辨識法寶配方。';
@@ -301,11 +302,33 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe 
       render();
     });
   }
+  function observeTrainingPage() {
+    const page = document.getElementById('page-training');
+    if (!page) return false;
+    const tabs = page.querySelector('.training-subtabs-v3');
+    if (tabs && tabs.dataset.refineryObserverBound !== '1') {
+      tabs.dataset.refineryObserverBound = '1';
+      new MutationObserver(schedule).observe(tabs, { childList: true });
+    }
+    return true;
+  }
+
   function boot() {
     ensureStyle();
     schedule();
     ['foundation-training-stage-changed','golden-core-access-changed','material-system-updated','material-catalog-updated','artifact-catalog-updated','artifact-recipes-updated','xiuxian:user-ready'].forEach((name) => window.addEventListener(name, schedule));
-    new MutationObserver(schedule).observe(document.body, { childList: true, subtree: true });
+
+    // 煉器每放一個材料都會重建內容區。若監看整個 body/subtree，
+    // 這些 DOM 變更會再次觸發煉器排程，材料種類多時容易造成 observer storm。
+    if (!observeTrainingPage()) {
+      const rootObserver = new MutationObserver(() => {
+        if (observeTrainingPage()) {
+          rootObserver.disconnect();
+          schedule();
+        }
+      });
+      rootObserver.observe(document.body, { childList: true, subtree: true });
+    }
   }
 
   window.getCultivationRefinerySelection = () => [...selected];
