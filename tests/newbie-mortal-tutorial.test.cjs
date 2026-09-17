@@ -7,7 +7,7 @@ const tutorial = readFileSync(join(__dirname, '../public/cultivation/newbie-tuto
 
 test('mortal-stage tutorial teaches a real-looking sample quiz without awarding cultivation', () => {
   assert.match(tutorial, /const VERSION = 2;/);
-  assert.match(tutorial, /const FOUNDATION_SCORE = 60;/);
+  assert.match(tutorial, /const FOUNDATION_SCORE = 10;/);
   assert.match(tutorial, /EXAMPLE_QUESTION = '範例：2 \+ 3 = \?'/);
   assert.match(tutorial, /新手範例 · 不計修為/);
   assert.match(tutorial, /requiresAnswer: true/);

@@ -97,25 +97,25 @@ function setup(totalScore = 0) {
 }
 
 test('correct answer updates saved stats and the top panel immediately', async () => {
-  const h = setup(4);
+  const h = setup(0);
   const pending = h.answer();
-  assert.equal(h.nodes.get('xiuxian-score').textContent, '5 修為');
+  assert.equal(h.nodes.get('xiuxian-score').textContent, '1 修為');
   assert.equal(h.nodes.get('xiuxian-realm').textContent, '煉氣');
   assert.equal(h.nodes.get('xiuxian-sub').textContent, '一層');
   assert.equal(h.nodes.get('xiuxian-progress').style.width, '0%');
-  assert.equal(h.nodes.get('xiuxian-next').textContent, '5 修為');
+  assert.equal(h.nodes.get('xiuxian-next').textContent, '1 修為');
   await pending;
   assert.equal(h.writes.length, 1);
-  assert.equal(h.writes[0].data.stats.totalScore, 5);
+  assert.equal(h.writes[0].data.stats.totalScore, 1);
   assert.equal(h.writes[0].data.stats.rankLevel, 1);
   assert.equal(h.writes[0].data.stats.totalCorrect, 1);
   assert.equal(h.logs.length, 1);
   h.context.render();
-  assert.equal(h.nodes.get('xiuxian-score').textContent, '5 修為');
+  assert.equal(h.nodes.get('xiuxian-score').textContent, '1 修為');
   h.context.currentUserData = { uid: 'test-user', ...h.writes[0].data };
   h.context.updateUIStats();
   h.context.render();
-  assert.equal(h.nodes.get('xiuxian-score').textContent, '5 修為');
+  assert.equal(h.nodes.get('xiuxian-score').textContent, '1 修為');
 });
 
 test('each new quiz awards once, including a repeated question', async () => {
@@ -133,7 +133,7 @@ test('each new quiz awards once, including a repeated question', async () => {
   assert.equal(h.context.currentUserData.stats.goldenCoreShield, undefined);
   h.context.render();
   assert.equal(h.nodes.get('xiuxian-score').textContent, '4 修為');
-  assert.equal(h.nodes.get('xiuxian-progress').style.width, '80%');
+  assert.equal(h.nodes.get('xiuxian-progress').style.width, '0%');
 });
 
 test('wrong and skipped answers preserve cultivation below Golden Core and reset the streak', async () => {
@@ -165,52 +165,52 @@ test('ordinary streaks never create Dao-heart shields or bonus cultivation', asy
 });
 
 test('Golden Core realm changes base cultivation to +2 correct and -1 wrong', async () => {
-  const h = setup(119);
+  const h = setup(27);
 
   await h.answer();
-  assert.equal(h.context.currentUserData.stats.totalScore, 120);
+  assert.equal(h.context.currentUserData.stats.totalScore, 28);
 
   h.newQuiz();
   await h.answer();
-  assert.equal(h.context.currentUserData.stats.totalScore, 122);
+  assert.equal(h.context.currentUserData.stats.totalScore, 30);
 
   h.newQuiz();
   await h.answer(1, 0);
-  assert.equal(h.context.currentUserData.stats.totalScore, 121);
+  assert.equal(h.context.currentUserData.stats.totalScore, 29);
 
   h.newQuiz();
   await h.answer(-1, -2);
-  assert.equal(h.context.currentUserData.stats.totalScore, 120);
+  assert.equal(h.context.currentUserData.stats.totalScore, 28);
 
   h.newQuiz();
   await h.answer(1, 0);
-  assert.equal(h.context.currentUserData.stats.totalScore, 119);
+  assert.equal(h.context.currentUserData.stats.totalScore, 27);
 });
 
 test('Golden Core Dao-heart blocks one cultivation loss and is consumed', async () => {
-  const h = setup(120);
+  const h = setup(28);
   h.context.currentUserData.stats.goldenCoreShield = true;
 
   await h.answer(1, 0);
-  assert.equal(h.context.currentUserData.stats.totalScore, 120);
+  assert.equal(h.context.currentUserData.stats.totalScore, 28);
   assert.equal(h.context.currentUserData.stats.goldenCoreShield, false);
 
   h.newQuiz();
   await h.answer(1, 0);
-  assert.equal(h.context.currentUserData.stats.totalScore, 119);
+  assert.equal(h.context.currentUserData.stats.totalScore, 27);
 });
 
 test('Golden Core alone may create its own Dao-heart state and cultivation bonus', async () => {
-  const h = setup(120);
+  const h = setup(28);
   h.context.window.resolveGoldenCoreCultivationReward = () => ({ bonusGain: 2, forceShield: true, message: '金丹生效' });
   await h.answer();
-  assert.equal(h.context.currentUserData.stats.totalScore, 124);
+  assert.equal(h.context.currentUserData.stats.totalScore, 32);
   assert.equal(h.context.currentUserData.stats.goldenCoreShield, true);
   assert.equal(Object.prototype.hasOwnProperty.call(h.context.currentUserData.stats, 'cultivationShield'), false);
 });
 
 test('legacy missing or string scores become numeric cultivation totals', async () => {
-  for (const [initial, expected] of [[undefined, 1], ['30', 31]]) {
+  for (const [initial, expected] of [[undefined, 1], ['20', 21]]) {
     const h = setup();
     h.context.currentUserData.stats.totalScore = initial;
     await h.answer();
@@ -220,9 +220,9 @@ test('legacy missing or string scores become numeric cultivation totals', async 
 });
 
 test('wrong-answer Golden Core Dao-heart may form in time to block that mistake', async () => {
-  const h = setup(120);
+  const h = setup(28);
   h.context.window.resolveGoldenCoreCultivationReward = () => ({ forceShield: true, message: '清心護體' });
   await h.answer(1, 0);
-  assert.equal(h.context.currentUserData.stats.totalScore, 120);
+  assert.equal(h.context.currentUserData.stats.totalScore, 28);
   assert.equal(h.context.currentUserData.stats.goldenCoreShield, false);
 });

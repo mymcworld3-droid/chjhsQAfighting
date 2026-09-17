@@ -2,8 +2,8 @@
 (function () {
   'use strict';
 
-  const FOUNDATION_SCORE = 60;
-  const GOLDEN_CORE_SCORE = 120;
+  const FOUNDATION_SCORE = 10;
+  const GOLDEN_CORE_SCORE = 28;
   const MIGRATION_FIELD = 'progressionMigrationV2';
   const MIGRATION_VERSION = 2;
   const STYLE_ID = 'golden-core-access-guard-style';

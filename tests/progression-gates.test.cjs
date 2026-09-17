@@ -35,17 +35,17 @@ test('login core is isolated from optional cultivation module failures', () => {
   assert.match(main, /\.\/cultivation\/cultivation-theme\.js/);
 });
 
-test('Foundation opens training at 60 with backpack only while Golden Core waits for 120', () => {
-  assert.match(progression, /const FOUNDATION_SCORE = 60;/);
-  assert.match(progression, /const GOLDEN_CORE_SCORE = 120;/);
-  assert.match(guard, /const FOUNDATION_SCORE = 60;/);
-  assert.match(guard, /const GOLDEN_CORE_SCORE = 120;/);
+test('Foundation opens training at 10 with backpack only while Golden Core waits for 28', () => {
+  assert.match(progression, /const FOUNDATION_SCORE = 10;/);
+  assert.match(progression, /const GOLDEN_CORE_SCORE = 28;/);
+  assert.match(guard, /const FOUNDATION_SCORE = 10;/);
+  assert.match(guard, /const GOLDEN_CORE_SCORE = 28;/);
   assert.match(guard, /migrationReady\(\) && score\(\) >= FOUNDATION_SCORE/);
   assert.match(guard, /migrationReady\(\) && score\(\) >= GOLDEN_CORE_SCORE/);
   assert.match(guard, /\[data-training-tab="core"\]/);
   assert.match(guard, /#training-status-tab/);
 
-  assert.match(foundationTraining, /const GOLDEN_CORE_SCORE = 120;/);
+  assert.match(foundationTraining, /const GOLDEN_CORE_SCORE = 28;/);
   assert.match(foundationTraining, /value >= FOUNDATION_SCORE && value < GOLDEN_CORE_SCORE/);
   assert.match(foundationTraining, /data-training-tab="bag"/);
   assert.doesNotMatch(foundationTraining, /data-training-tab="core"/);
@@ -60,8 +60,8 @@ test('Foundation opens training at 60 with backpack only while Golden Core waits
     'migration, shared inventory, guard, Foundation page and full Golden Core UI load in order');
 });
 
-test('Golden Core UI and effects remain gated behind migration and 120 cultivation', () => {
-  assert.match(training, /const GOLDEN_CORE_SCORE = 120;/);
+test('Golden Core UI and effects remain gated behind migration and 28 cultivation', () => {
+  assert.match(training, /const GOLDEN_CORE_SCORE = 28;/);
   assert.match(guard, /function coreAllowed\(\)/);
   assert.match(guard, /if \(!coreAllowed\(\)\)/);
   assert.match(guard, /resolveGoldenCoreCultivationReward/);
@@ -91,7 +91,7 @@ test('revival pill is a cultivation backpack consumable, not a Golden Core', () 
   assert.doesNotMatch(inventory, /cultivationTraining/);
 });
 
-test('multiplayer unlock remains Foundation Establishment at 60 cultivation', () => {
+test('multiplayer unlock remains Foundation Establishment at 10 cultivation', () => {
   assert.match(progression, /score\(\) < FOUNDATION_SCORE/);
   assert.match(progression, /startBattleMatchmaking/);
   assert.match(progression, /btn-social-nav/);
@@ -100,15 +100,15 @@ test('multiplayer unlock remains Foundation Establishment at 60 cultivation', ()
 
 test('post-Golden-Core realm curve is consistent across active realm renderers', () => {
   const expected = [
-    ['金丹', 120], ['元嬰', 500], ['化神', 800], ['煉虛', 1200],
-    ['合體', 1800], ['大乘', 2600], ['渡劫', 3600], ['真仙', 5000]
+    ['金丹', 28], ['元嬰', 68], ['化神', 128], ['煉虛', 208],
+    ['合體', 308], ['大乘', 448], ['渡劫', 628], ['真仙', 868]
   ];
   for (const source of [theme, liveSync, breakthrough]) {
     for (const [name, need] of expected) {
       assert.match(source, new RegExp(`name: '${name}'.*need: ${need}`), `${name} threshold ${need} is synchronized`);
     }
   }
-  assert.match(training, /const REALM_THRESHOLDS = \[500, 800, 1200, 1800, 2600, 3600, 5000\];/);
+  assert.match(training, /const REALM_THRESHOLDS = \[68, 128, 208, 308, 448, 628, 868\];/);
 });
 
 test('legacy compensation formula and item are preserved', () => {
@@ -124,7 +124,7 @@ test('beginner tutorial covers scope and Foundation but never mentions Golden Co
   assert.match(tutorial, /綜合題目/);
   assert.match(tutorial, /指定題庫/);
   assert.match(tutorial, /專注練習/);
-  assert.match(tutorial, /築基初期（60 修為）/);
+  assert.match(tutorial, /築基初期（10 修為）/);
   assert.match(tutorial, /set-source-mode/);
   assert.match(tutorial, /set-difficulty/);
   assert.doesNotMatch(tutorial, /金丹/);

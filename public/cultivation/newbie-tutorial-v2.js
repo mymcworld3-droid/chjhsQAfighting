@@ -8,7 +8,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
 
   const FIELD = 'newbieTutorialV1';
   const VERSION = 2;
-  const FOUNDATION_SCORE = 60;
+  const FOUNDATION_SCORE = 10;
   let active = false;
   let index = 0;
   let autoStarted = false;
@@ -74,8 +74,8 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       note: '剛開始可以先使用 AUTO 或中等。'
     },
     {
-      page: 'page-home', target: 'button[onclick*="startBattleMatchmaking"]', kicker: '第十一步 · 築基', title: '60 修為後開放多人玩法',
-      body: '達到 <strong>築基初期（60 修為）</strong> 後，才會開放配對鬥法、接受邀請與仙盟等多人功能，同時開放修煉背包。',
+      page: 'page-home', target: 'button[onclick*="startBattleMatchmaking"]', kicker: '第十一步 · 築基', title: '10 修為後開放多人玩法',
+      body: '達到 <strong>築基初期（10 修為）</strong> 後，才會開放配對鬥法、接受邀請與仙盟等多人功能，同時開放修煉背包。',
       note: '凡人期先把答題與回報流程學熟。'
     },
     {

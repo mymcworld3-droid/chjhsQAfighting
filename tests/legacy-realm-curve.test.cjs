@@ -7,14 +7,14 @@ const legacy = readFileSync(join(__dirname, '../public/main-legacy.js'), 'utf8')
 
 test('legacy login core uses the same cultivation realm curve', () => {
   const expected = [
-    ['金丹', 120],
-    ['元嬰', 500],
-    ['化神', 800],
-    ['煉虛', 1200],
-    ['合體', 1800],
-    ['大乘', 2600],
-    ['渡劫', 3600],
-    ['真仙', 5000]
+    ['金丹', 28],
+    ['元嬰', 68],
+    ['化神', 128],
+    ['煉虛', 208],
+    ['合體', 308],
+    ['大乘', 448],
+    ['渡劫', 628],
+    ['真仙', 868]
   ];
 
   for (const [name, need] of expected) {

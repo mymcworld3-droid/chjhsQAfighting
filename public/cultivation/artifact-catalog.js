@@ -14,16 +14,16 @@
 
 export const ARTIFACT_REALMS = Object.freeze([
   { id: 'mortal', name: '凡人', order: 0, need: 0 },
-  { id: 'qi', name: '煉氣', order: 1, need: 5 },
-  { id: 'foundation', name: '築基', order: 2, need: 60 },
-  { id: 'golden-core', name: '金丹', order: 3, need: 120 },
-  { id: 'nascent-soul', name: '元嬰', order: 4, need: 500 },
-  { id: 'spirit', name: '化神', order: 5, need: 800 },
-  { id: 'void', name: '煉虛', order: 6, need: 1200 },
-  { id: 'fusion', name: '合體', order: 7, need: 1800 },
-  { id: 'mahayana', name: '大乘', order: 8, need: 2600 },
-  { id: 'tribulation', name: '渡劫', order: 9, need: 3600 },
-  { id: 'immortal', name: '真仙', order: 10, need: 5000 }
+  { id: 'qi', name: '煉氣', order: 1, need: 1 },
+  { id: 'foundation', name: '築基', order: 2, need: 10 },
+  { id: 'golden-core', name: '金丹', order: 3, need: 28 },
+  { id: 'nascent-soul', name: '元嬰', order: 4, need: 68 },
+  { id: 'spirit', name: '化神', order: 5, need: 128 },
+  { id: 'void', name: '煉虛', order: 6, need: 208 },
+  { id: 'fusion', name: '合體', order: 7, need: 308 },
+  { id: 'mahayana', name: '大乘', order: 8, need: 448 },
+  { id: 'tribulation', name: '渡劫', order: 9, need: 628 },
+  { id: 'immortal', name: '真仙', order: 10, need: 868 }
 ]);
 
 export const SUPPORTED_ARTIFACT_EFFECTS = Object.freeze([

@@ -2,7 +2,7 @@
 (function () {
   'use strict';
 
-  const TRIBULATION_SCORE = 3600;
+  const TRIBULATION_SCORE = 628;
   const QUIZ_LEVEL = '國中三年級';
   const QUIZ_DIFFICULTY = 'medium';
   const ROLES = [
@@ -289,7 +289,7 @@
       box = document.createElement('section');
       box.id = 'five-immortals';
       box.className = 'five-immortals';
-      box.innerHTML = `<div class="five-immortals-head"><h3>九州五大仙</h3><button id="five-immortals-help" class="five-immortals-help" type="button" aria-label="查看五大仙遊戲方式" aria-expanded="false" title="遊戲方式">!</button></div><div id="five-immortals-guide" class="five-immortal-guide" hidden><p>渡劫以上方可問鼎 · 國中程度連答 · 一錯即止 · 超越紀錄者登仙</p><div class="five-immortal-rule"><div><span>境界門檻</span><b>渡劫 · 3600 修為</b></div><div><span>問鼎方式</span><b>連續答對直到答錯</b></div><div><span>挑戰限制</span><b>無限次嘗試</b></div></div><p class="five-immortal-extra">每一仙位對應固定科目；挑戰沒有總題數，也沒有次數限制。一路答到第一次答錯為止，只有嚴格超過目前紀錄才能奪位，同分不換榜；每名修士同時只能據有一席仙位。</p></div><div id="five-immortal-list" class="podium-container"></div><div id="five-immortal-lock" class="five-locked"></div>`;
+      box.innerHTML = `<div class="five-immortals-head"><h3>九州五大仙</h3><button id="five-immortals-help" class="five-immortals-help" type="button" aria-label="查看五大仙遊戲方式" aria-expanded="false" title="遊戲方式">!</button></div><div id="five-immortals-guide" class="five-immortal-guide" hidden><p>渡劫以上方可問鼎 · 國中程度連答 · 一錯即止 · 超越紀錄者登仙</p><div class="five-immortal-rule"><div><span>境界門檻</span><b>渡劫 · 628 修為</b></div><div><span>問鼎方式</span><b>連續答對直到答錯</b></div><div><span>挑戰限制</span><b>無限次嘗試</b></div></div><p class="five-immortal-extra">每一仙位對應固定科目；挑戰沒有總題數，也沒有次數限制。一路答到第一次答錯為止，只有嚴格超過目前紀錄才能奪位，同分不換榜；每名修士同時只能據有一席仙位。</p></div><div id="five-immortal-list" class="podium-container"></div><div id="five-immortal-lock" class="five-locked"></div>`;
       const anchor = rank.querySelector('.glass-panel') || rank.firstElementChild;
       if (anchor) anchor.before(box); else rank.prepend(box);
     }

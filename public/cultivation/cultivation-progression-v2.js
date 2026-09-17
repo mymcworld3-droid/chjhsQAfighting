@@ -2,13 +2,13 @@ import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.j
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
-// 進度規則 v2：築基開多人、金丹 120 開內丹；舊版高境界玩家一次性補償。
+// 進度規則 v2：築基開多人、金丹 28 開內丹；舊版高境界玩家一次性補償。
 (function () {
   'use strict';
 
-  const FOUNDATION_SCORE = 60;
+  const FOUNDATION_SCORE = 10;
   const LEGACY_HIGH_REALM_SCORE = 150;
-  const GOLDEN_CORE_SCORE = 120;
+  const GOLDEN_CORE_SCORE = 28;
   const MIGRATION_FIELD = 'progressionMigrationV2';
   const MIGRATION_VERSION = 2;
   const PILL_FIELD = 'revivalPills';
@@ -16,26 +16,26 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
 
   const FALLBACK_REALMS = [
     { name: '凡人', sub: '初入仙途', need: 0 },
-    { name: '煉氣', sub: '一層', need: 5 },
-    { name: '煉氣', sub: '二層', need: 10 },
-    { name: '煉氣', sub: '三層', need: 15 },
-    { name: '煉氣', sub: '四層', need: 20 },
-    { name: '煉氣', sub: '五層', need: 25 },
-    { name: '煉氣', sub: '六層', need: 30 },
-    { name: '煉氣', sub: '七層', need: 35 },
-    { name: '煉氣', sub: '八層', need: 40 },
-    { name: '煉氣', sub: '九層', need: 45 },
-    { name: '築基', sub: '初期', need: 60 },
-    { name: '築基', sub: '中期', need: 80 },
-    { name: '築基', sub: '後期', need: 100 },
-    { name: '金丹', sub: '丹成一品', need: 120 },
-    { name: '元嬰', sub: '元嬰出竅', need: 500 },
-    { name: '化神', sub: '神念通天', need: 800 },
-    { name: '煉虛', sub: '虛空悟道', need: 1200 },
-    { name: '合體', sub: '天地合一', need: 1800 },
-    { name: '大乘', sub: '大道將成', need: 2600 },
-    { name: '渡劫', sub: '雷劫問道', need: 3600 },
-    { name: '真仙', sub: '踏入仙門', need: 5000 }
+    { name: '煉氣', sub: '一層', need: 1 },
+    { name: '煉氣', sub: '二層', need: 2 },
+    { name: '煉氣', sub: '三層', need: 3 },
+    { name: '煉氣', sub: '四層', need: 4 },
+    { name: '煉氣', sub: '五層', need: 5 },
+    { name: '煉氣', sub: '六層', need: 6 },
+    { name: '煉氣', sub: '七層', need: 7 },
+    { name: '煉氣', sub: '八層', need: 8 },
+    { name: '煉氣', sub: '九層', need: 9 },
+    { name: '築基', sub: '初期', need: 10 },
+    { name: '築基', sub: '中期', need: 16 },
+    { name: '築基', sub: '後期', need: 22 },
+    { name: '金丹', sub: '丹成一品', need: 28 },
+    { name: '元嬰', sub: '元嬰出竅', need: 68 },
+    { name: '化神', sub: '神念通天', need: 128 },
+    { name: '煉虛', sub: '虛空悟道', need: 208 },
+    { name: '合體', sub: '天地合一', need: 308 },
+    { name: '大乘', sub: '大道將成', need: 448 },
+    { name: '渡劫', sub: '雷劫問道', need: 628 },
+    { name: '真仙', sub: '踏入仙門', need: 868 }
   ];
 
   let migrating = false;
@@ -190,7 +190,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
         icon: '<i class="fa-solid fa-scroll"></i>',
         title: '舊版更新補償',
         body: '因金丹機制與後期境界重新平衡，舊版已達金丹以上的修士統一回調至築基初期。被扣除修為的一半折算為 <strong>回魂聚靈丹</strong>（每顆 +100 修為，無條件進位），另一半乘 2 折算為靈石。回魂聚靈丹可在 <strong>修煉 → 背包</strong> 使用。',
-        summary: `<div class="progression-summary"><div><span>原修為</span><b>${originalScore.toLocaleString()}</b></div><div><span>調整後</span><b>60 · 築基初期</b></div><div><span>回魂聚靈丹</span><b>× ${grantedPills}</b></div><div><span>補償靈石</span><b>+${spiritStones.toLocaleString()}</b></div></div>`
+        summary: `<div class="progression-summary"><div><span>原修為</span><b>${originalScore.toLocaleString()}</b></div><div><span>調整後</span><b>${FOUNDATION_SCORE} · 築基初期</b></div><div><span>回魂聚靈丹</span><b>× ${grantedPills}</b></div><div><span>補償靈石</span><b>+${spiritStones.toLocaleString()}</b></div></div>`
       });
     } catch (error) {
       console.error('Progression migration failed:', error);

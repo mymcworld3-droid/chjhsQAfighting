@@ -11,7 +11,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js';
 (function () {
   'use strict';
 
-  const FOUNDATION_SCORE = 60;
+  const FOUNDATION_SCORE = 10;
   const ROOM_COLLECTION = 'rooms';
   const HEARTBEAT_MS = 8000;
   const PREPARE_LEASE_MS = 7000;

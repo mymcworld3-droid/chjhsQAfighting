@@ -1,10 +1,10 @@
-// 築基期修煉頁：60～119 修為只顯示背包；踏入金丹後交棒給完整修煉模組。
+// 築基期修煉頁：10～27 修為只顯示背包；踏入金丹後交棒給完整修煉模組。
 (function () {
   'use strict';
 
   const CSS_HREF = 'cultivation-training-v3.css';
-  const FOUNDATION_SCORE = 60;
-  const GOLDEN_CORE_SCORE = 120;
+  const FOUNDATION_SCORE = 10;
+  const GOLDEN_CORE_SCORE = 28;
   let lastStage = null;
 
   function score() {

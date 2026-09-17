@@ -1,6 +1,6 @@
 // 修為與答題統計由主流程一次儲存，避免另一次讀寫扣回獎勵。
 // 築基期以前答對固定 +1；金丹期起答對固定 +2、答錯 -1。金丹道心護體可抵銷一次修為下降。
-const GOLDEN_CORE_SCORE = 120;
+const GOLDEN_CORE_SCORE = 28;
 const PRE_GOLDEN_CORE_GAIN = 1;
 const GOLDEN_CORE_GAIN = 2;
 const GOLDEN_CORE_MISS_PENALTY = 1;

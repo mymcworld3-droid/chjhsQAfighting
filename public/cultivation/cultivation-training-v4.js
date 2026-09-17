@@ -6,7 +6,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
 (function () {
   'use strict';
 
-  const GOLDEN_CORE_SCORE = 120;
+  const GOLDEN_CORE_SCORE = 28;
   const WASH_COST = 100;
   const STATE_KEY = 'xiuxian_training_state_v4';
   const LEGACY_KEYS = [
@@ -16,7 +16,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   ];
   const CSS_HREF = 'cultivation-training-v3.css';
   const REMOTE_FIELD = 'cultivationTraining';
-  const REALM_THRESHOLDS = [500, 800, 1200, 1800, 2600, 3600, 5000];
+  const REALM_THRESHOLDS = [68, 128, 208, 308, 448, 628, 868];
 
   const GRADE_WEIGHTS = [
     { grade: 9, chance: 25 },
