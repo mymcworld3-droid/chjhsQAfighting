@@ -25,6 +25,8 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/material-catalog-sync.js',
   './cultivation/artifact-system.js',
   './cultivation/material-system.js',
+  './cultivation/unified-inventory-grid.js',
+  './cultivation/inventory-legacy-bridge.js',
   './cultivation/cultivation-refinery-v2.js',
   './cultivation/training-fluid-layout.js',
   './cultivation/market-fluid-layout.js',
@@ -47,7 +49,8 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/admin-material-manager.js',
   './cultivation/admin-material-realm-editor.js',
   './cultivation/admin-recipe-editor-enhancement.js',
-  './cultivation/admin-panel-collapsible.js'
+  './cultivation/admin-panel-collapsible.js',
+  './cultivation/admin-realm-sorting.js'
 ];
 
 let xiuxianFeatureLoadStarted = false;
