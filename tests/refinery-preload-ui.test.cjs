@@ -9,6 +9,7 @@ function read(rel) {
 
 const refinery = read('public/cultivation/cultivation-refinery-v2.js');
 const training = read('public/cultivation/cultivation-training-v4.js');
+const foundation = read('public/cultivation/foundation-training-page.js');
 const trainingCss = read('public/cultivation-training-v3.css');
 const main = read('public/main.js');
 
@@ -28,6 +29,13 @@ test('training page creates refinery tab and a complete stable shell up front', 
   assert.match(training, /refinery-shell-match/);
   assert.match(training, /refinery-shell-actions/);
   assert.match(training, /xiuxian:refinery-open-request/);
+});
+
+test('foundation training also preloads the refinery tab and shell', () => {
+  assert.match(foundation, /data-training-tab="refinery"/);
+  assert.match(foundation, /function refineryShellMarkup\(\)/);
+  assert.match(foundation, /refinery-shell-material-grid/);
+  assert.match(foundation, /xiuxian:refinery-open-request/);
 });
 
 test('preloaded refinery shell has base styling before refinery hydration', () => {
