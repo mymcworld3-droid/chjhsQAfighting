@@ -21,6 +21,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/cultivation-core-visual.js',
   './cultivation/cultivation-core-equip-warning.js',
   './cultivation/cultivation-combat-stats.js',
+  './cultivation/artifact-catalog-sync.js',
   './cultivation/artifact-system.js',
   './cultivation/battle-mode-v2.js',
   './cultivation/cultivation-status-panel.js',
@@ -30,7 +31,9 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/dongtian.js',
   './cultivation/newbie-tutorial-v2.js',
   './cultivation/golden-core-tutorial.js',
-  './cultivation/admin-self-transfer.js'
+  './cultivation/admin-self-transfer.js',
+  './cultivation/admin-artifact-manager.js',
+  './cultivation/admin-panel-collapsible.js'
 ];
 
 let xiuxianFeatureLoadStarted = false;
