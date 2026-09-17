@@ -3,8 +3,9 @@
 
 import { ARTIFACT_REALMS } from './artifact-catalog.js';
 
-export const MATERIAL_CATEGORIES = Object.freeze(['礦石', '靈木', '晶石', '妖獸材料', '符材', '其他']);
+export const MATERIAL_CATEGORIES = Object.freeze(['礦石', '靈木', '晶石', '妖獸材料', '特殊材料', '符材', '其他']);
 export const MAX_ARTIFACT_RECIPE_MATERIALS = 8;
+export const MATERIAL_CATALOG_SCHEMA_VERSION = 2;
 
 const MATERIAL_REALM_COLORS = Object.freeze({
   凡人: '#a1a1aa',
@@ -41,21 +42,69 @@ export const MATERIAL_REALMS = Object.freeze(ARTIFACT_REALMS.map((realm) => Obje
   dongtianRate: MATERIAL_REALM_DROP_BASE[realm.name]?.dongtianRate || 0.08
 })));
 
-const DEFAULT_MATERIAL_REALM_BY_ID = Object.freeze({
-  'spirit-iron': '煉氣',
-  'spirit-wood': '煉氣',
-  'talisman-paper': '築基',
-  'spirit-crystal': '金丹',
-  'beast-core-shard': '金丹'
-});
-
+// 完整材料系譜。既有五種材料保留原 ID，避免玩家 materialSystem.inventory 與既有配方失聯。
+// 新增高階材料預設 buyGold=0，主要由境界掉落取得；管理員仍可自行調整採購價。
 const DEFAULT_MATERIAL_CATALOG = [
+  // 礦石系：玄鐵 → 赤銅精 → 紫金砂 → 太虛玄鐵 → 九天玄晶 → 虛空石 → 混元金 → 混沌晶 → 九霄神鐵 → 仙金
   { id: 'spirit-iron', name: '玄鐵', icon: '鐵', category: '礦石', realm: '煉氣', description: '常見煉器礦材，可鍛造兵刃與護具。', buyGold: 18 },
+  { id: 'red-copper-essence', name: '赤銅精', icon: '銅', category: '礦石', realm: '築基', description: '赤銅反覆淬鍊所得精華，適合築基法器與陣器。', buyGold: 0 },
+  { id: 'purple-gold-sand', name: '紫金砂', icon: '砂', category: '礦石', realm: '金丹', description: '帶有金紫靈輝的細砂，可強化法寶靈力傳導。', buyGold: 0 },
+  { id: 'taixu-mystic-iron', name: '太虛玄鐵', icon: '太玄', category: '礦石', realm: '元嬰', description: '受太虛之氣浸染的玄鐵，質堅而能承載元嬰法力。', buyGold: 0 },
+  { id: 'nine-heaven-crystal', name: '九天玄晶', icon: '玄晶', category: '礦石', realm: '化神', description: '九天靈氣凝成的玄晶，常作化神法寶主材。', buyGold: 0 },
+  { id: 'void-stone', name: '虛空石', icon: '空石', category: '礦石', realm: '煉虛', description: '內蘊虛空波動的奇石，可承載空間類禁制。', buyGold: 0 },
+  { id: 'hunyuan-gold', name: '混元金', icon: '混金', category: '礦石', realm: '合體', description: '混合多種靈金本源而成，能協調不同屬性法力。', buyGold: 0 },
+  { id: 'chaos-crystal', name: '混沌晶', icon: '沌晶', category: '礦石', realm: '大乘', description: '混沌氣息凝結的晶礦，適合大乘期重寶。', buyGold: 0 },
+  { id: 'nine-heaven-divine-iron', name: '九霄神鐵', icon: '神鐵', category: '礦石', realm: '渡劫', description: '歷經九霄雷劫淬鍊的神鐵，對天劫之力極為耐受。', buyGold: 0 },
+  { id: 'immortal-gold', name: '仙金', icon: '仙金', category: '礦石', realm: '真仙', description: '仙靈之氣孕育的頂階靈金，可煉製仙器。', buyGold: 0 },
+
+  // 木材系：靈草 → 靈木 → 百年靈木 → 雷擊木 → 千年靈木 → 神魂木 → 界木 → 太古神木 → 世界樹枝
+  { id: 'spirit-herb', name: '靈草', icon: '草', category: '靈木', realm: '凡人', description: '初具靈性的草木，可作低階符藥與煉器輔材。', buyGold: 0 },
   { id: 'spirit-wood', name: '靈木', icon: '木', category: '靈木', realm: '煉氣', description: '蘊含靈氣的木材，適合法尺、玉佩與靈器骨架。', buyGold: 14 },
+  { id: 'century-spirit-wood', name: '百年靈木', icon: '百木', category: '靈木', realm: '築基', description: '生長百年的靈木，木性穩定，適合築基法器。', buyGold: 0 },
+  { id: 'lightning-struck-wood', name: '雷擊木', icon: '雷木', category: '靈木', realm: '金丹', description: '經天雷擊而不毀的靈木，內藏剛烈雷性。', buyGold: 0 },
+  { id: 'millennium-spirit-wood', name: '千年靈木', icon: '千木', category: '靈木', realm: '元嬰', description: '千年歲月溫養的靈木，靈性深厚且極難腐朽。', buyGold: 0 },
+  { id: 'soul-wood', name: '神魂木', icon: '魂木', category: '靈木', realm: '化神', description: '能溫養神識與魂魄的奇木，常見於神魂類法寶。', buyGold: 0 },
+  { id: 'boundary-wood', name: '界木', icon: '界木', category: '靈木', realm: '煉虛', description: '生於界域交界之處的靈木，帶有空間與界壁氣息。', buyGold: 0 },
+  { id: 'primordial-divine-wood', name: '太古神木', icon: '古木', category: '靈木', realm: '大乘', description: '自太古存續至今的神木，蘊含厚重本源生機。', buyGold: 0 },
+  { id: 'world-tree-branch', name: '世界樹枝', icon: '世樹', category: '靈木', realm: '真仙', description: '傳說承載一界生機的世界樹枝條，可作仙器根骨。', buyGold: 0 },
+
+  // 晶石系：青靈石 → 寒玉 → 靈晶 → 嬰靈晶 → 天雷晶 → 空冥晶 → 仙靈玉 → 劫雷晶核 → 仙晶
+  { id: 'azure-spirit-stone', name: '青靈石', icon: '青石', category: '晶石', realm: '煉氣', description: '蘊含清靈之氣的基礎靈石，可作法器靈力節點。', buyGold: 0 },
+  { id: 'cold-jade', name: '寒玉', icon: '寒玉', category: '晶石', realm: '築基', description: '寒氣內斂的靈玉，適合穩定靈力與封存符紋。', buyGold: 0 },
   { id: 'spirit-crystal', name: '靈晶', icon: '晶石', category: '晶石', realm: '金丹', description: '凝聚靈力的晶石，常用於高階法寶核心。', buyGold: 28 },
+  { id: 'nascent-soul-crystal', name: '嬰靈晶', icon: '嬰晶', category: '晶石', realm: '元嬰', description: '與元嬰靈息共鳴的晶體，可穩固法寶靈性。', buyGold: 0 },
+  { id: 'heaven-thunder-crystal', name: '天雷晶', icon: '雷晶', category: '晶石', realm: '化神', description: '天雷之力凝成的晶石，適合雷法與破邪法寶。', buyGold: 0 },
+  { id: 'kongming-crystal', name: '空冥晶', icon: '空晶', category: '晶石', realm: '煉虛', description: '晶內似有空冥虛界，可用於空間與遁法器物。', buyGold: 0 },
+  { id: 'immortal-spirit-jade', name: '仙靈玉', icon: '仙玉', category: '晶石', realm: '合體', description: '帶有微弱仙靈氣息的玉石，可調和合體期龐大法力。', buyGold: 0 },
+  { id: 'tribulation-thunder-core', name: '劫雷晶核', icon: '劫核', category: '晶石', realm: '渡劫', description: '劫雷深處凝成的晶核，可用於抗劫與雷道重寶。', buyGold: 0 },
+  { id: 'immortal-crystal', name: '仙晶', icon: '仙晶', category: '晶石', realm: '真仙', description: '高度凝聚仙靈力的晶體，是仙器與仙陣的重要核心。', buyGold: 0 },
+
+  // 妖獸系：獸皮 → 妖獸骨 → 妖丹碎片 → 完整妖丹 → 蛟龍鱗 → 鳳凰羽 → 真龍精血 → 鳳凰精血
+  { id: 'beast-hide', name: '獸皮', icon: '皮', category: '妖獸材料', realm: '煉氣', description: '低階妖獸皮革，可製護具、符袋與法器包覆層。', buyGold: 0 },
+  { id: 'demon-beast-bone', name: '妖獸骨', icon: '骨', category: '妖獸材料', realm: '築基', description: '妖獸骨骼蘊含氣血之力，可作法器骨架與強化材。', buyGold: 0 },
   { id: 'beast-core-shard', name: '妖丹碎片', icon: '丹', category: '妖獸材料', realm: '金丹', description: '妖獸內丹碎片，可為法寶注入爆發性的靈力。', buyGold: 35 },
-  { id: 'talisman-paper', name: '靈符紙', icon: '符', category: '符材', realm: '築基', description: '承載符紋與陣法的基礎材料。', buyGold: 10 }
+  { id: 'complete-beast-core', name: '完整妖丹', icon: '妖丹', category: '妖獸材料', realm: '元嬰', description: '完整保存的高階妖丹，內蘊濃厚妖力與本命精華。', buyGold: 0 },
+  { id: 'flood-dragon-scale', name: '蛟龍鱗', icon: '龍鱗', category: '妖獸材料', realm: '化神', description: '蛟龍護體之鱗，兼具堅韌與水行靈性。', buyGold: 0 },
+  { id: 'phoenix-feather', name: '鳳凰羽', icon: '鳳羽', category: '妖獸材料', realm: '煉虛', description: '蘊含涅槃火意的鳳羽，可煉火系與遁光重寶。', buyGold: 0 },
+  { id: 'true-dragon-blood', name: '真龍精血', icon: '龍血', category: '妖獸材料', realm: '大乘', description: '真龍本源精血，氣血與龍威極盛，可淬鍊頂階法寶。', buyGold: 0 },
+  { id: 'phoenix-blood', name: '鳳凰精血', icon: '鳳血', category: '妖獸材料', realm: '真仙', description: '鳳凰涅槃本源所化精血，蘊含近乎不滅的生命火種。', buyGold: 0 },
+
+  // 特殊系：靈符紙 → 地火石 → 星辰砂 → 天雷精魄 → 赤鳳石 → 五行精魄 → 天道碎片 → 法則碎片 → 大道碎片 → 鴻蒙紫氣
+  { id: 'talisman-paper', name: '靈符紙', icon: '符', category: '特殊材料', realm: '築基', description: '承載符紋與陣法的基礎材料。', buyGold: 10 },
+  { id: 'earthfire-stone', name: '地火石', icon: '地火', category: '特殊材料', realm: '金丹', description: '長年受地火灼煉的火性靈石，可提供穩定煉器火力。', buyGold: 0 },
+  { id: 'star-sand', name: '星辰砂', icon: '星砂', category: '特殊材料', realm: '元嬰', description: '吸納星輝形成的細砂，可引星力入器。', buyGold: 0 },
+  { id: 'heaven-thunder-essence', name: '天雷精魄', icon: '雷魄', category: '特殊材料', realm: '化神', description: '天雷中誕生的精魄，可賦予法寶雷霆神通。', buyGold: 0 },
+  { id: 'scarlet-phoenix-stone', name: '赤鳳石', icon: '鳳石', category: '特殊材料', realm: '煉虛', description: '赤鳳真火長年凝結形成的奇石，兼具火意與靈性。', buyGold: 0 },
+  { id: 'five-elements-essence', name: '五行精魄', icon: '五行', category: '特殊材料', realm: '合體', description: '金木水火土五行精華匯聚而成，可平衡多屬性法寶。', buyGold: 0 },
+  { id: 'heavenly-dao-fragment', name: '天道碎片', icon: '天道', category: '特殊材料', realm: '大乘', description: '蘊有一絲天道規律的神秘碎片，可提升法寶道韻。', buyGold: 0 },
+  { id: 'law-fragment', name: '法則碎片', icon: '法則', category: '特殊材料', realm: '渡劫', description: '天地法則顯化後留下的碎片，可承載高階法則之力。', buyGold: 0 },
+  { id: 'great-dao-fragment', name: '大道碎片', icon: '大道', category: '特殊材料', realm: '真仙', description: '大道顯化的一角，蘊含遠超尋常法則的本源力量。', buyGold: 0 },
+  { id: 'hongmeng-purple-qi', name: '鴻蒙紫氣', icon: '鴻蒙', category: '特殊材料', realm: '真仙', description: '傳說開天之前便存在的本源紫氣，屬於終局級稀世材料。', buyGold: 0 }
 ];
+
+const DEFAULT_MATERIAL_REALM_BY_ID = Object.freeze(Object.fromEntries(
+  DEFAULT_MATERIAL_CATALOG.map((item) => [item.id, item.realm])
+));
 
 const DEFAULT_ARTIFACT_RECIPES = {
   'seven-treasure-ruler': [
@@ -159,6 +208,19 @@ export const MATERIAL_CATALOG = DEFAULT_MATERIAL_CATALOG.map(normalizeMaterialDe
 
 export function getDefaultMaterialCatalog() {
   return clone(DEFAULT_MATERIAL_CATALOG.map(normalizeMaterialDefinition));
+}
+
+// 舊 Firestore materialCatalogV1 只有少量材料時，先以遠端同 ID 設定覆蓋預設值，
+// 再自動補上缺少的系統材料。額外由管理員建立的材料也會保留。
+export function mergeMaterialCatalogWithDefaults(items = []) {
+  const merged = new Map(getDefaultMaterialCatalog().map((item) => [item.id, item]));
+  (Array.isArray(items) ? items : []).forEach((raw) => {
+    const id = String(raw?.id || '').trim();
+    if (!id) return;
+    const base = merged.get(id) || {};
+    merged.set(id, normalizeMaterialDefinition({ ...base, ...raw, id }));
+  });
+  return validateMaterialCatalog([...merged.values()]);
 }
 
 export function replaceMaterialCatalog(items, source = 'runtime') {
