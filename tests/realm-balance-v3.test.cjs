@@ -25,3 +25,10 @@ test('post-Golden-Core curve is balanced against the +2 base cultivation gain', 
   assert.match(artifacts, /id: 'golden-core'.*need: 28/);
   assert.match(artifacts, /id: 'tribulation'.*need: 628/);
 });
+
+test('perfect-play answer gaps grow gradually after Golden Core instead of restoring the old grind', () => {
+  const thresholds = [28, 68, 128, 208, 308, 448, 628, 868];
+  const answerGaps = thresholds.slice(1).map((need, index) => (need - thresholds[index]) / 2);
+  assert.deepEqual(answerGaps, [20, 30, 40, 50, 70, 90, 120]);
+  for (let i = 1; i < answerGaps.length; i += 1) assert.ok(answerGaps[i] >= answerGaps[i - 1]);
+});
