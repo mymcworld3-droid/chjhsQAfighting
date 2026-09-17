@@ -144,7 +144,10 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
     tabs.querySelectorAll('[data-training-tab]').forEach((button) => {
       if (button.dataset.trainingTab !== TAB) bindExit(page, button);
     });
-    if (active && tabActive(page)) render();
+    if (tabActive(page)) {
+      active = true;
+      render();
+    }
   }
 
   function currentSignature() {
