@@ -30,6 +30,14 @@ test('dongtian material drops trigger only on the first-completion result and ma
   assert.match(drop, /enqueueRoll\('dongtian'\)/);
 });
 
+test('dongtian successful material rewards expand to a total of 3 through 10 items', () => {
+  assert.match(drop, /DONGTIAN_MIN_MATERIALS = 3/);
+  assert.match(drop, /DONGTIAN_MAX_MATERIALS = 10/);
+  assert.match(drop, /function expandDongtianDrops\(drops\)/);
+  assert.match(drop, /DONGTIAN_MIN_MATERIALS \+ Math\.floor\(Math\.random\(\) \* \(DONGTIAN_MAX_MATERIALS - DONGTIAN_MIN_MATERIALS \+ 1\)\)/);
+  assert.match(drop, /source === 'dongtian' \? expandDongtianDrops\(rolledDrops\) : rolledDrops/);
+});
+
 test('material drops use configurable independent rates and commit inventory transactionally', () => {
   assert.match(drop, /CONFIG_DOC = 'materialDropV1'/);
   assert.match(drop, /onSnapshot\(doc\(database\(\), CONFIG_COLLECTION, CONFIG_DOC\)/);
