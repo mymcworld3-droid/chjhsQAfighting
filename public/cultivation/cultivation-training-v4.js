@@ -410,9 +410,38 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     `;
   }
 
+  function refineryShellMarkup() {
+    const materialSlots = Array.from({ length: 8 }, (_, index) =>
+      `<div class="refinery-shell-material" aria-hidden="true"><span class="refinery-shell-icon"></span><span class="refinery-shell-line"></span><small>材料 ${index + 1}</small></div>`
+    ).join('');
+    const forgeSlots = Array.from({ length: 8 }, (_, index) =>
+      `<div class="refinery-shell-slot"><span class="idx">${index + 1}</span><span>＋</span></div>`
+    ).join('');
+    return `
+      <section class="cultivation-refinery refinery-shell" aria-busy="true">
+        <article class="refinery-panel">
+          <div class="refinery-head"><div><h3><i class="fa-solid fa-gem"></i> 持有材料</h3><p>材料資料載入後會直接填入固定格位，不改變版型。</p></div><span class="refinery-badge">載入中</span></div>
+          <div class="refinery-shell-material-grid">${materialSlots}</div>
+        </article>
+        <article class="refinery-panel">
+          <div class="refinery-head"><div><h3><i class="fa-solid fa-fire-burner"></i> 八方煉器陣</h3><p>8 格煉器陣已預先建立。</p></div><span class="refinery-badge">0/8</span></div>
+          <div class="refinery-shell-slots">${forgeSlots}</div>
+          <div class="refinery-shell-summary">投入：尚未投入材料</div>
+          <div class="refinery-shell-match">放入材料後，依材料數量自動辨識法寶配方。</div>
+          <div class="refinery-shell-actions"><button type="button" disabled>清空</button><button type="button" disabled><i class="fa-solid fa-fire"></i> 煉器</button></div>
+        </article>
+      </section>
+    `;
+  }
+
   function renderTrainingPage() {
     const content = document.getElementById('training-tab-content');
     if (!content) return;
+    if (activeTab === 'refinery') {
+      if (!content.querySelector('.cultivation-refinery')) content.innerHTML = refineryShellMarkup();
+      window.dispatchEvent(new CustomEvent('xiuxian:refinery-open-request'));
+      return;
+    }
     content.innerHTML = activeTab === 'bag' ? bagTabMarkup() : coreTabMarkup();
     if (activeTab === 'core') bindCoreActions();
   }
@@ -457,6 +486,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       </div>
       <div class="training-subtabs-v3" role="tablist">
         <button type="button" class="training-subtab-v3 active" data-training-tab="core"><i class="fa-solid fa-circle-dot"></i><span>金丹</span></button>
+        <button type="button" class="training-subtab-v3" data-training-tab="refinery"><i class="fa-solid fa-hammer"></i><span>煉器</span></button>
         <button type="button" class="training-subtab-v3" data-training-tab="bag"><i class="fa-solid fa-box-open"></i><span>背包</span></button>
       </div>
       <div id="training-tab-content"></div>
@@ -465,9 +495,12 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
 
     page.querySelectorAll('[data-training-tab]').forEach((button) => {
       button.addEventListener('click', () => {
-        activeTab = button.dataset.trainingTab === 'bag' ? 'bag' : 'core';
+        const requested = button.dataset.trainingTab;
+        activeTab = requested === 'bag' ? 'bag' : (requested === 'refinery' ? 'refinery' : 'core');
         page.querySelectorAll('[data-training-tab]').forEach((tab) => {
-          tab.classList.toggle('active', tab.dataset.trainingTab === activeTab);
+          const selected = tab.dataset.trainingTab === activeTab;
+          tab.classList.toggle('active', selected);
+          tab.setAttribute('aria-selected', selected ? 'true' : 'false');
         });
         renderTrainingPage();
       });
