@@ -3,45 +3,46 @@
   'use strict';
 
   const STYLE_ID = 'content-capacity-layout-style';
+  const PAGE_ID = 'page-training';
+  const NAV_ID = 'bottom-nav';
 
   function ensureStyle() {
     if (document.getElementById(STYLE_ID)) return;
     const style = document.createElement('style');
     style.id = STYLE_ID;
     style.textContent = `
-      /* 修煉頁：舊 compact 版型曾把內容硬裁掉；改成自然延展，超量時由 main / 區塊自身捲動。 */
       body.xianxia-theme main:has(#page-training.active-page),
       body.xianxia-theme main:has(#page-training:not(.hidden)){
         overflow-y:auto!important;
         overscroll-behavior-y:contain!important;
       }
 
+      /* 高度直接由實際底部導覽位置量測，不再重複扣除 dvh / main padding。 */
       body.xianxia-theme #page-training.training-page-v3{
         height:auto!important;
         max-height:none!important;
-        min-height:calc(100dvh - 208px)!important;
+        min-height:var(--training-fill-height,calc(100dvh - 208px))!important;
         overflow:visible!important;
-        padding-bottom:18px!important;
+        padding-bottom:8px!important;
       }
 
       body.xianxia-theme #page-training.training-page-v3.active-page{
         display:grid!important;
-        grid-template-rows:auto minmax(calc(100dvh - 260px),auto)!important;
-        align-content:start!important;
+        grid-template-rows:auto minmax(0,1fr)!important;
+        align-content:stretch!important;
       }
 
       body.xianxia-theme #page-training #training-tab-content{
         width:100%!important;
         height:auto!important;
-        min-height:calc(100dvh - 260px)!important;
+        min-height:var(--training-content-height,calc(100dvh - 260px))!important;
         max-height:none!important;
         overflow:visible!important;
-        padding-bottom:10px!important;
+        padding-bottom:0!important;
       }
 
-      /* 金丹主頁：讓金丹視覺真正吃到剩餘高度，不再只佔 220~260px。 */
       body.xianxia-theme #page-training .core-minimal-card{
-        min-height:calc(100dvh - 270px)!important;
+        min-height:var(--training-content-height,calc(100dvh - 270px))!important;
         height:auto!important;
         overflow:visible!important;
         align-items:stretch!important;
@@ -50,7 +51,7 @@
       body.xianxia-theme #page-training .core-minimal-center{
         width:min(100%,920px)!important;
         max-width:920px!important;
-        min-height:calc(100dvh - 288px)!important;
+        min-height:max(0px,calc(var(--training-content-height,calc(100dvh - 260px)) - 8px))!important;
         height:auto!important;
         max-height:none!important;
         grid-template-rows:minmax(250px,1fr) auto auto auto auto!important;
@@ -65,33 +66,32 @@
         min-width:180px!important;
       }
 
-      /* 背包／庫存：物品變多時固定使用整個剩餘視窗並在清單內捲動。 */
       body.xianxia-theme #page-training .training-v3-bag-grid,
       body.xianxia-theme #page-training .cultivation-inventory-grid{
         height:auto!important;
-        min-height:min(360px,calc(100dvh - 290px))!important;
-        max-height:calc(100dvh - 270px)!important;
+        min-height:min(360px,var(--training-content-height,calc(100dvh - 290px)))!important;
+        max-height:var(--training-content-height,calc(100dvh - 270px))!important;
         overflow:auto!important;
         overscroll-behavior:contain!important;
         scrollbar-gutter:stable;
         align-content:start!important;
-        padding:2px 4px 18px 2px!important;
+        padding:2px 4px 10px 2px!important;
       }
 
-      /* 煉器：兩側都可完整長高；材料很多時只滾材料區，右側不再被 overflow:hidden 截斷。 */
+      /* 煉器吃滿導覽列上方空間，材料過多只滾左側清單。 */
       body.xianxia-theme #page-training .cultivation-refinery{
         width:100%!important;
         max-width:none!important;
         height:auto!important;
-        min-height:calc(100dvh - 270px)!important;
-        align-items:start!important;
+        min-height:var(--training-content-height,calc(100dvh - 270px))!important;
+        align-items:stretch!important;
         overflow:visible!important;
-        padding-bottom:12px!important;
+        padding-bottom:0!important;
       }
 
       body.xianxia-theme #page-training .refinery-panel{
         height:auto!important;
-        min-height:calc(100dvh - 290px)!important;
+        min-height:max(0px,calc(var(--training-content-height,calc(100dvh - 270px)) - 4px))!important;
         max-height:none!important;
         overflow:visible!important;
       }
@@ -99,17 +99,14 @@
       body.xianxia-theme #page-training .refinery-material-list{
         flex:1 1 auto!important;
         min-height:220px!important;
-        max-height:calc(100dvh - 395px)!important;
+        max-height:max(220px,calc(var(--training-content-height,calc(100dvh - 270px)) - 110px))!important;
         overflow:auto!important;
         overscroll-behavior:contain!important;
         scrollbar-gutter:stable;
         padding-right:5px!important;
       }
 
-      body.xianxia-theme #page-training .refinery-slots{
-        flex:0 0 auto!important;
-      }
-
+      body.xianxia-theme #page-training .refinery-slots,
       body.xianxia-theme #page-training .refinery-summary,
       body.xianxia-theme #page-training .refinery-match,
       body.xianxia-theme #page-training .refinery-actions,
@@ -117,7 +114,6 @@
         flex:0 0 auto!important;
       }
 
-      /* 坊市／管理員：內容可能持續增加，解除窄版限制並提供穩定捲動區。 */
       body.xianxia-theme #page-store,
       body.xianxia-theme #page-admin{
         width:100%!important;
@@ -145,65 +141,47 @@
         align-items:start!important;
       }
 
-      body.xianxia-theme #page-admin :is(.amm-item,.aam-item){
-        min-width:0!important;
-      }
-
-      /* 大量資料列表統一避免橫向撐爆。 */
-      body.xianxia-theme :is(#page-store,#page-admin,#page-training) *{
-        min-width:0;
-      }
+      body.xianxia-theme #page-admin :is(.amm-item,.aam-item){min-width:0!important}
+      body.xianxia-theme :is(#page-store,#page-admin,#page-training) *{min-width:0}
 
       @media(max-width:900px){
-        body.xianxia-theme #page-training.training-page-v3,
-        body.xianxia-theme #page-training #training-tab-content,
-        body.xianxia-theme #page-training .core-minimal-card,
-        body.xianxia-theme #page-training .core-minimal-center,
-        body.xianxia-theme #page-training .cultivation-refinery,
-        body.xianxia-theme #page-training .refinery-panel{
-          min-height:0!important;
+        body.xianxia-theme #page-training.training-page-v3{
+          min-height:var(--training-fill-height,calc(100dvh - 190px))!important;
         }
-
         body.xianxia-theme #page-training #training-tab-content{
+          min-height:var(--training-content-height,0px)!important;
           overflow:visible!important;
         }
-
+        body.xianxia-theme #page-training .core-minimal-card,
+        body.xianxia-theme #page-training .core-minimal-center{
+          min-height:var(--training-content-height,0px)!important;
+        }
         body.xianxia-theme #page-training .cultivation-refinery{
           grid-template-columns:1fr!important;
+          min-height:var(--training-content-height,0px)!important;
         }
-
+        body.xianxia-theme #page-training .refinery-panel{min-height:0!important}
         body.xianxia-theme #page-training .refinery-material-list{
           min-height:180px!important;
           max-height:min(42dvh,360px)!important;
         }
-
         body.xianxia-theme #page-training .training-v3-bag-grid,
         body.xianxia-theme #page-training .cultivation-inventory-grid{
           max-height:none!important;
-          min-height:0!important;
+          min-height:var(--training-content-height,0px)!important;
           overflow:visible!important;
         }
-
-        body.xianxia-theme #page-admin .admin-collapse-body{
-          max-height:none;
-          overflow:visible;
-        }
+        body.xianxia-theme #page-admin .admin-collapse-body{max-height:none;overflow:visible}
       }
 
       @media(max-width:640px){
-        body.xianxia-theme #page-training .core-minimal-center{
-          grid-template-rows:auto auto auto auto auto!important;
-        }
-
+        body.xianxia-theme #page-training .core-minimal-center{grid-template-rows:auto auto auto auto auto!important}
         body.xianxia-theme #page-training .golden-core-stage-v3{
           height:clamp(190px,36dvh,290px)!important;
           min-height:160px!important;
           min-width:160px!important;
         }
-
-        body.xianxia-theme #page-admin :is(.amm-list,.aam-list){
-          grid-template-columns:1fr!important;
-        }
+        body.xianxia-theme #page-admin :is(.amm-list,.aam-list){grid-template-columns:1fr!important}
       }
 
       @media(max-height:650px){
@@ -212,16 +190,52 @@
           min-height:130px!important;
           min-width:130px!important;
         }
-        body.xianxia-theme #page-training .refinery-material-list{
-          max-height:230px!important;
-        }
+        body.xianxia-theme #page-training .refinery-material-list{max-height:230px!important}
       }
     `;
     document.head.appendChild(style);
   }
 
+  function updateTrainingFillHeight() {
+    const page = document.getElementById(PAGE_ID);
+    if (!page || page.classList.contains('hidden')) return;
+    const nav = document.getElementById(NAV_ID);
+    const pageRect = page.getBoundingClientRect();
+    if (!pageRect.height && !pageRect.top) return;
+
+    const viewportBottom = window.visualViewport?.height || window.innerHeight || document.documentElement.clientHeight || 0;
+    const navRect = nav && !nav.classList.contains('hidden') ? nav.getBoundingClientRect() : null;
+    const navTop = navRect && navRect.top > pageRect.top ? navRect.top : viewportBottom;
+    const safeGap = 8;
+    const fillHeight = Math.max(280, Math.floor(navTop - pageRect.top - safeGap));
+
+    const tabs = page.querySelector('.training-subtabs-v3');
+    const tabsRect = tabs?.getBoundingClientRect();
+    const contentTop = tabsRect ? Math.max(pageRect.top, tabsRect.bottom + 4) : pageRect.top;
+    const contentHeight = Math.max(240, Math.floor(navTop - contentTop - safeGap));
+
+    page.style.setProperty('--training-fill-height', `${fillHeight}px`);
+    page.style.setProperty('--training-content-height', `${contentHeight}px`);
+  }
+
+  function scheduleMeasure() {
+    updateTrainingFillHeight();
+    requestAnimationFrame(updateTrainingFillHeight);
+    setTimeout(updateTrainingFillHeight, 80);
+  }
+
   function boot() {
     ensureStyle();
+    scheduleMeasure();
+    window.addEventListener('resize', scheduleMeasure, { passive:true });
+    window.visualViewport?.addEventListener('resize', scheduleMeasure, { passive:true });
+    window.addEventListener('orientationchange', scheduleMeasure, { passive:true });
+    document.addEventListener('click', (event) => {
+      if (event.target.closest?.('#nav-training,[data-training-tab],[data-target="page-training"]')) scheduleMeasure();
+    }, true);
+    new MutationObserver((mutations) => {
+      if (mutations.some((mutation) => mutation.target?.id === PAGE_ID || mutation.target?.id === NAV_ID)) scheduleMeasure();
+    }).observe(document.body, { subtree:true, attributes:true, attributeFilter:['class'] });
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once:true });
