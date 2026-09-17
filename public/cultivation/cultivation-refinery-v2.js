@@ -136,6 +136,9 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
       tab.setAttribute('aria-selected', 'false');
       tab.innerHTML = '<i class="fa-solid fa-hammer"></i><span>煉器</span>';
       bag.before(tab);
+    }
+    if (tab.dataset.refineryOpenBound !== '1') {
+      tab.dataset.refineryOpenBound = '1';
       tab.addEventListener('click', () => activate(page));
     }
     tabs.querySelectorAll('[data-training-tab]').forEach((button) => {
@@ -417,6 +420,10 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
     ensureStyle();
     schedule();
     ['foundation-training-stage-changed','golden-core-access-changed','material-system-updated','material-catalog-updated','artifact-catalog-updated','artifact-recipes-updated','xiuxian:user-ready'].forEach((name) => window.addEventListener(name, schedule));
+    window.addEventListener('xiuxian:refinery-open-request', () => {
+      const page = document.getElementById('page-training');
+      if (page) activate(page);
+    });
 
     // 煉器每放一個材料都會重建內容區。若監看整個 body/subtree，
     // 這些 DOM 變更會再次觸發煉器排程，材料種類多時容易造成 observer storm。
