@@ -315,17 +315,17 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
     const placed = Number(selectedCounts()[id]) || 0;
     if (placed >= (Number(inv[id]) || 0)) { toast('此材料沒有更多可投入的數量。', false); return; }
     selected[empty] = id;
-    render(true);
+    syncSelectionView();
   }
   function remove(index) {
     if (busy || index < 0 || index >= SLOT_COUNT) return;
     selected[index] = null;
-    render(true);
+    syncSelectionView();
   }
   function clear() {
     if (busy) return;
     selected.fill(null);
-    render(true);
+    syncSelectionView();
   }
 
   async function craft() {
