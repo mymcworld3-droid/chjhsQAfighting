@@ -8,11 +8,13 @@ function read(rel) {
 }
 
 const drop = read('public/cultivation/material-drop-system.js');
-const admin = read('public/cultivation/admin-material-drop-manager.js');
+const catalog = read('public/cultivation/material-catalog.js');
+const realmUi = read('public/cultivation/material-realm-ui.js');
+const realmEditor = read('public/cultivation/admin-material-realm-editor.js');
 const main = read('public/main.js');
 
 test('quiz material drops only react to a local correct answer and are de-duplicated per quiz object', () => {
-  assert.match(drop, /window\.addEventListener\('xiuxian:stats-updated', onStatsUpdated\)/);
+  assert.match(drop, /xiuxian:stats-updated/);
   assert.match(drop, /totalAnswered/);
   assert.match(drop, /totalCorrect/);
   assert.match(drop, /text-green-400/);
@@ -38,10 +40,22 @@ test('dongtian successful material rewards expand to a total of 3 through 10 ite
   assert.match(drop, /source === 'dongtian' \? expandDongtianDrops\(rolledDrops\) : rolledDrops/);
 });
 
-test('material drops use configurable independent rates and commit inventory transactionally', () => {
-  assert.match(drop, /CONFIG_DOC = 'materialDropV1'/);
-  assert.match(drop, /onSnapshot\(doc\(database\(\), CONFIG_COLLECTION, CONFIG_DOC\)/);
+test('materials have realms, colors, and realm-driven automatic drop rates', () => {
+  assert.match(catalog, /export const MATERIAL_REALMS/);
+  assert.match(catalog, /realm: '煉氣'/);
+  assert.match(catalog, /realm: '築基'/);
+  assert.match(catalog, /realm: '金丹'/);
+  assert.match(catalog, /MATERIAL_REALM_COLORS/);
+  assert.match(catalog, /export function materialDropRateFor/);
+  assert.match(catalog, /playerRealm\.order < materialRealm\.order\) return 0/);
+  assert.match(catalog, /const multiplier = 1 \+ Math\.min\(gap, 5\) \* 0\.30/);
+  assert.match(drop, /materialDropRateFor\(material, score, source\)/);
   assert.match(drop, /Math\.random\(\) < rate/);
+  assert.doesNotMatch(drop, /materialDropV1/);
+  assert.doesNotMatch(drop, /onSnapshot/);
+});
+
+test('material rewards still commit inventory transactionally', () => {
   assert.match(drop, /runTransaction\(database\(\), async \(tx\) =>/);
   assert.match(drop, /next\.inventory\[materialId\] = \(Number\(next\.inventory\[materialId\]\) \|\| 0\) \+ quantity/);
   assert.match(drop, /tx\.update\(ref, \{ \[FIELD\]: next \}\)/);
@@ -49,26 +63,37 @@ test('material drops use configurable independent rates and commit inventory tra
   assert.match(drop, /materialDropped: true/);
 });
 
-test('admin can edit quiz and dongtian drop percentages for every current material', () => {
-  assert.match(admin, /材料掉落機率/);
-  assert.match(admin, /data-drop-quiz/);
-  assert.match(admin, /data-drop-dongtian/);
-  assert.match(admin, /問道答對掉落率/);
-  assert.match(admin, /洞天首次通關掉落率/);
-  assert.match(admin, /rules: next/);
-  assert.match(admin, /userSnap\.data\(\)\?\.isAdmin !== true/);
-  assert.match(admin, /material-drop-rules-updated/);
+test('material realm color UI decorates inventory, refinery and admin material interfaces', () => {
+  assert.match(realmUi, /--material-realm-color/);
+  assert.match(realmUi, /\.refinery-material\[data-refinery-material\]/);
+  assert.match(realmUi, /\.material-store-item/);
+  assert.match(realmUi, /#admin-material-list \.amm-item/);
+  assert.match(realmUi, /material-realm-badge/);
+  assert.match(realmUi, /materialRealmColor/);
 });
 
-test('material drop modules load after material inventory and admin material manager', () => {
+test('admin material editor can edit realm while the manual drop-rate panel is removed', () => {
+  assert.match(realmEditor, /材料境界/);
+  assert.match(realmEditor, /MATERIAL_REALMS/);
+  assert.match(realmEditor, /realm: modal\.querySelector\('#amre-realm'\)\.value/);
+  assert.match(realmEditor, /userSnap\.data\(\)\?\.isAdmin !== true/);
+  assert.match(main, /\.\/cultivation\/admin-material-realm-editor\.js/);
+  assert.match(main, /\.\/cultivation\/material-realm-ui\.js/);
+  assert.doesNotMatch(main, /admin-material-drop-manager/);
+  assert.equal(fs.existsSync(path.join(__dirname, '..', 'public/cultivation/admin-material-drop-manager.js')), false);
+});
+
+test('material realm modules load in the correct order', () => {
   const materialIndex = main.indexOf("'./cultivation/material-system.js'");
+  const realmUiIndex = main.indexOf("'./cultivation/material-realm-ui.js'");
   const dropIndex = main.indexOf("'./cultivation/material-drop-system.js'");
   const dongtianIndex = main.indexOf("'./cultivation/dongtian.js'");
   const adminMaterialIndex = main.indexOf("'./cultivation/admin-material-manager.js'");
-  const adminDropIndex = main.indexOf("'./cultivation/admin-material-drop-manager.js'");
+  const realmEditorIndex = main.indexOf("'./cultivation/admin-material-realm-editor.js'");
   const collapseIndex = main.indexOf("'./cultivation/admin-panel-collapsible.js'");
-  assert.ok(materialIndex >= 0 && dropIndex > materialIndex);
+  assert.ok(materialIndex >= 0 && realmUiIndex > materialIndex);
+  assert.ok(dropIndex > realmUiIndex);
   assert.ok(dongtianIndex > dropIndex);
-  assert.ok(adminMaterialIndex >= 0 && adminDropIndex > adminMaterialIndex);
-  assert.ok(collapseIndex > adminDropIndex);
+  assert.ok(adminMaterialIndex >= 0 && realmEditorIndex > adminMaterialIndex);
+  assert.ok(collapseIndex > realmEditorIndex);
 });
