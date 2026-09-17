@@ -363,7 +363,10 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, getArtifactById, realmForScore, real
     });
     if (!context?.container || !context.key || context.answered) return;
     const available = ARTIFACT_CATALOG.filter((item) => quantity(item.id) > 0 && !!removeOptionEffect(item, context.context));
-    if (!available.length) return;
+    if (!available.length) {
+      context.container.parentElement?.querySelector?.(`.artifact-question-tools[data-question-key="${CSS.escape(context.key)}"]`)?.remove();
+      return;
+    }
     let bar = context.container.parentElement?.querySelector?.(`.artifact-question-tools[data-question-key="${CSS.escape(context.key)}"]`);
     if (!bar) {
       bar = document.createElement('div');
@@ -372,6 +375,16 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, getArtifactById, realmForScore, real
       context.container.before(bar);
     }
     const used = usedQuestionKeys.has(context.key);
+    const renderKey = JSON.stringify([
+      context.key,
+      used,
+      !!busyAction,
+      available.map((item) => [item.id, item.name, item.icon || '◆', quantity(item.id)])
+    ]);
+    // MutationObserver 會再次看見 innerHTML 造成的 childList 變動；內容沒有改變時絕對不能重寫 DOM，
+    // 否則會形成 observer -> syncQuestionTools -> innerHTML -> observer 的無限循環，改法寶名稱時尤其容易觸發。
+    if (bar.dataset.artifactRenderKey === renderKey) return;
+    bar.dataset.artifactRenderKey = renderKey;
     bar.innerHTML = `<span class="artifact-question-label"><i class="fa-solid fa-wand-sparkles"></i> 法寶</span>${available.map((item) => `<button type="button" data-artifact-question-use="${escapeHtml(item.id)}" ${used || busyAction ? 'disabled' : ''}><b>${escapeHtml(item.icon || '◆')}</b>${escapeHtml(item.name)} ×${quantity(item.id)}<small>排除錯項</small></button>`).join('')}`;
     bar.querySelectorAll('[data-artifact-question-use]').forEach((button) => {
       button.onclick = () => useRemoveOptionArtifact(button.dataset.artifactQuestionUse, currentQuestionContext() || context).catch((error) => toast(error.message || '法寶使用失敗'));
