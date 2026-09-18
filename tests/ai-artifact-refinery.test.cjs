@@ -200,3 +200,24 @@ test('AI refinery job module loads before refinery UI', () => {
   const ui = main.indexOf("'./cultivation/cultivation-refinery-v2.js'");
   assert.ok(jobs >= 0 && ui > jobs);
 });
+
+
+test('admin can securely skip refinery wait without bypassing the normal claim flow', () => {
+  assert.match(refinery, /const canAdminSkip = !!job && !jobReady && userData\(\)\?\.isAdmin === true/);
+  assert.match(refinery, /data-refinery-admin-skip/);
+  assert.match(refinery, /管理員：跳過等待/);
+  assert.match(refinery, /skipCultivationRefineryWait\?\.\(\)/);
+  assert.match(refinery, /addEventListener\('click', skipAdminWait\)/);
+
+  assert.match(aiJobs, /async function skipJobWait\(\)/);
+  assert.match(aiJobs, /raw\.isAdmin !== true/);
+  assert.match(aiJobs, /readyAtMs: now/);
+  assert.match(aiJobs, /adminSkippedAtMs: now/);
+  assert.match(aiJobs, /adminSkippedBy: user\.uid/);
+  assert.match(aiJobs, /window\.skipCultivationRefineryWait = skipJobWait/);
+
+  // The actual artifact still goes through the original ready-time checked claim functions.
+  assert.match(aiJobs, /async function claimKnown\(job\)/);
+  assert.match(aiJobs, /async function claimDiscovery\(job\)/);
+  assert.match(aiJobs, /Date\.now\(\) < Number\(fresh\.readyAtMs/);
+});

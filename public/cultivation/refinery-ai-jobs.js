@@ -430,10 +430,41 @@ import {
     return job.kind === 'discovery' ? claimDiscovery(job) : claimKnown(job);
   }
 
+  async function skipJobWait() {
+    const user = authUser();
+    if (!user) throw new Error('尚未登入');
+
+    let updatedJob = null;
+    await runTransaction(db(), async (tx) => {
+      const ref = doc(db(), 'users', user.uid);
+      const snap = await tx.get(ref);
+      if (!snap.exists()) throw new Error('玩家資料不存在');
+      const raw = snap.data() || {};
+      if (raw.isAdmin !== true) throw new Error('只有管理員可以跳過煉製時間');
+      const fresh = raw[REFINERY_JOB_FIELD];
+      if (!fresh?.id) throw new Error('目前沒有煉器任務');
+
+      const now = Date.now();
+      updatedJob = {
+        ...fresh,
+        readyAtMs: now,
+        adminSkippedAtMs: now,
+        adminSkippedBy: user.uid
+      };
+      tx.update(ref, { [REFINERY_JOB_FIELD]: updatedJob });
+    });
+
+    const local = data();
+    if (local) local[REFINERY_JOB_FIELD] = updatedJob;
+    window.dispatchEvent(new CustomEvent('xiuxian:refinery-job-updated', { detail: updatedJob }));
+    return updatedJob;
+  }
+
   window.getCultivationRefineryJob = currentJob;
   window.getCultivationRefineryPlan = buildPlan;
   window.startCultivationRefineryJob = startJob;
   window.claimCultivationRefineryJob = claimJob;
+  window.skipCultivationRefineryWait = skipJobWait;
   window.formatCultivationRefineryDuration = formatRefineryDuration;
   window.getCultivationRefineryRecipeSignature = recipeSignature;
 })();

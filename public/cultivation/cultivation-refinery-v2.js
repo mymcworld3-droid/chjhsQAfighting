@@ -277,7 +277,8 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
       materials: MATERIAL_CATALOG.map((m) => [m.id, m.name, m.icon, m.category, m.realm]),
       artifacts: ARTIFACT_CATALOG.map((a) => [a.id, a.name, a.icon, a.realm, a.craft?.yield || 1]),
       recipes: ARTIFACT_RECIPES,
-      refineryJob: window.getCultivationRefineryJob?.() || null
+      refineryJob: window.getCultivationRefineryJob?.() || null,
+      isAdmin: userData()?.isAdmin === true
     });
   }
 
@@ -311,6 +312,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
     const job = window.getCultivationRefineryJob?.() || null;
     const plan = !job && matching.length <= 1 ? window.getCultivationRefineryPlan?.(selected, matching[0]?.id || '') : null;
     const jobReady = !!job && Date.now() >= Number(job.readyAtMs || 0);
+    const canAdminSkip = !!job && !jobReady && userData()?.isAdmin === true;
     const directions = ['乾','坎','艮','震','巽','離','坤','兌'];
 
     const materialHtml = ownedMaterials.map((m) => {
@@ -371,7 +373,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
 
     const craftReady = !busy && (job ? jobReady : !!plan?.valid) && matching.length <= 1;
     const craftLabel = job ? (jobReady ? '開爐' : '煉製中') : '煉製';
-    const jobBox = job ? `<div class="refinery-job-box"><strong>${job.kind === 'discovery' ? '未知配方煉製' : '法寶煉製中'}</strong><div class="refinery-job-grid"><div class="refinery-job-stat">法寶境界<b>${esc(job.targetRealm || '凡人')}</b></div><div class="refinery-job-stat">已付金幣<b>${Math.max(0, Number(job.goldCost) || 0)}</b></div><div class="refinery-job-stat">剩餘時間<b data-refinery-job-clock>--</b></div></div><div class="refinery-job-progress"><i data-refinery-job-progress></i></div><div class="refinery-note ${job.kind === 'discovery' ? 'refinery-discovery-note' : ''}">${job.kind === 'discovery' ? '此組合沒有既有配方；煉製完成後按「開爐」即可取得新法寶。' : '素材與金幣已在按「煉製」時扣除，完成後按「開爐」取出。'}</div></div>` : '';
+    const jobBox = job ? `<div class="refinery-job-box"><strong>${job.kind === 'discovery' ? '未知配方煉製' : '法寶煉製中'}</strong><div class="refinery-job-grid"><div class="refinery-job-stat">法寶境界<b>${esc(job.targetRealm || '凡人')}</b></div><div class="refinery-job-stat">已付金幣<b>${Math.max(0, Number(job.goldCost) || 0)}</b></div><div class="refinery-job-stat">剩餘時間<b data-refinery-job-clock>--</b></div></div><div class="refinery-job-progress"><i data-refinery-job-progress></i></div><div class="refinery-note ${job.kind === 'discovery' ? 'refinery-discovery-note' : ''}">${job.kind === 'discovery' ? '此組合沒有既有配方；煉製完成後按「開爐」即可取得新法寶。' : '素材與金幣已在按「煉製」時扣除，完成後按「開爐」取出。'}</div>${canAdminSkip ? `<div class="refinery-actions"><button type="button" class="refinery-clear" data-refinery-admin-skip ${busy ? 'disabled' : ''}><i class="fa-solid fa-forward-fast"></i> 管理員：跳過等待</button></div>` : ''}</div>` : '';
 
     const adminGuidance = adminGuidanceMarkup(job, matching.length);
 
@@ -491,6 +493,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
     content.querySelectorAll('[data-refinery-slot]').forEach((button) => button.addEventListener('click', () => remove(Number(button.dataset.refinerySlot))));
     content.querySelector('[data-refinery-clear]')?.addEventListener('click', clear);
     content.querySelector('[data-refinery-craft]')?.addEventListener('click', craft);
+    content.querySelector('[data-refinery-admin-skip]')?.addEventListener('click', skipAdminWait);
     const direction = content.querySelector('[data-refinery-admin-direction]');
     if (direction) direction.addEventListener('change', () => { adminForgeDirection = direction.value || '自由發揮'; });
     const prompt = content.querySelector('[data-refinery-admin-prompt]');
@@ -530,6 +533,39 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
     if (busy || window.getCultivationRefineryJob?.()) return;
     selected.fill(null);
     syncSelectionView();
+  }
+
+  async function skipAdminWait() {
+    if (busy) return;
+    if (userData()?.isAdmin !== true) {
+      toast('只有管理員可以跳過煉製時間。', false);
+      return;
+    }
+    const job = window.getCultivationRefineryJob?.() || null;
+    if (!job) {
+      toast('目前沒有煉器任務。', false);
+      return;
+    }
+    if (Date.now() >= Number(job.readyAtMs || 0)) {
+      toast('此法寶已可開爐。');
+      render(true);
+      updateJobClock();
+      return;
+    }
+
+    busy = true;
+    render(true);
+    try {
+      await window.skipCultivationRefineryWait?.();
+      toast('管理員已跳過煉製時間，可立即開爐。');
+    } catch (error) {
+      console.error('[Cultivation refinery admin skip]', error);
+      toast(error.message || '無法跳過煉製時間。', false);
+    } finally {
+      busy = false;
+      render(true);
+      updateJobClock();
+    }
   }
 
   async function craft() {
