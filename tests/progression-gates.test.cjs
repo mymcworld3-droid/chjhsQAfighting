@@ -23,6 +23,7 @@ const visual = read('cultivation-core-visual.js');
 const equipWarning = read('cultivation-core-equip-warning.js');
 const battleEffects = read('golden-core-battle-effects.js');
 const legacy = readRoot('main-legacy.js');
+const startupScene = readRoot('assets/xianxia-loading-scene.svg');
 
 test('login core is isolated from optional cultivation module failures', () => {
   const staticImports = main.match(/^import\s+['"][^'"]+['"];$/gm) || [];
@@ -215,4 +216,25 @@ test('game waits for every feature script before revealing the playable UI', () 
   const homePos = legacy.indexOf("switchToPage('page-home')");
   assert.ok(waitPos >= 0 && revealPos > waitPos && homePos > waitPos,
     'bottom navigation and home page are not revealed until all feature modules finish loading');
+});
+
+
+test('startup gate is a full-screen xianxia loading scene with real progress and rotating tips', () => {
+  assert.match(legacy, /GAME_STARTUP_TIPS = \[/);
+  assert.match(legacy, /width:100vw;height:100dvh/);
+  assert.match(legacy, /assets\/xianxia-loading-scene\.svg/);
+  assert.match(legacy, /id="game-startup-gate-progress"/);
+  assert.match(legacy, /id="game-startup-gate-percent"/);
+  assert.match(legacy, /id="game-startup-gate-tip"/);
+  assert.match(legacy, /function updateGameStartupProgress\(loaded = 0, total = 0\)/);
+  assert.match(legacy, /Math\.round\(\(safeLoaded \/ safeTotal\) \* 100\)/);
+  assert.match(legacy, /updateGameStartupProgress\(loaded, detail\.total\)/);
+  assert.match(legacy, /修行小提示：/);
+  assert.match(legacy, /洞天首次完整通關可獲得靈石/);
+  assert.doesNotMatch(legacy, /第一煉|第二煉|第三煉|木材加工成木棍/);
+
+  assert.match(startupScene, /<svg[^>]+viewBox="0 0 1600 900"/);
+  assert.match(startupScene, /青雲問道修仙雲海/);
+  assert.match(startupScene, /<circle cx="1115" cy="210"/);
+  assert.match(startupScene, /<path d="M0 570/);
 });

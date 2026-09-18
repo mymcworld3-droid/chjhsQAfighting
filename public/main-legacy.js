@@ -552,28 +552,184 @@ window.logout = () => {
 // ==========================================
 // 🚪 遊戲啟動閘門：登入後等所有功能腳本載入完成才進遊戲
 // ==========================================
+const GAME_STARTUP_TIPS = [
+    '洞府可以調整出題範圍、難度與個人設定。',
+    '洞天首次完整通關可獲得靈石，題數越多，獎勵也越高。',
+    '修煉頁的背包可以查看持有法寶與煉器素材。',
+    '築基之後會逐步開啟更多修煉與鬥法內容。',
+    '遇見其他修士的洞天時，進入前可先查看主人、科目與題數。',
+    '煉器任務開始後，即使離開煉器頁面，等待進度仍會保留。'
+];
+
+function ensureGameStartupGateStyle() {
+    if (document.getElementById('game-startup-gate-style')) return;
+    const style = document.createElement('style');
+    style.id = 'game-startup-gate-style';
+    style.textContent = `
+        #game-startup-gate{
+            position:fixed;inset:0;z-index:30000;width:100vw;height:100dvh;
+            overflow:hidden;background:#050505;color:#f3e5bf;
+            font-family:var(--xq-serif,'Noto Sans TC',sans-serif)
+        }
+        #game-startup-gate .game-startup-visual{
+            position:absolute;inset:0;overflow:hidden;background:#070704
+        }
+        #game-startup-gate .game-startup-visual img{
+            width:100%;height:100%;display:block;object-fit:cover;object-position:center 56%;
+            filter:saturate(.82) contrast(1.08) brightness(.72);transform:scale(1.015)
+        }
+        #game-startup-gate .game-startup-veil{
+            position:absolute;inset:0;
+            background:
+                linear-gradient(180deg,rgba(3,4,3,.24) 0%,rgba(3,4,3,.18) 28%,rgba(3,4,3,.58) 66%,rgba(3,4,3,.94) 100%),
+                radial-gradient(circle at 50% 42%,rgba(222,184,94,.08),transparent 36%),
+                linear-gradient(90deg,rgba(0,0,0,.46),transparent 34%,transparent 66%,rgba(0,0,0,.46))
+        }
+        #game-startup-gate .game-startup-content{
+            position:relative;z-index:2;width:min(920px,calc(100vw - 36px));height:100%;
+            margin:0 auto;padding:clamp(28px,6vh,72px) 0 clamp(30px,7vh,78px);
+            box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-end
+        }
+        #game-startup-gate .game-startup-brand{
+            margin-bottom:auto;display:flex;align-items:center;gap:9px;
+            color:rgba(238,214,155,.82);font-size:10px;font-weight:900;letter-spacing:.24em;text-transform:uppercase
+        }
+        #game-startup-gate .game-startup-brand:before{
+            content:'';width:30px;height:1px;background:linear-gradient(90deg,#d8b15d,transparent)
+        }
+        #game-startup-gate .game-startup-copy{max-width:760px;text-shadow:0 4px 24px rgba(0,0,0,.82)}
+        #game-startup-gate .game-startup-kicker{
+            color:#d9b96d;font-size:9px;font-weight:900;letter-spacing:.32em
+        }
+        #game-startup-gate h1{
+            margin:7px 0 5px;color:#f5e8c8;font:900 clamp(28px,5vw,54px)/1.06 var(--xq-serif,'Noto Sans TC',sans-serif);
+            letter-spacing:.06em
+        }
+        #game-startup-gate-text{
+            margin:0;color:#b7a783;font-size:clamp(10px,1.2vw,13px);line-height:1.75
+        }
+        #game-startup-gate .game-startup-progress-wrap{margin-top:clamp(20px,3.2vh,34px)}
+        #game-startup-gate .game-startup-tip-row{
+            min-height:22px;margin-bottom:8px;display:flex;align-items:flex-end;justify-content:space-between;gap:16px
+        }
+        #game-startup-gate-tip{
+            color:#d2c09a;font-size:clamp(9px,1.1vw,12px);line-height:1.55;
+            transition:opacity .18s ease,transform .18s ease
+        }
+        #game-startup-gate-percent{
+            flex:0 0 auto;color:#ecd48f;font-size:13px;font-weight:900;font-variant-numeric:tabular-nums
+        }
+        #game-startup-gate .game-startup-track{
+            position:relative;height:9px;border:1px solid rgba(229,197,111,.22);border-radius:999px;
+            overflow:hidden;background:rgba(4,4,3,.62);box-shadow:inset 0 0 18px rgba(0,0,0,.72),0 0 0 1px rgba(0,0,0,.18)
+        }
+        #game-startup-gate-progress{
+            position:absolute;inset:0 auto 0 0;width:0%;
+            background:linear-gradient(90deg,#70511d 0%,#d7ad50 54%,#f4df9a 100%);
+            box-shadow:0 0 22px rgba(220,177,83,.44);transition:width .28s cubic-bezier(.2,.75,.28,1)
+        }
+        #game-startup-gate-progress:after{
+            content:'';position:absolute;right:-16px;top:50%;width:34px;height:18px;transform:translateY(-50%);
+            background:radial-gradient(circle,rgba(255,237,180,.78),rgba(235,192,91,.22) 42%,transparent 70%);
+            filter:blur(2px)
+        }
+        #game-startup-gate .game-startup-meta{
+            margin-top:8px;display:flex;justify-content:space-between;gap:14px;color:#7f755f;font-size:8px;letter-spacing:.08em
+        }
+        #game-startup-gate-error{display:none;margin-top:18px}
+        #game-startup-gate-error button{
+            min-height:40px;padding:0 18px;border:1px solid rgba(216,177,93,.38);border-radius:11px;
+            background:rgba(16,12,5,.72);color:#f0d99a;font-size:9px;font-weight:900;backdrop-filter:blur(8px)
+        }
+        #game-startup-gate.is-error #game-startup-gate-text{color:#fecaca}
+        #game-startup-gate.is-error #game-startup-gate-progress{
+            background:linear-gradient(90deg,#7f1d1d,#ef4444,#fca5a5);box-shadow:0 0 22px rgba(239,68,68,.34)
+        }
+        @media(max-width:640px){
+            #game-startup-gate .game-startup-content{width:calc(100vw - 28px);padding-top:24px;padding-bottom:34px}
+            #game-startup-gate .game-startup-visual img{object-position:58% center}
+            #game-startup-gate .game-startup-tip-row{align-items:flex-start}
+            #game-startup-gate-tip{max-width:78%}
+        }
+        @media(prefers-reduced-motion:reduce){
+            #game-startup-gate-progress,#game-startup-gate-tip{transition:none}
+            #game-startup-gate .game-startup-visual img{transform:none}
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+function gameStartupTip(loaded = 0, total = 0) {
+    if (!GAME_STARTUP_TIPS.length) return '';
+    if (!total) return GAME_STARTUP_TIPS[0];
+    const ratio = Math.max(0, Math.min(1, Number(loaded) / Math.max(1, Number(total))));
+    const index = Math.min(GAME_STARTUP_TIPS.length - 1, Math.floor(ratio * GAME_STARTUP_TIPS.length));
+    return GAME_STARTUP_TIPS[index];
+}
+
+function updateGameStartupProgress(loaded = 0, total = 0) {
+    const gate = ensureGameStartupGate();
+    const safeTotal = Math.max(0, Number(total) || 0);
+    const safeLoaded = safeTotal ? Math.max(0, Math.min(Number(loaded) || 0, safeTotal)) : 0;
+    const percent = safeTotal ? Math.round((safeLoaded / safeTotal) * 100) : 0;
+    const fill = gate.querySelector('#game-startup-gate-progress');
+    const percentText = gate.querySelector('#game-startup-gate-percent');
+    const count = gate.querySelector('#game-startup-gate-count');
+    const tip = gate.querySelector('#game-startup-gate-tip');
+    if (fill) fill.style.width = `${percent}%`;
+    if (percentText) percentText.textContent = `${percent}%`;
+    if (count) count.textContent = safeTotal ? `${safeLoaded} / ${safeTotal} 個功能` : '準備載入';
+    if (tip) tip.textContent = `修行小提示：${gameStartupTip(safeLoaded, safeTotal)}`;
+    gate.dataset.loaded = String(safeLoaded);
+    gate.dataset.total = String(safeTotal);
+}
+
 function ensureGameStartupGate() {
     let gate = document.getElementById('game-startup-gate');
     if (gate) return gate;
+    ensureGameStartupGateStyle();
     gate = document.createElement('div');
     gate.id = 'game-startup-gate';
-    gate.style.cssText = 'position:fixed;inset:0;z-index:30000;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 50% 38%,rgba(216,177,93,.10),transparent 28%),rgba(5,5,5,.97);backdrop-filter:blur(10px)';
+    gate.setAttribute('role', 'status');
+    gate.setAttribute('aria-live', 'polite');
     gate.innerHTML = `
-        <div style="width:min(92vw,420px);padding:28px 24px;border:1px solid rgba(216,177,93,.28);border-radius:24px;background:linear-gradient(145deg,rgba(28,22,12,.98),rgba(8,8,8,.99));box-shadow:0 30px 100px rgba(0,0,0,.62);text-align:center">
-            <div style="width:58px;height:58px;margin:0 auto 16px;display:grid;place-items:center;border:1px solid rgba(216,177,93,.4);border-radius:50%;color:#e5c46f;font-size:22px">道</div>
-            <h3 style="margin:0;color:#f1dfb4;font-size:18px">仙府載入中</h3>
-            <p id="game-startup-gate-text" style="margin:9px 0 0;color:#9b8c70;font-size:10px;line-height:1.7">正在準備玩家資料…</p>
-            <div id="game-startup-gate-error" style="display:none;margin-top:14px">
-                <button type="button" onclick="location.reload()" style="min-height:38px;padding:0 16px;border:1px solid rgba(216,177,93,.38);border-radius:11px;background:rgba(216,177,93,.09);color:#f0d99a;font-size:9px;font-weight:900">重新整理</button>
+        <div class="game-startup-visual" aria-hidden="true">
+            <img src="assets/xianxia-loading-scene.svg" alt="" decoding="async">
+            <div class="game-startup-veil"></div>
+        </div>
+        <div class="game-startup-content">
+            <div class="game-startup-brand">QINGYUN · CULTIVATION REALM</div>
+            <div class="game-startup-copy">
+                <div class="game-startup-kicker">一念入道 · 萬法將啟</div>
+                <h1>仙府載入中</h1>
+                <p id="game-startup-gate-text">正在準備玩家資料…</p>
+                <div class="game-startup-progress-wrap">
+                    <div class="game-startup-tip-row">
+                        <span id="game-startup-gate-tip">修行小提示：${GAME_STARTUP_TIPS[0]}</span>
+                        <span id="game-startup-gate-percent">0%</span>
+                    </div>
+                    <div class="game-startup-track" aria-label="載入進度">
+                        <i id="game-startup-gate-progress"></i>
+                    </div>
+                    <div class="game-startup-meta">
+                        <span id="game-startup-gate-count">準備載入</span>
+                        <span>正在喚醒仙府諸般法門</span>
+                    </div>
+                </div>
+                <div id="game-startup-gate-error">
+                    <button type="button" onclick="location.reload()"><i class="fa-solid fa-rotate-right"></i> 重新整理</button>
+                </div>
             </div>
         </div>`;
     document.body.appendChild(gate);
+    updateGameStartupProgress(0, 0);
     return gate;
 }
 
 function showGameStartupGate(message = '正在載入全部功能腳本…') {
     const gate = ensureGameStartupGate();
-    gate.style.display = 'grid';
+    gate.style.display = 'block';
+    gate.classList.remove('is-error');
     const text = gate.querySelector('#game-startup-gate-text');
     if (text) text.textContent = message;
     const error = gate.querySelector('#game-startup-gate-error');
@@ -584,11 +740,11 @@ function showGameStartupGate(message = '正在載入全部功能腳本…') {
 
 function showGameStartupFailure(message) {
     const gate = ensureGameStartupGate();
+    gate.classList.add('is-error');
     const text = gate.querySelector('#game-startup-gate-text');
-    if (text) {
-        text.textContent = message || '部分功能腳本載入失敗，為避免以半套功能開始遊戲，請重新整理後再試。';
-        text.style.color = '#fca5a5';
-    }
+    if (text) text.textContent = message || '部分功能腳本載入失敗，為避免以半套功能開始遊戲，請重新整理後再試。';
+    const tip = gate.querySelector('#game-startup-gate-tip');
+    if (tip) tip.textContent = '載入中斷：請確認網路連線後重新整理。';
     const error = gate.querySelector('#game-startup-gate-error');
     if (error) error.style.display = 'block';
 }
@@ -608,9 +764,13 @@ async function waitForAllGameScripts() {
 
 window.addEventListener('xiuxian:feature-load-progress', (event) => {
     const detail = event.detail || {};
+    if (!detail.total) return;
+    const loaded = Math.min(Number(detail.loaded) || 0, Number(detail.total) || 0);
     const text = document.getElementById('game-startup-gate-text');
-    if (!text || !detail.total) return;
-    text.textContent = `正在載入功能腳本… ${Math.min(detail.loaded || 0, detail.total)} / ${detail.total}`;
+    if (text) text.textContent = loaded >= detail.total
+        ? '諸般法門已就緒，正在進入仙府…'
+        : '正在載入修仙功能模組…';
+    updateGameStartupProgress(loaded, detail.total);
 });
 
 // ==========================================
