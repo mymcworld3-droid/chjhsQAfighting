@@ -4266,8 +4266,6 @@ function checkAdminRole(isAdmin) {
 
     const navGrid = document.getElementById('nav-grid');
     if (isAdmin && !document.getElementById('btn-admin-nav')) {
-        navGrid.classList.remove('grid-cols-5'); 
-        navGrid.classList.add('grid-cols-6');
         const btn = document.createElement('button');
         btn.id = "btn-admin-nav"; btn.dataset.target = "page-admin";
         btn.className = "flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-red-400 transition group";
