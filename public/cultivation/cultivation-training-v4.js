@@ -118,14 +118,14 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     },
     {
       id: 'pojing', name: '破境衝仙丹', icon: '✦', tone: 'amber',
-      effect(grade) { return `進入下一境界前最後 ${breakthroughPercent(grade)}% 的修為區間時，悟道成功額外 +2 修為。`; },
+      effect(grade) { return `進入下一境界前最後 ${breakthroughPercent(grade)}% 的修為區間時，悟道成功額外 +5 修為。`; },
       ability: '越近瓶頸，丹力越能衝擊境界壁障。',
       upkeep: '突破前保持穩定悟道。',
       warning: '只在接近下一境界的指定比例區間生效。',
       note: '專治修行瓶頸。對真正的牆壁沒有作用，請勿以額頭驗證丹力。',
       resolve({ isCorrect, grade, score }) {
         if (!isCorrect || !inBreakthroughZone(score, grade)) return {};
-        return { bonusGain: 2, message: `${this.name}衝破瓶頸，額外 +2 修為` };
+        return { bonusGain: 5, message: `${this.name}衝破瓶頸，額外 +5 修為` };
       }
     },
     {
