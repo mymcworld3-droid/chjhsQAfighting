@@ -1,10 +1,11 @@
 // 煉器材料與法寶配方的資料來源。
 // 材料清單與配方可由 material-catalog-sync.js 以 Firestore 全站設定覆蓋。
 
-import { ARTIFACT_REALMS } from './artifact-catalog.js';
+import { ARTIFACT_CATALOG, ARTIFACT_REALMS, getArtifactById } from './artifact-catalog.js';
 
 export const MATERIAL_CATEGORIES = Object.freeze(['礦石', '靈木', '晶石', '妖獸材料', '特殊材料', '符材', '其他']);
 export const MAX_ARTIFACT_RECIPE_MATERIALS = 8;
+export const MAX_ARTIFACT_RECIPE_NESTING = 2;
 export const MATERIAL_CATALOG_SCHEMA_VERSION = 2;
 
 const MATERIAL_REALM_COLORS = Object.freeze({
@@ -238,15 +239,55 @@ export function getMaterialById(id) {
   return MATERIAL_CATALOG.find((item) => item.id === id) || null;
 }
 
+export function recipeIngredientKey(row = {}) {
+  const artifactId = String(row?.artifactId || '').trim();
+  if (artifactId) return `artifact:${artifactId}`;
+  const materialId = String(row?.materialId || '').trim();
+  return materialId ? `material:${materialId}` : '';
+}
+
 export function normalizeArtifactRecipe(recipe = []) {
   const totals = new Map();
   (Array.isArray(recipe) ? recipe : []).forEach((row) => {
+    const artifactId = String(row?.artifactId || '').trim();
     const materialId = String(row?.materialId || '').trim();
     const quantity = Math.max(0, Math.floor(finite(row?.quantity, 0)));
-    if (!materialId || quantity <= 0) return;
-    totals.set(materialId, (totals.get(materialId) || 0) + quantity);
+    if (quantity <= 0) return;
+    const key = artifactId ? `artifact:${artifactId}` : (materialId ? `material:${materialId}` : '');
+    if (!key) return;
+    totals.set(key, (totals.get(key) || 0) + quantity);
   });
-  return [...totals.entries()].map(([materialId, quantity]) => ({ materialId, quantity }));
+  return [...totals.entries()].map(([key, quantity]) => {
+    if (key.startsWith('artifact:')) return { artifactId: key.slice(9), quantity };
+    return { materialId: key.slice(9), quantity };
+  });
+}
+
+function recipeDepthFor(artifactId, recipes, visiting = new Set(), memo = new Map()) {
+  const id = String(artifactId || '').trim();
+  if (!id) return 0;
+  if (memo.has(id)) return memo.get(id);
+  if (visiting.has(id)) throw new Error(`法寶配方形成循環套娃：${[...visiting, id].join(' → ')}`);
+
+  visiting.add(id);
+  const recipe = Array.isArray(recipes?.[id]) ? recipes[id] : [];
+  const dependencies = recipe
+    .filter((row) => row?.artifactId)
+    .map((row) => String(row.artifactId).trim())
+    .filter(Boolean);
+
+  let depth = 0;
+  for (const dependencyId of dependencies) {
+    if (dependencyId === id) throw new Error(`法寶 ${id} 不可把自己當成煉器材料`);
+    depth = Math.max(depth, 1 + recipeDepthFor(dependencyId, recipes, visiting, memo));
+  }
+  visiting.delete(id);
+  memo.set(id, depth);
+  return depth;
+}
+
+export function artifactRecipeDepth(artifactId, recipes = ARTIFACT_RECIPES) {
+  return recipeDepthFor(artifactId, recipes, new Set(), new Map());
 }
 
 export function validateArtifactRecipes(rawRecipes = {}) {
@@ -257,14 +298,27 @@ export function validateArtifactRecipes(rawRecipes = {}) {
     if (!id) return;
     const recipe = normalizeArtifactRecipe(rawRecipe);
     recipe.forEach((row) => {
-      if (!getMaterialById(row.materialId)) throw new Error(`配方 ${id} 使用不存在的材料：${row.materialId}`);
+      if (row.materialId && !getMaterialById(row.materialId)) {
+        throw new Error(`配方 ${id} 使用不存在的材料：${row.materialId}`);
+      }
+      if (row.artifactId && !getArtifactById(row.artifactId)) {
+        throw new Error(`配方 ${id} 使用不存在的法寶：${row.artifactId}`);
+      }
     });
-    const totalMaterials = recipe.reduce((sum, row) => sum + Math.max(0, Number(row.quantity) || 0), 0);
-    if (totalMaterials > MAX_ARTIFACT_RECIPE_MATERIALS) {
-      throw new Error(`配方 ${id} 共需 ${totalMaterials} 個材料，超過煉器陣 ${MAX_ARTIFACT_RECIPE_MATERIALS} 格上限`);
+    const totalItems = recipe.reduce((sum, row) => sum + Math.max(0, Number(row.quantity) || 0), 0);
+    if (totalItems > MAX_ARTIFACT_RECIPE_MATERIALS) {
+      throw new Error(`配方 ${id} 共需 ${totalItems} 個煉器素材，超過煉器陣 ${MAX_ARTIFACT_RECIPE_MATERIALS} 格上限`);
     }
     if (recipe.length) result[id] = recipe;
   });
+
+  const memo = new Map();
+  for (const artifact of ARTIFACT_CATALOG) {
+    const depth = recipeDepthFor(artifact.id, result, new Set(), memo);
+    if (depth > MAX_ARTIFACT_RECIPE_NESTING) {
+      throw new Error(`法寶 ${artifact.name} 的二次煉製套娃深度為 ${depth}，最多只允許 ${MAX_ARTIFACT_RECIPE_NESTING} 層`);
+    }
+  }
   return result;
 }
 
