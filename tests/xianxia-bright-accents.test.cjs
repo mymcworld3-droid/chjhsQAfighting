@@ -13,7 +13,7 @@ const index = read('public/index.html');
 test('bright accent layer is loaded statically after dark theme/preload styles', () => {
   const dark = index.indexOf('xianxia-blackgold-harmony.css');
   const inlineLayout = index.indexOf('id="content-capacity-layout-style"');
-  const bright = index.indexOf('xianxia-bright-accents.css?v=20260918-bright1');
+  const bright = index.indexOf('xianxia-bright-accents.css?v=20260918-bright2');
   const debug = index.indexOf('id="debug-top-layer-style"');
   assert.ok(dark >= 0);
   assert.ok(inlineLayout > dark);
@@ -49,8 +49,12 @@ test('training, store and admin dense areas receive brighter surfaces', () => {
   assert.match(css, /#page-admin :is\(\.aam-item,\.amm-item,\.admin-stat-card\)/);
 });
 
-test('quiz paper and green/red answer feedback remain visibly distinct', () => {
+test('quiz paper uses darker parchment with high-contrast ink and preserves answer feedback', () => {
   assert.match(css, /#quiz-container>\.glass-panel:first-child/);
+  assert.match(css, /linear-gradient\(110deg,#d2c4a4,#b9a681\)/);
+  assert.match(css, /#question-text,[\s\S]*#question-text \*\{[\s\S]*color:#211a10!important/);
+  assert.match(css, /#question-text :is\(mjx-container,mjx-container \*\)/);
+  assert.match(css, /#quiz-badge\{[\s\S]*background:rgba\(38,31,21,.82\)!important/);
   assert.match(css, /#options-container>button:not\(\.bg-green-600\):not\(\.bg-red-600\)/);
   assert.match(css, /#options-container>\.bg-green-600/);
   assert.match(css, /#options-container>\.bg-red-600/);
