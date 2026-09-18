@@ -155,7 +155,8 @@ function registerArtifactGenerationApi(app) {
       const selected = Array.isArray(req.body?.selectedIngredients) ? req.body.selectedIngredients : [];
       const allMaterials = Array.isArray(req.body?.allMaterials) ? req.body.allMaterials : [];
       const targetRealm = String(req.body?.targetRealm || '');
-      if (selected.length < 2 || selected.length > 8) return res.status(400).json({ error: '煉器素材必須為 2 到 8 個' });
+      const totalIngredients = selected.reduce((sum, row) => sum + Math.max(0, Math.floor(Number(row?.quantity) || 1)), 0);
+      if (totalIngredients < 2 || totalIngredients > 8) return res.status(400).json({ error: '煉器素材必須為 2 到 8 個' });
       if (!allMaterials.length) return res.status(400).json({ error: '缺少完整材料圖鑑' });
       if (!REALMS.includes(targetRealm)) return res.status(400).json({ error: '未知的法寶境界' });
 
