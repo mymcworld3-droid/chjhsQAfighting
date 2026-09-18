@@ -109,6 +109,7 @@ test('Dongtian first completion always grants the player 1000 gold while owner r
   assert.match(uiSource, /'stats\.totalScore': increment\(OWNER_CULTIVATION_REWARD\)/);
   assert.match(uiSource, /'stats\.gold': increment\(OWNER_GOLD_REWARD\)/);
   assert.doesNotMatch(uiSource, /獎勵內容目前待開放/);
+  assert.match(uiSource, /玩家首次完整通關固定 \+\$\{FIRST_COMPLETION_GOLD_REWARD\.toLocaleString\(\)\} 靈石/);
 });
 
 test('Dongtian history is saved as one grouped run instead of one document per question', () => {
