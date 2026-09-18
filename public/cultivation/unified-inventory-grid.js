@@ -3,7 +3,9 @@ import {
   MATERIAL_CATALOG,
   getMaterialById,
   materialRealmColor,
-  materialRealmOrderByName
+  materialRealmOrderByName,
+  artifactRecipeDepth,
+  MAX_ARTIFACT_RECIPE_NESTING
 } from './material-catalog.js';
 
 // 統一修煉背包：法寶、材料、消耗道具共用正方形格子；點擊後才顯示詳細資料。
@@ -74,6 +76,7 @@ import {
         qualityRank: realmOrderByName(item?.realm || '凡人'),
         description: item?.description || '此法寶已不在目前法寶清單中。',
         effects: Array.isArray(item?.effects) ? item.effects : [],
+        refinementDepth: item ? artifactRecipeDepth(id) : 0,
         equipped: artifactEquipped(id),
         raw: item || null
       });
@@ -254,7 +257,7 @@ import {
 
     let extra = '';
     if (item.type === 'artifact') {
-      extra = `<div class="uib-detail-section"><span>法寶效果</span>${item.effects.length
+      extra = `<div class="uib-detail-section"><span>法寶資訊</span><p>二次煉製深度：${item.refinementDepth || 0}/${MAX_ARTIFACT_RECIPE_NESTING}</p></div><div class="uib-detail-section"><span>法寶效果</span>${item.effects.length
         ? `<ul>${item.effects.map((effect) => `<li>${escapeHtml(effectLabel(effect))}</li>`).join('')}</ul>`
         : '<p>目前沒有額外效果資料。</p>'}${item.equipped ? '<p class="uib-equipped-note"><i class="fa-solid fa-circle-check"></i> 目前已裝備</p>' : ''}</div>`;
     } else if (item.type === 'material') {
