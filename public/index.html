@@ -23,6 +23,448 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
+    <style id="training-fluid-layout-style">
+body.xianxia-theme main:has(#page-training.active-page){
+        width:100%!important;
+        max-width:none!important;
+      }
+
+      body.xianxia-theme #page-training.training-page-v3{
+        width:100%!important;
+        max-width:none!important;
+        margin:0!important;
+        padding-left:clamp(8px,1.7vw,28px)!important;
+        padding-right:clamp(8px,1.7vw,28px)!important;
+      }
+
+      body.xianxia-theme #page-training .training-subtabs-v3{
+        width:100%!important;
+        max-width:none!important;
+        display:grid!important;
+        grid-template-columns:repeat(auto-fit,minmax(92px,1fr))!important;
+        gap:clamp(4px,.65vw,9px)!important;
+      }
+
+      body.xianxia-theme #page-training .training-subtab-v3{
+        width:100%!important;
+        min-width:0!important;
+        flex:1 1 auto!important;
+      }
+
+      body.xianxia-theme #page-training #training-tab-content{
+        width:100%!important;
+        max-width:none!important;
+        min-width:0!important;
+      }
+
+      body.xianxia-theme #page-training .core-minimal-card{
+        width:100%!important;
+        max-width:none!important;
+        padding-left:clamp(8px,2vw,36px)!important;
+        padding-right:clamp(8px,2vw,36px)!important;
+      }
+
+      body.xianxia-theme #page-training .core-minimal-center{
+        width:min(100%,720px)!important;
+        max-width:720px!important;
+      }
+
+      body.xianxia-theme #page-training .training-v3-bag-grid,
+      body.xianxia-theme #page-training .cultivation-inventory-grid{
+        width:100%!important;
+        max-width:none!important;
+        grid-template-columns:repeat(auto-fit,minmax(250px,1fr))!important;
+        gap:clamp(7px,1vw,14px)!important;
+        overflow:auto!important;
+        overscroll-behavior:contain;
+        padding-right:2px;
+      }
+
+      body.xianxia-theme #page-training .training-v3-empty{
+        width:100%!important;
+        max-width:none!important;
+      }
+
+      body.xianxia-theme #page-training .cultivation-refinery{
+        width:100%!important;
+        max-width:none!important;
+        height:100%!important;
+        min-height:0!important;
+        margin:0!important;
+        grid-template-columns:minmax(280px,.9fr) minmax(390px,1.1fr)!important;
+        gap:clamp(10px,1.3vw,20px)!important;
+        align-items:stretch!important;
+      }
+
+      body.xianxia-theme #page-training .refinery-panel{
+        min-height:0!important;
+        height:100%!important;
+        display:flex!important;
+        flex-direction:column!important;
+      }
+
+      body.xianxia-theme #page-training .refinery-material-list{
+        flex:1 1 auto!important;
+        min-height:0!important;
+        max-height:none!important;
+        overflow:auto!important;
+        overscroll-behavior:contain;
+      }
+
+      body.xianxia-theme #page-training .refinery-slots{
+        grid-template-columns:repeat(4,minmax(64px,1fr))!important;
+      }
+
+      @media (min-width:1280px){
+        body.xianxia-theme #page-training .golden-core-stage-v3{
+          max-height:260px!important;
+        }
+        body.xianxia-theme #page-training .training-v3-bag-grid,
+        body.xianxia-theme #page-training .cultivation-inventory-grid{
+          grid-template-columns:repeat(auto-fit,minmax(280px,1fr))!important;
+        }
+      }
+
+      @media (max-width:900px){
+        body.xianxia-theme #page-training.training-page-v3{
+          padding-left:10px!important;
+          padding-right:10px!important;
+        }
+        body.xianxia-theme #page-training .cultivation-refinery{
+          grid-template-columns:1fr!important;
+          height:auto!important;
+          min-height:100%!important;
+        }
+        body.xianxia-theme #page-training #training-tab-content{
+          overflow:auto!important;
+          overscroll-behavior:contain;
+        }
+        body.xianxia-theme #page-training .refinery-panel{
+          height:auto!important;
+        }
+        body.xianxia-theme #page-training .refinery-material-list{
+          max-height:min(38dvh,330px)!important;
+        }
+      }
+
+      @media (max-width:640px){
+        body.xianxia-theme #page-training .training-subtabs-v3{
+          grid-template-columns:repeat(auto-fit,minmax(78px,1fr))!important;
+        }
+        body.xianxia-theme #page-training .training-v3-bag-grid,
+        body.xianxia-theme #page-training .cultivation-inventory-grid{
+          grid-template-columns:1fr!important;
+        }
+        body.xianxia-theme #page-training .core-minimal-center{
+          width:100%!important;
+        }
+        body.xianxia-theme #page-training .refinery-slots{
+          grid-template-columns:repeat(4,minmax(0,1fr))!important;
+          gap:5px!important;
+        }
+      }
+    </style>
+
+    <style id="content-capacity-layout-style">
+body.xianxia-theme main:has(#page-training.active-page),
+      body.xianxia-theme main:has(#page-training:not(.hidden)){
+        overflow-y:auto!important;
+        overscroll-behavior-y:contain!important;
+      }
+
+      /* 高度直接由實際底部導覽位置量測，不再重複扣除 dvh / main padding。 */
+      body.xianxia-theme #page-training.training-page-v3{
+        height:auto!important;
+        max-height:none!important;
+        min-height:var(--training-fill-height,calc(100dvh - 208px))!important;
+        overflow:visible!important;
+        padding-bottom:8px!important;
+      }
+
+      body.xianxia-theme #page-training.training-page-v3.active-page{
+        display:grid!important;
+        grid-template-rows:auto minmax(0,1fr)!important;
+        align-content:stretch!important;
+      }
+
+      body.xianxia-theme #page-training #training-tab-content{
+        width:100%!important;
+        height:auto!important;
+        min-height:var(--training-content-height,calc(100dvh - 260px))!important;
+        max-height:none!important;
+        overflow:visible!important;
+        padding-bottom:0!important;
+      }
+
+      body.xianxia-theme #page-training .core-minimal-card{
+        min-height:var(--training-content-height,calc(100dvh - 270px))!important;
+        height:auto!important;
+        overflow:visible!important;
+        align-items:stretch!important;
+      }
+
+      body.xianxia-theme #page-training .core-minimal-center{
+        width:min(100%,920px)!important;
+        max-width:920px!important;
+        min-height:max(0px,calc(var(--training-content-height,calc(100dvh - 260px)) - 8px))!important;
+        height:auto!important;
+        max-height:none!important;
+        grid-template-rows:minmax(250px,1fr) auto auto auto auto!important;
+        align-content:stretch!important;
+      }
+
+      body.xianxia-theme #page-training .golden-core-stage-v3{
+        width:auto!important;
+        height:clamp(240px,44dvh,430px)!important;
+        max-height:430px!important;
+        min-height:180px!important;
+        min-width:180px!important;
+      }
+
+      body.xianxia-theme #page-training .training-v3-bag-grid,
+      body.xianxia-theme #page-training .cultivation-inventory-grid{
+        height:auto!important;
+        min-height:min(360px,var(--training-content-height,calc(100dvh - 290px)))!important;
+        max-height:var(--training-content-height,calc(100dvh - 270px))!important;
+        overflow:auto!important;
+        overscroll-behavior:contain!important;
+        scrollbar-gutter:stable;
+        align-content:start!important;
+        padding:2px 4px 10px 2px!important;
+      }
+
+      /* 煉器吃滿導覽列上方空間，材料過多只滾左側清單。 */
+      body.xianxia-theme #page-training .cultivation-refinery{
+        width:100%!important;
+        max-width:none!important;
+        height:auto!important;
+        min-height:var(--training-content-height,calc(100dvh - 270px))!important;
+        align-items:stretch!important;
+        overflow:visible!important;
+        padding-bottom:0!important;
+      }
+
+      body.xianxia-theme #page-training .refinery-panel{
+        height:auto!important;
+        min-height:max(0px,calc(var(--training-content-height,calc(100dvh - 270px)) - 4px))!important;
+        max-height:none!important;
+        overflow:visible!important;
+      }
+
+      body.xianxia-theme #page-training .refinery-material-list{
+        flex:1 1 auto!important;
+        min-height:220px!important;
+        max-height:max(220px,calc(var(--training-content-height,calc(100dvh - 270px)) - 110px))!important;
+        overflow:auto!important;
+        overscroll-behavior:contain!important;
+        scrollbar-gutter:stable;
+        padding-right:5px!important;
+      }
+
+      body.xianxia-theme #page-training .refinery-slots,
+      body.xianxia-theme #page-training .refinery-summary,
+      body.xianxia-theme #page-training .refinery-match,
+      body.xianxia-theme #page-training .refinery-actions,
+      body.xianxia-theme #page-training .refinery-note{
+        flex:0 0 auto!important;
+      }
+
+      body.xianxia-theme #page-store,
+      body.xianxia-theme #page-admin{
+        width:100%!important;
+        max-width:none!important;
+        margin-inline:0!important;
+        box-sizing:border-box!important;
+      }
+
+      body.xianxia-theme #page-admin{
+        padding-left:clamp(10px,2vw,30px)!important;
+        padding-right:clamp(10px,2vw,30px)!important;
+      }
+
+      body.xianxia-theme #page-admin .admin-collapse-body{
+        max-height:min(72dvh,760px);
+        overflow:auto;
+        overscroll-behavior:contain;
+        scrollbar-gutter:stable;
+      }
+
+      body.xianxia-theme #page-admin :is(.amm-list,.aam-list){
+        display:grid!important;
+        grid-template-columns:repeat(auto-fit,minmax(320px,1fr))!important;
+        gap:9px!important;
+        align-items:start!important;
+      }
+
+      body.xianxia-theme #page-admin :is(.amm-item,.aam-item){min-width:0!important}
+      body.xianxia-theme :is(#page-store,#page-admin,#page-training) *{min-width:0}
+
+      @media(max-width:900px){
+        body.xianxia-theme #page-training.training-page-v3{
+          min-height:var(--training-fill-height,calc(100dvh - 190px))!important;
+        }
+        body.xianxia-theme #page-training #training-tab-content{
+          min-height:var(--training-content-height,0px)!important;
+          overflow:visible!important;
+        }
+        body.xianxia-theme #page-training .core-minimal-card,
+        body.xianxia-theme #page-training .core-minimal-center{
+          min-height:var(--training-content-height,0px)!important;
+        }
+        body.xianxia-theme #page-training .cultivation-refinery{
+          grid-template-columns:1fr!important;
+          min-height:var(--training-content-height,0px)!important;
+        }
+        body.xianxia-theme #page-training .refinery-panel{min-height:0!important}
+        body.xianxia-theme #page-training .refinery-material-list{
+          min-height:180px!important;
+          max-height:min(42dvh,360px)!important;
+        }
+        body.xianxia-theme #page-training .training-v3-bag-grid,
+        body.xianxia-theme #page-training .cultivation-inventory-grid{
+          max-height:none!important;
+          min-height:var(--training-content-height,0px)!important;
+          overflow:visible!important;
+        }
+        body.xianxia-theme #page-admin .admin-collapse-body{max-height:none;overflow:visible}
+      }
+
+      @media(max-width:640px){
+        body.xianxia-theme #page-training .core-minimal-center{grid-template-rows:auto auto auto auto auto!important}
+        body.xianxia-theme #page-training .golden-core-stage-v3{
+          height:clamp(190px,36dvh,290px)!important;
+          min-height:160px!important;
+          min-width:160px!important;
+        }
+        body.xianxia-theme #page-admin :is(.amm-list,.aam-list){grid-template-columns:1fr!important}
+      }
+
+      @media(max-height:650px){
+        body.xianxia-theme #page-training .golden-core-stage-v3{
+          height:clamp(150px,30dvh,220px)!important;
+          min-height:130px!important;
+          min-width:130px!important;
+        }
+        body.xianxia-theme #page-training .refinery-material-list{max-height:230px!important}
+      }
+    </style>
+
+    <style id="cultivation-refinery-v2-style">
+#page-settings #artifact-forge-card,#page-settings #material-store-card{display:none!important}
+      .cultivation-refinery{width:min(100%,980px);margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+      .refinery-panel{min-width:0;padding:14px;border:1px solid rgba(216,177,93,.2);border-radius:18px;background:linear-gradient(145deg,rgba(21,17,10,.96),rgba(7,7,7,.97));box-shadow:0 16px 42px rgba(0,0,0,.3)}
+      .refinery-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:11px}.refinery-head h3{margin:0;color:#f1e1bc;font-size:13px}.refinery-head p{margin:4px 0 0;color:#8d816c;font-size:8px;line-height:1.55}.refinery-badge{padding:5px 8px;border:1px solid rgba(216,177,93,.15);border-radius:999px;color:#cdb46f;font-size:7px;white-space:nowrap}
+      .refinery-material-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));grid-auto-rows:max-content;align-content:start;gap:8px;max-height:430px;overflow:auto;padding:2px 4px 4px 1px}.refinery-material{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:100%;aspect-ratio:1;min-width:0;padding:9px 7px;border:1px solid rgba(255,255,255,.065);border-radius:14px;background:radial-gradient(circle at 50% 28%,rgba(216,177,93,.055),rgba(255,255,255,.014));text-align:center;overflow:hidden}.refinery-material:not(:disabled):hover{border-color:rgba(216,177,93,.36);background:radial-gradient(circle at 50% 28%,rgba(216,177,93,.10),rgba(216,177,93,.025));transform:translateY(-1px)}.refinery-material:disabled{opacity:.4;cursor:not-allowed}.refinery-mat-icon{width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;border:1px solid rgba(216,177,93,.25);border-radius:12px;background:#171006;color:#efd17c;font-size:12px;font-weight:900}.refinery-mat-copy{display:flex;min-width:0;width:100%;flex-direction:column;align-items:center;gap:2px}.refinery-mat-copy strong{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#ede1c8;font-size:9px}.refinery-mat-copy small{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#81745f;font-size:6px}.refinery-mat-copy .material-realm-badge{margin-top:1px!important}.refinery-mat-qty{position:absolute;right:6px;top:6px;padding:2px 5px;border-radius:999px;background:rgba(0,0,0,.48);color:#d5b96e;font-size:6px;font-weight:900;white-space:nowrap}.refinery-empty{grid-column:1/-1;padding:22px 12px;text-align:center;color:#82745f;font-size:9px;border:1px dashed rgba(216,177,93,.13);border-radius:13px;line-height:1.7}
+      .refinery-slots{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:12px 0}.refinery-slot{aspect-ratio:1;min-height:72px;display:grid;place-items:center;padding:6px;border:1px solid rgba(216,177,93,.18);border-radius:13px;background:radial-gradient(circle at 50% 35%,rgba(216,177,93,.07),rgba(255,255,255,.012));color:#6f6657;position:relative}.refinery-slot.filled{border-color:rgba(216,177,93,.42);color:#efd17c;background:radial-gradient(circle at 50% 35%,rgba(216,177,93,.14),rgba(38,24,6,.18))}.refinery-slot .idx{position:absolute;top:5px;left:6px;color:#675c4d;font-size:6px}.refinery-slot .remove{position:absolute;top:4px;right:5px;color:#a98566;font-size:7px}.refinery-slot .icon{font-size:17px;font-weight:900}.refinery-slot .name{display:block;margin-top:3px;color:#d9c89f;font-size:6px;text-align:center}.refinery-slot:not(.filled) .remove,.refinery-slot:not(.filled) .name{display:none}
+      .refinery-summary,.refinery-match{padding:8px 9px;border-radius:11px;font-size:8px;line-height:1.6}.refinery-summary{min-height:35px;background:rgba(216,177,93,.035);color:#93846d}.refinery-summary strong{color:#d5bb79}.refinery-match{margin-top:8px;border:1px solid rgba(216,177,93,.13);color:#93846d}.refinery-match.ready{border-color:rgba(134,239,172,.2);color:#b9d6b4}.refinery-match.error{border-color:rgba(248,113,113,.18);color:#d7a0a0}.refinery-match b{color:#ead79f}.refinery-actions{display:flex;gap:8px;margin-top:10px}.refinery-clear,.refinery-craft{min-height:42px;border-radius:12px;font-size:9px;font-weight:900}.refinery-clear{width:34%;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.025);color:#9f9585}.refinery-craft{flex:1;border:1px solid rgba(216,177,93,.42);background:linear-gradient(135deg,#8f651e,#4b2f09);color:#fff0bd}.refinery-clear:disabled,.refinery-craft:disabled{opacity:.4;cursor:not-allowed}.refinery-note{margin-top:8px;color:#6f6556;font-size:7px;line-height:1.55}.refinery-note b{color:#aa9360}
+      @media(max-width:760px){.cultivation-refinery{grid-template-columns:1fr}.refinery-material-list{max-height:300px}.refinery-slot{min-height:62px}}
+      @media(max-width:430px){.refinery-material-list{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.refinery-slots{gap:5px}.refinery-slot{min-height:55px;border-radius:10px}.refinery-material{padding:7px 5px}.refinery-mat-icon{width:36px;height:36px;flex-basis:36px}.refinery-mat-copy strong{font-size:7px}.refinery-mat-copy small{font-size:5.5px}}
+    </style>
+
+    <style id="market-fluid-layout-style">
+body.xianxia-theme #page-store{
+        box-sizing:border-box;
+        width:100%!important;
+        max-width:none!important;
+        margin-inline:0!important;
+        padding-left:clamp(10px,2vw,30px)!important;
+        padding-right:clamp(10px,2vw,30px)!important;
+      }
+
+      body.xianxia-theme #page-store > .sticky{
+        width:100%;
+        box-sizing:border-box;
+        padding-left:clamp(2px,.6vw,10px);
+        padding-right:clamp(2px,.6vw,10px);
+      }
+
+      body.xianxia-theme #page-store > div:has(> .store-tab){
+        width:100%;
+        display:grid!important;
+        grid-template-columns:repeat(3,minmax(0,1fr));
+        gap:clamp(5px,.7vw,10px)!important;
+        box-sizing:border-box;
+      }
+
+      body.xianxia-theme #page-store .store-tab{
+        width:100%;
+        min-width:0;
+      }
+
+      body.xianxia-theme #store-grid{
+        width:100%;
+        box-sizing:border-box;
+        display:grid!important;
+        grid-template-columns:repeat(auto-fit,minmax(170px,1fr))!important;
+        gap:clamp(10px,1.15vw,18px)!important;
+        align-items:stretch;
+      }
+
+      body.xianxia-theme #store-grid > *{
+        min-width:0;
+        width:100%;
+      }
+
+      body.xianxia-theme #store-grid :is(.shop-card,.item-card){
+        width:100%;
+        height:100%;
+        box-sizing:border-box;
+      }
+
+      body.xianxia-theme #store-grid img:not([class~="h-[140%]"]){
+        max-width:100%;
+        height:auto;
+      }
+
+      /* 坊市中的頭像框只縮商品預覽，不影響玩家實際裝備後的頭像框。 */
+      body.xianxia-theme #store-grid img[class~="h-[140%]"]{
+        height:118%!important;
+        width:auto!important;
+        max-width:118%!important;
+        object-fit:contain!important;
+      }
+
+      @media (min-width:1500px){
+        body.xianxia-theme #store-grid{
+          grid-template-columns:repeat(auto-fit,minmax(190px,1fr))!important;
+        }
+      }
+
+      @media (max-width:760px){
+        body.xianxia-theme #page-store{
+          padding-left:10px!important;
+          padding-right:10px!important;
+        }
+        body.xianxia-theme #store-grid{
+          grid-template-columns:repeat(3,minmax(0,1fr))!important;
+          gap:9px!important;
+        }
+      }
+
+      @media (max-width:520px){
+        body.xianxia-theme #page-store > div:has(> .store-tab){
+          gap:5px!important;
+          padding:4px!important;
+        }
+        body.xianxia-theme #page-store .store-tab{
+          padding-left:4px!important;
+          padding-right:4px!important;
+          font-size:10px!important;
+        }
+        body.xianxia-theme #store-grid{
+          grid-template-columns:repeat(2,minmax(0,1fr))!important;
+          gap:8px!important;
+          padding-bottom:86px!important;
+        }
+      }
+
+      @media (max-width:330px){
+        body.xianxia-theme #store-grid{
+          grid-template-columns:1fr!important;
+        }
+      }
+    </style>
+
     <!-- 🔥 新增 MathJax 設定檔，強制識別 $ 符號 -->
     <script>
     window.MathJax = {
