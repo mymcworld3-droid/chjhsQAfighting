@@ -305,7 +305,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
       matchClass = jobReady ? 'ready' : '';
       matchPrefix = jobReady ? '煉製完成：' : '爐火運轉：';
       matchPlain = job.kind === 'discovery'
-        ? (jobReady ? '未知配方已完成，點中央「開爐」後由 AI 開創新法寶。' : '未知配方正在孕化；完成後取出時才會啟動 AI 推演。')
+        ? (jobReady ? '煉製已完成，點中央「開爐」取出新法寶。' : '未知配方正在孕化；完成後即可開爐。')
         : (jobReady ? '法寶已完成，點中央「開爐」。' : `正在煉製 ${getArtifactById(job.knownArtifactId)?.name || '法寶'}。`);
     } else if (used && matching.length === 1) {
       const matchedDepth = artifactRecipeDepth(matching[0].id);
@@ -318,7 +318,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
     } else if (used && plan?.valid) {
       matchClass = 'ready';
       matchPrefix = '未知配方：';
-      matchPlain = `AI 將以最高素材境界「${plan.targetRealm}」創造新法寶 · 金幣 ${plan.gold} · 約 ${window.formatCultivationRefineryDuration?.(plan.durationMs) || ''}`;
+      matchPlain = `新法寶境界「${plan.targetRealm}」 · 金幣 ${plan.gold} · 約 ${window.formatCultivationRefineryDuration?.(plan.durationMs) || ''}`;
     } else if (used) {
       matchClass = 'error';
       matchPlain = plan?.reason || '煉器至少需要 2 個素材。';
@@ -326,10 +326,10 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
 
     const craftReady = !busy && (job ? jobReady : !!plan?.valid) && matching.length <= 1;
     const craftLabel = job ? (jobReady ? '開爐' : '煉製中') : '煉製';
-    const jobBox = job ? `<div class="refinery-job-box"><strong>${job.kind === 'discovery' ? 'AI 未知配方煉製' : '法寶煉製中'}</strong><div class="refinery-job-grid"><div class="refinery-job-stat">法寶境界<b>${esc(job.targetRealm || '凡人')}</b></div><div class="refinery-job-stat">已付金幣<b>${Math.max(0, Number(job.goldCost) || 0)}</b></div><div class="refinery-job-stat">剩餘時間<b data-refinery-job-clock>--</b></div></div><div class="refinery-job-progress"><i data-refinery-job-progress></i></div><div class="refinery-note ${job.kind === 'discovery' ? 'refinery-discovery-note' : ''}">${job.kind === 'discovery' ? '此組合沒有既有配方；煉製完成後按「開爐」時，AI 才會依全部材料圖鑑創造新法寶與永久配方。' : '素材與金幣已在按「煉製」時扣除，完成後按「開爐」取出。'}</div></div>` : '';
+    const jobBox = job ? `<div class="refinery-job-box"><strong>${job.kind === 'discovery' ? '未知配方煉製' : '法寶煉製中'}</strong><div class="refinery-job-grid"><div class="refinery-job-stat">法寶境界<b>${esc(job.targetRealm || '凡人')}</b></div><div class="refinery-job-stat">已付金幣<b>${Math.max(0, Number(job.goldCost) || 0)}</b></div><div class="refinery-job-stat">剩餘時間<b data-refinery-job-clock>--</b></div></div><div class="refinery-job-progress"><i data-refinery-job-progress></i></div><div class="refinery-note ${job.kind === 'discovery' ? 'refinery-discovery-note' : ''}">${job.kind === 'discovery' ? '此組合沒有既有配方；煉製完成後按「開爐」即可取得新法寶。' : '素材與金幣已在按「煉製」時扣除，完成後按「開爐」取出。'}</div></div>` : '';
 
 
-    return `<section class="cultivation-refinery"><article class="refinery-panel"><div class="refinery-head"><div><h3><i class="fa-solid fa-gem"></i> 持有煉器素材</h3><p>一般材料與未裝備法寶都可投入；法寶最多套娃兩層。</p></div><span class="refinery-badge">${ownedMaterials.length + ownedArtifacts.length} 種</span></div><div class="refinery-material-list ${job ? 'is-job-locked' : ''}">${ingredientHtml}</div></article><article class="refinery-panel refinery-forge-panel"><div class="refinery-head"><div><h3><i class="fa-solid fa-fire-burner"></i> 八方煉器陣</h3><p>八方歸位，陣心煉器；點已放入素材可取回。</p></div><span class="refinery-badge" data-refinery-used-badge>${used}/${SLOT_COUNT}</span></div><div class="refinery-array-wrap"><div class="refinery-slots" aria-label="八方煉器陣"><span class="refinery-array-lines"></span><span class="refinery-array-ring"></span>${slotHtml}<div class="refinery-array-center"><button type="button" class="refinery-craft ${craftReady ? 'ready' : ''} ${jobReady ? 'job-ready' : ''}" data-refinery-craft ${craftReady ? '' : 'disabled'}><i class="fa-solid fa-fire-flame-curved"></i><span class="craft-main" data-refinery-craft-label>${busy ? '處理中' : craftLabel}</span><span class="craft-sub">REFINE</span></button></div><span class="refinery-array-caption">八方聚靈 · 一器成形</span></div></div>${jobBox}<div class="refinery-summary"><strong>投入：</strong><span data-refinery-summary-text>${esc(summary)}</span></div><div class="refinery-match ${matchClass}" data-refinery-match><b data-refinery-match-prefix>${esc(matchPrefix)}</b><span data-refinery-match-text>${esc(matchPlain)}</span></div><div class="refinery-actions"><button type="button" class="refinery-clear" data-refinery-clear ${!used || busy ? 'disabled' : ''}><i class="fa-solid fa-rotate-left"></i> 清空陣位</button></div><div class="refinery-note"><b>陣法規則：</b>按「煉製」即扣素材與金幣；境界越高、玩家境界越低，耗時與費用越高。煉製完成後按「開爐」取出法寶；未知配方會在開爐時由 AI 創造法寶，最高投入素材境界決定新法寶境界。</div></article></section>`;
+    return `<section class="cultivation-refinery"><article class="refinery-panel"><div class="refinery-head"><div><h3><i class="fa-solid fa-gem"></i> 持有煉器素材</h3><p>一般材料與未裝備法寶都可投入；法寶最多套娃兩層。</p></div><span class="refinery-badge">${ownedMaterials.length + ownedArtifacts.length} 種</span></div><div class="refinery-material-list ${job ? 'is-job-locked' : ''}">${ingredientHtml}</div></article><article class="refinery-panel refinery-forge-panel"><div class="refinery-head"><div><h3><i class="fa-solid fa-fire-burner"></i> 八方煉器陣</h3><p>八方歸位，陣心煉器；點已放入素材可取回。</p></div><span class="refinery-badge" data-refinery-used-badge>${used}/${SLOT_COUNT}</span></div><div class="refinery-array-wrap"><div class="refinery-slots" aria-label="八方煉器陣"><span class="refinery-array-lines"></span><span class="refinery-array-ring"></span>${slotHtml}<div class="refinery-array-center"><button type="button" class="refinery-craft ${craftReady ? 'ready' : ''} ${jobReady ? 'job-ready' : ''}" data-refinery-craft ${craftReady ? '' : 'disabled'}><i class="fa-solid fa-fire-flame-curved"></i><span class="craft-main" data-refinery-craft-label>${busy ? '處理中' : craftLabel}</span><span class="craft-sub">REFINE</span></button></div><span class="refinery-array-caption">八方聚靈 · 一器成形</span></div></div>${jobBox}<div class="refinery-summary"><strong>投入：</strong><span data-refinery-summary-text>${esc(summary)}</span></div><div class="refinery-match ${matchClass}" data-refinery-match><b data-refinery-match-prefix>${esc(matchPrefix)}</b><span data-refinery-match-text>${esc(matchPlain)}</span></div><div class="refinery-actions"><button type="button" class="refinery-clear" data-refinery-clear ${!used || busy ? 'disabled' : ''}><i class="fa-solid fa-rotate-left"></i> 清空陣位</button></div><div class="refinery-note"><b>陣法規則：</b>按「煉製」即扣素材與金幣；境界越高、玩家境界越低，耗時與費用越高。煉製完成後按「開爐」取出法寶。</div></article></section>`;
   }
 
   function setText(node, value) {
@@ -419,7 +419,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
     } else if (used && plan?.valid) {
       matchNode?.classList.add('ready');
       prefix = '未知配方：';
-      message = `AI 將以最高素材境界「${plan.targetRealm}」創造新法寶 · 金幣 ${plan.gold} · 約 ${window.formatCultivationRefineryDuration?.(plan.durationMs) || ''}`;
+      message = `新法寶境界「${plan.targetRealm}」 · 金幣 ${plan.gold} · 約 ${window.formatCultivationRefineryDuration?.(plan.durationMs) || ''}`;
     } else if (used) {
       matchNode?.classList.add('error');
       message = plan?.reason || '煉器至少需要 2 個素材。';
