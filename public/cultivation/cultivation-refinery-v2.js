@@ -407,7 +407,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
     matchNode?.classList.remove('ready', 'error');
     const plan = matching.length <= 1 ? window.getCultivationRefineryPlan?.(selected, matching[0]?.id || '') : null;
     let prefix = '';
-    let message = '放入 2～8 個素材後即可開爐；未知組合會在完成取出時由 AI 推演新法寶。';
+    let message = '放入 2～8 個素材後即可煉製。';
     if (used && matching.length === 1 && plan?.valid) {
       const item = matching[0];
       matchNode?.classList.add('ready');
