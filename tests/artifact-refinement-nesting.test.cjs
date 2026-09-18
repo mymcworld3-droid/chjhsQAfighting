@@ -143,3 +143,13 @@ test('backpack exposes refinement depth and index preloads the new refinery styl
   assert.match(css, /refinery-group-title/);
   assert.match(index, /main\.js\?v=20260918-quizrich1/);
 });
+
+test('owned refinery ingredients use deterministic realm then name ordering', () => {
+  assert.match(refinery, /materialRealmOrderByName/);
+  assert.match(refinery, /realmOrderByName/);
+  assert.match(refinery, /function compareOwnedMaterials\(a, b\)/);
+  assert.match(refinery, /function compareOwnedArtifacts\(a, b\)/);
+  assert.match(refinery, /\.sort\(compareOwnedMaterials\)/);
+  assert.match(refinery, /\.sort\(compareOwnedArtifacts\)/);
+  assert.match(refinery, /localeCompare\([^\n]+['"]zh-Hant['"]\)/);
+});

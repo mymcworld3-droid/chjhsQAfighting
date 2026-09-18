@@ -1,8 +1,8 @@
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, runTransaction } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-import { ARTIFACT_CATALOG, getArtifactById, artifactRealmColor } from './artifact-catalog.js';
-import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe, materialRealmColor, artifactRecipeDepth, MAX_ARTIFACT_RECIPE_NESTING } from './material-catalog.js';
+import { ARTIFACT_CATALOG, getArtifactById, artifactRealmColor, realmOrderByName } from './artifact-catalog.js';
+import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe, materialRealmColor, materialRealmOrderByName, artifactRecipeDepth, MAX_ARTIFACT_RECIPE_NESTING } from './material-catalog.js';
 
 (function () {
   'use strict';
@@ -281,14 +281,32 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
     });
   }
 
+  function compareOwnedMaterials(a, b) {
+    const realmDiff = materialRealmOrderByName(a?.realm || '凡人') - materialRealmOrderByName(b?.realm || '凡人');
+    if (realmDiff !== 0) return realmDiff;
+    return String(a?.name || a?.id || '').localeCompare(String(b?.name || b?.id || ''), 'zh-Hant');
+  }
+
+  function compareOwnedArtifacts(a, b) {
+    const realmDiff = realmOrderByName(a?.realm || '凡人') - realmOrderByName(b?.realm || '凡人');
+    if (realmDiff !== 0) return realmDiff;
+    return String(a?.name || a?.id || '').localeCompare(String(b?.name || b?.id || ''), 'zh-Hant');
+  }
+
   function markup() {
     const matInv = materialInventory();
     const artInv = artifactInventory();
     const equippedCounts = equippedArtifactCounts();
     const counts = selectedCounts();
     const used = selected.filter(Boolean).length;
-    const ownedMaterials = MATERIAL_CATALOG.filter((m) => (Number(matInv[m.id]) || 0) > 0);
-    const ownedArtifacts = ARTIFACT_CATALOG.filter((a) => (Number(artInv[a.id]) || 0) > 0);
+    const ownedMaterials = MATERIAL_CATALOG
+      .filter((m) => (Number(matInv[m.id]) || 0) > 0)
+      .slice()
+      .sort(compareOwnedMaterials);
+    const ownedArtifacts = ARTIFACT_CATALOG
+      .filter((a) => (Number(artInv[a.id]) || 0) > 0)
+      .slice()
+      .sort(compareOwnedArtifacts);
     const matching = matches();
     const job = window.getCultivationRefineryJob?.() || null;
     const plan = !job && matching.length <= 1 ? window.getCultivationRefineryPlan?.(selected, matching[0]?.id || '') : null;
