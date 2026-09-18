@@ -13,11 +13,12 @@ const foundation = read('public/cultivation/foundation-training-page.js');
 const trainingCss = read('public/cultivation-training-v3.css');
 const main = read('public/main.js');
 
-test('held refinery materials use an adaptive square multi-column grid', () => {
+test('held refinery materials use adaptive square grids inside independent scroll rolls', () => {
   assert.match(refinery, /grid-template-columns:repeat\(auto-fill,minmax\(96px,1fr\)\)/);
   assert.match(refinery, /\.refinery-material\{[^}]*aspect-ratio:1/);
   assert.match(refinery, /\.refinery-mat-qty\{position:absolute/);
-  assert.match(refinery, /@media\(max-width:430px\)\{\.refinery-material-list\{grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
+  assert.match(refinery, /\.refinery-material-roll-body\{[^}]*overflow:auto/);
+  assert.match(refinery, /@media\(max-width:430px\)\{\.refinery-material-list\{gap:7px\}\.refinery-material-roll\{padding:5px\}\.refinery-material-roll-body\{grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
 });
 
 test('training page creates refinery tab and a complete stable shell up front', () => {
