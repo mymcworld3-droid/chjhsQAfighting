@@ -17,6 +17,11 @@ const MAX_TEXT = 16000;
 const MIN_QUESTIONS = 10;
 const QUESTION_BATCH_SIZE = 5;
 const QUESTION_COUNT_CHOICES = Object.freeze([10, 15, 20, 25, 30]);
+const QUESTION_AMOUNT_PRESETS = Object.freeze({
+  low: Object.freeze([10]),
+  medium: Object.freeze([15, 20]),
+  high: Object.freeze([25, 30])
+});
 const MAX_QUESTIONS = 30;
 const MAX_REPORT_REASON = 1200;
 const MAX_REVISION_HINT = 1600;
@@ -57,17 +62,27 @@ function validateImages(images) {
   });
 }
 
-function normalizePlannedQuestionCount(value) {
-  const requested = Math.max(MIN_QUESTIONS, Math.min(MAX_QUESTIONS, Math.ceil(Number(value) || MIN_QUESTIONS)));
-  return QUESTION_COUNT_CHOICES.find((count) => count >= requested) || MAX_QUESTIONS;
+function normalizeQuestionAmount(value) {
+  const amount = String(value || '').toLowerCase().trim();
+  return Object.prototype.hasOwnProperty.call(QUESTION_AMOUNT_PRESETS, amount) ? amount : 'medium';
 }
 
-function normalizeDongtianPlan(raw, creatorLevel) {
+function allowedQuestionCounts(amount) {
+  return QUESTION_AMOUNT_PRESETS[normalizeQuestionAmount(amount)];
+}
+
+function normalizePlannedQuestionCount(value, amount = null) {
+  const requested = Math.max(MIN_QUESTIONS, Math.min(MAX_QUESTIONS, Math.ceil(Number(value) || MIN_QUESTIONS)));
+  const choices = amount ? allowedQuestionCounts(amount) : QUESTION_COUNT_CHOICES;
+  return choices.find((count) => count >= requested) || choices[choices.length - 1];
+}
+
+function normalizeDongtianPlan(raw, creatorLevel, questionAmount = null) {
   const data = raw && typeof raw === 'object' ? raw : {};
   const level = normalizeLevel(data.level, creatorLevel);
   const difficulty = normalizeDifficulty(data.difficulty);
   const subject = cleanText(data.subject || '綜合', 24) || '綜合';
-  const questionCount = normalizePlannedQuestionCount(data.questionCount);
+  const questionCount = normalizePlannedQuestionCount(data.questionCount, questionAmount);
   const knowledgePoints = Array.isArray(data.knowledgePoints)
     ? [...new Set(data.knowledgePoints.map((x) => cleanText(x, 180)).filter(Boolean))].slice(0, 50)
     : [];
@@ -108,15 +123,18 @@ function normalizeDongtianPlan(raw, creatorLevel) {
   };
 }
 
-function buildPlanningPrompt(text, creatorLevel, imageCount) {
+function buildPlanningPrompt(text, creatorLevel, imageCount, questionAmount = 'medium') {
+  const amount = normalizeQuestionAmount(questionAmount);
+  const allowedCounts = allowedQuestionCounts(amount);
+  const amountLabel = ({ low:'少量', medium:'中量', high:'大量' })[amount];
   return `
 [任務]
 你是「洞天」學習關卡規劃師。先分析使用者提供的所有文字與 ${imageCount} 張圖片，只做「題量與題目結構規劃」，此階段不要實際出題。
 
 [規劃要求]
 1. 盡可能完整辨認素材中所有可獨立學習／考核的知識點。
-2. 依素材資訊密度決定洞天題量，但每個洞天至少 ${MIN_QUESTIONS} 題、最多 ${MAX_QUESTIONS} 題。
-3. questionCount 只能是 ${QUESTION_COUNT_CHOICES.join('、')} 其中之一，讓後續能固定每 ${QUESTION_BATCH_SIZE} 題一批生成。
+2. 使用者選擇的題量偏好是「${amountLabel}」。本次 questionCount 只能從 ${allowedCounts.join('、')} 中選擇；若有兩個候選值，再依素材資訊密度判斷較合適的一個。
+3. 無論使用者選哪一種題量，每個洞天都不得少於 ${MIN_QUESTIONS} 題，且後續固定每 ${QUESTION_BATCH_SIZE} 題一批生成。
 4. 題目結構固定為「四選一單選題」：每題只能選一個答案、恰好一個 correct、恰好三個 wrong；禁止複選題、多選題、複數正解。
 5. questionBlueprints 必須恰好有 questionCount 筆，依實際遊玩順序規劃每一題要考的 focus、skill、difficulty、subject。
 6. 題序由基礎辨識 → 理解 → 應用／整合，避免規劃同義重複題。
@@ -254,8 +272,8 @@ function normalizeQuestionBatch(raw, plan, existingQuestions, startIndex, expect
 }
 
 // Backward-compatible export name for older tests/tools: buildPrompt now means the planning pass.
-function buildPrompt(text, creatorLevel, imageCount) {
-  return buildPlanningPrompt(text, creatorLevel, imageCount);
+function buildPrompt(text, creatorLevel, imageCount, questionAmount = 'medium') {
+  return buildPlanningPrompt(text, creatorLevel, imageCount, questionAmount);
 }
 
 async function callGemini(provider, prompt, images) {
@@ -749,12 +767,13 @@ module.exports = function registerDongtianApi(app) {
     try {
       const text = cleanText(req.body?.text, MAX_TEXT);
       const creatorLevel = normalizeLevel(req.body?.creatorLevel, '國中一年級');
+      const questionAmount = normalizeQuestionAmount(req.body?.questionAmount);
       const images = validateImages(req.body?.images);
       if (!text && !images.length) return res.status(400).json({ error: '請至少提供文字或一張圖片' });
 
       // Pass 1: only identify required question count, metadata and ordered single-choice structure.
-      const planningRun = await generateMultimodalJSON(buildPlanningPrompt(text, creatorLevel, images.length), images);
-      const plan = normalizeDongtianPlan(planningRun.data, creatorLevel);
+      const planningRun = await generateMultimodalJSON(buildPlanningPrompt(text, creatorLevel, images.length, questionAmount), images);
+      const plan = normalizeDongtianPlan(planningRun.data, creatorLevel, questionAmount);
 
       // Pass 2+: generate exactly five questions at a time.
       // Every batch prompt includes every question already generated so the model can avoid repetition.
@@ -803,6 +822,7 @@ module.exports = function registerDongtianApi(app) {
       res.json({
         dongtian,
         generationPlan: {
+          questionAmount,
           questionCount: plan.questionCount,
           questionStructure: plan.questionStructure
         },
@@ -821,4 +841,4 @@ module.exports = function registerDongtianApi(app) {
   });
 };
 
-module.exports.__test = { LEVELS, MIN_QUESTIONS, QUESTION_BATCH_SIZE, QUESTION_COUNT_CHOICES, normalizeLevel, normalizeDifficulty, normalizePlannedQuestionCount, normalizeDongtianPlan, normalizeQuestionBatch, normalizeResult, buildPrompt, buildPlanningPrompt, buildQuestionBatchPrompt, validateImages, normalizeQuestionSnapshot, buildQuestionReviewPrompt, normalizeQuestionReview, buildRevisionPrompt, buildRevisionValidationPrompt, normalizeStandaloneQuestion, normalizeRevisionValidation };
+module.exports.__test = { LEVELS, MIN_QUESTIONS, QUESTION_BATCH_SIZE, QUESTION_COUNT_CHOICES, QUESTION_AMOUNT_PRESETS, normalizeLevel, normalizeDifficulty, normalizeQuestionAmount, allowedQuestionCounts, normalizePlannedQuestionCount, normalizeDongtianPlan, normalizeQuestionBatch, normalizeResult, buildPrompt, buildPlanningPrompt, buildQuestionBatchPrompt, validateImages, normalizeQuestionSnapshot, buildQuestionReviewPrompt, normalizeQuestionReview, buildRevisionPrompt, buildRevisionValidationPrompt, normalizeStandaloneQuestion, normalizeRevisionValidation };

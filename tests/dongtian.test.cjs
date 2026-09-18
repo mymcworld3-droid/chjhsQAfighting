@@ -236,3 +236,44 @@ test('Dongtian creation UI describes planning first and five-question batch gene
   assert.match(uiSource, /先判斷需要的題數與固定單選結構，再每 5 題一批生成/);
   assert.match(uiSource, /先規劃題數，再每 5 題分批生成/);
 });
+
+
+test('Dongtian question amount presets constrain planning to low medium or high ranges', () => {
+  assert.deepEqual(api.allowedQuestionCounts('low'), [10]);
+  assert.deepEqual(api.allowedQuestionCounts('medium'), [15,20]);
+  assert.deepEqual(api.allowedQuestionCounts('high'), [25,30]);
+  assert.equal(api.normalizePlannedQuestionCount(13, 'low'), 10);
+  assert.equal(api.normalizePlannedQuestionCount(13, 'medium'), 15);
+  assert.equal(api.normalizePlannedQuestionCount(18, 'medium'), 20);
+  assert.equal(api.normalizePlannedQuestionCount(24, 'high'), 25);
+  assert.equal(api.normalizePlannedQuestionCount(29, 'high'), 30);
+  assert.equal(api.normalizeQuestionAmount('unknown'), 'medium');
+
+  const lowPrompt = api.buildPlanningPrompt('notes','國中一年級',0,'low');
+  const mediumPrompt = api.buildPlanningPrompt('notes','國中一年級',0,'medium');
+  const highPrompt = api.buildPlanningPrompt('notes','國中一年級',0,'high');
+  assert.match(lowPrompt, /題量偏好是「少量」/);
+  assert.match(lowPrompt, /只能從 10 中選擇/);
+  assert.match(mediumPrompt, /只能從 15、20 中選擇/);
+  assert.match(highPrompt, /只能從 25、30 中選擇/);
+});
+
+test('Dongtian creator UI offers low medium high question amounts and sends the choice to the API', () => {
+  assert.match(uiSource, /name="dt-question-amount" value="low"/);
+  assert.match(uiSource, /name="dt-question-amount" value="medium" checked/);
+  assert.match(uiSource, /name="dt-question-amount" value="high"/);
+  assert.match(uiSource, /少 <small>10 題<\/small>/);
+  assert.match(uiSource, /中 <small>15～20 題<\/small>/);
+  assert.match(uiSource, /多 <small>25～30 題<\/small>/);
+  assert.match(uiSource, /questionAmount = document\.querySelector/);
+  assert.match(uiSource, /JSON\.stringify\(\{ text, images, creatorLevel: level, questionAmount \}\)/);
+});
+
+test('Dongtian runner and question card fill the viewport instead of staying in a narrow centered column', () => {
+  assert.match(uiSource, /\.dt-overlay\{[^}]*width:100vw;height:100dvh/);
+  assert.match(uiSource, /\.dt-runner\{width:100vw;height:100dvh;max-width:none/);
+  assert.match(uiSource, /grid-template-rows:auto auto auto minmax\(0,1fr\)/);
+  assert.match(uiSource, /\.dt-question\{[^}]*height:100%[^}]*display:flex[^}]*overflow:auto/);
+  assert.match(uiSource, /\.dt-options\{[^}]*grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
+  assert.match(uiSource, /@media\(max-width:700px\)[\s\S]*\.dt-options\{grid-template-columns:1fr/);
+});
