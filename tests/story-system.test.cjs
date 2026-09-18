@@ -105,16 +105,17 @@ test('story engine loads before tutorials and tutorials wait while story dialogu
   const qiFiveIndex = main.indexOf("'./cultivation/qi-five-dongtian-tutorial.js'");
   const goldenIndex = main.indexOf("'./cultivation/golden-core-tutorial.js'");
   assert.ok(storyIndex >= 0 && newbieIndex > storyIndex);
-  assert.ok(qiFiveIndex > newbieIndex && goldenIndex > qiFiveIndex);
+  assert.equal(qiFiveIndex, -1);
+  assert.ok(goldenIndex > newbieIndex);
   assert.match(newbie, /#xiuxian-story-layer/);
   assert.match(qiFive, /#xiuxian-story-layer/);
   assert.match(golden, /#xiuxian-story-layer/);
 });
 
 test('story chapters use every uploaded NPC role in the narrative', () => {
-  assert.match(scripts, /speaker: 'elder'/);
-  assert.match(scripts, /speaker: 'refineryMaster'/);
-  assert.match(scripts, /speaker: 'rival'/);
-  assert.match(scripts, /speaker: 'envoy'/);
-  assert.match(scripts, /speaker: 'antagonist'/);
+  assert.match(scripts, /c\\('elder'/);
+  assert.match(scripts, /c\\('refineryMaster'/);
+  assert.match(scripts, /c\\('rival'/);
+  assert.match(scripts, /c\\('envoy'/);
+  assert.match(scripts, /c\\('antagonist'/);
 });
