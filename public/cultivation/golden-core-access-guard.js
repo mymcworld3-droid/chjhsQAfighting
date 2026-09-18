@@ -61,7 +61,13 @@
       window.switchToPage('page-home');
     }
     document.getElementById('nav-training')?.remove();
-    page?.remove();
+    if (page?.dataset.staticLayout === '1') {
+      page.classList.add('hidden');
+      page.classList.remove('active-page', 'foundation-training-page');
+      delete page.dataset.foundationTraining;
+    } else {
+      page?.remove();
+    }
     document.body?.classList.remove('cultivation-training-unlocked', 'foundation-training-only');
   }
 
