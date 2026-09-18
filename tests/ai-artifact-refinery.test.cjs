@@ -151,6 +151,14 @@ test('refinery button flow is 煉製 -> 煉製中 -> 開爐 and claim only after
   assert.match(refinery, /煉製完成後按「開爐」取出法寶/);
 });
 
+test('player-facing refinery never reveals that unknown recipes are AI-generated', () => {
+  assert.doesNotMatch(refinery, /AI/);
+  assert.doesNotMatch(refinery, /人工智慧/);
+  assert.doesNotMatch(aiJobs, /AI 法寶生成失敗/);
+  assert.match(refinery, /未知配方煉製/);
+  assert.match(refinery, /煉製完成後按「開爐」即可取得新法寶/);
+});
+
 test('admin keeps newest pending AI artifacts above approved realm-sorted artifacts and supports approval', () => {
   assert.match(admin, /AI・待處理/);
   assert.match(admin, /reviewStatus === 'pending'/);
