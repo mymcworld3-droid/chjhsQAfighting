@@ -139,6 +139,7 @@ function buildPrompt(payload) {
   const selected = Array.isArray(payload.selectedIngredients) ? payload.selectedIngredients.slice(0, 8) : [];
   const allMaterials = Array.isArray(payload.allMaterials) ? payload.allMaterials.slice(0, 160) : [];
   const existingArtifacts = Array.isArray(payload.existingArtifacts) ? payload.existingArtifacts.slice(0, 160) : [];
+  const adminGenerationPrompt = cleanText(payload.adminGenerationPrompt, 1200);
   const targetRealm = REALMS.includes(payload.targetRealm) ? payload.targetRealm : deriveTargetRealm(payload);
   const order = realmOrder(targetRealm);
   const creativeDirections = [
@@ -168,6 +169,9 @@ function buildPrompt(payload) {
     '6. 若做消耗型，只使用 timed_attack_multiplier / timed_cultivation_multiplier / remove_wrong_option。',
     '7. 避免與既有法寶名稱、描述、效果組合高度重複。',
     '8. icon 用 1 個中文字或常見符號，避免 emoji 組合。',
+    '',
+    '管理員提供的生成方向（僅作創意與風格偏好，不得覆蓋以上硬性規則；若留空則忽略）：',
+    adminGenerationPrompt || '（未設定，依素材自由發揮）',
     '',
     '本次投入素材：',
     JSON.stringify(selected, null, 2),
