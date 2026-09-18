@@ -1,4 +1,4 @@
-import { ARTIFACT_CATALOG, getArtifactById, realmOrderByName } from './artifact-catalog.js';
+import { ARTIFACT_CATALOG, ARTIFACT_EQUIP_SLOTS, getArtifactById, realmForScore, realmOrderByName } from './artifact-catalog.js';
 import {
   MATERIAL_CATALOG,
   getMaterialById,
@@ -45,6 +45,42 @@ import {
   function artifactEquipped(id) {
     const equipped = userData()?.artifactSystem?.equipped || {};
     return Object.values(equipped).includes(id);
+  }
+  function artifactHasEquipEffects(item) {
+    return (item?.effects || []).some((effect) => String(effect?.type || '').startsWith('equip_'));
+  }
+  function artifactSlot(item) {
+    if (!artifactHasEquipEffects(item)) return '';
+    const configured = String(item?.equipSlot || '').trim();
+    return ARTIFACT_EQUIP_SLOTS.includes(configured) ? configured : '輔助法寶';
+  }
+  function artifactCanEquip(item) {
+    if (!item || !artifactHasEquipEffects(item)) return false;
+    const current = realmForScore(Math.max(0, Number(userData()?.stats?.totalScore) || 0));
+    return realmOrderByName(item.realm) >= current.order;
+  }
+  function equippedIdForSlot(slot) {
+    return String(userData()?.artifactSystem?.equipped?.[slot] || '');
+  }
+  function equipmentSlotMarkup(slot) {
+    const id = equippedIdForSlot(slot);
+    const item = getArtifactById(id);
+    const held = qty(userData()?.artifactSystem?.inventory?.[id]);
+    const valid = !!item && held > 0 && artifactSlot(item) === slot;
+    if (!valid) {
+      return `<button type="button" class="uib-equip-slot is-empty" data-uib-empty-slot="${escapeHtml(slot)}"><span class="uib-equip-slot-label">${escapeHtml(slot)}</span><b><i class="fa-solid fa-plus"></i> 尚未裝備</b><small>從下方選擇法寶</small></button>`;
+    }
+    const color = qualityColor(item.realm);
+    const effects = (item.effects || []).filter((effect) => String(effect?.type || '').startsWith('equip_')).slice(0, 2);
+    return `<button type="button" class="uib-equip-slot is-filled" data-uib-equipped-item="artifact:${escapeHtml(id)}" style="--uib-quality:${escapeHtml(color)}"><span class="uib-equip-slot-label">${escapeHtml(slot)}</span><span class="uib-equip-slot-main"><i>${escapeHtml(item.icon || '◆')}</i><span><b>${escapeHtml(item.name)}</b><small>${escapeHtml(item.realm)} · 持有 ×${held}</small></span></span><em>${effects.length ? effects.map(effectLabel).map(escapeHtml).join(' · ') : '裝備效果生效中'}</em></button>`;
+  }
+  function equipmentMarkup() {
+    const equippedCount = ARTIFACT_EQUIP_SLOTS.filter((slot) => {
+      const id = equippedIdForSlot(slot);
+      const item = getArtifactById(id);
+      return !!item && qty(userData()?.artifactSystem?.inventory?.[id]) > 0 && artifactSlot(item) === slot;
+    }).length;
+    return `<section class="uib-equipment-panel"><div class="uib-equipment-head"><div><b>裝備</b><span>每個欄位只能裝備一件法寶；換裝會自動替換同欄位法寶。</span></div><em>${equippedCount} / ${ARTIFACT_EQUIP_SLOTS.length}</em></div><div class="uib-equipment-grid">${ARTIFACT_EQUIP_SLOTS.map(equipmentSlotMarkup).join('')}</div></section>`;
   }
 
   function readTrainingLocalItems() {
@@ -192,6 +228,7 @@ import {
       consumable: allItems.filter((item) => item.type === 'consumable' || item.type === 'training').length
     };
     return `<section id="${ROOT_ID}" class="uib-root">
+      ${equipmentMarkup()}
       <div class="uib-toolbar">
         <div class="uib-summary"><b>背包</b><span>${allItems.length} 種物品</span></div>
         <label>種類
@@ -257,9 +294,20 @@ import {
 
     let extra = '';
     if (item.type === 'artifact') {
-      extra = `<div class="uib-detail-section"><span>法寶資訊</span><p>二次煉製深度：${item.refinementDepth || 0}/${MAX_ARTIFACT_RECIPE_NESTING}</p></div><div class="uib-detail-section"><span>法寶效果</span>${item.effects.length
+      const rawArtifact = item.raw;
+      const equipSlot = artifactSlot(rawArtifact);
+      const equippedId = equipSlot ? equippedIdForSlot(equipSlot) : '';
+      const equippedHere = equippedId === item.id;
+      const replacing = equippedId && !equippedHere ? getArtifactById(equippedId) : null;
+      const hasEquip = artifactHasEquipEffects(rawArtifact);
+      const canEquip = artifactCanEquip(rawArtifact);
+      const currentRealm = realmForScore(Math.max(0, Number(userData()?.stats?.totalScore) || 0));
+      const equipAction = hasEquip && equipSlot
+        ? `<button type="button" class="uib-equip-btn" data-uib-equip="${escapeHtml(item.id)}" ${!equippedHere && !canEquip ? 'disabled' : ''}>${equippedHere ? '<i class="fa-solid fa-box-archive"></i> 卸下' : '<i class="fa-solid fa-shield-halved"></i> 裝備'} · ${escapeHtml(equipSlot)}</button>`
+        : '';
+      extra = `<div class="uib-detail-section"><span>法寶資訊</span><p>二次煉製深度：${item.refinementDepth || 0}/${MAX_ARTIFACT_RECIPE_NESTING}</p>${hasEquip ? `<p>裝備欄位：<b>${escapeHtml(equipSlot)}</b></p>` : ''}${replacing ? `<p>裝備後會替換：<b>${escapeHtml(replacing.name)}</b></p>` : ''}${hasEquip && !canEquip && !equippedHere ? `<p>目前不可裝備：${escapeHtml(item.realm)}低於你的${escapeHtml(currentRealm.name)}境界。</p>` : ''}</div><div class="uib-detail-section"><span>法寶效果</span>${item.effects.length
         ? `<ul>${item.effects.map((effect) => `<li>${escapeHtml(effectLabel(effect))}</li>`).join('')}</ul>`
-        : '<p>目前沒有額外效果資料。</p>'}${item.equipped ? '<p class="uib-equipped-note"><i class="fa-solid fa-circle-check"></i> 目前已裝備</p>' : ''}</div>`;
+        : '<p>目前沒有額外效果資料。</p>'}${equippedHere ? '<p class="uib-equipped-note"><i class="fa-solid fa-circle-check"></i> 目前已裝備，效果正在生效</p>' : ''}${equipAction}</div>`;
     } else if (item.type === 'material') {
       extra = `<div class="uib-detail-section"><span>材料資訊</span><p>分類：${escapeHtml(item.category)}</p><p>${item.buyGold > 0 ? `坊市參考價：${item.buyGold} 金幣` : '此材料不可直接購買'}</p></div>`;
     } else if (item.id === 'revival-pill') {
@@ -281,6 +329,20 @@ import {
       button.disabled = true;
       try { await window.useRevivalPillItem(); close(); } finally { scheduleRender(); }
     });
+    modal.querySelector('[data-uib-equip]')?.addEventListener('click', async (event) => {
+      const button = event.currentTarget;
+      if (!window.toggleEquipArtifact || button?.disabled) return;
+      button.disabled = true;
+      try {
+        await window.toggleEquipArtifact(button.dataset.uibEquip);
+        close();
+      } catch (error) {
+        button.disabled = false;
+        console.warn('[Unified bag equip]', error);
+      } finally {
+        scheduleRender(true);
+      }
+    });
     document.body.appendChild(modal);
   }
 
@@ -296,6 +358,15 @@ import {
     root.querySelectorAll('[data-uib-item]').forEach((button) => {
       button.addEventListener('click', () => openDetails(button.dataset.uibItem));
     });
+    root.querySelectorAll('[data-uib-equipped-item]').forEach((button) => {
+      button.addEventListener('click', () => openDetails(button.dataset.uibEquippedItem));
+    });
+    root.querySelectorAll('[data-uib-empty-slot]').forEach((button) => {
+      button.addEventListener('click', () => {
+        filterType = 'artifact';
+        scheduleRender(true);
+      });
+    });
   }
 
   function render(force = false) {
@@ -309,7 +380,8 @@ import {
     const signature = JSON.stringify({
       filterType,
       sortMode,
-      items: allItems.map((item) => [item.key, item.quantity, item.realm, item.name, item.equipped ? 1 : 0])
+      items: allItems.map((item) => [item.key, item.quantity, item.realm, item.name, item.equipped ? 1 : 0]),
+      equipment: ARTIFACT_EQUIP_SLOTS.map((slot) => [slot, equippedIdForSlot(slot)])
     });
     const root = document.getElementById(ROOT_ID);
     if (!force && root?.dataset.signature === signature && root.closest('#training-tab-content') === content) return;
@@ -336,14 +408,17 @@ import {
     style.id = STYLE_ID;
     style.textContent = `
       #${ROOT_ID}{width:100%;height:100%;min-height:0;display:flex;flex-direction:column;gap:10px;box-sizing:border-box}
+      .uib-equipment-panel{flex:0 0 auto;padding:10px;border:1px solid rgba(216,177,93,.17);border-radius:14px;background:linear-gradient(145deg,rgba(18,14,8,.94),rgba(8,8,7,.94))}
+      .uib-equipment-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}.uib-equipment-head>div{display:grid;gap:2px}.uib-equipment-head b{color:#f0dfb6;font-size:10px}.uib-equipment-head span{color:#827661;font-size:7px}.uib-equipment-head em{color:#d9bb70;font-size:8px;font-style:normal;font-weight:900}
+      .uib-equipment-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.uib-equip-slot{min-width:0;min-height:78px;padding:8px;border:1px solid rgba(216,177,93,.13);border-radius:12px;background:rgba(255,255,255,.018);color:#b9aa8b;text-align:left;overflow:hidden}.uib-equip-slot:hover{border-color:rgba(216,177,93,.34)}.uib-equip-slot.is-filled{border-color:color-mix(in srgb,var(--uib-quality) 44%,rgba(216,177,93,.15));background:radial-gradient(circle at 8% 30%,color-mix(in srgb,var(--uib-quality) 12%,transparent),rgba(255,255,255,.012))}.uib-equip-slot-label{display:block;margin-bottom:5px;color:#8c7f69;font-size:6px;font-weight:900}.uib-equip-slot.is-empty b{display:block;color:#91846e;font-size:8px}.uib-equip-slot.is-empty small{display:block;margin-top:4px;color:#655e52;font-size:6px}.uib-equip-slot-main{display:grid;grid-template-columns:28px minmax(0,1fr);gap:7px;align-items:center}.uib-equip-slot-main>i{width:28px;height:28px;display:grid;place-items:center;border-radius:9px;border:1px solid color-mix(in srgb,var(--uib-quality) 52%,transparent);color:var(--uib-quality);font-style:normal;font-weight:900}.uib-equip-slot-main span{min-width:0}.uib-equip-slot-main b,.uib-equip-slot-main small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.uib-equip-slot-main b{color:#eadfc8;font-size:8px}.uib-equip-slot-main small{margin-top:2px;color:var(--uib-quality);font-size:6px}.uib-equip-slot>em{display:block;margin-top:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#81745f;font-size:6px;font-style:normal}
       .uib-toolbar{flex:0 0 auto;display:flex;align-items:end;gap:8px;padding:9px 10px;border:1px solid rgba(216,177,93,.16);border-radius:14px;background:rgba(13,11,8,.84)}
       .uib-summary{display:grid;gap:2px;margin-right:auto}.uib-summary b{color:#f0dfb6;font-size:11px}.uib-summary span{color:#847864;font-size:7px}.uib-toolbar label{display:grid;gap:3px;color:#8e816c;font-size:6px;font-weight:900}.uib-toolbar select{min-width:126px;height:32px;padding:0 28px 0 9px;border:1px solid rgba(216,177,93,.2);border-radius:9px;background:#090807;color:#e2d5ba;font-size:8px;outline:none}
       .uib-grid{flex:1;min-height:0;overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(108px,140px));grid-auto-rows:max-content;align-content:start;justify-content:start;gap:10px;padding:2px 4px 12px 2px;scrollbar-width:thin;scrollbar-color:rgba(216,177,93,.26) transparent}
       .uib-item{position:relative;aspect-ratio:1/1;min-width:0;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:12px 8px 9px;border:1px solid color-mix(in srgb,var(--uib-quality) 42%,rgba(255,255,255,.08));border-radius:16px;background:radial-gradient(circle at 50% 27%,color-mix(in srgb,var(--uib-quality) 15%,transparent),transparent 46%),linear-gradient(145deg,rgba(22,18,12,.96),rgba(7,7,7,.98));color:#eee2ca;text-align:center;box-shadow:inset 0 0 22px rgba(255,255,255,.015);transition:.15s ease;overflow:hidden}.uib-item:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--uib-quality) 72%,#fff 8%);box-shadow:0 10px 24px rgba(0,0,0,.25)}
       .uib-icon{width:46px;height:46px;display:grid;place-items:center;border-radius:13px;border:1px solid color-mix(in srgb,var(--uib-quality) 58%,transparent);background:color-mix(in srgb,var(--uib-quality) 11%,#090807);color:var(--uib-quality);font-size:15px;font-weight:900;box-shadow:0 0 20px color-mix(in srgb,var(--uib-quality) 12%,transparent)}.uib-name{width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#eee2ca;font-size:8px;font-weight:900}.uib-bottom{width:100%;display:flex;justify-content:space-between;gap:5px;align-items:center}.uib-bottom small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#827661;font-size:6px}.uib-bottom em{color:var(--uib-quality);font-size:6px;font-style:normal;white-space:nowrap}.uib-qty{position:absolute;right:7px;top:7px;padding:2px 5px;border-radius:999px;background:rgba(0,0,0,.64);border:1px solid rgba(255,255,255,.08);color:#ead49a;font-size:7px;font-weight:900}.uib-equipped{position:absolute;left:7px;top:7px;color:#f6d77e;font-size:8px}
       .uib-empty{flex:1;min-height:180px;display:grid;place-items:center;align-content:center;gap:7px;color:#706653;text-align:center}.uib-empty i{font-size:25px}.uib-empty b{color:#a99b80;font-size:10px}.uib-empty span{font-size:7px}
-      .uib-modal-backdrop{position:fixed;inset:0;z-index:16050;display:grid;place-items:center;padding:16px;background:rgba(0,0,0,.82);backdrop-filter:blur(8px)}.uib-modal{width:min(100%,540px);max-height:88dvh;overflow:auto;padding:16px;border:1px solid color-mix(in srgb,var(--uib-quality) 48%,rgba(255,255,255,.08));border-radius:20px;background:linear-gradient(150deg,#18140e,#080808);box-shadow:0 30px 100px rgba(0,0,0,.72)}.uib-modal-head{display:grid;grid-template-columns:58px minmax(0,1fr) 34px;gap:11px;align-items:center}.uib-modal-icon{width:56px;height:56px;display:grid;place-items:center;border-radius:16px;border:1px solid color-mix(in srgb,var(--uib-quality) 55%,transparent);background:color-mix(in srgb,var(--uib-quality) 11%,#090807);color:var(--uib-quality);font-size:18px;font-weight:900}.uib-modal-head small{display:block;color:#857965;font-size:7px}.uib-modal-head h3{margin:3px 0;color:#f1e4c9;font-size:15px}.uib-modal-head span{color:var(--uib-quality);font-size:8px}.uib-close{width:32px;height:32px;border:1px solid rgba(255,255,255,.09);border-radius:10px;background:rgba(255,255,255,.025);color:#a99d87}.uib-description{margin-top:14px;padding:11px;border-radius:12px;background:rgba(255,255,255,.025);color:#a99b83;font-size:9px;line-height:1.7}.uib-detail-section{margin-top:10px;padding:11px;border:1px solid rgba(216,177,93,.12);border-radius:12px}.uib-detail-section>span{display:block;margin-bottom:7px;color:#d3b86f;font-size:8px;font-weight:900}.uib-detail-section p,.uib-detail-section li{margin:4px 0;color:#9b8e77;font-size:8px;line-height:1.55}.uib-detail-section ul{margin:0;padding-left:17px}.uib-equipped-note{color:#e3c36e!important}.uib-use-btn{width:100%;min-height:38px;margin-top:9px;border:1px solid rgba(216,177,93,.38);border-radius:11px;background:rgba(216,177,93,.09);color:#f0d99a;font-size:9px;font-weight:900}.uib-use-btn:disabled{opacity:.45}
-      @media(max-width:700px){.uib-toolbar{align-items:stretch;flex-wrap:wrap}.uib-summary{width:100%;margin-right:0}.uib-toolbar label{flex:1;min-width:120px}.uib-toolbar select{width:100%;min-width:0}.uib-grid{grid-template-columns:repeat(auto-fill,minmax(94px,1fr));gap:8px}.uib-item{max-width:140px;justify-self:start}}
+      .uib-modal-backdrop{position:fixed;inset:0;z-index:16050;display:grid;place-items:center;padding:16px;background:rgba(0,0,0,.82);backdrop-filter:blur(8px)}.uib-modal{width:min(100%,540px);max-height:88dvh;overflow:auto;padding:16px;border:1px solid color-mix(in srgb,var(--uib-quality) 48%,rgba(255,255,255,.08));border-radius:20px;background:linear-gradient(150deg,#18140e,#080808);box-shadow:0 30px 100px rgba(0,0,0,.72)}.uib-modal-head{display:grid;grid-template-columns:58px minmax(0,1fr) 34px;gap:11px;align-items:center}.uib-modal-icon{width:56px;height:56px;display:grid;place-items:center;border-radius:16px;border:1px solid color-mix(in srgb,var(--uib-quality) 55%,transparent);background:color-mix(in srgb,var(--uib-quality) 11%,#090807);color:var(--uib-quality);font-size:18px;font-weight:900}.uib-modal-head small{display:block;color:#857965;font-size:7px}.uib-modal-head h3{margin:3px 0;color:#f1e4c9;font-size:15px}.uib-modal-head span{color:var(--uib-quality);font-size:8px}.uib-close{width:32px;height:32px;border:1px solid rgba(255,255,255,.09);border-radius:10px;background:rgba(255,255,255,.025);color:#a99d87}.uib-description{margin-top:14px;padding:11px;border-radius:12px;background:rgba(255,255,255,.025);color:#a99b83;font-size:9px;line-height:1.7}.uib-detail-section{margin-top:10px;padding:11px;border:1px solid rgba(216,177,93,.12);border-radius:12px}.uib-detail-section>span{display:block;margin-bottom:7px;color:#d3b86f;font-size:8px;font-weight:900}.uib-detail-section p,.uib-detail-section li{margin:4px 0;color:#9b8e77;font-size:8px;line-height:1.55}.uib-detail-section ul{margin:0;padding-left:17px}.uib-equipped-note{color:#e3c36e!important}.uib-use-btn,.uib-equip-btn{width:100%;min-height:38px;margin-top:9px;border:1px solid rgba(216,177,93,.38);border-radius:11px;background:rgba(216,177,93,.09);color:#f0d99a;font-size:9px;font-weight:900}.uib-use-btn:disabled,.uib-equip-btn:disabled{opacity:.45}.uib-equip-btn:not(:disabled):hover{border-color:#e2c069;background:rgba(216,177,93,.14)}
+      @media(max-width:700px){.uib-equipment-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.uib-toolbar{align-items:stretch;flex-wrap:wrap}.uib-summary{width:100%;margin-right:0}.uib-toolbar label{flex:1;min-width:120px}.uib-toolbar select{width:100%;min-width:0}.uib-grid{grid-template-columns:repeat(auto-fill,minmax(94px,1fr));gap:8px}.uib-item{max-width:140px;justify-self:start}}
       @media(max-width:420px){.uib-grid{grid-template-columns:repeat(3,minmax(0,1fr));}.uib-item{max-width:none;padding:9px 6px}.uib-icon{width:40px;height:40px}.uib-name{font-size:7px}.uib-bottom small,.uib-bottom em{font-size:5.5px}}
     `;
     document.head.appendChild(style);

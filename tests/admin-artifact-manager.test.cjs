@@ -127,3 +127,14 @@ test('pending artifact approval does not reference editor-only normalizedRecipes
   assert.doesNotMatch(approval, /normalizedRecipes/);
   assert.match(approval, /reviewStatus: 'approved'/);
 });
+
+
+test('artifact equipment slot is a fixed dropdown shared with the player equipment system', () => {
+  assert.match(catalog, /ARTIFACT_EQUIP_SLOTS/);
+  assert.match(manager, /ARTIFACT_EQUIP_SLOTS/);
+  assert.match(manager, /<select id="aam-slot">/);
+  assert.match(manager, /不使用裝備欄位/);
+  assert.match(manager, /ARTIFACT_EQUIP_SLOTS\.map/);
+  assert.doesNotMatch(manager, /<input id="aam-slot"/);
+  for (const slot of ['本命法寶', '護身法寶', '佩飾法寶', '輔助法寶']) assert.match(catalog, new RegExp(slot));
+});

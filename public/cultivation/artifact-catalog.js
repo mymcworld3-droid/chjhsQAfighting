@@ -46,6 +46,8 @@ export const ARTIFACT_REALMS = Object.freeze([
   { id: 'immortal', name: '真仙', order: 10, need: 868 }
 ]);
 
+export const ARTIFACT_EQUIP_SLOTS = Object.freeze(['本命法寶', '護身法寶', '佩飾法寶', '輔助法寶']);
+
 export const ARTIFACT_REALM_COLORS = Object.freeze({
   凡人: '#a1a1aa',
   煉氣: '#86efac',

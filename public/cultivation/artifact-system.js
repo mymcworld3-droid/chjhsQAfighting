@@ -1,7 +1,7 @@
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, runTransaction } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-import { ARTIFACT_CATALOG, ARTIFACT_REALMS, getArtifactById, realmForScore, realmOrderByName, artifactRealmColor } from './artifact-catalog.js';
+import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactById, realmForScore, realmOrderByName, artifactRealmColor } from './artifact-catalog.js';
 
 // 資料驅動法寶系統：法寶內容只在 artifact-catalog.js 定義。
 // 本檔負責通用打造、持有、裝備、限時效果與題目中使用，不寫任何單一法寶的專屬 if/else。
@@ -57,6 +57,12 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, getArtifactById, realmForScore, real
   function clonePlain(value) {
     try { return structuredClone(value); } catch (_) { return JSON.parse(JSON.stringify(value || {})); }
   }
+  function itemHasEquipEffects(item) { return (item?.effects || []).some((effect) => String(effect.type).startsWith('equip_')); }
+  function canonicalEquipSlot(item) {
+    if (!itemHasEquipEffects(item)) return '';
+    const configured = String(item?.equipSlot || '').trim();
+    return ARTIFACT_EQUIP_SLOTS.includes(configured) ? configured : '輔助法寶';
+  }
   function normalizeSystem(raw = {}) {
     const inventory = {};
     Object.entries(raw?.inventory || {}).forEach(([id, value]) => {
@@ -65,7 +71,11 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, getArtifactById, realmForScore, real
     });
     const equipped = {};
     Object.entries(raw?.equipped || {}).forEach(([slot, id]) => {
-      if (typeof slot === 'string' && typeof id === 'string' && getArtifactById(id)) equipped[slot] = id;
+      const item = typeof id === 'string' ? getArtifactById(id) : null;
+      const canonicalSlot = canonicalEquipSlot(item);
+      if (ARTIFACT_EQUIP_SLOTS.includes(slot) && item && canonicalSlot === slot && inventory[id] > 0) {
+        equipped[slot] = id;
+      }
     });
     const buffs = {};
     Object.entries(raw?.buffs || {}).forEach(([key, buff]) => {
@@ -127,7 +137,6 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, getArtifactById, realmForScore, real
     return clonePlain(battleSnapshot());
   };
 
-  function itemHasEquipEffects(item) { return (item?.effects || []).some((effect) => String(effect.type).startsWith('equip_')); }
   function itemHasTimedEffects(item) { return (item?.effects || []).some((effect) => String(effect.type).startsWith('timed_')); }
   function removeOptionEffect(item, context) {
     return (item?.effects || []).find((effect) => effect.type === 'remove_wrong_option' && (!Array.isArray(effect.contexts) || effect.contexts.includes(context)));
@@ -225,27 +234,61 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, getArtifactById, realmForScore, real
     }
   }
 
+  function equipmentStatus(itemId) {
+    const item = getArtifactById(itemId);
+    const isEquipment = !!item && itemHasEquipEffects(item);
+    const slot = canonicalEquipSlot(item);
+    const s = state();
+    const equippedItemId = slot ? String(s.equipped[slot] || '') : '';
+    const equippedItem = getArtifactById(equippedItemId);
+    const owned = quantity(itemId);
+    const canEquip = !!item && isEquipment && !!slot && owned > 0 && realmAllowedToEquip(item);
+    let reason = '';
+    if (!item) reason = '法寶不存在';
+    else if (!isEquipment) reason = '此法寶不是裝備型';
+    else if (owned <= 0) reason = '尚未持有';
+    else if (!realmAllowedToEquip(item)) reason = `${item.realm}低於目前${currentRealm().name}境界`;
+    return {
+      itemId: String(itemId || ''),
+      slot,
+      equipped: equippedItemId === itemId,
+      equippedItemId,
+      equippedItemName: equippedItem?.name || '',
+      owned,
+      canEquip,
+      reason
+    };
+  }
+
   async function toggleEquipArtifact(itemId) {
     const item = getArtifactById(itemId);
-    if (!item || !itemHasEquipEffects(item)) return;
-    if (quantity(itemId) <= 0) { toast('你尚未持有此法寶。'); return; }
-    if (!realmAllowedToEquip(item)) {
-      toast(`${item.name}為${item.realm}法寶，低於你目前的${currentRealm().name}境界，不能裝備。`);
-      return;
-    }
-    const slot = item.equipSlot || '法寶';
+    if (!item || !itemHasEquipEffects(item)) throw new Error('此法寶不是可裝備法寶');
+    const slot = canonicalEquipSlot(item);
+    if (!slot) throw new Error('此法寶沒有可用裝備欄位');
+
     busyAction = `equip:${itemId}`; scheduleRender();
     try {
       let unequipped = false;
-      await updateArtifactSystem((next) => {
+      let replacedId = '';
+      await updateArtifactSystem((next, raw) => {
+        const owned = Math.max(0, Number(next.inventory[itemId]) || 0);
+        if (owned <= 0) throw new Error('你尚未持有此法寶');
+        const liveRealm = realmForScore(Math.max(0, Number(raw?.stats?.totalScore) || 0));
+        if (realmOrderByName(item.realm) < liveRealm.order) {
+          throw new Error(`${item.name}為${item.realm}法寶，低於你目前的${liveRealm.name}境界，不能裝備`);
+        }
         if (next.equipped[slot] === itemId) {
           delete next.equipped[slot];
           unequipped = true;
         } else {
+          replacedId = String(next.equipped[slot] || '');
           next.equipped[slot] = itemId;
         }
       });
-      toast(unequipped ? `已卸下 ${item.name}` : `已裝備 ${item.name}`);
+      const replaced = getArtifactById(replacedId);
+      toast(unequipped
+        ? `已卸下 ${item.name}`
+        : (replaced ? `已將 ${replaced.name} 替換為 ${item.name}` : `已裝備 ${item.name}`));
     } finally {
       busyAction = ''; scheduleRender();
     }
@@ -548,10 +591,14 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, getArtifactById, realmForScore, real
   }
   async function enforceEquipmentEligibility() {
     if (eligibilityBusy) return;
-    const s = state();
-    const invalidSlots = Object.entries(s.equipped).filter(([, id]) => {
+    const rawEquipped = userData()?.[FIELD]?.equipped || {};
+    const invalidSlots = Object.entries(rawEquipped).filter(([slot, id]) => {
       const item = getArtifactById(id);
-      return !item || !realmAllowedToEquip(item) || quantity(id) <= 0;
+      return !ARTIFACT_EQUIP_SLOTS.includes(slot) ||
+        !item ||
+        canonicalEquipSlot(item) !== slot ||
+        !realmAllowedToEquip(item) ||
+        quantity(id) <= 0;
     }).map(([slot]) => slot);
     if (!invalidSlots.length) return;
     eligibilityBusy = true;
@@ -565,6 +612,8 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, getArtifactById, realmForScore, real
   window.getArtifactCatalog = () => ARTIFACT_CATALOG;
   window.getArtifactSystemState = state;
   window.getArtifactCombatModifiers = combatModifiers;
+  window.getArtifactEquipmentSlots = () => ARTIFACT_EQUIP_SLOTS.slice();
+  window.getArtifactEquipmentStatus = (itemId) => clonePlain(equipmentStatus(itemId));
   window.craftArtifact = craftArtifact;
   window.toggleEquipArtifact = toggleEquipArtifact;
   window.useArtifact = activateTimedArtifact;
@@ -602,6 +651,7 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, getArtifactById, realmForScore, real
     enforceEquipmentEligibility();
 
     window.addEventListener('artifact-system-updated', scheduleRender);
+    window.addEventListener('artifact-catalog-updated', () => { scheduleRender(); enforceEquipmentEligibility(); });
     window.addEventListener('xiuxian:stats-updated', () => { scheduleRender(); enforceEquipmentEligibility(); });
     window.addEventListener('combat-stats-ready', installCombatWrapper);
     window.addEventListener('dongfu:settings-collapsible-ready', mountForge);

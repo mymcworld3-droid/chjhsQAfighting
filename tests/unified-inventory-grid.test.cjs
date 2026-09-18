@@ -66,3 +66,24 @@ test('new backpack modules load after material and artifact systems and admin so
   assert.ok(artifact >= 0 && material > artifact && bagIndex > material && bridgeIndex > bagIndex);
   assert.ok(adminManager >= 0 && adminSortIndex > adminManager);
 });
+
+
+test('backpack has a complete four-slot equipment panel with direct equip and unequip actions', () => {
+  assert.match(bag, /ARTIFACT_EQUIP_SLOTS/);
+  assert.match(bag, /function equipmentMarkup\(\)/);
+  assert.match(bag, /function equipmentSlotMarkup\(slot\)/);
+  assert.match(bag, /class="uib-equipment-grid"/);
+  assert.match(bag, /data-uib-equipped-item/);
+  assert.match(bag, /data-uib-empty-slot/);
+  assert.match(bag, /data-uib-equip=/);
+  assert.match(bag, /window\.toggleEquipArtifact/);
+  assert.match(bag, /換裝會自動替換同欄位法寶/);
+  assert.match(bag, /裝備後會替換/);
+});
+
+test('equipment panel is responsive and shows active artifact effects', () => {
+  assert.match(bag, /\.uib-equipment-grid\{display:grid;grid-template-columns:repeat\(4,minmax\(0,1fr\)\)/);
+  assert.match(bag, /@media\(max-width:700px\)\{\.uib-equipment-grid\{grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
+  assert.match(bag, /effects\.map\(effectLabel\)/);
+  assert.match(bag, /目前已裝備，效果正在生效/);
+});

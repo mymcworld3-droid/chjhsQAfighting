@@ -88,3 +88,26 @@ test('artifact ownership, equipment and timed buffs persist in the user document
   assert.match(system, /buffs/);
   assert.match(system, /expiresAt/);
 });
+
+
+test('equipment system uses four canonical slots, replaces same-slot gear, and cleans invalid equipment', () => {
+  assert.match(catalog, /ARTIFACT_EQUIP_SLOTS = Object\.freeze\(\['本命法寶', '護身法寶', '佩飾法寶', '輔助法寶'\]\)/);
+  assert.match(system, /ARTIFACT_EQUIP_SLOTS/);
+  assert.match(system, /function canonicalEquipSlot\(item\)/);
+  assert.match(system, /ARTIFACT_EQUIP_SLOTS\.includes\(slot\)/);
+  assert.match(system, /canonicalSlot === slot && inventory\[id\] > 0/);
+  assert.match(system, /replacedId = String\(next\.equipped\[slot\] \|\| ''\)/);
+  assert.match(system, /next\.equipped\[slot\] = itemId/);
+  assert.match(system, /已將 \$\{replaced\.name\} 替換為 \$\{item\.name\}/);
+  assert.match(system, /window\.getArtifactEquipmentSlots/);
+  assert.match(system, /window\.getArtifactEquipmentStatus/);
+});
+
+test('equipment writes recheck live ownership and realm inside the Firestore transaction', () => {
+  const start = system.indexOf('async function toggleEquipArtifact');
+  const end = system.indexOf('async function activateTimedArtifact', start);
+  const block = system.slice(start, end);
+  assert.match(block, /const owned = Math\.max\(0, Number\(next\.inventory\[itemId\]\) \|\| 0\)/);
+  assert.match(block, /const liveRealm = realmForScore/);
+  assert.match(block, /realmOrderByName\(item\.realm\) < liveRealm\.order/);
+});
