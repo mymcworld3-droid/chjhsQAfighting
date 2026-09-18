@@ -116,7 +116,7 @@ test('artifact recipe nesting rejects self-recursion and cycles', () => {
 test('player refinery accepts artifact tokens and never consumes equipped copies', () => {
   assert.match(refinery, /artifact:\$\{a\.id\}/);
   assert.match(refinery, /data-refinery-ingredient/);
-  assert.match(refinery, /法寶素材・二次煉製/);
+  assert.match(refinery, /<span>二次煉製<\/span>/);
   assert.match(refinery, /equippedArtifactCounts/);
   const aiJobs = read('public/cultivation/refinery-ai-jobs.js');
   assert.match(aiJobs, /have - reserved < need/);
@@ -152,4 +152,14 @@ test('owned refinery ingredients use deterministic realm then name ordering', ()
   assert.match(refinery, /\.sort\(compareOwnedMaterials\)/);
   assert.match(refinery, /\.sort\(compareOwnedArtifacts\)/);
   assert.match(refinery, /localeCompare\([^\n]+['"]zh-Hant['"]\)/);
+});
+
+test('refinery separates general materials and second-refinement artifacts into independent scroll panes', () => {
+  assert.match(refinery, /data-refinery-material-roll="materials"/);
+  assert.match(refinery, /data-refinery-material-roll="artifacts"/);
+  assert.match(refinery, /data-refinery-material-roll-body="materials"/);
+  assert.match(refinery, /data-refinery-material-roll-body="artifacts"/);
+  assert.match(refinery, /\.refinery-material-roll-body\{[^}]*overflow:auto/);
+  assert.match(refinery, /<span>一般素材<\/span>/);
+  assert.match(refinery, /<span>二次煉製<\/span>/);
 });
