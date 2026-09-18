@@ -748,16 +748,20 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   };
 
   function syncUnlock() {
-    const unlocked = isUnlocked();
+    const unlocked = window.isGoldenCoreUnlocked?.() ?? isUnlocked();
+    if (lastUnlocked === unlocked) return;
+
     if (unlocked) ensureUnlockedUI();
-    else if (lastUnlocked) removeLockedUI();
+    else if (lastUnlocked === true) removeLockedUI();
     lastUnlocked = unlocked;
   }
 
   function boot() {
     loadStyle();
     syncUnlock();
-    setInterval(syncUnlock, 900);
+    ['xiuxian:stats-updated','xiuxian:user-ready','xiuxian:migration-ready','golden-core-access-changed']
+      .forEach((name) => window.addEventListener(name, syncUnlock));
+    window.dispatchEvent(new CustomEvent('golden-core-runtime-ready'));
   }
 
   if (document.readyState === 'loading') {
