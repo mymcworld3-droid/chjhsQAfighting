@@ -99,18 +99,25 @@ test('Dongtian session keeps a fixed ordered question array until completion or 
   assert.doesNotMatch(uiSource, /generate-dongtian[\s\S]*renderRunner[\s\S]*fetch\('\/api\/generate-quiz'/);
 });
 
-test('Dongtian first completion always grants the player 1000 gold while owner reward remains once per unique player', () => {
-  assert.match(uiSource, /FIRST_COMPLETION_GOLD_REWARD = 1000/);
-  assert.match(uiSource, /if \(!alreadyCompleted\)/);
-  assert.match(uiSource, /'stats\.gold': increment\(FIRST_COMPLETION_GOLD_REWARD\)/);
-  assert.match(uiSource, /source: 'dongtian-first-completion'/);
-  assert.match(uiSource, /固定獲得 \+\$\{FIRST_COMPLETION_GOLD_REWARD\.toLocaleString\(\)\} 靈石/);
+test('Dongtian first completion spirit stones scale with question count while keeping a 1000 minimum', () => {
+  assert.match(uiSource, /FIRST_COMPLETION_SPIRIT_STONE_PER_QUESTION = 100/);
+  assert.match(uiSource, /FIRST_COMPLETION_MIN_SPIRIT_STONES = 1000/);
+  assert.match(uiSource, /function firstCompletionSpiritStones\(questionCount\)/);
+  assert.match(uiSource, /Math\.max\(FIRST_COMPLETION_MIN_SPIRIT_STONES, count \* FIRST_COMPLETION_SPIRIT_STONE_PER_QUESTION\)/);
+  assert.match(uiSource, /const firstCompletionReward = firstCompletionSpiritStones\(total\)/);
+  assert.match(uiSource, /'stats\.gold': increment\(firstCompletionReward\)/);
+  assert.match(uiSource, /goldAdded: firstCompletionReward, questionCount: total/);
+  assert.match(uiSource, /依 \$\{total\} 題獲得 \+\$\{firstCompletionReward\.toLocaleString\(\)\} 靈石/);
   assert.match(uiSource, /OWNER_CULTIVATION_REWARD = 1/);
   assert.match(uiSource, /OWNER_GOLD_REWARD = 5/);
-  assert.match(uiSource, /'stats\.totalScore': increment\(OWNER_CULTIVATION_REWARD\)/);
-  assert.match(uiSource, /'stats\.gold': increment\(OWNER_GOLD_REWARD\)/);
-  assert.doesNotMatch(uiSource, /獎勵內容目前待開放/);
-  assert.match(uiSource, /玩家首次完整通關固定 \+\$\{FIRST_COMPLETION_GOLD_REWARD\.toLocaleString\(\)\} 靈石/);
+});
+
+test('Dongtian encounter confirmation prominently shows the owner name and prospective first-clear reward', () => {
+  assert.match(uiSource, /const owner = dongtian\.ownerName \|\| '無名修士'/);
+  assert.match(uiSource, /此洞天由「\$\{escapeHtml\(owner\)\}」開闢/);
+  assert.match(uiSource, /洞天主人：<\/strong>\$\{escapeHtml\(owner\)\}/);
+  assert.match(uiSource, /首次完整通關：<\/strong>\+\$\{firstReward\.toLocaleString\(\)\} 靈石/);
+  assert.match(uiSource, /是否現在進入？/);
 });
 
 test('Dongtian history is saved as one grouped run instead of one document per question', () => {
