@@ -7,16 +7,16 @@ const refinery = fs.readFileSync(path.join(__dirname, '..', 'public/cultivation/
 
 test('refinery selection no longer rebuilds the whole material list', () => {
   assert.match(refinery, /function syncSelectionView\(\)/);
-  assert.match(refinery, /selected\[empty\] = id;\s*syncSelectionView\(\);/);
+  assert.match(refinery, /selected\[empty\] = token;\s*syncSelectionView\(\);/);
   assert.match(refinery, /selected\[index\] = null;\s*syncSelectionView\(\);/);
   assert.match(refinery, /selected\.fill\(null\);\s*syncSelectionView\(\);/);
-  assert.doesNotMatch(refinery, /selected\[empty\] = id;\s*render\(true\);/);
+  assert.doesNotMatch(refinery, /selected\[empty\] = token;\s*render\(true\);/);
 });
 
 test('refinery uses stable slot DOM and inline realm decoration', () => {
   assert.match(refinery, /data-refinery-slot=/);
-  assert.match(refinery, /data-refinery-material-id=/);
-  assert.match(refinery, /data-material-realm=/);
+  assert.match(refinery, /data-refinery-token=/);
+  assert.match(refinery, /--material-realm-color/);
   assert.match(refinery, /material-realm-badge/);
   assert.match(refinery, /data-refinery-used-badge/);
   assert.match(refinery, /data-refinery-summary-text/);
