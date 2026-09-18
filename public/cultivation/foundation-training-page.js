@@ -100,8 +100,11 @@
       home.insertAdjacentElement('afterend', page);
     }
 
+    const alreadyHydrated = page.dataset.foundationTrainingReady === '1' && page.dataset.foundationTraining === '1';
     page.dataset.foundationTraining = '1';
     page.classList.add('foundation-training-page', 'training-page', 'training-page-v3');
+    if (alreadyHydrated) return;
+    page.dataset.foundationTrainingReady = '1';
 
     const heading = page.querySelector('.training-page-heading-v3');
     if (heading) heading.innerHTML = '';
@@ -167,6 +170,7 @@
       page.classList.add('hidden');
       page.classList.remove('active-page', 'foundation-training-page');
       delete page.dataset.foundationTraining;
+      delete page.dataset.foundationTrainingReady;
     } else {
       page?.remove();
     }
