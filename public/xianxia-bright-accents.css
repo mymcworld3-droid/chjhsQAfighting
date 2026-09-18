@@ -311,12 +311,29 @@ body.xianxia-theme :is(.text-white,.text-slate-100){
   color:#fff5df!important;
 }
 
-/* 問道選項略提亮；紙卷本體仍維持原本亮色。 */
+/* 問道題卷改為較深舊宣紙，題目固定深墨色，避免亮底＋白字失去對比。 */
 body.xianxia-theme #quiz-container>.glass-panel:first-child{
-  background:linear-gradient(110deg,#f3ead2,#e5d8b7)!important;
-  color:#26352a!important;
-  border-color:#cdbb83!important;
-  box-shadow:0 14px 35px rgba(4,21,17,.24),inset 0 0 35px rgba(148,123,70,.12)!important;
+  background:
+    radial-gradient(circle at 18% 12%,rgba(255,244,211,.20),transparent 35%),
+    linear-gradient(110deg,#d2c4a4,#b9a681)!important;
+  color:#211a10!important;
+  border-color:#9b8357!important;
+  box-shadow:
+    0 14px 35px rgba(4,21,17,.24),
+    inset 0 0 32px rgba(82,60,30,.10)!important;
+}
+body.xianxia-theme #question-text,
+body.xianxia-theme #question-text *{
+  color:#211a10!important;
+  text-shadow:none!important;
+}
+body.xianxia-theme #question-text :is(mjx-container,mjx-container *){
+  color:#211a10!important;
+}
+body.xianxia-theme #quiz-badge{
+  background:rgba(38,31,21,.82)!important;
+  color:#f4dfaa!important;
+  border-color:rgba(112,88,48,.55)!important;
 }
 body.xianxia-theme #options-container>button:not(.bg-green-600):not(.bg-red-600){
   background:
