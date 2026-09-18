@@ -19,7 +19,7 @@ test('index contains all visual-critical theme and training styles up front', ()
   assert.match(index, /href="xianxia-gold\.css"/);
   assert.match(index, /href="xianxia-blackgold-harmony\.css"/);
   assert.match(index, /href="styles\/cultivation-training-compact\.css\?v=20260917-fit1"/);
-  assert.match(index, /href="cultivation-training-v3\.css"/);
+  assert.match(index, /href="cultivation-training-v3\.css(?:\?v=[^"]+)?"/);
   assert.match(index, /Orbitron:wght@400;500;600;700;800;900/);
   for (const id of [
     'training-fluid-layout-style',
@@ -68,5 +68,5 @@ test('admin artifact and material containers are static and hydrated in place', 
 });
 
 test('index cache-busts main after the static-layout migration', () => {
-  assert.match(index, /main\.js\?v=20260918-staticlayout1/);
+  assert.match(index, /main\.js\?v=20260918-refineryarray1/);
 });
