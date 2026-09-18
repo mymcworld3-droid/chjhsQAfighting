@@ -465,6 +465,22 @@ body.xianxia-theme #page-store{
       }
     </style>
 
+    <style id="golden-core-access-guard-style">
+html:not(.training-access-ready) #nav-training,
+      html:not(.training-access-ready) #page-training {
+        display: none !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+      }
+
+      html:not(.golden-core-access-ready) [data-training-tab="core"],
+      html:not(.golden-core-access-ready) #training-status-tab {
+        display: none !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+      }
+    </style>
+
     <!-- 🔥 新增 MathJax 設定檔，強制識別 $ 符號 -->
     <script>
     window.MathJax = {
@@ -1418,6 +1434,6 @@ body.xianxia-theme #page-store{
         <i class="fa-solid fa-bug text-xs"></i>
     </button>
 
-    <script type="module" src="main.js?v=20260917-namefix1"></script>
+    <script type="module" src="main.js?v=20260918-staticlayout1"></script>
 </body>
 </html>
