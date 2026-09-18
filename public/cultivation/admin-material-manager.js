@@ -14,7 +14,8 @@ import {
   getArtifactRecipe,
   getMaterialById,
   artifactRecipeDepth,
-  MAX_ARTIFACT_RECIPE_NESTING
+  MAX_ARTIFACT_RECIPE_NESTING,
+  MIN_ARTIFACT_RECIPE_MATERIALS
 } from './material-catalog.js';
 
 (function () {
@@ -205,7 +206,7 @@ import {
     const modal = document.createElement('div');
     modal.id = RECIPE_MODAL_ID;
     modal.className = 'amm-modal';
-    modal.innerHTML = `<section class="amm-card" role="dialog" aria-modal="true"><h3>${escapeHtml(artifact.name)} · 合成配方</h3><p class="amm-note">材料與既有法寶都可以放入 8 格煉器陣。法寶可做二次煉製素材，但套娃深度最多 ${MAX_ARTIFACT_RECIPE_NESTING} 層；自己吃自己、循環配方或第 3 層套娃都會被拒絕。被裝備中的法寶不會被玩家煉器消耗。</p><div class="amm-recipe-list"><div class="amm-recipe-group-title">一般材料</div>${MATERIAL_CATALOG.map((material) => `<div class="amm-recipe-row"><label>${escapeHtml(material.icon || '材')} ${escapeHtml(material.name)}<small>${escapeHtml(material.category)} · ${escapeHtml(material.realm || '凡人')} · ${material.buyGold > 0 ? `採購 ${material.buyGold} 金幣` : '不可購買'}</small></label><input type="number" min="0" step="1" value="${Math.max(0, Number(materialCurrent[material.id]) || 0)}" data-recipe-material="${escapeHtml(material.id)}"></div>`).join('')}<div class="amm-recipe-group-title">法寶素材（二次煉製）</div>${artifactChoices.map((item) => {
+    modal.innerHTML = `<section class="amm-card" role="dialog" aria-modal="true"><h3>${escapeHtml(artifact.name)} · 合成配方</h3><p class="amm-note">材料與既有法寶都可以放入 8 格煉器陣；每個配方至少投入 2 個素材。法寶可做二次煉製素材，但套娃深度最多 ${MAX_ARTIFACT_RECIPE_NESTING} 層；自己吃自己、循環配方或第 3 層套娃都會被拒絕。被裝備中的法寶不會被玩家煉器消耗。</p><div class="amm-recipe-list"><div class="amm-recipe-group-title">一般材料</div>${MATERIAL_CATALOG.map((material) => `<div class="amm-recipe-row"><label>${escapeHtml(material.icon || '材')} ${escapeHtml(material.name)}<small>${escapeHtml(material.category)} · ${escapeHtml(material.realm || '凡人')} · ${material.buyGold > 0 ? `採購 ${material.buyGold} 金幣` : '不可購買'}</small></label><input type="number" min="0" step="1" value="${Math.max(0, Number(materialCurrent[material.id]) || 0)}" data-recipe-material="${escapeHtml(material.id)}"></div>`).join('')}<div class="amm-recipe-group-title">法寶素材（二次煉製）</div>${artifactChoices.map((item) => {
       const color = artifactRealmColor(item.realm);
       return `<div class="amm-recipe-row is-artifact" style="--artifact-realm-color:${escapeHtml(color)}"><label>${escapeHtml(item.icon || '◆')} ${escapeHtml(item.name)}<small>${escapeHtml(item.realm)} · 目前配方深度 ${artifactRecipeDepth(item.id)}/${MAX_ARTIFACT_RECIPE_NESTING}</small></label><input type="number" min="0" step="1" value="${Math.max(0, Number(artifactCurrent[item.id]) || 0)}" data-recipe-artifact="${escapeHtml(item.id)}"></div>`;
     }).join('')}</div><div id="amm-recipe-status" class="amm-status"></div><div class="amm-modal-actions"><button type="button" class="amm-cancel">取消</button><button type="button" class="amm-save">儲存配方</button></div></section>`;
@@ -227,7 +228,11 @@ import {
       quantity: Math.max(0, Math.floor(Number(input.value) || 0))
     })).filter((row) => row.quantity > 0);
     const recipe = [...materialRows, ...artifactRows];
-    if (!recipe.length) { status.textContent = '至少需要 1 個材料或法寶素材才能合成法寶。'; return; }
+    const totalItems = recipe.reduce((sum, row) => sum + Math.max(0, Number(row.quantity) || 0), 0);
+    if (totalItems < MIN_ARTIFACT_RECIPE_MATERIALS) {
+      status.textContent = `每個法寶配方至少需要 ${MIN_ARTIFACT_RECIPE_MATERIALS} 個材料或法寶素材，目前只有 ${totalItems} 個。`;
+      return;
+    }
     const next = clone(ARTIFACT_RECIPES);
     next[artifact.id] = recipe;
     try { validateArtifactRecipes(next); } catch (error) { status.textContent = error.message; return; }
