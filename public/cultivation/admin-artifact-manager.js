@@ -45,6 +45,51 @@ import {
     timed_cultivation_multiplier: { title: '限時修為倍率', summary: '催動後一段時間提高答對所得修為', hint: '設定倍率與持續分鐘', icon: 'fa-fire-flame-curved' },
     remove_wrong_option: { title: '排除錯誤選項', summary: '作答前移除一個錯誤選項', hint: '可選問道／鬥法／洞天', icon: 'fa-wand-sparkles' }
   });
+
+  const EFFECT_GROUPS = Object.freeze([
+    {
+      id: 'offense',
+      title: '攻擊與傷害',
+      icon: 'fa-khanda',
+      types: ['equip_attack_flat', 'equip_attack_percent', 'equip_damage_percent', 'equip_true_damage_flat']
+    },
+    {
+      id: 'crit-combo',
+      title: '暴擊・連擊・吸血',
+      icon: 'fa-bolt',
+      types: ['equip_crit_chance', 'equip_crit_damage_percent', 'equip_combo_chance', 'equip_lifesteal_percent']
+    },
+    {
+      id: 'defense',
+      title: '防禦與護體',
+      icon: 'fa-shield-halved',
+      types: [
+        'equip_hp_flat', 'equip_hp_percent',
+        'equip_damage_reduction_flat', 'equip_damage_reduction_percent',
+        'equip_reflect_percent', 'equip_shield_flat',
+        'equip_first_hit_reduction_percent', 'equip_damage_cap_percent',
+        'equip_cheat_death'
+      ]
+    },
+    {
+      id: 'conditional',
+      title: '條件觸發',
+      icon: 'fa-fire-flame-curved',
+      types: ['equip_low_hp_damage_percent', 'equip_low_hp_reduction_percent', 'equip_on_correct_shield_flat']
+    },
+    {
+      id: 'special',
+      title: '特殊奇術',
+      icon: 'fa-wand-magic-sparkles',
+      types: ['equip_copy_enemy_artifact']
+    },
+    {
+      id: 'timed-study',
+      title: '限時・修煉・答題',
+      icon: 'fa-hourglass-half',
+      types: ['timed_attack_multiplier', 'timed_cultivation_multiplier', 'remove_wrong_option']
+    }
+  ]);
   let busy = false;
 
   function data() { return window.getCurrentUserData?.() || null; }
@@ -134,11 +179,24 @@ import {
     return options.map((category) => `<option value="${escapeHtml(category)}" ${category === value ? 'selected' : ''}>${escapeHtml(category)}</option>`).join('');
   }
 
+  function effectGuideItemMarkup(type) {
+    const guide = EFFECT_GUIDE[type] || { title: type, summary: '通用法寶效果', hint: type, icon: 'fa-wand-magic-sparkles' };
+    return `<button type="button" class="aam-guide-item" data-aam-add-effect-type="${escapeHtml(type)}"><span class="aam-guide-icon"><i class="fa-solid ${escapeHtml(guide.icon)}"></i></span><span class="aam-guide-copy"><b>${escapeHtml(guide.title)}</b><span>${escapeHtml(guide.summary)}</span><small>${escapeHtml(guide.hint)}</small></span><span class="aam-guide-add"><i class="fa-solid fa-plus"></i></span></button>`;
+  }
+
   function effectGuideMarkup() {
-    return SUPPORTED_ARTIFACT_EFFECTS.map((type) => {
-      const guide = EFFECT_GUIDE[type] || { title: type, summary: '通用法寶效果', hint: type, icon: 'fa-wand-magic-sparkles' };
-      return `<button type="button" class="aam-guide-item" data-aam-add-effect-type="${escapeHtml(type)}"><span class="aam-guide-icon"><i class="fa-solid ${escapeHtml(guide.icon)}"></i></span><span class="aam-guide-copy"><b>${escapeHtml(guide.title)}</b><span>${escapeHtml(guide.summary)}</span><small>${escapeHtml(guide.hint)}</small></span><span class="aam-guide-add"><i class="fa-solid fa-plus"></i></span></button>`;
-    }).join('');
+    const assigned = new Set();
+    const groups = EFFECT_GROUPS.map((group, index) => {
+      const types = group.types.filter((type) => SUPPORTED_ARTIFACT_EFFECTS.includes(type));
+      types.forEach((type) => assigned.add(type));
+      if (!types.length) return '';
+      return `<details class="aam-guide-group" data-aam-guide-group="${escapeHtml(group.id)}" ${index === 0 ? 'open' : ''}><summary><span><i class="fa-solid ${escapeHtml(group.icon)}"></i><b>${escapeHtml(group.title)}</b><em>${types.length}</em></span><i class="fa-solid fa-chevron-down aam-guide-chevron"></i></summary><div class="aam-guide-group-list">${types.map(effectGuideItemMarkup).join('')}</div></details>`;
+    });
+    const extras = SUPPORTED_ARTIFACT_EFFECTS.filter((type) => !assigned.has(type));
+    if (extras.length) {
+      groups.push(`<details class="aam-guide-group" data-aam-guide-group="other"><summary><span><i class="fa-solid fa-box-archive"></i><b>其他功能</b><em>${extras.length}</em></span><i class="fa-solid fa-chevron-down aam-guide-chevron"></i></summary><div class="aam-guide-group-list">${extras.map(effectGuideItemMarkup).join('')}</div></details>`);
+    }
+    return `<div class="aam-guide-scroll">${groups.join('')}</div>`;
   }
 
   function ensureStyle() {
@@ -151,10 +209,10 @@ import {
       .aam-list{display:grid;gap:7px}.aam-item{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:9px;align-items:center;padding:9px;border:1px solid rgba(255,255,255,.07);border-radius:13px;background:rgba(255,255,255,.018)}.aam-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:11px;border:1px solid rgba(216,177,93,.25);color:#f0d17a;background:#171005;font-weight:900}.aam-copy{min-width:0}.aam-copy strong{color:#eee1c7;font-size:10px}.aam-meta{margin-top:3px;color:#887a63;font-size:7px}.aam-effects{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px}.aam-effects span{padding:2px 5px;border-radius:999px;background:rgba(216,177,93,.05);color:#baa77d;font-size:6px}.aam-item-actions{display:grid;gap:5px;min-width:78px}.aam-edit,.aam-approve{min-height:32px;padding:0 10px;border-radius:9px;font-size:8px;font-weight:900}.aam-edit{border:1px solid rgba(216,177,93,.22);background:rgba(216,177,93,.05);color:#dbc078}.aam-approve{border:1px solid rgba(74,222,128,.28);background:rgba(22,101,52,.12);color:#86efac}.aam-pending{display:inline-flex;align-items:center;gap:4px;margin-left:6px;padding:2px 6px;border:1px solid rgba(251,191,36,.38);border-radius:999px;background:rgba(146,64,14,.16);color:#fbbf24;font-size:6px;font-weight:900}.aam-item.is-pending{border-color:rgba(251,191,36,.46)!important;box-shadow:inset 0 0 24px rgba(251,191,36,.045),0 0 20px rgba(251,191,36,.04)}.aam-ai-meta{margin-top:4px;color:#b99753;font-size:6px}
       .aam-modal{position:fixed;inset:0;z-index:12000;display:grid;place-items:center;padding:14px;background:rgba(0,0,0,.82);backdrop-filter:blur(8px)}.aam-card{width:min(100%,1080px);max-height:92dvh;overflow:auto;padding:18px;border:1px solid rgba(216,177,93,.28);border-radius:20px;background:linear-gradient(145deg,#18130c,#080808);box-shadow:0 30px 100px rgba(0,0,0,.72)}.aam-card h3{margin:0 0 4px;color:#f3e7ca;font-size:15px}.aam-note{margin:0 0 12px;color:#8f826d;font-size:8px;line-height:1.65}.aam-editor-layout{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:16px;align-items:start}.aam-editor-main{min-width:0}.aam-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.aam-field{display:grid;gap:4px}.aam-field.full{grid-column:1/-1}.aam-field label{color:#9a8d75;font-size:7px;font-weight:900}.aam-field input,.aam-field select,.aam-field textarea{width:100%;min-height:38px;padding:8px 9px;border:1px solid rgba(216,177,93,.16);border-radius:10px;background:#0a0908;color:#eadfc8;font-size:9px;outline:none}.aam-field textarea{min-height:76px;resize:vertical}.aam-field input:focus,.aam-field select:focus,.aam-field textarea:focus{border-color:rgba(216,177,93,.5)}
       .aam-effects-editor{display:grid;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.07)}.aam-effects-head{display:flex;align-items:center;justify-content:space-between;gap:8px;color:#d7bb77;font-size:9px;font-weight:900}.aam-effect-row{padding:9px;border:1px solid rgba(255,255,255,.07);border-radius:12px;background:rgba(255,255,255,.016)}.aam-effect-main{display:grid;grid-template-columns:minmax(150px,1.2fr) repeat(3,minmax(85px,1fr)) auto;gap:6px;align-items:end}.aam-effect-main label,.aam-contexts label{display:grid;gap:3px;color:#857963;font-size:6px}.aam-effect-main input,.aam-effect-main select{min-height:34px;padding:6px;border:1px solid rgba(216,177,93,.14);border-radius:9px;background:#090807;color:#e5d8bd;font-size:8px}.aam-remove-effect{width:32px;height:32px;border-radius:9px;border:1px solid rgba(248,113,113,.2);background:rgba(127,29,29,.12);color:#fca5a5}.aam-contexts{display:flex;gap:10px;flex-wrap:wrap;margin-top:7px}.aam-contexts label{display:flex;align-items:center;gap:4px}.aam-contexts input{accent-color:#d8b15d}.aam-add-effect{min-height:32px;padding:0 10px;border-radius:9px;border:1px dashed rgba(216,177,93,.28);background:transparent;color:#cbae68;font-size:8px;font-weight:900}
-      .aam-guide{position:sticky;top:0;padding:13px;border:1px solid rgba(216,177,93,.18);border-radius:16px;background:linear-gradient(160deg,rgba(31,24,13,.9),rgba(8,8,8,.96))}.aam-guide h4{margin:0;color:#efd99e;font-size:11px}.aam-guide>p{margin:4px 0 10px;color:#887b65;font-size:7px;line-height:1.55}.aam-guide-list{display:grid;gap:6px}.aam-guide-item{width:100%;display:grid;grid-template-columns:32px minmax(0,1fr) 24px;gap:8px;align-items:center;padding:8px;border:1px solid rgba(216,177,93,.12);border-radius:11px;background:rgba(255,255,255,.018);text-align:left;transition:.15s}.aam-guide-item:hover{border-color:rgba(216,177,93,.42);background:rgba(216,177,93,.07)}.aam-guide-icon{width:30px;height:30px;display:grid;place-items:center;border-radius:9px;background:rgba(216,177,93,.08);color:#daba6b}.aam-guide-copy{display:grid;gap:2px;min-width:0}.aam-guide-copy b{color:#e6d8b8;font-size:8px}.aam-guide-copy span{color:#998b72;font-size:7px;line-height:1.4}.aam-guide-copy small{color:#6f6555;font-size:6px}.aam-guide-add{display:grid;place-items:center;color:#c8a958;font-size:8px}.aam-guide-note{margin-top:10px;padding:8px;border-radius:10px;background:rgba(216,177,93,.045);color:#8e816b;font-size:6px;line-height:1.6}.aam-guide-note b{color:#c9ad69}
+      .aam-guide{position:sticky;top:0;display:flex;flex-direction:column;max-height:calc(92dvh - 36px);min-height:0;padding:13px;border:1px solid rgba(216,177,93,.18);border-radius:16px;background:linear-gradient(160deg,rgba(31,24,13,.9),rgba(8,8,8,.96));overflow:hidden}.aam-guide h4{margin:0;color:#efd99e;font-size:11px}.aam-guide>p{flex:0 0 auto;margin:4px 0 10px;color:#887b65;font-size:7px;line-height:1.55}.aam-guide-scroll{min-height:0;flex:1 1 auto;display:grid;align-content:start;gap:7px;max-height:min(62dvh,620px);overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable;padding:0 4px 2px 0}.aam-guide-scroll::-webkit-scrollbar{width:7px}.aam-guide-scroll::-webkit-scrollbar-thumb{border-radius:999px;background:rgba(216,177,93,.24)}.aam-guide-scroll::-webkit-scrollbar-track{background:rgba(255,255,255,.025)}.aam-guide-group{border:1px solid rgba(216,177,93,.12);border-radius:12px;background:rgba(255,255,255,.014);overflow:hidden}.aam-guide-group>summary{min-height:38px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 9px;cursor:pointer;list-style:none;color:#d8c28d;background:linear-gradient(90deg,rgba(216,177,93,.065),rgba(255,255,255,.012));user-select:none}.aam-guide-group>summary::-webkit-details-marker{display:none}.aam-guide-group>summary>span{display:flex;align-items:center;gap:7px;min-width:0}.aam-guide-group>summary>span>i{width:19px;color:#d6b764;text-align:center}.aam-guide-group>summary b{font-size:8px;white-space:nowrap}.aam-guide-group>summary em{min-width:20px;padding:2px 5px;border-radius:999px;background:rgba(216,177,93,.09);color:#9f8e69;font-size:6px;font-style:normal;text-align:center}.aam-guide-chevron{color:#8e7c59;font-size:7px;transition:transform .16s ease}.aam-guide-group[open] .aam-guide-chevron{transform:rotate(180deg)}.aam-guide-group-list{display:grid;gap:6px;padding:7px;border-top:1px solid rgba(216,177,93,.08);background:rgba(0,0,0,.12)}.aam-guide-item{width:100%;display:grid;grid-template-columns:32px minmax(0,1fr) 24px;gap:8px;align-items:center;padding:8px;border:1px solid rgba(216,177,93,.12);border-radius:11px;background:rgba(255,255,255,.018);text-align:left;transition:.15s}.aam-guide-item:hover{border-color:rgba(216,177,93,.42);background:rgba(216,177,93,.07)}.aam-guide-icon{width:30px;height:30px;display:grid;place-items:center;border-radius:9px;background:rgba(216,177,93,.08);color:#daba6b}.aam-guide-copy{display:grid;gap:2px;min-width:0}.aam-guide-copy b{color:#e6d8b8;font-size:8px}.aam-guide-copy span{color:#998b72;font-size:7px;line-height:1.4}.aam-guide-copy small{color:#6f6555;font-size:6px}.aam-guide-add{display:grid;place-items:center;color:#c8a958;font-size:8px}.aam-guide-note{flex:0 0 auto;margin-top:10px;padding:8px;border-radius:10px;background:rgba(216,177,93,.045);color:#8e816b;font-size:6px;line-height:1.6}.aam-guide-note b{color:#c9ad69}
       .aam-actions{display:flex;gap:8px;margin-top:14px}.aam-actions button{flex:1;min-height:40px;border-radius:11px;font-size:9px;font-weight:900}.aam-cancel{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:#aaa}.aam-save{border:1px solid rgba(216,177,93,.4);background:linear-gradient(135deg,#8f651e,#4b2f09);color:#fff0bd}.aam-save:disabled{opacity:.45}
-      @media(max-width:880px){.aam-editor-layout{grid-template-columns:1fr}.aam-guide{position:static;order:-1}.aam-guide-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
-      @media(max-width:620px){.aam-item{grid-template-columns:38px minmax(0,1fr)}.aam-item-actions{grid-column:1/-1;width:100%;grid-template-columns:1fr 1fr}.aam-edit,.aam-approve{width:100%}.aam-grid{grid-template-columns:1fr}.aam-field.full{grid-column:auto}.aam-effect-main{grid-template-columns:1fr 1fr}.aam-effect-main>label:first-child{grid-column:1/-1}.aam-remove-effect{align-self:end}.aam-head{align-items:flex-start;flex-direction:column}.aam-add{width:100%}.aam-guide-list{grid-template-columns:1fr}}
+      @media(max-width:880px){.aam-editor-layout{grid-template-columns:1fr}.aam-guide{position:static;order:-1;max-height:58dvh}.aam-guide-scroll{max-height:42dvh}}
+      @media(max-width:620px){.aam-item{grid-template-columns:38px minmax(0,1fr)}.aam-item-actions{grid-column:1/-1;width:100%;grid-template-columns:1fr 1fr}.aam-edit,.aam-approve{width:100%}.aam-grid{grid-template-columns:1fr}.aam-field.full{grid-column:auto}.aam-effect-main{grid-template-columns:1fr 1fr}.aam-effect-main>label:first-child{grid-column:1/-1}.aam-remove-effect{align-self:end}.aam-head{align-items:flex-start;flex-direction:column}.aam-add{width:100%}.aam-guide{max-height:54dvh}.aam-guide-scroll{max-height:38dvh}}
     `;
     document.head.appendChild(style);
   }
@@ -223,7 +281,7 @@ import {
     const modal = document.createElement('div');
     modal.id = MODAL_ID;
     modal.className = 'aam-modal';
-    modal.innerHTML = `<section class="aam-card" role="dialog" aria-modal="true"><h3>${editing ? '編輯法寶' : '新增法寶'}</h3><p class="aam-note">這裡直接維護全站正式法寶清單。建立後 ID 會鎖定，避免玩家既有背包與裝備失聯。右側「可用功能」可直接加入效果。</p><div class="aam-editor-layout"><div class="aam-editor-main"><div class="aam-grid"><div class="aam-field"><label>法寶 ID（英文小寫與 -）</label><input id="aam-id" maxlength="64" ${editing ? 'readonly' : ''} value="${escapeHtml(item?.id || '')}" placeholder="例如 thunder-seal"></div><div class="aam-field"><label>名稱</label><input id="aam-name" maxlength="80" value="${escapeHtml(item?.name || '')}"></div><div class="aam-field"><label>圖示（1–4 字）</label><input id="aam-icon" maxlength="4" value="${escapeHtml(item?.icon || '◆')}"></div><div class="aam-field"><label>境界</label><select id="aam-realm">${ARTIFACT_REALMS.map((realm) => `<option value="${realm.name}" ${realm.name === (item?.realm || '築基') ? 'selected' : ''}>${realm.name}</option>`).join('')}</select></div><div class="aam-field"><label>分類</label><select id="aam-category">${categoryOptions(item?.category)}</select></div><div class="aam-field"><label>裝備欄位（裝備效果才需要）</label><input id="aam-slot" maxlength="40" value="${escapeHtml(item?.equipSlot || '')}" placeholder="例如 本命法寶"></div><div class="aam-field"><label>打造金幣</label><input id="aam-gold" type="number" min="0" step="1" value="${Number(item?.craft?.gold) || 0}"></div><div class="aam-field"><label>每次打造數量</label><input id="aam-yield" type="number" min="1" step="1" value="${Math.max(1, Number(item?.craft?.yield) || 1)}"></div><div class="aam-field full"><label>說明</label><textarea id="aam-description" maxlength="500">${escapeHtml(item?.description || '')}</textarea></div></div><div class="aam-effects-editor"><div class="aam-effects-head"><span>法寶效果</span><button type="button" id="aam-add-effect" class="aam-add-effect"><i class="fa-solid fa-plus"></i> 新增效果</button></div><div id="aam-effect-list"></div></div><div id="aam-status" class="aam-note" style="margin-top:10px"></div></div><aside class="aam-guide"><h4><i class="fa-solid fa-list-check"></i> 可用功能</h4><p>點選任一功能即可直接加入左側法寶效果，可同時組合多種功能。</p><div class="aam-guide-list">${effectGuideMarkup()}</div><div class="aam-guide-note"><b>裝備類：</b>需要填「裝備欄位」。<br><b>連擊：</b>不論組合多少效果，總機率硬上限 10%。<br><b>鏡映：</b>每場固定複製敵方一項可複製戰鬥效果。<br><b>限時類：</b>催動時消耗 1 件法寶。<br><b>排除錯項：</b>可指定問道、鬥法、洞天。</div></aside></div><div class="aam-actions"><button type="button" class="aam-cancel">取消</button><button type="button" class="aam-save">${editing ? '儲存變更' : '建立法寶'}</button></div></section>`;
+    modal.innerHTML = `<section class="aam-card" role="dialog" aria-modal="true"><h3>${editing ? '編輯法寶' : '新增法寶'}</h3><p class="aam-note">這裡直接維護全站正式法寶清單。建立後 ID 會鎖定，避免玩家既有背包與裝備失聯。右側「可用功能」可直接加入效果。</p><div class="aam-editor-layout"><div class="aam-editor-main"><div class="aam-grid"><div class="aam-field"><label>法寶 ID（英文小寫與 -）</label><input id="aam-id" maxlength="64" ${editing ? 'readonly' : ''} value="${escapeHtml(item?.id || '')}" placeholder="例如 thunder-seal"></div><div class="aam-field"><label>名稱</label><input id="aam-name" maxlength="80" value="${escapeHtml(item?.name || '')}"></div><div class="aam-field"><label>圖示（1–4 字）</label><input id="aam-icon" maxlength="4" value="${escapeHtml(item?.icon || '◆')}"></div><div class="aam-field"><label>境界</label><select id="aam-realm">${ARTIFACT_REALMS.map((realm) => `<option value="${realm.name}" ${realm.name === (item?.realm || '築基') ? 'selected' : ''}>${realm.name}</option>`).join('')}</select></div><div class="aam-field"><label>分類</label><select id="aam-category">${categoryOptions(item?.category)}</select></div><div class="aam-field"><label>裝備欄位（裝備效果才需要）</label><input id="aam-slot" maxlength="40" value="${escapeHtml(item?.equipSlot || '')}" placeholder="例如 本命法寶"></div><div class="aam-field"><label>打造金幣</label><input id="aam-gold" type="number" min="0" step="1" value="${Number(item?.craft?.gold) || 0}"></div><div class="aam-field"><label>每次打造數量</label><input id="aam-yield" type="number" min="1" step="1" value="${Math.max(1, Number(item?.craft?.yield) || 1)}"></div><div class="aam-field full"><label>說明</label><textarea id="aam-description" maxlength="500">${escapeHtml(item?.description || '')}</textarea></div></div><div class="aam-effects-editor"><div class="aam-effects-head"><span>法寶效果</span><button type="button" id="aam-add-effect" class="aam-add-effect"><i class="fa-solid fa-plus"></i> 新增效果</button></div><div id="aam-effect-list"></div></div><div id="aam-status" class="aam-note" style="margin-top:10px"></div></div><aside class="aam-guide"><h4><i class="fa-solid fa-list-check"></i> 可用功能</h4><p>依類別展開或縮小；功能區可獨立捲動，點選功能即可加入左側法寶效果。</p>${effectGuideMarkup()}<div class="aam-guide-note"><b>裝備類：</b>需要填「裝備欄位」。<br><b>連擊：</b>不論組合多少效果，總機率硬上限 10%。<br><b>鏡映：</b>每場固定複製敵方一項可複製戰鬥效果。<br><b>限時類：</b>催動時消耗 1 件法寶。<br><b>排除錯項：</b>可指定問道、鬥法、洞天。</div></aside></div><div class="aam-actions"><button type="button" class="aam-cancel">取消</button><button type="button" class="aam-save">${editing ? '儲存變更' : '建立法寶'}</button></div></section>`;
     document.body.appendChild(modal);
     const effectList = modal.querySelector('#aam-effect-list');
     (item?.effects?.length ? item.effects : [defaultEffect('equip_attack_flat')]).forEach((effect) => effectList.appendChild(effectRow(effect)));
