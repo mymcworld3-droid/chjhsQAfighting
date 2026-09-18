@@ -54,14 +54,22 @@
 
   function observeTrainingVisibility() {
     if (!document.body) return;
+
+    const page = document.getElementById(PAGE_ID);
+    let wasVisible = !!page && !page.classList.contains('hidden');
+
     const observer = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
         if (mutation.type !== 'attributes') continue;
         const target = mutation.target;
         if (target?.id !== PAGE_ID) continue;
-        if (!target.classList.contains('hidden')) resetTrainingScrollSoon();
+
+        const visible = !target.classList.contains('hidden');
+        if (visible && !wasVisible) resetTrainingScrollSoon();
+        wasVisible = visible;
       }
     });
+
     observer.observe(document.body, {
       subtree: true,
       attributes: true,
