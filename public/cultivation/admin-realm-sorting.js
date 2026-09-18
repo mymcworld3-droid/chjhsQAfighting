@@ -5,11 +5,15 @@ import { getMaterialById, materialRealmOrderByName } from './material-catalog.js
   'use strict';
   let queued = false;
 
-  function reorder(container, idOf, rankOf, nameOf) {
+  function reorder(container, idOf, rankOf, nameOf, compareExtra = null) {
     if (!container) return;
     const nodes = [...container.children].filter((node) => idOf(node));
     if (nodes.length < 2) return;
     const sorted = nodes.slice().sort((a, b) => {
+      if (compareExtra) {
+        const extra = compareExtra(idOf(a), idOf(b));
+        if (extra !== 0) return extra;
+      }
       const ra = rankOf(idOf(a));
       const rb = rankOf(idOf(b));
       if (ra !== rb) return ra - rb;
@@ -24,12 +28,20 @@ import { getMaterialById, materialRealmOrderByName } from './material-catalog.js
     reorder(
       document.getElementById('admin-artifact-list'),
       (node) => node.querySelector('[data-admin-artifact-edit]')?.dataset.adminArtifactEdit || '',
-      (id) => {
-        const item = getArtifactById(id);
-        const realmRank = realmOrderByName(item?.realm || '凡人');
-        return item?.reviewStatus === 'pending' ? -100 + realmRank : realmRank;
-      },
-      (id) => getArtifactById(id)?.name || id
+      (id) => realmOrderByName(getArtifactById(id)?.realm || '凡人'),
+      (id) => getArtifactById(id)?.name || id,
+      (aId, bId) => {
+        const a = getArtifactById(aId);
+        const b = getArtifactById(bId);
+        const aPending = a?.reviewStatus === 'pending';
+        const bPending = b?.reviewStatus === 'pending';
+        if (aPending !== bPending) return aPending ? -1 : 1;
+        if (aPending && bPending) {
+          const timeDiff = (Number(b?.generatedAtMs) || 0) - (Number(a?.generatedAtMs) || 0);
+          if (timeDiff !== 0) return timeDiff;
+        }
+        return 0;
+      }
     );
     reorder(
       document.getElementById('admin-material-list'),
