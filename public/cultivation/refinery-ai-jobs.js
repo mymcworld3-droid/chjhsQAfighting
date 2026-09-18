@@ -286,6 +286,7 @@ import {
         allMaterials: apiMaterials(),
         existingArtifacts: apiArtifacts(),
         targetRealm: job.targetRealm,
+        adminGenerationPrompt: window.getArtifactGenerationPrompt?.() || '',
         supportedEffects: SUPPORTED_ARTIFACT_EFFECTS
       })
     });
