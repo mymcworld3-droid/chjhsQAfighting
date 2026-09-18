@@ -24,7 +24,8 @@ test('training page creates refinery tab and a complete stable shell up front', 
   assert.match(training, /data-training-tab="refinery"/);
   assert.match(training, /function refineryShellMarkup\(\)/);
   assert.match(training, /refinery-shell-material-grid/);
-  assert.match(training, /refinery-shell-slots/);
+  assert.match(training, /refinery-slots refinery-shell-array/);
+  assert.match(training, /refinery-array-center/);
   assert.match(training, /refinery-shell-summary/);
   assert.match(training, /refinery-shell-match/);
   assert.match(training, /refinery-shell-actions/);
@@ -41,7 +42,7 @@ test('foundation training also preloads the refinery tab and shell', () => {
 test('preloaded refinery shell has base styling before refinery hydration', () => {
   assert.match(trainingCss, /\.refinery-shell\{/);
   assert.match(trainingCss, /\.refinery-shell-material-grid\{/);
-  assert.match(trainingCss, /\.refinery-shell-slots\{/);
+  assert.match(trainingCss, /\.refinery-shell-array \.refinery-slot/);
   assert.match(trainingCss, /grid-template-columns:repeat\(auto-fill,minmax\(96px,1fr\)\)/);
 });
 
