@@ -11,7 +11,7 @@ const tutorial = read('public/cultivation/qi-five-dongtian-tutorial.js');
 const dongtian = read('public/cultivation/dongtian.js');
 const main = read('public/main.js');
 
-test('Qi-five Dongtian tutorial unlocks at five cultivation and does not teleport the player to Dongfu', () => {
+test('Qi-five Dongtian tutorial unlocks at five cultivation and never teleports to Dongfu', () => {
   assert.match(tutorial, /SCORE_REQUIRED = 5/);
   assert.match(tutorial, /phase === 'settings'/);
   assert.match(tutorial, /\[data-target="page-settings"\]/);
@@ -19,40 +19,51 @@ test('Qi-five Dongtian tutorial unlocks at five cultivation and does not telepor
   assert.doesNotMatch(tutorial, /switchToPage/);
 });
 
-test('tutorial carefully explains creation, amount, single-choice batching and previous-question de-duplication', () => {
-  assert.match(tutorial, /圖片、文字都可以煉成題庫/);
+test('Qi-five tutorial carefully explains source material, amount, single-choice batches and de-duplication', () => {
+  assert.match(tutorial, /圖片、文字都可以煉成洞天/);
   assert.match(tutorial, /少＝10 題/);
   assert.match(tutorial, /中＝15～20 題/);
   assert.match(tutorial, /多＝25～30 題/);
-  assert.match(tutorial, /四選一單選/);
+  assert.match(tutorial, /四選一/);
   assert.match(tutorial, /每 5 題一批/);
-  assert.match(tutorial, /後一批會讀取前面所有已生成題目/);
+  assert.match(tutorial, /後一批會帶入前面全部題目/);
 });
 
-test('tutorial creates a private sample, requires actual play, then requires actual deletion', () => {
-  assert.match(tutorial, /window\.ensureDongtianTutorialSample/);
-  assert.match(tutorial, /phase = 'play'/);
-  assert.match(tutorial, /data-dt-play/);
-  assert.match(tutorial, /dongtian:completed/);
-  assert.match(tutorial, /dongtian:session-closed/);
-  assert.match(tutorial, /phase = 'delete'/);
-  assert.match(tutorial, /data-dt-delete/);
-  assert.match(tutorial, /dongtian:deleted/);
-  assert.match(tutorial, /sampleDeleted:true/);
-  assert.match(dongtian, /name: '引道小洞天'/);
+test('Qi-five tutorial reuses the private local Dongtian demo, requires full play, return, then deletion', () => {
+  assert.match(tutorial, /window\.prepareNewbieDongtianDemo/);
+  assert.match(tutorial, /newbie:dongtian-demo-started/);
+  assert.match(tutorial, /newbie:dongtian-demo-completed/);
+  assert.match(tutorial, /newbie:dongtian-demo-returned/);
+  assert.match(tutorial, /newbie:dongtian-demo-deleted/);
+  assert.match(tutorial, /phase='delete'/);
+  assert.match(tutorial, /data-dt-tutorial-play/);
+  assert.match(tutorial, /data-dt-tutorial-delete/);
+  assert.match(dongtian, /id: 'newbie-private-dongtian-demo'/);
   assert.match(dongtian, /tutorialOnly: true/);
-  assert.match(dongtian, /status: 'tutorial'/);
+  assert.match(dongtian, /private: true/);
+  assert.match(dongtian, /TUTORIAL-DT-010/);
+  assert.match(dongtian, /完整教學 10 題/);
 });
 
-test('Dongtian first completion grants cultivation from correct answers as well as spirit stones', () => {
+test('formal Dongtian first completion grants cultivation from correct answers as well as spirit stones', () => {
   assert.match(dongtian, /FIRST_COMPLETION_CULTIVATION_CORRECT_STEP = 5/);
   assert.match(dongtian, /function firstCompletionCultivation\(correctCount\)/);
   assert.match(dongtian, /'stats\.totalScore': increment\(cultivationReward\)/);
   assert.match(dongtian, /cultivationAdded: cultivationReward/);
   assert.match(dongtian, /每答對 \$\{FIRST_COMPLETION_CULTIVATION_CORRECT_STEP\} 題 \+1/);
+  assert.match(dongtian, /答對至少 1 題保底 \+1/);
 });
 
-test('Qi-five tutorial module loads after normal newbie tutorial and after Dongtian', () => {
+test('private tutorial cave has no formal rewards while teaching the real formal reward rule', () => {
+  const finish = dongtian.slice(dongtian.indexOf('async function finishDongtian'), dongtian.indexOf('async function completeProgress'));
+  const tutorialBranch = finish.slice(finish.indexOf('if (s.tutorialOnly)'), finish.indexOf('const firstCompletionReward'));
+  assert.match(tutorialBranch, /教學範例不發正式獎勵/);
+  assert.doesNotMatch(tutorialBranch, /completeProgress\(/);
+  assert.match(tutorialBranch, /正式洞天首次通關每題 100 靈石/);
+  assert.match(tutorialBranch, /每答對 5 題 \+1/);
+});
+
+test('Qi-five tutorial module loads after Dongtian and after the mortal tutorial modules', () => {
   const dongtianIndex = main.indexOf("'./cultivation/dongtian.js'");
   const newbieIndex = main.indexOf("'./cultivation/newbie-tutorial-v2.js'");
   const layoutIndex = main.indexOf("'./cultivation/newbie-tutorial-layout-fix.js'");

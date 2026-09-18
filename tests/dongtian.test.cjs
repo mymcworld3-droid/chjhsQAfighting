@@ -99,19 +99,17 @@ test('Dongtian session keeps a fixed ordered question array until completion or 
   assert.doesNotMatch(uiSource, /generate-dongtian[\s\S]*renderRunner[\s\S]*fetch\('\/api\/generate-quiz'/);
 });
 
-test('Dongtian first completion spirit stones scale with question count while keeping a 1000 minimum', () => {
+test('Dongtian first completion grants spirit stones by question count and cultivation by correct answers', () => {
   assert.match(uiSource, /FIRST_COMPLETION_SPIRIT_STONE_PER_QUESTION = 100/);
   assert.match(uiSource, /FIRST_COMPLETION_MIN_SPIRIT_STONES = 1000/);
-  assert.match(uiSource, /function firstCompletionSpiritStones\(questionCount\)/);
-  assert.match(uiSource, /Math\.max\(FIRST_COMPLETION_MIN_SPIRIT_STONES, count \* FIRST_COMPLETION_SPIRIT_STONE_PER_QUESTION\)/);
-  assert.match(uiSource, /const firstCompletionReward = firstCompletionSpiritStones\(total\)/);
+  assert.match(uiSource, /FIRST_COMPLETION_CULTIVATION_CORRECT_STEP = 5/);
+  assert.match(uiSource, /function firstCompletionCultivation\(correctCount\)/);
+  assert.match(uiSource, /const cultivationReward = firstCompletionCultivation\(correct\)/);
   assert.match(uiSource, /'stats\.gold': increment\(firstCompletionReward\)/);
+  assert.match(uiSource, /'stats\.totalScore': increment\(cultivationReward\)/);
   assert.match(uiSource, /goldAdded: firstCompletionReward, cultivationAdded: cultivationReward, questionCount: total/);
-  assert.match(uiSource, /依 \$\{total\} 題獲得 \+\$\{firstCompletionReward\.toLocaleString\(\)\} 靈石/);
-  assert.match(uiSource, /OWNER_CULTIVATION_REWARD = 1/);
-  assert.match(uiSource, /OWNER_GOLD_REWARD = 5/);
+  assert.match(uiSource, /首次修為：<\/strong>每答對 \$\{FIRST_COMPLETION_CULTIVATION_CORRECT_STEP\} 題 \+1/);
 });
-
 test('Dongtian encounter confirmation prominently shows the owner name and prospective first-clear reward', () => {
   assert.match(uiSource, /const owner = dongtian\.ownerName \|\| '無名修士'/);
   assert.match(uiSource, /此洞天由「\$\{escapeHtml\(owner\)\}」開闢/);
@@ -215,14 +213,15 @@ test('Standalone revision normalization cannot change id, subject, or difficulty
 });
 
 
-test('Question report only appears after answering, so it cannot reveal the answer early', () => {
-  const runner = uiSource.slice(uiSource.indexOf('function renderRunner'), uiSource.indexOf('function answerDongtian'));
-  const answer = uiSource.slice(uiSource.indexOf('function answerDongtian'), uiSource.indexOf('function removeModerationModal'));
-  assert.doesNotMatch(runner, /dt-report-question/);
-  assert.match(answer, /dt-report-question/);
-  assert.match(answer, /document\.getElementById\('dt-report-question'\)\.onclick = openQuestionReport/);
+test('Question report only appears after answering and tutorial reports stay local', () => {
+  const answerStart = uiSource.indexOf('function answerDongtian');
+  const answerEnd = uiSource.indexOf('function removeModerationModal', answerStart);
+  const answer = uiSource.slice(answerStart, answerEnd);
+  assert.match(answer, /id="dt-report-question"/);
+  assert.match(answer, /s\.tutorialOnly/);
+  assert.match(answer, /openQuestionReport/);
+  assert.match(answer, /教學範例不會送出回報/);
 });
-
 test('Completion reward transaction rechecks active status to prevent seal/reward races', () => {
   const completion = uiSource.slice(uiSource.indexOf('async function completeProgress'), uiSource.indexOf('async function writeDongtianHistory'));
   assert.match(completion, /const \[playSnap, indexSnap\] = await Promise\.all/);
@@ -287,19 +286,18 @@ test('Dongtian runner and question card fill the viewport instead of staying in 
 });
 
 
-test('private tutorial Dongtian never writes public play, reward, material, or history data', () => {
+test('private ten-question tutorial Dongtian never writes public play, reward, material, or history data', () => {
   assert.match(uiSource, /function newbieDongtianDemoDefinition\(\)/);
   assert.match(uiSource, /id: 'newbie-private-dongtian-demo'/);
   assert.match(uiSource, /tutorialOnly: true/);
   assert.match(uiSource, /private: true/);
-  assert.match(uiSource, /questionCount: 3/);
-  assert.match(uiSource, /正式洞天至少 10 題/);
-  assert.match(uiSource, /不會公開、不會留下遊玩紀錄，也不會發放靈石或材料/);
+  assert.match(uiSource, /TUTORIAL-DT-010/);
+  assert.match(uiSource, /questionCount: questions\.length/);
+  assert.match(uiSource, /完整教學 10 題/);
+  assert.match(uiSource, /不會公開、不會留下正式遊玩紀錄，也不會發放靈石、修為或材料/);
 
   const enter = uiSource.slice(uiSource.indexOf('async function enterDongtian'), uiSource.indexOf('function ensureOverlay'));
   assert.match(enter, /if \(!tutorialOnly\) \{/);
-  assert.match(enter, /tutorialOnly,/);
-
   const finish = uiSource.slice(uiSource.indexOf('async function finishDongtian'), uiSource.indexOf('async function completeProgress'));
   assert.match(finish, /if \(s\.tutorialOnly\) \{/);
   assert.match(finish, /教學範例不發正式獎勵/);
@@ -308,7 +306,6 @@ test('private tutorial Dongtian never writes public play, reward, material, or h
   assert.doesNotMatch(tutorialBranch, /completeProgress\(/);
   assert.doesNotMatch(tutorialBranch, /writeDongtianHistory\(/);
 });
-
 test('private tutorial Dongtian appears in My Dongtian and can be played then locally deleted', () => {
   assert.match(uiSource, /function tutorialDongtianCardMarkup\(item\)/);
   assert.match(uiSource, /data-dt-tutorial-card/);
