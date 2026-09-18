@@ -168,7 +168,7 @@ test('refinery separates general materials and second-refinement artifacts into 
 test('material divider is shifted 96px downward inside the whole held-material card', () => {
   assert.match(refinery, /refinery-panel refinery-material-panel/);
   assert.match(refinery, /\.refinery-material-panel\{[^}]*padding:0[^}]*grid-template-rows:minmax\(0,1fr\)[^}]*overflow:hidden/);
-  assert.match(refinery, /\.refinery-material-list\{[^}]*grid-template-rows:minmax\(0,calc\(50% \+ 64px\)\) minmax\(0,calc\(50% - 96px\)\)[^}]*gap:0[^}]*height:100%/);
+  assert.match(refinery, /\.refinery-material-list\{[^}]*grid-template-rows:minmax\(0,calc\(50% \+ 96px\)\) minmax\(0,calc\(50% - 96px\)\)[^}]*gap:0[^}]*height:100%/);
   assert.doesNotMatch(refinery, /refinery-panel"><div class="refinery-head"><div><h3><i class="fa-solid fa-gem"><\/i> 持有煉器素材/);
 });
 

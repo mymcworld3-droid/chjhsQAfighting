@@ -34,7 +34,7 @@ test('refinery fills available content height and shifts the material divider do
   assert.match(layout, /#page-training \.cultivation-refinery/);
   assert.match(layout, /min-height:var\(--training-content-height/);
   assert.match(layout, /#page-training \.refinery-material-list/);
-  assert.match(layout, /grid-template-rows:minmax\(0,calc\(50% \+ 64px\)\) minmax\(0,calc\(50% - 96px\)\)!important/);
+  assert.match(layout, /grid-template-rows:minmax\(0,calc\(50% \+ 96px\)\) minmax\(0,calc\(50% - 96px\)\)!important/);
   assert.match(layout, /overflow:hidden!important/);
   assert.match(layout, /refinery-material-roll-body/);
   assert.match(layout, /overflow:auto!important/);

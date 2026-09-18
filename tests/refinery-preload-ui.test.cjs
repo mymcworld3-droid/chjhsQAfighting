@@ -72,5 +72,5 @@ test('preloaded refinery shell uses the same divider shifted 96px downward', () 
     assert.match(source, /二次煉製/);
   }
   assert.match(trainingCss, /refinery-panel\.refinery-material-panel\{[^}]*padding:0/);
-  assert.match(trainingCss, /refinery-material-list\{[^}]*grid-template-rows:minmax\(0,calc\(50% \+ 64px\)\) minmax\(0,calc\(50% - 96px\)\)[^}]*gap:0/);
+  assert.match(trainingCss, /refinery-material-list\{[^}]*grid-template-rows:minmax\(0,calc\(50% \+ 96px\)\) minmax\(0,calc\(50% - 96px\)\)[^}]*gap:0/);
 });
