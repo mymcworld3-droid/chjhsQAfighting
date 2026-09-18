@@ -4,8 +4,8 @@ export const REFINERY_REALMS = Object.freeze([
   '凡人','煉氣','築基','金丹','元嬰','化神','煉虛','合體','大乘','渡劫','真仙'
 ]);
 
-const BASE_GOLD = Object.freeze([20,35,60,95,150,230,340,490,680,920,1200]);
-const BASE_SECONDS = Object.freeze([12,20,32,48,70,98,132,172,220,276,340]);
+const BASE_GOLD = Object.freeze([40,80,150,260,420,650,950,1350,1900,2600,3600]);
+const BASE_SECONDS = Object.freeze([5,10,15,25,40,60,90,130,180,240,300].map((minutes) => minutes * 60));
 
 export function refineryRealmOrder(name) {
   const index = REFINERY_REALMS.indexOf(String(name || '').trim());
@@ -29,12 +29,12 @@ export function calculateRefineryEconomy({
   const realmGold = Math.max(BASE_GOLD[targetOrder] || BASE_GOLD[0], Math.max(0, Number(baseGold) || 0));
   const goldGapMultiplier = gap > 0 ? 1 + gap * 0.35 : Math.max(0.60, 1 + gap * 0.08);
   const timeGapMultiplier = gap > 0 ? 1 + gap * 0.25 : Math.max(0.55, 1 + gap * 0.07);
-  const discoveryMultiplier = discovery ? 1.25 : 1;
-
-  const gold = Math.max(1, Math.round(realmGold * goldGapMultiplier * discoveryMultiplier));
+  // 未知配方不另外加價；價格與時間只由法寶境界、管理員基礎價與玩家境界差決定。
+  // 同境界煉製煉氣期法寶的標準值固定為 80 金幣、10 分鐘。
+  const gold = Math.max(1, Math.round(realmGold * goldGapMultiplier));
   const durationMs = Math.max(
     5000,
-    Math.round((BASE_SECONDS[targetOrder] || BASE_SECONDS[0]) * 1000 * timeGapMultiplier * discoveryMultiplier)
+    Math.round((BASE_SECONDS[targetOrder] || BASE_SECONDS[0]) * 1000 * timeGapMultiplier)
   );
 
   return {
