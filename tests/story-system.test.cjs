@@ -119,3 +119,21 @@ test('story chapters use every uploaded NPC role in the narrative', () => {
   assert.equal(scripts.includes("c('envoy'"), true);
   assert.equal(scripts.includes("c('antagonist'"), true);
 });
+
+
+test('story dialogue advances by clicking anywhere while preserving button actions', () => {
+  assert.match(engine, /點擊任意處 \/ Enter \/ Space/);
+  assert.match(engine, /el\.onclick = \(event\) =>/);
+  assert.match(engine, /event\.target\.closest\?\.\('button,a,input,textarea,select,\[data-story-no-advance\]'\)/);
+  assert.match(engine, /nextLine\(\)/);
+});
+
+test('every next story line gives the active portrait a short hop without ignoring reduced-motion preferences', () => {
+  assert.match(engine, /story-portrait\.story-bounce/);
+  assert.match(engine, /@keyframes story-character-hop/);
+  assert.match(engine, /animation:story-character-hop \.22s/);
+  assert.match(engine, /renderLine\(\{ bounce: true \}\)/);
+  assert.match(engine, /bouncePortrait = options\.bounce === true && !!image/);
+  assert.match(engine, /prefers-reduced-motion:reduce/);
+  assert.match(engine, /animation:none!important/);
+});

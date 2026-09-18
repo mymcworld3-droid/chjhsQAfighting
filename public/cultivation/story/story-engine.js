@@ -100,9 +100,12 @@ import {
       #${LAYER_ID} .story-chapter-mark{position:absolute;left:clamp(14px,3vw,42px);top:clamp(14px,3vw,32px);z-index:4;max-width:min(72vw,620px);text-shadow:0 4px 20px #000}
       #${LAYER_ID} .story-chapter-mark small{display:block;color:#9c8555;font-size:9px;font-weight:900;letter-spacing:.2em}
       #${LAYER_ID} .story-chapter-mark b{display:block;margin-top:5px;color:#e9ddc3;font-size:clamp(16px,2.5vw,25px)}
+      #${LAYER_ID}.story-playing{cursor:pointer}
       #${LAYER_ID} .story-portrait{position:absolute;z-index:1;bottom:0;height:min(89dvh,900px);width:min(48vw,620px);object-fit:contain;object-position:center bottom;filter:drop-shadow(0 18px 35px rgba(0,0,0,.56));user-select:none;pointer-events:none;transition:opacity .16s ease,transform .18s ease}
       #${LAYER_ID} .story-portrait.left{left:clamp(-60px,-3vw,-12px);transform:translateX(0)}
       #${LAYER_ID} .story-portrait.right{right:clamp(-60px,-3vw,-12px);transform:translateX(0)}
+      #${LAYER_ID} .story-portrait.story-bounce{animation:story-character-hop .22s cubic-bezier(.2,.8,.3,1)}
+      @keyframes story-character-hop{0%{transform:translateY(0)}42%{transform:translateY(-14px) scale(1.01)}100%{transform:translateY(0)}}
       #${LAYER_ID} .story-narrator-seal{position:absolute;left:50%;top:30%;transform:translate(-50%,-50%);width:86px;height:86px;display:grid;place-items:center;border:1px solid rgba(216,177,93,.25);border-radius:50%;color:#b69854;font:900 34px serif;opacity:.58;box-shadow:0 0 40px rgba(216,177,93,.08)}
       #${LAYER_ID} .story-dialogue{position:absolute;z-index:5;left:50%;bottom:clamp(14px,3vh,34px);transform:translateX(-50%);width:min(calc(100vw - 28px),940px);min-height:170px;padding:20px 22px 17px;border:1px solid rgba(216,177,93,.3);border-radius:22px;background:linear-gradient(145deg,rgba(17,18,15,.96),rgba(5,6,5,.985));box-shadow:0 22px 75px rgba(0,0,0,.64),inset 0 1px rgba(255,255,255,.025);backdrop-filter:blur(10px)}
       #${LAYER_ID} .story-speaker{display:flex;align-items:center;gap:8px;color:#e0bd68;font-size:11px;font-weight:900;letter-spacing:.08em}
@@ -125,7 +128,7 @@ import {
       #${ARCHIVE_ID} .story-archive-list{display:grid;gap:8px;margin-top:16px}.story-archive-item{width:100%;display:grid;grid-template-columns:62px minmax(0,1fr) auto;align-items:center;gap:10px;padding:11px;border-radius:14px;border:1px solid rgba(216,177,93,.12);background:rgba(255,255,255,.018);text-align:left}.story-archive-item:not(:disabled):hover{border-color:rgba(216,177,93,.36);background:rgba(216,177,93,.045)}.story-archive-item:disabled{opacity:.42}.story-archive-item em{color:#9d8450;font-size:8px;font-style:normal;font-weight:900}.story-archive-item b{display:block;color:#e3d7bc;font-size:10px}.story-archive-item small{display:block;margin-top:3px;color:#777062;font-size:8px}.story-archive-item span{color:#8f846e;font-size:8px}
       .story-archive-launcher{margin:7px 0 0;min-height:30px;padding:0 10px;border-radius:10px;border:1px solid rgba(216,177,93,.2);background:rgba(216,177,93,.045);color:#c8ac69;font-size:8px;font-weight:900}
       @media(max-width:680px){#${LAYER_ID} .story-portrait{height:70dvh;width:78vw;opacity:.62}#${LAYER_ID} .story-portrait.left{left:-22vw}#${LAYER_ID} .story-portrait.right{right:-22vw}#${LAYER_ID} .story-dialogue{bottom:9px;min-height:190px;padding:17px}#${LAYER_ID} .story-text{font-size:13px}.story-gender-options{grid-template-columns:1fr}#${ARCHIVE_ID} .story-archive-item{grid-template-columns:48px minmax(0,1fr)}#${ARCHIVE_ID} .story-archive-item>span{grid-column:2}}
-      @media(prefers-reduced-motion:reduce){#${LAYER_ID} *{transition:none!important}}
+      @media(prefers-reduced-motion:reduce){#${LAYER_ID} *{transition:none!important;animation:none!important}}
     `;
     document.head.appendChild(style);
   }
@@ -167,7 +170,7 @@ import {
     return interpolate(character.name);
   }
 
-  function renderLine() {
+  function renderLine(options = {}) {
     if (!active || !currentChapter) return;
     const line = currentChapter.lines[lineIndex];
     if (!line) { finishChapter(); return; }
@@ -177,17 +180,19 @@ import {
     const image = portraitFor(line);
     const last = lineIndex >= currentChapter.lines.length - 1;
     const percent = Math.round(((lineIndex + 1) / currentChapter.lines.length) * 100);
+    const bouncePortrait = options.bounce === true && !!image;
+    el.classList.add('story-playing');
 
     el.innerHTML = `
       <div class="story-chapter-mark"><small>${escapeHtml(currentChapter.realm)} · MAIN STORY</small><b>${escapeHtml(currentChapter.title)}</b></div>
       ${image
-        ? `<img class="story-portrait ${character.side === 'left' ? 'left' : 'right'}" src="${escapeHtml(image)}" alt="${escapeHtml(speakerName(line))}" decoding="async">`
+        ? `<img class="story-portrait ${character.side === 'left' ? 'left' : 'right'}${bouncePortrait ? ' story-bounce' : ''}" src="${escapeHtml(image)}" alt="${escapeHtml(speakerName(line))}" decoding="async">`
         : '<div class="story-narrator-seal" aria-hidden="true">道</div>'}
       <section class="story-dialogue" role="dialog" aria-live="polite">
         <div class="story-speaker">${escapeHtml(speakerName(line))}</div>
         <div class="story-text">${escapeHtml(interpolate(line.text))}</div>
         <div class="story-actions">
-          <div class="story-actions-left"><span>${lineIndex + 1} / ${currentChapter.lines.length}</span><span>Enter / Space</span></div>
+          <div class="story-actions-left"><span>${lineIndex + 1} / ${currentChapter.lines.length}</span><span>點擊任意處 / Enter / Space</span></div>
           <div style="display:flex;gap:7px"><button type="button" class="story-later">稍後再看</button><button type="button" class="story-next">${last ? '結束本章' : '下一句'}</button></div>
         </div>
         <div class="story-line-progress"><i style="width:${percent}%"></i></div>
@@ -195,6 +200,11 @@ import {
 
     el.querySelector('.story-later')?.addEventListener('click', deferChapter);
     el.querySelector('.story-next')?.addEventListener('click', nextLine);
+    el.onclick = (event) => {
+      if (!active || !currentChapter) return;
+      if (event.target.closest?.('button,a,input,textarea,select,[data-story-no-advance]')) return;
+      nextLine();
+    };
   }
 
   function nextLine() {
@@ -204,7 +214,7 @@ import {
       return;
     }
     lineIndex += 1;
-    renderLine();
+    renderLine({ bounce: true });
   }
 
   async function finishChapter() {
@@ -214,6 +224,7 @@ import {
       await persist({ seen: { [finished.id]: { completedAtMs: Date.now(), score: score() } } });
     }
     active = false;
+    document.getElementById(LAYER_ID)?.classList.remove('story-playing');
     currentChapter = null;
     lineIndex = 0;
     replayMode = false;
@@ -224,6 +235,7 @@ import {
 
   function deferChapter() {
     active = false;
+    document.getElementById(LAYER_ID)?.classList.remove('story-playing');
     currentChapter = null;
     lineIndex = 0;
     replayMode = false;
