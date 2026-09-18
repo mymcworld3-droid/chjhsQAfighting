@@ -1,3 +1,4 @@
+import './cultivation/true-immortal.js';
 // 🔥 修正：使用純 URL 引入 Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -22,6 +23,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
+window.getRealmUserUid = () => auth.currentUser?.uid;
 const db = getFirestore();
 const provider = new GoogleAuthProvider();
 
@@ -520,13 +522,13 @@ const REALMS = [
     { name: '真仙', sub: '踏入仙門', need: 868, emoji: '🪽' }
 ];
 
-function getRankName(level) {
-    const idx = Math.min(level || 0, REALMS.length - 1);
+function getRankName(level, uid = auth.currentUser?.uid, score = currentUserData?.stats?.totalScore) {
+    const idx = window.limitImmortalRank(Math.min(level || 0, REALMS.length - 1), score, REALMS, uid);
     const r = REALMS[idx];
     return `${r.emoji} ${r.name} ${r.sub}`;
 }
 
-function calculateRankFromScore(totalScore) {
+function calculateRankFromScore(totalScore, uid = auth.currentUser?.uid) {
     let rank = 0;
     for (let i = REALMS.length - 1; i >= 0; i--) {
         if (totalScore >= REALMS[i].need) {
@@ -534,7 +536,7 @@ function calculateRankFromScore(totalScore) {
             break;
         }
     }
-    return rank;
+    return window.limitImmortalRank(rank, totalScore, REALMS, uid);
 }
 
 // 綁定全域函式
@@ -550,7 +552,19 @@ window.logout = () => {
 // ==========================================
 // 🔐 登入狀態監聽 (核心邏輯)
 // ==========================================
+let immortalBoardUnsub = null;
+window.addEventListener('xiuxian:immortals-updated', () => {
+    if (currentUserData) updateUIStats();
+});
 onAuthStateChanged(auth, async (user) => {
+    immortalBoardUnsub?.();
+    window.setTrueImmortalBoard([], false);
+    if (user) immortalBoardUnsub = onSnapshot(collection(db, 'worldImmortals'), (snapshot) => {
+        window.setTrueImmortalBoard(snapshot.docs.map(item => ({ ...item.data(), id: item.id })));
+    }, (error) => {
+        window.setTrueImmortalBoard([], false);
+        console.warn('仙位資格讀取失敗', error);
+    });
     // 先更新一次介面文字
     updateTexts();
 
@@ -787,7 +801,7 @@ function renderChatMessage(msg, container) {
     // 頭像
     const equipped = { frame: msg.frame || '', avatar: msg.avatar || '' };
     const avatarHtml = getAvatarHtml(equipped, "w-8 h-8");
-    const rankName = getRankName(msg.rankLevel || 0);
+    const rankName = getRankName(msg.rankLevel || 0, msg.uid || null, msg.totalScore ?? 0);
     const time = msg.timestamp ? new Date(msg.timestamp.toMillis()).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '...';
 
     div.innerHTML = `
@@ -823,6 +837,7 @@ window.sendChatMessage = async () => {
             avatar: currentUserData.equipped?.avatar || '',
             frame: currentUserData.equipped?.frame || '',
             rankLevel: currentUserData.stats?.rankLevel || 0,
+        totalScore: currentUserData.stats?.totalScore || 0,
             text: text,
             timestamp: serverTimestamp()
         });
@@ -1013,7 +1028,7 @@ window.loadFriendList = async () => {
                 <div class="flex-1">
                     <div class="flex justify-between items-center">
                         <span class="font-bold text-white">${fData.displayName}</span>
-                        <span class="text-xs text-yellow-500 font-mono">${getRankName(fData.stats?.rankLevel || 0)}</span>
+                        <span class="text-xs text-yellow-500 font-mono">${getRankName(calculateRankFromScore(fData.stats?.totalScore || 0, d.id), d.id, fData.stats?.totalScore)}</span>
                     </div>
                     <div class="flex justify-between items-center mt-1">
                         ${statusHtml}
@@ -2441,7 +2456,7 @@ window.showOpponentFoundAnimation = async (oppData) => {
     
     const oppUI = document.getElementById('match-opp');
     const oppAvatar = oppData.equipped?.avatar || '';
-    const oppRank = getRankName(oppData.rankLevel || 0);
+    const oppRank = getRankName(oppData.rankLevel || 0, oppData.uid || null, oppData.totalScore ?? 0);
     
     if (navigator.vibrate) navigator.vibrate([100, 50, 200]);
 
@@ -2481,6 +2496,7 @@ function buildLocalBattlePlayer() {
         artifactFirstHitUsed: false,
         artifactCheatDeathUsed: false,
         rankLevel: currentUserData.stats?.rankLevel || 0,
+        totalScore: currentUserData.stats?.totalScore || 0,
         done: false,
         answerCorrect: null,
         answerTime: null,
@@ -3750,7 +3766,7 @@ window.loadLeaderboard = async () => {
                         <span class="${isMe ? 'text-blue-300 font-bold' : ''}">${d.displayName}</span>
                     </td>
                     <td class="px-4 py-4 text-right font-mono text-blue-300">
-                        ${getRankName(d.stats.rankLevel)} <span class="text-xs text-gray-500 block">${d.stats.totalScore} pts</span>
+                        ${getRankName(calculateRankFromScore(d.stats.totalScore, doc.id), doc.id, d.stats.totalScore)} <span class="text-xs text-gray-500 block">${d.stats.totalScore} pts</span>
                     </td>
                 </tr>`;
             tbody.innerHTML += row; 
@@ -4472,6 +4488,7 @@ window.triggerGlobalReload = async () => {
 };
 
 window.recalculateAllUserRanks = async () => {
+    if (!window.trueImmortalBoardReady) { alert("五仙榜尚未讀取完成，請稍後再重算境界。"); return; }
     if (!currentUserData || !currentUserData.isAdmin) return alert("Permission Denied");
     if (!confirm(t('msg_recalc_warn'))) return;
 
@@ -4487,7 +4504,7 @@ window.recalculateAllUserRanks = async () => {
         const updates = snapshot.docs.map(async (userDoc) => {
             const data = userDoc.data();
             const stats = data.stats || {};
-            const correctRank = calculateRankFromScore(stats.totalScore || 0);
+            const correctRank = calculateRankFromScore(stats.totalScore || 0, userDoc.id);
             
             if (stats.rankLevel !== correctRank) {
                 count++;

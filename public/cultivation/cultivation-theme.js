@@ -57,11 +57,11 @@
     REALMS.forEach((realm) => {
       if (value >= realm.need) current = realm;
     });
-    return current;
+    return REALMS[window.limitImmortalRank(REALMS.indexOf(current), value, REALMS)];
   }
 
   function nextRealm(value) {
-    return REALMS.find((realm) => realm.need > value) || null;
+    return REALMS[REALMS.indexOf(realmFor(value)) + 1] || null;
   }
 
   function pct(value) {
@@ -139,7 +139,7 @@
       panel.dataset.xiuxianBound = '1';
       panel.querySelector('#xiuxian-meditate')?.addEventListener('click', meditate);
       panel.querySelector('#xiuxian-path')?.addEventListener('click', () => {
-        alert(REALMS.map((realm) => `${realm.emoji} ${realm.name} ${realm.sub}：${realm.need} 修為起`).join('\n'));
+        alert(REALMS.map((realm) => `${realm.emoji} ${realm.name} ${realm.sub}：${realm.need} 修為起${realm.name === '真仙' ? '，且須在九州五大仙榜上' : ''}`).join('\n'));
       });
     }
   }
@@ -201,7 +201,7 @@
     if (bar) bar.style.width = `${pct(value)}%`;
 
     const nextEl = document.getElementById('xiuxian-next');
-    if (nextEl) nextEl.textContent = next ? `${Math.max(0, next.need - value).toLocaleString()} 修為` : '已登仙';
+    if (nextEl) nextEl.textContent = next?.name === '真仙' && value >= next.need ? '需登上九州五大仙榜' : next ? `${Math.max(0, next.need - value).toLocaleString()} 修為` : '已登仙';
 
     const label = document.getElementById('xiuxian-progress-label');
     if (label) label.textContent = next ? `下一境界：${next.name} ${next.sub}` : '已登仙，繼續悟道';
@@ -237,6 +237,7 @@
     }
 
     window.addEventListener('xiuxian:stats-updated', render);
+    window.addEventListener('xiuxian:immortals-updated', render);
 
     if (typeof window.updateTexts === 'function') {
       const originalUpdateTexts = window.updateTexts;

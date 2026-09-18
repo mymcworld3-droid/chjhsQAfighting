@@ -52,7 +52,7 @@
       if (value >= REALMS[i].need) index = i;
       else break;
     }
-    return index;
+    return window.limitImmortalRank(index, value, REALMS);
   }
 
   function escapeHtml(value) {
