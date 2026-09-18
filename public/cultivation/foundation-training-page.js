@@ -159,8 +159,12 @@
   function removeFoundationUI() {
     const page = document.querySelector('#page-training[data-foundation-training="1"]');
     const nav = document.querySelector('#nav-training[data-foundation-training="1"]');
-    const wasVisible = !!page && !page.classList.contains('hidden');
+    if (!page && !nav) {
+      document.body.classList.remove('foundation-training-only');
+      return;
+    }
 
+    const wasVisible = !!page && !page.classList.contains('hidden');
     if (wasVisible && typeof window.switchToPage === 'function') {
       window.switchToPage('page-home');
     }
@@ -175,29 +179,33 @@
       page?.remove();
     }
     document.body.classList.remove('foundation-training-only');
-    document.body.classList.remove('cultivation-training-unlocked');
+
+    // 只有真的離開「整個修煉系統」時才移除 unlocked。
+    // 若已踏入金丹，金丹模組仍擁有這個 class，築基模組不得反覆拿掉它。
+    if (!window.isGoldenCoreUnlocked?.()) {
+      document.body.classList.remove('cultivation-training-unlocked');
+    }
   }
 
   function sync() {
     const active = foundationStage();
-    if (active) ensureFoundationUI();
-    else removeFoundationUI();
+    if (lastStage === active) return;
 
-    if (lastStage !== active) {
-      lastStage = active;
-      window.dispatchEvent(new CustomEvent('foundation-training-stage-changed', {
-        detail: { active, score: score(), foundationScore: FOUNDATION_SCORE, goldenCoreScore: GOLDEN_CORE_SCORE }
-      }));
-    }
+    if (active) ensureFoundationUI();
+    else if (lastStage === true) removeFoundationUI();
+
+    lastStage = active;
+    window.dispatchEvent(new CustomEvent('foundation-training-stage-changed', {
+      detail: { active, score: score(), foundationScore: FOUNDATION_SCORE, goldenCoreScore: GOLDEN_CORE_SCORE }
+    }));
   }
 
   window.isFoundationTrainingStage = foundationStage;
 
   function boot() {
     sync();
-    setInterval(sync, 450);
-    window.addEventListener('xiuxian:stats-updated', sync);
-    window.addEventListener('golden-core-access-changed', sync);
+    ['xiuxian:stats-updated','xiuxian:user-ready','xiuxian:migration-ready','golden-core-access-changed']
+      .forEach((name) => window.addEventListener(name, sync));
   }
 
   if (document.readyState === 'loading') {
