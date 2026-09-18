@@ -582,6 +582,21 @@ body.xianxia-theme main:has(#page-training.active-page),
     };
     </script>
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style id="debug-top-layer-style">
+      /* Admin debugger must remain above every app modal, battle overlay and tutorial layer. */
+      #btn-show-debug{
+        position:fixed!important;
+        z-index:2147483647!important;
+        pointer-events:auto!important;
+        isolation:isolate!important;
+      }
+      #admin-debug-console{
+        position:fixed!important;
+        z-index:2147483646!important;
+        pointer-events:auto!important;
+        isolation:isolate!important;
+      }
+    </style>
 </head>
 <body class="xianxia-theme font-sans h-[100dvh] flex flex-col overflow-hidden text-slate-100 selection:bg-cyan-500 selection:text-white bg-slate-950">
 
@@ -1498,7 +1513,7 @@ body.xianxia-theme main:has(#page-training.active-page),
         </div>
     </div>
 
-    <div id="admin-debug-console" class="hidden fixed bottom-0 left-0 w-full h-64 bg-black/95 text-green-400 font-mono text-xs z-[9999] border-t-2 border-red-500 shadow-[0_-5px_20px_rgba(0,0,0,0.8)] flex flex-col transition-transform duration-300 translate-y-0">
+    <div id="admin-debug-console" class="hidden fixed bottom-0 left-0 w-full h-64 bg-black/95 text-green-400 font-mono text-xs border-t-2 border-red-500 shadow-[0_-5px_20px_rgba(0,0,0,0.8)] flex flex-col transition-transform duration-300 translate-y-0">
         <div class="flex justify-between items-center px-4 py-2 bg-gray-900 border-b border-gray-700">
             <div class="flex items-center gap-2">
                 <span class="text-red-500 font-bold animate-pulse">🐞 SYSTEM DEBUGGER</span>
@@ -1518,10 +1533,10 @@ body.xianxia-theme main:has(#page-training.active-page),
         </div>
     </div>
 
-    <button id="btn-show-debug" class="hidden fixed bottom-24 right-4 z-[9998] bg-red-600 text-white w-8 h-8 rounded-full shadow-lg flex items-center justify-center opacity-50 hover:opacity-100 transition" onclick="document.getElementById('admin-debug-console').classList.remove('translate-y-full')">
+    <button id="btn-show-debug" class="hidden fixed bottom-24 right-4 bg-red-600 text-white w-8 h-8 rounded-full shadow-lg flex items-center justify-center opacity-50 hover:opacity-100 transition" onclick="document.getElementById('admin-debug-console').classList.remove('translate-y-full')">
         <i class="fa-solid fa-bug text-xs"></i>
     </button>
 
-    <script type="module" src="main.js?v=20260918-recipemin2"></script>
+    <script type="module" src="main.js?v=20260918-debugtop1"></script>
 </body>
 </html>
