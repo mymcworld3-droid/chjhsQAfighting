@@ -4,13 +4,33 @@
 // 煉器室、裝備、限時效果、問道／鬥法／洞天法寶都不需要各自修改。
 //
 // 支援的通用 effect.type：
-// - equip_attack_flat            裝備後固定增加攻擊
-// - equip_attack_percent         裝備後按比例增加攻擊，例如 value: 0.2 = +20%
-// - equip_hp_flat                裝備後固定增加生命上限
-// - equip_hp_percent             裝備後按比例增加生命上限
-// - timed_attack_multiplier      使用後一段時間攻擊倍率，例如 multiplier: 1.5
-// - timed_cultivation_multiplier 使用後一段時間修為倍率，例如 multiplier: 2
-// - remove_wrong_option          問道／鬥法／洞天時移除一個錯誤選項
+// 基礎屬性
+// - equip_attack_flat                  固定攻擊
+// - equip_attack_percent               百分比攻擊
+// - equip_hp_flat                      固定生命
+// - equip_hp_percent                   百分比生命
+// 鬥法效果
+// - equip_damage_percent               造成傷害百分比增加
+// - equip_damage_reduction_flat        每次受傷固定減傷
+// - equip_damage_reduction_percent     每次受傷百分比減傷
+// - equip_crit_chance                  暴擊率
+// - equip_crit_damage_percent          暴擊額外倍率
+// - equip_combo_chance                 連擊率；系統硬上限 10%
+// - equip_lifesteal_percent            戰鬥吸血
+// - equip_reflect_percent              反射實際受到的生命傷害
+// - equip_shield_flat                  每場鬥法初始護盾
+// - equip_true_damage_flat             每次命中追加固定真實傷害
+// - equip_low_hp_damage_percent        自身生命 <=30% 時增傷
+// - equip_low_hp_reduction_percent     自身生命 <=30% 時額外減傷
+// - equip_first_hit_reduction_percent  每場第一次受傷減傷
+// - equip_damage_cap_percent           單次生命傷害上限 = 最大生命百分比
+// - equip_on_correct_shield_flat       答對並攻擊後獲得護盾
+// - equip_cheat_death                  每場一次致命傷保留 1 HP
+// - equip_copy_enemy_artifact          每場固定複製敵方一項可複製戰鬥效果
+// 消耗／答題
+// - timed_attack_multiplier            使用後一段時間攻擊倍率
+// - timed_cultivation_multiplier       使用後一段時間修為倍率
+// - remove_wrong_option                問道／鬥法／洞天時移除一個錯誤選項
 
 export const ARTIFACT_REALMS = Object.freeze([
   { id: 'mortal', name: '凡人', order: 0, need: 0 },
@@ -31,6 +51,23 @@ export const SUPPORTED_ARTIFACT_EFFECTS = Object.freeze([
   'equip_attack_percent',
   'equip_hp_flat',
   'equip_hp_percent',
+  'equip_damage_percent',
+  'equip_damage_reduction_flat',
+  'equip_damage_reduction_percent',
+  'equip_crit_chance',
+  'equip_crit_damage_percent',
+  'equip_combo_chance',
+  'equip_lifesteal_percent',
+  'equip_reflect_percent',
+  'equip_shield_flat',
+  'equip_true_damage_flat',
+  'equip_low_hp_damage_percent',
+  'equip_low_hp_reduction_percent',
+  'equip_first_hit_reduction_percent',
+  'equip_damage_cap_percent',
+  'equip_on_correct_shield_flat',
+  'equip_cheat_death',
+  'equip_copy_enemy_artifact',
   'timed_attack_multiplier',
   'timed_cultivation_multiplier',
   'remove_wrong_option'
@@ -124,6 +161,41 @@ function finite(value, fallback = 0) {
   return Number.isFinite(number) ? number : fallback;
 }
 
+const PERCENT_EFFECT_CAPS = Object.freeze({
+  equip_attack_percent: 5,
+  equip_hp_percent: 5,
+  equip_damage_percent: 3,
+  equip_damage_reduction_percent: 0.8,
+  equip_crit_chance: 0.75,
+  equip_crit_damage_percent: 3,
+  equip_combo_chance: 0.10,
+  equip_lifesteal_percent: 0.5,
+  equip_reflect_percent: 1,
+  equip_low_hp_damage_percent: 2,
+  equip_low_hp_reduction_percent: 0.8,
+  equip_first_hit_reduction_percent: 0.9,
+  equip_damage_cap_percent: 1
+});
+
+const FLAT_NONNEGATIVE_EFFECTS = new Set([
+  'equip_attack_flat',
+  'equip_hp_flat',
+  'equip_damage_reduction_flat',
+  'equip_shield_flat',
+  'equip_true_damage_flat',
+  'equip_on_correct_shield_flat'
+]);
+
+function normalizeEffectValue(type, value) {
+  const raw = finite(value, 0);
+  if (Object.prototype.hasOwnProperty.call(PERCENT_EFFECT_CAPS, type)) {
+    if (type === 'equip_damage_cap_percent') return Math.min(1, Math.max(0.05, raw || 1));
+    return Math.min(PERCENT_EFFECT_CAPS[type], Math.max(0, raw));
+  }
+  if (FLAT_NONNEGATIVE_EFFECTS.has(type)) return Math.max(0, raw);
+  return raw;
+}
+
 export function normalizeArtifactDefinition(raw = {}) {
   const item = {
     id: String(raw.id || '').trim(),
@@ -138,7 +210,7 @@ export function normalizeArtifactDefinition(raw = {}) {
     },
     effects: Array.isArray(raw.effects) ? raw.effects.map((effect) => {
       const next = { type: String(effect?.type || '').trim() };
-      if ('value' in (effect || {})) next.value = finite(effect.value, 0);
+      if ('value' in (effect || {})) next.value = normalizeEffectValue(next.type, effect.value);
       if ('multiplier' in (effect || {})) next.multiplier = Math.max(0, finite(effect.multiplier, 1));
       if ('durationMs' in (effect || {})) next.durationMs = Math.max(1000, Math.floor(finite(effect.durationMs, 1000)));
       if (Array.isArray(effect?.contexts)) next.contexts = effect.contexts.filter((v) => ['quiz', 'battle', 'dongtian'].includes(v));
@@ -166,6 +238,8 @@ export function validateArtifactCatalog(items) {
       if (!SUPPORTED_ARTIFACT_EFFECTS.includes(effect.type)) throw new Error(`法寶 ${item.name} 使用尚未支援的效果：${effect.type}`);
       if (effect.type.startsWith('timed_') && (!(effect.multiplier > 0) || !(effect.durationMs >= 1000))) throw new Error(`法寶 ${item.name} 的限時效果數值不合法`);
       if (effect.type === 'remove_wrong_option' && (!Array.isArray(effect.contexts) || !effect.contexts.length)) throw new Error(`法寶 ${item.name} 至少要指定一個答題場景`);
+      if (effect.type === 'equip_combo_chance' && Number(effect.value) > 0.10) throw new Error(`法寶 ${item.name} 的連擊率不可超過 10%`);
+      if (effect.type === 'equip_damage_cap_percent' && (!(Number(effect.value) >= 0.05) || Number(effect.value) > 1)) throw new Error(`法寶 ${item.name} 的單次傷害上限比例不合法`);
     });
     const needsSlot = item.effects.some((effect) => effect.type.startsWith('equip_'));
     if (needsSlot && !item.equipSlot) throw new Error(`裝備法寶 ${item.name} 必須指定裝備欄位`);
