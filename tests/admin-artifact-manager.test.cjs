@@ -91,3 +91,19 @@ test('feature load order syncs catalog before artifact engine and loads admin ma
   assert.ok(syncIndex >= 0 && engineIndex > syncIndex);
   assert.ok(managerIndex >= 0 && collapseIndex > managerIndex);
 });
+
+test('available artifact effects are grouped into collapsible independently scrollable categories', () => {
+  assert.match(manager, /const EFFECT_GROUPS = Object\.freeze/);
+  for (const title of ['攻擊與傷害', '暴擊・連擊・吸血', '防禦與護體', '條件觸發', '特殊奇術', '限時・修煉・答題']) {
+    assert.match(manager, new RegExp(title));
+  }
+  assert.match(manager, /<details class="aam-guide-group"/);
+  assert.match(manager, /<summary>/);
+  assert.match(manager, /class="aam-guide-scroll"/);
+  assert.match(manager, /\.aam-guide-scroll\{[^}]*overflow-y:auto/);
+  assert.match(manager, /overscroll-behavior:contain/);
+  assert.match(manager, /scrollbar-gutter:stable/);
+  assert.match(manager, /data-aam-add-effect-type/);
+  assert.match(manager, /querySelectorAll\('\[data-aam-add-effect-type\]'\)/);
+  assert.match(manager, /max-height:42dvh/);
+});
