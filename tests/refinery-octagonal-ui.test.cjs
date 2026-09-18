@@ -34,7 +34,7 @@ test('craft action lives in the center of the array and lights when recipe match
 });
 
 test('octagonal forge keeps existing functional hooks', () => {
-  assert.match(refinery, /data-refinery-material=/);
+  assert.match(refinery, /data-refinery-ingredient=/);
   assert.match(refinery, /data-refinery-slot=/);
   assert.match(refinery, /data-refinery-clear/);
   assert.match(refinery, /data-refinery-craft/);
@@ -63,7 +63,7 @@ test('preloaded index contains octagonal refinery CSS before hydration', () => {
   assert.match(css, /\.refinery-slot\[data-refinery-slot="7"\]/);
   assert.match(css, /\.refinery-craft\.ready:not\(:disabled\)/);
   assert.match(index, /cultivation-training-v3\.css\?v=20260918-array1/);
-  assert.match(index, /main\.js\?v=20260918-artifactcombat1/);
+  assert.match(index, /main\.js\?v=20260918-artifactnest2/);
 });
 
 test('preload shell styling no longer describes the old four-column forge', () => {
