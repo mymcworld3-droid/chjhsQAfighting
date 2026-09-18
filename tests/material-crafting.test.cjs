@@ -34,11 +34,12 @@ test('material catalog and recipes sync from one global Firestore config documen
   assert.match(sync, /replaceArtifactRecipes\(data\.recipes, 'firestore'\)/);
 });
 
-test('artifact crafting is intercepted and atomically consumes gold plus every recipe material', () => {
+test('artifact crafting is intercepted and atomically consumes gold plus material or artifact ingredients', () => {
   assert.match(system, /const FIELD = 'materialSystem'/);
   assert.match(system, /getArtifactRecipe\(artifactId\)/);
   assert.match(system, /have < need/);
   assert.match(system, /delete materials\.inventory\[row\.materialId\]/);
+  assert.match(system, /delete artifactSystem\.inventory\[row\.artifactId\]/);
   assert.match(system, /artifactSystem\.inventory\[artifactId\]/);
   assert.match(system, /tx\.update\(ref, \{ \[FIELD\]: materials, artifactSystem, 'stats\.gold': newGold \}\)/);
   assert.match(system, /document\.addEventListener\('click', interceptArtifactCraft, true\)/);
@@ -62,7 +63,9 @@ test('admin can add edit delete materials and configure artifact recipes', () =>
   assert.match(admin, /window\.confirm/);
   assert.match(admin, /仍被 .*配方使用/);
   assert.match(admin, /設定配方/);
-  assert.match(admin, /至少需要 1 種材料才能合成法寶/);
+  assert.match(admin, /至少需要 1 個材料或法寶素材才能合成法寶/);
+  assert.match(admin, /data-recipe-artifact/);
+  assert.match(admin, /套娃深度最多/);
   assert.match(admin, /persistMaterials/);
   assert.match(admin, /persistRecipes/);
   assert.match(admin, /userSnap\.data\(\)\?\.isAdmin !== true/);
