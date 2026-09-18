@@ -177,3 +177,7 @@ test('empty second-refinement notice sits at the bottom of its half', () => {
   assert.match(refinery, /artifactHtml \? '' : 'is-empty'/);
   assert.match(refinery, /\.refinery-material-roll-body\.is-empty\{display:flex;flex-direction:column;justify-content:flex-end\}/);
 });
+
+test('second-refinement heading is visually lowered inside its half', () => {
+  assert.match(refinery, /\.refinery-material-roll\+\.refinery-material-roll \.refinery-group-title\{margin-top:14px\}/);
+});
