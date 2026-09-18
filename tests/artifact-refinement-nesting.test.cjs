@@ -189,3 +189,9 @@ test('second-refinement bottom edge extends another 64px while the divider stays
   assert.match(refinery, /\.refinery-material-roll\+\.refinery-material-roll \.refinery-material-roll-body\{padding-bottom:0\}/);
   assert.match(refinery, /grid-template-rows:minmax\(0,calc\(50% \+ 96px - 32px\)\) minmax\(0,calc\(50% - 96px \+ 32px\)\)/);
 });
+
+
+test('second-refinement artifacts sit at the bottom when the pane has spare height', () => {
+  assert.match(refinery, /refinery-material-roll\[data-refinery-material-roll="artifacts"\] \.refinery-material-roll-body:not\(\.is-empty\)\{align-content:end;align-content:safe end\}/);
+  assert.match(refinery, /\.refinery-material-roll-body\{[^}]*align-content:start/);
+});
