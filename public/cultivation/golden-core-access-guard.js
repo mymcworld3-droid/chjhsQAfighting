@@ -137,16 +137,14 @@
 
   function boot() {
     enforce();
-    setInterval(enforce, 250);
-    window.addEventListener('xiuxian:stats-updated', enforce);
-    window.addEventListener('golden-core-state-changed', enforce);
-
-    new MutationObserver(() => {
-      installRuntimeGuards();
-      if (!trainingAllowed() && (document.getElementById('nav-training') || document.getElementById('page-training'))) {
-        removeAllTrainingUI();
-      }
-    }).observe(document.body, { childList: true, subtree: true });
+    [
+      'xiuxian:stats-updated',
+      'xiuxian:user-ready',
+      'xiuxian:migration-ready',
+      'golden-core-state-changed',
+      'golden-core-runtime-ready',
+      'xiuxian:features-ready'
+    ].forEach((name) => window.addEventListener(name, enforce));
   }
 
   if (document.readyState === 'loading') {
