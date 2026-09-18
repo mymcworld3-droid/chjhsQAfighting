@@ -148,13 +148,13 @@ import {
     style.textContent = `
       #${PANEL_ID}{padding:14px;border:1px solid rgba(216,177,93,.2);border-radius:16px;background:linear-gradient(145deg,rgba(21,17,10,.94),rgba(7,7,7,.97))}
       .aam-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.aam-head h3{margin:0;color:#f3e5c3;font-size:14px}.aam-head p{margin:3px 0 0;color:#8e816b;font-size:8px;line-height:1.5}.aam-add{min-height:36px;padding:0 12px;border-radius:11px;border:1px solid rgba(216,177,93,.38);background:rgba(216,177,93,.09);color:#f1d895;font-size:9px;font-weight:900}
-      .aam-list{display:grid;gap:7px}.aam-item{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:9px;align-items:center;padding:9px;border:1px solid rgba(255,255,255,.07);border-radius:13px;background:rgba(255,255,255,.018)}.aam-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:11px;border:1px solid rgba(216,177,93,.25);color:#f0d17a;background:#171005;font-weight:900}.aam-copy{min-width:0}.aam-copy strong{color:#eee1c7;font-size:10px}.aam-meta{margin-top:3px;color:#887a63;font-size:7px}.aam-effects{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px}.aam-effects span{padding:2px 5px;border-radius:999px;background:rgba(216,177,93,.05);color:#baa77d;font-size:6px}.aam-edit{min-height:32px;padding:0 10px;border-radius:9px;border:1px solid rgba(216,177,93,.22);background:rgba(216,177,93,.05);color:#dbc078;font-size:8px;font-weight:900}
+      .aam-list{display:grid;gap:7px}.aam-item{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:9px;align-items:center;padding:9px;border:1px solid rgba(255,255,255,.07);border-radius:13px;background:rgba(255,255,255,.018)}.aam-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:11px;border:1px solid rgba(216,177,93,.25);color:#f0d17a;background:#171005;font-weight:900}.aam-copy{min-width:0}.aam-copy strong{color:#eee1c7;font-size:10px}.aam-meta{margin-top:3px;color:#887a63;font-size:7px}.aam-effects{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px}.aam-effects span{padding:2px 5px;border-radius:999px;background:rgba(216,177,93,.05);color:#baa77d;font-size:6px}.aam-item-actions{display:grid;gap:5px;min-width:78px}.aam-edit,.aam-approve{min-height:32px;padding:0 10px;border-radius:9px;font-size:8px;font-weight:900}.aam-edit{border:1px solid rgba(216,177,93,.22);background:rgba(216,177,93,.05);color:#dbc078}.aam-approve{border:1px solid rgba(74,222,128,.28);background:rgba(22,101,52,.12);color:#86efac}.aam-pending{display:inline-flex;align-items:center;gap:4px;margin-left:6px;padding:2px 6px;border:1px solid rgba(251,191,36,.38);border-radius:999px;background:rgba(146,64,14,.16);color:#fbbf24;font-size:6px;font-weight:900}.aam-item.is-pending{border-color:rgba(251,191,36,.46)!important;box-shadow:inset 0 0 24px rgba(251,191,36,.045),0 0 20px rgba(251,191,36,.04)}.aam-ai-meta{margin-top:4px;color:#b99753;font-size:6px}
       .aam-modal{position:fixed;inset:0;z-index:12000;display:grid;place-items:center;padding:14px;background:rgba(0,0,0,.82);backdrop-filter:blur(8px)}.aam-card{width:min(100%,1080px);max-height:92dvh;overflow:auto;padding:18px;border:1px solid rgba(216,177,93,.28);border-radius:20px;background:linear-gradient(145deg,#18130c,#080808);box-shadow:0 30px 100px rgba(0,0,0,.72)}.aam-card h3{margin:0 0 4px;color:#f3e7ca;font-size:15px}.aam-note{margin:0 0 12px;color:#8f826d;font-size:8px;line-height:1.65}.aam-editor-layout{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:16px;align-items:start}.aam-editor-main{min-width:0}.aam-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.aam-field{display:grid;gap:4px}.aam-field.full{grid-column:1/-1}.aam-field label{color:#9a8d75;font-size:7px;font-weight:900}.aam-field input,.aam-field select,.aam-field textarea{width:100%;min-height:38px;padding:8px 9px;border:1px solid rgba(216,177,93,.16);border-radius:10px;background:#0a0908;color:#eadfc8;font-size:9px;outline:none}.aam-field textarea{min-height:76px;resize:vertical}.aam-field input:focus,.aam-field select:focus,.aam-field textarea:focus{border-color:rgba(216,177,93,.5)}
       .aam-effects-editor{display:grid;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.07)}.aam-effects-head{display:flex;align-items:center;justify-content:space-between;gap:8px;color:#d7bb77;font-size:9px;font-weight:900}.aam-effect-row{padding:9px;border:1px solid rgba(255,255,255,.07);border-radius:12px;background:rgba(255,255,255,.016)}.aam-effect-main{display:grid;grid-template-columns:minmax(150px,1.2fr) repeat(3,minmax(85px,1fr)) auto;gap:6px;align-items:end}.aam-effect-main label,.aam-contexts label{display:grid;gap:3px;color:#857963;font-size:6px}.aam-effect-main input,.aam-effect-main select{min-height:34px;padding:6px;border:1px solid rgba(216,177,93,.14);border-radius:9px;background:#090807;color:#e5d8bd;font-size:8px}.aam-remove-effect{width:32px;height:32px;border-radius:9px;border:1px solid rgba(248,113,113,.2);background:rgba(127,29,29,.12);color:#fca5a5}.aam-contexts{display:flex;gap:10px;flex-wrap:wrap;margin-top:7px}.aam-contexts label{display:flex;align-items:center;gap:4px}.aam-contexts input{accent-color:#d8b15d}.aam-add-effect{min-height:32px;padding:0 10px;border-radius:9px;border:1px dashed rgba(216,177,93,.28);background:transparent;color:#cbae68;font-size:8px;font-weight:900}
       .aam-guide{position:sticky;top:0;padding:13px;border:1px solid rgba(216,177,93,.18);border-radius:16px;background:linear-gradient(160deg,rgba(31,24,13,.9),rgba(8,8,8,.96))}.aam-guide h4{margin:0;color:#efd99e;font-size:11px}.aam-guide>p{margin:4px 0 10px;color:#887b65;font-size:7px;line-height:1.55}.aam-guide-list{display:grid;gap:6px}.aam-guide-item{width:100%;display:grid;grid-template-columns:32px minmax(0,1fr) 24px;gap:8px;align-items:center;padding:8px;border:1px solid rgba(216,177,93,.12);border-radius:11px;background:rgba(255,255,255,.018);text-align:left;transition:.15s}.aam-guide-item:hover{border-color:rgba(216,177,93,.42);background:rgba(216,177,93,.07)}.aam-guide-icon{width:30px;height:30px;display:grid;place-items:center;border-radius:9px;background:rgba(216,177,93,.08);color:#daba6b}.aam-guide-copy{display:grid;gap:2px;min-width:0}.aam-guide-copy b{color:#e6d8b8;font-size:8px}.aam-guide-copy span{color:#998b72;font-size:7px;line-height:1.4}.aam-guide-copy small{color:#6f6555;font-size:6px}.aam-guide-add{display:grid;place-items:center;color:#c8a958;font-size:8px}.aam-guide-note{margin-top:10px;padding:8px;border-radius:10px;background:rgba(216,177,93,.045);color:#8e816b;font-size:6px;line-height:1.6}.aam-guide-note b{color:#c9ad69}
       .aam-actions{display:flex;gap:8px;margin-top:14px}.aam-actions button{flex:1;min-height:40px;border-radius:11px;font-size:9px;font-weight:900}.aam-cancel{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:#aaa}.aam-save{border:1px solid rgba(216,177,93,.4);background:linear-gradient(135deg,#8f651e,#4b2f09);color:#fff0bd}.aam-save:disabled{opacity:.45}
       @media(max-width:880px){.aam-editor-layout{grid-template-columns:1fr}.aam-guide{position:static;order:-1}.aam-guide-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
-      @media(max-width:620px){.aam-item{grid-template-columns:38px minmax(0,1fr)}.aam-edit{grid-column:1/-1;width:100%}.aam-grid{grid-template-columns:1fr}.aam-field.full{grid-column:auto}.aam-effect-main{grid-template-columns:1fr 1fr}.aam-effect-main>label:first-child{grid-column:1/-1}.aam-remove-effect{align-self:end}.aam-head{align-items:flex-start;flex-direction:column}.aam-add{width:100%}.aam-guide-list{grid-template-columns:1fr}}
+      @media(max-width:620px){.aam-item{grid-template-columns:38px minmax(0,1fr)}.aam-item-actions{grid-column:1/-1;width:100%;grid-template-columns:1fr 1fr}.aam-edit,.aam-approve{width:100%}.aam-grid{grid-template-columns:1fr}.aam-field.full{grid-column:auto}.aam-effect-main{grid-template-columns:1fr 1fr}.aam-effect-main>label:first-child{grid-column:1/-1}.aam-remove-effect{align-self:end}.aam-head{align-items:flex-start;flex-direction:column}.aam-add{width:100%}.aam-guide-list{grid-template-columns:1fr}}
     `;
     document.head.appendChild(style);
   }
@@ -164,9 +164,20 @@ import {
     if (!panel || !isAdmin()) return;
     const list = panel.querySelector('#admin-artifact-list');
     if (!list) return;
-    list.innerHTML = ARTIFACT_CATALOG.map((item) => {
+    const ordered = [...ARTIFACT_CATALOG].sort((a, b) => {
+      const pa = a.reviewStatus === 'pending' ? 0 : 1;
+      const pb = b.reviewStatus === 'pending' ? 0 : 1;
+      if (pa !== pb) return pa - pb;
+      if (pa === 0) return (Number(b.generatedAtMs) || 0) - (Number(a.generatedAtMs) || 0);
+      return 0;
+    });
+    list.innerHTML = ordered.map((item) => {
       const color = artifactRealmColor(item.realm);
-      return `<article class="aam-item" style="--artifact-realm-color:${escapeHtml(color)};border-color:color-mix(in srgb,${escapeHtml(color)} 28%,rgba(255,255,255,.07))"><div class="aam-icon" style="border-color:color-mix(in srgb,${escapeHtml(color)} 55%,transparent);color:${escapeHtml(color)};background:color-mix(in srgb,${escapeHtml(color)} 10%,#171005)">${escapeHtml(item.icon || '◆')}</div><div class="aam-copy"><strong style="color:${escapeHtml(color)}">${escapeHtml(item.name)}</strong><div class="aam-meta">${escapeHtml(item.id)} · ${escapeHtml(item.realm)} · ${escapeHtml(item.category || '法寶')} · 打造 ${Number(item.craft?.gold) || 0} 金幣</div><div class="aam-effects">${(item.effects || []).map((effect) => `<span>${escapeHtml(effectLabel(effect))}</span>`).join('')}</div></div><button type="button" class="aam-edit" data-admin-artifact-edit="${escapeHtml(item.id)}"><i class="fa-solid fa-pen"></i> 編輯</button></article>`;
+      const pending = item.reviewStatus === 'pending';
+      const aiMeta = item.generatedByAI
+        ? `<div class="aam-ai-meta">AI 生成${item.aiProvider ? ` · ${escapeHtml(item.aiProvider)}` : ''}${item.generationMaterials?.length ? ` · 素材：${item.generationMaterials.map((row) => `${escapeHtml(row.name || row.id)}×${Number(row.quantity) || 1}`).join('、')}` : ''}</div>`
+        : '';
+      return `<article class="aam-item ${pending ? 'is-pending' : ''}" data-admin-pending="${pending ? '1' : '0'}" style="--artifact-realm-color:${escapeHtml(color)};border-color:color-mix(in srgb,${escapeHtml(color)} 28%,rgba(255,255,255,.07))"><div class="aam-icon" style="border-color:color-mix(in srgb,${escapeHtml(color)} 55%,transparent);color:${escapeHtml(color)};background:color-mix(in srgb,${escapeHtml(color)} 10%,#171005)">${escapeHtml(item.icon || '◆')}</div><div class="aam-copy"><strong style="color:${escapeHtml(color)}">${escapeHtml(item.name)}</strong>${pending ? '<span class="aam-pending"><i class="fa-solid fa-wand-magic-sparkles"></i> AI・待處理</span>' : ''}<div class="aam-meta">${escapeHtml(item.id)} · ${escapeHtml(item.realm)} · ${escapeHtml(item.category || '法寶')} · 打造 ${Number(item.craft?.gold) || 0} 金幣</div>${aiMeta}<div class="aam-effects">${(item.effects || []).map((effect) => `<span>${escapeHtml(effectLabel(effect))}</span>`).join('')}</div></div><div class="aam-item-actions">${pending ? `<button type="button" class="aam-approve" data-admin-artifact-approve="${escapeHtml(item.id)}"><i class="fa-solid fa-check"></i> 確認已檢查</button>` : ''}<button type="button" class="aam-edit" data-admin-artifact-edit="${escapeHtml(item.id)}"><i class="fa-solid fa-pen"></i> 編輯</button></div></article>`;
     }).join('') || '<div class="text-gray-500 text-xs">目前沒有法寶。</div>';
   }
 
@@ -272,11 +283,32 @@ import {
     return normalized;
   }
 
+  async function approveGeneratedArtifact(id) {
+    if (busy) return;
+    const current = ARTIFACT_CATALOG.find((item) => item.id === id);
+    if (!current || current.reviewStatus !== 'pending') return;
+    busy = true;
+    try {
+      const next = ARTIFACT_CATALOG.map((item) => item.id === id
+        ? { ...JSON.parse(JSON.stringify(item)), reviewStatus: 'approved', reviewedAtMs: Date.now() }
+        : JSON.parse(JSON.stringify(item)));
+      await persistCatalog(next);
+      render();
+      toast(`已確認 ${current.name}`);
+    } catch (error) {
+      console.error('[Admin artifact approve]', error);
+      toast(error.message || '確認失敗', false);
+    } finally {
+      busy = false;
+    }
+  }
+
   async function saveFromModal(modal, originalId) {
     if (busy) return;
     const status = modal.querySelector('#aam-status');
     const save = modal.querySelector('.aam-save');
     const id = String(modal.querySelector('#aam-id').value || '').trim().toLowerCase();
+    const original = originalId ? ARTIFACT_CATALOG.find((entry) => entry.id === originalId) : null;
     const raw = {
       id,
       name: modal.querySelector('#aam-name').value,
@@ -286,7 +318,15 @@ import {
       equipSlot: modal.querySelector('#aam-slot').value,
       description: modal.querySelector('#aam-description').value,
       craft: { gold: modal.querySelector('#aam-gold').value, yield: modal.querySelector('#aam-yield').value },
-      effects: readEffects(modal)
+      effects: readEffects(modal),
+      reviewStatus: original?.reviewStatus || 'approved',
+      generatedByAI: original?.generatedByAI === true,
+      generatedAtMs: original?.generatedAtMs || 0,
+      reviewedAtMs: original?.reviewedAtMs || 0,
+      generationSignature: original?.generationSignature || '',
+      generationMaterials: original?.generationMaterials || [],
+      aiProvider: original?.aiProvider || '',
+      aiModel: original?.aiModel || ''
     };
     if (originalId && id !== originalId) { status.textContent = '既有法寶 ID 不可修改。'; return; }
     let item;
@@ -339,9 +379,14 @@ import {
     if (panel.dataset.artifactManagerHydrated !== '1') {
       panel.dataset.artifactManagerHydrated = '1';
       panel.classList.remove('admin-preload-shell');
-      panel.innerHTML = `<div class="aam-head"><div><h3><i class="fa-solid fa-hammer" style="color:#d8b15d"></i> 法寶管理</h3><p>查看並維護全站法寶。新增或編輯後，所有玩家的煉器室與法寶效果會同步更新。</p></div><button type="button" class="aam-add" id="admin-artifact-add"><i class="fa-solid fa-plus"></i> 新增法寶</button></div><div id="admin-artifact-list" class="aam-list"></div>`;
+      panel.innerHTML = `<div class="aam-head"><div><h3><i class="fa-solid fa-hammer" style="color:#d8b15d"></i> 法寶管理</h3><p>查看並維護全站法寶。AI 新法寶會置頂標示「待處理」，但在確認前玩家已可正常使用；檢查後可編輯或按「確認已檢查」。</p></div><button type="button" class="aam-add" id="admin-artifact-add"><i class="fa-solid fa-plus"></i> 新增法寶</button></div><div id="admin-artifact-list" class="aam-list"></div>`;
       panel.querySelector('#admin-artifact-add').onclick = () => openEditor();
       panel.addEventListener('click', (event) => {
+        const approve = event.target.closest('[data-admin-artifact-approve]');
+        if (approve) {
+          approveGeneratedArtifact(approve.dataset.adminArtifactApprove);
+          return;
+        }
         const button = event.target.closest('[data-admin-artifact-edit]');
         if (!button) return;
         const item = ARTIFACT_CATALOG.find((candidate) => candidate.id === button.dataset.adminArtifactEdit);
