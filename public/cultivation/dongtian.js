@@ -15,7 +15,6 @@ import {
   const OWNER_GOLD_REWARD = 5;
   const FIRST_COMPLETION_SPIRIT_STONE_PER_QUESTION = 100;
   const FIRST_COMPLETION_MIN_SPIRIT_STONES = 1000;
-  const FIRST_COMPLETION_CULTIVATION_CORRECT_STEP = 5;
   const INDEX_COLLECTION = 'dongtianIndex';
   const DATA_COLLECTION = 'dongtians';
   const PLAY_COLLECTION = 'dongtianPlays';
@@ -31,7 +30,9 @@ import {
     encounterBusy: false,
     originalStartQuizFlow: null,
     listLoaded: false,
-    moderationBusy: false
+    moderationBusy: false,
+    tutorialDemo: null,
+    tutorialDemoCompleted: false
   };
 
   function userData() { return window.getCurrentUserData?.() || null; }
@@ -46,15 +47,6 @@ import {
   function firstCompletionSpiritStones(questionCount) {
     const count = Math.max(0, Math.floor(Number(questionCount) || 0));
     return Math.max(FIRST_COMPLETION_MIN_SPIRIT_STONES, count * FIRST_COMPLETION_SPIRIT_STONE_PER_QUESTION);
-  }
-  function firstCompletionCultivation(correctCount) {
-    const correct = Math.max(0, Math.floor(Number(correctCount) || 0));
-    if (!correct) return 0;
-    return Math.max(1, Math.floor(correct / FIRST_COMPLETION_CULTIVATION_CORRECT_STEP));
-  }
-  function isPlayableDongtianStatus(dongtian) {
-    if (dongtian?.status === 'active') return true;
-    return dongtian?.status === 'tutorial' && dongtian?.tutorialOnly === true && dongtian?.ownerUid === uid();
   }
   function shuffle(items) {
     const arr = [...items];
@@ -78,8 +70,8 @@ import {
     .dt-create h4,.dt-library h4{margin:0 0 5px;color:#f0e1ff;font-size:12px;font-weight:900}.dt-create p,.dt-library-note{margin:0 0 12px;color:#81748d;font-size:9px;line-height:1.65}.dt-input{width:100%;min-height:112px;resize:vertical;padding:11px 12px;border-radius:13px;border:1px solid rgba(216,177,93,.16);background:#0c0b0d;color:#eadff0;font-size:11px;outline:none}.dt-input:focus{border-color:rgba(188,133,248,.55);box-shadow:0 0 0 3px rgba(174,112,238,.07)}
     .dt-upload-row{display:flex;align-items:center;gap:8px;margin-top:9px;flex-wrap:wrap}.dt-upload{display:inline-flex;align-items:center;gap:7px;min-height:36px;padding:0 12px;border-radius:11px;border:1px solid rgba(187,134,252,.25);background:rgba(164,103,224,.06);color:#d9b8ff;font-size:9px;font-weight:900;cursor:pointer}.dt-upload input{display:none}.dt-image-count{color:#72667a;font-size:8px}.dt-previews{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:7px;margin-top:9px}.dt-preview{position:relative;aspect-ratio:1;border-radius:11px;overflow:hidden;border:1px solid rgba(255,255,255,.08);background:#090909}.dt-preview img{width:100%;height:100%;object-fit:cover}.dt-preview button{position:absolute;right:4px;top:4px;width:22px;height:22px;border:0;border-radius:50%;background:rgba(0,0,0,.72);color:#f3d8ff;font-size:9px}
     .dt-amount{margin-top:11px}.dt-amount-title{display:block;margin-bottom:6px;color:#9e8ca8;font-size:8px;font-weight:900;letter-spacing:.08em}.dt-amount-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.dt-amount-choice{position:relative;cursor:pointer}.dt-amount-choice input{position:absolute;opacity:0;pointer-events:none}.dt-amount-choice span{min-height:38px;display:flex;align-items:center;justify-content:center;gap:5px;padding:7px 8px;border:1px solid rgba(187,134,252,.18);border-radius:11px;background:rgba(164,103,224,.035);color:#a994b5;font-size:9px;font-weight:900;transition:.18s ease}.dt-amount-choice small{color:#786882;font-size:7px;font-weight:700}.dt-amount-choice input:checked+span{border-color:rgba(203,151,251,.62);background:linear-gradient(135deg,rgba(114,65,154,.38),rgba(63,36,82,.3));color:#f2dcff;box-shadow:0 0 0 2px rgba(174,112,238,.08) inset}.dt-amount-choice input:checked+span small{color:#cdb2dc}.dt-generate{width:100%;min-height:42px;margin-top:11px;border-radius:13px;border:1px solid rgba(190,137,251,.45);background:linear-gradient(135deg,#71429f,#3d205a);color:#f8eaff;font-size:10px;font-weight:900;letter-spacing:.08em}.dt-generate:disabled{opacity:.45;cursor:wait}.dt-generate small{display:block;margin-top:2px;color:#c9aedc;font-size:7px;font-weight:700}
-    .dt-library{padding-top:3px}.dt-list{display:grid;gap:8px}.dt-empty{padding:22px 12px;border:1px dashed rgba(216,177,93,.14);border-radius:14px;text-align:center;color:#6f6575;font-size:9px}.dt-item{padding:11px;border:1px solid rgba(216,177,93,.13);border-radius:15px;background:rgba(255,255,255,.018)}.dt-item-top{display:flex;justify-content:space-between;gap:10px;align-items:start}.dt-item-name{color:#eadcf1;font-size:11px;font-weight:900}.dt-item-meta{margin-top:4px;color:#8b7d91;font-size:8px;line-height:1.55}.dt-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}.dt-tag{padding:3px 7px;border:1px solid rgba(216,177,93,.12);border-radius:999px;background:rgba(216,177,93,.03);color:#b9a88c;font-size:7px}.dt-play{flex:0 0 auto;min-height:31px;padding:0 10px;border-radius:10px;border:1px solid rgba(187,134,252,.28);background:rgba(164,103,224,.08);color:#dabaff;font-size:8px;font-weight:900}.dt-owner-reward{margin-top:9px;color:#766a7c;font-size:7px}
-    .dt-item.suspended{border-color:rgba(248,113,113,.28);background:linear-gradient(135deg,rgba(127,29,29,.08),rgba(255,255,255,.012))}.dt-item.tutorial-private{border-color:rgba(96,165,250,.28);background:linear-gradient(135deg,rgba(30,64,175,.08),rgba(255,255,255,.012))}.dt-status-bad{color:#fca5a5!important;border-color:rgba(248,113,113,.28)!important}.dt-status-private{color:#93c5fd!important;border-color:rgba(96,165,250,.3)!important}.dt-repair{flex:0 0 auto;min-height:31px;padding:0 10px;border-radius:10px;border:1px solid rgba(248,113,113,.34);background:rgba(127,29,29,.16);color:#fecaca;font-size:8px;font-weight:900}.dt-delete{flex:0 0 auto;min-height:31px;padding:0 10px;border-radius:10px;border:1px solid rgba(248,113,113,.3);background:rgba(127,29,29,.11);color:#fca5a5;font-size:8px;font-weight:900}.dt-delete:hover{border-color:rgba(248,113,113,.55);background:rgba(127,29,29,.2)}.dt-question-title-row{display:flex;align-items:flex-start;gap:10px}.dt-question-title-row h3{flex:1}.dt-answer-actions{display:grid;grid-template-columns:minmax(105px,.34fr) minmax(0,1fr);gap:8px;margin-top:12px}.dt-report-question{min-height:42px;padding:0 9px;border-radius:13px;border:1px solid rgba(251,191,36,.24);background:rgba(120,53,15,.1);color:#fcd34d;font-size:8px;font-weight:900}.dt-answer-actions .dt-next{margin-top:0}.dt-modal{position:fixed;inset:0;z-index:9950;display:grid;place-items:center;padding:16px;background:rgba(0,0,0,.82);backdrop-filter:blur(8px)}.dt-modal-card{width:min(100%,620px);max-height:88dvh;overflow:auto;padding:18px;border:1px solid rgba(203,151,251,.24);border-radius:20px;background:linear-gradient(145deg,#171119,#09080a);box-shadow:0 24px 90px rgba(0,0,0,.65)}.dt-modal-card h3{margin:0;color:#f1e5f7;font-size:15px}.dt-modal-note{margin:7px 0 12px;color:#93849a;font-size:9px;line-height:1.7}.dt-modal-question{padding:11px;border:1px solid rgba(255,255,255,.07);border-radius:12px;background:rgba(0,0,0,.22);color:#d9cedd;font-size:10px;line-height:1.7}.dt-modal textarea{width:100%;min-height:105px;margin-top:10px;padding:10px 11px;resize:vertical;border:1px solid rgba(216,177,93,.17);border-radius:12px;background:#09080a;color:#eee3f2;font-size:10px;outline:none}.dt-modal-actions{display:flex;gap:8px;margin-top:11px}.dt-modal-actions button{flex:1;min-height:38px;border-radius:11px;font-size:8px;font-weight:900}.dt-modal-cancel{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:#aaa}.dt-modal-submit{border:1px solid rgba(203,151,251,.35);background:linear-gradient(135deg,#72419a,#3f2452);color:#f5e7ff}.dt-modal-submit:disabled{opacity:.5;cursor:wait}.dt-ai-review{margin-top:10px;padding:10px;border-left:2px solid #ef4444;background:rgba(127,29,29,.08);color:#d8b4b4;font-size:9px;line-height:1.7}.dt-sealed{text-align:center;min-height:100dvh;display:grid;place-items:center;padding:24px}.dt-sealed-box{max-width:520px}.dt-sealed-icon{width:76px;height:76px;margin:0 auto 14px;display:grid;place-items:center;border-radius:50%;border:1px solid rgba(248,113,113,.35);color:#fca5a5;font-size:28px;box-shadow:0 0 50px rgba(239,68,68,.12)}
+    .dt-library{padding-top:3px}.dt-list{display:grid;gap:8px}.dt-empty{padding:22px 12px;border:1px dashed rgba(216,177,93,.14);border-radius:14px;text-align:center;color:#6f6575;font-size:9px}.dt-item{padding:11px;border:1px solid rgba(216,177,93,.13);border-radius:15px;background:rgba(255,255,255,.018)}.dt-item-top{display:flex;justify-content:space-between;gap:10px;align-items:start}.dt-item-name{color:#eadcf1;font-size:11px;font-weight:900}.dt-item-meta{margin-top:4px;color:#8b7d91;font-size:8px;line-height:1.55}.dt-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}.dt-tag{padding:3px 7px;border:1px solid rgba(216,177,93,.12);border-radius:999px;background:rgba(216,177,93,.03);color:#b9a88c;font-size:7px}.dt-play{flex:0 0 auto;min-height:31px;padding:0 10px;border-radius:10px;border:1px solid rgba(187,134,252,.28);background:rgba(164,103,224,.08);color:#dabaff;font-size:8px;font-weight:900}.dt-delete{flex:0 0 auto;min-height:31px;padding:0 10px;border-radius:10px;border:1px solid rgba(248,113,113,.25);background:rgba(127,29,29,.09);color:#fca5a5;font-size:8px;font-weight:900}.dt-delete:hover{border-color:rgba(248,113,113,.48);background:rgba(127,29,29,.17)}.dt-item.tutorial-private{border-color:rgba(96,165,250,.3);background:linear-gradient(135deg,rgba(30,64,175,.08),rgba(255,255,255,.012))}.dt-private-badge{color:#93c5fd!important;border-color:rgba(96,165,250,.3)!important;background:rgba(30,64,175,.08)!important}.dt-owner-reward{margin-top:9px;color:#766a7c;font-size:7px}
+    .dt-item.suspended{border-color:rgba(248,113,113,.28);background:linear-gradient(135deg,rgba(127,29,29,.08),rgba(255,255,255,.012))}.dt-status-bad{color:#fca5a5!important;border-color:rgba(248,113,113,.28)!important}.dt-repair{flex:0 0 auto;min-height:31px;padding:0 10px;border-radius:10px;border:1px solid rgba(248,113,113,.34);background:rgba(127,29,29,.16);color:#fecaca;font-size:8px;font-weight:900}.dt-question-title-row{display:flex;align-items:flex-start;gap:10px}.dt-question-title-row h3{flex:1}.dt-answer-actions{display:grid;grid-template-columns:minmax(105px,.34fr) minmax(0,1fr);gap:8px;margin-top:12px}.dt-report-question{min-height:42px;padding:0 9px;border-radius:13px;border:1px solid rgba(251,191,36,.24);background:rgba(120,53,15,.1);color:#fcd34d;font-size:8px;font-weight:900}.dt-answer-actions .dt-next{margin-top:0}.dt-modal{position:fixed;inset:0;z-index:9950;display:grid;place-items:center;padding:16px;background:rgba(0,0,0,.82);backdrop-filter:blur(8px)}.dt-modal-card{width:min(100%,620px);max-height:88dvh;overflow:auto;padding:18px;border:1px solid rgba(203,151,251,.24);border-radius:20px;background:linear-gradient(145deg,#171119,#09080a);box-shadow:0 24px 90px rgba(0,0,0,.65)}.dt-modal-card h3{margin:0;color:#f1e5f7;font-size:15px}.dt-modal-note{margin:7px 0 12px;color:#93849a;font-size:9px;line-height:1.7}.dt-modal-question{padding:11px;border:1px solid rgba(255,255,255,.07);border-radius:12px;background:rgba(0,0,0,.22);color:#d9cedd;font-size:10px;line-height:1.7}.dt-modal textarea{width:100%;min-height:105px;margin-top:10px;padding:10px 11px;resize:vertical;border:1px solid rgba(216,177,93,.17);border-radius:12px;background:#09080a;color:#eee3f2;font-size:10px;outline:none}.dt-modal-actions{display:flex;gap:8px;margin-top:11px}.dt-modal-actions button{flex:1;min-height:38px;border-radius:11px;font-size:8px;font-weight:900}.dt-modal-cancel{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:#aaa}.dt-modal-submit{border:1px solid rgba(203,151,251,.35);background:linear-gradient(135deg,#72419a,#3f2452);color:#f5e7ff}.dt-modal-submit:disabled{opacity:.5;cursor:wait}.dt-ai-review{margin-top:10px;padding:10px;border-left:2px solid #ef4444;background:rgba(127,29,29,.08);color:#d8b4b4;font-size:9px;line-height:1.7}.dt-sealed{text-align:center;min-height:100dvh;display:grid;place-items:center;padding:24px}.dt-sealed-box{max-width:520px}.dt-sealed-icon{width:76px;height:76px;margin:0 auto 14px;display:grid;place-items:center;border-radius:50%;border:1px solid rgba(248,113,113,.35);color:#fca5a5;font-size:28px;box-shadow:0 0 50px rgba(239,68,68,.12)}
     .dt-overlay{position:fixed;inset:0;z-index:9100;width:100vw;height:100dvh;background:radial-gradient(circle at 50% 45%,rgba(125,66,174,.22),transparent 32%),linear-gradient(180deg,#080609,#020202);color:#f0e5f4;overflow:hidden}.dt-encounter{min-height:100dvh;display:grid;place-items:center;padding:24px;text-align:center;overflow:hidden;position:relative}.dt-portal{position:absolute;width:min(70vw,420px);aspect-ratio:1;border-radius:50%;border:1px solid rgba(204,154,255,.28);box-shadow:0 0 80px rgba(141,75,196,.18),inset 0 0 70px rgba(183,114,245,.08);animation:dtPortal 2.4s ease-in-out infinite alternate}.dt-portal:before,.dt-portal:after{content:"";position:absolute;inset:11%;border-radius:50%;border:1px dashed rgba(224,188,255,.22);animation:dtSpin 9s linear infinite}.dt-portal:after{inset:25%;animation-direction:reverse;animation-duration:6s}.dt-encounter-copy{position:relative;z-index:2;max-width:560px}.dt-encounter-copy span{font-size:8px;letter-spacing:.28em;color:#a27bbb;font-weight:900}.dt-encounter-copy h2{margin:10px 0 8px;font-size:clamp(28px,8vw,54px);color:#f0dfff;text-shadow:0 0 32px rgba(203,150,255,.3)}.dt-encounter-copy p{color:#9a88a3;font-size:10px}.dt-encounter-copy b{display:inline-block;margin-top:13px;padding:6px 11px;border:1px solid rgba(205,154,255,.24);border-radius:999px;color:#d5b4ed;font-size:8px}@keyframes dtPortal{to{transform:scale(1.05);box-shadow:0 0 120px rgba(141,75,196,.28),inset 0 0 90px rgba(183,114,245,.14)}}@keyframes dtSpin{to{transform:rotate(360deg)}}
     .dt-runner{width:100vw;height:100dvh;max-width:none;margin:0;padding:clamp(10px,1.5vw,22px);box-sizing:border-box;display:grid;grid-template-rows:auto auto auto minmax(0,1fr);overflow:hidden}.dt-run-head{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:6px 0 11px;border-bottom:1px solid rgba(216,177,93,.12)}.dt-run-head small{display:block;color:#856d91;font-size:7px;letter-spacing:.16em}.dt-run-head strong{display:block;margin-top:3px;color:#f0e0f7;font-size:clamp(15px,1.6vw,22px)}.dt-exit{width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.09);background:#0d0a0e;color:#a891b3}.dt-run-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:9px 0}.dt-run-meta div{padding:7px;border:1px solid rgba(216,177,93,.1);border-radius:11px;background:rgba(255,255,255,.018);text-align:center}.dt-run-meta span{display:block;color:#756a7b;font-size:7px}.dt-run-meta b{display:block;margin-top:3px;color:#cbb4d6;font-size:9px}.dt-progress{height:4px;border-radius:999px;background:#171119;overflow:hidden}.dt-progress i{display:block;height:100%;background:linear-gradient(90deg,#6d3b94,#c994ec);transition:width .3s}
     .dt-question{min-height:0;height:100%;margin-top:10px;padding:clamp(14px,2vw,26px);box-sizing:border-box;display:flex;flex-direction:column;overflow:auto;border:1px solid rgba(193,137,247,.17);border-radius:20px;background:linear-gradient(145deg,rgba(27,18,31,.9),rgba(7,6,8,.98));box-shadow:0 20px 55px rgba(0,0,0,.32)}.dt-question h3{margin:0;color:#f1e7f5;font-size:clamp(16px,2vw,26px);line-height:1.6}.dt-options{flex:1;min-height:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:minmax(70px,1fr);align-content:stretch;gap:clamp(8px,1vw,14px);margin-top:14px}.dt-option{min-height:58px;padding:clamp(10px,1.3vw,17px);display:flex;align-items:center;gap:12px;border:1px solid rgba(216,177,93,.12);border-radius:13px;background:rgba(255,255,255,.02);color:#d6c9db;text-align:left;font-size:clamp(11px,1.15vw,16px)}.dt-option span{width:25px;height:25px;flex:0 0 25px;display:grid;place-items:center;border-radius:50%;border:1px solid rgba(197,144,247,.2);color:#cca1ee;font-size:8px}.dt-option.correct{border-color:rgba(74,222,128,.45);background:rgba(22,101,52,.12);color:#d1fae5}.dt-option.wrong{border-color:rgba(248,113,113,.45);background:rgba(127,29,29,.12);color:#fecaca}.dt-option:disabled{cursor:default}.dt-explain{margin-top:12px;padding:12px;border-left:2px solid #9256b8;background:rgba(139,82,176,.06);color:#b7a8bd;font-size:10px;line-height:1.75}.dt-next{width:100%;min-height:42px;margin-top:12px;border-radius:13px;border:1px solid rgba(197,144,247,.35);background:linear-gradient(135deg,#74429e,#422257);color:#f5e5ff;font-size:9px;font-weight:900}
@@ -159,15 +151,24 @@ import {
     card.querySelector('#dt-images').addEventListener('change', handleFiles);
     card.querySelector('#dt-generate').onclick = generateDongtian;
     card.querySelector('#dt-list').addEventListener('click', async (event) => {
+      const tutorialPlay = event.target.closest('[data-dt-tutorial-play]');
+      if (tutorialPlay) {
+        tutorialPlay.disabled = true;
+        try { await startNewbieDongtianDemo(); }
+        catch (error) { toast(error.message || '無法進入教學洞天'); tutorialPlay.disabled = false; }
+        return;
+      }
+      const tutorialDelete = event.target.closest('[data-dt-tutorial-delete]');
+      if (tutorialDelete) {
+        tutorialDelete.disabled = true;
+        deleteNewbieDongtianDemo();
+        return;
+      }
       const deleteButton = event.target.closest('[data-dt-delete]');
       if (deleteButton) {
         deleteButton.disabled = true;
-        try {
-          await deleteOwnedDongtian(deleteButton.dataset.dtDelete);
-        } catch (error) {
-          toast(error.message || '洞天刪除失敗');
-          deleteButton.disabled = false;
-        }
+        try { await deleteOwnedDongtian(deleteButton.dataset.dtDelete); }
+        catch (error) { toast(error.message || '洞天刪除失敗'); deleteButton.disabled = false; }
         return;
       }
       const repairButton = event.target.closest('[data-dt-repair]');
@@ -192,8 +193,8 @@ import {
         const snap = await getDoc(doc(db, DATA_COLLECTION, id));
         if (!snap.exists()) throw new Error('洞天資料不存在');
         const data = { id: snap.id, ...snap.data() };
-        if (!isPlayableDongtianStatus(data)) throw new Error('此洞天目前已封印，請先完成題目修復。');
-        await enterDongtian(data, { source: data.tutorialOnly ? 'tutorial' : 'owner', encountered: false });
+        if (data.status !== 'active') throw new Error('此洞天目前已封印，請先完成題目修復。');
+        await enterDongtian(data, { source: 'owner', encountered: false });
       } catch (error) {
         toast(error.message || '無法進入洞天');
         button.disabled = false;
@@ -340,99 +341,109 @@ import {
     await batch.commit();
   }
 
-  function tutorialSampleQuestions() {
-    return [
-      { id:'TUT-001', difficulty:'easy', subject:'洞天教學', q:'「洞天」功能主要位於哪裡？', correct:'洞府', wrong:['鬥法','排行榜','登入畫面'], exp:'洞天位於「洞府」頁面中。你可以在這裡建立、遊玩、管理與刪除自己開闢的洞天。' },
-      { id:'TUT-002', difficulty:'easy', subject:'洞天教學', q:'開闢洞天時可以提供哪些素材？', correct:'圖片與文字都可以', wrong:['只能圖片','只能文字','只能語音'], exp:'洞天支援圖片與文字；兩者可同時使用，AI 會先整理素材中的知識點。' },
-      { id:'TUT-003', difficulty:'easy', subject:'洞天教學', q:'建立洞天時的「少／中／多」是用來控制什麼？', correct:'預計生成的題目數量', wrong:['洞天公開範圍','答題時間','靈石種類'], exp:'少量是 10 題，中量由 AI 在 15～20 題判斷，大量由 AI 在 25～30 題判斷。' },
-      { id:'TUT-004', difficulty:'easy', subject:'洞天教學', q:'洞天題目目前採用哪一種作答結構？', correct:'四選一單選題', wrong:['可複選的多選題','申論題','是非題與複選混合'], exp:'每題只有一個正確答案與三個錯誤選項，不允許複選。' },
-      { id:'TUT-005', difficulty:'medium', subject:'洞天教學', q:'AI 正式生成洞天題目時，每批會生成幾題？', correct:'5 題', wrong:['1 題','3 題','10 題'], exp:'洞天先規劃總題數與題目結構，之後固定每 5 題生成一批。' },
-      { id:'TUT-006', difficulty:'medium', subject:'洞天教學', q:'為什麼後一批生成題目時會把先前題目加入 prompt？', correct:'降低題目重複或近義重複', wrong:['讓答案全部相同','增加洞天公開機率','跳過 AI 複核'], exp:'每一批都看得到前面已生成的完整題目，才能避免重複考完全相同的內容。' },
-      { id:'TUT-007', difficulty:'medium', subject:'洞天教學', q:'一般洞天至少會有多少題？', correct:'10 題', wrong:['3 題','5 題','8 題'], exp:'一般洞天至少 10 題；目前少量 10 題，中量 15～20 題，大量 25～30 題。' },
-      { id:'TUT-008', difficulty:'medium', subject:'洞天教學', q:'首次完整通關洞天時，靈石獎勵如何變化？', correct:'題數越多，靈石越多', wrong:['題數越多，靈石越少','永遠只有 100 靈石','完全不給靈石'], exp:'首次完整通關每題對應 100 靈石，最低保底 1000 靈石。' },
-      { id:'TUT-009', difficulty:'medium', subject:'洞天教學', q:'洞天首次完整通關的修為與什麼有關？', correct:'答對的題數', wrong:['洞天主人的名稱長度','圖片張數','刪除洞天的次數'], exp:'首次完整通關依答對題數給修為：每答對 5 題增加 1 修為；至少答對 1 題就有 1 修為。' },
-      { id:'TUT-010', difficulty:'easy', subject:'洞天教學', q:'自己建立的洞天要到哪裡重新遊玩或刪除？', correct:'洞府中的「我的洞天」', wrong:['登入頁面','鬥法配對畫面','題目回報紀錄'], exp:'「我的洞天」會列出自己的洞天，可重新進入、管理題目或徹底刪除。' }
-    ];
-  }
-
-  async function ensureTutorialSampleDongtian() {
-    if (!uid()) throw new Error('尚未登入');
-    const own = await getDocs(query(collection(db, INDEX_COLLECTION), where('ownerUid', '==', uid())));
-    const existing = own.docs.find((entry) => entry.data()?.tutorialOnly === true);
-    if (existing) {
-      const full = await getDoc(doc(db, DATA_COLLECTION, existing.id));
-      if (full.exists()) {
-        state.listLoaded = false;
-        await loadOwnDongtians(true);
-        return { id: existing.id, ...full.data() };
-      }
-    }
-
-    const user = userData() || {};
-    const questions = tutorialSampleQuestions();
-    const fullRef = doc(collection(db, DATA_COLLECTION));
-    const id = fullRef.id;
-    const now = Date.now();
-    const level = user?.profile?.educationLevel || '國中一年級';
-    const metadata = {
-      ownerUid: uid(),
-      ownerName: window.getPlayerDisplayName?.(user, auth.currentUser?.displayName || '無名修士') || user.displayName || auth.currentUser?.displayName || '無名修士',
-      name: '引道小洞天',
-      level,
-      levelOrder: Math.max(0, levelOrder(level)),
-      difficulty: 'easy',
-      subject: '洞天教學',
-      questionCount: questions.length,
-      knowledgePoints: ['洞天入口','建立洞天','題量','單選題','分批生成','通關獎勵','洞天管理'],
-      coverageSummary: '煉氣五層教學專用範例，只對本人顯示，不會進入其他修士的洞天遭遇池。',
-      sourceImageCount: 0,
-      status: 'tutorial',
-      visibility: 'private',
+  function newbieDongtianDemoDefinition() {
+    const player = userData() || {};
+    const ownerName = window.getPlayerDisplayName?.(player, auth.currentUser?.displayName || '新手修士') || player.displayName || auth.currentUser?.displayName || '新手修士';
+    const playerLevel = player?.profile?.educationLevel || '國中一年級';
+    return {
+      id: 'newbie-private-dongtian-demo',
       tutorialOnly: true,
+      private: true,
+      status: 'active',
+      ownerUid: uid(),
+      ownerName,
+      name: '青雲入門洞天',
+      level: playerLevel,
+      levelOrder: Math.max(0, levelOrder(playerLevel)),
+      difficulty: 'easy',
+      subject: '綜合',
+      questionCount: 3,
+      coverageSummary: '新手教學專用的縮短版洞天，只存在於你的瀏覽器本次教學中。',
+      knowledgePoints: ['洞天固定題序', '單選作答', '題解與通關'],
       playCount: 0,
       completionCount: 0,
-      createdAt: serverTimestamp(),
-      createdAtMs: now
+      questions: [
+        { id:'TUTORIAL-DT-001', difficulty:'easy', subject:'數學', q:'洞天教學：2 + 3 等於多少？', correct:'5', wrong:['4','6','7'], exp:'2 加 3 等於 5。洞天每一題答完後都會顯示解析，再前往下一境。' },
+        { id:'TUTORIAL-DT-002', difficulty:'easy', subject:'自然', q:'水在一般標準大氣壓下，攝氏 0 度附近會發生哪一種相變？', correct:'凝固', wrong:['沸騰','昇華','汽化'], exp:'液態水降到凝固點附近會轉變成固態冰，這個過程叫凝固。' },
+        { id:'TUTORIAL-DT-003', difficulty:'easy', subject:'英文', q:'英文單字 “book” 最常見的中文意思是什麼？', correct:'書', wrong:['桌子','門','水'], exp:'book 作名詞時最常見的意思是「書」。正式洞天會依建立素材產生固定題序。' }
+      ]
     };
-    const batch = writeBatch(db);
-    batch.set(fullRef, { ...metadata, questions });
-    batch.set(doc(db, INDEX_COLLECTION, id), metadata);
-    await batch.commit();
-    state.listLoaded = false;
-    await loadOwnDongtians(true);
-    window.dispatchEvent(new CustomEvent('dongtian:tutorial-sample-created', { detail: { id } }));
-    return { id, ...metadata, questions };
   }
 
-  async function deleteOwnedDongtian(id, options = {}) {
-    if (!uid()) throw new Error('尚未登入');
-    const key = String(id || '').trim();
-    if (!key) throw new Error('洞天 ID 不存在');
-    const [indexSnap, dataSnap] = await Promise.all([
-      getDoc(doc(db, INDEX_COLLECTION, key)),
-      getDoc(doc(db, DATA_COLLECTION, key))
-    ]);
-    const current = indexSnap.exists() ? indexSnap.data() : (dataSnap.exists() ? dataSnap.data() : null);
-    if (!current) throw new Error('洞天資料不存在或已刪除');
-    if (current.ownerUid !== uid()) throw new Error('只有洞天主人可以刪除');
+  function tutorialDongtianCardMarkup(item) {
+    return `<article class="dt-item tutorial-private" data-dt-tutorial-card>
+      <div class="dt-item-top">
+        <div><div class="dt-item-name">${escapeHtml(item.name)}</div><div class="dt-item-meta">${escapeHtml(item.coverageSummary)}</div></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">
+          <button type="button" class="dt-play" data-dt-tutorial-play><i class="fa-solid fa-play"></i> 進入範例</button>
+          <button type="button" class="dt-delete" data-dt-tutorial-delete><i class="fa-solid fa-trash"></i> 刪除範例</button>
+        </div>
+      </div>
+      <div class="dt-tags"><span class="dt-tag dt-private-badge">教學專用 · 不公開</span><span class="dt-tag">${escapeHtml(item.level)}</span><span class="dt-tag">簡單</span><span class="dt-tag">縮短版 3 題</span></div>
+      <div class="dt-owner-reward">正式洞天至少 10 題；這座範例只用來學操作，不會公開、不會留下遊玩紀錄，也不會發放靈石或材料。</div>
+    </article>`;
+  }
 
-    if (!options.skipConfirm) {
-      const ok = window.confirm(`確定刪除洞天「${current.name || '無名洞天'}」嗎？\n\n洞天本體會從「我的洞天」移除，其他修士也不會再遇到它。此動作不可復原。`);
-      if (!ok) return false;
+  function prepareNewbieDongtianDemo() {
+    mount();
+    if (!state.tutorialDemo) state.tutorialDemo = newbieDongtianDemoDefinition();
+    state.tutorialDemoCompleted = false;
+    state.listLoaded = false;
+    if (document.getElementById('dt-list')) loadOwnDongtians(true);
+    window.dispatchEvent(new CustomEvent('newbie:dongtian-demo-ready', { detail: { id: state.tutorialDemo.id } }));
+    return JSON.parse(JSON.stringify(state.tutorialDemo));
+  }
+
+  async function startNewbieDongtianDemo() {
+    const demo = state.tutorialDemo || prepareNewbieDongtianDemo();
+    if (state.session) throw new Error('目前已有進行中的洞天');
+    await enterDongtian(demo, { source: 'tutorial', tutorialOnly: true, encountered: false, alreadyEncountered: true });
+  }
+
+  function deleteNewbieDongtianDemo(options = {}) {
+    if (state.session?.tutorialOnly) {
+      state.session = null;
+      document.getElementById('dongtian-overlay')?.remove();
     }
+    const existed = !!state.tutorialDemo;
+    state.tutorialDemo = null;
+    state.tutorialDemoCompleted = false;
+    state.listLoaded = false;
+    if (document.getElementById('dt-list')) loadOwnDongtians(true);
+    if (existed) {
+      window.dispatchEvent(new CustomEvent('newbie:dongtian-demo-deleted'));
+      if (!options.silent) toast('教學範例洞天已刪除；沒有任何公開資料需要清理。');
+    }
+  }
+
+  async function deleteOwnedDongtian(dongtianId) {
+    const id = String(dongtianId || '').trim();
+    if (!uid() || !id) throw new Error('洞天資料不完整');
+    const dataRef = doc(db, DATA_COLLECTION, id);
+    const indexRef = doc(db, INDEX_COLLECTION, id);
+    const full = await getDoc(dataRef);
+    if (!full.exists()) throw new Error('洞天資料不存在');
+    const dongtian = { id: full.id, ...full.data() };
+    if (dongtian.ownerUid !== uid()) throw new Error('只有洞天主人可以刪除');
+    if (!window.confirm(`確定刪除洞天「${dongtian.name || '無名洞天'}」？\n\n刪除後不再公開，也無法復原。`)) return false;
+
+    const [plays, reports] = await Promise.all([
+      getDocs(query(collection(db, PLAY_COLLECTION), where('dongtianId', '==', id), limit(440))),
+      getDocs(query(collection(db, REPORT_COLLECTION), where('dongtianId', '==', id), limit(40)))
+    ]);
+    if (plays.size >= 440 || reports.size >= 40) throw new Error('此洞天歷史資料過多，為避免只刪除一部分，請聯絡管理員處理');
 
     const batch = writeBatch(db);
-    batch.delete(doc(db, INDEX_COLLECTION, key));
-    batch.delete(doc(db, DATA_COLLECTION, key));
-    // 自己的遊玩狀態可一併清除；其他玩家既有歷史紀錄保留為過往學習紀錄。
-    batch.delete(doc(db, PLAY_COLLECTION, `${uid()}__${key}`));
+    batch.delete(dataRef);
+    batch.delete(indexRef);
+    plays.docs.forEach((entry) => batch.delete(entry.ref));
+    reports.docs.forEach((entry) => batch.delete(entry.ref));
     await batch.commit();
+
     state.listLoaded = false;
     await loadOwnDongtians(true);
-    toast(`已刪除洞天「${current.name || '無名洞天'}」`);
-    window.dispatchEvent(new CustomEvent('dongtian:deleted', {
-      detail: { id: key, tutorialOnly: current.tutorialOnly === true, name: current.name || '' }
-    }));
+    toast(`已刪除洞天「${dongtian.name || '無名洞天'}」`);
+    window.dispatchEvent(new CustomEvent('dongtian:deleted', { detail: { id, name: dongtian.name || '' } }));
     return true;
   }
 
@@ -445,29 +456,30 @@ import {
       const snap = await getDocs(query(collection(db, INDEX_COLLECTION), where('ownerUid', '==', uid())));
       const items = snap.docs.map((entry) => ({ id: entry.id, ...entry.data() })).sort((a, b) => Number(b.createdAtMs || 0) - Number(a.createdAtMs || 0));
       state.listLoaded = true;
-      if (!items.length) {
+      const tutorialMarkup = state.tutorialDemo ? tutorialDongtianCardMarkup(state.tutorialDemo) : '';
+      if (!items.length && !tutorialMarkup) {
         list.innerHTML = '<div class="dt-empty">你還沒有開闢洞天。上傳圖片或貼上文字，就能把想練的內容煉成一座知識秘境。</div>';
         return;
       }
-      list.innerHTML = items.map((item) => {
+      list.innerHTML = tutorialMarkup + items.map((item) => {
         const suspended = item.status === 'suspended';
-        const tutorialOnly = item.tutorialOnly === true;
-        const actions = suspended
-          ? `<button type="button" class="dt-repair" data-dt-repair="${item.id}"><i class="fa-solid fa-screwdriver-wrench"></i> 修復題目</button>`
-          : `<button type="button" class="dt-play" data-dt-play="${item.id}"><i class="fa-solid fa-play"></i> 進入</button>${tutorialOnly ? '' : `<button type="button" class="dt-repair" data-dt-manage="${item.id}"><i class="fa-solid fa-pen-ruler"></i> 題目管理</button>`}`;
         return `
-        <article class="dt-item ${suspended ? 'suspended' : ''} ${tutorialOnly ? 'tutorial-private' : ''}" data-dt-item="${item.id}">
+        <article class="dt-item ${suspended ? 'suspended' : ''}">
           <div class="dt-item-top">
             <div><div class="dt-item-name">${escapeHtml(item.name)}</div><div class="dt-item-meta">${escapeHtml(item.coverageSummary || '固定題序知識秘境')}</div></div>
-            <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">${actions}<button type="button" class="dt-delete" data-dt-delete="${item.id}"><i class="fa-solid fa-trash"></i> 刪除</button></div>
+            ${suspended
+              ? `<div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end"><button type="button" class="dt-repair" data-dt-repair="${item.id}"><i class="fa-solid fa-screwdriver-wrench"></i> 修復題目</button><button type="button" class="dt-delete" data-dt-delete="${item.id}"><i class="fa-solid fa-trash"></i> 刪除</button></div>`
+              : `<div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end"><button type="button" class="dt-play" data-dt-play="${item.id}"><i class="fa-solid fa-play"></i> 進入</button><button type="button" class="dt-repair" data-dt-manage="${item.id}"><i class="fa-solid fa-pen-ruler"></i> 題目管理</button><button type="button" class="dt-delete" data-dt-delete="${item.id}"><i class="fa-solid fa-trash"></i> 刪除</button></div>`}
           </div>
-          <div class="dt-tags"><span class="dt-tag">${escapeHtml(item.level)}</span><span class="dt-tag">${difficultyLabel(item.difficulty)}</span><span class="dt-tag">${escapeHtml(item.subject)}</span><span class="dt-tag">${Number(item.questionCount) || 0} 題</span><span class="dt-tag">完成 ${Number(item.completionCount) || 0} 次</span>${tutorialOnly ? '<span class="dt-tag dt-status-private">教學專用 · 不公開</span>' : ''}${suspended ? '<span class="dt-tag dt-status-bad">已封印 · 待修復</span>' : ''}</div>
-          <div class="dt-owner-reward">${tutorialOnly ? '這座範例洞天只供你練習，不會進入其他修士的遭遇池。完成教學後請親自刪除。' : (suspended ? `AI 已確認第 ${Number(item.flaggedQuestionIndex || 0) + 1} 題有誤；修復通過二次 AI 驗證前，其他修士不會再遇到此洞天。` : `其他不同修士首次完成：洞天主人 +${OWNER_CULTIVATION_REWARD} 修為、+${OWNER_GOLD_REWARD} 金幣 · 玩家首次完整通關依題數獲得靈石；首次通關修為依答對題數計算`)}</div>
+          <div class="dt-tags"><span class="dt-tag">${escapeHtml(item.level)}</span><span class="dt-tag">${difficultyLabel(item.difficulty)}</span><span class="dt-tag">${escapeHtml(item.subject)}</span><span class="dt-tag">${Number(item.questionCount) || 0} 題</span><span class="dt-tag">完成 ${Number(item.completionCount) || 0} 次</span>${suspended ? '<span class="dt-tag dt-status-bad">已封印 · 待修復</span>' : ''}</div>
+          <div class="dt-owner-reward">${suspended ? `AI 已確認第 ${Number(item.flaggedQuestionIndex || 0) + 1} 題有誤；修復通過二次 AI 驗證前，其他修士不會再遇到此洞天。` : `其他不同修士首次完成：洞天主人 +${OWNER_CULTIVATION_REWARD} 修為、+${OWNER_GOLD_REWARD} 金幣 · 玩家首次完整通關依題數獲得靈石（每題 ${FIRST_COMPLETION_SPIRIT_STONE_PER_QUESTION}，最低 ${FIRST_COMPLETION_MIN_SPIRIT_STONES}）`}</div>
         </article>`;
       }).join('');
     } catch (error) {
       console.warn('[Dongtian list]', error);
-      list.innerHTML = '<div class="dt-empty">洞天名冊暫時無法讀取。</div>';
+      list.innerHTML = state.tutorialDemo
+        ? tutorialDongtianCardMarkup(state.tutorialDemo) + '<div class="dt-empty">正式洞天名冊暫時無法讀取，但教學私有範例仍可正常使用。</div>'
+        : '<div class="dt-empty">洞天名冊暫時無法讀取。</div>';
     }
   }
 
@@ -544,7 +556,7 @@ import {
       const owner = dongtian.ownerName || '無名修士';
       const questionCount = dongtian.questions?.length || dongtian.questionCount || 0;
       const firstReward = firstCompletionSpiritStones(questionCount);
-      overlay.innerHTML = `<div class="dt-encounter"><div class="dt-portal"></div><div class="dt-encounter-copy"><span>天地異象 · 發現洞天</span><h2>${escapeHtml(dongtian.name)}</h2><p><strong style="color:#eadcff">此洞天由「${escapeHtml(owner)}」開闢。</strong><br>你感應到這座知識秘境。每位修士只會遇見同一座洞天一次，是否現在進入？</p><div style="margin:14px auto;max-width:520px;padding:12px;border:1px solid rgba(205,154,255,.18);border-radius:14px;background:rgba(0,0,0,.2);font-size:9px;line-height:1.8;color:#bca9c4;text-align:left"><strong style="color:#eadcff">洞天主人：</strong>${escapeHtml(owner)}<br><strong>程度：</strong>${escapeHtml(dongtian.level)}　<strong>難度：</strong>${difficultyLabel(dongtian.difficulty)}<br><strong>科目：</strong>${escapeHtml(dongtian.subject)}　<strong>題數：</strong>${questionCount}<br><strong style="color:#dfbdf5">首次完整通關：</strong>+${firstReward.toLocaleString()} 靈石<br><strong style="color:#c4b5fd">首次修為：</strong>每答對 ${FIRST_COMPLETION_CULTIVATION_CORRECT_STEP} 題 +1（答對至少 1 題保底 +1）</div><div style="display:flex;gap:9px;justify-content:center;flex-wrap:wrap"><button id="dt-decline-encounter" class="dt-back" type="button">略過洞天，繼續一般修行</button><button id="dt-enter-encounter" class="dt-next" style="width:auto;padding:0 20px;margin:0" type="button">進入洞天</button></div></div></div>`;
+      overlay.innerHTML = `<div class="dt-encounter"><div class="dt-portal"></div><div class="dt-encounter-copy"><span>天地異象 · 發現洞天</span><h2>${escapeHtml(dongtian.name)}</h2><p><strong style="color:#eadcff">此洞天由「${escapeHtml(owner)}」開闢。</strong><br>你感應到這座知識秘境。每位修士只會遇見同一座洞天一次，是否現在進入？</p><div style="margin:14px auto;max-width:520px;padding:12px;border:1px solid rgba(205,154,255,.18);border-radius:14px;background:rgba(0,0,0,.2);font-size:9px;line-height:1.8;color:#bca9c4;text-align:left"><strong style="color:#eadcff">洞天主人：</strong>${escapeHtml(owner)}<br><strong>程度：</strong>${escapeHtml(dongtian.level)}　<strong>難度：</strong>${difficultyLabel(dongtian.difficulty)}<br><strong>科目：</strong>${escapeHtml(dongtian.subject)}　<strong>題數：</strong>${questionCount}<br><strong style="color:#dfbdf5">首次完整通關：</strong>+${firstReward.toLocaleString()} 靈石</div><div style="display:flex;gap:9px;justify-content:center;flex-wrap:wrap"><button id="dt-decline-encounter" class="dt-back" type="button">略過洞天，繼續一般修行</button><button id="dt-enter-encounter" class="dt-next" style="width:auto;padding:0 20px;margin:0" type="button">進入洞天</button></div></div></div>`;
       document.getElementById('dt-enter-encounter').onclick = () => { overlay.remove(); resolve(true); };
       document.getElementById('dt-decline-encounter').onclick = () => { overlay.remove(); resolve(false); };
     });
@@ -561,12 +573,16 @@ import {
 
   async function enterDongtian(dongtian, options = {}) {
     if (!dongtian?.questions?.length || state.session) return;
-    if (!isPlayableDongtianStatus(dongtian)) { toast('此洞天已封印，等待主人修復。'); return; }
-    if (options.encountered) await markEncountered(dongtian);
-    else if (!options.alreadyEncountered) updateDoc(doc(db, INDEX_COLLECTION, dongtian.id), { playCount: increment(1) }).catch(() => {});
+    const tutorialOnly = options.tutorialOnly === true || dongtian.tutorialOnly === true;
+    if (dongtian.status && dongtian.status !== 'active') { toast('此洞天已封印，等待主人修復。'); return; }
+    if (!tutorialOnly) {
+      if (options.encountered) await markEncountered(dongtian);
+      else if (!options.alreadyEncountered) updateDoc(doc(db, INDEX_COLLECTION, dongtian.id), { playCount: increment(1) }).catch(() => {});
+    }
     state.session = {
       dongtian,
       source: options.source || 'owner',
+      tutorialOnly,
       runId: `${uid()}_${dongtian.id}_${Date.now().toString(36)}`,
       index: 0,
       answers: [],
@@ -574,11 +590,9 @@ import {
       logged: false,
       startedAt: Date.now()
     };
-    window.dispatchEvent(new CustomEvent('dongtian:session-start', {
-      detail: { id: dongtian.id, tutorialOnly: dongtian.tutorialOnly === true, source: state.session.source }
-    }));
     showEncounterAnimation();
-    setTimeout(() => { if (state.session?.dongtian.id === dongtian.id) renderRunner(); }, 2450);
+    if (tutorialOnly) window.dispatchEvent(new CustomEvent('newbie:dongtian-demo-started'));
+    setTimeout(() => { if (state.session?.dongtian.id === dongtian.id) renderRunner(); }, tutorialOnly ? 700 : 2450);
   }
 
   function ensureOverlay() {
@@ -595,7 +609,7 @@ import {
   function showEncounterAnimation() {
     const s = state.session;
     const overlay = ensureOverlay();
-    overlay.innerHTML = `<div class="dt-encounter"><div class="dt-portal"></div><div class="dt-encounter-copy"><span>${s.source === 'encounter' ? '天地異象 · DONGTIAN ENCOUNTERED' : '洞天開啟 · ENTER SECRET REALM'}</span><h2>${escapeHtml(s.dongtian.name)}</h2><p>靈識已鎖定此洞天。進入後題序固定，除非主動退出或重新整理，否則不會切換成其他題目。</p><b>${escapeHtml(s.dongtian.level)} · ${difficultyLabel(s.dongtian.difficulty)} · ${escapeHtml(s.dongtian.subject)} · ${s.dongtian.questions.length} 題</b></div></div>`;
+    overlay.innerHTML = `<div class="dt-encounter"><div class="dt-portal"></div><div class="dt-encounter-copy"><span>${s.tutorialOnly ? '教學專用 · PRIVATE DEMO' : (s.source === 'encounter' ? '天地異象 · DONGTIAN ENCOUNTERED' : '洞天開啟 · ENTER SECRET REALM')}</span><h2>${escapeHtml(s.dongtian.name)}</h2><p>靈識已鎖定此洞天。進入後題序固定，除非主動退出或重新整理，否則不會切換成其他題目。</p><b>${escapeHtml(s.dongtian.level)} · ${difficultyLabel(s.dongtian.difficulty)} · ${escapeHtml(s.dongtian.subject)} · ${s.dongtian.questions.length} 題</b></div></div>`;
   }
 
   function renderRunner() {
@@ -607,7 +621,7 @@ import {
     s.answered = false;
     const optionObjects = shuffle([{ text: q.correct, correct: true }, ...(q.wrong || []).map((text) => ({ text, correct: false }))]);
     s.currentOptions = optionObjects;
-    overlay.innerHTML = `<main class="dt-runner"><header class="dt-run-head"><div><small>洞天試煉 · FIXED SEQUENCE</small><strong>${escapeHtml(s.dongtian.name)}</strong></div><button id="dt-exit" class="dt-exit" type="button" aria-label="退出洞天"><i class="fa-solid fa-door-open"></i></button></header><div class="dt-run-meta"><div><span>題序</span><b>${s.index + 1} / ${s.dongtian.questions.length}</b></div><div><span>科目</span><b>${escapeHtml(q.subject || s.dongtian.subject)}</b></div><div><span>難度</span><b>${difficultyLabel(q.difficulty)}</b></div></div><div class="dt-progress"><i style="width:${((s.index) / s.dongtian.questions.length) * 100}%"></i></div><section class="dt-question"><div class="dt-question-title-row"><h3>${escapeHtml(q.q)}</h3></div><div id="dt-options" class="dt-options">${optionObjects.map((option, index) => `<button class="dt-option" type="button" data-dt-answer="${index}"><span>${String.fromCharCode(65 + index)}</span><b>${escapeHtml(option.text)}</b></button>`).join('')}</div><div id="dt-explain-slot"></div></section></main>`;
+    overlay.innerHTML = `<main class="dt-runner"><header class="dt-run-head"><div><small>${s.tutorialOnly ? '教學範例 · 不公開 · 不計獎勵' : '洞天試煉 · FIXED SEQUENCE'}</small><strong>${escapeHtml(s.dongtian.name)}</strong></div><button id="dt-exit" class="dt-exit" type="button" aria-label="退出洞天"><i class="fa-solid fa-door-open"></i></button></header><div class="dt-run-meta"><div><span>題序</span><b>${s.index + 1} / ${s.dongtian.questions.length}</b></div><div><span>科目</span><b>${escapeHtml(q.subject || s.dongtian.subject)}</b></div><div><span>難度</span><b>${difficultyLabel(q.difficulty)}</b></div></div><div class="dt-progress"><i style="width:${((s.index) / s.dongtian.questions.length) * 100}%"></i></div><section class="dt-question"><div class="dt-question-title-row"><h3>${escapeHtml(q.q)}</h3></div><div id="dt-options" class="dt-options">${optionObjects.map((option, index) => `<button class="dt-option" type="button" data-dt-answer="${index}"><span>${String.fromCharCode(65 + index)}</span><b>${escapeHtml(option.text)}</b></button>`).join('')}</div><div id="dt-explain-slot"></div></section></main>`;
     overlay.querySelector('#dt-exit').onclick = exitDongtian;
     overlay.querySelectorAll('[data-dt-answer]').forEach((button) => button.onclick = () => answerDongtian(Number(button.dataset.dtAnswer)));
     try { window.MathJax?.typesetPromise?.([overlay]); } catch (_) {}
@@ -641,7 +655,12 @@ import {
     });
     const slot = document.getElementById('dt-explain-slot');
     slot.innerHTML = `<div class="dt-explain"><strong style="color:${isCorrect ? '#86efac' : '#fca5a5'}">${isCorrect ? '答對 · 靈機相合' : '答錯 · 參悟解析'}</strong><br>${escapeHtml(q.exp)}</div><div class="dt-answer-actions"><button id="dt-report-question" class="dt-report-question" type="button"><i class="fa-solid fa-triangle-exclamation"></i> 問題回報</button><button id="dt-next" type="button" class="dt-next">${s.index + 1 >= s.dongtian.questions.length ? '完成洞天' : '前往下一境'}</button></div>`;
-    document.getElementById('dt-report-question').onclick = openQuestionReport;
+    document.getElementById('dt-report-question').onclick = s.tutorialOnly
+      ? () => toast('教學範例不會送出回報；正式洞天答題後可在這裡回報錯題。')
+      : openQuestionReport;
+    if (s.tutorialOnly) {
+      window.dispatchEvent(new CustomEvent('newbie:dongtian-demo-question-answered', { detail: { index: s.index, isCorrect } }));
+    }
     document.getElementById('dt-next').onclick = async () => {
       if (!(await ensureSessionDongtianActive())) return;
       if (s.index + 1 >= s.dongtian.questions.length) finishDongtian();
@@ -662,17 +681,11 @@ import {
   async function ensureSessionDongtianActive() {
     const s = state.session;
     if (!s) return false;
+    if (s.tutorialOnly) return true;
     try {
       const snap = await getDoc(doc(db, INDEX_COLLECTION, s.dongtian.id));
-      if (snap.exists()) {
-        const live = { id: snap.id, ...snap.data() };
-        if (!isPlayableDongtianStatus(live)) {
-          await sealCurrentSession('此洞天剛被 AI 確認有錯並已封印，等待洞天主人修復。');
-          return false;
-        }
-      }
-      if (!snap.exists()) {
-        await sealCurrentSession('此洞天已被刪除，本次試煉停止。');
+      if (snap.exists() && snap.data()?.status !== 'active') {
+        await sealCurrentSession('此洞天剛被 AI 確認有錯並已封印，等待洞天主人修復。');
         return false;
       }
     } catch (error) {
@@ -1000,18 +1013,24 @@ import {
     const total = s.dongtian.questions.length;
     const accuracy = total ? correct / total : 0;
     const tier = rewardTier(accuracy);
+
+    if (s.tutorialOnly) {
+      state.tutorialDemoCompleted = true;
+      const overlay = ensureOverlay();
+      overlay.innerHTML = `<div class="dt-result" data-dt-tutorial-result><div class="dt-result-seal">習</div><h2>${escapeHtml(s.dongtian.name)} · 教學通關</h2><p>你已走完整個洞天流程：固定題序 → 單選作答 → 查看解析 → 前往下一境 → 完成結算。</p><div class="dt-result-grid"><div><span>答對</span><b>${correct} / ${total}</b></div><div><span>正確率</span><b>${Math.round(accuracy * 100)}%</b></div><div><span>公開狀態</span><b>不公開</b></div></div><div class="dt-reward"><strong style="color:#93c5fd">教學範例不發正式獎勵</strong><br>正式洞天至少 10 題；首次完整通關會依題數取得靈石，每題 100、最低 1000。</div><button id="dt-back" class="dt-back" type="button">返回「我的洞天」</button></div>`;
+      document.getElementById('dt-back').onclick = closeAfterSession;
+      window.dispatchEvent(new CustomEvent('newbie:dongtian-demo-completed', { detail: { correct, total } }));
+      return;
+    }
+
     const firstCompletionReward = firstCompletionSpiritStones(total);
-    const firstCompletionCultivationReward = firstCompletionCultivation(correct);
     const firstCompletion = await completeProgress(s, correct, total, tier).catch((error) => {
       console.warn('[Dongtian completion]', error);
       return false;
     });
     await writeDongtianHistory(s, true, correct, total, tier).catch(() => {});
     const overlay = ensureOverlay();
-    overlay.innerHTML = `<div class="dt-result"><div class="dt-result-seal">天</div><h2>${escapeHtml(s.dongtian.name)} · 通關</h2><p>這次洞天題序已全部走完。首次完整通關除了靈石，也會依答對題數增長修為。</p><div class="dt-result-grid"><div><span>答對</span><b>${correct} / ${total}</b></div><div><span>正確率</span><b>${Math.round(accuracy * 100)}%</b></div><div><span>機緣評級</span><b>${escapeHtml(tier.replace('洞天機緣', ''))}</b></div></div><div class="dt-reward">${firstCompletion ? `<strong style="color:#dfbdf5">首次通關洞天獎勵</strong><br>+${firstCompletionReward.toLocaleString()} 靈石 · +${firstCompletionCultivationReward} 修為（每答對 ${FIRST_COMPLETION_CULTIVATION_CORRECT_STEP} 題 +1；答對至少 1 題保底 +1）。` : '此洞天的首次通關紀錄已存在；本次為重遊，不重複領取首次獎勵。'}${s.dongtian.ownerUid !== uid() && firstCompletion ? `<br><br>洞天主人已獲得 +${OWNER_CULTIVATION_REWARD} 修為與 +${OWNER_GOLD_REWARD} 金幣。` : ''}</div><button id="dt-back" class="dt-back" type="button">返回</button></div>`;
-    window.dispatchEvent(new CustomEvent('dongtian:completed', {
-      detail: { id: s.dongtian.id, tutorialOnly: s.dongtian.tutorialOnly === true, firstCompletion, correct, total, cultivationAdded: firstCompletion ? firstCompletionCultivationReward : 0 }
-    }));
+    overlay.innerHTML = `<div class="dt-result"><div class="dt-result-seal">天</div><h2>${escapeHtml(s.dongtian.name)} · 通關</h2><p>這次洞天題序已全部走完。答對率越高，未來洞天獎勵池開放後可對應更好的機緣。</p><div class="dt-result-grid"><div><span>答對</span><b>${correct} / ${total}</b></div><div><span>正確率</span><b>${Math.round(accuracy * 100)}%</b></div><div><span>機緣評級</span><b>${escapeHtml(tier.replace('洞天機緣', ''))}</b></div></div><div class="dt-reward">${firstCompletion ? `<strong style="color:#dfbdf5">首次通關洞天獎勵</strong><br>依 ${total} 題獲得 +${firstCompletionReward.toLocaleString()} 靈石。` : '此洞天的首次通關紀錄已存在；本次為重遊，不重複領取首次獎勵。'}${s.dongtian.ownerUid !== uid() && firstCompletion ? `<br><br>洞天主人已獲得 +${OWNER_CULTIVATION_REWARD} 修為與 +${OWNER_GOLD_REWARD} 金幣。` : ''}</div><button id="dt-back" class="dt-back" type="button">返回</button></div>`;
     document.getElementById('dt-back').onclick = closeAfterSession;
   }
 
@@ -1019,13 +1038,10 @@ import {
     const playRef = doc(db, PLAY_COLLECTION, `${uid()}__${s.dongtian.id}`);
     const indexRef = doc(db, INDEX_COLLECTION, s.dongtian.id);
     const firstCompletionReward = firstCompletionSpiritStones(total);
-    const cultivationReward = firstCompletionCultivation(correct);
     let first = false;
     await runTransaction(db, async (tx) => {
       const [playSnap, indexSnap] = await Promise.all([tx.get(playRef), tx.get(indexRef)]);
-      if (!indexSnap.exists()) throw new Error('洞天已不存在，本次不進行通關結算');
-      const liveDongtian = { id: indexSnap.id, ...indexSnap.data() };
-      if (!isPlayableDongtianStatus(liveDongtian)) throw new Error('洞天已封印，本次不進行通關結算');
+      if (!indexSnap.exists() || indexSnap.data()?.status !== 'active') throw new Error('洞天已封印，本次不進行通關結算');
       const alreadyCompleted = playSnap.exists() && !!playSnap.data()?.completed;
       first = !alreadyCompleted;
       tx.set(playRef, {
@@ -1037,8 +1053,7 @@ import {
       if (!alreadyCompleted) {
         tx.update(indexRef, { completionCount: increment(1) });
         tx.update(doc(db, 'users', uid()), {
-          'stats.gold': increment(firstCompletionReward),
-          'stats.totalScore': increment(cultivationReward)
+          'stats.gold': increment(firstCompletionReward)
         });
         if (s.dongtian.ownerUid && s.dongtian.ownerUid !== uid()) {
           tx.update(doc(db, 'users', s.dongtian.ownerUid), {
@@ -1053,12 +1068,10 @@ import {
       if (data) {
         data.stats = data.stats || {};
         data.stats.gold = Math.max(0, Number(data.stats.gold) || 0) + firstCompletionReward;
-        data.stats.totalScore = Math.max(0, Number(data.stats.totalScore) || 0) + cultivationReward;
       }
       window.updateUIStats?.();
-      window.refreshCultivationRealmUI?.();
       window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', {
-        detail: { source: 'dongtian-first-completion', goldAdded: firstCompletionReward, cultivationAdded: cultivationReward, questionCount: total }
+        detail: { source: 'dongtian-first-completion', goldAdded: firstCompletionReward, questionCount: total }
       }));
     }
     return first;
@@ -1090,26 +1103,27 @@ import {
     const s = state.session;
     if (!s) return;
     if (s.answers.length && !confirm('確定退出洞天？本次剩餘題目將不再繼續。')) return;
-    await writeDongtianHistory(s, false).catch(() => {});
+    if (!s.tutorialOnly) await writeDongtianHistory(s, false).catch(() => {});
     closeAfterSession();
   }
 
   function closeAfterSession() {
-    const finished = state.session ? {
-      id: state.session.dongtian?.id || '',
-      tutorialOnly: state.session.dongtian?.tutorialOnly === true,
-      source: state.session.source
-    } : null;
     const source = state.session?.source;
+    const tutorialOnly = !!state.session?.tutorialOnly;
     state.session = null;
     document.getElementById('dongtian-overlay')?.remove();
-    if (source === 'owner' || source === 'tutorial') {
+    if (source === 'owner' || tutorialOnly) {
       window.switchToPage?.('page-settings');
+      const card = document.getElementById('dongtian-card');
+      const body = document.getElementById('dongtian-body');
+      if (card && body) setCardCollapsed(card, body, false);
       loadOwnDongtians(true);
+      if (tutorialOnly) {
+        setTimeout(() => window.dispatchEvent(new CustomEvent('newbie:dongtian-demo-returned')), 60);
+      }
     } else {
       window.switchToPage?.('page-home');
     }
-    if (finished) window.dispatchEvent(new CustomEvent('dongtian:session-closed', { detail: finished }));
   }
 
   function installQuizEncounterHook() {
@@ -1156,9 +1170,10 @@ import {
     return li;
   };
 
-  window.ensureDongtianTutorialSample = ensureTutorialSampleDongtian;
-  window.deleteOwnedDongtian = deleteOwnedDongtian;
-  window.refreshOwnedDongtians = () => loadOwnDongtians(true);
+  window.prepareNewbieDongtianDemo = prepareNewbieDongtianDemo;
+  window.startNewbieDongtianDemo = startNewbieDongtianDemo;
+  window.deleteNewbieDongtianDemo = deleteNewbieDongtianDemo;
+  window.hasNewbieDongtianDemo = () => !!state.tutorialDemo;
 
   window.openDongtianPanel = function () {
     mount();

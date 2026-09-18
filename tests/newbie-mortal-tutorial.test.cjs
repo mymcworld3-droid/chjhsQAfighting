@@ -52,3 +52,38 @@ test('Dongfu tutorial waits until the player clicks the bottom navigation before
   assert.match(tutorial, /window\.openDongfuSettingsSection\(step\.settingsSection/);
   assert.match(tutorial, /範圍、難度與個人設定都在「洞府」/);
 });
+
+
+test('newbie tutorial teaches the full Dongtian lifecycle without teleporting past the entrance', () => {
+  assert.match(tutorial, /第十一步 · 洞天入口/);
+  assert.match(tutorial, /target: '#dongtian-card \.dongfu-collapse-head, #dongtian-launcher-card \.dt-entry-head'/);
+  assert.match(tutorial, /requiresDongtianOpen: true/);
+  assert.match(tutorial, /圖片或文字都能煉成洞天/);
+  assert.match(tutorial, /少量是 <strong>10 題<\/strong>/);
+  assert.match(tutorial, /中量由 AI 在 <strong>15～20 題<\/strong>/);
+  assert.match(tutorial, /大量由 AI 在 <strong>25～30 題<\/strong>/);
+  assert.match(tutorial, /每 5 題一批/);
+  assert.match(tutorial, /正式洞天每題都是四選一單選題/);
+});
+
+test('newbie tutorial creates a private sample, makes the player finish it, return, and delete it', () => {
+  assert.match(tutorial, /prepareDongtianDemo: true/);
+  assert.match(tutorial, /data-dt-tutorial-card/);
+  assert.match(tutorial, /data-dt-tutorial-play/);
+  assert.match(tutorial, /requiresDongtianStart: true/);
+  assert.match(tutorial, /requiresDongtianComplete: true/);
+  assert.match(tutorial, /requiresDongtianReturn: true/);
+  assert.match(tutorial, /data-dt-tutorial-delete/);
+  assert.match(tutorial, /requiresDongtianDelete: true/);
+  assert.match(tutorial, /newbie:dongtian-demo-started/);
+  assert.match(tutorial, /newbie:dongtian-demo-completed/);
+  assert.match(tutorial, /newbie:dongtian-demo-returned/);
+  assert.match(tutorial, /newbie:dongtian-demo-deleted/);
+  assert.match(tutorial, /教學專用 · 不公開/);
+});
+
+test('newbie tutorial stays above the full-screen Dongtian runner and cleans private demo on skip or completion', () => {
+  assert.match(tutorial, /#newbie-tutorial-layer\{position:fixed;inset:0;z-index:12500/);
+  assert.match(tutorial, /window\.deleteNewbieDongtianDemo\?\.\(\{ silent: true \}\)/);
+  assert.match(tutorial, /function bindDongtianTutorialEvents\(\)/);
+});
