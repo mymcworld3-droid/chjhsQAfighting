@@ -550,6 +550,70 @@ window.logout = () => {
 };
 
 // ==========================================
+// 🚪 遊戲啟動閘門：登入後等所有功能腳本載入完成才進遊戲
+// ==========================================
+function ensureGameStartupGate() {
+    let gate = document.getElementById('game-startup-gate');
+    if (gate) return gate;
+    gate = document.createElement('div');
+    gate.id = 'game-startup-gate';
+    gate.style.cssText = 'position:fixed;inset:0;z-index:30000;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 50% 38%,rgba(216,177,93,.10),transparent 28%),rgba(5,5,5,.97);backdrop-filter:blur(10px)';
+    gate.innerHTML = `
+        <div style="width:min(92vw,420px);padding:28px 24px;border:1px solid rgba(216,177,93,.28);border-radius:24px;background:linear-gradient(145deg,rgba(28,22,12,.98),rgba(8,8,8,.99));box-shadow:0 30px 100px rgba(0,0,0,.62);text-align:center">
+            <div style="width:58px;height:58px;margin:0 auto 16px;display:grid;place-items:center;border:1px solid rgba(216,177,93,.4);border-radius:50%;color:#e5c46f;font-size:22px">道</div>
+            <h3 style="margin:0;color:#f1dfb4;font-size:18px">仙府載入中</h3>
+            <p id="game-startup-gate-text" style="margin:9px 0 0;color:#9b8c70;font-size:10px;line-height:1.7">正在準備玩家資料…</p>
+            <div id="game-startup-gate-error" style="display:none;margin-top:14px">
+                <button type="button" onclick="location.reload()" style="min-height:38px;padding:0 16px;border:1px solid rgba(216,177,93,.38);border-radius:11px;background:rgba(216,177,93,.09);color:#f0d99a;font-size:9px;font-weight:900">重新整理</button>
+            </div>
+        </div>`;
+    document.body.appendChild(gate);
+    return gate;
+}
+
+function showGameStartupGate(message = '正在載入全部功能腳本…') {
+    const gate = ensureGameStartupGate();
+    gate.style.display = 'grid';
+    const text = gate.querySelector('#game-startup-gate-text');
+    if (text) text.textContent = message;
+    const error = gate.querySelector('#game-startup-gate-error');
+    if (error) error.style.display = 'none';
+    document.getElementById('login-screen')?.classList.add('hidden');
+    document.getElementById('bottom-nav')?.classList.add('hidden');
+}
+
+function showGameStartupFailure(message) {
+    const gate = ensureGameStartupGate();
+    const text = gate.querySelector('#game-startup-gate-text');
+    if (text) {
+        text.textContent = message || '部分功能腳本載入失敗，為避免以半套功能開始遊戲，請重新整理後再試。';
+        text.style.color = '#fca5a5';
+    }
+    const error = gate.querySelector('#game-startup-gate-error');
+    if (error) error.style.display = 'block';
+}
+
+function hideGameStartupGate() {
+    document.getElementById('game-startup-gate')?.remove();
+}
+
+async function waitForAllGameScripts() {
+    const deadline = Date.now() + 15000;
+    while (typeof window.waitForXiuxianFeatures !== 'function') {
+        if (Date.now() > deadline) throw new Error('啟動器尚未就緒');
+        await new Promise((resolve) => setTimeout(resolve, 25));
+    }
+    return window.waitForXiuxianFeatures();
+}
+
+window.addEventListener('xiuxian:feature-load-progress', (event) => {
+    const detail = event.detail || {};
+    const text = document.getElementById('game-startup-gate-text');
+    if (!text || !detail.total) return;
+    text.textContent = `正在載入功能腳本… ${Math.min(detail.loaded || 0, detail.total)} / ${detail.total}`;
+});
+
+// ==========================================
 // 🔐 登入狀態監聽 (核心邏輯)
 // ==========================================
 let immortalBoardUnsub = null;
@@ -577,8 +641,7 @@ onAuthStateChanged(auth, async (user) => {
             userInfoEl.innerHTML = `<i class="fa-solid fa-user-astronaut"></i> ${user.displayName || '玩家'}`;
         }
 
-        document.getElementById('login-screen').classList.add('hidden');
-        document.getElementById('bottom-nav').classList.remove('hidden');
+        showGameStartupGate('正在載入玩家資料…');
         document.getElementById('settings-email').innerText = user.email;
 
         injectSocialUI();
@@ -618,7 +681,25 @@ onAuthStateChanged(auth, async (user) => {
                 await setDoc(userRef, currentUserData);
             }
 
-            // 啟動各項監聽服務
+            // 玩家資料先就緒，通知主啟動器載入所有修仙功能模組。
+            showGameStartupGate('正在載入全部功能腳本…');
+            window.dispatchEvent(new CustomEvent('xiuxian:user-data-ready'));
+
+            let featureGateResult;
+            try {
+                featureGateResult = await waitForAllGameScripts();
+            } catch (error) {
+                console.error('[Startup gate]', error);
+                showGameStartupFailure('功能腳本啟動器沒有就緒，請重新整理後再試。');
+                return;
+            }
+            if (!featureGateResult?.ok) {
+                const count = featureGateResult?.failures?.length || 0;
+                showGameStartupFailure(`有 ${count} 個功能腳本載入失敗。為避免半套功能開始遊戲，請重新整理後再試。`);
+                return;
+            }
+
+            // 所有腳本都已成功載入，現在才正式啟動各項監聽與遊戲介面。
             startPresenceSystem();
             startInvitationListener(); 
             listenToSystemCommands();  
@@ -633,11 +714,13 @@ onAuthStateChanged(auth, async (user) => {
                 userInfoEl.innerHTML = `<i class="fa-solid fa-user-astronaut"></i> ${currentUserData.displayName || user.displayName || '玩家'}`;
             }
 
-            // 根據資料完整度導向
+            // 根據資料完整度導向；到這裡才解除啟動遮罩並開始遊戲。
+            hideGameStartupGate();
             if (!currentUserData.profile.educationLevel || currentUserData.profile.educationLevel === "") {
                 switchToPage('page-onboarding'); 
                 document.getElementById('bottom-nav').classList.add('hidden'); 
             } else {
+                document.getElementById('bottom-nav').classList.remove('hidden');
                 switchToPage('page-home');
                 fillBuffer(); 
             }
@@ -654,6 +737,7 @@ onAuthStateChanged(auth, async (user) => {
             userInfoEl.innerText = t('not_logged_in');
         }
 
+        hideGameStartupGate();
         document.getElementById('login-screen').classList.remove('hidden');
         document.getElementById('bottom-nav').classList.add('hidden');
         

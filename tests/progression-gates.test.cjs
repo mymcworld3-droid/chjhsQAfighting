@@ -193,3 +193,26 @@ test('Golden Core roster matches the nine current pills and battle effects', () 
   assert.match(legacy, /resolveGoldenCoreBattleAttack/);
   assert.match(legacy, /resolveGoldenCoreBattleCounter/);
 });
+
+
+test('game waits for every feature script before revealing the playable UI', () => {
+  assert.match(main, /window\.waitForXiuxianFeatures = \(\) => xiuxianFeatureGate/);
+  assert.match(main, /xiuxian:feature-load-progress/);
+  assert.match(main, /if \(failures\.length\)/);
+  assert.match(main, /window\.__xiuxianFeaturesReady = true/);
+  assert.match(main, /new CustomEvent\('xiuxian:user-ready'\)/);
+  assert.match(main, /xiuxian:user-data-ready/);
+
+  assert.match(legacy, /function showGameStartupGate/);
+  assert.match(legacy, /function waitForAllGameScripts/);
+  assert.match(legacy, /window\.dispatchEvent\(new CustomEvent\('xiuxian:user-data-ready'\)\)/);
+  assert.match(legacy, /featureGateResult = await waitForAllGameScripts\(\)/);
+  assert.match(legacy, /if \(!featureGateResult\?\.ok\)/);
+  assert.match(legacy, /hideGameStartupGate\(\)/);
+
+  const waitPos = legacy.indexOf('featureGateResult = await waitForAllGameScripts()');
+  const revealPos = legacy.indexOf("document.getElementById('bottom-nav').classList.remove('hidden')");
+  const homePos = legacy.indexOf("switchToPage('page-home')");
+  assert.ok(waitPos >= 0 && revealPos > waitPos && homePos > waitPos,
+    'bottom navigation and home page are not revealed until all feature modules finish loading');
+});

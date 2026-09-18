@@ -1,5 +1,5 @@
-// 核心登入／遊戲模組必須優先且獨立載入。
-// 任一附加修仙功能載入失敗，都不能再阻斷 Google 登入。
+// 核心登入模組必須優先且獨立載入。
+// Google 登入本身不被附加模組阻斷；登入後的遊戲則必須等所有修仙模組載入成功才開始。
 import './main-legacy.js';
 import './cultivation/dongtian-entry.js';
 
@@ -57,16 +57,46 @@ const XIUXIAN_FEATURE_MODULES = [
 
 let xiuxianFeatureLoadStarted = false;
 let xiuxianReadyTimer = null;
+let resolveXiuxianFeatureGate;
+const xiuxianFeatureGate = new Promise((resolve) => { resolveXiuxianFeatureGate = resolve; });
+
+window.__xiuxianFeaturesReady = false;
+window.waitForXiuxianFeatures = () => xiuxianFeatureGate;
 
 async function loadXiuxianFeaturesSafely() {
-  for (const modulePath of XIUXIAN_FEATURE_MODULES) {
+  const failures = [];
+  const total = XIUXIAN_FEATURE_MODULES.length;
+
+  for (let index = 0; index < total; index += 1) {
+    const modulePath = XIUXIAN_FEATURE_MODULES[index];
+    window.dispatchEvent(new CustomEvent('xiuxian:feature-load-progress', {
+      detail: { loaded: index, total, modulePath }
+    }));
     try {
       await import(modulePath);
     } catch (error) {
+      failures.push(modulePath);
       console.error(`[Xiuxian] Failed to load optional module: ${modulePath}`, error);
     }
+    window.dispatchEvent(new CustomEvent('xiuxian:feature-load-progress', {
+      detail: { loaded: index + 1, total, modulePath }
+    }));
   }
-  window.dispatchEvent(new CustomEvent('xiuxian:features-ready'));
+
+  if (failures.length) {
+    window.__xiuxianFeatureLoadError = failures.slice();
+    const result = { ok: false, total, failures: failures.slice() };
+    resolveXiuxianFeatureGate(result);
+    window.dispatchEvent(new CustomEvent('xiuxian:features-failed', { detail: result }));
+    return;
+  }
+
+  window.__xiuxianFeaturesReady = true;
+  const result = { ok: true, total, failures: [] };
+  window.dispatchEvent(new CustomEvent('xiuxian:features-ready', { detail: result }));
+  // user-ready 僅在所有功能模組都已註冊監聽器後才派發。
+  window.dispatchEvent(new CustomEvent('xiuxian:user-ready'));
+  resolveXiuxianFeatureGate(result);
 }
 
 function cultivationUserDataReady() {
@@ -99,8 +129,8 @@ if (document.readyState === 'loading') {
   startXiuxianFeaturesWhenReady();
 }
 
-// 若未來核心登入流程主動派發 ready event，也能立即開始，不必等下一次輪詢。
-window.addEventListener('xiuxian:user-ready', startXiuxianFeaturesWhenReady);
+// 使用者資料完成後立即開始載入；輪詢仍作為事件遺失時的保險。
+window.addEventListener('xiuxian:user-data-ready', startXiuxianFeaturesWhenReady);
 
 function restoreComputerFont() {
   const fontHref = 'https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap';
