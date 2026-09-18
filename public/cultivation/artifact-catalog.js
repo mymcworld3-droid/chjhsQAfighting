@@ -239,6 +239,22 @@ export function normalizeArtifactDefinition(raw = {}) {
     }).filter((effect) => effect.type) : []
   };
   if (raw.equipSlot) item.equipSlot = String(raw.equipSlot).trim();
+  item.reviewStatus = raw.reviewStatus === 'pending' ? 'pending' : 'approved';
+  item.generatedByAI = raw.generatedByAI === true;
+  if (raw.generatedAtMs) item.generatedAtMs = Math.max(0, Math.floor(finite(raw.generatedAtMs, 0)));
+  if (raw.reviewedAtMs) item.reviewedAtMs = Math.max(0, Math.floor(finite(raw.reviewedAtMs, 0)));
+  if (raw.generationSignature) item.generationSignature = String(raw.generationSignature).trim().slice(0, 512);
+  if (raw.aiProvider) item.aiProvider = String(raw.aiProvider).trim().slice(0, 80);
+  if (raw.aiModel) item.aiModel = String(raw.aiModel).trim().slice(0, 120);
+  if (Array.isArray(raw.generationMaterials)) {
+    item.generationMaterials = raw.generationMaterials.slice(0, 8).map((row) => ({
+      type: row?.type === 'artifact' ? 'artifact' : 'material',
+      id: String(row?.id || '').trim().slice(0, 80),
+      name: String(row?.name || '').trim().slice(0, 80),
+      realm: String(row?.realm || '凡人').trim().slice(0, 20),
+      quantity: Math.max(1, Math.floor(finite(row?.quantity, 1)))
+    })).filter((row) => row.id);
+  }
   return item;
 }
 
