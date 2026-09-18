@@ -380,6 +380,18 @@ window.setupAdminDebug = function() {
 
     if (!consoleDiv || !logContainer) return;
 
+    // 除錯工具永遠是全站最高層。按鈕需高於除錯面板本身，確保任何頁面/Modal 都可開啟或操作。
+    if (showBtn) {
+        showBtn.style.setProperty('position', 'fixed', 'important');
+        showBtn.style.setProperty('z-index', '2147483647', 'important');
+        showBtn.style.setProperty('pointer-events', 'auto', 'important');
+        showBtn.style.setProperty('isolation', 'isolate', 'important');
+    }
+    consoleDiv.style.setProperty('position', 'fixed', 'important');
+    consoleDiv.style.setProperty('z-index', '2147483646', 'important');
+    consoleDiv.style.setProperty('pointer-events', 'auto', 'important');
+    consoleDiv.style.setProperty('isolation', 'isolate', 'important');
+
     // 顯示介面
     consoleDiv.classList.remove('hidden');
     if(showBtn) showBtn.classList.remove('hidden');
