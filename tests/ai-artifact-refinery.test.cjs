@@ -232,3 +232,76 @@ test('pending approval remains clickable and persists only review metadata', () 
   assert.match(approval, /await persistCatalog\(next\)/);
   assert.doesNotMatch(approval, /normalizedRecipes/);
 });
+
+
+test('hidden three-stage refinery progression maps raw materials to parts, then complete gear, then stronger synthesis', () => {
+  assert.equal(api.deriveRefinementStage({
+    selectedIngredients: [{ type:'material', id:'wood', quantity:2 }],
+    existingArtifacts: []
+  }), 1);
+
+  assert.equal(api.deriveRefinementStage({
+    selectedIngredients: [{ type:'artifact', id:'part-a', quantity:1 }, { type:'material', id:'iron', quantity:1 }],
+    existingArtifacts: [{ id:'part-a', refinementDepth:0 }]
+  }), 2);
+
+  assert.equal(api.deriveRefinementStage({
+    selectedIngredients: [{ type:'artifact', id:'weapon-a', quantity:1 }, { type:'material', id:'crystal', quantity:1 }],
+    existingArtifacts: [{ id:'weapon-a', refinementDepth:1 }]
+  }), 3);
+
+  const firstPrompt = api.buildPrompt({
+    targetRealm:'金丹',
+    selectedIngredients:[{ type:'material', id:'wood', name:'靈木', quantity:2 }],
+    allMaterials:[{ id:'wood', name:'靈木', realm:'金丹' }],
+    existingArtifacts:[]
+  });
+  assert.match(firstPrompt, /木材加工成木棍/);
+  assert.match(firstPrompt, /器胚、零件、核心/);
+
+  const secondPrompt = api.buildPrompt({
+    targetRealm:'金丹',
+    selectedIngredients:[{ type:'artifact', id:'part-a', name:'靈刃胚', quantity:1 }, { type:'material', id:'wood', quantity:1 }],
+    allMaterials:[{ id:'wood', name:'靈木', realm:'金丹' }],
+    existingArtifacts:[{ id:'part-a', name:'靈刃胚', realm:'金丹', refinementDepth:0 }]
+  });
+  assert.match(secondPrompt, /完整可用的武器、護具、法器或靈寶/);
+
+  const thirdPrompt = api.buildPrompt({
+    targetRealm:'金丹',
+    selectedIngredients:[{ type:'artifact', id:'weapon-a', name:'青鋒劍', quantity:1 }, { type:'material', id:'wood', quantity:1 }],
+    allMaterials:[{ id:'wood', name:'靈木', realm:'金丹' }],
+    existingArtifacts:[{ id:'weapon-a', name:'青鋒劍', realm:'金丹', refinementDepth:1 }]
+  });
+  assert.match(thirdPrompt, /完成度最高/);
+  assert.match(thirdPrompt, /集結更多彼此協調的特性/);
+});
+
+test('server enforces stronger effects across the three hidden refinement stages', () => {
+  const raw = {
+    name:'測試器',
+    equipSlot:'本命法寶',
+    effects:[
+      { type:'equip_attack_flat', value:99999 },
+      { type:'equip_hp_flat', value:99999 },
+      { type:'equip_damage_percent', value:9 }
+    ]
+  };
+  const first = api.sanitizeGeneratedArtifact(raw, '金丹', 1);
+  const second = api.sanitizeGeneratedArtifact(raw, '金丹', 2);
+  const third = api.sanitizeGeneratedArtifact(raw, '金丹', 3);
+
+  assert.equal(first.effects.length, 1);
+  assert.ok(second.effects.length >= first.effects.length);
+  assert.ok(third.effects.length >= second.effects.length);
+  assert.ok(first.effects[0].value < second.effects[0].value);
+  assert.ok(second.effects[0].value < third.effects[0].value);
+});
+
+test('refinement-stage design rules are sent to AI context but not added to player-facing refinery UI', () => {
+  assert.match(aiJobs, /refinementDepth: artifactRecipeDepth\(item\.id\)/);
+  assert.doesNotMatch(refinery, /木材加工成木棍/);
+  assert.doesNotMatch(refinery, /內部生成規則：第一煉/);
+  assert.doesNotMatch(refinery, /內部生成規則：第三煉/);
+  assert.doesNotMatch(refinery, /完成度最高的一次/);
+});

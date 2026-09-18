@@ -33,6 +33,47 @@ function maxEffectsForRealm(order) {
   return order >= 7 ? 3 : order >= 3 ? 2 : 1;
 }
 
+function normalizeRefinementStage(value) {
+  return Math.max(1, Math.min(3, Math.floor(finite(value, 1))));
+}
+
+function deriveRefinementStage(payload = {}) {
+  const selected = Array.isArray(payload.selectedIngredients) ? payload.selectedIngredients.slice(0, 8) : [];
+  const existingArtifacts = Array.isArray(payload.existingArtifacts) ? payload.existingArtifacts : [];
+  const artifactById = new Map(existingArtifacts.map((item) => [String(item?.id || ''), item]));
+  let stage = 1;
+
+  for (const row of selected) {
+    if (row?.type !== 'artifact') continue;
+    const trusted = artifactById.get(String(row?.id || '').trim());
+    if (!trusted) continue;
+    const sourceDepth = Math.max(0, Math.min(2, Math.floor(finite(trusted.refinementDepth, 0))));
+    stage = Math.max(stage, Math.min(3, sourceDepth + 2));
+  }
+  return stage;
+}
+
+function powerScaleForStage(stage) {
+  return ({ 1: 0.40, 2: 0.72, 3: 1.00 })[normalizeRefinementStage(stage)] || 0.40;
+}
+
+function maxEffectsForGeneration(order, stage) {
+  const normalizedStage = normalizeRefinementStage(stage);
+  const realmMax = maxEffectsForRealm(order);
+  if (normalizedStage === 1) return 1;
+  if (normalizedStage === 2) return Math.min(2, Math.max(1, realmMax));
+  return Math.min(3, Math.max(2, realmMax));
+}
+
+function effectAllowedForStage(type, stage) {
+  const normalizedStage = normalizeRefinementStage(stage);
+  if (normalizedStage === 1) {
+    return !['equip_cheat_death','equip_copy_enemy_artifact','equip_damage_cap_percent','remove_wrong_option'].includes(type);
+  }
+  if (normalizedStage === 2 && type === 'equip_copy_enemy_artifact') return false;
+  return true;
+}
+
 function deriveTargetRealm(payload = {}) {
   const selected = Array.isArray(payload.selectedIngredients) ? payload.selectedIngredients.slice(0, 8) : [];
   const allMaterials = Array.isArray(payload.allMaterials) ? payload.allMaterials : [];
@@ -66,7 +107,7 @@ function minRealmForEffect(type) {
     equip_reflect_percent: 2
   })[type] || 0;
 }
-function sanitizeValue(type, value, order) {
+function sanitizeValue(type, value, order, stage = 1) {
   const caps = {
     equip_attack_flat: 35 + order * 35,
     equip_hp_flat: 160 + order * 180,
@@ -88,18 +129,31 @@ function sanitizeValue(type, value, order) {
     equip_first_hit_reduction_percent: 0.15 + order * 0.035,
     equip_damage_cap_percent: Math.max(0.22, 0.55 - order * 0.025)
   };
-  if (type === 'equip_damage_cap_percent') return clamp(value || caps[type], 0.20, 0.80);
-  return clamp(value, 0, caps[type] ?? 999999);
+  const normalizedStage = normalizeRefinementStage(stage);
+  const scale = powerScaleForStage(normalizedStage);
+  if (type === 'equip_damage_cap_percent') {
+    const base = caps[type];
+    const weakest = 0.80;
+    const stageFloor = base + (weakest - base) * (1 - scale);
+    return clamp(value || stageFloor, stageFloor, 0.80);
+  }
+  return clamp(value, 0, (caps[type] ?? 999999) * scale);
 }
-function sanitizeEffect(raw, order) {
+function sanitizeEffect(raw, order, stage = 1) {
   const type = cleanText(raw?.type, 64);
-  if (!ALLOWED_EFFECTS.has(type) || order < minRealmForEffect(type)) return null;
+  if (!ALLOWED_EFFECTS.has(type) || order < minRealmForEffect(type) || !effectAllowedForStage(type, stage)) return null;
+  const normalizedStage = normalizeRefinementStage(stage);
+  const scale = powerScaleForStage(normalizedStage);
   const out = { type };
   if (type.startsWith('equip_') && !['equip_cheat_death','equip_copy_enemy_artifact'].includes(type)) {
-    out.value = sanitizeValue(type, raw?.value, order);
+    out.value = sanitizeValue(type, raw?.value, order, normalizedStage);
   } else if (type === 'timed_attack_multiplier' || type === 'timed_cultivation_multiplier') {
-    out.multiplier = clamp(raw?.multiplier || 1.25, 1.05, 1.35 + order * 0.06);
-    out.durationMs = Math.round(clamp(raw?.durationMinutes || (5 + order), 2, 5 + order * 2) * 60000);
+    const fullMax = 1.35 + order * 0.06;
+    const stageMax = 1 + (fullMax - 1) * scale;
+    out.multiplier = clamp(raw?.multiplier || (1 + 0.25 * scale), 1.02, stageMax);
+    const fullDuration = 5 + order * 2;
+    const stageDuration = Math.max(2, fullDuration * (0.55 + 0.45 * scale));
+    out.durationMs = Math.round(clamp(raw?.durationMinutes || stageDuration, 2, stageDuration) * 60000);
   } else if (type === 'remove_wrong_option') {
     out.contexts = ['quiz','battle','dongtian'];
     out.perQuestion = 1;
@@ -107,17 +161,20 @@ function sanitizeEffect(raw, order) {
   return out;
 }
 
-function sanitizeGeneratedArtifact(raw, targetRealm) {
+function sanitizeGeneratedArtifact(raw, targetRealm, refinementStage = 1) {
   const realm = REALMS.includes(targetRealm) ? targetRealm : '凡人';
   const order = realmOrder(realm);
-  const requested = Array.isArray(raw?.effects) ? raw.effects.map((e) => sanitizeEffect(e, order)).filter(Boolean) : [];
+  const stage = normalizeRefinementStage(refinementStage);
+  const requested = Array.isArray(raw?.effects) ? raw.effects.map((e) => sanitizeEffect(e, order, stage)).filter(Boolean) : [];
   const wantsEquip = requested.some((effect) => effect.type.startsWith('equip_'));
   let effects = wantsEquip
     ? requested.filter((effect) => effect.type.startsWith('equip_'))
     : requested.filter((effect) => !effect.type.startsWith('equip_'));
-  effects = effects.slice(0, maxEffectsForRealm(order));
+  effects = effects.slice(0, maxEffectsForGeneration(order, stage));
 
-  if (!effects.length) effects = [{ type: 'equip_attack_flat', value: 35 + order * 25 }];
+  if (!effects.length) {
+    effects = [sanitizeEffect({ type: 'equip_attack_flat', value: 35 + order * 25 }, order, stage)].filter(Boolean);
+  }
 
   const equipped = effects.some((effect) => effect.type.startsWith('equip_'));
   const result = {
@@ -143,6 +200,25 @@ function buildPrompt(payload) {
   const adminGenerationPrompt = cleanText(payload.adminGenerationPrompt, 1200);
   const targetRealm = REALMS.includes(payload.targetRealm) ? payload.targetRealm : deriveTargetRealm(payload);
   const order = realmOrder(targetRealm);
+  const refinementStage = deriveRefinementStage(payload);
+  const stageDirections = {
+    1: [
+      '【內部生成規則：第一煉】本次產物應像「木材加工成木棍」：是可繼續加工的器胚、零件、核心、刃胚、握柄、符骨、靈芯、甲片等半成品，而不是完整武器或終極法寶。',
+      '第一煉產物必須有一個清楚可感知、但偏弱的功能或特性；重點是留下可供下一次煉器承接的性質，不要一次完成所有用途。',
+      '名稱與描述要自然呈現它是一件可繼續加工的實體部件，但不要在文字中說「第一煉」「階段一」「低階產物」或解釋系統規則。'
+    ],
+    2: [
+      '【內部生成規則：第二煉】本次應把前一煉的部件與其他素材整合成一件完整可用的武器、護具、法器或靈寶。',
+      '第二煉應有不錯且明確的實戰或修煉功能，並承接投入部件的核心性質；完成度要顯著高於單純零件，但仍保留未來再次精煉、融合更多特性的空間。',
+      '不要在名稱或描述中提到「第二煉」「階段二」「升級層級」等系統資訊。'
+    ],
+    3: [
+      '【內部生成規則：第三煉】本次是三次煉器中完成度最高的一次：把前階成品與新素材的多種特性深度融合成成熟重寶。',
+      '第三煉可集結更多彼此協調的特性，效果組合比前兩次更豐富，數值在同境界硬上限內也可更接近上限；但仍不得突破任何平衡規則。',
+      '產物要像真正完成的強力法寶，不要在名稱或描述中提到「第三煉」「最終階段」「層級三」或任何系統內部規則。'
+    ]
+  };
+  const hiddenStageDirection = stageDirections[refinementStage].join('\n');
   const creativeDirections = [
     '古樸宗門鎮派器：名字沉穩、有歷史感，效果帶有守成或反制意味。',
     '邪異秘境奇器：名字詭譎但不俗氣，效果偏條件觸發、反傷、低血爆發或奇術。',
@@ -158,13 +234,15 @@ function buildPrompt(payload) {
     '請非常有創意，不要只把材料名稱機械拼接。名稱要像真正的修仙法寶，2~8 個中文字為佳；描述要能讓人看出材料之間的意象、性質或衝突如何形成此器。',
     '同一批材料可能蘊含攻擊、防禦、奇術、悟道、護命等方向；請根據素材氣質選擇最有特色的一種，不要每次都只做加攻擊。',
     '本次創意方向：' + creativeDirection,
+    hiddenStageDirection,
+    '上述煉器階段規則只供你內部生成時使用。輸出的 name、description、icon、effects 不得解釋玩家正在第幾次煉器，也不得出現「深度」「套娃」「生成規則」「階段」等系統詞。',
     '名稱要有辨識度，避免大量使用「玄、天、神、靈」作為固定前綴；可使用器型、異象、典故、動作、自然意象來命名。',
     '描述請像法寶誌異條目：說明它如何由這批素材的性質融合而成，以及使用時會出現什麼具體異象。',
     '',
     '硬性規則：',
     '1. 法寶境界已由遊戲鎖定為「' + targetRealm + '」，不得改境界。',
     '2. 只輸出 JSON，不要 Markdown。',
-    '3. 效果只能使用下方允許的 type；' + targetRealm + '最多 ' + maxEffectsForRealm(order) + ' 個效果。',
+    '3. 效果只能使用下方允許的 type；依本次內部煉器階段與境界，最多 ' + maxEffectsForGeneration(order, refinementStage) + ' 個效果。',
     '4. 連擊 equip_combo_chance 絕不可超過 0.10；數值會再由伺服器依境界平衡。',
     '5. 若使用任何 equip_ 效果，equipSlot 從：' + EQUIP_SLOTS.join('、') + ' 選一個。',
     '6. 若做消耗型，只使用 timed_attack_multiplier / timed_cultivation_multiplier / remove_wrong_option。',
@@ -206,9 +284,10 @@ function registerArtifactGenerationApi(app) {
       // 境界永遠由伺服器依投入素材在完整圖鑑中的正式境界重算，忽略前端傳來的 targetRealm。
       const targetRealm = deriveTargetRealm(req.body || {});
       const safePayload = { ...(req.body || {}), targetRealm };
+      const refinementStage = deriveRefinementStage(safePayload);
       const prompt = buildPrompt(safePayload);
       const routed = await aiRouter.generateJSON(prompt, { timeoutMs: 35000 });
-      const artifact = sanitizeGeneratedArtifact(routed.data, targetRealm);
+      const artifact = sanitizeGeneratedArtifact(routed.data, targetRealm, refinementStage);
       res.json({ artifact, provider: routed.provider, model: routed.model });
     } catch (error) {
       console.error('[Artifact Generation API]', error);
@@ -221,5 +300,6 @@ module.exports = registerArtifactGenerationApi;
 module.exports.buildPrompt = buildPrompt;
 module.exports.sanitizeGeneratedArtifact = sanitizeGeneratedArtifact;
 module.exports.deriveTargetRealm = deriveTargetRealm;
+module.exports.deriveRefinementStage = deriveRefinementStage;
 module.exports.REALMS = REALMS;
 module.exports.ALLOWED_EFFECTS = ALLOWED_EFFECTS;

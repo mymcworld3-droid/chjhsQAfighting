@@ -282,7 +282,8 @@ import {
   function apiArtifacts() {
     return ARTIFACT_CATALOG.map((item) => ({
       id: item.id, name: item.name, realm: item.realm, category: item.category,
-      description: item.description, effects: item.effects
+      description: item.description, effects: item.effects,
+      refinementDepth: artifactRecipeDepth(item.id)
     }));
   }
 
