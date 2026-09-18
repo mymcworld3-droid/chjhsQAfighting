@@ -405,26 +405,30 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
 
     const matchNode = content.querySelector('[data-refinery-match]');
     matchNode?.classList.remove('ready', 'error');
+    const plan = matching.length <= 1 ? window.getCultivationRefineryPlan?.(selected, matching[0]?.id || '') : null;
     let prefix = '';
-    let message = '放入材料或法寶後，依各素材數量自動辨識法寶配方。';
-    if (used && matching.length === 1) {
+    let message = '放入 2～8 個素材後即可開爐；未知組合會在完成取出時由 AI 推演新法寶。';
+    if (used && matching.length === 1 && plan?.valid) {
       const item = matching[0];
       matchNode?.classList.add('ready');
-      prefix = '配方吻合：';
-      message = `${item.icon || '◆'} ${item.name} · 煉製深度 ${artifactRecipeDepth(item.id)}/${MAX_ARTIFACT_RECIPE_NESTING} · 將煉製 ×${Math.max(1, Math.floor(Number(item.craft?.yield) || 1))}`;
+      prefix = '既有配方：';
+      message = `${item.icon || '◆'} ${item.name} · 深度 ${artifactRecipeDepth(item.id)}/${MAX_ARTIFACT_RECIPE_NESTING} · 金幣 ${plan.gold} · 約 ${window.formatCultivationRefineryDuration?.(plan.durationMs) || ''}`;
     } else if (used && matching.length > 1) {
       matchNode?.classList.add('error');
       message = '這組素材同時符合多個法寶配方，需由管理員將配方調整為唯一。';
+    } else if (used && plan?.valid) {
+      matchNode?.classList.add('ready');
+      prefix = '未知配方：';
+      message = `AI 將以最高素材境界「${plan.targetRealm}」創造新法寶 · 金幣 ${plan.gold} · 約 ${window.formatCultivationRefineryDuration?.(plan.durationMs) || ''}`;
     } else if (used) {
       matchNode?.classList.add('error');
-      message = '目前素材數量不符合任何法寶配方；格子順序不影響判定。';
+      message = plan?.reason || '煉器至少需要 2 個素材。';
     }
     setText(content.querySelector('[data-refinery-match-prefix]'), prefix);
     setText(content.querySelector('[data-refinery-match-text]'), message);
 
     const clearButton = content.querySelector('[data-refinery-clear]');
     if (clearButton) clearButton.disabled = !used || busy;
-    const plan = matching.length <= 1 ? window.getCultivationRefineryPlan?.(selected, matching[0]?.id || '') : null;
     const craftButton = content.querySelector('[data-refinery-craft]');
     if (craftButton) {
       const ready = !!plan?.valid && matching.length <= 1 && !busy;
