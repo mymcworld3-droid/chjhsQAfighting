@@ -80,18 +80,22 @@ test('generation prompt receives selected ingredients, full material catalog, ex
   assert.match(prompt, /不要只把材料名稱機械拼接/);
 });
 
-test('refinery economy varies with artifact realm, player realm and discovery status', () => {
+test('refinery economy uses qi baseline 10 minutes / 80 gold and varies with player realm gap', () => {
   const economy = loadEconomy();
+  const qi = economy.calculateRefineryEconomy({ targetRealm:'煉氣', playerRealm:'煉氣', discovery:false });
+  const qiDiscovery = economy.calculateRefineryEconomy({ targetRealm:'煉氣', playerRealm:'煉氣', discovery:true });
+  assert.equal(qi.gold, 80);
+  assert.equal(qi.durationMs, 10 * 60 * 1000);
+  assert.equal(qiDiscovery.gold, 80);
+  assert.equal(qiDiscovery.durationMs, 10 * 60 * 1000);
+
   const same = economy.calculateRefineryEconomy({ targetRealm:'元嬰', playerRealm:'元嬰', discovery:false });
   const underRealm = economy.calculateRefineryEconomy({ targetRealm:'元嬰', playerRealm:'築基', discovery:false });
   const overRealm = economy.calculateRefineryEconomy({ targetRealm:'元嬰', playerRealm:'大乘', discovery:false });
-  const discovery = economy.calculateRefineryEconomy({ targetRealm:'元嬰', playerRealm:'元嬰', discovery:true });
   assert.ok(underRealm.gold > same.gold);
   assert.ok(underRealm.durationMs > same.durationMs);
   assert.ok(overRealm.gold < same.gold);
   assert.ok(overRealm.durationMs < same.durationMs);
-  assert.ok(discovery.gold > same.gold);
-  assert.ok(discovery.durationMs > same.durationMs);
 });
 
 test('unknown recipes start a timed paid job and AI runs only when claiming the completed artifact', () => {
@@ -135,14 +139,16 @@ test('same discovered recipe is reused instead of generating duplicate permanent
   assert.match(aiJobs, /if \(!awardedId\) \{/);
 });
 
-test('refinery UI shows countdown, cost, target realm and only enables claim after ready time', () => {
+test('refinery button flow is 煉製 -> 煉製中 -> 開爐 and claim only after ready time', () => {
   assert.match(refinery, /data-refinery-job-clock/);
   assert.match(refinery, /已付金幣/);
   assert.match(refinery, /法寶境界/);
   assert.match(refinery, /Date\.now\(\) >= Number\(job\.readyAtMs/);
-  assert.match(refinery, /ready \? '取出' : '煉製中'/);
+  assert.match(refinery, /const craftLabel = job \? \(jobReady \? '開爐' : '煉製中'\) : '煉製'/);
+  assert.match(refinery, /ready \? '開爐' : '煉製中'/);
+  assert.match(refinery, /可開爐/);
   assert.match(refinery, /setInterval\(updateJobClock, 1000\)/);
-  assert.match(refinery, /未知配方完成後取出時由 AI 創造法寶/);
+  assert.match(refinery, /煉製完成後按「開爐」取出法寶/);
 });
 
 test('admin keeps newest pending AI artifacts above approved realm-sorted artifacts and supports approval', () => {
