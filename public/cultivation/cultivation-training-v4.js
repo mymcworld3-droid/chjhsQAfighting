@@ -472,38 +472,67 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   }
 
   function createTrainingPage() {
-    if (document.getElementById('page-training')) return;
     const home = document.getElementById('page-home');
     if (!home) return;
 
-    const page = document.createElement('div');
-    page.id = 'page-training';
-    page.className = 'page-section hidden px-4 training-page training-page-v3';
-    page.innerHTML = `
-      <div class="training-page-heading-v3">
-        <div><div class="training-eyebrow-v3">INNER ALCHEMY ／ 內丹修行</div><h2>修煉</h2></div>
-        <div class="training-realm-seal-v3">金丹</div>
-      </div>
-      <div class="training-subtabs-v3" role="tablist">
-        <button type="button" class="training-subtab-v3 active" data-training-tab="core"><i class="fa-solid fa-circle-dot"></i><span>金丹</span></button>
-        <button type="button" class="training-subtab-v3" data-training-tab="refinery"><i class="fa-solid fa-hammer"></i><span>煉器</span></button>
-        <button type="button" class="training-subtab-v3" data-training-tab="bag"><i class="fa-solid fa-box-open"></i><span>背包</span></button>
-      </div>
-      <div id="training-tab-content"></div>
-    `;
-    home.insertAdjacentElement('afterend', page);
+    let page = document.getElementById('page-training');
+    if (!page) {
+      page = document.createElement('div');
+      page.id = 'page-training';
+      page.className = 'page-section hidden px-4 training-page training-page-v3';
+      page.innerHTML = `
+        <div class="training-page-heading-v3">
+          <div><div class="training-eyebrow-v3">INNER ALCHEMY ／ 內丹修行</div><h2>修煉</h2></div>
+          <div class="training-realm-seal-v3">金丹</div>
+        </div>
+        <div class="training-subtabs-v3" role="tablist">
+          <button type="button" class="training-subtab-v3 active" data-training-tab="core" aria-selected="true"><i class="fa-solid fa-circle-dot"></i><span>金丹</span></button>
+          <button type="button" class="training-subtab-v3" data-training-tab="refinery" aria-selected="false"><i class="fa-solid fa-hammer"></i><span>煉器</span></button>
+          <button type="button" class="training-subtab-v3" data-training-tab="bag" aria-selected="false"><i class="fa-solid fa-box-open"></i><span>背包</span></button>
+        </div>
+        <div id="training-tab-content"></div>
+      `;
+      home.insertAdjacentElement('afterend', page);
+    }
 
-    page.querySelectorAll('[data-training-tab]').forEach((button) => {
-      button.addEventListener('click', () => {
-        const requested = button.dataset.trainingTab;
-        activeTab = requested === 'bag' ? 'bag' : (requested === 'refinery' ? 'refinery' : 'core');
-        page.querySelectorAll('[data-training-tab]').forEach((tab) => {
-          const selected = tab.dataset.trainingTab === activeTab;
-          tab.classList.toggle('active', selected);
-          tab.setAttribute('aria-selected', selected ? 'true' : 'false');
+    delete page.dataset.foundationTraining;
+    page.classList.remove('foundation-training-page');
+    page.classList.add('training-page', 'training-page-v3');
+
+    let heading = page.querySelector('.training-page-heading-v3');
+    if (!heading) {
+      heading = document.createElement('div');
+      heading.className = 'training-page-heading-v3';
+      page.prepend(heading);
+    }
+    heading.innerHTML = '<div><div class="training-eyebrow-v3">INNER ALCHEMY ／ 內丹修行</div><h2>修煉</h2></div><div class="training-realm-seal-v3">金丹</div>';
+
+    const tabs = page.querySelector('.training-subtabs-v3');
+    if (!tabs) return;
+    const coreTab = tabs.querySelector('[data-training-tab="core"]');
+    coreTab?.classList.remove('hidden');
+
+    if (page.dataset.trainingV4Bound !== '1') {
+      page.dataset.trainingV4Bound = '1';
+      page.querySelectorAll('[data-training-tab]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const requested = button.dataset.trainingTab;
+          activeTab = requested === 'bag' ? 'bag' : (requested === 'refinery' ? 'refinery' : 'core');
+          page.querySelectorAll('[data-training-tab]').forEach((tab) => {
+            const selected = tab.dataset.trainingTab === activeTab;
+            tab.classList.toggle('active', selected);
+            tab.setAttribute('aria-selected', selected ? 'true' : 'false');
+          });
+          renderTrainingPage();
         });
-        renderTrainingPage();
       });
+    }
+
+    activeTab = 'core';
+    page.querySelectorAll('[data-training-tab]').forEach((tab) => {
+      const selected = tab.dataset.trainingTab === activeTab;
+      tab.classList.toggle('active', selected);
+      tab.setAttribute('aria-selected', selected ? 'true' : 'false');
     });
     renderTrainingPage();
   }
@@ -642,7 +671,14 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
 
   function removeLockedUI() {
     document.getElementById('nav-training')?.remove();
-    document.getElementById('page-training')?.remove();
+    const page = document.getElementById('page-training');
+    if (page?.dataset.staticLayout === '1') {
+      page.classList.add('hidden');
+      page.classList.remove('active-page', 'foundation-training-page');
+      delete page.dataset.foundationTraining;
+    } else {
+      page?.remove();
+    }
     document.body.classList.remove('cultivation-training-unlocked');
   }
 
