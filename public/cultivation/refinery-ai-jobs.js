@@ -89,6 +89,10 @@ import {
     return job && typeof job === 'object' && job.id ? job : null;
   }
 
+  function cleanAdminGuidance(value, maxLength) {
+    return String(value || '').replace(/[\u0000-\u001f\u007f]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, maxLength);
+  }
+
   function playerRealm() {
     return realmForScore(Math.max(0, Number(data()?.stats?.totalScore) || 0));
   }
@@ -198,7 +202,7 @@ import {
     return { materialSystem, artifactSystem };
   }
 
-  async function startJob(tokens, knownArtifactId = '') {
+  async function startJob(tokens, knownArtifactId = '', adminOptions = {}) {
     if (currentJob()) throw new Error('目前已有一件法寶正在煉製，請等待完成後開爐取出。');
     const plan = buildPlan(tokens, knownArtifactId);
     if (!plan.valid) throw new Error(plan.reason);
@@ -206,6 +210,9 @@ import {
     const user = authUser();
     if (!user) throw new Error('尚未登入');
     const now = Date.now();
+    const canGuide = data()?.isAdmin === true && plan.discovery;
+    const adminGenerationDirection = canGuide ? cleanAdminGuidance(adminOptions?.direction, 80) : '';
+    const adminGenerationPrompt = canGuide ? cleanAdminGuidance(adminOptions?.prompt, 1200) : '';
     const job = {
       id: 'forge-' + now.toString(36) + '-' + Math.random().toString(36).slice(2, 8),
       status: 'refining',
@@ -220,7 +227,9 @@ import {
       readyAtMs: now + plan.durationMs,
       signature: plan.signature,
       recipe: plan.recipe,
-      ingredients: plan.ingredients
+      ingredients: plan.ingredients,
+      adminGenerationDirection,
+      adminGenerationPrompt
     };
 
     let committed = null;
@@ -286,7 +295,8 @@ import {
         allMaterials: apiMaterials(),
         existingArtifacts: apiArtifacts(),
         targetRealm: job.targetRealm,
-        adminGenerationPrompt: window.getArtifactGenerationPrompt?.() || '',
+        adminGenerationDirection: job.adminGenerationDirection || '',
+        adminGenerationPrompt: job.adminGenerationPrompt || '',
         supportedEffects: SUPPORTED_ARTIFACT_EFFECTS
       })
     });
