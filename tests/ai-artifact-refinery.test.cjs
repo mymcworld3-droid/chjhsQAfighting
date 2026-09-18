@@ -69,7 +69,9 @@ test('generation prompt receives selected ingredients, full material catalog, ex
       { id:'a', name:'星砂', realm:'金丹', category:'特殊材料', description:'星輝細砂' },
       { id:'b', name:'寒玉', realm:'築基', category:'晶石', description:'寒氣內斂' }
     ],
-    existingArtifacts: [{ id:'old', name:'舊燈', realm:'金丹', description:'既有法寶' }]
+    existingArtifacts: [{ id:'old', name:'舊燈', realm:'金丹', description:'既有法寶' }],
+    adminGenerationDirection: '偏防禦減傷',
+    adminGenerationPrompt: '玄武意象，名稱古樸，不要暴擊，以護盾與反震為主。'
   });
   assert.match(prompt, /本次創意方向/);
   assert.match(prompt, /全材料圖鑑/);
@@ -78,6 +80,10 @@ test('generation prompt receives selected ingredients, full material catalog, ex
   assert.match(prompt, /既有法寶摘要/);
   assert.match(prompt, /舊燈/);
   assert.match(prompt, /不要只把材料名稱機械拼接/);
+  assert.match(prompt, /管理員指定的大概動向/);
+  assert.match(prompt, /偏防禦減傷/);
+  assert.match(prompt, /管理員額外提示詞/);
+  assert.match(prompt, /玄武意象/);
 });
 
 test('refinery economy uses qi baseline 10 minutes / 80 gold and varies with player realm gap', () => {
@@ -96,6 +102,23 @@ test('refinery economy uses qi baseline 10 minutes / 80 gold and varies with pla
   assert.ok(underRealm.durationMs > same.durationMs);
   assert.ok(overRealm.gold < same.gold);
   assert.ok(overRealm.durationMs < same.durationMs);
+});
+
+test('admin refinery guidance is admin-only, stored with the furnace job, and reused at claim time', () => {
+  assert.match(refinery, /userData\(\)\?\.isAdmin !== true/);
+  assert.match(refinery, /data-refinery-admin-direction/);
+  assert.match(refinery, /data-refinery-admin-prompt/);
+  assert.match(refinery, /管理員煉器導引/);
+  assert.match(refinery, /大概動向/);
+  assert.match(refinery, /額外提示詞/);
+  assert.match(refinery, /startCultivationRefineryJob\?\.\([\s\S]*direction: adminForgeDirection[\s\S]*prompt: adminForgePrompt/);
+
+  assert.match(aiJobs, /const canGuide = data\(\)\?\.isAdmin === true && plan\.discovery/);
+  assert.match(aiJobs, /adminGenerationDirection/);
+  assert.match(aiJobs, /adminGenerationPrompt/);
+  assert.match(aiJobs, /job\.adminGenerationDirection \|\| ''/);
+  assert.match(aiJobs, /job\.adminGenerationPrompt \|\| ''/);
+  assert.doesNotMatch(aiJobs, /getArtifactGenerationPrompt/);
 });
 
 test('unknown recipes start a timed paid job and AI runs only when claiming the completed artifact', () => {
