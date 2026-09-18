@@ -12,7 +12,21 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, getArtifactById, realmForScore, real
   const COLLAPSE_KEY = 'artifactForgeCollapsedV1';
   const SUPPORTED_EFFECTS = new Set([
     'equip_attack_flat', 'equip_attack_percent', 'equip_hp_flat', 'equip_hp_percent',
+    'equip_damage_percent', 'equip_damage_reduction_flat', 'equip_damage_reduction_percent',
+    'equip_crit_chance', 'equip_crit_damage_percent', 'equip_combo_chance',
+    'equip_lifesteal_percent', 'equip_reflect_percent', 'equip_shield_flat',
+    'equip_true_damage_flat', 'equip_low_hp_damage_percent', 'equip_low_hp_reduction_percent',
+    'equip_first_hit_reduction_percent', 'equip_damage_cap_percent',
+    'equip_on_correct_shield_flat', 'equip_cheat_death', 'equip_copy_enemy_artifact',
     'timed_attack_multiplier', 'timed_cultivation_multiplier', 'remove_wrong_option'
+  ]);
+  const BATTLE_RUNTIME_EFFECTS = new Set([
+    'equip_damage_percent', 'equip_damage_reduction_flat', 'equip_damage_reduction_percent',
+    'equip_crit_chance', 'equip_crit_damage_percent', 'equip_combo_chance',
+    'equip_lifesteal_percent', 'equip_reflect_percent', 'equip_shield_flat',
+    'equip_true_damage_flat', 'equip_low_hp_damage_percent', 'equip_low_hp_reduction_percent',
+    'equip_first_hit_reduction_percent', 'equip_damage_cap_percent',
+    'equip_on_correct_shield_flat', 'equip_cheat_death', 'equip_copy_enemy_artifact'
   ]);
   const usedQuestionKeys = new Set();
   let busyAction = '';
@@ -93,6 +107,26 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, getArtifactById, realmForScore, real
     });
     return result;
   }
+  function battleSnapshot() {
+    const effects = equipmentEffects()
+      .filter((effect) => BATTLE_RUNTIME_EFFECTS.has(effect.type))
+      .map((effect) => ({
+        type: effect.type,
+        value: Number(effect.value) || 0,
+        artifactId: effect.item?.id || '',
+        artifactName: effect.item?.name || '',
+        effectIndex: Number(effect.effectIndex) || 0
+      }));
+    const openingShield = effects
+      .filter((effect) => effect.type === 'equip_shield_flat')
+      .reduce((sum, effect) => sum + Math.max(0, Number(effect.value) || 0), 0);
+    return { version: 1, effects, openingShield: Math.max(0, Math.round(openingShield)) };
+  }
+
+  window.getArtifactBattleSnapshot = function () {
+    return clonePlain(battleSnapshot());
+  };
+
   function itemHasEquipEffects(item) { return (item?.effects || []).some((effect) => String(effect.type).startsWith('equip_')); }
   function itemHasTimedEffects(item) { return (item?.effects || []).some((effect) => String(effect.type).startsWith('timed_')); }
   function removeOptionEffect(item, context) {
@@ -105,6 +139,23 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, getArtifactById, realmForScore, real
       case 'equip_attack_percent': return `裝備：攻擊 +${pct(effect.value)}`;
       case 'equip_hp_flat': return `裝備：生命 +${Number(effect.value) || 0}`;
       case 'equip_hp_percent': return `裝備：生命 +${pct(effect.value)}`;
+      case 'equip_damage_percent': return `鬥法：傷害 +${pct(effect.value)}`;
+      case 'equip_damage_reduction_flat': return `鬥法：每次受傷 -${Number(effect.value) || 0}`;
+      case 'equip_damage_reduction_percent': return `鬥法：受到傷害 -${pct(effect.value)}`;
+      case 'equip_crit_chance': return `鬥法：暴擊率 +${pct(effect.value)}`;
+      case 'equip_crit_damage_percent': return `鬥法：暴擊額外 +${pct(effect.value)}`;
+      case 'equip_combo_chance': return `鬥法：連擊率 ${pct(Math.min(0.10, Number(effect.value) || 0))}（上限 10%）`;
+      case 'equip_lifesteal_percent': return `鬥法：吸血 ${pct(effect.value)}`;
+      case 'equip_reflect_percent': return `鬥法：反傷 ${pct(effect.value)}`;
+      case 'equip_shield_flat': return `鬥法：開場護盾 +${Number(effect.value) || 0}`;
+      case 'equip_true_damage_flat': return `鬥法：命中追加 ${Number(effect.value) || 0} 真實傷害`;
+      case 'equip_low_hp_damage_percent': return `鬥法：生命≤30% 時傷害 +${pct(effect.value)}`;
+      case 'equip_low_hp_reduction_percent': return `鬥法：生命≤30% 時減傷 +${pct(effect.value)}`;
+      case 'equip_first_hit_reduction_percent': return `鬥法：首次受傷減少 ${pct(effect.value)}`;
+      case 'equip_damage_cap_percent': return `鬥法：單次生命傷害≤最大生命 ${pct(effect.value)}`;
+      case 'equip_on_correct_shield_flat': return `鬥法：答對攻擊後護盾 +${Number(effect.value) || 0}`;
+      case 'equip_cheat_death': return '鬥法：每場一次致命傷保留 1 HP';
+      case 'equip_copy_enemy_artifact': return '鬥法：複製敵方一項可複製法寶效果';
       case 'timed_attack_multiplier': return `使用：攻擊 ×${Number(effect.multiplier) || 1} · ${formatDuration(effect.durationMs)}`;
       case 'timed_cultivation_multiplier': return `使用：修為 ×${Number(effect.multiplier) || 1} · ${formatDuration(effect.durationMs)}`;
       case 'remove_wrong_option': return `答題：排除 1 個錯誤選項`;
