@@ -16,6 +16,7 @@ import {
   ARTIFACT_RECIPES,
   getMaterialById,
   validateArtifactRecipes,
+  repairArtifactRecipes,
   replaceArtifactRecipes,
   artifactRecipeDepth,
   MAX_ARTIFACT_RECIPE_NESTING
@@ -373,8 +374,13 @@ import {
         ? clone(artifactSnap.data().items) : clone(ARTIFACT_CATALOG);
       const latestRecipes = materialSnap.exists() && materialSnap.data()?.recipes && typeof materialSnap.data().recipes === 'object'
         ? clone(materialSnap.data().recipes) : clone(ARTIFACT_RECIPES);
+      const recipeRepair = repairArtifactRecipes(latestRecipes, {
+        artifactIds: latestItems.map((item) => item?.id),
+        materialIds: MATERIAL_CATALOG.map((item) => item?.id)
+      });
+      const cleanLatestRecipes = recipeRepair.recipes;
 
-      awardedId = findRecipeBySignature(latestRecipes, fresh.signature);
+      awardedId = findRecipeBySignature(cleanLatestRecipes, fresh.signature);
       if (!awardedId) {
         const id = uniqueGeneratedId(latestItems);
         const candidate = normalizeArtifactDefinition({
@@ -391,7 +397,7 @@ import {
           aiModel: generated.model || ''
         });
         committedCatalog = validateArtifactCatalog([candidate, ...latestItems]);
-        const nextRecipes = { ...latestRecipes, [candidate.id]: fresh.recipe };
+        const nextRecipes = { ...cleanLatestRecipes, [candidate.id]: fresh.recipe };
         committedRecipes = validateArtifactRecipes(nextRecipes);
         awardedId = candidate.id;
 
@@ -404,7 +410,15 @@ import {
         tx.set(materialRef, {
           recipes: committedRecipes,
           aiGeneratedRecipeAtMs: Date.now(),
-          aiGeneratedArtifactId: candidate.id
+          aiGeneratedArtifactId: candidate.id,
+          orphanRecipeCleanupRemovedIds: recipeRepair.removedRecipeIds.slice(0, 100)
+        }, { merge: true });
+      } else if (recipeRepair.changed) {
+        committedRecipes = cleanLatestRecipes;
+        tx.set(materialRef, {
+          recipes: committedRecipes,
+          orphanRecipeCleanupAtMs: Date.now(),
+          orphanRecipeCleanupRemovedIds: recipeRepair.removedRecipeIds.slice(0, 100)
         }, { merge: true });
       }
 

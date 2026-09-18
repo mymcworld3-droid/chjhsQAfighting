@@ -291,6 +291,76 @@ export function artifactRecipeDepth(artifactId, recipes = ARTIFACT_RECIPES) {
   return recipeDepthFor(artifactId, recipes, new Set(), new Map());
 }
 
+export function repairArtifactRecipes(rawRecipes = {}, options = {}) {
+  const source = rawRecipes && typeof rawRecipes === 'object' && !Array.isArray(rawRecipes) ? rawRecipes : {};
+  const artifactIds = new Set(
+    Array.isArray(options?.artifactIds)
+      ? options.artifactIds.map((id) => String(id || '').trim()).filter(Boolean)
+      : ARTIFACT_CATALOG.map((item) => String(item?.id || '').trim()).filter(Boolean)
+  );
+  const materialIds = new Set(
+    Array.isArray(options?.materialIds)
+      ? options.materialIds.map((id) => String(id || '').trim()).filter(Boolean)
+      : MATERIAL_CATALOG.map((item) => String(item?.id || '').trim()).filter(Boolean)
+  );
+  const normalized = {};
+  const invalidRecipeIds = new Set();
+  const reasons = [];
+
+  Object.entries(source).forEach(([artifactId, rawRecipe]) => {
+    const id = String(artifactId || '').trim();
+    if (!id) return;
+    const recipe = normalizeArtifactRecipe(rawRecipe);
+    normalized[id] = recipe;
+
+    if (!artifactIds.has(id)) {
+      invalidRecipeIds.add(id);
+      reasons.push({ recipeId: id, reason: 'recipe-target-missing', missingId: id });
+      return;
+    }
+
+    for (const row of recipe) {
+      if (row.materialId && !materialIds.has(String(row.materialId))) {
+        invalidRecipeIds.add(id);
+        reasons.push({ recipeId: id, reason: 'material-missing', missingId: String(row.materialId) });
+        break;
+      }
+      if (row.artifactId && !artifactIds.has(String(row.artifactId))) {
+        invalidRecipeIds.add(id);
+        reasons.push({ recipeId: id, reason: 'artifact-missing', missingId: String(row.artifactId) });
+        break;
+      }
+    }
+  });
+
+  // 一個配方失效後，所有以該「成品」當作二次煉製材料的上游配方也一併取消，
+  // 避免刪除法寶後留下不可重現的殘缺配方鏈。
+  let changed = true;
+  while (changed) {
+    changed = false;
+    Object.entries(normalized).forEach(([id, recipe]) => {
+      if (invalidRecipeIds.has(id)) return;
+      const brokenDependency = recipe.find((row) => row?.artifactId && invalidRecipeIds.has(String(row.artifactId)));
+      if (!brokenDependency) return;
+      invalidRecipeIds.add(id);
+      reasons.push({ recipeId: id, reason: 'depends-on-invalid-recipe', missingId: String(brokenDependency.artifactId) });
+      changed = true;
+    });
+  }
+
+  const repaired = {};
+  Object.entries(normalized).forEach(([id, recipe]) => {
+    if (!invalidRecipeIds.has(id) && recipe.length) repaired[id] = recipe;
+  });
+
+  return {
+    recipes: validateArtifactRecipes(repaired),
+    removedRecipeIds: [...invalidRecipeIds],
+    reasons,
+    changed: invalidRecipeIds.size > 0
+  };
+}
+
 export function validateArtifactRecipes(rawRecipes = {}) {
   const source = rawRecipes && typeof rawRecipes === 'object' && !Array.isArray(rawRecipes) ? rawRecipes : {};
   const result = {};

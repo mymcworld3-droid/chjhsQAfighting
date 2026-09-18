@@ -5,7 +5,8 @@ import {
   MATERIAL_CATALOG_SCHEMA_VERSION,
   mergeMaterialCatalogWithDefaults,
   replaceMaterialCatalog,
-  replaceArtifactRecipes
+  replaceArtifactRecipes,
+  repairArtifactRecipes
 } from './material-catalog.js';
 
 (function () {
@@ -15,6 +16,7 @@ import {
   const CONFIG_DOC = 'materialCatalogV1';
   let unsubscribe = null;
   let migrationWriteStarted = false;
+  let recipeRepairWriteStarted = false;
 
   function isAdmin() {
     try {
@@ -38,6 +40,21 @@ import {
     }
   }
 
+  async function persistRecipeRepair(ref, repair) {
+    if (recipeRepairWriteStarted || !repair?.changed || !isAdmin()) return;
+    recipeRepairWriteStarted = true;
+    try {
+      await setDoc(ref, {
+        recipes: repair.recipes,
+        orphanRecipeCleanupAt: serverTimestamp(),
+        orphanRecipeCleanupRemovedIds: repair.removedRecipeIds.slice(0, 100)
+      }, { merge: true });
+    } catch (error) {
+      recipeRepairWriteStarted = false;
+      console.warn('[Material recipe repair] runtime cleanup applied, Firestore persistence deferred:', error);
+    }
+  }
+
   function start() {
     if (unsubscribe) return;
     let db;
@@ -54,7 +71,14 @@ import {
           replaceMaterialCatalog(items, needsBackfill ? 'firestore-backfill' : 'firestore');
           if (needsBackfill) persistBackfill(ref, items);
         }
-        if (data.recipes && typeof data.recipes === 'object' && !Array.isArray(data.recipes)) replaceArtifactRecipes(data.recipes, 'firestore');
+        if (data.recipes && typeof data.recipes === 'object' && !Array.isArray(data.recipes)) {
+          const repair = repairArtifactRecipes(data.recipes);
+          replaceArtifactRecipes(repair.recipes, repair.changed ? 'firestore-orphan-repair' : 'firestore');
+          if (repair.changed) {
+            console.warn('[Material catalog sync] removed orphan recipe chain:', repair.removedRecipeIds, repair.reasons);
+            persistRecipeRepair(ref, repair);
+          }
+        }
       } catch (error) {
         console.error('[Material catalog sync]', error);
       }

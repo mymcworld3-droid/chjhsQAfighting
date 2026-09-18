@@ -32,7 +32,9 @@ test('material catalog and recipes sync from one global Firestore config documen
   assert.match(sync, /mergeMaterialCatalogWithDefaults\(data\.items\)/);
   assert.match(sync, /replaceMaterialCatalog\(items, needsBackfill \? 'firestore-backfill' : 'firestore'\)/);
   assert.match(sync, /materialCatalogSchemaVersion: MATERIAL_CATALOG_SCHEMA_VERSION/);
-  assert.match(sync, /replaceArtifactRecipes\(data\.recipes, 'firestore'\)/);
+  assert.match(sync, /repairArtifactRecipes\(data\.recipes\)/);
+  assert.match(sync, /replaceArtifactRecipes\(repair\.recipes, repair\.changed \? 'firestore-orphan-repair' : 'firestore'\)/);
+  assert.match(sync, /persistRecipeRepair\(ref, repair\)/);
 });
 
 test('artifact crafting is intercepted and atomically consumes gold plus material or artifact ingredients', () => {
@@ -85,4 +87,16 @@ test('material modules load in dependency order and admin panel loads before col
   assert.ok(artifactSync >= 0 && materialSync > artifactSync);
   assert.ok(artifactSystem > materialSync && materialSystem > artifactSystem);
   assert.ok(artifactAdmin >= 0 && materialAdmin > artifactAdmin && collapse > materialAdmin);
+});
+
+
+test('AI refinery repairs stale orphan recipes before matching or appending generated recipes', () => {
+  const jobs = read('public/cultivation/refinery-ai-jobs.js');
+  assert.match(jobs, /repairArtifactRecipes\(latestRecipes/);
+  assert.match(jobs, /artifactIds: latestItems\.map/);
+  assert.match(jobs, /const cleanLatestRecipes = recipeRepair\.recipes/);
+  assert.match(jobs, /findRecipeBySignature\(cleanLatestRecipes, fresh\.signature\)/);
+  assert.match(jobs, /const nextRecipes = \{ \.\.\.cleanLatestRecipes, \[candidate\.id\]: fresh\.recipe \}/);
+  assert.match(jobs, /else if \(recipeRepair\.changed\)/);
+  assert.match(jobs, /orphanRecipeCleanupRemovedIds/);
 });

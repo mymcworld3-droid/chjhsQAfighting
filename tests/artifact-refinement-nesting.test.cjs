@@ -45,7 +45,7 @@ function loadRecipeApi() {
   let source = materialCatalog
     .replace(/^import[^;]+;\s*/m, '')
     .replace(/\bexport\s+/g, '');
-  source += '\n;globalThis.__recipeApi={validateArtifactRecipes,artifactRecipeDepth,MAX_ARTIFACT_RECIPE_NESTING,MIN_ARTIFACT_RECIPE_MATERIALS};';
+  source += '\n;globalThis.__recipeApi={validateArtifactRecipes,repairArtifactRecipes,artifactRecipeDepth,MAX_ARTIFACT_RECIPE_NESTING,MIN_ARTIFACT_RECIPE_MATERIALS};';
   vm.runInContext(source, context);
   return context.__recipeApi;
 }
@@ -111,6 +111,23 @@ test('artifact recipe nesting rejects self-recursion and cycles', () => {
     'war-drum': [{ artifactId: 'enlightenment-lamp', quantity: 2 }],
     'enlightenment-lamp': [{ artifactId: 'war-drum', quantity: 2 }]
   }), /循環套娃/);
+});
+
+test('orphan artifact recipes are repaired as a cascade without weakening strict validation', () => {
+  const api = loadRecipeApi();
+  const broken = {
+    'seven-treasure-ruler': [{ materialId: 'spirit-wood', quantity: 2 }],
+    'war-drum': [{ artifactId: 'deleted-ai-artifact', quantity: 2 }],
+    'enlightenment-lamp': [{ artifactId: 'war-drum', quantity: 2 }]
+  };
+
+  assert.throws(() => api.validateArtifactRecipes(broken), /使用不存在的法寶/);
+  const repaired = api.repairArtifactRecipes(broken);
+  assert.equal(repaired.changed, true);
+  assert.deepEqual([...repaired.removedRecipeIds].sort(), ['enlightenment-lamp', 'war-drum']);
+  assert.ok(repaired.recipes['seven-treasure-ruler']);
+  assert.equal(repaired.recipes['war-drum'], undefined);
+  assert.equal(repaired.recipes['enlightenment-lamp'], undefined);
 });
 
 test('player refinery accepts artifact tokens and never consumes equipped copies', () => {
