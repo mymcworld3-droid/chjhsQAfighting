@@ -179,5 +179,5 @@ test('empty second-refinement notice sits at the bottom of its half', () => {
 });
 
 test('second-refinement heading is visually lowered inside its half', () => {
-  assert.match(refinery, /\.refinery-material-roll\+\.refinery-material-roll \.refinery-group-title\{margin-top:14px\}/);
+  assert.match(refinery, /\.refinery-material-roll\+\.refinery-material-roll \.refinery-group-title\{margin-top:64px\}/);
 });
