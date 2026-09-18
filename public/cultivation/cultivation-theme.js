@@ -106,46 +106,42 @@
   }
 
   function addHomePanel() {
-    if (document.getElementById('xiuxian-panel')) return;
     const home = document.getElementById('page-home');
     if (!home) return;
     const anchor = home.querySelector('.grid.grid-cols-2');
     if (!anchor) return;
 
-    const panel = document.createElement('section');
-    panel.id = 'xiuxian-panel';
-    panel.className = 'xiuxian-panel';
-    panel.setAttribute('aria-label', '仙途修行');
-    panel.innerHTML = `
-      <div class="xiuxian-kicker">修行境界 ／ CULTIVATION</div>
-      <p class="xiuxian-invocation">心向青雲，步履不停。</p>
-      <div class="xiuxian-identity">
-        <div id="xiuxian-avatar-slot"></div>
-        <div>
-          <div id="xiuxian-realm" class="xiuxian-realm">凡人</div>
-          <div id="xiuxian-sub" class="xiuxian-sub">初入仙途</div>
+    let panel = document.getElementById('xiuxian-panel');
+    if (!panel) {
+      panel = document.createElement('section');
+      panel.id = 'xiuxian-panel';
+      panel.className = 'xiuxian-panel';
+      panel.setAttribute('aria-label', '仙途修行');
+      panel.innerHTML = `
+        <div class="xiuxian-kicker">修行境界 ／ CULTIVATION</div>
+        <p class="xiuxian-invocation">心向青雲，步履不停。</p>
+        <div class="xiuxian-identity">
+          <div id="xiuxian-avatar-slot"><div id="home-avatar-container"></div></div>
+          <div>
+            <div id="xiuxian-realm" class="xiuxian-realm">凡人</div>
+            <div id="xiuxian-sub" class="xiuxian-sub">初入仙途</div>
+          </div>
         </div>
-      </div>
-      <div class="xiuxian-row">
-        <span class="xiuxian-label">當前修為</span>
-        <span id="xiuxian-score" class="xiuxian-value" aria-live="polite" aria-atomic="true">0 修為</span>
-      </div>
-      <div class="xiuxian-bar"><div id="xiuxian-progress" style="width:0%"></div></div>
-      <div class="xiuxian-row">
-        <span id="xiuxian-progress-label" class="xiuxian-label">距離下一境界</span>
-        <span id="xiuxian-next" class="xiuxian-value">5 修為</span>
-      </div>
-      <div class="xiuxian-actions">
-        <button id="xiuxian-meditate" class="xiuxian-btn">今日閉關</button>
-        <button id="xiuxian-path" class="xiuxian-btn">境界圖錄</button>
-      </div>
-    `;
+        <div class="xiuxian-row"><span class="xiuxian-label">當前修為</span><span id="xiuxian-score" class="xiuxian-value" aria-live="polite" aria-atomic="true">0 修為</span></div>
+        <div class="xiuxian-bar"><div id="xiuxian-progress" style="width:0%"></div></div>
+        <div class="xiuxian-row"><span id="xiuxian-progress-label" class="xiuxian-label">距離下一境界</span><span id="xiuxian-next" class="xiuxian-value">5 修為</span></div>
+        <div class="xiuxian-actions"><button id="xiuxian-meditate" class="xiuxian-btn" type="button">今日閉關</button><button id="xiuxian-path" class="xiuxian-btn" type="button">境界圖錄</button></div>
+      `;
+      anchor.parentNode.insertBefore(panel, anchor);
+    }
 
-    anchor.parentNode.insertBefore(panel, anchor);
-    document.getElementById('xiuxian-meditate').addEventListener('click', meditate);
-    document.getElementById('xiuxian-path').addEventListener('click', () => {
-      alert(REALMS.map((realm) => `${realm.emoji} ${realm.name} ${realm.sub}：${realm.need} 修為起`).join('\n'));
-    });
+    if (panel.dataset.xiuxianBound !== '1') {
+      panel.dataset.xiuxianBound = '1';
+      panel.querySelector('#xiuxian-meditate')?.addEventListener('click', meditate);
+      panel.querySelector('#xiuxian-path')?.addEventListener('click', () => {
+        alert(REALMS.map((realm) => `${realm.emoji} ${realm.name} ${realm.sub}：${realm.need} 修為起`).join('\n'));
+      });
+    }
   }
 
   function rewriteLabels() {
