@@ -1,8 +1,8 @@
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, runTransaction } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-import { ARTIFACT_CATALOG } from './artifact-catalog.js';
-import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe, materialRealmColor } from './material-catalog.js';
+import { ARTIFACT_CATALOG, getArtifactById, artifactRealmColor } from './artifact-catalog.js';
+import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe, materialRealmColor, artifactRecipeDepth, MAX_ARTIFACT_RECIPE_NESTING } from './material-catalog.js';
 
 (function () {
   'use strict';
@@ -38,10 +38,77 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
     });
     return { inventory };
   }
-  function inventory() { return normalizeMaterials(userData()?.materialSystem || {}).inventory; }
+  function materialInventory() { return normalizeMaterials(userData()?.materialSystem || {}).inventory; }
+  function artifactInventory() {
+    const inventory = {};
+    Object.entries(userData()?.artifactSystem?.inventory || {}).forEach(([id, value]) => {
+      const qty = Math.max(0, Math.floor(Number(value) || 0));
+      if (qty > 0) inventory[id] = qty;
+    });
+    return inventory;
+  }
+  function equippedArtifactCounts(system = userData()?.artifactSystem || {}) {
+    const counts = {};
+    Object.values(system?.equipped || {}).forEach((id) => {
+      const key = String(id || '').trim();
+      if (key) counts[key] = (counts[key] || 0) + 1;
+    });
+    return counts;
+  }
+  function ingredientToken(row = {}) {
+    const artifactId = String(row?.artifactId || '').trim();
+    if (artifactId) return `artifact:${artifactId}`;
+    const materialId = String(row?.materialId || '').trim();
+    return materialId ? `material:${materialId}` : '';
+  }
+  function parseToken(token) {
+    const text = String(token || '');
+    if (text.startsWith('artifact:')) return { type: 'artifact', id: text.slice(9) };
+    if (text.startsWith('material:')) return { type: 'material', id: text.slice(9) };
+    return { type: 'material', id: text };
+  }
+  function ingredientMeta(token) {
+    const parsed = parseToken(token);
+    if (parsed.type === 'artifact') {
+      const item = getArtifactById(parsed.id);
+      return {
+        ...parsed,
+        item,
+        name: item?.name || parsed.id,
+        icon: item?.icon || '◆',
+        realm: item?.realm || '凡人',
+        category: '法寶素材',
+        color: artifactRealmColor(item?.realm)
+      };
+    }
+    const item = getMaterialById(parsed.id);
+    return {
+      ...parsed,
+      item,
+      name: item?.name || parsed.id,
+      icon: item?.icon || '材',
+      realm: item?.realm || '凡人',
+      category: item?.category || '材料',
+      color: materialRealmColor(item?.realm)
+    };
+  }
+  function ingredientOwned(token) {
+    const parsed = parseToken(token);
+    if (parsed.type === 'artifact') return Math.max(0, Number(artifactInventory()[parsed.id]) || 0);
+    return Math.max(0, Number(materialInventory()[parsed.id]) || 0);
+  }
+  function ingredientAvailable(token) {
+    const parsed = parseToken(token);
+    if (parsed.type === 'artifact') {
+      const owned = Math.max(0, Number(artifactInventory()[parsed.id]) || 0);
+      const equipped = Math.max(0, Number(equippedArtifactCounts()[parsed.id]) || 0);
+      return Math.max(0, owned - equipped);
+    }
+    return Math.max(0, Number(materialInventory()[parsed.id]) || 0);
+  }
   function selectedCounts() {
     const out = {};
-    selected.forEach((id) => { if (id) out[id] = (out[id] || 0) + 1; });
+    selected.forEach((token) => { if (token) out[token] = (out[token] || 0) + 1; });
     return out;
   }
   function countsKey(counts) {
@@ -53,9 +120,9 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
   function recipeCounts(recipe) {
     const out = {};
     (recipe || []).forEach((row) => {
-      const id = String(row?.materialId || '').trim();
+      const token = ingredientToken(row);
       const q = Math.max(0, Math.floor(Number(row?.quantity) || 0));
-      if (id && q) out[id] = (out[id] || 0) + q;
+      if (token && q) out[token] = (out[token] || 0) + q;
     });
     return out;
   }
@@ -83,7 +150,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
       .refinery-forge-panel{background:radial-gradient(circle at 50% 42%,rgba(124,82,16,.16),transparent 36%),radial-gradient(circle at 50% 50%,rgba(75,52,19,.12),transparent 62%),linear-gradient(150deg,rgba(19,15,9,.985),rgba(5,5,6,.99))}
       .refinery-forge-panel:after{content:"煉";position:absolute;right:-8px;bottom:-38px;font-size:150px;font-weight:900;line-height:1;color:rgba(216,177,93,.022);pointer-events:none;transform:rotate(-8deg)}
       .refinery-head{position:relative;z-index:2;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:11px}.refinery-head h3{margin:0;color:#f1e1bc;font-size:13px;letter-spacing:.04em}.refinery-head h3 i{color:#d8b15d;margin-right:4px}.refinery-head p{margin:4px 0 0;color:#8d816c;font-size:8px;line-height:1.55}.refinery-badge{padding:5px 8px;border:1px solid rgba(216,177,93,.18);border-radius:999px;background:rgba(216,177,93,.035);color:#d8bd78;font-size:7px;white-space:nowrap}
-      .refinery-material-list{position:relative;z-index:1;display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));grid-auto-rows:max-content;align-content:start;gap:8px;max-height:430px;overflow:auto;padding:2px 4px 4px 1px}.refinery-material{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:100%;aspect-ratio:1;min-width:0;padding:9px 7px;border:1px solid color-mix(in srgb,var(--material-realm-color,#d8b15d) 25%,rgba(255,255,255,.05));border-radius:14px;background:radial-gradient(circle at 50% 25%,color-mix(in srgb,var(--material-realm-color,#d8b15d) 9%,transparent),rgba(255,255,255,.012) 62%);text-align:center;overflow:hidden;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}.refinery-material:not(:disabled):hover{border-color:color-mix(in srgb,var(--material-realm-color,#d8b15d) 55%,#d8b15d);box-shadow:0 8px 20px rgba(0,0,0,.25),inset 0 0 18px color-mix(in srgb,var(--material-realm-color,#d8b15d) 8%,transparent);transform:translateY(-2px)}.refinery-material:disabled{opacity:.4;cursor:not-allowed}.refinery-mat-icon{width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;border:1px solid color-mix(in srgb,var(--material-realm-color,#d8b15d) 45%,rgba(216,177,93,.18));border-radius:12px;background:#171006;color:var(--material-realm-color,#efd17c);font-size:12px;font-weight:900;box-shadow:inset 0 0 14px rgba(0,0,0,.3)}.refinery-mat-copy{display:flex;min-width:0;width:100%;flex-direction:column;align-items:center;gap:2px}.refinery-mat-copy strong{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#ede1c8;font-size:9px}.refinery-mat-copy small{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#81745f;font-size:6px}.refinery-mat-copy .material-realm-badge{margin-top:1px!important}.refinery-mat-qty{position:absolute;right:6px;top:6px;padding:2px 5px;border-radius:999px;background:rgba(0,0,0,.52);color:#d5b96e;font-size:6px;font-weight:900;white-space:nowrap}.refinery-empty{grid-column:1/-1;padding:22px 12px;text-align:center;color:#82745f;font-size:9px;border:1px dashed rgba(216,177,93,.13);border-radius:13px;line-height:1.7}
+      .refinery-material-list{position:relative;z-index:1;display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));grid-auto-rows:max-content;align-content:start;gap:8px;max-height:430px;overflow:auto;padding:2px 4px 4px 1px}.refinery-material{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:100%;aspect-ratio:1;min-width:0;padding:9px 7px;border:1px solid color-mix(in srgb,var(--material-realm-color,#d8b15d) 25%,rgba(255,255,255,.05));border-radius:14px;background:radial-gradient(circle at 50% 25%,color-mix(in srgb,var(--material-realm-color,#d8b15d) 9%,transparent),rgba(255,255,255,.012) 62%);text-align:center;overflow:hidden;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}.refinery-material:not(:disabled):hover{border-color:color-mix(in srgb,var(--material-realm-color,#d8b15d) 55%,#d8b15d);box-shadow:0 8px 20px rgba(0,0,0,.25),inset 0 0 18px color-mix(in srgb,var(--material-realm-color,#d8b15d) 8%,transparent);transform:translateY(-2px)}.refinery-material:disabled{opacity:.4;cursor:not-allowed}.refinery-mat-icon{width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;border:1px solid color-mix(in srgb,var(--material-realm-color,#d8b15d) 45%,rgba(216,177,93,.18));border-radius:12px;background:#171006;color:var(--material-realm-color,#efd17c);font-size:12px;font-weight:900;box-shadow:inset 0 0 14px rgba(0,0,0,.3)}.refinery-mat-copy{display:flex;min-width:0;width:100%;flex-direction:column;align-items:center;gap:2px}.refinery-mat-copy strong{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#ede1c8;font-size:9px}.refinery-mat-copy small{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#81745f;font-size:6px}.refinery-mat-copy .material-realm-badge{margin-top:1px!important}.refinery-mat-qty{position:absolute;right:6px;top:6px;padding:2px 5px;border-radius:999px;background:rgba(0,0,0,.52);color:#d5b96e;font-size:6px;font-weight:900;white-space:nowrap}.refinery-empty{grid-column:1/-1;padding:22px 12px;text-align:center;color:#82745f;font-size:9px;border:1px dashed rgba(216,177,93,.13);border-radius:13px;line-height:1.7}.refinery-group-title{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;margin-top:4px;padding:6px 8px;border-radius:9px;background:rgba(216,177,93,.04);color:#bfa66a;font-size:7px;font-weight:900}.refinery-group-title:first-child{margin-top:0}.refinery-artifact-ingredient{border-color:color-mix(in srgb,var(--material-realm-color,#d8b15d) 42%,rgba(255,255,255,.05));background:radial-gradient(circle at 50% 25%,color-mix(in srgb,var(--material-realm-color,#d8b15d) 14%,transparent),rgba(255,255,255,.012) 62%)}.refinery-artifact-ingredient .refinery-mat-copy strong{color:var(--material-realm-color,#eee1c8)}
       .refinery-array-wrap{position:relative;z-index:1;display:flex;justify-content:center;align-items:center;padding:2px 0 6px}
       .refinery-slots{--array-size:min(44dvh,430px);--slot-size:clamp(58px,17%,78px);position:relative;width:min(100%,var(--array-size));max-width:430px;aspect-ratio:1;margin:0 auto;isolation:isolate}
       .refinery-slots:before{content:"";position:absolute;inset:8.5%;clip-path:polygon(29.3% 0,70.7% 0,100% 29.3%,100% 70.7%,70.7% 100%,29.3% 100%,0 70.7%,0 29.3%);background:linear-gradient(135deg,rgba(248,217,139,.3),rgba(107,69,14,.08),rgba(248,217,139,.22));filter:drop-shadow(0 0 10px rgba(216,177,93,.12));z-index:0}
@@ -169,49 +236,75 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
   }
 
   function currentSignature() {
-    const inv = inventory();
+    const materials = materialInventory();
+    const artifacts = artifactInventory();
     return JSON.stringify({
       selected,
       busy,
-      inventory: Object.entries(inv).sort(([a], [b]) => a.localeCompare(b)),
-      materials: MATERIAL_CATALOG.map((m) => [m.id, m.name, m.icon, m.category]),
-      artifacts: ARTIFACT_CATALOG.map((a) => [a.id, a.name, a.icon, a.craft?.yield || 1]),
+      materialInventory: Object.entries(materials).sort(([a], [b]) => a.localeCompare(b)),
+      artifactInventory: Object.entries(artifacts).sort(([a], [b]) => a.localeCompare(b)),
+      equipped: Object.entries(userData()?.artifactSystem?.equipped || {}).sort(([a], [b]) => a.localeCompare(b)),
+      materials: MATERIAL_CATALOG.map((m) => [m.id, m.name, m.icon, m.category, m.realm]),
+      artifacts: ARTIFACT_CATALOG.map((a) => [a.id, a.name, a.icon, a.realm, a.craft?.yield || 1]),
       recipes: ARTIFACT_RECIPES
     });
   }
 
   function markup() {
-    const inv = inventory();
+    const matInv = materialInventory();
+    const artInv = artifactInventory();
+    const equippedCounts = equippedArtifactCounts();
     const counts = selectedCounts();
     const used = selected.filter(Boolean).length;
-    const ownedMaterials = MATERIAL_CATALOG.filter((m) => (Number(inv[m.id]) || 0) > 0);
+    const ownedMaterials = MATERIAL_CATALOG.filter((m) => (Number(matInv[m.id]) || 0) > 0);
+    const ownedArtifacts = ARTIFACT_CATALOG.filter((a) => (Number(artInv[a.id]) || 0) > 0);
     const matching = matches();
     const directions = ['乾','坎','艮','震','巽','離','坤','兌'];
-    const materialHtml = ownedMaterials.length ? ownedMaterials.map((m) => {
-      const owned = Number(inv[m.id]) || 0;
-      const placed = Number(counts[m.id]) || 0;
+
+    const materialHtml = ownedMaterials.map((m) => {
+      const token = `material:${m.id}`;
+      const owned = Number(matInv[m.id]) || 0;
+      const placed = Number(counts[token]) || 0;
       const remaining = Math.max(0, owned - placed);
       const color = materialRealmColor(m.realm);
-      return `<button type="button" class="refinery-material" data-refinery-material="${esc(m.id)}" data-material-realm="${esc(m.realm || '凡人')}" style="--material-realm-color:${esc(color)}" ${remaining <= 0 || used >= SLOT_COUNT || busy ? 'disabled' : ''}><span class="refinery-mat-icon">${esc(m.icon || '材')}</span><span class="refinery-mat-copy"><strong>${esc(m.name)}</strong><small>${esc(m.category || '材料')} · 已放入 ${placed}</small><span class="material-realm-badge">${esc(m.realm || '凡人')}</span></span><span class="refinery-mat-qty">可用 ${remaining}/${owned}</span></button>`;
-    }).join('') : '<div class="refinery-empty"><i class="fa-solid fa-box-open"></i><br>目前沒有煉器材料。<br>可透過問道與洞天取得。</div>';
-    const slotHtml = selected.map((id, index) => {
-      const m = id ? getMaterialById(id) : null;
-      const realm = m?.realm || '';
-      const color = m ? materialRealmColor(realm) : '';
-      return `<button type="button" class="refinery-slot ${m ? 'filled' : ''}" data-refinery-slot="${index}" ${m ? `data-refinery-material-id="${esc(m.id)}" data-material-realm="${esc(realm)}" style="--material-realm-color:${esc(color)}"` : 'disabled'} title="${m ? '點擊取回' : `陣位 ${directions[index]}`}"><span class="idx">${index + 1}</span><span class="remove">×</span><span class="direction">${directions[index]}</span><span><span class="icon">${esc(m?.icon || '＋')}</span><span class="name">${esc(m?.name || '')}</span></span></button>`;
+      return `<button type="button" class="refinery-material" data-refinery-ingredient="${esc(token)}" style="--material-realm-color:${esc(color)}" ${remaining <= 0 || used >= SLOT_COUNT || busy ? 'disabled' : ''}><span class="refinery-mat-icon">${esc(m.icon || '材')}</span><span class="refinery-mat-copy"><strong>${esc(m.name)}</strong><small>${esc(m.category || '材料')} · 已放入 ${placed}</small><span class="material-realm-badge">${esc(m.realm || '凡人')}</span></span><span class="refinery-mat-qty">可用 ${remaining}/${owned}</span></button>`;
     }).join('');
-    const summary = Object.entries(counts).map(([id, q]) => `${getMaterialById(id)?.name || id} ×${q}`).join(' · ') || '尚未投入材料';
+
+    const artifactHtml = ownedArtifacts.map((a) => {
+      const token = `artifact:${a.id}`;
+      const owned = Number(artInv[a.id]) || 0;
+      const reserved = Number(equippedCounts[a.id]) || 0;
+      const usableOwned = Math.max(0, owned - reserved);
+      const placed = Number(counts[token]) || 0;
+      const remaining = Math.max(0, usableOwned - placed);
+      const color = artifactRealmColor(a.realm);
+      const depth = artifactRecipeDepth(a.id);
+      return `<button type="button" class="refinery-material refinery-artifact-ingredient" data-refinery-ingredient="${esc(token)}" style="--material-realm-color:${esc(color)}" ${remaining <= 0 || used >= SLOT_COUNT || busy ? 'disabled' : ''}><span class="refinery-mat-icon">${esc(a.icon || '◆')}</span><span class="refinery-mat-copy"><strong>${esc(a.name)}</strong><small>法寶素材 · 深度 ${depth}/${MAX_ARTIFACT_RECIPE_NESTING} · 已放入 ${placed}</small><span class="material-realm-badge">${esc(a.realm || '凡人')}</span></span><span class="refinery-mat-qty">可用 ${remaining}/${owned}${reserved ? ` · 裝備保留 ${reserved}` : ''}</span></button>`;
+    }).join('');
+
+    const ingredientHtml = (ownedMaterials.length || ownedArtifacts.length)
+      ? `<div class="refinery-group-title"><span>一般材料</span><span>${ownedMaterials.length} 種</span></div>${materialHtml || '<div class="refinery-empty">目前沒有一般材料。</div>'}<div class="refinery-group-title"><span>法寶素材・二次煉製</span><span>套娃最多 2 層</span></div>${artifactHtml || '<div class="refinery-empty">目前沒有可投入的法寶；已裝備法寶會保留。</div>'}`
+      : '<div class="refinery-empty"><i class="fa-solid fa-box-open"></i><br>目前沒有煉器素材。<br>材料與未裝備法寶都會顯示在這裡。</div>';
+
+    const slotHtml = selected.map((token, index) => {
+      const meta = token ? ingredientMeta(token) : null;
+      return `<button type="button" class="refinery-slot ${meta?.item ? 'filled' : ''}" data-refinery-slot="${index}" ${meta?.item ? `data-refinery-token="${esc(token)}" style="--material-realm-color:${esc(meta.color)}"` : 'disabled'} title="${meta?.item ? '點擊取回' : `陣位 ${directions[index]}`}"><span class="idx">${index + 1}</span><span class="remove">×</span><span class="direction">${directions[index]}</span><span><span class="icon">${esc(meta?.icon || '＋')}</span><span class="name">${esc(meta?.name || '')}</span></span></button>`;
+    }).join('');
+
+    const summary = Object.entries(counts).map(([token, q]) => `${ingredientMeta(token).name} ×${q}`).join(' · ') || '尚未投入素材';
     let matchClass = '';
     if (used && matching.length === 1) matchClass = 'ready';
     else if (used) matchClass = 'error';
+    const matchedDepth = matching.length === 1 ? artifactRecipeDepth(matching[0].id) : 0;
     const matchPrefix = used && matching.length === 1 ? '配方吻合：' : '';
     const matchPlain = used && matching.length === 1
-      ? `${matching[0].icon || '◆'} ${matching[0].name} · 將煉製 ×${Math.max(1, Math.floor(Number(matching[0].craft?.yield) || 1))}`
+      ? `${matching[0].icon || '◆'} ${matching[0].name} · 煉製深度 ${matchedDepth}/${MAX_ARTIFACT_RECIPE_NESTING} · 將煉製 ×${Math.max(1, Math.floor(Number(matching[0].craft?.yield) || 1))}`
       : (used && matching.length > 1
-        ? '這組材料同時符合多個法寶配方，需由管理員將配方調整為唯一。'
-        : (used ? '目前材料數量不符合任何法寶配方；格子順序不影響判定。' : '放入材料後，依各材料數量自動辨識法寶配方。'));
+        ? '這組素材同時符合多個法寶配方，需由管理員將配方調整為唯一。'
+        : (used ? '目前素材數量不符合任何法寶配方；格子順序不影響判定。' : '放入材料或法寶後，依各素材數量自動辨識法寶配方。'));
     const craftReady = matching.length === 1 && !busy;
-    return `<section class="cultivation-refinery"><article class="refinery-panel"><div class="refinery-head"><div><h3><i class="fa-solid fa-gem"></i> 持有材料</h3><p>點擊材料，即放入右側第一個空陣位。</p></div><span class="refinery-badge">${ownedMaterials.length} 種</span></div><div class="refinery-material-list">${materialHtml}</div></article><article class="refinery-panel refinery-forge-panel"><div class="refinery-head"><div><h3><i class="fa-solid fa-fire-burner"></i> 八方煉器陣</h3><p>八方歸位，陣心煉器；點已放入的材料可取回。</p></div><span class="refinery-badge" data-refinery-used-badge>${used}/${SLOT_COUNT}</span></div><div class="refinery-array-wrap"><div class="refinery-slots" aria-label="八方煉器陣"><span class="refinery-array-lines"></span><span class="refinery-array-ring"></span>${slotHtml}<div class="refinery-array-center"><button type="button" class="refinery-craft ${craftReady ? 'ready' : ''}" data-refinery-craft ${craftReady ? '' : 'disabled'}><i class="fa-solid fa-fire-flame-curved"></i><span class="craft-main" data-refinery-craft-label>${busy ? '煉製中' : '煉製'}</span><span class="craft-sub">REFINE</span></button></div><span class="refinery-array-caption">八方聚靈 · 一器成形</span></div></div><div class="refinery-summary"><strong>投入：</strong><span data-refinery-summary-text>${esc(summary)}</span></div><div class="refinery-match ${matchClass}" data-refinery-match><b data-refinery-match-prefix>${esc(matchPrefix)}</b><span data-refinery-match-text>${esc(matchPlain)}</span></div><div class="refinery-actions"><button type="button" class="refinery-clear" data-refinery-clear ${!used || busy ? 'disabled' : ''}><i class="fa-solid fa-rotate-left"></i> 清空陣位</button></div><div class="refinery-note"><b>陣法規則：</b>只比較每種材料的數量，與放入哪一方位無關；材料完全吻合時，中央陣眼才會點亮。</div></article></section>`;
+
+    return `<section class="cultivation-refinery"><article class="refinery-panel"><div class="refinery-head"><div><h3><i class="fa-solid fa-gem"></i> 持有煉器素材</h3><p>一般材料與未裝備法寶都可投入；法寶最多套娃兩層。</p></div><span class="refinery-badge">${ownedMaterials.length + ownedArtifacts.length} 種</span></div><div class="refinery-material-list">${ingredientHtml}</div></article><article class="refinery-panel refinery-forge-panel"><div class="refinery-head"><div><h3><i class="fa-solid fa-fire-burner"></i> 八方煉器陣</h3><p>八方歸位，陣心煉器；點已放入素材可取回。</p></div><span class="refinery-badge" data-refinery-used-badge>${used}/${SLOT_COUNT}</span></div><div class="refinery-array-wrap"><div class="refinery-slots" aria-label="八方煉器陣"><span class="refinery-array-lines"></span><span class="refinery-array-ring"></span>${slotHtml}<div class="refinery-array-center"><button type="button" class="refinery-craft ${craftReady ? 'ready' : ''}" data-refinery-craft ${craftReady ? '' : 'disabled'}><i class="fa-solid fa-fire-flame-curved"></i><span class="craft-main" data-refinery-craft-label>${busy ? '煉製中' : '煉製'}</span><span class="craft-sub">REFINE</span></button></div><span class="refinery-array-caption">八方聚靈 · 一器成形</span></div></div><div class="refinery-summary"><strong>投入：</strong><span data-refinery-summary-text>${esc(summary)}</span></div><div class="refinery-match ${matchClass}" data-refinery-match><b data-refinery-match-prefix>${esc(matchPrefix)}</b><span data-refinery-match-text>${esc(matchPlain)}</span></div><div class="refinery-actions"><button type="button" class="refinery-clear" data-refinery-clear ${!used || busy ? 'disabled' : ''}><i class="fa-solid fa-rotate-left"></i> 清空陣位</button></div><div class="refinery-note"><b>陣法規則：</b>只比較素材種類與數量；法寶可作為法寶素材，但配方套娃深度最多 ${MAX_ARTIFACT_RECIPE_NESTING} 層，且已裝備法寶不會被消耗。</div></article></section>`;
   }
 
   function setText(node, value) {
@@ -236,62 +329,63 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
       return;
     }
 
-    const inv = inventory();
     const counts = selectedCounts();
     const used = selected.filter(Boolean).length;
     const matching = matches();
 
-    content.querySelectorAll('[data-refinery-material]').forEach((button) => {
-      const id = button.dataset.refineryMaterial;
-      const owned = Number(inv[id]) || 0;
-      const placed = Number(counts[id]) || 0;
-      const remaining = Math.max(0, owned - placed);
+    content.querySelectorAll('[data-refinery-ingredient]').forEach((button) => {
+      const token = button.dataset.refineryIngredient;
+      const meta = ingredientMeta(token);
+      const owned = ingredientOwned(token);
+      const available = ingredientAvailable(token);
+      const placed = Number(counts[token]) || 0;
+      const remaining = Math.max(0, available - placed);
       button.disabled = remaining <= 0 || used >= SLOT_COUNT || busy;
-      const meta = button.querySelector('.refinery-mat-copy small');
-      const material = getMaterialById(id);
-      setText(meta, `${material?.category || '材料'} · 已放入 ${placed}`);
-      setText(button.querySelector('.refinery-mat-qty'), `可用 ${remaining}/${owned}`);
+      const detail = meta.type === 'artifact'
+        ? `法寶素材 · 深度 ${artifactRecipeDepth(meta.id)}/${MAX_ARTIFACT_RECIPE_NESTING} · 已放入 ${placed}`
+        : `${meta.category} · 已放入 ${placed}`;
+      setText(button.querySelector('.refinery-mat-copy small'), detail);
+      const reserved = meta.type === 'artifact' ? Math.max(0, owned - available) : 0;
+      setText(button.querySelector('.refinery-mat-qty'), `可用 ${remaining}/${owned}${reserved ? ` · 裝備保留 ${reserved}` : ''}`);
     });
 
     content.querySelectorAll('[data-refinery-slot]').forEach((button) => {
       const index = Number(button.dataset.refinerySlot);
-      const id = selected[index] || '';
-      const material = id ? getMaterialById(id) : null;
-      button.classList.toggle('filled', !!material);
-      button.disabled = !material || busy;
-      button.title = material ? '點擊取回' : '空煉器格';
-      if (material) {
-        button.dataset.refineryMaterialId = material.id;
-        button.dataset.materialRealm = material.realm || '凡人';
-        button.style.setProperty('--material-realm-color', materialRealmColor(material.realm));
+      const token = selected[index] || '';
+      const meta = token ? ingredientMeta(token) : null;
+      button.classList.toggle('filled', !!meta?.item);
+      button.disabled = !meta?.item || busy;
+      button.title = meta?.item ? '點擊取回' : '空煉器格';
+      if (meta?.item) {
+        button.dataset.refineryToken = token;
+        button.style.setProperty('--material-realm-color', meta.color);
       } else {
-        delete button.dataset.refineryMaterialId;
-        delete button.dataset.materialRealm;
+        delete button.dataset.refineryToken;
         button.style.removeProperty('--material-realm-color');
       }
-      setText(button.querySelector('.icon'), material?.icon || '＋');
-      setText(button.querySelector('.name'), material?.name || '');
+      setText(button.querySelector('.icon'), meta?.icon || '＋');
+      setText(button.querySelector('.name'), meta?.name || '');
     });
 
     setText(content.querySelector('[data-refinery-used-badge]'), `${used}/${SLOT_COUNT}`);
-    const summary = Object.entries(counts).map(([id, q]) => `${getMaterialById(id)?.name || id} ×${q}`).join(' · ') || '尚未投入材料';
+    const summary = Object.entries(counts).map(([token, q]) => `${ingredientMeta(token).name} ×${q}`).join(' · ') || '尚未投入素材';
     setText(content.querySelector('[data-refinery-summary-text]'), summary);
 
     const matchNode = content.querySelector('[data-refinery-match]');
     matchNode?.classList.remove('ready', 'error');
     let prefix = '';
-    let message = '放入材料後，依各材料數量自動辨識法寶配方。';
+    let message = '放入材料或法寶後，依各素材數量自動辨識法寶配方。';
     if (used && matching.length === 1) {
       const item = matching[0];
       matchNode?.classList.add('ready');
       prefix = '配方吻合：';
-      message = `${item.icon || '◆'} ${item.name} · 將煉製 ×${Math.max(1, Math.floor(Number(item.craft?.yield) || 1))}`;
+      message = `${item.icon || '◆'} ${item.name} · 煉製深度 ${artifactRecipeDepth(item.id)}/${MAX_ARTIFACT_RECIPE_NESTING} · 將煉製 ×${Math.max(1, Math.floor(Number(item.craft?.yield) || 1))}`;
     } else if (used && matching.length > 1) {
       matchNode?.classList.add('error');
-      message = '這組材料同時符合多個法寶配方，需由管理員將配方調整為唯一。';
+      message = '這組素材同時符合多個法寶配方，需由管理員將配方調整為唯一。';
     } else if (used) {
       matchNode?.classList.add('error');
-      message = '目前材料數量不符合任何法寶配方；格子順序不影響判定。';
+      message = '目前素材數量不符合任何法寶配方；格子順序不影響判定。';
     }
     setText(content.querySelector('[data-refinery-match-prefix]'), prefix);
     setText(content.querySelector('[data-refinery-match-text]'), message);
@@ -305,13 +399,11 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
       craftButton.classList.toggle('ready', ready);
     }
     setText(content.querySelector('[data-refinery-craft-label]'), busy ? '煉製中' : '煉製');
-
-    // Selection changes are now reflected without replacing refinery innerHTML.
     content.dataset.refineryRenderKey = currentSignature();
   }
 
   function bindContent(content) {
-    content.querySelectorAll('[data-refinery-material]').forEach((button) => button.addEventListener('click', () => add(button.dataset.refineryMaterial)));
+    content.querySelectorAll('[data-refinery-ingredient]').forEach((button) => button.addEventListener('click', () => add(button.dataset.refineryIngredient)));
     content.querySelectorAll('[data-refinery-slot]').forEach((button) => button.addEventListener('click', () => remove(Number(button.dataset.refinerySlot))));
     content.querySelector('[data-refinery-clear]')?.addEventListener('click', clear);
     content.querySelector('[data-refinery-craft]')?.addEventListener('click', craft);
@@ -328,14 +420,16 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
     bindContent(content);
   }
 
-  function add(id) {
+  function add(token) {
     if (busy) return;
     const empty = selected.findIndex((value) => !value);
     if (empty < 0) { toast('八個煉器格都已放滿。', false); return; }
-    const inv = inventory();
-    const placed = Number(selectedCounts()[id]) || 0;
-    if (placed >= (Number(inv[id]) || 0)) { toast('此材料沒有更多可投入的數量。', false); return; }
-    selected[empty] = id;
+    const placed = Number(selectedCounts()[token]) || 0;
+    if (placed >= ingredientAvailable(token)) {
+      toast(parseToken(token).type === 'artifact' ? '此法寶沒有更多未裝備數量可投入。' : '此材料沒有更多可投入的數量。', false);
+      return;
+    }
+    selected[empty] = token;
     syncSelectionView();
   }
   function remove(index) {
@@ -352,10 +446,10 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
   async function craft() {
     if (busy) return;
     const matching = matches();
-    if (matching.length !== 1) { toast('目前材料沒有對應到唯一法寶配方。', false); return; }
+    if (matching.length !== 1) { toast('目前素材沒有對應到唯一法寶配方。', false); return; }
     const artifact = matching[0];
     const recipe = getArtifactRecipe(artifact.id);
-    if (countsKey(recipeCounts(recipe)) !== countsKey(selectedCounts())) { toast('配方已改變，請重新投入材料。', false); return; }
+    if (countsKey(recipeCounts(recipe)) !== countsKey(selectedCounts())) { toast('配方已改變，請重新投入素材。', false); return; }
     const user = authUser();
     if (!user) { toast('尚未登入。', false); return; }
     busy = true;
@@ -369,29 +463,55 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
         if (!snap.exists()) throw new Error('玩家資料不存在');
         const raw = snap.data();
         const materials = normalizeMaterials(raw.materialSystem || {});
-        const needed = recipeCounts(recipe);
-        for (const [id, q] of Object.entries(needed)) {
-          if ((Number(materials.inventory[id]) || 0) < q) throw new Error(`${getMaterialById(id)?.name || id} 數量不足`);
-        }
-        for (const [id, q] of Object.entries(needed)) {
-          const remain = (Number(materials.inventory[id]) || 0) - q;
-          if (remain > 0) materials.inventory[id] = remain; else delete materials.inventory[id];
-        }
         const artifacts = raw.artifactSystem && typeof raw.artifactSystem === 'object' ? { ...raw.artifactSystem } : {};
         artifacts.inventory = { ...(artifacts.inventory || {}) };
+        artifacts.equipped = { ...(artifacts.equipped || {}) };
+
+        const equippedCounts = {};
+        Object.values(artifacts.equipped).forEach((id) => {
+          const key = String(id || '').trim();
+          if (key) equippedCounts[key] = (equippedCounts[key] || 0) + 1;
+        });
+
+        for (const row of recipe) {
+          const q = Math.max(0, Math.floor(Number(row.quantity) || 0));
+          if (row.materialId) {
+            const have = Math.max(0, Number(materials.inventory[row.materialId]) || 0);
+            if (have < q) throw new Error(`${getMaterialById(row.materialId)?.name || row.materialId} 數量不足`);
+          } else if (row.artifactId) {
+            const have = Math.max(0, Number(artifacts.inventory[row.artifactId]) || 0);
+            const reserved = Math.max(0, Number(equippedCounts[row.artifactId]) || 0);
+            if (Math.max(0, have - reserved) < q) {
+              throw new Error(`${getArtifactById(row.artifactId)?.name || row.artifactId} 可用數量不足；已裝備法寶不會被消耗`);
+            }
+          }
+        }
+
+        for (const row of recipe) {
+          const q = Math.max(0, Math.floor(Number(row.quantity) || 0));
+          if (row.materialId) {
+            const remain = (Number(materials.inventory[row.materialId]) || 0) - q;
+            if (remain > 0) materials.inventory[row.materialId] = remain; else delete materials.inventory[row.materialId];
+          } else if (row.artifactId) {
+            const remain = (Number(artifacts.inventory[row.artifactId]) || 0) - q;
+            if (remain > 0) artifacts.inventory[row.artifactId] = remain; else delete artifacts.inventory[row.artifactId];
+          }
+        }
+
         const gain = Math.max(1, Math.floor(Number(artifact.craft?.yield) || 1));
         artifacts.inventory[artifact.id] = (Number(artifacts.inventory[artifact.id]) || 0) + gain;
         committedMaterials = materials;
         committedArtifacts = artifacts;
         tx.update(ref, { materialSystem: materials, artifactSystem: artifacts });
       });
+
       const data = userData();
       if (data) { data.materialSystem = committedMaterials; data.artifactSystem = committedArtifacts; }
       selected.fill(null);
       window.dispatchEvent(new CustomEvent('material-system-updated', { detail: committedMaterials }));
       window.dispatchEvent(new CustomEvent('artifact-system-updated', { detail: committedArtifacts }));
-      window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', { detail: { refineryCrafted: true, artifactCrafted: artifact.id } }));
-      toast(`煉器成功：${artifact.name} ×${Math.max(1, Math.floor(Number(artifact.craft?.yield) || 1))}`);
+      window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', { detail: { refineryCrafted: true, artifactCrafted: artifact.id, refinementDepth: artifactRecipeDepth(artifact.id) } }));
+      toast(`煉器成功：${artifact.name} ×${Math.max(1, Math.floor(Number(artifact.craft?.yield) || 1))} · 深度 ${artifactRecipeDepth(artifact.id)}/${MAX_ARTIFACT_RECIPE_NESTING}`);
     } catch (error) {
       console.error('[Cultivation refinery]', error);
       toast(error.message || '煉器失敗。', false);
@@ -402,16 +522,20 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
   }
 
   function reconcile() {
-    const inv = inventory();
     const seen = {};
     let changed = false;
-    selected.forEach((id, index) => {
-      if (!id) return;
-      seen[id] = (seen[id] || 0) + 1;
-      if (!getMaterialById(id) || seen[id] > (Number(inv[id]) || 0)) { selected[index] = null; changed = true; }
+    selected.forEach((token, index) => {
+      if (!token) return;
+      seen[token] = (seen[token] || 0) + 1;
+      const meta = ingredientMeta(token);
+      if (!meta.item || seen[token] > ingredientAvailable(token)) {
+        selected[index] = null;
+        changed = true;
+      }
     });
     return changed;
   }
+
   function schedule() {
     if (queued) return;
     queued = true;
@@ -437,7 +561,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
   function boot() {
     ensureStyle();
     schedule();
-    ['foundation-training-stage-changed','golden-core-access-changed','material-system-updated','material-catalog-updated','artifact-catalog-updated','artifact-recipes-updated','xiuxian:user-ready'].forEach((name) => window.addEventListener(name, schedule));
+    ['foundation-training-stage-changed','golden-core-access-changed','material-system-updated','artifact-system-updated','material-catalog-updated','artifact-catalog-updated','artifact-recipes-updated','xiuxian:user-ready'].forEach((name) => window.addEventListener(name, schedule));
     window.addEventListener('xiuxian:refinery-open-request', () => {
       const page = document.getElementById('page-training');
       if (page) activate(page);
