@@ -15,6 +15,13 @@
     
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="xianxia.css">
+    <link rel="stylesheet" href="xianxia-gold.css">
+    <link rel="stylesheet" href="xianxia-blackgold-harmony.css">
+    <link rel="stylesheet" href="styles/cultivation-training-compact.css?v=20260917-fit1">
+    <link rel="stylesheet" href="cultivation-training-v3.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <!-- 🔥 新增 MathJax 設定檔，強制識別 $ 符號 -->
     <script>
@@ -129,6 +136,33 @@
                     </div>
                 </div>
     
+                <section id="xiuxian-panel" class="xiuxian-panel" aria-label="仙途修行" data-static-layout="1">
+                    <div class="xiuxian-kicker">修行境界 ／ CULTIVATION</div>
+                    <p class="xiuxian-invocation">心向青雲，步履不停。</p>
+                    <div class="xiuxian-identity">
+                        <div id="xiuxian-avatar-slot">
+                            <div id="home-avatar-container"></div>
+                        </div>
+                        <div>
+                            <div id="xiuxian-realm" class="xiuxian-realm">凡人</div>
+                            <div id="xiuxian-sub" class="xiuxian-sub">初入仙途</div>
+                        </div>
+                    </div>
+                    <div class="xiuxian-row">
+                        <span class="xiuxian-label">當前修為</span>
+                        <span id="xiuxian-score" class="xiuxian-value" aria-live="polite" aria-atomic="true">0 修為</span>
+                    </div>
+                    <div class="xiuxian-bar"><div id="xiuxian-progress" style="width:0%"></div></div>
+                    <div class="xiuxian-row">
+                        <span id="xiuxian-progress-label" class="xiuxian-label">距離下一境界</span>
+                        <span id="xiuxian-next" class="xiuxian-value">5 修為</span>
+                    </div>
+                    <div class="xiuxian-actions">
+                        <button id="xiuxian-meditate" class="xiuxian-btn" type="button">今日閉關</button>
+                        <button id="xiuxian-path" class="xiuxian-btn" type="button">境界圖錄</button>
+                    </div>
+                </section>
+
                 <div class="grid grid-cols-2 gap-3 mb-4 home-stats">
                     <div class="stat-card group">
                         <div class="stat-icon text-yellow-500"><i class="fa-solid fa-coins"></i></div>
@@ -177,6 +211,45 @@
                 </button>
             </div>
             <p class="xianxia-footnote">千里仙途，始於一問</p>
+        </div>
+
+        <div id="page-training" class="page-section hidden px-4 training-page training-page-v3" data-static-layout="1">
+            <div class="training-page-heading-v3">
+                <div>
+                    <div class="training-eyebrow-v3">INNER ALCHEMY ／ 內丹修行</div>
+                    <h2>修煉</h2>
+                </div>
+                <div class="training-realm-seal-v3">金丹</div>
+            </div>
+
+            <div class="training-subtabs-v3" role="tablist">
+                <button type="button" class="training-subtab-v3 active" data-training-tab="core" aria-selected="true">
+                    <i class="fa-solid fa-circle-dot"></i><span>金丹</span>
+                </button>
+                <button type="button" class="training-subtab-v3" data-training-tab="refinery" aria-selected="false">
+                    <i class="fa-solid fa-hammer"></i><span>煉器</span>
+                </button>
+                <button type="button" class="training-subtab-v3" data-training-tab="bag" aria-selected="false">
+                    <i class="fa-solid fa-box-open"></i><span>背包</span>
+                </button>
+            </div>
+
+            <div id="training-tab-content">
+                <section class="core-minimal-card training-static-core-shell" aria-busy="true">
+                    <div class="core-minimal-center">
+                        <div class="golden-core-stage-v3">
+                            <div class="golden-core-halo-v3 halo-a"></div>
+                            <div class="golden-core-halo-v3 halo-b"></div>
+                            <div class="golden-core-orbit-v3"></div>
+                            <div class="golden-core-sphere-v3"><span>丹</span></div>
+                            <div class="golden-core-shadow-v3"></div>
+                        </div>
+                        <div class="core-minimal-name">本命金丹</div>
+                        <div class="core-minimal-meta">修煉資料同步中</div>
+                        <button type="button" class="core-equip-btn" disabled>資料載入後可操作</button>
+                    </div>
+                </section>
+            </div>
         </div>
 
         <div id="page-quiz" class="page-section hidden px-4">
@@ -652,6 +725,25 @@
 
         <div id="page-admin" class="page-section hidden px-4">
             <h2 class="text-xl font-bold text-red-500 mb-4 font-sci mt-4">ADMIN CONSOLE</h2>
+
+            <section id="admin-artifact-manager" class="glass-panel p-4 rounded-xl mb-4 admin-preload-shell" data-static-layout="1" data-admin-section-title="法寶管理" data-admin-section-icon="fa-hammer">
+                <div class="aam-head">
+                    <div><h3><i class="fa-solid fa-hammer"></i> 法寶管理</h3><p>法寶資料載入後會直接填入此區，不重新插入面板。</p></div>
+                    <button type="button" class="aam-add" id="admin-artifact-add" disabled><i class="fa-solid fa-plus"></i> 新增法寶</button>
+                </div>
+                <div id="admin-artifact-list" class="aam-list"><div class="text-xs text-gray-500 py-3">載入法寶資料…</div></div>
+            </section>
+
+            <section id="admin-material-manager" class="glass-panel p-4 rounded-xl mb-4 admin-preload-shell" data-static-layout="1" data-admin-section-title="材料管理" data-admin-section-icon="fa-gem">
+                <div class="amm-head">
+                    <div><h3><i class="fa-solid fa-gem"></i> 材料與法寶配方</h3><p>材料與配方資料載入後會直接填入此區。</p></div>
+                    <button type="button" class="amm-add" id="admin-material-add" disabled><i class="fa-solid fa-plus"></i> 新增材料</button>
+                </div>
+                <div class="amm-section-title"><span>材料清單</span><span>載入中</span></div>
+                <div id="admin-material-list" class="amm-list"><div class="text-xs text-gray-500 py-3">載入材料資料…</div></div>
+                <div class="amm-section-title"><span>法寶合成配方</span><span>載入中</span></div>
+                <div id="admin-recipe-list" class="amm-list"><div class="text-xs text-gray-500 py-3">載入配方資料…</div></div>
+            </section>
             <div class="glass-panel p-4 rounded-xl border border-cyan-500/30 mb-4 relative overflow-hidden">
                 <div class="absolute -top-10 -right-10 w-32 h-32 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
                 
