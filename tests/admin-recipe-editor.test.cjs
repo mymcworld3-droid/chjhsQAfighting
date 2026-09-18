@@ -23,16 +23,19 @@ test('admin material manager exposes per-artifact recipe editing and persists re
 });
 
 test('admin recipe editor mirrors the eight-slot refinery limit in the UI', () => {
+  assert.match(enhancement, /SLOT_MIN = 2/);
   assert.match(enhancement, /SLOT_LIMIT = 8/);
   assert.match(enhancement, /已使用|煉器陣素材格/);
-  assert.match(enhancement, /total > SLOT_LIMIT/);
+  assert.match(enhancement, /total < SLOT_MIN \|\| total > SLOT_LIMIT/);
   assert.match(enhancement, /save\.disabled = invalid/);
-  assert.match(enhancement, /最多 8 個/);
+  assert.match(enhancement, /至少 2 個、最多 8 個/);
   assert.match(enhancement, /不看 8 格排列/);
   assert.match(enhancement, /套娃最多 2 層/);
 });
 
-test('catalog enforces eight total ingredients and two artifact nesting levels', () => {
+test('catalog enforces two-to-eight total ingredients and two artifact nesting levels', () => {
+  assert.match(catalog, /MIN_ARTIFACT_RECIPE_MATERIALS = 2/);
+  assert.match(catalog, /totalItems < MIN_ARTIFACT_RECIPE_MATERIALS/);
   assert.match(catalog, /totalItems > MAX_ARTIFACT_RECIPE_MATERIALS/);
   assert.match(catalog, /MAX_ARTIFACT_RECIPE_NESTING = 2/);
   assert.match(catalog, /recipeDepthFor/);
