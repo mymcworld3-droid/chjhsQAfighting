@@ -5,6 +5,7 @@ const fs = require('fs');
 const aiRouter = require('./ai-router');
 const registerDongtianApi = require('./dongtian-api');
 const registerIdentityApi = require('./identity-api');
+const registerArtifactGenerationApi = require('./artifact-generation-api');
 require('dotenv').config();
 
 const app = express();
@@ -15,6 +16,7 @@ app.use(express.json({ limit: '20mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 registerDongtianApi(app);
 registerIdentityApi(app);
+registerArtifactGenerationApi(app);
 
 // 根目錄路由
 app.get('/', (req, res) => {
