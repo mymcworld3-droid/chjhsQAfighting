@@ -495,9 +495,11 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       home.insertAdjacentElement('afterend', page);
     }
 
+    const alreadyHydrated = page.dataset.trainingV4Ready === '1' && page.dataset.foundationTraining !== '1';
     delete page.dataset.foundationTraining;
     page.classList.remove('foundation-training-page');
     page.classList.add('training-page', 'training-page-v3');
+    if (alreadyHydrated) return;
 
     let heading = page.querySelector('.training-page-heading-v3');
     if (!heading) {
@@ -528,6 +530,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       });
     }
 
+    page.dataset.trainingV4Ready = '1';
     activeTab = 'core';
     page.querySelectorAll('[data-training-tab]').forEach((tab) => {
       const selected = tab.dataset.trainingTab === activeTab;
@@ -676,6 +679,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       page.classList.add('hidden');
       page.classList.remove('active-page', 'foundation-training-page');
       delete page.dataset.foundationTraining;
+      delete page.dataset.trainingV4Ready;
     } else {
       page?.remove();
     }
