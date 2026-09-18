@@ -165,10 +165,10 @@ test('refinery separates general materials and second-refinement artifacts into 
   assert.match(refinery, /> 二次煉製<\/span>/);
 });
 
-test('general and second-refinement rolls each use half of the whole held-material card height', () => {
+test('material divider is shifted 64px downward inside the whole held-material card', () => {
   assert.match(refinery, /refinery-panel refinery-material-panel/);
   assert.match(refinery, /\.refinery-material-panel\{[^}]*padding:0[^}]*grid-template-rows:minmax\(0,1fr\)[^}]*overflow:hidden/);
-  assert.match(refinery, /\.refinery-material-list\{[^}]*grid-template-rows:repeat\(2,minmax\(0,1fr\)\)[^}]*gap:0[^}]*height:100%/);
+  assert.match(refinery, /\.refinery-material-list\{[^}]*grid-template-rows:minmax\(0,calc\(50% \+ 64px\)\) minmax\(0,calc\(50% - 64px\)\)[^}]*gap:0[^}]*height:100%/);
   assert.doesNotMatch(refinery, /refinery-panel"><div class="refinery-head"><div><h3><i class="fa-solid fa-gem"><\/i> 持有煉器素材/);
 });
 
@@ -178,6 +178,6 @@ test('empty second-refinement notice sits at the bottom of its half', () => {
   assert.match(refinery, /\.refinery-material-roll-body\.is-empty\{display:flex;flex-direction:column;justify-content:flex-end\}/);
 });
 
-test('second-refinement heading is visually lowered inside its half', () => {
-  assert.match(refinery, /\.refinery-material-roll\+\.refinery-material-roll \.refinery-group-title\{margin-top:64px\}/);
+test('second-refinement heading follows the divider after the divider moves down 64px', () => {
+  assert.match(refinery, /\.refinery-material-roll\+\.refinery-material-roll \.refinery-group-title\{margin-top:0\}/);
 });

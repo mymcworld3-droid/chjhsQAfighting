@@ -108,7 +108,7 @@
         width:100%!important;
         height:100%!important;
         display:grid!important;
-        grid-template-rows:repeat(2,minmax(0,1fr))!important;
+        grid-template-rows:minmax(0,calc(50% + 64px)) minmax(0,calc(50% - 64px))!important;
         gap:0!important;
         min-height:0!important;
         max-height:none!important;
