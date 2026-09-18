@@ -14,11 +14,11 @@
     const note = modal.querySelector('.amm-note');
     const status = modal.querySelector('#amm-recipe-status');
     const save = modal.querySelector('.amm-save');
-    const inputs = [...modal.querySelectorAll('[data-recipe-material]')];
+    const inputs = [...modal.querySelectorAll('[data-recipe-material],[data-recipe-artifact]')];
     if (!card || !save || !inputs.length) return;
 
     if (note) {
-      note.textContent = '設定各材料需要的數量。玩家煉器時只比較材料種類與數量，不看 8 格中的排列順序；所有材料合計最多 8 個。數量填 0 代表不使用該材料。';
+      note.textContent = '設定各材料與法寶素材需要的數量。玩家煉器時只比較種類與數量，不看 8 格排列；總素材最多 8 個。法寶可二次煉製，但套娃最多 2 層。';
     }
 
     inputs.forEach((input) => {
@@ -31,7 +31,7 @@
     const meter = document.createElement('div');
     meter.className = 'amm-recipe-slot-meter';
     meter.style.cssText = 'margin:0 0 10px;padding:8px 10px;border:1px solid rgba(216,177,93,.18);border-radius:10px;background:rgba(216,177,93,.04);color:#bda66e;font-size:8px;font-weight:900;display:flex;justify-content:space-between;gap:8px';
-    meter.innerHTML = '<span>煉器陣材料格</span><b data-recipe-slot-count>0 / 8</b>';
+    meter.innerHTML = '<span>煉器陣素材格</span><b data-recipe-slot-count>0 / 8</b>';
     const list = modal.querySelector('.amm-recipe-list');
     if (list) list.before(meter);
 
@@ -52,8 +52,8 @@
       save.disabled = invalid;
       save.dataset.recipeLimitDisabled = invalid ? '1' : '0';
       if (status) {
-        if (total > SLOT_LIMIT) status.textContent = `目前共 ${total} 個材料，超過 8 格上限，請減少 ${total - SLOT_LIMIT} 個。`;
-        else if (total < 1) status.textContent = '至少需要放入 1 個材料才能建立法寶配方。';
+        if (total > SLOT_LIMIT) status.textContent = `目前共 ${total} 個素材，超過 8 格上限，請減少 ${total - SLOT_LIMIT} 個。`;
+        else if (total < 1) status.textContent = '至少需要放入 1 個材料或法寶素材才能建立法寶配方。';
         else if (status.textContent?.includes('超過 8 格') || status.textContent?.includes('至少需要放入 1 個')) status.textContent = '';
       }
     }
