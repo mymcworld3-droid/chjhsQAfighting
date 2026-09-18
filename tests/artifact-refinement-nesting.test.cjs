@@ -67,8 +67,8 @@ test('recipe schema accepts material and artifact ingredients while keeping old 
   assert.match(materialCatalog, /row\?\.materialId/);
   assert.match(materialCatalog, /return \{ artifactId: key\.slice\(9\), quantity \}/);
   assert.match(materialCatalog, /return \{ materialId: key\.slice\(9\), quantity \}/);
-  assert.match(materialAdmin, /data-recipe-artifact/);
-  assert.match(materialAdmin, /data-recipe-material/);
+  assert.match(artifactAdmin, /data-recipe-artifact/);
+  assert.match(artifactAdmin, /data-recipe-material/);
 });
 
 test('every defined artifact recipe requires at least two total ingredients', () => {

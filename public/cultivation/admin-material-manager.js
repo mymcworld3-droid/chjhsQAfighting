@@ -76,15 +76,8 @@ import {
     const panel = document.getElementById(PANEL_ID);
     if (!panel || !isAdmin()) return;
     const materialList = panel.querySelector('#admin-material-list');
-    const recipeList = panel.querySelector('#admin-recipe-list');
     if (materialList) {
       materialList.innerHTML = MATERIAL_CATALOG.map((item) => `<article class="amm-item"><div class="amm-icon">${escapeHtml(item.icon || '材')}</div><div class="amm-copy"><strong>${escapeHtml(item.name)}</strong><div class="amm-meta">${escapeHtml(item.id)} · ${escapeHtml(item.category)} · ${item.buyGold > 0 ? `採購 ${item.buyGold} 金幣` : '不可直接採購'}</div><div class="amm-description">${escapeHtml(item.description || '')}</div></div><div class="amm-actions"><button type="button" class="amm-edit" data-material-edit="${escapeHtml(item.id)}"><i class="fa-solid fa-pen"></i> 編輯</button><button type="button" class="amm-delete" data-material-delete="${escapeHtml(item.id)}"><i class="fa-solid fa-trash"></i> 刪除</button></div></article>`).join('');
-    }
-    if (recipeList) {
-      recipeList.innerHTML = ARTIFACT_CATALOG.map((artifact) => {
-        const color = artifactRealmColor(artifact.realm);
-        return `<article class="amm-item" style="--artifact-realm-color:${escapeHtml(color)};border-color:color-mix(in srgb,${escapeHtml(color)} 22%,rgba(255,255,255,.07))"><div class="amm-icon" style="border-color:color-mix(in srgb,${escapeHtml(color)} 48%,transparent);color:${escapeHtml(color)};background:color-mix(in srgb,${escapeHtml(color)} 10%,#171005)">${escapeHtml(artifact.icon || '◆')}</div><div class="amm-copy"><strong style="color:${escapeHtml(color)}">${escapeHtml(artifact.name)}</strong><div class="amm-meta">${escapeHtml(artifact.realm)} · ${recipeLabel(artifact.id)}</div></div><div class="amm-actions"><button type="button" class="amm-recipe-edit" data-recipe-edit="${escapeHtml(artifact.id)}"><i class="fa-solid fa-flask"></i> 設定配方</button></div></article>`;
-      }).join('');
     }
   }
 
@@ -271,20 +264,16 @@ import {
     if (panel.dataset.materialManagerHydrated !== '1') {
       panel.dataset.materialManagerHydrated = '1';
       panel.classList.remove('admin-preload-shell');
-      panel.innerHTML = `<div class="amm-head"><div><h3><i class="fa-solid fa-gem" style="color:#d8b15d"></i> 材料與法寶配方</h3><p>管理全站煉器材料，並設定每件法寶合成時必須消耗的材料。</p></div><button type="button" class="amm-add" id="admin-material-add"><i class="fa-solid fa-plus"></i> 新增材料</button></div><div class="amm-section-title"><span>材料清單</span><span>${MATERIAL_CATALOG.length} 種</span></div><div id="admin-material-list" class="amm-list"></div><div class="amm-section-title"><span>法寶合成配方</span><span>未設定配方的法寶不可合成</span></div><div id="admin-recipe-list" class="amm-list"></div>`;
+      panel.innerHTML = `<div class="amm-head"><div><h3><i class="fa-solid fa-gem" style="color:#d8b15d"></i> 材料管理</h3><p>管理全站煉器材料。法寶合成配方請直接到「法寶管理 → 編輯」內設定。</p></div><button type="button" class="amm-add" id="admin-material-add"><i class="fa-solid fa-plus"></i> 新增材料</button></div><div class="amm-section-title"><span>材料清單</span><span>${MATERIAL_CATALOG.length} 種</span></div><div id="admin-material-list" class="amm-list"></div>`;
       panel.querySelector('#admin-material-add').onclick = () => openMaterialEditor();
       panel.addEventListener('click', (event) => {
         const edit = event.target.closest('[data-material-edit]');
         const del = event.target.closest('[data-material-delete]');
-        const recipe = event.target.closest('[data-recipe-edit]');
         if (edit) {
           const item = getMaterialById(edit.dataset.materialEdit);
           if (item) openMaterialEditor(item);
         } else if (del) {
           deleteMaterial(del.dataset.materialDelete);
-        } else if (recipe) {
-          const artifact = ARTIFACT_CATALOG.find((item) => item.id === recipe.dataset.recipeEdit);
-          if (artifact) openRecipeEditor(artifact);
         }
       });
     }

@@ -49,12 +49,6 @@ import { getMaterialById, materialRealmOrderByName } from './material-catalog.js
       (id) => materialRealmOrderByName(getMaterialById(id)?.realm || '凡人'),
       (id) => getMaterialById(id)?.name || id
     );
-    reorder(
-      document.getElementById('admin-recipe-list'),
-      (node) => node.querySelector('[data-recipe-edit]')?.dataset.recipeEdit || '',
-      (id) => realmOrderByName(getArtifactById(id)?.realm || '凡人'),
-      (id) => getArtifactById(id)?.name || id
-    );
   }
 
   function schedule() {

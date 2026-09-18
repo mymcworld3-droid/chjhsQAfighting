@@ -48,10 +48,10 @@ test('legacy long backpack item is hidden when unified backpack is present', () 
   assert.match(bridge, /display:none!important/);
 });
 
-test('admin artifact material and recipe lists are ordered by realm', () => {
+test('admin artifact and material lists are ordered by realm', () => {
   assert.match(adminSort, /admin-artifact-list/);
   assert.match(adminSort, /admin-material-list/);
-  assert.match(adminSort, /admin-recipe-list/);
+  assert.doesNotMatch(adminSort, /admin-recipe-list/);
   assert.match(adminSort, /realmOrderByName/);
   assert.match(adminSort, /materialRealmOrderByName/);
 });

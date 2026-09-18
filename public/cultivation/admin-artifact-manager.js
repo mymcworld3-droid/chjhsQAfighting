@@ -10,6 +10,17 @@ import {
   validateArtifactCatalog,
   artifactRealmColor
 } from './artifact-catalog.js';
+import {
+  MATERIAL_CATALOG,
+  ARTIFACT_RECIPES,
+  validateArtifactRecipes,
+  replaceArtifactRecipes,
+  getArtifactRecipe,
+  artifactRecipeDepth,
+  MAX_ARTIFACT_RECIPE_NESTING,
+  MIN_ARTIFACT_RECIPE_MATERIALS,
+  MAX_ARTIFACT_RECIPE_MATERIALS
+} from './material-catalog.js';
 
 (function () {
   'use strict';
@@ -18,6 +29,7 @@ import {
   const MODAL_ID = 'admin-artifact-modal';
   const CONFIG_COLLECTION = 'gameConfig';
   const CONFIG_DOC = 'artifactCatalogV1';
+  const MATERIAL_CONFIG_DOC = 'materialCatalogV1';
   const ARTIFACT_CATEGORIES = Object.freeze(['消耗法寶', '裝備法寶']);
   const EFFECT_GUIDE = Object.freeze({
     equip_attack_flat: { title: '固定攻擊', summary: '裝備後固定增加攻擊力', hint: '例如：+80 攻擊', icon: 'fa-sword' },
@@ -199,6 +211,76 @@ import {
     return `<div class="aam-guide-scroll">${groups.join('')}</div>`;
   }
 
+
+  function recipeTotal(recipe = []) {
+    return recipe.reduce((sum, row) => sum + Math.max(0, Math.floor(Number(row?.quantity) || 0)), 0);
+  }
+
+  function recipeSummaryText(artifactId) {
+    const recipe = getArtifactRecipe(artifactId);
+    if (!recipe.length) return '未設定配方';
+    const depth = artifactRecipeDepth(artifactId);
+    return `已設定 · ${recipeTotal(recipe)}/${MAX_ARTIFACT_RECIPE_MATERIALS} 格${depth ? ` · 二次煉製深度 ${depth}/${MAX_ARTIFACT_RECIPE_NESTING}` : ''}`;
+  }
+
+  function recipeEditorMarkup(item = null) {
+    const recipe = item?.id ? getArtifactRecipe(item.id) : [];
+    const materialCurrent = Object.fromEntries(recipe.filter((row) => row.materialId).map((row) => [row.materialId, row.quantity]));
+    const artifactCurrent = Object.fromEntries(recipe.filter((row) => row.artifactId).map((row) => [row.artifactId, row.quantity]));
+    const artifactChoices = ARTIFACT_CATALOG.filter((artifact) => artifact.id !== item?.id);
+    const total = recipeTotal(recipe);
+    return `<details class="aam-recipe-editor" data-aam-recipe-editor><summary><span><i class="fa-solid fa-flask"></i><b>煉器配方</b><small data-aam-recipe-summary>${escapeHtml(item?.id ? recipeSummaryText(item.id) : '未設定配方')}</small></span><i class="fa-solid fa-chevron-down aam-recipe-chevron"></i></summary><div class="aam-recipe-body"><p>直接在法寶編輯裡設定合成素材。0 個代表未設定；已設定時至少 ${MIN_ARTIFACT_RECIPE_MATERIALS} 個、最多 ${MAX_ARTIFACT_RECIPE_MATERIALS} 個。可投入一般材料與既有法寶，二次煉製套娃最多 ${MAX_ARTIFACT_RECIPE_NESTING} 層。</p><div class="aam-recipe-meter"><span>煉器陣素材格</span><b data-aam-recipe-count>${total} / ${MAX_ARTIFACT_RECIPE_MATERIALS}</b></div><div class="aam-recipe-list"><div class="aam-recipe-group-title">一般材料</div>${MATERIAL_CATALOG.map((material) => `<label class="aam-recipe-row"><span>${escapeHtml(material.icon || '材')} ${escapeHtml(material.name)}<small>${escapeHtml(material.realm || '凡人')} · ${escapeHtml(material.category || '材料')}</small></span><input type="number" min="0" max="${MAX_ARTIFACT_RECIPE_MATERIALS}" step="1" inputmode="numeric" value="${Math.max(0, Number(materialCurrent[material.id]) || 0)}" data-recipe-material="${escapeHtml(material.id)}"></label>`).join('')}<div class="aam-recipe-group-title">法寶素材（二次煉製）</div>${artifactChoices.map((artifact) => {
+      const color = artifactRealmColor(artifact.realm);
+      return `<label class="aam-recipe-row is-artifact" style="--artifact-realm-color:${escapeHtml(color)}"><span>${escapeHtml(artifact.icon || '◆')} ${escapeHtml(artifact.name)}<small>${escapeHtml(artifact.realm || '凡人')} · 配方深度 ${artifactRecipeDepth(artifact.id)}/${MAX_ARTIFACT_RECIPE_NESTING}</small></span><input type="number" min="0" max="${MAX_ARTIFACT_RECIPE_MATERIALS}" step="1" inputmode="numeric" value="${Math.max(0, Number(artifactCurrent[artifact.id]) || 0)}" data-recipe-artifact="${escapeHtml(artifact.id)}"></label>`;
+    }).join('')}</div><div class="aam-recipe-status" data-aam-recipe-status></div></div></details>`;
+  }
+
+  function readRecipe(modal) {
+    const materialRows = [...modal.querySelectorAll('[data-recipe-material]')].map((input) => ({
+      materialId: input.dataset.recipeMaterial,
+      quantity: Math.max(0, Math.floor(Number(input.value) || 0))
+    })).filter((row) => row.quantity > 0);
+    const artifactRows = [...modal.querySelectorAll('[data-recipe-artifact]')].map((input) => ({
+      artifactId: input.dataset.recipeArtifact,
+      quantity: Math.max(0, Math.floor(Number(input.value) || 0))
+    })).filter((row) => row.quantity > 0);
+    return [...materialRows, ...artifactRows];
+  }
+
+  function syncRecipeEditor(modal) {
+    const inputs = [...modal.querySelectorAll('[data-recipe-material],[data-recipe-artifact]')];
+    let total = 0;
+    inputs.forEach((input) => {
+      let value = Math.floor(Number(input.value) || 0);
+      value = Math.max(0, Math.min(MAX_ARTIFACT_RECIPE_MATERIALS, value));
+      if (String(value) !== input.value && document.activeElement !== input) input.value = String(value);
+      total += value;
+    });
+    const count = modal.querySelector('[data-aam-recipe-count]');
+    if (count) {
+      count.textContent = `${total} / ${MAX_ARTIFACT_RECIPE_MATERIALS}`;
+      count.classList.toggle('is-error', total === 1 || total > MAX_ARTIFACT_RECIPE_MATERIALS);
+    }
+    const summary = modal.querySelector('[data-aam-recipe-summary]');
+    if (summary) summary.textContent = total ? `已選 ${total}/${MAX_ARTIFACT_RECIPE_MATERIALS} 格` : '未設定配方';
+    const recipeStatus = modal.querySelector('[data-aam-recipe-status]');
+    const save = modal.querySelector('.aam-save');
+    const invalid = total === 1 || total > MAX_ARTIFACT_RECIPE_MATERIALS;
+    if (save && !busy) save.disabled = invalid;
+    if (recipeStatus) {
+      if (total === 1) recipeStatus.textContent = `已設定配方至少需要 ${MIN_ARTIFACT_RECIPE_MATERIALS} 個素材。`;
+      else if (total > MAX_ARTIFACT_RECIPE_MATERIALS) recipeStatus.textContent = `目前共 ${total} 個素材，超過 ${MAX_ARTIFACT_RECIPE_MATERIALS} 格上限。`;
+      else recipeStatus.textContent = total === 0 ? '目前未設定配方；此法寶將不能用既有配方煉製。' : '';
+    }
+  }
+
+  function bindRecipeEditor(modal) {
+    modal.querySelectorAll('[data-recipe-material],[data-recipe-artifact]').forEach((input) => {
+      input.addEventListener('input', () => syncRecipeEditor(modal));
+    });
+    syncRecipeEditor(modal);
+  }
+
   function ensureStyle() {
     if (document.getElementById('admin-artifact-manager-style')) return;
     const style = document.createElement('style');
@@ -209,6 +291,7 @@ import {
       .aam-list{display:grid;gap:7px}.aam-item{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:9px;align-items:center;padding:9px;border:1px solid rgba(255,255,255,.07);border-radius:13px;background:rgba(255,255,255,.018)}.aam-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:11px;border:1px solid rgba(216,177,93,.25);color:#f0d17a;background:#171005;font-weight:900}.aam-copy{min-width:0}.aam-copy strong{color:#eee1c7;font-size:10px}.aam-meta{margin-top:3px;color:#887a63;font-size:7px}.aam-effects{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px}.aam-effects span{padding:2px 5px;border-radius:999px;background:rgba(216,177,93,.05);color:#baa77d;font-size:6px}.aam-item-actions{display:grid;gap:5px;min-width:78px}.aam-edit,.aam-approve{min-height:32px;padding:0 10px;border-radius:9px;font-size:8px;font-weight:900}.aam-edit{border:1px solid rgba(216,177,93,.22);background:rgba(216,177,93,.05);color:#dbc078}.aam-approve{border:1px solid rgba(74,222,128,.28);background:rgba(22,101,52,.12);color:#86efac}.aam-pending{display:inline-flex;align-items:center;gap:4px;margin-left:6px;padding:2px 6px;border:1px solid rgba(251,191,36,.38);border-radius:999px;background:rgba(146,64,14,.16);color:#fbbf24;font-size:6px;font-weight:900}.aam-item.is-pending{border-color:rgba(251,191,36,.46)!important;box-shadow:inset 0 0 24px rgba(251,191,36,.045),0 0 20px rgba(251,191,36,.04)}.aam-ai-meta{margin-top:4px;color:#b99753;font-size:6px}
       .aam-modal{position:fixed;inset:0;z-index:12000;display:grid;place-items:center;padding:14px;background:rgba(0,0,0,.82);backdrop-filter:blur(8px)}.aam-card{width:min(100%,1080px);max-height:92dvh;overflow:auto;padding:18px;border:1px solid rgba(216,177,93,.28);border-radius:20px;background:linear-gradient(145deg,#18130c,#080808);box-shadow:0 30px 100px rgba(0,0,0,.72)}.aam-card h3{margin:0 0 4px;color:#f3e7ca;font-size:15px}.aam-note{margin:0 0 12px;color:#8f826d;font-size:8px;line-height:1.65}.aam-editor-layout{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:16px;align-items:start}.aam-editor-main{min-width:0}.aam-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.aam-field{display:grid;gap:4px}.aam-field.full{grid-column:1/-1}.aam-field label{color:#9a8d75;font-size:7px;font-weight:900}.aam-field input,.aam-field select,.aam-field textarea{width:100%;min-height:38px;padding:8px 9px;border:1px solid rgba(216,177,93,.16);border-radius:10px;background:#0a0908;color:#eadfc8;font-size:9px;outline:none}.aam-field textarea{min-height:76px;resize:vertical}.aam-field input:focus,.aam-field select:focus,.aam-field textarea:focus{border-color:rgba(216,177,93,.5)}
       .aam-effects-editor{display:grid;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.07)}.aam-effects-head{display:flex;align-items:center;justify-content:space-between;gap:8px;color:#d7bb77;font-size:9px;font-weight:900}.aam-effect-row{padding:9px;border:1px solid rgba(255,255,255,.07);border-radius:12px;background:rgba(255,255,255,.016)}.aam-effect-main{display:grid;grid-template-columns:minmax(150px,1.2fr) repeat(3,minmax(85px,1fr)) auto;gap:6px;align-items:end}.aam-effect-main label,.aam-contexts label{display:grid;gap:3px;color:#857963;font-size:6px}.aam-effect-main input,.aam-effect-main select{min-height:34px;padding:6px;border:1px solid rgba(216,177,93,.14);border-radius:9px;background:#090807;color:#e5d8bd;font-size:8px}.aam-remove-effect{width:32px;height:32px;border-radius:9px;border:1px solid rgba(248,113,113,.2);background:rgba(127,29,29,.12);color:#fca5a5}.aam-contexts{display:flex;gap:10px;flex-wrap:wrap;margin-top:7px}.aam-contexts label{display:flex;align-items:center;gap:4px}.aam-contexts input{accent-color:#d8b15d}.aam-add-effect{min-height:32px;padding:0 10px;border-radius:9px;border:1px dashed rgba(216,177,93,.28);background:transparent;color:#cbae68;font-size:8px;font-weight:900}
+      .aam-recipe-editor{margin-top:12px;border:1px solid rgba(216,177,93,.16);border-radius:13px;background:rgba(216,177,93,.018);overflow:hidden}.aam-recipe-editor>summary{min-height:42px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 11px;cursor:pointer;list-style:none;background:linear-gradient(90deg,rgba(216,177,93,.07),rgba(255,255,255,.012));color:#d7bd7e}.aam-recipe-editor>summary::-webkit-details-marker{display:none}.aam-recipe-editor>summary>span{display:flex;align-items:center;gap:7px;min-width:0}.aam-recipe-editor>summary b{font-size:9px}.aam-recipe-editor>summary small{color:#86775e;font-size:7px;font-weight:700}.aam-recipe-chevron{font-size:8px;transition:transform .16s}.aam-recipe-editor[open] .aam-recipe-chevron{transform:rotate(180deg)}.aam-recipe-body{padding:10px;border-top:1px solid rgba(216,177,93,.08)}.aam-recipe-body>p{margin:0 0 9px;color:#81745f;font-size:7px;line-height:1.55}.aam-recipe-meter{display:flex;justify-content:space-between;gap:8px;margin-bottom:8px;padding:7px 9px;border-radius:9px;background:rgba(216,177,93,.045);color:#bca66f;font-size:7px;font-weight:900}.aam-recipe-meter b.is-error{color:#fca5a5}.aam-recipe-list{display:grid;gap:6px;max-height:42dvh;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable;padding-right:3px}.aam-recipe-group-title{position:sticky;top:0;z-index:1;padding:6px 8px;border-radius:8px;background:#171209;color:#c9aa62;font-size:7px;font-weight:900}.aam-recipe-row{display:grid;grid-template-columns:minmax(0,1fr) 86px;gap:8px;align-items:center;padding:7px 8px;border:1px solid rgba(255,255,255,.065);border-radius:10px;background:rgba(255,255,255,.014);color:#d8c9a8;font-size:7px}.aam-recipe-row>span{min-width:0}.aam-recipe-row small{display:block;margin-top:2px;color:#766a57;font-size:6px}.aam-recipe-row input{width:100%;min-height:32px;padding:5px 7px;border:1px solid rgba(216,177,93,.14);border-radius:8px;background:#090807;color:#eadfc8;font-size:8px}.aam-recipe-row.is-artifact{border-color:color-mix(in srgb,var(--artifact-realm-color,#d8b15d) 28%,rgba(255,255,255,.07))}.aam-recipe-row.is-artifact>span{color:var(--artifact-realm-color,#d8c9a8)}.aam-recipe-status{min-height:14px;margin-top:7px;color:#d6b86e;font-size:7px}
       .aam-guide{position:sticky;top:0;display:flex;flex-direction:column;max-height:calc(92dvh - 36px);min-height:0;padding:13px;border:1px solid rgba(216,177,93,.18);border-radius:16px;background:linear-gradient(160deg,rgba(31,24,13,.9),rgba(8,8,8,.96));overflow:hidden}.aam-guide h4{margin:0;color:#efd99e;font-size:11px}.aam-guide>p{flex:0 0 auto;margin:4px 0 10px;color:#887b65;font-size:7px;line-height:1.55}.aam-guide-scroll{min-height:0;flex:1 1 auto;display:grid;align-content:start;gap:7px;max-height:min(62dvh,620px);overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable;padding:0 4px 2px 0}.aam-guide-scroll::-webkit-scrollbar{width:7px}.aam-guide-scroll::-webkit-scrollbar-thumb{border-radius:999px;background:rgba(216,177,93,.24)}.aam-guide-scroll::-webkit-scrollbar-track{background:rgba(255,255,255,.025)}.aam-guide-group{border:1px solid rgba(216,177,93,.12);border-radius:12px;background:rgba(255,255,255,.014);overflow:hidden}.aam-guide-group>summary{min-height:38px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 9px;cursor:pointer;list-style:none;color:#d8c28d;background:linear-gradient(90deg,rgba(216,177,93,.065),rgba(255,255,255,.012));user-select:none}.aam-guide-group>summary::-webkit-details-marker{display:none}.aam-guide-group>summary>span{display:flex;align-items:center;gap:7px;min-width:0}.aam-guide-group>summary>span>i{width:19px;color:#d6b764;text-align:center}.aam-guide-group>summary b{font-size:8px;white-space:nowrap}.aam-guide-group>summary em{min-width:20px;padding:2px 5px;border-radius:999px;background:rgba(216,177,93,.09);color:#9f8e69;font-size:6px;font-style:normal;text-align:center}.aam-guide-chevron{color:#8e7c59;font-size:7px;transition:transform .16s ease}.aam-guide-group[open] .aam-guide-chevron{transform:rotate(180deg)}.aam-guide-group-list{display:grid;gap:6px;padding:7px;border-top:1px solid rgba(216,177,93,.08);background:rgba(0,0,0,.12)}.aam-guide-item{width:100%;display:grid;grid-template-columns:32px minmax(0,1fr) 24px;gap:8px;align-items:center;padding:8px;border:1px solid rgba(216,177,93,.12);border-radius:11px;background:rgba(255,255,255,.018);text-align:left;transition:.15s}.aam-guide-item:hover{border-color:rgba(216,177,93,.42);background:rgba(216,177,93,.07)}.aam-guide-icon{width:30px;height:30px;display:grid;place-items:center;border-radius:9px;background:rgba(216,177,93,.08);color:#daba6b}.aam-guide-copy{display:grid;gap:2px;min-width:0}.aam-guide-copy b{color:#e6d8b8;font-size:8px}.aam-guide-copy span{color:#998b72;font-size:7px;line-height:1.4}.aam-guide-copy small{color:#6f6555;font-size:6px}.aam-guide-add{display:grid;place-items:center;color:#c8a958;font-size:8px}.aam-guide-note{flex:0 0 auto;margin-top:10px;padding:8px;border-radius:10px;background:rgba(216,177,93,.045);color:#8e816b;font-size:6px;line-height:1.6}.aam-guide-note b{color:#c9ad69}
       .aam-actions{display:flex;gap:8px;margin-top:14px}.aam-actions button{flex:1;min-height:40px;border-radius:11px;font-size:9px;font-weight:900}.aam-cancel{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:#aaa}.aam-save{border:1px solid rgba(216,177,93,.4);background:linear-gradient(135deg,#8f651e,#4b2f09);color:#fff0bd}.aam-save:disabled{opacity:.45}
       @media(max-width:880px){.aam-editor-layout{grid-template-columns:1fr}.aam-guide{position:static;order:-1;max-height:58dvh}.aam-guide-scroll{max-height:42dvh}}
@@ -235,7 +318,7 @@ import {
       const aiMeta = item.generatedByAI
         ? `<div class="aam-ai-meta">AI 生成${item.aiProvider ? ` · ${escapeHtml(item.aiProvider)}` : ''}${item.generationMaterials?.length ? ` · 素材：${item.generationMaterials.map((row) => `${escapeHtml(row.name || row.id)}×${Number(row.quantity) || 1}`).join('、')}` : ''}</div>`
         : '';
-      return `<article class="aam-item ${pending ? 'is-pending' : ''}" data-admin-pending="${pending ? '1' : '0'}" style="--artifact-realm-color:${escapeHtml(color)};border-color:color-mix(in srgb,${escapeHtml(color)} 28%,rgba(255,255,255,.07))"><div class="aam-icon" style="border-color:color-mix(in srgb,${escapeHtml(color)} 55%,transparent);color:${escapeHtml(color)};background:color-mix(in srgb,${escapeHtml(color)} 10%,#171005)">${escapeHtml(item.icon || '◆')}</div><div class="aam-copy"><strong style="color:${escapeHtml(color)}">${escapeHtml(item.name)}</strong>${pending ? '<span class="aam-pending"><i class="fa-solid fa-wand-magic-sparkles"></i> AI・待處理</span>' : ''}<div class="aam-meta">${escapeHtml(item.id)} · ${escapeHtml(item.realm)} · ${escapeHtml(item.category || '法寶')} · 打造 ${Number(item.craft?.gold) || 0} 金幣</div>${aiMeta}<div class="aam-effects">${(item.effects || []).map((effect) => `<span>${escapeHtml(effectLabel(effect))}</span>`).join('')}</div></div><div class="aam-item-actions">${pending ? `<button type="button" class="aam-approve" data-admin-artifact-approve="${escapeHtml(item.id)}"><i class="fa-solid fa-check"></i> 確認已檢查</button>` : ''}<button type="button" class="aam-edit" data-admin-artifact-edit="${escapeHtml(item.id)}"><i class="fa-solid fa-pen"></i> 編輯</button></div></article>`;
+      return `<article class="aam-item ${pending ? 'is-pending' : ''}" data-admin-pending="${pending ? '1' : '0'}" style="--artifact-realm-color:${escapeHtml(color)};border-color:color-mix(in srgb,${escapeHtml(color)} 28%,rgba(255,255,255,.07))"><div class="aam-icon" style="border-color:color-mix(in srgb,${escapeHtml(color)} 55%,transparent);color:${escapeHtml(color)};background:color-mix(in srgb,${escapeHtml(color)} 10%,#171005)">${escapeHtml(item.icon || '◆')}</div><div class="aam-copy"><strong style="color:${escapeHtml(color)}">${escapeHtml(item.name)}</strong>${pending ? '<span class="aam-pending"><i class="fa-solid fa-wand-magic-sparkles"></i> AI・待處理</span>' : ''}<div class="aam-meta">${escapeHtml(item.id)} · ${escapeHtml(item.realm)} · ${escapeHtml(item.category || '法寶')} · 打造 ${Number(item.craft?.gold) || 0} 金幣 · 配方：${escapeHtml(recipeSummaryText(item.id))}</div>${aiMeta}<div class="aam-effects">${(item.effects || []).map((effect) => `<span>${escapeHtml(effectLabel(effect))}</span>`).join('')}</div></div><div class="aam-item-actions">${pending ? `<button type="button" class="aam-approve" data-admin-artifact-approve="${escapeHtml(item.id)}"><i class="fa-solid fa-check"></i> 確認已檢查</button>` : ''}<button type="button" class="aam-edit" data-admin-artifact-edit="${escapeHtml(item.id)}"><i class="fa-solid fa-pen"></i> 編輯</button></div></article>`;
     }).join('') || '<div class="text-gray-500 text-xs">目前沒有法寶。</div>';
   }
 
@@ -281,7 +364,7 @@ import {
     const modal = document.createElement('div');
     modal.id = MODAL_ID;
     modal.className = 'aam-modal';
-    modal.innerHTML = `<section class="aam-card" role="dialog" aria-modal="true"><h3>${editing ? '編輯法寶' : '新增法寶'}</h3><p class="aam-note">這裡直接維護全站正式法寶清單。建立後 ID 會鎖定，避免玩家既有背包與裝備失聯。右側「可用功能」可直接加入效果。</p><div class="aam-editor-layout"><div class="aam-editor-main"><div class="aam-grid"><div class="aam-field"><label>法寶 ID（英文小寫與 -）</label><input id="aam-id" maxlength="64" ${editing ? 'readonly' : ''} value="${escapeHtml(item?.id || '')}" placeholder="例如 thunder-seal"></div><div class="aam-field"><label>名稱</label><input id="aam-name" maxlength="80" value="${escapeHtml(item?.name || '')}"></div><div class="aam-field"><label>圖示（1–4 字）</label><input id="aam-icon" maxlength="4" value="${escapeHtml(item?.icon || '◆')}"></div><div class="aam-field"><label>境界</label><select id="aam-realm">${ARTIFACT_REALMS.map((realm) => `<option value="${realm.name}" ${realm.name === (item?.realm || '築基') ? 'selected' : ''}>${realm.name}</option>`).join('')}</select></div><div class="aam-field"><label>分類</label><select id="aam-category">${categoryOptions(item?.category)}</select></div><div class="aam-field"><label>裝備欄位（裝備效果才需要）</label><input id="aam-slot" maxlength="40" value="${escapeHtml(item?.equipSlot || '')}" placeholder="例如 本命法寶"></div><div class="aam-field"><label>打造金幣</label><input id="aam-gold" type="number" min="0" step="1" value="${Number(item?.craft?.gold) || 0}"></div><div class="aam-field"><label>每次打造數量</label><input id="aam-yield" type="number" min="1" step="1" value="${Math.max(1, Number(item?.craft?.yield) || 1)}"></div><div class="aam-field full"><label>說明</label><textarea id="aam-description" maxlength="500">${escapeHtml(item?.description || '')}</textarea></div></div><div class="aam-effects-editor"><div class="aam-effects-head"><span>法寶效果</span><button type="button" id="aam-add-effect" class="aam-add-effect"><i class="fa-solid fa-plus"></i> 新增效果</button></div><div id="aam-effect-list"></div></div><div id="aam-status" class="aam-note" style="margin-top:10px"></div></div><aside class="aam-guide"><h4><i class="fa-solid fa-list-check"></i> 可用功能</h4><p>依類別展開或縮小；功能區可獨立捲動，點選功能即可加入左側法寶效果。</p>${effectGuideMarkup()}<div class="aam-guide-note"><b>裝備類：</b>需要填「裝備欄位」。<br><b>連擊：</b>不論組合多少效果，總機率硬上限 10%。<br><b>鏡映：</b>每場固定複製敵方一項可複製戰鬥效果。<br><b>限時類：</b>催動時消耗 1 件法寶。<br><b>排除錯項：</b>可指定問道、鬥法、洞天。</div></aside></div><div class="aam-actions"><button type="button" class="aam-cancel">取消</button><button type="button" class="aam-save">${editing ? '儲存變更' : '建立法寶'}</button></div></section>`;
+    modal.innerHTML = `<section class="aam-card" role="dialog" aria-modal="true"><h3>${editing ? '編輯法寶' : '新增法寶'}</h3><p class="aam-note">這裡直接維護全站正式法寶清單。建立後 ID 會鎖定，避免玩家既有背包與裝備失聯。右側「可用功能」可直接加入效果。</p><div class="aam-editor-layout"><div class="aam-editor-main"><div class="aam-grid"><div class="aam-field"><label>法寶 ID（英文小寫與 -）</label><input id="aam-id" maxlength="64" ${editing ? 'readonly' : ''} value="${escapeHtml(item?.id || '')}" placeholder="例如 thunder-seal"></div><div class="aam-field"><label>名稱</label><input id="aam-name" maxlength="80" value="${escapeHtml(item?.name || '')}"></div><div class="aam-field"><label>圖示（1–4 字）</label><input id="aam-icon" maxlength="4" value="${escapeHtml(item?.icon || '◆')}"></div><div class="aam-field"><label>境界</label><select id="aam-realm">${ARTIFACT_REALMS.map((realm) => `<option value="${realm.name}" ${realm.name === (item?.realm || '築基') ? 'selected' : ''}>${realm.name}</option>`).join('')}</select></div><div class="aam-field"><label>分類</label><select id="aam-category">${categoryOptions(item?.category)}</select></div><div class="aam-field"><label>裝備欄位（裝備效果才需要）</label><input id="aam-slot" maxlength="40" value="${escapeHtml(item?.equipSlot || '')}" placeholder="例如 本命法寶"></div><div class="aam-field"><label>打造金幣</label><input id="aam-gold" type="number" min="0" step="1" value="${Number(item?.craft?.gold) || 0}"></div><div class="aam-field"><label>每次打造數量</label><input id="aam-yield" type="number" min="1" step="1" value="${Math.max(1, Number(item?.craft?.yield) || 1)}"></div><div class="aam-field full"><label>說明</label><textarea id="aam-description" maxlength="500">${escapeHtml(item?.description || '')}</textarea></div></div><div class="aam-effects-editor"><div class="aam-effects-head"><span>法寶效果</span><button type="button" id="aam-add-effect" class="aam-add-effect"><i class="fa-solid fa-plus"></i> 新增效果</button></div><div id="aam-effect-list"></div></div>${recipeEditorMarkup(item)}<div id="aam-status" class="aam-note" style="margin-top:10px"></div></div><aside class="aam-guide"><h4><i class="fa-solid fa-list-check"></i> 可用功能</h4><p>依類別展開或縮小；功能區可獨立捲動，點選功能即可加入左側法寶效果。</p>${effectGuideMarkup()}<div class="aam-guide-note"><b>裝備類：</b>需要填「裝備欄位」。<br><b>連擊：</b>不論組合多少效果，總機率硬上限 10%。<br><b>鏡映：</b>每場固定複製敵方一項可複製戰鬥效果。<br><b>限時類：</b>催動時消耗 1 件法寶。<br><b>排除錯項：</b>可指定問道、鬥法、洞天。</div></aside></div><div class="aam-actions"><button type="button" class="aam-cancel">取消</button><button type="button" class="aam-save">${editing ? '儲存變更' : '建立法寶'}</button></div></section>`;
     document.body.appendChild(modal);
     const effectList = modal.querySelector('#aam-effect-list');
     (item?.effects?.length ? item.effects : [defaultEffect('equip_attack_flat')]).forEach((effect) => effectList.appendChild(effectRow(effect)));
@@ -294,6 +377,7 @@ import {
         effectList.lastElementChild?.scrollIntoView?.({ behavior: 'smooth', block: 'nearest' });
       };
     });
+    bindRecipeEditor(modal);
     modal.querySelector('.aam-cancel').onclick = () => modal.remove();
     modal.querySelector('.aam-save').onclick = () => saveFromModal(modal, editing ? item.id : '');
   }
@@ -317,27 +401,32 @@ import {
     });
   }
 
-  async function persistCatalog(items) {
+  async function persistCatalog(items, recipes = null) {
     const auth = getAuth(getApp());
     const user = auth.currentUser;
     if (!user || !isAdmin()) throw new Error('僅管理員可以修改法寶清單');
     const normalized = validateArtifactCatalog(items);
+    const normalizedRecipes = recipes === null ? null : validateArtifactRecipes(recipes);
     const db = getFirestore(getApp());
     await runTransaction(db, async (tx) => {
       const userRef = doc(db, 'users', user.uid);
       const userSnap = await tx.get(userRef);
       if (!userSnap.exists() || userSnap.data()?.isAdmin !== true) throw new Error('管理員權限驗證失敗');
       const configRef = doc(db, CONFIG_COLLECTION, CONFIG_DOC);
-      tx.set(configRef, {
-        version: 1,
-        items: normalized,
+      const audit = {
         updatedBy: user.uid,
         updatedByName: data()?.displayName || user.displayName || '管理員',
         updatedAt: serverTimestamp(),
         updatedAtMs: Date.now()
-      }, { merge: true });
+      };
+      tx.set(configRef, { version: 1, items: normalized, ...audit }, { merge: true });
+      if (normalizedRecipes !== null) {
+        const materialConfigRef = doc(db, CONFIG_COLLECTION, MATERIAL_CONFIG_DOC);
+        tx.set(materialConfigRef, { version: 1, recipes: normalizedRecipes, ...audit }, { merge: true });
+      }
     });
     replaceArtifactCatalog(normalized, 'admin-save');
+    if (normalizedRecipes !== null) replaceArtifactRecipes(normalizedRecipes, 'admin-save');
     return normalized;
   }
 
@@ -350,7 +439,7 @@ import {
       const next = ARTIFACT_CATALOG.map((item) => item.id === id
         ? { ...JSON.parse(JSON.stringify(item)), reviewStatus: 'approved', reviewedAtMs: Date.now() }
         : JSON.parse(JSON.stringify(item)));
-      await persistCatalog(next);
+      await persistCatalog(next, normalizedRecipes);
       render();
       toast(`已確認 ${current.name}`);
     } catch (error) {
@@ -396,10 +485,33 @@ import {
     if (index >= 0) next[index] = item; else next.push(item);
     try { validateArtifactCatalog(next); } catch (error) { status.textContent = error.message || '法寶資料不合法'; return; }
 
+    const recipe = readRecipe(modal);
+    const totalItems = recipeTotal(recipe);
+    if (totalItems > 0 && totalItems < MIN_ARTIFACT_RECIPE_MATERIALS) {
+      status.textContent = `已設定配方至少需要 ${MIN_ARTIFACT_RECIPE_MATERIALS} 個材料或法寶素材，目前只有 ${totalItems} 個。`;
+      return;
+    }
+    if (totalItems > MAX_ARTIFACT_RECIPE_MATERIALS) {
+      status.textContent = `配方共需 ${totalItems} 個素材，超過煉器陣 ${MAX_ARTIFACT_RECIPE_MATERIALS} 格上限。`;
+      return;
+    }
+    const nextRecipes = JSON.parse(JSON.stringify(ARTIFACT_RECIPES));
+    if (recipe.length) nextRecipes[id] = recipe;
+    else delete nextRecipes[id];
+    let normalizedRecipes;
+    try {
+      normalizedRecipes = validateArtifactRecipes(nextRecipes);
+      const depth = artifactRecipeDepth(id, normalizedRecipes);
+      if (depth > MAX_ARTIFACT_RECIPE_NESTING) throw new Error(`此配方二次煉製套娃深度為 ${depth}，最多只允許 ${MAX_ARTIFACT_RECIPE_NESTING} 層`);
+    } catch (error) {
+      status.textContent = error.message || '煉器配方不合法';
+      return;
+    }
+
     busy = true;
     save.disabled = true;
     save.textContent = '儲存中…';
-    status.textContent = '正在驗證管理員權限並同步全站法寶設定…';
+    status.textContent = '正在驗證管理員權限並同步全站法寶與煉器配方設定…';
     try {
       await persistCatalog(next);
       modal.remove();

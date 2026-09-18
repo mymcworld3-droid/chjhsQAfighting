@@ -11,6 +11,7 @@ const catalog = read('public/cultivation/material-catalog.js');
 const sync = read('public/cultivation/material-catalog-sync.js');
 const system = read('public/cultivation/material-system.js');
 const admin = read('public/cultivation/admin-material-manager.js');
+const artifactAdmin = read('public/cultivation/admin-artifact-manager.js');
 const main = read('public/main.js');
 
 test('material catalog provides editable materials and default recipes for every built-in artifact', () => {
@@ -55,21 +56,22 @@ test('players have a material store and observer-safe idempotent rendering', () 
   assert.match(system, /MutationObserver/);
 });
 
-test('admin can add edit delete materials and configure artifact recipes', () => {
+test('admin material manager handles materials while artifact editor handles recipes', () => {
   assert.match(admin, /新增材料/);
   assert.match(admin, /編輯材料/);
   assert.match(admin, /刪除材料/);
   assert.match(admin, /既有材料 ID 不可修改/);
   assert.match(admin, /window\.confirm/);
   assert.match(admin, /仍被 .*配方使用/);
-  assert.match(admin, /設定配方/);
-  assert.match(admin, /每個法寶配方至少需要/);
-  assert.match(admin, /MIN_ARTIFACT_RECIPE_MATERIALS/);
-  assert.match(admin, /data-recipe-artifact/);
-  assert.match(admin, /套娃深度最多/);
   assert.match(admin, /persistMaterials/);
-  assert.match(admin, /persistRecipes/);
   assert.match(admin, /userSnap\.data\(\)\?\.isAdmin !== true/);
+
+  assert.match(artifactAdmin, /煉器配方/);
+  assert.match(artifactAdmin, /data-recipe-material/);
+  assert.match(artifactAdmin, /data-recipe-artifact/);
+  assert.match(artifactAdmin, /MIN_ARTIFACT_RECIPE_MATERIALS/);
+  assert.match(artifactAdmin, /MAX_ARTIFACT_RECIPE_NESTING/);
+  assert.match(artifactAdmin, /persistCatalog\(next, normalizedRecipes\)/);
 });
 
 test('material modules load in dependency order and admin panel loads before collapsible wrapper', () => {

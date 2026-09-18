@@ -107,3 +107,13 @@ test('available artifact effects are grouped into collapsible independently scro
   assert.match(manager, /querySelectorAll\('\[data-aam-add-effect-type\]'\)/);
   assert.match(manager, /max-height:42dvh/);
 });
+
+
+test('artifact edit modal includes a collapsible recipe section', () => {
+  assert.match(manager, /recipeEditorMarkup\(item\)/);
+  assert.match(manager, /<details class="aam-recipe-editor"/);
+  assert.match(manager, /data-aam-recipe-count/);
+  assert.match(manager, /data-recipe-material/);
+  assert.match(manager, /data-recipe-artifact/);
+  assert.match(manager, /配方：\$\{escapeHtml\(recipeSummaryText\(item\.id\)\)\}/);
+});
