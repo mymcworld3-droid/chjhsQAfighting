@@ -225,32 +225,41 @@ import {
     if (!isAdmin()) return;
     ensureStyle();
     const page = document.getElementById('page-admin');
-    if (!page || document.getElementById(PANEL_ID)) return;
-    const panel = document.createElement('section');
-    panel.id = PANEL_ID;
+    if (!page) return;
+
+    let panel = document.getElementById(PANEL_ID);
+    if (!panel) {
+      panel = document.createElement('section');
+      panel.id = PANEL_ID;
+      const artifactPanel = document.getElementById('admin-artifact-manager');
+      if (artifactPanel?.nextSibling) page.insertBefore(panel, artifactPanel.nextSibling);
+      else if (artifactPanel) artifactPanel.after(panel);
+      else page.prepend(panel);
+    }
+
     panel.dataset.adminSectionTitle = '材料管理';
     panel.dataset.adminSectionIcon = 'fa-gem';
-    panel.innerHTML = `<div class="amm-head"><div><h3><i class="fa-solid fa-gem" style="color:#d8b15d"></i> 材料與法寶配方</h3><p>管理全站煉器材料，並設定每件法寶合成時必須消耗的材料。</p></div><button type="button" class="amm-add" id="admin-material-add"><i class="fa-solid fa-plus"></i> 新增材料</button></div><div class="amm-section-title"><span>材料清單</span><span>${MATERIAL_CATALOG.length} 種</span></div><div id="admin-material-list" class="amm-list"></div><div class="amm-section-title"><span>法寶合成配方</span><span>未設定配方的法寶不可合成</span></div><div id="admin-recipe-list" class="amm-list"></div>`;
-    const artifactPanel = document.getElementById('admin-artifact-manager');
-    if (artifactPanel?.nextSibling) page.insertBefore(panel, artifactPanel.nextSibling);
-    else if (artifactPanel) artifactPanel.after(panel);
-    else page.prepend(panel);
 
-    panel.querySelector('#admin-material-add').onclick = () => openMaterialEditor();
-    panel.addEventListener('click', (event) => {
-      const edit = event.target.closest('[data-material-edit]');
-      const del = event.target.closest('[data-material-delete]');
-      const recipe = event.target.closest('[data-recipe-edit]');
-      if (edit) {
-        const item = getMaterialById(edit.dataset.materialEdit);
-        if (item) openMaterialEditor(item);
-      } else if (del) {
-        deleteMaterial(del.dataset.materialDelete);
-      } else if (recipe) {
-        const artifact = ARTIFACT_CATALOG.find((item) => item.id === recipe.dataset.recipeEdit);
-        if (artifact) openRecipeEditor(artifact);
-      }
-    });
+    if (panel.dataset.materialManagerHydrated !== '1') {
+      panel.dataset.materialManagerHydrated = '1';
+      panel.classList.remove('admin-preload-shell');
+      panel.innerHTML = `<div class="amm-head"><div><h3><i class="fa-solid fa-gem" style="color:#d8b15d"></i> 材料與法寶配方</h3><p>管理全站煉器材料，並設定每件法寶合成時必須消耗的材料。</p></div><button type="button" class="amm-add" id="admin-material-add"><i class="fa-solid fa-plus"></i> 新增材料</button></div><div class="amm-section-title"><span>材料清單</span><span>${MATERIAL_CATALOG.length} 種</span></div><div id="admin-material-list" class="amm-list"></div><div class="amm-section-title"><span>法寶合成配方</span><span>未設定配方的法寶不可合成</span></div><div id="admin-recipe-list" class="amm-list"></div>`;
+      panel.querySelector('#admin-material-add').onclick = () => openMaterialEditor();
+      panel.addEventListener('click', (event) => {
+        const edit = event.target.closest('[data-material-edit]');
+        const del = event.target.closest('[data-material-delete]');
+        const recipe = event.target.closest('[data-recipe-edit]');
+        if (edit) {
+          const item = getMaterialById(edit.dataset.materialEdit);
+          if (item) openMaterialEditor(item);
+        } else if (del) {
+          deleteMaterial(del.dataset.materialDelete);
+        } else if (recipe) {
+          const artifact = ARTIFACT_CATALOG.find((item) => item.id === recipe.dataset.recipeEdit);
+          if (artifact) openRecipeEditor(artifact);
+        }
+      });
+    }
     render();
   }
 
