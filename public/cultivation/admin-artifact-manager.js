@@ -7,7 +7,8 @@ import {
   SUPPORTED_ARTIFACT_EFFECTS,
   normalizeArtifactDefinition,
   replaceArtifactCatalog,
-  validateArtifactCatalog
+  validateArtifactCatalog,
+  artifactRealmColor
 } from './artifact-catalog.js';
 
 (function () {
@@ -163,7 +164,10 @@ import {
     if (!panel || !isAdmin()) return;
     const list = panel.querySelector('#admin-artifact-list');
     if (!list) return;
-    list.innerHTML = ARTIFACT_CATALOG.map((item) => `<article class="aam-item"><div class="aam-icon">${escapeHtml(item.icon || '◆')}</div><div class="aam-copy"><strong>${escapeHtml(item.name)}</strong><div class="aam-meta">${escapeHtml(item.id)} · ${escapeHtml(item.realm)} · ${escapeHtml(item.category || '法寶')} · 打造 ${Number(item.craft?.gold) || 0} 金幣</div><div class="aam-effects">${(item.effects || []).map((effect) => `<span>${escapeHtml(effectLabel(effect))}</span>`).join('')}</div></div><button type="button" class="aam-edit" data-admin-artifact-edit="${escapeHtml(item.id)}"><i class="fa-solid fa-pen"></i> 編輯</button></article>`).join('') || '<div class="text-gray-500 text-xs">目前沒有法寶。</div>';
+    list.innerHTML = ARTIFACT_CATALOG.map((item) => {
+      const color = artifactRealmColor(item.realm);
+      return `<article class="aam-item" style="--artifact-realm-color:${escapeHtml(color)};border-color:color-mix(in srgb,${escapeHtml(color)} 28%,rgba(255,255,255,.07))"><div class="aam-icon" style="border-color:color-mix(in srgb,${escapeHtml(color)} 55%,transparent);color:${escapeHtml(color)};background:color-mix(in srgb,${escapeHtml(color)} 10%,#171005)">${escapeHtml(item.icon || '◆')}</div><div class="aam-copy"><strong style="color:${escapeHtml(color)}">${escapeHtml(item.name)}</strong><div class="aam-meta">${escapeHtml(item.id)} · ${escapeHtml(item.realm)} · ${escapeHtml(item.category || '法寶')} · 打造 ${Number(item.craft?.gold) || 0} 金幣</div><div class="aam-effects">${(item.effects || []).map((effect) => `<span>${escapeHtml(effectLabel(effect))}</span>`).join('')}</div></div><button type="button" class="aam-edit" data-admin-artifact-edit="${escapeHtml(item.id)}"><i class="fa-solid fa-pen"></i> 編輯</button></article>`;
+    }).join('') || '<div class="text-gray-500 text-xs">目前沒有法寶。</div>';
   }
 
   function effectRow(effect = {}) {
