@@ -141,11 +141,26 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
   function recipeSummary(artifactId) {
     const recipe = getArtifactRecipe(artifactId);
     if (!recipe.length) return { recipe, text: '尚未設定合成材料配方', missing: true };
+    const artifactState = userData()?.artifactSystem || {};
+    const artifactInventory = artifactState.inventory || {};
+    const equippedCounts = {};
+    Object.values(artifactState.equipped || {}).forEach((id) => {
+      const key = String(id || '').trim();
+      if (key) equippedCounts[key] = (equippedCounts[key] || 0) + 1;
+    });
     let missing = false;
     const parts = recipe.map((row) => {
+      const need = Math.max(1, Number(row.quantity) || 1);
+      if (row.artifactId) {
+        const item = getArtifactById(row.artifactId);
+        const owned = Math.max(0, Number(artifactInventory[row.artifactId]) || 0);
+        const reserved = Math.max(0, Number(equippedCounts[row.artifactId]) || 0);
+        const have = Math.max(0, owned - reserved);
+        if (have < need) missing = true;
+        return { text: `法寶・${item?.name || row.artifactId} ${have}/${need}`, missing: have < need };
+      }
       const item = getMaterialById(row.materialId);
       const have = materialQuantity(row.materialId);
-      const need = Math.max(1, Number(row.quantity) || 1);
       if (have < need) missing = true;
       return { text: `${item?.name || row.materialId} ${have}/${need}`, missing: have < need };
     });
@@ -212,22 +227,45 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
         if (gold < cost) throw new Error(`金幣不足，打造需要 ${cost}`);
 
         const materials = normalizeMaterialSystem(raw[FIELD] || {});
-        for (const row of recipe) {
-          const material = getMaterialById(row.materialId);
-          const need = Math.max(1, Math.floor(Number(row.quantity) || 1));
-          const have = Math.max(0, Number(materials.inventory[row.materialId]) || 0);
-          if (!material) throw new Error(`配方材料已不存在：${row.materialId}`);
-          if (have < need) throw new Error(`${material.name} 不足，需要 ${need}，目前 ${have}`);
-        }
-        for (const row of recipe) {
-          const need = Math.max(1, Math.floor(Number(row.quantity) || 1));
-          const remain = Math.max(0, Number(materials.inventory[row.materialId]) || 0) - need;
-          if (remain > 0) materials.inventory[row.materialId] = remain;
-          else delete materials.inventory[row.materialId];
-        }
-
         const artifactSystem = raw.artifactSystem && typeof raw.artifactSystem === 'object' ? { ...raw.artifactSystem } : {};
         artifactSystem.inventory = { ...(artifactSystem.inventory || {}) };
+        artifactSystem.equipped = { ...(artifactSystem.equipped || {}) };
+        const equippedCounts = {};
+        Object.values(artifactSystem.equipped).forEach((id) => {
+          const key = String(id || '').trim();
+          if (key) equippedCounts[key] = (equippedCounts[key] || 0) + 1;
+        });
+
+        for (const row of recipe) {
+          const need = Math.max(1, Math.floor(Number(row.quantity) || 1));
+          if (row.artifactId) {
+            const sourceArtifact = getArtifactById(row.artifactId);
+            const owned = Math.max(0, Number(artifactSystem.inventory[row.artifactId]) || 0);
+            const reserved = Math.max(0, Number(equippedCounts[row.artifactId]) || 0);
+            const have = Math.max(0, owned - reserved);
+            if (!sourceArtifact) throw new Error(`配方法寶已不存在：${row.artifactId}`);
+            if (have < need) throw new Error(`${sourceArtifact.name} 可用數量不足，需要 ${need}，目前 ${have}；已裝備法寶不會消耗`);
+          } else {
+            const material = getMaterialById(row.materialId);
+            const have = Math.max(0, Number(materials.inventory[row.materialId]) || 0);
+            if (!material) throw new Error(`配方材料已不存在：${row.materialId}`);
+            if (have < need) throw new Error(`${material.name} 不足，需要 ${need}，目前 ${have}`);
+          }
+        }
+
+        for (const row of recipe) {
+          const need = Math.max(1, Math.floor(Number(row.quantity) || 1));
+          if (row.artifactId) {
+            const remain = Math.max(0, Number(artifactSystem.inventory[row.artifactId]) || 0) - need;
+            if (remain > 0) artifactSystem.inventory[row.artifactId] = remain;
+            else delete artifactSystem.inventory[row.artifactId];
+          } else {
+            const remain = Math.max(0, Number(materials.inventory[row.materialId]) || 0) - need;
+            if (remain > 0) materials.inventory[row.materialId] = remain;
+            else delete materials.inventory[row.materialId];
+          }
+        }
+
         artifactSystem.inventory[artifactId] = (Number(artifactSystem.inventory[artifactId]) || 0) + gain;
         newGold = gold - cost;
         committedMaterials = materials;
