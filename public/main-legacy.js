@@ -1919,7 +1919,8 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         if (navigator.vibrate) navigator.vibrate(200);
     }
     
-    fbText.innerHTML = formatQuizRichText(explanation) || "未提供解析。";
+    const explanationFormatter = window.formatQuizRichText || parseMarkdownImages;
+    fbText.innerHTML = explanationFormatter(explanation) || "未提供解析。";
     try {
         window.MathJax?.typesetClear?.([fbText]);
         window.MathJax?.typesetPromise?.([fbText]).catch((err) => console.log(err.message));
