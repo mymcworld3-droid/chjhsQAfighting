@@ -1,7 +1,7 @@
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, runTransaction, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-import { ARTIFACT_CATALOG } from './artifact-catalog.js';
+import { ARTIFACT_CATALOG, getArtifactById, artifactRealmColor } from './artifact-catalog.js';
 import {
   MATERIAL_CATALOG,
   MATERIAL_CATEGORIES,
@@ -12,7 +12,9 @@ import {
   replaceMaterialCatalog,
   replaceArtifactRecipes,
   getArtifactRecipe,
-  getMaterialById
+  getMaterialById,
+  artifactRecipeDepth,
+  MAX_ARTIFACT_RECIPE_NESTING
 } from './material-catalog.js';
 
 (function () {
@@ -50,16 +52,23 @@ import {
       .amm-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.amm-head h3{margin:0;color:#f3e5c3;font-size:14px}.amm-head p{margin:3px 0 0;color:#8e816b;font-size:8px;line-height:1.5}.amm-add{min-height:36px;padding:0 12px;border-radius:11px;border:1px solid rgba(216,177,93,.38);background:rgba(216,177,93,.09);color:#f1d895;font-size:9px;font-weight:900}
       .amm-section-title{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:13px 0 7px;padding-top:12px;border-top:1px solid rgba(255,255,255,.07);color:#d6ba76;font-size:9px;font-weight:900}.amm-section-title:first-of-type{margin-top:0;padding-top:0;border-top:0}.amm-list{display:grid;gap:7px}.amm-item{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:9px;align-items:center;padding:9px;border:1px solid rgba(255,255,255,.07);border-radius:13px;background:rgba(255,255,255,.018)}.amm-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:11px;border:1px solid rgba(216,177,93,.25);color:#f0d17a;background:#171005;font-weight:900}.amm-copy{min-width:0}.amm-copy strong{color:#eee1c7;font-size:10px}.amm-meta{margin-top:3px;color:#887a63;font-size:7px}.amm-description{margin-top:4px;color:#716653;font-size:7px;line-height:1.45}.amm-actions{display:flex;gap:5px}.amm-actions button{min-height:31px;padding:0 8px;border-radius:9px;font-size:7px;font-weight:900}.amm-edit,.amm-recipe-edit{border:1px solid rgba(216,177,93,.22);background:rgba(216,177,93,.05);color:#dbc078}.amm-delete{border:1px solid rgba(248,113,113,.25);background:rgba(127,29,29,.12);color:#fca5a5}.amm-recipe-missing{color:#f0a5a5}.amm-recipe-ok{color:#bfa966}
       .amm-modal{position:fixed;inset:0;z-index:12200;display:grid;place-items:center;padding:14px;background:rgba(0,0,0,.82);backdrop-filter:blur(8px)}.amm-card{width:min(100%,650px);max-height:92dvh;overflow:auto;padding:18px;border:1px solid rgba(216,177,93,.28);border-radius:20px;background:linear-gradient(145deg,#18130c,#080808);box-shadow:0 30px 100px rgba(0,0,0,.72)}.amm-card h3{margin:0 0 4px;color:#f3e7ca;font-size:15px}.amm-note{margin:0 0 12px;color:#8f826d;font-size:8px;line-height:1.65}.amm-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.amm-field{display:grid;gap:4px}.amm-field.full{grid-column:1/-1}.amm-field label{color:#9a8d75;font-size:7px;font-weight:900}.amm-field input,.amm-field select,.amm-field textarea{width:100%;min-height:38px;padding:8px 9px;border:1px solid rgba(216,177,93,.16);border-radius:10px;background:#0a0908;color:#eadfc8;font-size:9px;outline:none}.amm-field textarea{min-height:78px;resize:vertical}.amm-status{margin-top:9px;color:#d6b86e;font-size:8px}.amm-modal-actions{display:flex;gap:8px;margin-top:14px}.amm-modal-actions button{flex:1;min-height:40px;border-radius:11px;font-size:9px;font-weight:900}.amm-cancel{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:#aaa}.amm-save{border:1px solid rgba(216,177,93,.4);background:linear-gradient(135deg,#8f651e,#4b2f09);color:#fff0bd}.amm-save:disabled{opacity:.45}
-      .amm-recipe-list{display:grid;gap:7px}.amm-recipe-row{display:grid;grid-template-columns:minmax(0,1fr) 110px;gap:9px;align-items:center;padding:9px;border:1px solid rgba(255,255,255,.07);border-radius:12px}.amm-recipe-row label{color:#d9cba9;font-size:8px}.amm-recipe-row small{display:block;margin-top:2px;color:#766b58;font-size:6px}.amm-recipe-row input{width:100%;min-height:35px;padding:6px 8px;border:1px solid rgba(216,177,93,.14);border-radius:9px;background:#090807;color:#eadfc8;font-size:9px}
+      .amm-recipe-list{display:grid;gap:7px}.amm-recipe-row{display:grid;grid-template-columns:minmax(0,1fr) 110px;gap:9px;align-items:center;padding:9px;border:1px solid rgba(255,255,255,.07);border-radius:12px}.amm-recipe-row label{color:#d9cba9;font-size:8px}.amm-recipe-row small{display:block;margin-top:2px;color:#766b58;font-size:6px}.amm-recipe-row input{width:100%;min-height:35px;padding:6px 8px;border:1px solid rgba(216,177,93,.14);border-radius:9px;background:#090807;color:#eadfc8;font-size:9px}.amm-recipe-group-title{margin:12px 0 6px;padding:7px 9px;border-radius:9px;background:rgba(216,177,93,.045);color:#d7bb77;font-size:8px;font-weight:900}.amm-recipe-row.is-artifact{border-color:color-mix(in srgb,var(--artifact-realm-color,#d8b15d) 28%,rgba(255,255,255,.07));background:radial-gradient(circle at 8% 50%,color-mix(in srgb,var(--artifact-realm-color,#d8b15d) 8%,transparent),transparent 34%)}.amm-recipe-row.is-artifact label{color:var(--artifact-realm-color,#d9cba9)}
       @media(max-width:620px){.amm-head{align-items:flex-start;flex-direction:column}.amm-add{width:100%}.amm-item{grid-template-columns:38px minmax(0,1fr)}.amm-actions{grid-column:1/-1}.amm-actions button{flex:1}.amm-grid{grid-template-columns:1fr}.amm-field.full{grid-column:auto}.amm-recipe-row{grid-template-columns:minmax(0,1fr) 90px}}
     `;
     document.head.appendChild(style);
   }
 
+  function recipeRowName(row) {
+    if (row?.artifactId) return getArtifactById(row.artifactId)?.name || row.artifactId;
+    return getMaterialById(row?.materialId)?.name || row?.materialId || '未知素材';
+  }
+
   function recipeLabel(artifactId) {
     const recipe = getArtifactRecipe(artifactId);
     if (!recipe.length) return '<span class="amm-recipe-missing">未設定材料配方</span>';
-    return `<span class="amm-recipe-ok">${recipe.map((row) => `${escapeHtml(getMaterialById(row.materialId)?.name || row.materialId)} ×${row.quantity}`).join(' · ')}</span>`;
+    const depth = artifactRecipeDepth(artifactId);
+    const depthText = depth > 0 ? ` · 二次煉製深度 ${depth}/${MAX_ARTIFACT_RECIPE_NESTING}` : '';
+    return `<span class="amm-recipe-ok">${recipe.map((row) => `${row.artifactId ? '法寶・' : ''}${escapeHtml(recipeRowName(row))} ×${row.quantity}`).join(' · ')}${depthText}</span>`;
   }
 
   function render() {
@@ -71,7 +80,10 @@ import {
       materialList.innerHTML = MATERIAL_CATALOG.map((item) => `<article class="amm-item"><div class="amm-icon">${escapeHtml(item.icon || '材')}</div><div class="amm-copy"><strong>${escapeHtml(item.name)}</strong><div class="amm-meta">${escapeHtml(item.id)} · ${escapeHtml(item.category)} · ${item.buyGold > 0 ? `採購 ${item.buyGold} 金幣` : '不可直接採購'}</div><div class="amm-description">${escapeHtml(item.description || '')}</div></div><div class="amm-actions"><button type="button" class="amm-edit" data-material-edit="${escapeHtml(item.id)}"><i class="fa-solid fa-pen"></i> 編輯</button><button type="button" class="amm-delete" data-material-delete="${escapeHtml(item.id)}"><i class="fa-solid fa-trash"></i> 刪除</button></div></article>`).join('');
     }
     if (recipeList) {
-      recipeList.innerHTML = ARTIFACT_CATALOG.map((artifact) => `<article class="amm-item"><div class="amm-icon">${escapeHtml(artifact.icon || '◆')}</div><div class="amm-copy"><strong>${escapeHtml(artifact.name)}</strong><div class="amm-meta">${recipeLabel(artifact.id)}</div></div><div class="amm-actions"><button type="button" class="amm-recipe-edit" data-recipe-edit="${escapeHtml(artifact.id)}"><i class="fa-solid fa-flask"></i> 設定配方</button></div></article>`).join('');
+      recipeList.innerHTML = ARTIFACT_CATALOG.map((artifact) => {
+        const color = artifactRealmColor(artifact.realm);
+        return `<article class="amm-item" style="--artifact-realm-color:${escapeHtml(color)};border-color:color-mix(in srgb,${escapeHtml(color)} 22%,rgba(255,255,255,.07))"><div class="amm-icon" style="border-color:color-mix(in srgb,${escapeHtml(color)} 48%,transparent);color:${escapeHtml(color)};background:color-mix(in srgb,${escapeHtml(color)} 10%,#171005)">${escapeHtml(artifact.icon || '◆')}</div><div class="amm-copy"><strong style="color:${escapeHtml(color)}">${escapeHtml(artifact.name)}</strong><div class="amm-meta">${escapeHtml(artifact.realm)} · ${recipeLabel(artifact.id)}</div></div><div class="amm-actions"><button type="button" class="amm-recipe-edit" data-recipe-edit="${escapeHtml(artifact.id)}"><i class="fa-solid fa-flask"></i> 設定配方</button></div></article>`;
+      }).join('');
     }
   }
 
@@ -186,11 +198,17 @@ import {
   function openRecipeEditor(artifact) {
     if (!artifact || !isAdmin()) return;
     document.getElementById(RECIPE_MODAL_ID)?.remove();
-    const current = Object.fromEntries(getArtifactRecipe(artifact.id).map((row) => [row.materialId, row.quantity]));
+    const recipe = getArtifactRecipe(artifact.id);
+    const materialCurrent = Object.fromEntries(recipe.filter((row) => row.materialId).map((row) => [row.materialId, row.quantity]));
+    const artifactCurrent = Object.fromEntries(recipe.filter((row) => row.artifactId).map((row) => [row.artifactId, row.quantity]));
+    const artifactChoices = ARTIFACT_CATALOG.filter((item) => item.id !== artifact.id);
     const modal = document.createElement('div');
     modal.id = RECIPE_MODAL_ID;
     modal.className = 'amm-modal';
-    modal.innerHTML = `<section class="amm-card" role="dialog" aria-modal="true"><h3>${escapeHtml(artifact.name)} · 合成配方</h3><p class="amm-note">至少設定 1 種材料。數量填 0 代表此材料不加入配方；法寶原本的金幣成本仍會同時扣除。</p><div class="amm-recipe-list">${MATERIAL_CATALOG.map((material) => `<div class="amm-recipe-row"><label>${escapeHtml(material.icon || '材')} ${escapeHtml(material.name)}<small>${escapeHtml(material.category)} · 目前採購價 ${material.buyGold > 0 ? `${material.buyGold} 金幣` : '不可購買'}</small></label><input type="number" min="0" step="1" value="${Math.max(0, Number(current[material.id]) || 0)}" data-recipe-material="${escapeHtml(material.id)}"></div>`).join('')}</div><div id="amm-recipe-status" class="amm-status"></div><div class="amm-modal-actions"><button type="button" class="amm-cancel">取消</button><button type="button" class="amm-save">儲存配方</button></div></section>`;
+    modal.innerHTML = `<section class="amm-card" role="dialog" aria-modal="true"><h3>${escapeHtml(artifact.name)} · 合成配方</h3><p class="amm-note">材料與既有法寶都可以放入 8 格煉器陣。法寶可做二次煉製素材，但套娃深度最多 ${MAX_ARTIFACT_RECIPE_NESTING} 層；自己吃自己、循環配方或第 3 層套娃都會被拒絕。被裝備中的法寶不會被玩家煉器消耗。</p><div class="amm-recipe-list"><div class="amm-recipe-group-title">一般材料</div>${MATERIAL_CATALOG.map((material) => `<div class="amm-recipe-row"><label>${escapeHtml(material.icon || '材')} ${escapeHtml(material.name)}<small>${escapeHtml(material.category)} · ${escapeHtml(material.realm || '凡人')} · ${material.buyGold > 0 ? `採購 ${material.buyGold} 金幣` : '不可購買'}</small></label><input type="number" min="0" step="1" value="${Math.max(0, Number(materialCurrent[material.id]) || 0)}" data-recipe-material="${escapeHtml(material.id)}"></div>`).join('')}<div class="amm-recipe-group-title">法寶素材（二次煉製）</div>${artifactChoices.map((item) => {
+      const color = artifactRealmColor(item.realm);
+      return `<div class="amm-recipe-row is-artifact" style="--artifact-realm-color:${escapeHtml(color)}"><label>${escapeHtml(item.icon || '◆')} ${escapeHtml(item.name)}<small>${escapeHtml(item.realm)} · 目前配方深度 ${artifactRecipeDepth(item.id)}/${MAX_ARTIFACT_RECIPE_NESTING}</small></label><input type="number" min="0" step="1" value="${Math.max(0, Number(artifactCurrent[item.id]) || 0)}" data-recipe-artifact="${escapeHtml(item.id)}"></div>`;
+    }).join('')}</div><div id="amm-recipe-status" class="amm-status"></div><div class="amm-modal-actions"><button type="button" class="amm-cancel">取消</button><button type="button" class="amm-save">儲存配方</button></div></section>`;
     document.body.appendChild(modal);
     modal.querySelector('.amm-cancel').onclick = () => modal.remove();
     modal.querySelector('.amm-save').onclick = () => saveRecipe(modal, artifact);
@@ -200,11 +218,16 @@ import {
     if (busy) return;
     const status = modal.querySelector('#amm-recipe-status');
     const save = modal.querySelector('.amm-save');
-    const recipe = [...modal.querySelectorAll('[data-recipe-material]')].map((input) => ({
+    const materialRows = [...modal.querySelectorAll('[data-recipe-material]')].map((input) => ({
       materialId: input.dataset.recipeMaterial,
       quantity: Math.max(0, Math.floor(Number(input.value) || 0))
     })).filter((row) => row.quantity > 0);
-    if (!recipe.length) { status.textContent = '至少需要 1 種材料才能合成法寶。'; return; }
+    const artifactRows = [...modal.querySelectorAll('[data-recipe-artifact]')].map((input) => ({
+      artifactId: input.dataset.recipeArtifact,
+      quantity: Math.max(0, Math.floor(Number(input.value) || 0))
+    })).filter((row) => row.quantity > 0);
+    const recipe = [...materialRows, ...artifactRows];
+    if (!recipe.length) { status.textContent = '至少需要 1 個材料或法寶素材才能合成法寶。'; return; }
     const next = clone(ARTIFACT_RECIPES);
     next[artifact.id] = recipe;
     try { validateArtifactRecipes(next); } catch (error) { status.textContent = error.message; return; }
@@ -213,7 +236,7 @@ import {
       await persistRecipes(next);
       modal.remove();
       render();
-      toast(`已更新 ${artifact.name} 的材料配方`);
+      toast(`已更新 ${artifact.name} 的煉器配方`);
     } catch (error) {
       console.error('[Admin recipe save]', error);
       status.textContent = error.message || '配方儲存失敗';
