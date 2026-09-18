@@ -19,11 +19,11 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     list.forEach((realm, i) => {
       if (Number(score) >= Number(realm.need || 0)) index = i;
     });
-    return index;
+    return window.limitImmortalRank(index, score, list);
   }
 
   async function sync() {
-    if (writing) return;
+    if (writing || !window.trueImmortalBoardReady) return;
     const data = window.getCurrentUserData?.();
     const auth = getAuth(getApp());
     const user = auth.currentUser;
@@ -31,7 +31,6 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
 
     const score = Math.max(0, Number(data.stats.totalScore) || 0);
     const rank = expectedRank(score);
-    if (Number(data.stats.rankLevel) === rank) return;
 
     data.stats.rankLevel = rank;
     const key = `${user.uid}:${score}:${rank}`;
@@ -52,6 +51,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     sync();
     setInterval(sync, 700);
     window.addEventListener('xiuxian:stats-updated', sync);
+    window.addEventListener('xiuxian:immortals-updated', sync);
   }
 
   if (document.readyState === 'loading') {

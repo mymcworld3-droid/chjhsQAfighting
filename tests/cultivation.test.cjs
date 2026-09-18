@@ -71,6 +71,8 @@ function setup(totalScore = 0) {
     soloSession: { active: false }
   });
   vm.runInContext(
+    read('true-immortal.js') +
+    'window.getRealmUserUid = () => auth.currentUser?.uid;' +
     'const answeredSoloQuizzes = new WeakSet();' +
     'window.getCurrentUserData = () => currentUserData;' +
     read('cultivation-rules.js').replace(/export /g, '') +

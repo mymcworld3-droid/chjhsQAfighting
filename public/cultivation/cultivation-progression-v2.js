@@ -61,7 +61,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     realms().forEach((realm, i) => {
       if (Number(value) >= Number(realm.need || 0)) index = i;
     });
-    return index;
+    return window.limitImmortalRank(index, value, realms());
   }
 
   function pillCount() {

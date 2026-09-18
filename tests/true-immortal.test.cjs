@@ -1,0 +1,37 @@
+const { test } = require('node:test');
+const assert = require('node:assert/strict');
+const vm = require('node:vm');
+const fs = require('node:fs');
+const path = require('node:path');
+const source = fs.readFileSync(path.join(__dirname, '../public/cultivation/true-immortal.js'), 'utf8');
+function setup() {
+  const window = { getRealmUserUid: () => 'alice', dispatchEvent() {} };
+  vm.runInNewContext(source, { window, Event });
+  return window;
+}
+const realms = [{ name: '凡人' }, { name: '渡劫' }, { name: '真仙' }];
+test('True Immortal requires both the 868 threshold and an active named seat', () => {
+  const w = setup();
+  for (const listed of [false, true]) {
+    w.setTrueImmortalBoard(listed ? [{ id: 'ru-xian', uid: 'alice' }] : []);
+    for (const score of [0, 627, 628, 629, 867, 868, 9999]) {
+      assert.equal(w.isTrueImmortal(score), listed && score >= 868);
+    }
+  }
+});
+test('losing a seat, switching user and unavailable board revoke True Immortal', () => {
+  const w = setup();
+  w.setTrueImmortalBoard([{ id: 'ru-xian', uid: 'alice' }]);
+  assert.equal(w.limitImmortalRank(2, 868, realms), 2);
+  assert.equal(w.limitImmortalRank(2, 868, realms, 'bob'), 1);
+  w.setTrueImmortalBoard([{ id: 'ru-xian', uid: 'bob' }]);
+  assert.equal(w.limitImmortalRank(2, 9999, realms), 1);
+  assert.equal(w.limitImmortalRank(0, 0, realms), 0);
+  w.setTrueImmortalBoard([{ id: 'ru-xian', uid: 'alice' }], false);
+  assert.equal(w.isTrueImmortal(9999), false);
+});
+test('unknown board records cannot grant True Immortal', () => {
+  const w = setup();
+  w.setTrueImmortalBoard([{ id: 'unknown', uid: 'alice' }]);
+  assert.equal(w.isTrueImmortal(9999), false);
+});
