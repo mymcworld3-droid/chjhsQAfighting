@@ -290,7 +290,7 @@ import {
       })
     });
     const payload = await response.json().catch(() => ({}));
-    if (!response.ok || !payload.artifact) throw new Error(payload.error || 'AI 法寶生成失敗');
+    if (!response.ok || !payload.artifact) throw new Error('新法寶推演失敗，請稍後再開爐');
     return payload;
   }
 
