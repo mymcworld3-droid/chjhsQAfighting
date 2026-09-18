@@ -23,6 +23,23 @@ import {
     equip_attack_percent: { title: '百分比攻擊', summary: '裝備後按比例提高攻擊力', hint: '例如：0.2 = +20%', icon: 'fa-chart-line' },
     equip_hp_flat: { title: '固定生命', summary: '裝備後固定增加生命上限', hint: '例如：+400 生命', icon: 'fa-heart' },
     equip_hp_percent: { title: '百分比生命', summary: '裝備後按比例提高生命上限', hint: '例如：0.2 = +20%', icon: 'fa-heart-pulse' },
+    equip_damage_percent: { title: '百分比增傷', summary: '每次攻擊造成更多傷害', hint: '例如：0.15 = +15%', icon: 'fa-burst' },
+    equip_damage_reduction_flat: { title: '固定減傷', summary: '每次受到傷害先固定扣除數值', hint: '例如：80 = 每次少 80 傷害', icon: 'fa-shield' },
+    equip_damage_reduction_percent: { title: '百分比減傷', summary: '每次受到傷害按比例降低', hint: '例如：0.2 = -20% 傷害', icon: 'fa-shield-halved' },
+    equip_crit_chance: { title: '暴擊率', summary: '攻擊時有機率造成暴擊', hint: '例如：0.15 = 15%', icon: 'fa-crosshairs' },
+    equip_crit_damage_percent: { title: '暴擊增傷', summary: '暴擊時提高額外倍率', hint: '例如：0.5 = 暴擊額外 +50%', icon: 'fa-bolt' },
+    equip_combo_chance: { title: '連擊率', summary: '最多 10% 機率追加一次同等基礎攻擊', hint: '硬上限：0.10 = 10%', icon: 'fa-forward-fast' },
+    equip_lifesteal_percent: { title: '吸血', summary: '依實際造成的生命傷害回復生命', hint: '例如：0.1 = 10%', icon: 'fa-droplet' },
+    equip_reflect_percent: { title: '反傷', summary: '反射實際受到的生命傷害', hint: '例如：0.15 = 15%', icon: 'fa-reply' },
+    equip_shield_flat: { title: '開場護盾', summary: '每場鬥法開始時獲得固定護盾', hint: '例如：300 護盾', icon: 'fa-shield-heart' },
+    equip_true_damage_flat: { title: '固定真實傷害', summary: '命中時追加不受一般減傷影響的傷害', hint: '例如：+80 真傷', icon: 'fa-fire' },
+    equip_low_hp_damage_percent: { title: '低血增傷', summary: '生命 ≤30% 時提高傷害', hint: '例如：0.3 = +30%', icon: 'fa-skull' },
+    equip_low_hp_reduction_percent: { title: '低血減傷', summary: '生命 ≤30% 時額外降低傷害', hint: '例如：0.25 = -25%', icon: 'fa-heart-crack' },
+    equip_first_hit_reduction_percent: { title: '首次受傷減免', summary: '每場第一次受傷額外減傷', hint: '例如：0.5 = -50%', icon: 'fa-hand-sparkles' },
+    equip_damage_cap_percent: { title: '單次傷害上限', summary: '單次生命傷害不得超過最大生命比例', hint: '例如：0.35 = 最多 35% 最大生命', icon: 'fa-gauge-high' },
+    equip_on_correct_shield_flat: { title: '答對獲盾', summary: '答對並完成攻擊後增加固定護盾', hint: '例如：+120 護盾', icon: 'fa-shield-cat' },
+    equip_cheat_death: { title: '一次保命', summary: '每場一次，致命傷改為保留 1 HP', hint: '不需填數值', icon: 'fa-heart-circle-plus' },
+    equip_copy_enemy_artifact: { title: '鏡映敵方法寶', summary: '每場固定複製敵方一項可複製戰鬥效果', hint: '不會複製「複製」本身', icon: 'fa-clone' },
     timed_attack_multiplier: { title: '限時攻擊倍率', summary: '催動後一段時間提高鬥法攻擊', hint: '設定倍率與持續分鐘', icon: 'fa-bolt' },
     timed_cultivation_multiplier: { title: '限時修為倍率', summary: '催動後一段時間提高答對所得修為', hint: '設定倍率與持續分鐘', icon: 'fa-fire-flame-curved' },
     remove_wrong_option: { title: '排除錯誤選項', summary: '作答前移除一個錯誤選項', hint: '可選問道／鬥法／洞天', icon: 'fa-wand-sparkles' }
@@ -45,11 +62,29 @@ import {
   }
 
   function effectLabel(effect) {
+    const pct = (value) => `${Math.round((Number(value) || 0) * 100)}%`;
     const labels = {
       equip_attack_flat: `攻擊 +${Number(effect.value) || 0}`,
-      equip_attack_percent: `攻擊 +${Math.round((Number(effect.value) || 0) * 100)}%`,
+      equip_attack_percent: `攻擊 +${pct(effect.value)}`,
       equip_hp_flat: `生命 +${Number(effect.value) || 0}`,
-      equip_hp_percent: `生命 +${Math.round((Number(effect.value) || 0) * 100)}%`,
+      equip_hp_percent: `生命 +${pct(effect.value)}`,
+      equip_damage_percent: `傷害 +${pct(effect.value)}`,
+      equip_damage_reduction_flat: `固定減傷 ${Number(effect.value) || 0}`,
+      equip_damage_reduction_percent: `減傷 ${pct(effect.value)}`,
+      equip_crit_chance: `暴擊率 ${pct(effect.value)}`,
+      equip_crit_damage_percent: `暴擊增傷 ${pct(effect.value)}`,
+      equip_combo_chance: `連擊率 ${pct(Math.min(0.10, Number(effect.value) || 0))}`,
+      equip_lifesteal_percent: `吸血 ${pct(effect.value)}`,
+      equip_reflect_percent: `反傷 ${pct(effect.value)}`,
+      equip_shield_flat: `開場護盾 +${Number(effect.value) || 0}`,
+      equip_true_damage_flat: `真傷 +${Number(effect.value) || 0}`,
+      equip_low_hp_damage_percent: `低血增傷 +${pct(effect.value)}`,
+      equip_low_hp_reduction_percent: `低血減傷 ${pct(effect.value)}`,
+      equip_first_hit_reduction_percent: `首次減傷 ${pct(effect.value)}`,
+      equip_damage_cap_percent: `單次傷害≤${pct(effect.value)} 最大生命`,
+      equip_on_correct_shield_flat: `答對護盾 +${Number(effect.value) || 0}`,
+      equip_cheat_death: '每場一次保命',
+      equip_copy_enemy_artifact: '複製敵方戰鬥效果',
       timed_attack_multiplier: `限時攻擊 ×${Number(effect.multiplier) || 1}`,
       timed_cultivation_multiplier: `限時修為 ×${Number(effect.multiplier) || 1}`,
       remove_wrong_option: `排除錯項 · ${(effect.contexts || []).join('/')}`
@@ -57,8 +92,35 @@ import {
     return labels[effect.type] || effect.type;
   }
 
+  const VALUE_EFFECT_DEFAULTS = Object.freeze({
+    equip_attack_flat: 80,
+    equip_attack_percent: 0.15,
+    equip_hp_flat: 400,
+    equip_hp_percent: 0.15,
+    equip_damage_percent: 0.15,
+    equip_damage_reduction_flat: 60,
+    equip_damage_reduction_percent: 0.15,
+    equip_crit_chance: 0.10,
+    equip_crit_damage_percent: 0.50,
+    equip_combo_chance: 0.05,
+    equip_lifesteal_percent: 0.10,
+    equip_reflect_percent: 0.10,
+    equip_shield_flat: 250,
+    equip_true_damage_flat: 60,
+    equip_low_hp_damage_percent: 0.25,
+    equip_low_hp_reduction_percent: 0.25,
+    equip_first_hit_reduction_percent: 0.40,
+    equip_damage_cap_percent: 0.35,
+    equip_on_correct_shield_flat: 100
+  });
+
+  function effectUsesValue(type) {
+    return Object.prototype.hasOwnProperty.call(VALUE_EFFECT_DEFAULTS, type);
+  }
+
+
   function defaultEffect(type) {
-    if (['equip_attack_flat', 'equip_attack_percent', 'equip_hp_flat', 'equip_hp_percent'].includes(type)) return { type, value: 0 };
+    if (effectUsesValue(type)) return { type, value: VALUE_EFFECT_DEFAULTS[type] };
     if (type === 'timed_attack_multiplier' || type === 'timed_cultivation_multiplier') return { type, multiplier: 1.5, durationMs: 10 * 60 * 1000 };
     if (type === 'remove_wrong_option') return { type, contexts: ['quiz', 'battle', 'dongtian'], perQuestion: 1 };
     return { type };
@@ -113,9 +175,22 @@ import {
     row.innerHTML = `<div class="aam-effect-main"><label>效果類型<select data-aam-effect-type>${SUPPORTED_ARTIFACT_EFFECTS.map((value) => `<option value="${value}" ${value === type ? 'selected' : ''}>${escapeHtml(EFFECT_GUIDE[value]?.title || value)}</option>`).join('')}</select></label><label data-aam-value-field>數值<input data-aam-effect-value type="number" step="0.01" value="${Number(effect.value) || 0}"></label><label data-aam-multiplier-field>倍率<input data-aam-effect-multiplier type="number" min="0.01" step="0.05" value="${Number(effect.multiplier) || 1}"></label><label data-aam-duration-field>分鐘<input data-aam-effect-duration type="number" min="0.02" step="0.5" value="${minutes}"></label><button type="button" class="aam-remove-effect" aria-label="移除效果"><i class="fa-solid fa-trash"></i></button></div><div class="aam-contexts" data-aam-contexts><label><input type="checkbox" value="quiz" ${contexts.includes('quiz') ? 'checked' : ''}>問道</label><label><input type="checkbox" value="battle" ${contexts.includes('battle') ? 'checked' : ''}>鬥法</label><label><input type="checkbox" value="dongtian" ${contexts.includes('dongtian') ? 'checked' : ''}>洞天</label></div>`;
     const sync = () => {
       const current = row.querySelector('[data-aam-effect-type]').value;
-      const needsValue = ['equip_attack_flat', 'equip_attack_percent', 'equip_hp_flat', 'equip_hp_percent'].includes(current);
+      const needsValue = effectUsesValue(current);
       const timed = current.startsWith('timed_');
+      const valueInput = row.querySelector('[data-aam-effect-value]');
       row.querySelector('[data-aam-value-field]').style.display = needsValue ? '' : 'none';
+      if (valueInput) {
+        valueInput.removeAttribute('max');
+        valueInput.removeAttribute('min');
+        if (current === 'equip_combo_chance') {
+          valueInput.max = '0.10';
+          valueInput.min = '0';
+          if (Number(valueInput.value) > 0.10) valueInput.value = '0.10';
+        } else if (current === 'equip_damage_cap_percent') {
+          valueInput.min = '0.05';
+          valueInput.max = '1';
+        }
+      }
       row.querySelector('[data-aam-multiplier-field]').style.display = timed ? '' : 'none';
       row.querySelector('[data-aam-duration-field]').style.display = timed ? '' : 'none';
       row.querySelector('[data-aam-contexts]').style.display = current === 'remove_wrong_option' ? 'flex' : 'none';
@@ -133,7 +208,7 @@ import {
     const modal = document.createElement('div');
     modal.id = MODAL_ID;
     modal.className = 'aam-modal';
-    modal.innerHTML = `<section class="aam-card" role="dialog" aria-modal="true"><h3>${editing ? '編輯法寶' : '新增法寶'}</h3><p class="aam-note">這裡直接維護全站正式法寶清單。建立後 ID 會鎖定，避免玩家既有背包與裝備失聯。右側「可用功能」可直接加入效果。</p><div class="aam-editor-layout"><div class="aam-editor-main"><div class="aam-grid"><div class="aam-field"><label>法寶 ID（英文小寫與 -）</label><input id="aam-id" maxlength="64" ${editing ? 'readonly' : ''} value="${escapeHtml(item?.id || '')}" placeholder="例如 thunder-seal"></div><div class="aam-field"><label>名稱</label><input id="aam-name" maxlength="80" value="${escapeHtml(item?.name || '')}"></div><div class="aam-field"><label>圖示（1–4 字）</label><input id="aam-icon" maxlength="4" value="${escapeHtml(item?.icon || '◆')}"></div><div class="aam-field"><label>境界</label><select id="aam-realm">${ARTIFACT_REALMS.map((realm) => `<option value="${realm.name}" ${realm.name === (item?.realm || '築基') ? 'selected' : ''}>${realm.name}</option>`).join('')}</select></div><div class="aam-field"><label>分類</label><select id="aam-category">${categoryOptions(item?.category)}</select></div><div class="aam-field"><label>裝備欄位（裝備效果才需要）</label><input id="aam-slot" maxlength="40" value="${escapeHtml(item?.equipSlot || '')}" placeholder="例如 本命法寶"></div><div class="aam-field"><label>打造金幣</label><input id="aam-gold" type="number" min="0" step="1" value="${Number(item?.craft?.gold) || 0}"></div><div class="aam-field"><label>每次打造數量</label><input id="aam-yield" type="number" min="1" step="1" value="${Math.max(1, Number(item?.craft?.yield) || 1)}"></div><div class="aam-field full"><label>說明</label><textarea id="aam-description" maxlength="500">${escapeHtml(item?.description || '')}</textarea></div></div><div class="aam-effects-editor"><div class="aam-effects-head"><span>法寶效果</span><button type="button" id="aam-add-effect" class="aam-add-effect"><i class="fa-solid fa-plus"></i> 新增效果</button></div><div id="aam-effect-list"></div></div><div id="aam-status" class="aam-note" style="margin-top:10px"></div></div><aside class="aam-guide"><h4><i class="fa-solid fa-list-check"></i> 可用功能</h4><p>點選任一功能即可直接加入左側法寶效果，可同時組合多種功能。</p><div class="aam-guide-list">${effectGuideMarkup()}</div><div class="aam-guide-note"><b>裝備類：</b>需要填「裝備欄位」。<br><b>限時類：</b>催動時消耗 1 件法寶。<br><b>排除錯項：</b>可指定問道、鬥法、洞天。</div></aside></div><div class="aam-actions"><button type="button" class="aam-cancel">取消</button><button type="button" class="aam-save">${editing ? '儲存變更' : '建立法寶'}</button></div></section>`;
+    modal.innerHTML = `<section class="aam-card" role="dialog" aria-modal="true"><h3>${editing ? '編輯法寶' : '新增法寶'}</h3><p class="aam-note">這裡直接維護全站正式法寶清單。建立後 ID 會鎖定，避免玩家既有背包與裝備失聯。右側「可用功能」可直接加入效果。</p><div class="aam-editor-layout"><div class="aam-editor-main"><div class="aam-grid"><div class="aam-field"><label>法寶 ID（英文小寫與 -）</label><input id="aam-id" maxlength="64" ${editing ? 'readonly' : ''} value="${escapeHtml(item?.id || '')}" placeholder="例如 thunder-seal"></div><div class="aam-field"><label>名稱</label><input id="aam-name" maxlength="80" value="${escapeHtml(item?.name || '')}"></div><div class="aam-field"><label>圖示（1–4 字）</label><input id="aam-icon" maxlength="4" value="${escapeHtml(item?.icon || '◆')}"></div><div class="aam-field"><label>境界</label><select id="aam-realm">${ARTIFACT_REALMS.map((realm) => `<option value="${realm.name}" ${realm.name === (item?.realm || '築基') ? 'selected' : ''}>${realm.name}</option>`).join('')}</select></div><div class="aam-field"><label>分類</label><select id="aam-category">${categoryOptions(item?.category)}</select></div><div class="aam-field"><label>裝備欄位（裝備效果才需要）</label><input id="aam-slot" maxlength="40" value="${escapeHtml(item?.equipSlot || '')}" placeholder="例如 本命法寶"></div><div class="aam-field"><label>打造金幣</label><input id="aam-gold" type="number" min="0" step="1" value="${Number(item?.craft?.gold) || 0}"></div><div class="aam-field"><label>每次打造數量</label><input id="aam-yield" type="number" min="1" step="1" value="${Math.max(1, Number(item?.craft?.yield) || 1)}"></div><div class="aam-field full"><label>說明</label><textarea id="aam-description" maxlength="500">${escapeHtml(item?.description || '')}</textarea></div></div><div class="aam-effects-editor"><div class="aam-effects-head"><span>法寶效果</span><button type="button" id="aam-add-effect" class="aam-add-effect"><i class="fa-solid fa-plus"></i> 新增效果</button></div><div id="aam-effect-list"></div></div><div id="aam-status" class="aam-note" style="margin-top:10px"></div></div><aside class="aam-guide"><h4><i class="fa-solid fa-list-check"></i> 可用功能</h4><p>點選任一功能即可直接加入左側法寶效果，可同時組合多種功能。</p><div class="aam-guide-list">${effectGuideMarkup()}</div><div class="aam-guide-note"><b>裝備類：</b>需要填「裝備欄位」。<br><b>連擊：</b>不論組合多少效果，總機率硬上限 10%。<br><b>鏡映：</b>每場固定複製敵方一項可複製戰鬥效果。<br><b>限時類：</b>催動時消耗 1 件法寶。<br><b>排除錯項：</b>可指定問道、鬥法、洞天。</div></aside></div><div class="aam-actions"><button type="button" class="aam-cancel">取消</button><button type="button" class="aam-save">${editing ? '儲存變更' : '建立法寶'}</button></div></section>`;
     document.body.appendChild(modal);
     const effectList = modal.querySelector('#aam-effect-list');
     (item?.effects?.length ? item.effects : [defaultEffect('equip_attack_flat')]).forEach((effect) => effectList.appendChild(effectRow(effect)));
@@ -153,8 +228,10 @@ import {
   function readEffects(modal) {
     return [...modal.querySelectorAll('.aam-effect-row')].map((row) => {
       const type = row.querySelector('[data-aam-effect-type]').value;
-      if (['equip_attack_flat', 'equip_attack_percent', 'equip_hp_flat', 'equip_hp_percent'].includes(type)) {
-        return { type, value: Number(row.querySelector('[data-aam-effect-value]').value) || 0 };
+      if (effectUsesValue(type)) {
+        let value = Number(row.querySelector('[data-aam-effect-value]').value) || 0;
+        if (type === 'equip_combo_chance') value = Math.min(0.10, Math.max(0, value));
+        return { type, value };
       }
       if (type.startsWith('timed_')) {
         return { type, multiplier: Number(row.querySelector('[data-aam-effect-multiplier]').value) || 1, durationMs: Math.max(1000, Math.round((Number(row.querySelector('[data-aam-effect-duration]').value) || 0) * 60000)) };
