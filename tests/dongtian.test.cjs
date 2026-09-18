@@ -13,30 +13,73 @@ const legacySource = readFileSync(join(root, 'public/main-legacy.js'), 'utf8');
 
 const api = require('../dongtian-api.js').__test;
 
-test('Dongtian API normalizes the requested ordered question format and metadata', () => {
+test('Dongtian API normalizes at least ten ordered single-choice questions and metadata', () => {
+  const questions = Array.from({ length: 10 }, (_, i) => ({
+    id: 'x' + i,
+    difficulty: i < 3 ? 'easy' : (i < 7 ? 'medium' : 'hard'),
+    q: 'Q' + (i + 1),
+    correct: 'A' + i,
+    wrong: ['B' + i, 'C' + i, 'D' + i],
+    exp: 'E' + (i + 1),
+    subject: '數學'
+  }));
   const normalized = api.normalizeResult({
     name: '星軌算境', level: '國中二年級', difficulty: '中等', subject: '數學',
-    knowledgePoints: ['比例', '一次函數'],
-    questions: [
-      { id: 'x', difficulty: 'easy', q: 'Q1', correct: 'A', wrong: ['B','C','D'], exp: 'E1', subject: '數學' },
-      { id: 'y', difficulty: 'medium', q: 'Q2', correct: 'A2', wrong: ['B2','C2','D2'], exp: 'E2', subject: '數學' },
-      { id: 'z', difficulty: 'hard', q: 'Q3', correct: 'A3', wrong: ['B3','C3','D3'], exp: 'E3', subject: '數學' }
-    ]
+    knowledgePoints: ['比例', '一次函數'], questions
   }, '國中一年級');
   assert.equal(normalized.level, '國中二年級');
   assert.equal(normalized.difficulty, 'medium');
+  assert.equal(normalized.questions.length, 10);
   assert.equal(normalized.questions[0].id, 'DT-001');
-  assert.equal(normalized.questions[2].id, 'DT-003');
+  assert.equal(normalized.questions[9].id, 'DT-010');
   assert.deepEqual(Object.keys(normalized.questions[0]), ['id','difficulty','q','correct','wrong','exp','subject']);
 });
 
-test('Dongtian generation prompt asks one batch to cover as many knowledge points as possible', () => {
-  const prompt = api.buildPrompt('notes', '國中三年級', 3);
-  assert.match(prompt, /一次分析使用者提供的所有文字與 3 張圖片/);
-  assert.match(prompt, /所有可獨立學習／考核的知識點/);
-  assert.match(prompt, /questions 陣列順序就是玩家實際遊玩順序/);
-  assert.match(prompt, /素材很少可 3–5 題/);
-  assert.match(prompt, /DT-001/);
+test('Dongtian first plans question count and fixed single-choice structure with a ten-question minimum', () => {
+  const prompt = api.buildPlanningPrompt('notes', '國中三年級', 3);
+  assert.match(prompt, /只做「題量與題目結構規劃」/);
+  assert.match(prompt, /至少 10 題/);
+  assert.match(prompt, /10、15、20、25、30/);
+  assert.match(prompt, /四選一單選題/);
+  assert.match(prompt, /禁止複選題、多選題、複數正解/);
+  assert.equal(api.normalizePlannedQuestionCount(3), 10);
+  assert.equal(api.normalizePlannedQuestionCount(12), 15);
+  assert.equal(api.normalizePlannedQuestionCount(30), 30);
+});
+
+test('Dongtian generates exactly five questions per batch and carries all previous questions into the next prompt', () => {
+  const plan = api.normalizeDongtianPlan({
+    name:'星軌算境', level:'國中三年級', difficulty:'medium', subject:'數學',
+    knowledgePoints:['比例','函數'], questionCount:10,
+    questionBlueprints:Array.from({length:10},(_,i)=>({focus:'重點'+i,skill:'理解',difficulty:'medium',subject:'數學'}))
+  }, '國中三年級');
+  const previous = Array.from({length:5},(_,i)=>({
+    id:'DT-00'+(i+1), difficulty:'medium', q:'已生成題目'+(i+1),
+    correct:'A'+i, wrong:['B'+i,'C'+i,'D'+i], exp:'解析'+i, subject:'數學'
+  }));
+  const prompt = api.buildQuestionBatchPrompt('notes','國中三年級',0,plan,previous,5,5);
+  assert.match(prompt, /第 6～10 題，共恰好 5 題/);
+  assert.match(prompt, /每次固定生成 5 題/);
+  assert.match(prompt, /先前已生成的全部題目/);
+  assert.match(prompt, /已生成題目1/);
+  assert.match(prompt, /已生成題目5/);
+  assert.match(prompt, /不可複選/);
+});
+
+test('Dongtian batch normalization rejects multi-select and requires one correct plus three unique wrong choices', () => {
+  const plan = api.normalizeDongtianPlan({ questionCount:10, subject:'數學' }, '國中一年級');
+  const raw = { questions: Array.from({length:5},(_,i)=>({
+    q:'新題'+i, correct:'A'+i, wrong:['B'+i,'C'+i,'D'+i], exp:'E'+i, subject:'數學'
+  })) };
+  const normalized = api.normalizeQuestionBatch(raw, plan, [], 0, 5);
+  assert.equal(normalized.length, 5);
+  assert.equal(typeof normalized[0].correct, 'string');
+  assert.equal(normalized[0].wrong.length, 3);
+  assert.throws(() => api.normalizeQuestionBatch({
+    questions: Array.from({length:5},(_,i)=>({
+      q:'複選'+i, correct:['A','B'], wrong:['C','D','E'], exp:'E'
+    }))
+  }, plan, [], 0, 5));
 });
 
 test('Dongtian encounter is only for higher-grade matching players and is one-time', () => {
@@ -55,13 +98,17 @@ test('Dongtian session keeps a fixed ordered question array until completion or 
   assert.doesNotMatch(uiSource, /generate-dongtian[\s\S]*renderRunner[\s\S]*fetch\('\/api\/generate-quiz'/);
 });
 
-test('Dongtian rewards owner once per unique player completion while player reward stays placeholder', () => {
+test('Dongtian first completion always grants the player 1000 gold while owner reward remains once per unique player', () => {
+  assert.match(uiSource, /FIRST_COMPLETION_GOLD_REWARD = 1000/);
+  assert.match(uiSource, /if \(!alreadyCompleted\)/);
+  assert.match(uiSource, /'stats\.gold': increment\(FIRST_COMPLETION_GOLD_REWARD\)/);
+  assert.match(uiSource, /source: 'dongtian-first-completion'/);
+  assert.match(uiSource, /固定獲得 \+\$\{FIRST_COMPLETION_GOLD_REWARD\.toLocaleString\(\)\} 靈石/);
   assert.match(uiSource, /OWNER_CULTIVATION_REWARD = 1/);
   assert.match(uiSource, /OWNER_GOLD_REWARD = 5/);
-  assert.match(uiSource, /if \(!alreadyCompleted\)/);
   assert.match(uiSource, /'stats\.totalScore': increment\(OWNER_CULTIVATION_REWARD\)/);
   assert.match(uiSource, /'stats\.gold': increment\(OWNER_GOLD_REWARD\)/);
-  assert.match(uiSource, /獎勵內容目前待開放/);
+  assert.doesNotMatch(uiSource, /獎勵內容目前待開放/);
 });
 
 test('Dongtian history is saved as one grouped run instead of one document per question', () => {
@@ -172,4 +219,19 @@ test('Completion reward transaction rechecks active status to prevent seal/rewar
   assert.match(completion, /const \[playSnap, indexSnap\] = await Promise\.all/);
   assert.match(completion, /indexSnap\.data\(\)\?\.status !== 'active'/);
   assert.match(completion, /洞天已封印，本次不進行通關結算/);
+});
+
+
+test('Dongtian API endpoint performs planning before batched generation and audits prior-question context', () => {
+  assert.match(apiSource, /const planningRun = await generateMultimodalJSON\(buildPlanningPrompt/);
+  assert.match(apiSource, /startIndex < plan\.questionCount; startIndex \+= QUESTION_BATCH_SIZE/);
+  assert.match(apiSource, /buildQuestionBatchPrompt\([\s\S]*generatedQuestions/);
+  assert.match(apiSource, /generatedQuestions\.push\(\.\.\.batch\)/);
+  assert.match(apiSource, /priorQuestionCountInPrompt: startIndex/);
+  assert.match(apiSource, /QUESTION_BATCH_SIZE = 5/);
+});
+
+test('Dongtian creation UI describes planning first and five-question batch generation', () => {
+  assert.match(uiSource, /先判斷需要的題數與固定單選結構，再每 5 題一批生成/);
+  assert.match(uiSource, /先規劃題數，再每 5 題分批生成/);
 });

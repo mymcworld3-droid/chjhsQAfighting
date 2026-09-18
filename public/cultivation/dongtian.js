@@ -13,6 +13,7 @@ import {
   const MAX_IMAGES = 8;
   const OWNER_CULTIVATION_REWARD = 1;
   const OWNER_GOLD_REWARD = 5;
+  const FIRST_COMPLETION_GOLD_REWARD = 1000;
   const INDEX_COLLECTION = 'dongtianIndex';
   const DATA_COLLECTION = 'dongtians';
   const PLAY_COLLECTION = 'dongtianPlays';
@@ -107,14 +108,14 @@ import {
       <div id="dongtian-body" class="dongfu-collapse-body dt-body" hidden>
         <section class="dt-create">
           <h4>開闢新洞天</h4>
-          <p>可同時提供多張圖片與文字。AI 會一次擷取素材中的知識點，產生洞天名稱、程度、難度、科目與固定順序題目。</p>
+          <p>可同時提供多張圖片與文字。AI 會先判斷需要的題數與固定單選結構，再每 5 題一批生成；後一批會讀取前面已生成的全部題目以避免重複。</p>
           <textarea id="dt-source-text" class="dt-input" maxlength="16000" placeholder="貼上課文、筆記、公式說明、重點整理……（圖片與文字至少提供一種）"></textarea>
           <div class="dt-upload-row">
             <label class="dt-upload"><i class="fa-solid fa-images"></i> 上傳圖片（最多 ${MAX_IMAGES} 張）<input id="dt-images" type="file" accept="image/png,image/jpeg,image/webp" multiple></label>
             <span id="dt-image-count" class="dt-image-count">尚未選擇圖片</span>
           </div>
           <div id="dt-previews" class="dt-previews"></div>
-          <button id="dt-generate" class="dt-generate" type="button">凝聚洞天<small>AI 一次生成完整題組，不會逐題呼叫</small></button>
+          <button id="dt-generate" class="dt-generate" type="button">凝聚洞天<small>先規劃題數，再每 5 題分批生成</small></button>
           <div id="dt-generate-status" class="dt-library-note" style="margin-top:8px"></div>
         </section>
         <section class="dt-library">
@@ -236,7 +237,7 @@ import {
     const status = document.getElementById('dt-generate-status');
     state.generating = true;
     button.disabled = true;
-    button.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> 正在凝聚洞天…<small>正在讀取全部素材並一次生成完整題組</small>';
+    button.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> 正在凝聚洞天…<small>先規劃題數，再每 5 題分批生成</small>';
     status.textContent = state.files.length ? `正在整理 ${state.files.length} 張圖片與文字中的所有知識點…` : '正在整理文字中的所有知識點…';
     try {
       const images = [];
@@ -244,7 +245,7 @@ import {
         status.textContent = `處理圖片 ${i + 1} / ${state.files.length}…`;
         images.push(await compressImage(state.files[i].file));
       }
-      status.textContent = 'AI 正在一次建立洞天名稱、標籤與完整題序…';
+      status.textContent = 'AI 正在先規劃總題數與單選題結構，接著每 5 題分批生成並避免重複…';
       const level = userData()?.profile?.educationLevel || '國中一年級';
       const response = await fetch('/api/generate-dongtian', {
         method: 'POST',
@@ -267,7 +268,7 @@ import {
     } finally {
       state.generating = false;
       button.disabled = false;
-      button.innerHTML = `凝聚洞天<small>AI 一次生成完整題組，不會逐題呼叫</small>`;
+      button.innerHTML = `凝聚洞天<small>先規劃題數，再每 5 題分批生成</small>`;
     }
   }
 
@@ -859,7 +860,7 @@ import {
     });
     await writeDongtianHistory(s, true, correct, total, tier).catch(() => {});
     const overlay = ensureOverlay();
-    overlay.innerHTML = `<div class="dt-result"><div class="dt-result-seal">天</div><h2>${escapeHtml(s.dongtian.name)} · 通關</h2><p>這次洞天題序已全部走完。答對率越高，未來洞天獎勵池開放後可對應更好的機緣。</p><div class="dt-result-grid"><div><span>答對</span><b>${correct} / ${total}</b></div><div><span>正確率</span><b>${Math.round(accuracy * 100)}%</b></div><div><span>機緣評級</span><b>${escapeHtml(tier.replace('洞天機緣', ''))}</b></div></div><div class="dt-reward">${firstCompletion ? `<strong style="color:#dfbdf5">首次通關洞天獎勵</strong><br>${escapeHtml(tier)} · 獎勵內容目前待開放。` : '此洞天的首次通關紀錄已存在；本次為重遊，不重複領取首次獎勵。'}${s.dongtian.ownerUid !== uid() && firstCompletion ? `<br><br>洞天主人已獲得 +${OWNER_CULTIVATION_REWARD} 修為與 +${OWNER_GOLD_REWARD} 金幣。` : ''}</div><button id="dt-back" class="dt-back" type="button">返回</button></div>`;
+    overlay.innerHTML = `<div class="dt-result"><div class="dt-result-seal">天</div><h2>${escapeHtml(s.dongtian.name)} · 通關</h2><p>這次洞天題序已全部走完。答對率越高，未來洞天獎勵池開放後可對應更好的機緣。</p><div class="dt-result-grid"><div><span>答對</span><b>${correct} / ${total}</b></div><div><span>正確率</span><b>${Math.round(accuracy * 100)}%</b></div><div><span>機緣評級</span><b>${escapeHtml(tier.replace('洞天機緣', ''))}</b></div></div><div class="dt-reward">${firstCompletion ? `<strong style="color:#dfbdf5">首次通關洞天獎勵</strong><br>固定獲得 +${FIRST_COMPLETION_GOLD_REWARD.toLocaleString()} 靈石。` : '此洞天的首次通關紀錄已存在；本次為重遊，不重複領取首次獎勵。'}${s.dongtian.ownerUid !== uid() && firstCompletion ? `<br><br>洞天主人已獲得 +${OWNER_CULTIVATION_REWARD} 修為與 +${OWNER_GOLD_REWARD} 金幣。` : ''}</div><button id="dt-back" class="dt-back" type="button">返回</button></div>`;
     document.getElementById('dt-back').onclick = closeAfterSession;
   }
 
@@ -880,6 +881,9 @@ import {
       }, { merge: true });
       if (!alreadyCompleted) {
         tx.update(indexRef, { completionCount: increment(1) });
+        tx.update(doc(db, 'users', uid()), {
+          'stats.gold': increment(FIRST_COMPLETION_GOLD_REWARD)
+        });
         if (s.dongtian.ownerUid && s.dongtian.ownerUid !== uid()) {
           tx.update(doc(db, 'users', s.dongtian.ownerUid), {
             'stats.totalScore': increment(OWNER_CULTIVATION_REWARD),
@@ -888,6 +892,17 @@ import {
         }
       }
     });
+    if (first) {
+      const data = userData();
+      if (data) {
+        data.stats = data.stats || {};
+        data.stats.gold = Math.max(0, Number(data.stats.gold) || 0) + FIRST_COMPLETION_GOLD_REWARD;
+      }
+      window.updateUIStats?.();
+      window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', {
+        detail: { source: 'dongtian-first-completion', goldAdded: FIRST_COMPLETION_GOLD_REWARD }
+      }));
+    }
     return first;
   }
 

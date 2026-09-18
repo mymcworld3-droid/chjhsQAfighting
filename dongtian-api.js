@@ -14,6 +14,9 @@ const DIFFICULTIES = new Set(['easy', 'medium', 'hard']);
 const MAX_IMAGES = 8;
 const MAX_IMAGE_BASE64 = 2_800_000;
 const MAX_TEXT = 16000;
+const MIN_QUESTIONS = 10;
+const QUESTION_BATCH_SIZE = 5;
+const QUESTION_COUNT_CHOICES = Object.freeze([10, 15, 20, 25, 30]);
 const MAX_QUESTIONS = 30;
 const MAX_REPORT_REASON = 1200;
 const MAX_REVISION_HINT = 1600;
@@ -54,25 +57,75 @@ function validateImages(images) {
   });
 }
 
-function buildPrompt(text, creatorLevel, imageCount) {
+function normalizePlannedQuestionCount(value) {
+  const requested = Math.max(MIN_QUESTIONS, Math.min(MAX_QUESTIONS, Math.ceil(Number(value) || MIN_QUESTIONS)));
+  return QUESTION_COUNT_CHOICES.find((count) => count >= requested) || MAX_QUESTIONS;
+}
+
+function normalizeDongtianPlan(raw, creatorLevel) {
+  const data = raw && typeof raw === 'object' ? raw : {};
+  const level = normalizeLevel(data.level, creatorLevel);
+  const difficulty = normalizeDifficulty(data.difficulty);
+  const subject = cleanText(data.subject || '綜合', 24) || '綜合';
+  const questionCount = normalizePlannedQuestionCount(data.questionCount);
+  const knowledgePoints = Array.isArray(data.knowledgePoints)
+    ? [...new Set(data.knowledgePoints.map((x) => cleanText(x, 180)).filter(Boolean))].slice(0, 50)
+    : [];
+  const sourceBlueprints = Array.isArray(data.questionBlueprints) ? data.questionBlueprints : [];
+  const questionBlueprints = [];
+
+  for (let i = 0; i < questionCount; i++) {
+    const rawBlueprint = sourceBlueprints[i] || {};
+    const fallbackFocus = knowledgePoints[i % Math.max(1, knowledgePoints.length)] || `素材重點 ${i + 1}`;
+    const ratio = questionCount <= 1 ? 0 : i / (questionCount - 1);
+    const fallbackDifficulty = ratio < 0.34 ? 'easy' : (ratio < 0.72 ? 'medium' : 'hard');
+    questionBlueprints.push({
+      index: i + 1,
+      focus: cleanText(rawBlueprint.focus || fallbackFocus, 220) || fallbackFocus,
+      skill: cleanText(rawBlueprint.skill || (ratio < 0.34 ? '基礎辨識' : (ratio < 0.72 ? '理解' : '應用整合')), 120),
+      difficulty: normalizeDifficulty(rawBlueprint.difficulty, fallbackDifficulty),
+      subject: cleanText(rawBlueprint.subject || subject, 24) || subject
+    });
+  }
+
+  return {
+    name: cleanText(data.name, 40) || '無名洞天',
+    level,
+    levelOrder: LEVELS.indexOf(level),
+    difficulty,
+    subject,
+    knowledgePoints,
+    coverageSummary: cleanText(data.coverageSummary, 1000),
+    questionCount,
+    questionStructure: {
+      type: 'single_choice',
+      selectionMode: 'single',
+      optionsPerQuestion: 4,
+      correctAnswersPerQuestion: 1,
+      ordering: 'foundation_to_application'
+    },
+    questionBlueprints
+  };
+}
+
+function buildPlanningPrompt(text, creatorLevel, imageCount) {
   return `
 [任務]
-你是「洞天」學習關卡設計師。請一次分析使用者提供的所有文字與 ${imageCount} 張圖片，建立一個完整、可依序遊玩的知識洞天。
+你是「洞天」學習關卡規劃師。先分析使用者提供的所有文字與 ${imageCount} 張圖片，只做「題量與題目結構規劃」，此階段不要實際出題。
 
-[核心要求]
-1. 先盡可能完整擷取素材中的「所有可獨立學習／考核的知識點」，不要只挑最顯眼的幾個。
-2. 題目要覆蓋不同知識點，避免同義改寫、重複考同一概念。
-3. 題量由素材資訊密度決定：通常每個核心知識點至少被有效考到一次；素材很少可 3–5 題，中等素材約 6–12 題，內容豐富可 13–30 題。總題數最多 ${MAX_QUESTIONS} 題。
-4. questions 陣列順序就是玩家實際遊玩順序：先基礎辨識，再理解，再應用／整合；不要隨機排列。
-5. 每題都是單選題，只有一個明確正確答案；wrong 必須剛好三個，且不能與 correct 重複。
-6. 解析 exp 必須說明「為什麼正確」並在適當時指出其他選項錯在哪裡。
-7. 請估計整個素材最適合的程度，只能從以下值選一個：${LEVELS.join('、')}。建立者目前程度是「${cleanText(creatorLevel, 30) || '未提供'}」，僅供參考，不要因此硬套程度。
+[規劃要求]
+1. 盡可能完整辨認素材中所有可獨立學習／考核的知識點。
+2. 依素材資訊密度決定洞天題量，但每個洞天至少 ${MIN_QUESTIONS} 題、最多 ${MAX_QUESTIONS} 題。
+3. questionCount 只能是 ${QUESTION_COUNT_CHOICES.join('、')} 其中之一，讓後續能固定每 ${QUESTION_BATCH_SIZE} 題一批生成。
+4. 題目結構固定為「四選一單選題」：每題只能選一個答案、恰好一個 correct、恰好三個 wrong；禁止複選題、多選題、複數正解。
+5. questionBlueprints 必須恰好有 questionCount 筆，依實際遊玩順序規劃每一題要考的 focus、skill、difficulty、subject。
+6. 題序由基礎辨識 → 理解 → 應用／整合，避免規劃同義重複題。
+7. 程度只能從以下值選一個：${LEVELS.join('、')}。建立者目前程度是「${cleanText(creatorLevel, 30) || '未提供'}」，僅供參考。
 8. difficulty 只能是 easy / medium / hard。subject 優先使用：國文、英文、數學、公民、歷史、地理、物理、化學、生物；跨多科或無法歸入單科時用「綜合」。
-9. 洞天名稱要像修仙世界中的秘境名稱，簡短、有記憶點，並能暗示素材主題，例如「星軌算境」「細胞青蘿谷」，不要直接叫「XX測驗」。
-10. id 依順序使用 DT-001、DT-002……；每題仍需保留自己的 difficulty 與 subject。
+9. 洞天名稱要像修仙世界中的秘境名稱，簡短、有記憶點，並暗示素材主題。
 
 [使用者文字]
-${cleanText(text, MAX_TEXT) || '（沒有額外文字，主要依圖片內容建立）'}
+${cleanText(text, MAX_TEXT) || '（沒有額外文字，主要依圖片內容規劃）'}
 
 [輸出 JSON Only]
 {
@@ -81,20 +134,128 @@ ${cleanText(text, MAX_TEXT) || '（沒有額外文字，主要依圖片內容建
   "difficulty": "easy|medium|hard",
   "subject": "主要科目或綜合",
   "knowledgePoints": ["知識點1", "知識點2"],
-  "coverageSummary": "簡短說明這組題目如何涵蓋素材",
+  "coverageSummary": "規劃如何涵蓋素材",
+  "questionCount": 10,
+  "questionStructure": {
+    "type": "single_choice",
+    "selectionMode": "single",
+    "optionsPerQuestion": 4
+  },
+  "questionBlueprints": [
+    {
+      "focus": "本題要考的知識點",
+      "skill": "基礎辨識|理解|應用整合",
+      "difficulty": "easy|medium|hard",
+      "subject": "科目"
+    }
+  ]
+}
+不要輸出 markdown，不要實際生成題目，不要加入 JSON 以外的文字。`;
+}
+
+function questionFingerprint(value) {
+  return cleanText(value, 2500).toLowerCase().replace(/\s+/g, ' ').replace(/[，。！？、,.!?;；:："'「」『』（）()]/g, '').slice(0, 500);
+}
+
+function buildQuestionBatchPrompt(text, creatorLevel, imageCount, plan, generatedQuestions, startIndex, batchSize) {
+  const endIndex = startIndex + batchSize;
+  const blueprints = plan.questionBlueprints.slice(startIndex, endIndex);
+  return `
+[任務]
+你是「洞天」題目生成師。洞天規劃已完成。現在只生成第 ${startIndex + 1}～${endIndex} 題，共恰好 ${batchSize} 題。
+這是分批生成流程，每次固定生成 ${QUESTION_BATCH_SIZE} 題；不得一次生成其他批次。
+
+[洞天規劃]
+${JSON.stringify({
+    name: plan.name,
+    level: plan.level,
+    difficulty: plan.difficulty,
+    subject: plan.subject,
+    knowledgePoints: plan.knowledgePoints,
+    coverageSummary: plan.coverageSummary,
+    questionCount: plan.questionCount,
+    questionStructure: plan.questionStructure
+  })}
+
+[本批題目藍圖]
+${JSON.stringify(blueprints)}
+
+[先前已生成的全部題目]
+${generatedQuestions.length ? JSON.stringify(generatedQuestions) : '[]'}
+
+[重要規則]
+1. 你必須閱讀「先前已生成的全部題目」，本批不得重複或近義改寫任何已生成題目，也不要再次考完全相同的切入角度。
+2. 題目必須依照本批藍圖順序生成，並與素材內容有直接依據。
+3. 每題只能是四選一單選題，不可複選：correct 必須是單一字串，wrong 必須恰好三個不同字串。
+4. correct 與三個 wrong 彼此不可重複，且只能有一個明確正確答案。
+5. exp 必須解釋為何正確，必要時說明其他選項錯在哪裡。
+6. id 依全洞天題序使用 DT-001、DT-002……，不得重號。
+7. 不要輸出已生成過的題目，只輸出本批 ${batchSize} 題。
+
+[建立者程度]
+${cleanText(creatorLevel, 30) || '未提供'}
+
+[使用者文字]
+${cleanText(text, MAX_TEXT) || '（沒有額外文字，主要依圖片內容出題；本請求另附 ' + imageCount + ' 張圖片）'}
+
+[輸出 JSON Only]
+{
   "questions": [
     {
       "id": "DT-001",
       "difficulty": "easy|medium|hard",
       "q": "題目",
-      "correct": "正確選項",
-      "wrong": ["錯誤選項", "錯誤選項", "錯誤選項"],
+      "correct": "唯一正確選項",
+      "wrong": ["錯誤選項1", "錯誤選項2", "錯誤選項3"],
       "exp": "解析",
       "subject": "科目標籤"
     }
   ]
 }
 不要輸出 markdown，不要加入 JSON 以外的文字。`;
+}
+
+function normalizeQuestionBatch(raw, plan, existingQuestions, startIndex, expectedCount) {
+  const data = raw && typeof raw === 'object' ? raw : {};
+  const questions = Array.isArray(data.questions) ? data.questions : [];
+  const fingerprints = new Set((existingQuestions || []).map((item) => questionFingerprint(item.q)).filter(Boolean));
+  const normalized = [];
+
+  for (const item of questions) {
+    if (normalized.length >= expectedCount) break;
+    if (Array.isArray(item?.correct) || item?.multiple === true || item?.multiSelect === true) continue;
+    const q = cleanText(item?.q, 2500);
+    const correct = cleanText(item?.correct, 800);
+    const wrong = Array.isArray(item?.wrong) ? item.wrong.map((x) => cleanText(x, 800)).filter(Boolean) : [];
+    const exp = cleanText(item?.exp, 3500);
+    if (!q || !correct || wrong.length !== 3 || !exp) continue;
+    const uniqueWrong = [...new Set(wrong.filter((x) => x !== correct))];
+    if (uniqueWrong.length !== 3) continue;
+    const fp = questionFingerprint(q);
+    if (!fp || fingerprints.has(fp)) continue;
+    fingerprints.add(fp);
+    const globalIndex = startIndex + normalized.length;
+    const blueprint = plan.questionBlueprints[globalIndex] || {};
+    normalized.push({
+      id: `DT-${String(globalIndex + 1).padStart(3, '0')}`,
+      difficulty: normalizeDifficulty(item?.difficulty, blueprint.difficulty || plan.difficulty),
+      q,
+      correct,
+      wrong: uniqueWrong,
+      exp,
+      subject: cleanText(item?.subject || blueprint.subject || plan.subject, 24) || plan.subject
+    });
+  }
+
+  if (normalized.length !== expectedCount) {
+    throw new Error(`本批需要 ${expectedCount} 題有效單選題，AI 僅產生 ${normalized.length} 題；將重新嘗試`);
+  }
+  return normalized;
+}
+
+// Backward-compatible export name for older tests/tools: buildPrompt now means the planning pass.
+function buildPrompt(text, creatorLevel, imageCount) {
+  return buildPlanningPrompt(text, creatorLevel, imageCount);
 }
 
 async function callGemini(provider, prompt, images) {
@@ -199,7 +360,7 @@ function normalizeResult(raw, creatorLevel) {
     });
   }
 
-  if (normalizedQuestions.length < 3) throw new Error('AI 產生的有效題目不足，請增加素材後重試');
+  if (normalizedQuestions.length < MIN_QUESTIONS) throw new Error(`AI 產生的有效題目不足 ${MIN_QUESTIONS} 題，請增加素材後重試`);
   const knowledgePoints = Array.isArray(data.knowledgePoints)
     ? [...new Set(data.knowledgePoints.map((x) => cleanText(x, 180)).filter(Boolean))].slice(0, 50)
     : [];
@@ -591,19 +752,73 @@ module.exports = function registerDongtianApi(app) {
       const images = validateImages(req.body?.images);
       if (!text && !images.length) return res.status(400).json({ error: '請至少提供文字或一張圖片' });
 
-      const prompt = buildPrompt(text, creatorLevel, images.length);
-      const routed = await generateMultimodalJSON(prompt, images);
-      const dongtian = normalizeResult(routed.data, creatorLevel);
+      // Pass 1: only identify required question count, metadata and ordered single-choice structure.
+      const planningRun = await generateMultimodalJSON(buildPlanningPrompt(text, creatorLevel, images.length), images);
+      const plan = normalizeDongtianPlan(planningRun.data, creatorLevel);
+
+      // Pass 2+: generate exactly five questions at a time.
+      // Every batch prompt includes every question already generated so the model can avoid repetition.
+      const generatedQuestions = [];
+      const batchAudit = [];
+      for (let startIndex = 0; startIndex < plan.questionCount; startIndex += QUESTION_BATCH_SIZE) {
+        const expectedCount = Math.min(QUESTION_BATCH_SIZE, plan.questionCount - startIndex);
+        let batch = null;
+        let lastError = null;
+        let successfulRun = null;
+
+        for (let attempt = 1; attempt <= 2 && !batch; attempt++) {
+          try {
+            const prompt = buildQuestionBatchPrompt(
+              text, creatorLevel, images.length, plan, generatedQuestions, startIndex, expectedCount
+            );
+            const routed = await generateMultimodalJSON(prompt, images);
+            batch = normalizeQuestionBatch(routed.data, plan, generatedQuestions, startIndex, expectedCount);
+            successfulRun = routed;
+          } catch (error) {
+            lastError = error;
+          }
+        }
+
+        if (!batch) throw lastError || new Error(`第 ${startIndex / QUESTION_BATCH_SIZE + 1} 批題目生成失敗`);
+        generatedQuestions.push(...batch);
+        batchAudit.push({
+          start: startIndex + 1,
+          end: startIndex + batch.length,
+          count: batch.length,
+          priorQuestionCountInPrompt: startIndex,
+          provider: successfulRun?.provider || null,
+          model: successfulRun?.model || null
+        });
+      }
+
+      const dongtian = normalizeResult({ ...plan, questions: generatedQuestions }, creatorLevel);
+      if (dongtian.questions.length !== plan.questionCount) {
+        throw new Error(`洞天規劃 ${plan.questionCount} 題，但完成後只有 ${dongtian.questions.length} 題`);
+      }
+
       const doubleCheck = await verifyGeneratedDongtian(dongtian);
       if (!doubleCheck.review.passed) {
         return res.status(422).json({ error: '洞天第二次 AI 複核未通過，為避免錯題不予建立，請重新生成。', doubleCheck: doubleCheck.review });
       }
-      res.json({ dongtian, provider: routed.provider, model: routed.model, doubleCheck: doubleCheck.review, doubleCheckProvider: doubleCheck.provider, doubleCheckModel: doubleCheck.model });
+      res.json({
+        dongtian,
+        generationPlan: {
+          questionCount: plan.questionCount,
+          questionStructure: plan.questionStructure
+        },
+        planningProvider: planningRun.provider,
+        planningModel: planningRun.model,
+        batches: batchAudit,
+        doubleCheck: doubleCheck.review,
+        doubleCheckProvider: doubleCheck.provider,
+        doubleCheckModel: doubleCheck.model
+      });
     } catch (error) {
       console.error('[Dongtian API]', error);
       res.status(500).json({ error: error?.message || '洞天生成失敗' });
     }
+
   });
 };
 
-module.exports.__test = { LEVELS, normalizeLevel, normalizeDifficulty, normalizeResult, buildPrompt, validateImages, normalizeQuestionSnapshot, buildQuestionReviewPrompt, normalizeQuestionReview, buildRevisionPrompt, buildRevisionValidationPrompt, normalizeStandaloneQuestion, normalizeRevisionValidation };
+module.exports.__test = { LEVELS, MIN_QUESTIONS, QUESTION_BATCH_SIZE, QUESTION_COUNT_CHOICES, normalizeLevel, normalizeDifficulty, normalizePlannedQuestionCount, normalizeDongtianPlan, normalizeQuestionBatch, normalizeResult, buildPrompt, buildPlanningPrompt, buildQuestionBatchPrompt, validateImages, normalizeQuestionSnapshot, buildQuestionReviewPrompt, normalizeQuestionReview, buildRevisionPrompt, buildRevisionValidationPrompt, normalizeStandaloneQuestion, normalizeRevisionValidation };
