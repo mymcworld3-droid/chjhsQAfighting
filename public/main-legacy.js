@@ -837,20 +837,76 @@ function escapeHtml(text) {
     return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
 }
 // 新增：將 Markdown 圖片語法 ![alt](url) 轉換為 HTML <img>，並處理換行
-function parseMarkdownImages(text) {
-    if (!text) return text;
-
-    // 1. 🔥 修改：先將換行符號 (\n) 轉換為 <br>
-    let processedText = text.replace(/\n/g, '<br>');
-
-    // 2. 匹配 ![alt](url) 格式
-    const markdownImageRegex = /!\[([^\]]*)\]\(([^)]+)\)/g;
-    
-    return processedText.replace(markdownImageRegex, (match, alt, url) => {
-        // 回傳圖片的 HTML 結構 (移除樣板字串中的換行，保持整潔)
-        return `<div class="my-3 rounded-lg overflow-hidden border border-white/10 shadow-lg bg-black/20"><img src="${url}" alt="${alt}" class="w-full h-auto block" onerror="this.parentElement.innerHTML='<p class=\'p-2 text-xs text-red-400\'>圖片載入失敗: ${url}</p>'"></div>`;
-    });
+function normalizeQuizSymbols(text) {
+    return String(text ?? '')
+        .replace(/\u00a0/g, ' ')
+        .replace(/\r\n?/g, '\n')
+        // 常見全形／相似符號統一，避免題目、選項、解析顯示不一致。
+        .replace(/﹤|＜/g, '<')
+        .replace(/﹥|＞/g, '>')
+        .replace(/＆/g, '&')
+        .replace(/＝/g, '=')
+        .replace(/＋/g, '+')
+        .replace(/－/g, '−')
+        .replace(/＊/g, '×')
+        .replace(/／/g, '/');
 }
+
+function sanitizeQuizImageUrl(rawUrl) {
+    const url = String(rawUrl || '').trim();
+    if (!url) return '';
+    // 題庫圖片允許站內相對路徑、http(s) 與 data:image；其餘協定一律拒絕。
+    if (/^(?:https?:\/\/|\/|\.\/|\.\.\/|data:image\/)/i.test(url)) return url;
+    return '';
+}
+
+function formatQuizRichText(text) {
+    const source = normalizeQuizSymbols(text);
+    if (!source) return '';
+
+    const protectedParts = [];
+    const protect = (html) => {
+        const token = `@@QUIZ_PART_${protectedParts.length}@@`;
+        protectedParts.push(html);
+        return token;
+    };
+
+    // 先抽出 Markdown 圖片，避免 alt/url 裡的特殊字元被一般文字 escape 破壞。
+    let working = source.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_match, alt, rawUrl) => {
+        const safeUrl = sanitizeQuizImageUrl(rawUrl);
+        if (!safeUrl) return escapeHtml(_match);
+        const safeAlt = escapeHtml(String(alt || ''));
+        const safeSrc = escapeHtml(safeUrl);
+        return protect(`<div class="my-3 rounded-lg overflow-hidden border border-white/10 shadow-lg bg-black/20"><img src="${safeSrc}" alt="${safeAlt}" class="w-full h-auto block" loading="lazy"></div>`);
+    });
+
+    // 抽出 MathJax 區段。支援 $$...$$、$...$、\\[...\\]、\\(...\\)。
+    // 一般文字之後全部 escape，因此 x < 3、A&B 不會再被當 HTML。
+    const mathPatterns = [
+        /\$\$[\s\S]*?\$\$/g,
+        /\\\[[\s\S]*?\\\]/g,
+        /\\\([\s\S]*?\\\)/g,
+        /\$(?!\$)(?:\\.|[^$\\])*?\$/g
+    ];
+    mathPatterns.forEach((pattern) => {
+        working = working.replace(pattern, (math) => protect(math));
+    });
+
+    working = escapeHtml(working).replace(/\n/g, '<br>');
+
+    protectedParts.forEach((html, index) => {
+        const token = `@@QUIZ_PART_${index}@@`;
+        working = working.split(token).join(html);
+    });
+    return working;
+}
+
+// 保留舊名稱給其他既有程式使用，但實際改由安全的共用格式化器處理。
+function parseMarkdownImages(text) {
+    return formatQuizRichText(text);
+}
+
+window.formatQuizRichText = formatQuizRichText;
 
 window.copyFriendCode = () => {
     const code = document.getElementById('my-friend-code').innerText;
@@ -1851,7 +1907,13 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         if (navigator.vibrate) navigator.vibrate(200);
     }
     
-    fbText.innerHTML = parseMarkdownImages(explanation) || "AI did not provide explanation.";
+    fbText.innerHTML = formatQuizRichText(explanation) || "未提供解析。";
+    try {
+        window.MathJax?.typesetClear?.([fbText]);
+        window.MathJax?.typesetPromise?.([fbText]).catch((err) => console.log(err.message));
+    } catch (err) {
+        console.warn('[Quiz explanation MathJax]', err);
+    }
 
     if (soloSession.active) {
         if (isCorrect) soloSession.correctCount++;
@@ -1959,17 +2021,19 @@ async function renderQuiz(data, rank, topic) {
         btn.id = `option-btn-${idx}`;
         // 🔥 這裡修復了斷裂的字串與 class 名稱
         btn.className = "w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 flex items-center gap-3 active:scale-95 mb-2";
-        btn.innerHTML = `<span class="bg-slate-800 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-blue-400 border border-slate-600 shrink-0">${String.fromCharCode(65+idx)}</span><span class="flex-1">${optText}</span>`;
+        btn.innerHTML = `<span class="bg-slate-800 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-blue-400 border border-slate-600 shrink-0">${String.fromCharCode(65+idx)}</span><span class="flex-1 quiz-rich-option">${formatQuizRichText(optText)}</span>`;
         btn.onclick = () => handleAnswer(idx, data.ans, data.q, data.exp);
         container.appendChild(btn);
     });
 
     // 🔥 新增：讓 MathJax 掃描畫面並將 $ $ 轉換成數學符號
     if (window.MathJax) {
-        window.MathJax.typesetPromise([
+        const mathTargets = [
             document.getElementById('question-text'),
             document.getElementById('options-container')
-        ]).catch((err) => console.log(err.message));
+        ];
+        try { window.MathJax.typesetClear?.(mathTargets); } catch (_) {}
+        window.MathJax.typesetPromise(mathTargets).catch((err) => console.log(err.message));
     }
 }
 
