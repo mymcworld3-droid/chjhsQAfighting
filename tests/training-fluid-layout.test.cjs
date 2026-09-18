@@ -22,7 +22,7 @@ test('inventory and refinery adapt across desktop tablet and mobile widths', () 
   assert.match(layout, /cultivation-refinery[\s\S]*grid-template-columns:minmax\(280px,\.9fr\) minmax\(390px,1\.1fr\)/);
   assert.match(layout, /@media \(max-width:900px\)[\s\S]*cultivation-refinery[\s\S]*grid-template-columns:1fr!important/);
   assert.match(layout, /@media \(max-width:640px\)[\s\S]*training-v3-bag-grid[\s\S]*grid-template-columns:1fr!important/);
-  assert.match(layout, /refinery-material-list[\s\S]*grid-template-rows:minmax\(0,calc\(50% \+ 96px\)\) minmax\(0,calc\(50% - 96px\)\)!important/);
+  assert.match(layout, /refinery-material-list[\s\S]*grid-template-rows:minmax\(0,calc\(50% \+ 96px - 32px\)\) minmax\(0,calc\(50% - 96px \+ 32px\)\)!important/);
   assert.match(layout, /refinery-material-list[\s\S]*overflow:hidden!important/);
   assert.match(layout, /refinery-material-roll-body[\s\S]*overflow:auto!important/);
 });
@@ -32,4 +32,11 @@ test('fluid training layout loads after refinery so it can control final geometr
   const fluid = main.indexOf("'./cultivation/training-fluid-layout.js'");
   assert.ok(refinery >= 0);
   assert.ok(fluid > refinery);
+});
+
+
+test('second-refinement lower edge extends 64px without moving its upper divider', () => {
+  assert.match(layout, /refinery-panel\.refinery-material-panel[\s\S]*height:calc\(100% \+ 64px\)!important/);
+  assert.match(layout, /height:calc\(min\(42dvh,360px\) \+ 64px\)!important/);
+  assert.match(layout, /min-height:424px!important/);
 });

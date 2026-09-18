@@ -93,6 +93,7 @@
         padding:0!important;
         display:grid!important;
         grid-template-rows:minmax(0,1fr)!important;
+        height:calc(100% + 64px)!important;
         overflow:hidden!important;
       }
 
@@ -101,7 +102,7 @@
         width:100%!important;
         height:100%!important;
         display:grid!important;
-        grid-template-rows:minmax(0,calc(50% + 96px)) minmax(0,calc(50% - 96px))!important;
+        grid-template-rows:minmax(0,calc(50% + 96px - 32px)) minmax(0,calc(50% - 96px + 32px))!important;
         gap:0!important;
         min-height:0!important;
         max-height:none!important;
@@ -151,8 +152,8 @@
           height:auto!important;
         }
         body.xianxia-theme #page-training .refinery-panel.refinery-material-panel{
-          height:min(42dvh,360px)!important;
-          min-height:360px!important;
+          height:calc(min(42dvh,360px) + 64px)!important;
+          min-height:424px!important;
         }
         body.xianxia-theme #page-training .refinery-material-list{
           height:100%!important;

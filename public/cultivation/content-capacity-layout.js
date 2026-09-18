@@ -84,9 +84,9 @@
         max-width:none!important;
         height:auto!important;
         min-height:var(--training-content-height,calc(100dvh - 270px))!important;
-        align-items:stretch!important;
+        align-items:start!important;
         overflow:visible!important;
-        padding-bottom:0!important;
+        padding-bottom:64px!important;
       }
 
       body.xianxia-theme #page-training .refinery-panel{
@@ -100,6 +100,7 @@
         padding:0!important;
         display:grid!important;
         grid-template-rows:minmax(0,1fr)!important;
+        min-height:calc(var(--training-content-height,calc(100dvh - 270px)) + 60px)!important;
         overflow:hidden!important;
       }
 
@@ -108,7 +109,7 @@
         width:100%!important;
         height:100%!important;
         display:grid!important;
-        grid-template-rows:minmax(0,calc(50% + 96px)) minmax(0,calc(50% - 96px))!important;
+        grid-template-rows:minmax(0,calc(50% + 96px - 32px)) minmax(0,calc(50% - 96px + 32px))!important;
         gap:0!important;
         min-height:0!important;
         max-height:none!important;
@@ -184,8 +185,8 @@
         }
         body.xianxia-theme #page-training .refinery-panel{min-height:0!important}
         body.xianxia-theme #page-training .refinery-panel.refinery-material-panel{
-          height:min(42dvh,360px)!important;
-          min-height:360px!important;
+          height:calc(min(42dvh,360px) + 64px)!important;
+          min-height:424px!important;
         }
         body.xianxia-theme #page-training .refinery-material-list{
           height:100%!important;
@@ -217,7 +218,7 @@
           min-height:130px!important;
           min-width:130px!important;
         }
-        body.xianxia-theme #page-training .refinery-panel.refinery-material-panel{height:230px!important;min-height:230px!important}
+        body.xianxia-theme #page-training .refinery-panel.refinery-material-panel{height:294px!important;min-height:294px!important}
         body.xianxia-theme #page-training .refinery-material-list{height:100%!important;max-height:none!important}
       }
     `;

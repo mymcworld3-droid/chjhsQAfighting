@@ -34,7 +34,7 @@ test('refinery fills available content height and shifts the material divider do
   assert.match(layout, /#page-training \.cultivation-refinery/);
   assert.match(layout, /min-height:var\(--training-content-height/);
   assert.match(layout, /#page-training \.refinery-material-list/);
-  assert.match(layout, /grid-template-rows:minmax\(0,calc\(50% \+ 96px\)\) minmax\(0,calc\(50% - 96px\)\)!important/);
+  assert.match(layout, /grid-template-rows:minmax\(0,calc\(50% \+ 96px - 32px\)\) minmax\(0,calc\(50% - 96px \+ 32px\)\)!important/);
   assert.match(layout, /overflow:hidden!important/);
   assert.match(layout, /refinery-material-roll-body/);
   assert.match(layout, /overflow:auto!important/);
@@ -63,4 +63,13 @@ test('capacity layout loads after the existing training and market layout layers
   const capacity = main.indexOf("'./cultivation/content-capacity-layout.js'");
   assert.ok(training >= 0 && capacity > training);
   assert.ok(market >= 0 && capacity > market);
+});
+
+
+test('material lower edge extends 64px while the existing divider stays visually fixed', () => {
+  assert.match(layout, /align-items:start!important/);
+  assert.match(layout, /padding-bottom:64px!important/);
+  assert.match(layout, /min-height:calc\(var\(--training-content-height,calc\(100dvh - 270px\)\) \+ 60px\)!important/);
+  assert.match(layout, /height:calc\(min\(42dvh,360px\) \+ 64px\)!important/);
+  assert.match(layout, /height:294px!important;min-height:294px!important/);
 });
