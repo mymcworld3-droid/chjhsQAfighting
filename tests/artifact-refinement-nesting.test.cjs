@@ -181,3 +181,10 @@ test('empty second-refinement notice sits at the bottom of its half', () => {
 test('second-refinement heading follows the divider after the divider moves down 96px', () => {
   assert.match(refinery, /\.refinery-material-roll\+\.refinery-material-roll \.refinery-group-title\{margin-top:0\}/);
 });
+
+
+test('second-refinement bottom edge reaches the bottom of the held-material card', () => {
+  assert.match(refinery, /\.refinery-material-roll\+\.refinery-material-roll\{[^}]*padding-bottom:0/);
+  assert.match(refinery, /\.refinery-material-roll\+\.refinery-material-roll \.refinery-material-roll-body\{padding-bottom:0\}/);
+  assert.match(refinery, /grid-template-rows:minmax\(0,calc\(50% \+ 96px\)\) minmax\(0,calc\(50% - 96px\)\)/);
+});
