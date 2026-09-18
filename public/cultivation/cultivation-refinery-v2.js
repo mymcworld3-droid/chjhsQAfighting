@@ -299,7 +299,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
     const summary = Object.entries(counts).map(([token, q]) => `${ingredientMeta(token).name} ×${q}`).join(' · ') || '尚未投入素材';
     let matchClass = '';
     let matchPrefix = '';
-    let matchPlain = '放入 2～8 個素材後即可開爐；未知組合會在完成取出時由 AI 推演新法寶。';
+    let matchPlain = '放入 2～8 個素材後即可煉製。';
 
     if (job) {
       matchClass = jobReady ? 'ready' : '';
