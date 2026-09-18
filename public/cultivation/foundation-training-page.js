@@ -81,29 +81,48 @@
   }
 
   function createPage() {
-    if (document.getElementById('page-training')) return;
     const home = document.getElementById('page-home');
     if (!home) return;
 
-    const page = document.createElement('div');
-    page.id = 'page-training';
+    let page = document.getElementById('page-training');
+    if (!page) {
+      page = document.createElement('div');
+      page.id = 'page-training';
+      page.className = 'page-section hidden px-4 training-page training-page-v3 foundation-training-page';
+      page.innerHTML = `
+        <div class="training-page-heading-v3"></div>
+        <div class="training-subtabs-v3" role="tablist">
+          <button type="button" class="training-subtab-v3" data-training-tab="refinery" aria-selected="false"><i class="fa-solid fa-hammer"></i><span>煉器</span></button>
+          <button type="button" class="training-subtab-v3 active" data-training-tab="bag" aria-selected="true"><i class="fa-solid fa-box-open"></i><span>背包</span></button>
+        </div>
+        <div id="training-tab-content">${bagMarkup()}</div>
+      `;
+      home.insertAdjacentElement('afterend', page);
+    }
+
     page.dataset.foundationTraining = '1';
-    page.className = 'page-section hidden px-4 training-page training-page-v3 foundation-training-page';
-    page.innerHTML = `
-      <div class="training-page-heading-v3"></div>
-      <div class="training-subtabs-v3" role="tablist">
-        <button type="button" class="training-subtab-v3" data-training-tab="refinery" aria-selected="false">
-          <i class="fa-solid fa-hammer"></i><span>煉器</span>
-        </button>
-        <button type="button" class="training-subtab-v3 active" data-training-tab="bag" aria-selected="true">
-          <i class="fa-solid fa-box-open"></i><span>背包</span>
-        </button>
-      </div>
-      <div id="training-tab-content">${bagMarkup()}</div>
-    `;
-    home.insertAdjacentElement('afterend', page);
+    page.classList.add('foundation-training-page', 'training-page', 'training-page-v3');
+
+    const heading = page.querySelector('.training-page-heading-v3');
+    if (heading) heading.innerHTML = '';
+
+    const coreTab = page.querySelector('[data-training-tab="core"]');
+    coreTab?.classList.add('hidden');
+
+    page.querySelectorAll('[data-training-tab]').forEach((tab) => {
+      const selected = tab.dataset.trainingTab === 'bag';
+      tab.classList.toggle('active', selected);
+      tab.setAttribute('aria-selected', selected ? 'true' : 'false');
+    });
+
+    const content = page.querySelector('#training-tab-content');
+    if (content) content.innerHTML = bagMarkup();
+
+    if (page.dataset.foundationTrainingBound === '1') return;
+    page.dataset.foundationTrainingBound = '1';
 
     page.querySelector('[data-training-tab="refinery"]')?.addEventListener('click', () => {
+      if (!foundationStage()) return;
       page.querySelectorAll('[data-training-tab]').forEach((tab) => {
         const selected = tab.dataset.trainingTab === 'refinery';
         tab.classList.toggle('active', selected);
@@ -115,6 +134,7 @@
     });
 
     page.querySelector('[data-training-tab="bag"]')?.addEventListener('click', () => {
+      if (!foundationStage()) return;
       page.querySelectorAll('[data-training-tab]').forEach((tab) => {
         const selected = tab.dataset.trainingTab === 'bag';
         tab.classList.toggle('active', selected);
@@ -143,11 +163,15 @@
     }
 
     nav?.remove();
-    page?.remove();
-    document.body.classList.remove('foundation-training-only');
-    if (!document.getElementById('page-training')) {
-      document.body.classList.remove('cultivation-training-unlocked');
+    if (page?.dataset.staticLayout === '1') {
+      page.classList.add('hidden');
+      page.classList.remove('active-page', 'foundation-training-page');
+      delete page.dataset.foundationTraining;
+    } else {
+      page?.remove();
     }
+    document.body.classList.remove('foundation-training-only');
+    document.body.classList.remove('cultivation-training-unlocked');
   }
 
   function sync() {
