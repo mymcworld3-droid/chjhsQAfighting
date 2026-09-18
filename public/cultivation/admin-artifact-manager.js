@@ -241,22 +241,32 @@ import {
     if (!isAdmin()) return;
     ensureStyle();
     const page = document.getElementById('page-admin');
-    if (!page || document.getElementById(PANEL_ID)) return;
-    const panel = document.createElement('section');
-    panel.id = PANEL_ID;
+    if (!page) return;
+
+    let panel = document.getElementById(PANEL_ID);
+    if (!panel) {
+      panel = document.createElement('section');
+      panel.id = PANEL_ID;
+      const heading = page.querySelector('h2');
+      if (heading?.nextSibling) page.insertBefore(panel, heading.nextSibling);
+      else page.prepend(panel);
+    }
+
     panel.dataset.adminSectionTitle = '法寶管理';
     panel.dataset.adminSectionIcon = 'fa-hammer';
-    panel.innerHTML = `<div class="aam-head"><div><h3><i class="fa-solid fa-hammer" style="color:#d8b15d"></i> 法寶管理</h3><p>查看並維護全站法寶。新增或編輯後，所有玩家的煉器室與法寶效果會同步更新。</p></div><button type="button" class="aam-add" id="admin-artifact-add"><i class="fa-solid fa-plus"></i> 新增法寶</button></div><div id="admin-artifact-list" class="aam-list"></div>`;
-    const heading = page.querySelector('h2');
-    if (heading?.nextSibling) page.insertBefore(panel, heading.nextSibling);
-    else page.prepend(panel);
-    panel.querySelector('#admin-artifact-add').onclick = () => openEditor();
-    panel.addEventListener('click', (event) => {
-      const button = event.target.closest('[data-admin-artifact-edit]');
-      if (!button) return;
-      const item = ARTIFACT_CATALOG.find((candidate) => candidate.id === button.dataset.adminArtifactEdit);
-      if (item) openEditor(item);
-    });
+
+    if (panel.dataset.artifactManagerHydrated !== '1') {
+      panel.dataset.artifactManagerHydrated = '1';
+      panel.classList.remove('admin-preload-shell');
+      panel.innerHTML = `<div class="aam-head"><div><h3><i class="fa-solid fa-hammer" style="color:#d8b15d"></i> 法寶管理</h3><p>查看並維護全站法寶。新增或編輯後，所有玩家的煉器室與法寶效果會同步更新。</p></div><button type="button" class="aam-add" id="admin-artifact-add"><i class="fa-solid fa-plus"></i> 新增法寶</button></div><div id="admin-artifact-list" class="aam-list"></div>`;
+      panel.querySelector('#admin-artifact-add').onclick = () => openEditor();
+      panel.addEventListener('click', (event) => {
+        const button = event.target.closest('[data-admin-artifact-edit]');
+        if (!button) return;
+        const item = ARTIFACT_CATALOG.find((candidate) => candidate.id === button.dataset.adminArtifactEdit);
+        if (item) openEditor(item);
+      });
+    }
     render();
   }
 
