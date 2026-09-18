@@ -117,3 +117,13 @@ test('artifact edit modal includes a collapsible recipe section', () => {
   assert.match(manager, /data-recipe-artifact/);
   assert.match(manager, /配方：\$\{escapeHtml\(recipeSummaryText\(item\.id\)\)\}/);
 });
+
+
+test('pending artifact approval does not reference editor-only normalizedRecipes', () => {
+  const start = manager.indexOf('async function approveGeneratedArtifact');
+  const end = manager.indexOf('async function saveFromModal', start);
+  const approval = manager.slice(start, end);
+  assert.match(approval, /await persistCatalog\(next\)/);
+  assert.doesNotMatch(approval, /normalizedRecipes/);
+  assert.match(approval, /reviewStatus: 'approved'/);
+});

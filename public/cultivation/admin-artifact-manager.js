@@ -439,7 +439,7 @@ import {
       const next = ARTIFACT_CATALOG.map((item) => item.id === id
         ? { ...JSON.parse(JSON.stringify(item)), reviewStatus: 'approved', reviewedAtMs: Date.now() }
         : JSON.parse(JSON.stringify(item)));
-      await persistCatalog(next, normalizedRecipes);
+      await persistCatalog(next);
       render();
       toast(`已確認 ${current.name}`);
     } catch (error) {
@@ -513,7 +513,7 @@ import {
     save.textContent = '儲存中…';
     status.textContent = '正在驗證管理員權限並同步全站法寶與煉器配方設定…';
     try {
-      await persistCatalog(next);
+      await persistCatalog(next, normalizedRecipes);
       modal.remove();
       render();
       toast(originalId ? `已更新 ${item.name}` : `已建立 ${item.name}`);

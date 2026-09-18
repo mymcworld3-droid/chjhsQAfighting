@@ -57,3 +57,9 @@ test('catalog still enforces two-to-eight configured ingredients and two artifac
   assert.match(catalog, /MAX_ARTIFACT_RECIPE_NESTING = 2/);
   assert.match(catalog, /循環套娃/);
 });
+
+
+test('artifact editor persists validated recipes together with artifact changes', () => {
+  assert.match(artifactManager, /normalizedRecipes = validateArtifactRecipes\(nextRecipes\)/);
+  assert.match(artifactManager, /await persistCatalog\(next, normalizedRecipes\)/);
+});

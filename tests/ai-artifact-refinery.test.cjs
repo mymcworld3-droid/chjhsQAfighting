@@ -221,3 +221,14 @@ test('admin can securely skip refinery wait without bypassing the normal claim f
   assert.match(aiJobs, /async function claimDiscovery\(job\)/);
   assert.match(aiJobs, /Date\.now\(\) < Number\(fresh\.readyAtMs/);
 });
+
+
+test('pending approval remains clickable and persists only review metadata', () => {
+  assert.match(admin, /data-admin-artifact-approve/);
+  assert.match(admin, /approveGeneratedArtifact\(approve\.dataset\.adminArtifactApprove\)/);
+  const start = admin.indexOf('async function approveGeneratedArtifact');
+  const end = admin.indexOf('async function saveFromModal', start);
+  const approval = admin.slice(start, end);
+  assert.match(approval, /await persistCatalog\(next\)/);
+  assert.doesNotMatch(approval, /normalizedRecipes/);
+});
