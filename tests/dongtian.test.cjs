@@ -39,7 +39,8 @@ test('Dongtian first plans question count and fixed single-choice structure with
   const prompt = api.buildPlanningPrompt('notes', '國中三年級', 3);
   assert.match(prompt, /只做「題量與題目結構規劃」/);
   assert.match(prompt, /至少 10 題/);
-  assert.match(prompt, /10、15、20、25、30/);
+  assert.match(prompt, /題量偏好是「中量」/);
+  assert.match(prompt, /只能從 15、20 中選擇/);
   assert.match(prompt, /四選一單選題/);
   assert.match(prompt, /禁止複選題、多選題、複數正解/);
   assert.equal(api.normalizePlannedQuestionCount(3), 10);
