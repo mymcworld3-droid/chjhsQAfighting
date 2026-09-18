@@ -28,6 +28,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/material-system.js',
   './cultivation/unified-inventory-grid.js',
   './cultivation/inventory-legacy-bridge.js',
+  './cultivation/refinery-ai-jobs.js',
   './cultivation/cultivation-refinery-v2.js',
   './cultivation/training-fluid-layout.js',
   './cultivation/market-fluid-layout.js',
