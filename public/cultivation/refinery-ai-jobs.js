@@ -199,7 +199,7 @@ import {
   }
 
   async function startJob(tokens, knownArtifactId = '') {
-    if (currentJob()) throw new Error('目前已有一件法寶正在煉製，請先完成取出。');
+    if (currentJob()) throw new Error('目前已有一件法寶正在煉製，請等待完成後開爐取出。');
     const plan = buildPlan(tokens, knownArtifactId);
     if (!plan.valid) throw new Error(plan.reason);
 
@@ -319,7 +319,7 @@ import {
       const raw = snap.data() || {};
       const fresh = raw[REFINERY_JOB_FIELD];
       if (!fresh?.id || fresh.id !== job.id) throw new Error('煉器任務已變更，請重新整理');
-      if (Date.now() < Number(fresh.readyAtMs || 0)) throw new Error('法寶仍在煉製中');
+      if (Date.now() < Number(fresh.readyAtMs || 0)) throw new Error('法寶仍在煉製中，尚不可開爐');
       const item = getArtifactById(fresh.knownArtifactId);
       if (!item) throw new Error('此法寶已不存在，請聯絡管理員');
       artifactSystem = raw.artifactSystem && typeof raw.artifactSystem === 'object' ? clone(raw.artifactSystem) : { inventory: {}, equipped: {}, buffs: [] };
@@ -355,7 +355,7 @@ import {
       const raw = userSnap.data() || {};
       const fresh = raw[REFINERY_JOB_FIELD];
       if (!fresh?.id || fresh.id !== job.id) throw new Error('煉器任務已變更，請重新整理');
-      if (Date.now() < Number(fresh.readyAtMs || 0)) throw new Error('法寶仍在煉製中');
+      if (Date.now() < Number(fresh.readyAtMs || 0)) throw new Error('法寶仍在煉製中，尚不可開爐');
 
       const latestItems = artifactSnap.exists() && Array.isArray(artifactSnap.data()?.items) && artifactSnap.data().items.length
         ? clone(artifactSnap.data().items) : clone(ARTIFACT_CATALOG);
