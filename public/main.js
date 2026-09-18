@@ -44,7 +44,6 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/dongtian.js',
   './cultivation/newbie-tutorial-v2.js',
   './cultivation/newbie-tutorial-layout-fix.js',
-  './cultivation/qi-five-dongtian-tutorial.js',
   './cultivation/golden-core-tutorial.js',
   './cultivation/admin-self-transfer.js',
   './cultivation/admin-artifact-manager.js',

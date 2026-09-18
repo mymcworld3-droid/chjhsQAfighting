@@ -54,9 +54,36 @@ test('Dongfu tutorial waits until the player clicks the bottom navigation before
 });
 
 
-test('mortal tutorial leaves the full Dongtian practical lesson for Qi-five', () => {
-  assert.doesNotMatch(tutorial, /kicker: '第十一步 · 洞天入口'/);
-  assert.match(tutorial, /kicker: '第十一步 · 築基'/);
-  assert.match(tutorial, /煉氣五層時，系統會另外帶你完整實作洞天/);
-  assert.match(tutorial, /煉氣五層會開啟洞天專屬教學/);
+test('mortal newbie tutorial carefully teaches the complete Dongtian lifecycle', () => {
+  assert.match(tutorial, /第十一步 · 洞天入口/);
+  assert.match(tutorial, /請親自點亮起的「洞天」入口/);
+  assert.match(tutorial, /圖片與文字都可以煉成洞天/);
+  assert.match(tutorial, /少＝10 題/);
+  assert.match(tutorial, /中＝15～20 題/);
+  assert.match(tutorial, /多＝25～30 題/);
+  assert.match(tutorial, /四選一單選題/);
+  assert.match(tutorial, /每 5 題生成一批/);
+  assert.match(tutorial, /後一批會帶入前面全部已生成題目/);
+});
+
+test('mortal newbie tutorial requires actual private Dongtian play, return, and deletion', () => {
+  assert.match(tutorial, /prepareDongtianDemo: true/);
+  assert.match(tutorial, /data-dt-tutorial-card/);
+  assert.match(tutorial, /data-dt-tutorial-play/);
+  assert.match(tutorial, /requiresDongtianStart: true/);
+  assert.match(tutorial, /requiresDongtianComplete: true/);
+  assert.match(tutorial, /requiresDongtianReturn: true/);
+  assert.match(tutorial, /data-dt-tutorial-delete/);
+  assert.match(tutorial, /requiresDongtianDelete: true/);
+  assert.match(tutorial, /newbie:dongtian-demo-started/);
+  assert.match(tutorial, /newbie:dongtian-demo-completed/);
+  assert.match(tutorial, /newbie:dongtian-demo-returned/);
+  assert.match(tutorial, /newbie:dongtian-demo-deleted/);
+});
+
+test('mortal newbie tutorial explains real Dongtian rewards while the sample remains reward-free and private', () => {
+  assert.match(tutorial, /每題 100、最低 1000/);
+  assert.match(tutorial, /每答對 5 題 \+1/);
+  assert.match(tutorial, /私人教學範例完全不發正式獎勵、不掉材料，也不寫入歷史紀錄/);
+  assert.match(tutorial, /教學範例已刪除，而且從頭到尾都沒有公開/);
 });

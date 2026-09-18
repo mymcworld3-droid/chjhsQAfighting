@@ -63,11 +63,10 @@ test('private tutorial cave has no formal rewards while teaching the real formal
   assert.match(tutorialBranch, /每答對 5 題 \+1/);
 });
 
-test('Qi-five tutorial module loads after Dongtian and after the mortal tutorial modules', () => {
+test('legacy Qi-five Dongtian tutorial is no longer auto-loaded because onboarding is part of the main newbie tutorial', () => {
   const dongtianIndex = main.indexOf("'./cultivation/dongtian.js'");
   const newbieIndex = main.indexOf("'./cultivation/newbie-tutorial-v2.js'");
-  const layoutIndex = main.indexOf("'./cultivation/newbie-tutorial-layout-fix.js'");
   const qiFiveIndex = main.indexOf("'./cultivation/qi-five-dongtian-tutorial.js'");
   assert.ok(dongtianIndex >= 0 && newbieIndex > dongtianIndex);
-  assert.ok(layoutIndex > newbieIndex && qiFiveIndex > layoutIndex);
+  assert.equal(qiFiveIndex, -1);
 });

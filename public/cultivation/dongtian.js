@@ -376,7 +376,7 @@ import {
       difficulty: 'easy',
       subject: '洞天教學',
       questionCount: questions.length,
-      coverageSummary: '煉氣五層教學專用洞天，只存在於你的本次教學中，不會公開給其他修士。',
+      coverageSummary: '新手教學專用洞天，只存在於你的本次教學中，不會公開給其他修士。',
       knowledgePoints: ['洞天入口','建立素材','題量','單選結構','五題分批','防重複','靈石','修為','管理與刪除'],
       playCount: 0,
       completionCount: 0,

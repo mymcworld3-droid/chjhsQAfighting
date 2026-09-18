@@ -82,14 +82,80 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       note: '剛開始可以先使用 AUTO 或中等。'
     },
     {
-      page: 'page-home', target: 'button[onclick*="startBattleMatchmaking"]', kicker: '第十一步 · 築基', title: '10 修為後開放多人玩法',
+      page: 'page-settings', target: '#dongtian-card .dongfu-collapse-head, #dongtian-launcher-card .dt-entry-head', requiresDongtianOpen: true,
+      kicker: '第十一步 · 洞天入口', title: '先找到洞天在哪裡',
+      body: '洞天位在<strong>洞府</strong>裡，不會直接把你傳送進去。請找到「洞天」區塊並親自點開；自己的洞天建立、重玩、題目管理與刪除都從這裡進行。',
+      note: '請親自點亮起的「洞天」入口，把區塊展開。'
+    },
+    {
+      page: 'page-settings', target: '#dongtian-card .dt-create', prepareDongtianDemo: true, requiresDongtianDemoReady: true,
+      kicker: '第十二步 · 建立洞天', title: '圖片與文字都可以煉成洞天',
+      body: '正式建立時，可以貼上<strong>課文、筆記、公式、重點文字</strong>，也可以同時上傳多張圖片。AI 會先辨認知識點、需要多少題與題目結構，再開始出題。',
+      note: '現在系統會準備一座完全不公開的 10 題教學範例；它只存在本次教學，不呼叫 AI，也不寫入公開洞天資料。'
+    },
+    {
+      page: 'page-settings', target: '#dongtian-card .dt-amount-options',
+      kicker: '第十三步 · 題目量', title: '少、中、多會控制洞天題數',
+      body: '<strong>少＝10 題</strong>；<strong>中＝15～20 題</strong>；<strong>多＝25～30 題</strong>。正式洞天固定使用四選一單選題，每題只有一個正確答案，不能複選。',
+      note: 'AI 先規劃整體，再固定每 5 題生成一批；後一批會帶入前面全部已生成題目，降低重複。'
+    },
+    {
+      page: 'page-settings', target: '#dongtian-card [data-dt-tutorial-card]',
+      kicker: '第十四步 · 我的洞天', title: '建立完成後會出現在「我的洞天」',
+      body: '正式洞天會顯示名稱、程度、難度、科目、題數與完成次數，也可能被符合條件的其他修士遇見。現在這座<strong>青雲入門洞天</strong>標示為「教學專用 · 不公開」。',
+      note: '範例使用完整 10 題流程，但不會公開、不會發放靈石、修為或材料，也不留下正式遊玩紀錄。'
+    },
+    {
+      page: 'page-settings', target: '#dongtian-card [data-dt-tutorial-play]', requiresDongtianStart: true,
+      kicker: '第十五步 · 親自進入', title: '現在實際遊玩範例洞天',
+      body: '請親自按「進入範例」。洞天進入後題序固定，不會答一題就重新向 AI 取下一題；教學也不會替你直接閃現進去。',
+      note: '按下「進入範例」後，會進入全螢幕洞天答題畫面。'
+    },
+    {
+      target: '#dongtian-overlay .dt-run-meta',
+      kicker: '第十六步 · 洞天介面', title: '先看題序、科目、難度與進度',
+      body: '上方會顯示目前第幾題、科目與難度；進度條代表整座洞天走到哪裡。正式洞天會一路沿用建立時固定好的題序。',
+      note: '看懂這些資訊後按「下一步」，接著請把教學洞天真的玩完。'
+    },
+    {
+      target: '#dongtian-overlay .dt-options', requiresDongtianComplete: true,
+      kicker: '第十七步 · 完整遊玩', title: '請把 10 題教學洞天走完',
+      body: '每題都是單選題。作答後會立即顯示正確答案與解析，再按「前往下一境」。正式洞天若題目真的有錯，作答後還能使用「問題回報」。',
+      note: '請實際完成全部 10 題，直到看到洞天通關結算。'
+    },
+    {
+      target: '#dongtian-overlay [data-dt-tutorial-result]',
+      kicker: '第十八步 · 通關結算', title: '看懂正式洞天的首次通關獎勵',
+      body: '正式洞天首次完整通關會依題數給靈石：<strong>每題 100、最低 1000</strong>；修為依答對題數計算：<strong>每答對 5 題 +1，至少答對 1 題保底 +1</strong>。同一洞天重玩不會重複領首次獎勵。',
+      note: '這座私人教學範例完全不發正式獎勵、不掉材料，也不寫入歷史紀錄。'
+    },
+    {
+      target: '#dt-back', requiresDongtianReturn: true,
+      kicker: '第十九步 · 返回名冊', title: '通關後回到「我的洞天」',
+      body: '正式洞天完成後，可以回到自己的洞天名冊。建立者能重新遊玩、管理題目，也可以刪除不再需要的洞天。',
+      note: '請親自按「返回我的洞天」。'
+    },
+    {
+      page: 'page-settings', target: '#dongtian-card [data-dt-tutorial-delete]', requiresDongtianDelete: true,
+      kicker: '第二十步 · 刪除洞天', title: '最後親自刪除這座範例',
+      body: '不再需要的洞天可以從「我的洞天」刪除。正式洞天刪除後會從公開資料移除；現在請按這座<strong>不公開教學範例</strong>的「刪除範例」。',
+      note: '這座範例完全是本機教學資料，所以刪除不會碰到其他玩家資料。'
+    },
+    {
+      page: 'page-settings', target: '#dongtian-card .dt-library',
+      kicker: '第二十一步 · 洞天教學完成', title: '你已走完整個洞天流程',
+      body: '你已經實際完成：<strong>找到入口 → 了解素材與題量 → 進入洞天 → 單選作答與看解析 → 通關結算 → 返回名冊 → 刪除洞天</strong>。之後建立正式洞天就是同一套操作。',
+      note: '教學範例已刪除，而且從頭到尾都沒有公開或留下正式獎勵紀錄。'
+    },
+    {
+      page: 'page-home', target: 'button[onclick*="startBattleMatchmaking"]', kicker: '第二十二步 · 築基', title: '10 修為後開放多人玩法',
       body: '達到 <strong>築基初期（10 修為）</strong> 後，才會開放配對鬥法、接受邀請與仙盟等多人功能，同時開放修煉背包。',
       note: '凡人期先把問道與洞天流程學熟。'
     },
     {
-      page: 'page-home', target: '#xiuxian-panel', kicker: '完成 · 開始修行', title: '問道基本操作已完成',
-      body: '問道記住：<strong>看題目 → 選答案 → 看題解 → 下一題</strong>。達到煉氣五層時，系統會另外帶你完整實作洞天：找到入口、建立私人範例、遊玩並刪除。',
-      note: '現在可以正式開始自己的修行；煉氣五層會開啟洞天專屬教學。'
+      page: 'page-home', target: '#xiuxian-panel', kicker: '完成 · 開始修行', title: '問道與洞天都會用了',
+      body: '問道記住：<strong>看題目 → 選答案 → 看題解 → 下一題</strong>；洞天記住：<strong>準備素材 → 選題量 → 建立 → 完整遊玩 → 管理或刪除</strong>。任何時候都能從洞府重新開啟這份教學。',
+      note: '現在可以正式開始自己的修行。'
     }
   ];
 
