@@ -30,11 +30,11 @@ test('training content is not clipped and golden core can use the available heig
   assert.match(layout, /height:clamp\(240px,44dvh,430px\)!important/);
 });
 
-test('refinery fills available content height and shifts the material divider down 64px', () => {
+test('refinery fills available content height and shifts the material divider down 96px', () => {
   assert.match(layout, /#page-training \.cultivation-refinery/);
   assert.match(layout, /min-height:var\(--training-content-height/);
   assert.match(layout, /#page-training \.refinery-material-list/);
-  assert.match(layout, /grid-template-rows:minmax\(0,calc\(50% \+ 64px\)\) minmax\(0,calc\(50% - 64px\)\)!important/);
+  assert.match(layout, /grid-template-rows:minmax\(0,calc\(50% \+ 64px\)\) minmax\(0,calc\(50% - 96px\)\)!important/);
   assert.match(layout, /overflow:hidden!important/);
   assert.match(layout, /refinery-material-roll-body/);
   assert.match(layout, /overflow:auto!important/);

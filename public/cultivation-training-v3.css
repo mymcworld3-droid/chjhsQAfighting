@@ -116,7 +116,7 @@ body.xianxia-theme .training-page-v3 { max-width:900px; margin:0 auto; padding-b
 .refinery-shell{width:100%;display:grid;grid-template-columns:minmax(280px,.9fr) minmax(390px,1.1fr);gap:14px;align-items:stretch}
 .refinery-shell .refinery-panel{min-width:0;padding:14px;border:1px solid rgba(216,177,93,.2);border-radius:18px;background:linear-gradient(145deg,rgba(21,17,10,.96),rgba(7,7,7,.97));box-shadow:0 16px 42px rgba(0,0,0,.3)}
 .refinery-shell .refinery-panel.refinery-material-panel{padding:0;display:grid;grid-template-rows:minmax(0,1fr);overflow:hidden}
-.refinery-shell .refinery-material-list{height:100%;min-height:0;display:grid;grid-template-rows:minmax(0,calc(50% + 64px)) minmax(0,calc(50% - 64px));gap:0;overflow:hidden}
+.refinery-shell .refinery-material-list{height:100%;min-height:0;display:grid;grid-template-rows:minmax(0,calc(50% + 96px)) minmax(0,calc(50% - 96px));gap:0;overflow:hidden}
 .refinery-shell .refinery-material-roll{min-height:0;height:100%;display:grid;grid-template-rows:auto minmax(0,1fr);padding:10px 10px 8px;overflow:hidden}
 .refinery-shell .refinery-material-roll+.refinery-material-roll{border-top:1px solid rgba(216,177,93,.18)}
 .refinery-shell .refinery-material-roll+.refinery-material-roll .refinery-group-title{margin-top:0}

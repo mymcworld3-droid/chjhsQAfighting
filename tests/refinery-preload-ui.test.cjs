@@ -65,12 +65,12 @@ test('stable shell is created early while hydrated modules keep safe dependency 
   assert.ok(layoutPos > refineryPos && battlePos > layoutPos);
 });
 
-test('preloaded refinery shell uses the same divider shifted 64px downward', () => {
+test('preloaded refinery shell uses the same divider shifted 96px downward', () => {
   for (const source of [training, foundation]) {
     assert.match(source, /refinery-panel refinery-material-panel/);
     assert.match(source, /持有煉器素材 · 一般素材/);
     assert.match(source, /二次煉製/);
   }
   assert.match(trainingCss, /refinery-panel\.refinery-material-panel\{[^}]*padding:0/);
-  assert.match(trainingCss, /refinery-material-list\{[^}]*grid-template-rows:minmax\(0,calc\(50% \+ 64px\)\) minmax\(0,calc\(50% - 64px\)\)[^}]*gap:0/);
+  assert.match(trainingCss, /refinery-material-list\{[^}]*grid-template-rows:minmax\(0,calc\(50% \+ 64px\)\) minmax\(0,calc\(50% - 96px\)\)[^}]*gap:0/);
 });

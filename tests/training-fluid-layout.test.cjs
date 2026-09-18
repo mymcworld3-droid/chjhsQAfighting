@@ -22,7 +22,7 @@ test('inventory and refinery adapt across desktop tablet and mobile widths', () 
   assert.match(layout, /cultivation-refinery[\s\S]*grid-template-columns:minmax\(280px,\.9fr\) minmax\(390px,1\.1fr\)/);
   assert.match(layout, /@media \(max-width:900px\)[\s\S]*cultivation-refinery[\s\S]*grid-template-columns:1fr!important/);
   assert.match(layout, /@media \(max-width:640px\)[\s\S]*training-v3-bag-grid[\s\S]*grid-template-columns:1fr!important/);
-  assert.match(layout, /refinery-material-list[\s\S]*grid-template-rows:minmax\(0,calc\(50% \+ 64px\)\) minmax\(0,calc\(50% - 64px\)\)!important/);
+  assert.match(layout, /refinery-material-list[\s\S]*grid-template-rows:minmax\(0,calc\(50% \+ 64px\)\) minmax\(0,calc\(50% - 96px\)\)!important/);
   assert.match(layout, /refinery-material-list[\s\S]*overflow:hidden!important/);
   assert.match(layout, /refinery-material-roll-body[\s\S]*overflow:auto!important/);
 });
