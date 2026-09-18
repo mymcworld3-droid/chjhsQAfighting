@@ -2370,6 +2370,38 @@ window.showOpponentFoundAnimation = async (oppData) => {
     document.getElementById('battle-status-text').classList.remove('text-red-400', 'font-bold');
 };
 
+function buildLocalBattlePlayer() {
+    const combat = window.getCombatStats?.() || { attack: 20, hp: 100, maxHp: 100 };
+    const maxHp = Math.max(1, Math.round(Number(combat.maxHp) || Number(combat.hp) || 100));
+    const artifactBattle = window.getArtifactBattleSnapshot?.() || { version: 1, effects: [], openingShield: 0 };
+    const openingShield = Math.max(
+        0,
+        Math.round(
+            Number(window.getArtifactBattleOpeningShield?.(artifactBattle)) ||
+            Number(artifactBattle.openingShield) ||
+            0
+        )
+    );
+    return {
+        uid: auth.currentUser.uid,
+        name: currentUserData.displayName || "Player",
+        equipped: currentUserData.equipped || { frame: '', avatar: '' },
+        goldenCore: window.getEquippedGoldenCoreBattleSnapshot?.() || null,
+        artifactBattle,
+        artifactShield: openingShield,
+        artifactFirstHitUsed: false,
+        artifactCheatDeathUsed: false,
+        rankLevel: currentUserData.stats?.rankLevel || 0,
+        done: false,
+        answerCorrect: null,
+        answerTime: null,
+        isDead: false,
+        hp: maxHp,
+        maxHp,
+        atk: Math.max(1, Math.round(Number(combat.attack) || 20))
+    };
+}
+
 // [修正] 接受邀請 (強制切換 UI 並啟動監聽)
 async function acceptInvite(inviteId, roomId, toastElement) {
     // 1. 移除邀請通知
@@ -2383,20 +2415,7 @@ async function acceptInvite(inviteId, roomId, toastElement) {
     if (isBattleActive) { alert("你正在對戰中，無法加入！"); return; }
 
     // 3. 準備戰鬥資料
-    const myBattleData = {
-        uid: auth.currentUser.uid,
-        name: currentUserData.displayName || "Player",
-        equipped: currentUserData.equipped || { frame: '', avatar: '' },
-        goldenCore: window.getEquippedGoldenCoreBattleSnapshot?.() || null,
-        rankLevel: currentUserData.stats?.rankLevel || 0,
-        done: false,
-        answerCorrect: null,
-        answerTime: null,
-        isDead: false,
-        hp: 100,
-        maxHp: 100,
-        atk: 20
-    };
+    const myBattleData = buildLocalBattlePlayer();
 
     // 4. 切換頁面並顯示「連線中」 (避免畫面卡住)
     switchToPage('page-battle');
@@ -2468,19 +2487,7 @@ window.startBattleMatchmaking = async () => {
 
     const searchTimeRange = new Date(Date.now() - 1 * 60 * 1000);
     
-    const myBattleData = {
-        uid: auth.currentUser.uid,
-        name: currentUserData.displayName || "Player",
-        equipped: currentUserData.equipped || { frame: '', avatar: '' },
-        rankLevel: currentUserData.stats?.rankLevel || 0,
-        done: false,
-        answerCorrect: null,
-        answerTime: null,
-        isDead: false,
-        hp: 100,
-        maxHp: 100,
-        atk: 20
-    };
+    const myBattleData = buildLocalBattlePlayer();
 
     let joinedRoomId = null;
 
@@ -2981,41 +2988,110 @@ async function resolveRoundLogic(roomId, room) {
         const freshRoom = freshDoc.data();
         let h = { ...freshRoom.host };
         let g = { ...freshRoom.guest };
-        h.maxHp = Number(h.maxHp || 100); h.hp = Number(h.hp ?? h.maxHp); h.atk = Number(h.atk || 20);
-        g.maxHp = Number(g.maxHp || 100); g.hp = Number(g.hp ?? g.maxHp); g.atk = Number(g.atk || 20);
+        h.maxHp = Math.max(1, Number(h.maxHp || 100)); h.hp = Math.max(0, Number(h.hp ?? h.maxHp)); h.atk = Math.max(1, Number(h.atk || 20));
+        g.maxHp = Math.max(1, Number(g.maxHp || 100)); g.hp = Math.max(0, Number(g.hp ?? g.maxHp)); g.atk = Math.max(1, Number(g.atk || 20));
+        h.artifactShield = Math.max(0, Number(h.artifactShield) || 0);
+        g.artifactShield = Math.max(0, Number(g.artifactShield) || 0);
         const battleLog = [];
 
         for (const attackerRole of turnOrder) {
             const attacker = attackerRole === 'host' ? h : g;
             const defender = attackerRole === 'host' ? g : h;
             if (defender.hp <= 0 || attacker.hp <= 0) continue;
+
             if (attacker.answerCorrect) {
-                const baseDamage = Math.max(1, attacker.atk);
-                const attackEffect = window.resolveGoldenCoreBattleAttack?.({ attacker, defender, baseDamage }) || {};
-                const extraDamage = Math.max(0, Number(attackEffect.extraDamage) || 0);
-                const intendedDamage = baseDamage + extraDamage;
+                const baseDamage = Math.max(1, Number(attacker.atk) || 1);
+                const coreAttack = window.resolveGoldenCoreBattleAttack?.({ attacker, defender, baseDamage }) || {};
+                const coreExtraDamage = Math.max(0, Number(coreAttack.extraDamage) || 0);
+                const artifactAttack = window.resolveArtifactBattleAttack?.({
+                    attacker,
+                    defender,
+                    baseDamage: baseDamage + coreExtraDamage
+                }) || {
+                    normalDamage: baseDamage + coreExtraDamage,
+                    trueDamage: 0,
+                    lifestealPercent: 0,
+                    shieldGain: 0,
+                    skill: ''
+                };
+
+                const artifactDefense = window.resolveArtifactBattleDefense?.({
+                    defender,
+                    attacker,
+                    normalDamage: Math.max(0, Number(artifactAttack.normalDamage) || 0),
+                    trueDamage: Math.max(0, Number(artifactAttack.trueDamage) || 0)
+                }) || {
+                    hpDamage: Math.max(0, Number(artifactAttack.normalDamage) || 0) + Math.max(0, Number(artifactAttack.trueDamage) || 0),
+                    reflectDamage: 0,
+                    skill: ''
+                };
+
                 const defenderHpBefore = Math.max(0, Number(defender.hp) || 0);
+                const intendedDamage = Math.max(0, Math.round(Number(artifactDefense.hpDamage) || 0));
                 const receivedDamage = Math.min(defenderHpBefore, intendedDamage);
                 defender.hp = Math.max(0, defenderHpBefore - intendedDamage);
                 if (defender.hp === 0) defender.isDead = true;
+
+                const shieldGain = Math.max(0, Math.round(Number(artifactAttack.shieldGain) || 0));
+                if (shieldGain > 0) {
+                    attacker.artifactShield = Math.max(0, Number(attacker.artifactShield) || 0) + shieldGain;
+                }
+
+                let healed = 0;
+                const lifestealPercent = Math.max(0, Math.min(0.5, Number(artifactAttack.lifestealPercent) || 0));
+                if (receivedDamage > 0 && lifestealPercent > 0 && attacker.hp > 0) {
+                    const missingHp = Math.max(0, Number(attacker.maxHp) - Number(attacker.hp));
+                    healed = Math.min(missingHp, Math.max(0, Math.round(receivedDamage * lifestealPercent)));
+                    attacker.hp = Math.min(Number(attacker.maxHp), Number(attacker.hp) + healed);
+                }
+
+                const attackSkill = [
+                    coreAttack.skill || '答題攻擊',
+                    artifactAttack.skill || '',
+                    artifactDefense.skill ? `敵方・${artifactDefense.skill}` : '',
+                    shieldGain > 0 ? `聚盾+${shieldGain}` : ''
+                ].filter(Boolean).join('・');
+
                 battleLog.push({
-                    attacker: attackerRole, isHit: true, dmg: intendedDamage,
-                    skill: attackEffect.skill || '答題攻擊', healed: null
+                    attacker: attackerRole,
+                    isHit: true,
+                    dmg: intendedDamage,
+                    skill: attackSkill,
+                    healed: healed || null
                 });
 
                 if (defender.hp > 0 && receivedDamage > 0) {
-                    const counterEffect = window.resolveGoldenCoreBattleCounter?.({
-                        defender, attacker, receivedDamage
-                    }) || {};
-                    const reflectDamage = Math.max(0, Number(counterEffect.reflectDamage) || 0);
-                    if (reflectDamage > 0) {
-                        const defenderRole = attackerRole === 'host' ? 'guest' : 'host';
-                        attacker.hp = Math.max(0, Number(attacker.hp || 0) - reflectDamage);
+                    const defenderRole = attackerRole === 'host' ? 'guest' : 'host';
+
+                    const artifactReflectDamage = Math.max(0, Math.round(Number(artifactDefense.reflectDamage) || 0));
+                    if (artifactReflectDamage > 0 && attacker.hp > 0) {
+                        attacker.hp = Math.max(0, Number(attacker.hp || 0) - artifactReflectDamage);
                         if (attacker.hp === 0) attacker.isDead = true;
                         battleLog.push({
-                            attacker: defenderRole, isHit: true, dmg: reflectDamage,
-                            skill: counterEffect.skill || '萬劫雷霆丹・雷光反擊', healed: null
+                            attacker: defenderRole,
+                            isHit: true,
+                            dmg: artifactReflectDamage,
+                            skill: '法寶反震',
+                            healed: null
                         });
+                    }
+
+                    if (attacker.hp > 0) {
+                        const counterEffect = window.resolveGoldenCoreBattleCounter?.({
+                            defender, attacker, receivedDamage
+                        }) || {};
+                        const coreReflectDamage = Math.max(0, Number(counterEffect.reflectDamage) || 0);
+                        if (coreReflectDamage > 0) {
+                            attacker.hp = Math.max(0, Number(attacker.hp || 0) - coreReflectDamage);
+                            if (attacker.hp === 0) attacker.isDead = true;
+                            battleLog.push({
+                                attacker: defenderRole,
+                                isHit: true,
+                                dmg: coreReflectDamage,
+                                skill: counterEffect.skill || '萬劫雷霆丹・雷光反擊',
+                                healed: null
+                            });
+                        }
                     }
                 }
             } else {
@@ -3041,6 +3117,7 @@ async function resolveRoundLogic(roomId, room) {
         });
     });
 }
+
 // Battle victory reward
 async function processBattleWin(loserData, msgEl) {
     try {
