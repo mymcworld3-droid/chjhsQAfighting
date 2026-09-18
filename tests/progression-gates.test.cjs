@@ -35,7 +35,7 @@ test('login core is isolated from optional cultivation module failures', () => {
   assert.match(main, /\.\/cultivation\/cultivation-theme\.js/);
 });
 
-test('Foundation opens training at 10 with backpack only while Golden Core waits for 28', () => {
+test('Foundation opens shared training shell at 10 while Golden Core tab waits for 28', () => {
   assert.match(progression, /const FOUNDATION_SCORE = 10;/);
   assert.match(progression, /const GOLDEN_CORE_SCORE = 28;/);
   assert.match(guard, /const FOUNDATION_SCORE = 10;/);
@@ -48,7 +48,8 @@ test('Foundation opens training at 10 with backpack only while Golden Core waits
   assert.match(foundationTraining, /const GOLDEN_CORE_SCORE = 28;/);
   assert.match(foundationTraining, /value >= FOUNDATION_SCORE && value < GOLDEN_CORE_SCORE/);
   assert.match(foundationTraining, /data-training-tab="bag"/);
-  assert.doesNotMatch(foundationTraining, /data-training-tab="core"/);
+  assert.match(foundationTraining, /data-training-tab="refinery"/);
+  assert.match(foundationTraining, /coreTab\?\.classList\.add\('hidden'\)/);
   assert.doesNotMatch(foundationTraining, /training-status-tab/);
 
   const progressionIndex = main.indexOf("'./cultivation/cultivation-progression-v2.js'");
