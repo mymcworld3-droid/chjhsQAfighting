@@ -141,5 +141,5 @@ test('backpack exposes refinement depth and index preloads the new refinery styl
   const css = index.slice(start, end);
   assert.match(css, /refinery-artifact-ingredient/);
   assert.match(css, /refinery-group-title/);
-  assert.match(index, /main\.js\?v=20260918-playerforgecopy1/);
+  assert.match(index, /main\.js\?v=20260918-effectgroups1/);
 });
