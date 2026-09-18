@@ -116,7 +116,8 @@ test('artifact recipe nesting rejects self-recursion and cycles', () => {
 test('player refinery accepts artifact tokens and never consumes equipped copies', () => {
   assert.match(refinery, /artifact:\$\{a\.id\}/);
   assert.match(refinery, /data-refinery-ingredient/);
-  assert.match(refinery, /<span>二次煉製<\/span>/);
+  assert.match(refinery, /持有煉器素材 · 一般素材/);
+  assert.match(refinery, /> 二次煉製<\/span>/);
   assert.match(refinery, /equippedArtifactCounts/);
   const aiJobs = read('public/cultivation/refinery-ai-jobs.js');
   assert.match(aiJobs, /have - reserved < need/);
@@ -160,8 +161,8 @@ test('refinery separates general materials and second-refinement artifacts into 
   assert.match(refinery, /data-refinery-material-roll-body="materials"/);
   assert.match(refinery, /data-refinery-material-roll-body="artifacts"/);
   assert.match(refinery, /\.refinery-material-roll-body\{[^}]*overflow:auto/);
-  assert.match(refinery, /<span>一般素材<\/span>/);
-  assert.match(refinery, /<span>二次煉製<\/span>/);
+  assert.match(refinery, /持有煉器素材 · 一般素材/);
+  assert.match(refinery, /> 二次煉製<\/span>/);
 });
 
 test('general and second-refinement rolls each use half of the whole held-material card height', () => {
