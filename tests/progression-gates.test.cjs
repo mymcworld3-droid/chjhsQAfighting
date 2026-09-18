@@ -238,3 +238,9 @@ test('startup gate is a full-screen xianxia loading scene with real progress and
   assert.match(startupScene, /<circle cx="1115" cy="210"/);
   assert.match(startupScene, /<path d="M0 570/);
 });
+
+
+test('startup progress section is horizontally centered on the viewport', () => {
+  assert.match(legacy, /\.game-startup-copy\{width:100%;max-width:760px;margin-left:auto;margin-right:auto/);
+  assert.match(legacy, /\.game-startup-progress-wrap\{width:min\(720px,100%\);margin:clamp\(20px,3\.2vh,34px\) auto 0/);
+});

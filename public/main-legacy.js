@@ -597,7 +597,7 @@ function ensureGameStartupGateStyle() {
         #game-startup-gate .game-startup-brand:before{
             content:'';width:30px;height:1px;background:linear-gradient(90deg,#d8b15d,transparent)
         }
-        #game-startup-gate .game-startup-copy{max-width:760px;text-shadow:0 4px 24px rgba(0,0,0,.82)}
+        #game-startup-gate .game-startup-copy{width:100%;max-width:760px;margin-left:auto;margin-right:auto;text-shadow:0 4px 24px rgba(0,0,0,.82)}
         #game-startup-gate .game-startup-kicker{
             color:#d9b96d;font-size:9px;font-weight:900;letter-spacing:.32em
         }
@@ -608,7 +608,7 @@ function ensureGameStartupGateStyle() {
         #game-startup-gate-text{
             margin:0;color:#b7a783;font-size:clamp(10px,1.2vw,13px);line-height:1.75
         }
-        #game-startup-gate .game-startup-progress-wrap{margin-top:clamp(20px,3.2vh,34px)}
+        #game-startup-gate .game-startup-progress-wrap{width:min(720px,100%);margin:clamp(20px,3.2vh,34px) auto 0}
         #game-startup-gate .game-startup-tip-row{
             min-height:22px;margin-bottom:8px;display:flex;align-items:flex-end;justify-content:space-between;gap:16px
         }
