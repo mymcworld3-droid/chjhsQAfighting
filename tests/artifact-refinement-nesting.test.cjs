@@ -171,3 +171,9 @@ test('general and second-refinement rolls each use half of the whole held-materi
   assert.match(refinery, /\.refinery-material-list\{[^}]*grid-template-rows:repeat\(2,minmax\(0,1fr\)\)[^}]*gap:0[^}]*height:100%/);
   assert.doesNotMatch(refinery, /refinery-panel"><div class="refinery-head"><div><h3><i class="fa-solid fa-gem"><\/i> 持有煉器素材/);
 });
+
+test('empty second-refinement notice sits at the bottom of its half', () => {
+  assert.match(refinery, /data-refinery-material-roll-body="artifacts"/);
+  assert.match(refinery, /artifactHtml \? '' : 'is-empty'/);
+  assert.match(refinery, /\.refinery-material-roll-body\.is-empty\{display:flex;flex-direction:column;justify-content:flex-end\}/);
+});
