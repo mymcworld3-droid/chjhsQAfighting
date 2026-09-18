@@ -26,7 +26,8 @@ test('quiz rich-text formatter protects images and MathJax segments separately',
 test('question, every option and explanation use the same safe formatter', () => {
   assert.match(legacy, /questionTextEl\.innerHTML = parseMarkdownImages\(data\.q\)/);
   assert.match(legacy, /quiz-rich-option[^\n]*formatQuizRichText\(optText\)/);
-  assert.match(legacy, /fbText\.innerHTML = formatQuizRichText\(explanation\)/);
+  assert.match(legacy, /const explanationFormatter = window\.formatQuizRichText \|\| parseMarkdownImages/);
+  assert.match(legacy, /fbText\.innerHTML = explanationFormatter\(explanation\)/);
   assert.match(legacy, /function parseMarkdownImages\(text\) \{[\s\S]*return formatQuizRichText\(text\)/);
 });
 
