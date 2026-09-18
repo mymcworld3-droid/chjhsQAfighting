@@ -575,7 +575,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     const first=page.firstElementChild; if(first)first.insertAdjacentElement('afterend',button); else page.prepend(button);
   }
 
-  function blocking(){ return !!document.querySelector('#progression-v2-modal,.training-v3-modal-backdrop,#realm-breakthrough-feedback,#golden-core-tutorial-layer,#report-modal:not(.hidden)'); }
+  function blocking(){ return !!document.querySelector('#xiuxian-story-layer,#progression-v2-modal,.training-v3-modal-backdrop,#realm-breakthrough-feedback,#golden-core-tutorial-layer,#report-modal:not(.hidden)'); }
   function maybeAutoStart(){
     if(autoStarted||active||blocking())return;
     const data=userData(), user=getAuth(getApp()).currentUser;

@@ -88,7 +88,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
 
   function finish(skipped){if(!active)return;active=false;document.getElementById('golden-core-tutorial-layer')?.remove();if(resizeHandler)window.removeEventListener('resize',resizeHandler);resizeHandler=null;persistFinished(skipped);}
   function start(){if(!unlocked())return;ensureStyle();active=true;index=0;resizeHandler ||= ()=>updateSpotlight();window.addEventListener('resize',resizeHandler);render();}
-  function blocking(){return !!document.querySelector('#newbie-tutorial-layer,#progression-v2-modal,.training-v3-modal-backdrop,#realm-breakthrough-feedback');}
+  function blocking(){return !!document.querySelector('#xiuxian-story-layer,#newbie-tutorial-layer,#progression-v2-modal,.training-v3-modal-backdrop,#realm-breakthrough-feedback');}
 
   function maybeAutoStart(){
     if(autoStarted||active||!unlocked()||blocking())return; const data=userData(),user=getAuth(getApp()).currentUser;if(!data?.stats||!user)return;
