@@ -98,12 +98,24 @@
 
       body.xianxia-theme #page-training .refinery-material-list{
         flex:1 1 auto!important;
+        display:grid!important;
+        grid-template-rows:repeat(2,minmax(0,1fr))!important;
         min-height:220px!important;
         max-height:max(220px,calc(var(--training-content-height,calc(100dvh - 270px)) - 110px))!important;
+        overflow:hidden!important;
+        padding-right:5px!important;
+      }
+
+      body.xianxia-theme #page-training .refinery-material-roll{
+        min-height:0!important;
+        height:100%!important;
+      }
+
+      body.xianxia-theme #page-training .refinery-material-roll-body{
+        min-height:0!important;
         overflow:auto!important;
         overscroll-behavior:contain!important;
         scrollbar-gutter:stable;
-        padding-right:5px!important;
       }
 
       body.xianxia-theme #page-training .refinery-slots,

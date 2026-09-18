@@ -91,10 +91,22 @@
 
       body.xianxia-theme #page-training .refinery-material-list{
         flex:1 1 auto!important;
+        display:grid!important;
+        grid-template-rows:repeat(2,minmax(0,1fr))!important;
         min-height:0!important;
         max-height:none!important;
+        overflow:hidden!important;
+      }
+
+      body.xianxia-theme #page-training .refinery-material-roll{
+        min-height:0!important;
+        height:100%!important;
+      }
+
+      body.xianxia-theme #page-training .refinery-material-roll-body{
+        min-height:0!important;
         overflow:auto!important;
-        overscroll-behavior:contain;
+        overscroll-behavior:contain!important;
       }
 
       body.xianxia-theme #page-training .refinery-slots{

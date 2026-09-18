@@ -22,7 +22,9 @@ test('inventory and refinery adapt across desktop tablet and mobile widths', () 
   assert.match(layout, /cultivation-refinery[\s\S]*grid-template-columns:minmax\(280px,\.9fr\) minmax\(390px,1\.1fr\)/);
   assert.match(layout, /@media \(max-width:900px\)[\s\S]*cultivation-refinery[\s\S]*grid-template-columns:1fr!important/);
   assert.match(layout, /@media \(max-width:640px\)[\s\S]*training-v3-bag-grid[\s\S]*grid-template-columns:1fr!important/);
-  assert.match(layout, /refinery-material-list[\s\S]*overflow:auto!important/);
+  assert.match(layout, /refinery-material-list[\s\S]*grid-template-rows:repeat\(2,minmax\(0,1fr\)\)!important/);
+  assert.match(layout, /refinery-material-list[\s\S]*overflow:hidden!important/);
+  assert.match(layout, /refinery-material-roll-body[\s\S]*overflow:auto!important/);
 });
 
 test('fluid training layout loads after refinery so it can control final geometry', () => {
