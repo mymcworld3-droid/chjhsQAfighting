@@ -3,6 +3,7 @@
   'use strict';
 
   const MODAL_ID = 'admin-artifact-recipe-modal';
+  const SLOT_MIN = 2;
   const SLOT_LIMIT = 8;
   let observer = null;
 
@@ -18,7 +19,7 @@
     if (!card || !save || !inputs.length) return;
 
     if (note) {
-      note.textContent = '設定各材料與法寶素材需要的數量。玩家煉器時只比較種類與數量，不看 8 格排列；總素材最多 8 個。法寶可二次煉製，但套娃最多 2 層。';
+      note.textContent = '設定各材料與法寶素材需要的數量。玩家煉器時只比較種類與數量，不看 8 格排列；總素材至少 2 個、最多 8 個。法寶可二次煉製，但套娃最多 2 層。';
     }
 
     inputs.forEach((input) => {
@@ -48,13 +49,13 @@
         count.textContent = `${total} / ${SLOT_LIMIT}`;
         count.style.color = total > SLOT_LIMIT ? '#fca5a5' : (total === SLOT_LIMIT ? '#86efac' : '#d8b15d');
       }
-      const invalid = total < 1 || total > SLOT_LIMIT;
+      const invalid = total < SLOT_MIN || total > SLOT_LIMIT;
       save.disabled = invalid;
       save.dataset.recipeLimitDisabled = invalid ? '1' : '0';
       if (status) {
         if (total > SLOT_LIMIT) status.textContent = `目前共 ${total} 個素材，超過 8 格上限，請減少 ${total - SLOT_LIMIT} 個。`;
-        else if (total < 1) status.textContent = '至少需要放入 1 個材料或法寶素材才能建立法寶配方。';
-        else if (status.textContent?.includes('超過 8 格') || status.textContent?.includes('至少需要放入 1 個')) status.textContent = '';
+        else if (total < SLOT_MIN) status.textContent = `每個法寶配方至少需要 ${SLOT_MIN} 個材料或法寶素材，目前只有 ${total} 個。`;
+        else if (status.textContent?.includes('超過 8 格') || status.textContent?.includes('每個法寶配方至少需要')) status.textContent = '';
       }
     }
 
