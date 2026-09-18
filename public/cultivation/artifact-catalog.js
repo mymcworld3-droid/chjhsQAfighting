@@ -46,6 +46,25 @@ export const ARTIFACT_REALMS = Object.freeze([
   { id: 'immortal', name: '真仙', order: 10, need: 868 }
 ]);
 
+export const ARTIFACT_REALM_COLORS = Object.freeze({
+  凡人: '#a1a1aa',
+  煉氣: '#86efac',
+  築基: '#60a5fa',
+  金丹: '#fbbf24',
+  元嬰: '#c084fc',
+  化神: '#f472b6',
+  煉虛: '#818cf8',
+  合體: '#fb923c',
+  大乘: '#f87171',
+  渡劫: '#ef4444',
+  真仙: '#f8fafc'
+});
+
+export function artifactRealmColor(name) {
+  return ARTIFACT_REALM_COLORS[String(name || '').trim()] || '#d4d4d8';
+}
+
+
 export const SUPPORTED_ARTIFACT_EFFECTS = Object.freeze([
   'equip_attack_flat',
   'equip_attack_percent',
