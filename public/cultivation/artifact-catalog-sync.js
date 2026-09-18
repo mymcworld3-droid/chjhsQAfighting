@@ -8,7 +8,21 @@ import { getDefaultArtifactCatalog, replaceArtifactCatalog } from './artifact-ca
 
   const CONFIG_COLLECTION = 'gameConfig';
   const CONFIG_DOC = 'artifactCatalogV1';
+  const GENERATION_PROMPT_MAX = 1200;
   let unsubscribe = null;
+
+  function normalizeGenerationPrompt(value) {
+    return String(value || '').trim().slice(0, GENERATION_PROMPT_MAX);
+  }
+
+  function applyGenerationPrompt(value, source = 'sync') {
+    const prompt = normalizeGenerationPrompt(value);
+    window.__artifactGenerationPrompt = prompt;
+    window.dispatchEvent(new CustomEvent('artifact-generation-prompt-updated', {
+      detail: { prompt, source }
+    }));
+    return prompt;
+  }
 
   function applyDefault(reason = 'fallback') {
     try {
@@ -25,10 +39,12 @@ import { getDefaultArtifactCatalog, replaceArtifactCatalog } from './artifact-ca
     const ref = doc(db, CONFIG_COLLECTION, CONFIG_DOC);
     unsubscribe = onSnapshot(ref, (snap) => {
       if (!snap.exists()) {
+        applyGenerationPrompt('', 'default-no-remote-config');
         applyDefault('default-no-remote-config');
         return;
       }
       const data = snap.data() || {};
+      applyGenerationPrompt(data.generationPrompt || '', 'firestore');
       try {
         if (!Array.isArray(data.items) || !data.items.length) throw new Error('遠端法寶清單為空');
         replaceArtifactCatalog(data.items, 'firestore');
@@ -38,11 +54,14 @@ import { getDefaultArtifactCatalog, replaceArtifactCatalog } from './artifact-ca
       }
     }, (error) => {
       console.warn('[Artifact catalog] Firestore sync unavailable; using defaults:', error);
+      applyGenerationPrompt('', 'default-sync-error');
       applyDefault('default-sync-error');
     });
   }
 
   window.getArtifactCatalogConfigPath = () => `${CONFIG_COLLECTION}/${CONFIG_DOC}`;
+  window.getArtifactGenerationPrompt = () => normalizeGenerationPrompt(window.__artifactGenerationPrompt || '');
+  window.setArtifactGenerationPromptLocal = (value, source = 'local') => applyGenerationPrompt(value, source);
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start, { once: true });
   else start();
