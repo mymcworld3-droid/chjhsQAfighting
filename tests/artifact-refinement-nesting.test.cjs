@@ -118,10 +118,11 @@ test('player refinery accepts artifact tokens and never consumes equipped copies
   assert.match(refinery, /data-refinery-ingredient/);
   assert.match(refinery, /法寶素材・二次煉製/);
   assert.match(refinery, /equippedArtifactCounts/);
-  assert.match(refinery, /have - reserved/);
-  assert.match(refinery, /已裝備法寶不會被消耗/);
-  assert.match(refinery, /delete artifacts\.inventory\[row\.artifactId\]/);
-  assert.match(refinery, /artifact-system-updated/);
+  const aiJobs = read('public/cultivation/refinery-ai-jobs.js');
+  assert.match(aiJobs, /have - reserved < need/);
+  assert.match(aiJobs, /已裝備法寶不會被消耗/);
+  assert.match(aiJobs, /delete artifactSystem\.inventory\[row\.artifactId\]/);
+  assert.match(aiJobs, /artifact-system-updated/);
 });
 
 test('legacy forge path also reserves equipped artifacts and consumes mixed recipes atomically', () => {
