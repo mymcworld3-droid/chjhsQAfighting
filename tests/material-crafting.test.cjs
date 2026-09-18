@@ -63,7 +63,8 @@ test('admin can add edit delete materials and configure artifact recipes', () =>
   assert.match(admin, /window\.confirm/);
   assert.match(admin, /仍被 .*配方使用/);
   assert.match(admin, /設定配方/);
-  assert.match(admin, /至少需要 1 個材料或法寶素材才能合成法寶/);
+  assert.match(admin, /每個法寶配方至少需要/);
+  assert.match(admin, /MIN_ARTIFACT_RECIPE_MATERIALS/);
   assert.match(admin, /data-recipe-artifact/);
   assert.match(admin, /套娃深度最多/);
   assert.match(admin, /persistMaterials/);
