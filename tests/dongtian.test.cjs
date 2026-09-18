@@ -99,7 +99,7 @@ test('Dongtian session keeps a fixed ordered question array until completion or 
   assert.doesNotMatch(uiSource, /generate-dongtian[\s\S]*renderRunner[\s\S]*fetch\('\/api\/generate-quiz'/);
 });
 
-test('Dongtian first completion spirit stones scale with question count while keeping a 1000 minimum', () => {
+test('Dongtian first completion spirit stones and cultivation scale safely', () => {
   assert.match(uiSource, /FIRST_COMPLETION_SPIRIT_STONE_PER_QUESTION = 100/);
   assert.match(uiSource, /FIRST_COMPLETION_MIN_SPIRIT_STONES = 1000/);
   assert.match(uiSource, /function firstCompletionSpiritStones\(questionCount\)/);
@@ -108,6 +108,10 @@ test('Dongtian first completion spirit stones scale with question count while ke
   assert.match(uiSource, /'stats\.gold': increment\(firstCompletionReward\)/);
   assert.match(uiSource, /goldAdded: firstCompletionReward, questionCount: total/);
   assert.match(uiSource, /依 \$\{total\} 題獲得 \+\$\{firstCompletionReward\.toLocaleString\(\)\} 靈石/);
+  assert.match(uiSource, /FIRST_COMPLETION_CULTIVATION_CORRECT_STEP = 5/);
+  assert.match(uiSource, /function firstCompletionCultivation\(correctCount\)/);
+  assert.match(uiSource, /'stats\.totalScore': increment\(cultivationReward\)/);
+  assert.match(uiSource, /cultivationAdded: cultivationReward/);
   assert.match(uiSource, /OWNER_CULTIVATION_REWARD = 1/);
   assert.match(uiSource, /OWNER_GOLD_REWARD = 5/);
 });
@@ -117,6 +121,7 @@ test('Dongtian encounter confirmation prominently shows the owner name and prosp
   assert.match(uiSource, /此洞天由「\$\{escapeHtml\(owner\)\}」開闢/);
   assert.match(uiSource, /洞天主人：<\/strong>\$\{escapeHtml\(owner\)\}/);
   assert.match(uiSource, /首次完整通關：<\/strong>\+\$\{firstReward\.toLocaleString\(\)\} 靈石/);
+  assert.match(uiSource, /首次修為：<\/strong>每答對 \$\{FIRST_COMPLETION_CULTIVATION_CORRECT_STEP\} 題 \+1/);
   assert.match(uiSource, /是否現在進入？/);
 });
 
@@ -183,7 +188,7 @@ test('Suspended Dongtians are excluded from encounters and owners receive a repa
   assert.match(uiSource, /where\('status', '==', 'active'\)/);
   assert.match(uiSource, /data-dt-repair/);
   assert.match(uiSource, /已封印 · 待修復/);
-  assert.match(uiSource, /if \(dongtian\.status && dongtian\.status !== 'active'\)/);
+  assert.match(uiSource, /isPlayableDongtianStatus/);
   assert.match(uiSource, /ensureSessionDongtianActive/);
 });
 
@@ -223,10 +228,11 @@ test('Question report only appears after answering, so it cannot reveal the answ
   assert.match(answer, /document\.getElementById\('dt-report-question'\)\.onclick = openQuestionReport/);
 });
 
-test('Completion reward transaction rechecks active status to prevent seal/reward races', () => {
+test('Completion reward transaction rechecks playable status to prevent seal/reward races', () => {
   const completion = uiSource.slice(uiSource.indexOf('async function completeProgress'), uiSource.indexOf('async function writeDongtianHistory'));
   assert.match(completion, /const \[playSnap, indexSnap\] = await Promise\.all/);
-  assert.match(completion, /indexSnap\.data\(\)\?\.status !== 'active'/);
+  assert.match(completion, /if \(!indexSnap\.exists\(\)\)/);
+  assert.match(completion, /isPlayableDongtianStatus\(liveDongtian\)/);
   assert.match(completion, /洞天已封印，本次不進行通關結算/);
 });
 
@@ -284,4 +290,35 @@ test('Dongtian runner and question card fill the viewport instead of staying in 
   assert.match(uiSource, /\.dt-question\{[^}]*height:100%[^}]*display:flex[^}]*overflow:auto/);
   assert.match(uiSource, /\.dt-options\{[^}]*grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
   assert.match(uiSource, /@media\(max-width:700px\)[\s\S]*\.dt-options\{grid-template-columns:1fr/);
+});
+
+
+test('Qi-five tutorial can create a private ten-question sample Dongtian that never enters the public encounter pool', () => {
+  assert.match(uiSource, /function tutorialSampleQuestions\(\)/);
+  assert.match(uiSource, /TUT-010/);
+  assert.match(uiSource, /async function ensureTutorialSampleDongtian\(\)/);
+  assert.match(uiSource, /status: 'tutorial'/);
+  assert.match(uiSource, /visibility: 'private'/);
+  assert.match(uiSource, /tutorialOnly: true/);
+  assert.match(uiSource, /教學專用 · 不公開/);
+  assert.match(uiSource, /where\('status', '==', 'active'\)/);
+});
+
+test('owners can permanently delete Dongtians and tutorial deletion also clears the owner play marker', () => {
+  assert.match(uiSource, /async function deleteOwnedDongtian\(id, options = \{\}\)/);
+  assert.match(uiSource, /只有洞天主人可以刪除/);
+  assert.match(uiSource, /batch\.delete\(doc\(db, INDEX_COLLECTION, key\)\)/);
+  assert.match(uiSource, /batch\.delete\(doc\(db, DATA_COLLECTION, key\)\)/);
+  assert.match(uiSource, /batch\.delete\(doc\(db, PLAY_COLLECTION/);
+  assert.match(uiSource, /data-dt-delete/);
+  assert.match(uiSource, /dongtian:deleted/);
+});
+
+test('tutorial-only Dongtian is playable only by its owner and emits lifecycle events for guided play', () => {
+  assert.match(uiSource, /dongtian\?\.status === 'tutorial'/);
+  assert.match(uiSource, /dongtian\?\.tutorialOnly === true/);
+  assert.match(uiSource, /dongtian\?\.ownerUid === uid\(\)/);
+  assert.match(uiSource, /dongtian:session-start/);
+  assert.match(uiSource, /dongtian:completed/);
+  assert.match(uiSource, /dongtian:session-closed/);
 });
