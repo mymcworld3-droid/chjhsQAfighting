@@ -115,11 +115,15 @@ body.xianxia-theme .training-page-v3 { max-width:900px; margin:0 auto; padding-b
 /* Refinery shell is present with the training page so the layout does not jump while feature modules hydrate. */
 .refinery-shell{width:100%;display:grid;grid-template-columns:minmax(280px,.9fr) minmax(390px,1.1fr);gap:14px;align-items:stretch}
 .refinery-shell .refinery-panel{min-width:0;padding:14px;border:1px solid rgba(216,177,93,.2);border-radius:18px;background:linear-gradient(145deg,rgba(21,17,10,.96),rgba(7,7,7,.97));box-shadow:0 16px 42px rgba(0,0,0,.3)}
+.refinery-shell .refinery-panel.refinery-material-panel{padding:0;display:grid;grid-template-rows:minmax(0,1fr);overflow:hidden}
+.refinery-shell .refinery-material-list{height:100%;min-height:0;display:grid;grid-template-rows:repeat(2,minmax(0,1fr));gap:0;overflow:hidden}
+.refinery-shell .refinery-material-roll{min-height:0;height:100%;display:grid;grid-template-rows:auto minmax(0,1fr);padding:10px 10px 8px;overflow:hidden}
+.refinery-shell .refinery-material-roll+.refinery-material-roll{border-top:1px solid rgba(216,177,93,.18)}
 .refinery-shell .refinery-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:11px}
 .refinery-shell .refinery-head h3{margin:0;color:#f1e1bc;font-size:13px}
 .refinery-shell .refinery-head p{margin:4px 0 0;color:#8d816c;font-size:8px;line-height:1.55}
 .refinery-shell .refinery-badge{padding:5px 8px;border:1px solid rgba(216,177,93,.15);border-radius:999px;color:#cdb46f;font-size:7px;white-space:nowrap}
-.refinery-shell-material-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px;align-content:start}
+.refinery-shell-material-grid{min-height:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px;align-content:start;overflow:hidden}
 .refinery-shell-material{aspect-ratio:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:8px;border:1px solid rgba(255,255,255,.055);border-radius:14px;background:rgba(255,255,255,.014);color:#675f52}
 .refinery-shell-icon{width:42px;height:42px;border-radius:12px;background:linear-gradient(110deg,rgba(216,177,93,.08),rgba(255,255,255,.025),rgba(216,177,93,.08));border:1px solid rgba(216,177,93,.12)}
 .refinery-shell-line{width:62%;height:6px;border-radius:999px;background:rgba(216,177,93,.09)}

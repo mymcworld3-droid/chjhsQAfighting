@@ -57,18 +57,28 @@
   }
 
   function refineryShellMarkup() {
-    const materials = Array.from({ length: 8 }, (_, index) =>
+    const materialCells = Array.from({ length: 8 }, (_, index) =>
       `<div class="refinery-shell-material" aria-hidden="true"><span class="refinery-shell-icon"></span><span class="refinery-shell-line"></span><small>材料 ${index + 1}</small></div>`
-    ).join('');
+    );
+    const materials = materialCells.slice(0, 4).join('');
+    const artifacts = materialCells.slice(4).join('');
     const directions = ['乾','坎','艮','震','巽','離','坤','兌'];
     const slots = directions.map((direction, index) =>
       `<button type="button" class="refinery-slot" data-refinery-slot="${index}" disabled aria-label="空陣位 ${direction}"><span class="idx">${index + 1}</span><span class="remove">×</span><span class="direction">${direction}</span><span><span class="icon">＋</span><span class="name"></span></span></button>`
     ).join('');
     return `
       <section class="cultivation-refinery refinery-shell" aria-busy="true">
-        <article class="refinery-panel">
-          <div class="refinery-head"><div><h3><i class="fa-solid fa-gem"></i> 持有材料</h3><p>材料資料載入後會直接填入固定格位。</p></div><span class="refinery-badge">載入中</span></div>
-          <div class="refinery-shell-material-grid">${materials}</div>
+        <article class="refinery-panel refinery-material-panel">
+          <div class="refinery-material-list">
+            <section class="refinery-material-roll">
+              <div class="refinery-group-title"><span><i class="fa-solid fa-gem"></i> 持有煉器素材 · 一般素材</span><span>載入中</span></div>
+              <div class="refinery-shell-material-grid refinery-material-roll-body">${materials}</div>
+            </section>
+            <section class="refinery-material-roll">
+              <div class="refinery-group-title"><span><i class="fa-solid fa-recycle"></i> 二次煉製</span><span>載入中</span></div>
+              <div class="refinery-shell-material-grid refinery-material-roll-body">${artifacts}</div>
+            </section>
+          </div>
         </article>
         <article class="refinery-panel refinery-forge-panel">
           <div class="refinery-head"><div><h3><i class="fa-solid fa-fire-burner"></i> 八方煉器陣</h3><p>八方歸位，陣心煉器；法陣已預先建立。</p></div><span class="refinery-badge">0/8</span></div>

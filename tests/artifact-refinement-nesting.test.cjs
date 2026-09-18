@@ -163,3 +163,10 @@ test('refinery separates general materials and second-refinement artifacts into 
   assert.match(refinery, /<span>一般素材<\/span>/);
   assert.match(refinery, /<span>二次煉製<\/span>/);
 });
+
+test('general and second-refinement rolls each use half of the whole held-material card height', () => {
+  assert.match(refinery, /refinery-panel refinery-material-panel/);
+  assert.match(refinery, /\.refinery-material-panel\{[^}]*padding:0[^}]*grid-template-rows:minmax\(0,1fr\)[^}]*overflow:hidden/);
+  assert.match(refinery, /\.refinery-material-list\{[^}]*grid-template-rows:repeat\(2,minmax\(0,1fr\)\)[^}]*gap:0[^}]*height:100%/);
+  assert.doesNotMatch(refinery, /refinery-panel"><div class="refinery-head"><div><h3><i class="fa-solid fa-gem"><\/i> 持有煉器素材/);
+});

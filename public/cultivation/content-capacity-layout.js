@@ -96,14 +96,24 @@
         overflow:visible!important;
       }
 
+      body.xianxia-theme #page-training .refinery-panel.refinery-material-panel{
+        padding:0!important;
+        display:grid!important;
+        grid-template-rows:minmax(0,1fr)!important;
+        overflow:hidden!important;
+      }
+
       body.xianxia-theme #page-training .refinery-material-list{
-        flex:1 1 auto!important;
+        flex:none!important;
+        width:100%!important;
+        height:100%!important;
         display:grid!important;
         grid-template-rows:repeat(2,minmax(0,1fr))!important;
-        min-height:220px!important;
-        max-height:max(220px,calc(var(--training-content-height,calc(100dvh - 270px)) - 110px))!important;
+        gap:0!important;
+        min-height:0!important;
+        max-height:none!important;
         overflow:hidden!important;
-        padding-right:5px!important;
+        padding-right:0!important;
       }
 
       body.xianxia-theme #page-training .refinery-material-roll{
@@ -173,9 +183,14 @@
           min-height:var(--training-content-height,0px)!important;
         }
         body.xianxia-theme #page-training .refinery-panel{min-height:0!important}
+        body.xianxia-theme #page-training .refinery-panel.refinery-material-panel{
+          height:min(42dvh,360px)!important;
+          min-height:360px!important;
+        }
         body.xianxia-theme #page-training .refinery-material-list{
-          min-height:180px!important;
-          max-height:min(42dvh,360px)!important;
+          height:100%!important;
+          min-height:0!important;
+          max-height:none!important;
         }
         body.xianxia-theme #page-training .training-v3-bag-grid,
         body.xianxia-theme #page-training .cultivation-inventory-grid{
@@ -202,7 +217,8 @@
           min-height:130px!important;
           min-width:130px!important;
         }
-        body.xianxia-theme #page-training .refinery-material-list{max-height:230px!important}
+        body.xianxia-theme #page-training .refinery-panel.refinery-material-panel{height:230px!important;min-height:230px!important}
+        body.xianxia-theme #page-training .refinery-material-list{height:100%!important;max-height:none!important}
       }
     `;
     document.head.appendChild(style);

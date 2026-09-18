@@ -89,10 +89,20 @@
         flex-direction:column!important;
       }
 
+      body.xianxia-theme #page-training .refinery-panel.refinery-material-panel{
+        padding:0!important;
+        display:grid!important;
+        grid-template-rows:minmax(0,1fr)!important;
+        overflow:hidden!important;
+      }
+
       body.xianxia-theme #page-training .refinery-material-list{
-        flex:1 1 auto!important;
+        flex:none!important;
+        width:100%!important;
+        height:100%!important;
         display:grid!important;
         grid-template-rows:repeat(2,minmax(0,1fr))!important;
+        gap:0!important;
         min-height:0!important;
         max-height:none!important;
         overflow:hidden!important;
@@ -140,8 +150,13 @@
         body.xianxia-theme #page-training .refinery-panel{
           height:auto!important;
         }
+        body.xianxia-theme #page-training .refinery-panel.refinery-material-panel{
+          height:min(42dvh,360px)!important;
+          min-height:360px!important;
+        }
         body.xianxia-theme #page-training .refinery-material-list{
-          max-height:min(38dvh,330px)!important;
+          height:100%!important;
+          max-height:none!important;
         }
       }
 
