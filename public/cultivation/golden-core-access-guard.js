@@ -65,6 +65,8 @@
       page.classList.add('hidden');
       page.classList.remove('active-page', 'foundation-training-page');
       delete page.dataset.foundationTraining;
+      delete page.dataset.foundationTrainingReady;
+      delete page.dataset.trainingV4Ready;
     } else {
       page?.remove();
     }
