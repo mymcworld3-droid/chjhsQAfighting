@@ -113,9 +113,9 @@ test('story engine loads before tutorials and tutorials wait while story dialogu
 });
 
 test('story chapters use every uploaded NPC role in the narrative', () => {
-  assert.match(scripts, /c\\('elder'/);
-  assert.match(scripts, /c\\('refineryMaster'/);
-  assert.match(scripts, /c\\('rival'/);
-  assert.match(scripts, /c\\('envoy'/);
-  assert.match(scripts, /c\\('antagonist'/);
+  assert.equal(scripts.includes("c('elder'"), true);
+  assert.equal(scripts.includes("c('refineryMaster'"), true);
+  assert.equal(scripts.includes("c('rival'"), true);
+  assert.equal(scripts.includes("c('envoy'"), true);
+  assert.equal(scripts.includes("c('antagonist'"), true);
 });
