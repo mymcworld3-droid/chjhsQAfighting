@@ -134,7 +134,7 @@ function buildPlanningPrompt(text, creatorLevel, imageCount, questionAmount = 'm
 [規劃要求]
 1. 盡可能完整辨認素材中所有可獨立學習／考核的知識點。
 2. 使用者選擇的題量偏好是「${amountLabel}」。本次 questionCount 只能從 ${allowedCounts.join('、')} 中選擇；若有兩個候選值，再依素材資訊密度判斷較合適的一個。
-3. 無論使用者選哪一種題量，每個洞天都不得少於 ${MIN_QUESTIONS} 題，且後續固定每 ${QUESTION_BATCH_SIZE} 題一批生成。
+3. 無論使用者選哪一種題量，每個洞天至少 ${MIN_QUESTIONS} 題，且後續固定每 ${QUESTION_BATCH_SIZE} 題一批生成。
 4. 題目結構固定為「四選一單選題」：每題只能選一個答案、恰好一個 correct、恰好三個 wrong；禁止複選題、多選題、複數正解。
 5. questionBlueprints 必須恰好有 questionCount 筆，依實際遊玩順序規劃每一題要考的 focus、skill、difficulty、subject。
 6. 題序由基礎辨識 → 理解 → 應用／整合，避免規劃同義重複題。
