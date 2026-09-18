@@ -841,6 +841,18 @@ function normalizeQuizSymbols(text) {
     return String(text ?? '')
         .replace(/\u00a0/g, ' ')
         .replace(/\r\n?/g, '\n')
+        // 題庫偶爾直接回傳 HTML entity；先轉成真正符號，再由後續 escapeHtml 安全輸出。
+        .replace(/&(?:lt|#60);/gi, '<')
+        .replace(/&(?:gt|#62);/gi, '>')
+        .replace(/&(?:amp|#38);/gi, '&')
+        .replace(/&(?:le|leq);/gi, '≤')
+        .replace(/&(?:ge|geq);/gi, '≥')
+        .replace(/&(?:ne|neq);/gi, '≠')
+        .replace(/&times;/gi, '×')
+        .replace(/&divide;/gi, '÷')
+        .replace(/&plusmn;/gi, '±')
+        .replace(/&radic;/gi, '√')
+        .replace(/&infin;/gi, '∞')
         // 常見全形／相似符號統一，避免題目、選項、解析顯示不一致。
         .replace(/﹤|＜/g, '<')
         .replace(/﹥|＞/g, '>')
