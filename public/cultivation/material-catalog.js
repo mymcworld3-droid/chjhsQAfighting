@@ -4,6 +4,7 @@
 import { ARTIFACT_CATALOG, ARTIFACT_REALMS, getArtifactById } from './artifact-catalog.js';
 
 export const MATERIAL_CATEGORIES = Object.freeze(['礦石', '靈木', '晶石', '妖獸材料', '特殊材料', '符材', '其他']);
+export const MIN_ARTIFACT_RECIPE_MATERIALS = 2;
 export const MAX_ARTIFACT_RECIPE_MATERIALS = 8;
 export const MAX_ARTIFACT_RECIPE_NESTING = 2;
 export const MATERIAL_CATALOG_SCHEMA_VERSION = 2;
@@ -306,6 +307,9 @@ export function validateArtifactRecipes(rawRecipes = {}) {
       }
     });
     const totalItems = recipe.reduce((sum, row) => sum + Math.max(0, Number(row.quantity) || 0), 0);
+    if (recipe.length && totalItems < MIN_ARTIFACT_RECIPE_MATERIALS) {
+      throw new Error(`配方 ${id} 至少需要 ${MIN_ARTIFACT_RECIPE_MATERIALS} 個煉器素材，目前只有 ${totalItems} 個`);
+    }
     if (totalItems > MAX_ARTIFACT_RECIPE_MATERIALS) {
       throw new Error(`配方 ${id} 共需 ${totalItems} 個煉器素材，超過煉器陣 ${MAX_ARTIFACT_RECIPE_MATERIALS} 格上限`);
     }
