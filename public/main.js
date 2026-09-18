@@ -24,6 +24,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/artifact-catalog-sync.js',
   './cultivation/material-catalog-sync.js',
   './cultivation/artifact-system.js',
+  './cultivation/artifact-battle-effects.js',
   './cultivation/material-system.js',
   './cultivation/unified-inventory-grid.js',
   './cultivation/inventory-legacy-bridge.js',
