@@ -45,7 +45,7 @@ function loadRecipeApi() {
   let source = materialCatalog
     .replace(/^import[^;]+;\s*/m, '')
     .replace(/\bexport\s+/g, '');
-  source += '\n;globalThis.__recipeApi={validateArtifactRecipes,artifactRecipeDepth,MAX_ARTIFACT_RECIPE_NESTING};';
+  source += '\n;globalThis.__recipeApi={validateArtifactRecipes,artifactRecipeDepth,MAX_ARTIFACT_RECIPE_NESTING,MIN_ARTIFACT_RECIPE_MATERIALS};';
   vm.runInContext(source, context);
   return context.__recipeApi;
 }
@@ -71,12 +71,23 @@ test('recipe schema accepts material and artifact ingredients while keeping old 
   assert.match(materialAdmin, /data-recipe-material/);
 });
 
+test('every defined artifact recipe requires at least two total ingredients', () => {
+  const api = loadRecipeApi();
+  assert.equal(api.MIN_ARTIFACT_RECIPE_MATERIALS, 2);
+  assert.throws(() => api.validateArtifactRecipes({
+    'seven-treasure-ruler': [{ materialId: 'spirit-wood', quantity: 1 }]
+  }), /至少需要 2 個煉器素材/);
+  assert.doesNotThrow(() => api.validateArtifactRecipes({
+    'seven-treasure-ruler': [{ materialId: 'spirit-wood', quantity: 2 }]
+  }));
+});
+
 test('artifact recipe nesting allows depth two but rejects depth three', () => {
   const api = loadRecipeApi();
   const recipes = {
-    'seven-treasure-ruler': [{ materialId: 'spirit-wood', quantity: 1 }],
-    'war-drum': [{ artifactId: 'seven-treasure-ruler', quantity: 1 }],
-    'enlightenment-lamp': [{ artifactId: 'war-drum', quantity: 1 }]
+    'seven-treasure-ruler': [{ materialId: 'spirit-wood', quantity: 2 }],
+    'war-drum': [{ artifactId: 'seven-treasure-ruler', quantity: 2 }],
+    'enlightenment-lamp': [{ artifactId: 'war-drum', quantity: 2 }]
   };
   const valid = api.validateArtifactRecipes(recipes);
   assert.equal(api.artifactRecipeDepth('seven-treasure-ruler', valid), 0);
@@ -86,19 +97,19 @@ test('artifact recipe nesting allows depth two but rejects depth three', () => {
 
   assert.throws(() => api.validateArtifactRecipes({
     ...recipes,
-    'mountain-armor': [{ artifactId: 'enlightenment-lamp', quantity: 1 }]
+    'mountain-armor': [{ artifactId: 'enlightenment-lamp', quantity: 2 }]
   }), /最多只允許 2 層/);
 });
 
 test('artifact recipe nesting rejects self-recursion and cycles', () => {
   const api = loadRecipeApi();
   assert.throws(() => api.validateArtifactRecipes({
-    'war-drum': [{ artifactId: 'war-drum', quantity: 1 }]
+    'war-drum': [{ artifactId: 'war-drum', quantity: 2 }]
   }), /不可把自己當成煉器材料|循環套娃/);
 
   assert.throws(() => api.validateArtifactRecipes({
-    'war-drum': [{ artifactId: 'enlightenment-lamp', quantity: 1 }],
-    'enlightenment-lamp': [{ artifactId: 'war-drum', quantity: 1 }]
+    'war-drum': [{ artifactId: 'enlightenment-lamp', quantity: 2 }],
+    'enlightenment-lamp': [{ artifactId: 'war-drum', quantity: 2 }]
   }), /循環套娃/);
 });
 
