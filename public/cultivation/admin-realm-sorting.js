@@ -24,7 +24,11 @@ import { getMaterialById, materialRealmOrderByName } from './material-catalog.js
     reorder(
       document.getElementById('admin-artifact-list'),
       (node) => node.querySelector('[data-admin-artifact-edit]')?.dataset.adminArtifactEdit || '',
-      (id) => realmOrderByName(getArtifactById(id)?.realm || '凡人'),
+      (id) => {
+        const item = getArtifactById(id);
+        const realmRank = realmOrderByName(item?.realm || '凡人');
+        return item?.reviewStatus === 'pending' ? -100 + realmRank : realmRank;
+      },
       (id) => getArtifactById(id)?.name || id
     );
     reorder(
