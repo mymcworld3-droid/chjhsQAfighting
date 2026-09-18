@@ -17,6 +17,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   let exampleAnswered = false;
   let reportOpened = false;
   let reportCaptureBound = false;
+  let navigationCaptureBound = false;
 
   const EXAMPLE_QUESTION = '範例：2 + 3 = ?';
   const EXAMPLE_OPTIONS = ['4', '5', '6', '7'];
@@ -102,6 +103,80 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   function visible(el){ if(!el) return false; const s=getComputedStyle(el); return s.display!=='none'&&s.visibility!=='hidden'&&el.getClientRects().length>0; }
   function navigate(page){ if(page&&typeof window.switchToPage==='function') window.switchToPage(page); }
   function target(selector){ const all=Array.from(document.querySelectorAll(selector||'')); return all.find(visible)||all[0]||null; }
+
+  function currentPageId() {
+    const pages = Array.from(document.querySelectorAll('.page-section'));
+    return pages.find(visible)?.id || '';
+  }
+
+  function navRoute(destination, label, targetSelector, body) {
+    return {
+      routeGate: true,
+      destination,
+      target: targetSelector,
+      kicker: '先找到功能入口',
+      title: `先找到「${label}」在哪裡`,
+      body,
+      note: '請親自點擊金框標示的入口；進入後教學會自動繼續，不會直接把你傳送過去。'
+    };
+  }
+
+  function routeForStep(step) {
+    if (!step?.page) return null;
+    const current = currentPageId();
+    if (current === step.page) return null;
+
+    // 問道不是底部獨立分頁：先回首頁，再由首頁的「問道試煉」進入。
+    if (step.page === 'page-quiz') {
+      if (current !== 'page-home') {
+        return navRoute(
+          'page-home',
+          '首頁',
+          '[data-target="page-home"]',
+          '問道試煉的入口在首頁。請先看底部導覽，找到並點擊「首頁」。'
+        );
+      }
+      return navRoute(
+        'page-quiz',
+        '問道試煉',
+        '#btn-home-start',
+        '這顆「問道試煉」就是正式答題的入口。請自己點一次，教學會攔住正式出題並改用不計修為的範例題。'
+      );
+    }
+
+    if (step.page === 'page-settings') {
+      return navRoute(
+        'page-settings',
+        '洞府',
+        '[data-target="page-settings"]',
+        '範圍、難度與個人設定都在「洞府」。請看底部導覽，找到並點擊「洞府」。'
+      );
+    }
+
+    if (step.page === 'page-home') {
+      return navRoute(
+        'page-home',
+        '首頁',
+        '[data-target="page-home"]',
+        '這個功能位在首頁。請看底部導覽，找到並點擊「首頁」。'
+      );
+    }
+
+    const genericTarget = `[data-target="${step.page}"]`;
+    if (target(genericTarget)) {
+      return navRoute(
+        step.page,
+        '對應功能',
+        genericTarget,
+        '請先從底部導覽找到這個功能的入口並親自點擊，再繼續教學。'
+      );
+    }
+    return null;
+  }
+
+  function displayStep() {
+    return routeForStep(steps[index]) || steps[index];
+  }
 
   function setExampleFeedback(correct) {
     const section = document.getElementById('feedback-section');
@@ -220,9 +295,31 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     }, true);
   }
 
+  function bindNavigationGuards() {
+    if (navigationCaptureBound) return;
+    navigationCaptureBound = true;
+    document.addEventListener('click', (event) => {
+      if (!active) return;
+      const route = routeForStep(steps[index]);
+      if (!route) return;
+      const entrance = event.target.closest?.(route.target);
+      if (!entrance) return;
+
+      // 入口一定要由玩家自己點；攔截原本 onclick，避免範例問道真的建立正式答題 session。
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      navigate(route.destination);
+
+      setTimeout(() => {
+        if (route.destination === 'page-quiz') installExampleQuiz();
+        render();
+      }, 60);
+    }, true);
+  }
+
   function updateSpotlight(){
     const layer=document.getElementById('newbie-tutorial-layer'); const spot=layer?.querySelector('.newbie-tutorial-spotlight'); const dim=layer?.querySelector('.newbie-tutorial-dim');
-    if(!layer||!spot||!dim||!active) return; const el=target(steps[index].target);
+    if(!layer||!spot||!dim||!active) return; const el=target(displayStep().target);
     if(!el||!visible(el)){ spot.style.display='none'; dim.style.display='block'; return; }
     const r=el.getBoundingClientRect(), p=8; spot.style.display='block'; dim.style.display='none'; spot.style.left=`${Math.max(6,r.left-p)}px`; spot.style.top=`${Math.max(6,r.top-p)}px`; spot.style.width=`${Math.min(innerWidth-12,r.width+p*2)}px`; spot.style.height=`${Math.min(innerHeight-12,r.height+p*2)}px`;
   }
@@ -235,11 +332,18 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
 
   function renderCardOnly() {
     if (!active) return;
-    const step = steps[index];
+    const baseStep = steps[index];
+    const step = displayStep();
     const card = document.querySelector('#newbie-tutorial-layer .newbie-tutorial-card');
     if (!card) return;
-    const blocked = nextBlocked(step);
-    const blockedLabel = step.requiresAnswer && !exampleAnswered ? '請先作答' : (step.requiresReport && !reportOpened ? '請先按回報問題' : (index===steps.length-1?'完成':'下一步'));
+    const blocked = !!step.routeGate || nextBlocked(baseStep);
+    const blockedLabel = step.routeGate
+      ? '請點亮起的入口'
+      : (baseStep.requiresAnswer && !exampleAnswered
+        ? '請先作答'
+        : (baseStep.requiresReport && !reportOpened
+          ? '請先按回報問題'
+          : (index===steps.length-1?'完成':'下一步')));
     card.innerHTML=`<div class="newbie-tutorial-kicker">${step.kicker}</div><h3>${step.title}</h3><p>${step.body}</p><p class="newbie-tutorial-note">${step.note}</p><div class="newbie-tutorial-progress">${steps.map((_,i)=>`<i class="${i===index?'active':''}"></i>`).join('')}</div><div class="newbie-tutorial-actions"><button class="newbie-tutorial-skip">跳過教學</button><button class="newbie-tutorial-prev" ${index===0?'disabled':''}>上一步</button><button class="newbie-tutorial-next" ${blocked?'disabled':''}>${blockedLabel}</button></div>`;
     card.querySelector('.newbie-tutorial-skip').onclick=()=>finish(true);
     card.querySelector('.newbie-tutorial-prev').onclick=()=>{if(index>0){index--;render();}};
@@ -249,15 +353,19 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   function render(){
     if(!active) return;
     const step=steps[index];
-    navigate(step.page);
-    if (step.settingsSection && typeof window.openDongfuSettingsSection === 'function') {
+    const route=routeForStep(step);
+
+    // 不直接 navigate(step.page)：跨頁時一定先讓玩家看到並點擊真實入口。
+    if (!route && step.settingsSection && typeof window.openDongfuSettingsSection === 'function') {
       window.openDongfuSettingsSection(step.settingsSection, { scroll: false, persist: false });
     }
-    if (step.demo) installExampleQuiz(); else cleanupExampleQuiz();
+    if (!route && step.demo) installExampleQuiz();
+    else if (!route && !step.demo) cleanupExampleQuiz();
+
     let layer=document.getElementById('newbie-tutorial-layer');
     if(!layer){ layer=document.createElement('div'); layer.id='newbie-tutorial-layer'; layer.innerHTML='<div class="newbie-tutorial-dim"></div><div class="newbie-tutorial-spotlight"></div><section class="newbie-tutorial-card"></section>'; document.body.appendChild(layer); }
     renderCardOnly();
-    setTimeout(()=>{ target(step.target)?.scrollIntoView?.({behavior:'smooth',block:'center'}); setTimeout(updateSpotlight,180); },120);
+    setTimeout(()=>{ target(displayStep().target)?.scrollIntoView?.({behavior:'smooth',block:'center'}); setTimeout(updateSpotlight,180); },120);
   }
 
   async function persistFinished(skipped){
@@ -280,6 +388,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   function start(){
     ensureStyle();
     bindDemoGuards();
+    bindNavigationGuards();
     active=true;
     index=0;
     exampleAnswered=false;
@@ -307,6 +416,6 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   }
 
   window.startNewbieTutorial=start;
-  function boot(){ ensureStyle(); bindDemoGuards(); addReplayButton(); maybeAutoStart(); setInterval(()=>{addReplayButton();maybeAutoStart();if(active)updateSpotlight();},700); new MutationObserver(addReplayButton).observe(document.body,{childList:true,subtree:true}); }
+  function boot(){ ensureStyle(); bindDemoGuards(); bindNavigationGuards(); addReplayButton(); maybeAutoStart(); setInterval(()=>{addReplayButton();maybeAutoStart();if(active)updateSpotlight();},700); new MutationObserver(addReplayButton).observe(document.body,{childList:true,subtree:true}); }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true}); else boot();
 })();

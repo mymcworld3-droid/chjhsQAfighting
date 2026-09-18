@@ -26,3 +26,29 @@ test('mortal-stage tutorial teaches the existing report button without submittin
   assert.match(tutorial, /答案明顯錯誤/);
   assert.match(tutorial, /題目或選項有歧義/);
 });
+
+
+test('tutorial teaches where features live before changing pages instead of teleporting', () => {
+  assert.match(tutorial, /function currentPageId\(\)/);
+  assert.match(tutorial, /function routeForStep\(step\)/);
+  assert.match(tutorial, /target: '#btn-home-start'/);
+  assert.match(tutorial, /\[data-target="page-settings"\]/);
+  assert.match(tutorial, /\[data-target="page-home"\]/);
+  assert.match(tutorial, /請點亮起的入口/);
+  assert.match(tutorial, /event\.stopImmediatePropagation\(\)/);
+  assert.match(tutorial, /navigate\(route\.destination\)/);
+  assert.doesNotMatch(tutorial, /\n\s*navigate\(step\.page\);/);
+});
+
+test('tutorial route gate intercepts the real quiz entry so the sample does not start a real session', () => {
+  assert.match(tutorial, /route\.destination === 'page-quiz'/);
+  assert.match(tutorial, /installExampleQuiz\(\)/);
+  assert.match(tutorial, /攔截原本 onclick/);
+  assert.match(tutorial, /這顆「問道試煉」就是正式答題的入口/);
+});
+
+test('Dongfu tutorial waits until the player clicks the bottom navigation before opening sections', () => {
+  assert.match(tutorial, /if \(!route && step\.settingsSection/);
+  assert.match(tutorial, /window\.openDongfuSettingsSection\(step\.settingsSection/);
+  assert.match(tutorial, /範圍、難度與個人設定都在「洞府」/);
+});
