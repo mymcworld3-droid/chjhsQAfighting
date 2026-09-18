@@ -106,7 +106,7 @@ test('Dongtian first completion spirit stones scale with question count while ke
   assert.match(uiSource, /Math\.max\(FIRST_COMPLETION_MIN_SPIRIT_STONES, count \* FIRST_COMPLETION_SPIRIT_STONE_PER_QUESTION\)/);
   assert.match(uiSource, /const firstCompletionReward = firstCompletionSpiritStones\(total\)/);
   assert.match(uiSource, /'stats\.gold': increment\(firstCompletionReward\)/);
-  assert.match(uiSource, /goldAdded: firstCompletionReward, questionCount: total/);
+  assert.match(uiSource, /goldAdded: firstCompletionReward, cultivationAdded: cultivationReward, questionCount: total/);
   assert.match(uiSource, /依 \$\{total\} 題獲得 \+\$\{firstCompletionReward\.toLocaleString\(\)\} 靈石/);
   assert.match(uiSource, /OWNER_CULTIVATION_REWARD = 1/);
   assert.match(uiSource, /OWNER_GOLD_REWARD = 5/);

@@ -158,7 +158,8 @@ test('new AI artifact becomes usable immediately and is persisted as a permanent
 
 test('same discovered recipe is reused instead of generating duplicate permanent artifacts', () => {
   assert.match(aiJobs, /function findRecipeBySignature/);
-  assert.match(aiJobs, /awardedId = findRecipeBySignature\(latestRecipes, fresh\.signature\)/);
+  assert.match(aiJobs, /const cleanLatestRecipes = recipeRepair\.recipes/);
+  assert.match(aiJobs, /awardedId = findRecipeBySignature\(cleanLatestRecipes, fresh\.signature\)/);
   assert.match(aiJobs, /if \(!awardedId\) \{/);
 });
 
