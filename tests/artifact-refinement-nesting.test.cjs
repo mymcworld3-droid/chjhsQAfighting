@@ -116,7 +116,7 @@ test('player refinery accepts artifact tokens and never consumes equipped copies
 test('legacy forge path also reserves equipped artifacts and consumes mixed recipes atomically', () => {
   assert.match(materialSystem, /row\.artifactId/);
   assert.match(materialSystem, /equippedCounts/);
-  assert.match(materialSystem, /have - reserved/);
+  assert.match(materialSystem, /owned - reserved/);
   assert.match(materialSystem, /delete artifactSystem\.inventory\[row\.artifactId\]/);
   assert.match(materialSystem, /tx\.update\(ref, \{ \[FIELD\]: materials, artifactSystem, 'stats\.gold': newGold \}\)/);
 });
