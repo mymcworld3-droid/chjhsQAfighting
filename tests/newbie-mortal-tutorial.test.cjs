@@ -12,7 +12,7 @@ test('mortal-stage tutorial teaches a real-looking sample quiz without awarding 
   assert.match(tutorial, /新手範例 · 不計修為/);
   assert.match(tutorial, /requiresAnswer: true/);
   assert.match(tutorial, /exampleAnswered = true/);
-  assert.match(tutorial, /if\(\(Number\(data\.stats\.totalScore\)\|\|0\)>=FOUNDATION_SCORE\)/);
+  assert.match(tutorial, /Number\(current\.stats\.totalScore\) \|\| 0\) >= FOUNDATION_SCORE/);
   assert.doesNotMatch(tutorial, /applyCultivationReward/);
   assert.doesNotMatch(tutorial, /updateDoc\([^\n]*stats\.totalScore/);
 });
@@ -57,8 +57,8 @@ test('Dongfu tutorial waits until the player clicks the bottom navigation before
 });
 
 
-test('mortal newbie tutorial carefully teaches the complete Dongtian lifecycle', () => {
-  assert.match(tutorial, /第十一步 · 洞天入口/);
+test('chapter-two tutorial carefully teaches the complete Dongtian lifecycle', () => {
+  assert.match(tutorial, /第二章 · 洞天入口/);
   assert.match(tutorial, /請親自點亮起的「洞天」入口/);
   assert.match(tutorial, /圖片與文字都可以煉成洞天/);
   assert.match(tutorial, /少＝10 題/);
@@ -69,7 +69,7 @@ test('mortal newbie tutorial carefully teaches the complete Dongtian lifecycle',
   assert.match(tutorial, /後一批會帶入前面全部已生成題目/);
 });
 
-test('mortal newbie tutorial requires actual private Dongtian play, return, and deletion', () => {
+test('chapter-two tutorial requires actual private Dongtian play, return, and deletion', () => {
   assert.match(tutorial, /prepareDongtianDemo: true/);
   assert.match(tutorial, /data-dt-tutorial-card/);
   assert.match(tutorial, /data-dt-tutorial-play/);
@@ -84,7 +84,7 @@ test('mortal newbie tutorial requires actual private Dongtian play, return, and 
   assert.match(tutorial, /newbie:dongtian-demo-deleted/);
 });
 
-test('mortal newbie tutorial explains real Dongtian rewards while the sample remains reward-free and private', () => {
+test('chapter-two tutorial explains real Dongtian rewards while the sample remains reward-free and private', () => {
   assert.match(tutorial, /每題 100、最低 1000/);
   assert.match(tutorial, /每答對 5 題 \+1/);
   assert.match(tutorial, /私人教學範例完全不發正式獎勵、不掉材料，也不寫入歷史紀錄/);
