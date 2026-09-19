@@ -7,12 +7,6 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
 // 缺少欄位的舊玩家會自動補上，但既有數值絕不覆蓋。
 (function () {
   'use strict';
-import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-
-// 修仙戰鬥基礎數值：目前只保留攻擊力與生命值。
-// 缺少欄位的舊玩家會自動補上，但既有數值絕不覆蓋。
-(function () {
-  'use strict';
 
   const DEFAULTS = Object.freeze({
     attack: 200,
@@ -103,4 +97,3 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     boot();
   }
 })();
-
