@@ -275,6 +275,7 @@ import {
   async function finishChapter() {
     if (!currentChapter) return;
     const finished = currentChapter;
+    const wasReplay = replayMode;
     if (!replayMode) {
       await persist({ seen: { [finished.id]: { completedAtMs: Date.now(), score: score() } } });
     }
@@ -285,7 +286,7 @@ import {
     replayMode = false;
     document.getElementById(LAYER_ID)?.remove();
     snoozeUntil = Date.now() + 1200;
-    window.dispatchEvent(new CustomEvent('xiuxian:story-chapter-completed', { detail: { id: finished.id } }));
+    if (!wasReplay) window.dispatchEvent(new CustomEvent('xiuxian:story-chapter-completed', { detail: { id: finished.id } }));
   }
 
   function deferChapter() {
@@ -409,8 +410,10 @@ import {
     setTimeout(maybeAutoStart, 1000);
   }
 
+  function canPreviewAllStory() { return data()?.isAdmin === true; }
+
   function openArchive() {
-    if (active) return;
+    if (active || window.getBattleTutorialState?.().active) return;
     ensureStyle();
     document.getElementById(ARCHIVE_ID)?.remove();
     const el = document.createElement('div');
@@ -418,17 +421,22 @@ import {
     const seen = seenMap();
     const currentScore = score();
     const rows = STORY_CHAPTERS.map((chapter) => {
-      const unlocked = currentScore >= chapter.minScore;
+      const unlocked = canPreviewAllStory() || currentScore >= chapter.minScore;
       const read = !!seen[chapter.id];
       return `<button type="button" class="story-archive-item" data-story-chapter="${escapeHtml(chapter.id)}" ${unlocked ? '' : 'disabled'}><em>${escapeHtml(chapter.realm)}</em><span><b>${escapeHtml(chapter.title)}</b><small>${escapeHtml(chapter.subtitle)}</small></span><span>${!unlocked ? `需 ${chapter.minScore} 修為` : (read ? '已讀 · 重播' : '已解鎖')}</span></button>`;
     }).join('');
-    el.innerHTML = `<section class="story-archive-card"><div class="story-archive-head"><div><h3>主線劇情回顧</h3><p>已解鎖章節可隨時重播；重播不會改動修為與獎勵。</p></div><button type="button" class="story-archive-close">×</button></div><div class="story-archive-list">${rows}</div></section>`;
+    el.innerHTML = `<section class="story-archive-card"><div class="story-archive-head"><div><h3>主線劇情回顧</h3><p>已解鎖章節可隨時重播；重播不會改動修為與獎勵。</p></div><button type="button" class="story-archive-close">×</button></div><div class="story-archive-list">${rows}${canPreviewAllStory() ? ['intro','shen-story','gu-intro','gu-result'].map((scene, i) => `<button type="button" class="story-archive-item" data-admin-battle-scene="${scene}"><em>管理員</em><span><b>${['沈清霜切磋','一劍之後 · 師姐震驚','顧長風入場','教學戰後對話'][i]}</b><small>自由預覽 · 不寫入進度</small></span></button>`).join('') : ''}</div></section>`;
+    el.querySelectorAll('[data-admin-battle-scene]').forEach((button) => button.addEventListener('click', async () => {
+      if (!canPreviewAllStory()) return;
+      const opened = await window.startBattleTutorial?.({ replay:true, adminPreview:true, scene:button.dataset.adminBattleScene });
+      if (opened) el.remove();
+    }));
     el.querySelector('.story-archive-close')?.addEventListener('click', () => el.remove());
     el.addEventListener('click', (event) => { if (event.target === el) el.remove(); });
     el.querySelectorAll('[data-story-chapter]').forEach((button) => {
       button.addEventListener('click', () => {
         const chapter = storyChapterById(button.dataset.storyChapter);
-        if (chapter && score() >= chapter.minScore) {
+        if (chapter && (canPreviewAllStory() || score() >= chapter.minScore)) {
           el.remove();
           startChapter(chapter, { replay: true });
         }
@@ -463,7 +471,7 @@ import {
   window.openXiuxianStoryArchive = openArchive;
   window.openXiuxianStoryChapter = (id) => {
     const chapter = storyChapterById(id);
-    if (!chapter || score() < chapter.minScore) return false;
+    if (!chapter || (!canPreviewAllStory() && score() < chapter.minScore)) return false;
     return startChapter(chapter, { replay: true });
   };
   window.getXiuxianStoryChapters = () => STORY_CHAPTERS.map((chapter) => ({
