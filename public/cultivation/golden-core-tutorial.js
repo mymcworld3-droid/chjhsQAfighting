@@ -10,7 +10,8 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   const VERSION = 1;
   let active = false;
   let index = 0;
-  let autoStarted = false;
+  let replayOnly = false;
+  let startedByStory = false;
   let resizeHandler = null;
 
   const steps = [
@@ -86,18 +87,39 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     try{await updateDoc(doc(getFirestore(getApp()),'users',user.uid),{[FIELD]:value});}catch(error){console.warn('Golden Core tutorial persistence failed:',error);}
   }
 
-  function finish(skipped){if(!active)return;active=false;document.getElementById('golden-core-tutorial-layer')?.remove();if(resizeHandler)window.removeEventListener('resize',resizeHandler);resizeHandler=null;persistFinished(skipped);}
-  function start(){if(!unlocked())return;ensureStyle();active=true;index=0;resizeHandler ||= ()=>updateSpotlight();window.addEventListener('resize',resizeHandler);render();}
-  function blocking(){return !!document.querySelector('#xiuxian-story-layer,#battle-tutorial-layer,#newbie-tutorial-layer,#progression-v2-modal,.training-v3-modal-backdrop,#realm-breakthrough-feedback');}
-
-  function maybeAutoStart(){
-    if(autoStarted||active||!unlocked()||blocking())return; const data=userData(),user=getAuth(getApp()).currentUser;if(!data?.stats||!user)return;
-    if(Number(marker()?.version)>=VERSION&&marker()?.completed){autoStarted=true;return;}
-    if(!document.getElementById('page-training')||!document.querySelector('[data-training-tab="core"]'))return;
-    autoStarted=true;setTimeout(()=>{if(unlocked()&&!blocking())start();else autoStarted=false;},850);
+  function finish(skipped) {
+    if (!active) return;
+    active = false;
+    document.getElementById('golden-core-tutorial-layer')?.remove();
+    if (resizeHandler) window.removeEventListener('resize', resizeHandler);
+    resizeHandler = null;
+    if (!replayOnly) persistFinished(skipped);
+    if (startedByStory) {
+      window.dispatchEvent(new CustomEvent('xiuxian:story-tutorial-finished', {
+        detail: { kind: 'golden-core', replay: replayOnly, skipped: !!skipped }
+      }));
+    }
+    startedByStory = false;
   }
 
-  window.startGoldenCoreTutorial=start;
-  function boot(){ensureStyle();maybeAutoStart();setInterval(()=>{maybeAutoStart();if(active)updateSpotlight();},650);window.addEventListener('golden-core-access-changed',()=>{autoStarted=false;maybeAutoStart();});}
+  function start(options = {}) {
+    if (active || !unlocked()) return false;
+    replayOnly = options.replay === true || !!marker()?.completed;
+    startedByStory = options.story === true;
+    ensureStyle();
+    active = true;
+    index = 0;
+    resizeHandler ||= () => updateSpotlight();
+    window.addEventListener('resize', resizeHandler);
+    render();
+    return true;
+  }
+
+  window.startGoldenCoreTutorial = (options = {}) => start(options);
+  function boot() {
+    ensureStyle();
+    // 金丹教學跟隨第七章；解鎖事件不再在劇情播放中獨立搶畫面。
+    setInterval(() => { if (active) updateSpotlight(); }, 650);
+  }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
