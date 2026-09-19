@@ -9,13 +9,12 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   const FIELD = 'newbieTutorialV1';
   const DONGTIAN_FIELD = 'storyDongtianTutorialV1';
   const VERSION = 2;
-  const FOUNDATION_SCORE = 10;
   let active = false;
   let tutorialMode = 'question';
   let startedByStory = false;
   let steps = [];
   let index = 0;
-  let autoStarted = false;
+  let replayOnly = false;
   let resizeHandler = null;
   let exampleInstalled = false;
   let exampleAnswered = false;
@@ -598,10 +597,10 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     resizeHandler = null;
     // 剧情交棒期间由主線播放器接手畫面，不額外跳回仙府。
     if (finishedMode === 'question') navigate('page-home');
-    persistFinished(skipped, finishedMode);
+    if (!replayOnly) persistFinished(skipped, finishedMode);
     if (shouldResumeStory) {
-      window.dispatchEvent(new CustomEvent('xiuxian:story-dongtian-tutorial-finished', {
-        detail: { skipped: !!skipped }
+      window.dispatchEvent(new CustomEvent('xiuxian:story-tutorial-finished', {
+        detail: { kind: finishedMode, skipped: !!skipped, replay: replayOnly }
       }));
     }
   }
@@ -616,6 +615,8 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     try { window.deleteNewbieDongtianDemo?.({ silent: true }); } catch (_) {}
     tutorialMode = mode === 'dongtian' ? 'dongtian' : 'question';
     startedByStory = options.story === true;
+    const savedField = tutorialMode === 'dongtian' ? DONGTIAN_FIELD : FIELD;
+    replayOnly = options.replay === true || !!userData()?.[savedField]?.completed;
     steps = tutorialMode === 'dongtian' ? dongtianSteps : questionSteps;
     active = true;
     index = 0;
@@ -642,7 +643,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       button.type = 'button';
       button.className = 'newbie-tutorial-replay';
       button.innerHTML = '<i class="fa-solid fa-circle-question"></i><span>重新查看問道教學</span>';
-      button.onclick = () => start('question');
+      button.onclick = () => window.openXiuxianStoryChapter?.('prologue-enter-sect');
       const first = page.firstElementChild;
       if (first) first.insertAdjacentElement('afterend', button);
       else page.prepend(button);
@@ -653,7 +654,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       button.type = 'button';
       button.className = 'newbie-tutorial-replay';
       button.innerHTML = '<i class="fa-solid fa-mountain"></i><span>重新查看洞天教學（第二章）</span>';
-      button.onclick = () => start('dongtian');
+      button.onclick = () => window.openXiuxianStoryChapter?.('qi-five-dongtian');
       const after = document.getElementById('newbie-tutorial-replay');
       if (after) after.insertAdjacentElement('afterend', button);
       else page.prepend(button);
@@ -664,34 +665,19 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     return !!document.querySelector('#xiuxian-story-layer,#battle-tutorial-layer,#progression-v2-modal,.training-v3-modal-backdrop,#realm-breakthrough-feedback,#golden-core-tutorial-layer,#report-modal:not(.hidden)');
   }
 
-  function maybeAutoStart() {
-    if (autoStarted || active || blocking()) return;
-    const current = userData();
-    const person = getAuth(getApp()).currentUser;
-    if (!current?.stats || !person) return;
-    if (typeof window.hasCompletedPlayerProfile === 'function' && !window.hasCompletedPlayerProfile(current.profile)) return;
-    if (Number(marker()?.version) >= VERSION && marker()?.completed) { autoStarted = true; return; }
-    if ((Number(current.stats.totalScore) || 0) >= FOUNDATION_SCORE) { autoStarted = true; return; }
-    autoStarted = true;
-    setTimeout(() => {
-      if (!blocking() && !active) start('question');
-      else autoStarted = false;
-    }, 900);
-  }
-
-  window.startNewbieTutorial = () => start('question');
-  window.startStoryDongtianTutorial = () => start('dongtian', { story: true });
-  window.replayStoryDongtianTutorial = () => start('dongtian');
+  // 問道與洞天教學都由所屬章節接棒，不再由登入後的定時器搶先啟動。
+  window.startNewbieTutorial = () => start('question', { replay: !!userData()?.[FIELD]?.completed });
+  window.startStoryQuestionTutorial = (options = {}) => start('question', { ...options, story: true });
+  window.startStoryDongtianTutorial = (options = {}) => start('dongtian', { ...options, story: true });
+  window.replayStoryDongtianTutorial = () => window.openXiuxianStoryChapter?.('qi-five-dongtian');
   function boot() {
     ensureStyle();
     bindDemoGuards();
     bindNavigationGuards();
     bindDongtianTutorialEvents();
     addReplayButton();
-    maybeAutoStart();
     setInterval(() => {
       addReplayButton();
-      maybeAutoStart();
       if (active) updateSpotlight();
     }, 700);
     new MutationObserver(addReplayButton).observe(document.body, { childList: true, subtree: true });
