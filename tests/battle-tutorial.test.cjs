@@ -129,7 +129,7 @@ test('gender preview rejects non-admins and selecting either portrait never pers
     querySelector:selector => selector === '.story-gender-card' ? { append(){} } : elements[0] };
   const ctx = vm.createContext({ active:false, LAYER_ID:'story', canPreviewAllStory:() => admin,
     document:{ getElementById:() => null, createElement:() => { const item = make(); elements.push(item); return item; } },
-    layer:() => el, playerPortraitPath:() => '', persist:() => { writes++; },
+    layer:() => el, playerPortraitPath:() => '', playerName:() => '目前名字', escapeHtml:String, persist:() => { writes++; },
     openArchive:() => { archives++; } });
   vm.runInContext(source, ctx);
   assert.equal(vm.runInContext('openGenderChoice({preview:true})', ctx), false);

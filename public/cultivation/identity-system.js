@@ -144,6 +144,29 @@ import {
     }
   }
 
+  window.updatePlayerDisplayName = async function (rawName) {
+    const player = data();
+    const user = auth.currentUser;
+    if (!player || !user) throw new Error('尚未載入玩家資料。');
+    if (saveBusy) throw new Error('名稱正在儲存，請稍候。');
+    const requested = String(rawName || '').trim();
+    if (!isAdmin(player) && /九州/.test(requested)) throw new Error('「九州」為管理員專屬稱號。');
+
+    saveBusy = true;
+    try {
+      const approvedBase = await reviewBaseName(requested);
+      const approvedName = publicName(approvedBase, isAdmin(player));
+      await updateDoc(doc(db, 'users', user.uid), { displayName: approvedName });
+      player.displayName = approvedName;
+      syncVisibleName();
+      window.dispatchEvent(new CustomEvent('player-name-updated', { detail: { displayName: approvedName } }));
+      queueSnapshotPropagation(true);
+      return approvedName;
+    } finally {
+      saveBusy = false;
+    }
+  };
+
   function installSaveProfileGuard() {
     if (baseSaveProfile || typeof window.saveProfile !== 'function') return;
     baseSaveProfile = window.saveProfile;

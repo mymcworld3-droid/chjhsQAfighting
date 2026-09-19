@@ -17,6 +17,7 @@ test('saved game displayName overrides Google name and identity module loads ear
   assert.match(legacy, /saved game identity wins over Google profile/);
   assert.match(main, /cultivation\/identity-system\.js/);
   assert.match(identity, /window\.getPlayerDisplayName/);
+  assert.match(identity, /window\.updatePlayerDisplayName/);
   assert.match(identity, /《九州》/);
 });
 

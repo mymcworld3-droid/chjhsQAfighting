@@ -170,6 +170,7 @@ import {
       #${LAYER_ID} .story-gender{position:absolute;z-index:8;inset:0;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 50% 30%,rgba(101,78,38,.12),transparent 38%),rgba(3,4,3,.88);backdrop-filter:blur(3px)}
       #${LAYER_ID} .story-gender-card{width:min(100%,940px);padding:24px;border:1px solid rgba(216,177,93,.32);border-radius:25px;background:linear-gradient(145deg,rgba(24,24,19,.94),rgba(7,8,7,.96));text-align:center;box-shadow:0 32px 90px rgba(0,0,0,.7)}
       #${LAYER_ID} .story-gender-card small{color:#9b824d;font-size:8px;font-weight:900;letter-spacing:.2em}.story-gender-card h2{margin:7px 0;color:#f0e3c4;font-size:24px}.story-gender-card p{color:#9d9482;font-size:11px;line-height:1.7}
+      #${LAYER_ID} .story-name-field{display:block;max-width:430px;margin:14px auto 0;text-align:left;color:#b9aa8b;font-size:10px;font-weight:800}#${LAYER_ID} .story-name-field input{display:block;width:100%;height:43px;margin-top:6px;padding:0 13px;border:1px solid rgba(216,177,93,.3);border-radius:11px;background:#090a08;color:#f0e3c4;font-size:13px;font-weight:700;font-family:inherit;outline:none}#${LAYER_ID} .story-name-field input:focus{border-color:#cba452;box-shadow:0 0 0 3px rgba(203,164,82,.1)}#${LAYER_ID} .story-name-error{min-height:18px;margin:5px 0 0;color:#d98276!important}
       #${LAYER_ID} .story-gender-options{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
       #${LAYER_ID} .story-gender-option{position:relative;min-height:390px;overflow:hidden;padding:0;border-radius:20px;border:1px solid rgba(216,177,93,.25);background:radial-gradient(circle at 50% 22%,rgba(216,177,93,.09),transparent 43%),rgba(216,177,93,.035);color:#ead8ad;cursor:pointer}
       #${LAYER_ID} .story-gender-option:hover{border-color:#cba452;background:radial-gradient(circle at 50% 22%,rgba(216,177,93,.15),transparent 45%),rgba(216,177,93,.07);transform:translateY(-2px)}
@@ -368,10 +369,10 @@ import {
     if (active || document.getElementById(LAYER_ID)) return false;
     active = true;
     const el = layer();
-    el.innerHTML = `<div class="story-gender"><section class="story-gender-card"><small>主線劇情</small><h2>請選擇性別</h2><div class="story-gender-options"><button type="button" class="story-gender-option" data-story-gender="male"><img src="${playerPortraitPath('male','neutral')}" alt="男修"><strong>男修 · 師弟</strong></button><button type="button" class="story-gender-option" data-story-gender="female"><img src="${playerPortraitPath('female','neutral')}" alt="女修"><strong>女修 · 師妹</strong></button></div></section></div>`;
+    el.innerHTML = `<div class="story-gender"><section class="story-gender-card"><small>主線劇情</small><h2>請選擇性別</h2><label class="story-name-field">你的名字<input id="story-player-name" type="text" maxlength="24" autocomplete="nickname" value="${escapeHtml(playerName())}"></label><p class="story-name-error" aria-live="polite"></p><div class="story-gender-options"><button type="button" class="story-gender-option" data-story-gender="male"><img src="${playerPortraitPath('male','neutral')}" alt="男修"><strong>男修 · 師弟</strong></button><button type="button" class="story-gender-option" data-story-gender="female"><img src="${playerPortraitPath('female','neutral')}" alt="女修"><strong>女修 · 師妹</strong></button></div></section></div>`;
     if (preview) {
       const note = document.createElement('p');
-      note.textContent = '管理員預覽：不會儲存性別或推進劇情。';
+      note.textContent = '管理員預覽：不會儲存名字、性別或推進劇情。';
       note.setAttribute('aria-live', 'polite');
       const back = document.createElement('button');
       back.type = 'button';
@@ -387,6 +388,8 @@ import {
     el.querySelectorAll('[data-story-gender]').forEach((button) => {
       button.addEventListener('click', async () => {
         const selected = button.dataset.storyGender === 'female' ? 'female' : 'male';
+        const nameInput = el.querySelector('#story-player-name');
+        const error = el.querySelector('.story-name-error');
         if (preview) {
           if (!canPreviewAllStory()) { active = false; el.remove(); return; }
           el.querySelectorAll('[data-story-gender]').forEach((item) => {
@@ -398,7 +401,19 @@ import {
             `預覽選取：${selected === 'female' ? '女修 · 師妹' : '男修 · 師弟'}（未儲存）`;
           return;
         }
-        await persist({ gender: selected });
+        const requestedName = String(nameInput?.value || '').trim();
+        if (!requestedName) { error.textContent = '請先輸入你的名字。'; nameInput?.focus(); return; }
+        el.querySelectorAll('[data-story-gender]').forEach((item) => { item.disabled = true; });
+        try {
+          if (typeof window.updatePlayerDisplayName !== 'function') throw new Error('姓名功能尚未載入，請重新整理後再試。');
+          const savedName = await window.updatePlayerDisplayName(requestedName);
+          if (nameInput) nameInput.value = savedName;
+          await persist({ gender: selected });
+        } catch (saveError) {
+          error.textContent = saveError?.message || '名字儲存失敗，請再試一次。';
+          el.querySelectorAll('[data-story-gender]').forEach((item) => { item.disabled = false; });
+          return;
+        }
         active = false;
         el.remove();
         const chapter = nextEligibleChapter();
