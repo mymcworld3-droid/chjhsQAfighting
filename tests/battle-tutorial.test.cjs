@@ -28,6 +28,14 @@ test('first tutorial duel is Shen Qingshuang one-shotting the projection for exa
 });
 
 test('second tutorial duel is Gu Changfeng and teaches the real battle timing rules', () => {
+  assert.match(tutorial, /顧長風，你來陪他練基本鬥法/);
+  assert.match(tutorial, /顧長風入場/);
+  assert.match(tutorial, /師姐說你現在太弱/);
+  assert.match(tutorial, /assets\/story\/characters\/battle-rival\.png/);
+  assert.match(tutorial, /第一位玩家提交答案後，才會啟動另一方的 25 秒應答窗/);
+  assert.match(tutorial, /通常由較早答對者出手/);
+
+test('second tutorial duel is Gu Changfeng and teaches the real battle timing rules', () => {
   assert.match(tutorial, /下一場 · 顧長風/);
   assert.match(tutorial, /assets\/story\/characters\/battle-rival\.png/);
   assert.match(tutorial, /第一位玩家提交答案後，才會啟動另一方的 25 秒應答窗/);
@@ -70,3 +78,4 @@ test('completed battle tutorial can be replayed without changing its completion 
   assert.match(tutorial, /completed:true/);
   assert.match(tutorial, /xiuxian:battle-tutorial-completed/);
 });
+
