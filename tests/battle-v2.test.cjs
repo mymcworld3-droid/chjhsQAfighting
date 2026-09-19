@@ -203,3 +203,44 @@ test('Battle v2 hidden phases cannot be overridden by phase display styles', () 
   assert.match(cssSource, /\.battle-v2-page \.hidden\{display:none!important\}/);
   assert.match(battleSource, /classList\.toggle\('hidden', key !== name\)/);
 });
+
+
+test('formal matchmaking waits until chapter three story and battle tutorial are complete', async () => {
+  const src = battleSource.slice(battleSource.indexOf('  function battleStoryReady() {'), battleSource.indexOf('  async function forfeitCurrentRoom() {'));
+  const calls = [];
+  const current = { storyProgressV1: { seen: {} }, battleTutorialV1: { completed: false } };
+  let layerPresent = false;
+  const ctx = vm.createContext({
+    userData: () => current,
+    document: { querySelector: () => layerPresent ? {} : null },
+    window: { getBattleTutorialState: () => ({active:false}), switchToPage: () => calls.push('page'), ensureCombatStats: async () => {} },
+    state: { starting:false, roomId:null, room:null, role:null },
+    score: () => 10, FOUNDATION_SCORE:10, me: () => ({uid:'p'}),
+    toast: () => calls.push('toast'), alert: () => calls.push('alert'),
+    resetRuntime: () => calls.push('reset'), ensurePage: () => calls.push('ensurePage'),
+    showSection: () => calls.push('lobby'), renderLobby: () => calls.push('renderLobby'),
+    playerSnapshot: () => ({name:'p'}), setText:()=>{}, playerCoreLabel:()=> '',
+    findAndClaimRoom: async () => 'oldRoom', subscribeRoom: () => calls.push('subscribe'),
+    createWaitingRoom: async () => {calls.push('newRoom');return 'newRoom';},
+    scheduleReconcile:()=>{}, console
+  });
+  vm.runInContext(src,ctx);
+  await vm.runInContext('startMatchmaking()',ctx);
+  assert.deepEqual(calls,['toast'],'cannot enter matching before third chapter');
+  calls.length=0;
+  current.storyProgressV1.seen['foundation-first-battle'] = {completedAtMs: 123};
+  await vm.runInContext('startMatchmaking()',ctx);
+  assert.deepEqual(calls,['toast'],'cannot match after story but before tutorial');
+  calls.length=0;
+  current.battleTutorialV1.completed = true;
+  layerPresent = true;
+  await vm.runInContext('startMatchmaking()',ctx);
+  assert.deepEqual(calls,['toast'],'cannot match while a story is on screen');
+  calls.length=0;
+  layerPresent = false;
+  await vm.runInContext('startMatchmaking()',ctx);
+  assert.ok(calls.includes('subscribe'), 'completed story + lesson allows matching');
+  assert.ok(!calls.includes('newRoom'), 'mock matched an existing room without creating one');
+  assert.match(battleSource, /!battleStoryReady\(\) \|\| storyOrTutorialOpen\(\)/);
+  assert.match(battleSource, /recoverBattleSession\(\)[\s\S]*?!battleStoryReady\(\)/);
+});

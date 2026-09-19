@@ -380,3 +380,13 @@ test('unavailable chapter tutorial gives a visible retry instead of silently loo
   assert.match(engine, /next\.textContent = '重新啟動教學'/);
   assert.match(engine, /error \|\| 'launcher returned false'/);
 });
+
+
+test('third chapter story and story archive render above the fullscreen battle page', () => {
+  const full = read('public/cultivation/battle-v3-stability-ui.js');
+  const battleZ = Number(full.match(/#page-battle\.battle-v2-page\{[\s\S]*?z-index:(\d+)!important/)?.[1]);
+  const storyZ = Number(engine.match(/#\$\{LAYER_ID\}\{position:fixed;inset:0;z-index:(\d+);/)?.[1]);
+  const archiveZ = Number(engine.match(/#\$\{ARCHIVE_ID\}\{position:fixed;inset:0;z-index:(\d+);/)?.[1]);
+  assert.ok(Number.isFinite(battleZ) && storyZ > battleZ, 'story dialogue must cover fullscreen matchmaking UI');
+  assert.ok(archiveZ > battleZ && archiveZ < storyZ, 'chapter archive must remain accessible above battle page');
+});

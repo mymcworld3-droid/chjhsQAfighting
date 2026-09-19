@@ -155,7 +155,7 @@ import {
     const style = document.createElement('style');
     style.id = STYLE_ID;
     style.textContent = `
-      #${LAYER_ID}{position:fixed;inset:0;z-index:13000;overflow:hidden;background:rgba(2,5,3,.42);color:#eee6d4;font-family:var(--xq-serif,'Noto Sans TC',sans-serif);backdrop-filter:blur(1.5px) saturate(.82)}
+      #${LAYER_ID}{position:fixed;inset:0;z-index:16000;overflow:hidden;background:rgba(2,5,3,.42);color:#eee6d4;font-family:var(--xq-serif,'Noto Sans TC',sans-serif);backdrop-filter:blur(1.5px) saturate(.82)}
       #${LAYER_ID}:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.22),rgba(0,0,0,.04) 30%,rgba(0,0,0,.04) 70%,rgba(0,0,0,.22)),linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.18));pointer-events:none}
       #${LAYER_ID} .story-chapter-mark{position:absolute;left:clamp(14px,3vw,42px);top:clamp(14px,3vw,32px);z-index:4;max-width:min(72vw,620px);text-shadow:0 4px 20px #000}
       #${LAYER_ID} .story-chapter-mark small{display:block;color:#9c8555;font-size:9px;font-weight:900;letter-spacing:.2em}
@@ -188,7 +188,7 @@ import {
       #${LAYER_ID} .story-gender-option img{display:block;width:100%;height:325px;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 12px 24px rgba(0,0,0,.42));pointer-events:none}
       #${LAYER_ID} .story-gender-option strong{display:block;padding:12px 10px 3px;color:#f0dbab;font-size:13px;letter-spacing:.06em}
       #${LAYER_ID} .story-gender-option span{display:block;padding:0 10px 13px;color:#887d68;font-size:9px}
-      #${ARCHIVE_ID}{position:fixed;inset:0;z-index:12950;display:grid;place-items:center;padding:18px;background:rgba(0,0,0,.82);backdrop-filter:blur(10px)}
+      #${ARCHIVE_ID}{position:fixed;inset:0;z-index:15950;display:grid;place-items:center;padding:18px;background:rgba(0,0,0,.82);backdrop-filter:blur(10px)}
       #${ARCHIVE_ID} .story-archive-card{width:min(100%,760px);max-height:86dvh;overflow:auto;padding:22px;border:1px solid rgba(216,177,93,.3);border-radius:24px;background:linear-gradient(145deg,#171713,#070807);color:#ddcfaf;box-shadow:0 30px 90px rgba(0,0,0,.65)}
       #${LAYER_ID} .story-tutorial-error{margin:9px 0;color:#ffe3a3;background:rgba(123,51,21,.72);padding:9px 12px;border:1px solid rgba(245,173,87,.65);border-radius:9px;font-size:12px;line-height:1.65}
       #${ARCHIVE_ID} .story-archive-head{display:flex;align-items:start;justify-content:space-between;gap:12px}.story-archive-head h3{margin:0;color:#f0dfb9;font-size:21px}.story-archive-head p{margin:4px 0 0;color:#857b68;font-size:9px}.story-archive-close{width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.08);background:#0b0b0a;color:#a79b82}
