@@ -42,6 +42,14 @@ import {
   ].filter((value, index, list) => list.indexOf(value) === index));
 
   function data() { return window.getCurrentUserData?.() || null; }
+  function onboardingReady() {
+    const profile = data()?.profile || {};
+    if (typeof window.hasCompletedPlayerProfile === 'function') {
+      return window.hasCompletedPlayerProfile(profile);
+    }
+    const value = (input) => String(input ?? '').trim();
+    return Boolean(value(profile.educationLevel) && value(profile.strongSubjects) && value(profile.weakSubjects));
+  }
   function user() {
     try { return getAuth(getApp()).currentUser; } catch (_) { return null; }
   }
@@ -430,6 +438,7 @@ import {
       preloadStoryImages().then(() => setTimeout(maybeAutoStart, 0));
       return;
     }
+    if (!onboardingReady()) return;
     if (active || document.getElementById(ARCHIVE_ID) || Date.now() < snoozeUntil || blocking() || autoPermits <= 0) return;
     if (!data()?.stats || !user()) return;
     if (!gender()) {
@@ -543,6 +552,11 @@ import {
       mountArchiveLauncher();
       autoPermits = Math.max(1, autoPermits);
       setTimeout(maybeAutoStart, 120);
+    });
+    window.addEventListener('xiuxian:onboarding-completed', () => {
+      autoPermits = Math.max(1, autoPermits);
+      snoozeUntil = 0;
+      setTimeout(maybeAutoStart, 180);
     });
     window.addEventListener('player-name-updated', () => { if (active && currentChapter) renderLine(); });
     window.addEventListener('xiuxian:battle-tutorial-completed', () => {

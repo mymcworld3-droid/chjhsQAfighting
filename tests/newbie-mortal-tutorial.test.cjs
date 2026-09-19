@@ -37,6 +37,9 @@ test('tutorial teaches where features live before changing pages instead of tele
   assert.match(tutorial, /請點亮起的入口/);
   assert.match(tutorial, /event\.stopImmediatePropagation\(\)/);
   assert.match(tutorial, /navigate\(route\.destination\)/);
+  assert.match(tutorial, /先找到「\$\{label\}」在哪裡/);
+  assert.match(tutorial, /仙府/);
+  assert.doesNotMatch(tutorial, /首頁/);
   assert.doesNotMatch(tutorial, /\n\s*navigate\(step\.page\);/);
 });
 

@@ -226,3 +226,13 @@ test('gender selection copy uses gender rather than portrait terminology', () =>
   assert.match(engine, /請選擇性別/);
   assert.doesNotMatch(engine, /立繪|PLAYER PORTRAIT/);
 });
+
+
+test('main story cannot auto-start until grade, strong subjects and weak subjects are complete', () => {
+  assert.match(engine, /function onboardingReady\(\)/);
+  assert.match(engine, /profile\.educationLevel/);
+  assert.match(engine, /profile\.strongSubjects/);
+  assert.match(engine, /profile\.weakSubjects/);
+  assert.match(engine, /if \(!onboardingReady\(\)\) return;/);
+  assert.match(engine, /xiuxian:onboarding-completed/);
+});

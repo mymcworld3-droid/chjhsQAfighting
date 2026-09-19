@@ -246,3 +246,18 @@ test('startup progress section is horizontally centered on the viewport', () => 
   assert.match(legacy, /\.game-startup-copy\{width:100%;max-width:760px;margin-left:auto;margin-right:auto/);
   assert.match(legacy, /\.game-startup-progress-wrap\{width:min\(720px,100%\);margin:clamp\(20px,3\.2vh,34px\) auto 0/);
 });
+
+
+test('onboarding is complete only after grade, strengths and weaknesses, and navigation remains available in Qi Refining', () => {
+  assert.match(legacy, /function hasCompletedPlayerProfile\(profile = currentUserData\?\.profile\)/);
+  assert.match(legacy, /profile\?\.educationLevel/);
+  assert.match(legacy, /profile\?\.strongSubjects/);
+  assert.match(legacy, /profile\?\.weakSubjects/);
+  assert.match(legacy, /if \(!hasCompletedPlayerProfile\(currentUserData\.profile\)\)/);
+  assert.match(legacy, /populateOnboardingInputs\(\)/);
+  assert.match(legacy, /請先填完整年級、擅長科目與弱項科目/);
+  assert.match(legacy, /new CustomEvent\('xiuxian:onboarding-completed'/);
+  assert.match(legacy, /不論凡人、煉氣或後續境界都保留底部導覽列/);
+  assert.match(legacy, /xiuxian:stats-updated', ensureGameplayNavigationForReadyProfile/);
+  assert.doesNotMatch(legacy, /ensureGameplayNavigationForReadyProfile[\s\S]{0,500}score\(\)\s*[><=]/);
+});

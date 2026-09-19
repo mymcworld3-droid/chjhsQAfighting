@@ -53,7 +53,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     },
     {
       page: 'page-quiz', target: '#btn-next-step', demo: true, kicker: '第五步 · 下一題', title: '看完解析再進下一題',
-      body: '正式答題時，看完題解後按「下一題」即可繼續問道。若想先離開，也可以回到首頁。',
+      body: '正式答題時，看完題解後按「下一題」即可繼續問道。若想先離開，也可以回到仙府。',
       note: '教學範例不會真的產生下一題。'
     },
     {
@@ -68,7 +68,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     },
     {
       page: 'page-home', target: '#btn-home-start', kicker: '第八步 · 正式問道', title: '現在會正式答題了',
-      body: '回到首頁後，點「問道試煉」就能開始真正的單人答題。正式題目答對會增加修為，答錯不扣修為。',
+      body: '回到仙府後，點「問道試煉」就能開始真正的單人答題。正式題目答對會增加修為，答錯不扣修為。',
       note: '凡人期先靠問道累積修為，一步一步往築基前進。'
     },
     {
@@ -199,14 +199,14 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     const current = currentPageId();
     if (current === step.page) return null;
 
-    // 問道不是底部獨立分頁：先回首頁，再由首頁的「問道試煉」進入。
+    // 問道不是底部獨立分頁：先回仙府，再由仙府的「問道試煉」進入。
     if (step.page === 'page-quiz') {
       if (current !== 'page-home') {
         return navRoute(
           'page-home',
-          '首頁',
+          '仙府',
           '[data-target="page-home"]',
-          '問道試煉的入口在首頁。請先看底部導覽，找到並點擊「首頁」。'
+          '問道試煉的入口在仙府。請先看底部導覽，找到並點擊「仙府」。'
         );
       }
       return navRoute(
@@ -229,9 +229,9 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     if (step.page === 'page-home') {
       return navRoute(
         'page-home',
-        '首頁',
+        '仙府',
         '[data-target="page-home"]',
-        '這個功能位在首頁。請看底部導覽，找到並點擊「首頁」。'
+        '這個功能位在仙府。請看底部導覽，找到並點擊「仙府」。'
       );
     }
 

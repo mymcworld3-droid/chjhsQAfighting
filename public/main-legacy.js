@@ -31,6 +31,32 @@ let currentUserData = null;
 // 🔥 新增這行：將玩家資料開放給修仙模組讀取
 window.getCurrentUserData = () => currentUserData;
 
+function hasCompletedPlayerProfile(profile = currentUserData?.profile) {
+    const value = (input) => String(input ?? '').trim();
+    return Boolean(
+        value(profile?.educationLevel) &&
+        value(profile?.strongSubjects) &&
+        value(profile?.weakSubjects)
+    );
+}
+window.hasCompletedPlayerProfile = hasCompletedPlayerProfile;
+
+function populateOnboardingInputs() {
+    const profile = currentUserData?.profile || {};
+    const level = document.getElementById('ob-level');
+    const strong = document.getElementById('ob-strong');
+    const weak = document.getElementById('ob-weak');
+    if (level && profile.educationLevel) level.value = profile.educationLevel;
+    if (strong) strong.value = String(profile.strongSubjects || '');
+    if (weak) weak.value = String(profile.weakSubjects || '');
+}
+
+function ensureGameplayNavigationForReadyProfile() {
+    if (!auth.currentUser || document.getElementById('game-startup-gate')) return;
+    if (!hasCompletedPlayerProfile(currentUserData?.profile)) return;
+    document.getElementById('bottom-nav')?.classList.remove('hidden');
+}
+
 // --- 全域狀態變數 ---
 let isBattleResultProcessed = false; // 防止重複領取獎勵
 let systemUnsub = null;              // 系統指令監聽 (強制重整)
@@ -186,7 +212,7 @@ const translations = {
         tab_cards: "卡牌",
 
         // Nav
-        nav_home: "首頁",
+        nav_home: "仙府",
         nav_quiz: "答題",
         nav_store: "商店",
         nav_rank: "排行",
@@ -876,13 +902,15 @@ onAuthStateChanged(auth, async (user) => {
 
             // 根據資料完整度導向；到這裡才解除啟動遮罩並開始遊戲。
             hideGameStartupGate();
-            if (!currentUserData.profile.educationLevel || currentUserData.profile.educationLevel === "") {
-                switchToPage('page-onboarding'); 
-                document.getElementById('bottom-nav').classList.add('hidden'); 
+            if (!hasCompletedPlayerProfile(currentUserData.profile)) {
+                populateOnboardingInputs();
+                switchToPage('page-onboarding');
+                document.getElementById('bottom-nav').classList.add('hidden');
             } else {
+                // 個人資料完成後，不論凡人、煉氣或後續境界都保留底部導覽列。
                 document.getElementById('bottom-nav').classList.remove('hidden');
                 switchToPage('page-home');
-                fillBuffer(); 
+                fillBuffer();
             }
 
         } catch (error) { 
@@ -907,6 +935,9 @@ onAuthStateChanged(auth, async (user) => {
         if (chatUnsub) chatUnsub();
     }
 });
+
+window.addEventListener('xiuxian:stats-updated', ensureGameplayNavigationForReadyProfile);
+window.addEventListener('xiuxian:story-chapter-completed', ensureGameplayNavigationForReadyProfile);
 
 // ==========================================
 //  Social & UI Injection (Tabbed Chat)
@@ -1620,17 +1651,53 @@ async function getCleanSubjects(rawText) {
 }
 
 window.submitOnboarding = async () => {
-    const level = document.getElementById('ob-level').value;
-    const rawStrong = document.getElementById('ob-strong').value;
-    const rawWeak = document.getElementById('ob-weak').value;
-    if(!level) { alert("Please select level"); return; }
+    const level = String(document.getElementById('ob-level')?.value || '').trim();
+    const rawStrong = String(document.getElementById('ob-strong')?.value || '').trim();
+    const rawWeak = String(document.getElementById('ob-weak')?.value || '').trim();
+    if (!level || !rawStrong || !rawWeak) {
+        alert('請先填完整年級、擅長科目與弱項科目，再開始仙途。');
+        return;
+    }
+
     const btn = document.querySelector('button[onclick="submitOnboarding()"]');
-    btn.innerText = "Processing..."; btn.disabled = true;
-    const cleanStrong = await getCleanSubjects(rawStrong);
-    const cleanWeak = await getCleanSubjects(rawWeak);
-    await updateDoc(doc(db, "users", auth.currentUser.uid), { "profile.educationLevel": level, "profile.strongSubjects": cleanStrong, "profile.weakSubjects": cleanWeak });
-    currentUserData.profile.educationLevel = level; currentUserData.profile.strongSubjects = cleanStrong; currentUserData.profile.weakSubjects = cleanWeak;
-    updateSettingsInputs(); updateUIStats(); switchToPage('page-home'); document.getElementById('bottom-nav').classList.remove('hidden'); localStorage.removeItem('currentQuiz'); quizBuffer = []; fillBuffer(); btn.innerText = "Go! 🚀"; btn.disabled = false;
+    const originalLabel = btn?.innerText || '開始旅程';
+    if (btn) { btn.innerText = '資料確認中...'; btn.disabled = true; }
+
+    try {
+        const analyzedStrong = await getCleanSubjects(rawStrong);
+        const analyzedWeak = await getCleanSubjects(rawWeak);
+        const cleanStrong = String(analyzedStrong || rawStrong).trim();
+        const cleanWeak = String(analyzedWeak || rawWeak).trim();
+        if (!cleanStrong || !cleanWeak) throw new Error('強項或弱項整理後為空白，請重新填寫。');
+
+        await updateDoc(doc(db, "users", auth.currentUser.uid), {
+            "profile.educationLevel": level,
+            "profile.strongSubjects": cleanStrong,
+            "profile.weakSubjects": cleanWeak
+        });
+
+        currentUserData.profile.educationLevel = level;
+        currentUserData.profile.strongSubjects = cleanStrong;
+        currentUserData.profile.weakSubjects = cleanWeak;
+
+        updateSettingsInputs();
+        updateUIStats();
+        document.getElementById('bottom-nav').classList.remove('hidden');
+        switchToPage('page-home');
+        localStorage.removeItem('currentQuiz');
+        quizBuffer = [];
+        fillBuffer();
+
+        // 劇情只能在這個事件之後開始：先完成年級、強項、弱項，再進主線。
+        window.dispatchEvent(new CustomEvent('xiuxian:onboarding-completed', {
+            detail: { educationLevel: level, strongSubjects: cleanStrong, weakSubjects: cleanWeak }
+        }));
+    } catch (error) {
+        console.error('Onboarding save failed:', error);
+        alert(error?.message || '資料儲存失敗，請稍後再試。');
+    } finally {
+        if (btn) { btn.innerText = originalLabel; btn.disabled = false; }
+    }
 };
 
 window.saveProfile = async () => {
