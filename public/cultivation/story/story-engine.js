@@ -95,8 +95,8 @@ import {
     const style = document.createElement('style');
     style.id = STYLE_ID;
     style.textContent = `
-      #${LAYER_ID}{position:fixed;inset:0;z-index:13000;overflow:hidden;background:radial-gradient(circle at 50% 16%,rgba(73,87,72,.24),transparent 35%),linear-gradient(180deg,#101411 0%,#070807 54%,#020302 100%);color:#eee6d4;font-family:var(--xq-serif,'Noto Sans TC',sans-serif)}
-      #${LAYER_ID}:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.18),transparent 28%,transparent 72%,rgba(0,0,0,.18)),radial-gradient(circle at 50% 100%,rgba(205,164,79,.055),transparent 45%);pointer-events:none}
+      #${LAYER_ID}{position:fixed;inset:0;z-index:13000;overflow:hidden;background:rgba(2,5,3,.42);color:#eee6d4;font-family:var(--xq-serif,'Noto Sans TC',sans-serif);backdrop-filter:blur(1.5px) saturate(.82)}
+      #${LAYER_ID}:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.22),rgba(0,0,0,.04) 30%,rgba(0,0,0,.04) 70%,rgba(0,0,0,.22)),linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.18));pointer-events:none}
       #${LAYER_ID} .story-chapter-mark{position:absolute;left:clamp(14px,3vw,42px);top:clamp(14px,3vw,32px);z-index:4;max-width:min(72vw,620px);text-shadow:0 4px 20px #000}
       #${LAYER_ID} .story-chapter-mark small{display:block;color:#9c8555;font-size:9px;font-weight:900;letter-spacing:.2em}
       #${LAYER_ID} .story-chapter-mark b{display:block;margin-top:5px;color:#e9ddc3;font-size:clamp(16px,2.5vw,25px)}
@@ -107,7 +107,7 @@ import {
       #${LAYER_ID} .story-portrait.story-bounce{animation:story-character-hop .22s cubic-bezier(.2,.8,.3,1)}
       @keyframes story-character-hop{0%{transform:translateY(0)}42%{transform:translateY(-14px) scale(1.01)}100%{transform:translateY(0)}}
       #${LAYER_ID} .story-narrator-seal{position:absolute;left:50%;top:30%;transform:translate(-50%,-50%);width:86px;height:86px;display:grid;place-items:center;border:1px solid rgba(216,177,93,.25);border-radius:50%;color:#b69854;font:900 34px serif;opacity:.58;box-shadow:0 0 40px rgba(216,177,93,.08)}
-      #${LAYER_ID} .story-dialogue{position:absolute;z-index:5;left:50%;bottom:clamp(14px,3vh,34px);transform:translateX(-50%);width:min(calc(100vw - 28px),940px);min-height:170px;padding:20px 22px 17px;border:1px solid rgba(216,177,93,.3);border-radius:22px;background:linear-gradient(145deg,rgba(17,18,15,.96),rgba(5,6,5,.985));box-shadow:0 22px 75px rgba(0,0,0,.64),inset 0 1px rgba(255,255,255,.025);backdrop-filter:blur(10px)}
+      #${LAYER_ID} .story-dialogue{position:absolute;z-index:5;left:50%;bottom:clamp(14px,3vh,34px);transform:translateX(-50%);width:min(calc(100vw - 28px),940px);min-height:170px;padding:20px 22px 17px;border:1px solid rgba(216,177,93,.3);border-radius:22px;background:linear-gradient(145deg,rgba(17,18,15,.91),rgba(5,6,5,.94));box-shadow:0 22px 75px rgba(0,0,0,.64),inset 0 1px rgba(255,255,255,.025);backdrop-filter:blur(10px)}
       #${LAYER_ID} .story-speaker{display:flex;align-items:center;gap:8px;color:#e0bd68;font-size:11px;font-weight:900;letter-spacing:.08em}
       #${LAYER_ID} .story-speaker:before{content:"";width:18px;height:1px;background:#b99143}
       #${LAYER_ID} .story-text{min-height:66px;margin:10px 0 12px;color:#ddd3bf;font-size:clamp(13px,1.55vw,16px);line-height:1.85;font-weight:650;white-space:pre-line}
@@ -243,9 +243,41 @@ import {
     document.getElementById(LAYER_ID)?.remove();
   }
 
+  function prepareStoryScene(chapter) {
+    const scene = chapter?.scene || {};
+    const requestedPage = String(scene.page || 'page-home');
+    const targetPage = document.getElementById(requestedPage) ? requestedPage : 'page-home';
+
+    try {
+      window.switchToPage?.(targetPage);
+    } catch (error) {
+      console.warn('[Story] scene page switch failed:', error);
+    }
+
+    if (targetPage === 'page-training' && scene.trainingTab) {
+      const activateTab = () => {
+        const tab = document.querySelector(`#page-training [data-training-tab="${scene.trainingTab}"]`);
+        if (tab && !tab.classList.contains('active')) tab.click();
+      };
+      activateTab();
+      setTimeout(activateTab, 80);
+      setTimeout(activateTab, 220);
+    }
+
+    const main = document.querySelector('main');
+    if (main) {
+      try { main.scrollTo({ top: 0, left: 0, behavior: 'auto' }); }
+      catch (_) { main.scrollTop = 0; }
+    }
+    window.dispatchEvent(new CustomEvent('xiuxian:story-scene-prepared', {
+      detail: { chapterId: chapter?.id || '', page: targetPage, trainingTab: scene.trainingTab || '' }
+    }));
+  }
+
   function startChapter(chapter, options = {}) {
     if (!chapter || active) return false;
     document.getElementById(ARCHIVE_ID)?.remove();
+    prepareStoryScene(chapter);
     currentChapter = chapter;
     lineIndex = 0;
     replayMode = options.replay === true;
@@ -368,6 +400,7 @@ import {
     subtitle: chapter.subtitle,
     realm: chapter.realm,
     minScore: chapter.minScore,
+    scene: chapter.scene || { page: 'page-home' },
     seen: !!seenMap()[chapter.id]
   }));
 

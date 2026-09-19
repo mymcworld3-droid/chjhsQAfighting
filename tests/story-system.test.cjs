@@ -137,3 +137,38 @@ test('every next story line gives the active portrait a short hop without ignori
   assert.match(engine, /prefers-reduced-motion:reduce/);
   assert.match(engine, /animation:none!important/);
 });
+
+
+test('story overlay is translucent so the related game page remains visible behind dialogue', () => {
+  assert.match(engine, /background:rgba\(2,5,3,\.42\)/);
+  assert.match(engine, /backdrop-filter:blur\(1\.5px\) saturate\(\.82\)/);
+  assert.doesNotMatch(engine, /linear-gradient\(180deg,#101411 0%,#070807 54%,#020302 100%\)/);
+});
+
+test('each main story chapter declares a related game page and scene preparation switches there before playback', () => {
+  assert.match(engine, /function prepareStoryScene\(chapter\)/);
+  assert.match(engine, /window\.switchToPage\?\.\(targetPage\)/);
+  assert.match(engine, /prepareStoryScene\(chapter\);/);
+  assert.match(engine, /xiuxian:story-scene-prepared/);
+
+  const expected = [
+    ["qi-five-dongtian", "page-settings"],
+    ["foundation-first-battle", "page-battle"],
+    ["foundation-refinery", "page-training"],
+    ["foundation-mid-alliance", "page-social"],
+    ["golden-core-truth", "page-training"],
+    ["tribulation-final", "page-rank"],
+    ["true-immortal-epilogue", "page-rank"]
+  ];
+  for (const [id, page] of expected) {
+    const re = new RegExp("id: '" + id + "'[\\s\\S]*?scene: Object\\.freeze\\(\\{ page: '" + page + "'");
+    assert.match(scripts, re);
+  }
+});
+
+test('training-related story chapters open the correct training subtab behind the translucent story layer', () => {
+  assert.match(scripts, /id: 'foundation-refinery'[\s\S]*?trainingTab: 'refinery'/);
+  assert.match(scripts, /id: 'golden-core-truth'[\s\S]*?trainingTab: 'core'/);
+  assert.match(engine, /#page-training \[data-training-tab="/);
+  assert.match(engine, /tab\.click\(\)/);
+});
