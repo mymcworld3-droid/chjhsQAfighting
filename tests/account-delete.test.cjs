@@ -14,7 +14,7 @@ const artifactSystem = read('public/cultivation/artifact-system.js');
 const bag = read('public/cultivation/unified-inventory-grid.js');
 
 test('account delete control is loaded as a core module and placed directly below logout', () => {
-  assert.match(main, /import '\.\/account-delete\.js';/);
+  assert.match(main, /void import\('\.\/account-delete\.js'\)\.catch/);
   assert.ok(
     main.indexOf("void import('./account-delete.js')") < main.indexOf('const XIUXIAN_FEATURE_MODULES'),
     'account deletion must not depend on optional cultivation feature loading'
