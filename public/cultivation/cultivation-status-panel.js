@@ -1,4 +1,9 @@
 // 修煉頁「狀態」分頁：顯示目前調御中的本命金丹與玩家戰鬥數值。
+// 鬥法生命是單場投影資料；離開鬥法後不帶出，所以此處只顯示目前可用生命值。
+(function () {
+  'use strict';
+
+// 修煉頁「狀態」分頁：顯示目前調御中的本命金丹與玩家戰鬥數值。
 (function () {
   'use strict';
 
@@ -128,6 +133,12 @@
           <div class="status-section-title"><span>戰鬥數值</span><small>COMBAT STATUS</small></div>
           <div class="status-stat-grid status-stat-grid-simple">
             ${statCard('fa-khanda', '攻擊力', Math.round(player.attack).toLocaleString(), '基礎 200')}
+            ${statCard('fa-heart', '生命值', Math.round(player.hp).toLocaleString(), '單場鬥法結束後恢復滿值')}
+          </div>
+        </div>
+      </section>
+          <div class="status-stat-grid status-stat-grid-simple">
+            ${statCard('fa-khanda', '攻擊力', Math.round(player.attack).toLocaleString(), '基礎 200')}
             ${statCard('fa-heart', '生命值', `${Math.round(player.hp).toLocaleString()} / ${Math.round(player.maxHp).toLocaleString()}`, '基礎 1000')}
           </div>
         </div>
@@ -232,3 +243,4 @@
     boot();
   }
 })();
+
