@@ -236,3 +236,35 @@ test('main story cannot auto-start until grade, strong subjects and weak subject
   assert.match(engine, /if \(!onboardingReady\(\)\) return;/);
   assert.match(engine, /xiuxian:onboarding-completed/);
 });
+
+
+test('chapter two pauses between its opening and aftermath for one-question Dongtian practice', () => {
+  const chapter = scripts.slice(scripts.indexOf("id: 'qi-five-dongtian'"), scripts.indexOf("id: 'foundation-first-battle'"));
+  assert.match(chapter, /tutorialAfterLine: 11/);
+  const before = chapter.slice(chapter.indexOf('lines: Object.freeze'), chapter.indexOf('我在這裡等你'));
+  const after = chapter.slice(chapter.indexOf('我在這裡等你'));
+  assert.match(before, /私人範例，只需一題/);
+  assert.match(after, /你重新回到紫色門扉前/);
+  assert.match(after, /黑色符紋/);
+  assert.match(engine, /function handoffDongtianTutorial\(\)/);
+  assert.match(engine, /window\.startStoryDongtianTutorial/);
+  assert.match(engine, /storyTutorialPaused = true/);
+  assert.match(engine, /function resumeAfterDongtianTutorial\(\)/);
+  assert.match(engine, /xiuxian:story-dongtian-tutorial-finished/);
+  assert.match(engine, /!replayMode && currentChapter\.tutorialAfterLine === lineIndex/);
+  assert.match(engine, /storyDongtianTutorialComplete\(\)/);
+  assert.match(engine, /prepareStoryScene\(currentChapter\)/);
+});
+
+test('main newbie walkthrough teaches question solving; the separate Dongtian walkthrough belongs to chapter two', () => {
+  const question = newbie.slice(newbie.indexOf('const questionSteps = ['), newbie.indexOf('const dongtianSteps = ['));
+  const cave = newbie.slice(newbie.indexOf('const dongtianSteps = ['), newbie.indexOf('function ensureStyle()'));
+  assert.match(question, /讀題 → 選答案 → 看解析 → 下一題/);
+  assert.doesNotMatch(question, /requiresDongtianOpen|prepareDongtianDemo|requiresDongtianDelete/);
+  assert.match(cave, /requiresDongtianOpen: true/);
+  assert.match(cave, /requiresDongtianDelete: true/);
+  assert.match(newbie, /window\.startStoryDongtianTutorial = \(\) => start\('dongtian', \{ story: true \}\)/);
+  assert.match(newbie, /scope: mode/);
+  assert.match(newbie, /DONGTIAN_FIELD = 'storyDongtianTutorialV1'/);
+  assert.match(newbie, /if \(shouldResumeStory\)/);
+});

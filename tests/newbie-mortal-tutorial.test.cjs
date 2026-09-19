@@ -112,3 +112,14 @@ test('mortal tutorial requires only one private Dongtian question before returni
   assert.match(tutorial, /requiresDongtianReturn: true/);
   assert.match(tutorial, /requiresDongtianDelete: true/);
 });
+
+
+test('the new mortal tutorial ends before the Dongtian practice handed off by chapter two', () => {
+  const question = tutorial.slice(tutorial.indexOf('const questionSteps = ['), tutorial.indexOf('const dongtianSteps = ['));
+  const cave = tutorial.slice(tutorial.indexOf('const dongtianSteps = ['), tutorial.indexOf('function ensureStyle()'));
+  assert.doesNotMatch(question, /requiresDongtianOpen|requiresDongtianComplete/);
+  assert.match(question, /煉氣五層時，沈清霜會在第二章帶你體驗洞天/);
+  assert.match(cave, /requiresDongtianComplete: true/);
+  assert.match(cave, /requiresDongtianReturn: true/);
+  assert.match(cave, /requiresDongtianDelete: true/);
+});

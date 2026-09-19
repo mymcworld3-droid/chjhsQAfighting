@@ -27,6 +27,7 @@ import {
   let currentChapter = null;
   let lineIndex = 0;
   let replayMode = false;
+  let storyTutorialPaused = false;
   let snoozeUntil = 0;
   let autoPermits = 1;
   let lastScore = -1;
@@ -271,10 +272,47 @@ import {
     };
   }
 
+  function storyDongtianTutorialComplete() {
+    return !!data()?.storyDongtianTutorialV1?.completed;
+  }
+
+  function handoffDongtianTutorial() {
+    if (storyTutorialPaused || !currentChapter) return true;
+    const launch = window.startStoryDongtianTutorial;
+    if (typeof launch !== 'function') {
+      console.warn('[Story] Dongtian tutorial is not available yet');
+      return true;
+    }
+    storyTutorialPaused = true;
+    active = false;
+    document.getElementById(LAYER_ID)?.classList.remove('story-playing');
+    document.getElementById(LAYER_ID)?.remove();
+    const launched = launch();
+    if (!launched) {
+      storyTutorialPaused = false;
+      active = true;
+      renderLine();
+    }
+    return true;
+  }
+
+  function resumeAfterDongtianTutorial() {
+    if (!storyTutorialPaused || currentChapter?.id !== 'qi-five-dongtian') return;
+    storyTutorialPaused = false;
+    active = true;
+    lineIndex = Math.min(lineIndex + 1, currentChapter.lines.length - 1);
+    prepareStoryScene(currentChapter);
+    renderLine({ bounce: true });
+  }
+
   function nextLine() {
     if (!active || !currentChapter) return;
     if (lineIndex >= currentChapter.lines.length - 1) {
       finishChapter();
+      return;
+    }
+    if (!replayMode && currentChapter.tutorialAfterLine === lineIndex && !storyDongtianTutorialComplete()) {
+      handoffDongtianTutorial();
       return;
     }
     lineIndex += 1;
@@ -439,7 +477,7 @@ import {
       return;
     }
     if (!onboardingReady()) return;
-    if (active || document.getElementById(ARCHIVE_ID) || Date.now() < snoozeUntil || blocking() || autoPermits <= 0) return;
+    if (active || storyTutorialPaused || document.getElementById(ARCHIVE_ID) || Date.now() < snoozeUntil || blocking() || autoPermits <= 0) return;
     if (!data()?.stats || !user()) return;
     if (!gender()) {
       openGenderChoice();
@@ -559,6 +597,7 @@ import {
       setTimeout(maybeAutoStart, 180);
     });
     window.addEventListener('player-name-updated', () => { if (active && currentChapter) renderLine(); });
+    window.addEventListener('xiuxian:story-dongtian-tutorial-finished', resumeAfterDongtianTutorial);
     window.addEventListener('xiuxian:battle-tutorial-completed', () => {
       autoPermits = 1;
       snoozeUntil = Math.min(snoozeUntil, Date.now() + 650);

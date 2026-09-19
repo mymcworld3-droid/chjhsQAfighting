@@ -7,9 +7,13 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   'use strict';
 
   const FIELD = 'newbieTutorialV1';
+  const DONGTIAN_FIELD = 'storyDongtianTutorialV1';
   const VERSION = 2;
   const FOUNDATION_SCORE = 10;
   let active = false;
+  let tutorialMode = 'question';
+  let startedByStory = false;
+  let steps = [];
   let index = 0;
   let autoStarted = false;
   let resizeHandler = null;
@@ -30,7 +34,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   const EXAMPLE_OPTIONS = ['4', '5', '6', '7'];
   const EXAMPLE_ANSWER = 1;
 
-  const steps = [
+  const questionSteps = [
     {
       page: 'page-home', target: '#xiuxian-panel', kicker: '第一步 · 凡人入門', title: '先學會問道答題',
       body: '凡人期最重要的事情就是學會答題。接下來先做一題<strong>不計修為的範例題</strong>，帶你看懂題目、選答案、查看題解，以及題目有問題時如何回報。',
@@ -82,82 +86,82 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       note: '剛開始可以先使用 AUTO 或中等。'
     },
     {
+      page: 'page-home', target: '#xiuxian-panel',
+      kicker: '完成 · 問道入門', title: '現在可以開始正式問道',
+      body: '你已學會<strong>讀題 → 選答案 → 看解析 → 下一題</strong>，也知道題目有問題時如何回報。先靠問道提升修為；煉氣五層時，沈清霜會在第二章帶你體驗洞天。',
+      note: '洞天實作會隨第二章劇情開啟，不需要現在把所有功能一次學完。'
+    }
+  ];
+
+  const dongtianSteps = [
+    {
       page: 'page-settings', target: '#dongtian-card .dongfu-collapse-head, #dongtian-launcher-card .dt-entry-head', requiresDongtianOpen: true,
-      kicker: '第十一步 · 洞天入口', title: '先找到洞天在哪裡',
+      kicker: '第二章 · 洞天入口', title: '先找到洞天在哪裡',
       body: '洞天位在<strong>洞府</strong>裡，不會直接把你傳送進去。請找到「洞天」區塊並親自點開；自己的洞天建立、重玩、題目管理與刪除都從這裡進行。',
       note: '請親自點亮起的「洞天」入口，把區塊展開。'
     },
     {
       page: 'page-settings', target: '#dongtian-card .dt-create', prepareDongtianDemo: true, requiresDongtianDemoReady: true,
-      kicker: '第十二步 · 建立洞天', title: '圖片與文字都可以煉成洞天',
+      kicker: '洞天實作 · 建立洞天', title: '圖片與文字都可以煉成洞天',
       body: '正式建立時，可以貼上<strong>課文、筆記、公式、重點文字</strong>，也可以同時上傳多張圖片。AI 會先辨認知識點、需要多少題與題目結構，再開始出題。',
       note: '現在系統會準備一座完全不公開的 1 題教學範例；它只存在本次教學，不呼叫 AI，也不寫入公開洞天資料。'
     },
     {
       page: 'page-settings', target: '#dongtian-card .dt-amount-options',
-      kicker: '第十三步 · 題目量', title: '少、中、多會控制洞天題數',
+      kicker: '洞天實作 · 題目量', title: '少、中、多會控制洞天題數',
       body: '<strong>少＝10 題</strong>；<strong>中＝15～20 題</strong>；<strong>多＝25～30 題</strong>。正式洞天固定使用四選一單選題，每題只有一個正確答案，不能複選。',
       note: 'AI 先規劃整體，再固定每 5 題生成一批；後一批會帶入前面全部已生成題目，降低重複。'
     },
     {
       page: 'page-settings', target: '#dongtian-card [data-dt-tutorial-card]',
-      kicker: '第十四步 · 我的洞天', title: '建立完成後會出現在「我的洞天」',
+      kicker: '洞天實作 · 我的洞天', title: '建立完成後會出現在「我的洞天」',
       body: '正式洞天會顯示名稱、程度、難度、科目、題數與完成次數，也可能被符合條件的其他修士遇見。現在這座<strong>青雲入門洞天</strong>標示為「教學專用 · 不公開」。',
       note: '範例只需完成 1 題，體驗作答、解析與結算，但不會公開、不會發放靈石、修為或材料，也不留下正式遊玩紀錄。'
     },
     {
       page: 'page-settings', target: '#dongtian-card [data-dt-tutorial-play]', requiresDongtianStart: true,
-      kicker: '第十五步 · 親自進入', title: '現在實際遊玩範例洞天',
+      kicker: '洞天實作 · 親自進入', title: '現在實際遊玩範例洞天',
       body: '請親自按「進入範例」。洞天進入後題序固定，不會答一題就重新向 AI 取下一題；教學也不會替你直接閃現進去。',
       note: '按下「進入範例」後，會進入全螢幕洞天答題畫面。'
     },
     {
       target: '#dongtian-overlay .dt-run-meta',
-      kicker: '第十六步 · 洞天介面', title: '先看題序、科目、難度與進度',
+      kicker: '洞天實作 · 洞天介面', title: '先看題序、科目、難度與進度',
       body: '上方會顯示目前第幾題、科目與難度；進度條代表整座洞天走到哪裡。正式洞天會一路沿用建立時固定好的題序。',
       note: '看懂這些資訊後按「下一步」，接著請把教學洞天真的玩完。'
     },
     {
       target: '#dongtian-overlay .dt-options', requiresDongtianComplete: true,
-      kicker: '第十七步 · 完整遊玩', title: '請完成 1 題教學洞天',
+      kicker: '洞天實作 · 完整遊玩', title: '請完成 1 題教學洞天',
       body: '每題都是單選題。作答後會立即顯示正確答案與解析，再按「前往下一境」。正式洞天若題目真的有錯，作答後還能使用「問題回報」。',
       note: '請實際完成這 1 題，閱讀解析並按「前往下一境」，即可看到洞天通關結算。'
     },
     {
       target: '#dongtian-overlay [data-dt-tutorial-result]',
-      kicker: '第十八步 · 通關結算', title: '看懂正式洞天的首次通關獎勵',
+      kicker: '洞天實作 · 通關結算', title: '看懂正式洞天的首次通關獎勵',
       body: '正式洞天首次完整通關會依題數給靈石：<strong>每題 100、最低 1000</strong>；修為依答對題數計算：<strong>每答對 5 題 +1，至少答對 1 題保底 +1</strong>。同一洞天重玩不會重複領首次獎勵。',
       note: '這座私人教學範例完全不發正式獎勵、不掉材料，也不寫入歷史紀錄。'
     },
     {
       target: '#dt-back', requiresDongtianReturn: true,
-      kicker: '第十九步 · 返回名冊', title: '通關後回到「我的洞天」',
+      kicker: '洞天實作 · 返回名冊', title: '通關後回到「我的洞天」',
       body: '正式洞天完成後，可以回到自己的洞天名冊。建立者能重新遊玩、管理題目，也可以刪除不再需要的洞天。',
       note: '請親自按「返回我的洞天」。'
     },
     {
       page: 'page-settings', target: '#dongtian-card [data-dt-tutorial-delete]', requiresDongtianDelete: true,
-      kicker: '第二十步 · 刪除洞天', title: '最後親自刪除這座範例',
+      kicker: '洞天實作 · 刪除洞天', title: '最後親自刪除這座範例',
       body: '不再需要的洞天可以從「我的洞天」刪除。正式洞天刪除後會從公開資料移除；現在請按這座<strong>不公開教學範例</strong>的「刪除範例」。',
       note: '這座範例完全是本機教學資料，所以刪除不會碰到其他玩家資料。'
     },
     {
       page: 'page-settings', target: '#dongtian-card .dt-library',
-      kicker: '第二十一步 · 洞天教學完成', title: '你已走完整個洞天流程',
+      kicker: '完成 · 第二章洞天教學', title: '你已走完整個洞天流程',
       body: '你已經實際完成：<strong>找到入口 → 了解素材與題量 → 進入洞天 → 單選作答與看解析 → 通關結算 → 返回名冊 → 刪除洞天</strong>。之後建立正式洞天就是同一套操作。',
       note: '教學範例已刪除，而且從頭到尾都沒有公開或留下正式獎勵紀錄。'
     },
-    {
-      page: 'page-home', target: 'button[onclick*="startBattleMatchmaking"]', kicker: '第二十二步 · 築基', title: '10 修為後開放多人玩法',
-      body: '達到 <strong>築基初期（10 修為）</strong> 後，才會開放配對鬥法、接受邀請與仙盟等多人功能，同時開放修煉背包。',
-      note: '凡人期先把問道與洞天流程學熟。'
-    },
-    {
-      page: 'page-home', target: '#xiuxian-panel', kicker: '完成 · 開始修行', title: '問道與洞天都會用了',
-      body: '問道記住：<strong>看題目 → 選答案 → 看題解 → 下一題</strong>；洞天記住：<strong>準備素材 → 選題量 → 建立 → 完整遊玩 → 管理或刪除</strong>。任何時候都能從洞府重新開啟這份教學。',
-      note: '現在可以正式開始自己的修行。'
-    }
   ];
+  steps = questionSteps;
 
   function ensureStyle() {
     if (document.getElementById('newbie-tutorial-style')) return;
@@ -567,63 +571,130 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     }, 120);
   }
 
-  async function persistFinished(skipped){
-    const data=userData(), user=getAuth(getApp()).currentUser; if(!data||!user) return;
-    const value={version:VERSION,completed:true,skipped:!!skipped,completedAt:Date.now()}; data[FIELD]=value;
-    try{ await updateDoc(doc(getFirestore(getApp()),'users',user.uid),{[FIELD]:value}); }catch(error){ console.warn('Tutorial completion could not be persisted:',error); }
+  async function persistFinished(skipped, mode) {
+    const current = userData();
+    const person = getAuth(getApp()).currentUser;
+    if (!current || !person) return;
+    const field = mode === 'dongtian' ? DONGTIAN_FIELD : FIELD;
+    const value = { version: VERSION, completed: true, skipped: !!skipped, completedAt: Date.now(), scope: mode };
+    current[field] = value;
+    try {
+      await updateDoc(doc(getFirestore(getApp()), 'users', person.uid), { [field]: value });
+    } catch (error) {
+      console.warn('[Tutorial] completion could not be persisted:', error);
+    }
   }
 
-  function finish(skipped){
-    if(!active)return;
-    active=false;
+  function finish(skipped) {
+    if (!active) return;
+    const finishedMode = tutorialMode;
+    const shouldResumeStory = startedByStory;
+    active = false;
+    startedByStory = false;
     cleanupExampleQuiz();
     try { window.deleteNewbieDongtianDemo?.({ silent: true }); } catch (_) {}
     document.getElementById('newbie-tutorial-layer')?.remove();
-    if(resizeHandler)window.removeEventListener('resize',resizeHandler);
-    resizeHandler=null;
-    navigate('page-home');
-    persistFinished(skipped);
+    if (resizeHandler) window.removeEventListener('resize', resizeHandler);
+    resizeHandler = null;
+    // 剧情交棒期间由主線播放器接手畫面，不額外跳回仙府。
+    if (finishedMode === 'question') navigate('page-home');
+    persistFinished(skipped, finishedMode);
+    if (shouldResumeStory) {
+      window.dispatchEvent(new CustomEvent('xiuxian:story-dongtian-tutorial-finished', {
+        detail: { skipped: !!skipped }
+      }));
+    }
   }
 
-  function start(){
+  function start(mode = 'question', options = {}) {
+    if (active) return false;
+    if (options.story && mode !== 'dongtian') return false;
     ensureStyle();
     bindDemoGuards();
     bindNavigationGuards();
     bindDongtianTutorialEvents();
     try { window.deleteNewbieDongtianDemo?.({ silent: true }); } catch (_) {}
-    active=true;
-    index=0;
-    exampleAnswered=false;
-    reportOpened=false;
-    dongtianOpen=false;
-    dongtianDemoReady=false;
-    dongtianDemoStarted=false;
-    dongtianDemoCompleted=false;
-    dongtianDemoReturned=false;
-    dongtianDemoDeleted=false;
-    resizeHandler ||= ()=>updateSpotlight();
-    window.addEventListener('resize',resizeHandler);
+    tutorialMode = mode === 'dongtian' ? 'dongtian' : 'question';
+    startedByStory = options.story === true;
+    steps = tutorialMode === 'dongtian' ? dongtianSteps : questionSteps;
+    active = true;
+    index = 0;
+    exampleAnswered = false;
+    reportOpened = false;
+    dongtianOpen = false;
+    dongtianDemoReady = false;
+    dongtianDemoStarted = false;
+    dongtianDemoCompleted = false;
+    dongtianDemoReturned = false;
+    dongtianDemoDeleted = false;
+    resizeHandler ||= () => updateSpotlight();
+    window.addEventListener('resize', resizeHandler);
     render();
+    return true;
   }
 
-  function addReplayButton(){
-    const page=document.getElementById('page-settings'); if(!page||document.getElementById('newbie-tutorial-replay'))return;
-    const button=document.createElement('button'); button.id='newbie-tutorial-replay'; button.type='button'; button.className='newbie-tutorial-replay'; button.innerHTML='<i class="fa-solid fa-circle-question"></i><span>重新查看新手教程</span>'; button.onclick=start;
-    const first=page.firstElementChild; if(first)first.insertAdjacentElement('afterend',button); else page.prepend(button);
+  function addReplayButton() {
+    const page = document.getElementById('page-settings');
+    if (!page) return;
+    if (!document.getElementById('newbie-tutorial-replay')) {
+      const button = document.createElement('button');
+      button.id = 'newbie-tutorial-replay';
+      button.type = 'button';
+      button.className = 'newbie-tutorial-replay';
+      button.innerHTML = '<i class="fa-solid fa-circle-question"></i><span>重新查看問道教學</span>';
+      button.onclick = () => start('question');
+      const first = page.firstElementChild;
+      if (first) first.insertAdjacentElement('afterend', button);
+      else page.prepend(button);
+    }
+    if (!document.getElementById('dongtian-story-tutorial-replay')) {
+      const button = document.createElement('button');
+      button.id = 'dongtian-story-tutorial-replay';
+      button.type = 'button';
+      button.className = 'newbie-tutorial-replay';
+      button.innerHTML = '<i class="fa-solid fa-mountain"></i><span>重新查看洞天教學（第二章）</span>';
+      button.onclick = () => start('dongtian');
+      const after = document.getElementById('newbie-tutorial-replay');
+      if (after) after.insertAdjacentElement('afterend', button);
+      else page.prepend(button);
+    }
   }
 
-  function blocking(){ return !!document.querySelector('#xiuxian-story-layer,#battle-tutorial-layer,#progression-v2-modal,.training-v3-modal-backdrop,#realm-breakthrough-feedback,#golden-core-tutorial-layer,#report-modal:not(.hidden)'); }
-  function maybeAutoStart(){
-    if(autoStarted||active||blocking())return;
-    const data=userData(), user=getAuth(getApp()).currentUser;
-    if(!data?.stats||!user)return;
-    if(Number(marker()?.version)>=VERSION&&marker()?.completed){autoStarted=true;return;}
-    if((Number(data.stats.totalScore)||0)>=FOUNDATION_SCORE){autoStarted=true;return;}
-    autoStarted=true;
-    setTimeout(()=>{if(!blocking())start();else autoStarted=false;},900);
+  function blocking() {
+    return !!document.querySelector('#xiuxian-story-layer,#battle-tutorial-layer,#progression-v2-modal,.training-v3-modal-backdrop,#realm-breakthrough-feedback,#golden-core-tutorial-layer,#report-modal:not(.hidden)');
   }
 
-  window.startNewbieTutorial=start;
-  function boot(){ ensureStyle(); bindDemoGuards(); bindNavigationGuards(); bindDongtianTutorialEvents(); addReplayButton(); maybeAutoStart(); setInterval(()=>{addReplayButton();maybeAutoStart();if(active)updateSpotlight();},700); new MutationObserver(addReplayButton).observe(document.body,{childList:true,subtree:true}); }
+  function maybeAutoStart() {
+    if (autoStarted || active || blocking()) return;
+    const current = userData();
+    const person = getAuth(getApp()).currentUser;
+    if (!current?.stats || !person) return;
+    if (typeof window.hasCompletedPlayerProfile === 'function' && !window.hasCompletedPlayerProfile(current.profile)) return;
+    if (Number(marker()?.version) >= VERSION && marker()?.completed) { autoStarted = true; return; }
+    if ((Number(current.stats.totalScore) || 0) >= FOUNDATION_SCORE) { autoStarted = true; return; }
+    autoStarted = true;
+    setTimeout(() => {
+      if (!blocking() && !active) start('question');
+      else autoStarted = false;
+    }, 900);
+  }
+
+  window.startNewbieTutorial = () => start('question');
+  window.startStoryDongtianTutorial = () => start('dongtian', { story: true });
+  window.replayStoryDongtianTutorial = () => start('dongtian');
+  function boot() {
+    ensureStyle();
+    bindDemoGuards();
+    bindNavigationGuards();
+    bindDongtianTutorialEvents();
+    addReplayButton();
+    maybeAutoStart();
+    setInterval(() => {
+      addReplayButton();
+      maybeAutoStart();
+      if (active) updateSpotlight();
+    }, 700);
+    new MutationObserver(addReplayButton).observe(document.body, { childList: true, subtree: true });
+  }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true}); else boot();
 })();
