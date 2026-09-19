@@ -140,6 +140,16 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js';
         <section id="bv2-arena" class="bv2-arena hidden">
           <div class="bv2-scoreboard">
             <article id="bv2-enemy-fighter" class="bv2-fighter enemy">
+              <div class="bv2-fighter-head"><div><span>對手</span><strong id="bv2-enemy-name">—</strong></div><b id="bv2-enemy-hp-text">1000</b></div>
+              <div class="bv2-hp"><i id="bv2-enemy-hp"></i></div><small id="bv2-enemy-core">本命金丹：—</small>
+            </article>
+            <div class="bv2-round-seal"><span>ROUND</span><b id="bv2-round">1 / ${BATTLE_V2.maxRounds}</b><em>問</em></div>
+            <article id="bv2-my-fighter" class="bv2-fighter me">
+              <div class="bv2-fighter-head"><div><span>我方</span><strong id="bv2-my-name">—</strong></div><b id="bv2-my-hp-text">1000</b></div>
+              <div class="bv2-hp"><i id="bv2-my-hp"></i></div><small id="bv2-my-core">本命金丹：—</small>
+            </article>
+          </div>
+            <article id="bv2-enemy-fighter" class="bv2-fighter enemy">
               <div class="bv2-fighter-head"><div><span>對手</span><strong id="bv2-enemy-name">—</strong></div><b id="bv2-enemy-hp-text">1000 / 1000</b></div>
               <div class="bv2-hp"><i id="bv2-enemy-hp"></i></div><small id="bv2-enemy-core">本命金丹：—</small>
             </article>
@@ -427,6 +437,13 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js';
     else { setText('bv2-intro-kicker', '青雲鬥法臺'); setText('bv2-intro-count', '戰'); setText('bv2-intro-title', '鬥法開始'); }
   }
 
+  function setHp(prefix, player) {
+    const hp = Math.max(0, Number(player?.hp) || 0); const maxHp = Math.max(1, Number(player?.maxHp) || 1000);
+    // 血條顯示比例；數字只顯示此刻剩餘生命，避免被誤解成場外永久血條。
+    setText(`bv2-${prefix}-hp-text`, Math.round(hp));
+    const bar = document.getElementById(`bv2-${prefix}-hp`); if (bar) bar.style.width = `${Math.max(0, Math.min(100, hp / maxHp * 100))}%`;
+    document.getElementById(`bv2-${prefix === 'my' ? 'my' : 'enemy'}-fighter`)?.classList.toggle('low-hp', hp / maxHp <= .3);
+  }
   function setHp(prefix, player) {
     const hp = Math.max(0, Number(player?.hp) || 0); const maxHp = Math.max(1, Number(player?.maxHp) || 1000);
     setText(`bv2-${prefix}-hp-text`, `${Math.round(hp)} / ${Math.round(maxHp)}`);
@@ -833,3 +850,4 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js';
   function boot() { ensurePage(); setTimeout(recoverBattleSession, 700); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true }); else boot();
 })();
+
