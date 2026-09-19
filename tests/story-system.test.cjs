@@ -177,10 +177,10 @@ test('training-related story chapters open the correct training subtab behind th
 test('gender choice displays both male and female full character portraits', () => {
   assert.match(engine, /class="story-gender-option" data-story-gender="male"/);
   assert.match(engine, /playerPortraitPath\('male','neutral'\)/);
-  assert.match(engine, /alt="男修立繪"/);
+  assert.match(engine, /alt="男修"/);
   assert.match(engine, /class="story-gender-option" data-story-gender="female"/);
   assert.match(engine, /playerPortraitPath\('female','neutral'\)/);
-  assert.match(engine, /alt="女修立繪"/);
+  assert.match(engine, /alt="女修"/);
   assert.match(engine, /story-gender-option img/);
 });
 
@@ -212,4 +212,9 @@ test('other onboarding layers wait while the dedicated battle tutorial is visibl
   assert.match(engine, /#battle-tutorial-layer/);
   assert.match(newbie, /#battle-tutorial-layer/);
   assert.match(golden, /#battle-tutorial-layer/);
+});
+
+test('gender selection copy uses gender rather than portrait terminology', () => {
+  assert.match(engine, /請選擇性別/);
+  assert.doesNotMatch(engine, /立繪|PLAYER PORTRAIT/);
 });
