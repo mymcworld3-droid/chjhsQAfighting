@@ -251,7 +251,22 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   }
 
   function displayStep() {
-    return routeForStep(steps[index]) || steps[index];
+    const step = steps[index];
+    const route = routeForStep(step);
+    if (route) return route;
+    // 洞天單選答完後才產生「完成洞天」按鈕，金框應改為指向下一個實際操作。
+    if (step?.requiresDongtianComplete && !dongtianDemoCompleted) {
+      const finishButton = target('#dongtian-overlay #dt-next');
+      if (finishButton && visible(finishButton)) {
+        return {
+          ...step,
+          target: '#dongtian-overlay #dt-next',
+          body: '已作答並顯示正確答案與解析。請先看懂解析，再按金框中的<strong>「完成洞天」</strong>，進入教學結算。',
+          note: '請親自按「完成洞天」，才算走完這座 1 題教學洞天。'
+        };
+      }
+    }
+    return step;
   }
 
   function setExampleFeedback(correct) {
@@ -423,6 +438,15 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       } else {
         renderCardOnly();
       }
+    });
+    window.addEventListener('newbie:dongtian-demo-question-answered', () => {
+      if (!active || !steps[index]?.requiresDongtianComplete || dongtianDemoCompleted) return;
+      // 洞天答題器會先插入解析和 #dt-next，這時重新計算目標，讓金框立即移到按鈕。
+      setTimeout(() => {
+        if (!active || !steps[index]?.requiresDongtianComplete) return;
+        renderCardOnly();
+        updateSpotlight();
+      }, 30);
     });
     window.addEventListener('newbie:dongtian-demo-completed', () => {
       if (!active) return;

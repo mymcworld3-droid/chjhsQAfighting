@@ -154,3 +154,26 @@ test('prologue can launch the question lesson from its story checkpoint', () => 
   assert.equal(ctx.index,0);
   assert.equal(renders,1);
 });
+
+
+test('after answering the one-question Dongtian demo, the spotlight moves to the Finish Dongtian button', () => {
+  const vm = require('node:vm');
+  const source = tutorial.slice(tutorial.indexOf('  function displayStep() {'), tutorial.indexOf('  function setExampleFeedback('));
+  const question = { target:'#dongtian-overlay .dt-options', requiresDongtianComplete:true };
+  let finishVisible = false;
+  const ctx = vm.createContext({
+    steps:[question], index:0, dongtianDemoCompleted:false,
+    routeForStep:() => null,
+    target:() => finishVisible ? {id:'dt-next'} : null,
+    visible:() => finishVisible
+  });
+  vm.runInContext(source, ctx);
+  assert.equal(vm.runInContext('displayStep().target', ctx), '#dongtian-overlay .dt-options');
+  finishVisible = true;
+  assert.equal(vm.runInContext('displayStep().target', ctx), '#dongtian-overlay #dt-next');
+  assert.match(vm.runInContext('displayStep().body', ctx), /完成洞天/);
+  assert.match(tutorial, /newbie:dongtian-demo-question-answered/);
+  assert.match(tutorial, /renderCardOnly\(\);\s*updateSpotlight\(\);\s*}, 30\)/);
+  ctx.dongtianDemoCompleted = true;
+  assert.equal(vm.runInContext('displayStep().target', ctx), '#dongtian-overlay .dt-options');
+});
