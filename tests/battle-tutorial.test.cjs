@@ -34,12 +34,6 @@ test('second tutorial duel is Gu Changfeng and teaches the real battle timing ru
   assert.match(tutorial, /assets\/story\/characters\/battle-rival\.png/);
   assert.match(tutorial, /第一位玩家提交答案後，才會啟動另一方的 25 秒應答窗/);
   assert.match(tutorial, /通常由較早答對者出手/);
-
-test('second tutorial duel is Gu Changfeng and teaches the real battle timing rules', () => {
-  assert.match(tutorial, /下一場 · 顧長風/);
-  assert.match(tutorial, /assets\/story\/characters\/battle-rival\.png/);
-  assert.match(tutorial, /第一位玩家提交答案後，才會啟動另一方的 25 秒應答窗/);
-  assert.match(tutorial, /通常由較早答對者出手/);
   assert.match(tutorial, /QUESTIONS\.length/);
   assert.match(tutorial, /答錯：本回合你沒有造成傷害，顧長風反擊/);
 });
@@ -78,4 +72,3 @@ test('completed battle tutorial can be replayed without changing its completion 
   assert.match(tutorial, /completed:true/);
   assert.match(tutorial, /xiuxian:battle-tutorial-completed/);
 });
-
