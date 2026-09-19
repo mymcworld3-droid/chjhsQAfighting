@@ -205,7 +205,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
         return navRoute(
           'page-home',
           '仙府',
-          '[data-target="page-home"]',
+          '#bottom-nav #nav-grid > button[data-target="page-home"]',
           '問道試煉的入口在仙府。請先看底部導覽，找到並點擊「仙府」。'
         );
       }
@@ -221,7 +221,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       return navRoute(
         'page-settings',
         '洞府',
-        '[data-target="page-settings"]',
+        '#bottom-nav #nav-grid > button[data-target="page-settings"]',
         '範圍、難度與個人設定都在「洞府」。請看底部導覽，找到並點擊「洞府」。'
       );
     }
@@ -230,12 +230,12 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       return navRoute(
         'page-home',
         '仙府',
-        '[data-target="page-home"]',
+        '#bottom-nav #nav-grid > button[data-target="page-home"]',
         '這個功能位在仙府。請看底部導覽，找到並點擊「仙府」。'
       );
     }
 
-    const genericTarget = `[data-target="${step.page}"]`;
+    const genericTarget = `#bottom-nav #nav-grid > button[data-target="${step.page}"]`;
     if (target(genericTarget)) {
       return navRoute(
         step.page,
@@ -454,10 +454,39 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   }
 
   function updateSpotlight(){
-    const layer=document.getElementById('newbie-tutorial-layer'); const spot=layer?.querySelector('.newbie-tutorial-spotlight'); const dim=layer?.querySelector('.newbie-tutorial-dim');
-    if(!layer||!spot||!dim||!active) return; const el=target(displayStep().target);
-    if(!el||!visible(el)){ spot.style.display='none'; dim.style.display='block'; return; }
-    const r=el.getBoundingClientRect(), p=8; spot.style.display='block'; dim.style.display='none'; spot.style.left=`${Math.max(6,r.left-p)}px`; spot.style.top=`${Math.max(6,r.top-p)}px`; spot.style.width=`${Math.min(innerWidth-12,r.width+p*2)}px`; spot.style.height=`${Math.min(innerHeight-12,r.height+p*2)}px`;
+    const layer = document.getElementById('newbie-tutorial-layer');
+    const spot = layer?.querySelector('.newbie-tutorial-spotlight');
+    const dim = layer?.querySelector('.newbie-tutorial-dim');
+    if (!layer || !spot || !dim || !active) return;
+
+    const step = displayStep();
+    // 導覽步驟只圈 #bottom-nav 內真正能點擊的按鈕，不能圈到同 data-target 的其他元件。
+    const el = target(step.target);
+    if (!el || !visible(el)) {
+      spot.style.display = 'none';
+      spot.dataset.navigation = 'false';
+      dim.style.display = 'block';
+      return;
+    }
+    const r = el.getBoundingClientRect();
+    const padding = 5;
+    const left = Math.max(3, r.left - padding);
+    const top = Math.max(3, r.top - padding);
+    const right = Math.min(innerWidth - 3, r.right + padding);
+    const bottom = Math.min(innerHeight - 3, r.bottom + padding);
+    if (right <= left || bottom <= top) {
+      spot.style.display = 'none';
+      dim.style.display = 'block';
+      return;
+    }
+
+    spot.dataset.navigation = String(!!step.routeGate && !!el.closest('#bottom-nav'));
+    spot.style.left = `${left}px`;
+    spot.style.top = `${top}px`;
+    spot.style.width = `${right-left}px`;
+    spot.style.height = `${bottom-top}px`;
+    spot.style.display = 'block';
+    dim.style.display = 'none';
   }
 
   function nextBlocked(step) {
@@ -527,7 +556,15 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     let layer=document.getElementById('newbie-tutorial-layer');
     if(!layer){ layer=document.createElement('div'); layer.id='newbie-tutorial-layer'; layer.innerHTML='<div class="newbie-tutorial-dim"></div><div class="newbie-tutorial-spotlight"></div><section class="newbie-tutorial-card"></section>'; document.body.appendChild(layer); }
     renderCardOnly();
-    setTimeout(()=>{ target(displayStep().target)?.scrollIntoView?.({behavior:'smooth',block:'center'}); setTimeout(updateSpotlight,180); },120);
+    updateSpotlight();
+    setTimeout(() => {
+      const highlighted = target(displayStep().target);
+      // 固定底部的仙府／洞府按鈕不可 scrollIntoView：它們本來就在視窗內。
+      if (highlighted && !highlighted.closest('#bottom-nav')) {
+        highlighted.scrollIntoView?.({behavior:'smooth',block:'center'});
+      }
+      setTimeout(updateSpotlight, 180);
+    }, 120);
   }
 
   async function persistFinished(skipped){

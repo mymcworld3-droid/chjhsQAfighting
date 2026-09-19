@@ -90,3 +90,16 @@ test('mortal newbie tutorial explains real Dongtian rewards while the sample rem
   assert.match(tutorial, /私人教學範例完全不發正式獎勵、不掉材料，也不寫入歷史紀錄/);
   assert.match(tutorial, /教學範例已刪除，而且從頭到尾都沒有公開/);
 });
+
+
+test('the navigation gate highlights the actual bottom-bar buttons and leaves them clickable', () => {
+  const layout = readFileSync(join(__dirname, '../public/cultivation/newbie-tutorial-layout-fix.js'), 'utf8');
+  assert.match(tutorial, /#bottom-nav #nav-grid > button\[data-target="page-home"\]/);
+  assert.match(tutorial, /#bottom-nav #nav-grid > button\[data-target="page-settings"\]/);
+  assert.match(tutorial, /const genericTarget = `#bottom-nav #nav-grid > button/);
+  assert.match(tutorial, /spot\.dataset\.navigation = String\(!!step\.routeGate && !!el\.closest\('#bottom-nav'\)\)/);
+  assert.match(tutorial, /if \(highlighted && !highlighted\.closest\('#bottom-nav'\)\)/);
+  assert.match(tutorial, /navigate\(route\.destination\)/);
+  assert.match(layout, /spot\.dataset\.navigation === 'true'/);
+  assert.match(layout, /candidate\(centeredLeft, target\.top - height - GAP, width, height, 'above', 0\)/);
+});

@@ -104,7 +104,10 @@
       entry.score = entry.overlap * 1000 + entry.preference;
     });
     candidates.sort((a, b) => a.score - b.score || a.preference - b.preference);
-    const best = candidates[0];
+    // 底部導覽的按鈕必須完全露出：教學卡固定放在它上方，不用一般的側邊候選位置。
+    const best = spot.dataset.navigation === 'true'
+      ? candidate(centeredLeft, target.top - height - GAP, width, height, 'above', 0)
+      : candidates[0];
 
     const key = [Math.round(best.left), Math.round(best.top), Math.round(width), Math.round(height), best.name].join(':');
     if (key === lastKey) return;
