@@ -371,3 +371,12 @@ test('chapter replay actually hands off every tutorial then resumes without modi
     }
   }
 });
+
+
+test('unavailable chapter tutorial gives a visible retry instead of silently looping', () => {
+  assert.match(engine, /tutorialLaunchError = '教學暫時無法開啟/);
+  assert.match(engine, /tutorialLaunchError = '教學模組尚未載入/);
+  assert.match(engine, /warning\.setAttribute\('role', 'alert'\)/);
+  assert.match(engine, /next\.textContent = '重新啟動教學'/);
+  assert.match(engine, /error \|\| 'launcher returned false'/);
+});

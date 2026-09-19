@@ -607,7 +607,6 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
 
   function start(mode = 'question', options = {}) {
     if (active) return false;
-    if (options.story && mode !== 'dongtian') return false;
     ensureStyle();
     bindDemoGuards();
     bindNavigationGuards();

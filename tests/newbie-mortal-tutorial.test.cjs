@@ -131,3 +131,26 @@ test('standalone tutorial buttons replay their entire chapters, not detached tut
   assert.match(tutorial, /window\.startStoryQuestionTutorial = \(options = \{\}\)/);
   assert.match(tutorial, /window\.startStoryDongtianTutorial = \(options = \{\}\)/);
 });
+
+
+test('prologue can launch the question lesson from its story checkpoint', () => {
+  const vm = require('node:vm');
+  const src = tutorial.slice(tutorial.indexOf("  function start(mode = 'question', options = {}) {"), tutorial.indexOf('  function addReplayButton()'));
+  let renders = 0;
+  const ctx = vm.createContext({
+    active:false, resizeHandler:null, index:99,
+    ensureStyle(){}, bindDemoGuards(){}, bindNavigationGuards(){}, bindDongtianTutorialEvents(){},
+    userData:()=>({ newbieTutorialV1:{completed:true} }),
+    window:{ deleteNewbieDongtianDemo(){}, addEventListener(){} },
+    questionSteps:[{title:'問道'}], dongtianSteps:[{title:'洞天'}],
+    FIELD:'newbieTutorialV1', DONGTIAN_FIELD:'storyDongtianTutorialV1',
+    render(){renders++;}, updateSpotlight(){}
+  });
+  vm.runInContext(src + "\nstart('question', {story:true, replay:true});", ctx);
+  assert.equal(ctx.active,true);
+  assert.equal(ctx.tutorialMode,'question');
+  assert.equal(ctx.startedByStory,true);
+  assert.equal(ctx.replayOnly,true);
+  assert.equal(ctx.index,0);
+  assert.equal(renders,1);
+});

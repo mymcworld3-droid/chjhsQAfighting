@@ -29,6 +29,7 @@ import {
   let replayMode = false;
   let storyTutorialPaused = false;
   let pendingStoryTutorial = '';
+  let tutorialLaunchError = '';
   let snoozeUntil = 0;
   let autoPermits = 1;
   let lastScore = -1;
@@ -189,6 +190,7 @@ import {
       #${LAYER_ID} .story-gender-option span{display:block;padding:0 10px 13px;color:#887d68;font-size:9px}
       #${ARCHIVE_ID}{position:fixed;inset:0;z-index:12950;display:grid;place-items:center;padding:18px;background:rgba(0,0,0,.82);backdrop-filter:blur(10px)}
       #${ARCHIVE_ID} .story-archive-card{width:min(100%,760px);max-height:86dvh;overflow:auto;padding:22px;border:1px solid rgba(216,177,93,.3);border-radius:24px;background:linear-gradient(145deg,#171713,#070807);color:#ddcfaf;box-shadow:0 30px 90px rgba(0,0,0,.65)}
+      #${LAYER_ID} .story-tutorial-error{margin:9px 0;color:#ffe3a3;background:rgba(123,51,21,.72);padding:9px 12px;border:1px solid rgba(245,173,87,.65);border-radius:9px;font-size:12px;line-height:1.65}
       #${ARCHIVE_ID} .story-archive-head{display:flex;align-items:start;justify-content:space-between;gap:12px}.story-archive-head h3{margin:0;color:#f0dfb9;font-size:21px}.story-archive-head p{margin:4px 0 0;color:#857b68;font-size:9px}.story-archive-close{width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.08);background:#0b0b0a;color:#a79b82}
       #${ARCHIVE_ID} .story-archive-list{display:grid;gap:8px;margin-top:16px}.story-archive-item{width:100%;display:grid;grid-template-columns:62px minmax(0,1fr) auto;align-items:center;gap:10px;padding:11px;border-radius:14px;border:1px solid rgba(216,177,93,.12);background:rgba(255,255,255,.018);text-align:left}.story-archive-item:not(:disabled):hover{border-color:rgba(216,177,93,.36);background:rgba(216,177,93,.045)}.story-archive-item:disabled{opacity:.42}.story-archive-item em{color:#9d8450;font-size:8px;font-style:normal;font-weight:900}.story-archive-item b{display:block;color:#e3d7bc;font-size:10px}.story-archive-item small{display:block;margin-top:3px;color:#777062;font-size:8px}.story-archive-item span{color:#8f846e;font-size:8px}
       .story-archive-launcher{margin:7px 0 0;min-height:30px;padding:0 10px;border-radius:10px;border:1px solid rgba(216,177,93,.2);background:rgba(216,177,93,.045);color:#c8ac69;font-size:8px;font-weight:900}
@@ -264,6 +266,16 @@ import {
         <div class="story-line-progress"><i style="width:${percent}%"></i></div>
       </section>`;
 
+    if (tutorialLaunchError) {
+      const warning = document.createElement('p');
+      warning.className = 'story-tutorial-error';
+      warning.setAttribute('role', 'alert');
+      warning.textContent = tutorialLaunchError;
+      el.querySelector('.story-dialogue')?.insertBefore(warning, el.querySelector('.story-actions'));
+      const next = el.querySelector('.story-next');
+      if (next) next.textContent = '重新啟動教學';
+    }
+
     el.querySelector('.story-later')?.addEventListener('click', deferChapter);
     el.querySelector('.story-next')?.addEventListener('click', nextLine);
     el.onclick = (event) => {
@@ -285,7 +297,8 @@ import {
 
   function restoreStoryAfterFailedTutorial(kind, error) {
     if (!storyTutorialPaused || pendingStoryTutorial !== kind) return;
-    if (error) console.warn('[Story] tutorial could not start:', kind, error);
+    console.warn('[Story] tutorial could not start:', kind, error || 'launcher returned false');
+    tutorialLaunchError = '教學暫時無法開啟。請按「重新啟動教學」重試；若仍無法進入，可按「稍後再看」並重新整理遊戲。';
     storyTutorialPaused = false;
     pendingStoryTutorial = '';
     active = true;
@@ -302,8 +315,11 @@ import {
     }[kind];
     if (typeof launch !== 'function') {
       console.warn('[Story] tutorial is not available yet:', kind);
+      tutorialLaunchError = '教學模組尚未載入。請按「重新啟動教學」重試；若仍無法進入，可按「稍後再看」並重新整理遊戲。';
+      renderLine();
       return true;
     }
+    tutorialLaunchError = '';
     const adminPreview = replayMode && canPreviewAllStory() && score() < currentChapter.minScore;
     const options = { story: true, replay: replayMode, adminPreview };
     storyTutorialPaused = true;
@@ -325,6 +341,7 @@ import {
     if (!storyTutorialPaused || !kind || pendingStoryTutorial !== kind || !currentChapter) return;
     storyTutorialPaused = false;
     pendingStoryTutorial = '';
+    tutorialLaunchError = '';
     if (event.detail?.deferred && !replayMode) {
       // 第三章演武選擇「稍後」時不算通關，重進第三章再繼續。
       active = false;
@@ -353,6 +370,7 @@ import {
       handoffStoryTutorial(kind);
       return;
     }
+    tutorialLaunchError = '';
     lineIndex += 1;
     renderLine({ bounce: true });
   }
@@ -369,6 +387,7 @@ import {
     currentChapter = null;
     lineIndex = 0;
     replayMode = false;
+    tutorialLaunchError = '';
     document.getElementById(LAYER_ID)?.remove();
     snoozeUntil = Date.now() + 1200;
     if (!wasReplay) window.dispatchEvent(new CustomEvent('xiuxian:story-chapter-completed', { detail: { id: finished.id } }));
@@ -424,6 +443,7 @@ import {
     document.getElementById(ARCHIVE_ID)?.remove();
     prepareStoryScene(chapter);
     currentChapter = chapter;
+    tutorialLaunchError = '';
     lineIndex = 0;
     replayMode = options.replay === true;
     active = true;
