@@ -172,3 +172,28 @@ test('training-related story chapters open the correct training subtab behind th
   assert.match(engine, /#page-training \[data-training-tab="/);
   assert.match(engine, /tab\.click\(\)/);
 });
+
+
+test('gender choice displays both male and female full character portraits', () => {
+  assert.match(engine, /class="story-gender-option" data-story-gender="male"/);
+  assert.match(engine, /playerPortraitPath\('male','neutral'\)/);
+  assert.match(engine, /alt="男修立繪"/);
+  assert.match(engine, /class="story-gender-option" data-story-gender="female"/);
+  assert.match(engine, /playerPortraitPath\('female','neutral'\)/);
+  assert.match(engine, /alt="女修立繪"/);
+  assert.match(engine, /story-gender-option img/);
+});
+
+test('all story portraits preload before gender choice or chapter playback can start', () => {
+  assert.match(engine, /const STORY_IMAGE_ASSETS = Object\.freeze/);
+  assert.match(engine, /\['male', 'female'\]\.flatMap/);
+  assert.match(engine, /\['neutral', 'confused', 'happy', 'determined'\]/);
+  assert.match(engine, /Object\.values\(STORY_CHARACTERS\)/);
+  assert.match(engine, /function preloadStoryImages\(\)/);
+  assert.match(engine, /Promise\.all\(STORY_IMAGE_ASSETS\.map\(preloadImageAsset\)\)/);
+  assert.match(engine, /link\.rel = 'preload'/);
+  assert.match(engine, /link\.as = 'image'/);
+  assert.match(engine, /if \(!storyImagesReady\)/);
+  assert.match(engine, /window\.__xiuxianStoryImagesReady = true/);
+  assert.match(engine, /xiuxian:story-images-ready/);
+});

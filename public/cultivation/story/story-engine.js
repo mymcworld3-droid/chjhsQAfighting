@@ -31,6 +31,15 @@ import {
   let autoPermits = 1;
   let lastScore = -1;
   let busyPersist = false;
+  let storyImagesReady = false;
+  let storyImagesPromise = null;
+
+  const STORY_IMAGE_ASSETS = Object.freeze([
+    ...Object.values(STORY_CHARACTERS).map((character) => character?.image).filter(Boolean),
+    ...['male', 'female'].flatMap((g) =>
+      ['neutral', 'confused', 'happy', 'determined'].map((expression) => playerPortraitPath(g, expression))
+    )
+  ].filter((value, index, list) => list.indexOf(value) === index));
 
   function data() { return window.getCurrentUserData?.() || null; }
   function user() {
@@ -54,6 +63,46 @@ import {
     return String(value ?? '')
       .replaceAll('{{playerName}}', playerName())
       .replaceAll('{{junior}}', juniorTitle());
+  }
+
+  function preloadImageAsset(src) {
+    return new Promise((resolve) => {
+      const image = new Image();
+      image.decoding = 'async';
+      image.onload = () => resolve({ src, ok: true });
+      image.onerror = () => resolve({ src, ok: false });
+      image.src = src;
+      if (image.complete && image.naturalWidth > 0) resolve({ src, ok: true });
+    });
+  }
+
+  function addStoryPreloadHints() {
+    STORY_IMAGE_ASSETS.forEach((src) => {
+      if (document.head.querySelector(`link[rel="preload"][as="image"][href="${src}"]`)) return;
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = src;
+      link.fetchPriority = 'high';
+      document.head.appendChild(link);
+    });
+  }
+
+  function preloadStoryImages() {
+    if (storyImagesPromise) return storyImagesPromise;
+    addStoryPreloadHints();
+    storyImagesPromise = Promise.all(STORY_IMAGE_ASSETS.map(preloadImageAsset)).then((results) => {
+      const failed = results.filter((item) => !item.ok).map((item) => item.src);
+      storyImagesReady = true;
+      window.__xiuxianStoryImagesReady = true;
+      window.__xiuxianStoryImagePreloadFailures = failed;
+      if (failed.length) console.warn('[Story] some portraits could not be preloaded:', failed);
+      window.dispatchEvent(new CustomEvent('xiuxian:story-images-ready', {
+        detail: { total: STORY_IMAGE_ASSETS.length, failed: failed.slice() }
+      }));
+      return results;
+    });
+    return storyImagesPromise;
   }
 
   async function persist(patch = {}) {
@@ -118,16 +167,21 @@ import {
       #${LAYER_ID} .story-next{border:1px solid rgba(216,177,93,.55);background:linear-gradient(135deg,#8f6724,#51360e);color:#fff0c6}
       #${LAYER_ID} .story-line-progress{height:3px;margin-top:11px;border-radius:999px;background:rgba(255,255,255,.055);overflow:hidden}
       #${LAYER_ID} .story-line-progress i{display:block;height:100%;background:linear-gradient(90deg,#806026,#d7b65e);transition:width .2s ease}
-      #${LAYER_ID} .story-gender{position:absolute;z-index:8;inset:0;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 50% 30%,rgba(101,78,38,.12),transparent 38%),rgba(3,4,3,.96)}
-      #${LAYER_ID} .story-gender-card{width:min(100%,650px);padding:25px;border:1px solid rgba(216,177,93,.32);border-radius:25px;background:linear-gradient(145deg,#181813,#070807);text-align:center;box-shadow:0 32px 90px rgba(0,0,0,.7)}
+      #${LAYER_ID} .story-gender{position:absolute;z-index:8;inset:0;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 50% 30%,rgba(101,78,38,.12),transparent 38%),rgba(3,4,3,.88);backdrop-filter:blur(3px)}
+      #${LAYER_ID} .story-gender-card{width:min(100%,940px);padding:24px;border:1px solid rgba(216,177,93,.32);border-radius:25px;background:linear-gradient(145deg,rgba(24,24,19,.94),rgba(7,8,7,.96));text-align:center;box-shadow:0 32px 90px rgba(0,0,0,.7)}
       #${LAYER_ID} .story-gender-card small{color:#9b824d;font-size:8px;font-weight:900;letter-spacing:.2em}.story-gender-card h2{margin:7px 0;color:#f0e3c4;font-size:24px}.story-gender-card p{color:#9d9482;font-size:11px;line-height:1.7}
-      #${LAYER_ID} .story-gender-options{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:18px}.story-gender-options button{min-height:54px;border-radius:15px;border:1px solid rgba(216,177,93,.25);background:rgba(216,177,93,.055);color:#ead8ad;font-size:12px;font-weight:900}.story-gender-options button:hover{border-color:#cba452;background:rgba(216,177,93,.11)}
+      #${LAYER_ID} .story-gender-options{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
+      #${LAYER_ID} .story-gender-option{position:relative;min-height:390px;overflow:hidden;padding:0;border-radius:20px;border:1px solid rgba(216,177,93,.25);background:radial-gradient(circle at 50% 22%,rgba(216,177,93,.09),transparent 43%),rgba(216,177,93,.035);color:#ead8ad;cursor:pointer}
+      #${LAYER_ID} .story-gender-option:hover{border-color:#cba452;background:radial-gradient(circle at 50% 22%,rgba(216,177,93,.15),transparent 45%),rgba(216,177,93,.07);transform:translateY(-2px)}
+      #${LAYER_ID} .story-gender-option img{display:block;width:100%;height:325px;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 12px 24px rgba(0,0,0,.42));pointer-events:none}
+      #${LAYER_ID} .story-gender-option strong{display:block;padding:12px 10px 3px;color:#f0dbab;font-size:13px;letter-spacing:.06em}
+      #${LAYER_ID} .story-gender-option span{display:block;padding:0 10px 13px;color:#887d68;font-size:9px}
       #${ARCHIVE_ID}{position:fixed;inset:0;z-index:12950;display:grid;place-items:center;padding:18px;background:rgba(0,0,0,.82);backdrop-filter:blur(10px)}
       #${ARCHIVE_ID} .story-archive-card{width:min(100%,760px);max-height:86dvh;overflow:auto;padding:22px;border:1px solid rgba(216,177,93,.3);border-radius:24px;background:linear-gradient(145deg,#171713,#070807);color:#ddcfaf;box-shadow:0 30px 90px rgba(0,0,0,.65)}
       #${ARCHIVE_ID} .story-archive-head{display:flex;align-items:start;justify-content:space-between;gap:12px}.story-archive-head h3{margin:0;color:#f0dfb9;font-size:21px}.story-archive-head p{margin:4px 0 0;color:#857b68;font-size:9px}.story-archive-close{width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.08);background:#0b0b0a;color:#a79b82}
       #${ARCHIVE_ID} .story-archive-list{display:grid;gap:8px;margin-top:16px}.story-archive-item{width:100%;display:grid;grid-template-columns:62px minmax(0,1fr) auto;align-items:center;gap:10px;padding:11px;border-radius:14px;border:1px solid rgba(216,177,93,.12);background:rgba(255,255,255,.018);text-align:left}.story-archive-item:not(:disabled):hover{border-color:rgba(216,177,93,.36);background:rgba(216,177,93,.045)}.story-archive-item:disabled{opacity:.42}.story-archive-item em{color:#9d8450;font-size:8px;font-style:normal;font-weight:900}.story-archive-item b{display:block;color:#e3d7bc;font-size:10px}.story-archive-item small{display:block;margin-top:3px;color:#777062;font-size:8px}.story-archive-item span{color:#8f846e;font-size:8px}
       .story-archive-launcher{margin:7px 0 0;min-height:30px;padding:0 10px;border-radius:10px;border:1px solid rgba(216,177,93,.2);background:rgba(216,177,93,.045);color:#c8ac69;font-size:8px;font-weight:900}
-      @media(max-width:680px){#${LAYER_ID} .story-portrait{height:70dvh;width:78vw;opacity:.62}#${LAYER_ID} .story-portrait.left{left:-22vw}#${LAYER_ID} .story-portrait.right{right:-22vw}#${LAYER_ID} .story-dialogue{bottom:9px;min-height:190px;padding:17px}#${LAYER_ID} .story-text{font-size:13px}.story-gender-options{grid-template-columns:1fr}#${ARCHIVE_ID} .story-archive-item{grid-template-columns:48px minmax(0,1fr)}#${ARCHIVE_ID} .story-archive-item>span{grid-column:2}}
+      @media(max-width:680px){#${LAYER_ID} .story-portrait{height:70dvh;width:78vw;opacity:.62}#${LAYER_ID} .story-portrait.left{left:-22vw}#${LAYER_ID} .story-portrait.right{right:-22vw}#${LAYER_ID} .story-dialogue{bottom:9px;min-height:190px;padding:17px}#${LAYER_ID} .story-text{font-size:13px}#${LAYER_ID} .story-gender{padding:10px}#${LAYER_ID} .story-gender-card{padding:15px}#${LAYER_ID} .story-gender-options{grid-template-columns:1fr 1fr;gap:8px}#${LAYER_ID} .story-gender-option{min-height:300px}#${LAYER_ID} .story-gender-option img{height:245px}#${ARCHIVE_ID} .story-archive-item{grid-template-columns:48px minmax(0,1fr)}#${ARCHIVE_ID} .story-archive-item>span{grid-column:2}}
       @media(prefers-reduced-motion:reduce){#${LAYER_ID} *{transition:none!important;animation:none!important}}
     `;
     document.head.appendChild(style);
@@ -276,6 +330,10 @@ import {
 
   function startChapter(chapter, options = {}) {
     if (!chapter || active) return false;
+    if (!storyImagesReady) {
+      preloadStoryImages().then(() => startChapter(chapter, options));
+      return true;
+    }
     document.getElementById(ARCHIVE_ID)?.remove();
     prepareStoryScene(chapter);
     currentChapter = chapter;
@@ -299,7 +357,7 @@ import {
     if (active || document.getElementById(LAYER_ID)) return;
     active = true;
     const el = layer();
-    el.innerHTML = `<div class="story-gender"><section class="story-gender-card"><small>主線劇情 · PLAYER PORTRAIT</small><h2>選擇你的劇情立繪</h2><p>這只決定主線對話中顯示的玩家角色圖片與「師弟／師妹」稱呼，不影響修為、戰鬥數值或其他帳號資料。</p><div class="story-gender-options"><button type="button" data-story-gender="male">男修 · 師弟</button><button type="button" data-story-gender="female">女修 · 師妹</button></div></section></div>`;
+    el.innerHTML = `<div class="story-gender"><section class="story-gender-card"><small>主線劇情 · PLAYER PORTRAIT</small><h2>選擇你的劇情立繪</h2><p>點選其中一位角色。這只決定主線對話的玩家立繪與「師弟／師妹」稱呼，不影響修為、戰鬥數值或其他帳號資料。</p><div class="story-gender-options"><button type="button" class="story-gender-option" data-story-gender="male"><img src="${playerPortraitPath('male','neutral')}" alt="男修立繪"><strong>男修 · 師弟</strong><span>以男修立繪進行主線</span></button><button type="button" class="story-gender-option" data-story-gender="female"><img src="${playerPortraitPath('female','neutral')}" alt="女修立繪"><strong>女修 · 師妹</strong><span>以女修立繪進行主線</span></button></div></section></div>`;
     el.querySelectorAll('[data-story-gender]').forEach((button) => {
       button.addEventListener('click', async () => {
         const selected = button.dataset.storyGender === 'female' ? 'female' : 'male';
@@ -316,6 +374,10 @@ import {
   }
 
   function maybeAutoStart() {
+    if (!storyImagesReady) {
+      preloadStoryImages().then(() => setTimeout(maybeAutoStart, 0));
+      return;
+    }
     if (active || document.getElementById(ARCHIVE_ID) || Date.now() < snoozeUntil || blocking() || autoPermits <= 0) return;
     if (!data()?.stats || !user()) return;
     if (!gender()) {
@@ -388,6 +450,8 @@ import {
     nextLine();
   }
 
+  window.preloadXiuxianStoryImages = preloadStoryImages;
+  window.getXiuxianStoryImageAssets = () => STORY_IMAGE_ASSETS.slice();
   window.openXiuxianStoryArchive = openArchive;
   window.openXiuxianStoryChapter = (id) => {
     const chapter = storyChapterById(id);
@@ -406,6 +470,8 @@ import {
 
   function boot() {
     ensureStyle();
+    window.__xiuxianStoryImagesReady = false;
+    preloadStoryImages().then(() => setTimeout(maybeAutoStart, 0));
     lastScore = score();
     document.addEventListener('keydown', onKeydown);
     window.addEventListener('xiuxian:stats-updated', handleScoreUpdate);
