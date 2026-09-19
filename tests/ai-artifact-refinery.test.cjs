@@ -9,6 +9,31 @@ function read(rel) {
 }
 
 const api = require('../artifact-generation-api.js');
+
+test('deepest ingredients remain primary regardless of quantity, realm or submitted depth', () => {
+  const payload = {
+    selectedIngredients:[
+      {type:'material', id:'sand', quantity:6, refinementDepth:99},
+      {type:'artifact', id:'part', quantity:1, refinementDepth:99},
+      {type:'artifact', id:'sword', quantity:1, refinementDepth:0}
+    ],
+    allMaterials:[{id:'sand', name:'星砂', realm:'真仙'}],
+    existingArtifacts:[{id:'part', refinementDepth:0}, {id:'sword', name:'青鋒劍', refinementDepth:1}]
+  };
+  const hierarchy = api.ingredientHierarchy(payload);
+  assert.deepEqual(hierarchy.primary.map(x => x.id), ['sword']);
+  assert.deepEqual(hierarchy.supporting.map(x => x.id), ['sand', 'part']);
+  assert.match(api.buildPrompt(payload), /保留其器型、核心意象、主要用途/);
+  assert.deepEqual(api.ingredientHierarchy({...payload, selectedIngredients:payload.selectedIngredients.slice().reverse()}).primary, hierarchy.primary);
+});
+
+test('equal deepest artifacts share primacy and raw ingredients remain peers', () => {
+  const payload = {selectedIngredients:[{type:'artifact', id:'a'}, {type:'artifact', id:'b'}, {id:'m'}],
+    existingArtifacts:[{id:'a', refinementDepth:0}, {id:'b', refinementDepth:0}], allMaterials:[{id:'m'}]};
+  assert.deepEqual(api.ingredientHierarchy(payload).primary.map(x => x.id), ['a', 'b']);
+  assert.equal(api.ingredientHierarchy({...payload, selectedIngredients:[{id:'m'}]}).supporting.length, 0);
+  assert.throws(() => api.ingredientHierarchy({...payload, selectedIngredients:[{id:'unknown'}]}), /未知煉器素材/);
+});
 const aiJobs = read('public/cultivation/refinery-ai-jobs.js');
 const refinery = read('public/cultivation/cultivation-refinery-v2.js');
 const economySource = read('public/cultivation/refinery-economy.js');
