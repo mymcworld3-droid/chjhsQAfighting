@@ -41,6 +41,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     })
   ]);
 
+  let previewOnly = false;
   let active = false;
   let busy = false;
   let stage = 'intro';
@@ -76,6 +77,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   function delay(ms) { return new Promise((resolve) => setTimeout(resolve, ms)); }
 
   async function persist(patch) {
+    if (previewOnly) return;
     const d = data(), u = user();
     if (!d) return;
     const next = { version: VERSION, ...(d[FIELD] || {}), ...patch, updatedAtMs: Date.now() };
@@ -218,14 +220,14 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
 
   // The second duel is gated by this dialogue, never by a timer.
   const SHEN_AFTER_STRIKE = [
-    ['旁白', '劍光散去，你的演武投影已經倒在鬥法臺上。你甚至還沒看清師姐是如何出手的。'],
+    ['旁白', '劍光散去，沈清霜已經收劍。看著瞬間潰散的投影，她難得怔住，低頭看了看自己的劍。'],
     ['沈清霜', '我已經放水了。'],
-    ['player', '……這也算放水？六萬五千真實傷害，我連第一刀都接不住！'],
-    ['沈清霜', '你還能說話。看來現在的你，還不適合和我正式過招。'],
-    ['沈清霜', '是我高估了你的根基。先把基本鬥法練好，再談接我的劍。'],
+    ['沈清霜', '……怎麼就倒了？我分明只留了一絲劍意。'],
+    ['沈清霜', '你還能說話。先別動，讓我看看……沒有傷到神識就好。'],
+    ['沈清霜', '原來築基修士連這一絲也承受不住。是我估量有誤，不是你的錯。'],
     ['沈清霜', '顧長風，你來陪他練基本鬥法。記住，別真的把人打壞。'],
-    ['顧長風', '師姐，你這一刀下去，他還敢跟我打嗎？'],
-    ['player', '只要你別也來一刀六萬五千……我還能再試。'],
+    ['顧長風', '師姐，您說的一絲，對我們來說可能還是太多了。'],
+    ['沈清霜', '嗯。那便不由我示範了。顧長風，按你們能承受的程度來，我在旁邊看著。'],
     ['沈清霜', '別怕。鬥法中的生命只屬於這一場，無論輸贏都不會帶出場外。下一場會重新凝聚完整投影。'],
     ['顧長風', '那就站起來。記住，只要答對就能出手；我們都答對，就各出一招。'],
     ['旁白', '沈清霜收劍退到臺邊。顧長風走上鬥法臺，等你重新凝聚投影。']
@@ -405,6 +407,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     busy = false;
     document.getElementById(LAYER_ID)?.remove();
     window.closeBattleTutorialArena?.();
+    if (previewOnly) return;
     window.dispatchEvent(new CustomEvent('xiuxian:battle-tutorial-completed', {
       detail: { correct: guCorrect, total: QUESTIONS.length, trueDamage: TRUE_DAMAGE }
     }));
@@ -420,17 +423,23 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   }
 
   async function start(options = {}) {
-    if (active || busy || score() < FOUNDATION_SCORE) return false;
+    const adminPreview = options.adminPreview === true && data()?.isAdmin === true;
+    if (options.adminPreview && !adminPreview) return false;
+    if (active || busy || (!adminPreview && score() < FOUNDATION_SCORE)) return false;
     if (!options.replay && marker()?.completed) return false;
     if (!storySeen() && !options.replay) return false;
     try { await window.preloadXiuxianStoryImages?.(); } catch (_) {}
     if (active || busy || !window.openBattleTutorialArena?.()) return false;
+    previewOnly = adminPreview || options.replay === true;
     active = true;
     window.switchToPage?.('page-battle');
     playerHp = 1000; guHp = 2000; guRound = 0; guCorrect = 0; stage = 'intro';
     active = true;
     await persist({ started:true, startedAtMs:marker()?.startedAtMs || Date.now() });
-    renderIntro();
+    if (adminPreview && options.scene === 'shen-story') { playerHp = 0; renderShenResult(); }
+    else if (adminPreview && options.scene === 'gu-intro') { stage = 'gu-intro'; renderGuIntro(); }
+    else if (adminPreview && options.scene === 'gu-result') renderGuResult();
+    else renderIntro();
     return true;
   }
 
