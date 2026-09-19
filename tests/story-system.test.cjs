@@ -311,3 +311,63 @@ test('story-run tutorial replay is read only and returns to the next dialogue', 
   assert.doesNotMatch(golden, /golden-core-access-changed/);
   assert.doesNotMatch(newbie, /function maybeAutoStart\(/);
 });
+
+
+test('chapter replay actually hands off every tutorial then resumes without modifying the completion marker', async () => {
+  const vm = require('node:vm');
+  const lifecycle = engine.slice(engine.indexOf('  function storyTutorialComplete('), engine.indexOf('  async function finishChapter()'));
+  const markers = {
+    question: 'newbieTutorialV1',
+    dongtian: 'storyDongtianTutorialV1',
+    battle: 'battleTutorialV1',
+    'golden-core': 'goldenCoreTutorialV1'
+  };
+  const launchers = {
+    question: 'startStoryQuestionTutorial',
+    dongtian: 'startStoryDongtianTutorial',
+    battle: 'startBattleTutorial',
+    'golden-core': 'startGoldenCoreTutorial'
+  };
+  for (const kind of Object.keys(markers)) {
+    for (const replayMode of [false, true]) {
+      const calls = [];
+      const profile = { [markers[kind]]: { completed: true } };
+      const fakeWindow = {};
+      fakeWindow[launchers[kind]] = (options) => {
+        calls.push({ action: 'tutorial', options });
+        return true;
+      };
+      const context = vm.createContext({
+        data: () => profile,
+        currentChapter: { id: 'test-' + kind, minScore: 0, tutorialKind: kind, tutorialAfterLine: 0, lines: [{}, {}] },
+        lineIndex: 0, replayMode, storyTutorialPaused: false, pendingStoryTutorial: '',
+        active: true, LAYER_ID: 'story-layer',
+        window: fakeWindow,
+        canPreviewAllStory: () => false,
+        score: () => 100,
+        document: { getElementById: () => null },
+        renderLine: () => calls.push({ action: 'render' }),
+        prepareStoryScene: () => calls.push({ action: 'prepare' }),
+        console
+      });
+      vm.runInContext(lifecycle + '\nnextLine();', context);
+      await new Promise((resolve) => setImmediate(resolve));
+      if (!replayMode) {
+        assert.equal(calls.filter((item) => item.action === 'tutorial').length, 0, kind + ' already complete on normal play');
+        assert.equal(context.lineIndex, 1);
+      } else {
+        const callsToTutorial = calls.filter((item) => item.action === 'tutorial');
+        assert.equal(callsToTutorial.length, 1, kind + ' must replay its lesson');
+        assert.equal(callsToTutorial[0].options.replay, true);
+        assert.equal(callsToTutorial[0].options.story, true);
+        assert.equal(context.storyTutorialPaused, true);
+        assert.equal(context.active, false);
+        vm.runInContext("resumeAfterStoryTutorial({detail:{kind:" + JSON.stringify(kind) + "}})", context);
+        assert.equal(context.storyTutorialPaused, false);
+        assert.equal(context.active, true);
+        assert.equal(context.lineIndex, 1, kind + ' resumed after lesson');
+        assert.equal(profile[markers[kind]].completed, true, kind + ' completion marker unchanged');
+      }
+    }
+  }
+});
