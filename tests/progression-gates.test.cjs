@@ -154,6 +154,14 @@ test('combat status remains intentionally limited to attack and HP', () => {
   assert.doesNotMatch(combat, /critDamage:/);
   assert.match(statusPanel, /攻擊力/);
   assert.match(statusPanel, /生命值/);
+  assert.match(statusPanel, /單場鬥法結束後恢復滿值/);
+  assert.doesNotMatch(statusPanel, /\$\{Math\.round\(player\.hp\).*\/ \$\{Math\.round\(player\.maxHp\)/);
+  assert.doesNotMatch(statusPanel, /防禦力/);
+  assert.doesNotMatch(statusPanel, /暴擊傷害/);
+});
+  assert.doesNotMatch(combat, /critDamage:/);
+  assert.match(statusPanel, /攻擊力/);
+  assert.match(statusPanel, /生命值/);
   assert.doesNotMatch(statusPanel, /防禦力/);
   assert.doesNotMatch(statusPanel, /暴擊傷害/);
 });
@@ -244,3 +252,4 @@ test('startup progress section is horizontally centered on the viewport', () => 
   assert.match(legacy, /\.game-startup-copy\{width:100%;max-width:760px;margin-left:auto;margin-right:auto/);
   assert.match(legacy, /\.game-startup-progress-wrap\{width:min\(720px,100%\);margin:clamp\(20px,3\.2vh,34px\) auto 0/);
 });
+
