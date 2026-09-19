@@ -304,7 +304,8 @@ import {
       console.warn('[Story] tutorial is not available yet:', kind);
       return true;
     }
-    const options = { story: true, replay: replayMode };
+    const adminPreview = replayMode && canPreviewAllStory() && score() < currentChapter.minScore;
+    const options = { story: true, replay: replayMode, adminPreview };
     storyTutorialPaused = true;
     pendingStoryTutorial = kind;
     active = false;
@@ -324,6 +325,16 @@ import {
     if (!storyTutorialPaused || !kind || pendingStoryTutorial !== kind || !currentChapter) return;
     storyTutorialPaused = false;
     pendingStoryTutorial = '';
+    if (event.detail?.deferred && !replayMode) {
+      // 第三章演武選擇「稍後」時不算通關，重進第三章再繼續。
+      active = false;
+      currentChapter = null;
+      lineIndex = 0;
+      replayMode = false;
+      autoPermits = 1;
+      snoozeUntil = Date.now() + 5 * 60 * 1000;
+      return;
+    }
     active = true;
     lineIndex = Math.min(lineIndex + 1, currentChapter.lines.length - 1);
     prepareStoryScene(currentChapter);
@@ -429,7 +440,10 @@ import {
     const currentScore = score();
     const ordered = STORY_CHAPTERS.slice().sort((a, b) => a.order - b.order);
     for (const chapter of ordered) {
-      if (currentScore < chapter.minScore || seen[chapter.id]) continue;
+      if (currentScore < chapter.minScore) continue;
+      // 相容舊紀錄：第三章已讀但演武未完成時，要重新從第三章接回教學。
+      if (chapter.id === 'foundation-first-battle' && seen[chapter.id] && !battleTutorialComplete()) return chapter;
+      if (seen[chapter.id]) continue;
       if (chapter.order >= 4 && !battleTutorialComplete()) return null;
       return chapter;
     }
