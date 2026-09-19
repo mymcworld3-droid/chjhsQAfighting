@@ -106,3 +106,14 @@ test('Shen aftermath advances once per click and gates Gu until the last line', 
   assert.equal(context.stage, 'gu-intro');
   assert.equal(el.onclick, null);
 });
+
+test('admin archive unlocks all chapters and tutorial scenes without progression writes', () => {
+  assert.match(storyEngine, /function canPreviewAllStory\(\) \{ return data\(\)\?\.isAdmin === true/);
+  assert.match(storyEngine, /canPreviewAllStory\(\) \|\| currentScore >= chapter.minScore/);
+  assert.match(storyEngine, /data-admin-battle-scene/);
+  assert.match(storyEngine, /if \(!wasReplay\) window.dispatchEvent/);
+  assert.match(tutorial, /options.adminPreview === true && data\(\)\?\.isAdmin === true/);
+  assert.match(tutorial, /if \(options.adminPreview && !adminPreview\) return false/);
+  assert.match(tutorial, /async function persist\(patch\) \{\s*if \(previewOnly\) return/);
+  assert.match(tutorial, /是我估量有誤，不是你的錯/);
+});
