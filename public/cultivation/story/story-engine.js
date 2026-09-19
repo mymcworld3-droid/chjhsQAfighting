@@ -10,7 +10,7 @@ import {
 } from './story-scripts.js';
 
 // 沈清霜主線劇情播放器。
-// - 第一次進入先選男／女玩家立繪。
+// - 第一次進入先選擇性別。
 // - 劇情依修為節點逐章解鎖並保存在 users/{uid}.storyProgressV1。
 // - 同一個修為變化只自動彈一章，避免高境界舊玩家一次被所有章節淹沒。
 // - 其他教學／戰鬥／洞天全螢幕介面存在時不搶畫面。
@@ -368,10 +368,10 @@ import {
     if (active || document.getElementById(LAYER_ID)) return false;
     active = true;
     const el = layer();
-    el.innerHTML = `<div class="story-gender"><section class="story-gender-card"><small>主線劇情 · PLAYER PORTRAIT</small><h2>選擇你的劇情立繪</h2><p>點選其中一位角色。這只決定主線對話的玩家立繪與「師弟／師妹」稱呼，不影響修為、戰鬥數值或其他帳號資料。</p><div class="story-gender-options"><button type="button" class="story-gender-option" data-story-gender="male"><img src="${playerPortraitPath('male','neutral')}" alt="男修立繪"><strong>男修 · 師弟</strong><span>以男修立繪進行主線</span></button><button type="button" class="story-gender-option" data-story-gender="female"><img src="${playerPortraitPath('female','neutral')}" alt="女修立繪"><strong>女修 · 師妹</strong><span>以女修立繪進行主線</span></button></div></section></div>`;
+    el.innerHTML = `<div class="story-gender"><section class="story-gender-card"><small>主線劇情</small><h2>請選擇性別</h2><div class="story-gender-options"><button type="button" class="story-gender-option" data-story-gender="male"><img src="${playerPortraitPath('male','neutral')}" alt="男修"><strong>男修 · 師弟</strong></button><button type="button" class="story-gender-option" data-story-gender="female"><img src="${playerPortraitPath('female','neutral')}" alt="女修"><strong>女修 · 師妹</strong></button></div></section></div>`;
     if (preview) {
       const note = document.createElement('p');
-      note.textContent = '管理員預覽：可點選立繪查看選取效果，不會儲存性別或推進劇情。';
+      note.textContent = '管理員預覽：不會儲存性別或推進劇情。';
       note.setAttribute('aria-live', 'polite');
       const back = document.createElement('button');
       back.type = 'button';
@@ -453,7 +453,7 @@ import {
       const read = !!seen[chapter.id];
       return `<button type="button" class="story-archive-item" data-story-chapter="${escapeHtml(chapter.id)}" ${unlocked ? '' : 'disabled'}><em>${escapeHtml(chapter.realm)}</em><span><b>${escapeHtml(chapter.title)}</b><small>${escapeHtml(chapter.subtitle)}</small></span><span>${!unlocked ? `需 ${chapter.minScore} 修為` : (read ? '已讀 · 重播' : '已解鎖')}</span></button>`;
     }).join('');
-    el.innerHTML = `<section class="story-archive-card"><div class="story-archive-head"><div><h3>主線劇情回顧</h3><p>已解鎖章節可隨時重播；重播不會改動修為與獎勵。</p></div><button type="button" class="story-archive-close">×</button></div><div class="story-archive-list">${canPreviewAllStory() ? '<button type="button" class="story-archive-item" data-admin-gender-preview><em>管理員</em><span><b>性別選擇 · 男修／女修立繪</b><small>自由預覽 · 不修改角色性別</small></span></button>' : ''}${rows}${canPreviewAllStory() ? ['intro','shen-story','gu-intro','gu-result'].map((scene, i) => `<button type="button" class="story-archive-item" data-admin-battle-scene="${scene}"><em>管理員</em><span><b>${['沈清霜切磋','一劍之後 · 師姐震驚','顧長風入場','教學戰後對話'][i]}</b><small>自由預覽 · 不寫入進度</small></span></button>`).join('') : ''}</div></section>`;
+    el.innerHTML = `<section class="story-archive-card"><div class="story-archive-head"><div><h3>主線劇情回顧</h3><p>已解鎖章節可隨時重播；重播不會改動修為與獎勵。</p></div><button type="button" class="story-archive-close">×</button></div><div class="story-archive-list">${canPreviewAllStory() ? '<button type="button" class="story-archive-item" data-admin-gender-preview><em>管理員</em><span><b>性別選擇</b><small>自由預覽 · 不修改角色性別</small></span></button>' : ''}${rows}${canPreviewAllStory() ? ['intro','shen-story','gu-intro','gu-result'].map((scene, i) => `<button type="button" class="story-archive-item" data-admin-battle-scene="${scene}"><em>管理員</em><span><b>${['沈清霜切磋','一劍之後 · 師姐震驚','顧長風入場','教學戰後對話'][i]}</b><small>自由預覽 · 不寫入進度</small></span></button>`).join('') : ''}</div></section>`;
     el.querySelector('[data-admin-gender-preview]')?.addEventListener('click', () => {
       if (!canPreviewAllStory()) return;
       el.remove();
