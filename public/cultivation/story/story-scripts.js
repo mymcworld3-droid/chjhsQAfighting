@@ -50,6 +50,8 @@ export const STORY_CHAPTERS = Object.freeze([
     title: '序章 · 誰把你帶進來的',
     subtitle: '青雲宗收徒日',
     scene: Object.freeze({ page: 'page-home' }),
+    tutorialAfterLine: 20,
+    tutorialKind: 'question',
     lines: Object.freeze([
       c('narrator', '青雲宗山門前，三千多名新弟子排成長龍。有人測出火靈根，有人測出雷靈根，輪到你時，測靈石沉默了很久。'),
       c('elder', '……再測一次。'),
@@ -70,6 +72,11 @@ export const STORY_CHAPTERS = Object.freeze([
       c('shen', '沒有。'),
       c('player', '那妳為什麼選我？', 'confused'),
       c('shen', '其他人都走了。'),
+      c('shen', '走吧。修仙先學會問道，別急著問自己是不是天選之人。'),
+      c('narrator', '她遞來一枚不計修為的入門玉簡。你只需要答一題，但必須看懂題解，也要學會辨認題目本身有沒有問題。'),
+      c('narrator', '你收起玉簡，總算知道了仙府的問道碑該如何使用。'),
+      c('player', '所以，師姐，現在可以教我絕世功法了嗎？', 'happy'),
+      c('shen', '先把剛才那題的解析說給我聽。'),
       c('narrator', '你的修仙之路，就這樣非常有緣分地開始了。')
     ])
   }),
@@ -112,6 +119,7 @@ export const STORY_CHAPTERS = Object.freeze([
     title: '第二章 · 把知識煉成一座山',
     subtitle: '洞天初開',
     scene: Object.freeze({ page: 'page-settings' }),
+    tutorialKind: 'dongtian',
     // 師姐交付私人洞天時，劇情暫停並接入實際操作；完成後從下一句接續。
     tutorialAfterLine: 11,
     lines: Object.freeze([
@@ -149,6 +157,8 @@ export const STORY_CHAPTERS = Object.freeze([
     title: '第三章 · 築基之後，別只會做題',
     subtitle: '第一次真正的鬥法',
     scene: Object.freeze({ page: 'page-battle' }),
+    tutorialKind: 'battle',
+    tutorialAfterLine: 17,
     lines: Object.freeze([
       c('narrator', '踏入築基的那天，宗門演武場第一次向你開放。沈清霜帶你走上鬥法臺，顧長風抱劍站在場邊。'),
       c('shen', '築基之後，鬥法與仙盟正式開放。真正交手時，題目、速度、法寶、生命與判斷都會決定勝負。'),
@@ -167,7 +177,12 @@ export const STORY_CHAPTERS = Object.freeze([
       c('player', '……我現在可以反悔嗎？', 'confused'),
       c('shen', '不可以。'),
       c('narrator', '沈清霜走到鬥法臺另一端，連劍都沒有完全拔出。顧長風則默默往場邊又退了兩步。'),
-      c('shen', '上場。先學會輸，再學怎麼打。')
+      c('shen', '上場。先學會輸，再學怎麼打。'),
+      c('narrator', '演武投影消散後，你扶著鬥法臺站穩。顧長風收起劍，沈清霜的目光卻仍停在你身上。'),
+      c('player', '師姐，這次我總算知道怎麼出手了。', 'determined'),
+      c('shen', '記住：答對才有攻擊，雙方都答對就都能出手。先看清題目，再看清對手。'),
+      c('rival', '下次正式配對，可不會有人在旁邊替你解釋。'),
+      c('player', '……我還是先回仙府多練幾題。', 'confused')
     ])
   }),
 
@@ -269,6 +284,8 @@ export const STORY_CHAPTERS = Object.freeze([
     title: '第七章 · 丹成之日，問道碑醒了',
     subtitle: '第一枚道印',
     scene: Object.freeze({ page: 'page-training', trainingTab: 'core' }),
+    tutorialKind: 'golden-core',
+    tutorialAfterLine: 14,
     lines: Object.freeze([
       c('narrator', '金丹凝成的那一刻，仙府震動了整整三息。問道碑上第一道古紋完全亮起，一枚金色印記從碑中浮出。'),
       c('player', '師姐，這正常嗎？', 'confused'),
@@ -284,6 +301,8 @@ export const STORY_CHAPTERS = Object.freeze([
       c('shen', '看由誰拼，以及他想把什麼寫進去。'),
       c('narrator', '沈清霜伸手碰了一下金色道印。道印沒有排斥她，卻在接近你時發出更明亮的光。'),
       c('shen', '它認你。'),
+      c('shen', '你的本命金丹也被喚醒了。先去修煉頁看看丹性、品級和調御之法，再來看這枚道印。'),
+      c('narrator', '你從修煉頁返回時，丹田中那枚金丹仍靜靜運轉；金色道印的光芒卻像在等你回答一個更難的問題。'),
       c('player', '因為我是天選之人？', 'happy'),
       c('shen', '也可能因為你第一天就把靈石拿反，它覺得你需要幫助。'),
       c('player', '這件事可以不要再提嗎？', 'confused'),
