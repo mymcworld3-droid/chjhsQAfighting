@@ -45,9 +45,9 @@ test('account deletion cleans canonical and player-owned Firestore data before F
     assert.match(accountDelete, new RegExp(`'${collectionName}'`));
   }
 
-  assert.match(accountDelete, /where\('ownerUid', '==', uid\)/);
-  assert.match(accountDelete, /where\('reporterUid', '==', uid\)/);
-  assert.match(accountDelete, /where\('uid', '==', uid\)/);
+  assert.match(accountDelete, /collectQueryRefs\(database, 'dongtians', 'ownerUid', uid, warnings\)/);
+  assert.match(accountDelete, /collectQueryRefs\(database, 'dongtianReports', 'reporterUid', uid, warnings\)/);
+  assert.match(accountDelete, /collectQueryRefs\(database, 'global_chat', 'uid', uid, warnings\)/);
   assert.match(accountDelete, /where\(field, '==', value\)/);
   assert.match(accountDelete, /writeBatch\(database\)/);
 
