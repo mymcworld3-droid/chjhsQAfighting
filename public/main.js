@@ -1,8 +1,12 @@
 // 核心登入模組必須優先且獨立載入。
 // Google 登入本身不被附加模組阻斷；登入後的遊戲則必須等所有修仙模組載入成功才開始。
 import './main-legacy.js';
-import './account-delete.js';
 import './cultivation/dongtian-entry.js';
+
+// 帳號刪除是登入核心旁的獨立增強；載入失敗也不能阻斷 Google 登入。
+void import('./account-delete.js').catch((error) => {
+  console.error('[Account Delete] failed to load account deletion controls', error);
+});
 
 const XIUXIAN_FEATURE_MODULES = [
   './cultivation/cultivation-theme.js',
