@@ -198,7 +198,8 @@ import {
       '#dongtian-overlay',
       '#five-immortal-challenge',
       '#report-modal:not(.hidden)',
-      '#battle-result-overlay'
+      '#battle-result-overlay',
+      '#battle-tutorial-layer'
     ].join(','));
   }
 
@@ -344,13 +345,20 @@ import {
     return true;
   }
 
+  function battleTutorialComplete() {
+    return !!data()?.battleTutorialV1?.completed;
+  }
+
   function nextEligibleChapter() {
     const seen = seenMap();
     const currentScore = score();
-    return STORY_CHAPTERS
-      .slice()
-      .sort((a, b) => a.order - b.order)
-      .find((chapter) => currentScore >= chapter.minScore && !seen[chapter.id]) || null;
+    const ordered = STORY_CHAPTERS.slice().sort((a, b) => a.order - b.order);
+    for (const chapter of ordered) {
+      if (currentScore < chapter.minScore || seen[chapter.id]) continue;
+      if (chapter.order >= 4 && !battleTutorialComplete()) return null;
+      return chapter;
+    }
+    return null;
   }
 
   function openGenderChoice() {
@@ -481,6 +489,11 @@ import {
       setTimeout(maybeAutoStart, 120);
     });
     window.addEventListener('player-name-updated', () => { if (active && currentChapter) renderLine(); });
+    window.addEventListener('xiuxian:battle-tutorial-completed', () => {
+      autoPermits = 1;
+      snoozeUntil = Math.min(snoozeUntil, Date.now() + 650);
+      setTimeout(maybeAutoStart, 900);
+    });
 
     mountArchiveLauncher();
     maybeAutoStart();

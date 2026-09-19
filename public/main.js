@@ -43,6 +43,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/dongfu-settings-collapsible.js',
   './cultivation/dongtian.js',
   './cultivation/story/story-engine.js',
+  './cultivation/battle-tutorial.js',
   './cultivation/newbie-tutorial-v2.js',
   './cultivation/newbie-tutorial-layout-fix.js',
   './cultivation/golden-core-tutorial.js',

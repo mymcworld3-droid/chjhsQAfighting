@@ -197,3 +197,19 @@ test('all story portraits preload before gender choice or chapter playback can s
   assert.match(engine, /window\.__xiuxianStoryImagesReady = true/);
   assert.match(engine, /xiuxian:story-images-ready/);
 });
+
+
+test('Foundation battle story now hands off to the dedicated Shen Qingshuang then Gu Changfeng tutorial', () => {
+  assert.match(scripts, /id: 'foundation-first-battle'[\s\S]*?c\('shen', '我。'\)/);
+  assert.match(scripts, /靈識投影演武，投影敗北不會真的死亡/);
+  assert.match(scripts, /先學會輸，再學怎麼打/);
+  assert.match(engine, /battleTutorialV1/);
+  assert.match(engine, /chapter\.order >= 4 && !battleTutorialComplete\(\)/);
+  assert.match(engine, /xiuxian:battle-tutorial-completed/);
+});
+
+test('other onboarding layers wait while the dedicated battle tutorial is visible', () => {
+  assert.match(engine, /#battle-tutorial-layer/);
+  assert.match(newbie, /#battle-tutorial-layer/);
+  assert.match(golden, /#battle-tutorial-layer/);
+});
