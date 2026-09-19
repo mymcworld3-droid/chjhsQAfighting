@@ -362,14 +362,42 @@ import {
     return null;
   }
 
-  function openGenderChoice() {
-    if (active || document.getElementById(LAYER_ID)) return;
+  function openGenderChoice(options = {}) {
+    const preview = options.preview === true;
+    if (preview && !canPreviewAllStory()) return false;
+    if (active || document.getElementById(LAYER_ID)) return false;
     active = true;
     const el = layer();
     el.innerHTML = `<div class="story-gender"><section class="story-gender-card"><small>主線劇情 · PLAYER PORTRAIT</small><h2>選擇你的劇情立繪</h2><p>點選其中一位角色。這只決定主線對話的玩家立繪與「師弟／師妹」稱呼，不影響修為、戰鬥數值或其他帳號資料。</p><div class="story-gender-options"><button type="button" class="story-gender-option" data-story-gender="male"><img src="${playerPortraitPath('male','neutral')}" alt="男修立繪"><strong>男修 · 師弟</strong><span>以男修立繪進行主線</span></button><button type="button" class="story-gender-option" data-story-gender="female"><img src="${playerPortraitPath('female','neutral')}" alt="女修立繪"><strong>女修 · 師妹</strong><span>以女修立繪進行主線</span></button></div></section></div>`;
+    if (preview) {
+      const note = document.createElement('p');
+      note.textContent = '管理員預覽：可點選立繪查看選取效果，不會儲存性別或推進劇情。';
+      note.setAttribute('aria-live', 'polite');
+      const back = document.createElement('button');
+      back.type = 'button';
+      back.className = 'story-archive-launcher';
+      back.textContent = '返回劇情清單';
+      back.addEventListener('click', () => {
+        active = false;
+        el.remove();
+        openArchive();
+      });
+      el.querySelector('.story-gender-card').append(note, back);
+    }
     el.querySelectorAll('[data-story-gender]').forEach((button) => {
       button.addEventListener('click', async () => {
         const selected = button.dataset.storyGender === 'female' ? 'female' : 'male';
+        if (preview) {
+          if (!canPreviewAllStory()) { active = false; el.remove(); return; }
+          el.querySelectorAll('[data-story-gender]').forEach((item) => {
+            const chosen = item === button;
+            item.setAttribute('aria-pressed', String(chosen));
+            item.style.outline = chosen ? '2px solid #d8b15d' : '';
+          });
+          el.querySelector('[aria-live="polite"]').textContent =
+            `預覽選取：${selected === 'female' ? '女修 · 師妹' : '男修 · 師弟'}（未儲存）`;
+          return;
+        }
         await persist({ gender: selected });
         active = false;
         el.remove();
@@ -425,7 +453,12 @@ import {
       const read = !!seen[chapter.id];
       return `<button type="button" class="story-archive-item" data-story-chapter="${escapeHtml(chapter.id)}" ${unlocked ? '' : 'disabled'}><em>${escapeHtml(chapter.realm)}</em><span><b>${escapeHtml(chapter.title)}</b><small>${escapeHtml(chapter.subtitle)}</small></span><span>${!unlocked ? `需 ${chapter.minScore} 修為` : (read ? '已讀 · 重播' : '已解鎖')}</span></button>`;
     }).join('');
-    el.innerHTML = `<section class="story-archive-card"><div class="story-archive-head"><div><h3>主線劇情回顧</h3><p>已解鎖章節可隨時重播；重播不會改動修為與獎勵。</p></div><button type="button" class="story-archive-close">×</button></div><div class="story-archive-list">${rows}${canPreviewAllStory() ? ['intro','shen-story','gu-intro','gu-result'].map((scene, i) => `<button type="button" class="story-archive-item" data-admin-battle-scene="${scene}"><em>管理員</em><span><b>${['沈清霜切磋','一劍之後 · 師姐震驚','顧長風入場','教學戰後對話'][i]}</b><small>自由預覽 · 不寫入進度</small></span></button>`).join('') : ''}</div></section>`;
+    el.innerHTML = `<section class="story-archive-card"><div class="story-archive-head"><div><h3>主線劇情回顧</h3><p>已解鎖章節可隨時重播；重播不會改動修為與獎勵。</p></div><button type="button" class="story-archive-close">×</button></div><div class="story-archive-list">${canPreviewAllStory() ? '<button type="button" class="story-archive-item" data-admin-gender-preview><em>管理員</em><span><b>性別選擇 · 男修／女修立繪</b><small>自由預覽 · 不修改角色性別</small></span></button>' : ''}${rows}${canPreviewAllStory() ? ['intro','shen-story','gu-intro','gu-result'].map((scene, i) => `<button type="button" class="story-archive-item" data-admin-battle-scene="${scene}"><em>管理員</em><span><b>${['沈清霜切磋','一劍之後 · 師姐震驚','顧長風入場','教學戰後對話'][i]}</b><small>自由預覽 · 不寫入進度</small></span></button>`).join('') : ''}</div></section>`;
+    el.querySelector('[data-admin-gender-preview]')?.addEventListener('click', () => {
+      if (!canPreviewAllStory()) return;
+      el.remove();
+      openGenderChoice({ preview:true });
+    });
     el.querySelectorAll('[data-admin-battle-scene]').forEach((button) => button.addEventListener('click', async () => {
       if (!canPreviewAllStory()) return;
       const opened = await window.startBattleTutorial?.({ replay:true, adminPreview:true, scene:button.dataset.adminBattleScene });
