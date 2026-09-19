@@ -216,25 +216,60 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     renderShenResult();
   }
 
+  // The second duel is gated by this dialogue, never by a timer.
+  const SHEN_AFTER_STRIKE = [
+    ['旁白', '劍光散去，你的演武投影已經倒在鬥法臺上。你甚至還沒看清師姐是如何出手的。'],
+    ['沈清霜', '我已經放水了。'],
+    ['player', '……這也算放水？六萬五千真實傷害，我連第一刀都接不住！'],
+    ['沈清霜', '你還能說話。看來現在的你，還不適合和我正式過招。'],
+    ['沈清霜', '是我高估了你的根基。先把基本鬥法練好，再談接我的劍。'],
+    ['沈清霜', '顧長風，你來陪他練基本鬥法。記住，別真的把人打壞。'],
+    ['顧長風', '師姐，你這一刀下去，他還敢跟我打嗎？'],
+    ['player', '只要你別也來一刀六萬五千……我還能再試。'],
+    ['沈清霜', '別怕。鬥法中的生命只屬於這一場，無論輸贏都不會帶出場外。下一場會重新凝聚完整投影。'],
+    ['顧長風', '那就站起來。記住，只要答對就能出手；我們都答對，就各出一招。'],
+    ['旁白', '沈清霜收劍退到臺邊。顧長風走上鬥法臺，等你重新凝聚投影。']
+  ];
+  let shenStoryIndex = 0;
+
   function renderShenResult() {
+    stage = 'shen-story';
+    shenStoryIndex = 0;
+    renderShenStoryLine();
+  }
+
+  function renderShenStoryLine() {
+    const [speaker, text] = SHEN_AFTER_STRIKE[shenStoryIndex];
+    const last = shenStoryIndex === SHEN_AFTER_STRIKE.length - 1;
     const el = shell({
       opponent:'沈清霜',
       opponentImage:'assets/story/characters/shen-qingshuang.png',
       opponentHp:99999,
       opponentMaxHp:99999,
       playerImage:playerPortrait('confused'),
-      badge:'築基鬥法教學 · 第一戰結束',
-      title:'演武投影已被一刀擊潰',
-      body:`<div class="bt-result"><div class="bt-result-mark">敗</div><h3>65,000 真實傷害</h3><p>真實傷害直接穿過一般減傷。這一擊只是師姐的教學演示，不會改動你的正式生命與戰績。</p></div>
-        <div class="bt-dialogue" style="margin-top:12px"><div class="bt-speaker">沈清霜</div><p>我已經放水了。</p></div>
-        <div class="bt-dialogue" style="margin-top:8px"><div class="bt-speaker">${esc(playerName())}</div><p>……這也算放水？</p></div>
-        <div class="bt-dialogue" style="margin-top:8px"><div class="bt-speaker">沈清霜</div><p>你還能說話。看來現在的你，還不適合和我正式過招。</p></div>
-        <div class="bt-dialogue" style="margin-top:8px"><div class="bt-speaker">沈清霜</div><p>顧長風，你來陪他練基本鬥法。記住，別真的把人打壞。</p></div>
-        <div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="gu-intro">顧長風入場</button></div>`
+      badge:'築基鬥法教學 · 戰後劇情',
+      title:'一劍之後 · 65,000 真實傷害',
+      showLater:false,
+      body:`<div class="bt-dialogue" aria-live="polite"><div class="bt-speaker">${esc(speaker === 'player' ? playerName() : speaker)}</div><p>${esc(text)}</p></div>
+        <div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="story-next">${last ? '劇情結束 · 顧長風入場' : '點擊繼續'}</button></div>`
     });
-    el.querySelector('[data-bt-action="gu-intro"]')?.addEventListener('click', () => {
-      stage = 'gu-intro'; playerHp = 1000; guHp = 2000; guRound = 0; guCorrect = 0; renderGuIntro();
-    });
+    // Each render replaces the preceding handler, so a tap advances exactly one line.
+    el.onclick = () => {
+      if (!active || busy || stage !== 'shen-story') return;
+      el.onclick = null;
+      if (!last) {
+        shenStoryIndex += 1;
+        renderShenStoryLine();
+        return;
+      }
+      stage = 'gu-intro';
+      playerHp = 1000; guHp = 2000; guRound = 0; guCorrect = 0;
+      renderGuIntro();
+    };
+    const actor = ['player', '沈清霜'].includes(speaker)
+      ? el.querySelector(`[data-bt-fighter="${speaker === 'player' ? 'me' : 'enemy'}"]`) : null;
+    actor?.classList.add('strike');
+    el.querySelector('[data-bt-action="story-next"]')?.focus({ preventScroll:true });
   }
 
   function renderGuIntro() {
