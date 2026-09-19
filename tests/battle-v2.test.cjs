@@ -53,12 +53,12 @@ test('one correct answer attacks and both wrong answers deal no damage', () => {
   assert.equal(blankRound.guestHp, 1000);
 });
 
-test('server-time speed decides double-correct rounds and near ties are simultaneous', () => {
+test('both correct answers attack regardless of timing', () => {
   const e = loadEngine();
   const fasterGuest = e.settleBattleRound({ roomId: 'speed', round: 2, host: player('h', { correct: true, atMs: 2000 }), guest: player('g', { correct: true, atMs: 1700 }) });
-  assert.deepEqual(Array.from(fasterGuest.attackers), ['guest']);
+  assert.deepEqual(Array.from(fasterGuest.attackers), ['host', 'guest']);
   assert.equal(fasterGuest.hostHp, 800);
-  assert.equal(fasterGuest.guestHp, 1000);
+  assert.equal(fasterGuest.guestHp, 800);
 
   const tie = e.settleBattleRound({ roomId: 'tie', round: 2, host: player('h', { correct: true, atMs: 2000 }), guest: player('g', { correct: true, atMs: 2100 }) });
   assert.deepEqual(Array.from(tie.attackers), ['host', 'guest']);
@@ -136,7 +136,7 @@ test('25 second countdown starts only after the first player answers', () => {
 });
 
 test('answer speed uses Firestore server timestamps rather than client clocks', () => {
-  assert.match(battleSource, /速度判定只採 Firestore serverTimestamp/);
+  assert.match(battleSource, /作答時間採 Firestore serverTimestamp/);
   assert.match(battleSource, /const atMs = timestampMs\(player\.answerAt, 0\)/);
   assert.match(battleSource, /answerClientAt.*僅供除錯/);
 });

@@ -106,11 +106,6 @@ function answerCorrect(player) {
   return player?.answer?.correct === true;
 }
 
-function answerAt(player) {
-  const value = Number(player?.answer?.atMs);
-  return Number.isFinite(value) ? value : Number.MAX_SAFE_INTEGER;
-}
-
 export function decideRoundAttackers(host, guest, tieWindowMs = BATTLE_V2.tieWindowMs) {
   const hostCorrect = answerCorrect(host);
   const guestCorrect = answerCorrect(guest);
@@ -119,9 +114,8 @@ export function decideRoundAttackers(host, guest, tieWindowMs = BATTLE_V2.tieWin
   if (!hostCorrect && guestCorrect) return ['guest'];
   if (!hostCorrect && !guestCorrect) return [];
 
-  const diff = answerAt(host) - answerAt(guest);
-  if (Math.abs(diff) <= tieWindowMs) return ['host', 'guest'];
-  return diff < 0 ? ['host'] : ['guest'];
+  // Every correct answer attacks; apply both hits from the same pre-round state.
+  return ['host', 'guest'];
 }
 
 function attackPower(player) {

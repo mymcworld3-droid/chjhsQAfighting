@@ -33,7 +33,7 @@ test('second tutorial duel is Gu Changfeng and teaches the real battle timing ru
   assert.match(tutorial, /師姐說你現在太弱/);
   assert.match(tutorial, /assets\/story\/characters\/battle-rival\.png/);
   assert.match(tutorial, /第一位玩家提交答案後，才會啟動另一方的 25 秒應答窗/);
-  assert.match(tutorial, /通常由較早答對者出手/);
+  assert.match(tutorial, /雙方都答對就雙方都出手/);
   assert.match(tutorial, /QUESTIONS\.length/);
   assert.match(tutorial, /答錯：本回合你沒有造成傷害，顧長風反擊/);
 });
@@ -71,4 +71,12 @@ test('completed battle tutorial can be replayed without changing its completion 
   assert.match(tutorial, /window\.startBattleTutorial/);
   assert.match(tutorial, /completed:true/);
   assert.match(tutorial, /xiuxian:battle-tutorial-completed/);
+});
+
+test('tutorial uses the real arena and both correct answers deal damage', () => {
+  assert.match(tutorial, /openBattleTutorialArena/);
+  assert.match(tutorial, /getElementById\('bv2-arena'\)/);
+  assert.doesNotMatch(tutorial, /document\.body\.appendChild\(el\)/);
+  assert.match(tutorial, /closeBattleTutorialArena/);
+  assert.match(tutorial, /顧長風也答對/);
 });

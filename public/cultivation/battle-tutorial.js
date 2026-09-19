@@ -19,7 +19,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       q: '鬥法中，你答對題目時最重要的效果是？',
       opts: ['取得出手機會', '立刻回滿生命', '直接結束整場鬥法', '扣除自己的生命'],
       ans: 0,
-      exp: '答對才有攻擊資格；若對手沒有更早答對，你就能取得出手機會。'
+      exp: '答對就能出手；即使對手比你更早答對，你也能攻擊。'
     }),
     Object.freeze({
       q: '如果你答錯，而顧長風答對，這一回合會怎樣？',
@@ -34,10 +34,10 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       exp: '題目原本不倒數；第一位玩家提交答案後，才會啟動另一方的 25 秒應答窗。'
     }),
     Object.freeze({
-      q: '如果雙方都答對，通常由誰取得這一回合的攻擊？',
-      opts: ['較早答對的一方', '較晚答對的一方', '生命較低的一方', '完全隨機'],
+      q: '如果雙方都答對，這一回合誰能攻擊？',
+      opts: ['雙方都能出手', '只有較早答對的一方', '生命較低的一方', '完全隨機'],
       ans: 0,
-      exp: '通常由較早答對者出手；如果兩人幾乎同時答對，正式鬥法也可能形成同時交鋒。'
+      exp: '雙方都答對就雙方都出手，無論誰先作答；傷害同時結算，也可能同時倒下。'
     })
   ]);
 
@@ -93,8 +93,8 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     const style = document.createElement('style');
     style.id = STYLE_ID;
     style.textContent = `
-      #${LAYER_ID}{position:fixed;inset:0;z-index:13100;display:grid;place-items:center;padding:12px;background:rgba(2,4,3,.48);backdrop-filter:blur(2px) saturate(.8);color:#e9dfc8;font-family:var(--xq-serif,'Noto Sans TC',sans-serif)}
-      #${LAYER_ID} .bt-shell{position:relative;width:min(100%,980px);max-height:calc(100dvh - 24px);overflow:auto;border:1px solid rgba(216,177,93,.32);border-radius:24px;background:linear-gradient(145deg,rgba(19,18,14,.95),rgba(5,6,5,.97));box-shadow:0 30px 90px rgba(0,0,0,.66)}
+      #${LAYER_ID}{position:relative;width:100%;color:#e9dfc8}
+      #${LAYER_ID} .bt-shell{width:100%;background:transparent}
       #${LAYER_ID} .bt-head{display:flex;align-items:start;justify-content:space-between;gap:12px;padding:17px 19px;border-bottom:1px solid rgba(216,177,93,.12)}
       #${LAYER_ID} .bt-head small{display:block;color:#9b824d;font-size:8px;font-weight:900;letter-spacing:.18em}#${LAYER_ID} .bt-head h2{margin:4px 0 0;color:#f0e2bd;font-size:19px}
       #${LAYER_ID} .bt-later{border:1px solid rgba(255,255,255,.08);border-radius:10px;background:#0b0c0b;color:#817a6d;padding:8px 11px;font-size:8px;font-weight:900}
@@ -142,14 +142,14 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     if (!el) {
       el = document.createElement('div');
       el.id = LAYER_ID;
-      document.body.appendChild(el);
+      document.getElementById('bv2-arena').appendChild(el);
     }
     return el;
   }
 
   function fighterMarkup({ enemy = false, name, hp, maxHp, image, label }) {
     const pct = Math.max(0, Math.min(100, (Number(hp) || 0) / Math.max(1, Number(maxHp) || 1) * 100));
-    return `<article class="bt-fighter ${enemy ? 'enemy' : 'me'}" data-bt-fighter="${enemy ? 'enemy' : 'me'}">
+    return `<article class="bv2-fighter bt-fighter ${enemy ? 'enemy' : 'me'}" data-bt-fighter="${enemy ? 'enemy' : 'me'}">
       <div class="bt-fighter-head"><div><span>${esc(label)}</span><strong>${esc(name)}</strong></div><b>${Math.max(0,Math.round(hp))}</b></div>
       <img src="${esc(image)}" alt="${esc(name)}">
       <div class="bt-hp"><i style="width:${pct}%"></i></div>
@@ -160,9 +160,9 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     const el = layer();
     el.innerHTML = `<section class="bt-shell">
       <header class="bt-head"><div><small>${esc(badge)}</small><h2>${esc(title)}</h2></div>${showLater ? '<button type="button" class="bt-later">稍後再練</button>' : ''}</header>
-      <div class="bt-arena">
+      <div class="bt-arena bv2-scoreboard">
         ${fighterMarkup({ enemy:false, name:playerName(), hp:playerHp, maxHp:1000, image:playerImage, label:'我方 · 演武投影' })}
-        <div class="bt-vs">VS</div>
+        <div class="bt-vs bv2-round-seal">VS</div>
         ${fighterMarkup({ enemy:true, name:opponent, hp:opponentHp, maxHp:opponentMaxHp, image:opponentImage, label:'對手' })}
         <i class="bt-slash" aria-hidden="true"></i>
       </div>
@@ -247,7 +247,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       title:'顧長風 · 正式規則演練',
       body:`<div class="bt-dialogue"><div class="bt-speaker">顧長風</div><p>師姐說你現在太弱，要我先陪你練基本功。放心，我應該沒有六萬五千真傷。</p></div>
         <div class="bt-dialogue" style="margin-top:8px"><div class="bt-speaker">沈清霜</div><p>他沒有。這一場也只是靈識投影；不論勝負，生命都不會帶回仙府。</p></div>
-        <div class="bt-rule"><strong>正式規則：</strong>答對才有出手機會；第一位玩家作答後，另一方進入 25 秒應答窗；雙方都答對時，通常較早答對者先取得攻擊。</div>
+        <div class="bt-rule"><strong>正式規則：</strong>答對才有出手機會；第一位玩家作答後，另一方進入 25 秒應答窗；雙方都答對時，雙方都能出手，傷害同時結算。</div>
         <div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="gu-start">開始四回合教學戰</button></div>`
     });
     el.querySelector('[data-bt-action="gu-start"]')?.addEventListener('click', () => {
@@ -264,7 +264,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       return `<button type="button" class="bt-option${cls}" data-bt-choice="${index}" ${answered ? 'disabled' : ''}>${String.fromCharCode(65+index)}. ${esc(opt)}</button>`;
     }).join('');
     const explain = feedback
-      ? `<div class="bt-explain"><b>${feedback.correct ? '答對：你取得攻擊。' : '答錯：本回合你沒有造成傷害，顧長風反擊。'}</b><br>${esc(question.exp)}</div>`
+      ? `<div class="bt-explain"><b>${feedback.correct ? '答對：雙方都答對，雙方都出手（你造成 500，顧長風造成 220）。' : '答錯：本回合你沒有造成傷害，顧長風反擊。'}</b><br>${esc(question.exp)}</div>`
       : '<div class="bt-explain">教學戰沒有時間壓力；正式配對則會在第一人作答後啟動另一方 25 秒倒數。</div>';
     const action = answered
       ? `<div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="next-round">${guRound >= QUESTIONS.length - 1 ? '查看教學結果' : '下一回合'}</button></div>`
@@ -297,12 +297,12 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     if (!question) return;
     busy = true;
     const correct = choice === question.ans;
+    // Gu answers every practice question correctly, including double-correct rounds.
     if (correct) {
       guCorrect += 1;
       guHp = Math.max(0, guHp - 500);
-    } else {
-      playerHp = Math.max(0, playerHp - 220);
     }
+    playerHp = Math.max(0, playerHp - 220);
     const feedback = { choice, correct };
     renderGuRound(feedback);
     await delay(80);
@@ -317,6 +317,15 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     pop.style.left = correct ? '72%' : '28%';
     pop.innerHTML = `-${correct ? '500' : '220'}<small>${correct ? '答對 · 攻擊命中' : '錯答 · 對手反擊'}</small>`;
     el?.querySelector('.bt-arena')?.appendChild(pop);
+    if (correct) {
+      el?.querySelector('[data-bt-fighter="enemy"]')?.classList.add('strike');
+      el?.querySelector('[data-bt-fighter="me"]')?.classList.add('hit');
+      const counter = document.createElement('div');
+      counter.className = 'bt-damage';
+      counter.style.left = '28%';
+      counter.innerHTML = '-220<small>顧長風也答對 · 攻擊命中</small>';
+      el?.querySelector('.bt-arena')?.appendChild(counter);
+    }
     busy = false;
   }
 
@@ -360,6 +369,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     active = false;
     busy = false;
     document.getElementById(LAYER_ID)?.remove();
+    window.closeBattleTutorialArena?.();
     window.dispatchEvent(new CustomEvent('xiuxian:battle-tutorial-completed', {
       detail: { correct: guCorrect, total: QUESTIONS.length, trueDamage: TRUE_DAMAGE }
     }));
@@ -371,6 +381,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     autoStarted = false;
     snoozeUntil = Date.now() + 5 * 60 * 1000;
     document.getElementById(LAYER_ID)?.remove();
+    window.closeBattleTutorialArena?.();
   }
 
   async function start(options = {}) {
@@ -378,6 +389,8 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     if (!options.replay && marker()?.completed) return false;
     if (!storySeen() && !options.replay) return false;
     try { await window.preloadXiuxianStoryImages?.(); } catch (_) {}
+    if (active || busy || !window.openBattleTutorialArena?.()) return false;
+    active = true;
     window.switchToPage?.('page-battle');
     playerHp = 1000; guHp = 2000; guRound = 0; guCorrect = 0; stage = 'intro';
     active = true;
@@ -413,6 +426,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     actions.prepend(button);
   }
 
+  window.pauseBattleTutorial = snooze;
   window.startBattleTutorial = (options = {}) => start(options);
   window.getBattleTutorialState = () => ({
     active, stage, completed:!!marker()?.completed, guRound, guCorrect, trueDamage:TRUE_DAMAGE

@@ -276,7 +276,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js';
 
   function answerObject(player, round) {
     if (!hasSubmittedAnswer(player, round)) return null;
-    // 速度判定只採 Firestore serverTimestamp；answerClientAt 僅供除錯，不能決定勝負。
+    // 作答時間採 Firestore serverTimestamp；answerClientAt 僅供除錯。答對即可出手，時間不決定攻擊資格。
     const atMs = timestampMs(player.answerAt, 0);
     if (!atMs) return null;
     return { correct: player.answerCorrect, atMs, choice: player.answerChoice, timedOut: !!player.timedOut };
@@ -760,7 +760,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js';
   }
 
   async function startMatchmaking() {
-    if (state.starting) return; if (score() < FOUNDATION_SCORE) { toast(`需達築基初期（${FOUNDATION_SCORE} 修為）才可配對鬥法。`); return; } if (!me()) { alert('請先登入！'); return; }
+    if (window.getBattleTutorialState?.().active || state.starting) return; if (score() < FOUNDATION_SCORE) { toast(`需達築基初期（${FOUNDATION_SCORE} 修為）才可配對鬥法。`); return; } if (!me()) { alert('請先登入！'); return; }
     if (state.roomId && state.room && state.room.status !== 'finished') { window.switchToPage?.('page-battle'); return; }
     resetRuntime(); state.starting = true; ensurePage(); window.switchToPage?.('page-battle'); showSection('lobby'); renderLobby(null);
     try {
@@ -795,7 +795,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js';
   }
 
   async function recoverBattleSession() {
-    if (state.roomId || !me() || score() < FOUNDATION_SCORE) return; const uid = me().uid;
+    if (window.getBattleTutorialState?.().active || state.roomId || !me() || score() < FOUNDATION_SCORE) return; const uid = me().uid;
     try {
       const [hostRooms, guestRooms] = await Promise.all([
         getDocs(query(collection(db(), ROOM_COLLECTION), where('host.uid', '==', uid), limit(5))),
@@ -825,6 +825,32 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js';
       containerSelector: '#bv2-options'
     };
   };
+
+  // Local tutorials use the real arena, but never attach a matchmaking room.
+  let tutorialArenaBackup = null;
+  window.openBattleTutorialArena = () => {
+    if (state.starting || state.roomId) return null;
+    ensurePage();
+    showSection('arena');
+    const arena = document.getElementById('bv2-arena');
+    if (tutorialArenaBackup === null) tutorialArenaBackup = arena.innerHTML;
+    arena.innerHTML = '';
+    setText('bv2-room-badge', '鬥法教學 · 不計戰績');
+    return arena;
+  };
+  window.closeBattleTutorialArena = () => {
+    if (tutorialArenaBackup === null) return;
+    document.getElementById('bv2-arena').innerHTML = tutorialArenaBackup;
+    tutorialArenaBackup = null;
+    setText('bv2-room-badge', '尚未配對');
+    window.switchToPage?.('page-home');
+  };
+  document.addEventListener('click', (event) => {
+    if (tutorialArenaBackup !== null && event.target.closest?.('#bv2-leave-top')) {
+      event.preventDefault(); event.stopImmediatePropagation();
+      window.pauseBattleTutorial?.();
+    }
+  }, true);
 
   window.startBattleMatchmaking = startMatchmaking;
   window.leaveBattle = () => exitBattle({ navigate: true, forfeit: true });
