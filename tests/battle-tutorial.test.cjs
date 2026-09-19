@@ -80,3 +80,29 @@ test('tutorial uses the real arena and both correct answers deal damage', () => 
   assert.match(tutorial, /closeBattleTutorialArena/);
   assert.match(tutorial, /顧長風也答對/);
 });
+
+test('Shen aftermath advances once per click and gates Gu until the last line', () => {
+  const vm = require('node:vm');
+  const source = tutorial.slice(tutorial.indexOf('  const SHEN_AFTER_STRIKE ='), tutorial.indexOf('  function renderGuIntro()'));
+  let entered = 0;
+  const el = { onclick:null, querySelector:() => null };
+  const context = vm.createContext({
+    active:true, busy:false, stage:'shen-result', playerHp:0,
+    guHp:2000, guRound:0, guCorrect:0,
+    shell:() => el, esc:String, playerName:() => '玩家', playerPortrait:() => '',
+    renderGuIntro:() => { entered += 1; }
+  });
+  vm.runInContext(source + '\nrenderShenResult();', context);
+  const count = vm.runInContext('SHEN_AFTER_STRIKE.length', context);
+  assert.equal(context.stage, 'shen-story');
+  for (let i = 0; i < count - 1; i++) {
+    el.onclick();
+    assert.equal(entered, 0);
+    assert.equal(context.playerHp, 0);
+  }
+  el.onclick();
+  assert.equal(entered, 1);
+  assert.equal(context.playerHp, 1000);
+  assert.equal(context.stage, 'gu-intro');
+  assert.equal(el.onclick, null);
+});
