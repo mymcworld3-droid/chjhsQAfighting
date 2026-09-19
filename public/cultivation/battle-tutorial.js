@@ -42,6 +42,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   ]);
 
   let previewOnly = false;
+  let startedByStory = false;
   let active = false;
   let busy = false;
   let stage = 'intro';
@@ -407,6 +408,12 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     busy = false;
     document.getElementById(LAYER_ID)?.remove();
     window.closeBattleTutorialArena?.();
+    if (startedByStory) {
+      window.dispatchEvent(new CustomEvent('xiuxian:story-tutorial-finished', {
+        detail: { kind: 'battle', replay: previewOnly, skipped: false }
+      }));
+    }
+    startedByStory = false;
     if (previewOnly) return;
     window.dispatchEvent(new CustomEvent('xiuxian:battle-tutorial-completed', {
       detail: { correct: guCorrect, total: QUESTIONS.length, trueDamage: TRUE_DAMAGE }
@@ -420,6 +427,12 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     snoozeUntil = Date.now() + 5 * 60 * 1000;
     document.getElementById(LAYER_ID)?.remove();
     window.closeBattleTutorialArena?.();
+    if (startedByStory) {
+      window.dispatchEvent(new CustomEvent('xiuxian:story-tutorial-finished', {
+        detail: { kind: 'battle', replay: previewOnly, deferred: true }
+      }));
+    }
+    startedByStory = false;
   }
 
   async function start(options = {}) {
@@ -427,10 +440,11 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     if (options.adminPreview && !adminPreview) return false;
     if (active || busy || (!adminPreview && score() < FOUNDATION_SCORE)) return false;
     if (!options.replay && marker()?.completed) return false;
-    if (!storySeen() && !options.replay) return false;
+    if (!storySeen() && !options.replay && !options.story) return false;
     try { await window.preloadXiuxianStoryImages?.(); } catch (_) {}
     if (active || busy || !window.openBattleTutorialArena?.()) return false;
     previewOnly = adminPreview || options.replay === true;
+    startedByStory = options.story === true;
     active = true;
     window.switchToPage?.('page-battle');
     playerHp = 1000; guHp = 2000; guRound = 0; guCorrect = 0; stage = 'intro';
@@ -441,18 +455,6 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     else if (adminPreview && options.scene === 'gu-result') renderGuResult();
     else renderIntro();
     return true;
-  }
-
-  function maybeAutoStart() {
-    if (autoStarted || active || busy || Date.now() < snoozeUntil || blocking()) return;
-    if (score() < FOUNDATION_SCORE || !storySeen()) return;
-    if (marker()?.completed) { autoStarted = true; return; }
-    autoStarted = true;
-    setTimeout(async () => {
-      if (blocking()) { autoStarted = false; return; }
-      const ok = await start();
-      if (!ok) autoStarted = false;
-    }, 550);
   }
 
   function mountReplayButton() {
@@ -466,7 +468,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     button.title = '重看鬥法教學';
     button.setAttribute('aria-label','重看鬥法教學');
     button.innerHTML = '<i class="fa-solid fa-graduation-cap"></i>';
-    button.addEventListener('click', () => start({ replay:true }));
+    button.addEventListener('click', () => window.openXiuxianStoryChapter?.('foundation-first-battle'));
     actions.prepend(button);
   }
 
@@ -478,15 +480,9 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
 
   function boot() {
     ensureStyle();
-    window.addEventListener('xiuxian:story-chapter-completed', (event) => {
-      if (event.detail?.id !== 'foundation-first-battle') return;
-      autoStarted = false;
-      setTimeout(maybeAutoStart, 420);
-    });
-    window.addEventListener('xiuxian:user-ready', () => { autoStarted = false; setTimeout(maybeAutoStart, 900); });
-    window.addEventListener('xiuxian:stats-updated', () => { if (!marker()?.completed) autoStarted = false; setTimeout(maybeAutoStart, 700); });
-    setInterval(() => { mountReplayButton(); maybeAutoStart(); }, 1100);
-    setTimeout(maybeAutoStart, 1200);
+    // 鬥法教程屬於第三章，由劇情交棒；重播也先走完整章節。
+    setInterval(mountReplayButton, 1100);
+    mountReplayButton();
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once:true });
