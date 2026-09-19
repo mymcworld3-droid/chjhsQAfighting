@@ -103,8 +103,10 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   }
 
   function start(options = {}) {
-    if (active || !unlocked()) return false;
-    replayOnly = options.replay === true || !!marker()?.completed;
+    const adminPreview = options.adminPreview === true && userData()?.isAdmin === true;
+    if (options.adminPreview && !adminPreview) return false;
+    if (active || (!unlocked() && !adminPreview)) return false;
+    replayOnly = options.replay === true || adminPreview || !!marker()?.completed;
     startedByStory = options.story === true;
     ensureStyle();
     active = true;
