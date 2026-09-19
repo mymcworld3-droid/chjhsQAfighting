@@ -293,7 +293,7 @@ test('private one-question tutorial Dongtian never writes public play, reward, m
   assert.match(uiSource, /private: true/);
   assert.match(uiSource, /TUTORIAL-DT-001/);
   const demoDefinition = uiSource.slice(uiSource.indexOf('function newbieDongtianDemoDefinition()'), uiSource.indexOf('function tutorialDongtianCardMarkup'));
-  assert.equal((demoDefinition.match(/id:'TUTORIAL-DT-\\d+'/g) || []).length, 1);
+  assert.equal((demoDefinition.match(/id:'TUTORIAL-DT-\d+'/g) || []).length, 1);
   assert.doesNotMatch(demoDefinition, /TUTORIAL-DT-010/);
   assert.match(uiSource, /questionCount: questions\.length/);
   assert.match(uiSource, /教學體驗 1 題/);
