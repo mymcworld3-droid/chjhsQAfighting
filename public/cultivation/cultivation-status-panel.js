@@ -3,10 +3,6 @@
 (function () {
   'use strict';
 
-// 修煉頁「狀態」分頁：顯示目前調御中的本命金丹與玩家戰鬥數值。
-(function () {
-  'use strict';
-
   const CSS_HREF = 'cultivation-status-panel.css';
   let statusActive = false;
   let rendering = false;
@@ -137,12 +133,6 @@
           </div>
         </div>
       </section>
-          <div class="status-stat-grid status-stat-grid-simple">
-            ${statCard('fa-khanda', '攻擊力', Math.round(player.attack).toLocaleString(), '基礎 200')}
-            ${statCard('fa-heart', '生命值', `${Math.round(player.hp).toLocaleString()} / ${Math.round(player.maxHp).toLocaleString()}`, '基礎 1000')}
-          </div>
-        </div>
-      </section>
     `;
   }
 
@@ -243,4 +233,3 @@
     boot();
   }
 })();
-
