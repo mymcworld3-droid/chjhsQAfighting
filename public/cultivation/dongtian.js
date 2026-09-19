@@ -351,19 +351,10 @@ import {
     const player = userData() || {};
     const ownerName = window.getPlayerDisplayName?.(player, auth.currentUser?.displayName || '新手修士') || player.displayName || auth.currentUser?.displayName || '新手修士';
     const playerLevel = player?.profile?.educationLevel || '國中一年級';
+    // 新手範例只需體驗一次作答、解析與結算；正式洞天仍遵守原有題數規則。
     const questions = [
       { id:'TUTORIAL-DT-001', difficulty:'easy', subject:'洞天教學', q:'洞天功能主要位於哪個頁面？', correct:'洞府', wrong:['鬥法','排行榜','登入畫面'], exp:'洞天位於「洞府」中，可在那裡建立、重玩、管理與刪除自己的洞天。' },
-      { id:'TUTORIAL-DT-002', difficulty:'easy', subject:'洞天教學', q:'建立洞天時可以提供哪些學習素材？', correct:'圖片與文字都可以', wrong:['只能圖片','只能文字','只能語音'], exp:'建立洞天可貼文字，也可上傳多張圖片；AI 會先整理素材中的知識點。' },
-      { id:'TUTORIAL-DT-003', difficulty:'easy', subject:'洞天教學', q:'建立洞天時，「少／中／多」控制的是什麼？', correct:'預計生成的題目數量', wrong:['公開範圍','答題時間','洞天主人名稱'], exp:'少量是 10 題，中量由 AI 在 15～20 題判斷，大量由 AI 在 25～30 題判斷。' },
-      { id:'TUTORIAL-DT-004', difficulty:'easy', subject:'洞天教學', q:'正式洞天目前使用哪一種題目結構？', correct:'四選一單選題', wrong:['可複選多選題','申論題','複數正解題'], exp:'每題恰好一個正確答案與三個錯誤選項，不允許複選。' },
-      { id:'TUTORIAL-DT-005', difficulty:'medium', subject:'洞天教學', q:'AI 正式生成洞天題目時，每批固定生成幾題？', correct:'5 題', wrong:['1 題','3 題','10 題'], exp:'洞天先規劃總題數，再固定每 5 題生成一批。' },
-      { id:'TUTORIAL-DT-006', difficulty:'medium', subject:'洞天教學', q:'後一批生成時，為什麼要把前面已生成題目放進 prompt？', correct:'避免重複或近義重複題', wrong:['讓所有答案一樣','跳過 AI 複核','增加公開機率'], exp:'後一批會讀取之前所有題目，藉此降低內容重複。' },
-      { id:'TUTORIAL-DT-007', difficulty:'medium', subject:'洞天教學', q:'一般洞天至少需要多少題？', correct:'10 題', wrong:['3 題','5 題','8 題'], exp:'一般洞天至少 10 題；這座教學範例也採用完整 10 題流程。' },
-      { id:'TUTORIAL-DT-008', difficulty:'medium', subject:'洞天教學', q:'首次完整通關正式洞天時，靈石獎勵如何變化？', correct:'題數越多，靈石越多', wrong:['題數越多越少','永遠只有 100 靈石','完全沒有靈石'], exp:'首次完整通關每題 100 靈石，最低保底 1000 靈石。' },
-      { id:'TUTORIAL-DT-009', difficulty:'medium', subject:'洞天教學', q:'正式洞天首次完整通關的修為主要依什麼計算？', correct:'答對的題數', wrong:['圖片張數','主人名稱長度','刪除次數'], exp:'首次完整通關每答對 5 題增加 1 修為；只要至少答對 1 題，就保底增加 1 修為。' },
-      { id:'TUTORIAL-DT-010', difficulty:'easy', subject:'洞天教學', q:'自己建立的洞天要在哪裡重新遊玩或刪除？', correct:'洞府的「我的洞天」', wrong:['登入頁面','鬥法配對頁','題目回報紀錄'], exp:'自己的洞天會列在「我的洞天」，可重新進入、管理或刪除。' }
-    ];
-    return {
+    ];    return {
       id: 'newbie-private-dongtian-demo',
       tutorialOnly: true,
       private: true,
@@ -393,8 +384,8 @@ import {
           <button type="button" class="dt-delete" data-dt-tutorial-delete><i class="fa-solid fa-trash"></i> 刪除範例</button>
         </div>
       </div>
-      <div class="dt-tags"><span class="dt-tag dt-private-badge">教學專用 · 不公開</span><span class="dt-tag">${escapeHtml(item.level)}</span><span class="dt-tag">簡單</span><span class="dt-tag">完整教學 10 題</span></div>
-      <div class="dt-owner-reward">這座 10 題範例只用來學完整操作，不會公開、不會留下正式遊玩紀錄，也不會發放靈石、修為或材料。</div>
+      <div class="dt-tags"><span class="dt-tag dt-private-badge">教學專用 · 不公開</span><span class="dt-tag">${escapeHtml(item.level)}</span><span class="dt-tag">簡單</span><span class="dt-tag">教學體驗 1 題</span></div>
+      <div class="dt-owner-reward">這座 1 題範例只用來體驗完整操作，不會公開、不會留下正式遊玩紀錄，也不會發放靈石、修為或材料。</div>
     </article>`;
   }
 
@@ -1031,7 +1022,7 @@ import {
     if (s.tutorialOnly) {
       state.tutorialDemoCompleted = true;
       const overlay = ensureOverlay();
-      overlay.innerHTML = `<div class="dt-result" data-dt-tutorial-result><div class="dt-result-seal">習</div><h2>${escapeHtml(s.dongtian.name)} · 教學通關</h2><p>你已走完整個洞天流程：固定題序 → 單選作答 → 查看解析 → 前往下一境 → 完成結算。</p><div class="dt-result-grid"><div><span>答對</span><b>${correct} / ${total}</b></div><div><span>正確率</span><b>${Math.round(accuracy * 100)}%</b></div><div><span>公開狀態</span><b>不公開</b></div></div><div class="dt-reward"><strong style="color:#93c5fd">教學範例不發正式獎勵</strong><br>你剛完成完整 10 題流程。正式洞天首次通關每題 100 靈石（最低 1000），並依答對題數給修為：每答對 5 題 +1，至少答對 1 題保底 +1。</div><button id="dt-back" class="dt-back" type="button">返回「我的洞天」</button></div>`;
+      overlay.innerHTML = `<div class="dt-result" data-dt-tutorial-result><div class="dt-result-seal">習</div><h2>${escapeHtml(s.dongtian.name)} · 教學通關</h2><p>你已走完整個洞天流程：固定題序 → 單選作答 → 查看解析 → 前往下一境 → 完成結算。</p><div class="dt-result-grid"><div><span>答對</span><b>${correct} / ${total}</b></div><div><span>正確率</span><b>${Math.round(accuracy * 100)}%</b></div><div><span>公開狀態</span><b>不公開</b></div></div><div class="dt-reward"><strong style="color:#93c5fd">教學範例不發正式獎勵</strong><br>你已完成 1 題教學體驗。正式洞天首次通關每題 100 靈石（最低 1000），並依答對題數給修為：每答對 5 題 +1，至少答對 1 題保底 +1。</div><button id="dt-back" class="dt-back" type="button">返回「我的洞天」</button></div>`;
       document.getElementById('dt-back').onclick = closeAfterSession;
       window.dispatchEvent(new CustomEvent('newbie:dongtian-demo-completed', { detail: { correct, total } }));
       return;

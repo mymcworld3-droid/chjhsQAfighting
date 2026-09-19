@@ -60,7 +60,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     if (phase === 'intro') return {
       kicker:'煉氣五層 · 洞天專屬教學',
       title:'現在完整學會「洞天」',
-      body:'洞天能把<strong>圖片或文字教材</strong>煉成固定題序的知識秘境。這次不只看說明：你會自己找到入口、看懂建立規則、生成一座<strong>不公開的 10 題範例</strong>、實際答完，再親手刪除。',
+      body:'洞天能把<strong>圖片或文字教材</strong>煉成固定題序的知識秘境。這次不只看說明：你會自己找到入口、看懂建立規則、生成一座<strong>不公開的 1 題範例</strong>、實際答完，再親手刪除。',
       note:'私人教學範例只存在於本次教學，不寫入公開洞天資料，也不會被其他修士遇見。',
       button:'開始找洞天入口'
     };
@@ -86,22 +86,22 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     };
     if (phase === 'prepare') return {
       kicker:'第 5 步 · 私人範例', title:'建立「青雲入門洞天」',
-      body:'現在系統會建立一座<strong>10 題、教學專用、不公開</strong>的範例洞天。它不呼叫 AI、不寫入 Firestore，也不會進入其他玩家的洞天遭遇池。',
+      body:'現在系統會建立一座<strong>1 題、教學專用、不公開</strong>的範例洞天。它不呼叫 AI、不寫入 Firestore，也不會進入其他玩家的洞天遭遇池。',
       note:'這座範例不發正式靈石、修為或材料，只用來學完整操作。', button:busy?'正在準備…':'建立私人範例', target:'#dongtian-card .dt-library', busy
     };
     if (phase === 'play') return {
       kicker:'第 6 步 · 實際遊玩', title:'親自按「進入範例」',
       body:'「我的洞天」裡現在會看到標示<strong>教學專用 · 不公開</strong>的青雲入門洞天。請自己按「進入範例」，教學不會替你瞬移。',
-      note:'請把 10 題完整答完；每題作答後都會顯示解析。', button:'請按「進入範例」', target:'#dongtian-card [data-dt-tutorial-play]', locked:true
+      note:'請完成這 1 題、閱讀解析，並按「前往下一境」查看結算。', button:'請按「進入範例」', target:'#dongtian-card [data-dt-tutorial-play]', locked:true
     };
     if (phase === 'delete') return {
       kicker:'第 7 步 · 管理與刪除', title:'最後親自刪除教學洞天',
-      body:'你已完整走完 10 題。現在回到「我的洞天」，請按教學洞天右側的<strong>「刪除範例」</strong>。正式洞天的刪除按鈕也在同一區域。',
+      body:'你已完成 1 題體驗。現在回到「我的洞天」，請按教學洞天右側的<strong>「刪除範例」</strong>。正式洞天的刪除按鈕也在同一區域。',
       note:'正式洞天刪除後會移除公開洞天與相關遊玩／回報資料；這個私人範例只會清除本機教學資料。', button:'請按「刪除範例」', target:'#dongtian-card [data-dt-tutorial-delete]', locked:true
     };
     return {
       kicker:'完成 · 洞天已掌握', title:'你已完成洞天實作教學',
-      body:'你已實際完成：<strong>找到入口 → 看懂建立方式 → 選題量 → 建立私人範例 → 完整答 10 題 → 返回名冊 → 刪除範例</strong>。正式洞天首次完整通關還會依題數給靈石，並依答對題數給修為。',
+      body:'你已實際完成：<strong>找到入口 → 看懂建立方式 → 選題量 → 建立私人範例 → 完成 1 題 → 返回名冊 → 刪除範例</strong>。正式洞天首次完整通關還會依題數給靈石，並依答對題數給修為。',
       note:'正式洞天修為：每答對 5 題 +1；至少答對 1 題保底 +1，而且只在該洞天首次完整通關時發放。',
       button:'完成教學'
     };

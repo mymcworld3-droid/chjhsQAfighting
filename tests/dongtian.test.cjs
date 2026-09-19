@@ -286,14 +286,17 @@ test('Dongtian runner and question card fill the viewport instead of staying in 
 });
 
 
-test('private ten-question tutorial Dongtian never writes public play, reward, material, or history data', () => {
+test('private one-question tutorial Dongtian never writes public play, reward, material, or history data', () => {
   assert.match(uiSource, /function newbieDongtianDemoDefinition\(\)/);
   assert.match(uiSource, /id: 'newbie-private-dongtian-demo'/);
   assert.match(uiSource, /tutorialOnly: true/);
   assert.match(uiSource, /private: true/);
-  assert.match(uiSource, /TUTORIAL-DT-010/);
+  assert.match(uiSource, /TUTORIAL-DT-001/);
+  const demoDefinition = uiSource.slice(uiSource.indexOf('function newbieDongtianDemoDefinition()'), uiSource.indexOf('function tutorialDongtianCardMarkup'));
+  assert.equal((demoDefinition.match(/id:'TUTORIAL-DT-\\d+'/g) || []).length, 1);
+  assert.doesNotMatch(demoDefinition, /TUTORIAL-DT-010/);
   assert.match(uiSource, /questionCount: questions\.length/);
-  assert.match(uiSource, /完整教學 10 題/);
+  assert.match(uiSource, /教學體驗 1 題/);
   assert.match(uiSource, /不會公開、不會留下正式遊玩紀錄，也不會發放靈石、修為或材料/);
 
   const enter = uiSource.slice(uiSource.indexOf('async function enterDongtian'), uiSource.indexOf('function ensureOverlay'));

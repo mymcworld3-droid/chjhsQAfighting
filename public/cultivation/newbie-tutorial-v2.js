@@ -91,7 +91,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       page: 'page-settings', target: '#dongtian-card .dt-create', prepareDongtianDemo: true, requiresDongtianDemoReady: true,
       kicker: '第十二步 · 建立洞天', title: '圖片與文字都可以煉成洞天',
       body: '正式建立時，可以貼上<strong>課文、筆記、公式、重點文字</strong>，也可以同時上傳多張圖片。AI 會先辨認知識點、需要多少題與題目結構，再開始出題。',
-      note: '現在系統會準備一座完全不公開的 10 題教學範例；它只存在本次教學，不呼叫 AI，也不寫入公開洞天資料。'
+      note: '現在系統會準備一座完全不公開的 1 題教學範例；它只存在本次教學，不呼叫 AI，也不寫入公開洞天資料。'
     },
     {
       page: 'page-settings', target: '#dongtian-card .dt-amount-options',
@@ -103,7 +103,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       page: 'page-settings', target: '#dongtian-card [data-dt-tutorial-card]',
       kicker: '第十四步 · 我的洞天', title: '建立完成後會出現在「我的洞天」',
       body: '正式洞天會顯示名稱、程度、難度、科目、題數與完成次數，也可能被符合條件的其他修士遇見。現在這座<strong>青雲入門洞天</strong>標示為「教學專用 · 不公開」。',
-      note: '範例使用完整 10 題流程，但不會公開、不會發放靈石、修為或材料，也不留下正式遊玩紀錄。'
+      note: '範例只需完成 1 題，體驗作答、解析與結算，但不會公開、不會發放靈石、修為或材料，也不留下正式遊玩紀錄。'
     },
     {
       page: 'page-settings', target: '#dongtian-card [data-dt-tutorial-play]', requiresDongtianStart: true,
@@ -119,9 +119,9 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     },
     {
       target: '#dongtian-overlay .dt-options', requiresDongtianComplete: true,
-      kicker: '第十七步 · 完整遊玩', title: '請把 10 題教學洞天走完',
+      kicker: '第十七步 · 完整遊玩', title: '請完成 1 題教學洞天',
       body: '每題都是單選題。作答後會立即顯示正確答案與解析，再按「前往下一境」。正式洞天若題目真的有錯，作答後還能使用「問題回報」。',
-      note: '請實際完成全部 10 題，直到看到洞天通關結算。'
+      note: '請實際完成這 1 題，閱讀解析並按「前往下一境」，即可看到洞天通關結算。'
     },
     {
       target: '#dongtian-overlay [data-dt-tutorial-result]',

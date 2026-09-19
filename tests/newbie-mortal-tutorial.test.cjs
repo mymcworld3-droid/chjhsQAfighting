@@ -103,3 +103,12 @@ test('the navigation gate highlights the actual bottom-bar buttons and leaves th
   assert.match(layout, /spot\.dataset\.navigation === 'true'/);
   assert.match(layout, /candidate\(centeredLeft, target\.top - height - GAP, width, height, 'above', 0\)/);
 });
+
+
+test('mortal tutorial requires only one private Dongtian question before returning and deleting', () => {
+  assert.match(tutorial, /請完成 1 題教學洞天/);
+  assert.match(tutorial, /請實際完成這 1 題，閱讀解析並按「前往下一境」/);
+  assert.match(tutorial, /requiresDongtianComplete: true/);
+  assert.match(tutorial, /requiresDongtianReturn: true/);
+  assert.match(tutorial, /requiresDongtianDelete: true/);
+});

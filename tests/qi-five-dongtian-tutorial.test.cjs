@@ -29,7 +29,7 @@ test('Qi-five tutorial carefully explains source material, amount, single-choice
   assert.match(tutorial, /後一批會帶入前面全部題目/);
 });
 
-test('Qi-five tutorial reuses the private local Dongtian demo, requires full play, return, then deletion', () => {
+test('Qi-five tutorial reuses the one-question private Dongtian demo, requiring play, return, then deletion', () => {
   assert.match(tutorial, /window\.prepareNewbieDongtianDemo/);
   assert.match(tutorial, /newbie:dongtian-demo-started/);
   assert.match(tutorial, /newbie:dongtian-demo-completed/);
@@ -41,8 +41,9 @@ test('Qi-five tutorial reuses the private local Dongtian demo, requires full pla
   assert.match(dongtian, /id: 'newbie-private-dongtian-demo'/);
   assert.match(dongtian, /tutorialOnly: true/);
   assert.match(dongtian, /private: true/);
-  assert.match(dongtian, /TUTORIAL-DT-010/);
-  assert.match(dongtian, /完整教學 10 題/);
+  assert.match(dongtian, /TUTORIAL-DT-001/);
+  assert.match(dongtian, /教學體驗 1 題/);
+  assert.match(tutorial, /請完成這 1 題、閱讀解析/);
 });
 
 test('formal Dongtian first completion grants cultivation from correct answers as well as spirit stones', () => {
