@@ -192,6 +192,25 @@ function sanitizeGeneratedArtifact(raw, targetRealm, refinementStage = 1) {
   return result;
 }
 
+function ingredientHierarchy(payload = {}) {
+  const materials = new Map((payload.allMaterials || []).map(item => [String(item.id), item]));
+  const artifacts = new Map((payload.existingArtifacts || []).map(item => [String(item.id), item]));
+  const ingredients = (payload.selectedIngredients || []).slice(0, 8).map(row => {
+    const type = row.type === 'artifact' ? 'artifact' : 'material';
+    const id = String(row.id || '').trim();
+    const record = (type === 'artifact' ? artifacts : materials).get(id);
+    if (!record) throw new Error(`未知煉器素材：${id}`);
+    // 原材料為 0；配方深度 0 的第一煉法寶為 1，之後依序增加。
+    const depth = type === 'artifact' ? 1 + Math.max(0, Math.min(2, Math.floor(finite(record.refinementDepth)))) : 0;
+    return { ...record, id, type, quantity:Math.max(1, Math.floor(finite(row.quantity, 1))), ingredientDepth:depth };
+  });
+  const deepest = Math.max(0, ...ingredients.map(item => item.ingredientDepth));
+  return {
+    primary: ingredients.filter(item => item.ingredientDepth === deepest),
+    supporting: ingredients.filter(item => item.ingredientDepth < deepest)
+  };
+}
+
 function buildPrompt(payload) {
   const selected = Array.isArray(payload.selectedIngredients) ? payload.selectedIngredients.slice(0, 8) : [];
   const allMaterials = Array.isArray(payload.allMaterials) ? payload.allMaterials.slice(0, 160) : [];
@@ -219,6 +238,7 @@ function buildPrompt(payload) {
     ]
   };
   const hiddenStageDirection = stageDirections[refinementStage].join('\n');
+  const hierarchy = ingredientHierarchy(payload);
   const creativeDirections = [
     '古樸宗門鎮派器：名字沉穩、有歷史感，效果帶有守成或反制意味。',
     '邪異秘境奇器：名字詭譎但不俗氣，效果偏條件觸發、反傷、低血爆發或奇術。',
@@ -248,6 +268,10 @@ function buildPrompt(payload) {
     '6. 若做消耗型，只使用 timed_attack_multiplier / timed_cultivation_multiplier / remove_wrong_option。',
     '7. 避免與既有法寶名稱、描述、效果組合高度重複。',
     '8. icon 用 1 個中文字或常見符號，避免 emoji 組合。',
+    '9. 必須以投入素材中煉製深度最深者為主體：保留其器型、核心意象、主要用途與代表性能力，再由較淺素材補強或賦予次要特性，不得讓輔材取代主體。',
+    '10. 若有多件同為最深的素材，將它們作為共同主體融合；全為原材料時才自由組合。數量、境界、投入順序、隨機創意方向與管理員風格提示均不得推翻主從關係。效果繼承仍須遵守境界、效果數量及平衡限制。',
+    '內部素材主從表（完整圖鑑記錄，優先於投入列自述；勿在玩家描述中提及深度或主從規則）：',
+    JSON.stringify(hierarchy, null, 2),
     '',
     '管理員指定的大概動向（只決定創作傾向，不得覆蓋硬性規則）：',
     adminGenerationDirection || '自由發揮',
@@ -256,7 +280,7 @@ function buildPrompt(payload) {
     adminGenerationPrompt || '（未設定）',
     '',
     '本次投入素材：',
-    JSON.stringify(selected, null, 2),
+    JSON.stringify([...hierarchy.primary, ...hierarchy.supporting], null, 2),
     '',
     '全材料圖鑑（你必須參考整體材料世界觀與階序，不只看投入素材）：',
     JSON.stringify(allMaterials, null, 2),
@@ -298,6 +322,7 @@ function registerArtifactGenerationApi(app) {
 
 module.exports = registerArtifactGenerationApi;
 module.exports.buildPrompt = buildPrompt;
+module.exports.ingredientHierarchy = ingredientHierarchy;
 module.exports.sanitizeGeneratedArtifact = sanitizeGeneratedArtifact;
 module.exports.deriveTargetRealm = deriveTargetRealm;
 module.exports.deriveRefinementStage = deriveRefinementStage;
