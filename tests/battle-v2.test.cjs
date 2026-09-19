@@ -34,6 +34,18 @@ test('Battle v2 uses the unified cultivation combat scale', () => {
   assert.doesNotMatch(battleSource, /hp:\s*100,\s*maxHp:\s*100,\s*atk:\s*20/);
 });
 
+test('battle health display is a current in-match number, not a permanent fraction', () => {
+  assert.match(battleSource, /bv2-enemy-hp-text">1000</);
+  assert.match(battleSource, /bv2-my-hp-text">1000</);
+  assert.match(battleSource, /setText\(`bv2-\$\{prefix\}-hp-text`, Math\.round\(hp\)\)/);
+});
+
+test('one correct answer attacks and both wrong answers deal no damage', () => {
+  const e = loadEngine();
+  const winRound = e.settleBattleRound({ roomId: 'room-a', round: 1, host: player('h', { correct: true, atMs: 1000 }), guest: player('g', { correct: false, atMs: 1100 }) });
+  assert.doesNotMatch(battleSource, /hp:\s*100,\s*maxHp:\s*100,\s*atk:\s*20/);
+});
+
 test('one correct answer attacks and both wrong answers deal no damage', () => {
   const e = loadEngine();
   const winRound = e.settleBattleRound({ roomId: 'room-a', round: 1, host: player('h', { correct: true, atMs: 1000 }), guest: player('g', { correct: false, atMs: 1100 }) });
@@ -197,3 +209,4 @@ test('Battle v2 hidden phases cannot be overridden by phase display styles', () 
   assert.match(cssSource, /\.battle-v2-page \.hidden\{display:none!important\}/);
   assert.match(battleSource, /classList\.toggle\('hidden', key !== name\)/);
 });
+
