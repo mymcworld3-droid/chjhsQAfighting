@@ -102,10 +102,14 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     startedByStory = false;
   }
 
+  function blocking() {
+    return !!document.querySelector('#xiuxian-story-layer,#battle-tutorial-layer,#newbie-tutorial-layer,#progression-v2-modal,.training-v3-modal-backdrop,#realm-breakthrough-feedback');
+  }
+
   function start(options = {}) {
     const adminPreview = options.adminPreview === true && userData()?.isAdmin === true;
     if (options.adminPreview && !adminPreview) return false;
-    if (active || (!unlocked() && !adminPreview)) return false;
+    if (active || (!unlocked() && !adminPreview) || (!options.story && blocking())) return false;
     replayOnly = options.replay === true || adminPreview || !!marker()?.completed;
     startedByStory = options.story === true;
     ensureStyle();
