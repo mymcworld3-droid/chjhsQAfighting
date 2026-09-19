@@ -150,6 +150,12 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   function fighterMarkup({ enemy = false, name, hp, maxHp, image, label }) {
     const pct = Math.max(0, Math.min(100, (Number(hp) || 0) / Math.max(1, Number(maxHp) || 1) * 100));
     return `<article class="bt-fighter ${enemy ? 'enemy' : 'me'}" data-bt-fighter="${enemy ? 'enemy' : 'me'}">
+      <div class="bt-fighter-head"><div><span>${esc(label)}</span><strong>${esc(name)}</strong></div><b>${Math.max(0,Math.round(hp))}</b></div>
+      <img src="${esc(image)}" alt="${esc(name)}">
+      <div class="bt-hp"><i style="width:${pct}%"></i></div>
+    </article>`;
+    const pct = Math.max(0, Math.min(100, (Number(hp) || 0) / Math.max(1, Number(maxHp) || 1) * 100));
+    return `<article class="bt-fighter ${enemy ? 'enemy' : 'me'}" data-bt-fighter="${enemy ? 'enemy' : 'me'}">
       <div class="bt-fighter-head"><div><span>${esc(label)}</span><strong>${esc(name)}</strong></div><b>${Math.max(0,Math.round(hp))} / ${Math.round(maxHp)}</b></div>
       <img src="${esc(image)}" alt="${esc(name)}">
       <div class="bt-hp"><i style="width:${pct}%"></i></div>
@@ -228,6 +234,13 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       body:`<div class="bt-result"><div class="bt-result-mark">敗</div><h3>65,000 真實傷害</h3><p>真實傷害直接穿過一般減傷。這一擊只是師姐的教學演示，不會改動你的正式生命與戰績。</p></div>
         <div class="bt-dialogue" style="margin-top:12px"><div class="bt-speaker">沈清霜</div><p>我已經放水了。</p></div>
         <div class="bt-dialogue" style="margin-top:8px"><div class="bt-speaker">${esc(playerName())}</div><p>……這也算放水？</p></div>
+        <div class="bt-dialogue" style="margin-top:8px"><div class="bt-speaker">沈清霜</div><p>你還能說話。看來現在的你，還不適合和我正式過招。</p></div>
+        <div class="bt-dialogue" style="margin-top:8px"><div class="bt-speaker">沈清霜</div><p>顧長風，你來陪他練基本鬥法。記住，別真的把人打壞。</p></div>
+        <div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="gu-intro">顧長風入場</button></div>`
+    });
+    el.querySelector('[data-bt-action="gu-intro"]')?.addEventListener('click', () => {
+      stage = 'gu-intro'; playerHp = 1000; guHp = 2000; guRound = 0; guCorrect = 0; renderGuIntro();
+        <div class="bt-dialogue" style="margin-top:8px"><div class="bt-speaker">${esc(playerName())}</div><p>……這也算放水？</p></div>
         <div class="bt-dialogue" style="margin-top:8px"><div class="bt-speaker">沈清霜</div><p>你還能說話。</p></div>
         <div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="gu-intro">下一場 · 顧長風</button></div>`
     });
@@ -243,6 +256,12 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       opponentHp:guHp,
       opponentMaxHp:2000,
       badge:'築基鬥法教學 · 第二戰',
+      title:'顧長風 · 正式規則演練',
+      body:`<div class="bt-dialogue"><div class="bt-speaker">顧長風</div><p>師姐說你現在太弱，要我先陪你練基本功。放心，我應該沒有六萬五千真傷。</p></div>
+        <div class="bt-dialogue" style="margin-top:8px"><div class="bt-speaker">沈清霜</div><p>他沒有。這一場也只是靈識投影；不論勝負，生命都不會帶回仙府。</p></div>
+        <div class="bt-rule"><strong>正式規則：</strong>答對才有出手機會；第一位玩家作答後，另一方進入 25 秒應答窗；雙方都答對時，通常較早答對者先取得攻擊。</div>
+        <div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="gu-start">開始四回合教學戰</button></div>`
+    });
       title:'顧長風 · 正式規則演練',
       body:`<div class="bt-dialogue"><div class="bt-speaker">顧長風</div><p>現在輪到我。放心，我應該沒有六萬五千真傷。</p></div>
         <div class="bt-dialogue" style="margin-top:8px"><div class="bt-speaker">沈清霜</div><p>他沒有。</p></div>
@@ -433,3 +452,4 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once:true });
   else boot();
 })();
+
