@@ -28,6 +28,7 @@ import {
   let lineIndex = 0;
   let replayMode = false;
   let storyTutorialPaused = false;
+  let pendingStoryTutorial = '';
   let snoozeUntil = 0;
   let autoPermits = 1;
   let lastScore = -1;
@@ -272,33 +273,57 @@ import {
     };
   }
 
-  function storyDongtianTutorialComplete() {
-    return !!data()?.storyDongtianTutorialV1?.completed;
+  function storyTutorialComplete(kind) {
+    const field = {
+      question: 'newbieTutorialV1',
+      dongtian: 'storyDongtianTutorialV1',
+      battle: 'battleTutorialV1',
+      'golden-core': 'goldenCoreTutorialV1'
+    }[kind];
+    return !!field && !!data()?.[field]?.completed;
   }
 
-  function handoffDongtianTutorial() {
+  function restoreStoryAfterFailedTutorial(kind, error) {
+    if (!storyTutorialPaused || pendingStoryTutorial !== kind) return;
+    if (error) console.warn('[Story] tutorial could not start:', kind, error);
+    storyTutorialPaused = false;
+    pendingStoryTutorial = '';
+    active = true;
+    renderLine();
+  }
+
+  function handoffStoryTutorial(kind) {
     if (storyTutorialPaused || !currentChapter) return true;
-    const launch = window.startStoryDongtianTutorial;
+    const launch = {
+      question: window.startStoryQuestionTutorial,
+      dongtian: window.startStoryDongtianTutorial,
+      battle: window.startBattleTutorial,
+      'golden-core': window.startGoldenCoreTutorial
+    }[kind];
     if (typeof launch !== 'function') {
-      console.warn('[Story] Dongtian tutorial is not available yet');
+      console.warn('[Story] tutorial is not available yet:', kind);
       return true;
     }
+    const options = { story: true, replay: replayMode };
     storyTutorialPaused = true;
+    pendingStoryTutorial = kind;
     active = false;
     document.getElementById(LAYER_ID)?.classList.remove('story-playing');
     document.getElementById(LAYER_ID)?.remove();
-    const launched = launch();
-    if (!launched) {
-      storyTutorialPaused = false;
-      active = true;
-      renderLine();
-    }
+    Promise.resolve()
+      .then(() => launch(options))
+      .then((started) => {
+        if (started !== true) restoreStoryAfterFailedTutorial(kind);
+      })
+      .catch((error) => restoreStoryAfterFailedTutorial(kind, error));
     return true;
   }
 
-  function resumeAfterDongtianTutorial() {
-    if (!storyTutorialPaused || currentChapter?.id !== 'qi-five-dongtian') return;
+  function resumeAfterStoryTutorial(event) {
+    const kind = event?.detail?.kind;
+    if (!storyTutorialPaused || !kind || pendingStoryTutorial !== kind || !currentChapter) return;
     storyTutorialPaused = false;
+    pendingStoryTutorial = '';
     active = true;
     lineIndex = Math.min(lineIndex + 1, currentChapter.lines.length - 1);
     prepareStoryScene(currentChapter);
@@ -311,8 +336,10 @@ import {
       finishChapter();
       return;
     }
-    if (!replayMode && currentChapter.tutorialAfterLine === lineIndex && !storyDongtianTutorialComplete()) {
-      handoffDongtianTutorial();
+    const kind = currentChapter.tutorialKind;
+    if (kind && currentChapter.tutorialAfterLine === lineIndex &&
+        (replayMode || !storyTutorialComplete(kind))) {
+      handoffStoryTutorial(kind);
       return;
     }
     lineIndex += 1;
@@ -378,7 +405,7 @@ import {
   }
 
   function startChapter(chapter, options = {}) {
-    if (!chapter || active) return false;
+    if (!chapter || active || storyTutorialPaused) return false;
     if (!storyImagesReady) {
       preloadStoryImages().then(() => startChapter(chapter, options));
       return true;
@@ -597,7 +624,7 @@ import {
       setTimeout(maybeAutoStart, 180);
     });
     window.addEventListener('player-name-updated', () => { if (active && currentChapter) renderLine(); });
-    window.addEventListener('xiuxian:story-dongtian-tutorial-finished', resumeAfterDongtianTutorial);
+    window.addEventListener('xiuxian:story-tutorial-finished', resumeAfterStoryTutorial);
     window.addEventListener('xiuxian:battle-tutorial-completed', () => {
       autoPermits = 1;
       snoozeUntil = Math.min(snoozeUntil, Date.now() + 650);
