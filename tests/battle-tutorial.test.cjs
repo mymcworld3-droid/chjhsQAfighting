@@ -117,3 +117,28 @@ test('admin archive unlocks all chapters and tutorial scenes without progression
   assert.match(tutorial, /async function persist\(patch\) \{\s*if \(previewOnly\) return/);
   assert.match(tutorial, /是我估量有誤，不是你的錯/);
 });
+
+test('gender preview rejects non-admins and selecting either portrait never persists', async () => {
+  const vm = require('node:vm');
+  const source = storyEngine.slice(storyEngine.indexOf('  function openGenderChoice('), storyEngine.indexOf('  function maybeAutoStart()'));
+  let admin = false, writes = 0, archives = 0;
+  const elements = [];
+  const make = () => ({ style:{}, handlers:{}, setAttribute(){}, addEventListener(k, v){ this.handlers[k] = v; } });
+  const buttons = ['male', 'female'].map(g => ({ ...make(), dataset:{storyGender:g} }));
+  const el = { innerHTML:'', remove(){}, querySelectorAll:() => buttons,
+    querySelector:selector => selector === '.story-gender-card' ? { append(){} } : elements[0] };
+  const ctx = vm.createContext({ active:false, LAYER_ID:'story', canPreviewAllStory:() => admin,
+    document:{ getElementById:() => null, createElement:() => { const item = make(); elements.push(item); return item; } },
+    layer:() => el, playerPortraitPath:() => '', persist:() => { writes++; },
+    openArchive:() => { archives++; } });
+  vm.runInContext(source, ctx);
+  assert.equal(vm.runInContext('openGenderChoice({preview:true})', ctx), false);
+  admin = true;
+  vm.runInContext('openGenderChoice({preview:true})', ctx);
+  for (const button of buttons) await button.handlers.click();
+  assert.equal(writes, 0);
+  assert.equal(ctx.active, true);
+  elements[1].handlers.click();
+  assert.equal(ctx.active, false);
+  assert.equal(archives, 1);
+});
