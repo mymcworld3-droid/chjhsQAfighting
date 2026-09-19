@@ -7,12 +7,12 @@ const tutorial = readFileSync(join(__dirname, '../public/cultivation/newbie-tuto
 
 test('mortal-stage tutorial teaches a real-looking sample quiz without awarding cultivation', () => {
   assert.match(tutorial, /const VERSION = 2;/);
-  assert.match(tutorial, /const FOUNDATION_SCORE = 10;/);
+  assert.match(tutorial, /window\.startStoryQuestionTutorial/);
   assert.match(tutorial, /EXAMPLE_QUESTION = '範例：2 \+ 3 = \?'/);
   assert.match(tutorial, /新手範例 · 不計修為/);
   assert.match(tutorial, /requiresAnswer: true/);
   assert.match(tutorial, /exampleAnswered = true/);
-  assert.match(tutorial, /Number\(current\.stats\.totalScore\) \|\| 0\) >= FOUNDATION_SCORE/);
+  assert.doesNotMatch(tutorial, /function maybeAutoStart\(/);
   assert.doesNotMatch(tutorial, /applyCultivationReward/);
   assert.doesNotMatch(tutorial, /updateDoc\([^\n]*stats\.totalScore/);
 });
@@ -122,4 +122,12 @@ test('the new mortal tutorial ends before the Dongtian practice handed off by ch
   assert.match(cave, /requiresDongtianComplete: true/);
   assert.match(cave, /requiresDongtianReturn: true/);
   assert.match(cave, /requiresDongtianDelete: true/);
+});
+
+
+test('standalone tutorial buttons replay their entire chapters, not detached tutorials', () => {
+  assert.match(tutorial, /openXiuxianStoryChapter\?\.\('prologue-enter-sect'\)/);
+  assert.match(tutorial, /openXiuxianStoryChapter\?\.\('qi-five-dongtian'\)/);
+  assert.match(tutorial, /window\.startStoryQuestionTutorial = \(options = \{\}\)/);
+  assert.match(tutorial, /window\.startStoryDongtianTutorial = \(options = \{\}\)/);
 });

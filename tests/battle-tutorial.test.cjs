@@ -51,7 +51,7 @@ test('battle tutorial is a local simulation and never creates a formal matchmaki
 test('battle tutorial only unlocks after the Foundation battle story and gates later story chapters until complete', () => {
   assert.match(tutorial, /storyProgressV1\?\.seen\?\.\['foundation-first-battle'\]/);
   assert.match(tutorial, /const FIELD = 'battleTutorialV1'/);
-  assert.match(tutorial, /xiuxian:story-chapter-completed/);
+  assert.match(tutorial, /xiuxian:story-tutorial-finished/);
   assert.match(tutorial, /foundation-first-battle/);
   assert.match(storyEngine, /battleTutorialV1\?\.completed/);
   assert.match(storyEngine, /chapter\.order >= 4 && !battleTutorialComplete\(\)/);
@@ -67,7 +67,7 @@ test('Foundation battle chapter explicitly sets up Shen as the first opponent be
 
 test('completed battle tutorial can be replayed without changing its completion requirement', () => {
   assert.match(tutorial, /id = 'battle-tutorial-replay'/);
-  assert.match(tutorial, /start\(\{ replay:true \}\)/);
+  assert.match(tutorial, /openXiuxianStoryChapter\?\.\('foundation-first-battle'\)/);
   assert.match(tutorial, /window\.startBattleTutorial/);
   assert.match(tutorial, /completed:true/);
   assert.match(tutorial, /xiuxian:battle-tutorial-completed/);
@@ -141,4 +141,16 @@ test('gender preview rejects non-admins and selecting either portrait never pers
   elements[1].handlers.click();
   assert.equal(ctx.active, false);
   assert.equal(archives, 1);
+});
+
+
+test('battle lesson is inside the chapter replay, with no progress write on replay', () => {
+  assert.match(story, /tutorialKind: 'battle'/);
+  assert.match(story, /tutorialAfterLine: 17/);
+  assert.match(tutorial, /if \(!storySeen\(\) && !options\.replay && !options\.story\) return false/);
+  assert.match(tutorial, /startedByStory = options\.story === true/);
+  assert.match(tutorial, /previewOnly = adminPreview \|\| options\.replay === true/);
+  assert.match(tutorial, /async function persist\(patch\) \{\s*if \(previewOnly\) return/);
+  assert.match(tutorial, /detail: \{ kind: 'battle', replay: previewOnly/);
+  assert.doesNotMatch(tutorial, /function maybeAutoStart\(/);
 });

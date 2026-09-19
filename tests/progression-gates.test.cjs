@@ -132,7 +132,7 @@ test('beginner tutorial covers scope and reserves later realm guidance for the s
   assert.doesNotMatch(tutorial, /金丹/);
 });
 
-test('Golden Core tutorial is a separate post-unlock tutorial', () => {
+test('Golden Core tutorial is presented inside its story chapter after unlock', () => {
   assert.match(coreTutorial, /goldenCoreTutorialV1/);
   assert.match(coreTutorial, /isGoldenCoreUnlocked/);
   assert.match(coreTutorial, /training-core-orb/);
@@ -260,4 +260,17 @@ test('onboarding is complete only after grade, strengths and weaknesses, and nav
   assert.match(legacy, /不論凡人、煉氣或後續境界都保留底部導覽列/);
   assert.match(legacy, /xiuxian:stats-updated', ensureGameplayNavigationForReadyProfile/);
   assert.doesNotMatch(legacy, /ensureGameplayNavigationForReadyProfile[\s\S]{0,500}score\(\)\s*[><=]/);
+});
+
+
+test('Golden Core chapter controls the tutorial on normal play and replay without repeated persistence', () => {
+  const storyScripts = read('story/story-scripts.js');
+  const storyEngine = read('story/story-engine.js');
+  assert.match(storyScripts, /id: 'golden-core-truth'[\s\S]*?tutorialKind: 'golden-core'/);
+  assert.match(storyScripts, /tutorialAfterLine: 14/);
+  assert.match(storyEngine, /window\.startGoldenCoreTutorial/);
+  assert.match(coreTutorial, /replayOnly = options\.replay === true \|\| adminPreview \|\| !!marker\(\)\?\.completed/);
+  assert.match(coreTutorial, /if \(!replayOnly\) persistFinished\(skipped\)/);
+  assert.match(coreTutorial, /xiuxian:story-tutorial-finished/);
+  assert.doesNotMatch(coreTutorial, /golden-core-access-changed/);
 });

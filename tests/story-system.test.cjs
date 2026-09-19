@@ -246,13 +246,14 @@ test('chapter two pauses between its opening and aftermath for one-question Dong
   assert.match(before, /私人範例，只需一題/);
   assert.match(after, /你重新回到紫色門扉前/);
   assert.match(after, /黑色符紋/);
-  assert.match(engine, /function handoffDongtianTutorial\(\)/);
+  assert.match(engine, /function handoffStoryTutorial\(kind\)/);
   assert.match(engine, /window\.startStoryDongtianTutorial/);
   assert.match(engine, /storyTutorialPaused = true/);
-  assert.match(engine, /function resumeAfterDongtianTutorial\(\)/);
-  assert.match(engine, /xiuxian:story-dongtian-tutorial-finished/);
-  assert.match(engine, /!replayMode && currentChapter\.tutorialAfterLine === lineIndex/);
-  assert.match(engine, /storyDongtianTutorialComplete\(\)/);
+  assert.match(engine, /function resumeAfterStoryTutorial\(event\)/);
+  assert.match(engine, /xiuxian:story-tutorial-finished/);
+  assert.match(engine, /currentChapter\.tutorialAfterLine === lineIndex/);
+  assert.match(engine, /replayMode \|\| !storyTutorialComplete\(kind\)/);
+  assert.match(engine, /storyTutorialComplete\(kind\)/);
   assert.match(engine, /prepareStoryScene\(currentChapter\)/);
 });
 
@@ -263,8 +264,50 @@ test('main newbie walkthrough teaches question solving; the separate Dongtian wa
   assert.doesNotMatch(question, /requiresDongtianOpen|prepareDongtianDemo|requiresDongtianDelete/);
   assert.match(cave, /requiresDongtianOpen: true/);
   assert.match(cave, /requiresDongtianDelete: true/);
-  assert.match(newbie, /window\.startStoryDongtianTutorial = \(\) => start\('dongtian', \{ story: true \}\)/);
+  assert.match(newbie, /window\.startStoryDongtianTutorial = \(options = \{\}\) => start\('dongtian', \{ \.\.\.options, story: true \}\)/);
   assert.match(newbie, /scope: mode/);
   assert.match(newbie, /DONGTIAN_FIELD = 'storyDongtianTutorialV1'/);
   assert.match(newbie, /if \(shouldResumeStory\)/);
+});
+
+
+test('every main tutorial is a scene in its own chapter and chapter replay visits its tutorial', () => {
+  const definitions = [
+    ['prologue-enter-sect', 'question', 20],
+    ['qi-five-dongtian', 'dongtian', 11],
+    ['foundation-first-battle', 'battle', 17],
+    ['golden-core-truth', 'golden-core', 14]
+  ];
+  for (const [id, kind, checkpoint] of definitions) {
+    const begin = scripts.indexOf("id: '" + id + "'");
+    const end = scripts.indexOf('  Object.freeze({', begin + 1);
+    const scene = scripts.slice(begin, end < 0 ? undefined : end);
+    assert.match(scene, new RegExp("tutorialKind: '" + kind + "'"));
+    assert.match(scene, new RegExp('tutorialAfterLine: ' + checkpoint));
+    assert.ok((scene.match(/c\('/g) || []).length > checkpoint + 1, id + ' needs dialogue after its tutorial');
+  }
+  assert.match(engine, /replayMode \|\| !storyTutorialComplete\(kind\)/);
+  assert.match(engine, /storyTutorialPaused \|\| document\.getElementById\(ARCHIVE_ID\)/);
+  assert.match(engine, /if \(!chapter \|\| active \|\| storyTutorialPaused\) return false/);
+  assert.match(engine, /'newbieTutorialV1'/);
+  assert.match(engine, /'storyDongtianTutorialV1'/);
+  assert.match(engine, /'battleTutorialV1'/);
+  assert.match(engine, /'goldenCoreTutorialV1'/);
+});
+
+test('story-run tutorial replay is read only and returns to the next dialogue', () => {
+  const battle = read('public/cultivation/battle-tutorial.js');
+  assert.match(engine, /const options = \{ story: true, replay: replayMode, adminPreview \}/);
+  assert.match(engine, /detail\?\.kind/);
+  assert.match(engine, /pendingStoryTutorial !== kind/);
+  assert.match(engine, /lineIndex = Math\.min\(lineIndex \+ 1/);
+  assert.match(newbie, /if \(!replayOnly\) persistFinished\(skipped, finishedMode\)/);
+  assert.match(newbie, /replayOnly = options\.replay === true \|\| !!userData\(\)\?\.\[savedField\]\?\.completed/);
+  assert.match(battle, /if \(previewOnly\) return;/);
+  assert.match(battle, /startedByStory = options\.story === true/);
+  assert.match(battle, /kind: 'battle', replay: previewOnly/);
+  assert.match(golden, /if \(!replayOnly\) persistFinished\(skipped\)/);
+  assert.match(golden, /kind: 'golden-core', replay: replayOnly/);
+  assert.doesNotMatch(golden, /golden-core-access-changed/);
+  assert.doesNotMatch(newbie, /function maybeAutoStart\(/);
 });
