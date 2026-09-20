@@ -177,10 +177,6 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
     document.head.appendChild(style);
   }
 
-  function foundationBag() {
-    return '<section class="training-v3-empty foundation-training-bag"><i class="fa-solid fa-box-open"></i><h3>修煉背包</h3><p>修煉途中取得的特殊物品會收納於此。</p></section>';
-  }
-
   function tabActive(page) {
     return !!page?.querySelector(`[data-training-tab="${TAB}"].active`);
   }
@@ -211,23 +207,6 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
       return false;
     }
   }
-  function bindExit(page, button) {
-    if (button.dataset.refineryExitBound === '1') return;
-    button.dataset.refineryExitBound = '1';
-    button.addEventListener('click', () => {
-      active = false;
-      if (page.dataset.foundationTraining === '1' && button.dataset.trainingTab === 'bag') {
-        page.querySelectorAll('[data-training-tab]').forEach((tab) => {
-          const yes = tab === button;
-          tab.classList.toggle('active', yes);
-          tab.setAttribute('aria-selected', yes ? 'true' : 'false');
-        });
-        const content = page.querySelector('#training-tab-content');
-        if (content) { delete content.dataset.refineryRenderKey; content.innerHTML = foundationBag(); }
-        window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', { detail: { refineryTabClosed: true } }));
-      }
-    });
-  }
   function ensureTab() {
     const page = document.getElementById('page-training');
     const tabs = page?.querySelector('.training-subtabs-v3');
@@ -243,15 +222,8 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
       tab.innerHTML = '<i class="fa-solid fa-hammer"></i><span>煉器</span>';
       bag.before(tab);
     }
-    // 築基頁本身已管理分頁點擊；金丹頁則由共用煉器模組接手。
-    // 避免雙重處理導致剛開啟的煉器內容被另一個 handler 覆寫。
-    if (tab.dataset.refineryOpenBound !== '1' && page.dataset.foundationTraining !== '1') {
-      tab.dataset.refineryOpenBound = '1';
-      tab.addEventListener('click', () => activate(page));
-    }
-    tabs.querySelectorAll('[data-training-tab]').forEach((button) => {
-      if (button.dataset.trainingTab !== TAB) bindExit(page, button);
-    });
+    // 分頁點擊只由築基／金丹頁管理。這裡不再重複綁定 click 或回寫舊背包。
+    // v2 只在煉器分頁啟用時接管內容，從而避免覆蓋統一背包與裝備格。
     if (tabActive(page)) {
       active = true;
       render();
