@@ -379,7 +379,8 @@ test('refinery recipe book displays discovered formulas and first-owner details'
   assert.match(refinery, /你是首位發現者 · 配方擁有權已登錄/);
   assert.match(refinery, /首發擁有者：/);
   assert.match(refinery, /既有公共配方/);
-  assert.match(refinery, /第一位成功開爐並登錄未知配方/);
+  assert.match(refinery, /配方是製作指南，不是煉器許可證/);
+  assert.match(refinery, /首發者永久保有發現紀錄/);
   assert.match(refinery, /data-refinery-recipe-book/);
   assert.match(refinery, /recipeBookOpen = event\.currentTarget\.open/);
   assert.match(refinery, /item\?\.recipeFirstDiscovery/);
