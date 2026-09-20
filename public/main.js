@@ -18,8 +18,8 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/cultivation-progression-v2.js',
   './cultivation/cultivation-inventory.js',
   './cultivation/golden-core-access-guard.js',
-  './cultivation/foundation-training-page.js?v=20260920-equipment4',
-  './cultivation/cultivation-training-v4.js?v=20260920-equipment4',
+  './cultivation/foundation-training-page.js',
+  './cultivation/cultivation-training-v4.js',
   './cultivation/training-scroll-fix.js',
   './cultivation/reverse-core-multiples.js',
   './cultivation/golden-core-battle-effects.js',
@@ -31,7 +31,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/artifact-system.js',
   './cultivation/artifact-battle-effects.js',
   './cultivation/material-system.js',
-  './cultivation/unified-inventory-grid.js?v=20260920-equipment4',
+  './cultivation/unified-inventory-grid.js',
   './cultivation/inventory-legacy-bridge.js',
   './cultivation/refinery-ai-jobs.js',
   './cultivation/cultivation-refinery-v2.js',
@@ -66,6 +66,7 @@ let xiuxianFeatureLoadStarted = false;
 let xiuxianReadyTimer = null;
 let resolveXiuxianFeatureGate;
 const xiuxianFeatureGate = new Promise((resolve) => { resolveXiuxianFeatureGate = resolve; });
+const XIUXIAN_FEATURE_BUILD = '20260920-equipment4';
 
 window.__xiuxianFeaturesReady = false;
 window.waitForXiuxianFeatures = () => xiuxianFeatureGate;
@@ -80,7 +81,7 @@ async function loadXiuxianFeaturesSafely() {
       detail: { loaded: index, total, modulePath }
     }));
     try {
-      await import(modulePath);
+      await import(`${modulePath}?v=${XIUXIAN_FEATURE_BUILD}`);
     } catch (error) {
       failures.push(modulePath);
       console.error(`[Xiuxian] Failed to load optional module: ${modulePath}`, error);

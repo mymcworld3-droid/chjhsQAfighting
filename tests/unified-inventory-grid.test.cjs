@@ -166,8 +166,10 @@ test('old plain-text training backpack cards are removed from both stage shells'
   assert.match(goldenBag,/uib-bag-loading/);
 });
 
-test('equipment-related runtime modules are cache-busted together', () => {
-  assert.match(main,/foundation-training-page\.js\?v=20260920-equipment4/);
-  assert.match(main,/cultivation-training-v4\.js\?v=20260920-equipment4/);
-  assert.match(main,/unified-inventory-grid\.js\?v=20260920-equipment4/);
+test('all runtime feature modules share one build query without changing dependency-list paths', () => {
+  assert.match(main,/const XIUXIAN_FEATURE_BUILD = '20260920-equipment4'/);
+  assert.match(main,/await import\(\`\$\{modulePath\}\?v=\$\{XIUXIAN_FEATURE_BUILD\}\`\)/);
+  assert.match(main,/'\.\/cultivation\/foundation-training-page\.js'/);
+  assert.match(main,/'\.\/cultivation\/cultivation-training-v4\.js'/);
+  assert.match(main,/'\.\/cultivation\/unified-inventory-grid\.js'/);
 });
