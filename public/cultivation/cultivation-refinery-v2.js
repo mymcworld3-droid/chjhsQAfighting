@@ -200,10 +200,12 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
       }
       return true;
     } catch (error) {
+      // 細節由全域 console.error 進入管理員 Debugger，不向一般玩家顯示例外訊息。
       console.error('[Cultivation refinery] open failed:', error);
       const content = page.querySelector('#training-tab-content');
       if (content) {
-        content.innerHTML = '<section class="training-v3-empty refinery-open-error" role="alert"><h3>煉器介面載入失敗</h3><p>請按下方按鈕重新載入；若仍失敗，請重新整理遊戲。</p><button type="button" class="bt-primary" data-refinery-retry>重新載入煉器</button></section>';
+        // 保留可操作的重試入口；不輸出「Bug／載入失敗」等技術提示。
+        content.innerHTML = '<section class="training-v3-empty refinery-open-error"><h3>八方煉器陣</h3><p>煉器陣尚未準備完成。</p><button type="button" class="bt-primary" data-refinery-retry>重新準備煉器陣</button></section>';
         content.querySelector('[data-refinery-retry]')?.addEventListener('click', () => activate(page));
       }
       return false;
@@ -578,7 +580,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
       toast('管理員已跳過煉製時間，可立即開爐。');
     } catch (error) {
       console.error('[Cultivation refinery admin skip]', error);
-      toast(error.message || '無法跳過煉製時間。', false);
+      toast('本次操作未完成，請稍後再試。', false);
     } finally {
       busy = false;
       render(true);
@@ -618,7 +620,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
       }
     } catch (error) {
       console.error('[Cultivation refinery job]', error);
-      toast(error.message || '煉器失敗。', false);
+      toast('本次操作未完成，請稍後再試。', false);
     } finally {
       busy = false;
       render(true);
