@@ -49,7 +49,8 @@ test('preloaded refinery shell has base styling before refinery hydration', () =
 });
 
 test('refinery hydrates an already-active preloaded tab', () => {
-  assert.match(refinery, /refineryOpenBound/);
+  assert.doesNotMatch(refinery, /refineryOpenBound|refineryExitBound|function bindExit\(/);
+  assert.match(refinery, /分頁點擊只由築基／金丹頁管理/);
   assert.match(refinery, /xiuxian:refinery-open-request/);
   assert.match(refinery, /if \(tabActive\(page\)\) \{\s*active = true;\s*render\(\);/);
 });
