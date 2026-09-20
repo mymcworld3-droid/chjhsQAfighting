@@ -241,6 +241,13 @@ export function normalizeArtifactDefinition(raw = {}) {
     }).filter((effect) => effect.type) : []
   };
   if (raw.equipSlot) item.equipSlot = String(raw.equipSlot).trim();
+  // 配方首發權只附於首次登錄的正式法寶；不得由後續開爐覆寫。
+  // 舊有的官方／管理員配方沒有首發者，保持公共配方身分。
+  if (typeof raw.recipeOwnerUid === 'string' && raw.recipeOwnerUid.trim()) {
+    item.recipeOwnerUid = raw.recipeOwnerUid.trim().slice(0, 128);
+    item.recipeOwnerName = String(raw.recipeOwnerName || '無名修士').trim().slice(0, 36) || '無名修士';
+    item.recipeDiscoveredAtMs = Math.max(0, Math.floor(finite(raw.recipeDiscoveredAtMs, 0)));
+  }
   item.reviewStatus = raw.reviewStatus === 'pending' ? 'pending' : 'approved';
   item.generatedByAI = raw.generatedByAI === true;
   if (raw.generatedAtMs) item.generatedAtMs = Math.max(0, Math.floor(finite(raw.generatedAtMs, 0)));
