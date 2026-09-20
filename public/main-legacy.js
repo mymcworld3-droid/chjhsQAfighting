@@ -427,6 +427,15 @@ function queueXiuxianDebug(type, ...args) {
 window.reportXiuxianBug = (source, error, context = '') => {
     queueXiuxianDebug('error', '[BUG]', source, error, context);
 };
+// 使用者可理解的「金幣不足／材料不足」仍可正常顯示；原始例外、API 回應及堆疊只進 Debugger。
+window.xiuxianSafeActionError = (source, error, fallback = '本次操作未完成，請稍後再試。') => {
+    window.reportXiuxianBug(source, error);
+    const message = String(error?.message || error || '').trim();
+    const actionable = /^(?:金幣不足|材料不足|素材不足|靈石不足|修為不足|目前已有|目前沒有|此材料|此法寶|已裝備|需要|需先|請先|尚未登入|不可直接購買|名稱未通過)/;
+    return message.length <= 160 && !/[<>\\r\\n]/.test(message) && actionable.test(message)
+        ? message
+        : fallback;
+};
 console.error = function (...args) {
     xiuxianNativeError(...args);
     queueXiuxianDebug('error', ...args);
@@ -4852,6 +4861,12 @@ window.alert = (message, callback = null) => {
         return;
     }
 
+    // 舊功能若直接 alert 技術錯誤，完整訊息改進管理員 Debugger。
+    // 一般玩家只能看到不含 API／堆疊內容的通用操作提示。
+    if (typeof message === 'string' &&
+        /^(?:Error(?::|\\b)|Failed(?:\\b|:)|Load Error|Index Required|Exception|資料載入失敗|結算發生錯誤|Purchase failed|Equip failed)/i.test(message.trim())) {
+        message = window.xiuxianSafeActionError?.('Legacy alert', new Error(message), '本次操作未完成，請稍後再試。') || '本次操作未完成，請稍後再試。';
+    }
     // 設定內容
     msgEl.innerText = message;
     customAlertCallback = callback;
