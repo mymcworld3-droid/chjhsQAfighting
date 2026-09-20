@@ -1,4 +1,4 @@
-// 築基期修煉頁：10～27 修為只顯示背包；踏入金丹後交棒給完整修煉模組。
+// 築基期修煉頁：10～27 修為開放背包與煉器；踏入金丹後交棒給完整修煉模組。
 (function () {
   'use strict';
 
@@ -18,7 +18,10 @@
 
   function foundationStage() {
     const value = score();
-    return migrationReady() && value >= FOUNDATION_SCORE && value < GOLDEN_CORE_SCORE;
+    // 築基的背包與煉器屬於基礎修煉功能，只依實際修為解鎖。
+    // 舊角色若缺少 progressionMigrationV2 標記，也不能因此永久失去煉器。
+    return !!window.getCurrentUserData?.()?.stats &&
+      value >= FOUNDATION_SCORE && value < GOLDEN_CORE_SCORE;
   }
 
   function loadStyle() {

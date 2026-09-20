@@ -47,7 +47,9 @@
   }
 
   function trainingAllowed() {
-    return migrationReady() && score() >= FOUNDATION_SCORE;
+    // 築基起即可使用共同修煉殼層（背包、煉器）；不再依賴舊版遷移標記。
+    // 金丹仍由 coreAllowed() 保留 migrationReady + 28 修為的完整守門。
+    return !!data()?.stats && score() >= FOUNDATION_SCORE;
   }
 
   function coreAllowed() {

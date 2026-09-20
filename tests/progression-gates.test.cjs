@@ -41,13 +41,14 @@ test('Foundation opens shared training shell at 10 while Golden Core tab waits f
   assert.match(progression, /const GOLDEN_CORE_SCORE = 28;/);
   assert.match(guard, /const FOUNDATION_SCORE = 10;/);
   assert.match(guard, /const GOLDEN_CORE_SCORE = 28;/);
-  assert.match(guard, /migrationReady\(\) && score\(\) >= FOUNDATION_SCORE/);
+  assert.match(guard, /return !!data\(\)\?\.stats && score\(\) >= FOUNDATION_SCORE/);
   assert.match(guard, /migrationReady\(\) && score\(\) >= GOLDEN_CORE_SCORE/);
   assert.match(guard, /\[data-training-tab="core"\]/);
   assert.match(guard, /#training-status-tab/);
 
   assert.match(foundationTraining, /const GOLDEN_CORE_SCORE = 28;/);
   assert.match(foundationTraining, /value >= FOUNDATION_SCORE && value < GOLDEN_CORE_SCORE/);
+  assert.doesNotMatch(foundationTraining, /return migrationReady\(\) && value >= FOUNDATION_SCORE/);
   assert.match(foundationTraining, /data-training-tab="bag"/);
   assert.match(foundationTraining, /data-training-tab="refinery"/);
   assert.match(foundationTraining, /coreTab\?\.classList\.add\('hidden'\)/);
@@ -273,4 +274,13 @@ test('Golden Core chapter controls the tutorial on normal play and replay withou
   assert.match(coreTutorial, /if \(!replayOnly\) persistFinished\(skipped\)/);
   assert.match(coreTutorial, /xiuxian:story-tutorial-finished/);
   assert.doesNotMatch(coreTutorial, /golden-core-access-changed/);
+});
+
+
+test('Foundation refinery access does not depend on the legacy migration marker', () => {
+  assert.match(foundationTraining, /築基期修煉頁：10～27 修為開放背包與煉器/);
+  assert.match(foundationTraining, /return !!window\.getCurrentUserData\?\.\(\)\?\.stats[\s\S]*value >= FOUNDATION_SCORE && value < GOLDEN_CORE_SCORE/);
+  assert.match(guard, /築基起即可使用共同修煉殼層（背包、煉器）/);
+  assert.doesNotMatch(guard, /function trainingAllowed\(\) \{\s*return migrationReady\(\)/);
+  assert.match(guard, /function coreAllowed\(\) \{\s*return migrationReady\(\) && score\(\) >= GOLDEN_CORE_SCORE/);
 });
