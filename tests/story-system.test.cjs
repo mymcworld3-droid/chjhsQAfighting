@@ -210,7 +210,7 @@ test('all story portraits preload before gender choice or chapter playback can s
 test('Foundation battle story now hands off to the dedicated Shen Qingshuang then Gu Changfeng tutorial', () => {
   assert.match(scripts, /id: 'foundation-first-battle'[\s\S]*?c\('shen', '我。'\)/);
   assert.match(scripts, /演武，不會真的死亡/);
-  assert.match(scripts, /先學會輸，再學怎麼打/);
+  assert.match(scripts, /上場，我帶你練習一次/);
   assert.match(engine, /battleTutorialV1/);
   assert.match(engine, /chapter\.order >= 4 && !battleTutorialComplete\(\)/);
   assert.match(engine, /xiuxian:battle-tutorial-completed/);
@@ -286,7 +286,7 @@ test('every main tutorial is a scene in its own chapter and chapter replay visit
     assert.ok((scene.match(/c\('/g) || []).length > checkpoint + 1, id + ' needs dialogue after its tutorial');
   }
   assert.match(scripts, /kind: 'battle-shen', afterLine: 13/);
-  assert.match(scripts, /kind: 'battle-gu', afterLine: 26/);
+  assert.match(scripts, /kind: 'battle-gu', afterLine: 22/);
   assert.match(engine, /replayMode \|\| !storyTutorialComplete\(kind\)/);
   assert.match(engine, /storyTutorialPaused \|\| document\.getElementById\(ARCHIVE_ID\)/);
   assert.match(engine, /if \(!chapter \|\| active \|\| storyTutorialPaused\) return false/);
@@ -396,13 +396,13 @@ test('third chapter story and story archive render above the fullscreen battle p
 test('third chapter has two ordered handoffs with story dialogue between and after them', () => {
   const chapter = scripts.slice(scripts.indexOf("id: 'foundation-first-battle'"), scripts.indexOf("id: 'foundation-refinery'"));
   const lines = [...chapter.matchAll(/c\('(narrator|shen|player|rival)', '([^']*)'/g)].map(match=>match[2]);
-  assert.equal(lines.length,32);
-  assert.match(lines[13],/先學會輸/);
+  assert.equal(lines.length,28);
+  assert.match(lines[13],/上場，我帶你練習一次/);
   assert.match(lines[14],/六萬五千點真實傷害/);
-  assert.match(lines[16],/我已經放水了/);
-  assert.match(lines[23],/顧長風，過來/);
-  assert.match(lines[26],/顧長風走上鬥法臺/);
-  assert.match(lines[27],/第二場演武結束後/);
+  assert.match(lines[17],/呃……沒事吧/);
+  assert.match(lines[19],/顧長風，過來/);
+  assert.match(lines[22],/顧長風走上鬥法臺/);
+  assert.match(lines[23],/第二場演武結束後/);
   assert.ok(chapter.indexOf("kind: 'battle-shen'") < chapter.indexOf("kind: 'battle-gu'"));
   assert.match(engine,/phase: 'shen'/);
   assert.match(engine,/phase: 'gu'/);
@@ -412,7 +412,7 @@ test('chapter three performs two handoffs in sequence on replay', async () => {
   const vm = require('node:vm');
   const lifecycle = engine.slice(engine.indexOf('  function storyTutorialComplete('),engine.indexOf('  async function finishChapter()'));
   const calls = [];
-  const chapter = {id:'foundation-first-battle',minScore:10,tutorials:[{kind:'battle-shen',afterLine:13},{kind:'battle-gu',afterLine:26}],lines:Array(32).fill({})};
+  const chapter = {id:'foundation-first-battle',minScore:10,tutorials:[{kind:'battle-shen',afterLine:13},{kind:'battle-gu',afterLine:22}],lines:Array(28).fill({})};
   const ctx = vm.createContext({
     data:()=>({battleTutorialV1:{completed:true}}),currentChapter:chapter,
     lineIndex:13,replayMode:true,storyTutorialPaused:false,pendingStoryTutorial:'',active:true,LAYER_ID:'xiuxian-story-layer',
@@ -425,10 +425,10 @@ test('chapter three performs two handoffs in sequence on replay', async () => {
   assert.deepEqual(calls,['shen']);
   vm.runInContext("resumeAfterStoryTutorial({detail:{kind:'battle-shen'}})",ctx);
   assert.equal(ctx.lineIndex,14);
-  ctx.lineIndex=26;
+  ctx.lineIndex=22;
   vm.runInContext('nextLine()',ctx);
   await new Promise(resolve=>setImmediate(resolve));
   assert.deepEqual(calls,['shen','gu']);
   vm.runInContext("resumeAfterStoryTutorial({detail:{kind:'battle-gu'}})",ctx);
-  assert.equal(ctx.lineIndex,27);
+  assert.equal(ctx.lineIndex,23);
 });

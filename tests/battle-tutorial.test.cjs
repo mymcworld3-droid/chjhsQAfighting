@@ -22,8 +22,8 @@ test('first tutorial duel is Shen Qingshuang one-shotting the projection for exa
   assert.match(tutorial, /const TRUE_DAMAGE = 65000/);
   assert.match(tutorial, /-65,000<small>真實傷害 · TRUE DAMAGE/);
   assert.match(tutorial, /playerHp = 0/);
-  assert.match(story, /我已經放水了。/);
-  assert.match(story, /神識沒事吧/);
+  assert.match(story, /演武投影承受六萬五千點真實傷害/);
+  assert.match(story, /呃……沒事吧/);
   assert.match(tutorial, /assets\/story\/characters\/shen-qingshuang\.png/);
 });
 
@@ -62,7 +62,7 @@ test('Foundation battle chapter explicitly sets up Shen as the first opponent be
   assert.match(story, /c\('player', '所以我要跟誰打？'/);
   assert.match(story, /c\('shen', '我。'\)/);
   assert.match(story, /不會真的死亡/);
-  assert.match(story, /先學會輸，再學怎麼打/);
+  assert.match(story, /上場，我帶你練習一次/);
 });
 
 test('completed battle tutorial can be replayed without changing its completion requirement', () => {
@@ -88,8 +88,9 @@ test('Shen first duel returns to main story without starting Gu or marking tutor
   const el = {querySelector: () => ({addEventListener:(_event, callback) => {handler=callback;}})};
   const ctx = vm.createContext({
     active:true, busy:false, tutorialPhase:'shen', startedByStory:true, previewOnly:false,
-    LAYER_ID:'battle-tutorial-layer', playerHp:0,
-    shell:()=>el, playerPortrait:() => '', stage:'shen-strike',
+    LAYER_ID:'battle-tutorial-layer', playerHp:0, shenChoice:null,
+    SHEN_QUESTION:{opts:['正確值'],ans:0,exp:'數學解析'},esc:String,
+    shell:()=>el, playerPortrait:() => '', stage:'shen-strike', closeTutorialArena:()=>{closed++;},clearShenTimer() {},
     document:{getElementById:()=>({remove(){}})},
     window:{closeBattleTutorialArena:()=>{closed++;}, dispatchEvent:event=>{finished=event;}},
     CustomEvent:class {constructor(type, options){this.type=type;this.detail=options.detail;}}
@@ -114,7 +115,7 @@ test('admin archive unlocks all chapters and tutorial scenes without progression
   assert.match(tutorial, /options.adminPreview === true && data\(\)\?\.isAdmin === true/);
   assert.match(tutorial, /if \(options.adminPreview && !adminPreview\) return false/);
   assert.match(tutorial, /async function persist\(patch\) \{\s*if \(previewOnly\) return/);
-  assert.match(story, /是誰讓你修仙的/);
+  assert.match(story, /呃……沒事吧/);
 });
 
 test('gender preview rejects non-admins and selecting either portrait never persists', async () => {
@@ -145,7 +146,7 @@ test('gender preview rejects non-admins and selecting either portrait never pers
 
 test('battle lesson is inside the chapter replay, with no progress write on replay', () => {
   assert.match(story, /kind: 'battle-shen', afterLine: 13/);
-  assert.match(story, /kind: 'battle-gu', afterLine: 26/);
+  assert.match(story, /kind: 'battle-gu', afterLine: 22/);
   assert.match(tutorial, /if \(!storySeen\(\) && !options\.replay && !options\.story\) return false/);
   assert.match(tutorial, /startedByStory = options\.story === true/);
   assert.match(tutorial, /previewOnly = adminPreview \|\| options\.replay === true/);
