@@ -83,7 +83,8 @@ test('Foundation refinery click delegates to a single public opener for ordinary
   assert.match(refinery, /window\.openCultivationRefinery = \(\) => activate\(\)/);
   assert.match(refinery, /page\.dataset\.foundationTraining !== '1'/);
   assert.match(refinery, /function activate\(page = document\.getElementById\('page-training'\)\)/);
-  assert.match(refinery, /煉器介面載入失敗/);
+  assert.match(refinery, /八方煉器陣/);
+  assert.doesNotMatch(refinery, /<h3>煉器介面載入失敗<\/h3>/);
   assert.match(refinery, /data-refinery-retry/);
   assert.doesNotMatch(refinery, /function activate\(page[^)]*\) \{\s*if \(userData\(\)\?\.isAdmin/);
 });

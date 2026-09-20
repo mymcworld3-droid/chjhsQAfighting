@@ -46,3 +46,65 @@ test('old low debug z-index utility classes are removed from static markup', () 
   assert.doesNotMatch(index.slice(buttonStart, buttonEnd), /z-\[9998\]/);
   assert.doesNotMatch(index.slice(consoleStart, consoleEnd), /z-\[9999\]/);
 });
+
+test('all runtime console faults are buffered and exposed only after admin identity is confirmed', () => {
+  const vm = require('node:vm');
+  const start = legacy.indexOf('const xiuxianDebugBuffer =');
+  const end = legacy.indexOf('// ==========================================\n// 1. 定義修仙境界',start);
+  assert.ok(start>=0 && end>start);
+  const code = legacy.slice(start,end);
+  const handlers = {};
+  let admin = false;
+  const logs = [], visible = new Set();
+  const createClassList = () => ({
+    add(value){visible.delete(value);},
+    remove(value){visible.add(value);}
+  });
+  const elements = new Map();
+  function element(id) {
+    if (!elements.has(id)) {
+      const e = {
+        id, children:[], textContent: id === 'debug-count' ? '0' : '',
+        style:{setProperty(){}}, classList:createClassList(),
+        replaceChildren(){this.children=[];}, prepend(child){this.children.unshift(child);},
+        get lastElementChild(){return this.children[this.children.length-1];},
+        remove() {}
+      };
+      elements.set(id,e);
+    }
+    return elements.get(id);
+  }
+  const ctx = vm.createContext({
+    currentUserData:null,
+    window:{isDebugInit:false,addEventListener:(key,fn)=>{handlers[key]=fn;}},
+    document:{getElementById:element,createElement:()=>({className:'',textContent:''})},
+    console:{error:(...args)=>logs.push(['error',...args]),warn:(...args)=>logs.push(['warn',...args]),log:(...args)=>logs.push(['log',...args])},
+    Date, String
+  });
+  vm.runInContext(code,ctx);
+  vm.runInContext("console.error('early fail'); window.reportXiuxianBug('craft', new Error('failed'));",ctx);
+  vm.runInContext("window.setupAdminDebug()",ctx);
+  assert.equal(element('debug-logs').children.length,0, 'non-admin must not see any diagnostics');
+  ctx.currentUserData={isAdmin:true};
+  vm.runInContext("window.setupAdminDebug()",ctx);
+  assert.equal(element('debug-logs').children.length,2, 'admin sees pre-login errors');
+  assert.match(element('debug-logs').children[0].textContent,/craft/);
+  assert.match(element('debug-logs').children[1].textContent,/early fail/);
+  assert.equal(element('debug-count').textContent,'2');
+  handlers.error({message:'runtime exception',filename:'game.js',lineno:5,colno:3,error:new Error('boom')});
+  assert.match(element('debug-logs').children[0].textContent,/runtime exception/);
+  ctx.currentUserData={isAdmin:false};
+  vm.runInContext("console.warn('player-only warning')",ctx);
+  assert.doesNotMatch(element('debug-logs').children[0].textContent,/player-only warning/);
+});
+
+test('refinery shows ordinary players only a neutral retry and routes errors into the admin debugger', () => {
+  const refinery = read('public/cultivation/cultivation-refinery-v2.js');
+  assert.match(refinery, /console.error\('\[Cultivation refinery\] open failed:', error\)/);
+  assert.match(refinery, /data-refinery-retry/);
+  assert.doesNotMatch(refinery, /<h3>煉器介面載入失敗<\/h3>/);
+  assert.doesNotMatch(refinery, /toast\(error.message \|\| '煉器失敗/);
+  assert.match(legacy, /checkAdminRole\(currentUserData.isAdmin === true\)/);
+  assert.match(legacy, /xiuxianDebugBuffer\.forEach\(xiuxianDebugWriter\)/);
+  assert.match(legacy, /div\.textContent =/);
+});
