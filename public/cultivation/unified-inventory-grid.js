@@ -14,7 +14,7 @@ import {
 
   const ROOT_ID = 'unified-cultivation-bag';
   const MODAL_ID = 'unified-bag-detail-modal';
-  const STYLE_ID = 'unified-inventory-grid-style';
+  const STYLE_ID = 'unified-inventory-grid-runtime-style';
   const TYPE_ORDER = Object.freeze({ artifact: 0, material: 1, consumable: 2, training: 3 });
   const REALM_COLORS = Object.freeze({
     凡人: '#a1a1aa', 煉氣: '#86efac', 築基: '#60a5fa', 金丹: '#fbbf24', 元嬰: '#c084fc',
@@ -206,11 +206,11 @@ import {
     });
   }
 
-  function bagIsActive() {
+  function inventoryView() {
     const page = document.getElementById('page-training');
-    if (!page) return false;
-    const bag = page.querySelector('[data-training-tab="bag"]');
-    return !!bag && (bag.classList.contains('active') || bag.getAttribute('aria-selected') === 'true');
+    const selected = page?.querySelector('[data-training-tab].active');
+    const tab = selected?.dataset.trainingTab;
+    return tab === 'equipment' || tab === 'bag' ? tab : '';
   }
 
   function itemMarkup(item) {
@@ -224,16 +224,29 @@ import {
     </button>`;
   }
 
-  function rootMarkup(allItems) {
+  function rootMarkup(allItems, view = 'bag') {
+    if (view === 'equipment') {
+      const equipmentItems = allItems
+        .filter((item) => item.type === 'artifact' && !!artifactSlot(item.raw))
+        .filter((item) => !equipmentPickSlot || artifactSlot(item.raw) === equipmentPickSlot)
+        .sort((a, b) => (b.qualityRank || 0) - (a.qualityRank || 0) || String(a.name).localeCompare(String(b.name), 'zh-Hant'));
+      return `<section id="${ROOT_ID}" class="uib-root uib-equipment-view">
+        ${equipmentMarkup()}
+        ${equipmentPickSlot
+          ? `<div class="uib-equip-picker"><span>選擇「${escapeHtml(equipmentPickSlot)}」的法寶</span><button type="button" data-uib-cancel-equip>取消</button></div>`
+          : '<div class="uib-equip-picker"><span>點擊空欄裝配；點擊已裝法寶可查看或卸下。</span></div>'}
+        ${equipmentItems.length
+          ? `<div class="uib-equipment-available"><span>持有法寶</span><small>點擊法寶查看或裝配</small></div><div class="uib-grid">${equipmentItems.map(itemMarkup).join('')}</div>`
+          : `<div class="uib-empty"><i class="fa-solid fa-shield-halved"></i><b>${equipmentPickSlot ? '此欄尚無可裝配法寶' : '尚無可裝配的法寶'}</b><span>可以先前往煉器，打造裝備型法寶。</span></div>`}
+      </section>`;
+    }
     const visible = sortedVisibleItems(allItems);
     const counts = {
       artifact: allItems.filter((item) => item.type === 'artifact').length,
       material: allItems.filter((item) => item.type === 'material').length,
       consumable: allItems.filter((item) => item.type === 'consumable' || item.type === 'training').length
     };
-    return `<section id="${ROOT_ID}" class="uib-root">
-      ${equipmentMarkup()}
-      ${equipmentPickSlot ? `<div class="uib-equip-picker"><span>選擇「${escapeHtml(equipmentPickSlot)}」的法寶</span><button type="button" data-uib-cancel-equip>取消</button></div>` : ''}
+    return `<section id="${ROOT_ID}" class="uib-root uib-bag-view">
       <div class="uib-toolbar">
         <div class="uib-summary"><b>背包</b><span>${allItems.length} 種物品</span></div>
         <label>種類
@@ -255,7 +268,7 @@ import {
       </div>
       ${visible.length
         ? `<div class="uib-grid">${visible.map(itemMarkup).join('')}</div>`
-        : `<div class="uib-empty"><i class="fa-solid fa-box-open"></i><b>${equipmentPickSlot ? '此欄尚無可裝配法寶' : allItems.length ? '此分類沒有物品' : '背包尚空'}</b><span>${equipmentPickSlot ? '可以先煉製對應欄位的法寶。' : allItems.length ? '切換種類即可查看其他物品。' : '法寶、材料與修煉道具都會收納在這裡。'}</span></div>`}
+        : `<div class="uib-empty"><i class="fa-solid fa-box-open"></i><b>${allItems.length ? '此分類沒有物品' : '背包尚空'}</b><span>${allItems.length ? '切換種類即可查看其他物品。' : '法寶、材料與修煉道具都會收納在這裡。'}</span></div>`}
     </section>`;
   }
 
@@ -380,13 +393,15 @@ import {
 
   function render(force = false) {
     queued = false;
-    if (!bagIsActive()) return;
+    const view = inventoryView();
+    if (!view) return;
     const content = document.getElementById('training-tab-content');
     if (!content) return;
 
     const allItems = collectItems();
     lastItems = new Map(allItems.map((item) => [item.key, item]));
     const signature = JSON.stringify({
+      view,
       filterType,
       sortMode,
       equipmentPickSlot,
@@ -397,7 +412,7 @@ import {
     if (!force && root?.dataset.signature === signature && root.closest('#training-tab-content') === content) return;
 
     // 修煉模組每次切分頁都可能重建 content；統一背包在其後接手背包內容。
-    content.innerHTML = rootMarkup(allItems);
+    content.innerHTML = rootMarkup(allItems, view);
     const nextRoot = document.getElementById(ROOT_ID);
     if (nextRoot) {
       nextRoot.dataset.signature = signature;
@@ -418,6 +433,9 @@ import {
     style.id = STYLE_ID;
     style.textContent = `
       #${ROOT_ID}{width:100%;height:100%;min-height:0;display:flex;flex-direction:column;gap:10px;box-sizing:border-box}
+      .uib-equipment-view{overflow:auto;min-height:0;overscroll-behavior:contain}
+      .uib-equipment-available{display:flex;justify-content:space-between;align-items:center;color:#ddbf79;font-size:12px;font-weight:900}
+      .uib-equipment-available small{font-size:10px;color:#978465;font-weight:400}
       .uib-equipment-panel{flex:0 0 auto;width:100%;min-width:0;padding:clamp(12px,1.4vw,20px);border:1px solid rgba(216,177,93,.3);border-radius:18px;background:radial-gradient(ellipse at 50% -40%,rgba(186,137,55,.15),transparent 65%),linear-gradient(145deg,#17130d,#080807)}
       .uib-equipment-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.uib-equipment-head b{color:#ecd9ae;font-size:clamp(12px,1.15vw,17px)}.uib-equipment-head b i{margin-right:7px;color:#c8a15b}.uib-equipment-head em{padding:4px 10px;border:1px solid rgba(216,177,93,.28);border-radius:999px;color:#ebca80;font-size:12px;font-style:normal}
       .uib-equipment-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(7px,1vw,14px)}
