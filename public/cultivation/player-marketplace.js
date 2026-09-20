@@ -1,7 +1,7 @@
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import {
-  getFirestore, collection, doc, query, where, limit, onSnapshot, runTransaction
+  getFirestore, collection, doc, query, where, limit, onSnapshot, getDocs, runTransaction
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { ARTIFACT_CATALOG, getArtifactById } from './artifact-catalog.js';
 import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material-catalog.js';
@@ -31,6 +31,9 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
   let pendingRender = false;
   let noticeText = '';
   let noticeError = false;
+  let marketInitialized = false;
+  let requestedView = '';
+  let reloading = false;
 
   const user = () => { try { return getAuth(getApp()).currentUser; } catch (_) { return null; } };
   const data = () => window.getCurrentUserData?.() || null;
@@ -246,6 +249,46 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
     finally { busy = false; render(); }
   }
 
+  const EFFECT_LABELS = Object.freeze({
+    equip_attack_flat:'攻擊', equip_attack_percent:'攻擊加成', equip_hp_flat:'生命',
+    equip_hp_percent:'生命加成', equip_damage_percent:'傷害加成',
+    equip_damage_reduction_flat:'固定減傷', equip_damage_reduction_percent:'減傷',
+    equip_crit_chance:'暴擊率', equip_crit_damage_percent:'暴擊傷害',
+    equip_combo_chance:'連擊率', equip_lifesteal_percent:'吸血',
+    equip_reflect_percent:'反彈', equip_shield_flat:'初始護盾',
+    equip_true_damage_flat:'真實傷害', equip_cheat_death:'保命',
+    remove_wrong_option:'排除錯誤選項', timed_attack_multiplier:'限時攻擊加成',
+    timed_cultivation_multiplier:'限時修為加成'
+  });
+  function detailMarkup(listing) {
+    const item = itemFor(listing.type, listing.itemId);
+    if (!item) return '<p>商品資料已變更，請重新整理後確認。</p>';
+    const desc = esc(item.description || '暫無詳細描述');
+    const category = esc(item.category || (listing.type === 'recipe' ? '配方指南' : '法寶'));
+    const attributes = listing.type === 'material'
+      ? `<p><b>材料種類：</b>${category} · <b>境界：</b>${esc(item.realm || '凡人')}</p>`
+      : `<p><b>法寶類型：</b>${category} · <b>境界：</b>${esc(item.realm || '凡人')}</p>`;
+    const effects = (item.effects || []).map((effect) => {
+      const label = EFFECT_LABELS[effect.type] || effect.type || '特殊效果';
+      const amount = effect.value ?? effect.multiplier ?? '';
+      return `<li>${esc(label)}${amount === '' ? '' : '：' + esc(amount)}</li>`;
+    }).join('');
+    const isRecipe = listing.type === 'recipe';
+    const knows = isRecipe && (!item.recipeOwnerUid || item.recipeOwnerUid === currentUid || data()?.recipeLicenses?.[item.id] === true);
+    const ingredients = isRecipe
+      ? (knows
+        ? `<p><b>製作材料：</b>${getArtifactRecipe(item.id).map((row) => {
+            const ingredient = row.artifactId ? getArtifactById(row.artifactId) : getMaterialById(row.materialId);
+            return esc(ingredient?.name || row.artifactId || row.materialId || '素材') + ' ×' + qty(row.quantity);
+          }).join(' · ') || '目前未登錄配方'}</p>`
+        : '<p>購買後可在煉器配方圖鑑查看確切材料與數量；沒有配方仍能自由開爐。</p>')
+      : '';
+    return `<div class="pm-item-details"><p>${desc}</p>${attributes}
+      ${effects && !isRecipe ? `<b>法寶效果</b><ul>${effects}</ul>` : ''}
+      ${isRecipe ? `<p><b>首發者：</b>${esc(item.recipeOwnerName || listing.sellerName || '無名修士')} · 永久製作指南，首發身分不轉移</p>` : ''}
+      ${ingredients}</div>`;
+  }
+
   function card(listing, own = false) {
     const mine = listing.sellerUid === currentUid;
     const canBuy = !own && !mine && !busy && gold(data()) >= qty(listing.price)
@@ -253,6 +296,7 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
     const price = qty(listing.price);
     return `<article class="pm-card"><div class="pm-card-head"><span class="pm-icon">${esc(listing.itemIcon)}</span><div><b>${esc(listing.itemName)}</b><small>${esc(TYPE_LABEL[listing.type] || '商品')} · ${esc(listing.itemRealm)} · ×${qty(listing.quantity)}</small></div></div>
       <p class="pm-seller">賣家：${esc(listing.sellerName)} · ${listing.type === 'recipe' ? '永久配方知識' : '安全寄售'}</p>
+      <details class="pm-detail"><summary>查看商品資訊</summary>${detailMarkup(listing)}</details>
       <div class="pm-card-foot"><strong><i class="fa-solid fa-coins"></i> ${price.toLocaleString()} 金幣</strong>
       ${own ? (listing.status === 'active' ? `<button data-pm-cancel="${esc(listing.id)}" ${busy ? 'disabled' : ''}>取消委託</button>` : `<small>${listing.status === 'sold' ? '已成交' : '已取消'}</small>`)
       : `<button data-pm-buy="${esc(listing.id)}" ${canBuy ? '' : 'disabled'}>${mine ? '我的委託' : listing.type === 'recipe' && data()?.recipeLicenses?.[listing.itemId] ? '已獲授權' : gold(data()) < price ? '金幣不足' : '購買'}</button>`}</div></article>`;
@@ -268,7 +312,8 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
     root.innerHTML = `<div class="pm-header"><div><small>PLAYER MARKET · 修仙交易</small><h3><i class="fa-solid fa-scale-balanced"></i> 交易市集</h3><p>玩家自由定價；金幣與商品在同一筆交易中結算。首發配方可出售製作指南；沒有配方也能自由摸索煉製。</p></div><b>金幣 ${gold(data()).toLocaleString()}</b></div>
       <div class="pm-compose"><h4>發布委託</h4><div class="pm-form"><label>類別<select id="pm-sell-type">${Object.entries(TYPE_LABEL).map(([type,label]) => `<option value="${type}" ${type === sellType ? 'selected' : ''}>${label}</option>`).join('')}</select></label><label>商品<select id="pm-sell-item">${options.map((row) => `<option value="${esc(row.id)}" ${row.id === sellId ? 'selected' : ''}>${esc(row.name)}${sellType === 'recipe' ? ' · 首發配方' : ' · 可售 '+ row.count}</option>`).join('')}</select></label><label>數量<input id="pm-sell-qty" type="number" min="1" max="${selected?.count || 1}" value="${sellType === 'recipe' ? 1 : Math.min(Math.max(1,sellQuantity), selected?.count || 1)}" ${sellType === 'recipe' ? 'disabled' : ''}></label><label>總價（金幣）<input id="pm-sell-price" type="number" min="1" max="${MAX_PRICE}" value="${sellPrice}"></label><button id="pm-publish" ${!options.length || busy ? 'disabled' : ''}>上架寄售</button></div><p class="pm-hint">材料／法寶上架時扣除可用庫存，取消即退還。裝備中的法寶不可寄售。配方交易只傳授製作方法，首發者身分不轉移；沒有配方也能嘗試煉器。</p></div>
       <div class="pm-filters">${[['all','全部'],['material','材料'],['artifact','法寶'],['recipe','配方'],['mine','我的委託']].map(([value,label]) => `<button data-pm-filter="${value}" class="${filter === value ? 'active' : ''}">${label}</button>`).join('')}</div>
-      <div class="pm-list">${failed ? '<p class="pm-empty">市集尚未開放，請稍後再試。</p>' : list.length ? list.map((row) => card(row,filter==='mine')).join('') : '<p class="pm-empty">目前沒有符合條件的委託。</p>'}</div>
+      ${failed ? '<div class="pm-connection"><span>市集連線暫時中斷，以下若有商品為上次取得的資料；交易會在送出時重新驗證。</span><button type="button" data-pm-refresh>重新載入商品</button></div>' : ''}
+      <div class="pm-list">${list.length ? list.map((row) => card(row,filter==='mine')).join('') : '<p class="pm-empty">目前沒有符合條件的委託。</p>'}</div>
       <p id="player-market-notice" class="${noticeError ? 'market-notice-error' : ''}" aria-live="polite">${esc(noticeText)}</p>`;
   }
   function scheduleRender() {
@@ -283,7 +328,7 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
     const grid = document.getElementById('store-grid');
     if (!market || !store) {
       console.error('[Player market] market panel was not mounted before tab switch');
-      return;
+      return false;
     }
     store.classList.toggle('pm-market-active', open);
     market.classList.toggle('hidden', !open);
@@ -302,41 +347,84 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
     }
     document.getElementById('pm-view-shop')?.classList.toggle('active', !open);
     document.getElementById('pm-view-market')?.classList.toggle('active', open);
-    if (open) render();
+    if (open) { render(); void refreshListings(); }
+    return true;
   }
   function installStyle() {
     if (document.getElementById('player-market-style')) return;
     const style = document.createElement('style');
     style.id = 'player-market-style';
     style.textContent = `
+      #page-store.pm-market-active > div:has(> .store-tab),#page-store.pm-market-active #store-grid{display:none!important}
+      #page-store.pm-market-active #player-market{display:block!important}
       #player-market-switch{display:flex;gap:9px;margin:10px 0 15px}#player-market-switch button{flex:1;padding:12px;border:1px solid #554526;border-radius:12px;background:#15120c;color:#bea976;font-size:13px;font-weight:900}#player-market-switch button.active{color:#fff0c6;background:#4c3618;border-color:#cfa756}
       #player-market{color:#ebdcba;padding-bottom:90px}#player-market *{box-sizing:border-box}#player-market .pm-header{display:flex;justify-content:space-between;gap:15px;align-items:center;padding:20px;border:1px solid #564327;border-radius:19px;background:radial-gradient(circle at 12% 0%,#342711,#0b0a08 80%)}#player-market .pm-header small{color:#b9a06a;font-weight:800;letter-spacing:.13em}#player-market .pm-header h3{font-size:23px;font-weight:900;margin:8px 0 4px;color:#f5dfa8}#player-market .pm-header p{color:#ac9c7e;font-size:12px;line-height:1.65}#player-market .pm-header>b{flex-shrink:0;color:#ebc86c;font-size:14px}
       #player-market .pm-compose{margin:14px 0;padding:17px;border:1px solid #473921;border-radius:16px;background:#13100b}#player-market .pm-compose h4{font-weight:900;color:#e1c582;margin-bottom:12px}#player-market .pm-form{display:grid;grid-template-columns:minmax(105px,.8fr) minmax(180px,2fr) repeat(2,minmax(95px,.8fr)) auto;gap:9px;align-items:end}#player-market .pm-form label{display:flex;flex-direction:column;gap:6px;font-size:11px;color:#c7b78f}#player-market .pm-form :is(input,select){width:100%;min-width:0;height:40px;padding:0 9px;border:1px solid #554427;border-radius:9px;background:#090907;color:#eee0bc;font-size:12px}#player-market button{cursor:pointer}#player-market button:disabled{opacity:.35;cursor:not-allowed}#player-market #pm-publish,#player-market .pm-card-foot button{min-height:40px;padding:0 16px;border:1px solid #d2ad61;border-radius:10px;background:linear-gradient(150deg,#6f5226,#34250f);color:#fff0c7;font-weight:900;font-size:12px}#player-market .pm-hint{font-size:11px;color:#a79570;line-height:1.65;margin:10px 0 0}
       #player-market .pm-filters{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}#player-market .pm-filters button{border:1px solid #554428;border-radius:9px;padding:9px 13px;color:#c5b185;background:#16120d;font-size:12px}#player-market .pm-filters button.active{background:#63491f;border-color:#d4ae5b;color:#fff0c0}#player-market .pm-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:11px}#player-market .pm-card{padding:15px;border:1px solid #4c3a24;border-radius:15px;background:linear-gradient(145deg,#1d170e,#0b0a09)}#player-market .pm-card-head{display:flex;gap:10px;align-items:center}#player-market .pm-card-head b{color:#f3dfac;font-size:15px}#player-market .pm-card-head small{display:block;margin-top:5px;color:#a79675;font-size:10px}#player-market .pm-icon{flex:0 0 43px;height:43px;display:grid;place-items:center;background:#2d220f;border:1px solid #786034;border-radius:11px;color:#efca72;font-weight:900}#player-market .pm-seller{color:#97876c;font-size:11px;margin:14px 0}#player-market .pm-card-foot{display:flex;align-items:center;justify-content:space-between;gap:8px}#player-market .pm-card-foot strong{color:#f4d078;font-size:14px}#player-market .pm-card-foot small{color:#bca36e}#player-market .pm-empty{grid-column:1/-1;border:1px dashed #54432b;border-radius:12px;padding:33px;color:#a4916b;text-align:center}#player-market-notice{font-size:12px;color:#d3b873;margin-top:15px}#player-market-notice.market-notice-error{color:#f0abab}
+      #player-market .pm-detail{margin:9px 0;border:1px solid #564428;border-radius:9px;background:#100d08}
+      #player-market .pm-detail summary{cursor:pointer;color:#ead29b;font-size:12px;font-weight:850;padding:10px 12px}
+      #player-market .pm-item-details{padding:0 12px 11px;color:#c7b998;font-size:11px;line-height:1.7}
+      #player-market .pm-item-details p{margin:6px 0;overflow-wrap:anywhere}
+      #player-market .pm-item-details ul{padding-left:19px;margin-top:5px;list-style:disc}
+      #player-market .pm-connection{display:flex;align-items:center;justify-content:space-between;gap:10px;color:#e8c999;font-size:11px;border:1px solid #775b31;border-radius:12px;padding:11px;margin-bottom:13px}
+      #player-market .pm-connection button{padding:8px 12px;border-radius:7px;background:#694b1d;color:#fce3b4;flex-shrink:0}
       @media(max-width:900px){#player-market .pm-form{grid-template-columns:repeat(2,minmax(0,1fr))}#player-market #pm-publish{grid-column:1/-1}}@media(max-width:530px){#player-market .pm-header{flex-direction:column;align-items:flex-start}#player-market .pm-form{grid-template-columns:1fr 1fr}#player-market .pm-form label:nth-child(2){grid-column:1/-1}#player-market .pm-list{grid-template-columns:1fr}}
     `;
     document.head.appendChild(style);
   }
+  // 市集進入時主動載入一次商品；即時 Listen 中斷時也可手動重新整理，
+  // 不會因為一次傳輸錯誤永久遮住已取得的商品。
+  async function refreshListings() {
+    if (!db || !currentUid || reloading) return;
+    reloading = true;
+    try {
+      const [publicRows, ownRows] = await Promise.all([
+        getDocs(query(collection(db,COLLECTION),where('status','==','active'),limit(60))),
+        getDocs(query(collection(db,COLLECTION),where('sellerUid','==',currentUid),limit(40)))
+      ]);
+      active = publicRows.docs.map((row) => ({ id:row.id,...row.data() }))
+        .sort((a,b) => Number(b.createdAtMs || 0)-Number(a.createdAtMs || 0));
+      mine = ownRows.docs.map((row) => ({ id:row.id,...row.data() }))
+        .sort((a,b) => Number(b.createdAtMs || 0)-Number(a.createdAtMs || 0));
+      failed = false;
+    } catch (error) {
+      failed = true;
+      console.error('[Player market] refresh listings', error);
+    } finally {
+      reloading = false;
+      scheduleRender();
+    }
+  }
+
   function mount() {
     const page = document.getElementById('page-store');
-    if (!page || document.getElementById('player-market')) return;
+    if (!page) return false;
     installStyle();
     const tabs = page.querySelector('.store-tab')?.parentElement;
     const grid = page.querySelector('#store-grid');
     if (!tabs && !grid) {
       console.error('[Player market] store tabs and grid are both missing');
-      return;
+      return false;
     }
-    const switcher = document.createElement('div');
-    switcher.id = 'player-market-switch';
-    switcher.innerHTML = '<button type="button" id="pm-view-shop" class="active"><i class="fa-solid fa-store"></i> 坊市商品</button><button type="button" id="pm-view-market"><i class="fa-solid fa-scale-balanced"></i> 玩家交易市集</button>';
-    (tabs || grid).before(switcher);
-    const panel = document.createElement('section');
-    panel.id = 'player-market';
-    panel.className = 'hidden';
-    page.appendChild(panel);
-    switcher.querySelector('#pm-view-shop').addEventListener('click', () => switchMarket(false));
-    switcher.querySelector('#pm-view-market').addEventListener('click', () => switchMarket(true));
+    let switcher = document.getElementById('player-market-switch');
+    if (!switcher) {
+      switcher = document.createElement('div');
+      switcher.id = 'player-market-switch';
+      switcher.innerHTML = '<button type="button" id="pm-view-shop" class="active"><i class="fa-solid fa-store"></i> 坊市商品</button><button type="button" id="pm-view-market"><i class="fa-solid fa-scale-balanced"></i> 玩家交易市集</button>';
+      (tabs || grid).before(switcher);
+    }
+    let panel = document.getElementById('player-market');
+    if (!panel) {
+      panel = document.createElement('section');
+      panel.id = 'player-market';
+      panel.className = 'hidden';
+      page.appendChild(panel);
+    }
+    if (switcher.dataset.marketBound === '1' && panel.dataset.marketBound === '1') return true;
+    switcher.dataset.marketBound = '1';
+    panel.dataset.marketBound = '1';
+    switcher.querySelector('#pm-view-shop')?.addEventListener('click', () => switchMarket(false));
+    switcher.querySelector('#pm-view-market')?.addEventListener('click', () => switchMarket(true));
     panel.addEventListener('input', (event) => {
       if (event.target.id === 'pm-sell-qty') sellQuantity = Number(event.target.value);
       if (event.target.id === 'pm-sell-price') sellPrice = Number(event.target.value);
@@ -349,11 +437,14 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
       const button = event.target.closest('button');
       if (!button || button.disabled) return;
       if (button.id === 'pm-publish') { void createListing(); return; }
+      if (button.dataset.pmRefresh !== undefined) { void refreshListings(); return; }
       if (button.dataset.pmBuy) { void buyListing(button.dataset.pmBuy); return; }
       if (button.dataset.pmCancel) { void cancelListing(button.dataset.pmCancel); return; }
       if (button.dataset.pmFilter) { filter = button.dataset.pmFilter; render(); }
     });
+    return true;
   }
+
   function subscribe(uid) {
     unsubActive?.(); unsubMine?.(); unsubWallet?.();
     unsubActive = unsubMine = unsubWallet = null;
@@ -400,15 +491,28 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
     onAuthStateChanged(getAuth(getApp()), (account) => subscribe(account?.uid || ''));
     ['artifact-system-updated','material-system-updated','artifact-catalog-updated','artifact-recipes-updated','xiuxian:recipe-license-updated','xiuxian:stats-updated','xiuxian:user-ready']
       .forEach((name) => window.addEventListener(name, scheduleRender));
-    window.openPlayerMarketplace = (view = 'all') => {
-      if (['all','material','artifact','recipe','mine'].includes(view)) filter = view;
-      // 某些舊頁面重畫後可能取代坊市節點，開啟前補掛市集入口。
-      mount();
-      window.switchToPage?.('page-store');
-      if (!document.getElementById('page-store')?.classList.contains('active-page')) return;
-      switchMarket(true);
-    };
   }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once:true });
-  else boot();
+  // 先註冊入口，避免 DOMContentLoaded 前從煉器頁點擊時遺失請求。
+  window.openPlayerMarketplace = (view = 'all') => {
+    if (['all','material','artifact','recipe','mine'].includes(view)) filter = view;
+    if (!marketInitialized) { requestedView = filter; return; }
+    if (!mount()) return;
+    window.switchToPage?.('page-store');
+    switchMarket(true);
+  };
+  function initMarket() {
+    try {
+      boot();
+      marketInitialized = true;
+      if (requestedView) {
+        const target = requestedView;
+        requestedView = '';
+        window.openPlayerMarketplace(target);
+      }
+    } catch (error) {
+      console.error('[Player market] boot failure', error);
+    }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initMarket, { once:true });
+  else initMarket();
 })();
