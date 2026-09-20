@@ -6,14 +6,14 @@ import {
 import { ARTIFACT_CATALOG, getArtifactById } from './artifact-catalog.js';
 import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material-catalog.js';
 
-// 玩家市集：材料／未裝備法寶採原子寄售，首發配方販售非專屬使用權。
+// 玩家市集：材料／未裝備法寶採原子寄售，首發配方出售永久製作知識，不限制他人自由嘗試煉製。
 // 市集文件只代表可成交的委託；每次交割均重新讀取買賣雙方玩家文件。
 (function () {
   'use strict';
   const COLLECTION = 'marketListings';
   const MAX_PRICE = 1_000_000_000;
   const MAX_QUANTITY = 999;
-  const TYPE_LABEL = Object.freeze({ material: '煉器材料', artifact: '法寶', recipe: '配方使用權' });
+  const TYPE_LABEL = Object.freeze({ material: '煉器材料', artifact: '法寶', recipe: '配方製作指南' });
   let db = null;
   let currentUid = '';
   let unsubActive = null;
@@ -148,7 +148,7 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
         });
       });
       if (committed) notify(type, committed);
-      message(type === 'recipe' ? '首發配方使用權已上架，擁有權仍歸你。' : '委託已成立，物品已移入市集保管。');
+      message(type === 'recipe' ? '首發配方指南已上架，首發擁有權仍歸你。' : '委託已成立，物品已移入市集保管。');
       sellId = '';
       sellQuantity = 1;
     } catch (error) { safeError('create listing', error); }
@@ -206,7 +206,7 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
         committed = { ...rawBuyer, ...update, stats: { ...(rawBuyer.stats || {}), gold: buyerGold - price } };
       });
       if (committed) notify(tradeType, committed);
-      message(tradeType === 'recipe' ? '配方購買成功！已取得永久使用權，可前往煉器。' : '交易完成！物品已入帳。');
+      message(tradeType === 'recipe' ? '已學會這張配方！前往煉器圖鑑查看所需素材與數量。' : '交易完成！物品已入帳。');
     } catch (error) { safeError('buy listing', error); }
     finally { busy = false; render(); }
   }
@@ -241,7 +241,7 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
         tx.update(listingRef, { status:'cancelled', completedAtMs:Date.now() });
       });
       if (committed) notify(tradeType, committed);
-      message(tradeType === 'recipe' ? '已取消配方使用權委託。' : '委託已取消，寄售的材料或法寶已退還。');
+      message(tradeType === 'recipe' ? '已取消配方指南委託。' : '委託已取消，寄售的材料或法寶已退還。');
     } catch (error) { safeError('cancel listing', error); }
     finally { busy = false; render(); }
   }
@@ -252,7 +252,7 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
       && !(listing.type === 'recipe' && data()?.recipeLicenses?.[listing.itemId] === true);
     const price = qty(listing.price);
     return `<article class="pm-card"><div class="pm-card-head"><span class="pm-icon">${esc(listing.itemIcon)}</span><div><b>${esc(listing.itemName)}</b><small>${esc(TYPE_LABEL[listing.type] || '商品')} · ${esc(listing.itemRealm)} · ×${qty(listing.quantity)}</small></div></div>
-      <p class="pm-seller">賣家：${esc(listing.sellerName)} · ${listing.type === 'recipe' ? '永久非專屬使用權' : '安全寄售'}</p>
+      <p class="pm-seller">賣家：${esc(listing.sellerName)} · ${listing.type === 'recipe' ? '永久配方知識' : '安全寄售'}</p>
       <div class="pm-card-foot"><strong><i class="fa-solid fa-coins"></i> ${price.toLocaleString()} 金幣</strong>
       ${own ? (listing.status === 'active' ? `<button data-pm-cancel="${esc(listing.id)}" ${busy ? 'disabled' : ''}>取消委託</button>` : `<small>${listing.status === 'sold' ? '已成交' : '已取消'}</small>`)
       : `<button data-pm-buy="${esc(listing.id)}" ${canBuy ? '' : 'disabled'}>${mine ? '我的委託' : listing.type === 'recipe' && data()?.recipeLicenses?.[listing.itemId] ? '已獲授權' : gold(data()) < price ? '金幣不足' : '購買'}</button>`}</div></article>`;
@@ -265,8 +265,8 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
     if (!options.some((row) => row.id === sellId)) sellId = options[0]?.id || '';
     const selected = options.find((row) => row.id === sellId);
     const list = filter === 'mine' ? mine : active.filter((listing) => filter === 'all' || listing.type === filter);
-    root.innerHTML = `<div class="pm-header"><div><small>PLAYER MARKET · 修仙交易</small><h3><i class="fa-solid fa-scale-balanced"></i> 交易市集</h3><p>玩家自由定價；金幣與商品在同一筆交易中結算。首發配方可出售永久使用權。</p></div><b>金幣 ${gold(data()).toLocaleString()}</b></div>
-      <div class="pm-compose"><h4>發布委託</h4><div class="pm-form"><label>類別<select id="pm-sell-type">${Object.entries(TYPE_LABEL).map(([type,label]) => `<option value="${type}" ${type === sellType ? 'selected' : ''}>${label}</option>`).join('')}</select></label><label>商品<select id="pm-sell-item">${options.map((row) => `<option value="${esc(row.id)}" ${row.id === sellId ? 'selected' : ''}>${esc(row.name)}${sellType === 'recipe' ? ' · 首發配方' : ' · 可售 '+ row.count}</option>`).join('')}</select></label><label>數量<input id="pm-sell-qty" type="number" min="1" max="${selected?.count || 1}" value="${sellType === 'recipe' ? 1 : Math.min(Math.max(1,sellQuantity), selected?.count || 1)}" ${sellType === 'recipe' ? 'disabled' : ''}></label><label>總價（金幣）<input id="pm-sell-price" type="number" min="1" max="${MAX_PRICE}" value="${sellPrice}"></label><button id="pm-publish" ${!options.length || busy ? 'disabled' : ''}>上架寄售</button></div><p class="pm-hint">材料／法寶上架時扣除可用庫存，取消即退還。裝備中的法寶不可寄售。配方只出售使用權，首發者身分不轉移。</p></div>
+    root.innerHTML = `<div class="pm-header"><div><small>PLAYER MARKET · 修仙交易</small><h3><i class="fa-solid fa-scale-balanced"></i> 交易市集</h3><p>玩家自由定價；金幣與商品在同一筆交易中結算。首發配方可出售製作指南；沒有配方也能自由摸索煉製。</p></div><b>金幣 ${gold(data()).toLocaleString()}</b></div>
+      <div class="pm-compose"><h4>發布委託</h4><div class="pm-form"><label>類別<select id="pm-sell-type">${Object.entries(TYPE_LABEL).map(([type,label]) => `<option value="${type}" ${type === sellType ? 'selected' : ''}>${label}</option>`).join('')}</select></label><label>商品<select id="pm-sell-item">${options.map((row) => `<option value="${esc(row.id)}" ${row.id === sellId ? 'selected' : ''}>${esc(row.name)}${sellType === 'recipe' ? ' · 首發配方' : ' · 可售 '+ row.count}</option>`).join('')}</select></label><label>數量<input id="pm-sell-qty" type="number" min="1" max="${selected?.count || 1}" value="${sellType === 'recipe' ? 1 : Math.min(Math.max(1,sellQuantity), selected?.count || 1)}" ${sellType === 'recipe' ? 'disabled' : ''}></label><label>總價（金幣）<input id="pm-sell-price" type="number" min="1" max="${MAX_PRICE}" value="${sellPrice}"></label><button id="pm-publish" ${!options.length || busy ? 'disabled' : ''}>上架寄售</button></div><p class="pm-hint">材料／法寶上架時扣除可用庫存，取消即退還。裝備中的法寶不可寄售。配方交易只傳授製作方法，首發者身分不轉移；沒有配方也能嘗試煉器。</p></div>
       <div class="pm-filters">${[['all','全部'],['material','材料'],['artifact','法寶'],['recipe','配方'],['mine','我的委託']].map(([value,label]) => `<button data-pm-filter="${value}" class="${filter === value ? 'active' : ''}">${label}</button>`).join('')}</div>
       <div class="pm-list">${failed ? '<p class="pm-empty">市集尚未開放，請稍後再試。</p>' : list.length ? list.map((row) => card(row,filter==='mine')).join('') : '<p class="pm-empty">目前沒有符合條件的委託。</p>'}</div>
       <p id="player-market-notice" class="${noticeError ? 'market-notice-error' : ''}" aria-live="polite">${esc(noticeText)}</p>`;
