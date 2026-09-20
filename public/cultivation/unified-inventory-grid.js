@@ -27,8 +27,7 @@ import {
   let queued = false;
   let lastItems = new Map();
 
-  // 告知舊 cultivation-inventory.js 不要再插入長條式道具卡。
-  window.__unifiedCultivationBagActive = true;
+  // 唯一背包與裝備視圖；舊長條物品卡已從資料模組移除。
 
   function userData() { return window.getCurrentUserData?.() || null; }
   function escapeHtml(value) {
@@ -226,18 +225,24 @@ import {
 
   function rootMarkup(allItems, view = 'bag') {
     if (view === 'equipment') {
-      const equipmentItems = allItems
-        .filter((item) => item.type === 'artifact' && !!artifactSlot(item.raw))
+      const ownedArtifacts = allItems.filter((item) => item.type === 'artifact');
+      const equippedCandidates = ownedArtifacts.filter((item) => !!artifactSlot(item.raw));
+      const equipmentItems = equippedCandidates
         .filter((item) => !equipmentPickSlot || artifactSlot(item.raw) === equipmentPickSlot)
         .sort((a, b) => (b.qualityRank || 0) - (a.qualityRank || 0) || String(a.name).localeCompare(String(b.name), 'zh-Hant'));
+      const noEquipmentHint = ownedArtifacts.length && !equippedCandidates.length
+        ? '目前持有的法寶都是消耗型或答題型，不能放入裝配格。請先煉製具有裝備效果的法寶。'
+        : equipmentPickSlot && equippedCandidates.length
+          ? '目前持有的裝備型法寶屬於其他欄位。請取消選擇後查看可用欄位。'
+          : '請先在煉器頁取得具有裝備效果的法寶。';
       return `<section id="${ROOT_ID}" class="uib-root uib-equipment-view">
         ${equipmentMarkup()}
         ${equipmentPickSlot
-          ? `<div class="uib-equip-picker"><span>選擇「${escapeHtml(equipmentPickSlot)}」的法寶</span><button type="button" data-uib-cancel-equip>取消</button></div>`
-          : '<div class="uib-equip-picker"><span>點擊空欄裝配；點擊已裝法寶可查看或卸下。</span></div>'}
+          ? `<div class="uib-equip-picker"><span>點選下方法寶，即可裝配到「${escapeHtml(equipmentPickSlot)}」</span><button type="button" data-uib-cancel-equip>取消</button></div>`
+          : '<div class="uib-equip-picker"><span>先點擊空裝配格，再選擇下方對應法寶；已裝備法寶可點擊卸下。</span></div>'}
         ${equipmentItems.length
-          ? `<div class="uib-equipment-available"><span>持有法寶</span><small>點擊法寶查看或裝配</small></div><div class="uib-grid">${equipmentItems.map(itemMarkup).join('')}</div>`
-          : `<div class="uib-empty"><i class="fa-solid fa-shield-halved"></i><b>${equipmentPickSlot ? '此欄尚無可裝配法寶' : '尚無可裝配的法寶'}</b><span>可以先前往煉器，打造裝備型法寶。</span></div>`}
+          ? `<div class="uib-equipment-available"><span>持有裝備型法寶</span><small>${equipmentPickSlot ? '點一下直接裝配' : '點擊查看詳情及裝備'}</small></div><div class="uib-grid">${equipmentItems.map(itemMarkup).join('')}</div>`
+          : `<div class="uib-empty"><i class="fa-solid fa-shield-halved"></i><b>${equipmentPickSlot ? '此欄沒有可裝配的法寶' : '尚無可裝配的法寶'}</b><span>${noEquipmentHint}</span></div>`}
       </section>`;
     }
     const visible = sortedVisibleItems(allItems);
@@ -376,7 +381,32 @@ import {
       scheduleRender(true);
     });
     root.querySelectorAll('[data-uib-item]').forEach((button) => {
-      button.addEventListener('click', () => openDetails(button.dataset.uibItem));
+      button.addEventListener('click', async () => {
+        const key = button.dataset.uibItem;
+        const item = lastItems.get(key);
+        if (!equipmentPickSlot || !item || item.type !== 'artifact' || artifactSlot(item.raw) !== equipmentPickSlot) {
+          openDetails(key);
+          return;
+        }
+        // 點選裝配格後，再點相符法寶就直接裝配，不必先開詳情、再按第二次。
+        if (button.disabled || !window.toggleEquipArtifact) return;
+        if (!artifactCanEquip(item.raw)) {
+          openDetails(key); // 保留境界不足原因，避免看似點擊無效。
+          return;
+        }
+        button.disabled = true;
+        try {
+          await window.toggleEquipArtifact(item.id);
+          equipmentPickSlot = '';
+        } catch (error) {
+          console.error('[Equipment slot] equip failed:', error);
+          button.disabled = false;
+          // 技術細節只送管理員 Debugger；讓玩家仍能繼續操作。
+          openDetails(key);
+        } finally {
+          scheduleRender(true);
+        }
+      });
     });
     root.querySelectorAll('[data-uib-equipped-item]').forEach((button) => {
       button.addEventListener('click', () => openDetails(button.dataset.uibEquippedItem));
