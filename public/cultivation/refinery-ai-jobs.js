@@ -239,6 +239,12 @@ import {
       const snap = await tx.get(ref);
       if (!snap.exists()) throw new Error('玩家資料不存在');
       const raw = snap.data() || {};
+      // 首發者永久保有發現紀錄；其他玩家需先於市集取得非專屬配方使用權。
+      // 以交易中的玩家文件為準，避免只依賴過期的前端授權快照。
+      const knownItem = plan.knownArtifactId ? getArtifactById(plan.knownArtifactId) : null;
+      if (knownItem?.recipeOwnerUid && knownItem.recipeOwnerUid !== user.uid && raw.recipeLicenses?.[knownItem.id] !== true) {
+        throw new Error('尚未取得這張配方的使用權，請前往交易市集');
+      }
       if (raw[REFINERY_JOB_FIELD]?.id) throw new Error('目前已有一件法寶正在煉製');
       const gold = Math.max(0, Number(raw.stats?.gold) || 0);
       if (gold < plan.gold) throw new Error('金幣不足，需要 ' + plan.gold + '，目前只有 ' + gold);
