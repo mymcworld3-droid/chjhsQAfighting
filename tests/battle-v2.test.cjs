@@ -14,7 +14,7 @@ function loadEngine() {
   const context = vm.createContext({ console, Math, Number, String, Object, Array });
   const code = engineSource
     .replace(/export const /g, 'const ')
-    .replace(/export function /g, 'function ') + `\nthis.__engine={BATTLE_V2,deterministicPercent,resolveDeterministicAttackCore,resolveDeterministicCounterCore,decideRoundAttackers,settleBattleRound};`;
+    .replace(/export function /g, 'function ') + `\nthis.__engine={BATTLE_V2,deterministicPercent,resolveDeterministicAttackCore,resolveDeterministicCounterCore,resolveDeterministicCoreSupport,decideRoundAttackers,settleBattleRound};`;
   vm.runInContext(code, context);
   return context.__engine;
 }
@@ -243,4 +243,90 @@ test('formal matchmaking waits until chapter three story and battle tutorial are
   assert.ok(!calls.includes('newRoom'), 'mock matched an existing room without creating one');
   assert.match(battleSource, /!battleStoryReady\(\) \|\| storyOrTutorialOpen\(\)/);
   assert.match(battleSource, /recoverBattleSession\(\)[\s\S]*?!battleStoryReady\(\)/);
+});
+
+
+test('Gold Core shields block exactly one PvP hit and never erase off-field cultivation protection', () => {
+  const e = loadEngine();
+  const core = { type:'ningxin', name:'凝心靜音丹', grade:6 };
+  const host = { ...player('h',{correct:false}), goldenCore:core, coreShield:true, coreCorrectStreak:0 };
+  const guest = player('g',{correct:true});
+  const one = e.settleBattleRound({roomId:'guard',round:1,host,guest});
+  assert.equal(one.hostHp,1000);
+  assert.equal(one.hostCoreShield,false);
+  assert.ok(one.logs.some(x=>x.type==='guard' && x.actorRole==='host'));
+  assert.equal(one.logs.find(x=>x.type==='attack').damage,0);
+  assert.ok(one.activations.some(x=>x.ownerUid==='h' && x.skill==='金丹道心護體'));
+  const two = e.settleBattleRound({roomId:'guard',round:2,host:{...host,coreShield:one.hostCoreShield,coreCorrectStreak:one.hostCoreStreak,hp:one.hostHp},guest});
+  assert.equal(two.hostHp,800);
+  assert.equal(two.hostCoreShield,false);
+  assert.equal(host.coreShield,true, 'snapshot is not mutated and remains separate from persisted cultivation shield');
+  assert.match(battleSource,/coreShield: !!window\.getEquippedGoldenCoreBattleSnapshot/);
+  assert.match(battleSource,/'host\.coreShield': outcome\.hostCoreShield/);
+  assert.match(battleSource,/'guest\.coreCorrectStreak': outcome\.guestCoreStreak/);
+});
+
+test('Ningxin correct streak generates protection that prevents the same round hit', () => {
+  const e=loadEngine(), core={type:'ningxin',grade:6,name:'凝心靜音丹'};
+  const h={...player('h',{correct:true}),goldenCore:core,coreShield:false,coreCorrectStreak:2};
+  const g=player('g',{correct:true});
+  const out=e.settleBattleRound({roomId:'focus',round:3,host:h,guest:g});
+  assert.equal(out.hostCoreStreak,3);
+  assert.equal(out.hostHp,1000);
+  assert.equal(out.guestHp,800);
+  assert.equal(out.hostCoreShield,false,'created and consumed during same round');
+  assert.ok(out.activations.some(x=>x.skill==='凝心靜音丹・道心護體'));
+});
+
+test('Wugou shield trigger is deterministic and survives without incoming attacks', () => {
+  const e=loadEngine(), core={type:'wugou',grade:1,name:'無垢清心丹'};
+  const h={...player('h',{correct:false}),goldenCore:core,coreShield:false};
+  const g=player('g',{correct:false});
+  const first=e.settleBattleRound({roomId:'clean',round:1,host:h,guest:g});
+  const again=e.settleBattleRound({roomId:'clean',round:1,host:h,guest:g});
+  assert.equal(first.hostCoreShield,again.hostCoreShield);
+  assert.equal(first.hostCoreShield,true, 'grade 1 always triggers 100%');
+  assert.equal(first.hostHp,1000);
+  const second=e.settleBattleRound({roomId:'clean',round:2,host:{...h,coreShield:first.hostCoreShield},guest:player('g',{correct:true})});
+  assert.equal(second.hostHp,1000);
+  assert.equal(second.hostCoreShield,false);
+});
+
+test('All Golden Core battle effects apply their own attack or healing rules', () => {
+  const e=loadEngine();
+  const support=(type,previous=0,score=40,correct=true,grade=1)=>e.resolveDeterministicCoreSupport({
+    goldenCore:{type,grade,name:type},coreCorrectStreak:previous,totalScore:score,
+    answer:{correct}
+  },'fixed-seed');
+  assert.equal(support('taichu',1).heal,100);
+  assert.equal(support('pojing',0,67).bonusDamage,100);
+  assert.equal(support('pojing',0,40).bonusDamage,0);
+  assert.equal(support('xingchen',1).bonusDamage,80);
+  assert.equal(support('reverse',1).bonusDamage,120);
+  assert.equal(support('taichu',0).heal,0);
+  assert.equal(support('reverse',0).bonusDamage,0);
+  const taichu={...player('h',{hp:700,correct:true}),goldenCore:{type:'taichu',grade:1},coreCorrectStreak:1};
+  const out=e.settleBattleRound({roomId:'heal',round:2,host:taichu,guest:player('g',{correct:false})});
+  assert.equal(out.hostHp,800);
+  assert.equal(out.guestHp,800);
+  assert.ok(out.logs.some(x=>x.type==='heal' && x.amount===100));
+});
+
+test('Shielded hit deals zero actual damage and cannot trigger Thunder counter', () => {
+  const e=loadEngine();
+  const guest={...player('g',{correct:false}),goldenCore:{type:'thunder',grade:1},coreShield:true};
+  const out=e.settleBattleRound({roomId:'no-reflect',round:1,host:player('h',{correct:true}),guest});
+  assert.equal(out.hostHp,1000);
+  assert.equal(out.guestHp,1000);
+  assert.ok(!out.logs.some(x=>x.type==='counter'));
+  assert.ok(out.logs.some(x=>x.type==='guard'));
+});
+
+test('Battle UI shows shield and healing without animating non-attacks', () => {
+  assert.match(battleSource,/entry\.type === 'guard'/);
+  assert.match(battleSource,/entry\.type === 'heal'/);
+  assert.match(battleSource,/logs\.filter\(\(entry\) => entry\.type === 'attack' \|\| entry\.type === 'counter'\)/);
+  assert.match(battleSource,/mine\.coreShield \? ' · 道心護體'/);
+  assert.match(battleSource,/guest\.coreShield/);
+  assert.match(battleSource,/battle-engine-v2\.js\?v=20260920-corebattle1/);
 });
