@@ -37,31 +37,36 @@ test('trade offers validate quantities, price, inventory, and restrict listed eq
   assert.match(market, /tx\.update\(listingRef, \{ status:'cancelled'/);
 });
 
-test('recipe marketplace honors permanent first ownership and licenses without changing its owner', () => {
+test('recipe marketplace sells crafting knowledge while preserving the first discoverer', () => {
   assert.match(market, /const recipeSnap = type === 'recipe' \? await tx\.get/);
   assert.match(market, /const recipeSnap = listing\.type === 'recipe' \? await tx\.get/);
   assert.match(market, /official\.recipeOwnerUid !== seller\.uid/);
   assert.match(market, /official\.recipeOwnerUid !== listing\.sellerUid/);
   assert.match(market, /recipeLicenses: \{ \.\.\.\(rawBuyer\.recipeLicenses \|\| \{\}\), \[listing\.itemId\]: true \}/);
-  assert.match(market, /永久非專屬使用權/);
+  assert.match(market, /永久配方知識/);
   assert.match(market, /首發者身分不轉移/);
-  assert.match(refinery, /已取得永久使用權/);
-  assert.match(refinery, /已授權 \$\{licensed\.length\}/);
+  assert.match(refinery, /已學會製作方法/);
+  assert.match(refinery, /已學會 \$\{licensed\.length\}/);
   assert.match(refinery, /xiuxian:recipe-license-updated/);
 });
 
-test('refinery validates recipe signature and license in the same Firestore transaction', () => {
+test('even without a recipe, players can craft; owning the recipe only reveals exact ingredients', () => {
   const start = jobs.slice(jobs.indexOf('async function startJob('),jobs.indexOf('function apiMaterials()'));
-  assert.match(start, /const catalogSnap = await tx\.get\(doc\(db\(\), \.\.\.ARTIFACT_CONFIG\)\)/);
-  assert.match(start, /const recipeSnap = await tx\.get\(doc\(db\(\), \.\.\.MATERIAL_CONFIG\)\)/);
-  assert.match(start, /findRecipeBySignature\(officialRecipes, plan\.signature\)/);
-  assert.match(start, /if \(officialId !== plan\.knownArtifactId\)/);
-  assert.match(start, /official\.recipeOwnerUid !== user\.uid && raw\.recipeLicenses\?\.\[official\.id\] !== true/);
+  assert.match(start, /const plan = buildPlan\(tokens, knownArtifactId\)/);
+  assert.match(start, /const consumed = consumeRecipe\(raw, plan\.recipe\)/);
   assert.match(start, /tx\.update\(ref,/);
-  assert.ok(start.indexOf('const recipeSnap = await tx.get') < start.indexOf('tx.update(ref,'));
+  assert.doesNotMatch(start, /raw\.recipeLicenses|尚未取得此配方使用權|尚未取得這張配方的使用權/);
+  assert.doesNotMatch(start, /const recipeSnap = await tx\.get/);
   assert.match(jobs, /recipeOwnerUid: user\.uid/);
+  assert.doesNotMatch(refinery, /尚未取得這張配方的使用權，請前往交易市集/);
+  assert.match(refinery, /配方是製作指南，不是煉器許可證/);
+  assert.match(refinery, /沒有配方也能自由投入素材嘗試煉製/);
+  assert.match(refinery, /const canReadRecipe = !item\.recipeOwnerUid \|\| mine \|\| userData\(\)\?\.recipeLicenses\?\.\[item\.id\] === true/);
+  assert.match(refinery, /const ingredients = canReadRecipe \? getArtifactRecipe\(item\.id\)\.map/);
+  assert.match(refinery, /製作材料未公開 · 取得配方後可查看素材與數量/);
+  assert.match(refinery, /return `<article class="refinery-recipe-card/);
+  assert.match(market, /交易只傳授製作方法/);
 });
-
 test('market technical faults go to admin debugger while players see neutral feedback', () => {
   assert.match(market, /console\.error\('\[Player market\] ' \+ label, error\)/);
   assert.match(market, /本次操作未完成，請稍後重試/);
