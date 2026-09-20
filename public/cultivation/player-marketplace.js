@@ -1,7 +1,7 @@
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import {
-  getFirestore, collection, doc, query, where, limit, onSnapshot, getDocs, runTransaction
+  getFirestore, collection, doc, query, where, limit, onSnapshot, getDocs, getDocsFromCache, runTransaction
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { ARTIFACT_CATALOG, getArtifactById } from './artifact-catalog.js';
 import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material-catalog.js';
@@ -398,6 +398,20 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
     } catch (error) {
       failed = true;
       console.error('[Player market] refresh listings', error);
+      // 離線／Listen 傳輸暫時中斷時，仍可讀取先前的本機快取供玩家瀏覽。
+      // 不宣稱快取是即時資料；最終成交仍由 Firestore 交易重新驗證。
+      try {
+        const [publicRows, ownRows] = await Promise.all([
+          getDocsFromCache(query(collection(db,COLLECTION),where('status','==','active'),limit(60))),
+          getDocsFromCache(query(collection(db,COLLECTION),where('sellerUid','==',currentUid),limit(40)))
+        ]);
+        if (publicRows.size) active = publicRows.docs.map((row) => ({ id:row.id,...row.data() }))
+          .sort((a,b) => Number(b.createdAtMs || 0)-Number(a.createdAtMs || 0));
+        if (ownRows.size) mine = ownRows.docs.map((row) => ({ id:row.id,...row.data() }))
+          .sort((a,b) => Number(b.createdAtMs || 0)-Number(a.createdAtMs || 0));
+      } catch (cacheError) {
+        console.warn('[Player market] no cached listings available', cacheError);
+      }
     } finally {
       reloading = false;
       scheduleRender();
