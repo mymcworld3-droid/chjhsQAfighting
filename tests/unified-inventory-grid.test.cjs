@@ -68,7 +68,7 @@ test('new backpack modules load after material and artifact systems and admin so
 });
 
 
-test('backpack has a complete four-slot equipment panel with direct equip and unequip actions', () => {
+test('backpack renders four real equipment cards with inspect, equip and unequip actions', () => {
   assert.match(bag, /ARTIFACT_EQUIP_SLOTS/);
   assert.match(bag, /function equipmentMarkup\(\)/);
   assert.match(bag, /function equipmentSlotMarkup\(slot\)/);
@@ -77,13 +77,28 @@ test('backpack has a complete four-slot equipment panel with direct equip and un
   assert.match(bag, /data-uib-empty-slot/);
   assert.match(bag, /data-uib-equip=/);
   assert.match(bag, /window\.toggleEquipArtifact/);
-  assert.match(bag, /換裝會自動替換同欄位法寶/);
+  for (const slot of ['本命法寶', '護身法寶', '佩飾法寶', '輔助法寶']) {
+    assert.match(bag, new RegExp(slot));
+  }
   assert.match(bag, /裝備後會替換/);
 });
 
-test('equipment panel is responsive and shows active artifact effects', () => {
+test('equipment cards are responsive and show artifact icons instead of effect text', () => {
   assert.match(bag, /\.uib-equipment-grid\{display:grid;grid-template-columns:repeat\(4,minmax\(0,1fr\)\)/);
   assert.match(bag, /@media\(max-width:700px\)\{\.uib-equipment-grid\{grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
-  assert.match(bag, /effects\.map\(effectLabel\)/);
+  assert.match(bag, /uib-equip-slot-frame is-artifact/);
+  assert.match(bag, /uib-equip-slot-name/);
+  assert.doesNotMatch(bag.slice(bag.indexOf('function equipmentSlotMarkup'),bag.indexOf('function readTrainingLocalItems')), /effects\.map\(effectLabel\)/);
   assert.match(bag, /目前已裝備，效果正在生效/);
 });
+
+test('only selected backpack tab renders; empty slots choose compatible artifacts', () => {
+  const active = bag.slice(bag.indexOf('  function bagIsActive()'),bag.indexOf('  function itemMarkup('));
+  assert.doesNotMatch(active, /dataset\.foundationTraining === '1'\) return true/);
+  assert.match(active, /classList\.contains\('active'\)/);
+  assert.match(bag, /equipmentPickSlot = button\.dataset\.uibEmptySlot/);
+  assert.match(bag, /artifactSlot\(item\.raw\) === equipmentPickSlot/);
+  assert.match(bag, /data-uib-cancel-equip/);
+  assert.match(bag, /equipmentPickSlot = '';/);
+});
+
