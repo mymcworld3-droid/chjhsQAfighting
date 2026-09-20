@@ -82,7 +82,7 @@ test('revival pill is a cultivation backpack consumable, not a Golden Core', () 
   assert.match(inventory, /const PILL_FIELD = 'revivalPills';/);
   assert.match(inventory, /const PILL_GAIN = 100;/);
   assert.match(inventory, /type:\s*'consumable'/);
-  assert.match(inventory, /cultivationGain: PILL_GAIN/);
+  assert.match(inventory, /cultivationGain:\s*PILL_GAIN/);
   assert.doesNotMatch(inventory, /training-tab-content|data-training-tab="bag"/);
   assert.match(inventory, /window\.getCultivationInventoryItems/);
   assert.match(inventory, /'stats\.totalScore': newScore/);
