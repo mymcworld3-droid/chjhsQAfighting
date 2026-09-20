@@ -146,7 +146,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
     const known = ARTIFACT_CATALOG.filter((item) => getArtifactRecipe(item.id).length);
     const owned = known.filter((item) => myUid && item.recipeOwnerUid === myUid);
     const licensed = known.filter((item) => item.recipeOwnerUid && item.recipeOwnerUid !== myUid && userData()?.recipeLicenses?.[item.id] === true);
-    // 已公開配方仍允許其他玩家重製；首發登錄人固定，不因重製而更換。
+    // 配方只用來查看製作方法；沒有配方仍可在八方煉器陣自由嘗試。
     const entries = known.slice().sort((a, b) =>
       Number(myUid && b.recipeOwnerUid === myUid) - Number(myUid && a.recipeOwnerUid === myUid)
       || (Number(b.recipeDiscoveredAtMs) || 0) - (Number(a.recipeDiscoveredAtMs) || 0)
@@ -159,10 +159,11 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
       const access = item.recipeOwnerUid && !mine ? (userData()?.recipeLicenses?.[item.id] === true ? ' · 已取得永久使用權' : ' · 尚未取得使用權') : '';
       const discovered = item.recipeOwnerUid && item.recipeDiscoveredAtMs
         ? new Date(item.recipeDiscoveredAtMs).toLocaleDateString('zh-TW') : '';
-      const ingredients = getArtifactRecipe(item.id).map((row) => {
+      const canReadRecipe = !item.recipeOwnerUid || mine || userData()?.recipeLicenses?.[item.id] === true;
+      const ingredients = canReadRecipe ? getArtifactRecipe(item.id).map((row) => {
         const material = row.materialId ? getMaterialById(row.materialId) : getArtifactById(row.artifactId);
         return `${esc(material?.name || row.materialId || row.artifactId || '素材')} ×${Math.max(1, Number(row.quantity) || 1)}`;
-      }).join(' · ');
+      }).join(' · ') : '製作材料未公開 · 取得配方後可查看素材與數量';
       return `<article class="refinery-recipe-card ${mine ? 'is-owner' : ''}">
         <div><b>${esc(item.icon || '◆')} ${esc(item.name)}</b><small>${esc(item.realm)}</small></div>
         <p>${ingredients}</p>
@@ -172,7 +173,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
     return `<details class="refinery-recipe-book" data-refinery-recipe-book ${recipeBookOpen ? 'open' : ''}>
       <summary><i class="fa-solid fa-scroll"></i> 配方圖鑑 <small>我的首發 ${owned.length} · 已授權 ${licensed.length} · 已登錄 ${known.length}</small></summary>
       <div class="refinery-recipe-book-content">
-        <p>第一位成功開爐並登錄未知配方的修士，取得永久首發擁有權。重複煉製不改變原擁有者。</p>
+        <p>配方是製作指南，不是煉器許可證。沒有配方也能自由投入素材嘗試煉製；首發者永久保有發現紀錄，購買配方後可查看具體素材與數量。</p>
         <button type="button" class="refinery-clear" data-refinery-open-market>前往交易市集</button>
         ${cards || '<p>尚無已登錄的配方。投入 2～8 個素材，開爐發現第一張配方。</p>'}
       </div>
@@ -630,10 +631,6 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
         if (matching.length > 1) throw new Error('目前素材對應多個配方，暫時無法開爐。');
         const plan = window.getCultivationRefineryPlan?.(selected, matching[0]?.id || '');
         if (!plan?.valid) throw new Error(plan?.reason || '煉器至少需要 2 個素材。');
-        if (matching[0]?.recipeOwnerUid && matching[0].recipeOwnerUid !== authUser()?.uid && userData()?.recipeLicenses?.[matching[0].id] !== true) {
-          toast('尚未取得這張配方的使用權，請前往交易市集。', false);
-          return;
-        }
         const started = await window.startCultivationRefineryJob?.(
           selected,
           matching[0]?.id || '',
