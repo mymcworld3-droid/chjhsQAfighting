@@ -157,6 +157,33 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       #${LAYER_ID} .bt-shen-timer.urgent{color:#ff8273}
       #${LAYER_ID} .bt-explain{font-size:clamp(10px,.95vw,13px)}
       #${LAYER_ID} .bt-result{padding:clamp(8px,1.6vw,18px)}
+      /* 結算獨立成全螢幕視圖，不接在人物與題目下方，也不需要捲到頁尾。 */
+      #page-battle .bv2-arena.bt-tutorial-active #${LAYER_ID}.bt-final-mode{
+        position:fixed!important;inset:0!important;z-index:90!important;
+        box-sizing:border-box;width:100vw!important;max-width:none!important;height:100dvh!important;
+        margin:0!important;padding:clamp(16px,3.5vw,48px)!important;
+        display:flex!important;align-items:center;justify-content:center;
+        overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;
+        background:radial-gradient(circle at 50% 15%,rgba(142,95,27,.2),transparent 47%),#070705;
+      }
+      #${LAYER_ID}.bt-final-mode .bt-final-card{
+        box-sizing:border-box;width:min(100%,740px);min-width:0;margin:auto;padding:clamp(20px,4vw,38px);
+        border:1px solid rgba(216,177,93,.34);border-radius:22px;
+        background:linear-gradient(160deg,rgba(35,28,17,.98),rgba(10,9,7,.99));
+        box-shadow:0 26px 85px rgba(0,0,0,.7);text-align:center;
+      }
+      #${LAYER_ID}.bt-final-mode .bt-final-kicker{display:block;margin-bottom:8px;color:#d8b76d;font-size:clamp(11px,1.1vw,14px);font-weight:900;letter-spacing:.15em}
+      #${LAYER_ID}.bt-final-mode .bt-final-title{margin:0 0 14px;color:#f0e2bd;font-size:clamp(19px,2.6vw,29px)}
+      #${LAYER_ID}.bt-final-mode .bt-result-mark{width:clamp(78px,11vw,112px);height:clamp(78px,11vw,112px);font-size:clamp(36px,5vw,50px)}
+      #${LAYER_ID}.bt-final-mode .bt-result h3{font-size:clamp(18px,2.2vw,25px)}
+      #${LAYER_ID}.bt-final-mode .bt-result p{font-size:clamp(12px,1.1vw,15px)}
+      #${LAYER_ID}.bt-final-mode .bt-explain{text-align:left;margin-top:20px}
+      #${LAYER_ID}.bt-final-mode .bt-actions{justify-content:center;margin-top:clamp(16px,2.4vw,26px)}
+      #${LAYER_ID}.bt-final-mode .bt-primary{min-height:46px;font-size:clamp(12px,1.1vw,15px);padding:0 25px}
+      @media(max-width:650px){
+        #page-battle .bv2-arena.bt-tutorial-active #${LAYER_ID}.bt-final-mode{padding:12px!important}
+        #${LAYER_ID}.bt-final-mode .bt-final-card{padding:22px 16px}
+      }
       @media(max-width:650px){
         #${LAYER_ID} .bt-head{padding:9px 5px;gap:6px}
         #${LAYER_ID} .bt-head h2{font-size:clamp(15px,4vw,20px)}
@@ -216,8 +243,19 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     </article>`;
   }
 
-  function shell({ opponent, opponentImage, opponentHp, opponentMaxHp, playerImage = playerPortrait('determined'), body, badge, title, showLater = true }) {
+  function shell({ opponent, opponentImage, opponentHp, opponentMaxHp, playerImage = playerPortrait('determined'), body, badge, title, showLater = true, result = false }) {
     const el = layer();
+    el.classList.toggle('bt-final-mode', result);
+    if (result) {
+      el.innerHTML = `<section class="bt-final-card" role="dialog" aria-modal="true" aria-label="${esc(title)}">
+        <small class="bt-final-kicker">${esc(badge)}</small>
+        <h2 class="bt-final-title">${esc(title)}</h2>
+        <div class="bt-final-content">${body}</div>
+      </section>`;
+      // 結算重新置中；不要保留玩家上一題捲到下方的位置。
+      el.scrollTop = 0;
+      return el;
+    }
     el.innerHTML = `<section class="bt-shell">
       <header class="bt-head"><div><small>${esc(badge)}</small><h2>${esc(title)}</h2></div>${showLater ? '<button type="button" class="bt-later">稍後再練</button>' : ''}</header>
       <div class="bt-arena bv2-scoreboard">
@@ -331,6 +369,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       badge:'築基鬥法教學 · 第一戰結束',
       title:'沈清霜 · 65,000 真實傷害',
       showLater:false,
+      result:true,
       body:`<div class="bt-result"><div class="bt-result-mark">敗</div><h3>演武投影已潰散</h3><p>${shenChoice === null ? '25 秒已結束，未能及時作答。' : shenChoice === SHEN_QUESTION.ans ? '你答對了，但師姐先手命中。' : '你答錯了，師姐先手命中。'}投影承受 65,000 真實傷害；教學不計戰績或場外生命。</p></div>
         <div class="bt-explain"><b>正確答案：${esc(SHEN_QUESTION.opts[SHEN_QUESTION.ans])}</b><br>${esc(SHEN_QUESTION.exp)}</div>
         <div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="return-story">返回主線劇情</button></div>`
@@ -457,6 +496,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       badge:'築基鬥法教學 · 第二戰結束',
       title:'顧長風教學戰完成',
       showLater:false,
+      result:true,
       body:`<div class="bt-result"><div class="bt-result-mark">${resultMark}</div><h3>${esc(resultTitle)}</h3><p>答對 ${guCorrect} / ${QUESTIONS.length}。這場是本機教學模擬，不會加入正式勝敗紀錄。</p></div>
         <div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="finish">完成鬥法教學</button></div>`
     });

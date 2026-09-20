@@ -226,3 +226,33 @@ test('battle tutorial fills real arena responsively without bottom dialogue pane
   assert.match(tutorial, /classList\.remove\('bt-tutorial-active'\)/);
   assert.doesNotMatch(tutorial, /class="bt-dialogue"/);
 });
+
+
+test('Shen and Gu finish on a separate full-screen result view, never beneath the arena', () => {
+  const vm = require('node:vm');
+  const shellSource = tutorial.slice(tutorial.indexOf('  function shell('),tutorial.indexOf('  function renderIntro()'));
+  const el = {
+    innerHTML: '', scrollTop:99,
+    classes: new Set(),
+    classList:{ toggle(name, enabled) { if (enabled) el.classes.add(name); else el.classes.delete(name); } },
+    querySelector:()=>null
+  };
+  const ctx = vm.createContext({ layer:()=>el, playerName:()=> '玩家', esc:String,
+    playerPortrait:()=>'', playerHp:1000, fighterMarkup:()=>'<article class="bt-fighter"></article>', snooze:()=>{} });
+  vm.runInContext(shellSource,ctx);
+  vm.runInContext("shell({badge:'戰後',title:'結算',body:'<p>結果</p>',result:true})",ctx);
+  assert.equal(el.classes.has('bt-final-mode'),true);
+  assert.match(el.innerHTML,/bt-final-card/);
+  assert.match(el.innerHTML,/role="dialog" aria-modal="true"/);
+  assert.doesNotMatch(el.innerHTML,/bt-arena|bt-fighter|bt-vs/);
+  assert.equal(el.scrollTop,0);
+  vm.runInContext("shell({badge:'戰鬥',title:'再戰',body:'<p>題目</p>'})",ctx);
+  assert.equal(el.classes.has('bt-final-mode'),false);
+  assert.match(el.innerHTML,/bt-arena/);
+  const shen = tutorial.slice(tutorial.indexOf('  function renderShenResult()'),tutorial.indexOf('  function finishShen()'));
+  const gu = tutorial.slice(tutorial.indexOf('  function renderGuResult()'),tutorial.indexOf('  async function finish()'));
+  assert.match(shen,/result:true/);
+  assert.match(gu,/result:true/);
+  assert.match(tutorial,/#\$\{LAYER_ID\}\.bt-final-mode\{/);
+  assert.match(tutorial,/height:100dvh!important/);
+});
