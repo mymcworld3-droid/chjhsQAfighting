@@ -145,6 +145,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
     const myUid = authUser()?.uid || '';
     const known = ARTIFACT_CATALOG.filter((item) => getArtifactRecipe(item.id).length);
     const owned = known.filter((item) => myUid && item.recipeOwnerUid === myUid);
+    const licensed = known.filter((item) => item.recipeOwnerUid && item.recipeOwnerUid !== myUid && userData()?.recipeLicenses?.[item.id] === true);
     // 已公開配方仍允許其他玩家重製；首發登錄人固定，不因重製而更換。
     const entries = known.slice().sort((a, b) =>
       Number(myUid && b.recipeOwnerUid === myUid) - Number(myUid && a.recipeOwnerUid === myUid)
@@ -155,6 +156,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
       const owner = item.recipeOwnerUid
         ? (mine ? '你是首位發現者 · 配方擁有權已登錄' : `首發擁有者：${esc(item.recipeOwnerName || '無名修士')}`)
         : '既有公共配方';
+      const access = item.recipeOwnerUid && !mine ? (userData()?.recipeLicenses?.[item.id] === true ? ' · 已取得永久使用權' : ' · 尚未取得使用權') : '';
       const discovered = item.recipeOwnerUid && item.recipeDiscoveredAtMs
         ? new Date(item.recipeDiscoveredAtMs).toLocaleDateString('zh-TW') : '';
       const ingredients = getArtifactRecipe(item.id).map((row) => {
@@ -164,13 +166,14 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
       return `<article class="refinery-recipe-card ${mine ? 'is-owner' : ''}">
         <div><b>${esc(item.icon || '◆')} ${esc(item.name)}</b><small>${esc(item.realm)}</small></div>
         <p>${ingredients}</p>
-        <span class="refinery-recipe-owner">${owner}${discovered ? ` · ${discovered}` : ''}</span>
+        <span class="refinery-recipe-owner">${owner}${access}${discovered ? ` · ${discovered}` : ''}</span>
       </article>`;
     }).join('');
     return `<details class="refinery-recipe-book" data-refinery-recipe-book ${recipeBookOpen ? 'open' : ''}>
-      <summary><i class="fa-solid fa-scroll"></i> 配方圖鑑 <small>我的首發 ${owned.length} · 已登錄 ${known.length}</small></summary>
+      <summary><i class="fa-solid fa-scroll"></i> 配方圖鑑 <small>我的首發 ${owned.length} · 已授權 ${licensed.length} · 已登錄 ${known.length}</small></summary>
       <div class="refinery-recipe-book-content">
         <p>第一位成功開爐並登錄未知配方的修士，取得永久首發擁有權。重複煉製不改變原擁有者。</p>
+        <button type="button" class="refinery-clear" data-refinery-open-market>前往交易市集</button>
         ${cards || '<p>尚無已登錄的配方。投入 2～8 個素材，開爐發現第一張配方。</p>'}
       </div>
     </details>`;
@@ -522,6 +525,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
   }
 
   function bindContent(content) {
+    content.querySelector('[data-refinery-open-market]')?.addEventListener('click', () => window.openPlayerMarketplace?.('recipe'));
     content.querySelector('[data-refinery-recipe-book]')?.addEventListener('toggle', (event) => {
       recipeBookOpen = event.currentTarget.open;
     });
@@ -626,6 +630,10 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
         if (matching.length > 1) throw new Error('目前素材對應多個配方，暫時無法開爐。');
         const plan = window.getCultivationRefineryPlan?.(selected, matching[0]?.id || '');
         if (!plan?.valid) throw new Error(plan?.reason || '煉器至少需要 2 個素材。');
+        if (matching[0]?.recipeOwnerUid && matching[0].recipeOwnerUid !== authUser()?.uid && userData()?.recipeLicenses?.[matching[0].id] !== true) {
+          toast('尚未取得這張配方的使用權，請前往交易市集。', false);
+          return;
+        }
         const started = await window.startCultivationRefineryJob?.(
           selected,
           matching[0]?.id || '',
@@ -710,7 +718,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
   function boot() {
     ensureStyle();
     schedule();
-    ['foundation-training-stage-changed','golden-core-access-changed','material-system-updated','artifact-system-updated','material-catalog-updated','artifact-catalog-updated','artifact-recipes-updated','xiuxian:user-ready','xiuxian:refinery-job-updated'].forEach((name) => window.addEventListener(name, schedule));
+    ['foundation-training-stage-changed','golden-core-access-changed','material-system-updated','artifact-system-updated','material-catalog-updated','artifact-catalog-updated','artifact-recipes-updated','xiuxian:recipe-license-updated','xiuxian:user-ready','xiuxian:refinery-job-updated'].forEach((name) => window.addEventListener(name, schedule));
     window.addEventListener('xiuxian:refinery-open-request', () => activate());
     window.openCultivationRefinery = () => activate();
 
