@@ -290,6 +290,8 @@ import {
       question: 'newbieTutorialV1',
       dongtian: 'storyDongtianTutorialV1',
       battle: 'battleTutorialV1',
+      'battle-shen': 'battleTutorialV1',
+      'battle-gu': 'battleTutorialV1',
       'golden-core': 'goldenCoreTutorialV1'
     }[kind];
     return !!field && !!data()?.[field]?.completed;
@@ -311,6 +313,8 @@ import {
       question: window.startStoryQuestionTutorial,
       dongtian: window.startStoryDongtianTutorial,
       battle: window.startBattleTutorial,
+      'battle-shen': window.startBattleTutorial && ((options) => window.startBattleTutorial({ ...options, phase: 'shen' })),
+      'battle-gu': window.startBattleTutorial && ((options) => window.startBattleTutorial({ ...options, phase: 'gu' })),
       'golden-core': window.startGoldenCoreTutorial
     }[kind];
     if (typeof launch !== 'function') {
@@ -364,9 +368,10 @@ import {
       finishChapter();
       return;
     }
-    const kind = currentChapter.tutorialKind;
-    if (kind && currentChapter.tutorialAfterLine === lineIndex &&
-        (replayMode || !storyTutorialComplete(kind))) {
+    const checkpoint = currentChapter.tutorials?.find((item) => item.afterLine === lineIndex);
+    const kind = checkpoint?.kind ||
+      (currentChapter.tutorialAfterLine === lineIndex ? currentChapter.tutorialKind : '');
+    if (kind && (replayMode || !storyTutorialComplete(kind))) {
       handoffStoryTutorial(kind);
       return;
     }

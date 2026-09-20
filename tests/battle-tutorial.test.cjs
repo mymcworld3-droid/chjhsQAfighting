@@ -22,14 +22,14 @@ test('first tutorial duel is Shen Qingshuang one-shotting the projection for exa
   assert.match(tutorial, /const TRUE_DAMAGE = 65000/);
   assert.match(tutorial, /-65,000<small>真實傷害 · TRUE DAMAGE/);
   assert.match(tutorial, /playerHp = 0/);
-  assert.match(tutorial, /我已經放水了。/);
-  assert.match(tutorial, /你還能說話。/);
+  assert.match(story, /我已經放水了。/);
+  assert.match(story, /神識沒事吧/);
   assert.match(tutorial, /assets\/story\/characters\/shen-qingshuang\.png/);
 });
 
 test('second tutorial duel is Gu Changfeng and teaches the real battle timing rules', () => {
-  assert.match(tutorial, /顧長風，你來陪他練基本鬥法/);
-  assert.match(tutorial, /顧長風入場/);
+  assert.match(story, /顧長風，過來。你陪他練基本鬥法/);
+  assert.match(story, /顧長風走上鬥法臺/);
   assert.match(tutorial, /師姐說你現在太弱/);
   assert.match(tutorial, /assets\/story\/characters\/battle-rival\.png/);
   assert.match(tutorial, /第一位玩家提交答案後，才會啟動另一方的 25 秒應答窗/);
@@ -59,9 +59,9 @@ test('battle tutorial only unlocks after the Foundation battle story and gates l
 
 test('Foundation battle chapter explicitly sets up Shen as the first opponent before the local tutorial begins', () => {
   assert.match(story, /id: 'foundation-first-battle'/);
-  assert.match(story, /c\('player', '所以第一場是我跟顧長風？'/);
+  assert.match(story, /c\('player', '所以我要跟誰打？'/);
   assert.match(story, /c\('shen', '我。'\)/);
-  assert.match(story, /投影敗北不會真的死亡/);
+  assert.match(story, /不會真的死亡/);
   assert.match(story, /先學會輸，再學怎麼打/);
 });
 
@@ -81,30 +81,29 @@ test('tutorial uses the real arena and both correct answers deal damage', () => 
   assert.match(tutorial, /顧長風也答對/);
 });
 
-test('Shen aftermath advances once per click and gates Gu until the last line', () => {
+test('Shen first duel returns to main story without starting Gu or marking tutorial complete', () => {
   const vm = require('node:vm');
-  const source = tutorial.slice(tutorial.indexOf('  const SHEN_AFTER_STRIKE ='), tutorial.indexOf('  function renderGuIntro()'));
-  let entered = 0;
-  const el = { onclick:null, querySelector:() => null };
-  const context = vm.createContext({
-    active:true, busy:false, stage:'shen-result', playerHp:0,
-    guHp:2000, guRound:0, guCorrect:0,
-    shell:() => el, esc:String, playerName:() => '玩家', playerPortrait:() => '',
-    renderGuIntro:() => { entered += 1; }
+  const segment = tutorial.slice(tutorial.indexOf('  // 第一戰結束只返回主線劇情'), tutorial.indexOf('  function renderGuIntro()'));
+  let handler, finished = null, closed = 0;
+  const el = {querySelector: () => ({addEventListener:(_event, callback) => {handler=callback;}})};
+  const ctx = vm.createContext({
+    active:true, busy:false, tutorialPhase:'shen', startedByStory:true, previewOnly:false,
+    LAYER_ID:'battle-tutorial-layer', playerHp:0,
+    shell:()=>el, playerPortrait:() => '', stage:'shen-strike',
+    document:{getElementById:()=>({remove(){}})},
+    window:{closeBattleTutorialArena:()=>{closed++;}, dispatchEvent:event=>{finished=event;}},
+    CustomEvent:class {constructor(type, options){this.type=type;this.detail=options.detail;}}
   });
-  vm.runInContext(source + '\nrenderShenResult();', context);
-  const count = vm.runInContext('SHEN_AFTER_STRIKE.length', context);
-  assert.equal(context.stage, 'shen-story');
-  for (let i = 0; i < count - 1; i++) {
-    el.onclick();
-    assert.equal(entered, 0);
-    assert.equal(context.playerHp, 0);
-  }
-  el.onclick();
-  assert.equal(entered, 1);
-  assert.equal(context.playerHp, 1000);
-  assert.equal(context.stage, 'gu-intro');
-  assert.equal(el.onclick, null);
+  vm.runInContext(segment + '\nrenderShenResult();',ctx);
+  assert.equal(ctx.stage,'shen-result');
+  assert.equal(typeof handler,'function');
+  handler();
+  assert.equal(ctx.active,false);
+  assert.equal(closed,1);
+  assert.equal(finished.type,'xiuxian:story-tutorial-finished');
+  assert.equal(finished.detail.kind,'battle-shen');
+  assert.doesNotMatch(segment,/renderGuIntro\(\)/);
+  assert.doesNotMatch(segment,/completed:true/);
 });
 
 test('admin archive unlocks all chapters and tutorial scenes without progression writes', () => {
@@ -115,7 +114,7 @@ test('admin archive unlocks all chapters and tutorial scenes without progression
   assert.match(tutorial, /options.adminPreview === true && data\(\)\?\.isAdmin === true/);
   assert.match(tutorial, /if \(options.adminPreview && !adminPreview\) return false/);
   assert.match(tutorial, /async function persist\(patch\) \{\s*if \(previewOnly\) return/);
-  assert.match(tutorial, /是我估量有誤，不是你的錯/);
+  assert.match(story, /是誰讓你修仙的/);
 });
 
 test('gender preview rejects non-admins and selecting either portrait never persists', async () => {
@@ -145,12 +144,13 @@ test('gender preview rejects non-admins and selecting either portrait never pers
 
 
 test('battle lesson is inside the chapter replay, with no progress write on replay', () => {
-  assert.match(story, /tutorialKind: 'battle'/);
-  assert.match(story, /tutorialAfterLine: 17/);
+  assert.match(story, /kind: 'battle-shen', afterLine: 13/);
+  assert.match(story, /kind: 'battle-gu', afterLine: 26/);
   assert.match(tutorial, /if \(!storySeen\(\) && !options\.replay && !options\.story\) return false/);
   assert.match(tutorial, /startedByStory = options\.story === true/);
   assert.match(tutorial, /previewOnly = adminPreview \|\| options\.replay === true/);
   assert.match(tutorial, /async function persist\(patch\) \{\s*if \(previewOnly\) return/);
-  assert.match(tutorial, /detail: \{ kind: 'battle', replay: previewOnly/);
+  assert.match(tutorial, /detail: \{ kind: 'battle-shen', replay: previewOnly/);
+  assert.match(tutorial, /detail: \{ kind: 'battle-gu', replay: previewOnly/);
   assert.doesNotMatch(tutorial, /function maybeAutoStart\(/);
 });

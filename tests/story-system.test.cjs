@@ -251,7 +251,7 @@ test('chapter two pauses between its opening and aftermath for one-question Dong
   assert.match(engine, /storyTutorialPaused = true/);
   assert.match(engine, /function resumeAfterStoryTutorial\(event\)/);
   assert.match(engine, /xiuxian:story-tutorial-finished/);
-  assert.match(engine, /currentChapter\.tutorialAfterLine === lineIndex/);
+  assert.match(engine, /currentChapter\.tutorials\?\.find\(\(item\) => item\.afterLine === lineIndex\)/);
   assert.match(engine, /replayMode \|\| !storyTutorialComplete\(kind\)/);
   assert.match(engine, /storyTutorialComplete\(kind\)/);
   assert.match(engine, /prepareStoryScene\(currentChapter\)/);
@@ -275,7 +275,6 @@ test('every main tutorial is a scene in its own chapter and chapter replay visit
   const definitions = [
     ['prologue-enter-sect', 'question', 20],
     ['qi-five-dongtian', 'dongtian', 11],
-    ['foundation-first-battle', 'battle', 17],
     ['golden-core-truth', 'golden-core', 14]
   ];
   for (const [id, kind, checkpoint] of definitions) {
@@ -286,6 +285,8 @@ test('every main tutorial is a scene in its own chapter and chapter replay visit
     assert.match(scene, new RegExp('tutorialAfterLine: ' + checkpoint));
     assert.ok((scene.match(/c\('/g) || []).length > checkpoint + 1, id + ' needs dialogue after its tutorial');
   }
+  assert.match(scripts, /kind: 'battle-shen', afterLine: 13/);
+  assert.match(scripts, /kind: 'battle-gu', afterLine: 26/);
   assert.match(engine, /replayMode \|\| !storyTutorialComplete\(kind\)/);
   assert.match(engine, /storyTutorialPaused \|\| document\.getElementById\(ARCHIVE_ID\)/);
   assert.match(engine, /if \(!chapter \|\| active \|\| storyTutorialPaused\) return false/);
@@ -305,7 +306,8 @@ test('story-run tutorial replay is read only and returns to the next dialogue', 
   assert.match(newbie, /replayOnly = options\.replay === true \|\| !!userData\(\)\?\.\[savedField\]\?\.completed/);
   assert.match(battle, /if \(previewOnly\) return;/);
   assert.match(battle, /startedByStory = options\.story === true/);
-  assert.match(battle, /kind: 'battle', replay: previewOnly/);
+  assert.match(battle, /kind: 'battle-shen', replay: previewOnly/);
+  assert.match(battle, /kind: 'battle-gu', replay: previewOnly/);
   assert.match(golden, /if \(!replayOnly\) persistFinished\(skipped\)/);
   assert.match(golden, /kind: 'golden-core', replay: replayOnly/);
   assert.doesNotMatch(golden, /golden-core-access-changed/);
@@ -389,4 +391,44 @@ test('third chapter story and story archive render above the fullscreen battle p
   const archiveZ = Number(engine.match(/#\$\{ARCHIVE_ID\}\{position:fixed;inset:0;z-index:(\d+);/)?.[1]);
   assert.ok(Number.isFinite(battleZ) && storyZ > battleZ, 'story dialogue must cover fullscreen matchmaking UI');
   assert.ok(archiveZ > battleZ && archiveZ < storyZ, 'chapter archive must remain accessible above battle page');
+});
+
+test('third chapter has two ordered handoffs with story dialogue between and after them', () => {
+  const chapter = scripts.slice(scripts.indexOf("id: 'foundation-first-battle'"), scripts.indexOf("id: 'foundation-refinery'"));
+  const lines = [...chapter.matchAll(/c\('(narrator|shen|player|rival)', '([^']*)'/g)].map(match=>match[2]);
+  assert.equal(lines.length,32);
+  assert.match(lines[13],/先學會輸/);
+  assert.match(lines[14],/六萬五千點真實傷害/);
+  assert.match(lines[16],/我已經放水了/);
+  assert.match(lines[23],/顧長風，過來/);
+  assert.match(lines[26],/顧長風走上鬥法臺/);
+  assert.match(lines[27],/第二場演武結束後/);
+  assert.ok(chapter.indexOf("kind: 'battle-shen'") < chapter.indexOf("kind: 'battle-gu'"));
+  assert.match(engine,/phase: 'shen'/);
+  assert.match(engine,/phase: 'gu'/);
+});
+
+test('chapter three performs two handoffs in sequence on replay', async () => {
+  const vm = require('node:vm');
+  const lifecycle = engine.slice(engine.indexOf('  function storyTutorialComplete('),engine.indexOf('  async function finishChapter()'));
+  const calls = [];
+  const chapter = {id:'foundation-first-battle',minScore:10,tutorials:[{kind:'battle-shen',afterLine:13},{kind:'battle-gu',afterLine:26}],lines:Array(32).fill({})};
+  const ctx = vm.createContext({
+    data:()=>({battleTutorialV1:{completed:true}}),currentChapter:chapter,
+    lineIndex:13,replayMode:true,storyTutorialPaused:false,pendingStoryTutorial:'',active:true,LAYER_ID:'xiuxian-story-layer',
+    window:{startBattleTutorial:options=>{calls.push(options.phase);return true;}},
+    canPreviewAllStory:()=>false,score:()=>10,
+    document:{getElementById:()=>null},renderLine:()=>{},prepareStoryScene:()=>{},console
+  });
+  vm.runInContext(lifecycle+'\nnextLine();',ctx);
+  await new Promise(resolve=>setImmediate(resolve));
+  assert.deepEqual(calls,['shen']);
+  vm.runInContext("resumeAfterStoryTutorial({detail:{kind:'battle-shen'}})",ctx);
+  assert.equal(ctx.lineIndex,14);
+  ctx.lineIndex=26;
+  vm.runInContext('nextLine()',ctx);
+  await new Promise(resolve=>setImmediate(resolve));
+  assert.deepEqual(calls,['shen','gu']);
+  vm.runInContext("resumeAfterStoryTutorial({detail:{kind:'battle-gu'}})",ctx);
+  assert.equal(ctx.lineIndex,27);
 });

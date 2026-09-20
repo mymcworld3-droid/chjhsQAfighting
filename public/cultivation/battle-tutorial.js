@@ -43,6 +43,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
 
   let previewOnly = false;
   let startedByStory = false;
+  let tutorialPhase = 'shen';
   let active = false;
   let busy = false;
   let stage = 'intro';
@@ -219,60 +220,36 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     renderShenResult();
   }
 
-  // The second duel is gated by this dialogue, never by a timer.
-  const SHEN_AFTER_STRIKE = [
-    ['旁白', '劍光散去，沈清霜已經收劍。看著瞬間潰散的投影，她難得怔住，低頭看了看自己的劍。'],
-    ['沈清霜', '我已經放水了。'],
-    ['沈清霜', '……怎麼就倒了？我分明只留了一絲劍意。'],
-    ['沈清霜', '你還能說話。先別動，讓我看看……沒有傷到神識就好。'],
-    ['沈清霜', '原來築基修士連這一絲也承受不住。是我估量有誤，不是你的錯。'],
-    ['沈清霜', '顧長風，你來陪他練基本鬥法。記住，別真的把人打壞。'],
-    ['顧長風', '師姐，您說的一絲，對我們來說可能還是太多了。'],
-    ['沈清霜', '嗯。那便不由我示範了。顧長風，按你們能承受的程度來，我在旁邊看著。'],
-    ['沈清霜', '別怕。鬥法中的生命只屬於這一場，無論輸贏都不會帶出場外。下一場會重新凝聚完整投影。'],
-    ['顧長風', '那就站起來。記住，只要答對就能出手；我們都答對，就各出一招。'],
-    ['旁白', '沈清霜收劍退到臺邊。顧長風走上鬥法臺，等你重新凝聚投影。']
-  ];
-  let shenStoryIndex = 0;
-
+  // 第一戰結束只返回主線劇情；沈清霜親自說話、邀請顧長風後，才有第二次交棒。
   function renderShenResult() {
-    stage = 'shen-story';
-    shenStoryIndex = 0;
-    renderShenStoryLine();
-  }
-
-  function renderShenStoryLine() {
-    const [speaker, text] = SHEN_AFTER_STRIKE[shenStoryIndex];
-    const last = shenStoryIndex === SHEN_AFTER_STRIKE.length - 1;
+    stage = 'shen-result';
     const el = shell({
       opponent:'沈清霜',
       opponentImage:'assets/story/characters/shen-qingshuang.png',
       opponentHp:99999,
       opponentMaxHp:99999,
       playerImage:playerPortrait('confused'),
-      badge:'築基鬥法教學 · 戰後劇情',
-      title:'一劍之後 · 65,000 真實傷害',
+      badge:'築基鬥法教學 · 第一戰結束',
+      title:'沈清霜 · 65,000 真實傷害',
       showLater:false,
-      body:`<div class="bt-dialogue" aria-live="polite"><div class="bt-speaker">${esc(speaker === 'player' ? playerName() : speaker)}</div><p>${esc(text)}</p></div>
-        <div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="story-next">${last ? '劇情結束 · 顧長風入場' : '點擊繼續'}</button></div>`
+      body:`<div class="bt-result"><div class="bt-result-mark">敗</div><h3>演武投影已潰散</h3><p>你的投影被一劍擊倒，但本次教學不計戰績，也不影響場外生命。</p></div>
+        <div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="return-story">返回主線劇情</button></div>`
     });
-    // Each render replaces the preceding handler, so a tap advances exactly one line.
-    el.onclick = () => {
-      if (!active || busy || stage !== 'shen-story') return;
-      el.onclick = null;
-      if (!last) {
-        shenStoryIndex += 1;
-        renderShenStoryLine();
-        return;
-      }
-      stage = 'gu-intro';
-      playerHp = 1000; guHp = 2000; guRound = 0; guCorrect = 0;
-      renderGuIntro();
-    };
-    const actor = ['player', '沈清霜'].includes(speaker)
-      ? el.querySelector(`[data-bt-fighter="${speaker === 'player' ? 'me' : 'enemy'}"]`) : null;
-    actor?.classList.add('strike');
-    el.querySelector('[data-bt-action="story-next"]')?.focus({ preventScroll:true });
+    el.querySelector('[data-bt-action="return-story"]')?.addEventListener('click', finishShen);
+  }
+
+  function finishShen() {
+    if (!active || busy || tutorialPhase !== 'shen') return;
+    active = false;
+    document.getElementById(LAYER_ID)?.remove();
+    window.closeBattleTutorialArena?.();
+    const resume = startedByStory;
+    startedByStory = false;
+    if (resume) {
+      window.dispatchEvent(new CustomEvent('xiuxian:story-tutorial-finished', {
+        detail: { kind: 'battle-shen', replay: previewOnly, skipped: false }
+      }));
+    }
   }
 
   function renderGuIntro() {
@@ -410,7 +387,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     window.closeBattleTutorialArena?.();
     if (startedByStory) {
       window.dispatchEvent(new CustomEvent('xiuxian:story-tutorial-finished', {
-        detail: { kind: 'battle', replay: previewOnly, skipped: false }
+        detail: { kind: 'battle-gu', replay: previewOnly, skipped: false }
       }));
     }
     startedByStory = false;
@@ -429,7 +406,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     window.closeBattleTutorialArena?.();
     if (startedByStory) {
       window.dispatchEvent(new CustomEvent('xiuxian:story-tutorial-finished', {
-        detail: { kind: 'battle', replay: previewOnly, deferred: true }
+        detail: { kind: tutorialPhase === 'shen' ? 'battle-shen' : 'battle-gu', replay: previewOnly, deferred: true }
       }));
     }
     startedByStory = false;
@@ -441,6 +418,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     if (active || busy || (!adminPreview && score() < FOUNDATION_SCORE)) return false;
     if (!options.replay && marker()?.completed) return false;
     if (!storySeen() && !options.replay && !options.story) return false;
+    tutorialPhase = options.phase === 'gu' || ['gu-intro', 'gu-result'].includes(options.scene) ? 'gu' : 'shen';
     try { await window.preloadXiuxianStoryImages?.(); } catch (_) {}
     if (active || busy || !window.openBattleTutorialArena?.()) return false;
     previewOnly = adminPreview || options.replay === true;
@@ -451,8 +429,8 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     active = true;
     await persist({ started:true, startedAtMs:marker()?.startedAtMs || Date.now() });
     if (adminPreview && options.scene === 'shen-story') { playerHp = 0; renderShenResult(); }
-    else if (adminPreview && options.scene === 'gu-intro') { stage = 'gu-intro'; renderGuIntro(); }
     else if (adminPreview && options.scene === 'gu-result') renderGuResult();
+    else if (tutorialPhase === 'gu') { stage = 'gu-intro'; renderGuIntro(); }
     else renderIntro();
     return true;
   }
