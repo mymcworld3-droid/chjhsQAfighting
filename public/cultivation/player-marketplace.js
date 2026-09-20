@@ -1,7 +1,7 @@
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import {
-  getFirestore, collection, doc, query, where, limit, onSnapshot, getDocs, getDocsFromCache, runTransaction
+  getFirestore, collection, doc, query, where, limit, getDoc, getDocs, getDocsFromCache, runTransaction
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { ARTIFACT_CATALOG, getArtifactById } from './artifact-catalog.js';
 import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material-catalog.js';
@@ -16,9 +16,7 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
   const TYPE_LABEL = Object.freeze({ material: '煉器材料', artifact: '法寶', recipe: '配方製作指南' });
   let db = null;
   let currentUid = '';
-  let unsubActive = null;
-  let unsubMine = null;
-  let unsubWallet = null;
+  let refreshTimer = null;
   let active = [];
   let mine = [];
   let filter = 'all';
@@ -460,55 +458,57 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
     panel.addEventListener('click', (event) => {
       const button = event.target.closest('button');
       if (!button || button.disabled) return;
-      if (button.id === 'pm-publish') { void createListing(); return; }
-      if (button.dataset.pmRefresh !== undefined) { void refreshListings(); return; }
-      if (button.dataset.pmBuy) { void buyListing(button.dataset.pmBuy); return; }
-      if (button.dataset.pmCancel) { void cancelListing(button.dataset.pmCancel); return; }
+      if (button.id === 'pm-publish') { void createListing().then(() => void refreshListings()); return; }
+      if (button.dataset.pmRefresh !== undefined) { void refreshWallet(); void refreshListings(); return; }
+      if (button.dataset.pmBuy) { void buyListing(button.dataset.pmBuy).then(() => { void refreshWallet(); void refreshListings(); }); return; }
+      if (button.dataset.pmCancel) { void cancelListing(button.dataset.pmCancel).then(() => void refreshListings()); return; }
       if (button.dataset.pmFilter) { filter = button.dataset.pmFilter; render(); }
     });
     return true;
   }
 
+  async function refreshWallet() {
+    if (!db || !currentUid) return;
+    try {
+      const snap = await getDoc(doc(db,'users',currentUid));
+      const current = data();
+      if (!snap.exists() || !current || user()?.uid !== currentUid) return;
+      const latest = snap.data() || {};
+      const remoteGold = gold(latest);
+      if (gold(current) !== remoteGold) {
+        current.stats = current.stats || {};
+        current.stats.gold = remoteGold;
+        window.dispatchEvent(new CustomEvent('xiuxian:stats-updated',{detail:{gold:remoteGold}}));
+      }
+      const oldLicenses = JSON.stringify(current.recipeLicenses || {});
+      const newLicenses = JSON.stringify(latest.recipeLicenses || {});
+      if (oldLicenses !== newLicenses) {
+        current.recipeLicenses = latest.recipeLicenses || {};
+        window.dispatchEvent(new CustomEvent('xiuxian:recipe-license-updated'));
+      }
+    } catch (error) {
+      console.error('[Player market] refresh wallet',error);
+    }
+  }
+
   function subscribe(uid) {
-    unsubActive?.(); unsubMine?.(); unsubWallet?.();
-    unsubActive = unsubMine = unsubWallet = null;
+    if (refreshTimer) clearInterval(refreshTimer);
+    refreshTimer = null;
     currentUid = uid || '';
     active = []; mine = []; failed = false;
     if (!uid) { scheduleRender(); return; }
-    try {
-      // 賣家成交時也要更新本機金幣；登入核心只會在登入時讀取一次玩家資料。
-      unsubWallet = onSnapshot(doc(db, 'users', uid), (snap) => {
-        const current = data();
-        if (!snap.exists() || !current || user()?.uid !== uid) return;
-        const latest = snap.data() || {};
-        const remoteGold = gold(latest);
-        if (gold(current) !== remoteGold) {
-          current.stats = current.stats || {};
-          current.stats.gold = remoteGold;
-          window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', { detail: { gold: remoteGold } }));
-        }
-        const oldLicenses = JSON.stringify(current.recipeLicenses || {});
-        const newLicenses = JSON.stringify(latest.recipeLicenses || {});
-        if (oldLicenses !== newLicenses) {
-          current.recipeLicenses = latest.recipeLicenses || {};
-          window.dispatchEvent(new CustomEvent('xiuxian:recipe-license-updated'));
-        }
-        scheduleRender();
-      }, (error) => console.error('[Player market] wallet listener', error));
-      const activeQuery = query(collection(db, COLLECTION), where('status','==','active'),limit(60));
-      const ownQuery = query(collection(db, COLLECTION), where('sellerUid','==',uid),limit(40));
-      unsubActive = onSnapshot(activeQuery, (snapshot) => {
-        active = snapshot.docs.map((item) => ({ id:item.id, ...item.data() }))
-          .sort((a,b) => Number(b.createdAtMs || 0) - Number(a.createdAtMs || 0));
-        failed = false; scheduleRender();
-      }, (error) => { failed = true; console.error('[Player market] active listings listener',error); scheduleRender(); });
-      unsubMine = onSnapshot(ownQuery, (snapshot) => {
-        mine = snapshot.docs.map((item) => ({ id:item.id, ...item.data() }))
-          .sort((a,b) => Number(b.createdAtMs || 0) - Number(a.createdAtMs || 0));
-        scheduleRender();
-      }, (error) => { console.error('[Player market] own listings listener',error); });
-    } catch (error) { safeError('subscribe',error); }
+    void refreshWallet();
+    void refreshListings();
+    // 市集不使用 Firestore Listen stream，避免 WebChannel transport error
+    // 讓整個市集畫面失效；開啟時、交易後及每 20 秒以一次性讀取更新。
+    refreshTimer = setInterval(() => {
+      if (!document.getElementById('page-store')?.classList.contains('hidden')) {
+        void refreshWallet();
+        void refreshListings();
+      }
+    },20000);
   }
+
   function boot() {
     db = getFirestore(getApp());
     mount();
