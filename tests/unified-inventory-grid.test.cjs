@@ -169,9 +169,22 @@ test('old plain-text training backpack cards are removed from both stage shells'
 });
 
 test('all runtime feature modules share one build query without changing dependency-list paths', () => {
-  assert.match(main,/const XIUXIAN_FEATURE_BUILD = '20260920-dedup1'/);
+  assert.match(main,/const XIUXIAN_FEATURE_BUILD = '20260920-equip-action1'/);
   assert.match(main,/await import\(\`\$\{modulePath\}\?v=\$\{XIUXIAN_FEATURE_BUILD\}\`\)/);
   assert.match(main,/'\.\/cultivation\/foundation-training-page\.js'/);
   assert.match(main,/'\.\/cultivation\/cultivation-training-v4\.js'/);
   assert.match(main,/'\.\/cultivation\/unified-inventory-grid\.js'/);
+});
+
+test('selected equipment slot equips compatible owned artifacts directly and explains unsupported items', () => {
+  assert.match(bag, /const equippedCandidates = ownedArtifacts\.filter/);
+  assert.match(bag, /目前持有的法寶都是消耗型或答題型/);
+  assert.match(bag, /目前持有的裝備型法寶屬於其他欄位/);
+  assert.match(bag, /點選下方法寶，即可裝配到/);
+  assert.match(bag, /if \(!equipmentPickSlot \|\| !item/);
+  assert.match(bag, /artifactSlot\(item\.raw\) !== equipmentPickSlot/);
+  assert.match(bag, /await window\.toggleEquipArtifact\(item\.id\)/);
+  assert.match(bag, /if \(!artifactCanEquip\(item\.raw\)\) \{/);
+  assert.match(bag, /openDetails\(key\); \/\/ 保留境界不足原因/);
+  assert.match(bag, /console\.error\('\[Equipment slot\] equip failed:'/);
 });
