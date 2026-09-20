@@ -463,7 +463,8 @@ import {
     scheduleRender(true);
     [
       'material-system-updated', 'artifact-system-updated', 'material-catalog-updated', 'artifact-catalog-updated',
-      'xiuxian:stats-updated', 'foundation-training-stage-changed', 'golden-core-access-changed'
+      'xiuxian:stats-updated', 'foundation-training-stage-changed', 'golden-core-access-changed',
+      'xiuxian:equipment-open-request'
     ].forEach((name) => window.addEventListener(name, () => scheduleRender(true)));
 
     document.addEventListener('change', (event) => {
