@@ -32,7 +32,6 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/artifact-battle-effects.js',
   './cultivation/material-system.js',
   './cultivation/unified-inventory-grid.js',
-  './cultivation/inventory-legacy-bridge.js',
   './cultivation/refinery-ai-jobs.js',
   './cultivation/cultivation-refinery-v2.js',
   './cultivation/training-fluid-layout.js',
@@ -66,7 +65,7 @@ let xiuxianFeatureLoadStarted = false;
 let xiuxianReadyTimer = null;
 let resolveXiuxianFeatureGate;
 const xiuxianFeatureGate = new Promise((resolve) => { resolveXiuxianFeatureGate = resolve; });
-const XIUXIAN_FEATURE_BUILD = '20260920-equipment4';
+const XIUXIAN_FEATURE_BUILD = '20260920-dedup1';
 
 window.__xiuxianFeaturesReady = false;
 window.waitForXiuxianFeatures = () => xiuxianFeatureGate;
