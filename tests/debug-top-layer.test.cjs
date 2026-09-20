@@ -108,3 +108,27 @@ test('refinery shows ordinary players only a neutral retry and routes errors int
   assert.match(legacy, /xiuxianDebugBuffer\.forEach\(xiuxianDebugWriter\)/);
   assert.match(legacy, /div\.textContent =/);
 });
+
+test('safe action errors preserve gameplay validation but never expose raw technical exceptions to players', () => {
+  const vm = require('node:vm');
+  const start = legacy.indexOf('window.xiuxianSafeActionError =');
+  const end = legacy.indexOf('console.error = function', start);
+  assert.ok(start > 0 && end > start);
+  const sent = [];
+  const ctx = vm.createContext({ window:{reportXiuxianBug:(...args)=>sent.push(args)},String,Error });
+  vm.runInContext(legacy.slice(start,end),ctx);
+  assert.equal(vm.runInContext("window.xiuxianSafeActionError('煉器', new Error('FirebaseError: permission-denied'), '操作未完成')",ctx),'操作未完成');
+  assert.equal(vm.runInContext("window.xiuxianSafeActionError('煉器', new Error('金幣不足，需要 150'), '操作未完成')",ctx),'金幣不足，需要 150');
+  assert.equal(vm.runInContext("window.xiuxianSafeActionError('煉器', new Error('金幣不足<svg onload=alert(1)>'), '操作未完成')",ctx),'操作未完成');
+  assert.equal(sent.length,3,'even actionable failures must reach admin debugger');
+  assert.match(legacy,/if \(typeof message === 'string' &&[\s\S]*Legacy alert/);
+  const dongtian = read('public/cultivation/dongtian.js');
+  const entry = read('public/cultivation/dongtian-entry.js');
+  const material = read('public/cultivation/material-system.js');
+  const artifact = read('public/cultivation/artifact-system.js');
+  const identity = read('public/cultivation/identity-system.js');
+  for (const [moduleName,src] of Object.entries({dongtian,material,artifact,identity})) {
+    assert.match(src,/xiuxianSafeActionError/,moduleName+' must route error text through common guard');
+  }
+  assert.doesNotMatch(entry,/洞天啟動失敗：\$\{error\?\.message/);
+});
