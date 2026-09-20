@@ -66,7 +66,7 @@ let xiuxianFeatureLoadStarted = false;
 let xiuxianReadyTimer = null;
 let resolveXiuxianFeatureGate;
 const xiuxianFeatureGate = new Promise((resolve) => { resolveXiuxianFeatureGate = resolve; });
-const XIUXIAN_FEATURE_BUILD = '20260920-player-market2';
+const XIUXIAN_FEATURE_BUILD = '20260920-recipe-guide1';
 
 window.__xiuxianFeaturesReady = false;
 window.waitForXiuxianFeatures = () => xiuxianFeatureGate;

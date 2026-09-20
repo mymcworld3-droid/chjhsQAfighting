@@ -65,7 +65,7 @@ test('preloaded index contains octagonal refinery CSS before hydration', () => {
   assert.match(css, /\.refinery-slot\[data-refinery-slot="7"\]/);
   assert.match(css, /\.refinery-craft\.ready:not\(:disabled\)/);
   assert.match(index, /cultivation-training-v3\.css\?v=20260918-array1/);
-  assert.match(index, /main\.js\?v=20260920-player-market2/);
+  assert.match(index, /main\.js\?v=20260920-recipe-guide1/);
 });
 
 test('preload shell styling no longer describes the old four-column forge', () => {
