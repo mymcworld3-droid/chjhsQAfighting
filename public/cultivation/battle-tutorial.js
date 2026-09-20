@@ -11,6 +11,14 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   const VERSION = 1;
   const FOUNDATION_SCORE = 10;
   const TRUE_DAMAGE = 65000;
+  const SHEN_ANSWER_WINDOW_MS = 25000;
+  // 高等微積分：用幾何級數和交錯 ζ(3) 求精確值。師姐先手是第一戰劇情特例。
+  const SHEN_QUESTION = Object.freeze({
+    q: '設 ζ(3)＝Σ(n＝1 至 ∞) 1/n³。求定積分 ∫₀¹ (ln x)²／(1＋x) dx 的精確值。',
+    opts: ['2ζ(3)', '3ζ(3)／2', '7ζ(3)／4', 'π³／16'],
+    ans: 1,
+    exp: '將 1／(1＋x) 展成交錯幾何級數；逐項積分得 2Σ(n＝1 至 ∞)(−1)⁽ⁿ⁻¹⁾／n³＝2(1−2⁻²)ζ(3)＝3ζ(3)／2。'
+  });
   const LAYER_ID = 'battle-tutorial-layer';
   const STYLE_ID = 'battle-tutorial-style';
 
@@ -44,6 +52,9 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   let previewOnly = false;
   let startedByStory = false;
   let tutorialPhase = 'shen';
+  let shenTimer = null;
+  let shenDeadline = 0;
+  let shenChoice = null;
   let active = false;
   let busy = false;
   let stage = 'intro';
@@ -77,6 +88,10 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       .replaceAll('"','&quot;').replaceAll("'",'&#039;');
   }
   function delay(ms) { return new Promise((resolve) => setTimeout(resolve, ms)); }
+  function clearShenTimer() {
+    if (shenTimer !== null) clearInterval(shenTimer);
+    shenTimer = null;
+  }
 
   async function persist(patch) {
     if (previewOnly) return;
@@ -121,6 +136,42 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       #${LAYER_ID} .bt-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}.bt-primary{min-height:40px;padding:0 17px;border:1px solid rgba(216,177,93,.55);border-radius:12px;background:linear-gradient(135deg,#8d6623,#50360e);color:#fff0c5;font-size:9px;font-weight:1000}.bt-primary:disabled{opacity:.48}
       #${LAYER_ID} .bt-result{text-align:center;padding:10px 4px 2px}.bt-result-mark{display:grid;place-items:center;width:72px;height:72px;margin:0 auto 10px;border:1px solid rgba(216,177,93,.25);border-radius:50%;color:#d7b55b;font:900 33px serif}.bt-result h3{margin:0;color:#f0e1bd;font-size:18px}.bt-result p{margin:7px auto 0;max-width:620px;color:#968b76;font-size:10px;line-height:1.7}
       @media(max-width:650px){#${LAYER_ID}{padding:6px}#${LAYER_ID} .bt-head{padding:12px}#${LAYER_ID} .bt-arena{grid-template-columns:1fr 48px 1fr;padding:10px 9px 5px;gap:5px}#${LAYER_ID} .bt-fighter{min-height:205px}#${LAYER_ID} .bt-fighter img{inset:34px 0 30px;height:calc(100% - 64px)}#${LAYER_ID} .bt-fighter-head b{font-size:7px}#${LAYER_ID} .bt-body{padding:8px 9px 12px}.bt-options{grid-template-columns:1fr}.bt-damage{left:68%;font-size:25px}}
+      /* 正式鬥法使用兩欄 grid；教學改為橫跨整個演武場，不能被擠進側欄。 */
+      #page-battle .bv2-arena.bt-tutorial-active{display:block!important;grid-template-columns:none!important;grid-template-rows:none!important;grid-template-areas:none!important;width:100%!important;min-height:0!important;height:auto!important;max-height:none!important;margin:0!important;padding:0!important;overflow:visible!important}
+      #page-battle .bv2-arena.bt-tutorial-active #${LAYER_ID}{display:block;width:100%;min-width:0;max-width:1100px;margin:0 auto}
+      #${LAYER_ID} .bt-shell{display:flex;flex-direction:column;gap:clamp(8px,1.2dvh,14px);width:100%;min-width:0;padding-bottom:18px}
+      #${LAYER_ID} .bt-head{flex:0 0 auto}
+      #${LAYER_ID} .bt-arena{grid-template-columns:minmax(0,1fr) clamp(44px,7vw,75px) minmax(0,1fr);height:clamp(170px,30dvh,290px);min-height:0;padding:5px 2px;gap:clamp(4px,1vw,12px)}
+      #page-battle .bv2-arena.bt-tutorial-active .bt-fighter{min-width:0;min-height:0!important;height:100%;padding:0!important}
+      #${LAYER_ID} .bt-fighter img{inset:28px 0 19px;width:100%;height:calc(100% - 47px)}
+      #${LAYER_ID} .bt-body{flex:1;min-width:0;padding:0 2px 12px}
+      #${LAYER_ID} .bt-question{margin:0;padding:clamp(11px,1.5vw,19px);overflow-wrap:anywhere}
+      #${LAYER_ID} .bt-question h3{font-size:clamp(13px,1.5vw,19px)}
+      #${LAYER_ID} .bt-options{grid-template-columns:repeat(2,minmax(0,1fr))}
+      #${LAYER_ID} .bt-option{min-width:0;min-height:clamp(40px,6dvh,56px);font-size:clamp(11px,1vw,14px);overflow-wrap:anywhere}
+      #${LAYER_ID} .bt-shen-timer{font-variant-numeric:tabular-nums;font-size:clamp(13px,1.3vw,19px);color:#ffe29a;font-weight:900}
+      #${LAYER_ID} .bt-shen-timer.urgent{color:#ff8273}
+      #${LAYER_ID} .bt-explain{font-size:clamp(10px,.95vw,13px)}
+      #${LAYER_ID} .bt-result{padding:clamp(8px,1.6vw,18px)}
+      @media(max-width:650px){
+        #${LAYER_ID} .bt-head{padding:9px 5px;gap:6px}
+        #${LAYER_ID} .bt-head h2{font-size:clamp(15px,4vw,20px)}
+        #${LAYER_ID} .bt-arena{grid-template-columns:minmax(0,1fr) 36px minmax(0,1fr);height:clamp(135px,23dvh,200px);padding:0;gap:3px}
+        #${LAYER_ID} .bt-fighter img{inset:27px 0 15px;height:calc(100% - 42px)}
+        #${LAYER_ID} .bt-fighter-head{padding:6px 6px 0}
+        #${LAYER_ID} .bt-fighter-head strong{font-size:10px}
+        #${LAYER_ID} .bt-fighter-head b{font-size:8px}
+        #${LAYER_ID} .bt-vs{height:36px;width:36px;font-size:10px}
+        #${LAYER_ID} .bt-options{grid-template-columns:1fr}
+        #${LAYER_ID} .bt-option{min-height:40px}
+        #${LAYER_ID} .bt-question-meta{gap:8px;flex-wrap:wrap}
+        #${LAYER_ID} .bt-actions .bt-primary{width:100%}
+      }
+      @media(max-height:580px) and (orientation:landscape){
+        #${LAYER_ID} .bt-arena{height:115px}
+        #${LAYER_ID} .bt-fighter img{inset:25px 0 12px;height:calc(100% - 37px)}
+        #${LAYER_ID} .bt-question{padding:10px}
+      }
       @media(prefers-reduced-motion:reduce){#${LAYER_ID} *{animation:none!important;transition:none!important}}
     `;
     document.head.appendChild(style);
@@ -147,6 +198,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       el = document.createElement('div');
       el.id = LAYER_ID;
       document.getElementById('bv2-arena').appendChild(el);
+      document.getElementById('bv2-arena').classList.add('bt-tutorial-active');
     }
     return el;
   }
@@ -184,38 +236,81 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       opponentMaxHp:99999,
       badge:'築基鬥法教學 · 第一戰',
       title:'先和師姐切磋',
-      body:`<div class="bt-dialogue"><div class="bt-speaker">沈清霜</div><p>正式鬥法之前，先讓你知道站上鬥法臺代表什麼。這裡使用靈識投影，投影敗北不會真的死亡。</p></div>
-        <div class="bt-rule"><strong>教學戰不計戰績：</strong>不建立正式房間、不消耗道具、不給獎勵，也不會改動你的永久生命值。</div>
-        <div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="shen-start">準備好了 · 開始切磋</button></div>`
-    }).querySelector('[data-bt-action="shen-start"]')?.addEventListener('click', runShenStrike);
+      body:`<div class="bt-rule"><strong>教學戰不計戰績：</strong>不建立正式房間、不消耗道具、不給獎勵，也不會改動你的永久生命值。師姐將立刻答題，你有 25 秒回應。</div>
+        <div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="shen-start">進入數學試煉</button></div>`
+    }).querySelector('[data-bt-action="shen-start"]')?.addEventListener('click', beginShenQuestion);
   }
 
-  async function runShenStrike() {
-    if (busy) return;
-    busy = true;
-    stage = 'shen-strike';
+  function renderShenQuestion(feedback = null) {
+    const answered = feedback !== null;
+    const choice = feedback?.choice ?? null;
+    const remaining = Math.max(0, Math.ceil((shenDeadline - Date.now()) / 1000));
+    const opts = SHEN_QUESTION.opts.map((text, index) => {
+      const outcome = answered ? (index === SHEN_QUESTION.ans ? ' correct' : (index === choice ? ' wrong' : '')) : '';
+      return `<button type="button" class="bt-option${outcome}" data-bt-shen-choice="${index}" ${answered ? 'disabled' : ''}>${String.fromCharCode(65 + index)}. ${esc(text)}</button>`;
+    }).join('');
+    const explain = answered
+      ? `<div class="bt-explain"><b>${choice === null ? '時間到：玩家未作答。' : choice === SHEN_QUESTION.ans ? '你答對了，但師姐早已答對並取得先手。' : '你答錯了，師姐早已答對並取得先手。'}</b><br>正解：${esc(SHEN_QUESTION.opts[SHEN_QUESTION.ans])}。 ${esc(SHEN_QUESTION.exp)}<br>本場為先手秒殺劇情特例，不代表正式配對的雙方答對規則。</div>`
+      : '<div class="bt-explain">沈清霜已秒答。你只剩 25 秒；即使答對，師姐的先手劍意也會先命中。</div>';
     const el = shell({
       opponent:'沈清霜',
       opponentImage:'assets/story/characters/shen-qingshuang.png',
       opponentHp:99999,
       opponentMaxHp:99999,
-      badge:'築基鬥法教學 · 第一戰',
-      title:'沈清霜 · 示範一擊',
-      showLater:false,
-      body:`<div class="bt-dialogue"><div class="bt-speaker">沈清霜</div><p>看清楚。</p></div>`
+      badge:'築基鬥法教學 · 高難度數學',
+      title:'師姐已作答 · 玩家應答窗',
+      showLater:!answered,
+      body:`<section class="bt-question"><div class="bt-question-meta"><span>沈清霜 · 立即答對</span><span id="bt-shen-timer" class="bt-shen-timer ${remaining <= 5 ? 'urgent' : ''}">剩餘 ${remaining} 秒</span></div>
+        <h3>${esc(SHEN_QUESTION.q)}</h3><div class="bt-options">${opts}</div>${explain}</section>`
     });
-    await delay(260);
+    if (!answered) el.querySelectorAll('[data-bt-shen-choice]').forEach(button => button.addEventListener('click', () => runShenStrike(Number(button.dataset.btShenChoice))));
+    return el;
+  }
+
+  function updateShenTimer() {
+    if (!active || stage !== 'shen-question' || busy) return;
+    const remaining = Math.max(0, Math.ceil((shenDeadline - Date.now()) / 1000));
+    const el = document.getElementById('bt-shen-timer');
+    if (el) {
+      el.textContent = `剩餘 ${remaining} 秒`;
+      el.classList.toggle('urgent', remaining <= 5);
+    }
+    if (Date.now() >= shenDeadline) runShenStrike(null);
+  }
+
+  function beginShenQuestion() {
+    if (!active || busy || stage !== 'intro' || tutorialPhase !== 'shen') return;
+    clearShenTimer();
+    stage = 'shen-question';
+    shenDeadline = Date.now() + SHEN_ANSWER_WINDOW_MS;
+    shenChoice = null;
+    renderShenQuestion();
+    shenTimer = setInterval(updateShenTimer, 200);
+    updateShenTimer();
+  }
+
+  async function runShenStrike(choice = null) {
+    if (!active || busy || stage !== 'shen-question') return;
+    busy = true;
+    // 逾時點擊不能繞過 25 秒限制；作答結果僅決定解析，不影響師姐的先手攻擊。
+    shenChoice = Date.now() < shenDeadline && Number.isInteger(choice) && choice >= 0 && choice < SHEN_QUESTION.opts.length ? choice : null;
+    clearShenTimer();
+    stage = 'shen-strike';
+    const el = renderShenQuestion({ choice: shenChoice });
+    await delay(480);
+    if (!active) return;
     el.querySelector('[data-bt-fighter="enemy"]')?.classList.add('strike');
     el.querySelector('.bt-slash')?.classList.add('go');
     await delay(180);
+    if (!active) return;
     el.querySelector('[data-bt-fighter="me"]')?.classList.add('hit');
     const pop = document.createElement('div');
     pop.className = 'bt-damage';
     pop.innerHTML = '-65,000<small>真實傷害 · TRUE DAMAGE</small>';
     el.querySelector('.bt-arena')?.appendChild(pop);
-    await delay(380);
+    await delay(650);
+    if (!active) return;
     playerHp = 0;
-    stage = 'shen-result';
     busy = false;
     renderShenResult();
   }
@@ -232,7 +327,8 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       badge:'築基鬥法教學 · 第一戰結束',
       title:'沈清霜 · 65,000 真實傷害',
       showLater:false,
-      body:`<div class="bt-result"><div class="bt-result-mark">敗</div><h3>演武投影已潰散</h3><p>你的投影被一劍擊倒，但本次教學不計戰績，也不影響場外生命。</p></div>
+      body:`<div class="bt-result"><div class="bt-result-mark">敗</div><h3>演武投影已潰散</h3><p>${shenChoice === null ? '25 秒已結束，未能及時作答。' : shenChoice === SHEN_QUESTION.ans ? '你答對了，但師姐先手命中。' : '你答錯了，師姐先手命中。'}投影承受 65,000 真實傷害；教學不計戰績或場外生命。</p></div>
+        <div class="bt-explain"><b>正確答案：${esc(SHEN_QUESTION.opts[SHEN_QUESTION.ans])}</b><br>${esc(SHEN_QUESTION.exp)}</div>
         <div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="return-story">返回主線劇情</button></div>`
     });
     el.querySelector('[data-bt-action="return-story"]')?.addEventListener('click', finishShen);
@@ -241,6 +337,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   function finishShen() {
     if (!active || busy || tutorialPhase !== 'shen') return;
     active = false;
+    clearShenTimer();
     document.getElementById(LAYER_ID)?.remove();
     window.closeBattleTutorialArena?.();
     const resume = startedByStory;
@@ -260,9 +357,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       opponentMaxHp:2000,
       badge:'築基鬥法教學 · 第二戰',
       title:'顧長風 · 正式規則演練',
-      body:`<div class="bt-dialogue"><div class="bt-speaker">顧長風</div><p>師姐說你現在太弱，要我先陪你練基本功。放心，我應該沒有六萬五千真傷。</p></div>
-        <div class="bt-dialogue" style="margin-top:8px"><div class="bt-speaker">沈清霜</div><p>他沒有。這一場也只是靈識投影；不論勝負，生命都不會帶回仙府。</p></div>
-        <div class="bt-rule"><strong>正式規則：</strong>答對才有出手機會；第一位玩家作答後，另一方進入 25 秒應答窗；雙方都答對時，雙方都能出手，傷害同時結算。</div>
+      body:`<div class="bt-rule"><strong>顧長風 · 四回合規則訓練：</strong>師姐說你現在太弱，要我先陪你練基本功。這一場同樣不計戰績。答對才有出手機會；第一位玩家作答後，另一方進入 25 秒應答窗；雙方都答對時，雙方都能出手，傷害同時結算。</div>
         <div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="gu-start">開始四回合教學戰</button></div>`
     });
     el.querySelector('[data-bt-action="gu-start"]')?.addEventListener('click', () => {
@@ -350,11 +445,6 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     const passed = guCorrect >= 3;
     const resultMark = perfect ? '勝' : passed ? '合' : '習';
     const resultTitle = perfect ? '四題全對 · 顧長風生命歸零' : passed ? '規則掌握 · 教學合格' : '完成實戰 · 還需要多練';
-    const rivalLine = perfect
-      ? '……行。至少不是每個人都會被大師姐一刀之後還敢繼續打。'
-      : passed
-        ? '還行。真正配對不會有人停下來替你解釋。'
-        : '規則至少看過一遍了。下次別把錯題當招式。';
     const el = shell({
       opponent:'顧長風',
       opponentImage:'assets/story/characters/battle-rival.png',
@@ -364,8 +454,6 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       title:'顧長風教學戰完成',
       showLater:false,
       body:`<div class="bt-result"><div class="bt-result-mark">${resultMark}</div><h3>${esc(resultTitle)}</h3><p>答對 ${guCorrect} / ${QUESTIONS.length}。這場是本機教學模擬，不會加入正式勝敗紀錄。</p></div>
-        <div class="bt-dialogue" style="margin-top:12px"><div class="bt-speaker">顧長風</div><p>${esc(rivalLine)}</p></div>
-        <div class="bt-dialogue" style="margin-top:8px"><div class="bt-speaker">沈清霜</div><p>正式鬥法沒有教學保護。先看題，再出手。</p></div>
         <div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="finish">完成鬥法教學</button></div>`
     });
     el.querySelector('[data-bt-action="finish"]')?.addEventListener('click', finish);
@@ -383,6 +471,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     });
     active = false;
     busy = false;
+    clearShenTimer();
     document.getElementById(LAYER_ID)?.remove();
     window.closeBattleTutorialArena?.();
     if (startedByStory) {
@@ -399,6 +488,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
 
   function snooze() {
     if (busy) return;
+    clearShenTimer();
     active = false;
     autoStarted = false;
     snoozeUntil = Date.now() + 5 * 60 * 1000;
@@ -425,6 +515,9 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     startedByStory = options.story === true;
     active = true;
     window.switchToPage?.('page-battle');
+    clearShenTimer();
+    shenChoice = null;
+    shenDeadline = 0;
     playerHp = 1000; guHp = 2000; guRound = 0; guCorrect = 0; stage = 'intro';
     active = true;
     await persist({ started:true, startedAtMs:marker()?.startedAtMs || Date.now() });
