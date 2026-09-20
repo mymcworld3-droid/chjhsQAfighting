@@ -75,6 +75,8 @@ function loadPlayerMarketSafely() {
       .catch((error) => {
         console.error('[Xiuxian] Optional player marketplace failed:', error);
         window.__xiuxianMarketplaceLoadError = true;
+        const status = document.getElementById('pm-market-load-state');
+        if (status) status.textContent = '交易市集目前無法載入，請重新整理遊戲後再試。';
         // 保留重新嘗試的入口，但不可將市集故障加入遊戲啟動失敗清單。
         xiuxianMarketLoad = null;
         return false;
@@ -86,6 +88,9 @@ const queueMarketOpen = (view = 'all') => {
   void loadPlayerMarketSafely().then((loaded) => {
     if (loaded !== false && window.openPlayerMarketplace !== queueMarketOpen) {
       window.openPlayerMarketplace?.(view);
+    } else if (loaded !== false) {
+      const status = document.getElementById('pm-market-load-state');
+      if (status) status.textContent = '交易市集正在準備中，請稍後再按一次。';
     }
   });
 };
