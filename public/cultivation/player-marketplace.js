@@ -281,9 +281,25 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
     const store = document.getElementById('page-store');
     const tabs = store?.querySelector('.store-tab')?.parentElement;
     const grid = document.getElementById('store-grid');
-    market?.classList.toggle('hidden', !open);
+    if (!market || !store) {
+      console.error('[Player market] market panel was not mounted before tab switch');
+      return;
+    }
+    store.classList.toggle('pm-market-active', open);
+    market.classList.toggle('hidden', !open);
     tabs?.classList.toggle('hidden', open);
     grid?.classList.toggle('hidden', open);
+    // 舊坊市版型的 #store-grid 與分頁列有 display:grid!important。
+    // hidden 無法勝出；用 inline !important 明確遮蔽舊畫面。
+    if (open) {
+      tabs?.style.setProperty('display', 'none', 'important');
+      grid?.style.setProperty('display', 'none', 'important');
+      market.style.setProperty('display', 'block', 'important');
+    } else {
+      tabs?.style.removeProperty('display');
+      grid?.style.removeProperty('display');
+      market.style.removeProperty('display');
+    }
     document.getElementById('pm-view-shop')?.classList.toggle('active', !open);
     document.getElementById('pm-view-market')?.classList.toggle('active', open);
     if (open) render();
@@ -306,11 +322,15 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
     if (!page || document.getElementById('player-market')) return;
     installStyle();
     const tabs = page.querySelector('.store-tab')?.parentElement;
-    if (!tabs) return;
+    const grid = page.querySelector('#store-grid');
+    if (!tabs && !grid) {
+      console.error('[Player market] store tabs and grid are both missing');
+      return;
+    }
     const switcher = document.createElement('div');
     switcher.id = 'player-market-switch';
     switcher.innerHTML = '<button type="button" id="pm-view-shop" class="active"><i class="fa-solid fa-store"></i> 坊市商品</button><button type="button" id="pm-view-market"><i class="fa-solid fa-scale-balanced"></i> 玩家交易市集</button>';
-    tabs.before(switcher);
+    (tabs || grid).before(switcher);
     const panel = document.createElement('section');
     panel.id = 'player-market';
     panel.className = 'hidden';
@@ -382,7 +402,10 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
       .forEach((name) => window.addEventListener(name, scheduleRender));
     window.openPlayerMarketplace = (view = 'all') => {
       if (['all','material','artifact','recipe','mine'].includes(view)) filter = view;
+      // 某些舊頁面重畫後可能取代坊市節點，開啟前補掛市集入口。
+      mount();
       window.switchToPage?.('page-store');
+      if (!document.getElementById('page-store')?.classList.contains('active-page')) return;
       switchMarket(true);
     };
   }
