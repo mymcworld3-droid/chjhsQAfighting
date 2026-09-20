@@ -65,7 +65,7 @@ let xiuxianFeatureLoadStarted = false;
 let xiuxianReadyTimer = null;
 let resolveXiuxianFeatureGate;
 const xiuxianFeatureGate = new Promise((resolve) => { resolveXiuxianFeatureGate = resolve; });
-const XIUXIAN_FEATURE_BUILD = '20260920-market-visible1';
+const XIUXIAN_FEATURE_BUILD = '20260920-market-details2';
 
 // 交易市集僅為可選功能，載入失敗不可阻止玩家登入或進入遊戲。
 let xiuxianMarketLoad = null;
