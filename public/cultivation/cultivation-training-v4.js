@@ -89,7 +89,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     },
     {
       id: 'taichu', name: '太初回元丹', icon: '☀', tone: 'gold',
-      effect(grade) { return `每累積 ${Math.max(2, grade + 1)} 次悟道成功，額外獲得 1 修為。`; },
+      effect(grade) { return `每累積 ${Math.max(2, grade + 1)} 次悟道成功，額外獲得 1 修為；鬥法中每連續答對 ${Math.max(2, grade + 1)} 次，回復 100 生命。`; },
       ability: '以太初元氣反覆回補修行底蘊。',
       upkeep: '每日清晨靜坐片刻。',
       warning: '計數只累積悟道成功次數。',
@@ -104,7 +104,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     },
     {
       id: 'ningxin', name: '凝心靜音丹', icon: '◈', tone: 'ivory',
-      effect(grade) { return `連續悟道達 ${Math.max(1, Math.ceil(grade / 3)) + 1} 次，即凝聚金丹道心護體。`; },
+      effect(grade) { return `連續悟道達 ${Math.max(1, Math.ceil(grade / 3)) + 1} 次，即凝聚金丹道心護體；鬥法中連續答對同樣次數也可形成一次性護體，抵銷下一次攻擊。`; },
       ability: '凝神斂念，以連續悟道穩固金丹道心。',
       upkeep: '保持專注即可。',
       warning: '一般連勝本身沒有護體，必須調御此丹相才會觸發。',
@@ -119,7 +119,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     },
     {
       id: 'pojing', name: '破境衝仙丹', icon: '✦', tone: 'amber',
-      effect(grade) { return `進入下一境界前最後 ${breakthroughPercent(grade)}% 的修為區間時，悟道成功額外 +5 修為。`; },
+      effect(grade) { return `進入下一境界前最後 ${breakthroughPercent(grade)}% 的修為區間時，悟道成功額外 +5 修為；此時鬥法答對額外造成 100 傷害。`; },
       ability: '越近瓶頸，丹力越能衝擊境界壁障。',
       upkeep: '突破前保持穩定悟道。',
       warning: '只在接近下一境界的指定比例區間生效。',
@@ -131,7 +131,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     },
     {
       id: 'xingchen', name: '星辰吞月丹', icon: '✧', tone: 'pale',
-      effect(grade) { return `連續悟道達 ${Math.max(1, grade)} 次後，之後每次成功額外 +2 修為。`; },
+      effect(grade) { return `連續悟道達 ${Math.max(1, grade)} 次後，之後每次成功額外 +2 修為；鬥法連續答對後每次額外造成 80 傷害。`; },
       ability: '連勝越久，星月之力越穩定。',
       upkeep: '維持連續悟道。',
       warning: '中斷連勝後需重新累積。',
@@ -144,7 +144,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     },
     {
       id: 'wugou', name: '無垢清心丹', icon: '◇', tone: 'silver',
-      effect(grade) { return `答錯時有 ${chanceByGrade(grade, 20, 10, 100)}% 機率凝聚金丹道心護體。`; },
+      effect(grade) { return `答錯時有 ${chanceByGrade(grade, 20, 10, 100)}% 機率凝聚金丹道心護體；鬥法答錯時也有相同機率產生一次性護體，抵銷下一次攻擊。`; },
       ability: '失誤之際清心去垢，反而護住道心。',
       upkeep: '答錯後重新定神即可。',
       warning: '只產生金丹道心，不屬於舊版通用道心系統。',
@@ -174,7 +174,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     },
     {
       id: 'reverse', name: '陰陽反轉丹', icon: '↺', tone: 'violet',
-      effect(grade) { const n = Math.max(2, grade + 1); return `每逢連續悟道達 ${n} 次的倍數（如 ${n}、${n * 2}、${n * 3}…），額外 +3 修為。`; },
+      effect(grade) { const n = Math.max(2, grade + 1); return `每逢連續悟道達 ${n} 次的倍數（如 ${n}、${n * 2}、${n * 3}…），額外 +3 修為；鬥法連續答對達同樣倍數時，該次攻擊額外造成 120 傷害。`; },
       ability: '陰陽翻轉，在指定連勝節點爆發丹力。',
       upkeep: '保持連勝直到觸發節點。',
       warning: '只在達到指定連勝的那一次觸發。',
