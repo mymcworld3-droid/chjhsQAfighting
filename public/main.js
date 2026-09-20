@@ -65,7 +65,7 @@ let xiuxianFeatureLoadStarted = false;
 let xiuxianReadyTimer = null;
 let resolveXiuxianFeatureGate;
 const xiuxianFeatureGate = new Promise((resolve) => { resolveXiuxianFeatureGate = resolve; });
-const XIUXIAN_FEATURE_BUILD = '20260920-market-startupfix1';
+const XIUXIAN_FEATURE_BUILD = '20260920-market-visible1';
 
 // 交易市集僅為可選功能，載入失敗不可阻止玩家登入或進入遊戲。
 let xiuxianMarketLoad = null;
@@ -149,6 +149,8 @@ function startXiuxianFeaturesWhenReady() {
     xiuxianFeatureLoadStarted = true;
     if (xiuxianReadyTimer) clearTimeout(xiuxianReadyTimer);
     xiuxianReadyTimer = null;
+    // 市集與主遊戲解耦：玩家資料一就緒便準備入口，不受其他可選功能載入順序影響。
+    void loadPlayerMarketSafely();
     loadXiuxianFeaturesSafely();
     return;
   }
