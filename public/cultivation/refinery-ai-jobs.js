@@ -239,6 +239,19 @@ import {
       const snap = await tx.get(ref);
       if (!snap.exists()) throw new Error('玩家資料不存在');
       const raw = snap.data() || {};
+      // 非公共配方需由首發者持有或透過市集取得永久使用權。
+      // 交易中以 Firestore 的正式法寶清單驗證首發身份與玩家授權，不依賴本機顯示。
+      if (plan.knownArtifactId) {
+        const officialCatalogRef = doc(db(), ...ARTIFACT_CONFIG);
+        const officialSnap = await tx.get(officialCatalogRef);
+        const official = officialSnap.exists()
+          ? officialSnap.data()?.items?.find((item) => item?.id === plan.knownArtifactId)
+          : getArtifactById(plan.knownArtifactId);
+        if (!official) throw new Error('此配方已不存在');
+        if (official.recipeOwnerUid && official.recipeOwnerUid !== user.uid && raw.recipeLicenses?.[official.id] !== true) {
+          throw new Error('尚未取得此配方使用權，請前往交易市集');
+        }
+      }
       if (raw[REFINERY_JOB_FIELD]?.id) throw new Error('目前已有一件法寶正在煉製');
       const gold = Math.max(0, Number(raw.stats?.gold) || 0);
       if (gold < plan.gold) throw new Error('金幣不足，需要 ' + plan.gold + '，目前只有 ' + gold);
