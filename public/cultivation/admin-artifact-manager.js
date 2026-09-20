@@ -471,6 +471,10 @@ import {
       generatedByAI: original?.generatedByAI === true,
       generatedAtMs: original?.generatedAtMs || 0,
       reviewedAtMs: original?.reviewedAtMs || 0,
+      // 管理員修改法寶數值、名稱或配方時，不重設原本的配方首發登錄人。
+      recipeOwnerUid: original?.recipeOwnerUid || '',
+      recipeOwnerName: original?.recipeOwnerName || '',
+      recipeDiscoveredAtMs: original?.recipeDiscoveredAtMs || 0,
       generationSignature: original?.generationSignature || '',
       generationMaterials: original?.generationMaterials || [],
       aiProvider: original?.aiProvider || '',
