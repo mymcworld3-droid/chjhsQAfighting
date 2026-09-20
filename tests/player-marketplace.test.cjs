@@ -14,7 +14,7 @@ test('the existing market is loaded after artifacts and materials and reachable 
   const p = main.indexOf("'./cultivation/player-marketplace.js'");
   assert.ok(m >= 0 && p > m);
   assert.match(market, /getElementById\('page-store'\)/);
-  assert.match(market, /id="player-market-switch"/);
+  assert.match(market, /switcher\.id = 'player-market-switch'/);
   assert.match(market, /id="pm-view-market"/);
   assert.match(market, /window\.openPlayerMarketplace = \(view = 'all'\)/);
   assert.match(refinery, /data-refinery-open-market/);
