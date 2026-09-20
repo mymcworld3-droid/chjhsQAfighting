@@ -52,6 +52,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/newbie-tutorial-layout-fix.js',
   './cultivation/golden-core-tutorial.js',
   './cultivation/admin-self-transfer.js',
+  './cultivation/admin-account-manager.js',
   './cultivation/admin-artifact-manager.js',
   './cultivation/admin-artifact-delete.js',
   './cultivation/admin-material-manager.js',
