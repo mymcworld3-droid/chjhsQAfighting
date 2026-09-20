@@ -18,6 +18,7 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
   let currentUid = '';
   let unsubActive = null;
   let unsubMine = null;
+  let unsubWallet = null;
   let active = [];
   let mine = [];
   let filter = 'all';
@@ -334,12 +335,31 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
     });
   }
   function subscribe(uid) {
-    unsubActive?.(); unsubMine?.();
-    unsubActive = unsubMine = null;
+    unsubActive?.(); unsubMine?.(); unsubWallet?.();
+    unsubActive = unsubMine = unsubWallet = null;
     currentUid = uid || '';
     active = []; mine = []; failed = false;
     if (!uid) { scheduleRender(); return; }
     try {
+      // 賣家成交時也要更新本機金幣；登入核心只會在登入時讀取一次玩家資料。
+      unsubWallet = onSnapshot(doc(db, 'users', uid), (snap) => {
+        const current = data();
+        if (!snap.exists() || !current || user()?.uid !== uid) return;
+        const latest = snap.data() || {};
+        const remoteGold = gold(latest);
+        if (gold(current) !== remoteGold) {
+          current.stats = current.stats || {};
+          current.stats.gold = remoteGold;
+          window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', { detail: { gold: remoteGold } }));
+        }
+        const oldLicenses = JSON.stringify(current.recipeLicenses || {});
+        const newLicenses = JSON.stringify(latest.recipeLicenses || {});
+        if (oldLicenses !== newLicenses) {
+          current.recipeLicenses = latest.recipeLicenses || {};
+          window.dispatchEvent(new CustomEvent('xiuxian:recipe-license-updated'));
+        }
+        scheduleRender();
+      }, (error) => console.error('[Player market] wallet listener', error));
       const activeQuery = query(collection(db, COLLECTION), where('status','==','active'),limit(60));
       const ownQuery = query(collection(db, COLLECTION), where('sellerUid','==',uid),limit(40));
       unsubActive = onSnapshot(activeQuery, (snapshot) => {
