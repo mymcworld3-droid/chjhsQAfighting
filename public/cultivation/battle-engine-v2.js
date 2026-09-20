@@ -106,6 +106,60 @@ function answerCorrect(player) {
   return player?.answer?.correct === true;
 }
 
+const NEXT_REALM_THRESHOLDS = [28, 68, 128, 208, 308, 448, 628, 868];
+function nearBreakthrough(score, grade) {
+  const current = Math.max(0, Number(score) || 0);
+  const next = NEXT_REALM_THRESHOLDS.find((need) => need > current);
+  if (!next) return false;
+  const previous = NEXT_REALM_THRESHOLDS.filter((need) => need <= current).at(-1) || 28;
+  const span = Math.max(1, next - previous);
+  return current >= next - span * ((20 + (9 - clampGrade(grade)) * 5) / 100);
+}
+
+// 所有鬥法技能只以房間快照與回合種子運算；重試 Firestore transaction 不能重複擲骰。
+export function resolveDeterministicCoreSupport(player, seed) {
+  const correct = answerCorrect(player);
+  const previous = Math.max(0, Math.floor(Number(player?.coreCorrectStreak) || 0));
+  const streak = correct ? previous + 1 : 0;
+  const core = coreSnapshot(player);
+  const shieldWasReady = !!core && player?.coreShield === true;
+  const result = { streak, shield: shieldWasReady, bonusDamage: 0, heal: 0, activations: [] };
+  if (!core) return result;
+  const grade = core.grade;
+  const activate = (skill, message, kind = '鬥法金丹效果') => result.activations.push({
+    type: core.type, name: core.name, skill, message, kind
+  });
+
+  if (core.type === 'ningxin' && correct && previous >= Math.max(1, Math.ceil(grade / 3)) && !result.shield) {
+    result.shield = true;
+    activate('凝心靜音丹・道心護體', '連續答對，金丹道心護體成形', '鬥法防護');
+  }
+  if (core.type === 'wugou' && !correct && !result.shield) {
+    const chance = chanceByGrade(grade, 20, 10, 100);
+    if (deterministicPercent(`${seed}:wugou`) < chance) {
+      result.shield = true;
+      activate('無垢清心丹・道心護體', `答錯時清心護體（${chance}%）`, '鬥法防護');
+    }
+  }
+  if (core.type === 'taichu' && correct && streak % Math.max(2, grade + 1) === 0) {
+    result.heal = 100;
+    activate('太初回元丹・回元', '連續答對，回復 100 生命');
+  }
+  if (core.type === 'pojing' && correct && nearBreakthrough(player?.totalScore, grade)) {
+    result.bonusDamage = 100;
+    activate('破境衝仙丹・破境', '接近突破瓶頸，鬥法額外造成 100 傷害');
+  }
+  if (core.type === 'xingchen' && correct && previous >= Math.max(1, grade)) {
+    result.bonusDamage = 80;
+    activate('星辰吞月丹・引星', '連續答對，鬥法額外造成 80 傷害');
+  }
+  if (core.type === 'reverse' && correct && streak % Math.max(2, grade + 1) === 0) {
+    result.bonusDamage = 120;
+    activate('陰陽反轉丹・反轉', '連勝達指定倍數，鬥法額外造成 120 傷害');
+  }
+  return result;
+}
+
 export function decideRoundAttackers(host, guest, tieWindowMs = BATTLE_V2.tieWindowMs) {
   const hostCorrect = answerCorrect(host);
   const guestCorrect = answerCorrect(guest);
@@ -126,14 +180,14 @@ function currentHp(player) {
   return Math.max(0, Math.round(Number(player?.hp) || 0));
 }
 
-function hitPlan({ roomId, round, role, player }) {
+function hitPlan({ roomId, round, role, player, support }) {
   const seed = `${roomId}:${round}:${player?.uid || role}:attack`;
   const core = resolveDeterministicAttackCore(player, seed);
   return {
     role,
     baseDamage: attackPower(player),
-    extraDamage: core.extraDamage,
-    totalDamage: attackPower(player) + core.extraDamage,
+    extraDamage: core.extraDamage + support.bonusDamage,
+    totalDamage: attackPower(player) + core.extraDamage + support.bonusDamage,
     activation: core.activation
   };
 }
@@ -147,26 +201,43 @@ export function settleBattleRound({
   maxRounds = BATTLE_V2.maxRounds
 }) {
   const attackers = decideRoundAttackers(host, guest, tieWindowMs);
+  const hostSupport = resolveDeterministicCoreSupport(host, `${roomId}:${round}:${host.uid}:support`);
+  const guestSupport = resolveDeterministicCoreSupport(guest, `${roomId}:${round}:${guest.uid}:support`);
   const plans = attackers.map((role) => hitPlan({
-    roomId,
-    round,
-    role,
-    player: role === 'host' ? host : guest
+    roomId, round, role,
+    player: role === 'host' ? host : guest,
+    support: role === 'host' ? hostSupport : guestSupport
   }));
 
-  const startHostHp = currentHp(host);
-  const startGuestHp = currentHp(guest);
+  // 回元於本回合攻防前生效；護體抵銷一次攻擊，不寫回場外修為護體。
+  const startHostHp = Math.min(Math.max(1, Number(host?.maxHp) || 1000), currentHp(host) + hostSupport.heal);
+  const startGuestHp = Math.min(Math.max(1, Number(guest?.maxHp) || 1000), currentHp(guest) + guestSupport.heal);
   let hostHp = startHostHp;
   let guestHp = startGuestHp;
   const logs = [];
   const activations = [];
+  for (const activation of hostSupport.activations) activations.push({ ...activation, ownerUid: host.uid });
+  for (const activation of guestSupport.activations) activations.push({ ...activation, ownerUid: guest.uid });
+  if (hostSupport.heal && startHostHp > currentHp(host)) logs.push({ type:'heal', actorRole:'host', actorUid:host.uid, damage:0, amount:startHostHp-currentHp(host), skill:'太初回元丹・回元' });
+  if (guestSupport.heal && startGuestHp > currentHp(guest)) logs.push({ type:'heal', actorRole:'guest', actorUid:guest.uid, damage:0, amount:startGuestHp-currentHp(guest), skill:'太初回元丹・回元' });
 
   const hostHit = plans.find((plan) => plan.role === 'host') || null;
   const guestHit = plans.find((plan) => plan.role === 'guest') || null;
-
-  // Simultaneous hits are applied from the same pre-hit state, so neither browser gains ordering advantage.
-  if (hostHit) guestHp = Math.max(0, startGuestHp - hostHit.totalDamage);
-  if (guestHit) hostHp = Math.max(0, startHostHp - guestHit.totalDamage);
+  const hostReceived = guestHit && !hostSupport.shield ? guestHit.totalDamage : 0;
+  const guestReceived = hostHit && !guestSupport.shield ? hostHit.totalDamage : 0;
+  let hostCoreShield = hostSupport.shield && !guestHit;
+  let guestCoreShield = guestSupport.shield && !hostHit;
+  // Simultaneous hits use the same pre-hit state: guards and healing are symmetric.
+  if (hostHit) guestHp = Math.max(0, startGuestHp - guestReceived);
+  if (guestHit) hostHp = Math.max(0, startHostHp - hostReceived);
+  if (guestHit && hostSupport.shield) {
+    logs.push({ type:'guard', actorRole:'host', actorUid:host.uid, targetUid:guest.uid, damage:0, skill:'金丹道心護體', message:'金丹道心護體抵銷本次傷害' });
+    activations.push({ type:host.goldenCore.type, name:host.goldenCore.name || '金丹', ownerUid:host.uid, skill:'金丹道心護體', message:'金丹道心護體發動，抵銷本次攻擊', kind:'鬥法防護' });
+  }
+  if (hostHit && guestSupport.shield) {
+    logs.push({ type:'guard', actorRole:'guest', actorUid:guest.uid, targetUid:host.uid, damage:0, skill:'金丹道心護體', message:'金丹道心護體抵銷本次傷害' });
+    activations.push({ type:guest.goldenCore.type, name:guest.goldenCore.name || '金丹', ownerUid:guest.uid, skill:'金丹道心護體', message:'金丹道心護體發動，抵銷本次攻擊', kind:'鬥法防護' });
+  }
 
   if (hostHit) {
     logs.push({
@@ -174,7 +245,7 @@ export function settleBattleRound({
       actorRole: 'host',
       actorUid: host.uid,
       targetUid: guest.uid,
-      damage: hostHit.totalDamage,
+      damage: guestReceived,
       baseDamage: hostHit.baseDamage,
       extraDamage: hostHit.extraDamage,
       skill: hostHit.activation?.skill || ''
@@ -188,7 +259,7 @@ export function settleBattleRound({
       actorRole: 'guest',
       actorUid: guest.uid,
       targetUid: host.uid,
-      damage: guestHit.totalDamage,
+      damage: hostReceived,
       baseDamage: guestHit.baseDamage,
       extraDamage: guestHit.extraDamage,
       skill: guestHit.activation?.skill || ''
@@ -197,10 +268,10 @@ export function settleBattleRound({
   }
 
   // Thunder counter only fires if the defender survived the incoming hit.
-  if (hostHit && guestHp > 0) {
+  if (hostHit && guestReceived > 0 && guestHp > 0) {
     const counter = resolveDeterministicCounterCore(
       guest,
-      Math.min(startGuestHp, hostHit.totalDamage),
+      Math.min(startGuestHp, guestReceived),
       `${roomId}:${round}:${guest.uid}:counter`
     );
     if (counter.reflectDamage > 0) {
@@ -217,10 +288,10 @@ export function settleBattleRound({
     }
   }
 
-  if (guestHit && hostHp > 0) {
+  if (guestHit && hostReceived > 0 && hostHp > 0) {
     const counter = resolveDeterministicCounterCore(
       host,
-      Math.min(startHostHp, guestHit.totalDamage),
+      Math.min(startHostHp, hostReceived),
       `${roomId}:${round}:${host.uid}:counter`
     );
     if (counter.reflectDamage > 0) {
@@ -259,6 +330,10 @@ export function settleBattleRound({
     attackers,
     hostHp,
     guestHp,
+    hostCoreShield,
+    guestCoreShield,
+    hostCoreStreak: hostSupport.streak,
+    guestCoreStreak: guestSupport.streak,
     logs,
     activations,
     finished: winnerUid !== null,
