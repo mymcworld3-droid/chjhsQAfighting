@@ -193,6 +193,8 @@ import { getFirestore, collection, doc, getDoc, getDocs } from 'https://www.gsta
       if (sequence === loadSequence) {
         loading = false;
         panel.querySelector('#aum-refresh').disabled = false;
+        // 成功載入後同步更新人數狀態；錯誤訊息不會被覆蓋。
+        if (panel.querySelector('#aum-status').textContent === '正在讀取帳號…') renderList(0);
       }
     }
   }
