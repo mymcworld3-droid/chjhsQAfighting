@@ -345,8 +345,16 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
       grid?.style.removeProperty('display');
       market.style.removeProperty('display');
     }
-    document.getElementById('pm-view-shop')?.classList.toggle('active', !open);
-    document.getElementById('pm-view-market')?.classList.toggle('active', open);
+    const shopButton = document.getElementById('pm-view-shop');
+    const marketButton = document.getElementById('pm-view-market');
+    shopButton?.classList.toggle('active', !open);
+    marketButton?.classList.toggle('active', open);
+    shopButton?.style.removeProperty('background');
+    shopButton?.style.removeProperty('color');
+    marketButton?.style.removeProperty('background');
+    marketButton?.style.removeProperty('color');
+    const loading = document.getElementById('pm-market-load-state');
+    if (loading) loading.textContent = '';
     if (open) { render(); void refreshListings(); }
     return true;
   }
@@ -424,7 +432,9 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
     switcher.dataset.marketBound = '1';
     panel.dataset.marketBound = '1';
     switcher.querySelector('#pm-view-shop')?.addEventListener('click', () => switchMarket(false));
-    switcher.querySelector('#pm-view-market')?.addEventListener('click', () => switchMarket(true));
+    const marketButton = switcher.querySelector('#pm-view-market');
+    // 靜態坊市已有 onclick；避免重複執行，動態建立的入口才在這裡綁事件。
+    if (!marketButton?.hasAttribute('onclick')) marketButton?.addEventListener('click', () => switchMarket(true));
     panel.addEventListener('input', (event) => {
       if (event.target.id === 'pm-sell-qty') sellQuantity = Number(event.target.value);
       if (event.target.id === 'pm-sell-price') sellPrice = Number(event.target.value);
