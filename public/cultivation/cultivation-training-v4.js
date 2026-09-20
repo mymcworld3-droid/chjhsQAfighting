@@ -698,6 +698,12 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   }
 
   function removeLockedUI() {
+    // 金丹回落至築基（例如舊角色修為重算）時，築基模組已接管同一個
+    // #page-training 和 #nav-training。不能在後觸發的金丹清理中把它們刪掉。
+    if (window.isFoundationTrainingStage?.() &&
+        document.getElementById('page-training')?.dataset.foundationTraining === '1') {
+      return;
+    }
     document.getElementById('nav-training')?.remove();
     const page = document.getElementById('page-training');
     if (page?.dataset.staticLayout === '1') {
