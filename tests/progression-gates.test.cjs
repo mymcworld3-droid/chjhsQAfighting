@@ -31,7 +31,7 @@ test('login core is isolated from optional cultivation module failures', () => {
   const dongtianEntry = read('dongtian-entry.js');
   assert.doesNotMatch(dongtianEntry, /firebasejs|firebase-firestore|getFirestore|getAuth/);
   assert.match(main, /const XIUXIAN_FEATURE_MODULES = \[/);
-  assert.match(main, /await import\(modulePath\)/);
+  assert.match(main, /await import\(\`\$\{modulePath\}\?v=\$\{XIUXIAN_FEATURE_BUILD\}\`\)/);
   assert.match(main, /Failed to load optional module/);
   assert.match(main, /\.\/cultivation\/cultivation-theme\.js/);
 });
@@ -81,14 +81,14 @@ test('compensation inventory rendering is idempotent and cannot self-trigger for
 test('revival pill is a cultivation backpack consumable, not a Golden Core', () => {
   assert.match(inventory, /const PILL_FIELD = 'revivalPills';/);
   assert.match(inventory, /const PILL_GAIN = 100;/);
-  assert.match(inventory, /type: 'consumable'/);
+  assert.match(inventory, /type:\s*'consumable'/);
   assert.match(inventory, /cultivationGain: PILL_GAIN/);
-  assert.match(inventory, /training-tab-content/);
-  assert.match(inventory, /data-training-tab="bag"/);
+  assert.doesNotMatch(inventory, /training-tab-content|data-training-tab="bag"/);
+  assert.match(inventory, /window\.getCultivationInventoryItems/);
   assert.match(inventory, /'stats\.totalScore': newScore/);
   assert.match(inventory, /`stats\.\$\{PILL_FIELD\}`/);
-  assert.match(inventory, /修煉 → 背包/);
-  assert.match(inventory, /#settings-inventory-grid #revival-pill-card\{display:none!important\}/);
+  assert.match(progression, /修煉 → 背包/);
+  assert.match(inventory, /window\.useRevivalPillItem = useRevivalPill/);
   assert.match(main, /cultivation\/cultivation-inventory\.js/);
   assert.doesNotMatch(inventory, /getGoldenCoreState/);
   assert.doesNotMatch(inventory, /cultivationTraining/);
