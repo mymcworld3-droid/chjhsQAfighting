@@ -353,6 +353,7 @@ import {
     if (!user) throw new Error('尚未登入');
 
     let awardedId = '';
+    let firstDiscovery = false;
     let committedArtifacts = null;
     let committedCatalog = null;
     let committedRecipes = null;
@@ -381,6 +382,9 @@ import {
       const cleanLatestRecipes = recipeRepair.recipes;
 
       awardedId = findRecipeBySignature(cleanLatestRecipes, fresh.signature);
+      // 讀取全站目前配方的同一筆 transaction 決定首發者。並發開爐時
+      // Firestore 會重試衝突交易，只有第一筆成功登錄新配方的人擁有權。
+      firstDiscovery = !awardedId;
       if (!awardedId) {
         const id = uniqueGeneratedId(latestItems);
         const candidate = normalizeArtifactDefinition({
@@ -391,6 +395,9 @@ import {
           reviewStatus: 'pending',
           generatedByAI: true,
           generatedAtMs: Date.now(),
+          recipeOwnerUid: user.uid,
+          recipeOwnerName: String(raw.displayName || user.displayName || '無名修士').trim().slice(0, 36) || '無名修士',
+          recipeDiscoveredAtMs: Date.now(),
           generationSignature: fresh.signature,
           generationMaterials: fresh.ingredients,
           aiProvider: generated.provider || '',
@@ -435,7 +442,8 @@ import {
     if (committedRecipes) replaceArtifactRecipes(committedRecipes, 'ai-generated');
     window.dispatchEvent(new CustomEvent('artifact-system-updated', { detail: committedArtifacts }));
     window.dispatchEvent(new CustomEvent('xiuxian:refinery-job-updated', { detail: null }));
-    return getArtifactById(awardedId) || committedCatalog?.find((item) => item.id === awardedId) || { id: awardedId, name: '新生法寶' };
+    const awarded = getArtifactById(awardedId) || committedCatalog?.find((item) => item.id === awardedId) || { id: awardedId, name: '新生法寶' };
+    return { ...awarded, recipeFirstDiscovery: firstDiscovery };
   }
 
   async function claimJob() {
