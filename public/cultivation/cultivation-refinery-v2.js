@@ -156,7 +156,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
       const owner = item.recipeOwnerUid
         ? (mine ? '你是首位發現者 · 配方擁有權已登錄' : `首發擁有者：${esc(item.recipeOwnerName || '無名修士')}`)
         : '既有公共配方';
-      const access = item.recipeOwnerUid && !mine ? (userData()?.recipeLicenses?.[item.id] === true ? ' · 已取得永久使用權' : ' · 尚未取得使用權') : '';
+      const access = item.recipeOwnerUid && !mine ? (userData()?.recipeLicenses?.[item.id] === true ? ' · 已學會製作方法' : ' · 製作方法尚未習得') : '';
       const discovered = item.recipeOwnerUid && item.recipeDiscoveredAtMs
         ? new Date(item.recipeDiscoveredAtMs).toLocaleDateString('zh-TW') : '';
       const canReadRecipe = !item.recipeOwnerUid || mine || userData()?.recipeLicenses?.[item.id] === true;
@@ -171,7 +171,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
       </article>`;
     }).join('');
     return `<details class="refinery-recipe-book" data-refinery-recipe-book ${recipeBookOpen ? 'open' : ''}>
-      <summary><i class="fa-solid fa-scroll"></i> 配方圖鑑 <small>我的首發 ${owned.length} · 已授權 ${licensed.length} · 已登錄 ${known.length}</small></summary>
+      <summary><i class="fa-solid fa-scroll"></i> 配方圖鑑 <small>我的首發 ${owned.length} · 已學會 ${licensed.length} · 已登錄 ${known.length}</small></summary>
       <div class="refinery-recipe-book-content">
         <p>配方是製作指南，不是煉器許可證。沒有配方也能自由投入素材嘗試煉製；首發者永久保有發現紀錄，購買配方後可查看具體素材與數量。</p>
         <button type="button" class="refinery-clear" data-refinery-open-market>前往交易市集</button>
