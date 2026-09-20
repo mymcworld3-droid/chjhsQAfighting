@@ -93,12 +93,49 @@ test('equipment cards are responsive and show artifact icons instead of effect t
 });
 
 test('only selected backpack tab renders; empty slots choose compatible artifacts', () => {
-  const active = bag.slice(bag.indexOf('  function bagIsActive()'),bag.indexOf('  function itemMarkup('));
+  const active = bag.slice(bag.indexOf('  function inventoryView()'),bag.indexOf('  function itemMarkup('));
   assert.doesNotMatch(active, /dataset\.foundationTraining === '1'\) return true/);
-  assert.match(active, /classList\.contains\('active'\)/);
+  assert.match(active, /querySelector\('\[data-training-tab\]\.active'\)/);
+  assert.match(active, /tab === 'equipment' \|\| tab === 'bag'/);
   assert.match(bag, /equipmentPickSlot = button\.dataset\.uibEmptySlot/);
   assert.match(bag, /artifactSlot\(item\.raw\) === equipmentPickSlot/);
   assert.match(bag, /data-uib-cancel-equip/);
   assert.match(bag, /equipmentPickSlot = '';/);
 });
 
+
+test('real equipment tab is present in the static and both stage-specific layouts', () => {
+  const index = read('public/index.html');
+  const foundation = read('public/cultivation/foundation-training-page.js');
+  const golden = read('public/cultivation/cultivation-training-v4.js');
+  for (const [name, source] of Object.entries({index, foundation, golden})) {
+    assert.match(source, /data-training-tab="equipment"/,name);
+    assert.match(source, /fa-shield-halved/,name);
+  }
+  assert.match(foundation, /xiuxian:equipment-open-request/);
+  assert.match(golden, /activeTab === 'equipment'/);
+  assert.match(golden, /xiuxian:equipment-open-request/);
+  assert.match(bag, /'xiuxian:equipment-open-request'/);
+  assert.match(bag, /unified-inventory-grid-runtime-style/);
+  assert.match(index, /id="unified-inventory-grid-style"/);
+  assert.doesNotMatch(index, /id="unified-inventory-grid-runtime-style"/);
+});
+
+test('real markup puts exactly four equipment slots on Equipment tab, none in Backpack', () => {
+  const vm = require('node:vm');
+  const rootSource = bag.slice(bag.indexOf('  function rootMarkup('),bag.indexOf('  function effectLabel('));
+  const slots = ['本命法寶','護身法寶','佩飾法寶','輔助法寶'];
+  const ctx = vm.createContext({
+    ROOT_ID: 'unified-cultivation-bag', equipmentPickSlot:'', filterType:'all',sortMode:'type-quality',
+    escapeHtml:String, equipmentMarkup:() => '<section class="uib-equipment-panel"><div class="uib-equipment-grid">'+slots.map(name=>'<button class="uib-equip-slot">'+name+'</button>').join('')+'</div></section>',
+    sortedVisibleItems:()=>[], itemMarkup:()=>'', artifactSlot:()=>'', String
+  });
+  vm.runInContext(rootSource,ctx);
+  const equipment = vm.runInContext("rootMarkup([], 'equipment')",ctx);
+  assert.match(equipment,/uib-equipment-panel/);
+  assert.equal((equipment.match(/class="uib-equip-slot"/g)||[]).length,4);
+  assert.match(equipment,/尚無可裝配的法寶/);
+  const backpack = vm.runInContext("rootMarkup([], 'bag')",ctx);
+  assert.doesNotMatch(backpack,/uib-equipment-panel|uib-equip-slot/);
+  assert.match(backpack,/uib-toolbar/);
+});
