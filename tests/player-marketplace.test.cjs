@@ -94,3 +94,43 @@ test('market import failure does not block game readiness', () => {
   assert.match(main,/console\.error\('\[Xiuxian\] Optional player marketplace failed:', error\)/);
   assert.match(main,/window\.openPlayerMarketplace = queueMarketOpen/);
 });
+
+test('market entry and container live in static real shop, and opening does not require a late DOM event', () => {
+  assert.match(index,/id="player-market-switch"/);
+  assert.match(index,/id="pm-view-market" onclick="window\.openPlayerMarketplace\?\.\('all'\)"/);
+  assert.match(index,/id="player-market" class="hidden"/);
+  assert.match(market,/if \(switcher\.dataset\.marketBound === '1' && panel\.dataset\.marketBound === '1'\) return true/);
+  assert.match(market,/marketButton\?\.hasAttribute\('onclick'\)/);
+  assert.match(market,/window\.openPlayerMarketplace = \(view = 'all'\) => \{/);
+  assert.match(market,/if \(!marketInitialized\) \{ requestedView = filter; return; \}/);
+  assert.doesNotMatch(market,/if \(!document\.getElementById\('page-store'\)\?\.classList\.contains\('active-page'\)\) return/);
+});
+
+test('a market listing shows material descriptions, artifact effects and a guarded recipe guide', () => {
+  assert.match(market,/function detailMarkup\(listing\)/);
+  assert.match(market,/item\.description/);
+  assert.match(market,/EFFECT_LABELS\[effect\.type\]/);
+  assert.match(market,/getArtifactRecipe\(item\.id\)\.map/);
+  assert.match(market,/recipeOwnerUid === currentUid/);
+  assert.match(market,/data\(\)\?\.recipeLicenses\?\.\[item\.id\] === true/);
+  assert.match(market,/購買後可在煉器配方圖鑑查看確切材料與數量/);
+  assert.match(market,/<details class="pm-detail"><summary>查看商品資訊<\/summary>\$\{detailMarkup\(listing\)\}<\/details>/);
+  assert.match(market,/esc\(item\.description \|\| '暫無詳細描述'\)/);
+});
+
+test('market retains previously seen items through Firestore Listen transport failures', () => {
+  assert.match(market,/getDocsFromCache/);
+  assert.match(market,/async function refreshListings\(\)/);
+  assert.match(market,/if \(publicRows\.size\) active = publicRows\.docs/);
+  assert.match(market,/if \(ownRows\.size\) mine = ownRows\.docs/);
+  assert.match(market,/data-pm-refresh/);
+  assert.match(market,/市集連線暫時中斷/);
+  assert.doesNotMatch(market,/failed \? '<p class="pm-empty">市集尚未開放/);
+  assert.match(main,/交易市集目前無法載入，請重新整理遊戲後再試/);
+});
+
+test('market client script is syntactically valid after bundling changes', () => {
+  const vm=require('node:vm');
+  const stripped=market.replace(/^import[\s\S]*?;\s*$/gm,'');
+  assert.doesNotThrow(() => new vm.Script(stripped));
+});
