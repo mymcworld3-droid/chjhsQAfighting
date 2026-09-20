@@ -31,7 +31,6 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/artifact-system.js',
   './cultivation/artifact-battle-effects.js',
   './cultivation/material-system.js',
-  './cultivation/player-marketplace.js',
   './cultivation/unified-inventory-grid.js',
   './cultivation/refinery-ai-jobs.js',
   './cultivation/cultivation-refinery-v2.js',
@@ -66,7 +65,31 @@ let xiuxianFeatureLoadStarted = false;
 let xiuxianReadyTimer = null;
 let resolveXiuxianFeatureGate;
 const xiuxianFeatureGate = new Promise((resolve) => { resolveXiuxianFeatureGate = resolve; });
-const XIUXIAN_FEATURE_BUILD = '20260920-recipe-guide1';
+const XIUXIAN_FEATURE_BUILD = '20260920-market-startupfix1';
+
+// 交易市集僅為可選功能，載入失敗不可阻止玩家登入或進入遊戲。
+let xiuxianMarketLoad = null;
+function loadPlayerMarketSafely() {
+  if (!xiuxianMarketLoad) {
+    xiuxianMarketLoad = import(`./cultivation/player-marketplace.js?v=${XIUXIAN_FEATURE_BUILD}`)
+      .catch((error) => {
+        console.error('[Xiuxian] Optional player marketplace failed:', error);
+        window.__xiuxianMarketplaceLoadError = true;
+        // 保留重新嘗試的入口，但不可將市集故障加入遊戲啟動失敗清單。
+        xiuxianMarketLoad = null;
+        return false;
+      });
+  }
+  return xiuxianMarketLoad;
+}
+const queueMarketOpen = (view = 'all') => {
+  void loadPlayerMarketSafely().then((loaded) => {
+    if (loaded !== false && window.openPlayerMarketplace !== queueMarketOpen) {
+      window.openPlayerMarketplace?.(view);
+    }
+  });
+};
+window.openPlayerMarketplace = queueMarketOpen;
 
 window.__xiuxianFeaturesReady = false;
 window.waitForXiuxianFeatures = () => xiuxianFeatureGate;
@@ -105,6 +128,8 @@ async function loadXiuxianFeaturesSafely() {
   // user-ready 僅在所有功能模組都已註冊監聽器後才派發。
   window.dispatchEvent(new CustomEvent('xiuxian:user-ready'));
   resolveXiuxianFeatureGate(result);
+  // 遊戲已可開始，再載入市集。市集若故障不影響其餘功能。
+  void loadPlayerMarketSafely();
 }
 
 function cultivationUserDataReady() {
