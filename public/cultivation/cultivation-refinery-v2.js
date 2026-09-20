@@ -13,6 +13,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
   let active = false;
   let busy = false;
   let queued = false;
+  let recipeBookOpen = false;
   let adminForgeDirection = '自由發揮';
   let adminForgePrompt = '';
 
@@ -140,6 +141,41 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
     });
   }
 
+  function recipeBookMarkup() {
+    const myUid = authUser()?.uid || '';
+    const known = ARTIFACT_CATALOG.filter((item) => getArtifactRecipe(item.id).length);
+    const owned = known.filter((item) => myUid && item.recipeOwnerUid === myUid);
+    // 已公開配方仍允許其他玩家重製；首發登錄人固定，不因重製而更換。
+    const entries = known.slice().sort((a, b) =>
+      Number(myUid && b.recipeOwnerUid === myUid) - Number(myUid && a.recipeOwnerUid === myUid)
+      || (Number(b.recipeDiscoveredAtMs) || 0) - (Number(a.recipeDiscoveredAtMs) || 0)
+      || String(a.name).localeCompare(String(b.name), 'zh-Hant'));
+    const cards = entries.map((item) => {
+      const mine = !!myUid && item.recipeOwnerUid === myUid;
+      const owner = item.recipeOwnerUid
+        ? (mine ? '你是首位發現者 · 配方擁有權已登錄' : `首發擁有者：${esc(item.recipeOwnerName || '無名修士')}`)
+        : '既有公共配方';
+      const discovered = item.recipeOwnerUid && item.recipeDiscoveredAtMs
+        ? new Date(item.recipeDiscoveredAtMs).toLocaleDateString('zh-TW') : '';
+      const ingredients = getArtifactRecipe(item.id).map((row) => {
+        const material = row.materialId ? getMaterialById(row.materialId) : getArtifactById(row.artifactId);
+        return `${esc(material?.name || row.materialId || row.artifactId || '素材')} ×${Math.max(1, Number(row.quantity) || 1)}`;
+      }).join(' · ');
+      return `<article class="refinery-recipe-card ${mine ? 'is-owner' : ''}">
+        <div><b>${esc(item.icon || '◆')} ${esc(item.name)}</b><small>${esc(item.realm)}</small></div>
+        <p>${ingredients}</p>
+        <span class="refinery-recipe-owner">${owner}${discovered ? ` · ${discovered}` : ''}</span>
+      </article>`;
+    }).join('');
+    return `<details class="refinery-recipe-book" data-refinery-recipe-book ${recipeBookOpen ? 'open' : ''}>
+      <summary><i class="fa-solid fa-scroll"></i> 配方圖鑑 <small>我的首發 ${owned.length} · 已登錄 ${known.length}</small></summary>
+      <div class="refinery-recipe-book-content">
+        <p>第一位成功開爐並登錄未知配方的修士，取得永久首發擁有權。重複煉製不改變原擁有者。</p>
+        ${cards || '<p>尚無已登錄的配方。投入 2～8 個素材，開爐發現第一張配方。</p>'}
+      </div>
+    </details>`;
+  }
+
   function ensureStyle() {
     if (document.getElementById('cultivation-refinery-v2-style')) return;
     const style = document.createElement('style');
@@ -168,6 +204,11 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
       .refinery-craft{position:relative;z-index:2;width:72%;aspect-ratio:1;border-radius:50%;border:1px solid rgba(216,177,93,.42);background:radial-gradient(circle at 35% 28%,#8b6a2e,#3f2809 55%,#1d1205 100%);color:#d9c390;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:8px;font-weight:900;letter-spacing:.08em;box-shadow:0 8px 25px rgba(0,0,0,.38),inset 0 2px 4px rgba(255,255,255,.06);transition:transform .2s ease,box-shadow .2s ease,filter .2s ease}.refinery-craft i{font-size:15px;margin-bottom:1px}.refinery-craft .craft-main{font-size:10px}.refinery-craft .craft-sub{font-size:5.5px;color:#a99468;letter-spacing:.12em}.refinery-craft:disabled{opacity:.48;cursor:not-allowed;filter:saturate(.45)}.refinery-craft.ready:not(:disabled){color:#2a1904;background:radial-gradient(circle at 34% 25%,#fff0b5,#e9b64c 48%,#9d5d13 100%);border-color:#f5d57c;box-shadow:0 0 0 5px rgba(216,177,93,.08),0 0 28px rgba(241,191,72,.24),0 12px 28px rgba(0,0,0,.42);animation:refinery-craft-pulse 2s ease-in-out infinite}.refinery-craft.ready:not(:disabled) .craft-sub{color:#73501e}.refinery-craft:not(:disabled):hover{transform:scale(1.055)}
       .refinery-array-caption{position:absolute;left:50%;top:70%;transform:translateX(-50%);z-index:2;color:rgba(216,177,93,.28);font-size:6px;letter-spacing:.36em;white-space:nowrap;pointer-events:none}
       .refinery-summary,.refinery-match{position:relative;z-index:2;padding:8px 10px;border-radius:11px;font-size:8px;line-height:1.6}.refinery-summary{min-height:35px;background:rgba(216,177,93,.035);border:1px solid rgba(216,177,93,.07);color:#93846d}.refinery-summary strong{color:#d5bb79}.refinery-match{margin-top:8px;border:1px solid rgba(216,177,93,.13);background:rgba(0,0,0,.12);color:#93846d}.refinery-match.ready{border-color:rgba(134,239,172,.22);background:rgba(55,108,68,.07);color:#b9d6b4}.refinery-match.error{border-color:rgba(248,113,113,.18);color:#d7a0a0}.refinery-match b{color:#ead79f}.refinery-actions{position:relative;z-index:2;display:flex;justify-content:flex-end;gap:8px;margin-top:9px}.refinery-clear{min-height:34px;padding:0 14px;border-radius:10px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.022);color:#948b7c;font-size:8px;font-weight:800}.refinery-clear:not(:disabled):hover{border-color:rgba(216,177,93,.26);color:#cfbd95}.refinery-clear:disabled{opacity:.4;cursor:not-allowed}.refinery-note{position:relative;z-index:2;margin-top:7px;color:#6f6556;font-size:7px;line-height:1.55}.refinery-note b{color:#aa9360}
+      .refinery-recipe-book{position:relative;z-index:2;margin-top:12px;border:1px solid rgba(216,177,93,.27);border-radius:13px;background:rgba(216,177,93,.035);color:#dbc18c;overflow:hidden}
+      .refinery-recipe-book>summary{display:flex;align-items:center;gap:8px;padding:11px 12px;cursor:pointer;font-weight:900;font-size:11px;list-style:none}.refinery-recipe-book>summary::-webkit-details-marker{display:none}.refinery-recipe-book>summary small{margin-left:auto;color:#a48b5c;font-size:9px}
+      .refinery-recipe-book-content{max-height:320px;overflow:auto;padding:0 10px 10px}.refinery-recipe-book-content>p{font-size:10px;line-height:1.6;color:#a99a7c}
+      .refinery-recipe-card{margin-top:8px;padding:10px;border:1px solid rgba(216,177,93,.15);border-radius:10px;background:rgba(0,0,0,.2)}.refinery-recipe-card.is-owner{border-color:rgba(240,190,80,.57);background:rgba(216,177,93,.07)}
+      .refinery-recipe-card>div{display:flex;justify-content:space-between;gap:10px;align-items:center}.refinery-recipe-card b{font-size:11px;color:#f0dfb3}.refinery-recipe-card small,.refinery-recipe-owner{font-size:9px;color:#a98f64}.refinery-recipe-card p{margin:6px 0;font-size:10px;color:#ccc0a7}.refinery-recipe-card.is-owner .refinery-recipe-owner{color:#f4cf81}
       .refinery-job-box{position:relative;z-index:3;margin:8px 0;padding:11px 12px;border:1px solid rgba(216,177,93,.22);border-radius:13px;background:linear-gradient(135deg,rgba(216,177,93,.075),rgba(255,255,255,.015));color:#a99a7d;font-size:8px;line-height:1.65}.refinery-job-box strong{color:#efd58e}.refinery-job-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:7px}.refinery-job-stat{padding:7px;border-radius:9px;background:rgba(0,0,0,.22);text-align:center}.refinery-job-stat b{display:block;color:#ead59b;font-size:9px}.refinery-job-progress{height:5px;margin-top:9px;border-radius:999px;overflow:hidden;background:rgba(255,255,255,.06)}.refinery-job-progress>i{display:block;height:100%;width:0;background:linear-gradient(90deg,#8a611e,#f1cd6d);transition:width .25s linear}.refinery-discovery-note{color:#c6a85f!important}.refinery-admin-guidance{position:relative;z-index:3;margin:8px 0;padding:11px 12px;border:1px solid rgba(125,211,252,.22);border-radius:13px;background:linear-gradient(135deg,rgba(56,189,248,.065),rgba(216,177,93,.035));box-shadow:inset 0 1px rgba(255,255,255,.035)}.refinery-admin-guidance-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;color:#c8e9ec;font-size:8px;font-weight:900}.refinery-admin-guidance-head small{color:#758d8a;font-size:6px;font-weight:700}.refinery-admin-guidance-grid{display:grid;grid-template-columns:170px minmax(0,1fr);gap:8px}.refinery-admin-guidance label{display:grid;gap:4px;color:#9eb9b4;font-size:6px;font-weight:900}.refinery-admin-guidance select,.refinery-admin-guidance textarea{width:100%;border:1px solid rgba(148,209,198,.18);border-radius:9px;background:rgba(7,12,11,.84);color:#e8eee9;outline:none}.refinery-admin-guidance select{min-height:36px;padding:6px 8px;font-size:8px}.refinery-admin-guidance textarea{min-height:66px;max-height:150px;padding:8px;resize:vertical;font-size:8px;line-height:1.55}.refinery-admin-guidance select:focus,.refinery-admin-guidance textarea:focus{border-color:rgba(147,230,211,.48);box-shadow:0 0 0 2px rgba(147,230,211,.05)}.refinery-admin-guidance-note{margin-top:6px;color:#74847d;font-size:6px;line-height:1.5}.refinery-admin-guidance-preview{margin-top:7px;padding:7px 8px;border-radius:9px;background:rgba(0,0,0,.18);color:#8fa39b;font-size:6px;line-height:1.55}.refinery-admin-guidance-preview b{color:#c5ddd4}.refinery-craft.job-ready{animation:refinery-craft-pulse 1.1s ease-in-out infinite}.refinery-material-list.is-job-locked{opacity:.52;pointer-events:none}@media(max-width:520px){.refinery-job-grid{grid-template-columns:1fr 1fr}.refinery-job-stat:last-child{grid-column:1/-1}.refinery-admin-guidance-grid{grid-template-columns:1fr}}
       @keyframes refinery-array-spin{to{transform:rotate(360deg)}}@keyframes refinery-craft-pulse{0%,100%{box-shadow:0 0 0 5px rgba(216,177,93,.07),0 0 20px rgba(241,191,72,.15),0 12px 28px rgba(0,0,0,.42)}50%{box-shadow:0 0 0 8px rgba(216,177,93,.11),0 0 34px rgba(241,191,72,.31),0 12px 28px rgba(0,0,0,.42)}}
       @media(max-width:900px){.cultivation-refinery{grid-template-columns:1fr}.refinery-material-panel{height:calc(min(52dvh,360px) + 64px)}.refinery-material-list{height:100%;max-height:none}.refinery-slots{--array-size:min(62vw,410px)}}
@@ -370,7 +411,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
     const adminGuidance = adminGuidanceMarkup(job, matching.length);
 
 
-    return `<section class="cultivation-refinery"><article class="refinery-panel refinery-material-panel"><div class="refinery-material-list ${job ? 'is-job-locked' : ''}">${ingredientHtml}</div></article><article class="refinery-panel refinery-forge-panel"><div class="refinery-head"><div><h3><i class="fa-solid fa-fire-burner"></i> 八方煉器陣</h3><p>八方歸位，陣心煉器；點已放入素材可取回。</p></div><span class="refinery-badge" data-refinery-used-badge>${used}/${SLOT_COUNT}</span></div><div class="refinery-array-wrap"><div class="refinery-slots" aria-label="八方煉器陣"><span class="refinery-array-lines"></span><span class="refinery-array-ring"></span>${slotHtml}<div class="refinery-array-center"><button type="button" class="refinery-craft ${craftReady ? 'ready' : ''} ${jobReady ? 'job-ready' : ''}" data-refinery-craft ${craftReady ? '' : 'disabled'}><i class="fa-solid fa-fire-flame-curved"></i><span class="craft-main" data-refinery-craft-label>${busy ? '處理中' : craftLabel}</span><span class="craft-sub">REFINE</span></button></div><span class="refinery-array-caption">八方聚靈 · 一器成形</span></div></div>${jobBox}${adminGuidance}<div class="refinery-summary"><strong>投入：</strong><span data-refinery-summary-text>${esc(summary)}</span></div><div class="refinery-match ${matchClass}" data-refinery-match><b data-refinery-match-prefix>${esc(matchPrefix)}</b><span data-refinery-match-text>${esc(matchPlain)}</span></div><div class="refinery-actions"><button type="button" class="refinery-clear" data-refinery-clear ${!used || busy ? 'disabled' : ''}><i class="fa-solid fa-rotate-left"></i> 清空陣位</button></div><div class="refinery-note"><b>陣法規則：</b>按「煉製」即扣素材與金幣；境界越高、玩家境界越低，耗時與費用越高。煉製完成後按「開爐」取出法寶。</div></article></section>`;
+    return `<section class="cultivation-refinery"><article class="refinery-panel refinery-material-panel"><div class="refinery-material-list ${job ? 'is-job-locked' : ''}">${ingredientHtml}</div></article><article class="refinery-panel refinery-forge-panel"><div class="refinery-head"><div><h3><i class="fa-solid fa-fire-burner"></i> 八方煉器陣</h3><p>八方歸位，陣心煉器；點已放入素材可取回。</p></div><span class="refinery-badge" data-refinery-used-badge>${used}/${SLOT_COUNT}</span></div><div class="refinery-array-wrap"><div class="refinery-slots" aria-label="八方煉器陣"><span class="refinery-array-lines"></span><span class="refinery-array-ring"></span>${slotHtml}<div class="refinery-array-center"><button type="button" class="refinery-craft ${craftReady ? 'ready' : ''} ${jobReady ? 'job-ready' : ''}" data-refinery-craft ${craftReady ? '' : 'disabled'}><i class="fa-solid fa-fire-flame-curved"></i><span class="craft-main" data-refinery-craft-label>${busy ? '處理中' : craftLabel}</span><span class="craft-sub">REFINE</span></button></div><span class="refinery-array-caption">八方聚靈 · 一器成形</span></div></div>${jobBox}${adminGuidance}<div class="refinery-summary"><strong>投入：</strong><span data-refinery-summary-text>${esc(summary)}</span></div><div class="refinery-match ${matchClass}" data-refinery-match><b data-refinery-match-prefix>${esc(matchPrefix)}</b><span data-refinery-match-text>${esc(matchPlain)}</span></div><div class="refinery-actions"><button type="button" class="refinery-clear" data-refinery-clear ${!used || busy ? 'disabled' : ''}><i class="fa-solid fa-rotate-left"></i> 清空陣位</button></div><div class="refinery-note"><b>陣法規則：</b>按「煉製」即扣素材與金幣；境界越高、玩家境界越低，耗時與費用越高。煉製完成後按「開爐」取出法寶。</div>${recipeBookMarkup()}</article></section>`;
   }
 
   function setText(node, value) {
@@ -481,6 +522,9 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
   }
 
   function bindContent(content) {
+    content.querySelector('[data-refinery-recipe-book]')?.addEventListener('toggle', (event) => {
+      recipeBookOpen = event.currentTarget.open;
+    });
     content.querySelectorAll('[data-refinery-ingredient]').forEach((button) => button.addEventListener('click', () => add(button.dataset.refineryIngredient)));
     content.querySelectorAll('[data-refinery-slot]').forEach((button) => button.addEventListener('click', () => remove(Number(button.dataset.refinerySlot))));
     content.querySelector('[data-refinery-clear]')?.addEventListener('click', clear);
@@ -571,7 +615,9 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
           throw new Error('尚需 ' + (window.formatCultivationRefineryDuration?.(Number(job.readyAtMs) - Date.now()) || '一段時間'));
         }
         const item = await window.claimCultivationRefineryJob?.();
-        toast(`開爐成功：${item?.name || '新生法寶'}`);
+        toast(item?.recipeFirstDiscovery
+          ? `首發成功！${item?.name || '新生法寶'} 配方擁有權已歸你所有。`
+          : `開爐成功：${item?.name || '新生法寶'}`);
         selected.fill(null);
         adminForgeDirection = '自由發揮';
         adminForgePrompt = '';
