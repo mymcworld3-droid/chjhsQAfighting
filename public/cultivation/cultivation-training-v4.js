@@ -384,28 +384,28 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   }
 
   function bagTabMarkup() {
-    const items = Array.isArray(state.items) ? state.items : [];
-    if (!items.length) {
-      return `
-        <section class="training-v3-empty">
-          <i class="fa-solid fa-box-open"></i>
-          <h3>背包尚空</h3>
-          <p>金丹由修士自身靈田／丹田凝聚，屬於本命之物，不會放入背包。</p>
-        </section>
-      `;
-    }
+    // 背包物品改由統一背包模組渲染，避免舊的純文字 training-v3-bag-item 先出現在畫面。
+    return '<section class="uib-bag-loading" aria-hidden="true"></section>';
+  }
 
+  function equipmentShellMarkup() {
+    const slots = [
+      ['本命法寶', 'fa-khanda'],
+      ['護身法寶', 'fa-shield-halved'],
+      ['佩飾法寶', 'fa-gem'],
+      ['輔助法寶', 'fa-wand-magic-sparkles']
+    ];
     return `
-      <section class="training-v3-bag-grid">
-        ${items.map((item) => `
-          <div class="training-v3-bag-item">
-            <span class="training-v3-mini-core">${item.icon || '◆'}</span>
-            <span class="training-v3-bag-copy">
-              <strong>${item.name || '修煉物品'}</strong>
-              <small>× ${Math.max(1, Number(item.qty) || 1)}</small>
-            </span>
-          </div>
-        `).join('')}
+      <section class="uib-equipment-panel uib-equipment-shell" aria-label="法寶裝配欄" aria-busy="true">
+        <div class="uib-equipment-head"><b><i class="fa-solid fa-shield-halved"></i> 法寶裝配</b><em>0 / 4</em></div>
+        <div class="uib-equipment-grid">
+          ${slots.map(([slot, icon]) => `<button type="button" class="uib-equip-slot is-empty" disabled>
+            <span class="uib-equip-slot-label"><i class="fa-solid ${icon}"></i> ${slot}</span>
+            <span class="uib-equip-slot-frame"><i class="fa-solid fa-plus"></i></span>
+            <b class="uib-equip-slot-name">空裝備欄</b>
+            <small class="uib-equip-slot-hint">載入裝備資料中</small>
+          </button>`).join('')}
+        </div>
       </section>
     `;
   }
@@ -468,8 +468,9 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       return;
     }
     if (activeTab === 'equipment') {
-      // 裝備頁由共用裝備模組唯一負責渲染，不能再塞進舊背包純文字。
-      content.innerHTML = '';
+      // 四個裝配格先立即出現，再由共用裝備模組填入實際法寶。
+      content.innerHTML = equipmentShellMarkup();
+      window.openCultivationEquipment?.();
       window.dispatchEvent(new CustomEvent('xiuxian:equipment-open-request'));
       return;
     }

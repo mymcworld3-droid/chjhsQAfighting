@@ -139,3 +139,35 @@ test('real markup puts exactly four equipment slots on Equipment tab, none in Ba
   assert.doesNotMatch(backpack,/uib-equipment-panel|uib-equip-slot/);
   assert.match(backpack,/uib-toolbar/);
 });
+
+
+test('equipment stage pages render four slot shells immediately before unified inventory hydration', () => {
+  const foundation = read('public/cultivation/foundation-training-page.js');
+  const golden = read('public/cultivation/cultivation-training-v4.js');
+  for (const [name, source] of Object.entries({foundation, golden})) {
+    assert.match(source, /function equipmentShellMarkup\(\)/, name);
+    const block = source.slice(source.indexOf('function equipmentShellMarkup()'), source.indexOf('function refineryShellMarkup()'));
+    for (const slot of ['本命法寶','護身法寶','佩飾法寶','輔助法寶']) assert.match(block,new RegExp(slot),name);
+    assert.match(block,/uib-equipment-grid/,name);
+    assert.match(block,/uib-equip-slot is-empty/,name);
+  }
+  assert.match(foundation,/content\.innerHTML = equipmentShellMarkup\(\)/);
+  assert.match(golden,/content\.innerHTML = equipmentShellMarkup\(\)/);
+});
+
+test('old plain-text training backpack cards are removed from both stage shells', () => {
+  const foundation = read('public/cultivation/foundation-training-page.js');
+  const golden = read('public/cultivation/cultivation-training-v4.js');
+  const foundationBag = foundation.slice(foundation.indexOf('function bagMarkup()'),foundation.indexOf('function equipmentShellMarkup()'));
+  const goldenBag = golden.slice(golden.indexOf('function bagTabMarkup()'),golden.indexOf('function equipmentShellMarkup()'));
+  assert.doesNotMatch(foundationBag,/修煉背包|修煉途中取得的特殊物品/);
+  assert.doesNotMatch(goldenBag,/training-v3-bag-item|items\.map/);
+  assert.match(foundationBag,/uib-bag-loading/);
+  assert.match(goldenBag,/uib-bag-loading/);
+});
+
+test('equipment-related runtime modules are cache-busted together', () => {
+  assert.match(main,/foundation-training-page\.js\?v=20260920-equipment4/);
+  assert.match(main,/cultivation-training-v4\.js\?v=20260920-equipment4/);
+  assert.match(main,/unified-inventory-grid\.js\?v=20260920-equipment4/);
+});

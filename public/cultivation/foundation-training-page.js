@@ -50,11 +50,28 @@
   }
 
   function bagMarkup() {
+    // 真正背包由 unified-inventory-grid 接手；不要先畫舊式純文字卡。
+    return '<section class="uib-bag-loading" aria-hidden="true"></section>';
+  }
+
+  function equipmentShellMarkup() {
+    const slots = [
+      ['本命法寶', 'fa-khanda'],
+      ['護身法寶', 'fa-shield-halved'],
+      ['佩飾法寶', 'fa-gem'],
+      ['輔助法寶', 'fa-wand-magic-sparkles']
+    ];
     return `
-      <section class="training-v3-empty foundation-training-bag">
-        <i class="fa-solid fa-box-open"></i>
-        <h3>修煉背包</h3>
-        <p>修煉途中取得的特殊物品會收納於此。</p>
+      <section class="uib-equipment-panel uib-equipment-shell" aria-label="法寶裝配欄" aria-busy="true">
+        <div class="uib-equipment-head"><b><i class="fa-solid fa-shield-halved"></i> 法寶裝配</b><em>0 / 4</em></div>
+        <div class="uib-equipment-grid">
+          ${slots.map(([slot, icon]) => `<button type="button" class="uib-equip-slot is-empty" disabled>
+            <span class="uib-equip-slot-label"><i class="fa-solid ${icon}"></i> ${slot}</span>
+            <span class="uib-equip-slot-frame"><i class="fa-solid fa-plus"></i></span>
+            <b class="uib-equip-slot-name">空裝備欄</b>
+            <small class="uib-equip-slot-hint">載入裝備資料中</small>
+          </button>`).join('')}
+        </div>
       </section>
     `;
   }
@@ -183,9 +200,9 @@
         tab.classList.toggle('active', selected);
         tab.setAttribute('aria-selected', selected ? 'true' : 'false');
       });
-      // 舊背包純文字不再顯示；統一裝備模組於下一個畫面幀繪製四格。
       const content = page.querySelector('#training-tab-content');
-      if (content) content.innerHTML = '';
+      if (content) content.innerHTML = equipmentShellMarkup();
+      window.openCultivationEquipment?.();
       window.dispatchEvent(new CustomEvent('xiuxian:equipment-open-request'));
     });
 
