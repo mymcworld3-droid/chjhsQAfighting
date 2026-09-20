@@ -65,7 +65,7 @@ let xiuxianFeatureLoadStarted = false;
 let xiuxianReadyTimer = null;
 let resolveXiuxianFeatureGate;
 const xiuxianFeatureGate = new Promise((resolve) => { resolveXiuxianFeatureGate = resolve; });
-const XIUXIAN_FEATURE_BUILD = '20260920-market-details2';
+const XIUXIAN_FEATURE_BUILD = '20260921-market-stable1';
 
 // 交易市集僅為可選功能，載入失敗不可阻止玩家登入或進入遊戲。
 let xiuxianMarketLoad = null;
@@ -85,6 +85,20 @@ function loadPlayerMarketSafely() {
   return xiuxianMarketLoad;
 }
 const queueMarketOpen = (view = 'all') => {
+  // 即使市集模組尚在載入，也先切進坊市並顯示市集容器，
+  // 避免玩家按下入口後看起來毫無反應。
+  window.switchToPage?.('page-store');
+  const page = document.getElementById('page-store');
+  const panel = document.getElementById('player-market');
+  const tabs = page?.querySelector('.store-tab')?.parentElement;
+  const grid = document.getElementById('store-grid');
+  page?.classList.add('pm-market-active');
+  panel?.classList.remove('hidden');
+  panel?.style.setProperty('display','block','important');
+  tabs?.style.setProperty('display','none','important');
+  grid?.style.setProperty('display','none','important');
+  const status = document.getElementById('pm-market-load-state');
+  if (status) status.textContent = '正在載入交易市集…';
   void loadPlayerMarketSafely().then((loaded) => {
     if (loaded !== false && window.openPlayerMarketplace !== queueMarketOpen) {
       window.openPlayerMarketplace?.(view);
