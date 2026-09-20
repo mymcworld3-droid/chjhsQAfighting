@@ -394,132 +394,112 @@ window.toggleLanguage = () => {
     updateTexts();
 };
 // ==========================================
-// 🛠️ 管理員強力除錯工具 (已修正：支援 Error 物件解析)
+// 🛠️ 管理員 Debugger：啟動階段先記錄，確認管理員身分才顯示。
+// 技術故障只送到 Debugger；一般遊戲操作提示保留在原有 UI。
 // ==========================================
-window.setupAdminDebug = function() {
-    // 防止重複初始化
+const xiuxianDebugBuffer = [];
+const XIUXIAN_DEBUG_LIMIT = 200;
+let xiuxianDebugWriter = null;
+const xiuxianNativeError = console.error.bind(console);
+const xiuxianNativeWarn = console.warn.bind(console);
+const xiuxianNativeLog = console.log.bind(console);
+
+function formatXiuxianDebugArg(arg) {
+    if (arg instanceof Error) return arg.stack || arg.message || String(arg);
+    if (typeof arg === 'object' && arg !== null) {
+        try { return JSON.stringify(arg, null, 2); }
+        catch (_) { return '[Object] (Circular)'; }
+    }
+    return String(arg);
+}
+function queueXiuxianDebug(type, ...args) {
+    const entry = {
+        type,
+        text: args.map(formatXiuxianDebugArg).join(' '),
+        timestamp: Date.now()
+    };
+    xiuxianDebugBuffer.push(entry);
+    if (xiuxianDebugBuffer.length > XIUXIAN_DEBUG_LIMIT) xiuxianDebugBuffer.shift();
+    if (currentUserData?.isAdmin === true) xiuxianDebugWriter?.(entry);
+}
+
+// 讓所有功能模組都能直接記錄故障，而不用自行製作錯誤視窗。
+window.reportXiuxianBug = (source, error, context = '') => {
+    queueXiuxianDebug('error', '[BUG]', source, error, context);
+};
+console.error = function (...args) {
+    xiuxianNativeError(...args);
+    queueXiuxianDebug('error', ...args);
+};
+console.warn = function (...args) {
+    xiuxianNativeWarn(...args);
+    queueXiuxianDebug('warn', ...args);
+};
+// 不覆蓋其他功能模組的 onerror / onunhandledrejection。
+window.addEventListener('error', (event) => {
+    queueXiuxianDebug('error', event.message || 'Unhandled error',
+        `Location: ${event.filename || ''}:${event.lineno || 0}:${event.colno || 0}`,
+        event.error?.stack || '');
+});
+window.addEventListener('unhandledrejection', (event) => {
+    queueXiuxianDebug('error', 'Unhandled Promise:', event.reason);
+});
+
+window.setupAdminDebug = function () {
+    // 連 Debugger 的顯示與日誌寫入都必須由當前登入者的管理員身分決定。
+    if (currentUserData?.isAdmin !== true) return;
     if (window.isDebugInit) return;
-    window.isDebugInit = true;
 
     const consoleDiv = document.getElementById('admin-debug-console');
     const logContainer = document.getElementById('debug-logs');
     const debugCount = document.getElementById('debug-count');
     const showBtn = document.getElementById('btn-show-debug');
+    if (!consoleDiv || !logContainer || !debugCount || !showBtn) return;
+    window.isDebugInit = true;
 
-    if (!consoleDiv || !logContainer) return;
-
-    // 除錯工具永遠是全站最高層。按鈕需高於除錯面板本身，確保任何頁面/Modal 都可開啟或操作。
-    if (showBtn) {
-        showBtn.style.setProperty('position', 'fixed', 'important');
-        showBtn.style.setProperty('z-index', '2147483647', 'important');
-        showBtn.style.setProperty('pointer-events', 'auto', 'important');
-        showBtn.style.setProperty('isolation', 'isolate', 'important');
-    }
+    showBtn.style.setProperty('position', 'fixed', 'important');
+    showBtn.style.setProperty('z-index', '2147483647', 'important');
+    showBtn.style.setProperty('pointer-events', 'auto', 'important');
+    showBtn.style.setProperty('isolation', 'isolate', 'important');
     consoleDiv.style.setProperty('position', 'fixed', 'important');
     consoleDiv.style.setProperty('z-index', '2147483646', 'important');
     consoleDiv.style.setProperty('pointer-events', 'auto', 'important');
     consoleDiv.style.setProperty('isolation', 'isolate', 'important');
 
-    // 顯示介面
+    logContainer.replaceChildren();
+    debugCount.textContent = '0';
     consoleDiv.classList.remove('hidden');
-    if(showBtn) showBtn.classList.remove('hidden');
+    consoleDiv.classList.add('translate-y-full');
+    showBtn.classList.remove('hidden');
 
-    const initMsg = document.createElement('div');
-    initMsg.className = "text-green-400 text-[11px] font-mono border-b border-white/5 pb-1";
-    initMsg.innerText = "🔧 Admin Debugger Active: Error Tracing Enabled...";
-    logContainer.prepend(initMsg);
-
-    // 🔥 [核心修正] 格式化參數，專門處理 Error 物件與物件迴圈
-    const formatLogArgs = (args) => {
-        return args.map(arg => {
-            // 1. 如果是錯誤物件，強制印出 message 與 stack
-            if (arg instanceof Error) {
-                return `[Error] ${arg.message}\n<span class="opacity-50 text-[9px]">${arg.stack}</span>`;
-            }
-            // 2. 如果是普通物件，嘗試轉 JSON
-            if (typeof arg === 'object') {
-                try {
-                    return JSON.stringify(arg, null, 2);
-                } catch (e) {
-                    return `[Object] (Circular)`;
-                }
-            }
-            // 3. 其他轉字串
-            return String(arg);
-        }).join(' ');
-    };
-
-    // 輔助函式：新增日誌到畫面
-    const addLog = (msg, type = 'info') => {
+    xiuxianDebugWriter = (entry) => {
+        if (currentUserData?.isAdmin !== true) return;
         const div = document.createElement('div');
-        const now = new Date();
+        const now = new Date(entry.timestamp);
         const time = now.toLocaleTimeString('en-US', { hour12: false }) + '.' + String(now.getMilliseconds()).padStart(3, '0');
-        
-        let colorClass = 'text-gray-300';
-        let prefix = '[LOG]';
-
-        if (type === 'error') {
-            colorClass = 'text-red-400 font-bold bg-red-900/20 p-1 rounded border-l-2 border-red-500';
-            prefix = '❌';
-            // 更新錯誤計數
-            let count = parseInt(debugCount.innerText) || 0;
-            debugCount.innerText = count + 1;
-        } else if (type === 'warn') {
-            colorClass = 'text-yellow-400 bg-yellow-900/10';
-            prefix = '⚠️';
-        } else if (msg.includes('[Front-Image]') || msg.includes('[UI-Render]')) {
-            colorClass = 'text-cyan-300 font-bold';
-            prefix = '🎨';
-        }
-
-        div.className = `break-words text-[11px] font-mono border-b border-white/5 pb-1 ${colorClass}`;
-        // 支援 HTML (讓 Stack Trace 可以換行)
-        div.innerHTML = `<span class="opacity-50 mr-2 text-[9px]">${time}</span><span class="mr-1 opacity-75">${prefix}</span>${msg}`;
-        
+        const type = entry.type;
+        div.className = 'break-words whitespace-pre-wrap text-[11px] font-mono border-b border-white/5 pb-1 ' +
+            (type === 'error' ? 'text-red-400 font-bold bg-red-900/20 p-1 rounded border-l-2 border-red-500'
+                : type === 'warn' ? 'text-yellow-400 bg-yellow-900/10' : 'text-gray-300');
+        // 必須使用 textContent，避免遠端回應/錯誤字串注入管理員 Debugger。
+        div.textContent = `${time} ${type === 'error' ? '❌' : type === 'warn' ? '⚠️' : '📋'} ${entry.text}`;
         logContainer.prepend(div);
+        while (logContainer.children.length > XIUXIAN_DEBUG_LIMIT) logContainer.lastElementChild.remove();
+        if (type === 'error') debugCount.textContent = String((Number(debugCount.textContent) || 0) + 1);
     };
 
-    // 1. 攔截 console.error
-    const originalError = console.error;
-    console.error = function(...args) {
-        originalError.apply(console, args);
-        // 使用新的格式化函式
-        addLog(formatLogArgs(args), 'error');
-    };
-
-    // 2. 攔截 console.warn
-    const originalWarn = console.warn;
-    console.warn = function(...args) {
-        originalWarn.apply(console, args);
-        addLog(formatLogArgs(args), 'warn');
-    };
-
-    // 3. 攔截全域錯誤
-    window.onerror = function(msg, url, line, col, error) {
-        const stack = error ? error.stack : '';
-        addLog(`${msg}\nLocation: ${url}:${line}:${col}\n${stack}`, 'error');
-        return false; 
-    };
-
-    // 4. 攔截 Promise 錯誤
-    window.onunhandledrejection = function(event) {
-        // 有些 Promise error 是物件，有些是字串
-        const reason = event.reason instanceof Error ? event.reason.message : event.reason;
-        addLog(`Unhandled Promise: ${reason}`, 'error');
-    };
-    
-    // 5. 攔截 console.log
-    const originalLog = console.log;
-    console.log = function(...args) {
-        originalLog.apply(console, args);
-        
-        const msg = formatLogArgs(args);
-        const keywords = ['[Front-Image]', '[UI-Render]', 'Generate', '戰', 'API Error', 'Prompt'];
-        
-        if (keywords.some(k => msg.includes(k))) {
-           addLog(msg, 'info');
-        }
-    };
+    // 包含登入、腳本預載、Firestore 初始化等發生在身分確認前的故障。
+    xiuxianDebugBuffer.forEach(xiuxianDebugWriter);
+    if (!window.__xiuxianDebugLogHooked) {
+        window.__xiuxianDebugLogHooked = true;
+        console.log = function (...args) {
+            xiuxianNativeLog(...args);
+            const msg = args.map(formatXiuxianDebugArg).join(' ');
+            if (['[Front-Image]', '[UI-Render]', 'Generate', '戰', 'API Error', 'Prompt'].some(k => msg.includes(k))) {
+                queueXiuxianDebug('info', msg);
+            }
+        };
+    }
 };
 // ==========================================
 // 1. 定義修仙境界與升級門檻 (取代舊版段位)
@@ -765,12 +745,14 @@ function showGameStartupGate(message = '正在載入全部功能腳本…') {
 }
 
 function showGameStartupFailure(message) {
+    window.reportXiuxianBug?.('Startup gate', message || '功能腳本載入失敗');
     const gate = ensureGameStartupGate();
     gate.classList.add('is-error');
     const text = gate.querySelector('#game-startup-gate-text');
-    if (text) text.textContent = message || '部分功能腳本載入失敗，為避免以半套功能開始遊戲，請重新整理後再試。';
+    // 一般玩家僅得到安全的重試指引，不顯示失敗模組與例外細節。
+    if (text) text.textContent = '遊戲尚未準備完成，請重新整理後再試。';
     const tip = gate.querySelector('#game-startup-gate-tip');
-    if (tip) tip.textContent = '載入中斷：請確認網路連線後重新整理。';
+    if (tip) tip.textContent = '請確認網路連線，然後重新整理遊戲。';
     const error = gate.querySelector('#game-startup-gate-error');
     if (error) error.style.display = 'block';
 }
@@ -867,6 +849,8 @@ onAuthStateChanged(auth, async (user) => {
                 await setDoc(userRef, currentUserData);
             }
 
+            // 在載入可選功能前啟動管理員 Debugger，確保腳本載入失敗也有紀錄。
+            checkAdminRole(currentUserData.isAdmin === true);
             // 玩家資料先就緒，通知主啟動器載入所有修仙功能模組。
             showGameStartupGate('正在載入全部功能腳本…');
             window.dispatchEvent(new CustomEvent('xiuxian:user-data-ready'));
@@ -919,6 +903,9 @@ onAuthStateChanged(auth, async (user) => {
         }
     } else {
         // 👋 登出狀態
+        checkAdminRole(false);
+        currentUserData = null;
+        xiuxianDebugBuffer.length = 0;
         if (userInfoEl) {
             // 加回 data-i18n 屬性，讓它顯示翻譯的 "未登入"
             userInfoEl.setAttribute('data-i18n', 'not_logged_in');
@@ -4752,9 +4739,17 @@ window.filterStore = (type, btnElement) => {
 };
 
 function checkAdminRole(isAdmin) {
-    // 🔥 啟動除錯器 (如果是管理員)
-    if (isAdmin) {
-        if (window.setupAdminDebug) window.setupAdminDebug();
+    if (isAdmin === true && currentUserData?.isAdmin === true) {
+        window.setupAdminDebug?.();
+    } else {
+        xiuxianDebugWriter = null;
+        window.isDebugInit = false;
+        document.getElementById('admin-debug-console')?.classList.add('hidden');
+        document.getElementById('btn-show-debug')?.classList.add('hidden');
+        // 角色切換時不保留上一個管理員的 UI 日誌。
+        document.getElementById('debug-logs')?.replaceChildren();
+        const count = document.getElementById('debug-count');
+        if (count) count.textContent = '0';
     }
 
     const navGrid = document.getElementById('nav-grid');
