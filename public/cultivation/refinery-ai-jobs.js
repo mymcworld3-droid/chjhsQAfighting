@@ -239,14 +239,20 @@ import {
       const snap = await tx.get(ref);
       if (!snap.exists()) throw new Error('玩家資料不存在');
       const raw = snap.data() || {};
-      // 非公共配方需由首發者持有或透過市集取得永久使用權。
-      // 交易中以 Firestore 的正式法寶清單驗證首發身份與玩家授權，不依賴本機顯示。
-      if (plan.knownArtifactId) {
-        const officialCatalogRef = doc(db(), ...ARTIFACT_CONFIG);
-        const officialSnap = await tx.get(officialCatalogRef);
-        const official = officialSnap.exists()
-          ? officialSnap.data()?.items?.find((item) => item?.id === plan.knownArtifactId)
-          : getArtifactById(plan.knownArtifactId);
+      // 由全站正式配方反查投入材料，禁止以省略 knownArtifactId
+      // 的方式繞過配方使用權。所有 transaction 讀取都先於寫入。
+      const catalogSnap = await tx.get(doc(db(), ...ARTIFACT_CONFIG));
+      const recipeSnap = await tx.get(doc(db(), ...MATERIAL_CONFIG));
+      const officialRecipes = recipeSnap.exists() && recipeSnap.data()?.recipes && typeof recipeSnap.data().recipes === 'object'
+        ? recipeSnap.data().recipes : ARTIFACT_RECIPES;
+      const officialId = findRecipeBySignature(officialRecipes, plan.signature);
+      if (officialId !== plan.knownArtifactId) {
+        throw new Error('配方狀態已更新，請重新整理煉器頁後重試');
+      }
+      if (officialId) {
+        const official = catalogSnap.exists()
+          ? catalogSnap.data()?.items?.find((item) => item?.id === officialId)
+          : getArtifactById(officialId);
         if (!official) throw new Error('此配方已不存在');
         if (official.recipeOwnerUid && official.recipeOwnerUid !== user.uid && raw.recipeLicenses?.[official.id] !== true) {
           throw new Error('尚未取得此配方使用權，請前往交易市集');
