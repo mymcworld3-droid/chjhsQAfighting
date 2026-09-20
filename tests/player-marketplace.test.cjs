@@ -11,15 +11,17 @@ const refinery = read('public/cultivation/cultivation-refinery-v2.js');
 
 test('the existing market is loaded after artifacts and materials and reachable from shop and recipe book', () => {
   const m = main.indexOf("'./cultivation/material-system.js'");
-  const p = main.indexOf("'./cultivation/player-marketplace.js'");
+  const p = main.indexOf('function loadPlayerMarketSafely()');
   assert.ok(m >= 0 && p > m);
+  assert.match(main, /import\(\`\.\/cultivation\/player-marketplace\.js\?v=\$\{XIUXIAN_FEATURE_BUILD\}\`\)/);
+  assert.doesNotMatch(main.slice(main.indexOf('const XIUXIAN_FEATURE_MODULES'),main.indexOf('let xiuxianFeatureLoadStarted')), /player-marketplace\.js/);
   assert.match(market, /getElementById\('page-store'\)/);
   assert.match(market, /switcher\.id = 'player-market-switch'/);
   assert.match(market, /id="pm-view-market"/);
   assert.match(market, /window\.openPlayerMarketplace = \(view = 'all'\)/);
   assert.match(refinery, /data-refinery-open-market/);
   assert.match(refinery, /window\.openPlayerMarketplace\?\.\('recipe'\)/);
-  assert.match(index, /main\.js\?v=20260920-recipe-guide1/);
+  assert.match(index, /main\.js\?v=20260920-market-startupfix1/);
 });
 
 test('trade offers validate quantities, price, inventory, and restrict listed equipped artifacts', () => {
@@ -84,13 +86,11 @@ test('seller wallet and granted recipe licenses refresh from own Firestore user 
   assert.match(market,/scheduleRender\(\)/);
 });
 
-test('market switch overrides important shop grid display and remounts on open', () => {
-  const switchSource = market.slice(market.indexOf('function switchMarket(open)'), market.indexOf('function installStyle()'));
-  assert.match(switchSource,/store\.classList\.toggle\('pm-market-active', open\)/);
-  assert.match(switchSource,/tabs\?\.style\.setProperty\('display', 'none', 'important'\)/);
-  assert.match(switchSource,/grid\?\.style\.setProperty\('display', 'none', 'important'\)/);
-  assert.match(switchSource,/market\.style\.setProperty\('display', 'block', 'important'\)/);
-  assert.match(switchSource,/market\.style\.removeProperty\('display'\)/);
-  assert.match(market,/\(tabs \|\| grid\)\.before\(switcher\)/);
-  assert.match(market,/window\.openPlayerMarketplace = \(view = 'all'\) => \{[\s\S]*?mount\(\);[\s\S]*?switchMarket\(true\)/);
+test('market import failure does not block game readiness', () => {
+  const source = main.slice(main.indexOf('async function loadXiuxianFeaturesSafely()'),main.indexOf('function cultivationUserDataReady()'));
+  assert.match(source,/window\.__xiuxianFeaturesReady = true/);
+  assert.match(source,/resolveXiuxianFeatureGate\(result\);\s*\/\/ 遊戲已可開始，再載入市集/);
+  assert.match(source,/void loadPlayerMarketSafely\(\)/);
+  assert.match(main,/console\.error\('\[Xiuxian\] Optional player marketplace failed:', error\)/);
+  assert.match(main,/window\.openPlayerMarketplace = queueMarketOpen/);
 });
