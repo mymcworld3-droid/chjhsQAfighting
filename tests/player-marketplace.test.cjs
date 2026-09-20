@@ -13,7 +13,7 @@ test('the existing market is loaded after artifacts and materials and reachable 
   const m = main.indexOf("'./cultivation/material-system.js'");
   const p = main.indexOf("'./cultivation/player-marketplace.js'");
   assert.ok(m >= 0 && p > m);
-  assert.match(market, /#page-store/);
+  assert.match(market, /getElementById\('page-store'\)/);
   assert.match(market, /id="player-market-switch"/);
   assert.match(market, /id="pm-view-market"/);
   assert.match(market, /window\.openPlayerMarketplace = \(view = 'all'\)/);
