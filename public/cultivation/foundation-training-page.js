@@ -121,6 +121,7 @@
         <div class="training-page-heading-v3"></div>
         <div class="training-subtabs-v3" role="tablist">
           <button type="button" class="training-subtab-v3" data-training-tab="refinery" aria-selected="false"><i class="fa-solid fa-hammer"></i><span>煉器</span></button>
+          <button type="button" class="training-subtab-v3" data-training-tab="equipment" aria-selected="false"><i class="fa-solid fa-shield-halved"></i><span>裝備</span></button>
           <button type="button" class="training-subtab-v3 active" data-training-tab="bag" aria-selected="true"><i class="fa-solid fa-box-open"></i><span>背包</span></button>
         </div>
         <div id="training-tab-content">${bagMarkup()}</div>
@@ -139,6 +140,11 @@
 
     const coreTab = page.querySelector('[data-training-tab="core"]');
     coreTab?.classList.add('hidden');
+    // 舊靜態殼層也補齊裝備入口，四個裝配欄由統一裝備視圖渲染。
+    if (!page.querySelector('[data-training-tab="equipment"]')) {
+      const bag = page.querySelector('[data-training-tab="bag"]');
+      bag?.insertAdjacentHTML('beforebegin', '<button type="button" class="training-subtab-v3" data-training-tab="equipment" aria-selected="false"><i class="fa-solid fa-shield-halved"></i><span>裝備</span></button>');
+    }
 
     page.querySelectorAll('[data-training-tab]').forEach((tab) => {
       const selected = tab.dataset.trainingTab === 'bag';
@@ -168,6 +174,19 @@
         if (content && !content.querySelector('.cultivation-refinery')) content.innerHTML = refineryShellMarkup();
         window.dispatchEvent(new CustomEvent('xiuxian:refinery-open-request'));
       }
+    });
+
+    page.querySelector('[data-training-tab="equipment"]')?.addEventListener('click', () => {
+      if (!foundationStage()) return;
+      page.querySelectorAll('[data-training-tab]').forEach((tab) => {
+        const selected = tab.dataset.trainingTab === 'equipment';
+        tab.classList.toggle('active', selected);
+        tab.setAttribute('aria-selected', selected ? 'true' : 'false');
+      });
+      // 舊背包純文字不再顯示；統一裝備模組於下一個畫面幀繪製四格。
+      const content = page.querySelector('#training-tab-content');
+      if (content) content.innerHTML = '';
+      window.dispatchEvent(new CustomEvent('xiuxian:equipment-open-request'));
     });
 
     page.querySelector('[data-training-tab="bag"]')?.addEventListener('click', () => {

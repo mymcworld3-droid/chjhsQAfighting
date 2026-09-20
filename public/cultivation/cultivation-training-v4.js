@@ -467,6 +467,12 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       window.dispatchEvent(new CustomEvent('xiuxian:refinery-open-request'));
       return;
     }
+    if (activeTab === 'equipment') {
+      // 裝備頁由共用裝備模組唯一負責渲染，不能再塞進舊背包純文字。
+      content.innerHTML = '';
+      window.dispatchEvent(new CustomEvent('xiuxian:equipment-open-request'));
+      return;
+    }
     content.innerHTML = activeTab === 'bag' ? bagTabMarkup() : coreTabMarkup();
     if (activeTab === 'core') bindCoreActions();
   }
@@ -513,6 +519,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
         <div class="training-subtabs-v3" role="tablist">
           <button type="button" class="training-subtab-v3 active" data-training-tab="core" aria-selected="true"><i class="fa-solid fa-circle-dot"></i><span>金丹</span></button>
           <button type="button" class="training-subtab-v3" data-training-tab="refinery" aria-selected="false"><i class="fa-solid fa-hammer"></i><span>煉器</span></button>
+          <button type="button" class="training-subtab-v3" data-training-tab="equipment" aria-selected="false"><i class="fa-solid fa-shield-halved"></i><span>裝備</span></button>
           <button type="button" class="training-subtab-v3" data-training-tab="bag" aria-selected="false"><i class="fa-solid fa-box-open"></i><span>背包</span></button>
         </div>
         <div id="training-tab-content"></div>
@@ -538,13 +545,18 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     if (!tabs) return;
     const coreTab = tabs.querySelector('[data-training-tab="core"]');
     coreTab?.classList.remove('hidden');
+    if (!tabs.querySelector('[data-training-tab="equipment"]')) {
+      tabs.querySelector('[data-training-tab="bag"]')?.insertAdjacentHTML('beforebegin',
+        '<button type="button" class="training-subtab-v3" data-training-tab="equipment" aria-selected="false"><i class="fa-solid fa-shield-halved"></i><span>裝備</span></button>');
+    }
 
     if (page.dataset.trainingV4Bound !== '1') {
       page.dataset.trainingV4Bound = '1';
       page.querySelectorAll('[data-training-tab]').forEach((button) => {
         button.addEventListener('click', () => {
+          if (!isUnlocked() || page.dataset.foundationTraining === '1') return;
           const requested = button.dataset.trainingTab;
-          activeTab = requested === 'bag' ? 'bag' : (requested === 'refinery' ? 'refinery' : 'core');
+          activeTab = ['bag', 'refinery', 'equipment'].includes(requested) ? requested : 'core';
           page.querySelectorAll('[data-training-tab]').forEach((tab) => {
             const selected = tab.dataset.trainingTab === activeTab;
             tab.classList.toggle('active', selected);
