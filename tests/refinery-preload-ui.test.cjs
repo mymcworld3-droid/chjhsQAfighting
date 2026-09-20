@@ -74,3 +74,16 @@ test('preloaded refinery shell uses the same divider shifted 96px downward', () 
   assert.match(trainingCss, /refinery-panel\.refinery-material-panel\{[^}]*padding:0/);
   assert.match(trainingCss, /refinery-material-list\{[^}]*grid-template-rows:minmax\(0,calc\(50% \+ 96px - 32px\)\) minmax\(0,calc\(50% - 96px \+ 32px\)\)[^}]*gap:0/);
 });
+
+
+test('Foundation refinery click delegates to a single public opener for ordinary players', () => {
+  const foundation = read('public/cultivation/foundation-training-page.js');
+  assert.match(foundation, /typeof window\.openCultivationRefinery === 'function'/);
+  assert.match(foundation, /window\.openCultivationRefinery\(\)/);
+  assert.match(refinery, /window\.openCultivationRefinery = \(\) => activate\(\)/);
+  assert.match(refinery, /page\.dataset\.foundationTraining !== '1'/);
+  assert.match(refinery, /function activate\(page = document\.getElementById\('page-training'\)\)/);
+  assert.match(refinery, /煉器介面載入失敗/);
+  assert.match(refinery, /data-refinery-retry/);
+  assert.doesNotMatch(refinery, /function activate\(page[^)]*\) \{\s*if \(userData\(\)\?\.isAdmin/);
+});

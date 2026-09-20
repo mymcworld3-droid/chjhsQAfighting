@@ -184,14 +184,30 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
   function tabActive(page) {
     return !!page?.querySelector(`[data-training-tab="${TAB}"].active`);
   }
-  function activate(page) {
+  function activate(page = document.getElementById('page-training')) {
+    if (!page || !page.querySelector('#training-tab-content')) return false;
     active = true;
     page.querySelectorAll('[data-training-tab]').forEach((tab) => {
       const yes = tab.dataset.trainingTab === TAB;
       tab.classList.toggle('active', yes);
       tab.setAttribute('aria-selected', yes ? 'true' : 'false');
     });
-    render(true);
+    try {
+      render(true);
+      const content = page.querySelector('#training-tab-content');
+      if (!content?.querySelector('.cultivation-refinery:not([aria-busy="true"])')) {
+        throw new Error('煉器介面尚未完成載入');
+      }
+      return true;
+    } catch (error) {
+      console.error('[Cultivation refinery] open failed:', error);
+      const content = page.querySelector('#training-tab-content');
+      if (content) {
+        content.innerHTML = '<section class="training-v3-empty refinery-open-error" role="alert"><h3>煉器介面載入失敗</h3><p>請按下方按鈕重新載入；若仍失敗，請重新整理遊戲。</p><button type="button" class="bt-primary" data-refinery-retry>重新載入煉器</button></section>';
+        content.querySelector('[data-refinery-retry]')?.addEventListener('click', () => activate(page));
+      }
+      return false;
+    }
   }
   function bindExit(page, button) {
     if (button.dataset.refineryExitBound === '1') return;
@@ -225,7 +241,9 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
       tab.innerHTML = '<i class="fa-solid fa-hammer"></i><span>煉器</span>';
       bag.before(tab);
     }
-    if (tab.dataset.refineryOpenBound !== '1') {
+    // 築基頁本身已管理分頁點擊；金丹頁則由共用煉器模組接手。
+    // 避免雙重處理導致剛開啟的煉器內容被另一個 handler 覆寫。
+    if (tab.dataset.refineryOpenBound !== '1' && page.dataset.foundationTraining !== '1') {
       tab.dataset.refineryOpenBound = '1';
       tab.addEventListener('click', () => activate(page));
     }
@@ -673,10 +691,8 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
     ensureStyle();
     schedule();
     ['foundation-training-stage-changed','golden-core-access-changed','material-system-updated','artifact-system-updated','material-catalog-updated','artifact-catalog-updated','artifact-recipes-updated','xiuxian:user-ready','xiuxian:refinery-job-updated'].forEach((name) => window.addEventListener(name, schedule));
-    window.addEventListener('xiuxian:refinery-open-request', () => {
-      const page = document.getElementById('page-training');
-      if (page) activate(page);
-    });
+    window.addEventListener('xiuxian:refinery-open-request', () => activate());
+    window.openCultivationRefinery = () => activate();
 
     // 煉器每放一個材料都會重建內容區。若監看整個 body/subtree，
     // 這些 DOM 變更會再次觸發煉器排程，材料種類多時容易造成 observer storm。

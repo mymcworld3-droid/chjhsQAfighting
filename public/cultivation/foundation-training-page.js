@@ -154,14 +154,20 @@
 
     page.querySelector('[data-training-tab="refinery"]')?.addEventListener('click', () => {
       if (!foundationStage()) return;
-      page.querySelectorAll('[data-training-tab]').forEach((tab) => {
-        const selected = tab.dataset.trainingTab === 'refinery';
-        tab.classList.toggle('active', selected);
-        tab.setAttribute('aria-selected', selected ? 'true' : 'false');
-      });
+      // 同一個入口交給煉器模組負責狀態、內容與事件，避免兩個 click handler
+      // 在使用者快速切換時互相覆寫。模組尚未準備好時才顯示預載殼層。
       const content = page.querySelector('#training-tab-content');
-      if (content && !content.querySelector('.cultivation-refinery')) content.innerHTML = refineryShellMarkup();
-      window.dispatchEvent(new CustomEvent('xiuxian:refinery-open-request'));
+      if (typeof window.openCultivationRefinery === 'function') {
+        window.openCultivationRefinery();
+      } else {
+        page.querySelectorAll('[data-training-tab]').forEach((tab) => {
+          const selected = tab.dataset.trainingTab === 'refinery';
+          tab.classList.toggle('active', selected);
+          tab.setAttribute('aria-selected', selected ? 'true' : 'false');
+        });
+        if (content && !content.querySelector('.cultivation-refinery')) content.innerHTML = refineryShellMarkup();
+        window.dispatchEvent(new CustomEvent('xiuxian:refinery-open-request'));
+      }
     });
 
     page.querySelector('[data-training-tab="bag"]')?.addEventListener('click', () => {
