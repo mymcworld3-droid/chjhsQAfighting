@@ -69,3 +69,12 @@ test('market technical faults go to admin debugger while players see neutral fee
   assert.match(market, /unsubActive\?\.\(\); unsubMine\?\.\(\)/);
   assert.match(market, /where\('status','==','active'\)/);
 });
+
+test('seller wallet and granted recipe licenses refresh from own Firestore user document', () => {
+  assert.match(market,/unsubWallet = onSnapshot\(doc\(db, 'users', uid\)/);
+  assert.match(market,/unsubActive\?\.\(\); unsubMine\?\.\(\); unsubWallet\?\.\(\)/);
+  assert.match(market,/current\.stats\.gold = remoteGold/);
+  assert.match(market,/current\.recipeLicenses = latest\.recipeLicenses \|\| \{\}/);
+  assert.match(market,/xiuxian:recipe-license-updated/);
+  assert.match(market,/scheduleRender\(\)/);
+});
