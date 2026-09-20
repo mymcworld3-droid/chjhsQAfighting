@@ -24,7 +24,7 @@ test('admin and all players use the same runtime artifact catalog source', () =>
   assert.match(manager, /CONFIG_COLLECTION = 'gameConfig'/);
   assert.match(manager, /CONFIG_DOC = 'artifactCatalogV1'/);
   assert.match(manager, /tx\.set\(configRef/);
-  assert.match(manager, /replaceArtifactCatalog\(normalized, 'admin-save'\)/);
+  assert.match(manager, /replaceArtifactCatalog\(committedCatalog, 'admin-save'\)/);
 });
 
 test('artifact editor supports add and edit with strict validation and immutable existing ids', () => {
