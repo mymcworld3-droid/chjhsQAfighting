@@ -28,6 +28,8 @@ import { MATERIAL_CATALOG, getMaterialById } from './material-catalog.js';
   let busy = false;
   let failed = false;
   let pendingRender = false;
+  let noticeText = '';
+  let noticeError = false;
 
   const user = () => { try { return getAuth(getApp()).currentUser; } catch (_) { return null; } };
   const data = () => window.getCurrentUserData?.() || null;
@@ -81,6 +83,8 @@ import { MATERIAL_CATALOG, getMaterialById } from './material-catalog.js';
     }
   }
   function message(text, ok = true) {
+    noticeText = text;
+    noticeError = !ok;
     const node = document.getElementById('player-market-notice');
     if (!node) return;
     node.textContent = text;
@@ -111,11 +115,13 @@ import { MATERIAL_CATALOG, getMaterialById } from './material-catalog.js';
       await runTransaction(db, async (tx) => {
         const sellerRef = doc(db, 'users', seller.uid);
         const sellerSnap = await tx.get(sellerRef);
+        const catalogSnap = type === 'recipe' ? await tx.get(doc(db, 'gameConfig', 'artifactCatalogV1')) : null;
         if (!sellerSnap.exists()) throw new Error('玩家資料不存在');
         const raw = sellerSnap.data() || {};
         if (type === 'recipe') {
-          // 首發者權利採已登錄圖鑑判斷，售出的是永久非專屬使用權。
-          if (!item.recipeOwnerUid || item.recipeOwnerUid !== seller.uid) throw new Error('只有首發者可以出售配方使用權');
+          // 不能只信任玩家瀏覽器中的圖鑑；對照 Firestore 正式首發權紀錄。
+          const official = catalogSnap?.data()?.items?.find((record) => record?.id === id);
+          if (!official?.recipeOwnerUid || official.recipeOwnerUid !== seller.uid) throw new Error('只有首發者可以出售配方使用權');
         } else {
           const systemField = type === 'material' ? 'materialSystem' : 'artifactSystem';
           const system = { ...(raw[systemField] || {}), inventory: { ...(raw[systemField]?.inventory || {}) } };
@@ -166,6 +172,7 @@ import { MATERIAL_CATALOG, getMaterialById } from './material-catalog.js';
         if (listing.sellerUid === buyer.uid) throw new Error('不可購買自己的委託');
         const sellerRef = doc(db, 'users', listing.sellerUid);
         const sellerSnap = await tx.get(sellerRef);
+        const catalogSnap = listing.type === 'recipe' ? await tx.get(doc(db, 'gameConfig', 'artifactCatalogV1')) : null;
         if (!sellerSnap.exists()) throw new Error('賣家已不存在');
         const count = amount(listing.quantity, MAX_QUANTITY, '數量');
         const price = amount(listing.price, MAX_PRICE, '總價');
@@ -179,7 +186,8 @@ import { MATERIAL_CATALOG, getMaterialById } from './material-catalog.js';
         if (!item) throw new Error('商品已被管理員移除');
         let update = {};
         if (type === 'recipe') {
-          if (count !== 1 || !item.recipeOwnerUid || item.recipeOwnerUid !== listing.sellerUid) throw new Error('此配方委託已失效');
+          const official = catalogSnap?.data()?.items?.find((record) => record?.id === listing.itemId);
+          if (count !== 1 || !official?.recipeOwnerUid || official.recipeOwnerUid !== listing.sellerUid) throw new Error('此配方委託已失效');
           if (rawBuyer.recipeLicenses?.[listing.itemId] === true) throw new Error('你已持有該配方的使用權');
           update = { recipeLicenses: { ...(rawBuyer.recipeLicenses || {}), [listing.itemId]: true } };
         } else {
@@ -258,7 +266,7 @@ import { MATERIAL_CATALOG, getMaterialById } from './material-catalog.js';
       <div class="pm-compose"><h4>發布委託</h4><div class="pm-form"><label>類別<select id="pm-sell-type">${Object.entries(TYPE_LABEL).map(([type,label]) => `<option value="${type}" ${type === sellType ? 'selected' : ''}>${label}</option>`).join('')}</select></label><label>商品<select id="pm-sell-item">${options.map((row) => `<option value="${esc(row.id)}" ${row.id === sellId ? 'selected' : ''}>${esc(row.name)}${sellType === 'recipe' ? ' · 首發配方' : ' · 可售 '+ row.count}</option>`).join('')}</select></label><label>數量<input id="pm-sell-qty" type="number" min="1" max="${selected?.count || 1}" value="${sellType === 'recipe' ? 1 : Math.min(Math.max(1,sellQuantity), selected?.count || 1)}" ${sellType === 'recipe' ? 'disabled' : ''}></label><label>總價（金幣）<input id="pm-sell-price" type="number" min="1" max="${MAX_PRICE}" value="${sellPrice}"></label><button id="pm-publish" ${!options.length || busy ? 'disabled' : ''}>上架寄售</button></div><p class="pm-hint">材料／法寶上架時扣除可用庫存，取消即退還。裝備中的法寶不可寄售。配方只出售使用權，首發者身分不轉移。</p></div>
       <div class="pm-filters">${[['all','全部'],['material','材料'],['artifact','法寶'],['recipe','配方'],['mine','我的委託']].map(([value,label]) => `<button data-pm-filter="${value}" class="${filter === value ? 'active' : ''}">${label}</button>`).join('')}</div>
       <div class="pm-list">${failed ? '<p class="pm-empty">市集尚未開放，請稍後再試。</p>' : list.length ? list.map((row) => card(row,filter==='mine')).join('') : '<p class="pm-empty">目前沒有符合條件的委託。</p>'}</div>
-      <p id="player-market-notice" aria-live="polite"></p>`;
+      <p id="player-market-notice" class="${noticeError ? 'market-notice-error' : ''}" aria-live="polite">${esc(noticeText)}</p>`;
   }
   function scheduleRender() {
     if (pendingRender) return;
