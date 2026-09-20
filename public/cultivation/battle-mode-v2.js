@@ -4,7 +4,7 @@ import {
   getFirestore, doc, collection, query, where, limit, getDocs,
   addDoc, updateDoc, onSnapshot, runTransaction, serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js';
+import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260920-corebattle1';
 
 // Battle v2 — 修仙配對鬥法。
 // 核心原則：配對、首答倒數、回合結算、離場判定皆寫入 Firestore；任何單一 client 都不能私自決定勝負。
@@ -215,6 +215,9 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js';
       hp: combat.maxHp,
       maxHp: combat.maxHp,
       goldenCore: window.getEquippedGoldenCoreBattleSnapshot?.() || null,
+      // 金丹道心在配對時複製成「本場一次性防護」，不消耗一般悟道持有的道心。
+      coreShield: !!window.getEquippedGoldenCoreBattleSnapshot?.() && data.stats?.goldenCoreShield === true,
+      coreCorrectStreak: 0,
       answerChoice: null, answerCorrect: null, answerAt: null, answerRound: null, timedOut: false,
       lastSeenAtMs: nowMs()
     };
@@ -443,6 +446,8 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js';
       const actor = entry.actorName || (entry.actorUid === me()?.uid ? '你' : '對手');
       if (entry.type === 'attack') return `<p><b>${escapeHtml(actor)}</b> 出手造成 <strong>${Number(entry.damage) || 0}</strong> 傷害${entry.skill ? ` · ${escapeHtml(entry.skill)}` : ''}</p>`;
       if (entry.type === 'counter') return `<p class="counter"><b>${escapeHtml(actor)}</b> 雷光反擊 <strong>${Number(entry.damage) || 0}</strong> 傷害${entry.skill ? ` · ${escapeHtml(entry.skill)}` : ''}</p>`;
+      if (entry.type === 'guard') return `<p class="counter"><b>${escapeHtml(actor)}</b> <strong>金丹道心護體</strong>，抵銷本次攻擊</p>`;
+      if (entry.type === 'heal') return `<p class="counter"><b>${escapeHtml(actor)}</b> 回元，恢復 <strong>${Number(entry.amount) || 0}</strong> 生命</p>`;
       return `<p>${escapeHtml(entry.message || '回合結算')}</p>`;
     }).join('');
   }
@@ -461,7 +466,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js';
     const key = room.battleLogId || `${room.round}:${settlement.settledAtMs}`;
     if (state.seenSettlementKey === key) return; state.seenSettlementKey = key;
     const logs = Array.isArray(room.battleLog) ? room.battleLog.filter((x) => Number(x.round) === Number(room.round)) : [];
-    logs.forEach((entry, index) => setTimeout(() => {
+    logs.filter((entry) => entry.type === 'attack' || entry.type === 'counter').forEach((entry, index) => setTimeout(() => {
       const mineAttacks = entry.actorUid === me()?.uid;
       const actor = document.getElementById(mineAttacks ? 'bv2-my-fighter' : 'bv2-enemy-fighter');
       const target = document.getElementById(mineAttacks ? 'bv2-enemy-fighter' : 'bv2-my-fighter');
@@ -507,7 +512,9 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js';
     showSection('arena');
     const mine = playerForRole(room, state.role); const enemy = playerForRole(room, otherRole(state.role)); if (!mine || !enemy) return;
     setText('bv2-room-badge', `ROOM ${state.roomId.slice(0, 6).toUpperCase()}`); setText('bv2-round', `${room.round} / ${room.maxRounds || BATTLE_V2.maxRounds}`);
-    setText('bv2-my-name', mine.name || '我方'); setText('bv2-enemy-name', enemy.name || '對手'); setText('bv2-my-core', `本命金丹：${playerCoreLabel(mine)}`); setText('bv2-enemy-core', `本命金丹：${playerCoreLabel(enemy)}`);
+    setText('bv2-my-name', mine.name || '我方'); setText('bv2-enemy-name', enemy.name || '對手');
+    setText('bv2-my-core', `本命金丹：${playerCoreLabel(mine)}${mine.coreShield ? ' · 道心護體' : ''}`);
+    setText('bv2-enemy-core', `本命金丹：${playerCoreLabel(enemy)}${enemy.coreShield ? ' · 道心護體' : ''}`);
     setHp('my', mine); setHp('enemy', enemy); renderQuestion(room, mine); renderLogs(room); announceActivations(room); animateSettlement(room);
     const myAnswer = answerObject(mine, room.round); const enemyAnswer = answerObject(enemy, room.round);
     const phase = room.status === 'playing' ? (!myAnswer && !enemyAnswer ? '靜觀題意' : myAnswer && !enemyAnswer ? '等待對手' : !myAnswer && enemyAnswer ? '限時應答' : '雙方已答') : room.status === 'settled' ? '道法交鋒' : '凝聚下一題';
@@ -610,6 +617,8 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js';
         if (!roundLogs.length) roundLogs.push({ type: 'round', round, id: randomId(`log-${round}`), message: '雙方此回合皆未形成有效攻勢。' });
         const common = {
           'host.hp': outcome.hostHp, 'guest.hp': outcome.guestHp, 'host.isDead': outcome.hostHp <= 0, 'guest.isDead': outcome.guestHp <= 0,
+          'host.coreShield': outcome.hostCoreShield, 'guest.coreShield': outcome.guestCoreShield,
+          'host.coreCorrectStreak': outcome.hostCoreStreak, 'guest.coreCorrectStreak': outcome.guestCoreStreak,
           settledRound: round, battleLog: [...(Array.isArray(fresh.battleLog) ? fresh.battleLog : []), ...roundLogs].slice(-20), battleLogId: `${round}-${nowMs()}`,
           lastSettlement: { round, attackers: outcome.attackers, activations: outcome.activations, hostHp: outcome.hostHp, guestHp: outcome.guestHp, settledAtMs: nowMs() }, updatedAt: serverTimestamp()
         };
