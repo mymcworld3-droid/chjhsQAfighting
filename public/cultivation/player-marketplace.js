@@ -4,7 +4,7 @@ import {
   getFirestore, collection, doc, query, where, limit, onSnapshot, runTransaction
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { ARTIFACT_CATALOG, getArtifactById } from './artifact-catalog.js';
-import { MATERIAL_CATALOG, getMaterialById } from './material-catalog.js';
+import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material-catalog.js';
 
 // 玩家市集：材料／未裝備法寶採原子寄售，首發配方販售非專屬使用權。
 // 市集文件只代表可成交的委託；每次交割均重新讀取買賣雙方玩家文件。
@@ -47,7 +47,7 @@ import { MATERIAL_CATALOG, getMaterialById } from './material-catalog.js';
     return getArtifactById(id);
   }
   function available(type, id, row = data()) {
-    if (type === 'recipe') return getArtifactById(id)?.recipeOwnerUid === user()?.uid ? 1 : 0;
+    if (type === 'recipe') return getArtifactById(id)?.recipeOwnerUid === user()?.uid && getArtifactRecipe(id).length ? 1 : 0;
     const system = row?.[type === 'artifact' ? 'artifactSystem' : 'materialSystem'] || {};
     const held = qty(system.inventory?.[id]);
     if (type !== 'artifact') return held;
@@ -57,7 +57,7 @@ import { MATERIAL_CATALOG, getMaterialById } from './material-catalog.js';
   }
   function listable() {
     if (sellType === 'recipe') return ARTIFACT_CATALOG
-      .filter((item) => item.recipeOwnerUid === user()?.uid)
+      .filter((item) => item.recipeOwnerUid === user()?.uid && getArtifactRecipe(item.id).length)
       .map((item) => ({ id: item.id, name: item.name, count: 1 }));
     const items = sellType === 'material' ? MATERIAL_CATALOG : ARTIFACT_CATALOG;
     return items.map((item) => ({ id: item.id, name: item.name, count: available(sellType, item.id) }))
@@ -116,12 +116,13 @@ import { MATERIAL_CATALOG, getMaterialById } from './material-catalog.js';
         const sellerRef = doc(db, 'users', seller.uid);
         const sellerSnap = await tx.get(sellerRef);
         const catalogSnap = type === 'recipe' ? await tx.get(doc(db, 'gameConfig', 'artifactCatalogV1')) : null;
+        const recipeSnap = type === 'recipe' ? await tx.get(doc(db, 'gameConfig', 'materialCatalogV1')) : null;
         if (!sellerSnap.exists()) throw new Error('玩家資料不存在');
         const raw = sellerSnap.data() || {};
         if (type === 'recipe') {
           // 不能只信任玩家瀏覽器中的圖鑑；對照 Firestore 正式首發權紀錄。
           const official = catalogSnap?.data()?.items?.find((record) => record?.id === id);
-          if (!official?.recipeOwnerUid || official.recipeOwnerUid !== seller.uid) throw new Error('只有首發者可以出售配方使用權');
+          if (!official?.recipeOwnerUid || official.recipeOwnerUid !== seller.uid || !recipeSnap?.data()?.recipes?.[id]?.length) throw new Error('只有已登錄配方的首發者可以出售使用權');
         } else {
           const systemField = type === 'material' ? 'materialSystem' : 'artifactSystem';
           const system = { ...(raw[systemField] || {}), inventory: { ...(raw[systemField]?.inventory || {}) } };
@@ -146,7 +147,7 @@ import { MATERIAL_CATALOG, getMaterialById } from './material-catalog.js';
         });
       });
       if (committed) notify(type, committed);
-      message('委託已成立，物品已移入市集保管。');
+      message(type === 'recipe' ? '首發配方使用權已上架，擁有權仍歸你。' : '委託已成立，物品已移入市集保管。');
       sellId = '';
       sellQuantity = 1;
     } catch (error) { safeError('create listing', error); }
@@ -173,6 +174,7 @@ import { MATERIAL_CATALOG, getMaterialById } from './material-catalog.js';
         const sellerRef = doc(db, 'users', listing.sellerUid);
         const sellerSnap = await tx.get(sellerRef);
         const catalogSnap = listing.type === 'recipe' ? await tx.get(doc(db, 'gameConfig', 'artifactCatalogV1')) : null;
+        const recipeSnap = listing.type === 'recipe' ? await tx.get(doc(db, 'gameConfig', 'materialCatalogV1')) : null;
         if (!sellerSnap.exists()) throw new Error('賣家已不存在');
         const count = amount(listing.quantity, MAX_QUANTITY, '數量');
         const price = amount(listing.price, MAX_PRICE, '總價');
@@ -187,7 +189,7 @@ import { MATERIAL_CATALOG, getMaterialById } from './material-catalog.js';
         let update = {};
         if (type === 'recipe') {
           const official = catalogSnap?.data()?.items?.find((record) => record?.id === listing.itemId);
-          if (count !== 1 || !official?.recipeOwnerUid || official.recipeOwnerUid !== listing.sellerUid) throw new Error('此配方委託已失效');
+          if (count !== 1 || !official?.recipeOwnerUid || official.recipeOwnerUid !== listing.sellerUid || !recipeSnap?.data()?.recipes?.[listing.itemId]?.length) throw new Error('此配方委託已失效');
           if (rawBuyer.recipeLicenses?.[listing.itemId] === true) throw new Error('你已持有該配方的使用權');
           update = { recipeLicenses: { ...(rawBuyer.recipeLicenses || {}), [listing.itemId]: true } };
         } else {
@@ -203,7 +205,7 @@ import { MATERIAL_CATALOG, getMaterialById } from './material-catalog.js';
         committed = { ...rawBuyer, ...update, stats: { ...(rawBuyer.stats || {}), gold: buyerGold - price } };
       });
       if (committed) notify(tradeType, committed);
-      message('交易完成！物品或配方使用權已入帳。');
+      message(tradeType === 'recipe' ? '配方購買成功！已取得永久使用權，可前往煉器。' : '交易完成！物品已入帳。');
     } catch (error) { safeError('buy listing', error); }
     finally { busy = false; render(); }
   }
@@ -238,7 +240,7 @@ import { MATERIAL_CATALOG, getMaterialById } from './material-catalog.js';
         tx.update(listingRef, { status:'cancelled', completedAtMs:Date.now() });
       });
       if (committed) notify(tradeType, committed);
-      message('委託已取消，寄售的材料或法寶已退還。');
+      message(tradeType === 'recipe' ? '已取消配方使用權委託。' : '委託已取消，寄售的材料或法寶已退還。');
     } catch (error) { safeError('cancel listing', error); }
     finally { busy = false; render(); }
   }
@@ -356,9 +358,10 @@ import { MATERIAL_CATALOG, getMaterialById } from './material-catalog.js';
     db = getFirestore(getApp());
     mount();
     onAuthStateChanged(getAuth(getApp()), (account) => subscribe(account?.uid || ''));
-    ['artifact-system-updated','material-system-updated','artifact-catalog-updated','xiuxian:stats-updated','xiuxian:user-ready']
+    ['artifact-system-updated','material-system-updated','artifact-catalog-updated','artifact-recipes-updated','xiuxian:recipe-license-updated','xiuxian:stats-updated','xiuxian:user-ready']
       .forEach((name) => window.addEventListener(name, scheduleRender));
-    window.openPlayerMarketplace = () => {
+    window.openPlayerMarketplace = (view = 'all') => {
+      if (['all','material','artifact','recipe','mine'].includes(view)) filter = view;
       window.switchToPage?.('page-store');
       switchMarket(true);
     };
