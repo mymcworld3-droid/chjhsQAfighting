@@ -239,25 +239,8 @@ import {
       const snap = await tx.get(ref);
       if (!snap.exists()) throw new Error('玩家資料不存在');
       const raw = snap.data() || {};
-      // 由全站正式配方反查投入材料，禁止以省略 knownArtifactId
-      // 的方式繞過配方使用權。所有 transaction 讀取都先於寫入。
-      const catalogSnap = await tx.get(doc(db(), ...ARTIFACT_CONFIG));
-      const recipeSnap = await tx.get(doc(db(), ...MATERIAL_CONFIG));
-      const officialRecipes = recipeSnap.exists() && recipeSnap.data()?.recipes && typeof recipeSnap.data().recipes === 'object'
-        ? recipeSnap.data().recipes : ARTIFACT_RECIPES;
-      const officialId = findRecipeBySignature(officialRecipes, plan.signature);
-      if (officialId !== plan.knownArtifactId) {
-        throw new Error('配方狀態已更新，請重新整理煉器頁後重試');
-      }
-      if (officialId) {
-        const official = catalogSnap.exists()
-          ? catalogSnap.data()?.items?.find((item) => item?.id === officialId)
-          : getArtifactById(officialId);
-        if (!official) throw new Error('此配方已不存在');
-        if (official.recipeOwnerUid && official.recipeOwnerUid !== user.uid && raw.recipeLicenses?.[official.id] !== true) {
-          throw new Error('尚未取得此配方使用權，請前往交易市集');
-        }
-      }
+      // 配方是提供製作方法的知識，不是煉器許可證。
+      // 玩家即使未持有配方，也能靠自行投入素材煉製。
       if (raw[REFINERY_JOB_FIELD]?.id) throw new Error('目前已有一件法寶正在煉製');
       const gold = Math.max(0, Number(raw.stats?.gold) || 0);
       if (gold < plan.gold) throw new Error('金幣不足，需要 ' + plan.gold + '，目前只有 ' + gold);
