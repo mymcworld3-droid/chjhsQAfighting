@@ -159,7 +159,7 @@ export const STORY_CHAPTERS = Object.freeze([
     // 兩次交棒：先與沈清霜交手，回到主線對話後，才由顧長風接手教學。
     tutorials: Object.freeze([
       Object.freeze({ kind: 'battle-shen', afterLine: 13 }),
-      Object.freeze({ kind: 'battle-gu', afterLine: 26 })
+      Object.freeze({ kind: 'battle-gu', afterLine: 22 })
     ]),
     lines: Object.freeze([
       c('narrator', '踏入築基的那天，宗門演武場第一次向你開放。沈清霜帶你走上鬥法臺。'),
@@ -174,24 +174,20 @@ export const STORY_CHAPTERS = Object.freeze([
       c('shen', '因為你等一下沒空想這個。'),
       c('player', '……我現在可以反悔嗎？', 'confused'),
       c('shen', '不可以。'),
-      c('narrator', '沈清霜走到鬥法臺另一端，連劍都沒有完全拔出。顧長風則默默往場邊又退了兩步。'),
-      c('shen', '上場。先學會輸，再學怎麼打。'),
+      c('narrator', '沈清霜走到鬥法臺另一端，連劍都沒有完全拔出。'),
+      c('shen', '上場，我帶你練習一次。'),
       c('narrator', '一道劍光閃過。你的演武投影承受六萬五千點真實傷害，瞬間潰散。沈清霜收劍，難得怔住。'),
-      c('player', '師姐……妳剛才不是說會放水嗎？', 'confused'),
-      c('shen', '我已經放水了。'),
-      c('shen', '……等等。是誰讓你修仙的？'),
-      c('player', '……妳？', 'confused'),
-      c('shen', '我問的是誰讓你築基的。'),
-      c('player', '問道碑。', 'confused'),
-      c('shen', '先別動。投影散了，神識沒事吧？'),
+      c('player', '……', 'confused'),
+      c('shen', '……'),
+      c('shen', '呃……沒事吧？'),
       c('player', '人沒事，尊嚴沒了。', 'confused'),
-      c('shen', '顧長風，過來。你陪他練基本鬥法，別學我。'),
+      c('shen', '顧長風，過來。你陪他練基本鬥法。'),
       c('rival', '師姐，你剛才那一劍……'),
       c('shen', '我已經收了力。下一場按你們能承受的程度。'),
-      c('narrator', '顧長風走上鬥法臺，你的靈識投影重新凝聚。沈清霜退到場邊，示意他開始。'),
+      c('narrator', '顧長風走上鬥法臺，沈清霜退到場邊，示意他開始。'),
       c('narrator', '第二場演武結束後，你扶著鬥法臺站穩。顧長風收起劍，沈清霜仍在場邊看著你。'),
       c('player', '師姐，這次我總算知道怎麼出手了。', 'determined'),
-      c('shen', '記住：答對才有攻擊，雙方都答對就都能出手。先看清題目，再看清對手。'),
+      c('shen', '記住，先看清題目，再看清對手。'),
       c('rival', '下次正式配對，可不會有人在旁邊替你解釋。'),
       c('player', '……我還是先回仙府多練幾題。', 'confused')
     ])
