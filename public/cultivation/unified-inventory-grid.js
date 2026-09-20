@@ -427,6 +427,12 @@ import {
     requestAnimationFrame(() => render(force));
   }
 
+  // 分頁可直接要求裝備模組同步渲染，不必只依賴 CustomEvent 時序。
+  window.openCultivationEquipment = () => {
+    equipmentPickSlot = '';
+    render(true);
+  };
+
   function ensureStyle() {
     if (document.getElementById(STYLE_ID)) return;
     const style = document.createElement('style');
