@@ -161,7 +161,7 @@ import {
       if (tutorialPlay) {
         tutorialPlay.disabled = true;
         try { await startNewbieDongtianDemo(); }
-        catch (error) { toast(error.message || '無法進入教學洞天'); tutorialPlay.disabled = false; }
+        catch (error) { toast(window.xiuxianSafeActionError?.('教學洞天', error, '洞天尚未準備完成。') || '洞天尚未準備完成。'); tutorialPlay.disabled = false; }
         return;
       }
       const tutorialDelete = event.target.closest('[data-dt-tutorial-delete]');
@@ -174,20 +174,20 @@ import {
       if (deleteButton) {
         deleteButton.disabled = true;
         try { await deleteOwnedDongtian(deleteButton.dataset.dtDelete); }
-        catch (error) { toast(error.message || '洞天刪除失敗'); deleteButton.disabled = false; }
+        catch (error) { toast(window.xiuxianSafeActionError?.('洞天刪除', error, '洞天操作未完成。') || '洞天操作未完成。'); deleteButton.disabled = false; }
         return;
       }
       const repairButton = event.target.closest('[data-dt-repair]');
       if (repairButton) {
         repairButton.disabled = true;
-        await openDongtianRepair(repairButton.dataset.dtRepair).catch((error) => toast(error.message || '無法開啟修復介面'));
+        await openDongtianRepair(repairButton.dataset.dtRepair).catch((error) => toast(window.xiuxianSafeActionError?.('洞天修復', error, '洞天修復尚未準備完成。') || '洞天修復尚未準備完成。'));
         repairButton.disabled = false;
         return;
       }
       const manageButton = event.target.closest('[data-dt-manage]');
       if (manageButton) {
         manageButton.disabled = true;
-        await openOwnerQuestionManager(manageButton.dataset.dtManage).catch((error) => toast(error.message || '無法開啟題目管理'));
+        await openOwnerQuestionManager(manageButton.dataset.dtManage).catch((error) => toast(window.xiuxianSafeActionError?.('洞天題目管理', error, '題目管理尚未準備完成。') || '題目管理尚未準備完成。'));
         manageButton.disabled = false;
         return;
       }
@@ -202,7 +202,7 @@ import {
         if (data.status !== 'active') throw new Error('此洞天目前已封印，請先完成題目修復。');
         await enterDongtian(data, { source: 'owner', encountered: false });
       } catch (error) {
-        toast(error.message || '無法進入洞天');
+        toast(window.xiuxianSafeActionError?.('洞天進入', error, '洞天尚未準備完成。') || '洞天尚未準備完成。');
         button.disabled = false;
       }
     });
