@@ -8,7 +8,6 @@ function read(rel) {
 }
 
 const bag = read('public/cultivation/unified-inventory-grid.js');
-const bridge = read('public/cultivation/inventory-legacy-bridge.js');
 const adminSort = read('public/cultivation/admin-realm-sorting.js');
 const main = read('public/main.js');
 
@@ -42,10 +41,12 @@ test('material and artifact realm colors are visible in the backpack', () => {
   assert.match(bag, /item\.realm/);
 });
 
-test('legacy long backpack item is hidden when unified backpack is present', () => {
-  assert.match(bridge, /:has\(#unified-cultivation-bag\)/);
-  assert.match(bridge, /cultivation-inventory-grid/);
-  assert.match(bridge, /display:none!important/);
+test('obsolete renderer and CSS bridge are removed', () => {
+  const inventory = read('public/cultivation/cultivation-inventory.js');
+  const index = read('public/index.html');
+  assert.doesNotMatch(inventory,/function ensureBagGrid|function itemMarkup|new MutationObserver|setInterval/);
+  assert.doesNotMatch(main,/inventory-legacy-bridge\\.js/);
+  assert.doesNotMatch(index,/id="inventory-legacy-bridge-style"/);
 });
 
 test('admin artifact and material lists are ordered by realm', () => {
@@ -60,10 +61,9 @@ test('new backpack modules load after material and artifact systems and admin so
   const artifact = main.indexOf("'./cultivation/artifact-system.js'");
   const material = main.indexOf("'./cultivation/material-system.js'");
   const bagIndex = main.indexOf("'./cultivation/unified-inventory-grid.js'");
-  const bridgeIndex = main.indexOf("'./cultivation/inventory-legacy-bridge.js'");
   const adminManager = main.indexOf("'./cultivation/admin-material-manager.js'");
   const adminSortIndex = main.indexOf("'./cultivation/admin-realm-sorting.js'");
-  assert.ok(artifact >= 0 && material > artifact && bagIndex > material && bridgeIndex > bagIndex);
+  assert.ok(artifact >= 0 && material > artifact && bagIndex > material);
   assert.ok(adminManager >= 0 && adminSortIndex > adminManager);
 });
 
@@ -141,25 +141,27 @@ test('real markup puts exactly four equipment slots on Equipment tab, none in Ba
 });
 
 
-test('equipment stage pages render four slot shells immediately before unified inventory hydration', () => {
+test('both stages import exactly one shared four-slot preload shell', () => {
   const foundation = read('public/cultivation/foundation-training-page.js');
   const golden = read('public/cultivation/cultivation-training-v4.js');
+  const shared = read('public/cultivation/training-shared-shells.js');
   for (const [name, source] of Object.entries({foundation, golden})) {
-    assert.match(source, /function equipmentShellMarkup\(\)/, name);
-    const block = source.slice(source.indexOf('function equipmentShellMarkup()'), source.indexOf('function refineryShellMarkup()'));
-    for (const slot of ['本命法寶','護身法寶','佩飾法寶','輔助法寶']) assert.match(block,new RegExp(slot),name);
-    assert.match(block,/uib-equipment-grid/,name);
-    assert.match(block,/uib-equip-slot is-empty/,name);
+    assert.match(source,/import \{ equipmentShellMarkup, refineryShellMarkup \} from '\.\/training-shared-shells\.js'/,name);
+    assert.match(source,/content\.innerHTML = equipmentShellMarkup\(\)/,name);
+    assert.doesNotMatch(source,/function equipmentShellMarkup\(\)/,name);
   }
-  assert.match(foundation,/content\.innerHTML = equipmentShellMarkup\(\)/);
-  assert.match(golden,/content\.innerHTML = equipmentShellMarkup\(\)/);
+  assert.match(shared,/export function equipmentShellMarkup\(\)/);
+  const block = shared.slice(shared.indexOf('function equipmentShellMarkup()'),shared.indexOf('function refineryShellMarkup()'));
+  for (const slot of ['本命法寶','護身法寶','佩飾法寶','輔助法寶']) assert.match(block,new RegExp(slot));
+  assert.match(block,/uib-equipment-grid/);
+  assert.match(block,/uib-equip-slot is-empty/);
 });
 
 test('old plain-text training backpack cards are removed from both stage shells', () => {
   const foundation = read('public/cultivation/foundation-training-page.js');
   const golden = read('public/cultivation/cultivation-training-v4.js');
   const foundationBag = foundation.slice(foundation.indexOf('function bagMarkup()'),foundation.indexOf('function equipmentShellMarkup()'));
-  const goldenBag = golden.slice(golden.indexOf('function bagTabMarkup()'),golden.indexOf('function equipmentShellMarkup()'));
+  const goldenBag = golden.slice(golden.indexOf('function bagTabMarkup()'),golden.indexOf('function renderTrainingPage()'));
   assert.doesNotMatch(foundationBag,/修煉背包|修煉途中取得的特殊物品/);
   assert.doesNotMatch(goldenBag,/training-v3-bag-item|items\.map/);
   assert.match(foundationBag,/uib-bag-loading/);
@@ -167,7 +169,7 @@ test('old plain-text training backpack cards are removed from both stage shells'
 });
 
 test('all runtime feature modules share one build query without changing dependency-list paths', () => {
-  assert.match(main,/const XIUXIAN_FEATURE_BUILD = '20260920-equipment4'/);
+  assert.match(main,/const XIUXIAN_FEATURE_BUILD = '20260920-dedup1'/);
   assert.match(main,/await import\(\`\$\{modulePath\}\?v=\$\{XIUXIAN_FEATURE_BUILD\}\`\)/);
   assert.match(main,/'\.\/cultivation\/foundation-training-page\.js'/);
   assert.match(main,/'\.\/cultivation\/cultivation-training-v4\.js'/);

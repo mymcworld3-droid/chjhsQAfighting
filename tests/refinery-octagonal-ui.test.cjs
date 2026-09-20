@@ -44,7 +44,9 @@ test('octagonal forge keeps existing functional hooks', () => {
 });
 
 test('Golden Core and Foundation preload the same octagonal forge shell', () => {
-  for (const source of [training, foundation]) {
+  assert.match(training,/training-shared-shells\.js/);
+  assert.match(foundation,/training-shared-shells\.js/);
+  for (const source of [read('public/cultivation/training-shared-shells.js')]) {
     assert.match(source, /refinery-array-wrap/);
     assert.match(source, /refinery-slots refinery-shell-array/);
     assert.match(source, /refinery-array-center/);
@@ -63,7 +65,7 @@ test('preloaded index contains octagonal refinery CSS before hydration', () => {
   assert.match(css, /\.refinery-slot\[data-refinery-slot="7"\]/);
   assert.match(css, /\.refinery-craft\.ready:not\(:disabled\)/);
   assert.match(index, /cultivation-training-v3\.css\?v=20260918-array1/);
-  assert.match(index, /main\.js\?v=20260920-equipment4/);
+  assert.match(index, /main\.js\?v=20260920-dedup1/);
 });
 
 test('preload shell styling no longer describes the old four-column forge', () => {

@@ -23,20 +23,21 @@ test('held refinery materials use adaptive square grids inside independent scrol
 
 test('training page creates refinery tab and a complete stable shell up front', () => {
   assert.match(training, /data-training-tab="refinery"/);
-  assert.match(training, /function refineryShellMarkup\(\)/);
-  assert.match(training, /refinery-shell-material-grid/);
-  assert.match(training, /refinery-slots refinery-shell-array/);
-  assert.match(training, /refinery-array-center/);
-  assert.match(training, /refinery-shell-summary/);
-  assert.match(training, /refinery-shell-match/);
-  assert.match(training, /refinery-shell-actions/);
+  assert.match(training, /training-shared-shells\.js/);
+  assert.match(read('public/cultivation/training-shared-shells.js'), /function refineryShellMarkup\(\)/);
+  assert.match(read('public/cultivation/training-shared-shells.js'), /refinery-shell-material-grid/);
+  assert.match(read('public/cultivation/training-shared-shells.js'), /refinery-slots refinery-shell-array/);
+  assert.match(read('public/cultivation/training-shared-shells.js'), /refinery-array-center/);
+  assert.match(read('public/cultivation/training-shared-shells.js'), /refinery-shell-summary/);
+  assert.match(read('public/cultivation/training-shared-shells.js'), /refinery-shell-match/);
+  assert.match(read('public/cultivation/training-shared-shells.js'), /refinery-shell-actions/);
   assert.match(training, /xiuxian:refinery-open-request/);
 });
 
 test('foundation training also preloads the refinery tab and shell', () => {
   assert.match(foundation, /data-training-tab="refinery"/);
-  assert.match(foundation, /function refineryShellMarkup\(\)/);
-  assert.match(foundation, /refinery-shell-material-grid/);
+  assert.match(foundation, /training-shared-shells\.js/);
+  assert.match(read('public/cultivation/training-shared-shells.js'), /refinery-shell-material-grid/);
   assert.match(foundation, /xiuxian:refinery-open-request/);
 });
 
@@ -66,7 +67,7 @@ test('stable shell is created early while hydrated modules keep safe dependency 
 });
 
 test('preloaded refinery shell uses the same divider shifted 96px downward', () => {
-  for (const source of [training, foundation]) {
+  for (const source of [read('public/cultivation/training-shared-shells.js')]) {
     assert.match(source, /refinery-panel refinery-material-panel/);
     assert.match(source, /持有煉器素材 · 一般素材/);
     assert.match(source, /二次煉製/);
