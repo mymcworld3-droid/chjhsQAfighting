@@ -409,26 +409,40 @@ import {
     const normalized = validateArtifactCatalog(items);
     const normalizedRecipes = recipes === null ? null : validateArtifactRecipes(recipes);
     const db = getFirestore(getApp());
+    let committedCatalog = null;
     await runTransaction(db, async (tx) => {
       const userRef = doc(db, 'users', user.uid);
-      const userSnap = await tx.get(userRef);
-      if (!userSnap.exists() || userSnap.data()?.isAdmin !== true) throw new Error('管理員權限驗證失敗');
       const configRef = doc(db, CONFIG_COLLECTION, CONFIG_DOC);
+      const [userSnap, configSnap] = await Promise.all([tx.get(userRef), tx.get(configRef)]);
+      if (!userSnap.exists() || userSnap.data()?.isAdmin !== true) throw new Error('管理員權限驗證失敗');
+      // 以交易讀到的全站版本為準，管理員若使用舊畫面儲存，也不得擦除首發人。
+      const persistedItems = Array.isArray(configSnap.data()?.items) ? configSnap.data().items : [];
+      const owners = new Map(persistedItems.filter((item) => item?.id && item.recipeOwnerUid).map((item) => [item.id, item]));
+      committedCatalog = normalized.map((item) => {
+        const owner = owners.get(item.id);
+        if (!owner) return item;
+        return normalizeArtifactDefinition({
+          ...item,
+          recipeOwnerUid: owner.recipeOwnerUid,
+          recipeOwnerName: owner.recipeOwnerName,
+          recipeDiscoveredAtMs: owner.recipeDiscoveredAtMs
+        });
+      });
       const audit = {
         updatedBy: user.uid,
         updatedByName: data()?.displayName || user.displayName || '管理員',
         updatedAt: serverTimestamp(),
         updatedAtMs: Date.now()
       };
-      tx.set(configRef, { version: 1, items: normalized, ...audit }, { merge: true });
+      tx.set(configRef, { version: 1, items: committedCatalog, ...audit }, { merge: true });
       if (normalizedRecipes !== null) {
         const materialConfigRef = doc(db, CONFIG_COLLECTION, MATERIAL_CONFIG_DOC);
         tx.set(materialConfigRef, { version: 1, recipes: normalizedRecipes, ...audit }, { merge: true });
       }
     });
-    replaceArtifactCatalog(normalized, 'admin-save');
+    replaceArtifactCatalog(committedCatalog, 'admin-save');
     if (normalizedRecipes !== null) replaceArtifactRecipes(normalizedRecipes, 'admin-save');
-    return normalized;
+    return committedCatalog;
   }
 
   async function approveGeneratedArtifact(id) {
