@@ -78,7 +78,7 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
     anchor.before(card);
     card.addEventListener('click', (event) => {
       const button = event.target.closest('[data-material-buy]');
-      if (button) buyMaterial(button.dataset.materialBuy).catch((error) => toast(error.message || '材料購買失敗', false));
+      if (button) buyMaterial(button.dataset.materialBuy).catch((error) => toast(window.xiuxianSafeActionError?.('材料購買', error, '材料購買未完成，請稍後再試。') || '材料購買未完成，請稍後再試。', false));
     });
     renderCard();
   }
@@ -296,7 +296,7 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
     event.stopPropagation();
     event.stopImmediatePropagation();
     if (button.disabled) return;
-    craftWithMaterials(button.dataset.artifactCraft).catch((error) => toast(error.message || '法寶合成失敗', false));
+    craftWithMaterials(button.dataset.artifactCraft).catch((error) => toast(window.xiuxianSafeActionError?.('法寶合成', error, '法寶合成未完成，請稍後再試。') || '法寶合成未完成，請稍後再試。', false));
   }
 
   function scheduleRender() {

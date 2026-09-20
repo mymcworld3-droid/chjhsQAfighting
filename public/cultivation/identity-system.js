@@ -200,7 +200,7 @@ import {
         queueSnapshotPropagation(true);
       } catch (error) {
         input.value = oldText;
-        alert(error.message || '名稱審核失敗，請稍後再試。');
+        alert(window.xiuxianSafeActionError?.('名稱審核／儲存', error, '名稱設定未完成，請稍後再試。') || '名稱設定未完成，請稍後再試。');
       } finally {
         saveBusy = false;
       }

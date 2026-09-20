@@ -66,7 +66,7 @@
       window.openDongtianPanel();
     } catch (error) {
       console.error('[Dongtian launcher]', error);
-      if (status) status.textContent = `洞天啟動失敗：${error?.message || '未知錯誤'}。可再次按下按鈕重試。`;
+      if (status) status.textContent = '洞天正在準備中，請再次按下按鈕。';
       if (button) {
         button.disabled = false;
         button.innerHTML = '<i class="fa-solid fa-rotate-right"></i> 重新啟動洞天';

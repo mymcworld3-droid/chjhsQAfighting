@@ -481,7 +481,7 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
     bar.dataset.artifactRenderKey = renderKey;
     bar.innerHTML = `<span class="artifact-question-label"><i class="fa-solid fa-wand-sparkles"></i> 法寶</span>${available.map((item) => `<button type="button" data-artifact-question-use="${escapeHtml(item.id)}" ${used || busyAction ? 'disabled' : ''}><b>${escapeHtml(item.icon || '◆')}</b>${escapeHtml(item.name)} ×${quantity(item.id)}<small>排除錯項</small></button>`).join('')}`;
     bar.querySelectorAll('[data-artifact-question-use]').forEach((button) => {
-      button.onclick = () => useRemoveOptionArtifact(button.dataset.artifactQuestionUse, currentQuestionContext() || context).catch((error) => toast(error.message || '法寶使用失敗'));
+      button.onclick = () => useRemoveOptionArtifact(button.dataset.artifactQuestionUse, currentQuestionContext() || context).catch((error) => toast(window.xiuxianSafeActionError?.('法寶答題使用', error, '法寶使用未完成。') || '法寶使用未完成。'));
     });
   }
 
@@ -557,9 +557,9 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
       const craft = event.target.closest('[data-artifact-craft]');
       const equip = event.target.closest('[data-artifact-equip]');
       const use = event.target.closest('[data-artifact-use]');
-      if (craft) craftArtifact(craft.dataset.artifactCraft).catch((error) => toast(error.message || '煉器失敗'));
-      else if (equip) toggleEquipArtifact(equip.dataset.artifactEquip).catch((error) => toast(error.message || '裝備失敗'));
-      else if (use) activateTimedArtifact(use.dataset.artifactUse).catch((error) => toast(error.message || '法寶催動失敗'));
+      if (craft) craftArtifact(craft.dataset.artifactCraft).catch((error) => toast(window.xiuxianSafeActionError?.('舊煉器', error, '煉器未完成，請稍後再試。') || '煉器未完成，請稍後再試。'));
+      else if (equip) toggleEquipArtifact(equip.dataset.artifactEquip).catch((error) => toast(window.xiuxianSafeActionError?.('法寶裝備', error, '裝備未完成，請稍後再試。') || '裝備未完成，請稍後再試。'));
+      else if (use) activateTimedArtifact(use.dataset.artifactUse).catch((error) => toast(window.xiuxianSafeActionError?.('法寶催動', error, '法寶催動未完成，請稍後再試。') || '法寶催動未完成，請稍後再試。'));
     });
     renderForge();
   }

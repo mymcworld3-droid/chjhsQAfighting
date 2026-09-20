@@ -316,7 +316,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe 
       toast(`煉器成功：${artifact.name} ×${Math.max(1, Math.floor(Number(artifact.craft?.yield) || 1))}`);
     } catch (error) {
       console.error('[Cultivation refinery]', error);
-      toast(error.message || '煉器失敗，請稍後再試。', false);
+      toast(window.xiuxianSafeActionError?.('舊煉器操作', error, '煉器未完成，請稍後再試。') || '煉器未完成，請稍後再試。', false);
     } finally {
       busy = false;
       renderRefinery();
