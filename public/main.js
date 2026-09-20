@@ -31,6 +31,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/artifact-system.js',
   './cultivation/artifact-battle-effects.js',
   './cultivation/material-system.js',
+  './cultivation/player-marketplace.js',
   './cultivation/unified-inventory-grid.js',
   './cultivation/refinery-ai-jobs.js',
   './cultivation/cultivation-refinery-v2.js',
@@ -65,7 +66,7 @@ let xiuxianFeatureLoadStarted = false;
 let xiuxianReadyTimer = null;
 let resolveXiuxianFeatureGate;
 const xiuxianFeatureGate = new Promise((resolve) => { resolveXiuxianFeatureGate = resolve; });
-const XIUXIAN_FEATURE_BUILD = '20260920-recipe-owner1';
+const XIUXIAN_FEATURE_BUILD = '20260920-player-market1';
 
 window.__xiuxianFeaturesReady = false;
 window.waitForXiuxianFeatures = () => xiuxianFeatureGate;
