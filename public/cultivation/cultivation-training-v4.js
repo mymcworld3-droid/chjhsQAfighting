@@ -385,7 +385,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   }
 
   function bagTabMarkup() {
-    // 背包物品改由統一背包模組渲染，避免舊的純文字 training-v3-bag-item 先出現在畫面。
+    // 背包物品改由統一背包模組渲染，避免舊的純文字卡先出現在畫面。
     return '<section class="uib-bag-loading" aria-hidden="true"></section>';
   }
 
