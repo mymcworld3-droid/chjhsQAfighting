@@ -83,3 +83,14 @@ test('seller wallet and granted recipe licenses refresh from own Firestore user 
   assert.match(market,/xiuxian:recipe-license-updated/);
   assert.match(market,/scheduleRender\(\)/);
 });
+
+test('market switch overrides important shop grid display and remounts on open', () => {
+  const switchSource = market.slice(market.indexOf('function switchMarket(open)'), market.indexOf('function installStyle()'));
+  assert.match(switchSource,/store\.classList\.toggle\('pm-market-active', open\)/);
+  assert.match(switchSource,/tabs\?\.style\.setProperty\('display', 'none', 'important'\)/);
+  assert.match(switchSource,/grid\?\.style\.setProperty\('display', 'none', 'important'\)/);
+  assert.match(switchSource,/market\.style\.setProperty\('display', 'block', 'important'\)/);
+  assert.match(switchSource,/market\.style\.removeProperty\('display'\)/);
+  assert.match(market,/\(tabs \|\| grid\)\.before\(switcher\)/);
+  assert.match(market,/window\.openPlayerMarketplace = \(view = 'all'\) => \{[\s\S]*?mount\(\);[\s\S]*?switchMarket\(true\)/);
+});
