@@ -21,7 +21,7 @@ test('the existing market is loaded after artifacts and materials and reachable 
   assert.match(market, /window\.openPlayerMarketplace = \(view = 'all'\)/);
   assert.match(refinery, /data-refinery-open-market/);
   assert.match(refinery, /window\.openPlayerMarketplace\?\.\('recipe'\)/);
-  assert.match(index, /main\.js\?v=20260920-market-details2/);
+  assert.match(index, /main\.js\?v=20260921-market-stable1/);
 });
 
 test('trade offers validate quantities, price, inventory, and restrict listed equipped artifacts', () => {
@@ -73,17 +73,19 @@ test('market technical faults go to admin debugger while players see neutral fee
   assert.match(market, /console\.error\('\[Player market\] ' \+ label, error\)/);
   assert.match(market, /本次操作未完成，請稍後重試/);
   assert.doesNotMatch(market, /alert\(error\.message\)/);
-  assert.match(market, /unsubActive\?\.\(\); unsubMine\?\.\(\)/);
-  assert.match(market, /where\('status','==','active'\)/);
+  assert.doesNotMatch(market, /onSnapshot\(/);
+  assert.match(market, /getDocs\(query\(collection\(db,COLLECTION\),where\('status','==','active'\)/);
+  assert.match(market, /getDocsFromCache/);
 });
 
-test('seller wallet and granted recipe licenses refresh from own Firestore user document', () => {
-  assert.match(market,/unsubWallet = onSnapshot\(doc\(db, 'users', uid\)/);
-  assert.match(market,/unsubActive\?\.\(\); unsubMine\?\.\(\); unsubWallet\?\.\(\)/);
+test('seller wallet and recipe knowledge refresh without opening Firestore Listen streams', () => {
+  assert.match(market,/async function refreshWallet\(\)/);
+  assert.match(market,/await getDoc\(doc\(db,'users',currentUid\)\)/);
   assert.match(market,/current\.stats\.gold = remoteGold/);
   assert.match(market,/current\.recipeLicenses = latest\.recipeLicenses \|\| \{\}/);
-  assert.match(market,/xiuxian:recipe-license-updated/);
-  assert.match(market,/scheduleRender\(\)/);
+  assert.match(market,/refreshTimer = setInterval/);
+  assert.doesNotMatch(market,/onSnapshot\(/);
+  assert.doesNotMatch(market,/unsubWallet|unsubActive|unsubMine/);
 });
 
 test('market import failure does not block game readiness', () => {
@@ -93,6 +95,9 @@ test('market import failure does not block game readiness', () => {
   assert.match(source,/void loadPlayerMarketSafely\(\)/);
   assert.match(main,/console\.error\('\[Xiuxian\] Optional player marketplace failed:', error\)/);
   assert.match(main,/window\.openPlayerMarketplace = queueMarketOpen/);
+  assert.match(main,/window\.switchToPage\?\.\('page-store'\)/);
+  assert.match(main,/panel\?\.style\.setProperty\('display','block','important'\)/);
+  assert.match(main,/正在載入交易市集/);
 });
 
 test('market entry and container live in static real shop, and opening does not require a late DOM event', () => {
@@ -118,11 +123,12 @@ test('a market listing shows material descriptions, artifact effects and a guard
   assert.match(market,/esc\(item\.description \|\| '暫無詳細描述'\)/);
 });
 
-test('market retains previously seen items through Firestore Listen transport failures', () => {
+test('market refresh survives Firestore transport failures without depending on Listen streams', () => {
   assert.match(market,/getDocsFromCache/);
   assert.match(market,/async function refreshListings\(\)/);
-  assert.match(market,/if \(publicRows\.size\) active = publicRows\.docs/);
-  assert.match(market,/if \(ownRows\.size\) mine = ownRows\.docs/);
+  assert.match(market,/active = publicRows\.docs\.map/);
+  assert.match(market,/mine = ownRows\.docs\.map/);
+  assert.doesNotMatch(market,/onSnapshot\(/);
   assert.match(market,/data-pm-refresh/);
   assert.match(market,/市集連線暫時中斷/);
   assert.doesNotMatch(market,/failed \? '<p class="pm-empty">市集尚未開放/);
