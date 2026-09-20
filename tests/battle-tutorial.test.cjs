@@ -154,3 +154,74 @@ test('battle lesson is inside the chapter replay, with no progress write on repl
   assert.match(tutorial, /detail: \{ kind: 'battle-gu', replay: previewOnly/);
   assert.doesNotMatch(tutorial, /function maybeAutoStart\(/);
 });
+
+
+test('Shen duel has a correct hard math question, instant answer, and a real 25-second player countdown', () => {
+  assert.match(tutorial, /SHEN_ANSWER_WINDOW_MS = 25000/);
+  assert.match(tutorial, /∫₀¹ \(ln x\)²／\(1＋x\)/);
+  assert.match(tutorial, /opts: \['2ζ\(3\)', '3ζ\(3\)／2'/);
+  assert.match(tutorial, /ans: 1/);
+  assert.match(tutorial, /沈清霜 · 立即答對/);
+  assert.match(tutorial, /shenDeadline = Date\.now\(\) \+ SHEN_ANSWER_WINDOW_MS/);
+  assert.match(tutorial, /setInterval\(updateShenTimer, 200\)/);
+  assert.match(tutorial, /if \(Date\.now\(\) >= shenDeadline\) runShenStrike\(null\)/);
+});
+
+test('Shen strike always goes first even if the player answers correctly, and also strikes on timeout', async () => {
+  const vm = require('node:vm');
+  const constantSource = tutorial.slice(tutorial.indexOf('  const SHEN_ANSWER_WINDOW_MS'), tutorial.indexOf('  const LAYER_ID'));
+  const fightSource = tutorial.slice(tutorial.indexOf('  function renderIntro()'), tutorial.indexOf('  // 第一戰結束只返回主線劇情'));
+  async function simulate(choice, timedOut) {
+    let now = 1000, renderedResult = 0, intervalCleared = 0, slash = 0, hits = 0, numberOfTimers = 0;
+    const arena = { appendChild() {} };
+    const element = {
+      querySelector(selector) {
+        if (selector === '.bt-arena') return arena;
+        if (selector === '[data-bt-fighter="enemy"]' || selector === '.bt-slash') return {classList:{add:()=>{slash++;}}};
+        if (selector === '[data-bt-fighter="me"]') return {classList:{add:()=>{hits++;}}};
+        return { addEventListener(){} };
+      },
+      querySelectorAll() { return []; }
+    };
+    const ctx = vm.createContext({
+      active:true, busy:false, stage:'intro', tutorialPhase:'shen', shenTimer:null, shenDeadline:0, shenChoice:null,
+      playerHp:1000, delay:async()=>{}, clearInterval:()=>{intervalCleared++;}, setInterval:()=>{numberOfTimers++;return numberOfTimers;},
+      Date:{now:()=>now}, shell:()=>element, esc:String, playerPortrait:()=>'', renderShenResult:()=>{renderedResult++;},
+      document:{getElementById:()=>({textContent:'',classList:{toggle(){} }}),createElement:()=>({className:'',innerHTML:''})},
+      clearShenTimer() { if (ctx.shenTimer !== null) ctx.clearInterval(ctx.shenTimer);ctx.shenTimer=null;},
+    });
+    vm.runInContext(constantSource + '\n' + fightSource, ctx);
+    vm.runInContext('beginShenQuestion()',ctx);
+    assert.equal(ctx.stage,'shen-question');
+    assert.equal(ctx.shenDeadline,26000);
+    assert.equal(numberOfTimers,1);
+    if (timedOut) {
+      now = 26001;
+      vm.runInContext('updateShenTimer()',ctx);
+      await new Promise(resolve=>setImmediate(resolve));
+    } else {
+      await vm.runInContext('runShenStrike(' + choice + ')',ctx);
+    }
+    assert.equal(ctx.stage,'shen-strike');
+    assert.equal(ctx.playerHp,0,'Shen first attack must always one-shot');
+    assert.equal(renderedResult,1);
+    assert.equal(hits,1);
+    assert.ok(slash>=2);
+    assert.equal(intervalCleared,1,'timer should be cancelled as soon as first attack begins');
+    assert.equal(ctx.shenChoice, timedOut ? null : choice);
+  }
+  await simulate(1,false);
+  await simulate(0,false);
+  await simulate(null,true);
+});
+
+test('battle tutorial fills real arena responsively without bottom dialogue panels', () => {
+  assert.match(tutorial, /\.bv2-arena\.bt-tutorial-active\{display:block!important/);
+  assert.match(tutorial, /grid-template-areas:none!important/);
+  assert.match(tutorial, /max-width:1100px/);
+  assert.match(tutorial, /@media\(max-width:650px\)/);
+  assert.match(tutorial, /@media\(max-height:580px\) and \(orientation:landscape\)/);
+  assert.match(tutorial, /classList\.add\('bt-tutorial-active'\)/);
+  assert.match(tutorial, /classList\.remove\('bt-tutorial-active'\)/);
+  assert.doesNotMatch(tutorial, /class="bt-dialogue"/);
+});
