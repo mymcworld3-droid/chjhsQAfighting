@@ -92,6 +92,10 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     if (shenTimer !== null) clearInterval(shenTimer);
     shenTimer = null;
   }
+  function closeTutorialArena() {
+    document.getElementById('bv2-arena')?.classList.remove('bt-tutorial-active');
+    window.closeBattleTutorialArena?.();
+  }
 
   async function persist(patch) {
     if (previewOnly) return;
@@ -339,7 +343,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     active = false;
     clearShenTimer();
     document.getElementById(LAYER_ID)?.remove();
-    window.closeBattleTutorialArena?.();
+    closeTutorialArena();
     const resume = startedByStory;
     startedByStory = false;
     if (resume) {
@@ -473,7 +477,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     busy = false;
     clearShenTimer();
     document.getElementById(LAYER_ID)?.remove();
-    window.closeBattleTutorialArena?.();
+    closeTutorialArena();
     if (startedByStory) {
       window.dispatchEvent(new CustomEvent('xiuxian:story-tutorial-finished', {
         detail: { kind: 'battle-gu', replay: previewOnly, skipped: false }
@@ -493,7 +497,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     autoStarted = false;
     snoozeUntil = Date.now() + 5 * 60 * 1000;
     document.getElementById(LAYER_ID)?.remove();
-    window.closeBattleTutorialArena?.();
+    closeTutorialArena();
     if (startedByStory) {
       window.dispatchEvent(new CustomEvent('xiuxian:story-tutorial-finished', {
         detail: { kind: tutorialPhase === 'shen' ? 'battle-shen' : 'battle-gu', replay: previewOnly, deferred: true }
