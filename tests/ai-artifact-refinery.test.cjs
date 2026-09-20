@@ -331,3 +331,57 @@ test('refinement-stage design rules are sent to AI context but not added to play
   assert.doesNotMatch(refinery, /內部生成規則：第三煉/);
   assert.doesNotMatch(refinery, /完成度最高的一次/);
 });
+
+
+test('first successfully registered recipe gains immutable ownership without changing existing recipes', () => {
+  const claim = aiJobs.slice(aiJobs.indexOf('async function claimDiscovery(job)'), aiJobs.indexOf('async function claimJob()'));
+  assert.match(claim, /const \[userSnap, artifactSnap, materialSnap\] = await Promise\.all/);
+  assert.match(claim, /awardedId = findRecipeBySignature\(cleanLatestRecipes, fresh\.signature\)/);
+  assert.match(claim, /firstDiscovery = !awardedId/);
+  assert.match(claim, /if \(!awardedId\) \{/);
+  assert.match(claim, /recipeOwnerUid: user\.uid/);
+  assert.match(claim, /recipeOwnerName: String\(raw\.displayName \|\| user\.displayName/);
+  assert.match(claim, /recipeDiscoveredAtMs: Date\.now\(\)/);
+  assert.match(claim, /tx\.set\(artifactRef,[\s\S]*items: committedCatalog/);
+  assert.match(claim, /tx\.set\(materialRef,[\s\S]*recipes: committedRecipes/);
+  assert.match(claim, /recipeFirstDiscovery: firstDiscovery/);
+  assert.doesNotMatch(claim.slice(claim.indexOf('} else if (recipeRepair.changed)')), /recipeOwnerUid:/);
+});
+
+test('recipe owner survives catalog normalization and concurrent admin saves', () => {
+  const context = vm.createContext({console, Math, Number, String, Object, Array});
+  const source = artifactCatalog
+    .replace(/export const /g, 'const ')
+    .replace(/export function /g, 'function ')
+    + '\n;globalThis.__catalog={normalizeArtifactDefinition};';
+  vm.runInContext(source, context);
+  const result = context.__catalog.normalizeArtifactDefinition({
+    id:'first-recipe', name:'首發法寶', realm:'築基', effects:[{type:'equip_attack_flat',value:20}],
+    recipeOwnerUid:'first-user',recipeOwnerName:'發現者',recipeDiscoveredAtMs:123456
+  });
+  assert.equal(result.recipeOwnerUid, 'first-user');
+  assert.equal(result.recipeOwnerName, '發現者');
+  assert.equal(result.recipeDiscoveredAtMs, 123456);
+  const legacy = context.__catalog.normalizeArtifactDefinition({id:'old',name:'舊配方'});
+  assert.equal(Object.hasOwn(legacy,'recipeOwnerUid'),false);
+  assert.match(admin, /recipeOwnerUid: original\?\.recipeOwnerUid \|\| ''/);
+  assert.match(admin, /const \[userSnap, configSnap\] = await Promise\.all/);
+  assert.match(admin, /const owners = new Map\(persistedItems/);
+  assert.match(admin, /recipeOwnerUid: owner\.recipeOwnerUid/);
+  assert.match(admin, /items: committedCatalog/);
+  assert.match(admin, /replaceArtifactCatalog\(committedCatalog, 'admin-save'\)/);
+});
+
+test('refinery recipe book displays discovered formulas and first-owner details', () => {
+  assert.match(refinery, /function recipeBookMarkup\(\)/);
+  assert.match(refinery, /getArtifactRecipe\(item\.id\)/);
+  assert.match(refinery, /myUid && item\.recipeOwnerUid === myUid/);
+  assert.match(refinery, /你是首位發現者 · 配方擁有權已登錄/);
+  assert.match(refinery, /首發擁有者：/);
+  assert.match(refinery, /既有公共配方/);
+  assert.match(refinery, /第一位成功開爐並登錄未知配方/);
+  assert.match(refinery, /data-refinery-recipe-book/);
+  assert.match(refinery, /recipeBookOpen = event\.currentTarget\.open/);
+  assert.match(refinery, /item\?\.recipeFirstDiscovery/);
+  assert.match(refinery, /首發成功！/);
+});
