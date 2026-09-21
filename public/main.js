@@ -30,6 +30,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/material-catalog-sync.js',
   './cultivation/artifact-system.js',
   './cultivation/artifact-battle-effects.js',
+  './cultivation/combat-power.js',
   './cultivation/material-system.js',
   './cultivation/unified-inventory-grid.js',
   './cultivation/refinery-ai-jobs.js',
