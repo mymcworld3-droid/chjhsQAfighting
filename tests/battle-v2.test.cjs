@@ -205,17 +205,16 @@ test('Battle v2 hidden phases cannot be overridden by phase display styles', () 
 });
 
 
-test('formal matchmaking waits until chapter three story and battle tutorial are complete', async () => {
-  const src = battleSource.slice(battleSource.indexOf('  function battleStoryReady() {'), battleSource.indexOf('  async function forfeitCurrentRoom() {'));
+test('formal battle uses Foundation realm only; incomplete tutorials never block pairing or recovery', async () => {
+  const src = battleSource.slice(battleSource.indexOf('  function storyOrTutorialOpen() {'), battleSource.indexOf('  async function forfeitCurrentRoom() {'));
   const calls = [];
-  const current = { storyProgressV1: { seen: {} }, battleTutorialV1: { completed: false } };
   let layerPresent = false;
+  let currentScore = 9;
   const ctx = vm.createContext({
-    userData: () => current,
     document: { querySelector: () => layerPresent ? {} : null },
     window: { getBattleTutorialState: () => ({active:false}), switchToPage: () => calls.push('page'), ensureCombatStats: async () => {} },
     state: { starting:false, roomId:null, room:null, role:null },
-    score: () => 10, FOUNDATION_SCORE:10, me: () => ({uid:'p'}),
+    score: () => currentScore, FOUNDATION_SCORE:10, me: () => ({uid:'p'}),
     toast: () => calls.push('toast'), alert: () => calls.push('alert'),
     resetRuntime: () => calls.push('reset'), ensurePage: () => calls.push('ensurePage'),
     showSection: () => calls.push('lobby'), renderLobby: () => calls.push('renderLobby'),
@@ -226,23 +225,31 @@ test('formal matchmaking waits until chapter three story and battle tutorial are
   });
   vm.runInContext(src,ctx);
   await vm.runInContext('startMatchmaking()',ctx);
-  assert.deepEqual(calls,['toast'],'cannot enter matching before third chapter');
+  assert.deepEqual(calls,['toast'],'not yet Foundation blocks');
+  currentScore=10;
   calls.length=0;
-  current.storyProgressV1.seen['foundation-first-battle'] = {completedAtMs: 123};
+  layerPresent=true;
   await vm.runInContext('startMatchmaking()',ctx);
-  assert.deepEqual(calls,['toast'],'cannot match after story but before tutorial');
+  assert.deepEqual(calls,['toast'],'visible story or active tutorial must not overlap combat');
   calls.length=0;
-  current.battleTutorialV1.completed = true;
-  layerPresent = true;
+  layerPresent=false;
   await vm.runInContext('startMatchmaking()',ctx);
-  assert.deepEqual(calls,['toast'],'cannot match while a story is on screen');
-  calls.length=0;
-  layerPresent = false;
-  await vm.runInContext('startMatchmaking()',ctx);
-  assert.ok(calls.includes('subscribe'), 'completed story + lesson allows matching');
-  assert.ok(!calls.includes('newRoom'), 'mock matched an existing room without creating one');
-  assert.match(battleSource, /!battleStoryReady\(\) \|\| storyOrTutorialOpen\(\)/);
-  assert.match(battleSource, /recoverBattleSession\(\)[\s\S]*?!battleStoryReady\(\)/);
+  assert.ok(calls.includes('subscribe'), 'Foundation player can match without story or tutorial completion');
+  assert.ok(!calls.includes('newRoom'), 'mock matched an existing room');
+  assert.doesNotMatch(battleSource, /battleStoryReady/);
+  assert.doesNotMatch(battleSource, /請先完成第三章劇情與鬥法教學/);
+  const join = battleSource.slice(battleSource.indexOf('  async function joinSpecificRoom('),battleSource.indexOf('  // 法寶通用引擎'));
+  assert.doesNotMatch(join, /storyProgressV1|battleTutorialV1/);
+  assert.match(join, /score\(\) < FOUNDATION_SCORE/);
+});
+
+test('battle renders exactly one phase and does not inherit a static old arena', () => {
+  const index = readPublic('index.html');
+  const match = index.match(/<div id="page-battle"[^>]*><\/div>/g) || [];
+  assert.equal(match.length,1);
+  assert.doesNotMatch(index, /id="battle-lobby"|id="battle-arena"|id="battle-result"|id="battle-quiz-overlay"/);
+  assert.match(battleSource, /page\.dataset\.bv2Phase = name/);
+  assert.match(battleSource, /classList\.toggle\('hidden', key !== name\)/);
 });
 
 
