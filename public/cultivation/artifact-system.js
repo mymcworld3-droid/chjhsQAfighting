@@ -97,9 +97,8 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
   function currentRealm() {
     return realmForScore(Math.max(0, Number(userData()?.stats?.totalScore) || 0));
   }
-  function realmAllowedToEquip(item) {
-    return realmOrderByName(item?.realm) >= currentRealm().order;
-  }
+  // Item realm is a quality/power tier, never an equipment requirement.
+  function realmAllowedToEquip(item) { return !!item && itemHasEquipEffects(item); }
   function quantity(itemId) { return Math.max(0, Number(state().inventory[itemId]) || 0); }
   function activeBuffs() {
     const now = Date.now();
@@ -110,7 +109,7 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
     const result = [];
     Object.entries(s.equipped).forEach(([slot, id]) => {
       const item = getArtifactById(id);
-      if (!item || !realmAllowedToEquip(item)) return;
+      if (!item) return;
       (item.effects || []).forEach((effect, effectIndex) => {
         if (String(effect.type).startsWith('equip_')) result.push({ ...effect, item, slot, effectIndex });
       });
@@ -242,12 +241,11 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
     const equippedItemId = slot ? String(s.equipped[slot] || '') : '';
     const equippedItem = getArtifactById(equippedItemId);
     const owned = quantity(itemId);
-    const canEquip = !!item && isEquipment && !!slot && owned > 0 && realmAllowedToEquip(item);
+    const canEquip = !!item && isEquipment && !!slot && owned > 0;
     let reason = '';
     if (!item) reason = '法寶不存在';
     else if (!isEquipment) reason = '此法寶不是裝備型';
     else if (owned <= 0) reason = '尚未持有';
-    else if (!realmAllowedToEquip(item)) reason = `${item.realm}低於目前${currentRealm().name}境界`;
     return {
       itemId: String(itemId || ''),
       slot,
@@ -273,10 +271,6 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
       await updateArtifactSystem((next, raw) => {
         const owned = Math.max(0, Number(next.inventory[itemId]) || 0);
         if (owned <= 0) throw new Error('你尚未持有此法寶');
-        const liveRealm = realmForScore(Math.max(0, Number(raw?.stats?.totalScore) || 0));
-        if (realmOrderByName(item.realm) < liveRealm.order) {
-          throw new Error(`${item.name}為${item.realm}法寶，低於你目前的${liveRealm.name}境界，不能裝備`);
-        }
         if (next.equipped[slot] === itemId) {
           delete next.equipped[slot];
           unequipped = true;
@@ -508,7 +502,7 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
         <div class="artifact-name-row"><strong>${escapeHtml(item.name)}</strong><span>${escapeHtml(item.realm)}</span><em>${escapeHtml(item.category || '法寶')}</em></div>
         <p>${escapeHtml(item.description || '')}</p>
         <div class="artifact-effects">${(item.effects || []).map((effect) => `<span>${effectLabel(effect)}</span>`).join('')}${invalidEffects.map((effect) => `<span class="artifact-invalid">尚未支援：${escapeHtml(effect.type)}</span>`).join('')}</div>
-        <div class="artifact-meta">持有 <b>×${qty}</b>${eqSlot ? ` · 已裝備於 <b>${escapeHtml(eqSlot)}</b>` : ''}${buff ? ` · 效果剩餘 <b data-artifact-expire="${buff.expiresAt}">${formatRemaining(buff.expiresAt - Date.now())}</b>` : ''}${hasEquip && !canEquip ? ` · <i>${escapeHtml(item.realm)}低於目前${escapeHtml(currentRealm().name)}，不可裝備</i>` : ''}</div>
+        <div class="artifact-meta">持有 <b>×${qty}</b>${eqSlot ? ` · 已裝備於 <b>${escapeHtml(eqSlot)}</b>` : ''}${buff ? ` · 效果剩餘 <b data-artifact-expire="${buff.expiresAt}">${formatRemaining(buff.expiresAt - Date.now())}</b>` : ''}</div>
       </div>
       <div class="artifact-actions">
         <button type="button" data-artifact-craft="${escapeHtml(item.id)}" ${busyAction ? 'disabled' : ''}>${busyAction === `craft:${item.id}` ? '煉製中…' : `煉製 ×${yieldCount}`}<small>${cost} 金幣</small></button>
@@ -571,7 +565,7 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
     const gold = Math.max(0, Number(data?.stats?.gold) || 0);
     const equippedCount = Object.keys(state().equipped).length;
     const activeCount = activeBuffs().length;
-    content.innerHTML = `<div class="artifact-forge-summary"><div><span>目前境界</span><b>${escapeHtml(currentRealm().name)}</b></div><div><span>金幣</span><b>${gold.toLocaleString()}</b></div><div><span>已裝備／限時效果</span><b>${equippedCount} ／ ${activeCount}</b></div></div><p class="artifact-forge-note">所有境界都能持有、煉製與使用法寶；只有「裝備」受限制：法寶境界不得低於修士目前大境界。法寶資料全部來自 <code>artifact-catalog.js</code>，新增清單項目後會自動出現在這裡。</p><div class="artifact-list">${ARTIFACT_CATALOG.map(forgeItemMarkup).join('')}</div>`;
+    content.innerHTML = `<div class="artifact-forge-summary"><div><span>目前境界</span><b>${escapeHtml(currentRealm().name)}</b></div><div><span>金幣</span><b>${gold.toLocaleString()}</b></div><div><span>已裝備／限時效果</span><b>${equippedCount} ／ ${activeCount}</b></div></div><p class="artifact-forge-note">所有境界的修士都能裝備任何境界的裝備型法寶；只需要持有法寶並使用對應的四個裝備欄位。法寶境界僅代表品質與生成數值範圍。法寶資料全部來自 <code>artifact-catalog.js</code>，新增清單項目後會自動出現在這裡。</p><div class="artifact-list">${ARTIFACT_CATALOG.map(forgeItemMarkup).join('')}</div>`;
   }
   function scheduleRender() {
     if (renderQueued) return;
@@ -597,14 +591,13 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
       return !ARTIFACT_EQUIP_SLOTS.includes(slot) ||
         !item ||
         canonicalEquipSlot(item) !== slot ||
-        !realmAllowedToEquip(item) ||
         quantity(id) <= 0;
     }).map(([slot]) => slot);
     if (!invalidSlots.length) return;
     eligibilityBusy = true;
     try {
       await updateArtifactSystem((next) => invalidSlots.forEach((slot) => delete next.equipped[slot]));
-      toast('境界提升後，低於目前境界的已裝備法寶已自動卸下。');
+      toast('已清除不存在、未持有或欄位不符的裝備。');
     } catch (error) { console.warn('[Artifact] equipment eligibility sync failed', error); }
     finally { eligibilityBusy = false; }
   }
