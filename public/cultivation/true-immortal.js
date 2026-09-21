@@ -1,4 +1,4 @@
-// 真仙必須同時達到原有修為門檻，並持有九州五大仙榜的有效仙位。
+// 868 修為只能進入「登仙」；只有同時持有九州五大仙榜有效仙位者才顯示為「真仙」。
 (function () {
   const roles = new Set(['ru-xian', 'fa-xian', 'suan-xian', 'xuan-xian', 'wai-xian']);
   let members = new Set();
