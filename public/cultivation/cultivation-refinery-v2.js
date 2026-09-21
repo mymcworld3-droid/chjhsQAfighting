@@ -14,6 +14,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
   let busy = false;
   let queued = false;
   let recipeBookOpen = false;
+  let expandedRecipeId = '';
   let adminForgeDirection = '自由發揮';
   let adminForgePrompt = '';
 
@@ -162,6 +163,38 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
       </li>`;
   }
 
+  function recipeTokens(recipe) {
+    const tokens = [];
+    for (const row of recipe || []) {
+      const token = ingredientToken(row);
+      const quantity = Number(row?.quantity);
+      if (!token || !Number.isInteger(quantity) || quantity < 1 ||
+          tokens.length + quantity > SLOT_COUNT) return [];
+      for (let i = 0; i < quantity; i++) tokens.push(token);
+    }
+    return tokens.length >= 2 ? tokens : [];
+  }
+
+  function recipeAvailableToPlayer(item, uid = authUser()?.uid || '') {
+    return !!item && (!item.recipeOwnerUid || (!!uid && item.recipeOwnerUid === uid) ||
+      userData()?.recipeLicenses?.[item.id] === true);
+  }
+
+  function matchingRecipeForTokens(tokens, artifactId) {
+    const key = countsKey(recipeCounts(tokens.map((token) => {
+      const parsed = parseToken(token);
+      return parsed.type === 'artifact' ? { artifactId: parsed.id, quantity: 1 } :
+        { materialId: parsed.id, quantity: 1 };
+    })));
+    if (!key) return false;
+    const found = ARTIFACT_CATALOG.filter((item) => {
+      const recipe = getArtifactRecipe(item.id);
+      return recipe.length && recipeTotal(recipe) <= SLOT_COUNT &&
+        countsKey(recipeCounts(recipe)) === key;
+    });
+    return found.length === 1 && found[0].id === artifactId;
+  }
+
   function recipeBookMarkup() {
     const myUid = authUser()?.uid || '';
     const known = ARTIFACT_CATALOG.filter((item) => getArtifactRecipe(item.id).length);
@@ -175,7 +208,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
     const cards = entries.map((item) => {
       const mine = !!myUid && item.recipeOwnerUid === myUid;
       const learned = userData()?.recipeLicenses?.[item.id] === true;
-      const canReadRecipe = !item.recipeOwnerUid || mine || learned;
+      const canReadRecipe = recipeAvailableToPlayer(item, myUid);
       const owner = item.recipeOwnerUid
         ? (mine ? '你是首位發現者 · 配方擁有權已登錄' : `首發擁有者：${esc(item.recipeOwnerName || '無名修士')}`)
         : '既有公共配方';
@@ -184,6 +217,10 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
         ? new Date(item.recipeDiscoveredAtMs).toLocaleDateString('zh-TW') : '';
       const recipe = canReadRecipe ? getArtifactRecipe(item.id) : [];
       const cost = recipeTotal(recipe);
+      const tokens = canReadRecipe ? recipeTokens(recipe) : [];
+      const unique = canReadRecipe && !!tokens.length && matchingRecipeForTokens(tokens, item.id);
+      const plan = unique ? window.getCultivationRefineryPlan?.(tokens, item.id) : null;
+      const job = window.getCultivationRefineryJob?.() || null;
       const missing = canReadRecipe ? recipe.reduce((total, row) => {
         const needed = Math.max(1, Math.floor(Number(row.quantity) || 1));
         return total + Math.max(0, needed - ingredientAvailable(ingredientToken(row)));
@@ -195,24 +232,52 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
         ? `<div class="refinery-recipe-ingredients-head"><b><i class="fa-solid fa-cubes-stacked"></i> 合成材料</b><span>${cost} / ${SLOT_COUNT} 格 · ${missing ? `尚缺 ${missing} 個` : '素材齊備'}</span></div>
            <ul class="refinery-recipe-ingredients">${recipe.map(recipeIngredientMarkup).join('')}</ul>`
         : `<div class="refinery-recipe-sealed" role="note"><div class="refinery-recipe-seal-mark"><i class="fa-solid fa-lock"></i></div><strong>製作方法尚未習得</strong><p>此配方的素材與數量尚未公開。可在交易市集取得製作指南，或自行投入材料探索。</p></div>`;
-      return `<article class="refinery-recipe-card ${mine ? 'is-owner' : ''} ${canReadRecipe ? 'is-known' : 'is-sealed'}"
+      const gold = Math.max(0, Number(userData()?.stats?.gold) || 0);
+      const canCraft = canReadRecipe && unique && !missing && plan?.valid &&
+        gold >= Number(plan.gold || 0) && !busy && !job;
+      const actionText = job ? '已有法寶正在煉製' :
+        missing ? `尚缺 ${missing} 個素材` :
+        !unique ? '配方待修正' :
+        !plan?.valid ? '目前無法煉製' :
+        gold < Number(plan.gold || 0) ? '靈石不足' : '以此煉製';
+      const stage = Math.min(3, artifactRecipeDepth(item.id) + 1);
+      const teaser = canReadRecipe && item.description
+        ? String(item.description).trim().slice(0, 72)
+        : '製作指南尚未習得；點擊查看配方資訊。';
+      return `<details class="refinery-recipe-card ${mine ? 'is-owner' : ''} ${canReadRecipe ? 'is-known' : 'is-sealed'}"
+        data-refinery-recipe-card="${esc(item.id)}" ${expandedRecipeId === item.id ? 'open' : ''}
         style="--recipe-realm-color:${esc(color)}">
-        <header class="refinery-recipe-card-head">
+        <summary class="refinery-recipe-card-head">
           <span class="refinery-recipe-artifact-icon" aria-hidden="true">${esc(item.icon || '◆')}</span>
           <span class="refinery-recipe-artifact-title">
             <small class="refinery-recipe-eyebrow">煉 器 · 配 方</small>
             <strong>${esc(item.name)}</strong>
-            <span class="refinery-recipe-subtitle">${esc(item.realm || '凡人')} · ${esc(item.category || '法寶')}${canReadRecipe ? ` · 配方深度 ${artifactRecipeDepth(item.id)}/${MAX_ARTIFACT_RECIPE_NESTING}` : ''}</span>
+            <span class="refinery-recipe-subtitle">${esc(item.realm || '凡人')} · ${esc(item.category || '法寶')}</span>
+            <span class="refinery-recipe-intro">${esc(teaser || '此件法寶的製作指南')}</span>
           </span>
           <span class="refinery-recipe-access ${canReadRecipe ? 'is-unlocked' : 'is-locked'}"><i class="fa-solid ${statusIcon}"></i> ${statusLabel}</span>
-        </header>
-        ${canReadRecipe && item.description ? `<p class="refinery-recipe-description">${esc(item.description)}</p>` : ''}
-        ${ingredients}
-        <footer class="refinery-recipe-card-foot">
-          <span class="refinery-recipe-owner"><i class="fa-solid fa-fingerprint"></i> ${owner}${access}</span>
-          ${discovered ? `<time class="refinery-recipe-date">${esc(discovered)}</time>` : ''}
-        </footer>
-      </article>`;
+          <i class="fa-solid fa-chevron-down refinery-recipe-card-chevron" aria-hidden="true"></i>
+        </summary>
+        <div class="refinery-recipe-detail">
+          ${canReadRecipe && item.description ? `<p class="refinery-recipe-description">${esc(item.description)}</p>` : ''}
+          ${canReadRecipe ? `<p class="refinery-recipe-depth"><i class="fa-solid fa-gem"></i> 煉製深度 ${artifactRecipeDepth(item.id)}/${MAX_ARTIFACT_RECIPE_NESTING} · 第 ${stage} 煉</p>` : ''}
+          ${ingredients}
+          ${canReadRecipe ? `<section class="refinery-recipe-method" aria-label="製作方法">
+            <h4><i class="fa-solid fa-scroll"></i> 製作方法</h4>
+            <ol>
+              <li><b>備齊材料</b><span>依上方配方投入共 ${cost} 件素材，已裝備的法寶不可投入。</span></li>
+              <li><b>八方煉製</b><span>消耗 ${Math.max(0, Number(plan?.gold) || 0).toLocaleString()} 靈石，${plan?.valid ? `約需 ${esc(window.formatCultivationRefineryDuration?.(plan.durationMs) || '一段時間')}` : '目前無法計算煉製時間'}。</span></li>
+              <li><b>開爐取寶</b><span>煉製完成後，按陣心「開爐」領取 ${esc(item.name)}。</span></li>
+            </ol>
+            <button type="button" class="refinery-recipe-craft" data-refinery-craft-recipe="${esc(item.id)}" ${canCraft ? '' : 'disabled'}><i class="fa-solid fa-fire-flame-curved"></i> ${esc(actionText)}</button>
+            <p class="refinery-recipe-craft-note">${canCraft ? '點擊即按此配方投入素材、扣除靈石並開始煉製。' : '請先確認配方、材料、靈石及目前的煉製狀態。'}</p>
+          </section>` : ''}
+          <footer class="refinery-recipe-card-foot">
+            <span class="refinery-recipe-owner"><i class="fa-solid fa-fingerprint"></i> ${owner}${access}</span>
+            ${discovered ? `<time class="refinery-recipe-date">${esc(discovered)}</time>` : ''}
+          </footer>
+        </div>
+      </details>`;
     }).join('');
     return `<details class="refinery-recipe-book" data-refinery-recipe-book ${recipeBookOpen ? 'open' : ''}>
       <summary><span class="refinery-recipe-book-heading"><i class="fa-solid fa-scroll"></i><strong>配方圖鑑</strong><small>RECIPE COMPENDIUM</small></span><span class="refinery-recipe-summary-count">首發 ${owned.length} · 已學會 ${licensed.length} · 登錄 ${known.length}</span><i class="fa-solid fa-chevron-down refinery-recipe-book-chevron"></i></summary>
