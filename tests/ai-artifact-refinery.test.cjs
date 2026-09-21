@@ -134,7 +134,7 @@ test('artifact progression scales effect ranges without allowing empty or inflat
   const basic = api.effectRange('equip_attack_flat', 0, 3);
   const immortal = api.effectRange('equip_attack_flat', 10, 3);
   assert.deepEqual([basic.min, basic.max], [13, 35]);
-  assert.deepEqual([immortal.min, immortal.max], [135, 385]);
+  assert.deepEqual([immortal.min, immortal.max], [295, 385]);
   const lowStage = api.effectRange('equip_attack_flat', 3, 1);
   const topStage = api.effectRange('equip_attack_flat', 3, 3);
   assert.ok(lowStage.min > 0 && lowStage.max < topStage.max);
@@ -160,7 +160,7 @@ test('AI receives only currently eligible effect ranges with actual min and max'
   const prompt = api.buildPrompt(input);
   assert.match(prompt, /各特性實際數值上下限/);
   assert.match(prompt, /"type": "equip_attack_flat"/);
-  assert.match(prompt, /"min": 54/);
+  assert.match(prompt, /"min": 118/);
   assert.match(prompt, /"max": 154/);
   assert.match(prompt, /單次生命傷害上限/);
   assert.match(prompt, /數值越小代表越強/);
