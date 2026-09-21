@@ -19,10 +19,12 @@ test('all requested material lineages are present', () => {
   }
 });
 
-test('default catalog contains exactly 46 lineage materials', () => {
+test('default catalog contains 46 lineage materials and two dedicated weapon-forging materials', () => {
   const block = catalog.match(/const DEFAULT_MATERIAL_CATALOG = \[([\s\S]*?)\n\];\n\nconst DEFAULT_MATERIAL_REALM_BY_ID/);
   assert.ok(block, 'default material catalog block exists');
-  assert.equal((block[1].match(/\{ id:/g) || []).length, 46);
+  assert.equal((block[1].match(/\{ id:/g) || []).length, 48);
+  assert.match(block[1], /id: 'sword-forging-iron'/);
+  assert.match(block[1], /id: 'blade-forging-copper'/);
 });
 
 test('existing material ids remain stable for player inventories and recipes', () => {
