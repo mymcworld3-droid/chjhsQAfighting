@@ -436,9 +436,11 @@ test('Shielded hit deals zero actual damage and cannot trigger Thunder counter',
   assert.ok(out.logs.some(x=>x.type==='guard'));
 });
 
-test('Battle UI shows shield and healing without animating non-attacks', () => {
-  assert.match(battleSource,/entry\.type === 'guard'/);
-  assert.match(battleSource,/entry\.type === 'heal'/);
+test('Battle UI animates server attack steps with shield feedback but hides the old text log', () => {
+  assert.doesNotMatch(battleSource,/function renderLogs\(/);
+  assert.doesNotMatch(battleSource,/id="bv2-log"/);
+  assert.match(battleSource,/const guarded = !!step\.guarded/);
+  assert.match(battleSource,/target\?\.classList\.add\('guarded'\)/);
   assert.match(battleSource,/Array\.isArray\(settlement\.steps\)/);
   assert.match(battleSource,/const missed = step\.type === 'miss'/);
   assert.match(battleSource,/mine\.coreShield \? ' · 道心護體'/);
