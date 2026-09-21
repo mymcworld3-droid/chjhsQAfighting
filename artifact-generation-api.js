@@ -254,7 +254,8 @@ function sanitizeGeneratedArtifact(raw, targetRealm, refinementStage = 1) {
   effects = effects.slice(0, maxEffectsForGeneration(order, stage));
 
   if (!effects.length) {
-    effects = [sanitizeEffect({ type: 'equip_attack_flat', value: 35 + order * 25 }, order, stage)].filter(Boolean);
+    const fallbackRange = effectRange('equip_attack_flat', order, stage);
+    effects = [sanitizeEffect({ type: 'equip_attack_flat', value: (fallbackRange.min + fallbackRange.max) / 2 }, order, stage)].filter(Boolean);
   }
 
   const equipped = effects.some((effect) => effect.type.startsWith('equip_'));
@@ -320,6 +321,8 @@ function buildPrompt(payload) {
   };
   const hiddenStageDirection = stageDirections[refinementStage].join('\n');
   const hierarchy = ingredientHierarchy(payload);
+  const allowedRanges = effectRangesForRealm(targetRealm, refinementStage);
+  const allowedTypes = allowedRanges.map((range) => range.type);
   const creativeDirections = [
     '古樸宗門鎮派器：名字沉穩、有歷史感，效果帶有守成或反制意味。',
     '邪異秘境奇器：名字詭譎但不俗氣，效果偏條件觸發、反傷、低血爆發或奇術。',
@@ -344,7 +347,10 @@ function buildPrompt(payload) {
     '1. 法寶境界已由遊戲鎖定為「' + targetRealm + '」，不得改境界。',
     '2. 只輸出 JSON，不要 Markdown。',
     '3. 效果只能使用下方允許的 type；依本次內部煉器階段與境界，最多 ' + maxEffectsForGeneration(order, refinementStage) + ' 個效果。',
-    '4. 連擊 equip_combo_chance 絕不可超過 0.10；數值會再由伺服器依境界平衡。',
+    '4. 每個效果必須使用下方境界＋煉製階段數值表的 min～max（含上下限），不准填 0、不得突破範圍；百分比一律用小數，例如 0.10 = 10%。連擊上限 0.10。',
+    '4a. 法寶無修士境界裝備限制：不論玩家境界高低，只要持有裝備型法寶就能裝備；本表的「境界」僅影響法寶效果數值。',
+    '4b. 單次生命傷害上限 equip_damage_cap_percent 數值越小代表越強，不要誤選較大數字當成強化。',
+    '4c. 限時特性只填 multiplier 和 durationMinutes；每場固定一次的保命／鏡映不填數值；排除錯誤選項每題固定 1 個，不填自訂 value。',
     '5. 若使用任何 equip_ 效果，equipSlot 從：' + EQUIP_SLOTS.join('、') + ' 選一個。',
     '6. 若做消耗型，只使用 timed_attack_multiplier / timed_cultivation_multiplier / remove_wrong_option。',
     '7. 避免與既有法寶名稱、描述、效果組合高度重複。',
@@ -369,11 +375,13 @@ function buildPrompt(payload) {
     '既有法寶摘要（用於避免重複）：',
     JSON.stringify(existingArtifacts, null, 2),
     '',
-    '允許效果：',
-    JSON.stringify([...ALLOWED_EFFECTS]),
+    '本次法寶「' + targetRealm + '」境界與煉製階段 ' + refinementStage + ' 的各特性實際數值上下限（唯一權威表，未列出的效果不得選用）：',
+    JSON.stringify(allowedRanges, null, 2),
+    '允許效果 type：',
+    JSON.stringify(allowedTypes),
     '',
     '輸出格式：',
-    '{"name":"法寶名","icon":"單字或符號","description":"繁體中文描述","equipSlot":"本命法寶|護身法寶|佩飾法寶|輔助法寶（若為裝備型）","effects":[{"type":"允許效果之一","value":0.1,"multiplier":1.3,"durationMinutes":10}]}'
+    '{"name":"法寶名","icon":"單字或符號","description":"繁體中文描述","equipSlot":"本命法寶|護身法寶|佩飾法寶|輔助法寶（若為裝備型）","effects":[{"type":"表中允許效果之一","value":"依該 type 的 value 範圍填數字；無 value 時省略","multiplier":"只有限時類才填","durationMinutes":"只有限時類才填"}]}'
   ].join('\\n');
 }
 
@@ -409,3 +417,7 @@ module.exports.deriveTargetRealm = deriveTargetRealm;
 module.exports.deriveRefinementStage = deriveRefinementStage;
 module.exports.REALMS = REALMS;
 module.exports.ALLOWED_EFFECTS = ALLOWED_EFFECTS;
+module.exports.EFFECT_LABELS = EFFECT_LABELS;
+module.exports.effectRange = effectRange;
+module.exports.effectRangesForRealm = effectRangesForRealm;
+module.exports.sanitizeEffect = sanitizeEffect;
