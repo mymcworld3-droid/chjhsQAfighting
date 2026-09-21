@@ -484,21 +484,135 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
     });
   }
 
+
+  function settlementKey(room) {
+    return room?.lastSettlement ? String(state.roomId) + ':' + (room.battleLogId || (room.round + ':' + room.lastSettlement.settledAtMs)) : null;
+  }
+
+  function bothReviewed(room) {
+    return Number(room?.host?.reviewedRound) === Number(room?.round) &&
+      Number(room?.guest?.reviewedRound) === Number(room?.round);
+  }
+
+  function renderRoundCue(room) {
+    const remaining = Number(room.questionReadyAtMs || 0) - nowMs();
+    const counting = room.status === 'playing' && remaining > 0;
+    setText('bv2-cue-kicker', counting ? '下一題倒數' : room.status === 'preparing' ? '靈識凝聚' : '回合交鋒');
+    setText('bv2-cue-count', counting ? Math.ceil(remaining / 1000) : room.status === 'preparing' ? '問' : '⚔');
+    setText('bv2-cue-message', counting ? '凝神備戰，倒數後進入全畫面答題' :
+      room.status === 'preparing' ? '正在準備下一道題目…' :
+      room.status === 'settled' ? (bothReviewed(room) ? '雙方已確認，下一回合即將開始' : '等待道友閱讀解析…') :
+      '答題完成後，回到戰場依先後手出招');
+  }
+
   function animateSettlement(room) {
-    const settlement = room?.lastSettlement; if (!settlement || Number(settlement.round) !== Number(room.round)) return;
-    const key = room.battleLogId || `${room.round}:${settlement.settledAtMs}`;
-    if (state.seenSettlementKey === key) return; state.seenSettlementKey = key;
-    const logs = Array.isArray(room.battleLog) ? room.battleLog.filter((x) => Number(x.round) === Number(room.round)) : [];
-    logs.filter((entry) => entry.type === 'attack' || entry.type === 'counter').forEach((entry, index) => setTimeout(() => {
-      const mineAttacks = entry.actorUid === me()?.uid;
-      const actor = document.getElementById(mineAttacks ? 'bv2-my-fighter' : 'bv2-enemy-fighter');
-      const target = document.getElementById(mineAttacks ? 'bv2-enemy-fighter' : 'bv2-my-fighter');
-      actor?.classList.add('strike'); target?.classList.add('hit');
-      if (target) {
-        const pop = document.createElement('b'); pop.className = 'bv2-damage-pop'; pop.textContent = `-${Number(entry.damage) || 0}`; target.appendChild(pop); setTimeout(() => pop.remove(), 900);
+    const settlement = room?.lastSettlement;
+    if (!settlement || Number(settlement.round) !== Number(room.round) || state.reviewedRound !== Number(room.round)) return;
+    const key = settlementKey(room);
+    if (state.seenSettlementKey === key) return;
+    state.seenSettlementKey = key;
+    state.animationFinishedKey = null;
+    state.animationTimers.forEach(clearTimeout);
+    state.animationTimers = [];
+
+    const myRole = state.role;
+    const original = {
+      host: { ...room.host, hp: Number(settlement.startHostHp ?? room.host?.hp) },
+      guest: { ...room.guest, hp: Number(settlement.startGuestHp ?? room.guest?.hp) }
+    };
+    setHp('my', original[myRole]);
+    setHp('enemy', original[otherRole(myRole)]);
+    setText('bv2-cue-kicker', '攻防演武');
+    const steps = Array.isArray(settlement.steps) ? settlement.steps : [];
+    const fighters = { host: document.getElementById(myRole === 'host' ? 'bv2-my-fighter' : 'bv2-enemy-fighter'),
+      guest: document.getElementById(myRole === 'guest' ? 'bv2-my-fighter' : 'bv2-enemy-fighter') };
+    steps.forEach((step, index) => {
+      const timer = setTimeout(() => {
+        if (state.roomId !== key.split(':')[0] || state.seenSettlementKey !== key) return;
+        const actor = fighters[step.actorRole];
+        const targetRole = otherRole(step.actorRole);
+        const target = fighters[targetRole];
+        const damage = Math.max(0, Number(step.damage) || 0);
+        const missed = step.type === 'miss';
+        const guarded = !!step.guarded;
+        const counter = step.type === 'counter';
+        const label = missed ? 'MISS' : guarded ? '護體' : (counter ? '反擊 -' : '-') + damage;
+        setText('bv2-cue-kicker', index === 0 ? '先手出招' : counter ? '雷光反擊' : '後手出招');
+        setText('bv2-cue-count', missed ? 'MISS' : guarded ? 'BLOCK' : '-' + damage);
+        setText('bv2-cue-message', (step.actorRole === myRole ? '我方' : '對手') + (missed ? '作答未命中！' : guarded ? '出招被道心護體抵擋' : counter ? '發動反擊！' : '造成 ' + damage + ' 點傷害'));
+        actor?.classList.add(missed ? 'miss' : 'strike');
+        if (!missed && !guarded) target?.classList.add('hit');
+        const pop = document.createElement('b');
+        pop.className = 'bv2-damage-pop' + (missed ? ' miss' : guarded ? ' blocked' : '');
+        pop.textContent = label;
+        (missed ? actor : target)?.appendChild(pop);
+        state.animationTimers.push(setTimeout(() => {
+          actor?.classList.remove('strike', 'miss');
+          target?.classList.remove('hit');
+          pop.remove();
+        }, 700));
+        setHp('my', { ...original[myRole], hp: Number(step[myRole + 'Hp']) });
+        setHp('enemy', { ...original[otherRole(myRole)], hp: Number(step[otherRole(myRole) + 'Hp']) });
+      }, 300 + index * ANIMATION_STEP_MS);
+      state.animationTimers.push(timer);
+    });
+    state.animationTimers.push(setTimeout(() => {
+      if (state.seenSettlementKey !== key) return;
+      state.animationFinishedKey = key;
+      setHp('my', playerForRole(state.room, myRole));
+      setHp('enemy', playerForRole(state.room, otherRole(myRole)));
+      if (state.room?.status === 'finished') renderResult(state.room);
+      else if (state.room?.status === 'settled') {
+        setText('bv2-cue-count', '⚔');
+        setText('bv2-cue-kicker', '本回合結束');
+        setText('bv2-cue-message', bothReviewed(state.room) ? '下一回合即將開始' : '等待道友讀完解析…');
       }
-      setTimeout(() => { actor?.classList.remove('strike'); target?.classList.remove('hit'); }, 520);
-    }, index * 420));
+    }, 600 + steps.length * ANIMATION_STEP_MS));
+  }
+
+  async function confirmReview() {
+    const room = state.room, round = Number(room?.round);
+    if (!room || !state.role || state.reviewedRound === round ||
+        state.reviewSubmittingRound === round || !['settled', 'finished'].includes(room.status)) return;
+    state.reviewSubmittingRound = round;
+    const button = document.getElementById('bv2-review-continue');
+    if (button) button.disabled = true;
+    try {
+      if (room.status === 'settled') {
+        await runTransaction(db(), async (tx) => {
+          const ref = roomRef(), snap = await tx.get(ref);
+          if (!snap.exists()) return;
+          const fresh = snap.data();
+          if (fresh.status !== 'settled' || Number(fresh.round) !== round) return;
+          const other = playerForRole(fresh, otherRole(state.role));
+          const both = Number(other?.reviewedRound) === round;
+          const patch = { [state.role + '.reviewedRound']: round, updatedAt: serverTimestamp() };
+          if (both) patch.nextRoundAtMs = nowMs() + ROUND_ANIMATION_GRACE_MS;
+          tx.update(ref, patch);
+        });
+      }
+      if (state.roomId && Number(state.room?.round) === round) {
+        state.reviewedRound = round;
+        renderArena(state.room);
+      }
+    } catch (error) {
+      console.error('[Battle v2] review acknowledgement failed:', error);
+      toast('解析確認未能同步，請重新點擊返回戰場。');
+    } finally {
+      state.reviewSubmittingRound = null;
+      if (button) button.disabled = false;
+    }
+  }
+
+  function renderQuiz(room) {
+    showSection('quiz');
+    const mine = playerForRole(room, state.role);
+    if (!mine) return;
+    setText('bv2-room-badge', '第 ' + room.round + ' 回合 · 全畫面答題');
+    renderQuestion(room, mine);
+    const answered = answerObject(mine, room.round);
+    setText('bv2-phase', room.status === 'playing' ?
+      (answered ? '等待對手回答' : '凝神答題') : '本回合解析');
   }
 
   function renderQuestion(room, mine) {
@@ -525,23 +639,40 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
       btn.classList.toggle('selected', answered?.choice === idx || pending?.choice === idx);
       btn.classList.toggle('correct', settled && idx === Number(question.ans)); btn.classList.toggle('wrong', settled && answered?.choice === idx && idx !== Number(question.ans));
     });
-    if (settled) { expEl.textContent = `解析：${question.exp || '此題暫無解析。'}`; expEl.classList.remove('hidden'); setText('bv2-answer-status', '本回合已結算，稍後進入下一題。'); }
+    if (settled) { expEl.textContent = `解析：${question.exp || '此題暫無解析。'}`; expEl.classList.remove('hidden'); setText('bv2-answer-status', '請閱讀解析，確認後返回戰場觀看先手、後手攻擊。'); }
     else if (answered || pending) setText('bv2-answer-status', answered?.timedOut ? '本題逾時，等待回合結算。' : '你已出手；對手現在只有 25 秒可以回應。');
     else if (room.answerWindowStartedAt || room.answerWindowStartedAtMs) setText('bv2-answer-status', '對手已先作答！你的 25 秒倒數已開始。');
     else setText('bv2-answer-status', '不限讀題時間；第一位作答者會啟動另一方的 25 秒倒數。');
+    const continueButton = document.getElementById('bv2-review-continue');
+    if (continueButton) continueButton.classList.toggle('hidden', !settled || state.reviewedRound === Number(room.round));
   }
+
 
   function renderArena(room) {
     showSection('arena');
-    const mine = playerForRole(room, state.role); const enemy = playerForRole(room, otherRole(state.role)); if (!mine || !enemy) return;
-    setText('bv2-room-badge', `ROOM ${state.roomId.slice(0, 6).toUpperCase()}`); setText('bv2-round', `${room.round} / ${room.maxRounds || BATTLE_V2.maxRounds}`);
-    setText('bv2-my-name', mine.name || '我方'); setText('bv2-enemy-name', enemy.name || '對手');
-    setText('bv2-my-core', `本命金丹：${playerCoreLabel(mine)}${mine.coreShield ? ' · 道心護體' : ''}`);
-    setText('bv2-enemy-core', `本命金丹：${playerCoreLabel(enemy)}${enemy.coreShield ? ' · 道心護體' : ''}`);
-    setHp('my', mine); setHp('enemy', enemy); renderQuestion(room, mine); renderLogs(room); announceActivations(room); animateSettlement(room);
-    const myAnswer = answerObject(mine, room.round); const enemyAnswer = answerObject(enemy, room.round);
-    const phase = room.status === 'playing' ? (!myAnswer && !enemyAnswer ? '靜觀題意' : myAnswer && !enemyAnswer ? '等待對手' : !myAnswer && enemyAnswer ? '限時應答' : '雙方已答') : room.status === 'settled' ? '道法交鋒' : '凝聚下一題';
-    setText('bv2-phase', phase);
+    const mine = playerForRole(room, state.role);
+    const enemy = playerForRole(room, otherRole(state.role));
+    if (!mine || !enemy) return;
+    setText('bv2-room-badge', 'ROOM ' + state.roomId.slice(0, 6).toUpperCase());
+    setText('bv2-round', room.round + ' / ' + (room.maxRounds || BATTLE_V2.maxRounds));
+    setText('bv2-my-name', mine.name || '我方');
+    setText('bv2-enemy-name', enemy.name || '對手');
+    setText('bv2-my-core', '本命金丹：' + playerCoreLabel(mine) + (mine.coreShield ? ' · 道心護體' : ''));
+    setText('bv2-enemy-core', '本命金丹：' + playerCoreLabel(enemy) + (enemy.coreShield ? ' · 道心護體' : ''));
+    const key = settlementKey(room);
+    const replay = (room.status === 'settled' || room.status === 'finished') &&
+      Number(room.lastSettlement?.round) === Number(room.round) && state.reviewedRound === Number(room.round);
+    const animating = replay && state.seenSettlementKey === key && state.animationFinishedKey !== key;
+    if (!animating) {
+      setHp('my', mine);
+      setHp('enemy', enemy);
+      renderRoundCue(room);
+    }
+    renderLogs(room);
+    if (replay) {
+      announceActivations(room);
+      animateSettlement(room);
+    }
   }
 
   function battleReward(room, uid) {
