@@ -56,6 +56,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/admin-self-transfer.js',
   './cultivation/admin-account-manager.js',
   './cultivation/admin-artifact-manager.js',
+  './cultivation/admin-artifact-effect-bounds.js',
   './cultivation/admin-artifact-delete.js',
   './cultivation/admin-material-manager.js',
   './cultivation/admin-material-realm-editor.js',
@@ -68,7 +69,7 @@ let xiuxianFeatureLoadStarted = false;
 let xiuxianReadyTimer = null;
 let resolveXiuxianFeatureGate;
 const xiuxianFeatureGate = new Promise((resolve) => { resolveXiuxianFeatureGate = resolve; });
-const XIUXIAN_FEATURE_BUILD = '20260921-player-profile1';
+const XIUXIAN_FEATURE_BUILD = '20260921-artifact-effect-bounds1';
 
 // 交易市集僅為可選功能，載入失敗不可阻止玩家登入或進入遊戲。
 let xiuxianMarketLoad = null;
