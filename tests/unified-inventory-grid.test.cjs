@@ -185,6 +185,6 @@ test('selected equipment slot equips compatible owned artifacts directly and exp
   assert.match(bag, /artifactSlot\(item\.raw\) !== equipmentPickSlot/);
   assert.match(bag, /await window\.toggleEquipArtifact\(item\.id\)/);
   assert.match(bag, /if \(!artifactCanEquip\(item\.raw\)\) \{/);
-  assert.match(bag, /openDetails\(key\); \/\/ 保留境界不足原因/);
+  assert.match(bag, /openDetails\(key\); \/\/ 其他原因/);
   assert.match(bag, /console\.error\('\[Equipment slot\] equip failed:'/);
 });
