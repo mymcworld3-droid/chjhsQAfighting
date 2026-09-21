@@ -68,8 +68,9 @@ let chatUnsub = null;                // 聊天室監聽
 let currentBattleId = null;          // 當前對戰 ID
 let isBattleActive = false;          // 是否在對戰中
 let quizBuffer = [];                 // 題目緩衝
-const BUFFER_SIZE = 3;               // 🔥 緩衝題數改為 3
-let isFetchingBuffer = false; 
+const BUFFER_SIZE = 1;               // 只預取一題，減少切換範圍時浪費的 API 呼叫
+let isFetchingBuffer = false;
+let bufferFillPromise = null; 
 let currentBankData = null; 
 let presenceInterval = null; 
 let allBankFiles = [];
@@ -1855,20 +1856,26 @@ function getSmartDifficulty() {
 async function fillBuffer() {
     const scope = syncSoloQuestionCache();
     const uid = auth.currentUser?.uid || '';
-    if (!scope || !uid || isFetchingBuffer || quizBuffer.length >= BUFFER_SIZE) return;
+    // When the player opens the quiz during prefetch, share that existing request.
+    if (isFetchingBuffer) return bufferFillPromise;
+    if (!scope || !uid || quizBuffer.length >= BUFFER_SIZE) return;
     isFetchingBuffer = true;
-    try {
-        while (quizBuffer.length < BUFFER_SIZE && soloQuestionCache.isCurrent(uid, scope) && auth.currentUser?.uid === uid) {
-            const question = await fetchOneQuestion();
-            // Reject an API response from a previous account or range.
-            if (!soloQuestionCache.isCurrent(uid, scope) || auth.currentUser?.uid !== uid ||
-                soloQuestionScope() !== scope) break;
-            if (!soloQuestionCache.append(question)) break;
-            quizBuffer = soloQuestionCache.getQueue();
-        }
-    } catch (e) { console.warn("Background fetch failed", e); }
+    bufferFillPromise = (async () => {
+        try {
+            while (quizBuffer.length < BUFFER_SIZE && soloQuestionCache.isCurrent(uid, scope) && auth.currentUser?.uid === uid) {
+                const question = await fetchOneQuestion();
+                // Reject an API response from a previous account or range.
+                if (!soloQuestionCache.isCurrent(uid, scope) || auth.currentUser?.uid !== uid ||
+                    soloQuestionScope() !== scope) break;
+                if (!soloQuestionCache.append(question)) break;
+                quizBuffer = soloQuestionCache.getQueue();
+            }
+        } catch (e) { console.warn("Background fetch failed", e); }
+    })();
+    try { await bufferFillPromise; }
     finally {
         isFetchingBuffer = false;
+        bufferFillPromise = null;
         if (auth.currentUser?.uid && currentUserData && soloQuestionScope() !== scope) {
             syncSoloQuestionCache();
             void fillBuffer();
@@ -1911,7 +1918,13 @@ window.startQuizFlow = async (isNewSession = false) => {
     if (!scope || !uid) return;
 
     // Restore an unanswered active question before using the prefetched queue.
-    const nextQ = soloQuestionCache.getActive() || soloQuestionCache.takeNext();
+    let nextQ = soloQuestionCache.getActive() || soloQuestionCache.takeNext();
+    if (!nextQ && isFetchingBuffer) {
+        await fillBuffer();
+        if (opening !== soloQuizOpenSerial || auth.currentUser?.uid !== uid ||
+            soloQuestionScope() !== scope) return;
+        nextQ = soloQuestionCache.getActive() || soloQuestionCache.takeNext();
+    }
     quizBuffer = soloQuestionCache.getQueue();
     if (nextQ) {
         window.currentActiveQuiz = nextQ;
