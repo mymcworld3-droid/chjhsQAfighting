@@ -98,7 +98,7 @@ test('hit point numbers update after impact, retaining server-side step order an
   const animate = source.slice(source.indexOf('  function animateSettlement(room) {'), source.indexOf('  async function confirmReview() {'));
   assert.match(animate, /index \* ANIMATION_STEP_MS/);
   assert.match(animate, /const valid = \(\) => !!state\.roomId && state\.seenSettlementKey === key/);
-  assert.match(animate, /target\?\.classList\.add\('hit'\)/);
+  assert.match(animate, /target\.classList\.add\('hit'\)/);
   assert.match(animate, /setHp\('my'[\s\S]*setHp\('enemy'/);
   assert.match(animate, /scheduleBattleAt\(impactAtMs, key/);
   assert.match(animate, /startAtMs \+ ATTACK_LEAD_MS \+ index \* ANIMATION_STEP_MS/);
