@@ -153,6 +153,8 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
     const img = holder?.querySelector('img');
     const fallback = holder?.querySelector('.bv2-stage-portrait-fallback');
     if (!img || !fallback) return;
+    holder.classList.toggle('me', own);
+    holder.classList.toggle('enemy', !own);
     // Old rooms have no gender snapshot; use the local choice for our own character.
     const gender = player?.gender === 'female' ? 'female' :
       player?.gender === 'male' ? 'male' :
