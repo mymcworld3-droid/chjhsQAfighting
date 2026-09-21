@@ -195,3 +195,49 @@ test('admin-managed recipe listing checks seller admin status when buyer claims 
   assert.match(refinery,/item\.recipeSaleLocked !== true/);
   assert.match(market,/item\.recipeSaleLocked !== true/);
 });
+
+
+test('material market reference is unified by realm and strictly increases', () => {
+  const source = read('public/cultivation/material-catalog.js');
+  const from = source.indexOf('export function materialMarketReferencePrice(');
+  const to = source.indexOf('export function materialRealmColor(', from);
+  assert.ok(from >= 0 && to > from);
+  const js = source.slice(from,to).replaceAll('export function','function');
+  const names = ['凡人','煉氣','築基','金丹','元嬰','化神','煉虛','合體','大乘','渡劫','真仙'];
+  const fn = new Function('materialRealmOrderByName',js+
+    '\nreturn {reference:materialMarketReferencePrice, minimum:materialMarketMinimumTotal};');
+  const calc = fn((name)=>Math.max(0,names.indexOf(name)));
+  const prices = names.map(name=>calc.reference({realm:name}));
+  assert.deepEqual(prices,[10,20,40,80,160,320,640,1280,2560,5120,10240]);
+  assert.equal(calc.reference({realm:'金丹',buyGold:0}),calc.reference({realm:'金丹',buyGold:9999}));
+  assert.equal(calc.minimum('煉氣',1),21);
+  assert.equal(calc.minimum('煉氣',3),61);
+  assert.equal(calc.minimum('真仙',999),10229761);
+  assert.equal(calc.minimum('煉氣',0),0);
+});
+
+test('material listing validates total price above unit reference both before and inside Firestore transaction', () => {
+  const catalog = read('public/cultivation/material-catalog.js');
+  const bag = read('public/cultivation/unified-inventory-grid.js');
+  const npc = read('public/cultivation/material-system.js');
+  const admin = read('public/cultivation/admin-material-manager.js');
+  assert.match(market,/materialMarketReferencePrice, materialMarketMinimumTotal/);
+  assert.match(market,/function checkMaterialListingPrice\(type, item, count, price\)/);
+  assert.match(market,/if \(price < minimum\)/);
+  assert.match(market,/price = amount\(sellPrice, MAX_PRICE, '總價'\);\s*checkMaterialListingPrice\(type, item, count, price\)/);
+  assert.match(market,/checkMaterialListingPrice\(type, itemFor\(type, id\), count, price\)/);
+  assert.match(market,/function updatePriceHint\(\)/);
+  assert.match(market,/id="pm-material-price-hint"/);
+  assert.match(market,/publish\.disabled = busy \|\| !listable\(\)\.length \|\| !canList/);
+  assert.match(market,/event\.target\.id === 'pm-sell-qty' \|\| event\.target\.id === 'pm-sell-price'/);
+  assert.match(market,/境界統一參考單價/);
+  assert.match(catalog,/export function materialMarketReferencePrice\(/);
+  assert.match(bag,/坊市參考單價：/);
+  assert.match(npc,/參考 \$\{materialMarketReferencePrice\(item\.realm\)/);
+  assert.match(admin,/坊市參考 \$\{materialMarketReferencePrice\(item\.realm\)/);
+  assert.match(admin,/採購價分開/);
+  const before = market.slice(market.indexOf('async function createListing()'),market.indexOf('async function buyListing('));
+  assert.ok(before.indexOf('checkMaterialListingPrice(type, itemFor(type, id), count, price)') <
+    before.indexOf("tx.update(sellerRef, { [systemField]: system })"));
+  assert.match(before,/if \(type === 'recipe'\)/);
+});
