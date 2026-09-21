@@ -180,7 +180,8 @@
     return {
       player: getCombatSnapshot(),
       battle: window.getArtifactBattleSnapshot?.() || { effects: [] },
-      core: currentCoreSnapshot()
+      core: currentCoreSnapshot(),
+      power: window.getCombatPower?.() || null
     };
   }
 
@@ -188,10 +189,22 @@
     const stats = buildCombatStatList(snapshot.player, snapshot.battle);
     const effects = Array.isArray(snapshot.battle?.effects) ? snapshot.battle.effects : [];
     const passive = [];
+    const power = snapshot.power || { total:0, base:0, core:0, equipment:0, items:[] };
     if (effects.some(effect => effect?.type === 'equip_cheat_death')) passive.push('每場一次免死');
     if (effects.some(effect => effect?.type === 'equip_copy_enemy_artifact')) passive.push('鬥法時複製敵方法寶效果');
     return `
       <section class="training-status-panel">
+        <div class="status-section status-power-section" aria-label="綜合戰力">
+          <div class="status-section-title"><span>綜合戰力</span><small>COMBAT POWER</small></div>
+          <div class="status-power-main"><i class="fa-solid fa-bolt"></i><strong>${formatStatNumber(power.total)}</strong></div>
+          <div class="status-power-sources">
+            <div><span>基礎</span><b>${formatStatNumber(power.base)}</b></div>
+            <div><span>金丹 · 品質</span><b>${formatStatNumber(power.core)}</b></div>
+            <div><span>裝備 · 境界與屬性</span><b>${formatStatNumber(power.equipment)}</b></div>
+          </div>
+          ${power.items?.length ? `<div class="status-power-items">${power.items.map(item => `<span>${escapeHtml(item.name)}（${escapeHtml(item.realm)}） +${formatStatNumber(item.power)}</span>`).join("")}</div>` : ""}
+          <p class="status-power-note">僅計入目前調御金丹及已裝備法寶；金丹僅依品級計分。戰力不直接增加鬥法傷害。</p>
+        </div>
         <div class="status-section status-core-section">
           <div class="status-section-title"><span>目前調御金丹</span><small>ATTUNED CORE</small></div>
           ${currentCoreMarkup(snapshot.core)}
