@@ -74,7 +74,7 @@ import {
     const color = qualityColor(item.realm);
     return `<button type="button" class="uib-equip-slot is-filled" data-uib-equipped-item="artifact:${escapeHtml(id)}" style="--uib-quality:${escapeHtml(color)}">${label}
       <span class="uib-equip-slot-frame is-artifact">${escapeHtml(item.icon || '◆')}</span><b class="uib-equip-slot-name">${escapeHtml(item.name)}</b>
-      <small class="uib-equip-slot-hint">${escapeHtml(item.realm)} · 查看／卸下</small></button>`;
+      <small class="uib-equip-slot-hint">${escapeHtml(item.realm)} · 戰力 ${Math.max(0, Number(window.calculateArtifactPower?.(item)) || 0).toLocaleString("zh-TW")}</small></button>`;
   }
   function equipmentMarkup() {
     const equippedCount = ARTIFACT_EQUIP_SLOTS.filter((slot) => {
@@ -323,10 +323,11 @@ import {
       const replacing = equippedId && !equippedHere ? getArtifactById(equippedId) : null;
       const hasEquip = artifactHasEquipEffects(rawArtifact);
       const canEquip = artifactCanEquip(rawArtifact);
+      const itemPower = Math.max(0, Number(window.calculateArtifactPower?.(rawArtifact)) || 0);
       const equipAction = hasEquip && equipSlot
         ? `<button type="button" class="uib-equip-btn" data-uib-equip="${escapeHtml(item.id)}" ${!equippedHere && !canEquip ? 'disabled' : ''}>${equippedHere ? '<i class="fa-solid fa-box-archive"></i> 卸下' : '<i class="fa-solid fa-shield-halved"></i> 裝備'} · ${escapeHtml(equipSlot)}</button>`
         : '';
-      extra = `<div class="uib-detail-section"><span>法寶資訊</span><p>二次煉製深度：${item.refinementDepth || 0}/${MAX_ARTIFACT_RECIPE_NESTING}</p>${hasEquip ? `<p>裝備欄位：<b>${escapeHtml(equipSlot)}</b></p>` : ''}${replacing ? `<p>裝備後會替換：<b>${escapeHtml(replacing.name)}</b></p>` : ''}</div><div class="uib-detail-section"><span>法寶效果</span>${item.effects.length
+      extra = `<div class="uib-detail-section"><span>法寶資訊</span><p>二次煉製深度：${item.refinementDepth || 0}/${MAX_ARTIFACT_RECIPE_NESTING}</p>${hasEquip ? `<p>法寶戰力：<b>${itemPower.toLocaleString("zh-TW")}</b>（境界品質及裝備效果）</p>` : ""}${hasEquip ? `<p>裝備欄位：<b>${escapeHtml(equipSlot)}</b></p>` : ''}${replacing ? `<p>裝備後會替換：<b>${escapeHtml(replacing.name)}</b></p>` : ''}</div><div class="uib-detail-section"><span>法寶效果</span>${item.effects.length
         ? `<ul>${item.effects.map((effect) => `<li>${escapeHtml(effectLabel(effect))}</li>`).join('')}</ul>`
         : '<p>目前沒有額外效果資料。</p>'}${equippedHere ? '<p class="uib-equipped-note"><i class="fa-solid fa-circle-check"></i> 目前已裝備，效果正在生效</p>' : ''}${equipAction}</div>`;
     } else if (item.type === 'material') {
