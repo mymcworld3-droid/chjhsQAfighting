@@ -27,7 +27,7 @@ const startupScene = readRoot('assets/xianxia-loading-scene.svg');
 
 test('login core is isolated from optional cultivation module failures', () => {
   const staticImports = main.match(/^import\s+['"][^'"]+['"];$/gm) || [];
-  assert.deepEqual(staticImports, ["import './main-legacy.js';", "import './cultivation/dongtian-entry.js';"]);
+  assert.deepEqual(staticImports, ["import './main-legacy.js?v=20260921-solo-cache1';", "import './cultivation/dongtian-entry.js';"]);
   const dongtianEntry = read('dongtian-entry.js');
   assert.doesNotMatch(dongtianEntry, /firebasejs|firebase-firestore|getFirestore|getAuth/);
   assert.match(main, /const XIUXIAN_FEATURE_MODULES = \[/);
