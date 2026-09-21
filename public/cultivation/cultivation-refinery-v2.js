@@ -609,13 +609,38 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
     }
   }
 
+  function refineryFailureNotice(error, phase) {
+    const code = String(error?.code || '');
+    const message = String(error?.message || '');
+    const transient = /refinery-api-network|unavailable|deadline-exceeded|resource-exhausted/i.test(code) ||
+      /Load failed|Failed to fetch|NetworkError|network request failed|network connection/i.test(message);
+    if (code === 'refinery-api-network' || (phase === 'claim-discovery' && transient)) {
+      return '煉器推演服務暫時無法連線，煉製進度已保留。請確認網路後再按「開爐」。';
+    }
+    if (error?.refineryStage === 'generation' || (phase === 'claim-discovery' && code === 'permission-denied')) {
+      return '法寶推演暫時無法完成，煉製進度已保留。請稍後再按「開爐」。';
+    }
+    if (transient && phase === 'start') {
+      return '目前無法確認是否開始煉製。請重新整理確認素材、靈石和煉製進度後再操作。';
+    }
+    if (transient && phase.startsWith('claim')) {
+      return '開爐暫時未完成，煉製工作已保留。請確認連線後再按「開爐」。';
+    }
+    return window.xiuxianSafeActionError?.('煉器操作', error, '本次操作未完成，請稍後再試。') ||
+      '本次操作未完成，請稍後再試。';
+  }
+
   async function craft() {
     if (busy) return;
     busy = true;
+    let phase = 'start';
+    let attemptedJobId = '';
     render(true);
     try {
       const job = window.getCultivationRefineryJob?.() || null;
       if (job) {
+        phase = job.kind === 'discovery' ? 'claim-discovery' : 'claim-known';
+        attemptedJobId = String(job.id || '');
         if (Date.now() < Number(job.readyAtMs || 0)) {
           throw new Error('尚需 ' + (window.formatCultivationRefineryDuration?.(Number(job.readyAtMs) - Date.now()) || '一段時間'));
         }
@@ -642,8 +667,15 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
         toast(`開始煉製：消耗 ${started.goldCost} 金幣，約 ${window.formatCultivationRefineryDuration?.(started.durationMs) || ''} 完成`);
       }
     } catch (error) {
-      console.error('[Cultivation refinery job]', error);
-      toast('本次操作未完成，請稍後再試。', false);
+      console.error('[Cultivation refinery job]', {
+        phase: error?.refineryStage || phase,
+        jobId: attemptedJobId,
+        code: String(error?.code || ''),
+        httpStatus: error?.httpStatus || null,
+        serverReason: String(error?.serverReason || '').slice(0, 180),
+        cause: String(error?.cause?.message || '')
+      }, error);
+      toast(refineryFailureNotice(error, phase), false);
     } finally {
       busy = false;
       render(true);
