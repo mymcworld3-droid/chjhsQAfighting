@@ -337,6 +337,7 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder3';
       uid: user()?.uid || 'story-player', name: playerName(),
       hp: maxHp, maxHp, atk: Math.max(1, Math.round(Number.isFinite(Number(stats.attack)) ? Number(stats.attack) : 200)),
       totalScore: score(), goldenCore, coreShield: !!goldenCore && d.stats?.goldenCoreShield === true,
+      combatPower: Math.max(0, Math.round(Number(window.getCombatPower?.().total) || 0)),
       coreCorrectStreak: 0, artifactBattle,
       artifactShield: Math.max(0, Math.round(Number(window.getArtifactBattleOpeningShield?.(artifactBattle) ?? artifactBattle.openingShield) || 0)),
       artifactFirstHitUsed: false, artifactCheatDeathUsed: false
@@ -350,7 +351,7 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder3';
     const equipment = names.length ? names.join('、') : '目前無附加鬥法效果的裝備';
     const coreShield = guPlayer?.coreShield ? '已啟動' : '未啟動';
     const artifactShield = guPlayer?.artifactShield || 0;
-    return `實際攻擊 ${playerCombat?.atk || 200} ／ 最大生命 ${playerCombat?.maxHp || 1000} ／ 金丹：${esc(core)} ／ 道心護體：${coreShield} ／ 法寶護盾：${artifactShield} ／ 裝備：${esc(equipment)}`;
+    return `戰力 ${(playerCombat?.combatPower || 0).toLocaleString('zh-TW')} ／ 實際攻擊 ${playerCombat?.atk || 200} ／ 最大生命 ${playerCombat?.maxHp || 1000} ／ 金丹：${esc(core)} ／ 道心護體：${coreShield} ／ 法寶護盾：${artifactShield} ／ 裝備：${esc(equipment)}`;
   }
 
   function startCountdown(opponent, done) {
