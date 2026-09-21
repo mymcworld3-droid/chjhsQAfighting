@@ -176,8 +176,10 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
   }
 
   function recipeAvailableToPlayer(item, uid = authUser()?.uid || '') {
-    return !!item && (!item.recipeOwnerUid || (!!uid && item.recipeOwnerUid === uid) ||
-      userData()?.recipeLicenses?.[item.id] === true);
+    return !!item && (userData()?.isAdmin === true ||
+      (!!uid && item.recipeOwnerUid === uid) ||
+      userData()?.recipeLicenses?.[item.id] === true ||
+      (!item.recipeOwnerUid && item.recipeSaleLocked !== true));
   }
 
   function matchingRecipeForTokens(tokens, artifactId) {
@@ -199,7 +201,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
     const myUid = authUser()?.uid || '';
     const known = ARTIFACT_CATALOG.filter((item) => getArtifactRecipe(item.id).length);
     const owned = known.filter((item) => myUid && item.recipeOwnerUid === myUid);
-    const licensed = known.filter((item) => item.recipeOwnerUid && item.recipeOwnerUid !== myUid && userData()?.recipeLicenses?.[item.id] === true);
+    const licensed = known.filter((item) => item.recipeOwnerUid !== myUid && userData()?.recipeLicenses?.[item.id] === true);
     // 配方只用來查看製作方法；沒有配方仍可在八方煉器陣自由嘗試。
     const entries = known.slice().sort((a, b) =>
       Number(myUid && b.recipeOwnerUid === myUid) - Number(myUid && a.recipeOwnerUid === myUid)
