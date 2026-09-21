@@ -39,6 +39,28 @@ test('AI router supports multiple Gemini keys without duplicating the legacy key
   });
 });
 
+test('accidental comma-separated legacy GEMINI_MODEL still activates both models for every key', () => {
+  withEnv({
+    GEMINI_API_KEY: undefined,
+    GEMINI_API_KEYS: 'key-a,key-b,key-c,key-d',
+    GEMINI_MODEL: 'gemini-3.5-flash-lite, gemini-3.5-flash-lite,gemini-3.1-flash-lite',
+    GEMINI_MODELS: undefined,
+    OPENAI_API_KEY: undefined,
+    OPENAI_MODEL: undefined,
+    AI_PROVIDERS_JSON: '[]'
+  }, () => {
+    const providers = router.buildProviders();
+    assert.equal(providers.length, 8);
+    assert.deepEqual(providers.map(p => p.model), [
+      'gemini-3.5-flash-lite', 'gemini-3.1-flash-lite',
+      'gemini-3.5-flash-lite', 'gemini-3.1-flash-lite',
+      'gemini-3.5-flash-lite', 'gemini-3.1-flash-lite',
+      'gemini-3.5-flash-lite', 'gemini-3.1-flash-lite'
+    ]);
+    assert.ok(providers.every(p => !p.model.includes(',')));
+  });
+});
+
 test('one Gemini API key rotates across both Flash-Lite models without duplicate requests', () => {
   withEnv({
     GEMINI_API_KEY: 'one-key',
