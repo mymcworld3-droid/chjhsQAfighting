@@ -1,6 +1,7 @@
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder1';
 
 // 築基鬥法教學：完全本機模擬，不建立 rooms、不寫正式戰績。
 // 第一戰固定由沈清霜以 65,000 真實傷害擊倒演武投影；第二戰再由顧長風教正式鬥法規則。
@@ -12,6 +13,9 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   const FOUNDATION_SCORE = 10;
   const TRUE_DAMAGE = 65000;
   const SHEN_ANSWER_WINDOW_MS = 25000;
+  const ROUND_COUNTDOWN_MS = 3000;
+  const GU_ANSWER_WINDOW_MS = 25000;
+  const TURN_ANIMATION_MS = 850;
   // 高等微積分：用幾何級數和交錯 ζ(3) 求精確值。師姐先手是第一戰劇情特例。
   const SHEN_QUESTION = Object.freeze({
     q: '設 ζ(3)＝Σ(n＝1 至 ∞) 1/n³。求定積分 ∫₀¹ (ln x)²／(1＋x) dx 的精確值。',
@@ -45,7 +49,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       q: '如果雙方都答對，這一回合誰能攻擊？',
       opts: ['雙方都能出手', '只有較早答對的一方', '生命較低的一方', '完全隨機'],
       ans: 0,
-      exp: '雙方都答對就雙方都出手，無論誰先作答；傷害同時結算，也可能同時倒下。'
+      exp: '雙方都答對時依作答先後出手；先手造成致命傷害，就不再執行後手。'
     })
   ]);
 
@@ -64,6 +68,20 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   let guHp = 2000;
   let snoozeUntil = 0;
   let autoStarted = false;
+  let playerCombat = null;
+  let guPlayer = null;
+  let guOpponent = null;
+  let guOpponentAt = 0;
+  let guPlayerAt = 0;
+  let guDeadline = 0;
+  let guChoice = null;
+  let guFeedback = null;
+  let guOutcome = null;
+  let guOpponentTimer = null;
+  let guTick = null;
+  let roundCountdown = null;
+  let sceneToken = 0;
+  let shenFeedback = null;
 
   function data() { return window.getCurrentUserData?.() || null; }
   function user() {
@@ -92,7 +110,16 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     if (shenTimer !== null) clearInterval(shenTimer);
     shenTimer = null;
   }
+  function clearTutorialTimers() {
+    clearShenTimer();
+    if (guOpponentTimer !== null) clearTimeout(guOpponentTimer);
+    if (guTick !== null) clearInterval(guTick);
+    if (roundCountdown !== null) clearInterval(roundCountdown);
+    guOpponentTimer = guTick = roundCountdown = null;
+    sceneToken += 1;
+  }
   function closeTutorialArena() {
+    clearTutorialTimers();
     document.getElementById('bv2-arena')?.classList.remove('bt-tutorial-active');
     window.closeBattleTutorialArena?.();
   }
@@ -203,6 +230,21 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
         #${LAYER_ID} .bt-fighter img{inset:25px 0 12px;height:calc(100% - 37px)}
         #${LAYER_ID} .bt-question{padding:10px}
       }
+      #page-battle #bv2-quiz:not(.hidden) > #${LAYER_ID}.bt-quiz-mode{width:100%!important;max-width:1000px;min-height:calc(100dvh - 130px);margin:0 auto;align-self:stretch}
+      #${LAYER_ID} .bt-quiz-fullscreen{min-height:100%;padding:clamp(14px,3vw,32px);border:1px solid rgba(216,177,93,.28);border-radius:24px;background:linear-gradient(160deg,#211a10,#080807)}
+      #${LAYER_ID}.bt-quiz-mode .bt-head{padding:12px 4px 24px}
+      #${LAYER_ID}.bt-quiz-mode .bt-head h2{font-size:clamp(20px,3vw,32px)}
+      #${LAYER_ID}.bt-quiz-mode .bt-body{padding:0}
+      #${LAYER_ID}.bt-quiz-mode .bt-question{padding:clamp(15px,2vw,28px);margin:0}
+      #${LAYER_ID}.bt-quiz-mode .bt-question h3{font-size:clamp(19px,2.2vw,29px);line-height:1.7;margin:18px 0 26px}
+      #${LAYER_ID}.bt-quiz-mode .bt-option{min-height:clamp(58px,8dvh,78px);font-size:clamp(13px,1.45vw,18px)}
+      #${LAYER_ID}.bt-quiz-mode .bt-explain{font-size:clamp(13px,1.2vw,17px);line-height:1.8;padding:16px}
+      #${LAYER_ID} .bt-countdown{height:min(44dvh,380px);display:flex;flex-direction:column;gap:20px;align-items:center;justify-content:center;border:1px solid rgba(216,177,93,.25);border-radius:22px;background:radial-gradient(ellipse,rgba(181,123,35,.16),transparent 65%)}
+      #${LAYER_ID} .bt-countdown b{font-size:clamp(64px,11vw,124px);color:#f3d991;text-shadow:0 0 45px rgba(218,173,69,.28)}
+      #${LAYER_ID} .bt-countdown p{font-size:clamp(13px,2vw,20px);color:#d8c59b}
+      #${LAYER_ID} .bt-combat-cue{min-height:120px;padding:24px;text-align:center;border:1px solid rgba(216,177,93,.2);border-radius:16px;background:rgba(216,177,93,.04);font-size:clamp(16px,2vw,23px);color:#e5cf92}
+      #${LAYER_ID} .bt-combat-cue strong{display:block;margin-top:12px;font-size:clamp(26px,5vw,62px)}
+      #${LAYER_ID} .bt-damage.miss{color:#d1d0c9}
       @media(prefers-reduced-motion:reduce){#${LAYER_ID} *{animation:none!important;transition:none!important}}
     `;
     document.head.appendChild(style);
@@ -243,9 +285,20 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     </article>`;
   }
 
-  function shell({ opponent, opponentImage, opponentHp, opponentMaxHp, playerImage = playerPortrait('determined'), body, badge, title, showLater = true, result = false }) {
+  function shell({ opponent, opponentImage, opponentHp, opponentMaxHp, playerImage = playerPortrait('determined'), body, badge, title, showLater = true, result = false, quiz = false }) {
     const el = layer();
     el.classList.toggle('bt-final-mode', result);
+    window.setBattleTutorialScene?.(quiz ? 'quiz' : 'arena');
+    const parent = document.getElementById(quiz ? 'bv2-quiz' : 'bv2-arena');
+    if (parent && el.parentElement !== parent) parent.appendChild(el);
+    el.classList.toggle('bt-quiz-mode', quiz);
+    if (quiz) {
+      el.innerHTML = `<section class="bt-quiz-fullscreen" role="region" aria-label="${esc(title)}">
+        <header class="bt-head"><div><small>${esc(badge)}</small><h2>${esc(title)}</h2></div></header>
+        <div class="bt-body">${body}</div>
+      </section>`;
+      return el;
+    }
     if (result) {
       el.innerHTML = `<section class="bt-final-card" role="dialog" aria-modal="true" aria-label="${esc(title)}">
         <small class="bt-final-kicker">${esc(badge)}</small>
@@ -259,7 +312,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     el.innerHTML = `<section class="bt-shell">
       <header class="bt-head"><div><small>${esc(badge)}</small><h2>${esc(title)}</h2></div>${showLater ? '<button type="button" class="bt-later">稍後再練</button>' : ''}</header>
       <div class="bt-arena bv2-scoreboard">
-        ${fighterMarkup({ enemy:false, name:playerName(), hp:playerHp, maxHp:1000, image:playerImage, label:'我方 · 演武投影' })}
+        ${fighterMarkup({ enemy:false, name:playerName(), hp:playerHp, maxHp:playerCombat?.maxHp || 1000, image:playerImage, label:'我方 · 演武投影' })}
         <div class="bt-vs bv2-round-seal">VS</div>
         ${fighterMarkup({ enemy:true, name:opponent, hp:opponentHp, maxHp:opponentMaxHp, image:opponentImage, label:'對手' })}
         <i class="bt-slash" aria-hidden="true"></i>
