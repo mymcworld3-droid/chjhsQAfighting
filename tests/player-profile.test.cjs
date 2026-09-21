@@ -45,7 +45,7 @@ test('ranking, friends and chat avatars and names open the same UID-backed read-
   assert.match(source, /document\.addEventListener\('click'/);
   assert.match(source, /openPlayerProfileByUid\(button\.dataset\.xiuxianProfile/);
   assert.match(source, /getDoc\(doc\(getFirestore\(getApp\(\)\), 'users', uid\)\)/);
-  assert.match(source, /requestToken \+\+/);
+  assert.match(source, /\+\+requestToken/);
   assert.match(main,/cultivation\/combat-power\.js'[\s\S]*cultivation\/player-profile\.js'/);
 });
 
