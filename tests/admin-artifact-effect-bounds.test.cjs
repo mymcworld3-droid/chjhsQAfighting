@@ -83,3 +83,60 @@ test('invalid global bounds and fixed effects stay protected', () => {
     {'4':{equip_attack_flat:{min:10,max:20}}}
   ]) assert.throws(()=>api.normalizeDepthEffectBounds(config));
 });
+
+
+test('recipe ingredient quantity scales both limits by five percent per extra material', () => {
+  const config = api.normalizeDepthEffectBounds({'1':{
+    equip_attack_flat:{min:100,max:220},
+    equip_attack_percent:{min:0.1,max:0.5}
+  }});
+  const expected = [
+    [2,0.95,95,123], [3,1,100,130], [4,1.05,105,136],
+    [5,1.1,110,143], [8,1.25,125,162]
+  ];
+  for (const [count,factor,min,max] of expected) {
+    assert.equal(api.ingredientCountMultiplier(count),factor);
+    const range = api.effectRange('equip_attack_flat',1,1,{},false,config,count);
+    assert.deepEqual([range.min,range.max],[min,max]);
+    const generated = api.sanitizeGeneratedArtifact({
+      effects:[{type:'equip_attack_flat',value:999999}]
+    },'煉氣',1,{},config,count);
+    assert.equal(generated.effects[0].value,max,'AI output obeys adjusted upper bound');
+  }
+  assert.equal(api.ingredientTotal([{quantity:2},{quantity:1},{quantity:1}]),4);
+  assert.equal(api.ingredientCountMultiplier(),1);
+  const percent = api.effectRange('equip_attack_percent',1,1,{},false,config,4);
+  assert.deepEqual([percent.min,percent.max],[0.105,0.21]);
+});
+
+test('AI receives the quantity-adjusted bounds and preserves hard caps and durations', () => {
+  const config = api.normalizeDepthEffectBounds({'1':{
+    equip_attack_flat:{min:100,max:220}
+  }});
+  for (const [count,limit] of [[2,123],[3,130],[4,136]]) {
+    const payload = {
+      selectedIngredients:[{type:'material',id:'iron',quantity:count}],
+      allMaterials:[{id:'iron',name:'玄鐵',realm:'煉氣'}],
+      existingArtifacts:[],targetRealm:'煉氣',effectBoundsV2:config
+    };
+    const prompt = api.buildPrompt(payload);
+    assert.match(prompt,new RegExp('"max": '+limit+'(?:,|\\n)'));
+    assert.ok(prompt.includes('數值範圍倍率 ×'+api.ingredientCountMultiplier(count)));
+  }
+  const timed = api.effectRange('timed_attack_multiplier',10,3,{},false,{},4);
+  const original = api.effectRange('timed_attack_multiplier',10,3);
+  assert.equal(timed.durationMinutesMin,original.durationMinutesMin);
+  assert.equal(timed.durationMinutesMax,original.durationMinutesMax);
+  assert.ok(api.effectRange('equip_combo_chance',10,3,{},false,{},8).max <= .1);
+  assert.ok(api.effectRange('equip_damage_cap_percent',10,3,{},false,{},8).max <= 1);
+  assert.ok(api.effectRange('timed_attack_multiplier',10,3,{},false,{},2).min >= 1.01);
+});
+
+test('manual editor hint updates for recipe quantity and remains advisory', () => {
+  assert.match(admin, /function currentEditorIngredientCount\(modal\)/);
+  assert.match(admin, /function ingredientHintMultiplier\(count\)/);
+  assert.match(admin, /function scaleIngredientHint\(min, max, effect, factor\)/);
+  assert.match(admin, /素材 ' \+ quantity \+ ' 個 ×' \+ factor/);
+  assert.match(admin, /refreshEffectHints\(modal\)/);
+  assert.match(admin, /僅供參考，不限制手動填寫/);
+});
