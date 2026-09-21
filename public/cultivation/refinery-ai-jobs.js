@@ -316,7 +316,8 @@ import {
           targetRealm: job.targetRealm,
           adminGenerationDirection: job.adminGenerationDirection || '',
           adminGenerationPrompt: job.adminGenerationPrompt || '',
-          supportedEffects: SUPPORTED_ARTIFACT_EFFECTS
+          supportedEffects: SUPPORTED_ARTIFACT_EFFECTS,
+          effectBoundsV1: window.getArtifactEffectBounds?.() || {}
         })
       });
     } catch (cause) {
