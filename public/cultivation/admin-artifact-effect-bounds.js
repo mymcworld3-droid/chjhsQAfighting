@@ -58,7 +58,8 @@ import { getFirestore, doc, runTransaction, serverTimestamp } from 'https://www.
   // falling back to the first-refinement defaults for untouched effects.
   function firstDepthHint(range) {
     if (stage !== 2) return '';
-    const first = firstDepthDefaults?.find(item => item.type === range.type);
+    if (!firstDepthDefaults) return '<div class="aeb-previous">第一煉參考值暫時無法載入；不影響第二煉設定。</div>';
+    const first = firstDepthDefaults.find(item => item.type === range.type);
     if (!first) return '<div class="aeb-previous">第一煉：此功能未開放，無可對照的上下限。</div>';
     if (!['value', 'multiplier'].includes(first.field))
       return '<div class="aeb-previous">第一煉：固定效果，不需設定數值上下限。</div>';
