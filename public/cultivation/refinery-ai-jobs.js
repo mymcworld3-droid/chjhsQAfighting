@@ -282,7 +282,8 @@ import {
     return MATERIAL_CATALOG.map((item) => ({
       id: item.id, name: item.name, icon: item.icon, realm: item.realm,
       category: item.category, description: item.description || '',
-      story: item.story || '', buyGold: Number(item.buyGold) || 0
+      story: item.story || '', weaponForm: item.weaponForm || '',
+      weaponName: item.weaponName || '', buyGold: Number(item.buyGold) || 0
     }));
   }
 
