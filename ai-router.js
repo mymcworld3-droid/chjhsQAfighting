@@ -66,11 +66,13 @@ function normalizeBaseUrl(url) {
 function buildGeminiProviders() {
   const keys = [...splitCsv(process.env.GEMINI_API_KEYS), ...splitCsv(process.env.GEMINI_API_KEY)];
   const uniqueKeys = [...new Set(keys)];
-  // Model rotation is independent of API keys: one key can use every listed model.
-  // Preserve the historical one-provider-per-key behavior when GEMINI_MODELS is unset.
-  const models = [...new Set(splitCsv(process.env.GEMINI_MODELS))];
-  const fallbackModel = process.env.GEMINI_MODEL?.trim() || 'gemini-3.5-flash-lite';
-  const activeModels = models.length ? models : [fallbackModel];
+  // GEMINI_MODELS is preferred. Accept accidental comma-separated legacy
+  // GEMINI_MODEL values too, so Render does not send the whole CSV as a model ID.
+  const configuredModels = splitCsv(process.env.GEMINI_MODELS);
+  const legacyModels = splitCsv(process.env.GEMINI_MODEL);
+  const activeModels = [...new Set(configuredModels.length
+    ? configuredModels
+    : legacyModels.length ? legacyModels : ['gemini-3.5-flash-lite'])];
 
   return uniqueKeys.flatMap((key, index) => activeModels.map((model, modelIndex) => ({
     type: 'gemini',
