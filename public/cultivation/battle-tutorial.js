@@ -82,6 +82,7 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder1';
   let roundCountdown = null;
   let sceneToken = 0;
   let shenFeedback = null;
+  let tutorialRunKey = 0;
 
   function data() { return window.getCurrentUserData?.() || null; }
   function user() {
@@ -334,7 +335,7 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder1';
     const artifactBattle = window.getArtifactBattleSnapshot?.() || { version: 1, effects: [], openingShield: 0 };
     return {
       uid: user()?.uid || 'story-player', name: playerName(),
-      hp: maxHp, maxHp, atk: Math.max(1, Math.round(Number(stats.attack) || 200)),
+      hp: maxHp, maxHp, atk: Math.max(1, Math.round(Number.isFinite(Number(stats.attack)) ? Number(stats.attack) : 200)),
       totalScore: score(), goldenCore, coreShield: !!goldenCore && d.stats?.goldenCoreShield === true,
       coreCorrectStreak: 0, artifactBattle,
       artifactShield: Math.max(0, Math.round(Number(window.getArtifactBattleOpeningShield?.(artifactBattle) ?? artifactBattle.openingShield) || 0)),
@@ -347,7 +348,9 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder1';
     const effects = playerCombat?.artifactBattle?.effects || [];
     const names = [...new Set(effects.map((x) => x.artifactName).filter(Boolean))];
     const equipment = names.length ? names.join('、') : '目前無附加鬥法效果的裝備';
-    return `實際攻擊 ${playerCombat?.atk || 200} ／ 最大生命 ${playerCombat?.maxHp || 1000} ／ 金丹：${esc(core)} ／ 裝備：${esc(equipment)}`;
+    const coreShield = guPlayer?.coreShield ? '已啟動' : '未啟動';
+    const artifactShield = guPlayer?.artifactShield || 0;
+    return `實際攻擊 ${playerCombat?.atk || 200} ／ 最大生命 ${playerCombat?.maxHp || 1000} ／ 金丹：${esc(core)} ／ 道心護體：${coreShield} ／ 法寶護盾：${artifactShield} ／ 裝備：${esc(equipment)}`;
   }
 
   function startCountdown(opponent, done) {
@@ -671,6 +674,11 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder1';
     busy = true;
     const token = ++sceneToken;
     const outcome = guOutcome;
+    outcome.activations.filter((activation) => activation.ownerUid === guPlayer.uid && activation.type && activation.type !== 'artifact')
+      .forEach((activation) => window.showGoldenCoreActivation?.({
+        type:activation.type, name:activation.name || '金丹', message:activation.message || activation.skill,
+        kind:activation.kind || '教學鬥法金丹效果'
+      }));
     const el = shell({
       opponent:'顧長風', opponentImage:'assets/story/characters/battle-rival.png',
       opponentHp:guHp, opponentMaxHp:guOpponent.maxHp,
@@ -833,6 +841,7 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder1';
     };
     guHp = guOpponent.hp;
     guRound = 0; guCorrect = 0; stage = 'intro';
+    tutorialRunKey += 1;
     active = true;
     await persist({ started:true, startedAtMs:marker()?.startedAtMs || Date.now() });
     if (adminPreview && options.scene === 'shen-story') { playerHp = 0; renderShenResult(); }
@@ -865,7 +874,7 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder1';
     const answered = shen ? !!shenFeedback : !!guPlayerAt;
     return {
       context:'battle',
-      key:'battle-tutorial:' + tutorialPhase + ':' + guRound + ':' + (shen ? SHEN_QUESTION.q : QUESTIONS[guRound]?.q),
+      key:'battle-tutorial:' + tutorialRunKey + ':' + tutorialPhase + ':' + guRound + ':' + (shen ? SHEN_QUESTION.q : QUESTIONS[guRound]?.q),
       correctIndex:Number(correctIndex),
       answered,
       buttonsSelector: shen ? '#battle-tutorial-layer [data-bt-shen-choice]' : '#battle-tutorial-layer [data-bt-choice]',
