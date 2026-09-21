@@ -24,7 +24,8 @@
     { name: '合體', sub: '天地合一', need: 308, emoji: '☯️' },
     { name: '大乘', sub: '大道將成', need: 448, emoji: '⚡' },
     { name: '渡劫', sub: '雷劫問道', need: 628, emoji: '⛈️' },
-    { name: '真仙', sub: '踏入仙門', need: 868, emoji: '🪽' }
+    { name: '登仙', sub: '仙門在望', need: 868, emoji: '🪶' },
+    { name: '真仙', sub: '榜上仙位', need: 868, emoji: '🪽' }
   ];
 
   let initialized = false;
