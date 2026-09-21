@@ -103,6 +103,49 @@ test('AI router mixes Gemini and arbitrary OpenAI-compatible providers', () => {
   });
 });
 
+test('round-robin routes across Gemini models, not just API keys', () => {
+  withEnv({
+    GEMINI_API_KEY: 'only-key',
+    GEMINI_API_KEYS: undefined,
+    GEMINI_MODELS: 'gemini-3.5-flash-lite,gemini-3.1-flash-lite',
+    AI_PROVIDER_STRATEGY: 'round-robin',
+    OPENAI_API_KEY: undefined,
+    OPENAI_MODEL: undefined,
+    AI_PROVIDERS_JSON: '[]'
+  }, () => {
+    const providers = router.buildProviders();
+    const first = router.orderedProviders(providers);
+    const second = router.orderedProviders(providers);
+    assert.notEqual(first[0].model, second[0].model);
+    assert.deepEqual(new Set(providers.map(p => p.model)), new Set([
+      'gemini-3.5-flash-lite', 'gemini-3.1-flash-lite'
+    ]));
+  });
+});
+
+test('recent model activity includes successes and sanitized HTTP failures without credentials', () => {
+  const provider = { name: 'gemini-1-model-2', model: 'gemini-3.1-flash-lite', key: 'PRIVATE_KEY' };
+  router.recordAttempt(provider, 'failed', new Error('HTTP 429: PRIVATE_ERROR_BODY'));
+  router.recordAttempt(provider, 'success');
+  const recent = router.getRecentActivity();
+  assert.deepEqual(recent.slice(-2).map(x => x.outcome), ['failed', 'success']);
+  assert.equal(recent.at(-2).httpStatus, 429);
+  assert.equal(recent.at(-1).model, 'gemini-3.1-flash-lite');
+  assert.doesNotMatch(JSON.stringify(recent), /PRIVATE_KEY|PRIVATE_ERROR_BODY/);
+  const changed = router.getRecentActivity();
+  changed.at(-1).outcome = 'mutated';
+  assert.equal(router.getRecentActivity().at(-1).outcome, 'success');
+});
+
+test('Dongtian multimodal generation shares the same rotation and records actual attempts', () => {
+  const dongtian = readFileSync(join(__dirname, '../dongtian-api.js'), 'utf8');
+  assert.match(dongtian, /aiRouter\.orderedProviders\(aiRouter\.buildProviders\(\)\)/);
+  assert.match(dongtian, /aiRouter\.recordAttempt\(provider, 'success'\)/);
+  assert.match(dongtian, /aiRouter\.recordAttempt\(provider, 'failed', error\)/);
+  assert.match(server, /recent: aiRouter\.getRecentActivity\(\)/);
+  assert.match(server, /provider: routed\.provider, model: routed\.model/);
+});
+
 test('router safely extracts JSON from fenced or prefixed model output', () => {
   assert.equal(router.extractJsonText('```json\n{"ok":true}\n```'), '{"ok":true}');
   assert.equal(router.extractJsonText('Answer: {"ok":true} done'), '{"ok":true}');
