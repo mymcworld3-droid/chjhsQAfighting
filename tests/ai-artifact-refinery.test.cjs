@@ -635,6 +635,84 @@ test('recipe compendium protects unknown formulas and still shows public, first-
   assert.match(refinery, /前往交易市集/);
 });
 
+test('real player refinery recipe compendium opens compact summaries into details and paid crafting actions', () => {
+  const markupStart = refinery.indexOf('  function recipeBookMarkup() {');
+  const markupEnd = refinery.indexOf('  function ensureStyle() {', markupStart);
+  const markup = refinery.slice(markupStart, markupEnd);
+  assert.ok(markupStart >= 0 && markupEnd > markupStart);
+  assert.match(markup, /return .<details class="refinery-recipe-card/);
+  assert.match(markup, /<summary class="refinery-recipe-card-head">/);
+  assert.match(markup, /refinery-recipe-intro/);
+  assert.match(markup, /data-refinery-recipe-card/);
+  assert.match(markup, /expandedRecipeId === item.id/);
+  assert.match(markup, /<div class="refinery-recipe-detail">/);
+  assert.match(markup, /製作方法/);
+  assert.match(markup, /data-refinery-craft-recipe/);
+  assert.match(markup, /以此煉製/);
+  assert.match(markup, /recipe.map\(recipeIngredientMarkup\)/);
+  assert.match(refinery, /function bindContent\(content\)/);
+  assert.match(refinery, /button\.addEventListener\('click', \(\) => \{ void craftFromRecipe\(button\.dataset\.refineryCraftRecipe\); \}\)/);
+  assert.match(refinery, /content\.querySelectorAll\('\[data-refinery-recipe-card\]'\)/);
+  assert.match(refinery, /previousBookScroll/);
+  assert.match(refinery, /const nextBook = content\.querySelector\('\.refinery-recipe-book-content'\)/);
+  assert.match(refinery, /function markup\(\)[\s\S]*\$\{recipeBookMarkup\(\)\}/);
+  assert.match(refinery, /data-training-tab="\$\{TAB\}"/);
+  assert.match(refinery, /#training-tab-content/);
+});
+
+test('recipe craft action rechecks license, inventory, payment and calls the real furnace without spending on invalid recipes', async () => {
+  const start = refinery.indexOf('  async function craftFromRecipe(artifactId) {');
+  const end = refinery.indexOf('  function add(token) {', start);
+  assert.ok(start > 0 && end > start);
+  let authorized = false;
+  let stock = 2;
+  let gold = 100;
+  let calledCraft = 0;
+  let renders = 0;
+  const messages = [];
+  const context = {
+    busy: false, SLOT_COUNT: 8, selected: Array(8).fill('old'),
+    window: { getCultivationRefineryJob: () => null,
+      getCultivationRefineryPlan: (tokens, id) => ({ valid: true, knownArtifactId: id, gold: 80 }) },
+    toast: (msg) => messages.push(msg),
+    authUser: () => ({ uid: 'player' }),
+    getArtifactById: (id) => id === 'blade' ? { id: 'blade' } : null,
+    recipeAvailableToPlayer: () => authorized,
+    getArtifactRecipe: () => [{ materialId: 'iron', quantity: 2 }],
+    recipeTokens: () => ['material:iron', 'material:iron'],
+    matchingRecipeForTokens: () => true,
+    recipeCounts: () => ({ 'material:iron': 2 }),
+    ingredientAvailable: () => stock,
+    userData: () => ({ stats: { gold } }),
+    render: () => { renders++; },
+    craft: async () => {
+      calledCraft++;
+      assert.deepEqual(context.selected.slice(0, 2), ['material:iron', 'material:iron']);
+      assert.ok(context.selected.slice(2).every(value => value === null));
+    }
+  };
+  vm.createContext(context);
+  vm.runInContext(refinery.slice(start, end) + '\nthis.runCraftFromRecipe = craftFromRecipe;', context);
+  await context.runCraftFromRecipe('blade');
+  assert.equal(calledCraft, 0, 'unlicensed recipe cannot be used via a stale button');
+  assert.equal(context.selected[0], 'old');
+  authorized = true;
+  stock = 1;
+  await context.runCraftFromRecipe('blade');
+  assert.equal(calledCraft, 0, 'insufficient material cannot replace occupied forge slots');
+  stock = 2;
+  gold = 70;
+  await context.runCraftFromRecipe('blade');
+  assert.equal(calledCraft, 0, 'insufficient currency cannot start a job');
+  gold = 100;
+  await context.runCraftFromRecipe('blade');
+  assert.equal(calledCraft, 1, 'valid recipe starts exactly one existing forge job');
+  assert.equal(renders, 1);
+  assert.ok(messages.some(message => message.includes('配方')));
+  assert.ok(messages.some(message => message.includes('製作材料不足')));
+  assert.ok(messages.some(message => message.includes('靈石不足')));
+});
+
 test('refinery recipe book displays discovered formulas and first-owner details', () => {
   assert.match(refinery, /function recipeBookMarkup\(\)/);
   assert.match(refinery, /getArtifactRecipe\(item\.id\)/);
