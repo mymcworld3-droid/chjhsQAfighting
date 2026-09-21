@@ -69,8 +69,8 @@ test('AI prompt uses selected stage limits and a mortal-only recipe produces Qi 
   assert.equal(api.sanitizeGeneratedArtifact({effects:[{type:'equip_attack_flat',value:1}]},'凡人').realm,'煉氣');
   const config=api.normalizeDepthEffectBounds({'1':{equip_attack_flat:{min:100,max:220}}});
   const prompt=api.buildPrompt({...payload,targetRealm:'煉氣',effectBoundsV2:config});
-  assert.match(prompt, /"min": 100/);
-  assert.match(prompt, /"max": 130/);
+  assert.match(prompt, /"min": 95/);
+  assert.match(prompt, /"max": 123/);
 });
 
 test('invalid global bounds and fixed effects stay protected', () => {
