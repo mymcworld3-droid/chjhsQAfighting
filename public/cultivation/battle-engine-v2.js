@@ -254,7 +254,7 @@ export function settleBattleRound({
       activations.push({ type: defender.goldenCore?.type || 'shield', name: defender.goldenCore?.name || '金丹', ownerUid: defender.uid, skill: '金丹道心護體', message: '金丹道心護體發動，抵銷本次攻擊', kind: '鬥法防護' });
     }
     const equipment = !guarded && typeof resolveEquipmentHit === 'function'
-      ? (resolveEquipmentHit({ attacker: player, defender, baseDamage: plan.totalDamage, role, round }) || null)
+      ? (resolveEquipmentHit({ attacker: player, defender, baseDamage: plan.totalDamage, role, round, seed: `${roomId}:${round}:${player.uid}:artifact` }) || null)
       : null;
     const damage = guarded ? 0 : equipment ? Math.max(0, Math.round(Number(equipment.damage) || 0)) : plan.totalDamage;
     const targetBefore = role === 'host' ? guestHp : hostHp;
