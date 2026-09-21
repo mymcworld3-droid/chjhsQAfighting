@@ -19,6 +19,9 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260920-c
   const MATCH_SCAN_LIMIT = 80;
   const INTRO_DURATION_MS = 4800;
   const ANSWER_WINDOW_MS = 25000;
+  const BATTLE_WIN_GOLD = 500;
+  const BATTLE_WIN_CULTIVATION = 5;
+  const BATTLE_LOSS_GOLD = 200;
 
   const state = {
     roomId: null,
@@ -522,13 +525,34 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260920-c
     setText('bv2-phase', phase);
   }
 
+  function battleReward(room, uid) {
+    if (room?.status !== 'finished' || !uid || !room.host?.uid || !room.guest?.uid ||
+        (uid !== room.host.uid && uid !== room.guest.uid)) return { outcome: 'none', gold: 0, cultivation: 0 };
+    if (room.winner === uid) return { outcome: 'win', gold: BATTLE_WIN_GOLD, cultivation: BATTLE_WIN_CULTIVATION };
+    if (room.winner === room.host.uid || room.winner === room.guest.uid) return { outcome: 'loss', gold: BATTLE_LOSS_GOLD, cultivation: 0 };
+    if (room.winner === 'draw' || !room.winner) return { outcome: 'draw', gold: 0, cultivation: 0 };
+    return { outcome: 'none', gold: 0, cultivation: 0 };
+  }
+
   function renderResult(room) {
     showSection('result'); const uid = me()?.uid; const isDraw = room.winner === 'draw' || !room.winner; const won = room.winner === uid;
     setText('bv2-result-title', isDraw ? '道法相當 · 平局' : won ? '問道得勝' : '此局惜敗'); setText('bv2-result-emblem', isDraw ? '和' : won ? '勝' : '敗');
     setText('bv2-result-msg', room.finishReason === 'forfeit' ? '對手主動收法離場。' : room.finishReason === 'disconnect' ? '對手靈識中斷，判定離場。' : room.finishReason === 'round-limit' ? `已達 ${room.maxRounds || BATTLE_V2.maxRounds} 回合上限，以剩餘生命判定。` : room.finishReason === 'double-ko' ? '雙方同時力竭。' : '一方生命歸零，勝負已分。');
     const mine = playerForRole(room, state.role); const enemy = playerForRole(room, otherRole(state.role)); const stats = document.getElementById('bv2-result-stats');
-    if (stats) stats.innerHTML = `<div><span>你的生命</span><b>${Math.max(0, Number(mine?.hp) || 0)}</b></div><div><span>對手生命</span><b>${Math.max(0, Number(enemy?.hp) || 0)}</b></div><div><span>總回合</span><b>${room.round}</b></div><div><span>結果</span><b>${isDraw ? '平局' : won ? '勝' : '敗'}</b></div>`;
-    recordBattleResult(room).catch((error) => console.warn('[Battle v2] result record skipped:', error));
+    const reward = battleReward(room, uid);
+    const resultMarker = state.role === 'host' ? 'hostResultRecorded' : 'guestResultRecorded';
+    const rewardLabel = reward.outcome === 'draw' ? '平局不發放勝負獎勵' :
+      reward.outcome === 'none' ? '獎勵資料待確認' :
+      `${room[resultMarker] ? '已發放' : '發放中'}：+${reward.gold} 靈石${reward.cultivation ? ` · +${reward.cultivation} 修為` : ''}`;
+    if (stats) stats.innerHTML = `<div><span>你的生命</span><b>${Math.max(0, Number(mine?.hp) || 0)}</b></div><div><span>對手生命</span><b>${Math.max(0, Number(enemy?.hp) || 0)}</b></div><div><span>總回合</span><b>${room.round}</b></div><div><span>結果</span><b>${isDraw ? '平局' : won ? '勝' : '敗'}</b></div><div><span>本場獎勵</span><b id="bv2-reward-status">${rewardLabel}</b></div>`;
+    recordBattleResult(room).then((award) => {
+      if (award?.goldAdded > 0 && state.roomId === award.roomId) {
+        setText('bv2-reward-status', `已發放：+${award.goldAdded} 靈石${award.cultivationAdded ? ` · +${award.cultivationAdded} 修為` : ''}`);
+      }
+    }).catch((error) => {
+      console.warn('[Battle v2] result reward not yet delivered:', error);
+      setText('bv2-reward-status', '獎勵發放失敗，重新連線後將再嘗試。');
+    });
   }
 
   async function submitAnswer(choice) {
@@ -740,19 +764,66 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260920-c
     claimDisconnectedOpponent(room);
   }
 
-  async function recordBattleResult(room) {
-    if (!state.roomId || state.resultRecordedRoom === state.roomId || !state.role) return; state.resultRecordedRoom = state.roomId;
-    const userRef = doc(db(), 'users', me().uid); const ref = roomRef();
+  async function recordBattleResult(room, requestedRoomId = state.roomId) {
+    const uid = me()?.uid;
+    if (!requestedRoomId || !uid) return null;
+    const activeRoom = requestedRoomId === state.roomId;
+    if (activeRoom && state.resultRecordedRoom === requestedRoomId) return null;
+    if (activeRoom) state.resultRecordedRoom = requestedRoomId;
+    const userRef = doc(db(), 'users', uid);
+    const ref = roomRef(requestedRoomId);
     try {
-      await runTransaction(db(), async (tx) => {
-        const roomSnap = await tx.get(ref); const userSnap = await tx.get(userRef); if (!roomSnap.exists() || !userSnap.exists()) return;
-        const fresh = roomSnap.data(); if (fresh.status !== 'finished') return; const marker = state.role === 'host' ? 'hostResultRecorded' : 'guestResultRecorded'; if (fresh[marker]) return;
-        const stats = userSnap.data().stats || {}; const draw = fresh.winner === 'draw' || !fresh.winner; const won = fresh.winner === me().uid;
+      const awarded = await runTransaction(db(), async (tx) => {
+        const roomSnap = await tx.get(ref);
+        const userSnap = await tx.get(userRef);
+        if (!roomSnap.exists() || !userSnap.exists()) return null;
+        const fresh = roomSnap.data();
+        if (fresh.status !== 'finished' || Number(fresh.modeVersion) !== BATTLE_V2.modeVersion) return null;
+        // Derive membership from the *live room*, not the browser's cached role.
+        const actualRole = fresh.host?.uid === uid ? 'host' : fresh.guest?.uid === uid ? 'guest' : null;
+        if (!actualRole) return null;
+        const marker = actualRole === 'host' ? 'hostResultRecorded' : 'guestResultRecorded';
+        if (fresh[marker]) return null;
+        const reward = battleReward(fresh, uid);
+        if (reward.outcome === 'none') return null;
+        const stats = userSnap.data().stats || {};
+        const previousGold = Math.max(0, Number(stats.gold) || 0);
+        const previousScore = Math.max(0, Number(stats.totalScore) || 0);
         const userPatch = { 'stats.battleMatches': Math.max(0, Number(stats.battleMatches) || 0) + 1 };
-        if (draw) userPatch['stats.battleDraws'] = Math.max(0, Number(stats.battleDraws) || 0) + 1; else if (won) userPatch['stats.battleWins'] = Math.max(0, Number(stats.battleWins) || 0) + 1; else userPatch['stats.battleLosses'] = Math.max(0, Number(stats.battleLosses) || 0) + 1;
-        tx.update(userRef, userPatch); tx.update(ref, { [marker]: true, updatedAt: serverTimestamp() });
+        if (reward.outcome === 'draw') userPatch['stats.battleDraws'] = Math.max(0, Number(stats.battleDraws) || 0) + 1;
+        else if (reward.outcome === 'win') userPatch['stats.battleWins'] = Math.max(0, Number(stats.battleWins) || 0) + 1;
+        else userPatch['stats.battleLosses'] = Math.max(0, Number(stats.battleLosses) || 0) + 1;
+        // Stats, currency, cultivation and this player's receipt marker commit atomically.
+        if (reward.gold) userPatch['stats.gold'] = previousGold + reward.gold;
+        if (reward.cultivation) userPatch['stats.totalScore'] = previousScore + reward.cultivation;
+        tx.update(userRef, userPatch);
+        tx.update(ref, { [marker]: true, updatedAt: serverTimestamp() });
+        return { roomId: requestedRoomId, goldAdded: reward.gold, cultivationAdded: reward.cultivation,
+          previousGold, previousScore, gold: previousGold + reward.gold,
+          totalScore: previousScore + reward.cultivation };
       });
-    } catch (error) { state.resultRecordedRoom = null; throw error; }
+      if (awarded && me()?.uid === uid) {
+        const local = userData();
+        if (local?.stats) {
+          // Do not overwrite a newer local balance (e.g. another reward or a purchase).
+          if (Number(local.stats.gold) === awarded.previousGold) local.stats.gold = awarded.gold;
+          if (awarded.cultivationAdded && Number(local.stats.totalScore) === awarded.previousScore) {
+            local.stats.totalScore = awarded.totalScore;
+          }
+        }
+        window.updateUIStats?.();
+        window.refreshCultivationRealmUI?.();
+        window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', {
+          detail: { source: 'battle-result', roomId: requestedRoomId,
+            goldAdded: awarded.goldAdded, cultivationAdded: awarded.cultivationAdded,
+            gold: local?.stats?.gold, totalScore: local?.stats?.totalScore }
+        }));
+      }
+      return awarded;
+    } catch (error) {
+      if (activeRoom && state.resultRecordedRoom === requestedRoomId) state.resultRecordedRoom = null;
+      throw error;
+    }
   }
 
   function onRoomSnapshot(snap) {
@@ -805,7 +876,17 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260920-c
   }
 
   async function exitBattle({ navigate = true, forfeit = true } = {}) {
-    if (state.leaving) return; state.leaving = true; try { if (forfeit) await forfeitCurrentRoom(); } finally { resetRuntime(); if (navigate) window.switchToPage?.('page-home'); }
+    if (state.leaving) return;
+    state.leaving = true;
+    try {
+      if (forfeit) {
+        await forfeitCurrentRoom();
+        // The forfeiting loser leaves immediately and may never see the result page.
+        // Claim their one-time award before detaching from the finished room.
+        try { await recordBattleResult(null, state.roomId); }
+        catch (error) { console.warn('[Battle v2] forfeit reward will retry after reconnect:', error); }
+      }
+    } finally { resetRuntime(); if (navigate) window.switchToPage?.('page-home'); }
   }
 
   async function joinSpecificRoom(roomId) {
