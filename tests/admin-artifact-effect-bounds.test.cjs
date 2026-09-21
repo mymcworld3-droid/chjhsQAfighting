@@ -140,3 +140,19 @@ test('manual editor hint updates for recipe quantity and remains advisory', () =
   assert.match(admin, /refreshEffectHints\(modal\)/);
   assert.match(admin, /僅供參考，不限制手動填寫/);
 });
+
+
+test('second refinement shows live first-refinement bounds for every effect without constraining inputs', () => {
+  assert.match(ui, /function firstDepthHint\(range\)/);
+  assert.match(ui, /if \(stage !== 2\) return ''/);
+  assert.match(ui, /fetch\('\/api\/artifact-depth-effect-ranges\?stage=1'\)/);
+  assert.match(ui, /firstDepthDefaults = prior\.ranges/);
+  assert.match(ui, /pending\.has\('1'\) \? pending\.get\('1'\) \|\| \{\} : stored\(\)\['1'\] \|\| \{\}/);
+  assert.match(ui, /const actual = edits\[range\.type\] \|\| first/);
+  assert.match(ui, /'第一煉參考：下限 ' \+ actual\.min \+ ' ／ 上限 ' \+ actual\.max/);
+  assert.match(ui, /actual\.durationMinutesMin/);
+  assert.match(ui, /firstDepthHint\(range\) \+ '<\/div>'/);
+  assert.match(ui, /僅提醒，不限制第二煉填寫/);
+  assert.match(ui, /id="aeb-previous-note"/);
+  assert.doesNotMatch(ui.slice(ui.indexOf('function validate('),ui.indexOf('function numberField(')), /firstDepthDefaults|firstDepthHint/);
+});
