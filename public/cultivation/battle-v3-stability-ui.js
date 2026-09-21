@@ -93,17 +93,23 @@
         position:fixed!important;inset:0!important;z-index:15000!important;
         width:100vw!important;height:100dvh!important;min-height:100dvh!important;
         max-width:none!important;margin:0!important;padding:0!important;
-        overflow-x:hidden!important;overflow-y:auto!important;
+        overflow-x:hidden!important;overflow-y:auto!important;overscroll-behavior:contain!important;
         background:radial-gradient(circle at 50% -12%,rgba(189,143,45,.22),transparent 30%),radial-gradient(circle at 8% 62%,rgba(87,55,18,.16),transparent 28%),linear-gradient(180deg,#090805,#030303 78%)!important;
       }
       #page-battle.battle-v2-page.hidden{display:none!important}
-      #page-battle .bv2-shell{width:min(100%,1440px)!important;min-height:100dvh;margin:0 auto!important;padding:14px 24px 28px!important;display:flex;flex-direction:column}
+      /* The phase-specific display rules below must NEVER override a hidden phase. */
+      #page-battle.battle-v2-page #bv2-lobby.hidden,
+      #page-battle.battle-v2-page #bv2-intro.hidden,
+      #page-battle.battle-v2-page #bv2-arena.hidden,
+      #page-battle.battle-v2-page #bv2-result.hidden{display:none!important;min-height:0!important;margin:0!important;padding:0!important;visibility:hidden!important}
+      #page-battle.battle-v2-page .bv2-shell > section:not(.hidden){visibility:visible!important}
+      #page-battle .bv2-shell{box-sizing:border-box;width:min(100%,1440px)!important;min-height:100dvh;margin:0 auto!important;padding:14px 24px 28px!important;display:flex;flex-direction:column}
       #page-battle .bv2-head{position:sticky;top:0;z-index:20;margin:0 -4px 10px;padding:10px 6px 12px!important;background:linear-gradient(180deg,rgba(5,5,4,.96),rgba(5,5,4,.82),transparent);backdrop-filter:blur(12px)}
       #page-battle .bv2-head h2{font-size:clamp(22px,2.4vw,34px)!important}
       #page-battle .bv2-icon-btn{width:42px!important;height:42px!important}
       #page-battle .bv2-lobby,#page-battle .bv2-intro,#page-battle .bv2-result{flex:1;min-height:calc(100dvh - 98px)!important;margin-top:0!important}
       #page-battle .bv2-lobby{justify-content:center!important}
-      #page-battle .bv2-arena{
+      #page-battle .bv2-arena:not(.hidden){
         flex:1;min-height:0;margin-top:0!important;display:grid!important;
         grid-template-columns:minmax(0,1fr) minmax(280px,360px)!important;
         grid-template-areas:'score score' 'rule rule' 'question log'!important;
@@ -120,14 +126,14 @@
       #page-battle .bv2-fighter{padding:16px 18px!important}
       #page-battle .bv2-fighter-head strong{font-size:clamp(13px,1.3vw,18px)!important}
       #page-battle .bv2-hp{height:10px!important}
-      #page-battle .bv2-result{display:flex;flex-direction:column;align-items:center;justify-content:center}
+      #page-battle .bv2-result:not(.hidden){display:flex;flex-direction:column;align-items:center;justify-content:center}
       @media(min-width:1200px){
         #page-battle .bv2-shell{padding-left:34px!important;padding-right:34px!important}
         #page-battle .bv2-question-card{min-height:430px}
       }
       @media(max-width:900px){
         #page-battle .bv2-shell{padding:10px 12px 24px!important}
-        #page-battle .bv2-arena{grid-template-columns:1fr!important;grid-template-areas:'score' 'rule' 'question' 'log'!important;grid-template-rows:auto!important}
+        #page-battle .bv2-arena:not(.hidden){grid-template-columns:1fr!important;grid-template-areas:'score' 'rule' 'question' 'log'!important;grid-template-rows:auto!important}
         #page-battle .bv2-log-wrap{max-height:250px!important}
       }
       @media(max-width:620px){
