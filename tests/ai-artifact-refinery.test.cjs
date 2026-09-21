@@ -635,6 +635,50 @@ test('recipe compendium protects unknown formulas and still shows public, first-
   assert.match(refinery, /前往交易市集/);
 });
 
+test('real refinery runtime style replaces the legacy preload so recipe cards render on iPad', () => {
+  const index = read('public/index.html');
+  const match = index.match(/<style id="cultivation-refinery-v2-preload-style"[^>]*>/g) || [];
+  assert.equal(match.length, 1, 'static markup has exactly one temporary preload');
+  assert.doesNotMatch(index, /<style id="cultivation-refinery-v2-style">/);
+  const start = refinery.indexOf('  function ensureStyle() {');
+  const end = refinery.indexOf('  function tabActive(', start);
+  assert.ok(start >= 0 && end > start);
+  const styleSource = refinery.slice(start, end);
+  assert.match(styleSource, /cultivation-refinery-v2-runtime-style/);
+  assert.match(styleSource, /cultivation-refinery-v2-preload-style/);
+  assert.match(styleSource, /refinery-recipe-card:not\(\[open\]\) > \.refinery-recipe-detail/);
+  assert.match(styleSource, /refinery-recipe-book:not\(\[open\]\) > \.refinery-recipe-book-content/);
+  assert.match(styleSource, /display:none!important/);
+  assert.match(styleSource, /refinery-recipe-artifact-icon/);
+  assert.match(styleSource, /refinery-recipe-intro/);
+  assert.match(styleSource, /refinery-recipe-craft/);
+  let removed = 0;
+  let runtimeStyle = null;
+  const preload = {remove: () => { removed++; }};
+  const context = {
+    document: {
+      getElementById: id => id === 'cultivation-refinery-v2-preload-style' ? (removed ? null : preload) :
+        (id === 'cultivation-refinery-v2-runtime-style' ? runtimeStyle : null),
+      createElement: tag => {
+        assert.equal(tag, 'style');
+        return {id:'',textContent:''};
+      },
+      head: {
+        appendChild: node => { assert.equal(runtimeStyle, null); runtimeStyle = node; }
+      }
+    }
+  };
+  vm.createContext(context);
+  vm.runInContext(styleSource + '\nthis.installRefineryStyle = ensureStyle;',context);
+  context.installRefineryStyle();
+  assert.equal(runtimeStyle.id,'cultivation-refinery-v2-runtime-style');
+  assert.ok(runtimeStyle.textContent.length > 1000);
+  assert.ok(runtimeStyle.textContent.includes('.refinery-recipe-card[open]'));
+  assert.equal(removed,1,'legacy preload removed after full stylesheet was installed');
+  context.installRefineryStyle();
+  assert.equal(removed,1,'no duplicate stylesheet or unnecessary reinstall');
+});
+
 test('real player refinery recipe compendium opens compact summaries into details and paid crafting actions', () => {
   const markupStart = refinery.indexOf('  function recipeBookMarkup() {');
   const markupEnd = refinery.indexOf('  function ensureStyle() {', markupStart);
