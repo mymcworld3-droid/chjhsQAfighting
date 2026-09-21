@@ -22,10 +22,10 @@ test('True Immortal requires both the 868 threshold and an active named seat', (
 test('losing a seat, switching user and unavailable board revoke True Immortal', () => {
   const w = setup();
   w.setTrueImmortalBoard([{ id: 'ru-xian', uid: 'alice' }]);
-  assert.equal(w.limitImmortalRank(2, 868, realms), 2);
-  assert.equal(w.limitImmortalRank(2, 868, realms, 'bob'), 1);
+  assert.equal(w.limitImmortalRank(3, 868, realms), 3);
+  assert.equal(w.limitImmortalRank(3, 868, realms, 'bob'), 2);
   w.setTrueImmortalBoard([{ id: 'ru-xian', uid: 'bob' }]);
-  assert.equal(w.limitImmortalRank(2, 9999, realms), 1);
+  assert.equal(w.limitImmortalRank(3, 9999, realms), 2);
   assert.equal(w.limitImmortalRank(0, 0, realms), 0);
   w.setTrueImmortalBoard([{ id: 'ru-xian', uid: 'alice' }], false);
   assert.equal(w.isTrueImmortal(9999), false);
