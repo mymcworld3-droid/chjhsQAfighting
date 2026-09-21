@@ -63,7 +63,8 @@ const detailedCurve = [
   ['合體', '天地合一', 308],
   ['大乘', '大道將成', 448],
   ['渡劫', '雷劫問道', 628],
-  ['真仙', '踏入仙門', 868]
+  ['登仙', '仙門在望', 868],
+  ['真仙', '榜上仙位', 868]
 ];
 
 const detailedRealmFiles = [
@@ -177,7 +178,7 @@ replaceAll('tests/newbie-mortal-tutorial.test.cjs', '60 修為', '10 修為');
 }
 
 // Add an explicit pacing regression test so future changes cannot silently restore the grind.
-const balanceTest = `const test = require('node:test');\nconst assert = require('node:assert/strict');\nconst fs = require('node:fs');\nconst path = require('node:path');\n\nfunction read(rel) { return fs.readFileSync(path.join(__dirname, '..', rel), 'utf8'); }\n\nconst theme = read('public/cultivation/cultivation-theme.js');\nconst rules = read('public/cultivation/cultivation-rules.js');\nconst battle = read('public/cultivation/battle-mode-v2.js');\nconst artifacts = read('public/cultivation/artifact-catalog.js');\n\ntest('realm pacing reaches Foundation in 10 answers and Golden Core 18 answers later', () => {\n  assert.match(theme, /name: '築基', sub: '初期', need: 10/);\n  assert.match(theme, /name: '築基', sub: '中期', need: 16/);\n  assert.match(theme, /name: '築基', sub: '後期', need: 22/);\n  assert.match(theme, /name: '金丹', sub: '丹成一品', need: 28/);\n  assert.match(rules, /const GOLDEN_CORE_SCORE = 28;/);\n  assert.match(battle, /const FOUNDATION_SCORE = 10;/);\n});\n\ntest('post-Golden-Core curve is balanced against the +2 base cultivation gain', () => {\n  const expected = [['元嬰',68],['化神',128],['煉虛',208],['合體',308],['大乘',448],['渡劫',628],['真仙',868]];\n  for (const [name, need] of expected) assert.match(theme, new RegExp("name: '" + name + "'.*need: " + need));\n  assert.match(artifacts, /id: 'golden-core'.*need: 28/);\n  assert.match(artifacts, /id: 'tribulation'.*need: 628/);\n});\n`;
+const balanceTest = `const test = require('node:test');\nconst assert = require('node:assert/strict');\nconst fs = require('node:fs');\nconst path = require('node:path');\n\nfunction read(rel) { return fs.readFileSync(path.join(__dirname, '..', rel), 'utf8'); }\n\nconst theme = read('public/cultivation/cultivation-theme.js');\nconst rules = read('public/cultivation/cultivation-rules.js');\nconst battle = read('public/cultivation/battle-mode-v2.js');\nconst artifacts = read('public/cultivation/artifact-catalog.js');\n\ntest('realm pacing reaches Foundation in 10 answers and Golden Core 18 answers later', () => {\n  assert.match(theme, /name: '築基', sub: '初期', need: 10/);\n  assert.match(theme, /name: '築基', sub: '中期', need: 16/);\n  assert.match(theme, /name: '築基', sub: '後期', need: 22/);\n  assert.match(theme, /name: '金丹', sub: '丹成一品', need: 28/);\n  assert.match(rules, /const GOLDEN_CORE_SCORE = 28;/);\n  assert.match(battle, /const FOUNDATION_SCORE = 10;/);\n});\n\ntest('post-Golden-Core curve is balanced against the +2 base cultivation gain', () => {\n  const expected = [['元嬰',68],['化神',128],['煉虛',208],['合體',308],['大乘',448],['渡劫',628],['登仙',868],['真仙',868]];\n  for (const [name, need] of expected) assert.match(theme, new RegExp("name: '" + name + "'.*need: " + need));\n  assert.match(artifacts, /id: 'golden-core'.*need: 28/);\n  assert.match(artifacts, /id: 'tribulation'.*need: 628/);\n});\n`;
 write('tests/realm-balance-v3.test.cjs', balanceTest);
 
 console.log(`Realm rebalance updated ${touched.size} files:`);
