@@ -101,6 +101,7 @@
       #page-battle.battle-v2-page #bv2-lobby.hidden,
       #page-battle.battle-v2-page #bv2-intro.hidden,
       #page-battle.battle-v2-page #bv2-arena.hidden,
+      #page-battle.battle-v2-page #bv2-quiz.hidden,
       #page-battle.battle-v2-page #bv2-result.hidden{display:none!important;min-height:0!important;margin:0!important;padding:0!important;visibility:hidden!important}
       #page-battle.battle-v2-page .bv2-shell > section:not(.hidden){visibility:visible!important}
       #page-battle .bv2-shell{box-sizing:border-box;width:min(100%,1440px)!important;height:100%;min-height:0;margin:0 auto!important;padding:max(14px,env(safe-area-inset-top)) max(24px,env(safe-area-inset-right)) max(20px,env(safe-area-inset-bottom)) max(24px,env(safe-area-inset-left))!important;display:flex;flex-direction:column}
@@ -111,17 +112,24 @@
       #page-battle .bv2-lobby{justify-content:center!important}
       #page-battle .bv2-arena:not(.hidden){
         flex:1;min-height:0;margin-top:0!important;display:grid!important;
-        grid-template-columns:minmax(0,1fr) minmax(280px,360px)!important;
-        grid-template-areas:'score score' 'rule rule' 'question log'!important;
-        grid-template-rows:auto auto minmax(0,1fr)!important;gap:12px 14px!important;
+        grid-template-columns:minmax(0,1fr)!important;
+        grid-template-areas:'score' 'rule' 'cue' 'log'!important;
+        grid-template-rows:auto auto minmax(180px,1fr) auto!important;gap:12px!important;
       }
       #page-battle .bv2-scoreboard{grid-area:score}
+      #page-battle .bv2-duel-cue{grid-area:cue}
+      #page-battle .bv2-quiz:not(.hidden){flex:1;min-height:0;display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:clamp(8px,2vh,30px) 0 30px}
+      #page-battle .bv2-quiz .bv2-question-card{width:min(100%,980px);min-height:min(72dvh,580px);max-height:none!important;flex:0 0 auto;overflow:visible!important}
+      #page-battle .bv2-quiz .bv2-question-card h3{font-size:clamp(19px,2vw,30px)!important;line-height:1.65!important;margin:14px 0 28px}
+      #page-battle .bv2-quiz .bv2-option{font-size:clamp(13px,1.4vw,19px)!important;min-height:72px!important}
+      #page-battle .bv2-quiz .bv2-option b{font-size:inherit}
+      #page-battle #bv2-review-continue{align-self:center;min-height:52px;margin:20px auto 0;padding:12px 24px}
       #page-battle .bv2-duel-rule{grid-area:rule}
       #page-battle .bv2-question-card{grid-area:question;min-width:0;min-height:0;padding:clamp(16px,2vw,26px)!important;display:flex;flex-direction:column;justify-content:flex-start;overflow-y:auto;overflow-wrap:anywhere}
       #page-battle .bv2-question-card h3{font-size:clamp(17px,1.65vw,24px)!important;line-height:1.65!important}
       #page-battle .bv2-options{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
       #page-battle .bv2-option{min-height:64px!important;font-size:clamp(11px,1vw,14px)!important}
-      #page-battle .bv2-log-wrap{grid-area:log;margin:0!important;min-height:0;max-height:none!important;display:flex;flex-direction:column;overflow:hidden}
+      #page-battle .bv2-log-wrap{grid-area:log;margin:0!important;min-height:0;max-height:190px!important;display:flex;flex-direction:column;overflow:hidden}
       #page-battle .bv2-log{flex:1;min-height:180px;max-height:none!important;overflow:auto!important}
       #page-battle .bv2-fighter{padding:16px 18px!important}
       #page-battle .bv2-fighter-head strong{font-size:clamp(13px,1.3vw,18px)!important}
@@ -133,8 +141,9 @@
       }
       @media(max-width:900px){
         #page-battle .bv2-shell{height:auto;min-height:100%;padding:max(10px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(20px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))!important}
-        #page-battle .bv2-arena:not(.hidden){grid-template-columns:minmax(0,1fr)!important;grid-template-areas:'score' 'rule' 'question' 'log'!important;grid-template-rows:auto!important}
-        #page-battle .bv2-log-wrap{max-height:250px!important}
+        #page-battle .bv2-arena:not(.hidden){grid-template-columns:minmax(0,1fr)!important;grid-template-areas:'score' 'rule' 'cue' 'log'!important;grid-template-rows:auto auto minmax(160px,1fr) auto!important}
+        #page-battle .bv2-log-wrap{max-height:170px!important}
+        #page-battle .bv2-quiz .bv2-question-card{min-height:calc(100dvh - 150px)}
       }
       @media(max-width:620px){
         #page-battle .bv2-head{padding-top:8px!important}
