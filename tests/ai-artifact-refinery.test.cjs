@@ -596,7 +596,7 @@ test('recipe owner survives catalog normalization and concurrent admin saves', (
   const legacy = context.__catalog.normalizeArtifactDefinition({id:'old',name:'舊配方'});
   assert.equal(Object.hasOwn(legacy,'recipeOwnerUid'),false);
   assert.match(admin, /recipeOwnerUid: original\?\.recipeOwnerUid \|\| ''/);
-  assert.match(admin, /const \[userSnap, configSnap\] = await Promise\.all/);
+  assert.match(admin, /const \[userSnap, configSnap, transferSnap\] = await Promise\.all/);
   assert.match(admin, /const owners = new Map\(persistedItems/);
   assert.match(admin, /recipeOwnerUid: owner\.recipeOwnerUid/);
   assert.match(admin, /items: committedCatalog/);
