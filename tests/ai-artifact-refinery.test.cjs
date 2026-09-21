@@ -155,7 +155,7 @@ test('unknown recipes start a timed paid job and AI runs only when claiming the 
 
   const generatePos = aiJobs.indexOf('async function generateCandidate');
   const claimDiscoveryPos = aiJobs.indexOf('async function claimDiscovery');
-  const generatedCallPos = aiJobs.indexOf('const generated = await generateCandidate(job)', claimDiscoveryPos);
+  const generatedCallPos = aiJobs.indexOf('const generated = generatedCandidateCache.get(job.id) || await generateCandidate(job)', claimDiscoveryPos);
   assert.ok(generatePos >= 0 && claimDiscoveryPos > generatePos && generatedCallPos > claimDiscoveryPos);
   assert.match(aiJobs, /Date\.now\(\) < Number\(fresh\.readyAtMs/);
   assert.doesNotMatch(aiJobs.slice(aiJobs.indexOf('async function startJob'), generatePos), /generateCandidate\(/);
