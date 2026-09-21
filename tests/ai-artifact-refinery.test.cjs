@@ -160,8 +160,8 @@ test('AI receives only currently eligible effect ranges with actual min and max'
   const prompt = api.buildPrompt(input);
   assert.match(prompt, /各特性實際數值上下限/);
   assert.match(prompt, /"type": "equip_attack_flat"/);
-  assert.match(prompt, /"min": 5/);
-  assert.match(prompt, /"max": 14/);
+  assert.match(prompt, /"min": 54/);
+  assert.match(prompt, /"max": 154/);
   assert.match(prompt, /單次生命傷害上限/);
   assert.match(prompt, /越小越強/);
   assert.match(prompt, /每場固定一次/);
