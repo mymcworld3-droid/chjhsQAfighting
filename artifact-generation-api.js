@@ -144,10 +144,52 @@ const FLAT_VALUE_TYPES = new Set([
 function roundRange(value, digits = 4) {
   return Number(Number(value).toFixed(digits));
 }
-function effectRange(type, order, stage = 1) {
+// Bounds are keyed by realm -> refinement stage -> effect type. Existing
+// defaults remain authoritative whenever no admin override is stored.
+function normalizeEffectBounds(raw) {
+  if (raw == null) return {};
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) throw new Error('法寶效果上下限格式錯誤');
+  const result = {};
+  for (const [realm, stages] of Object.entries(raw)) {
+    if (!REALMS.includes(realm) || !stages || typeof stages !== 'object' || Array.isArray(stages)) throw new Error('未知的法寶境界設定');
+    for (const [stageKey, effects] of Object.entries(stages)) {
+      const stage = Number(stageKey);
+      if (![1, 2, 3].includes(stage) || !effects || typeof effects !== 'object' || Array.isArray(effects)) throw new Error('未知的煉器階段設定');
+      for (const [type, values] of Object.entries(effects)) {
+        const defaults = effectRange(type, realmOrder(realm), stage);
+        if (!defaults || !['value', 'multiplier'].includes(defaults.field)) throw new Error('此境界與階段不允許設定效果：' + type);
+        if (!values || typeof values !== 'object' || Array.isArray(values)) throw new Error('效果上下限格式錯誤：' + type);
+        const keys = defaults.field === 'multiplier'
+          ? ['min','max','durationMinutesMin','durationMinutesMax'] : ['min','max'];
+        if (Object.keys(values).some(key => !keys.includes(key))) throw new Error('不支援的法寶上下限欄位：' + type);
+        if (keys.some(key => values[key] === undefined || values[key] === null || values[key] === '' || !Number.isFinite(Number(values[key])))) throw new Error('請填寫完整的有限數值：' + type);
+        const bounds = Object.fromEntries(keys.map(key => [key, Number(values[key])]));
+        const integer = FLAT_VALUE_TYPES.has(type);
+        const lower = type === 'equip_damage_cap_percent' ? 0.05 : (defaults.field === 'multiplier' ? 1.01 : (integer ? 1 : 0.0001));
+        const upper = integer ? 1000000 : type === 'equip_combo_chance' ? 0.10
+          : type === 'equip_damage_cap_percent' ? 1 : defaults.field === 'multiplier' ? 5
+          : type === 'equip_crit_damage_percent' ? 3 : 1;
+        if (bounds.min < lower || bounds.max > upper || bounds.min > bounds.max ||
+            (integer && (!Number.isInteger(bounds.min) || !Number.isInteger(bounds.max)))) {
+          throw new Error(type + ' 上下限不合法（允許 ' + lower + '～' + upper + '）');
+        }
+        if (defaults.field === 'multiplier' &&
+            (bounds.durationMinutesMin < 0.02 || bounds.durationMinutesMax > 1440 ||
+             bounds.durationMinutesMin > bounds.durationMinutesMax)) {
+          throw new Error(type + ' 持續分鐘範圍不合法（0.02～1440 分鐘）');
+        }
+        ((result[realm] ||= {})[stageKey] ||= {})[type] = bounds;
+      }
+    }
+  }
+  return result;
+}
+
+function effectRange(type, order, stage = 1, effectBoundsV1 = {}) {
   if (!ALLOWED_EFFECTS.has(type) ||
       order < minRealmForEffect(type) ||
       !effectAllowedForStage(type, stage)) return null;
+  const override = effectBoundsV1?.[REALMS[order]]?.[String(normalizeRefinementStage(stage))]?.[type];
   const scale = powerScaleForStage(stage);
   const capByType = {
     equip_attack_flat: 35 + order * 35,
@@ -185,14 +227,16 @@ function effectRange(type, order, stage = 1) {
     const fullDuration = 5 + order * 2;
     const maxMinutes = Math.max(2, fullDuration * (0.55 + 0.45 * scale));
     return { type, label, field:'multiplier',
-      min:roundRange(1 + bonus * 0.35), max:roundRange(1 + bonus),
-      unit:'倍', durationMinutesMin:2, durationMinutesMax:roundRange(maxMinutes, 2),
+      min:override?.min ?? roundRange(1 + bonus * 0.35), max:override?.max ?? roundRange(1 + bonus),
+      unit:'倍', durationMinutesMin:override?.durationMinutesMin ?? 2,
+      durationMinutesMax:override?.durationMinutesMax ?? roundRange(maxMinutes, 2),
       note:'同時填入 multiplier 與 durationMinutes，催動後消耗一件' };
   }
   if (type === 'equip_damage_cap_percent') {
     const base = capByType[type];
     const min = roundRange(base + (0.80 - base) * (1 - scale));
-    return { type, label, field:'value', min, max:roundRange(Math.min(0.80, min + 0.12)),
+    return { type, label, field:'value', min:override?.min ?? min,
+      max:override?.max ?? roundRange(Math.min(0.80, min + 0.12)),
       unit:'最大生命比例', note:'越小越強；0.35 表示單次生命傷害至多 35%' };
   }
   const fullCap = capByType[type];
@@ -201,28 +245,29 @@ function effectRange(type, order, stage = 1) {
   const integer = FLAT_VALUE_TYPES.has(type);
   const min = integer ? Math.max(1, Math.ceil(scaledMax * 0.35)) : roundRange(scaledMax * 0.35);
   const max = integer ? Math.max(min, Math.floor(scaledMax)) : roundRange(scaledMax);
-  return { type, label, field:'value', min, max, unit:integer ? '點' : '比例',
+  return { type, label, field:'value', min:override?.min ?? min,
+    max:override?.max ?? max, unit:integer ? '點' : '比例',
     note:integer ? '使用整數' : '0.10 代表 10%' };
 }
-function effectRangesForRealm(realm, stage = 1) {
+function effectRangesForRealm(realm, stage = 1, effectBoundsV1 = {}) {
   const order = realmOrder(realm);
-  return [...ALLOWED_EFFECTS].map((type) => effectRange(type, order, stage)).filter(Boolean);
+  return [...ALLOWED_EFFECTS].map((type) => effectRange(type, order, stage, effectBoundsV1)).filter(Boolean);
 }
-function sanitizeValue(type, value, order, stage = 1) {
-  const range = effectRange(type, order, stage);
+function sanitizeValue(type, value, order, stage = 1, effectBoundsV1 = {}) {
+  const range = effectRange(type, order, stage, effectBoundsV1);
   if (!range || range.field !== 'value') return null;
   const proposed = Number(value);
   const chosen = Number.isFinite(proposed) ? proposed : (range.min + range.max) / 2;
   const bounded = clamp(chosen, range.min, range.max);
   return FLAT_VALUE_TYPES.has(type) ? Math.round(bounded) : roundRange(bounded);
 }
-function sanitizeEffect(raw, order, stage = 1) {
+function sanitizeEffect(raw, order, stage = 1, effectBoundsV1 = {}) {
   const type = cleanText(raw?.type, 64);
-  const range = effectRange(type, order, stage);
+  const range = effectRange(type, order, stage, effectBoundsV1);
   if (!range) return null;
   const out = { type };
   if (range.field === 'value') {
-    out.value = sanitizeValue(type, raw?.value, order, stage);
+    out.value = sanitizeValue(type, raw?.value, order, stage, effectBoundsV1);
   } else if (range.field === 'multiplier') {
     const proposed = Number(raw?.multiplier);
     out.multiplier = roundRange(clamp(
@@ -242,11 +287,11 @@ function sanitizeEffect(raw, order, stage = 1) {
   return out;
 }
 
-function sanitizeGeneratedArtifact(raw, targetRealm, refinementStage = 1) {
+function sanitizeGeneratedArtifact(raw, targetRealm, refinementStage = 1, effectBoundsV1 = {}) {
   const realm = REALMS.includes(targetRealm) ? targetRealm : '凡人';
   const order = realmOrder(realm);
   const stage = normalizeRefinementStage(refinementStage);
-  const requested = Array.isArray(raw?.effects) ? raw.effects.map((e) => sanitizeEffect(e, order, stage)).filter(Boolean) : [];
+  const requested = Array.isArray(raw?.effects) ? raw.effects.map((e) => sanitizeEffect(e, order, stage, effectBoundsV1)).filter(Boolean) : [];
   const wantsEquip = requested.some((effect) => effect.type.startsWith('equip_'));
   let effects = wantsEquip
     ? requested.filter((effect) => effect.type.startsWith('equip_'))
@@ -254,8 +299,8 @@ function sanitizeGeneratedArtifact(raw, targetRealm, refinementStage = 1) {
   effects = effects.slice(0, maxEffectsForGeneration(order, stage));
 
   if (!effects.length) {
-    const fallbackRange = effectRange('equip_attack_flat', order, stage);
-    effects = [sanitizeEffect({ type: 'equip_attack_flat', value: (fallbackRange.min + fallbackRange.max) / 2 }, order, stage)].filter(Boolean);
+    const fallbackRange = effectRange('equip_attack_flat', order, stage, effectBoundsV1);
+    effects = [sanitizeEffect({ type: 'equip_attack_flat', value: (fallbackRange.min + fallbackRange.max) / 2 }, order, stage, effectBoundsV1)].filter(Boolean);
   }
 
   const equipped = effects.some((effect) => effect.type.startsWith('equip_'));
@@ -332,7 +377,7 @@ function buildPrompt(payload) {
       '並給予當前階段允許的實際攻擊效果。若管理員有相容的命名指示，可調整名字但不得更改器型。'
     : '';
   const hiddenStageDirection = stageDirections[refinementStage].join('\n');
-  const allowedRanges = effectRangesForRealm(targetRealm, refinementStage);
+  const allowedRanges = effectRangesForRealm(targetRealm, refinementStage, payload.effectBoundsV1);
   const allowedTypes = allowedRanges.map((range) => range.type);
   const hasAdminGuidance = !!(adminGenerationDirection || adminGenerationPrompt);
   // Six of eight ordinary creative directions favor offense (~75% of sampled
@@ -428,7 +473,7 @@ function buildGuidanceReviewPrompt(payload, artifact, targetRealm, stage) {
     '投入主素材完整設定：', JSON.stringify(hierarchy.primary),
     '投入輔素材完整設定：', JSON.stringify(hierarchy.supporting),
     '鎖定境界與煉製階段：', JSON.stringify({ targetRealm, stage }),
-    '可用特性範圍：', JSON.stringify(effectRangesForRealm(targetRealm, stage)),
+    '可用特性範圍：', JSON.stringify(effectRangesForRealm(targetRealm, stage, payload.effectBoundsV1)),
     '目前成品：', JSON.stringify(artifact)
   ].join('\n');
 }
@@ -454,9 +499,9 @@ async function reviewGuidedArtifact(payload, artifact, targetRealm, stage) {
         !Array.isArray(revised.effects) || !revised.effects.length) {
       return { artifact, guidanceReview: 'unresolved' };
     }
-    const sanitized = sanitizeGeneratedArtifact(revised, targetRealm, stage);
+    const sanitized = sanitizeGeneratedArtifact(revised, targetRealm, stage, payload.effectBoundsV1);
     const validType = revised.effects.some((effect) =>
-      effectRange(cleanText(effect?.type, 64), realmOrder(targetRealm), stage) !== null
+      effectRange(cleanText(effect?.type, 64), realmOrder(targetRealm), stage, payload.effectBoundsV1) !== null
     );
     if (!validType) return { artifact, guidanceReview: 'unresolved' };
     return { artifact: sanitized, guidanceReview: 'revised' };
@@ -467,6 +512,12 @@ async function reviewGuidedArtifact(payload, artifact, targetRealm, stage) {
 }
 
 function registerArtifactGenerationApi(app) {
+  app.get('/api/artifact-effect-ranges', (req, res) => {
+    const realm = String(req.query?.realm || '煉氣');
+    const stage = Number(req.query?.stage || 1);
+    if (!REALMS.includes(realm) || ![1,2,3].includes(stage)) return res.status(400).json({ error:'未知境界或煉器階段' });
+    res.json({ realm, stage, ranges:effectRangesForRealm(realm, stage) });
+  });
   app.post('/api/generate-artifact', async (req, res) => {
     try {
       const selected = Array.isArray(req.body?.selectedIngredients) ? req.body.selectedIngredients : [];
@@ -477,17 +528,19 @@ function registerArtifactGenerationApi(app) {
 
       // 境界永遠由伺服器依投入素材在完整圖鑑中的正式境界重算，忽略前端傳來的 targetRealm。
       const targetRealm = deriveTargetRealm(req.body || {});
-      const safePayload = { ...(req.body || {}), targetRealm };
+      const effectBoundsV1 = normalizeEffectBounds(req.body?.effectBoundsV1);
+      const safePayload = { ...(req.body || {}), targetRealm, effectBoundsV1 };
       const refinementStage = deriveRefinementStage(safePayload);
       const prompt = buildPrompt(safePayload);
       const routed = await aiRouter.generateJSON(prompt, { timeoutMs: 35000 });
-      const initialArtifact = sanitizeGeneratedArtifact(routed.data, targetRealm, refinementStage);
+      const initialArtifact = sanitizeGeneratedArtifact(routed.data, targetRealm, refinementStage, effectBoundsV1);
       const reviewed = await reviewGuidedArtifact(safePayload, initialArtifact, targetRealm, refinementStage);
       res.json({ artifact: reviewed.artifact, provider: routed.provider, model: routed.model,
         guidanceReview: reviewed.guidanceReview });
     } catch (error) {
       console.error('[Artifact Generation API]', error);
-      res.status(500).json({ error: error?.message || 'AI 法寶生成失敗' });
+      res.status(/上下限|境界設定|階段設定|不允許設定|效果上下限|有限數值|不支援的法寶/.test(error?.message || '') ? 400 : 500)
+        .json({ error: error?.message || 'AI 法寶生成失敗' });
     }
   });
 }
@@ -506,3 +559,5 @@ module.exports.effectRangesForRealm = effectRangesForRealm;
 module.exports.sanitizeEffect = sanitizeEffect;
 module.exports.buildGuidanceReviewPrompt = buildGuidanceReviewPrompt;
 module.exports.reviewGuidedArtifact = reviewGuidedArtifact;
+
+module.exports.normalizeEffectBounds = normalizeEffectBounds;
