@@ -227,6 +227,9 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
     const user = me();
     const data = userData() || {};
     const combat = combatSnapshot();
+    const goldenCore = window.getEquippedGoldenCoreBattleSnapshot?.() || null;
+    const artifactBattle = window.getArtifactBattleSnapshot?.() || { version: 1, effects: [], openingShield: 0 };
+    const openingShield = window.getArtifactBattleOpeningShield?.(artifactBattle) ?? artifactBattle.openingShield ?? 0;
     return {
       uid: user.uid,
       name: data.displayName || user.displayName || '無名修士',
@@ -235,10 +238,14 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
       atk: combat.attack,
       hp: combat.maxHp,
       maxHp: combat.maxHp,
-      goldenCore: window.getEquippedGoldenCoreBattleSnapshot?.() || null,
+      goldenCore,
       // 金丹道心在配對時複製成「本場一次性防護」，不消耗一般悟道持有的道心。
-      coreShield: !!window.getEquippedGoldenCoreBattleSnapshot?.() && data.stats?.goldenCoreShield === true,
-      coreCorrectStreak: 0, reviewedRound: 0,
+      coreShield: !!goldenCore && data.stats?.goldenCoreShield === true,
+      coreCorrectStreak: 0,
+      // All combat effects come from equipped artifacts at matchmaking, not local post-match state.
+      artifactBattle, artifactShield: Math.max(0, Math.round(Number(openingShield) || 0)),
+      artifactFirstHitUsed: false, artifactCheatDeathUsed: false,
+      reviewedRound: 0,
       answerChoice: null, answerCorrect: null, answerAt: null, answerRound: null, timedOut: false,
       lastSeenAtMs: nowMs()
     };
@@ -787,7 +794,12 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
         const ref = roomRef(); const snap = await tx.get(ref); if (!snap.exists()) return; const fresh = snap.data();
         if (fresh.status !== 'playing' || Number(fresh.round) !== round || Number(fresh.settledRound) >= round) return;
         if (!answerObject(fresh.host, round) || !answerObject(fresh.guest, round)) return;
-        const outcome = settleBattleRound({ roomId: state.roomId, round, host: battlePlayer(fresh.host, round), guest: battlePlayer(fresh.guest, round), tieWindowMs: BATTLE_V2.tieWindowMs, maxRounds: fresh.maxRounds || BATTLE_V2.maxRounds });
+        const outcome = settleBattleRound({
+          roomId: state.roomId, round,
+          host: battlePlayer(fresh.host, round), guest: battlePlayer(fresh.guest, round),
+          tieWindowMs: BATTLE_V2.tieWindowMs, maxRounds: fresh.maxRounds || BATTLE_V2.maxRounds,
+          resolveEquipmentHit: window.resolveArtifactBattleHit
+        });
         const names = { host: fresh.host?.name || '我方', guest: fresh.guest?.name || '對手' };
         const roundLogs = outcome.logs.map((entry) => ({ ...entry, actorName: names[entry.actorRole] || '修士', round, id: randomId(`log-${round}`) }));
         if (!roundLogs.length) roundLogs.push({ type: 'round', round, id: randomId(`log-${round}`), message: '雙方此回合皆未形成有效攻勢。' });
@@ -795,6 +807,12 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
           'host.hp': outcome.hostHp, 'guest.hp': outcome.guestHp, 'host.isDead': outcome.hostHp <= 0, 'guest.isDead': outcome.guestHp <= 0,
           'host.coreShield': outcome.hostCoreShield, 'guest.coreShield': outcome.guestCoreShield,
           'host.coreCorrectStreak': outcome.hostCoreStreak, 'guest.coreCorrectStreak': outcome.guestCoreStreak,
+          'host.artifactShield': outcome.hostArtifactState.artifactShield,
+          'guest.artifactShield': outcome.guestArtifactState.artifactShield,
+          'host.artifactFirstHitUsed': outcome.hostArtifactState.artifactFirstHitUsed,
+          'guest.artifactFirstHitUsed': outcome.guestArtifactState.artifactFirstHitUsed,
+          'host.artifactCheatDeathUsed': outcome.hostArtifactState.artifactCheatDeathUsed,
+          'guest.artifactCheatDeathUsed': outcome.guestArtifactState.artifactCheatDeathUsed,
           settledRound: round, battleLog: [...(Array.isArray(fresh.battleLog) ? fresh.battleLog : []), ...roundLogs].slice(-20), battleLogId: `${round}-${nowMs()}`,
           lastSettlement: { round, attackers: outcome.attackers, turnOrder: outcome.turnOrder, steps: outcome.steps, startHostHp: outcome.startHostHp, startGuestHp: outcome.startGuestHp, activations: outcome.activations, hostHp: outcome.hostHp, guestHp: outcome.guestHp, settledAtMs: nowMs() }, updatedAt: serverTimestamp()
         };
