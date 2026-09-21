@@ -119,5 +119,5 @@ test('solo quiz uses restored active question before hitting the API and saves e
 
 test('core import and page query change together to refresh browser cached code', () => {
   assert.match(main, /main-legacy\.js\?v=20260921-solo-cache1/);
-  assert.match(index, /main\.js\?v=20260921-battle-stage2/);
+  assert.match(index, /main\.js\?v=20260921-battle-stage3/);
 });
