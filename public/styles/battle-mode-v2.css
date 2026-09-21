@@ -35,3 +35,34 @@
 @keyframes bv2miss{25%{transform:translateX(-5px);filter:brightness(.8)}55%{transform:translateX(5px)}100%{transform:none;filter:none}}
 @media(max-width:620px){.bv2-quiz{min-height:calc(100dvh - 90px);padding:10px 0 24px}.bv2-quiz .bv2-question-card{padding:18px 12px}.bv2-duel-cue{min-height:190px;padding:16px}.bv2-quiz .bv2-explanation{padding:12px}.bv2-quiz #bv2-review-continue{width:100%}}
 @media(prefers-reduced-motion:reduce){.bv2-duel-cue::before,.bv2-duel-cue strong,.bv2-fighter.miss{animation:none!important}}
+
+/* Shared profile avatar for matchmaking, VS intro, and the live arena. */
+.bv2-avatar{position:relative;width:72px;height:72px;flex:none;overflow:hidden;display:grid;place-items:center;border-radius:50%;border:2px solid rgba(217,181,96,.55);background:radial-gradient(circle at 38% 22%,rgba(215,179,95,.16),#14110c 74%);box-shadow:0 0 0 3px rgba(217,181,96,.06),0 4px 25px rgba(0,0,0,.38)}
+.bv2-avatar img{width:100%;height:100%;display:block;object-fit:cover;object-position:center}
+.bv2-avatar img[hidden],.bv2-avatar .bv2-avatar-fallback[hidden]{display:none!important}
+.bv2-avatar-fallback{width:100%;height:100%;display:grid;place-items:center;color:#9c895e;font-size:25px}
+.bv2-match-card{min-width:0}
+.bv2-match-card .bv2-avatar{margin:11px 0 8px}
+.bv2-match-card.enemy .bv2-avatar{margin-left:auto;border-color:rgba(199,104,84,.55);box-shadow:0 0 0 3px rgba(199,104,84,.06),0 4px 25px rgba(0,0,0,.38)}
+.bv2-intro-player{min-width:0}
+.bv2-intro-player .bv2-avatar{width:clamp(75px,10vw,112px);height:clamp(75px,10vw,112px);margin:14px 0 11px;box-shadow:0 0 0 5px rgba(217,181,96,.06),0 0 32px rgba(217,181,96,.14)}
+.bv2-intro-player.right .bv2-avatar{margin-left:auto;border-color:rgba(199,104,84,.6);box-shadow:0 0 0 5px rgba(199,104,84,.06),0 0 32px rgba(199,104,84,.12)}
+.bv2-match-card strong,.bv2-intro-player strong{overflow-wrap:anywhere}
+.bv2-fighter-identity{display:flex;align-items:center;gap:9px;min-width:0}
+.bv2-fighter-identity>div:last-child{min-width:0}
+.bv2-fighter-identity strong{overflow-wrap:anywhere}
+.bv2-fighter .bv2-avatar{width:42px;height:42px;border-width:1px}
+.bv2-fighter.enemy .bv2-avatar{border-color:rgba(199,104,84,.55)}
+.bv2-fighter .bv2-avatar-fallback{font-size:17px}
+@media(max-width:700px){
+ .bv2-match-card .bv2-avatar{width:clamp(52px,12vw,66px);height:clamp(52px,12vw,66px)}
+ .bv2-intro-player .bv2-avatar{width:clamp(55px,13vw,82px);height:clamp(55px,13vw,82px);margin:9px 0}
+ .bv2-fighter-identity{gap:5px}
+ .bv2-fighter .bv2-avatar{width:32px;height:32px}
+ .bv2-fighter .bv2-avatar-fallback{font-size:13px}
+}
+@media(max-width:420px){
+ .bv2-intro-player .bv2-avatar{width:52px;height:52px}
+ .bv2-fighter .bv2-avatar{width:27px;height:27px}
+ .bv2-fighter .bv2-avatar-fallback{font-size:11px}
+}
