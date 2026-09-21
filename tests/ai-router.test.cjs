@@ -27,6 +27,7 @@ test('AI router supports multiple Gemini keys without duplicating the legacy key
     GEMINI_API_KEY: 'key-a',
     GEMINI_API_KEYS: 'key-a,key-b,key-c',
     GEMINI_MODEL: 'gemini-test',
+    GEMINI_MODELS: undefined,
     AI_PROVIDERS_JSON: '[]',
     OPENAI_API_KEY: undefined,
     OPENAI_MODEL: undefined
@@ -38,11 +39,56 @@ test('AI router supports multiple Gemini keys without duplicating the legacy key
   });
 });
 
+test('one Gemini API key rotates across both Flash-Lite models without duplicate requests', () => {
+  withEnv({
+    GEMINI_API_KEY: 'one-key',
+    GEMINI_API_KEYS: undefined,
+    GEMINI_MODEL: 'gemini-3.5-flash-lite',
+    GEMINI_MODELS: 'gemini-3.5-flash-lite,gemini-3.1-flash-lite',
+    AI_PROVIDERS_JSON: '[]',
+    OPENAI_API_KEY: undefined,
+    OPENAI_MODEL: undefined
+  }, () => {
+    const providers = router.buildProviders();
+    assert.equal(providers.length, 2);
+    assert.deepEqual(providers.map(p => p.model), [
+      'gemini-3.5-flash-lite', 'gemini-3.1-flash-lite'
+    ]);
+    assert.deepEqual(providers.map(p => p.name), ['gemini-1-model-1', 'gemini-1-model-2']);
+    assert.ok(providers.every(p => p.key === 'one-key'));
+    assert.deepEqual(router.getStatus(), providers.map(({ name, type, model }) => ({ name, type, model })));
+    assert.ok(router.getStatus().every(p => !Object.hasOwn(p, 'key')));
+  });
+});
+
+test('multiple keys share both models and duplicate model IDs are deduplicated', () => {
+  withEnv({
+    GEMINI_API_KEY: 'key-a',
+    GEMINI_API_KEYS: 'key-a,key-b',
+    GEMINI_MODEL: 'unused-fallback',
+    GEMINI_MODELS: 'gemini-3.5-flash-lite,gemini-3.1-flash-lite,gemini-3.5-flash-lite',
+    AI_PROVIDERS_JSON: '[]',
+    OPENAI_API_KEY: undefined,
+    OPENAI_MODEL: undefined
+  }, () => {
+    const providers = router.buildProviders();
+    assert.equal(providers.length, 4);
+    assert.deepEqual(providers.map(p => p.model), [
+      'gemini-3.5-flash-lite', 'gemini-3.1-flash-lite',
+      'gemini-3.5-flash-lite', 'gemini-3.1-flash-lite'
+    ]);
+    assert.deepEqual(providers.map(p => p.name), [
+      'gemini-1-model-1', 'gemini-1-model-2', 'gemini-2-model-1', 'gemini-2-model-2'
+    ]);
+  });
+});
+
 test('AI router mixes Gemini and arbitrary OpenAI-compatible providers', () => {
   withEnv({
     GEMINI_API_KEY: 'gemini-key',
     GEMINI_API_KEYS: '',
     GEMINI_MODEL: 'gemini-test',
+    GEMINI_MODELS: undefined,
     OPENAI_API_KEY: 'openai-key',
     OPENAI_MODEL: 'openai-test',
     OPENAI_BASE_URL: 'https://api.example.com/v1/',
