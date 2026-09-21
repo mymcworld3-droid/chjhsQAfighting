@@ -109,15 +109,87 @@
     `;
   }
 
+  // 與正式鬥法使用同一份已裝備法寶效果快照，不另外猜測背包內物品的加成。
+  // 百分比的 sortValue 換算成百分點，讓 9% 排在 5% 前面。
+  const BATTLE_STAT_META = Object.freeze({
+    equip_damage_percent: { label: '傷害加成', icon: 'fa-burst', percent: true },
+    equip_damage_reduction_flat: { label: '固定減傷', icon: 'fa-shield-halved' },
+    equip_damage_reduction_percent: { label: '減傷', icon: 'fa-shield', percent: true, cap: 0.90 },
+    equip_crit_chance: { label: '暴擊率', icon: 'fa-crosshairs', percent: true, cap: 0.75 },
+    equip_crit_damage_percent: { label: '暴擊額外傷害', icon: 'fa-bolt', percent: true, note: '額外暴傷；基礎暴擊為 150%' },
+    equip_combo_chance: { label: '連擊率', icon: 'fa-arrows-rotate', percent: true, cap: 0.10 },
+    equip_lifesteal_percent: { label: '吸血率', icon: 'fa-droplet', percent: true, cap: 0.50 },
+    equip_reflect_percent: { label: '反傷率', icon: 'fa-shield-heart', percent: true, cap: 1 },
+    equip_shield_flat: { label: '開場護盾', icon: 'fa-shield-halved' },
+    equip_true_damage_flat: { label: '追加真實傷害', icon: 'fa-fire' },
+    equip_low_hp_damage_percent: { label: '低血量增傷', icon: 'fa-burst', percent: true, note: '生命 ≤30% 時生效' },
+    equip_low_hp_reduction_percent: { label: '低血量減傷', icon: 'fa-shield', percent: true, note: '生命 ≤30% 時生效；與常駐減傷合計上限 90%' },
+    equip_first_hit_reduction_percent: { label: '首次受傷減傷', icon: 'fa-shield-halved', percent: true, note: '每場首次受傷時生效；合計上限 90%' },
+    equip_damage_cap_percent: { label: '單次生命傷害上限', icon: 'fa-heart-pulse', percent: true, note: '最高受傷占最大生命比例（數值越低越好）', minValue: true },
+    equip_on_correct_shield_flat: { label: '答對獲得護盾', icon: 'fa-shield-heart', note: '鬥法中答對並攻擊後獲得' }
+  });
+
+  function finitePositive(value) {
+    const number = Number(value);
+    return Number.isFinite(number) ? Math.max(0, number) : 0;
+  }
+
+  function formatStatNumber(number) {
+    return new Intl.NumberFormat('zh-TW', { maximumFractionDigits: 2 }).format(number);
+  }
+
+  function buildCombatStatList(player, battle) {
+    const maxHp = Math.max(1, finitePositive(player?.maxHp) || FALLBACK_COMBAT.maxHp);
+    const hp = Math.min(maxHp, finitePositive(player?.hp));
+    const values = [
+      { key: 'hp', label: '生命值', icon: 'fa-heart', sortValue: hp, value: formatStatNumber(Math.round(hp)), note: hp < maxHp ? '最大生命：' + formatStatNumber(Math.round(maxHp)) : '鬥法開始時為滿血' },
+      { key: 'attack', label: '攻擊力', icon: 'fa-khanda', sortValue: finitePositive(player?.attack), value: formatStatNumber(Math.round(finitePositive(player?.attack))), note: '已計入裝備與目前生效的攻擊加成' }
+    ];
+    const effects = Array.isArray(battle?.effects) ? battle.effects : [];
+    const totals = new Map();
+    for (const effect of effects) {
+      const key = String(effect?.type || '');
+      if (!Object.prototype.hasOwnProperty.call(BATTLE_STAT_META, key)) continue;
+      const meta = BATTLE_STAT_META[key];
+      const value = finitePositive(effect.value);
+      if (meta.minValue) {
+        // 同時佩戴數個傷害上限效果時，鬥法採最小值。
+        if (value > 0) totals.set(key, Math.min(totals.get(key) ?? 1, Math.max(0.05, Math.min(1, value))));
+      } else {
+        totals.set(key, (totals.get(key) || 0) + value);
+      }
+    }
+    for (const [key, raw] of totals) {
+      const meta = BATTLE_STAT_META[key];
+      const finalValue = meta.cap ? Math.min(raw, meta.cap) : raw;
+      if (finalValue <= 0) continue;
+      const display = meta.percent ? finalValue * 100 : finalValue;
+      values.push({
+        key, label: meta.label, icon: meta.icon, sortValue: display,
+        value: formatStatNumber(display) + (meta.percent ? '%' : ''),
+        note: meta.note || (meta.cap && raw > meta.cap ? '已達鬥法生效上限' : '')
+      });
+    }
+    return values.sort((a, b) => b.sortValue - a.sortValue);
+  }
+
+  // 便於與鬥法快照交叉驗證，避免狀態頁另行套用法寶而重複加成。
+  window.getCultivationStatusStats = buildCombatStatList;
+
   function statusSnapshot() {
     return {
       player: getCombatSnapshot(),
+      battle: window.getArtifactBattleSnapshot?.() || { effects: [] },
       core: currentCoreSnapshot()
     };
   }
 
   function statusMarkup(snapshot) {
-    const player = snapshot.player;
+    const stats = buildCombatStatList(snapshot.player, snapshot.battle);
+    const effects = Array.isArray(snapshot.battle?.effects) ? snapshot.battle.effects : [];
+    const passive = [];
+    if (effects.some(effect => effect?.type === 'equip_cheat_death')) passive.push('每場一次免死');
+    if (effects.some(effect => effect?.type === 'equip_copy_enemy_artifact')) passive.push('鬥法時複製敵方法寶效果');
     return `
       <section class="training-status-panel">
         <div class="status-section status-core-section">
@@ -126,11 +198,12 @@
         </div>
 
         <div class="status-section status-player-section">
-          <div class="status-section-title"><span>戰鬥數值</span><small>COMBAT STATUS</small></div>
+          <div class="status-section-title"><span>戰鬥數值</span><small>由高至低</small></div>
+          <p class="status-stat-hint">已計入生效裝備；百分比按百分點排列，條件加成另行標明。</p>
           <div class="status-stat-grid status-stat-grid-simple">
-            ${statCard('fa-khanda', '攻擊力', Math.round(player.attack).toLocaleString(), '基礎 200')}
-            ${statCard('fa-heart', '生命值', Math.round(player.hp).toLocaleString(), '單場鬥法結束後恢復滿值')}
+            ${stats.map(stat => statCard(stat.icon, stat.label, stat.value, stat.note)).join('')}
           </div>
+          ${passive.length ? `<div class="status-stat-passive"><b>其他被動</b>${passive.map(label => `<span>${escapeHtml(label)}</span>`).join('')}</div>` : ''}
         </div>
       </section>
     `;
