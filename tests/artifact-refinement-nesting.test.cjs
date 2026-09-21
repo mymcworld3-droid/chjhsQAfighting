@@ -159,7 +159,7 @@ test('backpack exposes refinement depth and index preloads the new refinery styl
   const css = index.slice(start, end);
   assert.match(css, /refinery-artifact-ingredient/);
   assert.match(css, /refinery-group-title/);
-  assert.match(index, /main\.js\?v=20260921-player-profile1/);
+  assert.match(index, /main\.js\?v=20260921-artifact-effect-bounds1/);
 });
 
 test('owned refinery ingredients use deterministic realm then name ordering', () => {
