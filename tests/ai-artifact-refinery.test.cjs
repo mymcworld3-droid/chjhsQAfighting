@@ -231,6 +231,21 @@ test('ordinary forging favors attack artifacts and allows effective offensive fi
       effects:[{type:'equip_attack_flat',value:24}]}]
   });
   assert.match(stageThree, /攻擊型前階成品應延續其核心攻擊能力/);
+  const weaponPayload = {
+    selectedIngredients:[{type:'material',id:'sword-forging-iron',quantity:2}],
+    allMaterials:[{id:'sword-forging-iron',name:'鑄劍玄鐵',realm:'煉氣',
+      category:'兵器材料',description:'可直接鍛成完整長劍',
+      story:'山門用於鑄造入門佩劍',
+      weaponForm:'劍',weaponName:'玄鐵劍'}],
+    existingArtifacts:[]
+  };
+  const weaponPrompt = api.buildPrompt(weaponPayload);
+  assert.match(weaponPrompt, /正式兵器材料例外/);
+  assert.match(weaponPrompt, /weaponForm=劍、weaponName=玄鐵劍/);
+  assert.match(weaponPrompt, /即使是第一煉，也應直接完成可用的劍類武器/);
+  assert.match(weaponPrompt, /第一煉直接完成對應兵器/);
+  assert.match(aiJobs, /weaponForm: item\.weaponForm \|\| ''/);
+  assert.match(aiJobs, /weaponName: item\.weaponName \|\| ''/);
 });
 
 test('material lore is preserved by both admin editors and delivered as official ingredient context', () => {
