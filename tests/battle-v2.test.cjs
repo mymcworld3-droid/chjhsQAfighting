@@ -440,7 +440,7 @@ test('Battle UI animates server attack steps with shield feedback but hides the 
   assert.doesNotMatch(battleSource,/function renderLogs\(/);
   assert.doesNotMatch(battleSource,/id="bv2-log"/);
   assert.match(battleSource,/const guarded = !!step\.guarded/);
-  assert.match(battleSource,/target\?\.classList\.add\('guarded'\)/);
+  assert.match(battleSource,/target\.classList\.add\('guarded'\)/);
   assert.match(battleSource,/Array\.isArray\(settlement\.steps\)/);
   assert.match(battleSource,/const missed = step\.type === 'miss'/);
   assert.match(battleSource,/mine\.coreShield \? ' · 道心護體'/);
