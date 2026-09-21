@@ -15,7 +15,9 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder3';
   const SHEN_ANSWER_WINDOW_MS = 25000;
   const ROUND_COUNTDOWN_MS = 3000;
   const GU_ANSWER_WINDOW_MS = 25000;
-  const TURN_ANIMATION_MS = 850;
+  const TURN_ANIMATION_MS = 1850;
+  const TUTORIAL_IMPACT_MS = 650;
+  const TUTORIAL_VISIBLE_MS = 1450;
   // 高等微積分：用幾何級數和交錯 ζ(3) 求精確值。師姐先手是第一戰劇情特例。
   const SHEN_QUESTION = Object.freeze({
     q: '設 ζ(3)＝Σ(n＝1 至 ∞) 1/n³。求定積分 ∫₀¹ (ln x)²／(1＋x) dx 的精確值。',
@@ -107,6 +109,10 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder3';
       .replaceAll('"','&quot;').replaceAll("'",'&#039;');
   }
   function delay(ms) { return new Promise((resolve) => setTimeout(resolve, ms)); }
+  // Waiting is tied to absolute wall-clock deadlines, not accumulated paint delays.
+  async function waitUntil(deadlineMs) {
+    while (Date.now() < deadlineMs) await delay(Math.max(1, deadlineMs - Date.now()));
+  }
   function clearShenTimer() {
     if (shenTimer !== null) clearInterval(shenTimer);
     shenTimer = null;
@@ -301,6 +307,11 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder3';
         #${LAYER_ID} .bt-body{padding-bottom:3px}
         #${LAYER_ID}.bt-quiz-mode .bt-head{padding-bottom:6px}
       }
+      /* Match the wall-clock attack schedule in the formal duel. */
+      #${LAYER_ID} .bt-fighter.strike{animation-duration:1450ms!important}
+      #${LAYER_ID} .bt-fighter.hit{animation-duration:750ms!important}
+      #${LAYER_ID} .bt-slash.go{animation-duration:1450ms!important}
+      #${LAYER_ID} .bt-damage{animation-duration:800ms!important}
       @media(prefers-reduced-motion:reduce){#${LAYER_ID} *{animation:none!important;transition:none!important}}
     `;
     document.head.appendChild(style);
@@ -519,18 +530,28 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder3';
       badge:'築基鬥法教學 · 演武場', title:'師姐先手 · 劍意降臨', showLater:false,
       body:`<div class="bt-combat-cue">沈清霜先手攻擊<strong>真實傷害 65,000</strong></div><div class="bt-rule">${combatSummary()}</div>`
     });
-    await delay(300);
+    const strikeAtMs = Date.now() + 280;
+    const impactAtMs = strikeAtMs + TUTORIAL_IMPACT_MS;
+    const clearAtMs = strikeAtMs + TUTORIAL_VISIBLE_MS;
+    await waitUntil(strikeAtMs);
     if (!active || myToken !== sceneToken) return;
-    el.querySelector('[data-bt-fighter="enemy"]')?.classList.add('strike');
-    el.querySelector('.bt-slash')?.classList.add('go');
-    await delay(180);
+    const attacker = el.querySelector('[data-bt-fighter="enemy"]');
+    const defender = el.querySelector('[data-bt-fighter="me"]');
+    if (Date.now() < clearAtMs) {
+      attacker?.classList.add('strike');
+      el.querySelector('.bt-slash')?.classList.add('go');
+    }
+    await waitUntil(impactAtMs);
     if (!active || myToken !== sceneToken) return;
-    el.querySelector('[data-bt-fighter="me"]')?.classList.add('hit');
-    const pop = document.createElement('div');
-    pop.className = 'bt-damage';
-    pop.innerHTML = '-65,000<small>真實傷害 · TRUE DAMAGE</small>';
-    el.querySelector('.bt-arena')?.appendChild(pop);
-    await delay(TURN_ANIMATION_MS);
+    if (Date.now() < clearAtMs) {
+      defender?.classList.add('hit');
+      const pop = document.createElement('div');
+      pop.className = 'bt-damage';
+      pop.innerHTML = '-65,000<small>真實傷害 · TRUE DAMAGE</small>';
+      el.querySelector('.bt-arena')?.appendChild(pop);
+    }
+    refreshTutorialFighter(el, 'me', 0, playerCombat?.maxHp || 1000);
+    await waitUntil(clearAtMs);
     if (!active || myToken !== sceneToken) return;
     // The story deliberately dissipates the projection regardless of the player's persistent HP.
     playerHp = 0;
@@ -731,8 +752,12 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder3';
         <div class="bt-rule">${combatSummary()}</div>`
     });
     const steps = Array.isArray(outcome.steps) ? outcome.steps : [];
+    const startAtMs = Date.now();
     for (let index = 0; index < steps.length; index += 1) {
-      await delay(index === 0 ? 250 : 300);
+      const strikeAtMs = startAtMs + 280 + index * TURN_ANIMATION_MS;
+      const impactAtMs = strikeAtMs + TUTORIAL_IMPACT_MS;
+      const clearAtMs = strikeAtMs + TUTORIAL_VISIBLE_MS;
+      await waitUntil(strikeAtMs);
       if (!active || token !== sceneToken) return;
       const step = steps[index];
       const meAttacking = step.actorRole === 'host';
@@ -743,21 +768,40 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder3';
       const damage = Math.max(0, Number(step.damage) || 0);
       const label = missed ? 'MISS' : blocked ? '護體' : '-' + damage;
       const cue = el.querySelector('#bt-combat-cue');
-      if (cue) cue.innerHTML = `${index === 0 ? '先手' : step.type === 'counter' ? '雷光反擊' : '後手'} · ${meAttacking ? '我方' : '顧長風'}<strong>${label}</strong>`;
-      actor?.classList.add(missed ? 'miss' : 'strike');
-      if (!missed && !blocked) target?.classList.add('hit');
-      const pop = document.createElement('div');
-      pop.className = 'bt-damage' + (missed ? ' miss' : '');
-      pop.style.left = (missed ? (meAttacking ? '28%' : '72%') : (meAttacking ? '72%' : '28%'));
-      pop.innerHTML = esc(label) + '<small>' + (missed ? '答題未命中' : blocked ? '道心護體' : step.type === 'counter' ? '反擊' : '攻擊命中') + '</small>';
-      el.querySelector('.bt-arena')?.appendChild(pop);
+      if (cue) cue.innerHTML = (index === 0 ? '先手' : step.type === 'counter' ? '雷光反擊' : '後手') +
+        ' · ' + (meAttacking ? '我方' : '顧長風') + '<strong>' + esc(label) + '</strong>';
+      if (Date.now() < clearAtMs) {
+        if (actor) {
+          actor.style.animationDelay = '-' + Math.max(0, Date.now() - strikeAtMs) + 'ms';
+          actor.classList.add(missed ? 'miss' : 'strike');
+        }
+      }
+      await waitUntil(impactAtMs);
+      if (!active || token !== sceneToken) return;
+      let pop = null;
+      if (Date.now() < clearAtMs) {
+        if (target && !missed && !blocked) {
+          target.style.animationDelay = '-' + Math.max(0, Date.now() - impactAtMs) + 'ms';
+          target.classList.add('hit');
+        }
+        pop = document.createElement('div');
+        pop.className = 'bt-damage' + (missed ? ' miss' : '');
+        pop.style.left = (missed ? (meAttacking ? '28%' : '72%') : (meAttacking ? '72%' : '28%'));
+        pop.style.animationDelay = '-' + Math.max(0, Date.now() - impactAtMs) + 'ms';
+        pop.innerHTML = esc(label) + '<small>' +
+          (missed ? '答題未命中' : blocked ? '道心護體' : step.type === 'counter' ? '反擊' : '攻擊命中') + '</small>';
+        el.querySelector('.bt-arena')?.appendChild(pop);
+      }
+      // Preserve the settled engine's step-by-step HP regardless of tab throttling.
       refreshTutorialFighter(el, 'me', step.hostHp, guPlayer.maxHp);
       refreshTutorialFighter(el, 'enemy', step.guestHp, guOpponent.maxHp);
-      await delay(TURN_ANIMATION_MS);
+      await waitUntil(clearAtMs);
       if (!active || token !== sceneToken) return;
       actor?.classList.remove('miss', 'strike');
       target?.classList.remove('hit');
-      pop.remove();
+      if (actor) actor.style.animationDelay = '';
+      if (target) target.style.animationDelay = '';
+      pop?.remove();
       // The shared engine emits no further steps after a lethal hit or reflection.
     }
     if (!active || token !== sceneToken) return;
