@@ -265,7 +265,8 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
     const item = itemFor(listing.type, listing.itemId);
     if (!item) return '<p>商品資料已變更，請重新整理後確認。</p>';
     const isRecipe = listing.type === 'recipe';
-    const knows = isRecipe && (!item.recipeOwnerUid || item.recipeOwnerUid === currentUid || data()?.recipeLicenses?.[item.id] === true);
+    const knows = isRecipe && (data()?.isAdmin === true || (!!currentUid && item.recipeOwnerUid === currentUid) ||
+      data()?.recipeLicenses?.[item.id] === true || (!item.recipeOwnerUid && item.recipeSaleLocked !== true));
     // AI-generated descriptions may embed the discovery story or ingredient hints.
     // Never display them before the buyer receives a recipe license.
     const desc = esc(!isRecipe || knows ? (item.description || '暫無詳細描述') : '成品故事與製作資料購買後解鎖');
