@@ -502,7 +502,7 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder1';
   function finishShen() {
     if (!active || busy || tutorialPhase !== 'shen') return;
     active = false;
-    clearShenTimer();
+    clearTutorialTimers();
     document.getElementById(LAYER_ID)?.remove();
     closeTutorialArena();
     const resume = startedByStory;
@@ -786,7 +786,7 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder1';
 
   function snooze() {
     if (busy) return;
-    clearShenTimer();
+    clearTutorialTimers();
     active = false;
     autoStarted = false;
     snoozeUntil = Date.now() + 5 * 60 * 1000;
@@ -808,15 +808,27 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder1';
     if (!storySeen() && !options.replay && !options.story) return false;
     tutorialPhase = options.phase === 'gu' || ['gu-intro', 'gu-result'].includes(options.scene) ? 'gu' : 'shen';
     try { await window.preloadXiuxianStoryImages?.(); } catch (_) {}
+    await window.ensureCombatStats?.();
     if (active || busy || !window.openBattleTutorialArena?.()) return false;
     previewOnly = adminPreview || options.replay === true;
     startedByStory = options.story === true;
     active = true;
     window.switchToPage?.('page-battle');
-    clearShenTimer();
+    clearTutorialTimers();
     shenChoice = null;
+    shenFeedback = null;
     shenDeadline = 0;
-    playerHp = 1000; guHp = 2000; guRound = 0; guCorrect = 0; stage = 'intro';
+    playerCombat = capturePlayerCombat();
+    playerHp = playerCombat.maxHp;
+    guPlayer = { ...playerCombat };
+    guOpponent = {
+      uid:'story-gu-changfeng', name:'顧長風', hp:2000, maxHp:2000, atk:220,
+      totalScore:10, goldenCore:null, coreShield:false, coreCorrectStreak:0,
+      artifactBattle:{ version:1, effects:[], openingShield:0 }, artifactShield:0,
+      artifactFirstHitUsed:false, artifactCheatDeathUsed:false
+    };
+    guHp = guOpponent.hp;
+    guRound = 0; guCorrect = 0; stage = 'intro';
     active = true;
     await persist({ started:true, startedAtMs:marker()?.startedAtMs || Date.now() });
     if (adminPreview && options.scene === 'shen-story') { playerHp = 0; renderShenResult(); }
@@ -840,6 +852,22 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder1';
     button.addEventListener('click', () => window.openXiuxianStoryChapter?.('foundation-first-battle'));
     actions.prepend(button);
   }
+
+  // Shared item "remove wrong option" tool can work in the story's full-screen question.
+  window.getBattleTutorialQuestionContext = () => {
+    if (!active || !['shen-question', 'gu-question'].includes(stage)) return null;
+    const shen = stage === 'shen-question';
+    const correctIndex = shen ? SHEN_QUESTION.ans : QUESTIONS[guRound]?.ans;
+    const answered = shen ? !!shenFeedback : !!guPlayerAt;
+    return {
+      context:'battle',
+      key:'battle-tutorial:' + tutorialPhase + ':' + guRound + ':' + (shen ? SHEN_QUESTION.q : QUESTIONS[guRound]?.q),
+      correctIndex:Number(correctIndex),
+      answered,
+      buttonsSelector: shen ? '#battle-tutorial-layer [data-bt-shen-choice]' : '#battle-tutorial-layer [data-bt-choice]',
+      containerSelector:'#battle-tutorial-layer .bt-options'
+    };
+  };
 
   window.pauseBattleTutorial = snooze;
   window.startBattleTutorial = (options = {}) => start(options);
