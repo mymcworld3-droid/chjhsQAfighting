@@ -188,6 +188,8 @@ export function normalizeMaterialDefinition(raw = {}) {
     category: String(raw.category || '其他').trim() || '其他',
     realm: String(raw.realm || fallbackRealm).trim() || fallbackRealm,
     description: String(raw.description || '').trim(),
+    // Optional canonical backstory; legacy materials retain an empty story.
+    story: String(raw.story || '').trim().slice(0, 2000),
     buyGold: Math.max(0, Math.floor(finite(raw.buyGold, 0)))
   };
 }
