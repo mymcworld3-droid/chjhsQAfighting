@@ -166,9 +166,12 @@ function normalizeEffectBounds(raw) {
         const bounds = Object.fromEntries(keys.map(key => [key, Number(values[key])]));
         const integer = FLAT_VALUE_TYPES.has(type);
         const lower = type === 'equip_damage_cap_percent' ? 0.05 : (defaults.field === 'multiplier' ? 1.01 : (integer ? 1 : 0.0001));
-        const upper = integer ? 1000000 : type === 'equip_combo_chance' ? 0.10
-          : type === 'equip_damage_cap_percent' ? 1 : defaults.field === 'multiplier' ? 5
-          : type === 'equip_crit_damage_percent' ? 3 : 1;
+        const hardCaps = { equip_attack_percent:5, equip_hp_percent:5, equip_damage_percent:3,
+          equip_damage_reduction_percent:0.8, equip_crit_chance:0.75, equip_crit_damage_percent:3,
+          equip_combo_chance:0.10, equip_lifesteal_percent:0.5, equip_reflect_percent:1,
+          equip_low_hp_damage_percent:2, equip_low_hp_reduction_percent:0.8,
+          equip_first_hit_reduction_percent:0.9, equip_damage_cap_percent:1 };
+        const upper = integer ? 1000000 : defaults.field === 'multiplier' ? 5 : hardCaps[type] ?? 1;
         if (bounds.min < lower || bounds.max > upper || bounds.min > bounds.max ||
             (integer && (!Number.isInteger(bounds.min) || !Number.isInteger(bounds.max)))) {
           throw new Error(type + ' 上下限不合法（允許 ' + lower + '～' + upper + '）');
