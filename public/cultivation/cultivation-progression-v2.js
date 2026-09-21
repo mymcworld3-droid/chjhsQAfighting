@@ -35,7 +35,8 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     { name: '合體', sub: '天地合一', need: 308 },
     { name: '大乘', sub: '大道將成', need: 448 },
     { name: '渡劫', sub: '雷劫問道', need: 628 },
-    { name: '真仙', sub: '踏入仙門', need: 868 }
+    { name: '登仙', sub: '仙門在望', need: 868 },
+    { name: '真仙', sub: '榜上仙位', need: 868 }
   ];
 
   let migrating = false;
