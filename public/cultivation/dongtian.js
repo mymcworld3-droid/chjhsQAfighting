@@ -282,6 +282,7 @@ import {
     button.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> 正在凝聚洞天…<small>先規劃題數，再每批最多 5 題</small>';
     status.textContent = state.files.length ? `正在整理 ${state.files.length} 張圖片與文字中的所有知識點…` : '正在整理文字中的所有知識點…';
     let responseStatus = null;
+    let responseDiagnostics = null;
     try {
       const images = [];
       for (let i = 0; i < state.files.length; i++) {
@@ -298,6 +299,14 @@ import {
       });
       responseStatus = response.status;
       const payload = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        // Keep quality-review details for the administrator without showing raw
+        // AI responses or unverified question text to ordinary players.
+        responseDiagnostics = payload.doubleCheck
+          ? { review: payload.doubleCheck, initialReview: payload.initialDoubleCheck,
+              repairAttempts: payload.repairAttempts, reasonCode: payload.reasonCode }
+          : null;
+      }
       if (!response.ok || !payload.dongtian) {
         const detail = String(payload.error || '後端未回傳可用的洞天資料');
         throw new Error(`HTTP ${response.status}: ${detail}`);
@@ -312,7 +321,7 @@ import {
     } catch (error) {
       // Preserve the HTTP status and server error for the admin Debugger,
       // without showing raw AI errors or stack traces to regular players.
-      console.error('[Dongtian create]', responseStatus == null ? '請求未取得 HTTP 回應' : `HTTP ${responseStatus}`, error);
+      console.error('[Dongtian create]', responseStatus == null ? '請求未取得 HTTP 回應' : `HTTP ${responseStatus}`, error, responseDiagnostics || '');
       const fallback = responseStatus === 413
         ? '洞天素材過大，請減少圖片或文字後重試。'
         : '洞天生成未完成，請稍後重試。';
