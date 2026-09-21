@@ -884,6 +884,14 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
 
     if (room.status === 'intro') { updateIntroText(room); advanceIntro(room); }
     else if (room.status === 'playing' && room.currentQuestion) {
+      // The arena stays visible for the entire shared three-second countdown.
+      if (nowMs() < Number(room.questionReadyAtMs || 0)) {
+        if (document.getElementById('page-battle')?.dataset.bv2Phase !== 'arena') renderArena(room);
+        renderRoundCue(room);
+        claimDisconnectedOpponent(room);
+        return;
+      }
+      if (document.getElementById('page-battle')?.dataset.bv2Phase !== 'quiz') renderQuiz(room);
       const hostSubmitted = hasSubmittedAnswer(room.host, room.round);
       const guestSubmitted = hasSubmittedAnswer(room.guest, room.round);
       const hostAnswer = answerObject(room.host, room.round);
@@ -903,10 +911,12 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
         if (trackEl) trackEl.classList.add('idle'); if (barEl) barEl.style.width = '100%';
       }
     } else if (room.status === 'settled') {
-      const left = Math.max(0, Number(room.nextRoundAtMs || 0) - nowMs());
-      if (timerEl) { timerEl.textContent = `${(left / 1000).toFixed(1)}s`; timerEl.classList.remove('idle'); }
-      if (trackEl) trackEl.classList.remove('idle'); if (barEl) barEl.style.width = `${Math.max(0, Math.min(100, left / BATTLE_V2.nextRoundDelayMs * 100))}%`;
-      if (left <= 0) advanceFromSettled(room);
+      const ready = bothReviewed(room) && !!room.nextRoundAtMs;
+      const left = ready ? Math.max(0, Number(room.nextRoundAtMs) - nowMs()) : 0;
+      if (timerEl) { timerEl.textContent = ready ? (left / 1000).toFixed(1) + 's' : '等待雙方確認'; timerEl.classList.remove('idle'); }
+      if (trackEl) trackEl.classList.remove('idle');
+      if (barEl) barEl.style.width = ready ? Math.max(0, Math.min(100, left / ROUND_ANIMATION_GRACE_MS * 100)) + '%' : '100%';
+      if (ready && left <= 0) advanceFromSettled(room);
     } else if (room.status === 'preparing') {
       if (timerEl) timerEl.textContent = '凝聚題目'; if (barEl) barEl.style.width = '100%';
       if (room.questionOwnerUid === me()?.uid) prepareRound(room); else takeoverQuestionLease(room);
@@ -980,7 +990,22 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
     if (!snap.exists()) { toast('鬥法房間已不存在。'); resetRuntime(); window.switchToPage?.('page-home'); return; }
     const room = snap.data(); if (Number(room.modeVersion) !== BATTLE_V2.modeVersion) return; state.room = room;
     const uid = me()?.uid; if (room.host?.uid === uid) state.role = 'host'; else if (room.guest?.uid === uid) state.role = 'guest'; else return;
-    if (room.status === 'waiting') { renderLobby(room); if (state.role === 'host') scheduleReconcile(); } else if (room.status === 'intro') renderIntro(room); else if (['playing', 'settled', 'preparing'].includes(room.status)) renderArena(room); else if (room.status === 'finished') renderResult(room);
+    if (room.status === 'waiting') { renderLobby(room); if (state.role === 'host') scheduleReconcile(); }
+    else if (room.status === 'intro') renderIntro(room);
+    else if (room.status === 'preparing') renderArena(room);
+    else if (room.status === 'playing') {
+      if (room.currentQuestion && nowMs() >= Number(room.questionReadyAtMs || 0)) renderQuiz(room);
+      else renderArena(room);
+    } else if (room.status === 'settled') {
+      if (state.reviewedRound !== Number(room.round)) renderQuiz(room);
+      else renderArena(room);
+    } else if (room.status === 'finished') {
+      const hasFinalRound = ['hp', 'double-ko', 'round-limit'].includes(room.finishReason) &&
+        Number(room.lastSettlement?.round) === Number(room.round) && !!room.currentQuestion;
+      if (hasFinalRound && state.reviewedRound !== Number(room.round)) renderQuiz(room);
+      else if (hasFinalRound && state.animationFinishedKey !== settlementKey(room)) renderArena(room);
+      else renderResult(room);
+    }
     if (room.status === 'playing' && answerObject(room.host, room.round) && answerObject(room.guest, room.round)) settleRound(room);
   }
 
