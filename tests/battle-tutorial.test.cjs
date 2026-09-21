@@ -46,7 +46,7 @@ test('battle tutorial is a local simulation and never creates a formal matchmaki
   assert.doesNotMatch(tutorial, /addDoc/);
   assert.doesNotMatch(tutorial, /runTransaction/);
   assert.doesNotMatch(tutorial, /recordBattleResult/);
-  assert.match(tutorial, /不建立正式房間、不消耗道具、不給獎勵/);
+  assert.match(tutorial, /不建立正式房間、不自動消耗道具、不給獎勵/);
   assert.match(tutorial, /不會加入正式勝敗紀錄/);
 });
 
