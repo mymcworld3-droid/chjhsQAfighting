@@ -384,7 +384,7 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder1';
       opponentMaxHp:99999,
       badge:'築基鬥法教學 · 第一戰',
       title:'先和師姐切磋',
-      body:`<div class="bt-rule"><strong>教學戰不計戰績：</strong>不建立正式房間、不消耗道具、不給獎勵，也不會改動你的永久生命值。玩家依目前裝備、金丹與正式戰鬥數值建立投影；沈清霜 65,000 真實傷害為既定劇情特例。</div>
+      body:`<div class="bt-rule"><strong>教學戰不計戰績：</strong>不建立正式房間、不自動消耗道具、不給獎勵，也不會改動你的永久生命值。若主動使用答題法寶則依正式規則消耗。玩家依目前裝備、金丹與正式戰鬥數值建立投影；沈清霜 65,000 真實傷害為既定劇情特例。</div>
         <div class="bt-rule">${combatSummary()}</div>
         <div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="shen-start">進入數學試煉</button></div>`
     }).querySelector('[data-bt-action="shen-start"]')?.addEventListener('click', beginShenQuestion);
@@ -555,7 +555,11 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder1';
         guOpponentAt = Date.now();
         if (!guPlayerAt) guDeadline = guOpponentAt + GU_ANSWER_WINDOW_MS;
         if (guPlayerAt) completeGuAnswer();
-        else renderGuRound();
+        else {
+          // Preserve any already-used option-removal artifact; only update the timer label.
+          const label = document.getElementById('bt-gu-timer');
+          if (label) label.textContent = '剩餘 25 秒';
+        }
       }, guRound % 2 === 0 ? 4200 : 6200);
       guTick = setInterval(updateGuTimer, 200);
     });
