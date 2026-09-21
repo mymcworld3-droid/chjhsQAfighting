@@ -182,10 +182,11 @@ test('refinery separates general materials and second-refinement artifacts into 
   assert.match(refinery, /> 二次煉製<\/span>/);
 });
 
-test('material divider is shifted 96px downward inside the whole held-material card', () => {
+test('held-material divider equally divides normal and secondary forging shelves', () => {
   assert.match(refinery, /refinery-panel refinery-material-panel/);
   assert.match(refinery, /\.refinery-material-panel\{[^}]*padding:0[^}]*grid-template-rows:minmax\(0,1fr\)[^}]*overflow:hidden/);
-  assert.match(refinery, /\.refinery-material-list\{[^}]*grid-template-rows:minmax\(0,calc\(50% \+ 96px - 32px\)\) minmax\(0,calc\(50% - 96px \+ 32px\)\)[^}]*gap:0[^}]*height:100%/);
+  assert.match(refinery, /\.refinery-material-list\{[^}]*grid-template-rows:repeat\(2,minmax\(0,1fr\)\)[^}]*gap:0[^}]*height:100%/);
+  assert.doesNotMatch(refinery, /calc\(50% \+ 96px - 32px\)/);
   assert.doesNotMatch(refinery, /refinery-panel"><div class="refinery-head"><div><h3><i class="fa-solid fa-gem"><\/i> 持有煉器素材/);
 });
 
@@ -200,15 +201,14 @@ test('second-refinement heading follows the divider after the divider moves down
 });
 
 
-test('second-refinement bottom edge extends another 64px while the divider stays fixed', () => {
-  assert.match(refinery, /--refinery-bottom-extension:64px/);
-  assert.match(refinery, /\.refinery-material-roll\+\.refinery-material-roll\{[^}]*padding-bottom:0/);
-  assert.match(refinery, /\.refinery-material-roll\+\.refinery-material-roll \.refinery-material-roll-body\{padding-bottom:0\}/);
-  assert.match(refinery, /grid-template-rows:minmax\(0,calc\(50% \+ 96px - 32px\)\) minmax\(0,calc\(50% - 96px \+ 32px\)\)/);
+test('second-refinement bottom edge has padding and does not clip its independently scrollable grid', () => {
+  assert.match(refinery, /\.refinery-material-roll\+\.refinery-material-roll\{[^}]*padding-bottom:8px/);
+  assert.match(refinery, /\.refinery-material-roll\+\.refinery-material-roll \.refinery-material-roll-body\{padding-bottom:8px\}/);
+  assert.match(refinery, /\.refinery-material-roll-body\{[^}]*overflow:auto/);
+  assert.match(refinery, /grid-template-rows:repeat\(2,minmax\(0,1fr\)\)/);
 });
 
-
-test('second-refinement artifacts sit at the bottom when the pane has spare height', () => {
-  assert.match(refinery, /refinery-material-roll\[data-refinery-material-roll="artifacts"\] \.refinery-material-roll-body:not\(\.is-empty\)\{align-content:end;align-content:safe end\}/);
+test('secondary-refinement artifacts start directly beneath the section title', () => {
+  assert.match(refinery, /refinery-material-roll\[data-refinery-material-roll="artifacts"\] \.refinery-material-roll-body:not\(\.is-empty\)\{align-content:start\}/);
   assert.match(refinery, /\.refinery-material-roll-body\{[^}]*align-content:start/);
 });
