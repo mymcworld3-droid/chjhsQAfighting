@@ -111,7 +111,7 @@ test('solo quiz uses restored active question before hitting the API and saves e
   assert.match(legacy, /const identity = JSON.stringify\(\[uid, scope\]\)/);
   assert.match(legacy, /source: mode === 'bank'/);
   assert.match(legacy, /topics: Array.isArray\(unit\?\.sub_topics\)/);
-  assert.match(legacy, /data\.q === quiz\.data\?\.q/);
+  assert.match(legacy, /data\?\.q === quiz\.data\?\.q/);
 });
 
 test('core import and page query change together to refresh browser cached code', () => {
