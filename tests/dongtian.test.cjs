@@ -106,6 +106,100 @@ test('Dongtian batch normalization rejects multi-select and requires one correct
   }, plan, [], 0, 5));
 });
 
+test('Dongtian whole-cave verification example is internally consistent', () => {
+  const prompt = api.buildDongtianDoubleCheckPrompt({ questions: [] });
+  assert.match(prompt, /"confidence": 0\.95/);
+  assert.match(prompt, /"issues": \[\]/);
+  assert.doesNotMatch(prompt, /"questionId": "DT-001", "issue": "具體錯誤"/);
+  assert.equal(api.normalizeDongtianDoubleCheck({
+    approved:true, confidence:0.92, issues:[]
+  }).approved, true);
+});
+
+test('inconclusive whole-cave review retries independently before rejecting generated questions', async () => {
+  const router = require('../ai-router.js');
+  const saved = router.generateJSON;
+  const cave = { questions:[{id:'DT-001',q:'Q1',correct:'A',wrong:['B','C','D'],exp:'E'}] };
+  const replies = [
+    { approved:false, confidence:0.1, summary:'不確定', issues:[] },
+    { approved:true, confidence:0.96, summary:'再審通過', issues:[] }
+  ];
+  let calls = 0;
+  router.generateJSON = async () => ({ data: replies[calls++], provider:'gemini-test', model:'test-model' });
+  try {
+    const checked = await api.reviewAndRepairGeneratedDongtian(cave);
+    assert.equal(calls, 2);
+    assert.equal(checked.doubleCheck.review.passed, true);
+    assert.equal(checked.dongtian, cave);
+    assert.deepEqual(checked.repairs, []);
+  } finally { router.generateJSON = saved; }
+});
+
+test('a concrete issue is repaired only after independent revision validation and full recheck', async () => {
+  const router = require('../ai-router.js');
+  const saved = router.generateJSON;
+  const original = {id:'DT-001',difficulty:'medium',subject:'數學',
+    q:'2 + 2 = ?',correct:'5',wrong:['3','4','6'],exp:'2 + 2 = 5'};
+  const cave = { name:'算境',level:'國中一年級',difficulty:'medium',subject:'數學',
+    questions:[original,{...original,id:'DT-002',q:'3 + 3 = ?',correct:'6',wrong:['5','7','8'],exp:'3 + 3 = 6'}] };
+  const replies = [
+    { approved:false, confidence:0.98, summary:'第一題錯誤', issues:[{questionId:'DT-001',issue:'2 + 2 應為 4'}] },
+    { q:'2 + 2 = ?',correct:'4',wrong:['3','5','6'],exp:'2 + 2 = 4' },
+    { essencePreserved:true,errorResolved:true,singleCorrect:true,noNewError:true,levelAppropriate:true,confidence:0.98,summary:'已修正' },
+    { approved:true, confidence:0.97, summary:'全題通過', issues:[] }
+  ];
+  let calls = 0;
+  router.generateJSON = async () => ({ data: replies[calls++], provider:'gemini-test', model:'test-model' });
+  try {
+    const checked = await api.reviewAndRepairGeneratedDongtian(cave);
+    assert.equal(calls, 4);
+    assert.equal(checked.doubleCheck.review.passed, true);
+    assert.equal(checked.dongtian.questions[0].correct, '4');
+    assert.equal(checked.dongtian.questions[0].id, 'DT-001');
+    assert.equal(checked.dongtian.questions[0].subject, '數學');
+    assert.equal(checked.dongtian.questions[1].q, cave.questions[1].q);
+    assert.equal(cave.questions[0].correct, '5', 'original must not be mutated');
+    assert.equal(checked.repairs[0].validated, true);
+  } finally { router.generateJSON = saved; }
+});
+
+test('failed repair validation blocks publication rather than skipping quality checks', async () => {
+  const router = require('../ai-router.js');
+  const saved = router.generateJSON;
+  const cave = { questions:[{id:'DT-001',q:'Q1',correct:'A',wrong:['B','C','D'],exp:'E'}] };
+  const replies = [
+    { approved:false, confidence:0.9, issues:[{questionId:'DT-001',issue:'答案不唯一'}] },
+    { q:'Q1',correct:'A',wrong:['B','C','D'],exp:'E' },
+    { essencePreserved:true,errorResolved:false,singleCorrect:false,noNewError:true,levelAppropriate:true,confidence:0.9 }
+  ];
+  let calls = 0;
+  router.generateJSON = async () => ({ data: replies[calls++], provider:'gemini-test', model:'test-model' });
+  try {
+    const checked = await api.reviewAndRepairGeneratedDongtian(cave);
+    assert.equal(calls, 3);
+    assert.equal(checked.doubleCheck.review.passed, false);
+    assert.equal(checked.blocked, 'revision_validation');
+    assert.equal(checked.dongtian, cave);
+  } finally { router.generateJSON = saved; }
+});
+
+test('unknown question IDs in reviewer feedback cannot approve or rewrite the cave', async () => {
+  const router = require('../ai-router.js');
+  const saved = router.generateJSON;
+  const cave = { questions:[{id:'DT-001',q:'Q1',correct:'A',wrong:['B','C','D'],exp:'E'}] };
+  let calls = 0;
+  router.generateJSON = async () => {
+    calls++;
+    return { data: { approved:false,confidence:0.95,issues:[{questionId:'DT-999',issue:'不符'}] }, provider:'x',model:'x' };
+  };
+  try {
+    const checked = await api.reviewAndRepairGeneratedDongtian(cave);
+    assert.equal(calls, 1);
+    assert.equal(checked.doubleCheck.review.passed, false);
+    assert.equal(checked.blocked, 'unknown_question_id');
+  } finally { router.generateJSON = saved; }
+});
+
 test('Dongtian encounter is only for higher-grade matching players and is one-time', () => {
   assert.match(uiSource, /const ENCOUNTER_CHANCE = 0\.20/);
   assert.match(uiSource, /playerOrder > Number\(item\.levelOrder\)/);
