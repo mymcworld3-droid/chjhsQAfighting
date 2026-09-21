@@ -1,0 +1,45 @@
+/* Read-only public cultivator profile. Separate from the editable account settings. */
+.xpp-backdrop{position:fixed;inset:0;z-index:19000;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,.82);backdrop-filter:blur(9px)}
+.xpp-dialog{box-sizing:border-box;width:min(100%,640px);max-height:min(90dvh,850px);display:flex;flex-direction:column;overflow:hidden;border:1px solid rgba(216,177,93,.42);border-radius:23px;background:radial-gradient(ellipse at 50% 0%,rgba(216,177,93,.10),transparent 50%),linear-gradient(145deg,#19150e,#070707);color:#e8ddc5;box-shadow:0 26px 95px rgba(0,0,0,.75)}
+.xpp-header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex:none;padding:12px 17px;border-bottom:1px solid rgba(216,177,93,.17);color:#d7bc7a;font-size:11px;font-weight:900;letter-spacing:.09em}
+.xpp-close{display:grid;place-items:center;flex:none;width:36px;height:36px;border-radius:50%;border:1px solid rgba(216,177,93,.24);background:rgba(216,177,93,.07);color:#e7c878;cursor:pointer}
+.xpp-close:focus-visible{outline:2px solid #f0d58e;outline-offset:3px}
+.xpp-body{overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#795c30 transparent;padding:16px;min-height:0}
+.xpp-hero{display:flex;align-items:center;gap:15px}
+.xpp-avatar{flex:none;position:relative;width:86px;height:86px;display:grid;place-items:center;overflow:hidden;border-radius:50%;border:2px solid #c29d54;background:radial-gradient(circle at 40% 25%,#3d321e,#13110d);color:#bda16e;box-shadow:0 0 30px rgba(216,177,93,.1);font-size:31px}
+.xpp-avatar img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.xpp-avatar img[hidden],.xpp-avatar i[hidden]{display:none!important}
+.xpp-identity{min-width:0}
+.xpp-identity span{font-size:8px;font-weight:900;letter-spacing:.14em;color:#a99057}
+.xpp-identity h2{margin:4px 0 3px;font-size:clamp(17px,4vw,24px);color:#faebc9;overflow-wrap:anywhere}
+.xpp-identity p{margin:0;color:#a79b83;font-size:11px}
+.xpp-power{display:grid;gap:5px;justify-items:center;padding:13px;margin:15px 0 9px;border:1px solid rgba(217,178,90,.32);border-radius:16px;background:radial-gradient(ellipse at center,rgba(216,177,93,.15),rgba(216,177,93,.025))}
+.xpp-power span{font-size:10px;font-weight:900;color:#b9a171;letter-spacing:.12em}
+.xpp-power strong{font-size:clamp(30px,7vw,44px);line-height:1.13;color:#f5d77e;font-variant-numeric:tabular-nums;text-shadow:0 0 23px rgba(216,177,93,.18)}
+.xpp-power small{color:#a29375;font-size:9px;text-align:center}
+.xpp-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.xpp-stats>div{min-width:0;display:grid;gap:4px;justify-items:center;padding:9px 5px;border-radius:12px;background:rgba(216,177,93,.04);border:1px solid rgba(216,177,93,.13)}
+.xpp-stats span{font-size:9px;color:#95866c}
+.xpp-stats b{font-size:14px;color:#f0d494;font-variant-numeric:tabular-nums}
+.xpp-section{margin-top:18px}
+.xpp-section h3{font-size:12px;color:#efd8a1;margin:0 0 9px;padding-bottom:7px;border-bottom:1px solid rgba(216,177,93,.22)}
+.xpp-core{padding:12px;border-radius:13px;border:1px solid rgba(216,177,93,.18);background:rgba(216,177,93,.035)}
+.xpp-core>div{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:5px}
+.xpp-core strong{font-size:13px;color:#f3e3b6}
+.xpp-core b{font-size:10px;color:#d0ae62}
+.xpp-core p{margin:8px 0 0;color:#b4a68a;font-size:10px;line-height:1.7}
+.xpp-equipment{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.xpp-equip{min-width:0;display:flex;flex-direction:column;gap:4px;min-height:82px;padding:11px;border-radius:12px;border:1px solid rgba(216,177,93,.17);background:rgba(216,177,93,.025)}
+.xpp-equip>span{font-size:9px;color:#a4906e}
+.xpp-equip>strong{font-size:12px;color:#f3dfb4;overflow-wrap:anywhere}
+.xpp-equip>strong.xpp-empty{color:#716957;font-weight:400}
+.xpp-equip small{color:#d4b97d;font-size:9px}
+.xpp-equip p{margin:2px 0 0;font-size:9px;color:#a79a80;line-height:1.6;overflow-wrap:anywhere}
+.xpp-note,.xpp-footnote,.xpp-loading{font-size:11px;color:#94866b;line-height:1.7}
+.xpp-loading{text-align:center;padding:38px 8px}
+.xpp-footnote{margin:15px 0 0;font-size:9px}
+.xpp-profile-trigger{cursor:pointer;display:inline-flex;align-items:center;justify-content:center;border:0;background:transparent;color:inherit;padding:0;text-align:inherit;min-width:0}
+.xpp-profile-trigger:hover,.xpp-profile-trigger:focus-visible{color:#f2d28d;filter:brightness(1.15)}
+.xpp-profile-trigger:focus-visible{outline:2px solid #dfbf74;outline-offset:3px;border-radius:6px}
+@media(max-width:500px){.xpp-backdrop{padding:9px}.xpp-dialog{max-height:94dvh;border-radius:18px}.xpp-body{padding:12px}.xpp-avatar{width:70px;height:70px}.xpp-equipment{grid-template-columns:1fr}.xpp-core>div{display:grid}}
+@media(prefers-reduced-motion:reduce){.xpp-backdrop{backdrop-filter:none}}
