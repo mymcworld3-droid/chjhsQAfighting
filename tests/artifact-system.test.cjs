@@ -38,11 +38,12 @@ test('catalog supports every requested artifact behavior through composable effe
   assert.match(catalog, /contexts: \['quiz', 'battle', 'dongtian'\]/);
 });
 
-test('forge is mounted in Dongfu and all realms may craft or use while equipment obeys the no-lower-realm rule', () => {
+test('forge is mounted in Dongfu and all player realms can equip any artifact tier', () => {
   assert.match(system, /id = 'artifact-forge-card'|card\.id = 'artifact-forge-card'/);
   assert.match(system, />煉器室</);
-  assert.match(system, /所有境界都能持有、煉製與使用法寶/);
-  assert.match(system, /realmOrderByName\(item\?\.realm\) >= currentRealm\(\)\.order/);
+  assert.match(system, /所有境界的修士都能裝備任何境界的裝備型法寶/);
+  assert.doesNotMatch(system, /realmOrderByName\(item\?\.realm\) >= currentRealm\(\)\.order/);
+  assert.doesNotMatch(system, /低於你目前的.*境界，不能裝備/);
   assert.match(system, /enforceEquipmentEligibility/);
   assert.match(system, /delete next\.equipped\[slot\]/);
 });
@@ -103,11 +104,12 @@ test('equipment system uses four canonical slots, replaces same-slot gear, and c
   assert.match(system, /window\.getArtifactEquipmentStatus/);
 });
 
-test('equipment writes recheck live ownership and realm inside the Firestore transaction', () => {
+test('equipment writes recheck live ownership but do not reject cross-realm artifacts', () => {
   const start = system.indexOf('async function toggleEquipArtifact');
   const end = system.indexOf('async function activateTimedArtifact', start);
   const block = system.slice(start, end);
   assert.match(block, /const owned = Math\.max\(0, Number\(next\.inventory\[itemId\]\) \|\| 0\)/);
-  assert.match(block, /const liveRealm = realmForScore/);
-  assert.match(block, /realmOrderByName\(item\.realm\) < liveRealm\.order/);
+  assert.doesNotMatch(block, /const liveRealm = realmForScore/);
+  assert.doesNotMatch(block, /realmOrderByName\(item\.realm\)/);
+  assert.match(block, /next\.equipped\[slot\] = itemId/);
 });
