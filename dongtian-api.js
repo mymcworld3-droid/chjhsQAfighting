@@ -16,13 +16,16 @@ const MAX_IMAGE_BASE64 = 2_800_000;
 const MAX_TEXT = 16000;
 const MIN_QUESTIONS = 10;
 const QUESTION_BATCH_SIZE = 5;
-const QUESTION_COUNT_CHOICES = Object.freeze([10, 15, 20, 25, 30]);
-const QUESTION_AMOUNT_PRESETS = Object.freeze({
-  low: Object.freeze([10]),
-  medium: Object.freeze([15, 20]),
-  high: Object.freeze([25, 30])
-});
 const MAX_QUESTIONS = 30;
+const QUESTION_COUNT_CHOICES = Object.freeze(Array.from(
+  { length: MAX_QUESTIONS - MIN_QUESTIONS + 1 }, (_, i) => MIN_QUESTIONS + i
+));
+// Each amount is an inclusive integer range; not a set of multiples of five.
+const QUESTION_AMOUNT_PRESETS = Object.freeze({
+  low: Object.freeze([10, 14]),
+  medium: Object.freeze([15, 20]),
+  high: Object.freeze([21, 30])
+});
 const MAX_REPORT_REASON = 1200;
 const MAX_REVISION_HINT = 1600;
 
@@ -72,9 +75,10 @@ function allowedQuestionCounts(amount) {
 }
 
 function normalizePlannedQuestionCount(value, amount = null) {
-  const requested = Math.max(MIN_QUESTIONS, Math.min(MAX_QUESTIONS, Math.ceil(Number(value) || MIN_QUESTIONS)));
-  const choices = amount ? allowedQuestionCounts(amount) : QUESTION_COUNT_CHOICES;
-  return choices.find((count) => count >= requested) || choices[choices.length - 1];
+  const [min, max] = amount ? allowedQuestionCounts(amount) : [MIN_QUESTIONS, MAX_QUESTIONS];
+  const candidate = Number(value);
+  const requested = Number.isFinite(candidate) && candidate > 0 ? Math.ceil(candidate) : min;
+  return Math.max(min, Math.min(max, requested));
 }
 
 function normalizeDongtianPlan(raw, creatorLevel, questionAmount = null) {
@@ -133,8 +137,8 @@ function buildPlanningPrompt(text, creatorLevel, imageCount, questionAmount = 'm
 
 [規劃要求]
 1. 盡可能完整辨認素材中所有可獨立學習／考核的知識點。
-2. 使用者選擇的題量偏好是「${amountLabel}」。本次 questionCount 只能從 ${allowedCounts.join('、')} 中選擇；若有兩個候選值，再依素材資訊密度判斷較合適的一個。
-3. 無論使用者選哪一種題量，每個洞天至少 ${MIN_QUESTIONS} 題，且後續固定每 ${QUESTION_BATCH_SIZE} 題一批生成。
+2. 使用者選擇的題量偏好是「${amountLabel}」。本次 questionCount 應為 ${allowedCounts[0]}～${allowedCounts[1]} 之間任一整數，依素材實際可考核知識點選出合適的題數，不要湊成 5 的倍數或無故補題。
+3. 無論使用者選哪一種題量，每個洞天至少 ${MIN_QUESTIONS} 題；後續每批最多 ${QUESTION_BATCH_SIZE} 題，最後一批僅生成剩餘題數（可為 1～${QUESTION_BATCH_SIZE} 題）。
 4. 題目結構固定為「四選一單選題」：每題只能選一個答案、恰好一個 correct、恰好三個 wrong；禁止複選題、多選題、複數正解。
 5. questionBlueprints 必須恰好有 questionCount 筆，依實際遊玩順序規劃每一題要考的 focus、skill、difficulty、subject。
 6. 題序由基礎辨識 → 理解 → 應用／整合，避免規劃同義重複題。
@@ -181,7 +185,7 @@ function buildQuestionBatchPrompt(text, creatorLevel, imageCount, plan, generate
   return `
 [任務]
 你是「洞天」題目生成師。洞天規劃已完成。現在只生成第 ${startIndex + 1}～${endIndex} 題，共恰好 ${batchSize} 題。
-這是分批生成流程，每次固定生成 ${QUESTION_BATCH_SIZE} 題；不得一次生成其他批次。
+這是分批生成流程，每批最多 ${QUESTION_BATCH_SIZE} 題；本批只生成剩餘所需的 ${batchSize} 題，最後一批可少於 ${QUESTION_BATCH_SIZE} 題；不得額外湊題。
 
 [洞天規劃]
 ${JSON.stringify({
@@ -781,7 +785,7 @@ module.exports = function registerDongtianApi(app) {
       const planningRun = await generateMultimodalJSON(buildPlanningPrompt(text, creatorLevel, images.length, questionAmount), images);
       const plan = normalizeDongtianPlan(planningRun.data, creatorLevel, questionAmount);
 
-      // Pass 2+: generate exactly five questions at a time.
+      // Pass 2+: generate up to five questions per batch; final batch uses the exact remainder.
       // Every batch prompt includes every question already generated so the model can avoid repetition.
       const generatedQuestions = [];
       const batchAudit = [];
