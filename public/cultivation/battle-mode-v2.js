@@ -4,7 +4,7 @@ import {
   getFirestore, doc, collection, query, where, limit, getDocs,
   addDoc, updateDoc, onSnapshot, runTransaction, serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260920-corebattle1';
+import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder1';
 
 // Battle v2 — 修仙配對鬥法。
 // 核心原則：配對、首答倒數、回合結算、離場判定皆寫入 Firestore；任何單一 client 都不能私自決定勝負。
@@ -18,6 +18,9 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260920-c
   const MATCH_RECONCILE_MS = 1100;
   const MATCH_SCAN_LIMIT = 80;
   const INTRO_DURATION_MS = 4800;
+  const ROUND_COUNTDOWN_MS = 3000;
+  const ANIMATION_STEP_MS = 950;
+  const ROUND_ANIMATION_GRACE_MS = 5200;
   const ANSWER_WINDOW_MS = 25000;
   const BATTLE_WIN_GOLD = 500;
   const BATTLE_WIN_CULTIVATION = 5;
@@ -43,7 +46,11 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260920-c
     pendingAnswer: null,
     seenActivationKeys: new Set(),
     seenSettlementKey: null,
-    resultRecordedRoom: null
+    resultRecordedRoom: null,
+    reviewedRound: null,
+    reviewSubmittingRound: null,
+    animationFinishedKey: null,
+    animationTimers: []
   };
 
   function auth() { return getAuth(getApp()); }
@@ -155,6 +162,16 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260920-c
 
           <div class="bv2-duel-rule"><i class="fa-solid fa-hourglass-half"></i><span>本題<strong>不限讀題時間</strong>；任一方先答後，另一方才開始 <strong>25 秒</strong> 倒數。</span></div>
 
+          <div id="bv2-duel-cue" class="bv2-duel-cue" aria-live="polite">
+            <span id="bv2-cue-kicker">鬥法開始</span>
+            <strong id="bv2-cue-count">3</strong>
+            <p id="bv2-cue-message">凝神備戰，即將進入題目</p>
+          </div>
+
+          <div class="bv2-log-wrap"><div class="bv2-log-title"><span>鬥法紀錄</span><small>天道公證 · SERVER SYNCED</small></div><div id="bv2-log" class="bv2-log"><p>尚無攻防紀錄。</p></div></div>
+        </section>
+
+        <section id="bv2-quiz" class="bv2-quiz hidden" aria-label="全畫面鬥法題目">
           <div class="bv2-question-card">
             <div class="bv2-question-meta"><span id="bv2-phase">靜觀題意</span><span id="bv2-timer" class="idle">等待首答</span></div>
             <div class="bv2-timer-track idle" id="bv2-timer-track"><i id="bv2-timer-bar"></i></div>
@@ -162,9 +179,8 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260920-c
             <div id="bv2-options" class="bv2-options"></div>
             <div id="bv2-explanation" class="bv2-explanation hidden"></div>
             <p id="bv2-answer-status" class="bv2-answer-status">先看清題意；第一位作答者會啟動對手的 25 秒限時。</p>
+            <button id="bv2-review-continue" class="bv2-btn primary hidden" type="button">看完解析 · 返回戰場</button>
           </div>
-
-          <div class="bv2-log-wrap"><div class="bv2-log-title"><span>鬥法紀錄</span><small>天道公證 · SERVER SYNCED</small></div><div id="bv2-log" class="bv2-log"><p>尚無攻防紀錄。</p></div></div>
         </section>
 
         <section id="bv2-result" class="bv2-result hidden">
@@ -174,6 +190,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260920-c
         </section>
       </div>`;
 
+    page.querySelector('#bv2-review-continue')?.addEventListener('click', confirmReview);
     page.querySelector('#bv2-cancel')?.addEventListener('click', () => exitBattle({ navigate: true, forfeit: true }));
     page.querySelector('#bv2-leave-top')?.addEventListener('click', () => exitBattle({ navigate: true, forfeit: true }));
     page.querySelector('#bv2-home')?.addEventListener('click', () => exitBattle({ navigate: true, forfeit: false }));
@@ -188,7 +205,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260920-c
     const page = ensurePage();
     if (!page) return;
     page.dataset.bv2Phase = name;
-    ['lobby', 'intro', 'arena', 'result'].forEach((key) => page.querySelector(`#bv2-${key}`)?.classList.toggle('hidden', key !== name));
+    ['lobby', 'intro', 'arena', 'quiz', 'result'].forEach((key) => page.querySelector(`#bv2-${key}`)?.classList.toggle('hidden', key !== name));
   }
 
   function setText(id, value) {
@@ -221,7 +238,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260920-c
       goldenCore: window.getEquippedGoldenCoreBattleSnapshot?.() || null,
       // 金丹道心在配對時複製成「本場一次性防護」，不消耗一般悟道持有的道心。
       coreShield: !!window.getEquippedGoldenCoreBattleSnapshot?.() && data.stats?.goldenCoreShield === true,
-      coreCorrectStreak: 0,
+      coreCorrectStreak: 0, reviewedRound: 0,
       answerChoice: null, answerCorrect: null, answerAt: null, answerRound: null, timedOut: false,
       lastSeenAtMs: nowMs()
     };
@@ -333,7 +350,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260920-c
     const ref = await addDoc(collection(db(), ROOM_COLLECTION), {
       modeVersion: BATTLE_V2.modeVersion, mode: 'matchmaking', host: myData, guest: null, status: 'waiting',
       round: 1, maxRounds: BATTLE_V2.maxRounds, responseWindowMs: ANSWER_WINDOW_MS,
-      currentQuestion: question, settledRound: 0, battleLog: [], battleLogId: '', winner: null, finishReason: '',
+      currentQuestion: question, questionReadyAtMs: null, settledRound: 0, battleLog: [], battleLogId: '', winner: null, finishReason: '',
       hostResultRecorded: false, guestResultRecorded: false,
       answerWindowStartedAt: null, answerWindowStartedAtMs: null, firstAnswerUid: null,
       createdAt: serverTimestamp(), createdAtMs: nowMs(), updatedAt: serverTimestamp()
@@ -394,6 +411,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260920-c
     if (state.tick) clearInterval(state.tick);
     if (state.heartbeat) clearInterval(state.heartbeat);
     if (state.reconcile) clearTimeout(state.reconcile);
+    state.animationTimers.forEach(clearTimeout); state.animationTimers = [];
     state.tick = state.heartbeat = state.reconcile = null;
   }
 
@@ -403,6 +421,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260920-c
     state.settlingRound = state.timeoutRound = state.preparingRound = state.advancingRound = state.disconnectClaimRound = null;
     state.introAdvancing = false; state.renderedQuestionId = null; state.pendingAnswer = null;
     state.seenActivationKeys.clear(); state.seenSettlementKey = null; state.resultRecordedRoom = null;
+    state.reviewedRound = state.reviewSubmittingRound = state.animationFinishedKey = null;
   }
 
   function renderLobby(room) {
@@ -556,7 +575,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260920-c
   }
 
   async function submitAnswer(choice) {
-    if (!state.roomId || !state.role || state.room?.status !== 'playing') return;
+    if (!state.roomId || !state.role || state.room?.status !== 'playing' || nowMs() < Number(state.room.questionReadyAtMs || 0)) return;
     const round = Number(state.room.round);
     const mine = playerForRole(state.room, state.role);
     if (hasSubmittedAnswer(mine, round) || state.pendingAnswer?.round === round) return;
@@ -571,7 +590,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260920-c
         const snap = await tx.get(ref);
         if (!snap.exists()) return false;
         const room = snap.data();
-        if (room.status !== 'playing' || Number(room.round) !== round || room.currentQuestion?.id !== questionId) return false;
+        if (room.status !== 'playing' || nowMs() < Number(room.questionReadyAtMs || 0) || Number(room.round) !== round || room.currentQuestion?.id !== questionId) return false;
         const player = playerForRole(room, state.role);
         if (hasSubmittedAnswer(player, round)) return false;
 
@@ -645,24 +664,24 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260920-c
           'host.coreShield': outcome.hostCoreShield, 'guest.coreShield': outcome.guestCoreShield,
           'host.coreCorrectStreak': outcome.hostCoreStreak, 'guest.coreCorrectStreak': outcome.guestCoreStreak,
           settledRound: round, battleLog: [...(Array.isArray(fresh.battleLog) ? fresh.battleLog : []), ...roundLogs].slice(-20), battleLogId: `${round}-${nowMs()}`,
-          lastSettlement: { round, attackers: outcome.attackers, activations: outcome.activations, hostHp: outcome.hostHp, guestHp: outcome.guestHp, settledAtMs: nowMs() }, updatedAt: serverTimestamp()
+          lastSettlement: { round, attackers: outcome.attackers, turnOrder: outcome.turnOrder, steps: outcome.steps, startHostHp: outcome.startHostHp, startGuestHp: outcome.startGuestHp, activations: outcome.activations, hostHp: outcome.hostHp, guestHp: outcome.guestHp, settledAtMs: nowMs() }, updatedAt: serverTimestamp()
         };
         if (outcome.finished) tx.update(ref, { ...common, status: 'finished', winner: outcome.winnerUid, finishReason: outcome.finishReason, finishedAt: serverTimestamp() });
-        else tx.update(ref, { ...common, status: 'settled', nextRoundAtMs: nowMs() + BATTLE_V2.nextRoundDelayMs });
+        else tx.update(ref, { ...common, status: 'settled', nextRoundAtMs: null });
       });
     } catch (error) { console.warn('[Battle v2] settlement raced:', error); }
     finally { setTimeout(() => { if (state.settlingRound === round) state.settlingRound = null; }, 800); }
   }
 
   async function advanceFromSettled(room) {
-    const round = Number(room.round); if (state.advancingRound === round || room.status !== 'settled' || nowMs() < Number(room.nextRoundAtMs || 0)) return;
+    const round = Number(room.round); if (state.advancingRound === round || room.status !== 'settled' || !bothReviewed(room) || !room.nextRoundAtMs || nowMs() < Number(room.nextRoundAtMs)) return;
     state.advancingRound = round;
     try {
       await runTransaction(db(), async (tx) => {
         const ref = roomRef(); const snap = await tx.get(ref); if (!snap.exists()) return; const fresh = snap.data();
-        if (fresh.status !== 'settled' || Number(fresh.round) !== round || nowMs() < Number(fresh.nextRoundAtMs || 0)) return;
+        if (fresh.status !== 'settled' || Number(fresh.round) !== round || !bothReviewed(fresh) || !fresh.nextRoundAtMs || nowMs() < Number(fresh.nextRoundAtMs)) return;
         tx.update(ref, {
-          status: 'preparing', round: round + 1, currentQuestion: null, questionOwnerUid: me().uid, questionClaimedAtMs: nowMs(),
+          status: 'preparing', round: round + 1, currentQuestion: null, questionReadyAtMs: null, nextRoundAtMs: null, questionOwnerUid: me().uid, questionClaimedAtMs: nowMs(),
           answerWindowStartedAt: null, answerWindowStartedAtMs: null, firstAnswerUid: null,
           'host.answerChoice': null, 'host.answerCorrect': null, 'host.answerAt': null, 'host.answerClientAt': null, 'host.answerRound': null, 'host.timedOut': false,
           'guest.answerChoice': null, 'guest.answerCorrect': null, 'guest.answerAt': null, 'guest.answerClientAt': null, 'guest.answerRound': null, 'guest.timedOut': false, updatedAt: serverTimestamp()
@@ -679,7 +698,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260920-c
       await runTransaction(db(), async (tx) => {
         const ref = roomRef(); const snap = await tx.get(ref); if (!snap.exists()) return; const fresh = snap.data();
         if (fresh.status !== 'preparing' || Number(fresh.round) !== round || fresh.currentQuestion || fresh.questionOwnerUid !== me().uid) return;
-        tx.update(ref, { status: 'playing', currentQuestion: question, questionOwnerUid: null, questionClaimedAtMs: null, answerWindowStartedAt: null, answerWindowStartedAtMs: null, firstAnswerUid: null, updatedAt: serverTimestamp() });
+        tx.update(ref, { status: 'playing', currentQuestion: question, questionReadyAtMs: nowMs() + ROUND_COUNTDOWN_MS, questionOwnerUid: null, questionClaimedAtMs: null, answerWindowStartedAt: null, answerWindowStartedAtMs: null, firstAnswerUid: null, updatedAt: serverTimestamp() });
       });
     } catch (error) { console.error('[Battle v2] next question failed:', error); }
     finally { state.preparingRound = null; }
@@ -703,7 +722,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260920-c
       await runTransaction(db(), async (tx) => {
         const ref = roomRef(); const snap = await tx.get(ref); if (!snap.exists()) return; const fresh = snap.data();
         if (fresh.status !== 'intro' || nowMs() < Number(fresh.introUntilMs || 0)) return;
-        tx.update(ref, { status: 'playing', battleStartedAt: serverTimestamp(), answerWindowStartedAt: null, answerWindowStartedAtMs: null, firstAnswerUid: null, updatedAt: serverTimestamp() });
+        tx.update(ref, { status: 'playing', questionReadyAtMs: nowMs() + ROUND_COUNTDOWN_MS, battleStartedAt: serverTimestamp(), answerWindowStartedAt: null, answerWindowStartedAtMs: null, firstAnswerUid: null, updatedAt: serverTimestamp() });
       });
     } catch (_) {} finally { setTimeout(() => { state.introAdvancing = false; }, 600); }
   }
