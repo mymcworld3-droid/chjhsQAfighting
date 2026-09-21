@@ -81,6 +81,16 @@ function normalizePlannedQuestionCount(value, amount = null) {
   return Math.max(min, Math.min(max, requested));
 }
 
+// When AI omits a name, use the actual learning topic instead of a fantasy title.
+function contentBasedDongtianName(data) {
+  const points = Array.isArray(data?.knowledgePoints)
+    ? data.knowledgePoints.map((point) => cleanText(point, 26)).filter(Boolean)
+    : [];
+  if (points.length) return points.slice(0, 2).join('與').slice(0, 40);
+  const subject = cleanText(data?.subject, 24);
+  return subject && subject !== '綜合' ? `${subject}重點整理` : '學習重點整理';
+}
+
 function normalizeDongtianPlan(raw, creatorLevel, questionAmount = null) {
   const data = raw && typeof raw === 'object' ? raw : {};
   const level = normalizeLevel(data.level, creatorLevel);
@@ -108,7 +118,7 @@ function normalizeDongtianPlan(raw, creatorLevel, questionAmount = null) {
   }
 
   return {
-    name: cleanText(data.name, 40) || '無名洞天',
+    name: cleanText(data.name, 40) || contentBasedDongtianName(data),
     level,
     levelOrder: LEVELS.indexOf(level),
     difficulty,
@@ -144,14 +154,14 @@ function buildPlanningPrompt(text, creatorLevel, imageCount, questionAmount = 'm
 6. 題序由基礎辨識 → 理解 → 應用／整合，避免規劃同義重複題。
 7. 程度只能從以下值選一個：${LEVELS.join('、')}。建立者目前程度是「${cleanText(creatorLevel, 30) || '未提供'}」，僅供參考。
 8. difficulty 只能是 easy / medium / hard。subject 優先使用：國文、英文、數學、公民、歷史、地理、物理、化學、生物；跨多科或無法歸入單科時用「綜合」。
-9. 洞天名稱要像修仙世界中的秘境名稱，簡短、有記憶點，並暗示素材主題。
+9. 洞天名稱必須直接描述素材的實際學習內容／章節／核心概念，讓學生看到名稱就知道要學什麼；優先使用常見教材標題，如「一次函數與圖形」、「進位制與補數」、「光合作用」。禁止使用修仙、仙俠、秘境、玄幻、詩意或無法看出內容的名稱；不要取「星軌算境」這類名稱。
 
 [使用者文字]
 ${cleanText(text, MAX_TEXT) || '（沒有額外文字，主要依圖片內容規劃）'}
 
 [輸出 JSON Only]
 {
-  "name": "洞天名稱",
+  "name": "依素材內容命名的學習主題，例如：一次函數與圖形",
   "level": "上述程度之一",
   "difficulty": "easy|medium|hard",
   "subject": "主要科目或綜合",
@@ -394,7 +404,7 @@ function normalizeResult(raw, creatorLevel) {
     : [];
 
   return {
-    name: cleanText(data.name, 40) || '無名洞天',
+    name: cleanText(data.name, 40) || contentBasedDongtianName(data),
     level,
     levelOrder: LEVELS.indexOf(level),
     difficulty,
@@ -422,7 +432,7 @@ ${JSON.stringify(dongtian)}
 3. exp 是否和正解一致，計算與推理無誤。
 4. 題目程度、難度、科目是否合理。
 5. 題組是否有明顯重複、互相矛盾，題序是否由基礎到理解／應用。
-6. 洞天名稱、主要科目與程度是否和整組題目相符。
+6. 洞天名稱必須直接反映整組題目的實際學習主題，禁止修仙風格或空泛文藝名稱；主要科目與程度也應符合題目。
 
 [判定規則]
 - 逐題確實檢查；若所有題目正確且符合上列條件，approved=true、confidence 給 0～1 的實際信心值，issues 必須為 []。
@@ -932,4 +942,4 @@ module.exports = function registerDongtianApi(app) {
   });
 };
 
-module.exports.__test = { LEVELS, MIN_QUESTIONS, QUESTION_BATCH_SIZE, QUESTION_COUNT_CHOICES, QUESTION_AMOUNT_PRESETS, normalizeLevel, normalizeDifficulty, normalizeQuestionAmount, allowedQuestionCounts, normalizePlannedQuestionCount, normalizeDongtianPlan, normalizeQuestionBatch, normalizeResult, buildPrompt, buildPlanningPrompt, buildQuestionBatchPrompt, validateImages, normalizeQuestionSnapshot, buildQuestionReviewPrompt, normalizeQuestionReview, buildRevisionPrompt, buildRevisionValidationPrompt, normalizeStandaloneQuestion, normalizeRevisionValidation, normalizeDongtianDoubleCheck, buildDongtianDoubleCheckPrompt, verifyGeneratedDongtian, reviewAndRepairGeneratedDongtian };
+module.exports.__test = { LEVELS, MIN_QUESTIONS, QUESTION_BATCH_SIZE, QUESTION_COUNT_CHOICES, QUESTION_AMOUNT_PRESETS, normalizeLevel, normalizeDifficulty, normalizeQuestionAmount, allowedQuestionCounts, normalizePlannedQuestionCount, normalizeDongtianPlan, normalizeQuestionBatch, normalizeResult, buildPrompt, buildPlanningPrompt, buildQuestionBatchPrompt, validateImages, normalizeQuestionSnapshot, buildQuestionReviewPrompt, normalizeQuestionReview, buildRevisionPrompt, buildRevisionValidationPrompt, normalizeStandaloneQuestion, normalizeRevisionValidation, contentBasedDongtianName, normalizeDongtianDoubleCheck, buildDongtianDoubleCheckPrompt, verifyGeneratedDongtian, reviewAndRepairGeneratedDongtian };
