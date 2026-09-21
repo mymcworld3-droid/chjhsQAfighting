@@ -40,15 +40,15 @@ test('Dongtian first plans question count and fixed single-choice structure with
   assert.match(prompt, /只做「題量與題目結構規劃」/);
   assert.match(prompt, /至少 10 題/);
   assert.match(prompt, /題量偏好是「中量」/);
-  assert.match(prompt, /只能從 15、20 中選擇/);
+  assert.match(prompt, /15～20 之間任一整數/);
   assert.match(prompt, /四選一單選題/);
   assert.match(prompt, /禁止複選題、多選題、複數正解/);
   assert.equal(api.normalizePlannedQuestionCount(3), 10);
-  assert.equal(api.normalizePlannedQuestionCount(12), 15);
+  assert.equal(api.normalizePlannedQuestionCount(12), 12);
   assert.equal(api.normalizePlannedQuestionCount(30), 30);
 });
 
-test('Dongtian generates exactly five questions per batch and carries all previous questions into the next prompt', () => {
+test('Dongtian generates up to five questions per batch and carries all previous questions into the next prompt', () => {
   const plan = api.normalizeDongtianPlan({
     name:'星軌算境', level:'國中三年級', difficulty:'medium', subject:'數學',
     knowledgePoints:['比例','函數'], questionCount:10,
@@ -60,11 +60,34 @@ test('Dongtian generates exactly five questions per batch and carries all previo
   }));
   const prompt = api.buildQuestionBatchPrompt('notes','國中三年級',0,plan,previous,5,5);
   assert.match(prompt, /第 6～10 題，共恰好 5 題/);
-  assert.match(prompt, /每次固定生成 5 題/);
+  assert.match(prompt, /每批最多 5 題/);
   assert.match(prompt, /先前已生成的全部題目/);
   assert.match(prompt, /已生成題目1/);
   assert.match(prompt, /已生成題目5/);
   assert.match(prompt, /不可複選/);
+});
+
+test('Dongtian final batch uses the exact remainder and keeps prior-question context', () => {
+  const plan = api.normalizeDongtianPlan({ questionCount:18, subject:'數學' }, '國中一年級', 'medium');
+  const previous = Array.from({ length:15 }, (_,i) => ({
+    id:`DT-${String(i+1).padStart(3,'0')}`, difficulty:'medium',
+    q:'先前題目'+(i+1), correct:'A'+i,
+    wrong:['B'+i,'C'+i,'D'+i], exp:'解析'+i, subject:'數學'
+  }));
+  const expectedCount = Math.min(api.QUESTION_BATCH_SIZE, plan.questionCount - previous.length);
+  assert.equal(plan.questionCount, 18);
+  assert.equal(expectedCount, 3);
+  const prompt = api.buildQuestionBatchPrompt('notes', '國中一年級', 0, plan, previous, 15, expectedCount);
+  assert.match(prompt, /第 16～18 題，共恰好 3 題/);
+  assert.match(prompt, /本批只生成剩餘所需的 3 題/);
+  assert.match(prompt, /先前題目15/);
+  const raw = { questions: Array.from({ length:3 }, (_,i) => ({
+    q:'末批'+i, correct:'A'+i, wrong:['B'+i,'C'+i,'D'+i], exp:'E'+i, subject:'數學'
+  })) };
+  const result = api.normalizeQuestionBatch(raw, plan, previous, 15, expectedCount);
+  assert.equal(result.length, 3);
+  assert.deepEqual(result.map(q => q.id), ['DT-016','DT-017','DT-018']);
+  assert.throws(() => api.normalizeQuestionBatch({ questions: raw.questions.slice(0,2) }, plan, previous, 15, 3));
 });
 
 test('Dongtian batch normalization rejects multi-select and requires one correct plus three unique wrong choices', () => {
@@ -240,38 +263,41 @@ test('Dongtian API endpoint performs planning before batched generation and audi
 });
 
 test('Dongtian creation UI describes planning first and five-question batch generation', () => {
-  assert.match(uiSource, /先判斷需要的題數與固定單選結構，再每 5 題一批生成/);
-  assert.match(uiSource, /先規劃題數，再每 5 題分批生成/);
+  assert.match(uiSource, /先判斷需要的題數與固定單選結構，再每批最多 5 題生成/);
+  assert.match(uiSource, /先規劃題數，再每批最多 5 題/);
 });
 
 
 test('Dongtian question amount presets constrain planning to low medium or high ranges', () => {
-  assert.deepEqual(api.allowedQuestionCounts('low'), [10]);
+  assert.deepEqual(api.allowedQuestionCounts('low'), [10,14]);
   assert.deepEqual(api.allowedQuestionCounts('medium'), [15,20]);
-  assert.deepEqual(api.allowedQuestionCounts('high'), [25,30]);
-  assert.equal(api.normalizePlannedQuestionCount(13, 'low'), 10);
+  assert.deepEqual(api.allowedQuestionCounts('high'), [21,30]);
+  assert.equal(api.normalizePlannedQuestionCount(13, 'low'), 13);
   assert.equal(api.normalizePlannedQuestionCount(13, 'medium'), 15);
-  assert.equal(api.normalizePlannedQuestionCount(18, 'medium'), 20);
-  assert.equal(api.normalizePlannedQuestionCount(24, 'high'), 25);
-  assert.equal(api.normalizePlannedQuestionCount(29, 'high'), 30);
+  assert.equal(api.normalizePlannedQuestionCount(18, 'medium'), 18);
+  assert.equal(api.normalizePlannedQuestionCount(24, 'high'), 24);
+  assert.equal(api.normalizePlannedQuestionCount(29, 'high'), 29);
+  assert.equal(api.normalizePlannedQuestionCount(999, 'high'), 30);
+  assert.equal(api.normalizePlannedQuestionCount(23), 23);
+  assert.equal(api.normalizePlannedQuestionCount(-1, 'high'), 21);
   assert.equal(api.normalizeQuestionAmount('unknown'), 'medium');
 
   const lowPrompt = api.buildPlanningPrompt('notes','國中一年級',0,'low');
   const mediumPrompt = api.buildPlanningPrompt('notes','國中一年級',0,'medium');
   const highPrompt = api.buildPlanningPrompt('notes','國中一年級',0,'high');
   assert.match(lowPrompt, /題量偏好是「少量」/);
-  assert.match(lowPrompt, /只能從 10 中選擇/);
-  assert.match(mediumPrompt, /只能從 15、20 中選擇/);
-  assert.match(highPrompt, /只能從 25、30 中選擇/);
+  assert.match(lowPrompt, /10～14 之間任一整數/);
+  assert.match(mediumPrompt, /15～20 之間任一整數/);
+  assert.match(highPrompt, /21～30 之間任一整數/);
 });
 
 test('Dongtian creator UI offers low medium high question amounts and sends the choice to the API', () => {
   assert.match(uiSource, /name="dt-question-amount" value="low"/);
   assert.match(uiSource, /name="dt-question-amount" value="medium" checked/);
   assert.match(uiSource, /name="dt-question-amount" value="high"/);
-  assert.match(uiSource, /少 <small>10 題<\/small>/);
+  assert.match(uiSource, /少 <small>10～14 題<\/small>/);
   assert.match(uiSource, /中 <small>15～20 題<\/small>/);
-  assert.match(uiSource, /多 <small>25～30 題<\/small>/);
+  assert.match(uiSource, /多 <small>21～30 題<\/small>/);
   assert.match(uiSource, /questionAmount = document\.querySelector/);
   assert.match(uiSource, /JSON\.stringify\(\{ text, images, creatorLevel: level, questionAmount \}\)/);
 });
