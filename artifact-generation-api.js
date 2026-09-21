@@ -389,6 +389,65 @@ function buildPrompt(payload) {
   ].join('\\n');
 }
 
+// Admin guidance is optional. Give it a separate, bounded review only when
+// explicitly supplied, so ordinary forging keeps its single-call latency.
+function buildGuidanceReviewPrompt(payload, artifact, targetRealm, stage) {
+  const direction = cleanText(payload.adminGenerationDirection, 80);
+  const guidance = cleanText(payload.adminGenerationPrompt, 1200);
+  const hierarchy = ingredientHierarchy(payload);
+  return [
+    '你是煉器品質複核員。檢查成品有無遵守管理員可行的提示詞，以及正式素材的描述和背景故事。',
+    '管理員要求若與硬性境界、煉製階段、素材主從、允許效果及數值表衝突，只忽略衝突部分；其餘每項均須遵守。',
+    '對明確的名稱、器型、禁用效果、故事設定、特性選擇與用途要求逐條檢查；不要因個人口味而判失敗。',
+    '若已符合，輸出 {"aligned":true,"issues":[],"revisedArtifact":null}。',
+    '若不符合，列出具體不符合的項目並直接提供修改後的完整 revisedArtifact，不能只作空泛評論。',
+    'revisedArtifact 需維持原有 JSON 結構（name、icon、description、equipSlot、effects），不得擅自更改法寶境界。',
+    '只能使用本次允許的效果 type 及每個特性 min～max；無需填不存在的屬性。',
+    '不得憑空改寫已設定素材的正式故事；改進描述時須保留深度最深的主素材核心。',
+    '請只輸出 JSON。',
+    '管理員大概動向：', direction || '未設定',
+    '管理員額外提示詞：', guidance || '未設定',
+    '投入主素材完整設定：', JSON.stringify(hierarchy.primary),
+    '投入輔素材完整設定：', JSON.stringify(hierarchy.supporting),
+    '鎖定境界與煉製階段：', JSON.stringify({ targetRealm, stage }),
+    '可用特性範圍：', JSON.stringify(effectRangesForRealm(targetRealm, stage)),
+    '目前成品：', JSON.stringify(artifact)
+  ].join('\n');
+}
+
+async function reviewGuidedArtifact(payload, artifact, targetRealm, stage) {
+  if (!cleanText(payload.adminGenerationDirection, 80) &&
+      !cleanText(payload.adminGenerationPrompt, 1200)) {
+    return { artifact, guidanceReview: 'not-requested' };
+  }
+  try {
+    const response = await aiRouter.generateJSON(
+      buildGuidanceReviewPrompt(payload, artifact, targetRealm, stage),
+      { timeoutMs: 35000 }
+    );
+    const review = response.data || {};
+    if (review.aligned === true && (!Array.isArray(review.issues) || review.issues.length === 0)) {
+      return { artifact, guidanceReview: 'aligned' };
+    }
+    const revised = review.revisedArtifact;
+    // A reviewer cannot replace a valid artifact with an empty/partial answer.
+    if (!revised || typeof revised !== 'object' || Array.isArray(revised) ||
+        !cleanText(revised.name, 18) || !cleanText(revised.description, 180) ||
+        !Array.isArray(revised.effects) || !revised.effects.length) {
+      return { artifact, guidanceReview: 'unresolved' };
+    }
+    const sanitized = sanitizeGeneratedArtifact(revised, targetRealm, stage);
+    const validType = revised.effects.some((effect) =>
+      effectRange(cleanText(effect?.type, 64), realmOrder(targetRealm), stage) !== null
+    );
+    if (!validType) return { artifact, guidanceReview: 'unresolved' };
+    return { artifact: sanitized, guidanceReview: 'revised' };
+  } catch (error) {
+    console.warn('[Artifact Generation API] optional guidance review unavailable:', error?.message || error);
+    return { artifact, guidanceReview: 'unavailable' };
+  }
+}
+
 function registerArtifactGenerationApi(app) {
   app.post('/api/generate-artifact', async (req, res) => {
     try {
@@ -404,8 +463,10 @@ function registerArtifactGenerationApi(app) {
       const refinementStage = deriveRefinementStage(safePayload);
       const prompt = buildPrompt(safePayload);
       const routed = await aiRouter.generateJSON(prompt, { timeoutMs: 35000 });
-      const artifact = sanitizeGeneratedArtifact(routed.data, targetRealm, refinementStage);
-      res.json({ artifact, provider: routed.provider, model: routed.model });
+      const initialArtifact = sanitizeGeneratedArtifact(routed.data, targetRealm, refinementStage);
+      const reviewed = await reviewGuidedArtifact(safePayload, initialArtifact, targetRealm, refinementStage);
+      res.json({ artifact: reviewed.artifact, provider: routed.provider, model: routed.model,
+        guidanceReview: reviewed.guidanceReview });
     } catch (error) {
       console.error('[Artifact Generation API]', error);
       res.status(500).json({ error: error?.message || 'AI 法寶生成失敗' });
@@ -425,3 +486,5 @@ module.exports.EFFECT_LABELS = EFFECT_LABELS;
 module.exports.effectRange = effectRange;
 module.exports.effectRangesForRealm = effectRangesForRealm;
 module.exports.sanitizeEffect = sanitizeEffect;
+module.exports.buildGuidanceReviewPrompt = buildGuidanceReviewPrompt;
+module.exports.reviewGuidedArtifact = reviewGuidedArtifact;
