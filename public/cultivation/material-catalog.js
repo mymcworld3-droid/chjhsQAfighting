@@ -3,7 +3,8 @@
 
 import { ARTIFACT_CATALOG, ARTIFACT_REALMS, getArtifactById } from './artifact-catalog.js';
 
-export const MATERIAL_CATEGORIES = Object.freeze(['礦石', '靈木', '晶石', '妖獸材料', '特殊材料', '符材', '其他']);
+export const MATERIAL_CATEGORIES = Object.freeze(['礦石', '兵器材料', '靈木', '晶石', '妖獸材料', '特殊材料', '符材', '其他']);
+export const MATERIAL_WEAPON_FORMS = Object.freeze(['', '劍', '刀', '槍', '弓', '斧']);
 export const MIN_ARTIFACT_RECIPE_MATERIALS = 2;
 export const MAX_ARTIFACT_RECIPE_MATERIALS = 8;
 export const MAX_ARTIFACT_RECIPE_NESTING = 2;
@@ -58,6 +59,16 @@ const DEFAULT_MATERIAL_CATALOG = [
   { id: 'chaos-crystal', name: '混沌晶', icon: '沌晶', category: '礦石', realm: '大乘', description: '混沌氣息凝結的晶礦，適合大乘期重寶。', buyGold: 0 },
   { id: 'nine-heaven-divine-iron', name: '九霄神鐵', icon: '神鐵', category: '礦石', realm: '渡劫', description: '歷經九霄雷劫淬鍊的神鐵，對天劫之力極為耐受。', buyGold: 0 },
   { id: 'immortal-gold', name: '仙金', icon: '仙金', category: '礦石', realm: '真仙', description: '仙靈之氣孕育的頂階靈金，可煉製仙器。', buyGold: 0 },
+
+  // 明確可鑄造完整兵器的材料。第一煉即可成為基礎武器，之後仍可再次精煉。
+  { id: 'sword-forging-iron', name: '鑄劍玄鐵', icon: '劍鐵', category: '兵器材料', realm: '煉氣',
+    description: '預先去除雜質、適合直接鍛成完整劍身的玄鐵。與其他材料同爐時以劍為主要器型，可打造可裝備的初階長劍，而非只有劍胚。',
+    story: '山門昔日以此鐵打造門下弟子的入門佩劍；鐵性穩定、鋒芒內斂，經多次淬火可逐步養成靈劍。',
+    weaponForm: '劍', weaponName: '玄鐵劍', buyGold: 24 },
+  { id: 'blade-forging-copper', name: '鍛刀赤銅', icon: '刀銅', category: '兵器材料', realm: '築基',
+    description: '韌性與導熱兼具的赤銅精材，可鍛出完整的佩刀刀身，適合破甲與近戰，不應只生成刀柄或零件。',
+    story: '邊境煉器坊將此銅反覆折鍛，製成巡防修士的佩刀；刀脊堅韌，後續可再融入妖骨或雷晶提升威力。',
+    weaponForm: '刀', weaponName: '赤銅刀', buyGold: 30 },
 
   // 木材系：靈草 → 靈木 → 百年靈木 → 雷擊木 → 千年靈木 → 神魂木 → 界木 → 太古神木 → 世界樹枝
   { id: 'spirit-herb', name: '靈草', icon: '草', category: '靈木', realm: '凡人', description: '初具靈性的草木，可作低階符藥與煉器輔材。', buyGold: 0 },
@@ -190,6 +201,10 @@ export function normalizeMaterialDefinition(raw = {}) {
     description: String(raw.description || '').trim(),
     // Optional canonical backstory; legacy materials retain an empty story.
     story: String(raw.story || '').trim().slice(0, 2000),
+    // Optional authoritative weapon-form cue; only a PRIMARY ingredient can require it.
+    weaponForm: MATERIAL_WEAPON_FORMS.includes(String(raw.weaponForm || '').trim())
+      ? String(raw.weaponForm || '').trim() : '',
+    weaponName: String(raw.weaponName || '').trim().slice(0, 18),
     buyGold: Math.max(0, Math.floor(finite(raw.buyGold, 0)))
   };
 }
