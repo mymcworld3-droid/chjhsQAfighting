@@ -15,3 +15,23 @@
 @media(prefers-reduced-motion:reduce){.bv2-radar span,.bv2-ambient>i,.bv2-intro-runes i,.bv2-intro-center>b,.bv2-fighter.low-hp,.bv2-timer-track.idle i{animation:none!important}.bv2-intro-player{animation:none!important}}
 /* Only one Battle v2 phase may be visible at a time. */
 .battle-v2-page .hidden{display:none!important}
+
+/* Formal duel: stage and question are different full-screen scenes. */
+.bv2-quiz{width:100%;min-height:calc(100dvh - 120px);display:flex;align-items:flex-start;justify-content:center;padding:24px 0 40px;overflow-y:auto}
+.bv2-quiz .bv2-question-card{width:min(100%,960px);padding:clamp(18px,3vw,38px)}
+.bv2-quiz .bv2-explanation{font-size:clamp(13px,1.25vw,18px);line-height:1.8;padding:16px 20px}
+.bv2-quiz .bv2-answer-status{font-size:12px;line-height:1.6}
+.bv2-quiz #bv2-review-continue{display:block;min-width:210px;font-weight:900}
+.bv2-duel-cue{min-height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;position:relative;overflow:hidden;border:1px solid rgba(216,177,93,.25);border-radius:26px;background:radial-gradient(ellipse at center,rgba(167,116,35,.21),transparent 68%),linear-gradient(145deg,#17120a,#080806);text-align:center;padding:28px 14px}
+.bv2-duel-cue::before{content:"";position:absolute;width:180px;height:180px;border:1px solid rgba(225,186,101,.2);border-radius:50%;box-shadow:0 0 70px rgba(214,163,63,.09);pointer-events:none;animation:bv2float 6s ease-in-out infinite}
+.bv2-duel-cue > *{position:relative;z-index:1}
+.bv2-duel-cue span{font-size:12px;letter-spacing:.3em;font-weight:900;color:#dabb74}
+.bv2-duel-cue strong{font-size:clamp(48px,9vw,112px);line-height:1;font-weight:900;color:#f9df9c;text-shadow:0 0 40px rgba(224,170,63,.5);animation:bv2cuePulse .8s ease-out}
+.bv2-duel-cue p{font-size:clamp(12px,1.5vw,16px);color:#b9a783;margin:0}
+.bv2-fighter.miss{animation:bv2miss .65s ease-out}
+.bv2-damage-pop.miss{color:#c4bdaf;font-size:clamp(17px,3vw,28px);letter-spacing:.06em}
+.bv2-damage-pop.blocked{color:#a3d6ed;font-size:clamp(16px,2.4vw,23px)}
+@keyframes bv2cuePulse{from{transform:scale(.7);opacity:.25}to{transform:scale(1);opacity:1}}
+@keyframes bv2miss{25%{transform:translateX(-5px);filter:brightness(.8)}55%{transform:translateX(5px)}100%{transform:none;filter:none}}
+@media(max-width:620px){.bv2-quiz{min-height:calc(100dvh - 90px);padding:10px 0 24px}.bv2-quiz .bv2-question-card{padding:18px 12px}.bv2-duel-cue{min-height:190px;padding:16px}.bv2-quiz .bv2-explanation{padding:12px}.bv2-quiz #bv2-review-continue{width:100%}}
+@media(prefers-reduced-motion:reduce){.bv2-duel-cue::before,.bv2-duel-cue strong,.bv2-fighter.miss{animation:none!important}}
