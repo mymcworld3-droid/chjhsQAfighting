@@ -60,7 +60,7 @@
     if (status) status.textContent = '正在重新載入洞天模組與建立介面…';
 
     try {
-      await import('./dongtian.js?v=20260921-create-diagnostics1');
+      await import('./dongtian.js?v=20260921-dongtian-fullscreen1');
       await new Promise((resolve) => setTimeout(resolve, 80));
       if (typeof window.openDongtianPanel !== 'function') throw new Error('洞天模組已載入，但入口尚未完成初始化');
       window.openDongtianPanel();
