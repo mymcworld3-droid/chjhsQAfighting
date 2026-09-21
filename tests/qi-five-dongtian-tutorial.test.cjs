@@ -21,11 +21,11 @@ test('Qi-five Dongtian tutorial unlocks at five cultivation and never teleports 
 
 test('Qi-five tutorial carefully explains source material, amount, single-choice batches and de-duplication', () => {
   assert.match(tutorial, /圖片、文字都可以煉成洞天/);
-  assert.match(tutorial, /少＝10 題/);
+  assert.match(tutorial, /少＝10～14 題/);
   assert.match(tutorial, /中＝15～20 題/);
-  assert.match(tutorial, /多＝25～30 題/);
+  assert.match(tutorial, /多＝21～30 題/);
   assert.match(tutorial, /四選一/);
-  assert.match(tutorial, /每 5 題一批/);
+  assert.match(tutorial, /每批最多 5 題，末批依剩餘題數/);
   assert.match(tutorial, /後一批會帶入前面全部題目/);
 });
 
