@@ -2,6 +2,29 @@ const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 const DEFAULT_TIMEOUT_MS = Math.max(3000, Number(process.env.AI_TIMEOUT_MS) || 25000);
 let roundRobinCursor = 0;
+const recentAttempts = [];
+const MAX_RECENT_ATTEMPTS = 24;
+
+// Diagnostics are in-memory and contain no keys, prompts, user IDs or raw error bodies.
+function recordAttempt(provider, outcome, error = null) {
+  const statusText = String(error?.message || '');
+  const match = statusText.match(/\b(?:HTTP\s*)?(400|401|403|404|408|409|422|429|500|502|503|504)\b/i);
+  const httpStatus = match ? Number(match[1]) : null;
+  const entry = {
+    at: new Date().toISOString(),
+    provider: provider.name,
+    model: provider.model,
+    outcome,
+    ...(httpStatus ? { httpStatus } : {})
+  };
+  recentAttempts.push(entry);
+  if (recentAttempts.length > MAX_RECENT_ATTEMPTS) recentAttempts.shift();
+}
+
+function getRecentActivity() {
+  return recentAttempts.map((entry) => ({ ...entry }));
+}
+
 
 function splitCsv(value) {
   return String(value || '')
@@ -190,9 +213,11 @@ async function generateJSON(prompt, options = {}) {
       const raw = await callProvider(provider, prompt, timeoutMs);
       const text = extractJsonText(raw);
       const data = JSON.parse(text);
+      recordAttempt(provider, 'success');
       console.log(`[AI Router] ${provider.name}/${provider.model} success`);
       return { data, text, provider: provider.name, model: provider.model };
     } catch (error) {
+      recordAttempt(provider, 'failed', error);
       const message = error?.name === 'AbortError' ? 'timeout' : (error?.message || String(error));
       errors.push(`${provider.name}: ${message}`);
       console.warn(`[AI Router] ${provider.name}/${provider.model} failed: ${message}`);
@@ -210,5 +235,8 @@ module.exports = {
   generateJSON,
   getStatus,
   extractJsonText,
-  buildProviders
+  buildProviders,
+  orderedProviders,
+  recordAttempt,
+  getRecentActivity
 };
