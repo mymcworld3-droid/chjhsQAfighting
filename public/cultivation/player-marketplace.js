@@ -4,7 +4,7 @@ import {
   getFirestore, collection, doc, query, where, limit, getDoc, getDocs, getDocsFromCache, runTransaction
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { ARTIFACT_CATALOG, getArtifactById } from './artifact-catalog.js';
-import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material-catalog.js';
+import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe, materialMarketReferencePrice, materialMarketMinimumTotal } from './material-catalog.js';
 
 // 玩家市集：材料／未裝備法寶採原子寄售，首發配方出售永久製作知識，不限制他人自由嘗試煉製。
 // 市集文件只代表可成交的委託；每次交割均重新讀取買賣雙方玩家文件。
@@ -65,6 +65,41 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
     return items.map((item) => ({ id: item.id, name: item.name, count: available(sellType, item.id) }))
       .filter((item) => item.count > 0);
   }
+  function materialListingThreshold(item, count) {
+    return item ? materialMarketMinimumTotal(item, count) : 0;
+  }
+  function checkMaterialListingPrice(type, item, count, price) {
+    if (type !== 'material') return;
+    const refPrice = materialMarketReferencePrice(item);
+    const minimum = materialListingThreshold(item, count);
+    if (price < minimum) {
+      throw new Error('材料「' + item.name + '」參考單價為 ' + refPrice.toLocaleString() +
+        ' 金幣；' + count + ' 件上架總價必須大於 ' +
+        (minimum - 1).toLocaleString() + '，至少 ' + minimum.toLocaleString() + ' 金幣。');
+    }
+  }
+  function updatePriceHint() {
+    const hint = document.getElementById('pm-material-price-hint');
+    const publish = document.getElementById('pm-publish');
+    if (!hint || !publish) return;
+    const item = sellType === 'material' ? getMaterialById(sellId) : null;
+    if (!item) {
+      hint.textContent = '';
+      publish.disabled = busy || !listable().length;
+      return;
+    }
+    const count = Number(sellQuantity);
+    const price = Number(sellPrice);
+    const validQuantity = Number.isSafeInteger(count) && count >= 1 && count <= MAX_QUANTITY;
+    const minimum = validQuantity ? materialListingThreshold(item, count) : 0;
+    const canList = validQuantity && Number.isSafeInteger(price) && price >= minimum && price <= MAX_PRICE;
+    const ref = materialMarketReferencePrice(item);
+    hint.textContent = '材料單件參考價 ' + ref.toLocaleString() +
+      ' 金幣；' + (validQuantity ? count + ' 件總價至少 ' + minimum.toLocaleString() + ' 金幣。' : '請輸入有效數量。') +
+      (canList ? '' : ' 目前價格未達上架門檻。');
+    hint.classList.toggle('market-notice-error', !canList);
+    publish.disabled = busy || !listable().length || !canList;
+  }
   function notify(type, row) {
     const local = data();
     if (!local) return;
@@ -108,6 +143,7 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
     try {
       count = type === 'recipe' ? 1 : amount(sellQuantity, MAX_QUANTITY, '數量');
       price = amount(sellPrice, MAX_PRICE, '總價');
+      checkMaterialListingPrice(type, item, count, price);
     } catch (error) { message(error.message, false); return; }
     busy = true;
     message('正在提交委託…');
@@ -120,6 +156,8 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
         const catalogSnap = type === 'recipe' ? await tx.get(doc(db, 'gameConfig', 'artifactCatalogV1')) : null;
         const recipeSnap = type === 'recipe' ? await tx.get(doc(db, 'gameConfig', 'materialCatalogV1')) : null;
         if (!sellerSnap.exists()) throw new Error('玩家資料不存在');
+        // Revalidate the listing rule inside the same transaction before inventory escrow.
+        checkMaterialListingPrice(type, itemFor(type, id), count, price);
         const raw = sellerSnap.data() || {};
         if (type === 'recipe') {
           // 不能只信任玩家瀏覽器中的圖鑑；對照 Firestore 正式首發權紀錄。
@@ -288,6 +326,7 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
         : '<p>購買後可在煉器配方圖鑑查看確切材料與數量；沒有配方仍能自由開爐。</p>')
       : '';
     return `<div class="pm-item-details"><p>${desc}</p>${attributes}
+      ${listing.type === 'material' ? `<p><b>境界統一參考單價：</b>${materialMarketReferencePrice(item).toLocaleString()} 金幣</p>` : ''}
       ${effects ? `<b>成品屬性與效果</b><ul>${effects}</ul>` : ''}
       ${isRecipe ? `<p><b>配方擁有人：</b>${esc(item.recipeOwnerName || '公共配方')} · 永久製作指南，購買不轉移擁有權</p>` : ''}
       ${ingredients}${isRecipe && !knows ? '<p class="pm-recipe-lock"><i class="fa-solid fa-lock"></i> 故事、材料、製作方法與完整說明將於購買後開放。</p>' : ''}</div>`;
@@ -314,11 +353,12 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
     const selected = options.find((row) => row.id === sellId);
     const list = filter === 'mine' ? mine : active.filter((listing) => filter === 'all' || listing.type === filter);
     root.innerHTML = `<div class="pm-header"><div><small>PLAYER MARKET · 修仙交易</small><h3><i class="fa-solid fa-scale-balanced"></i> 交易市集</h3><p>玩家自由定價；金幣與商品在同一筆交易中結算。首發配方可出售製作指南；沒有配方也能自由摸索煉製。</p></div><b>金幣 ${gold(data()).toLocaleString()}</b></div>
-      <div class="pm-compose"><h4>發布委託</h4><div class="pm-form"><label>類別<select id="pm-sell-type">${Object.entries(TYPE_LABEL).map(([type,label]) => `<option value="${type}" ${type === sellType ? 'selected' : ''}>${label}</option>`).join('')}</select></label><label>商品<select id="pm-sell-item">${options.map((row) => `<option value="${esc(row.id)}" ${row.id === sellId ? 'selected' : ''}>${esc(row.name)}${sellType === 'recipe' ? ' · 首發配方' : ' · 可售 '+ row.count}</option>`).join('')}</select></label><label>數量<input id="pm-sell-qty" type="number" min="1" max="${selected?.count || 1}" value="${sellType === 'recipe' ? 1 : Math.min(Math.max(1,sellQuantity), selected?.count || 1)}" ${sellType === 'recipe' ? 'disabled' : ''}></label><label>總價（金幣）<input id="pm-sell-price" type="number" min="1" max="${MAX_PRICE}" value="${sellPrice}"></label><button id="pm-publish" ${!options.length || busy ? 'disabled' : ''}>上架寄售</button></div><p class="pm-hint">材料／法寶上架時扣除可用庫存，取消即退還。裝備中的法寶不可寄售。配方交易只傳授製作方法，首發者身分不轉移；沒有配方也能嘗試煉器。</p></div>
+      <div class="pm-compose"><h4>發布委託</h4><div class="pm-form"><label>類別<select id="pm-sell-type">${Object.entries(TYPE_LABEL).map(([type,label]) => `<option value="${type}" ${type === sellType ? 'selected' : ''}>${label}</option>`).join('')}</select></label><label>商品<select id="pm-sell-item">${options.map((row) => `<option value="${esc(row.id)}" ${row.id === sellId ? 'selected' : ''}>${esc(row.name)}${sellType === 'recipe' ? ' · 首發配方' : ' · 可售 '+ row.count}</option>`).join('')}</select></label><label>數量<input id="pm-sell-qty" type="number" min="1" max="${selected?.count || 1}" value="${sellType === 'recipe' ? 1 : Math.min(Math.max(1,sellQuantity), selected?.count || 1)}" ${sellType === 'recipe' ? 'disabled' : ''}></label><label>總價（金幣）<input id="pm-sell-price" type="number" min="1" max="${MAX_PRICE}" value="${sellPrice}"></label><button id="pm-publish" ${!options.length || busy ? 'disabled' : ''}>上架寄售</button></div><p id="pm-material-price-hint" class="pm-price-reference" role="status"></p><p class="pm-hint">材料／法寶上架時扣除可用庫存，取消即退還。裝備中的法寶不可寄售。配方交易只傳授製作方法，首發者身分不轉移；沒有配方也能嘗試煉器。</p></div>
       <div class="pm-filters">${[['all','全部'],['material','材料'],['artifact','法寶'],['recipe','配方'],['mine','我的委託']].map(([value,label]) => `<button data-pm-filter="${value}" class="${filter === value ? 'active' : ''}">${label}</button>`).join('')}</div>
       ${failed ? '<div class="pm-connection"><span>市集連線暫時中斷，以下若有商品為上次取得的資料；交易會在送出時重新驗證。</span><button type="button" data-pm-refresh>重新載入商品</button></div>' : ''}
       <div class="pm-list">${list.length ? list.map((row) => card(row,filter==='mine')).join('') : '<p class="pm-empty">目前沒有符合條件的委託。</p>'}</div>
       <p id="player-market-notice" class="${noticeError ? 'market-notice-error' : ''}" aria-live="polite">${esc(noticeText)}</p>`;
+    updatePriceHint();
   }
   function scheduleRender() {
     if (pendingRender) return;
@@ -371,7 +411,7 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
       #page-store.pm-market-active #player-market{display:block!important}
       #player-market-switch{display:flex;gap:9px;margin:10px 0 15px}#player-market-switch button{flex:1;padding:12px;border:1px solid #554526;border-radius:12px;background:#15120c;color:#bea976;font-size:13px;font-weight:900}#player-market-switch button.active{color:#fff0c6;background:#4c3618;border-color:#cfa756}
       #player-market{color:#ebdcba;padding-bottom:90px}#player-market *{box-sizing:border-box}#player-market .pm-header{display:flex;justify-content:space-between;gap:15px;align-items:center;padding:20px;border:1px solid #564327;border-radius:19px;background:radial-gradient(circle at 12% 0%,#342711,#0b0a08 80%)}#player-market .pm-header small{color:#b9a06a;font-weight:800;letter-spacing:.13em}#player-market .pm-header h3{font-size:23px;font-weight:900;margin:8px 0 4px;color:#f5dfa8}#player-market .pm-header p{color:#ac9c7e;font-size:12px;line-height:1.65}#player-market .pm-header>b{flex-shrink:0;color:#ebc86c;font-size:14px}
-      #player-market .pm-compose{margin:14px 0;padding:17px;border:1px solid #473921;border-radius:16px;background:#13100b}#player-market .pm-compose h4{font-weight:900;color:#e1c582;margin-bottom:12px}#player-market .pm-form{display:grid;grid-template-columns:minmax(105px,.8fr) minmax(180px,2fr) repeat(2,minmax(95px,.8fr)) auto;gap:9px;align-items:end}#player-market .pm-form label{display:flex;flex-direction:column;gap:6px;font-size:11px;color:#c7b78f}#player-market .pm-form :is(input,select){width:100%;min-width:0;height:40px;padding:0 9px;border:1px solid #554427;border-radius:9px;background:#090907;color:#eee0bc;font-size:12px}#player-market button{cursor:pointer}#player-market button:disabled{opacity:.35;cursor:not-allowed}#player-market #pm-publish,#player-market .pm-card-foot button{min-height:40px;padding:0 16px;border:1px solid #d2ad61;border-radius:10px;background:linear-gradient(150deg,#6f5226,#34250f);color:#fff0c7;font-weight:900;font-size:12px}#player-market .pm-hint{font-size:11px;color:#a79570;line-height:1.65;margin:10px 0 0}
+      #player-market .pm-compose{margin:14px 0;padding:17px;border:1px solid #473921;border-radius:16px;background:#13100b}#player-market .pm-compose h4{font-weight:900;color:#e1c582;margin-bottom:12px}#player-market .pm-form{display:grid;grid-template-columns:minmax(105px,.8fr) minmax(180px,2fr) repeat(2,minmax(95px,.8fr)) auto;gap:9px;align-items:end}#player-market .pm-form label{display:flex;flex-direction:column;gap:6px;font-size:11px;color:#c7b78f}#player-market .pm-form :is(input,select){width:100%;min-width:0;height:40px;padding:0 9px;border:1px solid #554427;border-radius:9px;background:#090907;color:#eee0bc;font-size:12px}#player-market button{cursor:pointer}#player-market button:disabled{opacity:.35;cursor:not-allowed}#player-market #pm-publish,#player-market .pm-card-foot button{min-height:40px;padding:0 16px;border:1px solid #d2ad61;border-radius:10px;background:linear-gradient(150deg,#6f5226,#34250f);color:#fff0c7;font-weight:900;font-size:12px}#player-market .pm-hint{font-size:11px;color:#a79570;line-height:1.65;margin:10px 0 0}#player-market .pm-price-reference{margin:10px 0 0;font-size:11px;line-height:1.6;color:#e3c37b}#player-market .pm-price-reference.market-notice-error{color:#f0abab}
       #player-market .pm-filters{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}#player-market .pm-filters button{border:1px solid #554428;border-radius:9px;padding:9px 13px;color:#c5b185;background:#16120d;font-size:12px}#player-market .pm-filters button.active{background:#63491f;border-color:#d4ae5b;color:#fff0c0}#player-market .pm-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:11px}#player-market .pm-card{padding:15px;border:1px solid #4c3a24;border-radius:15px;background:linear-gradient(145deg,#1d170e,#0b0a09)}#player-market .pm-card-head{display:flex;gap:10px;align-items:center}#player-market .pm-card-head b{color:#f3dfac;font-size:15px}#player-market .pm-card-head small{display:block;margin-top:5px;color:#a79675;font-size:10px}#player-market .pm-icon{flex:0 0 43px;height:43px;display:grid;place-items:center;background:#2d220f;border:1px solid #786034;border-radius:11px;color:#efca72;font-weight:900}#player-market .pm-seller{color:#97876c;font-size:11px;margin:14px 0}#player-market .pm-card-foot{display:flex;align-items:center;justify-content:space-between;gap:8px}#player-market .pm-card-foot strong{color:#f4d078;font-size:14px}#player-market .pm-card-foot small{color:#bca36e}#player-market .pm-empty{grid-column:1/-1;border:1px dashed #54432b;border-radius:12px;padding:33px;color:#a4916b;text-align:center}#player-market-notice{font-size:12px;color:#d3b873;margin-top:15px}#player-market-notice.market-notice-error{color:#f0abab}
       #player-market .pm-detail{margin:9px 0;border:1px solid #564428;border-radius:9px;background:#100d08}
       #player-market .pm-detail summary{cursor:pointer;color:#ead29b;font-size:12px;font-weight:850;padding:10px 12px}
@@ -456,6 +496,7 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
     panel.addEventListener('input', (event) => {
       if (event.target.id === 'pm-sell-qty') sellQuantity = Number(event.target.value);
       if (event.target.id === 'pm-sell-price') sellPrice = Number(event.target.value);
+      if (event.target.id === 'pm-sell-qty' || event.target.id === 'pm-sell-price') updatePriceHint();
     });
     panel.addEventListener('change', (event) => {
       if (event.target.id === 'pm-sell-type') { sellType = event.target.value; sellId = ''; sellQuantity = 1; render(); }
