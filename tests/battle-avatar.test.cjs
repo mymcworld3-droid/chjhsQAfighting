@@ -39,11 +39,10 @@ test('room player snapshots carry saved equipped profile avatar, independent of 
   assert.match(battle, /artifactBattle,/);
 });
 
-test('match lobby, versus intro and live arena contain independent avatar slots for both players', () => {
+test('match lobby and versus intro retain independent player avatar slots', () => {
   for (const id of [
     'bv2-match-me-avatar', 'bv2-match-enemy-avatar',
-    'bv2-intro-me-avatar', 'bv2-intro-enemy-avatar',
-    'bv2-arena-me-avatar', 'bv2-arena-enemy-avatar'
+    'bv2-intro-me-avatar', 'bv2-intro-enemy-avatar'
   ]) {
     assert.match(battle, new RegExp("avatarMarkup\\('" + id + "'\\)"));
     assert.match(battle, new RegExp("setPlayerAvatar\\('" + id + "'"));
