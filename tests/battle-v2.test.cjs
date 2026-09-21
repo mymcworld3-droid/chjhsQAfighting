@@ -375,7 +375,7 @@ test('Gold Core shields block exactly one PvP hit and never erase off-field cult
   assert.equal(two.hostHp,800);
   assert.equal(two.hostCoreShield,false);
   assert.equal(host.coreShield,true, 'snapshot is not mutated and remains separate from persisted cultivation shield');
-  assert.match(battleSource,/coreShield: !!window\.getEquippedGoldenCoreBattleSnapshot/);
+  assert.match(battleSource,/coreShield: !!goldenCore && data\.stats\?\.goldenCoreShield === true/);
   assert.match(battleSource,/'host\.coreShield': outcome\.hostCoreShield/);
   assert.match(battleSource,/'guest\.coreCorrectStreak': outcome\.guestCoreStreak/);
 });
