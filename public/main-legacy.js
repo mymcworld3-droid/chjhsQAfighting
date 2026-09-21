@@ -1754,7 +1754,7 @@ window.submitOnboarding = async () => {
     }
 };
 
-window.saveProfile = async () => {
+window.saveProfile = async (triggerButton = null) => {
     const displayName = document.getElementById('set-display-name').value.trim();
     const level = document.getElementById('set-level').value;
     const rawStrong = document.getElementById('set-strong').value;
@@ -1767,8 +1767,11 @@ window.saveProfile = async () => {
     if (sourceMode === 'bank' && (!source || source === 'ai')) { alert("請選擇題庫檔案！"); return; }
     if (sourceMode === 'focused' && (!window.soloSelectedUnits || window.soloSelectedUnits.length === 0)) { alert("請至少加入一個單元！"); return; }
 
-    const btn = document.querySelector('button[onclick="saveProfile()"]');
-    btn.innerText = "Saving..."; btn.disabled = true;
+    // The profile and scope cards have separate save buttons. Display progress
+    // on the button the player actually pressed without changing persistence.
+    const btn = triggerButton?.matches?.('button')
+        ? triggerButton : document.querySelector('button[onclick="saveProfile()"]');
+    if (btn) { btn.innerText = "儲存中…"; btn.disabled = true; }
     
     const cleanStrong = await getCleanSubjects(rawStrong);
     const cleanWeak = await getCleanSubjects(rawWeak);
@@ -1805,8 +1808,15 @@ window.saveProfile = async () => {
     syncSoloQuestionCache();
     fillBuffer();
     
-    btn.innerText = "Saved!"; 
-    setTimeout(() => { btn.innerHTML = `UPDATE SYSTEM`; btn.disabled = false; }, 2000);
+    if (btn) {
+        const originalLabel = btn.id === 'dongfu-scope-save' ? '儲存出題範圍' : '更新設定';
+        btn.innerText = "已儲存！";
+        setTimeout(() => {
+            if (!btn.isConnected) return;
+            btn.textContent = originalLabel;
+            btn.disabled = false;
+        }, 2000);
+    }
 };
 
 async function switchToAI() {
