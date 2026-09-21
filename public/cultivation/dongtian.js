@@ -121,7 +121,7 @@ import {
       <div id="dongtian-body" class="dongfu-collapse-body dt-body" hidden>
         <section class="dt-create">
           <h4>開闢新洞天</h4>
-          <p>可同時提供多張圖片與文字。AI 會先判斷需要的題數與固定單選結構，再每 5 題一批生成；後一批會讀取前面已生成的全部題目以避免重複。</p>
+          <p>可同時提供多張圖片與文字。AI 會先判斷需要的題數與固定單選結構，再每批最多 5 題生成；後一批會讀取前面已生成的全部題目以避免重複。</p>
           <textarea id="dt-source-text" class="dt-input" maxlength="16000" placeholder="貼上課文、筆記、公式說明、重點整理……（圖片與文字至少提供一種）"></textarea>
           <div class="dt-upload-row">
             <label class="dt-upload"><i class="fa-solid fa-images"></i> 上傳圖片（最多 ${MAX_IMAGES} 張）<input id="dt-images" type="file" accept="image/png,image/jpeg,image/webp" multiple></label>
@@ -131,12 +131,12 @@ import {
           <div class="dt-amount">
             <span class="dt-amount-title">生成題目量</span>
             <div class="dt-amount-options" role="radiogroup" aria-label="生成題目量">
-              <label class="dt-amount-choice"><input type="radio" name="dt-question-amount" value="low"><span>少 <small>10 題</small></span></label>
+              <label class="dt-amount-choice"><input type="radio" name="dt-question-amount" value="low"><span>少 <small>10～14 題</small></span></label>
               <label class="dt-amount-choice"><input type="radio" name="dt-question-amount" value="medium" checked><span>中 <small>15～20 題</small></span></label>
-              <label class="dt-amount-choice"><input type="radio" name="dt-question-amount" value="high"><span>多 <small>25～30 題</small></span></label>
+              <label class="dt-amount-choice"><input type="radio" name="dt-question-amount" value="high"><span>多 <small>21～30 題</small></span></label>
             </div>
           </div>
-          <button id="dt-generate" class="dt-generate" type="button">凝聚洞天<small>先規劃題數，再每 5 題分批生成</small></button>
+          <button id="dt-generate" class="dt-generate" type="button">凝聚洞天<small>先規劃題數，再每批最多 5 題</small></button>
           <div id="dt-generate-status" class="dt-library-note" style="margin-top:8px"></div>
         </section>
         <section class="dt-library">
@@ -279,7 +279,7 @@ import {
     const status = document.getElementById('dt-generate-status');
     state.generating = true;
     button.disabled = true;
-    button.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> 正在凝聚洞天…<small>先規劃題數，再每 5 題分批生成</small>';
+    button.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> 正在凝聚洞天…<small>先規劃題數，再每批最多 5 題</small>';
     status.textContent = state.files.length ? `正在整理 ${state.files.length} 張圖片與文字中的所有知識點…` : '正在整理文字中的所有知識點…';
     let responseStatus = null;
     try {
@@ -288,8 +288,8 @@ import {
         status.textContent = `處理圖片 ${i + 1} / ${state.files.length}…`;
         images.push(await compressImage(state.files[i].file));
       }
-      const amountLabel = ({ low:'少量（10 題）', medium:'中量（15～20 題）', high:'大量（25～30 題）' })[questionAmount] || '中量';
-      status.textContent = `AI 正在依「${amountLabel}」先規劃總題數與單選題結構，接著每 5 題分批生成並避免重複…`;
+      const amountLabel = ({ low:'少量（10～14 題）', medium:'中量（15～20 題）', high:'大量（21～30 題）' })[questionAmount] || '中量';
+      status.textContent = `AI 正在依「${amountLabel}」先規劃總題數與單選題結構，接著每批最多 5 題（最後一批按剩餘題數）生成並避免重複…`;
       const level = userData()?.profile?.educationLevel || '國中一年級';
       const response = await fetch('/api/generate-dongtian', {
         method: 'POST',
@@ -322,7 +322,7 @@ import {
     } finally {
       state.generating = false;
       button.disabled = false;
-      button.innerHTML = `凝聚洞天<small>先規劃題數，再每 5 題分批生成</small>`;
+      button.innerHTML = `凝聚洞天<small>先規劃題數，再每批最多 5 題</small>`;
     }
   }
 
