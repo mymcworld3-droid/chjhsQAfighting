@@ -61,11 +61,11 @@ test('chapter-two tutorial carefully teaches the complete Dongtian lifecycle', (
   assert.match(tutorial, /第二章 · 洞天入口/);
   assert.match(tutorial, /請親自點亮起的「洞天」入口/);
   assert.match(tutorial, /圖片與文字都可以煉成洞天/);
-  assert.match(tutorial, /少＝10 題/);
+  assert.match(tutorial, /少＝10～14 題/);
   assert.match(tutorial, /中＝15～20 題/);
-  assert.match(tutorial, /多＝25～30 題/);
+  assert.match(tutorial, /多＝21～30 題/);
   assert.match(tutorial, /四選一單選題/);
-  assert.match(tutorial, /每 5 題生成一批/);
+  assert.match(tutorial, /每批最多生成 5 題，末批依剩餘題數/);
   assert.match(tutorial, /後一批會帶入前面全部已生成題目/);
 });
 
