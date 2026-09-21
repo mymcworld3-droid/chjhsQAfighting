@@ -1,7 +1,7 @@
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder1';
+import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder2';
 
 // 築基鬥法教學：完全本機模擬，不建立 rooms、不寫正式戰績。
 // 第一戰固定由沈清霜以 65,000 真實傷害擊倒演武投影；第二戰再由顧長風教正式鬥法規則。
