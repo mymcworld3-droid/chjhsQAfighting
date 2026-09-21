@@ -18,7 +18,7 @@ test('artifact editor owns recipe editing and saves artifact plus recipe togethe
   assert.match(artifactManager, /data-recipe-material/);
   assert.match(artifactManager, /data-recipe-artifact/);
   assert.match(artifactManager, /function readRecipe\(modal\)/);
-  assert.match(artifactManager, /persistCatalog\(next, normalizedRecipes\)/);
+  assert.match(artifactManager, /persistCatalog\(next, normalizedRecipes, ownerOverride\)/);
   assert.match(artifactManager, /replaceArtifactRecipes\(normalizedRecipes, 'admin-save'\)/);
   assert.match(artifactManager, /MATERIAL_CONFIG_DOC = 'materialCatalogV1'/);
 });
@@ -61,5 +61,5 @@ test('catalog still enforces two-to-eight configured ingredients and two artifac
 
 test('artifact editor persists validated recipes together with artifact changes', () => {
   assert.match(artifactManager, /normalizedRecipes = validateArtifactRecipes\(nextRecipes\)/);
-  assert.match(artifactManager, /await persistCatalog\(next, normalizedRecipes\)/);
+  assert.match(artifactManager, /await persistCatalog\(next, normalizedRecipes, ownerOverride\)/);
 });
