@@ -195,6 +195,100 @@ test('generation prompt receives selected ingredients, full material catalog, ex
   assert.match(prompt, /玄武意象/);
 });
 
+test('material lore is preserved by both admin editors and delivered as official ingredient context', () => {
+  const materialCatalog = read('public/cultivation/material-catalog.js');
+  const editor = read('public/cultivation/admin-material-manager.js');
+  const realmEditor = read('public/cultivation/admin-material-realm-editor.js');
+  assert.match(materialCatalog, /story: String\(raw\.story \|\| ''\)\.trim\(\)\.slice\(0, 2000\)/);
+  for (const [src, prefix] of [[editor, 'amm'], [realmEditor, 'amre']]) {
+    assert.match(src, new RegExp('id="' + prefix + '-story"'));
+    assert.match(src, new RegExp("story: modal\\.querySelector\\('#" + prefix + "-story'\\)\\.value"));
+  }
+  assert.match(aiJobs, /story: item\.story \|\| ''/);
+  assert.match(aiJobs, /description: item\.description, story: item\.story \|\| ''/);
+  const payload = {
+    targetRealm:'金丹',
+    selectedIngredients:[{type:'material',id:'star',name:'惡意偽名',story:'偽造故事',quantity:2}],
+    allMaterials:[{id:'star',name:'星辰砂',realm:'金丹',description:'可引星辰入器',
+      story:'古代天象司保存的星砂，夜半會映出昔日星圖',category:'特殊材料'}],
+    existingArtifacts:[]
+  };
+  const hierarchy = api.ingredientHierarchy(payload);
+  assert.equal(hierarchy.primary[0].story, payload.allMaterials[0].story);
+  assert.equal(hierarchy.primary[0].name, '星辰砂');
+  assert.doesNotMatch(JSON.stringify(hierarchy), /偽造故事|惡意偽名/);
+  const prompt = api.buildPrompt(payload);
+  assert.match(prompt, /投入素材完整設定/);
+  assert.match(prompt, /古代天象司保存的星砂/);
+  assert.match(prompt, /可引星辰入器/);
+  assert.match(prompt, /若 story 為空/);
+});
+
+test('admin directions override random style when compatible, and get separate guidance compliance review', async () => {
+  const payload = {
+    targetRealm:'金丹',
+    selectedIngredients:[{type:'material',id:'star',quantity:2}],
+    allMaterials:[{id:'star',name:'星砂',realm:'金丹',description:'引星入器',story:'舊天文臺的遺砂'}],
+    existingArtifacts:[],
+    adminGenerationDirection:'護盾與防禦',
+    adminGenerationPrompt:'禁止劍型，法寶應是觀星圓盤，故事要承接天文臺；不要暴擊。'
+  };
+  const prompt = api.buildPrompt(payload);
+  assert.match(prompt, /不要用隨機風格取代管理員要求/);
+  assert.match(prompt, /管理員的額外提示詞與大概動向不是可忽略的隨機風格/);
+  assert.match(prompt, /逐條遵守可行的創作要求/);
+  const reviewPrompt = api.buildGuidanceReviewPrompt(payload, {
+    name:'星砂劍',description:'劍',effects:[{type:'equip_attack_flat',value:30}]
+  }, '金丹',1);
+  assert.match(reviewPrompt, /觀星圓盤/);
+  assert.match(reviewPrompt, /舊天文臺的遺砂/);
+  assert.match(reviewPrompt, /"min"/);
+  const router = require('../ai-router.js');
+  const saved = router.generateJSON;
+  let calls = 0;
+  router.generateJSON = async () => {
+    calls++;
+    return { data: { aligned:false, issues:['器型錯誤'], revisedArtifact: {
+      name:'天文觀星盤',icon:'盤',description:'舊天文臺的星砂鑄成的護身觀星盤',
+      equipSlot:'護身法寶',effects:[{type:'equip_shield_flat',value:999999}]
+    }}};
+  };
+  try {
+    const original = api.sanitizeGeneratedArtifact({
+      name:'星砂劍',icon:'劍',description:'劍',equipSlot:'本命法寶',
+      effects:[{type:'equip_attack_flat',value:30}]
+    }, '金丹',1);
+    const reviewed = await api.reviewGuidedArtifact(payload, original, '金丹',1);
+    assert.equal(calls,1);
+    assert.equal(reviewed.guidanceReview,'revised');
+    assert.equal(reviewed.artifact.name,'天文觀星盤');
+    assert.equal(reviewed.artifact.effects[0].type,'equip_shield_flat');
+    assert.equal(reviewed.artifact.effects[0].value,api.effectRange('equip_shield_flat',3,1).max);
+    assert.equal(original.name,'星砂劍');
+    const none = await api.reviewGuidedArtifact({...payload,adminGenerationDirection:'',adminGenerationPrompt:''},original,'金丹',1);
+    assert.equal(none.guidanceReview,'not-requested');
+    assert.equal(calls,1,'ordinary forging must not incur extra review');
+  } finally { router.generateJSON = saved; }
+});
+
+test('optional guidance review cannot replace a valid artifact with an invalid response', async () => {
+  const router = require('../ai-router.js'), saved = router.generateJSON;
+  const payload = {
+    selectedIngredients:[{id:'a',quantity:2}],
+    allMaterials:[{id:'a',name:'玄鐵',realm:'煉氣'}],
+    existingArtifacts:[],adminGenerationPrompt:'做成護甲'
+  };
+  const original = api.sanitizeGeneratedArtifact({
+    name:'玄鐵劍',description:'既有成品',effects:[{type:'equip_attack_flat',value:20}]
+  },'煉氣',1);
+  router.generateJSON = async () => ({data: {aligned:false,issues:['不是護甲'],revisedArtifact:{name:'空殼',description:'修訂',effects:[]}}});
+  try {
+    const checked = await api.reviewGuidedArtifact(payload,original,'煉氣',1);
+    assert.equal(checked.guidanceReview,'unresolved');
+    assert.equal(checked.artifact,original);
+  } finally {router.generateJSON=saved;}
+});
+
 test('refinery economy uses qi baseline 10 minutes / 80 gold and varies with player realm gap', () => {
   const economy = loadEconomy();
   const qi = economy.calculateRefineryEconomy({ targetRealm:'煉氣', playerRealm:'煉氣', discovery:false });
