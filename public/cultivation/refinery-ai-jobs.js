@@ -111,7 +111,7 @@ import {
         realm = row.realm || realm;
       }
     }
-    return realm;
+    return order < 1 ? '煉氣' : realm;
   }
 
   function resultingDepth(recipe) {
@@ -317,7 +317,7 @@ import {
           adminGenerationDirection: job.adminGenerationDirection || '',
           adminGenerationPrompt: job.adminGenerationPrompt || '',
           supportedEffects: SUPPORTED_ARTIFACT_EFFECTS,
-          effectBoundsV1: window.getArtifactEffectBounds?.() || {}
+          effectBoundsV2: window.getArtifactEffectBounds?.() || {}
         })
       });
     } catch (cause) {
