@@ -396,13 +396,20 @@ test('Dongtian creator UI offers low medium high question amounts and sends the 
   assert.match(uiSource, /JSON\.stringify\(\{ text, images, creatorLevel: level, questionAmount \}\)/);
 });
 
-test('Dongtian runner and question card fill the viewport instead of staying in a narrow centered column', () => {
-  assert.match(uiSource, /\.dt-overlay\{[^}]*width:100vw;height:100dvh/);
-  assert.match(uiSource, /\.dt-runner\{width:100vw;height:100dvh;max-width:none/);
+test('Dongtian quiz fills both viewport dimensions without a black frame or global main padding', () => {
+  assert.match(uiSource, /#dongtian-overlay\.dt-overlay\{[^}]*width:100vw;height:100vh;height:100dvh/);
+  assert.match(uiSource, /#dongtian-overlay > \.dt-runner\{[^}]*width:100%;height:100%/);
+  assert.match(uiSource, /#dongtian-overlay > \.dt-runner\{[^}]*margin:0;padding:0/);
   assert.match(uiSource, /grid-template-rows:auto auto auto minmax\(0,1fr\)/);
-  assert.match(uiSource, /\.dt-question\{[^}]*height:100%[^}]*display:flex[^}]*overflow:auto/);
+  assert.match(uiSource, /\.dt-question\{[^}]*width:100%;height:100%;margin:0/);
+  assert.match(uiSource, /\.dt-question\{[^}]*display:flex;flex-direction:column;overflow:auto/);
+  assert.match(uiSource, /\.dt-question\{[^}]*border:0;border-radius:0/);
   assert.match(uiSource, /\.dt-options\{[^}]*grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
   assert.match(uiSource, /@media\(max-width:700px\)[\s\S]*\.dt-options\{grid-template-columns:1fr/);
+  assert.match(uiSource, /env\(safe-area-inset-top\)/);
+  assert.match(uiSource, /env\(safe-area-inset-bottom\)/);
+  assert.match(uiSource, /overlay\.innerHTML = `<div class="dt-runner">/);
+  assert.doesNotMatch(uiSource, /overlay\.innerHTML = `<main class="dt-runner">/);
 });
 
 
