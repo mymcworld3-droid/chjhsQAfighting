@@ -108,8 +108,8 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     {
       page: 'page-settings', target: '#dongtian-card .dt-amount-options',
       kicker: '洞天實作 · 題目量', title: '少、中、多會控制洞天題數',
-      body: '<strong>少＝10 題</strong>；<strong>中＝15～20 題</strong>；<strong>多＝25～30 題</strong>。正式洞天固定使用四選一單選題，每題只有一個正確答案，不能複選。',
-      note: 'AI 先規劃整體，再固定每 5 題生成一批；後一批會帶入前面全部已生成題目，降低重複。'
+      body: '<strong>少＝10～14 題</strong>；<strong>中＝15～20 題</strong>；<strong>多＝21～30 題</strong>。正式洞天固定使用四選一單選題，每題只有一個正確答案，不能複選。',
+      note: 'AI 先規劃整體，再每批最多生成 5 題，末批依剩餘題數；後一批會帶入前面全部已生成題目，降低重複。'
     },
     {
       page: 'page-settings', target: '#dongtian-card [data-dt-tutorial-card]',
