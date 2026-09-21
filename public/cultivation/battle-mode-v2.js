@@ -447,9 +447,9 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
   function updateIntroText(room) {
     const left = Math.max(0, Number(room.introUntilMs || 0) - nowMs());
     if (left > 3600) { setText('bv2-intro-kicker', '靈識鎖定'); setText('bv2-intro-count', '鬥'); setText('bv2-intro-title', '道友相逢 · 以學論道'); }
-    else if (left > 2700) { setText('bv2-intro-kicker', '凝神'); setText('bv2-intro-count', '3'); setText('bv2-intro-title', '收斂心神'); }
-    else if (left > 1800) { setText('bv2-intro-kicker', '運氣'); setText('bv2-intro-count', '2'); setText('bv2-intro-title', '靈臺清明'); }
-    else if (left > 900) { setText('bv2-intro-kicker', '問道'); setText('bv2-intro-count', '1'); setText('bv2-intro-title', '勝負由學識而定'); }
+    else if (left > 2700) { setText('bv2-intro-kicker', '凝神'); setText('bv2-intro-count', '鬥'); setText('bv2-intro-title', '收斂心神'); }
+    else if (left > 1800) { setText('bv2-intro-kicker', '運氣'); setText('bv2-intro-count', '法'); setText('bv2-intro-title', '靈臺清明'); }
+    else if (left > 900) { setText('bv2-intro-kicker', '問道'); setText('bv2-intro-count', '臺'); setText('bv2-intro-title', '戰場將開始三秒倒數'); }
     else { setText('bv2-intro-kicker', '青雲鬥法臺'); setText('bv2-intro-count', '戰'); setText('bv2-intro-title', '鬥法開始'); }
   }
 
@@ -471,6 +471,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
       if (entry.type === 'counter') return `<p class="counter"><b>${escapeHtml(actor)}</b> 雷光反擊 <strong>${Number(entry.damage) || 0}</strong> 傷害${entry.skill ? ` · ${escapeHtml(entry.skill)}` : ''}</p>`;
       if (entry.type === 'guard') return `<p class="counter"><b>${escapeHtml(actor)}</b> <strong>金丹道心護體</strong>，抵銷本次攻擊</p>`;
       if (entry.type === 'heal') return `<p class="counter"><b>${escapeHtml(actor)}</b> 回元，恢復 <strong>${Number(entry.amount) || 0}</strong> 生命</p>`;
+      if (entry.type === 'miss') return `<p><b>${escapeHtml(actor)}</b> 出招未命中 <strong>MISS</strong></p>`;
       return `<p>${escapeHtml(entry.message || '回合結算')}</p>`;
     }).join('');
   }
@@ -528,7 +529,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
       guest: document.getElementById(myRole === 'guest' ? 'bv2-my-fighter' : 'bv2-enemy-fighter') };
     steps.forEach((step, index) => {
       const timer = setTimeout(() => {
-        if (state.roomId !== key.split(':')[0] || state.seenSettlementKey !== key) return;
+        if (!state.roomId || state.seenSettlementKey !== key || state.room?.round !== room.round) return;
         const actor = fighters[step.actorRole];
         const targetRole = otherRole(step.actorRole);
         const target = fighters[targetRole];
@@ -640,7 +641,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
       btn.classList.toggle('correct', settled && idx === Number(question.ans)); btn.classList.toggle('wrong', settled && answered?.choice === idx && idx !== Number(question.ans));
     });
     if (settled) { expEl.textContent = `解析：${question.exp || '此題暫無解析。'}`; expEl.classList.remove('hidden'); setText('bv2-answer-status', '請閱讀解析，確認後返回戰場觀看先手、後手攻擊。'); }
-    else if (answered || pending) setText('bv2-answer-status', answered?.timedOut ? '本題逾時，等待回合結算。' : '你已出手；對手現在只有 25 秒可以回應。');
+    else if (answered || pending) setText('bv2-answer-status', answered?.timedOut ? '本題逾時，等待回合結算。' : '答案已送出；等待對手答題，戰鬥將於解析後開始。');
     else if (room.answerWindowStartedAt || room.answerWindowStartedAtMs) setText('bv2-answer-status', '對手已先作答！你的 25 秒倒數已開始。');
     else setText('bv2-answer-status', '不限讀題時間；第一位作答者會啟動另一方的 25 秒倒數。');
     const continueButton = document.getElementById('bv2-review-continue');
