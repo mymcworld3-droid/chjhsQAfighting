@@ -157,7 +157,7 @@ ${cleanText(text, MAX_TEXT) || '（沒有額外文字，主要依圖片內容規
   "subject": "主要科目或綜合",
   "knowledgePoints": ["知識點1", "知識點2"],
   "coverageSummary": "規劃如何涵蓋素材",
-  "questionCount": 10,
+  "questionCount": ${Math.ceil((allowedCounts[0] + allowedCounts[1]) / 2)},
   "questionStructure": {
     "type": "single_choice",
     "selectionMode": "single",
