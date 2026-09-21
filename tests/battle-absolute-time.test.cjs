@@ -26,7 +26,7 @@ test('a throttled callback respects its absolute deadline rather than chaining p
   vm.runInNewContext(battle.slice(a, b) + '\nthis.schedule = scheduleBattleAt;', context);
   const events = [];
   context.schedule(1800, 'k', time => events.push(time));
-  assert.equal(timerQueue.shift().at, 1800);
+  assert.equal(timerQueue[0].at, 1800);
   // The browser is suspended until 2100ms; resume must not add an extra 800ms.
   now = 2100;
   // Run scheduled callback despite having missed the nominal deadline.
@@ -51,7 +51,7 @@ test('early timers recheck the actual clock; late timers remain cancellable', ()
   context.schedule(1100,'key',at=>fired.push(at));
   now=750;
   queued.shift().callback();
-  assert.equal(queued.shift().at,1100);
+  assert.equal(queued[0].at,1100);
   assert.deepEqual(fired,[]);
   now=1400;
   context.schedule(1600,'key',at=>fired.push(at));
