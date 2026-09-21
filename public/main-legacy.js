@@ -1132,14 +1132,15 @@ function renderChatMessage(msg, container) {
     const rankName = getRankName(msg.rankLevel || 0, msg.uid || null, msg.totalScore ?? 0);
     const time = msg.timestamp ? new Date(msg.timestamp.toMillis()).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '...';
 
+    const chatProfile = msg.uid ? ' data-xiuxian-profile="' + escapeHtml(msg.uid) + '"' : '';
     div.innerHTML = `
         <div class="flex-shrink-0 flex flex-col items-center">
-            ${avatarHtml}
+            <button type="button" class="xpp-profile-trigger" ${chatProfile} aria-label="查看 ${escapeHtml(msg.displayName || '修士')} 的資料" ${msg.uid ? '' : 'disabled'}>${avatarHtml}</button>
         </div>
         <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'} max-w-[75%]">
             <div class="flex items-baseline gap-2 mb-1">
                 <span class="text-[10px] text-yellow-500 font-mono border border-yellow-500/30 px-1 rounded bg-black/20">${rankName}</span>
-                <span class="text-xs text-gray-400 font-bold">${msg.displayName}</span>
+                <button type="button" class="xpp-profile-trigger text-xs text-gray-400 font-bold" ${chatProfile} ${msg.uid ? '' : 'disabled'}>${escapeHtml(msg.displayName || '修士')}</button>
             </div>
             <div class="px-4 py-2 rounded-2xl text-sm break-words relative shadow-md ${isMe ? 'bg-cyan-600 text-white rounded-tr-none' : 'bg-slate-700 text-gray-200 rounded-tl-none'}">
                 ${escapeHtml(msg.text)}
@@ -1352,10 +1353,10 @@ window.loadFriendList = async () => {
             const div = document.createElement('div');
             div.className = "bg-slate-800/50 p-3 rounded-xl border border-slate-700 flex items-center gap-3";
             div.innerHTML = `
-                ${getAvatarHtml(fData.equipped, "w-12 h-12")}
-                <div class="flex-1">
+                <button type="button" class="xpp-profile-trigger" data-xiuxian-profile="${escapeHtml(d.id)}" aria-label="查看 ${escapeHtml(fData.displayName || '修士')} 的資料">${getAvatarHtml(fData.equipped, "w-12 h-12")}</button>
+                <div class="flex-1 min-w-0">
                     <div class="flex justify-between items-center">
-                        <span class="font-bold text-white">${fData.displayName}</span>
+                        <button type="button" class="xpp-profile-trigger font-bold text-white" data-xiuxian-profile="${escapeHtml(d.id)}">${escapeHtml(fData.displayName || '修士')}</button>
                         <span class="text-xs text-yellow-500 font-mono">${getRankName(calculateRankFromScore(fData.stats?.totalScore || 0, d.id), d.id, fData.stats?.totalScore)}</span>
                     </div>
                     <div class="flex justify-between items-center mt-1">
@@ -4176,8 +4177,8 @@ window.loadLeaderboard = async () => {
                 <tr class="border-b border-slate-700/50 ${isMe ? 'bg-blue-900/20' : ''} hover:bg-slate-700/50 transition">
                     <td class="px-4 py-4 font-bold ${i===1?'text-yellow-400':(i===2?'text-gray-300':(i===3?'text-orange-400':'text-gray-500'))}">${i}</td>
                     <td class="px-4 py-4 flex items-center gap-3">
-                        ${avatarHtml}
-                        <span class="${isMe ? 'text-blue-300 font-bold' : ''}">${d.displayName}</span>
+                        <button type="button" class="xpp-profile-trigger" data-xiuxian-profile="${escapeHtml(doc.id)}" aria-label="查看 ${escapeHtml(d.displayName || '修士')} 的資料">${avatarHtml}</button>
+                        <button type="button" class="xpp-profile-trigger ${isMe ? 'text-blue-300 font-bold' : ''}" data-xiuxian-profile="${escapeHtml(doc.id)}">${escapeHtml(d.displayName || '修士')}</button>
                     </td>
                     <td class="px-4 py-4 text-right font-mono text-blue-300">
                         ${getRankName(calculateRankFromScore(d.stats.totalScore, doc.id), doc.id, d.stats.totalScore)} <span class="text-xs text-gray-500 block">${d.stats.totalScore} pts</span>
