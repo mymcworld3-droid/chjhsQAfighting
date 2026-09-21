@@ -102,7 +102,10 @@ test('invalid persisted records are ignored and storage-disabled browser remains
 });
 
 test('solo quiz uses restored active question before hitting the API and saves each prefetched result', () => {
-  assert.match(legacy, /const nextQ = soloQuestionCache.getActive\(\) \|\| soloQuestionCache.takeNext\(\)/);
+  assert.match(legacy, /let nextQ = soloQuestionCache.getActive\(\) \|\| soloQuestionCache.takeNext\(\)/);
+  assert.match(legacy, /const BUFFER_SIZE = 1;/);
+  assert.match(legacy, /if \(!nextQ && isFetchingBuffer\)/);
+  assert.match(legacy, /if \(isFetchingBuffer\) return bufferFillPromise/);
   assert.match(legacy, /soloQuestionCache.append\(question\)/);
   assert.match(legacy, /soloQuestionCache.setActive\(q\)/);
   assert.match(legacy, /soloQuestionCache.consumeActive\(\)/);
