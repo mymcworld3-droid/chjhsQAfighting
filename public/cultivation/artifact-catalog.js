@@ -138,7 +138,7 @@ const DEFAULT_ARTIFACT_CATALOG = [
     realm: '金丹',
     category: '裝備法寶',
     equipSlot: '護身法寶',
-    description: '裝備後提升攻擊與生命。法寶境界不得低於修士目前大境界。',
+    description: '裝備後提升攻擊與生命；任何境界的修士均可裝備。',
     craft: { gold: 300, yield: 1 },
     effects: [
       { type: 'equip_attack_flat', value: 80 },
