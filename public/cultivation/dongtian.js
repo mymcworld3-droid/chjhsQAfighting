@@ -281,6 +281,7 @@ import {
     button.disabled = true;
     button.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> 正在凝聚洞天…<small>先規劃題數，再每 5 題分批生成</small>';
     status.textContent = state.files.length ? `正在整理 ${state.files.length} 張圖片與文字中的所有知識點…` : '正在整理文字中的所有知識點…';
+    let responseStatus = null;
     try {
       const images = [];
       for (let i = 0; i < state.files.length; i++) {
@@ -295,8 +296,12 @@ import {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text, images, creatorLevel: level, questionAmount })
       });
+      responseStatus = response.status;
       const payload = await response.json().catch(() => ({}));
-      if (!response.ok || !payload.dongtian) throw new Error(payload.error || `洞天生成失敗 (${response.status})`);
+      if (!response.ok || !payload.dongtian) {
+        const detail = String(payload.error || '後端未回傳可用的洞天資料');
+        throw new Error(`HTTP ${response.status}: ${detail}`);
+      }
       await saveGeneratedDongtian(payload.dongtian, state.files.length);
       status.textContent = `洞天「${payload.dongtian.name}」已凝成，共 ${payload.dongtian.questionCount} 題。`;
       document.getElementById('dt-source-text').value = '';
@@ -305,9 +310,15 @@ import {
       renderPreviews();
       await loadOwnDongtians(true);
     } catch (error) {
-      console.error('[Dongtian create]', error);
-      status.textContent = error.message || '洞天生成失敗，請稍後重試。';
-      toast(status.textContent);
+      // Preserve the HTTP status and server error for the admin Debugger,
+      // without showing raw AI errors or stack traces to regular players.
+      console.error('[Dongtian create]', responseStatus == null ? '請求未取得 HTTP 回應' : `HTTP ${responseStatus}`, error);
+      const fallback = responseStatus === 413
+        ? '洞天素材過大，請減少圖片或文字後重試。'
+        : '洞天生成未完成，請稍後重試。';
+      const message = window.xiuxianSafeActionError?.('洞天建立', error, fallback) || fallback;
+      status.textContent = message;
+      toast(message);
     } finally {
       state.generating = false;
       button.disabled = false;
