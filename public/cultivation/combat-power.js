@@ -59,7 +59,7 @@ const positive = (value) => Math.max(0, finite(value));
 
 export function calculateGoldenCorePower(core) {
   if (!core || core.equipped === false || !core.type) return 0;
-  const grade = Math.max(1, Math.min(9, Math.floor(finite(core.grade, 9))));
+  const grade = Math.max(1, Math.min(9, Math.floor(finite(core.grade, 9) || 9)));
   return CORE_LOWEST_POWER + (9 - grade) * CORE_GRADE_STEP;
 }
 
