@@ -491,3 +491,46 @@ test('separate full-screen quiz requires countdown, explanation confirmation and
   assert.match(cssSource, /\.bv2-fighter\.miss/);
   assert.match(cssSource, /\.bv2-quiz/);
 });
+
+test('optional equipment resolver uses sequential current HP and saves shield state for story encounters', () => {
+  const e = loadEngine();
+  const host = { ...player('h', { hp:500, correct:true, atMs:1000, atk:350 }), artifactShield:300 };
+  const guest = { ...player('g', { hp:1000, correct:true, atMs:2000, atk:220 }), artifactShield:300 };
+  const seen = [];
+  const outcome = e.settleBattleRound({
+    roomId:'equipment-story', round:1, host, guest,
+    resolveEquipmentHit:({attacker, defender, baseDamage}) => {
+      seen.push([attacker.uid, attacker.hp, defender.hp, baseDamage]);
+      const absorbed = Math.min(Math.max(0, Number(defender.artifactShield) || 0), baseDamage);
+      defender.artifactShield -= absorbed;
+      return {damage:baseDamage - absorbed, heal:80, shieldGain:50, reflectDamage:0, skill:'測試裝備'};
+    }
+  });
+  assert.deepEqual(seen, [['h',500,1000,350],['g',950,580,220]]);
+  assert.equal(outcome.steps.length, 2);
+  assert.equal(outcome.steps[0].damage, 50);
+  assert.equal(outcome.steps[0].hostHp, 580);
+  assert.equal(outcome.steps[1].damage, 0);
+  assert.equal(outcome.hostHp, 580);
+  assert.equal(outcome.guestHp, 950);
+  assert.equal(outcome.hostArtifactState.artifactShield, 350);
+  assert.equal(outcome.guestArtifactState.artifactShield, 50);
+});
+
+test('equipment mitigation and once-per-fight protection can stop lethal blows', () => {
+  const e = loadEngine();
+  const host = { ...player('h', { hp:100, correct:false, atMs:2000 }), artifactCheatDeathUsed:false };
+  const guest = player('g', { hp:1000, correct:true, atMs:1000, atk:65000 });
+  const outcome = e.settleBattleRound({
+    roomId:'cheat-death-story', round:1, host, guest,
+    resolveEquipmentHit:({attacker, defender, baseDamage}) => {
+      if (defender.artifactCheatDeathUsed) return {damage:baseDamage};
+      defender.artifactCheatDeathUsed = true;
+      return {damage:Math.min(baseDamage, Math.max(0, defender.hp - 1)), skill:'保命'};
+    }
+  });
+  assert.equal(outcome.hostHp, 1);
+  assert.equal(outcome.finished, false);
+  assert.equal(outcome.steps[1].type, 'miss');
+  assert.equal(outcome.hostArtifactState.artifactCheatDeathUsed, true);
+});
