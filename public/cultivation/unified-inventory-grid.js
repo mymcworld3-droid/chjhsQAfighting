@@ -56,8 +56,7 @@ import {
   }
   function artifactCanEquip(item) {
     if (!item || !artifactHasEquipEffects(item)) return false;
-    const current = realmForScore(Math.max(0, Number(userData()?.stats?.totalScore) || 0));
-    return realmOrderByName(item.realm) >= current.order;
+    return true;
   }
   function equippedIdForSlot(slot) {
     return String(userData()?.artifactSystem?.equipped?.[slot] || '');
@@ -324,11 +323,10 @@ import {
       const replacing = equippedId && !equippedHere ? getArtifactById(equippedId) : null;
       const hasEquip = artifactHasEquipEffects(rawArtifact);
       const canEquip = artifactCanEquip(rawArtifact);
-      const currentRealm = realmForScore(Math.max(0, Number(userData()?.stats?.totalScore) || 0));
       const equipAction = hasEquip && equipSlot
         ? `<button type="button" class="uib-equip-btn" data-uib-equip="${escapeHtml(item.id)}" ${!equippedHere && !canEquip ? 'disabled' : ''}>${equippedHere ? '<i class="fa-solid fa-box-archive"></i> 卸下' : '<i class="fa-solid fa-shield-halved"></i> 裝備'} · ${escapeHtml(equipSlot)}</button>`
         : '';
-      extra = `<div class="uib-detail-section"><span>法寶資訊</span><p>二次煉製深度：${item.refinementDepth || 0}/${MAX_ARTIFACT_RECIPE_NESTING}</p>${hasEquip ? `<p>裝備欄位：<b>${escapeHtml(equipSlot)}</b></p>` : ''}${replacing ? `<p>裝備後會替換：<b>${escapeHtml(replacing.name)}</b></p>` : ''}${hasEquip && !canEquip && !equippedHere ? `<p>目前不可裝備：${escapeHtml(item.realm)}低於你的${escapeHtml(currentRealm.name)}境界。</p>` : ''}</div><div class="uib-detail-section"><span>法寶效果</span>${item.effects.length
+      extra = `<div class="uib-detail-section"><span>法寶資訊</span><p>二次煉製深度：${item.refinementDepth || 0}/${MAX_ARTIFACT_RECIPE_NESTING}</p>${hasEquip ? `<p>裝備欄位：<b>${escapeHtml(equipSlot)}</b></p>` : ''}${replacing ? `<p>裝備後會替換：<b>${escapeHtml(replacing.name)}</b></p>` : ''}</div><div class="uib-detail-section"><span>法寶效果</span>${item.effects.length
         ? `<ul>${item.effects.map((effect) => `<li>${escapeHtml(effectLabel(effect))}</li>`).join('')}</ul>`
         : '<p>目前沒有額外效果資料。</p>'}${equippedHere ? '<p class="uib-equipped-note"><i class="fa-solid fa-circle-check"></i> 目前已裝備，效果正在生效</p>' : ''}${equipAction}</div>`;
     } else if (item.type === 'material') {
@@ -391,7 +389,7 @@ import {
         // 點選裝配格後，再點相符法寶就直接裝配，不必先開詳情、再按第二次。
         if (button.disabled || !window.toggleEquipArtifact) return;
         if (!artifactCanEquip(item.raw)) {
-          openDetails(key); // 保留境界不足原因，避免看似點擊無效。
+          openDetails(key); // 其他原因（非裝備型或資料不完整）仍可查看。
           return;
         }
         button.disabled = true;
