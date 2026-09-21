@@ -33,7 +33,8 @@ test('second tutorial duel is Gu Changfeng and teaches the real battle timing ru
   assert.match(tutorial, /師姐說你現在太弱/);
   assert.match(tutorial, /assets\/story\/characters\/battle-rival\.png/);
   assert.match(tutorial, /第一位玩家提交答案後，才會啟動另一方的 25 秒應答窗/);
-  assert.match(tutorial, /雙方都答對就雙方都出手/);
+  assert.match(tutorial, /雙方都答對時依作答先後出手/);
+  assert.match(tutorial, /settleBattleRound\(\{/);
   assert.match(tutorial, /QUESTIONS\.length/);
   assert.match(tutorial, /答錯：本回合你沒有造成傷害，顧長風反擊/);
 });
@@ -78,7 +79,8 @@ test('tutorial uses the real arena and both correct answers deal damage', () => 
   assert.match(tutorial, /getElementById\('bv2-arena'\)/);
   assert.doesNotMatch(tutorial, /document\.body\.appendChild\(el\)/);
   assert.match(tutorial, /closeBattleTutorialArena/);
-  assert.match(tutorial, /顧長風也答對/);
+  assert.match(tutorial, /resolveEquipmentHit: resolveTutorialEquipmentHit/);
+  assert.match(tutorial, /window\.getArtifactBattleSnapshot\?\.\(\)/);
 });
 
 test('Shen first duel returns to main story without starting Gu or marking tutorial complete', () => {
@@ -168,52 +170,34 @@ test('Shen duel has a correct hard math question, instant answer, and a real 25-
   assert.match(tutorial, /if \(Date\.now\(\) >= shenDeadline\) runShenStrike\(null\)/);
 });
 
-test('Shen strike always goes first even if the player answers correctly, and also strikes on timeout', async () => {
-  const vm = require('node:vm');
-  const constantSource = tutorial.slice(tutorial.indexOf('  const SHEN_ANSWER_WINDOW_MS'), tutorial.indexOf('  const LAYER_ID'));
-  const fightSource = tutorial.slice(tutorial.indexOf('  function renderIntro()'), tutorial.indexOf('  // 第一戰結束只返回主線劇情'));
-  async function simulate(choice, timedOut) {
-    let now = 1000, renderedResult = 0, intervalCleared = 0, slash = 0, hits = 0, numberOfTimers = 0;
-    const arena = { appendChild() {} };
-    const element = {
-      querySelector(selector) {
-        if (selector === '.bt-arena') return arena;
-        if (selector === '[data-bt-fighter="enemy"]' || selector === '.bt-slash') return {classList:{add:()=>{slash++;}}};
-        if (selector === '[data-bt-fighter="me"]') return {classList:{add:()=>{hits++;}}};
-        return { addEventListener(){} };
-      },
-      querySelectorAll() { return []; }
-    };
-    const ctx = vm.createContext({
-      active:true, busy:false, stage:'intro', tutorialPhase:'shen', shenTimer:null, shenDeadline:0, shenChoice:null,
-      playerHp:1000, delay:async()=>{}, clearInterval:()=>{intervalCleared++;}, setInterval:()=>{numberOfTimers++;return numberOfTimers;},
-      Date:{now:()=>now}, shell:()=>element, esc:String, playerPortrait:()=>'', renderShenResult:()=>{renderedResult++;},
-      document:{getElementById:()=>({textContent:'',classList:{toggle(){} }}),createElement:()=>({className:'',innerHTML:''})},
-      clearShenTimer() { if (ctx.shenTimer !== null) ctx.clearInterval(ctx.shenTimer);ctx.shenTimer=null;},
-    });
-    vm.runInContext(constantSource + '\n' + fightSource, ctx);
-    vm.runInContext('beginShenQuestion()',ctx);
-    assert.equal(ctx.stage,'shen-question');
-    assert.equal(ctx.shenDeadline,26000);
-    assert.equal(numberOfTimers,1);
-    if (timedOut) {
-      now = 26001;
-      vm.runInContext('updateShenTimer()',ctx);
-      await new Promise(resolve=>setImmediate(resolve));
-    } else {
-      await vm.runInContext('runShenStrike(' + choice + ')',ctx);
-    }
-    assert.equal(ctx.stage,'shen-strike');
-    assert.equal(ctx.playerHp,0,'Shen first attack must always one-shot');
-    assert.equal(renderedResult,1);
-    assert.equal(hits,1);
-    assert.ok(slash>=2);
-    assert.equal(intervalCleared,1,'timer should be cancelled as soon as first attack begins');
-    assert.equal(ctx.shenChoice, timedOut ? null : choice);
-  }
-  await simulate(1,false);
-  await simulate(0,false);
-  await simulate(null,true);
+
+test('Shen uses a three-second arena countdown, full-screen answer review and scripted true-damage attack', () => {
+  const shen = tutorial.slice(tutorial.indexOf('  function renderIntro()'), tutorial.indexOf('  // 第一戰結束只返回主線劇情'));
+  assert.match(shen, /startCountdown\('shen'/);
+  assert.match(shen, /stage = 'shen-question'/);
+  assert.match(shen, /SHEN_ANSWER_WINDOW_MS/);
+  assert.match(shen, /quiz:true/);
+  assert.match(shen, /stage = 'shen-review'/);
+  assert.match(shen, /shen-return-arena/);
+  assert.match(shen, /playShenStrike/);
+  assert.match(shen, /pop\.innerHTML = '-65,000/);
+  assert.match(shen, /playerHp = 0/);
+  assert.ok(shen.indexOf('stage = \'shen-review\'') < shen.indexOf('async function playShenStrike()'));
+});
+
+test('Gu reuses the ordered formal combat engine and preserves equipped effects per round', () => {
+  const source = tutorial.slice(tutorial.indexOf('  function renderGuIntro()'), tutorial.indexOf('  async function finish()'));
+  assert.match(source, /startCountdown\('gu'/);
+  assert.match(source, /quiz:true/);
+  assert.match(source, /GU_ANSWER_WINDOW_MS/);
+  assert.match(source, /const host = \{ \.\.\.guPlayer, hp: playerHp/);
+  assert.match(source, /resolveEquipmentHit: resolveTutorialEquipmentHit/);
+  assert.match(source, /outcome\.steps/);
+  assert.match(source, /step\.type === 'miss'/);
+  assert.match(source, /playerHp = outcome\.hostHp/);
+  assert.match(source, /guPlayer = \{/);
+  assert.match(source, /outcome\.hostArtifactState/);
+  assert.match(source, /outcome\.finished \|\| playerHp <= 0 \|\| guHp <= 0/);
 });
 
 test('battle tutorial fills real arena responsively without bottom dialogue panels', () => {
@@ -238,7 +222,9 @@ test('Shen and Gu finish on a separate full-screen result view, never beneath th
     querySelector:()=>null
   };
   const ctx = vm.createContext({ layer:()=>el, playerName:()=> '玩家', esc:String,
-    playerPortrait:()=>'', playerHp:1000, fighterMarkup:()=>'<article class="bt-fighter"></article>', snooze:()=>{} });
+    window:{setBattleTutorialScene:()=>{}}, document:{getElementById:()=>null},
+    playerCombat:{maxHp:1600}, playerPortrait:()=>'', playerHp:1600,
+    fighterMarkup:()=>'<article class="bt-fighter"></article>', snooze:()=>{} });
   vm.runInContext(shellSource,ctx);
   vm.runInContext("shell({badge:'戰後',title:'結算',body:'<p>結果</p>',result:true})",ctx);
   assert.equal(el.classes.has('bt-final-mode'),true);
