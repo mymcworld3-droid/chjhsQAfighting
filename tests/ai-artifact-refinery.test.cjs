@@ -603,6 +603,38 @@ test('recipe owner survives catalog normalization and concurrent admin saves', (
   assert.match(admin, /replaceArtifactCatalog\(committedCatalog, 'admin-save'\)/);
 });
 
+test('recipe compendium uses artifact cards and visual material tiles rather than joined text', () => {
+  assert.match(refinery, /function recipeIngredientMarkup\(row\)/);
+  assert.match(refinery, /ingredientMeta\(token\)/);
+  assert.match(refinery, /ingredientAvailable\(token\)/);
+  assert.match(refinery, /refinery-recipe-artifact-icon/);
+  assert.match(refinery, /refinery-recipe-artifact-title/);
+  assert.match(refinery, /refinery-recipe-access/);
+  assert.match(refinery, /refinery-recipe-ingredients-head/);
+  assert.match(refinery, /<ul class="refinery-recipe-ingredients">/);
+  assert.match(refinery, /<li class="refinery-recipe-ingredient/);
+  assert.match(refinery, /refinery-recipe-material-icon/);
+  assert.match(refinery, /refinery-recipe-material-meta/);
+  assert.match(refinery, /refinery-recipe-stock/);
+  assert.match(refinery, /refinery-recipe-required/);
+  assert.match(refinery, /refinery-recipe-grid/);
+  assert.match(refinery, /max-height:min\(75dvh,760px\)/);
+  assert.match(refinery, /@media\(max-width:520px\)[^\n]*refinery-recipe-ingredients/);
+  assert.doesNotMatch(refinery, /\.join\(' · '\) : '製作材料未公開/);
+});
+
+test('recipe compendium protects unknown formulas and still shows public, first-owned or licensed recipes', () => {
+  assert.match(refinery, /const learned = userData\(\)\?\.recipeLicenses\?\.\[item\.id\] === true/);
+  assert.match(refinery, /const canReadRecipe = !item\.recipeOwnerUid \|\| mine \|\| learned/);
+  assert.match(refinery, /const recipe = canReadRecipe \? getArtifactRecipe\(item\.id\) : \[\]/);
+  assert.match(refinery, /const ingredients = canReadRecipe/);
+  assert.match(refinery, /canReadRecipe && item\.description/);
+  assert.match(refinery, /refinery-recipe-sealed/);
+  assert.match(refinery, /此配方的素材與數量尚未公開/);
+  assert.match(refinery, /配方是製作指南，不是煉器許可證/);
+  assert.match(refinery, /前往交易市集/);
+});
+
 test('refinery recipe book displays discovered formulas and first-owner details', () => {
   assert.match(refinery, /function recipeBookMarkup\(\)/);
   assert.match(refinery, /getArtifactRecipe\(item\.id\)/);
