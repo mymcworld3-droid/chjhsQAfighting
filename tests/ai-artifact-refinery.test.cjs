@@ -86,6 +86,90 @@ test('AI artifact sanitizer cannot change locked realm and keeps combo at ten pe
   if (combo) assert.ok(combo.value <= 0.10);
 });
 
+test('every supported AI effect has explicit safe bounds for each eligible realm and refinement stage', () => {
+  const types = [...api.ALLOWED_EFFECTS];
+  assert.equal(api.REALMS.length, 11);
+  assert.equal(types.length, 24);
+  for (const [order, realm] of api.REALMS.entries()) {
+    for (const stage of [1, 2, 3]) {
+      const ranges = api.effectRangesForRealm(realm, stage);
+      assert.equal(new Set(ranges.map(item => item.type)).size, ranges.length);
+      for (const range of ranges) {
+        assert.ok(api.ALLOWED_EFFECTS.has(range.type));
+        assert.equal(range.type, api.effectRange(range.type, order, stage).type);
+        assert.ok(range.label);
+        if (range.field === 'value' || range.field === 'multiplier') {
+          assert.ok(range.min > 0 && range.max >= range.min, `${realm}/${stage}/${range.type} bounds`);
+          const low = api.sanitizeEffect({
+            type: range.type, value: -99, multiplier: -99, durationMinutes: -99
+          }, order, stage);
+          const high = api.sanitizeEffect({
+            type: range.type, value: 999999, multiplier: 999999, durationMinutes: 999999
+          }, order, stage);
+          assert.equal(low[range.field], range.min, `${realm}/${stage}/${range.type} lower clamp`);
+          assert.equal(high[range.field], range.max, `${realm}/${stage}/${range.type} upper clamp`);
+          if (range.field === 'multiplier') {
+            assert.equal(low.durationMs, range.durationMinutesMin * 60000);
+            assert.equal(high.durationMs, Math.round(range.durationMinutesMax * 60000));
+          }
+        } else if (range.type === 'remove_wrong_option') {
+          assert.equal(range.min, 1);
+          assert.equal(range.max, 1);
+          assert.equal(api.sanitizeEffect({ type: range.type, value: 999 }, order, stage).perQuestion, 1);
+        } else {
+          assert.equal(range.field, 'none');
+          assert.equal(range.min, null);
+          assert.equal(range.max, null);
+          assert.deepEqual(Object.keys(api.sanitizeEffect({ type: range.type }, order, stage)), ['type']);
+        }
+      }
+    }
+  }
+  assert.equal(api.effectRangesForRealm('真仙', 3).length, types.length);
+  assert.equal(api.effectRange('equip_cheat_death', 0, 3), null);
+  assert.equal(api.effectRange('equip_copy_enemy_artifact', 10, 2), null);
+});
+
+test('artifact progression scales effect ranges without allowing empty or inflated values', () => {
+  const basic = api.effectRange('equip_attack_flat', 0, 3);
+  const immortal = api.effectRange('equip_attack_flat', 10, 3);
+  assert.deepEqual([basic.min, basic.max], [13, 35]);
+  assert.deepEqual([immortal.min, immortal.max], [135, 385]);
+  const lowStage = api.effectRange('equip_attack_flat', 3, 1);
+  const topStage = api.effectRange('equip_attack_flat', 3, 3);
+  assert.ok(lowStage.min > 0 && lowStage.max < topStage.max);
+  assert.ok(api.effectRange('equip_combo_chance', 10, 3).max <= 0.10);
+  const cap = api.effectRange('equip_damage_cap_percent', 10, 3);
+  assert.ok(cap.min < cap.max && cap.max <= 0.8);
+  assert.match(cap.note, /越小越強/);
+  assert.ok(api.effectRange('equip_damage_cap_percent', 10, 1).min > cap.min);
+  const generated = api.sanitizeGeneratedArtifact({
+    name:'極值測試', equipSlot:'本命法寶',
+    effects:[{type:'equip_attack_flat',value:0},{type:'equip_hp_percent',value:999999}]
+  }, '真仙', 3);
+  assert.ok(generated.effects[0].value >= api.effectRange('equip_attack_flat', 10, 3).min);
+  assert.ok(generated.effects[1].value <= api.effectRange('equip_hp_percent', 10, 3).max);
+});
+
+test('AI receives only currently eligible effect ranges with actual min and max', () => {
+  const input = {
+    targetRealm:'真仙',
+    selectedIngredients:[{type:'material',id:'a',quantity:2}],
+    allMaterials:[{id:'a',name:'仙晶',realm:'真仙'}], existingArtifacts:[]
+  };
+  const prompt = api.buildPrompt(input);
+  assert.match(prompt, /各特性實際數值上下限/);
+  assert.match(prompt, /"type": "equip_attack_flat"/);
+  assert.match(prompt, /"min": 5/);
+  assert.match(prompt, /"max": 14/);
+  assert.match(prompt, /單次生命傷害上限/);
+  assert.match(prompt, /越小越強/);
+  assert.match(prompt, /每場固定一次/);
+  assert.match(prompt, /法寶無修士境界裝備限制/);
+  const rangeBlock = prompt.slice(prompt.indexOf('各特性實際數值上下限'));
+  assert.doesNotMatch(rangeBlock.split('允許效果 type：')[0], /"type": "equip_cheat_death"/);
+});
+
 test('generation prompt receives selected ingredients, full material catalog, existing artifacts and creative direction', () => {
   const prompt = api.buildPrompt({
     targetRealm: '金丹',
