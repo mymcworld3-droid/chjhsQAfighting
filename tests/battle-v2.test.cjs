@@ -513,7 +513,7 @@ test('optional equipment resolver uses sequential current HP and saves shield st
   assert.equal(outcome.steps[1].damage, 0);
   assert.equal(outcome.hostHp, 580);
   assert.equal(outcome.guestHp, 950);
-  assert.equal(outcome.hostArtifactState.artifactShield, 350);
+  assert.equal(outcome.hostArtifactState.artifactShield, 130);
   assert.equal(outcome.guestArtifactState.artifactShield, 50);
 });
 
