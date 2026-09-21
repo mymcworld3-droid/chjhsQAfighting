@@ -53,7 +53,7 @@ test('HP, names, core details and quiz actions retain their own space', () => {
     '#page-battle #bv2-review-continue',
     'grid-template-columns:minmax(0,1fr)!important'
   ]) assert.ok(viewport.includes(fragment), fragment);
-  assert.ok(viewport.indexOf("grid-template-areas:'enemy' 'round' 'stage' 'mine' 'rule' 'cue'!important")
+  assert.ok(full.lastIndexOf("grid-template-areas:'enemy' 'round' 'stage' 'mine' 'rule' 'cue'!important")
     > full.indexOf("grid-template-areas:'score' 'rule' 'cue' 'log'!important"));
 });
 
