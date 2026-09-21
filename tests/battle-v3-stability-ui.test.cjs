@@ -31,20 +31,22 @@ test('battle stability layer preserves the original payload while enriching gene
   assert.doesNotMatch(fix, /\/api\/generate-battle-quiz/);
 });
 
-test('battle opens as a true fullscreen viewport and uses a wider desktop arena', () => {
+test('battle opens as a true fullscreen viewport with separate arena and quiz scenes', () => {
   assert.match(fix, /#page-battle\.battle-v2-page\{/);
   assert.match(fix, /position:fixed!important;inset:0!important/);
   assert.match(fix, /width:100vw!important;height:100dvh!important/);
   assert.match(fix, /z-index:15000!important/);
-  assert.match(fix, /grid-template-areas:'score score' 'rule rule' 'question log'/);
+  assert.match(fix, /grid-template-areas:'score' 'rule' 'cue' 'log'/);
+  assert.match(fix, /#page-battle \.bv2-quiz:not\(\.hidden\)/);
   assert.match(fix, /@media\(max-width:900px\)/);
-  assert.match(fix, /grid-template-areas:'score' 'rule' 'question' 'log'/);
+  assert.match(fix, /grid-template-rows:auto auto minmax\(160px,1fr\) auto/);
 });
 
-test('all four battle phases have a higher-specificity hidden rule than arena and result displays', () => {
+test('all five battle phases have a higher-specificity hidden rule than arena and result displays', () => {
   assert.match(fix, /#page-battle\.battle-v2-page #bv2-lobby\.hidden/);
   assert.match(fix, /#page-battle\.battle-v2-page #bv2-intro\.hidden/);
   assert.match(fix, /#page-battle\.battle-v2-page #bv2-arena\.hidden/);
+  assert.match(fix, /#page-battle\.battle-v2-page #bv2-quiz\.hidden/);
   assert.match(fix, /#page-battle\.battle-v2-page #bv2-result\.hidden\{display:none!important/);
   assert.match(fix, /#page-battle \.bv2-arena:not\(\.hidden\)\{/);
   assert.match(fix, /#page-battle \.bv2-result:not\(\.hidden\)\{/);
