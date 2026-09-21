@@ -96,3 +96,35 @@ test('admin can publish a saved recipe at a validated price without transferring
   assert.match(artifactManager, /recipeSaleLocked: original\?\.recipeSaleLocked === true/);
   assert.match(artifactManager, /請先儲存配方或擁有人變更，再上架/);
 });
+
+
+test('recipe ownership and market listing follow artifact effects and use independent layout', () => {
+  const editor = artifactManager.slice(artifactManager.indexOf('modal.innerHTML ='));
+  const effect = editor.indexOf('<div class="aam-effects-editor">');
+  const owner = editor.indexOf('<section class="aam-recipe-owner-editor">');
+  const listing = editor.indexOf('<section class="aam-recipe-listing">');
+  const recipe = editor.indexOf('recipeEditorMarkup(item)}');
+  assert.ok(effect >= 0 && effect < owner && owner < listing && listing < recipe);
+  assert.doesNotMatch(editor, /aam-recipe-owner-editor aam-field full/);
+  assert.doesNotMatch(editor, /aam-recipe-listing aam-field full/);
+  assert.match(artifactManager, /\.aam-owner-toggle input\[type="checkbox"\]\{[^}]*width:16px!important;[^}]*height:16px!important;/);
+  assert.match(artifactManager, /\.aam-owner-current-uid\{overflow-wrap:anywhere/);
+  assert.match(artifactManager, /\.aam-owner-fields\{display:grid;grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
+});
+
+test('manual effect editor displays live, advisory depth-and-realm bounds', () => {
+  assert.match(artifactManager, /\/api\/artifact-depth-effect-ranges\?stage=/);
+  assert.match(artifactManager, /window\.getArtifactEffectBounds\?\.\(\)/);
+  assert.match(artifactManager, /function depthHintForRealm\(/);
+  assert.match(artifactManager, /const step = \(Number\(bounds\.max\) - Number\(bounds\.min\)\) \/ 12/);
+  assert.match(artifactManager, /index, inverse, integer/);
+  assert.match(artifactManager, /data-aam-effect-hint role="note"/);
+  assert.match(artifactManager, /僅供參考，不限制手動填寫/);
+  assert.match(artifactManager, /目前填值超出參考範圍/);
+  assert.match(artifactManager, /const stage = currentEditorStage\(modal\)/);
+  assert.match(artifactManager, /#aam-realm'\)\.addEventListener\('change'/);
+  assert.match(artifactManager, /artifact-effect-bounds-updated/);
+  assert.match(artifactManager, /effectList\.appendChild\(effectRow\(defaultEffect\(type\)\)\);\s*refreshEffectHints\(modal\)/);
+  const save = artifactManager.slice(artifactManager.indexOf('function readEffects(modal)'));
+  assert.doesNotMatch(save, /depthHintForRealm|loadDepthHints|effectMinRealms/);
+});
