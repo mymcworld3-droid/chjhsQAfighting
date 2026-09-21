@@ -2,7 +2,7 @@ import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.j
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, runTransaction } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { getArtifactById } from './artifact-catalog.js';
-import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material-catalog.js';
+import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe, materialMarketReferencePrice } from './material-catalog.js';
 
 // 玩家材料庫與「金幣 + 材料」法寶合成。
 // 材料獨立存於 materialSystem，避免舊 artifactSystem 正規化時誤刪材料資料。
@@ -99,7 +99,7 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
       const qty = materialQuantity(item.id);
       const price = Math.max(0, Number(item.buyGold) || 0);
       const disabled = price <= 0 || purchaseBusy || gold < price;
-      return `<article class="material-store-item"><div class="material-store-icon">${escapeHtml(item.icon || '材')}</div><div class="material-store-copy"><b>${escapeHtml(item.name)}</b><span>${escapeHtml(item.category || '材料')}</span><small>持有 ×${qty}${price > 0 ? ` · 採購 ${price} 金幣` : ' · 不可直接採購'}</small></div><button type="button" class="material-buy" data-material-buy="${escapeHtml(item.id)}" ${disabled ? 'disabled' : ''}>${purchaseBusy === item.id ? '取得中…' : '取得 ×1'}</button></article>`;
+      return `<article class="material-store-item"><div class="material-store-icon">${escapeHtml(item.icon || '材')}</div><div class="material-store-copy"><b>${escapeHtml(item.name)}</b><span>${escapeHtml(item.category || '材料')}</span><small>持有 ×${qty} · 參考 ${materialMarketReferencePrice(item.realm).toLocaleString()} 金幣${price > 0 ? ` · 採購 ${price} 金幣` : ' · 不可直接採購'}</small></div><button type="button" class="material-buy" data-material-buy="${escapeHtml(item.id)}" ${disabled ? 'disabled' : ''}>${purchaseBusy === item.id ? '取得中…' : '取得 ×1'}</button></article>`;
     }).join('');
   }
 
