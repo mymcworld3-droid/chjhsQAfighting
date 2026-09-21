@@ -692,6 +692,14 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     };
   };
 
+  // 公開金丹資料只解釋丹性與品級；不讀取他人的洗髓候選或帳號私有欄位。
+  window.getGoldenCorePublicDetails = function (coreLike) {
+    if (!coreLike || !CORE_TYPES.some((entry) => entry.id === coreLike.type)) return null;
+    const grade = clampGrade(coreLike.grade);
+    const type = coreType(coreLike.type);
+    return { type: type.id, name: type.name, grade, effect: type.effect(grade), equipped: true };
+  };
+
   // 候選丹相：供金丹頁與「品質下降警告」使用。
   window.getGoldenCoreState = function () {
     if (!isUnlocked()) return null;
