@@ -304,6 +304,72 @@
         #page-battle .bv2-quiz .bv2-question-card{padding:9px!important}
         #page-battle .bv2-quiz .bv2-question-card h3{margin:5px 0 8px;font-size:16px!important}
       }
+
+      /* Answering remains a real full-viewport scene, not a small centered panel.
+         The exit control stays visible; only oversized text scrolls inside the card. */
+      #page-battle.bv2-quiz-active .bv2-shell{
+        box-sizing:border-box;width:100%!important;max-width:none!important;
+        padding:max(3px,env(safe-area-inset-top)) max(5px,env(safe-area-inset-right))
+          max(3px,env(safe-area-inset-bottom)) max(5px,env(safe-area-inset-left))!important
+      }
+      #page-battle.bv2-quiz-active .bv2-head{margin-bottom:2px;padding:2px 7px 5px!important}
+      #page-battle .bv2-quiz:not(.hidden){
+        box-sizing:border-box;width:100%!important;height:100%;min-height:0!important;flex:1 1 auto;
+        margin:0!important;padding:0!important;align-items:stretch!important;
+        justify-content:stretch!important;overflow:hidden!important
+      }
+      #page-battle .bv2-quiz:not(.hidden) > .bv2-question-card{
+        box-sizing:border-box;flex:1 1 auto;width:100%!important;min-width:0;
+        height:100%!important;min-height:0!important;max-height:none!important;
+        margin:0!important;padding:clamp(14px,2.2vw,32px)!important;
+        overflow-x:hidden!important;overflow-y:auto!important;overscroll-behavior:contain;
+        border-radius:clamp(10px,1.7vw,22px)
+      }
+      #page-battle .bv2-quiz .bv2-question-card h3{
+        font-size:clamp(19px,2.2vw,32px)!important;line-height:1.5!important;
+        margin:clamp(12px,2dvh,20px) 0 clamp(14px,2dvh,24px)
+      }
+      #page-battle .bv2-quiz .bv2-option{
+        min-height:clamp(55px,8dvh,80px)!important;
+        padding:clamp(9px,1.3dvh,16px) 12px;font-size:clamp(14px,1.4vw,19px)!important
+      }
+      #page-battle #bv2-quiz:not(.hidden) > #battle-tutorial-layer.bt-quiz-mode{
+        box-sizing:border-box;width:100%!important;height:100%!important;
+        min-height:0!important;max-width:none!important;margin:0!important
+      }
+      #page-battle #bv2-quiz:not(.hidden) > #battle-tutorial-layer.bt-quiz-mode .bt-quiz-fullscreen{
+        box-sizing:border-box;width:100%;height:100%;min-height:0!important;
+        overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain
+      }
+      /* These are elapsed-time animations: slow, consistent real-time durations.
+         Late JS callbacks are fast-forwarded with a negative animation-delay. */
+      #page-battle .bv2-stage-fighter.me.strike{
+        animation-duration:1450ms!important
+      }
+      #page-battle .bv2-stage-fighter.enemy.strike{
+        animation-duration:1450ms!important
+      }
+      #page-battle .bv2-stage-fighter.me.hit,
+      #page-battle .bv2-stage-fighter.enemy.hit{
+        animation-duration:750ms!important
+      }
+      #page-battle .bv2-stage-fighter.miss{animation-duration:1250ms!important}
+      #page-battle .bv2-stage-fighter.guarded{animation-duration:750ms!important}
+      #page-battle .bv2-stage-fighter .bv2-damage-pop{animation-duration:800ms!important}
+      @media(max-width:620px){
+        #page-battle .bv2-quiz:not(.hidden) > .bv2-question-card{
+          padding:clamp(10px,2vw,18px)!important
+        }
+        #page-battle .bv2-quiz .bv2-question-card h3{
+          font-size:clamp(17px,4.8vw,23px)!important;margin:10px 0 14px
+        }
+        #page-battle .bv2-quiz .bv2-option{min-height:52px!important}
+      }
+      @media(max-height:620px){
+        #page-battle .bv2-quiz:not(.hidden) > .bv2-question-card{padding:10px!important}
+        #page-battle .bv2-quiz .bv2-question-card h3{margin:6px 0 9px}
+        #page-battle .bv2-quiz .bv2-option{min-height:44px!important}
+      }
     `;
     document.head.appendChild(style);
   }
