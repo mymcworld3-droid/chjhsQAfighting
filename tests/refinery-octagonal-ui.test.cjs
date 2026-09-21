@@ -81,7 +81,7 @@ test('normal and secondary refinery shelves are equally tall on mobile and indep
     assert.doesNotMatch(css, /calc\(50% \+ 96px - 32px\)/);
     assert.doesNotMatch(css, /calc\(50% - 96px \+ 32px\)/);
     assert.match(css, /\.refinery-material-roll-body\{[^}]*overflow:auto/);
-    assert.match(css, /refinery-material-roll\+\.\refinery-material-roll\{[^}]*padding-bottom:8px/);
+    assert.match(css, /\.refinery-material-roll\+\.refinery-material-roll\{[^}]*padding-bottom:8px/);
     assert.match(css, /refinery-material-panel\{height:clamp\(520px,70dvh,680px\)/);
   }
   assert.match(refinery, /data-refinery-material-roll="materials"/);
