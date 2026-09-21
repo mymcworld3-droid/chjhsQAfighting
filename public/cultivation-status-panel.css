@@ -305,3 +305,59 @@ body.xianxia-theme .status-stat-copy > small {
     animation: none !important;
   }
 }
+
+/* 延伸戰鬥數值：卡片可依內容增加列數，僅狀態清單捲動，金丹仍保留在上方。 */
+body.xianxia-theme .status-player-section {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(216,177,93,.3) transparent;
+}
+body.xianxia-theme .status-stat-hint {
+  margin: 3px 12px 0;
+  color: #93846b;
+  font-size: 9px;
+  line-height: 1.55;
+}
+body.xianxia-theme .status-stat-grid,
+body.xianxia-theme .status-stat-grid.status-stat-grid-simple {
+  height: auto;
+  min-height: 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: none;
+  align-content: start;
+  padding-bottom: 9px;
+}
+body.xianxia-theme .status-stat-card {
+  min-height: 60px;
+}
+body.xianxia-theme .status-stat-copy > small {
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+body.xianxia-theme .status-stat-passive {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  padding: 0 11px 11px;
+}
+body.xianxia-theme .status-stat-passive b {
+  color: #d9b45b;
+  font-size: 10px;
+}
+body.xianxia-theme .status-stat-passive span {
+  padding: 4px 7px;
+  border: 1px solid rgba(216,177,93,.2);
+  border-radius: 9px;
+  background: rgba(216,177,93,.055);
+  color: #cbbda2;
+  font-size: 9px;
+}
+@media(max-width:640px) {
+  body.xianxia-theme .status-stat-card { min-height: 54px; }
+  body.xianxia-theme .status-stat-grid.status-stat-grid-simple {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: none;
+  }
+}
