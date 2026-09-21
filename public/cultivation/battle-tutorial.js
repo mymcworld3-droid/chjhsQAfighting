@@ -514,19 +514,50 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder1';
     }
   }
 
+
   function renderGuIntro() {
     const el = shell({
       opponent:'顧長風',
       opponentImage:'assets/story/characters/battle-rival.png',
       opponentHp:guHp,
-      opponentMaxHp:2000,
+      opponentMaxHp:guOpponent?.maxHp || 2000,
       badge:'築基鬥法教學 · 第二戰',
       title:'顧長風 · 正式規則演練',
-      body:`<div class="bt-rule"><strong>顧長風 · 四回合規則訓練：</strong>師姐說你現在太弱，要我先陪你練基本功。這一場同樣不計戰績。答對才有出手機會；第一位玩家作答後，另一方進入 25 秒應答窗；雙方都答對時，雙方都能出手，傷害同時結算。</div>
+      body:`<div class="bt-rule"><strong>顧長風 · 四回合規則訓練：</strong>師姐說你現在太弱，要我先陪你練基本功。這一場同樣不計戰績。答對即可出手；第一位作答後另一方進入 25 秒限時；依作答時間決定先後手，每次攻擊後立即檢查血量。</div>
+        <div class="bt-rule">${combatSummary()}</div>
         <div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="gu-start">開始四回合教學戰</button></div>`
     });
-    el.querySelector('[data-bt-action="gu-start"]')?.addEventListener('click', () => {
-      stage = 'gu-round'; renderGuRound();
+    el.querySelector('[data-bt-action="gu-start"]')?.addEventListener('click', beginGuRound);
+  }
+
+  function clearGuRoundTimers() {
+    if (guOpponentTimer !== null) clearTimeout(guOpponentTimer);
+    if (guTick !== null) clearInterval(guTick);
+    guOpponentTimer = guTick = null;
+  }
+
+  function beginGuRound() {
+    if (!active || busy || guRound >= QUESTIONS.length || playerHp <= 0 || guHp <= 0) {
+      if (active && !busy) renderGuResult();
+      return;
+    }
+    clearGuRoundTimers();
+    guChoice = null;
+    guPlayerAt = guOpponentAt = guDeadline = 0;
+    guFeedback = guOutcome = null;
+    startCountdown('gu', () => {
+      stage = 'gu-question';
+      renderGuRound();
+      const token = sceneToken;
+      // The NPC answers after a short deterministic delay. The player may answer before or after.
+      guOpponentTimer = setTimeout(() => {
+        if (!active || stage !== 'gu-question' || token !== sceneToken) return;
+        guOpponentAt = Date.now();
+        if (!guPlayerAt) guDeadline = guOpponentAt + GU_ANSWER_WINDOW_MS;
+        if (guPlayerAt) completeGuAnswer();
+        else renderGuRound();
+      }, guRound % 2 === 0 ? 4200 : 6200);
+      guTick = setInterval(updateGuTimer, 200);
     });
   }
 
@@ -534,93 +565,194 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder1';
     const question = QUESTIONS[guRound];
     if (!question) { renderGuResult(); return; }
     const answered = !!feedback;
+    const playerAnswered = guPlayerAt > 0;
     const opts = question.opts.map((opt, index) => {
       const cls = answered ? (index === question.ans ? ' correct' : (index === feedback.choice && !feedback.correct ? ' wrong' : '')) : '';
-      return `<button type="button" class="bt-option${cls}" data-bt-choice="${index}" ${answered ? 'disabled' : ''}>${String.fromCharCode(65+index)}. ${esc(opt)}</button>`;
+      return `<button type="button" class="bt-option${cls}" data-bt-choice="${index}" ${answered || playerAnswered ? 'disabled' : ''}>${String.fromCharCode(65+index)}. ${esc(opt)}</button>`;
     }).join('');
-    const explain = feedback
-      ? `<div class="bt-explain"><b>${feedback.correct ? '答對：雙方都答對，雙方都出手（你造成 500，顧長風造成 220）。' : '答錯：本回合你沒有造成傷害，顧長風反擊。'}</b><br>${esc(question.exp)}</div>`
-      : '<div class="bt-explain">教學戰沒有時間壓力；正式配對則會在第一人作答後啟動另一方 25 秒倒數。</div>';
-    const action = answered
-      ? `<div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="next-round">${guRound >= QUESTIONS.length - 1 ? '查看教學結果' : '下一回合'}</button></div>`
-      : '';
+    const seconds = guDeadline ? Math.max(0, Math.ceil((guDeadline - Date.now()) / 1000)) : 25;
+    const status = answered ? '雙方已答 · 請閱讀解析' :
+      guOpponentAt && !playerAnswered ? '顧長風已答 · 你的應答倒數' :
+      playerAnswered ? '答案已送出 · 等待顧長風作答' : '雙方尚未出手 · 任一方先答後啟動 25 秒倒數';
+    const explain = answered
+      ? `<div class="bt-explain"><b>${feedback.correct ? '答對：取得出手機會。' : feedback.choice === null ? '逾時：本回合 MISS。' : '答錯：本回合 MISS。'}</b><br>${esc(question.exp)}<br>先手依作答時間決定，返回戰場後逐次執行攻擊、護體或 MISS。</div>
+         <div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="gu-return-arena">看完解析 · 返回戰場</button></div>`
+      : `<div class="bt-explain">${status}。${playerAnswered ? ' 正在等待另一方完成作答。' : ''}</div>`;
     const el = shell({
-      opponent:'顧長風',
-      opponentImage:'assets/story/characters/battle-rival.png',
-      opponentHp:guHp,
-      opponentMaxHp:2000,
-      badge:`築基鬥法教學 · 顧長風 ${guRound+1}/${QUESTIONS.length}`,
-      title:'用答題決定誰能出手',
-      showLater:!answered,
-      body:`<section class="bt-question"><div class="bt-question-meta"><span>ROUND ${guRound+1}</span><span>教學題 · 不計修為</span></div><h3>${esc(question.q)}</h3><div class="bt-options">${opts}</div>${explain}</section>${action}`
+      opponent:'顧長風', badge:`築基鬥法教學 · 全畫面題目 ${guRound+1}/${QUESTIONS.length}`,
+      title:'以答題決定誰能出手', showLater:!answered, quiz:true,
+      body:`<section class="bt-question"><div class="bt-question-meta"><span>ROUND ${guRound+1}</span><span id="bt-gu-timer" class="bt-shen-timer">${guDeadline ? '剩餘 ' + seconds + ' 秒' : '等待首答'}</span></div><h3>${esc(question.q)}</h3><div class="bt-options">${opts}</div>${explain}</section>`
     });
-    if (!answered) {
-      el.querySelectorAll('[data-bt-choice]').forEach((button) => button.addEventListener('click', () => resolveGuAnswer(Number(button.dataset.btChoice))));
-    } else {
-      el.querySelector('[data-bt-action="next-round"]')?.addEventListener('click', () => {
-        if (busy) return;
-        guRound += 1;
-        if (guRound >= QUESTIONS.length) renderGuResult();
-        else renderGuRound();
-      });
+    if (!answered) el.querySelectorAll('[data-bt-choice]').forEach((button) => button.addEventListener('click', () => resolveGuAnswer(Number(button.dataset.btChoice))));
+    else el.querySelector('[data-bt-action="gu-return-arena"]')?.addEventListener('click', playGuStrike);
+  }
+
+  function updateGuTimer() {
+    if (!active || stage !== 'gu-question' || busy) return;
+    const left = guDeadline ? Math.max(0, Math.ceil((guDeadline - Date.now()) / 1000)) : 25;
+    const label = document.getElementById('bt-gu-timer');
+    if (label) {
+      label.textContent = guDeadline ? '剩餘 ' + left + ' 秒' : '等待首答';
+      label.classList.toggle('urgent', !!guDeadline && left <= 5);
+    }
+    if (guDeadline && left <= 0 && !guPlayerAt) resolveGuAnswer(null);
+    // A hung opponent callback cannot deadlock this local exercise.
+    if (guDeadline && left <= 0 && guPlayerAt && !guOpponentAt) {
+      guOpponentAt = Date.now();
+      completeGuAnswer();
     }
   }
 
-  async function resolveGuAnswer(choice) {
-    if (busy) return;
+  function resolveGuAnswer(choice) {
+    if (!active || busy || stage !== 'gu-question' || guPlayerAt) return;
     const question = QUESTIONS[guRound];
     if (!question) return;
+    guChoice = Date.now() <= (guDeadline || Number.POSITIVE_INFINITY) && Number.isInteger(choice) &&
+      choice >= 0 && choice < question.opts.length ? choice : null;
+    guPlayerAt = Date.now();
+    if (!guOpponentAt) guDeadline = guPlayerAt + GU_ANSWER_WINDOW_MS;
+    if (guOpponentAt) completeGuAnswer();
+    else renderGuRound();
+  }
+
+  function resolveTutorialEquipmentHit({ attacker, defender, baseDamage }) {
+    const attack = window.resolveArtifactBattleAttack?.({ attacker, defender, baseDamage });
+    if (!attack) return null;
+    const defense = window.resolveArtifactBattleDefense?.({
+      defender, attacker, normalDamage: attack.normalDamage, trueDamage: attack.trueDamage
+    });
+    if (!defense) return null;
+    const damage = Math.max(0, Number(defense.hpDamage) || 0);
+    return {
+      damage,
+      reflectDamage: Math.max(0, Number(defense.reflectDamage) || 0),
+      reflectSkill: defense.skill || '法寶反傷',
+      heal: Math.round(damage * Math.max(0, Number(attack.lifestealPercent) || 0)),
+      shieldGain: Math.max(0, Number(attack.shieldGain) || 0),
+      skill: [attack.skill, defense.skill].filter(Boolean).join('・')
+    };
+  }
+
+  function completeGuAnswer() {
+    if (!active || stage !== 'gu-question' || !guPlayerAt || !guOpponentAt || guOutcome) return;
+    clearGuRoundTimers();
+    const question = QUESTIONS[guRound];
+    const correct = guChoice === question.ans;
+    if (correct) guCorrect += 1;
+    const host = { ...guPlayer, hp: playerHp, answer: { correct, atMs: guPlayerAt } };
+    const guest = { ...guOpponent, hp: guHp, answer: { correct: true, atMs: guOpponentAt } };
+    guOutcome = settleBattleRound({
+      roomId: 'story-gu-' + (user()?.uid || 'preview'), round: guRound + 1,
+      host, guest, maxRounds: QUESTIONS.length,
+      resolveEquipmentHit: resolveTutorialEquipmentHit
+    });
+    guFeedback = { choice: guChoice, correct };
+    stage = 'gu-review';
+    renderGuRound(guFeedback);
+  }
+
+  function refreshTutorialFighter(el, who, hp, maxHp) {
+    const fighter = el.querySelector('[data-bt-fighter="' + who + '"]');
+    if (!fighter) return;
+    const remaining = Math.max(0, Math.round(Number(hp) || 0));
+    const number = fighter.querySelector('.bt-fighter-head b');
+    if (number) number.textContent = String(remaining);
+    const bar = fighter.querySelector('.bt-hp i');
+    if (bar) bar.style.width = Math.max(0, Math.min(100, 100 * remaining / Math.max(1, maxHp))) + '%';
+  }
+
+  async function playGuStrike() {
+    if (!active || busy || stage !== 'gu-review' || !guOutcome) return;
+    stage = 'gu-strike';
     busy = true;
-    const correct = choice === question.ans;
-    // Gu answers every practice question correctly, including double-correct rounds.
-    if (correct) {
-      guCorrect += 1;
-      guHp = Math.max(0, guHp - 500);
+    const token = ++sceneToken;
+    const outcome = guOutcome;
+    const el = shell({
+      opponent:'顧長風', opponentImage:'assets/story/characters/battle-rival.png',
+      opponentHp:guHp, opponentMaxHp:guOpponent.maxHp,
+      badge:`築基鬥法教學 · 第 ${guRound+1} 回合`,
+      title:'正式鬥法 · 回到演武場', showLater:false,
+      body:`<div id="bt-combat-cue" class="bt-combat-cue">回合結算中<strong>⚔</strong></div>
+        <div class="bt-rule">${combatSummary()}</div>`
+    });
+    const steps = Array.isArray(outcome.steps) ? outcome.steps : [];
+    for (let index = 0; index < steps.length; index += 1) {
+      await delay(index === 0 ? 250 : 300);
+      if (!active || token !== sceneToken) return;
+      const step = steps[index];
+      const meAttacking = step.actorRole === 'host';
+      const actor = el.querySelector('[data-bt-fighter="' + (meAttacking ? 'me' : 'enemy') + '"]');
+      const target = el.querySelector('[data-bt-fighter="' + (meAttacking ? 'enemy' : 'me') + '"]');
+      const missed = step.type === 'miss';
+      const blocked = !!step.guarded;
+      const damage = Math.max(0, Number(step.damage) || 0);
+      const label = missed ? 'MISS' : blocked ? '護體' : '-' + damage;
+      const cue = el.querySelector('#bt-combat-cue');
+      if (cue) cue.innerHTML = `${index === 0 ? '先手' : step.type === 'counter' ? '雷光反擊' : '後手'} · ${meAttacking ? '我方' : '顧長風'}<strong>${label}</strong>`;
+      actor?.classList.add(missed ? 'miss' : 'strike');
+      if (!missed && !blocked) target?.classList.add('hit');
+      const pop = document.createElement('div');
+      pop.className = 'bt-damage' + (missed ? ' miss' : '');
+      pop.style.left = (missed ? (meAttacking ? '28%' : '72%') : (meAttacking ? '72%' : '28%'));
+      pop.innerHTML = esc(label) + '<small>' + (missed ? '答題未命中' : blocked ? '道心護體' : step.type === 'counter' ? '反擊' : '攻擊命中') + '</small>';
+      el.querySelector('.bt-arena')?.appendChild(pop);
+      refreshTutorialFighter(el, 'me', step.hostHp, guPlayer.maxHp);
+      refreshTutorialFighter(el, 'enemy', step.guestHp, guOpponent.maxHp);
+      await delay(TURN_ANIMATION_MS);
+      if (!active || token !== sceneToken) return;
+      actor?.classList.remove('miss', 'strike');
+      target?.classList.remove('hit');
+      pop.remove();
+      // The shared engine emits no further steps after a lethal hit or reflection.
     }
-    playerHp = Math.max(0, playerHp - 220);
-    const feedback = { choice, correct };
-    renderGuRound(feedback);
-    await delay(80);
-    const el = document.getElementById(LAYER_ID);
-    const attacker = el?.querySelector(`[data-bt-fighter="${correct ? 'me' : 'enemy'}"]`);
-    const target = el?.querySelector(`[data-bt-fighter="${correct ? 'enemy' : 'me'}"]`);
-    attacker?.classList.add('strike');
-    await delay(110);
-    target?.classList.add('hit');
-    const pop = document.createElement('div');
-    pop.className = 'bt-damage';
-    pop.style.left = correct ? '72%' : '28%';
-    pop.innerHTML = `-${correct ? '500' : '220'}<small>${correct ? '答對 · 攻擊命中' : '錯答 · 對手反擊'}</small>`;
-    el?.querySelector('.bt-arena')?.appendChild(pop);
-    if (correct) {
-      el?.querySelector('[data-bt-fighter="enemy"]')?.classList.add('strike');
-      el?.querySelector('[data-bt-fighter="me"]')?.classList.add('hit');
-      const counter = document.createElement('div');
-      counter.className = 'bt-damage';
-      counter.style.left = '28%';
-      counter.innerHTML = '-220<small>顧長風也答對 · 攻擊命中</small>';
-      el?.querySelector('.bt-arena')?.appendChild(counter);
-    }
+    if (!active || token !== sceneToken) return;
+    playerHp = outcome.hostHp;
+    guHp = outcome.guestHp;
+    guPlayer = {
+      ...guPlayer, hp: playerHp, coreShield: outcome.hostCoreShield,
+      coreCorrectStreak: outcome.hostCoreStreak, ...outcome.hostArtifactState
+    };
+    guOpponent = {
+      ...guOpponent, hp: guHp, coreShield: outcome.guestCoreShield,
+      coreCorrectStreak: outcome.guestCoreStreak, ...outcome.guestArtifactState
+    };
     busy = false;
+    if (outcome.finished || playerHp <= 0 || guHp <= 0 || guRound >= QUESTIONS.length - 1) {
+      renderGuResult();
+    } else {
+      stage = 'gu-between';
+      const cue = el.querySelector('#bt-combat-cue');
+      if (cue) cue.innerHTML = '本回合結束<strong>雙方仍可再戰</strong>';
+      const body = el.querySelector('.bt-body');
+      if (body) {
+        const div = document.createElement('div');
+        div.className = 'bt-actions';
+        div.innerHTML = '<button type="button" class="bt-primary" data-bt-action="next-round">下一回合</button>';
+        body.appendChild(div);
+        div.querySelector('button')?.addEventListener('click', () => {
+          if (busy || stage !== 'gu-between') return;
+          guRound += 1;
+          beginGuRound();
+        });
+      }
+    }
   }
 
   function renderGuResult() {
     stage = 'gu-result';
-    const perfect = guCorrect === QUESTIONS.length;
-    const passed = guCorrect >= 3;
-    const resultMark = perfect ? '勝' : passed ? '合' : '習';
-    const resultTitle = perfect ? '四題全對 · 顧長風生命歸零' : passed ? '規則掌握 · 教學合格' : '完成實戰 · 還需要多練';
+    const won = guHp <= 0 && playerHp > 0;
+    const lost = playerHp <= 0 && guHp > 0;
+    const resultMark = won ? '勝' : lost ? '敗' : '習';
+    const resultTitle = won ? '顧長風生命歸零' : lost ? '演武投影力竭' : '四回合演練完成';
     const el = shell({
       opponent:'顧長風',
       opponentImage:'assets/story/characters/battle-rival.png',
-      opponentHp:guHp,
-      opponentMaxHp:2000,
+      opponentHp:guHp, opponentMaxHp:guOpponent?.maxHp || 2000,
       badge:'築基鬥法教學 · 第二戰結束',
       title:'顧長風教學戰完成',
-      showLater:false,
-      result:true,
-      body:`<div class="bt-result"><div class="bt-result-mark">${resultMark}</div><h3>${esc(resultTitle)}</h3><p>答對 ${guCorrect} / ${QUESTIONS.length}。這場是本機教學模擬，不會加入正式勝敗紀錄。</p></div>
-        <div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="finish">完成鬥法教學</button></div>`
+      showLater:false, result:true,
+      body:`<div class="bt-result"><div class="bt-result-mark">${resultMark}</div><h3>${esc(resultTitle)}</h3><p>答對 ${guCorrect} / ${Math.min(QUESTIONS.length, guRound + 1)}。本機演武使用正式數值、金丹與法寶投影，不會加入正式勝敗紀錄或改動場外生命。</p></div>
+         <div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="finish">完成鬥法教學</button></div>`
     });
     el.querySelector('[data-bt-action="finish"]')?.addEventListener('click', finish);
   }
