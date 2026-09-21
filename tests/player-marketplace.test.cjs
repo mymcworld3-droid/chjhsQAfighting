@@ -64,12 +64,12 @@ test('even without a recipe, players can craft; owning the recipe only reveals e
   assert.match(refinery, /配方是製作指南，不是煉器許可證/);
   assert.match(refinery, /沒有配方也能自由投入素材嘗試煉製/);
   assert.match(refinery, /const learned = userData\(\)\?\.recipeLicenses\?\.\[item\.id\] === true/);
-  assert.match(refinery, /const canReadRecipe = !item\.recipeOwnerUid \|\| mine \|\| learned/);
+  assert.match(refinery, /const canReadRecipe = recipeAvailableToPlayer\(item, myUid\)/);
   assert.match(refinery, /const recipe = canReadRecipe \? getArtifactRecipe\(item\.id\) : \[\]/);
   assert.match(refinery, /const ingredients = canReadRecipe/);
   assert.match(refinery, /製作方法尚未習得/);
   assert.match(refinery, /canReadRecipe && item\.description/);
-  assert.match(refinery, /return `<article class="refinery-recipe-card/);
+  assert.match(refinery, /return `<details class="refinery-recipe-card/);
   assert.match(market, /交易只傳授製作方法/);
 });
 test('market technical faults go to admin debugger while players see neutral feedback', () => {
