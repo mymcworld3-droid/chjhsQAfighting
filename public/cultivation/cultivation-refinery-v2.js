@@ -288,9 +288,15 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
   }
 
   function ensureStyle() {
-    if (document.getElementById('cultivation-refinery-v2-style')) return;
+    // index.html has only the temporary loading/preload rules. Do not treat
+    // those as the complete component CSS: otherwise the actual recipe cards
+    // fall back to unstyled inline text while the HTML renders correctly.
+    if (document.getElementById('cultivation-refinery-v2-runtime-style')) {
+      document.getElementById('cultivation-refinery-v2-preload-style')?.remove();
+      return;
+    }
     const style = document.createElement('style');
-    style.id = 'cultivation-refinery-v2-style';
+    style.id = 'cultivation-refinery-v2-runtime-style';
     style.textContent = `
       #page-settings #artifact-forge-card,#page-settings #material-store-card{display:none!important}
       .cultivation-refinery{width:min(100%,1080px);margin:0 auto;display:grid;grid-template-columns:minmax(300px,.88fr) minmax(430px,1.12fr);gap:14px}
@@ -377,6 +383,18 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
       .refinery-recipe-empty i{font-size:23px}
       .refinery-recipe-empty p{margin:0;color:#a99a7c;font-size:10px}
       @media(max-width:520px){.refinery-recipe-book>summary{flex-wrap:wrap;padding:11px 12px}.refinery-recipe-summary-count{margin-left:0}.refinery-recipe-book-content{padding:10px;max-height:72dvh}.refinery-recipe-card-head{flex-wrap:wrap}.refinery-recipe-access{margin-left:auto}.refinery-recipe-ingredients{grid-template-columns:1fr}.refinery-recipe-toolbar{align-items:stretch}.refinery-recipe-market{width:100%}}
+      /* Browser UA <details> hiding must win over our card layout rules.
+         Explicitly hide the details body when closed, including in WebKit/iPadOS. */
+      #page-training .refinery-recipe-book:not([open]) > .refinery-recipe-book-content,
+      #page-training .refinery-recipe-card:not([open]) > .refinery-recipe-detail{
+        display:none!important;visibility:hidden!important
+      }
+      #page-training .refinery-recipe-book[open] > .refinery-recipe-book-content{
+        display:block;visibility:visible
+      }
+      #page-training .refinery-recipe-card[open] > .refinery-recipe-detail{
+        display:block;visibility:visible
+      }
       /* 摘要卡：預設只顯示成品與短介紹，點開後再顯示配方內容。 */
       .refinery-recipe-grid{grid-template-columns:minmax(0,1fr);gap:8px}
       .refinery-recipe-card>summary{list-style:none;cursor:pointer;align-items:center;min-height:69px;padding:10px 11px;border-bottom:0;user-select:none}
@@ -413,6 +431,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
       @media(max-width:430px){.refinery-material-list{gap:7px}.refinery-material-roll{padding:5px}.refinery-material-roll-body{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.refinery-material{padding:7px 5px}.refinery-mat-icon{width:36px;height:36px;flex-basis:36px}.refinery-mat-copy strong{font-size:7px}.refinery-mat-copy small{font-size:5.5px}}
     `;
     document.head.appendChild(style);
+    document.getElementById('cultivation-refinery-v2-preload-style')?.remove();
   }
 
   function tabActive(page) {
