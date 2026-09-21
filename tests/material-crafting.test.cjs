@@ -73,7 +73,7 @@ test('admin material manager handles materials while artifact editor handles rec
   assert.match(artifactAdmin, /data-recipe-artifact/);
   assert.match(artifactAdmin, /MIN_ARTIFACT_RECIPE_MATERIALS/);
   assert.match(artifactAdmin, /MAX_ARTIFACT_RECIPE_NESTING/);
-  assert.match(artifactAdmin, /persistCatalog\(next, normalizedRecipes\)/);
+  assert.match(artifactAdmin, /persistCatalog\(next, normalizedRecipes, ownerOverride\)/);
 });
 
 test('material modules load in dependency order and admin panel loads before collapsible wrapper', () => {
