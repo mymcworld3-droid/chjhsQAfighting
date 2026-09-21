@@ -109,7 +109,7 @@ test('every supported AI effect has explicit safe bounds for each eligible realm
           assert.equal(low[range.field], range.min, `${realm}/${stage}/${range.type} lower clamp`);
           assert.equal(high[range.field], range.max, `${realm}/${stage}/${range.type} upper clamp`);
           if (range.field === 'multiplier') {
-            assert.equal(low.durationMs, range.durationMinutesMin * 60000);
+            assert.equal(low.durationMs, Math.round(range.durationMinutesMin * 60000));
             assert.equal(high.durationMs, Math.round(range.durationMinutesMax * 60000));
           }
         } else if (range.type === 'remove_wrong_option') {
