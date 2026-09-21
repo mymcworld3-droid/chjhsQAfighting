@@ -72,3 +72,25 @@ test('preload shell styling no longer describes the old four-column forge', () =
   assert.doesNotMatch(trainingCss, /\.refinery-shell-slots\{display:grid;grid-template-columns:repeat\(4/);
   assert.match(trainingCss, /\.refinery-shell-array \.refinery-slot/);
 });
+
+test('normal and secondary refinery shelves are equally tall on mobile and independently scrollable', () => {
+  // Both preload and runtime CSS need matching geometry, or mobile users see
+  // a short lower panel before hydration or after an app rerender.
+  for (const css of [index, refinery]) {
+    assert.match(css, /grid-template-rows:repeat\(2,minmax\(0,1fr\)\)/);
+    assert.doesNotMatch(css, /calc\(50% \+ 96px - 32px\)/);
+    assert.doesNotMatch(css, /calc\(50% - 96px \+ 32px\)/);
+    assert.match(css, /\.refinery-material-roll-body\{[^}]*overflow:auto/);
+    assert.match(css, /refinery-material-roll\+\.\refinery-material-roll\{[^}]*padding-bottom:8px/);
+    assert.match(css, /refinery-material-panel\{height:clamp\(520px,70dvh,680px\)/);
+  }
+  assert.match(refinery, /data-refinery-material-roll="materials"/);
+  assert.match(refinery, /data-refinery-material-roll="artifacts"/);
+  const content = index.slice(index.indexOf('<style id="content-capacity-layout-style">'));
+  assert.match(content, /\.refinery-panel\.refinery-material-panel\{[^}]*display:grid!important/);
+  assert.match(content, /\.refinery-material-panel \.refinery-material-list\{[^}]*grid-template-rows:repeat\(2,minmax\(0,1fr\)\)!important/);
+  assert.match(content, /\.refinery-panel\.refinery-material-panel\{height:clamp\(520px,70dvh,680px\)!important;min-height:520px!important/);
+  assert.doesNotMatch(content, /refinery-panel\.refinery-material-panel\{height:(?:424|294)px!important/);
+  assert.doesNotMatch(content, /refinery-material-list\{max-height:294px!important/);
+  assert.doesNotMatch(content, /refinery-material-list\{[^}]*max-height:min\(42dvh,360px\)!important/);
+});
