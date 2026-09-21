@@ -325,7 +325,7 @@ test('formal battle uses Foundation realm only; incomplete tutorials never block
     toast: () => calls.push('toast'), alert: () => calls.push('alert'),
     resetRuntime: () => calls.push('reset'), ensurePage: () => calls.push('ensurePage'),
     showSection: () => calls.push('lobby'), renderLobby: () => calls.push('renderLobby'),
-    playerSnapshot: () => ({name:'p'}), setText:()=>{}, playerCoreLabel:()=> '', playerPowerLabel:()=> '',
+    playerSnapshot: () => ({name:'p'}), setText:()=>{}, playerCoreLabel:()=> '', playerPowerLabel:()=> '', setPlayerAvatar:()=>{},
     findAndClaimRoom: async () => 'oldRoom', subscribeRoom: () => calls.push('subscribe'),
     createWaitingRoom: async () => {calls.push('newRoom');return 'newRoom';},
     scheduleReconcile:()=>{}, console
