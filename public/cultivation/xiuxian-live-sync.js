@@ -33,11 +33,13 @@
       if (value >= realm.need) current = realm;
       else break;
     }
-    return current;
+    const index = REALMS.indexOf(current);
+    return REALMS[window.limitImmortalRank(index, value, REALMS)] || current;
   }
 
   function nextRealm(value) {
-    return REALMS.find((realm) => realm.need > value) || null;
+    const current = realmFor(value);
+    return REALMS[REALMS.indexOf(current) + 1] || null;
   }
 
   function refresh(score) {
@@ -60,13 +62,20 @@
 
     if (!next) {
       barEl.style.width = '100%';
-      nextEl.textContent = '已登仙';
-      labelEl.textContent = '已登仙，繼續悟道';
+      nextEl.textContent = '已成真仙';
+      labelEl.textContent = '榜上有名，位列真仙';
+      return true;
+    }
+
+    if (next.name === '真仙' && next.need <= value) {
+      barEl.style.width = '100%';
+      nextEl.textContent = '需登上九州五大仙榜';
+      labelEl.textContent = '登仙已成 · 爭奪真仙席位';
       return true;
     }
 
     const percent = Math.max(0, Math.min(100,
-      ((value - realm.need) / (next.need - realm.need)) * 100
+      ((value - realm.need) / Math.max(1, next.need - realm.need)) * 100
     ));
     barEl.style.width = `${percent}%`;
     nextEl.textContent = `${Math.max(0, next.need - value).toLocaleString()} 修為`;
