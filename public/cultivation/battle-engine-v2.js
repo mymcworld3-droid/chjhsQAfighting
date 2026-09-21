@@ -240,6 +240,11 @@ export function settleBattleRound({
     }
 
     const plan = hitPlan({ roomId, round, role, player, support });
+    // The equipment resolver must see the current sequential HP, not the pre-round snapshot.
+    if (typeof resolveEquipmentHit === 'function') {
+      player.hp = role === 'host' ? hostHp : guestHp;
+      defender.hp = role === 'host' ? guestHp : hostHp;
+    }
     attackers.push(role);
     const guarded = role === 'host' ? guestCoreShield : hostCoreShield;
     if (guarded) {
@@ -260,11 +265,13 @@ export function settleBattleRound({
     steps.push({ ...attack, guarded, hostHp, guestHp });
     if (plan.activation) activations.push({ ...plan.activation, ownerUid: player.uid });
     // Equipment heals / grants a shield to its attacker after an actual hit.
-    if (equipment && damage > 0) {
-      const healed = Math.min(Math.max(1, Number(player.maxHp) || 1000),
-        (role === 'host' ? hostHp : guestHp) + Math.max(0, Math.round(Number(equipment.heal) || 0)));
-      if (role === 'host') hostHp = healed;
-      else guestHp = healed;
+    if (equipment) {
+      if (damage > 0) {
+        const healed = Math.min(Math.max(1, Number(player.maxHp) || 1000),
+          (role === 'host' ? hostHp : guestHp) + Math.max(0, Math.round(Number(equipment.heal) || 0)));
+        if (role === 'host') hostHp = healed;
+        else guestHp = healed;
+      }
       if (equipment.shieldGain > 0) {
         player.artifactShield = Math.max(0, Number(player.artifactShield) || 0) + Math.round(equipment.shieldGain);
       }
