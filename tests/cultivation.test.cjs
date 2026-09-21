@@ -74,6 +74,9 @@ function setup(totalScore = 0) {
     read('true-immortal.js') +
     'window.getRealmUserUid = () => auth.currentUser?.uid;' +
     'const answeredSoloQuizzes = new WeakSet();' +
+    // This isolated reward harness does not mount the new browser-local quiz cache.
+    'function syncSoloQuestionCache() {};' +
+    'const soloQuestionCache = { getActive: () => null, consumeActive: () => false };' +
     'window.getCurrentUserData = () => currentUserData;' +
     read('cultivation-rules.js').replace(/export /g, '') +
     section(main, 'const REALMS = [', '// 綁定全域函式') +
