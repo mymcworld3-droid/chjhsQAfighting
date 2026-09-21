@@ -221,10 +221,8 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
       const unique = canReadRecipe && !!tokens.length && matchingRecipeForTokens(tokens, item.id);
       const plan = unique ? window.getCultivationRefineryPlan?.(tokens, item.id) : null;
       const job = window.getCultivationRefineryJob?.() || null;
-      const missing = canReadRecipe ? recipe.reduce((total, row) => {
-        const needed = Math.max(1, Math.floor(Number(row.quantity) || 1));
-        return total + Math.max(0, needed - ingredientAvailable(ingredientToken(row)));
-      }, 0) : 0;
+      const missing = canReadRecipe ? Object.entries(recipeCounts(recipe)).reduce((total, [token, quantity]) =>
+        total + Math.max(0, quantity - ingredientAvailable(token)), 0) : 0;
       const statusLabel = mine ? '首發持有' : !item.recipeOwnerUid ? '公共配方' : learned ? '已學會' : '尚未解鎖';
       const statusIcon = mine ? 'fa-crown' : !item.recipeOwnerUid ? 'fa-book-open' : learned ? 'fa-circle-check' : 'fa-lock';
       const color = artifactRealmColor(item.realm);
