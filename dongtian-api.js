@@ -327,7 +327,8 @@ async function callOpenAICompatible(provider, prompt, images) {
 
 async function generateMultimodalJSON(prompt, images) {
   if (!images.length) return aiRouter.generateJSON(prompt, { timeoutMs: 70000 });
-  const providers = aiRouter.buildProviders();
+  // Match the shared router's round-robin/random strategy instead of always using model 1.
+  const providers = aiRouter.orderedProviders(aiRouter.buildProviders());
   if (!providers.length) throw new Error('No AI provider configured');
   const errors = [];
   for (const provider of providers) {
@@ -339,8 +340,13 @@ async function generateMultimodalJSON(prompt, images) {
           ])
         : await callOpenAICompatible(provider, prompt, images);
       const text = aiRouter.extractJsonText(raw);
-      return { data: JSON.parse(text), provider: provider.name, model: provider.model };
+      const data = JSON.parse(text);
+      aiRouter.recordAttempt(provider, 'success');
+      console.log(`[AI Router multimodal] ${provider.name}/${provider.model} success`);
+      return { data, provider: provider.name, model: provider.model };
     } catch (error) {
+      aiRouter.recordAttempt(provider, 'failed', error);
+      console.warn(`[AI Router multimodal] ${provider.name}/${provider.model} failed: ${error?.message || error}`);
       errors.push(`${provider.name}: ${error?.message || error}`);
     }
   }
