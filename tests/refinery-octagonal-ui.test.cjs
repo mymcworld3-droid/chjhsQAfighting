@@ -57,7 +57,7 @@ test('Golden Core and Foundation preload the same octagonal forge shell', () => 
 });
 
 test('preloaded index contains octagonal refinery CSS before hydration', () => {
-  const start = index.indexOf('<style id="cultivation-refinery-v2-style">');
+  const start = index.indexOf('<style id="cultivation-refinery-v2-preload-style" data-refinery-preload="true">');
   const end = index.indexOf('</style>', start);
   const css = index.slice(start, end);
   assert.ok(start >= 0 && end > start);
