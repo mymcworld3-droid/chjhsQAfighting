@@ -622,22 +622,9 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder2';
     else renderGuRound();
   }
 
-  function resolveTutorialEquipmentHit({ attacker, defender, baseDamage }) {
-    const attack = window.resolveArtifactBattleAttack?.({ attacker, defender, baseDamage });
-    if (!attack) return null;
-    const defense = window.resolveArtifactBattleDefense?.({
-      defender, attacker, normalDamage: attack.normalDamage, trueDamage: attack.trueDamage
-    });
-    if (!defense) return null;
-    const damage = Math.max(0, Number(defense.hpDamage) || 0);
-    return {
-      damage,
-      reflectDamage: Math.max(0, Number(defense.reflectDamage) || 0),
-      reflectSkill: defense.skill || '法寶反傷',
-      heal: Math.round(damage * Math.max(0, Number(attack.lifestealPercent) || 0)),
-      shieldGain: Math.max(0, Number(attack.shieldGain) || 0),
-      skill: [attack.skill, defense.skill].filter(Boolean).join('・')
-    };
+  // Use the same artifact resolver and seeded rolls as formal matchmaking.
+  function resolveTutorialEquipmentHit(args) {
+    return window.resolveArtifactBattleHit?.(args) || null;
   }
 
   function completeGuAnswer() {
