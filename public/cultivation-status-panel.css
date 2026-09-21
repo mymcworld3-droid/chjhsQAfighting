@@ -10,7 +10,7 @@ body.xianxia-theme .training-status-panel {
   min-height: 0;
   margin: 0 auto;
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-rows: auto auto minmax(0, 1fr);
   gap: 10px;
   overflow: hidden;
 }
@@ -360,4 +360,38 @@ body.xianxia-theme .status-stat-passive span {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-template-rows: none;
   }
+}
+
+/* 綜合戰力置頂；其餘數值依然在下方獨立捲動。 */
+body.xianxia-theme .status-power-section { padding-bottom: 10px; }
+body.xianxia-theme .status-power-main {
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  margin:4px 12px 8px;color:#f9dc89;
+}
+body.xianxia-theme .status-power-main i { font-size:20px;text-shadow:0 0 15px rgba(244,201,94,.5); }
+body.xianxia-theme .status-power-main strong {
+  font-size:clamp(26px,4vw,38px);font-weight:900;line-height:1.15;
+  font-variant-numeric:tabular-nums;letter-spacing:.025em;
+  text-shadow:0 0 20px rgba(244,201,94,.18);
+}
+body.xianxia-theme .status-power-sources {
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;
+  padding:0 12px;
+}
+body.xianxia-theme .status-power-sources div {
+  display:grid;gap:3px;min-width:0;text-align:center;
+  padding:7px 5px;border:1px solid rgba(216,177,93,.17);
+  border-radius:11px;background:rgba(216,177,93,.045);
+}
+body.xianxia-theme .status-power-sources span { color:#a99b7c;font-size:9px; }
+body.xianxia-theme .status-power-sources b { color:#f4dfaa;font-size:clamp(11px,1.7vw,16px);font-variant-numeric:tabular-nums; }
+body.xianxia-theme .status-power-items { display:flex;flex-wrap:wrap;gap:4px;margin:8px 12px 0;max-height:38px;overflow:auto; }
+body.xianxia-theme .status-power-items span { color:#d8c396;font-size:9px;padding:3px 6px;border-radius:6px;background:rgba(216,177,93,.065); }
+body.xianxia-theme .status-power-note { margin:6px 12px 0;color:#877a61;font-size:9px;line-height:1.4; }
+@media(max-width:640px) {
+  body.xianxia-theme .status-power-main { margin:3px 10px 6px; }
+  body.xianxia-theme .status-power-sources { gap:4px;padding:0 8px; }
+  body.xianxia-theme .status-power-sources div { padding:6px 3px; }
+  body.xianxia-theme .status-power-sources span { font-size:8px; }
+  body.xianxia-theme .status-power-note { font-size:8px; }
 }
