@@ -200,7 +200,9 @@ export function settleBattleRound({
   host,
   guest,
   tieWindowMs = BATTLE_V2.tieWindowMs,
-  maxRounds = BATTLE_V2.maxRounds
+  maxRounds = BATTLE_V2.maxRounds,
+  // Optional per-hit resolver for equipment effects. Pure engine remains unchanged without one.
+  resolveEquipmentHit = null
 }) {
   // Firestore server-stamped response time determines initiative, never damage eligibility.
   // Missing/timeout answers move last; a tie consistently gives host initiative.
@@ -246,19 +248,39 @@ export function settleBattleRound({
       logs.push({ type: 'guard', actorRole: targetRole, actorUid: defender.uid, targetUid: player.uid, damage: 0, skill: '金丹道心護體', message: '金丹道心護體抵銷本次傷害' });
       activations.push({ type: defender.goldenCore?.type || 'shield', name: defender.goldenCore?.name || '金丹', ownerUid: defender.uid, skill: '金丹道心護體', message: '金丹道心護體發動，抵銷本次攻擊', kind: '鬥法防護' });
     }
-    const damage = guarded ? 0 : plan.totalDamage;
+    const equipment = !guarded && typeof resolveEquipmentHit === 'function'
+      ? (resolveEquipmentHit({ attacker: player, defender, baseDamage: plan.totalDamage, role, round }) || null)
+      : null;
+    const damage = guarded ? 0 : equipment ? Math.max(0, Math.round(Number(equipment.damage) || 0)) : plan.totalDamage;
     const targetBefore = role === 'host' ? guestHp : hostHp;
     if (role === 'host') guestHp = Math.max(0, guestHp - damage);
     else hostHp = Math.max(0, hostHp - damage);
-    const attack = { type: 'attack', actorRole: role, actorUid: player.uid, targetUid: defender.uid, damage, baseDamage: plan.baseDamage, extraDamage: plan.extraDamage, skill: plan.activation?.skill || '' };
+    const attack = { type: 'attack', actorRole: role, actorUid: player.uid, targetUid: defender.uid, damage, baseDamage: plan.baseDamage, extraDamage: plan.extraDamage, skill: [plan.activation?.skill, equipment?.skill].filter(Boolean).join('・') };
     logs.push(attack);
     steps.push({ ...attack, guarded, hostHp, guestHp });
     if (plan.activation) activations.push({ ...plan.activation, ownerUid: player.uid });
+    // Equipment heals / grants a shield to its attacker after an actual hit.
+    if (equipment && damage > 0) {
+      const healed = Math.min(Math.max(1, Number(player.maxHp) || 1000),
+        (role === 'host' ? hostHp : guestHp) + Math.max(0, Math.round(Number(equipment.heal) || 0)));
+      if (role === 'host') hostHp = healed;
+      else guestHp = healed;
+      if (equipment.shieldGain > 0) {
+        player.artifactShield = Math.max(0, Number(player.artifactShield) || 0) + Math.round(equipment.shieldGain);
+      }
+    }
+    // Step HP records must include any instant post-hit recovery before animation playback.
+    steps[steps.length - 1].hostHp = hostHp;
+    steps[steps.length - 1].guestHp = guestHp;
     if (hostHp <= 0 || guestHp <= 0) break;
 
     // A surviving defender may reflect damage. The attacker must survive to take a later action.
     if (damage > 0) {
       const counter = resolveDeterministicCounterCore(defender, Math.min(targetBefore, damage), roomId + ':' + round + ':' + defender.uid + ':counter');
+      counter.reflectDamage += Math.max(0, Math.round(Number(equipment?.reflectDamage) || 0));
+      if (equipment?.reflectDamage > 0) {
+        counter.activation = counter.activation || { type: 'artifact', skill: equipment.reflectSkill || '法寶反傷', name: '法寶', message: '法寶反傷觸發', kind: '鬥法受擊效果' };
+      }
       if (counter.reflectDamage > 0) {
         if (role === 'host') hostHp = Math.max(0, hostHp - counter.reflectDamage);
         else guestHp = Math.max(0, guestHp - counter.reflectDamage);
@@ -298,6 +320,8 @@ export function settleBattleRound({
     guestCoreShield,
     hostCoreStreak: hostSupport.streak,
     guestCoreStreak: guestSupport.streak,
+    hostArtifactState: { artifactShield: host.artifactShield || 0, artifactFirstHitUsed: !!host.artifactFirstHitUsed, artifactCheatDeathUsed: !!host.artifactCheatDeathUsed },
+    guestArtifactState: { artifactShield: guest.artifactShield || 0, artifactFirstHitUsed: !!guest.artifactFirstHitUsed, artifactCheatDeathUsed: !!guest.artifactCheatDeathUsed },
     logs,
     activations,
     finished: winnerUid !== null,
