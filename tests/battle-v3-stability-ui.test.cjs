@@ -41,6 +41,17 @@ test('battle opens as a true fullscreen viewport and uses a wider desktop arena'
   assert.match(fix, /grid-template-areas:'score' 'rule' 'question' 'log'/);
 });
 
+test('all four battle phases have a higher-specificity hidden rule than arena and result displays', () => {
+  assert.match(fix, /#page-battle\.battle-v2-page #bv2-lobby\.hidden/);
+  assert.match(fix, /#page-battle\.battle-v2-page #bv2-intro\.hidden/);
+  assert.match(fix, /#page-battle\.battle-v2-page #bv2-arena\.hidden/);
+  assert.match(fix, /#page-battle\.battle-v2-page #bv2-result\.hidden\{display:none!important/);
+  assert.match(fix, /#page-battle \.bv2-arena:not\(\.hidden\)\{/);
+  assert.match(fix, /#page-battle \.bv2-result:not\(\.hidden\)\{/);
+  assert.doesNotMatch(fix, /#page-battle \.bv2-arena\{[^}]*display:grid!important/);
+  assert.doesNotMatch(fix, /#page-battle \.bv2-result\{display:flex/);
+});
+
 test('fullscreen body lock follows page-battle visibility and is released when hidden', () => {
   assert.match(fix, /battle-v3-fullscreen-active/);
   assert.match(fix, /!page\.classList\.contains\('hidden'\)/);
