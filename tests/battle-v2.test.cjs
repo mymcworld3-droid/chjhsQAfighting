@@ -48,15 +48,18 @@ test('one correct answer attacks and both wrong answers deal no damage', () => {
   assert.equal(winRound.guestHp, 800);
 
   const blankRound = e.settleBattleRound({ roomId: 'room-b', round: 1, host: player('h', { correct: false }), guest: player('g', { correct: false }) });
-  assert.equal(blankRound.logs.length, 0);
+  assert.equal(blankRound.logs.length, 2);
+  assert.ok(blankRound.logs.every((entry) => entry.type === 'miss'));
+  assert.ok(blankRound.steps.every((entry) => entry.type === 'miss'));
   assert.equal(blankRound.hostHp, 1000);
   assert.equal(blankRound.guestHp, 1000);
 });
 
-test('both correct answers attack regardless of timing', () => {
+test('both correct answers attack in response order; simultaneous answers break ties by host', () => {
   const e = loadEngine();
   const fasterGuest = e.settleBattleRound({ roomId: 'speed', round: 2, host: player('h', { correct: true, atMs: 2000 }), guest: player('g', { correct: true, atMs: 1700 }) });
-  assert.deepEqual(Array.from(fasterGuest.attackers), ['host', 'guest']);
+  assert.deepEqual(Array.from(fasterGuest.attackers), ['guest', 'host']);
+  assert.equal(fasterGuest.steps[0].actorRole, 'guest');
   assert.equal(fasterGuest.hostHp, 800);
   assert.equal(fasterGuest.guestHp, 800);
 
@@ -436,8 +439,55 @@ test('Shielded hit deals zero actual damage and cannot trigger Thunder counter',
 test('Battle UI shows shield and healing without animating non-attacks', () => {
   assert.match(battleSource,/entry\.type === 'guard'/);
   assert.match(battleSource,/entry\.type === 'heal'/);
-  assert.match(battleSource,/logs\.filter\(\(entry\) => entry\.type === 'attack' \|\| entry\.type === 'counter'\)/);
+  assert.match(battleSource,/Array\.isArray\(settlement\.steps\)/);
+  assert.match(battleSource,/const missed = step\.type === 'miss'/);
   assert.match(battleSource,/mine\.coreShield \? ' · 道心護體'/);
   assert.match(battleSource,/guest\.coreShield/);
-  assert.match(battleSource,/battle-engine-v2\.js\?v=20260920-corebattle1/);
+  assert.match(battleSource,/battle-engine-v2\.js\?v=20260921-turnorder1/);
+});
+
+test('lethal first attack stops before the other player can strike', () => {
+  const e = loadEngine();
+  const result = e.settleBattleRound({
+    roomId: 'lethal-turn', round: 1,
+    host: player('h', { correct: true, atMs: 1000, atk: 65000 }),
+    guest: player('g', { correct: true, atMs: 2000 })
+  });
+  assert.equal(result.guestHp, 0);
+  assert.equal(result.hostHp, 1000);
+  assert.equal(result.winnerUid, 'h');
+  assert.deepEqual(Array.from(result.attackers), ['host']);
+  assert.equal(result.steps.length, 1);
+  assert.equal(result.steps[0].type, 'attack');
+});
+
+test('early incorrect answer has a MISS before the opponent attacks', () => {
+  const e = loadEngine();
+  const result = e.settleBattleRound({
+    roomId: 'miss-turn', round: 1,
+    host: player('h', { correct: false, atMs: 1000 }),
+    guest: player('g', { correct: true, atMs: 2000 })
+  });
+  assert.deepEqual(Array.from(result.turnOrder), ['host', 'guest']);
+  assert.deepEqual(Array.from(result.steps.map((step) => step.type)), ['miss', 'attack']);
+  assert.equal(result.hostHp, 800);
+  assert.equal(result.guestHp, 1000);
+});
+
+test('separate full-screen quiz requires countdown, explanation confirmation and shared review gate', () => {
+  const arena = battleSource.slice(battleSource.indexOf('<section id="bv2-arena"'), battleSource.indexOf('<section id="bv2-quiz"'));
+  const quiz = battleSource.slice(battleSource.indexOf('<section id="bv2-quiz"'), battleSource.indexOf('<section id="bv2-result"'));
+  assert.ok(arena.includes('id="bv2-duel-cue"'));
+  assert.ok(!arena.includes('id="bv2-question"'), 'question must never be shown inside arena');
+  assert.ok(quiz.includes('id="bv2-question"'));
+  assert.ok(quiz.includes('id="bv2-explanation"'));
+  assert.ok(quiz.includes('id="bv2-review-continue"'));
+  assert.match(battleSource, /ROUND_COUNTDOWN_MS = 3000/);
+  assert.match(battleSource, /questionReadyAtMs: nowMs\(\) \+ ROUND_COUNTDOWN_MS/);
+  assert.match(battleSource, /function confirmReview\(\)/);
+  assert.match(battleSource, /function bothReviewed\(room\)/);
+  assert.match(battleSource, /!bothReviewed\(fresh\)/);
+  assert.match(battleSource, /state\.animationFinishedKey !== settlementKey\(room\)/);
+  assert.match(cssSource, /\.bv2-fighter\.miss/);
+  assert.match(cssSource, /\.bv2-quiz/);
 });
