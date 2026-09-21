@@ -145,7 +145,7 @@ test('Golden Core tutorial is presented inside its story chapter after unlock', 
   assert.doesNotMatch(main, /'\.\/newbie-tutorial\.js'/);
 });
 
-test('combat status remains intentionally limited to attack and HP', () => {
+test('combat base remains attack and HP while status reports equipped artifact effects in descending order', () => {
   assert.match(combat, /attack: 200/);
   assert.match(combat, /hp: 1000/);
   assert.match(combat, /maxHp: 1000/);
@@ -155,10 +155,13 @@ test('combat status remains intentionally limited to attack and HP', () => {
   assert.doesNotMatch(combat, /critDamage:/);
   assert.match(statusPanel, /攻擊力/);
   assert.match(statusPanel, /生命值/);
-  assert.match(statusPanel, /單場鬥法結束後恢復滿值/);
-  assert.doesNotMatch(statusPanel, /\$\{Math\.round\(player\.hp\).*\/ \$\{Math\.round\(player\.maxHp\)/);
+  assert.match(statusPanel, /鬥法開始時為滿血/);
+  assert.match(statusPanel, /window\.getArtifactBattleSnapshot\?\.\(\)/);
+  assert.match(statusPanel, /連擊率/);
+  assert.match(statusPanel, /減傷/);
+  assert.match(statusPanel, /暴擊率/);
+  assert.match(statusPanel, /sortValue/);
   assert.doesNotMatch(statusPanel, /防禦力/);
-  assert.doesNotMatch(statusPanel, /暴擊傷害/);
 });
 
 test('Golden Core visual and lower-quality equip warning remain active', () => {
