@@ -426,8 +426,12 @@ import {
     await runTransaction(db, async (tx) => {
       const userRef = doc(db, 'users', user.uid);
       const configRef = doc(db, CONFIG_COLLECTION, CONFIG_DOC);
-      const [userSnap, configSnap] = await Promise.all([tx.get(userRef), tx.get(configRef)]);
+      const transferRef = ownerOverride?.uid ? doc(db, 'users', ownerOverride.uid) : null;
+      const [userSnap, configSnap, transferSnap] = await Promise.all([
+        tx.get(userRef), tx.get(configRef), transferRef ? tx.get(transferRef) : Promise.resolve(null)
+      ]);
       if (!userSnap.exists() || userSnap.data()?.isAdmin !== true) throw new Error('管理員權限驗證失敗');
+      if (transferRef && !transferSnap?.exists()) throw new Error('新擁有人 UID 不存在，請先確認玩家帳號');
       // 以交易讀到的全站版本為準，管理員若使用舊畫面儲存，也不得擦除首發人。
       const persistedItems = Array.isArray(configSnap.data()?.items) ? configSnap.data().items : [];
       const owners = new Map(persistedItems.filter((item) => item?.id && item.recipeOwnerUid).map((item) => [item.id, item]));
