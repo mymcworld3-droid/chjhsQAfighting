@@ -1119,20 +1119,33 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
 
   // Local tutorials use the real arena, but never attach a matchmaking room.
   let tutorialArenaBackup = null;
+  let tutorialQuizBackup = null;
   window.openBattleTutorialArena = () => {
     if (state.starting || state.roomId) return null;
     ensurePage();
     showSection('arena');
     const arena = document.getElementById('bv2-arena');
-    if (tutorialArenaBackup === null) tutorialArenaBackup = arena.innerHTML;
+    const quiz = document.getElementById('bv2-quiz');
+    if (tutorialArenaBackup === null) {
+      tutorialArenaBackup = arena.innerHTML;
+      tutorialQuizBackup = quiz.innerHTML;
+    }
     arena.innerHTML = '';
+    quiz.innerHTML = '';
     setText('bv2-room-badge', '鬥法教學 · 不計戰績');
     return arena;
+  };
+  window.setBattleTutorialScene = (scene) => {
+    if (tutorialArenaBackup === null) return null;
+    const phase = scene === 'quiz' ? 'quiz' : 'arena';
+    showSection(phase);
+    return document.getElementById('bv2-' + phase);
   };
   window.closeBattleTutorialArena = () => {
     if (tutorialArenaBackup === null) return;
     document.getElementById('bv2-arena').innerHTML = tutorialArenaBackup;
-    tutorialArenaBackup = null;
+    document.getElementById('bv2-quiz').innerHTML = tutorialQuizBackup || '';
+    tutorialArenaBackup = tutorialQuizBackup = null;
     setText('bv2-room-badge', '尚未配對');
     window.switchToPage?.('page-home');
   };
