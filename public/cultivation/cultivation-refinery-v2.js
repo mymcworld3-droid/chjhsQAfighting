@@ -206,7 +206,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
           </span>
           <span class="refinery-recipe-access ${canReadRecipe ? 'is-unlocked' : 'is-locked'}"><i class="fa-solid ${statusIcon}"></i> ${statusLabel}</span>
         </header>
-        ${item.description ? `<p class="refinery-recipe-description">${esc(item.description)}</p>` : ''}
+        ${canReadRecipe && item.description ? `<p class="refinery-recipe-description">${esc(item.description)}</p>` : ''}
         ${ingredients}
         <footer class="refinery-recipe-card-foot">
           <span class="refinery-recipe-owner"><i class="fa-solid fa-fingerprint"></i> ${owner}${access}</span>
