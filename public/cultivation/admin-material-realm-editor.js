@@ -76,7 +76,7 @@ import {
         <div class="amm-field"><label>材料境界</label><select id="amre-realm">${realmOptions(realm)}</select></div>
         <div class="amm-field"><label>採購價（金幣；0 = 不可購買）</label><input id="amre-buy-gold" type="number" min="0" step="1" value="${Math.max(0, Number(item?.buyGold) || 0)}"></div>
         <div class="amm-field full"><label>境界預覽</label><div id="amre-realm-preview" style="min-height:38px;display:flex;align-items:center;padding:8px 10px;border:1px solid rgba(255,255,255,.1);border-radius:10px;font-size:9px;font-weight:900"></div></div>
-        <div class="amm-field full"><label>說明</label><textarea id="amre-description" maxlength="500">${esc(item?.description || '')}</textarea></div>
+        <div class="amm-field full"><label>說明／材質特性</label><textarea id="amre-description" maxlength="500">${esc(item?.description || '')}</textarea></div><div class="amm-field full"><label>材料背景故事（煉器 AI 會參考）</label><textarea id="amre-story" maxlength="2000" placeholder="記載來源、歷史、傳說與世界觀設定">${esc(item?.story || '')}</textarea></div>
       </div>
       <div id="amre-status" class="amm-status"></div>
       <div class="amm-modal-actions"><button type="button" class="amm-cancel">取消</button><button type="button" class="amm-save">${editing ? '儲存變更' : '建立材料'}</button></div>
@@ -110,6 +110,7 @@ import {
       category: modal.querySelector('#amre-category').value,
       realm: modal.querySelector('#amre-realm').value,
       description: modal.querySelector('#amre-description').value,
+      story: modal.querySelector('#amre-story').value,
       buyGold: modal.querySelector('#amre-buy-gold').value
     };
     if (originalId && id !== originalId) { status.textContent = '既有材料 ID 不可修改。'; return; }
