@@ -184,6 +184,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260920-c
   function showSection(name) {
     const page = ensurePage();
     if (!page) return;
+    page.dataset.bv2Phase = name;
     ['lobby', 'intro', 'arena', 'result'].forEach((key) => page.querySelector(`#bv2-${key}`)?.classList.toggle('hidden', key !== name));
   }
 
@@ -768,12 +769,6 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260920-c
     if (!state.tick) state.tick = setInterval(tickRoom, 200); if (!state.heartbeat) state.heartbeat = setInterval(heartbeat, HEARTBEAT_MS); heartbeat();
   }
 
-  function battleStoryReady() {
-    const current = userData();
-    return !!current?.storyProgressV1?.seen?.['foundation-first-battle'] &&
-      !!current?.battleTutorialV1?.completed;
-  }
-
   function storyOrTutorialOpen() {
     return !!document.querySelector('#xiuxian-story-layer,#newbie-tutorial-layer,#battle-tutorial-layer,#golden-core-tutorial-layer,#dongtian-overlay');
   }
@@ -781,9 +776,9 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260920-c
   async function startMatchmaking() {
     if (window.getBattleTutorialState?.().active || state.starting) return; if (score() < FOUNDATION_SCORE) { toast(`需達築基初期（${FOUNDATION_SCORE} 修為）才可配對鬥法。`); return; } if (!me()) { alert('請先登入！'); return; }
     if (state.roomId && state.room && state.room.status !== 'finished') { window.switchToPage?.('page-battle'); return; }
-    // 第三章主線與師姐／顧長風教學戰尚未結束，不得誤進正式配對，也不能先建立 Firestore 房間。
-    if (!battleStoryReady() || storyOrTutorialOpen()) {
-      toast('請先完成第三章劇情與鬥法教學，再進入正式配對。');
+    // 境界是唯一的遊玩進度門檻；正在顯示的劇情或教學畫面仍不能與配對重疊。
+    if (storyOrTutorialOpen()) {
+      toast('請先關閉目前的劇情或教學畫面，再進入鬥法。');
       return;
     }
     resetRuntime(); state.starting = true; ensurePage(); window.switchToPage?.('page-battle'); showSection('lobby'); renderLobby(null);
@@ -814,12 +809,12 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260920-c
   }
 
   async function joinSpecificRoom(roomId) {
-    if (score() < FOUNDATION_SCORE || !me() || !roomId || !battleStoryReady() || storyOrTutorialOpen()) return false; const myData = playerSnapshot();
+    if (score() < FOUNDATION_SCORE || !me() || !roomId || storyOrTutorialOpen()) return false; const myData = playerSnapshot();
     try { const joined = await findAndClaimRoom(myData, roomId); if (!joined) return false; resetRuntime(); state.role = 'guest'; ensurePage(); window.switchToPage?.('page-battle'); subscribeRoom(joined); return true; } catch (_) { return false; }
   }
 
   async function recoverBattleSession() {
-    if (window.getBattleTutorialState?.().active || state.roomId || !me() || score() < FOUNDATION_SCORE || !battleStoryReady() || storyOrTutorialOpen()) return; const uid = me().uid;
+    if (window.getBattleTutorialState?.().active || state.roomId || !me() || score() < FOUNDATION_SCORE || storyOrTutorialOpen()) return; const uid = me().uid;
     try {
       const [hostRooms, guestRooms] = await Promise.all([
         getDocs(query(collection(db(), ROOM_COLLECTION), where('host.uid', '==', uid), limit(5))),
