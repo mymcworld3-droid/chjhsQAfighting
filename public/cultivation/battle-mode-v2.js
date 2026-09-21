@@ -19,8 +19,19 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
   const MATCH_SCAN_LIMIT = 80;
   const INTRO_DURATION_MS = 4800;
   const ROUND_COUNTDOWN_MS = 3000;
-  const ANIMATION_STEP_MS = 950;
+  // One server-settled strike occupies real wall-clock time; rendering speed is irrelevant.
+  const ANIMATION_STEP_MS = 1850;
+  const ATTACK_IMPACT_MS = 650;
+  const ATTACK_VISIBLE_MS = 1450;
+  const ATTACK_LEAD_MS = 280;
   const ROUND_ANIMATION_GRACE_MS = 5200;
+  function battleAnimationDuration(stepCount) {
+    return ATTACK_LEAD_MS + Math.max(1, stepCount) * ANIMATION_STEP_MS + 400;
+  }
+  function roundAnimationGrace(room) {
+    const count = Array.isArray(room?.lastSettlement?.steps) ? room.lastSettlement.steps.length : 0;
+    return Math.max(ROUND_ANIMATION_GRACE_MS, battleAnimationDuration(count) + 1500);
+  }
   const ANSWER_WINDOW_MS = 25000;
   const BATTLE_WIN_GOLD = 500;
   const BATTLE_WIN_CULTIVATION = 5;
@@ -271,6 +282,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
     const page = ensurePage();
     if (!page) return;
     page.dataset.bv2Phase = name;
+    page.classList.toggle('bv2-quiz-active', name === 'quiz');
     ['lobby', 'intro', 'arena', 'quiz', 'result'].forEach((key) => page.querySelector(`#bv2-${key}`)?.classList.toggle('hidden', key !== name));
   }
 
@@ -576,6 +588,21 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
       '答題完成後，回到戰場依先後手出招');
   }
 
+  // Schedule every event against a fixed Date.now() deadline, never against a
+  // previous timeout, paint frame or CSS animationend. A throttled tab catches up.
+  function scheduleBattleAt(deadlineMs, key, action) {
+    const wait = () => {
+      if (state.seenSettlementKey !== key || !state.roomId) return;
+      const remaining = deadlineMs - nowMs();
+      if (remaining > 1) {
+        state.animationTimers.push(setTimeout(wait, remaining));
+        return;
+      }
+      action(nowMs());
+    };
+    state.animationTimers.push(setTimeout(wait, Math.max(0, deadlineMs - nowMs())));
+  }
+
   function animateSettlement(room) {
     const settlement = room?.lastSettlement;
     if (!settlement || Number(settlement.round) !== Number(room.round) || state.reviewedRound !== Number(room.round)) return;
@@ -586,6 +613,8 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
     state.animationTimers.forEach(clearTimeout);
     state.animationTimers = [];
 
+    const startAtMs = nowMs();
+    const round = Number(room.round);
     const myRole = state.role;
     const original = {
       host: { ...room.host, hp: Number(settlement.startHostHp ?? room.host?.hp) },
@@ -595,46 +624,66 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
     setHp('enemy', original[otherRole(myRole)]);
     setText('bv2-cue-kicker', '攻防演武');
     const steps = Array.isArray(settlement.steps) ? settlement.steps : [];
-    const fighters = { host: document.getElementById(myRole === 'host' ? 'bv2-my-fighter' : 'bv2-enemy-fighter'),
-      guest: document.getElementById(myRole === 'guest' ? 'bv2-my-fighter' : 'bv2-enemy-fighter') };
+    const fighters = {
+      host: document.getElementById(myRole === 'host' ? 'bv2-my-fighter' : 'bv2-enemy-fighter'),
+      guest: document.getElementById(myRole === 'guest' ? 'bv2-my-fighter' : 'bv2-enemy-fighter')
+    };
+    const valid = () => !!state.roomId && state.seenSettlementKey === key && Number(state.room?.round) === round;
     steps.forEach((step, index) => {
-      const timer = setTimeout(() => {
-        if (!state.roomId || state.seenSettlementKey !== key || state.room?.round !== room.round) return;
-        const actor = fighters[step.actorRole];
-        const targetRole = otherRole(step.actorRole);
-        const target = fighters[targetRole];
-        const damage = Math.max(0, Number(step.damage) || 0);
-        const missed = step.type === 'miss';
-        const guarded = !!step.guarded;
-        const counter = step.type === 'counter';
-        const label = missed ? 'MISS' : guarded ? '護體' : (counter ? '反擊 -' : '-') + damage;
+      const strikeAtMs = startAtMs + ATTACK_LEAD_MS + index * ANIMATION_STEP_MS;
+      const impactAtMs = strikeAtMs + ATTACK_IMPACT_MS;
+      const clearAtMs = strikeAtMs + ATTACK_VISIBLE_MS;
+      const actor = fighters[step.actorRole];
+      const target = fighters[otherRole(step.actorRole)];
+      const damage = Math.max(0, Number(step.damage) || 0);
+      const missed = step.type === 'miss';
+      const guarded = !!step.guarded;
+      const counter = step.type === 'counter';
+      const label = missed ? 'MISS' : guarded ? '護體' : (counter ? '反擊 -' : '-') + damage;
+      let pop = null;
+      scheduleBattleAt(strikeAtMs, key, (atMs) => {
+        if (!valid() || atMs >= clearAtMs) return;
         setText('bv2-cue-kicker', index === 0 ? '先手出招' : counter ? '雷光反擊' : '後手出招');
         setText('bv2-cue-count', missed ? 'MISS' : guarded ? 'BLOCK' : '-' + damage);
-        setText('bv2-cue-message', (step.actorRole === myRole ? '我方' : '對手') + (missed ? '作答未命中！' : guarded ? '出招被道心護體抵擋' : counter ? '發動反擊！' : '造成 ' + damage + ' 點傷害'));
-        actor?.classList.add(missed ? 'miss' : 'strike');
-        // Damage is projected at the impact frame, in the same order as the server's
-        // settled steps; room HP and outcome remain authoritative.
-        state.animationTimers.push(setTimeout(() => {
-          if (!state.roomId || state.seenSettlementKey !== key || state.room?.round !== room.round) return;
-          if (!missed && !guarded) target?.classList.add('hit');
-          else if (guarded) target?.classList.add('guarded');
-          const pop = document.createElement('b');
+        setText('bv2-cue-message', (step.actorRole === myRole ? '我方' : '對手') +
+          (missed ? '作答未命中！' : guarded ? '出招被道心護體抵擋' : counter ? '發動反擊！' : '造成 ' + damage + ' 點傷害'));
+        if (actor) {
+          actor.style.animationDelay = '-' + Math.max(0, atMs - strikeAtMs) + 'ms';
+          actor.classList.add(missed ? 'miss' : 'strike');
+        }
+      });
+      scheduleBattleAt(impactAtMs, key, (atMs) => {
+        if (!valid()) return;
+        // Even if the tab was suspended, HP follows the absolute impact
+        // deadline and the authoritative step order, not delayed paint events.
+        setHp('my', { ...original[myRole], hp: Number(step[myRole + 'Hp']) });
+        setHp('enemy', { ...original[otherRole(myRole)], hp: Number(step[otherRole(myRole) + 'Hp']) });
+        if (atMs >= clearAtMs) return;
+        if (target) {
+          target.style.animationDelay = '-' + Math.max(0, atMs - impactAtMs) + 'ms';
+          if (!missed && !guarded) target.classList.add('hit');
+          else if (guarded) target.classList.add('guarded');
+        }
+        const holder = missed ? actor : target;
+        if (holder) {
+          pop = document.createElement('b');
           pop.className = 'bv2-damage-pop' + (missed ? ' miss' : guarded ? ' blocked' : '');
           pop.textContent = label;
-          (missed ? actor : target)?.appendChild(pop);
-          setHp('my', { ...original[myRole], hp: Number(step[myRole + 'Hp']) });
-          setHp('enemy', { ...original[otherRole(myRole)], hp: Number(step[otherRole(myRole) + 'Hp']) });
-          state.animationTimers.push(setTimeout(() => {
-            actor?.classList.remove('strike', 'miss');
-            target?.classList.remove('hit', 'guarded');
-            pop.remove();
-          }, 520));
-        }, 190));
-      }, 300 + index * ANIMATION_STEP_MS);
-      state.animationTimers.push(timer);
+          pop.style.animationDelay = '-' + Math.max(0, atMs - impactAtMs) + 'ms';
+          holder.appendChild(pop);
+        }
+      });
+      scheduleBattleAt(clearAtMs, key, () => {
+        if (!valid()) return;
+        actor?.classList.remove('strike', 'miss');
+        target?.classList.remove('hit', 'guarded');
+        if (actor) actor.style.animationDelay = '';
+        if (target) target.style.animationDelay = '';
+        pop?.remove();
+      });
     });
-    state.animationTimers.push(setTimeout(() => {
-      if (state.seenSettlementKey !== key) return;
+    scheduleBattleAt(startAtMs + battleAnimationDuration(steps.length), key, () => {
+      if (!valid()) return;
       state.animationFinishedKey = key;
       setHp('my', playerForRole(state.room, myRole));
       setHp('enemy', playerForRole(state.room, otherRole(myRole)));
@@ -644,7 +693,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
         setText('bv2-cue-kicker', '本回合結束');
         setText('bv2-cue-message', bothReviewed(state.room) ? '下一回合即將開始' : '等待道友讀完解析…');
       }
-    }, 600 + steps.length * ANIMATION_STEP_MS));
+    });
   }
 
   async function confirmReview() {
@@ -664,7 +713,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
           const other = playerForRole(fresh, otherRole(state.role));
           const both = Number(other?.reviewedRound) === round;
           const patch = { [state.role + '.reviewedRound']: round, updatedAt: serverTimestamp() };
-          if (both) patch.nextRoundAtMs = nowMs() + ROUND_ANIMATION_GRACE_MS;
+          if (both) patch.nextRoundAtMs = nowMs() + roundAnimationGrace(fresh);
           tx.update(ref, patch);
         });
       }
@@ -1004,7 +1053,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
       const left = ready ? Math.max(0, Number(room.nextRoundAtMs) - nowMs()) : 0;
       if (timerEl) { timerEl.textContent = ready ? (left / 1000).toFixed(1) + 's' : '等待雙方確認'; timerEl.classList.remove('idle'); }
       if (trackEl) trackEl.classList.remove('idle');
-      if (barEl) barEl.style.width = ready ? Math.max(0, Math.min(100, left / ROUND_ANIMATION_GRACE_MS * 100)) + '%' : '100%';
+      if (barEl) barEl.style.width = ready ? Math.max(0, Math.min(100, left / roundAnimationGrace(room) * 100)) + '%' : '100%';
       if (ready && left <= 0) advanceFromSettled(room);
     } else if (room.status === 'preparing') {
       if (timerEl) timerEl.textContent = '凝聚題目'; if (barEl) barEl.style.width = '100%';
