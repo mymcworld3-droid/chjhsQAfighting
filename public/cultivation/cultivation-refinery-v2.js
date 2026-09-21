@@ -233,9 +233,9 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
            <ul class="refinery-recipe-ingredients">${recipe.map(recipeIngredientMarkup).join('')}</ul>`
         : `<div class="refinery-recipe-sealed" role="note"><div class="refinery-recipe-seal-mark"><i class="fa-solid fa-lock"></i></div><strong>製作方法尚未習得</strong><p>此配方的素材與數量尚未公開。可在交易市集取得製作指南，或自行投入材料探索。</p></div>`;
       const gold = Math.max(0, Number(userData()?.stats?.gold) || 0);
-      const canCraft = canReadRecipe && unique && !missing && plan?.valid &&
+      const canCraft = !!myUid && canReadRecipe && unique && !missing && plan?.valid &&
         gold >= Number(plan.gold || 0) && !busy && !job;
-      const actionText = job ? '已有法寶正在煉製' :
+      const actionText = !myUid ? '請先登入' : job ? '已有法寶正在煉製' :
         missing ? `尚缺 ${missing} 個素材` :
         !unique ? '配方待修正' :
         !plan?.valid ? '目前無法煉製' :
@@ -379,6 +379,35 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
       .refinery-recipe-empty i{font-size:23px}
       .refinery-recipe-empty p{margin:0;color:#a99a7c;font-size:10px}
       @media(max-width:520px){.refinery-recipe-book>summary{flex-wrap:wrap;padding:11px 12px}.refinery-recipe-summary-count{margin-left:0}.refinery-recipe-book-content{padding:10px;max-height:72dvh}.refinery-recipe-card-head{flex-wrap:wrap}.refinery-recipe-access{margin-left:auto}.refinery-recipe-ingredients{grid-template-columns:1fr}.refinery-recipe-toolbar{align-items:stretch}.refinery-recipe-market{width:100%}}
+      /* 摘要卡：預設只顯示成品與短介紹，點開後再顯示配方內容。 */
+      .refinery-recipe-grid{grid-template-columns:minmax(0,1fr);gap:8px}
+      .refinery-recipe-card>summary{list-style:none;cursor:pointer;align-items:center;min-height:69px;padding:10px 11px;border-bottom:0;user-select:none}
+      .refinery-recipe-card>summary::-webkit-details-marker{display:none}
+      .refinery-recipe-card>summary:hover{background-color:rgba(224,178,92,.055)}
+      .refinery-recipe-card[open]>summary{border-bottom:1px solid rgba(223,185,113,.15)}
+      .refinery-recipe-card .refinery-recipe-artifact-icon{flex-basis:43px;width:43px;height:43px;font-size:17px}
+      .refinery-recipe-card .refinery-recipe-eyebrow{font-size:7px}
+      .refinery-recipe-card .refinery-recipe-artifact-title{gap:2px}
+      .refinery-recipe-card .refinery-recipe-artifact-title strong{font-size:12px}
+      .refinery-recipe-intro{display:-webkit-box;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:2;color:#b9aa92;font-size:9px;line-height:1.5;overflow-wrap:anywhere}
+      .refinery-recipe-card-chevron{flex:0 0 auto;color:#bb9c66;font-size:10px;transition:transform .18s}
+      .refinery-recipe-card[open] .refinery-recipe-card-chevron{transform:rotate(180deg)}
+      .refinery-recipe-card>.refinery-recipe-detail{display:block;min-width:0;padding:0 0 2px}
+      .refinery-recipe-depth{display:flex;gap:5px;align-items:center;margin:0!important;padding:0 13px 12px;color:#c1ab81;font-size:10px;line-height:1.5}
+      .refinery-recipe-method{margin:2px 11px 12px;padding:12px;border:1px solid rgba(225,179,91,.18);border-radius:12px;background:linear-gradient(140deg,rgba(215,159,61,.075),rgba(0,0,0,.16))}
+      .refinery-recipe-method h4{margin:0 0 10px;color:#f1d693;font-size:12px;letter-spacing:.04em}
+      .refinery-recipe-method h4 i{margin-right:5px}
+      .refinery-recipe-method ol{display:grid;gap:8px;margin:0 0 13px;padding:0;list-style:none;counter-reset:forge-recipe-step}
+      .refinery-recipe-method li{display:grid;grid-template-columns:23px minmax(0,1fr);column-gap:9px;align-items:start;counter-increment:forge-recipe-step}
+      .refinery-recipe-method li:before{content:counter(forge-recipe-step);display:grid;place-items:center;width:23px;height:23px;border:1px solid rgba(219,183,101,.35);border-radius:50%;color:#f0d594;font-size:10px;font-weight:900}
+      .refinery-recipe-method li b{color:#ecddbb;font-size:10px}
+      .refinery-recipe-method li span{grid-column:2;color:#b3a48b;font-size:10px;line-height:1.6}
+      .refinery-recipe-craft{width:100%;min-height:42px;padding:10px 13px;border:1px solid #d6a752;border-radius:10px;background:linear-gradient(130deg,#6e4a19,#a7742c);color:#fff1c8;font-size:12px;font-weight:900;cursor:pointer;box-shadow:0 7px 16px rgba(0,0,0,.2)}
+      .refinery-recipe-craft:not(:disabled):hover{filter:brightness(1.15)}
+      .refinery-recipe-craft:disabled{cursor:not-allowed;opacity:.55;box-shadow:none}
+      .refinery-recipe-craft i{margin-right:6px}
+      .refinery-recipe-craft-note{margin:6px 0 0!important;color:#95876e!important;font-size:9px!important;line-height:1.55!important}
+      @media(max-width:520px){.refinery-recipe-card>summary{padding:9px;gap:8px}.refinery-recipe-card .refinery-recipe-artifact-icon{flex-basis:39px;width:39px;height:39px}.refinery-recipe-access{font-size:8px}.refinery-recipe-card-chevron{font-size:9px}}
       .refinery-job-box{position:relative;z-index:3;margin:8px 0;padding:11px 12px;border:1px solid rgba(216,177,93,.22);border-radius:13px;background:linear-gradient(135deg,rgba(216,177,93,.075),rgba(255,255,255,.015));color:#a99a7d;font-size:8px;line-height:1.65}.refinery-job-box strong{color:#efd58e}.refinery-job-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:7px}.refinery-job-stat{padding:7px;border-radius:9px;background:rgba(0,0,0,.22);text-align:center}.refinery-job-stat b{display:block;color:#ead59b;font-size:9px}.refinery-job-progress{height:5px;margin-top:9px;border-radius:999px;overflow:hidden;background:rgba(255,255,255,.06)}.refinery-job-progress>i{display:block;height:100%;width:0;background:linear-gradient(90deg,#8a611e,#f1cd6d);transition:width .25s linear}.refinery-discovery-note{color:#c6a85f!important}.refinery-admin-guidance{position:relative;z-index:3;margin:8px 0;padding:11px 12px;border:1px solid rgba(125,211,252,.22);border-radius:13px;background:linear-gradient(135deg,rgba(56,189,248,.065),rgba(216,177,93,.035));box-shadow:inset 0 1px rgba(255,255,255,.035)}.refinery-admin-guidance-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;color:#c8e9ec;font-size:8px;font-weight:900}.refinery-admin-guidance-head small{color:#758d8a;font-size:6px;font-weight:700}.refinery-admin-guidance-grid{display:grid;grid-template-columns:170px minmax(0,1fr);gap:8px}.refinery-admin-guidance label{display:grid;gap:4px;color:#9eb9b4;font-size:6px;font-weight:900}.refinery-admin-guidance select,.refinery-admin-guidance textarea{width:100%;border:1px solid rgba(148,209,198,.18);border-radius:9px;background:rgba(7,12,11,.84);color:#e8eee9;outline:none}.refinery-admin-guidance select{min-height:36px;padding:6px 8px;font-size:8px}.refinery-admin-guidance textarea{min-height:66px;max-height:150px;padding:8px;resize:vertical;font-size:8px;line-height:1.55}.refinery-admin-guidance select:focus,.refinery-admin-guidance textarea:focus{border-color:rgba(147,230,211,.48);box-shadow:0 0 0 2px rgba(147,230,211,.05)}.refinery-admin-guidance-note{margin-top:6px;color:#74847d;font-size:6px;line-height:1.5}.refinery-admin-guidance-preview{margin-top:7px;padding:7px 8px;border-radius:9px;background:rgba(0,0,0,.18);color:#8fa39b;font-size:6px;line-height:1.55}.refinery-admin-guidance-preview b{color:#c5ddd4}.refinery-craft.job-ready{animation:refinery-craft-pulse 1.1s ease-in-out infinite}.refinery-material-list.is-job-locked{opacity:.52;pointer-events:none}@media(max-width:520px){.refinery-job-grid{grid-template-columns:1fr 1fr}.refinery-job-stat:last-child{grid-column:1/-1}.refinery-admin-guidance-grid{grid-template-columns:1fr}}
       @keyframes refinery-array-spin{to{transform:rotate(360deg)}}@keyframes refinery-craft-pulse{0%,100%{box-shadow:0 0 0 5px rgba(216,177,93,.07),0 0 20px rgba(241,191,72,.15),0 12px 28px rgba(0,0,0,.42)}50%{box-shadow:0 0 0 8px rgba(216,177,93,.11),0 0 34px rgba(241,191,72,.31),0 12px 28px rgba(0,0,0,.42)}}
       @media(max-width:900px){.cultivation-refinery{grid-template-columns:1fr}.refinery-material-panel{height:calc(min(52dvh,360px) + 64px)}.refinery-material-list{height:100%;max-height:none}.refinery-slots{--array-size:min(62vw,410px)}}
@@ -477,8 +506,11 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
       materialInventory: Object.entries(materials).sort(([a], [b]) => a.localeCompare(b)),
       artifactInventory: Object.entries(artifacts).sort(([a], [b]) => a.localeCompare(b)),
       equipped: Object.entries(userData()?.artifactSystem?.equipped || {}).sort(([a], [b]) => a.localeCompare(b)),
-      materials: MATERIAL_CATALOG.map((m) => [m.id, m.name, m.icon, m.category, m.realm]),
-      artifacts: ARTIFACT_CATALOG.map((a) => [a.id, a.name, a.icon, a.realm, a.craft?.yield || 1]),
+      materials: MATERIAL_CATALOG.map((m) => [m.id, m.name, m.icon, m.category, m.realm, m.description]),
+      artifacts: ARTIFACT_CATALOG.map((a) => [a.id, a.name, a.icon, a.realm, a.category, a.description, a.craft?.yield || 1, a.recipeOwnerUid, a.recipeDiscoveredAtMs]),
+      licenses: Object.entries(userData()?.recipeLicenses || {}).sort(([a], [b]) => a.localeCompare(b)),
+      gold: Number(userData()?.stats?.gold) || 0,
+      cultivation: Number(userData()?.stats?.totalScore) || 0,
       recipes: ARTIFACT_RECIPES,
       refineryJob: window.getCultivationRefineryJob?.() || null,
       isAdmin: userData()?.isAdmin === true
@@ -696,6 +728,19 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
     content.querySelector('[data-refinery-recipe-book]')?.addEventListener('toggle', (event) => {
       recipeBookOpen = event.currentTarget.open;
     });
+    content.querySelectorAll('[data-refinery-recipe-card]').forEach((card) => card.addEventListener('toggle', () => {
+      const id = card.dataset.refineryRecipeCard;
+      if (card.open) {
+        expandedRecipeId = id;
+        content.querySelectorAll('[data-refinery-recipe-card]').forEach((other) => {
+          if (other !== card && other.open) other.open = false;
+        });
+      } else if (expandedRecipeId === id) {
+        expandedRecipeId = '';
+      }
+    }));
+    content.querySelectorAll('[data-refinery-craft-recipe]').forEach((button) =>
+      button.addEventListener('click', () => { void craftFromRecipe(button.dataset.refineryCraftRecipe); }));
     content.querySelectorAll('[data-refinery-ingredient]').forEach((button) => button.addEventListener('click', () => add(button.dataset.refineryIngredient)));
     content.querySelectorAll('[data-refinery-slot]').forEach((button) => button.addEventListener('click', () => remove(Number(button.dataset.refinerySlot))));
     content.querySelector('[data-refinery-clear]')?.addEventListener('click', clear);
@@ -713,9 +758,53 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
     if (!page || !content || !tabActive(page)) return;
     const signature = currentSignature();
     if (!force && content.dataset.refineryRenderKey === signature && content.querySelector('.cultivation-refinery')) return;
+    const previousBookScroll = content.querySelector('.refinery-recipe-book-content')?.scrollTop || 0;
     content.dataset.refineryRenderKey = signature;
     content.innerHTML = markup();
     bindContent(content);
+    const nextBook = content.querySelector('.refinery-recipe-book-content');
+    if (nextBook && recipeBookOpen) nextBook.scrollTop = previousBookScroll;
+  }
+
+  async function craftFromRecipe(artifactId) {
+    if (busy || window.getCultivationRefineryJob?.()) {
+      toast('目前已有法寶正在煉製。', false);
+      return;
+    }
+    const item = getArtifactById(artifactId);
+    if (!item || !authUser()?.uid || !recipeAvailableToPlayer(item)) {
+      toast('尚未取得這張配方的製作指南。', false);
+      return;
+    }
+    // Never trust an old rendered button: re-read the official recipe, inventory,
+    // equipped reservations and current economy immediately before consuming funds.
+    const recipe = getArtifactRecipe(item.id);
+    const tokens = recipeTokens(recipe);
+    if (!tokens.length || !matchingRecipeForTokens(tokens, item.id)) {
+      toast('配方內容已更動或與其他配方重複，暫時無法煉製。', false);
+      return;
+    }
+    const required = recipeCounts(recipe);
+    for (const [token, quantity] of Object.entries(required)) {
+      if (ingredientAvailable(token) < quantity) {
+        toast('製作材料不足，請先補齊可用素材；已裝備的法寶不可投入。', false);
+        return;
+      }
+    }
+    const plan = window.getCultivationRefineryPlan?.(tokens, item.id);
+    if (!plan?.valid || plan.knownArtifactId !== item.id) {
+      toast(plan?.reason || '配方暫時無法煉製。', false);
+      return;
+    }
+    if (Math.max(0, Number(userData()?.stats?.gold) || 0) < Number(plan.gold || 0)) {
+      toast('靈石不足，無法開始這張配方。', false);
+      return;
+    }
+    selected.splice(0, SLOT_COUNT, ...tokens, ...Array(SLOT_COUNT - tokens.length).fill(null));
+    render(true);
+    // Use the exact same validated job creation, payment and finishing flow as
+    // pressing the center of the eight-slot furnace.
+    await craft();
   }
 
   function add(token) {
