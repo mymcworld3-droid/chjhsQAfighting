@@ -246,6 +246,61 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder3';
       #${LAYER_ID} .bt-combat-cue{min-height:120px;padding:24px;text-align:center;border:1px solid rgba(216,177,93,.2);border-radius:16px;background:rgba(216,177,93,.04);font-size:clamp(16px,2vw,23px);color:#e5cf92}
       #${LAYER_ID} .bt-combat-cue strong{display:block;margin-top:12px;font-size:clamp(26px,5vw,62px)}
       #${LAYER_ID} .bt-damage.miss{color:#d1d0c9}
+
+      /* The training arena shares the fixed viewport without losing long dialogue. */
+      #page-battle .bv2-arena.bt-tutorial-active{
+        box-sizing:border-box;height:100%!important;min-height:0!important;flex:1;
+        overflow-x:hidden!important;overflow-y:auto!important;overscroll-behavior:contain
+      }
+      #${LAYER_ID} .bt-shell{gap:clamp(4px,.75dvh,10px);padding-bottom:6px}
+      #${LAYER_ID} .bt-arena{height:clamp(140px,26dvh,255px)}
+      #${LAYER_ID} .bt-body{padding-bottom:6px}
+      #${LAYER_ID} .bt-rule{
+        margin:5px 0;padding:6px 9px;line-height:1.4;overflow-wrap:anywhere
+      }
+      #${LAYER_ID} .bt-dialogue{padding:9px 11px}
+      #${LAYER_ID} .bt-dialogue p{margin-top:4px;line-height:1.5}
+      #${LAYER_ID} .bt-actions{margin-top:7px;flex-wrap:wrap}
+      #page-battle #bv2-quiz:not(.hidden) > #${LAYER_ID}.bt-quiz-mode{
+        box-sizing:border-box;min-height:0!important;max-width:1000px;margin:auto
+      }
+      #${LAYER_ID} .bt-quiz-fullscreen{min-height:0;padding:clamp(10px,1.4vw,22px)}
+      #${LAYER_ID}.bt-quiz-mode .bt-head{padding:6px 3px 12px}
+      #${LAYER_ID}.bt-quiz-mode .bt-head h2{font-size:clamp(17px,2vw,24px)}
+      #${LAYER_ID}.bt-quiz-mode .bt-question{padding:clamp(10px,1.4vw,17px)}
+      #${LAYER_ID}.bt-quiz-mode .bt-question h3{
+        font-size:clamp(16px,1.65vw,23px);line-height:1.5;margin:8px 0 13px
+      }
+      #${LAYER_ID}.bt-quiz-mode .bt-option{
+        min-height:clamp(44px,6dvh,58px);padding:8px 10px;font-size:clamp(12px,1.1vw,15px)
+      }
+      #${LAYER_ID}.bt-quiz-mode .bt-explain{
+        font-size:clamp(11px,1vw,14px);line-height:1.5;padding:10px
+      }
+      #${LAYER_ID} .bt-countdown{height:clamp(100px,24dvh,235px);gap:8px}
+      #${LAYER_ID} .bt-countdown b{font-size:clamp(42px,7vw,90px)}
+      #${LAYER_ID} .bt-combat-cue{min-height:70px;padding:10px}
+      #${LAYER_ID} .bt-combat-cue strong{margin-top:4px;font-size:clamp(24px,4vw,43px)}
+      @media(max-width:650px){
+        #${LAYER_ID} .bt-arena{height:clamp(118px,21dvh,180px)}
+        #${LAYER_ID} .bt-head{padding:5px 3px}
+        #${LAYER_ID} .bt-head h2{font-size:clamp(14px,3.5vw,18px)}
+        #${LAYER_ID} .bt-fighter-head strong{overflow-wrap:anywhere}
+        #${LAYER_ID} .bt-options,
+        #${LAYER_ID}.bt-quiz-mode .bt-options{
+          grid-template-columns:repeat(2,minmax(0,1fr))
+        }
+      }
+      @media(max-width:420px){
+        #${LAYER_ID} .bt-options,
+        #${LAYER_ID}.bt-quiz-mode .bt-options{grid-template-columns:minmax(0,1fr)}
+      }
+      @media(max-height:620px){
+        #${LAYER_ID} .bt-arena{height:clamp(105px,21dvh,155px)}
+        #${LAYER_ID} .bt-shell{gap:3px}
+        #${LAYER_ID} .bt-body{padding-bottom:3px}
+        #${LAYER_ID}.bt-quiz-mode .bt-head{padding-bottom:6px}
+      }
       @media(prefers-reduced-motion:reduce){#${LAYER_ID} *{animation:none!important;transition:none!important}}
     `;
     document.head.appendChild(style);
