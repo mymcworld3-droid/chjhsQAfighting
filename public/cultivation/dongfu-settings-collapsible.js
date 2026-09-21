@@ -106,6 +106,15 @@
     const scopeBody = document.createElement('div');
     scopeBody.id = 'dongfu-scope-body';
     scopeBody.appendChild(scopeBlock);
+    // Scope controls are moved out of the profile card; give them their own
+    // save action wired to the same persisted profile/gameSettings operation.
+    const scopeSave = document.createElement('button');
+    scopeSave.type = 'button';
+    scopeSave.id = 'dongfu-scope-save';
+    scopeSave.className = 'btn-cyber-primary w-full py-3 rounded-xl font-bold mt-3 hover:brightness-110 transition';
+    scopeSave.textContent = '儲存出題範圍';
+    scopeSave.setAttribute('onclick', 'saveProfile(this)');
+    scopeBody.appendChild(scopeSave);
     scopeCard.appendChild(scopeBody);
     analysisPanel.before(scopeCard);
     registerCard('scope', scopeCard, scopeBody, {
