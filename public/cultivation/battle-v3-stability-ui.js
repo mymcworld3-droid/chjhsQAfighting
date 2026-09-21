@@ -154,6 +154,156 @@
         #page-battle .bv2-options{grid-template-columns:1fr!important}
         #page-battle .bv2-option{min-height:52px!important}
       }
+
+      /* Viewport-fit battle: six actual scene elements, no obsolete score/log tracks. */
+      html.${ACTIVE_CLASS},body.${ACTIVE_CLASS}{overflow:hidden!important}
+      #page-battle.battle-v2-page{
+        box-sizing:border-box;width:100%!important;height:100dvh!important;min-height:0!important;
+        overflow:hidden!important;overscroll-behavior:none!important
+      }
+      #page-battle .bv2-shell{
+        height:100%!important;min-height:0;overflow:hidden;
+        padding:max(7px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right))
+          max(7px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))!important
+      }
+      #page-battle .bv2-head{
+        position:relative;flex:0 0 auto;z-index:20;
+        margin:0 0 clamp(3px,.7dvh,8px);padding:2px 4px 5px!important;
+        background:transparent;backdrop-filter:none
+      }
+      #page-battle .bv2-head h2{font-size:clamp(17px,2vw,27px)!important;line-height:1.2}
+      #page-battle .bv2-icon-btn{width:36px!important;height:36px!important;flex-shrink:0}
+      #page-battle .bv2-head-actions{flex-shrink:0;min-width:0}
+      #page-battle .bv2-lobby,#page-battle .bv2-intro,#page-battle .bv2-result{
+        flex:1;min-height:0!important;margin-top:0!important;overflow-x:hidden;overflow-y:auto
+      }
+      #page-battle .bv2-intro{min-height:0!important;align-content:center}
+      #page-battle .bv2-result:not(.hidden){justify-content:safe center}
+      #page-battle .bv2-arena:not(.hidden):not(.bt-tutorial-active){
+        flex:1;min-height:0;width:100%;margin-top:0!important;display:grid!important;
+        grid-template-columns:minmax(0,1fr)!important;
+        grid-template-areas:'enemy' 'round' 'stage' 'mine' 'rule' 'cue'!important;
+        grid-template-rows:auto auto minmax(110px,1fr) auto auto auto!important;
+        gap:clamp(3px,.65dvh,8px)!important;align-content:stretch;
+        overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin
+      }
+      #page-battle #bv2-enemy-status{grid-area:enemy}
+      #page-battle .bv2-stage-round{grid-area:round;line-height:1.2}
+      #page-battle .bv2-stage{
+        grid-area:stage;box-sizing:border-box;min-width:0;height:100%!important;
+        min-height:110px;max-height:none!important;border-radius:clamp(12px,2vw,22px)
+      }
+      #page-battle #bv2-my-status{grid-area:mine}
+      #page-battle .bv2-status-panel{
+        box-sizing:border-box;min-width:0;
+        padding:clamp(5px,.7dvh,10px) clamp(8px,1.4vw,15px)!important;border-radius:12px
+      }
+      #page-battle .bv2-status-panel .bv2-fighter-head{
+        display:flex!important;align-items:center!important;justify-content:space-between;
+        gap:8px;min-width:0
+      }
+      #page-battle .bv2-status-panel .bv2-fighter-head>div{min-width:0}
+      #page-battle .bv2-status-panel .bv2-fighter-head strong{
+        font-size:clamp(11px,1.5vw,16px)!important;line-height:1.25;overflow-wrap:anywhere
+      }
+      #page-battle .bv2-status-panel .bv2-fighter-head b{
+        flex:0 0 auto;margin:0!important;font-size:clamp(12px,1.65vw,18px)!important;
+        font-variant-numeric:tabular-nums
+      }
+      #page-battle .bv2-status-panel .bv2-hp{height:clamp(6px,1dvh,10px)!important;margin-top:3px!important}
+      #page-battle .bv2-status-panel small{
+        margin-top:3px;line-height:1.25;font-size:clamp(8px,1vw,10px);
+        white-space:normal;overflow-wrap:anywhere
+      }
+      #page-battle .bv2-duel-rule{
+        grid-area:rule;box-sizing:border-box;min-width:0;padding:4px 8px;line-height:1.3;
+        text-align:center;white-space:normal;overflow-wrap:anywhere
+      }
+      #page-battle .bv2-arena .bv2-duel-cue{
+        grid-area:cue;box-sizing:border-box;min-height:clamp(42px,7dvh,62px)!important;
+        padding:4px 10px;gap:1px;overflow:hidden
+      }
+      #page-battle .bv2-arena .bv2-duel-cue span{font-size:9px;line-height:1.2}
+      #page-battle .bv2-arena .bv2-duel-cue strong{font-size:clamp(19px,3.5vw,28px);line-height:1.05}
+      #page-battle .bv2-arena .bv2-duel-cue p{font-size:10px;line-height:1.2}
+      /* Only unusually long questions need an inner scrollbar; never clip an option. */
+      #page-battle .bv2-quiz:not(.hidden){
+        flex:1;min-height:0;margin:0;display:flex;align-items:safe center;justify-content:center;
+        overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;
+        padding:clamp(4px,1dvh,10px) 0
+      }
+      #page-battle .bv2-quiz .bv2-question-card{
+        box-sizing:border-box;width:min(100%,980px);min-width:0;min-height:0!important;
+        max-height:none!important;flex:0 0 auto;overflow:visible!important;
+        padding:clamp(10px,1.7vw,23px)!important
+      }
+      #page-battle .bv2-quiz .bv2-question-card h3{
+        font-size:clamp(16px,1.7vw,23px)!important;line-height:1.5!important;
+        margin:8px 0 13px;overflow-wrap:anywhere
+      }
+      #page-battle .bv2-quiz .bv2-timer-track{margin:5px 0 9px}
+      #page-battle .bv2-quiz .bv2-options{
+        display:grid;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+        gap:clamp(5px,.85dvh,9px)!important
+      }
+      #page-battle .bv2-quiz .bv2-option{
+        box-sizing:border-box;min-width:0;min-height:clamp(44px,6dvh,60px)!important;
+        padding:8px 10px;font-size:clamp(12px,1.1vw,15px)!important;overflow-wrap:anywhere
+      }
+      #page-battle .bv2-quiz .bv2-option b{font-size:inherit}
+      #page-battle .bv2-quiz .bv2-explanation{
+        padding:10px 12px;line-height:1.5;font-size:clamp(11px,1vw,14px)
+      }
+      #page-battle .bv2-quiz .bv2-answer-status{
+        margin-top:7px;font-size:clamp(10px,1vw,12px);line-height:1.4
+      }
+      #page-battle #bv2-review-continue{
+        align-self:center;min-height:44px;margin:10px auto 0;padding:8px 18px
+      }
+      #battle-v2-toast{
+        z-index:15100!important;bottom:max(10px,env(safe-area-inset-bottom))!important;
+        max-width:min(88vw,380px);pointer-events:none
+      }
+      @media(max-width:620px){
+        #page-battle .bv2-shell{
+          padding-left:max(7px,env(safe-area-inset-left))!important;
+          padding-right:max(7px,env(safe-area-inset-right))!important
+        }
+        #page-battle .bv2-eyebrow{display:none}
+        #page-battle .bv2-room-badge{
+          max-width:40vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:5px 7px
+        }
+        #page-battle .bv2-status-panel .bv2-fighter-head{display:flex!important}
+        #page-battle .bv2-duel-rule{font-size:8px;align-items:center}
+        #page-battle .bv2-quiz .bv2-options{grid-template-columns:minmax(0,1fr)!important}
+        #page-battle .bv2-quiz .bv2-option{min-height:44px!important}
+        #page-battle .bv2-quiz #bv2-review-continue{width:100%}
+        #page-battle .bv2-result-stats{margin:12px 0;gap:5px}
+        #page-battle .bv2-result-emblem{width:58px;height:58px;margin-bottom:9px}
+      }
+      @media(min-width:440px) and (max-width:620px){
+        #page-battle .bv2-quiz .bv2-options{
+          grid-template-columns:repeat(2,minmax(0,1fr))!important
+        }
+      }
+      @media(max-height:620px){
+        #page-battle .bv2-shell{
+          padding-top:max(3px,env(safe-area-inset-top))!important;
+          padding-bottom:max(3px,env(safe-area-inset-bottom))!important
+        }
+        #page-battle .bv2-head{margin-bottom:3px;padding:1px 3px 3px!important}
+        #page-battle .bv2-head h2{font-size:18px!important;margin:0}
+        #page-battle .bv2-icon-btn{width:32px!important;height:32px!important}
+        #page-battle .bv2-arena:not(.hidden):not(.bt-tutorial-active){
+          grid-template-rows:auto auto minmax(96px,1fr) auto auto auto!important;gap:3px!important
+        }
+        #page-battle .bv2-stage{min-height:96px}
+        #page-battle .bv2-status-panel{padding:4px 8px!important}
+        #page-battle .bv2-status-panel small{font-size:8px}
+        #page-battle .bv2-arena .bv2-duel-cue{min-height:40px!important;padding:3px 6px}
+        #page-battle .bv2-quiz .bv2-question-card{padding:9px!important}
+        #page-battle .bv2-quiz .bv2-question-card h3{margin:5px 0 8px;font-size:16px!important}
+      }
     `;
     document.head.appendChild(style);
   }
