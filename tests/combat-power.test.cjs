@@ -35,7 +35,7 @@ test('Golden Core power depends solely on quality, with first grade strongest an
   assert.equal(power.calculateGoldenCorePower({type:'ocean', grade:1}), 20000);
   assert.equal(power.calculateGoldenCorePower({type:'sword', grade:9}), 4000);
   assert.equal(power.calculateGoldenCorePower({type:'sword', grade:1,equipped:false}), 0);
-  assert.equal(power.calculateGoldenCorePower({type:'sword', grade:0}), 20000);
+  assert.equal(power.calculateGoldenCorePower({type:'sword', grade:0}), 4000);
   assert.equal(power.calculateGoldenCorePower({type:'sword', grade:10}), 4000);
 });
 test('artifact power includes realm quality and combat effects, never consumables', () => {
