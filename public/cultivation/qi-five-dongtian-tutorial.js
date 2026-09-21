@@ -81,7 +81,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     };
     if (phase === 'amount') return {
       kicker:'第 4 步 · 題量與出題', title:'少／中／多，全部都是單選題',
-      body:'<strong>少＝10 題</strong>、<strong>中＝15～20 題</strong>、<strong>多＝25～30 題</strong>。每題固定四選一、只有一個正解。生成時固定<strong>每 5 題一批</strong>，後一批會帶入前面全部題目，避免重複或近義重複。',
+      body:'<strong>少＝10～14 題</strong>、<strong>中＝15～20 題</strong>、<strong>多＝21～30 題</strong>。每題固定四選一、只有一個正解。生成時固定<strong>每批最多 5 題，末批依剩餘題數</strong>，後一批會帶入前面全部題目，避免重複或近義重複。',
       note:'全部生成後仍會進行全題 AI 複核。', button:'建立私人教學洞天', target:'#dongtian-card .dt-amount-options'
     };
     if (phase === 'prepare') return {
