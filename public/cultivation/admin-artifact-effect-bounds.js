@@ -19,7 +19,7 @@ import { getFirestore, doc, runTransaction, serverTimestamp } from 'https://www.
   const pending = new Map(); // stage -> validated overrides, or null to restore defaults
   let stage = 1;
   let defaults = null;
-  let firstDepthDefaults = null;
+  const priorDepthDefaults = new Map();
   let saving = false;
   let requestId = 0;
   const esc = value => String(value ?? '').replaceAll('&','&amp;').replaceAll('<','&lt;')
@@ -54,22 +54,31 @@ import { getFirestore, doc, runTransaction, serverTimestamp } from 'https://www.
       '" data-aeb-field="' + field + '" aria-label="' + esc(range.label + ' ' + field) +
       '" value="' + esc(value) + '">';
   }
-  // Reference only: show actual pending/saved first-refinement values,
-  // falling back to the first-refinement defaults for untouched effects.
-  function firstDepthHint(range) {
-    if (stage !== 2) return '';
-    if (!firstDepthDefaults) return '<div class="aeb-previous">第一煉參考值暫時無法載入；不影響第二煉設定。</div>';
-    const first = firstDepthDefaults.find(item => item.type === range.type);
-    if (!first) return '<div class="aeb-previous">第一煉：此功能未開放，無可對照的上下限。</div>';
-    if (!['value', 'multiplier'].includes(first.field))
-      return '<div class="aeb-previous">第一煉：固定效果，不需設定數值上下限。</div>';
-    const edits = pending.has('1') ? pending.get('1') || {} : stored()['1'] || {};
-    const actual = edits[range.type] || first;
-    let text = '第一煉參考：下限 ' + actual.min + ' ／ 上限 ' + actual.max + ' ' + first.unit;
-    if (first.field === 'multiplier') {
+  // Display previously selected refinement settings without enforcing progression:
+  // third refinement compares both first and second; second compares first.
+  function priorDepthHint(range, priorDepth) {
+    const label = ['','第一煉','第二煉'][priorDepth];
+    const ranges = priorDepthDefaults.get(priorDepth);
+    if (!ranges) return '<div class="aeb-previous" role="note">' + label +
+      '參考值暫時無法載入；不影響本次設定。</div>';
+    const prior = ranges.find(item => item.type === range.type);
+    if (!prior) return '<div class="aeb-previous" role="note">' + label +
+      '：此功能未開放，無可對照的上下限。</div>';
+    if (!['value', 'multiplier'].includes(prior.field))
+      return '<div class="aeb-previous" role="note">' + label +
+        '：固定效果，不需設定數值上下限。</div>';
+    const key = String(priorDepth);
+    const edits = pending.has(key) ? pending.get(key) || {} : stored()[key] || {};
+    const actual = edits[range.type] || prior;
+    let text = label + '參考：下限 ' + actual.min + ' ／ 上限 ' + actual.max + ' ' + prior.unit;
+    if (prior.field === 'multiplier')
       text += '；持續 ' + actual.durationMinutesMin + '～' + actual.durationMinutesMax + ' 分鐘';
-    }
-    return '<div class="aeb-previous" role="note">' + esc(text) + '（僅提醒，不限制第二煉填寫）</div>';
+    return '<div class="aeb-previous" role="note">' + esc(text) +
+      '（僅提醒，不限制本煉填寫）</div>';
+  }
+  function previousDepthHints(range) {
+    if (stage === 1) return '';
+    return Array.from({ length:stage - 1 }, (_, index) => priorDepthHint(range, index + 1)).join('');
   }
   function draw() {
     const list = document.getElementById('aeb-rows');
@@ -86,7 +95,7 @@ import { getFirestore, doc, runTransaction, serverTimestamp } from 'https://www.
           : '<div class="aeb-fixed">固定規則，不需設定</div>') +
         (range.field === 'multiplier' ?
           '<label>最短分鐘' + cell('durationMinutesMin') + '</label><label>最長分鐘' + cell('durationMinutesMax') + '</label>'
-          : '') + firstDepthHint(range) + '</div>';
+          : '') + previousDepthHints(range) + '</div>';
     }).join('');
     const select = document.getElementById('aeb-preview-effect');
     if (select) {
@@ -96,7 +105,9 @@ import { getFirestore, doc, runTransaction, serverTimestamp } from 'https://www.
       if ([...select.options].some(o => o.value === prior)) select.value = prior;
     }
     const note = document.getElementById('aeb-previous-note');
-    if (note) note.textContent = stage === 2 ? '第二煉設定：每項功能下方顯示第一煉目前生效的上下限，供比較參考。' : '';
+    if (note) note.textContent = stage === 2
+      ? '第二煉設定：每項功能下方顯示第一煉的上下限。'
+      : stage === 3 ? '第三煉設定：每項功能下方同時顯示第一煉及第二煉的上下限。' : '';
     preview();
     message('只需設定每個深度的上下限。未改動的項目沿用系統預設值。');
   }
@@ -158,7 +169,7 @@ import { getFirestore, doc, runTransaction, serverTimestamp } from 'https://www.
   async function load() {
     const id = ++requestId;
     defaults = null;
-    firstDepthDefaults = null;
+    priorDepthDefaults.clear();
     document.getElementById('aeb-rows').textContent = '';
     message('正在載入深度預設值…');
     try {
@@ -167,20 +178,20 @@ import { getFirestore, doc, runTransaction, serverTimestamp } from 'https://www.
       const data = await response.json();
       if (id !== requestId) return;
       if (!Array.isArray(data.ranges)) throw new Error('深度效果資料格式錯誤');
-      if (stage === 2) {
+      const priorStages = Array.from({ length:stage - 1 }, (_, index) => index + 1);
+      await Promise.all(priorStages.map(async priorStage => {
         try {
-          const priorResponse = await fetch('/api/artifact-depth-effect-ranges?stage=1');
-          if (!priorResponse.ok) throw new Error('HTTP ' + priorResponse.status);
-          const prior = await priorResponse.json();
-          if (!Array.isArray(prior.ranges)) throw new Error('第一煉預設資料格式錯誤');
+          const response = await fetch('/api/artifact-depth-effect-ranges?stage=' + priorStage);
+          if (!response.ok) throw new Error('HTTP ' + response.status);
+          const result = await response.json();
+          if (!Array.isArray(result.ranges)) throw new Error('前一煉預設資料格式錯誤');
           if (id !== requestId) return;
-          firstDepthDefaults = prior.ranges;
+          priorDepthDefaults.set(priorStage, result.ranges);
         } catch (error) {
-          if (id !== requestId) return;
-          console.warn('[Artifact depth limits] first refinement reference unavailable', error);
-          firstDepthDefaults = null;
+          if (id === requestId)
+            console.warn('[Artifact depth limits] prior refinement reference unavailable', priorStage, error);
         }
-      }
+      }));
       if (id !== requestId) return;
       defaults = data.ranges;
       draw();
