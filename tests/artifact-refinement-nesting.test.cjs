@@ -154,7 +154,7 @@ test('legacy forge path also reserves equipped artifacts and consumes mixed reci
 test('backpack exposes refinement depth and index preloads the new refinery styling', () => {
   assert.match(bag, /refinementDepth: item \? artifactRecipeDepth\(id\) : 0/);
   assert.match(bag, /二次煉製深度/);
-  const start = index.indexOf('<style id="cultivation-refinery-v2-style">');
+  const start = index.indexOf('<style id="cultivation-refinery-v2-preload-style" data-refinery-preload="true">');
   const end = index.indexOf('</style>', start);
   const css = index.slice(start, end);
   assert.match(css, /refinery-artifact-ingredient/);
