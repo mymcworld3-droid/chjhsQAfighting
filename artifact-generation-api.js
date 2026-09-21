@@ -294,7 +294,6 @@ function ingredientHierarchy(payload = {}) {
 }
 
 function buildPrompt(payload) {
-  const selected = Array.isArray(payload.selectedIngredients) ? payload.selectedIngredients.slice(0, 8) : [];
   const allMaterials = Array.isArray(payload.allMaterials) ? payload.allMaterials.slice(0, 160) : [];
   const existingArtifacts = Array.isArray(payload.existingArtifacts) ? payload.existingArtifacts.slice(0, 160) : [];
   const adminGenerationDirection = cleanText(payload.adminGenerationDirection, 80);
@@ -323,6 +322,7 @@ function buildPrompt(payload) {
   const hierarchy = ingredientHierarchy(payload);
   const allowedRanges = effectRangesForRealm(targetRealm, refinementStage);
   const allowedTypes = allowedRanges.map((range) => range.type);
+  const hasAdminGuidance = !!(adminGenerationDirection || adminGenerationPrompt);
   const creativeDirections = [
     '古樸宗門鎮派器：名字沉穩、有歷史感，效果帶有守成或反制意味。',
     '邪異秘境奇器：名字詭譎但不俗氣，效果偏條件觸發、反傷、低血爆發或奇術。',
@@ -337,11 +337,13 @@ function buildPrompt(payload) {
     '你是修仙世界的「天工器靈」，負責從從未出現過的素材組合中推演新法寶。',
     '請非常有創意，不要只把材料名稱機械拼接。名稱要像真正的修仙法寶，2~8 個中文字為佳；描述要能讓人看出材料之間的意象、性質或衝突如何形成此器。',
     '同一批材料可能蘊含攻擊、防禦、奇術、悟道、護命等方向；請根據素材氣質選擇最有特色的一種，不要每次都只做加攻擊。',
-    '本次創意方向：' + creativeDirection,
+    hasAdminGuidance ? '管理員已有指定方向；不要用隨機風格取代管理員要求。下列創意方向僅在相容時作次要參考：' + creativeDirection : '本次創意方向：' + creativeDirection,
     hiddenStageDirection,
     '上述煉器階段規則只供你內部生成時使用。輸出的 name、description、icon、effects 不得解釋玩家正在第幾次煉器，也不得出現「深度」「套娃」「生成規則」「階段」等系統詞。',
     '名稱要有辨識度，避免大量使用「玄、天、神、靈」作為固定前綴；可使用器型、異象、典故、動作、自然意象來命名。',
     '描述請像法寶誌異條目：說明它如何由這批素材的性質融合而成，以及使用時會出現什麼具體異象。',
+    '【素材內容優先】投入列只有 ID 與數量；下面主從表／投入素材詳表才有正式名稱、境界、分類、詳細說明、背景故事、原法寶效果與煉製深度。逐項閱讀這些內容，先由主材故事、材質特性及用途決定成品核心，再由輔材的記載補足外形或能力，不可只看到名稱就自由猜測。',
+    '若 story 有內容，將它視為已設定的世界觀事實，名稱與描述要合理承接其來源、傳說、遭遇或歷史；若 story 為空，僅可根據 description 創作，不要偽稱另有正式背景故事。不要把素材原文直接整段複製到玩家描述。',
     '',
     '硬性規則：',
     '1. 法寶境界已由遊戲鎖定為「' + targetRealm + '」，不得改境界。',
@@ -357,19 +359,20 @@ function buildPrompt(payload) {
     '8. icon 用 1 個中文字或常見符號，避免 emoji 組合。',
     '9. 必須以投入素材中煉製深度最深者為主體：保留其器型、核心意象、主要用途與代表性能力，再由較淺素材補強或賦予次要特性，不得讓輔材取代主體。',
     '10. 若有多件同為最深的素材，將它們作為共同主體融合；全為原材料時才自由組合。數量、境界、投入順序、隨機創意方向與管理員風格提示均不得推翻主從關係。效果繼承仍須遵守境界、效果數量及平衡限制。',
+    '11. 管理員的額外提示詞與大概動向不是可忽略的隨機風格：逐條落實其中與素材、煉製階段、允許特性及數值範圍相容的要求，包括名稱禁用詞、器型、故事、用途、效果方向及不要使用的特性。若有衝突，只調整衝突部分，其他要求仍須遵守；絕不能單純以預設創意方向推翻。',
     '內部素材主從表（完整圖鑑記錄，優先於投入列自述；勿在玩家描述中提及深度或主從規則）：',
     JSON.stringify(hierarchy, null, 2),
     '',
-    '管理員指定的大概動向（只決定創作傾向，不得覆蓋硬性規則）：',
+    '【高優先：管理員指定的大概動向；只受上述硬性規則限制】：',
     adminGenerationDirection || '自由發揮',
     '',
-    '管理員額外提示詞（只作創意與風格偏好，不得覆蓋硬性規則；若留空則忽略）：',
+    '【高優先：管理員額外提示詞；逐條遵守可行的創作要求，不得覆蓋境界、數值及效果硬性規則】：',
     adminGenerationPrompt || '（未設定）',
     '',
-    '本次投入素材：',
+    '本次投入素材完整設定（不可只有名字；description／story／effects 必須參照）：',
     JSON.stringify([...hierarchy.primary, ...hierarchy.supporting], null, 2),
     '',
-    '全材料圖鑑（你必須參考整體材料世界觀與階序，不只看投入素材）：',
+    '全材料圖鑑（補充整體世界觀與階序；優先級低於本次實際投入素材的完整設定）：',
     JSON.stringify(allMaterials, null, 2),
     '',
     '既有法寶摘要（用於避免重複）：',
@@ -380,6 +383,7 @@ function buildPrompt(payload) {
     '允許效果 type：',
     JSON.stringify(allowedTypes),
     '',
+    '輸出前自行核對：成品是否能由主材及其故事推導？是否保留適當原法寶能力？是否遵守管理員每一項可行要求？是否僅使用本階段允許的效果與數值？全部確認後才輸出 JSON。',
     '輸出格式：',
     '{"name":"法寶名","icon":"單字或符號","description":"繁體中文描述","equipSlot":"本命法寶|護身法寶|佩飾法寶|輔助法寶（若為裝備型）","effects":[{"type":"表中允許效果之一","value":"依該 type 的 value 範圍填數字；無 value 時省略","multiplier":"只有限時類才填","durationMinutes":"只有限時類才填"}]}'
   ].join('\\n');
