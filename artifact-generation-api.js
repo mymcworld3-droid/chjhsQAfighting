@@ -107,8 +107,49 @@ function minRealmForEffect(type) {
     equip_reflect_percent: 2
   })[type] || 0;
 }
-function sanitizeValue(type, value, order, stage = 1) {
-  const caps = {
+// This is the single source of truth for the AI's per-realm, per-refinement
+// numeric bounds. The same ranges are used when validating the AI's response.
+// Percentages are stored as fractions (0.10 = 10%). Unlike other values,
+// equip_damage_cap_percent gets STRONGER as its number becomes SMALLER.
+const EFFECT_LABELS = Object.freeze({
+  equip_attack_flat:'固定攻擊',
+  equip_attack_percent:'百分比攻擊',
+  equip_hp_flat:'固定生命',
+  equip_hp_percent:'百分比生命',
+  equip_damage_percent:'百分比增傷',
+  equip_damage_reduction_flat:'固定減傷',
+  equip_damage_reduction_percent:'百分比減傷',
+  equip_crit_chance:'暴擊率',
+  equip_crit_damage_percent:'暴擊增傷',
+  equip_combo_chance:'連擊率',
+  equip_lifesteal_percent:'吸血',
+  equip_reflect_percent:'反傷',
+  equip_shield_flat:'開場護盾',
+  equip_true_damage_flat:'固定真實傷害',
+  equip_low_hp_damage_percent:'低血增傷',
+  equip_low_hp_reduction_percent:'低血減傷',
+  equip_first_hit_reduction_percent:'首次受傷減免',
+  equip_damage_cap_percent:'單次生命傷害上限',
+  equip_on_correct_shield_flat:'答對獲盾',
+  equip_cheat_death:'一次保命',
+  equip_copy_enemy_artifact:'鏡映敵方法寶',
+  timed_attack_multiplier:'限時攻擊倍率',
+  timed_cultivation_multiplier:'限時修為倍率',
+  remove_wrong_option:'排除錯誤選項'
+});
+const FLAT_VALUE_TYPES = new Set([
+  'equip_attack_flat', 'equip_hp_flat', 'equip_damage_reduction_flat',
+  'equip_shield_flat', 'equip_true_damage_flat', 'equip_on_correct_shield_flat'
+]);
+function roundRange(value, digits = 4) {
+  return Number(Number(value).toFixed(digits));
+}
+function effectRange(type, order, stage = 1) {
+  if (!ALLOWED_EFFECTS.has(type) ||
+      order < minRealmForEffect(type) ||
+      !effectAllowedForStage(type, stage)) return null;
+  const scale = powerScaleForStage(stage);
+  const capByType = {
     equip_attack_flat: 35 + order * 35,
     equip_hp_flat: 160 + order * 180,
     equip_damage_reduction_flat: 20 + order * 18,
@@ -129,31 +170,71 @@ function sanitizeValue(type, value, order, stage = 1) {
     equip_first_hit_reduction_percent: 0.15 + order * 0.035,
     equip_damage_cap_percent: Math.max(0.22, 0.55 - order * 0.025)
   };
-  const normalizedStage = normalizeRefinementStage(stage);
-  const scale = powerScaleForStage(normalizedStage);
-  if (type === 'equip_damage_cap_percent') {
-    const base = caps[type];
-    const weakest = 0.80;
-    const stageFloor = base + (weakest - base) * (1 - scale);
-    return clamp(value || stageFloor, stageFloor, 0.80);
+  const label = EFFECT_LABELS[type];
+  if (type === 'equip_cheat_death' || type === 'equip_copy_enemy_artifact') {
+    return { type, label, field:'none', min:null, max:null, unit:'每場固定一次',
+      note: type === 'equip_cheat_death' ? '致命傷保留 1 HP' : '複製敵方一項可複製的戰鬥效果' };
   }
-  return clamp(value, 0, (caps[type] ?? 999999) * scale);
+  if (type === 'remove_wrong_option') {
+    return { type, label, field:'perQuestion', min:1, max:1, unit:'個錯誤選項/題',
+      note:'問道、鬥法、洞天每題至多移除一個錯項' };
+  }
+  if (type === 'timed_attack_multiplier' || type === 'timed_cultivation_multiplier') {
+    const fullMax = 1.35 + order * 0.06;
+    const bonus = (fullMax - 1) * scale;
+    const fullDuration = 5 + order * 2;
+    const maxMinutes = Math.max(2, fullDuration * (0.55 + 0.45 * scale));
+    return { type, label, field:'multiplier',
+      min:roundRange(1 + bonus * 0.35), max:roundRange(1 + bonus),
+      unit:'倍', durationMinutesMin:2, durationMinutesMax:roundRange(maxMinutes, 2),
+      note:'同時填入 multiplier 與 durationMinutes，催動後消耗一件' };
+  }
+  if (type === 'equip_damage_cap_percent') {
+    const base = capByType[type];
+    const min = roundRange(base + (0.80 - base) * (1 - scale));
+    return { type, label, field:'value', min, max:roundRange(Math.min(0.80, min + 0.12)),
+      unit:'最大生命比例', note:'越小越強；0.35 表示單次生命傷害至多 35%' };
+  }
+  const fullCap = capByType[type];
+  if (!Number.isFinite(fullCap)) throw new Error(`效果未設定境界數值表：${type}`);
+  const scaledMax = fullCap * scale;
+  const integer = FLAT_VALUE_TYPES.has(type);
+  const min = integer ? Math.max(1, Math.ceil(scaledMax * 0.35)) : roundRange(scaledMax * 0.35);
+  const max = integer ? Math.max(min, Math.floor(scaledMax)) : roundRange(scaledMax);
+  return { type, label, field:'value', min, max, unit:integer ? '點' : '比例',
+    note:integer ? '使用整數' : '0.10 代表 10%' };
+}
+function effectRangesForRealm(realm, stage = 1) {
+  const order = realmOrder(realm);
+  return [...ALLOWED_EFFECTS].map((type) => effectRange(type, order, stage)).filter(Boolean);
+}
+function sanitizeValue(type, value, order, stage = 1) {
+  const range = effectRange(type, order, stage);
+  if (!range || range.field !== 'value') return null;
+  const proposed = Number(value);
+  const chosen = Number.isFinite(proposed) ? proposed : (range.min + range.max) / 2;
+  const bounded = clamp(chosen, range.min, range.max);
+  return FLAT_VALUE_TYPES.has(type) ? Math.round(bounded) : roundRange(bounded);
 }
 function sanitizeEffect(raw, order, stage = 1) {
   const type = cleanText(raw?.type, 64);
-  if (!ALLOWED_EFFECTS.has(type) || order < minRealmForEffect(type) || !effectAllowedForStage(type, stage)) return null;
-  const normalizedStage = normalizeRefinementStage(stage);
-  const scale = powerScaleForStage(normalizedStage);
+  const range = effectRange(type, order, stage);
+  if (!range) return null;
   const out = { type };
-  if (type.startsWith('equip_') && !['equip_cheat_death','equip_copy_enemy_artifact'].includes(type)) {
-    out.value = sanitizeValue(type, raw?.value, order, normalizedStage);
-  } else if (type === 'timed_attack_multiplier' || type === 'timed_cultivation_multiplier') {
-    const fullMax = 1.35 + order * 0.06;
-    const stageMax = 1 + (fullMax - 1) * scale;
-    out.multiplier = clamp(raw?.multiplier || (1 + 0.25 * scale), 1.02, stageMax);
-    const fullDuration = 5 + order * 2;
-    const stageDuration = Math.max(2, fullDuration * (0.55 + 0.45 * scale));
-    out.durationMs = Math.round(clamp(raw?.durationMinutes || stageDuration, 2, stageDuration) * 60000);
+  if (range.field === 'value') {
+    out.value = sanitizeValue(type, raw?.value, order, stage);
+  } else if (range.field === 'multiplier') {
+    const proposed = Number(raw?.multiplier);
+    out.multiplier = roundRange(clamp(
+      Number.isFinite(proposed) ? proposed : (range.min + range.max) / 2,
+      range.min, range.max
+    ));
+    const minutes = Number(raw?.durationMinutes);
+    const duration = clamp(
+      Number.isFinite(minutes) ? minutes : range.durationMinutesMax,
+      range.durationMinutesMin, range.durationMinutesMax
+    );
+    out.durationMs = Math.round(duration * 60000);
   } else if (type === 'remove_wrong_option') {
     out.contexts = ['quiz','battle','dongtian'];
     out.perQuestion = 1;
