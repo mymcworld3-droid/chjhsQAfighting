@@ -1,4 +1,5 @@
 import './cultivation/true-immortal.js';
+import { createSoloQuestionCache } from './solo-question-cache.js';
 // 🔥 修正：使用純 URL 引入 Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -93,6 +94,53 @@ let soloSession = {
 // 🌍 國際化 (i18n) 設定
 // ==========================================
 let currentLang = localStorage.getItem('app_lang') || 'zh-TW';
+
+// Persist unanswered solo questions for the current account/range only.
+const soloQuestionCache = createSoloQuestionCache(window.localStorage);
+let soloCacheIdentity = '';
+let soloQuizOpenSerial = 0;
+
+function soloQuestionScope() {
+    const settings = currentUserData?.gameSettings || {};
+    const profile = currentUserData?.profile || {};
+    const mode = settings.sourceMode || 'random';
+    const units = mode === 'focused' && Array.isArray(settings.focusedUnits)
+        ? settings.focusedUnits.map((unit) => ({
+            path: String(unit?.path || ''),
+            detail: String(unit?.detail || ''),
+            topics: Array.isArray(unit?.sub_topics) ? unit.sub_topics.map(String).sort() : []
+        })).sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b)))
+        : [];
+    return JSON.stringify({
+        mode,
+        source: mode === 'bank' ? String(settings.source || 'ai') : '',
+        units,
+        difficulty: String(settings.difficulty || 'auto'),
+        level: String(profile.educationLevel || ''),
+        weakSubjects: mode === 'focused' ? String(profile.weakSubjects || '') : '',
+        language: currentLang
+    });
+}
+
+function syncSoloQuestionCache() {
+    const uid = auth.currentUser?.uid || '';
+    if (!uid || !currentUserData) return '';
+    const scope = soloQuestionScope();
+    const identity = JSON.stringify([uid, scope]);
+    if (soloCacheIdentity !== identity) {
+        // Discard the previous account/range and any in-flight buffer when scope changes.
+        soloQuestionCache.activate(uid, scope);
+        soloCacheIdentity = identity;
+        quizBuffer = soloQuestionCache.getQueue();
+        window.currentActiveQuiz = soloQuestionCache.getActive();
+        soloQuizOpenSerial += 1;
+        if (!soloQuestionCache.isPersistent()) {
+            console.warn('[Solo question cache] Browser storage unavailable; unanswered questions may not survive a reload.');
+        }
+    }
+    return scope;
+}
+
 
 const translations = {
     'zh-TW': {
@@ -392,6 +440,7 @@ window.toggleLanguage = () => {
     currentLang = currentLang === 'zh-TW' ? 'en' : 'zh-TW';
     localStorage.setItem('app_lang', currentLang);
     updateTexts();
+    if (currentUserData) { syncSoloQuestionCache(); void fillBuffer(); }
 };
 // ==========================================
 // 🛠️ 管理員 Debugger：啟動階段先記錄，確認管理員身分才顯示。
@@ -903,6 +952,7 @@ onAuthStateChanged(auth, async (user) => {
                 // 個人資料完成後，不論凡人、煉氣或後續境界都保留底部導覽列。
                 document.getElementById('bottom-nav').classList.remove('hidden');
                 switchToPage('page-home');
+                syncSoloQuestionCache();
                 fillBuffer();
             }
 
@@ -914,6 +964,11 @@ onAuthStateChanged(auth, async (user) => {
         // 👋 登出狀態
         checkAdminRole(false);
         currentUserData = null;
+        soloCacheIdentity = '';
+        soloQuizOpenSerial += 1;
+        soloQuestionCache.activate('', '');
+        quizBuffer = [];
+        window.currentActiveQuiz = null;
         xiuxianDebugBuffer.length = 0;
         if (userInfoEl) {
             // 加回 data-i18n 屬性，讓它顯示翻譯的 "未登入"
@@ -1681,7 +1736,7 @@ window.submitOnboarding = async () => {
         document.getElementById('bottom-nav').classList.remove('hidden');
         switchToPage('page-home');
         localStorage.removeItem('currentQuiz');
-        quizBuffer = [];
+        syncSoloQuestionCache();
         fillBuffer();
 
         // 劇情只能在這個事件之後開始：先完成年級、強項、弱項，再進主線。
@@ -1744,7 +1799,7 @@ window.saveProfile = async () => {
 
     currentBankData = null; 
     localStorage.removeItem('currentQuiz'); 
-    quizBuffer = []; 
+    syncSoloQuestionCache();
     fillBuffer();
     
     btn.innerText = "Saved!"; 
@@ -1756,6 +1811,7 @@ async function switchToAI() {
     currentUserData.gameSettings.sourceMode = 'random';
     const sm = document.getElementById('set-source-mode');
     if(sm) { sm.value = 'random'; toggleSourceMode(); }
+    syncSoloQuestionCache();
     return fetchOneQuestion(); 
 }
 
@@ -1797,14 +1853,27 @@ function getSmartDifficulty() {
 }
 
 async function fillBuffer() {
-    if (isFetchingBuffer || quizBuffer.length >= BUFFER_SIZE) return;
+    const scope = syncSoloQuestionCache();
+    const uid = auth.currentUser?.uid || '';
+    if (!scope || !uid || isFetchingBuffer || quizBuffer.length >= BUFFER_SIZE) return;
     isFetchingBuffer = true;
     try {
-        while (quizBuffer.length < BUFFER_SIZE) {
+        while (quizBuffer.length < BUFFER_SIZE && soloQuestionCache.isCurrent(uid, scope) && auth.currentUser?.uid === uid) {
             const question = await fetchOneQuestion();
-            quizBuffer.push(question);
+            // Reject an API response from a previous account or range.
+            if (!soloQuestionCache.isCurrent(uid, scope) || auth.currentUser?.uid !== uid ||
+                soloQuestionScope() !== scope) break;
+            if (!soloQuestionCache.append(question)) break;
+            quizBuffer = soloQuestionCache.getQueue();
         }
-    } catch (e) { console.warn("Background fetch failed", e); } finally { isFetchingBuffer = false; }
+    } catch (e) { console.warn("Background fetch failed", e); }
+    finally {
+        isFetchingBuffer = false;
+        if (auth.currentUser?.uid && currentUserData && soloQuestionScope() !== scope) {
+            syncSoloQuestionCache();
+            void fillBuffer();
+        }
+    }
 }
 
 // ==========================================
@@ -1835,27 +1904,42 @@ window.startQuizFlow = async (isNewSession = false) => {
         document.getElementById('solo-wrong-count').innerText = soloSession.wrongCount;
     }
 
-    window.quizStartTime = Date.now(); 
+    window.quizStartTime = Date.now();
+    const scope = syncSoloQuestionCache();
+    const uid = auth.currentUser?.uid || '';
+    const opening = ++soloQuizOpenSerial;
+    if (!scope || !uid) return;
 
-    if (quizBuffer.length > 0) { 
-        const nextQ = quizBuffer.shift(); 
-        window.currentActiveQuiz = nextQ; 
-        renderQuiz(nextQ.data, nextQ.rank, nextQ.badge); 
-        fillBuffer(); 
+    // Restore an unanswered active question before using the prefetched queue.
+    const nextQ = soloQuestionCache.getActive() || soloQuestionCache.takeNext();
+    quizBuffer = soloQuestionCache.getQueue();
+    if (nextQ) {
+        window.currentActiveQuiz = nextQ;
+        renderQuiz(nextQ.data, nextQ.rank, nextQ.badge);
+        void fillBuffer();
     } else {
         document.getElementById('quiz-loading').classList.remove('hidden');
         document.getElementById('loading-text').innerText = t('loading_text');
-        try { 
-            const q = await fetchOneQuestion(); 
-            window.currentActiveQuiz = q; 
-            renderQuiz(q.data, q.rank, q.badge); 
-            fillBuffer(); 
-        } catch (e) { 
-            console.error(e); 
-            alert("Failed to start"); 
-            switchToPage('page-home'); 
+        try {
+            const q = await fetchOneQuestion();
+            if (opening !== soloQuizOpenSerial || auth.currentUser?.uid !== uid) return;
+            if (soloQuestionScope() !== scope) {
+                syncSoloQuestionCache();
+                void window.startQuizFlow();
+                return;
+            }
+            soloQuestionCache.setActive(q);
+            window.currentActiveQuiz = q;
+            renderQuiz(q.data, q.rank, q.badge);
+            void fillBuffer();
+        } catch (e) {
+            if (opening !== soloQuizOpenSerial || auth.currentUser?.uid !== uid) return;
+            console.error(e);
+            alert("Failed to start");
+            switchToPage('page-home');
         }
     }
+
 };
 
 // ==========================================
@@ -2198,9 +2282,10 @@ async function fetchOneQuestion() {
 }
 
 /// 🔥 修改：在進入下一題前才清除舊題目，確保 startQuizFlow 能抓到新題目
-window.nextQuestion = () => { 
-    window.currentActiveQuiz = null; 
-    startQuizFlow(); 
+window.nextQuestion = () => {
+    // handleAnswer consumes the previous quiz before this action.
+    window.currentActiveQuiz = null;
+    void startQuizFlow();
 };
 
 async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
@@ -2209,6 +2294,10 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     if (quiz) {
         if (answeredSoloQuizzes.has(quiz)) return;
         answeredSoloQuizzes.add(quiz);
+        syncSoloQuestionCache();
+        if (soloQuestionCache.getActive()?.data?.q === quiz.data?.q) {
+            soloQuestionCache.consumeActive();
+        }
     }
 
     const timeTaken = (Date.now() - (window.quizStartTime || Date.now())) / 1000;
@@ -2502,9 +2591,13 @@ window.submitReport = async () => {
             btn.onclick = () => {
                 closeReportModal();
                 
-                // 清除暫存
-                window.currentActiveQuiz = null; 
-                fillBuffer(); 
+                // A verified skip also removes the question from the pending cache.
+                syncSoloQuestionCache();
+                if (soloQuestionCache.getActive()?.data?.q === currentQData.data?.q) {
+                    soloQuestionCache.consumeActive();
+                }
+                window.currentActiveQuiz = null;
+                void fillBuffer(); 
                 
                 // 稍微延遲執行，讓彈窗關閉動畫順暢
                 setTimeout(() => startQuizFlow(), 300); 
