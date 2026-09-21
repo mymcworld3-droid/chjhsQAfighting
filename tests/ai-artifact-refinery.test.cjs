@@ -142,7 +142,7 @@ test('artifact progression scales effect ranges without allowing empty or inflat
   const cap = api.effectRange('equip_damage_cap_percent', 10, 3);
   assert.ok(cap.min < cap.max && cap.max <= 0.8);
   assert.match(cap.note, /越小越強/);
-  assert.ok(api.effectRange('equip_damage_cap_percent', 10, 1).min > cap.min);
+  assert.ok(api.effectRange('equip_damage_cap_percent', 10, 2).min > cap.min);
   const generated = api.sanitizeGeneratedArtifact({
     name:'極值測試', equipSlot:'本命法寶',
     effects:[{type:'equip_attack_flat',value:0},{type:'equip_hp_percent',value:999999}]
@@ -163,7 +163,7 @@ test('AI receives only currently eligible effect ranges with actual min and max'
   assert.match(prompt, /"min": 54/);
   assert.match(prompt, /"max": 154/);
   assert.match(prompt, /單次生命傷害上限/);
-  assert.match(prompt, /越小越強/);
+  assert.match(prompt, /數值越小代表越強/);
   assert.match(prompt, /每場固定一次/);
   assert.match(prompt, /法寶無修士境界裝備限制/);
   const rangeBlock = prompt.slice(prompt.indexOf('各特性實際數值上下限'));
