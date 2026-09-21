@@ -24,6 +24,13 @@ import { getDefaultArtifactCatalog, replaceArtifactCatalog } from './artifact-ca
     return prompt;
   }
 
+  function applyEffectBounds(value, source = 'sync') {
+    const bounds = value && typeof value === 'object' && !Array.isArray(value)
+      ? JSON.parse(JSON.stringify(value)) : {};
+    window.__artifactEffectBoundsV1 = bounds;
+    window.dispatchEvent(new CustomEvent('artifact-effect-bounds-updated', { detail: { source } }));
+  }
+
   function applyDefault(reason = 'fallback') {
     try {
       replaceArtifactCatalog(getDefaultArtifactCatalog(), reason);
@@ -40,11 +47,13 @@ import { getDefaultArtifactCatalog, replaceArtifactCatalog } from './artifact-ca
     unsubscribe = onSnapshot(ref, (snap) => {
       if (!snap.exists()) {
         applyGenerationPrompt('', 'default-no-remote-config');
+        applyEffectBounds({}, 'default-no-remote-config');
         applyDefault('default-no-remote-config');
         return;
       }
       const data = snap.data() || {};
       applyGenerationPrompt(data.generationPrompt || '', 'firestore');
+      applyEffectBounds(data.effectBoundsV1 || {}, 'firestore');
       try {
         if (!Array.isArray(data.items) || !data.items.length) throw new Error('遠端法寶清單為空');
         replaceArtifactCatalog(data.items, 'firestore');
@@ -55,10 +64,13 @@ import { getDefaultArtifactCatalog, replaceArtifactCatalog } from './artifact-ca
     }, (error) => {
       console.warn('[Artifact catalog] Firestore sync unavailable; using defaults:', error);
       applyGenerationPrompt('', 'default-sync-error');
+      applyEffectBounds({}, 'default-sync-error');
       applyDefault('default-sync-error');
     });
   }
 
+  window.getArtifactEffectBounds = () => JSON.parse(JSON.stringify(window.__artifactEffectBoundsV1 || {}));
+  window.setArtifactEffectBoundsLocal = (value, source = 'admin-save') => applyEffectBounds(value, source);
   window.getArtifactCatalogConfigPath = () => `${CONFIG_COLLECTION}/${CONFIG_DOC}`;
   window.getArtifactGenerationPrompt = () => normalizeGenerationPrompt(window.__artifactGenerationPrompt || '');
   window.setArtifactGenerationPromptLocal = (value, source = 'local') => applyGenerationPrompt(value, source);
