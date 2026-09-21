@@ -86,7 +86,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
   }
 
   function ensureStyle() {
-    const href = 'styles/battle-mode-v2.css?v=20260921-battle-stage1';
+    const href = 'styles/battle-mode-v2.css?v=20260921-avatar1';
     if (document.querySelector(`link[href="${href}"]`)) return;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
@@ -103,6 +103,41 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
     document.body.appendChild(el);
     requestAnimationFrame(() => el.classList.add('show'));
     setTimeout(() => el.remove(), 2600);
+  }
+
+  // Room snapshots carry a player's currently equipped profile avatar. Never inject
+  // profile URLs into innerHTML: assign img.src through the DOM and recover on failure.
+  function avatarMarkup(id) {
+    return `<div id="${id}" class="bv2-avatar">
+      <img alt="玩家頭像" decoding="async" hidden>
+      <span class="bv2-avatar-fallback" aria-hidden="true"><i class="fa-solid fa-user"></i></span>
+    </div>`;
+  }
+
+  function setPlayerAvatar(id, player) {
+    const holder = document.getElementById(id);
+    if (!holder) return;
+    const img = holder.querySelector('img');
+    const fallback = holder.querySelector('.bv2-avatar-fallback');
+    if (!img || !fallback) return;
+    const raw = typeof player?.avatar === 'string' ? player.avatar.trim() : '';
+    // Only browser image paths and HTTPS/HTTP URLs. Empty/missing avatars use a fallback.
+    const url = raw && !/^(?:javascript|data|vbscript):/i.test(raw) && !raw.startsWith('//') ? raw : '';
+    const showFallback = () => { img.hidden = true; fallback.hidden = false; };
+    if (!url) {
+      if (img.dataset.avatarSrc) { img.removeAttribute('src'); img.dataset.avatarSrc = ''; }
+      img.alt = '未設定頭像';
+      showFallback();
+      return;
+    }
+    img.alt = String(player?.name || '修士') + '的頭像';
+    if (img.dataset.avatarSrc === url) return; // Do not restart image loads on every room snapshot.
+    img.dataset.avatarSrc = url;
+    img.hidden = true;
+    fallback.hidden = false;
+    img.onload = () => { if (img.dataset.avatarSrc === url) { img.hidden = false; fallback.hidden = true; } };
+    img.onerror = () => { if (img.dataset.avatarSrc === url) showFallback(); };
+    img.src = url;
   }
 
   function ensurePage() {
@@ -128,34 +163,34 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
           <div class="bv2-radar"><span></span><b>尋</b></div>
           <div class="bv2-lobby-copy"><span class="bv2-kicker">靈識尋蹤</span><h3 id="bv2-lobby-title">正在搜尋對手</h3><p id="bv2-lobby-status">尋找修為相近的道友…</p></div>
           <div class="bv2-match-pair">
-            <div class="bv2-match-card"><span>我方修士</span><strong id="bv2-match-me">修士</strong><small id="bv2-match-me-core">本命金丹：—</small></div>
+            <div class="bv2-match-card"><span>我方修士</span>${avatarMarkup('bv2-match-me-avatar')}<strong id="bv2-match-me">修士</strong><small id="bv2-match-me-core">本命金丹：—</small></div>
             <div class="bv2-vs"><i></i><b>VS</b><i></i></div>
-            <div class="bv2-match-card enemy"><span>對手修士</span><strong id="bv2-match-enemy">搜尋中…</strong><small id="bv2-match-enemy-core">等待道友入場</small></div>
+            <div class="bv2-match-card enemy"><span>對手修士</span>${avatarMarkup('bv2-match-enemy-avatar')}<strong id="bv2-match-enemy">搜尋中…</strong><small id="bv2-match-enemy-core">等待道友入場</small></div>
           </div>
           <button id="bv2-cancel" class="bv2-btn ghost" type="button">收回靈識 · 取消配對</button>
         </section>
 
         <section id="bv2-intro" class="bv2-intro hidden">
           <div class="bv2-intro-runes" aria-hidden="true"><i></i><i></i><i></i></div>
-          <div class="bv2-intro-player left"><span>我方</span><strong id="bv2-intro-me">—</strong><small id="bv2-intro-me-core">未調御金丹</small></div>
+          <div class="bv2-intro-player left"><span>我方</span>${avatarMarkup('bv2-intro-me-avatar')}<strong id="bv2-intro-me">—</strong><small id="bv2-intro-me-core">未調御金丹</small></div>
           <div class="bv2-intro-center">
             <span id="bv2-intro-kicker">靈識鎖定</span>
             <b id="bv2-intro-count">鬥</b>
             <strong id="bv2-intro-title">道友相逢 · 以學論道</strong>
           </div>
-          <div class="bv2-intro-player right"><span>對手</span><strong id="bv2-intro-enemy">—</strong><small id="bv2-intro-enemy-core">未調御金丹</small></div>
+          <div class="bv2-intro-player right"><span>對手</span>${avatarMarkup('bv2-intro-enemy-avatar')}<strong id="bv2-intro-enemy">—</strong><small id="bv2-intro-enemy-core">未調御金丹</small></div>
           <div class="bv2-intro-slash" aria-hidden="true"></div>
         </section>
 
         <section id="bv2-arena" class="bv2-arena hidden">
           <div class="bv2-scoreboard">
             <article id="bv2-enemy-fighter" class="bv2-fighter enemy">
-              <div class="bv2-fighter-head"><div><span>對手</span><strong id="bv2-enemy-name">—</strong></div><b id="bv2-enemy-hp-text">1000</b></div>
+              <div class="bv2-fighter-head"><div class="bv2-fighter-identity">${avatarMarkup('bv2-arena-enemy-avatar')}<div><span>對手</span><strong id="bv2-enemy-name">—</strong></div></div><b id="bv2-enemy-hp-text">1000</b></div>
               <div class="bv2-hp"><i id="bv2-enemy-hp"></i></div><small id="bv2-enemy-core">本命金丹：—</small>
             </article>
             <div class="bv2-round-seal"><span>ROUND</span><b id="bv2-round">1 / ${BATTLE_V2.maxRounds}</b><em>問</em></div>
             <article id="bv2-my-fighter" class="bv2-fighter me">
-              <div class="bv2-fighter-head"><div><span>我方</span><strong id="bv2-my-name">—</strong></div><b id="bv2-my-hp-text">1000</b></div>
+              <div class="bv2-fighter-head"><div class="bv2-fighter-identity">${avatarMarkup('bv2-arena-me-avatar')}<div><span>我方</span><strong id="bv2-my-name">—</strong></div></div><b id="bv2-my-hp-text">1000</b></div>
               <div class="bv2-hp"><i id="bv2-my-hp"></i></div><small id="bv2-my-core">本命金丹：—</small>
             </article>
           </div>
@@ -238,6 +273,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
     return {
       uid: user.uid,
       name: data.displayName || user.displayName || '無名修士',
+      avatar: String(data.equipped?.avatar || '').trim().slice(0, 2048),
       rankLevel: Math.max(0, Number(data.stats?.rankLevel) || 0),
       totalScore: Math.max(0, Number(data.stats?.totalScore) || 0),
       combatPower: Math.max(0, Math.round(Number(window.getCombatPower?.().total) || 0)),
@@ -441,6 +477,8 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
     showSection('lobby');
     const mine = state.role ? playerForRole(room, state.role) : playerSnapshot();
     const opp = state.role ? playerForRole(room, otherRole(state.role)) : null;
+    setPlayerAvatar('bv2-match-me-avatar', mine);
+    setPlayerAvatar('bv2-match-enemy-avatar', opp);
     setText('bv2-match-me', mine?.name || '修士'); setText('bv2-match-me-core', `本命金丹：${playerCoreLabel(mine)}${playerPowerLabel(mine)}`);
     setText('bv2-room-badge', state.roomId ? `ROOM ${state.roomId.slice(0, 6).toUpperCase()}` : 'SEARCHING');
     setText('bv2-lobby-title', opp ? '已尋得對手' : '正在搜尋對手');
@@ -451,6 +489,8 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
   function renderIntro(room) {
     showSection('intro');
     const mine = playerForRole(room, state.role); const enemy = playerForRole(room, otherRole(state.role));
+    setPlayerAvatar('bv2-intro-me-avatar', mine);
+    setPlayerAvatar('bv2-intro-enemy-avatar', enemy);
     setText('bv2-intro-me', mine?.name || '我方修士'); setText('bv2-intro-enemy', enemy?.name || '對手修士');
     setText('bv2-intro-me-core', playerCoreLabel(mine) + playerPowerLabel(mine)); setText('bv2-intro-enemy-core', playerCoreLabel(enemy) + playerPowerLabel(enemy));
     setText('bv2-room-badge', `ROOM ${state.roomId.slice(0, 6).toUpperCase()}`);
@@ -667,6 +707,8 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
     const mine = playerForRole(room, state.role);
     const enemy = playerForRole(room, otherRole(state.role));
     if (!mine || !enemy) return;
+    setPlayerAvatar('bv2-arena-me-avatar', mine);
+    setPlayerAvatar('bv2-arena-enemy-avatar', enemy);
     setText('bv2-room-badge', 'ROOM ' + state.roomId.slice(0, 6).toUpperCase());
     setText('bv2-round', room.round + ' / ' + (room.maxRounds || BATTLE_V2.maxRounds));
     setText('bv2-my-name', mine.name || '我方');
@@ -1054,7 +1096,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
     }
     resetRuntime(); state.starting = true; ensurePage(); window.switchToPage?.('page-battle'); showSection('lobby'); renderLobby(null);
     try {
-      await window.ensureCombatStats?.(); const myData = playerSnapshot(); setText('bv2-match-me', myData.name); setText('bv2-match-me-core', `本命金丹：${playerCoreLabel(myData)}${playerPowerLabel(myData)}`);
+      await window.ensureCombatStats?.(); const myData = playerSnapshot(); setPlayerAvatar('bv2-match-me-avatar', myData); setText('bv2-match-me', myData.name); setText('bv2-match-me-core', `本命金丹：${playerCoreLabel(myData)}${playerPowerLabel(myData)}`);
       const joined = await findAndClaimRoom(myData); if (joined) { state.role = 'guest'; subscribeRoom(joined); return; }
       setText('bv2-lobby-status', '目前沒有可加入的道友，正在開啟鬥法臺…'); const created = await createWaitingRoom(myData); state.role = 'host'; subscribeRoom(created); scheduleReconcile();
     } catch (error) { console.error('[Battle v2] matchmaking failed:', error); toast('配對失敗，請稍後再試。'); resetRuntime(); window.switchToPage?.('page-home'); }
