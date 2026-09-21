@@ -97,7 +97,7 @@ test('old rooms without gender render local chosen portrait and a stable enemy f
 test('hit point numbers update after impact, retaining server-side step order and settlement gates', () => {
   const animate = source.slice(source.indexOf('  function animateSettlement(room) {'), source.indexOf('  async function confirmReview() {'));
   assert.match(animate, /index \* ANIMATION_STEP_MS/);
-  assert.match(animate, /if \(!state\.roomId \|\| state\.seenSettlementKey !== key/);
+  assert.match(animate, /const valid = \(\) => !!state\.roomId && state\.seenSettlementKey === key/);
   assert.match(animate, /target\?\.classList\.add\('hit'\)/);
   assert.match(animate, /setHp\('my'[\s\S]*setHp\('enemy'/);
   assert.match(animate, /scheduleBattleAt\(impactAtMs, key/);
