@@ -3,7 +3,7 @@
 (function () {
   'use strict';
 
-  const CSS_HREF = 'cultivation-status-panel.css';
+  const CSS_HREF = 'cultivation-status-panel.css?v=20260921-power1';
   let statusActive = false;
   let rendering = false;
 
