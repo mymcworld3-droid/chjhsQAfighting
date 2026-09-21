@@ -160,8 +160,8 @@ test('AI receives only currently eligible effect ranges with actual min and max'
   const prompt = api.buildPrompt(input);
   assert.match(prompt, /各特性實際數值上下限/);
   assert.match(prompt, /"type": "equip_attack_flat"/);
-  assert.match(prompt, /"min": 118/);
-  assert.match(prompt, /"max": 154/);
+  assert.match(prompt, /"min": 112/);
+  assert.match(prompt, /"max": 146/);
   assert.match(prompt, /單次生命傷害上限/);
   assert.match(prompt, /數值越小代表越強/);
   assert.match(prompt, /每場固定一次/);
@@ -316,7 +316,7 @@ test('admin directions override random style when compatible, and get separate g
     assert.equal(reviewed.guidanceReview,'revised');
     assert.equal(reviewed.artifact.name,'天文觀星盤');
     assert.equal(reviewed.artifact.effects[0].type,'equip_shield_flat');
-    assert.equal(reviewed.artifact.effects[0].value,api.effectRange('equip_shield_flat',3,1).max);
+    assert.equal(reviewed.artifact.effects[0].value,api.effectRange('equip_shield_flat',3,1,{},false,{},2).max);
     assert.equal(original.name,'星砂劍');
     const none = await api.reviewGuidedArtifact({...payload,adminGenerationDirection:'',adminGenerationPrompt:''},original,'金丹',1);
     assert.equal(none.guidanceReview,'not-requested');
