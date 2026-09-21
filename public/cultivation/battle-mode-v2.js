@@ -86,7 +86,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
   }
 
   function ensureStyle() {
-    const href = 'styles/battle-mode-v2.css?v=20260921-avatar1';
+    const href = 'styles/battle-mode-v2.css?v=20260921-portrait-stage1';
     if (document.querySelector(`link[href="${href}"]`)) return;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
@@ -140,6 +140,32 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
     img.src = url;
   }
 
+  // The duel stage uses the story's full-height cultivator illustrations, not avatar thumbnails.
+  function portraitMarkup(id) {
+    return `<div id="${id}" class="bv2-stage-fighter">
+      <img alt="修士立繪" loading="eager" decoding="async" hidden>
+      <span class="bv2-stage-portrait-fallback" aria-hidden="true"><i class="fa-solid fa-user-ninja"></i></span>
+    </div>`;
+  }
+
+  function setPlayerPortrait(id, player, own = false) {
+    const holder = document.getElementById(id);
+    const img = holder?.querySelector('img');
+    const fallback = holder?.querySelector('.bv2-stage-portrait-fallback');
+    if (!img || !fallback) return;
+    // Old rooms have no gender snapshot; use the local choice for our own character.
+    const gender = player?.gender === 'female' ? 'female' :
+      player?.gender === 'male' ? 'male' :
+      own ? (userData()?.storyProgressV1?.gender === 'female' ? 'female' : 'male') : null;
+    const src = gender ? `assets/story/characters/player-${gender}-determined.png` : 'assets/story/characters/battle-rival.png';
+    if (img.dataset.portraitSrc === src) return;
+    img.dataset.portraitSrc = src;
+    img.hidden = true; fallback.hidden = false;
+    img.alt = String(player?.name || '修士') + '的立繪';
+    img.onload = () => { if (img.dataset.portraitSrc === src) { img.hidden = false; fallback.hidden = true; } };
+    img.onerror = () => { if (img.dataset.portraitSrc === src) { img.hidden = true; fallback.hidden = false; } };
+    img.src = src;
+  }
   function ensurePage() {
     ensureStyle();
     const page = document.getElementById('page-battle');
@@ -183,18 +209,22 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
         </section>
 
         <section id="bv2-arena" class="bv2-arena hidden">
-          <div class="bv2-scoreboard">
-            <article id="bv2-enemy-fighter" class="bv2-fighter enemy">
-              <div class="bv2-fighter-head"><div class="bv2-fighter-identity">${avatarMarkup('bv2-arena-enemy-avatar')}<div><span>對手</span><strong id="bv2-enemy-name">—</strong></div></div><b id="bv2-enemy-hp-text">1000</b></div>
-              <div class="bv2-hp"><i id="bv2-enemy-hp"></i></div><small id="bv2-enemy-core">本命金丹：—</small>
-            </article>
-            <div class="bv2-round-seal"><span>ROUND</span><b id="bv2-round">1 / ${BATTLE_V2.maxRounds}</b><em>問</em></div>
-            <article id="bv2-my-fighter" class="bv2-fighter me">
-              <div class="bv2-fighter-head"><div class="bv2-fighter-identity">${avatarMarkup('bv2-arena-me-avatar')}<div><span>我方</span><strong id="bv2-my-name">—</strong></div></div><b id="bv2-my-hp-text">1000</b></div>
-              <div class="bv2-hp"><i id="bv2-my-hp"></i></div><small id="bv2-my-core">本命金丹：—</small>
-            </article>
+          <article id="bv2-enemy-status" class="bv2-status-panel enemy">
+            <div class="bv2-fighter-head"><div><span>對手</span><strong id="bv2-enemy-name">—</strong></div><b id="bv2-enemy-hp-text">1000</b></div>
+            <div class="bv2-hp"><i id="bv2-enemy-hp"></i></div><small id="bv2-enemy-core">本命金丹：—</small>
+          </article>
+          <div class="bv2-stage-round"><span>ROUND</span><b id="bv2-round">1 / ${BATTLE_V2.maxRounds}</b></div>
+          <div class="bv2-stage" aria-label="雙人鬥法場">
+            <div class="bv2-stage-architecture" aria-hidden="true"><i></i><i></i><i></i></div>
+            <div class="bv2-stage-platform" aria-hidden="true"></div>
+            ${portraitMarkup('bv2-my-fighter')}
+            ${portraitMarkup('bv2-enemy-fighter')}
+            <div class="bv2-stage-center" aria-hidden="true">鬥</div>
           </div>
-
+          <article id="bv2-my-status" class="bv2-status-panel me">
+            <div class="bv2-fighter-head"><div><span>我方</span><strong id="bv2-my-name">—</strong></div><b id="bv2-my-hp-text">1000</b></div>
+            <div class="bv2-hp"><i id="bv2-my-hp"></i></div><small id="bv2-my-core">本命金丹：—</small>
+          </article>
           <div class="bv2-duel-rule"><i class="fa-solid fa-hourglass-half"></i><span>本題<strong>不限讀題時間</strong>；任一方先答後，另一方才開始 <strong>25 秒</strong> 倒數。</span></div>
 
           <div id="bv2-duel-cue" class="bv2-duel-cue" aria-live="polite">
@@ -203,7 +233,6 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
             <p id="bv2-cue-message">凝神備戰，即將進入題目</p>
           </div>
 
-          <div class="bv2-log-wrap"><div class="bv2-log-title"><span>鬥法紀錄</span><small>天道公證 · SERVER SYNCED</small></div><div id="bv2-log" class="bv2-log"><p>尚無攻防紀錄。</p></div></div>
         </section>
 
         <section id="bv2-quiz" class="bv2-quiz hidden" aria-label="全畫面鬥法題目">
@@ -274,6 +303,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
       uid: user.uid,
       name: data.displayName || user.displayName || '無名修士',
       avatar: String(data.equipped?.avatar || '').trim().slice(0, 2048),
+      gender: data.storyProgressV1?.gender === 'female' ? 'female' : 'male',
       rankLevel: Math.max(0, Number(data.stats?.rankLevel) || 0),
       totalScore: Math.max(0, Number(data.stats?.totalScore) || 0),
       combatPower: Math.max(0, Math.round(Number(window.getCombatPower?.().total) || 0)),
@@ -514,21 +544,6 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
     document.getElementById(`bv2-${prefix === 'my' ? 'my' : 'enemy'}-fighter`)?.classList.toggle('low-hp', hp / maxHp <= .3);
   }
 
-  function renderLogs(room) {
-    const el = document.getElementById('bv2-log'); if (!el) return;
-    const logs = Array.isArray(room?.battleLog) ? room.battleLog.slice(-8).reverse() : [];
-    if (!logs.length) { el.innerHTML = '<p>尚無攻防紀錄。</p>'; return; }
-    el.innerHTML = logs.map((entry) => {
-      const actor = entry.actorName || (entry.actorUid === me()?.uid ? '你' : '對手');
-      if (entry.type === 'attack') return `<p><b>${escapeHtml(actor)}</b> 出手造成 <strong>${Number(entry.damage) || 0}</strong> 傷害${entry.skill ? ` · ${escapeHtml(entry.skill)}` : ''}</p>`;
-      if (entry.type === 'counter') return `<p class="counter"><b>${escapeHtml(actor)}</b> 雷光反擊 <strong>${Number(entry.damage) || 0}</strong> 傷害${entry.skill ? ` · ${escapeHtml(entry.skill)}` : ''}</p>`;
-      if (entry.type === 'guard') return `<p class="counter"><b>${escapeHtml(actor)}</b> <strong>金丹道心護體</strong>，抵銷本次攻擊</p>`;
-      if (entry.type === 'heal') return `<p class="counter"><b>${escapeHtml(actor)}</b> 回元，恢復 <strong>${Number(entry.amount) || 0}</strong> 生命</p>`;
-      if (entry.type === 'miss') return `<p><b>${escapeHtml(actor)}</b> 出招未命中 <strong>MISS</strong></p>`;
-      return `<p>${escapeHtml(entry.message || '回合結算')}</p>`;
-    }).join('');
-  }
-
   function announceActivations(room) {
     const batch = room?.lastSettlement?.activations; if (!Array.isArray(batch)) return;
     batch.forEach((activation, index) => {
@@ -595,18 +610,24 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
         setText('bv2-cue-count', missed ? 'MISS' : guarded ? 'BLOCK' : '-' + damage);
         setText('bv2-cue-message', (step.actorRole === myRole ? '我方' : '對手') + (missed ? '作答未命中！' : guarded ? '出招被道心護體抵擋' : counter ? '發動反擊！' : '造成 ' + damage + ' 點傷害'));
         actor?.classList.add(missed ? 'miss' : 'strike');
-        if (!missed && !guarded) target?.classList.add('hit');
-        const pop = document.createElement('b');
-        pop.className = 'bv2-damage-pop' + (missed ? ' miss' : guarded ? ' blocked' : '');
-        pop.textContent = label;
-        (missed ? actor : target)?.appendChild(pop);
+        // Damage is projected at the impact frame, in the same order as the server's
+        // settled steps; room HP and outcome remain authoritative.
         state.animationTimers.push(setTimeout(() => {
-          actor?.classList.remove('strike', 'miss');
-          target?.classList.remove('hit');
-          pop.remove();
-        }, 700));
-        setHp('my', { ...original[myRole], hp: Number(step[myRole + 'Hp']) });
-        setHp('enemy', { ...original[otherRole(myRole)], hp: Number(step[otherRole(myRole) + 'Hp']) });
+          if (!state.roomId || state.seenSettlementKey !== key || state.room?.round !== room.round) return;
+          if (!missed && !guarded) target?.classList.add('hit');
+          else if (guarded) target?.classList.add('guarded');
+          const pop = document.createElement('b');
+          pop.className = 'bv2-damage-pop' + (missed ? ' miss' : guarded ? ' blocked' : '');
+          pop.textContent = label;
+          (missed ? actor : target)?.appendChild(pop);
+          setHp('my', { ...original[myRole], hp: Number(step[myRole + 'Hp']) });
+          setHp('enemy', { ...original[otherRole(myRole)], hp: Number(step[otherRole(myRole) + 'Hp']) });
+          state.animationTimers.push(setTimeout(() => {
+            actor?.classList.remove('strike', 'miss');
+            target?.classList.remove('hit', 'guarded');
+            pop.remove();
+          }, 520));
+        }, 190));
       }, 300 + index * ANIMATION_STEP_MS);
       state.animationTimers.push(timer);
     });
@@ -707,8 +728,8 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
     const mine = playerForRole(room, state.role);
     const enemy = playerForRole(room, otherRole(state.role));
     if (!mine || !enemy) return;
-    setPlayerAvatar('bv2-arena-me-avatar', mine);
-    setPlayerAvatar('bv2-arena-enemy-avatar', enemy);
+    setPlayerPortrait('bv2-my-fighter', mine, true);
+    setPlayerPortrait('bv2-enemy-fighter', enemy);
     setText('bv2-room-badge', 'ROOM ' + state.roomId.slice(0, 6).toUpperCase());
     setText('bv2-round', room.round + ' / ' + (room.maxRounds || BATTLE_V2.maxRounds));
     setText('bv2-my-name', mine.name || '我方');
@@ -724,7 +745,6 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
       setHp('enemy', enemy);
       renderRoundCue(room);
     }
-    renderLogs(room);
     if (replay) {
       announceActivations(room);
       animateSettlement(room);
