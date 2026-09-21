@@ -33,6 +33,9 @@ import {
 
   const ARTIFACT_CONFIG = ['gameConfig', 'artifactCatalogV1'];
   const MATERIAL_CONFIG = ['gameConfig', 'materialCatalogV1'];
+  // 同一工作生成成功後若 Firestore 暫時中斷，可再次開爐而不重複呼叫生成服務。
+  // 僅保存在本次頁面記憶體；實際領取狀態仍以 Firestore transaction 為準。
+  const generatedCandidateCache = new Map();
 
   const data = () => window.getCurrentUserData?.() || null;
   const authUser = () => { try { return getAuth(getApp()).currentUser; } catch (_) { return null; } };
@@ -290,22 +293,48 @@ import {
     }));
   }
 
+  function generationError(message, code, extra = {}) {
+    const error = new Error(message);
+    error.code = code;
+    error.refineryStage = 'generation';
+    Object.assign(error, extra);
+    return error;
+  }
+
   async function generateCandidate(job) {
-    const response = await fetch('/api/generate-artifact', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        selectedIngredients: job.ingredients,
-        allMaterials: apiMaterials(),
-        existingArtifacts: apiArtifacts(),
-        targetRealm: job.targetRealm,
-        adminGenerationDirection: job.adminGenerationDirection || '',
-        adminGenerationPrompt: job.adminGenerationPrompt || '',
-        supportedEffects: SUPPORTED_ARTIFACT_EFFECTS
-      })
-    });
-    const payload = await response.json().catch(() => ({}));
-    if (!response.ok || !payload.artifact) throw new Error('新法寶推演失敗，請稍後再開爐');
+    let response;
+    try {
+      response = await fetch('/api/generate-artifact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          selectedIngredients: job.ingredients,
+          allMaterials: apiMaterials(),
+          existingArtifacts: apiArtifacts(),
+          targetRealm: job.targetRealm,
+          adminGenerationDirection: job.adminGenerationDirection || '',
+          adminGenerationPrompt: job.adminGenerationPrompt || '',
+          supportedEffects: SUPPORTED_ARTIFACT_EFFECTS
+        })
+      });
+    } catch (cause) {
+      // Safari 的「Load failed」通常只是網路層 TypeError，不能據此判定材料或任務損毀。
+      throw generationError('煉器推演服務無法連線', 'refinery-api-network', { cause });
+    }
+    let payload;
+    try {
+      payload = await response.json();
+    } catch (cause) {
+      throw generationError('煉器推演服務回應格式不符', 'refinery-api-invalid-response', {
+        httpStatus: response.status, cause
+      });
+    }
+    if (!response.ok || !payload?.artifact) {
+      throw generationError('新法寶推演未完成', 'refinery-api-response', {
+        httpStatus: response.status,
+        serverReason: String(payload?.error || '').slice(0, 180)
+      });
+    }
     return payload;
   }
 
@@ -350,7 +379,8 @@ import {
   }
 
   async function claimDiscovery(job) {
-    const generated = await generateCandidate(job);
+    const generated = generatedCandidateCache.get(job.id) || await generateCandidate(job);
+    generatedCandidateCache.set(job.id, generated);
     const user = authUser();
     if (!user) throw new Error('尚未登入');
 
@@ -444,6 +474,7 @@ import {
     if (committedRecipes) replaceArtifactRecipes(committedRecipes, 'ai-generated');
     window.dispatchEvent(new CustomEvent('artifact-system-updated', { detail: committedArtifacts }));
     window.dispatchEvent(new CustomEvent('xiuxian:refinery-job-updated', { detail: null }));
+    generatedCandidateCache.delete(job.id);
     const awarded = getArtifactById(awardedId) || committedCatalog?.find((item) => item.id === awardedId) || { id: awardedId, name: '新生法寶' };
     return { ...awarded, recipeFirstDiscovery: firstDiscovery };
   }
