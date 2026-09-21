@@ -191,7 +191,10 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
         let update = {};
         if (type === 'recipe') {
           const official = catalogSnap?.data()?.items?.find((record) => record?.id === listing.itemId);
-          if (count !== 1 || !official?.recipeOwnerUid || official.recipeOwnerUid !== listing.sellerUid || !recipeSnap?.data()?.recipes?.[listing.itemId]?.length) throw new Error('此配方委託已失效');
+          const validOwner = !!official?.recipeOwnerUid && official.recipeOwnerUid === listing.sellerUid;
+          const validAdmin = listing.adminManaged === true && rawSeller.isAdmin === true;
+          if (count !== 1 || (!validOwner && !validAdmin) ||
+              !recipeSnap?.data()?.recipes?.[listing.itemId]?.length) throw new Error('此配方委託已失效');
           if (rawBuyer.recipeLicenses?.[listing.itemId] === true) throw new Error('你已持有該配方的使用權');
           update = { recipeLicenses: { ...(rawBuyer.recipeLicenses || {}), [listing.itemId]: true } };
         } else {
@@ -261,7 +264,11 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
   function detailMarkup(listing) {
     const item = itemFor(listing.type, listing.itemId);
     if (!item) return '<p>商品資料已變更，請重新整理後確認。</p>';
-    const desc = esc(item.description || '暫無詳細描述');
+    const isRecipe = listing.type === 'recipe';
+    const knows = isRecipe && (!item.recipeOwnerUid || item.recipeOwnerUid === currentUid || data()?.recipeLicenses?.[item.id] === true);
+    // AI-generated descriptions may embed the discovery story or ingredient hints.
+    // Never display them before the buyer receives a recipe license.
+    const desc = esc(!isRecipe || knows ? (item.description || '暫無詳細描述') : '成品故事與製作資料購買後解鎖');
     const category = esc(item.category || (listing.type === 'recipe' ? '配方指南' : '法寶'));
     const attributes = listing.type === 'material'
       ? `<p><b>材料種類：</b>${category} · <b>境界：</b>${esc(item.realm || '凡人')}</p>`
@@ -271,8 +278,6 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
       const amount = effect.value ?? effect.multiplier ?? '';
       return `<li>${esc(label)}${amount === '' ? '' : '：' + esc(amount)}</li>`;
     }).join('');
-    const isRecipe = listing.type === 'recipe';
-    const knows = isRecipe && (!item.recipeOwnerUid || item.recipeOwnerUid === currentUid || data()?.recipeLicenses?.[item.id] === true);
     const ingredients = isRecipe
       ? (knows
         ? `<p><b>製作材料：</b>${getArtifactRecipe(item.id).map((row) => {
@@ -282,9 +287,9 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe } from './material
         : '<p>購買後可在煉器配方圖鑑查看確切材料與數量；沒有配方仍能自由開爐。</p>')
       : '';
     return `<div class="pm-item-details"><p>${desc}</p>${attributes}
-      ${effects && !isRecipe ? `<b>法寶效果</b><ul>${effects}</ul>` : ''}
-      ${isRecipe ? `<p><b>首發者：</b>${esc(item.recipeOwnerName || listing.sellerName || '無名修士')} · 永久製作指南，首發身分不轉移</p>` : ''}
-      ${ingredients}</div>`;
+      ${effects ? `<b>成品屬性與效果</b><ul>${effects}</ul>` : ''}
+      ${isRecipe ? `<p><b>配方擁有人：</b>${esc(item.recipeOwnerName || '公共配方')} · 永久製作指南，購買不轉移擁有權</p>` : ''}
+      ${ingredients}${isRecipe && !knows ? '<p class="pm-recipe-lock"><i class="fa-solid fa-lock"></i> 故事、材料、製作方法與完整說明將於購買後開放。</p>' : ''}</div>`;
   }
 
   function card(listing, own = false) {
