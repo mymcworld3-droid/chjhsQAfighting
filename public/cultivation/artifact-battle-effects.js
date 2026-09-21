@@ -118,7 +118,7 @@
     return Math.max(0, Math.round(num(snapshot?.openingShield)));
   };
 
-  window.resolveArtifactBattleAttack = function ({ attacker, defender, baseDamage } = {}) {
+  window.resolveArtifactBattleAttack = function ({ attacker, defender, baseDamage, seed = null } = {}) {
     const effects = effectiveEffects(attacker, defender);
     const base = Math.max(0, num(baseDamage));
 
@@ -135,8 +135,13 @@
     const shieldGain = Math.max(0, Math.round(sumValue(effects, 'equip_on_correct_shield_flat')));
 
     const normalBase = Math.max(0, base * (1 + damagePercent));
-    const critical = critChance > 0 && Math.random() < critChance;
-    const combo = comboChance > 0 && Math.random() < comboChance;
+    // Firestore transactions may retry: seeded rolls keep the same attack result on replay.
+    // Unseeded callers retain the original random behavior (e.g. the legacy local mode).
+    const roll = (kind) => seed === null
+      ? Math.random()
+      : stableHash(String(seed) + ':' + kind) / 4294967296;
+    const critical = critChance > 0 && roll('critical') < critChance;
+    const combo = comboChance > 0 && roll('combo') < comboChance;
 
     let normalDamage = normalBase;
     if (critical) normalDamage *= 1.5 + critBonus;
@@ -146,6 +151,7 @@
     const labels = [];
     const copied = copyLabel(effects);
     if (copied) labels.push(copied);
+    if (damagePercent > 0) labels.push(`增傷+${Math.round(damagePercent * 100)}%`);
     if (critical) labels.push('暴擊');
     if (combo) labels.push('連擊');
     if (trueDamage > 0) labels.push(`真傷+${trueDamage}`);
@@ -239,6 +245,26 @@
       cheatDeath,
       copiedEffect: copied,
       skill: labels.join('・')
+    };
+  };
+
+  // Shared PvP/story bridge: pass final HP damage back to the sequential combat engine,
+  // while mutation of artifactShield / first-hit / cheat-death remains on the player snapshot.
+  window.resolveArtifactBattleHit = function ({ attacker, defender, baseDamage, seed = null } = {}) {
+    const attack = window.resolveArtifactBattleAttack({ attacker, defender, baseDamage, seed });
+    const defense = window.resolveArtifactBattleDefense({
+      defender, attacker, normalDamage: attack.normalDamage, trueDamage: attack.trueDamage
+    });
+    const damage = Math.max(0, Math.round(Number(defense.hpDamage) || 0));
+    return {
+      damage,
+      normalDamage: attack.normalDamage,
+      trueDamage: attack.trueDamage,
+      reflectDamage: Math.max(0, Math.round(Number(defense.reflectDamage) || 0)),
+      reflectSkill: defense.skill ? `法寶反傷・${defense.skill}` : '法寶反傷',
+      heal: Math.round(damage * Math.max(0, Number(attack.lifestealPercent) || 0)),
+      shieldGain: Math.max(0, Number(attack.shieldGain) || 0),
+      skill: [attack.skill, defense.skill].filter(Boolean).join('・')
     };
   };
 
