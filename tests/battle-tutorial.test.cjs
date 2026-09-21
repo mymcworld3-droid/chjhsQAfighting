@@ -36,7 +36,8 @@ test('second tutorial duel is Gu Changfeng and teaches the real battle timing ru
   assert.match(tutorial, /雙方都答對時依作答先後出手/);
   assert.match(tutorial, /settleBattleRound\(\{/);
   assert.match(tutorial, /QUESTIONS\.length/);
-  assert.match(tutorial, /答錯：本回合你沒有造成傷害，顧長風反擊/);
+  assert.match(tutorial, /答錯：本回合 MISS/);
+  assert.match(tutorial, /outcome\.steps/);
 });
 
 test('battle tutorial is a local simulation and never creates a formal matchmaking room or result record', () => {
@@ -92,7 +93,7 @@ test('Shen first duel returns to main story without starting Gu or marking tutor
     active:true, busy:false, tutorialPhase:'shen', startedByStory:true, previewOnly:false,
     LAYER_ID:'battle-tutorial-layer', playerHp:0, shenChoice:null,
     SHEN_QUESTION:{opts:['正確值'],ans:0,exp:'數學解析'},esc:String,
-    shell:()=>el, playerPortrait:() => '', stage:'shen-strike', closeTutorialArena:()=>{closed++;},clearShenTimer() {},
+    shell:()=>el, playerPortrait:() => '', stage:'shen-strike', closeTutorialArena:()=>{closed++;},clearShenTimer() {}, clearTutorialTimers() {},
     document:{getElementById:()=>({remove(){}})},
     window:{closeBattleTutorialArena:()=>{closed++;}, dispatchEvent:event=>{finished=event;}},
     CustomEvent:class {constructor(type, options){this.type=type;this.detail=options.detail;}}
