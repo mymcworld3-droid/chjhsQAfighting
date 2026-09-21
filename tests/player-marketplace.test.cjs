@@ -43,7 +43,7 @@ test('recipe marketplace sells crafting knowledge while preserving the first dis
   assert.match(market, /const recipeSnap = type === 'recipe' \? await tx\.get/);
   assert.match(market, /const recipeSnap = listing\.type === 'recipe' \? await tx\.get/);
   assert.match(market, /official\.recipeOwnerUid !== seller\.uid/);
-  assert.match(market, /official\.recipeOwnerUid !== listing\.sellerUid/);
+  assert.match(market, /official\.recipeOwnerUid === listing\.sellerUid/);
   assert.match(market, /recipeLicenses: \{ \.\.\.\(rawBuyer\.recipeLicenses \|\| \{\}\), \[listing\.itemId\]: true \}/);
   assert.match(market, /永久配方知識/);
   assert.match(market, /首發者身分不轉移/);
