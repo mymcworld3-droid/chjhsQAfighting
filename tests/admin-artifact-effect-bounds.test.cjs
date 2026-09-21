@@ -142,17 +142,53 @@ test('manual editor hint updates for recipe quantity and remains advisory', () =
 });
 
 
-test('second refinement shows live first-refinement bounds for every effect without constraining inputs', () => {
-  assert.match(ui, /function firstDepthHint\(range\)/);
-  assert.match(ui, /if \(stage !== 2\) return ''/);
-  assert.match(ui, /fetch\('\/api\/artifact-depth-effect-ranges\?stage=1'\)/);
-  assert.match(ui, /firstDepthDefaults = prior\.ranges/);
-  assert.match(ui, /pending\.has\('1'\) \? pending\.get\('1'\) \|\| \{\} : stored\(\)\['1'\] \|\| \{\}/);
-  assert.match(ui, /const actual = edits\[range\.type\] \|\| first/);
-  assert.match(ui, /'第一煉參考：下限 ' \+ actual\.min \+ ' ／ 上限 ' \+ actual\.max/);
-  assert.match(ui, /actual\.durationMinutesMin/);
-  assert.match(ui, /firstDepthHint\(range\) \+ '<\/div>'/);
-  assert.match(ui, /僅提醒，不限制第二煉填寫/);
-  assert.match(ui, /id="aeb-previous-note"/);
-  assert.doesNotMatch(ui.slice(ui.indexOf('function validate('),ui.indexOf('function numberField(')), /firstDepthDefaults|firstDepthHint/);
+test('second and third refinement display earlier stages, including pending edits, without enforcing progression', () => {
+  assert.match(ui,/function priorDepthHint\(range, priorDepth\)/);
+  assert.match(ui,/function previousDepthHints\(range\)/);
+  assert.match(ui,/Array\.from\(\{ length:stage - 1 \}, \(_, index\) => index \+ 1\)/);
+  assert.match(ui,/priorDepthDefaults\.set\(priorStage, result\.ranges\)/);
+  assert.match(ui,/fetch\('\/api\/artifact-depth-effect-ranges\?stage=' \+ priorStage\)/);
+  assert.match(ui,/const edits = pending\.has\(key\) \? pending\.get\(key\) \|\| \{\} : stored\(\)\[key\] \|\| \{\}/);
+  assert.match(ui,/const actual = edits\[range\.type\] \|\| prior/);
+  assert.match(ui,/actual\.durationMinutesMin/);
+  assert.match(ui,/previousDepthHints\(range\) \+ '<\/div>'/);
+  assert.match(ui,/第三煉設定：每項功能下方同時顯示第一煉及第二煉的上下限/);
+  assert.match(ui,/僅提醒，不限制本煉填寫/);
+  assert.match(ui,/id="aeb-previous-note"/);
+  assert.doesNotMatch(ui.slice(ui.indexOf('function validate('),ui.indexOf('function numberField(')), /priorDepthDefaults|priorDepthHint/);
+
+  const from=ui.indexOf('  function priorDepthHint(');
+  const to=ui.indexOf('  function draw() {',from);
+  assert.ok(from>0 && to>from);
+  const hintSource=ui.slice(from,to);
+  const getter=new Function('context', 'const {stage,priorDepthDefaults,pending,stored,esc}=context;\n'+
+    hintSource+'\nreturn previousDepthHints;');
+  const flat={type:'equip_attack_flat',field:'value',unit:'點',min:80,max:120};
+  const timed={type:'timed_attack_multiplier',field:'multiplier',unit:'倍',min:1.1,max:1.3,
+    durationMinutesMin:2,durationMinutesMax:4};
+  const context={
+    stage:3,
+    priorDepthDefaults:new Map([
+      [1,[flat,timed]],
+      [2,[{...flat,min:100,max:180},{...timed,min:1.4,max:1.8,durationMinutesMin:5,durationMinutesMax:9}]]
+    ]),
+    pending:new Map([['2',{equip_attack_flat:{min:130,max:210},
+      timed_attack_multiplier:{min:1.5,max:2,durationMinutesMin:6,durationMinutesMax:12}}]]),
+    stored:()=>({'1':{equip_attack_flat:{min:90,max:150}},'2':{}}),
+    esc:value=>String(value)
+  };
+  const third=getter(context)(flat);
+  assert.match(third,/第一煉參考：下限 90 ／ 上限 150 點/);
+  assert.match(third,/第二煉參考：下限 130 ／ 上限 210 點/);
+  assert.ok(third.indexOf('第一煉參考') < third.indexOf('第二煉參考'));
+  const timedThird=getter(context)(timed);
+  assert.match(timedThird,/第一煉參考：下限 1.1 ／ 上限 1.3 倍；持續 2～4 分鐘/);
+  assert.match(timedThird,/第二煉參考：下限 1.5 ／ 上限 2 倍；持續 6～12 分鐘/);
+  assert.match(getter({...context,stage:2})(flat),/第一煉參考：下限 90/);
+  assert.doesNotMatch(getter({...context,stage:2})(flat),/第二煉參考/);
+  assert.equal(getter({...context,stage:1})(flat),'');
+  assert.match(getter({...context,priorDepthDefaults:new Map([[1,[flat]]])})(flat),
+    /第二煉參考值暫時無法載入/);
+  assert.match(getter(context)({type:'equip_copy_enemy_artifact',field:'none'}),
+    /第一煉：此功能未開放/);
 });
