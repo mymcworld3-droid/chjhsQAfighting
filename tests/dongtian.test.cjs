@@ -48,6 +48,22 @@ test('Dongtian first plans question count and fixed single-choice structure with
   assert.equal(api.normalizePlannedQuestionCount(30), 30);
 });
 
+test('new Dongtian names describe the learning content, not a xianxia realm', () => {
+  const prompt = api.buildPlanningPrompt('一次函數與座標圖形', '國中一年級', 0, 'low');
+  assert.match(prompt, /洞天名稱必須直接描述素材的實際學習內容/);
+  assert.match(prompt, /禁止使用修仙、仙俠、秘境、玄幻/);
+  assert.match(prompt, /一次函數與圖形/);
+  assert.doesNotMatch(prompt, /洞天名稱要像修仙世界中的秘境名稱/);
+
+  assert.equal(api.contentBasedDongtianName({ knowledgePoints: ['一次函數', '圖形判讀'], subject:'數學' }), '一次函數與圖形判讀');
+  assert.equal(api.contentBasedDongtianName({ knowledgePoints: [], subject:'歷史' }), '歷史重點整理');
+  assert.equal(api.contentBasedDongtianName({ subject:'綜合' }), '學習重點整理');
+  assert.equal(api.normalizeDongtianPlan({
+    questionCount:10, knowledgePoints:['進位制', '補數'], subject:'數學'
+  }, '國中一年級', 'low').name, '進位制與補數');
+  assert.match(api.buildDongtianDoubleCheckPrompt({ name:'進位制與補數', questions:[] }), /禁止修仙風格或空泛文藝名稱/);
+});
+
 test('Dongtian generates up to five questions per batch and carries all previous questions into the next prompt', () => {
   const plan = api.normalizeDongtianPlan({
     name:'星軌算境', level:'國中三年級', difficulty:'medium', subject:'數學',
