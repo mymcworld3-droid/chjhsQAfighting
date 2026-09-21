@@ -625,7 +625,7 @@ test('recipe compendium uses artifact cards and visual material tiles rather tha
 
 test('recipe compendium protects unknown formulas and still shows public, first-owned or licensed recipes', () => {
   assert.match(refinery, /const learned = userData\(\)\?\.recipeLicenses\?\.\[item\.id\] === true/);
-  assert.match(refinery, /const canReadRecipe = !item\.recipeOwnerUid \|\| mine \|\| learned/);
+  assert.match(refinery, /const canReadRecipe = recipeAvailableToPlayer\(item, myUid\)/);
   assert.match(refinery, /const recipe = canReadRecipe \? getArtifactRecipe\(item\.id\) : \[\]/);
   assert.match(refinery, /const ingredients = canReadRecipe/);
   assert.match(refinery, /canReadRecipe && item\.description/);
