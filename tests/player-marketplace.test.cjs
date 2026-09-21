@@ -21,7 +21,7 @@ test('the existing market is loaded after artifacts and materials and reachable 
   assert.match(market, /window\.openPlayerMarketplace = \(view = 'all'\)/);
   assert.match(refinery, /data-refinery-open-market/);
   assert.match(refinery, /window\.openPlayerMarketplace\?\.\('recipe'\)/);
-  assert.match(index, /main\.js\?v=20260921-ascendant-realm6/);
+  assert.match(index, /main\.js\?v=20260921-battle-stage1/);
 });
 
 test('trade offers validate quantities, price, inventory, and restrict listed equipped artifacts', () => {
