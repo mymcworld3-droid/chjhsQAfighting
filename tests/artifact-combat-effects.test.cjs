@@ -14,6 +14,18 @@ const resolverSource = read('public/cultivation/artifact-battle-effects.js');
 const manager = read('public/cultivation/admin-artifact-manager.js');
 const legacy = read('public/main-legacy.js');
 const main = read('public/main.js');
+const formal = read('public/cultivation/battle-mode-v2.js');
+const engineSource = read('public/cultivation/battle-engine-v2.js');
+
+function loadCombatEngine() {
+  const ctx = {};
+  const code = engineSource
+    .replace(/export const /g, 'const ')
+    .replace(/export function /g, 'function ')
+    + '\nthis.api={settleBattleRound};';
+  vm.runInNewContext(code, ctx);
+  return ctx.api;
+}
 
 function loadResolver(randomValue = 0.5) {
   const math = Object.create(Math);
@@ -217,4 +229,65 @@ test('admin guide includes copy-enemy effect and both flat/percentage defensive 
   assert.match(manager, /百分比減傷/);
   assert.match(manager, /硬上限：0\.10 = 10%/);
   assert.match(manager, /不會複製「複製」本身/);
+});
+
+test('formal matchmaking captures equipped combat effects and persists their state after settlement', () => {
+  assert.match(formal, /const artifactBattle = window\.getArtifactBattleSnapshot\?\.\(\)/);
+  assert.match(formal, /artifactBattle, artifactShield:/);
+  assert.match(formal, /artifactFirstHitUsed: false, artifactCheatDeathUsed: false/);
+  assert.match(formal, /resolveEquipmentHit: window\.resolveArtifactBattleHit/);
+  for (const field of ['artifactShield', 'artifactFirstHitUsed', 'artifactCheatDeathUsed']) {
+    assert.match(formal, new RegExp("'host\\." + field + "': outcome.hostArtifactState\\." + field));
+    assert.match(formal, new RegExp("'guest\\." + field + "': outcome.guestArtifactState\\." + field));
+  }
+});
+
+test('equipped damage and true damage reach actual formal HP with defensive shield and round persistence', () => {
+  const runtime = loadResolver(0.99);
+  const engine = loadCombatEngine();
+  const host = player([
+    { type:'equip_damage_percent', value:0.5, artifactName:'破軍劍' },
+    { type:'equip_true_damage_flat', value:40, artifactName:'破軍劍' },
+    { type:'equip_on_correct_shield_flat', value:75, artifactName:'護元佩' }
+  ], { uid:'host', atk:200, coreCorrectStreak:0, answer:{correct:true,atMs:1000} });
+  const guest = player([
+    { type:'equip_damage_reduction_percent', value:0.2, artifactName:'護體袍' }
+  ], { uid:'guest', artifactShield:60, atk:200, coreCorrectStreak:0, answer:{correct:false,atMs:2000} });
+
+  const first = engine.settleBattleRound({
+    roomId:'formal-artifact', round:1, host, guest,
+    resolveEquipmentHit:runtime.resolveArtifactBattleHit
+  });
+  // (200 * 1.5) * 0.8 + 40 true - 60 opening shield = 220 HP damage.
+  assert.equal(first.guestHp, 780);
+  assert.equal(first.hostHp, 1000);
+  assert.equal(first.steps[0].damage, 220);
+  assert.match(first.logs[0].skill, /增傷\+50%/);
+  assert.match(first.logs[0].skill, /真傷\+40/);
+  assert.equal(first.hostArtifactState.artifactShield, 75);
+  assert.equal(first.guestArtifactState.artifactShield, 0);
+
+  const second = engine.settleBattleRound({
+    roomId:'formal-artifact', round:2,
+    host:{...host, hp:first.hostHp, ...first.hostArtifactState, answer:{correct:false,atMs:2000}},
+    guest:{...guest, hp:first.guestHp, ...first.guestArtifactState, answer:{correct:true,atMs:1000}},
+    resolveEquipmentHit:runtime.resolveArtifactBattleHit
+  });
+  assert.equal(second.hostHp, 875);
+  assert.equal(second.hostArtifactState.artifactShield, 0);
+  assert.equal(second.guestHp, 780);
+});
+
+test('artifact crit/combo decisions are stable when a transaction recomputes the same hit', () => {
+  const runtime = loadResolver(0.3);
+  const attacker = player([
+    {type:'equip_damage_percent',value:0.25},
+    {type:'equip_crit_chance',value:0.6},
+    {type:'equip_combo_chance',value:0.1}
+  ], {uid:'attacker'});
+  const defender = player([], {uid:'defender'});
+  const attack = () => runtime.resolveArtifactBattleHit({
+    attacker:{...attacker}, defender:{...defender}, baseDamage:200, seed:'room:1:attacker:artifact'
+  });
+  assert.deepEqual(JSON.parse(JSON.stringify(attack())), JSON.parse(JSON.stringify(attack())));
 });
