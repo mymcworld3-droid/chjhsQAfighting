@@ -59,7 +59,7 @@ test('login bootstrap dependencies exist before Google login can be clicked', ()
 
   assert.match(index, /onclick="googleLogin\(\)"/);
   assert.match(index, /<script type="module" src="main\.js(?:\?[^\"]+)?"><\/script>/);
-  assert.match(main, /^import '\.\/main-legacy\.js';/m);
+  assert.match(main, /^import '\.\/main-legacy\.js(?:\?v=[^']+)?';/m);
   assert.match(legacy, /window\.googleLogin\s*=\s*\(\)\s*=>/);
   assert.ok(existsSync(join(publicDir, 'cultivation-rules.js')), 'legacy cultivation rules compatibility module exists');
 });
