@@ -63,3 +63,36 @@ test('artifact editor persists validated recipes together with artifact changes'
   assert.match(artifactManager, /normalizedRecipes = validateArtifactRecipes\(nextRecipes\)/);
   assert.match(artifactManager, /await persistCatalog\(next, normalizedRecipes, ownerOverride\)/);
 });
+
+test('admin can inspect and explicitly reassign a recipe owner, including a public recipe', () => {
+  assert.match(artifactManager, /配方擁有人（管理員）/);
+  assert.match(artifactManager, /現任：/);
+  assert.match(artifactManager, /aam-owner-change/);
+  assert.match(artifactManager, /aam-owner-uid/);
+  assert.match(artifactManager, /aam-owner-name/);
+  assert.match(artifactManager, /const changeOwner = modal\.querySelector\('#aam-owner-change'\)\?\.checked === true/);
+  assert.match(artifactManager, /const ownerOverride = changeOwner \? \{ id, uid:nextUid, name:nextName \} : null/);
+  assert.match(artifactManager, /persistCatalog\(next, normalizedRecipes, ownerOverride\)/);
+  assert.match(artifactManager, /const transferRef = ownerOverride\?\.uid \? doc\(db, 'users', ownerOverride\.uid\) : null/);
+  assert.match(artifactManager, /transferRef && !transferSnap\?\.exists\(\)/);
+  assert.match(artifactManager, /if \(!owner && ownerOverride\?\.id !== item\.id\) return secured/);
+  assert.match(artifactManager, /recipeOwnerUid: ownerOverride\.uid/);
+  assert.match(artifactManager, /recipeOwnerUid: owner\.recipeOwnerUid/);
+  assert.match(artifactManager, /配方：\$\{escapeHtml\(recipeSummaryText\(item\.id\)\)\} · 擁有人：/);
+});
+
+test('admin can publish a saved recipe at a validated price without transferring ownership', () => {
+  assert.match(artifactManager, /管理員配方上架/);
+  assert.match(artifactManager, /data-aam-list-recipe/);
+  assert.match(artifactManager, /function adminListRecipe\(/);
+  assert.match(artifactManager, /Number\.isSafeInteger\(price\)/);
+  assert.match(artifactManager, /userSnap\.data\(\)\?\.isAdmin !== true/);
+  assert.match(artifactManager, /recipeSnap\.data\(\)\?\.recipes\?\.\[artifactId\]/);
+  assert.match(artifactManager, /tx\.set\(listingRef,/);
+  assert.match(artifactManager, /adminManaged:true, type:'recipe', itemId:artifactId/);
+  assert.match(artifactManager, /recipeSaleLocked:true/);
+  assert.match(artifactManager, /replaceArtifactCatalog\(updatedCatalog, 'admin-recipe-listing'\)/);
+  assert.match(artifactManager, /lockedIds\.has\(item\.id\)/);
+  assert.match(artifactManager, /recipeSaleLocked: original\?\.recipeSaleLocked === true/);
+  assert.match(artifactManager, /請先儲存配方或擁有人變更，再上架/);
+});
