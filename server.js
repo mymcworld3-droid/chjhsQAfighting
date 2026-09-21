@@ -29,7 +29,10 @@ app.get('/api/ai-status', (req, res) => {
     res.json({
         strategy: process.env.AI_PROVIDER_STRATEGY || 'round-robin',
         count: providers.length,
-        providers
+        providers,
+        // Recent actual attempts (including fallbacks), not just configured providers.
+        // In-memory per Render instance; no keys, prompts or user identifiers.
+        recent: aiRouter.getRecentActivity()
     });
 });
 
@@ -48,7 +51,7 @@ app.post('/api/analyze-subjects', async (req, res) => {
         `;
 
         const routed = await aiRouter.generateJSON(prompt);
-        res.json({ subjects: routed.data.subjects, provider: routed.provider });
+        res.json({ subjects: routed.data.subjects, provider: routed.provider, model: routed.model });
 
     } catch (error) {
         console.error("Analyze Error:", error);
@@ -263,7 +266,7 @@ app.post('/api/generate-quiz', async (req, res) => {
             if(!parsed.sub_topic) parsed.sub_topic = targetTopic;
             if(!parsed.subject) parsed.subject = subject;
 
-            return res.json({ text: JSON.stringify(parsed), provider: routed.provider });
+            return res.json({ text: JSON.stringify(parsed), provider: routed.provider, model: routed.model });
 
         } catch (error) {
             console.error(`Attempt ${attempts + 1} failed:`, error.message);
@@ -302,7 +305,7 @@ app.post('/api/verify-report', async (req, res) => {
 
     try {
         const routed = await aiRouter.generateJSON(prompt);
-        res.json({ ...routed.data, provider: routed.provider });
+        res.json({ ...routed.data, provider: routed.provider, model: routed.model });
     } catch (error) {
         console.error("Report Verification Error:", error);
         // 若 AI 發生錯誤，保守起見設為無效，並請玩家稍後再試
