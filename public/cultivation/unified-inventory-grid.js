@@ -4,6 +4,7 @@ import {
   getMaterialById,
   materialRealmColor,
   materialRealmOrderByName,
+  materialMarketReferencePrice,
   artifactRecipeDepth,
   MAX_ARTIFACT_RECIPE_NESTING
 } from './material-catalog.js';
@@ -331,7 +332,7 @@ import {
         ? `<ul>${item.effects.map((effect) => `<li>${escapeHtml(effectLabel(effect))}</li>`).join('')}</ul>`
         : '<p>目前沒有額外效果資料。</p>'}${equippedHere ? '<p class="uib-equipped-note"><i class="fa-solid fa-circle-check"></i> 目前已裝備，效果正在生效</p>' : ''}${equipAction}</div>`;
     } else if (item.type === 'material') {
-      extra = `<div class="uib-detail-section"><span>材料資訊</span><p>分類：${escapeHtml(item.category)}</p><p>${item.buyGold > 0 ? `坊市參考價：${item.buyGold} 金幣` : '此材料不可直接購買'}</p></div>`;
+      extra = `<div class="uib-detail-section"><span>材料資訊</span><p>分類：${escapeHtml(item.category)}</p><p>坊市參考單價：${materialMarketReferencePrice(item.realm).toLocaleString()} 金幣 · ${item.buyGold > 0 ? `系統採購價：${item.buyGold} 金幣` : '不可直接向系統採購'}</p></div>`;
     } else if (item.id === 'revival-pill') {
       extra = `<div class="uib-detail-section"><span>使用效果</span><p>服用後立即增加 ${item.cultivationGain || 100} 修為。</p><button type="button" class="uib-use-btn" data-uib-use="revival-pill">服用一顆</button></div>`;
     }
