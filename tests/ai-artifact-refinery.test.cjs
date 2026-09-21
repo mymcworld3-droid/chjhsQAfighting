@@ -195,6 +195,44 @@ test('generation prompt receives selected ingredients, full material catalog, ex
   assert.match(prompt, /玄武意象/);
 });
 
+test('ordinary forging favors attack artifacts and allows effective offensive first-refinement cores', () => {
+  const payload = {
+    selectedIngredients:[{type:'material',id:'iron',quantity:2}],
+    allMaterials:[{id:'iron',name:'玄鐵',realm:'煉氣',description:'可鍛造鋒利兵刃',story:'曾用於前線兵器'}],
+    existingArtifacts:[]
+  };
+  const prompt = api.buildPrompt(payload);
+  assert.match(prompt, /攻擊型法寶占多數（目標約七成至八成）/);
+  assert.match(prompt, /第一煉就能提供合理的固定攻擊、百分比攻擊、增傷、真傷或暴擊/);
+  assert.match(prompt, /第一煉允許直接生成攻擊型器胚與其實際攻擊效果/);
+  assert.match(prompt, /劍胚、刃胚、槍尖、箭簇、破甲符骨、雷擊核心、炎脈器芯/);
+  assert.match(prompt, /至少要有一項實際的攻擊／增傷／真傷／暴擊／連擊／低血增傷/);
+  assert.match(prompt, /"type": "equip_attack_flat"/);
+  assert.doesNotMatch(prompt, /"type": "equip_cheat_death"/);
+  // Direction sampling is intentionally biased, not a compulsory reclassification.
+  const source = read('artifact-generation-api.js');
+  const directions = source.slice(source.indexOf('  const creativeDirections = ['), source.indexOf('  const creativeDirection ='));
+  assert.equal((directions.match(/^    '/gm) || []).length, 8);
+  assert.equal((directions.match(/^    '(?:鋒銳兵胚|雷火攻器|破陣戰器|星辰殺器|兇烈戰器|精巧飛刃)/gm) || []).length, 6);
+  const defensive = api.buildPrompt({...payload,adminGenerationPrompt:'只煉護盾類防具，不要任何攻擊能力'});
+  assert.match(defensive, /只煉護盾類防具，不要任何攻擊能力/);
+  assert.match(defensive, /不要用隨機風格取代管理員要求/);
+  const stageTwo = api.buildPrompt({
+    selectedIngredients:[{type:'artifact',id:'blade',quantity:1},{type:'material',id:'iron',quantity:1}],
+    allMaterials:payload.allMaterials,
+    existingArtifacts:[{id:'blade',name:'雷刃胚',realm:'煉氣',description:'具備攻擊力的刃胚',refinementDepth:0,
+      effects:[{type:'equip_attack_flat',value:12}]}]
+  });
+  assert.match(stageTwo, /承接攻擊型器胚時，優先形成可用的劍、槍、刃、弓/);
+  const stageThree = api.buildPrompt({
+    selectedIngredients:[{type:'artifact',id:'blade',quantity:1},{type:'material',id:'iron',quantity:1}],
+    allMaterials:payload.allMaterials,
+    existingArtifacts:[{id:'blade',name:'雷刃',realm:'煉氣',description:'已完成的雷刃',refinementDepth:1,
+      effects:[{type:'equip_attack_flat',value:24}]}]
+  });
+  assert.match(stageThree, /攻擊型前階成品應延續其核心攻擊能力/);
+});
+
 test('material lore is preserved by both admin editors and delivered as official ingredient context', () => {
   const materialCatalog = read('public/cultivation/material-catalog.js');
   const editor = read('public/cultivation/admin-material-manager.js');
