@@ -24,7 +24,7 @@ test('index contains all visual-critical theme and training styles up front', ()
   for (const id of [
     'training-fluid-layout-style',
     'content-capacity-layout-style',
-    'cultivation-refinery-v2-style',
+    'cultivation-refinery-v2-preload-style',
     'market-fluid-layout-style',
     'golden-core-access-guard-style'
   ]) {
