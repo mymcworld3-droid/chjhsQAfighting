@@ -164,6 +164,22 @@ export function materialRealmOrderByName(name) {
   return materialRealmMetaByName(name)?.order ?? 0;
 }
 
+// Unified market reference values: materials of the same realm always share
+// one per-unit price, independently of their optional NPC purchase (buyGold).
+// Mortal starts at 10 and Qi starts at 20; each subsequent realm doubles.
+export function materialMarketReferencePrice(materialOrRealm) {
+  const realm = typeof materialOrRealm === 'string' ? materialOrRealm : materialOrRealm?.realm;
+  const index = Math.max(0, Math.min(10, materialRealmOrderByName(realm)));
+  return 10 * 2 ** index;
+}
+
+export function materialMarketMinimumTotal(materialOrRealm, quantity = 1) {
+  const count = Number(quantity);
+  if (!Number.isSafeInteger(count) || count < 1) return 0;
+  // Listing price is an integer TOTAL price, and must be strictly greater.
+  return materialMarketReferencePrice(materialOrRealm) * count + 1;
+}
+
 export function materialRealmColor(name) {
   return materialRealmMetaByName(name)?.color || '#d4d4d8';
 }
