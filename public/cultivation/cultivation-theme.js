@@ -69,7 +69,8 @@
     const current = realmFor(value);
     const next = nextRealm(value);
     if (!next) return 100;
-    return Math.max(0, Math.min(100, ((value - current.need) / (next.need - current.need)) * 100));
+    if (next.name === '真仙' && next.need <= value) return 100;
+    return Math.max(0, Math.min(100, ((value - current.need) / Math.max(1, next.need - current.need)) * 100));
   }
 
   function todayKey() {
@@ -140,7 +141,7 @@
       panel.dataset.xiuxianBound = '1';
       panel.querySelector('#xiuxian-meditate')?.addEventListener('click', meditate);
       panel.querySelector('#xiuxian-path')?.addEventListener('click', () => {
-        alert(REALMS.map((realm) => `${realm.emoji} ${realm.name} ${realm.sub}：${realm.need} 修為起${realm.name === '真仙' ? '，且須在九州五大仙榜上' : ''}`).join('\n'));
+        alert(REALMS.map((realm) => `${realm.emoji} ${realm.name} ${realm.sub}：${realm.need} 修為起${realm.name === '真仙' ? '，且只有九州五大仙榜在榜者可達成' : ''}`).join('\n'));
       });
     }
   }
@@ -202,10 +203,10 @@
     if (bar) bar.style.width = `${pct(value)}%`;
 
     const nextEl = document.getElementById('xiuxian-next');
-    if (nextEl) nextEl.textContent = next?.name === '真仙' && value >= next.need ? '需登上九州五大仙榜' : next ? `${Math.max(0, next.need - value).toLocaleString()} 修為` : '已登仙';
+    if (nextEl) nextEl.textContent = next?.name === '真仙' && value >= next.need ? '需登上九州五大仙榜' : next ? `${Math.max(0, next.need - value).toLocaleString()} 修為` : '已成真仙';
 
     const label = document.getElementById('xiuxian-progress-label');
-    if (label) label.textContent = next ? `下一境界：${next.name} ${next.sub}` : '已登仙，繼續悟道';
+    if (label) label.textContent = next?.name === '真仙' && value >= next.need ? '登仙已成 · 爭奪真仙席位' : next ? `下一境界：${next.name} ${next.sub}` : '榜上有名，位列真仙';
 
     const med = document.getElementById('xiuxian-meditate');
     if (med) {
