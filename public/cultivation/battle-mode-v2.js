@@ -217,6 +217,11 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
     return player?.goldenCore?.name ? `${player.goldenCore.name} · ${player.goldenCore.grade}品` : '未調御金丹';
   }
 
+  function playerPowerLabel(player) {
+    return Number.isFinite(Number(player?.combatPower)) && Number(player.combatPower) > 0
+      ? ' · 戰力 ' + Math.round(Number(player.combatPower)).toLocaleString('zh-TW') : '';
+  }
+
   function combatSnapshot() {
     const stats = window.getCombatStats?.() || window.getCombatStatDefaults?.() || { attack: 200, hp: 1000, maxHp: 1000 };
     const maxHp = Math.max(1, Math.round(finite(stats.maxHp, 1000)));
@@ -235,6 +240,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
       name: data.displayName || user.displayName || '無名修士',
       rankLevel: Math.max(0, Number(data.stats?.rankLevel) || 0),
       totalScore: Math.max(0, Number(data.stats?.totalScore) || 0),
+      combatPower: Math.max(0, Math.round(Number(window.getCombatPower?.().total) || 0)),
       atk: combat.attack,
       hp: combat.maxHp,
       maxHp: combat.maxHp,
@@ -435,18 +441,18 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
     showSection('lobby');
     const mine = state.role ? playerForRole(room, state.role) : playerSnapshot();
     const opp = state.role ? playerForRole(room, otherRole(state.role)) : null;
-    setText('bv2-match-me', mine?.name || '修士'); setText('bv2-match-me-core', `本命金丹：${playerCoreLabel(mine)}`);
+    setText('bv2-match-me', mine?.name || '修士'); setText('bv2-match-me-core', `本命金丹：${playerCoreLabel(mine)}${playerPowerLabel(mine)}`);
     setText('bv2-room-badge', state.roomId ? `ROOM ${state.roomId.slice(0, 6).toUpperCase()}` : 'SEARCHING');
     setText('bv2-lobby-title', opp ? '已尋得對手' : '正在搜尋對手');
     setText('bv2-lobby-status', opp ? '雙方靈識已鎖定，即將登上鬥法臺。' : '優先尋找修為相近、等待較久的道友。');
-    setText('bv2-match-enemy', opp?.name || '搜尋中…'); setText('bv2-match-enemy-core', opp ? playerCoreLabel(opp) : '等待道友入場');
+    setText('bv2-match-enemy', opp?.name || '搜尋中…'); setText('bv2-match-enemy-core', opp ? playerCoreLabel(opp) + playerPowerLabel(opp) : '等待道友入場');
   }
 
   function renderIntro(room) {
     showSection('intro');
     const mine = playerForRole(room, state.role); const enemy = playerForRole(room, otherRole(state.role));
     setText('bv2-intro-me', mine?.name || '我方修士'); setText('bv2-intro-enemy', enemy?.name || '對手修士');
-    setText('bv2-intro-me-core', playerCoreLabel(mine)); setText('bv2-intro-enemy-core', playerCoreLabel(enemy));
+    setText('bv2-intro-me-core', playerCoreLabel(mine) + playerPowerLabel(mine)); setText('bv2-intro-enemy-core', playerCoreLabel(enemy) + playerPowerLabel(enemy));
     setText('bv2-room-badge', `ROOM ${state.roomId.slice(0, 6).toUpperCase()}`);
     updateIntroText(room);
   }
@@ -665,8 +671,8 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
     setText('bv2-round', room.round + ' / ' + (room.maxRounds || BATTLE_V2.maxRounds));
     setText('bv2-my-name', mine.name || '我方');
     setText('bv2-enemy-name', enemy.name || '對手');
-    setText('bv2-my-core', '本命金丹：' + playerCoreLabel(mine) + (mine.coreShield ? ' · 道心護體' : ''));
-    setText('bv2-enemy-core', '本命金丹：' + playerCoreLabel(enemy) + (enemy.coreShield ? ' · 道心護體' : ''));
+    setText('bv2-my-core', '本命金丹：' + playerCoreLabel(mine) + playerPowerLabel(mine) + (mine.coreShield ? ' · 道心護體' : ''));
+    setText('bv2-enemy-core', '本命金丹：' + playerCoreLabel(enemy) + playerPowerLabel(enemy) + (enemy.coreShield ? ' · 道心護體' : ''));
     const key = settlementKey(room);
     const replay = (room.status === 'settled' || room.status === 'finished') &&
       Number(room.lastSettlement?.round) === Number(room.round) && state.reviewedRound === Number(room.round);
@@ -1048,7 +1054,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
     }
     resetRuntime(); state.starting = true; ensurePage(); window.switchToPage?.('page-battle'); showSection('lobby'); renderLobby(null);
     try {
-      await window.ensureCombatStats?.(); const myData = playerSnapshot(); setText('bv2-match-me', myData.name); setText('bv2-match-me-core', `本命金丹：${playerCoreLabel(myData)}`);
+      await window.ensureCombatStats?.(); const myData = playerSnapshot(); setText('bv2-match-me', myData.name); setText('bv2-match-me-core', `本命金丹：${playerCoreLabel(myData)}${playerPowerLabel(myData)}`);
       const joined = await findAndClaimRoom(myData); if (joined) { state.role = 'guest'; subscribeRoom(joined); return; }
       setText('bv2-lobby-status', '目前沒有可加入的道友，正在開啟鬥法臺…'); const created = await createWaitingRoom(myData); state.role = 'host'; subscribeRoom(created); scheduleReconcile();
     } catch (error) { console.error('[Battle v2] matchmaking failed:', error); toast('配對失敗，請稍後再試。'); resetRuntime(); window.switchToPage?.('page-home'); }
