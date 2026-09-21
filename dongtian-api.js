@@ -424,14 +424,18 @@ ${JSON.stringify(dongtian)}
 5. 題組是否有明顯重複、互相矛盾，題序是否由基礎到理解／應用。
 6. 洞天名稱、主要科目與程度是否和整組題目相符。
 
-[輸出 JSON Only]
+[判定規則]
+- 逐題確實檢查；若所有題目正確且符合上列條件，approved=true、confidence 給 0～1 的實際信心值，issues 必須為 []。
+- 僅在能指明真實、可驗證的錯誤時填入 issues，每筆必須對應洞天內真實存在的 questionId 並清楚說明錯誤。
+- 沒有具體錯誤時，不要為了符合輸出範例而編造 issues；不得複製範例的 confidence 數字。
+- 若有任何實質錯題，approved=false；單純個人風格偏好不應被列為實質錯誤。
+
+[輸出 JSON Only，以下只是格式示例：沒有發現錯誤時]
 {
   "approved": true,
-  "confidence": 0.0,
-  "summary": "整體審核理由",
-  "issues": [
-    { "questionId": "DT-001", "issue": "具體錯誤" }
-  ]
+  "confidence": 0.95,
+  "summary": "逐題檢查後未發現明確錯誤",
+  "issues": []
 }`;
 }
 
