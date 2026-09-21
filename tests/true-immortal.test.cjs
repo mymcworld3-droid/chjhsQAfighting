@@ -9,7 +9,7 @@ function setup() {
   vm.runInNewContext(source, { window, Event });
   return window;
 }
-const realms = [{ name: '凡人' }, { name: '渡劫' }, { name: '真仙' }];
+const realms = [{ name: '凡人' }, { name: '渡劫' }, { name: '登仙' }, { name: '真仙' }];
 test('True Immortal requires both the 868 threshold and an active named seat', () => {
   const w = setup();
   for (const listed of [false, true]) {
