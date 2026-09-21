@@ -16,7 +16,7 @@ test('Dongtian always has a visible Firebase-free launcher in Dongfu', () => {
   assert.match(entry, /開啟洞天/);
   assert.match(entry, /開闢與遊歷洞天/);
   assert.match(entry, /dongtian-launcher-card/);
-  assert.match(entry, /import\('\.\/dongtian\.js\?v=20260921-create-diagnostics1'\)/);
+  assert.match(entry, /import\('\.\/dongtian\.js\?v=20260921-dongtian-fullscreen1'\)/);
 });
 
 test('main bundle is cache-busted so a stale client cannot hide Dongtian', () => {
