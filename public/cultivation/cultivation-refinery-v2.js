@@ -141,6 +141,27 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
     });
   }
 
+  // 配方是製作知識；只有公共、首發本人或已取得授權者可看見素材細節。
+  function recipeIngredientMarkup(row) {
+    const token = ingredientToken(row);
+    const meta = ingredientMeta(token);
+    const needed = Math.max(1, Math.floor(Number(row.quantity) || 1));
+    const available = ingredientAvailable(token);
+    const enough = available >= needed;
+    const description = String(meta.item?.description || '').trim();
+    return `<li class="refinery-recipe-ingredient ${enough ? 'is-ready' : 'is-missing'}"
+        style="--recipe-ingredient-color:${esc(meta.color)}">
+        <span class="refinery-recipe-material-icon" aria-hidden="true">${esc(meta.icon)}</span>
+        <div class="refinery-recipe-material-copy">
+          <strong>${esc(meta.name)}</strong>
+          <span class="refinery-recipe-material-meta">${esc(meta.realm)} · ${esc(meta.category)}</span>
+          ${description ? `<small class="refinery-recipe-material-note">${esc(description)}</small>` : ''}
+          <span class="refinery-recipe-stock ${enough ? 'is-ready' : 'is-missing'}">可用 ${available} / 需要 ${needed}${enough ? ' · 齊備' : ' · 尚缺 ' + (needed - available)}</span>
+        </div>
+        <b class="refinery-recipe-required">×${needed}</b>
+      </li>`;
+  }
+
   function recipeBookMarkup() {
     const myUid = authUser()?.uid || '';
     const known = ARTIFACT_CATALOG.filter((item) => getArtifactRecipe(item.id).length);
@@ -153,29 +174,52 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
       || String(a.name).localeCompare(String(b.name), 'zh-Hant'));
     const cards = entries.map((item) => {
       const mine = !!myUid && item.recipeOwnerUid === myUid;
+      const learned = userData()?.recipeLicenses?.[item.id] === true;
+      const canReadRecipe = !item.recipeOwnerUid || mine || learned;
       const owner = item.recipeOwnerUid
         ? (mine ? '你是首位發現者 · 配方擁有權已登錄' : `首發擁有者：${esc(item.recipeOwnerName || '無名修士')}`)
         : '既有公共配方';
-      const access = item.recipeOwnerUid && !mine ? (userData()?.recipeLicenses?.[item.id] === true ? ' · 已學會製作方法' : ' · 製作方法尚未習得') : '';
+      const access = item.recipeOwnerUid && !mine ? (learned ? ' · 已學會製作方法' : ' · 製作方法尚未習得') : '';
       const discovered = item.recipeOwnerUid && item.recipeDiscoveredAtMs
         ? new Date(item.recipeDiscoveredAtMs).toLocaleDateString('zh-TW') : '';
-      const canReadRecipe = !item.recipeOwnerUid || mine || userData()?.recipeLicenses?.[item.id] === true;
-      const ingredients = canReadRecipe ? getArtifactRecipe(item.id).map((row) => {
-        const material = row.materialId ? getMaterialById(row.materialId) : getArtifactById(row.artifactId);
-        return `${esc(material?.name || row.materialId || row.artifactId || '素材')} ×${Math.max(1, Number(row.quantity) || 1)}`;
-      }).join(' · ') : '製作材料未公開 · 取得配方後可查看素材與數量';
-      return `<article class="refinery-recipe-card ${mine ? 'is-owner' : ''}">
-        <div><b>${esc(item.icon || '◆')} ${esc(item.name)}</b><small>${esc(item.realm)}</small></div>
-        <p>${ingredients}</p>
-        <span class="refinery-recipe-owner">${owner}${access}${discovered ? ` · ${discovered}` : ''}</span>
+      const recipe = canReadRecipe ? getArtifactRecipe(item.id) : [];
+      const cost = recipeTotal(recipe);
+      const missing = canReadRecipe ? recipe.reduce((total, row) => {
+        const needed = Math.max(1, Math.floor(Number(row.quantity) || 1));
+        return total + Math.max(0, needed - ingredientAvailable(ingredientToken(row)));
+      }, 0) : 0;
+      const statusLabel = mine ? '首發持有' : !item.recipeOwnerUid ? '公共配方' : learned ? '已學會' : '尚未解鎖';
+      const statusIcon = mine ? 'fa-crown' : !item.recipeOwnerUid ? 'fa-book-open' : learned ? 'fa-circle-check' : 'fa-lock';
+      const color = artifactRealmColor(item.realm);
+      const ingredients = canReadRecipe
+        ? `<div class="refinery-recipe-ingredients-head"><b><i class="fa-solid fa-cubes-stacked"></i> 合成材料</b><span>${cost} / ${SLOT_COUNT} 格 · ${missing ? `尚缺 ${missing} 個` : '素材齊備'}</span></div>
+           <ul class="refinery-recipe-ingredients">${recipe.map(recipeIngredientMarkup).join('')}</ul>`
+        : `<div class="refinery-recipe-sealed" role="note"><div class="refinery-recipe-seal-mark"><i class="fa-solid fa-lock"></i></div><strong>製作方法尚未習得</strong><p>此配方的素材與數量尚未公開。可在交易市集取得製作指南，或自行投入材料探索。</p></div>`;
+      return `<article class="refinery-recipe-card ${mine ? 'is-owner' : ''} ${canReadRecipe ? 'is-known' : 'is-sealed'}"
+        style="--recipe-realm-color:${esc(color)}">
+        <header class="refinery-recipe-card-head">
+          <span class="refinery-recipe-artifact-icon" aria-hidden="true">${esc(item.icon || '◆')}</span>
+          <span class="refinery-recipe-artifact-title">
+            <small class="refinery-recipe-eyebrow">煉 器 · 配 方</small>
+            <strong>${esc(item.name)}</strong>
+            <span class="refinery-recipe-subtitle">${esc(item.realm || '凡人')} · ${esc(item.category || '法寶')}${canReadRecipe ? ` · 配方深度 ${artifactRecipeDepth(item.id)}/${MAX_ARTIFACT_RECIPE_NESTING}` : ''}</span>
+          </span>
+          <span class="refinery-recipe-access ${canReadRecipe ? 'is-unlocked' : 'is-locked'}"><i class="fa-solid ${statusIcon}"></i> ${statusLabel}</span>
+        </header>
+        ${item.description ? `<p class="refinery-recipe-description">${esc(item.description)}</p>` : ''}
+        ${ingredients}
+        <footer class="refinery-recipe-card-foot">
+          <span class="refinery-recipe-owner"><i class="fa-solid fa-fingerprint"></i> ${owner}${access}</span>
+          ${discovered ? `<time class="refinery-recipe-date">${esc(discovered)}</time>` : ''}
+        </footer>
       </article>`;
     }).join('');
     return `<details class="refinery-recipe-book" data-refinery-recipe-book ${recipeBookOpen ? 'open' : ''}>
-      <summary><i class="fa-solid fa-scroll"></i> 配方圖鑑 <small>我的首發 ${owned.length} · 已學會 ${licensed.length} · 已登錄 ${known.length}</small></summary>
+      <summary><span class="refinery-recipe-book-heading"><i class="fa-solid fa-scroll"></i><strong>配方圖鑑</strong><small>RECIPE COMPENDIUM</small></span><span class="refinery-recipe-summary-count">首發 ${owned.length} · 已學會 ${licensed.length} · 登錄 ${known.length}</span><i class="fa-solid fa-chevron-down refinery-recipe-book-chevron"></i></summary>
       <div class="refinery-recipe-book-content">
-        <p>配方是製作指南，不是煉器許可證。沒有配方也能自由投入素材嘗試煉製；首發者永久保有發現紀錄，購買配方後可查看具體素材與數量。</p>
-        <button type="button" class="refinery-clear" data-refinery-open-market>前往交易市集</button>
-        ${cards || '<p>尚無已登錄的配方。投入 2～8 個素材，開爐發現第一張配方。</p>'}
+        <p class="refinery-recipe-guide"><i class="fa-solid fa-circle-info"></i><span>配方是製作指南，不是煉器許可證。沒有配方也能自由投入素材嘗試煉製；首發者永久保有發現紀錄，購買配方後可查看具體素材與數量。</span></p>
+        <div class="refinery-recipe-toolbar"><span><i class="fa-solid fa-layer-group"></i> 已收錄 ${known.length} 張法寶配方</span><button type="button" class="refinery-clear refinery-recipe-market" data-refinery-open-market><i class="fa-solid fa-scale-balanced"></i> 前往交易市集</button></div>
+        <div class="refinery-recipe-grid">${cards || '<div class="refinery-recipe-empty"><i class="fa-solid fa-book-open"></i><strong>尚無已登錄的配方</strong><p>投入 2～8 個素材，開爐探索第一張配方。</p></div>'}</div>
       </div>
     </details>`;
   }
