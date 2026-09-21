@@ -118,6 +118,6 @@ test('solo quiz uses restored active question before hitting the API and saves e
 });
 
 test('core import and page query change together to refresh browser cached code', () => {
-  assert.match(main, /main-legacy\.js\?v=20260921-solo-cache1/);
-  assert.match(index, /main\.js\?v=20260921-portrait-stage1/);
+  assert.match(main, /main-legacy\.js\?v=20260921-solo-cache2/);
+  assert.match(index, /main\.js\?v=20260921-player-profile1/);
 });
