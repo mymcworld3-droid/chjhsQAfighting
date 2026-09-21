@@ -20,7 +20,7 @@ test('realm pacing reaches Foundation in 10 answers and Golden Core 18 answers l
 });
 
 test('post-Golden-Core curve is balanced against the +2 base cultivation gain', () => {
-  const expected = [['元嬰',68],['化神',128],['煉虛',208],['合體',308],['大乘',448],['渡劫',628],['真仙',868]];
+  const expected = [['元嬰',68],['化神',128],['煉虛',208],['合體',308],['大乘',448],['渡劫',628],['登仙',868],['真仙',868]];
   for (const [name, need] of expected) assert.match(theme, new RegExp("name: '" + name + "'.*need: " + need));
   assert.match(artifacts, /id: 'golden-core'.*need: 28/);
   assert.match(artifacts, /id: 'tribulation'.*need: 628/);
