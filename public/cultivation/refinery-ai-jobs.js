@@ -281,15 +281,16 @@ import {
   function apiMaterials() {
     return MATERIAL_CATALOG.map((item) => ({
       id: item.id, name: item.name, icon: item.icon, realm: item.realm,
-      category: item.category, description: item.description || '', buyGold: Number(item.buyGold) || 0
+      category: item.category, description: item.description || '',
+      story: item.story || '', buyGold: Number(item.buyGold) || 0
     }));
   }
 
   function apiArtifacts() {
     return ARTIFACT_CATALOG.map((item) => ({
-      id: item.id, name: item.name, realm: item.realm, category: item.category,
-      description: item.description, effects: item.effects,
-      refinementDepth: artifactRecipeDepth(item.id)
+      id: item.id, name: item.name, icon: item.icon, realm: item.realm, category: item.category,
+      description: item.description, story: item.story || '', effects: item.effects,
+      equipSlot: item.equipSlot || '', refinementDepth: artifactRecipeDepth(item.id)
     }));
   }
 
