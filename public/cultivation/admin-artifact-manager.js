@@ -328,7 +328,7 @@ import {
       const aiMeta = item.generatedByAI
         ? `<div class="aam-ai-meta">AI 生成${item.aiProvider ? ` · ${escapeHtml(item.aiProvider)}` : ''}${item.generationMaterials?.length ? ` · 素材：${item.generationMaterials.map((row) => `${escapeHtml(row.name || row.id)}×${Number(row.quantity) || 1}`).join('、')}` : ''}</div>`
         : '';
-      return `<article class="aam-item ${pending ? 'is-pending' : ''}" data-admin-pending="${pending ? '1' : '0'}" style="--artifact-realm-color:${escapeHtml(color)};border-color:color-mix(in srgb,${escapeHtml(color)} 28%,rgba(255,255,255,.07))"><div class="aam-icon" style="border-color:color-mix(in srgb,${escapeHtml(color)} 55%,transparent);color:${escapeHtml(color)};background:color-mix(in srgb,${escapeHtml(color)} 10%,#171005)">${escapeHtml(item.icon || '◆')}</div><div class="aam-copy"><strong style="color:${escapeHtml(color)}">${escapeHtml(item.name)}</strong>${pending ? '<span class="aam-pending"><i class="fa-solid fa-wand-magic-sparkles"></i> AI・待處理</span>' : ''}<div class="aam-meta">${escapeHtml(item.id)} · ${escapeHtml(item.realm)} · ${escapeHtml(item.category || '法寶')} · 打造 ${Number(item.craft?.gold) || 0} 金幣 · 配方：${escapeHtml(recipeSummaryText(item.id))}</div>${aiMeta}<div class="aam-effects">${(item.effects || []).map((effect) => `<span>${escapeHtml(effectLabel(effect))}</span>`).join('')}</div></div><div class="aam-item-actions">${pending ? `<button type="button" class="aam-approve" data-admin-artifact-approve="${escapeHtml(item.id)}"><i class="fa-solid fa-check"></i> 確認已檢查</button>` : ''}<button type="button" class="aam-edit" data-admin-artifact-edit="${escapeHtml(item.id)}"><i class="fa-solid fa-pen"></i> 編輯</button></div></article>`;
+      return `<article class="aam-item ${pending ? 'is-pending' : ''}" data-admin-pending="${pending ? '1' : '0'}" style="--artifact-realm-color:${escapeHtml(color)};border-color:color-mix(in srgb,${escapeHtml(color)} 28%,rgba(255,255,255,.07))"><div class="aam-icon" style="border-color:color-mix(in srgb,${escapeHtml(color)} 55%,transparent);color:${escapeHtml(color)};background:color-mix(in srgb,${escapeHtml(color)} 10%,#171005)">${escapeHtml(item.icon || '◆')}</div><div class="aam-copy"><strong style="color:${escapeHtml(color)}">${escapeHtml(item.name)}</strong>${pending ? '<span class="aam-pending"><i class="fa-solid fa-wand-magic-sparkles"></i> AI・待處理</span>' : ''}<div class="aam-meta">${escapeHtml(item.id)} · ${escapeHtml(item.realm)} · ${escapeHtml(item.category || '法寶')} · 打造 ${Number(item.craft?.gold) || 0} 金幣 · 配方：${escapeHtml(recipeSummaryText(item.id))} · 擁有人：${escapeHtml(item.recipeOwnerName || '公共配方')}（${escapeHtml(item.recipeOwnerUid || '無 UID')}）${item.recipeSaleLocked ? ' · 付費配方' : ''}</div>${aiMeta}<div class="aam-effects">${(item.effects || []).map((effect) => `<span>${escapeHtml(effectLabel(effect))}</span>`).join('')}</div></div><div class="aam-item-actions">${pending ? `<button type="button" class="aam-approve" data-admin-artifact-approve="${escapeHtml(item.id)}"><i class="fa-solid fa-check"></i> 確認已檢查</button>` : ''}<button type="button" class="aam-edit" data-admin-artifact-edit="${escapeHtml(item.id)}"><i class="fa-solid fa-pen"></i> 編輯</button></div></article>`;
     }).join('') || '<div class="text-gray-500 text-xs">目前沒有法寶。</div>';
   }
 
@@ -431,19 +431,21 @@ import {
       // 以交易讀到的全站版本為準，管理員若使用舊畫面儲存，也不得擦除首發人。
       const persistedItems = Array.isArray(configSnap.data()?.items) ? configSnap.data().items : [];
       const owners = new Map(persistedItems.filter((item) => item?.id && item.recipeOwnerUid).map((item) => [item.id, item]));
+      const lockedIds = new Set(persistedItems.filter((item) => item?.recipeSaleLocked === true).map((item) => item.id));
       committedCatalog = normalized.map((item) => {
         const owner = owners.get(item.id);
-        if (!owner) return item;
+        const secured = lockedIds.has(item.id) ? { ...item, recipeSaleLocked:true } : item;
+        if (!owner && ownerOverride?.id !== item.id) return secured;
         // Ordinary edits preserve the transaction's latest owner. Only the exact
         // artifact explicitly selected for an admin reassignment may change it.
         if (ownerOverride?.id === item.id) return normalizeArtifactDefinition({
-          ...item,
+          ...secured,
           recipeOwnerUid: ownerOverride.uid,
           recipeOwnerName: ownerOverride.name,
-          recipeDiscoveredAtMs: ownerOverride.uid ? (owner.recipeDiscoveredAtMs || Date.now()) : 0
+          recipeDiscoveredAtMs: ownerOverride.uid ? (owner?.recipeDiscoveredAtMs || Date.now()) : 0
         });
         return normalizeArtifactDefinition({
-          ...item,
+          ...secured,
           recipeOwnerUid: owner.recipeOwnerUid,
           recipeOwnerName: owner.recipeOwnerName,
           recipeDiscoveredAtMs: owner.recipeDiscoveredAtMs
@@ -479,6 +481,7 @@ import {
     try {
       const db = getFirestore(getApp());
       const listingRef = doc(collection(db, 'marketListings'));
+      let updatedCatalog = null;
       await runTransaction(db, async (tx) => {
         const userSnap = await tx.get(doc(db, 'users', activeUser.uid));
         const catalogSnap = await tx.get(doc(db, CONFIG_COLLECTION, CONFIG_DOC));
@@ -487,6 +490,11 @@ import {
         const official = catalogSnap.data()?.items?.find((row) => row.id === artifactId);
         if (!official || !Array.isArray(recipeSnap.data()?.recipes?.[artifactId]) ||
             !recipeSnap.data().recipes[artifactId].length) throw new Error('配方尚未儲存，請先儲存配方');
+        updatedCatalog = catalogSnap.data().items.map((row) => row.id === artifactId
+          ? normalizeArtifactDefinition({ ...row, recipeSaleLocked:true }) : row);
+        tx.set(doc(db, CONFIG_COLLECTION, CONFIG_DOC),
+          { items:updatedCatalog, updatedBy:activeUser.uid, updatedAt:serverTimestamp(),
+            updatedAtMs:Date.now() }, { merge:true });
         tx.set(listingRef, {
           sellerUid:activeUser.uid,
           sellerName:String(userSnap.data().displayName || activeUser.displayName || '管理員').slice(0, 36),
@@ -497,6 +505,7 @@ import {
           quantity:1, price, status:'active', createdAtMs:Date.now(), buyerUid:'', completedAtMs:0
         });
       });
+      if (updatedCatalog) replaceArtifactCatalog(updatedCatalog, 'admin-recipe-listing');
       if (status) status.textContent = '配方已由管理員上架，其他玩家可在交易市集購買。';
       toast('配方已上架至交易市集');
     } catch (error) {
@@ -547,6 +556,7 @@ import {
       generatedAtMs: original?.generatedAtMs || 0,
       reviewedAtMs: original?.reviewedAtMs || 0,
       // 普通編輯保留原主；僅勾選「更新擁有人」才可透過管理員交易改派。
+      recipeSaleLocked: original?.recipeSaleLocked === true,
       recipeOwnerUid: original?.recipeOwnerUid || '',
       recipeOwnerName: original?.recipeOwnerName || '',
       recipeDiscoveredAtMs: original?.recipeDiscoveredAtMs || 0,
