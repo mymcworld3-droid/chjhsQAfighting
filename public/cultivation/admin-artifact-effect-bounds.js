@@ -19,6 +19,7 @@ import { getFirestore, doc, runTransaction, serverTimestamp } from 'https://www.
   const pending = new Map(); // stage -> validated overrides, or null to restore defaults
   let stage = 1;
   let defaults = null;
+  let firstDepthDefaults = null;
   let saving = false;
   let requestId = 0;
   const esc = value => String(value ?? '').replaceAll('&','&amp;').replaceAll('<','&lt;')
@@ -53,6 +54,22 @@ import { getFirestore, doc, runTransaction, serverTimestamp } from 'https://www.
       '" data-aeb-field="' + field + '" aria-label="' + esc(range.label + ' ' + field) +
       '" value="' + esc(value) + '">';
   }
+  // Reference only: show actual pending/saved first-refinement values,
+  // falling back to the first-refinement defaults for untouched effects.
+  function firstDepthHint(range) {
+    if (stage !== 2) return '';
+    const first = firstDepthDefaults?.find(item => item.type === range.type);
+    if (!first) return '<div class="aeb-previous">第一煉：此功能未開放，無可對照的上下限。</div>';
+    if (!['value', 'multiplier'].includes(first.field))
+      return '<div class="aeb-previous">第一煉：固定效果，不需設定數值上下限。</div>';
+    const edits = pending.has('1') ? pending.get('1') || {} : stored()['1'] || {};
+    const actual = edits[range.type] || first;
+    let text = '第一煉參考：下限 ' + actual.min + ' ／ 上限 ' + actual.max + ' ' + first.unit;
+    if (first.field === 'multiplier') {
+      text += '；持續 ' + actual.durationMinutesMin + '～' + actual.durationMinutesMax + ' 分鐘';
+    }
+    return '<div class="aeb-previous" role="note">' + esc(text) + '（僅提醒，不限制第二煉填寫）</div>';
+  }
   function draw() {
     const list = document.getElementById('aeb-rows');
     if (!list || !defaults) return;
@@ -68,7 +85,7 @@ import { getFirestore, doc, runTransaction, serverTimestamp } from 'https://www.
           : '<div class="aeb-fixed">固定規則，不需設定</div>') +
         (range.field === 'multiplier' ?
           '<label>最短分鐘' + cell('durationMinutesMin') + '</label><label>最長分鐘' + cell('durationMinutesMax') + '</label>'
-          : '') + '</div>';
+          : '') + firstDepthHint(range) + '</div>';
     }).join('');
     const select = document.getElementById('aeb-preview-effect');
     if (select) {
@@ -77,6 +94,8 @@ import { getFirestore, doc, runTransaction, serverTimestamp } from 'https://www.
         .map(r => '<option value="' + esc(r.type) + '">' + esc(r.label) + '</option>').join('');
       if ([...select.options].some(o => o.value === prior)) select.value = prior;
     }
+    const note = document.getElementById('aeb-previous-note');
+    if (note) note.textContent = stage === 2 ? '第二煉設定：每項功能下方顯示第一煉目前生效的上下限，供比較參考。' : '';
     preview();
     message('只需設定每個深度的上下限。未改動的項目沿用系統預設值。');
   }
@@ -138,6 +157,7 @@ import { getFirestore, doc, runTransaction, serverTimestamp } from 'https://www.
   async function load() {
     const id = ++requestId;
     defaults = null;
+    firstDepthDefaults = null;
     document.getElementById('aeb-rows').textContent = '';
     message('正在載入深度預設值…');
     try {
@@ -146,6 +166,21 @@ import { getFirestore, doc, runTransaction, serverTimestamp } from 'https://www.
       const data = await response.json();
       if (id !== requestId) return;
       if (!Array.isArray(data.ranges)) throw new Error('深度效果資料格式錯誤');
+      if (stage === 2) {
+        try {
+          const priorResponse = await fetch('/api/artifact-depth-effect-ranges?stage=1');
+          if (!priorResponse.ok) throw new Error('HTTP ' + priorResponse.status);
+          const prior = await priorResponse.json();
+          if (!Array.isArray(prior.ranges)) throw new Error('第一煉預設資料格式錯誤');
+          if (id !== requestId) return;
+          firstDepthDefaults = prior.ranges;
+        } catch (error) {
+          if (id !== requestId) return;
+          console.warn('[Artifact depth limits] first refinement reference unavailable', error);
+          firstDepthDefaults = null;
+        }
+      }
+      if (id !== requestId) return;
       defaults = data.ranges;
       draw();
     } catch (error) {
@@ -208,6 +243,8 @@ import { getFirestore, doc, runTransaction, serverTimestamp } from 'https://www.
       '.aeb-row{display:grid;grid-template-columns:minmax(130px,1.7fr) repeat(4,minmax(76px,1fr));gap:7px;align-items:center;padding:8px 0;border-bottom:1px solid rgba(216,177,93,.1)}',
       '.aeb-row label{display:grid;gap:4px;font-size:8px;color:#ae9d7b}.aeb-row input{width:100%;min-width:0;padding:8px 5px;background:#090807;color:#f1dfb9;border:1px solid rgba(216,177,93,.25);border-radius:7px;font-size:10px}',
       '.aeb-name{display:grid;gap:2px}.aeb-name strong{font-size:10px}.aeb-name small{font-size:8px;color:#8f826b}.aeb-fixed{font-size:9px;color:#8f826b}',
+      '.aeb-previous{grid-column:1/-1;padding:6px 9px;border-left:2px solid #aa8a4a;border-radius:5px;background:rgba(216,177,93,.06);color:#d4bb81;font-size:9px;line-height:1.55;overflow-wrap:anywhere}',
+      '#aeb-previous-note:empty{display:none}',
       '#aeb-status{min-height:20px;font-size:9px;line-height:1.6}',
       '.aeb-preview{display:grid;gap:3px;margin-top:8px}.aeb-preview>div{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;padding:5px 8px;border-bottom:1px solid rgba(216,177,93,.1);font-size:9px}',
       '.aeb-preview span{color:#8b7e65}.aeb-preview strong{text-align:right;color:#e7c675}',
@@ -228,7 +265,7 @@ import { getFirestore, doc, runTransaction, serverTimestamp } from 'https://www.
       '<p class="aeb-note">比例請填小數（0.10 = 10%）。單次傷害上限越小越強，因此其境界分配會反向；連擊率硬上限仍為 10%。本設定只影響新法寶，不修改既有裝備。</p>' +
       '<div class="aeb-controls"><label>煉製深度 <select id="aeb-stage"><option value="1">第一煉</option><option value="2">第二煉</option><option value="3">第三煉</option></select></label>' +
       '<button type="button" id="aeb-reset">本深度恢復預設</button><button type="button" id="aeb-save">儲存上下限</button></div>' +
-      '<div id="aeb-status" role="status"></div><div id="aeb-rows"></div>' +
+      '<p id="aeb-previous-note" class="aeb-note" role="note"></p><div id="aeb-status" role="status"></div><div id="aeb-rows"></div>' +
       '<details class="aeb-preview-details"><summary class="aeb-note">查看各境界自動換算結果</summary>' +
       '<div class="aeb-controls"><label>預覽功能 <select id="aeb-preview-effect"></select></label></div>' +
       '<div id="aeb-preview" class="aeb-preview"></div></details></details>';
