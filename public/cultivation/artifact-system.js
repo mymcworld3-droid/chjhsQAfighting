@@ -381,6 +381,8 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
   function currentQuestionContext() {
     const dongtian = window.getDongtianArtifactQuestionContext?.();
     if (dongtian?.correctIndex >= 0) return normalizeQuestionContext(dongtian);
+    const tutorial = window.getBattleTutorialQuestionContext?.();
+    if (tutorial?.correctIndex >= 0) return normalizeQuestionContext(tutorial);
     const battle = window.getBattleArtifactQuestionContext?.();
     if (battle?.correctIndex >= 0) return normalizeQuestionContext(battle);
 
