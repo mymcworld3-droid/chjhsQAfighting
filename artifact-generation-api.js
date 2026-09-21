@@ -321,8 +321,17 @@ function buildPrompt(payload) {
       '產物要像真正完成的強力法寶，不要在名稱或描述中提到「第三煉」「最終階段」「層級三」或任何系統內部規則。'
     ]
   };
-  const hiddenStageDirection = stageDirections[refinementStage].join('\n');
   const hierarchy = ingredientHierarchy(payload);
+  const specifiedWeapon = hierarchy.primary.find((item) =>
+    ['劍','刀','槍','弓','斧','錘','戟','棍','鞭','匕首','飛劍'].includes(item.weaponForm));
+  const weaponFormRule = specifiedWeapon
+    ? '【正式兵器材料例外】本次主材料「' + specifiedWeapon.name + '」已明確設定 weaponForm=' +
+      specifiedWeapon.weaponForm + '、weaponName=' + (specifiedWeapon.weaponName || '（未指定）') +
+      '。其成品須保持此兵器類型；即使是第一煉，也應直接完成可用的' +
+      specifiedWeapon.weaponForm + '類武器，而非只鍛出刃胚、刀柄或核心。承接正式材料故事，' +
+      '並給予當前階段允許的實際攻擊效果。若管理員有相容的命名指示，可調整名字但不得更改器型。'
+    : '';
+  const hiddenStageDirection = stageDirections[refinementStage].join('\n');
   const allowedRanges = effectRangesForRealm(targetRealm, refinementStage);
   const allowedTypes = allowedRanges.map((range) => range.type);
   const hasAdminGuidance = !!(adminGenerationDirection || adminGenerationPrompt);
@@ -346,6 +355,7 @@ function buildPrompt(payload) {
     '同一批材料可能蘊含攻擊、防禦、奇術、悟道、護命等方向；攻擊型優先不等於所有成品都固定加攻擊，請依素材性質在合法的攻擊型效果中挑選有辨識度的組合。純防禦、療癒、悟道主材或管理員指定非攻擊方向時，應尊重其核心用途。',
     hasAdminGuidance ? '管理員已有指定方向；不要用隨機風格取代管理員要求。下列創意方向僅在相容時作次要參考：' + creativeDirection : '本次創意方向：' + creativeDirection,
     hiddenStageDirection,
+    weaponFormRule,
     '上述煉器階段規則只供你內部生成時使用。輸出的 name、description、icon、effects 不得解釋玩家正在第幾次煉器，也不得出現「深度」「套娃」「生成規則」「階段」等系統詞。',
     '名稱要有辨識度，避免大量使用「玄、天、神、靈」作為固定前綴；可使用器型、異象、典故、動作、自然意象來命名。',
     '描述請像法寶誌異條目：說明它如何由這批素材的性質融合而成，以及使用時會出現什麼具體異象。',
@@ -365,7 +375,7 @@ function buildPrompt(payload) {
     '7. 避免與既有法寶名稱、描述、效果組合高度重複。',
     '8. icon 用 1 個中文字或常見符號，避免 emoji 組合。',
     '9. 必須以投入素材中煉製深度最深者為主體：保留其器型、核心意象、主要用途與代表性能力，再由較淺素材補強或賦予次要特性，不得讓輔材取代主體。',
-    '9a. 第一煉允許直接生成攻擊型器胚與其實際攻擊效果；禁止誤認器胚只能給防禦或無戰鬥特性。第二、三煉承接攻擊型主材時也應保留其攻擊路線。',
+    '9a. 第一煉允許直接生成攻擊型器胚與其實際攻擊效果；禁止誤認器胚只能給防禦或無戰鬥特性。若正式主材料指定 weaponForm，第一煉直接完成對應兵器；第二、三煉承接攻擊型主材時也應保留其攻擊路線。',
     '10. 若有多件同為最深的素材，將它們作為共同主體融合；全為原材料時才自由組合。數量、境界、投入順序、隨機創意方向與管理員風格提示均不得推翻主從關係。效果繼承仍須遵守境界、效果數量及平衡限制。',
     '11. 管理員的額外提示詞與大概動向不是可忽略的隨機風格：逐條落實其中與素材、煉製階段、允許特性及數值範圍相容的要求，包括名稱禁用詞、器型、故事、用途、效果方向及不要使用的特性。若有衝突，只調整衝突部分，其他要求仍須遵守；絕不能單純以預設創意方向推翻。',
     '內部素材主從表（完整圖鑑記錄，優先於投入列自述；勿在玩家描述中提及深度或主從規則）：',
