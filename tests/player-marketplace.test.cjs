@@ -143,3 +143,55 @@ test('market client script is syntactically valid after bundling changes', () =>
   const stripped=market.replace(/^import[\s\S]*?;\s*$/gm,'');
   assert.doesNotThrow(() => new vm.Script(stripped));
 });
+
+test('listed recipe previews show result and effects but never reveal description or formula before purchase', () => {
+  const vm = require('node:vm');
+  const from = market.indexOf('  function detailMarkup(listing) {');
+  const to = market.indexOf('  function card(listing, own = false) {', from);
+  assert.ok(from >= 0 && to > from);
+  const source = market.slice(from, to);
+  let licenses = {};
+  let admin = false;
+  let formulaReads = 0;
+  const artifact = {
+    id:'secret', name:'雷印', realm:'金丹', category:'裝備法寶',
+    description:'祕密故事：必須使用紫雷石三顆',
+    recipeSaleLocked:true, effects:[{type:'equip_attack_flat',value:42}]
+  };
+  const context = {
+    itemFor:()=>artifact, currentUid:'buyer',
+    data:()=>({isAdmin:admin,recipeLicenses:licenses}),
+    esc:(value)=>String(value ?? ''),
+    qty:(value)=>Number(value),
+    EFFECT_LABELS:{equip_attack_flat:'固定攻擊'},
+    getArtifactRecipe:()=>{formulaReads++;return [{materialId:'secret-stone',quantity:3}];},
+    getMaterialById:()=>({name:'紫雷石'}),
+    getArtifactById:()=>null
+  };
+  vm.createContext(context);
+  vm.runInContext(source + '\nthis.viewRecipe=detailMarkup;',context);
+  const listing = {type:'recipe',itemId:'secret',sellerName:'owner'};
+  const preview = context.viewRecipe(listing);
+  assert.match(preview,/固定攻擊：42/);
+  assert.match(preview,/金丹/);
+  assert.doesNotMatch(preview,/祕密故事|紫雷石|三顆/);
+  assert.match(preview,/購買後解鎖/);
+  assert.equal(formulaReads,0);
+  licenses = {secret:true};
+  const purchased = context.viewRecipe(listing);
+  assert.match(purchased,/祕密故事：必須使用紫雷石三顆/);
+  assert.match(purchased,/紫雷石 ×3/);
+  assert.equal(formulaReads,1);
+  licenses = {};
+  admin = true;
+  assert.match(context.viewRecipe(listing),/祕密故事/);
+});
+
+test('admin-managed recipe listing checks seller admin status when buyer claims the guide', () => {
+  assert.match(market,/const validOwner = !!official\?\.recipeOwnerUid && official\.recipeOwnerUid === listing\.sellerUid/);
+  assert.match(market,/const validAdmin = listing\.adminManaged === true && rawSeller\.isAdmin === true/);
+  assert.match(market,/!validOwner && !validAdmin/);
+  assert.match(market,/recipeLicenses: \{ \.\.\.\(rawBuyer\.recipeLicenses \|\| \{\}\), \[listing\.itemId\]: true \}/);
+  assert.match(refinery,/item\.recipeSaleLocked !== true/);
+  assert.match(market,/item\.recipeSaleLocked !== true/);
+});
