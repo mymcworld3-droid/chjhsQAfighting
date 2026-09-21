@@ -43,15 +43,20 @@ function normalizeBaseUrl(url) {
 function buildGeminiProviders() {
   const keys = [...splitCsv(process.env.GEMINI_API_KEYS), ...splitCsv(process.env.GEMINI_API_KEY)];
   const uniqueKeys = [...new Set(keys)];
-  const models = splitCsv(process.env.GEMINI_MODELS);
-  const fallbackModel = process.env.GEMINI_MODEL || 'gemini-3.5-flash-lite';
+  // Model rotation is independent of API keys: one key can use every listed model.
+  // Preserve the historical one-provider-per-key behavior when GEMINI_MODELS is unset.
+  const models = [...new Set(splitCsv(process.env.GEMINI_MODELS))];
+  const fallbackModel = process.env.GEMINI_MODEL?.trim() || 'gemini-3.5-flash-lite';
+  const activeModels = models.length ? models : [fallbackModel];
 
-  return uniqueKeys.map((key, index) => ({
+  return uniqueKeys.flatMap((key, index) => activeModels.map((model, modelIndex) => ({
     type: 'gemini',
-    name: `gemini-${index + 1}`,
+    name: activeModels.length === 1
+      ? `gemini-${index + 1}`
+      : `gemini-${index + 1}-model-${modelIndex + 1}`,
     key,
-    model: models[index % Math.max(1, models.length)] || fallbackModel
-  }));
+    model
+  })));
 }
 
 function buildOpenAICompatProviders() {
