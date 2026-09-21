@@ -123,7 +123,7 @@ test('a market listing shows material descriptions, artifact effects and a guard
   assert.match(market,/data\(\)\?\.recipeLicenses\?\.\[item\.id\] === true/);
   assert.match(market,/購買後可在煉器配方圖鑑查看確切材料與數量/);
   assert.match(market,/<details class="pm-detail"><summary>查看商品資訊<\/summary>\$\{detailMarkup\(listing\)\}<\/details>/);
-  assert.match(market,/esc\(item\.description \|\| '暫無詳細描述'\)/);
+  assert.match(market,/成品故事與製作資料購買後解鎖/);
 });
 
 test('market refresh survives Firestore transport failures without depending on Listen streams', () => {
