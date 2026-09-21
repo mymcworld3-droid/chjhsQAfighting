@@ -182,7 +182,7 @@ test('generation prompt receives selected ingredients, full material catalog, ex
     adminGenerationDirection: '偏防禦減傷',
     adminGenerationPrompt: '玄武意象，名稱古樸，不要暴擊，以護盾與反震為主。'
   });
-  assert.match(prompt, /本次創意方向/);
+  assert.match(prompt, /創意方向僅在相容時作次要參考/);
   assert.match(prompt, /全材料圖鑑/);
   assert.match(prompt, /星砂/);
   assert.match(prompt, /寒玉/);
