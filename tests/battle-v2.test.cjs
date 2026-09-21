@@ -443,7 +443,7 @@ test('Battle UI shows shield and healing without animating non-attacks', () => {
   assert.match(battleSource,/const missed = step\.type === 'miss'/);
   assert.match(battleSource,/mine\.coreShield \? ' · 道心護體'/);
   assert.match(battleSource,/guest\.coreShield/);
-  assert.match(battleSource,/battle-engine-v2\.js\?v=20260921-turnorder2/);
+  assert.match(battleSource,/battle-engine-v2\.js\?v=20260921-turnorder3/);
 });
 
 test('lethal first attack stops before the other player can strike', () => {
