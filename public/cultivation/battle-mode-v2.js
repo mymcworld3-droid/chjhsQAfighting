@@ -898,10 +898,25 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260920-c
     if (window.getBattleTutorialState?.().active || state.roomId || !me() || score() < FOUNDATION_SCORE || storyOrTutorialOpen()) return; const uid = me().uid;
     try {
       const [hostRooms, guestRooms] = await Promise.all([
-        getDocs(query(collection(db(), ROOM_COLLECTION), where('host.uid', '==', uid), limit(5))),
-        getDocs(query(collection(db(), ROOM_COLLECTION), where('guest.uid', '==', uid), limit(5)))
+        getDocs(query(collection(db(), ROOM_COLLECTION), where('host.uid', '==', uid), limit(20))),
+        getDocs(query(collection(db(), ROOM_COLLECTION), where('guest.uid', '==', uid), limit(20)))
       ]);
-      const active = [...hostRooms.docs, ...guestRooms.docs].filter((entry, index, arr) => arr.findIndex((item) => item.id === entry.id) === index).filter((entry) => {
+      const ownRooms = [...hostRooms.docs, ...guestRooms.docs].filter(
+        (entry, index, entries) => entries.findIndex((item) => item.id === entry.id) === index
+      );
+      // A loser who forfeited or disconnected may never have seen the result screen.
+      // Retry their unclaimed finished-room receipt after reload; the transaction
+      // still checks actual membership and the persistent marker before paying.
+      for (const entry of ownRooms) {
+        const finished = entry.data();
+        const marker = finished.host?.uid === uid ? 'hostResultRecorded' :
+          finished.guest?.uid === uid ? 'guestResultRecorded' : null;
+        if (Number(finished.modeVersion) !== BATTLE_V2.modeVersion ||
+            finished.status !== 'finished' || !marker || finished[marker]) continue;
+        try { await recordBattleResult(null, entry.id); }
+        catch (error) { console.warn('[Battle v2] unclaimed reward recovery skipped:', entry.id, error); }
+      }
+      const active = ownRooms.filter((entry) => {
         const room = entry.data(); return Number(room.modeVersion) === BATTLE_V2.modeVersion && ['waiting', 'intro', 'playing', 'settled', 'preparing'].includes(room.status) && !(room.status === 'waiting' && isRoomStale(room));
       }).sort((a, b) => timestampMs(b.data().updatedAt, b.data().createdAtMs) - timestampMs(a.data().updatedAt, a.data().createdAtMs))[0];
       if (!active) return; const room = active.data(); state.role = room.host?.uid === uid ? 'host' : 'guest'; ensurePage(); window.switchToPage?.('page-battle'); subscribeRoom(active.id); toast('已恢復上次尚未結束的鬥法。');
