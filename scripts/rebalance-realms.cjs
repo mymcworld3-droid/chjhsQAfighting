@@ -114,7 +114,7 @@ for (const rel of walk('public/cultivation', (rel) => rel.endsWith('.js'))) {
   replaceAll(rel, /const TRIBULATION_SCORE = \d+;/g, 'const TRIBULATION_SCORE = 628;');
 }
 
-replace('public/cultivation/cultivation-training-v4.js', /const REALM_THRESHOLDS = \[[^\]]+\];/, 'const REALM_THRESHOLDS = [68, 128, 208, 308, 448, 628, 868];');
+replace('public/cultivation/cultivation-training-v4.js', /const REALM_THRESHOLDS = \[[^\]]+\];/, 'const REALM_THRESHOLDS = [68, 128, 208, 308, 448, 628, 868];', false);
 replaceAll('public/cultivation/cultivation-theme.js', '築基以前維持原進度；金丹以上因金丹特性會加速修煉，因此拉長後期曲線。', '前 10 題快速完成煉氣並築基；金丹後每題基礎 +2，因此後期門檻按實際答題量漸進。');
 replaceAll('public/cultivation/cultivation-progression-v2.js', '金丹 120 開內丹', '金丹 28 開內丹');
 replaceAll('public/cultivation/cultivation-progression-v2.js', '<b>60 · 築基初期</b>', '<b>${FOUNDATION_SCORE} · 築基初期</b>');
