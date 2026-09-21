@@ -662,6 +662,69 @@ function normalizeRevisionValidation(raw) {
   return result;
 }
 
+// A failed whole-cave review must not discard every already-generated question
+// before we have checked whether the reviewer produced an inconclusive judgment
+// or identified a small number of repairable, concrete mistakes.
+async function reviewAndRepairGeneratedDongtian(dongtian) {
+  const initial = await verifyGeneratedDongtian(dongtian);
+  if (initial.review.passed) {
+    return { dongtian, doubleCheck: initial, initialDoubleCheck: initial, repairs: [] };
+  }
+
+  const issues = initial.review.issues;
+  const repairs = [];
+  let candidate = dongtian;
+
+  if (issues.length > 0 && issues.length <= 3) {
+    const ids = new Set(dongtian.questions.map((question) => question.id));
+    const uniqueIssues = new Map();
+    for (const issue of issues) {
+      if (!ids.has(issue.questionId)) {
+        // A fabricated or unidentifiable issue is inconclusive, not proof of a safe cave.
+        return { dongtian, doubleCheck: initial, initialDoubleCheck: initial, repairs, blocked: 'unknown_question_id' };
+      }
+      uniqueIssues.set(issue.questionId, [
+        uniqueIssues.get(issue.questionId), issue.issue
+      ].filter(Boolean).join('；'));
+    }
+    candidate = { ...dongtian, questions: dongtian.questions.map((question) => ({ ...question })) };
+    for (const [questionId, issue] of uniqueIssues) {
+      const index = candidate.questions.findIndex((question) => question.id === questionId);
+      const original = candidate.questions[index];
+      const hint = '只修正審核員指出的實質錯誤，維持原題的核心知識點、學習目標、難度和單選題結構。';
+      try {
+        const rewrite = await aiRouter.generateJSON(
+          buildRevisionPrompt(original, hint, issue, candidate), { timeoutMs: 60000 }
+        );
+        const revised = normalizeStandaloneQuestion(rewrite.data, original);
+        const validationRun = await aiRouter.generateJSON(
+          buildRevisionValidationPrompt(original, revised, issue, hint, candidate), { timeoutMs: 60000 }
+        );
+        const validation = normalizeRevisionValidation(validationRun.data);
+        repairs.push({ questionId, validated: validation.accepted, model: validationRun.model });
+        if (!validation.accepted) {
+          return { dongtian, doubleCheck: initial, initialDoubleCheck: initial, repairs, blocked: 'revision_validation' };
+        }
+        const revisedFingerprint = questionFingerprint(revised.q);
+        if (candidate.questions.some((question, i) => i !== index && questionFingerprint(question.q) === revisedFingerprint)) {
+          return { dongtian, doubleCheck: initial, initialDoubleCheck: initial, repairs, blocked: 'duplicate_after_revision' };
+        }
+        candidate.questions[index] = revised;
+      } catch (error) {
+        console.warn('[Dongtian auto-repair] failed', questionId, error);
+        return { dongtian, doubleCheck: initial, initialDoubleCheck: initial, repairs, blocked: 'revision_error' };
+      }
+    }
+  } else if (issues.length > 3) {
+    return { dongtian, doubleCheck: initial, initialDoubleCheck: initial, repairs, blocked: 'too_many_issues' };
+  }
+
+  // Recheck independently after every accepted repair, or once when the initial
+  // reviewer rejected without identifying any actual question error.
+  const final = await verifyGeneratedDongtian(candidate);
+  return { dongtian: candidate, doubleCheck: final, initialDoubleCheck: initial, repairs };
+}
+
 module.exports = function registerDongtianApi(app) {
   app.post('/api/review-dongtian-question', async (req, res) => {
     try {
@@ -829,12 +892,25 @@ module.exports = function registerDongtianApi(app) {
         throw new Error(`洞天規劃 ${plan.questionCount} 題，但完成後只有 ${dongtian.questions.length} 題`);
       }
 
-      const doubleCheck = await verifyGeneratedDongtian(dongtian);
+      const checked = await reviewAndRepairGeneratedDongtian(dongtian);
+      const doubleCheck = checked.doubleCheck;
       if (!doubleCheck.review.passed) {
-        return res.status(422).json({ error: '洞天第二次 AI 複核未通過，為避免錯題不予建立，請重新生成。', doubleCheck: doubleCheck.review });
+        console.warn('[Dongtian API] quality review rejected cave', {
+          initial: checked.initialDoubleCheck.review,
+          final: doubleCheck.review,
+          repairs: checked.repairs,
+          blocked: checked.blocked || null
+        });
+        return res.status(422).json({
+          error: '洞天品質複核未通過，已嘗試重新審核或修復可辨認的錯題；本次不予建立。',
+          doubleCheck: doubleCheck.review,
+          initialDoubleCheck: checked.initialDoubleCheck.review,
+          repairAttempts: checked.repairs,
+          reasonCode: checked.blocked || 'quality_review'
+        });
       }
       res.json({
-        dongtian,
+        dongtian: checked.dongtian,
         generationPlan: {
           questionAmount,
           questionCount: plan.questionCount,
@@ -845,7 +921,8 @@ module.exports = function registerDongtianApi(app) {
         batches: batchAudit,
         doubleCheck: doubleCheck.review,
         doubleCheckProvider: doubleCheck.provider,
-        doubleCheckModel: doubleCheck.model
+        doubleCheckModel: doubleCheck.model,
+        repairAttempts: checked.repairs
       });
     } catch (error) {
       console.error('[Dongtian API]', error);
@@ -855,4 +932,4 @@ module.exports = function registerDongtianApi(app) {
   });
 };
 
-module.exports.__test = { LEVELS, MIN_QUESTIONS, QUESTION_BATCH_SIZE, QUESTION_COUNT_CHOICES, QUESTION_AMOUNT_PRESETS, normalizeLevel, normalizeDifficulty, normalizeQuestionAmount, allowedQuestionCounts, normalizePlannedQuestionCount, normalizeDongtianPlan, normalizeQuestionBatch, normalizeResult, buildPrompt, buildPlanningPrompt, buildQuestionBatchPrompt, validateImages, normalizeQuestionSnapshot, buildQuestionReviewPrompt, normalizeQuestionReview, buildRevisionPrompt, buildRevisionValidationPrompt, normalizeStandaloneQuestion, normalizeRevisionValidation };
+module.exports.__test = { LEVELS, MIN_QUESTIONS, QUESTION_BATCH_SIZE, QUESTION_COUNT_CHOICES, QUESTION_AMOUNT_PRESETS, normalizeLevel, normalizeDifficulty, normalizeQuestionAmount, allowedQuestionCounts, normalizePlannedQuestionCount, normalizeDongtianPlan, normalizeQuestionBatch, normalizeResult, buildPrompt, buildPlanningPrompt, buildQuestionBatchPrompt, validateImages, normalizeQuestionSnapshot, buildQuestionReviewPrompt, normalizeQuestionReview, buildRevisionPrompt, buildRevisionValidationPrompt, normalizeStandaloneQuestion, normalizeRevisionValidation, normalizeDongtianDoubleCheck, buildDongtianDoubleCheckPrompt, verifyGeneratedDongtian, reviewAndRepairGeneratedDongtian };
