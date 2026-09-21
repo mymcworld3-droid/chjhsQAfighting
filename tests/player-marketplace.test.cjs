@@ -63,9 +63,12 @@ test('even without a recipe, players can craft; owning the recipe only reveals e
   assert.doesNotMatch(refinery, /尚未取得這張配方的使用權，請前往交易市集/);
   assert.match(refinery, /配方是製作指南，不是煉器許可證/);
   assert.match(refinery, /沒有配方也能自由投入素材嘗試煉製/);
-  assert.match(refinery, /const canReadRecipe = !item\.recipeOwnerUid \|\| mine \|\| userData\(\)\?\.recipeLicenses\?\.\[item\.id\] === true/);
-  assert.match(refinery, /const ingredients = canReadRecipe \? getArtifactRecipe\(item\.id\)\.map/);
-  assert.match(refinery, /製作材料未公開 · 取得配方後可查看素材與數量/);
+  assert.match(refinery, /const learned = userData\(\)\?\.recipeLicenses\?\.\[item\.id\] === true/);
+  assert.match(refinery, /const canReadRecipe = !item\.recipeOwnerUid \|\| mine \|\| learned/);
+  assert.match(refinery, /const recipe = canReadRecipe \? getArtifactRecipe\(item\.id\) : \[\]/);
+  assert.match(refinery, /const ingredients = canReadRecipe/);
+  assert.match(refinery, /製作方法尚未習得/);
+  assert.match(refinery, /canReadRecipe && item\.description/);
   assert.match(refinery, /return `<article class="refinery-recipe-card/);
   assert.match(market, /交易只傳授製作方法/);
 });
