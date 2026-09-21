@@ -323,6 +323,59 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder1';
     return el;
   }
 
+
+  // Take exactly the same equipped/stat snapshot as formal battle.
+  // These projected HP / shields / equipment flags are local to the story and never persisted.
+  function capturePlayerCombat() {
+    const d = data() || {};
+    const stats = window.getCombatStats?.() || window.getCombatStatDefaults?.() || { attack: 200, maxHp: 1000 };
+    const maxHp = Math.max(1, Math.round(Number(stats.maxHp) || 1000));
+    const goldenCore = window.getEquippedGoldenCoreBattleSnapshot?.() || null;
+    const artifactBattle = window.getArtifactBattleSnapshot?.() || { version: 1, effects: [], openingShield: 0 };
+    return {
+      uid: user()?.uid || 'story-player', name: playerName(),
+      hp: maxHp, maxHp, atk: Math.max(1, Math.round(Number(stats.attack) || 200)),
+      totalScore: score(), goldenCore, coreShield: !!goldenCore && d.stats?.goldenCoreShield === true,
+      coreCorrectStreak: 0, artifactBattle,
+      artifactShield: Math.max(0, Math.round(Number(window.getArtifactBattleOpeningShield?.(artifactBattle) ?? artifactBattle.openingShield) || 0)),
+      artifactFirstHitUsed: false, artifactCheatDeathUsed: false
+    };
+  }
+
+  function combatSummary() {
+    const core = playerCombat?.goldenCore?.name || '未調御金丹';
+    const effects = playerCombat?.artifactBattle?.effects || [];
+    const names = [...new Set(effects.map((x) => x.artifactName).filter(Boolean))];
+    const equipment = names.length ? names.join('、') : '目前無附加鬥法效果的裝備';
+    return `實際攻擊 ${playerCombat?.atk || 200} ／ 最大生命 ${playerCombat?.maxHp || 1000} ／ 金丹：${esc(core)} ／ 裝備：${esc(equipment)}`;
+  }
+
+  function startCountdown(opponent, done) {
+    stage = tutorialPhase === 'shen' ? 'shen-countdown' : 'gu-countdown';
+    const myToken = ++sceneToken;
+    const enemy = opponent === 'shen';
+    const name = enemy ? '沈清霜' : '顧長風';
+    const image = enemy ? 'assets/story/characters/shen-qingshuang.png' : 'assets/story/characters/battle-rival.png';
+    const maxHp = enemy ? 99999 : guOpponent.maxHp;
+    const hp = enemy ? 99999 : guOpponent.hp;
+    let left = 3;
+    const render = () => shell({
+      opponent: name, opponentImage: image, opponentHp: hp, opponentMaxHp: maxHp,
+      badge: '築基鬥法教學 · 演武場', title: '鬥法準備',
+      showLater: false,
+      body: `<div class="bt-countdown"><b>${left}</b><p>凝神備戰，即將進入全畫面題目</p></div><div class="bt-rule">${combatSummary()}</div>`
+    });
+    render();
+    if (roundCountdown !== null) clearInterval(roundCountdown);
+    roundCountdown = setInterval(() => {
+      if (!active || myToken !== sceneToken) { clearInterval(roundCountdown); roundCountdown = null; return; }
+      left -= 1;
+      if (left > 0) { render(); return; }
+      clearInterval(roundCountdown); roundCountdown = null;
+      done();
+    }, 1000);
+  }
+
   function renderIntro() {
     shell({
       opponent:'沈清霜',
@@ -331,7 +384,8 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder1';
       opponentMaxHp:99999,
       badge:'築基鬥法教學 · 第一戰',
       title:'先和師姐切磋',
-      body:`<div class="bt-rule"><strong>教學戰不計戰績：</strong>不建立正式房間、不消耗道具、不給獎勵，也不會改動你的永久生命值。師姐將立刻答題，你有 25 秒回應。</div>
+      body:`<div class="bt-rule"><strong>教學戰不計戰績：</strong>不建立正式房間、不消耗道具、不給獎勵，也不會改動你的永久生命值。玩家依目前裝備、金丹與正式戰鬥數值建立投影；沈清霜 65,000 真實傷害為既定劇情特例。</div>
+        <div class="bt-rule">${combatSummary()}</div>
         <div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="shen-start">進入數學試煉</button></div>`
     }).querySelector('[data-bt-action="shen-start"]')?.addEventListener('click', beginShenQuestion);
   }
@@ -345,20 +399,17 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder1';
       return `<button type="button" class="bt-option${outcome}" data-bt-shen-choice="${index}" ${answered ? 'disabled' : ''}>${String.fromCharCode(65 + index)}. ${esc(text)}</button>`;
     }).join('');
     const explain = answered
-      ? `<div class="bt-explain"><b>${choice === null ? '時間到：玩家未作答。' : choice === SHEN_QUESTION.ans ? '你答對了，但師姐早已答對並取得先手。' : '你答錯了，師姐早已答對並取得先手。'}</b><br>正解：${esc(SHEN_QUESTION.opts[SHEN_QUESTION.ans])}。 ${esc(SHEN_QUESTION.exp)}<br>本場為先手秒殺劇情特例，不代表正式配對的雙方答對規則。</div>`
-      : '<div class="bt-explain">沈清霜已秒答。你只剩 25 秒；即使答對，師姐的先手劍意也會先命中。</div>';
+      ? `<div class="bt-explain"><b>${choice === null ? '時間到：玩家未作答。' : choice === SHEN_QUESTION.ans ? '你答對了，但師姐已取得先手。' : '你答錯了，師姐已取得先手。'}</b><br>正解：${esc(SHEN_QUESTION.opts[SHEN_QUESTION.ans])}。 ${esc(SHEN_QUESTION.exp)}<br>本場為 65,000 真實傷害的劇情特例；正式配對仍依個別攻防與血量判定。</div>
+         <div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="shen-return-arena">看完解析 · 返回戰場</button></div>`
+      : '<div class="bt-explain">沈清霜 · 立即答對。你剩餘 25 秒；作答後先閱讀解析，再返回戰場看先手劍意。</div>';
     const el = shell({
-      opponent:'沈清霜',
-      opponentImage:'assets/story/characters/shen-qingshuang.png',
-      opponentHp:99999,
-      opponentMaxHp:99999,
-      badge:'築基鬥法教學 · 高難度數學',
-      title:'師姐已作答 · 玩家應答窗',
-      showLater:!answered,
+      opponent:'沈清霜', badge:'築基鬥法教學 · 全畫面答題',
+      title:'師姐已作答 · 玩家應答窗', showLater:!answered, quiz:true,
       body:`<section class="bt-question"><div class="bt-question-meta"><span>沈清霜 · 立即答對</span><span id="bt-shen-timer" class="bt-shen-timer ${remaining <= 5 ? 'urgent' : ''}">剩餘 ${remaining} 秒</span></div>
         <h3>${esc(SHEN_QUESTION.q)}</h3><div class="bt-options">${opts}</div>${explain}</section>`
     });
     if (!answered) el.querySelectorAll('[data-bt-shen-choice]').forEach(button => button.addEventListener('click', () => runShenStrike(Number(button.dataset.btShenChoice))));
+    else el.querySelector('[data-bt-action="shen-return-arena"]')?.addEventListener('click', playShenStrike);
     return el;
   }
 
@@ -375,36 +426,54 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder1';
 
   function beginShenQuestion() {
     if (!active || busy || stage !== 'intro' || tutorialPhase !== 'shen') return;
-    clearShenTimer();
-    stage = 'shen-question';
-    shenDeadline = Date.now() + SHEN_ANSWER_WINDOW_MS;
-    shenChoice = null;
-    renderShenQuestion();
-    shenTimer = setInterval(updateShenTimer, 200);
-    updateShenTimer();
+    clearTutorialTimers();
+    startCountdown('shen', () => {
+      stage = 'shen-question';
+      shenDeadline = Date.now() + SHEN_ANSWER_WINDOW_MS;
+      shenChoice = null;
+      renderShenQuestion();
+      shenTimer = setInterval(updateShenTimer, 200);
+      updateShenTimer();
+    });
   }
 
   async function runShenStrike(choice = null) {
     if (!active || busy || stage !== 'shen-question') return;
     busy = true;
-    // 逾時點擊不能繞過 25 秒限制；作答結果僅決定解析，不影響師姐的先手攻擊。
     shenChoice = Date.now() < shenDeadline && Number.isInteger(choice) && choice >= 0 && choice < SHEN_QUESTION.opts.length ? choice : null;
     clearShenTimer();
+    stage = 'shen-review';
+    shenFeedback = { choice: shenChoice, correct: shenChoice === SHEN_QUESTION.ans };
+    renderShenQuestion(shenFeedback);
+    busy = false;
+  }
+
+  async function playShenStrike() {
+    if (!active || busy || stage !== 'shen-review') return;
+    busy = true;
     stage = 'shen-strike';
-    const el = renderShenQuestion({ choice: shenChoice });
-    await delay(480);
-    if (!active) return;
+    const myToken = ++sceneToken;
+    const el = shell({
+      opponent:'沈清霜',
+      opponentImage:'assets/story/characters/shen-qingshuang.png',
+      opponentHp:99999, opponentMaxHp:99999,
+      badge:'築基鬥法教學 · 演武場', title:'師姐先手 · 劍意降臨', showLater:false,
+      body:`<div class="bt-combat-cue">沈清霜先手攻擊<strong>真實傷害 65,000</strong></div><div class="bt-rule">${combatSummary()}</div>`
+    });
+    await delay(300);
+    if (!active || myToken !== sceneToken) return;
     el.querySelector('[data-bt-fighter="enemy"]')?.classList.add('strike');
     el.querySelector('.bt-slash')?.classList.add('go');
     await delay(180);
-    if (!active) return;
+    if (!active || myToken !== sceneToken) return;
     el.querySelector('[data-bt-fighter="me"]')?.classList.add('hit');
     const pop = document.createElement('div');
     pop.className = 'bt-damage';
     pop.innerHTML = '-65,000<small>真實傷害 · TRUE DAMAGE</small>';
     el.querySelector('.bt-arena')?.appendChild(pop);
-    await delay(650);
-    if (!active) return;
+    await delay(TURN_ANIMATION_MS);
+    if (!active || myToken !== sceneToken) return;
+    // The story deliberately dissipates the projection regardless of the player's persistent HP.
     playerHp = 0;
     busy = false;
     renderShenResult();
