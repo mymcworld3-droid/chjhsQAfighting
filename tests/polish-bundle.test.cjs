@@ -49,7 +49,8 @@ test('Dongtian generation performs a second independent AI correctness check', (
   assert.match(dongtianApi, /buildDongtianDoubleCheckPrompt/);
   assert.match(dongtianApi, /verifyGeneratedDongtian/);
   assert.match(dongtianApi, /confidence >= 0\.8/);
-  assert.match(dongtianApi, /第二次 AI 複核未通過/);
+  assert.match(dongtianApi, /洞天品質複核未通過/);
+  assert.match(dongtianApi, /reviewAndRepairGeneratedDongtian/);
 });
 
 test('Dongtian encounter asks before entry and shows owner metadata', () => {
