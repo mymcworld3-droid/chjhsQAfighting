@@ -103,11 +103,11 @@
       #page-battle.battle-v2-page #bv2-arena.hidden,
       #page-battle.battle-v2-page #bv2-result.hidden{display:none!important;min-height:0!important;margin:0!important;padding:0!important;visibility:hidden!important}
       #page-battle.battle-v2-page .bv2-shell > section:not(.hidden){visibility:visible!important}
-      #page-battle .bv2-shell{box-sizing:border-box;width:min(100%,1440px)!important;min-height:100dvh;margin:0 auto!important;padding:14px 24px 28px!important;display:flex;flex-direction:column}
+      #page-battle .bv2-shell{box-sizing:border-box;width:min(100%,1440px)!important;height:100%;min-height:0;margin:0 auto!important;padding:max(14px,env(safe-area-inset-top)) max(24px,env(safe-area-inset-right)) max(20px,env(safe-area-inset-bottom)) max(24px,env(safe-area-inset-left))!important;display:flex;flex-direction:column}
       #page-battle .bv2-head{position:sticky;top:0;z-index:20;margin:0 -4px 10px;padding:10px 6px 12px!important;background:linear-gradient(180deg,rgba(5,5,4,.96),rgba(5,5,4,.82),transparent);backdrop-filter:blur(12px)}
       #page-battle .bv2-head h2{font-size:clamp(22px,2.4vw,34px)!important}
       #page-battle .bv2-icon-btn{width:42px!important;height:42px!important}
-      #page-battle .bv2-lobby,#page-battle .bv2-intro,#page-battle .bv2-result{flex:1;min-height:calc(100dvh - 98px)!important;margin-top:0!important}
+      #page-battle .bv2-lobby,#page-battle .bv2-intro,#page-battle .bv2-result{flex:1;min-height:0!important;margin-top:0!important;overflow-y:auto;overscroll-behavior:contain}
       #page-battle .bv2-lobby{justify-content:center!important}
       #page-battle .bv2-arena:not(.hidden){
         flex:1;min-height:0;margin-top:0!important;display:grid!important;
@@ -117,7 +117,7 @@
       }
       #page-battle .bv2-scoreboard{grid-area:score}
       #page-battle .bv2-duel-rule{grid-area:rule}
-      #page-battle .bv2-question-card{grid-area:question;min-height:0;padding:clamp(16px,2vw,26px)!important;display:flex;flex-direction:column;justify-content:flex-start}
+      #page-battle .bv2-question-card{grid-area:question;min-width:0;min-height:0;padding:clamp(16px,2vw,26px)!important;display:flex;flex-direction:column;justify-content:flex-start;overflow-y:auto;overflow-wrap:anywhere}
       #page-battle .bv2-question-card h3{font-size:clamp(17px,1.65vw,24px)!important;line-height:1.65!important}
       #page-battle .bv2-options{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
       #page-battle .bv2-option{min-height:64px!important;font-size:clamp(11px,1vw,14px)!important}
@@ -132,8 +132,8 @@
         #page-battle .bv2-question-card{min-height:430px}
       }
       @media(max-width:900px){
-        #page-battle .bv2-shell{padding:10px 12px 24px!important}
-        #page-battle .bv2-arena:not(.hidden){grid-template-columns:1fr!important;grid-template-areas:'score' 'rule' 'question' 'log'!important;grid-template-rows:auto!important}
+        #page-battle .bv2-shell{height:auto;min-height:100%;padding:max(10px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(20px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))!important}
+        #page-battle .bv2-arena:not(.hidden){grid-template-columns:minmax(0,1fr)!important;grid-template-areas:'score' 'rule' 'question' 'log'!important;grid-template-rows:auto!important}
         #page-battle .bv2-log-wrap{max-height:250px!important}
       }
       @media(max-width:620px){
