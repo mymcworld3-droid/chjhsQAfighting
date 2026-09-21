@@ -168,8 +168,10 @@ export function decideRoundAttackers(host, guest, tieWindowMs = BATTLE_V2.tieWin
   if (!hostCorrect && guestCorrect) return ['guest'];
   if (!hostCorrect && !guestCorrect) return [];
 
-  // Every correct answer attacks; apply both hits from the same pre-round state.
-  return ['host', 'guest'];
+  // Both correct players can attack, but the earlier server-stamped answer takes first turn.
+  const hostAt = Number(host?.answer?.atMs) || Number.POSITIVE_INFINITY;
+  const guestAt = Number(guest?.answer?.atMs) || Number.POSITIVE_INFINITY;
+  return guestAt < hostAt ? ['guest', 'host'] : ['host', 'guest'];
 }
 
 function attackPower(player) {
@@ -200,117 +202,76 @@ export function settleBattleRound({
   tieWindowMs = BATTLE_V2.tieWindowMs,
   maxRounds = BATTLE_V2.maxRounds
 }) {
-  const attackers = decideRoundAttackers(host, guest, tieWindowMs);
-  const hostSupport = resolveDeterministicCoreSupport(host, `${roomId}:${round}:${host.uid}:support`);
-  const guestSupport = resolveDeterministicCoreSupport(guest, `${roomId}:${round}:${guest.uid}:support`);
-  const plans = attackers.map((role) => hitPlan({
-    roomId, round, role,
-    player: role === 'host' ? host : guest,
-    support: role === 'host' ? hostSupport : guestSupport
-  }));
-
-  // 回元於本回合攻防前生效；護體抵銷一次攻擊，不寫回場外修為護體。
+  // Firestore server-stamped response time determines initiative, never damage eligibility.
+  // Missing/timeout answers move last; a tie consistently gives host initiative.
+  const hostAt = Number(host?.answer?.atMs) || Number.POSITIVE_INFINITY;
+  const guestAt = Number(guest?.answer?.atMs) || Number.POSITIVE_INFINITY;
+  const turnOrder = guestAt < hostAt ? ['guest', 'host'] : ['host', 'guest'];
+  const attackers = [];
+  const hostSupport = resolveDeterministicCoreSupport(host, roomId + ':' + round + ':' + host.uid + ':support');
+  const guestSupport = resolveDeterministicCoreSupport(guest, roomId + ':' + round + ':' + guest.uid + ':support');
   const startHostHp = Math.min(Math.max(1, Number(host?.maxHp) || 1000), currentHp(host) + hostSupport.heal);
   const startGuestHp = Math.min(Math.max(1, Number(guest?.maxHp) || 1000), currentHp(guest) + guestSupport.heal);
   let hostHp = startHostHp;
   let guestHp = startGuestHp;
+  let hostCoreShield = hostSupport.shield;
+  let guestCoreShield = guestSupport.shield;
   const logs = [];
+  const steps = [];
   const activations = [];
   for (const activation of hostSupport.activations) activations.push({ ...activation, ownerUid: host.uid });
   for (const activation of guestSupport.activations) activations.push({ ...activation, ownerUid: guest.uid });
-  if (hostSupport.heal && startHostHp > currentHp(host)) logs.push({ type:'heal', actorRole:'host', actorUid:host.uid, damage:0, amount:startHostHp-currentHp(host), skill:'太初回元丹・回元' });
-  if (guestSupport.heal && startGuestHp > currentHp(guest)) logs.push({ type:'heal', actorRole:'guest', actorUid:guest.uid, damage:0, amount:startGuestHp-currentHp(guest), skill:'太初回元丹・回元' });
+  if (hostSupport.heal && startHostHp > currentHp(host)) logs.push({ type: 'heal', actorRole: 'host', actorUid: host.uid, damage: 0, amount: startHostHp - currentHp(host), skill: '太初回元丹・回元' });
+  if (guestSupport.heal && startGuestHp > currentHp(guest)) logs.push({ type: 'heal', actorRole: 'guest', actorUid: guest.uid, damage: 0, amount: startGuestHp - currentHp(guest), skill: '太初回元丹・回元' });
 
-  const hostHit = plans.find((plan) => plan.role === 'host') || null;
-  const guestHit = plans.find((plan) => plan.role === 'guest') || null;
-  const hostReceived = guestHit && !hostSupport.shield ? guestHit.totalDamage : 0;
-  const guestReceived = hostHit && !guestSupport.shield ? hostHit.totalDamage : 0;
-  let hostCoreShield = hostSupport.shield && !guestHit;
-  let guestCoreShield = guestSupport.shield && !hostHit;
-  // Simultaneous hits use the same pre-hit state: guards and healing are symmetric.
-  if (hostHit) guestHp = Math.max(0, startGuestHp - guestReceived);
-  if (guestHit) hostHp = Math.max(0, startHostHp - hostReceived);
-  if (guestHit && hostSupport.shield) {
-    logs.push({ type:'guard', actorRole:'host', actorUid:host.uid, targetUid:guest.uid, damage:0, skill:'金丹道心護體', message:'金丹道心護體抵銷本次傷害' });
-    activations.push({ type:host.goldenCore.type, name:host.goldenCore.name || '金丹', ownerUid:host.uid, skill:'金丹道心護體', message:'金丹道心護體發動，抵銷本次攻擊', kind:'鬥法防護' });
-  }
-  if (hostHit && guestSupport.shield) {
-    logs.push({ type:'guard', actorRole:'guest', actorUid:guest.uid, targetUid:host.uid, damage:0, skill:'金丹道心護體', message:'金丹道心護體抵銷本次傷害' });
-    activations.push({ type:guest.goldenCore.type, name:guest.goldenCore.name || '金丹', ownerUid:guest.uid, skill:'金丹道心護體', message:'金丹道心護體發動，抵銷本次攻擊', kind:'鬥法防護' });
-  }
-
-  if (hostHit) {
-    logs.push({
-      type: 'attack',
-      actorRole: 'host',
-      actorUid: host.uid,
-      targetUid: guest.uid,
-      damage: guestReceived,
-      baseDamage: hostHit.baseDamage,
-      extraDamage: hostHit.extraDamage,
-      skill: hostHit.activation?.skill || ''
-    });
-    if (hostHit.activation) activations.push({ ...hostHit.activation, ownerUid: host.uid });
-  }
-
-  if (guestHit) {
-    logs.push({
-      type: 'attack',
-      actorRole: 'guest',
-      actorUid: guest.uid,
-      targetUid: host.uid,
-      damage: hostReceived,
-      baseDamage: guestHit.baseDamage,
-      extraDamage: guestHit.extraDamage,
-      skill: guestHit.activation?.skill || ''
-    });
-    if (guestHit.activation) activations.push({ ...guestHit.activation, ownerUid: guest.uid });
-  }
-
-  // Thunder counter only fires if the defender survived the incoming hit.
-  if (hostHit && guestReceived > 0 && guestHp > 0) {
-    const counter = resolveDeterministicCounterCore(
-      guest,
-      Math.min(startGuestHp, guestReceived),
-      `${roomId}:${round}:${guest.uid}:counter`
-    );
-    if (counter.reflectDamage > 0) {
-      hostHp = Math.max(0, hostHp - counter.reflectDamage);
-      logs.push({
-        type: 'counter',
-        actorRole: 'guest',
-        actorUid: guest.uid,
-        targetUid: host.uid,
-        damage: counter.reflectDamage,
-        skill: counter.activation?.skill || ''
-      });
-      if (counter.activation) activations.push({ ...counter.activation, ownerUid: guest.uid });
+  for (const role of turnOrder) {
+    // An earlier lethal hit (including Thunder reflection) ends the round immediately.
+    if (hostHp <= 0 || guestHp <= 0) break;
+    const player = role === 'host' ? host : guest;
+    const defender = role === 'host' ? guest : host;
+    const support = role === 'host' ? hostSupport : guestSupport;
+    const targetRole = role === 'host' ? 'guest' : 'host';
+    if (!answerCorrect(player)) {
+      logs.push({ type: 'miss', actorRole: role, actorUid: player.uid, targetUid: defender.uid, damage: 0, message: '本回合作答未命中，MISS' });
+      steps.push({ type: 'miss', actorRole: role, actorUid: player.uid, targetUid: defender.uid, damage: 0, hostHp, guestHp });
+      continue;
     }
-  }
 
-  if (guestHit && hostReceived > 0 && hostHp > 0) {
-    const counter = resolveDeterministicCounterCore(
-      host,
-      Math.min(startHostHp, hostReceived),
-      `${roomId}:${round}:${host.uid}:counter`
-    );
-    if (counter.reflectDamage > 0) {
-      guestHp = Math.max(0, guestHp - counter.reflectDamage);
-      logs.push({
-        type: 'counter',
-        actorRole: 'host',
-        actorUid: host.uid,
-        targetUid: guest.uid,
-        damage: counter.reflectDamage,
-        skill: counter.activation?.skill || ''
-      });
-      if (counter.activation) activations.push({ ...counter.activation, ownerUid: host.uid });
+    const plan = hitPlan({ roomId, round, role, player, support });
+    attackers.push(role);
+    const guarded = role === 'host' ? guestCoreShield : hostCoreShield;
+    if (guarded) {
+      if (role === 'host') guestCoreShield = false;
+      else hostCoreShield = false;
+      logs.push({ type: 'guard', actorRole: targetRole, actorUid: defender.uid, targetUid: player.uid, damage: 0, skill: '金丹道心護體', message: '金丹道心護體抵銷本次傷害' });
+      activations.push({ type: defender.goldenCore?.type || 'shield', name: defender.goldenCore?.name || '金丹', ownerUid: defender.uid, skill: '金丹道心護體', message: '金丹道心護體發動，抵銷本次攻擊', kind: '鬥法防護' });
+    }
+    const damage = guarded ? 0 : plan.totalDamage;
+    const targetBefore = role === 'host' ? guestHp : hostHp;
+    if (role === 'host') guestHp = Math.max(0, guestHp - damage);
+    else hostHp = Math.max(0, hostHp - damage);
+    const attack = { type: 'attack', actorRole: role, actorUid: player.uid, targetUid: defender.uid, damage, baseDamage: plan.baseDamage, extraDamage: plan.extraDamage, skill: plan.activation?.skill || '' };
+    logs.push(attack);
+    steps.push({ ...attack, guarded, hostHp, guestHp });
+    if (plan.activation) activations.push({ ...plan.activation, ownerUid: player.uid });
+    if (hostHp <= 0 || guestHp <= 0) break;
+
+    // A surviving defender may reflect damage. The attacker must survive to take a later action.
+    if (damage > 0) {
+      const counter = resolveDeterministicCounterCore(defender, Math.min(targetBefore, damage), roomId + ':' + round + ':' + defender.uid + ':counter');
+      if (counter.reflectDamage > 0) {
+        if (role === 'host') hostHp = Math.max(0, hostHp - counter.reflectDamage);
+        else guestHp = Math.max(0, guestHp - counter.reflectDamage);
+        const reflected = { type: 'counter', actorRole: targetRole, actorUid: defender.uid, targetUid: player.uid, damage: counter.reflectDamage, skill: counter.activation?.skill || '' };
+        logs.push(reflected);
+        steps.push({ ...reflected, hostHp, guestHp });
+        if (counter.activation) activations.push({ ...counter.activation, ownerUid: defender.uid });
+      }
     }
   }
 
   let winnerUid = null;
   let finishReason = '';
-
   if (hostHp <= 0 && guestHp <= 0) {
     winnerUid = 'draw';
     finishReason = 'double-ko';
@@ -325,9 +286,12 @@ export function settleBattleRound({
     if (hostHp === guestHp) winnerUid = 'draw';
     else winnerUid = hostHp > guestHp ? host.uid : guest.uid;
   }
-
   return {
     attackers,
+    turnOrder,
+    steps,
+    startHostHp,
+    startGuestHp,
     hostHp,
     guestHp,
     hostCoreShield,
