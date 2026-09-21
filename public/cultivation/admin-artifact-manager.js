@@ -355,6 +355,36 @@ import {
     return stage;
   }
 
+  // Same quantity scale as artifact-generation-api.js. Recompute on every
+  // recipe edit so this hint describes the prospective saved recipe.
+  function currentEditorIngredientCount(modal) {
+    const count = [...modal.querySelectorAll('[data-recipe-material],[data-recipe-artifact]')]
+      .reduce((sum, input) => sum + Math.max(0, Math.floor(Number(input.value) || 0)), 0);
+    return count >= 2 ? Math.min(count, MAX_ARTIFACT_RECIPE_MATERIALS) : 3;
+  }
+  function ingredientHintMultiplier(count) {
+    return Number((1 + (Math.max(2, Math.min(8, count)) - 3) * 0.05).toFixed(2));
+  }
+  const EFFECT_HINT_CAPS = Object.freeze({
+    equip_attack_percent:5, equip_hp_percent:5, equip_damage_percent:3,
+    equip_damage_reduction_percent:0.8, equip_crit_chance:0.75, equip_crit_damage_percent:3,
+    equip_combo_chance:0.1, equip_lifesteal_percent:0.5, equip_reflect_percent:1,
+    equip_low_hp_damage_percent:2, equip_low_hp_reduction_percent:0.8,
+    equip_first_hit_reduction_percent:0.9, equip_damage_cap_percent:1
+  });
+  function scaleIngredientHint(min, max, effect, factor) {
+    const integer = effect.unit === '點';
+    const floor = effect.type === 'equip_damage_cap_percent' ? 0.05 :
+      effect.field === 'multiplier' ? 1.01 : integer ? 1 : 0.0001;
+    const cap = integer ? 1000000 : effect.field === 'multiplier' ? 5 : EFFECT_HINT_CAPS[effect.type] ?? 1;
+    const bounded = n => Math.min(cap, Math.max(floor, n));
+    const low = bounded(min * factor);
+    const high = bounded(max * factor);
+    const minimum = integer ? Math.ceil(low - 1e-9) : Number(low.toFixed(4));
+    return integer ? [minimum, Math.max(minimum, Math.floor(high + 1e-9))]
+      : [minimum, Math.max(minimum, Number(high.toFixed(4)))];
+  }
+
   function depthHintForRealm(bounds, realmIndex, inverse = false, integer = false) {
     const start = inverse ? 10 - realmIndex : realmIndex - 1;
     const step = (Number(bounds.max) - Number(bounds.min)) / 12;
@@ -415,9 +445,13 @@ import {
     const bounds = setting || base;
     const integer = base.unit === '點';
     const inverse = type === 'equip_damage_cap_percent';
-    const [min, max] = depthHintForRealm(bounds, index, inverse, integer);
+    const [realmMin, realmMax] = depthHintForRealm(bounds, index, inverse, integer);
+    const quantity = currentEditorIngredientCount(modal);
+    const factor = ingredientHintMultiplier(quantity);
+    const [min, max] = scaleIngredientHint(realmMin, realmMax, base, factor);
     const number = (value) => Number(value).toLocaleString('zh-TW', { maximumFractionDigits:4 });
-    let text = prefix + number(min) + '～' + number(max) + ' ' + base.unit;
+    let text = prefix + number(min) + '～' + number(max) + ' ' + base.unit +
+      '（素材 ' + quantity + ' 個 ×' + factor + '）';
     if (base.field === 'multiplier') {
       const [durationMin, durationMax] = depthHintForRealm({
         min:bounds.durationMinutesMin, max:bounds.durationMinutesMax
