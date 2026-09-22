@@ -1853,9 +1853,9 @@ window.saveProfile = async (triggerButton = null) => {
     const source = document.getElementById('set-source-final-value').value; 
     const difficulty = document.getElementById('set-difficulty').value;
 
-    if (!displayName) { alert("名稱不能為空！"); return; }
-    if (sourceMode === 'bank' && (!source || source === 'ai')) { alert("請選擇題庫檔案！"); return; }
-    if (sourceMode === 'focused' && (!window.soloSelectedUnits || window.soloSelectedUnits.length === 0)) { alert("請至少加入一個單元！"); return; }
+    if (!displayName) { alert("名稱不能為空！"); return false; }
+    if (sourceMode === 'bank' && (!source || source === 'ai')) { alert("請選擇題庫檔案！"); return false; }
+    if (sourceMode === 'focused' && (!window.soloSelectedUnits || window.soloSelectedUnits.length === 0)) { alert("請至少加入一個單元！"); return false; }
 
     // The profile and scope cards have separate save buttons. Display progress
     // on the button the player actually pressed without changing persistence.
@@ -1907,6 +1907,7 @@ window.saveProfile = async (triggerButton = null) => {
             btn.disabled = false;
         }, 2000);
     }
+    return true;
 };
 
 async function switchToAI() {
