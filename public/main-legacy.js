@@ -2264,7 +2264,14 @@ async function fetchOneQuestion() {
     if (sourceMode === 'focused' && settings.focusedUnits && settings.focusedUnits.length > 0) {
         const randomUnit = settings.focusedUnits[Math.floor(Math.random() * settings.focusedUnits.length)];
         const parts = randomUnit.path.split('/');
-        const subject = parts[0]; 
+        const subject = parts[0];
+        // 專注練習的年級以選定單元為準，不應被玩家的個人程度覆蓋。
+        const chosenGrade = String(parts[1] || '');
+        const curriculumLevel = /^[七7](?:上|下|年級)/.test(chosenGrade) ? '國中一年級'
+            : /^[八8](?:上|下|年級)/.test(chosenGrade) ? '國中二年級'
+            : /^[九9](?:上|下|年級)/.test(chosenGrade) ? '國中三年級'
+            : /^(國小|國中|高中)[一二三四五六]年級/.test(chosenGrade) ? chosenGrade
+            : (currentUserData.profile.educationLevel || '國中一年級'); 
         
         let targetTopic = randomUnit.detail || randomUnit.path.replace('.json', '');
         if (randomUnit.sub_topics && randomUnit.sub_topics.length > 0) {
@@ -2283,7 +2290,7 @@ async function fetchOneQuestion() {
                 body: JSON.stringify({
                     subject: subject, 
                     specificTopic: targetTopic, 
-                    level: currentUserData.profile.educationLevel || "國中", 
+                    level: curriculumLevel, 
                     rank: rankName, 
                     difficulty: finalDifficulty,
                     language: currentLang,
