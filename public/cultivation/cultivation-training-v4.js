@@ -383,15 +383,6 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
           <button id="equip-current-core" type="button" class="core-equip-btn ${state.equipped ? 'equipped' : ''}" ${state.equipped || busy ? 'disabled' : ''}>
             ${state.equipped ? '<i class="fa-solid fa-circle-check"></i> 已調御此丹相' : '<i class="fa-solid fa-circle-dot"></i> 調御此丹相'}
           </button>
-          <div class="core-activation-row">
-            <span class="core-activation-state ${state.coreEnabled ? 'on' : 'off'}">${state.coreEnabled ? '本命金丹 · 啟用中' : '本命金丹 · 已停用'}</span>
-            <button id="toggle-golden-core" type="button" class="core-activation-btn ${state.coreEnabled ? 'is-enabled' : 'is-disabled'}"
-              aria-pressed="${state.coreEnabled}" ${busy || !state.equippedCore ? 'disabled' : ''}>
-              <i class="fa-solid ${state.coreEnabled ? 'fa-power-off' : 'fa-circle-play'}"></i>
-              ${state.coreEnabled ? '停用金丹' : '啟用金丹'}
-            </button>
-          </div>
-          <p class="core-activation-hint">停用保留原丹相與品級，暫停修為與鬥法效果；正在進行的鬥法仍使用入場時的金丹快照。</p>
         </div>
       </section>
     `;
@@ -567,7 +558,6 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     document.getElementById('core-odds-info')?.addEventListener('click', showOdds);
     document.getElementById('wash-golden-core')?.addEventListener('click', washCore);
     document.getElementById('equip-current-core')?.addEventListener('click', equipCore);
-    document.getElementById('toggle-golden-core')?.addEventListener('click', toggleGoldenCore);
   }
 
   async function persistRemote(extraFields = {}) {
@@ -585,13 +575,19 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     if (data) data[REMOTE_FIELD] = snapshot;
   }
 
+  // Status owns the activation control; never replace its DOM with the core tab.
+  function renderCoreTabIfVisible() {
+    if (activeTab !== 'core' || document.getElementById('training-status-tab')?.classList.contains('active')) return;
+    renderTrainingPage();
+  }
+
   // The equipped core is kept intact when disabled; only its activation bit changes.
   async function toggleGoldenCore() {
     if (busy || !isUnlocked() || !state.equippedCore) return;
     const previous = state.coreEnabled;
     busy = true;
     state.coreEnabled = !previous;
-    renderTrainingPage();
+    renderCoreTabIfVisible();
     try {
       await persistRemote();
       toast(state.coreEnabled ? '本命金丹已啟用，效果恢復。' : '本命金丹已停用，效果暫停。');
@@ -606,7 +602,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       toast('金丹狀態儲存失敗，已恢復原狀。');
     } finally {
       busy = false;
-      renderTrainingPage();
+      renderCoreTabIfVisible();
     }
   }
 
