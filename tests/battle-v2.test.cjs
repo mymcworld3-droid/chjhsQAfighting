@@ -363,20 +363,20 @@ test('battle renders exactly one phase and does not inherit a static old arena',
 });
 
 
-test('Gold Core shields block only the first hit of EACH PvP round without erasing off-field protection', () => {
+test('Gold Core shield disappears after one PvP hit without erasing off-field cultivation protection', () => {
   const e = loadEngine();
   const core = { type:'ningxin', name:'凝心靜音丹', grade:6 };
   const host = { ...player('h',{correct:false}), goldenCore:core, coreShield:true, coreCorrectStreak:0 };
   const guest = player('g',{correct:true});
   const one = e.settleBattleRound({roomId:'guard',round:1,host,guest});
   assert.equal(one.hostHp,1000);
-  assert.equal(one.hostCoreShield,true, 'the active shield rearms at the beginning of each round');
+  assert.equal(one.hostCoreShield,false, 'shield disappears as soon as it blocks one attack');
   assert.ok(one.logs.some(x=>x.type==='guard' && x.actorRole==='host'));
   assert.equal(one.logs.find(x=>x.type==='attack').damage,0);
   assert.ok(one.activations.some(x=>x.ownerUid==='h' && x.skill==='金丹道心護體'));
   const two = e.settleBattleRound({roomId:'guard',round:2,host:{...host,coreShield:one.hostCoreShield,coreCorrectStreak:one.hostCoreStreak,hp:one.hostHp},guest});
-  assert.equal(two.hostHp,1000);
-  assert.equal(two.hostCoreShield,true);
+  assert.equal(two.hostHp,800, 'next round does not automatically restore the shield');
+  assert.equal(two.hostCoreShield,false);
   assert.equal(host.coreShield,true, 'snapshot is not mutated and remains separate from persisted cultivation shield');
   assert.match(battleSource,/coreShield: !!goldenCore && data\.stats\?\.goldenCoreShield === true/);
   assert.match(battleSource,/'host\.coreShield': outcome\.hostCoreShield/);
@@ -391,7 +391,7 @@ test('Ningxin correct streak generates protection that prevents the same round h
   assert.equal(out.hostCoreStreak,3);
   assert.equal(out.hostHp,1000);
   assert.equal(out.guestHp,800);
-  assert.equal(out.hostCoreShield,true,'the trigger remains active but this round has spent its first-hit protection');
+  assert.equal(out.hostCoreShield,false,'newly generated protection was consumed by the same-round attack');
   assert.ok(out.activations.some(x=>x.skill==='凝心靜音丹・道心護體'));
 });
 
@@ -406,10 +406,10 @@ test('Wugou shield trigger is deterministic and survives without incoming attack
   assert.equal(first.hostHp,1000);
   const second=e.settleBattleRound({roomId:'clean',round:2,host:{...h,coreShield:first.hostCoreShield},guest:player('g',{correct:true})});
   assert.equal(second.hostHp,1000);
-  assert.equal(second.hostCoreShield,true);
+  assert.equal(second.hostCoreShield,false);
 });
 
-test('Dao-heart only blocks the first incoming hit in a round, including a counterattack', () => {
+test('Dao-heart blocks just one incoming hit, including a counterattack', () => {
   const e=loadEngine(), core={type:'ningxin',grade:6,name:'凝心靜音丹'};
   const h={...player('h',{correct:true,atMs:1000}),goldenCore:core,coreShield:true};
   const g={...player('g',{correct:true,atMs:1200}),goldenCore:{type:'thunder',grade:1},coreShield:false};
@@ -426,7 +426,32 @@ test('Dao-heart only blocks the first incoming hit in a round, including a count
     guest:{...g,hp:first.guestHp,coreCorrectStreak:first.guestCoreStreak},
     resolveEquipmentHit:({baseDamage})=>({damage:baseDamage,reflectDamage:120})
   });
-  assert.equal(next.hostHp,600,'the first reflection is guarded again next round, not the subsequent attack');
+  assert.equal(next.hostHp,480,'without a new skill activation, next-round reflection and direct attack both deal damage');
+  assert.equal(first.hostCoreShield,false);
+  assert.equal(next.hostCoreShield,false);
+});
+
+test('Ningxin can form a NEW shield in a later round after the prior one is consumed', () => {
+  const e=loadEngine(), core={type:'ningxin',name:'凝心靜音丹',grade:6};
+  const host={...player('h',{correct:false}),goldenCore:core,coreShield:true,coreCorrectStreak:2};
+  const guest=player('g',{correct:true});
+  const first=e.settleBattleRound({roomId:'reform',round:1,host,guest});
+  assert.equal(first.hostCoreShield,false);
+  const second=e.settleBattleRound({
+    roomId:'reform',round:2,
+    host:{...host,hp:first.hostHp,coreShield:first.hostCoreShield,coreCorrectStreak:first.hostCoreStreak,
+      answer:{correct:true,atMs:1100}},
+    guest:{...guest,answer:{correct:false,atMs:1200}}
+  });
+  assert.equal(second.hostCoreShield,false,'no protection without meeting the streak threshold again');
+  const reform=e.settleBattleRound({
+    roomId:'reform',round:3,
+    host:{...host,hp:second.hostHp,coreShield:second.hostCoreShield,coreCorrectStreak:2,
+      answer:{correct:true,atMs:1200}},
+    guest:{...guest,answer:{correct:false,atMs:1300}}
+  });
+  assert.equal(reform.hostCoreShield,true,'fresh Ningxin activation creates new protection');
+  assert.ok(reform.activations.some(x=>x.skill==='凝心靜音丹・道心護體'));
 });
 
 test('guarded opening attack still receives a second combo hit, but no third shield', () => {
@@ -438,7 +463,7 @@ test('guarded opening attack still receives a second combo hit, but no third shi
     resolveGuardedFollowup:()=>({damage:170,reflectDamage:0,heal:0,shieldGain:0,skill:'連擊'})
   });
   assert.equal(result.hostHp,830);
-  assert.equal(result.hostCoreShield,true);
+  assert.equal(result.hostCoreShield,false,'combo followup arrives after the shield is gone');
   const attackSteps = result.steps.filter(step=>step.type==='attack');
   assert.equal(attackSteps.length,2);
   assert.equal(attackSteps[0].guarded,true);
