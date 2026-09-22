@@ -4596,58 +4596,102 @@ window.loadAdminData = async () => {
     }
 };
 
+// Preserve the existing product fields and Firestore writes while presenting the form
+// outside the collapsible admin section. A closed section cannot clip this editor.
+let adminProductEditorOrigin = null;
+
+window.closeAdminForm = () => {
+    const editor = document.getElementById('admin-product-editor');
+    if (!editor || !editor.classList.contains('admin-product-editor-fullscreen')) return;
+    editor.classList.remove('admin-product-editor-fullscreen');
+    document.body.classList.remove('admin-product-editing');
+    document.getElementById('admin-form-body')?.classList.add('hidden');
+    document.getElementById('admin-product-close')?.classList.add('hidden');
+    const origin = adminProductEditorOrigin;
+    if (origin?.parent?.isConnected) {
+        origin.parent.insertBefore(editor, origin.next?.parentNode === origin.parent ? origin.next : null);
+    }
+    adminProductEditorOrigin = null;
+};
+
 window.toggleAdminForm = () => {
-    const body = document.getElementById('admin-form-body');
-    const arrow = document.getElementById('admin-form-arrow');
-    if (body.classList.contains('hidden')) {
-        body.classList.remove('hidden');
-        arrow.style.transform = 'rotate(0deg)';
+    if (document.getElementById('admin-product-editor')?.classList.contains('admin-product-editor-fullscreen')) {
+        closeAdminForm();
     } else {
-        body.classList.add('hidden');
-        arrow.style.transform = 'rotate(180deg)';
+        resetAdminForm();
+        openAdminForm();
     }
 };
 
 window.openAdminForm = () => {
-    const body = document.getElementById('admin-form-body');
-    const arrow = document.getElementById('admin-form-arrow');
-    body.classList.remove('hidden');
-    arrow.style.transform = 'rotate(0deg)';
-}
+    if (!currentUserData?.isAdmin) return;
+    const editor = document.getElementById('admin-product-editor');
+    if (!editor) return;
+    if (!editor.classList.contains('admin-product-editor-fullscreen')) {
+        adminProductEditorOrigin = { parent:editor.parentNode, next:editor.nextSibling };
+        document.body.appendChild(editor);
+    }
+    editor.classList.add('admin-product-editor-fullscreen');
+    document.body.classList.add('admin-product-editing');
+    document.getElementById('admin-form-body')?.classList.remove('hidden');
+    document.getElementById('admin-product-close')?.classList.remove('hidden');
+    void toggleAdminInputPlaceholder();
+    updateAdminProductPreview();
+    editor.querySelector('#admin-p-name')?.focus({ preventScroll:true });
+};
+
+window.updateAdminProductPreview = () => {
+    const value = document.getElementById('admin-p-value')?.value?.trim() || '';
+    const preview = document.getElementById('admin-asset-preview');
+    const empty = document.getElementById('admin-product-preview-empty');
+    if (!preview || !empty) return;
+    // CSS frame classes are not image URLs. Do not attempt to load them as paths.
+    const isImage = /^(?:assets\/|https?:\/\/|\.\.?\/|\/)[^?#]+\.(?:png|jpe?g|gif|webp|svg)(?:[?#].*)?$/i.test(value);
+    preview.classList.toggle('hidden', !isImage);
+    empty.classList.toggle('hidden', isImage);
+    if (isImage) {
+        if (preview.getAttribute('src') !== value) preview.src = value;
+    } else {
+        preview.removeAttribute('src');
+        empty.textContent = value ? '目前使用相框樣式：' + value : '選擇圖片以預覽外觀';
+    }
+};
 
 window.editProduct = (id, data) => {
-    document.getElementById('admin-edit-id').value = id; 
-    document.getElementById('admin-p-name').value = data.name;
-    document.getElementById('admin-p-type').value = data.type;
-    document.getElementById('admin-p-value').value = data.value;
-    document.getElementById('admin-p-price').value = data.price;
-    
-    document.getElementById('admin-form-title').innerText = "✏️ Edit Product";
-    const saveBtn = document.getElementById('admin-btn-save'); 
-    saveBtn.innerText = "Update";
-    saveBtn.classList.replace('bg-red-600', 'bg-blue-600');
-    
-    document.getElementById('admin-btn-del').classList.remove('hidden'); 
-    toggleAdminInputPlaceholder(); 
+    if (!currentUserData?.isAdmin) return;
+    document.getElementById('admin-edit-id').value = id;
+    document.getElementById('admin-p-name').value = data.name || '';
+    document.getElementById('admin-p-type').value = data.type || 'frame';
+    document.getElementById('admin-p-value').value = data.value || '';
+    document.getElementById('admin-p-price').value = data.price ?? '';
+
+    document.getElementById('admin-form-title').innerText = '編輯商品';
+    const saveBtn = document.getElementById('admin-btn-save');
+    saveBtn.innerText = '儲存變更';
+    document.getElementById('admin-btn-del').classList.remove('hidden');
     openAdminForm();
-    document.getElementById('page-admin').scrollIntoView({ behavior: 'smooth', block: 'start' });
 };
 
 window.resetAdminForm = () => {
-    document.getElementById('admin-edit-id').value = ''; 
+    closeAdminForm();
+    document.getElementById('admin-edit-id').value = '';
     document.getElementById('admin-p-name').value = '';
+    document.getElementById('admin-p-type').value = 'frame';
     document.getElementById('admin-p-value').value = '';
     document.getElementById('admin-p-price').value = '';
-    
-    document.getElementById('admin-form-title').innerText = t('admin_add_product');
-    const saveBtn = document.getElementById('admin-btn-save');
-    saveBtn.innerText = t('btn_save_product');
-    saveBtn.classList.replace('bg-blue-600', 'bg-red-600');
-    
-    document.getElementById('admin-btn-del').classList.add('hidden'); 
-    toggleAdminInputPlaceholder(); 
-    openAdminForm();
+
+    document.getElementById('admin-form-title').innerText = '新增商品';
+    document.getElementById('admin-btn-save').innerText = '建立商品';
+    document.getElementById('admin-btn-del').classList.add('hidden');
+    updateAdminProductPreview();
 };
+
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && document.getElementById('admin-product-editor')?.classList.contains('admin-product-editor-fullscreen')) {
+        event.preventDefault();
+        closeAdminForm();
+    }
+});
 
 window.saveProduct = async () => {
     if (!currentUserData || !currentUserData.isAdmin) return alert("Permission Denied (Admin only)");
@@ -4753,9 +4797,7 @@ async function loadUnusedAssets() {
 window.selectAdminImage = (value) => {
     if (!value) return;
     document.getElementById('admin-p-value').value = value;
-    const preview = document.getElementById('admin-asset-preview');
-    preview.src = value;
-    preview.classList.remove('hidden');
+    updateAdminProductPreview();
 };
 
 window.renderInventory = async (filterType = 'frame') => {
