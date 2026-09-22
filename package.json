@@ -6,7 +6,9 @@
   "scripts": {
     "test": "node --test tests/*.test.cjs",
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "build:module-versions": "node scripts/build-module-versions.cjs",
+    "check:module-versions": "node scripts/build-module-versions.cjs --check"
   },
   "keywords": [],
   "author": "",
