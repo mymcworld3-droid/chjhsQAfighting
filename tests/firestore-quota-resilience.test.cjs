@@ -38,3 +38,40 @@ test('meditation reuses the just-fetched daily record and keeps atomic settlemen
   assert.match(meditation, /await runTransaction\(db,/);
   assert.match(meditation, /if \(old\.lastDate === current\.date\)/);
 });
+
+const legacy = read('main-legacy.js');
+const battle = read('cultivation/battle-mode-v2.js');
+
+test('expensive full-user percentile scans require an explicit click and share an in-flight request', () => {
+  const section = legacy.slice(legacy.indexOf('let globalUsersStatsCache = null'), legacy.indexOf('// 主渲染函式'));
+  assert.match(section, /if \(percentileRequestedUid !== id\)/);
+  assert.match(section, /id="percentile-load-on-demand"/);
+  assert.match(section, /addEventListener\('click'/);
+  assert.match(section, /globalUsersStatsLoad = pending/);
+  assert.match(section, /if \(globalUsersStatsLoad\) return globalUsersStatsLoad/);
+  assert.match(section, /getDocs\(collection\(db, "users"\)\)/);
+  assert.match(section, /renderSerial !== percentileRenderSerial/);
+});
+
+test('idle matchmaking scans less frequently while preserving immediate initial search and room listener', () => {
+  assert.match(battle, /MATCH_RECONCILE_MS = 8000/);
+  assert.match(battle, /await findAndClaimRoom\(myData\)/);
+  assert.match(battle, /onSnapshot\(roomRef\(roomId\), onRoomSnapshot/);
+  assert.match(battle, /if \(state\.roomId && state\.role === 'host' && state\.room\?\.status === 'waiting'\) scheduleReconcile\(\)/);
+});
+
+test('market only refreshes automatically every two minutes while leaving manual refresh available', () => {
+  assert.match(market, /refreshTimer = setInterval/);
+  assert.match(market, /\},120000\);/);
+  assert.match(market, /button\.dataset\.pmRefresh !== undefined/);
+});
+
+test('friends, leaderboard and chat reuse recent reads without changing their original navigation', () => {
+  assert.match(legacy, /friendListReadCache/);
+  assert.match(legacy, /Date\.now\(\) - friendListReadCache\.time < 60000/);
+  assert.match(legacy, /friendListPending/);
+  assert.match(legacy, /leaderboardCachedSnapshot/);
+  assert.match(legacy, /Date\.now\(\) - leaderboardCacheTime >= 120000/);
+  assert.match(legacy, /limit\(25\)/);
+  assert.match(legacy, /if \(pageId !== 'page-social' && chatUnsub\)/);
+});
