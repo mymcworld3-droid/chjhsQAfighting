@@ -74,6 +74,7 @@
     document.body.style.overflow = 'hidden';
     document.documentElement.style.overflow = 'hidden';
     setView('course');
+    window.resetCurriculumPages?.();
     updateSummary();
     $('ss-close')?.focus({ preventScroll: true });
   }
