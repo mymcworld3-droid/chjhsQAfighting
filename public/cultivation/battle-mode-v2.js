@@ -455,7 +455,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
   // Invite only the host's friends who were recently active. The same waiting
   // room gets one invitation wave; listeners and reconnects cannot spam friends.
   async function inviteOnlineFriends(roomId) {
-    if (!roomId || state.invitedRoomId === roomId || state.role !== 'host') return;
+    if (!roomId || state.invitedRoomId === roomId || state.role !== 'host' || state.room?.status !== 'waiting') return;
     state.invitedRoomId = roomId;
     const owner = me();
     const friends = [...new Set((userData()?.friends || []).filter(uid => typeof uid === 'string' && uid !== owner?.uid))].slice(0, 30);
