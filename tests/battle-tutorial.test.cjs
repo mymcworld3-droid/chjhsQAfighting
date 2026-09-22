@@ -30,7 +30,7 @@ test('first tutorial duel is Shen Qingshuang one-shotting the projection for exa
 test('second tutorial duel is Gu Changfeng and teaches the real battle timing rules', () => {
   assert.match(story, /顧長風，過來。你陪他練基本鬥法/);
   assert.match(story, /顧長風走上鬥法臺/);
-  assert.match(tutorial, /師姐說你現在太弱/);
+  assert.match(tutorial, /師姐的劍太快了吧/);
   assert.match(tutorial, /assets\/story\/characters\/battle-rival\.png/);
   assert.match(tutorial, /第一位玩家提交答案後，才會啟動另一方的 25 秒應答窗/);
   assert.match(tutorial, /雙方都答對時依作答先後出手/);
@@ -46,7 +46,7 @@ test('battle tutorial is a local simulation and never creates a formal matchmaki
   assert.doesNotMatch(tutorial, /addDoc/);
   assert.doesNotMatch(tutorial, /runTransaction/);
   assert.doesNotMatch(tutorial, /recordBattleResult/);
-  assert.match(tutorial, /不建立正式房間、不自動消耗道具、不給獎勵/);
+  assert.match(tutorial, /切磋不計戰績；主動使用的答題法寶仍會正常消耗/);
   assert.match(tutorial, /不會加入正式勝敗紀錄/);
 });
 
