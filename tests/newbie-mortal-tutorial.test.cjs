@@ -57,6 +57,33 @@ test('Dongfu tutorial waits until the player clicks the bottom navigation before
 });
 
 
+test('newbie scope tutorial follows the fullscreen five-step picker without old dropdown targets', () => {
+  assert.match(tutorial, /target: '#dongfu-scope-card \.dongfu-collapse-head', requiresScopeOpen: true/);
+  assert.match(tutorial, /target: '#scope-studio #set-source-mode', requiresScopeOpenView: true/);
+  assert.match(tutorial, /target: '#scope-studio \.ss-picker \.ss-panel-head', requiresScopeOpenView: true/);
+  assert.match(tutorial, /target: '#scope-studio #ss-close', requiresScopeReturn: true/);
+  assert.match(tutorial, /年級 → 科目 → 學期 → 版本 → 章節與考點/);
+  assert.doesNotMatch(tutorial, /target: '#set-source-mode', settingsSection: 'scope'/);
+  assert.match(tutorial, /bindScopeTutorialEvents\(\)/);
+  assert.match(tutorial, /scopeStudioOpen\(\) \? '30000' : ''/);
+  assert.match(tutorial, /if \(step\.requiresScopeOpen && !scopeStudioOpen\(\)\) return true/);
+  assert.match(tutorial, /if \(step\.requiresScopeReturn && scopeStudioOpen\(\)\) return true/);
+  assert.match(tutorial, /if \(scopeStudioOpen\(\) && window\.closeCurriculumStudio\?\.\(\) === false\) return/);
+});
+
+test('clicking anywhere outside highlighted controls advances only informational steps', () => {
+  assert.match(tutorial, /function bindAnywhereClick\(\)/);
+  assert.match(tutorial, /document\.addEventListener\('click', \(event\) => \{/);
+  assert.match(tutorial, /if \(!active \|\| !event\.isTrusted\) return/);
+  assert.match(tutorial, /highlighted\.contains\(event\.target\)/);
+  assert.match(tutorial, /if \(withinHighlight\) return/);
+  assert.match(tutorial, /event\.stopImmediatePropagation\(\)/);
+  assert.match(tutorial, /if \(step\.routeGate \|\| nextBlocked\(steps\[index\]\)\) return/);
+  assert.match(tutorial, /advanceTutorial\(\)/);
+  assert.match(tutorial, /newbie-tutorial-actions button, #newbie-tutorial-layer input/);
+  assert.match(tutorial, /card\.querySelector\('\.newbie-tutorial-next'\)\.onclick=\(\)=>\{if\(!blocked\)advanceTutorial\(\);\}/);
+});
+
 test('chapter-two tutorial carefully teaches the complete Dongtian lifecycle', () => {
   assert.match(tutorial, /第二章 · 洞天入口/);
   assert.match(tutorial, /請親自點亮起的「洞天」入口/);
