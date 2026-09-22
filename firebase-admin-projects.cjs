@@ -36,7 +36,7 @@ function adminProject(role, { env = process.env, admin = require('firebase-admin
     projectId: PROJECT_IDS[role]
   }, APP_NAMES[role]);
   if (app.options.projectId !== PROJECT_IDS[role]) throw new Error('Firebase ' + role + ' Admin app project mismatch');
-  return { app, auth: app.auth(), db: app.firestore() };
+  return { app, auth: require('firebase-admin/auth').getAuth(app), db: require('firebase-admin/firestore').getFirestore(app) };
 }
 
 module.exports = { PROJECT_IDS, ENV_KEYS, parseServiceAccount, adminProject };
