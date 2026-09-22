@@ -46,7 +46,8 @@ test('only independently sourced high-school math first-book editions are labell
 });
 
 test('grade-aware selector never uses junior-high unit files for high-school data', () => {
-  assert.match(chooser, /sourcePath=\(sub,g\)=>g\.startsWith\('高中'\)/);
+  assert.match(chooser, /sourcePath=\(sub,g\)=>g\.startsWith\('國小'\)/);
+  assert.match(chooser, /g\.startsWith\('高中'\)\?'high_school_unit_name/);
   assert.match(chooser, /high_school_unit_name/);
   assert.match(chooser, /data\.subjects\?\.\[subject\]\?\.\[grade\]/);
   assert.match(chooser, /highSubjectList/);
