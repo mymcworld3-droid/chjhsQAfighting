@@ -241,3 +241,16 @@ test('material listing validates total price above unit reference both before an
     before.indexOf("tx.update(sellerRef, { [systemField]: system })"));
   assert.match(before,/if \(type === 'recipe'\)/);
 });
+
+test('store switches market type before showing frame and avatar item categories', () => {
+  const page = index.slice(index.indexOf('<div id="page-store"'), index.indexOf('<div id="page-cards"'));
+  const shop = page.indexOf('id="pm-view-shop"');
+  const marketButton = page.indexOf('id="pm-view-market"');
+  const all = page.indexOf("filterStore('all', this)");
+  const frame = page.indexOf("filterStore('frame', this)");
+  const avatar = page.indexOf("filterStore('avatar', this)");
+  assert.ok(shop >= 0 && marketButton > shop && all > marketButton && frame > all && avatar > frame);
+  assert.match(market, /tabs\?\.classList\.toggle\('hidden', open\)/);
+  assert.match(market, /switcher\.querySelector\('#pm-view-shop'\)\?\.addEventListener/);
+  assert.match(index, /id="pm-view-market" onclick="window\.openPlayerMarketplace\?\.\('all'\)"/);
+});
