@@ -13,6 +13,19 @@ const ALLOWED_EFFECTS = new Set([
   'timed_attack_multiplier','timed_cultivation_multiplier','remove_wrong_option'
 ]);
 const EQUIP_SLOTS = ['本命法寶','護身法寶','佩飾法寶','輔助法寶'];
+const FORGE_METHODS = Object.freeze(['自由發揮','劍道鍛造','護體鑄造','符籙煉製','陣法刻印']);
+const WEAPON_FORMS = Object.freeze(['劍','刀','槍','弓','斧','錘','戟','棍','鞭','匕首','飛劍','法盾','法杖','符籙','陣盤','寶珠','玉佩','法鏡','鈴','幡','印','鼎','鐘','器胚','其他']);
+const METHOD_FORMS = Object.freeze({ 劍道鍛造:'劍', 護體鑄造:'法盾', 符籙煉製:'符籙', 陣法刻印:'陣盤' });
+function normalizeForgeMethod(value) {
+  return FORGE_METHODS.includes(value) ? value : '自由發揮';
+}
+function lockedWeaponForm(payload = {}) {
+  const { primary } = ingredientHierarchy(payload);
+  // A deep artifact's existing shape takes priority over a newly selected style.
+  const prior = primary.find((item) => item.type === 'artifact' && WEAPON_FORMS.includes(item.weaponForm));
+  const prepared = primary.find((item) => item.type === 'material' && WEAPON_FORMS.includes(item.weaponForm));
+  return prior?.weaponForm || prepared?.weaponForm || METHOD_FORMS[normalizeForgeMethod(payload.forgeMethod)] || '';
+}
 const REALMS = ['凡人','煉氣','築基','金丹','元嬰','化神','煉虛','合體','大乘','渡劫','真仙'];
 
 function finite(value, fallback = 0) {
@@ -217,8 +230,10 @@ function scaleIngredientRange(range, count = 3) {
   const floor = range.type === 'equip_damage_cap_percent' ? 0.05 :
     range.field === 'multiplier' ? 1.01 : integer ? 1 : 0.0001;
   const cap = integer ? 1000000 : range.field === 'multiplier' ? 5 : HARD_EFFECT_CAPS[range.type] ?? 1;
-  const low = clamp(Number(range.min) * multiplier, floor, cap);
-  const high = clamp(Number(range.max) * multiplier, floor, cap);
+  // The damage cap is inverse: a lower cap is stronger, so extra materials must lower it.
+  const strengthMultiplier = range.type === 'equip_damage_cap_percent' ? 1 / multiplier : multiplier;
+  const low = clamp(Number(range.min) * strengthMultiplier, floor, cap);
+  const high = clamp(Number(range.max) * strengthMultiplier, floor, cap);
   const min = integer ? Math.ceil(low - 1e-9) : roundRange(low);
   const max = integer ? Math.max(min, Math.floor(high + 1e-9)) : Math.max(min, roundRange(high));
   // Time duration is not effect strength; the ingredient factor does not change it.
@@ -419,7 +434,7 @@ function sanitizeEffect(raw, order, stage = 1, effectBoundsV1 = {}, effectBounds
   return out;
 }
 
-function sanitizeGeneratedArtifact(raw, targetRealm, refinementStage = 1, effectBoundsV1 = {}, effectBoundsV2 = {}, ingredientCount = 3) {
+function sanitizeGeneratedArtifact(raw, targetRealm, refinementStage = 1, effectBoundsV1 = {}, effectBoundsV2 = {}, ingredientCount = 3, options = {}) {
   const realm = REALMS.includes(targetRealm) && targetRealm !== '凡人' ? targetRealm : '煉氣';
   const order = realmOrder(realm);
   const stage = normalizeRefinementStage(refinementStage);
@@ -428,7 +443,21 @@ function sanitizeGeneratedArtifact(raw, targetRealm, refinementStage = 1, effect
   let effects = wantsEquip
     ? requested.filter((effect) => effect.type.startsWith('equip_'))
     : requested.filter((effect) => !effect.type.startsWith('equip_'));
-  effects = effects.slice(0, maxEffectsForGeneration(order, stage));
+  // Never let the model silently erase the deepest artifact's defining effect.
+  const primaryArtifacts = Array.isArray(options.primaryArtifacts) ? options.primaryArtifacts : [];
+  const inherited = primaryArtifacts.flatMap((item) => Array.isArray(item.effects) ? item.effects : [])
+    .map((effect) => sanitizeEffect(effect, order, stage, effectBoundsV1, effectBoundsV2, ingredientCount))
+    .filter(Boolean);
+  const core = inherited.find((effect) => effect.type.startsWith('equip_')) || inherited[0];
+  if (core) {
+    effects = effects.filter((effect) => effect.type.startsWith('equip_') === core.type.startsWith('equip_'));
+    const already = effects.findIndex((effect) => effect.type === core.type);
+    // Preserve the new rolled numeric strength when the same effect is already present.
+    if (already < 0) effects.unshift(core);
+    else if (already > 0) effects.unshift(effects.splice(already, 1)[0]);
+  }
+  effects = effects.filter((effect, index, all) => all.findIndex((row) => row.type === effect.type) === index)
+    .slice(0, maxEffectsForGeneration(order, stage));
 
   if (!effects.length) {
     const fallbackRange = effectRange('equip_attack_flat', order, stage, effectBoundsV1, false, effectBoundsV2, ingredientCount);
@@ -442,7 +471,11 @@ function sanitizeGeneratedArtifact(raw, targetRealm, refinementStage = 1, effect
     realm,
     category: equipped ? '裝備法寶' : '消耗法寶',
     description: cleanText(raw?.description, 180) || '由未知配方自行衍化而成的法寶。',
-    effects
+    effects,
+    weaponForm: WEAPON_FORMS.includes(options.weaponForm) ? options.weaponForm :
+      (WEAPON_FORMS.includes(raw?.weaponForm) ? raw.weaponForm : '其他'),
+    forgeMethod: normalizeForgeMethod(options.forgeMethod),
+    coreEffect: core?.type || effects[0]?.type || ''
   };
   if (equipped) {
     const slot = cleanText(raw?.equipSlot, 16);
@@ -478,6 +511,8 @@ function buildPrompt(payload) {
   const targetRealm = REALMS.includes(payload.targetRealm) && payload.targetRealm !== '凡人' ? payload.targetRealm : deriveTargetRealm(payload);
   const order = realmOrder(targetRealm);
   const refinementStage = deriveRefinementStage(payload);
+  const forgeMethod = normalizeForgeMethod(payload.forgeMethod);
+  const fixedForm = lockedWeaponForm(payload);
   const stageDirections = {
     1: [
       '【內部生成規則：第一煉】本次產物應像「木材加工成木棍」：是可繼續加工的器胚、零件、核心、刃胚、握柄、符骨、靈芯、甲片等半成品，而不是完整武器或終極法寶。',
@@ -526,6 +561,9 @@ function buildPrompt(payload) {
     '文雅靈寶：當主素材明確偏悟道、療癒或輔助時，可走修為、護體或節奏型路線。'
   ];
   const creativeDirection = creativeDirections[Math.floor(Math.random() * creativeDirections.length)];
+  const methodRule = forgeMethod === '自由發揮'
+    ? '未指定煉器手法，依最深主材的用途自由創作。'
+    : '本次指定煉器手法：' + forgeMethod + '。除非最深主材已有正式兵器器型，否則必須依手法形成' + (METHOD_FORMS[forgeMethod] || '相容器物') + '。此指定優先於預設攻擊傾向。';
   return [
     '你是修仙世界的「天工器靈」，負責從從未出現過的素材組合中推演新法寶。',
     '請非常有創意，不要只把材料名稱機械拼接。名稱要像真正的修仙法寶，2~8 個中文字為佳；描述要能讓人看出材料之間的意象、性質或衝突如何形成此器。',
@@ -533,6 +571,8 @@ function buildPrompt(payload) {
     '同一批材料可能蘊含攻擊、防禦、奇術、悟道、護命等方向；攻擊型優先不等於所有成品都固定加攻擊，請依素材性質在合法的攻擊型效果中挑選有辨識度的組合。純防禦、療癒、悟道主材或管理員指定非攻擊方向時，應尊重其核心用途。',
     hasAdminGuidance ? '管理員已有指定方向；不要用隨機風格取代管理員要求。下列創意方向僅在相容時作次要參考：' + creativeDirection : '本次創意方向：' + creativeDirection,
     hiddenStageDirection,
+    methodRule,
+    fixedForm ? '正式器型已鎖定為「' + fixedForm + '」，不得被隨機方向、名稱或次要素材覆蓋。' : '',
     weaponFormRule,
     '上述煉器階段規則只供你內部生成時使用。輸出的 name、description、icon、effects 不得解釋玩家正在第幾次煉器，也不得出現「深度」「套娃」「生成規則」「階段」等系統詞。',
     '名稱要有辨識度，避免大量使用「玄、天、神、靈」作為固定前綴；可使用器型、異象、典故、動作、自然意象來命名。',
@@ -582,7 +622,7 @@ function buildPrompt(payload) {
     '',
     '輸出前自行核對：成品是否能由主材及其故事推導？是否保留適當原法寶能力？是否遵守管理員每一項可行要求？是否僅使用本階段允許的效果與數值？全部確認後才輸出 JSON。',
     '輸出格式：',
-    '{"name":"法寶名","icon":"單字或符號","description":"繁體中文描述","equipSlot":"本命法寶|護身法寶|佩飾法寶|輔助法寶（若為裝備型）","effects":[{"type":"表中允許效果之一","value":"依該 type 的 value 範圍填數字；無 value 時省略","multiplier":"只有限時類才填","durationMinutes":"只有限時類才填"}]}'
+    '{"name":"法寶名","icon":"單字或符號","description":"繁體中文描述","weaponForm":"器型（劍、刀、法盾、符籙、陣盤等）","equipSlot":"本命法寶|護身法寶|佩飾法寶|輔助法寶（若為裝備型）","effects":[{"type":"表中允許效果之一","value":"依該 type 的 value 範圍填數字；無 value 時省略","multiplier":"只有限時類才填","durationMinutes":"只有限時類才填"}]}'
   ].join('\\n');
 }
 
@@ -668,13 +708,21 @@ function registerArtifactGenerationApi(app) {
       // 境界永遠由伺服器依投入素材在完整圖鑑中的正式境界重算，忽略前端傳來的 targetRealm。
       const targetRealm = deriveTargetRealm(req.body || {});
       const effectBoundsV2 = normalizeDepthEffectBounds(req.body?.effectBoundsV2);
-      const safePayload = { ...(req.body || {}), targetRealm, effectBoundsV2 };
+      const safePayload = { ...(req.body || {}), targetRealm, effectBoundsV2,
+        forgeMethod: normalizeForgeMethod(req.body?.forgeMethod) };
       const refinementStage = deriveRefinementStage(safePayload);
       const prompt = buildPrompt(safePayload);
       const routed = await aiRouter.generateJSON(prompt, { timeoutMs: 35000 });
-      const initialArtifact = sanitizeGeneratedArtifact(routed.data, targetRealm, refinementStage, {}, effectBoundsV2, totalIngredients);
+      const hierarchy = ingredientHierarchy(safePayload);
+      const forgeOptions = { weaponForm: lockedWeaponForm(safePayload),
+        forgeMethod: safePayload.forgeMethod,
+        primaryArtifacts: hierarchy.primary.filter((item) => item.type === 'artifact') };
+      const initialArtifact = sanitizeGeneratedArtifact(routed.data, targetRealm, refinementStage, {}, effectBoundsV2, totalIngredients, forgeOptions);
       const reviewed = await reviewGuidedArtifact(safePayload, initialArtifact, targetRealm, refinementStage);
-      res.json({ artifact: reviewed.artifact, provider: routed.provider, model: routed.model,
+      // A secondary AI review cannot undo the locked form or inherited signature effect.
+      const finalArtifact = sanitizeGeneratedArtifact(reviewed.artifact, targetRealm, refinementStage,
+        {}, effectBoundsV2, totalIngredients, forgeOptions);
+      res.json({ artifact: finalArtifact, provider: routed.provider, model: routed.model,
         guidanceReview: reviewed.guidanceReview });
     } catch (error) {
       console.error('[Artifact Generation API]', error);
@@ -692,6 +740,8 @@ module.exports.deriveTargetRealm = deriveTargetRealm;
 module.exports.deriveRefinementStage = deriveRefinementStage;
 module.exports.REALMS = REALMS;
 module.exports.ALLOWED_EFFECTS = ALLOWED_EFFECTS;
+module.exports.FORGE_METHODS = FORGE_METHODS;
+module.exports.lockedWeaponForm = lockedWeaponForm;
 module.exports.EFFECT_LABELS = EFFECT_LABELS;
 module.exports.effectRange = effectRange;
 module.exports.effectRangesForRealm = effectRangesForRealm;

@@ -47,6 +47,8 @@ export const ARTIFACT_REALMS = Object.freeze([
 ]);
 
 export const ARTIFACT_EQUIP_SLOTS = Object.freeze(['本命法寶', '護身法寶', '佩飾法寶', '輔助法寶']);
+export const ARTIFACT_WEAPON_FORMS = Object.freeze(['劍','刀','槍','弓','斧','錘','戟','棍','鞭','匕首','飛劍','法盾','法杖','符籙','陣盤','寶珠','玉佩','法鏡','鈴','幡','印','鼎','鐘','器胚','其他']);
+export const ARTIFACT_FORGE_METHODS = Object.freeze(['自由發揮','劍道鍛造','護體鑄造','符籙煉製','陣法刻印']);
 
 export const ARTIFACT_REALM_COLORS = Object.freeze({
   凡人: '#a1a1aa',
@@ -225,6 +227,9 @@ export function normalizeArtifactDefinition(raw = {}) {
     realm: String(raw.realm || '凡人').trim(),
     category: String(raw.category || '法寶').trim(),
     description: String(raw.description || '').trim(),
+    weaponForm: ARTIFACT_WEAPON_FORMS.includes(raw.weaponForm) ? raw.weaponForm : '',
+    forgeMethod: ARTIFACT_FORGE_METHODS.includes(raw.forgeMethod) ? raw.forgeMethod : '自由發揮',
+    coreEffect: String(raw.coreEffect || '').trim().slice(0, 64),
     craft: {
       gold: Math.max(0, Math.floor(finite(raw.craft?.gold, 0))),
       yield: Math.max(1, Math.floor(finite(raw.craft?.yield, 1)))
@@ -240,6 +245,9 @@ export function normalizeArtifactDefinition(raw = {}) {
       return next;
     }).filter((effect) => effect.type) : []
   };
+  if (!item.coreEffect || !item.effects.some((effect) => effect.type === item.coreEffect)) {
+    item.coreEffect = item.effects[0]?.type || '';
+  }
   if (raw.equipSlot) item.equipSlot = String(raw.equipSlot).trim();
   // Once a recipe is listed as paid knowledge, public/legacy formulas no longer
   // reveal its guide in game UI without an explicit purchase/owner/admin access.

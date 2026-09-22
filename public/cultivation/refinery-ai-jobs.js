@@ -79,13 +79,14 @@ import {
       : { materialId: row.id, quantity: row.quantity });
   }
 
-  function recipeSignature(recipe = []) {
+  function recipeSignature(recipe = [], forgeMethod = '自由發揮') {
     return recipe.map((row) => ({
       key: row.artifactId ? 'artifact:' + row.artifactId : 'material:' + row.materialId,
       quantity: Math.max(0, Math.floor(Number(row.quantity) || 0))
     })).filter((row) => row.key && row.quantity)
       .sort((a, b) => a.key.localeCompare(b.key))
-      .map((row) => row.key + ':' + row.quantity).join('|');
+      .map((row) => row.key + ':' + row.quantity).join('|') +
+      (forgeMethod && forgeMethod !== '自由發揮' ? '|method:' + forgeMethod : '');
   }
 
   function currentJob() {
@@ -123,9 +124,11 @@ import {
     return depth;
   }
 
-  function buildPlan(tokens, knownArtifactId = '') {
+  function buildPlan(tokens, knownArtifactId = '', forgeMethod = '自由發揮') {
     const ingredients = aggregateTokens(tokens);
     const recipe = recipeFromIngredients(ingredients);
+    const method = ['自由發揮','劍道鍛造','護體鑄造','符籙煉製','陣法刻印'].includes(forgeMethod)
+      ? forgeMethod : '自由發揮';
     const total = ingredients.reduce((sum, row) => sum + row.quantity, 0);
     if (total < 2 || total > 8) return { valid: false, reason: '煉器需要 2 到 8 個素材。', total };
 
@@ -147,7 +150,8 @@ import {
       total,
       ingredients,
       recipe,
-      signature: recipeSignature(recipe),
+      signature: recipeSignature(recipe, known?.forgeMethod || method),
+      forgeMethod: known?.forgeMethod || method,
       knownArtifactId: known?.id || '',
       discovery: !known,
       targetRealm,
@@ -208,7 +212,7 @@ import {
 
   async function startJob(tokens, knownArtifactId = '', adminOptions = {}) {
     if (currentJob()) throw new Error('目前已有一件法寶正在煉製，請等待完成後開爐取出。');
-    const plan = buildPlan(tokens, knownArtifactId);
+    const plan = buildPlan(tokens, knownArtifactId, adminOptions?.forgeMethod);
     if (!plan.valid) throw new Error(plan.reason);
 
     const user = authUser();
@@ -232,6 +236,7 @@ import {
       signature: plan.signature,
       recipe: plan.recipe,
       ingredients: plan.ingredients,
+      forgeMethod: plan.forgeMethod,
       adminGenerationDirection,
       adminGenerationPrompt
     };
@@ -291,7 +296,9 @@ import {
     return ARTIFACT_CATALOG.map((item) => ({
       id: item.id, name: item.name, icon: item.icon, realm: item.realm, category: item.category,
       description: item.description, story: item.story || '', effects: item.effects,
-      equipSlot: item.equipSlot || '', refinementDepth: artifactRecipeDepth(item.id)
+      equipSlot: item.equipSlot || '', weaponForm:item.weaponForm || '',
+      forgeMethod:item.forgeMethod || '自由發揮', coreEffect:item.coreEffect || '',
+      refinementDepth: artifactRecipeDepth(item.id)
     }));
   }
 
@@ -314,6 +321,7 @@ import {
           allMaterials: apiMaterials(),
           existingArtifacts: apiArtifacts(),
           targetRealm: job.targetRealm,
+          forgeMethod: job.forgeMethod || '自由發揮',
           adminGenerationDirection: job.adminGenerationDirection || '',
           adminGenerationPrompt: job.adminGenerationPrompt || '',
           supportedEffects: SUPPORTED_ARTIFACT_EFFECTS,
@@ -348,9 +356,12 @@ import {
     return id.slice(0, 64);
   }
 
-  function findRecipeBySignature(recipes, signature) {
+  function findRecipeBySignature(recipes, signature, catalog = ARTIFACT_CATALOG) {
     for (const [artifactId, recipe] of Object.entries(recipes || {})) {
-      if (recipeSignature(recipe) === signature) return artifactId;
+      const item = catalog.find((candidate) => candidate.id === artifactId);
+      // Historical recipes have no method suffix; new recipes keep their exact discovery signature.
+      const storedSignature = item?.generationSignature || recipeSignature(recipe);
+      if (storedSignature === signature) return artifactId;
     }
     return '';
   }
@@ -416,7 +427,7 @@ import {
       });
       const cleanLatestRecipes = recipeRepair.recipes;
 
-      awardedId = findRecipeBySignature(cleanLatestRecipes, fresh.signature);
+      awardedId = findRecipeBySignature(cleanLatestRecipes, fresh.signature, latestItems);
       // 讀取全站目前配方的同一筆 transaction 決定首發者。並發開爐時
       // Firestore 會重試衝突交易，只有第一筆成功登錄新配方的人擁有權。
       firstDiscovery = !awardedId;
