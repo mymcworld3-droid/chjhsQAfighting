@@ -27,9 +27,11 @@ export const DAILY_MEDITATION_STREAKS = Object.freeze([
 
 // 永遠以台灣日期判定每日重置，避免瀏覽器所在時區不同。
 export function meditationDateKey(now = new Date()) {
-  return new Intl.DateTimeFormat('en-CA', {
+  const parts = new Intl.DateTimeFormat('en-US', {
     timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit', day: '2-digit'
-  }).format(now);
+  }).formatToParts(now);
+  const value = Object.fromEntries(parts.map(part => [part.type, part.value]));
+  return value.year + '-' + value.month + '-' + value.day;
 }
 export function nextMeditationStreak(previousDate, previousStreak, today) {
   if (previousDate === today) return Math.max(1, Math.floor(Number(previousStreak) || 0));
