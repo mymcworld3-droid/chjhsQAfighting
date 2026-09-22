@@ -882,6 +882,14 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
     setText('bv2-result-enemy-name', enemy?.name || '對手');
     setPlayerPortrait('bv2-result-my-fighter', mine, true);
     setPlayerPortrait('bv2-result-enemy-fighter', enemy);
+    // Repeat Firestore snapshots update rewards, not the once-per-result reveal.
+    const finaleKey = String(state.roomId || '') + ':' + String(room.round) + ':' + String(room.winner || 'draw');
+    if (resultScene && resultScene.dataset.finaleKey !== finaleKey) {
+      resultScene.dataset.finaleKey = finaleKey;
+      resultScene.classList.remove('bv2-result-reveal');
+      void resultScene.offsetWidth;
+      resultScene.classList.add('bv2-result-reveal');
+    }
     const reward = battleReward(room, uid);
     const resultMarker = state.role === 'host' ? 'hostResultRecorded' : 'guestResultRecorded';
     const rewardLabel = reward.outcome === 'draw' ? '平局不發放勝負獎勵' :
