@@ -34,6 +34,13 @@
     }
   }
 
+  // Wait for async MathJax boot: the quiz may be ready before the CDN script.
+  // MathJax startup.promise becomes available after the script is initialized.
+  function readyMath() {
+    const mj = math();
+    return mj?.startup?.promise || Promise.resolve();
+  }
+
   function typeset(nodes) {
     const roots = (Array.isArray(nodes) ? nodes : [nodes]).filter(Boolean);
     if (!roots.length) return Promise.resolve();
@@ -43,7 +50,7 @@
       const mj = math();
       if (!mj?.typesetPromise) return;
       try {
-        await (mj.startup?.promise || Promise.resolve());
+        await readyMath();
         const live = roots.filter(node => node.isConnected);
         if (live.length) await mj.typesetPromise(live);
       } catch (error) {
@@ -54,6 +61,8 @@
     return queue;
   }
 
+  // Use this after every dynamic question, choice, explanation or feedback update.
+  // Clearing BEFORE replacing DOM avoids stale MathJax equation entries.
   function put(node, value) {
     if (!node) return Promise.resolve();
     clear(node);
