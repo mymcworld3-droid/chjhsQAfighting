@@ -2277,6 +2277,14 @@ async function fetchOneQuestion() {
         if (randomUnit.sub_topics && randomUnit.sub_topics.length > 0) {
             targetTopic += ` (核心考點細項：${randomUnit.sub_topics.join('、')})`;
         }
+        // 高中數學 A／B／甲／乙送給 API 時維持「數學」科目，
+        // 將分流、冊次與已選課程範圍明確寫進指定主題，避免交叉出題。
+        if (chosenGrade.startsWith('高中') && parts.length >= 4) {
+            const studyTrack = String(parts[3] || subject).slice(0, 16);
+            const termName = String(parts[2] || '').slice(0, 20);
+            targetTopic = `${chosenGrade}／${termName}／${studyTrack}：${targetTopic}`;
+        }
+        targetTopic = targetTopic.slice(0, 240);
 
         const weakSubjects = (currentUserData.profile.weakSubjects || "").split(',').map(s => s.trim());
         if (weakSubjects.includes(subject)) finalDifficulty = "easy";
