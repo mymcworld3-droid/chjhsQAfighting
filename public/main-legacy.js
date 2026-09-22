@@ -3937,20 +3937,37 @@ function calculateDomainScore(map, subjects) {
 // ==========================================
 // 📊 全服排名百分比 (Top X%) 計算系統
 // ==========================================
-let globalUsersStatsCache = null; // 快取全服資料，避免切換科目時重複發送請求
+let globalUsersStatsCache = null; // 只有玩家要求全服比較時才讀取
+let globalUsersStatsLoad = null;
+let globalUsersStatsOwner = '';
+let percentileRequestedUid = '';
+let percentileRenderSerial = 0;
 
 async function fetchAllUsersForPercentile() {
-    if (globalUsersStatsCache) return globalUsersStatsCache;
-    try {
-        const snap = await getDocs(collection(db, "users"));
-        const users = [];
-        snap.forEach(doc => users.push(doc.data()));
-        globalUsersStatsCache = users; // 暫存起來
-        return users;
-    } catch (e) {
-        console.error("[Percentile Error] 無法取得全服資料:", e);
-        return [];
+    const id = auth.currentUser?.uid || '';
+    if (!id) return [];
+    if (globalUsersStatsOwner !== id) {
+        globalUsersStatsOwner = id;
+        globalUsersStatsCache = null;
+        globalUsersStatsLoad = null;
     }
+    if (globalUsersStatsCache) return globalUsersStatsCache;
+    if (globalUsersStatsLoad) return globalUsersStatsLoad;
+    // 共用同一個進行中的請求，避免快速切換科目時讀取整份 users 多次。
+    const pending = (async () => {
+        try {
+            const snap = await getDocs(collection(db, "users"));
+            const users = snap.docs.map(doc => doc.data());
+            if (globalUsersStatsOwner === id) globalUsersStatsCache = users;
+            return users;
+        } catch (e) {
+            console.error("[Percentile Error] 無法取得全服資料:", e);
+            return [];
+        }
+    })();
+    globalUsersStatsLoad = pending;
+    try { return await pending; }
+    finally { if (globalUsersStatsLoad === pending) globalUsersStatsLoad = null; }
 }
 
 window.updatePercentileDisplay = async (targetSubject, myMap) => {
@@ -3959,11 +3976,32 @@ window.updatePercentileDisplay = async (targetSubject, myMap) => {
     if (!displayDiv || !textEl) return;
 
     displayDiv.classList.remove('hidden');
-    textEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-cyan-400 text-xl"></i> <span class="text-gray-400 ml-2">雲端運算中...</span>';
+    const id = auth.currentUser?.uid || '';
+    const renderSerial = ++percentileRenderSerial;
+    if (!id) { textEl.textContent = '請先登入以查看全服比較。'; return; }
+    if (percentileRequestedUid !== id) {
+        // 精確全服百分比需要讀取所有玩家，因此改為一次明確的使用者操作。
+        textEl.innerHTML = '<button type="button" id="percentile-load-on-demand" class="px-3 py-2 rounded-lg border border-cyan-500/40 text-cyan-200 bg-cyan-950/30">查詢全服比較（會讀取全服資料）</button>';
+        textEl.querySelector('#percentile-load-on-demand')?.addEventListener('click', () => {
+            if (auth.currentUser?.uid !== id) return;
+            percentileRequestedUid = id;
+            void window.updatePercentileDisplay(targetSubject, myMap);
+        });
+        return;
+    }
+    textEl.textContent = '正在讀取全服比較資料…';
 
     const allUsers = await fetchAllUsersForPercentile();
+    if (renderSerial !== percentileRenderSerial || auth.currentUser?.uid !== id) return;
     if (!allUsers || allUsers.length <= 1) {
-        textEl.innerHTML = '<span class="text-gray-400">數據收集中，目前暫無足夠的全服資料。</span>';
+        // 失敗時允許明確重試，但不自動再次讀整個集合。
+        percentileRequestedUid = '';
+        textEl.innerHTML = '<span class="text-gray-400">暫時無法取得全服比較資料。</span> <button type="button" id="percentile-load-on-demand">重新查詢</button>';
+        textEl.querySelector('#percentile-load-on-demand')?.addEventListener('click', () => {
+            if (auth.currentUser?.uid !== id) return;
+            percentileRequestedUid = id;
+            void window.updatePercentileDisplay(targetSubject, myMap);
+        });
         return;
     }
 
