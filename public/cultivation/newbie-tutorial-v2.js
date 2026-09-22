@@ -607,8 +607,8 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     anywhereClickBound = true;
     document.addEventListener('click', (event) => {
       if (!active || !event.isTrusted) return;
-      // 教學卡的跳過／返回／下一步按鈕保留各自的操作，不重複推進。
-      if (event.target.closest?.('#newbie-tutorial-layer .newbie-tutorial-card')) return;
+      // 教學卡文字本身也可以點擊下一步；唯獨原本的操作按鈕不可重複觸發。
+      if (event.target.closest?.('#newbie-tutorial-layer .newbie-tutorial-actions button, #newbie-tutorial-layer input, #newbie-tutorial-layer textarea, #newbie-tutorial-layer select, #newbie-tutorial-layer a')) return;
       const step = displayStep();
       const highlighted = target(step.target);
       const withinHighlight = highlighted && visible(highlighted) &&
