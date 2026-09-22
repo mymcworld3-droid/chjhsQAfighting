@@ -12,7 +12,9 @@ test('five progressive pages preserve the existing grade, subject, term, edition
   assert.match(pages,/native\.dispatchEvent\(new Event\('change',\{bubbles:true\}\)\)/);
   assert.match(pages,/last\.append\(search,tools,chapter,add,custom,message\)/);
   assert.match(pages,/window\.openCurriculumPage=page/);
-  assert.match(pages,/id="cs-page-tab-/);
+  assert.match(pages,/id="cs-prev" class="cs-back"/);
+  assert.doesNotMatch(pages,/cs-page-tab-|cs-page-path|cs-page-progress|cs-page-tabs/);
+  assert.match(pages,/if\(active===0\) window.closeCurriculumStudio\?\.\(\)/);
   assert.match(pages,/id="cs-stage-/);
   assert.match(pages,/id="cs-cards-/);
   assert.match(pages,/\$\('ss-tab-cart'\)\?\.click\(\)/);
@@ -22,6 +24,9 @@ test('five progressive pages preserve the existing grade, subject, term, edition
 test('only one stage is visible while pages support scrolling, progress and mobile tiles',()=>{
   assert.match(pages,/item\.hidden = i!==active/);
   assert.match(pages,/setPage\(active-1\)/);
+  assert.match(pages,/back\.textContent = active===0 \? '← 返回洞府' : '← 返回上一步'/);
+  assert.doesNotMatch(css,/cs-page-tab|cs-page-path|cs-page-progress|cs-pages-top/);
+  assert.match(css,/#scope-studio \.cs-scope \.cs-back/);
   assert.match(css,/#scope-studio \.cs-stage\[hidden\]\{display:none!important\}/);
   assert.match(css,/#scope-studio \.cs-choice-grid/);
   assert.match(css,/@media\(max-width:700px\)/);
