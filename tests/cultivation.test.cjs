@@ -82,7 +82,7 @@ function setup(totalScore = 0) {
     section(main, 'const REALMS = [', '// 綁定全域函式') +
     section(main, 'function updateUIStats() {', 'function buildPathTree(') +
     section(main, 'async function handleAnswer(', 'async function generateVisualAid(') +
-    section(theme, '  function score() {', '  function toast(') +
+    section(theme, '  function score() {', '  function text(selector, value) {') +
     section(theme, '  function render() {', '  function boot()'),
     context
   );
