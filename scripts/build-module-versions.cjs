@@ -25,8 +25,8 @@ function walk(dir) {
   }
 }
 walk(root);
-const ordered = Object.fromEntries(Object.entries(files).sort(([a], [b]) => a.localeCompare(b, 'en')));
-const build = createHash('sha1').update(JSON.stringify(ordered)).digest('hex');
+const ordered = Object.fromEntries(Object.entries(files).sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0));
+const build = ordered['index.html'] || 'missing-index';
 const result = JSON.stringify({ schema: 1, build, files: ordered }) + '\n';
 if (process.argv.includes('--check')) {
   if (readFileSync(output, 'utf8') !== result) {
