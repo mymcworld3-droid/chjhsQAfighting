@@ -225,11 +225,10 @@ export function settleBattleRound({
   const startGuestHp = Math.min(Math.max(1, Number(guest?.maxHp) || 1000), currentHp(guest) + guestSupport.heal);
   let hostHp = startHostHp;
   let guestHp = startGuestHp;
-  // 道心護體只在同一回合第一次受到傷害時觸發；護體本身留到下回合再生效。
-  const hostCoreShield = hostSupport.shield;
-  const guestCoreShield = guestSupport.shield;
-  let hostRoundGuardAvailable = hostCoreShield;
-  let guestRoundGuardAvailable = guestCoreShield;
+  // 每次凝聚的道心護體只擋一次傷害；使用後立刻消耗，下一回合不會自動恢復。
+  // 金丹技能未來若再次凝聚，resolveDeterministicCoreSupport 才會重新設為 true。
+  let hostCoreShield = hostSupport.shield;
+  let guestCoreShield = guestSupport.shield;
   const logs = [];
   const steps = [];
   const activations = [];
@@ -258,12 +257,12 @@ export function settleBattleRound({
       defender.hp = role === 'host' ? guestHp : hostHp;
     }
     attackers.push(role);
-    const guarded = role === 'host' ? guestRoundGuardAvailable : hostRoundGuardAvailable;
+    const guarded = role === 'host' ? guestCoreShield : hostCoreShield;
     if (guarded) {
-      if (role === 'host') guestRoundGuardAvailable = false;
-      else hostRoundGuardAvailable = false;
-      logs.push({ type: 'guard', actorRole: targetRole, actorUid: defender.uid, targetUid: player.uid, damage: 0, skill: '金丹道心護體', message: '金丹道心護體抵銷本回合第一次傷害' });
-      activations.push({ type: defender.goldenCore?.type || 'shield', name: defender.goldenCore?.name || '金丹', ownerUid: defender.uid, skill: '金丹道心護體', message: '金丹道心護體發動，本回合的防護已使用', kind: '鬥法防護' });
+      if (role === 'host') guestCoreShield = false;
+      else hostCoreShield = false;
+      logs.push({ type: 'guard', actorRole: targetRole, actorUid: defender.uid, targetUid: player.uid, damage: 0, skill: '金丹道心護體', message: '金丹道心護體抵銷一次傷害後消失' });
+      activations.push({ type: defender.goldenCore?.type || 'shield', name: defender.goldenCore?.name || '金丹', ownerUid: defender.uid, skill: '金丹道心護體', message: '金丹道心護體發動並消耗，須重新凝聚', kind: '鬥法防護' });
     }
     const equipment = !guarded && typeof resolveEquipmentHit === 'function'
       ? (resolveEquipmentHit({ attacker: player, defender, baseDamage: plan.totalDamage, role, round, seed: `${roomId}:${round}:${player.uid}:artifact` }) || null)
@@ -310,12 +309,12 @@ export function settleBattleRound({
         counter.activation = counter.activation || { type: 'artifact', skill: equipment.reflectSkill || '法寶反傷', name: '法寶', message: '法寶反傷觸發', kind: '鬥法受擊效果' };
       }
       if (counter.reflectDamage > 0) {
-        const counterGuarded = role === 'host' ? hostRoundGuardAvailable : guestRoundGuardAvailable;
+        const counterGuarded = role === 'host' ? hostCoreShield : guestCoreShield;
         if (counterGuarded) {
-          if (role === 'host') hostRoundGuardAvailable = false;
-          else guestRoundGuardAvailable = false;
-          logs.push({ type: 'guard', actorRole: role, actorUid: player.uid, targetUid: defender.uid, damage: 0, skill: '金丹道心護體', message: '金丹道心護體抵銷本回合第一次反擊傷害' });
-          activations.push({ type: player.goldenCore?.type || 'shield', name: player.goldenCore?.name || '金丹', ownerUid: player.uid, skill: '金丹道心護體', message: '金丹道心護體發動，本回合的防護已使用', kind: '鬥法防護' });
+          if (role === 'host') hostCoreShield = false;
+          else guestCoreShield = false;
+          logs.push({ type: 'guard', actorRole: role, actorUid: player.uid, targetUid: defender.uid, damage: 0, skill: '金丹道心護體', message: '金丹道心護體抵銷一次反擊傷害後消失' });
+          activations.push({ type: player.goldenCore?.type || 'shield', name: player.goldenCore?.name || '金丹', ownerUid: player.uid, skill: '金丹道心護體', message: '金丹道心護體發動並消耗，須重新凝聚', kind: '鬥法防護' });
         } else if (role === 'host') hostHp = Math.max(0, hostHp - counter.reflectDamage);
         else guestHp = Math.max(0, guestHp - counter.reflectDamage);
         const reflected = { type: 'counter', actorRole: targetRole, actorUid: defender.uid, targetUid: player.uid, damage: counterGuarded ? 0 : counter.reflectDamage, guarded: counterGuarded, skill: counter.activation?.skill || '' };
