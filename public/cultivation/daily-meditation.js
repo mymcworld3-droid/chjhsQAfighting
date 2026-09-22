@@ -1,7 +1,8 @@
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-import { getFirestore, doc, getDoc, runTransaction, increment, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { getFirestore, collection, query, where, orderBy, limit, getDocs, doc, getDoc, runTransaction, increment, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { meditationDateKey, nextMeditationStreak, meditationReward } from './daily-meditation-rules.js';
+import { buildMeditationMistakePool, chooseMeditationMistakes } from './daily-meditation-mistakes.js';
 
 (function () {
   'use strict';
@@ -128,7 +129,7 @@ import { meditationDateKey, nextMeditationStreak, meditationReward } from './dai
     }
     const reward = currentPreview();
     setContent(summary([['今日連續', '第 ' + reward.streak + ' 天'], ['全對修為', '+' + reward.cultivation], ['全對靈石', '+' + reward.gold]]) +
-      '<p class="dm-note">參悟 3 題；全對獲完整獎勵，答對 2 題獲半額基礎獎勵與連續加成。未滿 2 題仍可累積閉關天數，獲得 5 靈石。<br>每日 00:00（台灣時間）重置，離開未完成的閉關可以重新開始。</p>' +
+      '<p class="dm-note">從你過去問道、洞天及閉關的錯題中抽出 3 道不同題目重新參悟。優先選擇尚未訂正的錯題。<br>全對獲完整獎勵，答對 2 題獲半額基礎獎勵與連續加成；未滿 2 題仍可累積天數並獲得 5 靈石。每日 00:00（台灣時間）重置。</p>' +
       '<button type="button" class="dm-action" id="dm-start">開始閉關</button>');
     node('dm-start').onclick = () => void start();
     syncPanel();
@@ -152,8 +153,15 @@ import { meditationDateKey, nextMeditationStreak, meditationReward } from './dai
     try {
       await loadRemote();
       if (!node('daily-meditation-overlay')) return;
-      if (session && session.uid === uid() && session.date === today() && session.answered < QUESTION_TOTAL) renderQuestion();
-      else { session = null; renderIntro(); }
+      if (session && session.uid === uid() && session.date === today() && record().lastDate !== today()) {
+        if (session.answered === QUESTION_TOTAL) {
+          setContent('<p class="dm-note">本次三題已答完，但尚未領取獎勵。</p><button type="button" class="dm-action" id="dm-resume-finish">出關結算</button>');
+          node('dm-resume-finish').onclick = () => void finish();
+        } else if (session.questionAnswered) {
+          setContent('<p class="dm-note">已作答的題目不會重複計分，繼續參悟下一題。</p><button type="button" class="dm-action" id="dm-resume-next">繼續參悟</button>');
+          node('dm-resume-next').onclick = () => void nextQuestion();
+        } else renderQuestion();
+      } else { session = null; renderIntro(); }
     } catch (error) { notify(error.message || '無法讀取閉關紀錄，請檢查網路。'); }
   }
   function typeset() {
@@ -174,7 +182,7 @@ import { meditationDateKey, nextMeditationStreak, meditationReward } from './dai
     }
     const q = session.question?.data;
     if (!q) { notify('題目尚未備妥。'); return; }
-    setContent('<div class="dm-eyebrow">參悟 ' + (session.answered + 1) + ' / ' + QUESTION_TOTAL + '　·　已答對 ' + session.correct + ' 題</div>' +
+    setContent('<div class="dm-eyebrow">' + (session.question.source || '昔日錯題') + ' · 參悟 ' + (session.answered + 1) + ' / ' + QUESTION_TOTAL + '　·　已答對 ' + session.correct + ' 題</div>' +
       '<div class="dm-progress"><span style="width:' + Math.round(session.answered / QUESTION_TOTAL * 100) + '%"></span></div>' +
       '<h3 class="dm-question" id="dm-question"></h3><div class="dm-options" id="dm-options"></div>' +
       '<p class="dm-note">本次閉關獨立結算，不重複觸發一般答題獎勵。</p>');
@@ -201,6 +209,7 @@ import { meditationDateKey, nextMeditationStreak, meditationReward } from './dai
     const correct = choice === q.ans;
     session.answered += 1;
     if (correct) session.correct += 1;
+    session.answers.push({ q: q.q, options: q.opts.slice(), correctIdx: q.ans, userIdx: choice, isCorrect: correct, exp: q.exp || '', source: session.question.source || '昔日錯題' });
     node('dm-options').querySelectorAll('button').forEach((button, i) => {
       button.disabled = true;
       if (i === q.ans) button.classList.add('dm-correct');
@@ -223,30 +232,28 @@ import { meditationDateKey, nextMeditationStreak, meditationReward } from './dai
     node('dm-content').appendChild(next);
     typeset();
   }
-  async function fetchQuestion() {
-    const fn = window.fetchDailyMeditationQuestion;
-    if (typeof fn !== 'function') throw new Error('出題系統尚未準備好，請重新整理。');
-    const candidate = await fn();
-    const q = candidate?.data;
-    if (!q || !String(q.q || '').trim() || !Array.isArray(q.opts) || q.opts.length < 2 ||
-        !Number.isInteger(q.ans) || q.ans < 0 || q.ans >= q.opts.length) throw new Error('出題失敗，請重試。');
-    return candidate;
+  async function loadMistakes(id) {
+    // 與原有「答題紀錄」相同索引（uid + timestamp），避免全站掃描。
+    const history = query(collection(db, 'exam_logs'),
+      where('uid', '==', id), orderBy('timestamp', 'desc'), limit(250));
+    const snapshot = await getDocs(history);
+    if (uid() !== id) throw new Error('帳號已切換，請重新開啟閉關。');
+    const pool = buildMeditationMistakePool(snapshot.docs.map(item => item.data()));
+    return { selected: chooseMeditationMistakes(pool, QUESTION_TOTAL), available: pool.total };
   }
   async function nextQuestion() {
     if (!session || session.busy || session.answered >= QUESTION_TOTAL) return;
     session.busy = true;
-    setContent('<p class="dm-note">靈氣流轉，正在準備下一道參悟題目…</p>');
-    try {
-      const question = await fetchQuestion();
-      if (!session || session.uid !== uid() || !node('daily-meditation-overlay')) return;
-      session.question = question;
-      session.questionAnswered = false;
-      renderQuestion();
-    } catch (error) {
-      setContent('<p class="dm-note">題目載入失敗，今日尚未結算，請重新嘗試。</p><button type="button" class="dm-action" id="dm-retry">重試出題</button>');
-      node('dm-retry').onclick = () => void nextQuestion();
-      notify(error.message || '出題服務暫時無法使用。');
-    } finally { if (session) session.busy = false; }
+    const question = session.questions[session.answered];
+    if (!question) {
+      session.busy = false;
+      notify('錯題資料不足，無法繼續閉關。');
+      return;
+    }
+    session.question = question;
+    session.questionAnswered = false;
+    session.busy = false;
+    renderQuestion();
   }
   async function start() {
     if (busy) return;
@@ -254,13 +261,32 @@ import { meditationDateKey, nextMeditationStreak, meditationReward } from './dai
     try {
       await loadRemote();
       if (record().lastDate === today()) { renderIntro(); return; }
-      session = { uid: uid(), date: today(), answered: 0, correct: 0, questionAnswered: false, question: null, busy: false };
+      const id = uid();
+      const date = today();
+      setContent('<p class="dm-note">正在從過去的答題紀錄搜尋錯題…</p>');
+      const { selected, available } = await loadMistakes(id);
+      if (id !== uid() || date !== today()) throw new Error('已跨日或切換帳號，請重新開始閉關。');
+      if (selected.length < QUESTION_TOTAL) {
+        session = null;
+        setContent('<h3 class="dm-result">錯題尚未集齊</h3><p class="dm-note">目前可用的不同錯題共有 ' +
+          available + ' 題，還需要 ' + (QUESTION_TOTAL - selected.length) +
+          ' 題才能進行每日閉關。請先到「問道」或「洞天」練習；不會以新題冒充舊錯題，也不會扣除今日閉關次數。</p>' +
+          '<button type="button" class="dm-action" id="dm-return">返回仙府</button>');
+        node('dm-return').onclick = () => node('daily-meditation-overlay')?.remove();
+        return;
+      }
+      session = { uid: id, date, answered: 0, correct: 0, questionAnswered: false,
+        questions: selected, answers: [], question: null, busy: false };
       await nextQuestion();
-    } catch (error) { notify(error.message || '無法開始閉關。'); }
-    finally { busy = false; }
+    } catch (error) {
+      setContent('<p class="dm-note">目前無法讀取歷史錯題，今日閉關尚未開始。請確認網路連線後重試。</p>' +
+        '<button type="button" class="dm-action" id="dm-retry-start">重新查詢錯題</button>');
+      node('dm-retry-start').onclick = () => void start();
+      notify(error.message || '讀取錯題紀錄失敗。');
+    } finally { busy = false; }
   }
   async function finish() {
-    if (busy || !session || !session.questionAnswered || session.answered !== QUESTION_TOTAL) return;
+    if (busy || !session || !session.questionAnswered || session.answered !== QUESTION_TOTAL || session.answers.length !== QUESTION_TOTAL) return;
     const current = session;
     if (current.uid !== uid() || current.date !== today()) {
       notify('已跨日或切換帳號，請重新開始。');
@@ -270,6 +296,7 @@ import { meditationDateKey, nextMeditationStreak, meditationReward } from './dai
     setContent('<p class="dm-note">正在結算修行成果，請勿關閉…</p>');
     try {
       let outcome;
+      const logRef = doc(collection(db, 'exam_logs'));
       await runTransaction(db, async tx => {
         const ref = userRef(current.uid);
         const snap = await tx.get(ref);
@@ -296,6 +323,14 @@ import { meditationDateKey, nextMeditationStreak, meditationReward } from './dai
           'stats.totalScore': increment(reward.cultivation),
           'stats.gold': increment(reward.gold),
           'stats.rankLevel': rank
+        });
+        tx.set(logRef, {
+          uid: current.uid, mode: 'daily-meditation', topic: '閉關錯題',
+          question: '每日閉關 · ' + current.correct + '/' + QUESTION_TOTAL,
+          isCorrect: current.correct === QUESTION_TOTAL,
+          correctCount: current.correct, totalCount: QUESTION_TOTAL,
+          dailyMeditationAnswers: current.answers.map(answer => ({ ...answer })),
+          timestamp: serverTimestamp()
         });
         outcome = { reward, newRecord, newScore, newGold: Math.max(0, Number(data.stats?.gold) || 0) + reward.gold, rank };
       });
