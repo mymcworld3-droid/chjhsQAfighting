@@ -68,5 +68,5 @@ test('admin artifact and material containers are static and hydrated in place', 
 });
 
 test('index cache-busts main after the static-layout migration', () => {
-  assert.match(index, /main\.js\?v=20260922-core-toggle1/);
+  assert.match(index, /main\.js\?v=20260922-core-status1/);
 });
