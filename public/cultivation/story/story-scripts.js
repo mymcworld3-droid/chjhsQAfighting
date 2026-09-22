@@ -176,7 +176,7 @@ export const STORY_CHAPTERS = Object.freeze([
       c('shen', '不可以。'),
       c('narrator', '沈清霜走到鬥法臺另一端，連劍都沒有完全拔出。'),
       c('shen', '上場，我帶你練習一次。'),
-      c('narrator', '一道劍光閃過。你的演武投影承受六萬五千點真實傷害，瞬間潰散。沈清霜收劍，難得怔住。'),
+      c('narrator', '一道劍光掠過，你還沒看清她如何出手，演武投影便碎成滿地流光。沈清霜收劍，難得怔住。'),
       c('player', '……', 'confused'),
       c('shen', '……'),
       c('shen', '呃……沒事吧？'),
