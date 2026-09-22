@@ -2701,8 +2701,36 @@ function listenToSystemCommands() {
 
 // 顯示邀請通知 (使用 getAvatarHtml 修正顯示)
 function showInviteToast(inviteId, data) {
+    // An active Dongtian quiz must never be covered or interrupted by a duel invitation.
+    const dongtianActive = () => {
+        const overlay = document.getElementById('dongtian-overlay');
+        return !!(overlay && overlay.getClientRects().length && getComputedStyle(overlay).visibility !== 'hidden');
+    };
+    if (dongtianActive()) {
+        const born = data.timestamp?.toMillis?.() || Date.now();
+        const retry = setInterval(() => {
+            if (Date.now() - born > 2 * 60 * 1000 || !auth.currentUser) {
+                clearInterval(retry);
+                removeInvite(inviteId, null);
+            } else if (!dongtianActive()) {
+                clearInterval(retry);
+                showInviteToast(inviteId, data);
+            }
+        }, 1200);
+        return;
+    }
+    // The v2 room protocol cannot be joined through the retired legacy transaction.
+    if (data.modeVersion && typeof window.joinBattleRoomV2 !== 'function') return;
     const container = document.getElementById('toast-container');
+    if (!container || container.querySelector('[data-duel-invite="' + inviteId + '"]')) return;
     const toast = document.createElement('div');
+    toast.dataset.duelInvite = inviteId;
+    container.style.position = 'fixed';
+    container.style.top = 'max(12px, env(safe-area-inset-top))';
+    container.style.right = '12px';
+    container.style.left = 'auto';
+    container.style.zIndex = '99999';
+    toast.style.maxWidth = 'min(360px, calc(100vw - 24px))';
     
     toast.className = "bg-slate-800/95 backdrop-blur border-l-4 border-yellow-400 text-white p-4 rounded shadow-2xl flex items-center gap-4 transform transition-all duration-300 translate-x-full mb-3 relative overflow-hidden";
     
@@ -2723,7 +2751,7 @@ function showInviteToast(inviteId, data) {
                 <i class="fa-solid fa-swords"></i> 對戰邀請！
             </h4>
             <p class="text-xs text-gray-300 truncate mb-2 mt-1">
-                <span class="text-white font-bold">${data.hostName}</span> 邀請你對戰
+                <span class="text-white font-bold">${escapeHtml(String(data.hostName || '修士'))}</span> 邀請你鬥法
             </p>
             <div class="flex gap-2">
                 <button id="btn-acc-${inviteId}" class="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white text-xs px-3 py-1.5 rounded font-bold transition shadow-lg">
@@ -2743,7 +2771,23 @@ function showInviteToast(inviteId, data) {
     container.appendChild(toast);
     requestAnimationFrame(() => toast.classList.remove('translate-x-full'));
 
-    document.getElementById(`btn-acc-${inviteId}`).onclick = () => acceptInvite(inviteId, data.roomId, toast);
+    document.getElementById(`btn-acc-${inviteId}`).onclick = async () => {
+        if (data.modeVersion) {
+            if (dongtianActive()) return;
+            const active = window.getBattleV2State?.();
+            if (active?.roomId && active.status !== 'finished') {
+                alert('你目前已有進行中的鬥法。');
+                return;
+            }
+            const button = document.getElementById(`btn-acc-${inviteId}`);
+            if (button) button.disabled = true;
+            const joined = await window.joinBattleRoomV2(data.roomId);
+            await removeInvite(inviteId, toast);
+            if (!joined) alert('房間已失效、已有對手，或目前無法加入鬥法。');
+        } else {
+            acceptInvite(inviteId, data.roomId, toast);
+        }
+    };
     document.getElementById(`btn-dec-${inviteId}`).onclick = () => removeInvite(inviteId, toast);
 
     setTimeout(() => { if (toast.parentNode) removeInvite(inviteId, toast); }, 10000);
