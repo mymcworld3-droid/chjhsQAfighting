@@ -98,7 +98,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
   }
 
   function ensureStyle() {
-    const href = 'styles/battle-mode-v2.css?v=20260922-duel-arena1';
+    const href = 'styles/battle-mode-v2.css?v=20260922-result-cinematic1';
     if (document.querySelector(`link[href="${href}"]`)) return;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
@@ -261,10 +261,27 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
           </div>
         </section>
 
-        <section id="bv2-result" class="bv2-result hidden">
-          <div id="bv2-result-emblem" class="bv2-result-emblem">道</div><span class="bv2-kicker">鬥法終了</span><h3 id="bv2-result-title">勝負已分</h3><p id="bv2-result-msg">正在寫入戰績…</p>
-          <div id="bv2-result-stats" class="bv2-result-stats"></div>
-          <div class="bv2-result-actions"><button id="bv2-home" class="bv2-btn ghost" type="button">返回仙府</button><button id="bv2-rematch" class="bv2-btn primary" type="button">再尋道友</button></div>
+        <section id="bv2-result" class="bv2-result hidden" data-outcome="draw" aria-label="鬥法結算">
+          <div class="bv2-result-scene" aria-hidden="true">
+            <div class="bv2-result-landscape"></div>
+            <div class="bv2-result-beam"></div>
+            <div class="bv2-result-seal"></div>
+            <div class="bv2-result-portrait left">${portraitMarkup('bv2-result-my-fighter')}</div>
+            <div class="bv2-result-portrait right">${portraitMarkup('bv2-result-enemy-fighter')}</div>
+            <div class="bv2-result-particles">${Array.from({ length: 16 }, (_, i) => `<i style="--angle:${i * 137.5}deg;--radius:${100 + i % 5 * 21}px;--delay:${i % 6 * 70}ms"></i>`).join('')}</div>
+          </div>
+          <div class="bv2-result-content">
+            <span class="bv2-result-overline">青雲宗 · 演武臺</span>
+            <div class="bv2-result-emblem-wrap">
+              <div id="bv2-result-emblem" class="bv2-result-emblem">道</div>
+            </div>
+            <span class="bv2-result-caption">鬥法終了</span>
+            <h3 id="bv2-result-title">勝負已分</h3>
+            <p id="bv2-result-msg">正在寫入戰績…</p>
+            <div class="bv2-result-names"><span id="bv2-result-my-name">我方</span><i>／</i><span id="bv2-result-enemy-name">對手</span></div>
+            <div id="bv2-result-stats" class="bv2-result-stats"></div>
+            <div class="bv2-result-actions"><button id="bv2-home" class="bv2-btn ghost" type="button">返回仙府</button><button id="bv2-rematch" class="bv2-btn primary" type="button">再尋道友</button></div>
+          </div>
         </section>
       </div>`;
 
@@ -859,6 +876,12 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
     setText('bv2-result-title', isDraw ? '道法相當 · 平局' : won ? '問道得勝' : '此局惜敗'); setText('bv2-result-emblem', isDraw ? '和' : won ? '勝' : '敗');
     setText('bv2-result-msg', room.finishReason === 'forfeit' ? '對手主動收法離場。' : room.finishReason === 'disconnect' ? '對手靈識中斷，判定離場。' : room.finishReason === 'round-limit' ? `已達 ${room.maxRounds || BATTLE_V2.maxRounds} 回合上限，以剩餘生命判定。` : room.finishReason === 'double-ko' ? '雙方同時力竭。' : '一方生命歸零，勝負已分。');
     const mine = playerForRole(room, state.role); const enemy = playerForRole(room, otherRole(state.role)); const stats = document.getElementById('bv2-result-stats');
+    const resultScene = document.getElementById('bv2-result');
+    if (resultScene) resultScene.dataset.outcome = isDraw ? 'draw' : won ? 'win' : 'loss';
+    setText('bv2-result-my-name', mine?.name || '我方');
+    setText('bv2-result-enemy-name', enemy?.name || '對手');
+    setPlayerPortrait('bv2-result-my-fighter', mine, true);
+    setPlayerPortrait('bv2-result-enemy-fighter', enemy);
     const reward = battleReward(room, uid);
     const resultMarker = state.role === 'host' ? 'hostResultRecorded' : 'guestResultRecorded';
     const rewardLabel = reward.outcome === 'draw' ? '平局不發放勝負獎勵' :
