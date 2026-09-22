@@ -140,24 +140,22 @@
   text-shadow: 0 0 20px rgba(255,231,164,.42), 0 0 46px rgba(216,177,93,.26);
 }
 
-.realm-breakthrough-emoji {
+.realm-breakthrough-icon {
   width: 78px;
   height: 78px;
   margin: 15px auto 7px;
   display: grid;
   place-items: center;
   border-radius: 50%;
-  font-size: 35px;
   background: radial-gradient(circle at 36% 30%, rgba(255,240,194,.20), rgba(216,177,93,.06) 46%, rgba(0,0,0,.18) 72%);
   border: 1px solid rgba(255,226,151,.34);
   box-shadow: 0 0 34px rgba(216,177,93,.18), inset 0 0 20px rgba(255,238,185,.06);
   animation: realmBreakthroughOrb 2.2s ease-in-out infinite;
 }
 
-.realm-breakthrough-feedback.major .realm-breakthrough-emoji {
+.realm-breakthrough-feedback.major .realm-breakthrough-icon {
   width: 92px;
   height: 92px;
-  font-size: 42px;
   box-shadow: 0 0 48px rgba(216,177,93,.28), inset 0 0 24px rgba(255,238,185,.10);
 }
 
@@ -248,8 +246,8 @@
   .realm-breakthrough-card { padding: 21px 16px 20px; border-radius: 25px; }
   .realm-breakthrough-title { font-size: 27px; }
   .realm-breakthrough-realm { font-size: 31px; }
-  .realm-breakthrough-emoji { width: 68px; height: 68px; font-size: 31px; }
-  .realm-breakthrough-feedback.major .realm-breakthrough-emoji { width: 80px; height: 80px; font-size: 37px; }
+  .realm-breakthrough-icon { width: 68px; height: 68px; }
+  .realm-breakthrough-feedback.major .realm-breakthrough-icon { width: 80px; height: 80px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -258,7 +256,7 @@
   .realm-breakthrough-ring,
   .realm-breakthrough-particle,
   .realm-breakthrough-card,
-  .realm-breakthrough-emoji {
+  .realm-breakthrough-icon {
     animation: none !important;
   }
   .realm-breakthrough-card { opacity: 1; transform: none; }
