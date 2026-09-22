@@ -78,7 +78,8 @@ if(stage===2&&subject==='地球科學')allowed=first?[3,4]:[2,3];
 units=units.filter((_,i)=>allowed.includes(i));
 }
 units=units.filter(u=>u.unit);display();if(units.length)status((grade.startsWith('高中')||grade.startsWith('國小')) ? '108課綱整理單元可依章節或考點選取；部分出版社僅提供目錄節錄，請以實際課本核對。' : '勾選整章或展開選取考點，再加入清單。');
-}catch(e){if(n!==serial)return;display();status('單元資料讀取失敗，可以先使用自訂主題。');console.error('[Curriculum]',e);}}
+window.dispatchEvent(new CustomEvent('curriculum:options-ready',{detail:{grade,subject,term,edition,available:units.length}}));
+}catch(e){if(n!==serial)return;display();status('單元資料讀取失敗，可以先使用自訂主題。');window.dispatchEvent(new CustomEvent('curriculum:options-ready',{detail:{grade,subject,term,edition,available:0,error:true}}));console.error('[Curriculum]',e);}}
 function addList(items){const existing=Array.isArray(window.soloSelectedUnits)?window.soloSelectedUnits:[],keys=new Set(existing.map(u=>JSON.stringify([u.path,u.detail,u.sub_topics])));let added=0;
 for(const item of items){const k=JSON.stringify([item.path,item.detail,item.sub_topics]);if(keys.has(k))continue;if(existing.length>=24)break;existing.push(item);keys.add(k);added++;}
 window.soloSelectedUnits=existing;window.renderSelectedUnitsList();status(added?'已加入 '+added+' 個範圍，請按「儲存出題範圍」。':'已存在，或達 24 個上限。');}
