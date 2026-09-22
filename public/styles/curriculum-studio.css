@@ -123,18 +123,9 @@ html.scope-studio-open,body.scope-studio-open{overflow:hidden!important;overscro
 #scope-studio #cs-scope>.cs-note{display:none}
 #scope-studio #cs-pages .cs-native-fields{display:none!important}
 #scope-studio .cs-stage[hidden]{display:none!important}
-#scope-studio .cs-pages-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
-#scope-studio .cs-pages-top small{display:block;color:#a8cabe;font-size:10px;letter-spacing:.18em;font-weight:800}
-#scope-studio .cs-pages-top h3{margin:4px 0 0;color:#f5e4c5;font:700 clamp(18px,2vw,24px)/1.4 "Noto Serif TC",serif}
-#scope-studio #cs-page-progress{padding:7px 11px;border-radius:999px;border:1px solid rgba(129,197,174,.25);background:rgba(106,166,150,.09);color:#c0e5d4;font-size:12px;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
-#scope-studio .cs-page-tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}
-#scope-studio .cs-page-tab{min-width:0;min-height:61px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;padding:8px 5px;border:1px solid rgba(233,200,132,.13);border-radius:12px;background:rgba(255,255,255,.022);color:#a59d8a;cursor:pointer;transition:border-color .15s,background .15s,color .15s}
-#scope-studio .cs-page-tab>span{font-size:10px;font-weight:900;color:#9a8f75;font-variant-numeric:tabular-nums}
-#scope-studio .cs-page-tab>b{font-size:11px;font-weight:800;white-space:nowrap}
-#scope-studio .cs-page-tab.is-active{border-color:rgba(139,211,188,.64);background:linear-gradient(130deg,rgba(103,171,153,.21),rgba(103,171,153,.07));color:#e2f5e9;box-shadow:inset 0 -2px rgba(132,208,185,.32)}
-#scope-studio .cs-page-tab.is-complete{border-color:rgba(238,207,145,.29);color:#ddc999}
-#scope-studio .cs-page-tab:disabled{opacity:.48;cursor:not-allowed}
-#scope-studio .cs-page-path{min-height:29px;display:flex;align-items:center;margin:0;padding:7px 11px;border-radius:8px;background:rgba(255,255,255,.025);color:#aba899;font-size:11px;overflow-wrap:anywhere;line-height:1.5}
+#scope-studio .cs-page-navigation{display:flex;align-items:center;justify-content:flex-start}
+#scope-studio .cs-scope .cs-back{display:inline-flex;align-items:center;justify-content:center;min-width:118px;min-height:38px!important;padding:8px 13px!important;border:1px solid rgba(143,212,200,.35)!important;border-radius:10px!important;background:rgba(109,181,160,.09)!important;color:#d8ede1!important;font-size:12px!important;font-weight:800!important}
+#scope-studio .cs-scope .cs-back:hover{border-color:rgba(143,212,200,.7)!important;background:rgba(109,181,160,.19)!important}
 #scope-studio .cs-stage{min-width:0;display:grid;gap:15px;align-content:start}
 #scope-studio .cs-stage-title{display:grid;gap:4px}
 #scope-studio .cs-stage-title>small{color:#85c5b5;font-size:10px;letter-spacing:.18em;font-weight:900}
@@ -158,25 +149,17 @@ html.scope-studio-open,body.scope-studio-open{overflow:hidden!important;overscro
 #scope-studio .cs-stage #cs-add{margin-top:0}
 @media(max-width:700px){
 #scope-studio #cs-pages{gap:11px}
-#scope-studio .cs-pages-top h3{font-size:18px}
-#scope-studio .cs-page-tabs{gap:4px}
-#scope-studio .cs-page-tab{min-height:55px;padding:6px 2px;border-radius:8px}
-#scope-studio .cs-page-tab>b{font-size:9px}
-#scope-studio .cs-page-tab>span{font-size:9px}
 #scope-studio .cs-stage-title>h4{font-size:18px}
 #scope-studio .cs-choice-grid{grid-template-columns:1fr}
 #scope-studio .cs-choice{min-height:57px}
 #scope-studio .cs-page-actions button{min-width:94px;padding:9px 10px}
 }
-@media(max-width:360px){#scope-studio .cs-page-tab>b{font-size:8px}#scope-studio .cs-choice-main{font-size:13px}}
+@media(max-width:360px){#scope-studio .cs-choice-main{font-size:13px}}
 
 /* Paginated controls take priority over the legacy generic .cs-scope button rules. */
-#scope-studio .cs-scope .cs-page-tab{min-height:61px!important;padding:8px 5px!important;border:1px solid rgba(233,200,132,.13)!important;border-radius:12px!important;background:rgba(255,255,255,.022)!important;color:#a59d8a!important}
-#scope-studio .cs-scope .cs-page-tab.is-active{border-color:rgba(139,211,188,.64)!important;background:linear-gradient(130deg,rgba(103,171,153,.21),rgba(103,171,153,.07))!important;color:#e2f5e9!important}
-#scope-studio .cs-scope .cs-page-tab.is-complete{border-color:rgba(238,207,145,.29)!important;color:#ddc999!important}
 #scope-studio .cs-scope .cs-choice{min-height:65px!important;padding:12px 13px!important;border:1px solid rgba(227,199,148,.18)!important;border-radius:13px!important;background:linear-gradient(130deg,rgba(32,39,38,.95),rgba(18,27,27,.95))!important;color:#e8deca!important;text-align:left!important}
 #scope-studio .cs-scope .cs-choice.is-selected{border-color:rgba(129,205,182,.66)!important;background:linear-gradient(130deg,rgba(93,163,144,.2),rgba(43,99,89,.12))!important}
 #scope-studio .cs-scope .cs-choice:not(:disabled):hover{border-color:rgba(236,204,132,.5)!important;background:rgba(236,204,132,.09)!important}
 #scope-studio .cs-scope .cs-page-actions button{min-width:110px;min-height:42px!important;padding:10px 18px!important;border-radius:11px!important;font-size:13px!important}
 #scope-studio .cs-scope #cs-next{border-color:rgba(131,205,180,.4)!important;background:rgba(112,182,161,.17)!important;color:#dcf0e5!important}
-@media(max-width:700px){#scope-studio .cs-scope .cs-page-tab{min-height:55px!important;padding:6px 2px!important;border-radius:8px!important}#scope-studio .cs-scope .cs-choice{min-height:57px!important}}
+@media(max-width:700px){#scope-studio .cs-scope .cs-choice{min-height:57px!important}}
