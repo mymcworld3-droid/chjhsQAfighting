@@ -567,34 +567,41 @@ window.setupAdminDebug = function () {
 // 1. 定義修仙境界與升級門檻 (取代舊版段位)
 // ==========================================
 const REALMS = [
-    { name: '凡人', sub: '初入仙途', need: 0, emoji: '🌱' },
-    { name: '煉氣', sub: '一層', need: 1, emoji: '🌬️' },
-    { name: '煉氣', sub: '二層', need: 2, emoji: '🌬️' },
-    { name: '煉氣', sub: '三層', need: 3, emoji: '🌬️' },
-    { name: '煉氣', sub: '四層', need: 4, emoji: '🌬️' },
-    { name: '煉氣', sub: '五層', need: 5, emoji: '🌬️' },
-    { name: '煉氣', sub: '六層', need: 6, emoji: '🌬️' },
-    { name: '煉氣', sub: '七層', need: 7, emoji: '🌬️' },
-    { name: '煉氣', sub: '八層', need: 8, emoji: '🌬️' },
-    { name: '煉氣', sub: '九層', need: 9, emoji: '🌬️' },
-    { name: '築基', sub: '初期', need: 10, emoji: '🪨' },
-    { name: '築基', sub: '中期', need: 16, emoji: '🪨' },
-    { name: '築基', sub: '後期', need: 22, emoji: '🪨' },
-    { name: '金丹', sub: '丹成一品', need: 28, emoji: '☀️' },
-    { name: '元嬰', sub: '元嬰出竅', need: 68, emoji: '✨' },
-    { name: '化神', sub: '神念通天', need: 128, emoji: '🔮' },
-    { name: '煉虛', sub: '虛空悟道', need: 208, emoji: '🌌' },
-    { name: '合體', sub: '天地合一', need: 308, emoji: '☯️' },
-    { name: '大乘', sub: '大道將成', need: 448, emoji: '⚡' },
-    { name: '渡劫', sub: '雷劫問道', need: 628, emoji: '⛈️' },
-    { name: '登仙', sub: '仙門在望', need: 868, emoji: '🪶' },
-    { name: '真仙', sub: '榜上仙位', need: 868, emoji: '🪽' }
+    { name: '凡人', sub: '初入仙途', need: 0 },
+    { name: '煉氣', sub: '一層', need: 1 },
+    { name: '煉氣', sub: '二層', need: 2 },
+    { name: '煉氣', sub: '三層', need: 3 },
+    { name: '煉氣', sub: '四層', need: 4 },
+    { name: '煉氣', sub: '五層', need: 5 },
+    { name: '煉氣', sub: '六層', need: 6 },
+    { name: '煉氣', sub: '七層', need: 7 },
+    { name: '煉氣', sub: '八層', need: 8 },
+    { name: '煉氣', sub: '九層', need: 9 },
+    { name: '築基', sub: '初期', need: 10 },
+    { name: '築基', sub: '中期', need: 16 },
+    { name: '築基', sub: '後期', need: 22 },
+    { name: '金丹', sub: '丹成一品', need: 28 },
+    { name: '元嬰', sub: '元嬰出竅', need: 68 },
+    { name: '化神', sub: '神念通天', need: 128 },
+    { name: '煉虛', sub: '虛空悟道', need: 208 },
+    { name: '合體', sub: '天地合一', need: 308 },
+    { name: '大乘', sub: '大道將成', need: 448 },
+    { name: '渡劫', sub: '雷劫問道', need: 628 },
+    { name: '登仙', sub: '仙門在望', need: 868 },
+    { name: '真仙', sub: '榜上仙位', need: 868 }
 ];
 
 function getRankName(level, uid = auth.currentUser?.uid, score = currentUserData?.stats?.totalScore) {
     const idx = window.limitImmortalRank(Math.min(level || 0, REALMS.length - 1), score, REALMS, uid);
     const r = REALMS[idx];
-    return `${r.emoji} ${r.name} ${r.sub}`;
+    return `${r.name} ${r.sub}`;
+}
+
+// 僅在 HTML 顯示場合附加向量紋章；AI 題目難度與資料欄位仍保留純文字境界。
+function getRankMarkup(level, uid = auth.currentUser?.uid, score = currentUserData?.stats?.totalScore) {
+    const idx = window.limitImmortalRank(Math.min(level || 0, REALMS.length - 1), score, REALMS, uid);
+    const realm = REALMS[idx] || REALMS[0];
+    return `${window.getRealmIconMarkup?.(realm.name) || ''} ${realm.name} ${realm.sub}`;
 }
 
 function calculateRankFromScore(totalScore, uid = auth.currentUser?.uid) {
@@ -1188,7 +1195,7 @@ function renderChatMessage(msg, container) {
     // 頭像
     const equipped = { frame: msg.frame || '', avatar: msg.avatar || '' };
     const avatarHtml = getAvatarHtml(equipped, "w-8 h-8");
-    const rankName = getRankName(msg.rankLevel || 0, msg.uid || null, msg.totalScore ?? 0);
+    const rankName = getRankMarkup(msg.rankLevel || 0, msg.uid || null, msg.totalScore ?? 0);
     const time = msg.timestamp ? new Date(msg.timestamp.toMillis()).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '...';
 
     const chatProfile = msg.uid ? ' data-xiuxian-profile="' + escapeHtml(msg.uid) + '"' : '';
@@ -1440,7 +1447,7 @@ window.loadFriendList = async () => {
                 <div class="flex-1 min-w-0">
                     <div class="flex justify-between items-center">
                         <button type="button" class="xpp-profile-trigger font-bold text-white" data-xiuxian-profile="${escapeHtml(d.id)}">${escapeHtml(fData.displayName || '修士')}</button>
-                        <span class="text-xs text-yellow-500 font-mono">${getRankName(calculateRankFromScore(fData.stats?.totalScore || 0, d.id), d.id, fData.stats?.totalScore)}</span>
+                        <span class="text-xs text-yellow-500 font-mono">${getRankMarkup(calculateRankFromScore(fData.stats?.totalScore || 0, d.id), d.id, fData.stats?.totalScore)}</span>
                     </div>
                     <div class="flex justify-between items-center mt-1">
                         ${statusHtml}
@@ -1543,7 +1550,7 @@ function updateUIStats() {
     const rankIndex = Math.min(stats.rankLevel, REALMS.length - 1);
     const currentRealm = REALMS[rankIndex];
     const rankEl = document.getElementById('display-rank');
-    rankEl.innerText = getRankName(stats.rankLevel); 
+    rankEl.innerHTML = getRankMarkup(stats.rankLevel); 
     rankEl.className = `text-5xl font-black mb-2 text-white`;
 
     let progressPercent = 100;
@@ -3011,7 +3018,7 @@ window.showOpponentFoundAnimation = async (oppData) => {
     
     const oppUI = document.getElementById('match-opp');
     const oppAvatar = oppData.equipped?.avatar || '';
-    const oppRank = getRankName(oppData.rankLevel || 0, oppData.uid || null, oppData.totalScore ?? 0);
+    const oppRank = getRankMarkup(oppData.rankLevel || 0, oppData.uid || null, oppData.totalScore ?? 0);
     
     if (navigator.vibrate) navigator.vibrate([100, 50, 200]);
 
@@ -3132,7 +3139,7 @@ window.startBattleMatchmaking = async () => {
 
     document.getElementById('battle-status-text').innerText = "SEARCHING FOR OPPONENTS...";
     document.getElementById('match-me-name').innerText = currentUserData.displayName || "Player";
-    document.getElementById('match-me-rank').innerText = getRankName(currentUserData.stats?.rankLevel || 0);
+    document.getElementById('match-me-rank').innerHTML = getRankMarkup(currentUserData.stats?.rankLevel || 0);
     const myAvatar = document.getElementById('match-me-avatar');
     myAvatar.src = currentUserData.equipped?.avatar || '';
     myAvatar.style.display = myAvatar.src ? 'block' : 'none';
@@ -4376,7 +4383,7 @@ window.loadLeaderboard = async () => {
                         <button type="button" class="xpp-profile-trigger ${isMe ? 'text-blue-300 font-bold' : ''}" data-xiuxian-profile="${escapeHtml(doc.id)}">${escapeHtml(d.displayName || '修士')}</button>
                     </td>
                     <td class="px-4 py-4 text-right font-mono text-blue-300">
-                        ${getRankName(calculateRankFromScore(d.stats.totalScore, doc.id), doc.id, d.stats.totalScore)} <span class="text-xs text-gray-500 block">${d.stats.totalScore} pts</span>
+                        ${getRankMarkup(calculateRankFromScore(d.stats.totalScore, doc.id), doc.id, d.stats.totalScore)} <span class="text-xs text-gray-500 block">${d.stats.totalScore} pts</span>
                     </td>
                 </tr>`;
             tbody.innerHTML += row; 
