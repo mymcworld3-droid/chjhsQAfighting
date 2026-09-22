@@ -2,14 +2,14 @@
 export const BATTLE_SUBJECTS = Object.freeze(['國文', '英文', '數學', '公民', '歷史', '地理', '物理', '化學', '生物']);
 
 export function normalizeBattleSubject(input) {
-  const value = String(input ?? '').trim().replace(/\\s+/g, '');
+  const value = String(input ?? '').trim().replace(/\s+/g, '');
   const aliases = { 數學A: '數學', 數學B: '數學', 理化: '物理', 國語: '國文', 英語: '英文', Chinese: '國文', English: '英文', Math: '數學', Biology: '生物' };
   const subject = aliases[value] || value;
   return BATTLE_SUBJECTS.includes(subject) ? subject : '';
 }
 
 function subjectsFrom(value) {
-  const raw = Array.isArray(value) ? value : String(value ?? '').split(/[,，、;；\\n]/);
+  const raw = Array.isArray(value) ? value : String(value ?? '').split(/[,，、;；\n]/);
   return [...new Set(raw.map(normalizeBattleSubject).filter(Boolean))];
 }
 
@@ -36,7 +36,7 @@ function gradeLabel(grade) {
 
 function extractUnit(raw) {
   if (!raw || typeof raw !== 'object') return null;
-  const path = String(raw.path || '').replace(/\\\\/g, '/').slice(0, 160);
+  const path = String(raw.path || '').replace(/\\/g, '/').slice(0, 160);
   const subject = normalizeBattleSubject(path.split('/').filter(Boolean)[0] || raw.subject);
   if (!subject) return null;
   const detail = String(raw.detail || '').trim().slice(0, 100);
