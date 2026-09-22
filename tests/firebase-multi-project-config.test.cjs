@@ -37,11 +37,20 @@ function simulate(config = {}) {
   return { ...ctx, apps };
 }
 
-test('secondary Firebase configuration starts as an editable, unconfigured template', () => {
+test('secondary Firebase configuration supports filled BD and C Web SDK values without server secrets', () => {
   assert.match(configSource, /export const firebaseProjectConfigs/);
-  assert.match(configSource, /BD:\s*\{\s*apiKey:\s*''/);
-  assert.match(configSource, /C:\s*\{\s*apiKey:\s*''/);
-  assert.doesNotMatch(configSource, /PRIVATE KEY|serviceAccount|client_secret/);
+  assert.match(configSource, /BD:\s*\{/);
+  assert.match(configSource, /C:\s*\{/);
+  const config = vm.runInNewContext(
+    configSource.replace(/^export\s+/m, '') + '\nfirebaseProjectConfigs',
+  );
+  for (const role of ['BD', 'C']) {
+    for (const field of ['apiKey', 'authDomain', 'projectId', 'appId']) {
+      assert.ok(typeof config[role][field] === 'string', role + '.' + field + ' should be editable');
+    }
+  }
+  assert.notEqual(config.BD.projectId, config.C.projectId);
+  assert.doesNotMatch(configSource, /-----BEGIN PRIVATE KEY-----|serviceAccount|client_secret/);
 });
 
 test('project helper does not initialize BD or C just by importing it', () => {
