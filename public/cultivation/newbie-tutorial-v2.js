@@ -28,6 +28,8 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   let dongtianDemoCompleted = false;
   let dongtianDemoReturned = false;
   let dongtianDemoDeleted = false;
+  let scopeEventsBound = false;
+  let anywhereClickBound = false;
 
   const EXAMPLE_QUESTION = '範例：2 + 3 = ?';
   const EXAMPLE_OPTIONS = ['4', '5', '6', '7'];
@@ -75,9 +77,28 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       note: '凡人期先靠問道累積修為，一步一步往築基前進。'
     },
     {
-      page: 'page-settings', target: '#set-source-mode', settingsSection: 'scope', kicker: '第九步 · 範圍選擇', title: '展開「範圍設定」決定題目從哪裡來',
-      body: '洞府現在把出題來源獨立放在可收合的<strong>範圍設定</strong>。展開後可選：<strong>綜合題目</strong>、<strong>指定題庫</strong>或<strong>專注練習</strong>。',
-      note: '考前複習建議使用指定題庫或專注練習。'
+      page: 'page-settings', target: '#dongfu-scope-card .dongfu-collapse-head', requiresScopeOpen: true,
+      kicker: '第九步 · 進入研修所', title: '點亮起的「範圍設定」',
+      body: '複習範圍現在是<strong>獨立的全螢幕課程研修所</strong>，不再展開下拉選單。請親自點擊洞府中亮起的「範圍設定」進入。',
+      note: '請點亮起的入口；點其他地方不會略過這個操作。'
+    },
+    {
+      page: 'page-settings', target: '#scope-studio #set-source-mode', requiresScopeOpenView: true,
+      kicker: '研修所 · 出題模式', title: '先決定題目從哪裡來',
+      body: '這裡可切換<strong>綜合題目</strong>、<strong>指定題庫</strong>與<strong>專注練習</strong>。想按自己的課程挑選範圍時，使用「專注練習」。',
+      note: '理解後點擊畫面非金框處繼續；不用在教學中儲存正式範圍。'
+    },
+    {
+      page: 'page-settings', target: '#scope-studio .ss-picker .ss-panel-head', requiresScopeOpenView: true,
+      kicker: '研修所 · 五步選課', title: '逐步挑選課程，再加入修習卷',
+      body: '在「探索課程」依序選<strong>年級 → 科目 → 學期 → 版本 → 章節與考點</strong>；每頁上方的返回鍵能退回上一步。加入後可在「我的修習卷」檢查，最後按「儲存出題範圍」。',
+      note: '新版沒有五個頂部步驟按鈕或課程路徑列。理解後點非金框處繼續。'
+    },
+    {
+      page: 'page-settings', target: '#scope-studio #ss-close', requiresScopeReturn: true,
+      kicker: '研修所 · 返回洞府', title: '親自返回洞府',
+      body: '現在請點亮起的<strong>「返回洞府」</strong>，再看看個人資料中的難度設定。若曾編輯卻尚未儲存，離開時遊戲會詢問是否放棄修改。',
+      note: '請實際點返回鍵，不能從其他地方跳過。'
     },
     {
       page: 'page-settings', target: '#set-difficulty', settingsSection: 'profile', kicker: '第十步 · 難度', title: '展開「個人資料」調整難度',
@@ -178,6 +199,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   function marker(){ return userData()?.[FIELD] || null; }
   function visible(el){ if(!el) return false; const s=getComputedStyle(el); return s.display!=='none'&&s.visibility!=='hidden'&&el.getClientRects().length>0; }
   function navigate(page){ if(page&&typeof window.switchToPage==='function') window.switchToPage(page); }
+  function scopeStudioOpen(){ const studio=document.getElementById('scope-studio');return !!studio&&!studio.hidden; }
   function target(selector){ const all=Array.from(document.querySelectorAll(selector||'')); return all.find(visible)||all[0]||null; }
 
   function currentPageId() {
@@ -408,6 +430,30 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     }, true);
   }
 
+  function bindScopeTutorialEvents() {
+    if (scopeEventsBound) return;
+    scopeEventsBound = true;
+    // 由真正的入口及返回按鈕完成教學，不代替玩家開關研修所。
+    document.addEventListener('click', (event) => {
+      if (!active || tutorialMode !== 'question') return;
+      const step = steps[index];
+      if (step?.requiresScopeOpen && event.target.closest?.('#dongfu-scope-card .dongfu-collapse-head')) {
+        setTimeout(() => {
+          if (!active || !steps[index]?.requiresScopeOpen || !scopeStudioOpen()) return;
+          index++;
+          render();
+        }, 40);
+      }
+      if (step?.requiresScopeReturn && event.target.closest?.('#scope-studio #ss-close')) {
+        setTimeout(() => {
+          if (!active || !steps[index]?.requiresScopeReturn || scopeStudioOpen()) return;
+          index++;
+          render();
+        }, 40);
+      }
+    });
+  }
+
   function bindDongtianTutorialEvents() {
     if (dongtianEventsBound) return;
     dongtianEventsBound = true;
@@ -487,6 +533,8 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     if (!layer || !spot || !dim || !active) return;
 
     const step = displayStep();
+    // 全螢幕研修所位於一般新手遮罩之上；教學時暫時提高遮罩層級。
+    layer.style.zIndex = scopeStudioOpen() ? '30000' : '';
     // 導覽步驟只圈 #bottom-nav 內真正能點擊的按鈕，不能圈到同 data-target 的其他元件。
     const el = target(step.target);
     if (!el || !visible(el)) {
@@ -517,6 +565,9 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   }
 
   function nextBlocked(step) {
+    if (step.requiresScopeOpen && !scopeStudioOpen()) return true;
+    if (step.requiresScopeOpenView && !scopeStudioOpen()) return true;
+    if (step.requiresScopeReturn && scopeStudioOpen()) return true;
     if (step.requiresAnswer && !exampleAnswered) return true;
     if (step.requiresReport && !reportOpened) return true;
     if (step.requiresDongtianOpen && !dongtianOpen) return true;
@@ -529,6 +580,9 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   }
 
   function blockedLabelForStep(step) {
+    if (step.requiresScopeOpen && !scopeStudioOpen()) return '請先進入研修所';
+    if (step.requiresScopeOpenView && !scopeStudioOpen()) return '研修所尚未開啟';
+    if (step.requiresScopeReturn && scopeStudioOpen()) return '請先返回洞府';
     if (step.requiresAnswer && !exampleAnswered) return '請先作答';
     if (step.requiresReport && !reportOpened) return '請先按回報問題';
     if (step.requiresDongtianOpen && !dongtianOpen) return '請先點開洞天';
@@ -538,6 +592,33 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     if (step.requiresDongtianReturn && !dongtianDemoReturned) return '請按「返回我的洞天」';
     if (step.requiresDongtianDelete && !dongtianDemoDeleted) return '請先刪除教學範例';
     return '';
+  }
+
+  function advanceTutorial() {
+    if (!active) return;
+    const step = displayStep();
+    if (step.routeGate || nextBlocked(steps[index])) return;
+    if (index === steps.length - 1) finish(false);
+    else { index++; render(); }
+  }
+
+  function bindAnywhereClick() {
+    if (anywhereClickBound) return;
+    anywhereClickBound = true;
+    document.addEventListener('click', (event) => {
+      if (!active || !event.isTrusted) return;
+      // 教學卡的跳過／返回／下一步按鈕保留各自的操作，不重複推進。
+      if (event.target.closest?.('#newbie-tutorial-layer .newbie-tutorial-card')) return;
+      const step = displayStep();
+      const highlighted = target(step.target);
+      const withinHighlight = highlighted && visible(highlighted) &&
+        (highlighted === event.target || highlighted.contains(event.target));
+      if (withinHighlight) return; // 金框內必須保留原本的點擊，不當作「下一步」。
+      event.preventDefault();
+      event.stopImmediatePropagation(); // 金框外不可誤觸其他遊戲功能。
+      if (step.routeGate || nextBlocked(steps[index])) return;
+      advanceTutorial();
+    }, true);
   }
 
   function renderCardOnly() {
@@ -552,8 +633,14 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       : (blocked ? blockedLabelForStep(baseStep) : (index===steps.length-1 ? '完成' : '下一步'));
     card.innerHTML=`<div class="newbie-tutorial-kicker">${step.kicker}</div><h3>${step.title}</h3><p>${step.body}</p><p class="newbie-tutorial-note">${step.note}</p><div class="newbie-tutorial-progress">${steps.map((_,i)=>`<i class="${i===index?'active':''}"></i>`).join('')}</div><div class="newbie-tutorial-actions"><button class="newbie-tutorial-skip">跳過教學</button><button class="newbie-tutorial-prev" ${index===0?'disabled':''}>上一步</button><button class="newbie-tutorial-next" ${blocked?'disabled':''}>${blockedLabel}</button></div>`;
     card.querySelector('.newbie-tutorial-skip').onclick=()=>finish(true);
-    card.querySelector('.newbie-tutorial-prev').onclick=()=>{if(index>0){index--;render();}};
-    card.querySelector('.newbie-tutorial-next').onclick=()=>{if(blocked)return;if(index===steps.length-1)finish(false);else{index++;render();}};
+    card.querySelector('.newbie-tutorial-prev').onclick=()=>{
+      if (index <= 0) return;
+      if (steps[index - 1]?.requiresScopeOpen && scopeStudioOpen() &&
+          window.closeCurriculumStudio?.() === false) return;
+      index--;
+      render();
+    };
+    card.querySelector('.newbie-tutorial-next').onclick=()=>{if(!blocked)advanceTutorial();};
   }
 
   function render(){
@@ -612,6 +699,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     if (!active) return;
     const finishedMode = tutorialMode;
     const shouldResumeStory = startedByStory;
+    if (scopeStudioOpen() && window.closeCurriculumStudio?.() === false) return;
     active = false;
     startedByStory = false;
     cleanupExampleQuiz();
@@ -634,7 +722,9 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     ensureStyle();
     bindDemoGuards();
     bindNavigationGuards();
+    bindScopeTutorialEvents();
     bindDongtianTutorialEvents();
+    bindAnywhereClick();
     try { window.deleteNewbieDongtianDemo?.({ silent: true }); } catch (_) {}
     tutorialMode = mode === 'dongtian' ? 'dongtian' : 'question';
     startedByStory = options.story === true;
@@ -697,7 +787,9 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     ensureStyle();
     bindDemoGuards();
     bindNavigationGuards();
+    bindScopeTutorialEvents();
     bindDongtianTutorialEvents();
+    bindAnywhereClick();
     addReplayButton();
     setInterval(() => {
       addReplayButton();
