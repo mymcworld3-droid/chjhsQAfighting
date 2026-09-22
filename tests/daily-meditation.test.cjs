@@ -153,3 +153,44 @@ test('new meditation runner uses historical mistakes and rejects shortages', () 
   assert.match(source, /dailyMeditationAnswers: current.answers.map/);
   assert.doesNotMatch(source, /await fn\(\)/);
 });
+
+test('daily meditation begins historical mistake prefetch before waiting for remote status', () => {
+  const source = readFileSync(join(__dirname, '../public/cultivation/daily-meditation.js'), 'utf8');
+  const opening = source.slice(source.indexOf('  async function open() {'), source.indexOf('  function typeset() {'));
+  assert.ok(opening.indexOf('void prepareMistakes(id, date)') < opening.indexOf('await loadRemote()'));
+  assert.match(source, /const \{ selected, available \} = await prepareMistakes\(id, date\)/);
+  assert.match(source, /if \(record\(\)\.lastDate !== date && !\(session && session\.uid === id && session\.date === date\)\)/);
+  assert.match(source, /invalidateMistakes\(\);\s*window\.updateUIStats\?\.\(\)/);
+});
+
+test('daily meditation prefetch shares pending Firestore query, caches result and invalidates across players', async () => {
+  const source = readFileSync(join(__dirname, '../public/cultivation/daily-meditation.js'), 'utf8');
+  const helper = source.slice(source.indexOf('  function invalidateMistakes() {'), source.indexOf('  function uid() {'));
+  let resolveFirst, calls = 0, player = 'u1', day = '2026-09-22';
+  const context = vm.createContext({
+    Promise, console,
+    mistakeKey: '', mistakeResult: null, mistakePending: null,
+    uid: () => player, today: () => day,
+    loadMistakes: () => {
+      calls++;
+      if (calls === 1) return new Promise(resolve => { resolveFirst = resolve; });
+      return Promise.resolve({ selected: [{ key: 'fresh' }], available: 1 });
+    }
+  });
+  vm.runInContext(helper, context);
+  const first = vm.runInContext("prepareMistakes('u1', '2026-09-22')", context);
+  const second = vm.runInContext("prepareMistakes('u1', '2026-09-22')", context);
+  assert.equal(first, second, 'two starts reuse one pending query');
+  assert.equal(calls, 1);
+  resolveFirst({ selected: [{ key: 'first' }], available: 1 });
+  assert.equal((await first).selected[0].key, 'first');
+  assert.equal((await vm.runInContext("prepareMistakes('u1', '2026-09-22')", context)).selected?.[0]?.key, 'first');
+  assert.equal(calls, 1);
+  player = 'u2';
+  const next = await vm.runInContext("prepareMistakes('u2', '2026-09-22')", context);
+  assert.equal(next.selected[0].key, 'fresh');
+  assert.equal(calls, 2);
+  vm.runInContext('invalidateMistakes()', context);
+  assert.equal(context.mistakeResult, null);
+  assert.equal(context.mistakePending, null);
+});
