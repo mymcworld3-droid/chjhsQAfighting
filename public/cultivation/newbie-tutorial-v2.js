@@ -532,6 +532,14 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     const dim = layer?.querySelector('.newbie-tutorial-dim');
     if (!layer || !spot || !dim || !active) return;
 
+    // 玩家若用 Escape 離開研修所，不能留在指向已隱藏畫面的教學步驟。
+    const baseStep = steps[index];
+    if (!scopeStudioOpen() && (baseStep?.requiresScopeOpenView || baseStep?.requiresScopeReturn)) {
+      const entry = steps.findIndex(item => item.requiresScopeOpen);
+      if (entry >= 0) { index = entry; render(); }
+      return;
+    }
+
     const step = displayStep();
     // 全螢幕研修所位於一般新手遮罩之上；教學時暫時提高遮罩層級。
     layer.style.zIndex = scopeStudioOpen() ? '30000' : '';
