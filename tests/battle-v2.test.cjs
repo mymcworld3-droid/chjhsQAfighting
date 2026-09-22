@@ -417,7 +417,7 @@ test('Dao-heart only blocks the first incoming hit in a round, including a count
     roomId:'reflect-first',round:1,host:h,guest:g,
     resolveEquipmentHit:({baseDamage})=>({damage:baseDamage,reflectDamage:120})
   });
-  assert.equal(first.hostHp,1000,'first reflection is blocked');
+  assert.equal(first.hostHp,800,'reflection was blocked; the later direct attack still deals damage');
   assert.equal(first.guestHp,800);
   assert.equal(first.steps.find(step=>step.type==='counter').guarded,true);
   const next=e.settleBattleRound({
@@ -426,7 +426,7 @@ test('Dao-heart only blocks the first incoming hit in a round, including a count
     guest:{...g,hp:first.guestHp,coreCorrectStreak:first.guestCoreStreak},
     resolveEquipmentHit:({baseDamage})=>({damage:baseDamage,reflectDamage:120})
   });
-  assert.equal(next.hostHp,1000,'first reflection is guarded again next round');
+  assert.equal(next.hostHp,600,'the first reflection is guarded again next round, not the subsequent attack');
 });
 
 test('guarded opening attack still receives a second combo hit, but no third shield', () => {
@@ -439,13 +439,14 @@ test('guarded opening attack still receives a second combo hit, but no third shi
   });
   assert.equal(result.hostHp,830);
   assert.equal(result.hostCoreShield,true);
-  assert.equal(result.steps.length,2);
-  assert.equal(result.steps[0].guarded,true);
-  assert.equal(result.steps[0].damage,0);
-  assert.equal(result.steps[0].hostHp,1000);
-  assert.equal(result.steps[1].guarded,false);
-  assert.equal(result.steps[1].damage,170);
-  assert.equal(result.steps[1].hostHp,830);
+  const attackSteps = result.steps.filter(step=>step.type==='attack');
+  assert.equal(attackSteps.length,2);
+  assert.equal(attackSteps[0].guarded,true);
+  assert.equal(attackSteps[0].damage,0);
+  assert.equal(attackSteps[0].hostHp,1000);
+  assert.equal(attackSteps[1].guarded,false);
+  assert.equal(attackSteps[1].damage,170);
+  assert.equal(attackSteps[1].hostHp,830);
 });
 
 test('All Golden Core battle effects apply their own attack or healing rules', () => {
