@@ -27,6 +27,8 @@ const auth = getAuth();
 window.getRealmUserUid = () => auth.currentUser?.uid;
 const db = getFirestore();
 const provider = new GoogleAuthProvider();
+// The optional cross-project bootstrap must finish before optional gameplay modules start.
+window.__xiuxianMigrationApproved = false;
 
 let currentUserData = null;
 // 🔥 新增這行：將玩家資料開放給修仙模組讀取
@@ -810,7 +812,7 @@ function showGameStartupFailure(message) {
     gate.classList.add('is-error');
     const text = gate.querySelector('#game-startup-gate-text');
     // 一般玩家僅得到安全的重試指引，不顯示失敗模組與例外細節。
-    if (text) text.textContent = '遊戲尚未準備完成，請重新整理後再試。';
+    if (text) text.textContent = String(message || '遊戲尚未準備完成，請重新整理後再試。').slice(0, 160);
     const tip = gate.querySelector('#game-startup-gate-tip');
     if (tip) tip.textContent = '請確認網路連線，然後重新整理遊戲。';
     const error = gate.querySelector('#game-startup-gate-error');
@@ -819,6 +821,42 @@ function showGameStartupFailure(message) {
 
 function hideGameStartupGate() {
     document.getElementById('game-startup-gate')?.remove();
+}
+
+async function waitForVerifiedPlayerMigration(user) {
+    // Server feature flag keeps the existing A-only game available until the
+    // three server-side credentials, freeze, rules and migration are configured.
+    const token = await user.getIdToken();
+    const headers = { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token };
+    for (;;) {
+        if (auth.currentUser?.uid !== user.uid) throw new Error('登入帳號已更換，請重新進入遊戲。');
+        const response = await fetch('/api/game-startup-migration', {
+            method: 'POST', cache: 'no-store', headers, body: '{}'
+        });
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(payload.message || '無法確認洞天資料搬移狀態，請重新整理後重試。');
+        if (payload.status === 'legacy' && payload.ready === true) return;
+        if (payload.status === 'ready' && payload.ready === true) {
+            showGameStartupGate('正在核對你的 BD、C 玩家資料…');
+            const synced = await fetch('/api/game-startup-player', {
+                method: 'POST', cache: 'no-store', headers, body: '{}'
+            });
+            const record = await synced.json().catch(() => ({}));
+            if (!synced.ok || record.ready !== true || record.uid !== user.uid ||
+                !record.profiles?.BD || !record.profiles?.C) {
+                throw new Error(record.message || '跨專案玩家資料尚未建立完成。');
+            }
+            if (auth.currentUser?.uid !== user.uid) throw new Error('登入帳號已更換，請重新進入遊戲。');
+            return;
+        }
+        if (payload.status !== 'running' && payload.status !== 'pending') {
+            throw new Error(payload.message || '資料尚未準備完成，請聯絡管理員。');
+        }
+        showGameStartupGate(payload.message || '正在核對洞天資料…');
+        // The backend owns a single migration lease; each visitor only polls.
+        // Do not initiate another copy or repeatedly read every cave in browsers.
+        await new Promise(resolve => setTimeout(resolve, 6000));
+    }
 }
 
 async function waitForAllGameScripts() {
@@ -909,6 +947,19 @@ onAuthStateChanged(auth, async (user) => {
                 await setDoc(userRef, currentUserData);
             }
 
+            // Verify global cave migration first. On the first visit after cutover,
+            // the trusted backend creates minimal BD/C playerProfiles by UID.
+            window.__xiuxianMigrationApproved = false;
+            showGameStartupGate('正在核對資料搬移狀態…');
+            try {
+                await waitForVerifiedPlayerMigration(user);
+            } catch (error) {
+                console.error('[Startup migration]', error);
+                showGameStartupFailure(error.message || '資料準備未完成，請重新整理後再試。');
+                return;
+            }
+            if (auth.currentUser?.uid !== user.uid) return;
+            window.__xiuxianMigrationApproved = true;
             // 在載入可選功能前啟動管理員 Debugger，確保腳本載入失敗也有紀錄。
             checkAdminRole(currentUserData.isAdmin === true);
             // 玩家資料先就緒，通知主啟動器載入所有修仙功能模組。
@@ -964,6 +1015,7 @@ onAuthStateChanged(auth, async (user) => {
         }
     } else {
         // 👋 登出狀態
+        window.__xiuxianMigrationApproved = false;
         checkAdminRole(false);
         currentUserData = null;
         soloCacheIdentity = '';
