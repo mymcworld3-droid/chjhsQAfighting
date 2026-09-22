@@ -13,6 +13,34 @@ import { buildMeditationMistakePool, chooseMeditationMistakes } from './daily-me
   let busy = false;
   let remoteUid = '';
   let remoteRecord = null;
+  // 同一次進入閉關只查詢一次錯題；日期或帳號變更時必須失效。
+  let mistakeKey = '';
+  let mistakeResult = null;
+  let mistakePending = null;
+
+  function invalidateMistakes() {
+    mistakeKey = '';
+    mistakeResult = null;
+    mistakePending = null;
+  }
+  function prepareMistakes(id, date) {
+    const key = id + '|' + date;
+    if (mistakeKey !== key) {
+      mistakeKey = key;
+      mistakeResult = null;
+      mistakePending = null;
+    }
+    if (mistakeResult) return Promise.resolve(mistakeResult);
+    if (mistakePending) return mistakePending;
+    const pending = loadMistakes(id).then(result => {
+      if (mistakeKey === key && uid() === id && today() === date) mistakeResult = result;
+      return result;
+    }).finally(() => {
+      if (mistakePending === pending) mistakePending = null;
+    });
+    mistakePending = pending;
+    return pending;
+  }
 
   function uid() { return auth.currentUser?.uid || ''; }
   function userData() { return window.getCurrentUserData?.() || null; }
@@ -83,6 +111,7 @@ import { buildMeditationMistakePool, chooseMeditationMistakes } from './daily-me
       if (busy) { notify('正在同步閉關資料，請完成結算後再離開。'); return; }
       overlay.remove();
       session = null;
+      invalidateMistakes();
     });
     return overlay;
   }
@@ -148,11 +177,22 @@ import { buildMeditationMistakePool, chooseMeditationMistakes } from './daily-me
   }
   async function open() {
     if (!uid()) { notify('請先登入再閉關。'); return; }
+    const id = uid(), date = today();
     ensureOverlay();
     setContent('<p class="dm-note">正在確認今日閉關紀錄…</p>');
+    // 畫面顯示前就與玩家紀錄並行預取錯題，而非按「開始」後才開始查 250 筆。
+    // 若既有 session 正在作答或今天已完成，則不額外查詢。
+    if (record().lastDate !== date && !(session && session.uid === id && session.date === date)) {
+      void prepareMistakes(id, date).then(() => {
+        if (node('dm-start')) notify('歷史錯題已備妥，可以開始閉關。');
+      }).catch(error => {
+        console.warn('[Meditation] mistake prefetch failed', error);
+        if (node('dm-start')) notify('錯題預載失敗；按開始閉關時會重新嘗試。');
+      });
+    }
     try {
       await loadRemote();
-      if (!node('daily-meditation-overlay')) return;
+      if (!node('daily-meditation-overlay') || uid() !== id || today() !== date) return;
       if (session && session.uid === uid() && session.date === today() && record().lastDate !== today()) {
         if (session.answered === QUESTION_TOTAL) {
           setContent('<p class="dm-note">本次三題已答完，但尚未領取獎勵。</p><button type="button" class="dm-action" id="dm-resume-finish">出關結算</button>');
@@ -161,7 +201,11 @@ import { buildMeditationMistakePool, chooseMeditationMistakes } from './daily-me
           setContent('<p class="dm-note">已作答的題目不會重複計分，繼續參悟下一題。</p><button type="button" class="dm-action" id="dm-resume-next">繼續參悟</button>');
           node('dm-resume-next').onclick = () => void nextQuestion();
         } else renderQuestion();
-      } else { session = null; renderIntro(); }
+      } else {
+        session = null;
+        renderIntro();
+        if (mistakePending && node('dm-start')) notify('正在預先整理歷史錯題，可先閱讀閉關說明。');
+      }
     } catch (error) { notify(error.message || '無法讀取閉關紀錄，請檢查網路。'); }
   }
   function typeset() {
@@ -266,7 +310,7 @@ import { buildMeditationMistakePool, chooseMeditationMistakes } from './daily-me
       const id = uid();
       const date = today();
       setContent('<p class="dm-note">正在從過去的答題紀錄搜尋錯題…</p>');
-      const { selected, available } = await loadMistakes(id);
+      const { selected, available } = await prepareMistakes(id, date);
       if (id !== uid() || date !== today()) throw new Error('已跨日或切換帳號，請重新開始閉關。');
       if (selected.length < QUESTION_TOTAL) {
         session = null;
@@ -347,6 +391,7 @@ import { buildMeditationMistakePool, chooseMeditationMistakes } from './daily-me
         local.stats.rankLevel = outcome.rank;
       }
       session = null;
+      invalidateMistakes();
       window.updateUIStats?.();
       window.refreshCultivationRealmUI?.();
       window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', {
@@ -365,6 +410,12 @@ import { buildMeditationMistakePool, chooseMeditationMistakes } from './daily-me
   window.getDailyMeditationPanelState = panelState;
   window.refreshDailyMeditationPanel = syncPanel;
   window.addEventListener('xiuxian:stats-updated', syncPanel);
-  window.addEventListener('xiuxian:user-data-ready', () => { remoteUid = ''; remoteRecord = null; session = null; syncPanel(); });
+  window.addEventListener('xiuxian:user-data-ready', () => {
+    remoteUid = '';
+    remoteRecord = null;
+    session = null;
+    invalidateMistakes();
+    syncPanel();
+  });
   syncPanel();
 })();
