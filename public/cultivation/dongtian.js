@@ -362,7 +362,7 @@ import {
       state.files.forEach((item) => URL.revokeObjectURL(item.url));
       state.files = [];
       renderPreviews();
-      await loadOwnDongtians(true);
+      await loadOwnDongtians();
     } catch (error) {
       // Preserve the HTTP status and server error for the admin Debugger,
       // without showing raw AI errors or stack traces to regular players.
@@ -410,6 +410,10 @@ import {
     });
     batch.set(doc(db, INDEX_COLLECTION, id), metadata);
     await batch.commit();
+    dongtianCache.setFull(uid(), id, { id, ...metadata, questions: generated.questions });
+    const cached = dongtianCache.getOwnedList(uid());
+    if (cached) dongtianCache.setOwnedList(uid(), [{ id, ...metadata }, ...cached]);
+    dongtianCache.clearPublicList();
   }
 
   function newbieDongtianDemoDefinition() {
@@ -459,7 +463,7 @@ import {
     if (!state.tutorialDemo) state.tutorialDemo = newbieDongtianDemoDefinition();
     state.tutorialDemoCompleted = false;
     state.listLoaded = false;
-    if (document.getElementById('dt-list')) loadOwnDongtians(true);
+    if (document.getElementById('dt-list')) loadOwnDongtians();
     window.dispatchEvent(new CustomEvent('newbie:dongtian-demo-ready', { detail: { id: state.tutorialDemo.id } }));
     return JSON.parse(JSON.stringify(state.tutorialDemo));
   }
@@ -479,7 +483,7 @@ import {
     state.tutorialDemo = null;
     state.tutorialDemoCompleted = false;
     state.listLoaded = false;
-    if (document.getElementById('dt-list')) loadOwnDongtians(true);
+    if (document.getElementById('dt-list')) loadOwnDongtians();
     if (existed) {
       window.dispatchEvent(new CustomEvent('newbie:dongtian-demo-deleted'));
       if (!options.silent) toast('教學範例洞天已刪除；沒有任何公開資料需要清理。');
@@ -510,8 +514,11 @@ import {
     reports.docs.forEach((entry) => batch.delete(entry.ref));
     await batch.commit();
 
+    const cached = dongtianCache.getOwnedList(uid());
+    if (cached) dongtianCache.setOwnedList(uid(), cached.filter(item => item.id !== id));
+    invalidateOwnCave(id);
     state.listLoaded = false;
-    await loadOwnDongtians(true);
+    await loadOwnDongtians();
     toast(`已刪除洞天「${dongtian.name || '無名洞天'}」`);
     window.dispatchEvent(new CustomEvent('dongtian:deleted', { detail: { id, name: dongtian.name || '' } }));
     return true;
@@ -791,7 +798,7 @@ import {
       state.session = null;
       overlay.remove();
       window.switchToPage?.(source === 'owner' ? 'page-settings' : 'page-home');
-      if (source === 'owner') loadOwnDongtians(true);
+      if (source === 'owner') loadOwnDongtians();
     };
   }
 
@@ -972,8 +979,9 @@ import {
       });
       removeModerationModal();
       toast('題目已通過「錯誤成立＋本質不變」雙重審核並更新。');
+      invalidateOwnCave(dongtian.id);
       state.listLoaded = false;
-      await loadOwnDongtians(true);
+      await loadOwnDongtians();
     } catch (error) {
       status.innerHTML = `<span style="color:#fca5a5">${escapeHtml(error.message || '修改失敗')}</span><br>請重新說明題目具體錯誤，不能只要求換題或調整風格。`;
       submit.disabled = false;
@@ -1071,8 +1079,11 @@ import {
       });
       removeModerationModal();
       toast('題目修復通過嚴格驗證，洞天已重新開放。');
+      invalidateOwnCave(dongtian.id);
+      const cached = dongtianCache.getOwnedList(uid());
+      if (cached) dongtianCache.setOwnedList(uid(), cached.map(item => item.id === dongtian.id ? { ...item, status: 'active', moderationStatus: 'resolved' } : item));
       state.listLoaded = false;
-      await loadOwnDongtians(true);
+      await loadOwnDongtians();
     } catch (error) {
       console.error('[Dongtian repair]', error);
       status.innerHTML = `<span style="color:#fca5a5">${escapeHtml(error.message || '修復失敗')}</span><br>洞天仍維持封印；請調整修改提示詞後再試。`;
@@ -1207,7 +1218,7 @@ import {
       const card = document.getElementById('dongtian-card');
       const body = document.getElementById('dongtian-body');
       if (card && body) setCardCollapsed(card, body, false);
-      loadOwnDongtians(true);
+      loadOwnDongtians();
       if (tutorialOnly) {
         setTimeout(() => window.dispatchEvent(new CustomEvent('newbie:dongtian-demo-returned')), 60);
       }
@@ -1283,9 +1294,7 @@ import {
     installQuizEncounterHook();
     setTimeout(installQuizEncounterHook, 600);
     window.addEventListener('xiuxian:user-ready', () => { mount(); installQuizEncounterHook(); });
-    window.addEventListener('focus', () => {
-      if (!state.session && !document.getElementById('dongtian-body')?.hidden) loadOwnDongtians(true);
-    });
+    // Browser focus does not refresh the Firestore list. Only the refresh button does.
     new MutationObserver(() => { if (!state.mounted) mount(); }).observe(document.body, { childList: true, subtree: true });
   }
 
