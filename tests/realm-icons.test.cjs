@@ -31,7 +31,7 @@ test('every cultivation realm has a unique safe SVG crest and a color definition
     assert.match(svg, /aria-hidden="true"/);
     assert.ok(svg.includes('data-realm="' + name + '"'));
     assert.match(css, new RegExp('realm-icon\\[data-realm="' + name + '"\\]'));
-    assert.doesNotMatch(svg, /[\\u{1F300}-\\u{1FAFF}]/u);
+    assert.doesNotMatch(svg, /[\u{1F300}-\u{1FAFF}]/u);
     assert.ok(!marks.has(svg), 'realm crests must differ: ' + name);
     marks.add(svg);
   }
@@ -41,15 +41,15 @@ test('every cultivation realm has a unique safe SVG crest and a color definition
 
 test('realm UI, breakthrough, chat and matchmaking no longer use realm emoji', () => {
   for (const code of [theme, live, breakthrough, legacy]) {
-    const realmRows = code.match(/\\{ name: '(?:凡人|煉氣|築基|金丹|元嬰|化神|煉虛|合體|大乘|渡劫|登仙|真仙)', sub:[^\\n]+/g) || [];
+    const realmRows = code.match(/\{ name: '(?:凡人|煉氣|築基|金丹|元嬰|化神|煉虛|合體|大乘|渡劫|登仙|真仙)', sub:[^\n]+/g) || [];
     assert.ok(realmRows.length >= 20);
     for (const row of realmRows) assert.doesNotMatch(row, /emoji:/);
   }
-  assert.match(theme, /function openRealmAtlas\\(/);
-  assert.match(theme, /updateRankNode\\(rank, realm\\)/);
+  assert.match(theme, /function openRealmAtlas\(/);
+  assert.match(theme, /updateRankNode\(rank, realm\)/);
   assert.match(breakthrough, /realm-breakthrough-icon/);
-  assert.match(legacy, /getRankMarkup\\(/);
-  assert.doesNotMatch(theme, /alert\\(REALMS/);
+  assert.match(legacy, /getRankMarkup\(/);
+  assert.doesNotMatch(theme, /alert\(REALMS/);
 });
 
 test('shared icon module loads first and cache manifest contains all new resources', () => {
