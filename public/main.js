@@ -10,6 +10,7 @@ void import('./account-delete.js').catch((error) => {
 
 const XIUXIAN_FEATURE_MODULES = [
   './cultivation/cultivation-theme.js',
+  './cultivation/daily-meditation.js',
   './cultivation/identity-system.js',
   './cultivation/golden-core-activation-feedback.js',
   './cultivation/cultivation-rules.js',
@@ -69,7 +70,7 @@ let xiuxianFeatureLoadStarted = false;
 let xiuxianReadyTimer = null;
 let resolveXiuxianFeatureGate;
 const xiuxianFeatureGate = new Promise((resolve) => { resolveXiuxianFeatureGate = resolve; });
-const XIUXIAN_FEATURE_BUILD = '20260922-result-cinematic1';
+const XIUXIAN_FEATURE_BUILD = '20260922-daily-meditation1';
 
 // 交易市集僅為可選功能，載入失敗不可阻止玩家登入或進入遊戲。
 let xiuxianMarketLoad = null;
