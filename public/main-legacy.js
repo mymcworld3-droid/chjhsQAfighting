@@ -1,5 +1,6 @@
 import './cultivation/true-immortal.js';
 import { createSoloQuestionCache } from './solo-question-cache.js';
+import { ensureSecondaryFirebaseAuth } from './cultivation/firebase-projects.js';
 // 🔥 修正：使用純 URL 引入 Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -846,6 +847,12 @@ async function waitForVerifiedPlayerMigration(user) {
                 !record.profiles?.BD || !record.profiles?.C) {
                 throw new Error(record.message || '跨專案玩家資料尚未建立完成。');
             }
+            // Both profiles now exist. Exchange the A ID token for distinct
+            // BD/C Firebase Auth sessions before gameplay modules can use rules.
+            await Promise.all([
+                ensureSecondaryFirebaseAuth('BD'),
+                ensureSecondaryFirebaseAuth('C')
+            ]);
             if (auth.currentUser?.uid !== user.uid) throw new Error('登入帳號已更換，請重新進入遊戲。');
             return;
         }
