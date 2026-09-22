@@ -98,7 +98,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
   }
 
   function ensureStyle() {
-    const href = 'styles/battle-mode-v2.css?v=20260922-result-cinematic1';
+    const href = 'styles/battle-mode-v2.css?v=20260922-result-cinematic1&duel=20260922-diagonal1';
     if (document.querySelector(`link[href="${href}"]`)) return;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
