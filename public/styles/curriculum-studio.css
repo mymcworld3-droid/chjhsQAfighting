@@ -12,14 +12,6 @@ html.scope-studio-open,body.scope-studio-open{overflow:hidden!important;overscro
 #scope-studio h2{margin:0;color:#f7e8cc;font:700 clamp(19px,2vw,25px)/1.25 "Noto Serif TC",serif;letter-spacing:.08em}
 #scope-studio .ss-close{display:flex;gap:8px;align-items:center;justify-content:center;min-height:40px;padding:0 14px;border:1px solid rgba(239,211,160,.18);border-radius:12px;color:#dfd4bd;background:rgba(255,255,255,.035);font-size:12px;font-weight:800;transition:background .15s,border-color .15s}
 #scope-studio .ss-close:hover{background:rgba(235,202,131,.1);border-color:rgba(235,202,131,.5)}
-#scope-studio .ss-hero{position:relative;z-index:1;flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:18px clamp(16px,3.2vw,44px) 20px;background:linear-gradient(110deg,rgba(235,202,131,.085),rgba(38,78,74,.035) 75%);border-bottom:1px solid rgba(235,202,131,.11)}
-#scope-studio .ss-kicker{margin:0 0 5px;color:var(--ss-teal);font-size:11px;letter-spacing:.18em;font-weight:800}
-#scope-studio .ss-hero h3{margin:0;color:#f8ead1;font:700 clamp(20px,2.6vw,30px)/1.3 "Noto Serif TC",serif}
-#scope-studio .ss-hero p{margin:5px 0 0;font-size:12px;color:#a9aaa4}
-#scope-studio .ss-stats{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-#scope-studio .ss-stat{display:grid;gap:2px;min-width:92px;padding:8px 13px;border:1px solid rgba(232,196,126,.13);border-radius:13px;background:rgba(9,14,15,.55)}
-#scope-studio .ss-stat b{color:#f1d08b;font-size:20px;line-height:1.2;font-variant-numeric:tabular-nums}
-#scope-studio .ss-stat small{color:#a7aaa5;font-size:10px}
 #scope-studio .ss-tabs{display:none}
 #scope-studio .ss-workspace{position:relative;z-index:1;flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,340px);gap:16px;padding:16px clamp(16px,3.2vw,44px) 10px;overflow:hidden}
 #scope-studio .ss-picker,#scope-studio .ss-cart{min-width:0;min-height:0;display:flex;flex-direction:column;border:1px solid rgba(234,204,148,.15);border-radius:20px;background:linear-gradient(155deg,rgba(24,29,29,.98),rgba(12,17,19,.98));box-shadow:0 18px 55px rgba(0,0,0,.21);overflow:hidden}
@@ -105,15 +97,6 @@ html.scope-studio-open,body.scope-studio-open{overflow:hidden!important;overscro
 #scope-studio h2{font-size:18px}
 #scope-studio .ss-close{width:36px;min-height:36px;padding:0}
 #scope-studio .ss-close span{display:none}
-#scope-studio .ss-hero{padding:12px 14px;gap:8px}
-#scope-studio .ss-hero h3{font-size:19px}
-#scope-studio .ss-hero p{font-size:10px}
-#scope-studio .ss-kicker{font-size:9px}
-#scope-studio .ss-stats{flex-wrap:nowrap;gap:5px}
-#scope-studio .ss-stat{min-width:54px;padding:5px 7px}
-#scope-studio .ss-stat b{font-size:16px}
-#scope-studio .ss-stat small{font-size:9px}
-#scope-studio .ss-stat:last-child{display:none}
 #scope-studio .ss-tabs{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:9px 14px 0}
 #scope-studio .ss-tabs button{display:flex;align-items:center;justify-content:center;gap:7px;min-height:38px;border:1px solid rgba(235,202,131,.15);border-radius:10px;color:#a9a99e;background:rgba(255,255,255,.025);font-size:12px;font-weight:900}
 #scope-studio .ss-tabs button[aria-selected=true]{background:rgba(118,188,169,.15);border-color:rgba(138,209,188,.42);color:#d5f0e6}
@@ -131,7 +114,7 @@ html.scope-studio-open,body.scope-studio-open{overflow:hidden!important;overscro
 #scope-studio .ss-foot-summary small{font-size:9px}
 #scope-studio #dongfu-scope-save{min-width:126px;min-height:43px;padding:8px 11px!important;font-size:12px!important}
 }
-@media(max-width:380px){#scope-studio .ss-hero p{display:none}#scope-studio .ss-stat{min-width:51px}#scope-studio .cs-fields{grid-template-columns:1fr!important}#scope-studio .ss-panel-head small{display:none}}
+@media(max-width:380px){#scope-studio .cs-fields{grid-template-columns:1fr!important}#scope-studio .ss-panel-head small{display:none}}
 @media(prefers-reduced-motion:reduce){#scope-studio *,#scope-studio *:before,#scope-studio *:after{transition-duration:0s!important;animation:none!important}}
 
 
