@@ -40,12 +40,12 @@ import { meditationDateKey, nextMeditationStreak, meditationReward } from './dai
     const el = document.createElement('style');
     el.id = 'daily-meditation-style';
     el.textContent = [
-      '.dm-overlay{position:fixed;inset:0;z-index:12000;display:grid;place-items:center;padding:14px;background:rgba(3,4,7,.94);backdrop-filter:blur(15px);color:#f2e9d7}',
-      '.dm-card{position:relative;display:flex;flex-direction:column;width:min(100%,750px);max-height:calc(100dvh - 28px);overflow:hidden;border:1px solid rgba(216,177,93,.32);border-radius:22px;background:radial-gradient(ellipse at 50% -20%,rgba(201,154,69,.19),transparent 55%),linear-gradient(165deg,#171810,#090c10 70%);box-shadow:0 25px 85px #000b}',
+      '.dm-overlay{position:fixed;inset:0;z-index:12000;display:grid;place-items:center;padding:0;background:rgba(3,4,7,.94);backdrop-filter:blur(15px);color:#f2e9d7}',
+      '.dm-card{position:relative;display:flex;flex-direction:column;width:100%;height:100dvh;max-height:100dvh;overflow:hidden;border:1px solid rgba(216,177,93,.32);border-radius:0;background:radial-gradient(ellipse at 50% -20%,rgba(201,154,69,.19),transparent 55%),linear-gradient(165deg,#171810,#090c10 70%);box-shadow:0 25px 85px #000b}',
       '.dm-top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 20px;border-bottom:1px solid #b9964b30}',
       '.dm-heading{font:700 20px "Noto Serif TC",serif;letter-spacing:.09em;color:#f2d89b}.dm-eyebrow{font-size:10px;letter-spacing:.18em;color:#bbaa8b}',
       '.dm-close{flex:0 0 auto;border:1px solid #cab48255;border-radius:100px;background:#191910;color:#e6d6b5;width:35px;height:35px;font-size:22px;cursor:pointer}',
-      '.dm-body{min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:20px;display:grid;gap:14px}',
+      '.dm-body{width:min(100%,880px);margin:0 auto;min-height:0;flex:1;overflow-y:auto;overscroll-behavior:contain;padding:20px;display:grid;align-content:start;gap:14px}',
       '.dm-scene{position:relative;min-height:160px;display:grid;place-items:center;overflow:hidden;border-radius:16px;background:radial-gradient(circle at 50% 50%,#c49a4630,transparent 40%),linear-gradient(135deg,#24271c,#090d13);border:1px solid #c9a76835}',
       '.dm-circle{width:116px;height:116px;border:1px solid #d1ad634a;border-radius:50%;display:grid;place-items:center;box-shadow:0 0 45px #c49a4636,inset 0 0 32px #d7ac3925;animation:dm-pulse 4s ease-in-out infinite}',
       '.dm-circle:before{content:"";position:absolute;width:138px;height:138px;border:1px dashed #c8a45c45;border-radius:50%;animation:dm-spin 24s linear infinite}',
