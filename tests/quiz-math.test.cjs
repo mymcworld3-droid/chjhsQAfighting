@@ -27,7 +27,7 @@ test('standalone TeX formulas get delimiters, natural language remains HTML-esca
   vm.runInNewContext(math,context);
   const rich = context.window.quizMathRichText;
   assert.equal(rich('<b>一般中文與 x < 3</b>'), '&lt;b&gt;一般中文與 x &lt; 3&lt;/b&gt;');
-  assert.equal(rich(String.raw`\frac{1}{2}`), String.raw`\\(\frac{1}{2}\\)`);
+  assert.equal(rich(String.raw`\frac{1}{2}`), String.raw`\(\frac{1}{2}\)`);
   assert.equal(rich(String.raw`答案為 \(\frac{1}{2}\)`), String.raw`答案為 \(\frac{1}{2}\)`);
   assert.equal(rich(String.raw`$x^2+1$`), String.raw`$x^2+1$`);
 });
