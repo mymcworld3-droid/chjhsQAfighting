@@ -48,10 +48,20 @@ test('course studio starts immediately at the course navigation with no oversize
   assert.match(studio, /id="ss-cart-body"/);
 });
 
+test('Dongfu scope tile opens the dialog immediately, never exposing its old dropdown', () => {
+  assert.match(dongfu, /if \(key === 'scope'\) \{/);
+  assert.match(dongfu, /button\.addEventListener\('click', \(\) => window\.openCurriculumStudio\?\.\(\)\)/);
+  assert.match(dongfu, /button\.setAttribute\('aria-haspopup', 'dialog'\)/);
+  assert.match(dongfu, /setCollapsed\('scope', true, false\)/);
+  assert.match(dongfu, /\.dongfu-scope-card \.dongfu-collapse-body\{display:none!important\}/);
+  assert.doesNotMatch(studio, /ss-launch-preview|ss-launch-button|const preview =/);
+  assert.doesNotMatch(css, /ss-launch-preview/);
+});
+
 test('full-screen studio reparents original selectors and persistent selected list without duplicating IDs', () => {
   assert.match(studio,/\$\('ss-picker-body'\)\.append\(block\)/);
   assert.match(studio,/\$\('ss-cart-body'\)\.append\(cartSource\)/);
-  assert.match(studio,/scopeBody\.insertBefore\(block, \$\('ss-launch-preview'\)\)/);
+  assert.match(studio,/scopeBody\.prepend\(block\)/);
   assert.match(studio,/window\.renderSelectedUnitsList = wrapped/);
   assert.match(studio,/const result = await window\.saveProfile\?\.\(saveButton\)/);
   assert.match(studio,/if \(result !== true\)/);
