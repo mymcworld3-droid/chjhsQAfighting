@@ -127,7 +127,7 @@ test('Golden Core blocks opening combo strike but second strike uses equipment d
   assert.equal(comboSteps[0].damage,0);
   assert.equal(comboSteps[1].damage,120,'second 200 hit reduced to 150 then 30 artifact shield');
   assert.equal(outcome.hostHp,880);
-  assert.equal(outcome.hostCoreShield,true,'ready again next round');
+  assert.equal(outcome.hostCoreShield,false,'shield is consumed by first strike, not refreshed next round');
   assert.equal(outcome.hostArtifactState.artifactShield,0,'only followup consumes equipment shield');
   assert.match(formal,/resolveGuardedFollowup: window.resolveArtifactGuardedFollowup/);
   assert.match(read('public/cultivation/battle-tutorial.js'),/resolveGuardedFollowup: resolveTutorialGuardedFollowup/);
