@@ -1,0 +1,96 @@
+/* Full-viewport editor for admin shop products (frame and avatar). */
+body.admin-product-editing{overflow:hidden!important}
+#admin-product-editor:not(.admin-product-editor-fullscreen){padding:0!important;overflow:hidden}
+#admin-product-editor:not(.admin-product-editor-fullscreen) .admin-product-editor-header{display:flex;align-items:center;justify-content:space-between}
+#admin-product-editor:not(.admin-product-editor-fullscreen) .admin-product-launch{
+  display:flex;align-items:center;justify-content:space-between;gap:15px;width:100%;
+  padding:16px 18px;border:0;background:transparent;color:#ecd7a7;
+  font-size:clamp(12px,1.2vw,15px);font-weight:900;text-align:left
+}
+#admin-product-editor:not(.admin-product-editor-fullscreen) .admin-product-launch:hover{background:rgba(216,177,93,.08)}
+#admin-product-editor.admin-product-editor-fullscreen{
+  box-sizing:border-box;position:fixed!important;inset:0!important;z-index:17000!important;
+  width:100vw!important;max-width:none!important;height:100dvh!important;max-height:100dvh!important;
+  margin:0!important;padding:max(12px,env(safe-area-inset-top)) max(15px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(15px,env(safe-area-inset-left))!important;
+  display:flex!important;flex-direction:column;overflow:hidden!important;border:0!important;border-radius:0!important;
+  color:#e9dabb;background:radial-gradient(ellipse at 18% -10%,rgba(171,126,48,.15),transparent 45%),linear-gradient(160deg,#171910,#090d0d 69%,#050706)!important;
+  box-shadow:none!important
+}
+.admin-product-editor-fullscreen .admin-product-editor-header{
+  flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  border-bottom:1px solid rgba(215,175,94,.25);padding:0 0 clamp(10px,1.8dvh,18px)
+}
+.admin-product-editor-fullscreen .admin-product-launch{
+  pointer-events:none;text-align:left;min-width:0;padding:3px 0;border:0;background:none;
+  color:#f2deb0;font-size:clamp(19px,2.5vw,30px);font-weight:900
+}
+.admin-product-editor-fullscreen #admin-form-arrow{display:none}
+.admin-product-editor-fullscreen .admin-product-close{
+  display:inline-flex;gap:8px;align-items:center;justify-content:center;flex:none;
+  padding:10px 16px;border:1px solid rgba(228,194,124,.27);border-radius:10px;
+  background:rgba(213,174,98,.07);color:#efdab5;font-size:13px;font-weight:800
+}
+.admin-product-editor-fullscreen .admin-product-editor-body{
+  display:flex!important;flex:1 1 auto;min-height:0;flex-direction:column;
+  overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;
+  width:min(100%,1170px);margin:0 auto;padding:clamp(12px,2dvh,26px) 2px 0;
+  scrollbar-gutter:stable
+}
+.admin-product-editor-fullscreen .admin-product-editor-grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:clamp(12px,2vw,24px);align-items:start;width:100%
+}
+.admin-product-editor-fullscreen .admin-product-field{display:flex;flex-direction:column;min-width:0;gap:8px}
+.admin-product-editor-fullscreen .admin-product-field span,
+.admin-product-editor-fullscreen .admin-product-preview-panel>span{
+  color:#d8c08a;font-size:clamp(12px,1.05vw,15px);font-weight:800
+}
+.admin-product-editor-fullscreen .admin-product-field-wide{grid-column:1/-1}
+.admin-product-editor-fullscreen .admin-product-field :is(input,select),
+.admin-product-editor-fullscreen #admin-asset-select{
+  box-sizing:border-box;width:100%;min-width:0;min-height:clamp(45px,6dvh,55px);
+  padding:10px 14px;border:1px solid rgba(228,186,112,.26);border-radius:11px;
+  background:rgba(7,12,11,.83);color:#f4e8cb;font-size:clamp(13px,1.15vw,16px);
+  outline:none
+}
+.admin-product-editor-fullscreen .admin-product-field :is(input,select):focus,
+.admin-product-editor-fullscreen #admin-asset-select:focus{border-color:#e6c680;box-shadow:0 0 0 2px rgba(226,189,105,.11)}
+.admin-product-editor-fullscreen .admin-product-asset-panel,
+.admin-product-editor-fullscreen .admin-product-preview-panel{
+  box-sizing:border-box;min-width:0;min-height:clamp(180px,27dvh,300px);
+  padding:clamp(14px,1.8vw,22px);border:1px solid rgba(216,177,93,.19);border-radius:14px;
+  background:linear-gradient(145deg,rgba(31,27,18,.6),rgba(10,15,13,.85))
+}
+.admin-product-editor-fullscreen .admin-product-asset-panel{display:flex;flex-direction:column;gap:9px;justify-content:start}
+.admin-product-editor-fullscreen #admin-asset-selector,
+.admin-product-editor-fullscreen #admin-hint{color:#b6a78b;font-size:clamp(11px,1vw,14px);line-height:1.6}
+.admin-product-editor-fullscreen .admin-product-preview-stage{
+  display:grid;place-items:center;width:100%;min-height:clamp(125px,22dvh,250px);
+  padding:12px;border:1px dashed rgba(222,186,116,.27);border-radius:11px;
+  margin-top:10px;background:radial-gradient(ellipse,rgba(226,190,108,.08),rgba(4,8,8,.48))
+}
+.admin-product-editor-fullscreen #admin-asset-preview{max-width:100%;max-height:clamp(115px,21dvh,238px);width:auto;height:auto;object-fit:contain}
+.admin-product-editor-fullscreen #admin-product-preview-empty{color:#847c6a;font-size:12px}
+.admin-product-editor-fullscreen .admin-product-editor-actions{
+  position:sticky;z-index:2;bottom:0;display:flex;flex:0 0 auto;gap:12px;
+  align-items:center;justify-content:flex-end;margin-top:auto;
+  padding:clamp(12px,2dvh,22px) 0 4px;
+  background:linear-gradient(180deg,transparent,#080c0b 24%)
+}
+.admin-product-editor-fullscreen .admin-product-editor-actions button{
+  min-height:clamp(44px,6dvh,55px);padding:9px clamp(15px,2vw,27px);
+  font-size:clamp(12px,1.1vw,15px);border-radius:11px
+}
+.admin-product-editor-fullscreen .admin-product-save{min-width:clamp(140px,23vw,270px)}
+.admin-product-editor-fullscreen .admin-product-delete{border-color:rgba(224,102,98,.4);color:#f2b1a9}
+.admin-product-editor-fullscreen .admin-product-cancel{border:1px solid rgba(225,189,125,.23);color:#c9b998}
+@media(max-width:660px){
+  .admin-product-editor-fullscreen .admin-product-editor-grid{grid-template-columns:minmax(0,1fr);gap:11px}
+  .admin-product-editor-fullscreen .admin-product-field-wide{grid-column:auto}
+  .admin-product-editor-fullscreen .admin-product-asset-panel,
+  .admin-product-editor-fullscreen .admin-product-preview-panel{min-height:0;padding:13px}
+  .admin-product-editor-fullscreen .admin-product-preview-stage{min-height:135px}
+  .admin-product-editor-fullscreen .admin-product-editor-actions{gap:7px}
+  .admin-product-editor-fullscreen .admin-product-editor-actions button{padding:9px 11px}
+  .admin-product-editor-fullscreen .admin-product-save{min-width:0;flex:1}
+}
