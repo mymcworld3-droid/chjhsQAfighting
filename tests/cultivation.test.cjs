@@ -20,7 +20,7 @@ function setup(totalScore = 0) {
   const nodes = new Map();
   function element() {
     return {
-      innerText: '', textContent: '', innerHTML: '', style: {},
+      innerText: '', textContent: '', innerHTML: '', style: {}, dataset: {}, querySelector: () => null,
       classList: { add() {}, remove() {} }, remove() {}
     };
   }
@@ -83,6 +83,7 @@ function setup(totalScore = 0) {
     section(main, 'function updateUIStats() {', 'function buildPathTree(') +
     section(main, 'async function handleAnswer(', 'async function generateVisualAid(') +
     section(theme, '  function score() {', '  function text(selector, value) {') +
+    section(theme, '  function updateRankNode(', '  function openRealmAtlas()') +
     section(theme, '  function render() {', '  function boot()'),
     context
   );
