@@ -363,20 +363,20 @@ test('battle renders exactly one phase and does not inherit a static old arena',
 });
 
 
-test('Gold Core shields block exactly one PvP hit and never erase off-field cultivation protection', () => {
+test('Gold Core shields block only the first hit of EACH PvP round without erasing off-field protection', () => {
   const e = loadEngine();
   const core = { type:'ningxin', name:'凝心靜音丹', grade:6 };
   const host = { ...player('h',{correct:false}), goldenCore:core, coreShield:true, coreCorrectStreak:0 };
   const guest = player('g',{correct:true});
   const one = e.settleBattleRound({roomId:'guard',round:1,host,guest});
   assert.equal(one.hostHp,1000);
-  assert.equal(one.hostCoreShield,false);
+  assert.equal(one.hostCoreShield,true, 'the active shield rearms at the beginning of each round');
   assert.ok(one.logs.some(x=>x.type==='guard' && x.actorRole==='host'));
   assert.equal(one.logs.find(x=>x.type==='attack').damage,0);
   assert.ok(one.activations.some(x=>x.ownerUid==='h' && x.skill==='金丹道心護體'));
   const two = e.settleBattleRound({roomId:'guard',round:2,host:{...host,coreShield:one.hostCoreShield,coreCorrectStreak:one.hostCoreStreak,hp:one.hostHp},guest});
-  assert.equal(two.hostHp,800);
-  assert.equal(two.hostCoreShield,false);
+  assert.equal(two.hostHp,1000);
+  assert.equal(two.hostCoreShield,true);
   assert.equal(host.coreShield,true, 'snapshot is not mutated and remains separate from persisted cultivation shield');
   assert.match(battleSource,/coreShield: !!goldenCore && data\.stats\?\.goldenCoreShield === true/);
   assert.match(battleSource,/'host\.coreShield': outcome\.hostCoreShield/);
@@ -391,7 +391,7 @@ test('Ningxin correct streak generates protection that prevents the same round h
   assert.equal(out.hostCoreStreak,3);
   assert.equal(out.hostHp,1000);
   assert.equal(out.guestHp,800);
-  assert.equal(out.hostCoreShield,false,'created and consumed during same round');
+  assert.equal(out.hostCoreShield,true,'the trigger remains active but this round has spent its first-hit protection');
   assert.ok(out.activations.some(x=>x.skill==='凝心靜音丹・道心護體'));
 });
 
@@ -406,7 +406,46 @@ test('Wugou shield trigger is deterministic and survives without incoming attack
   assert.equal(first.hostHp,1000);
   const second=e.settleBattleRound({roomId:'clean',round:2,host:{...h,coreShield:first.hostCoreShield},guest:player('g',{correct:true})});
   assert.equal(second.hostHp,1000);
-  assert.equal(second.hostCoreShield,false);
+  assert.equal(second.hostCoreShield,true);
+});
+
+test('Dao-heart only blocks the first incoming hit in a round, including a counterattack', () => {
+  const e=loadEngine(), core={type:'ningxin',grade:6,name:'凝心靜音丹'};
+  const h={...player('h',{correct:true,atMs:1000}),goldenCore:core,coreShield:true};
+  const g={...player('g',{correct:true,atMs:1200}),goldenCore:{type:'thunder',grade:1},coreShield:false};
+  const first=e.settleBattleRound({
+    roomId:'reflect-first',round:1,host:h,guest:g,
+    resolveEquipmentHit:({baseDamage})=>({damage:baseDamage,reflectDamage:120})
+  });
+  assert.equal(first.hostHp,1000,'first reflection is blocked');
+  assert.equal(first.guestHp,800);
+  assert.equal(first.steps.find(step=>step.type==='counter').guarded,true);
+  const next=e.settleBattleRound({
+    roomId:'reflect-next',round:2,
+    host:{...h,hp:first.hostHp,coreShield:first.hostCoreShield,coreCorrectStreak:first.hostCoreStreak},
+    guest:{...g,hp:first.guestHp,coreCorrectStreak:first.guestCoreStreak},
+    resolveEquipmentHit:({baseDamage})=>({damage:baseDamage,reflectDamage:120})
+  });
+  assert.equal(next.hostHp,1000,'first reflection is guarded again next round');
+});
+
+test('guarded opening attack still receives a second combo hit, but no third shield', () => {
+  const e=loadEngine(), core={type:'ningxin',grade:6,name:'凝心靜音丹'};
+  const h={...player('h',{correct:false}),goldenCore:core,coreShield:true};
+  const g=player('g',{correct:true});
+  const result=e.settleBattleRound({
+    roomId:'guarded-combo',round:1,host:h,guest:g,
+    resolveGuardedFollowup:()=>({damage:170,reflectDamage:0,heal:0,shieldGain:0,skill:'連擊'})
+  });
+  assert.equal(result.hostHp,830);
+  assert.equal(result.hostCoreShield,true);
+  assert.equal(result.steps.length,2);
+  assert.equal(result.steps[0].guarded,true);
+  assert.equal(result.steps[0].damage,0);
+  assert.equal(result.steps[0].hostHp,1000);
+  assert.equal(result.steps[1].guarded,false);
+  assert.equal(result.steps[1].damage,170);
+  assert.equal(result.steps[1].hostHp,830);
 });
 
 test('All Golden Core battle effects apply their own attack or healing rules', () => {
