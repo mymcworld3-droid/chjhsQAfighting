@@ -65,7 +65,7 @@ async function reviewNameWithDeadline(name, { generateJSON = aiRouter.generateJS
     return { ...normalizeReview(routed.data, checked), provider: routed.provider, model: routed.model, reviewStatus: 'reviewed' };
   } catch (error) {
     // AI 服務的內部 timeout 和整體 deadline 都可回退；額度、配置或傳輸錯誤不能偽裝為逾時。
-    if (error?.code !== 'NAME_REVIEW_TIMEOUT' && !/\\btimeout\\b|timed out|逾時|AbortError/i.test(String(error?.message || ''))) throw error;
+    if (error?.code !== 'NAME_REVIEW_TIMEOUT' && !/\btimeout\b|timed out|逾時|AbortError/i.test(String(error?.message || ''))) throw error;
     console.warn('[Identity review] AI timeout; applying server-side name checks');
     return { approved: true, normalizedName: checked, reason: 'AI 審核逾時，已通過基本名稱檢查', reviewStatus: 'timeout-fallback' };
   } finally {
