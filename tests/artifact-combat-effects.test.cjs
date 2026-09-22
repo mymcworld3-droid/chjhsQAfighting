@@ -121,10 +121,11 @@ test('Golden Core blocks opening combo strike but second strike uses equipment d
     resolveEquipmentHit:runtime.resolveArtifactBattleHit,
     resolveGuardedFollowup:runtime.resolveArtifactGuardedFollowup
   });
-  assert.equal(outcome.steps.length,2);
-  assert.equal(outcome.steps[0].guarded,true);
-  assert.equal(outcome.steps[0].damage,0);
-  assert.equal(outcome.steps[1].damage,120,'second 200 hit reduced to 150 then 30 artifact shield');
+  const comboSteps = outcome.steps.filter(step => step.type === 'attack');
+  assert.equal(comboSteps.length,2);
+  assert.equal(comboSteps[0].guarded,true);
+  assert.equal(comboSteps[0].damage,0);
+  assert.equal(comboSteps[1].damage,120,'second 200 hit reduced to 150 then 30 artifact shield');
   assert.equal(outcome.hostHp,880);
   assert.equal(outcome.hostCoreShield,true,'ready again next round');
   assert.equal(outcome.hostArtifactState.artifactShield,0,'only followup consumes equipment shield');
