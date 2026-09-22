@@ -1,5 +1,5 @@
 import { initializeApp, getApp, getApps } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+import { getAuth, signInWithCustomToken, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { firebaseProjectConfigs } from '../firebase-projects-config.js';
 
@@ -55,4 +55,64 @@ export function getFirebaseProjectServices(role) {
   }
   const app = already || initializeApp(config, name);
   return { role, app, auth: getAuth(app), db: getFirestore(app) };
+}
+
+const secondaryLoginPromises = new Map();
+let mainAuthUnsubscribe = null;
+
+function watchMainAccount() {
+  if (mainAuthUnsubscribe) return;
+  mainAuthUnsubscribe = onAuthStateChanged(getAuth(getApp()), (mainUser) => {
+    // Do not retain a prior player's BD / C session after A logs out or switches UID.
+    for (const role of ['BD', 'C']) {
+      const app = getApps().find(item => item.name === APP_NAMES[role]);
+      if (!app) continue;
+      const secondaryAuth = getAuth(app);
+      if (secondaryAuth.currentUser && secondaryAuth.currentUser.uid !== mainUser?.uid) {
+        void signOut(secondaryAuth).catch(() => {});
+      }
+    }
+  });
+}
+
+/**
+ * Authenticate the same A user into exactly one secondary project.
+ * A's ID token goes only to our backend, where its audience, issuer, expiry
+ * and revocation are verified before the server creates a short-lived custom
+ * token signed for the requested secondary project.
+ */
+export async function ensureSecondaryFirebaseAuth(role) {
+  if (role !== 'BD' && role !== 'C') throw new Error('只接受 BD 或 C 身分連線');
+  const mainAuth = getAuth(getApp());
+  const mainUser = mainAuth.currentUser;
+  if (!mainUser) throw new Error('主專案尚未登入');
+  const services = getFirebaseProjectServices(role);
+  watchMainAccount();
+  if (services.auth.currentUser?.uid === mainUser.uid) return services;
+  const key = role + ':' + mainUser.uid;
+  if (secondaryLoginPromises.has(key)) return secondaryLoginPromises.get(key);
+
+  const pending = (async () => {
+    const idToken = await mainUser.getIdToken();
+    const response = await fetch('/api/firebase-project-tokens', {
+      method: 'POST',
+      cache: 'no-store',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + idToken },
+      body: JSON.stringify({ roles: [role] })
+    });
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok || payload.uid !== mainUser.uid || typeof payload.tokens?.[role] !== 'string') {
+      throw new Error(payload.error || '跨專案身分交換尚未準備完成');
+    }
+    if (mainAuth.currentUser?.uid !== mainUser.uid) throw new Error('玩家已切換帳號');
+    const credential = await signInWithCustomToken(services.auth, payload.tokens[role]);
+    if (mainAuth.currentUser?.uid !== mainUser.uid || credential.user.uid !== mainUser.uid) {
+      await signOut(services.auth).catch(() => {});
+      throw new Error('跨專案玩家身分不符');
+    }
+    return services;
+  })();
+  secondaryLoginPromises.set(key, pending);
+  try { return await pending; }
+  finally { if (secondaryLoginPromises.get(key) === pending) secondaryLoginPromises.delete(key); }
 }
