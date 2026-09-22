@@ -98,7 +98,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
   }
 
   function ensureStyle() {
-    const href = 'styles/battle-mode-v2.css?v=20260921-portrait-stage1';
+    const href = 'styles/battle-mode-v2.css?v=20260922-duel-arena1';
     if (document.querySelector(`link[href="${href}"]`)) return;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
@@ -192,7 +192,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
       <div class="bv2-ambient" aria-hidden="true"><i></i><i></i><i></i><b>鬥</b></div>
       <div class="bv2-shell">
         <header class="bv2-head">
-          <div><span class="bv2-eyebrow">青雲鬥法臺 ／ MATCHMAKING</span><h2>論道鬥法</h2></div>
+          <div><span class="bv2-eyebrow">青雲宗 · 演武臺</span><h2>論道鬥法</h2></div>
           <div class="bv2-head-actions">
             <span id="bv2-room-badge" class="bv2-room-badge">尚未配對</span>
             <button id="bv2-leave-top" type="button" class="bv2-icon-btn" aria-label="離開鬥法"><i class="fa-solid fa-xmark"></i></button>
@@ -656,6 +656,8 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
     setHp('enemy', original[otherRole(myRole)]);
     setText('bv2-cue-kicker', '攻防演武');
     const steps = Array.isArray(settlement.steps) ? settlement.steps : [];
+    const stage = document.querySelector('#bv2-arena .bv2-stage');
+    stage?.querySelectorAll('.bv2-stage-impact').forEach((node) => node.remove());
     const fighters = {
       host: document.getElementById(myRole === 'host' ? 'bv2-my-fighter' : 'bv2-enemy-fighter'),
       guest: document.getElementById(myRole === 'guest' ? 'bv2-my-fighter' : 'bv2-enemy-fighter')
@@ -673,10 +675,11 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
       const counter = step.type === 'counter';
       const label = missed ? 'MISS' : guarded ? '護體' : (counter ? '反擊 -' : '-') + damage;
       let pop = null;
+      let impact = null;
       scheduleBattleAt(strikeAtMs, key, (atMs) => {
         if (!valid() || atMs >= clearAtMs) return;
         setText('bv2-cue-kicker', index === 0 ? '先手出招' : counter ? '雷光反擊' : '後手出招');
-        setText('bv2-cue-count', missed ? 'MISS' : guarded ? 'BLOCK' : '-' + damage);
+        setText('bv2-cue-count', missed ? '落空' : guarded ? '護體' : counter ? '反擊' : '出招');
         setText('bv2-cue-message', (step.actorRole === myRole ? '我方' : '對手') +
           (missed ? '作答未命中！' : guarded ? '出招被道心護體抵擋' : counter ? '發動反擊！' : '造成 ' + damage + ' 點傷害'));
         if (actor) {
@@ -691,6 +694,13 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
         setHp('my', { ...original[myRole], hp: Number(step[myRole + 'Hp']) });
         setHp('enemy', { ...original[otherRole(myRole)], hp: Number(step[otherRole(myRole) + 'Hp']) });
         if (atMs >= clearAtMs) return;
+        if (!missed && !guarded && stage) {
+          impact = document.createElement('i');
+          impact.className = 'bv2-stage-impact ' + (step.actorRole === myRole ? 'from-me' : 'from-enemy');
+          impact.setAttribute('aria-hidden', 'true');
+          impact.style.animationDelay = '-' + Math.max(0, atMs - impactAtMs) + 'ms';
+          stage.appendChild(impact);
+        }
         if (target) {
           target.style.animationDelay = '-' + Math.max(0, atMs - impactAtMs) + 'ms';
           if (!missed && !guarded) target.classList.add('hit');
@@ -712,6 +722,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
         if (actor) actor.style.animationDelay = '';
         if (target) target.style.animationDelay = '';
         pop?.remove();
+        impact?.remove();
       });
     });
     scheduleBattleAt(startAtMs + battleAnimationDuration(steps.length), key, () => {
