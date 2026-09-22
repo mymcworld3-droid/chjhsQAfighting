@@ -158,6 +158,8 @@
 
     return {
       normalDamage: Math.max(0, Math.round(normalDamage)),
+      // 將連擊額外的一擊保留為獨立數值，道心只能擋住其中第一擊。
+      comboNormalDamage: combo ? Math.max(0, Math.round(normalBase)) : 0,
       trueDamage,
       critical,
       combo,
@@ -260,6 +262,25 @@
       damage,
       normalDamage: attack.normalDamage,
       trueDamage: attack.trueDamage,
+      reflectDamage: Math.max(0, Math.round(Number(defense.reflectDamage) || 0)),
+      reflectSkill: defense.skill ? `法寶反傷・${defense.skill}` : '法寶反傷',
+      heal: Math.round(damage * Math.max(0, Number(attack.lifestealPercent) || 0)),
+      shieldGain: Math.max(0, Number(attack.shieldGain) || 0),
+      skill: [attack.skill, defense.skill].filter(Boolean).join('・')
+    };
+  };
+
+  // 第一擊被金丹道心擋下時，仍需判定本次攻擊是否觸發額外連擊。
+  // 不執行第一擊的法寶防禦：不能誤耗法寶護盾或一次性保命。
+  window.resolveArtifactGuardedFollowup = function ({ attacker, defender, baseDamage, seed = null } = {}) {
+    const attack = window.resolveArtifactBattleAttack({ attacker, defender, baseDamage, seed });
+    if (!attack.combo || attack.comboNormalDamage <= 0) return null;
+    const defense = window.resolveArtifactBattleDefense({
+      defender, attacker, normalDamage: attack.comboNormalDamage, trueDamage: 0
+    });
+    const damage = Math.max(0, Math.round(Number(defense.hpDamage) || 0));
+    return {
+      damage,
       reflectDamage: Math.max(0, Math.round(Number(defense.reflectDamage) || 0)),
       reflectSkill: defense.skill ? `法寶反傷・${defense.skill}` : '法寶反傷',
       heal: Math.round(damage * Math.max(0, Number(attack.lifestealPercent) || 0)),
