@@ -447,7 +447,7 @@
       #page-battle .bv2-stage-impact{
         position:absolute;z-index:6;inset:0;pointer-events:none;overflow:hidden
       }
-      #page-battle .bv2-stage-impact::before{
+      #page-battle .bv2-stage-impact::before{animation-delay:inherit;
         content:'';position:absolute;left:26%;top:18%;height:68%;width:8px;
         border-radius:100%;background:linear-gradient(180deg,transparent,#fff9d5 18%,#f9d489 45%,transparent 90%);
         box-shadow:0 0 16px 5px rgba(250,203,108,.55),0 0 49px rgba(255,243,191,.35);
@@ -458,7 +458,7 @@
         background:linear-gradient(180deg,transparent,#ffd9d7 18%,#ed8799 45%,transparent 90%);
         box-shadow:0 0 18px 4px rgba(235,111,124,.5)
       }
-      #page-battle .bv2-stage-impact::after{
+      #page-battle .bv2-stage-impact::after{animation-delay:inherit;
         content:'';position:absolute;left:72%;top:48%;width:42px;height:42px;border-radius:50%;
         border:3px solid rgba(255,239,179,.88);box-shadow:0 0 30px rgba(246,215,153,.65);
         transform:translate(-50%,-50%) scale(.2);animation:bv2ImpactRing .7s ease-out both
