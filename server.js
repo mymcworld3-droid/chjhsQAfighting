@@ -6,6 +6,7 @@ const aiRouter = require('./ai-router');
 const registerDongtianApi = require('./dongtian-api');
 const registerIdentityApi = require('./identity-api');
 const registerArtifactGenerationApi = require('./artifact-generation-api');
+const registerFirebaseProjectAuthApi = require('./firebase-project-auth-api.cjs');
 require('dotenv').config();
 
 const app = express();
@@ -17,6 +18,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 registerDongtianApi(app);
 registerIdentityApi(app);
 registerArtifactGenerationApi(app);
+registerFirebaseProjectAuthApi(app);
 
 // 根目錄路由
 app.get('/', (req, res) => {
