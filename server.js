@@ -253,6 +253,7 @@ app.post('/api/generate-quiz', async (req, res) => {
         7. **嚴格範圍**：只能考查「${level}」程度內的「${subject}／${targetTopic}」，不得跨科、超綱或擅自替換單元。
         8. **避免重複題目**：${previousQuestions.length ? JSON.stringify(previousQuestions) : '本場尚無既有題目'}。不得改寫同一道題目再出。
         9. 必須提供四個不重複且僅有一個正解的選項，以及能夠支持該答案的完整解析。
+        10. **LaTeX 排版**：題幹、正確選項、三個錯誤選項及解析中的所有數學式都必須使用 TeX 語法。行內數學用 $...$，獨立公式用 $...$；例如 $x^2+1$、$\\frac{1}{2}$。一般中文保留純文字，不要將整段中文包進公式；不要輸出 HTML 或 Markdown 程式碼區塊。
         ${diagnosticInfo}
     
         [輸出格式 (JSON Only)]
