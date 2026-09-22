@@ -75,8 +75,8 @@ test('CSS blocks are balanced and browser loads the new build', () => {
   const trainingEnd = tutorial.indexOf('      @media(prefers-reduced-motion:reduce){#' + layer + ' *{', tutorial.indexOf('/* The training arena shares the fixed viewport'));
   const tutorialCss = tutorial.slice(tutorial.indexOf('/* The training arena shares the fixed viewport'), trainingEnd);
   for (const text of [css, tutorialCss]) assert.equal(text.split('{').length, text.split('}').length);
-  assert.ok(main.includes("XIUXIAN_FEATURE_BUILD = '20260922-core-toggle1'"));
-  assert.ok(index.includes('main.js?v=20260922-core-toggle1'));
+  assert.ok(main.includes("XIUXIAN_FEATURE_BUILD = '20260922-core-status1'"));
+  assert.ok(index.includes('main.js?v=20260922-core-status1'));
 });
 
 test('stage portraits keep the near-left and far-right duel depth in formal and tutorial battles', () => {
