@@ -556,7 +556,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
     setPlayerAvatar('bv2-match-me-avatar', mine);
     setPlayerAvatar('bv2-match-enemy-avatar', opp);
     setText('bv2-match-me', mine?.name || '修士'); setText('bv2-match-me-core', `本命金丹：${playerCoreLabel(mine)}${playerPowerLabel(mine)}`);
-    setText('bv2-room-badge', state.roomId ? `ROOM ${state.roomId.slice(0, 6).toUpperCase()}` : 'SEARCHING');
+    setText('bv2-room-badge', state.roomId ? '青雲演武場' : '尋找對手中');
     setText('bv2-lobby-title', opp ? '已尋得對手' : '正在搜尋對手');
     setText('bv2-lobby-status', opp ? '雙方靈識已鎖定，即將登上鬥法臺。' : '優先尋找修為相近、等待較久的道友。');
     setText('bv2-match-enemy', opp?.name || '搜尋中…'); setText('bv2-match-enemy-core', opp ? playerCoreLabel(opp) + playerPowerLabel(opp) : '等待道友入場');
@@ -569,7 +569,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
     setPlayerAvatar('bv2-intro-enemy-avatar', enemy);
     setText('bv2-intro-me', mine?.name || '我方修士'); setText('bv2-intro-enemy', enemy?.name || '對手修士');
     setText('bv2-intro-me-core', playerCoreLabel(mine) + playerPowerLabel(mine)); setText('bv2-intro-enemy-core', playerCoreLabel(enemy) + playerPowerLabel(enemy));
-    setText('bv2-room-badge', `ROOM ${state.roomId.slice(0, 6).toUpperCase()}`);
+    setText('bv2-room-badge', '青雲演武場');
     updateIntroText(room);
   }
 
@@ -813,7 +813,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
     if (!mine || !enemy) return;
     setPlayerPortrait('bv2-my-fighter', mine, true);
     setPlayerPortrait('bv2-enemy-fighter', enemy);
-    setText('bv2-room-badge', 'ROOM ' + state.roomId.slice(0, 6).toUpperCase());
+    setText('bv2-room-badge', '青雲演武場');
     setText('bv2-round', room.round + ' / ' + (room.maxRounds || BATTLE_V2.maxRounds));
     setText('bv2-my-name', mine.name || '我方');
     setText('bv2-enemy-name', enemy.name || '對手');
