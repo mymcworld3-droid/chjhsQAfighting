@@ -2468,7 +2468,9 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     const explanationText = explanation || '未提供解析。';
     if (window.quizMathSet) void window.quizMathSet(fbText, explanationText);
     else {
-        fbText.innerHTML = formatQuizRichText(explanationText);
+        // Fallback for early boot and isolated legacy controllers without the local formatter in scope.
+        const fallback = window.formatQuizRichText || window.quizMathRichText || (text => String(text ?? ''));
+        fbText.innerHTML = fallback(explanationText);
         void window.MathJax?.typesetPromise?.([fbText]).catch(err => console.warn('[Quiz explanation MathJax]', err));
     }
 
