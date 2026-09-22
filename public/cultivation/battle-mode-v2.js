@@ -5,6 +5,7 @@ import {
   addDoc, updateDoc, onSnapshot, runTransaction, serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260922-first-answer1';
+import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } from './battle-question-scope.js?v=20260922-range1';
 
 // Battle v2 — 修仙配對鬥法。
 // 核心原則：配對、首答倒數、回合結算、離場判定皆寫入 Firestore；任何單一 client 都不能私自決定勝負。
@@ -50,6 +51,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260922-f
     settlingRound: null,
     timeoutRound: null,
     preparingRound: null,
+    prepareRetryAfterMs: 0,
     advancingRound: null,
     introAdvancing: false,
     disconnectClaimRound: null,
@@ -349,51 +351,81 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260922-f
       // All combat effects come from equipped artifacts at matchmaking, not local post-match state.
       artifactBattle, artifactShield: Math.max(0, Math.round(Number(openingShield) || 0)),
       artifactFirstHitUsed: false, artifactCheatDeathUsed: false,
+      knowledge: snapshotBattleKnowledge(data),
       reviewedRound: 0,
       answerChoice: null, answerCorrect: null, answerAt: null, answerRound: null, timedOut: false,
       lastSeenAtMs: nowMs()
     };
   }
 
-  function normalizeQuestion(raw) {
+  // The normal quiz API returns {correct, wrong}; older question banks return {opts, ans}.
+  // Both formats must be checked before a question can enter the shared Firestore room.
+  function normalizeQuestion(raw, request) {
     const source = Array.isArray(raw) ? raw[0] : (raw?.questions?.[0] || raw || {});
     const q = String(source.q ?? source.question ?? '').trim();
-    const opts = Array.isArray(source.opts) ? source.opts : (Array.isArray(source.options) ? source.options : []);
+    let opts = Array.isArray(source.opts) ? [...source.opts] :
+      Array.isArray(source.options) ? [...source.options] : null;
     let ans = source.ans ?? source.answer ?? source.correctIndex;
+    if (!opts && typeof source.correct === 'string' && Array.isArray(source.wrong)) {
+      opts = [source.correct, ...source.wrong];
+      ans = 0;
+    }
+    if (!Array.isArray(opts)) throw new Error('題目缺少單選選項');
     if (typeof ans === 'string' && /^[A-Da-d]$/.test(ans.trim())) ans = ans.trim().toUpperCase().charCodeAt(0) - 65;
-    if (!Number.isInteger(Number(ans)) && typeof ans === 'string') ans = opts.findIndex((item) => String(item) === ans);
+    if (!Number.isInteger(Number(ans)) && typeof ans === 'string') ans = opts.findIndex(item => String(item) === ans);
     ans = Number(ans);
-    if (!q || opts.length < 2 || !Number.isInteger(ans) || ans < 0 || ans >= opts.length) throw new Error('invalid quiz payload');
-    return { id: randomId('bv2q'), q, opts: opts.slice(0, 6).map(String), ans, exp: String(source.exp ?? source.explanation ?? '此題暫無解析。'), subject: String(source.subject ?? source.topic ?? '綜合') };
+    const choices = opts.map(value => String(value ?? '').trim());
+    const unique = new Set(choices.map(value => value.replace(/\\s+/g, '').toLowerCase()));
+    const exp = String(source.exp ?? source.explanation ?? '').trim();
+    if (q.length < 5 || choices.length !== 4 || choices.some(value => !value) ||
+        unique.size !== 4 || !Number.isInteger(ans) || ans < 0 || ans >= 4 || exp.length < 5) {
+      throw new Error('題目格式或答案無效');
+    }
+    const asked = Array.isArray(request.avoidQuestions) ? request.avoidQuestions : [];
+    const fingerprint = value => String(value).replace(/\\s+/g, '').toLowerCase();
+    if (asked.some(previous => fingerprint(previous) === fingerprint(q))) throw new Error('本場出現重複題目');
+    if (source.subject && String(source.subject).trim() !== request.subject) throw new Error('AI 題目科目與指定範圍不符');
+    // Rotate options, not their meaning; maintain the unique, authoritative correct index.
+    for (let i = choices.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [choices[i], choices[j]] = [choices[j], choices[i]];
+      if (ans === i) ans = j; else if (ans === j) ans = i;
+    }
+    return { id: randomId('bv2q'), q, opts: choices, ans, exp, subject: request.subject,
+      topic: request.specificTopic || String(source.sub_topic || ''), level: request.level };
   }
 
-  function fallbackQuestion() {
-    const a = Math.floor(Math.random() * 20) + 2;
-    const b = Math.floor(Math.random() * 9) + 1;
-    const answer = a + b;
-    const opts = [answer, answer + 1, Math.max(0, answer - 1), answer + 2].sort(() => Math.random() - 0.5);
-    return { id: randomId('fallback'), q: `備援題：${a} + ${b} = ?`, opts: opts.map(String), ans: opts.indexOf(answer), exp: `${a} + ${b} = ${answer}。`, subject: '基礎數學' };
-  }
-
-  async function generateQuestion() {
-    const data = userData() || {};
-    const settings = data.settings || {};
-    const weak = Array.isArray(settings.weakSubjects) ? settings.weakSubjects[0] : (settings.weak || data.weakSubjects?.[0]);
+  async function generateQuestion(room, round) {
+    const scope = room.knowledgeScope || resolveBattleKnowledge(room.host?.knowledge, room.guest?.knowledge);
+    const selected = pickBattleKnowledge(scope, round);
+    const avoidQuestions = (Array.isArray(room.questionHistory) ? room.questionHistory : [])
+      .slice(-10).map(entry => String(entry?.q || '')).filter(Boolean);
+    const request = { ...selected, rank: Math.min(Number(room.host?.rankLevel) || 0, Number(room.guest?.rankLevel) || 0),
+      avoidQuestions };
     try {
       const response = await fetch('/api/generate-quiz', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ subject: weak || '綜合', level: settings.level || data.level || data.educationLevel || '國中', rank: data.stats?.rankLevel || 0, difficulty: settings.difficulty || data.difficulty || 'medium' })
+        body: JSON.stringify(request)
       });
-      if (!response.ok) throw new Error(`quiz api ${response.status}`);
+      if (!response.ok) throw new Error('quiz api ' + response.status);
       const body = await response.json();
       let raw = body?.text ?? body;
-      if (typeof raw === 'string') raw = JSON.parse(raw.replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/i, '').trim());
-      return normalizeQuestion(raw);
+      if (typeof raw === 'string') raw = JSON.parse(raw.replace(/^\`\`\`(?:json)?\\s*/i, '').replace(/\`\`\`\\s*$/i, '').trim());
+      return normalizeQuestion(raw, request);
     } catch (error) {
-      console.warn('[Battle v2] quiz API unavailable; using fallback:', error);
-      toast('AI 出題暫時失敗，已切換備援題，鬥法不中斷。');
-      return fallbackQuestion();
+      // A random arithmetic fallback silently changes both competitors' agreed syllabus.
+      // Keep the room in 'preparing' and retry after a short cooldown instead.
+      console.warn('[Battle v2] question generation unavailable; retaining scope:', error);
+      toast('AI 出題暫時失敗，正依原範圍重新出題。');
+      throw error;
     }
+  }
+
+  function battleScopeLabel(scope) {
+    if (!scope) return '共同範圍確認中';
+    const first = scope.units?.[0];
+    return scope.level + ' · ' + (first && scope.units.length === 1 ? first.subject + '／' + first.topic :
+      scope.subjects?.join('、') || '綜合');
   }
 
   function roomRef(roomId = state.roomId) { return roomId ? doc(db(), ROOM_COLLECTION, roomId) : null; }
@@ -428,6 +460,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260922-f
       if (Number(room.modeVersion) !== BATTLE_V2.modeVersion || room.status !== 'waiting' || room.guest || room.host?.uid === myData.uid || isRoomStale(room)) return;
       tx.update(targetRef, {
         guest: myData,
+        knowledgeScope: resolveBattleKnowledge(room.host?.knowledge, myData.knowledge),
         status: 'intro',
         matchedAt: serverTimestamp(), matchedAtMs: nowMs(),
         introUntilMs: nowMs() + INTRO_DURATION_MS,
@@ -457,11 +490,10 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260922-f
   }
 
   async function createWaitingRoom(myData) {
-    const question = await generateQuestion();
     const ref = await addDoc(collection(db(), ROOM_COLLECTION), {
       modeVersion: BATTLE_V2.modeVersion, mode: 'matchmaking', host: myData, guest: null, status: 'waiting',
       round: 1, maxRounds: BATTLE_V2.maxRounds, responseWindowMs: ANSWER_WINDOW_MS,
-      currentQuestion: question, questionReadyAtMs: null, settledRound: 0, battleLog: [], battleLogId: '', winner: null, finishReason: '',
+      currentQuestion: null, questionHistory: [], knowledgeScope: null, questionReadyAtMs: null, settledRound: 0, battleLog: [], battleLogId: '', winner: null, finishReason: '',
       hostResultRecorded: false, guestResultRecorded: false,
       answerWindowStartedAt: null, answerWindowStartedAtMs: null, firstAnswerUid: null,
       createdAt: serverTimestamp(), createdAtMs: nowMs(), updatedAt: serverTimestamp()
@@ -533,7 +565,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260922-f
         const other = targetSnap.data();
         if (own.status !== 'waiting' || own.guest || own.host?.uid !== myData.uid) return;
         if (other.status !== 'waiting' || other.guest || other.host?.uid === myData.uid || Number(other.modeVersion) !== BATTLE_V2.modeVersion || isRoomStale(other)) return;
-        tx.update(target.ref, { guest: myData, status: 'intro', matchedAt: serverTimestamp(), matchedAtMs: nowMs(), introUntilMs: nowMs() + INTRO_DURATION_MS, answerWindowStartedAt: null, answerWindowStartedAtMs: null, firstAnswerUid: null, updatedAt: serverTimestamp() });
+        tx.update(target.ref, { guest: myData, knowledgeScope: resolveBattleKnowledge(other.host?.knowledge, myData.knowledge), status: 'intro', matchedAt: serverTimestamp(), matchedAtMs: nowMs(), introUntilMs: nowMs() + INTRO_DURATION_MS, answerWindowStartedAt: null, answerWindowStartedAtMs: null, firstAnswerUid: null, updatedAt: serverTimestamp() });
         tx.delete(ownRef);
         merged = true;
       });
@@ -561,6 +593,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260922-f
     detachRoomListener(); stopTimers();
     state.roomId = null; state.role = null; state.room = null; state.starting = false; state.leaving = false; state.invitedRoomId = null;
     state.settlingRound = state.timeoutRound = state.preparingRound = state.advancingRound = state.disconnectClaimRound = null;
+    state.prepareRetryAfterMs = 0;
     state.introAdvancing = false; state.renderedQuestionId = null; state.pendingAnswer = null;
     state.seenActivationKeys.clear(); state.seenSettlementKey = null; state.resultRecordedRoom = null;
     state.reviewedRound = state.reviewSubmittingRound = state.animationFinishedKey = null;
@@ -575,7 +608,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260922-f
     setText('bv2-match-me', mine?.name || '修士'); setText('bv2-match-me-core', `本命金丹：${playerCoreLabel(mine)}${playerPowerLabel(mine)}`);
     setText('bv2-room-badge', state.roomId ? '青雲演武場' : '尋找對手中');
     setText('bv2-lobby-title', opp ? '已尋得對手' : '正在搜尋對手');
-    setText('bv2-lobby-status', opp ? '雙方靈識已鎖定，即將登上鬥法臺。' : '優先尋找修為相近、等待較久的道友。');
+    setText('bv2-lobby-status', opp ? '本場題目：' + battleScopeLabel(room.knowledgeScope) : '優先尋找修為相近、等待較久的道友。');
     setText('bv2-match-enemy', opp?.name || '搜尋中…'); setText('bv2-match-enemy-core', opp ? playerCoreLabel(opp) + playerPowerLabel(opp) : '等待道友入場');
   }
 
@@ -797,8 +830,10 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260922-f
     setText('bv2-room-badge', '第 ' + room.round + ' 回合 · 全畫面答題');
     renderQuestion(room, mine);
     const answered = answerObject(mine, room.round);
-    setText('bv2-phase', room.status === 'playing' ?
-      (answered ? '等待對手回答' : '凝神答題') : '本回合解析');
+    const topic = room.currentQuestion?.topic;
+    const subject = room.currentQuestion?.subject || '共同範圍';
+    setText('bv2-phase', subject + (topic ? ' · ' + topic : '') + ' · ' +
+      (room.status === 'playing' ? (answered ? '等待對手回答' : '凝神答題') : '本回合解析'));
   }
 
   function renderQuestion(room, mine) {
@@ -1025,7 +1060,10 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260922-f
         const ref = roomRef(); const snap = await tx.get(ref); if (!snap.exists()) return; const fresh = snap.data();
         if (fresh.status !== 'settled' || Number(fresh.round) !== round || !bothReviewed(fresh) || !fresh.nextRoundAtMs || nowMs() < Number(fresh.nextRoundAtMs)) return;
         tx.update(ref, {
-          status: 'preparing', round: round + 1, currentQuestion: null, questionReadyAtMs: null, nextRoundAtMs: null, questionOwnerUid: me().uid, questionClaimedAtMs: nowMs(),
+          status: 'preparing', round: round + 1,
+          questionHistory: [...(Array.isArray(fresh.questionHistory) ? fresh.questionHistory : []),
+            { q: fresh.currentQuestion?.q || '', subject: fresh.currentQuestion?.subject || '' }].filter(entry => entry.q).slice(-10),
+          currentQuestion: null, questionReadyAtMs: null, nextRoundAtMs: null, questionOwnerUid: me().uid, questionClaimedAtMs: nowMs(),
           answerWindowStartedAt: null, answerWindowStartedAtMs: null, firstAnswerUid: null,
           'host.answerChoice': null, 'host.answerCorrect': null, 'host.answerAt': null, 'host.answerClientAt': null, 'host.answerRound': null, 'host.timedOut': false,
           'guest.answerChoice': null, 'guest.answerCorrect': null, 'guest.answerAt': null, 'guest.answerClientAt': null, 'guest.answerRound': null, 'guest.timedOut': false, updatedAt: serverTimestamp()
@@ -1038,13 +1076,13 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260922-f
     const round = Number(room.round); if (state.preparingRound === round || room.status !== 'preparing' || room.currentQuestion || room.questionOwnerUid !== me()?.uid) return;
     state.preparingRound = round;
     try {
-      const question = await generateQuestion();
+      const question = await generateQuestion(room, round);
       await runTransaction(db(), async (tx) => {
         const ref = roomRef(); const snap = await tx.get(ref); if (!snap.exists()) return; const fresh = snap.data();
         if (fresh.status !== 'preparing' || Number(fresh.round) !== round || fresh.currentQuestion || fresh.questionOwnerUid !== me().uid) return;
         tx.update(ref, { status: 'playing', currentQuestion: question, questionReadyAtMs: nowMs() + ROUND_COUNTDOWN_MS, questionOwnerUid: null, questionClaimedAtMs: null, answerWindowStartedAt: null, answerWindowStartedAtMs: null, firstAnswerUid: null, updatedAt: serverTimestamp() });
       });
-    } catch (error) { console.error('[Battle v2] next question failed:', error); }
+    } catch (error) { console.error('[Battle v2] next question failed:', error); state.prepareRetryAfterMs = nowMs() + 4000; }
     finally { state.preparingRound = null; }
   }
 
@@ -1066,7 +1104,11 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260922-f
       await runTransaction(db(), async (tx) => {
         const ref = roomRef(); const snap = await tx.get(ref); if (!snap.exists()) return; const fresh = snap.data();
         if (fresh.status !== 'intro' || nowMs() < Number(fresh.introUntilMs || 0)) return;
-        tx.update(ref, { status: 'playing', questionReadyAtMs: nowMs() + ROUND_COUNTDOWN_MS, battleStartedAt: serverTimestamp(), answerWindowStartedAt: null, answerWindowStartedAtMs: null, firstAnswerUid: null, updatedAt: serverTimestamp() });
+        tx.update(ref, { status: 'preparing', currentQuestion: null, questionHistory: [],
+          knowledgeScope: fresh.knowledgeScope || resolveBattleKnowledge(fresh.host?.knowledge, fresh.guest?.knowledge),
+          questionOwnerUid: me().uid, questionClaimedAtMs: nowMs(), questionReadyAtMs: null,
+          battleStartedAt: serverTimestamp(), answerWindowStartedAt: null, answerWindowStartedAtMs: null,
+          firstAnswerUid: null, updatedAt: serverTimestamp() });
       });
     } catch (_) {} finally { setTimeout(() => { state.introAdvancing = false; }, 600); }
   }
@@ -1132,7 +1174,9 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260922-f
       if (ready && left <= 0) advanceFromSettled(room);
     } else if (room.status === 'preparing') {
       if (timerEl) timerEl.textContent = '凝聚題目'; if (barEl) barEl.style.width = '100%';
-      if (room.questionOwnerUid === me()?.uid) prepareRound(room); else takeoverQuestionLease(room);
+      if (room.questionOwnerUid === me()?.uid) {
+        if (nowMs() >= state.prepareRetryAfterMs) prepareRound(room);
+      } else takeoverQuestionLease(room);
     }
     claimDisconnectedOpponent(room);
   }
