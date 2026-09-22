@@ -174,12 +174,12 @@ import {
       const input = document.getElementById('set-display-name');
       const player = data();
       if (!input || !player) return baseSaveProfile.apply(this, args);
-      if (saveBusy) return;
+      if (saveBusy) return false;
 
       const requested = input.value.trim();
       if (!isAdmin(player) && /九州/.test(requested)) {
         alert('「九州」為管理員專屬稱號，其他修士不能使用。');
-        return;
+        return false;
       }
 
       const oldText = input.value;
@@ -190,7 +190,8 @@ import {
         input.value = approvedName;
 
         // canonical users/{uid}.displayName 與其餘設定先完成儲存；成功後 UI 立即更新。
-        await baseSaveProfile.apply(this, args);
+        const persisted = await baseSaveProfile.apply(this, args);
+        if (persisted !== true) { input.value = oldText; return false; }
         player.displayName = approvedName;
         input.value = approvedName;
         syncVisibleName();
@@ -198,9 +199,11 @@ import {
 
         // 洞天／五仙舊快照在背景同步，失敗或資料很多都不能拖住改名介面。
         queueSnapshotPropagation(true);
+        return true;
       } catch (error) {
         input.value = oldText;
         alert(window.xiuxianSafeActionError?.('名稱審核／儲存', error, '名稱設定未完成，請稍後再試。') || '名稱設定未完成，請稍後再試。');
+        return false;
       } finally {
         saveBusy = false;
       }
