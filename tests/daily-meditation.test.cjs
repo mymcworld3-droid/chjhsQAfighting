@@ -117,7 +117,7 @@ test('previously wrong but later corrected questions are fallback only', () => {
     example('修正題', true),
     example('未修正題', false),
     example('修正題', false),
-    example('缺少選項', false),
+    { ...example('缺少選項', false), options: [] },
     { ...example('跳過題', false), userIdx: -1 },
     { ...example('沒有正解', false), correctIdx: -1 }
   ];
