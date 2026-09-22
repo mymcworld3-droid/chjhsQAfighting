@@ -223,6 +223,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       // equippedCore 才是目前真正調御、正在作用中的本命金丹；洗髓不會把它清掉。
       equippedCore: { ...core },
       equipped: true,
+      coreEnabled: true,
       counters: { correct: 0, mistakes: 0 },
       items: []
     };
@@ -262,6 +263,8 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       core: chosen,
       equippedCore,
       equipped,
+      // Older accounts did not store this setting and should remain enabled.
+      coreEnabled: raw.coreEnabled !== false,
       counters: { ...base.counters, ...(raw.counters || {}) },
       items: Array.isArray(raw.items) ? raw.items : []
     };
@@ -291,6 +294,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       core: state.core,
       equippedCore: state.equippedCore,
       equipped: state.equipped,
+      coreEnabled: state.coreEnabled,
       counters: state.counters,
       items: state.items
     };
@@ -379,6 +383,15 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
           <button id="equip-current-core" type="button" class="core-equip-btn ${state.equipped ? 'equipped' : ''}" ${state.equipped || busy ? 'disabled' : ''}>
             ${state.equipped ? '<i class="fa-solid fa-circle-check"></i> 已調御此丹相' : '<i class="fa-solid fa-circle-dot"></i> 調御此丹相'}
           </button>
+          <div class="core-activation-row">
+            <span class="core-activation-state ${state.coreEnabled ? 'on' : 'off'}">${state.coreEnabled ? '本命金丹 · 啟用中' : '本命金丹 · 已停用'}</span>
+            <button id="toggle-golden-core" type="button" class="core-activation-btn ${state.coreEnabled ? 'is-enabled' : 'is-disabled'}"
+              aria-pressed="${state.coreEnabled}" ${busy || !state.equippedCore ? 'disabled' : ''}>
+              <i class="fa-solid ${state.coreEnabled ? 'fa-power-off' : 'fa-circle-play'}"></i>
+              ${state.coreEnabled ? '停用金丹' : '啟用金丹'}
+            </button>
+          </div>
+          <p class="core-activation-hint">停用保留原丹相與品級，暫停修為與鬥法效果；正在進行的鬥法仍使用入場時的金丹快照。</p>
         </div>
       </section>
     `;
@@ -554,6 +567,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     document.getElementById('core-odds-info')?.addEventListener('click', showOdds);
     document.getElementById('wash-golden-core')?.addEventListener('click', washCore);
     document.getElementById('equip-current-core')?.addEventListener('click', equipCore);
+    document.getElementById('toggle-golden-core')?.addEventListener('click', toggleGoldenCore);
   }
 
   async function persistRemote(extraFields = {}) {
@@ -562,11 +576,51 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     const user = auth.currentUser;
     if (!user) return;
     const db = getFirestore(getApp());
+    const snapshot = serializableState();
     await updateDoc(doc(db, 'users', user.uid), {
-      [REMOTE_FIELD]: serializableState(),
+      [REMOTE_FIELD]: snapshot,
       ...extraFields
     });
+    const data = window.getCurrentUserData?.();
+    if (data) data[REMOTE_FIELD] = snapshot;
   }
+
+  // The equipped core is kept intact when disabled; only its activation bit changes.
+  async function toggleGoldenCore() {
+    if (busy || !isUnlocked() || !state.equippedCore) return;
+    const previous = state.coreEnabled;
+    busy = true;
+    state.coreEnabled = !previous;
+    renderTrainingPage();
+    try {
+      await persistRemote();
+      toast(state.coreEnabled ? '本命金丹已啟用，效果恢復。' : '本命金丹已停用，效果暫停。');
+      window.dispatchEvent(new CustomEvent('golden-core-equipped-changed', {
+        detail: { enabled: state.coreEnabled }
+      }));
+      window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', { detail: { source: 'golden-core-toggle' } }));
+    } catch (error) {
+      console.error('Toggle golden core failed:', error);
+      state.coreEnabled = previous;
+      saveLocal();
+      toast('金丹狀態儲存失敗，已恢復原狀。');
+    } finally {
+      busy = false;
+      renderTrainingPage();
+    }
+  }
+
+  window.setGoldenCoreEnabled = async function (enabled) {
+    if (typeof enabled !== 'boolean') return false;
+    if (busy || !isUnlocked() || !state.equippedCore) return false;
+    if (state.coreEnabled === enabled) return true;
+    await toggleGoldenCore();
+    return state.coreEnabled === enabled;
+  };
+
+  window.isGoldenCoreEnabled = function () {
+    return isUnlocked() && !!state.equippedCore && state.coreEnabled !== false;
+  };
 
   async function washCore() {
     if (busy) return;
@@ -662,7 +716,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
 
   window.resolveGoldenCoreCultivationReward = function ({ stats, isCorrect }) {
     const equippedCore = state.equippedCore;
-    if (!isUnlocked() || !equippedCore) {
+    if (!isUnlocked() || !equippedCore || state.coreEnabled === false) {
       return { bonusGain: 0, message: '' };
     }
 
@@ -710,13 +764,14 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       grade: state.core.grade,
       effect: type.effect(state.core.grade),
       equipped: state.equipped,
+      coreEnabled: state.coreEnabled,
       core: { ...state.core }
     };
   };
 
   // 真正調御中的本命金丹：狀態頁、修為效果與鬥法只能讀這一份。
   window.getEquippedGoldenCoreState = function () {
-    if (!isUnlocked() || !state.equippedCore) return null;
+    if (!isUnlocked() || !state.equippedCore || state.coreEnabled === false) return null;
     const core = state.equippedCore;
     const type = coreType(core.type);
     return {
@@ -729,6 +784,18 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     };
   };
 
+  function restoreRemoteTraining() {
+    if (busy) return;
+    const remote = window.getCurrentUserData?.()?.cultivationTraining;
+    if (!remote || typeof remote !== 'object') return;
+    // Account state is authoritative on login, even after changing devices.
+    const incoming = migrate(remote);
+    if (JSON.stringify(incoming) === JSON.stringify(state)) return;
+    state = incoming;
+    saveLocal();
+    if (lastUnlocked && activeTab === 'core') renderTrainingPage();
+  }
+
   function syncUnlock() {
     const unlocked = window.isGoldenCoreUnlocked?.() ?? isUnlocked();
     if (lastUnlocked === unlocked) return;
@@ -740,7 +807,9 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
 
   function boot() {
     loadStyle();
+    restoreRemoteTraining();
     syncUnlock();
+    window.addEventListener('xiuxian:user-ready', restoreRemoteTraining);
     ['xiuxian:stats-updated','xiuxian:user-ready','xiuxian:migration-ready','golden-core-access-changed']
       .forEach((name) => window.addEventListener(name, syncUnlock));
     window.dispatchEvent(new CustomEvent('golden-core-runtime-ready'));
