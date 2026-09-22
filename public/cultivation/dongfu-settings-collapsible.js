@@ -17,7 +17,8 @@
     .dongfu-collapse-head[aria-expanded="true"] .dongfu-collapse-chevron{transform:rotate(180deg);color:#d8b15d}
     .dongfu-collapse-body{position:relative;z-index:1;padding:4px 18px 18px}
     .dongfu-collapse-body[hidden]{display:none!important}
-    .dongfu-scope-card .dongfu-collapse-body{padding-top:2px}
+    /* 範圍設定為獨立全螢幕入口，卡片內容不再當作下拉選單。 */
+    .dongfu-scope-card .dongfu-collapse-body{display:none!important}
     .dongfu-scope-content{padding-top:0!important;margin-top:0!important;border-top:0!important}
     .dongfu-analysis-card .dongfu-collapse-body{padding-top:2px}
     .dongfu-collapse-card.is-collapsed{margin-bottom:8px!important}
@@ -48,6 +49,14 @@
   function setCollapsed(key, collapsed, persist = true) {
     const entry = sections.get(key);
     if (!entry) return false;
+    // 範圍設定不是 disclosure；舊教學的開啟呼叫同樣直接進全螢幕。
+    if (key === 'scope') {
+      entry.body.hidden = true;
+      entry.card.classList.add('is-collapsed');
+      entry.button.removeAttribute('aria-expanded');
+      if (!collapsed) window.openCurriculumStudio?.();
+      return true;
+    }
     entry.body.hidden = !!collapsed;
     entry.card.classList.toggle('is-collapsed', !!collapsed);
     entry.button.setAttribute('aria-expanded', String(!collapsed));
@@ -72,7 +81,18 @@
     body.classList.add('dongfu-collapse-body');
     const button = makeHeader(card, key, config.icon, config.title, config.summary);
     sections.set(key, { card, body, button });
-    button.addEventListener('click', () => setCollapsed(key, !body.hidden, true));
+    if (key === 'scope') {
+      // 直接打開獨立頁面；不再讓同一個按鈕切換下拉狀態。
+      body.hidden = true;
+      card.classList.add('is-collapsed');
+      button.removeAttribute('aria-expanded');
+      button.setAttribute('aria-haspopup', 'dialog');
+      button.setAttribute('aria-label', '開啟全螢幕範圍設定');
+      button.querySelector('.dongfu-collapse-chevron i')?.classList.replace('fa-chevron-down', 'fa-arrow-right');
+      button.addEventListener('click', () => window.openCurriculumStudio?.());
+    } else {
+      button.addEventListener('click', () => setCollapsed(key, !body.hidden, true));
+    }
   }
 
   function mount() {
@@ -132,7 +152,8 @@
     });
 
     const saved = readSaved();
-    ['profile', 'scope', 'analysis'].forEach((key) => setCollapsed(key, saved[key] !== undefined ? !!saved[key] : true, false));
+    ['profile', 'analysis'].forEach((key) => setCollapsed(key, saved[key] !== undefined ? !!saved[key] : true, false));
+    setCollapsed('scope', true, false);
     page.dataset.dongfuCollapsible = '1';
     window.dispatchEvent(new CustomEvent('dongfu:settings-collapsible-ready'));
     return true;
@@ -140,9 +161,13 @@
 
   window.openDongfuSettingsSection = function (key, options = {}) {
     // 新版範圍選擇為完整頁面，教學及舊呼叫入口也須導向相同視圖。
-    if (key === 'scope' && typeof window.openCurriculumStudio === 'function') {
-      window.openCurriculumStudio();
-      return true;
+    if (key === 'scope') {
+      if (!sections.size) mount();
+      if (typeof window.openCurriculumStudio === 'function') {
+        window.openCurriculumStudio();
+        return true;
+      }
+      return false;
     }
     if (!sections.size) mount();
     const opened = setCollapsed(key, false, options.persist === true);
@@ -152,6 +177,7 @@
   };
 
   window.closeDongfuSettingsSection = function (key) {
+    if (key === 'scope') return window.closeCurriculumStudio?.() ?? false;
     if (!sections.size) mount();
     return setCollapsed(key, true, true);
   };
