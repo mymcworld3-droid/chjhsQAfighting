@@ -845,12 +845,17 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
       setText('bv2-answer-status', '題目正在由鬥法臺同步。'); return;
     }
     if (state.renderedQuestionId !== question.id) {
-      state.renderedQuestionId = question.id; state.pendingAnswer = null; qEl.textContent = question.q; optionsEl.innerHTML = '';
+      state.renderedQuestionId = question.id; state.pendingAnswer = null;
+      const rich = window.quizMathRichText || escapeHtml;
+      window.quizMathClear?.([qEl, optionsEl, expEl]);
+      qEl.innerHTML = rich(question.q); optionsEl.replaceChildren();
       question.opts.forEach((option, index) => {
         const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'bv2-option'; btn.dataset.index = String(index);
-        btn.innerHTML = `<span>${String.fromCharCode(65 + index)}</span><b>${escapeHtml(option)}</b>`; btn.addEventListener('click', () => submitAnswer(index)); optionsEl.appendChild(btn);
+        btn.innerHTML = `<span>${String.fromCharCode(65 + index)}</span><b class="bv2-option-math">${rich(option)}</b>`;
+        btn.addEventListener('click', () => submitAnswer(index)); optionsEl.appendChild(btn);
       });
-      expEl.classList.add('hidden'); expEl.textContent = ''; try { window.MathJax?.typesetPromise?.([qEl, optionsEl]); } catch (_) {}
+      expEl.classList.add('hidden'); expEl.textContent = ''; delete expEl.dataset.mathQuestionId;
+      void window.quizMathTypeset?.([qEl, optionsEl]);
     }
     const answered = answerObject(mine, room.round); if (answered) state.pendingAnswer = null;
     const pending = state.pendingAnswer?.round === Number(room.round) ? state.pendingAnswer : null;
@@ -860,7 +865,20 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
       btn.classList.toggle('selected', answered?.choice === idx || pending?.choice === idx);
       btn.classList.toggle('correct', settled && idx === Number(question.ans)); btn.classList.toggle('wrong', settled && answered?.choice === idx && idx !== Number(question.ans));
     });
-    if (settled) { expEl.textContent = `解析：${question.exp || '此題暫無解析。'}`; expEl.classList.remove('hidden'); setText('bv2-answer-status', '請閱讀解析，確認後返回戰場觀看先手、後手攻擊。'); }
+    if (settled) {
+      // Firestore listeners can render this round repeatedly. Re-typeset only on
+      // first settlement or if the explanation itself changed.
+      const explanation = String(question.exp || '此題暫無解析。');
+      const renderKey = String(question.id) + ':' + explanation;
+      if (expEl.dataset.mathQuestionId !== renderKey) {
+        window.quizMathClear?.(expEl);
+        expEl.innerHTML = '<strong>解析：</strong>' + (window.quizMathRichText || escapeHtml)(explanation);
+        expEl.dataset.mathQuestionId = renderKey;
+        void window.quizMathTypeset?.(expEl);
+      }
+      expEl.classList.remove('hidden');
+      setText('bv2-answer-status', '請閱讀解析，確認後返回戰場觀看先手、後手攻擊。');
+    }
     else if (answered || pending) setText('bv2-answer-status', answered?.timedOut ? '本題逾時，等待回合結算。' : '答案已送出；等待對手答題，戰鬥將於解析後開始。');
     else if (room.answerWindowStartedAt || room.answerWindowStartedAtMs) setText('bv2-answer-status', '對手已先作答！你的 25 秒倒數已開始。');
     else setText('bv2-answer-status', '不限讀題時間；第一位作答者會啟動另一方的 25 秒倒數。');
