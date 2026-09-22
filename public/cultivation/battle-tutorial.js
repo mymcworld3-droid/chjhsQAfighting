@@ -108,6 +108,7 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260922-first-answer
     return String(value ?? '').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')
       .replaceAll('"','&quot;').replaceAll("'",'&#039;');
   }
+  function mathText(value) { return (window.quizMathRichText || esc)(value); }
   function delay(ms) { return new Promise((resolve) => setTimeout(resolve, ms)); }
   // Waiting is tied to absolute wall-clock deadlines, not accumulated paint delays.
   async function waitUntil(deadlineMs) {
@@ -416,11 +417,13 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260922-first-answer
     const parent = document.getElementById(quiz ? 'bv2-quiz' : 'bv2-arena');
     if (parent && el.parentElement !== parent) parent.appendChild(el);
     el.classList.toggle('bt-quiz-mode', quiz);
+    window.quizMathClear?.(el);
     if (quiz) {
       el.innerHTML = `<section class="bt-quiz-fullscreen" role="region" aria-label="${esc(title)}">
         <header class="bt-head"><div><small>${esc(badge)}</small><h2>${esc(title)}</h2></div></header>
         <div class="bt-body">${body}</div>
       </section>`;
+      void window.quizMathTypeset?.(el);
       return el;
     }
     if (result) {
@@ -440,6 +443,7 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260922-first-answer
       </section>`;
       // 結算重新置中；不要保留玩家上一題捲到下方的位置。
       el.scrollTop = 0;
+      void window.quizMathTypeset?.(el);
       return el;
     }
     el.innerHTML = `<section class="bt-shell">
@@ -532,17 +536,17 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260922-first-answer
     const remaining = Math.max(0, Math.ceil((shenDeadline - Date.now()) / 1000));
     const opts = SHEN_QUESTION.opts.map((text, index) => {
       const outcome = answered ? (index === SHEN_QUESTION.ans ? ' correct' : (index === choice ? ' wrong' : '')) : '';
-      return `<button type="button" class="bt-option${outcome}" data-bt-shen-choice="${index}" ${answered ? 'disabled' : ''}>${String.fromCharCode(65 + index)}. ${esc(text)}</button>`;
+      return `<button type="button" class="bt-option${outcome}" data-bt-shen-choice="${index}" ${answered ? 'disabled' : ''}>${String.fromCharCode(65 + index)}. <span class="bt-option-math">${mathText(text)}</span></button>`;
     }).join('');
     const explain = answered
-      ? `<div class="bt-explain"><b>${choice === null ? '時間到：玩家未作答。' : choice === SHEN_QUESTION.ans ? '你答對了，但師姐已取得先手。' : '你答錯了，師姐已取得先手。'}</b><br>正解：${esc(SHEN_QUESTION.opts[SHEN_QUESTION.ans])}。 ${esc(SHEN_QUESTION.exp)}</div>
+      ? `<div class="bt-explain"><b>${choice === null ? '時間到：玩家未作答。' : choice === SHEN_QUESTION.ans ? '你答對了，但師姐已取得先手。' : '你答錯了，師姐已取得先手。'}</b><br>正解：${mathText(SHEN_QUESTION.opts[SHEN_QUESTION.ans])}。 ${mathText(SHEN_QUESTION.exp)}</div>
          <div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="shen-return-arena">看完解析 · 返回戰場</button></div>`
       : '<div class="bt-explain">沈清霜 · 立即答對。你剩餘 25 秒；作答後先閱讀解析，再返回戰場看先手劍意。</div>';
     const el = shell({
       opponent:'沈清霜', badge:'築基鬥法教學 · 全畫面答題',
       title:'師姐已作答 · 玩家應答窗', showLater:!answered, quiz:true,
       body:`<section class="bt-question"><div class="bt-question-meta"><span>沈清霜 · 立即答對</span><span id="bt-shen-timer" class="bt-shen-timer ${remaining <= 5 ? 'urgent' : ''}">剩餘 ${remaining} 秒</span></div>
-        <h3>${esc(SHEN_QUESTION.q)}</h3><div class="bt-options">${opts}</div>${explain}</section>`
+        <h3>${mathText(SHEN_QUESTION.q)}</h3><div class="bt-options">${opts}</div>${explain}</section>`
     });
     if (!answered) el.querySelectorAll('[data-bt-shen-choice]').forEach(button => button.addEventListener('click', () => runShenStrike(Number(button.dataset.btShenChoice))));
     else el.querySelector('[data-bt-action="shen-return-arena"]')?.addEventListener('click', playShenStrike);
@@ -640,7 +644,7 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260922-first-answer
       showLater:false,
       result:true, resultKind:'defeat',
       body:`<div class="bt-result"><div class="bt-result-mark">敗</div><h3>演武投影已潰散</h3><p>${shenChoice === null ? '25 秒已結束，未能及時作答。' : shenChoice === SHEN_QUESTION.ans ? '你答對了，但師姐先手命中。' : '你答錯了，師姐先手命中。'}演武投影應聲潰散。這一戰不計入戰績。</p></div>
-        <div class="bt-explain"><b>正確答案：${esc(SHEN_QUESTION.opts[SHEN_QUESTION.ans])}</b><br>${esc(SHEN_QUESTION.exp)}</div>
+        <div class="bt-explain"><b>正確答案：${mathText(SHEN_QUESTION.opts[SHEN_QUESTION.ans])}</b><br>${mathText(SHEN_QUESTION.exp)}</div>
         <div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="return-story">返回主線劇情</button></div>`
     });
     el.querySelector('[data-bt-action="return-story"]')?.addEventListener('click', finishShen);
@@ -719,20 +723,20 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260922-first-answer
     const playerAnswered = guPlayerAt > 0;
     const opts = question.opts.map((opt, index) => {
       const cls = answered ? (index === question.ans ? ' correct' : (index === feedback.choice && !feedback.correct ? ' wrong' : '')) : '';
-      return `<button type="button" class="bt-option${cls}" data-bt-choice="${index}" ${answered || playerAnswered ? 'disabled' : ''}>${String.fromCharCode(65+index)}. ${esc(opt)}</button>`;
+      return `<button type="button" class="bt-option${cls}" data-bt-choice="${index}" ${answered || playerAnswered ? 'disabled' : ''}>${String.fromCharCode(65+index)}. <span class="bt-option-math">${mathText(opt)}</span></button>`;
     }).join('');
     const seconds = guDeadline ? Math.max(0, Math.ceil((guDeadline - Date.now()) / 1000)) : 25;
     const status = answered ? '雙方已答 · 請閱讀解析' :
       guOpponentAt && !playerAnswered ? '顧長風已答 · 你的應答倒數' :
       playerAnswered ? '答案已送出 · 等待顧長風作答' : '雙方尚未出手 · 任一方先答後啟動 25 秒倒數';
     const explain = answered
-      ? `<div class="bt-explain"><b>${feedback.correct ? '答對：取得出手機會。' : feedback.choice === null ? '逾時：本回合 MISS。' : '答錯：本回合 MISS。'}</b><br>${esc(question.exp)}<br>先手依作答時間決定，返回戰場後逐次執行攻擊、護體或 MISS。</div>
+      ? `<div class="bt-explain"><b>${feedback.correct ? '答對：取得出手機會。' : feedback.choice === null ? '逾時：本回合 MISS。' : '答錯：本回合 MISS。'}</b><br>${mathText(question.exp)}<br>先手依作答時間決定，返回戰場後逐次執行攻擊、護體或 MISS。</div>
          <div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="gu-return-arena">看完解析 · 返回戰場</button></div>`
       : `<div class="bt-explain">${status}。${playerAnswered ? ' 正在等待另一方完成作答。' : ''}</div>`;
     const el = shell({
       opponent:'顧長風', badge:`築基鬥法教學 · 全畫面題目 ${guRound+1}/${QUESTIONS.length}`,
       title:'以答題決定誰能出手', showLater:!answered, quiz:true,
-      body:`<section class="bt-question"><div class="bt-question-meta"><span>ROUND ${guRound+1}</span><span id="bt-gu-timer" class="bt-shen-timer">${guDeadline ? '剩餘 ' + seconds + ' 秒' : '等待首答'}</span></div><h3>${esc(question.q)}</h3><div class="bt-options">${opts}</div>${explain}</section>`
+      body:`<section class="bt-question"><div class="bt-question-meta"><span>ROUND ${guRound+1}</span><span id="bt-gu-timer" class="bt-shen-timer">${guDeadline ? '剩餘 ' + seconds + ' 秒' : '等待首答'}</span></div><h3>${mathText(question.q)}</h3><div class="bt-options">${opts}</div>${explain}</section>`
     });
     if (!answered) el.querySelectorAll('[data-bt-choice]').forEach((button) => button.addEventListener('click', () => resolveGuAnswer(Number(button.dataset.btChoice))));
     else el.querySelector('[data-bt-action="gu-return-arena"]')?.addEventListener('click', playGuStrike);
