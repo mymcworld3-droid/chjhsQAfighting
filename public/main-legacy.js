@@ -3336,23 +3336,21 @@ function listenToBattleRoom(roomId) {
                         b.classList.remove('opacity-50', 'cursor-not-allowed', 'bg-green-600', 'bg-red-600', 'border-green-400', 'border-red-400');
                     });
 
-                    document.getElementById('battle-q-text').innerHTML = parseMarkdownImages(room.currentQuestion.q);
+                    const questionNode = document.getElementById('battle-q-text');
                     const container = document.getElementById('battle-options');
+                    window.quizMathClear?.([questionNode, container]);
+                    questionNode.innerHTML = (window.quizMathRichText || parseMarkdownImages)(room.currentQuestion.q);
                     container.innerHTML = '';
                     room.currentQuestion.opts.forEach((opt, idx) => {
                         const btn = document.createElement('button');
                         btn.className = "w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 active:scale-95 mb-2 flex items-center";
-                        btn.innerHTML = `<span class="bg-slate-800 w-8 h-8 rounded-full inline-flex items-center justify-center text-sm font-bold text-blue-400 border border-slate-600 mr-3 shrink-0">${String.fromCharCode(65+idx)}</span><span class="text-white font-bold">${opt}</span>`;
+                        btn.innerHTML = `<span class="bg-slate-800 w-8 h-8 rounded-full inline-flex items-center justify-center text-sm font-bold text-blue-400 border border-slate-600 mr-3 shrink-0">${String.fromCharCode(65+idx)}</span><span class="text-white font-bold quiz-rich-option">${(window.quizMathRichText || parseMarkdownImages)(opt)}</span>`;
                         btn.onclick = () => handleBattleAnswer(roomId, idx, room.currentQuestion.ans, isHost);
                         container.appendChild(btn);
                     });
                     
-                    if (window.MathJax) {
-                        window.MathJax.typesetPromise([
-                            document.getElementById('battle-q-text'),
-                            document.getElementById('battle-options')
-                        ]).catch(e => console.log(e));
-                    }
+                    if (window.quizMathTypeset) void window.quizMathTypeset([questionNode, container]);
+                    else window.MathJax?.typesetPromise?.([questionNode, container]).catch(e => console.warn('[Battle Math]', e));
                  }
             } else {
                 // 無題目 -> 顯示等待畫面
@@ -3946,7 +3944,7 @@ window.loadUserHistory = async (isLoadMore = false) => {
 
                     return `<div class="p-2 mb-1 rounded text-[11px] ${bgClass} ${textClass} flex items-start gap-2">
                         <span class="shrink-0 w-4">${String.fromCharCode(65+i)}.</span>
-                        <span class="flex-1">${opt} ${icon}</span>
+                        <span class="flex-1">${(window.quizMathRichText || parseMarkdownImages)(opt)} ${icon}</span>
                     </div>`;
                 }).join('');
 
@@ -3982,7 +3980,7 @@ window.loadUserHistory = async (isLoadMore = false) => {
                     <span class="text-gray-400 font-mono">${time}</span>
                     <span class="${log.isCorrect ? 'text-green-400' : 'text-red-400'} font-bold">${log.isCorrect ? 'Correct' : 'Wrong'}</span>
                 </div>
-                <div class="text-white mb-2 text-sm">${log.question}</div>
+                <div class="text-white mb-2 text-sm">${(window.quizMathRichText || parseMarkdownImages)(log.question)}</div>
                 <div class="flex justify-between items-center text-gray-500 mt-2">
                     <span class="text-[10px] text-cyan-500/70 opacity-80"><i class="fa-solid fa-chevron-down"></i> 點擊展開詳解</span>
                     <span class="text-right">${log.rankAtTime || '單人模式'}</span>
@@ -3993,9 +3991,8 @@ window.loadUserHistory = async (isLoadMore = false) => {
         }); // 迴圈結束在這裡
 
         // 🔥 新增這段：資料載入完畢後，要求 MathJax 重新掃描歷史清單
-        if (window.MathJax) {
-            window.MathJax.typesetPromise([ul]).catch((err) => console.log('MathJax Error:', err.message));
-        }
+        if (window.quizMathTypeset) void window.quizMathTypeset(ul);
+        else window.MathJax?.typesetPromise?.([ul]).catch(err => console.warn('[History Math]', err));
 
         if (loadMoreBtn) {
             if (snap.docs.length === 20) {
