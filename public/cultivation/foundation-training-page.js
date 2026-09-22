@@ -77,6 +77,7 @@ import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-she
     }
 
     const alreadyHydrated = page.dataset.foundationTrainingReady === '1' && page.dataset.foundationTraining === '1';
+    const preserveStatus = !!page.querySelector('#training-status-tab.active');
     page.dataset.foundationTraining = '1';
     page.classList.add('foundation-training-page', 'training-page', 'training-page-v3');
     if (alreadyHydrated) return;
@@ -87,6 +88,16 @@ import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-she
 
     const coreTab = page.querySelector('[data-training-tab="core"]');
     coreTab?.classList.add('hidden');
+    // A newly created account already owns a Status-only shell. Add Foundation
+    // tabs to that same page rather than replacing the Status controls.
+    const tabs = page.querySelector('.training-subtabs-v3');
+    if (tabs && !tabs.querySelector('[data-training-tab="bag"]')) {
+      tabs.insertAdjacentHTML('afterbegin', `
+        <button type="button" class="training-subtab-v3" data-training-tab="refinery" aria-selected="false"><i class="fa-solid fa-hammer"></i><span>煉器</span></button>
+        <button type="button" class="training-subtab-v3" data-training-tab="equipment" aria-selected="false"><i class="fa-solid fa-shield-halved"></i><span>裝備</span></button>
+        <button type="button" class="training-subtab-v3" data-training-tab="bag" aria-selected="false"><i class="fa-solid fa-box-open"></i><span>背包</span></button>
+      `);
+    }
     // 舊靜態殼層也補齊裝備入口，四個裝配欄由統一裝備視圖渲染。
     if (!page.querySelector('[data-training-tab="equipment"]')) {
       const bag = page.querySelector('[data-training-tab="bag"]');
@@ -94,13 +105,13 @@ import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-she
     }
 
     page.querySelectorAll('[data-training-tab]').forEach((tab) => {
-      const selected = tab.dataset.trainingTab === 'bag';
+      const selected = !preserveStatus && tab.dataset.trainingTab === 'bag';
       tab.classList.toggle('active', selected);
       tab.setAttribute('aria-selected', selected ? 'true' : 'false');
     });
 
     const content = page.querySelector('#training-tab-content');
-    if (content) content.innerHTML = bagMarkup();
+    if (content && !preserveStatus) content.innerHTML = bagMarkup();
 
     if (page.dataset.foundationTrainingBound === '1') return;
     page.dataset.foundationTrainingBound = '1';
