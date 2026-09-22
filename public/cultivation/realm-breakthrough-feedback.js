@@ -4,28 +4,28 @@
 
   const CSS_HREF = 'realm-breakthrough-feedback.css';
   const REALMS = [
-    { name: '凡人', sub: '初入仙途', need: 0, emoji: '🌱' },
-    { name: '煉氣', sub: '一層', need: 1, emoji: '🌬️' },
-    { name: '煉氣', sub: '二層', need: 2, emoji: '🌬️' },
-    { name: '煉氣', sub: '三層', need: 3, emoji: '🌬️' },
-    { name: '煉氣', sub: '四層', need: 4, emoji: '🌬️' },
-    { name: '煉氣', sub: '五層', need: 5, emoji: '🌬️' },
-    { name: '煉氣', sub: '六層', need: 6, emoji: '🌬️' },
-    { name: '煉氣', sub: '七層', need: 7, emoji: '🌬️' },
-    { name: '煉氣', sub: '八層', need: 8, emoji: '🌬️' },
-    { name: '煉氣', sub: '九層', need: 9, emoji: '🌬️' },
-    { name: '築基', sub: '初期', need: 10, emoji: '🪨' },
-    { name: '築基', sub: '中期', need: 16, emoji: '🪨' },
-    { name: '築基', sub: '後期', need: 22, emoji: '🪨' },
-    { name: '金丹', sub: '丹成一品', need: 28, emoji: '☀️' },
-    { name: '元嬰', sub: '元嬰出竅', need: 68, emoji: '✨' },
-    { name: '化神', sub: '神念通天', need: 128, emoji: '🔮' },
-    { name: '煉虛', sub: '虛空悟道', need: 208, emoji: '🌌' },
-    { name: '合體', sub: '天地合一', need: 308, emoji: '☯️' },
-    { name: '大乘', sub: '大道將成', need: 448, emoji: '⚡' },
-    { name: '渡劫', sub: '雷劫問道', need: 628, emoji: '⛈️' },
-    { name: '登仙', sub: '仙門在望', need: 868, emoji: '🪶' },
-    { name: '真仙', sub: '榜上仙位', need: 868, emoji: '🪽' }
+    { name: '凡人', sub: '初入仙途', need: 0 },
+    { name: '煉氣', sub: '一層', need: 1 },
+    { name: '煉氣', sub: '二層', need: 2 },
+    { name: '煉氣', sub: '三層', need: 3 },
+    { name: '煉氣', sub: '四層', need: 4 },
+    { name: '煉氣', sub: '五層', need: 5 },
+    { name: '煉氣', sub: '六層', need: 6 },
+    { name: '煉氣', sub: '七層', need: 7 },
+    { name: '煉氣', sub: '八層', need: 8 },
+    { name: '煉氣', sub: '九層', need: 9 },
+    { name: '築基', sub: '初期', need: 10 },
+    { name: '築基', sub: '中期', need: 16 },
+    { name: '築基', sub: '後期', need: 22 },
+    { name: '金丹', sub: '丹成一品', need: 28 },
+    { name: '元嬰', sub: '元嬰出竅', need: 68 },
+    { name: '化神', sub: '神念通天', need: 128 },
+    { name: '煉虛', sub: '虛空悟道', need: 208 },
+    { name: '合體', sub: '天地合一', need: 308 },
+    { name: '大乘', sub: '大道將成', need: 448 },
+    { name: '渡劫', sub: '雷劫問道', need: 628 },
+    { name: '登仙', sub: '仙門在望', need: 868 },
+    { name: '真仙', sub: '榜上仙位', need: 868 }
   ];
 
   let initialized = false;
@@ -104,7 +104,7 @@
       <section class="realm-breakthrough-card">
         <div class="realm-breakthrough-kicker">${major ? 'BREAKTHROUGH' : 'REALM ASCENSION'}</div>
         <div class="realm-breakthrough-title">${major ? '境界突破' : '境界提升'}</div>
-        <div class="realm-breakthrough-emoji">${escapeHtml(to.emoji)}</div>
+        <div class="realm-breakthrough-icon">${window.getRealmIconMarkup?.(to.name) || ''}</div>
         <div class="realm-breakthrough-realm">${escapeHtml(to.name)}</div>
         <div class="realm-breakthrough-sub">${escapeHtml(to.sub)}</div>
         <div class="realm-breakthrough-divider"><span></span><b>◆</b><span></span></div>
