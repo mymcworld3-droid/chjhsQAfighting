@@ -4,7 +4,6 @@
   'use strict';
 
   const CSS_HREF = 'cultivation-status-panel.css?v=20260922-start-status1';
-  const FOUNDATION_SCORE = 10;
   let statusActive = false;
   let rendering = false;
   let coreTogglePending = false;
@@ -297,7 +296,7 @@
   // At score 10 the existing Foundation page hydrates this same DOM, at 28 Golden Core takes over.
   function ensureInitialStatusShell() {
     const data = window.getCurrentUserData?.();
-    if (!data?.stats || Math.max(0, Number(data.stats.totalScore) || 0) >= FOUNDATION_SCORE) return false;
+    if (!data?.stats || window.isFoundationTrainingStage?.() || window.isGoldenCoreUnlocked?.()) return false;
 
     if (!document.getElementById('nav-training')) {
       const nav = document.getElementById('nav-grid');
