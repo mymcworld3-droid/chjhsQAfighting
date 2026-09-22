@@ -220,8 +220,9 @@ test('Dongtian encounter is only for higher-grade matching players and is one-ti
   assert.match(uiSource, /const ENCOUNTER_CHANCE = 0\.20/);
   assert.match(uiSource, /playerOrder > Number\(item\.levelOrder\)/);
   assert.match(uiSource, /subjectMatches\(item\.subject, subjects\)/);
-  assert.match(uiSource, /item\.ownerUid !== uid\(\)/);
-  assert.match(uiSource, /if \(playSnap\.exists\(\)\) continue/);
+  assert.match(uiSource, /item\.ownerUid !== visitor/);
+  assert.match(uiSource, /if \(playSnap\.exists\(\)\)/);
+  assert.match(uiSource, /dongtianCache\.markEncountered\(visitor, item\.id\)/);
   assert.match(uiSource, /encountered: true/);
 });
 
