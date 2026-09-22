@@ -272,13 +272,14 @@ export function settleBattleRound({
         : null;
     // 連擊是第二次獨立傷害：首擊被道心抵銷後，連擊仍會正常命中。
     const damage = equipment ? Math.max(0, Math.round(Number(equipment.damage) || 0)) : guarded ? 0 : plan.totalDamage;
+    const beforeHostHp = hostHp, beforeGuestHp = guestHp;
     const targetBefore = role === 'host' ? guestHp : hostHp;
     if (role === 'host') guestHp = Math.max(0, guestHp - damage);
     else hostHp = Math.max(0, hostHp - damage);
     const attack = { type: 'attack', actorRole: role, actorUid: player.uid, targetUid: defender.uid, damage, baseDamage: plan.baseDamage, extraDamage: plan.extraDamage, skill: [plan.activation?.skill, equipment?.skill].filter(Boolean).join('・') };
     logs.push(attack);
     if (guarded) {
-      steps.push({ ...attack, damage: 0, guarded: true, hostHp: role === 'host' ? hostHp : startHostHp, guestHp: role === 'guest' ? guestHp : startGuestHp });
+      steps.push({ ...attack, damage: 0, guarded: true, hostHp: beforeHostHp, guestHp: beforeGuestHp });
       if (equipment) steps.push({ ...attack, damage, guarded: false, skill: [attack.skill, '連擊'].filter(Boolean).join('・'), hostHp, guestHp });
     } else {
       steps.push({ ...attack, guarded: false, hostHp, guestHp });
