@@ -285,7 +285,7 @@ test('Dongtian is wired into server, feature loading, and grouped history', () =
 test('Dongtian does not persist raw creator source material and owner library has no artificial cap', () => {
   const saveBlock = uiSource.slice(uiSource.indexOf('async function saveGeneratedDongtian'), uiSource.indexOf('async function loadOwnDongtians'));
   assert.doesNotMatch(saveBlock, /sourceText:/);
-  assert.match(uiSource, /where\('ownerUid', '==', uid\(\)\)\)\)/);
+  assert.match(uiSource, /where\('ownerUid', '==', owner\)\)\)/);
   assert.doesNotMatch(uiSource, /where\('ownerUid', '==', uid\(\)\), limit\(80\)/);
 });
 
