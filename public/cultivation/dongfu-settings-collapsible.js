@@ -139,6 +139,11 @@
   }
 
   window.openDongfuSettingsSection = function (key, options = {}) {
+    // 新版範圍選擇為完整頁面，教學及舊呼叫入口也須導向相同視圖。
+    if (key === 'scope' && typeof window.openCurriculumStudio === 'function') {
+      window.openCurriculumStudio();
+      return true;
+    }
     if (!sections.size) mount();
     const opened = setCollapsed(key, false, options.persist === true);
     const entry = sections.get(key);
