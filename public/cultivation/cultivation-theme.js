@@ -30,21 +30,6 @@
 
   window.XIUXIAN_REALMS = REALMS.map((realm) => ({ ...realm }));
 
-  const KEY = 'xiuxian_world_state_v2';
-  let state = loadState();
-
-  function loadState() {
-    try {
-      return JSON.parse(localStorage.getItem(KEY)) || { meditation: 0, lastMeditation: '' };
-    } catch (_) {
-      return { meditation: 0, lastMeditation: '' };
-    }
-  }
-
-  function saveState() {
-    localStorage.setItem(KEY, JSON.stringify(state));
-  }
-
   function score() {
     if (typeof window.getCurrentUserData === 'function') {
       const user = window.getCurrentUserData();
@@ -71,33 +56,6 @@
     if (!next) return 100;
     if (next.name === '真仙' && next.need <= value) return 100;
     return Math.max(0, Math.min(100, ((value - current.need) / Math.max(1, next.need - current.need)) * 100));
-  }
-
-  function todayKey() {
-    const d = new Date();
-    return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
-  }
-
-  function toast(message) {
-    const el = document.createElement('div');
-    el.className = 'xiuxian-toast';
-    el.textContent = message;
-    document.body.appendChild(el);
-    setTimeout(() => el.classList.add('show'), 20);
-    setTimeout(() => el.remove(), 2800);
-  }
-
-  function meditate() {
-    const today = todayKey();
-    if (state.lastMeditation === today) {
-      toast('今日已閉關，明日再來吸納靈氣。');
-      return;
-    }
-    state.lastMeditation = today;
-    state.meditation = (state.meditation || 0) + 1;
-    saveState();
-    toast(`閉關完成！靈氣沉澱（累計 ${state.meditation} 日）`);
-    render();
   }
 
   function text(selector, value) {
@@ -132,14 +90,14 @@
         <div class="xiuxian-row"><span class="xiuxian-label">當前修為</span><span id="xiuxian-score" class="xiuxian-value" aria-live="polite" aria-atomic="true">0 修為</span></div>
         <div class="xiuxian-bar"><div id="xiuxian-progress" style="width:0%"></div></div>
         <div class="xiuxian-row"><span id="xiuxian-progress-label" class="xiuxian-label">距離下一境界</span><span id="xiuxian-next" class="xiuxian-value">5 修為</span></div>
-        <div class="xiuxian-actions"><button id="xiuxian-meditate" class="xiuxian-btn" type="button">今日閉關</button><button id="xiuxian-path" class="xiuxian-btn" type="button">境界圖錄</button></div>
+        <div class="xiuxian-row"><span class="xiuxian-label" id="xiuxian-meditation-streak">連續閉關 0 日 · 累計 0 日</span></div>\n        <div class="xiuxian-actions"><button id="xiuxian-meditate" class="xiuxian-btn" type="button">今日閉關</button><button id="xiuxian-path" class="xiuxian-btn" type="button">境界圖錄</button></div>
       `;
       anchor.parentNode.insertBefore(panel, anchor);
     }
 
     if (panel.dataset.xiuxianBound !== '1') {
       panel.dataset.xiuxianBound = '1';
-      panel.querySelector('#xiuxian-meditate')?.addEventListener('click', meditate);
+      panel.querySelector('#xiuxian-meditate')?.addEventListener('click', () => window.openDailyMeditation?.());
       panel.querySelector('#xiuxian-path')?.addEventListener('click', () => {
         alert(REALMS.map((realm) => `${realm.emoji} ${realm.name} ${realm.sub}：${realm.need} 修為起${realm.name === '真仙' ? '，且只有九州五大仙榜在榜者可達成' : ''}`).join('\n'));
       });
@@ -208,13 +166,7 @@
     const label = document.getElementById('xiuxian-progress-label');
     if (label) label.textContent = next?.name === '真仙' && value >= next.need ? '登仙已成 · 爭奪真仙席位' : next ? `下一境界：${next.name} ${next.sub}` : '榜上有名，位列真仙';
 
-    const med = document.getElementById('xiuxian-meditate');
-    if (med) {
-      const done = state.lastMeditation === todayKey();
-      med.textContent = done ? '今日已閉關' : '今日閉關';
-      med.disabled = done;
-      med.style.opacity = done ? '.55' : '1';
-    }
+    window.refreshDailyMeditationPanel?.();
   }
 
   window.refreshCultivationRealmUI = render;
