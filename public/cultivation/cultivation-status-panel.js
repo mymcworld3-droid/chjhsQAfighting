@@ -3,9 +3,10 @@
 (function () {
   'use strict';
 
-  const CSS_HREF = 'cultivation-status-panel.css?v=20260921-power1';
+  const CSS_HREF = 'cultivation-status-panel.css?v=20260922-core-control1';
   let statusActive = false;
   let rendering = false;
+  let coreTogglePending = false;
 
   const CORE_META = {
     ocean: { icon: '≈', tone: 'ocean' },
@@ -67,7 +68,7 @@
     };
   }
 
-  function currentCoreMarkup(core) {
+  function currentCoreMarkup(core, pending = false) {
     if (!core) {
       return `
         <div class="status-core-empty">
@@ -79,19 +80,28 @@
 
     const meta = CORE_META[core.type] || CORE_META.taichu;
     return `
-      <div class="status-core-row" data-status-core-detail role="button" tabindex="0" title="查看金丹詳細">
-        <div class="status-core-orb core-tone-${meta.tone}" aria-hidden="true">
-          <span>${meta.icon}</span>
-          <i></i>
-        </div>
-        <div class="status-core-copy">
-          <div class="status-core-topline">
-            <span class="status-core-grade">${escapeHtml(core.grade)} 品</span>
-            <span class="status-core-equipped ${core.equipped ? 'on' : ''}">${core.equipped ? '啟用中' : '已停用'}</span>
+      <div class="status-core-row">
+        <div class="status-core-detail" data-status-core-detail role="button" tabindex="0" title="查看金丹詳細">
+          <div class="status-core-orb core-tone-${meta.tone}" aria-hidden="true">
+            <span>${meta.icon}</span>
+            <i></i>
           </div>
-          <h3>${escapeHtml(core.name)}</h3>
-          <p>${core.equipped ? escapeHtml(core.effect) : '金丹效果已暫停；重新啟用後恢復原本丹相與品級。'}</p>
+          <div class="status-core-copy">
+            <div class="status-core-topline">
+              <span class="status-core-grade">${escapeHtml(core.grade)} 品</span>
+              <span class="status-core-equipped ${core.equipped ? 'on' : 'off'}">${core.equipped ? '啟用中' : '已停用'}</span>
+            </div>
+            <h3>${escapeHtml(core.name)}</h3>
+            <p>${core.equipped ? escapeHtml(core.effect) : '金丹效果已暫停；重新啟用後恢復原本丹相與品級。'}</p>
+          </div>
         </div>
+        <button class="status-core-toggle ${core.equipped ? 'is-enabled' : 'is-disabled'}" type="button"
+          data-status-core-toggle aria-label="${core.equipped ? '停用金丹' : '啟用金丹'}"
+          title="${core.equipped ? '停用金丹' : '啟用金丹'}" aria-pressed="${core.equipped}"
+          ${pending || typeof window.setGoldenCoreEnabled !== 'function' ? 'disabled' : ''}>
+          <i class="fa-solid ${pending ? 'fa-spinner fa-spin' : core.equipped ? 'fa-power-off' : 'fa-circle-play'}" aria-hidden="true"></i>
+          <span>${pending ? '儲存中' : core.equipped ? '停用' : '啟用'}</span>
+        </button>
       </div>
     `;
   }
@@ -181,7 +191,8 @@
       player: getCombatSnapshot(),
       battle: window.getArtifactBattleSnapshot?.() || { effects: [] },
       core: currentCoreSnapshot(),
-      power: window.getCombatPower?.() || null
+      power: window.getCombatPower?.() || null,
+      coreTogglePending
     };
   }
 
@@ -207,7 +218,7 @@
         </div>
         <div class="status-section status-core-section">
           <div class="status-section-title"><span>目前調御金丹</span><small>ATTUNED CORE</small></div>
-          ${currentCoreMarkup(snapshot.core)}
+          ${currentCoreMarkup(snapshot.core, snapshot.coreTogglePending)}
         </div>
 
         <div class="status-section status-player-section">
@@ -239,6 +250,19 @@
     const openDetail = () => snapshot.core && window.openGoldenCoreDetails?.(snapshot.core);
     coreButton?.addEventListener('click', openDetail);
     coreButton?.addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openDetail(); } });
+    content.querySelector('[data-status-core-toggle]')?.addEventListener('click', async () => {
+      if (coreTogglePending || typeof window.setGoldenCoreEnabled !== 'function') return;
+      coreTogglePending = true;
+      renderStatus();
+      try {
+        await window.setGoldenCoreEnabled(!snapshot.core.equipped);
+      } catch (error) {
+        console.error('Status golden core toggle failed:', error);
+      } finally {
+        coreTogglePending = false;
+        renderStatus();
+      }
+    });
     rendering = false;
   }
 
@@ -303,6 +327,7 @@
     loadStyle();
     sync();
     window.addEventListener('combat-stats-ready', renderStatus);
+    window.addEventListener('golden-core-equipped-changed', renderStatus);
 
     new MutationObserver(() => {
       sync();
