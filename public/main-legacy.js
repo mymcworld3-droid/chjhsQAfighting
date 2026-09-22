@@ -2277,9 +2277,9 @@ async function fetchOneQuestion() {
         if (randomUnit.sub_topics && randomUnit.sub_topics.length > 0) {
             targetTopic += ` (核心考點細項：${randomUnit.sub_topics.join('、')})`;
         }
-        // 高中數學 A／B／甲／乙送給 API 時維持「數學」科目，
-        // 將分流、冊次與已選課程範圍明確寫進指定主題，避免交叉出題。
-        if (chosenGrade.startsWith('高中') && parts.length >= 4) {
+        // 高中保留數學 A/B/甲/乙；國小保留國語、生活等學科與上下學期。
+        // subject 欄位沿用既有 API 的主科目，指定主題明確註記真正選定的科目。
+        if ((chosenGrade.startsWith('高中') || chosenGrade.startsWith('國小')) && parts.length >= 4) {
             const studyTrack = String(parts[3] || subject).slice(0, 16);
             const termName = String(parts[2] || '').slice(0, 20);
             targetTopic = `${chosenGrade}／${termName}／${studyTrack}：${targetTopic}`;
