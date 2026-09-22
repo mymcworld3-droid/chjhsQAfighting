@@ -4,28 +4,28 @@
 
   // 前 10 題快速完成煉氣並築基；金丹後每題基礎 +2，因此後期門檻按實際答題量漸進。
   const REALMS = [
-    { name: '凡人', sub: '初入仙途', need: 0, emoji: '🌱' },
-    { name: '煉氣', sub: '一層', need: 1, emoji: '🌬️' },
-    { name: '煉氣', sub: '二層', need: 2, emoji: '🌬️' },
-    { name: '煉氣', sub: '三層', need: 3, emoji: '🌬️' },
-    { name: '煉氣', sub: '四層', need: 4, emoji: '🌬️' },
-    { name: '煉氣', sub: '五層', need: 5, emoji: '🌬️' },
-    { name: '煉氣', sub: '六層', need: 6, emoji: '🌬️' },
-    { name: '煉氣', sub: '七層', need: 7, emoji: '🌬️' },
-    { name: '煉氣', sub: '八層', need: 8, emoji: '🌬️' },
-    { name: '煉氣', sub: '九層', need: 9, emoji: '🌬️' },
-    { name: '築基', sub: '初期', need: 10, emoji: '🪨' },
-    { name: '築基', sub: '中期', need: 16, emoji: '🪨' },
-    { name: '築基', sub: '後期', need: 22, emoji: '🪨' },
-    { name: '金丹', sub: '丹成一品', need: 28, emoji: '☀️' },
-    { name: '元嬰', sub: '元嬰出竅', need: 68, emoji: '✨' },
-    { name: '化神', sub: '神念通天', need: 128, emoji: '🔮' },
-    { name: '煉虛', sub: '虛空悟道', need: 208, emoji: '🌌' },
-    { name: '合體', sub: '天地合一', need: 308, emoji: '☯️' },
-    { name: '大乘', sub: '大道將成', need: 448, emoji: '⚡' },
-    { name: '渡劫', sub: '雷劫問道', need: 628, emoji: '⛈️' },
-    { name: '登仙', sub: '仙門在望', need: 868, emoji: '🪶' },
-    { name: '真仙', sub: '榜上仙位', need: 868, emoji: '🪽' }
+    { name: '凡人', sub: '初入仙途', need: 0 },
+    { name: '煉氣', sub: '一層', need: 1 },
+    { name: '煉氣', sub: '二層', need: 2 },
+    { name: '煉氣', sub: '三層', need: 3 },
+    { name: '煉氣', sub: '四層', need: 4 },
+    { name: '煉氣', sub: '五層', need: 5 },
+    { name: '煉氣', sub: '六層', need: 6 },
+    { name: '煉氣', sub: '七層', need: 7 },
+    { name: '煉氣', sub: '八層', need: 8 },
+    { name: '煉氣', sub: '九層', need: 9 },
+    { name: '築基', sub: '初期', need: 10 },
+    { name: '築基', sub: '中期', need: 16 },
+    { name: '築基', sub: '後期', need: 22 },
+    { name: '金丹', sub: '丹成一品', need: 28 },
+    { name: '元嬰', sub: '元嬰出竅', need: 68 },
+    { name: '化神', sub: '神念通天', need: 128 },
+    { name: '煉虛', sub: '虛空悟道', need: 208 },
+    { name: '合體', sub: '天地合一', need: 308 },
+    { name: '大乘', sub: '大道將成', need: 448 },
+    { name: '渡劫', sub: '雷劫問道', need: 628 },
+    { name: '登仙', sub: '仙門在望', need: 868 },
+    { name: '真仙', sub: '榜上仙位', need: 868 }
   ];
 
   window.XIUXIAN_REALMS = REALMS.map((realm) => ({ ...realm }));
@@ -65,6 +65,57 @@
     });
   }
 
+  function updateRankNode(rank, realm) {
+    if (!rank) return;
+    const label = `${realm.name} ${realm.sub}`;
+    if (rank.dataset.realm === realm.name && rank.textContent === label && rank.querySelector('.realm-icon')) return;
+    rank.dataset.realm = realm.name;
+    rank.innerHTML = `${window.getRealmIconMarkup?.(realm.name) || ''}<span>${label}</span>`;
+  }
+
+  function openRealmAtlas() {
+    document.getElementById('xiuxian-realm-atlas')?.remove();
+    const current = realmFor(score());
+    const grouped = REALMS.filter((realm, index) => index === 0 || realm.name !== REALMS[index - 1].name);
+    const dialog = document.createElement('div');
+    dialog.id = 'xiuxian-realm-atlas';
+    dialog.className = 'xiuxian-realm-atlas';
+    dialog.setAttribute('role', 'dialog');
+    dialog.setAttribute('aria-modal', 'true');
+    dialog.setAttribute('aria-label', '修行境界圖錄');
+    dialog.innerHTML = `
+      <section class="xiuxian-realm-atlas-panel">
+        <header class="xiuxian-realm-atlas-head">
+          <h2>修行境界圖錄</h2>
+          <button type="button" class="xiuxian-realm-atlas-close" data-realm-atlas-close aria-label="關閉境界圖錄"><i class="fa-solid fa-xmark"></i></button>
+        </header>
+        <p class="xiuxian-realm-atlas-intro">境界各有獨立紋章；煉氣共九層，築基分初、中、後期。真仙須登上九州五大仙榜。</p>
+        <ul class="xiuxian-realm-atlas-list">
+          ${grouped.map(realm => {
+            const subtitle = realm.name === '煉氣' ? '一至九層' :
+              realm.name === '築基' ? '初期 · 中期 · 後期' : realm.sub;
+            const requirement = realm.name === '真仙' ? '868 修為＋榜上仙位' : `${realm.need} 修為起`;
+            return `<li class="xiuxian-realm-atlas-item" data-current="${current.name === realm.name}">
+              ${window.getRealmIconMarkup?.(realm.name) || ''}
+              <span class="xiuxian-realm-atlas-name"><strong>${realm.name}</strong><small>${subtitle}</small></span>
+              <span class="xiuxian-realm-atlas-need">${requirement}</span>
+            </li>`;
+          }).join('')}
+        </ul>
+      </section>`;
+    const close = () => {
+      document.removeEventListener('keydown', onKeyDown);
+      dialog.remove();
+    };
+    const onKeyDown = (event) => { if (event.key === 'Escape') close(); };
+    dialog.addEventListener('click', event => {
+      if (event.target === dialog || event.target.closest('[data-realm-atlas-close]')) close();
+    });
+    document.addEventListener('keydown', onKeyDown);
+    document.body.appendChild(dialog);
+    dialog.querySelector('[data-realm-atlas-close]')?.focus();
+  }
+
   function addHomePanel() {
     const home = document.getElementById('page-home');
     if (!home) return;
@@ -99,9 +150,7 @@
     if (panel.dataset.xiuxianBound !== '1') {
       panel.dataset.xiuxianBound = '1';
       panel.querySelector('#xiuxian-meditate')?.addEventListener('click', () => window.openDailyMeditation?.());
-      panel.querySelector('#xiuxian-path')?.addEventListener('click', () => {
-        alert(REALMS.map((realm) => `${realm.emoji} ${realm.name} ${realm.sub}：${realm.need} 修為起${realm.name === '真仙' ? '，且只有九州五大仙榜在榜者可達成' : ''}`).join('\n'));
-      });
+      panel.querySelector('#xiuxian-path')?.addEventListener('click', openRealmAtlas);
     }
   }
 
@@ -144,8 +193,7 @@
     }
 
     const rank = document.getElementById('display-rank');
-    const targetRank = `${realm.emoji} ${realm.name} ${realm.sub}`;
-    if (rank && rank.textContent !== targetRank) rank.textContent = targetRank;
+    updateRankNode(rank, realm);
 
     const realmEl = document.getElementById('xiuxian-realm');
     if (realmEl) realmEl.textContent = realm.name;
@@ -181,8 +229,7 @@
       new MutationObserver(() => {
         const value = score();
         const realm = realmFor(value);
-        const targetRank = `${realm.emoji} ${realm.name} ${realm.sub}`;
-        if (rankEl.textContent !== targetRank) rankEl.textContent = targetRank;
+        updateRankNode(rankEl, realm);
       }).observe(rankEl, { childList: true, characterData: true, subtree: true });
     }
 
