@@ -51,6 +51,21 @@ test('two focused players share only actual overlapping units and lower grade', 
   assert.equal(choice.specificTopic, '函數');
 });
 
+test('a shared upper-grade unit is excluded when the lower player has not reached it', () => {
+  const s = loadScope();
+  const selected = [{ path: '數學/八上/代數.json', detail: '一元一次方程式' }];
+  const low = s.snapshotBattleKnowledge({ profile: { educationLevel: '國中一年級' }, gameSettings: {
+    sourceMode: 'focused', focusedUnits: selected
+  } });
+  const high = s.snapshotBattleKnowledge({ profile: { educationLevel: '國中二年級' }, gameSettings: {
+    sourceMode: 'focused', focusedUnits: selected
+  } });
+  const shared = s.resolveBattleKnowledge(low, high);
+  assert.equal(shared.grade, 7);
+  assert.equal(shared.units.length, 0);
+  assert.equal(s.pickBattleKnowledge(shared, 1).specificTopic, '');
+});
+
 test('no mutual units switches to mutual subjects, then general subjects without borrowing a private unit', () => {
   const s = loadScope();
   const host = { grade: 7, focused: true, units: [{ subject: '數學', key: '數學:abc', topic: 'abc' }] };
