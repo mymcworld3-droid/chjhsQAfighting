@@ -15,7 +15,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260922-f
   const ROOM_COLLECTION = 'rooms';
   const HEARTBEAT_MS = 8000;
   const PREPARE_LEASE_MS = 7000;
-  const MATCH_RECONCILE_MS = 8000;
+  const MATCH_RECONCILE_MS = 1100;
   const MATCH_SCAN_LIMIT = 80;
   const INTRO_DURATION_MS = 4800;
   const ROUND_COUNTDOWN_MS = 3000;
@@ -505,7 +505,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260922-f
     state.reconcile = setTimeout(async () => {
       state.reconcile = null;
       await reconcileOwnWaitingRoom();
-      // 只要仍在自己的等待房，就低頻尋找另一個同時建立的等待房（避免每秒讀取數十個房間）。
+      // 只要仍在自己的等待房，就每 1.1 秒尋找另一個同時建立的等待房。
       // 修正兩名玩家同時按配對、各自成為房主後永久互相等不到的情況。
       if (state.roomId && state.role === 'host' && state.room?.status === 'waiting') scheduleReconcile();
     }, delay);
