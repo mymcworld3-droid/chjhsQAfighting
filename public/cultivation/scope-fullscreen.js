@@ -26,10 +26,9 @@
     if (!studio) return;
     const selected = units();
     const c = $('ss-selection-count'),
-      sum = $('ss-footer-main'), foot = $('ss-footer-sub'), tab = $('ss-tab-count'), launch = $('ss-launch-count');
+      sum = $('ss-footer-main'), foot = $('ss-footer-sub'), tab = $('ss-tab-count');
     if (c) c.textContent = String(selected.length);
     if (tab) tab.textContent = String(selected.length);
-    if (launch) launch.textContent = String(selected.length);
     if (sum) sum.textContent = selected.length ? '已選 ' + selected.length + ' 個複習範圍' : '建立你的專屬修習計畫';
     if (foot) foot.textContent = changed() ? '變更尚未儲存，離開前記得儲存。' : '可跨科選擇，最多 24 個範圍。';
     const placeholder = $('ss-cart-placeholder');
@@ -87,7 +86,8 @@
       window.renderSelectedUnitsList?.();
     }
     if (scopeBody) {
-      scopeBody.insertBefore(block, $('ss-launch-preview'));
+      // 關閉時把控制項送回隱藏的原始設定容器，保留相同 ID 與事件。
+      scopeBody.prepend(block);
       scopeBody.append(saveButton);
     }
     saveButton.style.display = 'none';
@@ -187,20 +187,8 @@
     $('ss-cart-body').append(cartSource);
     cartSource.classList.add('ss-cart-source');
 
-    const preview = document.createElement('div');
-    preview.className = 'ss-launch-preview';
-    preview.id = 'ss-launch-preview';
-    preview.innerHTML = '<p>選擇年級、出版社與考點，打造自己的專注練習。已選 <strong id="ss-launch-count">0</strong> 個範圍。</p><button type="button" id="ss-launch-button"><i class="fa-solid fa-up-right-and-down-left-from-center" aria-hidden="true"></i>　開啟全螢幕研修所</button>';
-    scopeBody.insertBefore(preview, saveButton);
-    // 舊的儲存鈕只在 studio 底部顯示，收合卡不另設一個會造成誤觸的入口。
+    // 卡片標題由 Dongfu controller 直接導向本頁，不再建置「先展開再按進入」的入口。
     saveButton.style.display = 'none';
-    $('ss-launch-button').addEventListener('click', open);
-    const header = card.querySelector('.dongfu-collapse-head');
-    header?.addEventListener('click', event => {
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      open();
-    }, true);
     $('ss-close').addEventListener('click', () => close());
     $('ss-tab-course').addEventListener('click', () => setView('course'));
     $('ss-tab-cart').addEventListener('click', () => setView('cart'));
@@ -218,7 +206,7 @@
     $('set-source-final-value')?.addEventListener('change', updateSummary);
     saveButton.removeAttribute('onclick');
     saveButton.addEventListener('click', save);
-    // 先保持與其他設定頁相同的 collapsed 狀態；打開時再轉為全螢幕。
+    // 範圍卡片永不展開；表單只在獨立研修所顯示。
     updateSummary();
     return true;
   }
