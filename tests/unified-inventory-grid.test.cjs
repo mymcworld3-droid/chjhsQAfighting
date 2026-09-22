@@ -169,7 +169,7 @@ test('old plain-text training backpack cards are removed from both stage shells'
 });
 
 test('all runtime feature modules share one build query without changing dependency-list paths', () => {
-  assert.match(main,/const XIUXIAN_FEATURE_BUILD = '20260922-result-cinematic1'/);
+  assert.match(main,/const XIUXIAN_FEATURE_BUILD = '20260922-daily-meditation1'/);
   assert.match(main,/await import\(\`\$\{modulePath\}\?v=\$\{XIUXIAN_FEATURE_BUILD\}\`\)/);
   assert.match(main,/'\.\/cultivation\/foundation-training-page\.js'/);
   assert.match(main,/'\.\/cultivation\/cultivation-training-v4\.js'/);
