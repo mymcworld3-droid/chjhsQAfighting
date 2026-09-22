@@ -2464,13 +2464,12 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         if (navigator.vibrate) navigator.vibrate(200);
     }
     
-    const explanationFormatter = window.formatQuizRichText || parseMarkdownImages;
-    fbText.innerHTML = explanationFormatter(explanation) || "未提供解析。";
-    try {
-        window.MathJax?.typesetClear?.([fbText]);
-        window.MathJax?.typesetPromise?.([fbText]).catch((err) => console.log(err.message));
-    } catch (err) {
-        console.warn('[Quiz explanation MathJax]', err);
+    // 題目、選項及答案解析走同一個 queued MathJax pipeline。
+    const explanationText = explanation || '未提供解析。';
+    if (window.quizMathSet) void window.quizMathSet(fbText, explanationText);
+    else {
+        fbText.innerHTML = formatQuizRichText(explanationText);
+        void window.MathJax?.typesetPromise?.([fbText]).catch(err => console.warn('[Quiz explanation MathJax]', err));
     }
 
     if (soloSession.active) {
@@ -2568,31 +2567,26 @@ async function renderQuiz(data, rank, topic) {
     document.getElementById('quiz-badge').innerText = `${topic} | ${rank}`;
     
     const questionTextEl = document.getElementById('question-text');
-    // 只保留 Markdown 轉 HTML (若題目本身內含靜態圖 URL 仍可顯示)
-    questionTextEl.innerHTML = parseMarkdownImages(data.q);
-
-    // C. 渲染選項 (保持不變)
+    // 更換題目時先清理舊公式，避免 MathJax 快取殘留。
     const container = document.getElementById('options-container');
-    container.innerHTML = ''; 
+    window.quizMathClear?.([questionTextEl, container]);
+    questionTextEl.innerHTML = (window.quizMathRichText || formatQuizRichText)(data.q);
+
+    // 所有選項均採與題幹／解析完全相同的安全 LaTeX 格式化器。
+    container.replaceChildren(); 
     data.opts.forEach((optText, idx) => {
         const btn = document.createElement('button');
         btn.id = `option-btn-${idx}`;
         // 🔥 這裡修復了斷裂的字串與 class 名稱
         btn.className = "w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 flex items-center gap-3 active:scale-95 mb-2";
-        btn.innerHTML = `<span class="bg-slate-800 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-blue-400 border border-slate-600 shrink-0">${String.fromCharCode(65+idx)}</span><span class="flex-1 quiz-rich-option">${formatQuizRichText(optText)}</span>`;
+        btn.innerHTML = `<span class="bg-slate-800 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-blue-400 border border-slate-600 shrink-0">${String.fromCharCode(65+idx)}</span><span class="flex-1 quiz-rich-option">${(window.quizMathRichText || formatQuizRichText)(optText)}</span>`;
         btn.onclick = () => handleAnswer(idx, data.ans, data.q, data.exp);
         container.appendChild(btn);
     });
 
-    // 🔥 新增：讓 MathJax 掃描畫面並將 $ $ 轉換成數學符號
-    if (window.MathJax) {
-        const mathTargets = [
-            document.getElementById('question-text'),
-            document.getElementById('options-container')
-        ];
-        try { window.MathJax.typesetClear?.(mathTargets); } catch (_) {}
-        window.MathJax.typesetPromise(mathTargets).catch((err) => console.log(err.message));
-    }
+    // 等 MathJax 初始化後依序排版，避免快速換題時併發渲染。
+    if (window.quizMathTypeset) void window.quizMathTypeset([questionTextEl, container]);
+    else void window.MathJax?.typesetPromise?.([questionTextEl, container]).catch(err => console.warn('[Quiz Math]', err));
 }
 
 // 在 main.js 中搜尋 window.giveUpQuiz 並替換
@@ -3846,7 +3840,8 @@ async function handleBattleAnswer(roomId, userIdx, correctIdx, isHost) {
     fbStatus.innerHTML = isCorrect 
         ? '<span class="text-green-400"><i class="fa-solid fa-check"></i> 回答正確！</span>' 
         : '<span class="text-red-400"><i class="fa-solid fa-xmark"></i> 回答錯誤...</span>';
-    fbText.innerHTML = parseMarkdownImages(currentExp);
+    if (window.quizMathSet) void window.quizMathSet(fbText, currentExp);
+    else fbText.innerHTML = formatQuizRichText(currentExp);
 
     document.getElementById('battle-waiting-msg').classList.remove('hidden');
 
