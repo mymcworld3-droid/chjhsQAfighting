@@ -345,7 +345,7 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
       hp: combat.maxHp,
       maxHp: combat.maxHp,
       goldenCore,
-      // 金丹道心在配對時複製為本場護體：啟動後每回合只抵銷第一筆傷害，不消耗一般悟道持有的道心。
+      // 金丹道心在配對時複製為本場一次性護體：抵擋一擊後消失，不消耗一般悟道持有的道心。
       coreShield: !!goldenCore && data.stats?.goldenCoreShield === true,
       coreCorrectStreak: 0,
       // All combat effects come from equipped artifacts at matchmaking, not local post-match state.
