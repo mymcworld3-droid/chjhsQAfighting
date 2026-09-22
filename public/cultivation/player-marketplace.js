@@ -560,13 +560,13 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe, materialMarketRef
     // 登入不代表玩家正在逛市集，避免登入時額外讀取完整 users 文件。
     if (marketVisible()) { void refreshWallet(); void refreshListings(); }
     // 市集不使用 Firestore Listen stream，避免 WebChannel transport error
-    // 讓整個市集畫面失效；開啟時、交易後及每 20 秒以一次性讀取更新。
+    // 讓整個市集畫面失效；開啟時、交易後及每 2 分鐘以一次性讀取更新。
     refreshTimer = setInterval(() => {
       if (marketVisible()) {
         void refreshWallet();
         void refreshListings();
       }
-    },20000);
+    },120000);
   }
 
   function boot() {
