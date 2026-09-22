@@ -54,6 +54,17 @@ body.xianxia-theme .training-page-v3 { max-width:900px; margin:0 auto; padding-b
 .core-equip-btn:hover:not(:disabled) { color:#fff0bd; border-color:#d8b15d; background:#19150d; transform:translateY(-1px); }
 .core-equip-btn.equipped { color:#8e856f; border-color:rgba(216,177,93,.14); background:#0b0b0b; }
 .core-wash-btn:disabled,.core-equip-btn:disabled { opacity:.48; cursor:not-allowed; }
+/* Core activation is separate from switching or rerolling the selected core. */
+.core-activation-row { width:100%; margin-top:12px; padding:10px 12px; border:1px solid rgba(216,177,93,.22); border-radius:17px; display:flex; align-items:center; justify-content:space-between; gap:12px; background:rgba(12,11,10,.84); }
+.core-activation-state { text-align:left; font-size:12px; font-weight:800; color:#e1c77f; }
+.core-activation-state.off { color:#b5ad9f; }
+.core-activation-btn { flex:0 0 auto; min-height:42px; min-width:112px; display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:8px 14px; border-radius:12px; font-size:12px; font-weight:900; border:1px solid rgba(216,177,93,.4); background:rgba(216,177,93,.13); color:#f2da9b; transition:background .15s ease,transform .15s ease; }
+.core-activation-btn.is-disabled { background:rgba(72,130,89,.23); color:#b1f5c7; border-color:rgba(90,194,130,.46); }
+.core-activation-btn:hover:not(:disabled) { background:rgba(216,177,93,.25); transform:translateY(-1px); }
+.core-activation-btn:disabled { opacity:.48; cursor:not-allowed; }
+.core-activation-hint { width:100%; margin-top:8px; font-size:11px; line-height:1.55; color:#a49b89; text-align:left; }
+@media(max-width:430px) { .core-activation-row { padding:8px 10px; gap:6px; } .core-activation-state { font-size:11px; } .core-activation-btn { min-width:98px; padding:8px; } }
+
 
 .training-v3-bag-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
 .training-v3-bag-item { min-height:82px; display:flex; align-items:center; gap:14px; padding:14px 16px; text-align:left; border:1px solid rgba(216,177,93,.18); border-radius:20px; background:linear-gradient(145deg,#151515,#090909); transition:.18s ease; }
