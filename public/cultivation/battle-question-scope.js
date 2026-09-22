@@ -34,6 +34,16 @@ function gradeLabel(grade) {
   return '高中' + n[grade - 10] + '年級';
 }
 
+function unitGrade(path) {
+  const suffix = String(path).split('/').slice(1).join('/');
+  const middle = suffix.match(/([七八九7-9])(?:上|下|年級)/);
+  if (middle) return ({ 七: 7, 八: 8, 九: 9 })[middle[1]] || Number(middle[1]);
+  const high = suffix.match(/(?:高中|高職)(?:第)?([一二三1-3])(?:年級|年|上|下)?/);
+  if (high) return 9 + (({ 一: 1, 二: 2, 三: 3 })[high[1]] || Number(high[1]));
+  if (/高中|高職|學測|分科/.test(suffix)) return 10;
+  return null; // Unknown unit age remains constrained by the generated-question prompt.
+}
+
 function extractUnit(raw) {
   if (!raw || typeof raw !== 'object') return null;
   const path = String(raw.path || '').replace(/\\/g, '/').slice(0, 160);
@@ -44,7 +54,7 @@ function extractUnit(raw) {
     .map(value => String(value).trim().slice(0, 80)).filter(Boolean).slice(0, 8);
   const topic = [detail, topics.length ? '核心考點：' + topics.join('、') : ''].filter(Boolean).join('（') +
     (detail && topics.length ? '）' : '');
-  return { subject, topic, key: subject + ':' + detail.toLowerCase() };
+  return { subject, topic, grade: unitGrade(path), key: subject + ':' + path.toLowerCase() + ':' + detail.toLowerCase() };
 }
 
 export function snapshotBattleKnowledge(data = {}) {
@@ -73,7 +83,8 @@ export function resolveBattleKnowledge(host = {}, guest = {}) {
   let commonUnits = [];
   if (host.focused && guest.focused) {
     const keys = new Set(guestUnits.map(u => u.key));
-    commonUnits = hostUnits.filter(u => keys.has(u.key) && allowed.includes(u.subject) && !!u.topic);
+    commonUnits = hostUnits.filter(u => keys.has(u.key) && allowed.includes(u.subject) && !!u.topic &&
+      (!u.grade || u.grade <= grade));
   }
   let subjects;
   if (commonUnits.length) subjects = [...new Set(commonUnits.map(u => u.subject))];
