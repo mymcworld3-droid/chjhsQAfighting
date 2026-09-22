@@ -17,6 +17,8 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe, materialMarketRef
   let db = null;
   let currentUid = '';
   let refreshTimer = null;
+  let walletLoading = false;
+  let walletRetryAfter = 0;
   let active = [];
   let mine = [];
   let filter = 'all';
@@ -365,6 +367,10 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe, materialMarketRef
     pendingRender = true;
     requestAnimationFrame(() => { pendingRender = false; render(); });
   }
+  function marketVisible() {
+    const store = document.getElementById('page-store');
+    return !!store && !store.classList.contains('hidden') && store.classList.contains('pm-market-active');
+  }
   function switchMarket(open) {
     const market = document.getElementById('player-market');
     const store = document.getElementById('page-store');
@@ -399,7 +405,7 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe, materialMarketRef
     marketButton?.style.removeProperty('color');
     const loading = document.getElementById('pm-market-load-state');
     if (loading) loading.textContent = '';
-    if (open) { render(); void refreshListings(); }
+    if (open) { render(); void refreshWallet(); void refreshListings(); }
     return true;
   }
   function installStyle() {
@@ -517,7 +523,9 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe, materialMarketRef
   }
 
   async function refreshWallet() {
-    if (!db || !currentUid) return;
+    // 同一個帳號讀取不能重疊；配額錯誤時避免持續重新送出 BatchGetDocuments。
+    if (!db || !currentUid || walletLoading || Date.now() < walletRetryAfter) return;
+    walletLoading = true;
     try {
       const snap = await getDoc(doc(db,'users',currentUid));
       const current = data();
@@ -536,22 +544,25 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe, materialMarketRef
         window.dispatchEvent(new CustomEvent('xiuxian:recipe-license-updated'));
       }
     } catch (error) {
+      if (String(error?.code || '').includes('resource-exhausted')) walletRetryAfter = Date.now() + 60000;
       console.error('[Player market] refresh wallet',error);
-    }
+    } finally { walletLoading = false; }
   }
 
   function subscribe(uid) {
     if (refreshTimer) clearInterval(refreshTimer);
     refreshTimer = null;
+    const oldUid = currentUid;
     currentUid = uid || '';
+    if (oldUid !== currentUid) walletRetryAfter = 0;
     active = []; mine = []; failed = false;
     if (!uid) { scheduleRender(); return; }
-    void refreshWallet();
-    void refreshListings();
+    // 登入不代表玩家正在逛市集，避免登入時額外讀取完整 users 文件。
+    if (marketVisible()) { void refreshWallet(); void refreshListings(); }
     // 市集不使用 Firestore Listen stream，避免 WebChannel transport error
     // 讓整個市集畫面失效；開啟時、交易後及每 20 秒以一次性讀取更新。
     refreshTimer = setInterval(() => {
-      if (!document.getElementById('page-store')?.classList.contains('hidden')) {
+      if (marketVisible()) {
         void refreshWallet();
         void refreshListings();
       }
