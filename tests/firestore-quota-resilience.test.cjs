@@ -75,3 +75,22 @@ test('friends, leaderboard and chat reuse recent reads without changing their or
   assert.match(legacy, /limit\(25\)/);
   assert.match(legacy, /if \(pageId !== 'page-social' && chatUnsub\)/);
 });
+
+const artifact = read('cultivation/artifact-system.js');
+
+test('artifact eligibility retries are throttled after quota exhaustion instead of polling every second', () => {
+  assert.match(artifact, /QUOTA_RETRY_MS = 30 \* 60 \* 1000/);
+  assert.match(artifact, /eligibilityRetryAfter = Date\.now\(\) \+ \(isQuotaFailure\(error\) \? QUOTA_RETRY_MS : ORDINARY_RETRY_MS\)/);
+  assert.match(artifact, /failureKey === eligibilityFailureKey && Date\.now\(\) < eligibilityRetryAfter/);
+  const interval = artifact.slice(artifact.indexOf('    setInterval(() => {'), artifact.indexOf('    }, 1000);'));
+  assert.doesNotMatch(interval, /enforceEquipmentEligibility\(\)/);
+  assert.match(artifact, /window\.addEventListener\('artifact-catalog-updated', \(\) => \{ scheduleRender\(\); enforceEquipmentEligibility\(\); \}\)/);
+  assert.match(artifact, /await updateArtifactSystem\(\(next\) => invalidSlots\.forEach\(\(slot\) => delete next\.equipped\[slot\]\)\)/);
+});
+
+test('expired artifact buffs only attempt one cleanup at a time and wait after failures', () => {
+  assert.match(artifact, /if \(expiredBuffBusy \|\| Date\.now\(\) < expiredBuffRetryAfter\) return/);
+  assert.match(artifact, /expiredBuffBusy = true/);
+  assert.match(artifact, /finally \{ expiredBuffBusy = false; \}/);
+  assert.match(artifact, /expiredBuffRetryAfter = Date\.now\(\) \+ \(isQuotaFailure\(error\) \? QUOTA_RETRY_MS : ORDINARY_RETRY_MS\)/);
+});
