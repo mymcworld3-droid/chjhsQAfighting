@@ -48,7 +48,7 @@ test('Status opens at account creation, Foundation features at 10, Golden Core a
   assert.match(guard, /migrationReady\(\) && score\(\) >= GOLDEN_CORE_SCORE/);
   assert.match(guard, /\[data-training-tab="core"\]/);
   assert.match(statusPanel, /function ensureInitialStatusShell\(\)/);
-  assert.match(statusPanel, /totalScore\) \|\| 0\) >= FOUNDATION_SCORE/);
+  assert.match(statusPanel, /window\.isFoundationTrainingStage\?\.\(\) \|\| window\.isGoldenCoreUnlocked\?\.\(\)/);
   assert.match(statusPanel, /className = 'page-section hidden px-4 training-page training-page-v3 initial-status-page'/);
   assert.match(statusPanel, /if \(initialShell && button && !statusActive\) activateStatus\(\)/);
 
