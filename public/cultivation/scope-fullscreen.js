@@ -175,10 +175,14 @@
           <div class="ss-cart-body" id="ss-cart-body"><p class="ss-cart-note"><strong>複習提示</strong>：選擇整章會包含其考點，也可以只挑個別細項。加入清單後記得儲存。</p>
             <p class="ss-cart-empty" id="ss-cart-placeholder"><i class="fa-solid fa-book-open" aria-hidden="true"></i><span>還沒有選定範圍<br>從左側選一個章節開始吧。</span></p>
           </div>
+          <div class="ss-foot-summary" aria-live="polite">
+            <strong id="ss-footer-main">建立你的專屬修習計畫</strong>
+            <small id="ss-footer-sub">可跨科選擇，最多 24 個範圍。</small>
+          </div>
         </aside>
       </div>
       <footer class="ss-foot">
-        <div class="ss-foot-summary"><strong id="ss-footer-main">建立你的專屬修習計畫</strong><small id="ss-footer-sub">可跨科選擇，最多 24 個範圍。</small><small id="ss-feedback" role="status" aria-live="polite"></small></div>
+        <small id="ss-feedback" role="status" aria-live="polite"></small>
         <div id="ss-foot-actions"></div>
       </footer>`;
     document.body.append(studio);
