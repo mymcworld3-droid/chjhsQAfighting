@@ -609,15 +609,37 @@ import {
     const playerOrder = levelOrder(playerLevel);
     if (playerOrder < 0) return null;
     const subjects = currentPracticeSubjects();
-    const snap = await getDocs(query(collection(db, INDEX_COLLECTION), where('status', '==', 'active'), limit(80)));
-    const eligible = shuffle(snap.docs.map((entry) => ({ id: entry.id, ...entry.data() })).filter((item) =>
-      item.ownerUid !== uid() && Number(item.levelOrder) >= 0 && playerOrder > Number(item.levelOrder) && subjectMatches(item.subject, subjects)
+    let publicItems = dongtianCache.getPublicList();
+    if (!publicItems) {
+      if (!state.publicListPending) {
+        state.publicListPending = getDocs(query(collection(db, INDEX_COLLECTION), where('status', '==', 'active'), limit(80)))
+          .then(snap => {
+            const items = snap.docs.map(entry => ({ id: entry.id, ...entry.data() }));
+            dongtianCache.setPublicList(items);
+            return items;
+          })
+          .finally(() => { state.publicListPending = null; });
+      }
+      publicItems = await state.publicListPending;
+    }
+    const visitor = uid();
+    const eligible = shuffle(publicItems.filter((item) =>
+      item.ownerUid !== visitor && Number(item.levelOrder) >= 0 && playerOrder > Number(item.levelOrder) && subjectMatches(item.subject, subjects)
     ));
     for (const item of eligible.slice(0, 12)) {
-      const playSnap = await getDoc(doc(db, PLAY_COLLECTION, `${uid()}__${item.id}`));
-      if (playSnap.exists()) continue;
+      // A confirmed previous encounter can be skipped locally. Never cache a negative
+      // check; another device may have encountered the cave since this browser last visited.
+      if (dongtianCache.hasEncountered(visitor, item.id)) continue;
+      const playSnap = await getDoc(doc(db, PLAY_COLLECTION, `${visitor}__${item.id}`));
+      if (playSnap.exists()) {
+        dongtianCache.markEncountered(visitor, item.id);
+        continue;
+      }
       const full = await getDoc(doc(db, DATA_COLLECTION, item.id));
-      if (full.exists()) return { id: full.id, ...full.data() };
+      if (full.exists() && full.data()?.status === 'active') return { id: full.id, ...full.data() };
+      // Removed or sealed caves should not repeatedly reappear in this device's list.
+      publicItems = publicItems.filter(row => row.id !== item.id);
+      dongtianCache.setPublicList(publicItems);
     }
     return null;
   }
@@ -660,6 +682,7 @@ import {
       uid: uid(), dongtianId: dongtian.id, ownerUid: dongtian.ownerUid || '',
       encountered: true, encounteredAt: serverTimestamp(), encounteredAtMs: Date.now(), completed: false
     }, { merge: true });
+    dongtianCache.markEncountered(uid(), dongtian.id);
     updateDoc(doc(db, INDEX_COLLECTION, dongtian.id), { playCount: increment(1) }).catch(() => {});
   }
 
