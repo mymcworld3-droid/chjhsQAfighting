@@ -96,6 +96,42 @@ test('combo chance is hard capped at ten percent in catalog, admin and runtime',
   assert.equal(attack.normalDamage, 200);
 });
 
+test('Golden Core blocks opening combo strike but second strike uses equipment defense normally', () => {
+  const runtime=loadResolver(0);
+  const engine=loadCombatEngine();
+  const guest=player([{type:'equip_combo_chance',value:0.10}], {
+    uid:'g', atk:200, answer:{correct:true,atMs:1000}
+  });
+  const host=player([{type:'equip_damage_reduction_percent',value:0.25}], {
+    uid:'h', atk:200, artifactShield:30, coreShield:true,
+    goldenCore:{type:'ningxin',name:'凝心靜音丹',grade:6},
+    answer:{correct:false,atMs:2000}
+  });
+  let roomId='';
+  for(let index=0;index<5000;index++){
+    const candidate='guarded-artifact-combo-'+index;
+    if(runtime.resolveArtifactBattleAttack({
+      attacker:guest,defender:host,baseDamage:200,
+      seed:candidate+':1:g:artifact'
+    }).combo){roomId=candidate;break;}
+  }
+  assert.ok(roomId,'find seeded combo without random retries');
+  const outcome=engine.settleBattleRound({
+    roomId,round:1,host,guest,
+    resolveEquipmentHit:runtime.resolveArtifactBattleHit,
+    resolveGuardedFollowup:runtime.resolveArtifactGuardedFollowup
+  });
+  assert.equal(outcome.steps.length,2);
+  assert.equal(outcome.steps[0].guarded,true);
+  assert.equal(outcome.steps[0].damage,0);
+  assert.equal(outcome.steps[1].damage,120,'second 200 hit reduced to 150 then 30 artifact shield');
+  assert.equal(outcome.hostHp,880);
+  assert.equal(outcome.hostCoreShield,true,'ready again next round');
+  assert.equal(outcome.hostArtifactState.artifactShield,0,'only followup consumes equipment shield');
+  assert.match(formal,/resolveGuardedFollowup: window.resolveArtifactGuardedFollowup/);
+  assert.match(read('public/cultivation/battle-tutorial.js'),/resolveGuardedFollowup: resolveTutorialGuardedFollowup/);
+});
+
 test('flat and percentage damage reduction stack in actual PvP resolver', () => {
   const runtime = loadResolver();
   const defender = player([
