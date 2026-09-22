@@ -21,7 +21,7 @@ async function listDocuments(db, name) {
   return db.collection(name).get();
 }
 
-async function migrate({ source, destination, action = 'dry-run', output = console } = {}) {
+async function migrate({ source, destination, action = 'dry-run', output = console, beforeBatch = async () => {} } = {}) {
   if (!source || !destination || source === destination) throw new Error('Require distinct A and BD Firestore instances');
   const report = {};
   for (const name of COLLECTIONS) {
@@ -43,6 +43,7 @@ async function migrate({ source, destination, action = 'dry-run', output = conso
     if (action !== 'execute' || !missing.length) continue;
 
     for (let start = 0; start < missing.length; start += BATCH_SIZE) {
+      await beforeBatch(); // reject stale workers before writing another batch
       const ids = missing.slice(start, start + BATCH_SIZE);
       // Check A again immediately before copying: fail if a new write landed during migration.
       const refs = ids.map(id => source.collection(name).doc(id));
@@ -60,7 +61,8 @@ async function migrate({ source, destination, action = 'dry-run', output = conso
   }
   if (action === 'execute') {
     output.log('Verifying full A/BD cave document equality...');
-    return migrate({ source, destination, action: 'verify', output });
+    await beforeBatch();
+    return migrate({ source, destination, action: 'verify', output, beforeBatch });
   }
   return report;
 }
