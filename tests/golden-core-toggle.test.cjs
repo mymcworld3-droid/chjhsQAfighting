@@ -80,6 +80,17 @@ test('runtime and downstream snapshots do not expose a disabled core as active',
   assert.match(profile, /if \(!enabled\) return null/);
   assert.match(css, /\.status-core-toggle:disabled/);
   assert.match(css, /grid-template-columns: minmax\(0, 1fr\) auto/);
+  // Neither the phone layout nor the short-height layout may reassign the outer
+  // two columns to the icon/text pair and accidentally push the control into the text cell.
+  const phone = css.match(/@media \(max-width: 640px\) \{([\s\S]*?)\n\}/)?.[1] || '';
+  const short = css.match(/@media \(max-height: 700px\) \{([\s\S]*?)\n\}/)?.[1] || '';
+  for (const responsive of [phone, short]) {
+    assert.match(responsive, /\.status-core-row\s*\{\s*grid-template-columns:\s*minmax\(0, 1fr\) auto;/);
+    assert.match(responsive, /\.status-core-detail\s*\{\s*grid-template-columns:/);
+    assert.doesNotMatch(responsive, /\.status-core-row\s*\{[^}]*grid-template-columns:\s*(?:56|62)px minmax/);
+  }
+  assert.match(css, /@media \(max-width: 360px\)/);
+  assert.match(css, /\.status-core-toggle span \{ display: none; \}/);
 });
 
 test('dormant core shield is suspended without being consumed by a wrong answer', () => {
