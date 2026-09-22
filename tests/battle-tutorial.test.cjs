@@ -92,7 +92,7 @@ test('Shen first duel returns to main story without starting Gu or marking tutor
   const ctx = vm.createContext({
     active:true, busy:false, tutorialPhase:'shen', startedByStory:true, previewOnly:false,
     LAYER_ID:'battle-tutorial-layer', playerHp:0, shenChoice:null,
-    SHEN_QUESTION:{opts:['正確值'],ans:0,exp:'數學解析'},esc:String,
+    SHEN_QUESTION:{opts:['正確值'],ans:0,exp:'數學解析'},esc:String,mathText:String,
     shell:()=>el, playerPortrait:() => '', stage:'shen-strike', closeTutorialArena:()=>{closed++;},clearShenTimer() {}, clearTutorialTimers() {},
     document:{getElementById:()=>({remove(){}})},
     window:{closeBattleTutorialArena:()=>{closed++;}, dispatchEvent:event=>{finished=event;}},
