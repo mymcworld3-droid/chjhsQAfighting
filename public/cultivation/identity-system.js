@@ -123,6 +123,10 @@ import {
     const base = stripReserved(rawName);
     if (base.length < 2) throw new Error('名稱至少需要 2 個字元。');
     if (base.length > 24) throw new Error('名稱最多 24 個字元。');
+    // 瀏覽器自行逾時時仍需檢查保留稱號；AI 明確拒絕不可放行。
+    if (/九州|管理员|管理員|官方|GM|Game\s*Master/i.test(base)) {
+      throw new Error('此名稱含有系統保留稱號或身分字樣。');
+    }
 
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), NAME_REVIEW_TIMEOUT_MS);
@@ -137,7 +141,10 @@ import {
       if (!response.ok || payload.approved !== true) throw new Error(payload.error || payload.reason || '名稱未通過 AI 審核。');
       return stripReserved(payload.normalizedName || base);
     } catch (error) {
-      if (error?.name === 'AbortError') throw new Error('名稱 AI 審核逾時，請再試一次。');
+      if (error?.name === 'AbortError') {
+        console.warn('[Identity] name AI review timed out; allowing locally validated name');
+        return base;
+      }
       throw error;
     } finally {
       clearTimeout(timeout);
