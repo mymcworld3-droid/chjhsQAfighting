@@ -166,7 +166,7 @@ test('prologue can launch the question lesson from its story checkpoint', () => 
   let renders = 0;
   const ctx = vm.createContext({
     active:false, resizeHandler:null, index:99,
-    ensureStyle(){}, bindDemoGuards(){}, bindNavigationGuards(){}, bindDongtianTutorialEvents(){},
+    ensureStyle(){}, bindDemoGuards(){}, bindNavigationGuards(){}, bindScopeTutorialEvents(){}, bindDongtianTutorialEvents(){}, bindAnywhereClick(){},
     userData:()=>({ newbieTutorialV1:{completed:true} }),
     window:{ deleteNewbieDongtianDemo(){}, addEventListener(){} },
     questionSteps:[{title:'問道'}], dongtianSteps:[{title:'洞天'}],
