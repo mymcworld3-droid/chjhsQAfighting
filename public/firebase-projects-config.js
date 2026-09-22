@@ -10,22 +10,21 @@
  */
 export const firebaseProjectConfigs = {
   BD: {
-    apiKey: '',
-    authDomain: '',
-    projectId: '',
-    storageBucket: '',
-    messagingSenderId: '',
-    appId: '',
-    // measurementId: '', // Console 有提供時才需要
+    apiKey: "AIzaSyBNa5xC6cFuYplPBbbgngnoqTSSjIo_en0",
+    authDomain: "xiuxian-dongtian-bd.firebaseapp.com",
+    projectId: "xiuxian-dongtian-bd",
+    storageBucket: "xiuxian-dongtian-bd.firebasestorage.app",
+    messagingSenderId: "393166571020",
+    appId: "1:393166571020:web:fff4eb01a04077a1991029"
   },
 
   C: {
-    apiKey: '',
-    authDomain: '',
-    projectId: '',
-    storageBucket: '',
-    messagingSenderId: '',
-    appId: '',
+    apiKey: "AIzaSyBArctG8Ngm2ajLqhikfA-Vb6X-8Mj-uoo",
+    authDomain: "xiuxian-battle.firebaseapp.com",
+    projectId: "xiuxian-battle",
+    storageBucket: "xiuxian-battle.firebasestorage.app",
+    messagingSenderId: "886185761315",
+    appId: "1:886185761315:web:cb436c55525749aa876f96"
     // measurementId: '', // Console 有提供時才需要
   },
 };
