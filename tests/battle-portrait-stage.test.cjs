@@ -50,8 +50,8 @@ test('formal arena shows enemy HP above center portraits and own HP below; no vi
   assert.match(scene, /portraitMarkup\('bv2-enemy-fighter'\)/);
   assert.doesNotMatch(scene, /bv2-scoreboard|bv2-log-wrap|bv2-log|bv2-arena-me-avatar/);
   assert.doesNotMatch(source, /function renderLogs|renderLogs\(room\)/);
-  assert.match(styles, /\.bv2-stage-fighter\.me\{left:3%\}/);
-  assert.match(styles, /\.bv2-stage-fighter\.enemy\{right:3%\}/);
+  assert.match(styles, /\.bv2-stage-fighter\.me\{left:1%;bottom:-6%;width:49%;height:91%\}/);
+  assert.match(styles, /\.bv2-stage-fighter\.enemy\{right:4%;bottom:21%;width:42%;height:73%\}/);
   assert.match(styles, /\.bv2-stage-fighter\.me\.strike/);
   assert.match(styles, /\.bv2-stage-fighter\.enemy\.hit/);
   assert.match(styles, /\.bv2-status-panel\.enemy/);
