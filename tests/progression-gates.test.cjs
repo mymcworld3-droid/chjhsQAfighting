@@ -36,15 +36,21 @@ test('login core is isolated from optional cultivation module failures', () => {
   assert.match(main, /\.\/cultivation\/cultivation-theme\.js/);
 });
 
-test('Foundation opens shared training shell at 10 while Golden Core tab waits for 28', () => {
+test('Status opens at account creation, Foundation features at 10, Golden Core at 28', () => {
   assert.match(progression, /const FOUNDATION_SCORE = 10;/);
   assert.match(progression, /const GOLDEN_CORE_SCORE = 28;/);
   assert.match(guard, /const FOUNDATION_SCORE = 10;/);
   assert.match(guard, /const GOLDEN_CORE_SCORE = 28;/);
-  assert.match(guard, /return !!data\(\)\?\.stats && score\(\) >= FOUNDATION_SCORE/);
+  assert.match(guard, /return !!data\(\)\?\.stats;/);
+  assert.match(guard, /html:not\(\.training-access-ready\) #nav-training/);
+  assert.doesNotMatch(guard, /html:not\(\.golden-core-access-ready\) #training-status-tab/);
+  assert.doesNotMatch(readRoot('index.html'), /html:not\(\.golden-core-access-ready\) #training-status-tab/);
   assert.match(guard, /migrationReady\(\) && score\(\) >= GOLDEN_CORE_SCORE/);
   assert.match(guard, /\[data-training-tab="core"\]/);
-  assert.match(guard, /#training-status-tab/);
+  assert.match(statusPanel, /function ensureInitialStatusShell\(\)/);
+  assert.match(statusPanel, /totalScore\) \|\| 0\) >= FOUNDATION_SCORE/);
+  assert.match(statusPanel, /className = 'page-section hidden px-4 training-page training-page-v3 initial-status-page'/);
+  assert.match(statusPanel, /if \(initialShell && button && !statusActive\) activateStatus\(\)/);
 
   assert.match(foundationTraining, /const GOLDEN_CORE_SCORE = 28;/);
   assert.match(foundationTraining, /value >= FOUNDATION_SCORE && value < GOLDEN_CORE_SCORE/);
@@ -52,7 +58,8 @@ test('Foundation opens shared training shell at 10 while Golden Core tab waits f
   assert.match(foundationTraining, /data-training-tab="bag"/);
   assert.match(foundationTraining, /data-training-tab="refinery"/);
   assert.match(foundationTraining, /coreTab\?\.classList\.add\('hidden'\)/);
-  assert.doesNotMatch(foundationTraining, /training-status-tab/);
+  assert.match(foundationTraining, /const preserveStatus = !!page\.querySelector\('#training-status-tab\.active'\)/);
+  assert.match(foundationTraining, /if \(tabs && !tabs\.querySelector\('\[data-training-tab="bag"\]'\)\)/);
 
   const progressionIndex = main.indexOf("'./cultivation/cultivation-progression-v2.js'");
   const inventoryIndex = main.indexOf("'./cultivation/cultivation-inventory.js'");
