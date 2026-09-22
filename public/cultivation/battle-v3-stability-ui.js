@@ -370,6 +370,122 @@
         #page-battle .bv2-quiz .bv2-question-card h3{margin:6px 0 9px}
         #page-battle .bv2-quiz .bv2-option{min-height:44px!important}
       }
+
+      /* Duel stage: one battlefield, not six stacked information cards. */
+      #page-battle .bv2-arena:not(.hidden):not(.bt-tutorial-active){
+        position:relative;grid-template-areas:'enemy' 'stage' 'mine'!important;
+        grid-template-rows:auto minmax(0,1fr) auto!important;
+        gap:clamp(4px,.8dvh,9px)!important;overflow:hidden!important
+      }
+      #page-battle .bv2-arena:not(.bt-tutorial-active) .bv2-duel-rule{display:none!important}
+      #page-battle .bv2-arena:not(.bt-tutorial-active) .bv2-stage-round{
+        grid-area:stage;align-self:start;justify-self:center;z-index:7;
+        margin-top:clamp(5px,1dvh,12px);padding:4px 14px;
+        border:1px solid rgba(238,202,133,.25);border-radius:30px;
+        background:rgba(10,13,12,.76);box-shadow:0 3px 18px rgba(0,0,0,.4);
+        pointer-events:none;color:#decb9d;font-size:10px
+      }
+      #page-battle .bv2-arena:not(.bt-tutorial-active) .bv2-stage-round span{font-size:0}
+      #page-battle .bv2-arena:not(.bt-tutorial-active) .bv2-stage-round span::after{
+        content:'回合';font-size:10px;letter-spacing:.2em
+      }
+      #page-battle .bv2-arena:not(.bt-tutorial-active) .bv2-duel-cue{
+        grid-area:stage;align-self:end;justify-self:center;z-index:8;
+        width:min(84%,370px);min-height:0!important;margin-bottom:clamp(5px,1dvh,12px);
+        border:1px solid rgba(227,194,122,.27);border-radius:13px;
+        padding:5px 13px!important;background:linear-gradient(90deg,rgba(8,11,11,.9),rgba(30,24,14,.9),rgba(8,11,11,.9));
+        box-shadow:0 7px 28px rgba(0,0,0,.46);pointer-events:none;gap:0!important
+      }
+      #page-battle .bv2-arena:not(.bt-tutorial-active) .bv2-duel-cue strong{
+        font-size:clamp(21px,3.2dvh,34px)!important;line-height:1.05
+      }
+      #page-battle .bv2-arena:not(.bt-tutorial-active) .bv2-duel-cue p{
+        max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+        font-size:clamp(9px,1.35dvh,12px)!important
+      }
+      #page-battle .bv2-arena:not(.bt-tutorial-active) .bv2-status-panel{
+        position:relative;z-index:5;padding:clamp(6px,.9dvh,11px) clamp(10px,1.8vw,21px)!important;
+        border-radius:6px 6px 12px 12px;background:linear-gradient(100deg,rgba(12,20,19,.95),rgba(9,12,11,.92))!important;
+        box-shadow:inset 3px 0 rgba(211,172,92,.37),0 6px 20px rgba(0,0,0,.22)
+      }
+      #page-battle .bv2-arena:not(.bt-tutorial-active) .bv2-status-panel.enemy{
+        box-shadow:inset -3px 0 rgba(194,93,73,.48),0 6px 20px rgba(0,0,0,.22);
+        background:linear-gradient(260deg,rgba(29,13,15,.95),rgba(10,11,12,.92))!important
+      }
+      #page-battle .bv2-arena:not(.bt-tutorial-active) .bv2-stage{
+        position:relative;isolation:isolate;min-height:0!important;
+        border-radius:8px 8px 20px 20px!important;
+        border:1px solid rgba(207,179,118,.26);
+        background:linear-gradient(180deg,rgba(3,10,10,.18),rgba(5,8,8,.22) 62%,rgba(0,0,0,.64)),
+          url('assets/immortal-mountains.svg') center 48% / cover no-repeat,#102521!important;
+        box-shadow:inset 0 0 70px rgba(0,0,0,.48),0 8px 26px rgba(0,0,0,.28)
+      }
+      #page-battle .bv2-stage::before{
+        content:'';position:absolute;z-index:1;inset:0;pointer-events:none;
+        background:radial-gradient(ellipse at 27% 53%,rgba(212,169,99,.13),transparent 30%),
+          radial-gradient(ellipse at 73% 53%,rgba(161,91,105,.14),transparent 30%),
+          linear-gradient(90deg,rgba(3,9,9,.32),transparent 25%,transparent 75%,rgba(3,9,9,.36))
+      }
+      #page-battle .bv2-stage::after{
+        content:'';position:absolute;z-index:2;inset:auto -3% 0;height:21%;pointer-events:none;
+        background:linear-gradient(180deg,transparent,rgba(4,11,10,.71))
+      }
+      #page-battle .bv2-stage-architecture::before{width:74%;height:72%;top:-49%;border-color:rgba(231,196,130,.14)}
+      #page-battle .bv2-stage-platform{
+        z-index:2;left:11%;right:11%;bottom:0;height:16%;
+        border-color:rgba(235,195,118,.26);
+        background:radial-gradient(ellipse,rgba(210,177,110,.09),rgba(7,17,16,.1) 70%,transparent 77%)
+      }
+      #page-battle .bv2-stage-center{z-index:1;top:49%;color:rgba(236,194,114,.085);font-size:clamp(64px,11vw,154px)}
+      #page-battle .bv2-stage-fighter{
+        z-index:4;width:46%;height:102%;bottom:-2%;
+        filter:drop-shadow(0 10px 15px rgba(0,0,0,.55))
+      }
+      #page-battle .bv2-stage-fighter.me{left:3%}
+      #page-battle .bv2-stage-fighter.enemy{right:3%}
+      #page-battle .bv2-stage-fighter img{object-position:center bottom}
+      #page-battle .bv2-stage-impact{
+        position:absolute;z-index:6;inset:0;pointer-events:none;overflow:hidden
+      }
+      #page-battle .bv2-stage-impact::before{
+        content:'';position:absolute;left:26%;top:18%;height:68%;width:8px;
+        border-radius:100%;background:linear-gradient(180deg,transparent,#fff9d5 18%,#f9d489 45%,transparent 90%);
+        box-shadow:0 0 16px 5px rgba(250,203,108,.55),0 0 49px rgba(255,243,191,.35);
+        transform:rotate(53deg) scaleY(.05);animation:bv2SwordArc .67s ease-out both
+      }
+      #page-battle .bv2-stage-impact.from-enemy::before{
+        left:69%;transform:rotate(-53deg) scaleY(.05);animation-name:bv2SwordArcEnemy;
+        background:linear-gradient(180deg,transparent,#ffd9d7 18%,#ed8799 45%,transparent 90%);
+        box-shadow:0 0 18px 4px rgba(235,111,124,.5)
+      }
+      #page-battle .bv2-stage-impact::after{
+        content:'';position:absolute;left:72%;top:48%;width:42px;height:42px;border-radius:50%;
+        border:3px solid rgba(255,239,179,.88);box-shadow:0 0 30px rgba(246,215,153,.65);
+        transform:translate(-50%,-50%) scale(.2);animation:bv2ImpactRing .7s ease-out both
+      }
+      #page-battle .bv2-stage-impact.from-enemy::after{left:28%;border-color:rgba(255,169,167,.84)}
+      @keyframes bv2SwordArc{0%{opacity:0;transform:translate(-70px,20px) rotate(53deg) scaleY(.05)}22%{opacity:1}65%{opacity:1;transform:translate(60px,-8px) rotate(53deg) scaleY(1.2)}100%{opacity:0;transform:translate(100px,-20px) rotate(53deg) scaleY(1.6)}}
+      @keyframes bv2SwordArcEnemy{0%{opacity:0;transform:translate(70px,20px) rotate(-53deg) scaleY(.05)}22%{opacity:1}65%{opacity:1;transform:translate(-60px,-8px) rotate(-53deg) scaleY(1.2)}100%{opacity:0;transform:translate(-100px,-20px) rotate(-53deg) scaleY(1.6)}}
+      @keyframes bv2ImpactRing{0%{opacity:0;transform:translate(-50%,-50%) scale(.15)}22%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(3.8)}}
+      #page-battle .bv2-stage-fighter .bv2-damage-pop{top:31%;font-size:clamp(19px,3vw,32px)}
+      @media(max-width:620px){
+        #page-battle .bv2-arena:not(.bt-tutorial-active) .bv2-stage-round{padding:2px 9px}
+        #page-battle .bv2-arena:not(.bt-tutorial-active) .bv2-duel-cue{width:min(94%,330px);margin-bottom:4px}
+        #page-battle .bv2-arena:not(.bt-tutorial-active) .bv2-duel-cue p{font-size:9px!important}
+        #page-battle .bv2-stage-fighter{width:51%;height:98%}
+        #page-battle .bv2-stage-fighter.me{left:-3%}
+        #page-battle .bv2-stage-fighter.enemy{right:-3%}
+      }
+      @media(max-height:570px){
+        #page-battle .bv2-arena:not(.hidden):not(.bt-tutorial-active){
+          grid-template-rows:auto minmax(0,1fr) auto!important
+        }
+        #page-battle .bv2-arena:not(.bt-tutorial-active) .bv2-status-panel small{display:none}
+        #page-battle .bv2-arena:not(.bt-tutorial-active) .bv2-status-panel{padding:3px 8px!important}
+      }
+      @media(prefers-reduced-motion:reduce){
+        #page-battle .bv2-stage-impact::before,#page-battle .bv2-stage-impact::after{animation:none!important;opacity:0}
+      }
     `;
     document.head.appendChild(style);
   }
