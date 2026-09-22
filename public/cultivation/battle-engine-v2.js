@@ -211,7 +211,8 @@ export function settleBattleRound({
   tieWindowMs = BATTLE_V2.tieWindowMs,
   maxRounds = BATTLE_V2.maxRounds,
   // Optional per-hit resolver for equipment effects. Pure engine remains unchanged without one.
-  resolveEquipmentHit = null
+  resolveEquipmentHit = null,
+  resolveGuardedFollowup = null
 }) {
   // Firestore server-stamped response time determines initiative, never damage eligibility.
   // Missing/timeout answers move last; timestamps tied to the millisecond defer to firstAnswerUid.
@@ -224,8 +225,11 @@ export function settleBattleRound({
   const startGuestHp = Math.min(Math.max(1, Number(guest?.maxHp) || 1000), currentHp(guest) + guestSupport.heal);
   let hostHp = startHostHp;
   let guestHp = startGuestHp;
-  let hostCoreShield = hostSupport.shield;
-  let guestCoreShield = guestSupport.shield;
+  // 道心護體只在同一回合第一次受到傷害時觸發；護體本身留到下回合再生效。
+  const hostCoreShield = hostSupport.shield;
+  const guestCoreShield = guestSupport.shield;
+  let hostRoundGuardAvailable = hostCoreShield;
+  let guestRoundGuardAvailable = guestCoreShield;
   const logs = [];
   const steps = [];
   const activations = [];
@@ -254,23 +258,31 @@ export function settleBattleRound({
       defender.hp = role === 'host' ? guestHp : hostHp;
     }
     attackers.push(role);
-    const guarded = role === 'host' ? guestCoreShield : hostCoreShield;
+    const guarded = role === 'host' ? guestRoundGuardAvailable : hostRoundGuardAvailable;
     if (guarded) {
-      if (role === 'host') guestCoreShield = false;
-      else hostCoreShield = false;
-      logs.push({ type: 'guard', actorRole: targetRole, actorUid: defender.uid, targetUid: player.uid, damage: 0, skill: '金丹道心護體', message: '金丹道心護體抵銷本次傷害' });
-      activations.push({ type: defender.goldenCore?.type || 'shield', name: defender.goldenCore?.name || '金丹', ownerUid: defender.uid, skill: '金丹道心護體', message: '金丹道心護體發動，抵銷本次攻擊', kind: '鬥法防護' });
+      if (role === 'host') guestRoundGuardAvailable = false;
+      else hostRoundGuardAvailable = false;
+      logs.push({ type: 'guard', actorRole: targetRole, actorUid: defender.uid, targetUid: player.uid, damage: 0, skill: '金丹道心護體', message: '金丹道心護體抵銷本回合第一次傷害' });
+      activations.push({ type: defender.goldenCore?.type || 'shield', name: defender.goldenCore?.name || '金丹', ownerUid: defender.uid, skill: '金丹道心護體', message: '金丹道心護體發動，本回合的防護已使用', kind: '鬥法防護' });
     }
     const equipment = !guarded && typeof resolveEquipmentHit === 'function'
       ? (resolveEquipmentHit({ attacker: player, defender, baseDamage: plan.totalDamage, role, round, seed: `${roomId}:${round}:${player.uid}:artifact` }) || null)
-      : null;
-    const damage = guarded ? 0 : equipment ? Math.max(0, Math.round(Number(equipment.damage) || 0)) : plan.totalDamage;
+      : guarded && typeof resolveGuardedFollowup === 'function'
+        ? (resolveGuardedFollowup({ attacker: player, defender, baseDamage: plan.totalDamage, role, round, seed: `${roomId}:${round}:${player.uid}:artifact` }) || null)
+        : null;
+    // 連擊是第二次獨立傷害：首擊被道心抵銷後，連擊仍會正常命中。
+    const damage = equipment ? Math.max(0, Math.round(Number(equipment.damage) || 0)) : guarded ? 0 : plan.totalDamage;
     const targetBefore = role === 'host' ? guestHp : hostHp;
     if (role === 'host') guestHp = Math.max(0, guestHp - damage);
     else hostHp = Math.max(0, hostHp - damage);
     const attack = { type: 'attack', actorRole: role, actorUid: player.uid, targetUid: defender.uid, damage, baseDamage: plan.baseDamage, extraDamage: plan.extraDamage, skill: [plan.activation?.skill, equipment?.skill].filter(Boolean).join('・') };
     logs.push(attack);
-    steps.push({ ...attack, guarded, hostHp, guestHp });
+    if (guarded) {
+      steps.push({ ...attack, damage: 0, guarded: true, hostHp: role === 'host' ? hostHp : startHostHp, guestHp: role === 'guest' ? guestHp : startGuestHp });
+      if (equipment) steps.push({ ...attack, damage, guarded: false, skill: [attack.skill, '連擊'].filter(Boolean).join('・'), hostHp, guestHp });
+    } else {
+      steps.push({ ...attack, guarded: false, hostHp, guestHp });
+    }
     if (plan.activation) activations.push({ ...plan.activation, ownerUid: player.uid });
     // Equipment heals / grants a shield to its attacker after an actual hit.
     if (equipment) {
@@ -297,9 +309,15 @@ export function settleBattleRound({
         counter.activation = counter.activation || { type: 'artifact', skill: equipment.reflectSkill || '法寶反傷', name: '法寶', message: '法寶反傷觸發', kind: '鬥法受擊效果' };
       }
       if (counter.reflectDamage > 0) {
-        if (role === 'host') hostHp = Math.max(0, hostHp - counter.reflectDamage);
+        const counterGuarded = role === 'host' ? hostRoundGuardAvailable : guestRoundGuardAvailable;
+        if (counterGuarded) {
+          if (role === 'host') hostRoundGuardAvailable = false;
+          else guestRoundGuardAvailable = false;
+          logs.push({ type: 'guard', actorRole: role, actorUid: player.uid, targetUid: defender.uid, damage: 0, skill: '金丹道心護體', message: '金丹道心護體抵銷本回合第一次反擊傷害' });
+          activations.push({ type: player.goldenCore?.type || 'shield', name: player.goldenCore?.name || '金丹', ownerUid: player.uid, skill: '金丹道心護體', message: '金丹道心護體發動，本回合的防護已使用', kind: '鬥法防護' });
+        } else if (role === 'host') hostHp = Math.max(0, hostHp - counter.reflectDamage);
         else guestHp = Math.max(0, guestHp - counter.reflectDamage);
-        const reflected = { type: 'counter', actorRole: targetRole, actorUid: defender.uid, targetUid: player.uid, damage: counter.reflectDamage, skill: counter.activation?.skill || '' };
+        const reflected = { type: 'counter', actorRole: targetRole, actorUid: defender.uid, targetUid: player.uid, damage: counterGuarded ? 0 : counter.reflectDamage, guarded: counterGuarded, skill: counter.activation?.skill || '' };
         logs.push(reflected);
         steps.push({ ...reflected, hostHp, guestHp });
         if (counter.activation) activations.push({ ...counter.activation, ownerUid: defender.uid });
