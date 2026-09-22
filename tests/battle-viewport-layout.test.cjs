@@ -78,3 +78,22 @@ test('CSS blocks are balanced and browser loads the new build', () => {
   assert.ok(main.includes("XIUXIAN_FEATURE_BUILD = '20260922-daily-meditation1'"));
   assert.ok(index.includes('main.js?v=20260922-product-editor-fullscreen1'));
 });
+
+test('stage portraits keep the near-left and far-right duel depth in formal and tutorial battles', () => {
+  const base = read('public/styles/battle-mode-v2.css');
+  const formalMe = '#page-battle .bv2-stage-fighter.me{left:1%;bottom:-6%;width:49%;height:91%}';
+  const formalEnemy = '#page-battle .bv2-stage-fighter.enemy{right:4%;bottom:21%;width:42%;height:73%}';
+  assert.ok(base.includes('.bv2-stage-fighter.me{left:1%;bottom:-6%;width:49%;height:91%}'));
+  assert.ok(base.includes('.bv2-stage-fighter.enemy{right:4%;bottom:21%;width:42%;height:73%}'));
+  for (const token of [formalMe, formalEnemy]) assert.ok(full.includes(token), token);
+  for (const token of [
+    '#page-battle .bv2-stage-fighter.me{left:-4%;bottom:-6%;width:54%;height:84%}',
+    '#page-battle .bv2-stage-fighter.enemy{right:-1%;bottom:23%;width:46%;height:67%}',
+    '#${LAYER_ID} .bt-fighter.me{left:1%;bottom:-6%;width:49%;height:91%!important}',
+    '#${LAYER_ID} .bt-fighter.enemy{right:4%;bottom:21%;width:42%;height:73%!important}',
+    '#${LAYER_ID} .bt-fighter.me{left:-4%;bottom:-6%;width:54%!important;height:84%!important}',
+    '#${LAYER_ID} .bt-fighter.enemy{right:-1%;bottom:23%;width:46%!important;height:67%!important}'
+  ]) assert.ok((token.includes('bt-fighter') ? tutorial : full).includes(token), token);
+  assert.ok(full.includes('left:72%;top:34%'), 'own attack impact targets the upper-right opponent');
+  assert.ok(full.includes('left:28%;top:65%'), 'opponent attack impact targets the lower-left player');
+});
