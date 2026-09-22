@@ -3,7 +3,7 @@
 (function () {
   'use strict';
 
-  const CSS_HREF = 'cultivation-status-panel.css?v=20260922-core-control1';
+  const CSS_HREF = 'cultivation-status-panel.css?v=20260922-core-layout2';
   let statusActive = false;
   let rendering = false;
   let coreTogglePending = false;
