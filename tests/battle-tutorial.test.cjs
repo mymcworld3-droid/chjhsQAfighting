@@ -20,9 +20,9 @@ test('battle tutorial is loaded after story engine and before the other onboardi
 
 test('first tutorial duel is Shen Qingshuang one-shotting the projection for exactly 65000 true damage', () => {
   assert.match(tutorial, /const TRUE_DAMAGE = 65000/);
-  assert.match(tutorial, /-65,000<small>真實傷害 · TRUE DAMAGE/);
+  assert.match(tutorial, /pop\.textContent = '破！'/);
   assert.match(tutorial, /playerHp = 0/);
-  assert.match(story, /演武投影承受六萬五千點真實傷害/);
+  assert.match(story, /演武投影便碎成滿地流光/);
   assert.match(story, /呃……沒事吧/);
   assert.match(tutorial, /assets\/story\/characters\/shen-qingshuang\.png/);
 });
@@ -181,7 +181,7 @@ test('Shen uses a three-second arena countdown, full-screen answer review and sc
   assert.match(shen, /stage = 'shen-review'/);
   assert.match(shen, /shen-return-arena/);
   assert.match(shen, /playShenStrike/);
-  assert.match(shen, /pop\.innerHTML = '-65,000/);
+  assert.match(shen, /pop\.textContent = '破！'/);
   assert.match(shen, /playerHp = 0/);
   assert.ok(shen.indexOf('stage = \'shen-review\'') < shen.indexOf('async function playShenStrike()'));
 });
