@@ -160,5 +160,7 @@ test('frontend waits for verified player initialization before releasing gamepla
   assert.match(legacy, /await waitForVerifiedPlayerMigration\(user\)/);
   assert.match(legacy, /\/api\/game-startup-player/);
   assert.match(legacy, /window\.__xiuxianMigrationApproved = true;/);
+  assert.match(legacy, /ensureSecondaryFirebaseAuth\('BD'\)/);
+  assert.match(legacy, /ensureSecondaryFirebaseAuth\('C'\)/);
   assert.match(main, /if \(!window\.__xiuxianMigrationApproved\)/);
 });
