@@ -375,7 +375,7 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder3';
     </article>`;
   }
 
-  function shell({ opponent, opponentImage, opponentHp, opponentMaxHp, playerImage = playerPortrait('determined'), body, badge, title, showLater = true, result = false, quiz = false }) {
+  function shell({ opponent, opponentImage, opponentHp, opponentMaxHp, playerImage = playerPortrait('determined'), body, badge, title, showLater = true, result = false, resultKind = 'practice', quiz = false }) {
     const el = layer();
     el.classList.toggle('bt-final-mode', result);
     window.setBattleTutorialScene?.(quiz ? 'quiz' : 'arena');
@@ -390,10 +390,19 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder3';
       return el;
     }
     if (result) {
-      el.innerHTML = `<section class="bt-final-card" role="dialog" aria-modal="true" aria-label="${esc(title)}">
-        <small class="bt-final-kicker">${esc(badge)}</small>
-        <h2 class="bt-final-title">${esc(title)}</h2>
-        <div class="bt-final-content">${body}</div>
+      const finale = resultKind === 'win' ? 'win' : resultKind === 'defeat' ? 'defeat' : 'practice';
+      el.innerHTML = `<section class="bt-final-card bt-finale-${finale}" role="dialog" aria-modal="true" aria-label="${esc(title)}">
+        <div class="bt-finale-backdrop" aria-hidden="true">
+          <i class="bt-finale-aura"></i><i class="bt-finale-seal"></i>
+          <img class="bt-finale-portrait own" src="${esc(playerImage || '')}" alt="">
+          <img class="bt-finale-portrait opponent" src="${esc(opponentImage || '')}" alt="">
+          <div class="bt-finale-sparks">${Array.from({length:12},(_,i)=>`<i style="--angle:${i*137.5}deg;--radius:${95+i%4*23}px"></i>`).join('')}</div>
+        </div>
+        <div class="bt-finale-content">
+          <small class="bt-final-kicker">${esc(badge)}</small>
+          <h2 class="bt-final-title">${esc(title)}</h2>
+          <div class="bt-final-content">${body}</div>
+        </div>
       </section>`;
       // 結算重新置中；不要保留玩家上一題捲到下方的位置。
       el.scrollTop = 0;
@@ -595,7 +604,7 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder3';
       badge:'築基鬥法教學 · 第一戰結束',
       title:'一劍定勝負',
       showLater:false,
-      result:true,
+      result:true, resultKind:'defeat',
       body:`<div class="bt-result"><div class="bt-result-mark">敗</div><h3>演武投影已潰散</h3><p>${shenChoice === null ? '25 秒已結束，未能及時作答。' : shenChoice === SHEN_QUESTION.ans ? '你答對了，但師姐先手命中。' : '你答錯了，師姐先手命中。'}演武投影應聲潰散。這一戰不計入戰績。</p></div>
         <div class="bt-explain"><b>正確答案：${esc(SHEN_QUESTION.opts[SHEN_QUESTION.ans])}</b><br>${esc(SHEN_QUESTION.exp)}</div>
         <div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="return-story">返回主線劇情</button></div>`
@@ -873,7 +882,7 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder3';
       opponentHp:guHp, opponentMaxHp:guOpponent?.maxHp || 2000,
       badge:'築基鬥法教學 · 第二戰結束',
       title:'顧長風教學戰完成',
-      showLater:false, result:true,
+      showLater:false, result:true, resultKind:won ? 'win' : lost ? 'defeat' : 'practice',
       body:`<div class="bt-result"><div class="bt-result-mark">${resultMark}</div><h3>${esc(resultTitle)}</h3><p>答對 ${guCorrect} / ${Math.min(QUESTIONS.length, guRound + 1)}。這場切磋到此為止，不計入正式戰績。</p></div>
          <div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="finish">完成鬥法教學</button></div>`
     });
