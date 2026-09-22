@@ -1,7 +1,7 @@
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import {
-  getFirestore, doc, collection, query, where, limit, getDocs,
+  getFirestore, doc, collection, query, where, limit, getDocs, getDoc,
   addDoc, updateDoc, onSnapshot, runTransaction, serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder3';
@@ -61,7 +61,8 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
     reviewedRound: null,
     reviewSubmittingRound: null,
     animationFinishedKey: null,
-    animationTimers: []
+    animationTimers: [],
+    invitedRoomId: null
   };
 
   function auth() { return getAuth(getApp()); }
@@ -451,6 +452,37 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
     return ref.id;
   }
 
+  // Invite only the host's friends who were recently active. The same waiting
+  // room gets one invitation wave; listeners and reconnects cannot spam friends.
+  async function inviteOnlineFriends(roomId) {
+    if (!roomId || state.invitedRoomId === roomId || state.role !== 'host') return;
+    state.invitedRoomId = roomId;
+    const owner = me();
+    const friends = [...new Set((userData()?.friends || []).filter(uid => typeof uid === 'string' && uid !== owner?.uid))].slice(0, 30);
+    if (!owner || !friends.length) return;
+    try {
+      const records = await Promise.all(friends.map(uid => getDoc(doc(db(), 'users', uid)).catch(() => null)));
+      if (state.roomId !== roomId || state.role !== 'host' || state.room?.status !== 'waiting') return;
+      const fresh = await getDoc(roomRef(roomId));
+      if (!fresh.exists() || fresh.data().status !== 'waiting' || fresh.data().guest || fresh.data().host?.uid !== owner.uid) return;
+      const cutoff = nowMs() - 5 * 60 * 1000;
+      const eligible = records.filter(snap => snap?.exists() && timestampMs(snap.data().lastActive) > cutoff);
+      const host = fresh.data().host || {};
+      await Promise.all(eligible.map(async snap => {
+        if (state.roomId !== roomId || state.role !== 'host' || state.room?.status !== 'waiting') return;
+        try {
+          await addDoc(collection(db(), 'users', snap.id, 'invitations'), {
+            roomId, modeVersion: BATTLE_V2.modeVersion, hostUid: owner.uid,
+            hostName: host.name || userData()?.displayName || '修士',
+            hostAvatar: host.avatar || userData()?.equipped?.avatar || '',
+            hostFrame: userData()?.equipped?.frame || '',
+            timestamp: serverTimestamp()
+          });
+        } catch (error) { console.warn('[Battle v2] friend invite skipped:', snap.id, error); }
+      }));
+    } catch (error) { console.warn('[Battle v2] invitations unavailable:', error); }
+  }
+
   function scheduleReconcile(delay = MATCH_RECONCILE_MS) {
     if (state.reconcile || state.role !== 'host' || !state.roomId) return;
     state.reconcile = setTimeout(async () => {
@@ -510,7 +542,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
 
   function resetRuntime() {
     detachRoomListener(); stopTimers();
-    state.roomId = null; state.role = null; state.room = null; state.starting = false; state.leaving = false;
+    state.roomId = null; state.role = null; state.room = null; state.starting = false; state.leaving = false; state.invitedRoomId = null;
     state.settlingRound = state.timeoutRound = state.preparingRound = state.advancingRound = state.disconnectClaimRound = null;
     state.introAdvancing = false; state.renderedQuestionId = null; state.pendingAnswer = null;
     state.seenActivationKeys.clear(); state.seenSettlementKey = null; state.resultRecordedRoom = null;
@@ -1128,7 +1160,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
     if (!snap.exists()) { toast('鬥法房間已不存在。'); resetRuntime(); window.switchToPage?.('page-home'); return; }
     const room = snap.data(); if (Number(room.modeVersion) !== BATTLE_V2.modeVersion) return; state.room = room;
     const uid = me()?.uid; if (room.host?.uid === uid) state.role = 'host'; else if (room.guest?.uid === uid) state.role = 'guest'; else return;
-    if (room.status === 'waiting') { renderLobby(room); if (state.role === 'host') scheduleReconcile(); }
+    if (room.status === 'waiting') { renderLobby(room); if (state.role === 'host') { scheduleReconcile(); inviteOnlineFriends(state.roomId); } }
     else if (room.status === 'intro') renderIntro(room);
     else if (room.status === 'preparing') renderArena(room);
     else if (room.status === 'playing') {
@@ -1169,7 +1201,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
     try {
       await window.ensureCombatStats?.(); const myData = playerSnapshot(); setPlayerAvatar('bv2-match-me-avatar', myData); setText('bv2-match-me', myData.name); setText('bv2-match-me-core', `本命金丹：${playerCoreLabel(myData)}${playerPowerLabel(myData)}`);
       const joined = await findAndClaimRoom(myData); if (joined) { state.role = 'guest'; subscribeRoom(joined); return; }
-      setText('bv2-lobby-status', '目前沒有可加入的道友，正在開啟鬥法臺…'); const created = await createWaitingRoom(myData); state.role = 'host'; subscribeRoom(created); scheduleReconcile();
+      setText('bv2-lobby-status', '目前沒有可加入的道友，正在開啟鬥法臺…'); const created = await createWaitingRoom(myData); state.role = 'host'; subscribeRoom(created); scheduleReconcile(); inviteOnlineFriends(created);
     } catch (error) { console.error('[Battle v2] matchmaking failed:', error); toast('配對失敗，請稍後再試。'); resetRuntime(); window.switchToPage?.('page-home'); }
     finally { state.starting = false; }
   }
