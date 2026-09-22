@@ -169,6 +169,12 @@ function startXiuxianFeaturesWhenReady() {
 
   // 修仙附加功能一律等登入核心完成使用者資料載入後才啟動。
   // 這可避免 observer / timer / Firebase 附加邏輯介入 Google 登入畫面。
+  // A player cannot start any auxiliary gameplay module until the backend
+  // confirms global migration and this UID's BD/C profile initialization.
+  if (!window.__xiuxianMigrationApproved) {
+    xiuxianReadyTimer = setTimeout(startXiuxianFeaturesWhenReady, 250);
+    return;
+  }
   if (cultivationUserDataReady()) {
     xiuxianFeatureLoadStarted = true;
     if (xiuxianReadyTimer) clearTimeout(xiuxianReadyTimer);
