@@ -418,7 +418,7 @@ test('Dao-heart only blocks the first incoming hit in a round, including a count
     resolveEquipmentHit:({baseDamage})=>({damage:baseDamage,reflectDamage:120})
   });
   assert.equal(first.hostHp,800,'reflection was blocked; the later direct attack still deals damage');
-  assert.equal(first.guestHp,800);
+  assert.equal(first.guestHp,680,'after attacking, the guest also receives its own reflected equipment damage');
   assert.equal(first.steps.find(step=>step.type==='counter').guarded,true);
   const next=e.settleBattleRound({
     roomId:'reflect-next',round:2,
