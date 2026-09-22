@@ -1409,6 +1409,20 @@ body.xianxia-theme main:has(#page-training.active-page),
         <i class="fa-solid fa-bug text-xs"></i>
     </button>
 
-    <script type="module" src="main.js?v=20260922-product-editor-fullscreen1&duel=20260922-diagonal1"></script>
+    <script>
+      // 登入仍以線上驗證為準；只將本專案的靜態模組保存在瀏覽器。
+      if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+        navigator.serviceWorker.register('./sw.js', { scope: './', updateViaCache: 'none' }).then(() => {
+          // 完成首次遊戲載入後，以低併發預存尚未保存在 CacheStorage 的 JS/CSS。
+          // 不預先下載大型角色圖、題庫或任何 Firebase 資料。
+          const prefetch = () => navigator.serviceWorker.ready.then(reg => {
+            reg.active?.postMessage({ type: 'XIUXIAN_PREFETCH_MODULES' });
+          }).catch(error => console.warn('[Local modules] prefetch unavailable:', error));
+          if (window.__xiuxianFeaturesReady) prefetch();
+          else window.addEventListener('xiuxian:features-ready', prefetch, { once: true });
+        }).catch(error => console.warn('[Local modules] cache unavailable:', error));
+      }
+    </script>
+    <script type="module" src="main.js?v=20260922-local-modules1"></script>
 </body>
 </html>
