@@ -1327,6 +1327,9 @@ function startPresenceSystem() {
     presenceInterval = setInterval(updatePresence, 60 * 1000);
 }
 
+// 好友頁一分鐘內重開沿用快照；重新登入或好友名單改變則自動失效。
+let friendListReadCache = { key: '', time: 0, docs: null };
+let friendListPending = null;
 window.loadFriendList = async () => {
     const container = document.getElementById('friend-list-container');
     const myCodeEl = document.getElementById('my-friend-code');
@@ -1338,8 +1341,29 @@ window.loadFriendList = async () => {
     }
     container.innerHTML = '<div class="loader"></div>';
     try {
-        const promises = currentUserData.friends.map(uid => getDoc(doc(db, "users", uid)));
-        const docs = await Promise.all(promises);
+        const currentUid = auth.currentUser?.uid || '';
+        const friendsKey = currentUid + ':' + JSON.stringify(currentUserData.friends);
+        if (!currentUid) return;
+        let docs;
+        if (friendListReadCache.key === friendsKey && Date.now() - friendListReadCache.time < 60000) {
+            docs = friendListReadCache.docs;
+        } else {
+            if (!friendListPending || friendListPending.key !== friendsKey) {
+                friendListPending = {
+                    key: friendsKey,
+                    promise: Promise.all(currentUserData.friends.map(uid => getDoc(doc(db, "users", uid))))
+                };
+            }
+            const pending = friendListPending;
+            try {
+                docs = await pending.promise;
+                if (auth.currentUser?.uid !== currentUid) return;
+                friendListReadCache = { key: friendsKey, time: Date.now(), docs };
+            } finally {
+                if (friendListPending === pending) friendListPending = null;
+            }
+        }
+        if (auth.currentUser?.uid !== currentUid || friendsKey !== currentUid + ':' + JSON.stringify(currentUserData.friends)) return;
         container.innerHTML = '';
         docs.forEach(d => {
             if (!d.exists()) return;
