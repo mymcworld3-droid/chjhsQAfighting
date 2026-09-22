@@ -438,11 +438,11 @@
       }
       #page-battle .bv2-stage-center{z-index:1;top:49%;color:rgba(236,194,114,.085);font-size:clamp(64px,11vw,154px)}
       #page-battle .bv2-stage-fighter{
-        z-index:4;width:46%;height:102%;bottom:-2%;
+        z-index:4;width:46%;height:90%;bottom:-5%;
         filter:drop-shadow(0 10px 15px rgba(0,0,0,.55))
       }
-      #page-battle .bv2-stage-fighter.me{left:3%}
-      #page-battle .bv2-stage-fighter.enemy{right:3%}
+      #page-battle .bv2-stage-fighter.me{left:1%;bottom:-6%;width:49%;height:91%}
+      #page-battle .bv2-stage-fighter.enemy{right:4%;bottom:21%;width:42%;height:73%}
       #page-battle .bv2-stage-fighter img{object-position:center bottom}
       #page-battle .bv2-stage-impact{
         position:absolute;z-index:6;inset:0;pointer-events:none;overflow:hidden
@@ -459,11 +459,11 @@
         box-shadow:0 0 18px 4px rgba(235,111,124,.5)
       }
       #page-battle .bv2-stage-impact::after{animation-delay:inherit;
-        content:'';position:absolute;left:72%;top:48%;width:42px;height:42px;border-radius:50%;
+        content:'';position:absolute;left:72%;top:34%;width:42px;height:42px;border-radius:50%;
         border:3px solid rgba(255,239,179,.88);box-shadow:0 0 30px rgba(246,215,153,.65);
         transform:translate(-50%,-50%) scale(.2);animation:bv2ImpactRing .7s ease-out both
       }
-      #page-battle .bv2-stage-impact.from-enemy::after{left:28%;border-color:rgba(255,169,167,.84)}
+      #page-battle .bv2-stage-impact.from-enemy::after{left:28%;top:65%;border-color:rgba(255,169,167,.84)}
       @keyframes bv2SwordArc{0%{opacity:0;transform:translate(-70px,20px) rotate(53deg) scaleY(.05)}22%{opacity:1}65%{opacity:1;transform:translate(60px,-8px) rotate(53deg) scaleY(1.2)}100%{opacity:0;transform:translate(100px,-20px) rotate(53deg) scaleY(1.6)}}
       @keyframes bv2SwordArcEnemy{0%{opacity:0;transform:translate(70px,20px) rotate(-53deg) scaleY(.05)}22%{opacity:1}65%{opacity:1;transform:translate(-60px,-8px) rotate(-53deg) scaleY(1.2)}100%{opacity:0;transform:translate(-100px,-20px) rotate(-53deg) scaleY(1.6)}}
       @keyframes bv2ImpactRing{0%{opacity:0;transform:translate(-50%,-50%) scale(.15)}22%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(3.8)}}
@@ -472,9 +472,8 @@
         #page-battle .bv2-arena:not(.bt-tutorial-active) .bv2-stage-round{padding:2px 9px}
         #page-battle .bv2-arena:not(.bt-tutorial-active) .bv2-duel-cue{width:min(94%,330px);margin-bottom:4px}
         #page-battle .bv2-arena:not(.bt-tutorial-active) .bv2-duel-cue p{font-size:9px!important}
-        #page-battle .bv2-stage-fighter{width:51%;height:98%}
-        #page-battle .bv2-stage-fighter.me{left:-3%}
-        #page-battle .bv2-stage-fighter.enemy{right:-3%}
+        #page-battle .bv2-stage-fighter.me{left:-4%;bottom:-6%;width:54%;height:84%}
+        #page-battle .bv2-stage-fighter.enemy{right:-1%;bottom:23%;width:46%;height:67%}
       }
       @media(max-height:570px){
         #page-battle .bv2-arena:not(.hidden):not(.bt-tutorial-active){
