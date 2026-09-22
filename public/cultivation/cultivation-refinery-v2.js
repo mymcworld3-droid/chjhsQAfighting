@@ -16,6 +16,16 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
   let recipeBookOpen = false;
   let expandedRecipeId = '';
   let adminForgeDirection = '自由發揮';
+  let forgeMethod = '自由發揮';
+  const FORGE_METHODS = ['自由發揮','劍道鍛造','護體鑄造','符籙煉製','陣法刻印'];
+  function recipeMethod(item) {
+    return FORGE_METHODS.includes(item?.forgeMethod) ? item.forgeMethod : '自由發揮';
+  }
+  function recipeSignatureFor(item, recipe) {
+    const key = countsKey(recipeCounts(recipe));
+    return item?.generationSignature || (key && recipeMethod(item) !== '自由發揮'
+      ? key + '|method:' + recipeMethod(item) : key);
+  }
   let adminForgePrompt = '';
 
   const userData = () => window.getCurrentUserData?.() || null;
@@ -136,9 +146,11 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
   function matches() {
     const key = countsKey(selectedCounts());
     if (!key) return [];
+    const signature = key + (forgeMethod === '自由發揮' ? '' : '|method:' + forgeMethod);
     return ARTIFACT_CATALOG.filter((item) => {
       const recipe = getArtifactRecipe(item.id);
-      return recipe.length && recipeTotal(recipe) <= SLOT_COUNT && countsKey(recipeCounts(recipe)) === key;
+      return recipe.length && recipeTotal(recipe) <= SLOT_COUNT &&
+        recipeSignatureFor(item, recipe) === signature;
     });
   }
 
@@ -152,7 +164,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
     const description = String(meta.item?.description || '').trim();
     return `<li class="refinery-recipe-ingredient ${enough ? 'is-ready' : 'is-missing'}"
         style="--recipe-ingredient-color:${esc(meta.color)}">
-        <span class="refinery-recipe-material-icon" aria-hidden="true">${esc(meta.icon)}</span>
+        <span class="refinery-recipe-material-icon ${row?.artifactId ? 'is-artifact' : 'is-material'}" aria-hidden="true">${esc(meta.icon)}</span>
         <div class="refinery-recipe-material-copy">
           <strong>${esc(meta.name)}</strong>
           <span class="refinery-recipe-material-meta">${esc(meta.realm)} · ${esc(meta.category)}</span>
@@ -189,10 +201,13 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
         { materialId: parsed.id, quantity: 1 };
     })));
     if (!key) return false;
+    const target = getArtifactById(artifactId);
+    if (!target) return false;
+    const signature = key + (recipeMethod(target) === '自由發揮' ? '' : '|method:' + recipeMethod(target));
     const found = ARTIFACT_CATALOG.filter((item) => {
       const recipe = getArtifactRecipe(item.id);
       return recipe.length && recipeTotal(recipe) <= SLOT_COUNT &&
-        countsKey(recipeCounts(recipe)) === key;
+        recipeSignatureFor(item, recipe) === signature;
     });
     return found.length === 1 && found[0].id === artifactId;
   }
@@ -252,7 +267,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
           <span class="refinery-recipe-artifact-title">
             <small class="refinery-recipe-eyebrow">煉 器 · 配 方</small>
             <strong>${esc(item.name)}</strong>
-            <span class="refinery-recipe-subtitle">${esc(item.realm || '凡人')} · ${esc(item.category || '法寶')}</span>
+            <span class="refinery-recipe-subtitle">${esc(item.realm || '凡人')} · ${esc(item.category || '法寶')}${item.weaponForm ? ' · ' + esc(item.weaponForm) : ''}${recipeMethod(item) !== '自由發揮' ? ' · ' + esc(recipeMethod(item)) : ''}</span>
             <span class="refinery-recipe-intro">${esc(teaser || '此件法寶的製作指南')}</span>
           </span>
           <span class="refinery-recipe-access ${canReadRecipe ? 'is-unlocked' : 'is-locked'}"><i class="fa-solid ${statusIcon}"></i> ${statusLabel}</span>
@@ -308,6 +323,12 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
       .refinery-forge-panel:after{content:"煉";position:absolute;right:-8px;bottom:-38px;font-size:150px;font-weight:900;line-height:1;color:rgba(216,177,93,.022);pointer-events:none;transform:rotate(-8deg)}
       .refinery-head{position:relative;z-index:2;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:11px}.refinery-head h3{margin:0;color:#f1e1bc;font-size:13px;letter-spacing:.04em}.refinery-head h3 i{color:#d8b15d;margin-right:4px}.refinery-head p{margin:4px 0 0;color:#8d816c;font-size:8px;line-height:1.55}.refinery-badge{padding:5px 8px;border:1px solid rgba(216,177,93,.18);border-radius:999px;background:rgba(216,177,93,.035);color:#d8bd78;font-size:7px;white-space:nowrap}
       .refinery-material-list{position:relative;z-index:1;display:grid;grid-template-rows:repeat(2,minmax(0,1fr));gap:0;width:100%;height:100%;min-height:0;max-height:none;overflow:hidden}.refinery-material-roll{box-sizing:border-box;min-height:0;height:100%;display:grid;grid-template-rows:auto minmax(0,1fr);gap:6px;padding:10px 10px 8px;border:0;border-radius:0;background:rgba(216,177,93,.018);overflow:hidden}.refinery-material-roll+.refinery-material-roll{border-top:1px solid rgba(216,177,93,.18);padding-bottom:8px}.refinery-material-roll+.refinery-material-roll .refinery-group-title{margin-top:0}.refinery-material-roll+.refinery-material-roll .refinery-material-roll-body{padding-bottom:8px}.refinery-material-roll-body{min-height:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));grid-auto-rows:max-content;align-content:start;gap:8px;overflow:auto;padding:1px 3px 3px 1px;overscroll-behavior:contain;scrollbar-gutter:stable}.refinery-material-roll-body.is-empty{display:flex;flex-direction:column;justify-content:flex-end}.refinery-material-roll-body.is-empty .refinery-empty{width:100%;box-sizing:border-box}.refinery-material-roll[data-refinery-material-roll="artifacts"] .refinery-material-roll-body:not(.is-empty){align-content:start}.refinery-material{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:100%;aspect-ratio:1;min-width:0;padding:9px 7px;border:1px solid color-mix(in srgb,var(--material-realm-color,#d8b15d) 25%,rgba(255,255,255,.05));border-radius:14px;background:radial-gradient(circle at 50% 25%,color-mix(in srgb,var(--material-realm-color,#d8b15d) 9%,transparent),rgba(255,255,255,.012) 62%);text-align:center;overflow:hidden;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}.refinery-material:not(:disabled):hover{border-color:color-mix(in srgb,var(--material-realm-color,#d8b15d) 55%,#d8b15d);box-shadow:0 8px 20px rgba(0,0,0,.25),inset 0 0 18px color-mix(in srgb,var(--material-realm-color,#d8b15d) 8%,transparent);transform:translateY(-2px)}.refinery-material:disabled{opacity:.4;cursor:not-allowed}.refinery-mat-icon{width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;border:1px solid color-mix(in srgb,var(--material-realm-color,#d8b15d) 45%,rgba(216,177,93,.18));border-radius:12px;background:#171006;color:var(--material-realm-color,#efd17c);font-size:12px;font-weight:900;box-shadow:inset 0 0 14px rgba(0,0,0,.3)}.refinery-mat-copy{display:flex;min-width:0;width:100%;flex-direction:column;align-items:center;gap:2px}.refinery-mat-copy strong{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#ede1c8;font-size:9px}.refinery-mat-copy small{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#81745f;font-size:6px}.refinery-mat-copy .material-realm-badge{margin-top:1px!important}.refinery-mat-qty{position:absolute;right:6px;top:6px;padding:2px 5px;border-radius:999px;background:rgba(0,0,0,.52);color:#d5b96e;font-size:6px;font-weight:900;white-space:nowrap}.refinery-empty{grid-column:1/-1;padding:22px 12px;text-align:center;color:#82745f;font-size:9px;border:1px dashed rgba(216,177,93,.13);border-radius:13px;line-height:1.7}.refinery-group-title{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0;padding:6px 8px;border-radius:9px;background:rgba(216,177,93,.04);color:#bfa66a;font-size:7px;font-weight:900}.refinery-group-title span:last-child{text-align:right;color:#8f7b51;font-size:6px}.refinery-artifact-ingredient{border-color:color-mix(in srgb,var(--material-realm-color,#d8b15d) 42%,rgba(255,255,255,.05));background:radial-gradient(circle at 50% 25%,color-mix(in srgb,var(--material-realm-color,#d8b15d) 14%,transparent),rgba(255,255,255,.012) 62%)}.refinery-artifact-ingredient .refinery-mat-copy strong{color:var(--material-realm-color,#eee1c8)}
+      .refinery-forge-method{position:relative;z-index:3;display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:5px 0 8px;padding:7px 10px;border:1px solid rgba(216,177,93,.19);border-radius:11px;color:#ddc58c;font-size:9px;font-weight:800;background:#17130b}
+      .refinery-forge-method select{min-width:120px;max-width:100%;padding:6px 9px;border:1px solid rgba(216,177,93,.32);border-radius:8px;background:#090806;color:#f0d99d;font-size:10px}.refinery-forge-method select:disabled{opacity:.5}.refinery-forge-method small{flex:1 1 100%;color:#96856a;font-size:7px;font-weight:400}
+      .refinery-mat-icon.is-material,.refinery-recipe-material-icon.is-material{border-radius:50%!important;background:radial-gradient(circle at 32% 25%,rgba(255,255,255,.17),rgba(99,70,29,.3) 42%,#100f0c 100%);box-shadow:inset 0 0 0 2px rgba(255,239,184,.07),0 0 12px rgba(233,187,93,.09)}
+      .refinery-mat-icon.is-artifact,.refinery-recipe-artifact-icon{border-radius:10px;box-shadow:inset 0 0 0 2px rgba(255,236,173,.09),0 0 16px rgba(217,169,66,.13)}
+      .refinery-slot.is-material .icon{width:28px;height:28px;display:grid;place-items:center;margin:auto;border:1px solid var(--material-realm-color,#d8b15d);border-radius:50%;background:radial-gradient(circle at 30% 20%,rgba(255,255,255,.15),rgba(0,0,0,.1) 70%);font-size:12px}
+      .refinery-slot.is-artifact .icon{color:var(--material-realm-color,#efd17c)}
       .refinery-array-wrap{position:relative;z-index:1;display:flex;justify-content:center;align-items:center;padding:2px 0 6px}
       .refinery-slots{--array-size:min(44dvh,430px);--slot-size:clamp(58px,17%,78px);position:relative;width:min(100%,var(--array-size));max-width:430px;aspect-ratio:1;margin:0 auto;isolation:isolate}
       .refinery-slots:before{content:"";position:absolute;inset:8.5%;clip-path:polygon(29.3% 0,70.7% 0,100% 29.3%,100% 70.7%,70.7% 100%,29.3% 100%,0 70.7%,0 29.3%);background:linear-gradient(135deg,rgba(248,217,139,.3),rgba(107,69,14,.08),rgba(248,217,139,.22));filter:drop-shadow(0 0 10px rgba(216,177,93,.12));z-index:0}
@@ -521,12 +542,13 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
     const artifacts = artifactInventory();
     return JSON.stringify({
       selected,
+      forgeMethod,
       busy,
       materialInventory: Object.entries(materials).sort(([a], [b]) => a.localeCompare(b)),
       artifactInventory: Object.entries(artifacts).sort(([a], [b]) => a.localeCompare(b)),
       equipped: Object.entries(userData()?.artifactSystem?.equipped || {}).sort(([a], [b]) => a.localeCompare(b)),
       materials: MATERIAL_CATALOG.map((m) => [m.id, m.name, m.icon, m.category, m.realm, m.description]),
-      artifacts: ARTIFACT_CATALOG.map((a) => [a.id, a.name, a.icon, a.realm, a.category, a.description, a.craft?.yield || 1, a.recipeOwnerUid, a.recipeDiscoveredAtMs]),
+      artifacts: ARTIFACT_CATALOG.map((a) => [a.id, a.name, a.icon, a.realm, a.category, a.description, a.weaponForm, a.forgeMethod, a.generationSignature, a.craft?.yield || 1, a.recipeOwnerUid, a.recipeDiscoveredAtMs]),
       licenses: Object.entries(userData()?.recipeLicenses || {}).sort(([a], [b]) => a.localeCompare(b)),
       gold: Number(userData()?.stats?.gold) || 0,
       cultivation: Number(userData()?.stats?.totalScore) || 0,
@@ -564,10 +586,16 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
       .sort(compareOwnedArtifacts);
     const matching = matches();
     const job = window.getCultivationRefineryJob?.() || null;
-    const plan = !job && matching.length <= 1 ? window.getCultivationRefineryPlan?.(selected, matching[0]?.id || '') : null;
+    const plan = !job && matching.length <= 1 ? window.getCultivationRefineryPlan?.(selected, matching[0]?.id || '', forgeMethod) : null;
     const jobReady = !!job && Date.now() >= Number(job.readyAtMs || 0);
     const canAdminSkip = !!job && !jobReady && userData()?.isAdmin === true;
     const directions = ['乾','坎','艮','震','巽','離','坤','兌'];
+    const forgeMethodOptions = FORGE_METHODS.map((method) =>
+      `<option value="${esc(method)}" ${method === forgeMethod ? 'selected' : ''}>${esc(method)}</option>`).join('');
+    const methodSelect = `<label class="refinery-forge-method">煉器手法
+      <select data-refinery-forge-method ${job || busy ? 'disabled' : ''} aria-label="選擇煉器手法">${forgeMethodOptions}</select>
+      <small>同樣的材料可以用不同手法探索新配方；舊配方使用「自由發揮」。</small>
+    </label>`;
 
     const materialHtml = ownedMaterials.map((m) => {
       const token = `material:${m.id}`;
@@ -575,7 +603,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
       const placed = Number(counts[token]) || 0;
       const remaining = Math.max(0, owned - placed);
       const color = materialRealmColor(m.realm);
-      return `<button type="button" class="refinery-material" data-refinery-ingredient="${esc(token)}" style="--material-realm-color:${esc(color)}" ${remaining <= 0 || used >= SLOT_COUNT || busy || job ? 'disabled' : ''}><span class="refinery-mat-icon">${esc(m.icon || '材')}</span><span class="refinery-mat-copy"><strong>${esc(m.name)}</strong><small>${esc(m.category || '材料')} · 已放入 ${placed}</small><span class="material-realm-badge">${esc(m.realm || '凡人')}</span></span><span class="refinery-mat-qty">可用 ${remaining}/${owned}</span></button>`;
+      return `<button type="button" class="refinery-material" data-refinery-ingredient="${esc(token)}" style="--material-realm-color:${esc(color)}" ${remaining <= 0 || used >= SLOT_COUNT || busy || job ? 'disabled' : ''}><span class="refinery-mat-icon is-material">${esc(m.icon || '材')}</span><span class="refinery-mat-copy"><strong>${esc(m.name)}</strong><small>${esc(m.category || '材料')} · 已放入 ${placed}</small><span class="material-realm-badge">${esc(m.realm || '凡人')}</span></span><span class="refinery-mat-qty">可用 ${remaining}/${owned}</span></button>`;
     }).join('');
 
     const artifactHtml = ownedArtifacts.map((a) => {
@@ -587,14 +615,14 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
       const remaining = Math.max(0, usableOwned - placed);
       const color = artifactRealmColor(a.realm);
       const depth = artifactRecipeDepth(a.id);
-      return `<button type="button" class="refinery-material refinery-artifact-ingredient" data-refinery-ingredient="${esc(token)}" style="--material-realm-color:${esc(color)}" ${remaining <= 0 || used >= SLOT_COUNT || busy || job ? 'disabled' : ''}><span class="refinery-mat-icon">${esc(a.icon || '◆')}</span><span class="refinery-mat-copy"><strong>${esc(a.name)}</strong><small>法寶素材 · 深度 ${depth}/${MAX_ARTIFACT_RECIPE_NESTING} · 已放入 ${placed}</small><span class="material-realm-badge">${esc(a.realm || '凡人')}</span></span><span class="refinery-mat-qty">可用 ${remaining}/${owned}${reserved ? ` · 裝備保留 ${reserved}` : ''}</span></button>`;
+      return `<button type="button" class="refinery-material refinery-artifact-ingredient" data-refinery-ingredient="${esc(token)}" style="--material-realm-color:${esc(color)}" ${remaining <= 0 || used >= SLOT_COUNT || busy || job ? 'disabled' : ''}><span class="refinery-mat-icon is-artifact">${esc(a.icon || '◆')}</span><span class="refinery-mat-copy"><strong>${esc(a.name)}</strong><small>${a.weaponForm ? esc(a.weaponForm) + ' · ' : ''}法寶素材 · 深度 ${depth}/${MAX_ARTIFACT_RECIPE_NESTING} · 已放入 ${placed}</small><span class="material-realm-badge">${esc(a.realm || '凡人')}</span></span><span class="refinery-mat-qty">可用 ${remaining}/${owned}${reserved ? ` · 裝備保留 ${reserved}` : ''}</span></button>`;
     }).join('');
 
     const ingredientHtml = `<section class="refinery-material-roll" data-refinery-material-roll="materials"><div class="refinery-group-title"><span><i class="fa-solid fa-gem"></i> 持有煉器素材 · 一般素材</span><span>${ownedMaterials.length} 種</span></div><div class="refinery-material-roll-body" data-refinery-material-roll-body="materials">${materialHtml || '<div class="refinery-empty">目前沒有一般素材。</div>'}</div></section><section class="refinery-material-roll" data-refinery-material-roll="artifacts"><div class="refinery-group-title"><span><i class="fa-solid fa-recycle"></i> 二次煉製</span><span>${ownedArtifacts.length} 種 · 最多 2 層</span></div><div class="refinery-material-roll-body ${artifactHtml ? '' : 'is-empty'}" data-refinery-material-roll-body="artifacts">${artifactHtml || '<div class="refinery-empty">目前沒有可投入的法寶；已裝備法寶會保留。</div>'}</div></section>`;
 
     const slotHtml = selected.map((token, index) => {
       const meta = token ? ingredientMeta(token) : null;
-      return `<button type="button" class="refinery-slot ${meta?.item ? 'filled' : ''}" data-refinery-slot="${index}" ${meta?.item ? `data-refinery-token="${esc(token)}" style="--material-realm-color:${esc(meta.color)}"` : 'disabled'} title="${meta?.item ? '點擊取回' : `陣位 ${directions[index]}`}"><span class="idx">${index + 1}</span><span class="remove">×</span><span class="direction">${directions[index]}</span><span><span class="icon">${esc(meta?.icon || '＋')}</span><span class="name">${esc(meta?.name || '')}</span></span></button>`;
+      return `<button type="button" class="refinery-slot ${meta?.item ? 'filled' : ''} ${meta?.type === 'material' ? 'is-material' : meta?.type === 'artifact' ? 'is-artifact' : ''}" data-refinery-slot="${index}" ${meta?.item ? `data-refinery-token="${esc(token)}" style="--material-realm-color:${esc(meta.color)}"` : 'disabled'} title="${meta?.item ? '點擊取回' : `陣位 ${directions[index]}`}"><span class="idx">${index + 1}</span><span class="remove">×</span><span class="direction">${directions[index]}</span><span><span class="icon">${esc(meta?.icon || '＋')}</span><span class="name">${esc(meta?.name || '')}</span></span></button>`;
     }).join('');
 
     const summary = Object.entries(counts).map(([token, q]) => `${ingredientMeta(token).name} ×${q}`).join(' · ') || '尚未投入素材';
@@ -632,7 +660,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
     const adminGuidance = adminGuidanceMarkup(job, matching.length);
 
 
-    return `<section class="cultivation-refinery"><article class="refinery-panel refinery-material-panel"><div class="refinery-material-list ${job ? 'is-job-locked' : ''}">${ingredientHtml}</div></article><article class="refinery-panel refinery-forge-panel"><div class="refinery-head"><div><h3><i class="fa-solid fa-fire-burner"></i> 八方煉器陣</h3><p>八方歸位，陣心煉器；點已放入素材可取回。</p></div><span class="refinery-badge" data-refinery-used-badge>${used}/${SLOT_COUNT}</span></div><div class="refinery-array-wrap"><div class="refinery-slots" aria-label="八方煉器陣"><span class="refinery-array-lines"></span><span class="refinery-array-ring"></span>${slotHtml}<div class="refinery-array-center"><button type="button" class="refinery-craft ${craftReady ? 'ready' : ''} ${jobReady ? 'job-ready' : ''}" data-refinery-craft ${craftReady ? '' : 'disabled'}><i class="fa-solid fa-fire-flame-curved"></i><span class="craft-main" data-refinery-craft-label>${busy ? '處理中' : craftLabel}</span><span class="craft-sub">REFINE</span></button></div><span class="refinery-array-caption">八方聚靈 · 一器成形</span></div></div>${jobBox}${adminGuidance}<div class="refinery-summary"><strong>投入：</strong><span data-refinery-summary-text>${esc(summary)}</span></div><div class="refinery-match ${matchClass}" data-refinery-match><b data-refinery-match-prefix>${esc(matchPrefix)}</b><span data-refinery-match-text>${esc(matchPlain)}</span></div><div class="refinery-actions"><button type="button" class="refinery-clear" data-refinery-clear ${!used || busy ? 'disabled' : ''}><i class="fa-solid fa-rotate-left"></i> 清空陣位</button></div><div class="refinery-note"><b>陣法規則：</b>按「煉製」即扣素材與金幣；境界越高、玩家境界越低，耗時與費用越高。煉製完成後按「開爐」取出法寶。</div>${recipeBookMarkup()}</article></section>`;
+    return `<section class="cultivation-refinery"><article class="refinery-panel refinery-material-panel"><div class="refinery-material-list ${job ? 'is-job-locked' : ''}">${ingredientHtml}</div></article><article class="refinery-panel refinery-forge-panel"><div class="refinery-head"><div><h3><i class="fa-solid fa-fire-burner"></i> 八方煉器陣</h3><p>八方歸位，陣心煉器；點已放入素材可取回。</p></div><span class="refinery-badge" data-refinery-used-badge>${used}/${SLOT_COUNT}</span></div>${methodSelect}<div class="refinery-array-wrap"><div class="refinery-slots" aria-label="八方煉器陣"><span class="refinery-array-lines"></span><span class="refinery-array-ring"></span>${slotHtml}<div class="refinery-array-center"><button type="button" class="refinery-craft ${craftReady ? 'ready' : ''} ${jobReady ? 'job-ready' : ''}" data-refinery-craft ${craftReady ? '' : 'disabled'}><i class="fa-solid fa-fire-flame-curved"></i><span class="craft-main" data-refinery-craft-label>${busy ? '處理中' : craftLabel}</span><span class="craft-sub">REFINE</span></button></div><span class="refinery-array-caption">八方聚靈 · 一器成形</span></div></div>${jobBox}${adminGuidance}<div class="refinery-summary"><strong>投入：</strong><span data-refinery-summary-text>${esc(summary)}</span></div><div class="refinery-match ${matchClass}" data-refinery-match><b data-refinery-match-prefix>${esc(matchPrefix)}</b><span data-refinery-match-text>${esc(matchPlain)}</span></div><div class="refinery-actions"><button type="button" class="refinery-clear" data-refinery-clear ${!used || busy ? 'disabled' : ''}><i class="fa-solid fa-rotate-left"></i> 清空陣位</button></div><div class="refinery-note"><b>陣法規則：</b>按「煉製」即扣素材與金幣；境界越高、玩家境界越低，耗時與費用越高。煉製完成後按「開爐」取出法寶。</div>${recipeBookMarkup()}</article></section>`;
   }
 
   function setText(node, value) {
@@ -708,7 +736,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
 
     const matchNode = content.querySelector('[data-refinery-match]');
     matchNode?.classList.remove('ready', 'error');
-    const plan = matching.length <= 1 ? window.getCultivationRefineryPlan?.(selected, matching[0]?.id || '') : null;
+    const plan = matching.length <= 1 ? window.getCultivationRefineryPlan?.(selected, matching[0]?.id || '', forgeMethod) : null;
     let prefix = '';
     let message = '放入 2～8 個素材後即可煉製。';
     if (used && matching.length === 1 && plan?.valid) {
@@ -763,6 +791,10 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
     content.querySelectorAll('[data-refinery-ingredient]').forEach((button) => button.addEventListener('click', () => add(button.dataset.refineryIngredient)));
     content.querySelectorAll('[data-refinery-slot]').forEach((button) => button.addEventListener('click', () => remove(Number(button.dataset.refinerySlot))));
     content.querySelector('[data-refinery-clear]')?.addEventListener('click', clear);
+    content.querySelector('[data-refinery-forge-method]')?.addEventListener('change', (event) => {
+      forgeMethod = FORGE_METHODS.includes(event.target.value) ? event.target.value : '自由發揮';
+      render(true);
+    });
     content.querySelector('[data-refinery-craft]')?.addEventListener('click', craft);
     content.querySelector('[data-refinery-admin-skip]')?.addEventListener('click', skipAdminWait);
     const direction = content.querySelector('[data-refinery-admin-direction]');
@@ -819,6 +851,8 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
       toast('靈石不足，無法開始這張配方。', false);
       return;
     }
+    // The recipe's own method must be selected before deciding whether this is a known item.
+    forgeMethod = recipeMethod(item);
     selected.splice(0, SLOT_COUNT, ...tokens, ...Array(SLOT_COUNT - tokens.length).fill(null));
     render(true);
     // Use the exact same validated job creation, payment and finishing flow as
@@ -925,19 +959,21 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
         selected.fill(null);
         adminForgeDirection = '自由發揮';
         adminForgePrompt = '';
+        forgeMethod = '自由發揮';
       } else {
         const matching = matches();
         if (matching.length > 1) throw new Error('目前素材對應多個配方，暫時無法開爐。');
-        const plan = window.getCultivationRefineryPlan?.(selected, matching[0]?.id || '');
+        const plan = window.getCultivationRefineryPlan?.(selected, matching[0]?.id || '', forgeMethod);
         if (!plan?.valid) throw new Error(plan?.reason || '煉器至少需要 2 個素材。');
         const started = await window.startCultivationRefineryJob?.(
           selected,
           matching[0]?.id || '',
-          { direction: adminForgeDirection, prompt: adminForgePrompt }
+          { direction: adminForgeDirection, prompt: adminForgePrompt, forgeMethod }
         );
         selected.fill(null);
         adminForgeDirection = '自由發揮';
         adminForgePrompt = '';
+        forgeMethod = '自由發揮';
         toast(`開始煉製：消耗 ${started.goldCost} 金幣，約 ${window.formatCultivationRefineryDuration?.(started.durationMs) || ''} 完成`);
       }
     } catch (error) {
