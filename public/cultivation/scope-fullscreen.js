@@ -25,11 +25,8 @@
   function updateSummary() {
     if (!studio) return;
     const selected = units();
-    const subjects = new Set(selected.map(row => String(row.path || '').split('/')[0]).filter(Boolean));
-    const n = $('ss-selected-count'), s = $('ss-subject-count'), c = $('ss-selection-count'),
+    const c = $('ss-selection-count'),
       sum = $('ss-footer-main'), foot = $('ss-footer-sub'), tab = $('ss-tab-count'), launch = $('ss-launch-count');
-    if (n) n.textContent = String(selected.length);
-    if (s) s.textContent = String(subjects.size);
     if (c) c.textContent = String(selected.length);
     if (tab) tab.textContent = String(selected.length);
     if (launch) launch.textContent = String(selected.length);
@@ -164,14 +161,6 @@
         <div class="ss-brand"><span class="ss-overline">青雲問道 · 修習策劃</span><h2 id="ss-title">課程研修所</h2></div>
         <button type="button" class="ss-close" id="ss-close" aria-label="返回洞府"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i><span>返回洞府</span></button>
       </header>
-      <section class="ss-hero" aria-label="研修總覽">
-        <div><p class="ss-kicker">CRAFT YOUR LEARNING PATH</p><h3>選定所學，逐章突破</h3><p>按年級、科目與學期安排複習，每次專注在真正需要的考點。</p></div>
-        <div class="ss-stats">
-          <div class="ss-stat"><b id="ss-selected-count">0</b><small>已選範圍</small></div>
-          <div class="ss-stat"><b id="ss-subject-count">0</b><small>複習科目</small></div>
-          <div class="ss-stat"><b>24</b><small>範圍上限</small></div>
-        </div>
-      </section>
       <nav class="ss-tabs" aria-label="選課分頁" role="tablist">
         <button id="ss-tab-course" type="button" role="tab" aria-selected="true"><i class="fa-solid fa-layer-group" aria-hidden="true"></i>選擇課程</button>
         <button id="ss-tab-cart" type="button" role="tab" aria-selected="false"><i class="fa-solid fa-bookmark" aria-hidden="true"></i>已選範圍 <span id="ss-tab-count">0</span></button>
