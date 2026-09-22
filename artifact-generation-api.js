@@ -555,7 +555,7 @@ function buildPrompt(payload) {
   };
   const hierarchy = ingredientHierarchy(payload);
   const specifiedWeapon = hierarchy.primary.find((item) =>
-    ['劍','刀','槍','弓','斧','錘','戟','棍','鞭','匕首','飛劍'].includes(item.weaponForm));
+    WEAPON_FORMS.includes(item.weaponForm) && item.weaponForm !== '其他');
   const weaponFormRule = specifiedWeapon
     ? '【正式兵器材料例外】本次主材料「' + specifiedWeapon.name + '」已明確設定 weaponForm=' +
       specifiedWeapon.weaponForm + '、weaponName=' + (specifiedWeapon.weaponName || '（未指定）') +

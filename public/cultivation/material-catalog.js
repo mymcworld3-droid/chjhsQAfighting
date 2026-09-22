@@ -4,7 +4,7 @@
 import { ARTIFACT_CATALOG, ARTIFACT_REALMS, getArtifactById } from './artifact-catalog.js';
 
 export const MATERIAL_CATEGORIES = Object.freeze(['礦石', '兵器材料', '靈木', '晶石', '妖獸材料', '特殊材料', '符材', '其他']);
-export const MATERIAL_WEAPON_FORMS = Object.freeze(['', '劍', '刀', '槍', '弓', '斧']);
+export const MATERIAL_WEAPON_FORMS = Object.freeze(['','劍','刀','槍','弓','斧','錘','戟','棍','鞭','匕首','飛劍','法盾','法杖','符籙','陣盤','寶珠','玉佩','法鏡','鈴','幡','印','鼎','鐘','器胚']);
 export const MIN_ARTIFACT_RECIPE_MATERIALS = 2;
 export const MAX_ARTIFACT_RECIPE_MATERIALS = 8;
 export const MAX_ARTIFACT_RECIPE_NESTING = 2;
@@ -211,7 +211,10 @@ export function normalizeMaterialDefinition(raw = {}) {
   return {
     id,
     name: String(raw.name || '').trim(),
-    icon: String(raw.icon || '材').trim().slice(0, 4) || '材',
+    icon: String(raw.icon || ({
+      '礦石':'礦','兵器材料':'兵','靈木':'木','晶石':'晶',
+      '妖獸材料':'獸','特殊材料':'異','符材':'符','其他':'材'
+    }[raw.category] || '材')).trim().slice(0, 4) || '材',
     category: String(raw.category || '其他').trim() || '其他',
     realm: String(raw.realm || fallbackRealm).trim() || fallbackRealm,
     description: String(raw.description || '').trim(),

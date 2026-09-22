@@ -4,6 +4,7 @@ import { getFirestore, doc, runTransaction, serverTimestamp } from 'https://www.
 import {
   MATERIAL_CATALOG,
   MATERIAL_CATEGORIES,
+  MATERIAL_WEAPON_FORMS,
   MATERIAL_REALMS,
   normalizeMaterialDefinition,
   validateMaterialCatalog,
@@ -73,6 +74,8 @@ import {
         <div class="amm-field"><label>名稱</label><input id="amre-name" maxlength="80" value="${esc(item?.name || '')}"></div>
         <div class="amm-field"><label>圖示（1–4 字）</label><input id="amre-icon" maxlength="4" value="${esc(item?.icon || '材')}"></div>
         <div class="amm-field"><label>分類</label><select id="amre-category">${MATERIAL_CATEGORIES.map((category) => `<option value="${esc(category)}" ${category === (item?.category || '其他') ? 'selected' : ''}>${esc(category)}</option>`).join('')}</select></div>
+        <div class="amm-field"><label>正式器型（選填）</label><select id="amre-weapon-form">${MATERIAL_WEAPON_FORMS.map((form) => `<option value="${esc(form)}" ${form === (item?.weaponForm || '') ? 'selected' : ''}>${esc(form || '不指定')}</option>`).join('')}</select></div>
+        <div class="amm-field"><label>指定兵器名稱（選填）</label><input id="amre-weapon-name" maxlength="80" value="${esc(item?.weaponName || '')}"></div>
         <div class="amm-field"><label>材料境界</label><select id="amre-realm">${realmOptions(realm)}</select></div>
         <div class="amm-field"><label>採購價（金幣；0 = 不可購買）</label><input id="amre-buy-gold" type="number" min="0" step="1" value="${Math.max(0, Number(item?.buyGold) || 0)}"></div>
         <div class="amm-field full"><label>境界預覽</label><div id="amre-realm-preview" style="min-height:38px;display:flex;align-items:center;padding:8px 10px;border:1px solid rgba(255,255,255,.1);border-radius:10px;font-size:9px;font-weight:900"></div></div>
@@ -109,6 +112,8 @@ import {
       icon: modal.querySelector('#amre-icon').value,
       category: modal.querySelector('#amre-category').value,
       realm: modal.querySelector('#amre-realm').value,
+      weaponForm: modal.querySelector('#amre-weapon-form').value,
+      weaponName: modal.querySelector('#amre-weapon-name').value,
       description: modal.querySelector('#amre-description').value,
       story: modal.querySelector('#amre-story').value,
       buyGold: modal.querySelector('#amre-buy-gold').value
