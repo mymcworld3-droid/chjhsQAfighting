@@ -51,6 +51,9 @@ import { ARTIFACT_EQUIP_SLOTS, getArtifactById, realmForScore } from './artifact
   function equippedCore(data, self) {
     const runtime = self ? window.getEquippedGoldenCoreState?.() : null;
     const remote = data?.cultivationTraining || {};
+    // Disabled core remains owned, but has no active combat power or public equipped effect.
+    const enabled = self ? (window.isGoldenCoreEnabled?.() ?? remote.coreEnabled !== false) : remote.coreEnabled !== false;
+    if (!enabled) return null;
     const raw = runtime || remote.equippedCore ||
       (remote.equipped === true ? remote.core : null);
     if (number(data?.stats?.totalScore) < 28 || !raw?.type) return null;
