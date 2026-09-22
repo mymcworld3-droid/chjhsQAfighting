@@ -375,14 +375,14 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
     if (!Number.isInteger(Number(ans)) && typeof ans === 'string') ans = opts.findIndex(item => String(item) === ans);
     ans = Number(ans);
     const choices = opts.map(value => String(value ?? '').trim());
-    const unique = new Set(choices.map(value => value.replace(/\\s+/g, '').toLowerCase()));
+    const unique = new Set(choices.map(value => value.replace(/\s+/g, '').toLowerCase()));
     const exp = String(source.exp ?? source.explanation ?? '').trim();
     if (q.length < 5 || choices.length !== 4 || choices.some(value => !value) ||
         unique.size !== 4 || !Number.isInteger(ans) || ans < 0 || ans >= 4 || exp.length < 5) {
       throw new Error('題目格式或答案無效');
     }
     const asked = Array.isArray(request.avoidQuestions) ? request.avoidQuestions : [];
-    const fingerprint = value => String(value).replace(/\\s+/g, '').toLowerCase();
+    const fingerprint = value => String(value).replace(/\s+/g, '').toLowerCase();
     if (asked.some(previous => fingerprint(previous) === fingerprint(q))) throw new Error('本場出現重複題目');
     if (source.subject && String(source.subject).trim() !== request.subject) throw new Error('AI 題目科目與指定範圍不符');
     // Rotate options, not their meaning; maintain the unique, authoritative correct index.
@@ -410,7 +410,7 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
       if (!response.ok) throw new Error('quiz api ' + response.status);
       const body = await response.json();
       let raw = body?.text ?? body;
-      if (typeof raw === 'string') raw = JSON.parse(raw.replace(/^\`\`\`(?:json)?\\s*/i, '').replace(/\`\`\`\\s*$/i, '').trim());
+      if (typeof raw === 'string') raw = JSON.parse(raw.replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/i, '').trim());
       return normalizeQuestion(raw, request);
     } catch (error) {
       // A random arithmetic fallback silently changes both competitors' agreed syllabus.
