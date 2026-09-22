@@ -37,6 +37,17 @@ edition=choices('cs-edition',versions,edition,'尚無版本資料');
 const contents=semester[edition];
 if(Array.isArray(contents))units=contents.map(u=>typeof u==='string'?{unit:u,details:[]}:{unit:u.unit||u.name||u.title||'',details:Array.isArray(u.details||u.sub_topics)?u.details||u.sub_topics:[]});
 else units=[...(semester['核心語法']||[]).map(s=>({unit:'核心語法：'+s,details:[s]})),...(semester['各版本情境主題']?.[edition]||[]).map(s=>({unit:'情境主題：'+s,details:[s]}))];
+// 科學共用同一資料檔，依實際年級／學期／科別限縮，不能將生物章節當物理出題。
+if(files[subject]==='生物理化/science.json'){
+const stage=grades.indexOf(grade)-6,first=term==='第一學期';
+let allowed=[];
+if(stage===0&&subject==='生物')allowed=units.map((_,i)=>i);
+if(stage===1&&subject==='物理')allowed=first?[0,2,3,4]:[5];
+if(stage===1&&subject==='化學')allowed=first?[1,5]:[0,1,2,3,4];
+if(stage===2&&subject==='物理')allowed=first?[0,1,2]:[0,1];
+if(stage===2&&subject==='地球科學')allowed=first?[3,4]:[2,3];
+units=units.filter((_,i)=>allowed.includes(i));
+}
 units=units.filter(u=>u.unit);display();if(units.length)status('勾選整章或展開選取考點，再加入清單。');
 }catch(e){if(n!==serial)return;display();status('單元資料讀取失敗，可以先使用自訂主題。');console.error('[Curriculum]',e);}}
 function addList(items){const existing=Array.isArray(window.soloSelectedUnits)?window.soloSelectedUnits:[],keys=new Set(existing.map(u=>JSON.stringify([u.path,u.detail,u.sub_topics])));let added=0;
