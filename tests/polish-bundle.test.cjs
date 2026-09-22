@@ -75,7 +75,9 @@ test('name save finishes before optional snapshot propagation and AI review has 
   assert.match(identity, /const NAME_REVIEW_TIMEOUT_MS = 12000/);
   assert.match(identity, /new AbortController\(\)/);
   assert.match(identity, /signal: controller\.signal/);
-  assert.match(identity, /名稱 AI 審核逾時/);
+  assert.match(identity, /name AI review timed out; allowing locally validated name/);
+  assert.match(identity, /if \(error\?\.name === 'AbortError'\) \{/);
+  assert.match(identity, /return base;/);
   assert.match(identity, /queueSnapshotPropagation\(true\)/);
   assert.doesNotMatch(identity, /await propagateNameSnapshots\(true\)/);
   assert.match(identity, /if \(saveBusy\) return/);
