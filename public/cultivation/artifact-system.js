@@ -33,6 +33,16 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
   let combatWrapped = false;
   let renderQueued = false;
   let eligibilityBusy = false;
+  let eligibilityRetryAfter = 0;
+  let eligibilityFailureKey = '';
+  let expiredBuffBusy = false;
+  let expiredBuffRetryAfter = 0;
+  // Resource exhaustion is usually a project-level limit, not a reason to retry each second.
+  const QUOTA_RETRY_MS = 30 * 60 * 1000;
+  const ORDINARY_RETRY_MS = 60 * 1000;
+  function isQuotaFailure(error) {
+    return error?.code === 'resource-exhausted' || /resource-exhausted/.test(String(error?.message || ''));
+  }
 
   function userData() { return window.getCurrentUserData?.() || null; }
   function authUser() {
@@ -577,17 +587,25 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
   }
 
   async function pruneExpiredBuffs() {
+    if (expiredBuffBusy || Date.now() < expiredBuffRetryAfter) return;
     const s = state();
     const now = Date.now();
     if (!Object.values(s.buffs).some((buff) => Number(buff.expiresAt) <= now)) return;
+    expiredBuffBusy = true;
     try {
       await updateArtifactSystem((next) => {
         Object.keys(next.buffs).forEach((key) => { if (Number(next.buffs[key]?.expiresAt) <= now) delete next.buffs[key]; });
       });
-    } catch (error) { console.warn('[Artifact] expired buff cleanup skipped', error); }
+      expiredBuffRetryAfter = 0;
+    } catch (error) {
+      expiredBuffRetryAfter = Date.now() + (isQuotaFailure(error) ? QUOTA_RETRY_MS : ORDINARY_RETRY_MS);
+      console.warn('[Artifact] expired buff cleanup skipped; retry delayed', error);
+    } finally { expiredBuffBusy = false; }
   }
   async function enforceEquipmentEligibility() {
     if (eligibilityBusy) return;
+    const ownerUid = authUser()?.uid;
+    if (!ownerUid) return;
     const rawEquipped = userData()?.[FIELD]?.equipped || {};
     const invalidSlots = Object.entries(rawEquipped).filter(([slot, id]) => {
       const item = getArtifactById(id);
@@ -596,13 +614,29 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
         canonicalEquipSlot(item) !== slot ||
         quantity(id) <= 0;
     }).map(([slot]) => slot);
-    if (!invalidSlots.length) return;
+    if (!invalidSlots.length) {
+      eligibilityRetryAfter = 0;
+      eligibilityFailureKey = '';
+      return;
+    }
+    const failureKey = ownerUid + ':' + invalidSlots.map((slot) => {
+      const id = rawEquipped[slot];
+      return slot + ':' + id + ':' + quantity(id);
+    }).join('|');
+    // UI updates can fire many times per second. An unchanged invalid equipment record
+    // must not start another Firestore transaction during quota or network failures.
+    if (failureKey === eligibilityFailureKey && Date.now() < eligibilityRetryAfter) return;
     eligibilityBusy = true;
     try {
       await updateArtifactSystem((next) => invalidSlots.forEach((slot) => delete next.equipped[slot]));
+      eligibilityRetryAfter = 0;
+      eligibilityFailureKey = '';
       toast('已清除不存在、未持有或欄位不符的裝備。');
-    } catch (error) { console.warn('[Artifact] equipment eligibility sync failed', error); }
-    finally { eligibilityBusy = false; }
+    } catch (error) {
+      eligibilityFailureKey = failureKey;
+      eligibilityRetryAfter = Date.now() + (isQuotaFailure(error) ? QUOTA_RETRY_MS : ORDINARY_RETRY_MS);
+      console.warn('[Artifact] equipment eligibility sync failed; retry delayed', error);
+    } finally { eligibilityBusy = false; }
   }
 
   window.getArtifactCatalog = () => ARTIFACT_CATALOG;
@@ -658,7 +692,6 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
       installCombatWrapper();
       syncQuestionTools();
       pruneExpiredBuffs();
-      enforceEquipmentEligibility();
       if (!document.getElementById('artifact-forge-body')?.hidden) renderForge();
     }, 1000);
   }
