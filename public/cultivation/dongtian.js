@@ -1,4 +1,5 @@
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import { dongtianCache } from './dongtian-cache.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import {
   getFirestore, collection, doc, getDoc, getDocs, query, where, limit,
@@ -31,12 +32,49 @@ import {
     encounterBusy: false,
     originalStartQuizFlow: null,
     listLoaded: false,
+    ownListPending: null,
+    publicListPending: null,
     moderationBusy: false,
     tutorialDemo: null,
     tutorialDemoCompleted: false
   };
 
   function userData() { return window.getCurrentUserData?.() || null; }
+
+  // Reading a full owner's cave is only necessary once per browser until an explicit
+  // refresh or an edit. Reward transactions and status checks always remain online.
+  async function loadOwnedCave(id) {
+    const owner = uid();
+    if (!owner || !id) throw new Error('洞天資料不完整');
+    const cached = dongtianCache.getFull(owner, id);
+    if (cached) return cached;
+    const snap = await getDoc(doc(db, DATA_COLLECTION, id));
+    if (!snap.exists()) throw new Error('洞天資料不存在');
+    const cave = { id: snap.id, ...snap.data() };
+    if (cave.ownerUid !== owner) throw new Error('只有洞天主人可以開啟此洞天');
+    if (!Array.isArray(cave.questions) || !cave.questions.length) throw new Error('洞天題目尚未準備完成');
+    dongtianCache.setFull(owner, id, cave);
+    return cave;
+  }
+
+  function renderCachedOwnList() {
+    const owner = uid();
+    if (!owner) return false;
+    const cached = dongtianCache.getOwnedList(owner);
+    if (!cached) return false;
+    const list = document.getElementById('dt-list');
+    if (!list) return false;
+    renderOwnDongtians(cached, list);
+    state.listLoaded = true;
+    return true;
+  }
+
+  // Own edits update the local listing without reading it again; an explicit refresh
+  // additionally clears the full-question cache to pull a fresh version on next entry.
+  function invalidateOwnCave(id) {
+    if (uid() && id) dongtianCache.removeFull(uid(), id);
+    dongtianCache.clearPublicList();
+  }
   function uid() { return auth.currentUser?.uid || ''; }
   function escapeHtml(value) {
     return String(value ?? '')
@@ -140,7 +178,7 @@ import {
           <div id="dt-generate-status" class="dt-library-note" style="margin-top:8px"></div>
         </section>
         <section class="dt-library">
-          <h4>我的洞天</h4>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><h4>我的洞天</h4><button type="button" id="dt-refresh" class="dt-repair" style="padding:6px 12px;border-radius:9px"><i class="fa-solid fa-rotate"></i> 重新整理</button></div>
           <p class="dt-library-note">洞天會永久保存。建立者可隨時重玩；其他修士首次完成你的洞天時，你可獲得 +${OWNER_CULTIVATION_REWARD} 修為與 +${OWNER_GOLD_REWARD} 金幣。</p>
           <div id="dt-list" class="dt-list"><div class="dt-empty">洞天名冊讀取中…</div></div>
         </section>
@@ -156,6 +194,15 @@ import {
     };
     card.querySelector('#dt-images').addEventListener('change', handleFiles);
     card.querySelector('#dt-generate').onclick = generateDongtian;
+    card.querySelector('#dt-refresh').onclick = async (event) => {
+      const button = event.currentTarget;
+      button.disabled = true;
+      try {
+        dongtianCache.clearOwnerFull(uid());
+        dongtianCache.clearPublicList();
+        await loadOwnDongtians(true);
+      } finally { button.disabled = false; }
+    };
     card.querySelector('#dt-list').addEventListener('click', async (event) => {
       const tutorialPlay = event.target.closest('[data-dt-tutorial-play]');
       if (tutorialPlay) {
@@ -196,9 +243,7 @@ import {
       const id = button.dataset.dtPlay;
       button.disabled = true;
       try {
-        const snap = await getDoc(doc(db, DATA_COLLECTION, id));
-        if (!snap.exists()) throw new Error('洞天資料不存在');
-        const data = { id: snap.id, ...snap.data() };
+        const data = await loadOwnedCave(id);
         if (data.status !== 'active') throw new Error('此洞天目前已封印，請先完成題目修復。');
         await enterDongtian(data, { source: 'owner', encountered: false });
       } catch (error) {
@@ -472,15 +517,7 @@ import {
     return true;
   }
 
-  async function loadOwnDongtians(force = false) {
-    if (!uid() || (state.listLoaded && !force)) return;
-    const list = document.getElementById('dt-list');
-    if (!list) return;
-    list.innerHTML = '<div class="dt-empty"><i class="fa-solid fa-circle-notch fa-spin"></i> 讀取洞天名冊…</div>';
-    try {
-      const snap = await getDocs(query(collection(db, INDEX_COLLECTION), where('ownerUid', '==', uid())));
-      const items = snap.docs.map((entry) => ({ id: entry.id, ...entry.data() })).sort((a, b) => Number(b.createdAtMs || 0) - Number(a.createdAtMs || 0));
-      state.listLoaded = true;
+  function renderOwnDongtians(items, list) {
       const tutorialMarkup = state.tutorialDemo ? tutorialDongtianCardMarkup(state.tutorialDemo) : '';
       if (!items.length && !tutorialMarkup) {
         list.innerHTML = '<div class="dt-empty">你還沒有開闢洞天。上傳圖片或貼上文字，就能把想練的內容煉成一座知識秘境。</div>';
@@ -500,12 +537,35 @@ import {
           <div class="dt-owner-reward">${suspended ? `AI 已確認第 ${Number(item.flaggedQuestionIndex || 0) + 1} 題有誤；修復通過二次 AI 驗證前，其他修士不會再遇到此洞天。` : `其他不同修士首次完成：洞天主人 +${OWNER_CULTIVATION_REWARD} 修為、+${OWNER_GOLD_REWARD} 金幣 · 玩家首次完整通關依題數獲得靈石（每題 ${FIRST_COMPLETION_SPIRIT_STONE_PER_QUESTION}，最低 ${FIRST_COMPLETION_MIN_SPIRIT_STONES}）`}</div>
         </article>`;
       }).join('');
-    } catch (error) {
-      console.warn('[Dongtian list]', error);
-      list.innerHTML = state.tutorialDemo
-        ? tutorialDongtianCardMarkup(state.tutorialDemo) + '<div class="dt-empty">正式洞天名冊暫時無法讀取，但教學私有範例仍可正常使用。</div>'
-        : '<div class="dt-empty">洞天名冊暫時無法讀取。</div>';
-    }
+  }
+
+  async function loadOwnDongtians(force = false) {
+    const owner = uid();
+    if (!owner) return;
+    const list = document.getElementById('dt-list');
+    if (!list) return;
+    if (!force && renderCachedOwnList()) return;
+    if (state.ownListPending) return state.ownListPending;
+    list.innerHTML = '<div class="dt-empty"><i class="fa-solid fa-circle-notch fa-spin"></i> 讀取洞天名冊…</div>';
+    const pending = (async () => {
+      try {
+        const snap = await getDocs(query(collection(db, INDEX_COLLECTION), where('ownerUid', '==', owner)));
+        const items = snap.docs.map((entry) => ({ id: entry.id, ...entry.data() })).sort((a, b) => Number(b.createdAtMs || 0) - Number(a.createdAtMs || 0));
+        if (uid() !== owner) return;
+        dongtianCache.setOwnedList(owner, items);
+        renderOwnDongtians(items, list);
+        state.listLoaded = true;
+      } catch (error) {
+        console.warn('[Dongtian list]', error);
+        if (uid() !== owner) return;
+        if (renderCachedOwnList()) { toast('洞天名冊更新失敗，仍顯示本機資料。'); return; }
+        list.innerHTML = state.tutorialDemo
+          ? tutorialDongtianCardMarkup(state.tutorialDemo) + '<div class="dt-empty">正式洞天名冊暫時無法讀取，但教學私有範例仍可正常使用。</div>'
+          : '<div class="dt-empty">洞天名冊暫時無法讀取，請按重新整理再試。</div>';
+      }
+    })();
+    state.ownListPending = pending;
+    try { await pending; } finally { if (state.ownListPending === pending) state.ownListPending = null; }
   }
 
   function currentPracticeSubjects() {
