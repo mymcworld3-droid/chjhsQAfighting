@@ -56,14 +56,14 @@
   }
 
   function currentCoreSnapshot() {
-    const core = window.getEquippedGoldenCoreState?.() || null;
-    if (!core || !core.equipped) return null;
+    const core = window.getStoredGoldenCoreState?.() || window.getEquippedGoldenCoreState?.() || null;
+    if (!core) return null;
     return {
       type: core.type || 'taichu',
       name: core.name || '金丹',
       grade: Number(core.grade) || 9,
       effect: core.effect || '尚無特性資料',
-      equipped: true
+      equipped: core.coreEnabled !== false && core.equipped !== false
     };
   }
 
@@ -87,10 +87,10 @@
         <div class="status-core-copy">
           <div class="status-core-topline">
             <span class="status-core-grade">${escapeHtml(core.grade)} 品</span>
-            <span class="status-core-equipped on">調御中</span>
+            <span class="status-core-equipped ${core.equipped ? 'on' : ''}">${core.equipped ? '啟用中' : '已停用'}</span>
           </div>
           <h3>${escapeHtml(core.name)}</h3>
-          <p>${escapeHtml(core.effect)}</p>
+          <p>${core.equipped ? escapeHtml(core.effect) : '金丹效果已暫停；重新啟用後恢復原本丹相與品級。'}</p>
         </div>
       </div>
     `;
@@ -203,7 +203,7 @@
             <div><span>裝備 · 境界與屬性</span><b>${formatStatNumber(power.equipment)}</b></div>
           </div>
           ${power.items?.length ? `<div class="status-power-items">${power.items.map(item => `<span>${escapeHtml(item.name)}（${escapeHtml(item.realm)}） +${formatStatNumber(item.power)}</span>`).join("")}</div>` : ""}
-          <p class="status-power-note">僅計入目前調御金丹及已裝備法寶；金丹僅依品級計分。戰力不直接增加鬥法傷害。</p>
+          <p class="status-power-note">僅計入目前啟用金丹及已裝備法寶；停用金丹不計戰力。戰力不直接增加鬥法傷害。</p>
         </div>
         <div class="status-section status-core-section">
           <div class="status-section-title"><span>目前調御金丹</span><small>ATTUNED CORE</small></div>
