@@ -445,7 +445,7 @@ test('Battle UI animates server attack steps with shield feedback but hides the 
   assert.match(battleSource,/const missed = step\.type === 'miss'/);
   assert.match(battleSource,/mine\.coreShield \? ' · 道心護體'/);
   assert.match(battleSource,/guest\.coreShield/);
-  assert.match(battleSource,/battle-engine-v2\.js\?v=20260921-turnorder3/);
+  assert.match(battleSource,/battle-engine-v2\.js\?v=20260922-first-answer1/);
 });
 
 test('lethal first attack stops before the other player can strike', () => {
@@ -535,4 +535,43 @@ test('equipment mitigation and once-per-fight protection can stop lethal blows',
   assert.equal(outcome.finished, false);
   assert.equal(outcome.steps[1].type, 'miss');
   assert.equal(outcome.hostArtifactState.artifactCheatDeathUsed, true);
+});
+
+test('recorded first answer resolves equal-millisecond timestamps rather than automatically favoring host', () => {
+  const e = loadEngine();
+  const host = player('h', { correct:true, atMs:20260922, atk:65000 });
+  const guest = player('g', { correct:true, atMs:20260922, atk:65000 });
+  const guestFirst = e.settleBattleRound({
+    roomId:'same-ms-guest', round:1, host:{...host}, guest:{...guest}, firstAnswerUid:'g'
+  });
+  assert.deepEqual(Array.from(guestFirst.turnOrder), ['guest','host']);
+  assert.deepEqual(Array.from(guestFirst.attackers), ['guest']);
+  assert.equal(guestFirst.hostHp,0);
+  assert.equal(guestFirst.guestHp,1000);
+  assert.equal(guestFirst.steps.length,1);
+  const hostFirst = e.settleBattleRound({
+    roomId:'same-ms-host', round:1, host:{...host}, guest:{...guest}, firstAnswerUid:'h'
+  });
+  assert.deepEqual(Array.from(hostFirst.attackers), ['host']);
+  assert.equal(hostFirst.guestHp,0);
+  assert.deepEqual(Array.from(e.decideRoundAttackers(host,guest,e.BATTLE_V2.tieWindowMs,'g')),['guest','host']);
+  assert.match(battleSource,/firstAnswerUid: fresh\.firstAnswerUid \|\| null/);
+});
+
+test('real earlier response beats the tie-break; early wrong response cannot deal damage', () => {
+  const e = loadEngine();
+  const host = player('h', {correct:true, atMs:2100});
+  const guest = player('g', {correct:true, atMs:2000});
+  const guestFirst = e.settleBattleRound({
+    roomId:'different-ms',round:1,host,guest,firstAnswerUid:'h'
+  });
+  assert.deepEqual(Array.from(guestFirst.turnOrder), ['guest','host']);
+  const miss = e.settleBattleRound({
+    roomId:'wrong-first',round:1,
+    host:player('h',{correct:false,atMs:1000}),
+    guest:player('g',{correct:true,atMs:1500}),
+    firstAnswerUid:'h'
+  });
+  assert.deepEqual(Array.from(miss.steps.map(x=>x.type)),['miss','attack']);
+  assert.deepEqual(Array.from(miss.attackers),['guest']);
 });
