@@ -72,7 +72,7 @@ npm run migrate:dongtian -- --verify-only
 - `POST /api/game-startup-migration`：第一次登入觸發**一個**有 A Firestore 共用租約的 A→BD 洞天資料複製；其餘玩家僅讀取共用狀態。複製完成後在 A 的 `systemMigrations/dongtian-a-to-bd-v1` 紀錄比對成功，狀態為 `ready`。失敗會回報錯誤並保留 A 的來源文件，絕不以部分結果解鎖。
 - `POST /api/game-startup-player`：僅在全站標記 `ready + verified` 後，用已驗證的 A UID 讀取 A 的 `users/{uid}`，分別在 BD、C 以同 UID 建立 `playerProfiles/{uid}`。已有正確格式的文件會跳過，不重複寫入；其中一個專案暫時失敗可重新執行。這裡只同步名稱／頭像，以及 C 的相框／性別，不同步 email、好友、背包、金幣、靈石、修為、管理員旗標。
 
-網頁用現有全屏啟動畫面等待上述結果，**不能把玩家端 JS 當成有管理員權限的遷移工具**。若 Render 無法回應、憑證失效或首次資料建立失敗，會維持遮罩與重新整理按鈕。服務端 `FIREBASE_AUTO_MIGRATE_ON_START=0` 時回傳 `legacy`，為保留既有 A 遊戲，網頁直接維持舊路徑，不宣稱已遷移。
+網頁用現有全屏啟動畫面等待上述結果，再以 A 的 ID Token 向後端分別換取 BD、C Custom Token，完成兩個次專案的 Firebase Auth 登入，才讓其他修仙腳本啟動。**不能把玩家端 JS 當成有管理員權限的遷移工具**。若 Render 無法回應、憑證失效或首次資料建立失敗，會維持遮罩與重新整理按鈕。服務端 `FIREBASE_AUTO_MIGRATE_ON_START=0` 時回傳 `legacy`，為保留既有 A 遊戲，網頁直接維持舊路徑，不宣稱已遷移。
 
 ### Render 啟用順序
 
