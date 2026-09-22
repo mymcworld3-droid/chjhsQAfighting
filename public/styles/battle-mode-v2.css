@@ -144,6 +144,9 @@
 
 
 /* A complete, outcome-specific fullscreen duel finale; unchanged battle settlement. */
+/* Do not play before the result becomes visible; a new room explicitly resets the reveal. */
+#page-battle .bv2-result:not(.bv2-result-reveal) *,#page-battle .bv2-result:not(.bv2-result-reveal) *::before,#page-battle .bv2-result:not(.bv2-result-reveal) *::after{animation:none!important}
+
 #page-battle .bv2-result:not(.hidden){
   --result-ink:#eac47e;--result-glow:rgba(243,190,93,.4);--result-fog:rgba(93,65,20,.38);
   position:relative;isolation:isolate;box-sizing:border-box;
