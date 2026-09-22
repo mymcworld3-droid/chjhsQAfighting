@@ -69,6 +69,8 @@ test('newbie scope tutorial follows the fullscreen five-step picker without old 
   assert.match(tutorial, /if \(step\.requiresScopeOpen && !scopeStudioOpen\(\)\) return true/);
   assert.match(tutorial, /if \(step\.requiresScopeReturn && scopeStudioOpen\(\)\) return true/);
   assert.match(tutorial, /if \(scopeStudioOpen\(\) && window\.closeCurriculumStudio\?\.\(\) === false\) return/);
+  assert.match(tutorial, /const entry = steps\.findIndex\(item => item\.requiresScopeOpen\)/);
+  assert.match(tutorial, /if \(entry >= 0\) \{ index = entry; render\(\); \}/);
 });
 
 test('clicking anywhere outside highlighted controls advances only informational steps', () => {
