@@ -398,7 +398,7 @@ test('third chapter has two ordered handoffs with story dialogue between and aft
   const lines = [...chapter.matchAll(/c\('(narrator|shen|player|rival)', '([^']*)'/g)].map(match=>match[2]);
   assert.equal(lines.length,28);
   assert.match(lines[13],/上場，我帶你練習一次/);
-  assert.match(lines[14],/六萬五千點真實傷害/);
+  assert.match(lines[14],/演武投影便碎成滿地流光/);
   assert.match(lines[17],/呃……沒事吧/);
   assert.match(lines[19],/顧長風，過來/);
   assert.match(lines[22],/顧長風走上鬥法臺/);
