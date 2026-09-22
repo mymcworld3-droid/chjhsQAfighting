@@ -104,7 +104,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     },
     {
       id: 'ningxin', name: '凝心靜音丹', icon: '◈', tone: 'ivory',
-      effect(grade) { return `連續悟道達 ${Math.max(1, Math.ceil(grade / 3)) + 1} 次，即凝聚金丹道心護體；鬥法中連續答對同樣次數也可形成道心護體；啟動後每回合僅抵銷第一次受到的傷害，連擊與其後傷害仍會命中。`; },
+      effect(grade) { return `連續悟道達 ${Math.max(1, Math.ceil(grade / 3)) + 1} 次，即凝聚金丹道心護體；鬥法中連續答對同樣次數也可形成道心護體；護體每次僅抵銷一次傷害後就消失，須由金丹再次凝聚；連擊的第二段傷害仍會命中。`; },
       ability: '凝神斂念，以連續悟道穩固金丹道心。',
       upkeep: '保持專注即可。',
       warning: '一般連勝本身沒有護體，必須調御此丹相才會觸發。',
@@ -144,7 +144,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     },
     {
       id: 'wugou', name: '無垢清心丹', icon: '◇', tone: 'silver',
-      effect(grade) { return `答錯時有 ${chanceByGrade(grade, 20, 10, 100)}% 機率凝聚金丹道心護體；鬥法答錯時也有相同機率產生道心護體；啟動後每回合僅抵銷第一次受到的傷害，連擊與其後傷害仍會命中。`; },
+      effect(grade) { return `答錯時有 ${chanceByGrade(grade, 20, 10, 100)}% 機率凝聚金丹道心護體；鬥法答錯時也有相同機率產生道心護體；護體每次僅抵銷一次傷害後就消失，須由金丹再次凝聚；連擊的第二段傷害仍會命中。`; },
       ability: '失誤之際清心去垢，反而護住道心。',
       upkeep: '答錯後重新定神即可。',
       warning: '只產生金丹道心，不屬於舊版通用道心系統。',
