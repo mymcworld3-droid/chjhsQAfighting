@@ -26,7 +26,9 @@ test('Dongfu collapsible controller exposes section opening for tutorials and fu
 });
 
 test('newbie tutorial opens the affected Dongfu section before spotlighting settings', () => {
-  assert.match(tutorialSource, /target: '#set-source-mode', settingsSection: 'scope'/);
+  assert.match(tutorialSource, /target: '#dongfu-scope-card \.dongfu-collapse-head', requiresScopeOpen: true/);
+  assert.match(tutorialSource, /target: '#scope-studio #set-source-mode', requiresScopeOpenView: true/);
+  assert.match(tutorialSource, /target: '#scope-studio #ss-close', requiresScopeReturn: true/);
   assert.match(tutorialSource, /target: '#set-difficulty', settingsSection: 'profile'/);
   assert.match(tutorialSource, /window\.openDongfuSettingsSection\(step\.settingsSection/);
   const dongfuIndex = mainSource.indexOf("'./cultivation/dongfu-settings-collapsible.js'");
