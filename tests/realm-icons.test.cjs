@@ -39,6 +39,19 @@ test('every cultivation realm has a unique safe SVG crest and a color definition
   assert.doesNotMatch(window.getRealmIconMarkup('金丹', '" onclick="bad()'), /onclick/);
 });
 
+test('True Immortal uses its celestial seal instead of the old star medal', () => {
+  const window = {};
+  const document = { querySelector: () => null, createElement: () => ({}), head: { appendChild() {} } };
+  vm.runInNewContext(icons, { window, document });
+  const immortal = window.getRealmIconMarkup('真仙');
+  assert.match(immortal, /class="immortal-jewel"/);
+  assert.match(immortal, /class="immortal-heart"/);
+  assert.match(immortal, /M13 17l4-8/);
+  assert.doesNotMatch(immortal, /M24 3l5 9 11-2/);
+  assert.match(css, /data-realm="真仙"\] \.immortal-jewel/);
+  assert.match(css, /data-realm="真仙"\] \.immortal-heart/);
+});
+
 test('realm UI, breakthrough, chat and matchmaking no longer use realm emoji', () => {
   for (const code of [theme, live, breakthrough, legacy]) {
     const realmRows = code.match(/\{ name: '(?:凡人|煉氣|築基|金丹|元嬰|化神|煉虛|合體|大乘|渡劫|登仙|真仙)', sub:[^\n]+/g) || [];
