@@ -4,7 +4,7 @@ import {
   getFirestore, doc, collection, query, where, limit, getDocs, getDoc,
   addDoc, updateDoc, onSnapshot, runTransaction, serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder3';
+import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260922-first-answer1';
 
 // Battle v2 — 修仙配對鬥法。
 // 核心原則：配對、首答倒數、回合結算、離場判定皆寫入 Firestore；任何單一 client 都不能私自決定勝負。
@@ -990,6 +990,7 @@ import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260921-t
         const outcome = settleBattleRound({
           roomId: state.roomId, round,
           host: battlePlayer(fresh.host, round), guest: battlePlayer(fresh.guest, round),
+          firstAnswerUid: fresh.firstAnswerUid || null,
           tieWindowMs: BATTLE_V2.tieWindowMs, maxRounds: fresh.maxRounds || BATTLE_V2.maxRounds,
           resolveEquipmentHit: window.resolveArtifactBattleHit
         });
