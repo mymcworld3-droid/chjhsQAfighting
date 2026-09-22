@@ -4701,9 +4701,11 @@ window.saveProduct = async () => {
     const type = document.getElementById('admin-p-type').value;
     const value = document.getElementById('admin-p-value').value;
     const priceRaw = document.getElementById('admin-p-price').value;
-    const price = parseInt(priceRaw);
+    const price = Number(priceRaw);
 
-    if (!name || !value || isNaN(price)) return alert("Please fill all fields");
+    if (!name.trim() || !value.trim() || !priceRaw.trim() || !Number.isSafeInteger(price) || price < 0) {
+        return alert("請輸入商品名稱、圖片路徑及有效的非負整數價格");
+    }
 
     const productData = { name, type, value, price, updatedAt: serverTimestamp() };
     const btn = document.getElementById('admin-btn-save');
@@ -4724,8 +4726,7 @@ window.saveProduct = async () => {
     } catch (e) { console.error("Save Error:", e); alert("Operation failed"); } 
     finally {
         btn.disabled = false;
-        if(!docId) btn.innerText = t('btn_save_product');
-        else btn.innerText = "Update";
+        btn.innerText = document.getElementById('admin-edit-id').value ? '儲存變更' : '建立商品';
     }
 };
 
