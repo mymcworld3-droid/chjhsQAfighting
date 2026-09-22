@@ -14,10 +14,10 @@
     '大乘': '<path d="M5 38h38M9 32h30M13 26h22M17 20h14M21 14h6M24 4v10M15 7l4 5m14-5-4 5"/><path d="M7 32l6-6 4-6 4-6M41 32l-6-6-4-6-4-6"/>',
     '渡劫': '<path d="M9 19c0-6 5-10 10-10 3-5 13-6 17 0 6 0 9 5 9 10 0 5-4 8-9 8h-5M11 27H7"/><path d="M26 18l-9 13h8l-4 13 14-18h-9l5-8z"/>',
     '登仙': '<path d="M7 41V15l17-9 17 9v26M13 41V19l11-6 11 6v22M19 41V26h10v15M4 41h40"/><path d="M24 2v5M7 8l5 5M41 8l-5 5M24 18v4"/>',
-    '真仙': '<path d="M24 3l5 9 11-2-3 11 8 7-11 5-1 11-9-6-9 6-1-11-11-5 8-7-3-11 11 2 5-9z"/><path d="M16 30l2-11 6 5 6-5 2 11H16z"/><path d="M18 34h12M24 12v5"/><circle cx="24" cy="19" r="1.5"/>'
+    '真仙': '<path d="M24 3v5M19 6l5-3 5 3"/><path d="M13 17l4-8 7 5 7-5 4 8"/><circle cx="24" cy="26" r="11"/><path d="M24 18l7 8-7 8-7-8 7-8z" class="immortal-jewel"/><circle cx="24" cy="26" r="2" class="immortal-heart"/><path d="M12 28c-4-3-8-1-8 3 0 3 3 5 7 4m25-7c4-3 8-1 8 3 0 3-3 5-7 4"/><path d="M18 41h12M21 44h6"/>'
   });
 
-  const CSS_HREF = 'realm-icons.css?v=20260922-realm-crest1';
+  const CSS_HREF = 'realm-icons.css?v=20260922-immortal-seal2';
 
   // name 僅經白名單索引；不得拼接使用者資料到 SVG 或 HTML。
   function getRealmIconMarkup(name, className = '') {
