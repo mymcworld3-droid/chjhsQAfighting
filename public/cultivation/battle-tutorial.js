@@ -454,7 +454,7 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder3';
       opponentMaxHp:99999,
       badge:'築基鬥法教學 · 第一戰',
       title:'先和師姐切磋',
-      body:`<div class="bt-rule"><strong>教學戰不計戰績：</strong>不建立正式房間、不自動消耗道具、不給獎勵，也不會改動你的永久生命值。若主動使用答題法寶則依正式規則消耗。玩家依目前裝備、金丹與正式戰鬥數值建立投影；沈清霜 65,000 真實傷害為既定劇情特例。</div>
+      body:`<div class="bt-rule"><strong>沈清霜：</strong>「先接我一劍。放心，這是演武投影，不會傷到你的真身。」<br><small>切磋不計戰績；主動使用的答題法寶仍會正常消耗。</small></div>
         <div class="bt-rule">${combatSummary()}</div>
         <div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="shen-start">進入數學試煉</button></div>`
     }).querySelector('[data-bt-action="shen-start"]')?.addEventListener('click', beginShenQuestion);
@@ -469,7 +469,7 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder3';
       return `<button type="button" class="bt-option${outcome}" data-bt-shen-choice="${index}" ${answered ? 'disabled' : ''}>${String.fromCharCode(65 + index)}. ${esc(text)}</button>`;
     }).join('');
     const explain = answered
-      ? `<div class="bt-explain"><b>${choice === null ? '時間到：玩家未作答。' : choice === SHEN_QUESTION.ans ? '你答對了，但師姐已取得先手。' : '你答錯了，師姐已取得先手。'}</b><br>正解：${esc(SHEN_QUESTION.opts[SHEN_QUESTION.ans])}。 ${esc(SHEN_QUESTION.exp)}<br>本場為 65,000 真實傷害的劇情特例；正式配對仍依個別攻防與血量判定。</div>
+      ? `<div class="bt-explain"><b>${choice === null ? '時間到：玩家未作答。' : choice === SHEN_QUESTION.ans ? '你答對了，但師姐已取得先手。' : '你答錯了，師姐已取得先手。'}</b><br>正解：${esc(SHEN_QUESTION.opts[SHEN_QUESTION.ans])}。 ${esc(SHEN_QUESTION.exp)}</div>
          <div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="shen-return-arena">看完解析 · 返回戰場</button></div>`
       : '<div class="bt-explain">沈清霜 · 立即答對。你剩餘 25 秒；作答後先閱讀解析，再返回戰場看先手劍意。</div>';
     const el = shell({
@@ -528,7 +528,7 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder3';
       opponentImage:'assets/story/characters/shen-qingshuang.png',
       opponentHp:99999, opponentMaxHp:99999,
       badge:'築基鬥法教學 · 演武場', title:'師姐先手 · 劍意降臨', showLater:false,
-      body:`<div class="bt-combat-cue">沈清霜先手攻擊<strong>真實傷害 65,000</strong></div><div class="bt-rule">${combatSummary()}</div>`
+      body:`<div class="bt-combat-cue">沈清霜的劍光已至！</div>`
     });
     const strikeAtMs = Date.now() + 280;
     const impactAtMs = strikeAtMs + TUTORIAL_IMPACT_MS;
@@ -547,7 +547,7 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder3';
       defender?.classList.add('hit');
       const pop = document.createElement('div');
       pop.className = 'bt-damage';
-      pop.innerHTML = '-65,000<small>真實傷害 · TRUE DAMAGE</small>';
+      pop.textContent = '破！';
       el.querySelector('.bt-arena')?.appendChild(pop);
     }
     refreshTutorialFighter(el, 'me', 0, playerCombat?.maxHp || 1000);
@@ -569,10 +569,10 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder3';
       opponentMaxHp:99999,
       playerImage:playerPortrait('confused'),
       badge:'築基鬥法教學 · 第一戰結束',
-      title:'沈清霜 · 65,000 真實傷害',
+      title:'一劍定勝負',
       showLater:false,
       result:true,
-      body:`<div class="bt-result"><div class="bt-result-mark">敗</div><h3>演武投影已潰散</h3><p>${shenChoice === null ? '25 秒已結束，未能及時作答。' : shenChoice === SHEN_QUESTION.ans ? '你答對了，但師姐先手命中。' : '你答錯了，師姐先手命中。'}投影承受 65,000 真實傷害；教學不計戰績或場外生命。</p></div>
+      body:`<div class="bt-result"><div class="bt-result-mark">敗</div><h3>演武投影已潰散</h3><p>${shenChoice === null ? '25 秒已結束，未能及時作答。' : shenChoice === SHEN_QUESTION.ans ? '你答對了，但師姐先手命中。' : '你答錯了，師姐先手命中。'}演武投影應聲潰散。這一戰不計入戰績。</p></div>
         <div class="bt-explain"><b>正確答案：${esc(SHEN_QUESTION.opts[SHEN_QUESTION.ans])}</b><br>${esc(SHEN_QUESTION.exp)}</div>
         <div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="return-story">返回主線劇情</button></div>`
     });
@@ -603,7 +603,7 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder3';
       opponentMaxHp:guOpponent?.maxHp || 2000,
       badge:'築基鬥法教學 · 第二戰',
       title:'顧長風 · 正式規則演練',
-      body:`<div class="bt-rule"><strong>顧長風 · 四回合規則訓練：</strong>師姐說你現在太弱，要我先陪你練基本功。這一場同樣不計戰績。答對即可出手；第一位作答後另一方進入 25 秒限時；依作答時間決定先後手，每次攻擊後立即檢查血量。</div>
+      body:`<div class="bt-rule"><strong>顧長風：</strong>「師姐的劍太快了吧？來，我陪你拆幾招。答對便能出手，誰先答對誰先攻；留意倒數，別讓我等太久。」<br><small>演武四回合，不計戰績。</small></div>
         <div class="bt-rule">${combatSummary()}</div>
         <div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="gu-start">開始四回合教學戰</button></div>`
     });
@@ -850,7 +850,7 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder3';
       badge:'築基鬥法教學 · 第二戰結束',
       title:'顧長風教學戰完成',
       showLater:false, result:true,
-      body:`<div class="bt-result"><div class="bt-result-mark">${resultMark}</div><h3>${esc(resultTitle)}</h3><p>答對 ${guCorrect} / ${Math.min(QUESTIONS.length, guRound + 1)}。本機演武使用正式數值、金丹與法寶投影，不會加入正式勝敗紀錄或改動場外生命。</p></div>
+      body:`<div class="bt-result"><div class="bt-result-mark">${resultMark}</div><h3>${esc(resultTitle)}</h3><p>答對 ${guCorrect} / ${Math.min(QUESTIONS.length, guRound + 1)}。這場切磋到此為止，不計入正式戰績。</p></div>
          <div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="finish">完成鬥法教學</button></div>`
     });
     el.querySelector('[data-bt-action="finish"]')?.addEventListener('click', finish);
