@@ -259,7 +259,9 @@ import { buildMeditationMistakePool, chooseMeditationMistakes } from './daily-me
     if (busy) return;
     busy = true;
     try {
-      await loadRemote();
+      // 點開閉關時已讀取今日記錄；開始答題不再重讀同一份 users 文件。
+      // 真正發獎仍由結算交易重新檢查每日領取狀態。
+      if (remoteUid !== uid() || !remoteRecord) await loadRemote();
       if (record().lastDate === today()) { renderIntro(); return; }
       const id = uid();
       const date = today();
