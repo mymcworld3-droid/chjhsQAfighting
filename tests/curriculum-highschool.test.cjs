@@ -19,7 +19,7 @@ test('high-school 108 study maps cover 11 subjects and two semesters across all 
     const availableGrades = /^數學(?:A|B)$/.test(subject) ? [G[1]]
       : /^數學[甲乙]$/.test(subject) ? [G[2]]
       : subject === '數學' ? [G[0]] : G;
-    assert.deepEqual(Object.keys(all[subject]).sort(), availableGrades.sort(), subject + ': grade split');
+    assert.deepEqual(Object.keys(all[subject]).sort(), [...availableGrades].sort(), subject + ': grade split');
     for (const grade of availableGrades) for (const term of T) {
       const map = all[subject][grade][term];
       assert.ok(map, subject + '/' + grade + '/' + term);
