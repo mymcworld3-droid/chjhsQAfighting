@@ -150,7 +150,10 @@ test('round lifecycle is one-time, replay safe and question generation can fail 
   assert.match(battleSource, /nextRoundAtMs/);
   assert.match(battleSource, /takeoverQuestionLease/);
   assert.match(battleSource, /PREPARE_LEASE_MS = 7000/);
-  assert.match(battleSource, /fallbackQuestion\(\)/);
+  assert.match(battleSource, /knowledgeScope: resolveBattleKnowledge/);
+  assert.match(battleSource, /status: 'preparing'/);
+  assert.match(battleSource, /retaining scope/);
+  assert.doesNotMatch(battleSource, /return fallbackQuestion\(/);
   assert.match(battleSource, /AI 出題暫時失敗/);
   assert.match(battleSource, /解析：/);
 });
