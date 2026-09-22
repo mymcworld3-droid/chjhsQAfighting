@@ -64,6 +64,7 @@
     baseline = snapshot();
     if (block.parentNode !== $('ss-picker-body')) $('ss-picker-body').append(block);
     if (saveButton.parentNode !== $('ss-foot-actions')) $('ss-foot-actions').append(saveButton);
+    saveButton.style.display = '';
     studio.hidden = false;
     opened = true;
     bodyOverflow = document.body.style.overflow;
@@ -91,6 +92,7 @@
       scopeBody.insertBefore(block, $('ss-launch-preview'));
       scopeBody.append(saveButton);
     }
+    saveButton.style.display = 'none';
     saveButton.textContent = '儲存出題範圍';
     saveButton.disabled = false;
     studio.hidden = true;
