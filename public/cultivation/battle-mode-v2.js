@@ -1045,7 +1045,8 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
           host: battlePlayer(fresh.host, round), guest: battlePlayer(fresh.guest, round),
           firstAnswerUid: fresh.firstAnswerUid || null,
           tieWindowMs: BATTLE_V2.tieWindowMs, maxRounds: fresh.maxRounds || BATTLE_V2.maxRounds,
-          resolveEquipmentHit: window.resolveArtifactBattleHit
+          resolveEquipmentHit: window.resolveArtifactBattleHit,
+          resolveGuardedFollowup: window.resolveArtifactGuardedFollowup
         });
         const names = { host: fresh.host?.name || '我方', guest: fresh.guest?.name || '對手' };
         const roundLogs = outcome.logs.map((entry) => ({ ...entry, actorName: names[entry.actorRole] || '修士', round, id: randomId(`log-${round}`) }));
