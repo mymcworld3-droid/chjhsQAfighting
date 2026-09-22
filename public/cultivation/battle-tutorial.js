@@ -312,6 +312,29 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder3';
       #${LAYER_ID} .bt-fighter.hit{animation-duration:750ms!important}
       #${LAYER_ID} .bt-slash.go{animation-duration:1450ms!important}
       #${LAYER_ID} .bt-damage{animation-duration:800ms!important}
+      /* Shared cinematic arena for Shen and Gu, preserving fullscreen questions. */
+      #page-battle .bv2-arena.bt-tutorial-active #${LAYER_ID} .bt-arena{box-sizing:border-box;display:block!important;position:relative;isolation:isolate;width:100%;height:clamp(210px,43dvh,470px)!important;min-height:0!important;padding:0!important;overflow:hidden;border:1px solid rgba(220,184,114,.35);border-radius:9px 9px 20px 20px;background:linear-gradient(180deg,rgba(4,10,10,.22),rgba(3,6,7,.23) 58%,rgba(0,0,0,.68)),url('assets/immortal-mountains.svg') center 46%/cover no-repeat,#102521;box-shadow:inset 0 0 65px rgba(0,0,0,.49),0 9px 25px rgba(0,0,0,.25)}
+      #${LAYER_ID} .bt-arena::before{content:'';position:absolute;z-index:1;inset:0;pointer-events:none;background:radial-gradient(ellipse at 28% 55%,rgba(217,170,98,.14),transparent 30%),radial-gradient(ellipse at 72% 55%,rgba(171,82,95,.17),transparent 30%),linear-gradient(90deg,rgba(5,10,9,.3),transparent 27%,transparent 73%,rgba(4,9,10,.31))}
+      #${LAYER_ID} .bt-arena::after{content:'';position:absolute;z-index:2;left:10%;right:10%;bottom:-9%;height:22%;border-radius:50%;transform:perspective(180px) rotateX(59deg);pointer-events:none;border:2px solid rgba(219,178,102,.29);box-shadow:0 0 25px rgba(223,181,113,.13),inset 0 0 24px rgba(213,170,95,.1)}
+      #page-battle .bv2-arena.bt-tutorial-active #${LAYER_ID} .bt-fighter{position:absolute!important;z-index:4;bottom:-2%;width:46%;height:102%!important;min-width:0;min-height:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;overflow:visible;transform-origin:50% 94%;pointer-events:none;filter:drop-shadow(0 11px 12px rgba(0,0,0,.55))}
+      #${LAYER_ID} .bt-fighter.me{left:3%}#${LAYER_ID} .bt-fighter.enemy{right:3%}
+      #${LAYER_ID} .bt-fighter img{position:absolute;inset:0!important;width:100%!important;height:100%!important;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 13px 11px rgba(0,0,0,.56))}
+      #${LAYER_ID} .bt-fighter.enemy img{transform:scaleX(-1)}
+      #${LAYER_ID} .bt-fighter-head{position:absolute;z-index:6;top:10px;left:7px;right:7px;align-items:center;padding:5px 9px!important;border:1px solid rgba(223,181,98,.31);border-radius:7px;background:rgba(8,13,12,.8);box-shadow:0 4px 14px rgba(0,0,0,.3)}
+      #${LAYER_ID} .bt-fighter.enemy .bt-fighter-head{border-color:rgba(215,110,95,.36)}#${LAYER_ID} .bt-fighter.me .bt-fighter-head{top:auto;bottom:28px}
+      #${LAYER_ID} .bt-fighter-head strong{font-size:clamp(10px,1.25vw,16px)!important}#${LAYER_ID} .bt-fighter-head b{font-size:clamp(10px,1.35vw,17px)!important}
+      #${LAYER_ID} .bt-hp{z-index:7;left:9px;right:9px;bottom:14px;height:8px;border-radius:7px;background:rgba(2,4,4,.82)}#${LAYER_ID} .bt-fighter.enemy .bt-hp{bottom:auto;top:51px}
+      #${LAYER_ID} .bt-vs{position:absolute;z-index:2;left:50%;top:43%;width:auto;height:auto;transform:translate(-50%,-50%);border:0;background:transparent;box-shadow:none;font:900 clamp(49px,8vw,100px) serif;color:rgba(233,195,110,.13);pointer-events:none}
+      #${LAYER_ID} .bt-slash{z-index:7}#${LAYER_ID} .bt-damage{z-index:9}
+      #${LAYER_ID} .bt-fighter.me.strike{animation:btStageAdvanceMe 1450ms ease-out both!important}#${LAYER_ID} .bt-fighter.enemy.strike{animation:btStageAdvanceEnemy 1450ms ease-out both!important}
+      #${LAYER_ID} .bt-fighter.me.hit{animation:btStageRecoilMe 750ms ease-out both!important}#${LAYER_ID} .bt-fighter.enemy.hit{animation:btStageRecoilEnemy 750ms ease-out both!important}
+      @keyframes btStageAdvanceMe{0%,100%{transform:translateX(0) scale(1)}18%{transform:translateX(-9px) scale(.98)}45%,66%{transform:translateX(clamp(30px,8vw,108px)) scale(1.07)}}
+      @keyframes btStageAdvanceEnemy{0%,100%{transform:translateX(0) scale(1)}18%{transform:translateX(9px) scale(.98)}45%,66%{transform:translateX(clamp(-108px,-8vw,-30px)) scale(1.07)}}
+      @keyframes btStageRecoilMe{0%,100%{transform:translateX(0);filter:brightness(1)}24%{transform:translateX(-16px);filter:brightness(1.9)}50%{transform:translateX(8px);filter:brightness(.9)}}
+      @keyframes btStageRecoilEnemy{0%,100%{transform:translateX(0);filter:brightness(1)}24%{transform:translateX(16px);filter:brightness(1.9)}50%{transform:translateX(-8px);filter:brightness(.9)}}
+      @media(max-width:620px){#page-battle .bv2-arena.bt-tutorial-active #${LAYER_ID} .bt-arena{height:clamp(175px,35dvh,340px)!important}#${LAYER_ID} .bt-fighter{width:52%!important}#${LAYER_ID} .bt-fighter.me{left:-4%}#${LAYER_ID} .bt-fighter.enemy{right:-4%}#${LAYER_ID} .bt-fighter-head{left:5px;right:5px;padding:3px 5px!important}#${LAYER_ID} .bt-fighter.enemy .bt-hp{top:44px}#${LAYER_ID} .bt-fighter.me .bt-fighter-head{bottom:25px}#${LAYER_ID} .bt-hp{bottom:12px;height:7px}}
+      @media(max-height:540px){#page-battle .bv2-arena.bt-tutorial-active #${LAYER_ID} .bt-arena{height:clamp(115px,36dvh,210px)!important}#${LAYER_ID} .bt-fighter-head span{display:none}#${LAYER_ID} .bt-fighter.enemy .bt-hp{top:31px}#${LAYER_ID} .bt-fighter.me .bt-fighter-head{bottom:23px}}
+      @media(prefers-reduced-motion:reduce){#${LAYER_ID} .bt-fighter.me.strike,#${LAYER_ID} .bt-fighter.enemy.strike,#${LAYER_ID} .bt-fighter.me.hit,#${LAYER_ID} .bt-fighter.enemy.hit{animation:none!important}}
       @media(prefers-reduced-motion:reduce){#${LAYER_ID} *{animation:none!important;transition:none!important}}
     `;
     document.head.appendChild(style);
@@ -433,7 +456,7 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder3';
       opponent: name, opponentImage: image, opponentHp: hp, opponentMaxHp: maxHp,
       badge: '築基鬥法教學 · 演武場', title: '鬥法準備',
       showLater: false,
-      body: `<div class="bt-countdown"><b>${left}</b><p>凝神備戰，即將進入全畫面題目</p></div><div class="bt-rule">${combatSummary()}</div>`
+      body: `<div class="bt-countdown"><b>${left}</b><p>凝神備戰，即將進入全畫面題目</p></div>`
     });
     render();
     if (roundCountdown !== null) clearInterval(roundCountdown);
@@ -455,7 +478,7 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder3';
       badge:'築基鬥法教學 · 第一戰',
       title:'先和師姐切磋',
       body:`<div class="bt-rule"><strong>沈清霜：</strong>「先接我一劍。放心，這是演武投影，不會傷到你的真身。」<br><small>切磋不計戰績；主動使用的答題法寶仍會正常消耗。</small></div>
-        <div class="bt-rule">${combatSummary()}</div>
+        
         <div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="shen-start">進入數學試煉</button></div>`
     }).querySelector('[data-bt-action="shen-start"]')?.addEventListener('click', beginShenQuestion);
   }
@@ -548,6 +571,7 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder3';
       const pop = document.createElement('div');
       pop.className = 'bt-damage';
       pop.textContent = '破！';
+      pop.style.left = '28%';
       el.querySelector('.bt-arena')?.appendChild(pop);
     }
     refreshTutorialFighter(el, 'me', 0, playerCombat?.maxHp || 1000);
@@ -604,7 +628,7 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder3';
       badge:'築基鬥法教學 · 第二戰',
       title:'顧長風 · 正式規則演練',
       body:`<div class="bt-rule"><strong>顧長風：</strong>「師姐的劍太快了吧？來，我陪你拆幾招。答對便能出手，誰先答對誰先攻；留意倒數，別讓我等太久。」<br><small>演武四回合，不計戰績。</small></div>
-        <div class="bt-rule">${combatSummary()}</div>
+        
         <div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="gu-start">開始四回合教學戰</button></div>`
     });
     el.querySelector('[data-bt-action="gu-start"]')?.addEventListener('click', beginGuRound);
@@ -749,7 +773,7 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260921-turnorder3';
       badge:`築基鬥法教學 · 第 ${guRound+1} 回合`,
       title:'正式鬥法 · 回到演武場', showLater:false,
       body:`<div id="bt-combat-cue" class="bt-combat-cue">回合結算中<strong>⚔</strong></div>
-        <div class="bt-rule">${combatSummary()}</div>`
+        `
     });
     const steps = Array.isArray(outcome.steps) ? outcome.steps : [];
     const startAtMs = Date.now();
