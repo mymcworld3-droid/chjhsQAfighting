@@ -769,9 +769,9 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     };
   };
 
-  // 真正調御中的本命金丹：狀態頁、修為效果與鬥法只能讀這一份。
-  window.getEquippedGoldenCoreState = function () {
-    if (!isUnlocked() || !state.equippedCore || state.coreEnabled === false) return null;
+  // 狀態頁可看到暫停中的原金丹；生效中的修為與鬥法只使用下方嚴格 getter。
+  window.getStoredGoldenCoreState = function () {
+    if (!isUnlocked() || !state.equippedCore) return null;
     const core = state.equippedCore;
     const type = coreType(core.type);
     return {
@@ -779,9 +779,15 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       name: type.name,
       grade: core.grade,
       effect: type.effect(core.grade),
-      equipped: true,
+      equipped: state.coreEnabled !== false,
+      coreEnabled: state.coreEnabled !== false,
       core: { ...core }
     };
+  };
+
+  window.getEquippedGoldenCoreState = function () {
+    const snapshot = window.getStoredGoldenCoreState();
+    return snapshot?.coreEnabled ? snapshot : null;
   };
 
   function restoreRemoteTraining() {
