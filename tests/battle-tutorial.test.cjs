@@ -47,7 +47,7 @@ test('battle tutorial is a local simulation and never creates a formal matchmaki
   assert.doesNotMatch(tutorial, /runTransaction/);
   assert.doesNotMatch(tutorial, /recordBattleResult/);
   assert.match(tutorial, /切磋不計戰績；主動使用的答題法寶仍會正常消耗/);
-  assert.match(tutorial, /不會加入正式勝敗紀錄/);
+  assert.match(tutorial, /這場切磋到此為止，不計入正式戰績/);
 });
 
 test('battle tutorial only unlocks after the Foundation battle story and gates later story chapters until complete', () => {
