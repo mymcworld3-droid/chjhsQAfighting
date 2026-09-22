@@ -3,7 +3,8 @@
 (function () {
   'use strict';
 
-  const CSS_HREF = 'cultivation-status-panel.css?v=20260922-core-layout2';
+  const CSS_HREF = 'cultivation-status-panel.css?v=20260922-start-status1';
+  const FOUNDATION_SCORE = 10;
   let statusActive = false;
   let rendering = false;
   let coreTogglePending = false;
@@ -73,7 +74,7 @@
       return `
         <div class="status-core-empty">
           <i class="fa-solid fa-circle-notch"></i>
-          <span>目前沒有調御中的金丹丹相</span>
+          <span>${(Number(window.getCurrentUserData?.()?.stats?.totalScore) || 0) < 28 ? '尚未凝丹 · 金丹境解鎖' : '目前沒有調御中的金丹丹相'}</span>
         </div>
       `;
     }
@@ -292,6 +293,44 @@
     button?.setAttribute('aria-selected', 'false');
   }
 
+  // Before Foundation, create only a Status shell; do not unlock Bag/Refinery/Equipment.
+  // At score 10 the existing Foundation page hydrates this same DOM, at 28 Golden Core takes over.
+  function ensureInitialStatusShell() {
+    const data = window.getCurrentUserData?.();
+    if (!data?.stats || Math.max(0, Number(data.stats.totalScore) || 0) >= FOUNDATION_SCORE) return false;
+
+    if (!document.getElementById('nav-training')) {
+      const nav = document.getElementById('nav-grid');
+      const homeButton = nav?.querySelector('[data-target="page-home"]');
+      if (homeButton) {
+        const button = document.createElement('button');
+        button.id = 'nav-training';
+        button.type = 'button';
+        button.dataset.target = 'page-training';
+        button.className = 'nav-btn training-nav-btn group flex-1 flex flex-col items-center justify-center h-full transition-all';
+        button.innerHTML = '<div class="relative p-1 training-nav-orb"><i class="fa-solid fa-fire-flame-curved text-lg"></i></div><span class="text-[10px] mt-1">修煉</span>';
+        button.addEventListener('click', () => window.switchToPage?.('page-training'));
+        homeButton.insertAdjacentElement('afterend', button);
+      }
+    }
+
+    if (!document.getElementById('page-training')) {
+      const home = document.getElementById('page-home');
+      if (!home) return false;
+      const page = document.createElement('div');
+      page.id = 'page-training';
+      page.className = 'page-section hidden px-4 training-page training-page-v3 initial-status-page';
+      page.innerHTML = `
+        <div class="training-page-heading-v3"></div>
+        <div class="training-subtabs-v3" role="tablist"></div>
+        <div id="training-tab-content"></div>
+      `;
+      home.insertAdjacentElement('afterend', page);
+    }
+    document.body.classList.add('cultivation-training-unlocked');
+    return true;
+  }
+
   function ensureStatusTab() {
     const tabs = document.querySelector('#page-training .training-subtabs-v3');
     if (!tabs || document.getElementById('training-status-tab')) return;
@@ -318,8 +357,12 @@
   }
 
   function sync() {
+    const initialShell = ensureInitialStatusShell();
     ensureStatusTab();
     bindNativeTabExit();
+    const button = document.getElementById('training-status-tab');
+    if (statusActive && !button?.classList.contains('active')) statusActive = false;
+    if (initialShell && button && !statusActive) activateStatus();
     if (statusActive) renderStatus();
   }
 
@@ -328,6 +371,8 @@
     sync();
     window.addEventListener('combat-stats-ready', renderStatus);
     window.addEventListener('golden-core-equipped-changed', renderStatus);
+    ['xiuxian:user-ready', 'xiuxian:stats-updated', 'training-access-changed', 'foundation-training-stage-changed', 'golden-core-access-changed']
+      .forEach(name => window.addEventListener(name, sync));
 
     new MutationObserver(() => {
       sync();
