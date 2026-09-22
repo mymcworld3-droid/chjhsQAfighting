@@ -10,7 +10,7 @@ const rules = read('public/cultivation/cultivation-rules.js');
 const status = read('public/cultivation/cultivation-status-panel.js');
 const profile = read('public/cultivation/player-profile.js');
 const battle = read('public/cultivation/golden-core-battle-effects.js');
-const css = read('public/cultivation-training-v3.css');
+const css = read('public/cultivation-status-panel.css');
 
 function runtime() {
   const store = new Map();
@@ -66,7 +66,10 @@ test('core toggle saves flag without replacing core, and effects stop and resume
 });
 
 test('runtime and downstream snapshots do not expose a disabled core as active', () => {
-  assert.match(training, /id="toggle-golden-core"/);
+  assert.doesNotMatch(training, /id="toggle-golden-core"/);
+  assert.match(status, /data-status-core-toggle/);
+  assert.match(status, /setGoldenCoreEnabled\(!snapshot\.core\.equipped\)/);
+  assert.match(status, /coreTogglePending/);
   assert.match(training, /window\.getStoredGoldenCoreState = function/);
   assert.match(training, /window\.getEquippedGoldenCoreState = function/);
   assert.match(training, /snapshot\?\.coreEnabled \? snapshot : null/);
@@ -75,7 +78,8 @@ test('runtime and downstream snapshots do not expose a disabled core as active',
   assert.match(status, /已停用/);
   assert.match(battle, /if \(!core\?\.equipped\) return null/);
   assert.match(profile, /if \(!enabled\) return null/);
-  assert.match(css, /\.core-activation-btn:disabled/);
+  assert.match(css, /\.status-core-toggle:disabled/);
+  assert.match(css, /grid-template-columns: minmax\(0, 1fr\) auto/);
 });
 
 test('dormant core shield is suspended without being consumed by a wrong answer', () => {
