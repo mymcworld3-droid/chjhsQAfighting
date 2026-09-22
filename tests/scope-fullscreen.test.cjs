@@ -48,6 +48,23 @@ test('course studio starts immediately at the course navigation with no oversize
   assert.match(studio, /id="ss-cart-body"/);
 });
 
+test('selection summary stays below the scrollable study cart while save feedback remains accessible', () => {
+  const cartStart = studio.indexOf('<aside class="ss-cart"');
+  const cartEnd = studio.indexOf('</aside>', cartStart);
+  const summary = studio.indexOf('<div class="ss-foot-summary"', cartStart);
+  const cartBodyEnd = studio.indexOf('</div>', studio.indexOf('id="ss-cart-body"', cartStart));
+  const footer = studio.indexOf('<footer class="ss-foot">');
+  assert.ok(cartStart > 0 && cartStart < cartBodyEnd && cartBodyEnd < summary && summary < cartEnd && cartEnd < footer);
+  assert.ok(studio.indexOf('id="ss-footer-main"') > summary);
+  assert.ok(studio.indexOf('id="ss-footer-sub"') > summary);
+  assert.ok(studio.indexOf('id="ss-feedback"') > footer, 'save errors remain visible on the course tab');
+  assert.ok(studio.indexOf('id="ss-foot-actions"') > footer);
+  assert.match(css, /\.ss-cart-body\{flex:1;min-height:0;overflow:auto/);
+  assert.match(css, /\.ss-foot-summary\{flex:0 0 auto;/);
+  assert.match(css, /#ss-feedback:empty\{display:none\}/);
+  assert.match(studio, /if \(foot\) foot\.textContent = changed\(\)/);
+});
+
 test('Dongfu scope tile opens the dialog immediately, never exposing its old dropdown', () => {
   assert.match(dongfu, /if \(key === 'scope'\) \{/);
   assert.match(dongfu, /button\.addEventListener\('click', \(\) => window\.openCurriculumStudio\?\.\(\)\)/);
