@@ -87,8 +87,10 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   window.ensureCombatStats = ensureDefaults;
 
   function boot() {
-    ensureDefaults();
-    setInterval(ensureDefaults, 1200);
+    // 登入或玩家資料就緒後補一次即可；不要每 1.2 秒檢查。
+    // 鬥法與狀態頁仍可透過 window.ensureCombatStats 主動補全。
+    void ensureDefaults();
+    window.addEventListener('xiuxian:user-data-ready', () => { void ensureDefaults(); });
   }
 
   if (document.readyState === 'loading') {
