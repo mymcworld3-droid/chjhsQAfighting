@@ -54,7 +54,7 @@ test('recipe marketplace sells crafting knowledge while preserving the first dis
 
 test('even without a recipe, players can craft; owning the recipe only reveals exact ingredients', () => {
   const start = jobs.slice(jobs.indexOf('async function startJob('),jobs.indexOf('function apiMaterials()'));
-  assert.match(start, /const plan = buildPlan\(tokens, knownArtifactId\)/);
+  assert.match(start, /const plan = buildPlan\(tokens, knownArtifactId, adminOptions\?\.forgeMethod\)/);
   assert.match(start, /const consumed = consumeRecipe\(raw, plan\.recipe\)/);
   assert.match(start, /tx\.update\(ref,/);
   assert.doesNotMatch(start, /raw\.recipeLicenses|尚未取得此配方使用權|尚未取得這張配方的使用權/);

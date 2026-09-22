@@ -23,8 +23,8 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
   }
   function recipeSignatureFor(item, recipe) {
     const key = countsKey(recipeCounts(recipe));
-    return item?.generationSignature || (key && recipeMethod(item) !== '自由發揮'
-      ? key + '|method:' + recipeMethod(item) : key);
+    return key && recipeMethod(item) !== '自由發揮'
+      ? key + '|method:' + recipeMethod(item) : key;
   }
   let adminForgePrompt = '';
 

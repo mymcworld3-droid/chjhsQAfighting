@@ -95,7 +95,7 @@ test('AI refinery repairs stale orphan recipes before matching or appending gene
   assert.match(jobs, /repairArtifactRecipes\(latestRecipes/);
   assert.match(jobs, /artifactIds: latestItems\.map/);
   assert.match(jobs, /const cleanLatestRecipes = recipeRepair\.recipes/);
-  assert.match(jobs, /findRecipeBySignature\(cleanLatestRecipes, fresh\.signature\)/);
+  assert.match(jobs, /findRecipeBySignature\(cleanLatestRecipes, fresh\.signature, latestItems\)/);
   assert.match(jobs, /const nextRecipes = \{ \.\.\.cleanLatestRecipes, \[candidate\.id\]: fresh\.recipe \}/);
   assert.match(jobs, /else if \(recipeRepair\.changed\)/);
   assert.match(jobs, /orphanRecipeCleanupRemovedIds/);

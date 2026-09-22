@@ -421,7 +421,9 @@ function sanitizeEffect(raw, order, stage = 1, effectBoundsV1 = {}, effectBounds
       Number.isFinite(proposed) ? proposed : (range.min + range.max) / 2,
       range.min, range.max
     ));
-    const minutes = Number(raw?.durationMinutes);
+    // A reviewed item may already store milliseconds; do not reset its duration.
+    const minutes = Number(raw?.durationMinutes ??
+      (Number.isFinite(Number(raw?.durationMs)) ? Number(raw.durationMs) / 60000 : NaN));
     const duration = clamp(
       Number.isFinite(minutes) ? minutes : range.durationMinutesMax,
       range.durationMinutesMin, range.durationMinutesMax
@@ -439,12 +441,20 @@ function sanitizeGeneratedArtifact(raw, targetRealm, refinementStage = 1, effect
   const order = realmOrder(realm);
   const stage = normalizeRefinementStage(refinementStage);
   const requested = Array.isArray(raw?.effects) ? raw.effects.map((e) => sanitizeEffect(e, order, stage, effectBoundsV1, effectBoundsV2, ingredientCount)).filter(Boolean) : [];
-  const wantsEquip = requested.some((effect) => effect.type.startsWith('equip_'));
+  const primaryItems = Array.isArray(options.primaryArtifacts) ? options.primaryArtifacts : [];
+  const inheritedCore = primaryItems.flatMap((item) => Array.isArray(item.effects) ? item.effects : [])
+    .map((effect) => sanitizeEffect(effect, order, stage, effectBoundsV1, effectBoundsV2, ingredientCount))
+    .find(Boolean);
+  const targetForm = options.weaponForm || raw?.weaponForm || '';
+  const forceEquip = !inheritedCore && ['劍','刀','槍','弓','斧','錘','戟','棍','鞭','匕首','飛劍','法盾','法杖','陣盤','寶珠','法鏡','鈴','幡','印','鼎','鐘'].includes(targetForm);
+  const forceConsumable = !inheritedCore && targetForm === '符籙';
+  const wantsEquip = inheritedCore ? inheritedCore.type.startsWith('equip_')
+    : forceEquip ? true : forceConsumable ? false : requested.some((effect) => effect.type.startsWith('equip_'));
   let effects = wantsEquip
     ? requested.filter((effect) => effect.type.startsWith('equip_'))
     : requested.filter((effect) => !effect.type.startsWith('equip_'));
   // Never let the model silently erase the deepest artifact's defining effect.
-  const primaryArtifacts = Array.isArray(options.primaryArtifacts) ? options.primaryArtifacts : [];
+  const primaryArtifacts = primaryItems;
   const inherited = primaryArtifacts.flatMap((item) => Array.isArray(item.effects) ? item.effects : [])
     .map((effect) => sanitizeEffect(effect, order, stage, effectBoundsV1, effectBoundsV2, ingredientCount))
     .filter(Boolean);
@@ -460,20 +470,30 @@ function sanitizeGeneratedArtifact(raw, targetRealm, refinementStage = 1, effect
     .slice(0, maxEffectsForGeneration(order, stage));
 
   if (!effects.length) {
-    const fallbackRange = effectRange('equip_attack_flat', order, stage, effectBoundsV1, false, effectBoundsV2, ingredientCount);
-    effects = [sanitizeEffect({ type: 'equip_attack_flat', value: (fallbackRange.min + fallbackRange.max) / 2 }, order, stage, effectBoundsV1, effectBoundsV2, ingredientCount)].filter(Boolean);
+    const fallbackType = forceConsumable ? 'timed_attack_multiplier'
+      : targetForm === '法盾' ? 'equip_shield_flat'
+      : targetForm === '陣盤' ? 'equip_on_correct_shield_flat' : 'equip_attack_flat';
+    const fallbackRange = effectRange(fallbackType, order, stage, effectBoundsV1, false, effectBoundsV2, ingredientCount);
+    effects = [sanitizeEffect({ type:fallbackType, value:(fallbackRange.min + fallbackRange.max) / 2,
+      multiplier:(fallbackRange.min + fallbackRange.max) / 2 }, order, stage, effectBoundsV1, effectBoundsV2, ingredientCount)].filter(Boolean);
   }
 
   const equipped = effects.some((effect) => effect.type.startsWith('equip_'));
+  const iconByForm = { 劍:'劍',刀:'刀',槍:'槍',弓:'弓',斧:'斧',錘:'錘',戟:'戟',棍:'棍',
+    鞭:'鞭',匕首:'匕',飛劍:'飛',法盾:'盾',法杖:'杖',符籙:'符',陣盤:'陣',
+    寶珠:'珠',玉佩:'玉',法鏡:'鏡',鈴:'鈴',幡:'幡',印:'印',鼎:'鼎',鐘:'鐘',器胚:'胚' };
+  const chosenForm = WEAPON_FORMS.includes(options.weaponForm) ? options.weaponForm :
+    (WEAPON_FORMS.includes(raw?.weaponForm) ? raw.weaponForm : '其他');
+  const generatedIcon = cleanText(raw?.icon, 4);
   const result = {
     name: cleanText(raw?.name, 18) || realm + '無名靈器',
-    icon: cleanText(raw?.icon, 4) || '◆',
+    icon: !generatedIcon || ['◆','◇','法','器','寶'].includes(generatedIcon)
+      ? (iconByForm[chosenForm] || '◆') : generatedIcon,
     realm,
     category: equipped ? '裝備法寶' : '消耗法寶',
     description: cleanText(raw?.description, 180) || '由未知配方自行衍化而成的法寶。',
     effects,
-    weaponForm: WEAPON_FORMS.includes(options.weaponForm) ? options.weaponForm :
-      (WEAPON_FORMS.includes(raw?.weaponForm) ? raw.weaponForm : '其他'),
+    weaponForm: chosenForm,
     forgeMethod: normalizeForgeMethod(options.forgeMethod),
     coreEffect: core?.type || effects[0]?.type || ''
   };

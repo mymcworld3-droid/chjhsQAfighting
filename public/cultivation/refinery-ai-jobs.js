@@ -359,9 +359,9 @@ import {
   function findRecipeBySignature(recipes, signature, catalog = ARTIFACT_CATALOG) {
     for (const [artifactId, recipe] of Object.entries(recipes || {})) {
       const item = catalog.find((candidate) => candidate.id === artifactId);
-      // Historical recipes have no method suffix; new recipes keep their exact discovery signature.
-      const storedSignature = item?.generationSignature || recipeSignature(recipe);
-      if (storedSignature === signature) return artifactId;
+      // Use current recipe + saved method so edited recipes remain reproducible.
+      const currentSignature = recipeSignature(recipe, item?.forgeMethod || '自由發揮');
+      if (currentSignature === signature) return artifactId;
     }
     return '';
   }

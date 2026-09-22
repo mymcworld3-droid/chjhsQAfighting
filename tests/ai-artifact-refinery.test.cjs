@@ -415,7 +415,7 @@ test('new AI artifact becomes usable immediately and is persisted as a permanent
 test('same discovered recipe is reused instead of generating duplicate permanent artifacts', () => {
   assert.match(aiJobs, /function findRecipeBySignature/);
   assert.match(aiJobs, /const cleanLatestRecipes = recipeRepair\.recipes/);
-  assert.match(aiJobs, /awardedId = findRecipeBySignature\(cleanLatestRecipes, fresh\.signature\)/);
+  assert.match(aiJobs, /awardedId = findRecipeBySignature\(cleanLatestRecipes, fresh\.signature, latestItems\)/);
   assert.match(aiJobs, /if \(!awardedId\) \{/);
 });
 
@@ -567,7 +567,7 @@ test('refinement-stage design rules are sent to AI context but not added to play
 test('first successfully registered recipe gains immutable ownership without changing existing recipes', () => {
   const claim = aiJobs.slice(aiJobs.indexOf('async function claimDiscovery(job)'), aiJobs.indexOf('async function claimJob()'));
   assert.match(claim, /const \[userSnap, artifactSnap, materialSnap\] = await Promise\.all/);
-  assert.match(claim, /awardedId = findRecipeBySignature\(cleanLatestRecipes, fresh\.signature\)/);
+  assert.match(claim, /awardedId = findRecipeBySignature\(cleanLatestRecipes, fresh\.signature, latestItems\)/);
   assert.match(claim, /firstDiscovery = !awardedId/);
   assert.match(claim, /if \(!awardedId\) \{/);
   assert.match(claim, /recipeOwnerUid: user\.uid/);
@@ -716,6 +716,7 @@ test('recipe craft action rechecks license, inventory, payment and calls the rea
   const messages = [];
   const context = {
     busy: false, SLOT_COUNT: 8, selected: Array(8).fill('old'),
+    forgeMethod: '自由發揮', recipeMethod: (item) => item?.forgeMethod || '自由發揮',
     window: { getCultivationRefineryJob: () => null,
       getCultivationRefineryPlan: (tokens, id) => ({ valid: true, knownArtifactId: id, gold: 80 }) },
     toast: (msg) => messages.push(msg),
@@ -770,4 +771,45 @@ test('refinery recipe book displays discovered formulas and first-owner details'
   assert.match(refinery, /recipeBookOpen = event\.currentTarget\.open/);
   assert.match(refinery, /item\?\.recipeFirstDiscovery/);
   assert.match(refinery, /首發成功！/);
+});
+
+test('forging methods lock distinct forms without overriding a formal primary weapon', () => {
+  const materials = [{id:'iron',name:'鑄劍鐵',realm:'金丹',weaponForm:'劍'},{id:'wood',name:'雷木',realm:'金丹'}];
+  const base = {selectedIngredients:[{type:'material',id:'iron',quantity:2},{type:'material',id:'wood',quantity:1}],allMaterials:materials};
+  assert.equal(api.lockedWeaponForm({...base,forgeMethod:'護體鑄造'}),'劍');
+  assert.equal(api.lockedWeaponForm({selectedIngredients:[{type:'material',id:'wood',quantity:2}],allMaterials:materials,forgeMethod:'陣法刻印'}),'陣盤');
+  assert.deepEqual(Array.from(api.FORGE_METHODS),['自由發揮','劍道鍛造','護體鑄造','符籙煉製','陣法刻印']);
+});
+test('second refinement preserves a compatible inherited core when the AI proposes another family', () => {
+  const item=api.sanitizeGeneratedArtifact({
+    name:'雷霆飛劍',icon:'◆',weaponForm:'法盾',
+    effects:[{type:'timed_cultivation_multiplier',multiplier:1.2,durationMinutes:3}]
+  },'金丹',2,{},{},3,{weaponForm:'劍',forgeMethod:'劍道鍛造',
+    primaryArtifacts:[{effects:[{type:'equip_crit_chance',value:0.06}]}]});
+  assert.equal(item.weaponForm,'劍');
+  assert.equal(item.icon,'劍');
+  assert.equal(item.forgeMethod,'劍道鍛造');
+  assert.equal(item.coreEffect,'equip_crit_chance');
+  assert.ok(item.effects.some(effect=>effect.type==='equip_crit_chance'));
+  assert.ok(item.effects.every(effect=>effect.type.startsWith('equip_')));
+});
+test('re-sanitizing timed items preserves milliseconds rather than resetting their duration', () => {
+  const item=api.sanitizeGeneratedArtifact({
+    name:'明悟符',weaponForm:'符籙',
+    effects:[{type:'timed_cultivation_multiplier',multiplier:1.3,durationMinutes:3}]
+  },'金丹',2);
+  const again=api.sanitizeGeneratedArtifact(item,'金丹',2);
+  assert.equal(again.effects[0].durationMs,item.effects[0].durationMs);
+});
+test('more ingredients improve inverse damage caps', () => {
+  const range={type:'equip_damage_cap_percent',field:'value',min:0.40,max:0.50};
+  const more=api.scaleIngredientRange(range,4),fewer=api.scaleIngredientRange(range,2);
+  assert.ok(more.max<range.max);
+  assert.ok(fewer.min>range.min);
+});
+test('material icons are round and artifact icons retain framed surfaces', () => {
+  assert.match(refinery,/refinery-mat-icon\.is-material[^\n]*border-radius:50%/);
+  assert.match(read('public/cultivation/unified-inventory-grid.js'),/uib-item\[data-uib-item\^="material:"\][^\n]*border-radius:50%/);
+  assert.match(read('public/cultivation/material-system.js'),/\.material-store-icon\{border-radius:50%/);
+  assert.match(read('public/cultivation/player-marketplace.js'),/\.pm-material \.pm-icon\{border-radius:50%/);
 });
