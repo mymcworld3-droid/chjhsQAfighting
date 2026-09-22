@@ -133,3 +133,56 @@ html.scope-studio-open,body.scope-studio-open{overflow:hidden!important;overscro
 }
 @media(max-width:380px){#scope-studio .ss-hero p{display:none}#scope-studio .ss-stat{min-width:51px}#scope-studio .cs-fields{grid-template-columns:1fr!important}#scope-studio .ss-panel-head small{display:none}}
 @media(prefers-reduced-motion:reduce){#scope-studio *,#scope-studio *:before,#scope-studio *:after{transition-duration:0s!important;animation:none!important}}
+
+
+/* 五段式課程導覽：只顯示當前決策，不再把四個 select 同時擠在畫面中。 */
+#scope-studio #cs-pages{display:grid;gap:16px;min-width:0}
+#scope-studio #cs-scope>.cs-note{display:none}
+#scope-studio #cs-pages .cs-native-fields{display:none!important}
+#scope-studio .cs-stage[hidden]{display:none!important}
+#scope-studio .cs-pages-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+#scope-studio .cs-pages-top small{display:block;color:#a8cabe;font-size:10px;letter-spacing:.18em;font-weight:800}
+#scope-studio .cs-pages-top h3{margin:4px 0 0;color:#f5e4c5;font:700 clamp(18px,2vw,24px)/1.4 "Noto Serif TC",serif}
+#scope-studio #cs-page-progress{padding:7px 11px;border-radius:999px;border:1px solid rgba(129,197,174,.25);background:rgba(106,166,150,.09);color:#c0e5d4;font-size:12px;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+#scope-studio .cs-page-tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}
+#scope-studio .cs-page-tab{min-width:0;min-height:61px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;padding:8px 5px;border:1px solid rgba(233,200,132,.13);border-radius:12px;background:rgba(255,255,255,.022);color:#a59d8a;cursor:pointer;transition:border-color .15s,background .15s,color .15s}
+#scope-studio .cs-page-tab>span{font-size:10px;font-weight:900;color:#9a8f75;font-variant-numeric:tabular-nums}
+#scope-studio .cs-page-tab>b{font-size:11px;font-weight:800;white-space:nowrap}
+#scope-studio .cs-page-tab.is-active{border-color:rgba(139,211,188,.64);background:linear-gradient(130deg,rgba(103,171,153,.21),rgba(103,171,153,.07));color:#e2f5e9;box-shadow:inset 0 -2px rgba(132,208,185,.32)}
+#scope-studio .cs-page-tab.is-complete{border-color:rgba(238,207,145,.29);color:#ddc999}
+#scope-studio .cs-page-tab:disabled{opacity:.48;cursor:not-allowed}
+#scope-studio .cs-page-path{min-height:29px;display:flex;align-items:center;margin:0;padding:7px 11px;border-radius:8px;background:rgba(255,255,255,.025);color:#aba899;font-size:11px;overflow-wrap:anywhere;line-height:1.5}
+#scope-studio .cs-stage{min-width:0;display:grid;gap:15px;align-content:start}
+#scope-studio .cs-stage-title{display:grid;gap:4px}
+#scope-studio .cs-stage-title>small{color:#85c5b5;font-size:10px;letter-spacing:.18em;font-weight:900}
+#scope-studio .cs-stage-title>h4{margin:0;color:#f1e4cb;font:700 20px/1.4 "Noto Serif TC",serif}
+#scope-studio .cs-stage-title>p{margin:0;color:#aaa99f;font-size:12px;line-height:1.7}
+#scope-studio .cs-choice-grid{min-width:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:start}
+#scope-studio .cs-choice{display:grid;grid-template-columns:34px minmax(0,1fr) 15px;align-items:center;gap:12px;min-height:65px;padding:12px 13px;border:1px solid rgba(227,199,148,.18);border-radius:13px;background:linear-gradient(130deg,rgba(32,39,38,.95),rgba(18,27,27,.95));color:#e8deca;text-align:left;transition:background .16s,border-color .16s,transform .16s;cursor:pointer}
+#scope-studio .cs-choice:not(:disabled):hover{transform:translateY(-2px);border-color:rgba(236,204,132,.5);background:rgba(236,204,132,.09)}
+#scope-studio .cs-choice.is-selected{border-color:rgba(129,205,182,.66);background:linear-gradient(130deg,rgba(93,163,144,.2),rgba(43,99,89,.12))}
+#scope-studio .cs-choice-num{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;border:1px solid rgba(237,203,134,.22);background:rgba(218,183,108,.08);color:#d5bb83;font-size:11px;font-weight:900}
+#scope-studio .cs-choice.is-selected .cs-choice-num{color:#c8e9da;border-color:rgba(139,208,185,.35);background:rgba(129,205,182,.12)}
+#scope-studio .cs-choice-main{font-size:14px;font-weight:800;line-height:1.5;overflow-wrap:anywhere}
+#scope-studio .cs-choice>i{font-size:10px;color:#8c866e}
+#scope-studio .cs-choice.is-selected>i{color:#9bdbca}
+#scope-studio .cs-step-empty{grid-column:1/-1;padding:24px 13px;border:1px dashed rgba(236,204,132,.18);border-radius:13px;color:#a9aa9e;text-align:center}
+#scope-studio .cs-page-actions{display:flex;justify-content:space-between;gap:10px;padding-top:10px;border-top:1px solid rgba(238,205,141,.1)}
+#scope-studio .cs-page-actions button{min-width:110px;min-height:42px;padding:10px 18px;border:1px solid rgba(233,199,135,.24);border-radius:11px;background:rgba(228,193,121,.075);color:#e7d4ae;font-size:13px;font-weight:800}
+#scope-studio #cs-next{margin-left:auto;border-color:rgba(131,205,180,.4);background:rgba(112,182,161,.17);color:#dcf0e5}
+#scope-studio .cs-page-actions button:disabled{opacity:.35;cursor:not-allowed}
+#scope-studio .cs-stage .cs-tools-caption{font-size:12px}
+#scope-studio .cs-stage #cs-add{margin-top:0}
+@media(max-width:700px){
+#scope-studio #cs-pages{gap:11px}
+#scope-studio .cs-pages-top h3{font-size:18px}
+#scope-studio .cs-page-tabs{gap:4px}
+#scope-studio .cs-page-tab{min-height:55px;padding:6px 2px;border-radius:8px}
+#scope-studio .cs-page-tab>b{font-size:9px}
+#scope-studio .cs-page-tab>span{font-size:9px}
+#scope-studio .cs-stage-title>h4{font-size:18px}
+#scope-studio .cs-choice-grid{grid-template-columns:1fr}
+#scope-studio .cs-choice{min-height:57px}
+#scope-studio .cs-page-actions button{min-width:94px;padding:9px 10px}
+}
+@media(max-width:360px){#scope-studio .cs-page-tab>b{font-size:8px}#scope-studio .cs-choice-main{font-size:13px}}
