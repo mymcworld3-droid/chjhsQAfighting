@@ -775,6 +775,10 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260922-first-answer
     return window.resolveArtifactBattleHit?.(args) || null;
   }
 
+  function resolveTutorialGuardedFollowup(args) {
+    return window.resolveArtifactGuardedFollowup?.(args) || null;
+  }
+
   function completeGuAnswer() {
     if (!active || stage !== 'gu-question' || !guPlayerAt || !guOpponentAt || guOutcome) return;
     clearGuRoundTimers();
@@ -786,7 +790,8 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260922-first-answer
     guOutcome = settleBattleRound({
       roomId: 'story-gu-' + (user()?.uid || 'preview'), round: guRound + 1,
       host, guest, maxRounds: QUESTIONS.length,
-      resolveEquipmentHit: resolveTutorialEquipmentHit
+      resolveEquipmentHit: resolveTutorialEquipmentHit,
+      resolveGuardedFollowup: resolveTutorialGuardedFollowup
     });
     guFeedback = { choice: guChoice, correct };
     stage = 'gu-review';
