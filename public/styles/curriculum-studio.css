@@ -1,0 +1,135 @@
+/* 洞府 / 全螢幕課程研修所。以 #scope-studio 隔離其他遊戲 UI。 */
+html.scope-studio-open,body.scope-studio-open{overflow:hidden!important;overscroll-behavior:none}
+#scope-studio{--ss-gold:#ebca83;--ss-cream:#f3e7d1;--ss-muted:#a6a39c;--ss-teal:#86cfc4;position:fixed!important;inset:0!important;z-index:29000!important;display:flex!important;flex-direction:column!important;min-width:320px;height:100dvh;max-height:100dvh;overflow:hidden;isolation:isolate;background:radial-gradient(ellipse 75% 48% at 6% -14%,rgba(126,97,45,.19),transparent 75%),radial-gradient(ellipse 50% 45% at 110% 60%,rgba(26,98,88,.13),transparent 75%),#0b0f12;color:var(--ss-cream);font-family:"Noto Sans TC",sans-serif;font-size:14px;line-height:1.5}
+#scope-studio[hidden]{display:none!important}
+#scope-studio *{box-sizing:border-box}
+#scope-studio :focus-visible{outline:2px solid var(--ss-teal)!important;outline-offset:3px}
+#scope-studio:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.13;background-image:linear-gradient(rgba(228,194,121,.14) 1px,transparent 1px),linear-gradient(90deg,rgba(228,194,121,.14) 1px,transparent 1px);background-size:48px 48px;mask-image:linear-gradient(to bottom,#000,transparent 62%)}
+#scope-studio .ss-topbar{position:relative;z-index:1;flex:0 0 auto;display:flex;align-items:center;gap:14px;padding:14px clamp(16px,3.2vw,44px);padding-top:max(14px,env(safe-area-inset-top));border-bottom:1px solid rgba(241,203,125,.15);background:rgba(8,11,12,.84);backdrop-filter:blur(22px)}
+#scope-studio .ss-emblem{flex:0 0 42px;width:42px;height:42px;display:grid;place-items:center;border:1px solid rgba(242,203,128,.37);border-radius:14px;background:radial-gradient(circle at 50% 20%,rgba(246,215,151,.22),rgba(122,88,29,.08) 73%);color:var(--ss-gold);font-size:19px;box-shadow:0 0 24px rgba(211,158,68,.08)}
+#scope-studio .ss-brand{min-width:0;flex:1}
+#scope-studio .ss-overline{display:block;color:#bdac8b;letter-spacing:.24em;font-size:10px;font-weight:800}
+#scope-studio h2{margin:0;color:#f7e8cc;font:700 clamp(19px,2vw,25px)/1.25 "Noto Serif TC",serif;letter-spacing:.08em}
+#scope-studio .ss-close{display:flex;gap:8px;align-items:center;justify-content:center;min-height:40px;padding:0 14px;border:1px solid rgba(239,211,160,.18);border-radius:12px;color:#dfd4bd;background:rgba(255,255,255,.035);font-size:12px;font-weight:800;transition:background .15s,border-color .15s}
+#scope-studio .ss-close:hover{background:rgba(235,202,131,.1);border-color:rgba(235,202,131,.5)}
+#scope-studio .ss-hero{position:relative;z-index:1;flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:18px clamp(16px,3.2vw,44px) 20px;background:linear-gradient(110deg,rgba(235,202,131,.085),rgba(38,78,74,.035) 75%);border-bottom:1px solid rgba(235,202,131,.11)}
+#scope-studio .ss-kicker{margin:0 0 5px;color:var(--ss-teal);font-size:11px;letter-spacing:.18em;font-weight:800}
+#scope-studio .ss-hero h3{margin:0;color:#f8ead1;font:700 clamp(20px,2.6vw,30px)/1.3 "Noto Serif TC",serif}
+#scope-studio .ss-hero p{margin:5px 0 0;font-size:12px;color:#a9aaa4}
+#scope-studio .ss-stats{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+#scope-studio .ss-stat{display:grid;gap:2px;min-width:92px;padding:8px 13px;border:1px solid rgba(232,196,126,.13);border-radius:13px;background:rgba(9,14,15,.55)}
+#scope-studio .ss-stat b{color:#f1d08b;font-size:20px;line-height:1.2;font-variant-numeric:tabular-nums}
+#scope-studio .ss-stat small{color:#a7aaa5;font-size:10px}
+#scope-studio .ss-tabs{display:none}
+#scope-studio .ss-workspace{position:relative;z-index:1;flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,340px);gap:16px;padding:16px clamp(16px,3.2vw,44px) 10px;overflow:hidden}
+#scope-studio .ss-picker,#scope-studio .ss-cart{min-width:0;min-height:0;display:flex;flex-direction:column;border:1px solid rgba(234,204,148,.15);border-radius:20px;background:linear-gradient(155deg,rgba(24,29,29,.98),rgba(12,17,19,.98));box-shadow:0 18px 55px rgba(0,0,0,.21);overflow:hidden}
+#scope-studio .ss-panel-head{display:flex;align-items:center;gap:10px;flex:0 0 auto;padding:17px 20px 13px;border-bottom:1px solid rgba(238,205,141,.1)}
+#scope-studio .ss-panel-mark{display:grid;place-items:center;width:32px;height:32px;flex:0 0 32px;border:1px solid rgba(225,192,120,.21);border-radius:10px;background:rgba(225,192,120,.06);color:var(--ss-gold)}
+#scope-studio .ss-panel-head strong{display:block;color:#f2e3c5;font:700 16px "Noto Serif TC",serif}
+#scope-studio .ss-panel-head small{display:block;margin-top:3px;color:#9b9f9a;font-size:11px}
+#scope-studio .ss-picker-body,#scope-studio .ss-cart-body{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:rgba(215,178,109,.32) transparent}
+#scope-studio .ss-picker-body{padding:18px 20px 22px}
+#scope-studio .ss-cart-body{padding:14px}
+#scope-studio .ss-cart-note{margin:0 0 12px;padding:11px 12px;border-radius:12px;color:#adada4;background:rgba(115,178,164,.065);border:1px solid rgba(115,178,164,.13);font-size:11px;line-height:1.75}
+#scope-studio .ss-cart-note strong{color:#a5ddd0}
+#scope-studio .ss-cart #solo-selected-units-list{max-height:none!important;height:auto!important;overflow:visible!important;padding:0!important;display:grid;gap:9px}
+#scope-studio .ss-cart #solo-selected-units-list>p{margin:0 0 3px}
+#scope-studio .ss-cart #solo-selected-units-list .cs-unit{margin:0}
+#scope-studio .ss-cart #solo-selected-units-list .cs-unit span{font-size:12px!important;line-height:1.65!important;color:#e7dfcc!important}
+#scope-studio .ss-cart #solo-selected-units-list .cs-unit button{align-self:center;flex:0 0 auto}
+#scope-studio .ss-foot{position:relative;z-index:2;flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:12px clamp(16px,3.2vw,44px);padding-bottom:max(12px,env(safe-area-inset-bottom));border-top:1px solid rgba(238,205,141,.16);background:rgba(8,11,12,.96);box-shadow:0 -12px 38px rgba(0,0,0,.15)}
+#scope-studio .ss-foot-summary{min-width:0;display:grid;gap:3px}
+#scope-studio .ss-foot-summary strong{font-size:13px;color:#eadbbf}
+#scope-studio .ss-foot-summary small{font-size:11px;color:#969b98}
+#scope-studio #dongfu-scope-save{width:auto!important;min-width:185px;min-height:46px;margin:0!important;padding:10px 23px!important;border:1px solid #f2d895!important;border-radius:12px!important;color:#241a0b!important;background:linear-gradient(120deg,#f4db9b,#dbb86c 58%,#f2d68c)!important;box-shadow:0 8px 24px rgba(203,157,65,.19);font-size:14px!important;font-weight:900}
+#scope-studio #dongfu-scope-save:disabled{opacity:.6}
+#scope-studio #dongfu-scope-save:hover:not(:disabled){filter:brightness(1.07)}
+#scope-studio #focused-source-container,#scope-studio #bank-source-container{border:0!important;background:transparent!important;padding:0!important}
+#scope-studio #set-source-mode{width:100%!important;min-height:43px;margin-bottom:14px!important;padding:8px 12px!important;border:1px solid rgba(235,202,131,.24)!important;border-radius:12px!important;color:#f4e5c9!important;background:#111c1d!important;font-size:13px!important}
+#scope-studio .dongfu-scope-content{margin:0!important;padding:0!important}
+#scope-studio .dongfu-scope-content>label{display:block;margin-bottom:6px!important;color:#c6bfac!important;font-size:11px!important}
+#scope-studio #solo-unit-selectors-container{margin:0}
+#scope-studio #solo-unit-hint{margin-top:8px;color:#a4b9ae!important;font-size:11px!important;height:auto!important;white-space:normal;line-height:1.65}
+#scope-studio #btn-add-unit{display:none!important}
+#scope-studio #focused-source-container>.flex.items-center{height:auto!important;min-height:20px!important}
+#scope-studio .cs-scope{display:grid;gap:15px!important;color:#e7ddc8!important;font-size:13px!important}
+#scope-studio .cs-scope>.cs-note:first-child{padding:10px 12px;border-left:2px solid #8ac9bd;border-radius:0 8px 8px 0;background:rgba(85,145,133,.09);color:#b9c9c1!important}
+#scope-studio .cs-fields{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:10px!important}
+#scope-studio .cs-fields label{display:grid;gap:7px;color:#bcb9ad;font-size:11px;font-weight:700}
+#scope-studio .cs-scope select,#scope-studio .cs-scope input:not([type=checkbox]){width:100%;min-height:45px!important;padding:8px 12px!important;border:1px solid rgba(223,198,149,.18)!important;border-radius:11px!important;background:#101b1d!important;color:#f0e3cf!important;font-size:13px!important;outline:none}
+#scope-studio .cs-scope select:focus,#scope-studio .cs-scope input:not([type=checkbox]):focus{border-color:rgba(143,212,200,.67)!important;box-shadow:0 0 0 3px rgba(143,212,200,.08)}
+#scope-studio .cs-scope select:disabled{opacity:.5}
+#scope-studio .cs-search-field{display:grid;gap:7px;color:#bcb9ad;font-size:11px;font-weight:700}
+#scope-studio .cs-tools{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+#scope-studio .cs-tools-caption{display:flex;gap:8px;align-items:center;color:#d6e2d9;font-size:12px;font-weight:800}
+#scope-studio #cs-draft-count{padding:3px 8px;border-radius:999px;color:#cce8df;background:rgba(98,170,154,.1);border:1px solid rgba(98,170,154,.21);font-size:11px;font-variant-numeric:tabular-nums}
+#scope-studio .cs-tools-actions{display:flex;gap:7px}
+#scope-studio .cs-scope button{min-height:38px!important;padding:8px 12px!important;border:1px solid rgba(230,204,153,.23)!important;border-radius:10px!important;background:rgba(218,176,92,.065)!important;color:#e9d4a2!important;font-size:12px!important;font-weight:800!important;transition:.15s}
+#scope-studio .cs-scope button:not(:disabled):hover{border-color:rgba(237,200,127,.58)!important;background:rgba(218,176,92,.14)!important}
+#scope-studio .cs-scope button:disabled{opacity:.38}
+#scope-studio .cs-units{max-height:none!important;overflow:visible!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px!important;align-items:start}
+#scope-studio .cs-unit{min-width:0;padding:0!important;border:1px solid rgba(224,198,148,.18)!important;border-radius:14px!important;background:linear-gradient(145deg,rgba(29,36,35,.75),rgba(16,22,23,.9))!important;transition:border-color .16s,box-shadow .16s;overflow:hidden}
+#scope-studio .cs-unit:hover{border-color:rgba(235,202,131,.44)!important}
+#scope-studio .cs-unit:has(.cs-chapter:checked){border-color:rgba(124,206,185,.67)!important;box-shadow:0 0 0 1px rgba(124,206,185,.18),inset 0 0 25px rgba(99,184,164,.065)}
+#scope-studio .cs-unit summary{display:flex!important;gap:11px!important;align-items:center;min-height:65px;padding:12px 13px;list-style:none;color:#f1e6ce;cursor:pointer}
+#scope-studio .cs-unit summary::-webkit-details-marker{display:none}
+#scope-studio .cs-unit summary::after{content:"⌄";margin-left:auto;color:#998b72;font-size:18px;transition:transform .15s}
+#scope-studio .cs-unit[open] summary::after{transform:rotate(180deg)}
+#scope-studio .cs-unit summary b{flex:1;min-width:0;font-size:13px;line-height:1.45;overflow-wrap:anywhere}
+#scope-studio .cs-card-number{display:grid;place-items:center;flex:0 0 32px;width:32px;height:32px;border:1px solid rgba(227,194,123,.18);border-radius:10px;background:rgba(223,185,107,.07);font-size:10px;color:#d8bc81;font-weight:900;font-variant-numeric:tabular-nums}
+#scope-studio .cs-card-count{display:block;padding:0 13px 10px 57px;margin:-5px 0 0;color:#849c92;font-size:10px}
+#scope-studio .cs-unit label{display:flex!important;align-items:flex-start;gap:10px!important;margin:0 12px;padding:10px 5px!important;border-top:1px solid rgba(231,215,183,.065);color:#bebfb1!important;font-size:12px!important;line-height:1.55;cursor:pointer}
+#scope-studio .cs-unit label:last-child{margin-bottom:8px}
+#scope-studio .cs-unit label:hover{color:#eff0dc!important}
+#scope-studio .cs-unit input[type=checkbox]{flex:0 0 17px!important;width:17px;height:17px;margin:1px 0 0;accent-color:#7fc9b7;cursor:pointer}
+#scope-studio .cs-custom-panel{padding:15px!important;display:grid;gap:9px}
+#scope-studio .cs-custom-panel>b{font-family:"Noto Serif TC",serif;font-size:14px;color:#eddbb5}
+#scope-studio #cs-add{min-height:44px!important;background:linear-gradient(120deg,rgba(101,172,156,.18),rgba(101,172,156,.09))!important;border-color:rgba(125,211,192,.38)!important;color:#c9eee3!important}
+#scope-studio #cs-message{min-height:20px;margin:0;color:#a8d6c8!important}
+#scope-studio .cs-note{color:#918e82!important;font-size:11px!important;line-height:1.7}
+#scope-studio .ss-picker-body>.ss-placeholder{padding:22px 12px;text-align:center;color:#aaa797}
+#scope-studio .ss-cart-empty{display:grid;place-items:center;gap:8px;padding:32px 12px;border:1px dashed rgba(231,202,140,.22);border-radius:13px;text-align:center;color:#ada58f;font-size:12px}
+#scope-studio .ss-cart-empty i{font-size:25px;color:#d7bf82}
+#dongfu-scope-card .dongfu-collapse-head{cursor:pointer}
+#dongfu-scope-card .dongfu-collapse-head .dongfu-collapse-chevron{display:grid;place-items:center}
+#dongfu-scope-card .dongfu-collapse-head .dongfu-collapse-chevron i:before{content:"\f065"}
+#dongfu-scope-card .ss-launch-preview{display:grid;gap:12px;margin-top:4px;padding:12px;border:1px solid rgba(211,176,107,.15);border-radius:13px;background:radial-gradient(circle at 0 0,rgba(230,186,105,.09),transparent 70%),rgba(13,17,16,.55)}
+#dongfu-scope-card .ss-launch-preview p{margin:0;color:#bdb39d;font-size:11px;line-height:1.7}
+#dongfu-scope-card .ss-launch-preview button{min-height:41px;border:1px solid rgba(234,197,122,.38);border-radius:10px;background:rgba(226,184,100,.12);color:#edd4a0;font-weight:900}
+@media(min-width:1400px){#scope-studio .ss-workspace{grid-template-columns:minmax(0,1fr) minmax(320px,390px)}}
+@media(max-width:1080px){#scope-studio .cs-fields{grid-template-columns:repeat(2,minmax(0,1fr))!important}#scope-studio .cs-units{grid-template-columns:1fr!important}#scope-studio .ss-workspace{grid-template-columns:minmax(0,1fr) minmax(255px,300px)}}
+@media(max-width:700px){
+#scope-studio .ss-topbar{padding:9px 14px;padding-top:max(9px,env(safe-area-inset-top));gap:10px}
+#scope-studio .ss-emblem{width:36px;height:36px;flex-basis:36px;border-radius:11px;font-size:15px}
+#scope-studio .ss-overline{font-size:8px;letter-spacing:.14em}
+#scope-studio h2{font-size:18px}
+#scope-studio .ss-close{width:36px;min-height:36px;padding:0}
+#scope-studio .ss-close span{display:none}
+#scope-studio .ss-hero{padding:12px 14px;gap:8px}
+#scope-studio .ss-hero h3{font-size:19px}
+#scope-studio .ss-hero p{font-size:10px}
+#scope-studio .ss-kicker{font-size:9px}
+#scope-studio .ss-stats{flex-wrap:nowrap;gap:5px}
+#scope-studio .ss-stat{min-width:54px;padding:5px 7px}
+#scope-studio .ss-stat b{font-size:16px}
+#scope-studio .ss-stat small{font-size:9px}
+#scope-studio .ss-stat:last-child{display:none}
+#scope-studio .ss-tabs{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:9px 14px 0}
+#scope-studio .ss-tabs button{display:flex;align-items:center;justify-content:center;gap:7px;min-height:38px;border:1px solid rgba(235,202,131,.15);border-radius:10px;color:#a9a99e;background:rgba(255,255,255,.025);font-size:12px;font-weight:900}
+#scope-studio .ss-tabs button[aria-selected=true]{background:rgba(118,188,169,.15);border-color:rgba(138,209,188,.42);color:#d5f0e6}
+#scope-studio .ss-workspace{display:block;padding:9px 14px 7px;min-height:0}
+#scope-studio .ss-picker,#scope-studio .ss-cart{height:100%;max-height:100%;border-radius:15px}
+#scope-studio[data-view=course] .ss-cart,#scope-studio[data-view=cart] .ss-picker{display:none!important}
+#scope-studio .ss-panel-head{padding:12px 13px 10px}
+#scope-studio .ss-panel-head strong{font-size:14px}
+#scope-studio .ss-picker-body{padding:12px}
+#scope-studio .ss-cart-body{padding:12px}
+#scope-studio .cs-fields{gap:9px!important}
+#scope-studio .cs-scope{gap:11px!important}
+#scope-studio .ss-foot{padding:9px 14px;padding-bottom:max(9px,env(safe-area-inset-bottom));gap:9px}
+#scope-studio .ss-foot-summary strong{font-size:11px}
+#scope-studio .ss-foot-summary small{font-size:9px}
+#scope-studio #dongfu-scope-save{min-width:126px;min-height:43px;padding:8px 11px!important;font-size:12px!important}
+}
+@media(max-width:380px){#scope-studio .ss-hero p{display:none}#scope-studio .ss-stat{min-width:51px}#scope-studio .cs-fields{grid-template-columns:1fr!important}#scope-studio .ss-panel-head small{display:none}}
+@media(prefers-reduced-motion:reduce){#scope-studio *,#scope-studio *:before,#scope-studio *:after{transition-duration:0s!important;animation:none!important}}
