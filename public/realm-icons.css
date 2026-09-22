@@ -24,7 +24,9 @@
 .realm-icon[data-realm="大乘"] { --realm-ink: #f0d39a; --realm-glow: rgba(240,211,154,.30); }
 .realm-icon[data-realm="渡劫"] { --realm-ink: #f2a49d; --realm-glow: rgba(242,164,157,.27); }
 .realm-icon[data-realm="登仙"] { --realm-ink: #ead6aa; --realm-glow: rgba(234,214,170,.31); }
-.realm-icon[data-realm="真仙"] { --realm-ink: #f9e9c3; --realm-glow: rgba(249,233,195,.36); }
+.realm-icon[data-realm="真仙"] { --realm-ink: #f7d98c; --realm-glow: rgba(252,214,122,.46); }
+.realm-icon[data-realm="真仙"] .immortal-jewel { fill: currentColor; fill-opacity: .14; stroke: #fff2ce; stroke-width: 1.35; }
+.realm-icon[data-realm="真仙"] .immortal-heart { fill: #fff4d7; stroke: #fff4d7; }
 
 #display-rank { display: flex; align-items: center; justify-content: center; gap: .25em; flex-wrap: wrap; }
 #display-rank > .realm-icon { width: .9em; height: .9em; }
