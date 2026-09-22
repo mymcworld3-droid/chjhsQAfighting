@@ -1100,7 +1100,7 @@ function listenToGlobalChat() {
     if (chatUnsub) return; // 避免重複監聽
 
     const chatContainer = document.getElementById('chat-messages');
-    const q = query(collection(db, "global_chat"), orderBy("timestamp", "desc"), limit(50));
+    const q = query(collection(db, "global_chat"), orderBy("timestamp", "desc"), limit(25));
 
     chatUnsub = onSnapshot(q, (snapshot) => {
         if(snapshot.size > 0 && chatContainer.innerHTML.includes('歡迎來到全服聊天室')) {
@@ -4278,12 +4278,29 @@ window.loadAdminLogs = async () => {
     } catch (e) { ul.innerHTML = '<li class="text-center text-red-400 py-4">Error (Permission Denied)</li>'; }
 };
 
+// 短時間重開排行榜不必再讀取相同的前十名。
+let leaderboardCachedSnapshot = null;
+let leaderboardCacheTime = 0;
+let leaderboardPending = null;
 window.loadLeaderboard = async () => {
     const tbody = document.getElementById('leaderboard-body');
     tbody.innerHTML = `<tr><td colspan="3" class="p-8 text-center text-gray-500"><div class="loader"></div> ${t('loading')}</td></tr>`;
     try {
-        const q = query(collection(db, "users"), orderBy("stats.rankLevel", "desc"), orderBy("stats.totalScore", "desc"), limit(10));
-        const snap = await getDocs(q);
+        let snap = leaderboardCachedSnapshot;
+        if (!snap || Date.now() - leaderboardCacheTime >= 120000) {
+            if (!leaderboardPending) {
+                const q = query(collection(db, "users"), orderBy("stats.rankLevel", "desc"), orderBy("stats.totalScore", "desc"), limit(10));
+                leaderboardPending = getDocs(q);
+            }
+            const pending = leaderboardPending;
+            try {
+                snap = await pending;
+                leaderboardCachedSnapshot = snap;
+                leaderboardCacheTime = Date.now();
+            } finally {
+                if (leaderboardPending === pending) leaderboardPending = null;
+            }
+        }
         tbody.innerHTML = '';
         let i = 1;
         snap.forEach(doc => {
