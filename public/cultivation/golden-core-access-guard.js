@@ -1,4 +1,4 @@
-// 兩階段修煉守門：築基 60 開修煉背包；金丹 120 才開金丹、狀態與金丹效果。
+// 狀態從角色建立起即可查看；築基 10 開背包、煉器；金丹 28 才解鎖金丹功能。
 (function () {
   'use strict';
 
@@ -23,8 +23,7 @@
         pointer-events: none !important;
       }
 
-      html:not(.golden-core-access-ready) [data-training-tab="core"],
-      html:not(.golden-core-access-ready) #training-status-tab {
+      html:not(.golden-core-access-ready) [data-training-tab="core"] {
         display: none !important;
         visibility: hidden !important;
         pointer-events: none !important;
@@ -47,9 +46,9 @@
   }
 
   function trainingAllowed() {
-    // 築基起即可使用共同修煉殼層（背包、煉器）；不再依賴舊版遷移標記。
-    // 金丹仍由 coreAllowed() 保留 migrationReady + 28 修為的完整守門。
-    return !!data()?.stats && score() >= FOUNDATION_SCORE;
+    // From the first account state, the shared shell exposes only Status.
+    // Foundation features are still gated separately at 10; Golden Core at 28.
+    return !!data()?.stats;
   }
 
   function coreAllowed() {
