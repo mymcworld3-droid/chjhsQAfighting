@@ -123,11 +123,14 @@ function createMigrationController({
       status: 'legacy', ready: true, migrationComplete: false,
       message: '正式遊戲仍使用 A；自動搬移尚未啟用。'
     };
-    let a, bd;
+    let a, bd, c;
     try {
       a = resolve('A');
       bd = resolve('BD');
-      if (a.app.options.projectId !== PROJECT_IDS.A || bd.app.options.projectId !== PROJECT_IDS.BD) {
+      c = resolve('C');
+      if (a.app.options.projectId !== PROJECT_IDS.A ||
+          bd.app.options.projectId !== PROJECT_IDS.BD ||
+          c.app.options.projectId !== PROJECT_IDS.C) {
         throw new Error('Firebase project mismatch');
       }
     } catch (error) {
