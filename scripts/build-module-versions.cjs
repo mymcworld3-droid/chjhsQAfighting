@@ -15,7 +15,7 @@ function walk(dir) {
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     const path = join(dir, entry.name);
     if (entry.isDirectory()) { walk(path); continue; }
-    if (!entry.isFile() || !extensions.has(extname(path).toLowerCase())) continue;
+    if (!entry.isFile() || (extname(path) && !extensions.has(extname(path).toLowerCase()))) continue;
     const name = relative(root, path).split('\\').join('/');
     if (excluded.has(name)) continue;
     const bytes = readFileSync(path);
