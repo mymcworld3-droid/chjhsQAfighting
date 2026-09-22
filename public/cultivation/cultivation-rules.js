@@ -9,7 +9,10 @@ export function applyCultivationReward(stats, isCorrect) {
   stats.totalScore = Math.max(0, Number(stats.totalScore) || 0);
   const scoreBeforeAnswer = stats.totalScore;
   const isGoldenCoreOrAbove = scoreBeforeAnswer >= GOLDEN_CORE_SCORE;
-  const hadGoldenCoreShield = !!stats.goldenCoreShield;
+  // 停用金丹時不使用、也不消耗已凝聚的道心；重新啟用後仍可正常使用。
+  const goldenCoreEnabled = typeof window.isGoldenCoreEnabled === 'function'
+    ? window.isGoldenCoreEnabled() : true;
+  const hadGoldenCoreShield = goldenCoreEnabled && !!stats.goldenCoreShield;
 
   // 舊版通用「道心護體」已停用。每次結算都移除舊欄位，避免舊帳號殘留狀態生效。
   if (Object.prototype.hasOwnProperty.call(stats, 'cultivationShield')) {
@@ -17,7 +20,7 @@ export function applyCultivationReward(stats, isCorrect) {
   }
 
   let goldenCoreEffect = { bonusGain: 0, forceShield: false, preserveShield: false, message: '' };
-  if (typeof window.resolveGoldenCoreCultivationReward === 'function') {
+  if (goldenCoreEnabled && typeof window.resolveGoldenCoreCultivationReward === 'function') {
     try {
       goldenCoreEffect = {
         ...goldenCoreEffect,
@@ -64,7 +67,7 @@ export function applyCultivationReward(stats, isCorrect) {
 
     if (goldenCoreMindReady) {
       stats.goldenCoreShield = true;
-    } else {
+    } else if (goldenCoreEnabled) {
       stats.goldenCoreShield = !!goldenCoreEffect.preserveShield && !!stats.goldenCoreShield;
     }
   }
