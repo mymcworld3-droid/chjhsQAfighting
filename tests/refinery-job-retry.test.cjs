@@ -46,8 +46,8 @@ test('retrying discovery after a successful AI response reuses that response and
 });
 
 test('new build query forces updated refinery code without altering module order', () => {
-  assert.match(main, /XIUXIAN_FEATURE_BUILD = '20260922-diagonal-duel1'/);
-  assert.match(index, /main\.js\?v=20260922-product-editor-fullscreen1/);
+  assert.match(main, /XIUXIAN_FEATURE_BUILD = '20260922-local-modules1'/);
+  assert.match(index, /main\.js\?v=20260922-local-modules1/);
   assert.ok(main.indexOf("'./cultivation/refinery-ai-jobs.js'") <
     main.indexOf("'./cultivation/cultivation-refinery-v2.js'"));
 });
