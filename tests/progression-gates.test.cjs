@@ -290,7 +290,7 @@ test('Golden Core chapter controls the tutorial on normal play and replay withou
 test('Foundation refinery access does not depend on the legacy migration marker', () => {
   assert.match(foundationTraining, /築基期修煉頁：10～27 修為開放背包與煉器/);
   assert.match(foundationTraining, /return !!window\.getCurrentUserData\?\.\(\)\?\.stats[\s\S]*value >= FOUNDATION_SCORE && value < GOLDEN_CORE_SCORE/);
-  assert.match(guard, /築基起即可使用共同修煉殼層（背包、煉器）/);
+  assert.match(guard, /築基 10 開背包、煉器/);
   assert.doesNotMatch(guard, /function trainingAllowed\(\) \{\s*return migrationReady\(\)/);
   assert.match(guard, /function coreAllowed\(\) \{\s*return migrationReady\(\) && score\(\) >= GOLDEN_CORE_SCORE/);
 });
