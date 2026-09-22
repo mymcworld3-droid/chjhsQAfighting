@@ -39,6 +39,15 @@ test('studio is a viewport-sized accessible dialog with desktop panels and mobil
   assert.match(css,/safe-area-inset-bottom/);
 });
 
+test('course studio starts immediately at the course navigation with no oversized hero', () => {
+  assert.doesNotMatch(studio, /選定所學，逐章突破|按年級、科目與學期安排複習/);
+  assert.doesNotMatch(studio, /class="ss-hero"|id="ss-selected-count"|id="ss-subject-count"/);
+  assert.doesNotMatch(css, /\.ss-hero|\.ss-stats?|\.ss-kicker/);
+  assert.match(studio, /<nav class="ss-tabs"/);
+  assert.match(studio, /id="ss-picker-body"/);
+  assert.match(studio, /id="ss-cart-body"/);
+});
+
 test('full-screen studio reparents original selectors and persistent selected list without duplicating IDs', () => {
   assert.match(studio,/\$\('ss-picker-body'\)\.append\(block\)/);
   assert.match(studio,/\$\('ss-cart-body'\)\.append\(cartSource\)/);
