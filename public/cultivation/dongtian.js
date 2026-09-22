@@ -736,10 +736,12 @@ import {
     s.answered = false;
     const optionObjects = shuffle([{ text: q.correct, correct: true }, ...(q.wrong || []).map((text) => ({ text, correct: false }))]);
     s.currentOptions = optionObjects;
-    overlay.innerHTML = `<div class="dt-runner"><header class="dt-run-head"><div><small>${s.tutorialOnly ? '教學範例 · 不公開 · 不計獎勵' : '洞天試煉 · FIXED SEQUENCE'}</small><strong>${escapeHtml(s.dongtian.name)}</strong></div><button id="dt-exit" class="dt-exit" type="button" aria-label="退出洞天"><i class="fa-solid fa-door-open"></i></button></header><div class="dt-run-meta"><div><span>題序</span><b>${s.index + 1} / ${s.dongtian.questions.length}</b></div><div><span>科目</span><b>${escapeHtml(q.subject || s.dongtian.subject)}</b></div><div><span>難度</span><b>${difficultyLabel(q.difficulty)}</b></div></div><div class="dt-progress"><i style="width:${((s.index) / s.dongtian.questions.length) * 100}%"></i></div><section class="dt-question"><div class="dt-question-title-row"><h3>${escapeHtml(q.q)}</h3></div><div id="dt-options" class="dt-options">${optionObjects.map((option, index) => `<button class="dt-option" type="button" data-dt-answer="${index}"><span>${String.fromCharCode(65 + index)}</span><b>${escapeHtml(option.text)}</b></button>`).join('')}</div><div id="dt-explain-slot"></div></section></div>`;
+    const rich = window.quizMathRichText || escapeHtml;
+    window.quizMathClear?.(overlay);
+    overlay.innerHTML = `<div class="dt-runner"><header class="dt-run-head"><div><small>${s.tutorialOnly ? '教學範例 · 不公開 · 不計獎勵' : '洞天試煉 · FIXED SEQUENCE'}</small><strong>${escapeHtml(s.dongtian.name)}</strong></div><button id="dt-exit" class="dt-exit" type="button" aria-label="退出洞天"><i class="fa-solid fa-door-open"></i></button></header><div class="dt-run-meta"><div><span>題序</span><b>${s.index + 1} / ${s.dongtian.questions.length}</b></div><div><span>科目</span><b>${escapeHtml(q.subject || s.dongtian.subject)}</b></div><div><span>難度</span><b>${difficultyLabel(q.difficulty)}</b></div></div><div class="dt-progress"><i style="width:${((s.index) / s.dongtian.questions.length) * 100}%"></i></div><section class="dt-question"><div class="dt-question-title-row"><h3>${rich(q.q)}</h3></div><div id="dt-options" class="dt-options">${optionObjects.map((option, index) => `<button class="dt-option" type="button" data-dt-answer="${index}"><span>${String.fromCharCode(65 + index)}</span><b class="dt-option-math">${rich(option.text)}</b></button>`).join('')}</div><div id="dt-explain-slot"></div></section></div>`;
     overlay.querySelector('#dt-exit').onclick = exitDongtian;
     overlay.querySelectorAll('[data-dt-answer]').forEach((button) => button.onclick = () => answerDongtian(Number(button.dataset.dtAnswer)));
-    try { window.MathJax?.typesetPromise?.([overlay]); } catch (_) {}
+    void window.quizMathTypeset?.(overlay);
   }
 
   function answerDongtian(optionIndex) {
@@ -769,7 +771,7 @@ import {
       exp: q.exp
     });
     const slot = document.getElementById('dt-explain-slot');
-    slot.innerHTML = `<div class="dt-explain"><strong style="color:${isCorrect ? '#86efac' : '#fca5a5'}">${isCorrect ? '答對 · 靈機相合' : '答錯 · 參悟解析'}</strong><br>${escapeHtml(q.exp)}</div><div class="dt-answer-actions"><button id="dt-report-question" class="dt-report-question" type="button"><i class="fa-solid fa-triangle-exclamation"></i> 問題回報</button><button id="dt-next" type="button" class="dt-next">${s.index + 1 >= s.dongtian.questions.length ? '完成洞天' : '前往下一境'}</button></div>`;
+    slot.innerHTML = `<div class="dt-explain"><strong style="color:${isCorrect ? '#86efac' : '#fca5a5'}">${isCorrect ? '答對 · 靈機相合' : '答錯 · 參悟解析'}</strong><br>${(window.quizMathRichText || escapeHtml)(q.exp || '此題暫無解析。')}</div><div class="dt-answer-actions"><button id="dt-report-question" class="dt-report-question" type="button"><i class="fa-solid fa-triangle-exclamation"></i> 問題回報</button><button id="dt-next" type="button" class="dt-next">${s.index + 1 >= s.dongtian.questions.length ? '完成洞天' : '前往下一境'}</button></div>`;
     document.getElementById('dt-report-question').onclick = s.tutorialOnly
       ? () => toast('教學範例不會送出回報；正式洞天答題後可在這裡回報錯題。')
       : openQuestionReport;
@@ -781,7 +783,7 @@ import {
       if (s.index + 1 >= s.dongtian.questions.length) finishDongtian();
       else { s.index += 1; renderRunner(); }
     };
-    try { window.MathJax?.typesetPromise?.([slot]); } catch (_) {}
+    void window.quizMathTypeset?.(slot);
   }
 
 
