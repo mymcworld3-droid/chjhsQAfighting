@@ -160,7 +160,17 @@ export function resolveDeterministicCoreSupport(player, seed) {
   return result;
 }
 
-export function decideRoundAttackers(host, guest, tieWindowMs = BATTLE_V2.tieWindowMs) {
+// 以伺服器答案時間排序；毫秒相同時，遵循房間交易記下的真正首答者。
+function roundTurnOrder(host, guest, firstAnswerUid = null) {
+  const hostAt = Number(host?.answer?.atMs) || Number.POSITIVE_INFINITY;
+  const guestAt = Number(guest?.answer?.atMs) || Number.POSITIVE_INFINITY;
+  if (guestAt < hostAt) return ['guest', 'host'];
+  if (hostAt < guestAt) return ['host', 'guest'];
+  if (firstAnswerUid && firstAnswerUid === guest?.uid) return ['guest', 'host'];
+  return ['host', 'guest'];
+}
+
+export function decideRoundAttackers(host, guest, tieWindowMs = BATTLE_V2.tieWindowMs, firstAnswerUid = null) {
   const hostCorrect = answerCorrect(host);
   const guestCorrect = answerCorrect(guest);
 
@@ -169,9 +179,7 @@ export function decideRoundAttackers(host, guest, tieWindowMs = BATTLE_V2.tieWin
   if (!hostCorrect && !guestCorrect) return [];
 
   // Both correct players can attack, but the earlier server-stamped answer takes first turn.
-  const hostAt = Number(host?.answer?.atMs) || Number.POSITIVE_INFINITY;
-  const guestAt = Number(guest?.answer?.atMs) || Number.POSITIVE_INFINITY;
-  return guestAt < hostAt ? ['guest', 'host'] : ['host', 'guest'];
+  return roundTurnOrder(host, guest, firstAnswerUid);
 }
 
 function attackPower(player) {
@@ -199,16 +207,16 @@ export function settleBattleRound({
   round,
   host,
   guest,
+  firstAnswerUid = null,
   tieWindowMs = BATTLE_V2.tieWindowMs,
   maxRounds = BATTLE_V2.maxRounds,
   // Optional per-hit resolver for equipment effects. Pure engine remains unchanged without one.
   resolveEquipmentHit = null
 }) {
   // Firestore server-stamped response time determines initiative, never damage eligibility.
-  // Missing/timeout answers move last; a tie consistently gives host initiative.
-  const hostAt = Number(host?.answer?.atMs) || Number.POSITIVE_INFINITY;
-  const guestAt = Number(guest?.answer?.atMs) || Number.POSITIVE_INFINITY;
-  const turnOrder = guestAt < hostAt ? ['guest', 'host'] : ['host', 'guest'];
+  // Missing/timeout answers move last; timestamps tied to the millisecond defer to firstAnswerUid.
+  // Older rooms without this field retain host as the deterministic last-resort tie-break.
+  const turnOrder = roundTurnOrder(host, guest, firstAnswerUid);
   const attackers = [];
   const hostSupport = resolveDeterministicCoreSupport(host, roomId + ':' + round + ':' + host.uid + ':support');
   const guestSupport = resolveDeterministicCoreSupport(guest, roomId + ':' + round + ':' + guest.uid + ':support');
