@@ -90,7 +90,8 @@
         <div class="xiuxian-row"><span class="xiuxian-label">當前修為</span><span id="xiuxian-score" class="xiuxian-value" aria-live="polite" aria-atomic="true">0 修為</span></div>
         <div class="xiuxian-bar"><div id="xiuxian-progress" style="width:0%"></div></div>
         <div class="xiuxian-row"><span id="xiuxian-progress-label" class="xiuxian-label">距離下一境界</span><span id="xiuxian-next" class="xiuxian-value">5 修為</span></div>
-        <div class="xiuxian-row"><span class="xiuxian-label" id="xiuxian-meditation-streak">連續閉關 0 日 · 累計 0 日</span></div>\n        <div class="xiuxian-actions"><button id="xiuxian-meditate" class="xiuxian-btn" type="button">今日閉關</button><button id="xiuxian-path" class="xiuxian-btn" type="button">境界圖錄</button></div>
+        <div class="xiuxian-row"><span class="xiuxian-label" id="xiuxian-meditation-streak">連續閉關 0 日 · 累計 0 日</span></div>
+        <div class="xiuxian-actions"><button id="xiuxian-meditate" class="xiuxian-btn" type="button">今日閉關</button><button id="xiuxian-path" class="xiuxian-btn" type="button">境界圖錄</button></div>
       `;
       anchor.parentNode.insertBefore(panel, anchor);
     }
