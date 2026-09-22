@@ -2306,6 +2306,9 @@ async function fetchOneQuestion() {
     }
 }
 
+// 閉關三題沿用玩家目前選擇的出題範圍，但獎勵另行結算。
+window.fetchDailyMeditationQuestion = fetchOneQuestion;
+
 /// 🔥 修改：在進入下一題前才清除舊題目，確保 startQuizFlow 能抓到新題目
 window.nextQuestion = () => {
     // handleAnswer consumes the previous quiz before this action.
