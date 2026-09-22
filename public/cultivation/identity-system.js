@@ -185,7 +185,9 @@ import {
       const oldText = input.value;
       saveBusy = true;
       try {
-        const approvedBase = await reviewBaseName(requested);
+        // 只有改名才需要送 AI；單純儲存課程範圍、難度或強弱科不能被名稱服務拖住。
+        const nameChanged = publicName(requested, isAdmin(player)) !== publicName(player.displayName, isAdmin(player));
+        const approvedBase = nameChanged ? await reviewBaseName(requested) : stripReserved(requested);
         const approvedName = publicName(approvedBase, isAdmin(player));
         input.value = approvedName;
 
@@ -195,10 +197,11 @@ import {
         player.displayName = approvedName;
         input.value = approvedName;
         syncVisibleName();
-        window.dispatchEvent(new CustomEvent('player-name-updated', { detail: { displayName: approvedName } }));
-
-        // 洞天／五仙舊快照在背景同步，失敗或資料很多都不能拖住改名介面。
-        queueSnapshotPropagation(true);
+        if (nameChanged) {
+          window.dispatchEvent(new CustomEvent('player-name-updated', { detail: { displayName: approvedName } }));
+          // 洞天／五仙舊快照只在名稱變更時更新。
+          queueSnapshotPropagation(true);
+        }
         return true;
       } catch (error) {
         input.value = oldText;
