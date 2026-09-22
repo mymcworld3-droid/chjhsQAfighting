@@ -48,6 +48,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/cultivation-status-panel.js',
   './cultivation/realm-breakthrough-feedback.js',
   './cultivation/cultivation-rank-sync.js',
+  './cultivation/curriculum-scope.js',
   './cultivation/dongfu-settings-collapsible.js',
   './cultivation/dongtian.js',
   './cultivation/story/story-engine.js',
@@ -71,7 +72,7 @@ let xiuxianFeatureLoadStarted = false;
 let xiuxianReadyTimer = null;
 let resolveXiuxianFeatureGate;
 const xiuxianFeatureGate = new Promise((resolve) => { resolveXiuxianFeatureGate = resolve; });
-const XIUXIAN_FEATURE_BUILD = '20260922-status-from-start1';
+const XIUXIAN_FEATURE_BUILD = '20260922-curriculum-scope1';
 
 // 交易市集僅為可選功能，載入失敗不可阻止玩家登入或進入遊戲。
 let xiuxianMarketLoad = null;
