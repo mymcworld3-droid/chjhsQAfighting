@@ -1209,30 +1209,39 @@ body.xianxia-theme main:has(#page-training.active-page),
                  <button onclick="recalculateAllUserRanks()" class="btn-cyber-ghost w-full py-2 text-xs mb-2 text-yellow-400 border-yellow-500/30">RECALC RANKS</button>
                  <button onclick="triggerGlobalReload()" class="btn-cyber-ghost w-full py-2 text-xs text-red-400 border-red-500/30">FORCE RELOAD</button>
              </div>
-             <div class="glass-panel p-4 rounded-xl mb-6 cursor-pointer hover:bg-white/5 transition" onclick="toggleAdminForm()">
-                 <h3 class="font-bold text-white flex justify-between items-center text-sm">
-                     <span id="admin-form-title">ADD PRODUCT</span>
-                     <i id="admin-form-arrow" class="fa-solid fa-chevron-up"></i>
-                 </h3>
+             <!-- 商品管理維持原有資料欄位；新增與編輯共用全螢幕編輯頁。 -->
+             <div id="admin-product-editor" class="glass-panel p-4 rounded-xl mb-6">
+                 <div class="admin-product-editor-header">
+                     <button type="button" class="admin-product-launch" onclick="resetAdminForm(); openAdminForm()">
+                         <span id="admin-form-title">新增商品</span>
+                         <i id="admin-form-arrow" class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+                     </button>
+                     <button type="button" id="admin-product-close" class="admin-product-close hidden" onclick="closeAdminForm()" aria-label="關閉商品編輯"><i class="fa-solid fa-xmark" aria-hidden="true"></i> 關閉</button>
+                 </div>
                  <input type="hidden" id="admin-edit-id">
-                 <div id="admin-form-body" class="mt-4 space-y-3">
-                     <input type="text" id="admin-p-name" placeholder="Name" class="input-cyber w-full">
-                     <div class="flex gap-2">
-                         <input type="number" id="admin-p-price" placeholder="Price" class="input-cyber flex-1">
-                         <select id="admin-p-type" class="input-cyber flex-1">
-                             <option value="frame">Frame</option>
-                             <option value="avatar">Avatar</option>
-                         </select>
+                 <div id="admin-form-body" class="admin-product-editor-body hidden">
+                     <div class="admin-product-editor-grid">
+                         <label class="admin-product-field"><span>商品名稱</span><input type="text" id="admin-p-name" placeholder="輸入商品名稱" class="input-cyber w-full"></label>
+                         <label class="admin-product-field"><span>商品價格（靈石）</span><input type="number" id="admin-p-price" min="0" step="1" placeholder="輸入售價" class="input-cyber w-full"></label>
+                         <label class="admin-product-field"><span>商品類型</span><select id="admin-p-type" class="input-cyber w-full" onchange="toggleAdminInputPlaceholder()">
+                             <option value="frame">相框</option>
+                             <option value="avatar">頭像</option>
+                         </select></label>
+                         <label class="admin-product-field admin-product-field-wide"><span>圖片路徑／相框樣式</span><input type="text" id="admin-p-value" placeholder="圖片路徑或 CSS 樣式" class="input-cyber w-full" oninput="updateAdminProductPreview()"></label>
+                         <div class="admin-product-asset-panel">
+                             <div id="admin-asset-selector" class="text-xs text-gray-400">可選擇未使用的圖片，或自行輸入路徑。</div>
+                             <p id="admin-hint" class="text-xs text-gray-400 mt-2"></p>
+                             <select id="admin-asset-select" onchange="selectAdminImage(this.value)" class="input-cyber w-full mt-3"></select>
+                         </div>
+                         <div class="admin-product-preview-panel">
+                             <span>商品預覽</span>
+                             <div class="admin-product-preview-stage"><img id="admin-asset-preview" class="hidden object-contain" alt="商品圖片預覽"><span id="admin-product-preview-empty">選擇圖片以預覽外觀</span></div>
+                         </div>
                      </div>
-                     <input type="text" id="admin-p-value" placeholder="Value/Path" class="input-cyber w-full">
-                     
-                     <div id="admin-asset-selector" class="hidden text-xs text-gray-500">Asset Selector Active</div> 
-                     <select id="admin-asset-select" onchange="selectAdminImage(this.value)" class="hidden"></select>
-                     <img id="admin-asset-preview" class="hidden w-10 h-10 mt-2 object-cover rounded">
-
-                     <div class="flex gap-2">
-                         <button onclick="saveProduct()" id="admin-btn-save" class="btn-cyber-primary flex-1 py-2 text-xs">SAVE</button>
-                         <button onclick="deleteProduct()" id="admin-btn-del" class="hidden btn-cyber-ghost w-10 text-red-400 border-red-500/30"><i class="fa-solid fa-trash"></i></button>
+                     <div class="admin-product-editor-actions">
+                         <button type="button" onclick="closeAdminForm()" class="btn-cyber-ghost admin-product-cancel">取消</button>
+                         <button type="button" onclick="deleteProduct()" id="admin-btn-del" class="hidden btn-cyber-ghost admin-product-delete"><i class="fa-solid fa-trash" aria-hidden="true"></i> 刪除商品</button>
+                         <button type="button" onclick="saveProduct()" id="admin-btn-save" class="btn-cyber-primary admin-product-save">儲存商品</button>
                      </div>
                  </div>
              </div>
