@@ -126,7 +126,7 @@
     equip_damage_reduction_flat: { label: '固定減傷', icon: 'fa-shield-halved' },
     equip_damage_reduction_percent: { label: '減傷', icon: 'fa-shield', percent: true, cap: 0.90 },
     equip_crit_chance: { label: '暴擊率', icon: 'fa-crosshairs', percent: true, cap: 0.75 },
-    equip_crit_damage_percent: { label: '暴擊額外傷害', icon: 'fa-bolt', percent: true, note: '額外暴傷；基礎暴擊為 150%' },
+    equip_crit_damage_percent: { label: '暴擊傷害', icon: 'fa-bolt', percent: true },
     equip_combo_chance: { label: '連擊率', icon: 'fa-arrows-rotate', percent: true, cap: 0.10 },
     equip_lifesteal_percent: { label: '吸血率', icon: 'fa-droplet', percent: true, cap: 0.50 },
     equip_reflect_percent: { label: '反傷率', icon: 'fa-shield-heart', percent: true, cap: 1 },
@@ -147,6 +147,8 @@
   function formatStatNumber(number) {
     return new Intl.NumberFormat('zh-TW', { maximumFractionDigits: 2 }).format(number);
   }
+
+  const BASE_CRIT_MULTIPLIER = 1.5; // 與 artifact-battle-effects.js 的實際暴擊倍率一致。
 
   function buildCombatStatList(player, battle) {
     const maxHp = Math.max(1, finitePositive(player?.maxHp) || FALLBACK_COMBAT.maxHp);
@@ -170,6 +172,8 @@
       }
     }
     for (const [key, raw] of totals) {
+      // 額外暴傷不是最終倍率；等確認暴擊率大於 0 後再顯示完整暴擊傷害。
+      if (key === 'equip_crit_damage_percent') continue;
       const meta = BATTLE_STAT_META[key];
       const finalValue = meta.cap ? Math.min(raw, meta.cap) : raw;
       if (finalValue <= 0) continue;
@@ -178,6 +182,18 @@
         key, label: meta.label, icon: meta.icon, sortValue: display,
         value: formatStatNumber(display) + (meta.percent ? '%' : ''),
         note: meta.note || (meta.cap && raw > meta.cap ? '已達鬥法生效上限' : '')
+      });
+    }
+    const critChance = Math.min(totals.get('equip_crit_chance') || 0, BATTLE_STAT_META.equip_crit_chance.cap);
+    if (critChance > 0) {
+      const bonus = totals.get('equip_crit_damage_percent') || 0;
+      const damagePercent = (BASE_CRIT_MULTIPLIER + bonus) * 100;
+      values.push({
+        key: 'equip_crit_damage_percent', label: '暴擊傷害', icon: 'fa-bolt',
+        sortValue: damagePercent, value: formatStatNumber(damagePercent) + '%',
+        note: bonus > 0
+          ? `基礎 150% + 額外 ${formatStatNumber(bonus * 100)}%`
+          : '基礎暴擊傷害 150%'
       });
     }
     return values.sort((a, b) => b.sortValue - a.sortValue);
