@@ -28,6 +28,42 @@ test('non-admin cannot claim Kyushu and name changes require AI review', () => {
   assert.equal(identityApi.RESERVED.test('九州劍仙'), true);
 });
 
+test('name AI review falls back only on timeout after server checks', async () => {
+  const review = identityApi.reviewNameWithDeadline;
+  assert.equal(identityApi.NAME_REVIEW_DEADLINE_MS, 8000);
+  const stalled = review('青雲劍客', {
+    timeoutMs: 5,
+    generateJSON: () => new Promise(() => {})
+  });
+  const fallback = await stalled;
+  assert.equal(fallback.approved, true);
+  assert.equal(fallback.normalizedName, '青雲劍客');
+  assert.equal(fallback.reviewStatus, 'timeout-fallback');
+  assert.equal((await review('九州劍仙', { timeoutMs: 5, generateJSON: () => { throw Error('AI should not run'); } })).approved, false);
+  assert.equal((await review('X', { timeoutMs: 5, generateJSON: () => { throw Error('AI should not run'); } })).approved, false);
+  const rejected = await review('不合適名稱', {
+    timeoutMs: 30,
+    generateJSON: async () => ({ data: { approved: false, reason: '拒絕原因', normalizedName: '不合適名稱' }, provider: 'test', model: 'test' })
+  });
+  assert.equal(rejected.approved, false);
+  assert.equal(rejected.reviewStatus, 'reviewed');
+  await assert.rejects(review('正常名稱', {
+    timeoutMs: 30,
+    generateJSON: async () => { throw new Error('HTTP 429: quota exceeded'); }
+  }), /HTTP 429/);
+  const providerTimeout = await review('修士乙', {
+    timeoutMs: 30,
+    generateJSON: async () => { throw new Error('All AI providers failed: gemini-1: AI request timeout'); }
+  });
+  assert.equal(providerTimeout.reviewStatus, 'timeout-fallback');
+});
+
+test('saving unchanged names avoids unrelated AI moderation', () => {
+  assert.match(identity, /const nameChanged = publicName\(requested, isAdmin\(player\)\) !== publicName\(player\.displayName, isAdmin\(player\)\)/);
+  assert.match(identity, /nameChanged \? await reviewBaseName\(requested\) : stripReserved\(requested\)/);
+  assert.match(identity, /if \(nameChanged\) \{/);
+});
+
 test('name rendering is idempotent so MutationObserver cannot self-trigger forever', () => {
   assert.match(identity, /userInfo\.dataset\.gameDisplayName !== name/);
   assert.match(identity, /userInfo\.dataset\.gameDisplayName = name/);
