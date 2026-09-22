@@ -199,9 +199,14 @@ function getRandomItem(arr) {
 // ==========================================
 app.post('/api/generate-quiz', async (req, res) => {
     // 兼容前端可能傳來的 specificTopic 或 topic
-    let { subject, level, rank, difficulty, knowledgeMap, specificTopic, topic } = req.body;
-    
-    let targetTopic = specificTopic || topic;
+    let { subject, level, rank, difficulty, knowledgeMap, specificTopic, topic, avoidQuestions } = req.body || {};
+    subject = String(subject || '').trim().slice(0, 40);
+    level = String(level || '國中一年級').slice(0, 32);
+    difficulty = ['easy', 'medium', 'hard'].includes(difficulty) ? difficulty : 'medium';
+    const previousQuestions = (Array.isArray(avoidQuestions) ? avoidQuestions : [])
+        .filter(value => typeof value === 'string').slice(-10).map(value => value.trim().slice(0, 180)).filter(Boolean);
+    const fingerprint = value => String(value).replace(/\s+/g, '').toLowerCase();
+    let targetTopic = String(specificTopic || topic || '').trim().slice(0, 240);
 
     // 1. 科目選擇
     if (!subject) {
@@ -245,6 +250,9 @@ app.post('/api/generate-quiz', async (req, res) => {
         4. **適用程度**：${level} (段位：${rank})
         5. **難度設定**：${difficulty}
         6. **隨機因子**：${randomSeed}
+        7. **嚴格範圍**：只能考查「${level}」程度內的「${subject}／${targetTopic}」，不得跨科、超綱或擅自替換單元。
+        8. **避免重複題目**：${previousQuestions.length ? JSON.stringify(previousQuestions) : '本場尚無既有題目'}。不得改寫同一道題目再出。
+        9. 必須提供四個不重複且僅有一個正解的選項，以及能夠支持該答案的完整解析。
         ${diagnosticInfo}
     
         [輸出格式 (JSON Only)]
@@ -269,8 +277,19 @@ app.post('/api/generate-quiz', async (req, res) => {
             console.log(`[Gen] ${subject} > ${targetTopic} (${difficulty}) - 嘗試 ${attempts + 1}`); 
             const routed = await aiRouter.generateJSON(generationPrompt);
             const parsed = routed.data;
-            if(!parsed.sub_topic) parsed.sub_topic = targetTopic;
-            if(!parsed.subject) parsed.subject = subject;
+            const wrong = Array.isArray(parsed?.wrong) ? parsed.wrong : [];
+            const options = [parsed?.correct, ...wrong];
+            if (typeof parsed?.q !== 'string' || parsed.q.trim().length < 5 ||
+                typeof parsed.correct !== 'string' || wrong.length !== 3 ||
+                options.some(item => typeof item !== 'string' || !item.trim()) ||
+                new Set(options.map(fingerprint)).size !== 4 ||
+                typeof parsed.exp !== 'string' || parsed.exp.trim().length < 5 ||
+                (parsed.subject && String(parsed.subject).trim() !== subject) ||
+                previousQuestions.some(old => fingerprint(old) === fingerprint(parsed.q))) {
+                throw new Error('AI 題目未通過範圍、格式或去重檢查');
+            }
+            parsed.subject = subject;
+            parsed.sub_topic = targetTopic;
 
             return res.json({ text: JSON.stringify(parsed), provider: routed.provider, model: routed.model });
 
