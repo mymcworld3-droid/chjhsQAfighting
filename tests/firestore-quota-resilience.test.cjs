@@ -53,8 +53,8 @@ test('expensive full-user percentile scans require an explicit click and share a
   assert.match(section, /renderSerial !== percentileRenderSerial/);
 });
 
-test('idle matchmaking scans less frequently while preserving immediate initial search and room listener', () => {
-  assert.match(battle, /MATCH_RECONCILE_MS = 8000/);
+test('waiting-room matchmaking scans every 1.1 seconds while preserving immediate initial search and room listener', () => {
+  assert.match(battle, /MATCH_RECONCILE_MS = 1100/);
   assert.match(battle, /await findAndClaimRoom\(myData\)/);
   assert.match(battle, /onSnapshot\(roomRef\(roomId\), onRoomSnapshot/);
   assert.match(battle, /if \(state\.roomId && state\.role === 'host' && state\.room\?\.status === 'waiting'\) scheduleReconcile\(\)/);
