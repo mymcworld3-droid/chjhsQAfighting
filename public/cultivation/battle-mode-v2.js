@@ -48,6 +48,7 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
     reconcile: null,
     starting: false,
     leaving: false,
+    recovering: false,
     settlingRound: null,
     timeoutRound: null,
     preparingRound: null,
@@ -73,6 +74,10 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
   function userData() { return window.getCurrentUserData?.() || null; }
   function score() { return Math.max(0, Number(userData()?.stats?.totalScore) || 0); }
   function nowMs() { return Date.now(); }
+
+  // Story, realm tutorials and delayed chapter launches must not take over an active duel.
+  // Reserve the lock throughout matchmaking/recovery and retain it through the result screen.
+  window.isXiuxianBattleBusy = () => Boolean(state.starting || state.leaving || state.recovering || state.roomId);
 
   function finite(value, fallback) {
     const number = Number(value);
@@ -1308,7 +1313,7 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
       await window.ensureCombatStats?.(); const myData = playerSnapshot(); setPlayerAvatar('bv2-match-me-avatar', myData); setText('bv2-match-me', myData.name); setText('bv2-match-me-core', `本命金丹：${playerCoreLabel(myData)}${playerPowerLabel(myData)}`);
       const joined = await findAndClaimRoom(myData); if (joined) { state.role = 'guest'; subscribeRoom(joined); return; }
       setText('bv2-lobby-status', '目前沒有可加入的道友，正在開啟鬥法臺…'); const created = await createWaitingRoom(myData); state.role = 'host'; subscribeRoom(created); scheduleReconcile(); inviteOnlineFriends(created);
-    } catch (error) { console.error('[Battle v2] matchmaking failed:', error); toast('配對失敗，請稍後再試。'); resetRuntime(); window.switchToPage?.('page-home'); }
+    } catch (error) { console.error('[Battle v2] matchmaking failed:', error); toast('配對失敗，請稍後再試。'); resetRuntime(); window.switchToPage?.('page-home'); window.dispatchEvent(new CustomEvent('xiuxian:battle-session-ended')); }
     finally { state.starting = false; }
   }
 
@@ -1337,16 +1342,36 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
         try { await recordBattleResult(null, state.roomId); }
         catch (error) { console.warn('[Battle v2] forfeit reward will retry after reconnect:', error); }
       }
-    } finally { resetRuntime(); if (navigate) window.switchToPage?.('page-home'); }
+    } finally {
+      resetRuntime();
+      if (navigate) window.switchToPage?.('page-home');
+      window.dispatchEvent(new CustomEvent('xiuxian:battle-session-ended'));
+    }
   }
 
   async function joinSpecificRoom(roomId) {
-    if (score() < FOUNDATION_SCORE || !me() || !roomId || storyOrTutorialOpen()) return false; const myData = playerSnapshot();
-    try { const joined = await findAndClaimRoom(myData, roomId); if (!joined) return false; resetRuntime(); state.role = 'guest'; ensurePage(); window.switchToPage?.('page-battle'); subscribeRoom(joined); return true; } catch (_) { return false; }
+    if (state.starting || state.roomId || score() < FOUNDATION_SCORE || !me() || !roomId || storyOrTutorialOpen()) return false;
+    state.starting = true;
+    try {
+      const myData = playerSnapshot();
+      const joined = await findAndClaimRoom(myData, roomId);
+      if (!joined) return false;
+      resetRuntime(); state.starting = true;
+      state.role = 'guest'; ensurePage(); window.switchToPage?.('page-battle'); subscribeRoom(joined);
+      return true;
+    } catch (error) {
+      console.warn('[Battle v2] room join failed:', error);
+      return false;
+    } finally {
+      state.starting = false;
+      if (!state.roomId) window.dispatchEvent(new CustomEvent('xiuxian:battle-session-ended'));
+    }
   }
 
   async function recoverBattleSession() {
-    if (window.getBattleTutorialState?.().active || state.roomId || !me() || score() < FOUNDATION_SCORE || storyOrTutorialOpen()) return; const uid = me().uid;
+    if (state.recovering || state.starting || window.getBattleTutorialState?.().active || state.roomId || !me() || score() < FOUNDATION_SCORE || storyOrTutorialOpen()) return;
+    const uid = me().uid;
+    state.recovering = true;
     try {
       const [hostRooms, guestRooms] = await Promise.all([
         getDocs(query(collection(db(), ROOM_COLLECTION), where('host.uid', '==', uid), limit(20))),
@@ -1372,6 +1397,10 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
       }).sort((a, b) => timestampMs(b.data().updatedAt, b.data().createdAtMs) - timestampMs(a.data().updatedAt, a.data().createdAtMs))[0];
       if (!active) return; const room = active.data(); state.role = room.host?.uid === uid ? 'host' : 'guest'; ensurePage(); window.switchToPage?.('page-battle'); subscribeRoom(active.id); toast('已恢復上次尚未結束的鬥法。');
     } catch (error) { console.warn('[Battle v2] session recovery skipped:', error); }
+    finally {
+      state.recovering = false;
+      if (!state.roomId) window.dispatchEvent(new CustomEvent('xiuxian:battle-session-ended'));
+    }
   }
 
   // 法寶通用引擎只需要這個唯讀橋接，不必知道 Battle v2 的內部 state 結構。
@@ -1436,6 +1465,12 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
   window.joinBattleRoomV2 = joinSpecificRoom;
   window.getBattleV2State = () => ({ roomId: state.roomId, role: state.role, status: state.room?.status || 'idle', round: state.room?.round || 0, modeVersion: BATTLE_V2.modeVersion });
 
-  function boot() { ensurePage(); setTimeout(recoverBattleSession, 700); }
+  function boot() {
+    ensurePage();
+    // Register before story-engine's listener; block its automatic chapter while
+    // looking for an unfinished room after login, then release if none exists.
+    window.addEventListener('xiuxian:user-ready', recoverBattleSession);
+    setTimeout(recoverBattleSession, 700);
+  }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true }); else boot();
 })();
