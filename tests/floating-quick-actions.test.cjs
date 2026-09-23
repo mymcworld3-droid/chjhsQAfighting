@@ -23,6 +23,10 @@ test('original solo and duel launchers float above, not inside, the bottom nav g
 
 test('floating launchers reserve content room without covering battle, question, or mobile nav', () => {
   assert.match(index, /#bottom-nav>\.xiuxian-quick-actions\{[\s\S]*?grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
+  assert.match(index, /width:100vw;max-width:none;box-sizing:border-box/);
+  assert.match(index, /margin:0 0 10px 50%;transform:translateX\(-50%\)/);
+  assert.match(index, /padding-inline:max\(8px,env\(safe-area-inset-left\)\) max\(8px,env\(safe-area-inset-right\)\)/);
+  assert.doesNotMatch(index, /width:min\(560px,100%\);margin:0 auto 10px/);
   assert.match(index, /#bottom-nav>\.xiuxian-quick-actions>button\{[\s\S]*?min-height:62px/);
   assert.match(index, /@media\(max-width:420px\)\{[\s\S]*?#bottom-nav>\.xiuxian-quick-actions>button\{gap:6px;min-height:54px/);
   assert.match(index, /body:has\(#page-quiz\.active-page\) #bottom-nav>\.xiuxian-quick-actions,/);
