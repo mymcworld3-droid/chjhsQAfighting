@@ -11,7 +11,7 @@ const DAILY_LIMIT = 5;
 const AI_DEADLINE_MS = 18000;
 
 function normalizeText(value, max = 2000) {
-  return String(value || '').normalize('NFKC').replace(/\s+/g, ' ').trim().slice(0, max);
+  return String(value || '').normalize('NFC').replace(/\s+/g, ' ').trim().slice(0, max);
 }
 
 function dateInTaiwan(now = new Date()) {
