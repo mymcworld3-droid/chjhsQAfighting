@@ -716,7 +716,7 @@ import {
     }
     const visitor = uid();
     const eligible = shuffle(publicItems.filter((item) =>
-      item.ownerUid !== visitor && Number(item.levelOrder) >= 0 && playerOrder > Number(item.levelOrder) && subjectMatches(item.subject, subjects)
+      item.ownerUid !== visitor && Number(item.levelOrder) >= 0 && playerOrder >= Number(item.levelOrder) && subjectMatches(item.subject, subjects)
     ));
     for (const item of eligible.slice(0, 12)) {
       // A confirmed previous encounter can be skipped locally. Never cache a negative
