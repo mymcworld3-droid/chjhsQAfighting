@@ -2674,6 +2674,28 @@ function reportView(name) {
     }
 }
 
+function renderReportOutcome({ kind, title, message, actionText = '關閉', onAction = window.closeReportModal, showClose = false }) {
+    const colors = {
+        approved: { icon: 'circle-check', className: 'text-green-400' },
+        rejected: { icon: 'circle-xmark', className: 'text-red-400' },
+        incomplete: { icon: 'circle-exclamation', className: 'text-yellow-400' }
+    };
+    const appearance = colors[kind] || colors.incomplete;
+    document.getElementById('report-result-icon').innerHTML =
+        '<i class="fa-solid fa-' + appearance.icon + ' ' + appearance.className + '"></i>';
+    const heading = document.getElementById('report-result-title');
+    heading.textContent = title;
+    heading.className = 'text-lg font-bold mb-2 ' + appearance.className;
+    document.getElementById('report-result-msg').textContent = message;
+
+    const action = document.getElementById('report-result-action');
+    action.textContent = actionText;
+    action.onclick = onAction;
+    const close = document.getElementById('report-result-close');
+    if (close) close.classList.toggle('hidden', !showClose);
+    reportView('result');
+}
+
 window.openReportModal = () => {
     if (reportSubmitting) {
         reportLoadingStatus('本次回報仍在處理，請勿重複送審。');
@@ -2695,12 +2717,12 @@ window.openReportModal = () => {
     document.getElementById('report-result-icon').innerHTML = '';
     document.getElementById('report-result-title').textContent = '';
     document.getElementById('report-result-msg').textContent = '';
-    const btn = document.querySelector('#report-result-view button');
+    const btn = document.getElementById('report-result-action');
     if (btn) {
         btn.onclick = () => closeReportModal();
         btn.textContent = '關閉';
-        btn.className = 'btn-cyber-ghost w-full py-2 text-xs';
     }
+    document.getElementById('report-result-close')?.classList.add('hidden');
     modal.classList.remove('hidden');
     requestAnimationFrame(() => {
         modal.classList.remove('opacity-0');
@@ -2777,14 +2799,9 @@ window.submitReport = async () => {
             throw error;
         }
 
-        reportView('result');
-        const icon = document.getElementById('report-result-icon');
-        const title = document.getElementById('report-result-title');
-        const message = document.getElementById('report-result-msg');
-        const btn = document.querySelector('#report-result-view button');
         const skipVerifiedQuestion = () => {
             closeReportModal();
-            // 不能讓舊回報結果跳過玩家已經切換到的新題目。
+            // A late review must not skip the player's newer question.
             if (window.currentActiveQuiz !== quiz) return;
             syncSoloQuestionCache();
             if (soloQuestionCache.getActive()?.data?.q === quiz.data?.q) soloQuestionCache.consumeActive();
@@ -2792,47 +2809,59 @@ window.submitReport = async () => {
             void fillBuffer();
             setTimeout(() => startQuizFlow(), 300);
         };
+        const retryReport = () => {
+            // Keep the entered reason so a transient server failure is retryable.
+            reportStatus();
+            reportView('input');
+        };
 
-        if (result.status === 'confirmed' && result.compensated === true && result.goldAdded === 100) {
-            icon.innerHTML = '<i class="fa-solid fa-circle-check text-green-400"></i>';
-            title.textContent = '題目有誤 · 補償已發放';
-            title.className = 'text-lg font-bold mb-2 text-green-400';
+        if (result.status === 'confirmed' && result.compensated === true && result.goldAdded === 100 &&
+            Number.isFinite(Number(result.newGold)) && Number.isFinite(Number(result.newTotalScore))) {
             const refunded = Math.max(0, Number(result.cultivationRefund) || 0);
             const extra = Math.max(0, Number(result.cultivationBonus) || 0);
-            message.textContent = '雙重 AI 審核：' + (result.reason || '題目確認有誤。') +
-                '\n返還修為 ' + refunded + '，額外修為 +' + extra +
-                '，共獲得 ' + (refunded + extra) + ' 修為；100 靈石已入帳。本題可直接跳過。';
-            // 以交易回傳的數值更新 UI，不再由前端自行累加或覆寫資料庫。
-            if (currentUserData?.stats && Number.isFinite(Number(result.newGold)) &&
-                Number.isFinite(Number(result.newTotalScore))) {
+            if (currentUserData?.stats && auth.currentUser?.uid === user.uid) {
+                // Only a confirmed server transaction may update the client reward display.
                 currentUserData.stats.gold = Number(result.newGold);
                 currentUserData.stats.totalScore = Number(result.newTotalScore);
                 updateUIStats();
             }
-            btn.textContent = '跳過錯題';
-            btn.onclick = skipVerifiedQuestion;
+            renderReportOutcome({
+                kind: 'approved',
+                title: '審查通過 ✅',
+                message: (result.reason || '題目確認有誤。') +
+                    '\n返還修為 ' + refunded + '，額外獎勵 +' + extra +
+                    ' 修為；共 +' + (refunded + extra) + ' 修為、100 靈石已入帳。',
+                actionText: '跳過錯題',
+                onAction: skipVerifiedQuestion
+            });
         } else if (result.status === 'duplicate') {
-            icon.innerHTML = '<i class="fa-solid fa-circle-check text-yellow-400"></i>';
-            title.textContent = '此題已領取補償';
-            title.className = 'text-lg font-bold mb-2 text-yellow-400';
-            message.textContent = '這道題目已有補償紀錄，不會再次發放修為或靈石；仍可跳過這道已確認的錯題。';
-            btn.textContent = '跳過錯題';
-            btn.onclick = skipVerifiedQuestion;
-        } else if (result.status === 'limit') {
-            icon.innerHTML = '<i class="fa-solid fa-circle-info text-yellow-400"></i>';
-            title.textContent = '今日補償已達上限';
-            title.className = 'text-lg font-bold mb-2 text-yellow-400';
-            message.textContent = result.reason || '今日已達補償上限，明日可再回報。';
-            btn.textContent = '關閉';
-            btn.onclick = () => closeReportModal();
+            renderReportOutcome({
+                kind: 'approved',
+                title: '此題已通過審查 ✅',
+                message: '先前已領取這道題目的補償，不會重複發放；可以直接跳過錯題。',
+                actionText: '跳過錯題',
+                onAction: skipVerifiedQuestion
+            });
+        } else if (result.status === 'rejected') {
+            renderReportOutcome({
+                kind: 'rejected',
+                title: '審查未通過 ❌',
+                message: (result.reason || '目前沒有足夠證據確認題目錯誤。') +
+                    '\n本次不發放補償，可關閉視窗繼續作答。'
+            });
         } else {
-            icon.innerHTML = '<i class="fa-solid fa-circle-xmark text-red-400"></i>';
-            title.textContent = '未確認題目有誤';
-            title.className = 'text-lg font-bold mb-2 text-red-400';
-            message.textContent = '審核結果：' + (result.reason || '目前沒有足夠證據確認題目錯誤。') +
-                '\n本次不發放補償；可繼續作答。';
-            btn.textContent = '關閉';
-            btn.onclick = () => closeReportModal();
+            // Limit, network errors, uncertain AI output and unsettled payments
+            // are NOT an AI rejection; never present them as a paid success.
+            const isLimit = result.status === 'limit';
+            renderReportOutcome({
+                kind: 'incomplete',
+                title: isLimit ? '今日補償已達上限' : '本次審查未完成',
+                message: (result.reason || '審核服務暫時無法處理，請重新送審。') +
+                    '\n本次沒有確認補償入帳。',
+                actionText: isLimit ? '關閉' : '重新送審',
+                onAction: isLimit ? window.closeReportModal : retryReport,
+                showClose: !isLimit
+            });
         }
     } catch (error) {
         // 明確記錄階段及 HTTP 狀態，避免只看見 main-legacy.js 的統一警告行號。
@@ -2842,9 +2871,17 @@ window.submitReport = async () => {
             code: error?.code || null,
             message: error?.message || String(error)
         });
-        reportView('input');
-        // 保留回報內容以供重新送審；審核未成功前不跳題、不宣告已發獎。
-        reportStatus(error?.message || '題目審核暫時無法完成，請稍後重試。', true);
+        // A transport/AI/payment error is not a review rejection.
+        // Keep the entered reason and offer a retry rather than silently resetting.
+        renderReportOutcome({
+            kind: 'incomplete',
+            title: '本次審查未完成',
+            message: (error?.message || '題目審核暫時無法完成，請稍後重試。') +
+                '\n本次尚未確認補償入帳。',
+            actionText: '重新送審',
+            onAction: () => { reportStatus(); reportView('input'); },
+            showClose: true
+        });
     } finally {
         reportSubmitting = false;
     }
