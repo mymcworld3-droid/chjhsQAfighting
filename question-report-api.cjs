@@ -29,7 +29,7 @@ function validateReport(body) {
   const explanation = normalizeText(body?.explanation, 2500);
   const reason = normalizeText(body?.userReason, 1200);
   if (question.length < 5 || options.length < 2 || options.length > 8 ||
-      options.some(item => !item) || new Set(options).size !== options.length ||
+      options.some(item => !item) ||
       !Number.isInteger(correctIndex) || correctIndex < 0 || correctIndex >= options.length) {
     return { error: '題目或正確答案資料不完整，請重新開啟題目。' };
   }
