@@ -23,6 +23,19 @@ test('report input validation and repeat key per player and question', () => {
   assert.equal(api.dateInTaiwan(new Date('2026-09-22T16:00:00Z')), '2026-09-23');
 });
 
+test('cultivation refund derives only from the actual recorded wrong-answer loss', () => {
+  const base = { question: input.question, isCorrect: false, scoreBefore: 29, scoreAfter: 28, penalty: 1 };
+  assert.equal(api.REWARD_GOLD, 100);
+  assert.equal(api.BONUS_CULTIVATION, 1);
+  assert.equal(api.actualCultivationRefund({ lastQuizAnswer: base }, input.question), 1);
+  assert.equal(api.actualCultivationRefund({ lastQuizAnswer: { ...base, penalty: 0 } }, input.question), 0);
+  assert.equal(api.actualCultivationRefund({ lastQuizAnswer: { ...base, scoreBefore: 28, scoreAfter: 28 } }, input.question), 0);
+  assert.equal(api.actualCultivationRefund({ lastQuizAnswer: { ...base, isCorrect: true } }, input.question), 0);
+  assert.equal(api.actualCultivationRefund({ lastQuizAnswer: { ...base, question: '另一道題' } }, input.question), 0);
+  assert.equal(api.actualCultivationRefund({ lastQuizAnswer: { ...base, penalty: 100, scoreBefore: 150, scoreAfter: 50 } }, input.question), 1);
+  assert.equal(api.actualCultivationRefund({}, input.question), 0);
+});
+
 test('two explicit AI confirmations are required; invalid output must not be a rejection', async () => {
   const approved = { determinate: true, hasError: true, confidence: 0.95, issueType: 'answer', reason: '解答不正確' };
   let calls = 0;
@@ -50,8 +63,8 @@ test('two explicit AI confirmations are required; invalid output must not be a r
   assert.equal(unknown.status, 'unavailable');
 });
 
-function fakeDatabase(gold = 100) {
-  const user = { uid: 'tester', stats: { gold }, questionReportDaily: {} };
+function fakeDatabase(gold = 100, score = 28, lastQuizAnswer = null) {
+  const user = { uid: 'tester', stats: { gold, totalScore: score, lastQuizAnswer }, questionReportDaily: {} };
   const claims = new Map();
   let locked = Promise.resolve();
   const ref = (collection, id) => ({ collection, id, async get() { return { exists: claims.has(id), data: () => claims.get(id) }; } });
@@ -75,6 +88,7 @@ function fakeDatabase(gold = 100) {
         }
         for (const [, data] of updates) {
           if (data['stats.gold']) user.stats.gold += data['stats.gold'].amount;
+          if (data['stats.totalScore']) user.stats.totalScore += data['stats.totalScore'].amount;
           user.questionReportDaily = data.questionReportDaily;
         }
         return result;
@@ -93,7 +107,9 @@ const fieldValue = {
 };
 
 test('Firestore transaction awards once even for parallel retries and preserves other stats', async () => {
-  const { db, user, claims } = fakeDatabase();
+  const { db, user, claims } = fakeDatabase(100, 28, {
+    question: input.question, isCorrect: false, scoreBefore: 29, scoreAfter: 28, penalty: 1
+  });
   const options = { today: () => '2026-09-23', fieldValue };
   const result = { reason: '雙重審核確認', issueType: 'answer' };
   const [a, b] = await Promise.all([
@@ -101,7 +117,9 @@ test('Firestore transaction awards once even for parallel retries and preserves 
     api.awardOnce(db, 'tester', { ...input, reason: '換理由' }, result, options)
   ]);
   assert.deepEqual(new Set([a.status, b.status]), new Set(['confirmed', 'duplicate']));
-  assert.equal(user.stats.gold, 120);
+  assert.equal(user.stats.gold, 200);
+  assert.equal(user.stats.totalScore, 30, 'refund one lost cultivation and add one bonus');
+  assert.equal(a.cultivationAdded + b.cultivationAdded, 2);
   assert.equal(claims.size, 1);
   assert.equal(user.questionReportDaily.count, 1);
 });
@@ -116,7 +134,8 @@ test('five daily claims cap is deterministic in Taiwan time and never reserves d
   const denied = await api.awardOnce(db, 'tester', { ...input, question: input.question + 'extra' }, { reason: '確認有誤' }, options);
   assert.equal(denied.status, 'limit');
   assert.equal(claims.size, 5);
-  assert.equal(user.stats.gold, 200);
+  assert.equal(user.stats.gold, 600);
+  assert.equal(user.stats.totalScore, 33, 'five zero-refund claims each grant one cultivation');
   const duplicate = await api.awardOnce(db, 'tester', { ...input, question: input.question + '0' }, { reason: '重複' }, options);
   assert.equal(duplicate.status, 'duplicate');
 });
@@ -165,7 +184,8 @@ test('endpoint distinguishes review-unavailable and completed repeat claim from 
   await confirmed(request, paid);
   await confirmed(request, repeated);
   assert.equal(paid.body.status, 'confirmed');
-  assert.equal(paid.body.goldAdded, 20);
+  assert.equal(paid.body.goldAdded, 100);
+  assert.equal(paid.body.cultivationAdded, 1);
   assert.equal(repeated.body.status, 'duplicate');
   assert.equal(repeated.body.goldAdded, 0);
 });
@@ -175,7 +195,10 @@ test('solo UI does not award gold locally or skip on unavailable result', () => 
   assert.doesNotMatch(server, /app\.post\('\/api\/verify-report'/);
   assert.match(legacy, /Authorization: 'Bearer ' \+ token/);
   assert.match(legacy, /reportSubmitting = true/);
-  assert.match(legacy, /if \(result\.status === 'confirmed' && result\.compensated === true && result\.goldAdded === 20\)/);
+  assert.match(legacy, /if \(result\.status === 'confirmed' && result\.compensated === true && result\.goldAdded === 100\)/);
+  assert.match(legacy, /stats\.lastQuizAnswer = \{/);
+  assert.match(legacy, /if \(quiz\.answerPersistence\) await quiz\.answerPersistence/);
+  assert.match(legacy, /currentUserData\.stats\.totalScore = Number\(result\.newTotalScore\)/);
   assert.match(legacy, /if \(result\.status === 'duplicate'\)/);
   assert.match(legacy, /if \(window\.currentActiveQuiz !== quiz\) return/);
   assert.doesNotMatch(legacy, /currentUserData\.stats\.gold = \(currentUserData\.stats\.gold \|\| 0\) \+ 20/);
