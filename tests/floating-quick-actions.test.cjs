@@ -1,0 +1,31 @@
+const { test } = require('node:test');
+const assert = require('node:assert/strict');
+const { readFileSync } = require('node:fs');
+const { join } = require('node:path');
+
+const index = readFileSync(join(__dirname, '../public/index.html'), 'utf8');
+const tutorial = readFileSync(join(__dirname, '../public/cultivation/newbie-tutorial-v2.js'), 'utf8');
+
+test('original solo and duel launchers float above, not inside, the bottom nav grid', () => {
+  const home = index.slice(index.indexOf('<div id="page-home"'), index.indexOf('<div id="page-training"'));
+  const nav = index.slice(index.indexOf('<nav id="bottom-nav"'), index.indexOf('<div id="toast-container"'));
+  assert.doesNotMatch(home, /id="btn-home-start"|startBattleMatchmaking\(\)/);
+  assert.match(nav, /<div class="xiuxian-quick-actions" aria-label="修行快捷入口">/);
+  assert.ok(nav.indexOf('xiuxian-quick-actions" aria-label') < nav.indexOf('class="glass-capsule'));
+  assert.ok(nav.indexOf('id="btn-home-start"') < nav.indexOf('id="nav-grid"'));
+  assert.ok(nav.indexOf('id="btn-home-pvp"') < nav.indexOf('id="nav-grid"'));
+  assert.equal((index.match(/id="btn-home-start"/g) || []).length, 1);
+  assert.equal((index.match(/id="btn-home-pvp"/g) || []).length, 1);
+  assert.match(nav, /id="btn-home-start"[^>]*onclick="startQuizFlow\(\)"/);
+  assert.match(nav, /id="btn-home-pvp"[^>]*onclick="startBattleMatchmaking\(\)"/);
+  assert.match(tutorial, /target: '#btn-home-start'/);
+});
+
+test('floating launchers reserve content room without covering battle, question, or mobile nav', () => {
+  assert.match(index, /#bottom-nav>\.xiuxian-quick-actions\{[\s\S]*?grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
+  assert.match(index, /#bottom-nav>\.xiuxian-quick-actions>button\{[\s\S]*?min-height:62px/);
+  assert.match(index, /@media\(max-width:420px\)\{[\s\S]*?#bottom-nav>\.xiuxian-quick-actions>button\{gap:6px;min-height:54px/);
+  assert.match(index, /body:has\(#page-quiz\.active-page\) #bottom-nav>\.xiuxian-quick-actions,/);
+  assert.match(index, /body:has\(#page-battle\.active-page\) #bottom-nav>\.xiuxian-quick-actions\{display:none\}/);
+  assert.match(index, /body\.xianxia-theme main\{padding-bottom:208px\}/);
+});
