@@ -6,13 +6,13 @@ const vm = require('node:vm');
 
 const source = readFileSync(join(__dirname, '../public/cultivation/dongtian-cache.js'), 'utf8');
 const caveSource = readFileSync(join(__dirname, '../public/cultivation/dongtian.js'), 'utf8');
-function setup(storage = new Map()) {
+function setup(storage = new Map(), now = Date.now) {
   const localStorage = {
     getItem(key) { return storage.get(key) ?? null; },
     setItem(key, value) { storage.set(key, value); },
     removeItem(key) { storage.delete(key); }
   };
-  const context = vm.createContext({ localStorage, Map, Array, JSON });
+  const context = vm.createContext({ localStorage, Map, Array, JSON, Date: { now } });
   vm.runInContext(source.replace('export const dongtianCache =', 'const dongtianCache =') + '\nthis.cache = dongtianCache;', context);
   return context.cache;
 }
@@ -51,6 +51,31 @@ test('manual refresh invalidates owner full data and public discovery but retain
   assert.equal(cache.getFull('a', 'd1'), null);
   assert.equal(cache.getPublicList(), null);
   assert.equal(cache.getOwnedList('a')[0].id, 'd1');
+});
+
+test('public encounter list expires after one minute, including an empty cached list', () => {
+  const storage = new Map();
+  const clock = { now: 1000 };
+  const cache = setup(storage, () => clock.now);
+  cache.setPublicList([{ id: 'd1', status: 'active' }]);
+  assert.equal(cache.getPublicList()[0].id, 'd1');
+  clock.now += 59 * 1000;
+  assert.equal(cache.getPublicList()[0].id, 'd1');
+  clock.now += 1000;
+  assert.equal(cache.getPublicList(), null, 'other players may have created a new cave');
+  cache.setPublicList([]);
+  assert.equal(cache.getPublicList().length, 0);
+  clock.now += 60 * 1000;
+  assert.equal(cache.getPublicList(), null, 'empty discovery results must expire too');
+});
+
+test('legacy untimed public cache is discarded, while own question cache is unchanged', () => {
+  const storage = new Map();
+  storage.set('xiuxian:dongtian:v1:public', JSON.stringify([{ id: 'old', status: 'active' }]));
+  const cache = setup(storage);
+  assert.equal(cache.getPublicList(), null);
+  cache.setFull('a', 'mine', { id: 'mine', ownerUid: 'a', questions: [{ q: 'Q' }] });
+  assert.equal(cache.getFull('a', 'mine').questions[0].q, 'Q');
 });
 
 test('confirmed encounters are locally memoized without caching negative play checks', () => {
