@@ -54,7 +54,7 @@ function fakeDatabase(gold = 100) {
   const user = { uid: 'tester', stats: { gold }, questionReportDaily: {} };
   const claims = new Map();
   let locked = Promise.resolve();
-  const ref = (collection, id) => ({ collection, id });
+  const ref = (collection, id) => ({ collection, id, async get() { return { exists: claims.has(id), data: () => claims.get(id) }; } });
   const db = {
     collection(name) { return { doc(id) { return ref(name, id); } }; },
     async runTransaction(fn) {
@@ -117,7 +117,7 @@ test('five daily claims cap is deterministic in Taiwan time and never reserves d
   assert.equal(denied.status, 'limit');
   assert.equal(claims.size, 5);
   assert.equal(user.stats.gold, 200);
-  const duplicate = await api.awardOnce(db, 'tester', input, { reason: '重複' }, options);
+  const duplicate = await api.awardOnce(db, 'tester', { ...input, question: input.question + '0' }, { reason: '重複' }, options);
   assert.equal(duplicate.status, 'duplicate');
 });
 
