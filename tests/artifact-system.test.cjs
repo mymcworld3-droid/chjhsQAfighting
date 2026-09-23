@@ -96,7 +96,8 @@ test('equipment system uses four canonical slots, replaces same-slot gear, and c
   assert.match(system, /ARTIFACT_EQUIP_SLOTS/);
   assert.match(system, /function canonicalEquipSlot\(item\)/);
   assert.match(system, /ARTIFACT_EQUIP_SLOTS\.includes\(slot\)/);
-  assert.match(system, /canonicalSlot === slot && inventory\[id\] > 0/);
+  assert.match(system, /ARTIFACT_EQUIP_SLOTS\.includes\(slot\) && inventory\[id\] > 0/);
+  assert.match(system, /\(item && canonicalSlot === slot\) \|\| \(!item && pendingCatalog\)/);
   assert.match(system, /replacedId = String\(next\.equipped\[slot\] \|\| ''\)/);
   assert.match(system, /next\.equipped\[slot\] = itemId/);
   assert.match(system, /已將 \$\{replaced\.name\} 替換為 \$\{item\.name\}/);
