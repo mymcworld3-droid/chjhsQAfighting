@@ -98,7 +98,7 @@ import { ARTIFACT_EQUIP_SLOTS, getArtifactById, realmForScore } from './artifact
     return {
       uid, name: String(data?.displayName || '無名修士'), avatar: safeImage(data?.equipped?.avatar),
       // A high enough score alone does not award the top-five True Immortal title.
-      realm: realm === '真仙' ? '登仙' : realm, score, power, core, slots,
+      realm: realm === '真仙' ? '半仙' : realm, score, power, core, slots,
       answered, correct, accuracy: answered ? (correct / answered * 100).toFixed(1) + '%' : '尚無紀錄'
     };
   }

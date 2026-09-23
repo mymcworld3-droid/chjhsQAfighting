@@ -14,7 +14,7 @@ test('legacy login core uses the same cultivation realm curve', () => {
     ['合體', 308],
     ['大乘', 448],
     ['渡劫', 628],
-    ['登仙', 868],
+    ['半仙', 868],
     ['真仙', 868]
   ];
 

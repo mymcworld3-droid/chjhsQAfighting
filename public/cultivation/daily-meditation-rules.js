@@ -9,7 +9,7 @@ export const DAILY_MEDITATION_REALMS = Object.freeze([
   { min: 308, name: '合體', cultivation: 7, gold: 100 },
   { min: 448, name: '大乘', cultivation: 8, gold: 130 },
   { min: 628, name: '渡劫', cultivation: 9, gold: 160 },
-  { min: 868, name: '登仙／真仙', cultivation: 10, gold: 200 }
+  { min: 868, name: '半仙／真仙', cultivation: 10, gold: 200 }
 ]);
 export const DAILY_MEDITATION_STREAKS = Object.freeze([
   { min: 1, cultivation: 0, gold: 0 },

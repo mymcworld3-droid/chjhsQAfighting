@@ -23,7 +23,7 @@
     { name: '合體', sub: '天地合一', need: 308 },
     { name: '大乘', sub: '大道將成', need: 448 },
     { name: '渡劫', sub: '雷劫問道', need: 628 },
-    { name: '登仙', sub: '仙門在望', need: 868 },
+    { name: '半仙', sub: '仙門在望', need: 868 },
     { name: '真仙', sub: '榜上仙位', need: 868 }
   ];
 
@@ -70,7 +70,7 @@
     if (next.name === '真仙' && next.need <= value) {
       barEl.style.width = '100%';
       nextEl.textContent = '需登上九州五大仙榜';
-      labelEl.textContent = '登仙已成 · 爭奪真仙席位';
+      labelEl.textContent = '半仙已成 · 爭奪真仙席位';
       return true;
     }
 

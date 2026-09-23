@@ -75,6 +75,23 @@ import { MATERIAL_CATALOG, getMaterialById, materialDropRateFor, materialRealmFo
     return [...compact.entries()].map(([materialId, quantity]) => ({ materialId, quantity }));
   }
 
+  // Firestore already retries a transaction internally, but the player's shared
+  // users document may still change under heavy concurrent activity. Retry only
+  // known version-conflict errors, with bounded backoff; never retry unknown
+  // commit outcomes (which could otherwise grant the same drop twice).
+  async function runDropTransactionWithRetry(operation, sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))) {
+    const MAX_CONFLICT_RETRIES = 3;
+    for (let attempt = 0; ; attempt += 1) {
+      try {
+        return await operation();
+      } catch (error) {
+        const code = String(error?.code || '').replace('firestore/', '');
+        if (!['failed-precondition', 'aborted'].includes(code) || attempt >= MAX_CONFLICT_RETRIES) throw error;
+        await sleep(180 * (2 ** attempt) + Math.floor(Math.random() * 90));
+      }
+    }
+  }
+
   async function grantDrops(source, drops) {
     if (!Array.isArray(drops) || !drops.length) return [];
     const user = authUser();
@@ -90,7 +107,7 @@ import { MATERIAL_CATALOG, getMaterialById, materialDropRateFor, materialRealmFo
     if (!normalizedDrops.length) return [];
 
     let committed = null;
-    await runTransaction(database(), async (tx) => {
+    await runDropTransactionWithRetry(() => runTransaction(database(), async (tx) => {
       const ref = doc(database(), 'users', user.uid);
       const snap = await tx.get(ref);
       if (!snap.exists()) throw new Error('玩家資料不存在');
@@ -100,8 +117,11 @@ import { MATERIAL_CATALOG, getMaterialById, materialDropRateFor, materialRealmFo
       });
       committed = next;
       tx.update(ref, { [FIELD]: next });
-    });
+    }));
 
+    // A session may change while Firestore retries; never apply the previous
+    // account's inventory to a different player's local profile.
+    if (authUser()?.uid !== user.uid) return normalizedDrops;
     const data = userData();
     if (data) data[FIELD] = committed;
     window.dispatchEvent(new CustomEvent('material-system-updated', {
@@ -123,7 +143,8 @@ import { MATERIAL_CATALOG, getMaterialById, materialDropRateFor, materialRealmFo
     const drops = source === 'dongtian' ? expandDongtianDrops(rolledDrops) : rolledDrops;
     if (!drops.length) return;
     grantQueue = grantQueue.then(() => grantDrops(source, drops)).catch((error) => {
-      console.warn('[Material drop]', error);
+      console.warn('[Material drop] reward not committed:', error?.code || error?.message || String(error));
+      toast('材料掉落未能寫入，獎勵尚未發放，請稍後再試。');
     });
   }
 

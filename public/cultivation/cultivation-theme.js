@@ -24,7 +24,7 @@
     { name: '合體', sub: '天地合一', need: 308 },
     { name: '大乘', sub: '大道將成', need: 448 },
     { name: '渡劫', sub: '雷劫問道', need: 628 },
-    { name: '登仙', sub: '仙門在望', need: 868 },
+    { name: '半仙', sub: '仙門在望', need: 868 },
     { name: '真仙', sub: '榜上仙位', need: 868 }
   ];
 
@@ -213,7 +213,7 @@
     if (nextEl) nextEl.textContent = next?.name === '真仙' && value >= next.need ? '需登上九州五大仙榜' : next ? `${Math.max(0, next.need - value).toLocaleString()} 修為` : '已成真仙';
 
     const label = document.getElementById('xiuxian-progress-label');
-    if (label) label.textContent = next?.name === '真仙' && value >= next.need ? '登仙已成 · 爭奪真仙席位' : next ? `下一境界：${next.name} ${next.sub}` : '榜上有名，位列真仙';
+    if (label) label.textContent = next?.name === '真仙' && value >= next.need ? '半仙已成 · 爭奪真仙席位' : next ? `下一境界：${next.name} ${next.sub}` : '榜上有名，位列真仙';
 
     window.refreshDailyMeditationPanel?.();
   }

@@ -14,7 +14,7 @@ const legacy = read('main-legacy.js');
 const main = read('main.js');
 const manifest = JSON.parse(read('module-versions.json'));
 
-const names = ['凡人','煉氣','築基','金丹','元嬰','化神','煉虛','合體','大乘','渡劫','登仙','真仙'];
+const names = ['凡人','煉氣','築基','金丹','元嬰','化神','煉虛','合體','大乘','渡劫','半仙','真仙'];
 
 test('every cultivation realm has a unique safe SVG crest and a color definition', () => {
   const window = {};
@@ -54,7 +54,7 @@ test('True Immortal uses its celestial seal instead of the old star medal', () =
 
 test('realm UI, breakthrough, chat and matchmaking no longer use realm emoji', () => {
   for (const code of [theme, live, breakthrough, legacy]) {
-    const realmRows = code.match(/\{ name: '(?:凡人|煉氣|築基|金丹|元嬰|化神|煉虛|合體|大乘|渡劫|登仙|真仙)', sub:[^\n]+/g) || [];
+    const realmRows = code.match(/\{ name: '(?:凡人|煉氣|築基|金丹|元嬰|化神|煉虛|合體|大乘|渡劫|半仙|真仙)', sub:[^\n]+/g) || [];
     assert.ok(realmRows.length >= 20);
     for (const row of realmRows) assert.doesNotMatch(row, /emoji:/);
   }
