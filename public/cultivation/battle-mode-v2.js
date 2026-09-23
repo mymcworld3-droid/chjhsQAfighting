@@ -20,6 +20,11 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
   const MATCH_SCAN_LIMIT = 80;
   const INTRO_DURATION_MS = 4800;
   const ROUND_COUNTDOWN_MS = 3000;
+  // Only the opening round has a shared three-second countdown.
+  // Every subsequent question becomes answerable as soon as it is ready.
+  function questionReadyDeadline(round, issuedAtMs) {
+    return issuedAtMs + (Number(round) === 1 ? ROUND_COUNTDOWN_MS : 0);
+  }
   // One server-settled strike occupies real wall-clock time; rendering speed is irrelevant.
   const ANIMATION_STEP_MS = 1850;
   const ATTACK_IMPACT_MS = 650;
@@ -666,10 +671,10 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
 
   function renderRoundCue(room) {
     const remaining = Number(room.questionReadyAtMs || 0) - nowMs();
-    const counting = room.status === 'playing' && remaining > 0;
-    setText('bv2-cue-kicker', counting ? '下一題倒數' : room.status === 'preparing' ? '靈識凝聚' : '回合交鋒');
+    const counting = room.status === 'playing' && Number(room.round) === 1 && remaining > 0;
+    setText('bv2-cue-kicker', counting ? '開戰倒數' : room.status === 'preparing' ? '靈識凝聚' : '回合交鋒');
     setText('bv2-cue-count', counting ? Math.ceil(remaining / 1000) : room.status === 'preparing' ? '問' : '⚔');
-    setText('bv2-cue-message', counting ? '凝神備戰，倒數後進入全畫面答題' :
+    setText('bv2-cue-message', counting ? '凝神備戰，開戰後進入全畫面答題' :
       room.status === 'preparing' ? '正在準備下一道題目…' :
       room.status === 'settled' ? (bothReviewed(room) ? '雙方已確認，下一回合即將開始' : '等待道友閱讀解析…') :
       '答題完成後，回到戰場依先後手出招');
@@ -1104,7 +1109,7 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
       await runTransaction(db(), async (tx) => {
         const ref = roomRef(); const snap = await tx.get(ref); if (!snap.exists()) return; const fresh = snap.data();
         if (fresh.status !== 'preparing' || Number(fresh.round) !== round || fresh.currentQuestion || fresh.questionOwnerUid !== me().uid) return;
-        tx.update(ref, { status: 'playing', currentQuestion: question, questionReadyAtMs: nowMs() + ROUND_COUNTDOWN_MS, questionOwnerUid: null, questionClaimedAtMs: null, answerWindowStartedAt: null, answerWindowStartedAtMs: null, firstAnswerUid: null, updatedAt: serverTimestamp() });
+        tx.update(ref, { status: 'playing', currentQuestion: question, questionReadyAtMs: questionReadyDeadline(round, nowMs()), questionOwnerUid: null, questionClaimedAtMs: null, answerWindowStartedAt: null, answerWindowStartedAtMs: null, firstAnswerUid: null, updatedAt: serverTimestamp() });
       });
     } catch (error) { console.error('[Battle v2] next question failed:', error); state.prepareRetryAfterMs = nowMs() + 4000; }
     finally { state.preparingRound = null; }
@@ -1163,7 +1168,7 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
 
     if (room.status === 'intro') { updateIntroText(room); advanceIntro(room); }
     else if (room.status === 'playing' && room.currentQuestion) {
-      // The arena stays visible for the entire shared three-second countdown.
+      // Only the opening round waits three seconds; later rounds immediately show the quiz.
       if (nowMs() < Number(room.questionReadyAtMs || 0)) {
         if (document.getElementById('page-battle')?.dataset.bv2Phase !== 'arena') renderArena(room);
         renderRoundCue(room);
