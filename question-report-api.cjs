@@ -186,7 +186,7 @@ function createHandler({ resolve = () => adminProject('A'), review = reviewQuest
     } catch (error) {
       const code = String(error?.code || '').toLowerCase();
       logger.warn('[Question report] Firebase A ID token verification failed:', code || error?.message);
-      if (/auth\\/(?:id-token-expired|id-token-revoked|invalid-id-token|argument-error|user-disabled|user-not-found|invalid-argument)/.test(code)) {
+      if (['auth/id-token-expired', 'auth/id-token-revoked', 'auth/invalid-id-token', 'auth/argument-error', 'auth/user-disabled', 'auth/user-not-found', 'auth/invalid-argument'].includes(code)) {
         return res.status(401).json({
           status: 'unauthorized', phase: 'authentication', valid: null, compensated: false,
           reason: '登入狀態已失效，請重新登入後再回報。'
