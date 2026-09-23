@@ -190,6 +190,36 @@ test('endpoint distinguishes review-unavailable and completed repeat claim from 
   assert.equal(repeated.body.goldAdded, 0);
 });
 
+test('report API distinguishes AI timeout from compensation write failure', async () => {
+  const verifyIdToken = async () => ({ uid: 'tester', aud: 'question-learning', iss: 'https://securetoken.google.com/question-learning' });
+  const { db, claims } = fakeDatabase();
+  const resolve = () => ({ auth: { verifyIdToken }, db });
+  const request = { body: input, get: () => 'Bearer valid.token' };
+  const logger = { warn() {}, error() {} };
+
+  const timeout = response();
+  await api.createHandler({
+    resolve, logger, review: async () => { throw new Error('review deadline exceeded'); }
+  })(request, timeout);
+  assert.equal(timeout.code, 503);
+  assert.equal(timeout.body.phase, 'ai-review');
+  assert.match(timeout.body.reason, /逾時/);
+  assert.equal(timeout.body.compensated, false);
+  assert.equal(claims.size, 0);
+
+  const failedAward = response();
+  await api.createHandler({
+    resolve, logger,
+    review: async () => ({ status: 'confirmed', reason: '確認有誤', issueType: 'answer' }),
+    award: async () => { throw new Error('Firestore write unavailable'); }
+  })(request, failedAward);
+  assert.equal(failedAward.code, 503);
+  assert.equal(failedAward.body.phase, 'compensation');
+  assert.match(failedAward.body.reason, /補償入帳/);
+  assert.equal(failedAward.body.compensated, false);
+  assert.equal(claims.size, 0);
+});
+
 test('solo UI does not award gold locally or skip on unavailable result', () => {
   assert.match(server, /registerQuestionReportApi\(app\)/);
   assert.doesNotMatch(server, /app\.post\('\/api\/verify-report'/);
@@ -198,6 +228,11 @@ test('solo UI does not award gold locally or skip on unavailable result', () => 
   assert.match(legacy, /if \(result\.status === 'confirmed' && result\.compensated === true && result\.goldAdded === 100\)/);
   assert.match(legacy, /stats\.lastQuizAnswer = \{/);
   assert.match(legacy, /if \(quiz\.answerPersistence\) await quiz\.answerPersistence/);
+  assert.match(legacy, /const persisted = p1;/);
+  assert.match(legacy, /void addDoc\(collection\(db, "exam_logs"\)/);
+  assert.match(legacy, /console\.warn\('\[Quiz exam log\]'/);
+  assert.match(legacy, /phase: error\?\.phase \|\| reportStage/);
+  assert.doesNotMatch(legacy, /Promise\.all\(\[p1, p2\]\)/);
   assert.match(legacy, /currentUserData\.stats\.totalScore = Number\(result\.newTotalScore\)/);
   assert.match(legacy, /if \(result\.status === 'duplicate'\)/);
   assert.match(legacy, /if \(window\.currentActiveQuiz !== quiz\) return/);
