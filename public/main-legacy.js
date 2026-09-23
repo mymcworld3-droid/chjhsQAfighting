@@ -1384,13 +1384,14 @@ window.addFriend = async () => {
 function startPresenceSystem() {
     if (presenceInterval) clearInterval(presenceInterval);
     const updatePresence = async () => {
-        if (!auth.currentUser) return;
+        if (!auth.currentUser || document.visibilityState === 'hidden') return;
         try {
             await updateDoc(doc(db, "users", auth.currentUser.uid), { lastActive: serverTimestamp() });
         } catch (e) { console.error("Presence update failed", e); }
     };
     updatePresence();
-    presenceInterval = setInterval(updatePresence, 60 * 1000);
+    // Online detection uses a five-minute window; two-minute heartbeats are enough.
+    presenceInterval = setInterval(updatePresence, 2 * 60 * 1000);
 }
 
 // 好友頁一分鐘內重開沿用快照；重新登入或好友名單改變則自動失效。
@@ -2497,6 +2498,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     let stats = currentUserData.stats;
     let scoreGain = 0;
     const scoreBeforeAnswer = Math.max(0, Number(stats.totalScore) || 0);
+    const shieldBeforeAnswer = !!stats.goldenCoreShield;
     const cultivationReward = applyCultivationReward(stats, isCorrect);
     // 記下實際扣除的修為；道心擋住扣分或尚未達金丹時皆為 0。
     // 隨本次答題的 stats 一起存入，補償 API 不信任瀏覽器另外送來的扣分金額。
@@ -2546,9 +2548,17 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
 
     updateUIStats();
 
+    // Neutral answers (no reward, cultivation loss, or persistent shield change)
+    // stay local until the next reward. A report explicitly saves its last answer
+    // before the API can calculate a trusted refund.
+    const shouldSaveAnswer = isCorrect || stats.totalScore !== scoreBeforeAnswer ||
+        !!stats.goldenCoreShield !== shieldBeforeAnswer;
     try {
-        const p1 = updateDoc(doc(db, "users", auth.currentUser.uid), { stats: stats })
-            .then(() => showCultivationFeedback(cultivationReward, isCorrect));
+        const p1 = shouldSaveAnswer
+            ? updateDoc(doc(db, "users", auth.currentUser.uid), { stats: stats })
+                .then(() => showCultivationFeedback(cultivationReward, isCorrect))
+            : null;
+        if (!shouldSaveAnswer) showCultivationFeedback(cultivationReward, isCorrect);
         void addDoc(collection(db, "exam_logs"), { 
             uid: auth.currentUser.uid, 
             email: auth.currentUser.email, 
@@ -2566,10 +2576,13 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
             // 答題歷史為非必要紀錄；寫入失敗不可阻止已保存的答題資料送審。
             console.warn('[Quiz exam log]', error?.code || error?.message || String(error));
         });
-        // 僅等待玩家修為與扣分紀錄保存；exam_logs 失敗不影響回報。
-        const persisted = p1;
-        if (quiz) quiz.answerPersistence = persisted;
-        await persisted;
+        // Only reward/loss writes must block the answer. A neutral answer can
+        // still be saved on demand when the player reports that exact question.
+        if (quiz) {
+            quiz.answerPersistence = p1;
+            quiz.answerPersistenceDeferred = !shouldSaveAnswer;
+        }
+        if (p1) await p1;
     } catch (e) { console.error("Firebase Error", e); }
     
     fillBuffer();
@@ -2769,6 +2782,20 @@ window.submitReport = async () => {
     reportLoadingStatus('正在等待答題資料同步…');
     let reportStage = 'save-answer';
     try {
+        if (quiz.answerPersistenceDeferred && !quiz.answerPersistence) {
+            // Do not persist every neutral answer. Save this answer only if the
+            // player opens an actual report; the server alone calculates rewards.
+            quiz.answerPersistenceDeferred = false;
+            quiz.answerPersistence = updateDoc(doc(db, "users", user.uid), {
+                'stats.lastQuizAnswer': currentUserData.stats.lastQuizAnswer,
+                'stats.totalAnswered': currentUserData.stats.totalAnswered,
+                'stats.currentStreak': currentUserData.stats.currentStreak
+            });
+            void quiz.answerPersistence.catch(() => {
+                quiz.answerPersistence = null;
+                quiz.answerPersistenceDeferred = true;
+            });
+        }
         if (quiz.answerPersistence) await waitForReportAnswerSaved(quiz.answerPersistence);
         if (window.currentActiveQuiz !== quiz || auth.currentUser?.uid !== user.uid) {
             throw new Error('題目或登入身分已變更，請重新開啟回報。');

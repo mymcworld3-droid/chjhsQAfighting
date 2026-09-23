@@ -166,12 +166,36 @@ function createHandler({ resolve = () => adminProject('A'), review = reviewQuest
     let project, verified;
     try {
       project = resolve();
-      verified = await project.auth.verifyIdToken(bearer[1], true);
-      if (!verified.uid || verified.aud !== 'question-learning' ||
-          verified.iss !== 'https://securetoken.google.com/question-learning') throw new Error('Invalid player identity');
     } catch (error) {
-      logger.warn('[Question report] authentication unavailable:', error?.message);
-      return res.status(503).json({ status: 'unavailable', phase: 'authentication', valid: null, reason: '暫時無法驗證登入或連接補償服務，請稍後再試。' });
+      // Credential errors need a deployment fix, not repeated AI reviews or client retries.
+      logger.error('[Question report] Firebase A Admin setup failed:', error?.code || error?.message);
+      return res.status(503).json({
+        status: 'unavailable', phase: 'authentication-config', valid: null, compensated: false,
+        reason: '補償服務尚未完成設定，請管理員檢查伺服器的 Firebase A 憑證。'
+      });
+    }
+    try {
+      verified = await project.auth.verifyIdToken(bearer[1], true);
+      if (!verified?.uid || verified.aud !== 'question-learning' ||
+          verified.iss !== 'https://securetoken.google.com/question-learning') {
+        return res.status(401).json({
+          status: 'unauthorized', phase: 'authentication', valid: null, compensated: false,
+          reason: '登入身分無效，請重新登入後再回報。'
+        });
+      }
+    } catch (error) {
+      const code = String(error?.code || '').toLowerCase();
+      logger.warn('[Question report] Firebase A ID token verification failed:', code || error?.message);
+      if (['auth/id-token-expired', 'auth/id-token-revoked', 'auth/invalid-id-token', 'auth/argument-error', 'auth/user-disabled', 'auth/user-not-found', 'auth/invalid-argument'].includes(code)) {
+        return res.status(401).json({
+          status: 'unauthorized', phase: 'authentication', valid: null, compensated: false,
+          reason: '登入狀態已失效，請重新登入後再回報。'
+        });
+      }
+      return res.status(503).json({
+        status: 'unavailable', phase: 'authentication', valid: null, compensated: false,
+        reason: '登入驗證服務暫時無法連線，請稍後重試。'
+      });
     }
     const uid = verified.uid;
     const claimRef = project.db.collection('questionErrorCompensations').doc(reportKey(uid, input.question));

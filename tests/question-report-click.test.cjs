@@ -82,3 +82,12 @@ test('only an approved and paid review can show rewards; a technical failure is 
   assert.match(html, /id="report-result-action"/);
   assert.match(html, /id="report-result-close"/);
 });
+
+test('neutral answers avoid unnecessary stats writes while report persists their audit record', () => {
+  assert.match(legacy, /const shouldSaveAnswer = isCorrect \|\| stats\.totalScore !== scoreBeforeAnswer \|\|/);
+  assert.match(legacy, /\? updateDoc\(doc\(db, "users", auth\.currentUser\.uid\), \{ stats: stats \}\)/);
+  assert.match(legacy, /quiz\.answerPersistenceDeferred = !shouldSaveAnswer/);
+  assert.match(legacy, /if \(quiz\.answerPersistenceDeferred && !quiz\.answerPersistence\)/);
+  assert.match(legacy, /'stats\.lastQuizAnswer': currentUserData\.stats\.lastQuizAnswer/);
+  assert.ok(legacy.indexOf('quiz.answerPersistence = updateDoc(') < legacy.indexOf("fetch('/api/verify-report'"));
+});
