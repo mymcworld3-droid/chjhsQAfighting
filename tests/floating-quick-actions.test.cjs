@@ -29,7 +29,18 @@ test('floating launchers reserve content room without covering battle, question,
   assert.doesNotMatch(index, /width:min\(560px,100%\);margin:0 auto 10px/);
   assert.match(index, /#bottom-nav>\.xiuxian-quick-actions>button\{[\s\S]*?min-height:62px/);
   assert.match(index, /@media\(max-width:420px\)\{[\s\S]*?#bottom-nav>\.xiuxian-quick-actions>button\{gap:6px;min-height:54px/);
-  assert.match(index, /body:has\(#page-quiz\.active-page\) #bottom-nav>\.xiuxian-quick-actions,/);
-  assert.match(index, /body:has\(#page-battle\.active-page\) #bottom-nav>\.xiuxian-quick-actions\{display:none\}/);
-  assert.match(index, /body\.xianxia-theme main\{padding-bottom:208px\}/);
+  assert.match(index, /#bottom-nav>\.xiuxian-quick-actions\{\s*display:none/);
+  assert.match(index, /body:has\(#page-home\.active-page\) #bottom-nav>\.xiuxian-quick-actions\{display:grid\}/);
+  assert.match(index, /body\.xianxia-theme main\{padding-bottom:116px\}/);
+  assert.match(index, /body\.xianxia-theme:has\(#page-home\.active-page\) main\{padding-bottom:208px\}/);
+});
+
+test('wide screens place home-only launchers at both sides of the centered navigation', () => {
+  assert.match(index, /@media\(min-width:1100px\)\{/);
+  assert.match(index, /position:absolute;bottom:0;left:50%/);
+  assert.match(index, /width:100vw;height:72px;margin:0/);
+  assert.match(index, /column-gap:calc\(560px \+ 24px\)/);
+  assert.match(index, /pointer-events:none/);
+  assert.match(index, /#bottom-nav>\.xiuxian-quick-actions>button\{width:100%;min-height:72px;pointer-events:auto\}/);
+  assert.match(index, /@media\(min-width:1100px\)\{\s*body\.xianxia-theme:has\(#page-home\.active-page\) main\{padding-bottom:116px\}/);
 });
