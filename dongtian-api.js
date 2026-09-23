@@ -851,6 +851,27 @@ module.exports = function registerDongtianApi(app) {
   });
 
   app.post('/api/generate-dongtian', async (req, res) => {
+    // Opt-in NDJSON gives the client confirmed batch counts instead of a
+    // simulated timer. Existing JSON callers and validation errors stay compatible.
+    const stream = String(req.get?.('accept') || req.headers?.accept || '').includes('application/x-ndjson');
+    let streamOpened = false;
+    const emit = (event) => {
+      if (!stream) return;
+      if (!streamOpened) {
+        res.status(200);
+        res.set('Content-Type', 'application/x-ndjson; charset=utf-8');
+        res.set('Cache-Control', 'no-cache, no-transform');
+        res.set('X-Accel-Buffering', 'no');
+        res.flushHeaders?.();
+        streamOpened = true;
+      }
+      res.write(JSON.stringify(event) + '\n');
+      res.flush?.();
+    };
+    const finish = (payload) => {
+      if (stream) return res.end(JSON.stringify({ type: 'complete', ...payload }) + '\n');
+      return res.json(payload);
+    };
     try {
       const text = cleanText(req.body?.text, MAX_TEXT);
       const creatorLevel = normalizeLevel(req.body?.creatorLevel, '國中一年級');
@@ -859,8 +880,10 @@ module.exports = function registerDongtianApi(app) {
       if (!text && !images.length) return res.status(400).json({ error: '請至少提供文字或一張圖片' });
 
       // Pass 1: only identify required question count, metadata and ordered single-choice structure.
+      emit({ type: 'planning' });
       const planningRun = await generateMultimodalJSON(buildPlanningPrompt(text, creatorLevel, images.length, questionAmount), images);
       const plan = normalizeDongtianPlan(planningRun.data, creatorLevel, questionAmount);
+      emit({ type: 'planned', total: plan.questionCount, completed: 0 });
 
       // Pass 2+: generate up to five questions per batch; final batch uses the exact remainder.
       // Every batch prompt includes every question already generated so the model can avoid repetition.
@@ -868,6 +891,9 @@ module.exports = function registerDongtianApi(app) {
       const batchAudit = [];
       for (let startIndex = 0; startIndex < plan.questionCount; startIndex += QUESTION_BATCH_SIZE) {
         const expectedCount = Math.min(QUESTION_BATCH_SIZE, plan.questionCount - startIndex);
+        emit({ type: 'batch-start', completed: generatedQuestions.length, total: plan.questionCount,
+          batch: Math.floor(startIndex / QUESTION_BATCH_SIZE) + 1,
+          batches: Math.ceil(plan.questionCount / QUESTION_BATCH_SIZE) });
         let batch = null;
         let lastError = null;
         let successfulRun = null;
@@ -887,6 +913,9 @@ module.exports = function registerDongtianApi(app) {
 
         if (!batch) throw lastError || new Error(`第 ${startIndex / QUESTION_BATCH_SIZE + 1} 批題目生成失敗`);
         generatedQuestions.push(...batch);
+        emit({ type: 'batch-complete', completed: generatedQuestions.length, total: plan.questionCount,
+          batch: Math.floor(startIndex / QUESTION_BATCH_SIZE) + 1,
+          batches: Math.ceil(plan.questionCount / QUESTION_BATCH_SIZE) });
         batchAudit.push({
           start: startIndex + 1,
           end: startIndex + batch.length,
@@ -902,6 +931,7 @@ module.exports = function registerDongtianApi(app) {
         throw new Error(`洞天規劃 ${plan.questionCount} 題，但完成後只有 ${dongtian.questions.length} 題`);
       }
 
+      emit({ type: 'review', completed: generatedQuestions.length, total: plan.questionCount });
       const checked = await reviewAndRepairGeneratedDongtian(dongtian);
       const doubleCheck = checked.doubleCheck;
       if (!doubleCheck.review.passed) {
@@ -911,15 +941,20 @@ module.exports = function registerDongtianApi(app) {
           repairs: checked.repairs,
           blocked: checked.blocked || null
         });
-        return res.status(422).json({
+        const failure = {
           error: '洞天品質複核未通過，已嘗試重新審核或修復可辨認的錯題；本次不予建立。',
           doubleCheck: doubleCheck.review,
           initialDoubleCheck: checked.initialDoubleCheck.review,
           repairAttempts: checked.repairs,
           reasonCode: checked.blocked || 'quality_review'
-        });
+        };
+        if (stream) {
+          emit({ type: 'error', httpStatus: 422, ...failure });
+          return res.end();
+        }
+        return res.status(422).json(failure);
       }
-      res.json({
+      finish({
         dongtian: checked.dongtian,
         generationPlan: {
           questionAmount,
@@ -936,6 +971,10 @@ module.exports = function registerDongtianApi(app) {
       });
     } catch (error) {
       console.error('[Dongtian API]', error);
+      if (streamOpened) {
+        emit({ type: 'error', httpStatus: 500, error: error?.message || '洞天生成失敗' });
+        return res.end();
+      }
       res.status(500).json({ error: error?.message || '洞天生成失敗' });
     }
 
