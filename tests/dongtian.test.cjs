@@ -216,9 +216,10 @@ test('unknown question IDs in reviewer feedback cannot approve or rewrite the ca
   } finally { router.generateJSON = saved; }
 });
 
-test('Dongtian encounter is only for higher-grade matching players and is one-time', () => {
+test('Dongtian encounter allows same or lower grade matching players and is one-time', () => {
   assert.match(uiSource, /const ENCOUNTER_CHANCE = 0\.20/);
-  assert.match(uiSource, /playerOrder > Number\(item\.levelOrder\)/);
+  assert.match(uiSource, /playerOrder >= Number\(item\.levelOrder\)/);
+  assert.doesNotMatch(uiSource, /playerOrder > Number\(item\.levelOrder\)/);
   assert.match(uiSource, /subjectMatches\(item\.subject, subjects\)/);
   assert.match(uiSource, /item\.ownerUid !== visitor/);
   assert.match(uiSource, /if \(playSnap\.exists\(\)\)/);
