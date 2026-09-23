@@ -19,7 +19,8 @@ test('repeated clicks communicate an ongoing report instead of silently returnin
   assert.match(legacy, /if \(reportSubmitting\) \{\s*reportLoadingStatus\('本次回報仍在處理/);
   assert.match(legacy, /reportLoadingStatus\('正在等待答題資料同步/);
   assert.match(legacy, /reportLoadingStatus\('已送交 AI 審核/);
-  assert.match(legacy, /reportStatus\(error\?\.message \|\| '題目審核暫時無法完成，請稍後重試。', true\)/);
+  assert.match(legacy, /title: '本次審查未完成'/);
+  assert.match(legacy, /actionText: '重新送審'/);
 });
 
 test('answer persistence has a bounded wait; timing out never submits the report or claims reward', async () => {
@@ -32,4 +33,52 @@ test('answer persistence has a bounded wait; timing out never submits the report
   await assert.rejects(context.wait(new Promise(() => {}), 5), /答題資料仍在同步/);
   assert.match(legacy, /if \(quiz\.answerPersistence\) await waitForReportAnswerSaved\(quiz\.answerPersistence\)/);
   assert.ok(legacy.indexOf('await waitForReportAnswerSaved(quiz.answerPersistence)') < legacy.indexOf("fetch('/api/verify-report'"));
+});
+
+test('review outcome has a passed, not-passed, or retryable incomplete screen', () => {
+  const start = legacy.indexOf('function reportView(');
+  const end = legacy.indexOf('window.openReportModal =', start);
+  assert.ok(start >= 0 && end > start);
+  const nodes = new Map();
+  function node(id) {
+    if (!nodes.has(id)) {
+      const flags = new Set(['hidden']);
+      nodes.set(id, {
+        textContent: '', innerHTML: '', className: '', style: {},
+        classList: {
+          toggle(flag, on) { if (on) flags.add(flag); else flags.delete(flag); },
+          contains(flag) { return flags.has(flag); }
+        }
+      });
+    }
+    return nodes.get(id);
+  }
+  const ctx = { document: { getElementById: node }, window: { closeReportModal() {} } };
+  vm.runInNewContext(legacy.slice(start, end) + '\\nthis.show = renderReportOutcome;', ctx);
+  ctx.show({ kind: 'approved', title: '審查通過 ✅', message: '100 靈石已入帳' });
+  assert.match(node('report-result-icon').innerHTML, /circle-check/);
+  assert.match(node('report-result-msg').textContent, /100 靈石已入帳/);
+  assert.equal(node('report-result-view').classList.contains('hidden'), false);
+  ctx.show({ kind: 'rejected', title: '審查未通過 ❌', message: '答案沒有錯' });
+  assert.match(node('report-result-icon').innerHTML, /circle-xmark/);
+  assert.equal(node('report-result-title').textContent, '審查未通過 ❌');
+  assert.equal(node('report-result-close').classList.contains('hidden'), true);
+  let retried = false;
+  ctx.show({ kind: 'incomplete', title: '本次審查未完成', message: 'AI 逾時', actionText: '重新送審', onAction: () => { retried = true; }, showClose: true });
+  assert.match(node('report-result-icon').innerHTML, /circle-exclamation/);
+  assert.equal(node('report-result-action').textContent, '重新送審');
+  assert.equal(node('report-result-close').classList.contains('hidden'), false);
+  node('report-result-action').onclick();
+  assert.equal(retried, true);
+});
+
+test('only an approved and paid review can show rewards; a technical failure is not a rejection', () => {
+  assert.match(legacy, /result\\.status === 'confirmed' && result\\.compensated === true && result\\.goldAdded === 100 &&/);
+  assert.match(legacy, /Number\\.isFinite\\(Number\\(result\\.newGold\\)\\)/);
+  assert.match(legacy, /result\\.status === 'rejected'/);
+  assert.match(legacy, /result\\.status === 'duplicate'/);
+  assert.match(legacy, /title: isLimit \\? '今日補償已達上限' : '本次審查未完成'/);
+  assert.match(legacy, /showClose: !isLimit/);
+  assert.match(html, /id="report-result-action"/);
+  assert.match(html, /id="report-result-close"/);
 });
