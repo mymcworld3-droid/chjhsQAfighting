@@ -578,7 +578,7 @@ body.xianxia-theme main:has(#page-training.active-page),
 
       /* Keep the actual quiz and duel launchers above the shared bottom navigation. */
       #bottom-nav>.xiuxian-quick-actions{
-        display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;
+        display:none;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;
         /* Span the entire viewport; each launcher takes one equal half. */
         width:100vw;max-width:none;box-sizing:border-box;
         margin:0 0 10px 50%;transform:translateX(-50%);
@@ -612,13 +612,11 @@ body.xianxia-theme main:has(#page-training.active-page),
         #bottom-nav>.xiuxian-quick-actions .font-sci{font-size:12px;letter-spacing:.035em}
         #bottom-nav>.xiuxian-quick-actions .font-mono{font-size:8px;letter-spacing:0}
       }
-      /* Active quiz/duel screens need the space for their question and battle UI. */
-      body:has(#page-quiz.active-page) #bottom-nav>.xiuxian-quick-actions,
-      body:has(#page-battle.active-page) #bottom-nav>.xiuxian-quick-actions{display:none}
+      /* Only the visible home screen exposes the quiz/duel shortcuts. */
+      body:has(#page-home.active-page) #bottom-nav>.xiuxian-quick-actions{display:grid}
       body.xianxia-theme #page-home .xianxia-footnote{grid-column:1/-1}
-      body.xianxia-theme main{padding-bottom:208px}
-      body.xianxia-theme:has(#page-quiz.active-page) main,
-      body.xianxia-theme:has(#page-battle.active-page) main{padding-bottom:116px}
+      body.xianxia-theme main{padding-bottom:116px}
+      body.xianxia-theme:has(#page-home.active-page) main{padding-bottom:208px}
     </style>
 
     <script>
