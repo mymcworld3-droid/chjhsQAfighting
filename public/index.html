@@ -579,7 +579,11 @@ body.xianxia-theme main:has(#page-training.active-page),
       /* Keep the actual quiz and duel launchers above the shared bottom navigation. */
       #bottom-nav>.xiuxian-quick-actions{
         display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;
-        width:min(560px,100%);margin:0 auto 10px;pointer-events:auto;
+        /* Span the entire viewport; each launcher takes one equal half. */
+        width:100vw;max-width:none;box-sizing:border-box;
+        margin:0 0 10px 50%;transform:translateX(-50%);
+        padding-inline:max(8px,env(safe-area-inset-left)) max(8px,env(safe-area-inset-right));
+        pointer-events:auto;
       }
       #bottom-nav>.xiuxian-quick-actions>button{
         box-sizing:border-box;min-width:0;min-height:62px;padding:9px 12px;
