@@ -225,7 +225,7 @@ test('solo UI does not award gold locally or skip on unavailable result', () => 
   assert.doesNotMatch(server, /app\.post\('\/api\/verify-report'/);
   assert.match(legacy, /Authorization: 'Bearer ' \+ token/);
   assert.match(legacy, /reportSubmitting = true/);
-  assert.match(legacy, /if \(result\.status === 'confirmed' && result\.compensated === true && result\.goldAdded === 100\)/);
+  assert.match(legacy, /if \(result\.status === 'confirmed' && result\.compensated === true && result\.goldAdded === 100 &&/);
   assert.match(legacy, /stats\.lastQuizAnswer = \{/);
   assert.match(legacy, /if \(quiz\.answerPersistence\) await waitForReportAnswerSaved\(quiz\.answerPersistence\)/);
   assert.match(legacy, /const persisted = p1;/);
