@@ -85,7 +85,7 @@ import { MATERIAL_CATALOG, getMaterialById, materialDropRateFor, materialRealmFo
       try {
         return await operation();
       } catch (error) {
-        const code = String(error?.code || '').replace(/^firestore\\//, '');
+        const code = String(error?.code || '').replace('firestore/', '');
         if (!['failed-precondition', 'aborted'].includes(code) || attempt >= MAX_CONFLICT_RETRIES) throw error;
         await sleep(180 * (2 ** attempt) + Math.floor(Math.random() * 90));
       }
