@@ -111,7 +111,7 @@ test('multiplayer unlock remains Foundation Establishment at 10 cultivation', ()
 test('post-Golden-Core realm curve is consistent across active realm renderers', () => {
   const expected = [
     ['金丹', 28], ['元嬰', 68], ['化神', 128], ['煉虛', 208],
-    ['合體', 308], ['大乘', 448], ['渡劫', 628], ['登仙', 868], ['真仙', 868]
+    ['合體', 308], ['大乘', 448], ['渡劫', 628], ['半仙', 868], ['真仙', 868]
   ];
   for (const source of [theme, liveSync, breakthrough]) {
     for (const [name, need] of expected) {
