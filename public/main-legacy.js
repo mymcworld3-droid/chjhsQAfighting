@@ -949,7 +949,9 @@ onAuthStateChanged(auth, async (user) => {
                     uid: user.uid, displayName: user.displayName, email: user.email,
                     profile: { educationLevel: "", strongSubjects: "", weakSubjects: "" },
                     inventory: [],
-                    equipped: { frame: '', avatar: '' }, 
+                    equipped: { frame: '', avatar: '' },
+                    // 法寶持有與四個裝配欄位一律放在玩家文件，而非瀏覽器。
+                    artifactSystem: { inventory: {}, equipped: {}, buffs: {} },
                     stats: { 
                         rankLevel: 0, currentStars: 0, totalScore: 0, gold: 0,
                         currentStreak: 0, bestStreak: 0, totalCorrect: 0, totalAnswered: 0
