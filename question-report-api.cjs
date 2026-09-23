@@ -6,7 +6,9 @@ const crypto = require('node:crypto');
 const aiRouter = require('./ai-router');
 const { adminProject } = require('./firebase-admin-projects.cjs');
 
-const REWARD_GOLD = 20;
+const REWARD_GOLD = 100;
+const BONUS_CULTIVATION = 1;
+const MAX_REFUND_CULTIVATION = 1;
 const DAILY_LIMIT = 5;
 const AI_DEADLINE_MS = 18000;
 
@@ -35,6 +37,19 @@ function validateReport(body) {
   }
   if (reason.length < 6) return { error: '請具體描述題目的錯誤，至少輸入 6 個字元。' };
   return { question, options, correctIndex, explanation, reason };
+}
+
+function actualCultivationRefund(stats, question) {
+  const answer = stats?.lastQuizAnswer;
+  if (!answer || answer.isCorrect !== false ||
+      normalizeText(answer.question, 1500) !== normalizeText(question, 1500)) return 0;
+  const before = Number(answer.scoreBefore);
+  const after = Number(answer.scoreAfter);
+  const recorded = Number(answer.penalty);
+  if (![before, after, recorded].every(Number.isFinite) ||
+      before < 0 || after < 0 || recorded < 0) return 0;
+  const actualLoss = Math.max(0, Math.floor(before) - Math.floor(after));
+  return Math.min(MAX_REFUND_CULTIVATION, actualLoss, Math.floor(recorded));
 }
 
 function reportKey(uid, question) {
@@ -110,25 +125,34 @@ async function awardOnce(db, uid, input, result, { today = dateInTaiwan, fieldVa
   const day = today();
   return db.runTransaction(async tx => {
     const [claimSnap, userSnap] = await Promise.all([tx.get(claimRef), tx.get(userRef)]);
-    if (claimSnap.exists) return { status: 'duplicate', compensated: false, goldAdded: 0, reason: '這道題目已領取過錯題補償。' };
+    if (claimSnap.exists) return { status: 'duplicate', compensated: false, goldAdded: 0, cultivationAdded: 0, reason: '這道題目已領取過錯題補償。' };
     if (!userSnap.exists || (userSnap.data()?.uid && userSnap.data().uid !== uid)) {
       throw new Error('玩家資料尚未建立');
     }
     const user = userSnap.data();
     const daily = user.questionReportDaily || {};
     const used = daily.date === day ? Math.max(0, Number(daily.count) || 0) : 0;
-    if (used >= DAILY_LIMIT) return { status: 'limit', compensated: false, goldAdded: 0, reason: '今日題目回報補償已達上限，明日可再回報。' };
+    if (used >= DAILY_LIMIT) return { status: 'limit', compensated: false, goldAdded: 0, cultivationAdded: 0, reason: '今日題目回報補償已達上限，明日可再回報。' };
     const gold = Math.max(0, Number(user.stats?.gold) || 0);
+    const score = Math.max(0, Number(user.stats?.totalScore) || 0);
+    const cultivationRefund = actualCultivationRefund(user.stats, input.question);
+    const cultivationAdded = cultivationRefund + BONUS_CULTIVATION;
     tx.create(claimRef, {
       uid, question: input.question, options: input.options, correctIndex: input.correctIndex,
       userReason: input.reason, reviewReason: result.reason, issueType: result.issueType || '',
-      gold: REWARD_GOLD, date: day, createdAt: fieldValue.serverTimestamp()
+      gold: REWARD_GOLD, cultivationRefund, cultivationBonus: BONUS_CULTIVATION,
+      cultivationAdded, date: day, createdAt: fieldValue.serverTimestamp()
     });
     tx.update(userRef, {
       'stats.gold': fieldValue.increment(REWARD_GOLD),
+      'stats.totalScore': fieldValue.increment(cultivationAdded),
       questionReportDaily: { date: day, count: used + 1 }
     });
-    return { status: 'confirmed', compensated: true, goldAdded: REWARD_GOLD, newGold: gold + REWARD_GOLD, reason: result.reason };
+    return {
+      status: 'confirmed', compensated: true, goldAdded: REWARD_GOLD, newGold: gold + REWARD_GOLD,
+      cultivationRefund, cultivationBonus: BONUS_CULTIVATION, cultivationAdded,
+      newTotalScore: score + cultivationAdded, reason: result.reason
+    };
   });
 }
 
@@ -154,7 +178,7 @@ function createHandler({ resolve = () => adminProject('A'), review = reviewQuest
     try {
       // Cheap duplicate check before asking AI; the transaction below repeats it for race safety.
       if ((await claimRef.get()).exists) {
-        return res.json({ status: 'duplicate', valid: true, compensated: false, goldAdded: 0, reason: '這道題目已領取過錯題補償。' });
+        return res.json({ status: 'duplicate', valid: true, compensated: false, goldAdded: 0, cultivationAdded: 0, reason: '這道題目已領取過錯題補償。' });
       }
       const result = await review(input);
       if (result.status === 'unavailable') return res.status(503).json({ ...result, valid: null, compensated: false });
@@ -171,4 +195,4 @@ function createHandler({ resolve = () => adminProject('A'), review = reviewQuest
 module.exports = function registerQuestionReportApi(app) {
   app.post('/api/verify-report', createHandler());
 };
-module.exports.__test = { REWARD_GOLD, DAILY_LIMIT, dateInTaiwan, validateReport, reportKey, normalizeReview, reviewQuestion, awardOnce, createHandler };
+module.exports.__test = { REWARD_GOLD, BONUS_CULTIVATION, DAILY_LIMIT, dateInTaiwan, validateReport, reportKey, normalizeReview, actualCultivationRefund, reviewQuestion, awardOnce, createHandler };
