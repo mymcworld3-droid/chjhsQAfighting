@@ -83,7 +83,12 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
     Object.entries(raw?.equipped || {}).forEach(([slot, id]) => {
       const item = typeof id === 'string' ? getArtifactById(id) : null;
       const canonicalSlot = canonicalEquipSlot(item);
-      if (ARTIFACT_EQUIP_SLOTS.includes(slot) && item && canonicalSlot === slot && inventory[id] > 0) {
+      // Catalog sync is asynchronous. Preserve references already stored in
+      // users/{uid} while remotely created artifacts are still loading; do not
+      // persist a temporary empty catalog as an unequip operation.
+      const pendingCatalog = window.__artifactCatalogReadyForEquipment !== true;
+      if (ARTIFACT_EQUIP_SLOTS.includes(slot) && inventory[id] > 0 &&
+          ((item && canonicalSlot === slot) || (!item && pendingCatalog))) {
         equipped[slot] = id;
       }
     });
@@ -206,7 +211,9 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
       committed = normalizeSystem(next);
       tx.update(ref, { [FIELD]: committed });
     });
-    setLocalState(committed);
+    // A transaction can finish after logout or account switch: never apply
+    // its equipped snapshot to the next account's in-memory player data.
+    if (authUser()?.uid === user.uid) setLocalState(committed);
     return committed;
   }
 
@@ -605,7 +612,7 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
   async function enforceEquipmentEligibility() {
     if (eligibilityBusy) return;
     const ownerUid = authUser()?.uid;
-    if (!ownerUid) return;
+    if (!ownerUid || !window.__artifactCatalogReadyForEquipment) return;
     const rawEquipped = userData()?.[FIELD]?.equipped || {};
     const invalidSlots = Object.entries(rawEquipped).filter(([slot, id]) => {
       const item = getArtifactById(id);
