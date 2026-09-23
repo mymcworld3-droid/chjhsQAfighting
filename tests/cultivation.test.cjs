@@ -153,9 +153,14 @@ test('wrong and skipped answers preserve cultivation below Golden Core and reset
   assert.equal(h.context.currentUserData.stats.goldenCoreShield, false);
   h.newQuiz();
   await h.answer(-1, -2);
-  assert.equal(h.writes[1].data.stats.totalScore, 25);
-  assert.equal(h.writes[1].data.stats.totalAnswered, 2);
+  assert.equal(h.writes.length, 0, 'neutral wrong/skip answers wait for a reward before stats persistence');
+  assert.equal(h.context.currentUserData.stats.totalScore, 25);
+  assert.equal(h.context.currentUserData.stats.totalAnswered, 2);
   assert.equal(h.nodes.get('xiuxian-score').textContent, '25 修為');
+  h.newQuiz();
+  await h.answer(0, 0);
+  assert.equal(h.writes.length, 1);
+  assert.equal(h.writes[0].data.stats.totalAnswered, 3, 'the next reward flushes prior local answer counts');
 });
 
 test('ordinary streaks never create Dao-heart shields or bonus cultivation', async () => {
