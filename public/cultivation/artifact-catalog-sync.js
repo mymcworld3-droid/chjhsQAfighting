@@ -10,6 +10,9 @@ import { getDefaultArtifactCatalog, replaceArtifactCatalog } from './artifact-ca
   const CONFIG_DOC = 'artifactCatalogV1';
   const GENERATION_PROMPT_MAX = 1200;
   let unsubscribe = null;
+  // A fallback catalog cannot validate remotely created artifacts. Never remove
+  // a player's saved equipment until the authoritative catalog is available.
+  window.__artifactCatalogReadyForEquipment = false;
 
   function normalizeGenerationPrompt(value) {
     return String(value || '').trim().slice(0, GENERATION_PROMPT_MAX);
@@ -46,6 +49,7 @@ import { getDefaultArtifactCatalog, replaceArtifactCatalog } from './artifact-ca
     const ref = doc(db, CONFIG_COLLECTION, CONFIG_DOC);
     unsubscribe = onSnapshot(ref, (snap) => {
       if (!snap.exists()) {
+        window.__artifactCatalogReadyForEquipment = true;
         applyGenerationPrompt('', 'default-no-remote-config');
         applyEffectBounds({}, 'default-no-remote-config');
         applyDefault('default-no-remote-config');
@@ -56,12 +60,17 @@ import { getDefaultArtifactCatalog, replaceArtifactCatalog } from './artifact-ca
       applyEffectBounds(data.effectBoundsV2 || {}, 'firestore');
       try {
         if (!Array.isArray(data.items) || !data.items.length) throw new Error('遠端法寶清單為空');
+        // Mark ready before replace fires artifact-catalog-updated, which may
+        // validate equipment from the saved users/{uid} document.
+        window.__artifactCatalogReadyForEquipment = true;
         replaceArtifactCatalog(data.items, 'firestore');
       } catch (error) {
+        window.__artifactCatalogReadyForEquipment = false;
         console.error('[Artifact catalog] remote config rejected; using defaults:', error);
         applyDefault('default-invalid-remote-config');
       }
     }, (error) => {
+      window.__artifactCatalogReadyForEquipment = false;
       console.warn('[Artifact catalog] Firestore sync unavailable; using defaults:', error);
       applyGenerationPrompt('', 'default-sync-error');
       applyEffectBounds({}, 'default-sync-error');
