@@ -47,12 +47,12 @@ test('Qi-five tutorial reuses the one-question private Dongtian demo, requiring 
 });
 
 test('formal Dongtian first completion grants cultivation from correct answers as well as spirit stones', () => {
-  assert.match(dongtian, /FIRST_COMPLETION_CULTIVATION_CORRECT_STEP = 5/);
+  assert.doesNotMatch(dongtian, /FIRST_COMPLETION_CULTIVATION_CORRECT_STEP/);
   assert.match(dongtian, /function firstCompletionCultivation\(correctCount\)/);
   assert.match(dongtian, /'stats\.totalScore': increment\(cultivationReward\)/);
   assert.match(dongtian, /cultivationAdded: cultivationReward/);
-  assert.match(dongtian, /每答對 \$\{FIRST_COMPLETION_CULTIVATION_CORRECT_STEP\} 題 \+1/);
-  assert.match(dongtian, /答對至少 1 題保底 \+1/);
+  assert.match(dongtian, /每答對 1 題 \+1 修為/);
+  assert.doesNotMatch(dongtian, /答對至少 1 題保底 \+1/);
 });
 
 test('private tutorial cave has no formal rewards while teaching the real formal reward rule', () => {
@@ -61,7 +61,7 @@ test('private tutorial cave has no formal rewards while teaching the real formal
   assert.match(tutorialBranch, /教學範例不發正式獎勵/);
   assert.doesNotMatch(tutorialBranch, /completeProgress\(/);
   assert.match(tutorialBranch, /正式洞天首次通關每題 100 靈石/);
-  assert.match(tutorialBranch, /每答對 5 題 \+1/);
+  assert.match(tutorialBranch, /每答對 1 題 \+1 修為/);
 });
 
 test('legacy Qi-five Dongtian tutorial is no longer auto-loaded because onboarding is part of the main newbie tutorial', () => {
