@@ -1369,8 +1369,9 @@ body.xianxia-theme main:has(#page-training.active-page),
             <div id="report-result-view" class="hidden flex-col items-center justify-center py-2 text-center">
                 <div id="report-result-icon" class="text-4xl mb-3"></div>
                 <h3 id="report-result-title" class="text-lg font-bold mb-2"></h3>
-                <p id="report-result-msg" class="text-xs text-gray-400 mb-4 bg-black/30 p-2 rounded w-full"></p>
-                <button onclick="closeReportModal()" class="btn-cyber-ghost w-full py-2 text-xs">關閉</button>
+                <p id="report-result-msg" class="text-xs text-gray-300 mb-4 bg-black/30 p-3 rounded w-full whitespace-pre-line leading-relaxed"></p>
+                <button id="report-result-action" type="button" onclick="closeReportModal()" class="btn-cyber-primary w-full py-2 text-xs">關閉</button>
+                <button id="report-result-close" type="button" onclick="closeReportModal()" class="hidden btn-cyber-ghost w-full py-2 mt-2 text-xs">關閉</button>
             </div>
         </div>
     </div>
