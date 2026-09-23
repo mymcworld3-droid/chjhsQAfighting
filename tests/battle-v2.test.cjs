@@ -553,7 +553,10 @@ test('separate full-screen quiz requires countdown, explanation confirmation and
   assert.ok(quiz.includes('id="bv2-explanation"'));
   assert.ok(quiz.includes('id="bv2-review-continue"'));
   assert.match(battleSource, /ROUND_COUNTDOWN_MS = 3000/);
-  assert.match(battleSource, /questionReadyAtMs: nowMs\(\) \+ ROUND_COUNTDOWN_MS/);
+  assert.match(battleSource, /questionReadyAtMs: questionReadyDeadline\(round, nowMs\(\)\)/);
+  assert.match(battleSource, /Number\(round\) === 1 \? ROUND_COUNTDOWN_MS : 0/);
+  assert.match(battleSource, /counting \? '開戰倒數'/);
+  assert.doesNotMatch(battleSource, /下一題倒數/);
   assert.match(battleSource, /function confirmReview\(\)/);
   assert.match(battleSource, /function bothReviewed\(room\)/);
   assert.match(battleSource, /!bothReviewed\(fresh\)/);
