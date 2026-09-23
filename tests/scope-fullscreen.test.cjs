@@ -65,6 +65,16 @@ test('selection summary stays below the scrollable study cart while save feedbac
   assert.match(studio, /if \(foot\) foot\.textContent = changed\(\)/);
 });
 
+test('selected-scope pane has no empty-state card but preserves the live list and summary', () => {
+  assert.doesNotMatch(studio, /ss-cart-placeholder|ss-cart-empty|還沒有選定範圍|從左側選一個章節開始吧/);
+  assert.doesNotMatch(css, /ss-cart-empty/);
+  assert.match(studio, /id="ss-cart-body"/);
+  assert.match(studio, /\$\('ss-cart-body'\)\.append\(cartSource\)/);
+  assert.match(studio, /id="ss-selection-count"/);
+  assert.match(studio, /function updateSummary\(\)/);
+  assert.match(studio, /const selected = units\(\)/);
+});
+
 test('Dongfu scope tile opens the dialog immediately, never exposing its old dropdown', () => {
   assert.match(dongfu, /if \(key === 'scope'\) \{/);
   assert.match(dongfu, /button\.addEventListener\('click', \(\) => window\.openCurriculumStudio\?\.\(\)\)/);
