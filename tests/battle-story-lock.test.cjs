@@ -41,7 +41,7 @@ test('automatic story and replay cannot start during a PvP session', () => {
   vm.runInNewContext(guard + '\n' + launch + '\nthis.blocking = blocking; this.startChapter = startChapter;', ctx);
   assert.equal(ctx.blocking(), true);
   assert.equal(ctx.startChapter({ id: 'late-unlock' }, { replay: true }), false);
-  assert.match(story, /if \(active \|\| document\.getElementById\(LAYER_ID\) \|\| blocking\(\)\) return false/);
+  assert.match(story, /if \(active \|\| document\.getElementById\(LAYER_ID\) \|\| window\.isXiuxianBattleBusy\?\.\(\)\) return false/);
   assert.match(story, /if \(active \|\| blocking\(\) \|\| window\.getBattleTutorialState/);
   assert.match(story, /xiuxian:battle-session-ended/);
 });
