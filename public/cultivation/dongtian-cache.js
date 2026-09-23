@@ -1,6 +1,7 @@
 // Per-browser, per-account cave snapshots. Only UI data is cached; Firestore owns rewards and settlement.
 // Storage may be unavailable (private browsing, quota); the in-memory layer still prevents duplicate reads.
 const PREFIX = 'xiuxian:dongtian:v1:';
+const PUBLIC_LIST_MAX_AGE_MS = 60 * 1000;
 const memory = new Map();
 
 function read(key) {
@@ -37,11 +38,18 @@ export const dongtianCache = {
     if (owner && Array.isArray(items)) write(ownerKey(owner), items);
   },
   getPublicList() {
-    const items = read('public');
-    return Array.isArray(items) && items.every(item => item?.id && item?.status === 'active') ? items : null;
+    const cached = read('public');
+    // Legacy array snapshots have no expiry; refresh them instead of keeping an
+    // outdated empty/public list indefinitely after other users create caves.
+    if (!cached || !Array.isArray(cached.items) ||
+        !Number.isFinite(cached.updatedAt) ||
+        Date.now() - cached.updatedAt >= PUBLIC_LIST_MAX_AGE_MS ||
+        cached.updatedAt > Date.now() ||
+        !cached.items.every(item => item?.id && item?.status === 'active')) return null;
+    return cached.items;
   },
   setPublicList(items) {
-    if (Array.isArray(items)) write('public', items);
+    if (Array.isArray(items)) write('public', { items, updatedAt: Date.now() });
   },
   clearPublicList() { remove('public'); },
   getFull(owner, caveId) {

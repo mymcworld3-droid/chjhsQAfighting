@@ -695,7 +695,9 @@ import {
   }
 
   async function findEncounter() {
-    if (!uid() || state.session || state.encounterBusy) return null;
+    // maybeEncounterBeforeQuiz owns the busy lock while this search is running.
+    // Checking it here would reject every successful 20% encounter roll.
+    if (!uid() || state.session) return null;
     if (document.getElementById('newbie-tutorial-layer') || document.getElementById('five-immortal-challenge')) return null;
     const playerLevel = userData()?.profile?.educationLevel || '';
     const playerOrder = levelOrder(playerLevel);
