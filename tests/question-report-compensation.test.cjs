@@ -227,7 +227,7 @@ test('solo UI does not award gold locally or skip on unavailable result', () => 
   assert.match(legacy, /reportSubmitting = true/);
   assert.match(legacy, /if \(result\.status === 'confirmed' && result\.compensated === true && result\.goldAdded === 100\)/);
   assert.match(legacy, /stats\.lastQuizAnswer = \{/);
-  assert.match(legacy, /if \(quiz\.answerPersistence\) await quiz\.answerPersistence/);
+  assert.match(legacy, /if \(quiz\.answerPersistence\) await waitForReportAnswerSaved\(quiz\.answerPersistence\)/);
   assert.match(legacy, /const persisted = p1;/);
   assert.match(legacy, /void addDoc\(collection\(db, "exam_logs"\)/);
   assert.match(legacy, /console\.warn\('\[Quiz exam log\]'/);
