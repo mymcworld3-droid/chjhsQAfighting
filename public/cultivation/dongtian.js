@@ -1263,8 +1263,8 @@ import {
 
   async function finishDongtian() {
     const s = state.session;
-    if (!s) return;
-    if (!(await ensureSessionDongtianActive())) return;
+    if (!s || s.settling) return;
+    s.settling = true;
     const correct = s.answers.filter((a) => a.isCorrect).length;
     const total = s.dongtian.questions.length;
     const accuracy = total ? correct / total : 0;
@@ -1279,14 +1279,40 @@ import {
       return;
     }
 
+    // Show an actionable settlement screen immediately rather than leaving the
+    // last answered question visible while the transaction waits on Firestore.
+    const overlay = ensureOverlay();
+    const settlementBack = `<button id="dt-settle-back" class="dt-back" type="button">返回洞府／仙府</button>`;
+    const bindSettlementBack = () => {
+      overlay.querySelector('#dt-settle-back').onclick = () => {
+        if (state.session !== s) return;
+        if (!confirm('結算可能仍在進行。離開後可重新登入查看獎勵，確定返回？')) return;
+        closeAfterSession();
+      };
+    };
+    overlay.innerHTML = `<div class="dt-result"><div class="dt-result-seal"><i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i></div><h2>洞天通關 · 正在結算</h2><p role="status">已完成 ${total} 題，正在確認通關紀錄與首次獎勵。連線較慢時可稍候，或返回後再查看獎勵。</p><div class="dt-result-grid"><div><span>答對</span><b>${correct} / ${total}</b></div><div><span>正確率</span><b>${Math.round(accuracy * 100)}%</b></div><div><span>狀態</span><b>確認中</b></div></div>${settlementBack}</div>`;
+    bindSettlementBack();
+
     const firstCompletionReward = firstCompletionSpiritStones(total);
     const firstCompletionCultivationReward = firstCompletionCultivation(correct);
-    const firstCompletion = await completeProgress(s, correct, total, tier).catch((error) => {
+    let firstCompletion;
+    try {
+      // Transaction revalidates the cave's active status and prevents duplicate rewards.
+      firstCompletion = await completeProgress(s, correct, total, tier);
+    } catch (error) {
       console.warn('[Dongtian completion]', error);
-      return false;
-    });
-    await writeDongtianHistory(s, true, correct, total, tier).catch(() => {});
-    const overlay = ensureOverlay();
+      if (state.session !== s) return;
+      s.settling = false;
+      overlay.innerHTML = `<div class="dt-result"><div class="dt-result-seal"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i></div><h2>洞天結算尚未完成</h2><p role="status">尚未確認這次通關獎勵。請檢查網路後重試；重複嘗試不會再次領取已入帳的首次獎勵。</p><button id="dt-retry-settlement" class="dt-back" type="button">重新確認結算</button> ${settlementBack}</div>`;
+      overlay.querySelector('#dt-retry-settlement').onclick = () => { if (state.session === s) void finishDongtian(); };
+      bindSettlementBack();
+      return;
+    }
+
+    // Exam history is secondary; it must never hold up an already committed reward.
+    void writeDongtianHistory(s, true, correct, total, tier)
+      .catch((error) => console.warn('[Dongtian completion history]', error));
+    if (state.session !== s) return;
     overlay.innerHTML = `<div class="dt-result"><div class="dt-result-seal">天</div><h2>${escapeHtml(s.dongtian.name)} · 通關</h2><p>這次洞天題序已全部走完。答對率越高，未來洞天獎勵池開放後可對應更好的機緣。</p><div class="dt-result-grid"><div><span>答對</span><b>${correct} / ${total}</b></div><div><span>正確率</span><b>${Math.round(accuracy * 100)}%</b></div><div><span>機緣評級</span><b>${escapeHtml(tier.replace('洞天機緣', ''))}</b></div></div><div class="dt-reward">${firstCompletion ? `<strong style="color:#dfbdf5">首次通關洞天獎勵</strong><br>+${firstCompletionReward.toLocaleString()} 靈石 · +${firstCompletionCultivationReward} 修為（每答對 ${FIRST_COMPLETION_CULTIVATION_CORRECT_STEP} 題 +1；答對至少 1 題保底 +1）。` : '此洞天的首次通關紀錄已存在；本次為重遊，不重複領取首次獎勵。'}${s.dongtian.ownerUid !== uid() && firstCompletion ? `<br><br>洞天主人已獲得 +${OWNER_CULTIVATION_REWARD} 修為與 +${OWNER_GOLD_REWARD} 金幣。` : ''}</div><button id="dt-back" class="dt-back" type="button">返回</button></div>`;
     document.getElementById('dt-back').onclick = closeAfterSession;
   }
@@ -1364,7 +1390,8 @@ import {
     const s = state.session;
     if (!s) return;
     if (s.answers.length && !confirm('確定退出洞天？本次剩餘題目將不再繼續。')) return;
-    if (!s.tutorialOnly) await writeDongtianHistory(s, false).catch(() => {});
+    if (!s.tutorialOnly) void writeDongtianHistory(s, false)
+      .catch((error) => console.warn('[Dongtian exit history]', error));
     closeAfterSession();
   }
 
