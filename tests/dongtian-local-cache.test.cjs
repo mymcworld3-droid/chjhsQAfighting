@@ -69,6 +69,7 @@ test('cave UI has manual refresh and does not forcibly reload on browser focus',
   assert.match(caveSource, /if \(!force && renderCachedOwnList\(\)\) return/);
   assert.match(caveSource, /dongtianCache\.getPublicList\(\)/);
   assert.match(caveSource, /dongtianCache\.markEncountered\(visitor, item\.id\)/);
-  assert.match(caveSource, /const snap = await getDoc\(doc\(db, INDEX_COLLECTION, s\.dongtian\.id\)\)/);
+  assert.match(caveSource, /getDoc\(doc\(db, INDEX_COLLECTION, caveId\)\)/);
+  assert.match(caveSource, /const result = await readSessionDongtianStatus\(s\.dongtian\.id\)/);
   assert.match(caveSource, /await runTransaction\(db,/);
 });
