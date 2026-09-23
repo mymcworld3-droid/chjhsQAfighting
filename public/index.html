@@ -625,13 +625,15 @@ body.xianxia-theme main:has(#page-training.active-page),
           pointer-events:none;
         }
         #bottom-nav>.xiuxian-quick-actions>button{width:100%;min-height:72px;pointer-events:auto}
-        body.xianxia-theme:has(#page-home.active-page) main{padding-bottom:116px}
       }
       /* Only the visible home screen exposes the quiz/duel shortcuts. */
       body:has(#page-home.active-page) #bottom-nav>.xiuxian-quick-actions{display:grid}
       body.xianxia-theme #page-home .xianxia-footnote{grid-column:1/-1}
       body.xianxia-theme main{padding-bottom:116px}
       body.xianxia-theme:has(#page-home.active-page) main{padding-bottom:208px}
+      @media(min-width:1100px){
+        body.xianxia-theme:has(#page-home.active-page) main{padding-bottom:116px}
+      }
     </style>
 
     <script>
