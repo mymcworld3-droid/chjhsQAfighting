@@ -1384,13 +1384,14 @@ window.addFriend = async () => {
 function startPresenceSystem() {
     if (presenceInterval) clearInterval(presenceInterval);
     const updatePresence = async () => {
-        if (!auth.currentUser) return;
+        if (!auth.currentUser || document.visibilityState === 'hidden') return;
         try {
             await updateDoc(doc(db, "users", auth.currentUser.uid), { lastActive: serverTimestamp() });
         } catch (e) { console.error("Presence update failed", e); }
     };
     updatePresence();
-    presenceInterval = setInterval(updatePresence, 60 * 1000);
+    // Online detection uses a five-minute window; two-minute heartbeats are enough.
+    presenceInterval = setInterval(updatePresence, 2 * 60 * 1000);
 }
 
 // 好友頁一分鐘內重開沿用快照；重新登入或好友名單改變則自動失效。
