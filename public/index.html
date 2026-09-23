@@ -576,7 +576,8 @@ body.xianxia-theme main:has(#page-training.active-page),
         }
       }
 
-      /* Keep the actual quiz and duel launchers above the shared bottom navigation. */
+      /* Narrow viewports: two equal-width launchers sit above the navigation.
+         On wide screens they flank the centered 560px navigation instead. */
       #bottom-nav>.xiuxian-quick-actions{
         display:none;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;
         /* Span the entire viewport; each launcher takes one equal half. */
@@ -611,6 +612,20 @@ body.xianxia-theme main:has(#page-training.active-page),
         #bottom-nav>.xiuxian-quick-actions>button>div:first-child{flex-basis:30px;width:30px;height:30px}
         #bottom-nav>.xiuxian-quick-actions .font-sci{font-size:12px;letter-spacing:.035em}
         #bottom-nav>.xiuxian-quick-actions .font-mono{font-size:8px;letter-spacing:0}
+      }
+      @media(min-width:1100px){
+        /* A 560px center bar plus 12px clearance on either side. */
+        #bottom-nav>.xiuxian-quick-actions{
+          position:absolute;bottom:0;left:50%;
+          width:100vw;height:72px;margin:0;
+          transform:translateX(-50%);
+          grid-template-columns:repeat(2,minmax(0,1fr));
+          column-gap:calc(560px + 24px);
+          align-items:stretch;
+          pointer-events:none;
+        }
+        #bottom-nav>.xiuxian-quick-actions>button{width:100%;min-height:72px;pointer-events:auto}
+        body.xianxia-theme:has(#page-home.active-page) main{padding-bottom:116px}
       }
       /* Only the visible home screen exposes the quiz/duel shortcuts. */
       body:has(#page-home.active-page) #bottom-nav>.xiuxian-quick-actions{display:grid}
