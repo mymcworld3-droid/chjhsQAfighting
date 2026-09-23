@@ -2549,7 +2549,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     try {
         const p1 = updateDoc(doc(db, "users", auth.currentUser.uid), { stats: stats })
             .then(() => showCultivationFeedback(cultivationReward, isCorrect));
-        const p2 = addDoc(collection(db, "exam_logs"), { 
+        void addDoc(collection(db, "exam_logs"), { 
             uid: auth.currentUser.uid, 
             email: auth.currentUser.email, 
             question: questionText, 
@@ -2562,9 +2562,12 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
             correctIdx: correctIdx,
             userIdx: userIdx,
             explanation: explanation || ""
+        }).catch(error => {
+            // 答題歷史為非必要紀錄；寫入失敗不可阻止已保存的答題資料送審。
+            console.warn('[Quiz exam log]', error?.code || error?.message || String(error));
         });
-        // 回報與補償須等答題資料確實寫入後才可送審。
-        const persisted = Promise.all([p1, p2]);
+        // 僅等待玩家修為與扣分紀錄保存；exam_logs 失敗不影響回報。
+        const persisted = p1;
         if (quiz) quiz.answerPersistence = persisted;
         await persisted;
     } catch (e) { console.error("Firebase Error", e); }
@@ -2701,12 +2704,15 @@ window.submitReport = async () => {
     }
     reportSubmitting = true;
     reportView('loading');
+    let reportStage = 'save-answer';
     try {
         if (quiz.answerPersistence) await quiz.answerPersistence;
         if (window.currentActiveQuiz !== quiz || auth.currentUser?.uid !== user.uid) {
             throw new Error('題目或登入身分已變更，請重新開啟回報。');
         }
+        reportStage = 'get-token';
         const token = await user.getIdToken();
+        reportStage = 'request';
         const res = await fetch('/api/verify-report', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
@@ -2718,9 +2724,13 @@ window.submitReport = async () => {
                 userReason: reason
             })
         });
+        reportStage = 'response';
         const result = await res.json().catch(() => ({}));
-        if (!res.ok || result.status === 'unavailable' || result.status === 'invalid' || result.status === 'unauthorized') {
-            throw new Error(result.reason || '補償服務暫時無法處理，請稍後重試。');
+        if (!res.ok || ['unavailable', 'invalid', 'unauthorized'].includes(result.status)) {
+            const error = new Error(result.reason || `題目回報暫時無法處理（HTTP ${res.status}），請稍後重試。`);
+            error.httpStatus = res.status;
+            error.phase = result.phase || reportStage;
+            throw error;
         }
 
         reportView('result');
@@ -2781,7 +2791,13 @@ window.submitReport = async () => {
             btn.onclick = () => closeReportModal();
         }
     } catch (error) {
-        console.warn('[Question report]', error);
+        // 明確記錄階段及 HTTP 狀態，避免只看見 main-legacy.js 的統一警告行號。
+        console.warn('[Question report]', {
+            phase: error?.phase || reportStage,
+            httpStatus: error?.httpStatus || null,
+            code: error?.code || null,
+            message: error?.message || String(error)
+        });
         reportView('input');
         // 保留回報內容以供重新送審；審核未成功前不跳題、不宣告已發獎。
         alert(error?.message || '題目審核暫時無法完成，請稍後重試。');
