@@ -2635,6 +2635,35 @@ window.giveUpQuiz = async () => {
 // 問道題目錯誤回報：審核與補償統一由後端核發；前端只顯示真正完成的交易結果。
 let reportSubmitting = false;
 let reportQuizSnapshot = null;
+let reportCloseTimer = null;
+
+function reportStatus(message = '', isError = false) {
+    const status = document.getElementById('report-input-status');
+    if (!status) return;
+    status.textContent = message;
+    status.classList.toggle('hidden', !message);
+    status.classList.toggle('text-red-300', isError);
+    status.classList.toggle('text-yellow-200', !isError);
+}
+
+function reportLoadingStatus(message) {
+    const status = document.getElementById('report-loading-status');
+    if (status) status.textContent = message;
+}
+
+async function waitForReportAnswerSaved(promise, deadlineMs = 12000) {
+    let timer;
+    try {
+        await Promise.race([
+            promise,
+            new Promise((_, reject) => {
+                timer = setTimeout(() => reject(new Error('答題資料仍在同步，請稍後再按「送出審查」；目前尚未送審或發放補償。')), deadlineMs);
+            })
+        ]);
+    } finally {
+        clearTimeout(timer);
+    }
+}
 
 function reportView(name) {
     for (const view of ['input', 'loading', 'result']) {
@@ -2646,7 +2675,11 @@ function reportView(name) {
 }
 
 window.openReportModal = () => {
-    if (reportSubmitting) return;
+    if (reportSubmitting) {
+        reportLoadingStatus('本次回報仍在處理，請勿重複送審。');
+        return;
+    }
+    if (reportCloseTimer) { clearTimeout(reportCloseTimer); reportCloseTimer = null; }
     const quiz = window.currentActiveQuiz;
     if (!quiz?.data?.q || !Array.isArray(quiz.data.opts)) {
         alert('找不到目前題目，請重新開啟問道。');
@@ -2657,6 +2690,8 @@ window.openReportModal = () => {
     const box = document.getElementById('report-box');
     reportView('input');
     document.getElementById('report-reason').value = '';
+    reportStatus();
+    reportLoadingStatus('正在準備審核…');
     document.getElementById('report-result-icon').innerHTML = '';
     document.getElementById('report-result-title').textContent = '';
     document.getElementById('report-result-msg').textContent = '';
@@ -2682,37 +2717,45 @@ window.closeReportModal = () => {
     box.classList.remove('scale-100');
     box.classList.add('scale-95');
     reportQuizSnapshot = null;
-    setTimeout(() => modal.classList.add('hidden'), 300);
+    if (reportCloseTimer) clearTimeout(reportCloseTimer);
+    reportCloseTimer = setTimeout(() => {
+        if (modal.classList.contains('opacity-0')) modal.classList.add('hidden');
+        reportCloseTimer = null;
+    }, 300);
 };
 
 window.submitReport = async () => {
     if (reportSubmitting) return;
     const reason = document.getElementById('report-reason').value.trim();
     if (reason.length < 6) {
-        alert('請具體指出題目錯誤，至少輸入 6 個字元。');
+        reportStatus('請具體指出題目錯誤，至少輸入 6 個字元。', true);
         return;
     }
     const quiz = reportQuizSnapshot;
     if (!quiz?.data || quiz !== window.currentActiveQuiz) {
-        alert('題目已變更，請重新開啟回報。');
+        reportStatus('題目已變更，請關閉視窗並在目前題目重新回報。', true);
         return;
     }
     const user = auth.currentUser;
     if (!user || user.uid !== currentUserData?.uid && currentUserData?.uid) {
-        alert('登入狀態已變更，請重新登入。');
+        reportStatus('登入狀態已變更，請重新登入。', true);
         return;
     }
     reportSubmitting = true;
+    reportStatus();
     reportView('loading');
+    reportLoadingStatus('正在等待答題資料同步…');
     let reportStage = 'save-answer';
     try {
-        if (quiz.answerPersistence) await quiz.answerPersistence;
+        if (quiz.answerPersistence) await waitForReportAnswerSaved(quiz.answerPersistence);
         if (window.currentActiveQuiz !== quiz || auth.currentUser?.uid !== user.uid) {
             throw new Error('題目或登入身分已變更，請重新開啟回報。');
         }
         reportStage = 'get-token';
+        reportLoadingStatus('正在確認登入狀態…');
         const token = await user.getIdToken();
         reportStage = 'request';
+        reportLoadingStatus('已送交 AI 審核，正在核對題目與補償…');
         const res = await fetch('/api/verify-report', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
@@ -2725,6 +2768,7 @@ window.submitReport = async () => {
             })
         });
         reportStage = 'response';
+        reportLoadingStatus('正在確認審核結果…');
         const result = await res.json().catch(() => ({}));
         if (!res.ok || ['unavailable', 'invalid', 'unauthorized'].includes(result.status)) {
             const error = new Error(result.reason || `題目回報暫時無法處理（HTTP ${res.status}），請稍後重試。`);
@@ -2800,7 +2844,7 @@ window.submitReport = async () => {
         });
         reportView('input');
         // 保留回報內容以供重新送審；審核未成功前不跳題、不宣告已發獎。
-        alert(error?.message || '題目審核暫時無法完成，請稍後重試。');
+        reportStatus(error?.message || '題目審核暫時無法完成，請稍後重試。', true);
     } finally {
         reportSubmitting = false;
     }
