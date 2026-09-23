@@ -1344,7 +1344,7 @@ body.xianxia-theme main:has(#page-training.active-page),
         </div>
     </div>
 
-    <div id="report-modal" class="hidden fixed inset-0 z-[300] bg-black/90 backdrop-blur-sm flex items-center justify-center p-6 opacity-0 transition-opacity duration-300">
+    <div id="report-modal" class="hidden fixed inset-0 z-[17000] bg-black/90 backdrop-blur-sm flex items-center justify-center p-6 opacity-0 transition-opacity duration-300">
         <div class="glass-panel border-2 border-yellow-500/50 rounded-2xl p-6 max-w-sm w-full shadow-[0_0_30px_rgba(234,179,8,0.3)] transform scale-95 transition-transform duration-300 relative overflow-hidden" id="report-box">
             <div id="report-input-view">
                 <h3 class="text-xl font-bold text-white mb-2 flex items-center gap-2 font-sci">
@@ -1353,6 +1353,7 @@ body.xianxia-theme main:has(#page-training.active-page),
                 </h3>
                 <p class="text-xs text-gray-400 mb-4">請簡述題目問題 (例如: 答案錯誤、選項重複、錯字)，AI 將進行嚴格審查。</p>
                 <textarea id="report-reason" class="w-full bg-slate-900/80 border border-slate-600 rounded-lg p-3 text-sm text-white focus:border-yellow-500 outline-none resize-none h-24 mb-4" placeholder="請輸入問題描述..."></textarea>
+                <p id="report-input-status" role="status" aria-live="polite" class="hidden text-xs mb-4 leading-relaxed"></p>
                 <div class="flex gap-3">
                     <button onclick="closeReportModal()" class="flex-1 btn-cyber-ghost py-2 rounded-lg text-xs hover:bg-white/10">取消</button>
                     <button onclick="submitReport()" class="flex-1 btn-cyber-primary py-2 rounded-lg text-xs bg-yellow-600 hover:bg-yellow-500 border-none text-black font-bold">送出審查</button>
@@ -1362,14 +1363,15 @@ body.xianxia-theme main:has(#page-training.active-page),
             <div id="report-loading-view" class="hidden flex-col items-center justify-center py-4">
                 <div class="cyber-loader border-yellow-400 mb-4"></div>
                 <h3 class="text-yellow-400 font-bold font-sci animate-pulse">AI 正在嚴格審查中...</h3>
-                <p class="text-xs text-gray-500 mt-2">Checking logic & facts...</p>
+                <p id="report-loading-status" role="status" aria-live="polite" class="text-xs text-gray-300 mt-2 text-center leading-relaxed">正在準備審核…</p>
             </div>
 
             <div id="report-result-view" class="hidden flex-col items-center justify-center py-2 text-center">
                 <div id="report-result-icon" class="text-4xl mb-3"></div>
                 <h3 id="report-result-title" class="text-lg font-bold mb-2"></h3>
-                <p id="report-result-msg" class="text-xs text-gray-400 mb-4 bg-black/30 p-2 rounded w-full"></p>
-                <button onclick="closeReportModal()" class="btn-cyber-ghost w-full py-2 text-xs">關閉</button>
+                <p id="report-result-msg" class="text-xs text-gray-300 mb-4 bg-black/30 p-3 rounded w-full whitespace-pre-line leading-relaxed"></p>
+                <button id="report-result-action" type="button" onclick="closeReportModal()" class="btn-cyber-primary w-full py-2 text-xs">關閉</button>
+                <button id="report-result-close" type="button" onclick="closeReportModal()" class="hidden btn-cyber-ghost w-full py-2 mt-2 text-xs">關閉</button>
             </div>
         </div>
     </div>
