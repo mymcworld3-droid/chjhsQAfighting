@@ -2496,7 +2496,19 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
 
     let stats = currentUserData.stats;
     let scoreGain = 0;
+    const scoreBeforeAnswer = Math.max(0, Number(stats.totalScore) || 0);
     const cultivationReward = applyCultivationReward(stats, isCorrect);
+    // 記下實際扣除的修為；道心擋住扣分或尚未達金丹時皆為 0。
+    // 隨本次答題的 stats 一起存入，補償 API 不信任瀏覽器另外送來的扣分金額。
+    if (quiz?.data?.q) {
+        const scoreAfterAnswer = Math.max(0, Number(stats.totalScore) || 0);
+        stats.lastQuizAnswer = {
+            question: String(quiz.data.q).normalize('NFC').replace(/\s+/g, ' ').trim().slice(0, 1500),
+            isCorrect, scoreBefore: scoreBeforeAnswer, scoreAfter: scoreAfterAnswer,
+            penalty: Math.max(0, scoreBeforeAnswer - scoreAfterAnswer),
+            answeredAtMs: Date.now()
+        };
+    }
 
     stats.totalAnswered++;
     if (isCorrect) {
@@ -2551,7 +2563,10 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
             userIdx: userIdx,
             explanation: explanation || ""
         });
-        await Promise.all([p1, p2]);
+        // 回報與補償須等答題資料確實寫入後才可送審。
+        const persisted = Promise.all([p1, p2]);
+        if (quiz) quiz.answerPersistence = persisted;
+        await persisted;
     } catch (e) { console.error("Firebase Error", e); }
     
     fillBuffer();
@@ -2687,6 +2702,10 @@ window.submitReport = async () => {
     reportSubmitting = true;
     reportView('loading');
     try {
+        if (quiz.answerPersistence) await quiz.answerPersistence;
+        if (window.currentActiveQuiz !== quiz || auth.currentUser?.uid !== user.uid) {
+            throw new Error('題目或登入身分已變更，請重新開啟回報。');
+        }
         const token = await user.getIdToken();
         const res = await fetch('/api/verify-report', {
             method: 'POST',
@@ -2720,15 +2739,20 @@ window.submitReport = async () => {
             setTimeout(() => startQuizFlow(), 300);
         };
 
-        if (result.status === 'confirmed' && result.compensated === true && result.goldAdded === 20) {
+        if (result.status === 'confirmed' && result.compensated === true && result.goldAdded === 100) {
             icon.innerHTML = '<i class="fa-solid fa-circle-check text-green-400"></i>';
             title.textContent = '題目有誤 · 補償已發放';
             title.className = 'text-lg font-bold mb-2 text-green-400';
+            const refunded = Math.max(0, Number(result.cultivationRefund) || 0);
+            const extra = Math.max(0, Number(result.cultivationBonus) || 0);
             message.textContent = '雙重 AI 審核：' + (result.reason || '題目確認有誤。') +
-                '\n已入帳 20 靈石，本題可直接跳過。';
-            // 數值以伺服器已完成的交易為準，不自行累加或整筆覆寫 stats.gold。
-            if (currentUserData?.stats && Number.isFinite(Number(result.newGold))) {
+                '\n返還修為 ' + refunded + '，額外修為 +' + extra +
+                '，共獲得 ' + (refunded + extra) + ' 修為；100 靈石已入帳。本題可直接跳過。';
+            // 以交易回傳的數值更新 UI，不再由前端自行累加或覆寫資料庫。
+            if (currentUserData?.stats && Number.isFinite(Number(result.newGold)) &&
+                Number.isFinite(Number(result.newTotalScore))) {
                 currentUserData.stats.gold = Number(result.newGold);
+                currentUserData.stats.totalScore = Number(result.newTotalScore);
                 updateUIStats();
             }
             btn.textContent = '跳過錯題';
@@ -2737,7 +2761,7 @@ window.submitReport = async () => {
             icon.innerHTML = '<i class="fa-solid fa-circle-check text-yellow-400"></i>';
             title.textContent = '此題已領取補償';
             title.className = 'text-lg font-bold mb-2 text-yellow-400';
-            message.textContent = '這道題目已有補償紀錄，不會再次發放靈石；仍可跳過這道已確認的錯題。';
+            message.textContent = '這道題目已有補償紀錄，不會再次發放修為或靈石；仍可跳過這道已確認的錯題。';
             btn.textContent = '跳過錯題';
             btn.onclick = skipVerifiedQuestion;
         } else if (result.status === 'limit') {
