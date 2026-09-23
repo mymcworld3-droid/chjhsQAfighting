@@ -177,7 +177,9 @@ test('all server AI features use the shared router and expose safe status metada
   assert.match(server, /const aiRouter = require\('\.\/ai-router'\);/);
   assert.match(server, /app\.get\('\/api\/ai-status'/);
   assert.match(server, /aiRouter\.getStatus\(\)/);
-  assert.ok((server.match(/aiRouter\.generateJSON\(/g) || []).length >= 3);
+  const report = readFileSync(join(__dirname, '../question-report-api.cjs'), 'utf8');
+  assert.ok((server.match(/aiRouter\.generateJSON\(/g) || []).length >= 2);
+  assert.match(report, /generate = aiRouter\.generateJSON/);
   assert.doesNotMatch(server, /model\.generateContent\(/);
   assert.doesNotMatch(server, /GoogleGenerativeAI/);
 });
