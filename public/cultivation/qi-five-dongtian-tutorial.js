@@ -241,11 +241,12 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   }
 
   function blocking() {
+    if (window.isXiuxianBattleBusy?.()) return true;
     return !!document.querySelector('#xiuxian-story-layer,#newbie-tutorial-layer,#golden-core-tutorial-layer,#progression-v2-modal,.training-v3-modal-backdrop,#realm-breakthrough-feedback,#dongtian-overlay,#five-immortal-challenge');
   }
 
   function start() {
-    if(active||score()<SCORE_REQUIRED||marker()?.completed)return;
+    if(active||window.isXiuxianBattleBusy?.()||score()<SCORE_REQUIRED||marker()?.completed||blocking())return;
     cleanupDemo();
     active=true;
     demoCompleted=false;

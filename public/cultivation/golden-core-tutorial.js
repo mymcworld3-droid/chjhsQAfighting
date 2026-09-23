@@ -109,7 +109,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   function start(options = {}) {
     const adminPreview = options.adminPreview === true && userData()?.isAdmin === true;
     if (options.adminPreview && !adminPreview) return false;
-    if (active || (!unlocked() && !adminPreview) || (!options.story && blocking())) return false;
+    if (active || window.isXiuxianBattleBusy?.() || (!unlocked() && !adminPreview) || (!options.story && blocking())) return false;
     replayOnly = options.replay === true || adminPreview || !!marker()?.completed;
     startedByStory = options.story === true;
     ensureStyle();

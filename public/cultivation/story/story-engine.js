@@ -201,6 +201,8 @@ import {
   }
 
   function blocking() {
+    // The PvP room remains busy even when the result overlay is hidden or a scene is preparing.
+    if (window.isXiuxianBattleBusy?.()) return true;
     return !!document.querySelector([
       '#newbie-tutorial-layer',
       '#qi-five-dongtian-tutorial-layer',
@@ -441,6 +443,7 @@ import {
 
   function startChapter(chapter, options = {}) {
     if (!chapter || active || storyTutorialPaused) return false;
+    if (blocking()) return false;
     if (!storyImagesReady) {
       preloadStoryImages().then(() => startChapter(chapter, options));
       return true;
@@ -479,6 +482,7 @@ import {
     const preview = options.preview === true;
     if (preview && !canPreviewAllStory()) return false;
     if (active || document.getElementById(LAYER_ID)) return false;
+    if (typeof window !== 'undefined' && window.isXiuxianBattleBusy?.()) return false;
     active = true;
     const el = layer();
     el.innerHTML = `<div class="story-gender"><section class="story-gender-card"><small>主線劇情</small><h2>請選擇性別</h2><label class="story-name-field">你的名字<input id="story-player-name" type="text" maxlength="24" autocomplete="nickname" value="${escapeHtml(playerName())}"></label><p class="story-name-error" aria-live="polite"></p><div class="story-gender-options"><button type="button" class="story-gender-option" data-story-gender="male"><img src="${playerPortraitPath('male','neutral')}" alt="男修"><strong>男修 · 師弟</strong></button><button type="button" class="story-gender-option" data-story-gender="female"><img src="${playerPortraitPath('female','neutral')}" alt="女修"><strong>女修 · 師妹</strong></button></div></section></div>`;
@@ -569,7 +573,7 @@ import {
   function canPreviewAllStory() { return data()?.isAdmin === true; }
 
   function openArchive() {
-    if (active || window.getBattleTutorialState?.().active) return;
+    if (active || blocking() || window.getBattleTutorialState?.().active) return;
     ensureStyle();
     document.getElementById(ARCHIVE_ID)?.remove();
     const el = document.createElement('div');
@@ -652,6 +656,7 @@ import {
     lastScore = score();
     document.addEventListener('keydown', onKeydown);
     window.addEventListener('xiuxian:stats-updated', handleScoreUpdate);
+    window.addEventListener('xiuxian:battle-session-ended', () => setTimeout(maybeAutoStart, 180));
     window.addEventListener('xiuxian:user-ready', () => {
       mountArchiveLauncher();
       autoPermits = Math.max(1, autoPermits);
