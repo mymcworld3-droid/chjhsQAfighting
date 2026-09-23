@@ -228,7 +228,9 @@ test('solo UI does not award gold locally or skip on unavailable result', () => 
   assert.match(legacy, /if \(result\.status === 'confirmed' && result\.compensated === true && result\.goldAdded === 100 &&/);
   assert.match(legacy, /stats\.lastQuizAnswer = \{/);
   assert.match(legacy, /if \(quiz\.answerPersistence\) await waitForReportAnswerSaved\(quiz\.answerPersistence\)/);
-  assert.match(legacy, /const persisted = p1;/);
+  assert.match(legacy, /quiz\.answerPersistence = p1;/);
+  assert.match(legacy, /quiz\.answerPersistenceDeferred = !shouldSaveAnswer;/);
+  assert.match(legacy, /if \(quiz\.answerPersistenceDeferred && !quiz\.answerPersistence\)/);
   assert.match(legacy, /void addDoc\(collection\(db, "exam_logs"\)/);
   assert.match(legacy, /console\.warn\('\[Quiz exam log\]'/);
   assert.match(legacy, /phase: error\?\.phase \|\| reportStage/);
@@ -237,4 +239,44 @@ test('solo UI does not award gold locally or skip on unavailable result', () => 
   assert.match(legacy, /if \(result\.status === 'duplicate'\)/);
   assert.match(legacy, /if \(window\.currentActiveQuiz !== quiz\) return/);
   assert.doesNotMatch(legacy, /currentUserData\.stats\.gold = \(currentUserData\.stats\.gold \|\| 0\) \+ 20/);
+});
+
+test('report authentication separates missing Admin credentials, bad login, and temporary verification outages', async () => {
+  const request = { body: input, get: () => 'Bearer valid.token' };
+  const logger = { warn() {}, error() {} };
+  const noCredentials = response();
+  await api.createHandler({
+    resolve: () => { throw new Error('Missing server credential for Firebase A'); },
+    review: () => { throw Error('must not reach AI'); }, logger
+  })(request, noCredentials);
+  assert.equal(noCredentials.code, 503);
+  assert.equal(noCredentials.body.phase, 'authentication-config');
+  assert.equal(noCredentials.body.compensated, false);
+  assert.match(noCredentials.body.reason, /Firebase A/);
+
+  const fake = fakeDatabase();
+  const wrongIdentity = response();
+  await api.createHandler({
+    resolve: () => ({ db: fake.db, auth: { verifyIdToken: async () => ({ uid: 'other', aud: 'wrong-project', iss: 'wrong' }) } }),
+    review: () => { throw Error('must not reach AI'); }, logger
+  })(request, wrongIdentity);
+  assert.equal(wrongIdentity.code, 401);
+  assert.equal(wrongIdentity.body.status, 'unauthorized');
+
+  const expired = response();
+  await api.createHandler({
+    resolve: () => ({ db: fake.db, auth: { verifyIdToken: async () => { const e = Error('expired'); e.code = 'auth/id-token-expired'; throw e; } } }),
+    review: () => { throw Error('must not reach AI'); }, logger
+  })(request, expired);
+  assert.equal(expired.code, 401);
+  assert.equal(expired.body.phase, 'authentication');
+
+  const outage = response();
+  await api.createHandler({
+    resolve: () => ({ db: fake.db, auth: { verifyIdToken: async () => { throw Error('service unreachable'); } } }),
+    review: () => { throw Error('must not reach AI'); }, logger
+  })(request, outage);
+  assert.equal(outage.code, 503);
+  assert.equal(outage.body.phase, 'authentication');
+  assert.equal(fake.claims.size, 0);
 });
