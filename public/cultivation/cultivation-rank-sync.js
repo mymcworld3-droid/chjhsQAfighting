@@ -32,9 +32,15 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     const score = Math.max(0, Number(data.stats.totalScore) || 0);
     const rank = expectedRank(score);
 
+    const previousRank = Number(data.stats.rankLevel);
     data.stats.rankLevel = rank;
-    const key = `${user.uid}:${score}:${rank}`;
-    if (lastPersistedKey === key) return;
+    // The normal reward save already persists a correct rank. Do not write again
+    // simply because the score changed while the player remained in the same realm.
+    const key = `${user.uid}:${rank}`;
+    if (lastPersistedKey === key || previousRank === rank) {
+      lastPersistedKey = key;
+      return;
+    }
 
     writing = true;
     try {
