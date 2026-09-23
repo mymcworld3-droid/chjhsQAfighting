@@ -726,7 +726,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   }
 
   function start(mode = 'question', options = {}) {
-    if (active) return false;
+    if (active || window.isXiuxianBattleBusy?.()) return false;
     ensureStyle();
     bindDemoGuards();
     bindNavigationGuards();
