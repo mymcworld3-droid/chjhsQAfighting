@@ -171,23 +171,33 @@ function createHandler({ resolve = () => adminProject('A'), review = reviewQuest
           verified.iss !== 'https://securetoken.google.com/question-learning') throw new Error('Invalid player identity');
     } catch (error) {
       logger.warn('[Question report] authentication unavailable:', error?.message);
-      return res.status(503).json({ status: 'unavailable', valid: null, reason: '暫時無法驗證登入或連接補償服務，請稍後再試。' });
+      return res.status(503).json({ status: 'unavailable', phase: 'authentication', valid: null, reason: '暫時無法驗證登入或連接補償服務，請稍後再試。' });
     }
     const uid = verified.uid;
     const claimRef = project.db.collection('questionErrorCompensations').doc(reportKey(uid, input.question));
+    let phase = 'duplicate-check';
     try {
       // Cheap duplicate check before asking AI; the transaction below repeats it for race safety.
       if ((await claimRef.get()).exists) {
         return res.json({ status: 'duplicate', valid: true, compensated: false, goldAdded: 0, cultivationAdded: 0, reason: '這道題目已領取過錯題補償。' });
       }
+      phase = 'ai-review';
       const result = await review(input);
-      if (result.status === 'unavailable') return res.status(503).json({ ...result, valid: null, compensated: false });
+      if (result.status === 'unavailable') return res.status(503).json({ ...result, phase, valid: null, compensated: false });
       if (result.status !== 'confirmed') return res.json({ ...result, valid: false, compensated: false });
+      phase = 'compensation';
       const outcome = await award(project.db, uid, input, result);
       return res.json({ ...outcome, valid: outcome.status === 'confirmed' || outcome.status === 'duplicate' });
     } catch (error) {
-      logger.error('[Question report] unavailable:', error?.message);
-      return res.status(503).json({ status: 'unavailable', valid: null, compensated: false, reason: '審核或補償尚未完成，請稍後重試；不會重複發獎。' });
+      logger.error(`[Question report] ${phase} unavailable:`, error?.code || error?.message);
+      const reason = phase === 'ai-review'
+        ? (/timeout|deadline|abort/i.test(String(error?.message || ''))
+          ? 'AI 審核逾時，請稍後重新送審；本次尚未發放補償。'
+          : 'AI 審核服務暫時無法處理，請稍後重新送審。')
+        : phase === 'compensation'
+          ? '補償入帳尚未完成，請稍後重試；不會重複發獎。'
+          : '暫時無法查詢題目回報紀錄，請稍後重試。';
+      return res.status(503).json({ status: 'unavailable', phase, valid: null, compensated: false, reason });
     }
   };
 }
