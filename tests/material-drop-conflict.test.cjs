@@ -10,7 +10,7 @@ const end = source.indexOf('  async function grantDrops(', start);
 assert.ok(start >= 0 && end > start, 'material drop conflict helper exists');
 
 function retry() {
-  const ctx = { Math: { random: () => 0 } };
+  const ctx = { Math: Object.assign(Object.create(Math), { random: () => 0 }) };
   vm.runInNewContext(source.slice(start, end) + '\nthis.retry = runDropTransactionWithRetry;', ctx);
   return ctx.retry;
 }
