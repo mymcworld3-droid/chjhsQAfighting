@@ -54,7 +54,7 @@ test('review outcome has a passed, not-passed, or retryable incomplete screen', 
     return nodes.get(id);
   }
   const ctx = { document: { getElementById: node }, window: { closeReportModal() {} } };
-  vm.runInNewContext(legacy.slice(start, end) + '\\nthis.show = renderReportOutcome;', ctx);
+  vm.runInNewContext(legacy.slice(start, end) + String.fromCharCode(10) + 'this.show = renderReportOutcome;', ctx);
   ctx.show({ kind: 'approved', title: '審查通過 ✅', message: '100 靈石已入帳' });
   assert.match(node('report-result-icon').innerHTML, /circle-check/);
   assert.match(node('report-result-msg').textContent, /100 靈石已入帳/);
@@ -73,12 +73,12 @@ test('review outcome has a passed, not-passed, or retryable incomplete screen', 
 });
 
 test('only an approved and paid review can show rewards; a technical failure is not a rejection', () => {
-  assert.match(legacy, /result\\.status === 'confirmed' && result\\.compensated === true && result\\.goldAdded === 100 &&/);
-  assert.match(legacy, /Number\\.isFinite\\(Number\\(result\\.newGold\\)\\)/);
-  assert.match(legacy, /result\\.status === 'rejected'/);
-  assert.match(legacy, /result\\.status === 'duplicate'/);
-  assert.match(legacy, /title: isLimit \\? '今日補償已達上限' : '本次審查未完成'/);
-  assert.match(legacy, /showClose: !isLimit/);
+  assert.ok(legacy.includes("result.status === 'confirmed' && result.compensated === true && result.goldAdded === 100 &&"));
+  assert.ok(legacy.includes('Number.isFinite(Number(result.newGold))'));
+  assert.ok(legacy.includes("result.status === 'rejected'"));
+  assert.ok(legacy.includes("result.status === 'duplicate'"));
+  assert.ok(legacy.includes("title: isLimit ? '今日補償已達上限' : '本次審查未完成'"));
+  assert.ok(legacy.includes('showClose: !isLimit'));
   assert.match(html, /id="report-result-action"/);
   assert.match(html, /id="report-result-close"/);
 });
