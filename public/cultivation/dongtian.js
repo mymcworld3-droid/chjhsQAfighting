@@ -12,6 +12,7 @@ import {
   const LEVELS = ['國小中年級', '國小高年級', '國中一年級', '國中二年級', '國中三年級', '高中職', '大學以上'];
   const ENCOUNTER_CHANCE = 0.20;
   const MAX_IMAGES = 8;
+  const STATUS_CHECK_TIMEOUT_MS = 4500;
   const OWNER_CULTIVATION_REWARD = 1;
   const OWNER_GOLD_REWARD = 5;
   const FIRST_COMPLETION_SPIRIT_STONE_PER_QUESTION = 100;
@@ -870,9 +871,29 @@ import {
       window.dispatchEvent(new CustomEvent('newbie:dongtian-demo-question-answered', { detail: { index: s.index, isCorrect } }));
     }
     document.getElementById('dt-next').onclick = async () => {
-      if (!(await ensureSessionDongtianActive())) return;
-      if (s.index + 1 >= s.dongtian.questions.length) finishDongtian();
-      else { s.index += 1; renderRunner(); }
+      // A slow Firestore lookup must not allow two clicks to skip questions.
+      if (state.session !== s || s.advancing || s.settling) return;
+      s.advancing = true;
+      const next = document.getElementById('dt-next');
+      const label = next.textContent;
+      const currentIndex = s.index;
+      next.disabled = true;
+      next.textContent = '正在確認洞天狀態…';
+      try {
+        if (!(await ensureSessionDongtianActive())) return;
+        if (state.session !== s || s.index !== currentIndex) return;
+        if (s.index + 1 >= s.dongtian.questions.length) void finishDongtian();
+        else { s.index += 1; renderRunner(); }
+      } catch (error) {
+        console.warn('[Dongtian next question]', error);
+        if (state.session === s) toast('切換題目未完成，請再試一次。');
+      } finally {
+        s.advancing = false;
+        if (state.session === s && next.isConnected) {
+          next.disabled = false;
+          next.textContent = label;
+        }
+      }
     };
     void window.quizMathTypeset?.(slot);
   }
@@ -886,36 +907,59 @@ import {
     return String(dongtian?.aiReviewSummary || dongtian?.flaggedReason || 'AI 已確認此題存在實質錯誤。');
   }
 
+  // Prevent a transient status read from holding the answer screen indefinitely.
+  // Final rewards still require an online Firestore transaction that verifies active status.
+  async function readSessionDongtianStatus(caveId, timeoutMs = STATUS_CHECK_TIMEOUT_MS) {
+    let timer;
+    try {
+      return await Promise.race([
+        getDoc(doc(db, INDEX_COLLECTION, caveId))
+          .then((snapshot) => ({ snapshot }), (error) => ({ error })),
+        new Promise((resolve) => {
+          timer = setTimeout(() => resolve({ timedOut: true }), timeoutMs);
+        })
+      ]);
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
   async function ensureSessionDongtianActive() {
     const s = state.session;
     if (!s) return false;
     if (s.tutorialOnly) return true;
-    try {
-      const snap = await getDoc(doc(db, INDEX_COLLECTION, s.dongtian.id));
-      if (snap.exists() && snap.data()?.status !== 'active') {
-        await sealCurrentSession('此洞天剛被 AI 確認有錯並已封印，等待洞天主人修復。');
-        return false;
+    const result = await readSessionDongtianStatus(s.dongtian.id);
+    if (state.session !== s) return false;
+    if (result.snapshot?.exists() && result.snapshot.data()?.status !== 'active') {
+      sealCurrentSession('此洞天剛被 AI 確認有錯並已封印，等待洞天主人修復。');
+      return false;
+    }
+    if (result.error || result.timedOut) {
+      console.warn('[Dongtian status check]', result.error || 'timed out');
+      if (!s.statusCheckWarned) {
+        s.statusCheckWarned = true;
+        toast('洞天狀態查詢較慢，先繼續答題；通關獎勵仍需連線確認。');
       }
-    } catch (error) {
-      console.warn('[Dongtian status check]', error);
     }
     return true;
   }
 
-  async function sealCurrentSession(message) {
+  function sealCurrentSession(message) {
     const s = state.session;
     if (!s) return;
     s.dongtian.status = 'suspended';
-    await writeDongtianHistory(s, false).catch(() => {});
     const source = s.source;
     const overlay = ensureOverlay();
     overlay.innerHTML = `<div class="dt-sealed"><div class="dt-sealed-box"><div class="dt-sealed-icon"><i class="fa-solid fa-lock"></i></div><h2 style="color:#fecaca;margin:0 0 8px">洞天暫時封印</h2><p style="color:#a78b8b;font-size:10px;line-height:1.8">${escapeHtml(message || '此洞天題目已確認有誤，暫停開放。')}</p><button id="dt-sealed-back" class="dt-back" type="button">返回</button></div></div>`;
     document.getElementById('dt-sealed-back').onclick = () => {
+      if (state.session !== s) return;
       state.session = null;
       overlay.remove();
       window.switchToPage?.(source === 'owner' ? 'page-settings' : 'page-home');
       if (source === 'owner') loadOwnDongtians();
     };
+    // Recording the interrupted run must not block the sealed screen or its return button.
+    void writeDongtianHistory(s, false).catch((error) => console.warn('[Dongtian sealed history]', error));
   }
 
   function openQuestionReport() {
