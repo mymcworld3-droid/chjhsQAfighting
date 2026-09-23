@@ -99,7 +99,7 @@ test('player-generated names and effect text are escaped and private fields are 
   },false);
   const html=profileMarkup(profile);
   assert.equal(profile.accuracy,'100.0%');
-  assert.equal(profile.realm,'登仙');
+  assert.equal(profile.realm,'半仙');
   assert.match(html,/&lt;img/);
   assert.doesNotMatch(html,/<img src=x|secret@example|SUPERSECRET|PRIVATESECRET/);
   assert.equal(profile.avatar,'');
