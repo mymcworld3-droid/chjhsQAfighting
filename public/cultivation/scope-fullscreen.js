@@ -31,8 +31,6 @@
     if (tab) tab.textContent = String(selected.length);
     if (sum) sum.textContent = selected.length ? '已選 ' + selected.length + ' 個複習範圍' : '建立你的專屬修習計畫';
     if (foot) foot.textContent = changed() ? '變更尚未儲存，離開前記得儲存。' : '可跨科選擇，最多 24 個範圍。';
-    const placeholder = $('ss-cart-placeholder');
-    if (placeholder) placeholder.hidden = selected.length > 0;
     const cardSummary = $('dongfu-scope-card')?.querySelector('.dongfu-collapse-summary');
     if (cardSummary) cardSummary.textContent = selected.length ? '已選 ' + selected.length + ' 個範圍 · 點擊全螢幕編輯' : '全螢幕選課 · 選章節、定考點';
   }
@@ -173,7 +171,6 @@
         <aside class="ss-cart" id="ss-cart" role="tabpanel" aria-labelledby="ss-tab-cart">
           <div class="ss-panel-head"><span class="ss-panel-mark"><i class="fa-solid fa-scroll" aria-hidden="true"></i></span><div><strong>我的修習卷</strong><small>已選 <span id="ss-selection-count">0</span> / 24 個範圍</small></div></div>
           <div class="ss-cart-body" id="ss-cart-body"><p class="ss-cart-note"><strong>複習提示</strong>：選擇整章會包含其考點，也可以只挑個別細項。加入清單後記得儲存。</p>
-            <p class="ss-cart-empty" id="ss-cart-placeholder"><i class="fa-solid fa-book-open" aria-hidden="true"></i><span>還沒有選定範圍<br>從左側選一個章節開始吧。</span></p>
           </div>
           <div class="ss-foot-summary" aria-live="polite">
             <strong id="ss-footer-main">建立你的專屬修習計畫</strong>

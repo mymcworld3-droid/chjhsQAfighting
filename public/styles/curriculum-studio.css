@@ -83,8 +83,6 @@ html.scope-studio-open,body.scope-studio-open{overflow:hidden!important;overscro
 #scope-studio #cs-message{min-height:20px;margin:0;color:#a8d6c8!important}
 #scope-studio .cs-note{color:#918e82!important;font-size:11px!important;line-height:1.7}
 #scope-studio .ss-picker-body>.ss-placeholder{padding:22px 12px;text-align:center;color:#aaa797}
-#scope-studio .ss-cart-empty{display:grid;place-items:center;gap:8px;padding:32px 12px;border:1px dashed rgba(231,202,140,.22);border-radius:13px;text-align:center;color:#ada58f;font-size:12px}
-#scope-studio .ss-cart-empty i{font-size:25px;color:#d7bf82}
 #dongfu-scope-card .dongfu-collapse-head{cursor:pointer}
 #dongfu-scope-card .dongfu-collapse-head .dongfu-collapse-chevron{display:grid;place-items:center}
 #dongfu-scope-card .dongfu-collapse-head .dongfu-collapse-chevron i:before{content:"\f061"}
