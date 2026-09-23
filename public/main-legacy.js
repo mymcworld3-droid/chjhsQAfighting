@@ -2614,33 +2614,40 @@ window.giveUpQuiz = async () => {
     }
 };
 
-// 🔥 新增：回報問題相關邏輯
+// 問道題目錯誤回報：審核與補償統一由後端核發；前端只顯示真正完成的交易結果。
+let reportSubmitting = false;
+let reportQuizSnapshot = null;
+
+function reportView(name) {
+    for (const view of ['input', 'loading', 'result']) {
+        const el = document.getElementById('report-' + view + '-view');
+        if (!el) continue;
+        el.classList.toggle('hidden', view !== name);
+        el.style.display = view === name && view !== 'input' ? 'flex' : '';
+    }
+}
+
 window.openReportModal = () => {
+    if (reportSubmitting) return;
+    const quiz = window.currentActiveQuiz;
+    if (!quiz?.data?.q || !Array.isArray(quiz.data.opts)) {
+        alert('找不到目前題目，請重新開啟問道。');
+        return;
+    }
+    reportQuizSnapshot = quiz;
     const modal = document.getElementById('report-modal');
     const box = document.getElementById('report-box');
-    
-    // 1. 重置 View 顯示狀態
-    document.getElementById('report-input-view').classList.remove('hidden');
-    document.getElementById('report-loading-view').classList.add('hidden');
-    document.getElementById('report-result-view').classList.add('hidden');
-    
-    // 2. 清空輸入框
+    reportView('input');
     document.getElementById('report-reason').value = '';
-
-    // 🔥 關鍵修正：強制清空結果頁的殘留資訊
     document.getElementById('report-result-icon').innerHTML = '';
-    document.getElementById('report-result-title').innerText = '';
-    document.getElementById('report-result-msg').innerText = '';
-
-    // 🔥 關鍵修正：重置按鈕行為與樣式
-    // 避免按鈕還保留著上一題的「跳過並領獎」功能
-    const resultBtn = document.querySelector('#report-result-view button');
-    if (resultBtn) {
-        resultBtn.onclick = () => closeReportModal(); // 還原為僅關閉
-        resultBtn.innerText = "關閉";                 // 還原文字
-        resultBtn.className = "btn-cyber-ghost w-full py-2 text-xs"; // 還原樣式
+    document.getElementById('report-result-title').textContent = '';
+    document.getElementById('report-result-msg').textContent = '';
+    const btn = document.querySelector('#report-result-view button');
+    if (btn) {
+        btn.onclick = () => closeReportModal();
+        btn.textContent = '關閉';
+        btn.className = 'btn-cyber-ghost w-full py-2 text-xs';
     }
-
     modal.classList.remove('hidden');
     requestAnimationFrame(() => {
         modal.classList.remove('opacity-0');
@@ -2650,103 +2657,112 @@ window.openReportModal = () => {
 };
 
 window.closeReportModal = () => {
+    if (reportSubmitting) return;
     const modal = document.getElementById('report-modal');
     const box = document.getElementById('report-box');
     modal.classList.add('opacity-0');
     box.classList.remove('scale-100');
     box.classList.add('scale-95');
+    reportQuizSnapshot = null;
     setTimeout(() => modal.classList.add('hidden'), 300);
 };
 
 window.submitReport = async () => {
+    if (reportSubmitting) return;
     const reason = document.getElementById('report-reason').value.trim();
-    if (!reason) return alert("請輸入回報原因！");
-
-    // 切換至 Loading 介面
-    document.getElementById('report-input-view').classList.add('hidden');
-    document.getElementById('report-loading-view').classList.remove('hidden');
-    document.getElementById('report-loading-view').style.display = 'flex';
-
-    // 取得當前題目資訊 (由記憶體變數取得)
-    const currentQData = window.currentActiveQuiz;
-    if (!currentQData || !currentQData.data) {
-        alert("找不到題目資料");
-        closeReportModal();
+    if (reason.length < 6) {
+        alert('請具體指出題目錯誤，至少輸入 6 個字元。');
         return;
     }
-
+    const quiz = reportQuizSnapshot;
+    if (!quiz?.data || quiz !== window.currentActiveQuiz) {
+        alert('題目已變更，請重新開啟回報。');
+        return;
+    }
+    const user = auth.currentUser;
+    if (!user || user.uid !== currentUserData?.uid && currentUserData?.uid) {
+        alert('登入狀態已變更，請重新登入。');
+        return;
+    }
+    reportSubmitting = true;
+    reportView('loading');
     try {
+        const token = await user.getIdToken();
         const res = await fetch('/api/verify-report', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
             body: JSON.stringify({
-                question: currentQData.data.q,
-                options: currentQData.data.opts,
-                correctIndex: currentQData.data.ans,
-                explanation: currentQData.data.exp,
+                question: quiz.data.q,
+                options: quiz.data.opts,
+                correctIndex: quiz.data.ans,
+                explanation: quiz.data.exp,
                 userReason: reason
             })
         });
-
-        const result = await res.json();
-
-        // 切換至結果介面
-        document.getElementById('report-loading-view').classList.add('hidden');
-        document.getElementById('report-loading-view').style.display = '';
-        document.getElementById('report-result-view').classList.remove('hidden');
-        document.getElementById('report-result-view').style.display = 'flex';
-
-        const iconEl = document.getElementById('report-result-icon');
-        const titleEl = document.getElementById('report-result-title');
-        const msgEl = document.getElementById('report-result-msg');
-
-        // 重設按鈕事件 (避免重複綁定)
-        const btn = document.querySelector('#report-result-view button');
-
-        if (result.valid) {
-            // ✅ 回報成功：發獎勵 + 跳過
-            iconEl.innerHTML = '<i class="fa-solid fa-circle-check text-green-400 animate-bounce"></i>';
-            titleEl.innerText = "回報成功！";
-            titleEl.className = "text-lg font-bold mb-2 text-green-400";
-            msgEl.innerText = `AI 判定：${result.reason}\n\n獲得補償 20 金幣，題目已跳過。`;
-
-            // 發放獎勵 (改發金幣)
-            if (currentUserData && currentUserData.stats) {
-                currentUserData.stats.gold = (currentUserData.stats.gold || 0) + 20;
-                await updateDoc(doc(db, "users", auth.currentUser.uid), { "stats.gold": currentUserData.stats.gold });
-                updateUIStats();
-            }
-
-            // 設定按鈕行為：跳下一題
-            btn.onclick = () => {
-                closeReportModal();
-                
-                // A verified skip also removes the question from the pending cache.
-                syncSoloQuestionCache();
-                if (soloQuestionCache.getActive()?.data?.q === currentQData.data?.q) {
-                    soloQuestionCache.consumeActive();
-                }
-                window.currentActiveQuiz = null;
-                void fillBuffer(); 
-                
-                // 稍微延遲執行，讓彈窗關閉動畫順暢
-                setTimeout(() => startQuizFlow(), 300); 
-            };
-        } else {
-            // ❌ 回報駁回
-            iconEl.innerHTML = '<i class="fa-solid fa-circle-xmark text-red-400"></i>';
-            titleEl.innerText = "回報駁回";
-            titleEl.className = "text-lg font-bold mb-2 text-red-400";
-            msgEl.innerText = `AI 判定：${result.reason}\n\n題目邏輯無誤，請繼續挑戰！`;
-            
-            // 設定按鈕行為：僅關閉視窗
-            btn.onclick = () => closeReportModal();
+        const result = await res.json().catch(() => ({}));
+        if (!res.ok || result.status === 'unavailable' || result.status === 'invalid' || result.status === 'unauthorized') {
+            throw new Error(result.reason || '補償服務暫時無法處理，請稍後重試。');
         }
 
-    } catch (e) {
-        console.error(e);
-        alert("連線錯誤，請稍後再試");
-        closeReportModal();
+        reportView('result');
+        const icon = document.getElementById('report-result-icon');
+        const title = document.getElementById('report-result-title');
+        const message = document.getElementById('report-result-msg');
+        const btn = document.querySelector('#report-result-view button');
+        const skipVerifiedQuestion = () => {
+            closeReportModal();
+            // 不能讓舊回報結果跳過玩家已經切換到的新題目。
+            if (window.currentActiveQuiz !== quiz) return;
+            syncSoloQuestionCache();
+            if (soloQuestionCache.getActive()?.data?.q === quiz.data?.q) soloQuestionCache.consumeActive();
+            window.currentActiveQuiz = null;
+            void fillBuffer();
+            setTimeout(() => startQuizFlow(), 300);
+        };
+
+        if (result.status === 'confirmed' && result.compensated === true && result.goldAdded === 20) {
+            icon.innerHTML = '<i class="fa-solid fa-circle-check text-green-400"></i>';
+            title.textContent = '題目有誤 · 補償已發放';
+            title.className = 'text-lg font-bold mb-2 text-green-400';
+            message.textContent = '雙重 AI 審核：' + (result.reason || '題目確認有誤。') +
+                '\n已入帳 20 靈石，本題可直接跳過。';
+            // 數值以伺服器已完成的交易為準，不自行累加或整筆覆寫 stats.gold。
+            if (currentUserData?.stats && Number.isFinite(Number(result.newGold))) {
+                currentUserData.stats.gold = Number(result.newGold);
+                updateUIStats();
+            }
+            btn.textContent = '跳過錯題';
+            btn.onclick = skipVerifiedQuestion;
+        } else if (result.status === 'duplicate') {
+            icon.innerHTML = '<i class="fa-solid fa-circle-check text-yellow-400"></i>';
+            title.textContent = '此題已領取補償';
+            title.className = 'text-lg font-bold mb-2 text-yellow-400';
+            message.textContent = '這道題目已有補償紀錄，不會再次發放靈石；仍可跳過這道已確認的錯題。';
+            btn.textContent = '跳過錯題';
+            btn.onclick = skipVerifiedQuestion;
+        } else if (result.status === 'limit') {
+            icon.innerHTML = '<i class="fa-solid fa-circle-info text-yellow-400"></i>';
+            title.textContent = '今日補償已達上限';
+            title.className = 'text-lg font-bold mb-2 text-yellow-400';
+            message.textContent = result.reason || '今日已達補償上限，明日可再回報。';
+            btn.textContent = '關閉';
+            btn.onclick = () => closeReportModal();
+        } else {
+            icon.innerHTML = '<i class="fa-solid fa-circle-xmark text-red-400"></i>';
+            title.textContent = '未確認題目有誤';
+            title.className = 'text-lg font-bold mb-2 text-red-400';
+            message.textContent = '審核結果：' + (result.reason || '目前沒有足夠證據確認題目錯誤。') +
+                '\n本次不發放補償；可繼續作答。';
+            btn.textContent = '關閉';
+            btn.onclick = () => closeReportModal();
+        }
+    } catch (error) {
+        console.warn('[Question report]', error);
+        reportView('input');
+        // 保留回報內容以供重新送審；審核未成功前不跳題、不宣告已發獎。
+        alert(error?.message || '題目審核暫時無法完成，請稍後重試。');
+    } finally {
+        reportSubmitting = false;
     }
 };
 
