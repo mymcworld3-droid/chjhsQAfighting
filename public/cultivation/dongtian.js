@@ -114,6 +114,7 @@ import {
     .dt-create h4,.dt-library h4{margin:0 0 5px;color:#f0e1ff;font-size:12px;font-weight:900}.dt-create p,.dt-library-note{margin:0 0 12px;color:#81748d;font-size:9px;line-height:1.65}.dt-input{width:100%;min-height:112px;resize:vertical;padding:11px 12px;border-radius:13px;border:1px solid rgba(216,177,93,.16);background:#0c0b0d;color:#eadff0;font-size:11px;outline:none}.dt-input:focus{border-color:rgba(188,133,248,.55);box-shadow:0 0 0 3px rgba(174,112,238,.07)}
     .dt-upload-row{display:flex;align-items:center;gap:8px;margin-top:9px;flex-wrap:wrap}.dt-upload{display:inline-flex;align-items:center;gap:7px;min-height:36px;padding:0 12px;border-radius:11px;border:1px solid rgba(187,134,252,.25);background:rgba(164,103,224,.06);color:#d9b8ff;font-size:9px;font-weight:900;cursor:pointer}.dt-upload input{display:none}.dt-image-count{color:#72667a;font-size:8px}.dt-previews{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:7px;margin-top:9px}.dt-preview{position:relative;aspect-ratio:1;border-radius:11px;overflow:hidden;border:1px solid rgba(255,255,255,.08);background:#090909}.dt-preview img{width:100%;height:100%;object-fit:cover}.dt-preview button{position:absolute;right:4px;top:4px;width:22px;height:22px;border:0;border-radius:50%;background:rgba(0,0,0,.72);color:#f3d8ff;font-size:9px}
     .dt-amount{margin-top:11px}.dt-amount-title{display:block;margin-bottom:6px;color:#9e8ca8;font-size:8px;font-weight:900;letter-spacing:.08em}.dt-amount-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.dt-amount-choice{position:relative;cursor:pointer}.dt-amount-choice input{position:absolute;opacity:0;pointer-events:none}.dt-amount-choice span{min-height:38px;display:flex;align-items:center;justify-content:center;gap:5px;padding:7px 8px;border:1px solid rgba(187,134,252,.18);border-radius:11px;background:rgba(164,103,224,.035);color:#a994b5;font-size:9px;font-weight:900;transition:.18s ease}.dt-amount-choice small{color:#786882;font-size:7px;font-weight:700}.dt-amount-choice input:checked+span{border-color:rgba(203,151,251,.62);background:linear-gradient(135deg,rgba(114,65,154,.38),rgba(63,36,82,.3));color:#f2dcff;box-shadow:0 0 0 2px rgba(174,112,238,.08) inset}.dt-amount-choice input:checked+span small{color:#cdb2dc}.dt-generate{width:100%;min-height:42px;margin-top:11px;border-radius:13px;border:1px solid rgba(190,137,251,.45);background:linear-gradient(135deg,#71429f,#3d205a);color:#f8eaff;font-size:10px;font-weight:900;letter-spacing:.08em}.dt-generate:disabled{opacity:.45;cursor:wait}.dt-generate small{display:block;margin-top:2px;color:#c9aedc;font-size:7px;font-weight:700}
+    .dt-generation-progress{margin-top:10px;padding:11px 12px;border:1px solid rgba(190,137,251,.23);border-radius:12px;background:rgba(120,65,160,.08)}.dt-generation-progress[hidden]{display:none!important}.dt-generation-head{display:flex;align-items:center;justify-content:space-between;gap:8px;color:#dcc5eb;font-size:9px;font-weight:800}.dt-generation-head strong{color:#e9d5ff;font-variant-numeric:tabular-nums;white-space:nowrap}.dt-generation-track{height:7px;margin-top:8px;border-radius:999px;background:rgba(255,255,255,.09);overflow:hidden}.dt-generation-track i{display:block;height:100%;width:0;background:linear-gradient(90deg,#9352cc,#dfb5ff);transition:width .25s ease}
     .dt-library{padding-top:3px}.dt-list{display:grid;gap:8px}.dt-empty{padding:22px 12px;border:1px dashed rgba(216,177,93,.14);border-radius:14px;text-align:center;color:#6f6575;font-size:9px}.dt-item{padding:11px;border:1px solid rgba(216,177,93,.13);border-radius:15px;background:rgba(255,255,255,.018)}.dt-item-top{display:flex;justify-content:space-between;gap:10px;align-items:start}.dt-item-name{color:#eadcf1;font-size:11px;font-weight:900}.dt-item-meta{margin-top:4px;color:#8b7d91;font-size:8px;line-height:1.55}.dt-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}.dt-tag{padding:3px 7px;border:1px solid rgba(216,177,93,.12);border-radius:999px;background:rgba(216,177,93,.03);color:#b9a88c;font-size:7px}.dt-play{flex:0 0 auto;min-height:31px;padding:0 10px;border-radius:10px;border:1px solid rgba(187,134,252,.28);background:rgba(164,103,224,.08);color:#dabaff;font-size:8px;font-weight:900}.dt-delete{flex:0 0 auto;min-height:31px;padding:0 10px;border-radius:10px;border:1px solid rgba(248,113,113,.25);background:rgba(127,29,29,.09);color:#fca5a5;font-size:8px;font-weight:900}.dt-delete:hover{border-color:rgba(248,113,113,.48);background:rgba(127,29,29,.17)}.dt-item.tutorial-private{border-color:rgba(96,165,250,.3);background:linear-gradient(135deg,rgba(30,64,175,.08),rgba(255,255,255,.012))}.dt-private-badge{color:#93c5fd!important;border-color:rgba(96,165,250,.3)!important;background:rgba(30,64,175,.08)!important}.dt-owner-reward{margin-top:9px;color:#766a7c;font-size:7px}
     .dt-item.suspended{border-color:rgba(248,113,113,.28);background:linear-gradient(135deg,rgba(127,29,29,.08),rgba(255,255,255,.012))}.dt-status-bad{color:#fca5a5!important;border-color:rgba(248,113,113,.28)!important}.dt-repair{flex:0 0 auto;min-height:31px;padding:0 10px;border-radius:10px;border:1px solid rgba(248,113,113,.34);background:rgba(127,29,29,.16);color:#fecaca;font-size:8px;font-weight:900}.dt-question-title-row{display:flex;align-items:flex-start;gap:10px}.dt-question-title-row h3{flex:1}.dt-answer-actions{display:grid;grid-template-columns:minmax(105px,.34fr) minmax(0,1fr);gap:8px;margin-top:12px}.dt-report-question{min-height:42px;padding:0 9px;border-radius:13px;border:1px solid rgba(251,191,36,.24);background:rgba(120,53,15,.1);color:#fcd34d;font-size:8px;font-weight:900}.dt-answer-actions .dt-next{margin-top:0}.dt-modal{position:fixed;inset:0;z-index:9950;display:grid;place-items:center;padding:16px;background:rgba(0,0,0,.82);backdrop-filter:blur(8px)}.dt-modal-card{width:min(100%,620px);max-height:88dvh;overflow:auto;padding:18px;border:1px solid rgba(203,151,251,.24);border-radius:20px;background:linear-gradient(145deg,#171119,#09080a);box-shadow:0 24px 90px rgba(0,0,0,.65)}.dt-modal-card h3{margin:0;color:#f1e5f7;font-size:15px}.dt-modal-note{margin:7px 0 12px;color:#93849a;font-size:9px;line-height:1.7}.dt-modal-question{padding:11px;border:1px solid rgba(255,255,255,.07);border-radius:12px;background:rgba(0,0,0,.22);color:#d9cedd;font-size:10px;line-height:1.7}.dt-modal textarea{width:100%;min-height:105px;margin-top:10px;padding:10px 11px;resize:vertical;border:1px solid rgba(216,177,93,.17);border-radius:12px;background:#09080a;color:#eee3f2;font-size:10px;outline:none}.dt-modal-actions{display:flex;gap:8px;margin-top:11px}.dt-modal-actions button{flex:1;min-height:38px;border-radius:11px;font-size:8px;font-weight:900}.dt-modal-cancel{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:#aaa}.dt-modal-submit{border:1px solid rgba(203,151,251,.35);background:linear-gradient(135deg,#72419a,#3f2452);color:#f5e7ff}.dt-modal-submit:disabled{opacity:.5;cursor:wait}.dt-ai-review{margin-top:10px;padding:10px;border-left:2px solid #ef4444;background:rgba(127,29,29,.08);color:#d8b4b4;font-size:9px;line-height:1.7}.dt-sealed{text-align:center;min-height:100dvh;display:grid;place-items:center;padding:24px}.dt-sealed-box{max-width:520px}.dt-sealed-icon{width:76px;height:76px;margin:0 auto 14px;display:grid;place-items:center;border-radius:50%;border:1px solid rgba(248,113,113,.35);color:#fca5a5;font-size:28px;box-shadow:0 0 50px rgba(239,68,68,.12)}
     #dongtian-overlay.dt-overlay{position:fixed;inset:0;z-index:9100;width:100vw;height:100vh;height:100dvh;max-width:none;max-height:none;margin:0;padding:0;box-sizing:border-box;display:block;background:radial-gradient(circle at 50% 45%,rgba(125,66,174,.22),transparent 42%),linear-gradient(160deg,#171119,#09070e);color:#f0e5f4;overflow:hidden}.dt-encounter{min-height:100dvh;display:grid;place-items:center;padding:24px;text-align:center;overflow:hidden;position:relative}.dt-portal{position:absolute;width:min(70vw,420px);aspect-ratio:1;border-radius:50%;border:1px solid rgba(204,154,255,.28);box-shadow:0 0 80px rgba(141,75,196,.18),inset 0 0 70px rgba(183,114,245,.08);animation:dtPortal 2.4s ease-in-out infinite alternate}.dt-portal:before,.dt-portal:after{content:"";position:absolute;inset:11%;border-radius:50%;border:1px dashed rgba(224,188,255,.22);animation:dtSpin 9s linear infinite}.dt-portal:after{inset:25%;animation-direction:reverse;animation-duration:6s}.dt-encounter-copy{position:relative;z-index:2;max-width:560px}.dt-encounter-copy span{font-size:8px;letter-spacing:.28em;color:#a27bbb;font-weight:900}.dt-encounter-copy h2{margin:10px 0 8px;font-size:clamp(28px,8vw,54px);color:#f0dfff;text-shadow:0 0 32px rgba(203,150,255,.3)}.dt-encounter-copy p{color:#9a88a3;font-size:10px}.dt-encounter-copy b{display:inline-block;margin-top:13px;padding:6px 11px;border:1px solid rgba(205,154,255,.24);border-radius:999px;color:#d5b4ed;font-size:8px}@keyframes dtPortal{to{transform:scale(1.05);box-shadow:0 0 120px rgba(141,75,196,.28),inset 0 0 90px rgba(183,114,245,.14)}}@keyframes dtSpin{to{transform:rotate(360deg)}}
@@ -175,6 +176,10 @@ import {
             </div>
           </div>
           <button id="dt-generate" class="dt-generate" type="button">凝聚洞天<small>先規劃題數，再每批最多 5 題</small></button>
+          <div id="dt-generate-progress" class="dt-generation-progress" role="status" aria-live="polite" hidden>
+            <div class="dt-generation-head"><span id="dt-progress-stage">準備生成</span><strong id="dt-progress-count"></strong></div>
+            <div id="dt-progress-track" class="dt-generation-track" role="progressbar" aria-label="已生成題目" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="dt-progress-fill"></i></div>
+          </div>
           <div id="dt-generate-status" class="dt-library-note" style="margin-top:8px"></div>
         </section>
         <section class="dt-library">
@@ -315,6 +320,48 @@ import {
     }
   }
 
+  // Read only confirmed server-side stage events, never a simulated timer.
+  async function readDongtianGeneration(response, onProgress) {
+    const type = String(response.headers?.get('content-type') || '').toLowerCase();
+    if (!type.includes('application/x-ndjson')) return response.json().catch(() => ({}));
+    if (!response.body?.getReader) throw new Error('瀏覽器無法讀取洞天生成進度，請重新送出。');
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    let result = null;
+    const acceptLine = (line) => {
+      if (!line.trim()) return;
+      const event = JSON.parse(line);
+      if (event.type === 'error') {
+        const error = new Error(String(event.error || '洞天生成未完成'));
+        error.httpStatus = Number(event.httpStatus) || 500;
+        error.details = event;
+        throw error;
+      }
+      if (event.type === 'complete') result = event;
+      else onProgress(event);
+    };
+    try {
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        let end;
+        while ((end = buffer.indexOf('\n')) !== -1) {
+          acceptLine(buffer.slice(0, end));
+          buffer = buffer.slice(end + 1);
+        }
+        if (buffer.length > 4_000_000) throw new Error('洞天進度回應超出允許長度');
+      }
+      buffer += decoder.decode();
+      if (buffer.trim()) acceptLine(buffer);
+      if (!result?.dongtian) throw new Error('洞天生成連線已中斷，尚未收到完整成果');
+      return result;
+    } finally {
+      reader.releaseLock();
+    }
+  }
+
   async function generateDongtian() {
     if (state.generating || !uid()) return;
     const text = document.getElementById('dt-source-text')?.value?.trim() || '';
@@ -322,7 +369,25 @@ import {
     if (!text && !state.files.length) { toast('請至少提供文字或一張圖片。'); return; }
     const button = document.getElementById('dt-generate');
     const status = document.getElementById('dt-generate-status');
+    const progress = document.getElementById('dt-generate-progress');
+    const stage = document.getElementById('dt-progress-stage');
+    const count = document.getElementById('dt-progress-count');
+    const track = document.getElementById('dt-progress-track');
+    const fill = document.getElementById('dt-progress-fill');
+    let total = 0;
+    let completed = 0;
+    const setProgress = (label, value = completed, maximum = total) => {
+      completed = Math.max(0, Math.floor(Number(value) || 0));
+      total = Math.max(0, Math.floor(Number(maximum) || 0));
+      progress.hidden = false;
+      stage.textContent = label;
+      count.textContent = total ? `${completed} / ${total} 題` : '規劃中';
+      fill.style.width = total ? `${Math.min(100, completed / total * 100)}%` : '0%';
+      if (total) track.setAttribute('aria-valuenow', String(Math.round(completed / total * 100)));
+      else track.removeAttribute('aria-valuenow');
+    };
     state.generating = true;
+    setProgress('整理素材');
     button.disabled = true;
     button.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> 正在凝聚洞天…<small>先規劃題數，再每批最多 5 題</small>';
     status.textContent = state.files.length ? `正在整理 ${state.files.length} 張圖片與文字中的所有知識點…` : '正在整理文字中的所有知識點…';
@@ -332,21 +397,44 @@ import {
       const images = [];
       for (let i = 0; i < state.files.length; i++) {
         status.textContent = `處理圖片 ${i + 1} / ${state.files.length}…`;
+        setProgress(`處理圖片 ${i + 1} / ${state.files.length}`);
         images.push(await compressImage(state.files[i].file));
       }
       const amountLabel = ({ low:'少量（10～14 題）', medium:'中量（15～20 題）', high:'大量（21～30 題）' })[questionAmount] || '中量';
-      status.textContent = `AI 正在依「${amountLabel}」先規劃總題數與單選題結構，接著每批最多 5 題（最後一批按剩餘題數）生成並避免重複…`;
+      status.textContent = `AI 正在依「${amountLabel}」先規劃總題數與單選題結構，接著每批最多 5 題生成…`;
+      setProgress('AI 正在規劃題數');
       const level = userData()?.profile?.educationLevel || '國中一年級';
       const response = await fetch('/api/generate-dongtian', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/x-ndjson' },
         body: JSON.stringify({ text, images, creatorLevel: level, questionAmount })
       });
       responseStatus = response.status;
-      const payload = await response.json().catch(() => ({}));
+      const payload = await readDongtianGeneration(response, (event) => {
+        if (event.type === 'planning') {
+          setProgress('AI 正在規劃題數');
+        } else if (event.type === 'planned') {
+          setProgress('題數規劃完成', event.completed, event.total);
+          status.textContent = `已規劃 ${event.total} 題，準備分批生成…`;
+        } else if (event.type === 'batch-start') {
+          setProgress(`生成第 ${event.batch} / ${event.batches} 批`, event.completed, event.total);
+          status.textContent = `已完成 ${event.completed} / ${event.total} 題，正在生成下一批…`;
+        } else if (event.type === 'batch-complete') {
+          setProgress(`第 ${event.batch} / ${event.batches} 批已完成`, event.completed, event.total);
+          status.textContent = `已生成 ${event.completed} / ${event.total} 題。`;
+        } else if (event.type === 'review') {
+          setProgress('AI 正在複核全部題目', event.completed, event.total);
+          status.textContent = `已生成全部 ${event.total} 題，正在複核題目品質…`;
+        }
+      }).catch((error) => {
+        if (error.httpStatus) responseStatus = error.httpStatus;
+        if (error.details?.doubleCheck) responseDiagnostics = {
+          review: error.details.doubleCheck, initialReview: error.details.initialDoubleCheck,
+          repairAttempts: error.details.repairAttempts, reasonCode: error.details.reasonCode
+        };
+        throw error;
+      });
       if (!response.ok) {
-        // Keep quality-review details for the administrator without showing raw
-        // AI responses or unverified question text to ordinary players.
         responseDiagnostics = payload.doubleCheck
           ? { review: payload.doubleCheck, initialReview: payload.initialDoubleCheck,
               repairAttempts: payload.repairAttempts, reasonCode: payload.reasonCode }
@@ -356,7 +444,11 @@ import {
         const detail = String(payload.error || '後端未回傳可用的洞天資料');
         throw new Error(`HTTP ${response.status}: ${detail}`);
       }
+      setProgress('題目複核完成，正在儲存洞天', completed || payload.dongtian.questionCount,
+        total || payload.dongtian.questionCount);
+      status.textContent = '題目已完成複核，正在將洞天存入 Firebase…';
       await saveGeneratedDongtian(payload.dongtian, state.files.length);
+      setProgress('洞天建立完成', payload.dongtian.questionCount, payload.dongtian.questionCount);
       status.textContent = `洞天「${payload.dongtian.name}」已凝成，共 ${payload.dongtian.questionCount} 題。`;
       document.getElementById('dt-source-text').value = '';
       state.files.forEach((item) => URL.revokeObjectURL(item.url));
@@ -364,14 +456,13 @@ import {
       renderPreviews();
       await loadOwnDongtians();
     } catch (error) {
-      // Preserve the HTTP status and server error for the admin Debugger,
-      // without showing raw AI errors or stack traces to regular players.
       console.error('[Dongtian create]', responseStatus == null ? '請求未取得 HTTP 回應' : `HTTP ${responseStatus}`, error, responseDiagnostics || '');
       const fallback = responseStatus === 413
         ? '洞天素材過大，請減少圖片或文字後重試。'
         : '洞天生成未完成，請稍後重試。';
       const message = window.xiuxianSafeActionError?.('洞天建立', error, fallback) || fallback;
       status.textContent = message;
+      if (!progress.hidden) stage.textContent = '洞天建立未完成';
       toast(message);
     } finally {
       state.generating = false;
