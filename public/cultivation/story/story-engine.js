@@ -442,7 +442,8 @@ import {
   }
 
   function startChapter(chapter, options = {}) {
-    if (!chapter || active || storyTutorialPaused || blocking()) return false;
+    if (!chapter || active || storyTutorialPaused) return false;
+    if (blocking()) return false;
     if (!storyImagesReady) {
       preloadStoryImages().then(() => startChapter(chapter, options));
       return true;
@@ -480,7 +481,7 @@ import {
   function openGenderChoice(options = {}) {
     const preview = options.preview === true;
     if (preview && !canPreviewAllStory()) return false;
-    if (active || document.getElementById(LAYER_ID) || blocking()) return false;
+    if (active || document.getElementById(LAYER_ID) || window.isXiuxianBattleBusy?.()) return false;
     active = true;
     const el = layer();
     el.innerHTML = `<div class="story-gender"><section class="story-gender-card"><small>主線劇情</small><h2>請選擇性別</h2><label class="story-name-field">你的名字<input id="story-player-name" type="text" maxlength="24" autocomplete="nickname" value="${escapeHtml(playerName())}"></label><p class="story-name-error" aria-live="polite"></p><div class="story-gender-options"><button type="button" class="story-gender-option" data-story-gender="male"><img src="${playerPortraitPath('male','neutral')}" alt="男修"><strong>男修 · 師弟</strong></button><button type="button" class="story-gender-option" data-story-gender="female"><img src="${playerPortraitPath('female','neutral')}" alt="女修"><strong>女修 · 師妹</strong></button></div></section></div>`;
