@@ -237,14 +237,24 @@ test('Dongtian session keeps a fixed ordered question array until completion or 
 test('Dongtian first completion grants spirit stones by question count and cultivation by correct answers', () => {
   assert.match(uiSource, /FIRST_COMPLETION_SPIRIT_STONE_PER_QUESTION = 100/);
   assert.match(uiSource, /FIRST_COMPLETION_MIN_SPIRIT_STONES = 1000/);
-  assert.match(uiSource, /FIRST_COMPLETION_CULTIVATION_CORRECT_STEP = 5/);
+  assert.doesNotMatch(uiSource, /FIRST_COMPLETION_CULTIVATION_CORRECT_STEP/);
   assert.match(uiSource, /function firstCompletionCultivation\(correctCount\)/);
   assert.match(uiSource, /const cultivationReward = firstCompletionCultivation\(correct\)/);
   assert.match(uiSource, /'stats\.gold': increment\(firstCompletionReward\)/);
   assert.match(uiSource, /'stats\.totalScore': increment\(cultivationReward\)/);
   assert.match(uiSource, /goldAdded: firstCompletionReward, cultivationAdded: cultivationReward, questionCount: total/);
-  assert.match(uiSource, /首次修為：<\/strong>每答對 \$\{FIRST_COMPLETION_CULTIVATION_CORRECT_STEP\} 題 \+1/);
+  assert.match(uiSource, /首次修為：<\/strong>每答對 1 題 \+1 修為/);
 });
+test('Dongtian one-point cultivation calculation depends on correct answers, not total questions', () => {
+  const vm = require('node:vm');
+  const source = uiSource.slice(uiSource.indexOf('  function firstCompletionCultivation('), uiSource.indexOf('  function shuffle('));
+  const context = vm.createContext({ Math, Number });
+  vm.runInContext(source + '\nthis.reward = firstCompletionCultivation;', context);
+  for (const [correct, expected] of [[0, 0], [1, 1], [4, 4], [5, 5], [10, 10], [24, 24], [-1, 0]]) {
+    assert.equal(context.reward(correct), expected, `correct answers: ${correct}`);
+  }
+});
+
 test('Dongtian encounter confirmation prominently shows the owner name and prospective first-clear reward', () => {
   assert.match(uiSource, /const owner = dongtian\.ownerName \|\| '無名修士'/);
   assert.match(uiSource, /此洞天由「\$\{escapeHtml\(owner\)\}」開闢/);
