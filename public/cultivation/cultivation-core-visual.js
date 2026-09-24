@@ -91,8 +91,15 @@
     queued = false;
     const state = window.getGoldenCoreState?.();
     if (!state) return;
-    const grade = Math.min(9, Math.max(1, Number(state.grade) || 9));
-    document.querySelectorAll('.golden-core-stage-v3').forEach((stage) => decorateStage(stage, grade));
+    const candidateGrade = Math.min(9, Math.max(1, Number(state.grade) || 9));
+    document.querySelectorAll('.golden-core-stage-v3').forEach((stage) => {
+      // 金丹頁使用候選丹品級，元嬰地圖則使用實際裝配品級。
+      // 不可拿 getGoldenCoreState() 的候選等級覆寫畫面上每一顆丹。
+      const explicitGrade = Number(stage.dataset.coreVisualGrade);
+      const grade = Number.isInteger(explicitGrade) && explicitGrade >= 1 && explicitGrade <= 9
+        ? explicitGrade : candidateGrade;
+      decorateStage(stage, grade);
+    });
   }
 
   function scheduleDecorate() {
