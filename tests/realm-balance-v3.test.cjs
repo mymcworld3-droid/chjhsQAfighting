@@ -19,16 +19,18 @@ test('realm pacing reaches Foundation in 10 answers and Golden Core 18 answers l
   assert.match(battle, /const FOUNDATION_SCORE = 10;/);
 });
 
-test('post-Golden-Core curve is balanced against the +2 base cultivation gain', () => {
-  const expected = [['元嬰',68],['化神',128],['煉虛',208],['合體',308],['大乘',448],['渡劫',628],['半仙',868],['真仙',868]];
+test('post-nascent-soul curve grows with investable cultivation bonuses', () => {
+  const expected = [['元嬰',68],['化神',188],['煉虛',428],['合體',788],['大乘',1268],['渡劫',1868],['半仙',2588],['真仙',2588]];
   for (const [name, need] of expected) assert.match(theme, new RegExp("name: '" + name + "'.*need: " + need));
   assert.match(artifacts, /id: 'golden-core'.*need: 28/);
-  assert.match(artifacts, /id: 'tribulation'.*need: 628/);
+  assert.match(artifacts, /id: 'tribulation'.*need: 1868/);
 });
 
-test('perfect-play answer gaps grow gradually after Golden Core instead of restoring the old grind', () => {
-  const thresholds = [28, 68, 128, 208, 308, 448, 628, 868];
+test('base +2 answer gaps increase after Nascent Soul while spirit bonuses shorten the grind', () => {
+  const thresholds = [28, 68, 188, 428, 788, 1268, 1868, 2588];
   const answerGaps = thresholds.slice(1).map((need, index) => (need - thresholds[index]) / 2);
-  assert.deepEqual(answerGaps, [20, 30, 40, 50, 70, 90, 120]);
+  assert.deepEqual(answerGaps, [20, 60, 120, 180, 240, 300, 360]);
   for (let i = 1; i < answerGaps.length; i += 1) assert.ok(answerGaps[i] >= answerGaps[i - 1]);
+  const fullyTrainedGaps = thresholds.slice(2).map((need, index) => (need - thresholds[index + 1]) / 12);
+  assert.deepEqual(fullyTrainedGaps, [10, 20, 30, 40, 50, 60]);
 });
