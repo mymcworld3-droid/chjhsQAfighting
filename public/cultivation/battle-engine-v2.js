@@ -193,11 +193,14 @@ function currentHp(player) {
 function hitPlan({ roomId, round, role, player, support }) {
   const seed = `${roomId}:${round}:${player?.uid || role}:attack`;
   const core = resolveDeterministicAttackCore(player, seed);
+  // 元嬰神念／神通為配對時固定的數值，不重新抽機率，且只作用在答對的攻擊。
+  const soulDamage = Math.max(0, Math.min(1000, Math.round(Number(player?.nascentSoul?.bonusDamage) || 0)));
   return {
     role,
     baseDamage: attackPower(player),
-    extraDamage: core.extraDamage + support.bonusDamage,
-    totalDamage: attackPower(player) + core.extraDamage + support.bonusDamage,
+    extraDamage: core.extraDamage + support.bonusDamage + soulDamage,
+    totalDamage: attackPower(player) + core.extraDamage + support.bonusDamage + soulDamage,
+    soulDamage,
     activation: core.activation
   };
 }
@@ -275,7 +278,7 @@ export function settleBattleRound({
     const targetBefore = role === 'host' ? guestHp : hostHp;
     if (role === 'host') guestHp = Math.max(0, guestHp - damage);
     else hostHp = Math.max(0, hostHp - damage);
-    const attack = { type: 'attack', actorRole: role, actorUid: player.uid, targetUid: defender.uid, damage, baseDamage: plan.baseDamage, extraDamage: plan.extraDamage, skill: [plan.activation?.skill, equipment?.skill].filter(Boolean).join('・') };
+    const attack = { type: 'attack', actorRole: role, actorUid: player.uid, targetUid: defender.uid, damage, baseDamage: plan.baseDamage, extraDamage: plan.extraDamage, skill: [plan.activation?.skill, plan.soulDamage ? '元嬰神通' : '', equipment?.skill].filter(Boolean).join('・') };
     logs.push(attack);
     if (guarded) {
       steps.push({ ...attack, damage: 0, guarded: true, hostHp: beforeHostHp, guestHp: beforeGuestHp });
