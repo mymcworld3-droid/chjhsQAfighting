@@ -2,7 +2,7 @@
 (function () {
   'use strict';
 
-  // 前 10 題快速完成煉氣並築基；金丹後每題基礎 +2，因此後期門檻按實際答題量漸進。
+  // 前 10 題快速完成煉氣並築基；元嬰以後可點亮問道／閉關／洞天修為加成，後期門檻按新成長速度拉長。
   const REALMS = [
     { name: '凡人', sub: '初入仙途', need: 0 },
     { name: '煉氣', sub: '一層', need: 1 },
@@ -19,13 +19,13 @@
     { name: '築基', sub: '後期', need: 22 },
     { name: '金丹', sub: '丹成一品', need: 28 },
     { name: '元嬰', sub: '元嬰出竅', need: 68 },
-    { name: '化神', sub: '神念通天', need: 128 },
-    { name: '煉虛', sub: '虛空悟道', need: 208 },
-    { name: '合體', sub: '天地合一', need: 308 },
-    { name: '大乘', sub: '大道將成', need: 448 },
-    { name: '渡劫', sub: '雷劫問道', need: 628 },
-    { name: '半仙', sub: '仙門在望', need: 868 },
-    { name: '真仙', sub: '榜上仙位', need: 868 }
+    { name: '化神', sub: '神念通天', need: 188 },
+    { name: '煉虛', sub: '虛空悟道', need: 428 },
+    { name: '合體', sub: '天地合一', need: 788 },
+    { name: '大乘', sub: '大道將成', need: 1268 },
+    { name: '渡劫', sub: '雷劫問道', need: 1868 },
+    { name: '半仙', sub: '仙門在望', need: 2588 },
+    { name: '真仙', sub: '榜上仙位', need: 2588 }
   ];
 
   window.XIUXIAN_REALMS = REALMS.map((realm) => ({ ...realm }));
