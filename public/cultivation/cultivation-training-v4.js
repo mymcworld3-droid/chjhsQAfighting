@@ -472,7 +472,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
           </div>
         </div>
         <p class="ns-tree-tip">左右主節點可直接點亮；主節點達 5 / 10 後，解鎖同側上下分支。每次點亮消耗 1 神識。</p>
-        <div class="ns-tree-viewport ns-trees" role="region" tabindex="0" aria-label="元嬰左右分支技能樹，窄螢幕可左右捲動">
+        <div class="ns-tree-viewport ns-trees" role="group" aria-label="元嬰左右分支技能地圖">
           <div class="ns-diagram" aria-label="中央金丹與六枚元嬰節點">
             <svg class="ns-branches" viewBox="0 0 1200 520" preserveAspectRatio="none" aria-hidden="true">
               <defs><linearGradient id="ns-link-gold"><stop stop-color="#aa814c"/><stop offset="0.5" stop-color="#f8dfa0"/><stop offset="1" stop-color="#aa814c"/></linearGradient></defs>
@@ -487,7 +487,6 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
             </div>
           </div>
         </div>
-        <p class="ns-tree-swipe-hint">手機或窄螢幕可左右滑動，查看兩側分支。</p>
         <div class="ns-branch-bottom">
           <p class="ns-combat-summary">已點亮：${soulBonusLabel(bonuses) || '尚無額外屬性'}</p>
           <div class="ns-progress" role="progressbar" aria-valuemin="${stage.min}" aria-valuenow="${earned}"
@@ -584,13 +583,9 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
       window.dispatchEvent(new CustomEvent('xiuxian:equipment-open-request'));
       return;
     }
-    const previousTreeScroll = activeTab === 'nascent-soul'
-      ? content.querySelector('.ns-tree-viewport')?.scrollLeft : undefined;
     content.innerHTML = activeTab === 'bag' ? bagTabMarkup()
       : activeTab === 'nascent-soul' ? nascentSoulTabMarkup() : coreTabMarkup();
-    if (activeTab === 'nascent-soul' && Number.isFinite(previousTreeScroll)) {
-      content.querySelector('.ns-tree-viewport').scrollLeft = previousTreeScroll;
-    }
+    document.body.classList.toggle('ns-map-active', activeTab === 'nascent-soul' && currentScore() >= NASCENT_SOUL_THRESHOLD);
     if (activeTab === 'core') bindCoreActions();
     if (activeTab === 'nascent-soul') bindSoulActions();
   }
@@ -899,6 +894,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
   }
 
   function removeLockedUI() {
+    document.body.classList.remove('ns-map-active');
     // 金丹回落至築基（例如舊角色修為重算）時，築基模組已接管同一個
     // #page-training 和 #nav-training。不能在後觸發的金丹清理中把它們刪掉。
     if (window.isFoundationTrainingStage?.() &&
