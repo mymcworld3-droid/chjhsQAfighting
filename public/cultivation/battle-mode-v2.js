@@ -341,6 +341,7 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
     const data = userData() || {};
     const combat = combatSnapshot();
     const goldenCore = window.getEquippedGoldenCoreBattleSnapshot?.() || null;
+    const nascentSoul = window.getNascentSoulBattleSnapshot?.() || null;
     const artifactBattle = window.getArtifactBattleSnapshot?.() || { version: 1, effects: [], openingShield: 0 };
     const openingShield = window.getArtifactBattleOpeningShield?.(artifactBattle) ?? artifactBattle.openingShield ?? 0;
     return {
@@ -355,6 +356,10 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
       hp: combat.maxHp,
       maxHp: combat.maxHp,
       goldenCore,
+      nascentSoul: nascentSoul ? {
+        type: nascentSoul.type,
+        bonusDamage: Math.max(0, Math.min(1000, Math.round(Number(nascentSoul.bonusDamage) || 0)))
+      } : null,
       // 金丹道心在配對時複製為本場一次性護體：抵擋一擊後消失，不消耗一般悟道持有的道心。
       coreShield: !!goldenCore && data.stats?.goldenCoreShield === true,
       coreCorrectStreak: 0,
