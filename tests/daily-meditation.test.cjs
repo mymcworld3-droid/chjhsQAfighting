@@ -38,8 +38,8 @@ test('early streak rewards start on day two, cultivation bonus on day three', ()
 test('every realm uses its own reward threshold', () => {
   const expected = [
     [0, 1, 10], [9, 1, 10], [10, 2, 20], [27, 2, 20],
-    [28, 3, 30], [68, 4, 45], [128, 5, 60], [208, 6, 80],
-    [308, 7, 100], [448, 8, 130], [628, 9, 160], [868, 10, 200]
+    [28, 3, 30], [68, 4, 45], [188, 5, 60], [428, 6, 80],
+    [788, 7, 100], [1268, 8, 130], [1868, 9, 160], [2588, 10, 200]
   ];
   for (const [score, cultivation, gold] of expected) {
     const reward = meditationReward(score, 1, 3);
@@ -53,17 +53,17 @@ test('two correct answers grant half base plus full streak; poor results grant o
   assert.equal(partial.cultivation, 4);
   assert.equal(partial.gold, 55);
   for (const count of [0, 1]) {
-    const reward = meditationReward(868, 90, count);
+    const reward = meditationReward(2588, 90, count);
     assert.equal(reward.cultivation, 0);
     assert.equal(reward.gold, 5);
   }
 });
 
 test('streak bonus is capped from day ninety onwards', () => {
-  assert.equal(meditationReward(868, 90, 3).cultivation, 16);
-  assert.equal(meditationReward(868, 90, 3).gold, 400);
-  assert.equal(meditationReward(868, 10000, 3).cultivation, 16);
-  assert.equal(meditationReward(868, 10000, 3).gold, 400);
+  assert.equal(meditationReward(2588, 90, 3).cultivation, 16);
+  assert.equal(meditationReward(2588, 90, 3).gold, 400);
+  assert.equal(meditationReward(2588, 10000, 3).cultivation, 16);
+  assert.equal(meditationReward(2588, 10000, 3).gold, 400);
 });
 
 test('meditation challenge is registered and local check-in is no longer used', () => {
