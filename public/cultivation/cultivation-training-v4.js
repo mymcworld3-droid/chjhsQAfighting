@@ -357,15 +357,16 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
 
   function coreVisualMarkup(core, clickable = true) {
     const type = coreType(core.type);
+    const tag = clickable ? 'button' : 'div';
     return `
-      <button type="button" class="golden-core-stage-v3 ${clickable ? 'clickable' : ''}" ${clickable ? 'id="training-core-orb" aria-label="查看金丹詳細資料"' : 'tabindex="-1"'}>
+      <${tag} ${clickable ? 'type="button"' : ''} class="golden-core-stage-v3 ${clickable ? 'clickable' : ''}" ${clickable ? 'id="training-core-orb" aria-label="查看金丹詳細資料"' : 'aria-hidden="true"'}>
         <span class="golden-core-halo-v3 halo-a"></span>
         <span class="golden-core-halo-v3 halo-b"></span>
         <span class="golden-core-orbit-v3 orbit-a"></span>
         <span class="golden-core-orbit-v3 orbit-b"></span>
         <span class="golden-core-sphere-v3 core-tone-${type.tone}"><span>${type.icon}</span></span>
         <span class="golden-core-shadow-v3"></span>
-      </button>
+      </${tag}>
     `;
   }
 
@@ -419,6 +420,40 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
   // 地圖節點只做選取。數值預覽及唯一的升級操作都放在右側詳情頁。
   function soulNodeDetailMarkup(type, tree, earned) {
     if (!selectedSoulNodeId) return '';
+    if (selectedSoulNodeId === 'core') {
+      const core = state.equippedCore;
+      if (!core || core.type !== type) return '';
+      const grade = clampGrade(core.grade);
+      const metadata = coreType(type);
+      const effect = metadata.effect(grade);
+      const bonuses = soulCombatBonuses(tree, type, grade);
+      const nodes = normalizeSoulTree(tree).paths[type]?.nodes || {};
+      const attackLevel = nodes.leftFinal || 0, guardLevel = nodes.rightFinal || 0;
+      const finalAttack = soulNodes(type, grade).find(node => node.id === 'leftFinal');
+      const finalGuard = soulNodes(type, grade).find(node => node.id === 'rightFinal');
+      return `
+        <aside class="ns-node-detail ns-core-detail" aria-labelledby="ns-detail-title">
+          <div class="ns-detail-header"><span>已調御金丹 · 品質效果</span>
+            <button type="button" class="ns-detail-close" data-ns-close aria-label="關閉金丹詳情">
+              <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+            </button>
+          </div>
+          <div class="ns-detail-identity">
+            <span class="ns-detail-icon"><span>${metadata.icon}</span></span>
+            <div><h4 id="ns-detail-title">${metadata.name}</h4><p>${grade} 品 · 已調御</p></div>
+          </div>
+          <p class="ns-detail-description ns-core-effect">${effect}</p>
+          <div class="ns-detail-stats">
+            <div class="ns-detail-stat"><span>本命殺招 · ${attackLevel} / 10</span>
+              <div class="ns-detail-stat-values"><strong>單級 +${finalAttack.coreAttack}</strong><strong class="ns-detail-next">目前 +${finalAttack.coreAttack * attackLevel}</strong></div>
+            </div>
+            <div class="ns-detail-stat"><span>本命護元 · ${guardLevel} / 10</span>
+              <div class="ns-detail-stat-values"><strong>單級 +${finalGuard.coreHeal}</strong><strong class="ns-detail-next">目前 +${bonuses.coreHeal}</strong></div>
+            </div>
+          </div>
+          <p class="ns-detail-note">金丹的丹性與品級以目前裝配資料為準。洗髓候選丹不影響本頁效果；更換裝配後自動重新計算。</p>
+        </aside>`;
+    }
     const node = soulNodes(type, state.equippedCore?.grade).find(item => item.id === selectedSoulNodeId);
     if (!node) return '';
     const status = soulNodeStatus(tree, type, node.id, earned);
@@ -572,12 +607,14 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
               ${links}
             </svg>
             ${nodes}
-            <div class="ns-tree-core">
+            <button type="button" class="ns-tree-core ${selectedSoulNodeId === 'core' ? 'is-selected' : ''}"
+              data-ns-core-detail aria-label="查看目前裝配的 ${equippedGrade} 品 ${equippedName} 金丹效果"
+              title="點擊查看 ${equippedName}（${equippedGrade} 品）金丹效果" aria-pressed="${selectedSoulNodeId === 'core'}">
               ${coreVisualMarkup(core, false)}
-              <div class="ns-tree-core-name">${equippedName}</div>
-              <div class="ns-tree-core-desc">${equippedGrade} 品 · 已調御</div>
-              <div class="ns-tree-core-stage">${stage.name}</div>
-            </div>
+              <span class="ns-tree-core-name">${equippedName}</span>
+              <span class="ns-tree-core-desc">${equippedGrade} 品 · 已調御</span>
+              <span class="ns-tree-core-stage">${stage.name}</span>
+            </button>
           </div>
           ${soulNodeDetailMarkup(type, tree, earned)}
         </div>
@@ -658,11 +695,18 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
           detail?.querySelector('.ns-detail-close'))?.focus({ preventScroll: true });
       });
     });
+    content.querySelector('[data-ns-core-detail]')?.addEventListener('click', () => {
+      if (soulBusy) return;
+      selectedSoulNodeId = 'core';
+      renderTrainingPage();
+      document.querySelector('#training-tab-content .ns-detail-close')?.focus({ preventScroll: true });
+    });
     content.querySelector('[data-ns-close]')?.addEventListener('click', () => {
       const lastId = selectedSoulNodeId;
       selectedSoulNodeId = null;
       renderTrainingPage();
-      content.querySelector('[data-ns-node="' + lastId + '"]')?.focus({ preventScroll: true });
+      (lastId === 'core' ? content.querySelector('[data-ns-core-detail]') :
+        content.querySelector('[data-ns-node="' + lastId + '"]'))?.focus({ preventScroll: true });
     });
     content.querySelector('[data-ns-upgrade]')?.addEventListener('click', (event) => {
       // 只能從詳情頁發起點亮；Firestore 交易會再次檢查餘額、前置與上限。
