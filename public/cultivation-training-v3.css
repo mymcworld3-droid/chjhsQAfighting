@@ -625,3 +625,27 @@ body.xianxia-theme.ns-map-active #page-training :is(.ns-pos-leftFinal,.ns-pos-ri
   body.xianxia-theme.ns-map-active #page-training .ns-tree-core-name,
   body.xianxia-theme.ns-map-active #page-training .ns-tree-core-stage {font-size:7px;}
 }
+
+/* 左攻擊、右生存：地圖節點與連線以不同微光識別，不新增額外背景框。 */
+body.xianxia-theme.ns-map-active #page-training .ns-map-side-label {
+  position:absolute;top:1%;transform:translateX(-50%);z-index:1;
+  font-size:clamp(8px,.9vw,12px);font-weight:900;letter-spacing:.16em;
+  text-shadow:0 0 12px rgba(0,0,0,.75);pointer-events:none;
+}
+body.xianxia-theme.ns-map-active #page-training .ns-map-side-left {left:23%;color:#ecc195;}
+body.xianxia-theme.ns-map-active #page-training .ns-map-side-right {left:77%;color:#a3ded9;}
+body.xianxia-theme.ns-map-active #page-training [class*="ns-pos-left"].ns-light-btn.is-lit {
+  border-color:rgba(244,184,109,.8);color:#f7d1ab;
+}
+body.xianxia-theme.ns-map-active #page-training [class*="ns-pos-right"].ns-light-btn.is-lit {
+  border-color:rgba(128,219,199,.8);color:#cff8e9;
+  box-shadow:0 0 16px rgba(100,216,190,.19),inset 0 0 12px rgba(98,202,190,.12);
+}
+body.xianxia-theme.ns-map-active #page-training .ns-branch-line[data-branch^="right"].is-open,
+body.xianxia-theme.ns-map-active #page-training .ns-branch-line[data-branch="core-right"].is-open {
+  stroke:rgba(116,196,179,.45);
+}
+body.xianxia-theme.ns-map-active #page-training .ns-branch-line[data-branch^="right"].is-lit,
+body.xianxia-theme.ns-map-active #page-training .ns-branch-line[data-branch="core-right"].is-lit {
+  stroke:#9bd9c4;filter:drop-shadow(0 0 4px rgba(115,215,187,.24));
+}
