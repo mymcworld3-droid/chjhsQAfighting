@@ -1,7 +1,9 @@
-// 金丹洗髓演出：只有遠端保存成功後才揭曉候選丹相。此模組不負責扣款或改動金丹狀態。
-const OVERLAY_ID = 'golden-core-wash-overlay';
-const STYLE_HREF = 'cultivation-golden-core-wash.css?v=20260924-1';
-const MINIMUM_WASH_MS = 1900;
+// 本命金丹頁內洗髓演出：兩道靈光由洗髓按鈕注入金丹，不建立彈窗、不處理扣款。
+const STYLE_HREF = 'cultivation-golden-core-wash.css?v=20260924-2';
+const MINIMUM_WASH_MS = 1650;
+const REVEAL_MS = 650;
+const FAILURE_MS = 320;
+const SVG_NS = 'http://www.w3.org/2000/svg';
 
 function ensureWashStyle() {
   if (document.querySelector('link[data-golden-core-wash-style]')) return;
@@ -12,112 +14,121 @@ function ensureWashStyle() {
   document.head.appendChild(link);
 }
 
-export function createGoldenCoreWashAnimation(previousCore, previousType) {
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function makeBeamPath(startX, startY, endX, endY, direction) {
+  const lift = Math.max(34, (startY - endY) * .35);
+  const curveX = direction * Math.max(24, Math.abs(endX - startX) * .7);
+  return 'M ' + startX.toFixed(1) + ' ' + startY.toFixed(1) +
+    ' C ' + (startX + curveX).toFixed(1) + ' ' + (startY - lift).toFixed(1) +
+    ', ' + (endX + direction * 34).toFixed(1) + ' ' + (endY + lift).toFixed(1) +
+    ', ' + endX.toFixed(1) + ' ' + endY.toFixed(1);
+}
+
+export function createGoldenCoreWashAnimation() {
   ensureWashStyle();
-  document.getElementById(OVERLAY_ID)?.remove();
+  const card = document.querySelector('.core-minimal-card');
+  const button = card?.querySelector('#wash-golden-core');
+  const sphere = card?.querySelector('.golden-core-sphere-v3');
+  const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches === true;
 
-  const overlay = document.createElement('div');
-  overlay.id = OVERLAY_ID;
-  overlay.className = 'gc-wash-overlay is-washing';
-  overlay.innerHTML = [
-    '<section class="gc-wash-panel" role="dialog" aria-modal="true" aria-label="本命金丹洗髓" tabindex="-1">',
-      '<div class="gc-wash-kicker">INNER ALCHEMY · 洗髓</div>',
-      '<h2 class="gc-wash-title">洗髓重塑</h2>',
-      '<p class="gc-wash-status" role="status" aria-live="polite">靈氣匯聚，正在重塑本命金丹……</p>',
-      '<div class="gc-wash-scene" aria-hidden="true">',
-        '<div class="gc-wash-seal seal-outer"></div>',
-        '<div class="gc-wash-seal seal-inner"></div>',
-        '<div class="gc-wash-orbit orbit-one"></div>',
-        '<div class="gc-wash-orbit orbit-two"></div>',
-        '<div class="gc-wash-sparks"></div>',
-        '<div class="gc-wash-flash"></div>',
-        '<div class="gc-wash-core"><span class="gc-wash-core-icon"></span></div>',
-        '<div class="gc-wash-core-shadow"></div>',
-      '</div>',
-      '<div class="gc-wash-result" aria-live="polite">',
-        '<span class="gc-wash-result-label">洗髓進行中</span>',
-        '<strong class="gc-wash-result-name">丹相尚未揭曉</strong>',
-        '<p class="gc-wash-result-note">原本調御中的金丹將持續生效。</p>',
-      '</div>',
-      '<button class="gc-wash-continue" type="button" hidden>返回修煉</button>',
-    '</section>'
+  // 即使玩家在修煉頁卸載時觸發洗髓，保存流程仍可完成，避免額外的動畫錯誤。
+  if (!card || !button || !sphere) {
+    return {
+      minimumDuration: Promise.resolve(),
+      async reveal() {},
+      async fail() {},
+      cleanup() {}
+    };
+  }
+
+  // 同一張卡片內以 SVG 對齊真實的按鈕及金丹位置，窄螢幕也不需要猜固定座標。
+  const layer = document.createElement('div');
+  layer.className = 'gc-wash-lightfield';
+  layer.setAttribute('aria-hidden', 'true');
+  const svg = document.createElementNS(SVG_NS, 'svg');
+  svg.classList.add('gc-wash-rays');
+  svg.setAttribute('preserveAspectRatio', 'none');
+  svg.innerHTML = [
+    '<defs>',
+    '<linearGradient id="gc-wash-ray-gold" x1="0%" y1="100%" x2="15%" y2="0%">',
+    '<stop offset="0%" stop-color="#f2b74c"/><stop offset="55%" stop-color="#fff3c2"/><stop offset="100%" stop-color="#fff5d7"/>',
+    '</linearGradient>',
+    '<linearGradient id="gc-wash-ray-jade" x1="0%" y1="100%" x2="85%" y2="0%">',
+    '<stop offset="0%" stop-color="#91b9dd"/><stop offset="55%" stop-color="#d9e9f7"/><stop offset="100%" stop-color="#fff3d3"/>',
+    '</linearGradient>',
+    '</defs>',
+    '<path class="gc-wash-beam-a gc-wash-ray-glow" data-beam="a" />',
+    '<path class="gc-wash-beam-b gc-wash-ray-glow" data-beam="b" />',
+    '<path class="gc-wash-beam-a gc-wash-ray-flow" data-beam="a" pathLength="100" />',
+    '<path class="gc-wash-beam-b gc-wash-ray-flow" data-beam="b" pathLength="100" />'
   ].join('');
+  const impact = document.createElement('span');
+  impact.className = 'gc-wash-impact';
+  layer.appendChild(svg);
+  layer.appendChild(impact);
+  card.appendChild(layer);
+  card.classList.add('is-core-washing');
 
-  const panel = overlay.querySelector('.gc-wash-panel');
-  const core = overlay.querySelector('.gc-wash-core');
-  const icon = overlay.querySelector('.gc-wash-core-icon');
-  const status = overlay.querySelector('.gc-wash-status');
-  const label = overlay.querySelector('.gc-wash-result-label');
-  const name = overlay.querySelector('.gc-wash-result-name');
-  const note = overlay.querySelector('.gc-wash-result-note');
-  const button = overlay.querySelector('.gc-wash-continue');
-  const sparks = overlay.querySelector('.gc-wash-sparks');
-  const originalFocus = document.activeElement;
-  let finished = false;
-
-  core.classList.add('core-tone-' + previousType.tone);
-  icon.textContent = previousType.icon;
-  for (let i = 0; i < 20; i += 1) {
-    const spark = document.createElement('i');
-    spark.style.setProperty('--angle', (i * 18) + 'deg');
-    spark.style.setProperty('--delay', ((i % 5) * 0.13) + 's');
-    sparks.appendChild(spark);
-  }
-  document.body.appendChild(overlay);
-  panel.focus({ preventScroll: true });
-
-  function close() {
-    if (!finished) return;
-    document.removeEventListener('keydown', onKeyDown, true);
-    overlay.remove();
-    // 洗髓完成後金丹頁已重新渲染，應聚焦新的操作鍵而非已移除的舊節點。
-    const washButton = document.getElementById('wash-golden-core');
-    if (washButton) washButton.focus({ preventScroll: true });
-    else if (originalFocus?.isConnected) originalFocus.focus({ preventScroll: true });
-  }
-
-  function onKeyDown(event) {
-    if (event.key === 'Escape' && finished) {
-      event.preventDefault();
-      close();
-    } else if (event.key === 'Tab') {
-      event.preventDefault();
-      (finished ? button : panel).focus({ preventScroll: true });
+  function positionBeams() {
+    if (!card.isConnected || !button.isConnected || !sphere.isConnected) return;
+    const bounds = card.getBoundingClientRect();
+    const source = button.getBoundingClientRect();
+    const target = sphere.getBoundingClientRect();
+    if (!bounds.width || !bounds.height) return;
+    svg.setAttribute('viewBox', '0 0 ' + bounds.width + ' ' + bounds.height);
+    const startY = source.top - bounds.top + Math.min(source.height * .4, 24);
+    const endY = target.top - bounds.top + target.height * .52;
+    const startCenter = source.left - bounds.left + source.width / 2;
+    const endCenter = target.left - bounds.left + target.width / 2;
+    const separation = Math.min(58, source.width * .24);
+    const paths = {
+      a: makeBeamPath(startCenter - separation, startY, endCenter - target.width * .16, endY, -1),
+      b: makeBeamPath(startCenter + separation, startY, endCenter + target.width * .16, endY, 1)
+    };
+    for (const kind of ['a', 'b']) {
+      svg.querySelectorAll('[data-beam="' + kind + '"]').forEach(path => path.setAttribute('d', paths[kind]));
     }
+    impact.style.left = endCenter + 'px';
+    impact.style.top = endY + 'px';
   }
 
-  document.addEventListener('keydown', onKeyDown, true);
-  button.addEventListener('click', close);
-
-  function finish(kind, title, detail, message) {
-    finished = true;
-    overlay.classList.remove('is-washing');
-    overlay.classList.add(kind);
-    status.textContent = title;
-    label.textContent = title;
-    name.textContent = detail;
-    note.textContent = message;
-    button.hidden = false;
-    button.focus({ preventScroll: true });
-  }
-
-  const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches === true;
-  const minimumDuration = new Promise((resolve) => {
-    setTimeout(resolve, reduceMotion ? 0 : MINIMUM_WASH_MS);
-  });
+  positionBeams();
+  window.addEventListener('resize', positionBeams);
+  const minimumDuration = sleep(reducedMotion ? 0 : MINIMUM_WASH_MS);
 
   return {
     minimumDuration,
-    reveal(freshCore, freshType) {
-      core.classList.remove('core-tone-' + previousType.tone);
-      core.classList.add('core-tone-' + freshType.tone);
-      icon.textContent = freshType.icon;
-      finish('is-revealed', '洗髓完成', freshCore.grade + ' 品 · ' + freshType.name,
-        '新丹相已保存，但尚未調御；原本金丹仍持續生效。');
+    async reveal(freshCore, freshType) {
+      if (card.isConnected) {
+        card.classList.remove('is-core-washing');
+        card.classList.add('is-core-wash-revealed');
+        for (const tone of [...sphere.classList]) {
+          if (tone.startsWith('core-tone-')) sphere.classList.remove(tone);
+        }
+        sphere.classList.add('core-tone-' + freshType.tone);
+        const icon = sphere.querySelector('span');
+        if (icon) icon.textContent = freshType.icon;
+        const name = card.querySelector('.core-minimal-name');
+        const grade = card.querySelector('.core-minimal-grade');
+        if (name) name.textContent = freshType.name;
+        if (grade) grade.textContent = freshCore.grade + ' 品';
+      }
+      await sleep(reducedMotion ? 0 : REVEAL_MS);
     },
-    fail() {
-      finish('is-failed', '洗髓未完成', '金丹重塑中斷',
-        '本機顯示已還原，請重新整理確認靈石與丹相。');
+    async fail() {
+      if (card.isConnected) {
+        card.classList.remove('is-core-washing');
+        card.classList.add('is-core-wash-failed');
+      }
+      await sleep(reducedMotion ? 0 : FAILURE_MS);
+    },
+    cleanup() {
+      window.removeEventListener('resize', positionBeams);
+      layer.remove();
+      card.classList.remove('is-core-washing', 'is-core-wash-revealed', 'is-core-wash-failed');
     }
   };
 }
