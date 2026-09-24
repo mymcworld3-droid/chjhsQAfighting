@@ -556,6 +556,8 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
         <p class="ns-tree-tip">左脈攻擊、右脈生存；中途有修為節點。每條前置達 5 級解鎖下一層，依距離每級消耗 1／3／5／8 神識。</p>
         <div class="ns-tree-viewport ns-trees" role="group" aria-label="元嬰左右分支技能地圖">
           <div class="ns-diagram" aria-label="中央金丹與十二枚元嬰節點">
+            <div class="ns-map-side-label ns-map-side-left" aria-hidden="true">攻擊靈脈</div>
+            <div class="ns-map-side-label ns-map-side-right" aria-hidden="true">生存靈脈</div>
             <svg class="ns-branches" viewBox="0 0 1200 520" preserveAspectRatio="none" aria-hidden="true">
               <defs><linearGradient id="ns-link-gold"><stop stop-color="#aa814c"/><stop offset="0.5" stop-color="#f8dfa0"/><stop offset="1" stop-color="#aa814c"/></linearGradient></defs>
               ${links}
