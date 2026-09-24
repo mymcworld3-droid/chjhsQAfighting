@@ -3,7 +3,7 @@ import { createGoldenCoreWashAnimation } from './golden-core-wash-animation.js';
 import {
   NASCENT_SOUL_THRESHOLD, NASCENT_SOUL_ATTRIBUTES, nascentSoulForCore, nascentSoulStage,
   normalizeSpirit, normalizeSoulTree, soulNodes, NASCENT_SOUL_NODE_CAP,
-  soulAvailableSpirit, soulSpentSpirit, soulNodeStatus, allocateSoulNode, soulCombatBonuses
+  soulAvailableSpirit, soulSpentSpirit, soulNodeStatus, allocateSoulNode, soulCombatBonuses, soulCultivationBonuses
 } from './nascent-soul-rules.js';
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
@@ -405,7 +405,10 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     return [
       bonus.attackFlat ? '+' + bonus.attackFlat + ' 攻擊' : '',
       bonus.maxHpFlat ? '+' + bonus.maxHpFlat + ' 生命' : '',
-      bonus.bonusDamage ? '+' + bonus.bonusDamage + ' 答對攻擊傷害' : ''
+      bonus.bonusDamage ? '+' + bonus.bonusDamage + ' 答對攻擊傷害' : '',
+      bonus.cultivationSolo ? '+' + bonus.cultivationSolo + ' 問道答對修為' : '',
+      bonus.cultivationDaily ? '+' + bonus.cultivationDaily + ' 閉關全對修為' : '',
+      bonus.cultivationCave ? '+' + bonus.cultivationCave + ' 洞天首次通關修為' : ''
     ].filter(Boolean).join(' · ');
   }
 
@@ -420,7 +423,10 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     const statRows = [
       ['attackFlat', '攻擊力'],
       ['maxHpFlat', '生命上限'],
-      ['bonusDamage', '答對攻擊傷害']
+      ['bonusDamage', '答對攻擊傷害'],
+      ['cultivationSolo', '問道答對修為'],
+      ['cultivationDaily', '每日閉關全對修為'],
+      ['cultivationCave', '洞天首次通關修為']
     ].filter(([key]) => node[key] > 0).map(([key, name]) => `
       <div class="ns-detail-stat">
         <span>${name}</span>
@@ -476,7 +482,10 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     const tree = normalizeSoulTree(player.nascentSoulTree);
     const spent = soulSpentSpirit(tree);
     const available = soulAvailableSpirit(tree, earned);
-    const bonuses = soulCombatBonuses(tree, type);
+    const combatBonuses = soulCombatBonuses(tree, type);
+    const cultivationBonuses = soulCultivationBonuses(tree, type);
+    const bonuses = { ...combatBonuses, cultivationSolo: cultivationBonuses.solo,
+      cultivationDaily: cultivationBonuses.daily, cultivationCave: cultivationBonuses.cave };
     const stage = nascentSoulStage(earned);
     const levels = tree.paths[type]?.nodes || {};
     const progress = stage.next ? Math.min(100, (earned - stage.min) / (stage.next.min - stage.min) * 100) : 100;
@@ -487,7 +496,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
       const isUnlocked = !node.parent || (levels[node.parent] || 0) >= 5;
       const statSummary = soulBonusLabel(node);
       const label = status.level >= NASCENT_SOUL_NODE_CAP ? '已圓滿' :
-        !isUnlocked ? '需前置 5 級' : !status.ok ? status.reason : '點擊查看';
+        !isUnlocked ? '需前置 5 級' : !status.ok ? status.reason : '消耗 ' + status.cost + ' 神識';
       return `
         <button type="button"
           class="ns-orbit-node ns-pos-${node.id} ${isLit ? 'is-lit' : ''} ${!isUnlocked ? 'is-locked' : ''} ${selectedSoulNodeId === node.id ? 'is-selected' : ''} ns-light-btn"
@@ -529,7 +538,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
             <div class="ns-resource-free"><small>可用神識</small><strong>${available}</strong></div>
           </div>
         </div>
-        <p class="ns-tree-tip">左右主節點可直接點亮；主節點達 5 / 10 後，解鎖同側上下分支。每次點亮消耗 1 神識。</p>
+        <p class="ns-tree-tip">左脈主鬥法，右脈主修為；主節點每級 1 神識，達 5 / 10 後可點亮外側分支，每級 3 神識。</p>
         <div class="ns-tree-viewport ns-trees" role="group" aria-label="元嬰左右分支技能地圖">
           <div class="ns-diagram" aria-label="中央金丹與六枚元嬰節點">
             <svg class="ns-branches" viewBox="0 0 1200 520" preserveAspectRatio="none" aria-hidden="true">
@@ -636,6 +645,13 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
   }
 
   // 鬥法配對時讀取已投資節點，生成固定單場快照；不寫回角色原始攻擊／生命。
+  window.getNascentSoulCultivationBonuses = function () {
+    if (currentScore() < NASCENT_SOUL_THRESHOLD || state.coreEnabled === false || !state.equippedCore) {
+      return { solo: 0, daily: 0, cave: 0 };
+    }
+    return soulCultivationBonuses(window.getCurrentUserData?.()?.nascentSoulTree, state.equippedCore.type);
+  };
+
   window.getNascentSoulBattleSnapshot = function () {
     if (currentScore() < NASCENT_SOUL_THRESHOLD || state.coreEnabled === false || !state.equippedCore) return null;
     const type = state.equippedCore.type;
