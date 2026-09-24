@@ -4,12 +4,12 @@ export const DAILY_MEDITATION_REALMS = Object.freeze([
   { min: 10, name: '築基', cultivation: 2, gold: 20 },
   { min: 28, name: '金丹', cultivation: 3, gold: 30 },
   { min: 68, name: '元嬰', cultivation: 4, gold: 45 },
-  { min: 128, name: '化神', cultivation: 5, gold: 60 },
-  { min: 208, name: '煉虛', cultivation: 6, gold: 80 },
-  { min: 308, name: '合體', cultivation: 7, gold: 100 },
-  { min: 448, name: '大乘', cultivation: 8, gold: 130 },
-  { min: 628, name: '渡劫', cultivation: 9, gold: 160 },
-  { min: 868, name: '半仙／真仙', cultivation: 10, gold: 200 }
+  { min: 188, name: '化神', cultivation: 5, gold: 60 },
+  { min: 428, name: '煉虛', cultivation: 6, gold: 80 },
+  { min: 788, name: '合體', cultivation: 7, gold: 100 },
+  { min: 1268, name: '大乘', cultivation: 8, gold: 130 },
+  { min: 1868, name: '渡劫', cultivation: 9, gold: 160 },
+  { min: 2588, name: '半仙／真仙', cultivation: 10, gold: 200 }
 ]);
 export const DAILY_MEDITATION_STREAKS = Object.freeze([
   { min: 1, cultivation: 0, gold: 0 },
