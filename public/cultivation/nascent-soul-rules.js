@@ -44,51 +44,76 @@ export function nascentSoulSpiritReward({ source, score, isCorrect = false, corr
 }
 
 
-// 元嬰雙脈：左鬥法、右修為；靠近中心的主節點每級 1 神識，外側分支每級 3 神識。
-// 九種元嬰各有自己的節點名稱、進度及效果；共用同一筆可用神識。
+// 元嬰雙脈：左右各六節點，內層 1、中層 3、遠層 5、終極 8 神識／級。
+// 左脈攻擊，右脈生存；少量途中節點用於學習修為，終極節點呼應調御金丹的丹性與品級。
 export const NASCENT_SOUL_NODE_CAP = 10;
 export const NASCENT_SOUL_BRANCH_UNLOCK = 5;
 export const NASCENT_SOUL_NODE_ORDER = Object.freeze([
-  'leftTop','leftMain','leftBottom','rightMain','rightTop','rightBottom'
+  'leftFinal','leftFarTop','leftTop','leftMain','leftBottom','leftFarBottom',
+  'rightMain','rightTop','rightFarTop','rightFinal','rightFarBottom','rightBottom'
 ]);
 const NODE_CONFIG = Object.freeze([
-  { id: 'leftMain', name: '神魄', icon: 'fa-khanda', parent: null, attackFlat: 12, maxHpFlat: 0, bonusDamage: 0, desc: '淬鍊神魄，每級增加攻擊。' },
-  { id: 'leftTop', name: '凌霄', icon: 'fa-bolt', parent: 'leftMain', attackFlat: 0, maxHpFlat: 0, bonusDamage: 8, desc: '神識化鋒，每級增加答對攻擊傷害。' },
-  { id: 'leftBottom', name: '破陣', icon: 'fa-khanda', parent: 'leftMain', attackFlat: 7, maxHpFlat: 0, bonusDamage: 0, desc: '凝神聚勢，每級增加攻擊。' },
-  { id: 'rightMain', name: '悟道', icon: 'fa-book-open', parent: null, attackFlat: 0, maxHpFlat: 0, bonusDamage: 0, cultivationSolo: 1, desc: '每級使問道答對時額外獲得 1 修為。' },
-  { id: 'rightTop', name: '閉關', icon: 'fa-mountain-sun', parent: 'rightMain', attackFlat: 0, maxHpFlat: 0, bonusDamage: 0, cultivationDaily: 1, desc: '每級使每日閉關全對時額外獲得 1 修為。' },
-  { id: 'rightBottom', name: '洞天', icon: 'fa-dungeon', parent: 'rightMain', attackFlat: 0, maxHpFlat: 0, bonusDamage: 0, cultivationCave: 1, desc: '每級使洞天首次通關時額外獲得 1 修為。' }
+  { id:'leftMain', name:'神魄', icon:'fa-khanda', parent:null, depth:1, attackFlat:12, desc:'淬鍊神魄，每級增加 12 攻擊。' },
+  { id:'leftTop', name:'凌霄', icon:'fa-bolt', parent:'leftMain', depth:2, bonusDamage:8, desc:'每級增加 8 點答對攻擊傷害。' },
+  { id:'leftBottom', name:'悟道', icon:'fa-book-open', parent:'leftMain', depth:2, cultivationSolo:1, desc:'修行分支：問道答對時，每級額外獲得 1 修為。' },
+  { id:'leftFarTop', name:'破陣', icon:'fa-khanda', parent:'leftTop', depth:3, attackFlat:7, desc:'每級增加 7 攻擊。' },
+  { id:'leftFarBottom', name:'追擊', icon:'fa-crosshairs', parent:'leftBottom', depth:3, bonusDamage:6, desc:'每級增加 6 點答對攻擊傷害。' },
+  { id:'leftFinal', name:'本命殺招', icon:'fa-fire-flame-curved', parent:['leftFarTop','leftFarBottom'], depth:4, coreAttack:1, desc:'依調御的金丹丹性與品級，強化每次答對的攻擊傷害。' },
+  { id:'rightMain', name:'靈體', icon:'fa-heart-pulse', parent:null, depth:1, maxHpFlat:70, desc:'每級增加 70 生命上限。' },
+  { id:'rightTop', name:'守元', icon:'fa-shield-halved', parent:'rightMain', depth:2, reductionFlat:5, desc:'每級使鬥法受到的每次傷害減少 5。' },
+  { id:'rightBottom', name:'閉關', icon:'fa-mountain-sun', parent:'rightMain', depth:2, cultivationDaily:1, desc:'修行分支：每日閉關全對時，每級額外獲得 1 修為。' },
+  { id:'rightFarTop', name:'護命', icon:'fa-heart', parent:'rightTop', depth:3, maxHpFlat:55, desc:'每級增加 55 生命上限。' },
+  { id:'rightFarBottom', name:'洞天', icon:'fa-dungeon', parent:'rightBottom', depth:3, cultivationCave:1, desc:'修行分支：洞天首次通關且至少答對一題，每級額外獲得 1 修為。' },
+  { id:'rightFinal', name:'本命護元', icon:'fa-sun-plant-wilt', parent:['rightFarTop','rightFarBottom'], depth:4, coreHeal:1, desc:'依調御的金丹丹性與品級，答對時恢復生命。' }
 ]);
 const BRANCH_NAMES = Object.freeze({
-  ocean: ['滄潮化刃','千浪破軍','潮汐悟道','萬海問天'],
-  taichu: ['一氣化生','元始開天','太初悟道','元始問天'],
-  ningxin: ['心念如鋒','靜意破妄','寧神悟道','明心問天'],
-  pojing: ['破界鋒芒','衝霄一念','破境悟道','九霄問天'],
-  xingchen: ['引星化刃','星月追擊','星輝悟道','周天問星'],
-  wugou: ['清光破邪','明鏡映心','無垢悟道','琉璃問天'],
-  thunder: ['劫光裂空','萬雷追擊','九霄悟道','雷域問天'],
-  reverse: ['兩儀化刃','陰陽逆轉','陰陽悟道','太極問天'],
-  sword: ['劍魄凌霄','萬劍歸宗','劍心悟道','萬劍問天']
+  ocean:['滄潮化刃','千浪破軍','萬海殺招','潮汐護元'],
+  taichu:['一氣化生','元始開天','太初殺招','太初護元'],
+  ningxin:['心念如鋒','靜意破妄','寧心殺招','凝神護元'],
+  pojing:['破界鋒芒','衝霄一念','破境殺招','九霄護元'],
+  xingchen:['引星化刃','星月追擊','星辰殺招','周天護元'],
+  wugou:['清光破邪','明鏡映心','無垢殺招','琉璃護元'],
+  thunder:['劫光裂空','萬雷追擊','雷霆殺招','雷域護元'],
+  reverse:['兩儀化刃','陰陽逆轉','陰陽殺招','太極護元'],
+  sword:['劍魄凌霄','萬劍歸宗','劍心殺招','劍魄護元']
 });
+// 九種金丹的終極增益依丹性分化；品級越高（數字越小），單級效果越強。
+const CORE_FINALE = Object.freeze({
+  ocean: { attack:18, heal:11 }, taichu:{attack:12,heal:20}, ningxin:{attack:13,heal:18},
+  pojing:{attack:22,heal:9}, xingchen:{attack:19,heal:12}, wugou:{attack:11,heal:21},
+  thunder:{attack:23,heal:10}, reverse:{attack:16,heal:16}, sword:{attack:24,heal:9}
+});
+export function soulFinalePerLevel(type, grade = 9) {
+  const core = CORE_FINALE[type] || CORE_FINALE.taichu;
+  const quality = 9 - Math.min(9, Math.max(1, Math.floor(Number(grade) || 9)));
+  return { coreAttack:core.attack + quality * 2, coreHeal:core.heal + quality };
+}
 export const NASCENT_SOUL_ATTRIBUTES = Object.freeze(NODE_CONFIG.filter(item => !item.parent).map(item =>
-  Object.freeze({ ...item, max: NASCENT_SOUL_NODE_CAP, stat: item.attackFlat ? 'attackFlat' : 'cultivationSolo', value: item.attackFlat || item.cultivationSolo })
+  Object.freeze({ ...item, max: NASCENT_SOUL_NODE_CAP })
 ));
 export const NASCENT_SOUL_SKILL_TIERS = Object.freeze(NODE_CONFIG.filter(item => !!item.parent).map(item =>
-  Object.freeze({ id: item.id, parent: item.parent, max: NASCENT_SOUL_NODE_CAP, cost: 3 })
+  Object.freeze({ id:item.id, parent:item.parent, max:NASCENT_SOUL_NODE_CAP, cost: item.depth === 2 ? 3 : item.depth === 3 ? 5 : 8 })
 ));
 export function soulSkills(type) {
   const names = BRANCH_NAMES[type] || BRANCH_NAMES.taichu;
-  return NODE_CONFIG.filter(item => item.parent).map((item, index) => ({
-    ...item, name: names[index], max: NASCENT_SOUL_NODE_CAP, cost: 3
-  }));
+  const ids = ['leftTop','leftFarTop','leftFinal','rightFinal'];
+  return NODE_CONFIG.filter(item => !!item.parent).map(item => {
+    const index = ids.indexOf(item.id);
+    return { ...item, name:index < 0 ? item.name : names[index], max:NASCENT_SOUL_NODE_CAP, cost:soulNodeCost(item.id) };
+  });
 }
 export function soulNodeCost(nodeId) {
-  if (!NASCENT_SOUL_NODE_ORDER.includes(nodeId)) return 0;
-  return NODE_CONFIG.find(item => item.id === nodeId)?.parent ? 3 : 1;
+  const node = NODE_CONFIG.find(item => item.id === nodeId);
+  return node ? [0,1,3,5,8][node.depth] : 0;
 }
-export function soulNodes(type) {
-  const skillMap = Object.fromEntries(soulSkills(type).map(item => [item.id, item]));
-  return NASCENT_SOUL_NODE_ORDER.map(id => skillMap[id] || NODE_CONFIG.find(item => item.id === id));
+export function soulNodes(type, grade = 9) {
+  const names = Object.fromEntries(soulSkills(type).map(item => [item.id, item]));
+  const finale = soulFinalePerLevel(type, grade);
+  return NASCENT_SOUL_NODE_ORDER.map(id => {
+    const base = names[id] || NODE_CONFIG.find(item => item.id === id);
+    return { ...base, ...(id === 'leftFinal' ? {coreAttack:finale.coreAttack} : {}),
+      ...(id === 'rightFinal' ? {coreHeal:finale.coreHeal} : {}) };
+  });
 }
 const LEGACY_ATTRS = Object.freeze([
   { id: 'attack', max: 5 }, { id: 'vitality', max: 5 }, { id: 'focus', max: 5 }
@@ -122,13 +147,7 @@ function cleanLevels(raw) {
     const level = Math.min(NASCENT_SOUL_NODE_CAP, normalizeSpirit(raw?.[id]));
     if (level) nodes[id] = level;
   }
-  // 允許舊版遷移保有後繼節點：自動補齊原本已付費的前置節點。
-  for (const id of NASCENT_SOUL_NODE_ORDER) {
-    const node = NODE_CONFIG.find(item => item.id === id);
-    if (nodes[id] && node.parent && (nodes[node.parent] || 0) < NASCENT_SOUL_BRANCH_UNLOCK) {
-      nodes[node.parent] = NASCENT_SOUL_BRANCH_UNLOCK;
-    }
-  }
+  // 已持有的老節點仍保留；後續升級需要新前置，遷移不額外贈送神識。
   return nodes;
 }
 function migrateLegacyPath(raw) {
@@ -150,25 +169,27 @@ export function normalizeSoulTree(raw) {
     const path = raw?.paths?.[type];
     if (!path || typeof path !== 'object') continue;
     let fixed;
-    if (version === 3) {
-      fixed = {
-        nodes: cleanLevels(path.nodes),
-        baselineNodes: cleanLevels(path.baselineNodes),
-        legacySpent: normalizeSpirit(path.legacySpent)
-      };
-    } else if (version === 2) {
+    if (version >= 4) {
+      fixed = {nodes:cleanLevels(path.nodes), baselineNodes:cleanLevels(path.baselineNodes),
+        legacySpent:normalizeSpirit(path.legacySpent)};
+    } else if (version === 3) {
       const nodes = cleanLevels(path.nodes);
-      const originalBaseline = cleanLevels(path.baselineNodes);
-      // 舊版六節點一律每級 1 神識：將既有等級及已花費神識凍結，不能以新外圈價格追溯收費。
-      let alreadySpent = normalizeSpirit(path.legacySpent);
-      for (const id of NASCENT_SOUL_NODE_ORDER) {
-        alreadySpent += Math.max(0, (nodes[id] || 0) - (originalBaseline[id] || 0));
+      const oldBaseline = cleanLevels(path.baselineNodes);
+      let spent = normalizeSpirit(path.legacySpent);
+      // v3 按原價 1／3 計算，再凍結成已付費基線；升級才使用新 1／3／5／8 費率。
+      for (const id of ['leftTop','leftMain','leftBottom','rightMain','rightTop','rightBottom']) {
+        spent += Math.max(0,(nodes[id] || 0) - (oldBaseline[id] || 0)) *
+          (id === 'leftMain' || id === 'rightMain' ? 1 : 3);
       }
-      fixed = { nodes, baselineNodes: { ...nodes }, legacySpent: alreadySpent };
-    } else {
-      fixed = migrateLegacyPath(path.nodes);
-    }
-    // 已繳費的舊節點最多抵銷相同節點的現有等級，避免異常存檔產生負消費。
+      fixed = {nodes, baselineNodes:{...nodes}, legacySpent:spent};
+    } else if (version === 2) {
+      const nodes = cleanLevels(path.nodes), originalBaseline = cleanLevels(path.baselineNodes);
+      let spent = normalizeSpirit(path.legacySpent);
+      for (const id of ['leftTop','leftMain','leftBottom','rightMain','rightTop','rightBottom']) {
+        spent += Math.max(0,(nodes[id] || 0) - (originalBaseline[id] || 0));
+      }
+      fixed = {nodes, baselineNodes:{...nodes}, legacySpent:spent};
+    } else fixed = migrateLegacyPath(path.nodes);
     for (const id of NASCENT_SOUL_NODE_ORDER) {
       if (fixed.baselineNodes[id]) {
         fixed.baselineNodes[id] = Math.min(fixed.baselineNodes[id], fixed.nodes[id] || 0);
@@ -177,7 +198,7 @@ export function normalizeSoulTree(raw) {
     }
     if (Object.keys(fixed.nodes).length || fixed.legacySpent) paths[type] = fixed;
   }
-  return { version: 3, paths };
+  return {version:4, paths};
 }
 export function soulSpentSpirit(tree) {
   const safe = normalizeSoulTree(tree);
@@ -201,8 +222,9 @@ export function soulNodeStatus(tree, type, nodeId, earned) {
   const cost = soulNodeCost(nodeId);
   if (!NASCENT_SOUL_TYPES[type] || !node) return { ok:false, reason:'未知元嬰節點', level, remaining, cost:0 };
   if (level >= NASCENT_SOUL_NODE_CAP) return { ok:false, reason:'已點滿', level, remaining, cost:0 };
-  if (node.parent && (levels[node.parent] || 0) < NASCENT_SOUL_BRANCH_UNLOCK) {
-    return { ok:false, reason:'前置需達 5 / 10', level, remaining, cost };
+  const parents = Array.isArray(node.parent) ? node.parent : node.parent ? [node.parent] : [];
+  if (parents.some(parent => (levels[parent] || 0) < NASCENT_SOUL_BRANCH_UNLOCK)) {
+    return { ok:false, reason:parents.length > 1 ? '兩條前置支脈皆須達 5 / 10' : '前置需達 5 / 10', level, remaining, cost };
   }
   if (remaining < cost) return { ok:false, reason:'神識不足', level, remaining, cost };
   return { ok:true, reason:'', level, remaining, cost };
@@ -215,29 +237,24 @@ export function allocateSoulNode(tree, type, nodeId, earned) {
   next.paths[type] = { ...prior, nodes: { ...prior.nodes, [nodeId]: status.level + 1 } };
   return { ok:true, cost:status.cost, tree:next, remaining:soulAvailableSpirit(next, earned) };
 }
-export function soulCombatBonuses(tree, type) {
+export function soulCombatBonuses(tree, type, grade = 9) {
   const nodes = normalizeSoulTree(tree).paths[type]?.nodes || {};
-  const result = { attackFlat:0, maxHpFlat:0, bonusDamage:0 };
-  for (const node of soulNodes(type)) {
-    for (const key of Object.keys(result)) result[key] += (node[key] || 0) * (nodes[node.id] || 0);
+  const result = {attackFlat:0,maxHpFlat:0,bonusDamage:0,reductionFlat:0,coreHeal:0};
+  for (const node of soulNodes(type, grade)) {
+    for (const key of Object.keys(result)) {
+      const effect = key === 'bonusDamage' ? (node.bonusDamage || 0) + (node.coreAttack || 0) : (node[key] || 0);
+      result[key] += effect * (nodes[node.id] || 0);
+    }
   }
   return result;
 }
-
-// 修為分支只在相應結算渠道生效，避免把重玩洞天或閉關部分答對誤算為加成。
 export function soulCultivationBonuses(tree, type) {
   const nodes = normalizeSoulTree(tree).paths[type]?.nodes || {};
-  return {
-    solo: nodes.rightMain || 0,
-    daily: nodes.rightTop || 0,
-    cave: nodes.rightBottom || 0
-  };
+  return {solo:nodes.leftBottom || 0, daily:nodes.rightBottom || 0, cave:nodes.rightFarBottom || 0};
 }
-// 使用遠端玩家資料計算每日閉關／洞天交易內的數值；停用金丹時不套用元嬰。
 export function soulCultivationBonusForPlayer(player, source) {
   if (normalizeSpirit(player?.stats?.totalScore) < NASCENT_SOUL_THRESHOLD) return 0;
   const training = player?.cultivationTraining;
   if (training?.coreEnabled === false || !training?.equippedCore?.type) return 0;
-  const bonuses = soulCultivationBonuses(player?.nascentSoulTree, training.equippedCore.type);
-  return normalizeSpirit(bonuses[source]);
+  return normalizeSpirit(soulCultivationBonuses(player?.nascentSoulTree,training.equippedCore.type)[source]);
 }
