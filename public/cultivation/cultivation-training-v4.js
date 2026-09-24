@@ -359,7 +359,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     const type = coreType(core.type);
     const tag = clickable ? 'button' : 'div';
     return `
-      <${tag} ${clickable ? 'type="button"' : ''} class="golden-core-stage-v3 ${clickable ? 'clickable' : ''}" ${clickable ? 'id="training-core-orb" aria-label="查看金丹詳細資料"' : 'aria-hidden="true"'}>
+      <${tag} ${clickable ? 'type="button"' : ''} class="golden-core-stage-v3 ${clickable ? 'clickable' : ''}" data-core-visual-grade="${clampGrade(core.grade)}" ${clickable ? 'id="training-core-orb" aria-label="查看金丹詳細資料"' : 'aria-hidden="true"'}>
         <span class="golden-core-halo-v3 halo-a"></span>
         <span class="golden-core-halo-v3 halo-b"></span>
         <span class="golden-core-orbit-v3 orbit-a"></span>
@@ -420,40 +420,6 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
   // 地圖節點只做選取。數值預覽及唯一的升級操作都放在右側詳情頁。
   function soulNodeDetailMarkup(type, tree, earned) {
     if (!selectedSoulNodeId) return '';
-    if (selectedSoulNodeId === 'core') {
-      const core = state.equippedCore;
-      if (!core || core.type !== type) return '';
-      const grade = clampGrade(core.grade);
-      const metadata = coreType(type);
-      const effect = metadata.effect(grade);
-      const bonuses = soulCombatBonuses(tree, type, grade);
-      const nodes = normalizeSoulTree(tree).paths[type]?.nodes || {};
-      const attackLevel = nodes.leftFinal || 0, guardLevel = nodes.rightFinal || 0;
-      const finalAttack = soulNodes(type, grade).find(node => node.id === 'leftFinal');
-      const finalGuard = soulNodes(type, grade).find(node => node.id === 'rightFinal');
-      return `
-        <aside class="ns-node-detail ns-core-detail" aria-labelledby="ns-detail-title">
-          <div class="ns-detail-header"><span>已調御金丹 · 品質效果</span>
-            <button type="button" class="ns-detail-close" data-ns-close aria-label="關閉金丹詳情">
-              <i class="fa-solid fa-xmark" aria-hidden="true"></i>
-            </button>
-          </div>
-          <div class="ns-detail-identity">
-            <span class="ns-detail-icon"><span>${metadata.icon}</span></span>
-            <div><h4 id="ns-detail-title">${metadata.name}</h4><p>${grade} 品 · 已調御</p></div>
-          </div>
-          <p class="ns-detail-description ns-core-effect">${effect}</p>
-          <div class="ns-detail-stats">
-            <div class="ns-detail-stat"><span>本命殺招 · ${attackLevel} / 10</span>
-              <div class="ns-detail-stat-values"><strong>單級 +${finalAttack.coreAttack}</strong><strong class="ns-detail-next">目前 +${finalAttack.coreAttack * attackLevel}</strong></div>
-            </div>
-            <div class="ns-detail-stat"><span>本命護元 · ${guardLevel} / 10</span>
-              <div class="ns-detail-stat-values"><strong>單級 +${finalGuard.coreHeal}</strong><strong class="ns-detail-next">目前 +${bonuses.coreHeal}</strong></div>
-            </div>
-          </div>
-          <p class="ns-detail-note">金丹的丹性與品級以目前裝配資料為準。洗髓候選丹不影響本頁效果；更換裝配後自動重新計算。</p>
-        </aside>`;
-    }
     const node = soulNodes(type, state.equippedCore?.grade).find(item => item.id === selectedSoulNodeId);
     if (!node) return '';
     const status = soulNodeStatus(tree, type, node.id, earned);
@@ -527,9 +493,6 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     const equippedCore = state.equippedCore;
     const equippedName = coreType(equippedCore.type).name;
     const equippedGrade = clampGrade(equippedCore.grade);
-    // 此處使用正式裝配金丹的品級效果。原先僅點擊中央金丹才看得到，
-    // 因此使用者停留在節點詳情時，地圖上完全看不到品級效果。
-    const equippedEffect = coreType(equippedCore.type).effect(equippedGrade);
     const player = window.getCurrentUserData?.() || {};
     const earned = normalizeSpirit(player.stats?.nascentSoulSpirit);
     const tree = normalizeSoulTree(player.nascentSoulTree);
@@ -541,9 +504,6 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
       cultivationDaily: cultivationBonuses.daily, cultivationCave: cultivationBonuses.cave };
     const stage = nascentSoulStage(earned);
     const levels = tree.paths[type]?.nodes || {};
-    const finale = soulNodes(type, equippedGrade);
-    const attackFinal = finale.find(node => node.id === 'leftFinal');
-    const guardFinal = finale.find(node => node.id === 'rightFinal');
     const progress = stage.next ? Math.min(100, (earned - stage.min) / (stage.next.min - stage.min) * 100) : 100;
 
     const nodes = soulNodes(type, equippedGrade).map(node => {
@@ -604,11 +564,6 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
           </div>
         </div>
         <p class="ns-tree-tip">左脈攻擊、右脈生存；中途有修為節點。每條前置達 5 級解鎖下一層，依距離每級消耗 1／3／5／8 神識。</p>
-        <div class="ns-equipped-effect" aria-label="目前裝配金丹的品級效果">
-          <span class="ns-equipped-effect-head"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> 裝配金丹 · ${equippedGrade} 品 · ${equippedName}</span>
-          <span class="ns-equipped-effect-text" title="${equippedEffect}">${equippedEffect}</span>
-          <span class="ns-equipped-effect-talent">本命殺招每級 +${attackFinal.coreAttack} 傷害 · 本命護元每級 +${guardFinal.coreHeal} 回復</span>
-        </div>
         <div class="ns-tree-viewport ns-trees" role="group" aria-label="元嬰左右分支技能地圖">
           <div class="ns-diagram" aria-label="中央金丹與十二枚元嬰節點">
             <div class="ns-map-side-label ns-map-side-left" aria-hidden="true">攻擊靈脈</div>
@@ -618,14 +573,12 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
               ${links}
             </svg>
             ${nodes}
-            <button type="button" class="ns-tree-core ${selectedSoulNodeId === 'core' ? 'is-selected' : ''}"
-              data-ns-core-detail aria-label="查看目前裝配的 ${equippedGrade} 品 ${equippedName} 金丹效果"
-              title="點擊查看 ${equippedName}（${equippedGrade} 品）金丹效果" aria-pressed="${selectedSoulNodeId === 'core'}">
+            <div class="ns-tree-core" aria-label="已裝配 ${equippedGrade} 品 ${equippedName}">
               ${coreVisualMarkup(core, false)}
               <span class="ns-tree-core-name">${equippedName}</span>
               <span class="ns-tree-core-desc">${equippedGrade} 品 · 已調御</span>
               <span class="ns-tree-core-stage">${stage.name}</span>
-            </button>
+            </div>
           </div>
           ${soulNodeDetailMarkup(type, tree, earned)}
         </div>
@@ -706,18 +659,11 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
           detail?.querySelector('.ns-detail-close'))?.focus({ preventScroll: true });
       });
     });
-    content.querySelector('[data-ns-core-detail]')?.addEventListener('click', () => {
-      if (soulBusy) return;
-      selectedSoulNodeId = 'core';
-      renderTrainingPage();
-      document.querySelector('#training-tab-content .ns-detail-close')?.focus({ preventScroll: true });
-    });
     content.querySelector('[data-ns-close]')?.addEventListener('click', () => {
       const lastId = selectedSoulNodeId;
       selectedSoulNodeId = null;
       renderTrainingPage();
-      (lastId === 'core' ? content.querySelector('[data-ns-core-detail]') :
-        content.querySelector('[data-ns-node="' + lastId + '"]'))?.focus({ preventScroll: true });
+      content.querySelector('[data-ns-node="' + lastId + '"]')?.focus({ preventScroll: true });
     });
     content.querySelector('[data-ns-upgrade]')?.addEventListener('click', (event) => {
       // 只能從詳情頁發起點亮；Firestore 交易會再次檢查餘額、前置與上限。
