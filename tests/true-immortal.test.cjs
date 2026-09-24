@@ -10,20 +10,20 @@ function setup() {
   return window;
 }
 const realms = [{ name: '凡人' }, { name: '渡劫' }, { name: '半仙' }, { name: '真仙' }];
-test('True Immortal requires both the 868 threshold and an active named seat', () => {
+test('True Immortal requires both the 2588 threshold and an active named seat', () => {
   const w = setup();
   for (const listed of [false, true]) {
     w.setTrueImmortalBoard(listed ? [{ id: 'ru-xian', uid: 'alice' }] : []);
-    for (const score of [0, 627, 628, 629, 867, 868, 9999]) {
-      assert.equal(w.isTrueImmortal(score), listed && score >= 868);
+    for (const score of [0, 627, 1868, 629, 867, 2588, 9999]) {
+      assert.equal(w.isTrueImmortal(score), listed && score >= 2588);
     }
   }
 });
 test('losing a seat, switching user and unavailable board revoke True Immortal', () => {
   const w = setup();
   w.setTrueImmortalBoard([{ id: 'ru-xian', uid: 'alice' }]);
-  assert.equal(w.limitImmortalRank(3, 868, realms), 3);
-  assert.equal(w.limitImmortalRank(3, 868, realms, 'bob'), 2);
+  assert.equal(w.limitImmortalRank(3, 2588, realms), 3);
+  assert.equal(w.limitImmortalRank(3, 2588, realms, 'bob'), 2);
   w.setTrueImmortalBoard([{ id: 'ru-xian', uid: 'bob' }]);
   assert.equal(w.limitImmortalRank(3, 9999, realms), 2);
   assert.equal(w.limitImmortalRank(0, 0, realms), 0);
