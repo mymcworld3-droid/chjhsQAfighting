@@ -1,0 +1,83 @@
+/* 本命金丹洗髓：獨立全螢幕演出，不改動金丹頁本身的布局。 */
+#golden-core-wash-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 7600;
+  display: grid;
+  place-items: center;
+  padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
+  background: radial-gradient(ellipse at 50% 39%, rgba(87,57,122,.2), transparent 56%), rgba(3,4,9,.95);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  color: #f7ebd2;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+#golden-core-wash-overlay *, #golden-core-wash-overlay *::before, #golden-core-wash-overlay *::after { box-sizing: border-box; }
+#golden-core-wash-overlay .gc-wash-panel {
+  width: min(100%, 480px);
+  margin: auto;
+  padding: 26px 22px 25px;
+  text-align: center;
+  border: 1px solid rgba(228,190,113,.35);
+  border-radius: 26px;
+  background: radial-gradient(ellipse at 50% 28%, rgba(180,130,54,.1), transparent 59%), linear-gradient(155deg,#171410,#08090d 75%);
+  box-shadow: 0 32px 90px rgba(0,0,0,.75), inset 0 1px rgba(255,255,255,.07);
+  outline: none;
+}
+#golden-core-wash-overlay .gc-wash-kicker { font-size: 10px; font-weight: 800; letter-spacing: .24em; color: #bba074; }
+#golden-core-wash-overlay .gc-wash-title { margin: 9px 0 6px; color: #ffedbb; font-size: clamp(23px,5vw,30px); font-weight: 900; letter-spacing: .09em; }
+#golden-core-wash-overlay .gc-wash-status { margin: 0; min-height: 22px; color: #bdb1a0; font-size: 13px; line-height: 1.65; }
+#golden-core-wash-overlay .gc-wash-scene { position: relative; isolation: isolate; width: min(100%,300px); height: 300px; margin: 2px auto 5px; display: grid; place-items: center; }
+#golden-core-wash-overlay .gc-wash-seal { position: absolute; border-radius: 50%; inset: 10px; border: 1px solid rgba(235,193,107,.36); box-shadow: 0 0 34px rgba(209,156,70,.08), inset 0 0 30px rgba(209,156,70,.06); }
+#golden-core-wash-overlay .seal-outer { background: repeating-conic-gradient(from 5deg, rgba(236,196,109,.23) 0deg 1deg, transparent 1deg 30deg) border-box; animation: gcWashRotate 8s linear infinite; }
+#golden-core-wash-overlay .seal-inner { inset: 35px; border-style: dashed; opacity: .8; animation: gcWashRotate 6s linear infinite reverse; }
+#golden-core-wash-overlay .gc-wash-orbit { position: absolute; width: 235px; height: 90px; border: 1px solid rgba(241,209,135,.44); border-radius: 50%; transform: rotate(30deg); animation: gcWashOrbitOne 2.3s linear infinite; }
+#golden-core-wash-overlay .orbit-two { animation-name: gcWashOrbitTwo; animation-duration: 2.9s; border-color: rgba(181,144,241,.35); }
+#golden-core-wash-overlay .gc-wash-core { position: relative; z-index: 3; width: 116px; height: 116px; display: grid; place-items: center; border-radius: 50%; color: #fff2ce; font-size: 37px; border: 1px solid rgba(255,238,175,.64); box-shadow: inset -18px -20px 30px rgba(0,0,0,.29), inset 10px 9px 18px rgba(255,255,240,.2), 0 0 45px rgba(233,181,84,.34); animation: gcWashCore 1.8s ease-in-out infinite; transition: filter .45s ease, box-shadow .45s ease; }
+#golden-core-wash-overlay .gc-wash-core-icon { text-shadow: 0 0 15px rgba(255,246,199,.85); }
+#golden-core-wash-overlay .gc-wash-core-shadow { position: absolute; bottom: 45px; width: 115px; height: 20px; border-radius: 50%; background: rgba(0,0,0,.75); filter: blur(12px); }
+#golden-core-wash-overlay .gc-wash-sparks { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+#golden-core-wash-overlay .gc-wash-sparks i { position: absolute; left: calc(50% - 2px); top: calc(50% - 2px); width: 4px; height: 4px; background: #ffe5a3; border-radius: 50%; box-shadow: 0 0 8px rgba(255,227,163,.95); opacity: 0; animation: gcWashGather 1.65s ease-in infinite; animation-delay: var(--delay); }
+#golden-core-wash-overlay .gc-wash-flash { position: absolute; z-index: 5; inset: 18px; border-radius: 50%; background: radial-gradient(circle,rgba(255,253,230,.98),rgba(247,204,118,.58) 32%, transparent 68%); opacity: 0; transform: scale(.35); pointer-events: none; }
+#golden-core-wash-overlay .gc-wash-result { display: grid; gap: 5px; min-height: 75px; }
+#golden-core-wash-overlay .gc-wash-result-label { font-size: 11px; color: #b99c63; letter-spacing: .14em; font-weight: 800; }
+#golden-core-wash-overlay .gc-wash-result-name { font-size: clamp(18px,4vw,22px); color: #f7d892; font-weight: 900; }
+#golden-core-wash-overlay .gc-wash-result-note { margin: 0; font-size: 12px; color: #aaa091; line-height: 1.6; }
+#golden-core-wash-overlay .gc-wash-continue { display: block; width: 100%; min-height: 47px; margin-top: 16px; border: 1px solid #d8b15d; border-radius: 14px; background: linear-gradient(135deg,#af802e,#5f3d13); color: #fff0cd; font-size: 14px; font-weight: 900; cursor: pointer; }
+#golden-core-wash-overlay .gc-wash-continue[hidden] { display: none !important; }
+#golden-core-wash-overlay .gc-wash-continue:focus-visible { outline: 2px solid #ffe2a1; outline-offset: 3px; }
+#golden-core-wash-overlay.is-washing .gc-wash-core { filter: brightness(1.3); }
+#golden-core-wash-overlay.is-revealed .gc-wash-flash { animation: gcWashReveal .75s ease-out both; }
+#golden-core-wash-overlay.is-revealed .gc-wash-core { animation: gcWashRest 2.8s ease-in-out infinite; box-shadow: inset -18px -20px 30px rgba(0,0,0,.2), 0 0 65px rgba(255,214,131,.53),0 0 100px rgba(159,112,236,.17); }
+#golden-core-wash-overlay.is-revealed .gc-wash-seal { animation-duration: 18s; }
+#golden-core-wash-overlay.is-revealed .gc-wash-sparks i { animation-duration: 3.5s; }
+#golden-core-wash-overlay.is-failed .gc-wash-scene { filter: grayscale(.72); opacity: .65; }
+#golden-core-wash-overlay.is-failed .gc-wash-seal,
+#golden-core-wash-overlay.is-failed .gc-wash-orbit,
+#golden-core-wash-overlay.is-failed .gc-wash-core,
+#golden-core-wash-overlay.is-failed .gc-wash-sparks i { animation-play-state: paused; }
+#golden-core-wash-overlay.is-failed .gc-wash-result-name { color: #e7b6a0; }
+
+@keyframes gcWashRotate { to { transform: rotate(360deg); } }
+@keyframes gcWashOrbitOne { from { transform: rotate(30deg); } to { transform: rotate(390deg); } }
+@keyframes gcWashOrbitTwo { from { transform: rotate(120deg); } to { transform: rotate(-240deg); } }
+@keyframes gcWashCore { 0%,100% { transform: scale(.9) translateY(5px); } 50% { transform: scale(1.17) translateY(-5px); } }
+@keyframes gcWashRest { 0%,100% { transform: translateY(1px); } 50% { transform: translateY(-7px); } }
+@keyframes gcWashGather { 0% { opacity: 0; transform: rotate(var(--angle)) translateX(126px) scale(.5); } 25% { opacity: 1; } 90% { opacity: .9; } 100% { opacity: 0; transform: rotate(var(--angle)) translateX(23px) scale(0); } }
+@keyframes gcWashReveal { 0% { opacity: 0; transform: scale(.35); } 30% { opacity: .95; transform: scale(1.2); } 100% { opacity: 0; transform: scale(1.75); } }
+
+@media (max-width: 430px), (max-height: 610px) {
+  #golden-core-wash-overlay .gc-wash-panel { padding: 17px 13px; border-radius: 19px; }
+  #golden-core-wash-overlay .gc-wash-scene { width: 224px; height: 224px; margin: 0 auto; }
+  #golden-core-wash-overlay .gc-wash-core { width: 92px; height: 92px; font-size: 29px; }
+  #golden-core-wash-overlay .gc-wash-orbit { width: 190px; height: 73px; }
+  #golden-core-wash-overlay .seal-outer { inset: 5px; }
+  #golden-core-wash-overlay .seal-inner { inset: 23px; }
+  #golden-core-wash-overlay .gc-wash-core-shadow { bottom: 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #golden-core-wash-overlay *, #golden-core-wash-overlay *::before, #golden-core-wash-overlay *::after { animation: none !important; transition: none !important; }
+  #golden-core-wash-overlay .gc-wash-sparks { display: none; }
+  #golden-core-wash-overlay .gc-wash-flash { display: none; }
+}
