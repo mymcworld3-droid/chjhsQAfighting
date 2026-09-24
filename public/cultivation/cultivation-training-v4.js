@@ -23,7 +23,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
   ];
   const CSS_HREF = 'cultivation-training-v3.css';
   const REMOTE_FIELD = 'cultivationTraining';
-  const REALM_THRESHOLDS = [68, 128, 208, 308, 448, 628, 868];
+  const REALM_THRESHOLDS = [68, 188, 428, 788, 1268, 1868, 2588];
 
   const GRADE_WEIGHTS = [
     { grade: 9, chance: 25 },
