@@ -350,7 +350,7 @@ export const STORY_CHAPTERS = Object.freeze([
   Object.freeze({
     id: 'spirit-transformation-history',
     order: 9,
-    minScore: 128,
+    minScore: 188,
     realm: '化神',
     title: '第九章 · 天裂不是天災',
     subtitle: '許長老的舊卷',
@@ -382,7 +382,7 @@ export const STORY_CHAPTERS = Object.freeze([
   Object.freeze({
     id: 'void-refinement-choice',
     order: 10,
-    minScore: 208,
+    minScore: 428,
     realm: '煉虛',
     title: '第十章 · 無相客給了你一道沒有選項的題',
     subtitle: '唯一答案',
@@ -411,7 +411,7 @@ export const STORY_CHAPTERS = Object.freeze([
   Object.freeze({
     id: 'integration-revelation',
     order: 11,
-    minScore: 308,
+    minScore: 788,
     realm: '合體',
     title: '第十一章 · 仙府真正的用途',
     subtitle: '不是考場',
@@ -438,7 +438,7 @@ export const STORY_CHAPTERS = Object.freeze([
   Object.freeze({
     id: 'mahayana-alliance',
     order: 12,
-    minScore: 448,
+    minScore: 1268,
     realm: '大乘',
     title: '第十二章 · 大家都來了，因為你已經不能裝沒事',
     subtitle: '決戰之前',
@@ -465,7 +465,7 @@ export const STORY_CHAPTERS = Object.freeze([
   Object.freeze({
     id: 'tribulation-final',
     order: 13,
-    minScore: 628,
+    minScore: 1868,
     realm: '渡劫',
     title: '第十三章 · 天劫之上仍有一道題',
     subtitle: '問道天碑核心',
@@ -500,7 +500,7 @@ export const STORY_CHAPTERS = Object.freeze([
   Object.freeze({
     id: 'true-immortal-epilogue',
     order: 14,
-    minScore: 868,
+    minScore: 2588,
     realm: '半仙',
     title: '終章 · 出師這件事，師姐說了算',
     subtitle: '問道不止',
