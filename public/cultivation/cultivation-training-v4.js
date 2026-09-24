@@ -637,16 +637,18 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
 
     let animation = null;
     try {
-      animation = createGoldenCoreWashAnimation(previousCore, coreType(previousCore.type));
+      // 在既有卡片上直接繪製兩道從按鈕進入金丹的靈光，不遮擋整頁。
+      animation = createGoldenCoreWashAnimation();
       const fresh = randomCore();
       state.core = fresh;
       // 洗髓只產生候選丹；原本裝備中的丹繼續生效，直到玩家主動裝配新丹。
       state.equipped = false;
       userData.stats.gold = stones - WASH_COST;
       await persistRemote({ 'stats.gold': stones - WASH_COST });
-      // 不讓網路速度決定動畫長度；也不在遠端儲存成功前揭曉丹相。
+      // 保存成功後才在原位置揭曉丹相；保留最短演出時間，避免網路過快導致特效閃過。
       await animation.minimumDuration;
-      animation.reveal(fresh, coreType(fresh.type));
+      await animation.reveal(fresh, coreType(fresh.type));
+      toast(`洗髓完成：${fresh.grade} 品 ${coreType(fresh.type).name}`);
     } catch (error) {
       console.error('Wash golden core failed:', error);
       state.core = previousCore;
@@ -654,9 +656,10 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       state.equipped = previousEquipped;
       userData.stats.gold = previousGold;
       saveLocal();
-      if (animation) animation.fail();
-      else toast('洗髓未完成，請重新整理確認靈石與丹相。');
+      if (animation) await animation.fail();
+      toast('洗髓未完成，請重新整理確認靈石與丹相。');
     } finally {
+      animation?.cleanup();
       busy = false;
       renderTrainingPage();
     }
