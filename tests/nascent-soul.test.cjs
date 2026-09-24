@@ -7,9 +7,9 @@ const vm = require('node:vm');
 const read = name => readFileSync(join(__dirname, '..', name), 'utf8');
 const source = read('public/cultivation/nascent-soul-rules.js');
 const rules = vm.runInNewContext(source.replace(/^export /gm, '') +
-  '\n({ NASCENT_SOUL_TYPES, nascentSoulForCore, nascentSoulStage, nascentSoulSpiritReward, NASCENT_SOUL_ATTRIBUTES, NASCENT_SOUL_NODE_CAP, NASCENT_SOUL_BRANCH_UNLOCK, soulNodes, soulSkills, normalizeSoulTree, soulAvailableSpirit, soulSpentSpirit, soulNodeStatus, allocateSoulNode, soulCombatBonuses, soulNodeCost, soulCultivationBonuses, soulCultivationBonusForPlayer, soulFinalePerLevel })');
+  '\n({ NASCENT_SOUL_TYPES, nascentSoulForCore, nascentSoulStage, nascentSoulSpiritReward, normalizeSpirit, NASCENT_SOUL_ATTRIBUTES, NASCENT_SOUL_NODE_CAP, NASCENT_SOUL_BRANCH_UNLOCK, soulNodes, soulSkills, normalizeSoulTree, soulAvailableSpirit, soulSpentSpirit, soulNodeStatus, allocateSoulNode, soulCombatBonuses, soulNodeCost, soulCultivationBonuses, soulCultivationBonusForPlayer, soulFinalePerLevel })');
 const { NASCENT_SOUL_TYPES, nascentSoulForCore, nascentSoulStage, nascentSoulSpiritReward,
-  NASCENT_SOUL_ATTRIBUTES, NASCENT_SOUL_NODE_CAP, NASCENT_SOUL_BRANCH_UNLOCK, soulNodes, soulSkills, normalizeSoulTree, soulAvailableSpirit, soulSpentSpirit, soulNodeStatus, allocateSoulNode, soulCombatBonuses, soulNodeCost, soulCultivationBonuses, soulCultivationBonusForPlayer, soulFinalePerLevel } = rules;
+  normalizeSpirit, NASCENT_SOUL_ATTRIBUTES, NASCENT_SOUL_NODE_CAP, NASCENT_SOUL_BRANCH_UNLOCK, soulNodes, soulSkills, normalizeSoulTree, soulAvailableSpirit, soulSpentSpirit, soulNodeStatus, allocateSoulNode, soulCombatBonuses, soulNodeCost, soulCultivationBonuses, soulCultivationBonusForPlayer, soulFinalePerLevel } = rules;
 
 test('all nine golden cores map to separate nascent souls with a talent', () => {
   const ids = ['ocean','taichu','ningxin','pojing','xingchen','wugou','thunder','reverse','sword'];
