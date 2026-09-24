@@ -573,13 +573,13 @@ body.xianxia-theme.ns-map-active #page-training .ns-node-detail {
 
 
 /* 12-node 元嬰地圖：兩側主脈分岔、再匯合本命終極節點，不引入頁面捲動。 */
-body.xianxia-theme.ns-map-active #page-training .ns-pos-leftMain { left:37.9167%;top:50%; }
+body.xianxia-theme.ns-map-active #page-training .ns-pos-leftMain { left:34.5%;top:50%; }
 body.xianxia-theme.ns-map-active #page-training .ns-pos-leftTop { left:29.5833%;top:20.1923%; }
 body.xianxia-theme.ns-map-active #page-training .ns-pos-leftBottom { left:29.5833%;top:79.8077%; }
 body.xianxia-theme.ns-map-active #page-training .ns-pos-leftFarTop { left:17.9167%;top:20.1923%; }
 body.xianxia-theme.ns-map-active #page-training .ns-pos-leftFarBottom { left:17.9167%;top:79.8077%; }
 body.xianxia-theme.ns-map-active #page-training .ns-pos-leftFinal { left:7.5%;top:50%; }
-body.xianxia-theme.ns-map-active #page-training .ns-pos-rightMain { left:62.0833%;top:50%; }
+body.xianxia-theme.ns-map-active #page-training .ns-pos-rightMain { left:65.5%;top:50%; }
 body.xianxia-theme.ns-map-active #page-training .ns-pos-rightTop { left:70.4167%;top:20.1923%; }
 body.xianxia-theme.ns-map-active #page-training .ns-pos-rightBottom { left:70.4167%;top:79.8077%; }
 body.xianxia-theme.ns-map-active #page-training .ns-pos-rightFarTop { left:82.0833%;top:20.1923%; }
@@ -608,4 +608,20 @@ body.xianxia-theme.ns-map-active #page-training :is(.ns-pos-leftFinal,.ns-pos-ri
   body.xianxia-theme.ns-map-active #page-training .ns-tree-core .golden-core-sphere-v3 {width:clamp(34px,7vw,51px)!important;height:clamp(34px,7vw,51px)!important;font-size:15px;}
   body.xianxia-theme.ns-map-active #page-training .ns-tree-core .golden-core-orbit-v3 {width:clamp(62px,12vw,83px)!important;}
   body.xianxia-theme.ns-map-active #page-training .ns-tree-core-desc {display:none;}
+}
+
+/* 橫向小螢幕仍保留操作間距，中心球不會擋到兩側主節點。 */
+@media(max-width:720px) and (max-height:490px) {
+  body.xianxia-theme.ns-map-active #page-training .ns-orbit-node.ns-light-btn {
+    width:29px;height:29px;min-height:0;padding:1px 0;
+  }
+  body.xianxia-theme.ns-map-active #page-training .ns-tree-core .golden-core-stage-v3 {
+    width:56px!important;height:56px!important;
+  }
+  body.xianxia-theme.ns-map-active #page-training .ns-tree-core .golden-core-sphere-v3 {
+    width:31px!important;height:31px!important;
+  }
+  body.xianxia-theme.ns-map-active #page-training .ns-tree-core .golden-core-orbit-v3 {width:53px!important;}
+  body.xianxia-theme.ns-map-active #page-training .ns-tree-core-name,
+  body.xianxia-theme.ns-map-active #page-training .ns-tree-core-stage {font-size:7px;}
 }
