@@ -7,9 +7,9 @@ const vm = require('node:vm');
 const read = name => readFileSync(join(__dirname, '..', name), 'utf8');
 const source = read('public/cultivation/nascent-soul-rules.js');
 const rules = vm.runInNewContext(source.replace(/^export /gm, '') +
-  '\n({ NASCENT_SOUL_TYPES, nascentSoulForCore, nascentSoulStage, nascentSoulSpiritReward, NASCENT_SOUL_ATTRIBUTES, NASCENT_SOUL_NODE_CAP, NASCENT_SOUL_BRANCH_UNLOCK, soulNodes, soulSkills, normalizeSoulTree, soulAvailableSpirit, soulSpentSpirit, soulNodeStatus, allocateSoulNode, soulCombatBonuses, soulNodeCost, soulCultivationBonuses, soulCultivationBonusForPlayer })');
+  '\n({ NASCENT_SOUL_TYPES, nascentSoulForCore, nascentSoulStage, nascentSoulSpiritReward, NASCENT_SOUL_ATTRIBUTES, NASCENT_SOUL_NODE_CAP, NASCENT_SOUL_BRANCH_UNLOCK, soulNodes, soulSkills, normalizeSoulTree, soulAvailableSpirit, soulSpentSpirit, soulNodeStatus, allocateSoulNode, soulCombatBonuses, soulNodeCost, soulCultivationBonuses, soulCultivationBonusForPlayer, soulFinalePerLevel })');
 const { NASCENT_SOUL_TYPES, nascentSoulForCore, nascentSoulStage, nascentSoulSpiritReward,
-  NASCENT_SOUL_ATTRIBUTES, NASCENT_SOUL_NODE_CAP, NASCENT_SOUL_BRANCH_UNLOCK, soulNodes, soulSkills, normalizeSoulTree, soulAvailableSpirit, soulSpentSpirit, soulNodeStatus, allocateSoulNode, soulCombatBonuses, soulNodeCost, soulCultivationBonuses, soulCultivationBonusForPlayer } = rules;
+  NASCENT_SOUL_ATTRIBUTES, NASCENT_SOUL_NODE_CAP, NASCENT_SOUL_BRANCH_UNLOCK, soulNodes, soulSkills, normalizeSoulTree, soulAvailableSpirit, soulSpentSpirit, soulNodeStatus, allocateSoulNode, soulCombatBonuses, soulNodeCost, soulCultivationBonuses, soulCultivationBonusForPlayer, soulFinalePerLevel } = rules;
 
 test('all nine golden cores map to separate nascent souls with a talent', () => {
   const ids = ['ocean','taichu','ningxin','pojing','xingchen','wugou','thunder','reverse','sword'];
@@ -55,24 +55,22 @@ test('rewards persist through existing settlement, and cave replay is idempotent
 });
 
 
-test('six nodes reach 10/10; each click spends one spirit without changing stage', () => {
-  assert.equal(NASCENT_SOUL_ATTRIBUTES.length, 2);
-  assert.equal(NASCENT_SOUL_NODE_CAP, 10);
-  assert.equal(NASCENT_SOUL_BRANCH_UNLOCK, 5);
-  const ids = soulNodes('sword').map(node => node.id);
-  assert.deepEqual(Array.from(ids), ['leftTop','leftMain','leftBottom','rightMain','rightTop','rightBottom']);
-  let tree = null;
-  for (let i = 1; i <= 10; i++) {
-    const result = allocateSoulNode(tree, 'sword', 'leftMain', 80);
-    assert.equal(result.ok, true);
-    assert.equal(result.cost, 1);
-    assert.equal(result.remaining, 80 - i);
-    tree = result.tree;
+test('twelve nodes reach 10/10 and preserve earned-stage progression', () => {
+  assert.equal(NASCENT_SOUL_ATTRIBUTES.length,2);
+  assert.equal(NASCENT_SOUL_NODE_CAP,10);
+  assert.equal(NASCENT_SOUL_BRANCH_UNLOCK,5);
+  const ids=soulNodes('sword').map(node=>node.id);
+  assert.equal(ids.length,12);assert.equal(new Set(ids).size,12);
+  for(const id of ['leftFinal','leftFarTop','leftFarBottom','rightFinal','rightFarTop','rightFarBottom'])assert.ok(ids.includes(id));
+  let tree=null;
+  for(let i=1;i<=10;i++){
+    const r=allocateSoulNode(tree,'sword','leftMain',80);
+    assert.equal(r.ok,true);assert.equal(r.cost,1);assert.equal(r.remaining,80-i);tree=r.tree;
   }
-  assert.equal(soulNodeStatus(tree, 'sword', 'leftMain', 80).ok, false);
-  assert.equal(soulSpentSpirit(tree), 10);
-  assert.equal(nascentSoulStage(80).name, '通靈');
-  assert.equal(soulCombatBonuses(tree, 'sword').attackFlat, 120);
+  assert.equal(soulNodeStatus(tree,'sword','leftMain',80).ok,false);
+  assert.equal(soulSpentSpirit(tree),10);
+  assert.equal(nascentSoulStage(80).name,'通靈');
+  assert.equal(soulCombatBonuses(tree,'sword').attackFlat,120);
 });
 
 test('both outward branches need five points in their respective main node', () => {
@@ -90,21 +88,21 @@ test('both outward branches need five points in their respective main node', () 
   assert.equal(soulCombatBonuses(lit.tree, 'thunder').bonusDamage, 8);
 });
 
-test('nine soul branches have distinct names and persistent per-type progress', () => {
-  const all = Object.keys(NASCENT_SOUL_TYPES);
-  for (const type of all) {
-    const skills = soulSkills(type);
-    assert.equal(skills.length, 4);
-    assert.equal(new Set(skills.map(skill => skill.name)).size, 4);
-    assert.deepEqual(Array.from(skills, skill => skill.id), ['leftTop','leftBottom','rightTop','rightBottom']);
+test('nine soul types have distinct final talents and separate investments', () => {
+  const all=Object.keys(NASCENT_SOUL_TYPES);
+  for(const type of all){
+    assert.equal(soulSkills(type).length,10);
+    assert.equal(soulNodes(type).length,12);
+    assert.ok(soulNodes(type).some(n=>n.id==='leftFinal'&&n.coreAttack>0));
+    assert.ok(soulNodes(type).some(n=>n.id==='rightFinal'&&n.coreHeal>0));
   }
-  assert.equal(new Set(all.map(type => soulSkills(type)[0].name)).size, 9);
-  const sword = allocateSoulNode(null, 'sword', 'leftMain', 20);
-  const ocean = allocateSoulNode(sword.tree, 'ocean', 'rightMain', 20);
-  assert.equal(soulAvailableSpirit(ocean.tree, 20), 18);
-  assert.equal(soulCombatBonuses(ocean.tree, 'sword').attackFlat, 12);
-  assert.equal(soulCombatBonuses(ocean.tree, 'ocean').maxHpFlat, 0);
-  assert.equal(soulCultivationBonuses(ocean.tree, 'ocean').solo, 1);
+  assert.equal(new Set(all.map(type=>soulNodes(type).find(n=>n.id==='leftFinal').name)).size,9);
+  const sword=allocateSoulNode(null,'sword','leftMain',20);
+  const ocean=allocateSoulNode(sword.tree,'ocean','rightMain',20);
+  assert.equal(soulAvailableSpirit(ocean.tree,20),18);
+  assert.equal(soulCombatBonuses(ocean.tree,'sword').attackFlat,12);
+  assert.equal(soulCombatBonuses(ocean.tree,'ocean').maxHpFlat,70);
+  assert.equal(soulCultivationBonuses(ocean.tree,'ocean').solo,0);
 });
 
 test('old paid upgrades migrate without erasing paid spirit or charging twice', () => {
@@ -113,7 +111,7 @@ test('old paid upgrades migrate without erasing paid spirit or charging twice', 
     sword: { nodes:{ vitality:2, form:1, seed:1 } }
   }};
   const fixed = normalizeSoulTree(legacy);
-  assert.equal(fixed.version, 3);
+  assert.equal(fixed.version, 4);
   assert.equal(fixed.paths.thunder.nodes.leftMain, 5);
   assert.equal(fixed.paths.thunder.nodes.leftTop, 1);
   assert.equal(fixed.paths.thunder.nodes.leftBottom, 2);
@@ -142,7 +140,7 @@ test('previous v2 outer nodes keep their original one-spirit price after migrati
     }
   }};
   const migrated = normalizeSoulTree(old);
-  assert.equal(migrated.version, 3);
+  assert.equal(migrated.version, 4);
   assert.equal(soulSpentSpirit(migrated), 13 + 47);
   assert.equal(soulSpentSpirit(normalizeSoulTree(migrated)), 60);
   const next = allocateSoulNode(migrated, 'sword', 'leftTop', 100);
@@ -224,7 +222,7 @@ test('nascent soul map stays inside one viewport with fixed navigation and HUD',
 test('map nodes only select; the right-hand detail is the sole upgrade control', () => {
   const training = read('public/cultivation/cultivation-training-v4.js');
   const css = read('public/cultivation-training-v3.css');
-  const nodeMarkup = training.slice(training.indexOf('    const nodes = soulNodes(type).map(node => {'), training.indexOf('    const line = (id, path', training.indexOf('    const nodes = soulNodes(type).map(node => {')));
+  const nodeMarkup = training.slice(training.indexOf('    const nodes = soulNodes(type, (state.equippedCore || state.core)?.grade).map(node => {'), training.indexOf('    const line = (id, path', training.indexOf('    const nodes = soulNodes(type, (state.equippedCore || state.core)?.grade).map(node => {')));
   const action = training.slice(training.indexOf('  function bindSoulActions() {'), training.indexOf('  // 鬥法配對時讀取已投資節點', training.indexOf('  function bindSoulActions() {')));
   assert.match(nodeMarkup, /data-ns-node="\$\{node\.id\}"/);
   assert.doesNotMatch(nodeMarkup, /data-ns-upgrade|disabled' : ''/);
@@ -249,7 +247,7 @@ test('node detail previews current and next values including locked or capped no
   assert.ok(start >= 0 && end > start);
   const func = training.slice(start, end);
   const render = (id, tree, earned) => {
-    const context = { soulNodes, soulNodeStatus, NASCENT_SOUL_NODE_CAP:10, soulBusy:false, selectedSoulNodeId:id };
+    const context = { soulNodes, soulNodeStatus, NASCENT_SOUL_NODE_CAP:10, soulBusy:false, selectedSoulNodeId:id, state:{equippedCore:{type:'sword',grade:9}} };
     const fn = new Function(...Object.keys(context), func + '\nreturn soulNodeDetailMarkup;');
     return fn(...Object.values(context))('sword',tree,earned);
   };
@@ -277,43 +275,28 @@ test('node detail previews current and next values including locked or capped no
 });
 
 
-test('distance-based costs and cultivation-versus-battle branches are applied consistently', () => {
-  assert.equal(soulNodeCost('leftMain'), 1);
-  assert.equal(soulNodeCost('rightMain'), 1);
-  for (const id of ['leftTop','leftBottom','rightTop','rightBottom']) assert.equal(soulNodeCost(id), 3);
-  assert.equal(soulNodeCost('unknown'), 0);
-  let tree = null;
-  for (let i = 0; i < 5; i++) tree = allocateSoulNode(tree, 'sword', 'rightMain', 100).tree;
-  const daily = allocateSoulNode(tree, 'sword', 'rightTop', 100);
-  assert.equal(daily.cost, 3);
-  assert.equal(daily.remaining, 92);
-  const cave = allocateSoulNode(daily.tree, 'sword', 'rightBottom', 100);
-  assert.equal(cave.cost, 3);
-  assert.equal(cave.remaining, 89);
-  const right = soulCultivationBonuses(cave.tree, 'sword');
-  assert.equal(right.solo, 5);
-  assert.equal(right.daily, 1);
-  assert.equal(right.cave, 1);
-  assert.equal(soulCombatBonuses(cave.tree, 'sword').maxHpFlat, 0);
-  assert.equal(soulCombatBonuses(cave.tree, 'sword').attackFlat, 0);
-  const left = allocateSoulNode(cave.tree, 'sword', 'leftMain', 100);
-  assert.equal(soulCultivationBonuses(left.tree, 'sword').solo, 5);
-  assert.equal(soulCombatBonuses(left.tree, 'sword').attackFlat, 12);
-  assert.equal(soulCultivationBonusForPlayer({
-    stats:{totalScore:68},
+test('node costs rise with distance and cultivation nodes are minority', () => {
+  for(const id of ['leftMain','rightMain'])assert.equal(soulNodeCost(id),1);
+  for(const id of ['leftTop','leftBottom','rightTop','rightBottom'])assert.equal(soulNodeCost(id),3);
+  for(const id of ['leftFarTop','leftFarBottom','rightFarTop','rightFarBottom'])assert.equal(soulNodeCost(id),5);
+  for(const id of ['leftFinal','rightFinal'])assert.equal(soulNodeCost(id),8);
+  assert.equal(soulNodeCost('not-a-node'),0);
+  const nodes=soulNodes('sword');
+  assert.equal(nodes.filter(n=>n.cultivationSolo||n.cultivationDaily||n.cultivationCave).length,3);
+  let tree=null;
+  for(let i=0;i<5;i++)tree=allocateSoulNode(tree,'sword','rightMain',150).tree;
+  let r=allocateSoulNode(tree,'sword','rightBottom',150);assert.equal(r.cost,3);tree=r.tree;
+  for(let i=1;i<5;i++)tree=allocateSoulNode(tree,'sword','rightBottom',150).tree;
+  r=allocateSoulNode(tree,'sword','rightFarBottom',150);
+  assert.equal(r.cost,5);assert.equal(soulCultivationBonuses(r.tree,'sword').daily,5);
+  assert.equal(soulCultivationBonuses(r.tree,'sword').cave,1);
+  assert.equal(soulCombatBonuses(r.tree,'sword').maxHpFlat,350);
+  assert.equal(soulCultivationBonusForPlayer({stats:{totalScore:68},
     cultivationTraining:{equippedCore:{type:'sword'},coreEnabled:true},
-    nascentSoulTree:cave.tree
-  },'daily'),1);
-  assert.equal(soulCultivationBonusForPlayer({
-    stats:{totalScore:68},
+    nascentSoulTree:r.tree},'daily'),5);
+  assert.equal(soulCultivationBonusForPlayer({stats:{totalScore:68},
     cultivationTraining:{equippedCore:{type:'sword'},coreEnabled:false},
-    nascentSoulTree:cave.tree
-  },'solo'),0);
-  assert.equal(soulCultivationBonusForPlayer({
-    stats:{totalScore:67},
-    cultivationTraining:{equippedCore:{type:'sword'},coreEnabled:true},
-    nascentSoulTree:cave.tree
-  },'solo'),0);
+    nascentSoulTree:r.tree},'daily'),0);
 });
 
 test('cultivation branches are integrated into the three correct settlement flows', () => {
@@ -327,6 +310,47 @@ test('cultivation branches are integrated into the three correct settlement flow
   assert.match(daily,/'stats\.totalScore': increment\(totalCultivation\)/);
   assert.match(cave,/first && correct > 0 \? soulCultivationBonusForPlayer\(playerData, 'cave'\) : 0/);
   assert.match(cave,/'stats\.totalScore': increment\(cultivationReward \+ soulCultivationAdded\)/);
-  assert.match(training,/左脈主鬥法，右脈主修為/);
+  assert.match(training,/左脈攻擊、右脈生存/);
   assert.match(training,/status\.cost \+ ' 神識'/);
+});
+
+
+test('dual outer prerequisites gate core-related final nodes', () => {
+  let tree=null;
+  for(let i=0;i<5;i++)tree=allocateSoulNode(tree,'thunder','leftMain',400).tree;
+  for(let i=0;i<5;i++)tree=allocateSoulNode(tree,'thunder','leftTop',400).tree;
+  for(let i=0;i<5;i++)tree=allocateSoulNode(tree,'thunder','leftBottom',400).tree;
+  for(let i=0;i<5;i++)tree=allocateSoulNode(tree,'thunder','leftFarTop',400).tree;
+  assert.equal(soulNodeStatus(tree,'thunder','leftFinal',400).ok,false);
+  for(let i=0;i<5;i++)tree=allocateSoulNode(tree,'thunder','leftFarBottom',400).tree;
+  const fin=allocateSoulNode(tree,'thunder','leftFinal',400);
+  assert.equal(fin.ok,true);assert.equal(fin.cost,8);
+  const low=soulCombatBonuses(fin.tree,'thunder',9).bonusDamage;
+  const high=soulCombatBonuses(fin.tree,'thunder',1).bonusDamage;
+  assert.equal(high-low,16);
+  assert.ok(soulFinalePerLevel('thunder',1).coreAttack>soulFinalePerLevel('ocean',9).coreAttack);
+  assert.ok(soulFinalePerLevel('wugou',1).coreHeal>soulFinalePerLevel('thunder',9).coreHeal);
+});
+test('previous v3 allocations preserve paid costs', () => {
+  const old={version:3,paths:{sword:{nodes:{leftMain:5,leftTop:2,rightMain:5,rightBottom:3},baselineNodes:{},legacySpent:0}}};
+  const fixed=normalizeSoulTree(old);
+  assert.equal(fixed.version,4);
+  assert.equal(soulSpentSpirit(fixed),5+6+5+9);
+  const newer=allocateSoulNode(fixed,'sword','leftTop',100);
+  assert.equal(newer.cost,3);
+  assert.equal(soulSpentSpirit(newer.tree),28);
+});
+test('duel survival reduction and core-linked correct-answer healing', () => {
+  const code=read('public/cultivation/battle-engine-v2.js').replace(/^export /gm,'');
+  const settle=new Function(code+'\\nreturn settleBattleRound;')();
+  const p=(uid,correct,hp,ns)=>({uid,hp,maxHp:1000,atk:200,goldenCore:null,nascentSoul:ns,answer:{correct,atMs:1000}});
+  const host=p('host',true,700,{bonusDamage:30,reductionFlat:15,coreHeal:24});
+  const guest=p('guest',false,1000,{reductionFlat:25});
+  const result=settle({roomId:'soul-survival',round:1,host,guest});
+  assert.equal(result.startHostHp,724);
+  assert.equal(result.guestHp,795);
+  assert.equal(result.steps.find(x=>x.type==='attack').damage,205);
+  assert.equal(result.steps.find(x=>x.type==='attack').extraDamage,30);
+  const wrong=settle({roomId:'soul-no-heal',round:1,host:p('host',false,700,{coreHeal:24}),guest:p('guest',false,1000,null)});
+  assert.equal(wrong.startHostHp,700);
 });
