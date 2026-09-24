@@ -637,7 +637,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
 
     let animation = null;
     try {
-      // 在既有卡片上直接繪製兩道從按鈕進入金丹的靈光，不遮擋整頁。
+      // 在原本金丹位置播放發光、脈動動畫，不建立光束或彈窗。
       animation = createGoldenCoreWashAnimation();
       const fresh = randomCore();
       state.core = fresh;
