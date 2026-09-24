@@ -1,4 +1,5 @@
 import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-shells.js';
+import { createGoldenCoreWashAnimation } from './golden-core-wash-animation.js';
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
@@ -633,14 +634,18 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     const previousEquipped = state.equipped;
     const previousGold = stones;
 
+    let animation = null;
     try {
+      animation = createGoldenCoreWashAnimation(previousCore, coreType(previousCore.type));
       const fresh = randomCore();
       state.core = fresh;
       // 洗髓只產生候選丹；原本裝備中的丹繼續生效，直到玩家主動裝配新丹。
       state.equipped = false;
       userData.stats.gold = stones - WASH_COST;
       await persistRemote({ 'stats.gold': stones - WASH_COST });
-      toast(`洗髓完成：${fresh.grade} 品 ${coreType(fresh.type).name}`);
+      // 不讓網路速度決定動畫長度；也不在遠端儲存成功前揭曉丹相。
+      await animation.minimumDuration;
+      animation.reveal(fresh, coreType(fresh.type));
     } catch (error) {
       console.error('Wash golden core failed:', error);
       state.core = previousCore;
@@ -648,7 +653,8 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       state.equipped = previousEquipped;
       userData.stats.gold = previousGold;
       saveLocal();
-      toast('洗髓失敗，靈石未扣除。');
+      if (animation) animation.fail();
+      else toast('洗髓未完成，請重新整理確認靈石與丹相。');
     } finally {
       busy = false;
       renderTrainingPage();
