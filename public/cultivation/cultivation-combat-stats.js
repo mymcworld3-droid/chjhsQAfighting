@@ -43,7 +43,18 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
 
   window.getCombatStats = function () {
     const data = window.getCurrentUserData?.();
-    return normalized(data?.stats || {});
+    const base = normalized(data?.stats || {});
+    // 元嬰點亮的是即時計算的戰鬥投影，不直接修改玩家永久 stats 欄位。
+    const soul = window.getNascentSoulBattleSnapshot?.();
+    if (!soul) return base;
+    const attackFlat = Math.max(0, Math.min(2000, Math.round(Number(soul.attackFlat) || 0)));
+    const hpFlat = Math.max(0, Math.min(10000, Math.round(Number(soul.maxHpFlat) || 0)));
+    const maxHp = base.maxHp + hpFlat;
+    return {
+      attack: base.attack + attackFlat,
+      maxHp,
+      hp: Math.max(0, Math.min(maxHp, Math.round(maxHp * (base.hp / base.maxHp))))
+    };
   };
 
   window.getCombatStatDefaults = function () {
