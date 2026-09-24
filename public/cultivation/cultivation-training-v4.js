@@ -2,7 +2,7 @@ import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-she
 import { createGoldenCoreWashAnimation } from './golden-core-wash-animation.js';
 import {
   NASCENT_SOUL_THRESHOLD, NASCENT_SOUL_ATTRIBUTES, nascentSoulForCore, nascentSoulStage,
-  normalizeSpirit, normalizeSoulTree, soulNodes, NASCENT_SOUL_NODE_CAP,
+  normalizeSpirit, normalizeSoulTree, soulNodes, NASCENT_SOUL_NODE_CAP, NASCENT_SOUL_BRANCH_UNLOCK,
   soulAvailableSpirit, soulSpentSpirit, soulNodeStatus, allocateSoulNode, soulCombatBonuses, soulCultivationBonuses
 } from './nascent-soul-rules.js';
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
@@ -406,6 +406,9 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
       bonus.attackFlat ? '+' + bonus.attackFlat + ' 攻擊' : '',
       bonus.maxHpFlat ? '+' + bonus.maxHpFlat + ' 生命' : '',
       bonus.bonusDamage ? '+' + bonus.bonusDamage + ' 答對攻擊傷害' : '',
+      bonus.reductionFlat ? '-' + bonus.reductionFlat + ' 每次受擊傷害' : '',
+      bonus.coreHeal ? '+' + bonus.coreHeal + ' 金丹護元回復' : '',
+      bonus.coreAttack ? '+' + bonus.coreAttack + ' 金丹殺招傷害' : '',
       bonus.cultivationSolo ? '+' + bonus.cultivationSolo + ' 問道答對修為' : '',
       bonus.cultivationDaily ? '+' + bonus.cultivationDaily + ' 閉關全對修為' : '',
       bonus.cultivationCave ? '+' + bonus.cultivationCave + ' 洞天首次通關修為' : ''
@@ -415,7 +418,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
   // 地圖節點只做選取。數值預覽及唯一的升級操作都放在右側詳情頁。
   function soulNodeDetailMarkup(type, tree, earned) {
     if (!selectedSoulNodeId) return '';
-    const node = soulNodes(type).find(item => item.id === selectedSoulNodeId);
+    const node = soulNodes(type, (state.equippedCore || state.core)?.grade).find(item => item.id === selectedSoulNodeId);
     if (!node) return '';
     const status = soulNodeStatus(tree, type, node.id, earned);
     const nextLevel = Math.min(NASCENT_SOUL_NODE_CAP, status.level + 1);
@@ -424,6 +427,9 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
       ['attackFlat', '攻擊力'],
       ['maxHpFlat', '生命上限'],
       ['bonusDamage', '答對攻擊傷害'],
+      ['reductionFlat', '每次受擊減傷'],
+      ['coreHeal', '本命護元回復'],
+      ['coreAttack', '金丹殺招傷害'],
       ['cultivationSolo', '問道答對修為'],
       ['cultivationDaily', '每日閉關全對修為'],
       ['cultivationCave', '洞天首次通關修為']
@@ -457,7 +463,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
         </div>
         <div class="ns-detail-footer">
           <div class="ns-detail-cost"><span>可用神識</span><strong>${status.remaining}</strong></div>
-          ${node.parent ? '<p class="ns-detail-requirement">前置主節點須達 5 / 10 級</p>' : ''}
+          ${node.parent ? '<p class="ns-detail-requirement">' + (Array.isArray(node.parent) ? '兩條前置支脈' : '前置節點') + '須達 5 / 10 級</p>' : ''}
           <button type="button" class="ns-detail-action" data-ns-upgrade="${node.id}"
             ${!status.ok || soulBusy ? 'disabled' : ''}>
             ${soulBusy ? '保存中…' : action}
@@ -482,7 +488,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     const tree = normalizeSoulTree(player.nascentSoulTree);
     const spent = soulSpentSpirit(tree);
     const available = soulAvailableSpirit(tree, earned);
-    const combatBonuses = soulCombatBonuses(tree, type);
+    const combatBonuses = soulCombatBonuses(tree, type, (state.equippedCore || state.core)?.grade);
     const cultivationBonuses = soulCultivationBonuses(tree, type);
     const bonuses = { ...combatBonuses, cultivationSolo: cultivationBonuses.solo,
       cultivationDaily: cultivationBonuses.daily, cultivationCave: cultivationBonuses.cave };
@@ -490,10 +496,11 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     const levels = tree.paths[type]?.nodes || {};
     const progress = stage.next ? Math.min(100, (earned - stage.min) / (stage.next.min - stage.min) * 100) : 100;
 
-    const nodes = soulNodes(type).map(node => {
+    const nodes = soulNodes(type, (state.equippedCore || state.core)?.grade).map(node => {
       const status = soulNodeStatus(tree, type, node.id, earned);
       const isLit = status.level > 0;
-      const isUnlocked = !node.parent || (levels[node.parent] || 0) >= 5;
+      const parents = Array.isArray(node.parent) ? node.parent : node.parent ? [node.parent] : [];
+      const isUnlocked = parents.every(parent => (levels[parent] || 0) >= NASCENT_SOUL_BRANCH_UNLOCK);
       const statSummary = soulBonusLabel(node);
       const label = status.level >= NASCENT_SOUL_NODE_CAP ? '已圓滿' :
         !isUnlocked ? '需前置 5 級' : !status.ok ? status.reason : '消耗 ' + status.cost + ' 神識';
@@ -514,12 +521,20 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
       <path d="${path}" class="ns-branch-line ${unlocked ? 'is-open' : ''} ${lit ? 'is-lit' : ''}"
         data-branch="${id}" />`;
     const links = [
-      line('core-left', 'M 520 260 C 460 260 425 260 340 260', true, !!levels.leftMain),
-      line('core-right', 'M 680 260 C 740 260 775 260 860 260', true, !!levels.rightMain),
-      line('leftTop', 'M 340 260 C 245 260 245 105 145 105', (levels.leftMain || 0) >= 5, !!levels.leftTop),
-      line('leftBottom', 'M 340 260 C 245 260 245 415 145 415', (levels.leftMain || 0) >= 5, !!levels.leftBottom),
-      line('rightTop', 'M 860 260 C 955 260 955 105 1055 105', (levels.rightMain || 0) >= 5, !!levels.rightTop),
-      line('rightBottom', 'M 860 260 C 955 260 955 415 1055 415', (levels.rightMain || 0) >= 5, !!levels.rightBottom)
+      line('core-left','M 530 260 L 455 260',true,!!levels.leftMain),
+      line('core-right','M 670 260 L 745 260',true,!!levels.rightMain),
+      line('leftTop','M 455 260 Q 410 260 355 105',(levels.leftMain||0)>=5,!!levels.leftTop),
+      line('leftBottom','M 455 260 Q 410 260 355 415',(levels.leftMain||0)>=5,!!levels.leftBottom),
+      line('leftFarTop','M 355 105 L 215 105',(levels.leftTop||0)>=5,!!levels.leftFarTop),
+      line('leftFarBottom','M 355 415 L 215 415',(levels.leftBottom||0)>=5,!!levels.leftFarBottom),
+      line('leftFinalTop','M 215 105 Q 145 105 90 260',(levels.leftFarTop||0)>=5,!!levels.leftFinal),
+      line('leftFinalBottom','M 215 415 Q 145 415 90 260',(levels.leftFarBottom||0)>=5,!!levels.leftFinal),
+      line('rightTop','M 745 260 Q 790 260 845 105',(levels.rightMain||0)>=5,!!levels.rightTop),
+      line('rightBottom','M 745 260 Q 790 260 845 415',(levels.rightMain||0)>=5,!!levels.rightBottom),
+      line('rightFarTop','M 845 105 L 985 105',(levels.rightTop||0)>=5,!!levels.rightFarTop),
+      line('rightFarBottom','M 845 415 L 985 415',(levels.rightBottom||0)>=5,!!levels.rightFarBottom),
+      line('rightFinalTop','M 985 105 Q 1055 105 1110 260',(levels.rightFarTop||0)>=5,!!levels.rightFinal),
+      line('rightFinalBottom','M 985 415 Q 1055 415 1110 260',(levels.rightFarBottom||0)>=5,!!levels.rightFinal)
     ].join('');
 
     // 顯示已調御中的金丹，而不是洗髓後尚未調御的候選丹。
@@ -538,9 +553,9 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
             <div class="ns-resource-free"><small>可用神識</small><strong>${available}</strong></div>
           </div>
         </div>
-        <p class="ns-tree-tip">左脈主鬥法，右脈主修為；主節點每級 1 神識，達 5 / 10 後可點亮外側分支，每級 3 神識。</p>
+        <p class="ns-tree-tip">左脈攻擊、右脈生存；中途有修為節點。每條前置達 5 級解鎖下一層，依距離每級消耗 1／3／5／8 神識。</p>
         <div class="ns-tree-viewport ns-trees" role="group" aria-label="元嬰左右分支技能地圖">
-          <div class="ns-diagram" aria-label="中央金丹與六枚元嬰節點">
+          <div class="ns-diagram" aria-label="中央金丹與十二枚元嬰節點">
             <svg class="ns-branches" viewBox="0 0 1200 520" preserveAspectRatio="none" aria-hidden="true">
               <defs><linearGradient id="ns-link-gold"><stop stop-color="#aa814c"/><stop offset="0.5" stop-color="#f8dfa0"/><stop offset="1" stop-color="#aa814c"/></linearGradient></defs>
               ${links}
@@ -655,7 +670,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
   window.getNascentSoulBattleSnapshot = function () {
     if (currentScore() < NASCENT_SOUL_THRESHOLD || state.coreEnabled === false || !state.equippedCore) return null;
     const type = state.equippedCore.type;
-    const bonus = soulCombatBonuses(window.getCurrentUserData?.()?.nascentSoulTree, type);
+    const bonus = soulCombatBonuses(window.getCurrentUserData?.()?.nascentSoulTree, type, state.equippedCore.grade);
     return { type, ...bonus };
   };
 
