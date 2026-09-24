@@ -358,7 +358,9 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
       goldenCore,
       nascentSoul: nascentSoul ? {
         type: nascentSoul.type,
-        bonusDamage: Math.max(0, Math.min(1000, Math.round(Number(nascentSoul.bonusDamage) || 0)))
+        bonusDamage: Math.max(0, Math.min(1000, Math.round(Number(nascentSoul.bonusDamage) || 0))),
+        reductionFlat: Math.max(0, Math.min(1000, Math.round(Number(nascentSoul.reductionFlat) || 0))),
+        coreHeal: Math.max(0, Math.min(1000, Math.round(Number(nascentSoul.coreHeal) || 0)))
       } : null,
       // 金丹道心在配對時複製為本場一次性護體：抵擋一擊後消失，不消耗一般悟道持有的道心。
       coreShield: !!goldenCore && data.stats?.goldenCoreShield === true,
