@@ -623,6 +623,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     if (busy) return;
     const userData = window.getCurrentUserData?.();
     if (!userData?.stats) return toast('尚未讀取到修士資料。');
+    if (!getAuth(getApp()).currentUser) return toast('尚未登入，無法保存洗髓結果。');
 
     const stones = currentSpiritStones();
     if (stones < WASH_COST) return toast(`靈石不足，洗髓需要 ${WASH_COST} 靈石。`);
