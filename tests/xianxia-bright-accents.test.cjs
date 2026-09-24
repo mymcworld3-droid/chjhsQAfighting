@@ -71,3 +71,16 @@ test('golden core fades its background into the navigation gap without covering 
   assert.doesNotMatch(surface, /mask|::after|pointer-events/);
   assert.match(css, /#bottom-nav>\.glass-capsule/);
 });
+
+
+test('cultivation subpages have no outer frames but preserve inner equipment controls', () => {
+  assert.match(css, /修煉分頁去外框/);
+  assert.match(css, /#page-training\.training-page-v3,[\s\S]*?#training-tab-content\s*\{[\s\S]*?border: 0 !important/);
+  assert.match(css, /#page-training \.training-subtabs-v3\s*\{[\s\S]*?background: transparent !important/);
+  assert.match(css, /#page-training \.core-minimal-card\s*\{[\s\S]*?radial-gradient\(ellipse 74% 81%/);
+  assert.match(css, /\.ns-panel, \.uib-equipment-panel, \.training-v3-empty/);
+  assert.match(css, /\.cultivation-refinery > \.refinery-panel\s*\{[\s\S]*?border: 0 !important/);
+  // Scope the reset to outer containers only; inner equipment slots and skill cards retain their borders.
+  const reset = css.slice(css.indexOf('/* 修煉分頁去外框'));
+  assert.doesNotMatch(reset, /uib-equip-slot|status-section|core-wash-btn/);
+});
