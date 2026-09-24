@@ -40,6 +40,8 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
   let activeTab = 'core';
   let busy = false;
   let soulBusy = false;
+  let selectedSoulNodeId = null;
+  let selectedSoulType = null;
   let lastUnlocked = false;
 
   function clampGrade(value) {
@@ -407,11 +409,67 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     ].filter(Boolean).join(' · ');
   }
 
+  // 地圖節點只做選取。數值預覽及唯一的升級操作都放在右側詳情頁。
+  function soulNodeDetailMarkup(type, tree, earned) {
+    if (!selectedSoulNodeId) return '';
+    const node = soulNodes(type).find(item => item.id === selectedSoulNodeId);
+    if (!node) return '';
+    const status = soulNodeStatus(tree, type, node.id, earned);
+    const nextLevel = Math.min(NASCENT_SOUL_NODE_CAP, status.level + 1);
+    const maxed = status.level >= NASCENT_SOUL_NODE_CAP;
+    const statRows = [
+      ['attackFlat', '攻擊力'],
+      ['maxHpFlat', '生命上限'],
+      ['bonusDamage', '答對攻擊傷害']
+    ].filter(([key]) => node[key] > 0).map(([key, name]) => `
+      <div class="ns-detail-stat">
+        <span>${name}</span>
+        <div class="ns-detail-stat-values">
+          <strong>+${node[key] * status.level}</strong>
+          <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+          <strong class="ns-detail-next">+${node[key] * nextLevel}</strong>
+        </div>
+      </div>`).join('');
+    const label = maxed ? '已點滿' : status.level ? '升級' : '點亮';
+    const action = !status.ok ? status.reason : label + ' · ' + status.cost + ' 神識';
+    return `
+      <aside class="ns-node-detail" aria-labelledby="ns-detail-title">
+        <div class="ns-detail-header">
+          <span>元嬰分支 · 節點詳情</span>
+          <button type="button" class="ns-detail-close" data-ns-close aria-label="關閉節點詳情">
+            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="ns-detail-identity">
+          <span class="ns-detail-icon"><i class="fa-solid ${node.icon}" aria-hidden="true"></i></span>
+          <div><h4 id="ns-detail-title">${node.name}</h4><p>${status.level} / 10 級</p></div>
+        </div>
+        <p class="ns-detail-description">${node.desc}</p>
+        <div class="ns-detail-stats">
+          <div class="ns-detail-stat-headers"><span>目前數值</span><span>升級後</span></div>
+          ${statRows}
+        </div>
+        <div class="ns-detail-footer">
+          <div class="ns-detail-cost"><span>可用神識</span><strong>${status.remaining}</strong></div>
+          ${node.parent ? '<p class="ns-detail-requirement">前置主節點須達 5 / 10 級</p>' : ''}
+          <button type="button" class="ns-detail-action" data-ns-upgrade="${node.id}"
+            ${!status.ok || soulBusy ? 'disabled' : ''}>
+            ${soulBusy ? '保存中…' : action}
+          </button>
+          <p class="ns-detail-note">${maxed ? '此節點已達最高等級' : status.ok ? '僅在此處確認後，才會消耗神識並保存。' : status.reason}</p>
+        </div>
+      </aside>`;
+  }
+
   function nascentSoulTabMarkup() {
     if (currentScore() < NASCENT_SOUL_THRESHOLD) {
       return '<section class="ns-panel"><h3>元嬰未成</h3><p>修為達到 68 後，方可凝聚本命元嬰。</p></section>';
     }
     const type = currentSoulType();
+    if (selectedSoulType !== type) {
+      selectedSoulNodeId = null;
+      selectedSoulType = type;
+    }
     const soul = nascentSoulForCore(type);
     const player = window.getCurrentUserData?.() || {};
     const earned = normalizeSpirit(player.stats?.nascentSoulSpirit);
@@ -429,11 +487,11 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
       const isUnlocked = !node.parent || (levels[node.parent] || 0) >= 5;
       const statSummary = soulBonusLabel(node);
       const label = status.level >= NASCENT_SOUL_NODE_CAP ? '已圓滿' :
-        !isUnlocked ? '需前置 5 級' : !status.ok ? status.reason : '點亮 · 1 神識';
+        !isUnlocked ? '需前置 5 級' : !status.ok ? status.reason : '點擊查看';
       return `
         <button type="button"
-          class="ns-orbit-node ns-pos-${node.id} ${isLit ? 'is-lit' : ''} ${!isUnlocked ? 'is-locked' : ''} ns-light-btn"
-          data-ns-node="${node.id}" ${!status.ok || soulBusy ? 'disabled' : ''}
+          class="ns-orbit-node ns-pos-${node.id} ${isLit ? 'is-lit' : ''} ${!isUnlocked ? 'is-locked' : ''} ${selectedSoulNodeId === node.id ? 'is-selected' : ''} ns-light-btn"
+          data-ns-node="${node.id}" aria-pressed="${selectedSoulNodeId === node.id}"
           aria-label="${node.name}，${status.level} / 10 級，${node.desc}，${label}"
           title="${node.desc} ${statSummary}；${label}">
           <span class="ns-orbit-symbol"><i class="fa-solid ${node.icon}" aria-hidden="true"></i></span>
@@ -486,6 +544,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
               <div class="ns-tree-core-stage">${stage.name}</div>
             </div>
           </div>
+          ${soulNodeDetailMarkup(type, tree, earned)}
         </div>
         <div class="ns-branch-bottom">
           <p class="ns-combat-summary">已點亮：${soulBonusLabel(bonuses) || '尚無額外屬性'}</p>
@@ -550,8 +609,29 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
   }
 
   function bindSoulActions() {
-    document.querySelectorAll('#training-tab-content [data-ns-node]').forEach(button => {
-      button.addEventListener('click', () => void illuminateSoulNode(button.dataset.nsNode));
+    const content = document.getElementById('training-tab-content');
+    if (!content) return;
+    content.querySelectorAll('[data-ns-node]').forEach(button => {
+      button.addEventListener('click', () => {
+        if (soulBusy) return;
+        selectedSoulNodeId = button.dataset.nsNode;
+        renderTrainingPage();
+        const detail = document.querySelector('#training-tab-content .ns-node-detail');
+        (detail?.querySelector('.ns-detail-action:not(:disabled)') ||
+          detail?.querySelector('.ns-detail-close'))?.focus({ preventScroll: true });
+      });
+    });
+    content.querySelector('[data-ns-close]')?.addEventListener('click', () => {
+      const lastId = selectedSoulNodeId;
+      selectedSoulNodeId = null;
+      renderTrainingPage();
+      content.querySelector('[data-ns-node="' + lastId + '"]')?.focus({ preventScroll: true });
+    });
+    content.querySelector('[data-ns-upgrade]')?.addEventListener('click', (event) => {
+      // 只能從詳情頁發起點亮；Firestore 交易會再次檢查餘額、前置與上限。
+      if (!selectedSoulNodeId || soulBusy) return;
+      const id = event.currentTarget.dataset.nsUpgrade;
+      if (id === selectedSoulNodeId) void illuminateSoulNode(id);
     });
   }
 
@@ -904,6 +984,8 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
 
   function removeLockedUI() {
     document.body.classList.remove('ns-map-active');
+    selectedSoulNodeId = null;
+    selectedSoulType = null;
     // 金丹回落至築基（例如舊角色修為重算）時，築基模組已接管同一個
     // #page-training 和 #nav-training。不能在後觸發的金丹清理中把它們刪掉。
     if (window.isFoundationTrainingStage?.() &&
