@@ -19,13 +19,13 @@
     { name: '築基', sub: '後期', need: 22 },
     { name: '金丹', sub: '丹成一品', need: 28 },
     { name: '元嬰', sub: '元嬰出竅', need: 68 },
-    { name: '化神', sub: '神念通天', need: 128 },
-    { name: '煉虛', sub: '虛空悟道', need: 208 },
-    { name: '合體', sub: '天地合一', need: 308 },
-    { name: '大乘', sub: '大道將成', need: 448 },
-    { name: '渡劫', sub: '雷劫問道', need: 628 },
-    { name: '半仙', sub: '仙門在望', need: 868 },
-    { name: '真仙', sub: '榜上仙位', need: 868 }
+    { name: '化神', sub: '神念通天', need: 188 },
+    { name: '煉虛', sub: '虛空悟道', need: 428 },
+    { name: '合體', sub: '天地合一', need: 788 },
+    { name: '大乘', sub: '大道將成', need: 1268 },
+    { name: '渡劫', sub: '雷劫問道', need: 1868 },
+    { name: '半仙', sub: '仙門在望', need: 2588 },
+    { name: '真仙', sub: '榜上仙位', need: 2588 }
   ];
 
   let initialized = false;
