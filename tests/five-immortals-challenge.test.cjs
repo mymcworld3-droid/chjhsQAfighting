@@ -5,8 +5,8 @@ const { join } = require('node:path');
 
 const source = readFileSync(join(__dirname, '../public/cultivation/five-immortals.js'), 'utf8');
 
-test('Five Immortals requires Tribulation realm at 628 cultivation', () => {
-  assert.match(source, /const TRIBULATION_SCORE = 628/);
+test('Five Immortals requires Tribulation realm at 1868 cultivation', () => {
+  assert.match(source, /const TRIBULATION_SCORE = 1868/);
   assert.match(source, /currentScore\(\) >= TRIBULATION_SCORE/);
   assert.match(source, /latestUser\.stats\?\.totalScore[\s\S]*TRIBULATION_SCORE/);
 });
