@@ -140,3 +140,34 @@ body.xianxia-theme .training-page-v3 { max-width:900px; margin:0 auto; padding-b
 .refinery-shell-array .refinery-craft{opacity:.44}
 @media(max-width:900px){.refinery-shell{grid-template-columns:1fr}}
 @media(max-width:430px){.refinery-shell-material-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}}
+
+
+/* 元嬰頁：只顯示已達元嬰境玩家，延續既有黑金丹田視覺。 */
+.training-subtab-v3[hidden] { display:none !important; }
+.ns-panel { display:flex; flex-direction:column; align-items:center; gap:12px; text-align:center; width:100%; min-height:520px;
+  padding:28px 16px; border:1px solid rgba(190,150,238,.25); border-radius:24px;
+  background:radial-gradient(circle at 50% 20%,rgba(162,103,224,.12),transparent 42%),linear-gradient(140deg,#14101a,#08090d); }
+.ns-stage { width:164px;height:164px;position:relative;display:grid;place-items:center; }
+.ns-stage-halo { position:absolute;inset:13px;border-radius:50%;border:1px dashed rgba(190,150,238,.45);
+  box-shadow:0 0 28px rgba(161,109,226,.22);animation:nsOrbit 16s linear infinite; }
+.ns-avatar { width:91px;height:91px;border:1px solid rgba(255,225,166,.65);border-radius:50%;display:grid;place-items:center;
+  color:#fff0cb;font-size:35px;box-shadow:0 0 36px rgba(177,120,226,.26),inset -12px -14px 25px rgba(0,0,0,.33);
+  animation:nsFloat 3.6s ease-in-out infinite; }
+.ns-avatar span { text-shadow:0 0 14px rgba(255,235,190,.75); }
+.ns-kicker { color:#bd9bdc;font-size:10px;font-weight:800;letter-spacing:.17em; }
+.ns-panel h3 { color:#f7e6ff;font-size:25px;font-weight:900;margin:0; }
+.ns-stage-name { color:#dcb7ff;font-size:12px;font-weight:800; }
+.ns-progress { width:min(100%,370px);height:8px;border-radius:999px;overflow:hidden;background:rgba(165,126,197,.18); }
+.ns-progress span { display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#9151cd,#e0b8ff); }
+.ns-progress-caption { margin:0;color:#a38bb6;font-size:11px; }
+.ns-trait,.ns-reward-guide { width:min(100%,430px);border:1px solid rgba(192,153,224,.19);border-radius:16px;padding:15px;
+  background:rgba(207,154,255,.035);text-align:left; }
+.ns-trait small { display:block;color:#9f85ae;font-size:10px;margin-bottom:5px; }
+.ns-trait strong { font-size:16px;color:#e4c1ff; }
+.ns-trait p { margin:5px 0 0;font-size:12px;color:#b6a5bf;line-height:1.7; }
+.ns-reward-guide { display:grid;gap:7px;color:#baacc5;font-size:12px; }
+.ns-reward-guide strong {color:#ddc2ed;font-size:13px;}
+@keyframes nsOrbit { to { transform:rotate(360deg); } }
+@keyframes nsFloat { 50% {transform:translateY(-5px);} }
+@media(max-width:640px) { .ns-panel {min-height:0;padding:18px 12px;} .ns-stage {width:136px;height:136px;} }
+@media(prefers-reduced-motion:reduce) { .ns-stage-halo,.ns-avatar {animation:none!important;} }
