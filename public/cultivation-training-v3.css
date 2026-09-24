@@ -298,7 +298,7 @@ body.xianxia-theme.ns-map-active #page-training .training-subtabs-v3 {
 }
 body.xianxia-theme.ns-map-active #page-training .ns-branch-panel {
   display: grid !important;
-  grid-template-rows: auto auto minmax(0,1fr) auto auto !important;
+  grid-template-rows: auto auto auto minmax(0,1fr) auto auto !important;
   align-content: stretch !important;
   gap: clamp(3px,.55dvh,7px) !important;
   box-sizing: border-box !important;
@@ -698,4 +698,90 @@ body.xianxia-theme.ns-map-active #page-training .ns-core-detail .ns-detail-note 
     line-height:1.25;
   }
   body.xianxia-theme.ns-map-active #page-training .ns-core-detail .ns-detail-stats { display:none; }
+}
+
+
+/* 元嬰地圖上的常駐「裝配金丹效果」——無須先點中央金丹或關閉節點詳情。
+   修煉分頁與神識摘要仍固定在上方；額外內容只縮小地圖可用區，不使頁面捲動。 */
+body.xianxia-theme.ns-map-active #page-training .ns-equipped-effect {
+  display: grid;
+  grid-template-columns: minmax(135px,max-content) minmax(0,1fr) minmax(175px,max-content);
+  align-items: center;
+  gap: 4px 12px;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  box-sizing: border-box;
+  padding: 5px clamp(6px,.8vw,12px);
+  border: 1px solid rgba(225,178,105,.35);
+  border-radius: 10px;
+  background: linear-gradient(100deg,rgba(145,103,48,.13),rgba(56,44,30,.07),rgba(145,103,48,.13));
+  color: #e5d3b2;
+  font-size: clamp(9px,.84vw,12px);
+  line-height: 1.4;
+}
+body.xianxia-theme.ns-map-active #page-training .ns-equipped-effect-head {
+  color: #f1d49e;
+  font-weight: 850;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+body.xianxia-theme.ns-map-active #page-training .ns-equipped-effect-head i { margin-right: 4px; }
+body.xianxia-theme.ns-map-active #page-training .ns-equipped-effect-text {
+  min-width: 0;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow-wrap: anywhere;
+}
+body.xianxia-theme.ns-map-active #page-training .ns-equipped-effect-talent {
+  color: #efd299;
+  font-weight: 750;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+@media(max-width:960px) {
+  body.xianxia-theme.ns-map-active #page-training .ns-equipped-effect {
+    grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+    gap: 2px 8px;
+    font-size: 10px;
+  }
+  body.xianxia-theme.ns-map-active #page-training .ns-equipped-effect-head { grid-column: 1; }
+  body.xianxia-theme.ns-map-active #page-training .ns-equipped-effect-talent {
+    grid-column: 2;
+    grid-row: 1;
+    font-size: 9px;
+  }
+  body.xianxia-theme.ns-map-active #page-training .ns-equipped-effect-text {
+    grid-column: 1/-1;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+  }
+}
+@media(max-width:480px) {
+  body.xianxia-theme.ns-map-active #page-training .ns-equipped-effect {
+    padding: 3px 5px;
+    gap: 1px 6px;
+    font-size: 9px;
+  }
+  body.xianxia-theme.ns-map-active #page-training .ns-equipped-effect-talent { font-size: 8px; }
+}
+@media(max-height:490px) {
+  body.xianxia-theme.ns-map-active #page-training .ns-equipped-effect {
+    grid-template-columns: minmax(95px,max-content) minmax(0,1fr);
+    padding: 2px 5px;
+    gap: 4px;
+    font-size: 9px;
+  }
+  body.xianxia-theme.ns-map-active #page-training .ns-equipped-effect-head { grid-column: 1; }
+  body.xianxia-theme.ns-map-active #page-training .ns-equipped-effect-text {
+    grid-column: 2;
+    grid-row: 1;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+  }
+  body.xianxia-theme.ns-map-active #page-training .ns-equipped-effect-talent { display: none; }
 }
