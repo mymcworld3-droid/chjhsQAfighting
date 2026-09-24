@@ -1,5 +1,6 @@
 import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-shells.js';
 import { createGoldenCoreWashAnimation } from './golden-core-wash-animation.js';
+import { NASCENT_SOUL_THRESHOLD, nascentSoulForCore, nascentSoulStage, normalizeSpirit } from './nascent-soul-rules.js';
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
@@ -389,6 +390,44 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     `;
   }
 
+  function nascentSoulTabMarkup() {
+    const totalScore = currentScore();
+    if (totalScore < NASCENT_SOUL_THRESHOLD) {
+      return '<section class="ns-panel"><h3>元嬰未成</h3><p>修為達到 68 後，方可凝聚本命元嬰。</p></section>';
+    }
+    // 元嬰丹性取自真正調御中的金丹；洗髓候選丹不影響已生效的元嬰。
+    const core = state.equippedCore || state.core;
+    const soul = nascentSoulForCore(core?.type);
+    const spirit = normalizeSpirit(window.getCurrentUserData?.()?.stats?.nascentSoulSpirit);
+    const stage = nascentSoulStage(spirit);
+    const percent = stage.next
+      ? Math.max(0, Math.min(100, (spirit - stage.min) / (stage.next.min - stage.min) * 100))
+      : 100;
+    return `
+      <section class="ns-panel" aria-label="本命元嬰">
+        <div class="ns-stage" aria-hidden="true">
+          <span class="ns-stage-halo"></span>
+          <div class="ns-avatar core-tone-${soul.tone}"><span>${soul.icon}</span></div>
+        </div>
+        <div class="ns-kicker">NASCENT SOUL · 本命元嬰</div>
+        <h3>${soul.name}</h3>
+        <div class="ns-stage-name">${stage.name} · 神識 ${spirit}</div>
+        <div class="ns-progress" role="progressbar" aria-valuemin="${stage.min}"
+          aria-valuenow="${spirit}" aria-valuemax="${stage.next?.min || spirit || 1}"
+          aria-label="神識修煉進度">
+          <span style="width:${percent}%"></span>
+        </div>
+        <p class="ns-progress-caption">${stage.next ? `距離${stage.next.name}尚需 ${Math.max(0, stage.next.min - spirit)} 神識` : '神識圓滿'}</p>
+        <div class="ns-trait"><small>本命神通 · 丹性傳承</small><strong>${soul.trait}</strong><p>${soul.description}</p></div>
+        <div class="ns-reward-guide">
+          <strong>神識修煉</strong>
+          <span>問道答對一題 +1</span>
+          <span>每日閉關全對 +3</span>
+          <span>首次完成洞天：依答對題數獲得等量神識</span>
+        </div>
+      </section>`;
+  }
+
   function bagTabMarkup() {
     // 背包物品改由統一背包模組渲染，避免舊的純文字卡先出現在畫面。
     return '<section class="uib-bag-loading" aria-hidden="true"></section>';
@@ -409,7 +448,8 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       window.dispatchEvent(new CustomEvent('xiuxian:equipment-open-request'));
       return;
     }
-    content.innerHTML = activeTab === 'bag' ? bagTabMarkup() : coreTabMarkup();
+    content.innerHTML = activeTab === 'bag' ? bagTabMarkup()
+      : activeTab === 'nascent-soul' ? nascentSoulTabMarkup() : coreTabMarkup();
     if (activeTab === 'core') bindCoreActions();
   }
 
@@ -454,6 +494,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
         </div>
         <div class="training-subtabs-v3" role="tablist">
           <button type="button" class="training-subtab-v3 active" data-training-tab="core" aria-selected="true"><i class="fa-solid fa-circle-dot"></i><span>金丹</span></button>
+          <button type="button" class="training-subtab-v3" data-training-tab="nascent-soul" aria-selected="false" hidden><i class="fa-solid fa-child-reaching"></i><span>元嬰</span></button>
           <button type="button" class="training-subtab-v3" data-training-tab="refinery" aria-selected="false"><i class="fa-solid fa-hammer"></i><span>煉器</span></button>
           <button type="button" class="training-subtab-v3" data-training-tab="equipment" aria-selected="false"><i class="fa-solid fa-shield-halved"></i><span>裝備</span></button>
           <button type="button" class="training-subtab-v3" data-training-tab="bag" aria-selected="false"><i class="fa-solid fa-box-open"></i><span>背包</span></button>
@@ -467,7 +508,11 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     delete page.dataset.foundationTraining;
     page.classList.remove('foundation-training-page');
     page.classList.add('training-page', 'training-page-v3');
-    if (alreadyHydrated) return;
+    if (alreadyHydrated) {
+      const soulTab = page.querySelector('[data-training-tab="nascent-soul"]');
+      if (soulTab) soulTab.hidden = currentScore() < NASCENT_SOUL_THRESHOLD;
+      return;
+    }
 
     let heading = page.querySelector('.training-page-heading-v3');
     if (!heading) {
@@ -481,6 +526,12 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     if (!tabs) return;
     const coreTab = tabs.querySelector('[data-training-tab="core"]');
     coreTab?.classList.remove('hidden');
+    let soulTab = tabs.querySelector('[data-training-tab="nascent-soul"]');
+    if (!soulTab) {
+      coreTab?.insertAdjacentHTML('afterend', '<button type="button" class="training-subtab-v3" data-training-tab="nascent-soul" aria-selected="false"><i class="fa-solid fa-child-reaching"></i><span>元嬰</span></button>');
+      soulTab = tabs.querySelector('[data-training-tab="nascent-soul"]');
+    }
+    if (soulTab) soulTab.hidden = currentScore() < NASCENT_SOUL_THRESHOLD;
     if (!tabs.querySelector('[data-training-tab="equipment"]')) {
       tabs.querySelector('[data-training-tab="bag"]')?.insertAdjacentHTML('beforebegin',
         '<button type="button" class="training-subtab-v3" data-training-tab="equipment" aria-selected="false"><i class="fa-solid fa-shield-halved"></i><span>裝備</span></button>');
@@ -492,7 +543,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
         button.addEventListener('click', () => {
           if (!isUnlocked() || page.dataset.foundationTraining === '1') return;
           const requested = button.dataset.trainingTab;
-          activeTab = ['bag', 'refinery', 'equipment'].includes(requested) ? requested : 'core';
+          activeTab = ['bag', 'refinery', 'equipment'].includes(requested) || (requested === 'nascent-soul' && currentScore() >= NASCENT_SOUL_THRESHOLD) ? requested : 'core';
           page.querySelectorAll('[data-training-tab]').forEach((tab) => {
             const selected = tab.dataset.trainingTab === activeTab;
             tab.classList.toggle('active', selected);
@@ -805,12 +856,19 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     if (JSON.stringify(incoming) === JSON.stringify(state)) return;
     state = incoming;
     saveLocal();
-    if (lastUnlocked && activeTab === 'core') renderTrainingPage();
+    if (lastUnlocked && ['core', 'nascent-soul'].includes(activeTab)) renderTrainingPage();
   }
 
   function syncUnlock() {
     const unlocked = window.isGoldenCoreUnlocked?.() ?? isUnlocked();
-    if (lastUnlocked === unlocked) return;
+    if (lastUnlocked === unlocked) {
+      if (unlocked) {
+        const soulTab = document.querySelector('#page-training [data-training-tab="nascent-soul"]');
+        if (soulTab) soulTab.hidden = currentScore() < NASCENT_SOUL_THRESHOLD;
+        if (activeTab === 'nascent-soul') renderTrainingPage();
+      }
+      return;
+    }
 
     if (unlocked) ensureUnlockedUI();
     else if (lastUnlocked === true) removeLockedUI();
