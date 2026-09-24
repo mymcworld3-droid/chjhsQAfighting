@@ -1,31 +1,4 @@
-/* 洗髓特效只作用於原本的金丹卡片；不建立遮罩或視窗。 */
-.core-minimal-card { position: relative; }
-.core-minimal-card .gc-wash-lightfield {
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  overflow: hidden;
-  border-radius: inherit;
-  pointer-events: none;
-}
-.gc-wash-rays { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-.gc-wash-rays path { fill: none; stroke-linecap: round; vector-effect: non-scaling-stroke; }
-.gc-wash-beam-a { stroke: url(#gc-wash-ray-gold); }
-.gc-wash-beam-b { stroke: url(#gc-wash-ray-jade); }
-.gc-wash-ray-glow { stroke-width: 12px; opacity: .30; filter: blur(7px); animation: gcWashBreath 1.1s ease-in-out infinite alternate; }
-.gc-wash-ray-flow { stroke-width: 4px; stroke-dasharray: 13 87; stroke-dashoffset: 100; filter: drop-shadow(0 0 5px #ffedae); animation: gcWashFlow 1.18s linear infinite; }
-.gc-wash-ray-flow.gc-wash-beam-b { animation-delay: -.24s; }
-.gc-wash-impact {
-  position: absolute;
-  width: 34px;
-  height: 34px;
-  margin: -17px 0 0 -17px;
-  border: 1px solid rgba(255,237,175,.72);
-  border-radius: 50%;
-  background: radial-gradient(circle,rgba(255,247,215,.75),rgba(241,201,116,.24) 36%,transparent 75%);
-  box-shadow: 0 0 26px rgba(255,211,130,.65);
-  animation: gcWashImpact .85s ease-out infinite;
-}
+/* 頁內洗髓：金丹本體發亮、脈動和重塑；沒有額外光束、遮罩或彈窗。 */
 .core-minimal-card.is-core-washing .golden-core-sphere-v3 {
   animation: gcWashSphere 1.12s ease-in-out infinite;
   box-shadow: inset -18px -20px 30px rgba(0,0,0,.25), inset 10px 9px 24px rgba(255,250,226,.28),
@@ -36,32 +9,30 @@
 .core-minimal-card.is-core-washing .golden-core-orbit-v3.orbit-a { animation-duration: 2.2s; }
 .core-minimal-card.is-core-washing .golden-core-orbit-v3.orbit-b { animation-duration: 2.8s; }
 .core-minimal-card.is-core-washing .core-wash-btn:disabled { opacity: .91; filter: brightness(1.12); }
-.core-minimal-card.is-core-wash-revealed .gc-wash-rays { animation: gcWashFadeOut .5s ease-out forwards; }
-.core-minimal-card.is-core-wash-revealed .gc-wash-impact {
-  animation: gcWashBurst .6s ease-out both;
-}
 .core-minimal-card.is-core-wash-revealed .golden-core-sphere-v3 {
   animation: gcWashReborn .6s ease-out both;
 }
-.core-minimal-card.is-core-wash-failed .gc-wash-lightfield { animation: gcWashFadeOut .3s ease-out both; }
 .core-minimal-card.is-core-wash-failed .golden-core-sphere-v3 { animation: gcWashFail .3s ease-out both; }
-@keyframes gcWashFlow { to { stroke-dashoffset: 0; } }
-@keyframes gcWashBreath { from { opacity: .16; } to { opacity: .52; } }
-@keyframes gcWashImpact { from { opacity: .55; transform: scale(.5); } to { opacity: .05; transform: scale(1.5); } }
-@keyframes gcWashSphere { 0%, 100% { transform: translateY(3px) scale(.94); } 50% { transform: translateY(-5px) scale(1.09); } }
-@keyframes gcWashFadeOut { to { opacity: 0; } }
-@keyframes gcWashBurst { 0% { opacity: 1; transform: scale(.75); } 65% { opacity: .95; transform: scale(3); } 100% { opacity: 0; transform: scale(4); } }
-@keyframes gcWashReborn { 0% { transform: scale(.9); filter: brightness(2.3); } 40% { transform: scale(1.22); filter: brightness(1.8); } 100% { transform: scale(1); filter: brightness(1); } }
-@keyframes gcWashFail { 0% { filter: brightness(1.5); } 100% { filter: brightness(1); } }
+@keyframes gcWashSphere {
+  0%, 100% { transform: translateY(3px) scale(.94); }
+  50% { transform: translateY(-5px) scale(1.09); }
+}
+@keyframes gcWashReborn {
+  0% { transform: scale(.9); filter: brightness(2.3); }
+  40% { transform: scale(1.22); filter: brightness(1.8); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+@keyframes gcWashFail {
+  0% { filter: brightness(1.5); }
+  100% { filter: brightness(1); }
+}
 @media (prefers-reduced-motion: reduce) {
-  .core-minimal-card .gc-wash-lightfield *,
   .core-minimal-card.is-core-washing .golden-core-sphere-v3,
   .core-minimal-card.is-core-washing .golden-core-halo-v3,
   .core-minimal-card.is-core-washing .golden-core-orbit-v3,
-  .core-minimal-card.is-core-wash-revealed .golden-core-sphere-v3 {
+  .core-minimal-card.is-core-wash-revealed .golden-core-sphere-v3,
+  .core-minimal-card.is-core-wash-failed .golden-core-sphere-v3 {
     animation: none !important;
     transition: none !important;
   }
-  .core-minimal-card .gc-wash-ray-flow { stroke-dasharray: none; opacity: .7; }
-  .core-minimal-card .gc-wash-impact { display: none; }
 }
