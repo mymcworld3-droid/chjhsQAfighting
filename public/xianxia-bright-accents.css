@@ -169,13 +169,20 @@ body.xianxia-theme #page-training .training-subtab-v3.active{
     linear-gradient(135deg,rgba(232,193,102,.22),rgba(105,132,93,.12))!important;
   box-shadow:inset 0 1px rgba(255,255,255,.07),0 5px 17px rgba(215,177,92,.09)!important;
 }
+/* 金丹主卡直接融入下方仙府背景；只淡出背景，不遮住洗髓／調御按鈕。 */
 body.xianxia-theme #page-training .core-minimal-card{
   background:
     radial-gradient(circle at 50% 28%,rgba(237,197,104,.10),transparent 33%),
     radial-gradient(circle at 15% 15%,rgba(115,200,169,.065),transparent 28%),
-    linear-gradient(145deg,rgba(42,37,27,.96),rgba(20,22,19,.97))!important;
+    linear-gradient(180deg,
+      rgba(42,37,27,.96) 0%,
+      rgba(31,29,24,.94) 55%,
+      rgba(23,24,20,.76) 73%,
+      rgba(20,22,19,.32) 89%,
+      rgba(20,22,19,0) 100%)!important;
   border-color:rgba(236,199,113,.35)!important;
-  box-shadow:0 18px 42px rgba(0,0,0,.26),inset 0 1px rgba(255,255,255,.07)!important;
+  /* 移除底部投影的水平截止線，保留極淡的上緣提亮。 */
+  box-shadow:inset 0 1px rgba(255,255,255,.045)!important;
 }
 body.xianxia-theme #page-training .uib-toolbar{
   background:linear-gradient(145deg,rgba(45,38,27,.93),rgba(24,25,20,.94))!important;
