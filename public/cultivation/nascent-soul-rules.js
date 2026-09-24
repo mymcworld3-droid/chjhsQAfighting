@@ -115,7 +115,7 @@ export function soulSkills(type) {
   });
 }
 function attrCost(level) {
-  return 5 + level * 5; // 由第 1 級 5 神識開始，每級 +5
+  return 5 + (level - 1) * 5; // 由第 1 級 5 神識開始，每級 +5
 }
 function soulNodeCap(nodeId) {
   return NASCENT_SOUL_ATTRIBUTES.find(item => item.id === nodeId)?.max
