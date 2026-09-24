@@ -487,11 +487,11 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
         </div>
         <div class="ns-trees">
           <section class="ns-tree-section">
-            <header><span>01 / 元嬰屬性</span><h4>凝神煉體</h4><p>消耗可用神識逐級點亮，上限各 5 級。</p></header>
+            <div class="ns-tree-head"><span>01 / 元嬰屬性</span><h4>凝神煉體</h4><p>消耗可用神識逐級點亮，上限各 5 級。</p></div>
             <div class="ns-node-list">${attributes}</div>
           </section>
           <section class="ns-tree-section">
-            <header><span>02 / ${soul.name}技能樹</span><h4>本命神通</h4><p>依序點亮三階支脈；不同丹相各自保存進度。</p></header>
+            <div class="ns-tree-head"><span>02 / ${soul.name}技能樹</span><h4>本命神通</h4><p>依序點亮三階支脈；不同丹相各自保存進度。</p></div>
             <div class="ns-node-list ns-skill-list">${skills}</div>
           </section>
         </div>
