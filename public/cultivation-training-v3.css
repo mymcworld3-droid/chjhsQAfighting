@@ -570,3 +570,42 @@ body.xianxia-theme.ns-map-active #page-training .ns-node-detail {
 @media(prefers-reduced-motion:reduce) {
   .ns-detail-action,.ns-detail-close { transition:none!important; }
 }
+
+
+/* 12-node 元嬰地圖：兩側主脈分岔、再匯合本命終極節點，不引入頁面捲動。 */
+body.xianxia-theme.ns-map-active #page-training .ns-pos-leftMain { left:37.9167%;top:50%; }
+body.xianxia-theme.ns-map-active #page-training .ns-pos-leftTop { left:29.5833%;top:20.1923%; }
+body.xianxia-theme.ns-map-active #page-training .ns-pos-leftBottom { left:29.5833%;top:79.8077%; }
+body.xianxia-theme.ns-map-active #page-training .ns-pos-leftFarTop { left:17.9167%;top:20.1923%; }
+body.xianxia-theme.ns-map-active #page-training .ns-pos-leftFarBottom { left:17.9167%;top:79.8077%; }
+body.xianxia-theme.ns-map-active #page-training .ns-pos-leftFinal { left:7.5%;top:50%; }
+body.xianxia-theme.ns-map-active #page-training .ns-pos-rightMain { left:62.0833%;top:50%; }
+body.xianxia-theme.ns-map-active #page-training .ns-pos-rightTop { left:70.4167%;top:20.1923%; }
+body.xianxia-theme.ns-map-active #page-training .ns-pos-rightBottom { left:70.4167%;top:79.8077%; }
+body.xianxia-theme.ns-map-active #page-training .ns-pos-rightFarTop { left:82.0833%;top:20.1923%; }
+body.xianxia-theme.ns-map-active #page-training .ns-pos-rightFarBottom { left:82.0833%;top:79.8077%; }
+body.xianxia-theme.ns-map-active #page-training .ns-pos-rightFinal { left:92.5%;top:50%; }
+body.xianxia-theme.ns-map-active #page-training .ns-orbit-node.ns-light-btn {
+  width:clamp(36px,5.5vw,78px); height:clamp(36px,5.5vw,78px);
+  gap:1px; padding:3px 1px; font-size:10px;
+}
+body.xianxia-theme.ns-map-active #page-training .ns-orbit-symbol { font-size:clamp(9px,1.1vw,15px); }
+body.xianxia-theme.ns-map-active #page-training .ns-orbit-node strong { font-size:clamp(8px,.8vw,11px); line-height:1.13; }
+body.xianxia-theme.ns-map-active #page-training .ns-orbit-rank { font-size:clamp(7px,.8vw,10px); }
+body.xianxia-theme.ns-map-active #page-training .ns-orbit-hint { display:none; }
+body.xianxia-theme.ns-map-active #page-training :is(.ns-pos-leftFinal,.ns-pos-rightFinal).ns-light-btn {
+  border-color:rgba(245,200,107,.7); box-shadow:0 0 15px rgba(242,181,77,.18), inset 0 0 14px rgba(244,195,102,.08);
+}
+@media(max-width:720px) {
+  body.xianxia-theme.ns-map-active #page-training .ns-orbit-node.ns-light-btn {
+    width:clamp(29px,8.3vw,48px);height:clamp(29px,8.3vw,48px);padding:2px 0;gap:0;
+  }
+  body.xianxia-theme.ns-map-active #page-training .ns-orbit-symbol {font-size:10px;}
+  body.xianxia-theme.ns-map-active #page-training .ns-orbit-node strong {font-size:7px;}
+  body.xianxia-theme.ns-map-active #page-training .ns-orbit-rank {font-size:7px;}
+  body.xianxia-theme.ns-map-active #page-training .ns-tree-core {width:clamp(65px,15vw,100px);}
+  body.xianxia-theme.ns-map-active #page-training .ns-tree-core .golden-core-stage-v3 {width:clamp(64px,14vw,90px)!important;height:clamp(64px,14vw,90px)!important;}
+  body.xianxia-theme.ns-map-active #page-training .ns-tree-core .golden-core-sphere-v3 {width:clamp(34px,7vw,51px)!important;height:clamp(34px,7vw,51px)!important;font-size:15px;}
+  body.xianxia-theme.ns-map-active #page-training .ns-tree-core .golden-core-orbit-v3 {width:clamp(62px,12vw,83px)!important;}
+  body.xianxia-theme.ns-map-active #page-training .ns-tree-core-desc {display:none;}
+}
