@@ -585,7 +585,16 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     }
     content.innerHTML = activeTab === 'bag' ? bagTabMarkup()
       : activeTab === 'nascent-soul' ? nascentSoulTabMarkup() : coreTabMarkup();
-    document.body.classList.toggle('ns-map-active', activeTab === 'nascent-soul' && currentScore() >= NASCENT_SOUL_THRESHOLD);
+    const enteringSoulMap = activeTab === 'nascent-soul' && currentScore() >= NASCENT_SOUL_THRESHOLD;
+    const previouslySoulMap = document.body.classList.contains('ns-map-active');
+    document.body.classList.toggle('ns-map-active', enteringSoulMap);
+    // 從可能已捲動的煉器／背包切入元嬰時，讓分頁與神識摘要回到畫面最上方。
+    if (enteringSoulMap && !previouslySoulMap) {
+      const main = document.querySelector('main');
+      if (main) main.scrollTop = 0;
+      const page = document.getElementById('page-training');
+      if (page) page.scrollTop = 0;
+    }
     if (activeTab === 'core') bindCoreActions();
     if (activeTab === 'nascent-soul') bindSoulActions();
   }
