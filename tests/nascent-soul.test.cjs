@@ -386,3 +386,39 @@ test('nascent soul center and final bonuses strictly follow equipped core, not w
   assert.match(transaction, /const remoteCore = remote\.cultivationTraining\?\.equippedCore/);
   assert.doesNotMatch(transaction, /remote\.cultivationTraining\?\.core\?\.type \|\| type/);
 });
+
+
+test('equipped core grade determines visible gold-core effect and both finale previews', () => {
+  const training = read('public/cultivation/cultivation-training-v4.js');
+  const start = training.indexOf('  function soulNodeDetailMarkup(');
+  const end = training.indexOf('  function nascentSoulTabMarkup()', start);
+  assert.ok(start >= 0 && end > start);
+  const functionSource = training.slice(start, end);
+  const tree = { version:4,paths:{sword:{nodes:{leftFinal:1,rightFinal:2},baselineNodes:{},legacySpent:0}} };
+  const render = (grade, candidateGrade) => {
+    const state = { equippedCore:{type:'sword',grade}, core:{type:'ocean',grade:candidateGrade} };
+    const deps = { state, selectedSoulNodeId:'core', soulNodes, soulNodeStatus,
+      soulCombatBonuses, normalizeSoulTree, NASCENT_SOUL_NODE_CAP:10, soulBusy:false,
+      clampGrade:value=>Math.max(1,Math.min(9,Number(value)||9)),
+      coreType:()=>({name:'破鋒劍心丹',icon:'⚔',effect:g=>'測試金丹品級效果：'+g+' 品'})
+    };
+    return new Function(...Object.keys(deps),functionSource + '\nreturn soulNodeDetailMarkup;')
+      (...Object.values(deps))('sword',tree,200);
+  };
+  const low = render(9, 1);
+  const high = render(1, 9);
+  assert.match(low,/測試金丹品級效果：9 品/);
+  assert.match(high,/測試金丹品級效果：1 品/);
+  assert.match(low,/單級 \+24/);
+  assert.match(high,/單級 \+40/);
+  assert.match(low,/單級 \+9/);
+  assert.match(high,/單級 \+17/);
+  assert.match(high,/目前 \+34/);
+  assert.doesNotMatch(low,/data-ns-upgrade/);
+  assert.match(training,/const effect = metadata\.effect\(grade\)/);
+  assert.match(training,/const grade = clampGrade\(core\.grade\)/);
+  assert.match(training,/data-ns-core-detail/);
+  assert.match(training,/selectedSoulNodeId = 'core'/);
+  const css = read('public/cultivation-training-v3.css');
+  assert.match(css,/button\.ns-tree-core\[data-ns-core-detail\]/);
+});
