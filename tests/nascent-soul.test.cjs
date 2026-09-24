@@ -150,7 +150,7 @@ test('training mutations use Firestore transaction and separate trees from the r
   assert.match(power, /window\.getNascentSoulBattleSnapshot\?\.\(\)/);
   assert.match(battle, /nascentSoul: nascentSoul \?/);
   assert.match(engine, /soulDamage/);
-  assert.match(css, /\.ns-trees/);
+  assert.match(css, /\.ns-tree-viewport/);
   assert.match(css, /\.ns-orbit-node\.ns-light-btn:disabled/);
   assert.match(training, /ns-tree-viewport ns-trees/);
   assert.match(training, /ns-branches/);
