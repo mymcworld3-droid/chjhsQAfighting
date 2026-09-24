@@ -220,7 +220,7 @@ test('nascent soul map stays inside one viewport with fixed navigation and HUD',
   assert.doesNotMatch(training, /ns-tree-viewport'\)\?\.scrollLeft/);
   assert.doesNotMatch(training, /窄螢幕可左右捲動|手機或窄螢幕可左右滑動/);
   assert.match(css, /body\.xianxia-theme\.ns-map-active main:has\(#page-training\.active-page\)\s*\{[\s\S]*?overflow:\s*hidden\s*!important/);
-  assert.match(css, /\.ns-branch-panel\s*\{[\s\S]*?grid-template-rows:\s*auto auto minmax\(0,1fr\) auto auto\s*!important/);
+  assert.match(css, /\.ns-branch-panel\s*\{[\s\S]*?grid-template-rows:\s*auto auto auto minmax\(0,1fr\) auto auto\s*!important/);
   assert.match(css, /#training-tab-content\s*\{[\s\S]*?max-height:\s*100%\s*!important/);
   assert.match(css, /\.ns-tree-viewport\s*\{[\s\S]*?overflow:\s*hidden\s*!important/);
   assert.match(css, /\.ns-diagram\s*\{[\s\S]*?min-width:\s*0\s*!important/);
@@ -421,4 +421,41 @@ test('equipped core grade determines visible gold-core effect and both finale pr
   assert.match(training,/selectedSoulNodeId = 'core'/);
   const css = read('public/cultivation-training-v3.css');
   assert.match(css,/button\.ns-tree-core\[data-ns-core-detail\]/);
+});
+
+
+test('equipped grade effect is visible on the map even while a different node is selected', () => {
+  const source = read('public/cultivation/cultivation-training-v4.js');
+  const from = source.indexOf('  function nascentSoulTabMarkup() {');
+  const to = source.indexOf('  async function illuminateSoulNode(',from);
+  assert.ok(from >= 0 && to > from);
+  const fn = source.slice(from,to);
+  const render = (grade, candidateGrade, selected) => {
+    const state = {equippedCore:{type:'sword',grade},core:{type:'ocean',grade:candidateGrade}};
+    const deps = {state,selectedSoulNodeId:selected,selectedSoulType:'sword',soulBusy:false,
+      NASCENT_SOUL_THRESHOLD:68,NASCENT_SOUL_BRANCH_UNLOCK:5,NASCENT_SOUL_NODE_CAP:10,
+      currentScore:()=>80,currentSoulType:()=>state.equippedCore.type,
+      clampGrade:v=>Math.max(1,Math.min(9,Number(v)||9)),
+      coreType:()=>({name:'破鋒劍心丹',effect:g=>'已裝配丹的品級效果：'+g+' 品'}),
+      nascentSoulForCore,nascentSoulStage,normalizeSpirit,normalizeSoulTree,soulSpentSpirit,
+      soulAvailableSpirit,soulNodes,soulNodeStatus,soulCombatBonuses,soulCultivationBonuses,
+      soulBonusLabel:()=>'',soulNodeDetailMarkup:()=>'<aside>技能節點資訊</aside>',
+      coreVisualMarkup:()=>'<span>已裝配金丹圖示</span>',
+      window:{getCurrentUserData:()=>({stats:{nascentSoulSpirit:0}})}
+    };
+    return new Function(...Object.keys(deps),fn+'\nreturn nascentSoulTabMarkup;')(...Object.values(deps))();
+  };
+  const low=render(9,1,'leftMain');
+  const high=render(1,9,'rightMain');
+  assert.match(low,/class="ns-equipped-effect"/);
+  assert.match(low,/已裝配丹的品級效果：9 品/);
+  assert.match(high,/已裝配丹的品級效果：1 品/);
+  assert.match(high,/本命殺招每級 \+40 傷害/);
+  assert.match(high,/本命護元每級 \+17 回復/);
+  assert.match(low,/本命殺招每級 \+24 傷害/);
+  assert.match(low,/本命護元每級 \+9 回復/);
+  assert.doesNotMatch(low,/已裝配丹的品級效果：1 品/);
+  const css = read('public/cultivation-training-v3.css');
+  assert.match(css,/\.ns-equipped-effect-text/);
+  assert.match(css,/grid-template-rows: auto auto auto minmax\(0,1fr\) auto auto !important/);
 });
