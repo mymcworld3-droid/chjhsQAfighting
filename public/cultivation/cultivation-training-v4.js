@@ -397,8 +397,9 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     `;
   }
 
+  // 元嬰只與目前正式裝配／調御的金丹綁定，洗髓候選丹不可作為中心或決定天賦。
   function currentSoulType() {
-    return state.equippedCore?.type || state.core?.type || 'taichu';
+    return state.equippedCore?.type || null;
   }
 
   function soulBonusLabel(bonus) {
@@ -418,7 +419,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
   // 地圖節點只做選取。數值預覽及唯一的升級操作都放在右側詳情頁。
   function soulNodeDetailMarkup(type, tree, earned) {
     if (!selectedSoulNodeId) return '';
-    const node = soulNodes(type, (state.equippedCore || state.core)?.grade).find(item => item.id === selectedSoulNodeId);
+    const node = soulNodes(type, state.equippedCore?.grade).find(item => item.id === selectedSoulNodeId);
     if (!node) return '';
     const status = soulNodeStatus(tree, type, node.id, earned);
     const nextLevel = Math.min(NASCENT_SOUL_NODE_CAP, status.level + 1);
@@ -478,17 +479,25 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
       return '<section class="ns-panel"><h3>元嬰未成</h3><p>修為達到 68 後，方可凝聚本命元嬰。</p></section>';
     }
     const type = currentSoulType();
+    if (!type) {
+      selectedSoulNodeId = null;
+      selectedSoulType = null;
+      return '<section class="ns-panel ns-no-core"><h3>尚未裝配金丹</h3><p>請先前往金丹分頁，調御目前的金丹後，再查看本命元嬰與技能樹。</p></section>';
+    }
     if (selectedSoulType !== type) {
       selectedSoulNodeId = null;
       selectedSoulType = type;
     }
     const soul = nascentSoulForCore(type);
+    const equippedCore = state.equippedCore;
+    const equippedName = coreType(equippedCore.type).name;
+    const equippedGrade = clampGrade(equippedCore.grade);
     const player = window.getCurrentUserData?.() || {};
     const earned = normalizeSpirit(player.stats?.nascentSoulSpirit);
     const tree = normalizeSoulTree(player.nascentSoulTree);
     const spent = soulSpentSpirit(tree);
     const available = soulAvailableSpirit(tree, earned);
-    const combatBonuses = soulCombatBonuses(tree, type, (state.equippedCore || state.core)?.grade);
+    const combatBonuses = soulCombatBonuses(tree, type, equippedGrade);
     const cultivationBonuses = soulCultivationBonuses(tree, type);
     const bonuses = { ...combatBonuses, cultivationSolo: cultivationBonuses.solo,
       cultivationDaily: cultivationBonuses.daily, cultivationCave: cultivationBonuses.cave };
@@ -496,7 +505,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     const levels = tree.paths[type]?.nodes || {};
     const progress = stage.next ? Math.min(100, (earned - stage.min) / (stage.next.min - stage.min) * 100) : 100;
 
-    const nodes = soulNodes(type, (state.equippedCore || state.core)?.grade).map(node => {
+    const nodes = soulNodes(type, equippedGrade).map(node => {
       const status = soulNodeStatus(tree, type, node.id, earned);
       const isLit = status.level > 0;
       const parents = Array.isArray(node.parent) ? node.parent : node.parent ? [node.parent] : [];
@@ -537,15 +546,15 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
       line('rightFinalBottom','M 985 415 Q 1055 415 1110 260',(levels.rightFarBottom||0)>=5,!!levels.rightFinal)
     ].join('');
 
-    // 顯示已調御中的金丹，而不是洗髓後尚未調御的候選丹。
-    const core = state.equippedCore || state.core;
+    // 中央金丹只能使用正式裝配的金丹，絕不能回退到洗髓候選丹。
+    const core = equippedCore;
     return `
       <section class="ns-panel ns-branch-panel" aria-label="本命元嬰">
         <div class="ns-branch-intro">
           <div class="ns-branch-title">
             <span class="ns-kicker">NASCENT SOUL · 本命元嬰</span>
             <h3>${soul.name}</h3>
-            <p>${soul.trait} · ${stage.name}</p>
+            <p>${soul.trait} · ${stage.name} · 裝配：${equippedName}（${equippedGrade} 品）</p>
           </div>
           <div class="ns-resource" aria-live="polite">
             <div><small>累計神識</small><strong>${earned}</strong></div>
@@ -565,8 +574,8 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
             ${nodes}
             <div class="ns-tree-core">
               ${coreVisualMarkup(core, false)}
-              <div class="ns-tree-core-name">${soul.name}</div>
-              <div class="ns-tree-core-desc">${soul.trait}</div>
+              <div class="ns-tree-core-name">${equippedName}</div>
+              <div class="ns-tree-core-desc">${equippedGrade} 品 · 已調御</div>
               <div class="ns-tree-core-stage">${stage.name}</div>
             </div>
           </div>
@@ -610,9 +619,11 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
         if (!snapshot.exists()) throw new Error('找不到玩家資料');
         const remote = snapshot.data();
         if (normalizeSpirit(remote.stats?.totalScore) < NASCENT_SOUL_THRESHOLD) throw new Error('元嬰境界不足');
-        const remoteType = remote.cultivationTraining?.equippedCore?.type ||
-          remote.cultivationTraining?.core?.type || type;
-        if (remoteType !== type) throw new Error('金丹丹相已變更，請重新開啟元嬰頁');
+        const remoteCore = remote.cultivationTraining?.equippedCore;
+        if (!remoteCore || remoteCore.type !== type ||
+          clampGrade(remoteCore.grade) !== clampGrade(state.equippedCore?.grade)) {
+          throw new Error('裝配金丹已變更，請重新開啟元嬰頁');
+        }
         awarded = allocateSoulNode(remote.nascentSoulTree, type, nodeId, remote.stats?.nascentSoulSpirit);
         if (!awarded.ok) throw new Error(awarded.reason);
         tx.update(ref, { nascentSoulTree: awarded.tree });
