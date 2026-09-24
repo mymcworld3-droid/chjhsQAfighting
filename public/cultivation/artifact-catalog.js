@@ -38,12 +38,12 @@ export const ARTIFACT_REALMS = Object.freeze([
   { id: 'foundation', name: '築基', order: 2, need: 10 },
   { id: 'golden-core', name: '金丹', order: 3, need: 28 },
   { id: 'nascent-soul', name: '元嬰', order: 4, need: 68 },
-  { id: 'spirit', name: '化神', order: 5, need: 128 },
-  { id: 'void', name: '煉虛', order: 6, need: 208 },
-  { id: 'fusion', name: '合體', order: 7, need: 308 },
-  { id: 'mahayana', name: '大乘', order: 8, need: 448 },
-  { id: 'tribulation', name: '渡劫', order: 9, need: 628 },
-  { id: 'immortal', name: '真仙', order: 10, need: 868 }
+  { id: 'spirit', name: '化神', order: 5, need: 188 },
+  { id: 'void', name: '煉虛', order: 6, need: 428 },
+  { id: 'fusion', name: '合體', order: 7, need: 788 },
+  { id: 'mahayana', name: '大乘', order: 8, need: 1268 },
+  { id: 'tribulation', name: '渡劫', order: 9, need: 1868 },
+  { id: 'immortal', name: '真仙', order: 10, need: 2588 }
 ]);
 
 export const ARTIFACT_EQUIP_SLOTS = Object.freeze(['本命法寶', '護身法寶', '佩飾法寶', '輔助法寶']);
