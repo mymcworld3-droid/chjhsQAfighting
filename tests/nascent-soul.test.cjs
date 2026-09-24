@@ -7,9 +7,9 @@ const vm = require('node:vm');
 const read = name => readFileSync(join(__dirname, '..', name), 'utf8');
 const source = read('public/cultivation/nascent-soul-rules.js');
 const rules = vm.runInNewContext(source.replace(/^export /gm, '') +
-  '\n({ NASCENT_SOUL_TYPES, nascentSoulForCore, nascentSoulStage, nascentSoulSpiritReward, NASCENT_SOUL_ATTRIBUTES, NASCENT_SOUL_NODE_CAP, NASCENT_SOUL_BRANCH_UNLOCK, soulNodes, soulSkills, normalizeSoulTree, soulAvailableSpirit, soulSpentSpirit, soulNodeStatus, allocateSoulNode, soulCombatBonuses })');
+  '\n({ NASCENT_SOUL_TYPES, nascentSoulForCore, nascentSoulStage, nascentSoulSpiritReward, NASCENT_SOUL_ATTRIBUTES, NASCENT_SOUL_NODE_CAP, NASCENT_SOUL_BRANCH_UNLOCK, soulNodes, soulSkills, normalizeSoulTree, soulAvailableSpirit, soulSpentSpirit, soulNodeStatus, allocateSoulNode, soulCombatBonuses, soulNodeCost, soulCultivationBonuses, soulCultivationBonusForPlayer })');
 const { NASCENT_SOUL_TYPES, nascentSoulForCore, nascentSoulStage, nascentSoulSpiritReward,
-  NASCENT_SOUL_ATTRIBUTES, NASCENT_SOUL_NODE_CAP, NASCENT_SOUL_BRANCH_UNLOCK, soulNodes, soulSkills, normalizeSoulTree, soulAvailableSpirit, soulSpentSpirit, soulNodeStatus, allocateSoulNode, soulCombatBonuses } = rules;
+  NASCENT_SOUL_ATTRIBUTES, NASCENT_SOUL_NODE_CAP, NASCENT_SOUL_BRANCH_UNLOCK, soulNodes, soulSkills, normalizeSoulTree, soulAvailableSpirit, soulSpentSpirit, soulNodeStatus, allocateSoulNode, soulCombatBonuses, soulNodeCost, soulCultivationBonuses, soulCultivationBonusForPlayer } = rules;
 
 test('all nine golden cores map to separate nascent souls with a talent', () => {
   const ids = ['ocean','taichu','ningxin','pojing','xingchen','wugou','thunder','reverse','sword'];
@@ -86,7 +86,7 @@ test('both outward branches need five points in their respective main node', () 
   assert.equal(soulNodeStatus(tree, 'thunder', 'leftBottom', 100).ok, true);
   assert.equal(soulNodeStatus(tree, 'thunder', 'rightTop', 100).ok, false);
   const lit = allocateSoulNode(tree, 'thunder', 'leftTop', 100);
-  assert.equal(lit.cost, 1);
+  assert.equal(lit.cost, 3);
   assert.equal(soulCombatBonuses(lit.tree, 'thunder').bonusDamage, 8);
 });
 
@@ -103,7 +103,8 @@ test('nine soul branches have distinct names and persistent per-type progress', 
   const ocean = allocateSoulNode(sword.tree, 'ocean', 'rightMain', 20);
   assert.equal(soulAvailableSpirit(ocean.tree, 20), 18);
   assert.equal(soulCombatBonuses(ocean.tree, 'sword').attackFlat, 12);
-  assert.equal(soulCombatBonuses(ocean.tree, 'ocean').maxHpFlat, 70);
+  assert.equal(soulCombatBonuses(ocean.tree, 'ocean').maxHpFlat, 0);
+  assert.equal(soulCultivationBonuses(ocean.tree, 'ocean').solo, 1);
 });
 
 test('old paid upgrades migrate without erasing paid spirit or charging twice', () => {
@@ -146,6 +147,7 @@ test('training mutations use Firestore transaction and separate trees from the r
   assert.match(training, /tx\.update\(ref, \{ nascentSoulTree: awarded\.tree \}\)/);
   assert.match(training, /data-ns-node=/);
   assert.match(training, /window\.getNascentSoulBattleSnapshot/);
+  assert.match(training, /window\.getNascentSoulCultivationBonuses/);
   assert.match(combat, /window\.getNascentSoulBattleSnapshot\?\.\(\)/);
   assert.match(power, /window\.getNascentSoulBattleSnapshot\?\.\(\)/);
   assert.match(battle, /nascentSoul: nascentSoul \?/);
@@ -248,4 +250,59 @@ test('node detail previews current and next values including locked or capped no
   assert.match(capped, /<strong>\+120<\/strong>/);
   assert.match(capped, /<strong class="ns-detail-next">\+120<\/strong>/);
   assert.match(capped,/data-ns-upgrade="leftMain"\s+disabled/);
+});
+
+
+test('distance-based costs and cultivation-versus-battle branches are applied consistently', () => {
+  assert.equal(soulNodeCost('leftMain'), 1);
+  assert.equal(soulNodeCost('rightMain'), 1);
+  for (const id of ['leftTop','leftBottom','rightTop','rightBottom']) assert.equal(soulNodeCost(id), 3);
+  assert.equal(soulNodeCost('unknown'), 0);
+  let tree = null;
+  for (let i = 0; i < 5; i++) tree = allocateSoulNode(tree, 'sword', 'rightMain', 100).tree;
+  const daily = allocateSoulNode(tree, 'sword', 'rightTop', 100);
+  assert.equal(daily.cost, 3);
+  assert.equal(daily.remaining, 92);
+  const cave = allocateSoulNode(daily.tree, 'sword', 'rightBottom', 100);
+  assert.equal(cave.cost, 3);
+  assert.equal(cave.remaining, 89);
+  const right = soulCultivationBonuses(cave.tree, 'sword');
+  assert.equal(right.solo, 5);
+  assert.equal(right.daily, 1);
+  assert.equal(right.cave, 1);
+  assert.equal(soulCombatBonuses(cave.tree, 'sword').maxHpFlat, 0);
+  assert.equal(soulCombatBonuses(cave.tree, 'sword').attackFlat, 0);
+  const left = allocateSoulNode(cave.tree, 'sword', 'leftMain', 100);
+  assert.equal(soulCultivationBonuses(left.tree, 'sword').solo, 5);
+  assert.equal(soulCombatBonuses(left.tree, 'sword').attackFlat, 12);
+  assert.equal(soulCultivationBonusForPlayer({
+    stats:{totalScore:68},
+    cultivationTraining:{equippedCore:{type:'sword'},coreEnabled:true},
+    nascentSoulTree:cave.tree
+  },'daily'),1);
+  assert.equal(soulCultivationBonusForPlayer({
+    stats:{totalScore:68},
+    cultivationTraining:{equippedCore:{type:'sword'},coreEnabled:false},
+    nascentSoulTree:cave.tree
+  },'solo'),0);
+  assert.equal(soulCultivationBonusForPlayer({
+    stats:{totalScore:67},
+    cultivationTraining:{equippedCore:{type:'sword'},coreEnabled:true},
+    nascentSoulTree:cave.tree
+  },'solo'),0);
+});
+
+test('cultivation branches are integrated into the three correct settlement flows', () => {
+  const rules = read('public/cultivation/cultivation-rules.js');
+  const daily = read('public/cultivation/daily-meditation.js');
+  const cave = read('public/cultivation/dongtian.js');
+  const training = read('public/cultivation/cultivation-training-v4.js');
+  assert.match(rules,/getNascentSoulCultivationBonuses/);
+  assert.match(rules,/baseGain \+ bonusGain \+ soulBonusGain/);
+  assert.match(daily,/current\.correct === QUESTION_TOTAL\s*\? soulCultivationBonusForPlayer\(data, 'daily'\) : 0/);
+  assert.match(daily,/'stats\.totalScore': increment\(totalCultivation\)/);
+  assert.match(cave,/first \? soulCultivationBonusForPlayer\(playerData, 'cave'\) : 0/);
+  assert.match(cave,/'stats\.totalScore': increment\(cultivationReward \+ soulCultivationAdded\)/);
+  assert.match(training,/左脈主鬥法，右脈主修為/);
+  assert.match(training,/status\.cost \+ ' 神識'/);
 });
