@@ -45,18 +45,8 @@ function fixture() {
   const document = {
     head: node(),
     querySelector(selector) { return selector === '.core-minimal-card' ? card : null; },
-    createElement() { return node(); },
-    createElementNS() {
-      const element = node();
-      Object.defineProperty(element, 'innerHTML', {
-        set() {
-          const a = [node(), node()], b = [node(), node()];
-          element.querySelectorAll = selector => selector.includes('"a"') ? a : b;
-          element.paths = {a,b};
-        }
-      });
-      return element;
-    }
+    createElement() { return node(); }
+
   };
   const window = {
     matchMedia: () => ({matches:true}),
@@ -68,21 +58,15 @@ function fixture() {
   return { animate: context.createGoldenCoreWashAnimation, card, sphere, sphereIcon, name, grade, document };
 }
 
-test('two rays travel from the wash button to the orb without creating any modal', async () => {
+test('wash brightens the existing core without creating rays or a modal', async () => {
   const {animate,card,document} = fixture();
   const effect = animate();
   assert.equal(document.head.children.length, 1);
-  assert.equal(card.children.length, 1);
+  assert.equal(card.children.length, 0);
   assert.equal(card.classList.contains('is-core-washing'), true);
-  const svg = card.children[0].children[0];
-  assert.equal(svg.paths.a.length, 2);
-  assert.equal(svg.paths.b.length, 2);
-  assert.notEqual(svg.paths.a[0].attrs.d, svg.paths.b[0].attrs.d);
-  assert.match(svg.paths.a[0].attrs.d, /^M 192\.0 480\.8 C /);
-  assert.match(svg.paths.b[0].attrs.d, /^M 308\.0 480\.8 C /);
+  assert.doesNotMatch(source, /createElementNS|gc-wash-beam|gc-wash-lightfield/);
   await effect.minimumDuration;
   effect.cleanup();
-  assert.equal(card.children[0].isConnected, false);
   assert.equal(card.classList.contains('is-core-washing'), false);
 });
 
@@ -106,9 +90,11 @@ test('core changes only on successful reveal; failed wash keeps original appeara
   second.cleanup();
 });
 
-test('wash keeps saving before revealing and CSS contains no full-screen modal', () => {
+test('wash keeps saving before revealing and CSS retains glow without rays or modal', () => {
   assert.match(training, /await persistRemote\(\{ 'stats\.gold': stones - WASH_COST \}\);[\s\S]*await animation\.minimumDuration;[\s\S]*await animation\.reveal/);
   assert.match(training, /state\.equipped = false;/);
-  assert.doesNotMatch(css, /position\s*:\s*fixed|golden-core-wash-overlay/);
+  assert.doesNotMatch(css, /position\s*:\s*fixed|golden-core-wash-overlay|gc-wash-(?:beam|ray|lightfield|impact)/);
+  assert.match(css, /gcWashSphere/);
+  assert.match(css, /gcWashReborn/);
   assert.match(css, /prefers-reduced-motion/);
 });
