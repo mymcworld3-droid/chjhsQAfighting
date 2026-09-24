@@ -400,3 +400,46 @@ body.xianxia-theme #nav-grid button.active-nav-btn :is(i,span){
     scroll-behavior:auto!important;
   }
 }
+
+
+/* 修煉分頁去外框：金丹、元嬰、煉器、裝備、背包與狀態共用無邊界底座。
+   只取消最外層的面板輪廓，內部操作鍵、裝配格及數值卡仍保留各自樣式。 */
+body.xianxia-theme #page-training.training-page-v3,
+body.xianxia-theme #page-training #training-tab-content {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+body.xianxia-theme #page-training .training-subtabs-v3 {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+/* 金丹保留中央靈氣，但讓四邊自然淡入頁面背景，不再有整塊矩形底板。 */
+body.xianxia-theme #page-training .core-minimal-card {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: radial-gradient(ellipse 74% 81% at 50% 31%,
+    rgba(65,49,27,.66) 0%,
+    rgba(42,36,26,.38) 42%,
+    rgba(28,27,23,.13) 73%,
+    transparent 100%) !important;
+  box-shadow: none !important;
+}
+/* 其他子分頁僅移除外殼，不影響內層內容及點擊區域。 */
+body.xianxia-theme #page-training #training-tab-content > :is(
+  .ns-panel, .uib-equipment-panel, .training-v3-empty
+) {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+body.xianxia-theme #page-training .cultivation-refinery > .refinery-panel {
+  border: 0 !important;
+  box-shadow: none !important;
+}
