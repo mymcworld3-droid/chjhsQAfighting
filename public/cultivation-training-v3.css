@@ -173,72 +173,89 @@ body.xianxia-theme .training-page-v3 { max-width:900px; margin:0 auto; padding-b
 @media(prefers-reduced-motion:reduce) { .ns-stage-halo,.ns-avatar {animation:none!important;} }
 
 
-/* 元嬰點亮：上方元嬰與資源摘要，下方兩支分明的屬性／本命神通樹。 */
-body.xianxia-theme #page-training .ns-panel {
-  width: 100%; max-width: 1300px; margin: 0 auto;
-  padding: clamp(12px, 1.8vw, 24px) clamp(8px, 1.4vw, 20px) 32px;
-  min-height: 0; gap: 18px; align-items: stretch; text-align: left;
+/* 元嬰左右雙脈，依照中央金丹、左右主節點、外側上下支脈佈置。 */
+body.xianxia-theme #page-training .ns-branch-panel {
+  width: 100%; max-width: 1320px; margin: 0 auto;
+  padding: clamp(10px,1.4vw,22px) clamp(5px,1vw,18px) 34px;
+  gap: 13px; min-height: 0; align-items: stretch; text-align: left;
 }
-.ns-overview {
-  display: grid; grid-template-columns: minmax(110px, 160px) minmax(0, 1fr);
-  gap: clamp(14px, 2vw, 30px); align-items: center; width: 100%; max-width: 960px;
-  margin: 0 auto; padding: 8px 0 12px;
+.ns-branch-intro { display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; padding:4px 8px; }
+.ns-branch-title { display:grid; gap:4px; }
+.ns-branch-title h3 { font-size:clamp(19px,2.1vw,27px); line-height:1.35; margin:0; color:#f5e0fb; }
+.ns-branch-title p { margin:0; color:#ae9abb; font-size:11px; }
+.ns-branch-intro .ns-resource { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:7px; width:min(100%,400px); margin:0; }
+.ns-resource > div { min-width:0; padding:8px 12px; border:1px solid rgba(200,165,234,.16); border-radius:12px; background:rgba(197,154,236,.045); }
+.ns-resource small { display:block; font-size:10px; color:#b5a0c2; }
+.ns-resource strong { display:block; font-size:clamp(18px,2vw,24px); color:#eee0f9; font-variant-numeric:tabular-nums; }
+.ns-resource .ns-resource-free { border-color:rgba(224,189,115,.38); background:rgba(188,144,70,.09); }
+.ns-resource-free strong { color:#f4d38c; }
+.ns-tree-tip { margin:0; font-size:11px; text-align:center; color:#b8a4c5; line-height:1.65; }
+.ns-tree-viewport {
+  width:100%; max-width:1240px; margin:0 auto; overflow-x:auto; overflow-y:hidden; overscroll-behavior-inline:contain;
+  scrollbar-width:thin; scrollbar-color:rgba(200,161,105,.4) transparent; -webkit-overflow-scrolling:touch;
+  border-radius:20px; background:radial-gradient(ellipse at 50% 52%,rgba(106,76,47,.13),transparent 54%);
 }
-.ns-overview .ns-stage { width: 150px; height: 150px; }
-.ns-overview-copy { min-width: 0; display: grid; gap: 8px; }
-.ns-overview-copy h3 { line-height: 1.28; }
-.ns-overview-copy .ns-progress-caption { line-height: 1.5; }
-.ns-resource { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; margin: 3px 0; }
-.ns-resource > div { min-width: 0; border: 1px solid rgba(200, 165, 234, .16); border-radius: 12px; padding: 9px 10px; background: rgba(197, 154, 236, .035); }
-.ns-resource small { display: block; color: #b9a4c5; font-size: 10px; }
-.ns-resource strong { display: block; margin-top: 3px; color: #f1dcff; font-size: clamp(17px, 2vw, 23px); font-variant-numeric: tabular-nums; }
-.ns-resource .ns-resource-free { border-color: rgba(222, 184, 121, .42); background: rgba(191, 145, 70, .10); }
-.ns-resource-free strong { color: #f4d38c; }
-.ns-combat-summary { margin: 0; font-size: 11px; line-height: 1.55; color: #d8bfeb; }
-.ns-trees { width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(12px, 1.6vw, 24px); align-items: start; }
-.ns-tree-section { min-width: 0; display: grid; gap: 11px; }
-.ns-tree-section .ns-tree-head { display: grid; gap: 5px; padding: 0 3px 9px; border-bottom: 1px solid rgba(200, 169, 225, .2); }
-.ns-tree-section .ns-tree-head > span, .ns-skill-tier { font-size: 10px; font-weight: 800; letter-spacing: .08em; color: #ab91c4; }
-.ns-tree-section h4 { margin: 0; font-size: 19px; font-weight: 900; color: #f0d9ff; }
-.ns-tree-section .ns-tree-head p { font-size: 11px; color: #a997b4; margin: 0; line-height: 1.55; }
-.ns-node-list { display: grid; gap: 13px; }
-.ns-node { position: relative; min-width: 0; display: grid; grid-template-columns: 42px minmax(0, 1fr); gap: 8px 10px; align-items: start;
-  padding: 14px; border: 1px solid rgba(179, 143, 206, .19); border-radius: 16px; background: linear-gradient(130deg, rgba(35, 25, 44, .50), rgba(17, 15, 22, .42)); }
-.ns-node.is-lit { border-color: rgba(218, 171, 98, .43); background: radial-gradient(circle at 0 0, rgba(221, 168, 89, .12), transparent 54%), rgba(35, 28, 29, .48); }
-.ns-node.is-locked { opacity: .72; }
-.ns-node-symbol { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 50%;
-  border: 1px solid rgba(197, 154, 236, .28); color: #bb99d8; font-size: 18px; background: rgba(131, 91, 163, .11); }
-.ns-node.is-lit .ns-node-symbol { color: #f2cd8d; border-color: rgba(237, 198, 123, .58); box-shadow: 0 0 18px rgba(237, 183, 100, .13), inset 0 0 10px rgba(237, 183, 100, .09); }
-.ns-node-content { display: grid; min-width: 0; gap: 5px; }
-.ns-node-content strong { color: #ede0f5; font-size: 14px; }
-.ns-node-content small { color: #ac9cb5; font-size: 11px; line-height: 1.55; }
-.ns-node-benefit { color: #e6c48a; font-size: 11px; line-height: 1.45; }
-.ns-node-level, .ns-skill-condition { color: #9485a2; font-size: 10px; line-height: 1.55; }
-.ns-light-btn { grid-column: 1 / -1; min-height: 38px; border: 1px solid rgba(217, 171, 102, .56); border-radius: 11px;
-  background: linear-gradient(135deg, rgba(171, 119, 48, .78), rgba(103, 61, 22, .74));
-  color: #f9e6bd; font-size: 12px; font-weight: 850; transition: filter .15s ease, transform .15s ease; cursor: pointer; }
-.ns-light-btn:not(:disabled):hover { filter: brightness(1.15); transform: translateY(-1px); }
-.ns-light-btn:focus-visible { outline: 2px solid #ffe3af; outline-offset: 2px; }
-.ns-light-btn:disabled { cursor: not-allowed; border-color: rgba(186, 153, 199, .19); background: rgba(135, 116, 152, .085); color: #95899d; }
-.ns-node.is-lit .ns-light-btn:disabled { border-color: rgba(222, 179, 110, .27); color: #d7b97f; }
-.ns-skill-list .ns-node + .ns-node::before { content: ''; position: absolute; top: -14px; left: 34px; height: 13px; border-left: 1px solid rgba(206, 172, 231, .40); }
-.ns-skill-list .ns-node.is-lit + .ns-node::before { border-color: rgba(233, 186, 118, .70); }
-.ns-save-tip { width: 100%; margin: 0 auto; font-size: 11px; color: #a99cad; text-align: center; line-height: 1.6; }
-body.xianxia-theme #page-training .ns-reward-guide { width: min(100%, 780px); margin: 0 auto; }
-@media (max-width: 780px) {
-  .ns-trees { grid-template-columns: 1fr; }
-  .ns-overview { grid-template-columns: 112px minmax(0, 1fr); gap: 12px; }
-  .ns-overview .ns-stage { width: 112px; height: 112px; }
-  .ns-overview .ns-stage-halo { inset: 9px; }
-  .ns-overview .ns-avatar { width: 72px; height: 72px; font-size: 28px; }
+.ns-tree-viewport:focus-visible { outline:2px solid rgba(224,187,117,.65); outline-offset:-3px; }
+.ns-diagram { position:relative; isolation:isolate; min-width:760px; width:100%; aspect-ratio:1200 / 520; user-select:none; }
+.ns-branches { position:absolute; z-index:0; inset:0; width:100%; height:100%; overflow:visible; pointer-events:none; }
+.ns-branch-line { fill:none; stroke:rgba(134,120,140,.22); stroke-width:2.2; stroke-linecap:round; stroke-dasharray:5 6; vector-effect:non-scaling-stroke; }
+.ns-branch-line.is-open { stroke:rgba(204,161,101,.40); stroke-dasharray:none; }
+.ns-branch-line.is-lit { stroke:url(#ns-link-gold); stroke-width:3; filter:drop-shadow(0 0 4px rgba(237,189,99,.30)); }
+.ns-branch-panel .ns-orbit-node.ns-light-btn {
+  position:absolute; z-index:2; display:flex; flex-direction:column; justify-content:center; align-items:center;
+  gap:3px; transform:translate(-50%,-50%); width:clamp(78px,8.4vw,110px); height:clamp(78px,8.4vw,110px);
+  min-height:0; padding:8px 4px 6px; border-radius:50%;
+  background:radial-gradient(circle at 35% 20%,rgba(75,55,91,.62),rgba(19,17,27,.97) 72%);
+  border:1px solid rgba(179,149,198,.36); box-shadow:inset 0 1px rgba(255,255,255,.055),0 5px 20px rgba(0,0,0,.29);
+  color:#d6bbec; cursor:pointer; text-align:center; font-weight:700; line-height:1.25;
+  transition:filter .2s ease, box-shadow .2s ease; opacity:1;
 }
-@media (max-width: 480px) {
-  .ns-overview { grid-template-columns: 1fr; justify-items: center; text-align: center; }
-  .ns-overview-copy { width: 100%; }
-  .ns-resource { gap: 5px; }
-  .ns-resource > div { padding: 8px 5px; }
-  .ns-node { padding: 11px; }
+.ns-branch-panel .ns-orbit-node.ns-light-btn:not(:disabled):hover { filter:brightness(1.17); transform:translate(-50%,-50%); box-shadow:0 0 20px rgba(197,158,234,.30); }
+.ns-branch-panel .ns-orbit-node.ns-light-btn:focus-visible { outline:2px solid #ffe1a0; outline-offset:4px; }
+.ns-branch-panel .ns-orbit-node.ns-light-btn.is-lit { color:#f2dfb4; border-color:rgba(236,194,110,.8); box-shadow:0 0 22px rgba(224,175,93,.20),inset 0 0 13px rgba(215,165,83,.12); }
+.ns-branch-panel .ns-orbit-node.ns-light-btn.is-locked { filter:grayscale(.55); opacity:.62; }
+.ns-branch-panel .ns-orbit-node.ns-light-btn:disabled { cursor:not-allowed; }
+.ns-orbit-symbol { font-size:clamp(13px,1.7vw,19px); }
+.ns-orbit-node strong { font-size:clamp(10px,1vw,12px); }
+.ns-orbit-rank { color:#cfb8d9; font-size:10px; font-variant-numeric:tabular-nums; }
+.ns-orbit-node.is-lit .ns-orbit-rank { color:#f5d19a; }
+.ns-orbit-glimmer { position:absolute; bottom:0; left:24%; right:24%; height:2px; border-radius:3px; background:linear-gradient(90deg,#9565bc var(--lit),rgba(158,145,165,.2) var(--lit)); }
+.ns-orbit-node.is-lit .ns-orbit-glimmer { background:linear-gradient(90deg,#f2d28c var(--lit),rgba(158,145,165,.2) var(--lit)); }
+.ns-orbit-hint { position:absolute; top:calc(100% + 5px); left:50%; transform:translateX(-50%); width:125px;
+  font-size:9px; color:#b7a6c5; white-space:normal; line-height:1.4; font-weight:600; }
+.ns-orbit-node.is-lit .ns-orbit-hint { color:#dbc394; }
+.ns-pos-leftTop { left:12.083333%; top:20.192308%; }
+.ns-pos-leftMain { left:28.333333%; top:50%; }
+.ns-pos-leftBottom { left:12.083333%; top:79.807692%; }
+.ns-pos-rightMain { left:71.666667%; top:50%; }
+.ns-pos-rightTop { left:87.916667%; top:20.192308%; }
+.ns-pos-rightBottom { left:87.916667%; top:79.807692%; }
+.ns-tree-core { position:absolute; z-index:1; left:50%; top:50%; transform:translate(-50%,-50%);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
+  width:clamp(165px,18vw,260px); gap:0; pointer-events:none; }
+.ns-tree-core .golden-core-stage-v3 { width:clamp(146px,16vw,218px); height:clamp(146px,16vw,218px); cursor:default; pointer-events:none; }
+.ns-tree-core .golden-core-sphere-v3 { width:clamp(76px,8vw,108px); height:clamp(76px,8vw,108px); }
+.ns-tree-core .golden-core-orbit-v3 { width:clamp(130px,12vw,172px); }
+.ns-tree-core .golden-core-halo-v3.halo-a { inset:23px; }
+.ns-tree-core .golden-core-halo-v3.halo-b { inset:39px; }
+.ns-tree-core-name { margin-top:-15px; color:#f4ddad; font-size:clamp(11px,1.2vw,15px); font-weight:900; }
+.ns-tree-core-desc,.ns-tree-core-stage { color:#ad9aa6; font-size:10px; }
+.ns-tree-core-stage { color:#d2ae73; }
+.ns-tree-swipe-hint { display:none; text-align:center; margin:0; font-size:10px; color:#af9bba; }
+.ns-branch-bottom { display:grid; width:min(100%,880px); gap:6px; margin:0 auto; text-align:center; }
+.ns-branch-bottom .ns-progress { width:100%; }
+.ns-combat-summary { margin:0; font-size:11px; line-height:1.55; color:#d8bfeb; }
+.ns-branch-panel .ns-reward-guide { display:flex; justify-content:center; flex-wrap:wrap; gap:8px 18px; width:100%; max-width:950px;
+  margin:0 auto; text-align:center; border:0; background:transparent; padding:10px 0; font-size:10px; color:#a99db3; }
+.ns-branch-panel .ns-reward-guide strong { color:#ddc2ed; }
+@media (max-width:800px) {
+  .ns-branch-intro { justify-content:center; text-align:center; gap:12px; }
+  .ns-branch-intro .ns-resource { width:100%; }
+  .ns-tree-swipe-hint { display:block; }
+  .ns-tree-core .golden-core-stage-v3 { width:146px; height:146px; }
+  .ns-tree-core .golden-core-sphere-v3 { width:76px; height:76px; }
+  .ns-tree-core .golden-core-orbit-v3 { width:130px; }
 }
-@media (prefers-reduced-motion: reduce) {
-  .ns-light-btn { transition: none !important; }
+@media (prefers-reduced-motion:reduce) {
+  .ns-branch-panel .ns-orbit-node.ns-light-btn { transition:none!important; }
 }
