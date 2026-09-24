@@ -49,12 +49,12 @@ test('main story spans the complete current realm curve from mortal to true immo
     ['foundation-late-shadow', 22],
     ['golden-core-truth', 28],
     ['nascent-soul-expedition', 68],
-    ['spirit-transformation-history', 128],
-    ['void-refinement-choice', 208],
-    ['integration-revelation', 308],
-    ['mahayana-alliance', 448],
-    ['tribulation-final', 628],
-    ['true-immortal-epilogue', 868]
+    ['spirit-transformation-history', 188],
+    ['void-refinement-choice', 428],
+    ['integration-revelation', 788],
+    ['mahayana-alliance', 1268],
+    ['tribulation-final', 1868],
+    ['true-immortal-epilogue', 2588]
   ]) {
     assert.match(scripts, new RegExp("id: '" + id + "'[\\s\\S]*?minScore: " + score));
   }
