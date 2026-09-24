@@ -48,6 +48,7 @@ jobs:
       - name: Run regression tests
         run: |
           npm install --no-audit --no-fund
+          npm run build:module-versions
           npm test
       - name: Commit rebalance
         run: |
