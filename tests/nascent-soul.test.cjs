@@ -231,7 +231,7 @@ test('nascent soul map stays inside one viewport with fixed navigation and HUD',
 test('map nodes only select; the right-hand detail is the sole upgrade control', () => {
   const training = read('public/cultivation/cultivation-training-v4.js');
   const css = read('public/cultivation-training-v3.css');
-  const nodeMarkup = training.slice(training.indexOf('    const nodes = soulNodes(type, (state.equippedCore || state.core)?.grade).map(node => {'), training.indexOf('    const line = (id, path', training.indexOf('    const nodes = soulNodes(type, (state.equippedCore || state.core)?.grade).map(node => {')));
+  const nodeMarkup = training.slice(training.indexOf('    const nodes = soulNodes(type, equippedGrade).map(node => {'), training.indexOf('    const line = (id, path', training.indexOf('    const nodes = soulNodes(type, equippedGrade).map(node => {')));
   const action = training.slice(training.indexOf('  function bindSoulActions() {'), training.indexOf('  // 鬥法配對時讀取已投資節點', training.indexOf('  function bindSoulActions() {')));
   assert.match(nodeMarkup, /data-ns-node="\$\{node\.id\}"/);
   assert.doesNotMatch(nodeMarkup, /data-ns-upgrade|disabled' : ''/);
