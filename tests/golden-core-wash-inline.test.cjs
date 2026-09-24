@@ -78,8 +78,8 @@ test('two rays travel from the wash button to the orb without creating any modal
   assert.equal(svg.paths.a.length, 2);
   assert.equal(svg.paths.b.length, 2);
   assert.notEqual(svg.paths.a[0].attrs.d, svg.paths.b[0].attrs.d);
-  assert.match(svg.paths.a[0].attrs.d, /^M 178\.0 480\.8 C /);
-  assert.match(svg.paths.b[0].attrs.d, /^M 322\.0 480\.8 C /);
+  assert.match(svg.paths.a[0].attrs.d, /^M 192\.0 480\.8 C /);
+  assert.match(svg.paths.b[0].attrs.d, /^M 308\.0 480\.8 C /);
   await effect.minimumDuration;
   effect.cleanup();
   assert.equal(card.children[0].isConnected, false);
