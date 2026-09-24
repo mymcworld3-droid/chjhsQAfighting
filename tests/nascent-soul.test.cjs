@@ -114,6 +114,7 @@ test('nine nascent soul branches have unique tier titles and nonzero passive eff
 test('training mutations use Firestore transaction and separate trees from the reward ledger', () => {
   const training = read('public/cultivation/cultivation-training-v4.js');
   const combat = read('public/cultivation/cultivation-combat-stats.js');
+  const power = read('public/cultivation/combat-power.js');
   const battle = read('public/cultivation/battle-mode-v2.js');
   const engine = read('public/cultivation/battle-engine-v2.js');
   const css = read('public/cultivation-training-v3.css');
@@ -122,6 +123,7 @@ test('training mutations use Firestore transaction and separate trees from the r
   assert.match(training, /data-ns-node=/);
   assert.match(training, /window\.getNascentSoulBattleSnapshot/);
   assert.match(combat, /window\.getNascentSoulBattleSnapshot\?\.\(\)/);
+  assert.match(power, /window\.getNascentSoulBattleSnapshot\?\.\(\)/);
   assert.match(battle, /nascentSoul: nascentSoul \?/);
   assert.match(engine, /soulDamage/);
   assert.match(css, /\.ns-trees/);
