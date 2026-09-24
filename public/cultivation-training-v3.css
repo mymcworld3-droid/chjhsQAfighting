@@ -259,3 +259,229 @@ body.xianxia-theme #page-training .ns-branch-panel {
 @media (prefers-reduced-motion:reduce) {
   .ns-branch-panel .ns-orbit-node.ns-light-btn { transition:none!important; }
 }
+
+
+/* 元嬰地圖一屏模式：分頁／名稱／神識／規則固定在上方，技能地圖填滿餘下空間。
+   content-capacity-layout.js 會以實際底部導覽位置設定 --training-fill-height，故只在元嬰分頁
+   覆寫原本的 auto + overflow:visible；金丹、煉器、裝備、背包不受影響。 */
+body.xianxia-theme.ns-map-active main:has(#page-training.active-page) {
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+}
+body.xianxia-theme.ns-map-active #page-training.training-page-v3.active-page {
+  display: grid !important;
+  grid-template-rows: auto minmax(0,1fr) !important;
+  width: 100% !important;
+  height: var(--training-fill-height, calc(100dvh - 208px)) !important;
+  min-height: 0 !important;
+  max-height: var(--training-fill-height, calc(100dvh - 208px)) !important;
+  padding-bottom: 0 !important;
+  overflow: hidden !important;
+  align-content: stretch !important;
+}
+body.xianxia-theme.ns-map-active #page-training #training-tab-content {
+  display: block !important;
+  box-sizing: border-box !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: 100% !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+}
+body.xianxia-theme.ns-map-active #page-training .training-subtabs-v3 {
+  position: relative;
+  z-index: 3;
+  flex-shrink: 0;
+  margin-bottom: 3px !important;
+}
+body.xianxia-theme.ns-map-active #page-training .ns-branch-panel {
+  display: grid !important;
+  grid-template-rows: auto auto minmax(0,1fr) auto auto !important;
+  align-content: stretch !important;
+  gap: clamp(3px,.55dvh,7px) !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: none !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: 100% !important;
+  overflow: hidden !important;
+  padding: clamp(4px,.65dvh,8px) clamp(3px,.7vw,10px) 2px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+body.xianxia-theme.ns-map-active #page-training .ns-branch-intro {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  gap: clamp(6px,1.6vw,22px);
+  padding: 0 clamp(2px,.7vw,8px);
+  min-height: 0;
+}
+body.xianxia-theme.ns-map-active #page-training .ns-branch-title {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+body.xianxia-theme.ns-map-active #page-training .ns-branch-title h3 {
+  font-size: clamp(15px,2vw,25px);
+  line-height: 1.22;
+}
+body.xianxia-theme.ns-map-active #page-training .ns-branch-title p {
+  font-size: 10px;
+}
+body.xianxia-theme.ns-map-active #page-training .ns-branch-intro .ns-resource {
+  width: clamp(218px,32vw,400px);
+  min-width: 0;
+  flex: 0 1 auto;
+  gap: clamp(3px,.5vw,8px);
+}
+body.xianxia-theme.ns-map-active #page-training .ns-resource > div {
+  padding: clamp(4px,.6vw,8px) clamp(3px,.8vw,11px);
+}
+body.xianxia-theme.ns-map-active #page-training .ns-resource strong {
+  font-size: clamp(14px,1.85vw,23px);
+}
+body.xianxia-theme.ns-map-active #page-training .ns-tree-tip {
+  position: relative;
+  z-index: 2;
+  margin: 0;
+  line-height: 1.45;
+  font-size: clamp(9px,.9vw,11px);
+}
+body.xianxia-theme.ns-map-active #page-training .ns-tree-viewport {
+  position: relative;
+  min-width: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: 100% !important;
+  overflow: hidden !important;
+  overscroll-behavior: none;
+  border-radius: 0 !important;
+  background: radial-gradient(ellipse at 50% 50%,rgba(121,86,52,.14),transparent 60%);
+  scrollbar-width: none;
+  touch-action: manipulation;
+}
+body.xianxia-theme.ns-map-active #page-training .ns-diagram {
+  position: relative;
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  aspect-ratio: auto !important;
+}
+body.xianxia-theme.ns-map-active #page-training .ns-branch-bottom {
+  width: min(100%,680px);
+  min-height: 0;
+  gap: 3px;
+  font-size: 10px;
+}
+body.xianxia-theme.ns-map-active #page-training .ns-branch-bottom .ns-progress-caption {
+  font-size: 9px;
+}
+body.xianxia-theme.ns-map-active #page-training .ns-branch-panel .ns-reward-guide {
+  padding: 2px 0 !important;
+  gap: 3px 13px;
+  font-size: 9px;
+  line-height: 1.4;
+}
+body.xianxia-theme.ns-map-active #page-training .ns-orbit-node.ns-light-btn {
+  width: clamp(58px,8vw,104px);
+  height: clamp(58px,8vw,104px);
+  padding: 6px 3px 5px;
+}
+body.xianxia-theme.ns-map-active #page-training .ns-tree-core {
+  width: clamp(110px,18vw,245px);
+}
+body.xianxia-theme.ns-map-active #page-training .ns-tree-core .golden-core-stage-v3 {
+  width: clamp(102px,15vw,204px) !important;
+  height: clamp(102px,15vw,204px) !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  max-width: none !important;
+  max-height: none !important;
+}
+body.xianxia-theme.ns-map-active #page-training .ns-tree-core .golden-core-sphere-v3 {
+  width: clamp(58px,7vw,105px) !important;
+  height: clamp(58px,7vw,105px) !important;
+  min-height: 0 !important;
+}
+body.xianxia-theme.ns-map-active #page-training .ns-tree-core .golden-core-orbit-v3 {
+  width: clamp(93px,12vw,168px) !important;
+}
+body.xianxia-theme.ns-map-active #page-training .ns-orbit-hint {
+  width: clamp(65px,10vw,125px);
+  font-size: clamp(8px,.73vw,9px);
+}
+@media (max-width: 720px) {
+  body.xianxia-theme.ns-map-active #page-training .ns-branch-intro {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 3px;
+    text-align: center;
+  }
+  body.xianxia-theme.ns-map-active #page-training .ns-branch-title { flex: 0 0 100%; }
+  body.xianxia-theme.ns-map-active #page-training .ns-branch-title h3 { font-size: 17px; }
+  body.xianxia-theme.ns-map-active #page-training .ns-branch-title p { font-size: 9px; }
+  body.xianxia-theme.ns-map-active #page-training .ns-branch-intro .ns-resource {
+    flex: 1 1 100%;
+    width: 100%;
+    max-width: 420px;
+  }
+  body.xianxia-theme.ns-map-active #page-training .ns-resource > div { padding: 3px 5px; }
+  body.xianxia-theme.ns-map-active #page-training .ns-resource strong { font-size: 15px; margin: 0; }
+  body.xianxia-theme.ns-map-active #page-training .ns-resource small { font-size: 9px; }
+  body.xianxia-theme.ns-map-active #page-training .ns-tree-tip { font-size: 9px; }
+  body.xianxia-theme.ns-map-active #page-training .ns-orbit-node.ns-light-btn {
+    width: clamp(50px,16vw,65px);
+    height: clamp(50px,16vw,65px);
+    gap: 1px;
+    padding: 4px 2px;
+  }
+  body.xianxia-theme.ns-map-active #page-training .ns-orbit-symbol { font-size: 12px; }
+  body.xianxia-theme.ns-map-active #page-training .ns-orbit-node strong { font-size: 9px; }
+  body.xianxia-theme.ns-map-active #page-training .ns-orbit-rank { font-size: 9px; }
+  body.xianxia-theme.ns-map-active #page-training .ns-orbit-hint { display: none; }
+  body.xianxia-theme.ns-map-active #page-training .ns-tree-core { width: 100px; }
+  body.xianxia-theme.ns-map-active #page-training .ns-tree-core .golden-core-stage-v3 {
+    width: 96px !important; height: 96px !important;
+  }
+  body.xianxia-theme.ns-map-active #page-training .ns-tree-core .golden-core-sphere-v3 {
+    width: 55px !important; height: 55px !important; font-size: 19px;
+  }
+  body.xianxia-theme.ns-map-active #page-training .ns-tree-core .golden-core-orbit-v3 { width: 89px !important; }
+  body.xianxia-theme.ns-map-active #page-training .ns-tree-core-name { margin-top: -7px; font-size: 10px; }
+  body.xianxia-theme.ns-map-active #page-training .ns-tree-core-desc,
+  body.xianxia-theme.ns-map-active #page-training .ns-tree-core-stage { font-size: 8px; }
+  body.xianxia-theme.ns-map-active #page-training .ns-branch-bottom .ns-progress-caption { display: none; }
+  body.xianxia-theme.ns-map-active #page-training .ns-branch-panel .ns-reward-guide { display: none; }
+}
+@media (max-height: 690px) {
+  body.xianxia-theme.ns-map-active #page-training .ns-branch-panel { gap: 2px !important; }
+  body.xianxia-theme.ns-map-active #page-training .ns-branch-bottom .ns-progress-caption { display: none; }
+  body.xianxia-theme.ns-map-active #page-training .ns-branch-panel .ns-reward-guide { display: none; }
+  body.xianxia-theme.ns-map-active #page-training .ns-orbit-hint { display: none; }
+}
+@media (max-height: 490px) {
+  body.xianxia-theme.ns-map-active #page-training .ns-orbit-node.ns-light-btn {
+    width: 49px; height: 49px; gap: 0; padding: 1px;
+  }
+  body.xianxia-theme.ns-map-active #page-training .ns-orbit-symbol { font-size: 11px; }
+  body.xianxia-theme.ns-map-active #page-training .ns-orbit-node strong,
+  body.xianxia-theme.ns-map-active #page-training .ns-orbit-rank { font-size: 8px; }
+  body.xianxia-theme.ns-map-active #page-training .ns-tree-core .golden-core-stage-v3 {
+    width: 83px !important; height: 83px !important;
+  }
+  body.xianxia-theme.ns-map-active #page-training .ns-tree-core .golden-core-sphere-v3 {
+    width: 48px !important; height: 48px !important;
+  }
+  body.xianxia-theme.ns-map-active #page-training .ns-tree-core-desc { display: none; }
+  body.xianxia-theme.ns-map-active #page-training .ns-branch-bottom { display: none; }
+}
