@@ -521,16 +521,16 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
       <path d="${path}" class="ns-branch-line ${unlocked ? 'is-open' : ''} ${lit ? 'is-lit' : ''}"
         data-branch="${id}" />`;
     const links = [
-      line('core-left','M 530 260 L 455 260',true,!!levels.leftMain),
-      line('core-right','M 670 260 L 745 260',true,!!levels.rightMain),
-      line('leftTop','M 455 260 Q 410 260 355 105',(levels.leftMain||0)>=5,!!levels.leftTop),
-      line('leftBottom','M 455 260 Q 410 260 355 415',(levels.leftMain||0)>=5,!!levels.leftBottom),
+      line('core-left','M 530 260 L 414 260',true,!!levels.leftMain),
+      line('core-right','M 670 260 L 786 260',true,!!levels.rightMain),
+      line('leftTop','M 414 260 Q 390 260 355 105',(levels.leftMain||0)>=5,!!levels.leftTop),
+      line('leftBottom','M 414 260 Q 390 260 355 415',(levels.leftMain||0)>=5,!!levels.leftBottom),
       line('leftFarTop','M 355 105 L 215 105',(levels.leftTop||0)>=5,!!levels.leftFarTop),
       line('leftFarBottom','M 355 415 L 215 415',(levels.leftBottom||0)>=5,!!levels.leftFarBottom),
       line('leftFinalTop','M 215 105 Q 145 105 90 260',(levels.leftFarTop||0)>=5,!!levels.leftFinal),
       line('leftFinalBottom','M 215 415 Q 145 415 90 260',(levels.leftFarBottom||0)>=5,!!levels.leftFinal),
-      line('rightTop','M 745 260 Q 790 260 845 105',(levels.rightMain||0)>=5,!!levels.rightTop),
-      line('rightBottom','M 745 260 Q 790 260 845 415',(levels.rightMain||0)>=5,!!levels.rightBottom),
+      line('rightTop','M 786 260 Q 810 260 845 105',(levels.rightMain||0)>=5,!!levels.rightTop),
+      line('rightBottom','M 786 260 Q 810 260 845 415',(levels.rightMain||0)>=5,!!levels.rightBottom),
       line('rightFarTop','M 845 105 L 985 105',(levels.rightTop||0)>=5,!!levels.rightFarTop),
       line('rightFarBottom','M 845 415 L 985 415',(levels.rightBottom||0)>=5,!!levels.rightFarBottom),
       line('rightFinalTop','M 985 105 Q 1055 105 1110 260',(levels.rightFarTop||0)>=5,!!levels.rightFinal),
