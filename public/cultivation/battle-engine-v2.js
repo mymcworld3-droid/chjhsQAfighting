@@ -106,7 +106,7 @@ function answerCorrect(player) {
   return player?.answer?.correct === true;
 }
 
-const NEXT_REALM_THRESHOLDS = [28, 68, 128, 208, 308, 448, 628, 868];
+const NEXT_REALM_THRESHOLDS = [28, 68, 188, 428, 788, 1268, 1868, 2588];
 function nearBreakthrough(score, grade) {
   const current = Math.max(0, Number(score) || 0);
   const next = NEXT_REALM_THRESHOLDS.find((need) => need > current);
