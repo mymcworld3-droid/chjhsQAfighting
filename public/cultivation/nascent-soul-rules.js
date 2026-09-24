@@ -145,23 +145,39 @@ function migrateLegacyPath(raw) {
 }
 export function normalizeSoulTree(raw) {
   const paths = {};
+  const version = Number(raw?.version);
   for (const type of Object.keys(NASCENT_SOUL_TYPES)) {
     const path = raw?.paths?.[type];
     if (!path || typeof path !== 'object') continue;
-    const isOld = Number(raw?.version) !== 2;
-    const fixed = isOld ? migrateLegacyPath(path.nodes) : {
-      nodes: cleanLevels(path.nodes),
-      baselineNodes: {}, legacySpent: normalizeSpirit(path.legacySpent)
-    };
-    if (!isOld) {
-      const baselines = cleanLevels(path.baselineNodes);
+    let fixed;
+    if (version === 3) {
+      fixed = {
+        nodes: cleanLevels(path.nodes),
+        baselineNodes: cleanLevels(path.baselineNodes),
+        legacySpent: normalizeSpirit(path.legacySpent)
+      };
+    } else if (version === 2) {
+      const nodes = cleanLevels(path.nodes);
+      const originalBaseline = cleanLevels(path.baselineNodes);
+      // 舊版六節點一律每級 1 神識：將既有等級及已花費神識凍結，不能以新外圈價格追溯收費。
+      let alreadySpent = normalizeSpirit(path.legacySpent);
       for (const id of NASCENT_SOUL_NODE_ORDER) {
-        if (baselines[id]) fixed.baselineNodes[id] = Math.min(baselines[id], fixed.nodes[id] || 0);
+        alreadySpent += Math.max(0, (nodes[id] || 0) - (originalBaseline[id] || 0));
+      }
+      fixed = { nodes, baselineNodes: { ...nodes }, legacySpent: alreadySpent };
+    } else {
+      fixed = migrateLegacyPath(path.nodes);
+    }
+    // 已繳費的舊節點最多抵銷相同節點的現有等級，避免異常存檔產生負消費。
+    for (const id of NASCENT_SOUL_NODE_ORDER) {
+      if (fixed.baselineNodes[id]) {
+        fixed.baselineNodes[id] = Math.min(fixed.baselineNodes[id], fixed.nodes[id] || 0);
+        if (!fixed.baselineNodes[id]) delete fixed.baselineNodes[id];
       }
     }
     if (Object.keys(fixed.nodes).length || fixed.legacySpent) paths[type] = fixed;
   }
-  return { version: 2, paths };
+  return { version: 3, paths };
 }
 export function soulSpentSpirit(tree) {
   const safe = normalizeSoulTree(tree);
