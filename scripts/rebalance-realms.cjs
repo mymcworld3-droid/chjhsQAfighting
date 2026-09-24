@@ -179,9 +179,6 @@ replaceAll('tests/newbie-mortal-tutorial.test.cjs', '60 修為', '10 修為');
   write(rel, source);
 }
 
-// Add an explicit pacing regression test so future changes cannot silently restore the grind.
-const balanceTest = `const test = require('node:test');\nconst assert = require('node:assert/strict');\nconst fs = require('node:fs');\nconst path = require('node:path');\n\nfunction read(rel) { return fs.readFileSync(path.join(__dirname, '..', rel), 'utf8'); }\n\nconst theme = read('public/cultivation/cultivation-theme.js');\nconst rules = read('public/cultivation/cultivation-rules.js');\nconst battle = read('public/cultivation/battle-mode-v2.js');\nconst artifacts = read('public/cultivation/artifact-catalog.js');\n\ntest('realm pacing reaches Foundation in 10 answers and Golden Core 18 answers later', () => {\n  assert.match(theme, /name: '築基', sub: '初期', need: 10/);\n  assert.match(theme, /name: '築基', sub: '中期', need: 16/);\n  assert.match(theme, /name: '築基', sub: '後期', need: 22/);\n  assert.match(theme, /name: '金丹', sub: '丹成一品', need: 28/);\n  assert.match(rules, /const GOLDEN_CORE_SCORE = 28;/);\n  assert.match(battle, /const FOUNDATION_SCORE = 10;/);\n});\n\ntest('post-Golden-Core curve is balanced against the +2 base cultivation gain', () => {\n  const expected = [['元嬰',68],['化神',188],['煉虛',428],['合體',788],['大乘',1268],['渡劫',1868],['半仙',2588],['真仙',2588]];\n  for (const [name, need] of expected) assert.match(theme, new RegExp("name: '" + name + "'.*need: " + need));\n  assert.match(artifacts, /id: 'golden-core'.*need: 28/);\n  assert.match(artifacts, /id: 'tribulation'.*need: 1868/);\n});\n`;
-write('tests/realm-balance-v3.test.cjs', balanceTest);
-
+// Keep the maintained realm-balance regression suite intact; do not regenerate or weaken it.
 console.log(`Realm rebalance updated ${touched.size} files:`);
 for (const rel of [...touched].sort()) console.log(` - ${rel}`);
