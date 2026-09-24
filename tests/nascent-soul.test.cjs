@@ -175,3 +175,21 @@ test('duel bonus damage from nascent soul is fixed in the match and applies only
   const wrong = context.settle({roomId:'soul-b',round:1,host:player('h',false,true),guest:player('g',false,false)});
   assert.equal(wrong.guestHp, 1000);
 });
+
+
+test('nascent soul map stays inside one viewport with fixed navigation and HUD', () => {
+  const training = read('public/cultivation/cultivation-training-v4.js');
+  const css = read('public/cultivation-training-v3.css');
+  assert.match(training, /document\.body\.classList\.toggle\('ns-map-active'/);
+  assert.match(training, /class="ns-branch-intro"/);
+  assert.match(training, /class="ns-tree-tip"/);
+  assert.match(training, /class="ns-tree-viewport ns-trees" role="group"/);
+  assert.doesNotMatch(training, /ns-tree-viewport'\)\?\.scrollLeft/);
+  assert.doesNotMatch(training, /窄螢幕可左右捲動|手機或窄螢幕可左右滑動/);
+  assert.match(css, /body\.xianxia-theme\.ns-map-active main:has\(#page-training\.active-page\)\s*\{[\s\S]*?overflow:\s*hidden\s*!important/);
+  assert.match(css, /\.ns-branch-panel\s*\{[\s\S]*?grid-template-rows:\s*auto auto minmax\(0,1fr\) auto auto\s*!important/);
+  assert.match(css, /#training-tab-content\s*\{[\s\S]*?max-height:\s*100%\s*!important/);
+  assert.match(css, /\.ns-tree-viewport\s*\{[\s\S]*?overflow:\s*hidden\s*!important/);
+  assert.match(css, /\.ns-diagram\s*\{[\s\S]*?min-width:\s*0\s*!important/);
+  assert.match(css, /\.ns-tree-core \.golden-core-stage-v3\s*\{[\s\S]*?min-height:\s*0\s*!important/);
+});
