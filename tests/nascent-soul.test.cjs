@@ -193,3 +193,59 @@ test('nascent soul map stays inside one viewport with fixed navigation and HUD',
   assert.match(css, /\.ns-diagram\s*\{[\s\S]*?min-width:\s*0\s*!important/);
   assert.match(css, /\.ns-tree-core \.golden-core-stage-v3\s*\{[\s\S]*?min-height:\s*0\s*!important/);
 });
+
+
+test('map nodes only select; the right-hand detail is the sole upgrade control', () => {
+  const training = read('public/cultivation/cultivation-training-v4.js');
+  const css = read('public/cultivation-training-v3.css');
+  const nodeMarkup = training.slice(training.indexOf('    const nodes = soulNodes(type).map(node => {'), training.indexOf('    const line = (id, path', training.indexOf('    const nodes = soulNodes(type).map(node => {')));
+  const action = training.slice(training.indexOf('  function bindSoulActions() {'), training.indexOf('  // 鬥法配對時讀取已投資節點', training.indexOf('  function bindSoulActions() {')));
+  assert.match(nodeMarkup, /data-ns-node="\$\{node\.id\}"/);
+  assert.doesNotMatch(nodeMarkup, /data-ns-upgrade|disabled' : ''/);
+  assert.match(training, /soulNodeDetailMarkup\(type, tree, earned\)/);
+  assert.match(training, /data-ns-close/);
+  assert.match(training, /data-ns-upgrade="\$\{node\.id\}"/);
+  assert.match(action, /selectedSoulNodeId = button\.dataset\.nsNode/);
+  assert.match(action, /content\.querySelector\('\[data-ns-upgrade\]'\)/);
+  assert.match(action, /id === selectedSoulNodeId\) void illuminateSoulNode\(id\)/);
+  assert.doesNotMatch(action, /\[data-ns-node\][\s\S]*?void illuminateSoulNode\(button\.dataset\.nsNode\)/);
+  assert.match(css, /\.ns-node-detail/);
+  assert.match(css, /position:\s*absolute/);
+  assert.match(css, /right:\s*1px/);
+  assert.match(css, /overflow:\s*hidden/);
+  assert.match(css, /\.ns-detail-action:disabled/);
+});
+
+test('node detail previews current and next values including locked or capped nodes', () => {
+  const training = read('public/cultivation/cultivation-training-v4.js');
+  const start = training.indexOf('  function soulNodeDetailMarkup(');
+  const end = training.indexOf('  function nascentSoulTabMarkup()', start);
+  assert.ok(start >= 0 && end > start);
+  const func = training.slice(start, end);
+  const render = (id, tree, earned) => {
+    const context = { soulNodes, soulNodeStatus, NASCENT_SOUL_NODE_CAP:10, soulBusy:false, selectedSoulNodeId:id };
+    const fn = new Function(...Object.keys(context), func + '\nreturn soulNodeDetailMarkup;');
+    return fn(...Object.values(context))('sword',tree,earned);
+  };
+  const initial = render('leftMain',null,50);
+  assert.match(initial,/目前數值/);
+  assert.match(initial,/升級後/);
+  assert.match(initial, /<strong>\+0<\/strong>/);
+  assert.match(initial, /<strong class="ns-detail-next">\+12<\/strong>/);
+  assert.match(initial,/點亮 · 1 神識/);
+  const first = allocateSoulNode(null,'sword','leftMain',50);
+  const upgraded = render('leftMain',first.tree,50);
+  assert.match(upgraded, /<strong>\+12<\/strong>/);
+  assert.match(upgraded, /<strong class="ns-detail-next">\+24<\/strong>/);
+  assert.match(upgraded,/升級 · 1 神識/);
+  const locked = render('rightTop',first.tree,50);
+  assert.match(locked,/前置需達 5 \/ 10/);
+  assert.match(locked,/data-ns-upgrade="rightTop"\s+disabled/);
+  let tree=first.tree;
+  for(let i=1;i<10;i++) tree=allocateSoulNode(tree,'sword','leftMain',50).tree;
+  const capped=render('leftMain',tree,50);
+  assert.match(capped,/已點滿/);
+  assert.match(capped, /<strong>\+120<\/strong>/);
+  assert.match(capped, /<strong class="ns-detail-next">\+120<\/strong>/);
+  assert.match(capped,/data-ns-upgrade="leftMain"\s+disabled/);
+});
