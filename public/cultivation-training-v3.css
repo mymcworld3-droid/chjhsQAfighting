@@ -171,3 +171,74 @@ body.xianxia-theme .training-page-v3 { max-width:900px; margin:0 auto; padding-b
 @keyframes nsFloat { 50% {transform:translateY(-5px);} }
 @media(max-width:640px) { .ns-panel {min-height:0;padding:18px 12px;} .ns-stage {width:136px;height:136px;} }
 @media(prefers-reduced-motion:reduce) { .ns-stage-halo,.ns-avatar {animation:none!important;} }
+
+
+/* 元嬰點亮：上方元嬰與資源摘要，下方兩支分明的屬性／本命神通樹。 */
+body.xianxia-theme #page-training .ns-panel {
+  width: 100%; max-width: 1300px; margin: 0 auto;
+  padding: clamp(12px, 1.8vw, 24px) clamp(8px, 1.4vw, 20px) 32px;
+  min-height: 0; gap: 18px; align-items: stretch; text-align: left;
+}
+.ns-overview {
+  display: grid; grid-template-columns: minmax(110px, 160px) minmax(0, 1fr);
+  gap: clamp(14px, 2vw, 30px); align-items: center; width: 100%; max-width: 960px;
+  margin: 0 auto; padding: 8px 0 12px;
+}
+.ns-overview .ns-stage { width: 150px; height: 150px; }
+.ns-overview-copy { min-width: 0; display: grid; gap: 8px; }
+.ns-overview-copy h3 { line-height: 1.28; }
+.ns-overview-copy .ns-progress-caption { line-height: 1.5; }
+.ns-resource { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; margin: 3px 0; }
+.ns-resource > div { min-width: 0; border: 1px solid rgba(200, 165, 234, .16); border-radius: 12px; padding: 9px 10px; background: rgba(197, 154, 236, .035); }
+.ns-resource small { display: block; color: #b9a4c5; font-size: 10px; }
+.ns-resource strong { display: block; margin-top: 3px; color: #f1dcff; font-size: clamp(17px, 2vw, 23px); font-variant-numeric: tabular-nums; }
+.ns-resource .ns-resource-free { border-color: rgba(222, 184, 121, .42); background: rgba(191, 145, 70, .10); }
+.ns-resource-free strong { color: #f4d38c; }
+.ns-combat-summary { margin: 0; font-size: 11px; line-height: 1.55; color: #d8bfeb; }
+.ns-trees { width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(12px, 1.6vw, 24px); align-items: start; }
+.ns-tree-section { min-width: 0; display: grid; gap: 11px; }
+.ns-tree-section header { display: grid; gap: 5px; padding: 0 3px 9px; border-bottom: 1px solid rgba(200, 169, 225, .2); }
+.ns-tree-section header > span, .ns-skill-tier { font-size: 10px; font-weight: 800; letter-spacing: .08em; color: #ab91c4; }
+.ns-tree-section h4 { margin: 0; font-size: 19px; font-weight: 900; color: #f0d9ff; }
+.ns-tree-section header p { font-size: 11px; color: #a997b4; margin: 0; line-height: 1.55; }
+.ns-node-list { display: grid; gap: 13px; }
+.ns-node { position: relative; min-width: 0; display: grid; grid-template-columns: 42px minmax(0, 1fr); gap: 8px 10px; align-items: start;
+  padding: 14px; border: 1px solid rgba(179, 143, 206, .19); border-radius: 16px; background: linear-gradient(130deg, rgba(35, 25, 44, .50), rgba(17, 15, 22, .42)); }
+.ns-node.is-lit { border-color: rgba(218, 171, 98, .43); background: radial-gradient(circle at 0 0, rgba(221, 168, 89, .12), transparent 54%), rgba(35, 28, 29, .48); }
+.ns-node.is-locked { opacity: .72; }
+.ns-node-symbol { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 50%;
+  border: 1px solid rgba(197, 154, 236, .28); color: #bb99d8; font-size: 18px; background: rgba(131, 91, 163, .11); }
+.ns-node.is-lit .ns-node-symbol { color: #f2cd8d; border-color: rgba(237, 198, 123, .58); box-shadow: 0 0 18px rgba(237, 183, 100, .13), inset 0 0 10px rgba(237, 183, 100, .09); }
+.ns-node-content { display: grid; min-width: 0; gap: 5px; }
+.ns-node-content strong { color: #ede0f5; font-size: 14px; }
+.ns-node-content small { color: #ac9cb5; font-size: 11px; line-height: 1.55; }
+.ns-node-benefit { color: #e6c48a; font-size: 11px; line-height: 1.45; }
+.ns-node-level, .ns-skill-condition { color: #9485a2; font-size: 10px; line-height: 1.55; }
+.ns-light-btn { grid-column: 1 / -1; min-height: 38px; border: 1px solid rgba(217, 171, 102, .56); border-radius: 11px;
+  background: linear-gradient(135deg, rgba(171, 119, 48, .78), rgba(103, 61, 22, .74));
+  color: #f9e6bd; font-size: 12px; font-weight: 850; transition: filter .15s ease, transform .15s ease; cursor: pointer; }
+.ns-light-btn:not(:disabled):hover { filter: brightness(1.15); transform: translateY(-1px); }
+.ns-light-btn:focus-visible { outline: 2px solid #ffe3af; outline-offset: 2px; }
+.ns-light-btn:disabled { cursor: not-allowed; border-color: rgba(186, 153, 199, .19); background: rgba(135, 116, 152, .085); color: #95899d; }
+.ns-node.is-lit .ns-light-btn:disabled { border-color: rgba(222, 179, 110, .27); color: #d7b97f; }
+.ns-skill-list .ns-node + .ns-node::before { content: ''; position: absolute; top: -14px; left: 34px; height: 13px; border-left: 1px solid rgba(206, 172, 231, .40); }
+.ns-skill-list .ns-node.is-lit + .ns-node::before { border-color: rgba(233, 186, 118, .70); }
+.ns-save-tip { width: 100%; margin: 0 auto; font-size: 11px; color: #a99cad; text-align: center; line-height: 1.6; }
+body.xianxia-theme #page-training .ns-reward-guide { width: min(100%, 780px); margin: 0 auto; }
+@media (max-width: 780px) {
+  .ns-trees { grid-template-columns: 1fr; }
+  .ns-overview { grid-template-columns: 112px minmax(0, 1fr); gap: 12px; }
+  .ns-overview .ns-stage { width: 112px; height: 112px; }
+  .ns-overview .ns-stage-halo { inset: 9px; }
+  .ns-overview .ns-avatar { width: 72px; height: 72px; font-size: 28px; }
+}
+@media (max-width: 480px) {
+  .ns-overview { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+  .ns-overview-copy { width: 100%; }
+  .ns-resource { gap: 5px; }
+  .ns-resource > div { padding: 8px 5px; }
+  .ns-node { padding: 11px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ns-light-btn { transition: none !important; }
+}
