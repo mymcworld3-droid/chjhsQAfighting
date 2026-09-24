@@ -527,6 +527,9 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     const equippedCore = state.equippedCore;
     const equippedName = coreType(equippedCore.type).name;
     const equippedGrade = clampGrade(equippedCore.grade);
+    // 此處使用正式裝配金丹的品級效果。原先僅點擊中央金丹才看得到，
+    // 因此使用者停留在節點詳情時，地圖上完全看不到品級效果。
+    const equippedEffect = coreType(equippedCore.type).effect(equippedGrade);
     const player = window.getCurrentUserData?.() || {};
     const earned = normalizeSpirit(player.stats?.nascentSoulSpirit);
     const tree = normalizeSoulTree(player.nascentSoulTree);
@@ -538,6 +541,9 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
       cultivationDaily: cultivationBonuses.daily, cultivationCave: cultivationBonuses.cave };
     const stage = nascentSoulStage(earned);
     const levels = tree.paths[type]?.nodes || {};
+    const finale = soulNodes(type, equippedGrade);
+    const attackFinal = finale.find(node => node.id === 'leftFinal');
+    const guardFinal = finale.find(node => node.id === 'rightFinal');
     const progress = stage.next ? Math.min(100, (earned - stage.min) / (stage.next.min - stage.min) * 100) : 100;
 
     const nodes = soulNodes(type, equippedGrade).map(node => {
@@ -598,6 +604,11 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
           </div>
         </div>
         <p class="ns-tree-tip">左脈攻擊、右脈生存；中途有修為節點。每條前置達 5 級解鎖下一層，依距離每級消耗 1／3／5／8 神識。</p>
+        <div class="ns-equipped-effect" aria-label="目前裝配金丹的品級效果">
+          <span class="ns-equipped-effect-head"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> 裝配金丹 · ${equippedGrade} 品 · ${equippedName}</span>
+          <span class="ns-equipped-effect-text" title="${equippedEffect}">${equippedEffect}</span>
+          <span class="ns-equipped-effect-talent">本命殺招每級 +${attackFinal.coreAttack} 傷害 · 本命護元每級 +${guardFinal.coreHeal} 回復</span>
+        </div>
         <div class="ns-tree-viewport ns-trees" role="group" aria-label="元嬰左右分支技能地圖">
           <div class="ns-diagram" aria-label="中央金丹與十二枚元嬰節點">
             <div class="ns-map-side-label ns-map-side-left" aria-hidden="true">攻擊靈脈</div>
