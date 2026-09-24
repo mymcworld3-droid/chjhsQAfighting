@@ -11,6 +11,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 import { applyCultivationReward, showCultivationFeedback } from './cultivation-rules.js';
+import { nascentSoulSpiritReward, normalizeSpirit } from './cultivation/nascent-soul-rules.js';
 
 // Firebase Config
 const firebaseConfig = {
@@ -2502,6 +2503,9 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     const scoreBeforeAnswer = Math.max(0, Number(stats.totalScore) || 0);
     const shieldBeforeAnswer = !!stats.goldenCoreShield;
     const cultivationReward = applyCultivationReward(stats, isCorrect);
+    // 問道每答對一題 +1 神識；以本題作答前的境界判斷，不能越境提前獲取。
+    const spiritAdded = nascentSoulSpiritReward({ source: 'solo', score: scoreBeforeAnswer, isCorrect });
+    if (spiritAdded) stats.nascentSoulSpirit = normalizeSpirit(stats.nascentSoulSpirit) + spiritAdded;
     // 記下實際扣除的修為；道心擋住扣分或尚未達金丹時皆為 0。
     // 隨本次答題的 stats 一起存入，補償 API 不信任瀏覽器另外送來的扣分金額。
     if (quiz?.data?.q) {
@@ -2521,7 +2525,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         if (stats.currentStreak > stats.bestStreak) stats.bestStreak = stats.currentStreak;
         
         scoreGain = 20; // 無限模式獎勵
-        fbTitle.innerHTML += ` <span class="text-yellow-400 text-sm ml-2 border border-yellow-500 rounded px-1">+${scoreGain}💰 · +${cultivationReward.gain} 修為</span>`;
+        fbTitle.innerHTML += ` <span class="text-yellow-400 text-sm ml-2 border border-yellow-500 rounded px-1">+${scoreGain}💰 · +${cultivationReward.gain} 修為${spiritAdded ? ` · +${spiritAdded} 神識` : ''}</span>`;
     } else {
         stats.currentStreak = 0; 
     }
