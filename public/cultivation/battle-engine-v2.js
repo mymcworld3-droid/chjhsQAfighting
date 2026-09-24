@@ -224,6 +224,11 @@ export function settleBattleRound({
   const attackers = [];
   const hostSupport = resolveDeterministicCoreSupport(host, roomId + ':' + round + ':' + host.uid + ':support');
   const guestSupport = resolveDeterministicCoreSupport(guest, roomId + ':' + round + ':' + guest.uid + ':support');
+  // 元嬰終極護元每次答對時提供固定回復，丹性與品質已在配對快照中確定。
+  const hostSoulHeal = answerCorrect(host) ? Math.max(0, Math.min(1000, Math.round(Number(host?.nascentSoul?.coreHeal) || 0))) : 0;
+  const guestSoulHeal = answerCorrect(guest) ? Math.max(0, Math.min(1000, Math.round(Number(guest?.nascentSoul?.coreHeal) || 0))) : 0;
+  hostSupport.heal += hostSoulHeal;
+  guestSupport.heal += guestSoulHeal;
   const startHostHp = Math.min(Math.max(1, Number(host?.maxHp) || 1000), currentHp(host) + hostSupport.heal);
   const startGuestHp = Math.min(Math.max(1, Number(guest?.maxHp) || 1000), currentHp(guest) + guestSupport.heal);
   let hostHp = startHostHp;
@@ -237,8 +242,8 @@ export function settleBattleRound({
   const activations = [];
   for (const activation of hostSupport.activations) activations.push({ ...activation, ownerUid: host.uid });
   for (const activation of guestSupport.activations) activations.push({ ...activation, ownerUid: guest.uid });
-  if (hostSupport.heal && startHostHp > currentHp(host)) logs.push({ type: 'heal', actorRole: 'host', actorUid: host.uid, damage: 0, amount: startHostHp - currentHp(host), skill: '太初回元丹・回元' });
-  if (guestSupport.heal && startGuestHp > currentHp(guest)) logs.push({ type: 'heal', actorRole: 'guest', actorUid: guest.uid, damage: 0, amount: startGuestHp - currentHp(guest), skill: '太初回元丹・回元' });
+  if (hostSupport.heal && startHostHp > currentHp(host)) logs.push({ type: 'heal', actorRole: 'host', actorUid: host.uid, damage: 0, amount: startHostHp - currentHp(host), skill: hostSoulHeal ? '本命護元' : '太初回元丹・回元' });
+  if (guestSupport.heal && startGuestHp > currentHp(guest)) logs.push({ type: 'heal', actorRole: 'guest', actorUid: guest.uid, damage: 0, amount: startGuestHp - currentHp(guest), skill: guestSoulHeal ? '本命護元' : '太初回元丹・回元' });
 
   for (const role of turnOrder) {
     // An earlier lethal hit (including Thunder reflection) ends the round immediately.
@@ -273,7 +278,10 @@ export function settleBattleRound({
         ? (resolveGuardedFollowup({ attacker: player, defender, baseDamage: plan.totalDamage, role, round, seed: `${roomId}:${round}:${player.uid}:artifact` }) || null)
         : null;
     // 連擊是第二次獨立傷害：首擊被道心抵銷後，連擊仍會正常命中。
-    const damage = equipment ? Math.max(0, Math.round(Number(equipment.damage) || 0)) : guarded ? 0 : plan.totalDamage;
+    const incomingDamage = equipment ? Math.max(0, Math.round(Number(equipment.damage) || 0)) : guarded ? 0 : plan.totalDamage;
+    // 元嬰守元在最後結算每次實際受擊傷害；護體格擋仍優先。
+    const reduction = guarded ? 0 : Math.max(0, Math.min(1000, Math.round(Number(defender?.nascentSoul?.reductionFlat) || 0)));
+    const damage = Math.max(0, incomingDamage - reduction);
     const beforeHostHp = hostHp, beforeGuestHp = guestHp;
     const targetBefore = role === 'host' ? guestHp : hostHp;
     if (role === 'host') guestHp = Math.max(0, guestHp - damage);
