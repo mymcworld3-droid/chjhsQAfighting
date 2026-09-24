@@ -1344,7 +1344,7 @@ import {
         source: 'dongtian', score: s.spiritEligibleScore, correct, total
       });
       s.spiritAdded = spiritAdded;
-      soulCultivationAdded = first ? soulCultivationBonusForPlayer(playerData, 'cave') : 0;
+      soulCultivationAdded = first && correct > 0 ? soulCultivationBonusForPlayer(playerData, 'cave') : 0;
       s.soulCultivationAdded = soulCultivationAdded;
       tx.set(playRef, {
         uid: uid(), dongtianId: s.dongtian.id, ownerUid: s.dongtian.ownerUid || '',
