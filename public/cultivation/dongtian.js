@@ -1314,8 +1314,8 @@ import {
     void writeDongtianHistory(s, true, correct, total, tier)
       .catch((error) => console.warn('[Dongtian completion history]', error));
     if (state.session !== s) return;
-    const spiritAward = firstCompletion ? nascentSoulSpiritReward({ source: 'dongtian', score: s.spiritEligibleScore || 0, correct, total }) : 0;
-    overlay.innerHTML = `<div class="dt-result"><div class="dt-result-seal">天</div><h2>${escapeHtml(s.dongtian.name)} · 通關</h2><p>這次洞天題序已全部走完。答對率越高，未來洞天獎勵池開放後可對應更好的機緣。</p><div class="dt-result-grid"><div><span>答對</span><b>${correct} / ${total}</b></div><div><span>正確率</span><b>${Math.round(accuracy * 100)}%</b></div><div><span>機緣評級</span><b>${escapeHtml(tier.replace('洞天機緣', ''))}</b></div></div><div class="dt-reward">${firstCompletion ? `<strong style="color:#dfbdf5">首次通關洞天獎勵</strong><br>+${firstCompletionReward.toLocaleString()} 靈石 · +${firstCompletionCultivationReward} 修為（每答對 1 題 +1 修為）${spiritAward ? ` · +${spiritAward} 神識` : ''}。` : '此洞天的首次通關紀錄已存在；本次為重遊，不重複領取首次獎勵。'}${s.dongtian.ownerUid !== uid() && firstCompletion ? `<br><br>洞天主人已獲得 +${OWNER_CULTIVATION_REWARD} 修為與 +${OWNER_GOLD_REWARD} 金幣。` : ''}</div><button id="dt-back" class="dt-back" type="button">返回</button></div>`;
+    const spiritAward = Math.max(0, Number(s.spiritAdded) || 0);
+    overlay.innerHTML = `<div class="dt-result"><div class="dt-result-seal">天</div><h2>${escapeHtml(s.dongtian.name)} · 通關</h2><p>這次洞天題序已全部走完。答對率越高，未來洞天獎勵池開放後可對應更好的機緣。</p><div class="dt-result-grid"><div><span>答對</span><b>${correct} / ${total}</b></div><div><span>正確率</span><b>${Math.round(accuracy * 100)}%</b></div><div><span>機緣評級</span><b>${escapeHtml(tier.replace('洞天機緣', ''))}</b></div></div><div class="dt-reward">${firstCompletion ? `<strong style="color:#dfbdf5">首次通關洞天獎勵</strong><br>+${firstCompletionReward.toLocaleString()} 靈石 · +${firstCompletionCultivationReward} 修為（每答對 1 題 +1 修為）${spiritAward ? ` · +${spiritAward} 神識` : ''}。` : `此洞天的首次通關紀錄已存在；本次為重遊，不重複領取首次獎勵${spiritAward ? `；本次答題獲得 +${spiritAward} 神識` : ''}。`}${s.dongtian.ownerUid !== uid() && firstCompletion ? `<br><br>洞天主人已獲得 +${OWNER_CULTIVATION_REWARD} 修為與 +${OWNER_GOLD_REWARD} 金幣。` : ''}</div><button id="dt-back" class="dt-back" type="button">返回</button></div>`;
     document.getElementById('dt-back').onclick = closeAfterSession;
   }
 
@@ -1335,12 +1335,16 @@ import {
       first = !alreadyCompleted;
       const playerData = playerSnap.data();
       s.spiritEligibleScore = Math.max(0, Number(playerData.stats?.totalScore) || 0);
-      spiritAdded = first ? nascentSoulSpiritReward({
+      // 每次完整通關均可獲神識；只針對本次 runId 領取一次，重試不重複入帳。
+      const alreadySpiritPaid = playSnap.exists() && playSnap.data()?.lastSpiritRunId === s.runId;
+      spiritAdded = alreadySpiritPaid ? 0 : nascentSoulSpiritReward({
         source: 'dongtian', score: s.spiritEligibleScore, correct, total
-      }) : 0;
+      });
+      s.spiritAdded = spiritAdded;
       tx.set(playRef, {
         uid: uid(), dongtianId: s.dongtian.id, ownerUid: s.dongtian.ownerUid || '',
         encountered: true, completed: true, correct, total,
+        lastSpiritRunId: s.runId,
         accuracy: total ? correct / total : 0, rewardTier: tier,
         completedAt: serverTimestamp(), completedAtMs: Date.now()
       }, { merge: true });
@@ -1348,8 +1352,7 @@ import {
         tx.update(indexRef, { completionCount: increment(1) });
         tx.update(playerRef, {
           'stats.gold': increment(firstCompletionReward),
-          'stats.totalScore': increment(cultivationReward),
-          'stats.nascentSoulSpirit': increment(spiritAdded)
+          'stats.totalScore': increment(cultivationReward)
         });
         if (s.dongtian.ownerUid && s.dongtian.ownerUid !== uid()) {
           tx.update(doc(db, 'users', s.dongtian.ownerUid), {
@@ -1358,6 +1361,7 @@ import {
           });
         }
       }
+      if (spiritAdded) tx.update(playerRef, { 'stats.nascentSoulSpirit': increment(spiritAdded) });
     });
     if (first) {
       const data = userData();
@@ -1365,12 +1369,30 @@ import {
         data.stats = data.stats || {};
         data.stats.gold = Math.max(0, Number(data.stats.gold) || 0) + firstCompletionReward;
         data.stats.totalScore = Math.max(0, Number(data.stats.totalScore) || 0) + cultivationReward;
-        data.stats.nascentSoulSpirit = normalizeSpirit(data.stats.nascentSoulSpirit) + spiritAdded;
       }
       window.updateUIStats?.();
       window.refreshCultivationRealmUI?.();
       window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', {
         detail: { source: 'dongtian-first-completion', goldAdded: firstCompletionReward, cultivationAdded: cultivationReward, spiritAdded, questionCount: total }
+      }));
+    }
+    if (spiritAdded && !first) {
+      const data = userData();
+      if (data) {
+        data.stats = data.stats || {};
+        data.stats.nascentSoulSpirit = normalizeSpirit(data.stats.nascentSoulSpirit) + spiritAdded;
+      }
+      window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', {
+        detail: { source: 'dongtian-repeat-completion', spiritAdded, questionCount: total }
+      }));
+    } else if (spiritAdded && first) {
+      const data = userData();
+      if (data) {
+        data.stats = data.stats || {};
+        data.stats.nascentSoulSpirit = normalizeSpirit(data.stats.nascentSoulSpirit) + spiritAdded;
+      }
+      window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', {
+        detail: { source: 'dongtian-spirit', spiritAdded, questionCount: total }
       }));
     }
     return first;
