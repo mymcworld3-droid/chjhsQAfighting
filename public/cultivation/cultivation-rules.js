@@ -34,9 +34,13 @@ export function applyCultivationReward(stats, isCorrect) {
   // 額外修為可來自金丹；一般連勝本身不再提供任何修為加成。
   const bonusGain = isCorrect ? Math.max(0, Number(goldenCoreEffect.bonusGain) || 0) : 0;
   const baseGain = isCorrect ? (isGoldenCoreOrAbove ? GOLDEN_CORE_GAIN : PRE_GOLDEN_CORE_GAIN) : 0;
-  const preArtifactGain = baseGain + bonusGain;
+  // 元嬰右脈「悟道」只在問道答對時提供額外修為；錯題及其他模式不享有此獎勵。
+  const soulBonusGain = isCorrect && goldenCoreEnabled && scoreBeforeAnswer >= 68
+    ? Math.max(0, Math.min(10, Math.floor(Number(window.getNascentSoulCultivationBonuses?.()?.solo) || 0)))
+    : 0;
+  const preArtifactGain = baseGain + bonusGain + soulBonusGain;
 
-  // 法寶倍率作用在「本次實際可獲得的全部修為」上，因此也會包含金丹額外修為。
+  // 法寶倍率作用在「本次實際可獲得的全部修為」上，因此也會包含金丹與元嬰額外修為。
   let artifactEffect = { gain: preArtifactGain, bonusGain: 0, multiplier: 1, message: '' };
   if (isCorrect && typeof window.applyArtifactCultivationGain === 'function') {
     try {
@@ -76,6 +80,7 @@ export function applyCultivationReward(stats, isCorrect) {
     gain,
     baseGain,
     bonusGain,
+    soulBonusGain,
     artifactBonusGain,
     artifactMultiplier: Number(artifactEffect.multiplier) || 1,
     artifactMessage: artifactEffect.message || '',
