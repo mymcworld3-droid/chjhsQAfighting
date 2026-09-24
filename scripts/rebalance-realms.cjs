@@ -1,3 +1,5 @@
+// This script is a historical rebalancing utility. Keep its output aligned with the
+// current post-nascent-soul curve so reruns cannot silently restore the earlier thresholds.
 const fs = require('node:fs');
 const path = require('node:path');
 
@@ -58,13 +60,13 @@ const detailedCurve = [
   ['築基', '後期', 22],
   ['金丹', '丹成一品', 28],
   ['元嬰', '元嬰出竅', 68],
-  ['化神', '神念通天', 128],
-  ['煉虛', '虛空悟道', 208],
-  ['合體', '天地合一', 308],
-  ['大乘', '大道將成', 448],
-  ['渡劫', '雷劫問道', 628],
-  ['半仙', '仙門在望', 868],
-  ['真仙', '榜上仙位', 868]
+  ['化神', '神念通天', 188],
+  ['煉虛', '虛空悟道', 428],
+  ['合體', '天地合一', 788],
+  ['大乘', '大道將成', 1268],
+  ['渡劫', '雷劫問道', 1868],
+  ['半仙', '仙門在望', 2588],
+  ['真仙', '榜上仙位', 2588]
 ];
 
 const detailedRealmFiles = [
@@ -90,12 +92,12 @@ const artifactNeeds = {
   foundation: 10,
   'golden-core': 28,
   'nascent-soul': 68,
-  spirit: 128,
-  void: 208,
-  fusion: 308,
-  mahayana: 448,
-  tribulation: 628,
-  immortal: 868
+  spirit: 188,
+  void: 428,
+  fusion: 788,
+  mahayana: 1268,
+  tribulation: 1868,
+  immortal: 2588
 };
 {
   const rel = 'public/cultivation/artifact-catalog.js';
@@ -111,28 +113,28 @@ const artifactNeeds = {
 for (const rel of walk('public/cultivation', (rel) => rel.endsWith('.js'))) {
   replaceAll(rel, /const FOUNDATION_SCORE = \d+;/g, 'const FOUNDATION_SCORE = 10;');
   replaceAll(rel, /const GOLDEN_CORE_SCORE = \d+;/g, 'const GOLDEN_CORE_SCORE = 28;');
-  replaceAll(rel, /const TRIBULATION_SCORE = \d+;/g, 'const TRIBULATION_SCORE = 628;');
+  replaceAll(rel, /const TRIBULATION_SCORE = \d+;/g, 'const TRIBULATION_SCORE = 1868;');
 }
 
-replace('public/cultivation/cultivation-training-v4.js', /const REALM_THRESHOLDS = \[[^\]]+\];/, 'const REALM_THRESHOLDS = [68, 128, 208, 308, 448, 628, 868];', false);
+replace('public/cultivation/cultivation-training-v4.js', /const REALM_THRESHOLDS = \[[^\]]+\];/, 'const REALM_THRESHOLDS = [68, 188, 428, 788, 1268, 1868, 2588];', false);
 replaceAll('public/cultivation/cultivation-theme.js', '築基以前維持原進度；金丹以上因金丹特性會加速修煉，因此拉長後期曲線。', '前 10 題快速完成煉氣並築基；金丹後每題基礎 +2，因此後期門檻按實際答題量漸進。');
 replaceAll('public/cultivation/cultivation-progression-v2.js', '金丹 120 開內丹', '金丹 28 開內丹');
 replaceAll('public/cultivation/cultivation-progression-v2.js', '<b>60 · 築基初期</b>', '<b>${FOUNDATION_SCORE} · 築基初期</b>');
 replaceAll('public/cultivation/foundation-training-page.js', '築基期修煉頁：60～119 修為只顯示背包；踏入金丹後交棒給完整修煉模組。', '築基期修煉頁：10～27 修為只顯示背包；踏入金丹後交棒給完整修煉模組。');
 replaceAll('public/cultivation/newbie-tutorial-v2.js', '60 修為後開放多人玩法', '10 修為後開放多人玩法');
 replaceAll('public/cultivation/newbie-tutorial-v2.js', '築基初期（60 修為）', '築基初期（10 修為）');
-replaceAll('public/cultivation/five-immortals.js', '渡劫 · 3600 修為', '渡劫 · 628 修為');
+replaceAll('public/cultivation/five-immortals.js', '渡劫 · 3600 修為', '渡劫 · 1868 修為');
 
 // Update regression expectations for the new curve.
 const testRealmNeeds = {
   金丹: 28,
   元嬰: 68,
-  化神: 128,
-  煉虛: 208,
-  合體: 308,
-  大乘: 448,
-  渡劫: 628,
-  真仙: 868
+  化神: 188,
+  煉虛: 428,
+  合體: 788,
+  大乘: 1268,
+  渡劫: 1868,
+  真仙: 2588
 };
 for (const rel of ['tests/progression-gates.test.cjs', 'tests/legacy-realm-curve.test.cjs']) {
   let source = read(rel);
@@ -149,8 +151,8 @@ for (const rel of ['tests/progression-gates.test.cjs', 'tests/legacy-realm-curve
   write(rel, source);
 }
 
-replaceAll('tests/progression-gates.test.cjs', 'const REALM_THRESHOLDS = [500, 800, 1200, 1800, 2600, 3600, 5000];', 'const REALM_THRESHOLDS = [68, 128, 208, 308, 448, 628, 868];');
-replaceAll('tests/five-immortals-challenge.test.cjs', '3600', '628');
+replaceAll('tests/progression-gates.test.cjs', 'const REALM_THRESHOLDS = [500, 800, 1200, 1800, 2600, 3600, 5000];', 'const REALM_THRESHOLDS = [68, 188, 428, 788, 1268, 1868, 2588];');
+replaceAll('tests/five-immortals-challenge.test.cjs', '3600', '1868');
 replaceAll('tests/newbie-mortal-tutorial.test.cjs', 'FOUNDATION_SCORE = 60', 'FOUNDATION_SCORE = 10');
 replaceAll('tests/newbie-mortal-tutorial.test.cjs', '60 修為', '10 修為');
 
@@ -178,7 +180,7 @@ replaceAll('tests/newbie-mortal-tutorial.test.cjs', '60 修為', '10 修為');
 }
 
 // Add an explicit pacing regression test so future changes cannot silently restore the grind.
-const balanceTest = `const test = require('node:test');\nconst assert = require('node:assert/strict');\nconst fs = require('node:fs');\nconst path = require('node:path');\n\nfunction read(rel) { return fs.readFileSync(path.join(__dirname, '..', rel), 'utf8'); }\n\nconst theme = read('public/cultivation/cultivation-theme.js');\nconst rules = read('public/cultivation/cultivation-rules.js');\nconst battle = read('public/cultivation/battle-mode-v2.js');\nconst artifacts = read('public/cultivation/artifact-catalog.js');\n\ntest('realm pacing reaches Foundation in 10 answers and Golden Core 18 answers later', () => {\n  assert.match(theme, /name: '築基', sub: '初期', need: 10/);\n  assert.match(theme, /name: '築基', sub: '中期', need: 16/);\n  assert.match(theme, /name: '築基', sub: '後期', need: 22/);\n  assert.match(theme, /name: '金丹', sub: '丹成一品', need: 28/);\n  assert.match(rules, /const GOLDEN_CORE_SCORE = 28;/);\n  assert.match(battle, /const FOUNDATION_SCORE = 10;/);\n});\n\ntest('post-Golden-Core curve is balanced against the +2 base cultivation gain', () => {\n  const expected = [['元嬰',68],['化神',128],['煉虛',208],['合體',308],['大乘',448],['渡劫',628],['半仙',868],['真仙',868]];\n  for (const [name, need] of expected) assert.match(theme, new RegExp("name: '" + name + "'.*need: " + need));\n  assert.match(artifacts, /id: 'golden-core'.*need: 28/);\n  assert.match(artifacts, /id: 'tribulation'.*need: 628/);\n});\n`;
+const balanceTest = `const test = require('node:test');\nconst assert = require('node:assert/strict');\nconst fs = require('node:fs');\nconst path = require('node:path');\n\nfunction read(rel) { return fs.readFileSync(path.join(__dirname, '..', rel), 'utf8'); }\n\nconst theme = read('public/cultivation/cultivation-theme.js');\nconst rules = read('public/cultivation/cultivation-rules.js');\nconst battle = read('public/cultivation/battle-mode-v2.js');\nconst artifacts = read('public/cultivation/artifact-catalog.js');\n\ntest('realm pacing reaches Foundation in 10 answers and Golden Core 18 answers later', () => {\n  assert.match(theme, /name: '築基', sub: '初期', need: 10/);\n  assert.match(theme, /name: '築基', sub: '中期', need: 16/);\n  assert.match(theme, /name: '築基', sub: '後期', need: 22/);\n  assert.match(theme, /name: '金丹', sub: '丹成一品', need: 28/);\n  assert.match(rules, /const GOLDEN_CORE_SCORE = 28;/);\n  assert.match(battle, /const FOUNDATION_SCORE = 10;/);\n});\n\ntest('post-Golden-Core curve is balanced against the +2 base cultivation gain', () => {\n  const expected = [['元嬰',68],['化神',188],['煉虛',428],['合體',788],['大乘',1268],['渡劫',1868],['半仙',2588],['真仙',2588]];\n  for (const [name, need] of expected) assert.match(theme, new RegExp("name: '" + name + "'.*need: " + need));\n  assert.match(artifacts, /id: 'golden-core'.*need: 28/);\n  assert.match(artifacts, /id: 'tribulation'.*need: 1868/);\n});\n`;
 write('tests/realm-balance-v3.test.cjs', balanceTest);
 
 console.log(`Realm rebalance updated ${touched.size} files:`);
