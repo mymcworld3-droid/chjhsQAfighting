@@ -1,6 +1,6 @@
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { dongtianCache } from './dongtian-cache.js';
-import { nascentSoulSpiritReward, normalizeSpirit } from './nascent-soul-rules.js';
+import { nascentSoulSpiritReward, normalizeSpirit, soulCultivationBonusForPlayer } from './nascent-soul-rules.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import {
   getFirestore, collection, doc, getDoc, getDocs, query, where, limit,
@@ -1315,7 +1315,9 @@ import {
       .catch((error) => console.warn('[Dongtian completion history]', error));
     if (state.session !== s) return;
     const spiritAward = Math.max(0, Number(s.spiritAdded) || 0);
-    overlay.innerHTML = `<div class="dt-result"><div class="dt-result-seal">天</div><h2>${escapeHtml(s.dongtian.name)} · 通關</h2><p>這次洞天題序已全部走完。答對率越高，未來洞天獎勵池開放後可對應更好的機緣。</p><div class="dt-result-grid"><div><span>答對</span><b>${correct} / ${total}</b></div><div><span>正確率</span><b>${Math.round(accuracy * 100)}%</b></div><div><span>機緣評級</span><b>${escapeHtml(tier.replace('洞天機緣', ''))}</b></div></div><div class="dt-reward">${firstCompletion ? `<strong style="color:#dfbdf5">首次通關洞天獎勵</strong><br>+${firstCompletionReward.toLocaleString()} 靈石 · +${firstCompletionCultivationReward} 修為（每答對 1 題 +1 修為）${spiritAward ? ` · +${spiritAward} 神識` : ''}。` : `此洞天的首次通關紀錄已存在；本次為重遊，不重複領取首次獎勵${spiritAward ? `；本次答題獲得 +${spiritAward} 神識` : ''}。`}${s.dongtian.ownerUid !== uid() && firstCompletion ? `<br><br>洞天主人已獲得 +${OWNER_CULTIVATION_REWARD} 修為與 +${OWNER_GOLD_REWARD} 金幣。` : ''}</div><button id="dt-back" class="dt-back" type="button">返回</button></div>`;
+    const soulCultivationAdded = Math.max(0, Number(s.soulCultivationAdded) || 0);
+    const totalCultivation = firstCompletionCultivationReward + soulCultivationAdded;
+    overlay.innerHTML = `<div class="dt-result"><div class="dt-result-seal">天</div><h2>${escapeHtml(s.dongtian.name)} · 通關</h2><p>這次洞天題序已全部走完。答對率越高，未來洞天獎勵池開放後可對應更好的機緣。</p><div class="dt-result-grid"><div><span>答對</span><b>${correct} / ${total}</b></div><div><span>正確率</span><b>${Math.round(accuracy * 100)}%</b></div><div><span>機緣評級</span><b>${escapeHtml(tier.replace('洞天機緣', ''))}</b></div></div><div class="dt-reward">${firstCompletion ? `<strong style="color:#dfbdf5">首次通關洞天獎勵</strong><br>+${firstCompletionReward.toLocaleString()} 靈石 ·  +${totalCultivation} 修為（答對題數 +${firstCompletionCultivationReward}${soulCultivationAdded ? `，元嬰加成 +${soulCultivationAdded}` : ''}）${spiritAward ? ` · +${spiritAward} 神識` : ''}。` : `此洞天的首次通關紀錄已存在；本次為重遊，不重複領取首次獎勵${spiritAward ? `；本次答題獲得 +${spiritAward} 神識` : ''}。`}${s.dongtian.ownerUid !== uid() && firstCompletion ? `<br><br>洞天主人已獲得 +${OWNER_CULTIVATION_REWARD} 修為與 +${OWNER_GOLD_REWARD} 金幣。` : ''}</div><button id="dt-back" class="dt-back" type="button">返回</button></div>`;
     document.getElementById('dt-back').onclick = closeAfterSession;
   }
 
@@ -1325,6 +1327,7 @@ import {
     const firstCompletionReward = firstCompletionSpiritStones(total);
     const cultivationReward = firstCompletionCultivation(correct);
     let first = false;
+    let soulCultivationAdded = 0;
     let spiritAdded = 0;
     await runTransaction(db, async (tx) => {
       const playerRef = doc(db, 'users', uid());
@@ -1341,6 +1344,8 @@ import {
         source: 'dongtian', score: s.spiritEligibleScore, correct, total
       });
       s.spiritAdded = spiritAdded;
+      soulCultivationAdded = first ? soulCultivationBonusForPlayer(playerData, 'cave') : 0;
+      s.soulCultivationAdded = soulCultivationAdded;
       tx.set(playRef, {
         uid: uid(), dongtianId: s.dongtian.id, ownerUid: s.dongtian.ownerUid || '',
         encountered: true, completed: true, correct, total,
@@ -1352,7 +1357,7 @@ import {
         tx.update(indexRef, { completionCount: increment(1) });
         tx.update(playerRef, {
           'stats.gold': increment(firstCompletionReward),
-          'stats.totalScore': increment(cultivationReward)
+          'stats.totalScore': increment(cultivationReward + soulCultivationAdded)
         });
         if (s.dongtian.ownerUid && s.dongtian.ownerUid !== uid()) {
           tx.update(doc(db, 'users', s.dongtian.ownerUid), {
@@ -1368,12 +1373,12 @@ import {
       if (data) {
         data.stats = data.stats || {};
         data.stats.gold = Math.max(0, Number(data.stats.gold) || 0) + firstCompletionReward;
-        data.stats.totalScore = Math.max(0, Number(data.stats.totalScore) || 0) + cultivationReward;
+        data.stats.totalScore = Math.max(0, Number(data.stats.totalScore) || 0) + cultivationReward + soulCultivationAdded;
       }
       window.updateUIStats?.();
       window.refreshCultivationRealmUI?.();
       window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', {
-        detail: { source: 'dongtian-first-completion', goldAdded: firstCompletionReward, cultivationAdded: cultivationReward, spiritAdded, questionCount: total }
+        detail: { source: 'dongtian-first-completion', goldAdded: firstCompletionReward, cultivationAdded: cultivationReward + soulCultivationAdded, soulCultivationAdded, spiritAdded, questionCount: total }
       }));
     }
     if (spiritAdded && !first) {
