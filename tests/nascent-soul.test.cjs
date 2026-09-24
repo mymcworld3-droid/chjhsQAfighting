@@ -325,7 +325,7 @@ test('cultivation branches are integrated into the three correct settlement flow
   assert.match(rules,/baseGain \+ bonusGain \+ soulBonusGain/);
   assert.match(daily,/current\.correct === QUESTION_TOTAL\s*\? soulCultivationBonusForPlayer\(data, 'daily'\) : 0/);
   assert.match(daily,/'stats\.totalScore': increment\(totalCultivation\)/);
-  assert.match(cave,/first \? soulCultivationBonusForPlayer\(playerData, 'cave'\) : 0/);
+  assert.match(cave,/first && correct > 0 \? soulCultivationBonusForPlayer\(playerData, 'cave'\) : 0/);
   assert.match(cave,/'stats\.totalScore': increment\(cultivationReward \+ soulCultivationAdded\)/);
   assert.match(training,/左脈主鬥法，右脈主修為/);
   assert.match(training,/status\.cost \+ ' 神識'/);
