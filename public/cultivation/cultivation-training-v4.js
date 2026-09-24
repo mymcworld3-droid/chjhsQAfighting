@@ -651,6 +651,8 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
   function renderTrainingPage() {
     const content = document.getElementById('training-tab-content');
     if (!content) return;
+    // 煉器／裝備可提前返回，先清理元嬰專屬的一屏模式，避免裁切其他分頁。
+    if (activeTab !== 'nascent-soul') document.body.classList.remove('ns-map-active');
     if (activeTab === 'refinery') {
       if (!content.querySelector('.cultivation-refinery')) content.innerHTML = refineryShellMarkup();
       window.dispatchEvent(new CustomEvent('xiuxian:refinery-open-request'));
