@@ -363,3 +363,26 @@ test('duel survival reduction and core-linked correct-answer healing', () => {
   const wrong=settle({roomId:'soul-no-heal',round:1,host:p('host',false,700,{coreHeal:24}),guest:p('guest',false,1000,null)});
   assert.equal(wrong.startHostHp,700);
 });
+
+
+test('nascent soul center and final bonuses strictly follow equipped core, not washed candidate', () => {
+  const training = read('public/cultivation/cultivation-training-v4.js');
+  const source = training.slice(training.indexOf('  function currentSoulType() {'),
+    training.indexOf('  function soulBonusLabel(', training.indexOf('  function currentSoulType() {')));
+  assert.match(source, /return state\.equippedCore\?\.type \|\| null/);
+  assert.doesNotMatch(source, /state\.core\?\.type/);
+  const soul = training.slice(training.indexOf('  function nascentSoulTabMarkup() {'),
+    training.indexOf('  async function illuminateSoulNode(', training.indexOf('  function nascentSoulTabMarkup() {')));
+  assert.match(soul, /const equippedCore = state\.equippedCore/);
+  assert.match(soul, /const core = equippedCore/);
+  assert.match(soul, /coreVisualMarkup\(core, false\)/);
+  assert.match(soul, /ns-tree-core-name">\$\{equippedName\}/);
+  assert.match(soul, /ns-tree-core-desc">\$\{equippedGrade\} 品 · 已調御/);
+  assert.match(soul, /soulNodes\(type, equippedGrade\)/);
+  assert.match(soul, /soulCombatBonuses\(tree, type, equippedGrade\)/);
+  assert.match(soul, /尚未裝配金丹/);
+  const transaction = training.slice(training.indexOf('  async function illuminateSoulNode('),
+    training.indexOf('  function bindSoulActions(', training.indexOf('  async function illuminateSoulNode(')));
+  assert.match(transaction, /const remoteCore = remote\.cultivationTraining\?\.equippedCore/);
+  assert.doesNotMatch(transaction, /remote\.cultivationTraining\?\.core\?\.type \|\| type/);
+});
