@@ -423,7 +423,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
           <strong>神識修煉</strong>
           <span>問道答對一題 +1</span>
           <span>每日閉關全對 +3</span>
-          <span>首次完成洞天：依答對題數獲得等量神識</span>
+          <span>每次完成洞天：依答對題數獲得等量神識</span>
         </div>
       </section>`;
   }
