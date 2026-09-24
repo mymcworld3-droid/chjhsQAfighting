@@ -220,7 +220,7 @@ test('nascent soul map stays inside one viewport with fixed navigation and HUD',
   assert.doesNotMatch(training, /ns-tree-viewport'\)\?\.scrollLeft/);
   assert.doesNotMatch(training, /窄螢幕可左右捲動|手機或窄螢幕可左右滑動/);
   assert.match(css, /body\.xianxia-theme\.ns-map-active main:has\(#page-training\.active-page\)\s*\{[\s\S]*?overflow:\s*hidden\s*!important/);
-  assert.match(css, /\.ns-branch-panel\s*\{[\s\S]*?grid-template-rows:\s*auto auto auto minmax\(0,1fr\) auto auto\s*!important/);
+  assert.match(css, /\.ns-branch-panel\s*\{[\s\S]*?grid-template-rows:\s*auto auto minmax\(0,1fr\) auto auto\s*!important/);
   assert.match(css, /#training-tab-content\s*\{[\s\S]*?max-height:\s*100%\s*!important/);
   assert.match(css, /\.ns-tree-viewport\s*\{[\s\S]*?overflow:\s*hidden\s*!important/);
   assert.match(css, /\.ns-diagram\s*\{[\s\S]*?min-width:\s*0\s*!important/);
@@ -388,74 +388,65 @@ test('nascent soul center and final bonuses strictly follow equipped core, not w
 });
 
 
-test('equipped core grade determines visible gold-core effect and both finale previews', () => {
+test('core-grade decoration uses each rendered core, never applies the wash candidate to all', () => {
+  const visual = read('public/cultivation/cultivation-core-visual.js');
   const training = read('public/cultivation/cultivation-training-v4.js');
-  const start = training.indexOf('  function soulNodeDetailMarkup(');
-  const end = training.indexOf('  function nascentSoulTabMarkup()', start);
-  assert.ok(start >= 0 && end > start);
-  const functionSource = training.slice(start, end);
-  const tree = { version:4,paths:{sword:{nodes:{leftFinal:1,rightFinal:2},baselineNodes:{},legacySpent:0}} };
-  const render = (grade, candidateGrade) => {
-    const state = { equippedCore:{type:'sword',grade}, core:{type:'ocean',grade:candidateGrade} };
-    const deps = { state, selectedSoulNodeId:'core', soulNodes, soulNodeStatus,
-      soulCombatBonuses, normalizeSoulTree, NASCENT_SOUL_NODE_CAP:10, soulBusy:false,
-      clampGrade:value=>Math.max(1,Math.min(9,Number(value)||9)),
-      coreType:()=>({name:'破鋒劍心丹',icon:'⚔',effect:g=>'測試金丹品級效果：'+g+' 品'})
-    };
-    return new Function(...Object.keys(deps),functionSource + '\nreturn soulNodeDetailMarkup;')
-      (...Object.values(deps))('sword',tree,200);
-  };
-  const low = render(9, 1);
-  const high = render(1, 9);
-  assert.match(low,/測試金丹品級效果：9 品/);
-  assert.match(high,/測試金丹品級效果：1 品/);
-  assert.match(low,/單級 \+24/);
-  assert.match(high,/單級 \+40/);
-  assert.match(low,/單級 \+9/);
-  assert.match(high,/單級 \+17/);
-  assert.match(high,/目前 \+34/);
-  assert.doesNotMatch(low,/data-ns-upgrade/);
-  assert.match(training,/const effect = metadata\.effect\(grade\)/);
-  assert.match(training,/const grade = clampGrade\(core\.grade\)/);
-  assert.match(training,/data-ns-core-detail/);
-  assert.match(training,/selectedSoulNodeId = 'core'/);
+  const wash = read('public/cultivation/golden-core-wash-animation.js');
   const css = read('public/cultivation-training-v3.css');
-  assert.match(css,/button\.ns-tree-core\[data-ns-core-detail\]/);
+  const visualsCss = read('public/cultivation-core-visual.css');
+  assert.match(training, /data-core-visual-grade="\$\{clampGrade\(core\.grade\)\}"/);
+  assert.match(training, /const core = equippedCore/);
+  assert.match(training, /coreVisualMarkup\(core, false\)/);
+  assert.match(visual, /const explicitGrade = Number\(stage\.dataset\.coreVisualGrade\)/);
+  assert.match(visual, /Number\.isInteger\(explicitGrade\)/);
+  assert.match(visual, /decorateStage\(stage, grade\)/);
+  assert.match(wash, /stage\.dataset\.coreVisualGrade = String\(/);
+  assert.match(visualsCss, /\.core-grade-1 \.pattern-a/);
+  assert.match(visualsCss, /\.core-grade-9 \.pattern-a/);
+  assert.doesNotMatch(training, /ns-equipped-effect|data-ns-core-detail/);
+  assert.doesNotMatch(css, /ns-equipped-effect/);
+  assert.match(css, /grid-template-rows: auto auto minmax\(0,1fr\) auto auto !important/);
 });
 
-
-test('equipped grade effect is visible on the map even while a different node is selected', () => {
-  const source = read('public/cultivation/cultivation-training-v4.js');
-  const from = source.indexOf('  function nascentSoulTabMarkup() {');
-  const to = source.indexOf('  async function illuminateSoulNode(',from);
-  assert.ok(from >= 0 && to > from);
-  const fn = source.slice(from,to);
-  const render = (grade, candidateGrade, selected) => {
-    const state = {equippedCore:{type:'sword',grade},core:{type:'ocean',grade:candidateGrade}};
-    const deps = {state,selectedSoulNodeId:selected,selectedSoulType:'sword',soulBusy:false,
-      NASCENT_SOUL_THRESHOLD:68,NASCENT_SOUL_BRANCH_UNLOCK:5,NASCENT_SOUL_NODE_CAP:10,
-      currentScore:()=>80,currentSoulType:()=>state.equippedCore.type,
-      clampGrade:v=>Math.max(1,Math.min(9,Number(v)||9)),
-      coreType:()=>({name:'破鋒劍心丹',effect:g=>'已裝配丹的品級效果：'+g+' 品'}),
-      nascentSoulForCore,nascentSoulStage,normalizeSpirit,normalizeSoulTree,soulSpentSpirit,
-      soulAvailableSpirit,soulNodes,soulNodeStatus,soulCombatBonuses,soulCultivationBonuses,
-      soulBonusLabel:()=>'',soulNodeDetailMarkup:()=>'<aside>技能節點資訊</aside>',
-      coreVisualMarkup:()=>'<span>已裝配金丹圖示</span>',
-      window:{getCurrentUserData:()=>({stats:{nascentSoulSpirit:0}})}
+test('independent grade classes survive mixing one-grade equipped core with nine-grade wash candidate', () => {
+  const visual = read('public/cultivation/cultivation-core-visual.js');
+  const state = {grade:9};
+  const makeStage = (grade) => {
+    const classes = new Set(['golden-core-stage-v3']);
+    const stage = {
+      dataset: {coreVisualGrade:String(grade)},
+      classList: {
+        add: (...items) => items.forEach(item=>classes.add(item)),
+        remove: (...items) => items.forEach(item=>classes.delete(item))
+      },
+      querySelector:()=>null,
+      appendChild:()=>{},
+      classes
     };
-    return new Function(...Object.keys(deps),fn+'\nreturn nascentSoulTabMarkup;')(...Object.values(deps))();
+    return stage;
   };
-  const low=render(9,1,'leftMain');
-  const high=render(1,9,'rightMain');
-  assert.match(low,/class="ns-equipped-effect"/);
-  assert.match(low,/已裝配丹的品級效果：9 品/);
-  assert.match(high,/已裝配丹的品級效果：1 品/);
-  assert.match(high,/本命殺招每級 \+40 傷害/);
-  assert.match(high,/本命護元每級 \+17 回復/);
-  assert.match(low,/本命殺招每級 \+24 傷害/);
-  assert.match(low,/本命護元每級 \+9 回復/);
-  assert.doesNotMatch(low,/已裝配丹的品級效果：1 品/);
-  const css = read('public/cultivation-training-v3.css');
-  assert.match(css,/\.ns-equipped-effect-text/);
-  assert.match(css,/grid-template-rows: auto auto auto minmax\(0,1fr\) auto auto !important/);
+  const candidate = makeStage(9), equipped = makeStage(1);
+  const documentMock = {readyState:'loading', addEventListener:()=>{},
+    querySelectorAll:()=>[candidate,equipped]};
+  // Isolate decoration logic with simplified DOM nodes; verify per-stage quality.
+  const start = visual.indexOf('  function decorateAll() {');
+  const end = visual.indexOf('  function scheduleDecorate() {',start);
+  assert.ok(start>=0 && end>start);
+  const body = visual.slice(start,end);
+  const decorate = new Function('window','document','decorateStage',
+    body + '\nreturn decorateAll;')(
+      {getGoldenCoreState:()=>state},documentMock,
+      (stage,grade) => {
+        for(let i=1;i<=9;i++) stage.classList.remove('core-grade-'+i);
+        stage.classList.add('core-grade-'+grade);
+      }
+    );
+  decorate();
+  assert.ok(candidate.classes.has('core-grade-9'));
+  assert.ok(equipped.classes.has('core-grade-1'));
+  assert.ok(!equipped.classes.has('core-grade-9'));
+  state.grade=2;
+  decorate();
+  assert.ok(equipped.classes.has('core-grade-1'));
+  assert.ok(candidate.classes.has('core-grade-9'));
 });
