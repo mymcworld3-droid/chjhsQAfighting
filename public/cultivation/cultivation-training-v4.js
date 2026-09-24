@@ -2,8 +2,8 @@ import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-she
 import { createGoldenCoreWashAnimation } from './golden-core-wash-animation.js';
 import {
   NASCENT_SOUL_THRESHOLD, NASCENT_SOUL_ATTRIBUTES, nascentSoulForCore, nascentSoulStage,
-  normalizeSpirit, normalizeSoulTree, soulSkills, soulAvailableSpirit,
-  soulSpentSpirit, soulNodeStatus, allocateSoulNode, soulCombatBonuses
+  normalizeSpirit, normalizeSoulTree, soulNodes, NASCENT_SOUL_NODE_CAP,
+  soulAvailableSpirit, soulSpentSpirit, soulNodeStatus, allocateSoulNode, soulCombatBonuses
 } from './nascent-soul-rules.js';
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
@@ -411,7 +411,6 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     if (currentScore() < NASCENT_SOUL_THRESHOLD) {
       return '<section class="ns-panel"><h3>元嬰未成</h3><p>修為達到 68 後，方可凝聚本命元嬰。</p></section>';
     }
-    // 以正式調御的金丹決定元嬰類型；洗髓候選丹不改變已點亮的技能樹。
     const type = currentSoulType();
     const soul = nascentSoulForCore(type);
     const player = window.getCurrentUserData?.() || {};
@@ -422,85 +421,86 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     const bonuses = soulCombatBonuses(tree, type);
     const stage = nascentSoulStage(earned);
     const levels = tree.paths[type]?.nodes || {};
-    const progress = stage.next
-      ? Math.max(0, Math.min(100, (earned - stage.min) / (stage.next.min - stage.min) * 100))
-      : 100;
-    const attributes = NASCENT_SOUL_ATTRIBUTES.map(attr => {
-      const status = soulNodeStatus(tree, type, attr.id, earned);
-      const current = (levels[attr.id] || 0) * attr.value;
+    const progress = stage.next ? Math.min(100, (earned - stage.min) / (stage.next.min - stage.min) * 100) : 100;
+
+    const nodes = soulNodes(type).map(node => {
+      const status = soulNodeStatus(tree, type, node.id, earned);
+      const isLit = status.level > 0;
+      const isUnlocked = !node.parent || (levels[node.parent] || 0) >= 5;
+      const statSummary = soulBonusLabel(node);
+      const label = status.level >= NASCENT_SOUL_NODE_CAP ? '已圓滿' :
+        !isUnlocked ? '需前置 5 級' : !status.ok ? status.reason : '點亮 · 1 神識';
       return `
-        <article class="ns-node ns-attribute ${status.level ? 'is-lit' : ''}">
-          <div class="ns-node-symbol"><i class="fa-solid ${attr.icon}" aria-hidden="true"></i></div>
-          <div class="ns-node-content"><strong>${attr.name}</strong><small>${attr.desc}</small>
-            <span class="ns-node-benefit">現有效果：+${current}</span>
-            <span class="ns-node-level">${status.level} / ${attr.max} 級</span>
-          </div>
-          <button type="button" class="ns-light-btn" data-ns-node="${attr.id}"
-            ${!status.ok || soulBusy ? 'disabled' : ''}
-            title="${status.reason || '消耗 ' + status.cost + ' 神識點亮'}">
-            ${status.level >= attr.max ? '已滿' : status.ok ? '點亮 · ' + status.cost : status.reason}
-          </button>
-        </article>`;
+        <button type="button"
+          class="ns-orbit-node ns-pos-${node.id} ${isLit ? 'is-lit' : ''} ${!isUnlocked ? 'is-locked' : ''} ns-light-btn"
+          data-ns-node="${node.id}" ${!status.ok || soulBusy ? 'disabled' : ''}
+          aria-label="${node.name}，${status.level} / 10 級，${node.desc}，${label}"
+          title="${node.desc} ${statSummary}；${label}">
+          <span class="ns-orbit-symbol"><i class="fa-solid ${node.icon}" aria-hidden="true"></i></span>
+          <strong>${node.name}</strong>
+          <span class="ns-orbit-rank">${status.level} / 10</span>
+          <span class="ns-orbit-glimmer" aria-hidden="true" style="--lit:${status.level / 10 * 100}%"></span>
+          <span class="ns-orbit-hint">${label}</span>
+        </button>`;
     }).join('');
-    const skills = soulSkills(type).map((skill, index) => {
-      const status = soulNodeStatus(tree, type, skill.id, earned);
-      const lit = !!levels[skill.id];
-      return `
-        <article class="ns-node ns-skill ${lit ? 'is-lit' : ''} ${!lit && !status.ok ? 'is-locked' : ''}">
-          <div class="ns-node-symbol"><i class="fa-solid ${['fa-seedling','fa-sun','fa-dharmachakra'][index]}" aria-hidden="true"></i></div>
-          <div class="ns-node-content">
-            <span class="ns-skill-tier">第 ${index + 1} 階 · ${['靈胎','顯化','法域'][index]}</span>
-            <strong>${skill.name}</strong><small>${skill.description}</small>
-            <span class="ns-node-benefit">${soulBonusLabel(skill)}</span>
-            <span class="ns-skill-condition">累計神識 ${skill.minSpirit} ${index ? ' · 需先點亮上一階' : ' · 需先點亮一項屬性'}</span>
-          </div>
-          <button type="button" class="ns-light-btn" data-ns-node="${skill.id}"
-            ${!status.ok || soulBusy ? 'disabled' : ''}
-            title="${status.reason || '消耗 ' + status.cost + ' 神識點亮'}">
-            ${lit ? '已點亮' : status.ok ? '點亮 · ' + status.cost : status.reason}
-          </button>
-        </article>`;
-    }).join('');
+    const line = (id, path, unlocked, lit) => `
+      <path d="${path}" class="ns-branch-line ${unlocked ? 'is-open' : ''} ${lit ? 'is-lit' : ''}"
+        data-branch="${id}" />`;
+    const links = [
+      line('core-left', 'M 520 260 C 460 260 425 260 340 260', true, !!levels.leftMain),
+      line('core-right', 'M 680 260 C 740 260 775 260 860 260', true, !!levels.rightMain),
+      line('leftTop', 'M 340 260 C 245 260 245 105 145 105', (levels.leftMain || 0) >= 5, !!levels.leftTop),
+      line('leftBottom', 'M 340 260 C 245 260 245 415 145 415', (levels.leftMain || 0) >= 5, !!levels.leftBottom),
+      line('rightTop', 'M 860 260 C 955 260 955 105 1055 105', (levels.rightMain || 0) >= 5, !!levels.rightTop),
+      line('rightBottom', 'M 860 260 C 955 260 955 415 1055 415', (levels.rightMain || 0) >= 5, !!levels.rightBottom)
+    ].join('');
+
+    // 顯示已調御中的金丹，而不是洗髓後尚未調御的候選丹。
+    const core = state.equippedCore || state.core;
     return `
-      <section class="ns-panel" aria-label="本命元嬰">
-        <div class="ns-overview">
-          <div class="ns-stage" aria-hidden="true">
-            <span class="ns-stage-halo"></span>
-            <div class="ns-avatar core-tone-${soul.tone}"><span>${soul.icon}</span></div>
-          </div>
-          <div class="ns-overview-copy">
-            <div class="ns-kicker">NASCENT SOUL · 本命元嬰</div>
+      <section class="ns-panel ns-branch-panel" aria-label="本命元嬰">
+        <div class="ns-branch-intro">
+          <div class="ns-branch-title">
+            <span class="ns-kicker">NASCENT SOUL · 本命元嬰</span>
             <h3>${soul.name}</h3>
-            <div class="ns-stage-name">${stage.name} · ${soul.trait}</div>
-            <p class="ns-progress-caption">${soul.description}</p>
-            <div class="ns-resource" aria-live="polite">
-              <div><small>累計神識</small><strong>${earned}</strong></div>
-              <div><small>已投入</small><strong>${spent}</strong></div>
-              <div class="ns-resource-free"><small>可用神識</small><strong>${available}</strong></div>
-            </div>
-            <div class="ns-progress" role="progressbar" aria-valuemin="${stage.min}"
-              aria-valuenow="${earned}" aria-valuemax="${stage.next?.min || Math.max(earned,1)}"
-              aria-label="神識修煉進度"><span style="width:${progress}%"></span></div>
-            <p class="ns-progress-caption">${stage.next ? '距離' + stage.next.name + '尚需 ' + Math.max(0, stage.next.min - earned) + ' 神識' : '神識圓滿'}</p>
-            <p class="ns-combat-summary">本丹相已點亮：${soulBonusLabel(bonuses) || '尚無額外屬性'}</p>
+            <p>${soul.trait} · ${stage.name}</p>
+          </div>
+          <div class="ns-resource" aria-live="polite">
+            <div><small>累計神識</small><strong>${earned}</strong></div>
+            <div><small>已投入</small><strong>${spent}</strong></div>
+            <div class="ns-resource-free"><small>可用神識</small><strong>${available}</strong></div>
           </div>
         </div>
-        <div class="ns-trees">
-          <section class="ns-tree-section">
-            <div class="ns-tree-head"><span>01 / 元嬰屬性</span><h4>凝神煉體</h4><p>消耗可用神識逐級點亮，上限各 5 級。</p></div>
-            <div class="ns-node-list">${attributes}</div>
-          </section>
-          <section class="ns-tree-section">
-            <div class="ns-tree-head"><span>02 / ${soul.name}技能樹</span><h4>本命神通</h4><p>依序點亮三階支脈；不同丹相各自保存進度。</p></div>
-            <div class="ns-node-list ns-skill-list">${skills}</div>
-          </section>
+        <p class="ns-tree-tip">左右主節點可直接點亮；主節點達 5 / 10 後，解鎖同側上下分支。每次點亮消耗 1 神識。</p>
+        <div class="ns-tree-viewport ns-trees" role="region" tabindex="0" aria-label="元嬰左右分支技能樹，窄螢幕可左右捲動">
+          <div class="ns-diagram" aria-label="中央金丹與六枚元嬰節點">
+            <svg class="ns-branches" viewBox="0 0 1200 520" preserveAspectRatio="none" aria-hidden="true">
+              <defs><linearGradient id="ns-link-gold"><stop stop-color="#aa814c"/><stop offset="0.5" stop-color="#f8dfa0"/><stop offset="1" stop-color="#aa814c"/></linearGradient></defs>
+              ${links}
+            </svg>
+            ${nodes}
+            <div class="ns-tree-core">
+              ${coreVisualMarkup(core, false)}
+              <div class="ns-tree-core-name">${soul.name}</div>
+              <div class="ns-tree-core-desc">${soul.trait}</div>
+              <div class="ns-tree-core-stage">${stage.name}</div>
+            </div>
+          </div>
         </div>
-        <p class="ns-save-tip">點亮後永久保存，不消耗累計修煉階段；目前不提供洗點。更換丹相時，各元嬰進度保留。鬥法效果在下一場配對時生效。</p>
+        <p class="ns-tree-swipe-hint">手機或窄螢幕可左右滑動，查看兩側分支。</p>
+        <div class="ns-branch-bottom">
+          <p class="ns-combat-summary">已點亮：${soulBonusLabel(bonuses) || '尚無額外屬性'}</p>
+          <div class="ns-progress" role="progressbar" aria-valuemin="${stage.min}" aria-valuenow="${earned}"
+            aria-valuemax="${stage.next?.min || Math.max(earned, 1)}" aria-label="元嬰修煉進度">
+            <span style="width:${progress}%"></span>
+          </div>
+          <p class="ns-progress-caption">${stage.next ? '距離' + stage.next.name + '尚需 ' + Math.max(0, stage.next.min - earned) + ' 神識' : '神識圓滿'} · 已點亮進度永久保留</p>
+        </div>
         <div class="ns-reward-guide">
-          <strong>獲得神識</strong>
+          <strong>神識來源</strong>
           <span>問道答對一題 +1</span>
           <span>每日閉關全對 +3</span>
-          <span>每次完成洞天：依答對題數獲得等量神識</span>
+          <span>完成洞天：依答對題數獲得神識</span>
         </div>
       </section>`;
   }
@@ -584,8 +584,13 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
       window.dispatchEvent(new CustomEvent('xiuxian:equipment-open-request'));
       return;
     }
+    const previousTreeScroll = activeTab === 'nascent-soul'
+      ? content.querySelector('.ns-tree-viewport')?.scrollLeft : undefined;
     content.innerHTML = activeTab === 'bag' ? bagTabMarkup()
       : activeTab === 'nascent-soul' ? nascentSoulTabMarkup() : coreTabMarkup();
+    if (activeTab === 'nascent-soul' && Number.isFinite(previousTreeScroll)) {
+      content.querySelector('.ns-tree-viewport').scrollLeft = previousTreeScroll;
+    }
     if (activeTab === 'core') bindCoreActions();
     if (activeTab === 'nascent-soul') bindSoulActions();
   }
