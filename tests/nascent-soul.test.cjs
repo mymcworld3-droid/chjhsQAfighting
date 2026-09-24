@@ -113,7 +113,7 @@ test('old paid upgrades migrate without erasing paid spirit or charging twice', 
     sword: { nodes:{ vitality:2, form:1, seed:1 } }
   }};
   const fixed = normalizeSoulTree(legacy);
-  assert.equal(fixed.version, 2);
+  assert.equal(fixed.version, 3);
   assert.equal(fixed.paths.thunder.nodes.leftMain, 5);
   assert.equal(fixed.paths.thunder.nodes.leftTop, 1);
   assert.equal(fixed.paths.thunder.nodes.leftBottom, 2);
@@ -125,6 +125,30 @@ test('old paid upgrades migrate without erasing paid spirit or charging twice', 
   assert.equal(next.ok, true);
   assert.equal(soulSpentSpirit(next.tree), 116);
   assert.equal(next.remaining, 4);
+});
+
+
+test('previous v2 outer nodes keep their original one-spirit price after migration', () => {
+  const old = { version: 2, paths: {
+    sword: {
+      nodes: { leftMain: 5, leftTop: 2, rightMain: 5, rightTop: 1 },
+      baselineNodes: {},
+      legacySpent: 0
+    },
+    ocean: {
+      nodes: { leftMain: 6, leftTop: 2 },
+      baselineNodes: { leftMain: 5, leftTop: 1 },
+      legacySpent: 45
+    }
+  }};
+  const migrated = normalizeSoulTree(old);
+  assert.equal(migrated.version, 3);
+  assert.equal(soulSpentSpirit(migrated), 13 + 47);
+  assert.equal(soulSpentSpirit(normalizeSoulTree(migrated)), 60);
+  const next = allocateSoulNode(migrated, 'sword', 'leftTop', 100);
+  assert.equal(next.cost, 3);
+  assert.equal(soulSpentSpirit(next.tree), 63);
+  assert.equal(next.remaining, 37);
 });
 
 test('available spirit cannot go below zero or spend again at cap', () => {
