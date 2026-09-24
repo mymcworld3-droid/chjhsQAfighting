@@ -59,3 +59,15 @@ test('quiz paper uses darker parchment with high-contrast ink and preserves answ
   assert.match(css, /#options-container>\.bg-green-600/);
   assert.match(css, /#options-container>\.bg-red-600/);
 });
+
+test('golden core fades its background into the navigation gap without covering buttons', () => {
+  const start = css.indexOf('body.xianxia-theme #page-training .core-minimal-card{');
+  const end = css.indexOf('\n}', start);
+  assert.ok(start >= 0 && end > start, 'golden core surface rule exists');
+  const surface = css.slice(start, end + 2);
+  assert.match(surface, /linear-gradient\(180deg/);
+  assert.match(surface, /rgba\(20,22,19,0\) 100%/);
+  assert.doesNotMatch(surface, /0 18px 42px/);
+  assert.doesNotMatch(surface, /mask|::after|pointer-events/);
+  assert.match(css, /#bottom-nav>\.glass-capsule/);
+});
