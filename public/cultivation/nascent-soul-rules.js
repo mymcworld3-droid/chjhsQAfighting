@@ -160,6 +160,9 @@ function migrateLegacyPath(raw) {
     rightTop: old.form || 0,
     rightBottom: old.realm || 0
   });
+  // 老版已解鎖的分支補足原主節點級數，維持舊進度，計入免費基線。
+  if ((migrated.leftTop || migrated.leftBottom) && (migrated.leftMain || 0) < 5) migrated.leftMain = 5;
+  if ((migrated.rightTop || migrated.rightBottom) && (migrated.rightMain || 0) < 5) migrated.rightMain = 5;
   return { nodes: migrated, baselineNodes: { ...migrated }, legacySpent: oldSpent(old) };
 }
 export function normalizeSoulTree(raw) {
