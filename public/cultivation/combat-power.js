@@ -104,10 +104,16 @@ export function calculateCombatPower({ stats = {}, core = null, equipped = {}, i
 export function getCurrentCombatPower() {
   const data = window.getCurrentUserData?.() || {};
   const core = window.getEquippedGoldenCoreBattleSnapshot?.() || null;
+  const soul = window.getNascentSoulBattleSnapshot?.() || null;
   const system = data.artifactSystem || {};
+  const stats = { ...(data.stats || {}) };
+  if (soul) {
+    // 戰力展示反映元嬰屬性，但不把法寶加成重複計入基礎數值。
+    stats.attack = positive(stats.attack ?? 200) + positive(soul.attackFlat);
+    stats.maxHp = Math.max(1, finite(stats.maxHp, 1000)) + positive(soul.maxHpFlat);
+  }
   return calculateCombatPower({
-    stats: data.stats || {}, core,
-    equipped: system.equipped || {}, inventory: system.inventory || {}
+    stats, core, equipped: system.equipped || {}, inventory: system.inventory || {}
   });
 }
 
