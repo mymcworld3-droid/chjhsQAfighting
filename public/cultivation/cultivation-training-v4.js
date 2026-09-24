@@ -524,7 +524,12 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
 
     const tabs = page.querySelector('.training-subtabs-v3');
     if (!tabs) return;
-    const coreTab = tabs.querySelector('[data-training-tab="core"]');
+    let coreTab = tabs.querySelector('[data-training-tab="core"]');
+    // 築基／初始狀態共用修煉頁時，原本可能沒有金丹分頁。
+    if (!coreTab) {
+      tabs.insertAdjacentHTML('afterbegin', '<button type="button" class="training-subtab-v3" data-training-tab="core" aria-selected="false"><i class="fa-solid fa-circle-dot"></i><span>金丹</span></button>');
+      coreTab = tabs.querySelector('[data-training-tab="core"]');
+    }
     coreTab?.classList.remove('hidden');
     let soulTab = tabs.querySelector('[data-training-tab="nascent-soul"]');
     if (!soulTab) {
