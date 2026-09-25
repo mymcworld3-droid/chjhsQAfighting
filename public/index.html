@@ -14,7 +14,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="xianxia.css?v=20260925-question-helper2">
+    <link rel="stylesheet" href="xianxia.css?v=20260925-extended-practice1">
     <link rel="stylesheet" href="xianxia-gold.css">
     <link rel="stylesheet" href="xianxia-blackgold-harmony.css">
     <link rel="stylesheet" href="styles/admin-product-editor.css?v=20260922-fullscreen1">
@@ -885,6 +885,11 @@ body.xianxia-theme main:has(#page-training.active-page),
                 <div class="glass-panel p-6 rounded-2xl mb-4 border-l-4 border-cyan-500 relative">
                     <div class="quiz-card-tools absolute top-3 right-3 z-20 flex items-center gap-2">
                         <span class="text-[10px] bg-slate-900/50 px-2 py-1 rounded border border-white/10 text-cyan-300 backdrop-blur-md" id="quiz-badge">TYPE</span>
+                        <button id="btn-extended-practice-stop" type="button" onclick="endQuizExtendedPractice()" class="quiz-extended-practice-stop hidden" title="結束延伸練習">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <span>延伸中</span>
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
                         <button id="btn-quiz-whiteboard" type="button" onclick="toggleQuizWhiteboard()" class="quiz-whiteboard-toggle" aria-expanded="false" aria-controls="quiz-whiteboard-panel" title="開啟計算白板">
                             <i class="fa-solid fa-pen-to-square"></i>
                             <span>白板</span>
@@ -1555,6 +1560,6 @@ body.xianxia-theme main:has(#page-training.active-page),
         }).catch(error => console.warn('[Local modules] cache unavailable:', error));
       }
     </script>
-    <script type="module" src="main.js?v=20260925-question-helper2"></script>
+    <script type="module" src="main.js?v=20260925-extended-practice1"></script>
 </body>
 </html>
