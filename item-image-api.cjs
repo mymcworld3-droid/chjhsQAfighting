@@ -146,7 +146,7 @@ async function generateFluxImage(prompt, { env = process.env, fetchImpl = fetch,
     error.status = response.status || 502;
     throw error;
   }
-  const base64 = clean(payload?.result?.image || payload?.image, 20 * 1024 * 1024);
+  const base64 = String(payload?.result?.image || payload?.image || '').replace(/\s+/g, '').slice(0, 20 * 1024 * 1024);
   if (!base64) {
     const error = new Error('Cloudflare 未回傳圖片資料');
     error.status = 502;
