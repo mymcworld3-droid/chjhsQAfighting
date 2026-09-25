@@ -2677,7 +2677,182 @@ async function generateVisualAid(imagePrompt) {
 }
 
 // 2. [修改] renderQuiz 函式 (移除圖片載入邏輯)
-async function renderQuiz(data, rank, topic) {
+async const quizWhiteboardState = {
+    strokes: [],
+    currentStroke: null,
+    initialized: false,
+    resizeFrame: 0
+};
+
+function quizWhiteboardElements() {
+    return {
+        panel: document.getElementById('quiz-whiteboard-panel'),
+        stage: document.getElementById('quiz-whiteboard-stage'),
+        canvas: document.getElementById('quiz-whiteboard-canvas'),
+        toggle: document.getElementById('btn-quiz-whiteboard')
+    };
+}
+
+function quizWhiteboardCssSize() {
+    const { stage } = quizWhiteboardElements();
+    if (!stage) return { width: 0, height: 0 };
+    const width = Math.max(240, Math.floor(stage.clientWidth || 0));
+    const height = Math.max(260, Math.min(420, Math.floor(window.innerHeight * 0.38)));
+    return { width, height };
+}
+
+function prepareQuizWhiteboardCanvas() {
+    const { canvas } = quizWhiteboardElements();
+    if (!canvas) return null;
+    const { width, height } = quizWhiteboardCssSize();
+    if (!width || !height) return null;
+
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
+
+    const dpr = Math.min(2, Math.max(1, window.devicePixelRatio || 1));
+    const pixelWidth = Math.round(width * dpr);
+    const pixelHeight = Math.round(height * dpr);
+    if (canvas.width !== pixelWidth || canvas.height !== pixelHeight) {
+        canvas.width = pixelWidth;
+        canvas.height = pixelHeight;
+    }
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return null;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.lineWidth = 2.4;
+    ctx.strokeStyle = '#1f2937';
+    ctx.fillStyle = '#1f2937';
+    return { canvas, ctx, width, height };
+}
+
+function redrawQuizWhiteboard() {
+    const prepared = prepareQuizWhiteboardCanvas();
+    if (!prepared) return;
+    const { ctx, width, height } = prepared;
+    ctx.clearRect(0, 0, width, height);
+
+    for (const stroke of quizWhiteboardState.strokes) {
+        if (!Array.isArray(stroke) || stroke.length === 0) continue;
+        if (stroke.length === 1) {
+            const point = stroke[0];
+            ctx.beginPath();
+            ctx.arc(point.x * width, point.y * height, 1.25, 0, Math.PI * 2);
+            ctx.fill();
+            continue;
+        }
+        ctx.beginPath();
+        stroke.forEach((point, index) => {
+            const x = point.x * width;
+            const y = point.y * height;
+            if (index === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        });
+        ctx.stroke();
+    }
+}
+
+function quizWhiteboardPoint(event, canvas) {
+    const rect = canvas.getBoundingClientRect();
+    if (!rect.width || !rect.height) return null;
+    return {
+        x: Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width)),
+        y: Math.max(0, Math.min(1, (event.clientY - rect.top) / rect.height))
+    };
+}
+
+function initQuizWhiteboard() {
+    if (quizWhiteboardState.initialized) return;
+    const { canvas } = quizWhiteboardElements();
+    if (!canvas) return;
+    quizWhiteboardState.initialized = true;
+
+    canvas.addEventListener('pointerdown', (event) => {
+        if (event.button !== undefined && event.button !== 0 && event.pointerType === 'mouse') return;
+        const point = quizWhiteboardPoint(event, canvas);
+        if (!point) return;
+        event.preventDefault();
+        canvas.setPointerCapture?.(event.pointerId);
+        const stroke = [point];
+        quizWhiteboardState.strokes.push(stroke);
+        quizWhiteboardState.currentStroke = stroke;
+        redrawQuizWhiteboard();
+    });
+
+    canvas.addEventListener('pointermove', (event) => {
+        const stroke = quizWhiteboardState.currentStroke;
+        if (!stroke) return;
+        const point = quizWhiteboardPoint(event, canvas);
+        if (!point) return;
+        event.preventDefault();
+        const previous = stroke[stroke.length - 1];
+        if (previous && Math.abs(previous.x - point.x) < 0.001 && Math.abs(previous.y - point.y) < 0.001) return;
+        stroke.push(point);
+        redrawQuizWhiteboard();
+    });
+
+    const finishStroke = (event) => {
+        if (!quizWhiteboardState.currentStroke) return;
+        event?.preventDefault?.();
+        quizWhiteboardState.currentStroke = null;
+        if (event?.pointerId != null && canvas.hasPointerCapture?.(event.pointerId)) {
+            canvas.releasePointerCapture?.(event.pointerId);
+        }
+    };
+    canvas.addEventListener('pointerup', finishStroke);
+    canvas.addEventListener('pointercancel', finishStroke);
+    canvas.addEventListener('lostpointercapture', () => {
+        quizWhiteboardState.currentStroke = null;
+    });
+
+    window.addEventListener('resize', () => {
+        const { panel } = quizWhiteboardElements();
+        if (!panel || panel.classList.contains('hidden')) return;
+        cancelAnimationFrame(quizWhiteboardState.resizeFrame);
+        quizWhiteboardState.resizeFrame = requestAnimationFrame(redrawQuizWhiteboard);
+    });
+}
+
+function resetQuizWhiteboard({ close = true } = {}) {
+    quizWhiteboardState.strokes = [];
+    quizWhiteboardState.currentStroke = null;
+    const { panel, toggle } = quizWhiteboardElements();
+    if (close && panel) panel.classList.add('hidden');
+    if (toggle) toggle.setAttribute('aria-expanded', close ? 'false' : String(!panel?.classList.contains('hidden')));
+    if (!close && panel && !panel.classList.contains('hidden')) redrawQuizWhiteboard();
+}
+
+window.clearQuizWhiteboard = () => {
+    resetQuizWhiteboard({ close: false });
+};
+
+window.toggleQuizWhiteboard = (forceOpen) => {
+    const { panel, toggle } = quizWhiteboardElements();
+    if (!panel) return;
+    initQuizWhiteboard();
+
+    const shouldOpen = typeof forceOpen === 'boolean'
+        ? forceOpen
+        : panel.classList.contains('hidden');
+
+    panel.classList.toggle('hidden', !shouldOpen);
+    toggle?.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+    toggle?.classList.toggle('active', shouldOpen);
+
+    if (shouldOpen) {
+        requestAnimationFrame(() => {
+            redrawQuizWhiteboard();
+            panel.scrollIntoView?.({ block: 'nearest', behavior: 'smooth' });
+        });
+    }
+};
+
+function renderQuiz(data, rank, topic) {
+    // 每一道新題使用全新的計算空間，避免上一題草稿誤導下一題。
+    resetQuizWhiteboard({ close: true });
     document.getElementById('quiz-loading').classList.add('hidden');
     document.getElementById('quiz-container').classList.remove('hidden');
     document.getElementById('quiz-badge').innerText = `${topic} | ${rank}`;
