@@ -86,7 +86,9 @@ test('battle rotates one shared question range per round and stores recent quest
   assert.equal(choice.subject, '國文');
   assert.match(battleSource, /questionHistory: \[\.\.\.\(Array\.isArray\(fresh\.questionHistory\)/);
   assert.match(battleSource, /avoidQuestions/);
-  assert.match(serverSource, /previousQuestions\.some/);
+  assert.match(serverSource, /isTooSimilarQuestion\(parsed\.q, previousQuestions\)/);
+  assert.match(battleSource, /avoidQuestionMeta/);
+  assert.match(battleSource, /template_id/);
   assert.match(serverSource, /不得跨科、超綱/);
 });
 
