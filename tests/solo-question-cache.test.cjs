@@ -149,6 +149,7 @@ test('quiz exposes a responsive mouse and touch calculation whiteboard', () => {
   assert.match(index, /role="dialog"/);
   assert.match(index, /aria-modal="true"/);
   assert.match(index, /class="quiz-whiteboard-backdrop"/);
+  assert.match(index, /id="quiz-whiteboard-question"/);
   assert.match(index, /id="quiz-whiteboard-canvas"/);
   assert.match(index, /onclick="clearQuizWhiteboard\(\)"/);
   assert.match(legacy, /window\.toggleQuizWhiteboard =/);
@@ -156,11 +157,13 @@ test('quiz exposes a responsive mouse and touch calculation whiteboard', () => {
   assert.match(legacy, /canvas\.addEventListener\('pointerdown'/);
   assert.match(legacy, /resetQuizWhiteboard\(\{ close: true \}\)/);
   assert.match(xianxia, /#quiz-whiteboard-canvas/);
+  assert.match(xianxia, /height:\s*100dvh/);
+  assert.match(xianxia, /\.quiz-whiteboard-question-wrap/);
   assert.match(xianxia, /touch-action:\s*none/);
 });
 
 test('core import and page query change together to refresh browser cached code', () => {
-  assert.match(main, /main-legacy\.js\?v=20260925-quiz-whiteboard2/);
-  assert.match(index, /main\.js\?v=20260925-quiz-whiteboard2/);
-  assert.match(index, /xianxia\.css\?v=20260925-quiz-whiteboard2/);
+  assert.match(main, /main-legacy\.js\?v=20260925-quiz-whiteboard3/);
+  assert.match(index, /main\.js\?v=20260925-quiz-whiteboard3/);
+  assert.match(index, /xianxia\.css\?v=20260925-quiz-whiteboard3/);
 });
