@@ -400,7 +400,9 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
     }
     const asked = Array.isArray(request.avoidQuestions) ? request.avoidQuestions : [];
     const fingerprint = value => String(value).replace(/\s+/g, '').toLowerCase();
-    if (asked.some(previous => fingerprint(previous) === fingerprint(q))) throw new Error('本場出現重複題目');
+    if (asked.some(previous => fingerprint(typeof previous === 'string' ? previous : previous?.q) === fingerprint(q))) {
+      throw new Error('本場出現重複題目');
+    }
     if (source.subject && String(source.subject).trim() !== request.subject) throw new Error('AI 題目科目與指定範圍不符');
     // Rotate options, not their meaning; maintain the unique, authoritative correct index.
     for (let i = choices.length - 1; i > 0; i--) {
@@ -409,14 +411,30 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
       if (ans === i) ans = j; else if (ans === j) ans = i;
     }
     return { id: randomId('bv2q'), q, opts: choices, ans, exp, subject: request.subject,
-      topic: request.specificTopic || String(source.sub_topic || ''), level: request.level };
+      topic: request.specificTopic || String(source.sub_topic || ''), level: request.level,
+      conceptId: String(source.concept_id || '').trim(),
+      skillId: String(source.skill_id || '').trim(),
+      templateId: String(source.template_id || '').trim(),
+      questionForm: String(source.question_form || '').trim(),
+      cognitiveLevel: Number(source.cognitive_level) || 0,
+      reasoningSteps: Number(source.reasoning_steps) || 0,
+      targetMisconception: String(source.target_misconception || '').trim() };
   }
 
   async function generateQuestion(room, round) {
     const scope = room.knowledgeScope || resolveBattleKnowledge(room.host?.knowledge, room.guest?.knowledge);
     const selected = pickBattleKnowledge(scope, round);
     const avoidQuestions = (Array.isArray(room.questionHistory) ? room.questionHistory : [])
-      .slice(-10).map(entry => String(entry?.q || '')).filter(Boolean);
+      .slice(-40)
+      .map(entry => ({
+        q: String(entry?.q || ''),
+        concept_id: String(entry?.conceptId || entry?.concept_id || ''),
+        skill_id: String(entry?.skillId || entry?.skill_id || ''),
+        template_id: String(entry?.templateId || entry?.template_id || ''),
+        question_form: String(entry?.questionForm || entry?.question_form || ''),
+        cognitive_level: Number(entry?.cognitiveLevel || entry?.cognitive_level || 0)
+      }))
+      .filter(entry => entry.q);
     const request = { ...selected, rank: Math.min(Number(room.host?.rankLevel) || 0, Number(room.guest?.rankLevel) || 0),
       avoidQuestions };
     try {
@@ -1098,7 +1116,15 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
         tx.update(ref, {
           status: 'preparing', round: round + 1,
           questionHistory: [...(Array.isArray(fresh.questionHistory) ? fresh.questionHistory : []),
-            { q: fresh.currentQuestion?.q || '', subject: fresh.currentQuestion?.subject || '' }].filter(entry => entry.q).slice(-10),
+            {
+              q: fresh.currentQuestion?.q || '',
+              subject: fresh.currentQuestion?.subject || '',
+              conceptId: fresh.currentQuestion?.conceptId || '',
+              skillId: fresh.currentQuestion?.skillId || '',
+              templateId: fresh.currentQuestion?.templateId || '',
+              questionForm: fresh.currentQuestion?.questionForm || '',
+              cognitiveLevel: Number(fresh.currentQuestion?.cognitiveLevel) || 0
+            }].filter(entry => entry.q).slice(-40),
           currentQuestion: null, questionReadyAtMs: null, nextRoundAtMs: null, questionOwnerUid: me().uid, questionClaimedAtMs: nowMs(),
           answerWindowStartedAt: null, answerWindowStartedAtMs: null, firstAnswerUid: null,
           'host.answerChoice': null, 'host.answerCorrect': null, 'host.answerAt': null, 'host.answerClientAt': null, 'host.answerRound': null, 'host.timedOut': false,
