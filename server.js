@@ -3,6 +3,15 @@ const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 const aiRouter = require('./ai-router');
+const {
+    normalizeText,
+    normalizeHistory,
+    planQuestionBlueprint,
+    sanitizeGeneratedMetadata,
+    validateGeneratedMetadata,
+    duplicateReason,
+    historyForPrompt
+} = require('./question-quality.cjs');
 const registerDongtianApi = require('./dongtian-api');
 const registerIdentityApi = require('./identity-api');
 const registerQuestionReportApi = require('./question-report-api.cjs');
@@ -202,14 +211,13 @@ function getRandomItem(arr) {
 // API 2: 生成測驗題目 (優化版：單次請求 + 安全 JSON 解析)
 // ==========================================
 app.post('/api/generate-quiz', async (req, res) => {
-    // 兼容前端可能傳來的 specificTopic 或 topic
+    // 兼容前端可能傳來的 specificTopic 或 topic；avoidQuestions 可為舊版字串陣列或新版結構化紀錄。
     let { subject, level, rank, difficulty, knowledgeMap, specificTopic, topic, avoidQuestions } = req.body || {};
     subject = String(subject || '').trim().slice(0, 40);
     level = String(level || '國中一年級').slice(0, 32);
     difficulty = ['easy', 'medium', 'hard'].includes(difficulty) ? difficulty : 'medium';
-    const previousQuestions = (Array.isArray(avoidQuestions) ? avoidQuestions : [])
-        .filter(value => typeof value === 'string').slice(-10).map(value => value.trim().slice(0, 180)).filter(Boolean);
-    const fingerprint = value => String(value).replace(/\s+/g, '').toLowerCase();
+    const previousQuestions = normalizeHistory(avoidQuestions, 60);
+    const fingerprint = normalizeText;
     let targetTopic = String(specificTopic || topic || '').trim().slice(0, 240);
 
     // 1. 科目選擇
@@ -230,74 +238,110 @@ app.post('/api/generate-quiz', async (req, res) => {
         topicDescription = SUBJECT_DETAILS[subject][targetTopic];
     }
 
-    // 4. 建構診斷資訊
+    // 4. 玩家表現只用來提供鷹架與弱點提示，不再偷偷把玩家設定的難度降成 easy。
     let diagnosticInfo = "";
     if (knowledgeMap && knowledgeMap[subject] && knowledgeMap[subject][targetTopic]) {
         const stats = knowledgeMap[subject][targetTopic];
-        const accuracy = stats.total > 0 ? ((stats.correct / stats.total) * 100).toFixed(1) : 0;
-        diagnosticInfo = `[玩家數據] 在「${subject}-${targetTopic}」上正確率為 ${accuracy}% (已練 ${stats.total} 題)。`;
-        if (stats.total > 3 && accuracy < 40) difficulty = "easy"; 
-        if (stats.total > 5 && accuracy > 80) difficulty = "hard"; 
+        const total = Math.max(0, Number(stats.total) || 0);
+        const correct = Math.max(0, Number(stats.correct) || 0);
+        const accuracy = total > 0 ? ((correct / total) * 100).toFixed(1) : 0;
+        diagnosticInfo = `[玩家數據] 在「${subject}-${targetTopic}」上正確率為 ${accuracy}%（已練 ${total} 題）。若表現較弱，請用較清楚的情境與可辨識線索做鷹架，但仍必須維持本次指定的 ${difficulty} 認知難度，不得退化成只背定義或單步套公式。`;
     }
 
-    const randomSeed = Math.random().toString(36).substring(7);
+    const randomSeed = Math.random().toString(36).substring(2, 12);
+    const blueprint = planQuestionBlueprint(subject, difficulty, previousQuestions, randomSeed);
+    const avoidanceHistory = historyForPrompt(previousQuestions, 30);
 
     const generationPrompt = `
         [系統指令]
-        你是一名 AI 教育專家，請生成一道高品質的「單選題」。
-        題目有需要換行時可以打\n。
-        
-        [出題規格]
-        1. **主科目**：${subject}
-        2. **指定題型**：${targetTopic}
-        3. **題型要求**：${topicDescription}
-        4. **適用程度**：${level} (段位：${rank})
-        5. **難度設定**：${difficulty}
-        6. **隨機因子**：${randomSeed}
-        7. **嚴格範圍**：只能考查「${level}」程度內的「${subject}／${targetTopic}」，不得跨科、超綱或擅自替換單元。
-        8. **避免重複題目**：${previousQuestions.length ? JSON.stringify(previousQuestions) : '本場尚無既有題目'}。不得改寫同一道題目再出。
-        9. 必須提供四個不重複且僅有一個正解的選項，以及能夠支持該答案的完整解析。
-        10. **LaTeX 排版**：題幹、正確選項、三個錯誤選項及解析中的所有數學式都必須使用 TeX 語法。行內數學用 $...$，獨立公式用 $...$；例如 $x^2+1$、$\\frac{1}{2}$。一般中文保留純文字，不要將整段中文包進公式；不要輸出 HTML 或 Markdown 程式碼區塊。
+        你是一名重視「有效練習」而不是大量換皮題的教育測驗設計者。請生成一道高品質單選題。
+        題目需要換行時可使用 \\n。
+
+        [課程範圍]
+        1. 主科目：${subject}
+        2. 指定範圍：${targetTopic}
+        3. 題型／單元說明：${topicDescription}
+        4. 適用程度：${level}（段位：${rank}）
+        5. 難度：${difficulty}
+        6. 嚴格範圍：只能考查「${level}」程度內的「${subject}／${targetTopic}」，不得跨科、超綱或擅自替換單元。
+
+        [本題藍圖－必須遵守]
+        - question_form 必須為：${blueprint.questionForm}
+        - cognitive_level 必須介於 ${blueprint.cognitiveMin} 到 ${blueprint.cognitiveMax}
+        - reasoning_steps 至少 ${blueprint.minReasoningSteps} 步
+        - 深度要求：${blueprint.guidance}
+        - 請從指定範圍中的「細部觀念」選一個真正可練習的 concept_id；不要把整個章名直接當成唯一考點。
+        - template_id 必須描述「抽象解題骨架」，不得包含人名、具體數字或隨機情境名。例如同樣是「已知矩形對角線與邊差求面積」，即使換數字仍應使用同一 template_id。
+        - 錯誤選項應對應合理迷思／計算錯誤，避免一眼可排除的荒謬選項。
+        - 若為 medium/hard，不得只把 easy 題換更大的數字；要增加推理、條件整合、判讀或建模深度。
+
+        [近期已出題－禁止換皮重出]
+        ${avoidanceHistory.length ? JSON.stringify(avoidanceHistory) : '本範圍尚無近期紀錄'}
+        禁止：
+        - 完全相同題目。
+        - 只替換數字、人名、物品名稱或敘述順序的同骨架題。
+        - 近期重複相同 template_id。
+        - 連續用相同 concept_id + question_form 轟炸同一觀念。
+        請主動換一個尚未充分練到的細部角度。
+
+        [作答品質]
+        - 必須有四個不重複選項且只有一個正解。
+        - exp 要說明關鍵推理，不能只寫「答案為 X」。
+        - 所有數學式使用 TeX：行內使用 $...$；例如 $x^2+1$、$\\frac{1}{2}$。
+        - 一般中文保持純文字，不要輸出 HTML，不要 markdown 程式碼區塊。
         ${diagnosticInfo}
-    
-        [輸出格式 (JSON Only)]
-        請直接回傳 JSON，不要 markdown 標記：
+
+        [輸出格式：JSON Only]
         {
-            "q": "題目內容 (純文字描述)",
+            "q": "題目內容",
             "correct": "正確選項",
             "wrong": ["錯誤1", "錯誤2", "錯誤3"],
-            "exp": "解析內容...",
+            "exp": "完整解析",
             "subject": "${subject}",
-            "sub_topic": "${targetTopic}" 
+            "sub_topic": "${targetTopic}",
+            "concept_id": "穩定的細部觀念代碼或短名稱",
+            "skill_id": "主要能力代碼或短名稱",
+            "template_id": "不含具體數字／人名的抽象解題骨架",
+            "question_form": "${blueprint.questionForm}",
+            "cognitive_level": ${blueprint.cognitiveMin},
+            "reasoning_steps": ${blueprint.minReasoningSteps},
+            "target_misconception": "本題主要針對的常見錯誤或空字串"
         }
-        請檢查：答案 "correct" 只有一個、錯誤答案中沒有正確答案、選項必須在選項裡不可在題目裡、不可為多選題。
+        請在回傳前自行確認：答案唯一、四選項皆合理、沒有超綱、不是近期題目的換皮版本，而且 metadata 與實際題目一致。
     `;
 
-    // 6. 呼叫 AI (取消雙重呼叫，改為直接解析)
     let attempts = 0;
     const maxAttempts = 3;
 
     while (attempts < maxAttempts) {
         try {
-            console.log(`[Gen] ${subject} > ${targetTopic} (${difficulty}) - 嘗試 ${attempts + 1}`); 
-            const routed = await aiRouter.generateJSON(generationPrompt);
+            console.log(`[Gen] ${subject} > ${targetTopic} (${difficulty}/${blueprint.questionForm}) - 嘗試 ${attempts + 1}`);
+            const retryNote = attempts
+                ? `\n[重試提醒] 前一版未通過格式、深度或去重檢查。請明顯更換解題骨架，不要只改數字或措辭。這是第 ${attempts + 1} 次生成。`
+                : '';
+            const routed = await aiRouter.generateJSON(generationPrompt + retryNote);
             const parsed = routed.data;
             const wrong = Array.isArray(parsed?.wrong) ? parsed.wrong : [];
             const options = [parsed?.correct, ...wrong];
+            const meta = sanitizeGeneratedMetadata(parsed, blueprint, targetTopic);
+            Object.assign(parsed || {}, meta);
+            const metadataError = validateGeneratedMetadata(meta, blueprint);
+            const duplicate = duplicateReason({ ...meta, q: parsed?.q }, previousQuestions);
+
             if (typeof parsed?.q !== 'string' || parsed.q.trim().length < 5 ||
                 typeof parsed.correct !== 'string' || wrong.length !== 3 ||
                 options.some(item => typeof item !== 'string' || !item.trim()) ||
                 new Set(options.map(fingerprint)).size !== 4 ||
-                typeof parsed.exp !== 'string' || parsed.exp.trim().length < 5 ||
+                typeof parsed.exp !== 'string' || parsed.exp.trim().length < 8 ||
                 (parsed.subject && String(parsed.subject).trim() !== subject) ||
-                previousQuestions.some(old => fingerprint(old) === fingerprint(parsed.q))) {
-                throw new Error('AI 題目未通過範圍、格式或去重檢查');
+                metadataError || duplicate) {
+                const why = metadataError || duplicate || '格式／答案檢查失敗';
+                throw new Error(`AI 題目未通過範圍、深度或去重檢查：${why}`);
             }
+
             parsed.subject = subject;
             parsed.sub_topic = targetTopic;
-
             return res.json({ text: JSON.stringify(parsed), provider: routed.provider, model: routed.model });
-
         } catch (error) {
             console.error(`Attempt ${attempts + 1} failed:`, error.message);
             attempts++;
