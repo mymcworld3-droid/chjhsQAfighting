@@ -10,6 +10,7 @@ const registerArtifactGenerationApi = require('./artifact-generation-api');
 const registerFirebaseProjectAuthApi = require('./firebase-project-auth-api.cjs');
 const registerAutoMigrationApi = require('./firebase-auto-migration-api.cjs');
 const registerPlayerProvisionApi = require('./firebase-player-provision-api.cjs');
+const registerAdminAccountApi = require('./admin-account-api.cjs');
 require('dotenv').config();
 
 const app = express();
@@ -25,6 +26,7 @@ registerArtifactGenerationApi(app);
 registerFirebaseProjectAuthApi(app);
 const migrationController = registerAutoMigrationApi(app);
 registerPlayerProvisionApi(app, { migrationController });
+registerAdminAccountApi(app);
 
 // 根目錄路由
 app.get('/', (req, res) => {
