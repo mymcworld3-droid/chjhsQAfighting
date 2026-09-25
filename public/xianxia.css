@@ -132,6 +132,136 @@ body.xianxia-theme .home-actions .font-sci { font-size: 19px; font-weight: 500; 
 body.xianxia-theme .home-actions .font-mono { color: #ccd0b7; font: 11px 'Noto Sans TC', sans-serif; margin-top: 5px; letter-spacing: .06em; }
 .xianxia-footnote { margin: 26px 0 12px; display: flex; align-items: center; gap: 16px; justify-content: center; color: #97aa91; font: 12px var(--xq-serif); letter-spacing: .16em; }
 .xianxia-footnote::before, .xianxia-footnote::after { content: ''; width: 60px; height: 1px; background: var(--xq-line); }
+/* 問道計算白板：題型標籤與按鈕共用右上工具列，白板支援滑鼠與觸控手寫。 */
+#quiz-container > .glass-panel:first-child { padding-top: 4rem; }
+.quiz-card-tools { max-width: calc(100% - 28px); }
+.quiz-card-tools #quiz-badge {
+  position: static;
+  min-width: 0;
+  max-width: min(55vw, 420px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.quiz-whiteboard-toggle,
+.quiz-whiteboard-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid #ffffff24;
+  background: #0f172acc;
+  color: #cbd5e1;
+  border-radius: 8px;
+  min-height: 30px;
+  padding: 5px 9px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  transition: background .16s ease, border-color .16s ease, color .16s ease, transform .16s ease;
+}
+.quiz-whiteboard-toggle:hover,
+.quiz-whiteboard-toggle.active,
+.quiz-whiteboard-action:hover {
+  color: #cffafe;
+  border-color: #22d3ee80;
+  background: #164e63dd;
+}
+.quiz-whiteboard-toggle:active,
+.quiz-whiteboard-action:active { transform: scale(.96); }
+.quiz-whiteboard-panel {
+  overflow: hidden;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  background: #0f172a;
+  box-shadow: 0 12px 30px #02061745;
+}
+.quiz-whiteboard-toolbar {
+  min-height: 46px;
+  padding: 8px 10px 8px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border-bottom: 1px solid #334155;
+  background: #111827;
+}
+.quiz-whiteboard-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #e2e8f0;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .05em;
+}
+.quiz-whiteboard-title i { color: #67e8f9; }
+.quiz-whiteboard-actions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.quiz-whiteboard-stage {
+  width: 100%;
+  min-height: 260px;
+  overflow: hidden;
+  background-color: #fffef8;
+  background-image:
+    linear-gradient(#dbe4ea70 1px, transparent 1px),
+    linear-gradient(90deg, #dbe4ea55 1px, transparent 1px);
+  background-size: 24px 24px;
+  cursor: crosshair;
+}
+#quiz-whiteboard-canvas {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: crosshair;
+}
+body.xianxia-theme .quiz-whiteboard-panel {
+  border-color: #b9a87078;
+  background: #132a23;
+  box-shadow: 0 12px 30px #03120d55;
+}
+body.xianxia-theme .quiz-whiteboard-toolbar {
+  background: #173128;
+  border-color: #b9a87055;
+}
+body.xianxia-theme .quiz-whiteboard-title { color: #ead7aa; }
+body.xianxia-theme .quiz-whiteboard-title i { color: #d6bf83; }
+body.xianxia-theme .quiz-whiteboard-toggle,
+body.xianxia-theme .quiz-whiteboard-action {
+  background: #203b30e8;
+  border-color: #a99a665f;
+  color: #e7dcc0;
+  border-radius: 4px;
+}
+body.xianxia-theme .quiz-whiteboard-toggle:hover,
+body.xianxia-theme .quiz-whiteboard-toggle.active,
+body.xianxia-theme .quiz-whiteboard-action:hover {
+  background: #365243;
+  border-color: #d4bc7d;
+  color: #fff3cf;
+}
+@media (max-width: 560px) {
+  .quiz-card-tools {
+    left: 14px;
+    right: 12px;
+    max-width: none;
+    justify-content: flex-end;
+  }
+  .quiz-card-tools #quiz-badge {
+    max-width: calc(100% - 78px);
+  }
+  .quiz-whiteboard-toggle span { display: none; }
+  .quiz-whiteboard-toggle { width: 32px; padding-inline: 0; flex: 0 0 32px; }
+  .quiz-whiteboard-toolbar { padding-left: 10px; }
+  .quiz-whiteboard-action { padding-inline: 8px; }
+}
+
 /* 宣紙題卷。正解/錯解仍有獨立色彩與原有文字、圖示。 */
 body.xianxia-theme #page-quiz { max-width: 820px; }
 body.xianxia-theme #quiz-container > .glass-panel:first-child {
