@@ -14,7 +14,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="xianxia.css?v=20260925-helper-layout1">
+    <link rel="stylesheet" href="xianxia.css?v=20260925-helper-layout2">
     <link rel="stylesheet" href="xianxia-gold.css">
     <link rel="stylesheet" href="xianxia-blackgold-harmony.css">
     <link rel="stylesheet" href="styles/admin-product-editor.css?v=20260922-fullscreen1">
@@ -883,23 +883,83 @@ body.xianxia-theme main:has(#page-training.active-page),
 
             <div id="quiz-container" class="hidden mt-4">
                 <div class="quiz-question-helper-layout">
-                    <div class="glass-panel p-6 rounded-2xl mb-4 border-l-4 border-cyan-500 relative">
+                    <div class="quiz-main-column">
+                        <div class="glass-panel p-6 rounded-2xl mb-4 border-l-4 border-cyan-500 relative">
                         <div class="quiz-card-tools absolute top-3 right-3 z-20 flex items-center gap-2">
-                            <span class="text-[10px] bg-slate-900/50 px-2 py-1 rounded border border-white/10 text-cyan-300 backdrop-blur-md" id="quiz-badge">TYPE</span>
-                            <button id="btn-extended-practice-stop" type="button" onclick="endQuizExtendedPractice()" class="quiz-extended-practice-stop hidden" title="結束延伸練習">
-                                <i class="fa-solid fa-graduation-cap"></i>
-                                <span>延伸中</span>
-                                <i class="fa-solid fa-xmark"></i>
-                            </button>
-                            <button id="btn-quiz-whiteboard" type="button" onclick="toggleQuizWhiteboard()" class="quiz-whiteboard-toggle" aria-expanded="false" aria-controls="quiz-whiteboard-panel" title="開啟計算白板">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                                <span>白板</span>
-                            </button>
+                        <span class="text-[10px] bg-slate-900/50 px-2 py-1 rounded border border-white/10 text-cyan-300 backdrop-blur-md" id="quiz-badge">TYPE</span>
+                        <button id="btn-extended-practice-stop" type="button" onclick="endQuizExtendedPractice()" class="quiz-extended-practice-stop hidden" title="結束延伸練習">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        <span>延伸中</span>
+                        <i class="fa-solid fa-xmark"></i>
+                        </button>
+                        <button id="btn-quiz-whiteboard" type="button" onclick="toggleQuizWhiteboard()" class="quiz-whiteboard-toggle" aria-expanded="false" aria-controls="quiz-whiteboard-panel" title="開啟計算白板">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        <span>白板</span>
+                        </button>
                         </div>
                         <div class="text-6xl text-cyan-500/10 absolute -top-2 -left-2"><i class="fa-solid fa-quote-left"></i></div>
                         <h3 class="text-lg font-bold leading-relaxed relative z-10 text-white" id="question-text">...</h3>
+                        </div>
+                        <section id="quiz-whiteboard-panel" class="quiz-whiteboard-panel hidden" role="dialog" aria-modal="true" aria-label="計算白板">
+                        <button type="button" class="quiz-whiteboard-backdrop" onclick="toggleQuizWhiteboard(false)" aria-label="關閉計算白板"></button>
+                        <div class="quiz-whiteboard-dialog">
+                        <div class="quiz-whiteboard-toolbar">
+                        <div class="quiz-whiteboard-title">
+                        <i class="fa-solid fa-chalkboard"></i>
+                        <span>計算白板</span>
+                        </div>
+                        <div class="quiz-whiteboard-actions">
+                        <button type="button" onclick="clearQuizWhiteboard()" class="quiz-whiteboard-action" title="清空白板">
+                        <i class="fa-solid fa-eraser"></i>
+                        <span>清空</span>
+                        </button>
+                        <button type="button" onclick="toggleQuizWhiteboard(false)" class="quiz-whiteboard-action" title="關閉白板">
+                        <i class="fa-solid fa-xmark"></i>
+                        <span>關閉</span>
+                        </button>
+                        </div>
+                        </div>
+                        <div class="quiz-whiteboard-question-wrap">
+                        <div class="quiz-whiteboard-question-label">
+                        <i class="fa-solid fa-scroll"></i>
+                        <span>題目</span>
+                        </div>
+                        <div id="quiz-whiteboard-question" class="quiz-whiteboard-question">...</div>
+                        </div>
+                        <div id="quiz-whiteboard-stage" class="quiz-whiteboard-stage">
+                        <canvas id="quiz-whiteboard-canvas" aria-label="可手寫計算的白板"></canvas>
+                        </div>
+                        </div>
+                        </section>
+                        
+                        
+                        
+                        <div id="options-container" class="space-y-3"></div>
+                        
+                        <div id="feedback-section" class="hidden mt-6 glass-panel p-5 rounded-xl border border-white/10 animate-fade-in-up">
+                        <div class="flex items-center gap-3 mb-3">
+                        <div id="feedback-icon" class="text-2xl"></div>
+                        <h3 id="feedback-title" class="text-lg font-bold font-sci"></h3>
+                        </div>
+                        <div class="bg-slate-950/50 p-4 rounded-lg text-sm text-gray-300 leading-relaxed border border-white/5 mb-4">
+                        <span class="text-cyan-400 font-bold block mb-1 text-xs uppercase tracking-wider"><i class="fa-solid fa-magnifying-glass"></i> 題解參悟</span>
+                        <span id="feedback-text"></span>
+                        </div>
+                        <div class="flex gap-3">
+                        <button onclick="switchToPage('page-home')" class="btn-cyber-ghost flex-1 py-3 rounded-lg text-xs" data-i18n="btn_back_home">HOME</button>
+                        <button id="btn-next-step" onclick="nextQuestion()" class="btn-cyber-primary flex-1 py-3 rounded-lg text-xs" data-i18n="btn_next_q">NEXT</button>
+                        </div>
+                        </div>
+                        
+                        <div class="mt-8 flex gap-3 w-full">
+                        <button id="btn-giveup" onclick="giveUpQuiz()" class="flex-1 py-3 text-gray-600 text-xs text-center hover:text-red-400 transition border border-transparent hover:border-red-500/20 rounded-lg group">
+                        <i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i> <span data-i18n="btn_giveup">ABORT MISSION</span>
+                        </button>
+                        <button id="btn-report" onclick="openReportModal()" class="flex-1 py-3 text-gray-600 text-xs text-center hover:text-yellow-400 transition border border-transparent hover:border-yellow-500/20 rounded-lg group">
+                        <i class="fa-solid fa-bug group-hover:rotate-12 transition-transform"></i> <span>回報問題</span>
+                        </button>
+                        </div>
                     </div>
-
                     <aside id="quiz-helper-shell" class="quiz-helper-shell collapsed" aria-label="問道助手">
                         <button id="quiz-helper-launcher" type="button" class="quiz-helper-launcher" onclick="toggleQuizHelper(true)" aria-label="開啟問道助手" title="問道助手">
                             <i class="fa-solid fa-comments"></i>
@@ -933,66 +993,6 @@ body.xianxia-theme main:has(#page-training.active-page),
                             <div id="quiz-helper-status" class="quiz-helper-status" aria-live="polite"></div>
                         </section>
                     </aside>
-                </div>
-
-                <section id="quiz-whiteboard-panel" class="quiz-whiteboard-panel hidden" role="dialog" aria-modal="true" aria-label="計算白板">
-                    <button type="button" class="quiz-whiteboard-backdrop" onclick="toggleQuizWhiteboard(false)" aria-label="關閉計算白板"></button>
-                    <div class="quiz-whiteboard-dialog">
-                        <div class="quiz-whiteboard-toolbar">
-                            <div class="quiz-whiteboard-title">
-                                <i class="fa-solid fa-chalkboard"></i>
-                                <span>計算白板</span>
-                            </div>
-                            <div class="quiz-whiteboard-actions">
-                                <button type="button" onclick="clearQuizWhiteboard()" class="quiz-whiteboard-action" title="清空白板">
-                                    <i class="fa-solid fa-eraser"></i>
-                                    <span>清空</span>
-                                </button>
-                                <button type="button" onclick="toggleQuizWhiteboard(false)" class="quiz-whiteboard-action" title="關閉白板">
-                                    <i class="fa-solid fa-xmark"></i>
-                                    <span>關閉</span>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="quiz-whiteboard-question-wrap">
-                            <div class="quiz-whiteboard-question-label">
-                                <i class="fa-solid fa-scroll"></i>
-                                <span>題目</span>
-                            </div>
-                            <div id="quiz-whiteboard-question" class="quiz-whiteboard-question">...</div>
-                        </div>
-                        <div id="quiz-whiteboard-stage" class="quiz-whiteboard-stage">
-                            <canvas id="quiz-whiteboard-canvas" aria-label="可手寫計算的白板"></canvas>
-                        </div>
-                    </div>
-                </section>
-
-
-
-                <div id="options-container" class="space-y-3"></div>
-
-                <div id="feedback-section" class="hidden mt-6 glass-panel p-5 rounded-xl border border-white/10 animate-fade-in-up">
-                    <div class="flex items-center gap-3 mb-3">
-                        <div id="feedback-icon" class="text-2xl"></div>
-                        <h3 id="feedback-title" class="text-lg font-bold font-sci"></h3>
-                    </div>
-                    <div class="bg-slate-950/50 p-4 rounded-lg text-sm text-gray-300 leading-relaxed border border-white/5 mb-4">
-                        <span class="text-cyan-400 font-bold block mb-1 text-xs uppercase tracking-wider"><i class="fa-solid fa-magnifying-glass"></i> 題解參悟</span>
-                        <span id="feedback-text"></span>
-                    </div>
-                    <div class="flex gap-3">
-                        <button onclick="switchToPage('page-home')" class="btn-cyber-ghost flex-1 py-3 rounded-lg text-xs" data-i18n="btn_back_home">HOME</button>
-                        <button id="btn-next-step" onclick="nextQuestion()" class="btn-cyber-primary flex-1 py-3 rounded-lg text-xs" data-i18n="btn_next_q">NEXT</button>
-                    </div>
-                </div>
-                
-                <div class="mt-8 flex gap-3 w-full">
-                    <button id="btn-giveup" onclick="giveUpQuiz()" class="flex-1 py-3 text-gray-600 text-xs text-center hover:text-red-400 transition border border-transparent hover:border-red-500/20 rounded-lg group">
-                        <i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i> <span data-i18n="btn_giveup">ABORT MISSION</span>
-                    </button>
-                    <button id="btn-report" onclick="openReportModal()" class="flex-1 py-3 text-gray-600 text-xs text-center hover:text-yellow-400 transition border border-transparent hover:border-yellow-500/20 rounded-lg group">
-                        <i class="fa-solid fa-bug group-hover:rotate-12 transition-transform"></i> <span>回報問題</span>
-                    </button>
                 </div>
             </div>
         </div>
@@ -1564,6 +1564,6 @@ body.xianxia-theme main:has(#page-training.active-page),
         }).catch(error => console.warn('[Local modules] cache unavailable:', error));
       }
     </script>
-    <script type="module" src="main.js?v=20260925-helper-layout1"></script>
+    <script type="module" src="main.js?v=20260925-helper-layout2"></script>
 </body>
 </html>
