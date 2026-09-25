@@ -2718,6 +2718,7 @@ const quizHelperState = {
     correctIndex: null,
     answered: false,
     busy: false,
+    requestSerial: 0,
     initialized: false,
     manualOpen: null
 };
@@ -2795,6 +2796,31 @@ function quizHelperAppendMessage(role, text, { knowledgePoint = '' } = {}) {
     });
 }
 
+function quizHelperAppendThinking() {
+    const { messages } = quizHelperElements();
+    if (!messages) return null;
+
+    const row = document.createElement('div');
+    row.className = 'quiz-helper-thinking';
+    row.setAttribute('role', 'status');
+    row.setAttribute('aria-label', '問道助手正在思考');
+
+    const avatar = document.createElement('span');
+    avatar.className = 'quiz-helper-thinking-avatar';
+    avatar.innerHTML = '<i class="fa-solid fa-user-graduate"></i>';
+
+    const bubble = document.createElement('div');
+    bubble.className = 'quiz-helper-thinking-bubble';
+    bubble.innerHTML = '<span></span><span></span><span></span>';
+
+    row.append(avatar, bubble);
+    messages.appendChild(row);
+    requestAnimationFrame(() => {
+        messages.scrollTop = messages.scrollHeight;
+    });
+    return row;
+}
+
 function renderQuizHelperConversation() {
     const { messages } = quizHelperElements();
     if (!messages) return;
@@ -2846,6 +2872,7 @@ function resetQuizHelper(data = {}, { topic = '' } = {}) {
     quizHelperState.correctIndex = Number.isInteger(data.ans) ? data.ans : null;
     quizHelperState.answered = false;
     quizHelperState.busy = false;
+    quizHelperState.requestSerial += 1;
 
     if (input) input.value = '';
     if (send) send.disabled = false;
@@ -2863,13 +2890,16 @@ async function sendQuizHelperMessage(rawMessage) {
     if (!message || quizHelperState.busy || !quizHelperState.question) return;
 
     const history = quizHelperState.messages.slice(-6).map(item => ({ role: item.role, text: item.text }));
+    const requestQuestion = quizHelperState.question;
+    const requestId = ++quizHelperState.requestSerial;
     quizHelperState.messages.push({ role: 'user', text: message });
     quizHelperAppendMessage('user', message);
     if (input) input.value = '';
 
     quizHelperState.busy = true;
     if (send) send.disabled = true;
-    if (status) status.textContent = '問道助手思索中…';
+    if (status) status.textContent = '';
+    const thinkingBubble = quizHelperAppendThinking();
 
     try {
         const response = await fetch('/api/question-helper', {
@@ -2889,6 +2919,8 @@ async function sendQuizHelperMessage(rawMessage) {
             })
         });
         const payload = await response.json().catch(() => ({}));
+        if (requestId !== quizHelperState.requestSerial || requestQuestion !== quizHelperState.question) return;
+        thinkingBubble?.remove();
         if (!response.ok) throw new Error(payload.error || `HTTP ${response.status}`);
         const answer = String(payload.answer || '').trim();
         if (!answer) throw new Error('問道助手沒有回傳內容');
@@ -2897,12 +2929,17 @@ async function sendQuizHelperMessage(rawMessage) {
         quizHelperAppendMessage('assistant', answer, { knowledgePoint });
         if (status) status.textContent = '';
     } catch (error) {
+        if (requestId !== quizHelperState.requestSerial || requestQuestion !== quizHelperState.question) return;
+        thinkingBubble?.remove();
         console.warn('[Quiz helper]', error);
         if (status) status.textContent = error?.message || '問道助手暫時無法回應。';
     } finally {
-        quizHelperState.busy = false;
-        if (send) send.disabled = false;
-        input?.focus({ preventScroll: true });
+        if (requestId === quizHelperState.requestSerial && requestQuestion === quizHelperState.question) {
+            thinkingBubble?.remove();
+            quizHelperState.busy = false;
+            if (send) send.disabled = false;
+            input?.focus({ preventScroll: true });
+        }
     }
 }
 
