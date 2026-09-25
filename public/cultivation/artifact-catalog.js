@@ -266,6 +266,14 @@ export function normalizeArtifactDefinition(raw = {}) {
   if (raw.generationSignature) item.generationSignature = String(raw.generationSignature).trim().slice(0, 512);
   if (raw.aiProvider) item.aiProvider = String(raw.aiProvider).trim().slice(0, 80);
   if (raw.aiModel) item.aiModel = String(raw.aiModel).trim().slice(0, 120);
+  if (raw.imageUrl) item.imageUrl = String(raw.imageUrl).trim().slice(0, 2048);
+  if (['generating','ready','error'].includes(raw.imageStatus)) item.imageStatus = raw.imageStatus;
+  if (raw.imageModel) item.imageModel = String(raw.imageModel).trim().slice(0, 120);
+  if (raw.imagePromptVersion) item.imagePromptVersion = String(raw.imagePromptVersion).trim().slice(0, 80);
+  if (raw.imageStoragePath) item.imageStoragePath = String(raw.imageStoragePath).trim().slice(0, 512);
+  if (raw.imageUpdatedAtMs) item.imageUpdatedAtMs = Math.max(0, Math.floor(finite(raw.imageUpdatedAtMs, 0)));
+  if (raw.imageError) item.imageError = String(raw.imageError).trim().slice(0, 260);
+  if (raw.imageJobId) item.imageJobId = String(raw.imageJobId).trim().slice(0, 80);
   if (Array.isArray(raw.generationMaterials)) {
     item.generationMaterials = raw.generationMaterials.slice(0, 8).map((row) => ({
       type: row?.type === 'artifact' ? 'artifact' : 'material',
