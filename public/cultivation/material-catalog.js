@@ -208,7 +208,7 @@ export function materialDropRateFor(materialOrRealm, playerScore, source = 'quiz
 export function normalizeMaterialDefinition(raw = {}) {
   const id = String(raw.id || '').trim();
   const fallbackRealm = DEFAULT_MATERIAL_REALM_BY_ID[id] || '煉氣';
-  return {
+  const item = {
     id,
     name: String(raw.name || '').trim(),
     icon: String(raw.icon || ({
@@ -218,14 +218,21 @@ export function normalizeMaterialDefinition(raw = {}) {
     category: String(raw.category || '其他').trim() || '其他',
     realm: String(raw.realm || fallbackRealm).trim() || fallbackRealm,
     description: String(raw.description || '').trim(),
-    // Optional canonical backstory; legacy materials retain an empty story.
     story: String(raw.story || '').trim().slice(0, 2000),
-    // Optional authoritative weapon-form cue; only a PRIMARY ingredient can require it.
     weaponForm: MATERIAL_WEAPON_FORMS.includes(String(raw.weaponForm || '').trim())
       ? String(raw.weaponForm || '').trim() : '',
     weaponName: String(raw.weaponName || '').trim().slice(0, 18),
     buyGold: Math.max(0, Math.floor(finite(raw.buyGold, 0)))
   };
+  if (raw.imageUrl) item.imageUrl = String(raw.imageUrl).trim().slice(0, 2048);
+  if (['generating','ready','error'].includes(raw.imageStatus)) item.imageStatus = raw.imageStatus;
+  if (raw.imageModel) item.imageModel = String(raw.imageModel).trim().slice(0, 120);
+  if (raw.imagePromptVersion) item.imagePromptVersion = String(raw.imagePromptVersion).trim().slice(0, 80);
+  if (raw.imageStoragePath) item.imageStoragePath = String(raw.imageStoragePath).trim().slice(0, 512);
+  if (raw.imageUpdatedAtMs) item.imageUpdatedAtMs = Math.max(0, Math.floor(finite(raw.imageUpdatedAtMs, 0)));
+  if (raw.imageError) item.imageError = String(raw.imageError).trim().slice(0, 260);
+  if (raw.imageJobId) item.imageJobId = String(raw.imageJobId).trim().slice(0, 80);
+  return item;
 }
 
 export function validateMaterialCatalog(items) {
