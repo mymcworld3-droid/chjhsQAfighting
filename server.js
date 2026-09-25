@@ -198,17 +198,124 @@ function getRandomItem(arr) {
     return arr[Math.floor(Math.random() * arr.length)];
 }
 
+
+const QUESTION_FORMS = Object.freeze([
+    'direct-application', 'inverse-reasoning', 'error-analysis', 'scenario-modeling',
+    'data-interpretation', 'comparison', 'multi-step', 'concept-transfer'
+]);
+
+function cleanQuestionText(value) {
+    return String(value || '').trim().slice(0, 500);
+}
+
+function normalizedQuestionFingerprint(value, ignoreNumbers = false) {
+    let text = cleanQuestionText(value).toLowerCase()
+        .replace(/\\[a-z]+/g, ' ')
+        .replace(/[{}$^_=+×÷*\/\\]/g, ' ')
+        .replace(/[，。！？；：、,.!?;:「」『』（）()\[\]<>]/g, '')
+        .replace(/\s+/g, '');
+    if (ignoreNumbers) {
+        text = text
+            .replace(/[-+]?\d+(?:\.\d+)?/g, '#')
+            .replace(/[一二三四五六七八九十百千萬億兩〇零]+/g, '#');
+    }
+    return text;
+}
+
+function questionShingles(value) {
+    const text = normalizedQuestionFingerprint(value, true);
+    const set = new Set();
+    if (text.length < 3) {
+        if (text) set.add(text);
+        return set;
+    }
+    for (let i = 0; i <= text.length - 3; i++) set.add(text.slice(i, i + 3));
+    return set;
+}
+
+function diceSimilarity(a, b) {
+    const A = questionShingles(a);
+    const B = questionShingles(b);
+    if (!A.size || !B.size) return 0;
+    let hit = 0;
+    for (const item of A) if (B.has(item)) hit++;
+    return (2 * hit) / (A.size + B.size);
+}
+
+function normalizeQuestionMeta(input = {}) {
+    if (!input || typeof input !== 'object') return null;
+    return {
+        q: cleanQuestionText(input.q || input.question),
+        concept_id: String(input.concept_id || '').trim().slice(0, 100),
+        template_id: String(input.template_id || '').trim().slice(0, 120),
+        question_form: String(input.question_form || '').trim().slice(0, 60),
+        cognitive_level: Math.max(1, Math.min(5, Number(input.cognitive_level) || 1)),
+        reasoning_steps: Math.max(1, Math.min(6, Number(input.reasoning_steps) || 1))
+    };
+}
+
+function isTooSimilarQuestion(candidate, history) {
+    const exact = normalizedQuestionFingerprint(candidate);
+    const structural = normalizedQuestionFingerprint(candidate, true);
+    return history.some(old => {
+        if (!old) return false;
+        if (exact === normalizedQuestionFingerprint(old)) return true;
+        if (structural && structural === normalizedQuestionFingerprint(old, true)) return true;
+        return diceSimilarity(candidate, old) >= 0.84;
+    });
+}
+
+function qualityPolicy(subject, difficulty) {
+    const languageSocial = ['國文', '英文', '歷史', '地理', '公民'].includes(subject);
+    if (difficulty === 'hard') {
+        return {
+            cognitive: '4-5',
+            steps: '3-5',
+            instruction: languageSocial
+                ? '至少包含推論、比較、資料或語境判讀之一，不得只問單一名詞、翻譯或年代記憶。'
+                : '至少需要 3 個有意義的解題步驟，優先結合兩個子技能、逆向推理、資料判讀或陌生情境。'
+        };
+    }
+    if (difficulty === 'medium') {
+        return {
+            cognitive: '3-4',
+            steps: '2-3',
+            instruction: languageSocial
+                ? '不能只靠看到關鍵字直接作答；至少需要理解上下文、因果、比較或資訊整合。'
+                : '至少包含一次轉換、建模、判斷方法或兩步計算；避免單純代公式。'
+        };
+    }
+    return {
+        cognitive: '2-3',
+        steps: '1-2',
+        instruction: '基礎題仍要檢查真正理解；可以直接，但避免反覆只考定義、背誦或完全相同公式代入。'
+    };
+}
+
+function chooseQuestionForm(previousMeta, seed) {
+    const recent = new Set(previousMeta.slice(-5).map(item => item.question_form).filter(Boolean));
+    const candidates = QUESTION_FORMS.filter(form => !recent.has(form));
+    const pool = candidates.length ? candidates : QUESTION_FORMS;
+    const n = [...String(seed || '')].reduce((sum, ch) => sum + ch.charCodeAt(0), 0);
+    return pool[n % pool.length];
+}
+
 // ==========================================
 // API 2: 生成測驗題目 (優化版：單次請求 + 安全 JSON 解析)
 // ==========================================
 app.post('/api/generate-quiz', async (req, res) => {
     // 兼容前端可能傳來的 specificTopic 或 topic
-    let { subject, level, rank, difficulty, knowledgeMap, specificTopic, topic, avoidQuestions } = req.body || {};
+    let { subject, level, rank, difficulty, knowledgeMap, specificTopic, topic, avoidQuestions, avoidQuestionMeta } = req.body || {};
     subject = String(subject || '').trim().slice(0, 40);
     level = String(level || '國中一年級').slice(0, 32);
     difficulty = ['easy', 'medium', 'hard'].includes(difficulty) ? difficulty : 'medium';
     const previousQuestions = (Array.isArray(avoidQuestions) ? avoidQuestions : [])
-        .filter(value => typeof value === 'string').slice(-10).map(value => value.trim().slice(0, 180)).filter(Boolean);
+        .map(cleanQuestionText).filter(Boolean).slice(-80);
+    const previousMeta = (Array.isArray(avoidQuestionMeta) ? avoidQuestionMeta : [])
+        .map(normalizeQuestionMeta).filter(Boolean).slice(-80);
+    for (const item of previousMeta) {
+        if (item.q && !previousQuestions.includes(item.q)) previousQuestions.push(item.q);
+    }
     const fingerprint = value => String(value).replace(/\s+/g, '').toLowerCase();
     let targetTopic = String(specificTopic || topic || '').trim().slice(0, 240);
 
@@ -241,6 +348,12 @@ app.post('/api/generate-quiz', async (req, res) => {
     }
 
     const randomSeed = Math.random().toString(36).substring(7);
+    const quality = qualityPolicy(subject, difficulty);
+    const targetForm = chooseQuestionForm(previousMeta, randomSeed);
+    const recentTemplates = [...new Set(previousMeta.slice(-18).map(item => item.template_id).filter(Boolean))];
+    const recentConceptForms = previousMeta.slice(-6)
+        .filter(item => item.concept_id || item.question_form)
+        .map(item => ({ concept_id: item.concept_id, question_form: item.question_form }));
 
     const generationPrompt = `
         [系統指令]
@@ -255,9 +368,14 @@ app.post('/api/generate-quiz', async (req, res) => {
         5. **難度設定**：${difficulty}
         6. **隨機因子**：${randomSeed}
         7. **嚴格範圍**：只能考查「${level}」程度內的「${subject}／${targetTopic}」，不得跨科、超綱或擅自替換單元。
-        8. **避免重複題目**：${previousQuestions.length ? JSON.stringify(previousQuestions) : '本場尚無既有題目'}。不得改寫同一道題目再出。
-        9. 必須提供四個不重複且僅有一個正解的選項，以及能夠支持該答案的完整解析。
-        10. **LaTeX 排版**：題幹、正確選項、三個錯誤選項及解析中的所有數學式都必須使用 TeX 語法。行內數學用 $...$，獨立公式用 $...$；例如 $x^2+1$、$\\frac{1}{2}$。一般中文保留純文字，不要將整段中文包進公式；不要輸出 HTML 或 Markdown 程式碼區塊。
+        8. **避免重複題目**：近期已有 ${previousQuestions.length} 題。不得只換數字、人名、物品、地點或敘述後重出相同解法骨架。
+        9. **本題指定表現形式**：${targetForm}。除非該科確實不適用，請依這種形式設計。
+        10. **深度要求**：認知層級約 ${quality.cognitive}，合理推理步數約 ${quality.steps}。 ${quality.instruction}
+        11. **近期禁止骨架**：${recentTemplates.length ? JSON.stringify(recentTemplates) : '無'}。template_id 必須描述解題骨架，不可只寫題目名稱。
+        12. **近期概念/題型組合**：${recentConceptForms.length ? JSON.stringify(recentConceptForms) : '無'}。若可行，避免立刻重複同一 concept_id + question_form。
+        13. 錯誤選項應對應常見迷思、計算錯誤或推理錯誤，不能只是隨機湊數。
+        14. 必須提供四個不重複且僅有一個正解的選項，以及完整解析；解析須點出關鍵觀念與主要步驟。
+        15. **LaTeX 排版**：題幹、正確選項、三個錯誤選項及解析中的所有數學式都必須使用 TeX 語法。行內數學用 $...$，獨立公式用 $...$；例如 $x^2+1$、$\\frac{1}{2}$。一般中文保留純文字，不要將整段中文包進公式；不要輸出 HTML 或 Markdown 程式碼區塊。
         ${diagnosticInfo}
     
         [輸出格式 (JSON Only)]
@@ -268,7 +386,12 @@ app.post('/api/generate-quiz', async (req, res) => {
             "wrong": ["錯誤1", "錯誤2", "錯誤3"],
             "exp": "解析內容...",
             "subject": "${subject}",
-            "sub_topic": "${targetTopic}" 
+            "sub_topic": "${targetTopic}",
+            "concept_id": "穩定且短小的考點ID",
+            "template_id": "描述解題骨架的ID",
+            "question_form": "${targetForm}",
+            "cognitive_level": 1,
+            "reasoning_steps": 1
         }
         請檢查：答案 "correct" 只有一個、錯誤答案中沒有正確答案、選項必須在選項裡不可在題目裡、不可為多選題。
     `;
@@ -290,11 +413,23 @@ app.post('/api/generate-quiz', async (req, res) => {
                 new Set(options.map(fingerprint)).size !== 4 ||
                 typeof parsed.exp !== 'string' || parsed.exp.trim().length < 5 ||
                 (parsed.subject && String(parsed.subject).trim() !== subject) ||
-                previousQuestions.some(old => fingerprint(old) === fingerprint(parsed.q))) {
-                throw new Error('AI 題目未通過範圍、格式或去重檢查');
+                isTooSimilarQuestion(parsed.q, previousQuestions)) {
+                throw new Error('AI 題目未通過範圍、格式或結構去重檢查');
             }
+
             parsed.subject = subject;
             parsed.sub_topic = targetTopic;
+            parsed.question_form = QUESTION_FORMS.includes(String(parsed.question_form || ''))
+                ? String(parsed.question_form) : targetForm;
+            parsed.concept_id = String(parsed.concept_id || (subject + ':' + targetTopic)).trim().slice(0, 100);
+            parsed.template_id = String(parsed.template_id || (parsed.concept_id + ':' + parsed.question_form))
+                .trim().slice(0, 120);
+            parsed.cognitive_level = Math.max(1, Math.min(5, Number(parsed.cognitive_level) || (difficulty === 'hard' ? 4 : difficulty === 'medium' ? 3 : 2)));
+            parsed.reasoning_steps = Math.max(1, Math.min(6, Number(parsed.reasoning_steps) || (difficulty === 'hard' ? 3 : difficulty === 'medium' ? 2 : 1)));
+
+            if (recentTemplates.includes(parsed.template_id)) {
+                throw new Error('AI 題目與近期解題骨架重複');
+            }
 
             return res.json({ text: JSON.stringify(parsed), provider: routed.provider, model: routed.model });
 
