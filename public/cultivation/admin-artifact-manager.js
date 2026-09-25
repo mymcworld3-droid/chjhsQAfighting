@@ -725,7 +725,14 @@ import {
       generationSignature: original?.generationSignature || '',
       generationMaterials: original?.generationMaterials || [],
       aiProvider: original?.aiProvider || '',
-      aiModel: original?.aiModel || ''
+      aiModel: original?.aiModel || '',
+      imageUrl: original?.imageUrl || '',
+      imageStatus: original?.imageStatus || '',
+      imageModel: original?.imageModel || '',
+      imagePromptVersion: original?.imagePromptVersion || '',
+      imageStoragePath: original?.imageStoragePath || '',
+      imageUpdatedAtMs: original?.imageUpdatedAtMs || 0,
+      imageError: original?.imageError || ''
     };
     if (originalId && id !== originalId) { status.textContent = '既有法寶 ID 不可修改。'; return; }
     let item;
@@ -777,6 +784,10 @@ import {
       modal.remove();
       render();
       toast(originalId ? `已更新 ${item.name}` : `已建立 ${item.name}`);
+      if (!item.imageUrl) {
+        void window.ensureAdminItemImage?.('artifact', item.id).catch((error) =>
+          console.warn('[Admin artifact image]', error));
+      }
     } catch (error) {
       console.error('[Admin artifact save]', error);
       status.textContent = error.message || '法寶儲存失敗';
