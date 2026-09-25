@@ -2081,6 +2081,23 @@ window.startQuizFlow = async (isNewSession = false) => {
     const opening = ++soloQuizOpenSerial;
     if (!scope || !uid) return;
 
+    if (extendedPracticeState.active) {
+        document.getElementById('quiz-loading').classList.remove('hidden');
+        document.getElementById('loading-text').innerText = `正在生成「${extendedPracticeState.knowledgePoint}」延伸練習…`;
+        try {
+            const q = await fetchExtendedPracticeQuestion();
+            if (opening !== soloQuizOpenSerial || auth.currentUser?.uid !== uid) return;
+            window.currentActiveQuiz = q;
+            renderQuiz(q.data, q.rank, q.badge);
+            return;
+        } catch (error) {
+            console.error('[Extended Practice]', error);
+            extendedPracticeState.active = false;
+            document.getElementById('btn-extended-practice-stop')?.classList.add('hidden');
+            window.showToast?.('延伸練習出題失敗，已回到原本練習。');
+        }
+    }
+
     // Restore an unanswered active question before using the prefetched queue.
     let nextQ = soloQuestionCache.getActive() || soloQuestionCache.takeNext();
     if (!nextQ && isFetchingBuffer) {
@@ -2673,7 +2690,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         if (p1) await p1;
     } catch (e) { console.error("Firebase Error", e); }
     
-    fillBuffer();
+    if (!extendedPracticeState.active) fillBuffer();
 }
 
 async function generateVisualAid(imagePrompt) {
@@ -2682,11 +2699,21 @@ async function generateVisualAid(imagePrompt) {
 }
 
 // 2. [修改] renderQuiz 函式 (移除圖片載入邏輯)
+const extendedPracticeState = {
+    active: false,
+    subject: '',
+    knowledgePoint: '',
+    originQuestion: ''
+};
+
+window.isExtendedPracticeActive = () => extendedPracticeState.active;
+
 const quizHelperState = {
     messages: [],
     question: '',
     options: [],
     explanation: '',
+    subject: '',
     selectedIndex: null,
     correctIndex: null,
     answered: false,
@@ -2723,18 +2750,34 @@ window.toggleQuizHelper = (forceOpen) => {
     setQuizHelperOpen(open);
 };
 
-function quizHelperAppendMessage(role, text) {
+function quizHelperAppendMessage(role, text, { knowledgePoint = '' } = {}) {
     const { messages } = quizHelperElements();
     if (!messages) return;
     const row = document.createElement('div');
     row.className = 'quiz-helper-message ' + (role === 'assistant' ? 'assistant' : 'user');
+
+    const stack = document.createElement('div');
+    stack.className = 'quiz-helper-message-stack';
     const body = document.createElement('div');
     body.className = 'quiz-helper-message-body';
-    row.appendChild(body);
+    stack.appendChild(body);
+    row.appendChild(stack);
     messages.appendChild(row);
 
     if (role === 'assistant' && window.quizMathSet) void window.quizMathSet(body, text);
     else body.textContent = text;
+
+    const point = String(knowledgePoint || '').trim().slice(0, 60);
+    if (role === 'assistant' && point) {
+        const practice = document.createElement('button');
+        practice.type = 'button';
+        practice.className = 'quiz-helper-practice-btn';
+        practice.title = '針對這個知識點繼續練習';
+        practice.innerHTML = '<i class="fa-solid fa-graduation-cap"></i><span>延伸練習</span><small></small><i class="fa-solid fa-chevron-right"></i>';
+        practice.querySelector('small').textContent = point;
+        practice.onclick = () => window.startQuizExtendedPractice(point);
+        stack.appendChild(practice);
+    }
 
     requestAnimationFrame(() => {
         messages.scrollTop = messages.scrollHeight;
@@ -2756,7 +2799,7 @@ function renderQuizHelperConversation() {
     intro.appendChild(introBody);
     messages.appendChild(intro);
 
-    for (const item of quizHelperState.messages) quizHelperAppendMessage(item.role, item.text);
+    for (const item of quizHelperState.messages) quizHelperAppendMessage(item.role, item.text, { knowledgePoint: item.knowledgePoint });
 }
 
 function initQuizHelper() {
@@ -2775,10 +2818,13 @@ function initQuizHelper() {
     });
 }
 
-function resetQuizHelper(data = {}) {
+function resetQuizHelper(data = {}, { topic = '' } = {}) {
     initQuizHelper();
     quizHelperState.messages = [];
     quizHelperState.question = String(data.q || '');
+    const topicText = String(topic || '').replace(/[🎯📚]/g, '').trim();
+    const topicSubject = topicText.split('|')[0].trim();
+    quizHelperState.subject = String(window.currentActiveQuiz?.extendedPracticeSubject || topicSubject || '').slice(0, 40);
     quizHelperState.options = Array.isArray(data.opts) ? data.opts.map(String) : [];
     quizHelperState.explanation = String(data.exp || '');
     quizHelperState.selectedIndex = null;
@@ -2832,8 +2878,9 @@ async function sendQuizHelperMessage(rawMessage) {
         if (!response.ok) throw new Error(payload.error || `HTTP ${response.status}`);
         const answer = String(payload.answer || '').trim();
         if (!answer) throw new Error('問道助手沒有回傳內容');
-        quizHelperState.messages.push({ role: 'assistant', text: answer });
-        quizHelperAppendMessage('assistant', answer);
+        const knowledgePoint = String(payload.knowledgePoint || '').trim().slice(0, 60);
+        quizHelperState.messages.push({ role: 'assistant', text: answer, knowledgePoint });
+        quizHelperAppendMessage('assistant', answer, { knowledgePoint });
         if (status) status.textContent = '';
     } catch (error) {
         console.warn('[Quiz helper]', error);
@@ -2854,6 +2901,86 @@ window.submitQuizHelper = (event) => {
 window.askQuizHelperPreset = (message) => {
     setQuizHelperOpen(true);
     void sendQuizHelperMessage(message);
+};
+
+async function fetchExtendedPracticeQuestion() {
+    const subject = String(extendedPracticeState.subject || quizHelperState.subject || '綜合').trim().slice(0, 40);
+    const knowledgePoint = String(extendedPracticeState.knowledgePoint || '本題核心觀念').trim().slice(0, 60);
+    const settings = currentUserData?.gameSettings || {};
+    const rankName = getRankName(currentUserData?.stats?.rankLevel || 0);
+    let difficulty = settings.difficulty;
+    if (!difficulty || difficulty === 'auto') difficulty = getSmartDifficulty();
+
+    const response = await fetch('/api/generate-quiz', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            subject,
+            specificTopic: knowledgePoint,
+            level: currentUserData?.profile?.educationLevel || 'General',
+            rank: rankName,
+            difficulty,
+            language: currentLang,
+            knowledgeMap: currentUserData?.stats?.knowledgeMap || {},
+            ...recentSoloQuestionContext()
+        })
+    });
+    if (!response.ok) throw new Error(`Server Error: ${response.status}`);
+    const payload = await response.json();
+    let aiText = payload.text;
+    const jsonMatch = String(aiText || '').match(/\{[\s\S]*\}/);
+    if (jsonMatch) aiText = jsonMatch[0];
+    const rawData = JSON.parse(aiText);
+    const allOptions = shuffleArray([rawData.correct, ...rawData.wrong]);
+
+    return {
+        data: {
+            q: rawData.q,
+            opts: allOptions,
+            ans: allOptions.indexOf(rawData.correct),
+            exp: rawData.exp
+        },
+        meta: quizMetaFromRaw(rawData),
+        rank: rankName,
+        badge: `📚 延伸練習 | ${subject} · ${knowledgePoint}`,
+        extendedPractice: true,
+        extendedPracticeSubject: subject,
+        extendedPracticeKnowledgePoint: knowledgePoint
+    };
+}
+
+window.startQuizExtendedPractice = async (knowledgePoint) => {
+    const point = String(knowledgePoint || '').trim().slice(0, 60);
+    if (!point || !currentUserData) return;
+
+    const currentQuiz = window.currentActiveQuiz;
+    syncSoloQuestionCache();
+    if (currentQuiz && !answeredSoloQuizzes.has(currentQuiz)) {
+        if (soloQuestionCache.getActive()?.data?.q === currentQuiz.data?.q) {
+            soloQuestionCache.consumeActive({ remember: true });
+        } else {
+            soloQuestionCache.remember?.(currentQuiz);
+        }
+    }
+
+    extendedPracticeState.active = true;
+    extendedPracticeState.subject = String(quizHelperState.subject || currentQuiz?.extendedPracticeSubject || '綜合').slice(0, 40);
+    extendedPracticeState.knowledgePoint = point;
+    extendedPracticeState.originQuestion = String(quizHelperState.question || currentQuiz?.data?.q || '').slice(0, 1000);
+    window.currentActiveQuiz = null;
+    setQuizHelperOpen(false, { remember: false });
+    void window.startQuizFlow();
+};
+
+window.endQuizExtendedPractice = () => {
+    if (!extendedPracticeState.active) return;
+    extendedPracticeState.active = false;
+    extendedPracticeState.subject = '';
+    extendedPracticeState.knowledgePoint = '';
+    extendedPracticeState.originQuestion = '';
+    const stop = document.getElementById('btn-extended-practice-stop');
+    stop?.classList.add('hidden');
+    window.showToast?.('已結束延伸練習，下一題回到原本範圍。');
 };
 
 const quizWhiteboardState = {
@@ -3048,7 +3175,9 @@ window.toggleQuizWhiteboard = (forceOpen) => {
 function renderQuiz(data, rank, topic) {
     // 每一道新題使用全新的計算空間與問答脈絡，避免上一題殘留。
     resetQuizWhiteboard({ close: true });
-    resetQuizHelper(data);
+    resetQuizHelper(data, { topic });
+    const extendedStop = document.getElementById('btn-extended-practice-stop');
+    extendedStop?.classList.toggle('hidden', !extendedPracticeState.active);
     document.getElementById('quiz-loading').classList.add('hidden');
     document.getElementById('quiz-container').classList.remove('hidden');
     document.getElementById('quiz-badge').innerText = `${topic} | ${rank}`;
