@@ -159,11 +159,14 @@ test('quiz exposes a responsive mouse and touch calculation whiteboard', () => {
   assert.match(xianxia, /#quiz-whiteboard-canvas/);
   assert.match(xianxia, /height:\s*100dvh/);
   assert.match(xianxia, /\.quiz-whiteboard-question-wrap/);
+  assert.match(xianxia, /max-height:\s*20dvh/);
+  assert.match(xianxia, /quiz-whiteboard-question-wrap::before/);
+  assert.match(xianxia, /quiz-whiteboard-question-wrap::after/);
   assert.match(xianxia, /touch-action:\s*none/);
 });
 
 test('core import and page query change together to refresh browser cached code', () => {
   assert.match(main, /main-legacy\.js\?v=20260925-quiz-whiteboard3/);
   assert.match(index, /main\.js\?v=20260925-quiz-whiteboard3/);
-  assert.match(index, /xianxia\.css\?v=20260925-quiz-whiteboard3/);
+  assert.match(index, /xianxia\.css\?v=20260925-quiz-whiteboard4/);
 });
