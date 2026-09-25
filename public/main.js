@@ -1,6 +1,6 @@
 // 核心登入模組必須優先且獨立載入。
 // Google 登入本身不被附加模組阻斷；登入後的遊戲則必須等所有修仙模組載入成功才開始。
-import './main-legacy.js?v=20260925-helper-layout2';
+import './main-legacy.js?v=20260925-helper-state1';
 import './cultivation/dongtian-entry.js';
 
 // 帳號刪除是登入核心旁的獨立增強；載入失敗也不能阻斷 Google 登入。
