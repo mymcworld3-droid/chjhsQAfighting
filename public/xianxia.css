@@ -549,6 +549,7 @@ body.xianxia-theme #cultivation-rule-toast { background: #173429 !important; bor
 .quiz-helper-shell.collapsed .quiz-helper-panel { display: none; }
 .quiz-helper-shell.collapsed .quiz-helper-launcher { display: inline-flex; }
 body.quiz-helper-fullscreen-open { overflow: hidden; }
+body.quiz-whiteboard-open .quiz-helper-shell { z-index: 145; }
 
 .quiz-helper-header {
   flex: 0 0 auto;
