@@ -4,7 +4,7 @@ import {
   getFirestore, doc, collection, query, where, limit, getDocs, getDoc,
   addDoc, updateDoc, onSnapshot, runTransaction, serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-import { BATTLE_V2, settleBattleRound } from './battle-engine-v2.js?v=20260922-first-answer1';
+import { BATTLE_V2, settleBattleRound, applyNascentSoulDuelRule } from './battle-engine-v2.js?v=20260926-nascent-seal1';
 import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } from './battle-question-scope.js?v=20260922-range1';
 
 // Battle v2 — 修仙配對鬥法。
@@ -330,6 +330,20 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
       ? ' · 戰力 ' + Math.round(Number(player.combatPower)).toLocaleString('zh-TW') : '';
   }
 
+  function playerNascentSealLabel(player) {
+    return player?.nascentSoulSuppressed ? ' · 元嬰封印' : '';
+  }
+
+  function baseCombatSnapshot() {
+    const stats = userData()?.stats || {};
+    const maxHp = Math.max(1, Math.round(finite(stats.maxHp, 1000)));
+    return {
+      attack: Math.max(1, Math.round(finite(stats.attack, 200))),
+      hp: maxHp,
+      maxHp
+    };
+  }
+
   function combatSnapshot() {
     const stats = window.getCombatStats?.() || window.getCombatStatDefaults?.() || { attack: 200, hp: 1000, maxHp: 1000 };
     const maxHp = Math.max(1, Math.round(finite(stats.maxHp, 1000)));
@@ -339,6 +353,7 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
   function playerSnapshot() {
     const user = me();
     const data = userData() || {};
+    const baseCombat = baseCombatSnapshot();
     const combat = combatSnapshot();
     const goldenCore = window.getEquippedGoldenCoreBattleSnapshot?.() || null;
     const nascentSoul = window.getNascentSoulBattleSnapshot?.() || null;
@@ -352,12 +367,16 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
       rankLevel: Math.max(0, Number(data.stats?.rankLevel) || 0),
       totalScore: Math.max(0, Number(data.stats?.totalScore) || 0),
       combatPower: Math.max(0, Math.round(Number(window.getCombatPower?.().total) || 0)),
+      baseAtk: baseCombat.attack,
+      baseMaxHp: baseCombat.maxHp,
       atk: combat.attack,
       hp: combat.maxHp,
       maxHp: combat.maxHp,
       goldenCore,
       nascentSoul: nascentSoul ? {
         type: nascentSoul.type,
+        attackFlat: Math.max(0, Math.min(2000, Math.round(Number(nascentSoul.attackFlat) || 0))),
+        maxHpFlat: Math.max(0, Math.min(10000, Math.round(Number(nascentSoul.maxHpFlat) || 0))),
         bonusDamage: Math.max(0, Math.min(1000, Math.round(Number(nascentSoul.bonusDamage) || 0))),
         reductionFlat: Math.max(0, Math.min(1000, Math.round(Number(nascentSoul.reductionFlat) || 0))),
         coreHeal: Math.max(0, Math.min(1000, Math.round(Number(nascentSoul.coreHeal) || 0)))
@@ -488,8 +507,10 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
       if (!snap.exists()) return;
       const room = snap.data();
       if (Number(room.modeVersion) !== BATTLE_V2.modeVersion || room.status !== 'waiting' || room.guest || room.host?.uid === myData.uid || isRoomStale(room)) return;
+      const duel = applyNascentSoulDuelRule(room.host, myData);
       tx.update(targetRef, {
-        guest: myData,
+        host: duel.host,
+        guest: duel.guest,
         knowledgeScope: resolveBattleKnowledge(room.host?.knowledge, myData.knowledge),
         status: 'intro',
         matchedAt: serverTimestamp(), matchedAtMs: nowMs(),
@@ -595,7 +616,8 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
         const other = targetSnap.data();
         if (own.status !== 'waiting' || own.guest || own.host?.uid !== myData.uid) return;
         if (other.status !== 'waiting' || other.guest || other.host?.uid === myData.uid || Number(other.modeVersion) !== BATTLE_V2.modeVersion || isRoomStale(other)) return;
-        tx.update(target.ref, { guest: myData, knowledgeScope: resolveBattleKnowledge(other.host?.knowledge, myData.knowledge), status: 'intro', matchedAt: serverTimestamp(), matchedAtMs: nowMs(), introUntilMs: nowMs() + INTRO_DURATION_MS, answerWindowStartedAt: null, answerWindowStartedAtMs: null, firstAnswerUid: null, updatedAt: serverTimestamp() });
+        const duel = applyNascentSoulDuelRule(other.host, myData);
+        tx.update(target.ref, { host: duel.host, guest: duel.guest, knowledgeScope: resolveBattleKnowledge(other.host?.knowledge, myData.knowledge), status: 'intro', matchedAt: serverTimestamp(), matchedAtMs: nowMs(), introUntilMs: nowMs() + INTRO_DURATION_MS, answerWindowStartedAt: null, answerWindowStartedAtMs: null, firstAnswerUid: null, updatedAt: serverTimestamp() });
         tx.delete(ownRef);
         merged = true;
       });
@@ -635,11 +657,11 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
     const opp = state.role ? playerForRole(room, otherRole(state.role)) : null;
     setPlayerAvatar('bv2-match-me-avatar', mine);
     setPlayerAvatar('bv2-match-enemy-avatar', opp);
-    setText('bv2-match-me', mine?.name || '修士'); setText('bv2-match-me-core', `本命金丹：${playerCoreLabel(mine)}${playerPowerLabel(mine)}`);
+    setText('bv2-match-me', mine?.name || '修士'); setText('bv2-match-me-core', `本命金丹：${playerCoreLabel(mine)}${playerPowerLabel(mine)}${playerNascentSealLabel(mine)}`);
     setText('bv2-room-badge', state.roomId ? '青雲演武場' : '尋找對手中');
     setText('bv2-lobby-title', opp ? '已尋得對手' : '正在搜尋對手');
     setText('bv2-lobby-status', opp ? '本場題目：' + battleScopeLabel(room.knowledgeScope) : '優先尋找修為相近、等待較久的道友。');
-    setText('bv2-match-enemy', opp?.name || '搜尋中…'); setText('bv2-match-enemy-core', opp ? playerCoreLabel(opp) + playerPowerLabel(opp) : '等待道友入場');
+    setText('bv2-match-enemy', opp?.name || '搜尋中…'); setText('bv2-match-enemy-core', opp ? playerCoreLabel(opp) + playerPowerLabel(opp) + playerNascentSealLabel(opp) : '等待道友入場');
   }
 
   function renderIntro(room) {
@@ -648,7 +670,7 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
     setPlayerAvatar('bv2-intro-me-avatar', mine);
     setPlayerAvatar('bv2-intro-enemy-avatar', enemy);
     setText('bv2-intro-me', mine?.name || '我方修士'); setText('bv2-intro-enemy', enemy?.name || '對手修士');
-    setText('bv2-intro-me-core', playerCoreLabel(mine) + playerPowerLabel(mine)); setText('bv2-intro-enemy-core', playerCoreLabel(enemy) + playerPowerLabel(enemy));
+    setText('bv2-intro-me-core', playerCoreLabel(mine) + playerPowerLabel(mine) + playerNascentSealLabel(mine)); setText('bv2-intro-enemy-core', playerCoreLabel(enemy) + playerPowerLabel(enemy) + playerNascentSealLabel(enemy));
     setText('bv2-room-badge', '青雲演武場');
     updateIntroText(room);
   }
@@ -928,8 +950,8 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
     setText('bv2-round', room.round + ' / ' + (room.maxRounds || BATTLE_V2.maxRounds));
     setText('bv2-my-name', mine.name || '我方');
     setText('bv2-enemy-name', enemy.name || '對手');
-    setText('bv2-my-core', '本命金丹：' + playerCoreLabel(mine) + playerPowerLabel(mine) + (mine.coreShield ? ' · 道心護體' : ''));
-    setText('bv2-enemy-core', '本命金丹：' + playerCoreLabel(enemy) + playerPowerLabel(enemy) + (enemy.coreShield ? ' · 道心護體' : ''));
+    setText('bv2-my-core', '本命金丹：' + playerCoreLabel(mine) + playerPowerLabel(mine) + playerNascentSealLabel(mine) + (mine.coreShield ? ' · 道心護體' : ''));
+    setText('bv2-enemy-core', '本命金丹：' + playerCoreLabel(enemy) + playerPowerLabel(enemy) + playerNascentSealLabel(enemy) + (enemy.coreShield ? ' · 道心護體' : ''));
     const key = settlementKey(room);
     const replay = (room.status === 'settled' || room.status === 'finished') &&
       Number(room.lastSettlement?.round) === Number(room.round) && state.reviewedRound === Number(room.round);
@@ -1343,7 +1365,7 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
     }
     resetRuntime(); state.starting = true; ensurePage(); window.switchToPage?.('page-battle'); showSection('lobby'); renderLobby(null);
     try {
-      await window.ensureCombatStats?.(); const myData = playerSnapshot(); setPlayerAvatar('bv2-match-me-avatar', myData); setText('bv2-match-me', myData.name); setText('bv2-match-me-core', `本命金丹：${playerCoreLabel(myData)}${playerPowerLabel(myData)}`);
+      await window.ensureCombatStats?.(); const myData = playerSnapshot(); setPlayerAvatar('bv2-match-me-avatar', myData); setText('bv2-match-me', myData.name); setText('bv2-match-me-core', `本命金丹：${playerCoreLabel(myData)}${playerPowerLabel(myData)}${playerNascentSealLabel(myData)}`);
       const joined = await findAndClaimRoom(myData); if (joined) { state.role = 'guest'; subscribeRoom(joined); return; }
       setText('bv2-lobby-status', '目前沒有可加入的道友，正在開啟鬥法臺…'); const created = await createWaitingRoom(myData); state.role = 'host'; subscribeRoom(created); scheduleReconcile(); inviteOnlineFriends(created);
     } catch (error) { console.error('[Battle v2] matchmaking failed:', error); toast('配對失敗，請稍後再試。'); resetRuntime(); window.switchToPage?.('page-home'); window.dispatchEvent(new CustomEvent('xiuxian:battle-session-ended')); }
