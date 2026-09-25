@@ -2677,7 +2677,7 @@ async function generateVisualAid(imagePrompt) {
 }
 
 // 2. [修改] renderQuiz 函式 (移除圖片載入邏輯)
-async const quizWhiteboardState = {
+const quizWhiteboardState = {
     strokes: [],
     currentStroke: null,
     initialized: false,
