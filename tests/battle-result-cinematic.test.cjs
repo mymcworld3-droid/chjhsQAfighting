@@ -53,8 +53,8 @@ test('story duel finale distinguishes Shen loss, Gu victory, loss, and practice'
 
 test('result stylesheet and all runtime modules receive the new cache version', () => {
   assert.match(formal, /battle-mode-v2\.css\?v=20260922-result-cinematic1/);
-  assert.match(main, /XIUXIAN_FEATURE_BUILD = '20260926-nascent-seal1'/);
-  assert.match(index, /main\.js\?v=20260926-nascent-seal1/);
+  assert.match(main, /XIUXIAN_FEATURE_BUILD = '20260926-item-images1'/);
+  assert.match(index, /main\.js\?v=20260926-item-images1/);
   assert.equal(stylesheet.split('{').length,stylesheet.split('}').length,'result stylesheet braces');
   const styleStart = tutorial.indexOf('/* Story finale:');
   const styleEnd = tutorial.indexOf('      @media(prefers-reduced-motion:reduce){#\u0024{LAYER_ID} *{animation:none',styleStart);
