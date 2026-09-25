@@ -77,6 +77,9 @@ app.post('/api/question-helper', async (req, res) => {
         const question = String(req.body?.question || '').trim().slice(0, 3000);
         const userMessage = String(req.body?.message || '').trim().slice(0, 600);
         const answered = req.body?.answered === true;
+        const explanation = answered ? String(req.body?.explanation || '').trim().slice(0, 3000) : '';
+        const selectedOption = answered ? String(req.body?.selectedOption || '').trim().slice(0, 800) : '';
+        const correctOption = answered ? String(req.body?.correctOption || '').trim().slice(0, 800) : '';
         const options = (Array.isArray(req.body?.options) ? req.body.options : [])
             .slice(0, 6)
             .map(item => String(item || '').trim().slice(0, 800))
@@ -109,6 +112,12 @@ ${options.length ? options.map((item, index) => `${String.fromCharCode(65 + inde
 
 [目前狀態]
 玩家${answered ? '已經作答，可以完整解析並指出正確觀念。' : '尚未作答。不可直接透露正確選項字母、完整最終答案或直接替玩家完成計算；請用提示、關鍵觀念、拆步驟、反問或指出下一步的方式協助。'}
+${answered ? `
+[作答結果]
+玩家選擇：${selectedOption || '未記錄'}
+正確選項：${correctOption || '未記錄'}
+原題解析：${explanation || '未提供'}
+` : ''}
 
 [最近對話]
 ${conversation}
