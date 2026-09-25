@@ -1457,7 +1457,8 @@ import {
     if (state.originalStartQuizFlow || typeof window.startQuizFlow !== 'function') return;
     state.originalStartQuizFlow = window.startQuizFlow;
     window.startQuizFlow = async function (...args) {
-      if (!state.session && !state.encounterBusy) {
+      // 問道助手延伸練習屬於玩家主動指定的知識點，不插入隨機洞天遭遇。
+      if (!window.isExtendedPracticeActive?.() && !state.session && !state.encounterBusy) {
         const intercepted = await maybeEncounterBeforeQuiz();
         if (intercepted) return;
       }
