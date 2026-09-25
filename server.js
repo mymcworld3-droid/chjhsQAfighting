@@ -70,6 +70,75 @@ app.post('/api/analyze-subjects', async (req, res) => {
 });
 
 // ==========================================
+// API: 題目旁的問道助手
+// ==========================================
+app.post('/api/question-helper', async (req, res) => {
+    try {
+        const question = String(req.body?.question || '').trim().slice(0, 3000);
+        const userMessage = String(req.body?.message || '').trim().slice(0, 600);
+        const answered = req.body?.answered === true;
+        const options = (Array.isArray(req.body?.options) ? req.body.options : [])
+            .slice(0, 6)
+            .map(item => String(item || '').trim().slice(0, 800))
+            .filter(Boolean);
+        const history = (Array.isArray(req.body?.history) ? req.body.history : [])
+            .slice(-6)
+            .map(item => ({
+                role: item?.role === 'assistant' ? 'assistant' : 'user',
+                text: String(item?.text || '').trim().slice(0, 800)
+            }))
+            .filter(item => item.text);
+
+        if (!question || !userMessage) {
+            return res.status(400).json({ error: '缺少題目或提問內容' });
+        }
+
+        const conversation = history.length
+            ? history.map(item => `${item.role === 'assistant' ? '助教' : '玩家'}：${item.text}`).join('\n')
+            : '尚無前文';
+
+        const prompt = `
+你是修仙學習遊戲中的「問道助手」，使用繁體中文回答玩家針對目前題目的疑問。
+你的任務是幫助玩家理解與推理，而不是取代玩家作答。
+
+[目前題目]
+${question}
+
+[選項]
+${options.length ? options.map((item, index) => `${String.fromCharCode(65 + index)}. ${item}`).join('\n') : '未提供'}
+
+[目前狀態]
+玩家${answered ? '已經作答，可以完整解析並指出正確觀念。' : '尚未作答。不可直接透露正確選項字母、完整最終答案或直接替玩家完成計算；請用提示、關鍵觀念、拆步驟、反問或指出下一步的方式協助。'}
+
+[最近對話]
+${conversation}
+
+[玩家最新提問]
+${userMessage}
+
+回答規則：
+1. 只處理這一道題相關的問題。
+2. 優先回答玩家真正卡住的地方，不要長篇重述題目。
+3. 尚未作答時，可以示範方法與中間步驟，但在最關鍵一步前停下，讓玩家自己完成。
+4. 已作答時，可完整說明解法、錯因與觀念。
+5. 數學式可使用 $...$ TeX 語法。
+6. 回答控制在約 220 個中文字內，除非玩家明確要求詳細說明。
+7. 請只回傳合法 JSON：
+{"answer":"你的回答"}
+`;
+
+        const routed = await aiRouter.generateJSON(prompt, { timeoutMs: 25000 });
+        const answer = String(routed.data?.answer || '').trim();
+        if (!answer) throw new Error('AI 未回傳有效回答');
+
+        res.json({ answer, provider: routed.provider, model: routed.model });
+    } catch (error) {
+        console.error('[Question Helper]', error);
+        res.status(502).json({ error: '問道助手暫時無法回應，請稍後再試。' });
+    }
+});
+
+// ==========================================
 // API 3: 取得伺服器上的圖片列表 (保持不變，用於靜態資源)
 // ==========================================
 app.get('/api/assets', (req, res) => {
