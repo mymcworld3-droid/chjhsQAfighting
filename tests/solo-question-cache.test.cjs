@@ -186,6 +186,8 @@ test('quiz question includes contextual helper chat with responsive collapse', (
   assert.match(xianxia, /\.quiz-question-helper-layout\.helper-collapsed/);
   assert.match(xianxia, /\.quiz-helper-shell\.collapsed/);
   assert.match(xianxia, /@media \(min-width: 1100px\)/);
+  assert.match(xianxia, /\.quiz-helper-shell:not\(\.collapsed\)[\s\S]*position:\s*fixed/);
+  assert.match(xianxia, /right:\s*max\(16px, calc\(\(100vw - 1220px\) \/ 2 \+ 16px\)\)/);
   assert.match(xianxia, /grid-template-columns:\s*minmax\(0, 1fr\)/);
   assert.match(xianxia, /@media \(max-width: 1099px\)/);
   assert.match(xianxia, /width:\s*100vw/);
@@ -219,5 +221,5 @@ test('helper replies expose knowledge-point extended practice', () => {
 test('core import and page query change together to refresh browser cached code', () => {
   assert.match(main, /main-legacy\.js\?v=20260925-helper-thinking1/);
   assert.match(index, /main\.js\?v=20260925-helper-thinking1/);
-  assert.match(index, /xianxia\.css\?v=20260925-helper-thinking1/);
+  assert.match(index, /xianxia\.css\?v=20260925-helper-fixed1/);
 });
