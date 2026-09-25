@@ -132,15 +132,21 @@ ${userMessage}
 4. 已作答時，可完整說明解法、錯因與觀念。
 5. 數學式可使用 $...$ TeX 語法。
 6. 回答控制在約 220 個中文字內，除非玩家明確要求詳細說明。
-7. 請只回傳合法 JSON：
-{"answer":"你的回答"}
+7. 從這次回答中整理出一個最適合延伸練習的核心知識點，knowledgePoint 要簡短、具體，可直接作為下一題出題範圍，例如「一元一次方程式移項」、「現在完成式」、「清代臺灣行政區劃」。
+8. 請只回傳合法 JSON：
+{"answer":"你的回答","knowledgePoint":"核心知識點"}
 `;
 
         const routed = await aiRouter.generateJSON(prompt, { timeoutMs: 25000 });
         const answer = String(routed.data?.answer || '').trim();
         if (!answer) throw new Error('AI 未回傳有效回答');
+        const fallbackPoint = userMessage.replace(/[？?！!。,.，]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 40);
+        const knowledgePoint = String(routed.data?.knowledgePoint || fallbackPoint || '本題核心觀念')
+            .replace(/[\r\n]+/g, ' ')
+            .trim()
+            .slice(0, 60);
 
-        res.json({ answer, provider: routed.provider, model: routed.model });
+        res.json({ answer, knowledgePoint, provider: routed.provider, model: routed.model });
     } catch (error) {
         console.error('[Question Helper]', error);
         res.status(502).json({ error: '問道助手暫時無法回應，請稍後再試。' });
