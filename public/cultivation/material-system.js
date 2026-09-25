@@ -23,6 +23,11 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe, materialMarketRef
   function escapeHtml(value) {
     return String(value ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;');
   }
+  function itemImageMarkup(item, fallback = '材') {
+    const url = String(item?.imageUrl || '').trim();
+    if (!url) return escapeHtml(fallback);
+    return `<img src="${escapeHtml(url)}" alt="${escapeHtml(item?.name || '')}" loading="lazy" decoding="async">`;
+  }
   function normalizeMaterialSystem(raw = {}) {
     const inventory = {};
     Object.entries(raw?.inventory || {}).forEach(([id, value]) => {
@@ -56,7 +61,7 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe, materialMarketRef
     style.textContent = `
       #${CARD_ID}{padding:14px;border:1px solid rgba(216,177,93,.16);border-radius:16px;background:linear-gradient(145deg,rgba(19,16,11,.94),rgba(7,7,7,.97))}
       .material-store-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px}.material-store-head h3{margin:0;color:#f0dfb6;font-size:12px}.material-store-head p{margin:4px 0 0;color:#827660;font-size:7px;line-height:1.5}.material-store-gold{padding:6px 9px;border-radius:999px;border:1px solid rgba(216,177,93,.15);color:#d9bd73;font-size:8px;white-space:nowrap}
-      .material-store-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.material-store-item{display:grid;grid-template-columns:38px minmax(0,1fr) auto;gap:8px;align-items:center;padding:8px;border:1px solid rgba(255,255,255,.06);border-radius:12px;background:rgba(255,255,255,.016)}.material-store-icon{width:36px;height:36px;display:grid;place-items:center;border-radius:10px;border:1px solid rgba(216,177,93,.22);background:#171006;color:#efd17c;font-weight:900}.material-store-copy{min-width:0}.material-store-copy b{display:block;color:#eadfc8;font-size:9px}.material-store-copy span{display:block;margin-top:2px;color:#877961;font-size:6px}.material-store-copy small{display:block;margin-top:3px;color:#b59c62;font-size:7px}.material-buy{min-height:32px;padding:0 8px;border-radius:9px;border:1px solid rgba(216,177,93,.23);background:rgba(216,177,93,.06);color:#e4cc8a;font-size:7px;font-weight:900}.material-buy:disabled{opacity:.38;cursor:not-allowed}
+      .material-store-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.material-store-item{display:grid;grid-template-columns:38px minmax(0,1fr) auto;gap:8px;align-items:center;padding:8px;border:1px solid rgba(255,255,255,.06);border-radius:12px;background:rgba(255,255,255,.016)}.material-store-icon{width:36px;height:36px;display:grid;place-items:center;overflow:hidden;border-radius:10px;border:1px solid rgba(216,177,93,.22);background:#171006;color:#efd17c;font-weight:900}.material-store-icon img{width:100%;height:100%;display:block;object-fit:cover}.material-store-copy{min-width:0}.material-store-copy b{display:block;color:#eadfc8;font-size:9px}.material-store-copy span{display:block;margin-top:2px;color:#877961;font-size:6px}.material-store-copy small{display:block;margin-top:3px;color:#b59c62;font-size:7px}.material-buy{min-height:32px;padding:0 8px;border-radius:9px;border:1px solid rgba(216,177,93,.23);background:rgba(216,177,93,.06);color:#e4cc8a;font-size:7px;font-weight:900}.material-buy:disabled{opacity:.38;cursor:not-allowed}
       .material-store-icon{border-radius:50%;background:radial-gradient(circle at 30% 20%,#977c45,#21190d 55%,#0d0b07);box-shadow:inset 0 0 0 2px rgba(255,235,180,.08)}
       .material-recipe-cost{grid-column:1/-1;padding:5px 7px;border-radius:8px;background:rgba(216,177,93,.035);color:#8f826b;font-size:6px;line-height:1.45;text-align:left}.material-recipe-cost b{color:#cdb16b}.material-recipe-cost .missing{color:#f2a3a3}.material-recipe-cost.no-recipe{color:#f3b0b0;border:1px solid rgba(248,113,113,.12)}
       @media(max-width:700px){.material-store-list{grid-template-columns:1fr}.material-store-head{flex-direction:column}.material-store-gold{align-self:flex-start}}
@@ -93,14 +98,14 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe, materialMarketRef
     if (goldNode && goldNode.textContent !== goldText) goldNode.textContent = goldText;
     const list = card.querySelector('#material-store-list');
     if (!list) return;
-    const renderKey = `${gold}|${purchaseBusy}|${MATERIAL_CATALOG.map((item) => `${item.id}:${item.name}:${item.icon}:${item.category}:${item.buyGold}:${materialQuantity(item.id)}`).join('|')}`;
+    const renderKey = `${gold}|${purchaseBusy}|${MATERIAL_CATALOG.map((item) => `${item.id}:${item.name}:${item.icon}:${item.imageUrl || ''}:${item.category}:${item.buyGold}:${materialQuantity(item.id)}`).join('|')}`;
     if (list.dataset.renderKey === renderKey) return;
     list.dataset.renderKey = renderKey;
     list.innerHTML = MATERIAL_CATALOG.map((item) => {
       const qty = materialQuantity(item.id);
       const price = Math.max(0, Number(item.buyGold) || 0);
       const disabled = price <= 0 || purchaseBusy || gold < price;
-      return `<article class="material-store-item"><div class="material-store-icon">${escapeHtml(item.icon || '材')}</div><div class="material-store-copy"><b>${escapeHtml(item.name)}</b><span>${escapeHtml(item.category || '材料')}</span><small>持有 ×${qty} · 參考 ${materialMarketReferencePrice(item.realm).toLocaleString()} 金幣${price > 0 ? ` · 採購 ${price} 金幣` : ' · 不可直接採購'}</small></div><button type="button" class="material-buy" data-material-buy="${escapeHtml(item.id)}" ${disabled ? 'disabled' : ''}>${purchaseBusy === item.id ? '取得中…' : '取得 ×1'}</button></article>`;
+      return `<article class="material-store-item"><div class="material-store-icon">${itemImageMarkup(item, item.icon || '材')}</div><div class="material-store-copy"><b>${escapeHtml(item.name)}</b><span>${escapeHtml(item.category || '材料')}</span><small>持有 ×${qty} · 參考 ${materialMarketReferencePrice(item.realm).toLocaleString()} 金幣${price > 0 ? ` · 採購 ${price} 金幣` : ' · 不可直接採購'}</small></div><button type="button" class="material-buy" data-material-buy="${escapeHtml(item.id)}" ${disabled ? 'disabled' : ''}>${purchaseBusy === item.id ? '取得中…' : '取得 ×1'}</button></article>`;
     }).join('');
   }
 
