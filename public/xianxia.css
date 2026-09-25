@@ -143,6 +143,7 @@ body.xianxia-theme .home-actions .font-mono { color: #ccd0b7; font: 11px 'Noto S
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.quiz-extended-practice-stop,
 .quiz-whiteboard-toggle,
 .quiz-whiteboard-action {
   display: inline-flex;
@@ -160,6 +161,7 @@ body.xianxia-theme .home-actions .font-mono { color: #ccd0b7; font: 11px 'Noto S
   line-height: 1;
   transition: background .16s ease, border-color .16s ease, color .16s ease, transform .16s ease;
 }
+.quiz-extended-practice-stop:hover,
 .quiz-whiteboard-toggle:hover,
 .quiz-whiteboard-toggle.active,
 .quiz-whiteboard-action:hover {
@@ -167,8 +169,19 @@ body.xianxia-theme .home-actions .font-mono { color: #ccd0b7; font: 11px 'Noto S
   border-color: #22d3ee80;
   background: #164e63dd;
 }
+.quiz-extended-practice-stop:active,
 .quiz-whiteboard-toggle:active,
 .quiz-whiteboard-action:active { transform: scale(.96); }
+.quiz-extended-practice-stop {
+  color: #f8e7ba;
+  border-color: #b89755aa;
+  background: #4f3b1edd;
+}
+.quiz-extended-practice-stop:hover {
+  color: #fff4cf;
+  border-color: #d4b96f;
+  background: #6a5127e8;
+}
 .quiz-whiteboard-panel {
   position: fixed;
   inset: 0;
@@ -316,6 +329,7 @@ body.xianxia-theme .quiz-whiteboard-toolbar {
 }
 body.xianxia-theme .quiz-whiteboard-title { color: #ead7aa; }
 body.xianxia-theme .quiz-whiteboard-title i { color: #d6bf83; }
+body.xianxia-theme .quiz-extended-practice-stop,
 body.xianxia-theme .quiz-whiteboard-toggle,
 body.xianxia-theme .quiz-whiteboard-action {
   background: #203b30e8;
@@ -323,6 +337,7 @@ body.xianxia-theme .quiz-whiteboard-action {
   color: #e7dcc0;
   border-radius: 4px;
 }
+body.xianxia-theme .quiz-extended-practice-stop:hover,
 body.xianxia-theme .quiz-whiteboard-toggle:hover,
 body.xianxia-theme .quiz-whiteboard-toggle.active,
 body.xianxia-theme .quiz-whiteboard-action:hover {
@@ -360,8 +375,10 @@ body.xianxia-theme .quiz-whiteboard-action:hover {
   .quiz-card-tools #quiz-badge {
     max-width: calc(100% - 78px);
   }
-  .quiz-whiteboard-toggle span { display: none; }
+  .quiz-whiteboard-toggle span,
+  .quiz-extended-practice-stop span { display: none; }
   .quiz-whiteboard-toggle { width: 32px; padding-inline: 0; flex: 0 0 32px; }
+  .quiz-extended-practice-stop { width: 42px; padding-inline: 0; flex: 0 0 42px; gap: 4px; }
   .quiz-whiteboard-action { padding-inline: 8px; }
 }
 
@@ -595,8 +612,15 @@ body.xianxia-theme #cultivation-rule-toast { background: #173429 !important; bor
   margin: 0 0 9px;
 }
 .quiz-helper-message.user { justify-content: flex-end; }
-.quiz-helper-message-body {
+.quiz-helper-message-stack {
   max-width: 88%;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.quiz-helper-message.user .quiz-helper-message-stack { align-items: flex-end; }
+.quiz-helper-message-body {
+  max-width: 100%;
   padding: 9px 11px;
   border-radius: 11px;
   font-size: 12px;
@@ -619,6 +643,45 @@ body.xianxia-theme #cultivation-rule-toast { background: #173429 !important; bor
 .quiz-helper-message.intro .quiz-helper-message-body {
   color: #514830;
   background: #d9c9a7;
+}
+.quiz-helper-practice-btn {
+  width: 100%;
+  min-height: 36px;
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 9px;
+  border: 1px solid #a88e55;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #263f33, #1b2f27);
+  color: #f0ddb0;
+  box-shadow: 0 4px 12px #00000028;
+  text-align: left;
+  transition: transform .15s ease, border-color .15s ease, background .15s ease;
+}
+.quiz-helper-practice-btn:hover {
+  transform: translateY(-1px);
+  border-color: #d3b369;
+  background: linear-gradient(90deg, #355342, #22382f);
+}
+.quiz-helper-practice-btn > i:first-child { color: #e5c06b; }
+.quiz-helper-practice-btn > span {
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.quiz-helper-practice-btn > small {
+  min-width: 0;
+  overflow: hidden;
+  color: #b9c8bc;
+  font-size: 9px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.quiz-helper-practice-btn > i:last-child {
+  color: #b9a97c;
+  font-size: 9px;
 }
 .quiz-helper-prompts {
   flex: 0 0 auto;
