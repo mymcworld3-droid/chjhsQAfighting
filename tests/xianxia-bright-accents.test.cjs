@@ -50,7 +50,7 @@ test('training, store and admin dense areas receive brighter surfaces', () => {
 });
 
 test('quiz paper uses darker parchment with high-contrast ink and preserves answer feedback', () => {
-  assert.match(css, /#quiz-container>\.glass-panel:first-child/);
+  assert.match(css, /\.quiz-question-helper-layout>\.glass-panel:first-child/);
   assert.match(css, /linear-gradient\(110deg,#d2c4a4,#b9a681\)/);
   assert.match(css, /#question-text,[\s\S]*#question-text \*\{[\s\S]*color:#211a10!important/);
   assert.match(css, /#question-text :is\(mjx-container,mjx-container \*\)/);
