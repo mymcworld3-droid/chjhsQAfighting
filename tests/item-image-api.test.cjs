@@ -23,7 +23,7 @@ test('item image API uses Cloudflare FLUX Schnell with a fixed xianxia prompt', 
   assert.match(material, /1:1 square inventory item image/);
   assert.match(material, /crafting MATERIAL/);
   assert.match(material, /rounded or clustered silhouette/);
-  assert.match(material, /no text/i);
+  assert.match(material, /text, letters, numbers/i);
 
   const artifact = buildItemImagePrompt('artifact', {
     name: '青雲劍',
