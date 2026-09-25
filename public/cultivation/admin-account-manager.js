@@ -1,6 +1,5 @@
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-import { getFirestore, collection, doc, getDoc, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
 // 管理員帳號目錄。與統計儀表板共用 users/{uid}，不將公開排行榜當作註冊帳號。
 (function () {
@@ -15,7 +14,6 @@ import { getFirestore, collection, doc, getDoc, getDocs } from 'https://www.gsta
   let loading = false;
 
   function currentUser() { return getAuth(getApp()).currentUser; }
-  function database() { return getFirestore(getApp()); }
   function isAdmin() {
     const user = currentUser();
     const player = window.getCurrentUserData?.();
@@ -43,15 +41,40 @@ import { getFirestore, collection, doc, getDoc, getDocs } from 'https://www.gsta
     return ms ? new Date(ms).toLocaleString('zh-TW') : '未記錄';
   }
   function errorMessage(error) {
-    if (error?.code === 'permission-denied') return '資料庫拒絕讀取：請確認 Firestore 規則允許管理員讀取 users 集合。';
-    return '讀取失敗，請檢查網路連線後再試。';
+    if (error?.status === 401) return '登入已失效，請重新登入後再開啟帳號管理。';
+    if (error?.status === 403) return '此帳號沒有管理員權限。';
+    if (error?.status === 503) return '帳號管理後端尚未就緒，請確認 Render 已設定 FIREBASE_A_SERVICE_ACCOUNT_JSON。';
+    return error?.message || '讀取失敗，請檢查網路連線後再試。';
   }
-  async function confirmServerAdmin(uid) {
-    if (!uid || !isAdmin() || currentUser()?.uid !== uid) throw new Error('管理員身分已失效。');
-    const snapshot = await getDoc(doc(database(), 'users', uid));
-    if (!snapshot.exists() || snapshot.data().isAdmin !== true || currentUser()?.uid !== uid) {
-      throw new Error('管理員身分已失效。');
+  async function requestAdminAccounts(action, payload = {}) {
+    const user = currentUser();
+    if (!user || !isAdmin()) {
+      const error = new Error('管理員身分已失效。');
+      error.status = 401;
+      throw error;
     }
+    const idToken = await user.getIdToken();
+    const response = await fetch('/api/admin/accounts', {
+      method: 'POST',
+      cache: 'no-store',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + idToken
+      },
+      body: JSON.stringify({ action, ...payload })
+    });
+    const body = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      const error = new Error(body?.error || '帳號管理服務讀取失敗。');
+      error.status = response.status;
+      throw error;
+    }
+    if (currentUser()?.uid !== user.uid) {
+      const error = new Error('管理員帳號已切換。');
+      error.status = 401;
+      throw error;
+    }
+    return body;
   }
   function addStyle() {
     if (document.getElementById('admin-account-manager-style')) return;
@@ -101,7 +124,7 @@ import { getFirestore, collection, doc, getDoc, getDocs } from 'https://www.gsta
     panel.dataset.adminSectionIcon = 'fa-users-gear';
     panel.innerHTML = [
       '<div class="aum-header"><div><h3><i class="fa-solid fa-users-gear"></i> 帳號管理</h3>',
-      '<p class="aum-muted">依據遊戲 users 帳號資料，僅供管理員唯讀查看。</p></div>',
+      '<p class="aum-muted">由後端驗證管理員身分後讀取 users；本頁不再直接監聽或列舉 Firestore。</p></div>',
       '<button type="button" class="aum-action" id="aum-refresh"><i class="fa-solid fa-rotate"></i> 重新整理</button></div>',
       '<div class="aum-bar"><input id="aum-search" type="search" autocomplete="off" placeholder="搜尋名稱、Email、UID、好友碼" aria-label="搜尋已註冊帳號"></div>',
       '<p id="aum-status" class="aum-muted" role="status">進入管理員頁面後載入帳號。</p>',
@@ -173,12 +196,9 @@ import { getFirestore, collection, doc, getDoc, getDocs } from 'https://www.gsta
     panel.querySelector('#aum-refresh').disabled = true;
     panel.querySelector('#aum-status').textContent = '正在讀取帳號…';
     try {
-      await confirmServerAdmin(uid);
-      const snapshot = await getDocs(collection(database(), 'users'));
+      const payload = await requestAdminAccounts('list');
       if (sequence !== loadSequence || currentUser()?.uid !== uid || !isAdmin()) return;
-      entries = snapshot.docs.map(item => ({ uid: item.id, data: item.data() }))
-        .sort((a, b) => dateNumber(b.data.lastActive || b.data.createdAt) - dateNumber(a.data.lastActive || a.data.createdAt) ||
-          String(a.data.displayName || '').localeCompare(String(b.data.displayName || ''), 'zh-TW'));
+      entries = Array.isArray(payload.entries) ? payload.entries : [];
       renderList(0);
       // 正在檢視的玩家可能已刪除或被改名；重新整理時清除舊的詳細資訊。
       selectedUid = '';
@@ -247,15 +267,10 @@ import { getFirestore, collection, doc, getDoc, getDocs } from 'https://www.gsta
     detail.replaceChildren(el('p', 'aum-muted', '正在載入玩家詳情…'));
     renderListPageSelection();
     try {
-      await confirmServerAdmin(requesterUid);
-      const snapshot = await getDoc(doc(database(), 'users', uid));
+      const payload = await requestAdminAccounts('detail', { uid });
       if (sequence !== loadSequence || !isAdmin() || currentUser()?.uid !== requesterUid || selectedUid !== uid) return;
       detail.replaceChildren();
-      if (!snapshot.exists()) {
-        detail.appendChild(el('p', 'aum-muted', '帳號不存在，可能已被刪除。請重新整理清單。'));
-        return;
-      }
-      const data = snapshot.data();
+      const data = payload?.data || {};
       const stats = data.stats || {};
       const profile = data.profile || {};
       const answered = Number(stats.totalAnswered) || 0;
