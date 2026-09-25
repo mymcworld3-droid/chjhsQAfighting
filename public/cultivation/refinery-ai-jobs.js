@@ -310,6 +310,31 @@ import {
     return error;
   }
 
+  async function ensureGeneratedArtifactImage(artifactId) {
+    const user = authUser();
+    if (!user || !artifactId) return null;
+    const token = await user.getIdToken();
+    const response = await fetch('/api/item-image/ensure-artifact', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      },
+      body: JSON.stringify({ id: artifactId })
+    });
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok || payload?.ok !== true) {
+      throw new Error(payload?.error || ('法寶圖片生成失敗 (' + response.status + ')'));
+    }
+    if (payload.item?.id) {
+      const next = ARTIFACT_CATALOG.map((row) =>
+        row.id === payload.item.id ? { ...row, ...payload.item } : row);
+      replaceArtifactCatalog(next, 'ai-generated-image');
+      return payload.item;
+    }
+    return null;
+  }
+
   async function generateCandidate(job) {
     let response;
     try {
@@ -488,6 +513,14 @@ import {
     if (committedRecipes) replaceArtifactRecipes(committedRecipes, 'ai-generated');
     window.dispatchEvent(new CustomEvent('artifact-system-updated', { detail: committedArtifacts }));
     window.dispatchEvent(new CustomEvent('xiuxian:refinery-job-updated', { detail: null }));
+
+    // 新配方第一次正式登錄後立刻補圖；圖片失敗不回滾已完成的煉器，
+    // 管理員仍可在「物品補圖」面板重試。
+    if (firstDiscovery && awardedId) {
+      try { await ensureGeneratedArtifactImage(awardedId); }
+      catch (error) { console.warn('[Refinery artifact image]', awardedId, error); }
+    }
+
     generatedCandidateCache.delete(job.id);
     const awarded = getArtifactById(awardedId) || committedCatalog?.find((item) => item.id === awardedId) || { id: awardedId, name: '新生法寶' };
     return { ...awarded, recipeFirstDiscovery: firstDiscovery };
