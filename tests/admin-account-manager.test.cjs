@@ -10,6 +10,8 @@ function read(rel) {
 
 const manager = read('public/cultivation/admin-account-manager.js');
 const main = read('public/main.js');
+const server = read('server.js');
+const api = read('admin-account-api.cjs');
 
 test('admin account module has valid JavaScript syntax and is registered before collapsible panels', () => {
   const file = path.join(__dirname, '..', 'public/cultivation/admin-account-manager.js');
@@ -20,16 +22,20 @@ test('admin account module has valid JavaScript syntax and is registered before 
   assert.ok(accounts > 0 && collapse > accounts);
 });
 
-test('directory reads canonical registered game accounts only with a fresh admin check', () => {
-  assert.match(manager, /getDocs\(collection\(database\(\), 'users'\)\)/);
-  assert.match(manager, /getDoc\(doc\(database\(\), 'users', uid\)\)/);
-  assert.match(manager, /snapshot\.data\(\)\.isAdmin !== true/);
-  assert.match(manager, /currentUser\(\)\?\.uid !== uid/);
-  assert.match(manager, /window\.loadAdminData = wrapped/);
-  assert.match(manager, /onAuthStateChanged/);
+test('directory uses authenticated backend API instead of browser Firestore collection reads', () => {
+  assert.match(manager, /fetch\('\/api\/admin\/accounts'/);
+  assert.match(manager, /Authorization: 'Bearer ' \+ idToken/);
+  assert.match(manager, /requestAdminAccounts\('list'\)/);
+  assert.match(manager, /requestAdminAccounts\('detail', \{ uid \}\)/);
+  assert.doesNotMatch(manager, /getFirestore|getDocs\(|getDoc\(|onSnapshot\(/);
+  assert.match(server, /registerAdminAccountApi/);
+  assert.match(server, /registerAdminAccountApi\(app\)/);
+  assert.match(api, /verifyIdToken\(token, true\)/);
+  assert.match(api, /adminSnap\.data\(\)\?\.isAdmin !== true/);
+  assert.match(api, /a\.db\.collection\('users'\)\.get\(\)/);
 });
 
-test('account directory searches and paginates, but only reads player details on selection', () => {
+test('account directory searches and paginates summaries and reads details on selection', () => {
   assert.match(manager, /PAGE_SIZE = 20/);
   assert.match(manager, /entry\.data\.email/);
   assert.match(manager, /entry\.data\.friendCode/);
@@ -42,4 +48,6 @@ test('account directory searches and paginates, but only reads player details on
   assert.match(manager, /fmtDate\(data\.createdAt\)/);
   assert.match(manager, /textContent = dataText/);
   assert.doesNotMatch(manager, /updateDoc\(|setDoc\(|deleteDoc\(/);
+  assert.match(api, /SENSITIVE_KEY/);
+  assert.match(api, /\[已遮蔽\]/);
 });
