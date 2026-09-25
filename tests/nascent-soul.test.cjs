@@ -175,6 +175,12 @@ test('training mutations use Firestore transaction and separate trees from the r
   assert.match(battle, /nascentSoul: nascentSoul \?/);
   assert.match(battle, /reductionFlat:/);
   assert.match(battle, /coreHeal:/);
+  assert.match(battle, /baseAtk: baseCombat\.attack/);
+  assert.match(battle, /baseMaxHp: baseCombat\.maxHp/);
+  assert.match(battle, /applyNascentSoulDuelRule\(room\.host, myData\)/);
+  assert.match(battle, /元嬰封印/);
+  assert.match(engine, /NASCENT_SOUL_SCORE = 68/);
+  assert.match(engine, /applyNascentSoulDuelRule\(host, guest\)/);
   assert.match(engine, /soulDamage/);
   assert.match(css, /\.ns-tree-viewport/);
   assert.match(css, /\.ns-orbit-node\.ns-light-btn:disabled/);
@@ -198,7 +204,7 @@ test('duel bonus damage from nascent soul is fixed in the match and applies only
   const context = vm.createContext({ console, Math, Number, String, Object, Array });
   vm.runInContext(source + '\nthis.settle=settleBattleRound;', context);
   const player = (id, correct, withSoul) => ({
-    uid: id, name: id, hp: 1000, maxHp: 1000, atk: 200, goldenCore: null,
+    uid: id, name: id, totalScore: 68, hp: 1000, maxHp: 1000, atk: 200, goldenCore: null,
     nascentSoul: withSoul ? {type:'sword', bonusDamage: 45} : null,
     answer: { correct, atMs: 1000 }
   });
@@ -207,6 +213,50 @@ test('duel bonus damage from nascent soul is fixed in the match and applies only
   assert.equal(correct.steps.find(step => step.type === 'attack').extraDamage, 45);
   const wrong = context.settle({roomId:'soul-b',round:1,host:player('h',false,true),guest:player('g',false,false)});
   assert.equal(wrong.guestHp, 1000);
+});
+
+
+test('nascent soul combat attributes are sealed against Golden Core or lower opponents', () => {
+  const source = read('public/cultivation/battle-engine-v2.js')
+    .replace(/export const /g, 'const ')
+    .replace(/export function /g, 'function ');
+  const context = vm.createContext({ console, Math, Number, String, Object, Array });
+  vm.runInContext(source + '\nthis.settle=settleBattleRound;this.applyRule=applyNascentSoulDuelRule;', context);
+
+  const soulHost = {
+    uid:'nascent', name:'nascent', totalScore:68,
+    baseAtk:200, baseMaxHp:1000, atk:320, hp:1700, maxHp:1700, combatPower:9000,
+    goldenCore:null,
+    nascentSoul:{type:'sword',attackFlat:120,maxHpFlat:700,bonusDamage:45,reductionFlat:30,coreHeal:24},
+    answer:{correct:true,atMs:1000}
+  };
+  const goldenGuest = {
+    uid:'golden', name:'golden', totalScore:28,
+    baseAtk:200, baseMaxHp:1000, atk:200, hp:1000, maxHp:1000, combatPower:5000,
+    goldenCore:null, nascentSoul:null, answer:{correct:false,atMs:1200}
+  };
+
+  const ruled = context.applyRule(soulHost, goldenGuest);
+  assert.equal(ruled.host.nascentSoul, null);
+  assert.equal(ruled.host.nascentSoulSuppressed, true);
+  assert.equal(ruled.host.atk, 200);
+  assert.equal(ruled.host.maxHp, 1000);
+  assert.equal(ruled.host.hp, 1000);
+
+  const sealed = context.settle({roomId:'seal-golden',round:1,host:soulHost,guest:goldenGuest});
+  assert.equal(sealed.guestHp, 800);
+  assert.equal(sealed.startHostHp, 1000);
+  const sealedHit = sealed.steps.find(step => step.type === 'attack');
+  assert.equal(sealedHit.baseDamage, 200);
+  assert.equal(sealedHit.extraDamage, 0);
+
+  const nascentGuest = {...goldenGuest, uid:'nascent-guest', totalScore:68};
+  const active = context.settle({roomId:'seal-nascent',round:1,host:soulHost,guest:nascentGuest});
+  assert.equal(active.guestHp, 635);
+  assert.equal(active.startHostHp, 1700);
+  const activeHit = active.steps.find(step => step.type === 'attack');
+  assert.equal(activeHit.baseDamage, 320);
+  assert.equal(activeHit.extraDamage, 45);
 });
 
 
