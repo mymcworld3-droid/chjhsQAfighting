@@ -2737,8 +2737,18 @@ function quizHelperElements() {
 function setQuizHelperOpen(open, { remember = true } = {}) {
     const { shell, input } = quizHelperElements();
     if (!shell) return;
+    const compact = window.matchMedia?.('(max-width: 1099px)')?.matches ?? false;
     shell.classList.toggle('collapsed', !open);
     shell.classList.toggle('open', open);
+    shell.classList.toggle('fullscreen', open && compact);
+    document.body.classList.toggle('quiz-helper-fullscreen-open', open && compact);
+
+    const collapseIcon = shell.querySelector('.quiz-helper-collapse i');
+    if (collapseIcon) {
+        collapseIcon.classList.toggle('fa-chevron-right', !compact);
+        collapseIcon.classList.toggle('fa-xmark', compact);
+    }
+
     if (remember) quizHelperState.manualOpen = !!open;
     if (open) requestAnimationFrame(() => input?.focus({ preventScroll: true }));
 }
@@ -2811,7 +2821,7 @@ function initQuizHelper() {
         event.preventDefault();
         void sendQuizHelperMessage(input.value);
     });
-    const media = window.matchMedia?.('(max-width: 1279px)');
+    const media = window.matchMedia?.('(max-width: 1099px)');
     media?.addEventListener?.('change', (event) => {
         if (event.matches) setQuizHelperOpen(false, { remember: false });
         else if (quizHelperState.manualOpen == null) setQuizHelperOpen(true, { remember: false });
@@ -2839,7 +2849,7 @@ function resetQuizHelper(data = {}, { topic = '' } = {}) {
     if (status) status.textContent = '';
     renderQuizHelperConversation();
 
-    const desktopOpen = window.matchMedia?.('(min-width: 1280px)')?.matches ?? true;
+    const desktopOpen = window.matchMedia?.('(min-width: 1100px)')?.matches ?? true;
     setQuizHelperOpen(desktopOpen, { remember: false });
 }
 
