@@ -173,41 +173,37 @@ body.xianxia-theme .home-actions .font-mono { color: #ccd0b7; font: 11px 'Noto S
   position: fixed;
   inset: 0;
   z-index: 120;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: clamp(14px, 3vw, 36px);
+  display: block;
+  padding: 0;
+  background: #0f172a;
 }
 .quiz-whiteboard-panel.hidden { display: none; }
-.quiz-whiteboard-backdrop {
+.quiz-whiteboard-backdrop { display: none; }
+.quiz-whiteboard-dialog {
   position: absolute;
   inset: 0;
-  border: 0;
-  background: rgba(2, 6, 23, .68);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-}
-.quiz-whiteboard-dialog {
-  position: relative;
-  z-index: 1;
-  width: min(920px, 92vw);
-  max-height: 88vh;
+  width: 100vw;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
   overflow: hidden;
-  border: 1px solid #334155;
-  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  border: 0;
+  border-radius: 0;
   background: #0f172a;
-  box-shadow: 0 24px 70px #02061799;
-  transform-origin: center;
-  animation: quiz-whiteboard-pop .18s ease-out both;
+  box-shadow: none;
+  animation: quiz-whiteboard-pop .16s ease-out both;
 }
 @keyframes quiz-whiteboard-pop {
-  from { opacity: 0; transform: translateY(10px) scale(.975); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 body.quiz-whiteboard-open { overflow: hidden; }
 .quiz-whiteboard-toolbar {
-  min-height: 46px;
-  padding: 8px 10px 8px 14px;
+  flex: 0 0 auto;
+  min-height: 52px;
+  padding: 8px max(12px, env(safe-area-inset-right)) 8px max(14px, env(safe-area-inset-left));
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -230,9 +226,34 @@ body.quiz-whiteboard-open { overflow: hidden; }
   align-items: center;
   gap: 7px;
 }
+.quiz-whiteboard-question-wrap {
+  flex: 0 0 auto;
+  max-height: 32dvh;
+  overflow: auto;
+  padding: 16px clamp(18px, 4vw, 54px) 18px;
+  border-bottom: 1px solid #cbbd8c;
+  background: linear-gradient(110deg, #f0e8d1, #e3d8b9);
+  color: #25392e;
+  box-shadow: inset 0 -10px 24px #7f6f4920;
+}
+.quiz-whiteboard-question-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 8px;
+  color: #766440;
+  font: 700 11px 'Noto Sans TC', sans-serif;
+  letter-spacing: .12em;
+}
+.quiz-whiteboard-question {
+  color: #25392e;
+  font: 600 clamp(17px, 2.1vw, 24px)/1.8 'Noto Serif TC', serif;
+  overflow-wrap: anywhere;
+}
 .quiz-whiteboard-stage {
+  flex: 1 1 auto;
+  min-height: 0;
   width: 100%;
-  min-height: 260px;
   overflow: hidden;
   background-color: #fffef8;
   background-image:
@@ -244,6 +265,7 @@ body.quiz-whiteboard-open { overflow: hidden; }
 #quiz-whiteboard-canvas {
   display: block;
   width: 100%;
+  height: 100%;
   max-width: 100%;
   touch-action: none;
   user-select: none;
@@ -251,9 +273,7 @@ body.quiz-whiteboard-open { overflow: hidden; }
   cursor: crosshair;
 }
 body.xianxia-theme .quiz-whiteboard-dialog {
-  border-color: #b9a87078;
   background: #132a23;
-  box-shadow: 0 24px 70px #03120dcc;
 }
 body.xianxia-theme .quiz-whiteboard-toolbar {
   background: #173128;
@@ -276,17 +296,17 @@ body.xianxia-theme .quiz-whiteboard-action:hover {
   color: #fff3cf;
 }
 @media (max-width: 560px) {
-  .quiz-whiteboard-panel {
-    align-items: flex-end;
-    padding: 10px;
+  .quiz-whiteboard-toolbar {
+    min-height: 48px;
+    padding-top: max(7px, env(safe-area-inset-top));
   }
-  .quiz-whiteboard-dialog {
-    width: 100%;
-    max-height: calc(100dvh - 20px);
-    border-radius: 14px 14px 8px 8px;
+  .quiz-whiteboard-question-wrap {
+    max-height: 36dvh;
+    padding: 12px 16px 14px;
   }
-  .quiz-whiteboard-stage {
-    min-height: 58dvh;
+  .quiz-whiteboard-question {
+    font-size: 16px;
+    line-height: 1.7;
   }
   .quiz-card-tools {
     left: 14px;
@@ -299,7 +319,6 @@ body.xianxia-theme .quiz-whiteboard-action:hover {
   }
   .quiz-whiteboard-toggle span { display: none; }
   .quiz-whiteboard-toggle { width: 32px; padding-inline: 0; flex: 0 0 32px; }
-  .quiz-whiteboard-toolbar { padding-left: 10px; }
   .quiz-whiteboard-action { padding-inline: 8px; }
 }
 
