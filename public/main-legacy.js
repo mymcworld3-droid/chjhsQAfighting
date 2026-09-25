@@ -2427,9 +2427,19 @@ async function fetchOneQuestion() {
 
         const filteredQuestions = currentBankData.questions.filter(q => q.difficulty === finalDifficulty);
         const pool = filteredQuestions.length > 0 ? filteredQuestions : currentBankData.questions;
+        const seenQuestions = new Set(
+            recentSoloQuestionContext().avoidQuestions
+                .map(value => String(value || '').toLowerCase().replace(/\s+/g, ''))
+                .filter(Boolean)
+        );
+        const unseenPool = pool.filter(item =>
+            !seenQuestions.has(String(item?.q || '').toLowerCase().replace(/\s+/g, ''))
+        );
+        // 題庫尚有沒做過的題時，只從未看過的題抽；全部做完才開啟新一輪。
+        const drawPool = unseenPool.length > 0 ? unseenPool : pool;
         const rawData = pickBankQuestionWithoutReplacement(
-            pool,
-            `${targetSource || 'bank'}|${filteredQuestions.length > 0 ? finalDifficulty : 'all'}|${pool.length}`
+            drawPool,
+            `${targetSource || 'bank'}|${filteredQuestions.length > 0 ? finalDifficulty : 'all'}|${drawPool.length}`
         );
         let allOptions = shuffleArray([rawData.correct, ...rawData.wrong]);
         let displaySubject = rawData.subject || settings.source.split('/').pop().replace('.json', '');
