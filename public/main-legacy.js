@@ -2821,7 +2821,11 @@ function resetQuizWhiteboard({ close = true } = {}) {
     quizWhiteboardState.currentStroke = null;
     const { panel, toggle } = quizWhiteboardElements();
     if (close && panel) panel.classList.add('hidden');
-    if (toggle) toggle.setAttribute('aria-expanded', close ? 'false' : String(!panel?.classList.contains('hidden')));
+    if (toggle) {
+        const isOpen = !close && !!panel && !panel.classList.contains('hidden');
+        toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        toggle.classList.toggle('active', isOpen);
+    }
     if (!close && panel && !panel.classList.contains('hidden')) redrawQuizWhiteboard();
 }
 
