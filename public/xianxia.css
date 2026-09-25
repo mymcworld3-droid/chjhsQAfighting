@@ -833,11 +833,13 @@ body.quiz-whiteboard-open .quiz-helper-shell { z-index: 145; }
     min-width: 0;
   }
   .quiz-helper-shell:not(.collapsed) {
-    position: sticky;
+    position: fixed;
     top: 88px;
-    inset-inline: auto;
+    right: max(16px, calc((100vw - 1220px) / 2 + 16px));
+    bottom: auto;
+    left: auto;
     z-index: 34;
-    width: 100%;
+    width: clamp(310px, 29vw, 350px);
     height: min(680px, calc(100dvh - 116px));
     min-height: 420px;
     pointer-events: none;
