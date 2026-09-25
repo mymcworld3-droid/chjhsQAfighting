@@ -2518,6 +2518,8 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     const timeTaken = (Date.now() - (window.quizStartTime || Date.now())) / 1000;
     const isCorrect = userIdx === correctIdx;
     quizHelperState.answered = true;
+    quizHelperState.selectedIndex = Number.isInteger(userIdx) ? userIdx : null;
+    quizHelperState.correctIndex = Number.isInteger(correctIdx) ? correctIdx : quizHelperState.correctIndex;
     quizHelperState.explanation = String(explanation || '');
     renderQuizHelperConversation();
     
@@ -2685,6 +2687,8 @@ const quizHelperState = {
     question: '',
     options: [],
     explanation: '',
+    selectedIndex: null,
+    correctIndex: null,
     answered: false,
     busy: false,
     initialized: false,
@@ -2777,6 +2781,8 @@ function resetQuizHelper(data = {}) {
     quizHelperState.question = String(data.q || '');
     quizHelperState.options = Array.isArray(data.opts) ? data.opts.map(String) : [];
     quizHelperState.explanation = String(data.exp || '');
+    quizHelperState.selectedIndex = null;
+    quizHelperState.correctIndex = Number.isInteger(data.ans) ? data.ans : null;
     quizHelperState.answered = false;
     quizHelperState.busy = false;
     quizHelperState.manualOpen = null;
@@ -2814,7 +2820,12 @@ async function sendQuizHelperMessage(rawMessage) {
                 options: quizHelperState.options,
                 message,
                 history,
-                answered: quizHelperState.answered
+                answered: quizHelperState.answered,
+                ...(quizHelperState.answered ? {
+                    explanation: quizHelperState.explanation,
+                    selectedOption: quizHelperState.selectedIndex >= 0 ? quizHelperState.options[quizHelperState.selectedIndex] : '',
+                    correctOption: quizHelperState.correctIndex >= 0 ? quizHelperState.options[quizHelperState.correctIndex] : ''
+                } : {})
             })
         });
         const payload = await response.json().catch(() => ({}));
