@@ -133,7 +133,7 @@ body.xianxia-theme .home-actions .font-mono { color: #ccd0b7; font: 11px 'Noto S
 .xianxia-footnote { margin: 26px 0 12px; display: flex; align-items: center; gap: 16px; justify-content: center; color: #97aa91; font: 12px var(--xq-serif); letter-spacing: .16em; }
 .xianxia-footnote::before, .xianxia-footnote::after { content: ''; width: 60px; height: 1px; background: var(--xq-line); }
 /* 問道計算白板：題型標籤與按鈕共用右上工具列，白板支援滑鼠與觸控手寫。 */
-#quiz-container > .glass-panel:first-child { padding-top: 4rem; }
+.quiz-question-helper-layout > .glass-panel:first-child { padding-top: 4rem; }
 .quiz-card-tools { max-width: calc(100% - 28px); }
 .quiz-card-tools #quiz-badge {
   position: static;
@@ -384,7 +384,7 @@ body.xianxia-theme .quiz-whiteboard-action:hover {
 
 /* 宣紙題卷。正解/錯解仍有獨立色彩與原有文字、圖示。 */
 body.xianxia-theme #page-quiz { max-width: 820px; }
-body.xianxia-theme #quiz-container > .glass-panel:first-child {
+body.xianxia-theme .quiz-question-helper-layout > .glass-panel:first-child {
   background: linear-gradient(110deg, #efe7cf, #e0d6b9); color: #26352a; border: 1px solid #c5b480;
   border-left: 5px solid #8c7750; padding: 56px 32px 30px; border-radius: 4px;
   box-shadow: 0 14px 35px #04151140, inset 0 0 35px #947b4620;
@@ -465,7 +465,7 @@ body.xianxia-theme #nav-grid button:hover i { color: #e1cc98; transform: transla
   body.xianxia-theme .home-actions .font-sci { font-size: 16px; letter-spacing: .04em; }
   body.xianxia-theme .home-actions .font-mono { font-size: 9px; letter-spacing: 0; }
   body.xianxia-theme #question-text { font-size: 17px; }
-  body.xianxia-theme #quiz-container > .glass-panel:first-child { padding-inline: 22px; }
+  body.xianxia-theme .quiz-question-helper-layout > .glass-panel:first-child { padding-inline: 22px; }
   body.xianxia-theme #bottom-nav > .glass-capsule { min-height: 68px; padding-inline: 4px; }
   .xianxia-login-card { padding: 35px 22px; }
 }
