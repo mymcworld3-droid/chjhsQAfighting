@@ -1,6 +1,8 @@
 // Battle v2 pure engine: deterministic, replay-safe PvP settlement.
 // No Firebase / DOM dependencies so round rules can be regression-tested independently.
 
+export const NASCENT_SOUL_SCORE = 68;
+
 export const BATTLE_V2 = Object.freeze({
   modeVersion: 2,
   roundDurationMs: 25000,
@@ -104,6 +106,45 @@ export function resolveDeterministicCounterCore(player, receivedDamage, seed) {
 
 function answerCorrect(player) {
   return player?.answer?.correct === true;
+}
+
+export function shouldSuppressNascentSoul(player, opponent) {
+  return !!player?.nascentSoul && Math.max(0, Number(opponent?.totalScore) || 0) < NASCENT_SOUL_SCORE;
+}
+
+export function applyNascentSoulDuelRuleToPlayer(player, opponent) {
+  if (!player || !shouldSuppressNascentSoul(player, opponent)) return player;
+
+  const soul = player.nascentSoul || {};
+  const currentAtk = Math.max(1, Math.round(Number(player.atk) || 200));
+  const currentMaxHp = Math.max(1, Math.round(Number(player.maxHp) || 1000));
+  const baseAtk = Math.max(1, Math.round(Number(player.baseAtk) ||
+    (currentAtk - Math.max(0, Number(soul.attackFlat) || 0))));
+  const baseMaxHp = Math.max(1, Math.round(Number(player.baseMaxHp) ||
+    (currentMaxHp - Math.max(0, Number(soul.maxHpFlat) || 0))));
+  const currentHp = Math.max(0, Math.min(currentMaxHp, Number(player.hp) || currentMaxHp));
+  const hpRatio = currentMaxHp > 0 ? currentHp / currentMaxHp : 1;
+  const soulPower = Math.round(
+    Math.max(0, Number(soul.attackFlat) || 0) * 2 +
+    Math.max(0, Number(soul.maxHpFlat) || 0) * 0.2
+  );
+
+  return {
+    ...player,
+    atk: baseAtk,
+    maxHp: baseMaxHp,
+    hp: Math.max(0, Math.min(baseMaxHp, Math.round(baseMaxHp * hpRatio))),
+    combatPower: Math.max(0, Math.round(Number(player.combatPower) || 0) - soulPower),
+    nascentSoul: null,
+    nascentSoulSuppressed: true
+  };
+}
+
+export function applyNascentSoulDuelRule(host, guest) {
+  return {
+    host: applyNascentSoulDuelRuleToPlayer(host, guest),
+    guest: applyNascentSoulDuelRuleToPlayer(guest, host)
+  };
 }
 
 const NEXT_REALM_THRESHOLDS = [28, 68, 188, 428, 788, 1268, 1868, 2588];
@@ -217,6 +258,9 @@ export function settleBattleRound({
   resolveEquipmentHit = null,
   resolveGuardedFollowup = null
 }) {
+  // 對手若仍在金丹或以下，元嬰戰鬥投影全部封印：包含攻擊／生命屬性、加傷、減傷與護元。
+  ({ host, guest } = applyNascentSoulDuelRule(host, guest));
+
   // Firestore server-stamped response time determines initiative, never damage eligibility.
   // Missing/timeout answers move last; timestamps tied to the millisecond defer to firstAnswerUid.
   // Older rooms without this field retain host as the deterministic last-resort tie-break.
