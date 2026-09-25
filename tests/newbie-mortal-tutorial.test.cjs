@@ -57,12 +57,15 @@ test('Dongfu tutorial waits until the player clicks the bottom navigation before
 });
 
 
-test('newbie scope tutorial follows the fullscreen five-step picker without old dropdown targets', () => {
+test('newbie scope tutorial follows the fullscreen three-step picker without semester/version steps', () => {
   assert.match(tutorial, /target: '#dongfu-scope-card \.dongfu-collapse-head', requiresScopeOpen: true/);
   assert.match(tutorial, /target: '#scope-studio #set-source-mode', requiresScopeOpenView: true/);
   assert.match(tutorial, /target: '#scope-studio \.ss-picker \.ss-panel-head', requiresScopeOpenView: true/);
   assert.match(tutorial, /target: '#scope-studio #ss-close', requiresScopeReturn: true/);
-  assert.match(tutorial, /年級 → 科目 → 學期 → 版本 → 章節與考點/);
+  assert.match(tutorial, /年級 → 科目 → 章節與考點/);
+  assert.match(tutorial, /上下學期已自動合併/);
+  assert.match(tutorial, /不需要再選「複習版」或出版社版本/);
+  assert.doesNotMatch(tutorial, /年級 → 科目 → 學期 → 版本 → 章節與考點/);
   assert.doesNotMatch(tutorial, /target: '#set-source-mode', settingsSection: 'scope'/);
   assert.match(tutorial, /bindScopeTutorialEvents\(\)/);
   assert.match(tutorial, /scopeStudioOpen\(\) \? '30000' : ''/);
