@@ -90,9 +90,9 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     },
     {
       page: 'page-settings', target: '#scope-studio .ss-picker .ss-panel-head', requiresScopeOpenView: true,
-      kicker: '研修所 · 五步選課', title: '逐步挑選課程，再加入修習卷',
-      body: '在「探索課程」依序選<strong>年級 → 科目 → 學期 → 版本 → 章節與考點</strong>；每頁上方的返回鍵能退回上一步。加入後可在「我的修習卷」檢查，最後按「儲存出題範圍」。',
-      note: '新版沒有五個頂部步驟按鈕或課程路徑列。理解後點非金框處繼續。'
+      kicker: '研修所 · 三步選課', title: '選完科目就直接挑章節',
+      body: '在「探索課程」依序選<strong>年級 → 科目 → 章節與考點</strong>。上下學期已自動合併，也不需要再選「複習版」或出版社版本；加入後可在「我的修習卷」檢查，最後按「儲存出題範圍」。',
+      note: '章節旁會標示上／下學期，方便辨識原冊次。理解後點非金框處繼續。'
     },
     {
       page: 'page-settings', target: '#scope-studio #ss-close', requiresScopeReturn: true,
