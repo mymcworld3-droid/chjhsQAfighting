@@ -101,6 +101,28 @@ test('invalid persisted records are ignored and storage-disabled browser remains
   assert.equal(blocked.isPersistent(), false);
 });
 
+test('seen-question history survives reload and blocks exact or long structural repeats', () => {
+  const { createSoloQuestionCache } = cacheAPI();
+  const storage = createMemoryStorage();
+  const first = createSoloQuestionCache(storage);
+  first.activate('uid-history', scope());
+
+  const original = makeQuiz('小明買了 12 顆蘋果，平均分給 3 個人，每人可以分到幾顆？');
+  original.meta = { concept_id: 'division', template_id: 'equal-share', question_form: 'scenario-modeling' };
+  first.append(original);
+  first.takeNext();
+  first.consumeActive({ remember: true });
+
+  assert.equal(first.getHistory().length, 1);
+  assert.equal(first.getHistory()[0].template_id, 'equal-share');
+
+  const refreshed = createSoloQuestionCache(storage);
+  refreshed.activate('uid-history', scope());
+  assert.equal(refreshed.getHistory().length, 1);
+  assert.equal(refreshed.append(makeQuiz('小華買了 20 顆蘋果，平均分給 5 個人，每人可以分到幾顆？')), false);
+  assert.equal(refreshed.append(makeQuiz('下列哪一個圖形具有四條等長的邊？')), true);
+});
+
 test('solo quiz uses restored active question before hitting the API and saves each prefetched result', () => {
   assert.match(legacy, /let nextQ = soloQuestionCache.getActive\(\) \|\| soloQuestionCache.takeNext\(\)/);
   assert.match(legacy, /const BUFFER_SIZE = 1;/);
@@ -108,7 +130,10 @@ test('solo quiz uses restored active question before hitting the API and saves e
   assert.match(legacy, /if \(isFetchingBuffer\) return bufferFillPromise/);
   assert.match(legacy, /soloQuestionCache.append\(question\)/);
   assert.match(legacy, /soloQuestionCache.setActive\(q\)/);
-  assert.match(legacy, /soloQuestionCache.consumeActive\(\)/);
+  assert.match(legacy, /soloQuestionCache\.consumeActive\(\{ remember: true \}\)/);
+  assert.match(legacy, /recentSoloQuestionContext\(\)/);
+  assert.match(legacy, /avoidQuestionMeta/);
+  assert.match(legacy, /pickBankQuestionWithoutReplacement/);
   assert.match(legacy, /soloQuestionScope\(\) !== scope/);
   assert.match(legacy, /auth.currentUser\?\.uid !== uid/);
   assert.match(legacy, /const identity = JSON.stringify\(\[uid, scope\]\)/);
