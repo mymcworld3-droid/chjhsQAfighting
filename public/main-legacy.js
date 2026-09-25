@@ -2831,6 +2831,10 @@ function initQuizHelper() {
 
 function resetQuizHelper(data = {}, { topic = '' } = {}) {
     initQuizHelper();
+    const { shell, input, send, status } = quizHelperElements();
+    const hadPreviousQuestion = !!quizHelperState.question;
+    const wasOpen = shell ? !shell.classList.contains('collapsed') : false;
+
     quizHelperState.messages = [];
     quizHelperState.question = String(data.q || '');
     const topicText = String(topic || '').replace(/[🎯📚]/g, '').trim();
@@ -2842,16 +2846,15 @@ function resetQuizHelper(data = {}, { topic = '' } = {}) {
     quizHelperState.correctIndex = Number.isInteger(data.ans) ? data.ans : null;
     quizHelperState.answered = false;
     quizHelperState.busy = false;
-    quizHelperState.manualOpen = null;
 
-    const { input, send, status } = quizHelperElements();
     if (input) input.value = '';
     if (send) send.disabled = false;
     if (status) status.textContent = '';
     renderQuizHelperConversation();
 
-    const desktopOpen = window.matchMedia?.('(min-width: 1100px)')?.matches ?? true;
-    setQuizHelperOpen(desktopOpen, { remember: false });
+    // 換題只更新聊天內容，不改變玩家目前的展開／縮小狀態。
+    const defaultOpen = window.matchMedia?.('(min-width: 1100px)')?.matches ?? true;
+    setQuizHelperOpen(hadPreviousQuestion ? wasOpen : defaultOpen, { remember: false });
 }
 
 async function sendQuizHelperMessage(rawMessage) {
