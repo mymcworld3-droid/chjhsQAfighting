@@ -217,7 +217,7 @@ body.xianxia-theme :is(.input-cyber, input:not([type="checkbox"]):not([type="rad
   border-radius: 14px !important;
 }
 
-body.xianxia-theme .quiz-question-helper-layout > .glass-panel:first-child,
+body.xianxia-theme .quiz-main-column > .glass-panel:first-child,
 body.xianxia-theme #percentile-display,
 body.xianxia-theme .xiuxian-toast {
   border-radius: 18px !important;
