@@ -191,6 +191,11 @@ test('quiz question includes contextual helper chat with responsive collapse', (
   assert.match(xianxia, /width:\s*100vw/);
   assert.match(xianxia, /height:\s*100dvh/);
   assert.match(legacy, /quiz-helper-fullscreen-open/);
+  assert.match(legacy, /function quizHelperAppendThinking\(\)/);
+  assert.match(legacy, /quiz-helper-thinking-bubble/);
+  assert.match(legacy, /requestId !== quizHelperState\.requestSerial/);
+  assert.match(xianxia, /@keyframes quiz-helper-thinking-dot/);
+  assert.match(xianxia, /quiz-helper-thinking-bubble span:nth-child\(3\)/);
   assert.match(server, /app\.post\('\/api\/question-helper'/);
   assert.match(server, /尚未作答/);
 });
@@ -212,7 +217,7 @@ test('helper replies expose knowledge-point extended practice', () => {
 
 
 test('core import and page query change together to refresh browser cached code', () => {
-  assert.match(main, /main-legacy\.js\?v=20260925-helper-state1/);
-  assert.match(index, /main\.js\?v=20260925-helper-state1/);
-  assert.match(index, /xianxia\.css\?v=20260925-helper-state1/);
+  assert.match(main, /main-legacy\.js\?v=20260925-helper-thinking1/);
+  assert.match(index, /main\.js\?v=20260925-helper-thinking1/);
+  assert.match(index, /xianxia\.css\?v=20260925-helper-thinking1/);
 });
