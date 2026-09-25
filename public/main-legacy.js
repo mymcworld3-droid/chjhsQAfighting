@@ -2895,7 +2895,6 @@ function renderQuiz(data, rank, topic) {
     });
 
     // 等 MathJax 初始化後依序排版，避免快速換題時併發渲染。
-    const whiteboardQuestionEl = document.getElementById('quiz-whiteboard-question');
     const mathTargets = [questionTextEl, container, whiteboardQuestionEl].filter(Boolean);
     if (window.quizMathTypeset) void window.quizMathTypeset(mathTargets);
     else void window.MathJax?.typesetPromise?.(mathTargets).catch(err => console.warn('[Quiz Math]', err));
