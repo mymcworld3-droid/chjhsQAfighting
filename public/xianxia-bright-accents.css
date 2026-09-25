@@ -319,7 +319,7 @@ body.xianxia-theme :is(.text-white,.text-slate-100){
 }
 
 /* 問道題卷改為較深舊宣紙，題目固定深墨色，避免亮底＋白字失去對比。 */
-body.xianxia-theme .quiz-question-helper-layout>.glass-panel:first-child{
+body.xianxia-theme .quiz-main-column>.glass-panel:first-child{
   background:
     radial-gradient(circle at 18% 12%,rgba(255,244,211,.20),transparent 35%),
     linear-gradient(110deg,#d2c4a4,#b9a681)!important;
