@@ -343,8 +343,10 @@ app.post('/api/generate-quiz', async (req, res) => {
         const stats = knowledgeMap[subject][targetTopic];
         const accuracy = stats.total > 0 ? ((stats.correct / stats.total) * 100).toFixed(1) : 0;
         diagnosticInfo = `[玩家數據] 在「${subject}-${targetTopic}」上正確率為 ${accuracy}% (已練 ${stats.total} 題)。`;
-        if (stats.total > 3 && accuracy < 40) difficulty = "easy"; 
-        if (stats.total > 5 && accuracy > 80) difficulty = "hard"; 
+        // 低正確率代表需要更清楚的鷹架，不代表永遠只做 easy。
+        // hard 最多降一級到 medium；medium 保持兩步以上的理解／推理要求。
+        if (stats.total > 3 && Number(accuracy) < 40 && difficulty === "hard") difficulty = "medium";
+        if (stats.total > 5 && Number(accuracy) > 80) difficulty = "hard";
     }
 
     const randomSeed = Math.random().toString(36).substring(7);
