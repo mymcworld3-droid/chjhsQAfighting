@@ -24,7 +24,9 @@ function structuralDuplicate(a, b) {
   if (exactA && exactA === exactB) return true;
   const shapeA = normalizedFingerprint(a, true);
   const shapeB = normalizedFingerprint(b, true);
-  return !!shapeA && shapeA === shapeB;
+  // 很短的題目（例如測試名稱或單一字詞）只做精確去重，避免把不同短題誤判為同型。
+  if (shapeA.length < 12 || shapeB.length < 12) return false;
+  return shapeA === shapeB;
 }
 
 function compactMeta(item) {
