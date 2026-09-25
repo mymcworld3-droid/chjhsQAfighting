@@ -17,16 +17,31 @@ function normalizedFingerprint(value, ignoreNumbers = false) {
   return text;
 }
 
+function structuralSimilarity(a, b) {
+  const A = normalizedFingerprint(a, true);
+  const B = normalizedFingerprint(b, true);
+  if (A.length < 12 || B.length < 12) return 0;
+  if (A === B) return 1;
+
+  const grams = (text) => {
+    const set = new Set();
+    for (let i = 0; i <= text.length - 3; i++) set.add(text.slice(i, i + 3));
+    return set;
+  };
+  const left = grams(A);
+  const right = grams(B);
+  if (!left.size || !right.size) return 0;
+  let overlap = 0;
+  for (const gram of left) if (right.has(gram)) overlap++;
+  return (2 * overlap) / (left.size + right.size);
+}
+
 function structuralDuplicate(a, b) {
   if (!a || !b) return false;
   const exactA = normalizedFingerprint(a);
   const exactB = normalizedFingerprint(b);
   if (exactA && exactA === exactB) return true;
-  const shapeA = normalizedFingerprint(a, true);
-  const shapeB = normalizedFingerprint(b, true);
-  // 很短的題目（例如測試名稱或單一字詞）只做精確去重，避免把不同短題誤判為同型。
-  if (shapeA.length < 12 || shapeB.length < 12) return false;
-  return shapeA === shapeB;
+  return structuralSimilarity(a, b) >= 0.80;
 }
 
 function compactMeta(item) {
