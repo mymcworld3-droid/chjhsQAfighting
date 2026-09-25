@@ -146,6 +146,9 @@ test('solo quiz uses restored active question before hitting the API and saves e
 test('quiz exposes a responsive mouse and touch calculation whiteboard', () => {
   assert.match(index, /id="btn-quiz-whiteboard"/);
   assert.match(index, /id="quiz-whiteboard-panel"/);
+  assert.match(index, /role="dialog"/);
+  assert.match(index, /aria-modal="true"/);
+  assert.match(index, /class="quiz-whiteboard-backdrop"/);
   assert.match(index, /id="quiz-whiteboard-canvas"/);
   assert.match(index, /onclick="clearQuizWhiteboard\(\)"/);
   assert.match(legacy, /window\.toggleQuizWhiteboard =/);
@@ -157,7 +160,7 @@ test('quiz exposes a responsive mouse and touch calculation whiteboard', () => {
 });
 
 test('core import and page query change together to refresh browser cached code', () => {
-  assert.match(main, /main-legacy\.js\?v=20260925-quiz-whiteboard1/);
-  assert.match(index, /main\.js\?v=20260925-quiz-whiteboard1/);
-  assert.match(index, /xianxia\.css\?v=20260925-quiz-whiteboard1/);
+  assert.match(main, /main-legacy\.js\?v=20260925-quiz-whiteboard2/);
+  assert.match(index, /main\.js\?v=20260925-quiz-whiteboard2/);
+  assert.match(index, /xianxia\.css\?v=20260925-quiz-whiteboard2/);
 });
