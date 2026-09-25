@@ -36,6 +36,11 @@ import {
       .replaceAll('"', '&quot;').replaceAll("'", '&#039;');
   }
   function qty(value) { return Math.max(0, Math.floor(Number(value) || 0)); }
+  function imageMarkup(imageUrl, fallback, alt = '') {
+    const url = String(imageUrl || '').trim();
+    if (!url) return escapeHtml(fallback || '◆');
+    return `<img src="${escapeHtml(url)}" alt="${escapeHtml(alt)}" loading="lazy" decoding="async">`;
+  }
   function typeLabel(type) {
     if (type === 'artifact') return '法寶';
     if (type === 'material') return '材料';
@@ -74,7 +79,7 @@ import {
       <span class="uib-equip-slot-frame"><i class="fa-solid fa-plus"></i></span><b class="uib-equip-slot-name">空裝備欄</b><small class="uib-equip-slot-hint">點擊裝配</small></button>`;
     const color = qualityColor(item.realm);
     return `<button type="button" class="uib-equip-slot is-filled" data-uib-equipped-item="artifact:${escapeHtml(id)}" style="--uib-quality:${escapeHtml(color)}">${label}
-      <span class="uib-equip-slot-frame is-artifact">${escapeHtml(item.icon || '◆')}</span><b class="uib-equip-slot-name">${escapeHtml(item.name)}</b>
+      <span class="uib-equip-slot-frame is-artifact">${imageMarkup(item.imageUrl, item.icon || '◆', item.name)}</span><b class="uib-equip-slot-name">${escapeHtml(item.name)}</b>
       <small class="uib-equip-slot-hint">${escapeHtml(item.realm)} · 戰力 ${Math.max(0, Number(window.calculateArtifactPower?.(item)) || 0).toLocaleString("zh-TW")}</small></button>`;
   }
   function equipmentMarkup() {
@@ -110,6 +115,7 @@ import {
         type: 'artifact',
         name: item?.name || `未知法寶 ${id}`,
         icon: item?.icon || '◆',
+        imageUrl: item?.imageUrl || '',
         quantity,
         category: item?.category || '法寶',
         realm: item?.realm || '凡人',
@@ -132,6 +138,7 @@ import {
         type: 'material',
         name: item?.name || `未知材料 ${id}`,
         icon: item?.icon || '材',
+        imageUrl: item?.imageUrl || '',
         quantity,
         category: item?.category || '材料',
         realm: item?.realm || '凡人',
@@ -217,7 +224,7 @@ import {
     return `<button type="button" class="uib-item" data-uib-item="${escapeHtml(item.key)}" style="--uib-quality:${escapeHtml(color)}" aria-label="查看 ${escapeHtml(item.name)} 詳細資料">
       <span class="uib-qty">×${item.quantity}</span>
       ${item.equipped ? '<span class="uib-equipped"><i class="fa-solid fa-circle-check"></i></span>' : ''}
-      <span class="uib-icon" aria-hidden="true">${escapeHtml(item.icon || '◆')}</span>
+      <span class="uib-icon">${imageMarkup(item.imageUrl, item.icon || '◆', item.name)}</span>
       <span class="uib-name">${escapeHtml(item.name)}</span>
       <span class="uib-bottom"><small>${escapeHtml(typeLabel(item.type))}</small><em>${escapeHtml(item.realm || '凡人')}</em></span>
     </button>`;
@@ -485,7 +492,7 @@ import {
       .uib-summary{display:grid;gap:2px;margin-right:auto}.uib-summary b{color:#f0dfb6;font-size:11px}.uib-summary span{color:#847864;font-size:7px}.uib-toolbar label{display:grid;gap:3px;color:#8e816c;font-size:6px;font-weight:900}.uib-toolbar select{min-width:126px;height:32px;padding:0 28px 0 9px;border:1px solid rgba(216,177,93,.2);border-radius:9px;background:#090807;color:#e2d5ba;font-size:8px;outline:none}
       .uib-grid{flex:1;min-height:0;overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(108px,140px));grid-auto-rows:max-content;align-content:start;justify-content:start;gap:10px;padding:2px 4px 12px 2px;scrollbar-width:thin;scrollbar-color:rgba(216,177,93,.26) transparent}
       .uib-item{position:relative;aspect-ratio:1/1;min-width:0;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:12px 8px 9px;border:1px solid color-mix(in srgb,var(--uib-quality) 42%,rgba(255,255,255,.08));border-radius:16px;background:radial-gradient(circle at 50% 27%,color-mix(in srgb,var(--uib-quality) 15%,transparent),transparent 46%),linear-gradient(145deg,rgba(22,18,12,.96),rgba(7,7,7,.98));color:#eee2ca;text-align:center;box-shadow:inset 0 0 22px rgba(255,255,255,.015);transition:.15s ease;overflow:hidden}.uib-item:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--uib-quality) 72%,#fff 8%);box-shadow:0 10px 24px rgba(0,0,0,.25)}
-      .uib-icon{width:46px;height:46px;display:grid;place-items:center;border-radius:13px;border:1px solid color-mix(in srgb,var(--uib-quality) 58%,transparent);background:color-mix(in srgb,var(--uib-quality) 11%,#090807);color:var(--uib-quality);font-size:15px;font-weight:900;box-shadow:0 0 20px color-mix(in srgb,var(--uib-quality) 12%,transparent)}.uib-name{width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#eee2ca;font-size:8px;font-weight:900}.uib-bottom{width:100%;display:flex;justify-content:space-between;gap:5px;align-items:center}.uib-bottom small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#827661;font-size:6px}.uib-bottom em{color:var(--uib-quality);font-size:6px;font-style:normal;white-space:nowrap}.uib-qty{position:absolute;right:7px;top:7px;padding:2px 5px;border-radius:999px;background:rgba(0,0,0,.64);border:1px solid rgba(255,255,255,.08);color:#ead49a;font-size:7px;font-weight:900}.uib-equipped{position:absolute;left:7px;top:7px;color:#f6d77e;font-size:8px}
+      .uib-icon{width:46px;height:46px;display:grid;place-items:center;overflow:hidden;border-radius:13px;border:1px solid color-mix(in srgb,var(--uib-quality) 58%,transparent);background:color-mix(in srgb,var(--uib-quality) 11%,#090807);color:var(--uib-quality);font-size:15px;font-weight:900;box-shadow:0 0 20px color-mix(in srgb,var(--uib-quality) 12%,transparent)}.uib-icon img,.uib-equip-slot-frame img{width:100%;height:100%;display:block;object-fit:cover}.uib-equip-slot-frame{overflow:hidden}.uib-name{width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#eee2ca;font-size:8px;font-weight:900}.uib-bottom{width:100%;display:flex;justify-content:space-between;gap:5px;align-items:center}.uib-bottom small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#827661;font-size:6px}.uib-bottom em{color:var(--uib-quality);font-size:6px;font-style:normal;white-space:nowrap}.uib-qty{position:absolute;right:7px;top:7px;padding:2px 5px;border-radius:999px;background:rgba(0,0,0,.64);border:1px solid rgba(255,255,255,.08);color:#ead49a;font-size:7px;font-weight:900}.uib-equipped{position:absolute;left:7px;top:7px;color:#f6d77e;font-size:8px}
       /* Materials are round mineral tokens; forged artifacts retain angular framed emblems. */
       .uib-item[data-uib-item^="material:"] .uib-icon,.uib-modal-material .uib-modal-icon{border-radius:50%!important;background:radial-gradient(circle at 31% 25%,color-mix(in srgb,var(--uib-quality) 36%,#fff),color-mix(in srgb,var(--uib-quality) 14%,#16110a) 43%,#0b0b09 100%);box-shadow:inset 0 0 0 2px rgba(255,255,255,.07),0 0 12px color-mix(in srgb,var(--uib-quality) 12%,transparent)}
       .uib-item[data-uib-item^="artifact:"] .uib-icon,.uib-modal-artifact .uib-modal-icon{border-radius:12px;box-shadow:inset 0 0 0 2px rgba(255,235,169,.1),0 0 17px color-mix(in srgb,var(--uib-quality) 16%,transparent)}
