@@ -14,7 +14,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="xianxia.css?v=20260925-quiz-whiteboard1">
+    <link rel="stylesheet" href="xianxia.css?v=20260925-quiz-whiteboard2">
     <link rel="stylesheet" href="xianxia-gold.css">
     <link rel="stylesheet" href="xianxia-blackgold-harmony.css">
     <link rel="stylesheet" href="styles/admin-product-editor.css?v=20260922-fullscreen1">
@@ -894,25 +894,28 @@ body.xianxia-theme main:has(#page-training.active-page),
                     <h3 class="text-lg font-bold leading-relaxed relative z-10 text-white" id="question-text">...</h3>
                 </div>
 
-                <section id="quiz-whiteboard-panel" class="quiz-whiteboard-panel hidden mb-5" aria-label="計算白板">
-                    <div class="quiz-whiteboard-toolbar">
-                        <div class="quiz-whiteboard-title">
-                            <i class="fa-solid fa-chalkboard"></i>
-                            <span>計算白板</span>
+                <section id="quiz-whiteboard-panel" class="quiz-whiteboard-panel hidden" role="dialog" aria-modal="true" aria-label="計算白板">
+                    <button type="button" class="quiz-whiteboard-backdrop" onclick="toggleQuizWhiteboard(false)" aria-label="關閉計算白板"></button>
+                    <div class="quiz-whiteboard-dialog">
+                        <div class="quiz-whiteboard-toolbar">
+                            <div class="quiz-whiteboard-title">
+                                <i class="fa-solid fa-chalkboard"></i>
+                                <span>計算白板</span>
+                            </div>
+                            <div class="quiz-whiteboard-actions">
+                                <button type="button" onclick="clearQuizWhiteboard()" class="quiz-whiteboard-action" title="清空白板">
+                                    <i class="fa-solid fa-eraser"></i>
+                                    <span>清空</span>
+                                </button>
+                                <button type="button" onclick="toggleQuizWhiteboard(false)" class="quiz-whiteboard-action" title="關閉白板">
+                                    <i class="fa-solid fa-xmark"></i>
+                                    <span>關閉</span>
+                                </button>
+                            </div>
                         </div>
-                        <div class="quiz-whiteboard-actions">
-                            <button type="button" onclick="clearQuizWhiteboard()" class="quiz-whiteboard-action" title="清空白板">
-                                <i class="fa-solid fa-eraser"></i>
-                                <span>清空</span>
-                            </button>
-                            <button type="button" onclick="toggleQuizWhiteboard(false)" class="quiz-whiteboard-action" title="關閉白板">
-                                <i class="fa-solid fa-xmark"></i>
-                                <span>關閉</span>
-                            </button>
+                        <div id="quiz-whiteboard-stage" class="quiz-whiteboard-stage">
+                            <canvas id="quiz-whiteboard-canvas" aria-label="可手寫計算的白板"></canvas>
                         </div>
-                    </div>
-                    <div id="quiz-whiteboard-stage" class="quiz-whiteboard-stage">
-                        <canvas id="quiz-whiteboard-canvas" aria-label="可手寫計算的白板"></canvas>
                     </div>
                 </section>
 
@@ -1511,6 +1514,6 @@ body.xianxia-theme main:has(#page-training.active-page),
         }).catch(error => console.warn('[Local modules] cache unavailable:', error));
       }
     </script>
-    <script type="module" src="main.js?v=20260925-quiz-whiteboard1"></script>
+    <script type="module" src="main.js?v=20260925-quiz-whiteboard2"></script>
 </body>
 </html>
