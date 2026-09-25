@@ -409,16 +409,29 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
       if (ans === i) ans = j; else if (ans === j) ans = i;
     }
     return { id: randomId('bv2q'), q, opts: choices, ans, exp, subject: request.subject,
-      topic: request.specificTopic || String(source.sub_topic || ''), level: request.level };
+      topic: request.specificTopic || String(source.sub_topic || ''), level: request.level,
+      concept_id: String(source.concept_id || '').slice(0, 100),
+      template_id: String(source.template_id || '').slice(0, 120),
+      question_form: String(source.question_form || '').slice(0, 60),
+      cognitive_level: Math.max(1, Math.min(5, Number(source.cognitive_level) || 1)),
+      reasoning_steps: Math.max(1, Math.min(6, Number(source.reasoning_steps) || 1)) };
   }
 
   async function generateQuestion(room, round) {
     const scope = room.knowledgeScope || resolveBattleKnowledge(room.host?.knowledge, room.guest?.knowledge);
     const selected = pickBattleKnowledge(scope, round);
-    const avoidQuestions = (Array.isArray(room.questionHistory) ? room.questionHistory : [])
-      .slice(-10).map(entry => String(entry?.q || '')).filter(Boolean);
+    const recentHistory = (Array.isArray(room.questionHistory) ? room.questionHistory : []).slice(-30);
+    const avoidQuestions = recentHistory.map(entry => String(entry?.q || '')).filter(Boolean);
+    const avoidQuestionMeta = recentHistory.map(entry => ({
+      q: String(entry?.q || ''),
+      concept_id: String(entry?.concept_id || ''),
+      template_id: String(entry?.template_id || ''),
+      question_form: String(entry?.question_form || ''),
+      cognitive_level: Number(entry?.cognitive_level) || 1,
+      reasoning_steps: Number(entry?.reasoning_steps) || 1
+    }));
     const request = { ...selected, rank: Math.min(Number(room.host?.rankLevel) || 0, Number(room.guest?.rankLevel) || 0),
-      avoidQuestions };
+      avoidQuestions, avoidQuestionMeta };
     try {
       const response = await fetch('/api/generate-quiz', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -1098,7 +1111,15 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
         tx.update(ref, {
           status: 'preparing', round: round + 1,
           questionHistory: [...(Array.isArray(fresh.questionHistory) ? fresh.questionHistory : []),
-            { q: fresh.currentQuestion?.q || '', subject: fresh.currentQuestion?.subject || '' }].filter(entry => entry.q).slice(-10),
+            {
+              q: fresh.currentQuestion?.q || '',
+              subject: fresh.currentQuestion?.subject || '',
+              concept_id: fresh.currentQuestion?.concept_id || '',
+              template_id: fresh.currentQuestion?.template_id || '',
+              question_form: fresh.currentQuestion?.question_form || '',
+              cognitive_level: Number(fresh.currentQuestion?.cognitive_level) || 1,
+              reasoning_steps: Number(fresh.currentQuestion?.reasoning_steps) || 1
+            }].filter(entry => entry.q).slice(-30),
           currentQuestion: null, questionReadyAtMs: null, nextRoundAtMs: null, questionOwnerUid: me().uid, questionClaimedAtMs: nowMs(),
           answerWindowStartedAt: null, answerWindowStartedAtMs: null, firstAnswerUid: null,
           'host.answerChoice': null, 'host.answerCorrect': null, 'host.answerAt': null, 'host.answerClientAt': null, 'host.answerRound': null, 'host.timedOut': false,
