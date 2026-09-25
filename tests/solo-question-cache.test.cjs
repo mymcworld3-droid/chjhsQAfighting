@@ -184,7 +184,7 @@ test('quiz question includes contextual helper chat with responsive collapse', (
 
 
 test('core import and page query change together to refresh browser cached code', () => {
-  assert.match(main, /main-legacy\.js\?v=20260925-question-helper1/);
-  assert.match(index, /main\.js\?v=20260925-question-helper1/);
-  assert.match(index, /xianxia\.css\?v=20260925-question-helper1/);
+  assert.match(main, /main-legacy\.js\?v=20260925-question-helper2/);
+  assert.match(index, /main\.js\?v=20260925-question-helper2/);
+  assert.match(index, /xianxia\.css\?v=20260925-question-helper2/);
 });
