@@ -12,8 +12,9 @@ const main = readFileSync(join(root, 'public/main.js'), 'utf8');
 const index = readFileSync(join(root, 'public/index.html'), 'utf8');
 const scope = (path = '數學/代數', level = '國中一年級') =>
   JSON.stringify({ mode: 'focused', path, level });
-const makeQuiz = (q) => ({
+const makeQuiz = (q, templateId = '') => ({
   data: { q, opts: ['正解', '錯誤'], ans: 0, exp: '解析' },
+  meta: { subject: '數學', conceptId: '代數', templateId, questionForm: 'application_modeling', cognitiveLevel: 2 },
   rank: '練氣', badge: '🎯 數學 | 代數'
 });
 
@@ -49,21 +50,40 @@ test('active and all unanswered prefetched questions survive reload in the same 
   const localStorage = createMemoryStorage();
   const first = createSoloQuestionCache(localStorage);
   assert.equal(first.activate('uid-1', scope()), true);
-  first.append(makeQuiz('第 1 題'));
-  first.append(makeQuiz('第 2 題'));
-  first.append(makeQuiz('第 3 題'));
-  assert.equal(first.takeNext().data.q, '第 1 題');
+  first.append(makeQuiz('甲觀念練習'));
+  first.append(makeQuiz('乙觀念練習'));
+  first.append(makeQuiz('丙觀念練習'));
+  assert.equal(first.takeNext().data.q, '甲觀念練習');
   assert.equal(first.pendingCount(), 3);
   const refreshed = createSoloQuestionCache(localStorage);
   refreshed.activate('uid-1', scope());
-  assert.equal(refreshed.getActive().data.q, '第 1 題');
-  assert.deepEqual(Array.from(refreshed.getQueue(), q => q.data.q), ['第 2 題', '第 3 題']);
+  assert.equal(refreshed.getActive().data.q, '甲觀念練習');
+  assert.deepEqual(Array.from(refreshed.getQueue(), q => q.data.q), ['乙觀念練習', '丙觀念練習']);
   refreshed.consumeActive();
-  assert.equal(refreshed.takeNext().data.q, '第 2 題');
+  assert.equal(refreshed.takeNext().data.q, '乙觀念練習');
   const refreshedAgain = createSoloQuestionCache(localStorage);
   refreshedAgain.activate('uid-1', scope());
-  assert.equal(refreshedAgain.getActive().data.q, '第 2 題');
+  assert.equal(refreshedAgain.getActive().data.q, '乙觀念練習');
   assert.equal(refreshedAgain.getQueue().length, 1);
+});
+
+test('answered questions become avoidance history and similar templates are rejected', () => {
+  const { createSoloQuestionCache } = cacheAPI();
+  const storage = createMemoryStorage();
+  const cache = createSoloQuestionCache(storage);
+  cache.activate('uid-history', scope());
+  assert.equal(cache.append(makeQuiz('長方形長 8 寬 6，求對角線', 'rect-diagonal')), true);
+  assert.equal(cache.takeNext().data.q.includes('長方形'), true);
+  assert.equal(cache.consumeActive(), true);
+  assert.equal(cache.getHistory().length, 1);
+  assert.equal(cache.getAvoidance()[0].template_id, 'rect-diagonal');
+  assert.equal(cache.append(makeQuiz('長方形長 12 寬 5，求對角線', 'rect-diagonal')), false);
+  assert.equal(cache.append(makeQuiz('比較兩個根式大小並說明理由', 'compare-radicals')), true);
+
+  const refreshed = createSoloQuestionCache(storage);
+  refreshed.activate('uid-history', scope());
+  assert.equal(refreshed.getHistory().length, 1);
+  assert.equal(refreshed.getAvoidance().some(item => item.template_id === 'rect-diagonal'), true);
 });
 
 test('changing account or learning range discards prior local questions even after switching back', () => {
@@ -109,6 +129,10 @@ test('solo quiz uses restored active question before hitting the API and saves e
   assert.match(legacy, /soloQuestionCache.append\(question\)/);
   assert.match(legacy, /soloQuestionCache.setActive\(q\)/);
   assert.match(legacy, /soloQuestionCache.consumeActive\(\)/);
+  assert.match(legacy, /avoidQuestions: recentQuestionAvoidance\(\)/);
+  assert.match(legacy, /takeBankQuestion\(pool, deckKey\)/);
+  assert.match(cacheSource, /function getAvoidance\(limit = 60\)/);
+  assert.match(cacheSource, /questionSkeleton/);
   assert.match(legacy, /soloQuestionScope\(\) !== scope/);
   assert.match(legacy, /auth.currentUser\?\.uid !== uid/);
   assert.match(legacy, /const identity = JSON.stringify\(\[uid, scope\]\)/);

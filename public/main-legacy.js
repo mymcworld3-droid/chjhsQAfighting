@@ -75,7 +75,8 @@ let quizBuffer = [];                 // 題目緩衝
 const BUFFER_SIZE = 1;               // 只預取一題，減少切換範圍時浪費的 API 呼叫
 let isFetchingBuffer = false;
 let bufferFillPromise = null; 
-let currentBankData = null; 
+let currentBankData = null;
+let bankDrawState = { key: '', deck: [], lastSkeleton: '' }; 
 let presenceInterval = null; 
 let allBankFiles = [];
 let currentSelectSlot = null;
@@ -2255,6 +2256,65 @@ window.renderSelectedUnitsList = () => {
     });
 };
 
+function makeQuizMeta(rawData, subject, topic = '') {
+    return {
+        subject: String(rawData?.subject || subject || '').trim(),
+        topic: String(rawData?.sub_topic || topic || '').trim(),
+        conceptId: String(rawData?.concept_id || '').trim(),
+        skillId: String(rawData?.skill_id || '').trim(),
+        templateId: String(rawData?.template_id || '').trim(),
+        questionForm: String(rawData?.question_form || '').trim(),
+        cognitiveLevel: Number(rawData?.cognitive_level) || 0,
+        reasoningSteps: Number(rawData?.reasoning_steps) || 0,
+        targetMisconception: String(rawData?.target_misconception || '').trim()
+    };
+}
+
+function recentQuestionAvoidance() {
+    return typeof soloQuestionCache.getAvoidance === 'function'
+        ? soloQuestionCache.getAvoidance(60)
+        : [];
+}
+
+function localQuestionSkeleton(value) {
+    return String(value ?? '').normalize('NFKC').toLowerCase()
+        .replace(/\s+/g, '')
+        .replace(/[，。！？；：、,.!?;:'"「」『』（）()【】\[\]{}<>]/g, '')
+        .replace(/[-+]?\d+(?:\.\d+)?(?:\/\d+(?:\.\d+)?)?/g, '#')
+        .replace(/[a-z][a-z0-9_]*/g, 'v');
+}
+
+function shuffleIndexes(values) {
+    const copy = values.slice();
+    for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+}
+
+function takeBankQuestion(pool, deckKey) {
+    if (!Array.isArray(pool) || pool.length === 0) return null;
+    if (bankDrawState.key !== deckKey || bankDrawState.deck.length === 0) {
+        const recentSkeletons = new Set(
+            (typeof soloQuestionCache.getHistory === 'function' ? soloQuestionCache.getHistory(60) : [])
+                .map(item => localQuestionSkeleton(item?.q)).filter(Boolean)
+        );
+        const allIndexes = pool.map((_, index) => index);
+        const freshIndexes = allIndexes.filter(index => !recentSkeletons.has(localQuestionSkeleton(pool[index]?.q)));
+        const sourceIndexes = freshIndexes.length ? freshIndexes : allIndexes;
+        let deck = shuffleIndexes(sourceIndexes);
+        if (deck.length > 1 && localQuestionSkeleton(pool[deck[0]]?.q) === bankDrawState.lastSkeleton) {
+            deck.push(deck.shift());
+        }
+        bankDrawState = { key: deckKey, deck, lastSkeleton: bankDrawState.lastSkeleton };
+    }
+    const index = bankDrawState.deck.shift();
+    const selected = pool[index];
+    bankDrawState.lastSkeleton = localQuestionSkeleton(selected?.q);
+    return selected;
+}
+
 async function fetchOneQuestion() {
     const settings = currentUserData.gameSettings || { sourceMode: 'random', source: 'ai', difficulty: 'auto', focusedUnits: [] };
     const rankName = getRankName(currentUserData.stats.rankLevel || 0);
@@ -2291,9 +2351,6 @@ async function fetchOneQuestion() {
         }
         targetTopic = targetTopic.slice(0, 240);
 
-        const weakSubjects = (currentUserData.profile.weakSubjects || "").split(',').map(s => s.trim());
-        if (weakSubjects.includes(subject)) finalDifficulty = "easy";
-
         console.log(`[AI-專注出題] 學科: ${subject} | 範圍: ${targetTopic} | 難度: ${finalDifficulty}`);
 
         try {
@@ -2307,7 +2364,8 @@ async function fetchOneQuestion() {
                     rank: rankName, 
                     difficulty: finalDifficulty,
                     language: currentLang,
-                    knowledgeMap: currentUserData.stats.knowledgeMap || {} 
+                    knowledgeMap: currentUserData.stats.knowledgeMap || {},
+                    avoidQuestions: recentQuestionAvoidance()
                 })
             });
             if (!response.ok) throw new Error(`Server Error: ${response.status}`);
@@ -2320,6 +2378,7 @@ async function fetchOneQuestion() {
             let allOptions = shuffleArray([rawData.correct, ...rawData.wrong]);
             return {
                 data: { q: rawData.q, opts: allOptions, ans: allOptions.indexOf(rawData.correct), exp: rawData.exp },
+                meta: makeQuizMeta(rawData, subject, targetTopic),
                 rank: rankName,
                 badge: `🎯 ${subject} | ${rawData.sub_topic || '精選'}`
             };
@@ -2367,12 +2426,19 @@ async function fetchOneQuestion() {
 
         const filteredQuestions = currentBankData.questions.filter(q => q.difficulty === finalDifficulty);
         const pool = filteredQuestions.length > 0 ? filteredQuestions : currentBankData.questions;
-        const rawData = pool[Math.floor(Math.random() * pool.length)];
+        const deckKey = [targetSource, finalDifficulty, pool.length].join('|');
+        const rawData = takeBankQuestion(pool, deckKey);
+        if (!rawData) throw new Error("No bank question available");
         let allOptions = shuffleArray([rawData.correct, ...rawData.wrong]);
         let displaySubject = rawData.subject || settings.source.split('/').pop().replace('.json', '');
         
+        const bankMeta = makeQuizMeta(rawData, displaySubject, rawData.sub_topic || targetSource);
+        if (!bankMeta.templateId) bankMeta.templateId = 'bank-' + localQuestionSkeleton(rawData.q).slice(0, 100);
+        if (!bankMeta.conceptId) bankMeta.conceptId = String(rawData.sub_topic || displaySubject || 'bank-item');
+        if (!bankMeta.questionForm) bankMeta.questionForm = 'bank-item';
         return { 
             data: { q: rawData.q, opts: allOptions, ans: allOptions.indexOf(rawData.correct), exp: rawData.exp }, 
+            meta: bankMeta,
             rank: rankName, 
             badge: `🎯 ${displaySubject} | ${finalDifficulty.toUpperCase()}` 
         };
@@ -2392,7 +2458,8 @@ async function fetchOneQuestion() {
                     rank: rankName, 
                     difficulty: finalDifficulty,
                     language: currentLang,
-                    knowledgeMap: currentUserData.stats.knowledgeMap || {} 
+                    knowledgeMap: currentUserData.stats.knowledgeMap || {},
+                    avoidQuestions: recentQuestionAvoidance()
                 })
             });
 
@@ -2406,6 +2473,7 @@ async function fetchOneQuestion() {
             let allOptions = shuffleArray([rawData.correct, ...rawData.wrong]);
             return {
                 data: { q: rawData.q, opts: allOptions, ans: allOptions.indexOf(rawData.correct), exp: rawData.exp },
+                meta: makeQuizMeta(rawData, rawData.subject || targetSubject, rawData.sub_topic || ''),
                 rank: rankName,
                 badge: `🎯 ${rawData.subject} | ${rawData.sub_topic || '綜合'}`
             };

@@ -85,8 +85,11 @@ test('battle rotates one shared question range per round and stores recent quest
   const choice = s.pickBattleKnowledge({ subjects: ['數學', '國文'], level: '國中一年級' }, 2);
   assert.equal(choice.subject, '國文');
   assert.match(battleSource, /questionHistory: \[\.\.\.\(Array\.isArray\(fresh\.questionHistory\)/);
+  assert.match(battleSource, /\.slice\(-40\)/);
+  assert.match(battleSource, /templateId: fresh\.currentQuestion\?\.templateId/);
   assert.match(battleSource, /avoidQuestions/);
-  assert.match(serverSource, /previousQuestions\.some/);
+  assert.match(serverSource, /duplicateReason/);
+  assert.match(serverSource, /planQuestionBlueprint/);
   assert.match(serverSource, /不得跨科、超綱/);
 });
 
