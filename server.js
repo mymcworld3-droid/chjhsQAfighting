@@ -249,7 +249,7 @@ app.post('/api/generate-quiz', async (req, res) => {
     }
 
     const randomSeed = Math.random().toString(36).substring(2, 12);
-    const blueprint = planQuestionBlueprint(subject, difficulty, previousQuestions, randomSeed);
+    const blueprint = planQuestionBlueprint(subject, difficulty, previousQuestions, randomSeed, targetTopic);
     const avoidanceHistory = historyForPrompt(previousQuestions, 30);
 
     const generationPrompt = `
@@ -266,11 +266,13 @@ app.post('/api/generate-quiz', async (req, res) => {
         6. 嚴格範圍：只能考查「${level}」程度內的「${subject}／${targetTopic}」，不得跨科、超綱或擅自替換單元。
 
         [本題藍圖－必須遵守]
+        - 本題指定細部考點：${blueprint.targetConceptLabel}
+        - concept_id 必須精確為：${blueprint.targetConceptId}
         - question_form 必須為：${blueprint.questionForm}
         - cognitive_level 必須介於 ${blueprint.cognitiveMin} 到 ${blueprint.cognitiveMax}
         - reasoning_steps 至少 ${blueprint.minReasoningSteps} 步
         - 深度要求：${blueprint.guidance}
-        - 請從指定範圍中的「細部觀念」選一個真正可練習的 concept_id；不要把整個章名直接當成唯一考點。
+        - 若指定範圍同時列出多個「核心考點細項」，本題只能以指定細部考點為核心，再搭配必要的先備知識；不要自行改考最容易出的那一項。
         - template_id 必須描述「抽象解題骨架」，不得包含人名、具體數字或隨機情境名。例如同樣是「已知矩形對角線與邊差求面積」，即使換數字仍應使用同一 template_id。
         - 錯誤選項應對應合理迷思／計算錯誤，避免一眼可排除的荒謬選項。
         - 若為 medium/hard，不得只把 easy 題換更大的數字；要增加推理、條件整合、判讀或建模深度。
@@ -299,7 +301,7 @@ app.post('/api/generate-quiz', async (req, res) => {
             "exp": "完整解析",
             "subject": "${subject}",
             "sub_topic": "${targetTopic}",
-            "concept_id": "穩定的細部觀念代碼或短名稱",
+            "concept_id": "${blueprint.targetConceptId}",
             "skill_id": "主要能力代碼或短名稱",
             "template_id": "不含具體數字／人名的抽象解題骨架",
             "question_form": "${blueprint.questionForm}",
