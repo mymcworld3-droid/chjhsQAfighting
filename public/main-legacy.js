@@ -2764,7 +2764,7 @@ function initQuizHelper() {
         event.preventDefault();
         void sendQuizHelperMessage(input.value);
     });
-    const media = window.matchMedia?.('(max-width: 1200px)');
+    const media = window.matchMedia?.('(max-width: 1279px)');
     media?.addEventListener?.('change', (event) => {
         if (event.matches) setQuizHelperOpen(false, { remember: false });
         else if (quizHelperState.manualOpen == null) setQuizHelperOpen(true, { remember: false });
@@ -2787,7 +2787,7 @@ function resetQuizHelper(data = {}) {
     if (status) status.textContent = '';
     renderQuizHelperConversation();
 
-    const desktopOpen = window.matchMedia?.('(min-width: 1201px)')?.matches ?? true;
+    const desktopOpen = window.matchMedia?.('(min-width: 1280px)')?.matches ?? true;
     setQuizHelperOpen(desktopOpen, { remember: false });
 }
 
