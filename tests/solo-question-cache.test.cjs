@@ -183,8 +183,23 @@ test('quiz question includes contextual helper chat with responsive collapse', (
 });
 
 
+test('helper replies expose knowledge-point extended practice', () => {
+  assert.match(index, /id="btn-extended-practice-stop"/);
+  assert.match(legacy, /quiz-helper-practice-btn/);
+  assert.match(legacy, /window\.startQuizExtendedPractice = async/);
+  assert.match(legacy, /async function fetchExtendedPracticeQuestion\(\)/);
+  assert.match(legacy, /specificTopic: knowledgePoint/);
+  assert.match(legacy, /extendedPracticeState\.active/);
+  assert.match(legacy, /window\.endQuizExtendedPractice =/);
+  assert.match(xianxia, /\.quiz-helper-practice-btn/);
+  assert.match(xianxia, /\.quiz-extended-practice-stop/);
+  assert.match(server, /knowledgePoint/);
+  assert.match(server, /最適合延伸練習的核心知識點/);
+});
+
+
 test('core import and page query change together to refresh browser cached code', () => {
-  assert.match(main, /main-legacy\.js\?v=20260925-question-helper2/);
-  assert.match(index, /main\.js\?v=20260925-question-helper2/);
-  assert.match(index, /xianxia\.css\?v=20260925-question-helper2/);
+  assert.match(main, /main-legacy\.js\?v=20260925-extended-practice1/);
+  assert.match(index, /main\.js\?v=20260925-extended-practice1/);
+  assert.match(index, /xianxia\.css\?v=20260925-extended-practice1/);
 });
