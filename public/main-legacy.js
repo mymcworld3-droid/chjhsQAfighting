@@ -2517,6 +2517,9 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
 
     const timeTaken = (Date.now() - (window.quizStartTime || Date.now())) / 1000;
     const isCorrect = userIdx === correctIdx;
+    quizHelperState.answered = true;
+    quizHelperState.explanation = String(explanation || '');
+    renderQuizHelperConversation();
     
     const opts = document.querySelectorAll('[id^="option-btn-"]');
     opts.forEach((btn, idx) => {
@@ -2677,6 +2680,171 @@ async function generateVisualAid(imagePrompt) {
 }
 
 // 2. [修改] renderQuiz 函式 (移除圖片載入邏輯)
+const quizHelperState = {
+    messages: [],
+    question: '',
+    options: [],
+    explanation: '',
+    answered: false,
+    busy: false,
+    initialized: false,
+    manualOpen: null
+};
+
+function quizHelperElements() {
+    return {
+        shell: document.getElementById('quiz-helper-shell'),
+        panel: document.getElementById('quiz-helper-panel'),
+        launcher: document.getElementById('quiz-helper-launcher'),
+        messages: document.getElementById('quiz-helper-messages'),
+        input: document.getElementById('quiz-helper-input'),
+        send: document.getElementById('quiz-helper-send'),
+        status: document.getElementById('quiz-helper-status')
+    };
+}
+
+function setQuizHelperOpen(open, { remember = true } = {}) {
+    const { shell, input } = quizHelperElements();
+    if (!shell) return;
+    shell.classList.toggle('collapsed', !open);
+    shell.classList.toggle('open', open);
+    if (remember) quizHelperState.manualOpen = !!open;
+    if (open) requestAnimationFrame(() => input?.focus({ preventScroll: true }));
+}
+
+window.toggleQuizHelper = (forceOpen) => {
+    const { shell } = quizHelperElements();
+    if (!shell) return;
+    const open = typeof forceOpen === 'boolean' ? forceOpen : shell.classList.contains('collapsed');
+    setQuizHelperOpen(open);
+};
+
+function quizHelperAppendMessage(role, text) {
+    const { messages } = quizHelperElements();
+    if (!messages) return;
+    const row = document.createElement('div');
+    row.className = 'quiz-helper-message ' + (role === 'assistant' ? 'assistant' : 'user');
+    const body = document.createElement('div');
+    body.className = 'quiz-helper-message-body';
+    row.appendChild(body);
+    messages.appendChild(row);
+
+    if (role === 'assistant' && window.quizMathSet) void window.quizMathSet(body, text);
+    else body.textContent = text;
+
+    requestAnimationFrame(() => {
+        messages.scrollTop = messages.scrollHeight;
+    });
+}
+
+function renderQuizHelperConversation() {
+    const { messages } = quizHelperElements();
+    if (!messages) return;
+    messages.replaceChildren();
+
+    const intro = document.createElement('div');
+    intro.className = 'quiz-helper-message assistant intro';
+    const introBody = document.createElement('div');
+    introBody.className = 'quiz-helper-message-body';
+    introBody.textContent = quizHelperState.answered
+        ? '你已經作答，可以問我完整解法、錯因或相關觀念。'
+        : '卡住了嗎？可以直接問這題。我會先給提示，不會在作答前直接揭曉答案。';
+    intro.appendChild(introBody);
+    messages.appendChild(intro);
+
+    for (const item of quizHelperState.messages) quizHelperAppendMessage(item.role, item.text);
+}
+
+function initQuizHelper() {
+    if (quizHelperState.initialized) return;
+    quizHelperState.initialized = true;
+    const { input } = quizHelperElements();
+    input?.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter' || event.shiftKey || event.isComposing) return;
+        event.preventDefault();
+        void sendQuizHelperMessage(input.value);
+    });
+    const media = window.matchMedia?.('(max-width: 1200px)');
+    media?.addEventListener?.('change', (event) => {
+        if (event.matches) setQuizHelperOpen(false, { remember: false });
+        else if (quizHelperState.manualOpen == null) setQuizHelperOpen(true, { remember: false });
+    });
+}
+
+function resetQuizHelper(data = {}) {
+    initQuizHelper();
+    quizHelperState.messages = [];
+    quizHelperState.question = String(data.q || '');
+    quizHelperState.options = Array.isArray(data.opts) ? data.opts.map(String) : [];
+    quizHelperState.explanation = String(data.exp || '');
+    quizHelperState.answered = false;
+    quizHelperState.busy = false;
+    quizHelperState.manualOpen = null;
+
+    const { input, send, status } = quizHelperElements();
+    if (input) input.value = '';
+    if (send) send.disabled = false;
+    if (status) status.textContent = '';
+    renderQuizHelperConversation();
+
+    const desktopOpen = window.matchMedia?.('(min-width: 1201px)')?.matches ?? true;
+    setQuizHelperOpen(desktopOpen, { remember: false });
+}
+
+async function sendQuizHelperMessage(rawMessage) {
+    const message = String(rawMessage || '').trim().slice(0, 600);
+    const { input, send, status } = quizHelperElements();
+    if (!message || quizHelperState.busy || !quizHelperState.question) return;
+
+    const history = quizHelperState.messages.slice(-6).map(item => ({ role: item.role, text: item.text }));
+    quizHelperState.messages.push({ role: 'user', text: message });
+    quizHelperAppendMessage('user', message);
+    if (input) input.value = '';
+
+    quizHelperState.busy = true;
+    if (send) send.disabled = true;
+    if (status) status.textContent = '問道助手思索中…';
+
+    try {
+        const response = await fetch('/api/question-helper', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                question: quizHelperState.question,
+                options: quizHelperState.options,
+                message,
+                history,
+                answered: quizHelperState.answered
+            })
+        });
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(payload.error || `HTTP ${response.status}`);
+        const answer = String(payload.answer || '').trim();
+        if (!answer) throw new Error('問道助手沒有回傳內容');
+        quizHelperState.messages.push({ role: 'assistant', text: answer });
+        quizHelperAppendMessage('assistant', answer);
+        if (status) status.textContent = '';
+    } catch (error) {
+        console.warn('[Quiz helper]', error);
+        if (status) status.textContent = error?.message || '問道助手暫時無法回應。';
+    } finally {
+        quizHelperState.busy = false;
+        if (send) send.disabled = false;
+        input?.focus({ preventScroll: true });
+    }
+}
+
+window.submitQuizHelper = (event) => {
+    event?.preventDefault?.();
+    const { input } = quizHelperElements();
+    void sendQuizHelperMessage(input?.value || '');
+};
+
+window.askQuizHelperPreset = (message) => {
+    setQuizHelperOpen(true);
+    void sendQuizHelperMessage(message);
+};
+
 const quizWhiteboardState = {
     strokes: [],
     currentStroke: null,
@@ -2867,8 +3035,9 @@ window.toggleQuizWhiteboard = (forceOpen) => {
 };
 
 function renderQuiz(data, rank, topic) {
-    // 每一道新題使用全新的計算空間，避免上一題草稿誤導下一題。
+    // 每一道新題使用全新的計算空間與問答脈絡，避免上一題殘留。
     resetQuizWhiteboard({ close: true });
+    resetQuizHelper(data);
     document.getElementById('quiz-loading').classList.add('hidden');
     document.getElementById('quiz-container').classList.remove('hidden');
     document.getElementById('quiz-badge').innerText = `${topic} | ${rank}`;
