@@ -2689,6 +2689,7 @@ function quizWhiteboardElements() {
         panel: document.getElementById('quiz-whiteboard-panel'),
         stage: document.getElementById('quiz-whiteboard-stage'),
         canvas: document.getElementById('quiz-whiteboard-canvas'),
+        question: document.getElementById('quiz-whiteboard-question'),
         toggle: document.getElementById('btn-quiz-whiteboard')
     };
 }
@@ -2697,7 +2698,7 @@ function quizWhiteboardCssSize() {
     const { stage } = quizWhiteboardElements();
     if (!stage) return { width: 0, height: 0 };
     const width = Math.max(240, Math.floor(stage.clientWidth || 0));
-    const height = Math.max(300, Math.min(580, Math.floor(window.innerHeight * 0.56)));
+    const height = Math.max(220, Math.floor(stage.clientHeight || 0));
     return { width, height };
 }
 
@@ -2855,6 +2856,9 @@ window.toggleQuizWhiteboard = (forceOpen) => {
     toggle?.classList.toggle('active', shouldOpen);
 
     if (shouldOpen) {
+        const sourceQuestion = document.getElementById('question-text');
+        const whiteboardQuestion = document.getElementById('quiz-whiteboard-question');
+        if (sourceQuestion && whiteboardQuestion) whiteboardQuestion.innerHTML = sourceQuestion.innerHTML;
         requestAnimationFrame(() => {
             redrawQuizWhiteboard();
             panel.querySelector('.quiz-whiteboard-action:last-child')?.focus({ preventScroll: true });
@@ -2873,7 +2877,10 @@ function renderQuiz(data, rank, topic) {
     // 更換題目時先清理舊公式，避免 MathJax 快取殘留。
     const container = document.getElementById('options-container');
     window.quizMathClear?.([questionTextEl, container]);
-    questionTextEl.innerHTML = (window.quizMathRichText || formatQuizRichText)(data.q);
+    const renderedQuestion = (window.quizMathRichText || formatQuizRichText)(data.q);
+    questionTextEl.innerHTML = renderedQuestion;
+    const whiteboardQuestionEl = document.getElementById('quiz-whiteboard-question');
+    if (whiteboardQuestionEl) whiteboardQuestionEl.innerHTML = renderedQuestion;
 
     // 所有選項均採與題幹／解析完全相同的安全 LaTeX 格式化器。
     container.replaceChildren(); 
@@ -2888,8 +2895,10 @@ function renderQuiz(data, rank, topic) {
     });
 
     // 等 MathJax 初始化後依序排版，避免快速換題時併發渲染。
-    if (window.quizMathTypeset) void window.quizMathTypeset([questionTextEl, container]);
-    else void window.MathJax?.typesetPromise?.([questionTextEl, container]).catch(err => console.warn('[Quiz Math]', err));
+    const whiteboardQuestionEl = document.getElementById('quiz-whiteboard-question');
+    const mathTargets = [questionTextEl, container, whiteboardQuestionEl].filter(Boolean);
+    if (window.quizMathTypeset) void window.quizMathTypeset(mathTargets);
+    else void window.MathJax?.typesetPromise?.(mathTargets).catch(err => console.warn('[Quiz Math]', err));
 }
 
 // 在 main.js 中搜尋 window.giveUpQuiz 並替換
