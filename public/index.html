@@ -14,7 +14,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="xianxia.css?v=20260925-quiz-whiteboard4">
+    <link rel="stylesheet" href="xianxia.css?v=20260925-question-helper1">
     <link rel="stylesheet" href="xianxia-gold.css">
     <link rel="stylesheet" href="xianxia-blackgold-harmony.css">
     <link rel="stylesheet" href="styles/admin-product-editor.css?v=20260922-fullscreen1">
@@ -926,6 +926,40 @@ body.xianxia-theme main:has(#page-training.active-page),
                     </div>
                 </section>
 
+                <aside id="quiz-helper-shell" class="quiz-helper-shell collapsed" aria-label="問道助手">
+                    <button id="quiz-helper-launcher" type="button" class="quiz-helper-launcher" onclick="toggleQuizHelper(true)" aria-label="開啟問道助手" title="問道助手">
+                        <i class="fa-solid fa-comments"></i>
+                        <span class="quiz-helper-launcher-label">問道</span>
+                    </button>
+                    <section id="quiz-helper-panel" class="quiz-helper-panel" aria-label="題目問答聊天室">
+                        <header class="quiz-helper-header">
+                            <div class="quiz-helper-heading">
+                                <span class="quiz-helper-avatar"><i class="fa-solid fa-user-graduate"></i></span>
+                                <div>
+                                    <strong>問道助手</strong>
+                                    <small>針對此題提問</small>
+                                </div>
+                            </div>
+                            <button type="button" class="quiz-helper-collapse" onclick="toggleQuizHelper(false)" aria-label="縮小問道助手" title="縮小">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </button>
+                        </header>
+                        <div id="quiz-helper-messages" class="quiz-helper-messages" aria-live="polite"></div>
+                        <div class="quiz-helper-prompts" aria-label="快速提問">
+                            <button type="button" onclick="askQuizHelperPreset('給我一個提示，但不要直接告訴我答案。')">給我提示</button>
+                            <button type="button" onclick="askQuizHelperPreset('這題應該先從哪個觀念開始？')">從哪開始</button>
+                            <button type="button" onclick="askQuizHelperPreset('可以把這題拆成幾個步驟嗎？')">拆解步驟</button>
+                        </div>
+                        <form class="quiz-helper-compose" onsubmit="submitQuizHelper(event)">
+                            <textarea id="quiz-helper-input" rows="1" maxlength="600" placeholder="輸入你對這題的疑問…" aria-label="輸入對題目的疑問"></textarea>
+                            <button id="quiz-helper-send" type="submit" aria-label="送出問題" title="送出">
+                                <i class="fa-solid fa-paper-plane"></i>
+                            </button>
+                        </form>
+                        <div id="quiz-helper-status" class="quiz-helper-status" aria-live="polite"></div>
+                    </section>
+                </aside>
+
                 <div id="options-container" class="space-y-3"></div>
 
                 <div id="feedback-section" class="hidden mt-6 glass-panel p-5 rounded-xl border border-white/10 animate-fade-in-up">
@@ -1521,6 +1555,6 @@ body.xianxia-theme main:has(#page-training.active-page),
         }).catch(error => console.warn('[Local modules] cache unavailable:', error));
       }
     </script>
-    <script type="module" src="main.js?v=20260925-quiz-whiteboard3"></script>
+    <script type="module" src="main.js?v=20260925-question-helper1"></script>
 </body>
 </html>
