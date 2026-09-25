@@ -192,7 +192,7 @@ body.xianxia-theme .home-actions .font-mono,
 body.xianxia-theme .xianxia-footnote { color: #9e947f; }
 
 /* 題目區：改成黑金卷軸感，降低亮度。 */
-body.xianxia-theme .quiz-question-helper-layout > .glass-panel:first-child {
+body.xianxia-theme .quiz-main-column > .glass-panel:first-child {
   background: linear-gradient(120deg, #181818, #0b0b0b);
   color: #f2ecdf;
   border-color: #8f6928;
