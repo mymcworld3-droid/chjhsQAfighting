@@ -136,6 +136,7 @@ import {
     const status = modal.querySelector('#amm-status');
     const save = modal.querySelector('.amm-save');
     const id = String(modal.querySelector('#amm-id').value || '').trim().toLowerCase();
+    const original = originalId ? MATERIAL_CATALOG.find((entry) => entry.id === originalId) : null;
     const raw = {
       id,
       name: modal.querySelector('#amm-name').value,
@@ -146,7 +147,14 @@ import {
       weaponName: modal.querySelector('#amm-weapon-name').value,
       description: modal.querySelector('#amm-description').value,
       story: modal.querySelector('#amm-story').value,
-      buyGold: modal.querySelector('#amm-buy-gold').value
+      buyGold: modal.querySelector('#amm-buy-gold').value,
+      imageUrl: original?.imageUrl || '',
+      imageStatus: original?.imageStatus || '',
+      imageModel: original?.imageModel || '',
+      imagePromptVersion: original?.imagePromptVersion || '',
+      imageStoragePath: original?.imageStoragePath || '',
+      imageUpdatedAtMs: original?.imageUpdatedAtMs || 0,
+      imageError: original?.imageError || ''
     };
     if (originalId && id !== originalId) { status.textContent = '既有材料 ID 不可修改。'; return; }
     let item;
@@ -163,6 +171,10 @@ import {
       modal.remove();
       render();
       toast(originalId ? `已更新材料：${item.name}` : `已建立材料：${item.name}`);
+      if (!item.imageUrl) {
+        void window.ensureAdminItemImage?.('material', item.id).catch((error) =>
+          console.warn('[Admin material image]', error));
+      }
     } catch (error) {
       console.error('[Admin material save]', error);
       status.textContent = error.message || '材料儲存失敗';
