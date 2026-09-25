@@ -29,8 +29,18 @@ const ordered = Object.fromEntries(Object.entries(files).sort(([a], [b]) => a < 
 const build = ordered['index.html'] || 'missing-index';
 const result = JSON.stringify({ schema: 1, build, files: ordered }) + '\n';
 if (process.argv.includes('--check')) {
-  if (readFileSync(output, 'utf8') !== result) {
+  let existing = null;
+  try { existing = JSON.parse(readFileSync(output, 'utf8')); } catch (_) {}
+  const existingFiles = existing?.files && typeof existing.files === 'object' ? existing.files : {};
+  const names = new Set([...Object.keys(ordered), ...Object.keys(existingFiles)]);
+  const mismatches = [...names].filter(name => ordered[name] !== existingFiles[name]);
+  const valid = existing?.schema === 1 && existing?.build === build && mismatches.length === 0;
+  if (!valid) {
     console.error('module-versions.json 已過期；請執行 npm run build:module-versions');
+    if (existing?.build !== build) console.error('build:', existing?.build, '=>', build);
+    for (const name of mismatches.slice(0, 20)) {
+      console.error(name + ':', existingFiles[name] || '(missing)', '=>', ordered[name] || '(removed)');
+    }
     process.exitCode = 1;
   } else console.log('module-versions.json 與靜態資源一致');
 } else {
