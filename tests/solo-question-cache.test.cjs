@@ -180,6 +180,9 @@ test('quiz question includes contextual helper chat with responsive collapse', (
   assert.match(index, /class="quiz-main-column"/);
   assert.match(index, /class="quiz-main-column"[\s\S]*id="options-container"[\s\S]*id="feedback-section"/);
   assert.match(legacy, /classList\.toggle\('helper-collapsed', !open\)/);
+  assert.match(legacy, /const hadPreviousQuestion = !!quizHelperState\.question/);
+  assert.match(legacy, /const wasOpen = shell \? !shell\.classList\.contains\('collapsed'\) : false/);
+  assert.match(legacy, /setQuizHelperOpen\(hadPreviousQuestion \? wasOpen : defaultOpen, \{ remember: false \}\)/);
   assert.match(xianxia, /\.quiz-question-helper-layout\.helper-collapsed/);
   assert.match(xianxia, /\.quiz-helper-shell\.collapsed/);
   assert.match(xianxia, /@media \(min-width: 1100px\)/);
@@ -209,7 +212,7 @@ test('helper replies expose knowledge-point extended practice', () => {
 
 
 test('core import and page query change together to refresh browser cached code', () => {
-  assert.match(main, /main-legacy\.js\?v=20260925-helper-layout2/);
-  assert.match(index, /main\.js\?v=20260925-helper-layout2/);
-  assert.match(index, /xianxia\.css\?v=20260925-helper-layout2/);
+  assert.match(main, /main-legacy\.js\?v=20260925-helper-state1/);
+  assert.match(index, /main\.js\?v=20260925-helper-state1/);
+  assert.match(index, /xianxia\.css\?v=20260925-helper-state1/);
 });
