@@ -147,6 +147,63 @@ function syncSoloQuestionCache() {
 }
 
 
+function recentSoloQuestionContext() {
+    syncSoloQuestionCache();
+    const history = soloQuestionCache.getHistory();
+    const pending = [
+        soloQuestionCache.getActive(),
+        ...soloQuestionCache.getQueue()
+    ].filter(Boolean).map(item => ({
+        q: item?.data?.q || '',
+        concept_id: item?.meta?.concept_id || '',
+        template_id: item?.meta?.template_id || '',
+        question_form: item?.meta?.question_form || '',
+        cognitive_level: item?.meta?.cognitive_level || 1,
+        reasoning_steps: item?.meta?.reasoning_steps || 1
+    }));
+    const combined = [...history, ...pending].slice(-80);
+    return {
+        avoidQuestions: combined.map(item => String(item?.q || '')).filter(Boolean),
+        avoidQuestionMeta: combined
+    };
+}
+
+function quizMetaFromRaw(rawData = {}) {
+    return {
+        concept_id: String(rawData.concept_id || '').slice(0, 100),
+        template_id: String(rawData.template_id || '').slice(0, 120),
+        question_form: String(rawData.question_form || '').slice(0, 60),
+        cognitive_level: Math.max(1, Math.min(5, Number(rawData.cognitive_level) || 1)),
+        reasoning_steps: Math.max(1, Math.min(6, Number(rawData.reasoning_steps) || 1))
+    };
+}
+
+function pickBankQuestionWithoutReplacement(pool, drawKey) {
+    if (!Array.isArray(pool) || pool.length === 0) return null;
+    if (!currentBankData) return pool[Math.floor(Math.random() * pool.length)];
+    if (!currentBankData.drawBags) currentBankData.drawBags = {};
+
+    const key = String(drawKey || 'default');
+    let state = currentBankData.drawBags[key];
+    if (!state || !Array.isArray(state.order) || state.order.length === 0) {
+        const order = Array.from({ length: pool.length }, (_, index) => index);
+        for (let i = order.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [order[i], order[j]] = [order[j], order[i]];
+        }
+        if (state?.lastIndex != null && order.length > 1 && order[0] === state.lastIndex) {
+            [order[0], order[1]] = [order[1], order[0]];
+        }
+        state = { order, lastIndex: state?.lastIndex ?? null };
+        currentBankData.drawBags[key] = state;
+    }
+
+    const index = state.order.shift();
+    state.lastIndex = index;
+    return pool[index] || pool[0];
+}
+
+
 const translations = {
     'zh-TW': {
         app_title: "青雲問道 · 以學入道",
@@ -2292,7 +2349,8 @@ async function fetchOneQuestion() {
         targetTopic = targetTopic.slice(0, 240);
 
         const weakSubjects = (currentUserData.profile.weakSubjects || "").split(',').map(s => s.trim());
-        if (weakSubjects.includes(subject)) finalDifficulty = "easy";
+        // 弱科不等於永遠做 easy；最多只把 hard 暫時降為 medium，保留真正練習深度。
+        if (weakSubjects.includes(subject) && finalDifficulty === "hard") finalDifficulty = "medium";
 
         console.log(`[AI-專注出題] 學科: ${subject} | 範圍: ${targetTopic} | 難度: ${finalDifficulty}`);
 
@@ -2307,7 +2365,8 @@ async function fetchOneQuestion() {
                     rank: rankName, 
                     difficulty: finalDifficulty,
                     language: currentLang,
-                    knowledgeMap: currentUserData.stats.knowledgeMap || {} 
+                    knowledgeMap: currentUserData.stats.knowledgeMap || {},
+                    ...recentSoloQuestionContext()
                 })
             });
             if (!response.ok) throw new Error(`Server Error: ${response.status}`);
@@ -2320,6 +2379,7 @@ async function fetchOneQuestion() {
             let allOptions = shuffleArray([rawData.correct, ...rawData.wrong]);
             return {
                 data: { q: rawData.q, opts: allOptions, ans: allOptions.indexOf(rawData.correct), exp: rawData.exp },
+                meta: quizMetaFromRaw(rawData),
                 rank: rankName,
                 badge: `🎯 ${subject} | ${rawData.sub_topic || '精選'}`
             };
@@ -2358,7 +2418,7 @@ async function fetchOneQuestion() {
                 const results = await Promise.all(fetchPromises);
                 const mergedQuestions = results.flat();
                 if (mergedQuestions.length === 0) throw new Error("No questions");
-                currentBankData = { sourcePath: targetSource, questions: mergedQuestions };
+                currentBankData = { sourcePath: targetSource, questions: mergedQuestions, drawBags: {} };
             } catch (e) { 
                 console.error("[Fetch-Bank-Error] 題庫讀取失敗:", e); 
                 return await switchToAI(); 
@@ -2367,7 +2427,10 @@ async function fetchOneQuestion() {
 
         const filteredQuestions = currentBankData.questions.filter(q => q.difficulty === finalDifficulty);
         const pool = filteredQuestions.length > 0 ? filteredQuestions : currentBankData.questions;
-        const rawData = pool[Math.floor(Math.random() * pool.length)];
+        const rawData = pickBankQuestionWithoutReplacement(
+            pool,
+            `${targetSource || 'bank'}|${filteredQuestions.length > 0 ? finalDifficulty : 'all'}|${pool.length}`
+        );
         let allOptions = shuffleArray([rawData.correct, ...rawData.wrong]);
         let displaySubject = rawData.subject || settings.source.split('/').pop().replace('.json', '');
         
@@ -2392,7 +2455,8 @@ async function fetchOneQuestion() {
                     rank: rankName, 
                     difficulty: finalDifficulty,
                     language: currentLang,
-                    knowledgeMap: currentUserData.stats.knowledgeMap || {} 
+                    knowledgeMap: currentUserData.stats.knowledgeMap || {},
+                    ...recentSoloQuestionContext()
                 })
             });
 
@@ -2406,6 +2470,7 @@ async function fetchOneQuestion() {
             let allOptions = shuffleArray([rawData.correct, ...rawData.wrong]);
             return {
                 data: { q: rawData.q, opts: allOptions, ans: allOptions.indexOf(rawData.correct), exp: rawData.exp },
+                meta: quizMetaFromRaw(rawData),
                 rank: rankName,
                 badge: `🎯 ${rawData.subject} | ${rawData.sub_topic || '綜合'}`
             };
@@ -2434,7 +2499,9 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         answeredSoloQuizzes.add(quiz);
         syncSoloQuestionCache();
         if (soloQuestionCache.getActive()?.data?.q === quiz.data?.q) {
-            soloQuestionCache.consumeActive();
+            soloQuestionCache.consumeActive({ remember: true });
+        } else {
+            soloQuestionCache.remember(quiz);
         }
     }
 
@@ -2837,7 +2904,11 @@ window.submitReport = async () => {
             // A late review must not skip the player's newer question.
             if (window.currentActiveQuiz !== quiz) return;
             syncSoloQuestionCache();
-            if (soloQuestionCache.getActive()?.data?.q === quiz.data?.q) soloQuestionCache.consumeActive();
+            if (soloQuestionCache.getActive()?.data?.q === quiz.data?.q) {
+                soloQuestionCache.consumeActive({ remember: true });
+            } else {
+                soloQuestionCache.remember(quiz);
+            }
             window.currentActiveQuiz = null;
             void fillBuffer();
             setTimeout(() => startQuizFlow(), 300);
