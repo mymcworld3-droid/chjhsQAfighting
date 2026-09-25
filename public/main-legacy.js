@@ -2741,6 +2741,7 @@ function setQuizHelperOpen(open, { remember = true } = {}) {
     shell.classList.toggle('collapsed', !open);
     shell.classList.toggle('open', open);
     shell.classList.toggle('fullscreen', open && compact);
+    shell.closest('.quiz-question-helper-layout')?.classList.toggle('helper-collapsed', !open);
     document.body.classList.toggle('quiz-helper-fullscreen-open', open && compact);
 
     const collapseIcon = shell.querySelector('.quiz-helper-collapse i');
