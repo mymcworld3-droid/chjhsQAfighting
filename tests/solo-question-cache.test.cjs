@@ -10,6 +10,7 @@ const cacheSource = readFileSync(join(root, 'public/solo-question-cache.js'), 'u
 const legacy = readFileSync(join(root, 'public/main-legacy.js'), 'utf8');
 const main = readFileSync(join(root, 'public/main.js'), 'utf8');
 const index = readFileSync(join(root, 'public/index.html'), 'utf8');
+const xianxia = readFileSync(join(root, 'public/xianxia.css'), 'utf8');
 const scope = (path = '數學/代數', level = '國中一年級') =>
   JSON.stringify({ mode: 'focused', path, level });
 const makeQuiz = (q) => ({
@@ -142,7 +143,21 @@ test('solo quiz uses restored active question before hitting the API and saves e
   assert.match(legacy, /data\?\.q === quiz\.data\?\.q/);
 });
 
+test('quiz exposes a responsive mouse and touch calculation whiteboard', () => {
+  assert.match(index, /id="btn-quiz-whiteboard"/);
+  assert.match(index, /id="quiz-whiteboard-panel"/);
+  assert.match(index, /id="quiz-whiteboard-canvas"/);
+  assert.match(index, /onclick="clearQuizWhiteboard\(\)"/);
+  assert.match(legacy, /window\.toggleQuizWhiteboard =/);
+  assert.match(legacy, /window\.clearQuizWhiteboard =/);
+  assert.match(legacy, /canvas\.addEventListener\('pointerdown'/);
+  assert.match(legacy, /resetQuizWhiteboard\(\{ close: true \}\)/);
+  assert.match(xianxia, /#quiz-whiteboard-canvas/);
+  assert.match(xianxia, /touch-action:\s*none/);
+});
+
 test('core import and page query change together to refresh browser cached code', () => {
-  assert.match(main, /main-legacy\.js\?v=20260925-question-quality2/);
-  assert.match(index, /main\.js\?v=20260925-question-quality2/);
+  assert.match(main, /main-legacy\.js\?v=20260925-quiz-whiteboard1/);
+  assert.match(index, /main\.js\?v=20260925-quiz-whiteboard1/);
+  assert.match(index, /xianxia\.css\?v=20260925-quiz-whiteboard1/);
 });
