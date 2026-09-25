@@ -2511,7 +2511,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         if (soloQuestionCache.getActive()?.data?.q === quiz.data?.q) {
             soloQuestionCache.consumeActive({ remember: true });
         } else {
-            soloQuestionCache.remember(quiz);
+            soloQuestionCache.remember?.(quiz);
         }
     }
 
@@ -3096,7 +3096,7 @@ window.submitReport = async () => {
             if (soloQuestionCache.getActive()?.data?.q === quiz.data?.q) {
                 soloQuestionCache.consumeActive({ remember: true });
             } else {
-                soloQuestionCache.remember(quiz);
+                soloQuestionCache.remember?.(quiz);
             }
             window.currentActiveQuiz = null;
             void fillBuffer();
