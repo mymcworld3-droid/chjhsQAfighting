@@ -2697,7 +2697,7 @@ function quizWhiteboardCssSize() {
     const { stage } = quizWhiteboardElements();
     if (!stage) return { width: 0, height: 0 };
     const width = Math.max(240, Math.floor(stage.clientWidth || 0));
-    const height = Math.max(260, Math.min(420, Math.floor(window.innerHeight * 0.38)));
+    const height = Math.max(300, Math.min(580, Math.floor(window.innerHeight * 0.56)));
     return { width, height };
 }
 
@@ -2814,6 +2814,12 @@ function initQuizWhiteboard() {
         cancelAnimationFrame(quizWhiteboardState.resizeFrame);
         quizWhiteboardState.resizeFrame = requestAnimationFrame(redrawQuizWhiteboard);
     });
+
+    document.addEventListener('keydown', (event) => {
+        const { panel } = quizWhiteboardElements();
+        if (event.key !== 'Escape' || !panel || panel.classList.contains('hidden')) return;
+        window.toggleQuizWhiteboard(false);
+    });
 }
 
 function resetQuizWhiteboard({ close = true } = {}) {
@@ -2821,6 +2827,7 @@ function resetQuizWhiteboard({ close = true } = {}) {
     quizWhiteboardState.currentStroke = null;
     const { panel, toggle } = quizWhiteboardElements();
     if (close && panel) panel.classList.add('hidden');
+    if (close) document.body.classList.remove('quiz-whiteboard-open');
     if (toggle) {
         const isOpen = !close && !!panel && !panel.classList.contains('hidden');
         toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
@@ -2843,13 +2850,14 @@ window.toggleQuizWhiteboard = (forceOpen) => {
         : panel.classList.contains('hidden');
 
     panel.classList.toggle('hidden', !shouldOpen);
+    document.body.classList.toggle('quiz-whiteboard-open', shouldOpen);
     toggle?.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
     toggle?.classList.toggle('active', shouldOpen);
 
     if (shouldOpen) {
         requestAnimationFrame(() => {
             redrawQuizWhiteboard();
-            panel.scrollIntoView?.({ block: 'nearest', behavior: 'smooth' });
+            panel.querySelector('.quiz-whiteboard-action:last-child')?.focus({ preventScroll: true });
         });
     }
 };
