@@ -78,6 +78,36 @@ function normalizeHistory(values, max = 60) {
     .map(normalizeHistoryEntry).filter(Boolean).slice(-Math.max(1, max));
 }
 
+function extractConceptCandidates(targetTopic) {
+  const text = compact(targetTopic, 400);
+  const marker = text.match(/核心考點細項[:：]\s*([^）)]+)/);
+  const raw = marker
+    ? marker[1].split(/[、,，;；]/)
+    : [text.replace(/[（(][^）)]*[）)]/g, '').trim()];
+  return [...new Set(raw.map(value => compact(value, 100)).filter(value => value.length >= 2))].slice(0, 12);
+}
+
+function chooseTargetConcept(targetTopic, history = [], randomValue = Math.random()) {
+  const candidates = extractConceptCandidates(targetTopic)
+    .map(label => ({ label, id: normalizeId(label, 100) }))
+    .filter(item => item.id);
+  if (!candidates.length) {
+    const fallback = compact(targetTopic || '綜合測驗', 100);
+    return { label: fallback, id: normalizeId(fallback, 100) || 'general' };
+  }
+  const recent = normalizeHistory(history, 60);
+  const counts = Object.fromEntries(candidates.map(item => [item.id, 0]));
+  for (const item of recent) if (counts[item.concept_id] !== undefined) counts[item.concept_id]++;
+  const lastTwo = new Set(recent.slice(-2).map(item => item.concept_id).filter(Boolean));
+  let eligible = candidates.filter(item => !lastTwo.has(item.id));
+  if (!eligible.length) eligible = candidates;
+  const minimum = Math.min(...eligible.map(item => counts[item.id] || 0));
+  const leastPracticed = eligible.filter(item => (counts[item.id] || 0) === minimum);
+  const n = Number.isFinite(Number(randomValue)) ? Number(randomValue) : 0;
+  const index = Math.min(leastPracticed.length - 1, Math.max(0, Math.floor(Math.abs(n % 1) * leastPracticed.length)));
+  return leastPracticed[index] || candidates[0];
+}
+
 function chooseQuestionForm(subject, history = [], randomValue = Math.random()) {
   const pool = FORM_POOLS[subject] || DEFAULT_FORMS;
   const recent = normalizeHistory(history, 12);
@@ -94,14 +124,17 @@ function chooseQuestionForm(subject, history = [], randomValue = Math.random()) 
   return available[index] || pool[0];
 }
 
-function planQuestionBlueprint(subject, difficulty, history = [], randomSeed = '') {
+function planQuestionBlueprint(subject, difficulty, history = [], randomSeed = '', targetTopic = '') {
   const profile = DIFFICULTY_PROFILES[difficulty] || DIFFICULTY_PROFILES.medium;
   let seedValue = 0;
   for (const char of String(randomSeed)) seedValue = (seedValue * 33 + char.charCodeAt(0)) >>> 0;
   const randomValue = (seedValue % 10000) / 10000;
   const questionForm = chooseQuestionForm(subject, history, randomValue);
+  const targetConcept = chooseTargetConcept(targetTopic, history, (randomValue + 0.381966) % 1);
   return {
     questionForm,
+    targetConceptId: targetConcept.id,
+    targetConceptLabel: targetConcept.label,
     cognitiveMin: profile.minCognitive,
     cognitiveMax: profile.maxCognitive,
     minReasoningSteps: profile.minReasoningSteps,
@@ -112,7 +145,7 @@ function planQuestionBlueprint(subject, difficulty, history = [], randomSeed = '
 function sanitizeGeneratedMetadata(parsed, plan, targetTopic) {
   const questionForm = normalizeId(parsed?.question_form || plan.questionForm);
   return {
-    concept_id: normalizeId(parsed?.concept_id || parsed?.concept || targetTopic, 100),
+    concept_id: normalizeId(parsed?.concept_id || parsed?.concept || plan.targetConceptId || targetTopic, 100),
     skill_id: normalizeId(parsed?.skill_id || parsed?.skill || questionForm, 100),
     template_id: normalizeId(parsed?.template_id || '', 120),
     question_form: questionForm,
@@ -124,6 +157,7 @@ function sanitizeGeneratedMetadata(parsed, plan, targetTopic) {
 
 function validateGeneratedMetadata(meta, plan) {
   if (!meta.concept_id || meta.concept_id.length < 2) return '缺少可追蹤的 concept_id';
+  if (plan.targetConceptId && meta.concept_id !== normalizeId(plan.targetConceptId, 100)) return 'concept_id 未遵守指定細部考點';
   if (!meta.skill_id || meta.skill_id.length < 2) return '缺少可追蹤的 skill_id';
   if (!meta.template_id || meta.template_id.length < 3) return '缺少可追蹤的 template_id';
   if (meta.question_form !== normalizeId(plan.questionForm)) return 'question_form 未遵守題目藍圖';
@@ -173,6 +207,8 @@ module.exports = {
   normalizeText,
   questionSkeleton,
   normalizeHistory,
+  extractConceptCandidates,
+  chooseTargetConcept,
   chooseQuestionForm,
   planQuestionBlueprint,
   sanitizeGeneratedMetadata,
