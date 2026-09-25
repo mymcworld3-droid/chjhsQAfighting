@@ -37,6 +37,21 @@ test('all structured junior-high course data is valid JSON with subject, grade a
   }
 });
 
+test('semester and edition choices are automatic and both semesters feed one chapter list', () => {
+  assert.match(script, /const AUTO_TERM='全學年',AUTO_EDITION='自動整合'/);
+  assert.match(script, /id="cs-term" hidden aria-hidden="true"/);
+  assert.match(script, /id="cs-edition" hidden aria-hidden="true"/);
+  assert.match(script, /function mergeYearUnits\(yearData\)/);
+  assert.match(script, /\['第一學期','第二學期'/);
+  assert.match(script, /semester\['108課綱複習版'\]/);
+  assert.match(script, /versions\.includes\('翰林版'\)\?'翰林版':versions\[0\]/);
+  assert.doesNotMatch(script, /el\('cs-term'\)\.onchange/);
+  assert.doesNotMatch(script, /el\('cs-edition'\)\.onchange/);
+  assert.match(script, /termBadge\.textContent=u\.term==='第一學期'\?'上學期'/);
+  assert.match(script, /\[canonicalSubject,grade,AUTO_TERM,subject\]\.join\('\/'\)/);
+  assert.match(script, /\[subject,year\+'年級全學年'\]\.join\('\/'\)/);
+});
+
 test('verified Kang Hsuan first-semester grade-seven math includes 2-4 exponent rules', () => {
   const math = JSON.parse(fs.readFileSync(path.join(root, 'public/middle_school_unit_name/數學/math.json'), 'utf8'));
   const lessons = math.middle_school_math_courses['數學']['七年級']['第一學期']['康軒版'];
