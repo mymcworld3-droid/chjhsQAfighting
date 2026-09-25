@@ -11,6 +11,7 @@ const legacy = readFileSync(join(root, 'public/main-legacy.js'), 'utf8');
 const main = readFileSync(join(root, 'public/main.js'), 'utf8');
 const index = readFileSync(join(root, 'public/index.html'), 'utf8');
 const xianxia = readFileSync(join(root, 'public/xianxia.css'), 'utf8');
+const server = readFileSync(join(root, 'server.js'), 'utf8');
 const scope = (path = '數學/代數', level = '國中一年級') =>
   JSON.stringify({ mode: 'focused', path, level });
 const makeQuiz = (q) => ({
@@ -165,8 +166,25 @@ test('quiz exposes a responsive mouse and touch calculation whiteboard', () => {
   assert.match(xianxia, /touch-action:\s*none/);
 });
 
+
+test('quiz question includes contextual helper chat with responsive collapse', () => {
+  assert.match(index, /id="quiz-helper-shell"/);
+  assert.match(index, /id="quiz-helper-messages"/);
+  assert.match(index, /id="quiz-helper-input"/);
+  assert.match(index, /onsubmit="submitQuizHelper\(event\)"/);
+  assert.match(legacy, /window\.toggleQuizHelper =/);
+  assert.match(legacy, /window\.submitQuizHelper =/);
+  assert.match(legacy, /fetch\('\/api\/question-helper'/);
+  assert.match(legacy, /\(max-width: 1279px\)/);
+  assert.match(xianxia, /\.quiz-helper-shell\.collapsed/);
+  assert.match(xianxia, /@media \(max-width: 1279px\)/);
+  assert.match(server, /app\.post\('\/api\/question-helper'/);
+  assert.match(server, /尚未作答/);
+});
+
+
 test('core import and page query change together to refresh browser cached code', () => {
-  assert.match(main, /main-legacy\.js\?v=20260925-quiz-whiteboard3/);
-  assert.match(index, /main\.js\?v=20260925-quiz-whiteboard3/);
-  assert.match(index, /xianxia\.css\?v=20260925-quiz-whiteboard4/);
+  assert.match(main, /main-legacy\.js\?v=20260925-question-helper1/);
+  assert.match(index, /main\.js\?v=20260925-question-helper1/);
+  assert.match(index, /xianxia\.css\?v=20260925-question-helper1/);
 });
