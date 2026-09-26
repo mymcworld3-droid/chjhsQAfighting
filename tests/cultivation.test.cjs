@@ -77,6 +77,9 @@ function setup(totalScore = 0) {
     // This isolated reward harness does not mount the new browser-local quiz cache.
     'function syncSoloQuestionCache() {};' +
     'const soloQuestionCache = { getActive: () => null, consumeActive: () => false };' +
+'const quizHelperState = { answered:false, selectedIndex:null, correctIndex:null, explanation:\"\", question:\"\", messages:[], busy:false, requestSerial:0 };' +
+    'function renderQuizHelperConversation() {};' +
+    'const extendedPracticeState = { active:false };' +
     'window.getCurrentUserData = () => currentUserData;' +
     read('cultivation-rules.js').replace(/export /g, '') +
     section(main, 'const REALMS = [', '// 綁定全域函式') +
