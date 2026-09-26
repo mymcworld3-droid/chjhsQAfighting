@@ -39,7 +39,7 @@ function runtime() {
     CustomEvent: class CustomEvent { constructor(name, opts) { this.type = name; this.detail = opts?.detail; } },
     requestAnimationFrame() {}, setTimeout() {}
   };
-  const script = training.replace(/^import .*?;\s*$/gm, '');
+  const script = training.slice(training.indexOf('// 修煉 v4：'));
   vm.runInNewContext(script, context);
   return { window, data, store, remote };
 }
