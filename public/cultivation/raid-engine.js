@@ -3,7 +3,6 @@ export const RAID_MVP = Object.freeze({
   modeVersion: 1,
   minimumScore: 10,
   // 每位玩家獨立出題、獨立倒數；不等待隊友，也不共用題目。
-  answerWindowMs: 30000,
   minQuestionCycleMs: 6000,
   reviewLockMs: 1500,
   // Boss 使用自己的時間軸，不因任何玩家答題快慢而延後。
@@ -40,6 +39,19 @@ export function createScaledShenBoss({ playerAttack = 200, playerMaxHp = 1000 } 
     baseAttack: Math.max(70, Math.round(referenceHp * 0.105)),
     phase: 1
   };
+}
+
+export function createTeamScaledShenBoss(members = []) {
+  const team = Array.isArray(members) ? members.filter(Boolean).slice(0, 4) : [];
+  const count = Math.max(1, team.length);
+  const totalAttack = team.reduce((sum, member) => sum + Math.max(1, Math.round(finite(member?.atk, 200))), 0);
+  const averageHp = team.reduce((sum, member) => sum + Math.max(1, Math.round(finite(member?.maxHp, 1000))), 0) / count;
+  const boss = createScaledShenBoss({ playerAttack: totalAttack, playerMaxHp: averageHp });
+  // 多人時血量依全隊輸出尺度成長，但 Boss 單次傷害維持以平均生命尺度計算，
+  // 避免玩家數增加後單人承傷也被不合理放大。
+  boss.maxHp = Math.max(1800, Math.round(totalAttack * (6.5 + 0.5 * count)));
+  boss.hp = boss.maxHp;
+  return boss;
 }
 
 export function shenPhaseForHp(hp, maxHp) {
@@ -171,10 +183,6 @@ export function nextPersonalQuestionAt({ issuedAtMs = 0, resolvedAtMs = 0 } = {}
   // 很快答完的人仍有最短行動週期，避免靠連點把輸出差距無限放大；
   // 花較久時間作答的人則不再額外等待。
   return Math.max(issued + RAID_MVP.minQuestionCycleMs, resolved + RAID_MVP.reviewLockMs);
-}
-
-export function raidQuestionDeadline(issuedAtMs) {
-  return Math.max(0, finite(issuedAtMs)) + RAID_MVP.answerWindowMs;
 }
 
 export function bossClockState({ startedAtMs = 0, nowMs = 0, actionCount = 0 } = {}) {
