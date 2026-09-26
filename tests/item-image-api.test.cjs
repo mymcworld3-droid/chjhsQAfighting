@@ -8,6 +8,7 @@ const {
   MODEL,
   PROMPT_VERSION,
   buildItemImagePrompt,
+  materialColorTheme,
   r2Config,
   signedR2PutRequest,
   uploadGeneratedImage,
@@ -16,17 +17,19 @@ const {
 
 test('item image API uses Cloudflare FLUX Schnell with a fixed xianxia prompt', () => {
   assert.equal(MODEL, '@cf/black-forest-labs/flux-1-schnell');
-  assert.equal(PROMPT_VERSION, 'xianxia-moba-item-icon-v4');
+  assert.equal(PROMPT_VERSION, 'xianxia-moba-item-icon-v5');
   const material = buildItemImagePrompt('material', {
     name: '玄鐵',
     realm: '築基',
     category: '礦石',
     description: '沉重黑色礦石'
   });
-  assert.match(material, /1:1 square inventory icon/);
+  assert.match(material, /1:1 square fantasy game inventory icon/);
   assert.match(material, /crafting MATERIAL/);
-  assert.match(material, /rounded or clustered silhouette/);
-  assert.match(material, /text, letters, numbers/i);
+  assert.match(material, /single selected palette/);
+  assert.match(material, /golden amber with restrained metallic highlights/);
+  assert.match(material, /No rainbow palette/);
+  assert.match(material, /No table, altar, rack, stand/);
 
   const artifact = buildItemImagePrompt('artifact', {
     name: '青雲劍',
@@ -38,15 +41,27 @@ test('item image API uses Cloudflare FLUX Schnell with a fixed xianxia prompt', 
   assert.match(artifact, /finished magical ARTIFACT/);
   assert.match(artifact, /Canonical artifact form: 劍/);
   assert.match(artifact, /equip_attack_flat 80/);
-  assert.match(artifact, /exactly one complete artifact/);
-  assert.match(artifact, /competitive MOBA equipment icon/);
-  assert.match(artifact, /three-quarter angle/);
-  assert.match(artifact, /82 to 92 percent/);
-  assert.match(artifact, /float alone/);
-  assert.match(artifact, /saturated jewel-tone colors/);
-  assert.match(artifact, /dark navy, indigo, violet, or black gradient background/);
+  assert.match(artifact, /MOBA-style in-game equipment icon/);
+  assert.match(artifact, /three-quarter presentation/);
+  assert.match(artifact, /82 to 90 percent/);
+  assert.match(artifact, /one dominant magical color family/);
+  assert.match(artifact, /Avoid dense particles, rainbow light/);
   assert.match(artifact, /No table, altar, rack, stand/);
-  assert.match(artifact, /no rack, no stand/);
+});
+
+test('material color theme is semantic and deterministic', () => {
+  assert.equal(
+    materialColorTheme({ id: 'soul-wood', name: '神魂木', category: '靈木' }),
+    'emerald green with warm brown accents'
+  );
+  assert.equal(
+    materialColorTheme({ id: 'lightning-core', name: '雷核', category: '晶體' }),
+    'electric violet with cool blue accents'
+  );
+  const first = materialColorTheme({ id: 'unknown-a', name: '未知素材', category: '其他' });
+  const second = materialColorTheme({ id: 'unknown-a', name: '未知素材', category: '其他' });
+  assert.equal(first, second);
+  assert.match(first, /(blue|green|red|purple|amber|teal)/);
 });
 
 test('item image prompt stays within the Cloudflare model limit', () => {
