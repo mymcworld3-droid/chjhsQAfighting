@@ -49,6 +49,7 @@ export const ARTIFACT_REALMS = Object.freeze([
 export const ARTIFACT_EQUIP_SLOTS = Object.freeze(['本命法寶', '護身法寶', '佩飾法寶', '輔助法寶']);
 export const ARTIFACT_WEAPON_FORMS = Object.freeze(['劍','刀','槍','弓','斧','錘','戟','棍','鞭','匕首','飛劍','法盾','法杖','符籙','陣盤','寶珠','玉佩','法鏡','鈴','幡','印','鼎','鐘','器胚','其他']);
 export const ARTIFACT_FORGE_METHODS = Object.freeze(['自由發揮','劍道鍛造','護體鑄造','符籙煉製','陣法刻印']);
+export const ARTIFACT_CATALOG_SCHEMA_VERSION = 2;
 
 export const ARTIFACT_REALM_COLORS = Object.freeze({
   凡人: '#a1a1aa',
@@ -314,6 +315,19 @@ export const ARTIFACT_CATALOG = DEFAULT_ARTIFACT_CATALOG.map(normalizeArtifactDe
 
 export function getDefaultArtifactCatalog() {
   return clone(DEFAULT_ARTIFACT_CATALOG.map(normalizeArtifactDefinition));
+}
+
+// 舊版 Firestore 全站法寶清單可能缺少後來加入的內建法寶。
+// 僅在 schema migration 時補齊；同 ID 的遠端管理員設定仍優先，額外 AI 法寶也會保留。
+export function mergeArtifactCatalogWithDefaults(items = []) {
+  const merged = new Map(getDefaultArtifactCatalog().map((item) => [item.id, item]));
+  (Array.isArray(items) ? items : []).forEach((raw) => {
+    const id = String(raw?.id || '').trim();
+    if (!id) return;
+    const base = merged.get(id) || {};
+    merged.set(id, normalizeArtifactDefinition({ ...base, ...raw, id }));
+  });
+  return validateArtifactCatalog([...merged.values()]);
 }
 
 export function replaceArtifactCatalog(items, source = 'runtime') {
