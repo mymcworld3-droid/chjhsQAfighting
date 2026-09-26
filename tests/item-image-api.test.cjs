@@ -16,7 +16,7 @@ const {
 
 test('item image API uses Cloudflare FLUX Schnell with a fixed xianxia prompt', () => {
   assert.equal(MODEL, '@cf/black-forest-labs/flux-1-schnell');
-  assert.equal(PROMPT_VERSION, 'xianxia-moba-item-icon-v2');
+  assert.equal(PROMPT_VERSION, 'xianxia-moba-item-icon-v3');
   const material = buildItemImagePrompt('material', {
     name: '玄鐵',
     realm: '築基',
@@ -41,7 +41,10 @@ test('item image API uses Cloudflare FLUX Schnell with a fixed xianxia prompt', 
   assert.match(artifact, /exactly one complete artifact/);
   assert.match(artifact, /competitive MOBA equipment icon/);
   assert.match(artifact, /three-quarter angle/);
-  assert.match(artifact, /78 to 86 percent/);
+  assert.match(artifact, /80 to 88 percent/);
+  assert.match(artifact, /float alone/);
+  assert.match(artifact, /vivid jewel-tone colors/);
+  assert.match(artifact, /no rack, no stand/);
 });
 
 test('item image prompt stays within the Cloudflare model limit', () => {
