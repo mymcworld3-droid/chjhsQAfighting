@@ -3,7 +3,9 @@ import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth
 import { getFirestore, doc, onSnapshot, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import {
   MATERIAL_CATALOG_SCHEMA_VERSION,
+  ARTIFACT_RECIPE_SCHEMA_VERSION,
   mergeMaterialCatalogWithDefaults,
+  mergeArtifactRecipesWithDefaults,
   replaceMaterialCatalog,
   replaceArtifactRecipes,
   repairArtifactRecipes
@@ -40,18 +42,23 @@ import {
     }
   }
 
-  async function persistRecipeRepair(ref, repair) {
-    if (recipeRepairWriteStarted || !repair?.changed || !isAdmin()) return;
+  async function persistRecipeRepair(ref, repair, { backfilled = false } = {}) {
+    if (recipeRepairWriteStarted || (!repair?.changed && !backfilled) || !isAdmin()) return;
     recipeRepairWriteStarted = true;
     try {
-      await setDoc(ref, {
+      const payload = {
         recipes: repair.recipes,
-        orphanRecipeCleanupAt: serverTimestamp(),
-        orphanRecipeCleanupRemovedIds: repair.removedRecipeIds.slice(0, 100)
-      }, { merge: true });
+        artifactRecipeSchemaVersion: ARTIFACT_RECIPE_SCHEMA_VERSION
+      };
+      if (backfilled) payload.artifactRecipeBackfilledAt = serverTimestamp();
+      if (repair.changed) {
+        payload.orphanRecipeCleanupAt = serverTimestamp();
+        payload.orphanRecipeCleanupRemovedIds = repair.removedRecipeIds.slice(0, 100);
+      }
+      await setDoc(ref, payload, { merge: true });
     } catch (error) {
       recipeRepairWriteStarted = false;
-      console.warn('[Material recipe repair] runtime cleanup applied, Firestore persistence deferred:', error);
+      console.warn('[Material recipe repair] runtime repair applied, Firestore persistence deferred:', error);
     }
   }
 
@@ -72,11 +79,21 @@ import {
           if (needsBackfill) persistBackfill(ref, items);
         }
         if (data.recipes && typeof data.recipes === 'object' && !Array.isArray(data.recipes)) {
-          const repair = repairArtifactRecipes(data.recipes);
-          replaceArtifactRecipes(repair.recipes, repair.changed ? 'firestore-orphan-repair' : 'firestore');
+          const recipeSchemaVersion = Math.max(0, Number(data.artifactRecipeSchemaVersion) || 0);
+          const needsRecipeBackfill = recipeSchemaVersion < ARTIFACT_RECIPE_SCHEMA_VERSION;
+          const recipeSource = needsRecipeBackfill
+            ? mergeArtifactRecipesWithDefaults(data.recipes)
+            : data.recipes;
+          const repair = repairArtifactRecipes(recipeSource);
+          const source = repair.changed
+            ? 'firestore-orphan-repair'
+            : (needsRecipeBackfill ? 'firestore-recipe-backfill' : 'firestore');
+          replaceArtifactRecipes(repair.recipes, source);
           if (repair.changed) {
             console.warn('[Material catalog sync] removed orphan recipe chain:', repair.removedRecipeIds, repair.reasons);
-            persistRecipeRepair(ref, repair);
+          }
+          if (repair.changed || needsRecipeBackfill) {
+            persistRecipeRepair(ref, repair, { backfilled: needsRecipeBackfill });
           }
         }
       } catch (error) {
