@@ -7,7 +7,6 @@ const { getStorage } = require('firebase-admin/storage');
 const MODEL = '@cf/black-forest-labs/flux-1-schnell';
 const PROMPT_VERSION = 'xianxia-item-icon-v1';
 const PROMPT_MAX = 2048;
-const DEFAULT_BUCKET = 'question-learning.firebasestorage.app';
 const CONFIGS = Object.freeze({
   artifact: { doc: 'artifactCatalogV1', folder: 'artifacts' },
   material: { doc: 'materialCatalogV1', folder: 'materials' }
@@ -34,8 +33,26 @@ function imageConfig(env = process.env) {
   return {
     accountId: clean(env.CLOUDFLARE_ACCOUNT_ID || env.CF_ACCOUNT_ID || env.CLOUDFLARE_AI_ACCOUNT_ID, 160),
     apiToken: clean(env.CLOUDFLARE_API_TOKEN || env.CF_API_TOKEN || env.CLOUDFLARE_AI_TOKEN, 4096),
-    bucketName: clean(env.FIREBASE_A_STORAGE_BUCKET || env.FIREBASE_STORAGE_BUCKET || DEFAULT_BUCKET, 240)
+    bucketName: clean(env.FIREBASE_A_STORAGE_BUCKET || env.FIREBASE_STORAGE_BUCKET, 240)
   };
+}
+
+function storageBucketCandidates(project, env = process.env) {
+  const cfg = imageConfig(env);
+  const projectId = clean(project?.app?.options?.projectId || PROJECT_IDS.A, 160);
+  const appBucket = clean(project?.app?.options?.storageBucket, 240);
+  return [...new Set([
+    cfg.bucketName,
+    appBucket,
+    projectId ? projectId + '.firebasestorage.app' : '',
+    projectId ? projectId + '.appspot.com' : ''
+  ].filter(Boolean))];
+}
+
+function isMissingBucketError(error) {
+  const code = Number(error?.code || error?.status || error?.response?.statusCode);
+  const message = String(error?.message || '');
+  return code === 404 || /specified bucket does not exist|bucket .* does not exist|no such bucket/i.test(message);
 }
 
 function effectSummary(item = {}) {
@@ -164,29 +181,51 @@ async function uploadGeneratedImage(kind, id, base64, {
   storageFactory = getStorage,
   project = adminProject('A')
 } = {}) {
-  const cfg = imageConfig(env);
-  const bucket = storageFactory(project.app).bucket(cfg.bucketName);
+  const storage = storageFactory(project.app);
+  const candidates = storageBucketCandidates(project, env);
   const safeId = clean(id, 80).replace(/[^a-zA-Z0-9_-]+/g, '-') || 'item';
   const storagePath = 'generated-items/' + CONFIGS[kind].folder + '/' + safeId + '/' + Date.now() + '-' + randomUUID() + '.jpg';
   const downloadToken = randomUUID();
   const buffer = Buffer.from(base64, 'base64');
   if (!buffer.length) throw new Error('生成圖片解碼失敗');
+  if (!candidates.length) {
+    const error = new Error('找不到 Firebase Storage bucket 設定');
+    error.status = 503;
+    throw error;
+  }
 
-  await bucket.file(storagePath).save(buffer, {
-    resumable: false,
-    validation: false,
-    metadata: {
-      contentType: 'image/jpeg',
-      cacheControl: 'public,max-age=31536000,immutable',
-      metadata: { firebaseStorageDownloadTokens: downloadToken }
+  let lastMissing = null;
+  for (const bucketName of candidates) {
+    const bucket = storage.bucket(bucketName);
+    try {
+      await bucket.file(storagePath).save(buffer, {
+        resumable: false,
+        validation: false,
+        metadata: {
+          contentType: 'image/jpeg',
+          cacheControl: 'public,max-age=31536000,immutable',
+          metadata: { firebaseStorageDownloadTokens: downloadToken }
+        }
+      });
+
+      const imageUrl =
+        'https://firebasestorage.googleapis.com/v0/b/' + encodeURIComponent(bucket.name || bucketName) +
+        '/o/' + encodeURIComponent(storagePath) +
+        '?alt=media&token=' + encodeURIComponent(downloadToken);
+      return { imageUrl, storagePath, bucketName: bucket.name || bucketName };
+    } catch (error) {
+      if (!isMissingBucketError(error)) throw error;
+      lastMissing = error;
     }
-  });
+  }
 
-  const imageUrl =
-    'https://firebasestorage.googleapis.com/v0/b/' + encodeURIComponent(bucket.name) +
-    '/o/' + encodeURIComponent(storagePath) +
-    '?alt=media&token=' + encodeURIComponent(downloadToken);
-  return { imageUrl, storagePath };
+  const error = new Error(
+    'Firebase Storage bucket 不存在。已嘗試：' + candidates.join('、') +
+    '。請到 Firebase Console > Storage 建立預設 bucket，或在 Render 設定 FIREBASE_A_STORAGE_BUCKET。'
+  );
+  error.status = 503;
+  error.cause = lastMissing || undefined;
+  throw error;
 }
 
 async function authenticatedPlayer(req, { resolve = role => adminProject(role) } = {}) {
@@ -452,6 +491,8 @@ module.exports = {
   PROMPT_VERSION,
   buildItemImagePrompt,
   imageConfig,
+  storageBucketCandidates,
+  uploadGeneratedImage,
   generateFluxImage,
   generateCatalogItemImage,
   createAdminItemImageHandler,
