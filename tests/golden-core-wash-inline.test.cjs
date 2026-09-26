@@ -37,6 +37,7 @@ function fixture() {
   const grade = node();
   grade.textContent = '9 品';
   const card = node(['core-minimal-card']);
+  sphere.closest = () => card;
   card.getBoundingClientRect = () => ({left:0,top:0,width:500,height:650});
   card.querySelector = selector => ({
     '#wash-golden-core': button, '.golden-core-sphere-v3':sphere,
