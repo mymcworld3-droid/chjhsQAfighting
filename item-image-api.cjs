@@ -4,7 +4,7 @@ const { randomUUID, createHash, createHmac } = require('node:crypto');
 const { adminProject, PROJECT_IDS } = require('./firebase-admin-projects.cjs');
 
 const MODEL = '@cf/black-forest-labs/flux-1-schnell';
-const PROMPT_VERSION = 'xianxia-moba-item-icon-v3';
+const PROMPT_VERSION = 'xianxia-moba-item-icon-v4';
 const PROMPT_MAX = 2048;
 const CONFIGS = Object.freeze({
   artifact: { doc: 'artifactCatalogV1', folder: 'artifacts' },
@@ -130,12 +130,13 @@ function buildItemImagePrompt(kind, item = {}) {
   const effects = effectSummary(item);
 
   const common = [
-    'Create a 1:1 square inventory icon for a Chinese xianxia cultivation RPG.',
-    'Use premium mobile MOBA item-icon rendering with very vivid and saturated colors, bold readable silhouette, painterly fantasy detail, rich metal jade crystal textures, sharp specular highlights, controlled bloom, dramatic rim lighting, deep contrast, and excellent readability at small size.',
-    'Center exactly one object, fully visible and not cropped. Let the object fill about 80 to 88 percent of the canvas with a strong iconic silhouette.',
-    'Use only an abstract dark gradient background with magical haze and soft energy glow; no environment, no landscape, no room, no temple, no table, no platform, no shelf, no rack, no stand, no holder, no pedestal, and no display base.',
-    'The object should appear to float in space by itself.',
-    'Do not include text, letters, numbers, labels, watermark, logo, UI frame, inventory border, duplicated object, split panel, or caption.'
+    'Create a 1:1 square fantasy MOBA equipment icon for a Chinese xianxia cultivation RPG.',
+    'Match the visual language of polished competitive mobile MOBA item icons: one oversized item, saturated jewel-tone colors, strong blue purple or black background contrast, bright magical highlights, glossy metal and crystal rendering, painterly fantasy shading, crisp glowing edges, and immediate thumbnail readability.',
+    'Show exactly one item. Make it large and dominant, filling about 82 to 92 percent of the square while remaining fully visible and uncropped.',
+    'Use a simple dark navy, indigo, violet, or black gradient background with a localized aura directly behind the object. No environment and no scenery.',
+    'The item must float by itself in the center. No table, altar, rack, stand, shelf, tray, platform, holder, pedestal, mount, display base, shadow-catching floor, or supporting object.',
+    'Use strong directional highlights and a luminous edge glow so the object pops clearly from the dark background. Keep the background simple and the item visually dominant.',
+    'Do not include text, letters, numbers, labels, watermark, logo, UI frame, inventory border, duplicated object, split panel, character, hand, or caption.'
   ];
 
   if (kind === 'material') {
@@ -156,15 +157,13 @@ function buildItemImagePrompt(kind, item = {}) {
 
   return finalizePrompt([
     ...common,
-    'This is a finished magical ARTIFACT and should read like a top-tier competitive MOBA equipment icon, not a realistic product photo.',
-    'Show exactly one complete artifact at a slightly dramatic three-quarter angle with a powerful, elegant, highly readable silhouette.',
-    'Use vivid jewel-tone colors and stronger saturation. Favor luminous gold, crimson, emerald, sapphire, cyan, violet, and fiery orange accents when appropriate to the artifact, while keeping the overall palette clean and visually striking.',
-    'Use ornate xianxia craftsmanship, layered metal or jade edges, engraved details, luminous runes, energy seams, and a concentrated magical core glow.',
-    'The artifact must float alone in the center of the image. Do not place it on any rack, stand, shelf, table, altar, tray, platform, holder, pedestal, or base.',
-    'Keep the silhouette instantly recognizable at thumbnail size. Swords remain swords, shields remain shields, talismans remain talismans, mirrors remain mirrors, bells remain bells, cauldrons remain cauldrons, and array artifacts remain compact mystical devices.',
-    'Add subtle sparks, wisps, embers, magical particles, or energy trails around the artifact, but keep all effects secondary to the object itself.',
-    'Make higher cultivation realms feel rarer through finer ornament, brighter core energy, richer materials, more saturated magical accents, and stronger but controlled rim light.',
-    'Avoid dull, gray, muddy, desaturated, or overly realistic color treatment.',
+    'This is a finished magical ARTIFACT. Render it as a polished in-game equipment icon, not a product photograph and not a full illustration.',
+    'Use a bold diagonal or three-quarter presentation when suitable, similar to high-end MOBA equipment icons: the main silhouette should be obvious within a fraction of a second.',
+    'Use vivid saturated colors with one dominant magical color family and bright complementary highlights. Favor gold, orange, red, cyan, electric blue, violet, emerald, or white energy depending on the artifact.',
+    'Use compact exaggerated fantasy proportions, ornate xianxia craftsmanship, sharp metallic edges, jade or crystal inlays, engraved motifs, luminous runes, magical seams, and concentrated energy glow.',
+    'Give the artifact bright rim light, specular shine, bloom around magical parts, and a localized aura behind it. Keep these effects tight around the item rather than filling the entire background.',
+    'Do not make the object tiny, distant, flat, gray, muddy, muted, photorealistic, or displayed on furniture. It must look like a vibrant game equipment icon.',
+    'Keep the silhouette instantly recognizable at thumbnail size. Swords remain swords, shields remain shields, talismans remain talismans, mirrors remain mirrors, bells remain bells, cauldrons remain cauldrons, boots remain boots, and array artifacts remain compact mystical devices.',
     'Item name: ' + name + '.',
     'Cultivation realm: ' + realm + '.',
     'Artifact category: ' + category + '.',
