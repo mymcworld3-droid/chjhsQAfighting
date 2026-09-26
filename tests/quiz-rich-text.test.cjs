@@ -24,17 +24,18 @@ test('quiz rich-text formatter protects images and MathJax segments separately',
 });
 
 test('solo question, all four choices and explanation share the safe queued renderer', () => {
-  assert.match(legacy, /const renderedQuestion = \\(window\\.quizMathRichText \\|\\| formatQuizRichText\\)\\(data\\.q\\)/);
-  assert.match(legacy, /questionTextEl\\.innerHTML = renderedQuestion/);
-  assert.match(legacy, /quiz-rich-option[^\\n]*quizMathRichText \\|\\| formatQuizRichText\\)\\(optText\\)/);
-  assert.match(legacy, /window\\.quizMathSet\\(fbText, explanationText\\)/);
-  assert.match(legacy, /function parseMarkdownImages\\(text\\) \\{[\\s\\S]*return formatQuizRichText\\(text\\)/);
+  assert.ok(legacy.includes('const renderedQuestion = (window.quizMathRichText || formatQuizRichText)(data.q);'));
+  assert.ok(legacy.includes('questionTextEl.innerHTML = renderedQuestion;'));
+  assert.ok(legacy.includes('quiz-rich-option'));
+  assert.ok(legacy.includes('(window.quizMathRichText || formatQuizRichText)(optText)'));
+  assert.ok(legacy.includes('window.quizMathSet(fbText, explanationText)'));
+  assert.match(legacy, /function parseMarkdownImages\(text\) \{[\s\S]*return formatQuizRichText\(text\)/);
 });
 
 test('MathJax is rerun for the full options set and feedback after dynamic updates', () => {
-  assert.match(legacy, /window\\.quizMathClear\\?\\.\\(\\[questionTextEl, container\\]\\)/);
-  assert.match(legacy, /const mathTargets = \\[questionTextEl, container, whiteboardQuestionEl\\]\\.filter\\(Boolean\\)/);
-  assert.match(legacy, /if \\(window\\.quizMathTypeset\\) void window\\.quizMathTypeset\\(mathTargets\\)/);
-  assert.match(legacy, /window\\.quizMathSet\\(fbText, explanationText\\)/);
-  assert.match(legacy, /window\\.quizMathSet\\(fbText, currentExp\\)/);
+  assert.ok(legacy.includes('window.quizMathClear?.([questionTextEl, container]);'));
+  assert.ok(legacy.includes('const mathTargets = [questionTextEl, container, whiteboardQuestionEl].filter(Boolean);'));
+  assert.ok(legacy.includes('if (window.quizMathTypeset) void window.quizMathTypeset(mathTargets);'));
+  assert.ok(legacy.includes('window.quizMathSet(fbText, explanationText)'));
+  assert.ok(legacy.includes('window.quizMathSet(fbText, currentExp)'));
 });
