@@ -132,8 +132,8 @@ export async function commitRaidBossDefense({ roomId, hp, bossActionSeen, reflec
 export async function commitRaidMemberState({ roomId, hp, bossActionSeen }) {
   await api('member-state', { roomId, hp, bossActionSeen });
 }
-export async function advanceRaidBossAction({ roomId, intent, maxActions = 12 }) {
-  const result = await api('advance-boss', { roomId, intent, maxActions });
+export async function advanceRaidBossAction({ roomId, intent }) {
+  const result = await api('advance-boss', { roomId, intent });
   return result.room || null;
 }
 export async function leaveRaidRoom(roomId) {
