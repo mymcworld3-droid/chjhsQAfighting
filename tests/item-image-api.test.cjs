@@ -38,6 +38,19 @@ test('item image API uses Cloudflare FLUX Schnell with a fixed xianxia prompt', 
   assert.match(artifact, /exactly one complete artifact/);
 });
 
+test('item image prompt stays within the Cloudflare model limit', () => {
+  const prompt = buildItemImagePrompt('artifact', {
+    name: '極長描述法寶',
+    realm: '真仙',
+    category: '裝備法寶',
+    weaponForm: '劍',
+    description: '甲'.repeat(2000),
+    story: '乙'.repeat(2000),
+    effects: [{ type: 'equip_attack_flat', value: 999 }]
+  });
+  assert.ok(prompt.length <= 2048);
+});
+
 test('Cloudflare image response keeps base64 intact and uses four steps', async () => {
   let request = null;
   const fakeFetch = async (url, options) => {
