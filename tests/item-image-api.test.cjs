@@ -72,6 +72,7 @@ test('Cloudflare image response keeps base64 intact and uses four steps', async 
   const body = JSON.parse(request.options.body);
   assert.equal(body.prompt, 'test prompt');
   assert.equal(body.steps, 4);
+  assert.equal(Object.hasOwn(body, 'seed'), false);
 });
 
 test('server and clients wire secure backfill and automatic generated-artifact images', () => {
