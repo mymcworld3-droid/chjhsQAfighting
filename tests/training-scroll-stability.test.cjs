@@ -31,7 +31,7 @@ test('Foundation cleanup cannot repeatedly clear Golden Core unlocked layout', (
 });
 
 test('Golden Core unlock UI runs only on an actual unlock transition', () => {
-  assert.match(training, /if \(lastUnlocked === unlocked\) return;/);
+  assert.match(training, /if \(lastUnlocked === unlocked\) \{[\s\S]*?return;[\s\S]*?\}/);
   assert.match(training, /if \(unlocked\) ensureUnlockedUI\(\)/);
   assert.match(training, /else if \(lastUnlocked === true\) removeLockedUI\(\)/);
 });
