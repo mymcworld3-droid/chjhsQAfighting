@@ -47,6 +47,7 @@ import {
     heartbeatTimer: null,
     lastBossActionSeen: 0,
     applyingBossAction: false,
+    advancingBossAction: false,
     reconnectTried: false,
     invitedRoomId: '',
     rewardClaiming: false,
@@ -471,13 +472,27 @@ import {
   }
 
   async function maybeAdvanceBoss() {
-    if (!isHost() || state.room?.status !== 'active' || !state.bossStartedAtMs) return;
+    if (!isHost() || state.room?.status !== 'active' || !state.bossStartedAtMs || state.advancingBossAction) return;
     const clock = currentBossClock();
     if (!clock?.due) return;
+    state.advancingBossAction = true;
     try {
-      await advanceRaidBossAction({ roomId: state.roomId, intent: currentIntent(), maxActions: RAID_MVP.maxBossActions });
+      const room = await advanceRaidBossAction({
+        roomId: state.roomId,
+        intent: currentIntent(),
+        maxActions: RAID_MVP.maxBossActions
+      });
+      if (room) {
+        state.room = room;
+        state.bossActionCount = Math.max(state.bossActionCount, Number(room.bossActionCount) || 0);
+        if (room.lastBossAction && Number(room.lastBossAction.id) > state.lastBossActionSeen) {
+          void applyRemoteBossAction(room.lastBossAction);
+        }
+      }
     } catch (error) {
       console.warn('[Raid] boss timeline sync failed:', error);
+    } finally {
+      state.advancingBossAction = false;
     }
   }
 
@@ -752,7 +767,7 @@ import {
       history: [], questionIssuedAtMs: 0, questionResolvedAtMs: 0, nextQuestionAtMs: 0,
       selectedChoice: null, answerCorrect: null, playerActionCount: 0, bossStartedAtMs: 0, bossActionCount: 0,
       lastBossAction: null, lastPlayerAction: null, questionLoading: false, roomId: '', room: null,
-      lastBossActionSeen: 0, applyingBossAction: false, invitedRoomId: '',
+      lastBossActionSeen: 0, applyingBossAction: false, advancingBossAction: false, invitedRoomId: '',
       rewardClaiming: false, rewardClaimedRoomId: ''
     });
     document.body.classList.remove('raid-session-active');
