@@ -4,6 +4,7 @@ const { adminProject, PROJECT_IDS } = require('./firebase-admin-projects.cjs');
 
 const SCHEMA_VERSION = 1;
 const PROFILE_COLLECTION = 'playerProfiles';
+const STATE_COLLECTION = 'playerProvisionStates';
 
 function safeText(input, length = 80) {
   return typeof input === 'string' ? input.trim().slice(0, length) : '';
@@ -46,6 +47,35 @@ async function createPlayerProfile(db, uid, data, { now = Date.now } = {}) {
   return created ? 'created' : 'existing';
 }
 
+function validProvisionState(data, uid) {
+  return data?.ready === true &&
+    data?.uid === uid &&
+    data?.schemaVersion === SCHEMA_VERSION &&
+    data?.sourceProject === PROJECT_IDS.A &&
+    data?.projects?.BD === PROJECT_IDS.BD &&
+    data?.projects?.C === PROJECT_IDS.C;
+}
+
+async function readProvisionState(db, uid) {
+  const snap = await db.collection(STATE_COLLECTION).doc(uid).get();
+  if (!snap.exists) return null;
+  const data = snap.data() || {};
+  return validProvisionState(data, uid) ? data : null;
+}
+
+async function markProvisionState(db, uid, { now = Date.now } = {}) {
+  const state = {
+    ready: true,
+    uid,
+    schemaVersion: SCHEMA_VERSION,
+    sourceProject: PROJECT_IDS.A,
+    projects: { BD: PROJECT_IDS.BD, C: PROJECT_IDS.C },
+    verifiedAtMs: now()
+  };
+  await db.collection(STATE_COLLECTION).doc(uid).set(state, { merge: true });
+  return state;
+}
+
 function createPlayerProvisionHandler({
   resolve = role => adminProject(role),
   migrationStatus,
@@ -79,17 +109,49 @@ function createPlayerProvisionHandler({
       return res.status(401).json({ ready: false, message: '登入已失效，請重新登入。' });
     }
 
+    const uid = verified.uid;
+
+    // Once a UID has completed trusted BD/C provisioning, future logins never
+    // re-read the two secondary profiles or poll the global cave migration.
+    // A single server-owned marker in project A is enough until the schema changes.
+    try {
+      const existingState = await readProvisionState(a.db, uid);
+      if (existingState) {
+        return res.status(200).json({
+          ready: true,
+          cached: true,
+          uid,
+          profiles: { BD: 'verified', C: 'verified' },
+          provisionState: existingState
+        });
+      }
+    } catch (error) {
+      logger.error('[Player provisioning] state read:', error.message);
+      return res.status(503).json({
+        ready: false,
+        code: 'PROVISION_STATE_UNAVAILABLE',
+        message: '目前無法讀取跨專案玩家完成狀態。'
+      });
+    }
+
     let status;
     try { status = await migrationStatus({ trigger: false }); }
     catch (error) {
       logger.error('[Player provisioning] migration check:', error.message);
-      return res.status(503).json({ ready: false, message: '目前無法核對洞天搬移狀態。' });
+      return res.status(503).json({
+        ready: false,
+        code: 'MIGRATION_STATUS_UNAVAILABLE',
+        message: '目前無法核對洞天搬移狀態。'
+      });
     }
     if (status?.status !== 'ready' || status?.ready !== true) {
-      return res.status(503).json({ ready: false, message: '洞天尚未完成搬移及核對。' });
+      return res.status(503).json({
+        ready: false,
+        code: 'MIGRATION_NOT_READY',
+        message: '洞天尚未完成搬移及核對。'
+      });
     }
 
-    const uid = verified.uid;
     try {
       const userSnap = await a.db.collection('users').doc(uid).get();
       if (!userSnap.exists) {
@@ -99,9 +161,13 @@ function createPlayerProvisionHandler({
       if (profile.uid && profile.uid !== uid) throw new Error('Main user record UID mismatch');
       const bdResult = await create(bd.db, uid, project('BD', uid, profile));
       const cResult = await create(c.db, uid, project('C', uid, profile));
+      const provisionState = await markProvisionState(a.db, uid);
       return res.status(200).json({
-        ready: true, uid,
-        profiles: { BD: bdResult, C: cResult }
+        ready: true,
+        cached: false,
+        uid,
+        profiles: { BD: bdResult, C: cResult },
+        provisionState
       });
     } catch (error) {
       logger.error('[Player provisioning] incomplete, safe to retry:', error.message);
@@ -120,3 +186,6 @@ module.exports = function registerPlayerProvisionApi(app, { migrationController,
 module.exports.createPlayerProvisionHandler = createPlayerProvisionHandler;
 module.exports.createPlayerProfile = createPlayerProfile;
 module.exports.projectPlayerData = projectPlayerData;
+module.exports.readProvisionState = readProvisionState;
+module.exports.markProvisionState = markProvisionState;
+module.exports.validProvisionState = validProvisionState;
