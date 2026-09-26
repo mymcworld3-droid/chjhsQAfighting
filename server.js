@@ -13,6 +13,7 @@ const registerPlayerProvisionApi = require('./firebase-player-provision-api.cjs'
 const registerAdminAccountApi = require('./admin-account-api.cjs');
 const registerAdminArtifactDeleteApi = require('./admin-artifact-delete-api.cjs');
 const { registerItemImageApi } = require('./item-image-api.cjs');
+const registerRaidApi = require('./raid-api.cjs');
 require('dotenv').config();
 
 const app = express();
@@ -31,6 +32,7 @@ registerPlayerProvisionApi(app, { migrationController });
 registerAdminAccountApi(app);
 registerAdminArtifactDeleteApi(app);
 registerItemImageApi(app);
+registerRaidApi(app);
 
 // 根目錄路由
 app.get('/', (req, res) => {
