@@ -950,10 +950,8 @@ async function waitForVerifiedPlayerMigration(user) {
             if (!provision.ready) {
                 throw new Error(provision.record?.message || '跨專案玩家資料尚未建立完成。');
             }
-            await Promise.all([
-                ensureSecondaryFirebaseAuth('BD'),
-                ensureSecondaryFirebaseAuth('C')
-            ]);
+            await ensureSecondaryFirebaseAuth('BD');
+            await ensureSecondaryFirebaseAuth('C');
             if (auth.currentUser?.uid !== user.uid) throw new Error('登入帳號已更換，請重新進入遊戲。');
             return;
         }
