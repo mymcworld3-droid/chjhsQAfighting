@@ -4,7 +4,7 @@ const { randomUUID, createHash, createHmac } = require('node:crypto');
 const { adminProject, PROJECT_IDS } = require('./firebase-admin-projects.cjs');
 
 const MODEL = '@cf/black-forest-labs/flux-1-schnell';
-const PROMPT_VERSION = 'xianxia-moba-item-icon-v2';
+const PROMPT_VERSION = 'xianxia-moba-item-icon-v3';
 const PROMPT_MAX = 2048;
 const CONFIGS = Object.freeze({
   artifact: { doc: 'artifactCatalogV1', folder: 'artifacts' },
@@ -131,9 +131,10 @@ function buildItemImagePrompt(kind, item = {}) {
 
   const common = [
     'Create a 1:1 square inventory icon for a Chinese xianxia cultivation RPG.',
-    'Use polished premium mobile MOBA item-icon rendering: bold readable silhouette, painterly fantasy detail, rich metal jade crystal textures, sharp specular highlights, controlled bloom, dramatic rim lighting, deep contrast, and clean small-size readability.',
-    'Center exactly one object, fully visible and not cropped. Let the object fill about 78 to 86 percent of the canvas with a strong iconic silhouette.',
-    'Use a dark vignetted gradient background with soft magical haze only; no environment, landscape, pedestal, hand, character, or full scene.',
+    'Use premium mobile MOBA item-icon rendering with very vivid and saturated colors, bold readable silhouette, painterly fantasy detail, rich metal jade crystal textures, sharp specular highlights, controlled bloom, dramatic rim lighting, deep contrast, and excellent readability at small size.',
+    'Center exactly one object, fully visible and not cropped. Let the object fill about 80 to 88 percent of the canvas with a strong iconic silhouette.',
+    'Use only an abstract dark gradient background with magical haze and soft energy glow; no environment, no landscape, no room, no temple, no table, no platform, no shelf, no rack, no stand, no holder, no pedestal, and no display base.',
+    'The object should appear to float in space by itself.',
     'Do not include text, letters, numbers, labels, watermark, logo, UI frame, inventory border, duplicated object, split panel, or caption.'
   ];
 
@@ -156,10 +157,14 @@ function buildItemImagePrompt(kind, item = {}) {
   return finalizePrompt([
     ...common,
     'This is a finished magical ARTIFACT and should read like a top-tier competitive MOBA equipment icon, not a realistic product photo.',
-    'Show exactly one complete artifact at a slightly dramatic three-quarter angle. Use elegant exaggerated proportions, ornate xianxia craftsmanship, layered metal or jade edges, engraved details, luminous runes or energy seams, and a focused magical glow around the artifact.',
+    'Show exactly one complete artifact at a slightly dramatic three-quarter angle with a powerful, elegant, highly readable silhouette.',
+    'Use vivid jewel-tone colors and stronger saturation. Favor luminous gold, crimson, emerald, sapphire, cyan, violet, and fiery orange accents when appropriate to the artifact, while keeping the overall palette clean and visually striking.',
+    'Use ornate xianxia craftsmanship, layered metal or jade edges, engraved details, luminous runes, energy seams, and a concentrated magical core glow.',
+    'The artifact must float alone in the center of the image. Do not place it on any rack, stand, shelf, table, altar, tray, platform, holder, pedestal, or base.',
     'Keep the silhouette instantly recognizable at thumbnail size. Swords remain swords, shields remain shields, talismans remain talismans, mirrors remain mirrors, bells remain bells, cauldrons remain cauldrons, and array artifacts remain compact mystical devices.',
-    'Use one dominant magical accent glow plus subtle sparks, wisps, or energy trails. Effects must enhance the object, never hide its shape or fill the whole canvas.',
-    'Make higher cultivation realms feel rarer through finer ornament, brighter core energy, richer materials, and stronger but controlled rim light.',
+    'Add subtle sparks, wisps, embers, magical particles, or energy trails around the artifact, but keep all effects secondary to the object itself.',
+    'Make higher cultivation realms feel rarer through finer ornament, brighter core energy, richer materials, more saturated magical accents, and stronger but controlled rim light.',
+    'Avoid dull, gray, muddy, desaturated, or overly realistic color treatment.',
     'Item name: ' + name + '.',
     'Cultivation realm: ' + realm + '.',
     'Artifact category: ' + category + '.',
