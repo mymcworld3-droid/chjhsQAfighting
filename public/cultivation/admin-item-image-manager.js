@@ -83,6 +83,14 @@ import {
     return [...artifactRows, ...materialRows];
   }
 
+  function regenerateQueue() {
+    const artifactRows = ARTIFACT_CATALOG
+      .map((item) => ({ kind: 'artifact', id: item.id, name: item.name || item.id }));
+    const materialRows = MATERIAL_CATALOG
+      .map((item) => ({ kind: 'material', id: item.id, name: item.name || item.id }));
+    return [...artifactRows, ...materialRows];
+  }
+
   function counts() {
     const artifactsReady = ARTIFACT_CATALOG.filter((item) => item.imageUrl).length;
     const materialsReady = MATERIAL_CATALOG.filter((item) => item.imageUrl).length;
@@ -115,9 +123,10 @@ import {
     const c = counts();
     panel.innerHTML = `
       <div class="aiim-head">
-        <div><h3><i class="fa-solid fa-images"></i> 法寶／素材圖片</h3><p>使用 Cloudflare FLUX.1 Schnell。補圖只處理目前沒有圖片的項目；新建法寶與素材會自動生圖。</p></div>
+        <div><h3><i class="fa-solid fa-images"></i> 法寶／素材圖片</h3><p>使用 Cloudflare FLUX.1 Schnell。補圖只處理缺圖；一鍵重生會強制重新生成全部法寶與素材圖片。</p></div>
         <div class="aiim-actions">
           <button type="button" class="aiim-btn" id="aiim-backfill" ${busy ? 'disabled' : ''}><i class="fa-solid fa-wand-magic-sparkles"></i> 補圖</button>
+          <button type="button" class="aiim-btn" id="aiim-regenerate" ${busy ? 'disabled' : ''}><i class="fa-solid fa-arrows-rotate"></i> 一鍵重生</button>
           <button type="button" class="aiim-btn aiim-stop" id="aiim-stop" ${busy ? '' : 'disabled'}><i class="fa-solid fa-stop"></i> 停止</button>
         </div>
       </div>
@@ -129,6 +138,7 @@ import {
       <div class="aiim-progress"><i id="aiim-progress-bar"></i></div>
     `;
     panel.querySelector('#aiim-backfill')?.addEventListener('click', backfill);
+    panel.querySelector('#aiim-regenerate')?.addEventListener('click', regenerateAll);
     panel.querySelector('#aiim-stop')?.addEventListener('click', () => {
       stopRequested = true;
       const status = panel.querySelector('#aiim-status');
@@ -136,14 +146,18 @@ import {
     });
   }
 
-  async function backfill() {
+  async function runQueue(queue, {
+    overwrite = false,
+    actionLabel = '補圖',
+    emptyMessage = '目前沒有需要補圖的法寶或素材'
+  } = {}) {
     if (busy || !isAdmin()) return;
-    const queue = missingQueue();
     if (!queue.length) {
-      toast('目前沒有需要補圖的法寶或素材');
+      toast(emptyMessage);
       render();
       return;
     }
+
     busy = true;
     stopRequested = false;
     render();
@@ -157,22 +171,23 @@ import {
     for (let index = 0; index < queue.length; index += 1) {
       if (stopRequested) break;
       const row = queue[index];
-      if (status) status.textContent = `正在生成 ${index + 1} / ${queue.length}：${row.kind === 'artifact' ? '法寶' : '素材'}「${row.name}」`;
+      if (status) status.textContent = `${actionLabel}中 ${index + 1} / ${queue.length}：${row.kind === 'artifact' ? '法寶' : '素材'}「${row.name}」`;
       if (bar) bar.style.width = Math.round(index / queue.length * 100) + '%';
       try {
-        await requestItemImage(row.kind, row.id);
+        await requestItemImage(row.kind, row.id, { overwrite });
         completed += 1;
       } catch (error) {
         failed += 1;
         const message = String(error?.message || '圖片生成失敗');
         if (!firstError) firstError = message;
         console.warn('[Admin item image backfill]', {
+          action: overwrite ? 'regenerate' : 'backfill',
           ...row,
           status: Number(error?.status) || 0,
           error: message
         });
         if (FATAL_IMAGE_STATUSES.has(Number(error?.status) || 0)) {
-          if (status) status.textContent = message + '；已停止本次補圖。';
+          if (status) status.textContent = message + '；已停止本次' + actionLabel + '。';
           break;
         }
       }
@@ -184,10 +199,26 @@ import {
     stopRequested = false;
     render();
     if (firstError) {
-      toast(`補圖失敗：${firstError}${completed ? `（已完成 ${completed} 張）` : ''}`, false);
+      toast(`${actionLabel}失敗：${firstError}${completed ? `（已完成 ${completed} 張）` : ''}`, false);
     } else {
-      toast(stopped ? `已停止補圖，本次完成 ${completed} 張` : `補圖完成：成功 ${completed} 張`, true);
+      toast(stopped ? `已停止${actionLabel}，本次完成 ${completed} 張` : `${actionLabel}完成：成功 ${completed} 張`, true);
     }
+  }
+
+  async function backfill() {
+    return runQueue(missingQueue(), {
+      overwrite: false,
+      actionLabel: '補圖',
+      emptyMessage: '目前沒有需要補圖的法寶或素材'
+    });
+  }
+
+  async function regenerateAll() {
+    return runQueue(regenerateQueue(), {
+      overwrite: true,
+      actionLabel: '重生',
+      emptyMessage: '目前沒有可重新生成圖片的法寶或素材'
+    });
   }
 
   function mount() {
