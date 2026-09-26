@@ -71,7 +71,7 @@ function mockWorker() {
     const base = new URL(scope);
     const path = uri.origin === base.origin && uri.pathname.startsWith(base.pathname)
       ? uri.pathname.slice(base.pathname.length)
-      : uri.pathname.replace(/^\\/+/, '');
+      : uri.pathname.replace(/^\/+/, '');
     networkCalls.push({ path, url: uri.href, options });
     if (uri.pathname.endsWith('/module-versions.json')) return new Response(JSON.stringify(versions), { status:200 });
     return new Response('file:' + path, { status:200 });
