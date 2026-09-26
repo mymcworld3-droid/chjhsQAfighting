@@ -241,7 +241,7 @@ test('Dongtian first completion grants spirit stones by question count and culti
   assert.match(uiSource, /function firstCompletionCultivation\(correctCount\)/);
   assert.match(uiSource, /const cultivationReward = firstCompletionCultivation\(correct\)/);
   assert.match(uiSource, /'stats\.gold': increment\(firstCompletionReward\)/);
-  assert.match(uiSource, /'stats\.totalScore': increment\(cultivationReward\)/);
+  assert.match(uiSource, /'stats\.totalScore': increment\(cultivationReward \+ soulCultivationAdded\)/);
   assert.match(uiSource, /cultivationAdded: cultivationReward \\+ soulCultivationAdded/);
   assert.match(uiSource, /首次修為：<\/strong>每答對 1 題 \+1 修為/);
 });
@@ -369,7 +369,7 @@ test('Question report only appears after answering and tutorial reports stay loc
 });
 test('Completion reward transaction rechecks active status to prevent seal/reward races', () => {
   const completion = uiSource.slice(uiSource.indexOf('async function completeProgress'), uiSource.indexOf('async function writeDongtianHistory'));
-  assert.match(completion, /const \[playSnap, indexSnap\] = await Promise\.all/);
+  assert.match(completion, /const \[playSnap, indexSnap, playerSnap\] = await Promise\.all/);
   assert.match(completion, /indexSnap\.data\(\)\?\.status !== 'active'/);
   assert.match(completion, /洞天已封印，本次不進行通關結算/);
 });
