@@ -52,7 +52,7 @@ test('raid refinement keys are raid-only and gate second and third refinement', 
   assert.match(refinery, /SECOND_REFINEMENT_KEY = 'raid-refine-key-2'/);
   assert.match(refinery, /THIRD_REFINEMENT_KEY = 'raid-refine-key-3'/);
   assert.match(refinery, /refinementKeyRequirement\(depth, targetRealm/);
-  assert.match(refinery, /consumeRecipe\(raw, plan\.recipe, trustedKey\)/);
+  assert.match(refinery, /const consumed = consumeRecipe\(raw, plan\.recipe\)/);
   assert.match(apiSource, /\[SECOND_REFINEMENT_KEY\]: 1/);
   assert.match(apiSource, /deterministicThirdKey/);
 });
