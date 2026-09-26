@@ -128,8 +128,7 @@ async function generateFluxImage(prompt, { env = process.env, fetchImpl = fetch,
         },
         body: JSON.stringify({
           prompt,
-          steps: 4,
-          seed: Math.floor(Math.random() * 2147483646) + 1
+          steps: 4
         }),
         signal: controller.signal
       }
