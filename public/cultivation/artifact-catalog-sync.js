@@ -17,6 +17,7 @@ import {
   const GENERATION_PROMPT_MAX = 1200;
   let unsubscribe = null;
   let migrationWriteStarted = false;
+  let pendingMigration = null;
   // A fallback catalog cannot validate remotely created artifacts. Never remove
   // a player's saved equipment until the authoritative catalog is available.
   window.__artifactCatalogReadyForEquipment = false;
@@ -58,8 +59,13 @@ import {
   }
 
   async function persistBackfill(ref, items) {
-    if (migrationWriteStarted || !isAdmin()) return;
+    if (migrationWriteStarted) return;
+    if (!isAdmin()) {
+      pendingMigration = { ref, items };
+      return;
+    }
     migrationWriteStarted = true;
+    pendingMigration = null;
     try {
       await setDoc(ref, {
         items,
@@ -68,8 +74,15 @@ import {
       }, { merge: true });
     } catch (error) {
       migrationWriteStarted = false;
+      pendingMigration = { ref, items };
       console.warn('[Artifact catalog migration] runtime backfill applied, Firestore persistence deferred:', error);
     }
+  }
+
+  function retryPendingMigration() {
+    if (!pendingMigration || migrationWriteStarted || !isAdmin()) return;
+    const pending = pendingMigration;
+    persistBackfill(pending.ref, pending.items);
   }
 
   function start() {
@@ -111,6 +124,9 @@ import {
       applyDefault('default-sync-error');
     });
   }
+
+  window.addEventListener('xiuxian:user-ready', retryPendingMigration);
+  window.addEventListener('xiuxian:features-ready', retryPendingMigration);
 
   window.getArtifactEffectBounds = () => JSON.parse(JSON.stringify(window.__artifactEffectBoundsV2 || {}));
   window.setArtifactEffectBoundsLocal = (value, source = 'admin-save') => applyEffectBounds(value, source);
