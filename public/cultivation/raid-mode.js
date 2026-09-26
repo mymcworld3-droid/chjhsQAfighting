@@ -1,7 +1,7 @@
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, collection, getDoc, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-import { RAID_MVP, createTeamScaledShenBoss, shenPhaseForHp, shenIntentForRound, bossClockState, nextPersonalQuestionAt } from './raid-engine.js';
+import { RAID_MVP, createTeamScaledShenBoss, shenPhaseForHp, shenIntentForRound, bossClockState } from './raid-engine.js';
 import { snapshotBattleKnowledge, resolveBattleKnowledge } from './battle-question-scope.js';
 import { generateRaidQuestion } from './raid-question.js';
 import { resolveShenPlayerAction, resolveShenBossAction } from './raid-combat.js';
@@ -48,6 +48,9 @@ import {
     lastBossActionSeen: 0,
     applyingBossAction: false,
     advancingBossAction: false,
+    battleSceneToken: 0,
+    battleScenePlaying: false,
+    pendingFinishRoom: null,
     reconnectTried: false,
     invitedRoomId: '',
     rewardClaiming: false,
@@ -190,9 +193,9 @@ import {
       '<div><small>SECRET REALM ／ 秘境集結</small><h2>秘境討伐</h2><p>1–4 人共用 Boss；每位玩家各自作答，不互相等待。</p></div><span class="raid-seal">團</span></header>' +
       '<article class="raid-boss-card ' + (locked ? 'locked' : '') + '">' +
       '<div class="raid-boss-art"><img src="' + RAID_MVP.bossImage + '" alt="沈清霜"><span>多人 Boss</span></div>' +
-      '<div class="raid-boss-info"><div class="raid-badges"><span>1–4 人</span><span>題目不同步</span><span>作答不限時</span><span>Boss 每 18 秒行動</span></div>' +
+      '<div class="raid-boss-info"><div class="raid-badges"><span>1–4 人</span></div>' +
       '<small>青雲山・演武秘境</small><h3>' + RAID_MVP.bossTitle + '</h3>' +
-      '<p>題目已取消倒數。你可以思考到作答為止，但 Boss 不會等待，仍依自己的時間軸持續出招。答錯只失去本次攻擊，不會額外觸發 Boss 傷害。</p>' +
+      '<p>與隊友一同迎戰大師姐。答對即可出手，Boss 出招時會切回戰場呈現攻防結果。</p>' +
       '<div class="raid-join-grid"><button class="raid-primary" type="button" data-quick ' + (locked ? 'disabled' : '') + '>快速加入／建立隊伍</button>' +
       '<button class="raid-ghost" type="button" data-create ' + (locked ? 'disabled' : '') + '>建立私人隊伍</button></div>' +
       '<div class="raid-code-join"><input id="raid-room-code-input" maxlength="6" placeholder="輸入 6 碼隊伍代碼"><button class="raid-ghost" type="button" data-code ' + (locked ? 'disabled' : '') + '>加入隊伍</button></div>' +
@@ -310,7 +313,7 @@ import {
     const alive = state.player.hp > 0 && myRoomMember()?.alive !== false;
     arena.innerHTML =
       '<header class="raid-battle-head"><button class="raid-back" type="button" data-leave><i class="fa-solid fa-door-open"></i></button>' +
-      '<div><small>清霜試煉・' + raidRoomMembers(state.room).length + ' 人隊伍</small><strong>Boss 行動 ' + state.bossActionCount + ' / ' + RAID_MVP.maxBossActions + '</strong></div>' +
+      '<div><small>清霜試煉・' + raidRoomMembers(state.room).length + ' 人隊伍</small><strong>Boss 已出招 ' + state.bossActionCount + ' 次</strong></div>' +
       '<span>階段 ' + state.boss.phase + '・' + phaseName(state.boss.phase) + '</span></header>' +
       partyMarkup() +
       '<div class="raid-stage"><section class="raid-boss-side"><div class="raid-name-row"><div><small>BOSS</small><h3>' + state.boss.name + '</h3></div>' +
@@ -328,6 +331,64 @@ import {
       (!alive ? '觀戰中' : state.question ? '繼續作答' : state.questionLoading ? '題目準備中…' : '準備下一題') + '</button></section></div>';
     arena.querySelector('[data-leave]')?.addEventListener('click', leaveRaid);
     arena.querySelector('[data-question]')?.addEventListener('click', function () { void openNextQuestion(); });
+  }
+
+  function wait(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  async function playBattleScene({
+    attacker = 'boss',
+    actionName = '',
+    damage = 0,
+    reflectedDamage = 0,
+    guarded = false,
+    defenseSkill = '',
+    healed = 0
+  } = {}) {
+    const returnStatus = state.status;
+    const returnToQuestion = !!state.question && ['question', 'review'].includes(returnStatus);
+    const token = ++state.battleSceneToken;
+    state.battleScenePlaying = true;
+    renderArena();
+
+    const arena = document.getElementById('raid-arena');
+    const stage = arena?.querySelector('.raid-stage');
+    if (stage) stage.classList.add(attacker === 'player' ? 'raid-player-strike' : 'raid-boss-strike');
+
+    const notice = document.createElement('div');
+    notice.className = 'raid-combat-event ' + (attacker === 'player' ? 'player' : 'boss');
+    const details = [];
+    if (guarded) details.push('道心護體・完全抵擋');
+    if (defenseSkill) details.push(defenseSkill);
+    if (reflectedDamage > 0) details.push('反擊 ' + Math.round(reflectedDamage).toLocaleString());
+    if (healed > 0) details.push('回復 ' + Math.round(healed).toLocaleString() + ' HP');
+    notice.innerHTML =
+      '<small>' + (attacker === 'player' ? '你的攻勢' : '大師姐出招') + '</small>' +
+      '<strong>' + escapeHtml(actionName || (attacker === 'player' ? '攻擊' : '劍招')) + '</strong>' +
+      '<b>' + (guarded ? '0' : Math.max(0, Math.round(Number(damage) || 0)).toLocaleString()) + ' 傷害</b>' +
+      (details.length ? '<span>' + details.map(escapeHtml).join('・') + '</span>' : '');
+    arena?.appendChild(notice);
+
+    await wait(1150);
+    if (token !== state.battleSceneToken) return;
+
+    notice.remove();
+    stage?.classList.remove('raid-player-strike', 'raid-boss-strike');
+    state.battleScenePlaying = false;
+
+    if (state.pendingFinishRoom) {
+      const terminal = state.pendingFinishRoom;
+      state.pendingFinishRoom = null;
+      state.room = terminal;
+      finishRaid(terminal.status === 'won', terminal.status === 'won' ? 'boss-defeated' : 'team-defeated');
+      return;
+    }
+
+    if (state.room?.status === 'active' && returnToQuestion && state.question) {
+      state.status = returnStatus;
+      renderQuestion(returnStatus === 'review');
+    }
   }
 
   async function prefetchQuestion() {
@@ -352,11 +413,6 @@ import {
 
   async function openNextQuestion() {
     if (state.room?.status !== 'active' || state.player?.hp <= 0 || state.status === 'question') return;
-    const wait = Math.max(0, state.nextQuestionAtMs - now());
-    if (wait > 0) {
-      toast('下一次出手尚需 ' + (wait / 1000).toFixed(1) + ' 秒。');
-      return;
-    }
     if (!state.pendingQuestion) {
       await prefetchQuestion();
       if (!state.pendingQuestion) return renderArena();
@@ -411,10 +467,7 @@ import {
     state.selectedChoice = Number.isInteger(choice) ? choice : null;
     state.answerCorrect = state.selectedChoice !== null && state.selectedChoice === Number(state.question.ans);
     state.questionResolvedAtMs = now();
-    state.nextQuestionAtMs = nextPersonalQuestionAt({
-      issuedAtMs: state.questionIssuedAtMs,
-      resolvedAtMs: state.questionResolvedAtMs
-    });
+    state.nextQuestionAtMs = 0;
     const actionId = state.playerActionCount + 1;
     const action = resolveShenPlayerAction({
       runId: state.runId,
@@ -440,7 +493,18 @@ import {
       toast('出手同步失敗，正在等待房間重新同步。');
     }
     void prefetchQuestion();
-    if (state.room?.status === 'active') renderQuestion(true);
+    if (state.room?.status === 'active') {
+      if (state.answerCorrect && action.damage > 0) {
+        await playBattleScene({
+          attacker: 'player',
+          actionName: '破勢一擊',
+          damage: action.damage,
+          healed: action.healed
+        });
+      } else {
+        renderQuestion(true);
+      }
+    }
     updateHomeEntry();
   }
 
@@ -463,7 +527,20 @@ import {
         bossActionSeen: state.lastBossActionSeen,
         reflectedDamage: result.reflectedDamage
       });
-      toast(result.guarded ? '道心護體擋下「' + action.name + '」' : '大師姐「' + action.name + '」造成 ' + result.damage.toLocaleString() + ' 傷害');
+      const bossHint = [
+        result.guarded ? '道心護體擋下攻擊' : ('受到 ' + result.damage.toLocaleString() + ' 傷害'),
+        result.reflectedDamage > 0 ? ('反擊 ' + result.reflectedDamage.toLocaleString()) : '',
+        result.defenseSkill || ''
+      ].filter(Boolean).join('・');
+      toast(bossHint);
+      await playBattleScene({
+        attacker: 'boss',
+        actionName: action.name,
+        damage: result.damage,
+        reflectedDamage: result.reflectedDamage,
+        guarded: result.guarded,
+        defenseSkill: result.defenseSkill
+      });
     } catch (error) {
       console.error('[Raid] boss action apply failed:', error);
     } finally {
@@ -512,8 +589,7 @@ import {
         'Boss ' + (current.remainingMs / 1000).toFixed(1) + ' 秒後行動';
     }
     const qTimer = document.getElementById('raid-question-timer');
-    if (qTimer) qTimer.textContent = state.status === 'review' ?
-      (Math.max(0, state.nextQuestionAtMs - now()) > 0 ? '冷卻 ' + (Math.max(0, state.nextQuestionAtMs - now()) / 1000).toFixed(1) : '可續') : '不限時';
+    if (qTimer) qTimer.textContent = state.status === 'review' ? '可續' : '不限時';
     const bossHp = document.getElementById('raid-boss-hp-text');
     const bossBar = document.getElementById('raid-boss-hp-bar');
     const playerHp = document.getElementById('raid-player-hp-text');
@@ -664,6 +740,10 @@ import {
       return;
     }
     if (room.status === 'won' || room.status === 'lost') {
+      if (state.battleScenePlaying) {
+        state.pendingFinishRoom = room;
+        return;
+      }
       finishRaid(room.status === 'won', room.status === 'won' ? 'boss-defeated' : 'team-defeated');
       return;
     }
@@ -767,7 +847,8 @@ import {
       history: [], questionIssuedAtMs: 0, questionResolvedAtMs: 0, nextQuestionAtMs: 0,
       selectedChoice: null, answerCorrect: null, playerActionCount: 0, bossStartedAtMs: 0, bossActionCount: 0,
       lastBossAction: null, lastPlayerAction: null, questionLoading: false, roomId: '', room: null,
-      lastBossActionSeen: 0, applyingBossAction: false, advancingBossAction: false, invitedRoomId: '',
+      lastBossActionSeen: 0, applyingBossAction: false, advancingBossAction: false,
+      battleSceneToken: state.battleSceneToken + 1, battleScenePlaying: false, pendingFinishRoom: null, invitedRoomId: '',
       rewardClaiming: false, rewardClaimedRoomId: ''
     });
     document.body.classList.remove('raid-session-active');
