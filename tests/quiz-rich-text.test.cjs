@@ -24,15 +24,17 @@ test('quiz rich-text formatter protects images and MathJax segments separately',
 });
 
 test('solo question, all four choices and explanation share the safe queued renderer', () => {
-  assert.match(legacy, /questionTextEl\.innerHTML = \(window\.quizMathRichText \|\| formatQuizRichText\)\(data\.q\)/);
-  assert.match(legacy, /quiz-rich-option[^\n]*quizMathRichText \|\| formatQuizRichText\)\(optText\)/);
-  assert.match(legacy, /window\.quizMathSet\(fbText, explanationText\)/);
-  assert.match(legacy, /function parseMarkdownImages\(text\) \{[\s\S]*return formatQuizRichText\(text\)/);
+  assert.match(legacy, /const renderedQuestion = \\(window\\.quizMathRichText \\|\\| formatQuizRichText\\)\\(data\\.q\\)/);
+  assert.match(legacy, /questionTextEl\\.innerHTML = renderedQuestion/);
+  assert.match(legacy, /quiz-rich-option[^\\n]*quizMathRichText \\|\\| formatQuizRichText\\)\\(optText\\)/);
+  assert.match(legacy, /window\\.quizMathSet\\(fbText, explanationText\\)/);
+  assert.match(legacy, /function parseMarkdownImages\\(text\\) \\{[\\s\\S]*return formatQuizRichText\\(text\\)/);
 });
 
 test('MathJax is rerun for the full options set and feedback after dynamic updates', () => {
-  assert.match(legacy, /window\.quizMathClear\?\.\(\[questionTextEl, container\]\)/);
-  assert.match(legacy, /window\.quizMathTypeset\(\[questionTextEl, container\]\)/);
-  assert.match(legacy, /window\.quizMathSet\(fbText, explanationText\)/);
-  assert.match(legacy, /window\.quizMathSet\(fbText, currentExp\)/);
+  assert.match(legacy, /window\\.quizMathClear\\?\\.\\(\\[questionTextEl, container\\]\\)/);
+  assert.match(legacy, /const mathTargets = \\[questionTextEl, container, whiteboardQuestionEl\\]\\.filter\\(Boolean\\)/);
+  assert.match(legacy, /if \\(window\\.quizMathTypeset\\) void window\\.quizMathTypeset\\(mathTargets\\)/);
+  assert.match(legacy, /window\\.quizMathSet\\(fbText, explanationText\\)/);
+  assert.match(legacy, /window\\.quizMathSet\\(fbText, currentExp\\)/);
 });
