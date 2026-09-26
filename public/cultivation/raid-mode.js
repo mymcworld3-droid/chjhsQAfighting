@@ -230,12 +230,14 @@ import { resolveShenPlayerAction, resolveShenBossAction } from './raid-combat.js
     if (state.questionLoading || state.pendingQuestion || !state.scope || state.status === 'finished') return;
     state.questionLoading = true;
     try {
-      state.pendingQuestion = await generateRaidQuestion({
+      const targetAction = state.playerActionCount + (state.status === 'question' ? 2 : 1);
+      const generated = await generateRaidQuestion({
         scope: state.scope,
-        round: state.playerActionCount + 1,
+        round: targetAction,
         rank: state.player.rankLevel,
         history: state.history
       });
+      if (state.status !== 'finished') state.pendingQuestion = generated;
     } catch (error) {
       console.warn('[Raid] question generation failed:', error);
       toast('題目生成失敗，保留原學習範圍，請再試一次。');
@@ -257,12 +259,15 @@ import { resolveShenPlayerAction, resolveShenBossAction } from './raid-combat.js
     }
     state.question = state.pendingQuestion;
     state.pendingQuestion = null;
+    state.history.push(state.question);
     state.selectedChoice = null;
     state.answerCorrect = null;
     state.questionIssuedAtMs = now();
     state.questionDeadlineMs = raidQuestionDeadline(state.questionIssuedAtMs);
     state.status = 'question';
     renderQuestion(false);
+    // 題目一顯示就預載下一題；網路生成時間不侵蝕玩家下一輪的作答時間。
+    void prefetchQuestion();
   }
 
   function renderQuestion(review) {
@@ -317,7 +322,6 @@ import { resolveShenPlayerAction, resolveShenBossAction } from './raid-combat.js
     });
     state.playerActionCount += 1;
     state.lastPlayerAction = action;
-    state.history.push(state.question);
     state.status = 'review';
     state.boss.phase = shenPhaseForHp(state.boss.hp, state.boss.maxHp);
     if (action.bossDefeated) return finishRaid(true, 'boss-defeated');
