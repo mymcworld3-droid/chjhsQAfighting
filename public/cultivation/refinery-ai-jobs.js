@@ -19,6 +19,7 @@ import {
   repairArtifactRecipes,
   replaceArtifactRecipes,
   artifactRecipeDepth,
+  raidRefinementKeyRequirement,
   MAX_ARTIFACT_RECIPE_NESTING
 } from './material-catalog.js';
 import {
@@ -145,6 +146,8 @@ import {
       baseGold: known?.craft?.gold || baseRealmForgeGold(targetRealm),
       discovery: !known
     });
+    const refinementStage = Math.min(3, depth + 1);
+    const keyRequirement = raidRefinementKeyRequirement(refinementStage, targetRealm);
     return {
       valid: true,
       total,
@@ -157,6 +160,8 @@ import {
       targetRealm,
       playerRealm: pRealm,
       depth,
+      refinementStage,
+      keyRequirement,
       ...economy
     };
   }
@@ -210,6 +215,22 @@ import {
     return { materialSystem, artifactSystem };
   }
 
+  function consumeRefinementKey(materialSystem, requirement) {
+    const materialId = String(requirement?.materialId || '');
+    const need = Math.max(0, Math.floor(Number(requirement?.quantity) || 0));
+    if (!materialId || !need) return materialSystem;
+    const inventory = materialSystem?.inventory || {};
+    const have = Math.max(0, Math.floor(Number(inventory[materialId]) || 0));
+    const material = getMaterialById(materialId);
+    if (have < need) {
+      throw new Error((material?.name || '團本煉製關鍵道具') + ' 不足，需要 ' + need + '，目前只有 ' + have);
+    }
+    const remain = have - need;
+    if (remain > 0) inventory[materialId] = remain;
+    else delete inventory[materialId];
+    return materialSystem;
+  }
+
   async function startJob(tokens, knownArtifactId = '', adminOptions = {}) {
     if (currentJob()) throw new Error('目前已有一件法寶正在煉製，請等待完成後開爐取出。');
     const plan = buildPlan(tokens, knownArtifactId, adminOptions?.forgeMethod);
@@ -229,6 +250,8 @@ import {
       targetRealm: plan.targetRealm,
       playerRealm: plan.playerRealm,
       depth: plan.depth,
+      refinementStage: plan.refinementStage,
+      keyRequirement: plan.keyRequirement,
       goldCost: plan.gold,
       durationMs: plan.durationMs,
       startedAtMs: now,
@@ -254,6 +277,7 @@ import {
       if (gold < plan.gold) throw new Error('金幣不足，需要 ' + plan.gold + '，目前只有 ' + gold);
 
       const consumed = consumeRecipe(raw, plan.recipe);
+      consumeRefinementKey(consumed.materialSystem, plan.keyRequirement);
       committed = {
         materialSystem: consumed.materialSystem,
         artifactSystem: consumed.artifactSystem,
