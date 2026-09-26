@@ -514,7 +514,7 @@ test('Battle UI animates server attack steps with shield feedback but hides the 
   assert.match(battleSource,/const missed = step\.type === 'miss'/);
   assert.match(battleSource,/mine\.coreShield \? ' · 道心護體'/);
   assert.match(battleSource,/guest\.coreShield/);
-  assert.match(battleSource,/battle-engine-v2\.js\?v=20260922-first-answer1/);
+  assert.match(battleSource,/battle-engine-v2\.js\?v=20260926-nascent-seal1/);
 });
 
 test('lethal first attack stops before the other player can strike', () => {
