@@ -20,7 +20,8 @@ test('admin and all players use the same runtime artifact catalog source', () =>
   assert.match(sync, /CONFIG_COLLECTION = 'gameConfig'/);
   assert.match(sync, /CONFIG_DOC = 'artifactCatalogV1'/);
   assert.match(sync, /onSnapshot\(ref/);
-  assert.match(sync, /replaceArtifactCatalog\(data\.items, 'firestore'\)/);
+  assert.match(sync, /mergeArtifactCatalogWithDefaults\(data\.items\)/);
+  assert.match(sync, /replaceArtifactCatalog\(items, needsBackfill \? 'firestore-backfill' : 'firestore'\)/);
   assert.match(manager, /CONFIG_COLLECTION = 'gameConfig'/);
   assert.match(manager, /CONFIG_DOC = 'artifactCatalogV1'/);
   assert.match(manager, /tx\.set\(configRef/);
