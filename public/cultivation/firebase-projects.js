@@ -58,19 +58,38 @@ export function getFirebaseProjectServices(role) {
 }
 
 const secondaryLoginPromises = new Map();
+const secondaryAuthQueues = new Map();
 let mainAuthUnsubscribe = null;
+
+function queueSecondaryAuthOperation(role, task) {
+  const previous = secondaryAuthQueues.get(role) || Promise.resolve();
+  const pending = previous.catch(() => {}).then(task);
+  secondaryAuthQueues.set(role, pending);
+  pending.finally(() => {
+    if (secondaryAuthQueues.get(role) === pending) secondaryAuthQueues.delete(role);
+  }).catch(() => {});
+  return pending;
+}
 
 function watchMainAccount() {
   if (mainAuthUnsubscribe) return;
-  mainAuthUnsubscribe = onAuthStateChanged(getAuth(getApp()), (mainUser) => {
-    // Do not retain a prior player's BD / C session after A logs out or switches UID.
+  mainAuthUnsubscribe = onAuthStateChanged(getAuth(getApp()), () => {
+    // Never call signOut while the same secondary Auth instance is signing in.
+    // Re-check the latest A UID inside the serialized operation because this
+    // callback may have been queued before a new BD/C login completed.
     for (const role of ['BD', 'C']) {
       const app = getApps().find(item => item.name === APP_NAMES[role]);
       if (!app) continue;
-      const secondaryAuth = getAuth(app);
-      if (secondaryAuth.currentUser && secondaryAuth.currentUser.uid !== mainUser?.uid) {
-        void signOut(secondaryAuth).catch(() => {});
-      }
+      void queueSecondaryAuthOperation(role, async () => {
+        const latestMainUid = getAuth(getApp()).currentUser?.uid || '';
+        const secondaryAuth = getAuth(app);
+        const secondaryUid = secondaryAuth.currentUser?.uid || '';
+        if (secondaryUid && secondaryUid !== latestMainUid) {
+          await signOut(secondaryAuth);
+        }
+      }).catch((error) => {
+        console.warn('[Firebase secondary auth cleanup]', role, error?.message || error);
+      });
     }
   });
 }
@@ -86,13 +105,21 @@ export async function ensureSecondaryFirebaseAuth(role) {
   const mainAuth = getAuth(getApp());
   const mainUser = mainAuth.currentUser;
   if (!mainUser) throw new Error('主專案尚未登入');
+
+  const mainUid = mainUser.uid;
   const services = getFirebaseProjectServices(role);
   watchMainAccount();
-  if (services.auth.currentUser?.uid === mainUser.uid) return services;
-  const key = role + ':' + mainUser.uid;
+  const key = role + ':' + mainUid;
   if (secondaryLoginPromises.has(key)) return secondaryLoginPromises.get(key);
 
   const pending = (async () => {
+    // If a cleanup operation was already queued, let it settle before trusting
+    // currentUser. This prevents a stale signOut from firing after a fast return.
+    const queued = secondaryAuthQueues.get(role);
+    if (queued) await queued.catch(() => {});
+    if (mainAuth.currentUser?.uid !== mainUid) throw new Error('玩家已切換帳號');
+    if (services.auth.currentUser?.uid === mainUid) return services;
+
     const idToken = await mainUser.getIdToken();
     const response = await fetch('/api/firebase-project-tokens', {
       method: 'POST',
@@ -101,18 +128,30 @@ export async function ensureSecondaryFirebaseAuth(role) {
       body: JSON.stringify({ roles: [role] })
     });
     const payload = await response.json().catch(() => ({}));
-    if (!response.ok || payload.uid !== mainUser.uid || typeof payload.tokens?.[role] !== 'string') {
+    if (!response.ok || payload.uid !== mainUid || typeof payload.tokens?.[role] !== 'string') {
       throw new Error(payload.error || '跨專案身分交換尚未準備完成');
     }
-    if (mainAuth.currentUser?.uid !== mainUser.uid) throw new Error('玩家已切換帳號');
-    const credential = await signInWithCustomToken(services.auth, payload.tokens[role]);
-    if (mainAuth.currentUser?.uid !== mainUser.uid || credential.user.uid !== mainUser.uid) {
-      await signOut(services.auth).catch(() => {});
-      throw new Error('跨專案玩家身分不符');
-    }
-    return services;
+
+    return queueSecondaryAuthOperation(role, async () => {
+      if (mainAuth.currentUser?.uid !== mainUid) throw new Error('玩家已切換帳號');
+
+      const currentSecondaryUid = services.auth.currentUser?.uid || '';
+      if (currentSecondaryUid === mainUid) return services;
+      if (currentSecondaryUid) await signOut(services.auth);
+
+      const credential = await signInWithCustomToken(services.auth, payload.tokens[role]);
+      if (mainAuth.currentUser?.uid !== mainUid || credential.user.uid !== mainUid) {
+        if (services.auth.currentUser) await signOut(services.auth).catch(() => {});
+        throw new Error('跨專案玩家身分不符');
+      }
+      return services;
+    });
   })();
+
   secondaryLoginPromises.set(key, pending);
-  try { return await pending; }
-  finally { if (secondaryLoginPromises.get(key) === pending) secondaryLoginPromises.delete(key); }
+  try {
+    return await pending;
+  } finally {
+    if (secondaryLoginPromises.get(key) === pending) secondaryLoginPromises.delete(key);
+  }
 }
