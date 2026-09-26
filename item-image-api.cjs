@@ -6,6 +6,7 @@ const { getStorage } = require('firebase-admin/storage');
 
 const MODEL = '@cf/black-forest-labs/flux-1-schnell';
 const PROMPT_VERSION = 'xianxia-item-icon-v1';
+const PROMPT_MAX = 2048;
 const DEFAULT_BUCKET = 'question-learning.firebasestorage.app';
 const CONFIGS = Object.freeze({
   artifact: { doc: 'artifactCatalogV1', folder: 'artifacts' },
@@ -18,6 +19,10 @@ const IMAGE_FIELDS = Object.freeze([
 
 function clean(value, max = 240) {
   return String(value || '').replace(/[\u0000-\u001f\u007f]+/g, ' ').replace(/\s+/g, ' ').trim().slice(0, max);
+}
+
+function finalizePrompt(parts) {
+  return clean((Array.isArray(parts) ? parts : []).filter(Boolean).join(' '), PROMPT_MAX);
 }
 
 function itemKind(value) {
@@ -61,7 +66,7 @@ function buildItemImagePrompt(kind, item = {}) {
   ];
 
   if (kind === 'material') {
-    return [
+    return finalizePrompt([
       ...common,
       'This is a crafting MATERIAL, not a finished weapon or magical artifact.',
       'Give the object a compact, naturally rounded or clustered silhouette suitable for a circular material slot.',
@@ -73,10 +78,10 @@ function buildItemImagePrompt(kind, item = {}) {
       weaponForm ? 'Prepared weapon-form cue: ' + weaponForm + '.' : '',
       description ? 'Material description: ' + description + '.' : '',
       story ? 'Lore mood only, without literal text: ' + story + '.' : ''
-    ].filter(Boolean).join(' ');
+    ]);
   }
 
-  return [
+  return finalizePrompt([
     ...common,
     'This is a finished magical ARTIFACT. Show exactly one complete artifact with a distinctive silhouette and visible craftsmanship.',
     'Its shape must match the artifact type instead of becoming a generic glowing orb. Swords remain swords, shields remain shields, talismans remain talismans, arrays remain array plates, mirrors remain mirrors, bells remain bells, cauldrons remain cauldrons.',
@@ -88,7 +93,7 @@ function buildItemImagePrompt(kind, item = {}) {
     effects ? 'Mechanical theme to express visually: ' + effects + '.' : '',
     description ? 'Artifact description: ' + description + '.' : '',
     story ? 'Lore mood only, without literal text: ' + story + '.' : ''
-  ].filter(Boolean).join(' ');
+  ]);
 }
 
 function cloudflareError(payload, status) {
