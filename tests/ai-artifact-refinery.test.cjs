@@ -432,7 +432,9 @@ test('refinery button flow is 煉製 -> 煉製中 -> 開爐 and claim only after
 });
 
 test('player-facing refinery never reveals that unknown recipes are AI-generated', () => {
-  assert.doesNotMatch(refinery, /AI/);
+  // Internal identifiers such as RAID_REFINEMENT_KEYS legitimately contain the letters "AI".
+  // Only user-facing generation language must remain absent.
+  assert.doesNotMatch(refinery, /AI[・ ]?(?:生成|法寶|煉器|推演)/);
   assert.doesNotMatch(refinery, /人工智慧/);
   assert.doesNotMatch(aiJobs, /AI 法寶生成失敗/);
   assert.match(refinery, /未知配方煉製/);
@@ -728,6 +730,7 @@ test('recipe craft action rechecks license, inventory, payment and calls the rea
     matchingRecipeForTokens: () => true,
     recipeCounts: () => ({ 'material:iron': 2 }),
     ingredientAvailable: () => stock,
+    refinementKeyStatus: () => ({ materialId:'', need:0, have:0, enough:true, name:'' }),
     userData: () => ({ stats: { gold } }),
     render: () => { renders++; },
     craft: async () => {
