@@ -114,6 +114,13 @@ const DEFAULT_MATERIAL_CATALOG = [
   { id: 'law-fragment', name: '法則碎片', icon: '法則', category: '特殊材料', realm: '渡劫', description: '天地法則顯化後留下的碎片，可承載高階法則之力。', buyGold: 0 },
   { id: 'great-dao-fragment', name: '大道碎片', icon: '大道', category: '特殊材料', realm: '真仙', description: '大道顯化的一角，蘊含遠超尋常法則的本源力量。', buyGold: 0 },
   { id: 'hongmeng-purple-qi', name: '鴻蒙紫氣', icon: '鴻蒙', category: '特殊材料', realm: '真仙', description: '傳說開天之前便存在的本源紫氣，屬於終局級稀世材料。', buyGold: 0 }
+  ,
+  { id: 'raid-refine-key-2', name: '清霜煉印', icon: '霜印', category: '特殊材料', realm: '築基',
+    description: '大師姐清霜試煉留下的煉器印記，是進行第二煉的關鍵媒介；只能由團本獎勵取得。',
+    story: '劍意凝成的淡青印記，離開演武秘境後仍殘留一線清霜之氣。', buyGold: 0, raidOnly: true },
+  { id: 'raid-refine-key-3', name: '玄霜真印', icon: '真印', category: '特殊材料', realm: '金丹',
+    description: '更罕見的團本煉器真印，是進行第三煉的關鍵媒介；只能由團本獎勵取得。',
+    story: '只有在清霜試煉中真正逼出深層劍意時，才可能凝成的玄霜真印。', buyGold: 0, raidOnly: true }
 ];
 
 const DEFAULT_MATERIAL_REALM_BY_ID = Object.freeze(Object.fromEntries(
@@ -223,7 +230,8 @@ export function normalizeMaterialDefinition(raw = {}) {
     weaponForm: MATERIAL_WEAPON_FORMS.includes(String(raw.weaponForm || '').trim())
       ? String(raw.weaponForm || '').trim() : '',
     weaponName: String(raw.weaponName || '').trim().slice(0, 18),
-    buyGold: Math.max(0, Math.floor(finite(raw.buyGold, 0)))
+    buyGold: Math.max(0, Math.floor(finite(raw.buyGold, 0))),
+    raidOnly: raw.raidOnly === true
   };
   if (raw.imageUrl) item.imageUrl = String(raw.imageUrl).trim().slice(0, 2048);
   if (['generating','ready','error'].includes(raw.imageStatus)) item.imageStatus = raw.imageStatus;
