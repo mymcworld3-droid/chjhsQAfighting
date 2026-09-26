@@ -1,3 +1,6 @@
+import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+import { getFirestore, doc, collection, getDoc, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { RAID_MVP, createTeamScaledShenBoss, shenPhaseForHp, shenIntentForRound, bossClockState, nextPersonalQuestionAt } from './raid-engine.js';
 import { snapshotBattleKnowledge, resolveBattleKnowledge } from './battle-question-scope.js';
 import { generateRaidQuestion } from './raid-question.js';
@@ -44,7 +47,8 @@ import {
     heartbeatTimer: null,
     lastBossActionSeen: 0,
     applyingBossAction: false,
-    reconnectTried: false
+    reconnectTried: false,
+    invitedRoomId: ''
   };
 
   function now() { return Date.now(); }
@@ -200,6 +204,43 @@ import {
     });
   }
 
+  async function inviteOnlineFriends() {
+    if (!state.roomId || !state.room || !isHost() || state.room.status !== 'waiting' || state.invitedRoomId === state.roomId) return;
+    state.invitedRoomId = state.roomId;
+    const user = getAuth(getApp()).currentUser;
+    const friends = [...new Set((data()?.friends || []).filter(uid => typeof uid === 'string' && uid !== user?.uid))].slice(0, 30);
+    if (!user || !friends.length) return;
+    const mainDb = getFirestore(getApp());
+    try {
+      const records = await Promise.all(friends.map(uid => getDoc(doc(mainDb, 'users', uid)).catch(() => null)));
+      const cutoff = now() - 5 * 60 * 1000;
+      const online = records.filter(snap => {
+        if (!snap?.exists()) return false;
+        const active = snap.data()?.lastActive;
+        const at = active?.toMillis?.() || Number(active) || 0;
+        return at > cutoff;
+      });
+      await Promise.all(online.map(async snap => {
+        try {
+          await addDoc(collection(mainDb, 'users', snap.id, 'invitations'), {
+            raidVersion: 2,
+            raidCode: state.room.code,
+            raidRoomId: state.roomId,
+            hostUid: user.uid,
+            hostName: state.player?.name || data()?.displayName || '修士',
+            hostAvatar: data()?.equipped?.avatar || '',
+            hostFrame: data()?.equipped?.frame || '',
+            timestamp: serverTimestamp()
+          });
+        } catch (error) {
+          console.warn('[Raid] friend invite skipped:', snap.id, error);
+        }
+      }));
+    } catch (error) {
+      console.warn('[Raid] friend invitations unavailable:', error);
+    }
+  }
+
   function renderLobby() {
     if (!state.room || !state.player) return renderHub();
     state.status = 'lobby';
@@ -207,6 +248,7 @@ import {
     document.body.classList.add('raid-session-active');
     const members = raidRoomMembers(state.room);
     const me = myRoomMember();
+    void inviteOnlineFriends();
     const allReady = members.length > 0 && members.every(member => member.ready && raidMemberOnline(member));
     const lobby = document.getElementById('raid-lobby');
     lobby.innerHTML =
@@ -658,7 +700,7 @@ import {
       history: [], questionIssuedAtMs: 0, questionResolvedAtMs: 0, nextQuestionAtMs: 0,
       selectedChoice: null, answerCorrect: null, playerActionCount: 0, bossStartedAtMs: 0, bossActionCount: 0,
       lastBossAction: null, lastPlayerAction: null, questionLoading: false, roomId: '', room: null,
-      lastBossActionSeen: 0, applyingBossAction: false
+      lastBossActionSeen: 0, applyingBossAction: false, invitedRoomId: ''
     });
     document.body.classList.remove('raid-session-active');
     updateHomeEntry();
@@ -695,6 +737,11 @@ import {
   }
 
   window.openRaidHub = openHub;
+  window.joinRaidRoomInvite = async function (roomCode) {
+    if (state.roomId && state.room?.status && !['won', 'lost', 'closed'].includes(state.room.status)) return false;
+    await enterRoom('code', roomCode);
+    return !!state.roomId;
+  };
   window.startShenRaid = function () { return enterRoom('quick'); };
   window.getRaidMvpState = function () {
     return {
