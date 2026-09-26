@@ -79,7 +79,8 @@ test('meditation challenge is registered and local check-in is no longer used', 
   assert.doesNotMatch(theme, /localStorage\.setItem\(KEY/);
   assert.match(html, /id="xiuxian-meditation-streak"/);
   assert.match(meditation, /runTransaction/);
-  assert.match(meditation, /'stats\.totalScore': increment\(reward\.cultivation\)/);
+  assert.match(meditation, /const totalCultivation = reward\.cultivation \+ soulCultivationAdded/);
+  assert.match(meditation, /'stats\.totalScore': increment\(totalCultivation\)/);
 });
 
 
