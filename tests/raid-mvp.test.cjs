@@ -73,7 +73,7 @@ test('raid mode is multiplayer and keeps every player question asynchronous', ()
 });
 
 test('shared room layer supports party lifecycle, boss HP and reconnect', () => {
-  assert.match(roomSource, /const MAX_MEMBERS = 4/);
+  assert.match(roomApiSource, /const MAX_MEMBERS = 4/);
   assert.match(roomSource, /createRaidRoom/);
   assert.match(roomSource, /findOrCreateRaidRoom/);
   assert.match(roomSource, /joinRaidRoomByCode/);
