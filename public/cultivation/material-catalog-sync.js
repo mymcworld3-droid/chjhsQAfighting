@@ -19,6 +19,8 @@ import {
   let unsubscribe = null;
   let migrationWriteStarted = false;
   let recipeRepairWriteStarted = false;
+  let pendingMaterialBackfill = null;
+  let pendingRecipeRepair = null;
 
   function isAdmin() {
     try {
@@ -29,8 +31,13 @@ import {
   }
 
   async function persistBackfill(ref, items) {
-    if (migrationWriteStarted || !isAdmin()) return;
+    if (migrationWriteStarted) return;
+    if (!isAdmin()) {
+      pendingMaterialBackfill = { ref, items };
+      return;
+    }
     migrationWriteStarted = true;
+    pendingMaterialBackfill = null;
     try {
       await setDoc(ref, {
         items,
@@ -38,13 +45,20 @@ import {
         materialCatalogBackfilledAt: serverTimestamp()
       }, { merge: true });
     } catch (error) {
+      migrationWriteStarted = false;
+      pendingMaterialBackfill = { ref, items };
       console.warn('[Material catalog migration] runtime backfill applied, Firestore persistence deferred:', error);
     }
   }
 
   async function persistRecipeRepair(ref, repair, { backfilled = false } = {}) {
-    if (recipeRepairWriteStarted || (!repair?.changed && !backfilled) || !isAdmin()) return;
+    if (recipeRepairWriteStarted || (!repair?.changed && !backfilled)) return;
+    if (!isAdmin()) {
+      pendingRecipeRepair = { ref, repair, backfilled };
+      return;
+    }
     recipeRepairWriteStarted = true;
+    pendingRecipeRepair = null;
     try {
       const payload = {
         recipes: repair.recipes,
@@ -58,7 +72,20 @@ import {
       await setDoc(ref, payload, { merge: true });
     } catch (error) {
       recipeRepairWriteStarted = false;
+      pendingRecipeRepair = { ref, repair, backfilled };
       console.warn('[Material recipe repair] runtime repair applied, Firestore persistence deferred:', error);
+    }
+  }
+
+  function retryPendingWrites() {
+    if (!isAdmin()) return;
+    if (pendingMaterialBackfill && !migrationWriteStarted) {
+      const pending = pendingMaterialBackfill;
+      persistBackfill(pending.ref, pending.items);
+    }
+    if (pendingRecipeRepair && !recipeRepairWriteStarted) {
+      const pending = pendingRecipeRepair;
+      persistRecipeRepair(pending.ref, pending.repair, { backfilled: pending.backfilled });
     }
   }
 
@@ -101,6 +128,9 @@ import {
       }
     }, (error) => console.error('[Material catalog snapshot]', error));
   }
+
+  window.addEventListener('xiuxian:user-ready', retryPendingWrites);
+  window.addEventListener('xiuxian:features-ready', retryPendingWrites);
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start, { once: true });
   else start();
