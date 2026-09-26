@@ -4,6 +4,8 @@ import { getFirestore, doc, runTransaction, serverTimestamp } from 'https://www.
 import { ARTIFACT_CATALOG, getArtifactById, artifactRealmColor } from './artifact-catalog.js';
 import {
   MATERIAL_CATALOG,
+  MATERIAL_CATALOG_SCHEMA_VERSION,
+  ARTIFACT_RECIPE_SCHEMA_VERSION,
   materialMarketReferencePrice,
   MATERIAL_CATEGORIES,
   MATERIAL_WEAPON_FORMS,
@@ -106,14 +108,20 @@ import {
 
   async function persistMaterials(items) {
     const normalized = validateMaterialCatalog(items);
-    await verifyAndWrite({ items: normalized });
+    await verifyAndWrite({
+      items: normalized,
+      materialCatalogSchemaVersion: MATERIAL_CATALOG_SCHEMA_VERSION
+    });
     replaceMaterialCatalog(normalized, 'admin-save');
     return normalized;
   }
 
   async function persistRecipes(recipes) {
     const normalized = validateArtifactRecipes(recipes);
-    await verifyAndWrite({ recipes: normalized });
+    await verifyAndWrite({
+      recipes: normalized,
+      artifactRecipeSchemaVersion: ARTIFACT_RECIPE_SCHEMA_VERSION
+    });
     replaceArtifactRecipes(normalized, 'admin-save');
     return normalized;
   }
