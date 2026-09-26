@@ -3663,8 +3663,9 @@ function showInviteToast(inviteId, data) {
         }, 1200);
         return;
     }
-    // The v2 room protocol cannot be joined through the retired legacy transaction.
-    if (data.modeVersion && typeof window.joinBattleRoomV2 !== 'function') return;
+    // Modern duel / raid invitations use their own room protocols.
+    if (data.raidVersion && typeof window.joinRaidRoomInvite !== 'function') return;
+    if (!data.raidVersion && data.modeVersion && typeof window.joinBattleRoomV2 !== 'function') return;
     const container = document.getElementById('toast-container');
     if (!container || container.querySelector('[data-duel-invite="' + inviteId + '"]')) return;
     const toast = document.createElement('div');
@@ -3692,10 +3693,10 @@ function showInviteToast(inviteId, data) {
         
         <div class="flex-1 min-w-0 z-10">
             <h4 class="font-bold text-sm truncate text-yellow-400 flex items-center gap-2">
-                <i class="fa-solid fa-swords"></i> 對戰邀請！
+                <i class="fa-solid ${data.raidVersion ? 'fa-users-rays' : 'fa-swords'}"></i> ${data.raidVersion ? '團本邀請！' : '對戰邀請！'}
             </h4>
             <p class="text-xs text-gray-300 truncate mb-2 mt-1">
-                <span class="text-white font-bold">${escapeHtml(String(data.hostName || '修士'))}</span> 邀請你鬥法
+                <span class="text-white font-bold">${escapeHtml(String(data.hostName || '修士'))}</span> ${data.raidVersion ? '邀請你挑戰大師姐' : '邀請你鬥法'}
             </p>
             <div class="flex gap-2">
                 <button id="btn-acc-${inviteId}" class="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white text-xs px-3 py-1.5 rounded font-bold transition shadow-lg">
@@ -3716,7 +3717,19 @@ function showInviteToast(inviteId, data) {
     requestAnimationFrame(() => toast.classList.remove('translate-x-full'));
 
     document.getElementById(`btn-acc-${inviteId}`).onclick = async () => {
-        if (data.modeVersion) {
+        if (data.raidVersion) {
+            if (dongtianActive()) return;
+            const active = window.getRaidMvpState?.();
+            if (active?.roomId && !['finished','hub'].includes(active.status)) {
+                alert('你目前已有進行中的團本。');
+                return;
+            }
+            const button = document.getElementById(`btn-acc-${inviteId}`);
+            if (button) button.disabled = true;
+            const joined = await window.joinRaidRoomInvite(data.raidCode);
+            await removeInvite(inviteId, toast);
+            if (!joined) alert('團本房間已失效、已開始，或目前無法加入。');
+        } else if (data.modeVersion) {
             if (dongtianActive()) return;
             const active = window.getBattleV2State?.();
             if (active?.roomId && active.status !== 'finished') {
