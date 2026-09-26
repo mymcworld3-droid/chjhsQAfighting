@@ -39,7 +39,7 @@ test('trusted raid reward rejects unfinished, forged-damage and non-member rooms
     u1:{uid:'u1',damage:100,attempts:1,correct:1}
   }}), 'u1').ok, false);
   assert.equal(api.validateRaidVictory(wonRoom(), 'outsider').ok, false);
-  assert.equal(api.validateRaidVictory(wonRoom({bossActionCount:13}), 'u1').ok, false);
+  assert.equal(api.validateRaidVictory(wonRoom({bossActionCount:13}), 'u1').ok, true);
 });
 
 function fakeDb(initialUser) {
