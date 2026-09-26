@@ -57,7 +57,7 @@ test('Shen boss scales to the challenger and has three HP phases', () => {
 
 test('raid mode keeps questions personal while the boss attacks on its own clock', () => {
   assert.match(raidSource, /asynchronousQuestions:\s*true/);
-  assert.match(raidSource, /generateRaidQuestion/);
+  assert.match(raidSource, /pickBattleKnowledge/);
   assert.match(raidSource, /noQuestionTimer:\s*true/);
   assert.match(raidSource, /不限時/);
   assert.doesNotMatch(raidSource, /questionDeadlineMs|raidQuestionDeadline|answer\(null\)/);
