@@ -1,7 +1,7 @@
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, runTransaction } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-import { MATERIAL_CATALOG, getMaterialById, materialDropRateFor, materialRealmForScore } from './material-catalog.js';
+import { MATERIAL_CATALOG, RAID_REFINEMENT_KEYS, getMaterialById, materialDropRateFor, materialRealmForScore } from './material-catalog.js';
 
 // 問道答對與洞天首次通關材料掉落。
 // 材料掉率不再由管理員手動百分比控制，而由「材料境界 × 玩家境界」自動決定：
@@ -46,7 +46,9 @@ import { MATERIAL_CATALOG, getMaterialById, materialDropRateFor, materialRealmFo
 
   function roll(source) {
     const score = currentScore();
+    const raidOnly = new Set(Object.values(RAID_REFINEMENT_KEYS));
     return MATERIAL_CATALOG.flatMap((material) => {
+      if (raidOnly.has(material.id)) return [];
       const rate = materialDropRateFor(material, score, source);
       return rate > 0 && Math.random() < rate ? [{ materialId: material.id, quantity: 1 }] : [];
     });
