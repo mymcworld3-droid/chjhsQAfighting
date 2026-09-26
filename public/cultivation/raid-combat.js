@@ -110,3 +110,98 @@ export function resolveShenRaidCombat({ runId, round, player, boss, intent, corr
     preHitHeal
   };
 }
+
+
+export function resolveShenPlayerAction({ runId, actionId = 1, player, boss, correct } = {}) {
+  const p = player;
+  const enemy = bossSnapshot(boss);
+  const seed = String(runId || 'shen-raid') + ':player:' + String(actionId) + ':' + String(p?.uid || 'player');
+  p.answer = { correct: correct === true };
+
+  const support = resolveDeterministicCoreSupport(p, seed + ':support');
+  p.coreCorrectStreak = support.streak;
+  p.coreShield = support.shield;
+  const soulHeal = correct ? Math.max(0, Number(p.nascentSoul?.coreHeal) || 0) : 0;
+  let healed = Math.max(0, Math.round(Number(support.heal) || 0)) + soulHeal;
+  p.hp = Math.min(p.maxHp, p.hp + healed);
+  const activations = [...support.activations];
+
+  let damage = 0;
+  let artifactAttack = null;
+  if (correct) {
+    const coreAttack = resolveDeterministicAttackCore(p, seed + ':core-attack');
+    if (coreAttack.activation) activations.push(coreAttack.activation);
+    const soulBonus = Math.max(0, Number(p.nascentSoul?.bonusDamage) || 0);
+    const baseDamage = Math.max(0, Number(p.atk) || 0) + support.bonusDamage + coreAttack.extraDamage + soulBonus;
+    if (typeof window.resolveArtifactBattleHit === 'function') {
+      artifactAttack = window.resolveArtifactBattleHit({
+        attacker: p,
+        defender: enemy,
+        baseDamage,
+        seed: seed + ':artifact'
+      }) || null;
+      damage = Math.max(0, Math.round(Number(artifactAttack?.damage) || 0));
+      const artifactHeal = Math.max(0, Math.round(Number(artifactAttack?.heal) || 0));
+      healed += artifactHeal;
+      p.hp = Math.min(p.maxHp, p.hp + artifactHeal);
+      p.artifactShield = Math.max(0, Math.round(Number(p.artifactShield) || 0)) +
+        Math.max(0, Math.round(Number(artifactAttack?.shieldGain) || 0));
+    } else {
+      damage = Math.max(0, Math.round(baseDamage));
+    }
+  }
+
+  boss.hp = Math.max(0, Math.round(Number(boss.hp) || 0) - damage);
+  boss.phase = boss.hp <= 0 ? 3 : boss.phase;
+  return {
+    correct: correct === true,
+    damage,
+    healed,
+    artifactAttack,
+    activations,
+    bossDefeated: boss.hp <= 0
+  };
+}
+
+export function resolveShenBossAction({ runId, actionCount = 1, player, boss, intent } = {}) {
+  const p = player;
+  const enemy = bossSnapshot(boss);
+  const seed = String(runId || 'shen-raid') + ':boss:' + String(actionCount) + ':' + String(p?.uid || 'player');
+  let incomingDamage = Math.max(0, Math.round(Number(intent?.damage) || 0));
+  let reflectedDamage = 0;
+  let guarded = false;
+  let defenseSkill = '';
+  const activations = [];
+
+  if (p.coreShield && incomingDamage > 0) {
+    guarded = true;
+    incomingDamage = 0;
+    p.coreShield = false;
+  } else if (incomingDamage > 0 && typeof window.resolveArtifactBattleDefense === 'function') {
+    const defense = window.resolveArtifactBattleDefense({
+      defender: p,
+      attacker: enemy,
+      normalDamage: incomingDamage,
+      trueDamage: 0
+    }) || null;
+    const soulReduction = Math.max(0, Math.min(1000, Math.round(Number(p.nascentSoul?.reductionFlat) || 0)));
+    incomingDamage = Math.max(0, Math.round(Number(defense?.hpDamage) || 0) - soulReduction);
+    reflectedDamage += Math.max(0, Math.round(Number(defense?.reflectDamage) || 0));
+    defenseSkill = [defense?.skill, soulReduction ? '元嬰守元-' + soulReduction : ''].filter(Boolean).join('・');
+    const counter = resolveDeterministicCounterCore(p, incomingDamage, seed + ':counter');
+    reflectedDamage += Math.max(0, Math.round(Number(counter.reflectDamage) || 0));
+    if (counter.activation) activations.push(counter.activation);
+  }
+
+  p.hp = Math.max(0, Math.round(Number(p.hp) || 0) - incomingDamage);
+  boss.hp = Math.max(0, Math.round(Number(boss.hp) || 0) - (incomingDamage > 0 ? reflectedDamage : 0));
+  return {
+    damage: incomingDamage,
+    reflectedDamage: incomingDamage > 0 ? reflectedDamage : 0,
+    guarded,
+    defenseSkill,
+    activations,
+    playerDefeated: p.hp <= 0,
+    bossDefeated: boss.hp <= 0
+  };
+}
