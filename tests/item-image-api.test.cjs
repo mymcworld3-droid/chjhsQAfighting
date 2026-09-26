@@ -146,6 +146,9 @@ test('server and clients wire secure backfill and automatic generated-artifact i
   assert.match(server, /registerItemImageApi\(app\)/);
   assert.match(main, /admin-item-image-manager\.js/);
   assert.match(admin, /補圖/);
+  assert.match(admin, /一鍵重生/);
+  assert.match(admin, /regenerateAll/);
+  assert.match(admin, /overwrite: true/);
   assert.match(admin, /Authorization: 'Bearer ' \+ token/);
   assert.match(refinery, /\/api\/item-image\/ensure-artifact/);
   assert.match(refinery, /if \(firstDiscovery && awardedId\)/);
