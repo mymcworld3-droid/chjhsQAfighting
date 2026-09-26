@@ -202,7 +202,7 @@ test('material market reference is unified by realm and strictly increases', () 
   const from = source.indexOf('export function materialMarketReferencePrice(');
   const to = source.indexOf('export function materialRealmColor(', from);
   assert.ok(from >= 0 && to > from);
-  const js = source.slice(from,to).replaceAll('export function','function');
+  const js = source.slice(from,to).replaceAll('export function','function').replaceAll('export const','const');
   const names = ['凡人','煉氣','築基','金丹','元嬰','化神','煉虛','合體','大乘','渡劫','真仙'];
   const fn = new Function('materialRealmOrderByName',js+
     '\nreturn {reference:materialMarketReferencePrice, minimum:materialMarketMinimumTotal};');
