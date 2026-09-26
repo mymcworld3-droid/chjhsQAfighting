@@ -2,7 +2,7 @@ import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.j
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, runTransaction } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { ARTIFACT_CATALOG, getArtifactById, artifactRealmColor, realmOrderByName } from './artifact-catalog.js';
-import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe, materialRealmColor, materialRealmOrderByName, artifactRecipeDepth, MAX_ARTIFACT_RECIPE_NESTING } from './material-catalog.js';
+import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialById, getArtifactRecipe, materialRealmColor, materialRealmOrderByName, artifactRecipeDepth, MAX_ARTIFACT_RECIPE_NESTING } from './material-catalog.js';
 
 (function () {
   'use strict';
@@ -127,6 +127,16 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
       return Math.max(0, owned - equipped);
     }
     return Math.max(0, Number(materialInventory()[parsed.id]) || 0);
+  }
+  function refinementKeyStatus(plan) {
+    const materialId = String(plan?.keyRequirement?.materialId || '');
+    const need = Math.max(0, Math.floor(Number(plan?.keyRequirement?.quantity) || 0));
+    if (!materialId || !need) return { materialId: '', need: 0, have: 0, enough: true, name: '' };
+    const have = Math.max(0, Math.floor(Number(materialInventory()[materialId]) || 0));
+    return {
+      materialId, need, have, enough: have >= need,
+      name: getMaterialById(materialId)?.name || '團本煉製關鍵道具'
+    };
   }
   function selectedCounts() {
     const out = {};
@@ -585,8 +595,9 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
     const equippedCounts = equippedArtifactCounts();
     const counts = selectedCounts();
     const used = selected.filter(Boolean).length;
+    const raidKeyIds = new Set(Object.values(RAID_REFINEMENT_KEYS));
     const ownedMaterials = MATERIAL_CATALOG
-      .filter((m) => (Number(matInv[m.id]) || 0) > 0)
+      .filter((m) => !raidKeyIds.has(m.id) && (Number(matInv[m.id]) || 0) > 0)
       .slice()
       .sort(compareOwnedMaterials);
     const ownedArtifacts = ARTIFACT_CATALOG
@@ -746,20 +757,23 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
     const matchNode = content.querySelector('[data-refinery-match]');
     matchNode?.classList.remove('ready', 'error');
     const plan = matching.length <= 1 ? window.getCultivationRefineryPlan?.(selected, matching[0]?.id || '', forgeMethod) : null;
+    const keyStatus = refinementKeyStatus(plan);
     let prefix = '';
     let message = '放入 2～8 個素材後即可煉製。';
     if (used && matching.length === 1 && plan?.valid) {
       const item = matching[0];
       matchNode?.classList.add('ready');
       prefix = '既有配方：';
-      message = `${item.icon || '◆'} ${item.name} · 深度 ${artifactRecipeDepth(item.id)}/${MAX_ARTIFACT_RECIPE_NESTING} · 金幣 ${plan.gold} · 約 ${window.formatCultivationRefineryDuration?.(plan.durationMs) || ''}`;
+      message = `${item.icon || '◆'} ${item.name} · 深度 ${artifactRecipeDepth(item.id)}/${MAX_ARTIFACT_RECIPE_NESTING} · 金幣 ${plan.gold} · 約 ${window.formatCultivationRefineryDuration?.(plan.durationMs) || ''}` +
+        (keyStatus.need ? ` · ${keyStatus.name} ${keyStatus.have}/${keyStatus.need}` : '');
     } else if (used && matching.length > 1) {
       matchNode?.classList.add('error');
       message = '這組素材同時符合多個法寶配方，需由管理員將配方調整為唯一。';
     } else if (used && plan?.valid) {
       matchNode?.classList.add('ready');
       prefix = '未知配方：';
-      message = `新法寶境界「${plan.targetRealm}」 · 金幣 ${plan.gold} · 約 ${window.formatCultivationRefineryDuration?.(plan.durationMs) || ''}`;
+      message = `新法寶境界「${plan.targetRealm}」 · 金幣 ${plan.gold} · 約 ${window.formatCultivationRefineryDuration?.(plan.durationMs) || ''}` +
+        (keyStatus.need ? ` · ${keyStatus.name} ${keyStatus.have}/${keyStatus.need}` : '');
     } else if (used) {
       matchNode?.classList.add('error');
       message = plan?.reason || '煉器至少需要 2 個素材。';
@@ -771,7 +785,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
     if (clearButton) clearButton.disabled = !used || busy;
     const craftButton = content.querySelector('[data-refinery-craft]');
     if (craftButton) {
-      const ready = !!plan?.valid && matching.length <= 1 && !busy;
+      const ready = !!plan?.valid && matching.length <= 1 && keyStatus.enough && !busy;
       craftButton.disabled = !ready;
       craftButton.classList.toggle('ready', ready);
     }
@@ -854,6 +868,11 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
     const plan = window.getCultivationRefineryPlan?.(tokens, item.id);
     if (!plan?.valid || plan.knownArtifactId !== item.id) {
       toast(plan?.reason || '配方暫時無法煉製。', false);
+      return;
+    }
+    const keyStatus = refinementKeyStatus(plan);
+    if (!keyStatus.enough) {
+      toast(`${keyStatus.name}不足，需要 ${keyStatus.need}，目前只有 ${keyStatus.have}。請先挑戰團本取得。`, false);
       return;
     }
     if (Math.max(0, Number(userData()?.stats?.gold) || 0) < Number(plan.gold || 0)) {
