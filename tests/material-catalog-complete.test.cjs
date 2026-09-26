@@ -19,12 +19,14 @@ test('all requested material lineages are present', () => {
   }
 });
 
-test('default catalog contains 46 lineage materials and two dedicated weapon-forging materials', () => {
+test('default catalog contains lineage, weapon-forging and raid-only refinement materials', () => {
   const block = catalog.match(/const DEFAULT_MATERIAL_CATALOG = \[([\s\S]*?)\n\];\n\nconst DEFAULT_MATERIAL_REALM_BY_ID/);
   assert.ok(block, 'default material catalog block exists');
-  assert.equal((block[1].match(/\{ id:/g) || []).length, 48);
+  assert.equal((block[1].match(/\{ id:/g) || []).length, 50);
   assert.match(block[1], /id: 'sword-forging-iron'/);
   assert.match(block[1], /id: 'blade-forging-copper'/);
+  assert.match(block[1], /id: 'raid-refine-key-ii'/);
+  assert.match(block[1], /id: 'raid-refine-key-iii'/);
 });
 
 test('existing material ids remain stable for player inventories and recipes', () => {
@@ -39,5 +41,5 @@ test('expanded materials cover realm progression and special material category',
   }
   assert.match(catalog, /'特殊材料'/);
   assert.match(catalog, /mergeMaterialCatalogWithDefaults/);
-  assert.match(catalog, /MATERIAL_CATALOG_SCHEMA_VERSION = 2/);
+  assert.match(catalog, /MATERIAL_CATALOG_SCHEMA_VERSION = 3/);
 });
