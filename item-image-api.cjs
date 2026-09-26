@@ -4,7 +4,7 @@ const { randomUUID, createHash, createHmac } = require('node:crypto');
 const { adminProject, PROJECT_IDS } = require('./firebase-admin-projects.cjs');
 
 const MODEL = '@cf/black-forest-labs/flux-1-schnell';
-const PROMPT_VERSION = 'xianxia-moba-item-icon-v4';
+const PROMPT_VERSION = 'xianxia-moba-item-icon-v5';
 const PROMPT_MAX = 2048;
 const CONFIGS = Object.freeze({
   artifact: { doc: 'artifactCatalogV1', folder: 'artifacts' },
@@ -110,6 +110,44 @@ function signedR2PutRequest({ accountId, accessKeyId, secretAccessKey, bucketNam
     }
   };
 }
+function materialColorTheme(item = {}) {
+  const text = [
+    item?.id || '',
+    item?.name || '',
+    item?.category || '',
+    item?.description || '',
+    item?.story || ''
+  ].join(' ').toLowerCase();
+
+  const semanticThemes = [
+    { re: /木|wood|樹|靈木|神木/, theme: 'emerald green with warm brown accents' },
+    { re: /火|炎|焰|熔岩|赤|fire|flame|lava/, theme: 'crimson red with restrained orange accents' },
+    { re: /冰|霜|雪|寒|水|ice|frost|snow|water/, theme: 'icy blue with soft white accents' },
+    { re: /雷|電|lightning|thunder/, theme: 'electric violet with cool blue accents' },
+    { re: /毒|瘴|venom|poison|toxic/, theme: 'deep jade green with dark green accents' },
+    { re: /虛空|暗|影|冥|夜|void|shadow|dark|abyss/, theme: 'deep violet with black accents' },
+    { re: /風|storm|wind|air/, theme: 'cyan teal with pale cyan accents' },
+    { re: /土|石|岩|砂|沙|earth|stone|rock|sand/, theme: 'earth brown with muted amber accents' },
+    { re: /魂|魄|靈|spirit|soul|ghost/, theme: 'pale cyan with silver accents' },
+    { re: /金|鐵|鋼|礦|晶|玉|metal|iron|steel|ore|crystal|jade/, theme: 'golden amber with restrained metallic highlights' }
+  ];
+  const semantic = semanticThemes.find((entry) => entry.re.test(text));
+  if (semantic) return semantic.theme;
+
+  const fallbackThemes = [
+    'sapphire blue with pale blue accents',
+    'emerald green with muted gold accents',
+    'crimson red with restrained orange accents',
+    'violet purple with cool blue accents',
+    'golden amber with warm ivory accents',
+    'cyan teal with pale cyan accents'
+  ];
+  const seed = String(item?.id || item?.name || item?.category || 'material');
+  let hash = 0;
+  for (let i = 0; i < seed.length; i += 1) hash = ((hash * 31) + seed.charCodeAt(i)) >>> 0;
+  return fallbackThemes[hash % fallbackThemes.length];
+}
+
 function effectSummary(item = {}) {
   return (Array.isArray(item.effects) ? item.effects : []).slice(0, 3).map((effect) => {
     const type = clean(effect?.type, 48);
@@ -124,32 +162,35 @@ function buildItemImagePrompt(kind, item = {}) {
   const name = clean(item.name || (kind === 'artifact' ? 'Unnamed magical artifact' : 'Unnamed crafting material'), 80);
   const realm = clean(item.realm || '凡人', 30);
   const category = clean(item.category || (kind === 'artifact' ? '法寶' : '材料'), 50);
-  const description = clean(item.description || '', 420);
-  const story = clean(item.story || '', 360);
+  const description = clean(item.description || '', 360);
+  const story = clean(item.story || '', 260);
   const weaponForm = clean(item.weaponForm || '', 40);
   const effects = effectSummary(item);
 
   const common = [
-    'Create a 1:1 square fantasy MOBA equipment icon for a Chinese xianxia cultivation RPG.',
-    'Match the visual language of polished competitive mobile MOBA item icons: one oversized item, saturated jewel-tone colors, strong blue purple or black background contrast, bright magical highlights, glossy metal and crystal rendering, painterly fantasy shading, crisp glowing edges, and immediate thumbnail readability.',
-    'Show exactly one item. Make it large and dominant, filling about 82 to 92 percent of the square while remaining fully visible and uncropped.',
-    'Use a simple dark navy, indigo, violet, or black gradient background with a localized aura directly behind the object. No environment and no scenery.',
-    'The item must float by itself in the center. No table, altar, rack, stand, shelf, tray, platform, holder, pedestal, mount, display base, shadow-catching floor, or supporting object.',
-    'Use strong directional highlights and a luminous edge glow so the object pops clearly from the dark background. Keep the background simple and the item visually dominant.',
-    'Do not include text, letters, numbers, labels, watermark, logo, UI frame, inventory border, duplicated object, split panel, character, hand, or caption.'
+    'Create a clean 1:1 square fantasy game inventory icon for a Chinese xianxia cultivation RPG.',
+    'Show exactly one large item, centered, fully visible, uncropped, filling about 82 to 90 percent of the square.',
+    'Use a simple dark navy, indigo, or black gradient background with only a faint localized glow behind the item.',
+    'Keep the composition simple, uncluttered, and easy to read at thumbnail size.',
+    'Use one dominant color family with at most one subtle secondary accent color. No rainbow palette and no competing multi-color effects.',
+    'Use clean highlights and restrained rim light. Keep particles, aura, bloom, and energy effects minimal.',
+    'The item must float by itself. No table, altar, rack, stand, shelf, tray, platform, holder, pedestal, mount, display base, floor, or supporting object.',
+    'Do not include text, letters, numbers, labels, watermark, logo, UI frame, duplicated object, character, hand, or caption.'
   ];
 
   if (kind === 'material') {
+    const colorTheme = materialColorTheme(item);
     return finalizePrompt([
       ...common,
       'This is a crafting MATERIAL, not a finished weapon or magical artifact.',
-      'Give the object a compact, naturally rounded or clustered silhouette suitable for a circular material slot.',
-      'Make its physical substance unmistakable at small icon size: ore should read as ore, spirit wood as wood, crystal as crystal, beast material as organic material, talisman material as paper or fiber.',
-      'Do not turn it into a sword, accessory, treasure chest, bottle, or finished equipment unless the category itself explicitly requires that form.',
+      'Use a compact, simple silhouette that immediately reads as the material substance: wood as wood, ore as ore, crystal as crystal, beast material as organic material, paper or fiber as paper or fiber.',
+      'The entire material icon must follow this single selected palette: ' + colorTheme + '.',
+      'Do not introduce extra hues outside that palette except tiny neutral white or black shading.',
+      'Keep the material less ornate and less magical than an equipment artifact. Use almost no particles.',
+      'Do not turn it into a weapon, accessory, bottle, chest, or finished equipment unless the category explicitly requires it.',
       'Item name: ' + name + '.',
       'Cultivation realm: ' + realm + '.',
       'Material category: ' + category + '.',
-      weaponForm ? 'Prepared weapon-form cue: ' + weaponForm + '.' : '',
       description ? 'Material description: ' + description + '.' : '',
       story ? 'Lore mood only, without literal text: ' + story + '.' : ''
     ]);
@@ -157,13 +198,12 @@ function buildItemImagePrompt(kind, item = {}) {
 
   return finalizePrompt([
     ...common,
-    'This is a finished magical ARTIFACT. Render it as a polished in-game equipment icon, not a product photograph and not a full illustration.',
-    'Use a bold diagonal or three-quarter presentation when suitable, similar to high-end MOBA equipment icons: the main silhouette should be obvious within a fraction of a second.',
-    'Use vivid saturated colors with one dominant magical color family and bright complementary highlights. Favor gold, orange, red, cyan, electric blue, violet, emerald, or white energy depending on the artifact.',
-    'Use compact exaggerated fantasy proportions, ornate xianxia craftsmanship, sharp metallic edges, jade or crystal inlays, engraved motifs, luminous runes, magical seams, and concentrated energy glow.',
-    'Give the artifact bright rim light, specular shine, bloom around magical parts, and a localized aura behind it. Keep these effects tight around the item rather than filling the entire background.',
-    'Do not make the object tiny, distant, flat, gray, muddy, muted, photorealistic, or displayed on furniture. It must look like a vibrant game equipment icon.',
-    'Keep the silhouette instantly recognizable at thumbnail size. Swords remain swords, shields remain shields, talismans remain talismans, mirrors remain mirrors, bells remain bells, cauldrons remain cauldrons, boots remain boots, and array artifacts remain compact mystical devices.',
+    'This is a finished magical ARTIFACT. Render it as a polished MOBA-style in-game equipment icon, not a product photograph and not a full illustration.',
+    'Use one dominant magical color family chosen to fit the artifact identity, plus at most one restrained accent color.',
+    'Use a bold diagonal or three-quarter presentation when suitable, with a strong instantly readable silhouette.',
+    'Keep ornament selective rather than busy: a few engraved details, one clear magical core or rune treatment, and controlled glossy highlights.',
+    'Keep glow and energy tight around the artifact. Avoid dense particles, rainbow light, excessive decoration, or many competing hues.',
+    'Swords remain swords, shields remain shields, talismans remain talismans, mirrors remain mirrors, bells remain bells, cauldrons remain cauldrons, boots remain boots, and array artifacts remain compact mystical devices.',
     'Item name: ' + name + '.',
     'Cultivation realm: ' + realm + '.',
     'Artifact category: ' + category + '.',
@@ -571,6 +611,7 @@ module.exports = {
   MODEL,
   PROMPT_VERSION,
   buildItemImagePrompt,
+  materialColorTheme,
   imageConfig,
   r2Config,
   signedR2PutRequest,
