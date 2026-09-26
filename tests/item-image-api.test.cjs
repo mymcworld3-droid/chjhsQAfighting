@@ -54,46 +54,59 @@ test('item image prompt stays within the Cloudflare model limit', () => {
   assert.ok(prompt.length <= 2048);
 });
 
-test('storage bucket candidates cover explicit, modern and legacy Firebase names', () => {
-  const project = { app: { options: { projectId: 'question-learning' } } };
-  assert.deepEqual(
-    storageBucketCandidates(project, { FIREBASE_A_STORAGE_BUCKET: 'custom-bucket' }),
-    ['custom-bucket', 'question-learning.firebasestorage.app', 'question-learning.appspot.com']
-  );
+test('R2 config reuses the Cloudflare account id but keeps separate S3 credentials', () => {
+  const cfg = r2Config({
+    CLOUDFLARE_ACCOUNT_ID: 'acct',
+    R2_ACCESS_KEY_ID: 'test-key',
+    R2_SECRET_ACCESS_KEY: 'test-value',
+    R2_BUCKET_NAME: 'item-images',
+    R2_PUBLIC_BASE_URL: 'https://pub-example.r2.dev/'
+  });
+  assert.equal(cfg.accountId, 'acct');
+  assert.equal(cfg.accessKeyId, 'test-key');
+  assert.equal(cfg.secretAccessKey, 'test-value');
+  assert.equal(cfg.bucketName, 'item-images');
+  assert.equal(cfg.publicBaseUrl, 'https://pub-example.r2.dev');
 });
 
-test('storage upload falls back to the legacy appspot bucket when the modern bucket is absent', async () => {
-  const attempts = [];
-  const storageFactory = () => ({
-    bucket(name) {
-      return {
-        name,
-        file() {
-          return {
-            async save() {
-              attempts.push(name);
-              if (name.endsWith('.firebasestorage.app')) {
-                const error = new Error('The specified bucket does not exist.');
-                error.code = 404;
-                throw error;
-              }
-            }
-          };
-        }
-      };
-    }
-  });
+test('R2 upload signs a S3-compatible PUT and returns the permanent public URL', async () => {
+  let request = null;
+  const fakeFetch = async (url, options) => {
+    request = { url, options };
+    return { ok: true, status: 200, text: async () => '' };
+  };
   const result = await uploadGeneratedImage('artifact', 'seven-treasure-ruler', 'YWJj', {
-    env: {},
-    storageFactory,
-    project: { app: { options: { projectId: 'question-learning' } } }
+    env: {
+      CLOUDFLARE_ACCOUNT_ID: 'acct',
+      R2_ACCESS_KEY_ID: 'test-key',
+      R2_SECRET_ACCESS_KEY: 'test-value',
+      R2_BUCKET_NAME: 'item-images',
+      R2_PUBLIC_BASE_URL: 'https://pub-example.r2.dev'
+    },
+    fetchImpl: fakeFetch,
+    now: () => new Date('2026-09-26T00:00:00.000Z')
   });
-  assert.deepEqual(attempts, [
-    'question-learning.firebasestorage.app',
-    'question-learning.appspot.com'
-  ]);
-  assert.equal(result.bucketName, 'question-learning.appspot.com');
-  assert.match(result.imageUrl, /question-learning\.appspot\.com/);
+  assert.match(request.url, /^https:\/\/acct\.r2\.cloudflarestorage\.com\/item-images\/generated-items\/artifacts\/seven-treasure-ruler\//);
+  assert.equal(request.options.method, 'PUT');
+  assert.match(request.options.headers.Authorization, /^AWS4-HMAC-SHA256 Credential=test-key\/20260926\/auto\/s3\/aws4_request,/);
+  assert.equal(request.options.headers['Content-Type'], 'image/jpeg');
+  assert.match(result.imageUrl, /^https:\/\/pub-example\.r2\.dev\/generated-items\/artifacts\/seven-treasure-ruler\//);
+  assert.equal(result.bucketName, 'item-images');
+});
+
+test('R2 signer uses the auto region and S3 service', () => {
+  const signed = signedR2PutRequest({
+    accountId: 'acct',
+    accessKeyId: 'test-key',
+    secretAccessKey: 'test-value',
+    bucketName: 'bucket',
+    key: 'generated-items/artifacts/a b.jpg',
+    body: Buffer.from('abc'),
+    now: new Date('2026-09-26T00:00:00.000Z')
+  });
+  assert.equal(signed.url, 'https://acct.r2.cloudflarestorage.com/bucket/generated-items/artifacts/a%20b.jpg');
+  assert.match(signed.headers.Authorization, /20260926\/auto\/s3\/aws4_request/);
+  assert.equal(signed.headers['x-amz-date'], '20260926T000000Z');
 });
 
 test('Cloudflare image response keeps base64 intact and uses four steps', async () => {
