@@ -1,8 +1,7 @@
 'use strict';
 
-const { randomUUID } = require('node:crypto');
+const { randomUUID, createHash, createHmac } = require('node:crypto');
 const { adminProject, PROJECT_IDS } = require('./firebase-admin-projects.cjs');
-const { getStorage } = require('firebase-admin/storage');
 
 const MODEL = '@cf/black-forest-labs/flux-1-schnell';
 const PROMPT_VERSION = 'xianxia-item-icon-v1';
@@ -32,29 +31,85 @@ function itemKind(value) {
 function imageConfig(env = process.env) {
   return {
     accountId: clean(env.CLOUDFLARE_ACCOUNT_ID || env.CF_ACCOUNT_ID || env.CLOUDFLARE_AI_ACCOUNT_ID, 160),
-    apiToken: clean(env.CLOUDFLARE_API_TOKEN || env.CF_API_TOKEN || env.CLOUDFLARE_AI_TOKEN, 4096),
-    bucketName: clean(env.FIREBASE_A_STORAGE_BUCKET || env.FIREBASE_STORAGE_BUCKET, 240)
+    apiToken: clean(env.CLOUDFLARE_API_TOKEN || env.CF_API_TOKEN || env.CLOUDFLARE_AI_TOKEN, 4096)
   };
 }
 
-function storageBucketCandidates(project, env = process.env) {
-  const cfg = imageConfig(env);
-  const projectId = clean(project?.app?.options?.projectId || PROJECT_IDS.A, 160);
-  const appBucket = clean(project?.app?.options?.storageBucket, 240);
-  return [...new Set([
-    cfg.bucketName,
-    appBucket,
-    projectId ? projectId + '.firebasestorage.app' : '',
-    projectId ? projectId + '.appspot.com' : ''
-  ].filter(Boolean))];
+function r2Config(env = process.env) {
+  return {
+    accountId: clean(env.R2_ACCOUNT_ID || env.CLOUDFLARE_ACCOUNT_ID || env.CF_ACCOUNT_ID || env.CLOUDFLARE_AI_ACCOUNT_ID, 160),
+    accessKeyId: clean(env.R2_ACCESS_KEY_ID, 512),
+    secretAccessKey: clean(env.R2_SECRET_ACCESS_KEY, 4096),
+    bucketName: clean(env.R2_BUCKET_NAME || env.R2_BUCKET, 160),
+    publicBaseUrl: clean(env.R2_PUBLIC_BASE_URL || env.R2_PUBLIC_URL, 700).replace(/\/+$/, '')
+  };
 }
 
-function isMissingBucketError(error) {
-  const code = Number(error?.code || error?.status || error?.response?.statusCode);
-  const message = String(error?.message || '');
-  return code === 404 || /specified bucket does not exist|bucket .* does not exist|no such bucket/i.test(message);
+function sha256(value, encoding = 'hex') {
+  return createHash('sha256').update(value).digest(encoding);
 }
 
+function hmac(key, value, encoding) {
+  return createHmac('sha256', key).update(value).digest(encoding);
+}
+
+function encodeR2Key(key) {
+  return String(key || '').split('/').map((part) => encodeURIComponent(part)).join('/');
+}
+
+function formatAmzDate(date = new Date()) {
+  return date.toISOString().replace(/[:-]|\.\d{3}/g, '');
+}
+
+function signedR2PutRequest({ accountId, accessKeyId, secretAccessKey, bucketName, key, body, now = new Date() }) {
+  const encodedBucket = encodeURIComponent(bucketName);
+  const encodedKey = encodeR2Key(key);
+  const host = accountId + '.r2.cloudflarestorage.com';
+  const url = 'https://' + host + '/' + encodedBucket + '/' + encodedKey;
+  const payloadHash = sha256(body);
+  const amzDate = formatAmzDate(now);
+  const dateStamp = amzDate.slice(0, 8);
+  const canonicalHeaders =
+    'host:' + host + '\n' +
+    'x-amz-content-sha256:' + payloadHash + '\n' +
+    'x-amz-date:' + amzDate + '\n';
+  const signedHeaders = 'host;x-amz-content-sha256;x-amz-date';
+  const canonicalRequest = [
+    'PUT',
+    '/' + encodedBucket + '/' + encodedKey,
+    '',
+    canonicalHeaders,
+    signedHeaders,
+    payloadHash
+  ].join('\n');
+  const scope = dateStamp + '/auto/s3/aws4_request';
+  const stringToSign = [
+    'AWS4-HMAC-SHA256',
+    amzDate,
+    scope,
+    sha256(canonicalRequest)
+  ].join('\n');
+  const dateKey = hmac('AWS4' + secretAccessKey, dateStamp);
+  const regionKey = hmac(dateKey, 'auto');
+  const serviceKey = hmac(regionKey, 's3');
+  const signingKey = hmac(serviceKey, 'aws4_request');
+  const signature = hmac(signingKey, stringToSign, 'hex');
+  const authorization =
+    'AWS4-HMAC-SHA256 Credential=' + accessKeyId + '/' + scope +
+    ', SignedHeaders=' + signedHeaders +
+    ', Signature=' + signature;
+
+  return {
+    url,
+    headers: {
+      Authorization: authorization,
+      'Content-Type': 'image/jpeg',
+      'Cache-Control': 'public,max-age=31536000,immutable',
+      'x-amz-content-sha256': payloadHash,
+      'x-amz-date': amzDate
+    }
+  };
+}
 function effectSummary(item = {}) {
   return (Array.isArray(item.effects) ? item.effects : []).slice(0, 3).map((effect) => {
     const type = clean(effect?.type, 48);
@@ -178,56 +233,76 @@ async function generateFluxImage(prompt, { env = process.env, fetchImpl = fetch,
 
 async function uploadGeneratedImage(kind, id, base64, {
   env = process.env,
-  storageFactory = getStorage,
-  project = adminProject('A')
+  fetchImpl = fetch,
+  now = () => new Date()
 } = {}) {
-  const storage = storageFactory(project.app);
-  const candidates = storageBucketCandidates(project, env);
-  const safeId = clean(id, 80).replace(/[^a-zA-Z0-9_-]+/g, '-') || 'item';
-  const storagePath = 'generated-items/' + CONFIGS[kind].folder + '/' + safeId + '/' + Date.now() + '-' + randomUUID() + '.jpg';
-  const downloadToken = randomUUID();
-  const buffer = Buffer.from(base64, 'base64');
-  if (!buffer.length) throw new Error('生成圖片解碼失敗');
-  if (!candidates.length) {
-    const error = new Error('找不到 Firebase Storage bucket 設定');
+  const cfg = r2Config(env);
+  const missing = [
+    !cfg.accountId ? 'R2_ACCOUNT_ID（或 CLOUDFLARE_ACCOUNT_ID）' : '',
+    !cfg.accessKeyId ? 'R2_ACCESS_KEY_ID' : '',
+    !cfg.secretAccessKey ? 'R2_SECRET_ACCESS_KEY' : '',
+    !cfg.bucketName ? 'R2_BUCKET_NAME' : '',
+    !cfg.publicBaseUrl ? 'R2_PUBLIC_BASE_URL' : ''
+  ].filter(Boolean);
+
+  if (missing.length) {
+    const error = new Error('Render 尚缺少 Cloudflare R2 設定：' + missing.join('、'));
+    error.status = 503;
+    throw error;
+  }
+  if (!/^https:\/\//i.test(cfg.publicBaseUrl)) {
+    const error = new Error('R2_PUBLIC_BASE_URL 必須是 https:// 開頭的公開 R2 網址或自訂網域');
     error.status = 503;
     throw error;
   }
 
-  let lastMissing = null;
-  for (const bucketName of candidates) {
-    const bucket = storage.bucket(bucketName);
-    try {
-      await bucket.file(storagePath).save(buffer, {
-        resumable: false,
-        validation: false,
-        metadata: {
-          contentType: 'image/jpeg',
-          cacheControl: 'public,max-age=31536000,immutable',
-          metadata: { firebaseStorageDownloadTokens: downloadToken }
-        }
-      });
-
-      const imageUrl =
-        'https://firebasestorage.googleapis.com/v0/b/' + encodeURIComponent(bucket.name || bucketName) +
-        '/o/' + encodeURIComponent(storagePath) +
-        '?alt=media&token=' + encodeURIComponent(downloadToken);
-      return { imageUrl, storagePath, bucketName: bucket.name || bucketName };
-    } catch (error) {
-      if (!isMissingBucketError(error)) throw error;
-      lastMissing = error;
-    }
+  const safeId = clean(id, 80).replace(/[^a-zA-Z0-9_-]+/g, '-') || 'item';
+  const storagePath =
+    'generated-items/' + CONFIGS[kind].folder + '/' + safeId + '/' +
+    Date.now() + '-' + randomUUID() + '.jpg';
+  const buffer = Buffer.from(base64, 'base64');
+  if (!buffer.length) {
+    const error = new Error('生成圖片解碼失敗');
+    error.status = 502;
+    throw error;
   }
 
-  const error = new Error(
-    'Firebase Storage bucket 不存在。已嘗試：' + candidates.join('、') +
-    '。請到 Firebase Console > Storage 建立預設 bucket，或在 Render 設定 FIREBASE_A_STORAGE_BUCKET。'
-  );
-  error.status = 503;
-  error.cause = lastMissing || undefined;
-  throw error;
-}
+  const signed = signedR2PutRequest({
+    accountId: cfg.accountId,
+    accessKeyId: cfg.accessKeyId,
+    secretAccessKey: cfg.secretAccessKey,
+    bucketName: cfg.bucketName,
+    key: storagePath,
+    body: buffer,
+    now: now()
+  });
 
+  let response;
+  try {
+    response = await fetchImpl(signed.url, {
+      method: 'PUT',
+      headers: signed.headers,
+      body: buffer
+    });
+  } catch (error) {
+    const wrapped = new Error('Cloudflare R2 上傳連線失敗：' + clean(error?.message || 'network error', 260));
+    wrapped.status = 502;
+    throw wrapped;
+  }
+
+  if (!response.ok) {
+    const detail = clean(await response.text().catch(() => ''), 320);
+    const error = new Error(
+      'Cloudflare R2 上傳失敗 (' + response.status + ')' +
+      (detail ? '：' + detail : '')
+    );
+    error.status = response.status === 401 || response.status === 403 ? 502 : (response.status || 502);
+    throw error;
+  }
+
+  const imageUrl = cfg.publicBaseUrl + '/' + encodeR2Key(storagePath);
+  return { imageUrl, storagePath, bucketName: cfg.bucketName };
+}
 async function authenticatedPlayer(req, { resolve = role => adminProject(role) } = {}) {
   const bearer = /^Bearer ([A-Za-z0-9_.-]+)$/.exec(String(req.get?.('authorization') || ''));
   if (!bearer) {
@@ -389,7 +464,7 @@ async function generateCatalogItemImage({
   admin = false,
   env = process.env,
   fetchImpl = fetch,
-  storageFactory = getStorage
+  storageFetchImpl = fetch
 }) {
   const normalizedKind = itemKind(kind);
   const normalizedId = clean(id, 80);
@@ -413,7 +488,7 @@ async function generateCatalogItemImage({
     const prompt = buildItemImagePrompt(normalizedKind, reserved.item);
     const generated = await generateFluxImage(prompt, { env, fetchImpl });
     const uploaded = await uploadGeneratedImage(normalizedKind, normalizedId, generated.base64, {
-      env, storageFactory, project
+      env, fetchImpl: storageFetchImpl
     });
     const item = await finishImageJob({
       project, reserved, kind: normalizedKind, id: normalizedId,
@@ -443,7 +518,7 @@ function createAdminItemImageHandler(options = {}) {
         admin: true,
         env: options.env || process.env,
         fetchImpl: options.fetchImpl || fetch,
-        storageFactory: options.storageFactory || getStorage
+        storageFetchImpl: options.storageFetchImpl || fetch
       });
       return res.json({ ok: true, ...result });
     } catch (error) {
@@ -469,7 +544,7 @@ function createArtifactAutoImageHandler(options = {}) {
         admin: auth.data?.isAdmin === true,
         env: options.env || process.env,
         fetchImpl: options.fetchImpl || fetch,
-        storageFactory: options.storageFactory || getStorage
+        storageFetchImpl: options.storageFetchImpl || fetch
       });
       return res.json({ ok: true, ...result });
     } catch (error) {
@@ -491,7 +566,8 @@ module.exports = {
   PROMPT_VERSION,
   buildItemImagePrompt,
   imageConfig,
-  storageBucketCandidates,
+  r2Config,
+  signedR2PutRequest,
   uploadGeneratedImage,
   generateFluxImage,
   generateCatalogItemImage,
