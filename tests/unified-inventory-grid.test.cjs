@@ -41,6 +41,16 @@ test('material and artifact realm colors are visible in the backpack', () => {
   assert.match(bag, /item\.realm/);
 });
 
+test('raid refinement seals are normal backpack items with dedicated identity', () => {
+  assert.match(bag, /RAID_REFINEMENT_KEYS/);
+  assert.match(bag, /RAID_KEY_IDS\.has\(id\)/);
+  assert.match(bag, /團本印記/);
+  assert.match(bag, /uib-raid-key-badge/);
+  assert.match(bag, /團本煉器印記/);
+  assert.match(bag, /第二次煉製的必要印記/);
+  assert.match(bag, /第三次煉製的必要道印/);
+});
+
 test('obsolete renderer and CSS bridge are removed', () => {
   const inventory = read('public/cultivation/cultivation-inventory.js');
   const index = read('public/index.html');
