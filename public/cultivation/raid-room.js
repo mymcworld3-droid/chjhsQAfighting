@@ -254,6 +254,42 @@ export async function commitRaidPlayerAction({ roomId, actionId, damage, hp, cor
     return { ...room, ...update };
   });
 }
+export async function commitRaidBossDefense({ roomId, hp, bossActionSeen, reflectedDamage = 0 }) {
+  const { uid, db } = await ensureRaidRoomAuth();
+  await runTransaction(db, async tx => {
+    const ref = doc(db, COLLECTION, roomId);
+    const snap = await tx.get(ref);
+    if (!snap.exists()) return;
+    const room = snap.data();
+    if (room.status !== 'active') return;
+    const members = membersOf(room);
+    const me = members[uid];
+    if (!me || finite(me.lastBossActionSeen) >= finite(bossActionSeen)) return;
+    const nextHp = Math.max(0, Math.round(finite(hp, me.hp)));
+    const reflected = Math.max(0, Math.round(finite(reflectedDamage)));
+    const nextBossHp = Math.max(0, Math.round(finite(room.bossHp)) - reflected);
+    members[uid] = {
+      ...me,
+      hp: nextHp,
+      alive: nextHp > 0,
+      damage: Math.max(0, Math.round(finite(me.damage))) + reflected,
+      lastBossActionSeen: Math.max(finite(me.lastBossActionSeen), finite(bossActionSeen)),
+      online: true,
+      heartbeatAtMs: now()
+    };
+    const alive = Object.values(members).some(member => member?.alive !== false && finite(member?.hp) > 0);
+    const update = { members, bossHp: nextBossHp };
+    if (nextBossHp <= 0) {
+      update.status = 'won';
+      update.finishedAtMs = now();
+    } else if (!alive) {
+      update.status = 'lost';
+      update.finishedAtMs = now();
+    }
+    tx.update(ref, update);
+  });
+}
+
 export async function commitRaidMemberState({ roomId, hp, bossActionSeen }) {
   const { uid, db } = await ensureRaidRoomAuth();
   await runTransaction(db, async tx => {
