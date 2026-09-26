@@ -100,3 +100,26 @@ test('config scaffold leaves existing main authentication, cave and battle routi
   assert.doesNotMatch(caveSource, /getFirebaseProjectServices\('BD'\)/);
   assert.doesNotMatch(battleSource, /getFirebaseProjectServices\('C'\)/);
 });
+
+
+test('secondary auth mutations are serialized so sign-in and sign-out cannot race', () => {
+  assert.match(helperSource, /const secondaryAuthQueues = new Map\(\)/);
+  assert.match(helperSource, /function queueSecondaryAuthOperation\(role, task\)/);
+  assert.match(helperSource, /previous\.catch\(\(\) => \{\}\)\.then\(task\)/);
+  assert.match(helperSource, /return queueSecondaryAuthOperation\(role, async \(\) => \{/);
+  assert.match(helperSource, /if \(currentSecondaryUid\) await signOut\(services\.auth\)/);
+  assert.match(helperSource, /await signInWithCustomToken\(services\.auth, payload\.tokens\[role\]\)/);
+  assert.match(helperSource, /const latestMainUid = getAuth\(getApp\(\)\)\.currentUser\?\.uid \|\| ''/);
+});
+
+test('startup authenticates BD then C sequentially and does not use Promise.all for secondary auth', () => {
+  const bd = "await ensureSecondaryFirebaseAuth('BD');";
+  const c = "await ensureSecondaryFirebaseAuth('C');";
+  assert.ok(legacySource.includes(bd));
+  assert.ok(legacySource.includes(c));
+  assert.ok(legacySource.indexOf(bd) < legacySource.indexOf(c));
+  assert.doesNotMatch(
+    legacySource,
+    /Promise\.all\(\[\s*ensureSecondaryFirebaseAuth\('BD'\),\s*ensureSecondaryFirebaseAuth\('C'\)/s
+  );
+});
