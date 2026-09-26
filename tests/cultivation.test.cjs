@@ -80,6 +80,8 @@ function setup(totalScore = 0) {
 'const quizHelperState = { answered:false, selectedIndex:null, correctIndex:null, explanation:\"\", question:\"\", messages:[], busy:false, requestSerial:0 };' +
     'function renderQuizHelperConversation() {};' +
     'const extendedPracticeState = { active:false };' +
+    'function nascentSoulSpiritReward() { return 0; };' +
+    'function normalizeSpirit(value) { return Math.max(0, Number(value) || 0); };' +
     'window.getCurrentUserData = () => currentUserData;' +
     read('cultivation-rules.js').replace(/export /g, '') +
     section(main, 'const REALMS = [', '// 綁定全域函式') +
