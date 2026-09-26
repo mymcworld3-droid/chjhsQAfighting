@@ -91,6 +91,9 @@ test('shared room layer supports party lifecycle, boss HP and reconnect', () => 
   assert.match(roomApiSource, /adminProject\('C'\)/);
   assert.match(roomApiSource, /where\('status', '==', 'waiting'\)/);
   assert.match(roomApiSource, /verifyIdToken/);
+  assert.match(roomApiSource, /const BOSS_ACTION_INTERVAL_MS = 18000/);
+  assert.match(roomApiSource, /now\(\) < nextActionAtMs/);
+  assert.match(raidSource, /advancingBossAction/);
   assert.match(serverSource, /registerRaidRoomApi\(app\)/);
 });
 
