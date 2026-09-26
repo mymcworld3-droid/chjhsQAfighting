@@ -85,7 +85,13 @@ test('shared room layer supports party lifecycle, boss HP and reconnect', () => 
   assert.match(roomSource, /advanceRaidBossAction/);
   assert.match(roomSource, /heartbeatRaidRoom/);
   assert.match(roomSource, /leaveRaidRoom/);
-  assert.match(roomSource, /ensureSecondaryFirebaseAuth\('C'\)/);
+  assert.match(roomSource, /\/api\/raid\/room/);
+  assert.match(roomSource, /const POLL_MS = 1000/);
+  assert.doesNotMatch(roomSource, /ensureSecondaryFirebaseAuth/);
+  assert.match(roomApiSource, /adminProject\('C'\)/);
+  assert.match(roomApiSource, /where\('status', '==', 'waiting'\)/);
+  assert.match(roomApiSource, /verifyIdToken/);
+  assert.match(serverSource, /registerRaidRoomApi\(app\)/);
 });
 
 test('wrong answers only lose the player attack and never trigger an extra boss strike', () => {
