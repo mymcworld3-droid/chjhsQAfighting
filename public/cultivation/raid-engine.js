@@ -2,13 +2,12 @@
 export const RAID_MVP = Object.freeze({
   modeVersion: 1,
   minimumScore: 10,
-  // 每位玩家獨立出題、獨立倒數；不等待隊友，也不共用題目。
-  minQuestionCycleMs: 6000,
-  reviewLockMs: 1500,
+  // 每位玩家獨立出題；答完可立刻進入下一題，不等待隊友。
+  minQuestionCycleMs: 0,
+  reviewLockMs: 0,
   // Boss 使用自己的時間軸，不因任何玩家答題快慢而延後。
   bossActionIntervalMs: 18000,
   bossTelegraphMs: 5000,
-  maxBossActions: 12,
   bossId: 'shen-qingshuang',
   bossName: '沈清霜',
   bossTitle: '大師姐・清霜試煉',
@@ -66,15 +65,6 @@ export function shenIntentForRound({ round = 1, bossHp = 1, bossMaxHp = 1, baseA
   const phase = shenPhaseForHp(bossHp, bossMaxHp);
   const attack = Math.max(1, Math.round(finite(baseAttack, 100)));
 
-  if (turn >= RAID_MVP.maxBossActions) {
-    return {
-      phase,
-      name: '霜華收劍',
-      cue: '最後一式。撐過去，或在這一回合擊破試煉。',
-      damage: Math.round(attack * 1.60),
-      kind: 'finisher'
-    };
-  }
   if (phase === 3) {
     return {
       phase,
@@ -154,9 +144,6 @@ export function resolveSoloRaidRound({
   } else if (nextPlayerHp <= 0) {
     finished = true;
     finishReason = 'player-defeated';
-  } else if (turn >= RAID_MVP.maxBossActions) {
-    finished = true;
-    finishReason = 'round-limit';
   }
 
   return {
@@ -179,10 +166,7 @@ export function resolveSoloRaidRound({
 
 export function nextPersonalQuestionAt({ issuedAtMs = 0, resolvedAtMs = 0 } = {}) {
   const issued = Math.max(0, finite(issuedAtMs));
-  const resolved = Math.max(issued, finite(resolvedAtMs, issued));
-  // 很快答完的人仍有最短行動週期，避免靠連點把輸出差距無限放大；
-  // 花較久時間作答的人則不再額外等待。
-  return Math.max(issued + RAID_MVP.minQuestionCycleMs, resolved + RAID_MVP.reviewLockMs);
+  return Math.max(issued, finite(resolvedAtMs, issued));
 }
 
 export function bossClockState({ startedAtMs = 0, nowMs = 0, actionCount = 0 } = {}) {
@@ -198,6 +182,6 @@ export function bossClockState({ startedAtMs = 0, nowMs = 0, actionCount = 0 } =
     remainingMs: Math.max(0, nextActionAtMs - now),
     telegraphing: now >= telegraphAtMs && now < nextActionAtMs,
     due: now >= nextActionAtMs,
-    enraged: count >= RAID_MVP.maxBossActions
+    enraged: false
   };
 }
