@@ -8,6 +8,8 @@ const SCOPE = self.registration.scope;
 const MANIFEST_URL = new URL('module-versions.json', SCOPE).href;
 const STATIC_CACHE = 'xiuxian-static-versioned-v1';
 const META_CACHE = 'xiuxian-static-meta-v1';
+const ITEM_IMAGE_CACHE = 'xiuxian-item-images-v1';
+const ITEM_IMAGE_CACHE_MAX = 400;
 const KEY = '__xiuxian_asset_sha';
 let currentManifest = null;
 let manifestCheck = null;
@@ -101,6 +103,39 @@ async function serveStatic(request, path, manifest) {
   }
 }
 
+function isGeneratedItemImage(request) {
+  if (request?.method !== 'GET' || request?.destination !== 'image') return false;
+  try {
+    const url = new URL(request.url);
+    return url.pathname.split('/').includes('generated-items');
+  } catch (_) {
+    return false;
+  }
+}
+
+async function trimItemImageCache() {
+  const storage = await caches.open(ITEM_IMAGE_CACHE);
+  if (typeof storage.keys !== 'function' || typeof storage.delete !== 'function') return;
+  const keys = await storage.keys();
+  const overflow = keys.length - ITEM_IMAGE_CACHE_MAX;
+  for (let index = 0; index < overflow; index += 1) {
+    await storage.delete(keys[index]);
+  }
+}
+
+async function serveGeneratedItemImage(request) {
+  const storage = await caches.open(ITEM_IMAGE_CACHE);
+  const saved = await storage.match(request);
+  if (saved) return saved;
+
+  const network = await fetch(request);
+  if (network.ok || network.type === 'opaque') {
+    await storage.put(request, network.clone());
+    trimItemImageCache().catch(() => {});
+  }
+  return network;
+}
+
 async function precacheModules() {
   const manifest = await loadManifest(false);
   if (!manifest) return;
@@ -129,6 +164,12 @@ self.addEventListener('message', event => {
 
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
+
+  if (isGeneratedItemImage(event.request)) {
+    event.respondWith(serveGeneratedItemImage(event.request));
+    return;
+  }
+
   const path = relativePath(event.request.url);
   if (!path || path === 'module-versions.json' || path === 'sw.js') return;
   if (event.request.mode === 'navigate') {
