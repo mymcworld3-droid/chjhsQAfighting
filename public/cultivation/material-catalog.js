@@ -9,6 +9,7 @@ export const MIN_ARTIFACT_RECIPE_MATERIALS = 2;
 export const MAX_ARTIFACT_RECIPE_MATERIALS = 8;
 export const MAX_ARTIFACT_RECIPE_NESTING = 2;
 export const MATERIAL_CATALOG_SCHEMA_VERSION = 2;
+export const ARTIFACT_RECIPE_SCHEMA_VERSION = 2;
 
 const MATERIAL_REALM_COLORS = Object.freeze({
   凡人: '#a1a1aa',
@@ -443,6 +444,21 @@ export const ARTIFACT_RECIPES = validateArtifactRecipes(DEFAULT_ARTIFACT_RECIPES
 
 export function getDefaultArtifactRecipes() {
   return clone(validateArtifactRecipes(DEFAULT_ARTIFACT_RECIPES));
+}
+
+// Recipe schema migration only: restore built-in recipes that may have been lost
+// by an older catalog race, while preserving remote/admin/AI recipes verbatim.
+// Invalid remote entries are intentionally left for repairArtifactRecipes().
+export function mergeArtifactRecipesWithDefaults(rawRecipes = {}) {
+  const source = rawRecipes && typeof rawRecipes === 'object' && !Array.isArray(rawRecipes)
+    ? rawRecipes : {};
+  const merged = clone(DEFAULT_ARTIFACT_RECIPES);
+  Object.entries(source).forEach(([artifactId, recipe]) => {
+    const id = String(artifactId || '').trim();
+    if (!id) return;
+    merged[id] = normalizeArtifactRecipe(recipe);
+  });
+  return merged;
 }
 
 export function replaceArtifactRecipes(recipes, source = 'runtime') {
