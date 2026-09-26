@@ -13,7 +13,7 @@ import {
   'use strict';
 
   const PANEL_ID = 'admin-item-image-manager';
-  const FATAL_IMAGE_STATUSES = new Set([400, 401, 403, 429, 500, 502, 503, 504]);
+  const FATAL_IMAGE_STATUSES = new Set([400, 401, 403, 404, 429, 500, 502, 503, 504]);
   let busy = false;
   let stopRequested = false;
 
