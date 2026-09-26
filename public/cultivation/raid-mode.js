@@ -48,7 +48,9 @@ import {
     lastBossActionSeen: 0,
     applyingBossAction: false,
     reconnectTried: false,
-    invitedRoomId: ''
+    invitedRoomId: '',
+    rewardClaiming: false,
+    rewardClaimedRoomId: ''
   };
 
   function now() { return Date.now(); }
@@ -659,6 +661,57 @@ import {
     }
   }
 
+  async function claimRaidReward() {
+    if (!state.roomId || state.room?.status !== 'won' || state.rewardClaiming ||
+        state.rewardClaimedRoomId === state.roomId) return;
+    state.rewardClaiming = true;
+    const status = document.getElementById('raid-reward-status');
+    if (status) status.textContent = '正在由伺服器核對團本紀錄…';
+    try {
+      const user = getAuth(getApp()).currentUser;
+      if (!user) throw new Error('請重新登入後領取團本獎勵');
+      const token = await user.getIdToken();
+      const response = await fetch('/api/raid/reward', {
+        method: 'POST',
+        cache: 'no-store',
+        headers: { 'Content-Type':'application/json', Authorization:'Bearer ' + token },
+        body: JSON.stringify({ roomId: state.roomId })
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok || payload.ok !== true) throw new Error(payload.error || '團本獎勵尚未完成入帳');
+
+      state.rewardClaimedRoomId = state.roomId;
+      const local = data();
+      if (local) {
+        local.materialSystem = local.materialSystem && typeof local.materialSystem === 'object'
+          ? local.materialSystem : { inventory:{} };
+        local.materialSystem.inventory = local.materialSystem.inventory && typeof local.materialSystem.inventory === 'object'
+          ? local.materialSystem.inventory : {};
+        Object.entries(payload.inventory || {}).forEach(([id, quantity]) => {
+          local.materialSystem.inventory[id] = Math.max(0, Math.floor(Number(quantity) || 0));
+        });
+      }
+      window.dispatchEvent(new CustomEvent('material-system-updated', {
+        detail: { ...(local?.materialSystem || {}), raidReward:true }
+      }));
+      const second = Number(payload.rewards?.['raid-refine-key-ii']) || 0;
+      const third = Number(payload.rewards?.['raid-refine-key-iii']) || 0;
+      if (status) status.innerHTML = payload.awarded
+        ? '<b>團本獎勵已入帳</b><small>淬靈玄印 ×' + second + '・玄天道印 ×' + third + '</small>'
+        : '<b>本場獎勵已領取</b><small>伺服器已阻止重複發放。</small>';
+    } catch (error) {
+      console.error('[Raid] trusted reward claim failed:', error);
+      if (status) status.innerHTML = '<b>獎勵尚未入帳</b><small>' + escapeHtml(error?.message || '請稍後再試') + '</small>' +
+        '<button type="button" class="raid-ghost" data-retry-reward>重新領取</button>';
+      document.querySelector('[data-retry-reward]')?.addEventListener('click', function () {
+        state.rewardClaiming = false;
+        void claimRaidReward();
+      }, { once:true });
+    } finally {
+      state.rewardClaiming = false;
+    }
+  }
+
   function finishRaid(won, reason) {
     stopTick();
     state.status = 'finished';
@@ -674,7 +727,7 @@ import {
       '<div><span>Boss 剩餘生命</span><b>' + Math.round(state.room?.bossHp || 0).toLocaleString() + '</b></div><div><span>題目時間</span><b>不限時</b></div></div>' +
       '<div class="raid-result-team">' + members.map(member => '<div><span>' + escapeHtml(member.name) + '</span><b>' + Math.max(0, Number(member.damage) || 0).toLocaleString() + ' 傷害</b><small>' +
         Math.max(0, Number(member.correct) || 0) + ' / ' + Math.max(0, Number(member.attempts) || 0) + ' 答對</small></div>').join('') + '</div>' +
-      '<div class="raid-prototype-note"><i class="fa-solid fa-gem"></i><span><b>多人團本同步已啟用</b><small>房間、共用 Boss、隊員生命、輸出、Boss 時間軸與斷線重連已接至 C 專案。永久稀有掉落仍應由伺服器端核發，不由瀏覽器直接增加。</small></span></div>' +
+      '<div class="raid-prototype-note"><i class="fa-solid fa-gem"></i><span id="raid-reward-status"><b>' + (won ? '可信任獎勵結算' : '本場無勝利獎勵') + '</b><small>' + (won ? 'Render 正在核對 C 專案團本紀錄，通過後才會把二煉／三煉關鍵道具寫入 A 專案。' : '擊敗 Boss 後才會由伺服器發放關鍵道具。') + '</small></span></div>' +
       '<div class="raid-result-actions"><button class="raid-ghost" type="button" data-home>返回仙府</button><button class="raid-primary" type="button" data-again>重新組隊</button></div></div>';
     result.querySelector('[data-home]')?.addEventListener('click', async function () {
       await leaveRaidRoom(state.roomId).catch(() => {});
@@ -687,6 +740,7 @@ import {
       renderHub();
     });
     updateHomeEntry();
+    if (won) void claimRaidReward();
   }
 
   function resetRaid(clearRoom = true) {
@@ -700,7 +754,8 @@ import {
       history: [], questionIssuedAtMs: 0, questionResolvedAtMs: 0, nextQuestionAtMs: 0,
       selectedChoice: null, answerCorrect: null, playerActionCount: 0, bossStartedAtMs: 0, bossActionCount: 0,
       lastBossAction: null, lastPlayerAction: null, questionLoading: false, roomId: '', room: null,
-      lastBossActionSeen: 0, applyingBossAction: false, invitedRoomId: ''
+      lastBossActionSeen: 0, applyingBossAction: false, invitedRoomId: '',
+      rewardClaiming: false, rewardClaimedRoomId: ''
     });
     document.body.classList.remove('raid-session-active');
     updateHomeEntry();
