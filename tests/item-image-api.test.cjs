@@ -16,7 +16,7 @@ const {
 
 test('item image API uses Cloudflare FLUX Schnell with a fixed xianxia prompt', () => {
   assert.equal(MODEL, '@cf/black-forest-labs/flux-1-schnell');
-  assert.equal(PROMPT_VERSION, 'xianxia-moba-item-icon-v3');
+  assert.equal(PROMPT_VERSION, 'xianxia-moba-item-icon-v4');
   const material = buildItemImagePrompt('material', {
     name: '玄鐵',
     realm: '築基',
@@ -41,9 +41,11 @@ test('item image API uses Cloudflare FLUX Schnell with a fixed xianxia prompt', 
   assert.match(artifact, /exactly one complete artifact/);
   assert.match(artifact, /competitive MOBA equipment icon/);
   assert.match(artifact, /three-quarter angle/);
-  assert.match(artifact, /80 to 88 percent/);
+  assert.match(artifact, /82 to 92 percent/);
   assert.match(artifact, /float alone/);
-  assert.match(artifact, /vivid jewel-tone colors/);
+  assert.match(artifact, /saturated jewel-tone colors/);
+  assert.match(artifact, /dark navy, indigo, violet, or black gradient background/);
+  assert.match(artifact, /No table, altar, rack, stand/);
   assert.match(artifact, /no rack, no stand/);
 });
 
