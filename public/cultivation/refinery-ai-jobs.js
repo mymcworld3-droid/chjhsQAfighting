@@ -288,7 +288,15 @@ import {
       if (gold < plan.gold) throw new Error('金幣不足，需要 ' + plan.gold + '，目前只有 ' + gold);
 
       const trustedKey = refinementKeyRequirement(plan.depth, plan.targetRealm, raw.materialSystem?.inventory || {});
-      const consumed = consumeRecipe(raw, plan.recipe, trustedKey);
+      const consumed = consumeRecipe(raw, plan.recipe);
+      if (trustedKey?.materialId) {
+        const need = Math.max(1, Math.floor(Number(trustedKey.quantity) || 1));
+        const have = Math.max(0, Number(consumed.materialSystem.inventory?.[trustedKey.materialId]) || 0);
+        if (have < need) throw new Error((trustedKey.name || trustedKey.materialId) + ' 數量不足，需要 ' + need + '，目前只有 ' + have);
+        const remain = have - need;
+        if (remain > 0) consumed.materialSystem.inventory[trustedKey.materialId] = remain;
+        else delete consumed.materialSystem.inventory[trustedKey.materialId];
+      }
       committed = {
         materialSystem: consumed.materialSystem,
         artifactSystem: consumed.artifactSystem,
