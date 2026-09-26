@@ -56,18 +56,25 @@ function mockWorker() {
     async open(name) {
       if (!cacheStores.has(name)) cacheStores.set(name, new Map());
       const store = cacheStores.get(name);
+      const normalizeKey = key => typeof key === 'string' ? key : (key?.url || String(key));
       return {
-        async match(key) { return store.get(String(key))?.clone() || undefined; },
-        async put(key, response) { store.set(String(key), response.clone()); }
+        async match(key) { return store.get(normalizeKey(key))?.clone() || undefined; },
+        async put(key, response) { store.set(normalizeKey(key), response.clone()); },
+        async keys() { return [...store.keys()]; },
+        async delete(key) { return store.delete(normalizeKey(key)); }
       };
     }
   };
   async function fetch(request, options = {}) {
     if (offline) throw new Error('offline');
     const uri = new URL(typeof request === 'string' ? request : request.url);
-    networkCalls.push({ path: uri.pathname.slice(new URL(scope).pathname.length), options });
+    const base = new URL(scope);
+    const path = uri.origin === base.origin && uri.pathname.startsWith(base.pathname)
+      ? uri.pathname.slice(base.pathname.length)
+      : uri.pathname.replace(/^\\/+/, '');
+    networkCalls.push({ path, url: uri.href, options });
     if (uri.pathname.endsWith('/module-versions.json')) return new Response(JSON.stringify(versions), { status:200 });
-    return new Response('file:' + uri.pathname.slice(new URL(scope).pathname.length), { status:200 });
+    return new Response('file:' + path, { status:200 });
   }
   const self = {
     registration: { scope },
@@ -85,7 +92,16 @@ function mockWorker() {
     assert.ok(event.result, 'versioned local asset should be intercepted');
     return (await event.result).text();
   }
-  return { events, scope, versions, networkCalls, resource, setOffline(v) { offline = v; } };
+  async function imageResource(url) {
+    const event = {
+      request: { url, method:'GET', mode:'no-cors', destination:'image' },
+      respondWith(p) { this.result = p; }
+    };
+    events.get('fetch')(event);
+    assert.ok(event.result, 'generated item image should be intercepted');
+    return (await event.result).text();
+  }
+  return { events, scope, versions, networkCalls, resource, imageResource, setOffline(v) { offline = v; } };
 }
 
 test('cached version is reused without another asset download, even with a changed query string', async () => {
@@ -116,6 +132,33 @@ test('offline navigation uses the previous manifest and local code', async () =>
   sw.setOffline(true);
   assert.equal(await sw.resource('index.html', 'navigate'), 'file:index.html');
   assert.equal(await sw.resource('main.js'), 'file:main.js');
+});
+
+test('generated R2 item images are cache-first and remain available offline', async () => {
+  const sw = mockWorker();
+  const imageUrl = 'https://pub-example.r2.dev/generated-items/artifacts/seven-treasure-ruler/icon.jpg';
+  assert.equal(
+    await sw.imageResource(imageUrl),
+    'file:generated-items/artifacts/seven-treasure-ruler/icon.jpg'
+  );
+  assert.equal(
+    await sw.imageResource(imageUrl),
+    'file:generated-items/artifacts/seven-treasure-ruler/icon.jpg'
+  );
+  assert.equal(sw.networkCalls.filter(x => x.url === imageUrl).length, 1);
+  sw.setOffline(true);
+  assert.equal(
+    await sw.imageResource(imageUrl),
+    'file:generated-items/artifacts/seven-treasure-ruler/icon.jpg'
+  );
+});
+
+test('item image cache is isolated and bounded', () => {
+  assert.match(worker, /ITEM_IMAGE_CACHE = 'xiuxian-item-images-v1'/);
+  assert.match(worker, /ITEM_IMAGE_CACHE_MAX = 400/);
+  assert.match(worker, /pathname\.split\('\/'\)\.includes\('generated-items'\)/);
+  assert.match(worker, /if \(saved\) return saved/);
+  assert.match(worker, /trimItemImageCache/);
 });
 
 test('non-versioned URLs and remote Firebase requests are never put in the module cache', () => {
