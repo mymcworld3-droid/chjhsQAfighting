@@ -8,7 +8,7 @@ export const MATERIAL_WEAPON_FORMS = Object.freeze(['','劍','刀','槍','弓','
 export const MIN_ARTIFACT_RECIPE_MATERIALS = 2;
 export const MAX_ARTIFACT_RECIPE_MATERIALS = 8;
 export const MAX_ARTIFACT_RECIPE_NESTING = 2;
-export const MATERIAL_CATALOG_SCHEMA_VERSION = 2;
+export const MATERIAL_CATALOG_SCHEMA_VERSION = 3;
 export const ARTIFACT_RECIPE_SCHEMA_VERSION = 2;
 
 const MATERIAL_REALM_COLORS = Object.freeze({
