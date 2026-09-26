@@ -7,6 +7,7 @@ import {
   ARTIFACT_EQUIP_SLOTS,
   ARTIFACT_WEAPON_FORMS,
   ARTIFACT_FORGE_METHODS,
+  ARTIFACT_CATALOG_SCHEMA_VERSION,
   SUPPORTED_ARTIFACT_EFFECTS,
   normalizeArtifactDefinition,
   replaceArtifactCatalog,
@@ -616,7 +617,12 @@ import {
         updatedAt: serverTimestamp(),
         updatedAtMs: Date.now()
       };
-      tx.set(configRef, { version: 1, items: committedCatalog, ...audit }, { merge: true });
+      tx.set(configRef, {
+        version: 1,
+        artifactCatalogSchemaVersion: ARTIFACT_CATALOG_SCHEMA_VERSION,
+        items: committedCatalog,
+        ...audit
+      }, { merge: true });
       if (normalizedRecipes !== null) {
         const materialConfigRef = doc(db, CONFIG_COLLECTION, MATERIAL_CONFIG_DOC);
         tx.set(materialConfigRef, { version: 1, recipes: normalizedRecipes, ...audit }, { merge: true });
