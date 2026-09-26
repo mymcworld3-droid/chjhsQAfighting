@@ -192,8 +192,6 @@ import {
       '<div class="raid-boss-info"><div class="raid-badges"><span>1–4 人</span><span>題目不同步</span><span>作答不限時</span><span>Boss 每 18 秒行動</span></div>' +
       '<small>青雲山・演武秘境</small><h3>' + RAID_MVP.bossTitle + '</h3>' +
       '<p>題目已取消倒數。你可以思考到作答為止，但 Boss 不會等待，仍依自己的時間軸持續出招。答錯只失去本次攻擊，不會額外觸發 Boss 傷害。</p>' +
-      '<div class="raid-rule-grid"><div><span>玩家節奏</span><b>獨立題目・不限時</b></div><div><span>最低出手間隔</span><b>6 秒，避免連點刷傷害</b></div>' +
-      '<div><span>Boss 節奏</span><b>18 秒一式・5 秒預告</b></div><div><span>隊伍</span><b>共用 Boss HP・各自承傷</b></div></div>' +
       '<div class="raid-join-grid"><button class="raid-primary" type="button" data-quick ' + (locked ? 'disabled' : '') + '>快速加入／建立隊伍</button>' +
       '<button class="raid-ghost" type="button" data-create ' + (locked ? 'disabled' : '') + '>建立私人隊伍</button></div>' +
       '<div class="raid-code-join"><input id="raid-room-code-input" maxlength="6" placeholder="輸入 6 碼隊伍代碼"><button class="raid-ghost" type="button" data-code ' + (locked ? 'disabled' : '') + '>加入隊伍</button></div>' +
