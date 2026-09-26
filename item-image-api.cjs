@@ -4,7 +4,7 @@ const { randomUUID, createHash, createHmac } = require('node:crypto');
 const { adminProject, PROJECT_IDS } = require('./firebase-admin-projects.cjs');
 
 const MODEL = '@cf/black-forest-labs/flux-1-schnell';
-const PROMPT_VERSION = 'xianxia-item-icon-v1';
+const PROMPT_VERSION = 'xianxia-moba-item-icon-v2';
 const PROMPT_MAX = 2048;
 const CONFIGS = Object.freeze({
   artifact: { doc: 'artifactCatalogV1', folder: 'artifacts' },
@@ -130,11 +130,11 @@ function buildItemImagePrompt(kind, item = {}) {
   const effects = effectSummary(item);
 
   const common = [
-    'Create a 1:1 square inventory item image for a Chinese xianxia cultivation RPG.',
-    'Use one consistent premium game-art direction: refined Chinese fantasy, elegant ancient craftsmanship, realistic material texture, subtle ink-painting influence, restrained spiritual glow, crisp readable silhouette.',
-    'The item must be centered, fully visible, not cropped, with roughly ten percent empty margin around it.',
-    'Use a simple dark neutral studio-like background with a faint atmospheric aura; do not draw a scene.',
-    'Do not include any people, hands, faces, text, letters, numbers, labels, watermark, logo, UI border, inventory frame, duplicated object, split panel, or caption.'
+    'Create a 1:1 square inventory icon for a Chinese xianxia cultivation RPG.',
+    'Use polished premium mobile MOBA item-icon rendering: bold readable silhouette, painterly fantasy detail, rich metal jade crystal textures, sharp specular highlights, controlled bloom, dramatic rim lighting, deep contrast, and clean small-size readability.',
+    'Center exactly one object, fully visible and not cropped. Let the object fill about 78 to 86 percent of the canvas with a strong iconic silhouette.',
+    'Use a dark vignetted gradient background with soft magical haze only; no environment, landscape, pedestal, hand, character, or full scene.',
+    'Do not include text, letters, numbers, labels, watermark, logo, UI frame, inventory border, duplicated object, split panel, or caption.'
   ];
 
   if (kind === 'material') {
@@ -155,9 +155,11 @@ function buildItemImagePrompt(kind, item = {}) {
 
   return finalizePrompt([
     ...common,
-    'This is a finished magical ARTIFACT. Show exactly one complete artifact with a distinctive silhouette and visible craftsmanship.',
-    'Its shape must match the artifact type instead of becoming a generic glowing orb. Swords remain swords, shields remain shields, talismans remain talismans, arrays remain array plates, mirrors remain mirrors, bells remain bells, cauldrons remain cauldrons.',
-    'Higher cultivation realms may look more refined and spiritually powerful, but keep the design readable rather than filling the image with effects.',
+    'This is a finished magical ARTIFACT and should read like a top-tier competitive MOBA equipment icon, not a realistic product photo.',
+    'Show exactly one complete artifact at a slightly dramatic three-quarter angle. Use elegant exaggerated proportions, ornate xianxia craftsmanship, layered metal or jade edges, engraved details, luminous runes or energy seams, and a focused magical glow around the artifact.',
+    'Keep the silhouette instantly recognizable at thumbnail size. Swords remain swords, shields remain shields, talismans remain talismans, mirrors remain mirrors, bells remain bells, cauldrons remain cauldrons, and array artifacts remain compact mystical devices.',
+    'Use one dominant magical accent glow plus subtle sparks, wisps, or energy trails. Effects must enhance the object, never hide its shape or fill the whole canvas.',
+    'Make higher cultivation realms feel rarer through finer ornament, brighter core energy, richer materials, and stronger but controlled rim light.',
     'Item name: ' + name + '.',
     'Cultivation realm: ' + realm + '.',
     'Artifact category: ' + category + '.',
