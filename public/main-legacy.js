@@ -890,10 +890,42 @@ function hideGameStartupGate() {
 }
 
 async function waitForVerifiedPlayerMigration(user) {
-    // Server feature flag keeps the existing A-only game available until the
-    // three server-side credentials, freeze, rules and migration are configured.
+    // Already-provisioned players are resolved by one trusted marker in A.
+    // Only first-time / schema-upgrade players enter migration polling and BD/C profile checks.
     const token = await user.getIdToken();
     const headers = { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token };
+
+    const ensurePlayerProvision = async () => {
+        const synced = await fetch('/api/game-startup-player', {
+            method: 'POST', cache: 'no-store', headers, body: '{}'
+        });
+        const record = await synced.json().catch(() => ({}));
+        if (synced.ok && record.ready === true && record.uid === user.uid &&
+            record.profiles?.BD && record.profiles?.C) {
+            return { ready: true, record };
+        }
+        if (synced.status === 503 && record.code === 'MIGRATION_NOT_READY') {
+            return { ready: false, migrationPending: true, record };
+        }
+        throw new Error(record.message || '跨專案玩家資料尚未建立完成。');
+    };
+
+    if (auth.currentUser?.uid !== user.uid) throw new Error('登入帳號已更換，請重新進入遊戲。');
+
+    // Fast path: a player that has been verified before never polls migration
+    // and never rechecks the BD/C playerProfiles.
+    showGameStartupGate('正在連線 BD、C 玩家資料…');
+    let provision = await ensurePlayerProvision();
+    if (provision.ready) {
+        await Promise.all([
+            ensureSecondaryFirebaseAuth('BD'),
+            ensureSecondaryFirebaseAuth('C')
+        ]);
+        if (auth.currentUser?.uid !== user.uid) throw new Error('登入帳號已更換，請重新進入遊戲。');
+        return;
+    }
+
+    // First-time players only: wait for the one global migration, then provision once.
     for (;;) {
         if (auth.currentUser?.uid !== user.uid) throw new Error('登入帳號已更換，請重新進入遊戲。');
         const response = await fetch('/api/game-startup-migration', {
@@ -903,17 +935,11 @@ async function waitForVerifiedPlayerMigration(user) {
         if (!response.ok) throw new Error(payload.message || '無法確認洞天資料搬移狀態，請重新整理後重試。');
         if (payload.status === 'legacy' && payload.ready === true) return;
         if (payload.status === 'ready' && payload.ready === true) {
-            showGameStartupGate('正在核對你的 BD、C 玩家資料…');
-            const synced = await fetch('/api/game-startup-player', {
-                method: 'POST', cache: 'no-store', headers, body: '{}'
-            });
-            const record = await synced.json().catch(() => ({}));
-            if (!synced.ok || record.ready !== true || record.uid !== user.uid ||
-                !record.profiles?.BD || !record.profiles?.C) {
-                throw new Error(record.message || '跨專案玩家資料尚未建立完成。');
+            showGameStartupGate('首次建立你的 BD、C 玩家資料…');
+            provision = await ensurePlayerProvision();
+            if (!provision.ready) {
+                throw new Error(provision.record?.message || '跨專案玩家資料尚未建立完成。');
             }
-            // Both profiles now exist. Exchange the A ID token for distinct
-            // BD/C Firebase Auth sessions before gameplay modules can use rules.
             await Promise.all([
                 ensureSecondaryFirebaseAuth('BD'),
                 ensureSecondaryFirebaseAuth('C')
@@ -925,8 +951,7 @@ async function waitForVerifiedPlayerMigration(user) {
             throw new Error(payload.message || '資料尚未準備完成，請聯絡管理員。');
         }
         showGameStartupGate(payload.message || '正在核對洞天資料…');
-        // The backend owns a single migration lease; each visitor only polls.
-        // Do not initiate another copy or repeatedly read every cave in browsers.
+        // The backend owns a single migration lease; each first-time visitor only polls.
         await new Promise(resolve => setTimeout(resolve, 6000));
     }
 }
@@ -1021,8 +1046,8 @@ onAuthStateChanged(auth, async (user) => {
                 await setDoc(userRef, currentUserData);
             }
 
-            // Verify global cave migration first. On the first visit after cutover,
-            // the trusted backend creates minimal BD/C playerProfiles by UID.
+            // Reuse the trusted per-player BD/C completion marker after the first successful setup.
+            // Only players without that marker enter migration polling / profile provisioning.
             window.__xiuxianMigrationApproved = false;
             showGameStartupGate('正在核對資料搬移狀態…');
             try {
