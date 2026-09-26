@@ -11,6 +11,7 @@ const registerFirebaseProjectAuthApi = require('./firebase-project-auth-api.cjs'
 const registerAutoMigrationApi = require('./firebase-auto-migration-api.cjs');
 const registerPlayerProvisionApi = require('./firebase-player-provision-api.cjs');
 const registerAdminAccountApi = require('./admin-account-api.cjs');
+const registerAdminArtifactDeleteApi = require('./admin-artifact-delete-api.cjs');
 const { registerItemImageApi } = require('./item-image-api.cjs');
 require('dotenv').config();
 
@@ -28,6 +29,7 @@ registerFirebaseProjectAuthApi(app);
 const migrationController = registerAutoMigrationApi(app);
 registerPlayerProvisionApi(app, { migrationController });
 registerAdminAccountApi(app);
+registerAdminArtifactDeleteApi(app);
 registerItemImageApi(app);
 
 // 根目錄路由
