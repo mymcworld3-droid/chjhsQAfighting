@@ -8,6 +8,8 @@ const readPublic = path => readFileSync(join(__dirname, '../public', path), 'utf
 const engineSource = readPublic('cultivation/raid-engine.js');
 const raidSource = readPublic('cultivation/raid-mode.js');
 const roomSource = readPublic('cultivation/raid-room.js');
+const roomApiSource = readFileSync(join(__dirname, '../raid-room-api.cjs'), 'utf8');
+const serverSource = readFileSync(join(__dirname, '../server.js'), 'utf8');
 const mainSource = readPublic('main.js');
 const cssSource = readPublic('styles/raid-mode.css');
 
