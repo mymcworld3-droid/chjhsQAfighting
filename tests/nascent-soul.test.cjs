@@ -402,7 +402,7 @@ test('previous v3 allocations preserve paid costs', () => {
 test('duel survival reduction and core-linked correct-answer healing', () => {
   const code=read('public/cultivation/battle-engine-v2.js').replace(/^export /gm,'');
   const settle=new Function(code+'\nreturn settleBattleRound;')();
-  const p=(uid,correct,hp,ns)=>({uid,hp,maxHp:1000,atk:200,goldenCore:null,nascentSoul:ns,answer:{correct,atMs:1000}});
+  const p=(uid,correct,hp,ns)=>({uid,hp,maxHp:1000,atk:200,totalScore:68,goldenCore:null,nascentSoul:ns,answer:{correct,atMs:1000}});
   const host=p('host',true,700,{bonusDamage:30,reductionFlat:15,coreHeal:24});
   const guest=p('guest',false,1000,{reductionFlat:25});
   const result=settle({roomId:'soul-survival',round:1,host,guest});
