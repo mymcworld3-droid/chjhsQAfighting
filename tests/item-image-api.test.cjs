@@ -8,7 +8,8 @@ const {
   MODEL,
   PROMPT_VERSION,
   buildItemImagePrompt,
-  storageBucketCandidates,
+  r2Config,
+  signedR2PutRequest,
   uploadGeneratedImage,
   generateFluxImage
 } = require('../item-image-api.cjs');
