@@ -355,6 +355,8 @@ import {
     const arena = document.getElementById('raid-arena');
     const stage = arena?.querySelector('.raid-stage');
     if (stage) stage.classList.add(attacker === 'player' ? 'raid-player-strike' : 'raid-boss-strike');
+    const actionCaption = arena?.querySelector('.raid-boss-portrait > span');
+    if (actionCaption && actionName) actionCaption.textContent = '「' + actionName + '」';
 
     const notice = document.createElement('div');
     notice.className = 'raid-combat-event ' + (attacker === 'player' ? 'player' : 'boss');
@@ -556,8 +558,7 @@ import {
     try {
       const room = await advanceRaidBossAction({
         roomId: state.roomId,
-        intent: currentIntent(),
-        maxActions: RAID_MVP.maxBossActions
+        intent: currentIntent()
       });
       if (room) {
         state.room = room;
