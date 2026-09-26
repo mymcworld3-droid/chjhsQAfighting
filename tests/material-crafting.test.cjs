@@ -32,9 +32,11 @@ test('material catalog and recipes sync from one global Firestore config documen
   assert.match(sync, /mergeMaterialCatalogWithDefaults\(data\.items\)/);
   assert.match(sync, /replaceMaterialCatalog\(items, needsBackfill \? 'firestore-backfill' : 'firestore'\)/);
   assert.match(sync, /materialCatalogSchemaVersion: MATERIAL_CATALOG_SCHEMA_VERSION/);
-  assert.match(sync, /repairArtifactRecipes\(data\.recipes\)/);
-  assert.match(sync, /replaceArtifactRecipes\(repair\.recipes, repair\.changed \? 'firestore-orphan-repair' : 'firestore'\)/);
-  assert.match(sync, /persistRecipeRepair\(ref, repair\)/);
+  assert.match(sync, /mergeArtifactRecipesWithDefaults\(data\.recipes\)/);
+  assert.match(sync, /artifactRecipeSchemaVersion/);
+  assert.match(sync, /repairArtifactRecipes\(recipeSource\)/);
+  assert.match(sync, /replaceArtifactRecipes\(repair\.recipes, source\)/);
+  assert.match(sync, /persistRecipeRepair\(ref, repair, \{ backfilled: needsRecipeBackfill \}\)/);
 });
 
 test('artifact crafting is intercepted and atomically consumes gold plus material or artifact ingredients', () => {
