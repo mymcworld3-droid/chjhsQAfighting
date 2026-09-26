@@ -13,6 +13,7 @@ import {
   'use strict';
 
   const PANEL_ID = 'admin-item-image-manager';
+  const FATAL_IMAGE_STATUSES = new Set([400, 401, 403, 429, 500, 502, 503, 504]);
   let busy = false;
   let stopRequested = false;
 
@@ -57,9 +58,12 @@ import {
       },
       body: JSON.stringify({ kind, id, overwrite })
     });
-    const payload = await response.json().catch(() => ({}));
+    const raw = await response.text().catch(() => '');
+    let payload = {};
+    try { payload = raw ? JSON.parse(raw) : {}; } catch (_) {}
     if (!response.ok || payload?.ok !== true) {
-      const error = new Error(payload?.error || ('圖片生成失敗 (' + response.status + ')'));
+      const detail = String(payload?.error || raw || '').trim().slice(0, 360);
+      const error = new Error(detail || ('圖片生成失敗 (' + response.status + ')'));
       error.status = response.status;
       throw error;
     }
@@ -148,6 +152,7 @@ import {
     const bar = panel?.querySelector('#aiim-progress-bar');
     let completed = 0;
     let failed = 0;
+    let firstError = '';
 
     for (let index = 0; index < queue.length; index += 1) {
       if (stopRequested) break;
@@ -159,9 +164,15 @@ import {
         completed += 1;
       } catch (error) {
         failed += 1;
-        console.warn('[Admin item image backfill]', row, error);
-        if (error?.status === 429 || error?.status === 503 || error?.status === 504) {
-          if (status) status.textContent = error.message + '；已停止本次補圖。';
+        const message = String(error?.message || '圖片生成失敗');
+        if (!firstError) firstError = message;
+        console.warn('[Admin item image backfill]', {
+          ...row,
+          status: Number(error?.status) || 0,
+          error: message
+        });
+        if (FATAL_IMAGE_STATUSES.has(Number(error?.status) || 0)) {
+          if (status) status.textContent = message + '；已停止本次補圖。';
           break;
         }
       }
@@ -172,9 +183,11 @@ import {
     const stopped = stopRequested;
     stopRequested = false;
     render();
-    toast(stopped
-      ? `已停止補圖，本次完成 ${completed} 張`
-      : `補圖完成：成功 ${completed} 張${failed ? `，失敗 ${failed} 張` : ''}`, failed === 0);
+    if (firstError) {
+      toast(`補圖失敗：${firstError}${completed ? `（已完成 ${completed} 張）` : ''}`, false);
+    } else {
+      toast(stopped ? `已停止補圖，本次完成 ${completed} 張` : `補圖完成：成功 ${completed} 張`, true);
+    }
   }
 
   function mount() {
