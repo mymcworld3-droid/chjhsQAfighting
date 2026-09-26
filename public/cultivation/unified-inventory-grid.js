@@ -6,7 +6,8 @@ import {
   materialRealmOrderByName,
   materialMarketReferencePrice,
   artifactRecipeDepth,
-  MAX_ARTIFACT_RECIPE_NESTING
+  MAX_ARTIFACT_RECIPE_NESTING,
+  RAID_REFINEMENT_KEYS
 } from './material-catalog.js';
 
 // 統一修煉背包：法寶、材料、消耗道具共用正方形格子；點擊後才顯示詳細資料。
@@ -17,6 +18,7 @@ import {
   const MODAL_ID = 'unified-bag-detail-modal';
   const STYLE_ID = 'unified-inventory-grid-runtime-style';
   const TYPE_ORDER = Object.freeze({ artifact: 0, material: 1, consumable: 2, training: 3 });
+  const RAID_KEY_IDS = new Set(Object.values(RAID_REFINEMENT_KEYS));
   const REALM_COLORS = Object.freeze({
     凡人: '#a1a1aa', 煉氣: '#86efac', 築基: '#60a5fa', 金丹: '#fbbf24', 元嬰: '#c084fc',
     化神: '#f472b6', 煉虛: '#818cf8', 合體: '#fb923c', 大乘: '#f87171', 渡劫: '#ef4444', 真仙: '#f8fafc'
@@ -145,6 +147,7 @@ import {
         qualityRank: materialRealmOrderByName(item?.realm || '凡人'),
         description: item?.description || '此材料已不在目前材料清單中。',
         buyGold: Math.max(0, Number(item?.buyGold) || 0),
+        raidKey: RAID_KEY_IDS.has(id),
         raw: item || null
       });
     });
@@ -221,12 +224,13 @@ import {
 
   function itemMarkup(item) {
     const color = qualityColor(item.realm);
-    return `<button type="button" class="uib-item" data-uib-item="${escapeHtml(item.key)}" style="--uib-quality:${escapeHtml(color)}" aria-label="查看 ${escapeHtml(item.name)} 詳細資料">
+    return `<button type="button" class="uib-item ${item.raidKey ? 'uib-raid-key' : ''}" data-uib-item="${escapeHtml(item.key)}" style="--uib-quality:${escapeHtml(color)}" aria-label="查看 ${escapeHtml(item.name)} 詳細資料">
       <span class="uib-qty">×${item.quantity}</span>
       ${item.equipped ? '<span class="uib-equipped"><i class="fa-solid fa-circle-check"></i></span>' : ''}
+      ${item.raidKey ? '<span class="uib-raid-key-badge"><i class="fa-solid fa-stamp"></i> 團本</span>' : ''}
       <span class="uib-icon">${imageMarkup(item.imageUrl, item.icon || '◆', item.name)}</span>
       <span class="uib-name">${escapeHtml(item.name)}</span>
-      <span class="uib-bottom"><small>${escapeHtml(typeLabel(item.type))}</small><em>${escapeHtml(item.realm || '凡人')}</em></span>
+      <span class="uib-bottom"><small>${escapeHtml(item.raidKey ? '團本印記' : typeLabel(item.type))}</small><em>${escapeHtml(item.realm || '凡人')}</em></span>
     </button>`;
   }
 
@@ -339,7 +343,9 @@ import {
         ? `<ul>${item.effects.map((effect) => `<li>${escapeHtml(effectLabel(effect))}</li>`).join('')}</ul>`
         : '<p>目前沒有額外效果資料。</p>'}${equippedHere ? '<p class="uib-equipped-note"><i class="fa-solid fa-circle-check"></i> 目前已裝備，效果正在生效</p>' : ''}${equipAction}</div>`;
     } else if (item.type === 'material') {
-      extra = `<div class="uib-detail-section"><span>材料資訊</span><p>分類：${escapeHtml(item.category)}</p><p>坊市參考單價：${materialMarketReferencePrice(item.realm).toLocaleString()} 金幣 · ${item.buyGold > 0 ? `系統採購價：${item.buyGold} 金幣` : '不可直接向系統採購'}</p></div>`;
+      extra = item.raidKey
+        ? `<div class="uib-detail-section uib-raid-key-detail"><span><i class="fa-solid fa-stamp"></i> 團本煉器印記</span><p>分類：團本印記</p><p>用途：${item.id === RAID_REFINEMENT_KEYS[2] ? '第二次煉製的必要印記。' : '第三次煉製的必要道印。'}</p><p>取得方式：擊敗團本 Boss 後由伺服器結算發放；不可由一般題目、洞天或系統商店取得。</p><p>持有數量：<b>×${item.quantity}</b></p></div>`
+        : `<div class="uib-detail-section"><span>材料資訊</span><p>分類：${escapeHtml(item.category)}</p><p>坊市參考單價：${materialMarketReferencePrice(item.realm).toLocaleString()} 金幣 · ${item.buyGold > 0 ? `系統採購價：${item.buyGold} 金幣` : '不可直接向系統採購'}</p></div>`;
     } else if (item.id === 'revival-pill') {
       extra = `<div class="uib-detail-section"><span>使用效果</span><p>服用後立即增加 ${item.cultivationGain || 100} 修為。</p><button type="button" class="uib-use-btn" data-uib-use="revival-pill">服用一顆</button></div>`;
     }
@@ -491,12 +497,13 @@ import {
       .uib-toolbar{flex:0 0 auto;display:flex;align-items:end;gap:8px;padding:9px 10px;border:1px solid rgba(216,177,93,.16);border-radius:14px;background:rgba(13,11,8,.84)}
       .uib-summary{display:grid;gap:2px;margin-right:auto}.uib-summary b{color:#f0dfb6;font-size:11px}.uib-summary span{color:#847864;font-size:7px}.uib-toolbar label{display:grid;gap:3px;color:#8e816c;font-size:6px;font-weight:900}.uib-toolbar select{min-width:126px;height:32px;padding:0 28px 0 9px;border:1px solid rgba(216,177,93,.2);border-radius:9px;background:#090807;color:#e2d5ba;font-size:8px;outline:none}
       .uib-grid{flex:1;min-height:0;overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(108px,140px));grid-auto-rows:max-content;align-content:start;justify-content:start;gap:10px;padding:2px 4px 12px 2px;scrollbar-width:thin;scrollbar-color:rgba(216,177,93,.26) transparent}
-      .uib-item{position:relative;aspect-ratio:1/1;min-width:0;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:12px 8px 9px;border:1px solid color-mix(in srgb,var(--uib-quality) 42%,rgba(255,255,255,.08));border-radius:16px;background:radial-gradient(circle at 50% 27%,color-mix(in srgb,var(--uib-quality) 15%,transparent),transparent 46%),linear-gradient(145deg,rgba(22,18,12,.96),rgba(7,7,7,.98));color:#eee2ca;text-align:center;box-shadow:inset 0 0 22px rgba(255,255,255,.015);transition:.15s ease;overflow:hidden}.uib-item:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--uib-quality) 72%,#fff 8%);box-shadow:0 10px 24px rgba(0,0,0,.25)}
+      .uib-item{position:relative;aspect-ratio:1/1;min-width:0;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:12px 8px 9px;border:1px solid color-mix(in srgb,var(--uib-quality) 42%,rgba(255,255,255,.08));border-radius:16px;background:radial-gradient(circle at 50% 27%,color-mix(in srgb,var(--uib-quality) 15%,transparent),transparent 46%),linear-gradient(145deg,rgba(22,18,12,.96),rgba(7,7,7,.98));color:#eee2ca;text-align:center;box-shadow:inset 0 0 22px rgba(255,255,255,.015);transition:.15s ease;overflow:hidden}.uib-item:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--uib-quality) 72%,#fff 8%);box-shadow:0 10px 24px rgba(0,0,0,.25)}.uib-item.uib-raid-key{border-color:color-mix(in srgb,var(--uib-quality) 68%,#e7c779);background:radial-gradient(circle at 50% 24%,rgba(231,199,121,.2),transparent 48%),linear-gradient(145deg,#20180d,#080807);box-shadow:inset 0 0 25px rgba(231,199,121,.04)}.uib-raid-key-badge{position:absolute;left:6px;top:6px;padding:2px 5px;border:1px solid rgba(231,199,121,.3);border-radius:999px;background:rgba(35,24,9,.88);color:#e7c779;font-size:5.5px;font-weight:900;letter-spacing:.04em}.uib-raid-key-badge i{margin-right:2px}
       .uib-icon{width:46px;height:46px;display:grid;place-items:center;overflow:hidden;border-radius:13px;border:1px solid color-mix(in srgb,var(--uib-quality) 58%,transparent);background:color-mix(in srgb,var(--uib-quality) 11%,#090807);color:var(--uib-quality);font-size:15px;font-weight:900;box-shadow:0 0 20px color-mix(in srgb,var(--uib-quality) 12%,transparent)}.uib-icon img,.uib-equip-slot-frame img{width:100%;height:100%;display:block;object-fit:cover}.uib-equip-slot-frame{overflow:hidden}.uib-name{width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#eee2ca;font-size:8px;font-weight:900}.uib-bottom{width:100%;display:flex;justify-content:space-between;gap:5px;align-items:center}.uib-bottom small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#827661;font-size:6px}.uib-bottom em{color:var(--uib-quality);font-size:6px;font-style:normal;white-space:nowrap}.uib-qty{position:absolute;right:7px;top:7px;padding:2px 5px;border-radius:999px;background:rgba(0,0,0,.64);border:1px solid rgba(255,255,255,.08);color:#ead49a;font-size:7px;font-weight:900}.uib-equipped{position:absolute;left:7px;top:7px;color:#f6d77e;font-size:8px}
       /* Materials are round mineral tokens; forged artifacts retain angular framed emblems. */
       .uib-item[data-uib-item^="material:"] .uib-icon,.uib-modal-material .uib-modal-icon{border-radius:50%!important;background:radial-gradient(circle at 31% 25%,color-mix(in srgb,var(--uib-quality) 36%,#fff),color-mix(in srgb,var(--uib-quality) 14%,#16110a) 43%,#0b0b09 100%);box-shadow:inset 0 0 0 2px rgba(255,255,255,.07),0 0 12px color-mix(in srgb,var(--uib-quality) 12%,transparent)}
       .uib-item[data-uib-item^="artifact:"] .uib-icon,.uib-modal-artifact .uib-modal-icon{border-radius:12px;box-shadow:inset 0 0 0 2px rgba(255,235,169,.1),0 0 17px color-mix(in srgb,var(--uib-quality) 16%,transparent)}
       .uib-empty{flex:1;min-height:180px;display:grid;place-items:center;align-content:center;gap:7px;color:#706653;text-align:center}.uib-empty i{font-size:25px}.uib-empty b{color:#a99b80;font-size:10px}.uib-empty span{font-size:7px}
+      .uib-raid-key-detail{border-color:rgba(231,199,121,.26);background:rgba(231,199,121,.035)}.uib-raid-key-detail>span{color:#e7c779}.uib-raid-key-detail b{color:#f1d791}
       .uib-modal-backdrop{position:fixed;inset:0;z-index:16050;display:grid;place-items:center;padding:16px;background:rgba(0,0,0,.82);backdrop-filter:blur(8px)}.uib-modal{width:min(100%,540px);max-height:88dvh;overflow:auto;padding:16px;border:1px solid color-mix(in srgb,var(--uib-quality) 48%,rgba(255,255,255,.08));border-radius:20px;background:linear-gradient(150deg,#18140e,#080808);box-shadow:0 30px 100px rgba(0,0,0,.72)}.uib-modal-head{display:grid;grid-template-columns:58px minmax(0,1fr) 34px;gap:11px;align-items:center}.uib-modal-icon{width:56px;height:56px;display:grid;place-items:center;border-radius:16px;border:1px solid color-mix(in srgb,var(--uib-quality) 55%,transparent);background:color-mix(in srgb,var(--uib-quality) 11%,#090807);color:var(--uib-quality);font-size:18px;font-weight:900}.uib-modal-head small{display:block;color:#857965;font-size:7px}.uib-modal-head h3{margin:3px 0;color:#f1e4c9;font-size:15px}.uib-modal-head span{color:var(--uib-quality);font-size:8px}.uib-close{width:32px;height:32px;border:1px solid rgba(255,255,255,.09);border-radius:10px;background:rgba(255,255,255,.025);color:#a99d87}.uib-description{margin-top:14px;padding:11px;border-radius:12px;background:rgba(255,255,255,.025);color:#a99b83;font-size:9px;line-height:1.7}.uib-detail-section{margin-top:10px;padding:11px;border:1px solid rgba(216,177,93,.12);border-radius:12px}.uib-detail-section>span{display:block;margin-bottom:7px;color:#d3b86f;font-size:8px;font-weight:900}.uib-detail-section p,.uib-detail-section li{margin:4px 0;color:#9b8e77;font-size:8px;line-height:1.55}.uib-detail-section ul{margin:0;padding-left:17px}.uib-equipped-note{color:#e3c36e!important}.uib-use-btn,.uib-equip-btn{width:100%;min-height:38px;margin-top:9px;border:1px solid rgba(216,177,93,.38);border-radius:11px;background:rgba(216,177,93,.09);color:#f0d99a;font-size:9px;font-weight:900}.uib-use-btn:disabled,.uib-equip-btn:disabled{opacity:.45}.uib-equip-btn:not(:disabled):hover{border-color:#e2c069;background:rgba(216,177,93,.14)}
       @media(max-width:700px){.uib-equipment-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.uib-equip-slot{min-height:136px}.uib-equip-slot-frame{width:58px;min-height:58px}.uib-toolbar{align-items:stretch;flex-wrap:wrap}.uib-summary{width:100%;margin-right:0}.uib-toolbar label{flex:1;min-width:120px}.uib-toolbar select{width:100%;min-width:0}.uib-grid{grid-template-columns:repeat(auto-fill,minmax(94px,1fr));gap:8px}.uib-item{max-width:140px;justify-self:start}}
       @media(max-width:420px){.uib-grid{grid-template-columns:repeat(3,minmax(0,1fr));}.uib-item{max-width:none;padding:9px 6px}.uib-icon{width:40px;height:40px}.uib-name{font-size:7px}.uib-bottom small,.uib-bottom em{font-size:5.5px}}
