@@ -103,6 +103,12 @@ const DEFAULT_MATERIAL_CATALOG = [
   { id: 'true-dragon-blood', name: '真龍精血', icon: '龍血', category: '妖獸材料', realm: '大乘', description: '真龍本源精血，氣血與龍威極盛，可淬鍊頂階法寶。', buyGold: 0 },
   { id: 'phoenix-blood', name: '鳳凰精血', icon: '鳳血', category: '妖獸材料', realm: '真仙', description: '鳳凰涅槃本源所化精血，蘊含近乎不滅的生命火種。', buyGold: 0 },
 
+  // 團本專屬煉製關鍵道具：不可購買，只能由可信任團本結算取得。
+  { id: 'raid-refine-key-ii', name: '淬靈玄印', icon: '玄印', category: '特殊材料', realm: '築基',
+    description: '第二煉的關鍵玄印。無法購買或由一般題目、洞天掉落取得，只能透過團本結算獲得。', buyGold: 0 },
+  { id: 'raid-refine-key-iii', name: '玄天道印', icon: '道印', category: '特殊材料', realm: '金丹',
+    description: '第三煉的關鍵道印。無法購買或由一般題目、洞天掉落取得，只能透過高階煉製所需的團本結算獲得。', buyGold: 0 },
+
   // 特殊系：靈符紙 → 地火石 → 星辰砂 → 天雷精魄 → 赤鳳石 → 五行精魄 → 天道碎片 → 法則碎片 → 大道碎片 → 鴻蒙紫氣
   { id: 'talisman-paper', name: '靈符紙', icon: '符', category: '特殊材料', realm: '築基', description: '承載符紋與陣法的基礎材料。', buyGold: 10 },
   { id: 'earthfire-stone', name: '地火石', icon: '地火', category: '特殊材料', realm: '金丹', description: '長年受地火灼煉的火性靈石，可提供穩定煉器火力。', buyGold: 0 },
@@ -179,6 +185,23 @@ export function materialMarketMinimumTotal(materialOrRealm, quantity = 1) {
   if (!Number.isSafeInteger(count) || count < 1) return 0;
   // Listing price is an integer TOTAL price, and must be strictly greater.
   return materialMarketReferencePrice(materialOrRealm) * count + 1;
+}
+
+export const RAID_REFINEMENT_KEYS = Object.freeze({
+  2: 'raid-refine-key-ii',
+  3: 'raid-refine-key-iii'
+});
+
+export function raidRefinementKeyRequirement(stage, realm) {
+  const level = Math.floor(Number(stage) || 0);
+  if (level !== 2 && level !== 3) return { stage: level, materialId: '', quantity: 0 };
+  // 凡人=0、煉氣=1 ... 真仙=10。第二煉約每兩個境界多一枚；
+  // 第三煉更稀有，約每 1.5 個境界多一枚。
+  const order = Math.max(1, materialRealmOrderByName(realm));
+  const quantity = level === 2
+    ? Math.max(1, Math.ceil(order / 2))
+    : Math.max(1, Math.ceil(order * 2 / 3));
+  return { stage: level, materialId: RAID_REFINEMENT_KEYS[level], quantity };
 }
 
 export function materialRealmColor(name) {
