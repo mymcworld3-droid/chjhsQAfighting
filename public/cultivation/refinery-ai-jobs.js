@@ -36,6 +36,8 @@ import {
   // 同一工作生成成功後若 Firestore 暫時中斷，可再次開爐而不重複呼叫生成服務。
   // 僅保存在本次頁面記憶體；實際領取狀態仍以 Firestore transaction 為準。
   const generatedCandidateCache = new Map();
+  const SECOND_REFINEMENT_KEY = 'raid-refine-key-2';
+  const THIRD_REFINEMENT_KEY = 'raid-refine-key-3';
 
   const data = () => window.getCurrentUserData?.() || null;
   const authUser = () => { try { return getAuth(getApp()).currentUser; } catch (_) { return null; } };
@@ -124,8 +126,26 @@ import {
     return depth;
   }
 
+  function refinementKeyRequirement(depth, targetRealm, inventory = data()?.materialSystem?.inventory || {}) {
+    if (depth < 1) return null;
+    const materialId = depth >= 2 ? THIRD_REFINEMENT_KEY : SECOND_REFINEMENT_KEY;
+    const realmOrder = Math.max(1, realmOrderByName(targetRealm));
+    const quantity = 1 + Math.floor((realmOrder - 1) / 3);
+    const owned = Math.max(0, Math.floor(Number(inventory?.[materialId]) || 0));
+    return {
+      materialId,
+      name: getMaterialById(materialId)?.name || (depth >= 2 ? '玄霜真印' : '清霜煉印'),
+      quantity,
+      owned,
+      missing: Math.max(0, quantity - owned)
+    };
+  }
+
   function buildPlan(tokens, knownArtifactId = '', forgeMethod = '自由發揮') {
     const ingredients = aggregateTokens(tokens);
+    if (ingredients.some((row) => row.type === 'material' && getMaterialById(row.id)?.raidOnly === true)) {
+      return { valid: false, reason: '團本煉印是煉製階段憑證，不佔八方煉器陣素材格。' };
+    }
     const recipe = recipeFromIngredients(ingredients);
     const method = ['自由發揮','劍道鍛造','護體鑄造','符籙煉製','陣法刻印'].includes(forgeMethod)
       ? forgeMethod : '自由發揮';
@@ -145,6 +165,7 @@ import {
       baseGold: known?.craft?.gold || baseRealmForgeGold(targetRealm),
       discovery: !known
     });
+    const refinementKey = refinementKeyRequirement(depth, targetRealm);
     return {
       valid: true,
       total,
@@ -157,6 +178,7 @@ import {
       targetRealm,
       playerRealm: pRealm,
       depth,
+      refinementKey,
       ...economy
     };
   }
@@ -170,7 +192,7 @@ import {
     return out;
   }
 
-  function consumeRecipe(raw, recipe) {
+  function consumeRecipe(raw, recipe, refinementKey = null) {
     const materialSystem = raw.materialSystem && typeof raw.materialSystem === 'object' ? clone(raw.materialSystem) : { inventory: {} };
     materialSystem.inventory = normalizeInventory(materialSystem.inventory);
     const artifactSystem = raw.artifactSystem && typeof raw.artifactSystem === 'object' ? clone(raw.artifactSystem) : { inventory: {}, equipped: {}, buffs: [] };
@@ -182,6 +204,12 @@ import {
       const key = String(id || '');
       if (key) equippedCounts[key] = (equippedCounts[key] || 0) + 1;
     });
+
+    if (refinementKey?.materialId) {
+      const need = Math.max(1, Math.floor(Number(refinementKey.quantity) || 1));
+      const have = Math.max(0, Number(materialSystem.inventory[refinementKey.materialId]) || 0);
+      if (have < need) throw new Error((refinementKey.name || refinementKey.materialId) + ' 數量不足，需要 ' + need + '，目前只有 ' + have);
+    }
 
     for (const row of recipe) {
       const need = Math.max(1, Math.floor(Number(row.quantity) || 1));
@@ -206,6 +234,12 @@ import {
         if (remain > 0) artifactSystem.inventory[row.artifactId] = remain;
         else delete artifactSystem.inventory[row.artifactId];
       }
+    }
+    if (refinementKey?.materialId) {
+      const need = Math.max(1, Math.floor(Number(refinementKey.quantity) || 1));
+      const remain = (Number(materialSystem.inventory[refinementKey.materialId]) || 0) - need;
+      if (remain > 0) materialSystem.inventory[refinementKey.materialId] = remain;
+      else delete materialSystem.inventory[refinementKey.materialId];
     }
     return { materialSystem, artifactSystem };
   }
@@ -253,7 +287,16 @@ import {
       const gold = Math.max(0, Number(raw.stats?.gold) || 0);
       if (gold < plan.gold) throw new Error('金幣不足，需要 ' + plan.gold + '，目前只有 ' + gold);
 
+      const trustedKey = refinementKeyRequirement(plan.depth, plan.targetRealm, raw.materialSystem?.inventory || {});
       const consumed = consumeRecipe(raw, plan.recipe);
+      if (trustedKey?.materialId) {
+        const need = Math.max(1, Math.floor(Number(trustedKey.quantity) || 1));
+        const have = Math.max(0, Number(consumed.materialSystem.inventory?.[trustedKey.materialId]) || 0);
+        if (have < need) throw new Error((trustedKey.name || trustedKey.materialId) + ' 數量不足，需要 ' + need + '，目前只有 ' + have);
+        const remain = have - need;
+        if (remain > 0) consumed.materialSystem.inventory[trustedKey.materialId] = remain;
+        else delete consumed.materialSystem.inventory[trustedKey.materialId];
+      }
       committed = {
         materialSystem: consumed.materialSystem,
         artifactSystem: consumed.artifactSystem,
@@ -284,7 +327,7 @@ import {
   }
 
   function apiMaterials() {
-    return MATERIAL_CATALOG.map((item) => ({
+    return MATERIAL_CATALOG.filter((item) => item.raidOnly !== true).map((item) => ({
       id: item.id, name: item.name, icon: item.icon, realm: item.realm,
       category: item.category, description: item.description || '',
       story: item.story || '', weaponForm: item.weaponForm || '',

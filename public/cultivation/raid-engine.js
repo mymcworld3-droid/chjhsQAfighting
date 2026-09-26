@@ -3,7 +3,6 @@ export const RAID_MVP = Object.freeze({
   modeVersion: 1,
   minimumScore: 10,
   // 每位玩家獨立出題、獨立倒數；不等待隊友，也不共用題目。
-  answerWindowMs: 30000,
   minQuestionCycleMs: 6000,
   reviewLockMs: 1500,
   // Boss 使用自己的時間軸，不因任何玩家答題快慢而延後。
@@ -173,9 +172,6 @@ export function nextPersonalQuestionAt({ issuedAtMs = 0, resolvedAtMs = 0 } = {}
   return Math.max(issued + RAID_MVP.minQuestionCycleMs, resolved + RAID_MVP.reviewLockMs);
 }
 
-export function raidQuestionDeadline(issuedAtMs) {
-  return Math.max(0, finite(issuedAtMs)) + RAID_MVP.answerWindowMs;
-}
 
 export function bossClockState({ startedAtMs = 0, nowMs = 0, actionCount = 0 } = {}) {
   const start = Math.max(0, finite(startedAtMs));

@@ -15,14 +15,14 @@ function loadEngine() {
   const code = engineSource
     .replace(/export const /g, 'const ')
     .replace(/export function /g, 'function ') +
-    '\nthis.__raid={RAID_MVP,createScaledShenBoss,shenPhaseForHp,shenIntentForRound,resolveSoloRaidRound,nextPersonalQuestionAt,raidQuestionDeadline,bossClockState};';
+    '\nthis.__raid={RAID_MVP,createScaledShenBoss,shenPhaseForHp,shenIntentForRound,resolveSoloRaidRound,nextPersonalQuestionAt,bossClockState};';
   vm.runInContext(code, context);
   return context.__raid;
 }
 
-test('raid MVP uses independent player and boss clocks', () => {
+test('raid MVP has no question countdown and keeps an independent boss clock', () => {
   const e = loadEngine();
-  assert.equal(e.RAID_MVP.answerWindowMs, 30000);
+  assert.equal(Object.hasOwn(e.RAID_MVP, 'answerWindowMs'), false);
   assert.equal(e.RAID_MVP.minQuestionCycleMs, 6000);
   assert.equal(e.RAID_MVP.reviewLockMs, 1500);
   assert.equal(e.RAID_MVP.bossActionIntervalMs, 18000);
@@ -33,7 +33,7 @@ test('raid MVP uses independent player and boss clocks', () => {
   assert.equal(fast, 7000, 'fast answer is capped by the six-second personal action cycle');
   const slow = e.nextPersonalQuestionAt({ issuedAtMs: 1000, resolvedAtMs: 12000 });
   assert.equal(slow, 13500, 'slow answer only keeps the short review lock');
-  assert.equal(e.raidQuestionDeadline(5000), 35000);
+  assert.doesNotMatch(engineSource, /raidQuestionDeadline|answerWindowMs/);
 
   const normal = e.bossClockState({ startedAtMs: 1000, nowMs: 12000, actionCount: 0 });
   assert.equal(normal.nextActionAtMs, 19000);
@@ -57,27 +57,22 @@ test('Shen boss scales to the challenger and has three HP phases', () => {
 
 test('raid mode keeps questions personal while the boss attacks on its own clock', () => {
   assert.match(raidSource, /asynchronousQuestions:\s*true/);
-  assert.match(raidSource, /generateRaidQuestion/);
-  assert.match(raidSource, /questionIssuedAtMs/);
-  assert.match(raidSource, /raidQuestionDeadline/);
-  assert.match(raidSource, /nextPersonalQuestionAt/);
-  assert.match(raidSource, /bossStartedAtMs/);
-  assert.match(raidSource, /bossClockState/);
+  assert.match(raidSource, /pickBattleKnowledge/);
+  assert.match(raidSource, /noQuestionTimer:\s*true/);
+  assert.match(raidSource, /不限時/);
+  assert.doesNotMatch(raidSource, /questionDeadlineMs|raidQuestionDeadline|answer\(null\)/);
   assert.match(raidSource, /setInterval\(updateLiveLabels, 100\)/);
-  assert.match(raidSource, /resolveShenPlayerAction/);
-  assert.match(raidSource, /resolveShenBossAction/);
+  assert.match(raidSource, /\/api\/raid\/answer/);
+  assert.match(raidSource, /\/api\/raid\/tick/);
   assert.doesNotMatch(raidSource, /allPlayersAnswered|bothReviewed|sharedQuestion/);
 });
 
-test('wrong or timed out raid answers do not directly cause an extra boss hit', () => {
-  const answerStart = raidSource.indexOf('  function answer(choice) {');
-  const answerEnd = raidSource.indexOf('  function bossAttack() {', answerStart);
-  const answerBody = raidSource.slice(answerStart, answerEnd);
-  assert.match(answerBody, /resolveShenPlayerAction/);
-  assert.doesNotMatch(answerBody, /resolveShenBossAction/);
-  assert.match(raidSource, /state\.selectedChoice === null \? '時間到・本次失去攻擊'/);
+test('raid questions never time out and boss actions use a separate endpoint', () => {
+  assert.doesNotMatch(raidSource, /時間到|answer\(null\)|questionDeadlineMs/);
+  assert.match(raidSource, /\/api\/raid\/answer/);
+  assert.match(raidSource, /\/api\/raid\/tick/);
+  assert.match(raidSource, /題目本身不限時/);
 });
-
 test('raid entry is loaded as an optional cultivation feature and has responsive full-screen question UI', () => {
   assert.match(mainSource, /'\.\/cultivation\/raid-mode\.js'/);
   assert.match(cssSource, /\.raid-question-view\{position:fixed!important;inset:0!important/);

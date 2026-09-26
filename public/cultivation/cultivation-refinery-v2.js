@@ -256,12 +256,13 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
            <ul class="refinery-recipe-ingredients">${recipe.map(recipeIngredientMarkup).join('')}</ul>`
         : `<div class="refinery-recipe-sealed" role="note"><div class="refinery-recipe-seal-mark"><i class="fa-solid fa-lock"></i></div><strong>製作方法尚未習得</strong><p>此配方的素材與數量尚未公開。可在交易市集取得製作指南，或自行投入材料探索。</p></div>`;
       const gold = Math.max(0, Number(userData()?.stats?.gold) || 0);
-      const canCraft = !!myUid && canReadRecipe && unique && !missing && plan?.valid &&
+      const canCraft = !!myUid && canReadRecipe && unique && !missing && plan?.valid && !plan?.refinementKey?.missing &&
         gold >= Number(plan.gold || 0) && !busy && !job;
       const actionText = !myUid ? '請先登入' : job ? '已有法寶正在煉製' :
         missing ? `尚缺 ${missing} 個素材` :
         !unique ? '配方待修正' :
         !plan?.valid ? '目前無法煉製' :
+        plan?.refinementKey?.missing ? `尚缺 ${plan.refinementKey.name} ×${plan.refinementKey.missing}` :
         gold < Number(plan.gold || 0) ? '靈石不足' : '以此煉製';
       const stage = Math.min(3, artifactRecipeDepth(item.id) + 1);
       const teaser = canReadRecipe && item.description
@@ -586,7 +587,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
     const counts = selectedCounts();
     const used = selected.filter(Boolean).length;
     const ownedMaterials = MATERIAL_CATALOG
-      .filter((m) => (Number(matInv[m.id]) || 0) > 0)
+      .filter((m) => m.raidOnly !== true && (Number(matInv[m.id]) || 0) > 0)
       .slice()
       .sort(compareOwnedMaterials);
     const ownedArtifacts = ARTIFACT_CATALOG
@@ -649,7 +650,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
       const matchedDepth = artifactRecipeDepth(matching[0].id);
       matchClass = 'ready';
       matchPrefix = '既有配方：';
-      matchPlain = `${matching[0].icon || '◆'} ${matching[0].name} · 深度 ${matchedDepth}/${MAX_ARTIFACT_RECIPE_NESTING} · 金幣 ${plan?.gold || 0} · 約 ${window.formatCultivationRefineryDuration?.(plan?.durationMs || 0) || ''}`;
+      matchPlain = `${matching[0].icon || '◆'} ${matching[0].name} · 深度 ${matchedDepth}/${MAX_ARTIFACT_RECIPE_NESTING}${plan?.refinementKey ? ` · 需要 ${plan.refinementKey.name} ${plan.refinementKey.owned}/${plan.refinementKey.quantity}` : ''} · 金幣 ${plan?.gold || 0} · 約 ${window.formatCultivationRefineryDuration?.(plan?.durationMs || 0) || ''}`;
     } else if (used && matching.length > 1) {
       matchClass = 'error';
       matchPlain = '這組素材同時符合多個法寶配方，需由管理員將配方調整為唯一。';
@@ -662,7 +663,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
       matchPlain = plan?.reason || '煉器至少需要 2 個素材。';
     }
 
-    const craftReady = !busy && (job ? jobReady : !!plan?.valid) && matching.length <= 1;
+    const craftReady = !busy && (job ? jobReady : !!plan?.valid && !plan?.refinementKey?.missing) && matching.length <= 1;
     const craftLabel = job ? (jobReady ? '開爐' : '煉製中') : '煉製';
     const jobBox = job ? `<div class="refinery-job-box"><strong>${job.kind === 'discovery' ? '未知配方煉製' : '法寶煉製中'}</strong><div class="refinery-job-grid"><div class="refinery-job-stat">法寶境界<b>${esc(job.targetRealm || '凡人')}</b></div><div class="refinery-job-stat">已付金幣<b>${Math.max(0, Number(job.goldCost) || 0)}</b></div><div class="refinery-job-stat">剩餘時間<b data-refinery-job-clock>--</b></div></div><div class="refinery-job-progress"><i data-refinery-job-progress></i></div><div class="refinery-note ${job.kind === 'discovery' ? 'refinery-discovery-note' : ''}">${job.kind === 'discovery' ? '此組合沒有既有配方；煉製完成後按「開爐」即可取得新法寶。' : '素材與金幣已在按「煉製」時扣除，完成後按「開爐」取出。'}</div>${canAdminSkip ? `<div class="refinery-actions"><button type="button" class="refinery-clear" data-refinery-admin-skip ${busy ? 'disabled' : ''}><i class="fa-solid fa-forward-fast"></i> 管理員：跳過等待</button></div>` : ''}</div>` : '';
 
@@ -752,7 +753,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, getMaterialById, getArtifactRecipe,
       const item = matching[0];
       matchNode?.classList.add('ready');
       prefix = '既有配方：';
-      message = `${item.icon || '◆'} ${item.name} · 深度 ${artifactRecipeDepth(item.id)}/${MAX_ARTIFACT_RECIPE_NESTING} · 金幣 ${plan.gold} · 約 ${window.formatCultivationRefineryDuration?.(plan.durationMs) || ''}`;
+      message = `${item.icon || '◆'} ${item.name} · 深度 ${artifactRecipeDepth(item.id)}/${MAX_ARTIFACT_RECIPE_NESTING}${plan.refinementKey ? ` · 需要 ${plan.refinementKey.name} ${plan.refinementKey.owned}/${plan.refinementKey.quantity}` : ''} · 金幣 ${plan.gold} · 約 ${window.formatCultivationRefineryDuration?.(plan.durationMs) || ''}`;
     } else if (used && matching.length > 1) {
       matchNode?.classList.add('error');
       message = '這組素材同時符合多個法寶配方，需由管理員將配方調整為唯一。';
