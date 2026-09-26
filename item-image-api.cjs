@@ -127,9 +127,9 @@ function materialColorTheme(item = {}) {
     { re: /毒|瘴|venom|poison|toxic/, theme: 'deep jade green with dark green accents' },
     { re: /虛空|暗|影|冥|夜|void|shadow|dark|abyss/, theme: 'deep violet with black accents' },
     { re: /風|storm|wind|air/, theme: 'cyan teal with pale cyan accents' },
+    { re: /金|鐵|鋼|礦|晶|玉|metal|iron|steel|ore|crystal|jade/, theme: 'golden amber with restrained metallic highlights' },
     { re: /土|石|岩|砂|沙|earth|stone|rock|sand/, theme: 'earth brown with muted amber accents' },
-    { re: /魂|魄|靈|spirit|soul|ghost/, theme: 'pale cyan with silver accents' },
-    { re: /金|鐵|鋼|礦|晶|玉|metal|iron|steel|ore|crystal|jade/, theme: 'golden amber with restrained metallic highlights' }
+    { re: /魂|魄|靈|spirit|soul|ghost/, theme: 'pale cyan with silver accents' }
   ];
   const semantic = semanticThemes.find((entry) => entry.re.test(text));
   if (semantic) return semantic.theme;
