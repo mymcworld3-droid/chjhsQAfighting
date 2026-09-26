@@ -8,6 +8,8 @@ const {
   MODEL,
   PROMPT_VERSION,
   buildItemImagePrompt,
+  storageBucketCandidates,
+  uploadGeneratedImage,
   generateFluxImage
 } = require('../item-image-api.cjs');
 
@@ -49,6 +51,48 @@ test('item image prompt stays within the Cloudflare model limit', () => {
     effects: [{ type: 'equip_attack_flat', value: 999 }]
   });
   assert.ok(prompt.length <= 2048);
+});
+
+test('storage bucket candidates cover explicit, modern and legacy Firebase names', () => {
+  const project = { app: { options: { projectId: 'question-learning' } } };
+  assert.deepEqual(
+    storageBucketCandidates(project, { FIREBASE_A_STORAGE_BUCKET: 'custom-bucket' }),
+    ['custom-bucket', 'question-learning.firebasestorage.app', 'question-learning.appspot.com']
+  );
+});
+
+test('storage upload falls back to the legacy appspot bucket when the modern bucket is absent', async () => {
+  const attempts = [];
+  const storageFactory = () => ({
+    bucket(name) {
+      return {
+        name,
+        file() {
+          return {
+            async save() {
+              attempts.push(name);
+              if (name.endsWith('.firebasestorage.app')) {
+                const error = new Error('The specified bucket does not exist.');
+                error.code = 404;
+                throw error;
+              }
+            }
+          };
+        }
+      };
+    }
+  });
+  const result = await uploadGeneratedImage('artifact', 'seven-treasure-ruler', 'YWJj', {
+    env: {},
+    storageFactory,
+    project: { app: { options: { projectId: 'question-learning' } } }
+  });
+  assert.deepEqual(attempts, [
+    'question-learning.firebasestorage.app',
+    'question-learning.appspot.com'
+  ]);
+  assert.equal(result.bucketName, 'question-learning.appspot.com');
+  assert.match(result.imageUrl, /question-learning\.appspot\.com/);
 });
 
 test('Cloudflare image response keeps base64 intact and uses four steps', async () => {
