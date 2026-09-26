@@ -9,7 +9,6 @@ const ROOM_TTL_MS = 30 * 60 * 1000;
 const RAID_ROOM_VERSION = 2;
 const RAID_BOSS_ID = 'shen-qingshuang';
 const BOSS_ACTION_INTERVAL_MS = 18000;
-const MAX_BOSS_ACTIONS = 12;
 
 function now() { return Date.now(); }
 function finite(value, fallback = 0) {
@@ -385,10 +384,6 @@ function createHandler({
             issuedAtMs: now()
           };
           const update = { bossActionCount: nextCount, lastBossAction: bossAction };
-          if (nextCount >= MAX_BOSS_ACTIONS) {
-            update.status = 'lost';
-            update.finishedAtMs = now();
-          }
           tx.update(ref, update);
           return publicRoom(roomId, { ...current, ...update });
         });
@@ -430,7 +425,7 @@ module.exports = function registerRaidRoomApi(app) {
 };
 module.exports.__test = {
   COLLECTION, MAX_MEMBERS, STALE_MS, ROOM_TTL_MS, RAID_ROOM_VERSION, RAID_BOSS_ID,
-  BOSS_ACTION_INTERVAL_MS, MAX_BOSS_ACTIONS,
+  BOSS_ACTION_INTERVAL_MS,
   finite, membersOf, memberOnline, activeMembers, roomUsable, safeRoomId, safeRoomCode,
   memberSnapshot, createHandler
 };
