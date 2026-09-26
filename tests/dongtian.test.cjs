@@ -242,7 +242,7 @@ test('Dongtian first completion grants spirit stones by question count and culti
   assert.match(uiSource, /const cultivationReward = firstCompletionCultivation\(correct\)/);
   assert.match(uiSource, /'stats\.gold': increment\(firstCompletionReward\)/);
   assert.match(uiSource, /'stats\.totalScore': increment\(cultivationReward\)/);
-  assert.match(uiSource, /goldAdded: firstCompletionReward, cultivationAdded: cultivationReward, questionCount: total/);
+  assert.match(uiSource, /cultivationAdded: cultivationReward \\+ soulCultivationAdded/);
   assert.match(uiSource, /首次修為：<\/strong>每答對 1 題 \+1 修為/);
 });
 test('Dongtian one-point cultivation calculation depends on correct answers, not total questions', () => {
