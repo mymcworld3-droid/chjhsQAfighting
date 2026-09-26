@@ -7,7 +7,6 @@ const RAID_ROOM_COLLECTION = 'raidRooms';
 const CLAIM_COLLECTION = 'raidRewardClaims';
 const RAID_BOSS_ID = 'shen-qingshuang';
 const RAID_ROOM_VERSION = 2;
-const MAX_BOSS_ACTIONS = 12;
 const REWARDS = Object.freeze({
   'raid-refine-key-ii': 2,
   'raid-refine-key-iii': 1
@@ -39,7 +38,7 @@ function validateRaidVictory(room, uid) {
   const maxHp = Math.max(0, Math.round(finite(room.bossMaxHp)));
   if (maxHp < 1800) return { ok:false, reason:'團本 Boss 資料異常' };
   const actionCount = Math.max(0, Math.floor(finite(room.bossActionCount)));
-  if (actionCount > MAX_BOSS_ACTIONS) return { ok:false, reason:'團本行動紀錄異常' };
+  if (!Number.isFinite(actionCount) || actionCount < 0) return { ok:false, reason:'團本行動紀錄異常' };
   const startedAtMs = Math.max(0, finite(room.startedAtMs));
   const finishedAtMs = Math.max(0, finite(room.finishedAtMs));
   if (!startedAtMs || !finishedAtMs || finishedAtMs < startedAtMs) return { ok:false, reason:'團本時間紀錄不完整' };
@@ -154,6 +153,6 @@ module.exports = function registerRaidRewardApi(app) {
 };
 module.exports.__test = {
   RAID_ROOM_COLLECTION, CLAIM_COLLECTION, RAID_BOSS_ID, RAID_ROOM_VERSION,
-  MAX_BOSS_ACTIONS, REWARDS, safeRoomId, claimId, validateRaidVictory,
+  REWARDS, safeRoomId, claimId, validateRaidVictory,
   awardRaidReward, createHandler
 };
