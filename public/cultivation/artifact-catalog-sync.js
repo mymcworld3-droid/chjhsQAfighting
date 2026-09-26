@@ -1,6 +1,12 @@
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-import { getFirestore, doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-import { getDefaultArtifactCatalog, replaceArtifactCatalog } from './artifact-catalog.js';
+import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+import { getFirestore, doc, onSnapshot, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import {
+  ARTIFACT_CATALOG_SCHEMA_VERSION,
+  getDefaultArtifactCatalog,
+  mergeArtifactCatalogWithDefaults,
+  replaceArtifactCatalog
+} from './artifact-catalog.js';
 
 // 全站法寶清單同步：Firestore 有管理員設定時使用遠端版本；否則退回程式內建預設值。
 (function () {
@@ -10,6 +16,7 @@ import { getDefaultArtifactCatalog, replaceArtifactCatalog } from './artifact-ca
   const CONFIG_DOC = 'artifactCatalogV1';
   const GENERATION_PROMPT_MAX = 1200;
   let unsubscribe = null;
+  let migrationWriteStarted = false;
   // A fallback catalog cannot validate remotely created artifacts. Never remove
   // a player's saved equipment until the authoritative catalog is available.
   window.__artifactCatalogReadyForEquipment = false;
@@ -42,6 +49,29 @@ import { getDefaultArtifactCatalog, replaceArtifactCatalog } from './artifact-ca
     }
   }
 
+  function isAdmin() {
+    try {
+      return window.getCurrentUserData?.()?.isAdmin === true && !!getAuth(getApp()).currentUser;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  async function persistBackfill(ref, items) {
+    if (migrationWriteStarted || !isAdmin()) return;
+    migrationWriteStarted = true;
+    try {
+      await setDoc(ref, {
+        items,
+        artifactCatalogSchemaVersion: ARTIFACT_CATALOG_SCHEMA_VERSION,
+        artifactCatalogBackfilledAt: serverTimestamp()
+      }, { merge: true });
+    } catch (error) {
+      migrationWriteStarted = false;
+      console.warn('[Artifact catalog migration] runtime backfill applied, Firestore persistence deferred:', error);
+    }
+  }
+
   function start() {
     if (unsubscribe) return;
     let db;
@@ -60,10 +90,14 @@ import { getDefaultArtifactCatalog, replaceArtifactCatalog } from './artifact-ca
       applyEffectBounds(data.effectBoundsV2 || {}, 'firestore');
       try {
         if (!Array.isArray(data.items) || !data.items.length) throw new Error('遠端法寶清單為空');
+        const schemaVersion = Math.max(0, Number(data.artifactCatalogSchemaVersion) || 0);
+        const needsBackfill = schemaVersion < ARTIFACT_CATALOG_SCHEMA_VERSION;
+        const items = needsBackfill ? mergeArtifactCatalogWithDefaults(data.items) : data.items;
         // Mark ready before replace fires artifact-catalog-updated, which may
         // validate equipment from the saved users/{uid} document.
         window.__artifactCatalogReadyForEquipment = true;
-        replaceArtifactCatalog(data.items, 'firestore');
+        replaceArtifactCatalog(items, needsBackfill ? 'firestore-backfill' : 'firestore');
+        if (needsBackfill) persistBackfill(ref, items);
       } catch (error) {
         window.__artifactCatalogReadyForEquipment = false;
         console.error('[Artifact catalog] remote config rejected; using defaults:', error);
