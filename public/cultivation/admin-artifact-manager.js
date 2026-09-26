@@ -16,6 +16,7 @@ import {
 } from './artifact-catalog.js';
 import {
   MATERIAL_CATALOG,
+  ARTIFACT_RECIPE_SCHEMA_VERSION,
   ARTIFACT_RECIPES,
   validateArtifactRecipes,
   replaceArtifactRecipes,
@@ -625,7 +626,12 @@ import {
       }, { merge: true });
       if (normalizedRecipes !== null) {
         const materialConfigRef = doc(db, CONFIG_COLLECTION, MATERIAL_CONFIG_DOC);
-        tx.set(materialConfigRef, { version: 1, recipes: normalizedRecipes, ...audit }, { merge: true });
+        tx.set(materialConfigRef, {
+          version: 1,
+          artifactRecipeSchemaVersion: ARTIFACT_RECIPE_SCHEMA_VERSION,
+          recipes: normalizedRecipes,
+          ...audit
+        }, { merge: true });
       }
     });
     replaceArtifactCatalog(committedCatalog, 'admin-save');
