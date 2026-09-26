@@ -117,5 +117,10 @@ test('raid refinement keys are exclusive rewards and are consumed outside the ei
   assert.match(jobs, /consumeRefinementKey\(consumed\.materialSystem, plan\.keyRequirement\)/);
   assert.match(jobs, /refinementStage: plan\.refinementStage/);
   assert.match(ui, /!raidKeyIds\.has\(m\.id\)/);
+  assert.match(ui, /refinery-key-requirement/);
+  assert.match(ui, /第二煉印記/);
+  assert.match(ui, /第三煉印記/);
+  assert.match(ui, /持有 \$\{view\.have\} \/ 需要 \$\{view\.need\}/);
+  assert.match(ui, /keyStatus\.enough/);
   assert.match(ui, /請先挑戰團本取得/);
 });
