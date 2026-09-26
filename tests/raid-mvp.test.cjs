@@ -8,6 +8,7 @@ const readPublic = path => readFileSync(join(__dirname, '../public', path), 'utf
 const engineSource = readPublic('cultivation/raid-engine.js');
 const raidSource = readPublic('cultivation/raid-mode.js');
 const roomSource = readPublic('cultivation/raid-room.js');
+const questionSource = readPublic('cultivation/raid-question.js');
 const roomApiSource = readFileSync(join(__dirname, '../raid-room-api.cjs'), 'utf8');
 const serverSource = readFileSync(join(__dirname, '../server.js'), 'utf8');
 const mainSource = readPublic('main.js');
@@ -26,22 +27,24 @@ function loadEngine() {
 test('raid questions have no answer deadline while boss keeps its own clock', () => {
   const e = loadEngine();
   assert.equal('answerWindowMs' in e.RAID_MVP, false);
-  assert.equal(e.RAID_MVP.minQuestionCycleMs, 6000);
-  assert.equal(e.RAID_MVP.reviewLockMs, 1500);
+  assert.equal(e.RAID_MVP.minQuestionCycleMs, 0);
+  assert.equal(e.RAID_MVP.reviewLockMs, 0);
   assert.equal(e.RAID_MVP.bossActionIntervalMs, 18000);
   assert.equal(e.RAID_MVP.bossTelegraphMs, 5000);
-  assert.equal(e.RAID_MVP.maxBossActions, 12);
+  assert.equal('maxBossActions' in e.RAID_MVP, false);
 
   const fast = e.nextPersonalQuestionAt({ issuedAtMs: 1000, resolvedAtMs: 2000 });
-  assert.equal(fast, 7000);
+  assert.equal(fast, 2000);
   const slow = e.nextPersonalQuestionAt({ issuedAtMs: 1000, resolvedAtMs: 12000 });
-  assert.equal(slow, 13500);
+  assert.equal(slow, 12000);
 
   const warning = e.bossClockState({ startedAtMs: 1000, nowMs: 15000, actionCount: 0 });
   assert.equal(warning.telegraphing, true);
   assert.equal(warning.due, false);
   const due = e.bossClockState({ startedAtMs: 1000, nowMs: 19000, actionCount: 0 });
   assert.equal(due.due, true);
+  const longRun = e.shenIntentForRound({ round: 99, bossHp: 1000, bossMaxHp: 1000, baseAttack: 100 });
+  assert.notEqual(longRun.kind, 'finisher');
 });
 
 test('Shen boss supports team scaling and three HP phases', () => {
@@ -67,6 +70,10 @@ test('raid mode is multiplayer and keeps every player question asynchronous', ()
   assert.match(raidSource, /questionTimeLimit:\s*null/);
   assert.match(raidSource, /multiplayer:\s*true/);
   assert.match(raidSource, /不限時/);
+  assert.match(raidSource, /playBattleScene/);
+  assert.match(raidSource, /raid-player-strike/);
+  assert.match(raidSource, /raid-boss-strike/);
+  assert.doesNotMatch(raidSource, /下一次出手尚需/);
   assert.doesNotMatch(raidSource, /raidQuestionDeadline/);
   assert.doesNotMatch(raidSource, /questionDeadlineMs/);
   assert.doesNotMatch(raidSource, /answer\(null\)/);
@@ -93,8 +100,17 @@ test('shared room layer supports party lifecycle, boss HP and reconnect', () => 
   assert.match(roomApiSource, /verifyIdToken/);
   assert.match(roomApiSource, /const BOSS_ACTION_INTERVAL_MS = 18000/);
   assert.match(roomApiSource, /now\(\) < nextActionAtMs/);
+  assert.doesNotMatch(roomApiSource, /MAX_BOSS_ACTIONS/);
+  assert.doesNotMatch(roomSource, /maxActions/);
   assert.match(raidSource, /advancingBossAction/);
   assert.match(serverSource, /registerRaidRoomApi\(app\)/);
+});
+
+test('raid questions use the quick simple generation profile', () => {
+  assert.match(questionSource, /difficulty:\s*'easy'/);
+  assert.match(questionSource, /quizMode:\s*'raid-quick-simple'/);
+  assert.match(serverSource, /raidQuickSimple/);
+  assert.match(serverSource, /團本快答模式/);
 });
 
 test('wrong answers only lose the player attack and never trigger an extra boss strike', () => {
@@ -112,5 +128,8 @@ test('raid UI includes party lobby, join code, responsive fullscreen questions a
   assert.match(cssSource, /\.raid-party-list/);
   assert.match(cssSource, /\.raid-party-strip/);
   assert.match(cssSource, /\.raid-code-join/);
+  assert.match(cssSource, /\.raid-combat-event/);
+  assert.match(cssSource, /@keyframes raidPlayerStrike/);
+  assert.match(cssSource, /@keyframes raidBossStrike/);
   assert.match(cssSource, /@media\(max-width:760px\)/);
 });
