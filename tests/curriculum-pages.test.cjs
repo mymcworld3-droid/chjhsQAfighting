@@ -9,7 +9,7 @@ test('paginated curriculum module loads after data selector and fullscreen wrapp
 test('three progressive pages go directly from subject to merged full-year chapters',()=>{
   assert.match(pages,/\['cs-grade','cs-subject'\]/);
   assert.match(pages,/\['選年級','選科目','選章節'\]/);
-  assert.doesNotMatch(pages,/選學期|選版本|cs-cards-3|cs-cards-4/);
+  assert.doesNotMatch(pages,/cs-term|cs-version|cs-cards-3|cs-cards-4/);
   assert.match(pages,/setPage\(Math\.min\(2,stage\+1\)\)/);
   assert.match(pages,/native\.dispatchEvent\(new Event\('change',\{bubbles:true\}\)\)/);
   assert.match(pages,/const last=\$\('cs-stage-2'\)/);
