@@ -397,10 +397,11 @@ function chooseQuestionForm(previousMeta, seed) {
 // ==========================================
 app.post('/api/generate-quiz', async (req, res) => {
     // 兼容前端可能傳來的 specificTopic 或 topic
-    let { subject, level, rank, difficulty, knowledgeMap, specificTopic, topic, avoidQuestions, avoidQuestionMeta } = req.body || {};
+    let { subject, level, rank, difficulty, knowledgeMap, specificTopic, topic, avoidQuestions, avoidQuestionMeta, quizMode } = req.body || {};
     subject = String(subject || '').trim().slice(0, 40);
     level = String(level || '國中一年級').slice(0, 32);
-    difficulty = ['easy', 'medium', 'hard'].includes(difficulty) ? difficulty : 'medium';
+    const raidQuickSimple = String(quizMode || '') === 'raid-quick-simple';
+    difficulty = raidQuickSimple ? 'easy' : (['easy', 'medium', 'hard'].includes(difficulty) ? difficulty : 'medium');
     const previousQuestions = (Array.isArray(avoidQuestions) ? avoidQuestions : [])
         .map(cleanQuestionText).filter(Boolean).slice(-80);
     const previousMeta = (Array.isArray(avoidQuestionMeta) ? avoidQuestionMeta : [])
@@ -437,12 +438,17 @@ app.post('/api/generate-quiz', async (req, res) => {
         diagnosticInfo = `[玩家數據] 在「${subject}-${targetTopic}」上正確率為 ${accuracy}% (已練 ${stats.total} 題)。`;
         // 低正確率代表需要更清楚的鷹架，不代表永遠只做 easy。
         // hard 最多降一級到 medium；medium 保持兩步以上的理解／推理要求。
-        if (stats.total > 3 && Number(accuracy) < 40 && difficulty === "hard") difficulty = "medium";
-        if (stats.total > 5 && Number(accuracy) > 80) difficulty = "hard";
+        if (!raidQuickSimple) {
+            if (stats.total > 3 && Number(accuracy) < 40 && difficulty === "hard") difficulty = "medium";
+            if (stats.total > 5 && Number(accuracy) > 80) difficulty = "hard";
+        }
     }
 
+    if (raidQuickSimple) difficulty = 'easy';
     const randomSeed = Math.random().toString(36).substring(7);
-    const quality = qualityPolicy(subject, difficulty);
+    const quality = raidQuickSimple
+        ? { cognitive: 1, steps: 1, instruction: '團本快答題：只考一個核心觀念，題幹短、條件直接，通常一步即可作答。避免陷阱、冗長情境、多階段推理與冷僻細節。' }
+        : qualityPolicy(subject, difficulty);
     const targetForm = chooseQuestionForm(previousMeta, randomSeed);
     const recentTemplates = [...new Set(previousMeta.slice(-18).map(item => item.template_id).filter(Boolean))];
     const recentConceptForms = previousMeta.slice(-6)
@@ -469,7 +475,8 @@ app.post('/api/generate-quiz', async (req, res) => {
         12. **近期概念/題型組合**：${recentConceptForms.length ? JSON.stringify(recentConceptForms) : '無'}。若可行，避免立刻重複同一 concept_id + question_form。
         13. 錯誤選項應對應常見迷思、計算錯誤或推理錯誤，不能只是隨機湊數。
         14. 必須提供四個不重複且僅有一個正解的選項，以及完整解析；解析須點出關鍵觀念與主要步驟。
-        15. **LaTeX 排版**：題幹、正確選項、三個錯誤選項及解析中的所有數學式都必須使用 TeX 語法。行內數學用 $...$，獨立公式用 $...$；例如 $x^2+1$、$\\frac{1}{2}$。一般中文保留純文字，不要將整段中文包進公式；不要輸出 HTML 或 Markdown 程式碼區塊。
+        ${raidQuickSimple ? '15. **團本快答模式**：題目要比一般練習更簡單、直覺。題幹盡量 1–2 句；選項簡短；優先考基本辨識、直接代入、單一步驟計算或明確概念判斷。不要設文字陷阱，不要要求多層推論，不要故意混淆相近概念。' : ''}
+        16. **LaTeX 排版**：題幹、正確選項、三個錯誤選項及解析中的所有數學式都必須使用 TeX 語法。行內數學用 $...$，獨立公式用 $...$；例如 $x^2+1$、$\\frac{1}{2}$。一般中文保留純文字，不要將整段中文包進公式；不要輸出 HTML 或 Markdown 程式碼區塊。
         ${diagnosticInfo}
     
         [輸出格式 (JSON Only)]
@@ -518,8 +525,12 @@ app.post('/api/generate-quiz', async (req, res) => {
             parsed.concept_id = String(parsed.concept_id || (subject + ':' + targetTopic)).trim().slice(0, 100);
             parsed.template_id = String(parsed.template_id || (parsed.concept_id + ':' + parsed.question_form))
                 .trim().slice(0, 120);
-            parsed.cognitive_level = Math.max(1, Math.min(5, Number(parsed.cognitive_level) || (difficulty === 'hard' ? 4 : difficulty === 'medium' ? 3 : 2)));
-            parsed.reasoning_steps = Math.max(1, Math.min(6, Number(parsed.reasoning_steps) || (difficulty === 'hard' ? 3 : difficulty === 'medium' ? 2 : 1)));
+            parsed.cognitive_level = raidQuickSimple
+                ? Math.max(1, Math.min(2, Number(parsed.cognitive_level) || 1))
+                : Math.max(1, Math.min(5, Number(parsed.cognitive_level) || (difficulty === 'hard' ? 4 : difficulty === 'medium' ? 3 : 2)));
+            parsed.reasoning_steps = raidQuickSimple
+                ? 1
+                : Math.max(1, Math.min(6, Number(parsed.reasoning_steps) || (difficulty === 'hard' ? 3 : difficulty === 'medium' ? 2 : 1)));
 
             if (recentTemplates.includes(parsed.template_id)) {
                 throw new Error('AI 題目與近期解題骨架重複');
