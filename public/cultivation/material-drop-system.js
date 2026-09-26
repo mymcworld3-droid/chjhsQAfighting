@@ -47,6 +47,7 @@ import { MATERIAL_CATALOG, getMaterialById, materialDropRateFor, materialRealmFo
   function roll(source) {
     const score = currentScore();
     return MATERIAL_CATALOG.flatMap((material) => {
+      if (material.raidOnly === true) return [];
       const rate = materialDropRateFor(material, score, source);
       return rate > 0 && Math.random() < rate ? [{ materialId: material.id, quantity: 1 }] : [];
     });
