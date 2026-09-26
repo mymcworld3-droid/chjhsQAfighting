@@ -14,6 +14,7 @@ const registerAdminAccountApi = require('./admin-account-api.cjs');
 const registerAdminArtifactDeleteApi = require('./admin-artifact-delete-api.cjs');
 const { registerItemImageApi } = require('./item-image-api.cjs');
 const registerRaidRewardApi = require('./raid-reward-api.cjs');
+const registerRaidRoomApi = require('./raid-room-api.cjs');
 require('dotenv').config();
 
 const app = express();
@@ -32,6 +33,7 @@ registerPlayerProvisionApi(app, { migrationController });
 registerAdminAccountApi(app);
 registerAdminArtifactDeleteApi(app);
 registerItemImageApi(app);
+registerRaidRoomApi(app);
 registerRaidRewardApi(app);
 
 // 根目錄路由
