@@ -50,7 +50,7 @@ test('formal Dongtian first completion grants cultivation from correct answers a
   assert.doesNotMatch(dongtian, /FIRST_COMPLETION_CULTIVATION_CORRECT_STEP/);
   assert.match(dongtian, /function firstCompletionCultivation\(correctCount\)/);
   assert.match(dongtian, /'stats\.totalScore': increment\(cultivationReward\)/);
-  assert.match(dongtian, /cultivationAdded: cultivationReward/);
+  assert.match(dongtian, /cultivationAdded: cultivationReward \\+ soulCultivationAdded/);
   assert.match(dongtian, /每答對 1 題 \+1 修為/);
   assert.doesNotMatch(dongtian, /答對至少 1 題保底 \+1/);
 });
