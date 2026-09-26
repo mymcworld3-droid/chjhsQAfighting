@@ -64,7 +64,7 @@ test('equipment still needs ownership and a compatible slot after catalog load',
 
 test('catalog synchronization never removes player equipment while remote catalog is unresolved', () => {
   assert.match(sync, /window\.__artifactCatalogReadyForEquipment = false/);
-  assert.match(sync, /window\.__artifactCatalogReadyForEquipment = true;\s*replaceArtifactCatalog\(data\.items, 'firestore'\)/);
+  assert.match(sync, /window\.__artifactCatalogReadyForEquipment = true;\s*replaceArtifactCatalog\(items, needsBackfill \? 'firestore-backfill' : 'firestore'\)/);
   assert.match(sync, /window\.__artifactCatalogReadyForEquipment = true;\s*applyGenerationPrompt\('', 'default-no-remote-config'\)/);
   assert.match(system, /if \(!ownerUid \|\| !window\.__artifactCatalogReadyForEquipment\) return/);
   assert.match(system, /!item && pendingCatalog/);
