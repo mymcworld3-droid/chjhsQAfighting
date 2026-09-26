@@ -19,6 +19,13 @@ function fakeStore(rows = {}) {
             async get() {
               const row = rows[name]?.[id];
               return { exists: row !== undefined, data: () => row };
+            },
+            async set(value, options = {}) {
+              (rows[name] ||= {});
+              rows[name][id] = options?.merge
+                ? { ...(rows[name][id] || {}), ...value }
+                : value;
+              calls.push(name + ':' + id);
             }
           };
         }
@@ -74,12 +81,19 @@ function setup({ verified = true, migration = { status: 'ready', ready: true }, 
     C: { app: { options: { projectId: PROJECT_IDS.C } }, db: c }
   };
   const errors = [];
+  let migrationCalls = 0;
   const handler = createPlayerProvisionHandler({
     resolve: role => services[role],
-    migrationStatus: async () => migration,
+    migrationStatus: async () => {
+      migrationCalls += 1;
+      return migration;
+    },
     logger: { error(...args) { errors.push(args); } }
   });
-  return { uid, original, a, bd, c, handler, errors };
+  return {
+    uid, original, a, bd, c, handler, errors,
+    get migrationCalls() { return migrationCalls; }
+  };
 }
 
 test('first entry creates minimal BD/C player records from trusted A data, never private balances', async () => {
@@ -91,6 +105,9 @@ test('first entry creates minimal BD/C player records from trusted A data, never
   assert.equal(res.headers['Cache-Control'], 'no-store');
   assert.equal(setupData.bd.rows.playerProfiles[setupData.uid].uid, setupData.uid);
   assert.equal(setupData.c.rows.playerProfiles[setupData.uid].gender, 'female');
+  assert.equal(setupData.a.rows.playerProvisionStates[setupData.uid].ready, true);
+  assert.equal(setupData.a.rows.playerProvisionStates[setupData.uid].projects.BD, PROJECT_IDS.BD);
+  assert.equal(setupData.a.rows.playerProvisionStates[setupData.uid].projects.C, PROJECT_IDS.C);
   for (const role of ['bd', 'c']) {
     const profile = setupData[role].rows.playerProfiles[setupData.uid];
     for (const name of ['email', 'friends', 'isAdmin', 'inventory', 'stats', 'gold', 'totalScore']) {
@@ -99,14 +116,22 @@ test('first entry creates minimal BD/C player records from trusted A data, never
   }
 });
 
-test('existing BD/C player records are not written repeatedly on every login', async () => {
+test('verified players reuse the trusted A marker without rechecking BD/C or migration status', async () => {
   const context = setup();
-  assert.equal((await context.handler(request(), response())).statusCode, 200);
-  const next = await context.handler(request(), response());
-  assert.equal(next.statusCode, 200);
-  assert.deepEqual(next.body.profiles, { BD: 'existing', C: 'existing' });
+  const first = await context.handler(request(), response());
+  assert.equal(first.statusCode, 200);
+  assert.equal(first.body.cached, false);
+  assert.equal(context.migrationCalls, 1);
   assert.equal(context.bd.calls.length, 1);
   assert.equal(context.c.calls.length, 1);
+
+  const next = await context.handler(request(), response());
+  assert.equal(next.statusCode, 200);
+  assert.equal(next.body.cached, true);
+  assert.deepEqual(next.body.profiles, { BD: 'verified', C: 'verified' });
+  assert.equal(context.migrationCalls, 1, 'cached player must not poll migration again');
+  assert.equal(context.bd.calls.length, 1, 'cached player must not re-read/write BD profile');
+  assert.equal(context.c.calls.length, 1, 'cached player must not re-read/write C profile');
 });
 
 test('partial first-login failure can retry without overwriting the earlier profile', async () => {
@@ -159,6 +184,12 @@ test('frontend waits for verified player initialization before releasing gamepla
   const main = readFileSync(join(__dirname, '../public/main.js'), 'utf8');
   assert.match(legacy, /await waitForVerifiedPlayerMigration\(user\)/);
   assert.match(legacy, /\/api\/game-startup-player/);
+  assert.match(legacy, /Fast path: a player that has been verified before/);
+  assert.match(legacy, /MIGRATION_NOT_READY/);
+  assert.ok(
+    legacy.indexOf("fetch('/api/game-startup-player'") < legacy.indexOf("fetch('/api/game-startup-migration'"),
+    'cached player check must run before migration polling'
+  );
   assert.match(legacy, /window\.__xiuxianMigrationApproved = true;/);
   assert.match(legacy, /ensureSecondaryFirebaseAuth\('BD'\)/);
   assert.match(legacy, /ensureSecondaryFirebaseAuth\('C'\)/);
