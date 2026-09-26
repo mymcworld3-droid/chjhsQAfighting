@@ -8,63 +8,60 @@ function read(rel) {
 }
 
 const del = read('public/cultivation/admin-artifact-delete.js');
+const api = read('admin-artifact-delete-api.cjs');
+const server = read('server.js');
 const main = read('public/main.js');
 
-test('artifact delete is admin-only, confirmed, persisted, and refreshes catalog plus recipes', () => {
-  assert.match(del, /isAdmin\(\)/);
-  assert.match(del, /window\.confirm/);
-  assert.match(del, /ARTIFACT_CATALOG\s*\.filter\(\(item\) => item\.id !== itemId\)/);
-  assert.match(del, /validateArtifactCatalog\(next\)/);
-  assert.match(del, /validateArtifactRecipes\(raw\)/);
-  assert.match(del, /adminSnap\.data\(\)\?\.isAdmin !== true/);
-  assert.match(del, /batch\.set\(doc\(db, CONFIG_COLLECTION, CONFIG_DOC\)/);
-  assert.match(del, /batch\.set\(doc\(db, CONFIG_COLLECTION, MATERIAL_CONFIG_DOC\)/);
-  assert.match(del, /replaceArtifactCatalog\(normalized, 'admin-delete'\)/);
-  assert.match(del, /replaceArtifactRecipes\(normalizedRecipes, 'admin-delete'\)/);
+test('artifact delete uses trusted backend instead of client-wide Firestore access', () => {
+  assert.match(del, /fetch\('\/api\/admin\/artifacts\/delete'/);
+  assert.match(del, /Authorization: 'Bearer ' \+ idToken/);
+  assert.match(del, /requestArtifactDeletion\('preview', itemId\)/);
+  assert.match(del, /requestArtifactDeletion\('delete', itemId\)/);
+  assert.doesNotMatch(del, /getFirestore|getDocs\(|writeBatch\(|collection\(db, 'users'\)/);
+  assert.match(server, /registerAdminArtifactDeleteApi/);
+  assert.match(server, /registerAdminArtifactDeleteApi\(app\)/);
 });
 
-test('artifact delete is destructive: inventory equipment buffs and dependent recipes are removed', () => {
-  assert.match(del, /delete artifactSystem\.inventory\[itemId\]/);
-  assert.match(del, /delete artifactSystem\.equipped\[slot\]/);
-  assert.match(del, /delete artifactSystem\.buffs\[key\]/);
-  assert.match(del, /invalidRecipeIds = new Set\(\[itemId\]\)/);
-  assert.match(del, /invalidRecipeIds\.add\(artifactId\)/);
-  assert.match(del, /連帶取消依賴配方/);
-  assert.doesNotMatch(del, /休眠資料/);
+test('backend verifies A identity and administrator role before scanning players', () => {
+  assert.match(api, /verifyIdToken\(token, true\)/);
+  assert.match(api, /decoded\.aud !== PROJECT_IDS\.A/);
+  assert.match(api, /adminSnap\.data\(\)\?\.isAdmin !== true/);
+  assert.match(api, /a\.db\.collection\('users'\)\.get\(\)/);
+  assert.match(api, /MAX_BATCH_USER_WRITES = 440/);
 });
 
-test('holders receive per-copy gold compensation and canceled jobs are refunded safely', () => {
-  assert.match(del, /MIN_COMPENSATION_PER_COPY = 100/);
-  assert.match(del, /Math\.max\(0, Math\.floor\(Number\(item\?\.craft\?\.gold\)/);
-  assert.match(del, /compensatedCopies = heldCopies \+ deletedJobInputs/);
-  assert.match(del, /compensationGold = compensatedCopies \* compensationEach/);
-  assert.match(del, /jobGoldRefund = Math\.max\(0, Math\.floor\(Number\(job\?\.goldCost\)/);
-  assert.match(del, /'stats\.gold': cleanup\.newGold/);
+test('artifact deletion removes inventory equipment buffs and dependent recipes', () => {
+  assert.match(api, /delete artifactSystem\.inventory\[itemId\]/);
+  assert.match(api, /delete artifactSystem\.equipped\[slot\]/);
+  assert.match(api, /delete artifactSystem\.buffs\[key\]/);
+  assert.match(api, /invalidRecipeIds = new Set\(\[itemId\]\)/);
+  assert.match(api, /invalidRecipeIds\.add\(artifactId\)/);
+});
+
+test('holders receive per-copy gold compensation and canceled jobs are refunded', () => {
+  assert.match(api, /MIN_COMPENSATION_PER_COPY = 100/);
+  assert.match(api, /compensatedCopies = heldCopies \+ deletedJobInputs/);
+  assert.match(api, /compensationGold = compensatedCopies \* compensationEach/);
+  assert.match(api, /jobGoldRefund = Math\.max\(0, Math\.floor\(Number\(job\?\.goldCost\)/);
+  assert.match(api, /'stats\.gold': cleanup\.newGold/);
   assert.match(del, /artifact-delete-compensation/);
 });
 
-test('active refinery jobs referencing the deleted artifact are canceled and other ingredients are restored', () => {
-  assert.match(del, /function jobReferencesArtifact/);
-  assert.match(del, /String\(job\.knownArtifactId \|\| ''\) === itemId/);
-  assert.match(del, /materialSystem\.inventory\[materialId\]/);
-  assert.match(del, /artifactSystem\.inventory\[sourceId\]/);
-  assert.match(del, /patch\[REFINERY_JOB_FIELD\] = null/);
-  assert.match(del, /xiuxian:refinery-job-updated/);
-});
-
-test('deletion uses one safe batch and aborts before changes when too many player writes are required', () => {
-  assert.match(del, /MAX_BATCH_USER_WRITES = 440/);
-  assert.match(del, /affected\.length > MAX_BATCH_USER_WRITES/);
-  assert.match(del, /未進行任何刪除/);
-  assert.match(del, /const batch = writeBatch\(db\)/);
-  assert.match(del, /await batch\.commit\(\)/);
+test('server commits catalog recipes and player cleanup in one admin batch', () => {
+  assert.match(api, /const batch = a\.db\.batch\(\)/);
+  assert.match(api, /batch\.set\(plan\.artifactRef/);
+  assert.match(api, /batch\.set\(plan\.materialRef/);
+  assert.match(api, /batch\.update\(ref, patch\)/);
+  assert.match(api, /await batch\.commit\(\)/);
+  assert.match(api, /artifactCatalogSchemaVersion: ARTIFACT_SCHEMA_VERSION/);
+  assert.match(api, /artifactRecipeSchemaVersion: RECIPE_SCHEMA_VERSION/);
 });
 
 test('artifact delete button appears only for existing editor records', () => {
   assert.match(del, /idInput\.readOnly/);
   assert.match(del, /className = 'aam-delete'/);
   assert.match(del, /徹底刪除法寶/);
-  assert.match(del, /ARTIFACT_CATALOG\.some\(\(item\) => item\.id === itemId\)/);
+  assert.match(del, /ARTIFACT_CATALOG\.some\(item => item\.id === itemId\)/);
 });
 
 test('delete enhancer loads after artifact manager and before admin collapsible wrapper', () => {
