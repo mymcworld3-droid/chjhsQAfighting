@@ -562,7 +562,9 @@ import {
     }
     state.bossStartedAtMs = Number(room.startedAtMs) || now();
     state.bossActionCount = Math.max(0, Number(room.bossActionCount) || 0);
-    state.status = state.player.hp > 0 ? 'active' : 'spectating';
+    const wasQuestion = state.status === 'question';
+    const wasReview = state.status === 'review';
+    state.status = state.player.hp > 0 ? (wasQuestion ? 'question' : wasReview ? 'review' : 'active') : 'spectating';
     startTick();
     if (room.lastBossAction && Number(room.lastBossAction.id) > state.lastBossActionSeen) void applyRemoteBossAction(room.lastBossAction);
     if (state.player.hp > 0 && !state.question && !state.pendingQuestion) {
