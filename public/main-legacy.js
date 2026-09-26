@@ -551,8 +551,20 @@ console.error = function (...args) {
     xiuxianNativeError(...args);
     queueXiuxianDebug('error', ...args);
 };
+function isRecoverableFirestoreListenWarning(args) {
+    const text = args
+        .filter(arg => typeof arg === 'string' || typeof arg === 'number')
+        .map(String)
+        .join(' ');
+    return /@firebase\/firestore/i.test(text) &&
+        /WebChannelConnection RPC ['"]Listen['"] stream/i.test(text) &&
+        /transport errored/i.test(text);
+}
 console.warn = function (...args) {
     xiuxianNativeWarn(...args);
+    // Firestore automatically reconnects this transport-level Listen warning.
+    // Keep it in the browser console, but do not count it as an admin game fault.
+    if (isRecoverableFirestoreListenWarning(args)) return;
     queueXiuxianDebug('warn', ...args);
 };
 // 不覆蓋其他功能模組的 onerror / onunhandledrejection。
@@ -917,10 +929,8 @@ async function waitForVerifiedPlayerMigration(user) {
     showGameStartupGate('正在連線 BD、C 玩家資料…');
     let provision = await ensurePlayerProvision();
     if (provision.ready) {
-        await Promise.all([
-            ensureSecondaryFirebaseAuth('BD'),
-            ensureSecondaryFirebaseAuth('C')
-        ]);
+        await ensureSecondaryFirebaseAuth('BD');
+        await ensureSecondaryFirebaseAuth('C');
         if (auth.currentUser?.uid !== user.uid) throw new Error('登入帳號已更換，請重新進入遊戲。');
         return;
     }
