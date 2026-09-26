@@ -52,6 +52,8 @@ export async function generateRaidQuestion({ scope, round, rank = 0, history = [
   const request = {
     ...selected,
     rank: Math.max(0, Number(rank) || 0),
+    difficulty: 'easy',
+    quizMode: 'raid-quick-simple',
     avoidQuestions: recent.map(item => String(item?.q || '')).filter(Boolean),
     avoidQuestionMeta: recent.map(item => ({
       q: String(item?.q || ''),
