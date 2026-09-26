@@ -8,6 +8,8 @@ const STALE_MS = 45000;
 const ROOM_TTL_MS = 30 * 60 * 1000;
 const RAID_ROOM_VERSION = 2;
 const RAID_BOSS_ID = 'shen-qingshuang';
+const BOSS_ACTION_INTERVAL_MS = 18000;
+const MAX_BOSS_ACTIONS = 12;
 
 function now() { return Date.now(); }
 function finite(value, fallback = 0) {
@@ -367,7 +369,12 @@ function createHandler({
           const current = snap.data() || {};
           requireMember(current, uid);
           if (current.status !== 'active' || current.hostUid !== uid) return publicRoom(roomId, current);
-          const nextCount = Math.max(0, Math.floor(finite(current.bossActionCount))) + 1;
+          const currentCount = Math.max(0, Math.floor(finite(current.bossActionCount)));
+          const nextActionAtMs = Math.max(0, finite(current.startedAtMs)) + (currentCount + 1) * BOSS_ACTION_INTERVAL_MS;
+          // Authoritative server-side cadence: repeated/early client requests cannot
+          // fast-forward the boss timeline while the client is waiting for room polling.
+          if (!current.startedAtMs || now() < nextActionAtMs) return publicRoom(roomId, current);
+          const nextCount = currentCount + 1;
           const intent = req.body?.intent || {};
           const bossAction = {
             id: nextCount,
@@ -378,8 +385,7 @@ function createHandler({
             issuedAtMs: now()
           };
           const update = { bossActionCount: nextCount, lastBossAction: bossAction };
-          const maxActions = Math.max(1, Math.min(50, Math.floor(finite(req.body?.maxActions, 12))));
-          if (nextCount >= maxActions) {
+          if (nextCount >= MAX_BOSS_ACTIONS) {
             update.status = 'lost';
             update.finishedAtMs = now();
           }
@@ -424,6 +430,7 @@ module.exports = function registerRaidRoomApi(app) {
 };
 module.exports.__test = {
   COLLECTION, MAX_MEMBERS, STALE_MS, ROOM_TTL_MS, RAID_ROOM_VERSION, RAID_BOSS_ID,
+  BOSS_ACTION_INTERVAL_MS, MAX_BOSS_ACTIONS,
   finite, membersOf, memberOnline, activeMembers, roomUsable, safeRoomId, safeRoomCode,
   memberSnapshot, createHandler
 };
