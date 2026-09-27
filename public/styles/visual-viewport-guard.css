@@ -47,6 +47,8 @@ html.app-visual-viewport-ready :is(
   .amm-modal,
   .aam-modal,
   .progression-modal-backdrop,
+  .training-v3-modal-backdrop,
+  #five-immortal-challenge.fi-backdrop,
   .fi-backdrop,
   .xpp-backdrop,
   #report-modal:not(.hidden),
@@ -96,6 +98,8 @@ html.app-visual-viewport-ready :is(
   .fi-modal,
   .xpp-dialog,
   .progression-modal,
+  .training-v3-modal,
+  #report-box,
   #custom-confirm-box
 ){
   max-height:min(calc(var(--app-vv-height) - 28px),92dvh)!important;
