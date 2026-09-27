@@ -55,6 +55,7 @@ const CORE_FINALE = Object.freeze({
   thunder:{attack:23,heal:10},reverse:{attack:16,heal:16},sword:{attack:24,heal:9}
 });
 const NEXT_REALM_THRESHOLDS = Object.freeze([28,68,188,428,788,1268,1868,2588]);
+const BATTLE_SUBJECTS = Object.freeze(['國文','英文','數學','公民','歷史','地理','物理','化學','生物']);
 
 function finite(value,fallback=0){const n=Number(value);return Number.isFinite(n)?n:fallback;}
 function positive(value){return Math.max(0,finite(value));}
@@ -71,6 +72,72 @@ function safePortrait(value){
   if (/^https?:\/\/[^\s"'<>]+$/i.test(url)) return url;
   if (/^(?:assets\/|images\/|img\/)[a-z0-9/_\-.%]+$/i.test(url)) return url;
   return '';
+}
+
+function normalizeSubject(input){
+  const value=String(input??'').trim().replace(/\s+/g,'');
+  const aliases={數學A:'數學',數學B:'數學',理化:'物理',國語:'國文',英語:'英文',Chinese:'國文',English:'英文',Math:'數學',Biology:'生物'};
+  const subject=aliases[value]||value;
+  return BATTLE_SUBJECTS.includes(subject)?subject:'';
+}
+function subjectsFrom(value){
+  const raw=Array.isArray(value)?value:String(value??'').split(/[,，、;；\n]/);
+  return [...new Set(raw.map(normalizeSubject).filter(Boolean))];
+}
+function educationGrade(value){
+  const text=String(value??''),m=text.match(/(?:第)?([一二三四五六七八九十]|1[0-2]|[1-9])(?:年級|年)/);
+  const names={一:1,二:2,三:3,四:4,五:5,六:6,七:7,八:8,九:9,十:10};
+  const year=m?(names[m[1]]||Number(m[1])):1;
+  if(/國小|小學/.test(text))return Math.min(6,year);
+  if(/高中|高職/.test(text))return Math.min(12,9+year);
+  if(/大學|研究所/.test(text))return 13;
+  if(/國中|初中/.test(text))return Math.min(9,6+year);
+  if(/^(?:[7-9]|[一二三])年級$/.test(text))return Math.min(9,6+year);
+  return 7;
+}
+function gradeLabel(grade){
+  if(grade>=13)return '大學';
+  const n=['一','二','三','四','五','六'];
+  if(grade<=6)return '國小'+(n[grade-1]||'一')+'年級';
+  if(grade<=9)return '國中'+n[grade-7]+'年級';
+  return '高中'+n[grade-10]+'年級';
+}
+function unitGrade(path){
+  const suffix=String(path||'').split('/').slice(1).join('/');
+  const middle=suffix.match(/([七八九7-9])(?:上|下|年級)/);
+  if(middle)return ({七:7,八:8,九:9})[middle[1]]||Number(middle[1]);
+  const high=suffix.match(/(?:高中|高職)(?:第)?([一二三1-3])(?:年級|年|上|下)?/);
+  if(high)return 9+(({一:1,二:2,三:3})[high[1]]||Number(high[1]));
+  if(/高中|高職|學測|分科/.test(suffix))return 10;
+  return null;
+}
+function trustedKnowledgeScope(data={}){
+  const profile=data.profile||{},settings=data.gameSettings||{},grade=educationGrade(profile.educationLevel||data.educationLevel);
+  const focused=settings.sourceMode==='focused'&&Array.isArray(settings.focusedUnits)&&settings.focusedUnits.length>0;
+  const units=focused?settings.focusedUnits.map(raw=>{
+    if(!raw||typeof raw!=='object')return null;
+    const path=String(raw.path||'').replace(/\\/g,'/').slice(0,160);
+    const subject=normalizeSubject(path.split('/').filter(Boolean)[0]||raw.subject);if(!subject)return null;
+    const detail=String(raw.detail||'').trim().slice(0,100);
+    const topics=(Array.isArray(raw.sub_topics)?raw.sub_topics:[]).map(v=>String(v).trim().slice(0,80)).filter(Boolean).slice(0,8);
+    const topic=[detail,topics.length?'核心考點：'+topics.join('、'):''].filter(Boolean).join('（')+(detail&&topics.length?'）':'');
+    return {subject,topic,grade:unitGrade(path),key:subject+':'+path.toLowerCase()+':'+detail.toLowerCase()};
+  }).filter(Boolean).slice(0,24):[];
+  const weak=subjectsFrom(profile.weakSubjects);
+  const allowed=grade<=6?['國文','英文','數學']:BATTLE_SUBJECTS;
+  let validUnits=units.filter(u=>allowed.includes(u.subject)&&(!u.grade||u.grade<=grade));
+  let subjects=validUnits.length?[...new Set(validUnits.map(u=>u.subject))]:weak.filter(s=>allowed.includes(s));
+  if(!subjects.length)subjects=allowed.filter(s=>BATTLE_SUBJECTS.includes(s));
+  return {version:1,grade,level:gradeLabel(grade),subjects:[...new Set(subjects)],units:validUnits,
+    difficulty:['easy','medium','hard'].includes(String(settings.difficulty))?String(settings.difficulty):'medium',
+    policy:validUnits.length?'focused-units':'trusted-subjects'};
+}
+function pickTrustedRaidKnowledge(scope,actionId){
+  const index=Math.max(0,Math.floor(finite(actionId,1))-1),units=Array.isArray(scope?.units)?scope.units:[],
+    subjects=Array.isArray(scope?.subjects)&&scope.subjects.length?scope.subjects:BATTLE_SUBJECTS;
+  const unit=units.length?units[index%units.length]:null;
+  return {subject:unit?.subject||subjects[index%subjects.length]||'數學',specificTopic:unit?.topic||'',
+    level:String(scope?.level||'國中一年級'),difficulty:String(scope?.difficulty||'medium')};
 }
 
 function coreSnapshot(data){
@@ -223,7 +290,8 @@ function trustedRaidPlayerSnapshot(player,uid,catalogDoc={}){
     combatPower:combatPower({attack:baseAttack+soulAttack,maxHp:baseMaxHp+soulMaxHp},core,equipped),
     atk:combat.attack,baseAtk:baseCombat.attack,hp:combat.maxHp,maxHp:combat.maxHp,baseMaxHp:baseCombat.maxHp,
     goldenCore:core,nascentSoul:soul,coreShield:!!core&&player?.stats?.goldenCoreShield===true,coreCorrectStreak:0,
-    artifactBattle,artifactShield:artifactBattle.openingShield,artifactFirstHitUsed:false,artifactCheatDeathUsed:false
+    artifactBattle,artifactShield:artifactBattle.openingShield,artifactFirstHitUsed:false,artifactCheatDeathUsed:false,
+    knowledgeScope:trustedKnowledgeScope(player)
   };
 }
 async function loadTrustedRaidPlayer(db,uid){
@@ -352,6 +420,7 @@ function resolveBossDefense(member,{roomId,bossAction}={}){
 }
 
 module.exports={
-  EQUIP_SLOTS,RUNTIME_EFFECTS,stableHash,artifactPower,combatPower,trustedRaidPlayerSnapshot,loadTrustedRaidPlayer,
-  memberSnapshotFromTrusted,createTeamBoss,bossPhase,bossIntent,resolvePlayerAction,resolveBossDefense
+  EQUIP_SLOTS,RUNTIME_EFFECTS,stableHash,artifactPower,combatPower,trustedKnowledgeScope,pickTrustedRaidKnowledge,
+  trustedRaidPlayerSnapshot,loadTrustedRaidPlayer,memberSnapshotFromTrusted,createTeamBoss,bossPhase,bossIntent,
+  resolvePlayerAction,resolveBossDefense
 };
