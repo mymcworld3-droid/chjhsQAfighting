@@ -48,9 +48,11 @@ test('rewards persist through existing settlement, and cave replay is idempotent
   const training = read('public/cultivation/cultivation-training-v4.js');
   assert.match(solo,/stats\.nascentSoulSpirit = normalizeSpirit\(stats\.nascentSoulSpirit\) \+ spiritAdded/);
   assert.match(daily,/lastDate === current\.date[\s\S]*'stats\.nascentSoulSpirit': increment\(spiritAdded\)/);
-  assert.match(cave,/lastSpiritRunId === s\.runId/);
-  assert.match(cave,/lastSpiritRunId: s\.runId/);
-  assert.match(cave,/if \(spiritAdded\) tx\.update\(playerRef, \{ 'stats\.nascentSoulSpirit': increment\(spiritAdded\) \}\)/);
+  const caveSettlement = read('dongtian-settlement-api.cjs');
+  assert.match(cave,/rewardRepository\.claimDongtian/);
+  assert.match(caveSettlement,/lastSpiritRunId:e\.runId/);
+  assert.match(caveSettlement,/receiptId:e\.id/);
+  assert.match(caveSettlement,/if\(spirit\)p\['stats\.nascentSoulSpirit'\]=FieldValue\.increment\(spirit\)/);
   assert.match(training,/activeTab === 'nascent-soul' \? nascentSoulTabMarkup\(\)/);
 });
 
