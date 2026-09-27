@@ -24,18 +24,18 @@ function forget() {
 export async function ensureRaidRoomAuth() {
   return raidRepository.ensureAuth();
 }
-export async function createRaidRoom(player) {
-  const result = await api('create', { player });
+export async function createRaidRoom() {
+  const result = await api('create');
   remember(result.roomId);
   return result.roomId;
 }
-export async function findOrCreateRaidRoom(player) {
-  const result = await api('quick', { player });
+export async function findOrCreateRaidRoom() {
+  const result = await api('quick');
   remember(result.roomId);
   return result.roomId;
 }
-export async function joinRaidRoomByCode(roomCode, player) {
-  const result = await api('join-code', { roomCode, player });
+export async function joinRaidRoomByCode(roomCode) {
+  const result = await api('join-code', { roomCode });
   remember(result.roomId);
   return result.roomId;
 }
@@ -58,8 +58,8 @@ export async function reconnectRaidRoom() {
 export async function setRaidReady(roomId, ready) {
   await api('ready', { roomId, ready: !!ready });
 }
-export async function startRaidRoom(roomId, boss) {
-  await api('start', { roomId, boss });
+export async function startRaidRoom(roomId) {
+  await api('start', { roomId });
 }
 export function subscribeRaidRoom(roomId, callback, onError) {
   let stopped = false;
@@ -102,19 +102,21 @@ export function subscribeRaidRoom(roomId, callback, onError) {
 export async function heartbeatRaidRoom(roomId) {
   await api('heartbeat', { roomId });
 }
-export async function commitRaidPlayerAction({ roomId, actionId, damage, hp, correct }) {
-  const result = await api('player-action', { roomId, actionId, damage, hp, correct: correct === true });
-  return result.room || null;
+export async function commitRaidPlayerAction({ roomId, actionId, questionId, choice, ticket }) {
+  // Only the player's choice is an input. Correctness, damage and HP are resolved by the server.
+  return api('player-action', { roomId, actionId, questionId, choice, ticket });
 }
-export async function commitRaidBossDefense({ roomId, hp, bossActionSeen, reflectedDamage = 0 }) {
-  await api('boss-defense', { roomId, hp, bossActionSeen, reflectedDamage });
+export async function commitRaidBossDefense({ roomId, bossActionSeen }) {
+  // HP, mitigation and reflected damage are resolved from the trusted room member snapshot.
+  return api('boss-defense', { roomId, bossActionSeen });
 }
-export async function commitRaidMemberState({ roomId, hp, bossActionSeen }) {
-  await api('member-state', { roomId, hp, bossActionSeen });
+export async function commitRaidMemberState({ roomId }) {
+  // Legacy compatibility: this endpoint is heartbeat-only on the server.
+  return api('member-state', { roomId });
 }
-export async function advanceRaidBossAction({ roomId, intent }) {
-  const result = await api('advance-boss', { roomId, intent });
-  return result.room || null;
+export async function advanceRaidBossAction({ roomId }) {
+  // Boss intent and damage are derived from authoritative room state.
+  return api('advance-boss', { roomId });
 }
 export async function leaveRaidRoom(roomId) {
   try {
