@@ -164,7 +164,7 @@ test('raid hub bottom follows the real bottom navigation top edge', () => {
 
 
 test('raid hub card is measured directly to the navigation edge and cache-busted', () => {
-  assert.match(raidSource, /STYLE_HREF = 'styles\/raid-mode\.css\?v=20260927-raid-nav-fit2'/);
+  assert.match(raidSource, /STYLE_HREF = 'styles\/raid-mode\.css\?v=20260927-raid-lobby-fit3'/);
   assert.match(raidSource, /function fitRaidHubToNavigation\(\)/);
   assert.match(raidSource, /navTop - cardTop - 8/);
   assert.match(raidSource, /card\.style\.setProperty\('height', targetHeight \+ 'px', 'important'\)/);
@@ -184,4 +184,18 @@ test('raid lobby adapts member cards and actions without stretching', () => {
   assert.match(cssSource, /@media\(max-width:760px\)\{[^}]*\.raid-party-list/);
   assert.match(cssSource, /\.raid-lobby-actions\{grid-template-columns:repeat\(3,minmax\(0,1fr\)\)\}/);
   assert.match(cssSource, /body\.raid-page-open\.raid-session-active #page-raid\.active-page\{bottom:var\(--raid-visual-bottom-inset,0px\)!important\}/);
+});
+
+
+test('raid lobby switches viewport state before measuring', () => {
+  const lobbyStart = raidSource.indexOf('  function renderLobby() {');
+  const lobbyEnd = raidSource.indexOf('  async function', lobbyStart);
+  const lobby = raidSource.slice(lobbyStart, lobbyEnd);
+  assert.ok(lobby.indexOf("document.body.classList.add('raid-session-active')") < lobby.indexOf("show('lobby')"));
+  assert.match(lobby, /syncRaidBottomClearance\(\)/);
+
+  const hubStart = raidSource.indexOf('  function renderHub() {');
+  const hubEnd = raidSource.indexOf('  async function inviteOnlineFriends', hubStart);
+  const hub = raidSource.slice(hubStart, hubEnd);
+  assert.ok(hub.indexOf("document.body.classList.remove('raid-session-active')") < hub.indexOf("show('hub')"));
 });
