@@ -50,8 +50,10 @@ test('Qi-five tutorial reuses the one-question private Dongtian demo, requiring 
 test('formal Dongtian first completion grants cultivation from correct answers as well as spirit stones', () => {
   assert.doesNotMatch(dongtian, /FIRST_COMPLETION_CULTIVATION_CORRECT_STEP/);
   assert.match(dongtian, /function firstCompletionCultivation\(correctCount\)/);
-  assert.ok(dongtian.includes("'stats.totalScore': increment(cultivationReward + soulCultivationAdded)"));
-  assert.ok(dongtian.includes('cultivationAdded: cultivationReward + soulCultivationAdded'));
+  assert.match(dongtian, /rewardRepository\.claimDongtian/);
+  assert.match(dongtianSettlement, /cult=first\?e\.correct\+soul:0/);
+  assert.match(dongtianSettlement, /if\(cult\)p\['stats\.totalScore'\]=FieldValue\.increment\(cult\)/);
+  assert.match(dongtianSettlement, /cultivationAdded:cult/);
   assert.match(dongtian, /每答對 1 題 \+1 修為/);
   assert.doesNotMatch(dongtian, /答對至少 1 題保底 \+1/);
 });
