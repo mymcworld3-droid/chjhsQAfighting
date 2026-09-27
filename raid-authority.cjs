@@ -62,6 +62,7 @@ function clamp(value,min,max){return Math.min(max,Math.max(min,finite(value,min)
 function clampGrade(value){return Math.min(9,Math.max(1,Math.floor(finite(value,9)||9)));}
 function level(value){return Math.min(10,Math.max(0,Math.floor(finite(value))));}
 function stableHash(text){let h=2166136261;for(const ch of String(text||'')){h^=ch.charCodeAt(0);h=Math.imul(h,16777619);}return h>>>0;}
+function deterministicPercent(seed){return stableHash(seed)%100;}
 function roll01(seed,kind){return stableHash(String(seed)+':'+String(kind))/4294967296;}
 function chanceByGrade(grade,base,step,cap=100){return Math.min(cap,base+(9-clampGrade(grade))*step);}
 function safeName(value,max=40){return String(value||'').trim().slice(0,max);}
@@ -78,9 +79,33 @@ function coreSnapshot(data){
   if(score<GOLDEN_CORE_THRESHOLD||training.coreEnabled===false||!raw?.type)return null;
   return {type:String(raw.type),grade:clampGrade(raw.grade),name:safeName(raw.name||CORE_NAMES[raw.type]||'本命金丹',40)};
 }
+function soulNodeLevels(tree,type){
+  const raw=tree?.paths?.[type]?.nodes||{};
+  const version=Math.floor(finite(tree?.version));
+  if(version>=2){
+    const clean={};
+    for(const id of ['leftFinal','leftFarTop','leftTop','leftMain','leftBottom','leftFarBottom',
+      'rightMain','rightTop','rightFarTop','rightFinal','rightFarBottom','rightBottom']){
+      const n=level(raw[id]);if(n)clean[id]=n;
+    }
+    return clean;
+  }
+  // Legacy v1 node names used attack/vitality/focus plus seed/form/realm gates.
+  const migrated={
+    leftMain:Math.min(10,level(raw.attack)*2),
+    rightMain:Math.min(10,level(raw.vitality)*2),
+    leftBottom:Math.min(10,level(raw.focus)*2),
+    leftTop:raw.seed?1:0,
+    rightTop:raw.form?1:0,
+    rightBottom:raw.realm?1:0
+  };
+  if((migrated.leftTop||migrated.leftBottom)&&migrated.leftMain<5)migrated.leftMain=5;
+  if((migrated.rightTop||migrated.rightBottom)&&migrated.rightMain<5)migrated.rightMain=5;
+  return migrated;
+}
 function soulSnapshot(data,core){
   if(!core||positive(data?.stats?.totalScore)<NASCENT_SOUL_THRESHOLD)return null;
-  const nodes=data?.nascentSoulTree?.paths?.[core.type]?.nodes||{};
+  const nodes=soulNodeLevels(data?.nascentSoulTree,core.type);
   const finale=CORE_FINALE[core.type]||CORE_FINALE.taichu;
   const quality=9-core.grade;
   return {
@@ -242,7 +267,8 @@ function coreSupport(member,correct,seed){
   const out={streak,shield:!!core&&member?.coreShield===true,bonusDamage:0,heal:0};
   if(!core)return out;const grade=clampGrade(core.grade);
   if(core.type==='ningxin'&&correct&&previous>=Math.max(1,Math.ceil(grade/3)))out.shield=true;
-  if(core.type==='wugou'&&!correct&&!out.shield&&roll01(seed,'wugou')<chanceByGrade(grade,20,10,100)/100)out.shield=true;
+  if(core.type==='wugou'&&!correct&&!out.shield&&
+      deterministicPercent(seed+':wugou')<chanceByGrade(grade,20,10,100))out.shield=true;
   if(core.type==='taichu'&&correct&&streak%Math.max(2,grade+1)===0)out.heal=100;
   if(core.type==='pojing'&&correct&&nearBreakthrough(member.totalScore,grade))out.bonusDamage=100;
   if(core.type==='xingchen'&&correct&&previous>=Math.max(1,grade))out.bonusDamage=80;
@@ -251,14 +277,14 @@ function coreSupport(member,correct,seed){
 }
 function coreAttack(member,seed){
   const core=member?.goldenCore;if(!core)return 0;const grade=clampGrade(core.grade);
-  if(core.type==='ocean'&&roll01(seed,'ocean')<chanceByGrade(grade,10,5,50)/100)return 100;
-  if(core.type==='sword'&&roll01(seed,'sword')<chanceByGrade(grade,10,5,50)/100)return 200;
+  if(core.type==='ocean'&&deterministicPercent(seed+':ocean')<chanceByGrade(grade,10,5,50))return 100;
+  if(core.type==='sword'&&deterministicPercent(seed+':sword')<chanceByGrade(grade,10,5,50))return 200;
   return 0;
 }
 function coreCounter(member,received,seed){
   const core=member?.goldenCore;if(!core||core.type!=='thunder'||received<=0)return 0;
-  const chance=chanceByGrade(core.grade,10,10,90)/100;
-  return roll01(seed,'thunder')<chance?received:0;
+  const chance=chanceByGrade(core.grade,10,10,90);
+  return deterministicPercent(seed+':thunder')<chance?received:0;
 }
 function runtimeEffects(member){return Array.isArray(member?.artifactBattle?.effects)?member.artifactBattle.effects:[];}
 function hpRatio(member){return clamp(finite(member?.hp)/Math.max(1,finite(member?.maxHp,1)),0,1);}
@@ -277,14 +303,14 @@ function resolveArtifactAttack(member,baseDamage,seed){
 }
 function resolvePlayerAction(member,{roomId,actionId,correct}={}){
   const next={...member,artifactBattle:{...(member.artifactBattle||{}),effects:[...runtimeEffects(member)]}};
-  const seed=String(roomId)+':'+String(actionId)+':'+String(next.uid),support=coreSupport(next,correct,seed+':support');
+  const seed=String(roomId)+':player:'+String(actionId)+':'+String(next.uid),support=coreSupport(next,correct,seed+':support');
   next.coreCorrectStreak=support.streak;next.coreShield=support.shield;
   let healed=support.heal+(correct?Math.max(0,Math.round(finite(next?.nascentSoul?.coreHeal))):0);
   next.hp=Math.min(next.maxHp,next.hp+healed);
   let damage=0;
   if(correct){
     const base=Math.max(1,Math.round(finite(next.atk,200)))+support.bonusDamage+
-      coreAttack(next,seed+':core')+Math.max(0,Math.min(1000,Math.round(finite(next?.nascentSoul?.bonusDamage))));
+      coreAttack(next,seed+':core-attack')+Math.max(0,Math.min(1000,Math.round(finite(next?.nascentSoul?.bonusDamage))));
     const artifact=resolveArtifactAttack(next,base,seed+':artifact');
     damage=artifact.damage;
     const lifesteal=Math.max(0,Math.round(damage*artifact.lifesteal));healed+=lifesteal;
