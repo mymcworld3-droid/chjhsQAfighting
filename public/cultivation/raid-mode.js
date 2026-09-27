@@ -580,7 +580,7 @@ import { rewardRepository } from './data/reward-repository.js';
       const mine = state.room?.members?.[state.player?.uid];
       if (mine && state.player) Object.assign(state.player, mine);
       if (state.boss) {
-        state.boss.hp = Math.max(0, Number(resolution.bossHp) || Number(state.room?.bossHp) || 0);
+        state.boss.hp = Math.max(0, Number(state.room?.bossHp ?? resolution.bossHp) || 0);
         state.boss.phase = shenPhaseForHp(state.boss.hp, state.boss.maxHp);
       }
       state.status = 'review';
@@ -643,7 +643,7 @@ import { rewardRepository } from './data/reward-repository.js';
       const mine = state.room?.members?.[state.player.uid];
       if (mine) Object.assign(state.player, mine);
       if (state.boss) {
-        state.boss.hp = Math.max(0, Number(resolution.bossHp) || Number(state.room?.bossHp) || 0);
+        state.boss.hp = Math.max(0, Number(state.room?.bossHp ?? resolution.bossHp) || 0);
         state.boss.phase = shenPhaseForHp(state.boss.hp, state.boss.maxHp);
       }
 
