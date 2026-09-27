@@ -119,3 +119,26 @@ html.app-visual-viewport-ready :is(
     padding-bottom:max(18px,env(safe-area-inset-bottom,0px))!important;
   }
 }
+
+
+/* Story dialogue and tutorial cards use their own bottom positioning. */
+html.app-visual-viewport-ready #xiuxian-story-layer .story-dialogue{
+  bottom:max(12px,calc(var(--app-vv-bottom) + env(safe-area-inset-bottom,0px)))!important;
+}
+
+/* Existing fixed toasts keep their designed offset, plus any browser-chrome overlap. */
+html.app-visual-viewport-ready :is(
+  #cultivation-rule-toast,
+  #artifact-toast,
+  #material-toast,
+  #material-drop-toast,
+  #cultivation-refinery-toast,
+  #admin-self-transfer-toast,
+  #admin-artifact-delete-toast,
+  #admin-material-toast,
+  #admin-artifact-toast,
+  #aiim-toast,
+  .dt-toast
+){
+  margin-bottom:var(--app-vv-bottom)!important;
+}
