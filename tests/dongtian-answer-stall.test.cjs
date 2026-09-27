@@ -6,6 +6,7 @@ const path = require('node:path');
 const vm = require('node:vm');
 
 const source = fs.readFileSync(path.join(__dirname, '../public/cultivation/dongtian.js'), 'utf8');
+const settlementSource = fs.readFileSync(path.join(__dirname, '../dongtian-settlement-api.cjs'), 'utf8');
 
 test('next question waits at most one bounded status check and ignores double clicks', () => {
   const next = source.slice(source.indexOf("document.getElementById('dt-next').onclick"), source.indexOf('function removeModerationModal'));
@@ -21,15 +22,16 @@ test('next question waits at most one bounded status check and ignores double cl
   assert.match(source, /clearTimeout\(timer\)/);
 });
 
-test('status timeout, network error and sealed state do not bypass the final reward transaction', () => {
+
+test('status timeout or network warning never bypasses the server-authoritative settlement', () => {
   const check = source.slice(source.indexOf('async function readSessionDongtianStatus'), source.indexOf('function openQuestionReport'));
   const settlement = source.slice(source.indexOf('async function completeProgress'), source.indexOf('async function writeDongtianHistory'));
   assert.match(check, /result\.snapshot\?\.exists\(\) && result\.snapshot\.data\(\)\?\.status !== 'active'/);
   assert.match(check, /sealCurrentSession\(/);
   assert.match(check, /result\.error \|\| result\.timedOut/);
-  assert.match(check, /state\.session !== s/);
-  assert.match(settlement, /indexSnap\.data\(\)\?\.status !== 'active'/);
-  assert.match(settlement, /const alreadyCompleted = playSnap\.exists\(\) && !!playSnap\.data\(\)\?\.completed/);
+  assert.match(settlement, /rewardRepository\.claimDongtian/);
+  assert.match(settlementSource, /index\.status!=='active'\|\|cave\.status!=='active'/);
+  assert.match(settlementSource, /runRewardReceipt/);
 });
 
 test('status read settles even when Firestore hangs; a late rejection is handled', async () => {

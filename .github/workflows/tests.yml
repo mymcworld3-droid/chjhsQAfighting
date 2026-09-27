@@ -2,7 +2,7 @@ name: Cultivation regression tests
 
 on:
   push:
-    branches: [main]
+    branches: [main, Improvement]
   pull_request:
     branches: [main]
 

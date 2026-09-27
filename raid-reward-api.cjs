@@ -1,7 +1,9 @@
 'use strict';
 
 const crypto = require('node:crypto');
-const { adminProject, PROJECT_IDS } = require('./firebase-admin-projects.cjs');
+const { PROJECT_IDS } = require('./firebase-admin-projects.cjs');
+const { playerRepository, raidRepository } = require('./server-repositories.cjs');
+const { runRewardReceipt } = require('./reward-receipt.cjs');
 
 const RAID_ROOM_COLLECTION = 'raidRooms';
 const CLAIM_COLLECTION = 'raidRewardClaims';
@@ -65,44 +67,63 @@ async function awardRaidReward(db, uid, roomId, validation, {
   fieldValue = require('firebase-admin/firestore').FieldValue
 } = {}) {
   const userRef = db.collection('users').doc(uid);
-  const rewardRef = db.collection(CLAIM_COLLECTION).doc(claimId(roomId, uid));
-  return db.runTransaction(async tx => {
-    const [claimSnap, userSnap] = await Promise.all([tx.get(rewardRef), tx.get(userRef)]);
-    if (claimSnap.exists) {
-      const existing = claimSnap.data() || {};
-      return {
-        status:'duplicate', awarded:false, rewards:existing.rewards || rewards,
-        inventory: existing.inventory || null
-      };
-    }
-    if (!userSnap.exists) throw new Error('玩家資料不存在');
-    const user = userSnap.data() || {};
-    if (user.uid && user.uid !== uid) throw new Error('玩家資料 UID 不符');
+  const receipt = await runRewardReceipt({
+    db,
+    collection: CLAIM_COLLECTION,
+    receiptId: claimId(roomId, uid),
+    fieldValue,
+    onFirstClaim: async ({ tx }) => {
+      const userSnap = await tx.get(userRef);
+      if (!userSnap.exists) throw new Error('玩家資料不存在');
+      const user = userSnap.data() || {};
+      if (user.uid && user.uid !== uid) throw new Error('玩家資料 UID 不符');
 
-    const materialSystem = user.materialSystem && typeof user.materialSystem === 'object'
-      ? JSON.parse(JSON.stringify(user.materialSystem)) : { inventory:{} };
-    materialSystem.inventory = materialSystem.inventory && typeof materialSystem.inventory === 'object'
-      ? { ...materialSystem.inventory } : {};
-    for (const [materialId, amount] of Object.entries(rewards)) {
-      const qty = Math.max(0, Math.floor(Number(amount) || 0));
-      if (!qty) continue;
-      materialSystem.inventory[materialId] = Math.max(0, Math.floor(Number(materialSystem.inventory[materialId]) || 0)) + qty;
-    }
-    const inventory = Object.fromEntries(Object.keys(rewards).map(id => [id, Number(materialSystem.inventory[id]) || 0]));
-
-    tx.create(rewardRef, {
-      uid, roomId, bossId:RAID_BOSS_ID, rewards, inventory,
-      partySize:validation.partySize, totalDamage:validation.totalDamage,
-      bossMaxHp:validation.bossMaxHp, createdAt:fieldValue.serverTimestamp()
-    });
-    tx.update(userRef, { materialSystem });
-    return { status:'awarded', awarded:true, rewards, inventory };
+      const materialSystem = user.materialSystem && typeof user.materialSystem === 'object'
+        ? JSON.parse(JSON.stringify(user.materialSystem)) : { inventory:{} };
+      materialSystem.inventory = materialSystem.inventory && typeof materialSystem.inventory === 'object'
+        ? { ...materialSystem.inventory } : {};
+      for (const [materialId, amount] of Object.entries(rewards)) {
+        const qty = Math.max(0, Math.floor(Number(amount) || 0));
+        if (!qty) continue;
+        materialSystem.inventory[materialId] = Math.max(0, Math.floor(Number(materialSystem.inventory[materialId]) || 0)) + qty;
+      }
+      const inventory = Object.fromEntries(
+        Object.keys(rewards).map(id => [id, Number(materialSystem.inventory[id]) || 0])
+      );
+      tx.update(userRef, { materialSystem });
+      return { inventory };
+    },
+    createReceipt: result => ({
+      uid,
+      roomId,
+      bossId: RAID_BOSS_ID,
+      rewards,
+      inventory: result.inventory,
+      partySize: validation.partySize,
+      totalDamage: validation.totalDamage,
+      bossMaxHp: validation.bossMaxHp
+    })
   });
+
+  if (receipt.duplicate) {
+    return {
+      status:'duplicate',
+      awarded:false,
+      rewards:receipt.receipt.rewards || rewards,
+      inventory:receipt.receipt.inventory || null
+    };
+  }
+  return {
+    status:'awarded',
+    awarded:true,
+    rewards,
+    inventory:receipt.result.inventory
+  };
 }
 
 function createHandler({
-  resolveA = () => adminProject('A'),
-  resolveC = () => adminProject('C'),
+  resolveA = () => playerRepository.resolve(),
+  resolveC = () => raidRepository.resolve(),
   award = awardRaidReward,
   logger = console
 } = {}) {

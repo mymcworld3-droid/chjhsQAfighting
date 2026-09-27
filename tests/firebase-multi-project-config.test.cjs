@@ -93,12 +93,15 @@ test('helper rejects reusing one project ID across A, BD and C', () => {
   assert.throws(() => sameAsMain.getServices('BD'), /三個不同/);
 });
 
-test('config scaffold leaves existing main authentication, cave and battle routing intact', () => {
+test('main authentication stays on A while cave and battle route through repositories', () => {
   assert.match(legacySource, /const app = initializeApp\(firebaseConfig\)/);
-  assert.match(caveSource, /const db = getFirestore\(getApp\(\)\)/);
-  assert.match(battleSource, /function db\(\) \{ return getFirestore\(getApp\(\)\); \}/);
-  assert.doesNotMatch(caveSource, /getFirebaseProjectServices\('BD'\)/);
-  assert.doesNotMatch(battleSource, /getFirebaseProjectServices\('C'\)/);
+  assert.match(caveSource, /dongtianRepository\.connect\(\)/);
+  assert.match(caveSource, /const db = content\.db/);
+  assert.match(caveSource, /const progressDb = progress\.db/);
+  assert.match(battleSource, /battleRepository\.connect\(\)/);
+  assert.match(battleSource, /function db\(\) \{ return battleDb; \}/);
+  assert.doesNotMatch(caveSource, /getFirestore\(getApp\(\)\)|getAuth\(getApp\(\)\)/);
+  assert.doesNotMatch(battleSource, /getFirestore\(getApp\(\)\)|getAuth\(getApp\(\)\)/);
 });
 
 

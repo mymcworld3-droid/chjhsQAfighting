@@ -1,15 +1,18 @@
-import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import {
-  getFirestore, doc, collection, query, where, limit, getDocs, getDoc,
+  doc, collection, query, where, limit, getDocs, getDoc,
   addDoc, updateDoc, onSnapshot, runTransaction, serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { BATTLE_V2, settleBattleRound, applyNascentSoulDuelRule } from './battle-engine-v2.js?v=20260926-nascent-seal1';
 import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } from './battle-question-scope.js?v=20260922-range1';
+import { battleRepository } from './data/battle-repository.js';
+import { playerRepository } from './data/player-repository.js';
+import { rewardRepository } from './data/reward-repository.js';
 
 // Battle v2 — 修仙配對鬥法。
-// 核心原則：配對、首答倒數、回合結算、離場判定皆寫入 Firestore；任何單一 client 都不能私自決定勝負。
-(function () {
+// 核心原則：房間與戰鬥狀態只寫 Firebase C；玩家邀請與獎勵留在 A／後端。
+export const featureReady = (async () => {
+  const { db: battleDb } = await battleRepository.connect();
+  (function () {
   'use strict';
 
   const FOUNDATION_SCORE = 10;
@@ -73,9 +76,8 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
     invitedRoomId: null
   };
 
-  function auth() { return getAuth(getApp()); }
-  function db() { return getFirestore(getApp()); }
-  function me() { return auth().currentUser; }
+  function db() { return battleDb; }
+  function me() { return playerRepository.currentUser(); }
   function userData() { return window.getCurrentUserData?.() || null; }
   function score() { return Math.max(0, Number(userData()?.stats?.totalScore) || 0); }
   function nowMs() { return Date.now(); }
@@ -561,25 +563,22 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
     const friends = [...new Set((userData()?.friends || []).filter(uid => typeof uid === 'string' && uid !== owner?.uid))].slice(0, 30);
     if (!owner || !friends.length) return;
     try {
-      const records = await Promise.all(friends.map(uid => getDoc(doc(db(), 'users', uid)).catch(() => null)));
-      if (state.roomId !== roomId || state.role !== 'host' || state.room?.status !== 'waiting') return;
       const fresh = await getDoc(roomRef(roomId));
       if (!fresh.exists() || fresh.data().status !== 'waiting' || fresh.data().guest || fresh.data().host?.uid !== owner.uid) return;
-      const cutoff = nowMs() - 5 * 60 * 1000;
-      const eligible = records.filter(snap => snap?.exists() && timestampMs(snap.data().lastActive) > cutoff);
+      if (state.roomId !== roomId || state.role !== 'host' || state.room?.status !== 'waiting') return;
       const host = fresh.data().host || {};
-      await Promise.all(eligible.map(async snap => {
-        if (state.roomId !== roomId || state.role !== 'host' || state.room?.status !== 'waiting') return;
-        try {
-          await addDoc(collection(db(), 'users', snap.id, 'invitations'), {
-            roomId, modeVersion: BATTLE_V2.modeVersion, hostUid: owner.uid,
-            hostName: host.name || userData()?.displayName || '修士',
-            hostAvatar: host.avatar || userData()?.equipped?.avatar || '',
-            hostFrame: userData()?.equipped?.frame || '',
-            timestamp: serverTimestamp()
-          });
-        } catch (error) { console.warn('[Battle v2] friend invite skipped:', snap.id, error); }
-      }));
+      await playerRepository.sendInvitations({
+        friendUids: friends,
+        activeAfterMs: nowMs() - 5 * 60 * 1000,
+        invitation: {
+          roomId,
+          modeVersion: BATTLE_V2.modeVersion,
+          hostUid: owner.uid,
+          hostName: host.name || userData()?.displayName || '修士',
+          hostAvatar: host.avatar || userData()?.equipped?.avatar || '',
+          hostFrame: userData()?.equipped?.frame || ''
+        }
+      });
     } catch (error) { console.warn('[Battle v2] invitations unavailable:', error); }
   }
 
@@ -1266,53 +1265,30 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
     const activeRoom = requestedRoomId === state.roomId;
     if (activeRoom && state.resultRecordedRoom === requestedRoomId) return null;
     if (activeRoom) state.resultRecordedRoom = requestedRoomId;
-    const userRef = doc(db(), 'users', uid);
-    const ref = roomRef(requestedRoomId);
     try {
-      const awarded = await runTransaction(db(), async (tx) => {
-        const roomSnap = await tx.get(ref);
-        const userSnap = await tx.get(userRef);
-        if (!roomSnap.exists() || !userSnap.exists()) return null;
-        const fresh = roomSnap.data();
-        if (fresh.status !== 'finished' || Number(fresh.modeVersion) !== BATTLE_V2.modeVersion) return null;
-        // Derive membership from the *live room*, not the browser's cached role.
-        const actualRole = fresh.host?.uid === uid ? 'host' : fresh.guest?.uid === uid ? 'guest' : null;
-        if (!actualRole) return null;
-        const marker = actualRole === 'host' ? 'hostResultRecorded' : 'guestResultRecorded';
-        if (fresh[marker]) return null;
-        const reward = battleReward(fresh, uid);
-        if (reward.outcome === 'none') return null;
-        const stats = userSnap.data().stats || {};
-        const previousGold = Math.max(0, Number(stats.gold) || 0);
-        const previousScore = Math.max(0, Number(stats.totalScore) || 0);
-        const userPatch = { 'stats.battleMatches': Math.max(0, Number(stats.battleMatches) || 0) + 1 };
-        if (reward.outcome === 'draw') userPatch['stats.battleDraws'] = Math.max(0, Number(stats.battleDraws) || 0) + 1;
-        else if (reward.outcome === 'win') userPatch['stats.battleWins'] = Math.max(0, Number(stats.battleWins) || 0) + 1;
-        else userPatch['stats.battleLosses'] = Math.max(0, Number(stats.battleLosses) || 0) + 1;
-        // Stats, currency, cultivation and this player's receipt marker commit atomically.
-        if (reward.gold) userPatch['stats.gold'] = previousGold + reward.gold;
-        if (reward.cultivation) userPatch['stats.totalScore'] = previousScore + reward.cultivation;
-        tx.update(userRef, userPatch);
-        tx.update(ref, { [marker]: true, updatedAt: serverTimestamp() });
-        return { roomId: requestedRoomId, goldAdded: reward.gold, cultivationAdded: reward.cultivation,
-          previousGold, previousScore, gold: previousGold + reward.gold,
-          totalScore: previousScore + reward.cultivation };
-      });
-      if (awarded && me()?.uid === uid) {
+      const result = await rewardRepository.claimBattle(requestedRoomId);
+      const awarded = {
+        roomId: requestedRoomId,
+        awarded: result?.awarded === true,
+        outcome: result?.outcome || 'none',
+        goldAdded: Math.max(0, Number(result?.goldAdded) || 0),
+        cultivationAdded: Math.max(0, Number(result?.cultivationAdded) || 0)
+      };
+      if (awarded.awarded && me()?.uid === uid) {
         const local = userData();
         if (local?.stats) {
-          // Do not overwrite a newer local balance (e.g. another reward or a purchase).
-          if (Number(local.stats.gold) === awarded.previousGold) local.stats.gold = awarded.gold;
-          if (awarded.cultivationAdded && Number(local.stats.totalScore) === awarded.previousScore) {
-            local.stats.totalScore = awarded.totalScore;
-          }
+          local.stats.gold = Math.max(0, Number(local.stats.gold) || 0) + awarded.goldAdded;
+          local.stats.totalScore = Math.max(0, Number(local.stats.totalScore) || 0) + awarded.cultivationAdded;
+          local.stats.battleMatches = Math.max(0, Number(local.stats.battleMatches) || 0) + 1;
+          if (awarded.outcome === 'win') local.stats.battleWins = Math.max(0, Number(local.stats.battleWins) || 0) + 1;
+          else if (awarded.outcome === 'loss') local.stats.battleLosses = Math.max(0, Number(local.stats.battleLosses) || 0) + 1;
+          else if (awarded.outcome === 'draw') local.stats.battleDraws = Math.max(0, Number(local.stats.battleDraws) || 0) + 1;
         }
         window.updateUIStats?.();
         window.refreshCultivationRealmUI?.();
         window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', {
-          detail: { source: 'battle-result', roomId: requestedRoomId,
-            goldAdded: awarded.goldAdded, cultivationAdded: awarded.cultivationAdded,
-            gold: local?.stats?.gold, totalScore: local?.stats?.totalScore }
+          detail: { source:'battle-result', roomId:requestedRoomId, goldAdded:awarded.goldAdded,
+            cultivationAdded:awarded.cultivationAdded, gold:local?.stats?.gold, totalScore:local?.stats?.totalScore }
         }));
       }
       return awarded;
@@ -1528,4 +1504,5 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
     setTimeout(recoverBattleSession, 700);
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true }); else boot();
+}  })();
 })();

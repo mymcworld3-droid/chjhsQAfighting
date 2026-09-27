@@ -21,7 +21,7 @@ function scenario(options = {}) {
   const math = Object.create(Math);
   math.random = () => options.random ?? 0.01;
   const ctx = vm.createContext({
-    state, Math: math, Promise, console, ENCOUNTER_CHANCE: 0.20, db: {},
+    state, Math: math, Promise, console, ENCOUNTER_CHANCE: 0.20, db: {}, progressDb: {},
     INDEX_COLLECTION: 'dongtianIndex', PLAY_COLLECTION: 'dongtianPlays', DATA_COLLECTION: 'dongtians',
     uid: () => 'visitor-2', userData: () => player,
     document: { getElementById: () => null },

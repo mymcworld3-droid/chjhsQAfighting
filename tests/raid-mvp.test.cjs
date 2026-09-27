@@ -95,7 +95,8 @@ test('shared room layer supports party lifecycle, boss HP and reconnect', () => 
   assert.match(roomSource, /\/api\/raid\/room/);
   assert.match(roomSource, /const POLL_MS = 1000/);
   assert.doesNotMatch(roomSource, /ensureSecondaryFirebaseAuth/);
-  assert.match(roomApiSource, /adminProject\('C'\)/);
+  assert.match(roomApiSource, /raidRepository\.resolve\(\)/);
+  assert.match(readFileSync(join(__dirname, '../server-repositories.cjs'), 'utf8'), /raid:\s*'C'/);
   assert.match(roomApiSource, /where\('status', '==', 'waiting'\)/);
   assert.match(roomApiSource, /verifyIdToken/);
   assert.match(roomApiSource, /const BOSS_ACTION_INTERVAL_MS = 18000/);
@@ -113,12 +114,14 @@ test('raid questions use the quick simple generation profile', () => {
   assert.match(serverSource, /團本快答模式/);
 });
 
-test('wrong answers only lose the player attack and never trigger an extra boss strike', () => {
+test('raid answers are settled by the server and wrong answers never trigger a local boss strike', () => {
   const answerStart = raidSource.indexOf('  async function answer(choice) {');
   const answerEnd = raidSource.indexOf('  async function applyRemoteBossAction', answerStart);
   const answerBody = raidSource.slice(answerStart, answerEnd);
-  assert.match(answerBody, /resolveShenPlayerAction/);
-  assert.doesNotMatch(answerBody, /resolveShenBossAction/);
+  assert.match(answerBody, /commitRaidPlayerAction/);
+  assert.match(answerBody, /choice: selectedChoice/);
+  assert.match(answerBody, /state\.answerCorrect = resolution\.correct === true/);
+  assert.doesNotMatch(answerBody, /resolveShenPlayerAction|resolveShenBossAction/);
   assert.match(raidSource, /答錯・本次失去攻擊/);
 });
 

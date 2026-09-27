@@ -1,15 +1,13 @@
-import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-import { getFirestore, doc, collection, getDoc, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-import { RAID_MVP, createTeamScaledShenBoss, shenPhaseForHp, shenIntentForRound, bossClockState } from './raid-engine.js';
+import { RAID_MVP, shenPhaseForHp, shenIntentForRound, bossClockState } from './raid-engine.js';
 import { snapshotBattleKnowledge, resolveBattleKnowledge } from './battle-question-scope.js';
 import { generateRaidQuestion } from './raid-question.js';
-import { resolveShenPlayerAction, resolveShenBossAction } from './raid-combat.js';
 import {
   ensureRaidRoomAuth, createRaidRoom, findOrCreateRaidRoom, joinRaidRoomByCode, reconnectRaidRoom,
   setRaidReady, startRaidRoom, subscribeRaidRoom, heartbeatRaidRoom, commitRaidPlayerAction,
   commitRaidBossDefense, advanceRaidBossAction, leaveRaidRoom, raidRoomMembers, raidMemberOnline
 } from './raid-room.js';
+import { playerRepository } from './data/player-repository.js';
+import { rewardRepository } from './data/reward-repository.js';
 
 (function () {
   'use strict';
@@ -297,40 +295,27 @@ import {
   async function inviteOnlineFriends() {
     if (!state.roomId || !state.room || !isHost() || state.room.status !== 'waiting' || state.invitedRoomId === state.roomId) return;
     state.invitedRoomId = state.roomId;
-    const user = getAuth(getApp()).currentUser;
+    const user = playerRepository.currentUser();
     const friends = [...new Set((data()?.friends || []).filter(uid => typeof uid === 'string' && uid !== user?.uid))].slice(0, 30);
     if (!user || !friends.length) return;
-    const mainDb = getFirestore(getApp());
     try {
-      const records = await Promise.all(friends.map(uid => getDoc(doc(mainDb, 'users', uid)).catch(() => null)));
-      const cutoff = now() - 5 * 60 * 1000;
-      const online = records.filter(snap => {
-        if (!snap?.exists()) return false;
-        const active = snap.data()?.lastActive;
-        const at = active?.toMillis?.() || Number(active) || 0;
-        return at > cutoff;
-      });
-      await Promise.all(online.map(async snap => {
-        try {
-          await addDoc(collection(mainDb, 'users', snap.id, 'invitations'), {
-            raidVersion: 2,
-            raidCode: state.room.code,
-            raidRoomId: state.roomId,
-            hostUid: user.uid,
-            hostName: state.player?.name || data()?.displayName || '修士',
-            hostAvatar: data()?.equipped?.avatar || '',
-            hostFrame: data()?.equipped?.frame || '',
-            timestamp: serverTimestamp()
-          });
-        } catch (error) {
-          console.warn('[Raid] friend invite skipped:', snap.id, error);
+      await playerRepository.sendRaidInvitations({
+        friendUids: friends,
+        activeAfterMs: now() - 5 * 60 * 1000,
+        invitation: {
+          raidVersion: 2,
+          raidCode: state.room.code,
+          raidRoomId: state.roomId,
+          hostUid: user.uid,
+          hostName: state.player?.name || data()?.displayName || '修士',
+          hostAvatar: data()?.equipped?.avatar || '',
+          hostFrame: data()?.equipped?.frame || ''
         }
-      }));
+      });
     } catch (error) {
       console.warn('[Raid] friend invitations unavailable:', error);
     }
   }
-
   function renderLobby() {
     if (!state.room || !state.player) return renderHub();
     state.status = 'lobby';
@@ -492,7 +477,8 @@ import {
         scope: state.scope,
         round: targetAction,
         rank: state.player.rankLevel,
-        history: state.history
+        history: state.history,
+        roomId: state.roomId
       });
       if (state.room?.status === 'active') state.pendingQuestion = generated;
     } catch (error) {
@@ -558,85 +544,128 @@ import {
 
   async function answer(choice) {
     if (state.status !== 'question' || !state.question || state.room?.status !== 'active') return;
-    state.selectedChoice = Number.isInteger(choice) ? choice : null;
-    state.answerCorrect = state.selectedChoice !== null && state.selectedChoice === Number(state.question.ans);
-    state.questionResolvedAtMs = now();
-    state.nextQuestionAtMs = 0;
+    const selectedChoice = Number.isInteger(choice) ? choice : null;
+    if (selectedChoice === null || selectedChoice < 0 || selectedChoice > 3) return;
     const actionId = state.playerActionCount + 1;
-    const action = resolveShenPlayerAction({
-      runId: state.runId,
-      actionId,
-      player: state.player,
-      boss: state.boss,
-      correct: state.answerCorrect
-    });
-    state.playerActionCount = actionId;
-    state.lastPlayerAction = action;
-    state.status = 'review';
-    state.boss.phase = shenPhaseForHp(state.boss.hp, state.boss.maxHp);
+    const question = state.question;
+
+    // Freeze the question while the server verifies the encrypted answer ticket and resolves combat.
+    state.selectedChoice = selectedChoice;
+    state.status = 'submitting';
+    renderQuestion(false);
     try {
-      await commitRaidPlayerAction({
+      const result = await commitRaidPlayerAction({
         roomId: state.roomId,
         actionId,
-        damage: action.damage,
-        hp: state.player.hp,
-        correct: state.answerCorrect
+        questionId: question.id,
+        choice: selectedChoice,
+        ticket: question.ticket
       });
-    } catch (error) {
-      console.error('[Raid] action sync failed:', error);
-      toast('出手同步失敗，正在等待房間重新同步。');
-    }
-    void prefetchQuestion();
-    if (state.room?.status === 'active') {
-      if (state.answerCorrect && action.damage > 0) {
+      const resolution = result?.resolution;
+      if (!resolution) throw new Error('伺服器尚未完成本次出手結算');
+
+      state.room = result.room || state.room;
+      state.playerActionCount = actionId;
+      state.answerCorrect = resolution.correct === true;
+      state.questionResolvedAtMs = now();
+      state.nextQuestionAtMs = 0;
+      question.ans = Number(resolution.correctIndex);
+      question.exp = String(resolution.explanation || '此題暫無解析。');
+      state.lastPlayerAction = {
+        correct: state.answerCorrect,
+        damage: Math.max(0, Number(resolution.damage) || 0),
+        healed: Math.max(0, Number(resolution.healed) || 0)
+      };
+
+      const mine = state.room?.members?.[state.player?.uid];
+      if (mine && state.player) Object.assign(state.player, mine);
+      if (state.boss) {
+        state.boss.hp = Math.max(0, Number(state.room?.bossHp ?? resolution.bossHp) || 0);
+        state.boss.phase = shenPhaseForHp(state.boss.hp, state.boss.maxHp);
+      }
+      state.status = 'review';
+
+      if (state.room?.status === 'won' || state.room?.status === 'lost') {
+        state.pendingFinishRoom = state.room;
+      }
+      void prefetchQuestion();
+
+      if (state.answerCorrect && state.lastPlayerAction.damage > 0) {
         await playBattleScene({
           attacker: 'player',
           actionName: '破勢一擊',
-          damage: action.damage,
-          healed: action.healed
+          damage: state.lastPlayerAction.damage,
+          healed: state.lastPlayerAction.healed
         });
+      } else if (state.pendingFinishRoom) {
+        const terminal = state.pendingFinishRoom;
+        state.pendingFinishRoom = null;
+        finishRaid(terminal.status === 'won', terminal.status === 'won' ? 'boss-defeated' : 'team-defeated');
       } else {
         renderQuestion(true);
       }
+    } catch (error) {
+      console.error('[Raid] authoritative action failed:', error);
+      state.selectedChoice = null;
+      state.answerCorrect = null;
+      state.status = 'question';
+      toast(error.message || '出手結算失敗，請再作答一次。');
+      renderQuestion(false);
     }
     updateHomeEntry();
   }
 
   async function applyRemoteBossAction(action) {
-    if (!action || state.applyingBossAction || Number(action.id) <= state.lastBossActionSeen || !state.player || state.player.hp <= 0) return;
+    if (!action || state.applyingBossAction || Number(action.id) <= state.lastBossActionSeen ||
+        !state.player || state.player.hp <= 0) return;
     state.applyingBossAction = true;
     try {
-      const result = resolveShenBossAction({
-        runId: state.runId,
-        actionCount: Number(action.id),
-        player: state.player,
-        boss: state.boss,
-        intent: action
-      });
-      state.lastBossActionSeen = Number(action.id);
-      state.lastBossAction = { intent: action, result };
-      await commitRaidBossDefense({
+      // The browser reports only which server-issued Boss action it is acknowledging.
+      // HP, mitigation, shields and reflection are all resolved from the trusted room snapshot.
+      const result = await commitRaidBossDefense({
         roomId: state.roomId,
-        hp: state.player.hp,
-        bossActionSeen: state.lastBossActionSeen,
-        reflectedDamage: result.reflectedDamage
+        bossActionSeen: Number(action.id)
       });
+      const resolution = result?.resolution;
+      if (!resolution) {
+        const duplicate = result?.room?.members?.[state.player.uid];
+        if (duplicate) {
+          state.room = result.room;
+          Object.assign(state.player, duplicate);
+          state.lastBossActionSeen = Math.max(state.lastBossActionSeen, Number(duplicate.lastBossActionSeen) || 0);
+        }
+        return;
+      }
+
+      state.room = result.room || state.room;
+      state.lastBossActionSeen = Math.max(state.lastBossActionSeen, Number(resolution.bossActionSeen) || Number(action.id));
+      state.lastBossAction = { intent: action, result: resolution };
+      const mine = state.room?.members?.[state.player.uid];
+      if (mine) Object.assign(state.player, mine);
+      if (state.boss) {
+        state.boss.hp = Math.max(0, Number(state.room?.bossHp ?? resolution.bossHp) || 0);
+        state.boss.phase = shenPhaseForHp(state.boss.hp, state.boss.maxHp);
+      }
+
       const bossHint = [
-        result.guarded ? '道心護體擋下攻擊' : ('受到 ' + result.damage.toLocaleString() + ' 傷害'),
-        result.reflectedDamage > 0 ? ('反擊 ' + result.reflectedDamage.toLocaleString()) : '',
-        result.defenseSkill || ''
+        resolution.guarded ? '道心護體擋下攻擊' : ('受到 ' + Math.max(0, Number(resolution.damage) || 0).toLocaleString() + ' 傷害'),
+        Number(resolution.reflectedDamage) > 0 ? ('反擊 ' + Number(resolution.reflectedDamage).toLocaleString()) : ''
       ].filter(Boolean).join('・');
       toast(bossHint);
+
+      if (state.room?.status === 'won' || state.room?.status === 'lost') {
+        state.pendingFinishRoom = state.room;
+      }
       await playBattleScene({
         attacker: 'boss',
         actionName: action.name,
-        damage: result.damage,
-        reflectedDamage: result.reflectedDamage,
-        guarded: result.guarded,
-        defenseSkill: result.defenseSkill
+        damage: Math.max(0, Number(resolution.damage) || 0),
+        reflectedDamage: Math.max(0, Number(resolution.reflectedDamage) || 0),
+        guarded: resolution.guarded === true,
+        defenseSkill: ''
       });
     } catch (error) {
-      console.error('[Raid] boss action apply failed:', error);
+      console.error('[Raid] authoritative boss action failed:', error);
     } finally {
       state.applyingBossAction = false;
     }
@@ -648,10 +677,7 @@ import {
     if (!clock?.due) return;
     state.advancingBossAction = true;
     try {
-      const room = await advanceRaidBossAction({
-        roomId: state.roomId,
-        intent: currentIntent()
-      });
+      const room = await advanceRaidBossAction({ roomId: state.roomId });
       if (room) {
         state.room = room;
         state.bossActionCount = Math.max(state.bossActionCount, Number(room.bossActionCount) || 0);
@@ -744,10 +770,11 @@ import {
     show('question');
     document.getElementById('raid-question').innerHTML = '<div class="raid-question-shell raid-loading"><i class="fa-solid fa-circle-notch fa-spin"></i><h3>正在連結秘境隊伍</h3><p>題目不設倒數；Boss 會在正式開戰後才開始計時。</p></div>';
     try {
-      const player = await ensureLocalPlayer();
-      const roomId = mode === 'create' ? await createRaidRoom(player) :
-        mode === 'code' ? await joinRaidRoomByCode(roomCode, player) :
-        await findOrCreateRaidRoom(player);
+      await ensureLocalPlayer();
+      // The server rebuilds the combat snapshot from Firebase A; no client combat stats are submitted.
+      const roomId = mode === 'create' ? await createRaidRoom() :
+        mode === 'code' ? await joinRaidRoomByCode(roomCode) :
+        await findOrCreateRaidRoom();
       attachRoom(roomId);
     } catch (error) {
       console.error('[Raid] enter room failed:', error);
@@ -760,8 +787,8 @@ import {
   async function hostStartRaid() {
     if (!state.room || !isHost()) return;
     try {
-      const boss = createTeamScaledShenBoss(raidRoomMembers(state.room));
-      await startRaidRoom(state.roomId, boss);
+      // Boss HP and attack are scaled from the server-trusted member snapshots.
+      await startRaidRoom(state.roomId);
     } catch (error) {
       toast(error.message || '目前無法開始團本');
     }
@@ -783,8 +810,10 @@ import {
     };
     const mine = myRoomMember();
     if (mine) {
-      state.player.hp = Math.max(0, Number(mine.hp) || 0);
+      // Mirror the authoritative C-room projection for UI only; local A values never settle combat.
+      Object.assign(state.player, mine);
       state.lastBossActionSeen = Math.max(state.lastBossActionSeen, Number(mine.lastBossActionSeen) || 0);
+      state.playerActionCount = Math.max(state.playerActionCount, Number(mine.lastActionId) || 0);
     }
     state.bossStartedAtMs = Number(room.startedAtMs) || now();
     state.bossActionCount = Math.max(0, Number(room.bossActionCount) || 0);
@@ -818,8 +847,10 @@ import {
     }
     state.bossActionCount = Math.max(0, Number(room.bossActionCount) || 0);
     const mine = myRoomMember();
-    if (mine && state.player && Number(mine.hp) < state.player.hp && Number(mine.lastBossActionSeen) >= state.lastBossActionSeen) {
-      state.player.hp = Math.max(0, Number(mine.hp) || 0);
+    if (mine && state.player) {
+      Object.assign(state.player, mine);
+      state.playerActionCount = Math.max(state.playerActionCount, Number(mine.lastActionId) || 0);
+      state.lastBossActionSeen = Math.max(state.lastBossActionSeen, Number(mine.lastBossActionSeen) || 0);
     }
     if (room.status === 'waiting') {
       stopTick();
@@ -854,17 +885,7 @@ import {
     const status = document.getElementById('raid-reward-status');
     if (status) status.textContent = '正在由伺服器核對團本紀錄…';
     try {
-      const user = getAuth(getApp()).currentUser;
-      if (!user) throw new Error('請重新登入後領取團本獎勵');
-      const token = await user.getIdToken();
-      const response = await fetch('/api/raid/reward', {
-        method: 'POST',
-        cache: 'no-store',
-        headers: { 'Content-Type':'application/json', Authorization:'Bearer ' + token },
-        body: JSON.stringify({ roomId: state.roomId })
-      });
-      const payload = await response.json().catch(() => ({}));
-      if (!response.ok || payload.ok !== true) throw new Error(payload.error || '團本獎勵尚未完成入帳');
+      const payload = await rewardRepository.claimRaid(state.roomId);
 
       state.rewardClaimedRoomId = state.roomId;
       const local = data();

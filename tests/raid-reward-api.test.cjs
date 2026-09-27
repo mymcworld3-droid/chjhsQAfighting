@@ -92,13 +92,17 @@ test('raid reward writes both refinement keys exactly once into A material inven
   assert.equal(db.docs.get('users/u1').materialSystem.inventory['raid-refine-key-iii'], 1);
 });
 
-test('raid reward API is registered and client claims only by room id with A bearer token', () => {
+test('raid reward API is registered and client claims through the settlement repository', () => {
   const server = read('server.js');
   const raid = read('public/cultivation/raid-mode.js');
+  const repository = read('public/cultivation/data/reward-repository.js');
   assert.match(server, /registerRaidRewardApi\(app\)/);
-  assert.match(raid, /fetch\('\/api\/raid\/reward'/);
-  assert.match(raid, /Authorization:'Bearer ' \+ token/);
-  assert.match(raid, /JSON\.stringify\(\{ roomId: state\.roomId \}\)/);
+  assert.match(raid, /rewardRepository\.claimRaid\(state\.roomId\)/);
+  assert.doesNotMatch(raid, /fetch\('\/api\/raid\/reward'/);
+  assert.match(repository, /\/api\/raid\/reward/);
+  assert.match(repository, /authenticatedMainFetch/);
+  assert.match(repository, /body:JSON\.stringify\(body\|\|\{\}\)/);
+  assert.match(repository, /claimRaid\(roomId\).*\{roomId\}/);
   assert.doesNotMatch(raid, /JSON\.stringify\(\{[^}]*raid-refine-key/);
 });
 

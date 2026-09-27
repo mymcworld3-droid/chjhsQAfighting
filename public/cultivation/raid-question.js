@@ -1,4 +1,5 @@
 import { pickBattleKnowledge } from './battle-question-scope.js';
+import { authenticatedMainFetch } from './data/project-repository.js';
 
 function randomId(prefix = 'raidq') {
   if (globalThis.crypto?.randomUUID) return prefix + '-' + crypto.randomUUID();
@@ -46,7 +47,7 @@ export function normalizeRaidQuestion(raw, request) {
   };
 }
 
-export async function generateRaidQuestion({ scope, round, rank = 0, history = [] } = {}) {
+export async function generateRaidQuestion({ scope, round, rank = 0, history = [], roomId = '' } = {}) {
   const selected = pickBattleKnowledge(scope, round);
   const recent = (Array.isArray(history) ? history : []).slice(-30);
   const request = {
@@ -54,6 +55,8 @@ export async function generateRaidQuestion({ scope, round, rank = 0, history = [
     rank: Math.max(0, Number(rank) || 0),
     difficulty: 'easy',
     quizMode: 'raid-quick-simple',
+    roomId: String(roomId || ''),
+    actionId: Math.max(1, Math.floor(Number(round) || 1)),
     avoidQuestions: recent.map(item => String(item?.q || '')).filter(Boolean),
     avoidQuestionMeta: recent.map(item => ({
       q: String(item?.q || ''),
@@ -64,13 +67,22 @@ export async function generateRaidQuestion({ scope, round, rank = 0, history = [
       reasoning_steps: Number(item?.reasoning_steps) || 1
     }))
   };
-  const response = await fetch('/api/generate-quiz', {
+  const response = await authenticatedMainFetch('/api/generate-quiz', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(request)
   });
   if (!response.ok) throw new Error('quiz api ' + response.status);
   const body = await response.json();
+  if (body?.raidQuestion) {
+    const question = body.raidQuestion;
+    const opts = Array.isArray(question.opts) ? question.opts.map(value => String(value ?? '').trim()) : [];
+    if (!question.id || !question.ticket || String(question.q || '').trim().length < 5 ||
+        opts.length !== 4 || opts.some(value => !value)) {
+      throw new Error('伺服器未回傳有效的團本題目票證');
+    }
+    // The correct answer and explanation intentionally do not exist on the client until settlement.
+    return { ...question, opts, ans: null, exp: '' };
+  }
   let raw = body?.text ?? body;
   if (typeof raw === 'string') {
     raw = raw.trim();

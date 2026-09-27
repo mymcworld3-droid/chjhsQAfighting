@@ -8,6 +8,7 @@ const root = join(__dirname, '..');
 const apiSource = readFileSync(join(root, 'dongtian-api.js'), 'utf8');
 const uiSource = readFileSync(join(root, 'public/cultivation/dongtian.js'), 'utf8');
 const serverSource = readFileSync(join(root, 'server.js'), 'utf8');
+const settlementSource = readFileSync(join(root, 'dongtian-settlement-api.cjs'), 'utf8');
 const mainSource = readFileSync(join(root, 'public/main.js'), 'utf8');
 const legacySource = readFileSync(join(root, 'public/main-legacy.js'), 'utf8');
 
@@ -234,17 +235,21 @@ test('Dongtian session keeps a fixed ordered question array until completion or 
   assert.doesNotMatch(uiSource, /generate-dongtian[\s\S]*renderRunner[\s\S]*fetch\('\/api\/generate-quiz'/);
 });
 
-test('Dongtian first completion grants spirit stones by question count and cultivation by correct answers', () => {
+
+test('Dongtian first completion grants rewards through the A/BD settlement bridge', () => {
   assert.match(uiSource, /FIRST_COMPLETION_SPIRIT_STONE_PER_QUESTION = 100/);
   assert.match(uiSource, /FIRST_COMPLETION_MIN_SPIRIT_STONES = 1000/);
-  assert.doesNotMatch(uiSource, /FIRST_COMPLETION_CULTIVATION_CORRECT_STEP/);
   assert.match(uiSource, /function firstCompletionCultivation\(correctCount\)/);
-  assert.match(uiSource, /const cultivationReward = firstCompletionCultivation\(correct\)/);
-  assert.match(uiSource, /'stats\.gold': increment\(firstCompletionReward\)/);
-  assert.match(uiSource, /'stats\.totalScore': increment\(cultivationReward \+ soulCultivationAdded\)/);
-  assert.ok(uiSource.includes('cultivationAdded: cultivationReward + soulCultivationAdded'));
+  assert.match(uiSource, /rewardRepository\.claimDongtian/);
+  assert.match(settlementSource, /FIRST_COMPLETION_SPIRIT_STONE_PER_QUESTION=100/);
+  assert.match(settlementSource, /FIRST_COMPLETION_MIN_SPIRIT_STONES=1000/);
+  assert.match(settlementSource, /runRewardReceipt/);
+  assert.match(settlementSource, /PLAY_COLLECTION='dongtianPlays'/);
+  assert.match(settlementSource, /OWNER_CULTIVATION_REWARD=1/);
+  assert.match(settlementSource, /OWNER_GOLD_REWARD=5/);
   assert.match(uiSource, /首次修為：<\/strong>每答對 1 題 \+1 修為/);
 });
+
 test('Dongtian one-point cultivation calculation depends on correct answers, not total questions', () => {
   const vm = require('node:vm');
   const source = uiSource.slice(uiSource.indexOf('  function firstCompletionCultivation('), uiSource.indexOf('  function shuffle('));
@@ -263,12 +268,13 @@ test('Dongtian encounter confirmation prominently shows the owner name and prosp
   assert.match(uiSource, /是否現在進入？/);
 });
 
-test('Dongtian history is saved as one grouped run instead of one document per question', () => {
+
+test('Dongtian history is saved as one grouped run in Firebase A', () => {
   assert.match(uiSource, /mode: 'dongtian'/);
   assert.match(uiSource, /dongtianAnswers: s\.answers/);
   assert.match(uiSource, /window\.renderDongtianHistoryLog/);
-  const addDocCalls = (uiSource.match(/addDoc\(collection\(db, 'exam_logs'\)/g) || []).length;
-  assert.equal(addDocCalls, 1);
+  assert.equal((uiSource.match(/playerRepository\.addExamLog\(/g) || []).length, 1);
+  assert.doesNotMatch(uiSource, /collection\(db, 'exam_logs'\)/);
 });
 
 test('Dongtian scripts are syntactically valid', () => {
@@ -367,13 +373,17 @@ test('Question report only appears after answering and tutorial reports stay loc
   assert.match(answer, /openQuestionReport/);
   assert.match(answer, /教學範例不會送出回報/);
 });
-test('Completion reward transaction rechecks active status to prevent seal/reward races', () => {
-  const completion = uiSource.slice(uiSource.indexOf('async function completeProgress'), uiSource.indexOf('async function writeDongtianHistory'));
-  assert.match(completion, /const \[playSnap, indexSnap, playerSnap\] = await Promise\.all/);
-  assert.match(completion, /indexSnap\.data\(\)\?\.status !== 'active'/);
-  assert.match(completion, /洞天已封印，本次不進行通關結算/);
-});
 
+test('Completion settlement claims active BD content before the A reward receipt', () => {
+  const completion = uiSource.slice(uiSource.indexOf('async function completeProgress'), uiSource.indexOf('async function writeDongtianHistory'));
+  assert.match(completion, /rewardRepository\.claimDongtian/);
+  assert.match(completion, /selected: String\(answer\.options\?\.\[answer\.userIdx\]/);
+  assert.match(settlementSource, /index\.status!=='active'\|\|cave\.status!=='active'/);
+  assert.match(settlementSource, /ELIGIBILITY_COLLECTION='dongtianSettlementClaims'/);
+  assert.match(settlementSource, /REWARD_COLLECTION='dongtianRewardClaims'/);
+  assert.match(settlementSource, /runRewardReceipt/);
+  assert.match(settlementSource, /claim\.finalized===true/);
+});
 
 test('Dongtian API endpoint performs planning before batched generation and audits prior-question context', () => {
   assert.match(apiSource, /const planningRun = await generateMultimodalJSON\(buildPlanningPrompt/);
@@ -483,10 +493,13 @@ test('owners can delete real Dongtians with confirmation and public-data cascade
   assert.match(uiSource, /dongtian\.ownerUid !== uid\(\)/);
   assert.match(uiSource, /window\.confirm/);
   assert.match(uiSource, /where\('dongtianId', '==', id\)/);
-  assert.match(uiSource, /batch\.delete\(dataRef\)/);
-  assert.match(uiSource, /batch\.delete\(indexRef\)/);
-  assert.match(uiSource, /plays\.docs\.forEach\(\(entry\) => batch\.delete\(entry\.ref\)\)/);
-  assert.match(uiSource, /reports\.docs\.forEach\(\(entry\) => batch\.delete\(entry\.ref\)\)/);
+  assert.match(uiSource, /const contentBatch = writeBatch\(db\)/);
+  assert.match(uiSource, /contentBatch\.delete\(dataRef\)/);
+  assert.match(uiSource, /contentBatch\.delete\(indexRef\)/);
+  assert.match(uiSource, /collection\(progressDb, PLAY_COLLECTION\)/);
+  assert.match(uiSource, /const progressBatch = writeBatch\(progressDb\)/);
+  assert.match(uiSource, /plays\.docs\.forEach\(\(entry\) => progressBatch\.delete\(entry\.ref\)\)/);
+  assert.match(uiSource, /reports\.docs\.forEach\(\(entry\) => contentBatch\.delete\(entry\.ref\)\)/);
   assert.match(uiSource, /dongtian:deleted/);
 });
 
