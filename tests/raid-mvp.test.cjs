@@ -171,3 +171,17 @@ test('raid hub card is measured directly to the navigation edge and cache-busted
   assert.match(raidSource, /new ResizeObserver\(scheduleRaidHubFit\)\.observe\(nav\)/);
   assert.match(raidSource, /setTimeout\(scheduleRaidHubFit, 360\)/);
 });
+
+
+test('raid lobby adapts member cards and actions without stretching', () => {
+  assert.match(raidSource, /lobby\.dataset\.partySize = String\(members\.length\)/);
+  assert.match(raidSource, /data-party-count="' \+ members\.length \+ '"/);
+  assert.match(raidSource, /visualBottomInset/);
+  assert.match(raidSource, /--raid-visual-bottom-inset/);
+  assert.match(cssSource, /\.raid-party-list\{[^}]*grid-auto-rows:auto[^}]*align-content:start/);
+  assert.match(cssSource, /\.raid-party-list\[data-party-count="1"\]\{grid-template-columns:minmax\(0,1fr\)\}/);
+  assert.match(cssSource, /\.raid-party-member\{[^}]*min-height:76px[^}]*max-height:96px/);
+  assert.match(cssSource, /@media\(max-width:760px\)\{[^}]*\.raid-party-list/);
+  assert.match(cssSource, /\.raid-lobby-actions\{grid-template-columns:repeat\(3,minmax\(0,1fr\)\)\}/);
+  assert.match(cssSource, /body\.raid-page-open\.raid-session-active #page-raid\.active-page\{bottom:var\(--raid-visual-bottom-inset,0px\)!important\}/);
+});
