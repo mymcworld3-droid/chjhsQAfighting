@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
 const aiRouter = require('./ai-router');
 const registerDongtianApi = require('./dongtian-api');
 const registerIdentityApi = require('./identity-api');
@@ -17,6 +18,8 @@ const registerRaidRewardApi = require('./raid-reward-api.cjs');
 const registerRaidRoomApi = require('./raid-room-api.cjs');
 const registerBattleRewardApi = require('./battle-reward-api.cjs');
 const registerDongtianSettlementApi = require('./dongtian-settlement-api.cjs');
+const { playerRepository, raidRepository } = require('./server-repositories.cjs');
+const { verifyMainIdentity, issueRaidQuestionTicket } = require('./raid-question-ticket.cjs');
 require('dotenv').config();
 
 const app = express();
@@ -405,6 +408,35 @@ app.post('/api/generate-quiz', async (req, res) => {
     subject = String(subject || '').trim().slice(0, 40);
     level = String(level || '國中一年級').slice(0, 32);
     const raidQuickSimple = String(quizMode || '') === 'raid-quick-simple';
+    let raidIdentity = null;
+    let raidRoomId = '';
+    let raidActionId = 0;
+    if (raidQuickSimple) {
+        try {
+            raidIdentity = await verifyMainIdentity(req);
+            raidRoomId = String(req.body?.roomId || '').trim();
+            raidActionId = Math.max(1, Math.floor(Number(req.body?.actionId) || 0));
+            if (!/^[A-Za-z0-9_-]{8,160}$/.test(raidRoomId) || !raidActionId) {
+                return res.status(400).json({ error: '團本題目房間或題號無效' });
+            }
+            const roomSnap = await raidRepository.resolve().db.collection('raidRooms').doc(raidRoomId).get();
+            if (!roomSnap.exists) return res.status(404).json({ error: '團本房間不存在' });
+            const room = roomSnap.data() || {};
+            const member = room?.members?.[raidIdentity];
+            if (!member) return res.status(403).json({ error: '你不在這個團本隊伍' });
+            if (room.status !== 'active' || member.alive === false) {
+                return res.status(409).json({ error: '目前無法取得新的團本題目' });
+            }
+            const expected = Math.max(1, Math.floor(Number(member.lastActionId) || 0) + 1);
+            // The client may prefetch exactly one question ahead while reading the current one.
+            if (raidActionId < expected || raidActionId > expected + 1) {
+                return res.status(409).json({ error: '團本題號不同步，請等待房間重新同步' });
+            }
+        } catch (error) {
+            const status = error?.status || 503;
+            return res.status(status).json({ error: error?.message || '團本題目驗證失敗' });
+        }
+    }
     difficulty = raidQuickSimple ? 'easy' : (['easy', 'medium', 'hard'].includes(difficulty) ? difficulty : 'medium');
     const previousQuestions = (Array.isArray(avoidQuestions) ? avoidQuestions : [])
         .map(cleanQuestionText).filter(Boolean).slice(-80);
@@ -538,6 +570,44 @@ app.post('/api/generate-quiz', async (req, res) => {
 
             if (recentTemplates.includes(parsed.template_id)) {
                 throw new Error('AI 題目與近期解題骨架重複');
+            }
+
+            if (raidQuickSimple) {
+                const choices = [parsed.correct, ...wrong].map(value => String(value || '').trim());
+                let answerIndex = 0;
+                for (let i = choices.length - 1; i > 0; i -= 1) {
+                    const j = crypto.randomInt(i + 1);
+                    [choices[i], choices[j]] = [choices[j], choices[i]];
+                    if (answerIndex === i) answerIndex = j;
+                    else if (answerIndex === j) answerIndex = i;
+                }
+                const questionId = 'raidq-' + crypto.randomUUID();
+                const ticket = issueRaidQuestionTicket({
+                    uid: raidIdentity,
+                    roomId: raidRoomId,
+                    actionId: raidActionId,
+                    questionId,
+                    answerIndex,
+                    explanation: String(parsed.exp || '').slice(0, 3000)
+                });
+                return res.json({
+                    raidQuestion: {
+                        id: questionId,
+                        q: parsed.q,
+                        opts: choices,
+                        ticket,
+                        subject,
+                        topic: targetTopic,
+                        level,
+                        concept_id: parsed.concept_id,
+                        template_id: parsed.template_id,
+                        question_form: parsed.question_form,
+                        cognitive_level: parsed.cognitive_level,
+                        reasoning_steps: parsed.reasoning_steps
+                    },
+                    provider: routed.provider,
+                    model: routed.model
+                });
             }
 
             return res.json({ text: JSON.stringify(parsed), provider: routed.provider, model: routed.model });
