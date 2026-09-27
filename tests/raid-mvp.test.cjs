@@ -207,3 +207,14 @@ test('raid lobby action bar stays directly below the party list', () => {
   assert.doesNotMatch(cssSource, /\.raid-lobby-actions\{[^}]*position:absolute/);
   assert.match(cssSource, /\.raid-lobby-actions button\{width:100%;min-height:42px\}/);
 });
+
+
+test('raid leave uses the built-in confirmation modal', () => {
+  const start = raidSource.indexOf('  async function leaveRaid() {');
+  const end = raidSource.indexOf('  async function tryReconnect', start);
+  const body = raidSource.slice(start, end);
+  assert.match(body, /typeof window\.openConfirm !== 'function'/);
+  assert.match(body, /await window\.openConfirm\('退出隊伍會離開本次團本，確定離開？'\)/);
+  assert.match(body, /if \(confirmed !== true\) return/);
+  assert.doesNotMatch(body, /window\.confirm|\bconfirm\(/);
+});
