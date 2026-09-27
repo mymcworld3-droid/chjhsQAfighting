@@ -136,8 +136,11 @@ async function loadXiuxianFeaturesSafely() {
       detail: { loaded: index, total, modulePath }
     }));
     try {
-      const build = modulePath === './cultivation/raid-mode.js' ? RAID_FEATURE_BUILD : XIUXIAN_FEATURE_BUILD;
-      await import(`${modulePath}?v=${build}`);
+      if (modulePath === './cultivation/raid-mode.js') {
+        await import(`${modulePath}?v=${RAID_FEATURE_BUILD}`);
+      } else {
+        await import(`${modulePath}?v=${XIUXIAN_FEATURE_BUILD}`);
+      }
     } catch (error) {
       failures.push(modulePath);
       console.error(`[Xiuxian] Failed to load optional module: ${modulePath}`, error);
