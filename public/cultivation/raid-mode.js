@@ -126,7 +126,8 @@ import {
     const vv = window.visualViewport;
     const visualHeight = Math.max(1, Number(vv?.height) || Number(window.innerHeight) || document.documentElement.clientHeight || 1);
     const appHeader = document.querySelector('body > header');
-    const headerHeight = Math.max(0, Math.ceil(Number(appHeader?.getBoundingClientRect?.().height) || 72));
+    const headerRect = appHeader?.getBoundingClientRect?.();
+    const headerBottom = Math.max(0, Math.ceil(Number(headerRect?.bottom) || Number(headerRect?.height) || 72));
     const sessionActive = document.body.classList.contains('raid-session-active');
 
     const navTop = Math.max(0, Number(nav.getBoundingClientRect?.().top) || 0);
@@ -134,13 +135,13 @@ import {
       ? Math.ceil(visualHeight - navTop + 8)
       : 116;
     const pageHeight = Math.max(180, Math.floor(
-      visualHeight - headerHeight - (sessionActive ? 0 : clearance)
+      visualHeight - headerBottom - (sessionActive ? 0 : clearance)
     ));
 
-    page.style.setProperty('--raid-header-height', headerHeight + 'px');
+    page.style.setProperty('--raid-header-height', headerBottom + 'px');
     page.style.setProperty('--raid-bottom-clearance', clearance + 'px');
     page.style.setProperty('--raid-page-height', pageHeight + 'px');
-    page.style.setProperty('top', headerHeight + 'px', 'important');
+    page.style.setProperty('top', headerBottom + 'px', 'important');
     page.style.setProperty('height', pageHeight + 'px', 'important');
     page.style.setProperty('max-height', pageHeight + 'px', 'important');
     page.style.setProperty('bottom', 'auto', 'important');
@@ -391,7 +392,9 @@ import {
 
   function renderArena() {
     if (!state.player || !state.boss || !state.room) return renderHub();
+    document.body.classList.add('raid-session-active');
     show('arena');
+    syncRaidBottomClearance();
     const clock = currentBossClock();
     const intent = currentIntent();
     const arena = document.getElementById('raid-arena');
@@ -520,7 +523,9 @@ import {
   function renderQuestion(review) {
     const q = state.question;
     if (!q) return renderArena();
+    document.body.classList.add('raid-session-active');
     show('question');
+    syncRaidBottomClearance();
     const view = document.getElementById('raid-question');
     const opts = q.opts.map(function (option, i) {
       let cls = '';
