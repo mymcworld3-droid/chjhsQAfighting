@@ -126,7 +126,12 @@ test('raid UI includes party lobby, join code, responsive fullscreen questions a
   assert.match(mainSource, /'\.\/cultivation\/raid-mode\.js'/);
   assert.match(cssSource, /\.raid-question-view\{position:fixed!important;inset:0!important/);
   assert.match(cssSource, /\.raid-page\{[^}]*height:100%[^}]*overflow:hidden/);
-  assert.match(cssSource, /body\.xianxia-theme:has\(#page-raid\.active-page\) main\{[^}]*height:100dvh[^}]*overflow:hidden/);
+  assert.match(cssSource, /html\.raid-page-open,body\.raid-page-open\{[^}]*overflow:hidden!important/);
+  assert.match(cssSource, /body\.raid-page-open #page-raid\.active-page\{[^}]*position:fixed!important[^}]*top:72px!important[^}]*bottom:96px!important[^}]*overflow:hidden!important/);
+  assert.match(cssSource, /body\.raid-page-open\.raid-session-active #page-raid\.active-page\{bottom:0!important\}/);
+  assert.match(raidSource, /function syncRaidViewportLock\(\)/);
+  assert.match(raidSource, /document\.documentElement\.classList\.toggle\('raid-page-open', active\)/);
+  assert.match(raidSource, /new MutationObserver\(syncRaidViewportLock\)/);
   assert.match(cssSource, /#raid-arena:not\(\.hidden\)\{display:grid;grid-template-rows:auto auto minmax\(0,1fr\);min-height:0;overflow:hidden\}/);
   assert.match(cssSource, /\.raid-stage\{[^}]*height:100%[^}]*min-height:0[^}]*overflow:hidden/);
   assert.doesNotMatch(cssSource, /\.raid-stage\{[^}]*min-height:min\(720px,calc\(100dvh - 145px\)\)/);
