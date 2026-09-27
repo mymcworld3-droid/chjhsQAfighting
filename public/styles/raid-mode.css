@@ -2,8 +2,8 @@
 .raid-page{--raid-gold:#e7c779;--raid-red:#e06464;--raid-cyan:#8fd7d2;height:100%;min-height:0;padding:0 14px;box-sizing:border-box;overflow:hidden}
 html.raid-page-open,body.raid-page-open{height:100%!important;overflow:hidden!important;overscroll-behavior:none!important}
 body.raid-page-open main{height:auto!important;min-height:0!important;padding:0!important;overflow:visible!important}
-body.raid-page-open #page-raid.active-page{position:fixed!important;z-index:35!important;top:72px!important;left:50%!important;bottom:var(--raid-bottom-clearance,116px)!important;width:min(100vw,1060px)!important;max-width:1060px!important;margin:0!important;padding:0 14px!important;transform:translateX(-50%)!important;overflow:hidden!important}
-body.raid-page-open.raid-session-active #page-raid.active-page{bottom:var(--raid-visual-bottom-inset,0px)!important}
+body.raid-page-open #page-raid.active-page{position:fixed!important;z-index:35!important;top:var(--raid-header-height,72px)!important;left:50%!important;bottom:auto!important;height:var(--raid-page-height,calc(100dvh - 188px))!important;max-height:var(--raid-page-height,calc(100dvh - 188px))!important;width:min(100vw,1060px)!important;max-width:1060px!important;margin:0!important;padding:0 14px!important;transform:translateX(-50%)!important;overflow:hidden!important}
+body.raid-page-open.raid-session-active #page-raid.active-page{bottom:auto!important;height:var(--raid-page-height,calc(100dvh - 72px))!important;max-height:var(--raid-page-height,calc(100dvh - 72px))!important}
 body.raid-page-open #page-raid.active-page>.raid-view:not(.hidden){height:100%!important;min-height:0!important;overflow:hidden!important}
 #page-raid>.raid-view:not(.hidden){height:100%;min-height:0;overflow:hidden}
 #raid-hub:not(.hidden){display:grid;grid-template-rows:auto minmax(0,1fr);align-content:start}
@@ -94,6 +94,6 @@ body.raid-page-open #page-raid.active-page>.raid-view:not(.hidden){height:100%!i
 }
 
 @media(max-width:640px){
-  body.raid-page-open #page-raid.active-page{top:68px!important;bottom:var(--raid-bottom-clearance,116px)!important;padding:0 6px!important}
+  body.raid-page-open #page-raid.active-page{top:var(--raid-header-height,68px)!important;bottom:auto!important;padding:0 6px!important}
   body.raid-page-open.raid-session-active #page-raid.active-page{bottom:0!important}
 }
