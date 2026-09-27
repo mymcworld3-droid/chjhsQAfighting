@@ -1,0 +1,43 @@
+'use strict';
+const crypto=require('node:crypto');
+const {PROJECT_IDS}=require('./firebase-admin-projects.cjs');
+const {playerRepository,dongtianRepository}=require('./server-repositories.cjs');
+const {runRewardReceipt}=require('./reward-receipt.cjs');
+const {FieldValue}=require('firebase-admin/firestore');
+const INDEX_COLLECTION='dongtianIndex',DATA_COLLECTION='dongtians',PLAY_COLLECTION='dongtianPlays',ELIGIBILITY_COLLECTION='dongtianSettlementClaims',REWARD_COLLECTION='dongtianRewardClaims';
+const FIRST_COMPLETION_SPIRIT_STONE_PER_QUESTION=100,FIRST_COMPLETION_MIN_SPIRIT_STONES=1000,OWNER_CULTIVATION_REWARD=1,OWNER_GOLD_REWARD=5,NASCENT_SOUL_THRESHOLD=68;
+function safeId(v,max=240){const id=String(v||'').trim();return id&&id.length<=max&&!id.includes('/')?id:'';}
+function receiptId(uid,cave,run){return crypto.createHash('sha256').update(String(uid)+'\n'+String(cave)+'\n'+String(run)).digest('hex');}
+const clean=v=>String(v??'').trim();
+function verifyAnswers(cave,submitted){
+ const qs=Array.isArray(cave?.questions)?cave.questions:[],as=Array.isArray(submitted)?submitted:[];
+ if(!qs.length||as.length!==qs.length)throw Object.assign(new Error('洞天答題紀錄不完整'),{status:409});
+ let correct=0;
+ for(let i=0;i<qs.length;i++){const q=qs[i]||{},a=as[i]||{};if(String(a.id||'')!==String(q.id||''))throw Object.assign(new Error('洞天題目版本已改變，請重新進入'),{status:409});const selected=clean(a.selected),valid=[q.correct,...(Array.isArray(q.wrong)?q.wrong:[])].map(clean);if(!selected||!valid.includes(selected))throw Object.assign(new Error('洞天作答內容無法驗證'),{status:409});if(selected===clean(q.correct))correct++;}
+ const total=qs.length,accuracy=total?correct/total:0,tier=accuracy>=.9?'上品洞天機緣':accuracy>=.75?'中品洞天機緣':accuracy>=.6?'下品洞天機緣':'微光洞天機緣';
+ return {correct,total,accuracy,tier};
+}
+function firstCompletionGold(total){return Math.max(FIRST_COMPLETION_MIN_SPIRIT_STONES,Math.max(0,Math.floor(Number(total)||0))*FIRST_COMPLETION_SPIRIT_STONE_PER_QUESTION);}
+function caveSoulBonus(player){const score=Math.max(0,Number(player?.stats?.totalScore)||0),t=player?.cultivationTraining||{},type=t?.equippedCore?.type;if(score<68||t.coreEnabled===false||!type)return 0;return Math.min(10,Math.max(0,Math.floor(Number(player?.nascentSoulTree?.paths?.[type]?.nodes?.rightFarBottom)||0)));}
+async function verifyRequest(req,resolveA){const b=/^Bearer ([A-Za-z0-9_.-]+)$/.exec(String(req.get?.('authorization')||''));if(!b)throw Object.assign(new Error('請先登入後再結算洞天'),{status:401});const a=resolveA();let v;try{v=await a.auth.verifyIdToken(b[1],true);}catch(_){throw Object.assign(new Error('登入狀態已失效，請重新登入'),{status:401});}if(!v?.uid||v.aud!==PROJECT_IDS.A||v.iss!=='https://securetoken.google.com/'+PROJECT_IDS.A)throw Object.assign(new Error('登入身分驗證失敗'),{status:401});return {uid:v.uid,a};}
+async function claimEligibility(db,uid,dongtianId,runId,answers){
+ const id=receiptId(uid,dongtianId,runId),claimRef=db.collection(ELIGIBILITY_COLLECTION).doc(id),indexRef=db.collection(INDEX_COLLECTION).doc(dongtianId),caveRef=db.collection(DATA_COLLECTION).doc(dongtianId);
+ return db.runTransaction(async tx=>{const prior=await tx.get(claimRef);if(prior.exists)return {id,...prior.data()};const [is,cs]=await Promise.all([tx.get(indexRef),tx.get(caveRef)]);if(!is.exists||!cs.exists)throw Object.assign(new Error('洞天資料不存在'),{status:404});const index=is.data()||{},cave=cs.data()||{};if(index.status!=='active'||cave.status!=='active')throw Object.assign(new Error('洞天已封印，本次不進行通關結算'),{status:409});if(String(index.ownerUid||cave.ownerUid||'')!==String(cave.ownerUid||''))throw new Error('洞天索引與內容擁有人不一致');const score=verifyAnswers(cave,answers),claim={uid,dongtianId,runId,ownerUid:String(cave.ownerUid||''),...score,finalized:false,createdAt:FieldValue.serverTimestamp(),createdAtMs:Date.now()};tx.create(claimRef,claim);return {id,...claim};});
+}
+async function awardProgress(db,uid,e){
+ const playRef=db.collection(PLAY_COLLECTION).doc(uid+'__'+e.dongtianId),userRef=db.collection('users').doc(uid),ownerUid=String(e.ownerUid||''),ownerRef=ownerUid&&ownerUid!==uid?db.collection('users').doc(ownerUid):null;
+ const receipt=await runRewardReceipt({db,collection:REWARD_COLLECTION,receiptId:e.id,fieldValue:FieldValue,onFirstClaim:async({tx})=>{
+  const refs=[playRef,userRef,...(ownerRef?[ownerRef]:[])],snaps=await Promise.all(refs.map(ref=>tx.get(ref))),play=snaps[0],userSnap=snaps[1],ownerSnap=ownerRef?snaps[2]:null;
+  if(!userSnap.exists)throw new Error('玩家資料不存在');if(ownerRef&&!ownerSnap?.exists)throw new Error('洞天主人資料不存在');const player=userSnap.data()||{};if(player.uid&&player.uid!==uid)throw new Error('玩家資料 UID 不符');
+  const first=!(play.exists&&!!play.data()?.completed),spirit=Math.floor(Number(player.stats?.totalScore)||0)>=NASCENT_SOUL_THRESHOLD?Math.max(0,Math.min(e.correct,e.total)):0,soul=first&&e.correct>0?caveSoulBonus(player):0,gold=first?firstCompletionGold(e.total):0,cult=first?e.correct+soul:0;
+  tx.set(playRef,{uid,dongtianId:e.dongtianId,ownerUid,encountered:true,completed:true,correct:e.correct,total:e.total,lastSpiritRunId:e.runId,accuracy:e.accuracy,rewardTier:e.tier,completedAt:FieldValue.serverTimestamp(),completedAtMs:Date.now()},{merge:true});
+  const p={};if(gold)p['stats.gold']=FieldValue.increment(gold);if(cult)p['stats.totalScore']=FieldValue.increment(cult);if(spirit)p['stats.nascentSoulSpirit']=FieldValue.increment(spirit);if(Object.keys(p).length)tx.update(userRef,p);
+  if(first&&ownerRef)tx.update(ownerRef,{'stats.totalScore':FieldValue.increment(OWNER_CULTIVATION_REWARD),'stats.gold':FieldValue.increment(OWNER_GOLD_REWARD)});
+  return {firstCompletion:first,goldAdded:gold,cultivationAdded:cult,soulCultivationAdded:soul,spiritAdded:spirit,correct:e.correct,total:e.total,tier:e.tier};
+ },createReceipt:r=>({uid,dongtianId:e.dongtianId,runId:e.runId,ownerUid,...r})});
+ const d=receipt.duplicate?receipt.receipt:receipt.result;return {applied:!receipt.duplicate,firstCompletion:d?.firstCompletion===true,goldAdded:Math.max(0,Number(d?.goldAdded)||0),cultivationAdded:Math.max(0,Number(d?.cultivationAdded)||0),soulCultivationAdded:Math.max(0,Number(d?.soulCultivationAdded)||0),spiritAdded:Math.max(0,Number(d?.spiritAdded)||0),correct:Math.max(0,Number(d?.correct)||0),total:Math.max(0,Number(d?.total)||0),tier:String(d?.tier||e.tier||'')};
+}
+async function finalizeEligibility(db,e,first){const claimRef=db.collection(ELIGIBILITY_COLLECTION).doc(e.id),indexRef=db.collection(INDEX_COLLECTION).doc(e.dongtianId);await db.runTransaction(async tx=>{const cs=await tx.get(claimRef);if(!cs.exists)throw new Error('洞天結算資格不存在');const claim=cs.data()||{};if(claim.finalized===true)return;if(first===true){const is=await tx.get(indexRef);if(!is.exists)throw new Error('洞天索引不存在');tx.update(indexRef,{completionCount:FieldValue.increment(1)});}tx.update(claimRef,{finalized:true,firstCompletion:first===true,finalizedAt:FieldValue.serverTimestamp(),finalizedAtMs:Date.now()});});}
+function createHandler({resolveA=()=>playerRepository.resolve(),resolveBD=()=>dongtianRepository.resolve(),logger=console}={}){return async function(req,res){res.set?.('Cache-Control','no-store');const dongtianId=safeId(req.body?.dongtianId,200),runId=safeId(req.body?.runId,240);if(!dongtianId||!runId)return res.status(400).json({ok:false,error:'洞天結算識別碼無效'});if(!Array.isArray(req.body?.answers)||req.body.answers.length>60)return res.status(400).json({ok:false,error:'洞天答題紀錄格式無效'});let identity,bd;try{identity=await verifyRequest(req,resolveA);bd=resolveBD();}catch(error){const status=error?.status||503;if(status>=500)logger.error('[Dongtian settlement] Firebase unavailable:',error?.message||error);return res.status(status).json({ok:false,error:error?.message||'洞天結算服務尚未完成設定'});}try{const e=await claimEligibility(bd.db,identity.uid,dongtianId,runId,req.body.answers),reward=await awardProgress(identity.a.db,identity.uid,e);await finalizeEligibility(bd.db,e,reward.firstCompletion);return res.json({ok:true,dongtianId,runId,...reward});}catch(error){const status=error?.status||503;if(status>=500)logger.error('[Dongtian settlement] failed:',error?.code||error?.message||error);return res.status(status).json({ok:false,error:error?.message||'洞天結算尚未完成，請稍後重試'});}};}
+module.exports=app=>app.post('/api/dongtian/settle',createHandler());
+module.exports.__test={INDEX_COLLECTION,DATA_COLLECTION,PLAY_COLLECTION,ELIGIBILITY_COLLECTION,REWARD_COLLECTION,FIRST_COMPLETION_SPIRIT_STONE_PER_QUESTION,FIRST_COMPLETION_MIN_SPIRIT_STONES,OWNER_CULTIVATION_REWARD,OWNER_GOLD_REWARD,NASCENT_SOUL_THRESHOLD,safeId,receiptId,verifyAnswers,firstCompletionGold,caveSoulBonus,claimEligibility,awardProgress,finalizeEligibility,createHandler};

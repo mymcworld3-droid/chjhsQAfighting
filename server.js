@@ -15,6 +15,8 @@ const registerAdminArtifactDeleteApi = require('./admin-artifact-delete-api.cjs'
 const { registerItemImageApi } = require('./item-image-api.cjs');
 const registerRaidRewardApi = require('./raid-reward-api.cjs');
 const registerRaidRoomApi = require('./raid-room-api.cjs');
+const registerBattleRewardApi = require('./battle-reward-api.cjs');
+const registerDongtianSettlementApi = require('./dongtian-settlement-api.cjs');
 require('dotenv').config();
 
 const app = express();
@@ -35,6 +37,8 @@ registerAdminArtifactDeleteApi(app);
 registerItemImageApi(app);
 registerRaidRoomApi(app);
 registerRaidRewardApi(app);
+registerBattleRewardApi(app);
+registerDongtianSettlementApi(app);
 
 // 根目錄路由
 app.get('/', (req, res) => {
