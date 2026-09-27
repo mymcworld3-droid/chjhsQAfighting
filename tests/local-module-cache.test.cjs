@@ -37,7 +37,7 @@ test('service worker is installed early but preloads only code after all feature
   assert.match(index, /navigator\.serviceWorker\.register\('\.\/sw\.js'/);
   assert.match(index, /xiuxian:features-ready', prefetch/);
   assert.match(index, /XIUXIAN_PREFETCH_MODULES/);
-  assert.match(main, /XIUXIAN_FEATURE_BUILD = '20260927-raid-nav-fit2'/);
+  assert.match(main, /XIUXIAN_FEATURE_BUILD = '20260927-raid-lobby-fit3'/);
   assert.match(worker, /filter\(path => \/\\\.\(\?:js\|css\)\$\/\.test\(path\)\)/);
   assert.doesNotMatch(worker, /firestore\.googleapis\.com|runTransaction|users\/\$\{/);
 });
