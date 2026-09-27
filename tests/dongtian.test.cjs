@@ -493,11 +493,13 @@ test('owners can delete real Dongtians with confirmation and public-data cascade
   assert.match(uiSource, /dongtian\.ownerUid !== uid\(\)/);
   assert.match(uiSource, /window\.confirm/);
   assert.match(uiSource, /where\('dongtianId', '==', id\)/);
-  assert.match(uiSource, /batch\.delete\(dataRef\)/);
-  assert.match(uiSource, /batch\.delete\(indexRef\)/);
+  assert.match(uiSource, /const contentBatch = writeBatch\(db\)/);
+  assert.match(uiSource, /contentBatch\.delete\(dataRef\)/);
+  assert.match(uiSource, /contentBatch\.delete\(indexRef\)/);
   assert.match(uiSource, /collection\(progressDb, PLAY_COLLECTION\)/);
+  assert.match(uiSource, /const progressBatch = writeBatch\(progressDb\)/);
   assert.match(uiSource, /plays\.docs\.forEach\(\(entry\) => progressBatch\.delete\(entry\.ref\)\)/);
-  assert.match(uiSource, /reports\.docs\.forEach\(\(entry\) => batch\.delete\(entry\.ref\)\)/);
+  assert.match(uiSource, /reports\.docs\.forEach\(\(entry\) => contentBatch\.delete\(entry\.ref\)\)/);
   assert.match(uiSource, /dongtian:deleted/);
 });
 
