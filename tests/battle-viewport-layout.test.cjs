@@ -77,7 +77,7 @@ test('CSS blocks are balanced and browser loads the new build', () => {
   for (const text of [css, tutorialCss]) assert.equal(text.split('{').length, text.split('}').length);
   assert.ok(main.includes("XIUXIAN_FEATURE_BUILD = '20260927-raid-lobby-fit3'"));
   assert.ok(main.includes("BATTLE_FEATURE_BUILD = '20260927-battle-vv2'"));
-  assert.ok(index.includes('main.js?v=20260927-vv-battle2'));
+  assert.ok(index.includes('main.js?v=20260927-vv-raid8'));
 });
 
 test('stage portraits keep the near-left and far-right duel depth in formal and tutorial battles', () => {
