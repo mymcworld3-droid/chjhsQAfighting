@@ -89,12 +89,27 @@ import {
     link.href = STYLE_HREF;
     document.head.appendChild(link);
   }
+  function syncRaidBottomClearance() {
+    const page = document.getElementById(PAGE_ID);
+    const nav = document.getElementById('bottom-nav');
+    if (!page || !nav) return;
+    const viewportHeight = Math.max(0, Number(window.innerHeight) || document.documentElement.clientHeight || 0);
+    const navTop = Math.max(0, Number(nav.getBoundingClientRect?.().top) || 0);
+    // Keep an 8px breathing room above the visible bottom navigation.
+    // This follows the real rendered nav height instead of assuming a fixed mobile size.
+    const clearance = navTop > 0 && viewportHeight > navTop
+      ? Math.ceil(viewportHeight - navTop + 8)
+      : 116;
+    page.style.setProperty('--raid-bottom-clearance', clearance + 'px');
+  }
+
   function syncRaidViewportLock() {
     const page = document.getElementById(PAGE_ID);
     const active = !!page?.classList.contains('active-page') && !page.classList.contains('hidden');
     document.documentElement.classList.toggle('raid-page-open', active);
     document.body.classList.toggle('raid-page-open', active);
     if (active) {
+      syncRaidBottomClearance();
       // The raid is a viewport surface, not part of the document's scroll flow.
       // Reset any inherited page offset so fixed header/navigation never move with raid content.
       try { window.scrollTo({ top: 0, left: 0, behavior: 'auto' }); }
@@ -940,6 +955,8 @@ import {
   function boot() {
     ensureStyle();
     ensurePage();
+    window.addEventListener('resize', syncRaidBottomClearance, { passive: true });
+    window.visualViewport?.addEventListener?.('resize', syncRaidBottomClearance, { passive: true });
     mountHomeEntry();
     renderHub();
     window.addEventListener('xiuxian:user-ready', function () {
