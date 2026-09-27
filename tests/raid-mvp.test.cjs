@@ -127,7 +127,7 @@ test('raid UI includes party lobby, join code, responsive fullscreen questions a
   assert.match(cssSource, /\.raid-question-view\{position:fixed!important;inset:0!important/);
   assert.match(cssSource, /\.raid-page\{[^}]*height:100%[^}]*overflow:hidden/);
   assert.match(cssSource, /html\.raid-page-open,body\.raid-page-open\{[^}]*overflow:hidden!important/);
-  assert.match(cssSource, /body\.raid-page-open #page-raid\.active-page\{[^}]*position:fixed!important[^}]*top:72px!important[^}]*bottom:96px!important[^}]*overflow:hidden!important/);
+  assert.match(cssSource, /body\.raid-page-open #page-raid\.active-page\{[^}]*position:fixed!important[^}]*top:72px!important[^}]*bottom:var\(--raid-bottom-clearance,116px\)!important[^}]*overflow:hidden!important/);
   assert.match(cssSource, /body\.raid-page-open\.raid-session-active #page-raid\.active-page\{bottom:0!important\}/);
   assert.match(raidSource, /function syncRaidViewportLock\(\)/);
   assert.match(raidSource, /document\.documentElement\.classList\.toggle\('raid-page-open', active\)/);
@@ -149,4 +149,15 @@ test('boss information panel is anchored near the top instead of vertically cent
   assert.match(cssSource, /\.raid-boss-info\{[^}]*justify-content:flex-start/);
   assert.match(cssSource, /\.raid-boss-info\{[^}]*padding:clamp\(42px,7dvh,76px\)/);
   assert.doesNotMatch(cssSource, /\.raid-boss-info\{[^}]*justify-content:center/);
+});
+
+
+test('raid hub bottom follows the real bottom navigation top edge', () => {
+  assert.match(raidSource, /function syncRaidBottomClearance\(\)/);
+  assert.match(raidSource, /getElementById\('bottom-nav'\)/);
+  assert.match(raidSource, /getBoundingClientRect\(\)\.top/);
+  assert.match(raidSource, /viewportHeight - navTop \+ 8/);
+  assert.match(raidSource, /--raid-bottom-clearance/);
+  assert.match(raidSource, /visualViewport\?\.addEventListener/);
+  assert.match(cssSource, /bottom:var\(--raid-bottom-clearance,116px\)!important/);
 });
