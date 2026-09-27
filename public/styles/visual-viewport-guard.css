@@ -12,7 +12,6 @@
 
 /* True fullscreen roots: constrain them to the visual viewport, never the layout viewport. */
 html.app-visual-viewport-ready :is(
-  #raid-question.raid-question-view,
   #dongtian-overlay.dt-overlay,
   #page-battle.battle-v2-page,
   #scope-studio,
