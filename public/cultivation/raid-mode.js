@@ -123,7 +123,12 @@ import {
     const page = document.getElementById(PAGE_ID);
     const nav = document.getElementById('bottom-nav');
     if (!page || !nav) return;
-    const viewportHeight = Math.max(0, Number(window.visualViewport?.height) || Number(window.innerHeight) || document.documentElement.clientHeight || 0);
+    const layoutHeight = Math.max(0, Number(window.innerHeight) || document.documentElement.clientHeight || 0);
+    const visualHeight = Math.max(0, Number(window.visualViewport?.height) || layoutHeight);
+    const visualOffsetTop = Math.max(0, Number(window.visualViewport?.offsetTop) || 0);
+    const visualBottomInset = Math.max(0, Math.ceil(layoutHeight - (visualOffsetTop + visualHeight)));
+    page.style.setProperty('--raid-visual-bottom-inset', visualBottomInset + 'px');
+    const viewportHeight = visualHeight;
     const navTop = Math.max(0, Number(nav.getBoundingClientRect?.().top) || 0);
     const clearance = navTop > 0 && viewportHeight > navTop
       ? Math.ceil(viewportHeight - navTop + 8)
@@ -132,7 +137,7 @@ import {
     if (!document.body.classList.contains('raid-session-active')) {
       page.style.setProperty('bottom', clearance + 'px', 'important');
     } else {
-      page.style.setProperty('bottom', '0px', 'important');
+      page.style.setProperty('bottom', visualBottomInset + 'px', 'important');
     }
   }
 
@@ -330,10 +335,11 @@ import {
     void inviteOnlineFriends();
     const allReady = members.length > 0 && members.every(member => member.ready && raidMemberOnline(member));
     const lobby = document.getElementById('raid-lobby');
+    lobby.dataset.partySize = String(members.length);
     lobby.innerHTML =
       '<header class="raid-heading"><button class="raid-back" type="button" data-leave><i class="fa-solid fa-arrow-left"></i></button>' +
       '<div><small>RAID PARTY ／ 秘境隊伍</small><h2>清霜試煉隊伍</h2><p>隊伍代碼 <b class="raid-room-code">' + escapeHtml(state.room.code || '------') + '</b></p></div><span class="raid-seal">' + members.length + '/4</span></header>' +
-      '<div class="raid-party-list">' + members.map(member => {
+      '<div class="raid-party-list" data-party-count="' + members.length + '">' + members.map(member => {
         const hp = Math.max(1, Number(member.maxHp) || 1);
         return '<article class="raid-party-member ' + (member.uid === state.player.uid ? 'me' : '') + '">' +
           '<img src="' + escapeHtml(member.portrait || MALE) + '" alt="隊員">' +
