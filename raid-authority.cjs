@@ -95,7 +95,15 @@ function soulSnapshot(data,core){
 }
 function artifactCatalog(data){
   const items=Array.isArray(data?.items)?data.items.filter(x=>x&&typeof x==='object'&&x.id):[];
-  return items.length?items:DEFAULT_ARTIFACTS;
+  if(!items.length)return DEFAULT_ARTIFACTS;
+  if(Math.max(0,Math.floor(finite(data?.artifactCatalogSchemaVersion)))>=2)return items;
+  // Match the client catalog backfill path for legacy remote configs.
+  const merged=new Map(DEFAULT_ARTIFACTS.map(item=>[item.id,item]));
+  for(const item of items){
+    const id=String(item.id||'').trim();if(!id)continue;
+    merged.set(id,{...(merged.get(id)||{}),...item,id});
+  }
+  return [...merged.values()];
 }
 function equippedArtifacts(player,catalog){
   const system=player?.artifactSystem||{}, inventory=system.inventory||{}, equipped=system.equipped||{};
