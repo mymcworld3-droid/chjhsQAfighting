@@ -101,7 +101,8 @@ test('raid reward API is registered and client claims through the settlement rep
   assert.doesNotMatch(raid, /fetch\('\/api\/raid\/reward'/);
   assert.match(repository, /\/api\/raid\/reward/);
   assert.match(repository, /authenticatedMainFetch/);
-  assert.match(repository, /JSON\.stringify\(\{ roomId \}\)/);
+  assert.match(repository, /body:JSON\.stringify\(body\|\|\{\}\)/);
+  assert.match(repository, /claimRaid\(roomId\).*\{roomId\}/);
   assert.doesNotMatch(raid, /JSON\.stringify\(\{[^}]*raid-refine-key/);
 });
 
