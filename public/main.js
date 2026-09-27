@@ -135,7 +135,11 @@ async function loadXiuxianFeaturesSafely() {
       detail: { loaded: index, total, modulePath }
     }));
     try {
-      await import(`${modulePath}?v=${XIUXIAN_FEATURE_BUILD}`);
+      if (modulePath === './cultivation/raid-mode.js') {
+        await import(`${modulePath}?v=20260927-raid-lobby-fit3`);
+      } else {
+        await import(`${modulePath}?v=${XIUXIAN_FEATURE_BUILD}`);
+      }
     } catch (error) {
       failures.push(modulePath);
       console.error(`[Xiuxian] Failed to load optional module: ${modulePath}`, error);
