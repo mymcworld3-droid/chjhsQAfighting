@@ -79,6 +79,7 @@ let resolveXiuxianFeatureGate;
 const xiuxianFeatureGate = new Promise((resolve) => { resolveXiuxianFeatureGate = resolve; });
 const XIUXIAN_FEATURE_BUILD = '20260927-raid-lobby-fit3';
 const RAID_FEATURE_BUILD = '20260927-raid-confirm6';
+const BATTLE_FEATURE_BUILD = '20260927-battle-vv2';
 
 // 交易市集僅為可選功能，載入失敗不可阻止玩家登入或進入遊戲。
 let xiuxianMarketLoad = null;
@@ -138,6 +139,8 @@ async function loadXiuxianFeaturesSafely() {
     try {
       if (modulePath === './cultivation/raid-mode.js') {
         await import(`${modulePath}?v=${RAID_FEATURE_BUILD}`);
+      } else if (modulePath === './cultivation/battle-v3-stability-ui.js') {
+        await import(`${modulePath}?v=${BATTLE_FEATURE_BUILD}`);
       } else {
         await import(`${modulePath}?v=${XIUXIAN_FEATURE_BUILD}`);
       }
