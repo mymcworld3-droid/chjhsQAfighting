@@ -1,13 +1,18 @@
-import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { dongtianCache } from './dongtian-cache.js';
-import { nascentSoulSpiritReward, normalizeSpirit, soulCultivationBonusForPlayer } from './nascent-soul-rules.js';
-import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+import { normalizeSpirit } from './nascent-soul-rules.js';
 import {
-  getFirestore, collection, doc, getDoc, getDocs, query, where, limit,
+  collection, doc, getDoc, getDocs, query, where, limit,
   setDoc, updateDoc, writeBatch, runTransaction, serverTimestamp, increment, addDoc
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { dongtianRepository } from './data/dongtian-repository.js';
+import { playerRepository } from './data/player-repository.js';
+import { rewardRepository } from './data/reward-repository.js';
 
-(function () {
+export const featureReady = (async () => {
+  const { content, progress } = await dongtianRepository.connect();
+  const db = content.db;
+  const progressDb = progress.db;
+  (function () {
   'use strict';
 
   const LEVELS = ['國小中年級', '國小高年級', '國中一年級', '國中二年級', '國中三年級', '高中職', '大學以上'];
@@ -23,8 +28,7 @@ import {
   const PLAY_COLLECTION = 'dongtianPlays';
   const REPORT_COLLECTION = 'dongtianReports';
 
-  const auth = getAuth(getApp());
-  const db = getFirestore(getApp());
+  const auth = { get currentUser() { return playerRepository.currentUser(); } };
   const state = {
     files: [],
     session: null,
@@ -593,17 +597,26 @@ import {
     if (!window.confirm(`確定刪除洞天「${dongtian.name || '無名洞天'}」？\n\n刪除後不再公開，也無法復原。`)) return false;
 
     const [plays, reports] = await Promise.all([
-      getDocs(query(collection(db, PLAY_COLLECTION), where('dongtianId', '==', id), limit(440))),
+      getDocs(query(collection(progressDb, PLAY_COLLECTION), where('dongtianId', '==', id), limit(440))),
       getDocs(query(collection(db, REPORT_COLLECTION), where('dongtianId', '==', id), limit(40)))
     ]);
     if (plays.size >= 440 || reports.size >= 40) throw new Error('此洞天歷史資料過多，為避免只刪除一部分，請聯絡管理員處理');
 
-    const batch = writeBatch(db);
-    batch.delete(dataRef);
-    batch.delete(indexRef);
-    plays.docs.forEach((entry) => batch.delete(entry.ref));
-    reports.docs.forEach((entry) => batch.delete(entry.ref));
-    await batch.commit();
+    const contentBatch = writeBatch(db);
+    contentBatch.delete(dataRef);
+    contentBatch.delete(indexRef);
+    reports.docs.forEach((entry) => contentBatch.delete(entry.ref));
+    await contentBatch.commit();
+
+    if (!plays.empty) {
+      try {
+        const progressBatch = writeBatch(progressDb);
+        plays.docs.forEach((entry) => progressBatch.delete(entry.ref));
+        await progressBatch.commit();
+      } catch (error) {
+        console.warn('[Dongtian delete] stale play cleanup deferred:', error);
+      }
+    }
 
     const cached = dongtianCache.getOwnedList(uid());
     if (cached) dongtianCache.setOwnedList(uid(), cached.filter(item => item.id !== id));
@@ -723,7 +736,7 @@ import {
       // A confirmed previous encounter can be skipped locally. Never cache a negative
       // check; another device may have encountered the cave since this browser last visited.
       if (dongtianCache.hasEncountered(visitor, item.id)) continue;
-      const playSnap = await getDoc(doc(db, PLAY_COLLECTION, `${visitor}__${item.id}`));
+      const playSnap = await getDoc(doc(progressDb, PLAY_COLLECTION, `${visitor}__${item.id}`));
       if (playSnap.exists()) {
         dongtianCache.markEncountered(visitor, item.id);
         continue;
@@ -770,7 +783,7 @@ import {
   }
 
   async function markEncountered(dongtian) {
-    const ref = doc(db, PLAY_COLLECTION, `${uid()}__${dongtian.id}`);
+    const ref = doc(progressDb, PLAY_COLLECTION, `${uid()}__${dongtian.id}`);
     await setDoc(ref, {
       uid: uid(), dongtianId: dongtian.id, ownerUid: dongtian.ownerUid || '',
       encountered: true, encounteredAt: serverTimestamp(), encounteredAtMs: Date.now(), completed: false
@@ -1322,82 +1335,38 @@ import {
   }
 
   async function completeProgress(s, correct, total, tier) {
-    const playRef = doc(db, PLAY_COLLECTION, `${uid()}__${s.dongtian.id}`);
-    const indexRef = doc(db, INDEX_COLLECTION, s.dongtian.id);
-    const firstCompletionReward = firstCompletionSpiritStones(total);
-    const cultivationReward = firstCompletionCultivation(correct);
-    let first = false;
-    let soulCultivationAdded = 0;
-    let spiritAdded = 0;
-    await runTransaction(db, async (tx) => {
-      const playerRef = doc(db, 'users', uid());
-      const [playSnap, indexSnap, playerSnap] = await Promise.all([tx.get(playRef), tx.get(indexRef), tx.get(playerRef)]);
-      if (!playerSnap.exists()) throw new Error('找不到玩家資料，無法結算神識');
-      if (!indexSnap.exists() || indexSnap.data()?.status !== 'active') throw new Error('洞天已封印，本次不進行通關結算');
-      const alreadyCompleted = playSnap.exists() && !!playSnap.data()?.completed;
-      first = !alreadyCompleted;
-      const playerData = playerSnap.data();
-      s.spiritEligibleScore = Math.max(0, Number(playerData.stats?.totalScore) || 0);
-      // 每次完整通關均可獲神識；只針對本次 runId 領取一次，重試不重複入帳。
-      const alreadySpiritPaid = playSnap.exists() && playSnap.data()?.lastSpiritRunId === s.runId;
-      spiritAdded = alreadySpiritPaid ? 0 : nascentSoulSpiritReward({
-        source: 'dongtian', score: s.spiritEligibleScore, correct, total
-      });
-      s.spiritAdded = spiritAdded;
-      soulCultivationAdded = first && correct > 0 ? soulCultivationBonusForPlayer(playerData, 'cave') : 0;
-      s.soulCultivationAdded = soulCultivationAdded;
-      tx.set(playRef, {
-        uid: uid(), dongtianId: s.dongtian.id, ownerUid: s.dongtian.ownerUid || '',
-        encountered: true, completed: true, correct, total,
-        lastSpiritRunId: s.runId,
-        accuracy: total ? correct / total : 0, rewardTier: tier,
-        completedAt: serverTimestamp(), completedAtMs: Date.now()
-      }, { merge: true });
-      if (!alreadyCompleted) {
-        tx.update(indexRef, { completionCount: increment(1) });
-        tx.update(playerRef, {
-          'stats.gold': increment(firstCompletionReward),
-          'stats.totalScore': increment(cultivationReward + soulCultivationAdded)
-        });
-        if (s.dongtian.ownerUid && s.dongtian.ownerUid !== uid()) {
-          tx.update(doc(db, 'users', s.dongtian.ownerUid), {
-            'stats.totalScore': increment(OWNER_CULTIVATION_REWARD),
-            'stats.gold': increment(OWNER_GOLD_REWARD)
-          });
-        }
-      }
-      if (spiritAdded) tx.update(playerRef, { 'stats.nascentSoulSpirit': increment(spiritAdded) });
+    const answers = s.answers.map((answer) => ({
+      id: String(answer.id || ''),
+      selected: String(answer.options?.[answer.userIdx] ?? '')
+    }));
+    const result = await rewardRepository.claimDongtian({
+      dongtianId: s.dongtian.id,
+      runId: s.runId,
+      answers
     });
-    if (first) {
+    const first = result?.firstCompletion === true;
+    const cultivationReward = firstCompletionCultivation(correct);
+    const soulCultivationAdded = Math.max(0, Number(result?.soulCultivationAdded) || 0);
+    const spiritAdded = Math.max(0, Number(result?.spiritAdded) || 0);
+    const goldAdded = Math.max(0, Number(result?.goldAdded) || 0);
+    const cultivationAdded = Math.max(0, Number(result?.cultivationAdded) || 0);
+    s.spiritAdded = spiritAdded;
+    s.soulCultivationAdded = soulCultivationAdded;
+
+    if (result?.applied === true) {
       const data = userData();
       if (data) {
         data.stats = data.stats || {};
-        data.stats.gold = Math.max(0, Number(data.stats.gold) || 0) + firstCompletionReward;
-        data.stats.totalScore = Math.max(0, Number(data.stats.totalScore) || 0) + cultivationReward + soulCultivationAdded;
+        data.stats.gold = Math.max(0, Number(data.stats.gold) || 0) + goldAdded;
+        data.stats.totalScore = Math.max(0, Number(data.stats.totalScore) || 0) + cultivationAdded;
+        if (spiritAdded) data.stats.nascentSoulSpirit = normalizeSpirit(data.stats.nascentSoulSpirit) + spiritAdded;
       }
       window.updateUIStats?.();
       window.refreshCultivationRealmUI?.();
       window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', {
-        detail: { source: 'dongtian-first-completion', goldAdded: firstCompletionReward, cultivationAdded: cultivationReward + soulCultivationAdded, soulCultivationAdded, spiritAdded, questionCount: total }
-      }));
-    }
-    if (spiritAdded && !first) {
-      const data = userData();
-      if (data) {
-        data.stats = data.stats || {};
-        data.stats.nascentSoulSpirit = normalizeSpirit(data.stats.nascentSoulSpirit) + spiritAdded;
-      }
-      window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', {
-        detail: { source: 'dongtian-repeat-completion', spiritAdded, questionCount: total }
-      }));
-    } else if (spiritAdded && first) {
-      const data = userData();
-      if (data) {
-        data.stats = data.stats || {};
-        data.stats.nascentSoulSpirit = normalizeSpirit(data.stats.nascentSoulSpirit) + spiritAdded;
-      }
-      window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', {
-        detail: { source: 'dongtian-spirit', spiritAdded, questionCount: total }
+        detail: { source:first ? 'dongtian-first-completion' : 'dongtian-repeat-completion',
+          goldAdded, cultivationAdded, soulCultivationAdded, spiritAdded, correct, questionCount:total,
+          baseCultivation:first ? cultivationReward : 0 }
       }));
     }
     return first;
@@ -1408,7 +1377,7 @@ import {
     s.logged = true;
     const c = correct ?? s.answers.filter((a) => a.isCorrect).length;
     const t = total ?? s.answers.length;
-    await addDoc(collection(db, 'exam_logs'), {
+    await playerRepository.addExamLog({
       uid: uid(), email: auth.currentUser?.email || '',
       mode: 'dongtian', topic: '洞天',
       dongtianId: s.dongtian.id, dongtianName: s.dongtian.name,
@@ -1527,4 +1496,5 @@ import {
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
   else boot();
+}  })();
 })();

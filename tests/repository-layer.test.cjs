@@ -55,3 +55,16 @@ test('raid reward uses reusable receipt transaction primitive', () => {
   assert.match(receipt, /if \(snap\.exists\)/);
   assert.match(receipt, /tx\.create\(receiptRef, receipt\)/);
 });
+
+test('battle room traffic is isolated to C and rewards cross the server bridge to A', () => {
+  const mode=read('public/cultivation/battle-mode-v2.js'), repository=read('public/cultivation/data/battle-repository.js'), reward=read('public/cultivation/data/reward-repository.js'), api=read('battle-reward-api.cjs');
+  assert.match(mode,/battleRepository\.connect\(\)/);assert.match(mode,/rewardRepository\.claimBattle/);
+  assert.doesNotMatch(mode,/getFirestore\(getApp\(\)\)|getAuth\(getApp\(\)\)/);
+  assert.match(repository,/getProjectServices\('C'\)/);assert.match(api,/playerRepository\.resolve\(\)/);assert.match(api,/battleRepository\.resolve\(\)/);assert.match(api,/runRewardReceipt/);assert.match(reward,/\/api\/battle\/reward/);
+});
+test('Dongtian content uses BD while plays, history and player rewards remain in A', () => {
+  const mode=read('public/cultivation/dongtian.js'), repository=read('public/cultivation/data/dongtian-repository.js'), player=read('public/cultivation/data/player-repository.js'), reward=read('public/cultivation/data/reward-repository.js'), api=read('dongtian-settlement-api.cjs');
+  assert.match(mode,/dongtianRepository\.connect\(\)/);assert.match(mode,/const progressDb = progress\.db/);assert.match(mode,/collection\(progressDb, PLAY_COLLECTION\)/);assert.match(mode,/playerRepository\.addExamLog/);assert.match(mode,/rewardRepository\.claimDongtian/);
+  assert.doesNotMatch(mode,/getFirestore\(getApp\(\)\)|getAuth\(getApp\(\)\)/);
+  assert.match(repository,/progressRole:'A'/);assert.match(repository,/getProjectServices\('BD'\)/);assert.match(repository,/getProjectServices\('A'/);assert.match(player,/collection\(db,'exam_logs'\)/);assert.match(reward,/\/api\/dongtian\/settle/);assert.match(api,/PLAY_COLLECTION='dongtianPlays'/);
+});

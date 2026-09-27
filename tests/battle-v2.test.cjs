@@ -198,87 +198,33 @@ this.reward=battleReward;`, context);
   assert.equal(context.reward(room,'outsider').gold,0);
 });
 
-test('Battle v2 awards each player atomically and only once, even after a reload', async () => {
-  const from = battleSource.indexOf('  function battleReward(room, uid) {');
-  const rewardEnd = battleSource.indexOf('  function renderResult(room) {', from);
-  const recordStart = battleSource.indexOf('  async function recordBattleResult(room, requestedRoomId = state.roomId) {');
-  const recordEnd = battleSource.indexOf('  function onRoomSnapshot(snap) {',recordStart);
-  assert.ok(from >= 0 && rewardEnd > from && recordStart > rewardEnd && recordEnd > recordStart);
 
-  const room = {modeVersion:2,status:'finished',winner:'host',host:{uid:'host'},guest:{uid:'guest'},
-    hostResultRecorded:false,guestResultRecorded:false};
-  const users = {
-    host:{stats:{gold:100,totalScore:10,battleMatches:0,battleWins:0}},
-    guest:{stats:{gold:100,totalScore:10,battleMatches:0,battleLosses:0}}
-  };
-  let currentUid = 'host', txCount = 0;
-  const events = [];
-  const applyPatch = (row,patch) => Object.entries(patch).forEach(([key,value]) => {
-    const parts = key.split('.');
-    let target = row;
-    for (const part of parts.slice(0,-1)) target = target[part] ||= {};
-    target[parts.at(-1)] = value;
-  });
-  const context = {
-    BATTLE_WIN_GOLD:500,BATTLE_WIN_CULTIVATION:5,BATTLE_LOSS_GOLD:200,
-    BATTLE_V2:{modeVersion:2},state:{roomId:'battle-one',resultRecordedRoom:null},
-    me:()=>({uid:currentUid}),db:()=>({}),doc:(_db,_name,uid)=>({kind:'user',uid}),
-    roomRef:(id)=>({kind:'room',id}),serverTimestamp:()=>111,
-    userData:()=>users[currentUid],CustomEvent:class {constructor(type,opts){this.type=type;this.detail=opts.detail;}},
-    window:{updateUIStats:()=>{},refreshCultivationRealmUI:()=>{},
-      dispatchEvent:(event)=>events.push(event)},
-    runTransaction:async (_db,action) => {
-      txCount++;
-      const writes = [];
-      const tx = {
-        get:async (ref)=>({exists:()=>true,data:()=>ref.kind==='room'?room:users[ref.uid]}),
-        update:(ref,patch)=>writes.push({ref,patch})
-      };
-      const result = await action(tx);
-      // The receipt marker and the matching currency/score change commit together.
-      assert.equal(writes.length, result ? 2 : 0);
-      for(const {ref,patch} of writes) applyPatch(ref.kind==='room'?room:users[ref.uid],patch);
-      return result;
-    }
-  };
-  vm.createContext(context);
-  vm.runInContext(`${battleSource.slice(from,rewardEnd)}
-${battleSource.slice(recordStart,recordEnd)}
-this.claim=recordBattleResult;`,context);
-  let result = await context.claim(null,'battle-one');
-  assert.equal(result.goldAdded,500);
-  assert.equal(result.cultivationAdded,5);
-  assert.equal(users.host.stats.gold,600);
-  assert.equal(users.host.stats.totalScore,15);
-  assert.equal(users.host.stats.battleWins,1);
-  assert.equal(room.hostResultRecorded,true);
-  context.state.resultRecordedRoom = null; // Simulate reconnect / reload.
-  assert.equal(await context.claim(null,'battle-one'),null);
-  assert.equal(users.host.stats.gold,600);
-  currentUid='guest';context.state.resultRecordedRoom=null;
-  result = await context.claim(null,'battle-one');
-  assert.equal(result.goldAdded,200);
-  assert.equal(result.cultivationAdded,0);
-  assert.equal(users.guest.stats.gold,300);
-  assert.equal(users.guest.stats.totalScore,10);
-  assert.equal(users.guest.stats.battleLosses,1);
-  assert.equal(room.guestResultRecorded,true);
-  context.state.resultRecordedRoom=null;
-  assert.equal(await context.claim(null,'battle-one'),null);
-  assert.equal(users.guest.stats.gold,300);
-  assert.equal(events.filter(e=>e.detail.goldAdded>0).length,2);
-  assert.equal(txCount,4);
+test('Battle v2 rewards bridge Firebase C rooms to idempotent Firebase A receipts', () => {
+  const rewardApi = readFileSync(join(__dirname, '../battle-reward-api.cjs'), 'utf8');
+  const start = battleSource.indexOf('  async function recordBattleResult(room, requestedRoomId = state.roomId) {');
+  const end = battleSource.indexOf('  function onRoomSnapshot(snap) {', start);
+  assert.ok(start >= 0 && end > start);
+  const record = battleSource.slice(start, end);
+  assert.match(record, /rewardRepository\.claimBattle\(requestedRoomId\)/);
+  assert.doesNotMatch(record, /runTransaction|doc\(db\(\), 'users'/);
+  assert.match(record, /if \(awarded\.awarded && me\(\)\?\.uid === uid\)/);
+  assert.match(rewardApi, /runRewardReceipt/);
+  assert.match(rewardApi, /playerRepository\.resolve\(\)/);
+  assert.match(rewardApi, /battleRepository\.resolve\(\)/);
+  assert.match(rewardApi, /battleRewardClaims/);
 });
 
-test('Battle v2 displays paid rewards and recovers a forfeiting or disconnected loser', () => {
+
+test('Battle v2 displays paid rewards and retries server receipts after forfeits or reconnects', () => {
+  const rewardApi = readFileSync(join(__dirname, '../battle-reward-api.cjs'), 'utf8');
   assert.match(battleSource, /id="bv2-reward-status"/);
   assert.match(battleSource, /已發放.*靈石/);
   assert.match(battleSource, /forfeitCurrentRoom\(\);[\s\S]*await recordBattleResult\(null, state\.roomId\)/);
   assert.match(battleSource, /for \(const entry of ownRooms\)/);
-  assert.match(battleSource, /finished\.status !== 'finished'/);
   assert.match(battleSource, /await recordBattleResult\(null, entry\.id\)/);
-  assert.match(battleSource, /tx\.update\(ref, \{ \[marker\]: true/);
-  assert.match(battleSource, /userPatch\['stats\.totalScore'\] = previousScore \+ reward\.cultivation/);
+  assert.match(battleSource, /rewardRepository\.claimBattle\(requestedRoomId\)/);
+  assert.match(rewardApi, /runRewardReceipt/);
+  assert.match(rewardApi, /\[marker\]:true/);
 });
 
 test('arena has xianxia combat feedback, impact animation and responsive mobile layout', () => {

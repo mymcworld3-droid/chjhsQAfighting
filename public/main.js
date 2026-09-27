@@ -141,12 +141,16 @@ async function loadXiuxianFeaturesSafely() {
       detail: { loaded: index, total, modulePath }
     }));
     try {
+      let loadedModule;
       if (modulePath === './cultivation/raid-mode.js') {
-        await import(`${modulePath}?v=${RAID_FEATURE_BUILD}`);
+        loadedModule = await import(`${modulePath}?v=${RAID_FEATURE_BUILD}`);
       } else if (modulePath === './cultivation/battle-v3-stability-ui.js') {
-        await import(`${modulePath}?v=${BATTLE_FEATURE_BUILD}`);
+        loadedModule = await import(`${modulePath}?v=${BATTLE_FEATURE_BUILD}`);
       } else {
-        await import(`${modulePath}?v=${XIUXIAN_FEATURE_BUILD}`);
+        loadedModule = await import(`${modulePath}?v=${XIUXIAN_FEATURE_BUILD}`);
+      }
+      if (loadedModule?.featureReady && typeof loadedModule.featureReady.then === 'function') {
+        await loadedModule.featureReady;
       }
     } catch (error) {
       failures.push(modulePath);
