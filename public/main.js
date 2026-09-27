@@ -2,8 +2,10 @@
 // Google 登入本身不被附加模組阻斷；登入後的遊戲則必須等所有修仙模組載入成功才開始。
 import './main-legacy.js?v=20260925-helper-thinking1';
 import './cultivation/dongtian-entry.js';
-// 資料存取契約先載入；只有真正呼叫 Repository 時才會連線到對應資料域。
-import './cultivation/data/index.js';
+// Repository 註冊屬於附加能力；即使載入失敗也不能阻斷 Google 登入核心。
+void import('./cultivation/data/index.js').catch((error) => {
+  console.error('[Data repositories] failed to initialize repository registry', error);
+});
 
 // 帳號刪除是登入核心旁的獨立增強；載入失敗也不能阻斷 Google 登入。
 void import('./account-delete.js').catch((error) => {
