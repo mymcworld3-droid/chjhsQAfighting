@@ -1,0 +1,117 @@
+/* Global visual viewport protection.
+   env(safe-area-inset-*) handles device cutouts/home indicator;
+   --app-vv-* handles Safari/Chrome browser chrome that CSS 100vh/100dvh can still overlap. */
+:root{
+  --app-vv-top:0px;
+  --app-vv-left:0px;
+  --app-vv-right:0px;
+  --app-vv-bottom:0px;
+  --app-vv-width:100vw;
+  --app-vv-height:100dvh;
+}
+
+/* True fullscreen roots: constrain them to the visual viewport, never the layout viewport. */
+html.app-visual-viewport-ready :is(
+  #raid-question.raid-question-view,
+  #dongtian-overlay.dt-overlay,
+  #page-battle.battle-v2-page,
+  #scope-studio,
+  .dm-overlay,
+  #admin-product-editor.admin-product-editor-fullscreen,
+  #xiuxian-story-layer,
+  #xiuxian-story-archive,
+  #newbie-tutorial-layer,
+  #golden-core-tutorial-layer,
+  #qi-five-dongtian-tutorial-layer,
+  #battle-tutorial-layer.bt-final-mode,
+  #game-startup-gate
+){
+  position:fixed!important;
+  inset:auto!important;
+  top:var(--app-vv-top)!important;
+  left:var(--app-vv-left)!important;
+  right:auto!important;
+  bottom:auto!important;
+  width:var(--app-vv-width)!important;
+  max-width:var(--app-vv-width)!important;
+  height:var(--app-vv-height)!important;
+  min-height:0!important;
+  max-height:var(--app-vv-height)!important;
+  box-sizing:border-box!important;
+}
+
+/* Fullscreen/modal backdrops also stay inside the visible browser area. */
+html.app-visual-viewport-ready :is(
+  .dt-modal,
+  .uib-modal-backdrop,
+  .amm-modal,
+  .aam-modal,
+  .progression-modal-backdrop,
+  .fi-backdrop,
+  .xpp-backdrop,
+  #report-modal:not(.hidden),
+  #custom-confirm-modal:not(.hidden),
+  #realm-breakthrough-feedback
+){
+  top:var(--app-vv-top)!important;
+  bottom:var(--app-vv-bottom)!important;
+  left:var(--app-vv-left)!important;
+  right:var(--app-vv-right)!important;
+  max-height:var(--app-vv-height)!important;
+  box-sizing:border-box!important;
+}
+
+/* Fixed bottom UI must clear mobile browser chrome, not only the hardware safe area. */
+html.app-visual-viewport-ready body.xianxia-theme #bottom-nav{
+  bottom:max(14px,calc(var(--app-vv-bottom) + env(safe-area-inset-bottom,0px)))!important;
+}
+html.app-visual-viewport-ready :is(
+  .newbie-tutorial-card,
+  .golden-core-tutorial-card,
+  #qi-five-dongtian-tutorial-layer .qfd-card
+){
+  bottom:max(14px,calc(var(--app-vv-bottom) + env(safe-area-inset-bottom,0px)))!important;
+}
+
+/* Scrollable fullscreen content gets a visible bottom runway. */
+html.app-visual-viewport-ready :is(
+  .raid-question-shell,
+  #dongtian-overlay .dt-question,
+  #page-battle .bv2-shell,
+  .dm-body,
+  #scope-studio .ss-main,
+  #scope-studio .ss-content,
+  #admin-product-editor.admin-product-editor-fullscreen,
+  #xiuxian-story-archive .story-archive-card
+){
+  scroll-padding-bottom:max(18px,env(safe-area-inset-bottom,0px))!important;
+}
+
+/* Common centered dialogs use the real visual viewport for their cap. */
+html.app-visual-viewport-ready :is(
+  .dt-modal-card,
+  .uib-modal,
+  .amm-card,
+  .aam-card,
+  .fi-modal,
+  .xpp-dialog,
+  .progression-modal,
+  #custom-confirm-box
+){
+  max-height:min(calc(var(--app-vv-height) - 28px),92dvh)!important;
+  box-sizing:border-box!important;
+}
+
+/* Toasts should never land behind the browser toolbar. */
+html.app-visual-viewport-ready :is(
+  .training-v3-toast,
+  .raid-toast
+){
+  margin-bottom:var(--app-vv-bottom)!important;
+}
+
+@media(max-width:760px){
+  html.app-visual-viewport-ready .raid-question-shell{
+    padding-bottom:max(18px,env(safe-area-inset-bottom,0px))!important;
+  }
+}
