@@ -3,7 +3,9 @@
 body.xianxia-theme:has(#page-raid.active-page){overflow:hidden}
 body.xianxia-theme:has(#page-raid.active-page) main{height:100dvh;box-sizing:border-box;overflow:hidden}
 #page-raid>.raid-view:not(.hidden){height:100%;min-height:0;overflow:hidden}
-#raid-hub:not(.hidden),#raid-lobby:not(.hidden),#raid-result:not(.hidden){display:grid;grid-template-rows:auto minmax(0,1fr);align-content:start}
+#raid-hub:not(.hidden){display:grid;grid-template-rows:auto minmax(0,1fr);align-content:start}
+#raid-lobby:not(.hidden){display:grid;grid-template-rows:auto minmax(0,1fr) auto;align-content:start}
+#raid-result:not(.hidden){display:grid;grid-template-rows:minmax(0,1fr);align-content:stretch}
 #raid-arena:not(.hidden){display:grid;grid-template-rows:auto auto minmax(0,1fr);min-height:0;overflow:hidden}
 .raid-page .hidden{display:none!important}
 .raid-home-entry{width:100%;margin:0 0 18px;padding:14px 16px;display:grid;grid-template-columns:54px minmax(0,1fr) 32px;gap:12px;align-items:center;border:1px solid rgba(229,196,112,.28);border-radius:18px;background:linear-gradient(135deg,rgba(46,28,20,.94),rgba(13,14,17,.96));color:#f5ead0;text-align:left;box-shadow:0 14px 34px rgba(0,0,0,.28),inset 0 1px rgba(255,255,255,.03);transition:.2s ease}
