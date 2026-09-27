@@ -15,7 +15,7 @@ import {
   'use strict';
 
   const PAGE_ID = 'page-raid';
-  const STYLE_HREF = 'styles/raid-mode.css?v=20260927-raid-nav-fit2';
+  const STYLE_HREF = 'styles/raid-mode.css?v=20260927-raid-lobby-fit3';
   const MALE = 'assets/story/characters/player-male-determined.png';
   const FEMALE = 'assets/story/characters/player-female-determined.png';
   const HEARTBEAT_MS = 8000;
@@ -258,8 +258,8 @@ import {
 
   function renderHub() {
     state.status = state.roomId ? state.status : 'hub';
-    show('hub');
     document.body.classList.remove('raid-session-active');
+    show('hub');
     const locked = score() < RAID_MVP.minimumScore;
     const hub = document.getElementById('raid-hub');
     hub.innerHTML =
@@ -328,8 +328,8 @@ import {
   function renderLobby() {
     if (!state.room || !state.player) return renderHub();
     state.status = 'lobby';
-    show('lobby');
     document.body.classList.add('raid-session-active');
+    show('lobby');
     const members = raidRoomMembers(state.room);
     const me = myRoomMember();
     void inviteOnlineFriends();
@@ -359,6 +359,7 @@ import {
       void setRaidReady(state.roomId, !me?.ready).catch(error => toast(error.message || '準備狀態更新失敗'));
     });
     lobby.querySelector('[data-start]')?.addEventListener('click', function () { void hostStartRaid(); });
+    syncRaidBottomClearance();
   }
 
   function currentBossClock() {
