@@ -164,7 +164,7 @@ test('raid hub bottom follows the real bottom navigation top edge', () => {
 
 
 test('raid hub card is measured directly to the navigation edge and cache-busted', () => {
-  assert.match(raidSource, /STYLE_HREF = 'styles\/raid-mode\.css\?v=20260927-raid-lobby-actions5'/);
+  assert.match(raidSource, /STYLE_HREF = 'styles\/raid-mode\.css\?v=20260927-raid-vv8'/);
   assert.match(raidSource, /function fitRaidHubToNavigation\(\)/);
   assert.match(raidSource, /navTop - cardTop - 8/);
   assert.match(raidSource, /card\.style\.setProperty\('height', targetHeight \+ 'px', 'important'\)/);
@@ -217,4 +217,16 @@ test('raid leave uses the built-in confirmation modal', () => {
   assert.match(body, /await window\.openConfirm\('退出隊伍會離開本次團本，確定離開？'\)/);
   assert.match(body, /if \(confirmed !== true\) return/);
   assert.doesNotMatch(body, /window\.confirm|\bconfirm\(/);
+});
+
+
+test('raid session height uses the real visual viewport', () => {
+  assert.match(raidSource, /const vv = window\.visualViewport/);
+  assert.match(raidSource, /const visualHeight = Math\.max\(1, Number\(vv\?\.height\)/);
+  assert.match(raidSource, /document\.querySelector\('body > header'\)/);
+  assert.match(raidSource, /visualHeight - headerHeight - \(sessionActive \? 0 : clearance\)/);
+  assert.match(raidSource, /page\.style\.setProperty\('height', pageHeight \+ 'px', 'important'\)/);
+  assert.match(raidSource, /page\.style\.setProperty\('bottom', 'auto', 'important'\)/);
+  assert.match(raidSource, /window\.addEventListener\('app:visual-viewport', scheduleRaidHubFit/);
+  assert.match(cssSource, /height:var\(--raid-page-height,calc\(100dvh - 72px\)\)!important/);
 });
