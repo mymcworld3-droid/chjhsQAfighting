@@ -264,7 +264,7 @@ function createHandler({
           if (!members.length || members.some(member => !member.ready)) {
             throw Object.assign(new Error('仍有隊員尚未準備'), { status: 409 });
           }
-          const boss = createTeamBoss(members);
+          const boss = createTeamBoss(activeMembers);
           const update = {
             status: 'active',
             startedAtMs: now(),
