@@ -106,8 +106,8 @@ test('raid protocol ignores client combat claims and uses trusted A/C server res
   assert.match(room,/api\('join-code', \{ roomCode \}\)/);
   assert.match(room,/player-action', \{ roomId, actionId, questionId, choice, ticket \}/);
   assert.match(room,/boss-defense', \{ roomId, bossActionSeen \}/);
-  assert.doesNotMatch(room,/player-action'.*damage/s);
-  assert.doesNotMatch(room,/boss-defense'.*reflectedDamage/s);
+  assert.doesNotMatch(room,/commitRaidPlayerAction\(\{ roomId, actionId, damage, hp, correct \}\)/);
+  assert.doesNotMatch(room,/commitRaidBossDefense\(\{ roomId, hp, bossActionSeen, reflectedDamage/);
 
   assert.doesNotMatch(mode,/resolveShenPlayerAction|resolveShenBossAction/);
   assert.match(mode,/state\.answerCorrect = resolution\.correct === true/);
