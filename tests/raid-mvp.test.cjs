@@ -161,3 +161,13 @@ test('raid hub bottom follows the real bottom navigation top edge', () => {
   assert.match(raidSource, /visualViewport\?\.addEventListener/);
   assert.match(cssSource, /bottom:var\(--raid-bottom-clearance,116px\)!important/);
 });
+
+
+test('raid hub card is measured directly to the navigation edge and cache-busted', () => {
+  assert.match(raidSource, /STYLE_HREF = 'styles\/raid-mode\.css\?v=20260927-raid-nav-fit2'/);
+  assert.match(raidSource, /function fitRaidHubToNavigation\(\)/);
+  assert.match(raidSource, /navTop - cardTop - 8/);
+  assert.match(raidSource, /card\.style\.setProperty\('height', targetHeight \+ 'px', 'important'\)/);
+  assert.match(raidSource, /new ResizeObserver\(scheduleRaidHubFit\)\.observe\(nav\)/);
+  assert.match(raidSource, /setTimeout\(scheduleRaidHubFit, 360\)/);
+});
