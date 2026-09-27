@@ -940,7 +940,12 @@ import {
   }
 
   async function leaveRaid() {
-    if (!window.confirm('退出隊伍會離開本次團本，確定離開？')) return;
+    if (typeof window.openConfirm !== 'function') {
+      toast('確認視窗尚未載入，請稍後再試');
+      return;
+    }
+    const confirmed = await window.openConfirm('退出隊伍會離開本次團本，確定離開？');
+    if (confirmed !== true) return;
     const roomId = state.roomId;
     resetRaid(false);
     if (roomId) await leaveRaidRoom(roomId).catch(() => {});
