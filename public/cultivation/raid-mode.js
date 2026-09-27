@@ -89,6 +89,19 @@ import {
     link.href = STYLE_HREF;
     document.head.appendChild(link);
   }
+  function syncRaidViewportLock() {
+    const page = document.getElementById(PAGE_ID);
+    const active = !!page?.classList.contains('active-page') && !page.classList.contains('hidden');
+    document.documentElement.classList.toggle('raid-page-open', active);
+    document.body.classList.toggle('raid-page-open', active);
+    if (active) {
+      // The raid is a viewport surface, not part of the document's scroll flow.
+      // Reset any inherited page offset so fixed header/navigation never move with raid content.
+      try { window.scrollTo({ top: 0, left: 0, behavior: 'auto' }); }
+      catch (_) { window.scrollTo?.(0, 0); }
+    }
+  }
+
   function ensurePage() {
     let page = document.getElementById(PAGE_ID);
     if (!page) {
@@ -105,6 +118,14 @@ import {
         '<section id="raid-question" class="raid-view raid-question-view hidden"></section>' +
         '<section id="raid-result" class="raid-view hidden"></section>';
     }
+    if (!page.dataset.raidViewportObserver) {
+      page.dataset.raidViewportObserver = '1';
+      new MutationObserver(syncRaidViewportLock).observe(page, {
+        attributes: true,
+        attributeFilter: ['class']
+      });
+    }
+    syncRaidViewportLock();
     return page;
   }
   function show(name) {
@@ -200,7 +221,10 @@ import {
       '<button class="raid-ghost" type="button" data-create ' + (locked ? 'disabled' : '') + '>建立私人隊伍</button></div>' +
       '<div class="raid-code-join"><input id="raid-room-code-input" maxlength="6" placeholder="輸入 6 碼隊伍代碼"><button class="raid-ghost" type="button" data-code ' + (locked ? 'disabled' : '') + '>加入隊伍</button></div>' +
       '</div></article>';
-    hub.querySelector('[data-home]')?.addEventListener('click', function () { window.switchToPage?.('page-home'); });
+    hub.querySelector('[data-home]')?.addEventListener('click', function () {
+      window.switchToPage?.('page-home');
+      syncRaidViewportLock();
+    });
     hub.querySelector('[data-quick]')?.addEventListener('click', function () { void enterRoom('quick'); });
     hub.querySelector('[data-create]')?.addEventListener('click', function () { void enterRoom('create'); });
     hub.querySelector('[data-code]')?.addEventListener('click', function () {
@@ -827,6 +851,7 @@ import {
       await leaveRaidRoom(state.roomId).catch(() => {});
       resetRaid(false);
       window.switchToPage?.('page-home');
+      syncRaidViewportLock();
     });
     result.querySelector('[data-again]')?.addEventListener('click', async function () {
       await leaveRaidRoom(state.roomId).catch(() => {});
@@ -877,6 +902,7 @@ import {
   function openHub() {
     ensurePage();
     window.switchToPage?.(PAGE_ID);
+    syncRaidViewportLock();
     if (state.roomId && state.room?.status === 'waiting') renderLobby();
     else if (state.roomId && state.room?.status === 'active') {
       document.body.classList.add('raid-session-active');
