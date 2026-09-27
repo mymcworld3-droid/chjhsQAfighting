@@ -58,5 +58,5 @@ test('shop product edits retain Firestore save and delete behavior', () => {
 
 test('browser loads the latest fullscreen editor core after index update', () => {
   assert.match(main, /main-legacy\.js\?v=20260925-helper-thinking1/);
-  assert.match(index, /main\.js\?v=20260927-raid-lobby-actions5/);
+  assert.match(index, /main\.js\?v=20260927-raid-confirm6/);
 });
