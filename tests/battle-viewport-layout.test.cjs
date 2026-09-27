@@ -36,7 +36,7 @@ test('safe-area fullscreen keeps short stages visible and long content reachable
   for (const fragment of [
     'height:var(--battle-vv-height,100dvh)!important;min-height:0!important',
     'overflow:hidden!important;overscroll-behavior:none!important',
-    'max(7px,env(safe-area-inset-bottom))',
+    'max(10px,env(safe-area-inset-bottom))',
     'grid-template-rows:auto auto minmax(110px,1fr) auto auto auto!important',
     'grid-template-rows:auto auto minmax(96px,1fr) auto auto auto!important',
     'overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain',
