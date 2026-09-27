@@ -89,7 +89,7 @@ test('raid protocol ignores client combat claims and uses trusted A/C server res
   const server=read('server.js');
 
   assert.match(api,/loadTrustedRaidPlayer\(playerDb, uid\)/);
-  assert.match(api,/createTeamBoss\(members\)/);
+  assert.match(api,/createTeamBoss\(activeMembers\)/);
   assert.match(api,/resolvePlayerAction\(\{ \.\.\.me \}, \{ roomId, actionId: id, correct \}\)/);
   assert.match(api,/resolveBossDefense\(\{ \.\.\.me \}, \{ roomId, bossAction \}\)/);
   assert.match(api,/readRaidQuestionTicket\(req\.body\.ticket\)/);
@@ -115,4 +115,7 @@ test('raid protocol ignores client combat claims and uses trusted A/C server res
   assert.match(question,/ans: null, exp: ''/);
   assert.match(server,/issueRaidQuestionTicket/);
   assert.match(server,/raidActionId > expected \+ 1/);
+  assert.match(server,/subject = trusted\.subject/);
+  assert.match(server,/level = trusted\.level/);
+  assert.match(server,/knowledgeMap = null/);
 });
