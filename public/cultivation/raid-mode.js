@@ -15,7 +15,7 @@ import {
   'use strict';
 
   const PAGE_ID = 'page-raid';
-  const STYLE_HREF = 'styles/raid-mode.css';
+  const STYLE_HREF = 'styles/raid-mode.css?v=20260927-raid-nav-fit2';
   const MALE = 'assets/story/characters/player-male-determined.png';
   const FEMALE = 'assets/story/characters/player-female-determined.png';
   const HEARTBEAT_MS = 8000;
@@ -83,24 +83,57 @@ import {
     return !!document.querySelector('#xiuxian-story-layer,#newbie-tutorial-layer,#battle-tutorial-layer,#golden-core-tutorial-layer,#dongtian-overlay');
   }
   function ensureStyle() {
-    if (document.querySelector('link[href="' + STYLE_HREF + '"]')) return;
+    const existing = [...document.querySelectorAll('link[rel="stylesheet"]')]
+      .find(link => String(link.getAttribute('href') || '').includes('styles/raid-mode.css'));
+    if (existing?.getAttribute('href') === STYLE_HREF) return;
+    existing?.remove();
     const link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = STYLE_HREF;
     document.head.appendChild(link);
   }
+  let raidHubFitFrame = 0;
+
+  function fitRaidHubToNavigation() {
+    const hub = document.getElementById('raid-hub');
+    const card = hub?.querySelector?.('.raid-boss-card');
+    const nav = document.getElementById('bottom-nav');
+    if (!hub || hub.classList.contains('hidden') || !card || !nav) return;
+    const navRect = nav.getBoundingClientRect?.();
+    const cardRect = card.getBoundingClientRect?.();
+    const navTop = Number(navRect?.top) || 0;
+    const cardTop = Number(cardRect?.top) || 0;
+    if (!(navTop > cardTop && cardTop > 0)) return;
+    const targetHeight = Math.max(180, Math.floor(navTop - cardTop - 8));
+    card.style.setProperty('height', targetHeight + 'px', 'important');
+    card.style.setProperty('max-height', targetHeight + 'px', 'important');
+  }
+
+  function scheduleRaidHubFit() {
+    cancelAnimationFrame(raidHubFitFrame);
+    raidHubFitFrame = requestAnimationFrame(() => {
+      raidHubFitFrame = requestAnimationFrame(() => {
+        syncRaidBottomClearance();
+        fitRaidHubToNavigation();
+      });
+    });
+  }
+
   function syncRaidBottomClearance() {
     const page = document.getElementById(PAGE_ID);
     const nav = document.getElementById('bottom-nav');
     if (!page || !nav) return;
-    const viewportHeight = Math.max(0, Number(window.innerHeight) || document.documentElement.clientHeight || 0);
+    const viewportHeight = Math.max(0, Number(window.visualViewport?.height) || Number(window.innerHeight) || document.documentElement.clientHeight || 0);
     const navTop = Math.max(0, Number(nav.getBoundingClientRect?.().top) || 0);
-    // Keep an 8px breathing room above the visible bottom navigation.
-    // This follows the real rendered nav height instead of assuming a fixed mobile size.
     const clearance = navTop > 0 && viewportHeight > navTop
       ? Math.ceil(viewportHeight - navTop + 8)
       : 116;
     page.style.setProperty('--raid-bottom-clearance', clearance + 'px');
+    if (!document.body.classList.contains('raid-session-active')) {
+      page.style.setProperty('bottom', clearance + 'px', 'important');
+    } else {
+      page.style.setProperty('bottom', '0px', 'important');
+    }
   }
 
   function syncRaidViewportLock() {
@@ -236,6 +269,9 @@ import {
       '<button class="raid-ghost" type="button" data-create ' + (locked ? 'disabled' : '') + '>建立私人隊伍</button></div>' +
       '<div class="raid-code-join"><input id="raid-room-code-input" maxlength="6" placeholder="輸入 6 碼隊伍代碼"><button class="raid-ghost" type="button" data-code ' + (locked ? 'disabled' : '') + '>加入隊伍</button></div>' +
       '</div></article>';
+    scheduleRaidHubFit();
+    setTimeout(scheduleRaidHubFit, 120);
+    setTimeout(scheduleRaidHubFit, 360);
     hub.querySelector('[data-home]')?.addEventListener('click', function () {
       window.switchToPage?.('page-home');
       syncRaidViewportLock();
@@ -955,8 +991,17 @@ import {
   function boot() {
     ensureStyle();
     ensurePage();
-    window.addEventListener('resize', syncRaidBottomClearance, { passive: true });
-    window.visualViewport?.addEventListener?.('resize', syncRaidBottomClearance, { passive: true });
+    const nav = document.getElementById('bottom-nav');
+    window.addEventListener('resize', scheduleRaidHubFit, { passive: true });
+    window.visualViewport?.addEventListener?.('resize', scheduleRaidHubFit, { passive: true });
+    window.visualViewport?.addEventListener?.('scroll', scheduleRaidHubFit, { passive: true });
+    if (nav && globalThis.ResizeObserver) new ResizeObserver(scheduleRaidHubFit).observe(nav);
+    if (nav) new MutationObserver(scheduleRaidHubFit).observe(nav, {
+      attributes: true,
+      attributeFilter: ['class', 'style'],
+      childList: true,
+      subtree: true
+    });
     mountHomeEntry();
     renderHub();
     window.addEventListener('xiuxian:user-ready', function () {
