@@ -1,6 +1,3 @@
-import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-import { getFirestore, doc, collection, getDoc, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { RAID_MVP, createTeamScaledShenBoss, shenPhaseForHp, shenIntentForRound, bossClockState } from './raid-engine.js';
 import { snapshotBattleKnowledge, resolveBattleKnowledge } from './battle-question-scope.js';
 import { generateRaidQuestion } from './raid-question.js';
@@ -10,6 +7,8 @@ import {
   setRaidReady, startRaidRoom, subscribeRaidRoom, heartbeatRaidRoom, commitRaidPlayerAction,
   commitRaidBossDefense, advanceRaidBossAction, leaveRaidRoom, raidRoomMembers, raidMemberOnline
 } from './raid-room.js';
+import { playerRepository } from './data/player-repository.js';
+import { rewardRepository } from './data/reward-repository.js';
 
 (function () {
   'use strict';
@@ -297,40 +296,27 @@ import {
   async function inviteOnlineFriends() {
     if (!state.roomId || !state.room || !isHost() || state.room.status !== 'waiting' || state.invitedRoomId === state.roomId) return;
     state.invitedRoomId = state.roomId;
-    const user = getAuth(getApp()).currentUser;
+    const user = playerRepository.currentUser();
     const friends = [...new Set((data()?.friends || []).filter(uid => typeof uid === 'string' && uid !== user?.uid))].slice(0, 30);
     if (!user || !friends.length) return;
-    const mainDb = getFirestore(getApp());
     try {
-      const records = await Promise.all(friends.map(uid => getDoc(doc(mainDb, 'users', uid)).catch(() => null)));
-      const cutoff = now() - 5 * 60 * 1000;
-      const online = records.filter(snap => {
-        if (!snap?.exists()) return false;
-        const active = snap.data()?.lastActive;
-        const at = active?.toMillis?.() || Number(active) || 0;
-        return at > cutoff;
-      });
-      await Promise.all(online.map(async snap => {
-        try {
-          await addDoc(collection(mainDb, 'users', snap.id, 'invitations'), {
-            raidVersion: 2,
-            raidCode: state.room.code,
-            raidRoomId: state.roomId,
-            hostUid: user.uid,
-            hostName: state.player?.name || data()?.displayName || '修士',
-            hostAvatar: data()?.equipped?.avatar || '',
-            hostFrame: data()?.equipped?.frame || '',
-            timestamp: serverTimestamp()
-          });
-        } catch (error) {
-          console.warn('[Raid] friend invite skipped:', snap.id, error);
+      await playerRepository.sendRaidInvitations({
+        friendUids: friends,
+        activeAfterMs: now() - 5 * 60 * 1000,
+        invitation: {
+          raidVersion: 2,
+          raidCode: state.room.code,
+          raidRoomId: state.roomId,
+          hostUid: user.uid,
+          hostName: state.player?.name || data()?.displayName || '修士',
+          hostAvatar: data()?.equipped?.avatar || '',
+          hostFrame: data()?.equipped?.frame || ''
         }
-      }));
+      });
     } catch (error) {
       console.warn('[Raid] friend invitations unavailable:', error);
     }
   }
-
   function renderLobby() {
     if (!state.room || !state.player) return renderHub();
     state.status = 'lobby';
@@ -854,17 +840,7 @@ import {
     const status = document.getElementById('raid-reward-status');
     if (status) status.textContent = '正在由伺服器核對團本紀錄…';
     try {
-      const user = getAuth(getApp()).currentUser;
-      if (!user) throw new Error('請重新登入後領取團本獎勵');
-      const token = await user.getIdToken();
-      const response = await fetch('/api/raid/reward', {
-        method: 'POST',
-        cache: 'no-store',
-        headers: { 'Content-Type':'application/json', Authorization:'Bearer ' + token },
-        body: JSON.stringify({ roomId: state.roomId })
-      });
-      const payload = await response.json().catch(() => ({}));
-      if (!response.ok || payload.ok !== true) throw new Error(payload.error || '團本獎勵尚未完成入帳');
+      const payload = await rewardRepository.claimRaid(state.roomId);
 
       state.rewardClaimedRoomId = state.roomId;
       const local = data();

@@ -1,5 +1,4 @@
-import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+import { raidRepository } from './data/raid-repository.js';
 
 const STORAGE_KEY = 'xiuxian:raid-room:v2';
 const POLL_MS = 1000;
@@ -10,26 +9,10 @@ function finite(value, fallback = 0) {
   const n = Number(value);
   return Number.isFinite(n) ? n : fallback;
 }
+const RAID_ROOM_ENDPOINT = '/api/raid/room';
 async function api(action, payload = {}) {
-  const user = getAuth(getApp()).currentUser;
-  if (!user) throw new Error('主專案尚未登入');
-  const token = await user.getIdToken();
-  const response = await fetch('/api/raid/room', {
-    method: 'POST',
-    cache: 'no-store',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + token
-    },
-    body: JSON.stringify({ action, ...payload })
-  });
-  const data = await response.json().catch(() => ({}));
-  if (!response.ok || data.ok !== true) {
-    const error = new Error(data.error || '團本房間連線失敗');
-    error.status = response.status;
-    throw error;
-  }
-  return data;
+  // 房間狀態由伺服器權威處理；瀏覽器只送出意圖與 A 專案登入憑證。
+  return raidRepository.request(action, payload, RAID_ROOM_ENDPOINT);
 }
 function remember(roomId) {
   if (roomId) localStorage.setItem(STORAGE_KEY, roomId);
@@ -39,10 +22,7 @@ function forget() {
 }
 
 export async function ensureRaidRoomAuth() {
-  const user = getAuth(getApp()).currentUser;
-  if (!user) throw new Error('主專案尚未登入');
-  await user.getIdToken();
-  return { uid: user.uid };
+  return raidRepository.ensureAuth();
 }
 export async function createRaidRoom(player) {
   const result = await api('create', { player });

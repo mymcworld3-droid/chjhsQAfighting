@@ -95,7 +95,8 @@ test('shared room layer supports party lifecycle, boss HP and reconnect', () => 
   assert.match(roomSource, /\/api\/raid\/room/);
   assert.match(roomSource, /const POLL_MS = 1000/);
   assert.doesNotMatch(roomSource, /ensureSecondaryFirebaseAuth/);
-  assert.match(roomApiSource, /adminProject\('C'\)/);
+  assert.match(roomApiSource, /raidRepository\.resolve\(\)/);
+  assert.match(readFileSync(join(__dirname, '../server-repositories.cjs'), 'utf8'), /raid:\s*'C'/);
   assert.match(roomApiSource, /where\('status', '==', 'waiting'\)/);
   assert.match(roomApiSource, /verifyIdToken/);
   assert.match(roomApiSource, /const BOSS_ACTION_INTERVAL_MS = 18000/);

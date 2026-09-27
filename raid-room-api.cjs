@@ -1,6 +1,7 @@
 'use strict';
 
-const { adminProject, PROJECT_IDS } = require('./firebase-admin-projects.cjs');
+const { PROJECT_IDS } = require('./firebase-admin-projects.cjs');
+const { playerRepository, raidRepository } = require('./server-repositories.cjs');
 
 const COLLECTION = 'raidRooms';
 const MAX_MEMBERS = 4;
@@ -173,8 +174,8 @@ async function verifyRequest(req, resolveA) {
 }
 
 function createHandler({
-  resolveA = () => adminProject('A'),
-  resolveC = () => adminProject('C'),
+  resolveA = () => playerRepository.resolve(),
+  resolveC = () => raidRepository.resolve(),
   logger = console
 } = {}) {
   return async function raidRoomHandler(req, res) {
