@@ -124,11 +124,11 @@ test('wrong answers only lose the player attack and never trigger an extra boss 
 
 test('raid UI includes party lobby, join code, responsive fullscreen questions and optional feature loading', () => {
   assert.match(mainSource, /'\.\/cultivation\/raid-mode\.js'/);
-  assert.match(cssSource, /\.raid-question-view\{position:fixed!important;inset:0!important/);
+  assert.match(cssSource, /\.raid-question-view\{position:absolute!important;inset:0!important[^}]*height:100%!important/);
   assert.match(cssSource, /\.raid-page\{[^}]*height:100%[^}]*overflow:hidden/);
   assert.match(cssSource, /html\.raid-page-open,body\.raid-page-open\{[^}]*overflow:hidden!important/);
-  assert.match(cssSource, /body\.raid-page-open #page-raid\.active-page\{[^}]*position:fixed!important[^}]*top:72px!important[^}]*bottom:var\(--raid-bottom-clearance,116px\)!important[^}]*overflow:hidden!important/);
-  assert.match(cssSource, /body\.raid-page-open\.raid-session-active #page-raid\.active-page\{bottom:0!important\}/);
+  assert.match(cssSource, /body\.raid-page-open #page-raid\.active-page\{[^}]*position:fixed!important[^}]*top:var\(--raid-header-height,72px\)!important[^}]*bottom:auto!important[^}]*height:var\(--raid-page-height/);
+  assert.match(cssSource, /body\.raid-page-open\.raid-session-active #page-raid\.active-page\{bottom:auto!important[^}]*height:var\(--raid-page-height/);
   assert.match(raidSource, /function syncRaidViewportLock\(\)/);
   assert.match(raidSource, /document\.documentElement\.classList\.toggle\('raid-page-open', active\)/);
   assert.match(raidSource, /new MutationObserver\(syncRaidViewportLock\)/);
@@ -156,10 +156,10 @@ test('raid hub bottom follows the real bottom navigation top edge', () => {
   assert.match(raidSource, /function syncRaidBottomClearance\(\)/);
   assert.match(raidSource, /getElementById\('bottom-nav'\)/);
   assert.match(raidSource, /getBoundingClientRect\?\.\(\)\.top/);
-  assert.match(raidSource, /viewportHeight - navTop \+ 8/);
+  assert.match(raidSource, /visualHeight - navTop \+ 8/);
   assert.match(raidSource, /--raid-bottom-clearance/);
   assert.match(raidSource, /visualViewport\?\.addEventListener/);
-  assert.match(cssSource, /bottom:var\(--raid-bottom-clearance,116px\)!important/);
+  assert.match(cssSource, /height:var\(--raid-page-height/);
 });
 
 
@@ -176,14 +176,14 @@ test('raid hub card is measured directly to the navigation edge and cache-busted
 test('raid lobby adapts member cards and actions without stretching', () => {
   assert.match(raidSource, /lobby\.dataset\.partySize = String\(members\.length\)/);
   assert.match(raidSource, /data-party-count="' \+ members\.length \+ '"/);
-  assert.match(raidSource, /visualBottomInset/);
-  assert.match(raidSource, /--raid-visual-bottom-inset/);
+  assert.match(raidSource, /headerBottom/);
+  assert.match(raidSource, /--raid-header-height/);
   assert.match(cssSource, /\.raid-party-list\{[^}]*grid-auto-rows:auto[^}]*align-content:start/);
   assert.match(cssSource, /\.raid-party-list\[data-party-count="1"\]\{grid-template-columns:minmax\(0,1fr\)\}/);
   assert.match(cssSource, /\.raid-party-member\{[^}]*min-height:76px[^}]*max-height:96px/);
   assert.match(cssSource, /@media\(max-width:760px\)\{[^}]*\.raid-party-list/);
   assert.match(cssSource, /\.raid-lobby-actions\{grid-template-columns:repeat\(3,minmax\(0,1fr\)\)\}/);
-  assert.match(cssSource, /body\.raid-page-open\.raid-session-active #page-raid\.active-page\{bottom:var\(--raid-visual-bottom-inset,0px\)!important\}/);
+  assert.match(cssSource, /body\.raid-page-open\.raid-session-active #page-raid\.active-page\{bottom:auto!important[^}]*height:var\(--raid-page-height/);
 });
 
 
@@ -224,9 +224,26 @@ test('raid session height uses the real visual viewport', () => {
   assert.match(raidSource, /const vv = window\.visualViewport/);
   assert.match(raidSource, /const visualHeight = Math\.max\(1, Number\(vv\?\.height\)/);
   assert.match(raidSource, /document\.querySelector\('body > header'\)/);
-  assert.match(raidSource, /visualHeight - headerHeight - \(sessionActive \? 0 : clearance\)/);
+  assert.match(raidSource, /headerRect\?\.bottom/);
+  assert.match(raidSource, /visualHeight - headerBottom - \(sessionActive \? 0 : clearance\)/);
   assert.match(raidSource, /page\.style\.setProperty\('height', pageHeight \+ 'px', 'important'\)/);
   assert.match(raidSource, /page\.style\.setProperty\('bottom', 'auto', 'important'\)/);
   assert.match(raidSource, /window\.addEventListener\('app:visual-viewport', scheduleRaidHubFit/);
   assert.match(cssSource, /height:var\(--raid-page-height,calc\(100dvh - 72px\)\)!important/);
+});
+
+
+test('raid arena and question force session viewport sync', () => {
+  const arenaStart = raidSource.indexOf('  function renderArena() {');
+  const arenaEnd = raidSource.indexOf('  async function', arenaStart);
+  const arena = raidSource.slice(arenaStart, arenaEnd);
+  assert.match(arena, /document\.body\.classList\.add\('raid-session-active'\)/);
+  assert.match(arena, /syncRaidBottomClearance\(\)/);
+
+  const questionStart = raidSource.indexOf('  function renderQuestion\(review\) {');
+  const questionEnd = raidSource.indexOf('  async function answer', questionStart);
+  const question = raidSource.slice(questionStart, questionEnd);
+  assert.match(question, /document\.body\.classList\.add\('raid-session-active'\)/);
+  assert.match(question, /syncRaidBottomClearance\(\)/);
+  assert.match(cssSource, /\.raid-question-view\{position:absolute!important;inset:0!important[^}]*height:100%!important/);
 });
