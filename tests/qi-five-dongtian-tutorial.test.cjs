@@ -9,6 +9,7 @@ function read(rel) {
 
 const tutorial = read('public/cultivation/qi-five-dongtian-tutorial.js');
 const dongtian = read('public/cultivation/dongtian.js');
+const dongtianSettlement = read('dongtian-settlement-api.cjs');
 const main = read('public/main.js');
 
 test('Qi-five Dongtian tutorial unlocks at five cultivation and never teleports to Dongfu', () => {
