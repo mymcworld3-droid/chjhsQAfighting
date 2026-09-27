@@ -91,7 +91,7 @@
       html.${ACTIVE_CLASS},body.${ACTIVE_CLASS}{overflow:hidden!important;overscroll-behavior:none}
       #page-battle.battle-v2-page{
         position:fixed!important;inset:0!important;z-index:15000!important;
-        width:100vw!important;height:100dvh!important;min-height:100dvh!important;
+        width:var(--battle-vv-width,100vw)!important;height:var(--battle-vv-height,100dvh)!important;min-height:0!important;
         max-width:none!important;margin:0!important;padding:0!important;
         overflow-x:hidden!important;overflow-y:auto!important;overscroll-behavior:contain!important;
         background:radial-gradient(circle at 50% -12%,rgba(189,143,45,.22),transparent 30%),radial-gradient(circle at 8% 62%,rgba(87,55,18,.16),transparent 28%),linear-gradient(180deg,#090805,#030303 78%)!important;
@@ -104,7 +104,7 @@
       #page-battle.battle-v2-page #bv2-quiz.hidden,
       #page-battle.battle-v2-page #bv2-result.hidden{display:none!important;min-height:0!important;margin:0!important;padding:0!important;visibility:hidden!important}
       #page-battle.battle-v2-page .bv2-shell > section:not(.hidden){visibility:visible!important}
-      #page-battle .bv2-shell{box-sizing:border-box;width:min(100%,1440px)!important;height:100%;min-height:0;margin:0 auto!important;padding:max(14px,env(safe-area-inset-top)) max(24px,env(safe-area-inset-right)) max(20px,env(safe-area-inset-bottom)) max(24px,env(safe-area-inset-left))!important;display:flex;flex-direction:column}
+      #page-battle .bv2-shell{box-sizing:border-box;width:min(100%,1440px)!important;height:100%;min-height:0;margin:0 auto!important;padding:max(14px,env(safe-area-inset-top)) max(24px,env(safe-area-inset-right)) max(20px,env(safe-area-inset-bottom)) max(24px,env(safe-area-inset-left))!important;display:flex;flex-direction:column;overflow:hidden}
       #page-battle .bv2-head{position:sticky;top:0;z-index:20;margin:0 -4px 10px;padding:10px 6px 12px!important;background:linear-gradient(180deg,rgba(5,5,4,.96),rgba(5,5,4,.82),transparent);backdrop-filter:blur(12px)}
       #page-battle .bv2-head h2{font-size:clamp(22px,2.4vw,34px)!important}
       #page-battle .bv2-icon-btn{width:42px!important;height:42px!important}
@@ -158,13 +158,13 @@
       /* Viewport-fit battle: six actual scene elements, no obsolete score/log tracks. */
       html.${ACTIVE_CLASS},body.${ACTIVE_CLASS}{overflow:hidden!important}
       #page-battle.battle-v2-page{
-        box-sizing:border-box;width:100%!important;height:100dvh!important;min-height:0!important;
+        box-sizing:border-box;width:100%!important;height:var(--battle-vv-height,100dvh)!important;min-height:0!important;
         overflow:hidden!important;overscroll-behavior:none!important
       }
       #page-battle .bv2-shell{
         height:100%!important;min-height:0;overflow:hidden;
         padding:max(7px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right))
-          max(7px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))!important
+          max(10px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))!important
       }
       #page-battle .bv2-head{
         position:relative;flex:0 0 auto;z-index:20;
@@ -489,11 +489,42 @@
     document.head.appendChild(style);
   }
 
+  let battleViewportFrame = 0;
+
+  function syncBattleVisualViewport() {
+    const page = document.getElementById('page-battle');
+    if (!page) return;
+    const vv = window.visualViewport;
+    const width = Math.max(1, Number(vv?.width) || Number(window.innerWidth) || document.documentElement.clientWidth || 1);
+    const height = Math.max(1, Number(vv?.height) || Number(window.innerHeight) || document.documentElement.clientHeight || 1);
+    const top = Math.max(0, Number(vv?.offsetTop) || 0);
+    const left = Math.max(0, Number(vv?.offsetLeft) || 0);
+
+    page.style.setProperty('--battle-vv-width', width + 'px');
+    page.style.setProperty('--battle-vv-height', height + 'px');
+    page.style.setProperty('top', top + 'px', 'important');
+    page.style.setProperty('left', left + 'px', 'important');
+    page.style.setProperty('right', 'auto', 'important');
+    page.style.setProperty('bottom', 'auto', 'important');
+    page.style.setProperty('width', width + 'px', 'important');
+    page.style.setProperty('height', height + 'px', 'important');
+    page.style.setProperty('max-height', height + 'px', 'important');
+  }
+
+  function scheduleBattleVisualViewportSync() {
+    cancelAnimationFrame(battleViewportFrame);
+    battleViewportFrame = requestAnimationFrame(() => {
+      syncBattleVisualViewport();
+      requestAnimationFrame(syncBattleVisualViewport);
+    });
+  }
+
   function syncFullscreenState() {
     const page = document.getElementById('page-battle');
     const active = !!page && !page.classList.contains('hidden');
     document.documentElement.classList.toggle(ACTIVE_CLASS, active);
     document.body?.classList.toggle(ACTIVE_CLASS, active);
+    if (active) scheduleBattleVisualViewportSync();
   }
 
   function observeBattlePage() {
@@ -521,4 +552,8 @@
   observeBattlePage();
   window.addEventListener('pageshow', syncFullscreenState);
   window.addEventListener('popstate', syncFullscreenState);
+  window.addEventListener('resize', scheduleBattleVisualViewportSync, { passive: true });
+  window.visualViewport?.addEventListener?.('resize', scheduleBattleVisualViewportSync, { passive: true });
+  window.visualViewport?.addEventListener?.('scroll', scheduleBattleVisualViewportSync, { passive: true });
+  window.addEventListener('app:visual-viewport', scheduleBattleVisualViewportSync, { passive: true });
 })();
