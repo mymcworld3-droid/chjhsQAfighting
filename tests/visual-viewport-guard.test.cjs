@@ -9,10 +9,10 @@ const css = fs.readFileSync(path.join(root, 'styles', 'visual-viewport-guard.css
 const index = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 
 test('global visual viewport guard loads before the main app', () => {
-  assert.match(index, /styles\/visual-viewport-guard\.css\?v=20260927-vv1/);
-  assert.match(index, /visual-viewport-guard\.js\?v=20260927-vv1/);
-  assert.ok(index.indexOf('visual-viewport-guard.js?v=20260927-vv1') <
-    index.indexOf('main.js?v=20260927-vv-raid8'));
+  assert.match(index, /styles\/visual-viewport-guard\.css\?v=20260927-vv2/);
+  assert.match(index, /visual-viewport-guard\.js\?v=20260927-vv2/);
+  assert.ok(index.indexOf('visual-viewport-guard.js?v=20260927-vv2') <
+    index.indexOf('main.js?v=20260927-vv-raid9'));
 });
 
 test('guard tracks Safari visual viewport geometry and browser chrome', () => {
