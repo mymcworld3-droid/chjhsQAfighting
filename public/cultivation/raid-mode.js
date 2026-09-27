@@ -15,7 +15,7 @@ import {
   'use strict';
 
   const PAGE_ID = 'page-raid';
-  const STYLE_HREF = 'styles/raid-mode.css?v=20260927-raid-vv8';
+  const STYLE_HREF = 'styles/raid-mode.css?v=20260927-raid-vv9';
   const MALE = 'assets/story/characters/player-male-determined.png';
   const FEMALE = 'assets/story/characters/player-female-determined.png';
   const HEARTBEAT_MS = 8000;
