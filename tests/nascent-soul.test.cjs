@@ -369,8 +369,11 @@ test('cultivation branches are integrated into the three correct settlement flow
   assert.match(rules,/baseGain \+ bonusGain \+ soulBonusGain/);
   assert.match(daily,/current\.correct === QUESTION_TOTAL\s*\? soulCultivationBonusForPlayer\(data, 'daily'\) : 0/);
   assert.match(daily,/'stats\.totalScore': increment\(totalCultivation\)/);
-  assert.match(cave,/first && correct > 0 \? soulCultivationBonusForPlayer\(playerData, 'cave'\) : 0/);
-  assert.match(cave,/'stats\.totalScore': increment\(cultivationReward \+ soulCultivationAdded\)/);
+  const caveSettlement = read('dongtian-settlement-api.cjs');
+  assert.match(cave,/rewardRepository\.claimDongtian/);
+  assert.match(caveSettlement,/soul=first&&e\.correct>0\?caveSoulBonus\(player\):0/);
+  assert.match(caveSettlement,/cult=first\?e\.correct\+soul:0/);
+  assert.match(caveSettlement,/if\(cult\)p\['stats\.totalScore'\]=FieldValue\.increment\(cult\)/);
   assert.match(training,/左脈攻擊、右脈生存/);
   assert.match(training,/status\.cost \+ ' 神識'/);
 });
