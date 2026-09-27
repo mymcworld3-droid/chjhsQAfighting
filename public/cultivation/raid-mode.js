@@ -15,7 +15,7 @@ import {
   'use strict';
 
   const PAGE_ID = 'page-raid';
-  const STYLE_HREF = 'styles/raid-mode.css?v=20260927-raid-lobby-actions5';
+  const STYLE_HREF = 'styles/raid-mode.css?v=20260927-raid-vv8';
   const MALE = 'assets/story/characters/player-male-determined.png';
   const FEMALE = 'assets/story/characters/player-female-determined.png';
   const HEARTBEAT_MS = 8000;
@@ -123,22 +123,27 @@ import {
     const page = document.getElementById(PAGE_ID);
     const nav = document.getElementById('bottom-nav');
     if (!page || !nav) return;
-    const layoutHeight = Math.max(0, Number(window.innerHeight) || document.documentElement.clientHeight || 0);
-    const visualHeight = Math.max(0, Number(window.visualViewport?.height) || layoutHeight);
-    const visualOffsetTop = Math.max(0, Number(window.visualViewport?.offsetTop) || 0);
-    const visualBottomInset = Math.max(0, Math.ceil(layoutHeight - (visualOffsetTop + visualHeight)));
-    page.style.setProperty('--raid-visual-bottom-inset', visualBottomInset + 'px');
-    const viewportHeight = visualHeight;
+    const vv = window.visualViewport;
+    const visualHeight = Math.max(1, Number(vv?.height) || Number(window.innerHeight) || document.documentElement.clientHeight || 1);
+    const appHeader = document.querySelector('body > header');
+    const headerHeight = Math.max(0, Math.ceil(Number(appHeader?.getBoundingClientRect?.().height) || 72));
+    const sessionActive = document.body.classList.contains('raid-session-active');
+
     const navTop = Math.max(0, Number(nav.getBoundingClientRect?.().top) || 0);
-    const clearance = navTop > 0 && viewportHeight > navTop
-      ? Math.ceil(viewportHeight - navTop + 8)
+    const clearance = navTop > 0 && visualHeight > navTop
+      ? Math.ceil(visualHeight - navTop + 8)
       : 116;
+    const pageHeight = Math.max(180, Math.floor(
+      visualHeight - headerHeight - (sessionActive ? 0 : clearance)
+    ));
+
+    page.style.setProperty('--raid-header-height', headerHeight + 'px');
     page.style.setProperty('--raid-bottom-clearance', clearance + 'px');
-    if (!document.body.classList.contains('raid-session-active')) {
-      page.style.setProperty('bottom', clearance + 'px', 'important');
-    } else {
-      page.style.setProperty('bottom', visualBottomInset + 'px', 'important');
-    }
+    page.style.setProperty('--raid-page-height', pageHeight + 'px');
+    page.style.setProperty('top', headerHeight + 'px', 'important');
+    page.style.setProperty('height', pageHeight + 'px', 'important');
+    page.style.setProperty('max-height', pageHeight + 'px', 'important');
+    page.style.setProperty('bottom', 'auto', 'important');
   }
 
   function syncRaidViewportLock() {
@@ -1007,6 +1012,7 @@ import {
     window.addEventListener('resize', scheduleRaidHubFit, { passive: true });
     window.visualViewport?.addEventListener?.('resize', scheduleRaidHubFit, { passive: true });
     window.visualViewport?.addEventListener?.('scroll', scheduleRaidHubFit, { passive: true });
+    window.addEventListener('app:visual-viewport', scheduleRaidHubFit, { passive: true });
     if (nav && globalThis.ResizeObserver) new ResizeObserver(scheduleRaidHubFit).observe(nav);
     if (nav) new MutationObserver(scheduleRaidHubFit).observe(nav, {
       attributes: true,
