@@ -120,6 +120,10 @@ function equippedEffects(equipped){
 function sumEffect(effects,type){
   return effects.filter(e=>String(e.type||'')===type).reduce((sum,e)=>sum+positive(e.value),0);
 }
+function equipmentMultiplier(effects,type,cap=5){
+  return effects.filter(e=>String(e.type||'')===type)
+    .reduce((m,e)=>m*(1+clamp(e.value,0,cap)),1);
+}
 function timedAttackMultiplier(player,at=Date.now()){
   const buffs=player?.artifactSystem?.buffs||{};
   return Object.values(buffs).reduce((m,buff)=>{
@@ -161,14 +165,19 @@ function trustedRaidPlayerSnapshot(player,uid,catalogDoc={}){
   const core=coreSnapshot(player), soul=soulSnapshot(player,core);
   const equipped=equippedArtifacts(player,artifactCatalog(catalogDoc));
   const effects=equippedEffects(equipped);
-  const equipmentAttack=(baseAttack+sumEffect(effects,'equip_attack_flat'))*
-    (1+sumEffect(effects,'equip_attack_percent'))*timedAttackMultiplier(player);
-  const equipmentMaxHp=(baseMaxHp+sumEffect(effects,'equip_hp_flat'))*
-    (1+sumEffect(effects,'equip_hp_percent'));
-  const baseCombat={attack:Math.max(1,Math.round(equipmentAttack)),maxHp:Math.max(1,Math.round(equipmentMaxHp))};
+  const soulAttack=Math.max(0,Math.round(finite(soul?.attackFlat)));
+  const soulMaxHp=Math.max(0,Math.round(finite(soul?.maxHpFlat)));
+  // Match the browser wrapper exactly: nascent-soul projection first, then equipment
+  // flat/percent modifiers, then active timed attack multipliers.
+  const attackMultiplier=equipmentMultiplier(effects,'equip_attack_percent')*timedAttackMultiplier(player);
+  const hpMultiplier=equipmentMultiplier(effects,'equip_hp_percent');
+  const baseCombat={
+    attack:Math.max(1,Math.round((baseAttack+sumEffect(effects,'equip_attack_flat'))*attackMultiplier)),
+    maxHp:Math.max(1,Math.round((baseMaxHp+sumEffect(effects,'equip_hp_flat'))*hpMultiplier))
+  };
   const combat={
-    attack:baseCombat.attack+Math.max(0,Math.round(finite(soul?.attackFlat))),
-    maxHp:baseCombat.maxHp+Math.max(0,Math.round(finite(soul?.maxHpFlat)))
+    attack:Math.max(1,Math.round((baseAttack+soulAttack+sumEffect(effects,'equip_attack_flat'))*attackMultiplier)),
+    maxHp:Math.max(1,Math.round((baseMaxHp+soulMaxHp+sumEffect(effects,'equip_hp_flat'))*hpMultiplier))
   };
   const artifactBattle=battleSnapshot(effects);
   const portrait=safePortrait(player?.equipped?.avatar) ||
@@ -176,7 +185,9 @@ function trustedRaidPlayerSnapshot(player,uid,catalogDoc={}){
   return {
     uid:String(uid),name:safeName(player.displayName||player?.profile?.displayName||'無名修士',40),
     portrait,totalScore:positive(player?.stats?.totalScore),rankLevel:positive(player?.stats?.rankLevel),
-    combatPower:combatPower({attack:combat.attack,maxHp:combat.maxHp},core,equipped),
+    // Combat power intentionally scores raw+soul base stats and equipment separately,
+    // matching public/cultivation/combat-power.js without double-counting equipment stats.
+    combatPower:combatPower({attack:baseAttack+soulAttack,maxHp:baseMaxHp+soulMaxHp},core,equipped),
     atk:combat.attack,baseAtk:baseCombat.attack,hp:combat.maxHp,maxHp:combat.maxHp,baseMaxHp:baseCombat.maxHp,
     goldenCore:core,nascentSoul:soul,coreShield:!!core&&player?.stats?.goldenCoreShield===true,coreCorrectStreak:0,
     artifactBattle,artifactShield:artifactBattle.openingShield,artifactFirstHitUsed:false,artifactCheatDeathUsed:false
