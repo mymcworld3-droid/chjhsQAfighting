@@ -164,7 +164,7 @@ test('raid hub bottom follows the real bottom navigation top edge', () => {
 
 
 test('raid hub card is measured directly to the navigation edge and cache-busted', () => {
-  assert.match(raidSource, /STYLE_HREF = 'styles\/raid-mode\.css\?v=20260927-raid-lobby-actions4'/);
+  assert.match(raidSource, /STYLE_HREF = 'styles\/raid-mode\.css\?v=20260927-raid-lobby-actions5'/);
   assert.match(raidSource, /function fitRaidHubToNavigation\(\)/);
   assert.match(raidSource, /navTop - cardTop - 8/);
   assert.match(raidSource, /card\.style\.setProperty\('height', targetHeight \+ 'px', 'important'\)/);
@@ -201,9 +201,9 @@ test('raid lobby switches viewport state before measuring', () => {
 });
 
 
-test('raid lobby action bar stays pinned in the visible area', () => {
-  assert.match(cssSource, /#raid-lobby:not\(\.hidden\)\{[^}]*position:relative[^}]*display:flex[^}]*padding-bottom:72px/);
-  assert.match(cssSource, /\.raid-lobby-actions\{[^}]*position:absolute[^}]*bottom:8px[^}]*grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
+test('raid lobby action bar stays directly below the party list', () => {
+  assert.match(cssSource, /#raid-lobby:not\(\.hidden\)\{[^}]*display:flex[^}]*padding-bottom:10px/);
+  assert.match(cssSource, /\.raid-lobby-actions\{[^}]*position:relative[^}]*grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
+  assert.doesNotMatch(cssSource, /\.raid-lobby-actions\{[^}]*position:absolute/);
   assert.match(cssSource, /\.raid-lobby-actions button\{width:100%;min-height:42px\}/);
-  assert.match(cssSource, /@media\(max-width:460px\)\{#raid-lobby:not\(\.hidden\)\{padding-bottom:116px\}/);
 });
