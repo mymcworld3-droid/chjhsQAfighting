@@ -34,7 +34,7 @@ test('formal stage uses rows corresponding to the actual combat elements', () =>
 
 test('safe-area fullscreen keeps short stages visible and long content reachable', () => {
   for (const fragment of [
-    'height:100dvh!important;min-height:0!important',
+    'height:var(--battle-vv-height,100dvh)!important;min-height:0!important',
     'overflow:hidden!important;overscroll-behavior:none!important',
     'max(7px,env(safe-area-inset-bottom))',
     'grid-template-rows:auto auto minmax(110px,1fr) auto auto auto!important',
@@ -96,4 +96,17 @@ test('stage portraits keep the near-left and far-right duel depth in formal and 
   ]) assert.ok((token.includes('bt-fighter') ? tutorial : full).includes(token), token);
   assert.ok(full.includes('left:72%;top:34%'), 'own attack impact targets the upper-right opponent');
   assert.ok(full.includes('left:28%;top:65%'), 'opponent attack impact targets the lower-left player');
+});
+
+
+test('battle runtime pins the page to the browser visual viewport', () => {
+  assert.match(full, /function syncBattleVisualViewport\(\)/);
+  assert.match(full, /window\.visualViewport/);
+  assert.match(full, /vv\?\.height/);
+  assert.match(full, /page\.style\.setProperty\('height', height \+ 'px', 'important'\)/);
+  assert.match(full, /page\.style\.setProperty\('top', top \+ 'px', 'important'\)/);
+  assert.match(full, /visualViewport\?\.addEventListener\?\.\('resize'/);
+  assert.match(full, /visualViewport\?\.addEventListener\?\.\('scroll'/);
+  assert.match(full, /app:visual-viewport/);
+  assert.doesNotMatch(viewport, /height:100dvh!important;min-height:100dvh!important/);
 });
