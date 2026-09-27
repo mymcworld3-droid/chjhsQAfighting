@@ -28,7 +28,6 @@ test('guard tracks Safari visual viewport geometry and browser chrome', () => {
 
 test('fullscreen gameplay roots use the actual visible viewport', () => {
   for (const selector of [
-    '#raid-question.raid-question-view',
     '#dongtian-overlay.dt-overlay',
     '#page-battle.battle-v2-page',
     '#scope-studio',
@@ -52,4 +51,9 @@ test('bottom navigation, tutorial cards and modals clear browser chrome', () => 
   assert.match(css, /#custom-confirm-modal:not\(\.hidden\)/);
   assert.match(css, /\.training-v3-modal-backdrop/);
   assert.match(css, /#five-immortal-challenge\.fi-backdrop/);
+});
+
+
+test('raid question delegates sizing to the corrected raid parent', () => {
+  assert.doesNotMatch(css, /#raid-question\.raid-question-view/);
 });
