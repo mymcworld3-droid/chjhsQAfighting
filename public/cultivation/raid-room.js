@@ -116,7 +116,8 @@ export async function commitRaidMemberState({ roomId }) {
 }
 export async function advanceRaidBossAction({ roomId }) {
   // Boss intent and damage are derived from authoritative room state.
-  return api('advance-boss', { roomId });
+  const result = await api('advance-boss', { roomId });
+  return result.room || null;
 }
 export async function leaveRaidRoom(roomId) {
   try {
