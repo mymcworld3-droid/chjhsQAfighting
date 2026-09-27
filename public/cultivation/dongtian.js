@@ -1496,5 +1496,5 @@ export const featureReady = (async () => {
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
   else boot();
-}  })();
+  })();
 })();
