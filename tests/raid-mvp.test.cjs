@@ -143,3 +143,10 @@ test('raid UI includes party lobby, join code, responsive fullscreen questions a
   assert.match(cssSource, /@keyframes raidBossStrike/);
   assert.match(cssSource, /@media\(max-width:760px\)/);
 });
+
+
+test('boss information panel is anchored near the top instead of vertically centered', () => {
+  assert.match(cssSource, /\.raid-boss-info\{[^}]*justify-content:flex-start/);
+  assert.match(cssSource, /\.raid-boss-info\{[^}]*padding:clamp\(42px,7dvh,76px\)/);
+  assert.doesNotMatch(cssSource, /\.raid-boss-info\{[^}]*justify-content:center/);
+});
