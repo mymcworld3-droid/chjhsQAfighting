@@ -18,7 +18,8 @@ const registerRaidRewardApi = require('./raid-reward-api.cjs');
 const registerRaidRoomApi = require('./raid-room-api.cjs');
 const registerBattleRewardApi = require('./battle-reward-api.cjs');
 const registerDongtianSettlementApi = require('./dongtian-settlement-api.cjs');
-const { playerRepository, raidRepository } = require('./server-repositories.cjs');
+const { raidRepository } = require('./server-repositories.cjs');
+const { pickTrustedRaidKnowledge } = require('./raid-authority.cjs');
 const { verifyMainIdentity, issueRaidQuestionTicket } = require('./raid-question-ticket.cjs');
 require('dotenv').config();
 
@@ -411,6 +412,7 @@ app.post('/api/generate-quiz', async (req, res) => {
     let raidIdentity = null;
     let raidRoomId = '';
     let raidActionId = 0;
+    let raidTrustedTopic = '';
     if (raidQuickSimple) {
         try {
             raidIdentity = await verifyMainIdentity(req);
@@ -432,6 +434,13 @@ app.post('/api/generate-quiz', async (req, res) => {
             if (raidActionId < expected || raidActionId > expected + 1) {
                 return res.status(409).json({ error: '團本題號不同步，請等待房間重新同步' });
             }
+            const trusted = pickTrustedRaidKnowledge(member.knowledgeScope || {}, raidActionId);
+            subject = trusted.subject;
+            level = trusted.level;
+            rank = Math.max(0, Math.floor(Number(member.rankLevel) || 0));
+            raidTrustedTopic = trusted.specificTopic;
+            // Raid difficulty is intentionally fixed to easy below; knowledgeMap is not client-authoritative.
+            knowledgeMap = null;
         } catch (error) {
             const status = error?.status || 503;
             return res.status(status).json({ error: error?.message || '團本題目驗證失敗' });
@@ -447,6 +456,7 @@ app.post('/api/generate-quiz', async (req, res) => {
     }
     const fingerprint = value => String(value).replace(/\s+/g, '').toLowerCase();
     let targetTopic = String(specificTopic || topic || '').trim().slice(0, 240);
+    if (raidQuickSimple) targetTopic = String(raidTrustedTopic || '').trim().slice(0, 240);
 
     // 1. 科目選擇
     if (!subject) {
