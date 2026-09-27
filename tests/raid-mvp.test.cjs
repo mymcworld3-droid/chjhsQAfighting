@@ -125,6 +125,11 @@ test('wrong answers only lose the player attack and never trigger an extra boss 
 test('raid UI includes party lobby, join code, responsive fullscreen questions and optional feature loading', () => {
   assert.match(mainSource, /'\.\/cultivation\/raid-mode\.js'/);
   assert.match(cssSource, /\.raid-question-view\{position:fixed!important;inset:0!important/);
+  assert.match(cssSource, /\.raid-page\{[^}]*height:100%[^}]*overflow:hidden/);
+  assert.match(cssSource, /body\.xianxia-theme:has\(#page-raid\.active-page\) main\{[^}]*height:100dvh[^}]*overflow:hidden/);
+  assert.match(cssSource, /#raid-arena:not\(\.hidden\)\{display:grid;grid-template-rows:auto auto minmax\(0,1fr\);min-height:0;overflow:hidden\}/);
+  assert.match(cssSource, /\.raid-stage\{[^}]*height:100%[^}]*min-height:0[^}]*overflow:hidden/);
+  assert.doesNotMatch(cssSource, /\.raid-stage\{[^}]*min-height:min\(720px,calc\(100dvh - 145px\)\)/);
   assert.match(cssSource, /\.raid-party-list/);
   assert.match(cssSource, /\.raid-party-strip/);
   assert.match(cssSource, /\.raid-code-join/);
