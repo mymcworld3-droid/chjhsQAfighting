@@ -155,7 +155,7 @@ test('boss information panel is anchored near the top instead of vertically cent
 test('raid hub bottom follows the real bottom navigation top edge', () => {
   assert.match(raidSource, /function syncRaidBottomClearance\(\)/);
   assert.match(raidSource, /getElementById\('bottom-nav'\)/);
-  assert.match(raidSource, /getBoundingClientRect\(\)\.top/);
+  assert.match(raidSource, /getBoundingClientRect\?\.\(\)\.top/);
   assert.match(raidSource, /viewportHeight - navTop \+ 8/);
   assert.match(raidSource, /--raid-bottom-clearance/);
   assert.match(raidSource, /visualViewport\?\.addEventListener/);
