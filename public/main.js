@@ -78,6 +78,7 @@ let xiuxianReadyTimer = null;
 let resolveXiuxianFeatureGate;
 const xiuxianFeatureGate = new Promise((resolve) => { resolveXiuxianFeatureGate = resolve; });
 const XIUXIAN_FEATURE_BUILD = '20260927-raid-lobby-fit3';
+const RAID_FEATURE_BUILD = '20260927-raid-lobby-actions4';
 
 // 交易市集僅為可選功能，載入失敗不可阻止玩家登入或進入遊戲。
 let xiuxianMarketLoad = null;
@@ -135,7 +136,8 @@ async function loadXiuxianFeaturesSafely() {
       detail: { loaded: index, total, modulePath }
     }));
     try {
-      await import(`${modulePath}?v=${XIUXIAN_FEATURE_BUILD}`);
+      const build = modulePath === './cultivation/raid-mode.js' ? RAID_FEATURE_BUILD : XIUXIAN_FEATURE_BUILD;
+      await import(`${modulePath}?v=${build}`);
     } catch (error) {
       failures.push(modulePath);
       console.error(`[Xiuxian] Failed to load optional module: ${modulePath}`, error);
