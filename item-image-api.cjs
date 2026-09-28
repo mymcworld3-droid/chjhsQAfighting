@@ -58,10 +58,16 @@ function buildSafetyFallbackPrompt(kind, item = {}) {
     'Do not include characters, creatures, portraits, hands, text, letters, numbers, labels, watermark, logo, UI frame, stand, shelf, pedestal, or duplicated objects.'
   ];
   if (kind === 'material') {
+    const identity = inferNameVisualIdentity(item?.name || '');
     return finalizePrompt([
       ...common,
       'Depict a compact abstract crafting resource such as a crystal, ore chunk, wood fragment, fiber bundle, or refined fantasy component.',
-      'Use this palette: ' + materialColorTheme(item) + '.',
+      identity.palette.length
+        ? 'Use this safe name-derived palette: ' + identity.palette.join(' with ') + '.'
+        : 'Use this palette: ' + materialColorTheme(item) + '.',
+      identity.motifs.length
+        ? 'Integrate these safe name-derived material details: ' + identity.motifs.slice(0, 3).join(', ') + '.'
+        : '',
       'Keep the resource simple, non-figurative, and easy to recognize at thumbnail size.'
     ]);
   }
@@ -256,7 +262,26 @@ const NAME_VISUAL_RULES = Object.freeze([
   { re: /五行/, palette: 'warm gold with restrained five-gem accents', motifs: ['five balanced elemental nodes around one center'], mood: 'balanced and harmonious' },
   { re: /界|世界/, motifs: ['nested boundary rings', 'layered dimensional frame geometry'], mood: 'vast and structural' },
   { re: /古|太古|遠古/, motifs: ['archaic seal-script inspired engravings', 'aged bronze-like structural details'], mood: 'ancient and venerable' },
-  { re: /仙/, palette: 'pearl white and soft gold', motifs: ['fine immortal-cloud filigree'], mood: 'pristine and transcendent' }
+  { re: /仙/, palette: 'pearl white and soft gold', motifs: ['fine immortal-cloud filigree'], mood: 'pristine and transcendent' },
+  { re: /鐵|鋼/, palette: 'dark gunmetal and cool steel', motifs: ['forged-metal grain', 'tempered steel edges'], mood: 'solid and disciplined' },
+  { re: /銅|青銅/, palette: 'aged bronze and warm amber', motifs: ['bronze patina details', 'cast-metal bands'], mood: 'ancient and sturdy' },
+  { re: /石|岩/, motifs: ['faceted stone planes', 'mineral fracture lines'], mood: 'dense and grounded' },
+  { re: /骨/, palette: 'ivory and muted bronze', motifs: ['smooth ivory-like inlays', 'ribbed carved patterns'], mood: 'ancient and austere' },
+  { re: /光|明/, motifs: ['clean luminous edge lines', 'a focused radiant core'], mood: 'bright and pure' },
+  { re: /影/, palette: 'smoky indigo and charcoal', motifs: ['soft shadow-trail engravings', 'dim layered silhouettes on the surface'], mood: 'quiet and elusive' },
+  { re: /神|聖/, palette: 'pearl white and ceremonial gold', motifs: ['sacred geometric filigree', 'clean halo-like ring detail'], mood: 'sacred and exalted' },
+  { re: /魔|煞/, palette: 'dark crimson and blackened violet', motifs: ['angular forbidden-rune styling', 'dark crystal accents'], mood: 'ominous but controlled' },
+  { re: /太極|陰陽/, palette: 'black and pearl white with one muted gold accent', motifs: ['balanced dual-swirl geometry', 'paired opposing inlays'], mood: 'balanced and philosophical' },
+  { re: /無極/, motifs: ['continuous infinity-like ring geometry', 'unbroken circular engravings'], mood: 'boundless and serene' },
+  { re: /乾坤/, motifs: ['paired heaven-and-earth rings', 'dual concentric seal geometry'], mood: 'vast and balanced' },
+  { re: /輪迴/, motifs: ['cyclic concentric rings', 'repeating return-path engravings'], mood: 'solemn and timeless' },
+  { re: /涅槃/, palette: 'crimson ember and warm gold', motifs: ['phoenix-feather rebirth sigil', 'upward ember curves'], mood: 'renewed and majestic' },
+  { re: /夢|幻/, palette: 'soft violet and moon silver', motifs: ['translucent layered reflections', 'dreamlike ripple geometry'], mood: 'illusory and delicate' },
+  { re: /劫/, motifs: ['fine lightning-scar engravings', 'tempered dark-metal edges'], mood: 'tribulation-forged and resilient' },
+  { re: /虎|白虎/, motifs: ['tiger-stripe metal engravings', 'restrained claw-like edge notches'], mood: 'fierce and disciplined' },
+  { re: /麒麟/, motifs: ['qilin-scale patterns', 'small horn-like ornamental ridges'], mood: 'auspicious and regal' },
+  { re: /玄武/, motifs: ['tortoise-shell hexagonal geometry', 'coiling protective border'], mood: 'ancient and defensive' },
+  { re: /朱雀/, motifs: ['vermillion feather engravings', 'upward wing-like flame curves'], mood: 'radiant and noble' }
 ]);
 
 function uniqueLimited(values, limit) {
@@ -316,7 +341,29 @@ function artifactFormVisual(item = {}) {
     [/甲|armor|armour/, 'ornate magical armor'],
     [/尺|ruler/, 'ritual ruler'],
     [/扇|fan/, 'ritual folding fan'],
-    [/環|戒|ring/, 'mystical ring']
+    [/環|戒|ring/, 'mystical ring'],
+    [/鐲|bracelet/, 'mystical bracelet'],
+    [/塔|pagoda|tower/, 'miniature ritual pagoda'],
+    [/葫蘆|gourd/, 'ritual gourd vessel'],
+    [/琴|zither|guqin/, 'ritual zither'],
+    [/笛|簫|flute/, 'ritual flute'],
+    [/瓶|vase|bottle/, 'ritual jade vessel'],
+    [/壺|pot|vessel/, 'ritual vessel'],
+    [/輪|wheel/, 'ritual wheel'],
+    [/碑|tablet|stele/, 'ritual stone tablet'],
+    [/筆|brush/, 'ritual calligraphy brush'],
+    [/卷|書|scroll|scripture/, 'sealed scripture scroll'],
+    [/鎖|lock/, 'mystical lock'],
+    [/針|needle/, 'ritual flying needle'],
+    [/釘|spike/, 'ritual spike'],
+    [/梭|shuttle/, 'mystical flying shuttle'],
+    [/舟|船|boat/, 'miniature mystical boat'],
+    [/傘|umbrella/, 'ritual umbrella'],
+    [/袋|囊|pouch|bag/, 'mystical storage pouch'],
+    [/冠|crown/, 'ritual crown'],
+    [/袍|robe/, 'ornate magical robe'],
+    [/靴|鞋|boot|shoe/, 'ornate magical boots'],
+    [/鎧|armor|armour/, 'ornate magical armor']
   ];
   return forms.find(([re]) => re.test(text))?.[1] || 'compact mystical relic';
 }
@@ -387,7 +434,7 @@ function buildItemImagePrompt(kind, item = {}) {
       ...common,
       'This is a crafting MATERIAL, not finished equipment.',
       'The visual identity MUST reflect the material name instead of looking like a generic resource.',
-      'Base material palette: ' + colorTheme + '.',
+      identity.palette.length ? '' : 'Base material palette: ' + colorTheme + '.',
       ...nameIdentityPrompt(identity),
       'Use a compact resource silhouette such as ore, crystal, wood, fiber, paper, or a refined fantasy component, whichever best matches the name and category.',
       'Realm finish: ' + realmVisualStyle(realm) + '.',
