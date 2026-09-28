@@ -1504,5 +1504,5 @@ export const featureReady = (async () => {
     setTimeout(recoverBattleSession, 700);
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true }); else boot();
-}  })();
+  })();
 })();
