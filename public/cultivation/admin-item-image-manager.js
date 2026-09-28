@@ -13,7 +13,7 @@ import {
   'use strict';
 
   const PANEL_ID = 'admin-item-image-manager';
-  const FATAL_IMAGE_STATUSES = new Set([400, 401, 403, 404, 429, 500, 502, 503, 504]);
+  const FATAL_IMAGE_STATUSES = new Set([401, 403, 429, 500, 502, 503, 504]);
   let busy = false;
   let stopRequested = false;
 
@@ -24,12 +24,32 @@ import {
       .replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;');
   }
 
+
+  function friendlyImageError(error) {
+    const status = Number(error?.status) || 0;
+    const code = String(error?.code || '');
+    const raw = String(error?.message || '圖片生成失敗').trim();
+    if (status === 422 || code === 'IMAGE_SAFETY_REJECTED' ||
+        /(?:nsfw|unsafe|safety|content\s*(?:policy|filter|moderation)|內容審核)/i.test(raw)) {
+      return '此物品的圖片描述未通過內容審核，已略過並繼續處理下一張';
+    }
+    if (status === 429) return '圖片服務目前請求過多，請稍後再試';
+    if (status === 401 || status === 403) return '圖片服務授權失效，請檢查 Cloudflare／管理員設定';
+    if (status === 503) return '圖片服務尚未完成設定或目前不可用';
+    if (status === 504) return '圖片生成逾時，請稍後再試';
+    return raw
+      .replace(/^AiError:\s*/i, '')
+      .replace(/\s*\([0-9a-f]{8}-[0-9a-f-]{27,}\)\s*/ig, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .slice(0, 140) || '圖片生成失敗';
+  }
   function toast(message, ok = true) {
     document.getElementById('aiim-toast')?.remove();
     const node = document.createElement('div');
     node.id = 'aiim-toast';
     node.textContent = message;
-    node.style.cssText = `position:fixed;left:50%;bottom:110px;transform:translateX(-50%);z-index:12400;padding:10px 15px;border-radius:999px;background:#090909f5;border:1px solid ${ok ? '#d8b15d88' : '#ef777788'};color:${ok ? '#f1ddaa' : '#ffd0d0'};font-size:10px;font-weight:900;box-shadow:0 16px 45px #0009`;
+    node.style.cssText = `position:fixed;left:50%;bottom:110px;transform:translateX(-50%);z-index:12400;max-width:min(560px,calc(100vw - 32px));width:max-content;padding:11px 15px;border-radius:15px;background:#090909f5;border:1px solid ${ok ? '#d8b15d88' : '#ef777788'};color:${ok ? '#f1ddaa' : '#ffd0d0'};font-size:10px;font-weight:900;line-height:1.55;text-align:left;white-space:normal;overflow-wrap:anywhere;box-shadow:0 16px 45px #0009`;
     document.body.appendChild(node);
     setTimeout(() => node.remove(), 3200);
   }
@@ -65,6 +85,7 @@ import {
       const detail = String(payload?.error || raw || '').trim().slice(0, 360);
       const error = new Error(detail || ('圖片生成失敗 (' + response.status + ')'));
       error.status = response.status;
+      error.code = String(payload?.code || '');
       throw error;
     }
     if (payload.item) updateLocal(kind, payload.item);
@@ -166,7 +187,8 @@ import {
     const bar = panel?.querySelector('#aiim-progress-bar');
     let completed = 0;
     let failed = 0;
-    let firstError = '';
+    let fatalError = '';
+    let processed = 0;
 
     for (let index = 0; index < queue.length; index += 1) {
       if (stopRequested) break;
@@ -178,30 +200,42 @@ import {
         completed += 1;
       } catch (error) {
         failed += 1;
-        const message = String(error?.message || '圖片生成失敗');
-        if (!firstError) firstError = message;
+        const rawMessage = String(error?.message || '圖片生成失敗');
+        const message = friendlyImageError(error);
         console.warn('[Admin item image backfill]', {
           action: overwrite ? 'regenerate' : 'backfill',
           ...row,
           status: Number(error?.status) || 0,
-          error: message
+          code: String(error?.code || ''),
+          error: rawMessage
         });
         if (FATAL_IMAGE_STATUSES.has(Number(error?.status) || 0)) {
+          fatalError = message;
           if (status) status.textContent = message + '；已停止本次' + actionLabel + '。';
+          processed = index + 1;
           break;
         }
+        if (status) status.textContent = `已略過「${row.name}」：${message}`;
       }
+      processed = index + 1;
     }
 
-    if (bar) bar.style.width = '100%';
+    if (bar) {
+      const ratio = queue.length ? Math.min(1, processed / queue.length) : 1;
+      bar.style.width = Math.round(ratio * 100) + '%';
+    }
     busy = false;
     const stopped = stopRequested;
     stopRequested = false;
     render();
-    if (firstError) {
-      toast(`${actionLabel}失敗：${firstError}${completed ? `（已完成 ${completed} 張）` : ''}`, false);
+    if (fatalError) {
+      toast(`${actionLabel}中斷：${fatalError}（成功 ${completed} 張${failed ? `，略過 ${failed} 張` : ''}）`, false);
+    } else if (stopped) {
+      toast(`已停止${actionLabel}：成功 ${completed} 張${failed ? `，略過 ${failed} 張` : ''}`, true);
+    } else if (failed) {
+      toast(`${actionLabel}完成：成功 ${completed} 張，略過 ${failed} 張；可稍後個別重試`, true);
     } else {
-      toast(stopped ? `已停止${actionLabel}，本次完成 ${completed} 張` : `${actionLabel}完成：成功 ${completed} 張`, true);
+      toast(`${actionLabel}完成：成功 ${completed} 張`, true);
     }
   }
 
