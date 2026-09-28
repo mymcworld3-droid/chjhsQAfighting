@@ -4,7 +4,7 @@ const { randomUUID, createHash, createHmac } = require('node:crypto');
 const { adminProject, PROJECT_IDS } = require('./firebase-admin-projects.cjs');
 
 const MODEL = '@cf/black-forest-labs/flux-1-schnell';
-const PROMPT_VERSION = 'xianxia-moba-item-icon-v5';
+const PROMPT_VERSION = 'xianxia-moba-item-icon-v6-safe';
 const PROMPT_MAX = 2048;
 const CONFIGS = Object.freeze({
   artifact: { doc: 'artifactCatalogV1', folder: 'artifacts' },
@@ -17,6 +17,61 @@ const IMAGE_FIELDS = Object.freeze([
 
 function clean(value, max = 240) {
   return String(value || '').replace(/[\u0000-\u001f\u007f]+/g, ' ').replace(/\s+/g, ' ').trim().slice(0, max);
+}
+
+function safeVisualText(value, max = 180) {
+  return clean(value, Math.max(max * 2, max))
+    .replace(/\b(?:nsfw|porn(?:ography)?|nude|nudity|naked|sexual|sex|fetish|erotic|explicit)\b/gi, ' ')
+    .replace(/(?:色情|情色|裸照|裸體|裸露|性行為|性交|性器官|乳房|乳頭|陰部|陰莖|陰道|精液|自慰|強姦|強暴|斷肢|內臟|腐屍|血淋淋|流血傷口)/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, max);
+}
+
+function isSafetyRejection(value) {
+  return /(?:nsfw|unsafe|safety|content\s*(?:policy|filter|moderation)|moderation|adult content|prompt contains)/i
+    .test(String(value || ''));
+}
+
+function safeArtifactForm(value) {
+  const text = safeVisualText(value, 72).toLowerCase();
+  if (/劍|刀|刃|sword|blade|saber/.test(text)) return 'sword-like magical relic';
+  if (/盾|shield/.test(text)) return 'shield-like magical relic';
+  if (/符|talisman|seal/.test(text)) return 'talisman-like magical relic';
+  if (/鏡|mirror/.test(text)) return 'mirror-like magical relic';
+  if (/鐘|鈴|bell/.test(text)) return 'bell-like magical relic';
+  if (/鼎|爐|cauldron|furnace/.test(text)) return 'cauldron-like magical relic';
+  if (/靴|鞋|boot|shoe/.test(text)) return 'boot-like magical relic';
+  if (/環|戒|ring/.test(text)) return 'ring-like magical relic';
+  if (/弓|bow/.test(text)) return 'bow-like magical relic';
+  if (/扇|fan/.test(text)) return 'fan-like magical relic';
+  if (/珠|orb|pearl/.test(text)) return 'orb-like magical relic';
+  return 'compact mystical relic';
+}
+
+function buildSafetyFallbackPrompt(kind, item = {}) {
+  const common = [
+    'Create a clean 1:1 square fantasy RPG inventory icon.',
+    'Show exactly one inanimate game item, centered, fully visible, uncropped, on a simple dark navy or indigo gradient background.',
+    'Use a clear silhouette, restrained highlights, minimal glow, and a polished mobile-game icon finish.',
+    'Keep the image object-only and scene-free.',
+    'Do not include characters, creatures, portraits, hands, text, letters, numbers, labels, watermark, logo, UI frame, stand, shelf, pedestal, or duplicated objects.'
+  ];
+  if (kind === 'material') {
+    return finalizePrompt([
+      ...common,
+      'Depict a compact abstract crafting resource such as a crystal, ore chunk, wood fragment, fiber bundle, or refined fantasy component.',
+      'Use this palette: ' + materialColorTheme(item) + '.',
+      'Keep the resource simple, non-figurative, and easy to recognize at thumbnail size.'
+    ]);
+  }
+  return finalizePrompt([
+    ...common,
+    'Depict a ' + safeArtifactForm(item?.weaponForm || item?.category || item?.name || '') + '.',
+    'Use a deep sapphire, jade, violet, or warm gold magical color family with at most one restrained accent.',
+    'Use a bold three-quarter presentation and a strong readable silhouette.',
+    'Keep ornament limited to a few engravings and one subtle magical core or rune detail.'
+  ]);
 }
 
 function finalizePrompt(parts) {
@@ -159,12 +214,11 @@ function effectSummary(item = {}) {
 }
 
 function buildItemImagePrompt(kind, item = {}) {
-  const name = clean(item.name || (kind === 'artifact' ? 'Unnamed magical artifact' : 'Unnamed crafting material'), 80);
-  const realm = clean(item.realm || '凡人', 30);
-  const category = clean(item.category || (kind === 'artifact' ? '法寶' : '材料'), 50);
-  const description = clean(item.description || '', 360);
-  const story = clean(item.story || '', 260);
-  const weaponForm = clean(item.weaponForm || '', 40);
+  const name = safeVisualText(item.name || (kind === 'artifact' ? 'Unnamed magical artifact' : 'Unnamed crafting material'), 80);
+  const realm = safeVisualText(item.realm || '凡人', 30);
+  const category = safeVisualText(item.category || (kind === 'artifact' ? '法寶' : '材料'), 50);
+  const description = safeVisualText(item.description || '', 180);
+  const weaponForm = safeVisualText(item.weaponForm || '', 40);
   const effects = effectSummary(item);
 
   const common = [
@@ -175,7 +229,7 @@ function buildItemImagePrompt(kind, item = {}) {
     'Use one dominant color family with at most one subtle secondary accent color. No rainbow palette and no competing multi-color effects.',
     'Use clean highlights and restrained rim light. Keep particles, aura, bloom, and energy effects minimal.',
     'The item must float by itself. No table, altar, rack, stand, shelf, tray, platform, holder, pedestal, mount, display base, floor, or supporting object.',
-    'Do not include text, letters, numbers, labels, watermark, logo, UI frame, duplicated object, character, hand, or caption.'
+    'Only the item is visible. Keep the image scene-free and do not include characters, creatures, portraits, hands, text, letters, numbers, labels, watermark, logo, UI frame, duplicated object, or caption.'
   ];
 
   if (kind === 'material') {
@@ -183,7 +237,7 @@ function buildItemImagePrompt(kind, item = {}) {
     return finalizePrompt([
       ...common,
       'This is a crafting MATERIAL, not a finished weapon or magical artifact.',
-      'Use a compact, simple silhouette that immediately reads as the material substance: wood as wood, ore as ore, crystal as crystal, beast material as organic material, paper or fiber as paper or fiber.',
+      'Use a compact, simple silhouette that immediately reads as a game crafting resource: wood, ore, crystal, fiber, paper, or a refined fantasy component.',
       'The entire material icon must follow this single selected palette: ' + colorTheme + '.',
       'Do not introduce extra hues outside that palette except tiny neutral white or black shading.',
       'Keep the material less ornate and less magical than an equipment artifact. Use almost no particles.',
@@ -191,8 +245,7 @@ function buildItemImagePrompt(kind, item = {}) {
       'Item name: ' + name + '.',
       'Cultivation realm: ' + realm + '.',
       'Material category: ' + category + '.',
-      description ? 'Material description: ' + description + '.' : '',
-      story ? 'Lore mood only, without literal text: ' + story + '.' : ''
+      description ? 'Visual description: ' + description + '.' : ''
     ]);
   }
 
@@ -209,8 +262,7 @@ function buildItemImagePrompt(kind, item = {}) {
     'Artifact category: ' + category + '.',
     weaponForm ? 'Canonical artifact form: ' + weaponForm + '.' : '',
     effects ? 'Mechanical theme to express visually: ' + effects + '.' : '',
-    description ? 'Artifact description: ' + description + '.' : '',
-    story ? 'Lore mood only, without literal text: ' + story + '.' : ''
+    description ? 'Visual description: ' + description + '.' : ''
   ]);
 }
 
@@ -532,7 +584,26 @@ async function generateCatalogItemImage({
 
   try {
     const prompt = buildItemImagePrompt(normalizedKind, reserved.item);
-    const generated = await generateFluxImage(prompt, { env, fetchImpl });
+    let generated;
+    let safetyFallbackUsed = false;
+    try {
+      generated = await generateFluxImage(prompt, { env, fetchImpl });
+    } catch (error) {
+      if (!isSafetyRejection(error?.message)) throw error;
+      safetyFallbackUsed = true;
+      const fallbackPrompt = buildSafetyFallbackPrompt(normalizedKind, reserved.item);
+      try {
+        generated = await generateFluxImage(fallbackPrompt, { env, fetchImpl });
+      } catch (retryError) {
+        if (isSafetyRejection(retryError?.message)) {
+          const safeError = new Error('此物品的圖片描述未通過內容審核，已自動改用安全提示詞重試但仍未成功');
+          safeError.status = 422;
+          safeError.code = 'IMAGE_SAFETY_REJECTED';
+          throw safeError;
+        }
+        throw retryError;
+      }
+    }
     const uploaded = await uploadGeneratedImage(normalizedKind, normalizedId, generated.base64, {
       env, fetchImpl: storageFetchImpl
     });
@@ -540,7 +611,7 @@ async function generateCatalogItemImage({
       project, reserved, kind: normalizedKind, id: normalizedId,
       imageUrl: uploaded.imageUrl, storagePath: uploaded.storagePath
     });
-    return { skipped: false, item, model: MODEL, promptVersion: PROMPT_VERSION };
+    return { skipped: false, item, model: MODEL, promptVersion: PROMPT_VERSION, safetyFallbackUsed };
   } catch (error) {
     await failImageJob({ project, reserved, id: normalizedId, error });
     throw error;
@@ -570,6 +641,7 @@ function createAdminItemImageHandler(options = {}) {
     } catch (error) {
       return res.status(Number(error?.status) || 500).json({
         ok: false,
+        code: clean(error?.code || '', 80) || undefined,
         error: clean(error?.message || '補圖失敗', 360)
       });
     }
@@ -596,6 +668,7 @@ function createArtifactAutoImageHandler(options = {}) {
     } catch (error) {
       return res.status(Number(error?.status) || 500).json({
         ok: false,
+        code: clean(error?.code || '', 80) || undefined,
         error: clean(error?.message || '法寶自動補圖失敗', 360)
       });
     }
@@ -611,6 +684,9 @@ module.exports = {
   MODEL,
   PROMPT_VERSION,
   buildItemImagePrompt,
+  buildSafetyFallbackPrompt,
+  isSafetyRejection,
+  safeVisualText,
   materialColorTheme,
   imageConfig,
   r2Config,
