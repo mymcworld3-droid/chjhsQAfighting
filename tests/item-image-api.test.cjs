@@ -8,6 +8,9 @@ const {
   MODEL,
   PROMPT_VERSION,
   buildItemImagePrompt,
+  buildSafetyFallbackPrompt,
+  isSafetyRejection,
+  safeVisualText,
   materialColorTheme,
   r2Config,
   signedR2PutRequest,
@@ -17,7 +20,7 @@ const {
 
 test('item image API uses Cloudflare FLUX Schnell with a fixed xianxia prompt', () => {
   assert.equal(MODEL, '@cf/black-forest-labs/flux-1-schnell');
-  assert.equal(PROMPT_VERSION, 'xianxia-moba-item-icon-v5');
+  assert.equal(PROMPT_VERSION, 'xianxia-moba-item-icon-v6-safe');
   const material = buildItemImagePrompt('material', {
     name: '玄鐵',
     realm: '築基',
@@ -49,6 +52,34 @@ test('item image API uses Cloudflare FLUX Schnell with a fixed xianxia prompt', 
   assert.match(artifact, /No table, altar, rack, stand/);
 });
 
+
+test('item image prompt removes risky lore text and provides a static safety fallback', () => {
+  const prompt = buildItemImagePrompt('artifact', {
+    name: '青雲劍',
+    realm: '金丹',
+    category: '裝備法寶',
+    weaponForm: '劍',
+    description: '古老法寶，帶有裸露情色字樣但外觀只是青色長劍',
+    story: '這段 lore 含有不應直接送進圖片模型的 NSFW 敘述'
+  });
+  assert.doesNotMatch(prompt, /NSFW|情色|裸露/i);
+  assert.doesNotMatch(prompt, /這段 lore/);
+  assert.match(prompt, /Item name: 青雲劍/);
+
+  const fallback = buildSafetyFallbackPrompt('artifact', {
+    name: '任何名稱',
+    category: '裝備法寶',
+    weaponForm: '劍',
+    story: 'NSFW'
+  });
+  assert.match(fallback, /Object-only|object-only/i);
+  assert.match(fallback, /sword-like magical relic/);
+  assert.doesNotMatch(fallback, /任何名稱|NSFW/);
+
+  assert.equal(isSafetyRejection('AiError: Input prompt contains NSFW content.'), true);
+  assert.equal(isSafetyRejection('network timeout'), false);
+  assert.equal(safeVisualText('安全外觀 裸體 色情', 80), '安全外觀');
+});
 test('material color theme is semantic and deterministic', () => {
   assert.equal(
     materialColorTheme({ id: 'soul-wood', name: '神魂木', category: '靈木' }),
