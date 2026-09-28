@@ -4,7 +4,7 @@ const { randomUUID, createHash, createHmac } = require('node:crypto');
 const { adminProject, PROJECT_IDS } = require('./firebase-admin-projects.cjs');
 
 const MODEL = '@cf/black-forest-labs/flux-1-schnell';
-const PROMPT_VERSION = 'xianxia-moba-item-icon-v6-safe';
+const PROMPT_VERSION = 'xianxia-moba-item-icon-v7-name-visual';
 const PROMPT_MAX = 2048;
 const CONFIGS = Object.freeze({
   artifact: { doc: 'artifactCatalogV1', folder: 'artifacts' },
@@ -58,19 +58,30 @@ function buildSafetyFallbackPrompt(kind, item = {}) {
     'Do not include characters, creatures, portraits, hands, text, letters, numbers, labels, watermark, logo, UI frame, stand, shelf, pedestal, or duplicated objects.'
   ];
   if (kind === 'material') {
+    const identity = inferNameVisualIdentity(item?.name || '');
     return finalizePrompt([
       ...common,
       'Depict a compact abstract crafting resource such as a crystal, ore chunk, wood fragment, fiber bundle, or refined fantasy component.',
-      'Use this palette: ' + materialColorTheme(item) + '.',
+      identity.palette.length
+        ? 'Use this safe name-derived palette: ' + identity.palette.join(' with ') + '.'
+        : 'Use this palette: ' + materialColorTheme(item) + '.',
+      identity.motifs.length
+        ? 'Integrate these safe name-derived material details: ' + identity.motifs.slice(0, 3).join(', ') + '.'
+        : '',
       'Keep the resource simple, non-figurative, and easy to recognize at thumbnail size.'
     ]);
   }
+  const identity = inferNameVisualIdentity(item?.name || '');
   return finalizePrompt([
     ...common,
-    'Depict a ' + safeArtifactForm(item?.weaponForm || item?.category || item?.name || '') + '.',
-    'Use a deep sapphire, jade, violet, or warm gold magical color family with at most one restrained accent.',
-    'Use a bold three-quarter presentation and a strong readable silhouette.',
-    'Keep ornament limited to a few engravings and one subtle magical core or rune detail.'
+    'Depict a ' + artifactFormVisual(item) + '.',
+    identity.palette.length
+      ? 'Use this safe name-derived palette: ' + identity.palette.join(' with ') + '.'
+      : 'Use a deep sapphire, jade, violet, or warm gold magical color family with at most one restrained accent.',
+    identity.motifs.length
+      ? 'Integrate these safe name-derived motifs into the object: ' + identity.motifs.slice(0, 3).join(', ') + '.'
+      : 'Keep ornament limited to a few engravings and one subtle magical core or rune detail.',
+    'Use a bold three-quarter presentation and a strong readable silhouette.'
   ]);
 }
 
@@ -213,56 +224,241 @@ function effectSummary(item = {}) {
   }).filter(Boolean).join(', ');
 }
 
+const NAME_VISUAL_RULES = Object.freeze([
+  { re: /雷|霆|電|天雷|劫雷/, palette: 'electric violet and cool blue', motifs: ['thin lightning arcs', 'thunder-rune engravings'], mood: 'charged and forceful' },
+  { re: /火|炎|焰|焚|地火/, palette: 'crimson red and molten gold', motifs: ['flame-shaped engravings', 'heated glowing edges'], mood: 'fierce and radiant' },
+  { re: /冰|霜|雪|寒/, palette: 'icy blue and pearl white', motifs: ['frost crystal facets', 'delicate ice-vein patterns'], mood: 'cold and precise' },
+  { re: /風|嵐|颶/, palette: 'cyan teal and pale silver', motifs: ['swept wind curves', 'spiral airflow engravings'], mood: 'light and swift' },
+  { re: /水|海|潮|河|滄/, palette: 'deep sapphire and cyan', motifs: ['flowing wave patterns', 'water-ripple rings'], mood: 'fluid and calm' },
+  { re: /毒|瘴/, palette: 'deep jade and dark emerald', motifs: ['jade mist channels', 'serpentine alchemical markings'], mood: 'mysterious and dangerous' },
+  { re: /青/, palette: 'jade green and clear cyan', motifs: ['clean jade-like highlights'], mood: 'elegant and fresh' },
+  { re: /赤|朱|丹/, palette: 'crimson and warm gold', motifs: ['crimson enamel accents'], mood: 'bold and ceremonial' },
+  { re: /紫/, palette: 'royal violet and muted gold', motifs: ['violet crystal accents'], mood: 'noble and mystical' },
+  { re: /金|黃金|仙金/, palette: 'warm gold and ivory', motifs: ['refined golden filigree'], mood: 'prestigious and luminous' },
+  { re: /玄|冥|幽|夜|暗/, palette: 'deep indigo and blackened metal', motifs: ['subtle dark rune bands'], mood: 'profound and mysterious' },
+  { re: /太虛|虛空|空冥|虛/, palette: 'deep indigo and cosmic violet', motifs: ['concentric spatial rings', 'subtle void-like geometric gaps'], mood: 'ethereal and otherworldly' },
+  { re: /混沌|鴻蒙/, palette: 'primordial violet and muted gold', motifs: ['slow spiral primordial patterns', 'layered origin sigils'], mood: 'ancient and transcendent' },
+  { re: /星|辰|九霄|九天/, palette: 'midnight blue and starlight silver', motifs: ['small star-point inlays', 'celestial orbit engravings'], mood: 'celestial and lofty' },
+  { re: /月/, palette: 'moon silver and pale blue', motifs: ['crescent-moon ornament', 'soft lunar halo'], mood: 'serene and refined' },
+  { re: /日|陽|曜/, palette: 'sun gold and warm ivory', motifs: ['sun-disc engraving', 'short radial light marks'], mood: 'bright and sovereign' },
+  { re: /龍|蛟/, motifs: ['dragon-scale engravings', 'a restrained coiling-dragon ornament'], mood: 'majestic and commanding' },
+  { re: /鳳|凰/, motifs: ['phoenix-feather engravings', 'upward feather-like flame curves'], mood: 'noble and reborn' },
+  { re: /蓮/, motifs: ['lotus-petal geometry', 'a lotus-shaped guard or central ornament'], mood: 'pure and elegant' },
+  { re: /雲/, motifs: ['traditional cloud-scroll engravings', 'soft flowing cloud curves'], mood: 'graceful and airy' },
+  { re: /山|嶽|峰/, motifs: ['layered mountain-ridge geometry', 'heavy stepped contours'], mood: 'stable and imposing' },
+  { re: /木|樹|枝/, motifs: ['refined wood-grain lines', 'leaf or branch-shaped details'], mood: 'natural and enduring' },
+  { re: /玉/, palette: 'jade green and warm ivory', motifs: ['translucent jade surface', 'smooth carved-jade edges'], mood: 'refined and auspicious' },
+  { re: /晶|琉璃|琥珀/, motifs: ['faceted crystal core', 'clean gem-like reflections'], mood: 'precise and luminous' },
+  { re: /魂|魄|神魂/, palette: 'pale cyan and silver', motifs: ['spirit-flame shaped glow', 'soul-binding rune loops'], mood: 'mystical and solemn' },
+  { re: /道|悟道|天道|大道|法則/, motifs: ['concentric dao sigils', 'balanced geometric law patterns'], mood: 'disciplined and transcendent' },
+  { re: /鎮|封|禁/, motifs: ['sealing rune bands', 'symmetrical suppressing geometry'], mood: 'heavy and suppressive' },
+  { re: /獄/, motifs: ['interlocking dark-metal bands', 'strict vertical rune bars'], mood: 'severe and imposing' },
+  { re: /破|斬|裂|滅|軍/, motifs: ['sharp split-line engravings', 'forward-driving angular geometry'], mood: 'aggressive and martial' },
+  { re: /守|護|御/, motifs: ['protective outer rune ring', 'layered defensive edging'], mood: 'steadfast and protective' },
+  { re: /長生|不朽|永生/, motifs: ['longevity-knot engravings', 'subtle evergreen vine curves'], mood: 'calm and enduring' },
+  { re: /七寶|玲瓏|寶/, motifs: ['small jewel inlays', 'fine symmetrical treasure filigree'], mood: 'precious and intricate' },
+  { re: /戰|武/, motifs: ['martial rivet bands', 'bold ceremonial battle markings'], mood: 'martial and resolute' },
+  { re: /靈/, motifs: ['a compact luminous spirit core'], mood: 'alive with restrained magical energy' },
+  { re: /五行/, palette: 'warm gold with restrained five-gem accents', motifs: ['five balanced elemental nodes around one center'], mood: 'balanced and harmonious' },
+  { re: /界|世界/, motifs: ['nested boundary rings', 'layered dimensional frame geometry'], mood: 'vast and structural' },
+  { re: /古|太古|遠古/, motifs: ['archaic seal-script inspired engravings', 'aged bronze-like structural details'], mood: 'ancient and venerable' },
+  { re: /仙/, palette: 'pearl white and soft gold', motifs: ['fine immortal-cloud filigree'], mood: 'pristine and transcendent' },
+  { re: /鐵|鋼/, palette: 'dark gunmetal and cool steel', motifs: ['forged-metal grain', 'tempered steel edges'], mood: 'solid and disciplined' },
+  { re: /銅|青銅/, palette: 'aged bronze and warm amber', motifs: ['bronze patina details', 'cast-metal bands'], mood: 'ancient and sturdy' },
+  { re: /石|岩/, motifs: ['faceted stone planes', 'mineral fracture lines'], mood: 'dense and grounded' },
+  { re: /骨/, palette: 'ivory and muted bronze', motifs: ['smooth ivory-like inlays', 'ribbed carved patterns'], mood: 'ancient and austere' },
+  { re: /光|明/, motifs: ['clean luminous edge lines', 'a focused radiant core'], mood: 'bright and pure' },
+  { re: /影/, palette: 'smoky indigo and charcoal', motifs: ['soft shadow-trail engravings', 'dim layered silhouettes on the surface'], mood: 'quiet and elusive' },
+  { re: /神|聖/, palette: 'pearl white and ceremonial gold', motifs: ['sacred geometric filigree', 'clean halo-like ring detail'], mood: 'sacred and exalted' },
+  { re: /魔|煞/, palette: 'dark crimson and blackened violet', motifs: ['angular forbidden-rune styling', 'dark crystal accents'], mood: 'ominous but controlled' },
+  { re: /太極|陰陽/, palette: 'black and pearl white with one muted gold accent', motifs: ['balanced dual-swirl geometry', 'paired opposing inlays'], mood: 'balanced and philosophical' },
+  { re: /無極/, motifs: ['continuous infinity-like ring geometry', 'unbroken circular engravings'], mood: 'boundless and serene' },
+  { re: /乾坤/, motifs: ['paired heaven-and-earth rings', 'dual concentric seal geometry'], mood: 'vast and balanced' },
+  { re: /輪迴/, motifs: ['cyclic concentric rings', 'repeating return-path engravings'], mood: 'solemn and timeless' },
+  { re: /涅槃/, palette: 'crimson ember and warm gold', motifs: ['phoenix-feather rebirth sigil', 'upward ember curves'], mood: 'renewed and majestic' },
+  { re: /夢|幻/, palette: 'soft violet and moon silver', motifs: ['translucent layered reflections', 'dreamlike ripple geometry'], mood: 'illusory and delicate' },
+  { re: /劫/, motifs: ['fine lightning-scar engravings', 'tempered dark-metal edges'], mood: 'tribulation-forged and resilient' },
+  { re: /虎|白虎/, motifs: ['tiger-stripe metal engravings', 'restrained claw-like edge notches'], mood: 'fierce and disciplined' },
+  { re: /麒麟/, motifs: ['qilin-scale patterns', 'small horn-like ornamental ridges'], mood: 'auspicious and regal' },
+  { re: /玄武/, motifs: ['tortoise-shell hexagonal geometry', 'coiling protective border'], mood: 'ancient and defensive' },
+  { re: /朱雀/, motifs: ['vermillion feather engravings', 'upward wing-like flame curves'], mood: 'radiant and noble' }
+]);
+
+function uniqueLimited(values, limit) {
+  return [...new Set(values.filter(Boolean))].slice(0, limit);
+}
+
+function inferNameVisualIdentity(name = '') {
+  const text = safeVisualText(name, 100);
+  const palettes = [];
+  const motifs = [];
+  const moods = [];
+  for (const rule of NAME_VISUAL_RULES) {
+    if (!rule.re.test(text)) continue;
+    if (rule.palette) palettes.push(rule.palette);
+    if (Array.isArray(rule.motifs)) motifs.push(...rule.motifs);
+    if (rule.mood) moods.push(rule.mood);
+  }
+  return {
+    palette: uniqueLimited(palettes, 2),
+    motifs: uniqueLimited(motifs, 5),
+    mood: uniqueLimited(moods, 3)
+  };
+}
+
+function artifactFormVisual(item = {}) {
+  const text = [
+    item?.weaponForm || '',
+    item?.name || '',
+    item?.category || ''
+  ].join(' ').toLowerCase();
+  const forms = [
+    [/飛劍|flying sword/, 'flying sword'],
+    [/匕首|dagger/, 'dagger'],
+    [/劍|sword/, 'sword'],
+    [/刀|blade|saber/, 'saber or broad blade'],
+    [/槍|spear/, 'spear'],
+    [/弓|bow/, 'bow'],
+    [/斧|axe/, 'battle axe'],
+    [/錘|hammer/, 'war hammer'],
+    [/戟|halberd/, 'halberd'],
+    [/棍|staff/, 'combat staff'],
+    [/鞭|whip/, 'ritual whip'],
+    [/盾|法盾|shield/, 'magical shield'],
+    [/杖|法杖|wand/, 'ritual staff'],
+    [/符|符籙|talisman/, 'talisman'],
+    [/陣盤|formation|array/, 'formation disk'],
+    [/寶珠|珠|orb|pearl/, 'mystical orb'],
+    [/玉佩|佩飾|pendant|jade pendant/, 'jade pendant'],
+    [/法鏡|鏡|mirror/, 'ritual mirror'],
+    [/鈴|bell charm/, 'ritual hand bell'],
+    [/幡|banner/, 'ritual banner'],
+    [/印|seal/, 'square ritual seal'],
+    [/鼎|cauldron/, 'ritual cauldron'],
+    [/鐘|bell/, 'large ritual bell'],
+    [/鼓|drum/, 'ceremonial war drum'],
+    [/燈|lamp|lantern/, 'ritual lamp'],
+    [/甲|armor|armour/, 'ornate magical armor'],
+    [/尺|ruler/, 'ritual ruler'],
+    [/扇|fan/, 'ritual folding fan'],
+    [/環|戒|ring/, 'mystical ring'],
+    [/鐲|bracelet/, 'mystical bracelet'],
+    [/塔|pagoda|tower/, 'miniature ritual pagoda'],
+    [/葫蘆|gourd/, 'ritual gourd vessel'],
+    [/琴|zither|guqin/, 'ritual zither'],
+    [/笛|簫|flute/, 'ritual flute'],
+    [/瓶|vase|bottle/, 'ritual jade vessel'],
+    [/壺|pot|vessel/, 'ritual vessel'],
+    [/輪|wheel/, 'ritual wheel'],
+    [/碑|tablet|stele/, 'ritual stone tablet'],
+    [/筆|brush/, 'ritual calligraphy brush'],
+    [/卷|書|scroll|scripture/, 'sealed scripture scroll'],
+    [/鎖|lock/, 'mystical lock'],
+    [/針|needle/, 'ritual flying needle'],
+    [/釘|spike/, 'ritual spike'],
+    [/梭|shuttle/, 'mystical flying shuttle'],
+    [/舟|船|boat/, 'miniature mystical boat'],
+    [/傘|umbrella/, 'ritual umbrella'],
+    [/袋|囊|pouch|bag/, 'mystical storage pouch'],
+    [/冠|crown/, 'ritual crown'],
+    [/袍|robe/, 'ornate magical robe'],
+    [/靴|鞋|boot|shoe/, 'ornate magical boots'],
+    [/鎧|armor|armour/, 'ornate magical armor']
+  ];
+  return forms.find(([re]) => re.test(text))?.[1] || 'compact mystical relic';
+}
+
+function realmVisualStyle(realm = '') {
+  const styles = {
+    '凡人': 'plain handcrafted construction with almost no ornament',
+    '煉氣': 'simple low-tier magical craftsmanship with one small glow accent',
+    '築基': 'refined craftsmanship with clear engraved details and controlled polish',
+    '金丹': 'high-grade craftsmanship with a distinct luminous core and polished finish',
+    '元嬰': 'rare ornate craftsmanship with layered runes and elegant magical depth',
+    '化神': 'masterwork craftsmanship with sophisticated symbolic detailing',
+    '煉虛': 'ethereal high-tier craftsmanship with spatial depth and floating geometry',
+    '合體': 'grand balanced masterwork with integrated motifs and unified structure',
+    '大乘': 'legendary craftsmanship with powerful but controlled aura',
+    '渡劫': 'tribulation-grade relic with premium scorched-metal and lightning-tested details',
+    '真仙': 'immortal-grade masterpiece, exceptionally refined, luminous and pristine'
+  };
+  return styles[String(realm || '').trim()] || 'refined magical craftsmanship';
+}
+
+function effectVisualIdentity(item = {}) {
+  const effects = Array.isArray(item.effects) ? item.effects : [];
+  const cues = [];
+  for (const effect of effects) {
+    const type = String(effect?.type || '');
+    if (/attack|damage_percent/.test(type)) cues.push('sharpened energy channels and assertive forward geometry');
+    if (/hp|reduction|shield|damage_cap/.test(type)) cues.push('protective rune bands and robust reinforced edges');
+    if (/crit/.test(type)) cues.push('starburst facets around a focused power core');
+    if (/combo/.test(type)) cues.push('paired echo-lines suggesting rapid chained strikes');
+    if (/lifesteal/.test(type)) cues.push('a ruby life-force gem with inward flowing light');
+    if (/reflect|copy_enemy/.test(type)) cues.push('mirror-polished facets and twin symmetrical glyphs');
+    if (/true_damage/.test(type)) cues.push('a narrow white-gold piercing rune through the center');
+    if (/cheat_death/.test(type)) cues.push('a restrained phoenix-like rebirth sigil');
+    if (/timed_cultivation/.test(type)) cues.push('calm concentric spiritual rings around the core');
+    if (/timed_attack/.test(type)) cues.push('a compact pulsing martial aura close to the object');
+    if (/remove_wrong_option/.test(type)) cues.push('precise ordered jewel markers suggesting discernment and selection');
+  }
+  return uniqueLimited(cues, 3);
+}
+
+function nameIdentityPrompt(identity) {
+  const parts = [];
+  if (identity.palette.length) parts.push('Name-derived palette: ' + identity.palette.join(' with ') + '.');
+  if (identity.motifs.length) parts.push('Name-derived motifs that MUST be visibly integrated into the object: ' + identity.motifs.join(', ') + '.');
+  if (identity.mood.length) parts.push('Name-derived mood: ' + identity.mood.join(', ') + '.');
+  return parts;
+}
+
 function buildItemImagePrompt(kind, item = {}) {
   const name = safeVisualText(item.name || (kind === 'artifact' ? 'Unnamed magical artifact' : 'Unnamed crafting material'), 80);
   const realm = safeVisualText(item.realm || '凡人', 30);
   const category = safeVisualText(item.category || (kind === 'artifact' ? '法寶' : '材料'), 50);
-  const description = safeVisualText(item.description || '', 180);
-  const weaponForm = safeVisualText(item.weaponForm || '', 40);
-  const effects = effectSummary(item);
+  const description = safeVisualText(item.description || '', 150);
+  const identity = inferNameVisualIdentity(name);
 
   const common = [
-    'Create a clean 1:1 square fantasy game inventory icon for a Chinese xianxia cultivation RPG.',
-    'Show exactly one large item, centered, fully visible, uncropped, filling about 82 to 90 percent of the square.',
-    'Use a simple dark navy, indigo, or black gradient background with only a faint localized glow behind the item.',
-    'Keep the composition simple, uncluttered, and easy to read at thumbnail size.',
-    'Use one dominant color family with at most one subtle secondary accent color. No rainbow palette and no competing multi-color effects.',
-    'Use clean highlights and restrained rim light. Keep particles, aura, bloom, and energy effects minimal.',
-    'The item must float by itself. No table, altar, rack, stand, shelf, tray, platform, holder, pedestal, mount, display base, floor, or supporting object.',
-    'Only the item is visible. Keep the image scene-free and do not include characters, creatures, portraits, hands, text, letters, numbers, labels, watermark, logo, UI frame, duplicated object, or caption.'
+    'Create a polished 1:1 square inventory icon for a Chinese xianxia RPG.',
+    'Show exactly one large inanimate item, centered, fully visible, uncropped, filling about 82 to 90 percent of the frame.',
+    'Use a dark navy, indigo, or black gradient background with only a faint localized glow; no scene or environment.',
+    'Use one dominant color family with at most one restrained accent, a crisp readable silhouette, and minimal particles or bloom.',
+    'Do not include characters, creatures, portraits, hands, text, letters, numbers, labels, watermark, logo, UI frame, duplicated object, stand, shelf, pedestal, or floor.'
   ];
 
   if (kind === 'material') {
     const colorTheme = materialColorTheme(item);
     return finalizePrompt([
       ...common,
-      'This is a crafting MATERIAL, not a finished weapon or magical artifact.',
-      'Use a compact, simple silhouette that immediately reads as a game crafting resource: wood, ore, crystal, fiber, paper, or a refined fantasy component.',
-      'The entire material icon must follow this single selected palette: ' + colorTheme + '.',
-      'Do not introduce extra hues outside that palette except tiny neutral white or black shading.',
-      'Keep the material less ornate and less magical than an equipment artifact. Use almost no particles.',
-      'Do not turn it into a weapon, accessory, bottle, chest, or finished equipment unless the category explicitly requires it.',
-      'Item name: ' + name + '.',
-      'Cultivation realm: ' + realm + '.',
+      'This is a crafting MATERIAL, not finished equipment.',
+      'The visual identity MUST reflect the material name instead of looking like a generic resource.',
+      identity.palette.length ? '' : 'Base material palette: ' + colorTheme + '.',
+      ...nameIdentityPrompt(identity),
+      'Use a compact resource silhouette such as ore, crystal, wood, fiber, paper, or a refined fantasy component, whichever best matches the name and category.',
+      'Realm finish: ' + realmVisualStyle(realm) + '.',
+      'Item name reference: ' + name + '.',
       'Material category: ' + category + '.',
-      description ? 'Visual description: ' + description + '.' : ''
+      description ? 'Secondary visual hint only: ' + description + '.' : ''
     ]);
   }
 
+  const form = artifactFormVisual(item);
+  const effectCues = effectVisualIdentity(item);
   return finalizePrompt([
     ...common,
-    'This is a finished magical ARTIFACT. Render it as a polished MOBA-style in-game equipment icon, not a product photograph and not a full illustration.',
-    'Use one dominant magical color family chosen to fit the artifact identity, plus at most one restrained accent color.',
-    'Use a bold diagonal or three-quarter presentation when suitable, with a strong instantly readable silhouette.',
-    'Keep ornament selective rather than busy: a few engraved details, one clear magical core or rune treatment, and controlled glossy highlights.',
-    'Keep glow and energy tight around the artifact. Avoid dense particles, rainbow light, excessive decoration, or many competing hues.',
-    'Swords remain swords, shields remain shields, talismans remain talismans, mirrors remain mirrors, bells remain bells, cauldrons remain cauldrons, boots remain boots, and array artifacts remain compact mystical devices.',
-    'Item name: ' + name + '.',
-    'Cultivation realm: ' + realm + '.',
+    'This is a finished magical ARTIFACT rendered as a polished MOBA-style equipment icon.',
+    'The visual identity MUST clearly communicate this specific artifact name; do not generate a generic fantasy item.',
+    'Primary object form: ' + form + '. The silhouette must unmistakably read as this object type.',
+    ...nameIdentityPrompt(identity),
+    'Realm craftsmanship: ' + realmVisualStyle(realm) + '.',
+    effectCues.length ? 'Gameplay-effect visual cues, lower priority than the name: ' + effectCues.join('; ') + '.' : '',
+    'Integrate only the strongest 2 to 4 name motifs into the actual object geometry, guard, core, engravings, edges, or inlays; do not scatter unrelated decorations.',
+    'Keep glow tight around the artifact and keep the object itself dominant.',
+    'Item name reference: ' + name + '.',
     'Artifact category: ' + category + '.',
-    weaponForm ? 'Canonical artifact form: ' + weaponForm + '.' : '',
-    effects ? 'Mechanical theme to express visually: ' + effects + '.' : '',
-    description ? 'Visual description: ' + description + '.' : ''
+    description ? 'Secondary visual hint only: ' + description + '.' : ''
   ]);
 }
 
@@ -685,6 +881,10 @@ module.exports = {
   PROMPT_VERSION,
   buildItemImagePrompt,
   buildSafetyFallbackPrompt,
+  inferNameVisualIdentity,
+  artifactFormVisual,
+  realmVisualStyle,
+  effectVisualIdentity,
   isSafetyRejection,
   safeVisualText,
   materialColorTheme,

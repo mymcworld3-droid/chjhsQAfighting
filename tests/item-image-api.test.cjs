@@ -9,6 +9,10 @@ const {
   PROMPT_VERSION,
   buildItemImagePrompt,
   buildSafetyFallbackPrompt,
+  inferNameVisualIdentity,
+  artifactFormVisual,
+  realmVisualStyle,
+  effectVisualIdentity,
   isSafetyRejection,
   safeVisualText,
   materialColorTheme,
@@ -18,21 +22,21 @@ const {
   generateFluxImage
 } = require('../item-image-api.cjs');
 
-test('item image API uses Cloudflare FLUX Schnell with a fixed xianxia prompt', () => {
+test('item image API uses Cloudflare FLUX Schnell with name-driven xianxia prompts', () => {
   assert.equal(MODEL, '@cf/black-forest-labs/flux-1-schnell');
-  assert.equal(PROMPT_VERSION, 'xianxia-moba-item-icon-v6-safe');
+  assert.equal(PROMPT_VERSION, 'xianxia-moba-item-icon-v7-name-visual');
+
   const material = buildItemImagePrompt('material', {
     name: '玄鐵',
     realm: '築基',
     category: '礦石',
     description: '沉重黑色礦石'
   });
-  assert.match(material, /1:1 square fantasy game inventory icon/);
+  assert.match(material, /1:1 square inventory icon/);
   assert.match(material, /crafting MATERIAL/);
-  assert.match(material, /single selected palette/);
-  assert.match(material, /golden amber with restrained metallic highlights/);
-  assert.match(material, /No rainbow palette/);
-  assert.match(material, /No table, altar, rack, stand/);
+  assert.match(material, /visual identity MUST reflect the material name/);
+  assert.match(material, /deep indigo and blackened metal/);
+  assert.match(material, /Realm finish:/);
 
   const artifact = buildItemImagePrompt('artifact', {
     name: '青雲劍',
@@ -42,18 +46,16 @@ test('item image API uses Cloudflare FLUX Schnell with a fixed xianxia prompt', 
     effects: [{ type: 'equip_attack_flat', value: 80 }]
   });
   assert.match(artifact, /finished magical ARTIFACT/);
-  assert.match(artifact, /Canonical artifact form: 劍/);
-  assert.match(artifact, /equip_attack_flat 80/);
-  assert.match(artifact, /MOBA-style in-game equipment icon/);
-  assert.match(artifact, /three-quarter presentation/);
+  assert.match(artifact, /specific artifact name/);
+  assert.match(artifact, /Primary object form: sword/);
+  assert.match(artifact, /jade green and clear cyan/);
+  assert.match(artifact, /traditional cloud-scroll engravings/);
+  assert.match(artifact, /sharpened energy channels/);
   assert.match(artifact, /82 to 90 percent/);
-  assert.match(artifact, /one dominant magical color family/);
-  assert.match(artifact, /Avoid dense particles, rainbow light/);
-  assert.match(artifact, /No table, altar, rack, stand/);
+  assert.match(artifact, /Item name reference: 青雲劍/);
 });
 
-
-test('item image prompt removes risky lore text and provides a static safety fallback', () => {
+test('item image prompt removes risky lore text and preserves name identity in safety fallback', () => {
   const prompt = buildItemImagePrompt('artifact', {
     name: '青雲劍',
     realm: '金丹',
@@ -64,22 +66,67 @@ test('item image prompt removes risky lore text and provides a static safety fal
   });
   assert.doesNotMatch(prompt, /NSFW|情色|裸露/i);
   assert.doesNotMatch(prompt, /這段 lore/);
-  assert.match(prompt, /Item name: 青雲劍/);
+  assert.match(prompt, /Item name reference: 青雲劍/);
 
   const fallback = buildSafetyFallbackPrompt('artifact', {
-    name: '任何名稱',
+    name: '雷獄鎮魂鐘',
     category: '裝備法寶',
-    weaponForm: '劍',
+    weaponForm: '鐘',
     story: 'NSFW'
   });
-  assert.match(fallback, /Object-only|object-only/i);
-  assert.match(fallback, /sword-like magical relic/);
-  assert.doesNotMatch(fallback, /任何名稱|NSFW/);
+  assert.match(fallback, /object-only/i);
+  assert.match(fallback, /large ritual bell/);
+  assert.match(fallback, /electric violet and cool blue/);
+  assert.match(fallback, /lightning arcs|thunder-rune engravings/);
+  assert.doesNotMatch(fallback, /雷獄鎮魂鐘|NSFW/);
 
   assert.equal(isSafetyRejection('AiError: Input prompt contains NSFW content.'), true);
   assert.equal(isSafetyRejection('network timeout'), false);
   assert.equal(safeVisualText('安全外觀 裸體 色情', 80), '安全外觀');
 });
+
+test('artifact name visual parser turns Chinese names into concrete image motifs', () => {
+  const thunderBell = inferNameVisualIdentity('雷獄鎮魂鐘');
+  assert.ok(thunderBell.palette.includes('electric violet and cool blue'));
+  assert.ok(thunderBell.motifs.includes('thin lightning arcs'));
+  assert.ok(thunderBell.motifs.includes('soul-binding rune loops'));
+  assert.ok(thunderBell.motifs.includes('sealing rune bands'));
+  assert.equal(artifactFormVisual({ name: '雷獄鎮魂鐘' }), 'large ritual bell');
+
+  const lotusSword = buildItemImagePrompt('artifact', {
+    name: '青蓮劍', realm: '元嬰', category: '裝備法寶'
+  });
+  assert.match(lotusSword, /Primary object form: sword/);
+  assert.match(lotusSword, /jade green and clear cyan/);
+  assert.match(lotusSword, /lotus-petal geometry/);
+
+  const flameSeal = buildItemImagePrompt('artifact', {
+    name: '赤焰焚天印', realm: '化神', category: '裝備法寶'
+  });
+  assert.match(flameSeal, /Primary object form: square ritual seal/);
+  assert.match(flameSeal, /crimson red and molten gold|crimson and warm gold/);
+  assert.match(flameSeal, /flame-shaped engravings/);
+});
+
+test('built-in artifact names have distinct readable visual identities', () => {
+  const cases = [
+    ['七寶玲瓏尺', 'ritual ruler', 'small jewel inlays'],
+    ['破軍戰鼓', 'ceremonial war drum', 'martial rivet bands'],
+    ['悟道玄燈', 'ritual lamp', 'concentric dao sigils'],
+    ['鎮嶽玄甲', 'ornate magical armor', 'layered mountain-ridge geometry'],
+    ['太虛劍', 'sword', 'concentric spatial rings'],
+    ['長生玉佩', 'jade pendant', 'longevity-knot engravings']
+  ];
+  for (const [name, form, motif] of cases) {
+    const prompt = buildItemImagePrompt('artifact', { name, realm: '金丹', category: '裝備法寶' });
+    assert.ok(prompt.includes(form), name + ' should use form ' + form);
+    assert.ok(prompt.includes(motif), name + ' should include motif ' + motif);
+  }
+  assert.match(realmVisualStyle('真仙'), /immortal-grade masterpiece/);
+  assert.ok(effectVisualIdentity({ effects: [{ type: 'equip_shield_flat', value: 10 }] })
+    .some((cue) => /protective rune bands/.test(cue)));
+});
+
 test('material color theme is semantic and deterministic', () => {
   assert.equal(
     materialColorTheme({ id: 'soul-wood', name: '神魂木', category: '靈木' }),
