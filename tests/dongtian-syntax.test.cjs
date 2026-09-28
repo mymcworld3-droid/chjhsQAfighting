@@ -20,3 +20,16 @@ test('dongtian featureReady closes the inner IIFE and outer async initializer cl
   assert.match(source, /else boot\(\);\s*\}\)\(\);\s*\}\)\(\);\s*$/);
   assert.doesNotMatch(source, /\}\s+\}\)\(\);\s*\}\)\(\);\s*$/);
 });
+
+
+test('battle v2 browser module has valid JavaScript syntax', () => {
+  const source = readFileSync(join(__dirname, '../public/cultivation/battle-mode-v2.js'), 'utf8');
+  const parseable = browserModuleToSyntaxCheck(source);
+  assert.doesNotThrow(() => new Function(parseable));
+});
+
+test('battle v2 featureReady closes the inner IIFE and outer async initializer cleanly', () => {
+  const source = readFileSync(join(__dirname, '../public/cultivation/battle-mode-v2.js'), 'utf8');
+  assert.match(source, /else boot\(\);\s*\}\)\(\);\s*\}\)\(\);\s*$/);
+  assert.doesNotMatch(source, /\}\s+\}\)\(\);\s*\}\)\(\);\s*$/);
+});
