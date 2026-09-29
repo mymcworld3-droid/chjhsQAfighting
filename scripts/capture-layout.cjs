@@ -50,6 +50,22 @@ const server = createServer(async (req, res) => {
           if (!target) throw new Error(`Missing static page: ${id}`);
           target.classList.remove('hidden'); target.classList.add('active-page');
           target.style.display = 'block';
+          if (id === 'quiz') {
+            document.getElementById('quiz-container').classList.remove('hidden');
+            document.getElementById('quiz-badge').textContent = '數學｜一次函數';
+            document.getElementById('question-text').textContent = '若 f(x) = 2x + 3，則 f(4) 的值為何？';
+            const options = document.getElementById('options-container');
+            options.replaceChildren();
+            ['7', '9', '11', '13'].forEach((answer, index) => {
+              const button = document.createElement('button');
+              button.className = 'w-full text-left p-4 bg-slate-700 rounded-lg border border-slate-600 flex items-center gap-3 mb-2';
+              const letter = document.createElement('span');
+              letter.className = 'bg-slate-800 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-blue-400 shrink-0';
+              letter.textContent = String.fromCharCode(65 + index);
+              const value = document.createElement('span'); value.className = 'flex-1 quiz-rich-option'; value.textContent = answer;
+              button.append(letter, value); options.append(button);
+            });
+          }
           document.querySelector('main').scrollTop = 0;
         }, id);
         await page.screenshot({ path: path.join(output, `${viewport.name}-${id}.png`), animations: 'disabled' });
