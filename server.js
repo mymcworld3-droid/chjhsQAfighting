@@ -22,6 +22,7 @@ const registerInvitationApi = require('./invitation-api.cjs');
 const { raidRepository } = require('./server-repositories.cjs');
 const { pickTrustedRaidKnowledge } = require('./raid-authority.cjs');
 const { verifyMainIdentity, issueRaidQuestionTicket } = require('./raid-question-ticket.cjs');
+const { questionQualityIssue } = require('./question-quality.cjs');
 require('dotenv').config();
 
 const app = express();
@@ -523,6 +524,7 @@ app.post('/api/generate-quiz', async (req, res) => {
         12. **近期概念/題型組合**：${recentConceptForms.length ? JSON.stringify(recentConceptForms) : '無'}。若可行，避免立刻重複同一 concept_id + question_form。
         13. 錯誤選項應對應常見迷思、計算錯誤或推理錯誤，不能只是隨機湊數。
         14. 必須提供四個不重複且僅有一個正解的選項，以及完整解析；解析須點出關鍵觀念與主要步驟。
+        14a. 本介面不能呈現附圖，題目不可引用未提供的圖片。若條件互相矛盾、答案需要更正或解析與正解不符，請重新構思整題後才輸出。
         ${raidQuickSimple ? '15. **團本快答模式**：題目要比一般練習更簡單、直覺。題幹盡量 1–2 句；選項簡短；優先考基本辨識、直接代入、單一步驟計算或明確概念判斷。不要設文字陷阱，不要要求多層推論，不要故意混淆相近概念。' : ''}
         16. **LaTeX 排版**：題幹、正確選項、三個錯誤選項及解析中的所有數學式都必須使用 TeX 語法。行內數學用 $...$，獨立公式用 $...$；例如 $x^2+1$、$\\frac{1}{2}$。一般中文保留純文字，不要將整段中文包進公式；不要輸出 HTML 或 Markdown 程式碼區塊。
         ${diagnosticInfo}
@@ -565,6 +567,8 @@ app.post('/api/generate-quiz', async (req, res) => {
                 isTooSimilarQuestion(parsed.q, previousQuestions)) {
                 throw new Error('AI 題目未通過範圍、格式或結構去重檢查');
             }
+            const qualityIssue = questionQualityIssue(parsed);
+            if (qualityIssue) throw new Error('AI 題目品質檢查失敗：' + qualityIssue);
 
             parsed.subject = subject;
             parsed.sub_topic = targetTopic;

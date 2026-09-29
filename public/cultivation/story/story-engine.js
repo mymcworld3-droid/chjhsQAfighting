@@ -567,7 +567,8 @@ import {
     if (now !== lastScore) {
       lastScore = now;
       autoPermits = 1;
-      snoozeUntil = Math.min(snoozeUntil, Date.now() + 900);
+      // A score update must not cancel the player's explicit "稍後再看" choice.
+      snoozeUntil = Math.max(snoozeUntil, Date.now() + 900);
     }
     setTimeout(maybeAutoStart, 1000);
   }
@@ -683,7 +684,7 @@ import {
     window.addEventListener('xiuxian:story-tutorial-finished', resumeAfterStoryTutorial);
     window.addEventListener('xiuxian:battle-tutorial-completed', () => {
       autoPermits = 1;
-      snoozeUntil = Math.min(snoozeUntil, Date.now() + 650);
+      snoozeUntil = Math.max(snoozeUntil, Date.now() + 650);
       setTimeout(maybeAutoStart, 900);
     });
 
