@@ -81,7 +81,7 @@ let xiuxianFeatureLoadStarted = false;
 let xiuxianReadyTimer = null;
 let resolveXiuxianFeatureGate;
 const xiuxianFeatureGate = new Promise((resolve) => { resolveXiuxianFeatureGate = resolve; });
-const XIUXIAN_FEATURE_BUILD = '20260927-raid-lobby-fit3';
+const XIUXIAN_FEATURE_BUILD = '20260929-firestore-c-rules1';
 const RAID_FEATURE_BUILD = '20260927-raid-vv9';
 const BATTLE_FEATURE_BUILD = '20260927-battle-vv2';
 
