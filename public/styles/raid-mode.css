@@ -404,3 +404,73 @@ body.raid-page-open #page-raid.active-page>#raid-result:not(.hidden){
   body.raid-combat-focus #raid-arena .raid-stage-player-art{height:38px!important}
   body.raid-combat-focus #raid-arena .raid-stage-player-info>span{display:none!important}
 }
+
+
+/* Raid battlefield v3.1 — never let the bottom player lineup collapse.
+   On iPad/mobile landscape, an auto-sized second grid row could shrink to
+   almost only the HP strip while the Boss consumed the remaining height. */
+#raid-arena .raid-stage{
+  grid-template-rows:minmax(0,1fr) clamp(136px,22dvh,188px)!important;
+}
+#raid-arena .raid-party-floor{
+  height:clamp(136px,22dvh,188px)!important;
+  min-height:clamp(136px,22dvh,188px)!important;
+  max-height:clamp(136px,22dvh,188px)!important;
+  overflow:hidden!important;
+}
+#raid-arena .raid-player-lineup{
+  min-height:0!important;
+  height:100%!important;
+}
+#raid-arena .raid-stage-player{
+  min-height:0!important;
+  height:100%!important;
+  box-sizing:border-box!important;
+}
+#raid-arena .raid-stage-player-art{
+  min-height:52px!important;
+  overflow:visible!important;
+}
+#raid-arena .raid-stage-player-art img{
+  max-height:100%!important;
+}
+
+/* Attack cut-in still reserves a complete player row instead of an auto row. */
+body.raid-combat-focus #raid-arena .raid-stage{
+  grid-template-rows:minmax(0,1fr) clamp(118px,20dvh,160px)!important;
+}
+body.raid-combat-focus #raid-arena .raid-party-floor{
+  height:clamp(118px,20dvh,160px)!important;
+  min-height:clamp(118px,20dvh,160px)!important;
+  max-height:clamp(118px,20dvh,160px)!important;
+}
+body.raid-combat-focus #raid-arena .raid-player-lineup{
+  height:100%!important;
+}
+body.raid-combat-focus #raid-arena .raid-stage-player-art{
+  height:clamp(54px,9dvh,78px)!important;
+  min-height:54px!important;
+}
+
+@media(max-height:560px){
+  #raid-arena .raid-stage{
+    grid-template-rows:minmax(0,1fr) 118px!important;
+  }
+  #raid-arena .raid-party-floor{
+    height:118px!important;
+    min-height:118px!important;
+    max-height:118px!important;
+  }
+  body.raid-combat-focus #raid-arena .raid-stage{
+    grid-template-rows:minmax(0,1fr) 106px!important;
+  }
+  body.raid-combat-focus #raid-arena .raid-party-floor{
+    height:106px!important;
+    min-height:106px!important;
+    max-height:106px!important;
+  }
+  body.raid-combat-focus #raid-arena .raid-stage-player-art{
+    height:46px!important;
+    min-height:46px!important;
+  }
+}
