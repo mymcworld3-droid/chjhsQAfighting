@@ -1,0 +1,93 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function sameHostUid() {
+      return request.resource.data.host.uid == resource.data.host.uid;
+    }
+
+    function sameGuestUid() {
+      return request.resource.data.guest != null
+        && resource.data.guest != null
+        && request.resource.data.guest.uid == resource.data.guest.uid;
+    }
+
+    function isHost() {
+      return signedIn() && resource.data.host.uid == request.auth.uid;
+    }
+
+    function isGuest() {
+      return signedIn()
+        && resource.data.guest != null
+        && resource.data.guest.uid == request.auth.uid;
+    }
+
+    function isRoomMember() {
+      return isHost() || isGuest();
+    }
+
+    // A player may claim an unoccupied waiting room as guest.  The Battle v2
+    // client also applies the nascent-soul duel snapshot to the host at this
+    // transition, so host data may change, but the host UID must remain fixed.
+    function isValidGuestJoin() {
+      return signedIn()
+        && resource.data.status == 'waiting'
+        && resource.data.guest == null
+        && request.resource.data.status == 'intro'
+        && request.resource.data.host.uid == resource.data.host.uid
+        && request.resource.data.guest != null
+        && request.resource.data.guest.uid == request.auth.uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'host',
+          'guest',
+          'knowledgeScope',
+          'status',
+          'matchedAt',
+          'matchedAtMs',
+          'introUntilMs',
+          'answerWindowStartedAt',
+          'answerWindowStartedAtMs',
+          'firstAnswerUid',
+          'updatedAt'
+        ]);
+    }
+
+    match /rooms/{roomId} {
+      // Matchmaking scans waiting rooms and session recovery queries host.uid /
+      // guest.uid, so authenticated players need collection reads.
+      allow get, list: if signedIn();
+
+      allow create: if signedIn()
+        && request.resource.data.status == 'waiting'
+        && request.resource.data.guest == null
+        && request.resource.data.host.uid == request.auth.uid;
+
+      // Once matched, only the two room members may mutate battle state.
+      // Keep both member UIDs immutable across every normal update.
+      allow update: if isValidGuestJoin()
+        || (isRoomMember()
+          && sameHostUid()
+          && sameGuestUid());
+
+      // Only an unmatched host may remove their own waiting room.
+      allow delete: if isHost()
+        && resource.data.status == 'waiting'
+        && resource.data.guest == null;
+    }
+
+    // Secondary player profiles are provisioned by the trusted backend/Admin SDK.
+    // The browser does not need direct writes here.
+    match /playerProfiles/{uid} {
+      allow read: if signedIn() && request.auth.uid == uid;
+      allow write: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
