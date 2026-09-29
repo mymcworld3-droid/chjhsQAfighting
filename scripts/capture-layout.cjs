@@ -7,7 +7,7 @@ const path = require('node:path');
 
 const root = path.resolve(__dirname, '../public');
 const output = path.resolve(process.env.LAYOUT_OUTPUT || 'layout-screenshots');
-const pages = ['onboarding', 'home', 'training', 'quiz', 'store', 'cards', 'battle', 'rank', 'settings', 'history', 'admin'];
+const pages = ['onboarding', 'home', 'training', 'quiz', 'store', 'rank', 'settings', 'history', 'admin'];
 const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.gif': 'image/gif', '.json': 'application/json' };
 
 const server = createServer(async (req, res) => {

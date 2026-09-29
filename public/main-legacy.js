@@ -319,7 +319,6 @@ const translations = {
         admin_select_img: "從伺服器選擇圖片：",
         btn_save_product: "上架商品",
         admin_inventory_title: "📦 現有商品庫存",
-        tab_cards: "卡牌",
 
         // Nav
         nav_home: "仙府",
@@ -1712,9 +1711,6 @@ function updateUIStats() {
     const storePts = document.getElementById('store-user-points');
     if(storePts) storePts.innerText = stats.gold || 0;
     
-    const cardPts = document.getElementById('cards-user-points');
-    if(cardPts) cardPts.innerText = stats.gold || 0;
-
     document.getElementById('display-streak').innerText = stats.currentStreak;
     document.getElementById('display-best-streak').innerText = stats.bestStreak;
     
