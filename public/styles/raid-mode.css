@@ -474,3 +474,81 @@ body.raid-combat-focus #raid-arena .raid-stage-player-art{
     min-height:46px!important;
   }
 }
+
+
+/* Raid battlefield v3.2 — visible full-body player portraits.
+   Each player portrait is kept around one quarter of the Boss portrait's
+   visual width/height while the whole party remains in one horizontal row. */
+#raid-arena .raid-stage-player{
+  grid-template-columns:clamp(74px,7vw,108px) minmax(0,1fr)!important;
+  align-items:end!important;
+}
+#raid-arena .raid-stage-player-art{
+  width:clamp(74px,7vw,108px)!important;
+  height:clamp(78px,12dvh,112px)!important;
+  min-width:0!important;
+  min-height:78px!important;
+  justify-self:center!important;
+  align-self:end!important;
+  overflow:visible!important;
+}
+#raid-arena .raid-stage-player-art img{
+  width:100%!important;
+  height:100%!important;
+  max-width:108px!important;
+  max-height:112px!important;
+  object-fit:contain!important;
+  object-position:center bottom!important;
+  transform-origin:center bottom;
+}
+#raid-arena .raid-stage-player-info{
+  align-self:center!important;
+}
+
+/* During attack cut-ins the portrait stays visible instead of shrinking into the HP strip. */
+body.raid-combat-focus #raid-arena .raid-stage-player{
+  grid-template-columns:clamp(68px,6.5vw,96px) minmax(0,1fr)!important;
+}
+body.raid-combat-focus #raid-arena .raid-stage-player-art{
+  width:clamp(68px,6.5vw,96px)!important;
+  height:clamp(70px,10dvh,96px)!important;
+  min-height:70px!important;
+}
+body.raid-combat-focus #raid-arena .raid-stage-player-art img{
+  max-width:96px!important;
+  max-height:96px!important;
+}
+
+@media(max-width:760px){
+  #raid-arena .raid-stage-player{
+    grid-template-columns:1fr!important;
+    grid-template-rows:minmax(58px,1fr) auto!important;
+    align-items:end!important;
+  }
+  #raid-arena .raid-stage-player-art{
+    width:clamp(54px,14vw,82px)!important;
+    height:clamp(58px,9dvh,84px)!important;
+    min-height:58px!important;
+  }
+  #raid-arena .raid-stage-player-art img{
+    max-width:82px!important;
+    max-height:84px!important;
+  }
+  body.raid-combat-focus #raid-arena .raid-stage-player-art{
+    width:clamp(50px,13vw,74px)!important;
+    height:clamp(54px,8dvh,76px)!important;
+    min-height:54px!important;
+  }
+}
+@media(max-height:560px){
+  #raid-arena .raid-stage-player-art{
+    width:64px!important;
+    height:64px!important;
+    min-height:64px!important;
+  }
+  body.raid-combat-focus #raid-arena .raid-stage-player-art{
+    width:58px!important;
+    height:58px!important;
+    min-height:58px!important;
+  }
+}
