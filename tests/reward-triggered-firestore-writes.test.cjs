@@ -14,8 +14,9 @@ test('rank sync writes only on realm change, not every cultivation score change'
   assert.match(ranks, /await updateDoc\(doc\(getFirestore\(getApp\(\)\), 'users', user\.uid\), \{ 'stats\.rankLevel': rank \}\)/);
 });
 
-test('presence stays visible with five-minute window but writes at two-minute cadence', () => {
+test('presence keeps its low Firestore write cadence while invitations use server presence', () => {
   assert.match(main, /presenceInterval = setInterval\(updatePresence, 2 \* 60 \* 1000\)/);
   assert.match(main, /document\.visibilityState === 'hidden'/);
-  assert.match(main, /const fiveMinutesAgo =/);
+  assert.match(main, /\/api\/invitations\/listen/);
+  assert.doesNotMatch(main, /const fiveMinutesAgo =/);
 });
