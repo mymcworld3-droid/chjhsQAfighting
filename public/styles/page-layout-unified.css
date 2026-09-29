@@ -4,6 +4,7 @@ body.xianxia-theme main { min-width: 0; }
 body.xianxia-theme main > .page-section { box-sizing: border-box; min-width: 0; }
 body.xianxia-theme :is(#page-home,#page-store,#page-cards,#page-rank,#page-settings,#page-history,#page-admin) {
   width: min(100%, 1180px);
+  max-width: 1180px;
   padding-inline: clamp(12px, 2.2vw, 28px);
 }
 body.xianxia-theme :is(#page-store,#page-cards,#page-rank,#page-settings,#page-history,#page-admin) > :is(h2,.sticky):first-child {
