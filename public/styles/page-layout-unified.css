@@ -56,6 +56,15 @@ body.xianxia-theme #page-cards #storage-count { background: #a58b5033; color: #e
 
 @media (max-width: 700px) {
   body.xianxia-theme #login-screen:not(.hidden) { min-height: calc(100dvh - 82px); }
+  body.xianxia-theme #page-home .xianxia-page-heading { margin-bottom: 12px; }
+  body.xianxia-theme #page-home .xiuxian-panel { padding: 18px; }
+  body.xianxia-theme #page-home .xiuxian-invocation { margin: 5px 0 12px; }
+  body.xianxia-theme #page-home .xiuxian-identity { margin-bottom: 10px; }
+  body.xianxia-theme #page-home .xiuxian-row { margin-top: 7px; }
+  body.xianxia-theme #page-home .xiuxian-bar { margin-top: 9px; }
+  body.xianxia-theme #page-home .xiuxian-actions { margin-top: 12px; gap: 8px; }
+  body.xianxia-theme #page-home .stat-card { padding-block: 9px; }
+  body.xianxia-theme #page-home .stat-card .stat-icon { margin-bottom: 4px; }
   body.xianxia-theme :is(#page-home,#page-store,#page-cards,#page-rank,#page-settings,#page-history,#page-admin) { padding-inline: 12px; }
   body.xianxia-theme :is(#page-store,#page-cards,#page-history) > .sticky:first-child { gap: 8px; flex-wrap: wrap; }
   body.xianxia-theme :is(#page-store,#page-cards) > .sticky:first-child > :last-child { flex: none; }
