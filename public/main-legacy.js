@@ -3594,25 +3594,63 @@ window.submitReport = async () => {
 //  🚀 隨機邀請系統 & 對戰邏輯
 // ==========================================
 
+async function invitationServerRequest(path, body = {}, signal = undefined) {
+    const user = auth.currentUser;
+    if (!user) throw new Error('請先登入');
+    const token = await user.getIdToken();
+    const response = await fetch(path, {
+        method: 'POST',
+        cache: 'no-store',
+        signal,
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify(body || {})
+    });
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok || payload.ok === false) {
+        const error = new Error(payload.error || '邀請服務暫時無法使用');
+        error.status = response.status;
+        throw error;
+    }
+    return payload;
+}
+
 function startInvitationListener() {
     if (inviteUnsub) inviteUnsub();
-    const userInvitesRef = collection(db, "users", auth.currentUser.uid, "invitations");
-    
-    inviteUnsub = onSnapshot(userInvitesRef, (snapshot) => {
-        snapshot.docChanges().forEach((change) => {
-            if (change.type === "added") {
-                const invite = change.doc.data();
-                const now = Date.now();
-                const inviteTime = invite.timestamp ? invite.timestamp.toMillis() : now;
-                
-                if (now - inviteTime < 2 * 60 * 1000) {
-                    showInviteToast(change.doc.id, invite);
-                } else {
-                    deleteDoc(change.doc.ref);
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const listenUid = user.uid;
+    const controller = new AbortController();
+    let active = true;
+    const stop = () => {
+        active = false;
+        controller.abort();
+        if (inviteUnsub === stop) inviteUnsub = null;
+    };
+    inviteUnsub = stop;
+
+    void (async () => {
+        while (active && auth.currentUser?.uid === listenUid) {
+            try {
+                const payload = await invitationServerRequest('/api/invitations/listen', {}, controller.signal);
+                const invites = Array.isArray(payload.invitations) ? payload.invitations : [];
+                for (const invite of invites) {
+                    if (!active || auth.currentUser?.uid !== listenUid) break;
+                    const inviteTime = Number(invite?.createdAtMs) || Date.now();
+                    if (Date.now() - inviteTime < 2 * 60 * 1000 && invite?.id) {
+                        showInviteToast(invite.id, invite);
+                    }
                 }
+            } catch (error) {
+                if (!active || error?.name === 'AbortError') break;
+                console.warn('[Invitation server] listen failed:', error?.message || error);
+                await new Promise(resolve => setTimeout(resolve, 1500));
             }
-        });
-    });
+        }
+    })();
 }
 
 // 系統強制重整監聽
@@ -3651,7 +3689,7 @@ function showInviteToast(inviteId, data) {
         return !!(overlay && overlay.getClientRects().length && getComputedStyle(overlay).visibility !== 'hidden');
     };
     if (dongtianActive()) {
-        const born = data.timestamp?.toMillis?.() || Date.now();
+        const born = Number(data.createdAtMs) || data.timestamp?.toMillis?.() || Date.now();
         const retry = setInterval(() => {
             if (Date.now() - born > 2 * 60 * 1000 || !auth.currentUser) {
                 clearInterval(retry);
@@ -3755,48 +3793,27 @@ async function removeInvite(inviteId, toastElement) {
         toastElement.classList.add('translate-x-full', 'opacity-0');
         setTimeout(() => toastElement.remove(), 300);
     }
-    try { await deleteDoc(doc(db, "users", auth.currentUser.uid, "invitations", inviteId)); } catch (e) { console.error(e); }
+    try {
+        await invitationServerRequest('/api/invitations/remove', { inviteId });
+    } catch (error) {
+        console.warn('[Invitation server] remove skipped:', error?.message || error);
+    }
 }
 
 async function inviteRandomPlayers(roomId) {
-    if (!auth.currentUser) return;
-    const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+    if (!auth.currentUser || !roomId) return;
+    const friends = [...new Set((currentUserData?.friends || [])
+        .filter(uid => typeof uid === 'string' && uid !== auth.currentUser.uid))].slice(0, 30);
+    if (!friends.length) return;
     try {
-        const usersRef = collection(db, "users");
-        const q = query(usersRef, where("lastActive", ">", fiveMinutesAgo), limit(20));
-        const snapshot = await getDocs(q);
-        
-        let candidates = [];
-        snapshot.forEach(doc => {
-            if (doc.id !== auth.currentUser.uid) {
-                candidates.push({ id: doc.id, ...doc.data() });
-            }
+        const payload = await invitationServerRequest('/api/invitations/send', {
+            friendUids: friends,
+            invitation: { roomId }
         });
-
-        if (candidates.length === 0) return; 
-
-        for (let i = candidates.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [candidates[i], candidates[j]] = [candidates[j], candidates[i]];
-        }
-
-        const targets = candidates.slice(0, 3);
-        const batch = writeBatch(db);
-
-        targets.forEach(user => {
-            const inviteRef = doc(collection(db, "users", user.id, "invitations"));
-            batch.set(inviteRef, {
-                roomId: roomId,
-                hostName: currentUserData.displayName,
-                hostAvatar: currentUserData.equipped?.avatar || '',
-                hostFrame: currentUserData.equipped?.frame || '',
-                timestamp: serverTimestamp()
-            });
-        });
-
-        await batch.commit();
-        console.log(`已發送邀請給 ${targets.length} 位玩家`);
-    } catch (e) { console.error("邀請發送失敗", e); }
+        console.log(`已透過 Server 發送邀請給 ${Array.isArray(payload.sentTo) ? payload.sentTo.length : 0} 位在線好友`);
+    } catch (error) {
+        console.warn('[Invitation server] legacy invite failed:', error?.message || error);
+    }
 }
 
 // [修正版] generateSharedQuiz：增加 AI 失敗後的備援機制，防止卡死
@@ -3935,12 +3952,8 @@ function buildLocalBattlePlayer() {
 
 // [修正] 接受邀請 (強制切換 UI 並啟動監聽)
 async function acceptInvite(inviteId, roomId, toastElement) {
-    // 1. 移除邀請通知
-    if (toastElement) {
-        toastElement.classList.add('translate-x-full', 'opacity-0');
-        setTimeout(() => toastElement.remove(), 300);
-    }
-    try { await deleteDoc(doc(db, "users", auth.currentUser.uid, "invitations", inviteId)); } catch(e) {}
+    // 1. 邀請通知與 Server 佇列都由同一個入口移除
+    await removeInvite(inviteId, toastElement);
 
     // 2. 防呆檢查
     if (isBattleActive) { alert("你正在對戰中，無法加入！"); return; }

@@ -2,28 +2,22 @@ import {
   doc, getDoc, setDoc, updateDoc, runTransaction, onSnapshot,
   collection, addDoc, serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-import { getProjectServices, getMainUser } from './project-repository.js';
+import { getProjectServices, getMainUser, authenticatedMainFetch } from './project-repository.js';
 
 const COLLECTION='users';
 function uidValue(uid){const value=String(uid||'').trim();if(!value)throw new Error('玩家 UID 不可為空');return value;}
 async function services(){return getProjectServices('A',{authenticateSecondary:false});}
 
-async function sendInvitationsToActiveFriends({friendUids=[],activeAfterMs=0,invitation={}}={}){
-  const {db}=await services(), currentUid=getMainUser()?.uid||'';
-  const unique=[...new Set(friendUids.map(v=>String(v||'').trim()).filter(v=>v&&v!==currentUid))].slice(0,30);
-  if(!unique.length)return [];
-  const records=await Promise.all(unique.map(uid=>getDoc(doc(db,COLLECTION,uid)).catch(()=>null)));
-  const cutoff=Math.max(0,Number(activeAfterMs)||0);
-  const online=records.filter(snap=>{
-    if(!snap?.exists())return false;
-    const active=snap.data()?.lastActive, at=active?.toMillis?.()||Number(active)||0;
-    return at>cutoff;
+async function sendServerInvitations({friendUids=[],invitation={}}={}) {
+  const response = await authenticatedMainFetch('/api/invitations/send', {
+    method: 'POST',
+    body: JSON.stringify({ friendUids, invitation })
   });
-  await Promise.all(online.map(async snap=>{
-    try{await addDoc(collection(db,COLLECTION,snap.id,'invitations'),{...invitation,timestamp:serverTimestamp()});}
-    catch(error){console.warn('[PlayerRepository] invitation skipped:',snap.id,error);}
-  }));
-  return online.map(snap=>snap.id);
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok || payload.ok !== true) {
+    throw new Error(payload.error || '邀請服務暫時無法使用');
+  }
+  return Array.isArray(payload.sentTo) ? payload.sentTo : [];
 }
 
 export const playerRepository=Object.freeze({
@@ -39,6 +33,6 @@ export const playerRepository=Object.freeze({
   },
   async subscribe(uid,next,error){const {db}=await services();return onSnapshot(doc(db,COLLECTION,uidValue(uid)),snap=>next?.(snap.exists()?{id:snap.id,...snap.data()}:null),error);},
   async addExamLog(value={}){const {db}=await services();return addDoc(collection(db,'exam_logs'),value);},
-  async sendInvitations(options){return sendInvitationsToActiveFriends(options);},
-  async sendRaidInvitations(options){return sendInvitationsToActiveFriends(options);}
+  async sendInvitations(options){return sendServerInvitations(options);},
+  async sendRaidInvitations(options){return sendServerInvitations(options);}
 });
