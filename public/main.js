@@ -59,6 +59,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/scope-fullscreen.js',
   './cultivation/curriculum-pages.js',
   './cultivation/dongtian.js',
+  './cultivation/story/opening-cinematic.js',
   './cultivation/story/story-engine.js',
   './cultivation/battle-tutorial.js',
   './cultivation/newbie-tutorial-v2.js',
@@ -81,7 +82,7 @@ let xiuxianFeatureLoadStarted = false;
 let xiuxianReadyTimer = null;
 let resolveXiuxianFeatureGate;
 const xiuxianFeatureGate = new Promise((resolve) => { resolveXiuxianFeatureGate = resolve; });
-const XIUXIAN_FEATURE_BUILD = '20260927-raid-lobby-fit3';
+const XIUXIAN_FEATURE_BUILD = '20260929-opening-cinematic1';
 const RAID_FEATURE_BUILD = '20260927-raid-vv9';
 const BATTLE_FEATURE_BUILD = '20260927-battle-vv2';
 

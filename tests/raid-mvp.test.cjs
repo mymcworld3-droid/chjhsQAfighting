@@ -250,3 +250,12 @@ test('raid arena and question force session viewport sync', () => {
   assert.match(question, /syncRaidBottomClearance\(\)/);
   assert.match(cssSource, /\.raid-question-view\{position:absolute!important;inset:0!important[^}]*height:100%!important/);
 });
+
+
+test('raid lobby exposes a host-only manual friend invite with cooldown', () => {
+  assert.match(raidSource, /data-invite/);
+  assert.match(raidSource, /inviteOnlineFriends\(\{ force: true \}\)/);
+  assert.match(raidSource, /inviteCooldownUntil = now\(\) \+ 15000/);
+  assert.match(raidSource, /已邀請 ' \+ sent \+ ' 位在線好友/);
+  assert.match(raidSource, /目前沒有在線好友可邀請/);
+});
