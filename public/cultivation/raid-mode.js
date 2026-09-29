@@ -13,7 +13,7 @@ import { rewardRepository } from './data/reward-repository.js';
   'use strict';
 
   const PAGE_ID = 'page-raid';
-  const STYLE_HREF = 'styles/raid-mode.css?v=20260929-correct-feedback1';
+  const STYLE_HREF = 'styles/raid-mode.css?v=20260929-combat-viewport1';
   const MALE = 'assets/story/characters/player-male-determined.png';
   const FEMALE = 'assets/story/characters/player-female-determined.png';
   const HEARTBEAT_MS = 8000;
@@ -137,6 +137,35 @@ import { rewardRepository } from './data/reward-repository.js';
     if (!page || !nav) return;
     const vv = window.visualViewport;
     const visualHeight = Math.max(1, Number(vv?.height) || Number(window.innerHeight) || document.documentElement.clientHeight || 1);
+    const visualWidth = Math.max(1, Number(vv?.width) || Number(window.innerWidth) || document.documentElement.clientWidth || 1);
+    const visualTop = Math.max(0, Number(vv?.offsetTop) || 0);
+    const visualLeft = Math.max(0, Number(vv?.offsetLeft) || 0);
+    const combatFocus = document.body.classList.contains('raid-combat-focus');
+
+    // During the 1.15 s attack cut-in, bind the whole raid surface to the actual
+    // visual viewport. Mobile browser chrome can otherwise shrink the visible area
+    // between the quiz and arena renders and clip the battlefield.
+    if (combatFocus) {
+      page.style.setProperty('--raid-header-height', '0px');
+      page.style.setProperty('--raid-bottom-clearance', '0px');
+      page.style.setProperty('--raid-page-height', Math.floor(visualHeight) + 'px');
+      page.style.setProperty('top', visualTop + 'px', 'important');
+      page.style.setProperty('left', visualLeft + 'px', 'important');
+      page.style.setProperty('width', Math.floor(visualWidth) + 'px', 'important');
+      page.style.setProperty('max-width', Math.floor(visualWidth) + 'px', 'important');
+      page.style.setProperty('height', Math.floor(visualHeight) + 'px', 'important');
+      page.style.setProperty('max-height', Math.floor(visualHeight) + 'px', 'important');
+      page.style.setProperty('bottom', 'auto', 'important');
+      page.style.setProperty('transform', 'none', 'important');
+      return;
+    }
+
+    // Remove attack-only inline geometry so the normal centered raid layout takes over.
+    page.style.removeProperty('left');
+    page.style.removeProperty('width');
+    page.style.removeProperty('max-width');
+    page.style.removeProperty('transform');
+
     const appHeader = document.querySelector('body > header');
     const headerRect = appHeader?.getBoundingClientRect?.();
     const headerBottom = Math.max(0, Math.ceil(Number(headerRect?.bottom) || Number(headerRect?.height) || 72));
@@ -157,6 +186,15 @@ import { rewardRepository } from './data/reward-repository.js';
     page.style.setProperty('height', pageHeight + 'px', 'important');
     page.style.setProperty('max-height', pageHeight + 'px', 'important');
     page.style.setProperty('bottom', 'auto', 'important');
+  }
+
+  function setRaidCombatFocus(active) {
+    document.documentElement.classList.toggle('raid-combat-focus', !!active);
+    document.body.classList.toggle('raid-combat-focus', !!active);
+    syncRaidBottomClearance();
+    if (active) {
+      requestAnimationFrame(syncRaidBottomClearance);
+    }
   }
 
   function syncRaidViewportLock() {
@@ -439,6 +477,7 @@ import { rewardRepository } from './data/reward-repository.js';
     const returnToQuestion = !!state.question && ['question', 'review'].includes(returnStatus);
     const token = ++state.battleSceneToken;
     state.battleScenePlaying = true;
+    setRaidCombatFocus(true);
     renderArena();
 
     const arena = document.getElementById('raid-arena');
@@ -467,6 +506,7 @@ import { rewardRepository } from './data/reward-repository.js';
     notice.remove();
     stage?.classList.remove('raid-player-strike', 'raid-boss-strike');
     state.battleScenePlaying = false;
+    setRaidCombatFocus(false);
 
     if (state.pendingFinishRoom) {
       const terminal = state.pendingFinishRoom;
@@ -944,6 +984,7 @@ import { rewardRepository } from './data/reward-repository.js';
   function finishRaid(won, reason) {
     stopTick();
     state.status = 'finished';
+    setRaidCombatFocus(false);
     document.body.classList.remove('raid-session-active');
     show('result');
     const result = document.getElementById('raid-result');
@@ -988,6 +1029,7 @@ import { rewardRepository } from './data/reward-repository.js';
       battleSceneToken: state.battleSceneToken + 1, battleScenePlaying: false, pendingFinishRoom: null, invitedRoomId: '',
       rewardClaiming: false, rewardClaimedRoomId: ''
     });
+    setRaidCombatFocus(false);
     document.body.classList.remove('raid-session-active');
     updateHomeEntry();
   }
