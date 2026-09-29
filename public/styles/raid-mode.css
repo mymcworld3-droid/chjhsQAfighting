@@ -1,4 +1,10 @@
 /* 秘境討伐 MVP — 大師姐 Boss 試煉 */
+/* Short questions should use readable choices instead of stretching four answers
+   across the entire battlefield height. Long questions still scroll naturally. */
+.raid-question-shell:not(.raid-loading){justify-content:safe center}
+.raid-question-shell:not(.raid-loading) .raid-options{flex:0 0 auto;grid-auto-rows:minmax(72px,auto)}
+.raid-question-shell:not(.raid-loading) .raid-option{min-height:72px}
+@media(max-width:760px){.raid-question-shell:not(.raid-loading) .raid-options{grid-auto-rows:minmax(58px,auto)}.raid-question-shell:not(.raid-loading) .raid-option{min-height:58px}}
 .raid-page{--raid-gold:#e7c779;--raid-red:#e06464;--raid-cyan:#8fd7d2;height:100%;min-height:0;padding:0 14px;box-sizing:border-box;overflow:hidden}
 html.raid-page-open,body.raid-page-open{height:100%!important;overflow:hidden!important;overscroll-behavior:none!important}
 body.raid-page-open main{height:auto!important;min-height:0!important;padding:0!important;overflow:visible!important}
