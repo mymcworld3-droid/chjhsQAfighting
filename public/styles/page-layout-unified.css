@@ -1,6 +1,8 @@
 /* Shared spacing for the main app screens. Scoped to the visible app theme so
    battle overlays and the sign-in screen retain their own viewport geometry. */
 body.xianxia-theme main { min-width: 0; }
+body.xianxia-theme:has(#login-screen:not(.hidden)) main { padding-bottom: 0; }
+body.xianxia-theme #login-screen:not(.hidden) { min-height: calc(100dvh - 92px); }
 body.xianxia-theme main > .page-section { box-sizing: border-box; min-width: 0; }
 body.xianxia-theme :is(#page-home,#page-store,#page-cards,#page-rank,#page-settings,#page-history,#page-admin) {
   width: min(100%, 1180px);
@@ -40,8 +42,20 @@ body.xianxia-theme #page-store #store-grid,
 body.xianxia-theme #page-cards #my-card-list { padding-bottom: 20px; }
 body.xianxia-theme #page-store #store-grid { grid-template-columns: repeat(auto-fill,minmax(min(100%,150px),1fr)); gap: clamp(8px,1.2vw,16px); }
 body.xianxia-theme #page-cards #my-card-list { grid-template-columns: repeat(auto-fill,minmax(min(100%,140px),1fr)); gap: clamp(8px,1vw,14px); }
+body.xianxia-theme #page-cards .summon-banner {
+  background: linear-gradient(135deg,#244333,#142f29);
+  border-color: var(--xq-line);
+}
+body.xianxia-theme #page-cards .summon-banner :is(h3,p) { color: var(--xq-paper); }
+body.xianxia-theme #page-cards .summon-banner button:last-child {
+  background: linear-gradient(110deg,#806638,#594824);
+  color: #fff0cc;
+  box-shadow: none;
+}
+body.xianxia-theme #page-cards #storage-count { background: #a58b5033; color: #ead6a3; }
 
 @media (max-width: 700px) {
+  body.xianxia-theme #login-screen:not(.hidden) { min-height: calc(100dvh - 82px); }
   body.xianxia-theme :is(#page-home,#page-store,#page-cards,#page-rank,#page-settings,#page-history,#page-admin) { padding-inline: 12px; }
   body.xianxia-theme :is(#page-store,#page-cards,#page-history) > .sticky:first-child { gap: 8px; flex-wrap: wrap; }
   body.xianxia-theme :is(#page-store,#page-cards) > .sticky:first-child > :last-child { flex: none; }
