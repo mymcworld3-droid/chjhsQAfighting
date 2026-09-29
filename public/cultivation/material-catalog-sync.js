@@ -11,6 +11,17 @@ import {
   repairArtifactRecipes
 } from './material-catalog.js';
 
+let resolveMaterialCatalogReady;
+let materialCatalogReadySettled = false;
+export const featureReady = new Promise((resolve) => { resolveMaterialCatalogReady = resolve; });
+function markMaterialCatalogReady(source) {
+  if (materialCatalogReadySettled) return;
+  materialCatalogReadySettled = true;
+  window.__materialCatalogStartupReady = true;
+  resolveMaterialCatalogReady({ ok: true, source });
+  window.dispatchEvent(new CustomEvent('xiuxian:material-catalog-startup-ready', { detail: { source } }));
+}
+
 (function () {
   'use strict';
 
@@ -91,11 +102,17 @@ import {
 
   function start() {
     if (unsubscribe) return;
+    setTimeout(() => {
+      if (!materialCatalogReadySettled) markMaterialCatalogReady('startup-timeout');
+    }, 4500);
     let db;
     try { db = getFirestore(getApp()); } catch (_) { return; }
     const ref = doc(db, CONFIG_COLLECTION, CONFIG_DOC);
     unsubscribe = onSnapshot(ref, (snap) => {
-      if (!snap.exists()) return;
+      if (!snap.exists()) {
+        markMaterialCatalogReady('default-no-remote-config');
+        return;
+      }
       const data = snap.data() || {};
       try {
         if (Array.isArray(data.items) && data.items.length) {
@@ -123,10 +140,15 @@ import {
             persistRecipeRepair(ref, repair, { backfilled: needsRecipeBackfill });
           }
         }
+        markMaterialCatalogReady('firestore');
       } catch (error) {
         console.error('[Material catalog sync]', error);
+        markMaterialCatalogReady('default-invalid-remote-config');
       }
-    }, (error) => console.error('[Material catalog snapshot]', error));
+    }, (error) => {
+      console.error('[Material catalog snapshot]', error);
+      markMaterialCatalogReady('default-sync-error');
+    });
   }
 
   window.addEventListener('xiuxian:user-ready', retryPendingWrites);

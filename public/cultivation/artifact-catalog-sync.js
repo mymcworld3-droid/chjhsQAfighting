@@ -8,6 +8,17 @@ import {
   replaceArtifactCatalog
 } from './artifact-catalog.js';
 
+let resolveArtifactCatalogReady;
+let artifactCatalogReadySettled = false;
+export const featureReady = new Promise((resolve) => { resolveArtifactCatalogReady = resolve; });
+function markArtifactCatalogReady(source) {
+  if (artifactCatalogReadySettled) return;
+  artifactCatalogReadySettled = true;
+  window.__artifactCatalogStartupReady = true;
+  resolveArtifactCatalogReady({ ok: true, source });
+  window.dispatchEvent(new CustomEvent('xiuxian:artifact-catalog-startup-ready', { detail: { source } }));
+}
+
 // 全站法寶清單同步：Firestore 有管理員設定時使用遠端版本；否則退回程式內建預設值。
 (function () {
   'use strict';
@@ -87,6 +98,12 @@ import {
 
   function start() {
     if (unsubscribe) return;
+    setTimeout(() => {
+      if (!artifactCatalogReadySettled) {
+        applyDefault('startup-timeout');
+        markArtifactCatalogReady('startup-timeout');
+      }
+    }, 4500);
     let db;
     try { db = getFirestore(getApp()); } catch (_) { return; }
     const ref = doc(db, CONFIG_COLLECTION, CONFIG_DOC);
@@ -96,6 +113,7 @@ import {
         applyGenerationPrompt('', 'default-no-remote-config');
         applyEffectBounds({}, 'default-no-remote-config');
         applyDefault('default-no-remote-config');
+        markArtifactCatalogReady('default-no-remote-config');
         return;
       }
       const data = snap.data() || {};
@@ -110,11 +128,13 @@ import {
         // validate equipment from the saved users/{uid} document.
         window.__artifactCatalogReadyForEquipment = true;
         replaceArtifactCatalog(items, needsBackfill ? 'firestore-backfill' : 'firestore');
+        markArtifactCatalogReady(needsBackfill ? 'firestore-backfill' : 'firestore');
         if (needsBackfill) persistBackfill(ref, items);
       } catch (error) {
         window.__artifactCatalogReadyForEquipment = false;
         console.error('[Artifact catalog] remote config rejected; using defaults:', error);
         applyDefault('default-invalid-remote-config');
+        markArtifactCatalogReady('default-invalid-remote-config');
       }
     }, (error) => {
       window.__artifactCatalogReadyForEquipment = false;
@@ -122,6 +142,7 @@ import {
       applyGenerationPrompt('', 'default-sync-error');
       applyEffectBounds({}, 'default-sync-error');
       applyDefault('default-sync-error');
+      markArtifactCatalogReady('default-sync-error');
     });
   }
 
