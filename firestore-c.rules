@@ -11,9 +11,10 @@ service cloud.firestore {
     }
 
     function sameGuestUid() {
-      return request.resource.data.guest != null
-        && resource.data.guest != null
-        && request.resource.data.guest.uid == resource.data.guest.uid;
+      return (resource.data.guest == null && request.resource.data.guest == null)
+        || (request.resource.data.guest != null
+          && resource.data.guest != null
+          && request.resource.data.guest.uid == resource.data.guest.uid);
     }
 
     function isHost() {
