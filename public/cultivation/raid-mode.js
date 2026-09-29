@@ -13,7 +13,7 @@ import { rewardRepository } from './data/reward-repository.js';
   'use strict';
 
   const PAGE_ID = 'page-raid';
-  const STYLE_HREF = 'styles/raid-mode.css?v=20260929-combat-viewport1';
+  const STYLE_HREF = 'styles/raid-mode.css?v=20260929-party-floor2';
   const MALE = 'assets/story/characters/player-male-determined.png';
   const FEMALE = 'assets/story/characters/player-female-determined.png';
   const HEARTBEAT_MS = 8000;
@@ -417,14 +417,29 @@ import { rewardRepository } from './data/reward-repository.js';
       baseAttack: state.boss?.baseAttack || 100
     });
   }
-  function partyMarkup() {
+  function partyMarkup(alive, recent) {
     const members = raidRoomMembers(state.room);
-    return '<div class="raid-party-strip">' + members.map(member => {
+    const count = Math.max(1, Math.min(4, members.length));
+    const cards = members.map(member => {
       const pct = hpPct(member.hp, member.maxHp);
-      return '<div class="raid-party-chip ' + (member.alive === false ? 'down' : '') + '"><span>' + escapeHtml(member.name) + '</span>' +
-        '<i><b style="width:' + pct + '%"></b></i><small>' + Math.max(0, Number(member.hp) || 0).toLocaleString() + ' HP・輸出 ' +
-        Math.max(0, Number(member.damage) || 0).toLocaleString() + '</small></div>';
-    }).join('') + '</div>';
+      const isMe = String(member.uid || '') === String(state.player?.uid || '');
+      const hpId = isMe ? ' id="raid-player-hp-text"' : '';
+      const barId = isMe ? ' id="raid-player-hp-bar"' : '';
+      return '<article class="raid-stage-player ' + (isMe ? 'me ' : '') + (member.alive === false ? 'down' : '') + '">' +
+        '<div class="raid-stage-player-art"><img src="' + escapeHtml(member.portrait || state.player?.portrait || '') + '" alt="' + escapeHtml(member.name || '玩家') + '"></div>' +
+        '<div class="raid-stage-player-info"><strong>' + escapeHtml(member.name || '無名修士') + (isMe ? '<em>你</em>' : '') + '</strong>' +
+        '<small' + hpId + '>' + Math.max(0, Number(member.hp) || 0).toLocaleString() + ' HP</small>' +
+        '<div class="raid-stage-player-hp"><i' + barId + ' style="width:' + pct + '%"></i></div>' +
+        '<span>輸出 ' + Math.max(0, Number(member.damage) || 0).toLocaleString() + '</span></div></article>';
+    }).join('');
+    return '<section class="raid-party-floor"><div class="raid-player-lineup" style="grid-template-columns:repeat(' + count + ',minmax(0,1fr))">' +
+      cards + '</div><div class="raid-party-controls"><div class="raid-current-status"><span>' +
+      escapeHtml(alive ? recent : '你已倒下，等待隊友完成本次試煉。') + '</span><small>個人題號 ' + (state.playerActionCount + 1) +
+      '・法寶護盾 ' + Math.round(state.player.artifactShield || 0).toLocaleString() +
+      '・' + (state.player.coreShield ? '道心護體已凝聚' : '道心護體未凝聚') + '</small></div>' +
+      '<button class="raid-primary raid-fight" type="button" data-question ' + (!alive ? 'disabled' : '') + '>' +
+      (!alive ? '觀戰中' : state.question ? '繼續作答' : state.questionLoading ? '題目準備中…' : '準備下一題') +
+      '</button></div></section>';
   }
 
   function renderArena() {
@@ -442,20 +457,13 @@ import { rewardRepository } from './data/reward-repository.js';
       '<header class="raid-battle-head"><button class="raid-back" type="button" data-leave><i class="fa-solid fa-door-open"></i></button>' +
       '<div><small>清霜試煉・' + raidRoomMembers(state.room).length + ' 人隊伍</small><strong>Boss 已出招 ' + state.bossActionCount + ' 次</strong></div>' +
       '<span>階段 ' + state.boss.phase + '・' + phaseName(state.boss.phase) + '</span></header>' +
-      partyMarkup() +
       '<div class="raid-stage"><section class="raid-boss-side"><div class="raid-name-row"><div><small>BOSS</small><h3>' + state.boss.name + '</h3></div>' +
       '<b id="raid-boss-hp-text">' + Math.round(state.boss.hp).toLocaleString() + ' / ' + Math.round(state.boss.maxHp).toLocaleString() + '</b></div>' +
       '<div class="raid-hp boss"><i id="raid-boss-hp-bar" style="width:' + hpPct(state.boss.hp, state.boss.maxHp) + '%"></i></div>' +
       '<div class="raid-boss-portrait"><div class="raid-boss-aura"></div><img src="' + state.boss.image + '" alt="沈清霜"><span>「' + escapeHtml(intent.name) + '」</span></div>' +
       '<div class="raid-intent ' + intent.kind + '"><i class="fa-solid fa-khanda"></i><div><b>' + escapeHtml(intent.name) + '</b><span>' + escapeHtml(intent.cue) + '</span></div>' +
       '<em id="raid-boss-clock">' + (clock ? (clock.remainingMs / 1000).toFixed(1) : '18.0') + ' 秒</em></div></section>' +
-      '<section class="raid-player-side"><div class="raid-player-card"><img src="' + state.player.portrait + '" alt="玩家角色"><div><small>挑戰者</small><h3>' + escapeHtml(state.player.name) + '</h3>' +
-      '<span>戰力 ' + state.player.combatPower.toLocaleString() + '・攻擊 ' + state.player.atk.toLocaleString() + '</span></div><b id="raid-player-hp-text">' + Math.round(state.player.hp).toLocaleString() + ' HP</b></div>' +
-      '<div class="raid-hp player"><i id="raid-player-hp-bar" style="width:' + hpPct(state.player.hp, state.player.maxHp) + '%"></i></div>' +
-      '<div class="raid-status-row"><span>個人題號 ' + (state.playerActionCount + 1) + '</span><span>法寶護盾 ' + Math.round(state.player.artifactShield || 0).toLocaleString() + '</span>' +
-      '<span>' + (state.player.coreShield ? '道心護體・已凝聚' : '道心護體・未凝聚') + '</span></div><div class="raid-round-summary">' + escapeHtml(alive ? recent : '你已倒下，等待隊友完成本次試煉。') + '</div>' +
-      '<button class="raid-primary raid-fight" type="button" data-question ' + (!alive ? 'disabled' : '') + '>' +
-      (!alive ? '觀戰中' : state.question ? '繼續作答' : state.questionLoading ? '題目準備中…' : '準備下一題') + '</button></section></div>';
+      partyMarkup(alive, recent) + '</div>';
     arena.querySelector('[data-leave]')?.addEventListener('click', leaveRaid);
     arena.querySelector('[data-question]')?.addEventListener('click', function () { void openNextQuestion(); });
   }
