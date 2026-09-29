@@ -148,6 +148,31 @@ function preloadImage(src, priority = 'auto') {
   });
 }
 
+const warmedImages = new Set();
+const warmFailures = new Set();
+
+function warmImage(src, priority = 'auto') {
+  if (!src || warmedImages.has(src)) return Promise.resolve({ src, ok: true, cached: true });
+  warmedImages.add(src);
+  return preloadImage(src, priority).then((result) => {
+    if (!result.ok) warmFailures.add(src);
+    window.__xiuxianOpeningImagePreloadFailures = [...warmFailures];
+    if (!result.ok) console.warn('[Opening cinematic] image preload failed:', src);
+    return result;
+  });
+}
+
+function warmFollowingScenes(fromIndex) {
+  const next = SCENES[fromIndex + 1];
+  const afterNext = SCENES[fromIndex + 2];
+  if (next) void warmImage(next.image, 'high');
+  if (afterNext) {
+    const run = () => void warmImage(afterNext.image, 'auto');
+    if ('requestIdleCallback' in window) window.requestIdleCallback(run, { timeout: 1800 });
+    else setTimeout(run, 650);
+  }
+}
+
 function preloadImages() {
   if (imagePreloadPromise) return imagePreloadPromise;
   SCENES.slice(0, 2).forEach((scene) => {
@@ -160,11 +185,10 @@ function preloadImages() {
     document.head.appendChild(link);
   });
   imagePreloadPromise = Promise.all(
-    SCENES.map((scene, index) => preloadImage(scene.image, index < 2 ? 'high' : 'auto'))
+    SCENES.slice(0, 2).map((scene) => warmImage(scene.image, 'high'))
   ).then((results) => {
-    const failed = results.filter((item) => !item.ok).map((item) => item.src);
-    window.__xiuxianOpeningImagePreloadFailures = failed;
-    if (failed.length) console.warn('[Opening cinematic] image preload failed:', failed);
+    // Remaining panels are warmed progressively while the player reads each scene.
+    warmFollowingScenes(0);
     return results;
   });
   return imagePreloadPromise;
@@ -272,6 +296,7 @@ function renderScene() {
   const el = layer();
   const duration = Math.max(1, scene.duration || 6500);
   sceneStartedAt = Date.now();
+  warmFollowingScenes(sceneIndex);
 
   const dots = SCENES.map((_, index) => {
     const state = index < sceneIndex ? 'done' : index === sceneIndex ? 'current' : '';
