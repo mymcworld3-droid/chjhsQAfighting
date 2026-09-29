@@ -97,3 +97,11 @@ body.raid-page-open #page-raid.active-page>.raid-view:not(.hidden){height:100%!i
   body.raid-page-open #page-raid.active-page{top:var(--raid-header-height,68px)!important;bottom:auto!important;padding:0 6px!important}
   body.raid-page-open.raid-session-active #page-raid.active-page{bottom:0!important}
 }
+
+
+/* Immediate correct-answer feedback for raid questions. */
+.raid-correct-feedback{position:fixed;left:50%;top:clamp(74px,11dvh,112px);z-index:18250;display:flex;align-items:center;gap:11px;min-width:min(330px,calc(100vw - 28px));max-width:460px;padding:11px 15px;border:1px solid rgba(105,207,160,.42);border-radius:16px;background:linear-gradient(135deg,rgba(20,49,41,.97),rgba(7,14,12,.98));box-shadow:0 18px 55px rgba(0,0,0,.46),0 0 28px rgba(86,190,151,.12);transform:translate(-50%,-12px) scale(.96);opacity:0;pointer-events:none;transition:opacity .18s ease,transform .22s ease}
+.raid-correct-feedback.show{opacity:1;transform:translate(-50%,0) scale(1)}
+.raid-correct-feedback>span{width:34px;height:34px;flex:0 0 34px;display:grid;place-items:center;border:1px solid rgba(125,225,177,.5);border-radius:50%;background:rgba(70,155,112,.16);color:#c1eed5;font-size:20px;font-weight:900;box-shadow:inset 0 0 16px rgba(104,214,162,.08)}
+.raid-correct-feedback>div{display:grid;gap:2px}.raid-correct-feedback strong{color:#d9f3e6;font-size:14px;letter-spacing:.08em}.raid-correct-feedback small{color:#91baa7;font-size:9px;line-height:1.45}
+@media(prefers-reduced-motion:reduce){.raid-correct-feedback{transition:none!important}}
