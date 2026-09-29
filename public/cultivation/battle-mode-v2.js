@@ -131,6 +131,31 @@ export const featureReady = (async () => {
     setTimeout(() => el.remove(), 2600);
   }
 
+  function firebaseBattleErrorMessage(error, fallback = '配對失敗，請稍後再試。') {
+    const code = String(error?.code || '').replace(/^firestore\//, '');
+    if (code === 'permission-denied') {
+      return 'Firebase C 尚未允許鬥法房間存取，請部署 firestore-c.rules。';
+    }
+    if (code === 'failed-precondition') {
+      return 'Firebase C 的 Firestore 索引或資料庫設定尚未完成。';
+    }
+    if (code === 'unauthenticated') {
+      return '鬥法登入已失效，請重新登入後再試。';
+    }
+    if (code === 'unavailable') {
+      return '鬥法資料庫暫時無法連線，請稍後再試。';
+    }
+    return fallback;
+  }
+
+  function logBattleFirestoreError(context, error) {
+    console.error('[Battle v2] ' + context + ':', {
+      code: error?.code || '',
+      message: error?.message || String(error || ''),
+      name: error?.name || ''
+    }, error);
+  }
+
   function showCorrectAnswerFeedback(detail = '攻勢已凝聚') {
     document.getElementById('bv2-correct-feedback')?.remove();
     const el = document.createElement('div');
@@ -1344,7 +1369,10 @@ export const featureReady = (async () => {
 
   function subscribeRoom(roomId) {
     detachRoomListener(); state.roomId = roomId;
-    state.unsub = onSnapshot(roomRef(roomId), onRoomSnapshot, (error) => { console.error('[Battle v2] listener failed:', error); toast('鬥法同步暫時中斷，房間仍會保留。'); });
+    state.unsub = onSnapshot(roomRef(roomId), onRoomSnapshot, (error) => {
+      logBattleFirestoreError('listener failed', error);
+      toast(firebaseBattleErrorMessage(error, '鬥法同步暫時中斷，房間仍會保留。'));
+    });
     if (!state.tick) state.tick = setInterval(tickRoom, 200); if (!state.heartbeat) state.heartbeat = setInterval(heartbeat, HEARTBEAT_MS); heartbeat();
   }
 
@@ -1365,7 +1393,13 @@ export const featureReady = (async () => {
       await window.ensureCombatStats?.(); const myData = playerSnapshot(); setPlayerAvatar('bv2-match-me-avatar', myData); setText('bv2-match-me', myData.name); setText('bv2-match-me-core', `本命金丹：${playerCoreLabel(myData)}${playerPowerLabel(myData)}${playerNascentSealLabel(myData)}`);
       const joined = await findAndClaimRoom(myData); if (joined) { state.role = 'guest'; subscribeRoom(joined); return; }
       setText('bv2-lobby-status', '目前沒有可加入的道友，正在開啟鬥法臺…'); const created = await createWaitingRoom(myData); state.role = 'host'; subscribeRoom(created); scheduleReconcile(); inviteOnlineFriends(created);
-    } catch (error) { console.error('[Battle v2] matchmaking failed:', error); toast('配對失敗，請稍後再試。'); resetRuntime(); window.switchToPage?.('page-home'); window.dispatchEvent(new CustomEvent('xiuxian:battle-session-ended')); }
+    } catch (error) {
+      logBattleFirestoreError('matchmaking failed', error);
+      toast(firebaseBattleErrorMessage(error));
+      resetRuntime();
+      window.switchToPage?.('page-home');
+      window.dispatchEvent(new CustomEvent('xiuxian:battle-session-ended'));
+    }
     finally { state.starting = false; }
   }
 

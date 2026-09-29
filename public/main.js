@@ -144,7 +144,10 @@ async function loadXiuxianFeaturesSafely() {
       let loadedModule;
       if (modulePath === './cultivation/raid-mode.js') {
         loadedModule = await import(`${modulePath}?v=${RAID_FEATURE_BUILD}`);
-      } else if (modulePath === './cultivation/battle-v3-stability-ui.js') {
+      } else if (
+        modulePath === './cultivation/battle-v3-stability-ui.js' ||
+        modulePath === './cultivation/battle-mode-v2.js'
+      ) {
         loadedModule = await import(`${modulePath}?v=${BATTLE_FEATURE_BUILD}`);
       } else {
         loadedModule = await import(`${modulePath}?v=${XIUXIAN_FEATURE_BUILD}`);
