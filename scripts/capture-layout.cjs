@@ -30,6 +30,9 @@ const server = createServer(async (req, res) => {
     for (const viewport of [{ name: 'desktop', width: 1440, height: 900 }, { name: 'mobile', width: 390, height: 844 }]) {
       const context = await browser.newContext({ viewport, deviceScaleFactor: 1, reducedMotion: 'reduce', serviceWorkers: 'block' });
       const page = await context.newPage();
+      // Keep the static UI intact. The application module requires a real
+      // Firebase player and removes some legacy pages during guest startup.
+      await page.route('**/main.js*', route => route.abort());
       await page.goto(`http://127.0.0.1:${server.address().port}/`, { waitUntil: 'domcontentloaded' });
       await page.waitForTimeout(3000);
       await page.screenshot({ path: path.join(output, `${viewport.name}-login.png`), animations: 'disabled' });
@@ -44,6 +47,7 @@ const server = createServer(async (req, res) => {
             element.style.display = 'none';
           });
           const target = document.getElementById(`page-${id}`);
+          if (!target) throw new Error(`Missing static page: ${id}`);
           target.classList.remove('hidden'); target.classList.add('active-page');
           target.style.display = 'block';
           document.querySelector('main').scrollTop = 0;
