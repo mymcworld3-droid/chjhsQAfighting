@@ -984,6 +984,29 @@ window.addEventListener('xiuxian:feature-load-progress', (event) => {
     updateGameStartupProgress(loaded, detail.total);
 });
 
+window.addEventListener('xiuxian:startup-resource-progress', (event) => {
+    const detail = event.detail || {};
+    const text = document.getElementById('game-startup-gate-text');
+    if (!text) return;
+    if (detail.phase === 'catalogs') {
+        text.textContent = detail.loaded >= detail.total
+            ? '法寶、材料與煉器配方已整理完成…'
+            : '正在整理法寶、材料與煉器配方…';
+        return;
+    }
+    if (detail.phase === 'images') {
+        const loaded = Math.max(0, Number(detail.loaded) || 0);
+        const total = Math.max(0, Number(detail.total) || 0);
+        text.textContent = total
+            ? `正在預載背包與裝備圖片… ${loaded} / ${total}`
+            : '正在預載背包與裝備圖片…';
+        return;
+    }
+    if (detail.phase === 'ready') {
+        text.textContent = '法寶、材料、裝備與煉器資源已就緒…';
+    }
+});
+
 // ==========================================
 // 🔐 登入狀態監聽 (核心邏輯)
 // ==========================================
