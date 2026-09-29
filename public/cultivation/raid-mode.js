@@ -51,6 +51,7 @@ import { rewardRepository } from './data/reward-repository.js';
     pendingFinishRoom: null,
     reconnectTried: false,
     invitedRoomId: '',
+    inviteCooldownUntil: 0,
     rewardClaiming: false,
     rewardClaimedRoomId: ''
   };
@@ -344,16 +345,26 @@ import { rewardRepository } from './data/reward-repository.js';
     });
   }
 
-  async function inviteOnlineFriends() {
-    if (!state.roomId || !state.room || !isHost() || state.room.status !== 'waiting' || state.invitedRoomId === state.roomId) return;
-    state.invitedRoomId = state.roomId;
+  async function inviteOnlineFriends({ force = false } = {}) {
+    if (!state.roomId || !state.room || !isHost() || state.room.status !== 'waiting') return { sent: 0, skipped: true };
+    if (!force && state.invitedRoomId === state.roomId) return { sent: 0, skipped: true };
+    if (force && now() < state.inviteCooldownUntil) {
+      return { sent: 0, cooldownMs: state.inviteCooldownUntil - now() };
+    }
+
     const user = playerRepository.currentUser();
     const friends = [...new Set((data()?.friends || []).filter(uid => typeof uid === 'string' && uid !== user?.uid))].slice(0, 30);
-    if (!user || !friends.length) return;
+    if (!user || !friends.length) {
+      if (force) toast('目前沒有可邀請的好友');
+      return { sent: 0 };
+    }
+
+    if (!force) state.invitedRoomId = state.roomId;
+    if (force) state.inviteCooldownUntil = now() + 15000;
+
     try {
-      await playerRepository.sendRaidInvitations({
+      const sentTo = await playerRepository.sendRaidInvitations({
         friendUids: friends,
-        activeAfterMs: now() - 5 * 60 * 1000,
         invitation: {
           raidVersion: 2,
           raidCode: state.room.code,
@@ -364,8 +375,14 @@ import { rewardRepository } from './data/reward-repository.js';
           hostFrame: data()?.equipped?.frame || ''
         }
       });
+      const sent = Array.isArray(sentTo) ? sentTo.length : 0;
+      if (force) toast(sent ? '已邀請 ' + sent + ' 位在線好友' : '目前沒有在線好友可邀請');
+      return { sent };
     } catch (error) {
+      if (force) state.inviteCooldownUntil = 0;
       console.warn('[Raid] friend invitations unavailable:', error);
+      if (force) toast(error?.message || '好友邀請發送失敗');
+      return { sent: 0, error };
     }
   }
   function renderLobby() {
@@ -391,12 +408,30 @@ import { rewardRepository } from './data/reward-repository.js';
           '<b class="' + (member.ready ? 'ready' : '') + '">' + (member.ready ? '已準備' : '未準備') + '</b></article>';
       }).join('') + '</div>' +
       '<div class="raid-lobby-actions"><button class="raid-ghost" type="button" data-copy>複製隊伍代碼</button>' +
+      (isHost() ? '<button class="raid-ghost" type="button" data-invite><i class="fa-solid fa-user-plus"></i> 邀請好友</button>' : '') +
       '<button class="raid-primary" type="button" data-ready>' + (me?.ready ? '取消準備' : '準備') + '</button>' +
       (isHost() ? '<button class="raid-primary" type="button" data-start ' + (allReady ? '' : 'disabled') + '>開始團本</button>' : '<span class="raid-wait-host">等待隊長開始</span>') + '</div>';
     lobby.querySelector('[data-leave]')?.addEventListener('click', leaveRaid);
     lobby.querySelector('[data-copy]')?.addEventListener('click', async function () {
       try { await navigator.clipboard.writeText(String(state.room.code || '')); toast('隊伍代碼已複製'); }
       catch (_) { toast('隊伍代碼：' + String(state.room.code || '')); }
+    });
+    lobby.querySelector('[data-invite]')?.addEventListener('click', async function (event) {
+      const button = event.currentTarget;
+      if (!button || button.disabled) return;
+      const remaining = Math.max(0, state.inviteCooldownUntil - now());
+      if (remaining > 0) {
+        toast('請等待 ' + Math.ceil(remaining / 1000) + ' 秒後再邀請');
+        return;
+      }
+      button.disabled = true;
+      const original = button.innerHTML;
+      button.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 邀請中';
+      await inviteOnlineFriends({ force: true });
+      button.innerHTML = original;
+      window.setTimeout(() => {
+        if (button.isConnected) button.disabled = false;
+      }, Math.max(0, state.inviteCooldownUntil - now()));
     });
     lobby.querySelector('[data-ready]')?.addEventListener('click', function () {
       void setRaidReady(state.roomId, !me?.ready).catch(error => toast(error.message || '準備狀態更新失敗'));
