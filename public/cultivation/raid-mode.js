@@ -13,7 +13,7 @@ import { rewardRepository } from './data/reward-repository.js';
   'use strict';
 
   const PAGE_ID = 'page-raid';
-  const STYLE_HREF = 'styles/raid-mode.css?v=20260927-raid-vv9';
+  const STYLE_HREF = 'styles/raid-mode.css?v=20260929-correct-feedback1';
   const MALE = 'assets/story/characters/player-male-determined.png';
   const FEMALE = 'assets/story/characters/player-female-determined.png';
   const HEARTBEAT_MS = 8000;
@@ -76,6 +76,20 @@ import { rewardRepository } from './data/reward-repository.js';
     el.textContent = message;
     document.body.appendChild(el);
     setTimeout(function () { el.remove(); }, 2800);
+  }
+  function showCorrectAnswerFeedback(detail = '攻勢命中') {
+    document.getElementById('raid-correct-feedback')?.remove();
+    const el = document.createElement('div');
+    el.id = 'raid-correct-feedback';
+    el.className = 'raid-correct-feedback';
+    el.innerHTML = '<span aria-hidden="true">✓</span><div><strong>答對</strong><small>' +
+      escapeHtml(detail) + '</small></div>';
+    document.body.appendChild(el);
+    requestAnimationFrame(function () { el.classList.add('show'); });
+    window.setTimeout(function () {
+      el.classList.remove('show');
+      window.setTimeout(function () { el.remove(); }, 220);
+    }, 1350);
   }
   function storyOpen() {
     return !!document.querySelector('#xiuxian-story-layer,#newbie-tutorial-layer,#battle-tutorial-layer,#golden-core-tutorial-layer,#dongtian-overlay');
@@ -522,7 +536,10 @@ import { rewardRepository } from './data/reward-repository.js';
     }).join('');
     let explain = '';
     if (review) {
-      const label = state.answerCorrect ? '答對・立即出手' : '答錯・本次失去攻擊';
+      const dealt = Math.max(0, Number(state.lastPlayerAction?.damage) || 0);
+      const label = state.answerCorrect
+        ? ('答對・' + (dealt > 0 ? '造成 ' + dealt.toLocaleString() + ' 傷害' : '攻勢已凝聚'))
+        : '答錯・本次失去攻擊';
       explain = '<div class="raid-explain ' + (state.answerCorrect ? 'correct' : 'wrong') + '"><b>' + label + '</b><p>' + rich(q.exp) + '</p>' +
         '<button class="raid-primary" type="button" data-next>下一題</button><button class="raid-ghost" type="button" data-arena>先看戰場</button></div>';
     }
@@ -589,6 +606,11 @@ import { rewardRepository } from './data/reward-repository.js';
         state.pendingFinishRoom = state.room;
       }
       void prefetchQuestion();
+
+      if (state.answerCorrect) {
+        const dealt = Math.max(0, Number(state.lastPlayerAction.damage) || 0);
+        showCorrectAnswerFeedback(dealt > 0 ? '攻勢命中・' + dealt.toLocaleString() + ' 傷害' : '攻勢已凝聚');
+      }
 
       if (state.answerCorrect && state.lastPlayerAction.damage > 0) {
         await playBattleScene({
