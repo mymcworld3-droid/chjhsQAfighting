@@ -3,7 +3,7 @@ import { createSoloQuestionCache } from './solo-question-cache.js';
 import { ensureSecondaryFirebaseAuth } from './cultivation/firebase-projects.js';
 // 🔥 修正：使用純 URL 引入 Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getAuth, signInWithPopup, signInAnonymously, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { 
     getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, addDoc, 
     query, orderBy, limit, getDocs, serverTimestamp, where, onSnapshot, runTransaction, 
@@ -686,6 +686,18 @@ function calculateRankFromScore(totalScore, uid = auth.currentUser?.uid) {
 
 // 綁定全域函式
 window.googleLogin = () => { signInWithPopup(auth, provider).catch((error) => alert("Login Failed: " + error.code)); };
+window.anonymousLogin = () => {
+    const button = document.getElementById('btn-anonymous-login');
+    if (button) button.disabled = true;
+    signInAnonymously(auth).catch((error) => {
+        if (button) button.disabled = false;
+        window.showToast?.('匿名登入失敗：' + (error?.code || '請稍後重試'));
+        console.error('[Anonymous login]', error);
+    });
+};
+if (new URLSearchParams(location.search).get('qa') === '1') {
+    document.getElementById('btn-anonymous-login')?.classList.remove('hidden');
+}
 window.logout = () => { 
     localStorage.removeItem('currentQuiz');
     if (inviteUnsub) inviteUnsub(); // 登出時取消監聽
@@ -1035,7 +1047,7 @@ onAuthStateChanged(auth, async (user) => {
         }
 
         showGameStartupGate('正在載入玩家資料…');
-        document.getElementById('settings-email').innerText = user.email;
+        document.getElementById('settings-email').innerText = user.email || '匿名測試帳號';
 
         injectSocialUI();
 
@@ -1059,7 +1071,7 @@ onAuthStateChanged(auth, async (user) => {
                 // 新使用者初始化
                 const code = Math.random().toString(36).substring(2, 8).toUpperCase();
                 currentUserData = {
-                    uid: user.uid, displayName: user.displayName, email: user.email,
+                    uid: user.uid, displayName: user.displayName || '匿名修士', email: user.email || '',
                     profile: { educationLevel: "", strongSubjects: "", weakSubjects: "" },
                     inventory: [],
                     equipped: { frame: '', avatar: '' },
