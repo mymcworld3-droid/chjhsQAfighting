@@ -95,5 +95,312 @@ body.raid-page-open #page-raid.active-page>.raid-view:not(.hidden){height:100%!i
 
 @media(max-width:640px){
   body.raid-page-open #page-raid.active-page{top:var(--raid-header-height,68px)!important;bottom:auto!important;padding:0 6px!important}
-  body.raid-page-open.raid-session-active #page-raid.active-page{bottom:0!important}
+  body.raid-page-open.raid-session-active #page-raid.active-page{bottom:auto!important}
+}
+
+
+/* Immediate correct-answer feedback for raid questions. */
+.raid-correct-feedback{position:fixed;left:50%;top:clamp(74px,11dvh,112px);z-index:18250;display:flex;align-items:center;gap:11px;min-width:min(330px,calc(100vw - 28px));max-width:460px;padding:11px 15px;border:1px solid rgba(105,207,160,.42);border-radius:16px;background:linear-gradient(135deg,rgba(20,49,41,.97),rgba(7,14,12,.98));box-shadow:0 18px 55px rgba(0,0,0,.46),0 0 28px rgba(86,190,151,.12);transform:translate(-50%,-12px) scale(.96);opacity:0;pointer-events:none;transition:opacity .18s ease,transform .22s ease}
+.raid-correct-feedback.show{opacity:1;transform:translate(-50%,0) scale(1)}
+.raid-correct-feedback>span{width:34px;height:34px;flex:0 0 34px;display:grid;place-items:center;border:1px solid rgba(125,225,177,.5);border-radius:50%;background:rgba(70,155,112,.16);color:#c1eed5;font-size:20px;font-weight:900;box-shadow:inset 0 0 16px rgba(104,214,162,.08)}
+.raid-correct-feedback>div{display:grid;gap:2px}.raid-correct-feedback strong{color:#d9f3e6;font-size:14px;letter-spacing:.08em}.raid-correct-feedback small{color:#91baa7;font-size:9px;line-height:1.45}
+@media(prefers-reduced-motion:reduce){.raid-correct-feedback{transition:none!important}}
+
+
+/* Attack cut-in viewport guard.
+   The quiz can trigger an arena render while mobile browser chrome is resizing.
+   During that short cut-in, the raid page is pinned by JS to visualViewport and
+   the nonessential header/party strip are removed so the battlefield always fits. */
+html.raid-combat-focus,body.raid-combat-focus{overflow:hidden!important;overscroll-behavior:none!important}
+body.raid-combat-focus #page-raid.active-page{z-index:18150!important;padding:max(6px,env(safe-area-inset-top,0px)) max(6px,env(safe-area-inset-right,0px)) max(6px,env(safe-area-inset-bottom,0px)) max(6px,env(safe-area-inset-left,0px))!important;box-sizing:border-box!important;overflow:hidden!important}
+body.raid-combat-focus #raid-arena:not(.hidden){position:relative!important;display:grid!important;grid-template-rows:minmax(0,1fr)!important;width:100%!important;height:100%!important;max-height:100%!important;min-height:0!important;gap:0!important;overflow:hidden!important}
+body.raid-combat-focus #raid-arena>.raid-battle-head,
+body.raid-combat-focus #raid-arena>.raid-party-strip{display:none!important}
+body.raid-combat-focus #raid-arena .raid-stage{width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;min-height:0!important;margin:0!important;overflow:hidden!important;box-sizing:border-box!important}
+body.raid-combat-focus #raid-arena .raid-boss-side,
+body.raid-combat-focus #raid-arena .raid-player-side{min-height:0!important;max-height:100%!important;box-sizing:border-box!important;overflow:hidden!important}
+body.raid-combat-focus #raid-arena .raid-boss-portrait{min-height:0!important;max-height:100%!important}
+body.raid-combat-focus #raid-arena .raid-boss-portrait img{max-height:100%!important}
+body.raid-combat-focus .raid-combat-event{position:absolute!important;left:50%!important;top:50%!important;width:min(420px,calc(100% - 24px))!important;min-width:0!important;max-width:calc(100% - 24px)!important;box-sizing:border-box!important;transform:translate(-50%,-50%);margin:0!important}
+
+@media(max-height:560px){
+  body.raid-combat-focus #raid-arena .raid-stage{grid-template-columns:minmax(0,1.18fr) minmax(165px,.82fr)!important;gap:5px!important}
+  body.raid-combat-focus #raid-arena .raid-boss-side,
+  body.raid-combat-focus #raid-arena .raid-player-side{padding:5px 7px!important;border-radius:14px!important}
+  body.raid-combat-focus #raid-arena .raid-player-card{padding:4px!important}
+  body.raid-combat-focus #raid-arena .raid-player-card img{height:40px!important;width:40px!important}
+  body.raid-combat-focus #raid-arena .raid-status-row,
+  body.raid-combat-focus #raid-arena .raid-round-summary,
+  body.raid-combat-focus #raid-arena .raid-fight{display:none!important}
+  body.raid-combat-focus #raid-arena .raid-intent{padding:5px 7px!important}
+}
+
+
+/* =========================================================
+   Raid battlefield v3 — Boss above, every player in one row below.
+   ========================================================= */
+#raid-arena:not(.hidden){
+  grid-template-rows:auto minmax(0,1fr)!important;
+}
+#raid-arena .raid-stage{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  grid-template-rows:minmax(0,1fr) auto!important;
+  gap:8px!important;
+  min-height:0!important;
+  height:100%!important;
+  overflow:hidden!important;
+}
+#raid-arena .raid-boss-side{
+  min-width:0!important;
+  min-height:0!important;
+  width:100%!important;
+  height:100%!important;
+  padding:8px 12px!important;
+  box-sizing:border-box!important;
+}
+#raid-arena .raid-boss-portrait img{
+  max-width:min(54%,430px)!important;
+  max-height:100%!important;
+}
+.raid-party-floor{
+  position:relative;
+  z-index:4;
+  min-width:0;
+  display:grid;
+  grid-template-rows:minmax(0,1fr) auto;
+  gap:5px;
+  padding:6px 8px 7px;
+  border:1px solid rgba(143,215,210,.14);
+  border-radius:17px;
+  background:linear-gradient(180deg,rgba(12,17,18,.95),rgba(6,8,9,.98));
+  box-sizing:border-box;
+  overflow:hidden;
+}
+.raid-player-lineup{
+  min-width:0;
+  display:grid;
+  gap:6px;
+  align-items:stretch;
+}
+.raid-stage-player{
+  position:relative;
+  min-width:0;
+  display:grid;
+  grid-template-columns:clamp(42px,6vw,68px) minmax(0,1fr);
+  gap:7px;
+  align-items:end;
+  padding:5px 7px;
+  border:1px solid rgba(255,255,255,.055);
+  border-radius:12px;
+  background:rgba(255,255,255,.018);
+  overflow:hidden;
+}
+.raid-stage-player.me{
+  border-color:rgba(143,215,210,.38);
+  background:linear-gradient(180deg,rgba(56,113,111,.11),rgba(255,255,255,.018));
+  box-shadow:inset 0 0 20px rgba(116,202,196,.045);
+}
+.raid-stage-player.down{opacity:.42;filter:saturate(.5)}
+.raid-stage-player-art{
+  height:clamp(54px,10dvh,86px);
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  overflow:hidden;
+}
+.raid-stage-player-art img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  object-position:center bottom;
+  filter:drop-shadow(0 7px 8px rgba(0,0,0,.55));
+}
+.raid-stage-player-info{min-width:0;align-self:center}
+.raid-stage-player-info strong{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  color:#e9dfca;
+  font-size:10px;
+}
+.raid-stage-player-info strong em{
+  flex:0 0 auto;
+  padding:2px 4px;
+  border-radius:999px;
+  background:rgba(93,170,165,.15);
+  color:#aee0dc;
+  font-size:6px;
+  font-style:normal;
+}
+.raid-stage-player-info small{
+  display:block;
+  margin-top:2px;
+  color:#aab5ad;
+  font-size:7px;
+  white-space:nowrap;
+}
+.raid-stage-player-hp{
+  height:5px;
+  margin:4px 0 3px;
+  overflow:hidden;
+  border-radius:999px;
+  background:#08090a;
+}
+.raid-stage-player-hp i{
+  display:block;
+  height:100%;
+  border-radius:inherit;
+  background:linear-gradient(90deg,#3b746f,#8fd7d2);
+  transition:width .45s ease;
+}
+.raid-stage-player-info>span{
+  display:block;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  color:#746f65;
+  font-size:6px;
+}
+.raid-party-controls{
+  min-width:0;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:8px;
+  align-items:center;
+}
+.raid-current-status{
+  min-width:0;
+  padding:5px 7px;
+  border-left:2px solid #9c8651;
+  background:rgba(156,134,81,.045);
+}
+.raid-current-status span,
+.raid-current-status small{
+  display:block;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.raid-current-status span{color:#c1b59e;font-size:8px}
+.raid-current-status small{margin-top:2px;color:#756f64;font-size:6px}
+.raid-party-controls .raid-fight{
+  min-width:112px;
+  min-height:32px;
+  margin:0!important;
+  padding:0 12px;
+}
+
+/* Player attack/defense now originates from the current player's card in the bottom row. */
+.raid-stage.raid-player-strike .raid-stage-player.me img{
+  animation:raidPlayerStrike 1.05s cubic-bezier(.2,.75,.2,1);
+}
+.raid-stage.raid-boss-strike .raid-stage-player.me{
+  animation:raidPlayerHit 1.05s ease;
+}
+@keyframes raidPlayerStrike{
+  0%,100%{transform:translateY(0) scale(1)}
+  35%{transform:translateY(-18px) scale(1.04)}
+  55%{transform:translateY(-28px) scale(1.07)}
+}
+@keyframes raidBossStrike{
+  0%,100%{transform:translateY(0) scale(1)}
+  35%{transform:translateY(18px) scale(1.035)}
+  55%{transform:translateY(30px) scale(1.06)}
+}
+@keyframes raidPlayerHit{
+  0%,32%,100%{filter:none;transform:translateY(0)}
+  42%{filter:brightness(1.6);transform:translateY(6px)}
+  50%{transform:translateY(-4px)}
+  58%{transform:translateY(2px)}
+}
+
+/* The short attack cut-in keeps the same Boss-above / party-below composition. */
+body.raid-combat-focus #raid-arena .raid-stage{
+  grid-template-columns:1fr!important;
+  grid-template-rows:minmax(0,1fr) auto!important;
+  gap:5px!important;
+}
+body.raid-combat-focus #raid-arena .raid-party-floor{
+  min-height:0!important;
+  max-height:38%!important;
+}
+body.raid-combat-focus #raid-arena .raid-party-controls{
+  display:none!important;
+}
+body.raid-combat-focus #raid-arena .raid-stage-player-art{
+  height:clamp(42px,10dvh,72px)!important;
+}
+
+/* Result screen must remain fully reachable even on short/mobile viewports. */
+body.raid-page-open #page-raid.active-page>#raid-result:not(.hidden){
+  display:block!important;
+  height:100%!important;
+  min-height:0!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  padding:8px 0 max(18px,env(safe-area-inset-bottom,0px))!important;
+  box-sizing:border-box!important;
+  overscroll-behavior:contain;
+  scroll-padding-bottom:24px;
+}
+#raid-result .raid-result-card{
+  width:min(100%,760px)!important;
+  max-height:none!important;
+  height:auto!important;
+  min-height:min-content!important;
+  margin:0 auto 12px!important;
+  overflow:visible!important;
+  box-sizing:border-box!important;
+}
+#raid-result .raid-result-actions{
+  position:relative;
+  z-index:2;
+  margin-bottom:2px;
+}
+
+@media(max-width:760px){
+  #raid-arena .raid-stage{gap:5px!important}
+  #raid-arena .raid-boss-side{padding:6px 8px!important}
+  #raid-arena .raid-boss-portrait img{max-width:min(62%,360px)!important}
+  .raid-party-floor{padding:5px;gap:4px}
+  .raid-player-lineup{gap:3px}
+  .raid-stage-player{
+    grid-template-columns:1fr;
+    gap:2px;
+    padding:3px;
+    text-align:center;
+    align-items:end;
+  }
+  .raid-stage-player-art{height:clamp(42px,8dvh,62px)}
+  .raid-stage-player-info strong{justify-content:center;font-size:8px}
+  .raid-stage-player-info small{font-size:6px}
+  .raid-stage-player-info>span{display:none}
+  .raid-stage-player-hp{margin:3px 1px}
+  .raid-current-status small{display:none}
+  .raid-party-controls .raid-fight{min-width:96px}
+}
+@media(max-width:460px){
+  .raid-party-floor{border-radius:12px}
+  .raid-stage-player-art{height:clamp(38px,7dvh,54px)}
+  .raid-stage-player-info strong{font-size:7px}
+  .raid-stage-player-info strong em{display:none}
+  .raid-stage-player-info small{font-size:5.5px}
+  .raid-party-controls{grid-template-columns:minmax(0,1fr) 88px;gap:4px}
+  .raid-party-controls .raid-fight{min-width:0;padding:0 5px;font-size:7px}
+  #raid-result .raid-result-card{padding-inline:11px!important}
+}
+@media(max-height:560px){
+  body.raid-combat-focus #raid-arena .raid-stage{
+    grid-template-columns:1fr!important;
+    grid-template-rows:minmax(0,1fr) auto!important;
+  }
+  body.raid-combat-focus #raid-arena .raid-party-floor{max-height:34%!important}
+  body.raid-combat-focus #raid-arena .raid-stage-player-art{height:38px!important}
+  body.raid-combat-focus #raid-arena .raid-stage-player-info>span{display:none!important}
 }
