@@ -299,28 +299,3 @@ loadCelestialGoldTheme();
 loadBlackGoldHarmonyTheme();
 loadCompactTrainingLayout();
 registerBlackGoldChartTheme();
-
-const LEGACY_SELECTORS = [
-  '.summon-banner', '#page-cards', '#nav-grid [data-target="page-cards"]',
-  '[onclick="drawSingleCard()"]', '[onclick="draw11Cards()"]', '#home-best-card-container'
-];
-
-function removeLegacyGachaUI() {
-  LEGACY_SELECTORS.forEach((selector) => {
-    document.querySelectorAll(selector).forEach((node) => node.remove());
-  });
-  window.drawSingleCard = undefined;
-  window.draw11Cards = undefined;
-}
-
-function bootLegacyCleanup() {
-  removeLegacyGachaUI();
-  if (!document.body) return;
-  new MutationObserver(removeLegacyGachaUI).observe(document.body, { childList: true, subtree: true });
-}
-
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', bootLegacyCleanup, { once: true });
-} else {
-  bootLegacyCleanup();
-}

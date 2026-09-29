@@ -243,7 +243,7 @@ test('material listing validates total price above unit reference both before an
 });
 
 test('store switches market type before showing frame and avatar item categories', () => {
-  const page = index.slice(index.indexOf('<div id="page-store"'), index.indexOf('<div id="page-cards"'));
+  const page = index.slice(index.indexOf('<div id="page-store"'), index.indexOf('<div id="page-battle"'));
   const shop = page.indexOf('id="pm-view-shop"');
   const marketButton = page.indexOf('id="pm-view-market"');
   const all = page.indexOf("filterStore('all', this)");

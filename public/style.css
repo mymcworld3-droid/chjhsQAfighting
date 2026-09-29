@@ -164,11 +164,6 @@
     white-space: nowrap;
 }
 
-/* 8. 戰鬥卡片容器 (必須與 main.js 配合) */
-.battle-card-wrapper {
-    transition: all 0.3s ease;
-}
-
 /* 9. Loader 動畫 */
 .cyber-loader {
     width: 40px;
@@ -184,43 +179,6 @@
 .custom-scrollbar::-webkit-scrollbar { width: 4px; }
 .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
 .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 2px; }
-
-/* 11. Deck Slots */
-.deck-slot {
-    width: 80px;
-    height: 120px;
-    background: rgba(30, 41, 59, 0.5);
-    border: 2px dashed rgba(255, 255, 255, 0.2);
-    border-radius: 12px;
-    position: relative;
-    cursor: pointer;
-    overflow: hidden;
-    transition: all 0.3s;
-}
-.deck-slot:hover { border-color: var(--neon-cyan); }
-.slot-label {
-    position: absolute;
-    top: 0; left: 0;
-    font-size: 8px;
-    font-weight: bold;
-    color: white;
-    padding: 2px 6px;
-    border-bottom-right-radius: 6px;
-    z-index: 10;
-}
-.slot-content {
-    width: 100%; height: 100%;
-    display: flex; align-items: center; justify-content: center;
-}
-.slot-hover {
-    position: absolute; inset: 0;
-    background: rgba(0,0,0,0.5);
-    display: flex; align-items: center; justify-content: center;
-    opacity: 0; transition: opacity 0.2s;
-    z-index: 20;
-    color: white;
-}
-.deck-slot:hover .slot-hover { opacity: 1; }
 
 /* 12. 商店 Tab */
 .store-tab.active {
@@ -1124,17 +1082,6 @@ input:focus, textarea:focus {
         border-width: 3px;
     }
 }
-/* 卡牌樣式 */
-.game-card {
-    background: linear-gradient(180deg, #1e293b, #0f172a);
-    border-radius: 0.5rem;
-    overflow: hidden;
-    position: relative;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-}
-.card-trait { font-size: 10px; color: #fbbf24; } /* 特性文字顏色 */
-.card-skill { font-size: 10px; color: #f87171; } /* 技能文字顏色 */
-
 /* 攻擊動畫 */
 @keyframes attackUp {
     0% { transform: translateY(0); }
@@ -1164,14 +1111,6 @@ input:focus, textarea:focus {
     animation: battleShake 0.4s cubic-bezier(.36,.07,.19,.97) both; 
 }
 
-/* 在 style.css 中加入 */
-#my-card-container {
-    margin-bottom: 2rem; /* 增加底部間距 */
-}
-
-#enemy-card-container {
-    margin-top: 1rem; /* 增加頂部間距 */
-}
 /* 血條漸變效果 */
 .hp-bar-critical { background: linear-gradient(90deg, #dc2626, #ef4444); }
 .hp-bar-warning { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
@@ -1192,114 +1131,6 @@ input:focus, textarea:focus {
     max-height: 200px;
     overflow-y: auto;
     border: 1px solid rgba(148, 163, 184, 0.2);
-}
-/* ==========================================
-   抽卡系統特效
-   ========================================== */
-
-/* 1. 卡牌翻轉容器 */
-.gacha-card-wrapper {
-    perspective: 1000px;
-    width: 100%;
-    aspect-ratio: 2/3;
-    cursor: pointer;
-}
-
-.gacha-card-inner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-    transition: transform 0.6s cubic-bezier(0.4, 2, 0.5, 1);
-    transform-style: preserve-3d;
-}
-
-/* 翻牌狀態 */
-.gacha-card-wrapper.flipped .gacha-card-inner {
-    transform: rotateY(180deg);
-}
-
-/* 卡牌正反面 */
-.gacha-card-front, .gacha-card-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    border-radius: 0.75rem;
-    overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.5);
-}
-
-/* 背面 (卡背) */
-.gacha-card-back {
-    background: linear-gradient(135deg, #1e293b 25%, #0f172a 100%);
-    border: 2px solid #475569;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.gacha-card-back::after {
-    content: '?';
-    font-size: 3rem;
-    font-weight: bold;
-    color: rgba(255,255,255,0.1);
-}
-
-/* 正面 (內容) - 預設旋轉180度 */
-.gacha-card-front {
-    background: #1e293b;
-    transform: rotateY(180deg);
-}
-
-/* 2. 稀有度光暈 (Glows) */
-.glow-gray { box-shadow: 0 0 10px rgba(156, 163, 175, 0.5); border-color: #9ca3af; }
-.glow-blue { box-shadow: 0 0 15px rgba(59, 130, 246, 0.6); border-color: #3b82f6; }
-.glow-purple { box-shadow: 0 0 20px rgba(168, 85, 246, 0.7); border-color: #a855f7; }
-.glow-red { box-shadow: 0 0 25px rgba(239, 68, 68, 0.8); border-color: #ef4444; }
-.glow-gold { box-shadow: 0 0 30px rgba(234, 179, 8, 0.9); border-color: #eab308; animation: pulse-gold 2s infinite; }
-.glow-rainbow { 
-    box-shadow: 0 0 40px rgba(255, 255, 255, 0.8); 
-    border: 2px solid transparent;
-    background-image: linear-gradient(#1e293b, #1e293b), linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
-    background-origin: border-box;
-    background-clip: content-box, border-box;
-    animation: rainbow-border 2s linear infinite;
-}
-
-@keyframes pulse-gold {
-    0%, 100% { box-shadow: 0 0 20px rgba(234, 179, 8, 0.6); }
-    50% { box-shadow: 0 0 40px rgba(234, 179, 8, 1); }
-}
-
-/* 3. 抽卡動畫序列 */
-@keyframes orb-charge {
-    0% { transform: scale(0); opacity: 0; }
-    50% { transform: scale(1); opacity: 1; }
-    90% { transform: scale(1.2) rotate(180deg); opacity: 1; filter: brightness(2); }
-    100% { transform: scale(30); opacity: 0; } /* 爆炸變大 */
-}
-
-@keyframes flash-screen {
-    0% { background-color: transparent; }
-    50% { background-color: white; }
-    100% { background-color: transparent; }
-}
-
-.anim-orb-charge {
-    animation: orb-charge 2.5s cubic-bezier(0.7, 0, 0.84, 0) forwards;
-}
-
-.anim-flash {
-    animation: flash-screen 0.5s ease-out forwards;
-}
-
-/* 卡牌進場 */
-.card-entry {
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeInUpShort 0.5s forwards;
 }
 /* ==========================================
    🔥 對戰模式視覺升級 (Battle VFX)

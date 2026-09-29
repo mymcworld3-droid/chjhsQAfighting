@@ -1,0 +1,79 @@
+/* Shared spacing for the main app screens. Scoped to the visible app theme so
+   battle overlays and the sign-in screen retain their own viewport geometry. */
+body.xianxia-theme main { min-width: 0; }
+body.xianxia-theme:has(#login-screen:not(.hidden)) main { padding-bottom: 0; }
+body.xianxia-theme #login-screen:not(.hidden) { min-height: calc(100dvh - 92px); }
+body.xianxia-theme main > .page-section { box-sizing: border-box; min-width: 0; }
+body.xianxia-theme :is(#page-home,#page-store,#page-rank,#page-settings,#page-history,#page-admin) {
+  width: min(100%, 1180px);
+  max-width: 1180px;
+  padding-inline: clamp(12px, 2.2vw, 28px);
+}
+body.xianxia-theme :is(#page-store,#page-rank,#page-settings,#page-history,#page-admin) > :is(h2,.sticky):first-child {
+  box-sizing: border-box;
+  min-height: 58px;
+  margin: 0 0 clamp(12px, 1.6vw, 20px);
+  padding: 8px 0 12px;
+  border-bottom: 1px solid var(--xq-line);
+  background: transparent;
+}
+body.xianxia-theme :is(#page-store,#page-rank,#page-settings,#page-history,#page-admin) > :is(h2,.sticky):first-child h2,
+body.xianxia-theme :is(#page-store,#page-rank,#page-settings,#page-history,#page-admin) > h2:first-child {
+  color: var(--xq-paper);
+  font: 500 clamp(21px, 2.2vw, 28px)/1.35 var(--xq-serif);
+  letter-spacing: .06em;
+}
+body.xianxia-theme :is(#page-store,#page-rank,#page-settings,#page-history,#page-admin) > :is(h2,.sticky):first-child i { color: var(--xq-gold); }
+body.xianxia-theme :is(#page-store,#page-rank,#page-settings,#page-history,#page-admin) > .sticky:first-child {
+  top: 0;
+  background: #102920f2;
+  backdrop-filter: blur(12px);
+}
+body.xianxia-theme :is(#page-store,#page-rank,#page-settings,#page-history,#page-admin) :is(.glass-panel,.grid,section) { min-width: 0; }
+body.xianxia-theme :is(#page-store,#page-rank,#page-settings,#page-history,#page-admin) :is(button,input,select,textarea) { max-width: 100%; }
+
+/* Secondary screens use the same content density without giant empty panels. */
+body.xianxia-theme #page-settings { max-width: 900px; }
+body.xianxia-theme #page-history { max-width: 900px; }
+body.xianxia-theme #page-rank { max-width: 980px; }
+body.xianxia-theme #page-history #history-list { min-height: 0; }
+body.xianxia-theme #page-history > .glass-panel { margin-bottom: 20px; }
+body.xianxia-theme #page-store #store-grid { padding-bottom: 20px; }
+body.xianxia-theme #page-store #store-grid { grid-template-columns: repeat(auto-fill,minmax(min(100%,150px),1fr)); gap: clamp(8px,1.2vw,16px); }
+
+@media (max-width: 700px) {
+  body.xianxia-theme #login-screen:not(.hidden) { min-height: calc(100dvh - 82px); }
+  body.xianxia-theme #page-home .xianxia-page-heading { margin-bottom: 12px; }
+  body.xianxia-theme #page-home .xiuxian-panel { padding: 18px; }
+  body.xianxia-theme #page-home .xiuxian-invocation { margin: 5px 0 12px; }
+  body.xianxia-theme #page-home .xiuxian-identity { margin-bottom: 10px; }
+  body.xianxia-theme #page-home .xiuxian-row { margin-top: 7px; }
+  body.xianxia-theme #page-home .xiuxian-bar { margin-top: 9px; }
+  body.xianxia-theme #page-home .xiuxian-actions { margin-top: 12px; gap: 8px; }
+  body.xianxia-theme #page-home .stat-card { padding-block: 9px; }
+  body.xianxia-theme #page-home .stat-card .stat-icon { margin-bottom: 4px; }
+  body.xianxia-theme :is(#page-home,#page-store,#page-rank,#page-settings,#page-history,#page-admin) { padding-inline: 12px; }
+  body.xianxia-theme :is(#page-store,#page-history) > .sticky:first-child { gap: 8px; flex-wrap: wrap; }
+  body.xianxia-theme #page-store > .sticky:first-child > :last-child { flex: none; }
+  body.xianxia-theme #page-store #player-market-switch { margin-block: 8px 12px; }
+  body.xianxia-theme #page-store #player-market-switch button { min-width: 0; white-space: normal; line-height: 1.35; }
+  body.xianxia-theme #page-rank .glass-panel { overflow-x: auto; }
+  body.xianxia-theme #page-rank table { min-width: 320px; }
+  body.xianxia-theme #page-settings > .glass-panel { padding: 16px; margin-bottom: 14px; }
+  body.xianxia-theme #page-admin > section { margin-bottom: 12px; }
+  body.xianxia-theme #bottom-nav:not(.hidden) + #toast-container { max-width: calc(100vw - 16px); }
+}
+
+/* A short landscape screen must scroll inside the page instead of clipping the
+   refinery list below an unconditional 520px minimum. */
+@media (max-height: 650px) {
+  body.xianxia-theme #page-training .refinery-panel.refinery-material-panel {
+    min-height: 0 !important;
+    height: auto !important;
+    max-height: max(240px, calc(100dvh - 190px)) !important;
+  }
+  body.xianxia-theme #page-training .refinery-material-panel .refinery-material-list {
+    min-height: 0 !important;
+    overflow-y: auto !important;
+  }
+}
