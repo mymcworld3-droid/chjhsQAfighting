@@ -134,7 +134,7 @@ import { rewardRepository } from './data/reward-repository.js';
   function syncRaidBottomClearance() {
     const page = document.getElementById(PAGE_ID);
     const nav = document.getElementById('bottom-nav');
-    if (!page || !nav) return;
+    if (!page) return;
     const vv = window.visualViewport;
     const visualHeight = Math.max(1, Number(vv?.height) || Number(window.innerHeight) || document.documentElement.clientHeight || 1);
     const visualWidth = Math.max(1, Number(vv?.width) || Number(window.innerWidth) || document.documentElement.clientWidth || 1);
@@ -171,7 +171,7 @@ import { rewardRepository } from './data/reward-repository.js';
     const headerBottom = Math.max(0, Math.ceil(Number(headerRect?.bottom) || Number(headerRect?.height) || 72));
     const sessionActive = document.body.classList.contains('raid-session-active');
 
-    const navTop = Math.max(0, Number(nav.getBoundingClientRect?.().top) || 0);
+    const navTop = Math.max(0, Number(nav?.getBoundingClientRect?.().top) || 0);
     const clearance = navTop > 0 && visualHeight > navTop
       ? Math.ceil(visualHeight - navTop + 8)
       : 116;
@@ -984,8 +984,8 @@ import { rewardRepository } from './data/reward-repository.js';
   function finishRaid(won, reason) {
     stopTick();
     state.status = 'finished';
-    setRaidCombatFocus(false);
     document.body.classList.remove('raid-session-active');
+    setRaidCombatFocus(false);
     show('result');
     const result = document.getElementById('raid-result');
     const members = raidRoomMembers(state.room);
@@ -1029,8 +1029,8 @@ import { rewardRepository } from './data/reward-repository.js';
       battleSceneToken: state.battleSceneToken + 1, battleScenePlaying: false, pendingFinishRoom: null, invitedRoomId: '',
       rewardClaiming: false, rewardClaimedRoomId: ''
     });
-    setRaidCombatFocus(false);
     document.body.classList.remove('raid-session-active');
+    setRaidCombatFocus(false);
     updateHomeEntry();
   }
 
