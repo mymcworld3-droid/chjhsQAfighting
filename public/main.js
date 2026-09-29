@@ -81,7 +81,7 @@ let xiuxianFeatureLoadStarted = false;
 let xiuxianReadyTimer = null;
 let resolveXiuxianFeatureGate;
 const xiuxianFeatureGate = new Promise((resolve) => { resolveXiuxianFeatureGate = resolve; });
-const XIUXIAN_FEATURE_BUILD = '20260929-firestore-c-rules1';
+const XIUXIAN_FEATURE_BUILD = '20260927-raid-lobby-fit3';
 const RAID_FEATURE_BUILD = '20260927-raid-vv9';
 const BATTLE_FEATURE_BUILD = '20260927-battle-vv2';
 
@@ -144,7 +144,10 @@ async function loadXiuxianFeaturesSafely() {
       let loadedModule;
       if (modulePath === './cultivation/raid-mode.js') {
         loadedModule = await import(`${modulePath}?v=${RAID_FEATURE_BUILD}`);
-      } else if (modulePath === './cultivation/battle-v3-stability-ui.js') {
+      } else if (
+        modulePath === './cultivation/battle-v3-stability-ui.js' ||
+        modulePath === './cultivation/battle-mode-v2.js'
+      ) {
         loadedModule = await import(`${modulePath}?v=${BATTLE_FEATURE_BUILD}`);
       } else {
         loadedModule = await import(`${modulePath}?v=${XIUXIAN_FEATURE_BUILD}`);
