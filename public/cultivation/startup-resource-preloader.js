@@ -59,17 +59,10 @@ function collectPriorityDefinitions() {
     .filter(([, count]) => qty(count) > 0)
     .map(([id]) => id);
 
-  const score = Math.max(0, Number(data?.stats?.totalScore) || 0);
-  const currentRealmOrder = (() => {
-    let order = 0;
-    for (const item of ARTIFACT_CATALOG) {
-      const candidate = realmOrderByName(item?.realm || '凡人');
-      if (candidate <= 10 && Number(item?.craft?.gold || 0) >= 0 && candidate <= 10) {
-        if (candidate <= 10) order = Math.max(order, Math.min(candidate, Number(data?.stats?.rankLevel) || candidate));
-      }
-    }
-    return Math.max(0, Number(data?.stats?.rankLevel) || order || (score > 0 ? 1 : 0));
-  })();
+  const currentRealmOrder = Math.max(
+    0,
+    Math.min(10, Math.floor(Number(data?.stats?.rankLevel) || 0))
+  );
 
   const nearbyArtifacts = ARTIFACT_CATALOG
     .filter((item) => realmOrderByName(item?.realm || '凡人') <= currentRealmOrder + 1)
