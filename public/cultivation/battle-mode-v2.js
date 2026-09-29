@@ -112,7 +112,7 @@ export const featureReady = (async () => {
   }
 
   function ensureStyle() {
-    const href = 'styles/battle-mode-v2.css?v=20260922-result-cinematic1&duel=20260922-diagonal1';
+    const href = 'styles/battle-mode-v2.css?v=20260929-correct-feedback1&duel=20260922-diagonal1';
     if (document.querySelector(`link[href="${href}"]`)) return;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
@@ -129,6 +129,21 @@ export const featureReady = (async () => {
     document.body.appendChild(el);
     requestAnimationFrame(() => el.classList.add('show'));
     setTimeout(() => el.remove(), 2600);
+  }
+
+  function showCorrectAnswerFeedback(detail = '攻勢已凝聚') {
+    document.getElementById('bv2-correct-feedback')?.remove();
+    const el = document.createElement('div');
+    el.id = 'bv2-correct-feedback';
+    el.className = 'bv2-correct-feedback';
+    el.innerHTML = '<span aria-hidden="true">✓</span><div><strong>答對</strong><small>' +
+      escapeHtml(detail) + '</small></div>';
+    document.body.appendChild(el);
+    requestAnimationFrame(() => el.classList.add('show'));
+    window.setTimeout(() => {
+      el.classList.remove('show');
+      window.setTimeout(() => el.remove(), 220);
+    }, 1350);
   }
 
   // Room snapshots carry a player's currently equipped profile avatar. Never inject
@@ -928,7 +943,11 @@ export const featureReady = (async () => {
         void window.quizMathTypeset?.(expEl);
       }
       expEl.classList.remove('hidden');
-      setText('bv2-answer-status', '請閱讀解析，確認後返回戰場觀看先手、後手攻擊。');
+      setText('bv2-answer-status', answered?.correct
+        ? '答對！攻勢已凝聚。請閱讀解析，確認後返回戰場觀看攻擊。'
+        : answered?.timedOut
+          ? '本題逾時。請閱讀解析，確認後返回戰場。'
+          : '本題未命中。請閱讀解析，確認後返回戰場。');
     }
     else if (answered || pending) setText('bv2-answer-status', answered?.timedOut ? '本題逾時，等待回合結算。' : '答案已送出；等待對手答題，戰鬥將於解析後開始。');
     else if (room.answerWindowStartedAt || room.answerWindowStartedAtMs) setText('bv2-answer-status', '對手已先作答！你的 25 秒倒數已開始。');
@@ -1056,6 +1075,8 @@ export const featureReady = (async () => {
       if (!submitted) {
         state.pendingAnswer = null;
         if (state.room) renderQuestion(state.room, playerForRole(state.room, state.role));
+      } else if (Number(choice) === Number(state.room?.currentQuestion?.ans)) {
+        showCorrectAnswerFeedback('攻勢已凝聚，等待對手作答');
       }
     } catch (error) {
       state.pendingAnswer = null;
