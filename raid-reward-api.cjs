@@ -228,7 +228,7 @@ module.exports = function registerRaidRewardApi(app) {
 };
 module.exports.__test = {
   RAID_ROOM_COLLECTION, CLAIM_COLLECTION, RAID_BOSS_ID, RAID_ROOM_VERSION,
-  REWARDS, safeRoomId, claimId, validateRaidVictory,
-  awardRaidReward, createHandler
+  REWARDS, RAID_MATERIAL_POOL, RAID_MATERIAL_ROLLS, rollRaidMaterials,
+  safeRoomId, claimId, validateRaidVictory, awardRaidReward, createHandler
 };
 
