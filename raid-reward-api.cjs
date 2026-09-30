@@ -3,7 +3,7 @@
 const crypto = require('node:crypto');
 const { PROJECT_IDS } = require('./firebase-admin-projects.cjs');
 const { playerRepository, raidRepository } = require('./server-repositories.cjs');
-const { realmMaterials, victoryDate, MEMENTO } = require('./raid-loot.cjs');
+const { victoryDate, MEMENTO } = require('./raid-loot.cjs');
 const { runRewardReceipt } = require('./reward-receipt.cjs');
 
 const RAID_ROOM_COLLECTION = 'raidRooms';
@@ -11,8 +11,6 @@ const CLAIM_COLLECTION = 'raidRewardClaims';
 const RAID_BOSS_ID = 'shen-qingshuang';
 const RAID_ROOM_VERSION = 2;
 const REWARDS = Object.freeze({
-  'raid-refine-key-ii': 2,
-  'raid-refine-key-iii': 1,
   'raid-secret-realm-essence': 2,
   'raid-shen-sword-soul': 1
 });
@@ -79,7 +77,6 @@ async function awardRaidReward(db, uid, roomId, validation, {
       const userSnap = await tx.get(userRef);
       if (!userSnap.exists) throw new Error('玩家資料不存在');
       const user = userSnap.data() || {};
-      const catalogSnap = await tx.get(db.collection('gameConfig').doc('materialCatalogV1'));
       const date = victoryDate(validation.finishedAtMs);
       const dailyRef = date ? db.collection('raidDailyClaims').doc(claimId(RAID_BOSS_ID + ':' + date, uid)) : null;
       const dailySnap = dailyRef ? await tx.get(dailyRef) : null;
@@ -87,11 +84,8 @@ async function awardRaidReward(db, uid, roomId, validation, {
 
       const firstVictory = !user.raidProgress?.[RAID_BOSS_ID]?.firstVictoryRoomId;
       const dailyFirstVictory = !!date && !dailySnap.exists;
-      const bundle = realmMaterials(validation.member?.totalScore ?? user.stats?.totalScore, catalogSnap.data());
-      const granted = { ...rewards, ...bundle.rewards };
+      const granted = { ...rewards };
       if (dailyFirstVictory) {
-        granted['raid-refine-key-ii'] = (granted['raid-refine-key-ii'] || 0) + 1;
-        granted['raid-refine-key-iii'] = (granted['raid-refine-key-iii'] || 0) + 1;
         granted['raid-secret-realm-essence'] = (granted['raid-secret-realm-essence'] || 0) + 1;
       }
       // Boss 專屬材料讓首通也有一次明顯躍升，但後續仍可重複農取。
@@ -116,7 +110,7 @@ async function awardRaidReward(db, uid, roomId, validation, {
       );
       tx.update(userRef, { materialSystem, raidProgress });
       if (dailyFirstVictory) tx.create(dailyRef, {uid,roomId,bossId:RAID_BOSS_ID,date});
-      return { inventory, rewards:granted, firstVictory, dailyFirstVictory, date, realm:bundle.realm,
+      return { inventory, rewards:granted, firstVictory, dailyFirstVictory, date,
         memento:firstVictory ? MEMENTO : null };
     },
     createReceipt: result => ({
