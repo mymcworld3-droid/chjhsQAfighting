@@ -2,7 +2,7 @@ import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.j
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, runTransaction } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { ARTIFACT_CATALOG, getArtifactById, artifactRealmColor, realmOrderByName } from './artifact-catalog.js';
-import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialById, getArtifactRecipe, materialRealmColor, materialRealmOrderByName, artifactRecipeDepth, MAX_ARTIFACT_RECIPE_NESTING } from './material-catalog.js';
+import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, RAID_EXCLUSIVE_MATERIAL_IDS, getMaterialById, getArtifactRecipe, materialRealmColor, materialRealmOrderByName, artifactRecipeDepth, MAX_ARTIFACT_RECIPE_NESTING } from './material-catalog.js';
 
 (function () {
   'use strict';
@@ -644,7 +644,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
     const equippedCounts = equippedArtifactCounts();
     const counts = selectedCounts();
     const used = selected.filter(Boolean).length;
-    const raidKeyIds = new Set(Object.values(RAID_REFINEMENT_KEYS));
+    const raidKeyIds = new Set(RAID_EXCLUSIVE_MATERIAL_IDS);
     const ownedMaterials = MATERIAL_CATALOG
       .filter((m) => !raidKeyIds.has(m.id) && (Number(matInv[m.id]) || 0) > 0)
       .slice()
