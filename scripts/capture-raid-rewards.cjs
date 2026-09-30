@@ -49,6 +49,7 @@ const server=createServer(async(req,res)=>{
           run(state,()=>{},()=>{},()=>{},room=>Object.values(room.members),{bossImage:'assets/story/characters/shen-qingshuang.png'},value=>String(value),()=>mine,window.lootView.renderRaidLearning,claim,()=>{},async()=>{},()=>{},()=>{},()=>{});
           document.getElementById('raid-result').scrollTop=0;
         },{finish,mode});
+        await page.waitForFunction(()=>[...document.images].every(img=>img.complete&&img.naturalWidth>0));
         await page.screenshot({path:path.join(output,`${size.name}-raid-${mode}.png`),animations:'disabled'});
         const view=await page.evaluate(()=>{
           const result=document.getElementById('raid-result');

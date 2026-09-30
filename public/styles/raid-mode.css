@@ -579,3 +579,13 @@ body.raid-combat-focus #raid-arena .raid-stage-player-art img{
 #raid-result .raid-memento { padding:8px 0 0; margin-top:8px; border-top:1px solid #bfa46b33; }
 #raid-result .raid-memento small { display:block; font-size:11px; }
 @media(max-width:420px) { #raid-result .raid-learning-grid>div { flex-direction:column; align-items:flex-start; } #raid-result .raid-loot-grid { gap:6px; } #raid-result .raid-loot-item { padding:6px; gap:6px; } }
+#raid-result .raid-result-card>img { height:120px!important; max-height:120px!important; width:auto!important; max-width:100%!important; margin:8px auto!important; }
+#raid-result .raid-result-grid span { font-size:10px; }
+#raid-result .raid-result-grid b { font-size:12px; }
+#raid-result .raid-result-team span, #raid-result .raid-result-team b { font-size:12px; }
+#raid-result .raid-result-team small { font-size:10px; }
+#raid-result #raid-reward-status>b { font-size:14px; }
+#raid-result #raid-reward-status>small, #raid-result .raid-loot-bonus { font-size:12px; line-height:1.5; }
+#raid-result .raid-memento b { font-size:13px; }
+@media(min-width:761px) { #raid-result .raid-result-actions { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+@media(max-width:420px) { #raid-result .raid-result-card>img { height:96px!important; max-height:96px!important; } }
