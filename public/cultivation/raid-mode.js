@@ -693,7 +693,9 @@ import { rewardRepository } from './data/reward-repository.js';
 
       if (state.answerCorrect) {
         const dealt = Math.max(0, Number(state.lastPlayerAction.damage) || 0);
-        showCorrectAnswerFeedback(dealt > 0 ? '攻勢命中・' + dealt.toLocaleString() + ' 傷害' : '攻勢已凝聚');
+        const spiritText = Number(resolution.spiritGain) > 0
+          ? (result.spiritReward?.status === 'pending' ? '・神識待入帳' : '・神識 +1') : '';
+        showCorrectAnswerFeedback((dealt > 0 ? '攻勢命中・' + dealt.toLocaleString() + ' 傷害' : '攻勢已凝聚') + spiritText);
       }
 
       if (state.answerCorrect && state.lastPlayerAction.damage > 0) {
@@ -1056,7 +1058,8 @@ import { rewardRepository } from './data/reward-repository.js';
       '<div class="raid-result-grid"><div><span>隊伍人數</span><b>' + members.length + ' 人</b></div><div><span>Boss 已出招</span><b>' + state.bossActionCount + ' 次</b></div>' +
       '<div><span>Boss 剩餘生命</span><b>' + Math.round(state.room?.bossHp || 0).toLocaleString() + '</b></div><div><span>題目時間</span><b>不限時</b></div></div>' +
       '<div class="raid-result-team">' + members.map(member => '<div><span>' + escapeHtml(member.name) + '</span><b>' + Math.max(0, Number(member.damage) || 0).toLocaleString() + ' 傷害</b><small>' +
-        Math.max(0, Number(member.correct) || 0) + ' / ' + Math.max(0, Number(member.attempts) || 0) + ' 答對</small></div>').join('') + '</div>' +
+        Math.max(0, Number(member.correct) || 0) + ' / ' + Math.max(0, Number(member.attempts) || 0) + ' 答對' +
+        (Number(member.spiritCorrect) > 0 ? '・神識 +' + Math.floor(member.spiritCorrect) + '（勝敗皆保留）' : '') + '</small></div>').join('') + '</div>' +
       '<div class="raid-prototype-note"><i class="fa-solid fa-gem"></i><span id="raid-reward-status"><b>' + (won ? '試煉獎勵' : '本場無勝利獎勵') + '</b><small>' + (won ? '正在確認本次試煉獎勵，完成後道印會收入背包。' : '擊敗大師姐後可獲得煉器道印。') + '</small></span></div>' +
       '<div class="raid-result-actions"><button class="raid-ghost" type="button" data-home>返回仙府</button><button class="raid-primary" type="button" data-again>重新組隊</button></div></div>';
     result.querySelector('[data-home]')?.addEventListener('click', async function () {
