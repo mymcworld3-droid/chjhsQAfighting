@@ -330,10 +330,10 @@ export function settleBattleRound({
     const equipment = !guarded && typeof resolveEquipmentHit === 'function'
       ? (resolveEquipmentHit({ attacker: player, defender, baseDamage: plan.totalDamage, bonusNormalDamage:talent.normal, bonusTrueDamage:talent.trueDamage, role, round, seed: `${roomId}:${round}:${player.uid}:artifact` }) || null)
       : guarded && typeof resolveGuardedFollowup === 'function'
-        ? (resolveGuardedFollowup({ attacker: player, defender, baseDamage: plan.totalDamage, role, round, seed: `${roomId}:${round}:${player.uid}:artifact` }) || null)
+        ? (resolveGuardedFollowup({ attacker: player, defender, baseDamage: plan.totalDamage, bonusTrueDamage:talent.trueDamage, role, round, seed: `${roomId}:${round}:${player.uid}:artifact` }) || null)
         : null;
     // 連擊是第二次獨立傷害：首擊被道心抵銷後，連擊仍會正常命中。
-    const guardedTrue = guarded && talent.trueDamage > 0 ? (resolveTalentDefense ?
+    const guardedTrue = guarded && !equipment && talent.trueDamage > 0 ? (resolveTalentDefense ?
       Math.max(0,Math.round(resolveTalentDefense({attacker:player,defender,normalDamage:0,trueDamage:talent.trueDamage})?.hpDamage || 0)) : talent.trueDamage) : 0;
     const incomingDamage = (equipment ? Math.max(0, Math.round(Number(equipment.damage) || 0)) : guarded ? 0 : plan.totalDamage + talent.normal) + guardedTrue;
     // 元嬰守元在最後結算每次實際受擊傷害；護體格擋仍優先。
@@ -347,7 +347,7 @@ export function settleBattleRound({
     logs.push(attack);
     if (guarded) {
       steps.push({ ...attack, damage: 0, guarded: true, hostHp: beforeHostHp, guestHp: beforeGuestHp });
-      if (equipment || guardedTrue) steps.push({ ...attack, damage, guarded: false, skill: [attack.skill, guardedTrue ? '清光真傷・穿透道心' : '連擊'].filter(Boolean).join('・'), hostHp, guestHp });
+      if (equipment || guardedTrue) steps.push({ ...attack, damage, guarded: false, skill: [attack.skill, guardedTrue || equipment?.trueDamage ? '真傷・穿透道心' : '連擊'].filter(Boolean).join('・'), hostHp, guestHp });
     } else {
       steps.push({ ...attack, guarded: false, hostHp, guestHp });
     }

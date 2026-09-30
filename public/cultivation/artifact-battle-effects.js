@@ -274,16 +274,18 @@
   };
 
   // 第一擊被金丹道心擋下時，仍需判定本次攻擊是否觸發額外連擊。
-  // 不執行第一擊的法寶防禦：不能誤耗法寶護盾或一次性保命。
-  window.resolveArtifactGuardedFollowup = function ({ attacker, defender, baseDamage, seed = null } = {}) {
+  // 只處理穿透道心的真傷及第二擊，普通首擊不誤耗法寶護盾或一次性保命。
+  window.resolveArtifactGuardedFollowup = function ({ attacker, defender, baseDamage, seed = null, bonusTrueDamage=0 } = {}) {
     const attack = window.resolveArtifactBattleAttack({ attacker, defender, baseDamage, seed });
-    if (!attack.combo || attack.comboNormalDamage <= 0) return null;
+    const trueDamage=attack.trueDamage+bonusTrueDamage;
+    if ((!attack.combo || attack.comboNormalDamage <= 0) && trueDamage <= 0) return null;
     const defense = window.resolveArtifactBattleDefense({
-      defender, attacker, normalDamage: attack.comboNormalDamage, trueDamage: 0
+      defender, attacker, normalDamage: attack.combo ? attack.comboNormalDamage : 0, trueDamage
     });
     const damage = Math.max(0, Math.round(Number(defense.hpDamage) || 0));
     return {
       damage,
+      trueDamage,
       soulReductionApplied:true,
       reflectDamage: Math.max(0, Math.round(Number(defense.reflectDamage) || 0)),
       reflectSkill: defense.skill ? `法寶反傷・${defense.skill}` : '法寶反傷',

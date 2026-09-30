@@ -1,3 +1,4 @@
+import {} from './soul-talents.js';
 import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-shells.js';
 import { createGoldenCoreWashAnimation } from './golden-core-wash-animation.js';
 import {
@@ -1238,4 +1239,3 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     boot();
   }
 })();
-import './soul-talents.js';

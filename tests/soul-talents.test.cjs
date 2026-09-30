@@ -113,3 +113,15 @@ test('raid trusted snapshot and browser rules agree, and changing talents preser
   assert.equal(rules.soulNodes(type,1).find(n=>n.id==='leftFinal').coreAttack,0);
  }
 });
+test('artifact true damage values remain unchanged and combine with Dao-piercing soul true damage once',()=>{
+ const context={window:{}};vm.createContext(context);
+ vm.runInContext(fs.readFileSync(require('node:path').join(__dirname,'../public/cultivation/artifact-battle-effects.js'),'utf8'),context);
+ const host=p('wugou'),guest=p('ocean');guest.answer.correct=false;guest.coreShield=true;guest.goldenCore={type:'wugou',grade:9};
+ host.artifactBattle={effects:[{type:'equip_true_damage_flat',value:5}]};
+ const r=engine({roomId:'combined-true',round:1,host,guest,soulTalents:talents,
+  resolveEquipmentHit:context.window.resolveArtifactBattleHit,
+  resolveGuardedFollowup:context.window.resolveArtifactGuardedFollowup,
+  resolveTalentDefense:context.window.resolveArtifactBattleDefense});
+ assert.equal(r.guestHp,923);
+ assert.equal(context.window.resolveArtifactBattleAttack({attacker:host,defender:guest,baseDamage:200,seed:'unchanged'}).trueDamage,5);
+});

@@ -1,3 +1,4 @@
+import {} from './soul-talents.js';
 import {
   doc, collection, query, where, limit, getDocs, getDoc,
   addDoc, updateDoc, onSnapshot, runTransaction, serverTimestamp
@@ -1563,4 +1564,3 @@ export const featureReady = (async () => {
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true }); else boot();
   })();
 })();
-import './soul-talents.js';
