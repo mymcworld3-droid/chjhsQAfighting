@@ -661,5 +661,6 @@ app.get('/api/units', (req, res) => {
 // [已刪除] /api/generate-image 路由已移除，節省費用
 
 app.listen(port, () => {
+    registerRaidRoomApi.startScheduler();
     console.log(`Server is running on port ${port}`);
 });

@@ -722,12 +722,15 @@ import { rewardRepository } from './data/reward-repository.js';
 
   async function applyRemoteBossAction(action) {
     if (!action || state.applyingBossAction || Number(action.id) <= state.lastBossActionSeen ||
-        !state.player || state.player.hp <= 0) return;
+        !state.player) return;
     state.applyingBossAction = true;
     try {
       // The browser reports only which server-issued Boss action it is acknowledging.
       // HP, mitigation, shields and reflection are all resolved from the trusted room snapshot.
-      const result = await commitRaidBossDefense({
+      const settled = state.room?.members?.[state.player.uid]?.lastBossResolution;
+      const result = state.room?.serverDrivenBoss && Number(settled?.bossActionSeen) === Number(action.id)
+        ? { room: state.room, resolution: settled }
+        : await commitRaidBossDefense({
         roomId: state.roomId,
         bossActionSeen: Number(action.id)
       });
@@ -777,6 +780,7 @@ import { rewardRepository } from './data/reward-repository.js';
   }
 
   async function maybeAdvanceBoss() {
+    if (state.room?.serverDrivenBoss) return;
     if (!isHost() || state.room?.status !== 'active' || !state.bossStartedAtMs || state.advancingBossAction) return;
     const clock = currentBossClock();
     if (!clock?.due) return;
@@ -917,7 +921,7 @@ import { rewardRepository } from './data/reward-repository.js';
     if (mine) {
       // Mirror the authoritative C-room projection for UI only; local A values never settle combat.
       Object.assign(state.player, mine);
-      state.lastBossActionSeen = Math.max(state.lastBossActionSeen, Number(mine.lastBossActionSeen) || 0);
+      if (!room.serverDrivenBoss) state.lastBossActionSeen = Math.max(state.lastBossActionSeen, Number(mine.lastBossActionSeen) || 0);
       state.playerActionCount = Math.max(state.playerActionCount, Number(mine.lastActionId) || 0);
     }
     state.bossStartedAtMs = Number(room.startedAtMs) || now();
@@ -955,7 +959,7 @@ import { rewardRepository } from './data/reward-repository.js';
     if (mine && state.player) {
       Object.assign(state.player, mine);
       state.playerActionCount = Math.max(state.playerActionCount, Number(mine.lastActionId) || 0);
-      state.lastBossActionSeen = Math.max(state.lastBossActionSeen, Number(mine.lastBossActionSeen) || 0);
+      if (!room.serverDrivenBoss) state.lastBossActionSeen = Math.max(state.lastBossActionSeen, Number(mine.lastBossActionSeen) || 0);
     }
     if (room.status === 'waiting') {
       stopTick();
@@ -969,6 +973,15 @@ import { rewardRepository } from './data/reward-repository.js';
       return;
     }
     if (room.status === 'won' || room.status === 'lost') {
+      // Play the final server-settled hit even if it killed this player or the
+      // Boss. No acknowledgement is required to establish the terminal state.
+      if (room.serverDrivenBoss && room.lastBossAction && state.player &&
+          Number(room.lastBossAction.id) > state.lastBossActionSeen &&
+          Number(mine?.lastBossResolution?.bossActionSeen) === Number(room.lastBossAction.id)) {
+        state.pendingFinishRoom = room;
+        if (!state.applyingBossAction) void applyRemoteBossAction(room.lastBossAction);
+        return;
+      }
       if (state.battleScenePlaying) {
         state.pendingFinishRoom = room;
         return;
@@ -988,7 +1001,7 @@ import { rewardRepository } from './data/reward-repository.js';
         state.rewardClaimedRoomId === state.roomId) return;
     state.rewardClaiming = true;
     const status = document.getElementById('raid-reward-status');
-    if (status) status.textContent = '正在由伺服器核對團本紀錄…';
+    if (status) status.textContent = '正在確認本次試煉獎勵…';
     try {
       const payload = await rewardRepository.claimRaid(state.roomId);
 
@@ -1010,7 +1023,7 @@ import { rewardRepository } from './data/reward-repository.js';
       const third = Number(payload.rewards?.['raid-refine-key-iii']) || 0;
       if (status) status.innerHTML = payload.awarded
         ? '<b>團本獎勵已入帳</b><small>淬靈玄印 ×' + second + '・玄天道印 ×' + third + '</small>'
-        : '<b>本場獎勵已領取</b><small>伺服器已阻止重複發放。</small>';
+        : '<b>本場獎勵已領取</b><small>道印已收入背包。</small>';
     } catch (error) {
       console.error('[Raid] trusted reward claim failed:', error);
       if (status) status.innerHTML = '<b>獎勵尚未入帳</b><small>' + escapeHtml(error?.message || '請稍後再試') + '</small>' +
@@ -1043,7 +1056,7 @@ import { rewardRepository } from './data/reward-repository.js';
       '<div><span>Boss 剩餘生命</span><b>' + Math.round(state.room?.bossHp || 0).toLocaleString() + '</b></div><div><span>題目時間</span><b>不限時</b></div></div>' +
       '<div class="raid-result-team">' + members.map(member => '<div><span>' + escapeHtml(member.name) + '</span><b>' + Math.max(0, Number(member.damage) || 0).toLocaleString() + ' 傷害</b><small>' +
         Math.max(0, Number(member.correct) || 0) + ' / ' + Math.max(0, Number(member.attempts) || 0) + ' 答對</small></div>').join('') + '</div>' +
-      '<div class="raid-prototype-note"><i class="fa-solid fa-gem"></i><span id="raid-reward-status"><b>' + (won ? '可信任獎勵結算' : '本場無勝利獎勵') + '</b><small>' + (won ? 'Render 正在核對 C 專案團本紀錄，通過後才會把二煉／三煉關鍵道具寫入 A 專案。' : '擊敗 Boss 後才會由伺服器發放關鍵道具。') + '</small></span></div>' +
+      '<div class="raid-prototype-note"><i class="fa-solid fa-gem"></i><span id="raid-reward-status"><b>' + (won ? '試煉獎勵' : '本場無勝利獎勵') + '</b><small>' + (won ? '正在確認本次試煉獎勵，完成後道印會收入背包。' : '擊敗大師姐後可獲得煉器道印。') + '</small></span></div>' +
       '<div class="raid-result-actions"><button class="raid-ghost" type="button" data-home>返回仙府</button><button class="raid-primary" type="button" data-again>重新組隊</button></div></div>';
     result.querySelector('[data-home]')?.addEventListener('click', async function () {
       await leaveRaidRoom(state.roomId).catch(() => {});
