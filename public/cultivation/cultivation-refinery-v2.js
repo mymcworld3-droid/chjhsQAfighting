@@ -150,7 +150,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, RAID_EXCLUSIV
       stage,
       consumed,
       visible: (stage === 2 || stage === 3) && status.need > 0,
-      label: stage === 2 ? '第二煉印記' : stage === 3 ? '第三煉印記' : '煉製印記'
+      label: stage === 2 ? '第二煉素材' : stage === 3 ? '第三煉素材' : '煉製素材'
     };
   }
   function refinementKeyRequirementMarkup(plan, job = null) {
@@ -161,7 +161,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, RAID_EXCLUSIV
       : `持有 ${view.have} / 需要 ${view.need}`;
     return `<div class="refinery-key-requirement ${view.visible ? '' : 'is-hidden'} ${view.consumed ? 'is-consumed' : view.enough ? 'is-ready' : 'is-missing'}" data-refinery-key-requirement>
       <span class="refinery-key-icon" data-refinery-key-icon>${view.visible ? itemImageMarkup(item, item.icon || '印') : '印'}</span>
-      <span class="refinery-key-copy"><small data-refinery-key-stage>${esc(view.label)}</small><strong data-refinery-key-name>${esc(view.name || '煉製印記')}</strong><em data-refinery-key-stock>${esc(stock)}</em></span>
+      <span class="refinery-key-copy"><small data-refinery-key-stage>${esc(view.label)}</small><strong data-refinery-key-name>${esc(view.name || '煉製素材')}</strong><em data-refinery-key-stock>${esc(stock)}</em></span>
       <b data-refinery-key-count>${view.visible ? '×' + view.need : ''}</b>
     </div>`;
   }
@@ -177,7 +177,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, RAID_EXCLUSIV
     const icon = node.querySelector('[data-refinery-key-icon]');
     if (icon) icon.innerHTML = view.visible ? itemImageMarkup(item, item.icon || '印') : '印';
     setText(node.querySelector('[data-refinery-key-stage]'), view.label);
-    setText(node.querySelector('[data-refinery-key-name]'), view.name || '煉製印記');
+    setText(node.querySelector('[data-refinery-key-name]'), view.name || '煉製素材');
     setText(node.querySelector('[data-refinery-key-stock]'), view.consumed
       ? `本爐已消耗 ×${view.need} · 背包剩 ${view.have}`
       : `持有 ${view.have} / 需要 ${view.need}`);
