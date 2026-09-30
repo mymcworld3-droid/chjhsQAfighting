@@ -8,7 +8,12 @@ export function renderRaidLoot(payload) {
   return '<b>' + (payload.awarded ? '戰利品已入帳' : '本場戰利品已領取') + '</b>' +
     '<div class="raid-loot-grid">' + items.map(([id,qty]) => {
       const item = getMaterialById(id);
-      const keyLabels = { 'raid-secret-realm-essence':'第二煉所需・團本限定', 'raid-shen-sword-soul':'第三煉所需・清霜限定' };
+      const keyLabels = {
+        'raid-secret-realm-essence':'煉器素材・團本限定',
+        'raid-shen-sword-soul':'煉器素材・清霜限定',
+        'raid-refine-key-ii':'第二煉印記・團本限定',
+        'raid-refine-key-iii':'第三煉印記・團本限定'
+      };
       const key = keyLabels[id] || '';
       const image = String(item?.imageUrl || '');
       const safeImage = /^https?:\/\//i.test(image) || /^(?:assets\/|\/assets\/)/.test(image);
@@ -18,7 +23,7 @@ export function renderRaidLoot(payload) {
         escape(item?.name || id) + ' ×' + Math.floor(Number(qty)) + '</strong><small>' +
         (key ? key : '團本素材') + '</small></div></div>';
     }).join('') + '</div>' +
-    (payload.dailyFirstVictory ? '<small class="raid-loot-bonus">每日首勝：額外獲得秘境玄髓 ×1</small>' : '') +
+    (payload.dailyFirstVictory ? '<small class="raid-loot-bonus">每日首勝：額外獲得秘境玄髓、淬靈玄印、玄天道印各 ×1</small>' : '') +
     (payload.firstVictory ? '<div class="raid-memento"><b>首次通關・' + escape(payload.memento?.name || '清霜劍印') +
       '</b><small>永久紀念已收入本帳號的團本紀錄</small></div>' : '');
 }
