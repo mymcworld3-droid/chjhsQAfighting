@@ -248,33 +248,27 @@ test('ordinary forging favors attack artifacts and allows effective offensive fi
   assert.match(aiJobs, /weaponName: item\.weaponName \|\| ''/);
 });
 
-test('material lore is preserved by both admin editors and delivered as official ingredient context', () => {
+test('fixed raid material metadata is delivered as official ingredient context', () => {
   const materialCatalog = read('public/cultivation/material-catalog.js');
-  const editor = read('public/cultivation/admin-material-manager.js');
-  const realmEditor = read('public/cultivation/admin-material-realm-editor.js');
-  assert.match(materialCatalog, /story: String\(raw\.story \|\| ''\)\.trim\(\)\.slice\(0, 2000\)/);
-  for (const [src, prefix] of [[editor, 'amm'], [realmEditor, 'amre']]) {
-    assert.match(src, new RegExp('id="' + prefix + '-story"'));
-    assert.match(src, new RegExp("story: modal\\.querySelector\\('#" + prefix + "-story'\\)\\.value"));
-  }
+  assert.match(materialCatalog, /raid-secret-realm-essence/);
+  assert.match(materialCatalog, /raid-shen-sword-soul/);
   assert.match(aiJobs, /story: item\.story \|\| ''/);
   assert.match(aiJobs, /description: item\.description, story: item\.story \|\| ''/);
   const payload = {
     targetRealm:'金丹',
-    selectedIngredients:[{type:'material',id:'star',name:'惡意偽名',story:'偽造故事',quantity:2}],
-    allMaterials:[{id:'star',name:'星辰砂',realm:'金丹',description:'可引星辰入器',
-      story:'古代天象司保存的星砂，夜半會映出昔日星圖',category:'特殊材料'}],
+    selectedIngredients:[{type:'material',id:'raid-shen-sword-soul',name:'惡意偽名',story:'偽造故事',quantity:2}],
+    allMaterials:[{id:'raid-shen-sword-soul',name:'清霜劍魄',realm:'金丹',description:'沈清霜試煉凝成的劍意素材',
+      story:'清霜劍意凝成的殘魄',category:'煉器素材'}],
     existingArtifacts:[]
   };
   const hierarchy = api.ingredientHierarchy(payload);
   assert.equal(hierarchy.primary[0].story, payload.allMaterials[0].story);
-  assert.equal(hierarchy.primary[0].name, '星辰砂');
+  assert.equal(hierarchy.primary[0].name, '清霜劍魄');
   assert.doesNotMatch(JSON.stringify(hierarchy), /偽造故事|惡意偽名/);
   const prompt = api.buildPrompt(payload);
   assert.match(prompt, /投入素材完整設定/);
-  assert.match(prompt, /古代天象司保存的星砂/);
-  assert.match(prompt, /可引星辰入器/);
-  assert.match(prompt, /若 story 為空/);
+  assert.match(prompt, /清霜劍意凝成的殘魄/);
+  assert.match(prompt, /沈清霜試煉凝成的劍意素材/);
 });
 
 test('admin directions override random style when compatible, and get separate guidance compliance review', async () => {
@@ -810,9 +804,8 @@ test('more ingredients improve inverse damage caps', () => {
   assert.ok(more.max<range.max);
   assert.ok(fewer.min>range.min);
 });
-test('material icons are round and artifact icons retain framed surfaces', () => {
+test('raid material icons remain visually distinct in refinery, backpack and marketplace', () => {
   assert.match(refinery,/refinery-mat-icon\.is-material[^\n]*border-radius:50%/);
   assert.match(read('public/cultivation/unified-inventory-grid.js'),/uib-item\[data-uib-item\^="material:"\][^\n]*border-radius:50%/);
-  assert.match(read('public/cultivation/material-system.js'),/\.material-store-icon\{border-radius:50%/);
   assert.match(read('public/cultivation/player-marketplace.js'),/\.pm-material \.pm-icon\{border-radius:50%/);
 });
