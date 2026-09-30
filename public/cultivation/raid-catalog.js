@@ -12,7 +12,7 @@ export const RAID_TRIALS = Object.freeze([
     recommended: '建議 3 人',
     bossImage: 'assets/story/characters/shen-qingshuang.png',
     description: '與隊友共同破除霜華劍陣。每位玩家各自作答，但不同隊員的正確答案會共同削弱 Boss 下一式並觸發三才合擊。',
-    rewards: ['秘境玄髓', '清霜劍魄'],
+    rewards: ['秘境玄髓', '清霜劍魄', '淬靈玄印', '玄天道印'],
     mechanic: '2 人破陣減傷・3 人觸發合擊'
   }),
   Object.freeze({
