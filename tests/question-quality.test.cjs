@@ -1,6 +1,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { questionQualityIssue } = require('../question-quality.cjs');
+const { questionQualityIssue, removeUnstableOptionLabels } = require('../question-quality.cjs');
 
 test('rejects questions that depend on an absent figure', () => {
   assert.match(questionQualityIssue({ q: '請根據如附圖所示的速度圖判斷位移？' }), /圖片/);
@@ -13,4 +13,11 @@ test('rejects explanations that correct the stored answer or admit contradictory
 
 test('accepts a self-contained question with consistent answer and explanation', () => {
   assert.equal(questionQualityIssue({ q: '水電解產生氫氧體積比為何？', correct: '2:1', wrong: ['1:1', '1:2', '3:1'], exp: '水電解的反應係數為 2H2O → 2H2 + O2，因此體積比為 2:1。' }), '');
+});
+
+test('rejects answer lists embedded in the stem and removes unstable letter references', () => {
+  assert.match(questionQualityIssue({ q: '何者正確？(A) 一 (B) 二 (C) 三 (D) 四' }), /題幹/);
+  const explanation = removeUnstableOptionLabels('選項A強調形影不離；選項(B)的說法不同；(C)是誤解。');
+  assert.doesNotMatch(explanation, /選項[ABCD]|選項\([ABCD]\)|\([ABCD]\)/);
+  assert.match(explanation, /相關敘述強調形影不離/);
 });
