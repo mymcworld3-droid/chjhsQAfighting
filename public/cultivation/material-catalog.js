@@ -108,6 +108,10 @@ const DEFAULT_MATERIAL_CATALOG = [
     description: '第二煉的關鍵玄印。無法購買或由一般題目、洞天掉落取得，只能透過團本結算獲得。', buyGold: 0 },
   { id: 'raid-refine-key-iii', name: '玄天道印', icon: '道印', category: '特殊材料', realm: '金丹',
     description: '第三煉的關鍵道印。無法購買或由一般題目、洞天掉落取得，只能透過高階煉製所需的團本結算獲得。', buyGold: 0 },
+  { id: 'raid-secret-realm-essence', name: '秘境玄髓', icon: '玄髓', category: '特殊材料', realm: '築基',
+    description: '秘境核心逸散出的玄髓，可作後續團本兌換、特殊煉器與秘境裝備的通用關鍵材料；不會由問道或洞天掉落。', buyGold: 0 },
+  { id: 'raid-shen-sword-soul', name: '清霜劍魄', icon: '劍魄', category: '特殊材料', realm: '金丹',
+    description: '沈清霜試煉中凝成的劍意精魄。屬於 Boss 專屬素材，可用於未來清霜系法寶、覺醒與特殊配方；只能由該團本結算取得。', buyGold: 0 },
 
   // 特殊系：靈符紙 → 地火石 → 星辰砂 → 天雷精魄 → 赤鳳石 → 五行精魄 → 天道碎片 → 法則碎片 → 大道碎片 → 鴻蒙紫氣
   { id: 'talisman-paper', name: '靈符紙', icon: '符', category: '特殊材料', realm: '築基', description: '承載符紋與陣法的基礎材料。', buyGold: 10 },
@@ -191,6 +195,11 @@ export const RAID_REFINEMENT_KEYS = Object.freeze({
   2: 'raid-refine-key-ii',
   3: 'raid-refine-key-iii'
 });
+export const RAID_EXCLUSIVE_MATERIAL_IDS = Object.freeze([
+  ...Object.values(RAID_REFINEMENT_KEYS),
+  'raid-secret-realm-essence',
+  'raid-shen-sword-soul'
+]);
 
 export function raidRefinementKeyRequirement(stage, realm) {
   const level = Math.floor(Number(stage) || 0);
