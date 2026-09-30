@@ -8,6 +8,7 @@ const {
 } = require('./raid-authority.cjs');
 const { readRaidQuestionTicket, assertRaidQuestionTicket } = require('./raid-question-ticket.cjs');
 const { advanceRaidRoom, startRaidScheduler } = require('./raid-clock.cjs');
+const { eligibleCorrect, awardRaidSpirit } = require('./raid-spirit-reward.cjs');
 
 const COLLECTION = 'raidRooms';
 const MAX_MEMBERS = 4;
@@ -170,8 +171,32 @@ async function verifyRequest(req, resolveA) {
 function createHandler({
   resolveA = () => playerRepository.resolve(),
   resolveC = () => raidRepository.resolve(),
+  awardSpirit = awardRaidSpirit,
   logger = console
 } = {}) {
+  // Avoid rereading A for each one-second room poll after successful settlement.
+  // The durable A receipt remains the authority after restarts/cache eviction.
+  const spiritCache = new Map();
+  async function settleSpirit(playerDb, uid, roomId, room) {
+    const member = room?.members?.[uid];
+    const target = eligibleCorrect(member);
+    if (!target) return null;
+    const key = roomId + ':' + uid;
+    const cached = spiritCache.get(key);
+    if (cached?.settledCorrect >= target) return { ...cached, awarded:0, status:'duplicate' };
+    try {
+      const outcome = await awardSpirit(playerDb, uid, roomId, member);
+      if (outcome.settledCorrect >= target &&
+          outcome.settledCorrect >= (spiritCache.get(key)?.settledCorrect || 0)) {
+        if (spiritCache.size >= 1000) spiritCache.delete(spiritCache.keys().next().value);
+        spiritCache.set(key, outcome);
+      }
+      return outcome;
+    } catch (error) {
+      logger.error('[Raid spirit] pending settlement:', error?.message || error);
+      return { uid, status:'pending', awarded:0 };
+    }
+  }
   return async function raidRoomHandler(req, res) {
     res.set?.('Cache-Control', 'no-store');
     let uid, db, playerDb;
@@ -215,7 +240,8 @@ function createHandler({
         if (!snap.exists) return res.status(404).json({ ok: false, error: '團本房間不存在' });
         const room = snap.data() || {};
         requireMember(room, uid);
-        return res.json({ ok: true, room: publicRoom(roomId, room) });
+        const spiritReward = await settleSpirit(playerDb, uid, roomId, room);
+        return res.json({ ok: true, room: publicRoom(roomId, room), spiritReward });
       }
 
       if (action === 'reconnect') {
@@ -232,7 +258,8 @@ function createHandler({
           tx.update(ref, { members });
           return publicRoom(roomId, { ...room, members });
         });
-        return res.json({ ok: true, roomId: result ? roomId : null, room: result });
+        const spiritReward = await settleSpirit(playerDb, uid, roomId, result);
+        return res.json({ ok: true, roomId: result ? roomId : null, room: result, spiritReward });
       }
 
       if (action === 'ready') {
@@ -337,13 +364,14 @@ function createHandler({
             throw Object.assign(new Error('這道團本題目已經結算'), { status: 409 });
           }
 
-          const combat = resolvePlayerAction({ ...me }, { roomId, actionId: id, correct, bossHp:room.bossHp, bossMaxHp:room.bossMaxHp });
+          const combat = resolvePlayerAction({ ...me }, { roomId, actionId: id, correct, bossHp:current.bossHp, bossMaxHp:current.bossMaxHp });
           const dealt = correct ? Math.max(0, Math.round(finite(combat.damage))) : 0;
           const nextBossHp = Math.max(0, Math.round(finite(current.bossHp)) - dealt);
           const resolution = {
             actionId: id,
             questionId,
             correct,
+            spiritGain: correct && finite(me.totalScore) >= 68 ? 1 : 0,
             correctIndex: question.answerIndex,
             explanation: cleanString(question.explanation || '', 3000),
             damage: dealt,
@@ -356,6 +384,7 @@ function createHandler({
             alive: finite(combat.member.hp) > 0,
             damage: Math.max(0, Math.round(finite(me.damage))) + dealt,
             correct: Math.max(0, Math.round(finite(me.correct))) + (correct ? 1 : 0),
+            spiritCorrect: Math.max(0, Math.floor(finite(me.spiritCorrect))) + resolution.spiritGain,
             attempts: Math.max(0, Math.round(finite(me.attempts))) + 1,
             lastActionId: id,
             answeredQuestionIds: [...answered, questionId].slice(-30),
@@ -375,7 +404,8 @@ function createHandler({
           tx.update(ref, update);
           return { room: publicRoom(roomId, { ...current, ...update }), resolution };
         });
-        return res.json({ ok: true, ...result });
+        const spiritReward = await settleSpirit(playerDb, uid, roomId, result.room);
+        return res.json({ ok: true, ...result, spiritReward });
       }
 
       if (action === 'boss-defense' || action === 'member-state' || action === 'advance-boss') {

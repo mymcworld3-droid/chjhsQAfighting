@@ -11,7 +11,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 import { applyCultivationReward, showCultivationFeedback } from './cultivation-rules.js';
-import { nascentSoulSpiritReward, normalizeSpirit } from './cultivation/nascent-soul-rules.js';
+import { nascentSoulSpiritReward, normalizeSpirit, soulCultivationBonusForPlayer } from './cultivation/nascent-soul-rules.js';
 
 // Firebase Config
 const firebaseConfig = {
@@ -2665,7 +2665,9 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     let scoreGain = 0;
     const scoreBeforeAnswer = Math.max(0, Number(stats.totalScore) || 0);
     const shieldBeforeAnswer = !!stats.goldenCoreShield;
-    const cultivationReward = applyCultivationReward(stats, isCorrect);
+    const cultivationReward = applyCultivationReward(stats, isCorrect, {
+        soulBonusGain: soulCultivationBonusForPlayer(currentUserData, 'solo')
+    });
     // 問道每答對一題 +1 神識；以本題作答前的境界判斷，不能越境提前獲取。
     const spiritAdded = nascentSoulSpiritReward({ source: 'solo', score: scoreBeforeAnswer, isCorrect });
     if (spiritAdded) stats.nascentSoulSpirit = normalizeSpirit(stats.nascentSoulSpirit) + spiritAdded;

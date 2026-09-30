@@ -90,7 +90,7 @@ test('raid protocol ignores client combat claims and uses trusted A/C server res
 
   assert.match(api,/loadTrustedRaidPlayer\(playerDb, uid\)/);
   assert.match(api,/createTeamBoss\(members\)/);
-  assert.match(api,/resolvePlayerAction\(\{ \.\.\.me \}, \{ roomId, actionId: id, correct, bossHp:room\.bossHp, bossMaxHp:room\.bossMaxHp \}\)/);
+  assert.match(api,/resolvePlayerAction\(\{ \.\.\.me \}, \{ roomId, actionId: id, correct, bossHp:current\.bossHp, bossMaxHp:current\.bossMaxHp \}\)/);
   assert.match(read('raid-clock.cjs'),/resolveBossDefense\(member, \{ roomId, bossAction: action \}\)/);
   assert.match(api,/readRaidQuestionTicket\(req\.body\.ticket\)/);
   assert.match(read('raid-clock.cjs'),/const intent = bossIntent\(next\)/);

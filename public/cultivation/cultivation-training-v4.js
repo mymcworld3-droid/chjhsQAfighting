@@ -608,6 +608,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
         <div class="ns-reward-guide">
           <strong>神識來源</strong>
           <span>問道答對一題 +1</span>
+          <span>團本答對一題 +1，勝敗皆保留</span>
           <span>每日閉關全對 +3</span>
           <span>完成洞天：依答對題數獲得神識</span>
         </div>

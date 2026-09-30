@@ -5,7 +5,7 @@ const PRE_GOLDEN_CORE_GAIN = 1;
 const GOLDEN_CORE_GAIN = 2;
 const GOLDEN_CORE_MISS_PENALTY = 1;
 
-export function applyCultivationReward(stats, isCorrect) {
+export function applyCultivationReward(stats, isCorrect, { soulBonusGain: suppliedSoulBonusGain } = {}) {
   stats.totalScore = Math.max(0, Number(stats.totalScore) || 0);
   const scoreBeforeAnswer = stats.totalScore;
   const isGoldenCoreOrAbove = scoreBeforeAnswer >= GOLDEN_CORE_SCORE;
@@ -34,9 +34,12 @@ export function applyCultivationReward(stats, isCorrect) {
   // 額外修為可來自金丹；一般連勝本身不再提供任何修為加成。
   const bonusGain = isCorrect ? Math.max(0, Number(goldenCoreEffect.bonusGain) || 0) : 0;
   const baseGain = isCorrect ? (isGoldenCoreOrAbove ? GOLDEN_CORE_GAIN : PRE_GOLDEN_CORE_GAIN) : 0;
-  // 元嬰右脈「悟道」只在問道答對時提供額外修為；錯題及其他模式不享有此獎勵。
-  const soulBonusGain = isCorrect && goldenCoreEnabled && scoreBeforeAnswer >= 68
-    ? Math.max(0, Math.min(10, Math.floor(Number(window.getNascentSoulCultivationBonuses?.()?.solo) || 0)))
+  // 左脈「悟道」以主流程的玩家存檔為準，不依賴技能樹介面的載入或快取。
+  // 未提供存檔加成的舊呼叫仍可使用介面 getter；存檔 helper 已驗證金丹啟用狀態。
+  const hasSavedSoulBonus = suppliedSoulBonusGain !== undefined;
+  const soulBonusGain = isCorrect && (hasSavedSoulBonus || goldenCoreEnabled) && scoreBeforeAnswer >= 68
+    ? Math.max(0, Math.min(10, Math.floor(Number(hasSavedSoulBonus
+      ? suppliedSoulBonusGain : window.getNascentSoulCultivationBonuses?.()?.solo) || 0)))
     : 0;
   const preArtifactGain = baseGain + bonusGain + soulBonusGain;
 
@@ -116,6 +119,7 @@ export function showCultivationFeedback(reward, isCorrect) {
 
   if (isCorrect) {
     const extras = [];
+    if (reward.soulBonusGain > 0) extras.push(`元嬰悟道 +${reward.soulBonusGain}`);
     if (reward.goldenCoreMindReady) extras.push('金丹道心凝聚');
     if (reward.goldenCoreMessage) extras.push(reward.goldenCoreMessage);
     if (reward.artifactMessage) extras.push(reward.artifactMessage);

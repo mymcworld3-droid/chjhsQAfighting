@@ -12,7 +12,19 @@ function finite(value, fallback = 0) {
 const RAID_ROOM_ENDPOINT = '/api/raid/room';
 async function api(action, payload = {}) {
   // 房間狀態由伺服器權威處理；瀏覽器只送出意圖與 A 專案登入憑證。
-  return raidRepository.request(action, payload, RAID_ROOM_ENDPOINT);
+  const local = window.getCurrentUserData?.();
+  const result = await raidRepository.request(action, payload, RAID_ROOM_ENDPOINT);
+  const reward = result?.spiritReward;
+  // Server has persisted this lifetime earned total; mirror it without another
+  // write. Account switches and older poll responses must not replace new stats.
+  if (local && local === window.getCurrentUserData?.() &&
+      (!local.uid || local.uid === reward?.uid) && Number.isFinite(reward?.totalSpirit)) {
+    local.stats = local.stats || {};
+    const before = Math.max(0, Number(local.stats.nascentSoulSpirit) || 0);
+    local.stats.nascentSoulSpirit = Math.max(before, reward.totalSpirit);
+    if (local.stats.nascentSoulSpirit !== before) window.updateUIStats?.();
+  }
+  return result;
 }
 function remember(roomId) {
   if (roomId) localStorage.setItem(STORAGE_KEY, roomId);
