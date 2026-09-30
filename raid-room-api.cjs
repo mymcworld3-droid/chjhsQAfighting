@@ -3,10 +3,11 @@
 const { PROJECT_IDS } = require('./firebase-admin-projects.cjs');
 const { playerRepository, raidRepository } = require('./server-repositories.cjs');
 const {
-  loadTrustedRaidPlayer, memberSnapshotFromTrusted, createTeamBoss, bossPhase, bossIntent,
-  resolvePlayerAction, resolveBossDefense
+  loadTrustedRaidPlayer, memberSnapshotFromTrusted, createTeamBoss, bossPhase,
+  resolvePlayerAction
 } = require('./raid-authority.cjs');
 const { readRaidQuestionTicket, assertRaidQuestionTicket } = require('./raid-question-ticket.cjs');
+const { advanceRaidRoom, startRaidScheduler } = require('./raid-clock.cjs');
 
 const COLLECTION = 'raidRooms';
 const MAX_MEMBERS = 4;
@@ -205,6 +206,9 @@ function createHandler({
       const roomId = safeRoomId(req.body?.roomId);
       if (!roomId) return res.status(400).json({ ok: false, error: '團本房間代碼無效' });
       const ref = db.collection(COLLECTION).doc(roomId);
+      // Catch up before accepting an answer, reconnect or heartbeat as well as
+      // on the background timer. A sleeping/restarted server cannot skip damage.
+      await advanceRaidRoom(db, ref);
 
       if (action === 'get') {
         const snap = await ref.get();
@@ -220,7 +224,10 @@ function createHandler({
           if (!snap.exists) return null;
           const room = snap.data() || {};
           const members = { ...membersOf(room) };
-          if (!members[uid] || ['won', 'lost', 'closed'].includes(room.status)) return null;
+          if (!members[uid] || room.status === 'closed') return null;
+          // A returning player must still see the result and claim a pending
+          // reward if the server completed the fight while their tab was away.
+          if (['won', 'lost'].includes(room.status)) return publicRoom(roomId, room);
           members[uid] = { ...members[uid], online: true, heartbeatAtMs: now() };
           tx.update(ref, { members });
           return publicRoom(roomId, { ...room, members });
@@ -264,9 +271,10 @@ function createHandler({
           if (!members.length || members.some(member => !member.ready)) {
             throw Object.assign(new Error('仍有隊員尚未準備'), { status: 409 });
           }
-          const boss = createTeamBoss(activeMembers);
+          const boss = createTeamBoss(members);
           const update = {
             status: 'active',
+            serverDrivenBoss: true,
             startedAtMs: now(),
             bossHp: boss.maxHp,
             bossMaxHp: boss.maxHp,
@@ -370,103 +378,17 @@ function createHandler({
         return res.json({ ok: true, ...result });
       }
 
-      if (action === 'boss-defense' || action === 'member-state') {
-        const result = await db.runTransaction(async tx => {
-          const snap = await tx.get(ref);
-          if (!snap.exists) throw Object.assign(new Error('團本房間不存在'), { status: 404 });
-          const current = snap.data() || {};
-          const members = { ...membersOf(current) };
-          const me = requireMember(current, uid);
-
-          // Legacy member-state calls are now heartbeat-only. The browser can no longer
-          // write HP or mark a boss action as seen without actually settling it.
-          if (action === 'member-state') {
-            members[uid] = { ...me, online: true, heartbeatAtMs: now() };
-            tx.update(ref, { members });
-            return { room: publicRoom(roomId, { ...current, members }), resolution: null };
-          }
-          if (current.status !== 'active') return { room: publicRoom(roomId, current), resolution: null };
-
-          const seen = Math.max(0, Math.floor(finite(req.body?.bossActionSeen)));
-          const bossAction = current.lastBossAction;
-          if (!bossAction || seen !== Math.floor(finite(bossAction.id))) {
-            throw Object.assign(new Error('Boss 招式序號不同步，請等待房間重新同步'), { status: 409 });
-          }
-          if (seen <= finite(me.lastBossActionSeen)) {
-            const prior = me.lastBossResolution;
-            return {
-              room: publicRoom(roomId, current),
-              resolution: prior && finite(prior.bossActionSeen) === seen ? prior : null
-            };
-          }
-
-          const combat = resolveBossDefense({ ...me }, { roomId, bossAction });
-          const reflected = Math.max(0, Math.round(finite(combat.reflectedDamage)));
-          const nextBossHp = Math.max(0, Math.round(finite(current.bossHp)) - reflected);
-          const resolution = {
-            bossActionSeen: seen,
-            damage: Math.max(0, Math.round(finite(combat.damage))),
-            reflectedDamage: reflected,
-            guarded: combat.guarded === true,
-            playerHp: Math.max(0, Math.round(finite(combat.member.hp))),
-            bossHp: nextBossHp
-          };
-          members[uid] = {
-            ...combat.member,
-            alive: finite(combat.member.hp) > 0,
-            damage: Math.max(0, Math.round(finite(me.damage))) + reflected,
-            lastBossActionSeen: seen,
-            lastBossResolution: resolution,
-            online: true,
-            heartbeatAtMs: now()
-          };
-          const alive = Object.values(members).some(member => member?.alive !== false && finite(member?.hp) > 0);
-          const update = {
-            members,
-            bossHp: nextBossHp,
-            bossPhase: bossPhase(nextBossHp, current.bossMaxHp)
-          };
-          if (nextBossHp <= 0) {
-            update.status = 'won';
-            update.finishedAtMs = now();
-          } else if (!alive) {
-            update.status = 'lost';
-            update.finishedAtMs = now();
-          }
-          tx.update(ref, update);
-          return { room: publicRoom(roomId, { ...current, ...update }), resolution };
-        });
-        return res.json({ ok: true, ...result });
-      }
-
-      if (action === 'advance-boss') {
-        const room = await db.runTransaction(async tx => {
-          const snap = await tx.get(ref);
-          if (!snap.exists) return null;
-          const current = snap.data() || {};
-          requireMember(current, uid);
-          if (current.status !== 'active' || current.hostUid !== uid) return publicRoom(roomId, current);
-          const currentCount = Math.max(0, Math.floor(finite(current.bossActionCount)));
-          const nextActionAtMs = Math.max(0, finite(current.startedAtMs)) + (currentCount + 1) * BOSS_ACTION_INTERVAL_MS;
-          // Authoritative server-side cadence: repeated/early client requests cannot
-          // fast-forward the boss timeline while the client is waiting for room polling.
-          if (!current.startedAtMs || now() < nextActionAtMs) return publicRoom(roomId, current);
-          const nextCount = currentCount + 1;
-          const intent = bossIntent(current);
-          const bossAction = {
-            id: nextCount,
-            name: cleanString(intent.name || '試劍', 40),
-            cue: cleanString(intent.cue || '', 160),
-            kind: cleanString(intent.kind || 'normal', 24),
-            damage: Math.max(0, Math.round(finite(intent.damage))),
-            phase: Math.max(1, Math.min(3, Math.floor(finite(intent.phase, 1)))),
-            issuedAtMs: now()
-          };
-          const update = { bossActionCount: nextCount, lastBossAction: bossAction, bossPhase: bossAction.phase };
-          tx.update(ref, update);
-          return publicRoom(roomId, { ...current, ...update });
-        });
-        return res.json({ ok: true, room });
+      if (action === 'boss-defense' || action === 'member-state' || action === 'advance-boss') {
+        // Older clients may acknowledge an animation. These compatibility calls
+        // only read the server's settled result and never apply another hit.
+        const snap = await ref.get();
+        if (!snap.exists) return res.status(404).json({ ok: false, error: '團本房間不存在' });
+        const current = snap.data() || {};
+        const me = requireMember(current, uid);
+        const seen = Math.floor(finite(req.body?.bossActionSeen));
+        const resolution = action === 'boss-defense' && me.lastBossResolution?.bossActionSeen === seen
+          ? me.lastBossResolution : null;
+        return res.json({ ok: true, room: publicRoom(roomId, current), resolution });
       }
 
       if (action === 'leave') {
@@ -502,6 +424,9 @@ function createHandler({
 module.exports = function registerRaidRoomApi(app) {
   app.post('/api/raid/room', createHandler());
 };
+module.exports.startScheduler = options => startRaidScheduler({
+  resolveDb: () => raidRepository.resolve().db, ...options
+});
 module.exports.__test = {
   COLLECTION, MAX_MEMBERS, STALE_MS, ROOM_TTL_MS, RAID_ROOM_VERSION, RAID_BOSS_ID,
   BOSS_ACTION_INTERVAL_MS,
