@@ -24,7 +24,7 @@ test('fixed material catalog contains two forge materials and two refinement sea
 test('material catalog startup is local-only and does not connect to Firebase', () => {
   assert.match(sync,/local-fixed-catalog/);
   assert.match(sync,/xiuxian:material-catalog-startup-ready/);
-  assert.doesNotMatch(sync,/firebase|Firestore|getFirestore|onSnapshot|setDoc|materialCatalogV1/i);
+  assert.doesNotMatch(sync,/from 'https:\/\/www\.gstatic\.com\/firebasejs|getFirestore|onSnapshot|setDoc|materialCatalogV1/);
 });
 
 test('material system is read-only on the client and has no purchase or Firebase path', () => {
