@@ -12,7 +12,7 @@ export const RAID_TRIALS = Object.freeze([
     recommended: '建議 3 人',
     bossImage: 'assets/story/characters/shen-qingshuang.png',
     description: '與隊友共同破除霜華劍陣。每位玩家各自作答，但不同隊員的正確答案會共同削弱 Boss 下一式並觸發三才合擊。',
-    rewards: ['淬靈玄印', '玄天道印', '秘境玄髓', '清霜劍魄'],
+    rewards: ['秘境玄髓', '清霜劍魄'],
     mechanic: '2 人破陣減傷・3 人觸發合擊'
   }),
   Object.freeze({
@@ -26,7 +26,7 @@ export const RAID_TRIALS = Object.freeze([
     recommended: '開發中',
     bossImage: '',
     description: '預留給下一個正式團本。未來可配置獨立 Boss、合作規則、專屬材料與首通紀念。',
-    rewards: ['專屬 Boss 素材', '秘境玄髓'],
+    rewards: ['秘境玄髓', '清霜劍魄'],
     mechanic: '封印中'
   }),
   Object.freeze({
@@ -40,7 +40,7 @@ export const RAID_TRIALS = Object.freeze([
     recommended: '開發中',
     bossImage: '',
     description: '高階團本預留槽。入口與資料結構已先做成列表，不必再重做整個秘境頁。',
-    rewards: ['高階專屬素材', '秘境玄髓'],
+    rewards: ['秘境玄髓', '清霜劍魄'],
     mechanic: '封印中'
   })
 ]);
