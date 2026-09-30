@@ -217,6 +217,21 @@ export function soulSpentSpirit(tree) {
 export function soulAvailableSpirit(tree, earned) {
   return Math.max(0, normalizeSpirit(earned) - soulSpentSpirit(tree));
 }
+// 各丹性共用累計神識；換丹不刪除舊配點。重修只釋放投入，不增加累計收入。
+export function soulInvestmentSummary(tree, activeType) {
+  const safe = normalizeSoulTree(tree);
+  return Object.entries(safe.paths).map(([type, path]) => ({
+    type, name: nascentSoulForCore(type).name, active: type === activeType,
+    spent: soulSpentSpirit({ version: 4, paths: { [type]: path } }),
+    levels: Object.values(path.nodes).reduce((sum, level) => sum + level, 0)
+  }));
+}
+export function resetSoulTree(tree, earned) {
+  const next = { version: 4, paths: {} };
+  return { tree: next, released: soulSpentSpirit(tree),
+    remaining: soulAvailableSpirit(next, earned),
+    returned: soulAvailableSpirit(next, earned) - soulAvailableSpirit(tree, earned) };
+}
 export function soulNodeStatus(tree, type, nodeId, earned) {
   const levels = normalizeSoulTree(tree).paths[type]?.nodes || {};
   const level = levels[nodeId] || 0;

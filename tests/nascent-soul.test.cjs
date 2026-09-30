@@ -267,7 +267,7 @@ test('nascent soul map stays inside one viewport with fixed navigation and HUD',
   const css = read('public/cultivation-training-v3.css');
   assert.match(training, /document\.body\.classList\.toggle\('ns-map-active'/);
   assert.match(training, /class="ns-branch-intro"/);
-  assert.match(training, /class="ns-tree-tip"/);
+  assert.match(training, /class="ns-tree-tip ns-investment-guide"/);
   assert.match(training, /class="ns-tree-viewport ns-trees" role="group"/);
   assert.doesNotMatch(training, /ns-tree-viewport'\)\?\.scrollLeft/);
   assert.doesNotMatch(training, /窄螢幕可左右捲動|手機或窄螢幕可左右滑動/);
