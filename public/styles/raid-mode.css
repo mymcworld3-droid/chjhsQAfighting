@@ -558,3 +558,24 @@ body.raid-combat-focus #raid-arena .raid-stage-player-art img{
     min-height:58px!important;
   }
 }
+
+
+/* Compact, personal rewards; the existing result scroller handles small screens. */
+#raid-result .raid-learning-summary { margin:12px 0; padding:12px; border:1px solid #bfa46b55; border-radius:12px; background:#102b2b; text-align:left; }
+#raid-result .raid-learning-summary>small { display:block; color:#c6cabe; margin-top:8px; font-size:12px; }
+#raid-result .raid-learning-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-top:8px; }
+#raid-result .raid-learning-grid>div { display:flex; align-items:center; justify-content:space-between; gap:5px; padding:8px; background:#ffffff08; border-radius:8px; }
+#raid-result .raid-learning-grid strong { color:#e7cb8d; font-size:18px; }
+#raid-result .raid-loot-summary { align-items:flex-start; text-align:left; }
+#raid-result #raid-reward-status { flex:1; min-width:0; }
+#raid-result .raid-loot-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin:10px 0; }
+#raid-result .raid-loot-item { display:flex; align-items:center; gap:8px; padding:8px; background:#ffffff08; border-radius:8px; min-width:0; }
+#raid-result .raid-loot-item>div:last-child { min-width:0; overflow-wrap:anywhere; }
+#raid-result .raid-loot-item strong { font-size:13px; }
+#raid-result .raid-loot-item small { display:block; font-size:11px; color:#b8c5bb; margin-top:3px; }
+#raid-result .raid-loot-icon { width:36px; height:36px; flex:0 0 36px; display:grid; place-items:center; border:1px solid #bfa46b55; border-radius:8px; color:#e7cb8d; font-size:12px; }
+#raid-result .raid-loot-icon img { width:100%; height:100%; object-fit:contain; margin:0; border:0; border-radius:8px; }
+#raid-result .raid-loot-bonus { display:block; color:#e7cb8d; line-height:1.5; }
+#raid-result .raid-memento { padding:8px 0 0; margin-top:8px; border-top:1px solid #bfa46b33; }
+#raid-result .raid-memento small { display:block; font-size:11px; }
+@media(max-width:420px) { #raid-result .raid-learning-grid>div { flex-direction:column; align-items:flex-start; } #raid-result .raid-loot-grid { gap:6px; } #raid-result .raid-loot-item { padding:6px; gap:6px; } }

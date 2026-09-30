@@ -15,14 +15,30 @@ async function api(action, payload = {}) {
   const local = window.getCurrentUserData?.();
   const result = await raidRepository.request(action, payload, RAID_ROOM_ENDPOINT);
   const reward = result?.spiritReward;
-  // Server has persisted this lifetime earned total; mirror it without another
-  // write. Account switches and older poll responses must not replace new stats.
+  // Apply only unseen lifetime earnings. Cached totals must never restore gold
+  // already spent or cultivation lost in another activity.
   if (local && local === window.getCurrentUserData?.() &&
-      (!local.uid || local.uid === reward?.uid) && Number.isFinite(reward?.totalSpirit)) {
+      (!local.uid || local.uid === reward?.uid)) {
     local.stats = local.stats || {};
-    const before = Math.max(0, Number(local.stats.nascentSoulSpirit) || 0);
-    local.stats.nascentSoulSpirit = Math.max(before, reward.totalSpirit);
-    if (local.stats.nascentSoulSpirit !== before) window.updateUIStats?.();
+    let changed = false;
+    if (Number.isFinite(reward?.totalSpirit)) {
+      const before = Math.max(0, Number(local.stats.nascentSoulSpirit) || 0);
+      local.stats.nascentSoulSpirit = Math.max(before, reward.totalSpirit);
+      changed = local.stats.nascentSoulSpirit !== before;
+    }
+    for (const [key, stat] of [['cultivation', 'totalScore'], ['gold', 'gold']]) {
+      const earned = reward?.learningTotals?.[key];
+      if (!Number.isFinite(earned) || earned < 0) continue;
+      local.raidLearningRewards ||= {};
+      const before = Math.max(0, Number(local.raidLearningRewards[key]) || 0);
+      const delta = Math.max(0, earned - before);
+      if (delta) {
+        local.stats[stat] = Math.max(0, Number(local.stats[stat]) || 0) + delta;
+        local.raidLearningRewards[key] = earned;
+        changed = true;
+      }
+    }
+    if (changed) window.updateUIStats?.();
   }
   return result;
 }
@@ -85,7 +101,7 @@ export function subscribeRaidRoom(roomId, callback, onError) {
     try {
       const result = await api('get', { roomId });
       lastError = '';
-      callback(result.room || null);
+      callback(result.room || null, result.spiritReward || null);
     } catch (error) {
       const signature = String(error?.status || '') + ':' + String(error?.message || error);
       if (signature !== lastError) {

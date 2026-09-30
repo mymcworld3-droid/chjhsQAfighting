@@ -8,7 +8,7 @@ const {
 } = require('./raid-authority.cjs');
 const { readRaidQuestionTicket, assertRaidQuestionTicket } = require('./raid-question-ticket.cjs');
 const { advanceRaidRoom, startRaidScheduler } = require('./raid-clock.cjs');
-const { eligibleCorrect, awardRaidSpirit } = require('./raid-spirit-reward.cjs');
+const { eligibleCorrect, learningCorrect, awardRaidSpirit } = require('./raid-spirit-reward.cjs');
 
 const COLLECTION = 'raidRooms';
 const MAX_MEMBERS = 4;
@@ -180,14 +180,18 @@ function createHandler({
   async function settleSpirit(playerDb, uid, roomId, room) {
     const member = room?.members?.[uid];
     const target = eligibleCorrect(member);
-    if (!target) return null;
+    const learningTarget = learningCorrect(member);
+    if (!target && !learningTarget) return null;
     const key = roomId + ':' + uid;
     const cached = spiritCache.get(key);
-    if (cached?.settledCorrect >= target) return { ...cached, awarded:0, status:'duplicate' };
+    if (cached?.settledCorrect >= target && (cached.settledLearningCorrect || 0) >= learningTarget) {
+      return { ...cached, awarded:0, learningAwarded:0, status:'duplicate' };
+    }
     try {
       const outcome = await awardSpirit(playerDb, uid, roomId, member);
-      if (outcome.settledCorrect >= target &&
-          outcome.settledCorrect >= (spiritCache.get(key)?.settledCorrect || 0)) {
+      if (outcome.settledCorrect >= target && (outcome.settledLearningCorrect || 0) >= learningTarget &&
+          outcome.settledCorrect >= (spiritCache.get(key)?.settledCorrect || 0) &&
+          (outcome.settledLearningCorrect || 0) >= (spiritCache.get(key)?.settledLearningCorrect || 0)) {
         if (spiritCache.size >= 1000) spiritCache.delete(spiritCache.keys().next().value);
         spiritCache.set(key, outcome);
       }
@@ -371,6 +375,8 @@ function createHandler({
             actionId: id,
             questionId,
             correct,
+            cultivationGain: correct ? 1 : 0,
+            goldGain: correct ? 20 : 0,
             spiritGain: correct && finite(me.totalScore) >= 68 ? 1 : 0,
             correctIndex: question.answerIndex,
             explanation: cleanString(question.explanation || '', 3000),
@@ -384,6 +390,7 @@ function createHandler({
             alive: finite(combat.member.hp) > 0,
             damage: Math.max(0, Math.round(finite(me.damage))) + dealt,
             correct: Math.max(0, Math.round(finite(me.correct))) + (correct ? 1 : 0),
+            learningCorrect: Math.max(0, Math.floor(finite(me.learningCorrect))) + resolution.cultivationGain,
             spiritCorrect: Math.max(0, Math.floor(finite(me.spiritCorrect))) + resolution.spiritGain,
             attempts: Math.max(0, Math.round(finite(me.attempts))) + 1,
             lastActionId: id,
