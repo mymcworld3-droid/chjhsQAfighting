@@ -28,7 +28,7 @@ function fixture({inventory={'raid-refine-key-ii':0},claimError,switchAccount=fa
 test('authoritative duplicate payload cannot restore an already-consumed seal',async()=>{
   const f=fixture({inventory:{'raid-refine-key-ii':0}});
   await f.call();
-  assert.equal(f.local.materialSystem.inventory['raid-refine-key-ii'],0);
+  assert.equal(f.local.materialSystem.inventory['raid-refine-key-ii'],undefined);
   assert.equal(f.state.rewardClaimedRoomId,'room_test');
   await f.call();
   assert.equal(f.claims(),1);
