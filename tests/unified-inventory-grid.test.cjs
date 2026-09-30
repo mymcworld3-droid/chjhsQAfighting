@@ -41,15 +41,16 @@ test('material and artifact realm colors are visible in the backpack', () => {
   assert.match(bag, /item\.realm/);
 });
 
-test('raid-exclusive materials are normal backpack items with dedicated identity', () => {
-  assert.match(bag, /RAID_EXCLUSIVE_MATERIAL_IDS/);
-  assert.match(bag, /RAID_KEY_IDS\.has\(id\)/);
-  assert.match(bag, /團本關鍵材料/);
-  assert.match(bag, /uib-raid-key-badge/);
+test('raid forge materials and bound refinement seals have distinct backpack identity', () => {
+  assert.match(bag, /RAID_CRAFT_MATERIAL_IDS/);
+  assert.match(bag, /RAID_KEY_IDS = new Set\(Object\.values\(RAID_REFINEMENT_KEYS\)\)/);
+  assert.match(bag, /RAID_CRAFT_IDS = new Set\(RAID_CRAFT_MATERIAL_IDS\)/);
+  assert.match(bag, /團本印記/);
+  assert.match(bag, /團本煉器素材/);
   assert.match(bag, /第二次煉製的必要印記/);
-  assert.match(bag, /第三次煉製的必要道印/);
-  assert.match(bag, /秘境通用玄髓/);
-  assert.match(bag, /沈清霜 Boss 專屬劍魄/);
+  assert.match(bag, /第三次煉製的必要印記/);
+  assert.match(bag, /秘境玄髓，可直接放入八方煉器陣/);
+  assert.match(bag, /清霜劍魄，可直接放入八方煉器陣/);
 });
 
 test('obsolete renderer and CSS bridge are removed', () => {
