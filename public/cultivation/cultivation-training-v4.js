@@ -3,7 +3,8 @@ import { createGoldenCoreWashAnimation } from './golden-core-wash-animation.js';
 import {
   NASCENT_SOUL_THRESHOLD, NASCENT_SOUL_ATTRIBUTES, nascentSoulForCore, nascentSoulStage,
   normalizeSpirit, normalizeSoulTree, soulNodes, NASCENT_SOUL_NODE_CAP, NASCENT_SOUL_BRANCH_UNLOCK,
-  soulAvailableSpirit, soulSpentSpirit, soulNodeStatus, allocateSoulNode, soulCombatBonuses, soulCultivationBonuses
+  soulAvailableSpirit, soulSpentSpirit, soulNodeStatus, allocateSoulNode, soulCombatBonuses, soulCultivationBonuses,
+  soulInvestmentSummary, resetSoulTree
 } from './nascent-soul-rules.js';
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
@@ -498,6 +499,8 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     const tree = normalizeSoulTree(player.nascentSoulTree);
     const spent = soulSpentSpirit(tree);
     const available = soulAvailableSpirit(tree, earned);
+    const retained = soulInvestmentSummary(tree, type).filter(path => !path.active);
+    const retainedText = retained.map(path => path.name + ' ' + path.spent + ' 神識').join('、');
     const combatBonuses = soulCombatBonuses(tree, type, equippedGrade);
     const cultivationBonuses = soulCultivationBonuses(tree, type);
     const bonuses = { ...combatBonuses, cultivationSolo: cultivationBonuses.solo,
@@ -559,11 +562,15 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
           </div>
           <div class="ns-resource" aria-live="polite">
             <div><small>累計神識</small><strong>${earned}</strong></div>
-            <div><small>已投入</small><strong>${spent}</strong></div>
+            <div><small>各丹性總投入</small><strong>${spent}</strong></div>
             <div class="ns-resource-free"><small>可用神識</small><strong>${available}</strong></div>
           </div>
         </div>
-        <p class="ns-tree-tip">左脈攻擊、右脈生存；中途有修為節點。每條前置達 5 級解鎖下一層，依距離每級消耗 1／3／5／8 神識。</p>
+        <div class="ns-tree-tip ns-investment-guide">
+          <span>${retained.length ? '舊配點仍保留：' + retainedText + '。換回原丹性即可使用；重修可釋放全部投入。' : '配點依丹性保留，換丹不會返還神識；重修可重新分配。'}
+          <span class="ns-node-rules">左脈攻擊、右脈生存；前置 5 級解鎖下一層，每級消耗 1／3／5／8 神識。</span></span>
+          <button type="button" class="ns-reset-btn" data-ns-reset ${soulBusy || !Object.keys(tree.paths).length ? 'disabled' : ''}>重修元嬰</button>
+        </div>
         <div class="ns-tree-viewport ns-trees" role="group" aria-label="元嬰左右分支技能地圖">
           <div class="ns-diagram" aria-label="中央金丹與十二枚元嬰節點">
             <div class="ns-map-side-label ns-map-side-left" aria-hidden="true">攻擊靈脈</div>
@@ -588,7 +595,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
             aria-valuemax="${stage.next?.min || Math.max(earned, 1)}" aria-label="元嬰修煉進度">
             <span style="width:${progress}%"></span>
           </div>
-          <p class="ns-progress-caption">${stage.next ? '距離' + stage.next.name + '尚需 ' + Math.max(0, stage.next.min - earned) + ' 神識' : '神識圓滿'} · 已點亮進度永久保留</p>
+          <p class="ns-progress-caption">${stage.next ? '距離' + stage.next.name + '尚需 ' + Math.max(0, stage.next.min - earned) + ' 神識' : '神識圓滿'} · 配點依丹性保存，重修前均保留</p>
         </div>
         <div class="ns-reward-guide">
           <strong>神識來源</strong>
@@ -646,9 +653,60 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     }
   }
 
+  async function respecSoulTree() {
+    if (soulBusy || busy || currentScore() < NASCENT_SOUL_THRESHOLD) return;
+    const user = getAuth(getApp()).currentUser;
+    if (!user) return toast('尚未登入，無法保存元嬰技能。');
+    soulBusy = true;
+    renderTrainingPage();
+    try {
+      const db = getFirestore(getApp());
+      const ref = doc(db, 'users', user.uid);
+      // 先以雲端資料預覽，避免用過期的本機配點確認重修。
+      const preview = await runTransaction(db, async tx => {
+        const snapshot = await tx.get(ref);
+        if (!snapshot.exists()) throw new Error('找不到玩家資料');
+        const data = snapshot.data();
+        return { tree: normalizeSoulTree(data.nascentSoulTree), earned: normalizeSpirit(data.stats?.nascentSoulSpirit) };
+      });
+      if (!Object.keys(preview.tree.paths).length) return toast('尚無元嬰配點可重修。');
+      const result = resetSoulTree(preview.tree, preview.earned);
+      const paths = soulInvestmentSummary(preview.tree, currentSoulType()).map(path => path.name).join('、');
+      const confirmed = await window.openConfirm?.('重修將清除所有丹性的元嬰配點（' + paths + '），返還可用神識 ' + result.returned + '，重修後可用 ' + result.remaining + '。累計神識與金丹不變。確定重修？');
+      if (confirmed !== true) return;
+      if (getAuth(getApp()).currentUser?.uid !== user.uid) throw new Error('登入帳號已變更，請重新登入');
+      let awarded;
+      await runTransaction(db, async tx => {
+        const snapshot = await tx.get(ref);
+        if (!snapshot.exists()) throw new Error('找不到玩家資料');
+        const remote = snapshot.data();
+        if (normalizeSpirit(remote.stats?.totalScore) < NASCENT_SOUL_THRESHOLD) throw new Error('元嬰境界不足');
+        if (JSON.stringify(normalizeSoulTree(remote.nascentSoulTree)) !== JSON.stringify(preview.tree)) {
+          throw new Error('配點已變更，請重新確認重修');
+        }
+        awarded = resetSoulTree(remote.nascentSoulTree, remote.stats?.nascentSoulSpirit);
+        tx.update(ref, { nascentSoulTree: awarded.tree });
+      });
+      const local = window.getCurrentUserData?.();
+      if (getAuth(getApp()).currentUser?.uid === user.uid && local) {
+        local.nascentSoulTree = awarded.tree;
+        selectedSoulNodeId = null;
+        toast('元嬰已重修，返還可用神識 ' + awarded.returned);
+        window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', { detail: { source: 'nascent-soul-respec' } }));
+      }
+    } catch (error) {
+      console.error('[Nascent soul respec]', error);
+      toast('重修未完成：' + (error?.message || '請檢查連線後重試'));
+    } finally {
+      soulBusy = false;
+      if (activeTab === 'nascent-soul') renderTrainingPage();
+    }
+  }
+
   function bindSoulActions() {
     const content = document.getElementById('training-tab-content');
     if (!content) return;
+    content.querySelector('[data-ns-reset]')?.addEventListener('click', () => void respecSoulTree());
     content.querySelectorAll('[data-ns-node]').forEach(button => {
       button.addEventListener('click', () => {
         if (soulBusy) return;

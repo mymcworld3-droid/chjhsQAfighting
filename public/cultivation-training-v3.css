@@ -649,3 +649,10 @@ body.xianxia-theme.ns-map-active #page-training .ns-branch-line[data-branch^="ri
 body.xianxia-theme.ns-map-active #page-training .ns-branch-line[data-branch="core-right"].is-lit {
   stroke:#9bd9c4;filter:drop-shadow(0 0 4px rgba(115,215,187,.24));
 }
+.ns-investment-guide { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.ns-investment-guide > span { min-width:0; }
+.ns-node-rules { display:block; opacity:.8; }
+.ns-reset-btn { flex:none; padding:5px 10px; border:1px solid #aa814c; border-radius:8px; background:#272017; color:#f2dfb4; font:inherit; cursor:pointer; }
+.ns-reset-btn:disabled { opacity:.45; cursor:default; }
+.ns-reset-btn:focus-visible { outline:2px solid #ffe1a0; outline-offset:2px; }
+@media(max-width:600px) { .ns-node-rules { display:none; } .ns-reset-btn { padding:4px 7px; } }
