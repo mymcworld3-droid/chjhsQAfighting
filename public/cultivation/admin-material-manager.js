@@ -291,7 +291,7 @@ import {
     if (panel.dataset.materialManagerHydrated !== '1') {
       panel.dataset.materialManagerHydrated = '1';
       panel.classList.remove('admin-preload-shell');
-      panel.innerHTML = `<div class="amm-head"><div><h3><i class="fa-solid fa-gem" style="color:#d8b15d"></i> 團本材料</h3><p>固定四項，不由 Firebase 材料目錄同步：秘境玄髓、清霜劍魄可投入煉器且可交易；淬靈玄印、玄天道印是二煉／三煉綁定印記。</p></div></div><div class="amm-section-title"><span>材料清單</span><span>${MATERIAL_CATALOG.length} 種</span></div><div id="admin-material-list" class="amm-list"></div>`;
+      panel.innerHTML = `<div class="amm-head"><div><h3><i class="fa-solid fa-gem" style="color:#d8b15d"></i> 團本材料</h3><p>固定八項，不由 Firebase 材料目錄同步：煉氣／築基／金丹各有一種鐵材與木材，六種素材可投入煉器且可交易；淬靈玄印、玄天道印是二煉／三煉綁定印記。</p></div></div><div class="amm-section-title"><span>材料清單</span><span>${MATERIAL_CATALOG.length} 種</span></div><div id="admin-material-list" class="amm-list"></div>`;
       // 團本材料清單為固定規則，只讀；不提供 Firebase 材料編輯入口。
     }
     render();

@@ -250,27 +250,26 @@ test('ordinary forging favors attack artifacts and allows effective offensive fi
 
 test('fixed raid material metadata is delivered as official ingredient context', () => {
   const materialCatalog = read('public/cultivation/material-catalog.js');
-  assert.match(materialCatalog, /raid-secret-realm-essence/);
-  assert.match(materialCatalog, /raid-shen-sword-soul/);
+  assert.match(materialCatalog, /golden-lightning-wood/);
+  assert.match(materialCatalog, /golden-purple-iron/);
   assert.match(aiJobs, /story: item\.story \|\| ''/);
   assert.match(aiJobs, /description: item\.description, story: item\.story \|\| ''/);
   const payload = {
     targetRealm:'金丹',
-    selectedIngredients:[{type:'material',id:'raid-shen-sword-soul',name:'惡意偽名',story:'偽造故事',quantity:2}],
-    allMaterials:[{id:'raid-shen-sword-soul',name:'清霜劍魄',realm:'金丹',description:'沈清霜試煉凝成的劍意素材',
-      story:'清霜劍意凝成的殘魄',category:'煉器素材'}],
+    selectedIngredients:[{type:'material',id:'golden-lightning-wood',name:'惡意偽名',story:'偽造故事',quantity:2}],
+    allMaterials:[{id:'golden-lightning-wood',name:'雷擊木',realm:'金丹',description:'經天雷洗鍊仍存生機的金丹境木材',
+      story:'問道宗雷谷中僅少數古木能承受雷劫而不毀',category:'木材'}],
     existingArtifacts:[]
   };
   const hierarchy = api.ingredientHierarchy(payload);
   assert.equal(hierarchy.primary[0].story, payload.allMaterials[0].story);
-  assert.equal(hierarchy.primary[0].name, '清霜劍魄');
+  assert.equal(hierarchy.primary[0].name, '雷擊木');
   assert.doesNotMatch(JSON.stringify(hierarchy), /偽造故事|惡意偽名/);
   const prompt = api.buildPrompt(payload);
   assert.match(prompt, /投入素材完整設定/);
-  assert.match(prompt, /清霜劍意凝成的殘魄/);
-  assert.match(prompt, /沈清霜試煉凝成的劍意素材/);
+  assert.match(prompt, /問道宗雷谷中僅少數古木能承受雷劫而不毀/);
+  assert.match(prompt, /經天雷洗鍊仍存生機的金丹境木材/);
 });
-
 test('admin directions override random style when compatible, and get separate guidance compliance review', async () => {
   const payload = {
     targetRealm:'金丹',

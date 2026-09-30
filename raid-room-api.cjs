@@ -17,8 +17,110 @@ const ROOM_TTL_MS = 30 * 60 * 1000;
 const RAID_ROOM_VERSION = 2;
 const RAID_BOSS_ID = 'shen-qingshuang';
 const BOSS_ACTION_INTERVAL_MS = 18000;
+const RAID_DAILY_TICKETS = 3;
+const RAID_TICKET_CAP = 10;
+const RAID_TICKET_RESERVATION_COLLECTION = 'raidTicketReservations';
+const TAIPEI_OFFSET_MS = 8 * 60 * 60 * 1000;
 
 function now() { return Date.now(); }
+function raidTicketDate(nowMs = now()) {
+  return new Date(Math.max(0, Number(nowMs) || 0) + TAIPEI_OFFSET_MS).toISOString().slice(0, 10);
+}
+function dayIndex(date) {
+  const value = Date.parse(String(date || '') + 'T00:00:00.000Z');
+  return Number.isFinite(value) ? Math.floor(value / 86400000) : null;
+}
+function accrueRaidTickets(raw = {}, today = raidTicketDate()) {
+  const current = raw?.raidTickets && typeof raw.raidTickets === 'object' ? raw.raidTickets : {};
+  let count = Math.max(0, Math.min(RAID_TICKET_CAP, Math.floor(finite(current.count))));
+  const last = /^\d{4}-\d{2}-\d{2}$/.test(String(current.lastGrantDate || '')) ? String(current.lastGrantDate) : '';
+  const todayIndex = dayIndex(today);
+  const lastIndex = dayIndex(last);
+  const elapsed = lastIndex == null || todayIndex == null ? (last === today ? 0 : 1) : Math.max(0, todayIndex - lastIndex);
+  if (elapsed > 0) count = Math.min(RAID_TICKET_CAP, count + elapsed * RAID_DAILY_TICKETS);
+  return {
+    count,
+    lastGrantDate: elapsed > 0 || !last ? today : last,
+    dailyGrant: RAID_DAILY_TICKETS,
+    cap: RAID_TICKET_CAP
+  };
+}
+async function syncRaidTickets(db, uid, nowMs = now()) {
+  const userRef = db.collection('users').doc(uid);
+  const today = raidTicketDate(nowMs);
+  return db.runTransaction(async tx => {
+    const snap = await tx.get(userRef);
+    if (!snap.exists) throw Object.assign(new Error('玩家資料不存在'), { status:404 });
+    const next = accrueRaidTickets(snap.data() || {}, today);
+    tx.update(userRef, { raidTickets: next });
+    return next;
+  });
+}
+async function reserveRaidTickets(db, roomId, members, nowMs = now()) {
+  const entries = (Array.isArray(members) ? members : [])
+    .map(member => ({ uid:String(member?.uid || ''), name:cleanString(member?.name || member?.displayName || member?.uid || '', 60) }))
+    .filter(member => member.uid);
+  const memberUids = [...new Set(entries.map(member => member.uid))].sort();
+  if (!memberUids.length) throw Object.assign(new Error('沒有可進入團本的隊員'), { status:409 });
+  const reservationRef = db.collection(RAID_TICKET_RESERVATION_COLLECTION).doc(String(roomId));
+  const refs = memberUids.map(uid => db.collection('users').doc(uid));
+  const today = raidTicketDate(nowMs);
+  return db.runTransaction(async tx => {
+    const reservationSnap = await tx.get(reservationRef);
+    const snaps = [];
+    for (const ref of refs) snaps.push(await tx.get(ref));
+    if (snaps.some(snap => !snap.exists)) throw Object.assign(new Error('隊伍中有玩家資料不存在'), { status:409 });
+
+    const states = {};
+    snaps.forEach((snap, index) => {
+      states[memberUids[index]] = accrueRaidTickets(snap.data() || {}, today);
+    });
+    const existing = reservationSnap.exists ? reservationSnap.data() || {} : null;
+    const sameMembers = existing && JSON.stringify([...(existing.memberUids || [])].sort()) === JSON.stringify(memberUids);
+    if (existing?.state === 'reserved' && sameMembers) {
+      refs.forEach((ref, index) => tx.update(ref, { raidTickets: states[memberUids[index]] }));
+      return { duplicate:true, memberUids, ticketsByUid:states };
+    }
+
+    for (const uid of memberUids) {
+      if (states[uid].count < 1) {
+        const entry = entries.find(item => item.uid === uid);
+        throw Object.assign(new Error((entry?.name || '隊員') + ' 沒有團本入場券'), { status:409, code:'raid-ticket-empty' });
+      }
+    }
+    refs.forEach((ref, index) => {
+      const uid = memberUids[index];
+      states[uid] = { ...states[uid], count:states[uid].count - 1 };
+      tx.update(ref, { raidTickets: states[uid] });
+    });
+    tx.set(reservationRef, {
+      roomId:String(roomId), state:'reserved', memberUids,
+      reservedAtMs:Math.max(0, Number(nowMs) || 0), date:today
+    });
+    return { duplicate:false, memberUids, ticketsByUid:states };
+  });
+}
+async function refundRaidTicketReservation(db, roomId, nowMs = now()) {
+  const reservationRef = db.collection(RAID_TICKET_RESERVATION_COLLECTION).doc(String(roomId));
+  return db.runTransaction(async tx => {
+    const reservationSnap = await tx.get(reservationRef);
+    if (!reservationSnap.exists) return false;
+    const reservation = reservationSnap.data() || {};
+    if (reservation.state !== 'reserved') return false;
+    const memberUids = Array.isArray(reservation.memberUids) ? reservation.memberUids.map(String).filter(Boolean) : [];
+    const refs = memberUids.map(uid => db.collection('users').doc(uid));
+    const snaps = [];
+    for (const ref of refs) snaps.push(await tx.get(ref));
+    const today = raidTicketDate(nowMs);
+    refs.forEach((ref, index) => {
+      if (!snaps[index]?.exists) return;
+      const state = accrueRaidTickets(snaps[index].data() || {}, today);
+      tx.update(ref, { raidTickets:{ ...state, count:Math.min(RAID_TICKET_CAP, state.count + 1) } });
+    });
+    tx.update(reservationRef, { state:'refunded', refundedAtMs:Math.max(0, Number(nowMs) || 0) });
+    return true;
+  });
+}
 function finite(value, fallback = 0) {
   const n = Number(value);
   return Number.isFinite(n) ? n : fallback;
@@ -221,20 +323,30 @@ function createHandler({
 
     const action = String(req.body?.action || '').trim();
     try {
+      if (action === 'ticket-status') {
+        const ticketState = await syncRaidTickets(playerDb, uid);
+        return res.json({ ok:true, ticketState });
+      }
       if (action === 'create') {
+        const ticketState = await syncRaidTickets(playerDb, uid);
+        if (ticketState.count < 1) throw Object.assign(new Error('目前沒有團本入場券；每日會補充 3 張，最多持有 10 張'), { status:409, code:'raid-ticket-empty' });
         const player = await loadTrustedRaidPlayer(playerDb, uid);
         const result = await createRoom(db, uid, player);
-        return res.json({ ok: true, ...result });
+        return res.json({ ok: true, ...result, ticketState });
       }
       if (action === 'quick') {
+        const ticketState = await syncRaidTickets(playerDb, uid);
+        if (ticketState.count < 1) throw Object.assign(new Error('目前沒有團本入場券；每日會補充 3 張，最多持有 10 張'), { status:409, code:'raid-ticket-empty' });
         const player = await loadTrustedRaidPlayer(playerDb, uid);
         const result = await findOrCreate(db, uid, player);
-        return res.json({ ok: true, ...result });
+        return res.json({ ok: true, ...result, ticketState });
       }
       if (action === 'join-code') {
+        const ticketState = await syncRaidTickets(playerDb, uid);
+        if (ticketState.count < 1) throw Object.assign(new Error('目前沒有團本入場券；每日會補充 3 張，最多持有 10 張'), { status:409, code:'raid-ticket-empty' });
         const player = await loadTrustedRaidPlayer(playerDb, uid);
         const result = await joinByCode(db, uid, req.body?.roomCode, player);
-        return res.json({ ok: true, ...result });
+        return res.json({ ok: true, ...result, ticketState });
       }
 
       const roomId = safeRoomId(req.body?.roomId);
@@ -296,38 +408,63 @@ function createHandler({
       }
 
       if (action === 'start') {
-        const room = await db.runTransaction(async tx => {
-          const snap = await tx.get(ref);
-          if (!snap.exists) throw Object.assign(new Error('隊伍不存在'), { status: 404 });
-          const current = snap.data() || {};
-          requireMember(current, uid);
-          if (current.hostUid !== uid) throw Object.assign(new Error('只有隊長可以開始'), { status: 403 });
-          if (current.status !== 'waiting') return publicRoom(roomId, current);
-          const members = activeMembers(current);
-          if (!members.length || members.some(member => !member.ready)) {
-            throw Object.assign(new Error('仍有隊員尚未準備'), { status: 409 });
-          }
-          const boss = createRaidBoss();
-          const update = {
-            status: 'active',
-            serverDrivenBoss: true,
-            startedAtMs: now(),
-            bossHp: boss.maxHp,
-            bossMaxHp: boss.maxHp,
-            bossBaseAttack: boss.baseAttack,
-            bossPhase: boss.phase,
-            bossActionCount: 0,
-            lastBossAction: null,
-            teamCycle: 1,
-            teamCorrectUids: [],
-            teamGuardReady: false,
-            teamBurstTriggered: false,
-            teamBurstCount: 0
-          };
-          tx.update(ref, update);
-          return publicRoom(roomId, { ...current, ...update });
-        });
-        return res.json({ ok: true, room });
+        const preSnap = await ref.get();
+        if (!preSnap.exists) throw Object.assign(new Error('隊伍不存在'), { status:404 });
+        const pre = preSnap.data() || {};
+        requireMember(pre, uid);
+        if (pre.hostUid !== uid) throw Object.assign(new Error('只有隊長可以開始'), { status:403 });
+        if (pre.status !== 'waiting') {
+          const ticketState = await syncRaidTickets(playerDb, uid);
+          return res.json({ ok:true, room:publicRoom(roomId, pre), ticketState });
+        }
+        const preMembers = activeMembers(pre);
+        if (!preMembers.length || preMembers.some(member => !member.ready)) {
+          throw Object.assign(new Error('仍有隊員尚未準備'), { status:409 });
+        }
+
+        const reservation = await reserveRaidTickets(playerDb, roomId, preMembers);
+        try {
+          const room = await db.runTransaction(async tx => {
+            const snap = await tx.get(ref);
+            if (!snap.exists) throw Object.assign(new Error('隊伍不存在'), { status:404 });
+            const current = snap.data() || {};
+            requireMember(current, uid);
+            if (current.hostUid !== uid) throw Object.assign(new Error('只有隊長可以開始'), { status:403 });
+            if (current.status !== 'waiting') return publicRoom(roomId, current);
+            const members = activeMembers(current);
+            if (!members.length || members.some(member => !member.ready)) {
+              throw Object.assign(new Error('仍有隊員尚未準備'), { status:409 });
+            }
+            const currentUids = members.map(member => String(member.uid || '')).filter(Boolean).sort();
+            if (JSON.stringify(currentUids) !== JSON.stringify(reservation.memberUids)) {
+              throw Object.assign(new Error('隊伍成員已變更，請重新確認後再開始'), { status:409 });
+            }
+            const boss = createRaidBoss();
+            const update = {
+              status: 'active',
+              serverDrivenBoss: true,
+              startedAtMs: now(),
+              bossHp: boss.maxHp,
+              bossMaxHp: boss.maxHp,
+              bossBaseAttack: boss.baseAttack,
+              bossPhase: boss.phase,
+              bossActionCount: 0,
+              lastBossAction: null,
+              teamCycle: 1,
+              teamCorrectUids: [],
+              teamGuardReady: false,
+              teamBurstTriggered: false,
+              teamBurstCount: 0,
+              ticketMemberUids: reservation.memberUids
+            };
+            tx.update(ref, update);
+            return publicRoom(roomId, { ...current, ...update });
+          });
+          return res.json({ ok:true, room, ticketState:reservation.ticketsByUid[uid] || null });
+        } catch (error) {
+          if ([404,409].includes(error?.status)) await refundRaidTicketReservation(playerDb, roomId).catch(() => {});
+          throw error;
+        }
       }
 
       if (action === 'heartbeat') {
@@ -492,7 +629,8 @@ module.exports.startScheduler = options => startRaidScheduler({
 });
 module.exports.__test = {
   COLLECTION, MAX_MEMBERS, STALE_MS, ROOM_TTL_MS, RAID_ROOM_VERSION, RAID_BOSS_ID,
-  BOSS_ACTION_INTERVAL_MS,
+  BOSS_ACTION_INTERVAL_MS, RAID_DAILY_TICKETS, RAID_TICKET_CAP, RAID_TICKET_RESERVATION_COLLECTION,
   finite, membersOf, memberOnline, activeMembers, roomUsable, safeRoomId, safeRoomCode,
+  raidTicketDate, accrueRaidTickets, syncRaidTickets, reserveRaidTickets, refundRaidTicketReservation,
   memberSnapshot, createHandler
 };

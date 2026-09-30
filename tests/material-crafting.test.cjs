@@ -12,16 +12,17 @@ const artifactAdmin = read('public/cultivation/admin-artifact-manager.js');
 const refinery = read('public/cultivation/cultivation-refinery-v2.js');
 const main = read('public/main.js');
 
-test('fixed material catalog contains two forge materials and two refinement seals', () => {
+test('fixed material catalog contains six tradable forge materials and two refinement seals', () => {
   assert.match(catalog,/RAID_CRAFT_MATERIAL_IDS/);
-  assert.match(catalog,/raid-secret-realm-essence/);
-  assert.match(catalog,/raid-shen-sword-soul/);
+  for (const id of ['qi-spirit-iron','foundation-refined-iron','golden-purple-iron','qi-spirit-wood','foundation-century-wood','golden-lightning-wood']) {
+    assert.match(catalog,new RegExp(id));
+  }
   assert.match(catalog,/2: 'raid-refine-key-ii'/);
   assert.match(catalog,/3: 'raid-refine-key-iii'/);
   assert.match(catalog,/items\.length !== allowed\.size/);
 });
 
-test('material catalog startup is local-only and does not connect to Firebase', () => {
+test('material catalog startup is local-only and does not connect to Firebase config', () => {
   assert.match(sync,/local-fixed-catalog/);
   assert.match(sync,/xiuxian:material-catalog-startup-ready/);
   assert.doesNotMatch(sync,/from 'https:\/\/www\.gstatic\.com\/firebasejs|getFirestore|onSnapshot|setDoc|materialCatalogV1/);
@@ -34,15 +35,15 @@ test('material system is read-only on the client and has no purchase or Firebase
   assert.doesNotMatch(system,/getFirestore|runTransaction|data-material-buy|buyMaterial|material-store/);
 });
 
-test('only essence and sword soul enter the eight-slot forge; refinement seals are reserved', () => {
+test('six wood/iron materials enter the furnace while refinement seals stay external', () => {
   assert.match(refinery,/new Set\(Object\.values\(RAID_REFINEMENT_KEYS\)\)/);
   assert.match(refinery,/filter\(\(m\) => !raidKeyIds\.has\(m\.id\)/);
   assert.match(refinery,/第二煉印記/);
   assert.match(refinery,/第三煉印記/);
 });
 
-test('admin material catalog is fixed while artifact recipe editor remains available', () => {
-  assert.match(admin,/固定四項/);
+test('admin material catalog is fixed to eight entries while artifact recipe editor remains available', () => {
+  assert.match(admin,/固定八項/);
   assert.match(admin,/固定規則/);
   assert.doesNotMatch(main,/admin-material-realm-editor\.js/);
   assert.match(artifactAdmin,/煉器配方/);

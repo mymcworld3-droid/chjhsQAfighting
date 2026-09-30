@@ -52,6 +52,10 @@ function forget() {
 export async function ensureRaidRoomAuth() {
   return raidRepository.ensureAuth();
 }
+export async function getRaidTicketState() {
+  const result = await api('ticket-status');
+  return result.ticketState || null;
+}
 export async function createRaidRoom() {
   const result = await api('create');
   remember(result.roomId);
@@ -87,7 +91,7 @@ export async function setRaidReady(roomId, ready) {
   await api('ready', { roomId, ready: !!ready });
 }
 export async function startRaidRoom(roomId) {
-  await api('start', { roomId });
+  return api('start', { roomId });
 }
 export function subscribeRaidRoom(roomId, callback, onError) {
   let stopped = false;

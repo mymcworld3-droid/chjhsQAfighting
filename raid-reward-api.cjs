@@ -12,10 +12,29 @@ const RAID_BOSS_ID = 'shen-qingshuang';
 const RAID_ROOM_VERSION = 2;
 const REWARDS = Object.freeze({
   'raid-refine-key-ii': 2,
-  'raid-refine-key-iii': 1,
-  'raid-secret-realm-essence': 2,
-  'raid-shen-sword-soul': 1
+  'raid-refine-key-iii': 1
 });
+const RAID_MATERIAL_POOL = Object.freeze([
+  'qi-spirit-iron',
+  'foundation-refined-iron',
+  'golden-purple-iron',
+  'qi-spirit-wood',
+  'foundation-century-wood',
+  'golden-lightning-wood'
+]);
+const RAID_MATERIAL_ROLLS = 3;
+
+function rollRaidMaterials(roomId, uid, rolls = RAID_MATERIAL_ROLLS) {
+  const granted = {};
+  const total = Math.max(0, Math.floor(Number(rolls) || 0));
+  for (let i = 0; i < total; i += 1) {
+    // Deterministic per room/player/roll for replay safety; every player uses the same 1/6 table.
+    const digest = crypto.createHash('sha256').update(String(roomId) + '\n' + String(uid) + '\nmaterial-roll:' + i).digest();
+    const id = RAID_MATERIAL_POOL[digest.readUInt32BE(0) % RAID_MATERIAL_POOL.length];
+    granted[id] = (granted[id] || 0) + 1;
+  }
+  return granted;
+}
 
 function finite(value, fallback = 0) {
   const n = Number(value);
@@ -86,15 +105,10 @@ async function awardRaidReward(db, uid, roomId, validation, {
 
       const firstVictory = !user.raidProgress?.[RAID_BOSS_ID]?.firstVictoryRoomId;
       const dailyFirstVictory = !!date && !dailySnap.exists;
-      const granted = { ...rewards };
+      const granted = { ...rewards, ...rollRaidMaterials(roomId, uid) };
       if (dailyFirstVictory) {
         granted['raid-refine-key-ii'] = (granted['raid-refine-key-ii'] || 0) + 1;
         granted['raid-refine-key-iii'] = (granted['raid-refine-key-iii'] || 0) + 1;
-        granted['raid-secret-realm-essence'] = (granted['raid-secret-realm-essence'] || 0) + 1;
-      }
-      // Boss 專屬材料讓首通也有一次明顯躍升，但後續仍可重複農取。
-      if (firstVictory) {
-        granted['raid-shen-sword-soul'] = (granted['raid-shen-sword-soul'] || 0) + 1;
       }
       const raidProgress = { ...(user.raidProgress || {}) };
       raidProgress[RAID_BOSS_ID] = { ...(raidProgress[RAID_BOSS_ID] || {}),
@@ -214,7 +228,7 @@ module.exports = function registerRaidRewardApi(app) {
 };
 module.exports.__test = {
   RAID_ROOM_COLLECTION, CLAIM_COLLECTION, RAID_BOSS_ID, RAID_ROOM_VERSION,
-  REWARDS, safeRoomId, claimId, validateRaidVictory,
-  awardRaidReward, createHandler
+  REWARDS, RAID_MATERIAL_POOL, RAID_MATERIAL_ROLLS, rollRaidMaterials,
+  safeRoomId, claimId, validateRaidVictory, awardRaidReward, createHandler
 };
 

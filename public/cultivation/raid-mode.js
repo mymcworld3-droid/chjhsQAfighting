@@ -2,7 +2,7 @@ import { RAID_MVP, shenPhaseForHp, shenIntentForRound, bossClockState } from './
 import { snapshotBattleKnowledge, resolveBattleKnowledge } from './battle-question-scope.js';
 import { generateRaidQuestion } from './raid-question.js';
 import {
-  ensureRaidRoomAuth, createRaidRoom, findOrCreateRaidRoom, joinRaidRoomByCode, reconnectRaidRoom,
+  ensureRaidRoomAuth, getRaidTicketState, createRaidRoom, findOrCreateRaidRoom, joinRaidRoomByCode, reconnectRaidRoom,
   setRaidReady, startRaidRoom, subscribeRaidRoom, heartbeatRaidRoom, commitRaidPlayerAction,
   commitRaidBossDefense, advanceRaidBossAction, leaveRaidRoom, raidRoomMembers, raidMemberOnline
 } from './raid-room.js';
@@ -15,7 +15,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
   'use strict';
 
   const PAGE_ID = 'page-raid';
-  const STYLE_HREF = 'styles/raid-mode.css?v=20260930-teamwork-list1';
+  const STYLE_HREF = 'styles/raid-mode.css?v=20260930-teamwork-ticket1';
   const MALE = 'assets/story/characters/player-male-determined.png';
   const FEMALE = 'assets/story/characters/player-female-determined.png';
   const HEARTBEAT_MS = 8000;
@@ -57,10 +57,31 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     rewardClaiming: false,
     rewardClaimedRoomId: '',
     learningOutcome: null,
-    selectedRaidId: RAID_MVP.bossId
+    selectedRaidId: RAID_MVP.bossId,
+    ticketState: { count:null, dailyGrant:3, cap:10, lastGrantDate:'' },
+    ticketLoading: false
   };
 
   function now() { return Date.now(); }
+  async function refreshRaidTickets({ rerender = true } = {}) {
+    if (state.ticketLoading) return state.ticketState;
+    state.ticketLoading = true;
+    try {
+      const next = await getRaidTicketState();
+      if (next) state.ticketState = {
+        count: Math.max(0, Number(next.count) || 0),
+        dailyGrant: Math.max(0, Number(next.dailyGrant) || 3),
+        cap: Math.max(1, Number(next.cap) || 10),
+        lastGrantDate: String(next.lastGrantDate || '')
+      };
+      if (rerender && state.status === 'hub' && !state.roomId) renderHub();
+    } catch (error) {
+      console.warn('[Raid] ticket status unavailable:', error);
+    } finally {
+      state.ticketLoading = false;
+    }
+    return state.ticketState;
+  }
   function data() { return window.getCurrentUserData?.() || {}; }
   function score() { return Math.max(0, Number(data()?.stats?.totalScore) || 0); }
   function escapeHtml(value) {
@@ -323,7 +344,8 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     document.body.classList.remove('raid-session-active');
     show('hub');
     const selected = raidTrialById(state.selectedRaidId);
-    const selectedLocked = selected.status !== 'open' || score() < selected.minimumScore;
+    const noTickets = Number(state.ticketState?.count) === 0;
+    const selectedLocked = selected.status !== 'open' || score() < selected.minimumScore || noTickets;
     const hub = document.getElementById('raid-hub');
     const trialCards = RAID_TRIALS.map(function (trial) {
       const active = trial.id === selected.id;
@@ -355,7 +377,10 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
         '<small>' + escapeHtml(selected.location) + '</small><h3>' + escapeHtml(selected.bossTitle) + '</h3>' +
         '<p>' + escapeHtml(selected.description) + '</p>' +
         '<div class="raid-reward-preview"><b>主要戰利品</b><span>' + selected.rewards.map(escapeHtml).join('・') + '</span></div>' +
-        '<p class="raid-hub-rewards">答對：修為 +1、靈石 +20；元嬰另獲神識。通關另有境界素材；每日首勝會加贈團本關鍵材料。</p>' +
+        '<div class="raid-ticket-status"><i class="fa-solid fa-ticket"></i><span><b>團本入場券 ' +
+          (state.ticketState?.count == null ? '讀取中' : escapeHtml(state.ticketState.count + ' / ' + state.ticketState.cap)) +
+          '</b><small>每日 +3，最多 10 張；正式開戰時每位隊員消耗 1 張</small></span></div>' +
+        '<p class="raid-hub-rewards">本團本只掉落煉氣／築基／金丹的木材與鐵材；每次通關抽取 3 次，六種素材每抽皆為 1/6，所有玩家機率完全相同。淬靈玄印、玄天道印另作煉製印記。</p>' +
         '<div class="raid-join-grid"><button class="raid-primary" type="button" data-quick ' + (selectedLocked ? 'disabled' : '') + '>快速加入／建立隊伍</button>' +
         '<button class="raid-ghost" type="button" data-create ' + (selectedLocked ? 'disabled' : '') + '>建立私人隊伍</button></div>' +
         '<div class="raid-code-join"><input id="raid-room-code-input" maxlength="6" placeholder="輸入 6 碼隊伍代碼"><button class="raid-ghost" type="button" data-code ' +
@@ -976,7 +1001,8 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     if (!state.room || !isHost()) return;
     try {
       // Boss HP and attack use the same fixed difficulty for every party.
-      await startRaidRoom(state.roomId);
+      const result = await startRaidRoom(state.roomId);
+      if (result?.ticketState) state.ticketState = { ...state.ticketState, ...result.ticketState };
     } catch (error) {
       toast(error.message || '目前無法開始團本');
     }
@@ -1094,7 +1120,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
       if (state.roomId !== roomId || local !== data() || playerRepository.currentUser()?.uid !== uid) return;
       state.rewardClaimedRoomId = roomId;
 
-      // 團本 API 回傳本次四種團本道具的權威庫存值；直接合併到本地玩家狀態，
+      // 團本 API 回傳本場素材與印記的權威庫存值；直接合併到本地玩家狀態，
       // 不再為素材額外從瀏覽器讀取 Firebase users 文件。
       local.materialSystem = local.materialSystem && typeof local.materialSystem === 'object'
         ? local.materialSystem : {inventory:{}};
@@ -1229,6 +1255,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
       renderArena();
     } else if (state.status === 'finished') show('result');
     else renderHub();
+    void refreshRaidTickets();
     void tryReconnect();
   }
 
@@ -1253,7 +1280,9 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
       bossActionCount: state.bossActionCount,
       asynchronousQuestions: true,
       questionTimeLimit: null,
-      multiplayer: true
+      multiplayer: true,
+      raidTickets: state.ticketState?.count ?? null,
+      raidTicketCap: state.ticketState?.cap ?? 10
     };
   };
 
@@ -1274,9 +1303,11 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     });
     mountHomeEntry();
     renderHub();
+    void refreshRaidTickets();
     window.addEventListener('xiuxian:user-ready', function () {
       mountHomeEntry();
       updateHomeEntry();
+      void refreshRaidTickets();
       void tryReconnect();
     });
     window.addEventListener('xiuxian:stats-updated', updateHomeEntry);

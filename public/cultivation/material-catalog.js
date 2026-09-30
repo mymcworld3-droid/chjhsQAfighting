@@ -1,14 +1,14 @@
 // 煉器素材與法寶配方的資料來源。
-// 素材目錄固定在程式碼中，不再由 Firebase 同步；團本是四種素材／印記的唯一產生來源。
+// 素材目錄固定在程式碼中，不再由 Firebase 同步；團本是木／鐵素材與煉製印記的唯一產生來源。
 
 import { ARTIFACT_CATALOG, ARTIFACT_REALMS, getArtifactById } from './artifact-catalog.js';
 
-export const MATERIAL_CATEGORIES = Object.freeze(['礦石', '兵器材料', '靈木', '晶石', '妖獸材料', '特殊材料', '符材', '其他']);
+export const MATERIAL_CATEGORIES = Object.freeze(['鐵材', '木材', '礦石', '兵器材料', '靈木', '晶石', '妖獸材料', '特殊材料', '符材', '其他']);
 export const MATERIAL_WEAPON_FORMS = Object.freeze(['','劍','刀','槍','弓','斧','錘','戟','棍','鞭','匕首','飛劍','法盾','法杖','符籙','陣盤','寶珠','玉佩','法鏡','鈴','幡','印','鼎','鐘','器胚']);
 export const MIN_ARTIFACT_RECIPE_MATERIALS = 2;
 export const MAX_ARTIFACT_RECIPE_MATERIALS = 8;
 export const MAX_ARTIFACT_RECIPE_NESTING = 2;
-export const MATERIAL_CATALOG_SCHEMA_VERSION = 4;
+export const MATERIAL_CATALOG_SCHEMA_VERSION = 5;
 export const ARTIFACT_RECIPE_SCHEMA_VERSION = 3;
 
 const MATERIAL_REALM_COLORS = Object.freeze({
@@ -46,13 +46,21 @@ export const MATERIAL_REALMS = Object.freeze(ARTIFACT_REALMS.map((realm) => Obje
   dongtianRate: MATERIAL_REALM_DROP_BASE[realm.name]?.dongtianRate || 0.08
 })));
 
-// 現行材料系統只保留四種團本道具：兩種可投入煉器陣的素材與兩種煉製印記。
-// 舊材料 ID 不再進入目錄、配方、掉落或背包顯示。
+// 現行材料系統只保留本團本的六種木／鐵煉器素材，以及二煉、三煉印記。
+// 素材只涵蓋煉氣、築基、金丹三個境界；問道、洞天與商店不會自然產生。
 const DEFAULT_MATERIAL_CATALOG = [
-  { id: 'raid-secret-realm-essence', name: '秘境玄髓', icon: '玄髓', category: '煉器素材', realm: '築基',
-    description: '由秘境核心凝成的通用煉器素材。只能透過團本結算取得，可直接投入八方煉器陣。', buyGold: 0 },
-  { id: 'raid-shen-sword-soul', name: '清霜劍魄', icon: '劍魄', category: '煉器素材', realm: '金丹',
-    description: '沈清霜試煉凝成的劍意素材。只能透過團本結算取得，可直接投入八方煉器陣。', buyGold: 0 },
+  { id: 'qi-spirit-iron', name: '玄鐵', icon: '鐵', category: '鐵材', realm: '煉氣',
+    description: '煉氣境常用鐵材，質地沉穩，適合基礎兵器與法器器胚。只能由對應團本產生。', buyGold: 0 },
+  { id: 'foundation-refined-iron', name: '精煉玄鐵', icon: '鍛鐵', category: '鐵材', realm: '築基',
+    description: '反覆淬鍊後的築基境鐵材，靈力承載能力比玄鐵更高。只能由對應團本產生。', buyGold: 0 },
+  { id: 'golden-purple-iron', name: '紫金玄鐵', icon: '紫鐵', category: '鐵材', realm: '金丹',
+    description: '帶有紫金靈輝的金丹境高階鐵材，可承受更強的法力灌注。只能由對應團本產生。', buyGold: 0 },
+  { id: 'qi-spirit-wood', name: '靈木', icon: '木', category: '木材', realm: '煉氣',
+    description: '帶有淡薄靈氣的煉氣境木材，可用於符器、弓杖與輔助法寶。只能由對應團本產生。', buyGold: 0 },
+  { id: 'foundation-century-wood', name: '百年靈木', icon: '古木', category: '木材', realm: '築基',
+    description: '生長百年的築基境靈木，木質穩定而能長時間蓄靈。只能由對應團本產生。', buyGold: 0 },
+  { id: 'golden-lightning-wood', name: '雷擊木', icon: '雷木', category: '木材', realm: '金丹',
+    description: '經天雷洗鍊仍存生機的金丹境木材，兼具堅韌與導靈性。只能由對應團本產生。', buyGold: 0 },
   { id: 'raid-refine-key-ii', name: '淬靈玄印', icon: '玄印', category: '團本印記', realm: '築基',
     description: '第二煉的必要印記。只由團本結算取得，不佔八方煉器陣素材格。', buyGold: 0 },
   { id: 'raid-refine-key-iii', name: '玄天道印', icon: '道印', category: '團本印記', realm: '金丹',
@@ -65,27 +73,28 @@ const DEFAULT_MATERIAL_REALM_BY_ID = Object.freeze(Object.fromEntries(
 
 const DEFAULT_ARTIFACT_RECIPES = {
   'seven-treasure-ruler': [
-    { materialId: 'raid-secret-realm-essence', quantity: 3 }
+    { materialId: 'qi-spirit-wood', quantity: 2 },
+    { materialId: 'qi-spirit-iron', quantity: 1 }
   ],
   'war-drum': [
-    { materialId: 'raid-secret-realm-essence', quantity: 2 },
-    { materialId: 'raid-shen-sword-soul', quantity: 1 }
+    { materialId: 'foundation-century-wood', quantity: 2 },
+    { materialId: 'qi-spirit-iron', quantity: 1 }
   ],
   'enlightenment-lamp': [
-    { materialId: 'raid-secret-realm-essence', quantity: 2 },
-    { materialId: 'raid-shen-sword-soul', quantity: 2 }
+    { materialId: 'qi-spirit-wood', quantity: 1 },
+    { materialId: 'foundation-century-wood', quantity: 1 }
   ],
   'mountain-armor': [
-    { materialId: 'raid-secret-realm-essence', quantity: 5 },
-    { materialId: 'raid-shen-sword-soul', quantity: 1 }
+    { materialId: 'golden-purple-iron', quantity: 2 },
+    { materialId: 'foundation-refined-iron', quantity: 2 }
   ],
   'void-sword': [
-    { materialId: 'raid-secret-realm-essence', quantity: 3 },
-    { materialId: 'raid-shen-sword-soul', quantity: 3 }
+    { materialId: 'golden-purple-iron', quantity: 3 },
+    { materialId: 'golden-lightning-wood', quantity: 1 }
   ],
   'longevity-jade': [
-    { materialId: 'raid-secret-realm-essence', quantity: 4 },
-    { materialId: 'raid-shen-sword-soul', quantity: 2 }
+    { materialId: 'golden-lightning-wood', quantity: 2 },
+    { materialId: 'foundation-century-wood', quantity: 1 }
   ]
 }
 
@@ -123,8 +132,12 @@ export function materialMarketMinimumTotal(materialOrRealm, quantity = 1) {
 }
 
 export const RAID_CRAFT_MATERIAL_IDS = Object.freeze([
-  'raid-secret-realm-essence',
-  'raid-shen-sword-soul'
+  'qi-spirit-iron',
+  'foundation-refined-iron',
+  'golden-purple-iron',
+  'qi-spirit-wood',
+  'foundation-century-wood',
+  'golden-lightning-wood'
 ]);
 export const RAID_REFINEMENT_KEYS = Object.freeze({
   2: 'raid-refine-key-ii',
@@ -198,10 +211,10 @@ export function validateMaterialCatalog(items) {
   if (!Array.isArray(items) || !items.length) throw new Error('材料清單不可為空');
   const seen = new Set();
   const allowed = new Set(Object.keys(DEFAULT_MATERIAL_REALM_BY_ID));
-  if (items.length !== allowed.size) throw new Error('現行材料系統固定為 4 種團本道具，不可新增或刪除');
+  if (items.length !== allowed.size) throw new Error('現行材料系統固定為 8 種團本道具，不可新增或刪除');
   const normalized = items.map((raw) => {
     const item = normalizeMaterialDefinition(raw);
-    if (!allowed.has(item.id)) throw new Error(`材料 ${item.id || '空白'} 已退出現行煉器系統；目前僅允許團本四種材料／印記`);
+    if (!allowed.has(item.id)) throw new Error(`材料 ${item.id || '空白'} 已退出現行煉器系統；目前僅允許本團本六種木鐵素材與兩種印記`);
     if (!/^[a-z0-9][a-z0-9-]{1,63}$/.test(item.id)) throw new Error(`材料 ID 不合法：${item.id || '空白'}`);
     if (seen.has(item.id)) throw new Error(`材料 ID 重複：${item.id}`);
     seen.add(item.id);
@@ -209,7 +222,7 @@ export function validateMaterialCatalog(items) {
     if (!MATERIAL_REALMS.some((realm) => realm.name === item.realm)) throw new Error(`材料 ${item.name} 使用未知境界：${item.realm}`);
     return item;
   });
-  if ([...allowed].some((id) => !seen.has(id))) throw new Error('四種團本道具必須完整保留');
+  if ([...allowed].some((id) => !seen.has(id))) throw new Error('八種團本道具必須完整保留');
   return normalized;
 }
 
@@ -219,7 +232,7 @@ export function getDefaultMaterialCatalog() {
   return clone(DEFAULT_MATERIAL_CATALOG.map(normalizeMaterialDefinition));
 }
 
-// Schema v4 收斂為固定四項：兩種團本煉器素材＋二煉／三煉印記。
+// Schema v5：固定六種煉氣～金丹木／鐵素材＋二煉／三煉印記。
 export function mergeMaterialCatalogWithDefaults(items = []) {
   const merged = new Map(getDefaultMaterialCatalog().map((item) => [item.id, item]));
   (Array.isArray(items) ? items : []).forEach((raw) => {

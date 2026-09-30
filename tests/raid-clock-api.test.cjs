@@ -16,7 +16,29 @@ function fixture(status = 'active') {
     const job=chain.then(()=>fn({get:async()=>snapshot(),update(_ref,patch){room={...room,...structuredClone(patch)};}}));
     chain=job.catch(()=>{});return job;
   }};
-  const handler = createHandler({resolveA:()=>({db:{},auth:{verifyIdToken:async()=>({
+  const playerDocs = new Map([
+    ['users/a',{uid:'a',raidTickets:{count:10,lastGrantDate:'2099-01-01'}}],
+    ['users/b',{uid:'b',raidTickets:{count:10,lastGrantDate:'2099-01-01'}}],
+    ['users/player1',{uid:'player1',raidTickets:{count:10,lastGrantDate:'2099-01-01'}}],
+    ['users/player2',{uid:'player2',raidTickets:{count:10,lastGrantDate:'2099-01-01'}}],
+    ['users/player3',{uid:'player3',raidTickets:{count:10,lastGrantDate:'2099-01-01'}}]
+  ]);
+  const playerSnapshot = ref => ({exists:playerDocs.has(ref.key),data:()=>structuredClone(playerDocs.get(ref.key))});
+  const playerDb = {
+    collection(name){return {doc(id){return {key:name+'/'+id,get:async()=>playerSnapshot({key:name+'/'+id})};}};},
+    runTransaction(fn){
+      const pending=new Map();
+      return Promise.resolve(fn({
+        get:async ref=>playerSnapshot(ref),
+        set(ref,value){pending.set(ref.key,structuredClone(value));},
+        update(ref,patch){
+          const base=structuredClone(pending.get(ref.key)||playerDocs.get(ref.key)||{});
+          pending.set(ref.key,{...base,...structuredClone(patch)});
+        }
+      })).then(result=>{for(const [key,value] of pending)playerDocs.set(key,value);return result;});
+    }
+  };
+  const handler = createHandler({resolveA:()=>({db:playerDb,auth:{verifyIdToken:async()=>({
     uid:'a',aud:'question-learning',iss:'https://securetoken.google.com/question-learning'
   })}}),resolveC:()=>({db}),logger:{error(){}}});
   async function request(action, extra={}) {

@@ -36,10 +36,10 @@ test('authoritative duplicate payload cannot restore an already-consumed seal',a
 });
 
 test('successful reward settlement updates the local bag without an extra Firebase player read',async()=>{
-  const f=fixture({inventory:{'raid-refine-key-ii':3,'raid-secret-realm-essence':2}});
+  const f=fixture({inventory:{'raid-refine-key-ii':3,'qi-spirit-iron':2}});
   await f.call();
   assert.equal(f.local.materialSystem.inventory['raid-refine-key-ii'],3);
-  assert.equal(f.local.materialSystem.inventory['raid-secret-realm-essence'],2);
+  assert.equal(f.local.materialSystem.inventory['qi-spirit-iron'],2);
   assert.equal(f.reads(),0);
   assert.equal(f.state.rewardClaimedRoomId,'room_test');
   assert.match(f.status.innerHTML,/loot/);
