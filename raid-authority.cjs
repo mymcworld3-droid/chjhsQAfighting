@@ -1,4 +1,5 @@
 'use strict';
+const soulTalents = require('./public/cultivation/soul-talents.js');
 
 const EQUIP_SLOTS = Object.freeze(['本命法寶','護身法寶','佩飾法寶','輔助法寶']);
 const REALM_ORDER = Object.freeze({凡人:0,煉氣:1,築基:2,金丹:3,元嬰:4,化神:5,煉虛:6,合體:7,大乘:8,渡劫:9,真仙:10});
@@ -48,11 +49,6 @@ const EFFECT_LIMITS = Object.freeze({
 const CORE_NAMES = Object.freeze({
   ocean:'大海無垠丹',taichu:'太初回元丹',ningxin:'凝心靜音丹',pojing:'破境衝仙丹',
   xingchen:'星辰吞月丹',wugou:'無垢清心丹',thunder:'萬劫雷霆丹',reverse:'陰陽反轉丹',sword:'破鋒劍心丹'
-});
-const CORE_FINALE = Object.freeze({
-  ocean:{attack:18,heal:11},taichu:{attack:12,heal:20},ningxin:{attack:13,heal:18},
-  pojing:{attack:22,heal:9},xingchen:{attack:19,heal:12},wugou:{attack:11,heal:21},
-  thunder:{attack:23,heal:10},reverse:{attack:16,heal:16},sword:{attack:24,heal:9}
 });
 const NEXT_REALM_THRESHOLDS = Object.freeze([28,68,188,428,788,1268,1868,2588]);
 const BATTLE_SUBJECTS = Object.freeze(['國文','英文','數學','公民','歷史','地理','物理','化學','生物']);
@@ -173,16 +169,15 @@ function soulNodeLevels(tree,type){
 function soulSnapshot(data,core){
   if(!core||positive(data?.stats?.totalScore)<NASCENT_SOUL_THRESHOLD)return null;
   const nodes=soulNodeLevels(data?.nascentSoulTree,core.type);
-  const finale=CORE_FINALE[core.type]||CORE_FINALE.taichu;
   const quality=9-core.grade;
   return {
     type:core.type,
     attackFlat:level(nodes.leftMain)*12+level(nodes.leftFarTop)*7,
     maxHpFlat:level(nodes.rightMain)*70+level(nodes.rightFarTop)*55,
-    bonusDamage:level(nodes.leftTop)*8+level(nodes.leftFarBottom)*6+
-      level(nodes.leftFinal)*(finale.attack+quality*2),
+    bonusDamage:level(nodes.leftTop)*8+level(nodes.leftFarBottom)*6,
+    talent:soulTalents.snapshot(core.type,core.grade,nodes),
     reductionFlat:level(nodes.rightTop)*5,
-    coreHeal:level(nodes.rightFinal)*(finale.heal+quality)
+    coreHeal:level(nodes.rightFinal)*(12+quality)
   };
 }
 function artifactCatalog(data){
@@ -334,7 +329,8 @@ function coreSupport(member,correct,seed){
   const previous=Math.max(0,Math.floor(finite(member?.coreCorrectStreak))),streak=correct?previous+1:0,core=member?.goldenCore;
   const out={streak,shield:!!core&&member?.coreShield===true,bonusDamage:0,heal:0};
   if(!core)return out;const grade=clampGrade(core.grade);
-  if(core.type==='ningxin'&&correct&&previous>=Math.max(1,Math.ceil(grade/3)))out.shield=true;
+  const soulShieldReady=soulTalents.strength(member?.nascentSoul?.talent)>0?streak%Math.max(3,Math.ceil(grade/3)+1)===0:previous>=Math.max(1,Math.ceil(grade/3));
+  if(core.type==='ningxin'&&correct&&soulShieldReady)out.shield=true;
   if(core.type==='wugou'&&!correct&&!out.shield&&
       deterministicPercent(seed+':wugou')<chanceByGrade(grade,20,10,100))out.shield=true;
   if(core.type==='taichu'&&correct&&streak%Math.max(2,grade+1)===0)out.heal=100;
@@ -352,7 +348,7 @@ function coreAttack(member,seed){
 function coreCounter(member,received,seed){
   const core=member?.goldenCore;if(!core||core.type!=='thunder'||received<=0)return 0;
   const chance=chanceByGrade(core.grade,10,10,90);
-  return deterministicPercent(seed+':thunder')<chance?received:0;
+  return deterministicPercent(seed+':thunder')<chance?Math.round(received*(member?.nascentSoul?.talent?.final || member?.nascentSoul?.talent?.top || member?.nascentSoul?.talent?.far ? .25 : 1)):0;
 }
 function runtimeEffects(member){return Array.isArray(member?.artifactBattle?.effects)?member.artifactBattle.effects:[];}
 function hpRatio(member){return clamp(finite(member?.hp)/Math.max(1,finite(member?.maxHp,1)),0,1);}
@@ -369,7 +365,7 @@ function resolveArtifactAttack(member,baseDamage,seed){
     lifesteal:clamp(sumEffect(effects,'equip_lifesteal_percent'),0,.5),
     shieldGain:Math.max(0,Math.round(sumEffect(effects,'equip_on_correct_shield_flat')))};
 }
-function resolvePlayerAction(member,{roomId,actionId,correct}={}){
+function resolvePlayerAction(member,{roomId,actionId,correct,bossHp=1,bossMaxHp=1}={}){
   const next={...member,artifactBattle:{...(member.artifactBattle||{}),effects:[...runtimeEffects(member)]}};
   const seed=String(roomId)+':player:'+String(actionId)+':'+String(next.uid),support=coreSupport(next,correct,seed+':support');
   next.coreCorrectStreak=support.streak;next.coreShield=support.shield;
@@ -380,7 +376,10 @@ function resolvePlayerAction(member,{roomId,actionId,correct}={}){
     const base=Math.max(1,Math.round(finite(next.atk,200)))+support.bonusDamage+
       coreAttack(next,seed+':core-attack')+Math.max(0,Math.min(1000,Math.round(finite(next?.nascentSoul?.bonusDamage))));
     const artifact=resolveArtifactAttack(next,base,seed+':artifact');
-    damage=artifact.damage;
+    const talent=soulTalents.attack(next,{hp:bossHp,maxHp:bossMaxHp},{seed,streak:support.streak});
+    damage=artifact.damage+talent.normal+talent.trueDamage+talent.followup;
+    const soulHeal=soulTalents.healing(next,Math.min(Math.max(0,bossHp),damage),talent.leech);
+    healed+=soulHeal;next.hp=Math.min(next.maxHp,next.hp+soulHeal);
     const lifesteal=Math.max(0,Math.round(damage*artifact.lifesteal));healed+=lifesteal;
     next.hp=Math.min(next.maxHp,next.hp+lifesteal);
     next.artifactShield=Math.max(0,Math.round(finite(next.artifactShield)))+artifact.shieldGain;
@@ -413,7 +412,7 @@ function resolveBossDefense(member,{roomId,bossAction}={}){
   else if(incoming>0){
     const defense=resolveArtifactDefense(next,incoming);
     damage=Math.max(0,defense.hpDamage-Math.max(0,Math.min(1000,Math.round(finite(next?.nascentSoul?.reductionFlat)))));
-    reflected=damage>0?defense.reflectDamage+coreCounter(next,damage,seed+':counter'):0;
+    reflected=damage>0?defense.reflectDamage+coreCounter(next,damage,seed+':counter')+soulTalents.reflection(next,Math.min(next.hp,damage)):0;
     next.hp=Math.max(0,next.hp-damage);
   }
   return {member:next,damage,reflectedDamage:Math.max(0,Math.round(reflected)),guarded};

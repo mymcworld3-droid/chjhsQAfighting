@@ -273,6 +273,7 @@ import { rewardRepository } from './data/reward-repository.js';
       portrait: portrait(),
       goldenCore: core,
       nascentSoul: soul ? {
+        talent: soul.talent || null,
         type: soul.type,
         bonusDamage: Math.max(0, Math.min(1000, Math.round(Number(soul.bonusDamage) || 0))),
         reductionFlat: Math.max(0, Math.min(1000, Math.round(Number(soul.reductionFlat) || 0))),

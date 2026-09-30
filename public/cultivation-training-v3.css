@@ -656,3 +656,7 @@ body.xianxia-theme.ns-map-active #page-training .ns-branch-line[data-branch="cor
 .ns-reset-btn:disabled { opacity:.45; cursor:default; }
 .ns-reset-btn:focus-visible { outline:2px solid #ffe1a0; outline-offset:2px; }
 @media(max-width:600px) { .ns-node-rules { display:none; } .ns-reset-btn { padding:4px 7px; } }
+.ns-node-detail .ns-detail-description { max-height:95px; overflow-y:auto; flex-shrink:1; }
+.ns-node-detail .ns-detail-stats { overflow-y:auto; }
+.ns-node-detail .ns-detail-footer { flex-shrink:0; }
+@media(max-width:600px) { .ns-node-detail .ns-detail-description { max-height:65px; } }

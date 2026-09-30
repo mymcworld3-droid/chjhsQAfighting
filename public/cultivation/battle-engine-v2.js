@@ -13,6 +13,11 @@ export const BATTLE_V2 = Object.freeze({
   nextRoundDelayMs: 2200
 });
 
+function hasSoulTalent(player) {
+  const talent=player?.nascentSoul?.talent;
+  return talent?.version===1 && Number(talent.top)+Number(talent.far)+Number(talent.final)>0;
+}
+
 function clampGrade(value) {
   return Math.min(9, Math.max(1, Number(value) || 9));
 }
@@ -93,7 +98,7 @@ export function resolveDeterministicCounterCore(player, receivedDamage, seed) {
   }
 
   return {
-    reflectDamage: damage,
+    reflectDamage: hasSoulTalent(player) ? Math.round(damage*.25) : damage,
     activation: {
       type: core.type,
       name: core.name,
@@ -171,7 +176,8 @@ export function resolveDeterministicCoreSupport(player, seed) {
     type: core.type, name: core.name, skill, message, kind
   });
 
-  if (core.type === 'ningxin' && correct && previous >= Math.max(1, Math.ceil(grade / 3)) && !result.shield) {
+  const soulShieldReady = hasSoulTalent(player) ? streak % Math.max(3,Math.ceil(grade / 3)+1) === 0 : previous >= Math.max(1, Math.ceil(grade / 3));
+  if (core.type === 'ningxin' && correct && soulShieldReady && !result.shield) {
     result.shield = true;
     activate('凝心靜音丹・道心護體', '連續答對，金丹道心護體成形', '鬥法防護');
   }
@@ -256,7 +262,9 @@ export function settleBattleRound({
   maxRounds = BATTLE_V2.maxRounds,
   // Optional per-hit resolver for equipment effects. Pure engine remains unchanged without one.
   resolveEquipmentHit = null,
-  resolveGuardedFollowup = null
+  resolveGuardedFollowup = null,
+  resolveTalentDefense = null,
+  soulTalents = globalThis.QASoulTalents || null
 }) {
   // 對手若仍在金丹或以下，元嬰戰鬥投影全部封印：包含攻擊／生命屬性、加傷、減傷與護元。
   ({ host, guest } = applyNascentSoulDuelRule(host, guest));
@@ -302,7 +310,10 @@ export function settleBattleRound({
       continue;
     }
 
+    player.hp = role === 'host' ? hostHp : guestHp;
+    defender.hp = role === 'host' ? guestHp : hostHp;
     const plan = hitPlan({ roomId, round, role, player, support });
+    const talent = soulTalents?.attack(player, defender, {seed:roomId + ':' + round + ':' + player.uid, streak:support.streak}) || {normal:0,trueDamage:0,followup:0,leech:0};
     // The equipment resolver must see the current sequential HP, not the pre-round snapshot.
     if (typeof resolveEquipmentHit === 'function') {
       player.hp = role === 'host' ? hostHp : guestHp;
@@ -317,24 +328,26 @@ export function settleBattleRound({
       activations.push({ type: defender.goldenCore?.type || 'shield', name: defender.goldenCore?.name || '金丹', ownerUid: defender.uid, skill: '金丹道心護體', message: '金丹道心護體發動並消耗，須重新凝聚', kind: '鬥法防護' });
     }
     const equipment = !guarded && typeof resolveEquipmentHit === 'function'
-      ? (resolveEquipmentHit({ attacker: player, defender, baseDamage: plan.totalDamage, role, round, seed: `${roomId}:${round}:${player.uid}:artifact` }) || null)
+      ? (resolveEquipmentHit({ attacker: player, defender, baseDamage: plan.totalDamage, bonusNormalDamage:talent.normal, bonusTrueDamage:talent.trueDamage, role, round, seed: `${roomId}:${round}:${player.uid}:artifact` }) || null)
       : guarded && typeof resolveGuardedFollowup === 'function'
-        ? (resolveGuardedFollowup({ attacker: player, defender, baseDamage: plan.totalDamage, role, round, seed: `${roomId}:${round}:${player.uid}:artifact` }) || null)
+        ? (resolveGuardedFollowup({ attacker: player, defender, baseDamage: plan.totalDamage, bonusTrueDamage:talent.trueDamage, role, round, seed: `${roomId}:${round}:${player.uid}:artifact` }) || null)
         : null;
     // 連擊是第二次獨立傷害：首擊被道心抵銷後，連擊仍會正常命中。
-    const incomingDamage = equipment ? Math.max(0, Math.round(Number(equipment.damage) || 0)) : guarded ? 0 : plan.totalDamage;
+    const guardedTrue = guarded && !equipment && talent.trueDamage > 0 ? (resolveTalentDefense ?
+      Math.max(0,Math.round(resolveTalentDefense({attacker:player,defender,normalDamage:0,trueDamage:talent.trueDamage})?.hpDamage || 0)) : talent.trueDamage) : 0;
+    const incomingDamage = (equipment ? Math.max(0, Math.round(Number(equipment.damage) || 0)) : guarded ? 0 : plan.totalDamage + talent.normal) + guardedTrue;
     // 元嬰守元在最後結算每次實際受擊傷害；護體格擋仍優先。
-    const reduction = guarded ? 0 : Math.max(0, Math.min(1000, Math.round(Number(defender?.nascentSoul?.reductionFlat) || 0)));
-    const damage = Math.max(0, incomingDamage - reduction);
+    const reduction = guarded || equipment?.soulReductionApplied ? 0 : Math.max(0, Math.min(1000, Math.round(Number(defender?.nascentSoul?.reductionFlat) || 0)));
+    const damage = Math.max(0, incomingDamage - reduction) + (!equipment && !guarded ? talent.trueDamage : 0);
     const beforeHostHp = hostHp, beforeGuestHp = guestHp;
     const targetBefore = role === 'host' ? guestHp : hostHp;
     if (role === 'host') guestHp = Math.max(0, guestHp - damage);
     else hostHp = Math.max(0, hostHp - damage);
-    const attack = { type: 'attack', actorRole: role, actorUid: player.uid, targetUid: defender.uid, damage, baseDamage: plan.baseDamage, extraDamage: plan.extraDamage, skill: [plan.activation?.skill, plan.soulDamage ? '元嬰神通' : '', equipment?.skill].filter(Boolean).join('・') };
+    const attack = { type: 'attack', actorRole: role, actorUid: player.uid, targetUid: defender.uid, damage, baseDamage: plan.baseDamage, extraDamage: plan.extraDamage + talent.normal + talent.trueDamage, skill: [plan.activation?.skill, plan.soulDamage ? '元嬰神通' : '', talent.normal || talent.trueDamage ? '元嬰・' + talent.name + (talent.trueDamage ? '真傷' : '') : '', equipment?.skill].filter(Boolean).join('・') };
     logs.push(attack);
     if (guarded) {
       steps.push({ ...attack, damage: 0, guarded: true, hostHp: beforeHostHp, guestHp: beforeGuestHp });
-      if (equipment) steps.push({ ...attack, damage, guarded: false, skill: [attack.skill, '連擊'].filter(Boolean).join('・'), hostHp, guestHp });
+      if (equipment || guardedTrue) steps.push({ ...attack, damage, guarded: false, skill: [attack.skill, guardedTrue || equipment?.trueDamage ? '真傷・穿透道心' : '連擊'].filter(Boolean).join('・'), hostHp, guestHp });
     } else {
       steps.push({ ...attack, guarded: false, hostHp, guestHp });
     }
@@ -351,15 +364,37 @@ export function settleBattleRound({
         player.artifactShield = Math.max(0, Number(player.artifactShield) || 0) + Math.round(equipment.shieldGain);
       }
     }
+    let talentReceived = Math.min(targetBefore, damage), talentReflect = 0;
+    // One isolated follow-up: defense still applies, attack procs never run again.
+    if (talent.followup > 0 && hostHp > 0 && guestHp > 0) {
+      defender.hp = role === 'host' ? guestHp : hostHp;
+      const defended = resolveTalentDefense?.({attacker:player,defender,normalDamage:talent.followup,trueDamage:0});
+      const followDamage = defended ? Math.max(0, Math.round(defended.hpDamage || 0)) :
+        Math.max(0,talent.followup - Math.max(0,Number(defender?.nascentSoul?.reductionFlat)||0));
+      talentReceived += Math.min(defender.hp, followDamage);
+      talentReflect = Math.max(0,Math.round(defended?.reflectDamage || 0));
+      if (role === 'host') guestHp = Math.max(0,guestHp-followDamage);
+      else hostHp = Math.max(0,hostHp-followDamage);
+      steps.push({type:'attack',actorRole:role,actorUid:player.uid,targetUid:defender.uid,
+        damage:followDamage,baseDamage:0,extraDamage:followDamage,guarded:false,skill:'元嬰・' + talent.name + '連擊',hostHp,guestHp});
+    }
+    const soulLeech = soulTalents?.healing(player,talentReceived,talent.leech) || 0;
+    if(soulLeech > 0 && (role === 'host' ? hostHp : guestHp) > 0) {
+      if(role === 'host')hostHp=Math.min(player.maxHp,hostHp+soulLeech);
+      else guestHp=Math.min(player.maxHp,guestHp+soulLeech);
+      logs.push({type:'heal',actorRole:role,actorUid:player.uid,amount:soulLeech,damage:0,skill:'元嬰・還神吸血'});
+    }
     // Step HP records must include any instant post-hit recovery before animation playback.
     steps[steps.length - 1].hostHp = hostHp;
     steps[steps.length - 1].guestHp = guestHp;
     if (hostHp <= 0 || guestHp <= 0) break;
 
     // A surviving defender may reflect damage. The attacker must survive to take a later action.
-    if (damage > 0) {
-      const counter = resolveDeterministicCounterCore(defender, Math.min(targetBefore, damage), roomId + ':' + round + ':' + defender.uid + ':counter');
-      counter.reflectDamage += Math.max(0, Math.round(Number(equipment?.reflectDamage) || 0));
+    if (talentReceived > 0) {
+      const counter = resolveDeterministicCounterCore(defender, talentReceived, roomId + ':' + round + ':' + defender.uid + ':counter');
+      const soulReflect = soulTalents?.reflection(defender,talentReceived) || 0;
+      counter.reflectDamage += Math.max(0, Math.round(Number(equipment?.reflectDamage) || 0)) + talentReflect + soulReflect;
+      if(soulReflect > 0)counter.activation=counter.activation || {type:'nascent-soul',skill:'元嬰・雷返反傷',name:'雷霆元嬰',message:'雷返反傷',kind:'元嬰受擊效果'};
       if (equipment?.reflectDamage > 0) {
         counter.activation = counter.activation || { type: 'artifact', skill: equipment.reflectSkill || '法寶反傷', name: '法寶', message: '法寶反傷觸發', kind: '鬥法受擊效果' };
       }

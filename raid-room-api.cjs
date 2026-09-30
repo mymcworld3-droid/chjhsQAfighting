@@ -337,7 +337,7 @@ function createHandler({
             throw Object.assign(new Error('這道團本題目已經結算'), { status: 409 });
           }
 
-          const combat = resolvePlayerAction({ ...me }, { roomId, actionId: id, correct });
+          const combat = resolvePlayerAction({ ...me }, { roomId, actionId: id, correct, bossHp:room.bossHp, bossMaxHp:room.bossMaxHp });
           const dealt = correct ? Math.max(0, Math.round(finite(combat.damage))) : 0;
           const nextBossHp = Math.max(0, Math.round(finite(current.bossHp)) - dealt);
           const resolution = {

@@ -1,3 +1,4 @@
+import {} from './soul-talents.js';
 import {
   doc, collection, query, where, limit, getDocs, getDoc,
   addDoc, updateDoc, onSnapshot, runTransaction, serverTimestamp
@@ -416,6 +417,7 @@ export const featureReady = (async () => {
       maxHp: combat.maxHp,
       goldenCore,
       nascentSoul: nascentSoul ? {
+        talent: nascentSoul.talent || null,
         type: nascentSoul.type,
         attackFlat: Math.max(0, Math.min(2000, Math.round(Number(nascentSoul.attackFlat) || 0))),
         maxHpFlat: Math.max(0, Math.min(10000, Math.round(Number(nascentSoul.maxHpFlat) || 0))),
@@ -1143,7 +1145,8 @@ export const featureReady = (async () => {
           firstAnswerUid: fresh.firstAnswerUid || null,
           tieWindowMs: BATTLE_V2.tieWindowMs, maxRounds: fresh.maxRounds || BATTLE_V2.maxRounds,
           resolveEquipmentHit: window.resolveArtifactBattleHit,
-          resolveGuardedFollowup: window.resolveArtifactGuardedFollowup
+          resolveGuardedFollowup: window.resolveArtifactGuardedFollowup,
+          resolveTalentDefense: window.resolveArtifactBattleDefense
         });
         const names = { host: fresh.host?.name || '我方', guest: fresh.guest?.name || '對手' };
         const roundLogs = outcome.logs.map((entry) => ({ ...entry, actorName: names[entry.actorRole] || '修士', round, id: randomId(`log-${round}`) }));
