@@ -11,13 +11,14 @@ const artifactSync = read('public/cultivation/artifact-catalog-sync.js');
 const materialSync = read('public/cultivation/material-catalog-sync.js');
 const preload = read('public/cultivation/startup-resource-preloader.js');
 
-test('startup waits for authoritative artifact and material catalogs', () => {
+test('startup waits for authoritative artifacts and local fixed materials', () => {
   assert.match(artifactSync, /export const featureReady = new Promise/);
   assert.match(artifactSync, /xiuxian:artifact-catalog-startup-ready/);
   assert.match(materialSync, /export const featureReady = new Promise/);
   assert.match(materialSync, /xiuxian:material-catalog-startup-ready/);
   assert.match(artifactSync, /startup-timeout/);
-  assert.match(materialSync, /startup-timeout/);
+  assert.match(materialSync, /local-fixed-catalog/);
+  assert.doesNotMatch(materialSync, /getFirestore|onSnapshot|setDoc/);
 });
 
 test('inventory and refinery resource preloader runs before unified inventory UI', () => {

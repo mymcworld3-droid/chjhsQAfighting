@@ -42,10 +42,11 @@ test('integrated recipe editor enforces the eight-slot refinery limit while allo
   assert.match(artifactManager, /artifactRecipeDepth\(id, normalizedRecipes\)/);
 });
 
-test('material manager no longer exposes a separate artifact recipe list', () => {
+test('material manager is fixed/read-only while recipe editing stays in artifact editor', () => {
   assert.doesNotMatch(index, /id="admin-recipe-list"/);
   assert.match(index, /法寶配方請在法寶編輯裡設定/);
-  assert.match(materialManager, /法寶合成配方請直接到「法寶管理 → 編輯」內設定/);
+  assert.match(materialManager, /固定四項/);
+  assert.match(materialManager, /固定規則/);
   assert.doesNotMatch(main, /admin-recipe-editor-enhancement\.js/);
 });
 

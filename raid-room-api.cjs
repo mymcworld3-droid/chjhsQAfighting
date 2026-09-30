@@ -4,7 +4,7 @@ const { PROJECT_IDS } = require('./firebase-admin-projects.cjs');
 const { playerRepository, raidRepository } = require('./server-repositories.cjs');
 const {
   loadTrustedRaidPlayer, memberSnapshotFromTrusted, createRaidBoss, bossPhase,
-  resolvePlayerAction
+  resolvePlayerAction, RAID_TEAMWORK
 } = require('./raid-authority.cjs');
 const { readRaidQuestionTicket, assertRaidQuestionTicket } = require('./raid-question-ticket.cjs');
 const { advanceRaidRoom, startRaidScheduler } = require('./raid-clock.cjs');
@@ -96,6 +96,11 @@ async function createRoom(db, uid, player) {
     bossPhase: 1,
     bossActionCount: 0,
     lastBossAction: null,
+    teamCycle: 1,
+    teamCorrectUids: [],
+    teamGuardReady: false,
+    teamBurstTriggered: false,
+    teamBurstCount: 0,
     maxMembers: MAX_MEMBERS,
     members: { [uid]: memberSnapshot(player, uid, true) }
   };
@@ -312,7 +317,12 @@ function createHandler({
             bossBaseAttack: boss.baseAttack,
             bossPhase: boss.phase,
             bossActionCount: 0,
-            lastBossAction: null
+            lastBossAction: null,
+            teamCycle: 1,
+            teamCorrectUids: [],
+            teamGuardReady: false,
+            teamBurstTriggered: false,
+            teamBurstCount: 0
           };
           tx.update(ref, update);
           return publicRoom(roomId, { ...current, ...update });
@@ -369,7 +379,15 @@ function createHandler({
           }
 
           const combat = resolvePlayerAction({ ...me }, { roomId, actionId: id, correct, bossHp:current.bossHp, bossMaxHp:current.bossMaxHp });
-          const dealt = correct ? Math.max(0, Math.round(finite(combat.damage))) : 0;
+          const personalDamage = correct ? Math.max(0, Math.round(finite(combat.damage))) : 0;
+          const previousContributors = Array.isArray(current.teamCorrectUids) ? current.teamCorrectUids : [];
+          const teamCorrectUids = correct ? [...new Set([...previousContributors, uid])] : [...previousContributors];
+          const teamGuardReady = current.teamGuardReady === true ||
+            teamCorrectUids.length >= RAID_TEAMWORK.guardContributors;
+          const teamBurstDamage = correct && current.teamBurstTriggered !== true &&
+            teamCorrectUids.length >= RAID_TEAMWORK.burstContributors ? RAID_TEAMWORK.burstDamage : 0;
+          const teamBurstTriggered = current.teamBurstTriggered === true || teamBurstDamage > 0;
+          const dealt = personalDamage + teamBurstDamage;
           const nextBossHp = Math.max(0, Math.round(finite(current.bossHp)) - dealt);
           const resolution = {
             actionId: id,
@@ -381,6 +399,10 @@ function createHandler({
             correctIndex: question.answerIndex,
             explanation: cleanString(question.explanation || '', 3000),
             damage: dealt,
+            personalDamage,
+            teamBurstDamage,
+            teamContributors: teamCorrectUids.length,
+            teamGuardReady,
             healed: Math.max(0, Math.round(finite(combat.healed))),
             playerHp: Math.max(0, Math.round(finite(combat.member.hp))),
             bossHp: nextBossHp
@@ -402,7 +424,11 @@ function createHandler({
           const update = {
             members,
             bossHp: nextBossHp,
-            bossPhase: bossPhase(nextBossHp, current.bossMaxHp)
+            bossPhase: bossPhase(nextBossHp, current.bossMaxHp),
+            teamCorrectUids,
+            teamGuardReady,
+            teamBurstTriggered,
+            teamBurstCount: Math.max(0, Math.floor(finite(current.teamBurstCount))) + (teamBurstDamage > 0 ? 1 : 0)
           };
           if (nextBossHp <= 0) {
             update.status = 'won';

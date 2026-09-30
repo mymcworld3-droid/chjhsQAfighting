@@ -73,7 +73,6 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/admin-artifact-delete.js',
   './cultivation/admin-material-manager.js',
   './cultivation/admin-item-image-manager.js',
-  './cultivation/admin-material-realm-editor.js',
   './cultivation/admin-panel-collapsible.js',
   './cultivation/admin-realm-sorting.js',
   './cultivation/admin-single-row-layout.js'
@@ -83,8 +82,8 @@ let xiuxianFeatureLoadStarted = false;
 let xiuxianReadyTimer = null;
 let resolveXiuxianFeatureGate;
 const xiuxianFeatureGate = new Promise((resolve) => { resolveXiuxianFeatureGate = resolve; });
-const XIUXIAN_FEATURE_BUILD = '20260927-raid-lobby-fit3';
-const RAID_FEATURE_BUILD = '20260927-raid-vv9';
+const XIUXIAN_FEATURE_BUILD = '20260930-economy-raid1';
+const RAID_FEATURE_BUILD = '20260930-teamwork-raid1';
 const BATTLE_FEATURE_BUILD = '20260927-battle-vv2';
 
 // 交易市集僅為可選功能，載入失敗不可阻止玩家登入或進入遊戲。

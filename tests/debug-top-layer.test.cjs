@@ -127,7 +127,9 @@ test('safe action errors preserve gameplay validation but never expose raw techn
   const material = read('public/cultivation/material-system.js');
   const artifact = read('public/cultivation/artifact-system.js');
   const identity = read('public/cultivation/identity-system.js');
-  for (const [moduleName,src] of Object.entries({dongtian,material,artifact,identity})) {
+  assert.match(material,/local-readonly/);
+  assert.doesNotMatch(material,/runTransaction|getFirestore/);
+  for (const [moduleName,src] of Object.entries({dongtian,artifact,identity})) {
     assert.match(src,/xiuxianSafeActionError/,moduleName+' must route error text through common guard');
   }
   assert.doesNotMatch(entry,/洞天啟動失敗：\$\{error\?\.message/);

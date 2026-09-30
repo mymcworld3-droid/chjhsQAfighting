@@ -237,17 +237,33 @@ test('Dongtian session keeps a fixed ordered question array until completion or 
 
 
 test('Dongtian first completion grants rewards through the A/BD settlement bridge', () => {
-  assert.match(uiSource, /FIRST_COMPLETION_SPIRIT_STONE_PER_QUESTION = 100/);
-  assert.match(uiSource, /FIRST_COMPLETION_MIN_SPIRIT_STONES = 1000/);
+  assert.match(uiSource, /FIRST_COMPLETION_SPIRIT_STONE_PER_QUESTION = 30/);
+  assert.match(uiSource, /FIRST_COMPLETION_BASE_SPIRIT_STONES = 150/);
   assert.match(uiSource, /function firstCompletionCultivation\(correctCount\)/);
   assert.match(uiSource, /rewardRepository\.claimDongtian/);
-  assert.match(settlementSource, /FIRST_COMPLETION_SPIRIT_STONE_PER_QUESTION=100/);
-  assert.match(settlementSource, /FIRST_COMPLETION_MIN_SPIRIT_STONES=1000/);
+  assert.match(settlementSource, /FIRST_COMPLETION_SPIRIT_STONE_PER_QUESTION=30/);
+  assert.match(settlementSource, /FIRST_COMPLETION_BASE_SPIRIT_STONES=150/);
   assert.match(settlementSource, /runRewardReceipt/);
   assert.match(settlementSource, /PLAY_COLLECTION='dongtianPlays'/);
   assert.match(settlementSource, /OWNER_CULTIVATION_REWARD=1/);
   assert.match(settlementSource, /OWNER_GOLD_REWARD=5/);
   assert.match(uiSource, /首次修為：<\/strong>每答對 1 題 \+1 修為/);
+});
+
+test('Dongtian first-clear spirit stones use a modest base plus per-question reward', () => {
+  const vm = require('node:vm');
+  const start = uiSource.indexOf('  function firstCompletionSpiritStones(');
+  const end = uiSource.indexOf('  function firstCompletionCultivation(', start);
+  const source = uiSource.slice(start, end);
+  const context = vm.createContext({
+    Math, Number,
+    FIRST_COMPLETION_BASE_SPIRIT_STONES:150,
+    FIRST_COMPLETION_SPIRIT_STONE_PER_QUESTION:30
+  });
+  vm.runInContext(source + '\nthis.reward = firstCompletionSpiritStones;', context);
+  assert.equal(context.reward(0),150);
+  assert.equal(context.reward(10),450);
+  assert.equal(context.reward(20),750);
 });
 
 test('Dongtian one-point cultivation calculation depends on correct answers, not total questions', () => {

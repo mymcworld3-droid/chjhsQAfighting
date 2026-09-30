@@ -4,7 +4,7 @@ import {
   getFirestore, collection, doc, query, where, limit, getDoc, getDocs, getDocsFromCache, runTransaction
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { ARTIFACT_CATALOG, getArtifactById } from './artifact-catalog.js';
-import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe, materialMarketReferencePrice, materialMarketMinimumTotal } from './material-catalog.js';
+import { MATERIAL_CATALOG, RAID_CRAFT_MATERIAL_IDS, RAID_REFINEMENT_KEYS, getMaterialById, getArtifactRecipe, materialMarketReferencePrice, materialMarketMinimumTotal } from './material-catalog.js';
 
 // 玩家市集：材料／未裝備法寶採原子寄售，首發配方出售永久製作知識，不限制他人自由嘗試煉製。
 // 市集文件只代表可成交的委託；每次交割均重新讀取買賣雙方玩家文件。
@@ -13,7 +13,7 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe, materialMarketRef
   const COLLECTION = 'marketListings';
   const MAX_PRICE = 1_000_000_000;
   const MAX_QUANTITY = 999;
-  const TYPE_LABEL = Object.freeze({ material: '煉器材料', artifact: '法寶', recipe: '配方製作指南' });
+  const TYPE_LABEL = Object.freeze({ material: '煉器素材', artifact: '法寶', recipe: '配方製作指南' });
   let db = null;
   let currentUid = '';
   let refreshTimer = null;
@@ -46,8 +46,10 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe, materialMarketRef
     if (!Number.isSafeInteger(num) || num < 1 || num > cap) throw new Error(field + '必須是 1～' + cap + ' 的整數');
     return num;
   }
+  const tradableMaterialIds = new Set(RAID_CRAFT_MATERIAL_IDS);
+  const boundSealIds = new Set(Object.values(RAID_REFINEMENT_KEYS));
   function itemFor(type, id) {
-    if (type === 'material') return getMaterialById(id);
+    if (type === 'material') return tradableMaterialIds.has(String(id || '')) ? getMaterialById(id) : null;
     return getArtifactById(id);
   }
   function available(type, id, row = data()) {
@@ -63,7 +65,7 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe, materialMarketRef
     if (sellType === 'recipe') return ARTIFACT_CATALOG
       .filter((item) => item.recipeOwnerUid === user()?.uid && getArtifactRecipe(item.id).length)
       .map((item) => ({ id: item.id, name: item.name, count: 1 }));
-    const items = sellType === 'material' ? MATERIAL_CATALOG : ARTIFACT_CATALOG;
+    const items = sellType === 'material' ? MATERIAL_CATALOG.filter((item) => tradableMaterialIds.has(item.id) && !boundSealIds.has(item.id)) : ARTIFACT_CATALOG;
     return items.map((item) => ({ id: item.id, name: item.name, count: available(sellType, item.id) }))
       .filter((item) => item.count > 0);
   }
@@ -355,8 +357,8 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe, materialMarketRef
     const selected = options.find((row) => row.id === sellId);
     const list = filter === 'mine' ? mine : active.filter((listing) => filter === 'all' || listing.type === filter);
     root.innerHTML = `<div class="pm-header"><div><small>PLAYER MARKET · 修仙交易</small><h3><i class="fa-solid fa-scale-balanced"></i> 交易市集</h3><p>玩家自由定價；金幣與商品在同一筆交易中結算。首發配方可出售製作指南；沒有配方也能自由摸索煉製。</p></div><b>金幣 ${gold(data()).toLocaleString()}</b></div>
-      <div class="pm-compose"><h4>發布委託</h4><div class="pm-form"><label>類別<select id="pm-sell-type">${Object.entries(TYPE_LABEL).map(([type,label]) => `<option value="${type}" ${type === sellType ? 'selected' : ''}>${label}</option>`).join('')}</select></label><label>商品<select id="pm-sell-item">${options.map((row) => `<option value="${esc(row.id)}" ${row.id === sellId ? 'selected' : ''}>${esc(row.name)}${sellType === 'recipe' ? ' · 首發配方' : ' · 可售 '+ row.count}</option>`).join('')}</select></label><label>數量<input id="pm-sell-qty" type="number" min="1" max="${selected?.count || 1}" value="${sellType === 'recipe' ? 1 : Math.min(Math.max(1,sellQuantity), selected?.count || 1)}" ${sellType === 'recipe' ? 'disabled' : ''}></label><label>總價（金幣）<input id="pm-sell-price" type="number" min="1" max="${MAX_PRICE}" value="${sellPrice}"></label><button id="pm-publish" ${!options.length || busy ? 'disabled' : ''}>上架寄售</button></div><p id="pm-material-price-hint" class="pm-price-reference" role="status"></p><p class="pm-hint">材料／法寶上架時扣除可用庫存，取消即退還。裝備中的法寶不可寄售。配方交易只傳授製作方法，首發者身分不轉移；沒有配方也能嘗試煉器。</p></div>
-      <div class="pm-filters">${[['all','全部'],['material','材料'],['artifact','法寶'],['recipe','配方'],['mine','我的委託']].map(([value,label]) => `<button data-pm-filter="${value}" class="${filter === value ? 'active' : ''}">${label}</button>`).join('')}</div>
+      <div class="pm-compose"><h4>發布委託</h4><div class="pm-form"><label>類別<select id="pm-sell-type">${Object.entries(TYPE_LABEL).map(([type,label]) => `<option value="${type}" ${type === sellType ? 'selected' : ''}>${label}</option>`).join('')}</select></label><label>商品<select id="pm-sell-item">${options.map((row) => `<option value="${esc(row.id)}" ${row.id === sellId ? 'selected' : ''}>${esc(row.name)}${sellType === 'recipe' ? ' · 首發配方' : ' · 可售 '+ row.count}</option>`).join('')}</select></label><label>數量<input id="pm-sell-qty" type="number" min="1" max="${selected?.count || 1}" value="${sellType === 'recipe' ? 1 : Math.min(Math.max(1,sellQuantity), selected?.count || 1)}" ${sellType === 'recipe' ? 'disabled' : ''}></label><label>總價（金幣）<input id="pm-sell-price" type="number" min="1" max="${MAX_PRICE}" value="${sellPrice}"></label><button id="pm-publish" ${!options.length || busy ? 'disabled' : ''}>上架寄售</button></div><p id="pm-material-price-hint" class="pm-price-reference" role="status"></p><p class="pm-hint">秘境玄髓與清霜劍魄可自由交易；淬靈玄印、玄天道印綁定玩家不可交易。法寶上架時扣除可用庫存，取消即退還。配方交易只傳授製作方法，首發者身分不轉移；沒有配方也能嘗試煉器。</p></div>
+      <div class="pm-filters">${[['all','全部'],['material','素材'],['artifact','法寶'],['recipe','配方'],['mine','我的委託']].map(([value,label]) => `<button data-pm-filter="${value}" class="${filter === value ? 'active' : ''}">${label}</button>`).join('')}</div>
       ${failed ? '<div class="pm-connection"><span>市集連線暫時中斷，以下若有商品為上次取得的資料；交易會在送出時重新驗證。</span><button type="button" data-pm-refresh>重新載入商品</button></div>' : ''}
       <div class="pm-list">${list.length ? list.map((row) => card(row,filter==='mine')).join('') : '<p class="pm-empty">目前沒有符合條件的委託。</p>'}</div>
       <p id="player-market-notice" class="${noticeError ? 'market-notice-error' : ''}" aria-live="polite">${esc(noticeText)}</p>`;
@@ -442,9 +444,8 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe, materialMarketRef
         getDocs(query(collection(db,COLLECTION),where('status','==','active'),limit(60))),
         getDocs(query(collection(db,COLLECTION),where('sellerUid','==',currentUid),limit(40)))
       ]);
-      active = publicRows.docs.map((row) => ({ id:row.id,...row.data() }))
-        .sort((a,b) => Number(b.createdAtMs || 0)-Number(a.createdAtMs || 0));
-      mine = ownRows.docs.map((row) => ({ id:row.id,...row.data() }))
+      active = publicRows.docs.map((row) => ({ id:row.id,...row.data() })).sort((a,b) => Number(b.createdAtMs || 0)-Number(a.createdAtMs || 0));
+      mine = ownRows.docs.map((row) => ({ id:row.id,...row.data() })).filter((row) => row.type !== 'material')
         .sort((a,b) => Number(b.createdAtMs || 0)-Number(a.createdAtMs || 0));
       failed = false;
     } catch (error) {
@@ -457,9 +458,8 @@ import { MATERIAL_CATALOG, getMaterialById, getArtifactRecipe, materialMarketRef
           getDocsFromCache(query(collection(db,COLLECTION),where('status','==','active'),limit(60))),
           getDocsFromCache(query(collection(db,COLLECTION),where('sellerUid','==',currentUid),limit(40)))
         ]);
-        if (publicRows.size) active = publicRows.docs.map((row) => ({ id:row.id,...row.data() }))
-          .sort((a,b) => Number(b.createdAtMs || 0)-Number(a.createdAtMs || 0));
-        if (ownRows.size) mine = ownRows.docs.map((row) => ({ id:row.id,...row.data() }))
+        if (publicRows.size) active = publicRows.docs.map((row) => ({ id:row.id,...row.data() })).sort((a,b) => Number(b.createdAtMs || 0)-Number(a.createdAtMs || 0));
+        if (ownRows.size) mine = ownRows.docs.map((row) => ({ id:row.id,...row.data() })).filter((row) => row.type !== 'material')
           .sort((a,b) => Number(b.createdAtMs || 0)-Number(a.createdAtMs || 0));
       } catch (cacheError) {
         console.warn('[Player market] no cached listings available', cacheError);

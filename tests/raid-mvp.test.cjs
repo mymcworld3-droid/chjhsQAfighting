@@ -13,6 +13,8 @@ const roomApiSource = readFileSync(join(__dirname, '../raid-room-api.cjs'), 'utf
 const serverSource = readFileSync(join(__dirname, '../server.js'), 'utf8');
 const mainSource = readPublic('main.js');
 const cssSource = readPublic('styles/raid-mode.css');
+const catalogSource = readPublic('cultivation/raid-catalog.js');
+const clockSource = readFileSync(join(__dirname, '../raid-clock.cjs'), 'utf8');
 
 function loadEngine() {
   const context = vm.createContext({ console, Math, Number, String, Object, Array });
@@ -164,7 +166,7 @@ test('raid hub bottom follows the real bottom navigation top edge', () => {
 
 
 test('raid hub card is measured directly to the navigation edge and cache-busted', () => {
-  assert.match(raidSource, /STYLE_HREF = 'styles\/raid-mode\.css\?v=20260930-raid-loot1'/);
+  assert.match(raidSource, /STYLE_HREF = 'styles\/raid-mode\.css\?v=20260930-teamwork-list1'/);
   assert.match(raidSource, /function fitRaidHubToNavigation\(\)/);
   assert.match(raidSource, /navTop - cardTop - 8/);
   assert.match(raidSource, /card\.style\.setProperty\('height', targetHeight \+ 'px', 'important'\)/);
@@ -255,4 +257,34 @@ test('raid lobby exposes a host-only manual friend invite with cooldown', () => 
   assert.match(raidSource, /inviteCooldownUntil = now\(\) \+ 15000/);
   assert.match(raidSource, /已邀請 ' \+ sent \+ ' 位在線好友/);
   assert.match(raidSource, /目前沒有在線好友可邀請/);
+});
+
+
+test('raid hub uses an extensible trial catalog instead of a single hard-coded boss entry', () => {
+  assert.match(catalogSource,/export const RAID_TRIALS/);
+  assert.match(catalogSource,/id: 'shen-qingshuang'/);
+  assert.match(catalogSource,/id: 'sealed-trial-02'/);
+  assert.match(catalogSource,/id: 'sealed-trial-03'/);
+  assert.match(catalogSource,/秘境玄髓/);
+  assert.match(catalogSource,/清霜劍魄/);
+  assert.match(raidSource,/RAID_TRIALS\.map/);
+  assert.match(raidSource,/class="raid-trial-list"/);
+  assert.match(raidSource,/data-raid-trial=/);
+  assert.match(cssSource,/\.raid-trial-list\{/);
+  assert.match(cssSource,/\.raid-trial-card\{/);
+});
+
+test('raid teamwork requires distinct contributors and exposes progress in arena and question views', () => {
+  assert.match(roomApiSource,/new Set\(\[\.\.\.previousContributors, uid\]\)/);
+  assert.match(roomApiSource,/teamCorrectUids\.length >= RAID_TEAMWORK\.guardContributors/);
+  assert.match(roomApiSource,/teamCorrectUids\.length >= RAID_TEAMWORK\.burstContributors/);
+  assert.match(roomApiSource,/teamBurstDamage = correct/);
+  assert.match(roomApiSource,/RAID_TEAMWORK\.burstDamage/);
+  assert.match(clockSource,/RAID_TEAMWORK\.guardDamageMultiplier/);
+  assert.match(clockSource,/next\.teamCorrectUids = \[\]/);
+  assert.match(raidSource,/同心破陣/);
+  assert.match(raidSource,/三才合擊/);
+  assert.match(raidSource,/teamworkMarkup\(false\)/);
+  assert.match(raidSource,/teamworkMarkup\(true\)/);
+  assert.match(cssSource,/\.raid-teamwork\{/);
 });

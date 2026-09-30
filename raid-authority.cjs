@@ -303,6 +303,14 @@ function memberSnapshotFromTrusted(player,host=false){
 }
 // 固定三人基準試煉；隊伍人數、裝備與境界只改變玩家自身能力。
 const RAID_BOSS_DIFFICULTY = Object.freeze({ maxHp:4800, baseAttack:70 });
+// 清霜試煉的合作窗口：兩名不同隊員答對可削弱下一式，三名不同隊員再觸發一次合擊。
+// 單人仍可硬打，但無法取得隊伍破陣減傷與三才合擊，符合「三人正常通關、單人需高養成」定位。
+const RAID_TEAMWORK = Object.freeze({
+  guardContributors: 2,
+  guardDamageMultiplier: 0.55,
+  burstContributors: 3,
+  burstDamage: 240
+});
 function createRaidBoss(){
   return {id:'shen-qingshuang',hp:RAID_BOSS_DIFFICULTY.maxHp,
     maxHp:RAID_BOSS_DIFFICULTY.maxHp,baseAttack:RAID_BOSS_DIFFICULTY.baseAttack,phase:1};
@@ -419,6 +427,6 @@ function resolveBossDefense(member,{roomId,bossAction}={}){
 
 module.exports={
   EQUIP_SLOTS,RUNTIME_EFFECTS,stableHash,artifactPower,combatPower,trustedKnowledgeScope,pickTrustedRaidKnowledge,
-  trustedRaidPlayerSnapshot,loadTrustedRaidPlayer,memberSnapshotFromTrusted,createRaidBoss,RAID_BOSS_DIFFICULTY,bossPhase,bossIntent,
+  trustedRaidPlayerSnapshot,loadTrustedRaidPlayer,memberSnapshotFromTrusted,createRaidBoss,RAID_BOSS_DIFFICULTY,RAID_TEAMWORK,bossPhase,bossIntent,
   resolvePlayerAction,resolveBossDefense
 };

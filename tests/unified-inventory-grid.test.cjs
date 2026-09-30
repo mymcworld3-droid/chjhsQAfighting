@@ -41,14 +41,16 @@ test('material and artifact realm colors are visible in the backpack', () => {
   assert.match(bag, /item\.realm/);
 });
 
-test('raid refinement seals are normal backpack items with dedicated identity', () => {
-  assert.match(bag, /RAID_REFINEMENT_KEYS/);
-  assert.match(bag, /RAID_KEY_IDS\.has\(id\)/);
+test('raid forge materials and bound refinement seals have distinct backpack identity', () => {
+  assert.match(bag, /RAID_CRAFT_MATERIAL_IDS/);
+  assert.match(bag, /RAID_KEY_IDS = new Set\(Object\.values\(RAID_REFINEMENT_KEYS\)\)/);
+  assert.match(bag, /RAID_CRAFT_IDS = new Set\(RAID_CRAFT_MATERIAL_IDS\)/);
   assert.match(bag, /團本印記/);
-  assert.match(bag, /uib-raid-key-badge/);
-  assert.match(bag, /團本煉器印記/);
+  assert.match(bag, /團本煉器素材/);
   assert.match(bag, /第二次煉製的必要印記/);
-  assert.match(bag, /第三次煉製的必要道印/);
+  assert.match(bag, /第三次煉製的必要印記/);
+  assert.match(bag, /秘境玄髓，可直接放入八方煉器陣/);
+  assert.match(bag, /清霜劍魄，可直接放入八方煉器陣/);
 });
 
 test('obsolete renderer and CSS bridge are removed', () => {
@@ -179,7 +181,7 @@ test('old plain-text training backpack cards are removed from both stage shells'
 });
 
 test('all runtime feature modules share one build query without changing dependency-list paths', () => {
-  assert.match(main,/const XIUXIAN_FEATURE_BUILD = '20260927-raid-lobby-fit3'/);
+  assert.match(main,/const XIUXIAN_FEATURE_BUILD = '20260930-economy-raid1'/);
   assert.match(main,/await import\(\`\$\{modulePath\}\?v=\$\{XIUXIAN_FEATURE_BUILD\}\`\)/);
   assert.match(main,/'\.\/cultivation\/foundation-training-page\.js'/);
   assert.match(main,/'\.\/cultivation\/cultivation-training-v4\.js'/);

@@ -75,17 +75,17 @@ test('every defined artifact recipe requires at least two total ingredients', ()
   const api = loadRecipeApi();
   assert.equal(api.MIN_ARTIFACT_RECIPE_MATERIALS, 2);
   assert.throws(() => api.validateArtifactRecipes({
-    'seven-treasure-ruler': [{ materialId: 'spirit-wood', quantity: 1 }]
+    'seven-treasure-ruler': [{ materialId: 'raid-secret-realm-essence', quantity: 1 }]
   }), /至少需要 2 個煉器素材/);
   assert.doesNotThrow(() => api.validateArtifactRecipes({
-    'seven-treasure-ruler': [{ materialId: 'spirit-wood', quantity: 2 }]
+    'seven-treasure-ruler': [{ materialId: 'raid-secret-realm-essence', quantity: 2 }]
   }));
 });
 
 test('artifact recipe nesting allows depth two but rejects depth three', () => {
   const api = loadRecipeApi();
   const recipes = {
-    'seven-treasure-ruler': [{ materialId: 'spirit-wood', quantity: 2 }],
+    'seven-treasure-ruler': [{ materialId: 'raid-secret-realm-essence', quantity: 2 }],
     'war-drum': [{ artifactId: 'seven-treasure-ruler', quantity: 2 }],
     'enlightenment-lamp': [{ artifactId: 'war-drum', quantity: 2 }]
   };
@@ -116,7 +116,7 @@ test('artifact recipe nesting rejects self-recursion and cycles', () => {
 test('orphan artifact recipes are repaired as a cascade without weakening strict validation', () => {
   const api = loadRecipeApi();
   const broken = {
-    'seven-treasure-ruler': [{ materialId: 'spirit-wood', quantity: 2 }],
+    'seven-treasure-ruler': [{ materialId: 'raid-secret-realm-essence', quantity: 2 }],
     'war-drum': [{ artifactId: 'deleted-ai-artifact', quantity: 2 }],
     'enlightenment-lamp': [{ artifactId: 'war-drum', quantity: 2 }]
   };
@@ -143,12 +143,12 @@ test('player refinery accepts artifact tokens and never consumes equipped copies
   assert.match(aiJobs, /artifact-system-updated/);
 });
 
-test('legacy forge path also reserves equipped artifacts and consumes mixed recipes atomically', () => {
-  assert.match(materialSystem, /row\.artifactId/);
-  assert.match(materialSystem, /equippedCounts/);
-  assert.match(materialSystem, /owned - reserved/);
-  assert.match(materialSystem, /delete artifactSystem\.inventory\[row\.artifactId\]/);
-  assert.match(materialSystem, /tx\.update\(ref, \{ \[FIELD\]: materials, artifactSystem, 'stats\.gold': newGold \}\)/);
+test('retired material store no longer performs legacy forge transactions', () => {
+  assert.match(materialSystem, /local-readonly/);
+  assert.doesNotMatch(materialSystem, /runTransaction|getFirestore|tx\.update/);
+  const aiJobs = read('public/cultivation/refinery-ai-jobs.js');
+  assert.match(aiJobs, /consumeRecipe\(raw, plan\.recipe\)/);
+  assert.match(aiJobs, /delete artifactSystem\.inventory\[row\.artifactId\]/);
 });
 
 test('backpack exposes refinement depth and index preloads the new refinery styling', () => {

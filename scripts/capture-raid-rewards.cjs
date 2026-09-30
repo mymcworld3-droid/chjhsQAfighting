@@ -40,7 +40,7 @@ const server=createServer(async(req,res)=>{
         await page.evaluate(({finish,mode})=>{
           const mine={uid:'fixture',name:'青雲學子',damage:2400,correct:8,attempts:10,learningCorrect:8,spiritCorrect:8};
           const state={status:'active',roomId:'fixture_room',bossActionCount:6,room:{status:mode==='lost'?'lost':'won',bossHp:mode==='lost'?1400:0,members:{fixture:mine}},learningOutcome:mode==='pending'?null:{settledLearningCorrect:8,settledCorrect:8}};
-          const rewards={awarded:mode!=='duplicate',rewards:{'raid-refine-key-ii':3,'raid-refine-key-iii':2,'taixu-mystic-iron':2,'nascent-soul-crystal':1},dailyFirstVictory:true,firstVictory:true,memento:{name:'清霜劍印'},realm:'元嬰'};
+          const rewards={awarded:mode!=='duplicate',rewards:{'raid-refine-key-ii':3,'raid-refine-key-iii':2,'raid-secret-realm-essence':3,'raid-shen-sword-soul':2},dailyFirstVictory:true,firstVictory:true,memento:{name:'清霜劍印'},realm:'元嬰'};
           const claim=()=>{
             const status=document.getElementById('raid-reward-status');
             status.innerHTML=mode==='retry'?'<b>獎勵尚未確認</b><small>連線中斷，請稍後重試</small><button class="raid-ghost" data-retry-reward>重試同步／領取</button>':window.lootView.renderRaidLoot(rewards);

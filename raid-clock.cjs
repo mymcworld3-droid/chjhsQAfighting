@@ -1,6 +1,6 @@
 'use strict';
 
-const { bossIntent, bossPhase, resolveBossDefense } = require('./raid-authority.cjs');
+const { bossIntent, bossPhase, resolveBossDefense, RAID_TEAMWORK } = require('./raid-authority.cjs');
 const STALE_MS = 45000;
 const BOSS_ACTION_INTERVAL_MS = 18000;
 const ROOM_TTL_MS = 30 * 60 * 1000;
@@ -45,8 +45,16 @@ function advanceRaidClock(room, roomId, at = Date.now()) {
       expireMembers(due);
       if (terminal(due)) break;
       const intent = bossIntent(next);
+      const teamContributors = [...new Set(Array.isArray(next.teamCorrectUids) ? next.teamCorrectUids : [])];
+      const teamGuarded = next.teamGuardReady === true &&
+        teamContributors.length >= RAID_TEAMWORK.guardContributors;
+      const rawDamage = Math.max(0, Math.round(finite(intent.damage)));
+      const resolvedDamage = teamGuarded
+        ? Math.max(1, Math.round(rawDamage * RAID_TEAMWORK.guardDamageMultiplier))
+        : rawDamage;
       const action = { id: count + 1, name: intent.name, cue: intent.cue, kind: intent.kind,
-        damage: intent.damage, phase: intent.phase, issuedAtMs: due };
+        damage: resolvedDamage, rawDamage, phase: intent.phase, issuedAtMs: due,
+        teamGuarded, teamContributors };
       let reflected = 0;
       for (const [uid, member] of Object.entries(next.members)) {
         if (member.alive === false || finite(member.hp) <= 0) continue;
@@ -57,12 +65,18 @@ function advanceRaidClock(room, roomId, at = Date.now()) {
           damage: Math.max(0, finite(member.damage)) + reflection,
           lastBossActionSeen: action.id,
           lastBossResolution: { bossActionSeen: action.id, damage: combat.damage,
-            reflectedDamage: reflection, guarded: combat.guarded, playerHp: combat.member.hp } };
+            reflectedDamage: reflection, guarded: combat.guarded, teamGuarded: action.teamGuarded === true,
+            rawBossDamage: action.rawDamage, playerHp: combat.member.hp } };
       }
       next.bossHp = Math.max(0, finite(next.bossHp) - reflected);
       next.bossActionCount = action.id;
       next.lastBossAction = action;
       next.bossPhase = bossPhase(next.bossHp, next.bossMaxHp);
+      // 每次 Boss 出招後開啟新的合作窗口；同一玩家重複答對不會灌滿不同隊員門檻。
+      next.teamCycle = Math.max(1, Math.floor(finite(next.teamCycle, 1))) + 1;
+      next.teamCorrectUids = [];
+      next.teamGuardReady = false;
+      next.teamBurstTriggered = false;
       for (const member of rows()) {
         if (member.lastBossResolution?.bossActionSeen === action.id) member.lastBossResolution.bossHp = next.bossHp;
       }

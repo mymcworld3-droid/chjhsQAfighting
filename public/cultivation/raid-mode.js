@@ -9,12 +9,13 @@ import {
 import { playerRepository } from './data/player-repository.js';
 import { renderRaidLoot, renderRaidLearning } from './raid-loot-view.js';
 import { rewardRepository } from './data/reward-repository.js';
+import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
 
 (function () {
   'use strict';
 
   const PAGE_ID = 'page-raid';
-  const STYLE_HREF = 'styles/raid-mode.css?v=20260930-raid-loot1';
+  const STYLE_HREF = 'styles/raid-mode.css?v=20260930-teamwork-list1';
   const MALE = 'assets/story/characters/player-male-determined.png';
   const FEMALE = 'assets/story/characters/player-female-determined.png';
   const HEARTBEAT_MS = 8000;
@@ -55,7 +56,8 @@ import { rewardRepository } from './data/reward-repository.js';
     inviteCooldownUntil: 0,
     rewardClaiming: false,
     rewardClaimedRoomId: '',
-    learningOutcome: null
+    learningOutcome: null,
+    selectedRaidId: RAID_MVP.bossId
   };
 
   function now() { return Date.now(); }
@@ -300,7 +302,7 @@ import { rewardRepository } from './data/reward-repository.js';
     button.type = 'button';
     button.className = 'raid-home-entry';
     button.innerHTML = '<span class="raid-home-emblem"><i class="fa-solid fa-users-rays"></i></span>' +
-      '<span class="raid-home-copy"><small>秘境集結 ／ RAID</small><strong>秘境討伐</strong><em>建議 3 人同行・挑戰沈清霜</em></span>' +
+      '<span class="raid-home-copy"><small>秘境集結 ／ RAID</small><strong>秘境試煉</strong><em>選擇團本・建議 3 人同行</em></span>' +
       '<span class="raid-home-arrow"><i class="fa-solid fa-chevron-right"></i></span>';
     button.addEventListener('click', openHub);
     anchor.insertAdjacentElement('afterend', button);
@@ -313,29 +315,57 @@ import { rewardRepository } from './data/reward-repository.js';
     button.classList.toggle('locked', locked);
     const hint = button.querySelector('em');
     if (hint) hint.textContent = locked ? '築基初期（' + RAID_MVP.minimumScore + ' 修為）開放' :
-      (state.roomId ? '秘境隊伍進行中' : '建議 3 人同行・挑戰沈清霜');
+      (state.roomId ? '秘境隊伍進行中' : '選擇團本・建議 3 人同行');
   }
 
   function renderHub() {
     state.status = state.roomId ? state.status : 'hub';
     document.body.classList.remove('raid-session-active');
     show('hub');
-    const locked = score() < RAID_MVP.minimumScore;
+    const selected = raidTrialById(state.selectedRaidId);
+    const selectedLocked = selected.status !== 'open' || score() < selected.minimumScore;
     const hub = document.getElementById('raid-hub');
-    hub.innerHTML =
-      '<header class="raid-heading"><button class="raid-back" type="button" data-home><i class="fa-solid fa-arrow-left"></i></button>' +
-      '<div><small>SECRET REALM ／ 秘境集結</small><h2>秘境討伐</h2><p>1–4 人共用 Boss；每位玩家各自作答，不互相等待。</p></div><span class="raid-seal">團</span></header>' +
-      '<article class="raid-boss-card ' + (locked ? 'locked' : '') + '">' +
-      '<div class="raid-boss-art"><img src="' + RAID_MVP.bossImage + '" alt="沈清霜"><span>多人 Boss</span></div>' +
-      '<div class="raid-boss-info"><div class="raid-badges"><span>1–4 人</span></div>' +
-      (data().raidProgress?.['shen-qingshuang']?.memento ? '<small>通關紀念・' + escapeHtml(data().raidProgress['shen-qingshuang'].memento.name) + '</small>' : '') +
-      '<small>青雲山・演武秘境</small><h3>' + RAID_MVP.bossTitle + '</h3>' +
-      '<p>與隊友一同迎戰大師姐。答對即可出手，Boss 出招時會切回戰場呈現攻防結果。</p>' +
-      '<p class="raid-hub-rewards">答對：修為 +1、靈石 +20；元嬰另獲神識。通關：道印與境界素材；每日首勝加贈道印。</p>' +
-      '<div class="raid-join-grid"><button class="raid-primary" type="button" data-quick ' + (locked ? 'disabled' : '') + '>快速加入／建立隊伍</button>' +
-      '<button class="raid-ghost" type="button" data-create ' + (locked ? 'disabled' : '') + '>建立私人隊伍</button></div>' +
-      '<div class="raid-code-join"><input id="raid-room-code-input" maxlength="6" placeholder="輸入 6 碼隊伍代碼"><button class="raid-ghost" type="button" data-code ' + (locked ? 'disabled' : '') + '>加入隊伍</button></div>' +
-      '</div></article>';
+    const trialCards = RAID_TRIALS.map(function (trial) {
+      const active = trial.id === selected.id;
+      const lockedByRealm = score() < trial.minimumScore;
+      const sealed = trial.status !== 'open';
+      return '<button type="button" class="raid-trial-card ' + (active ? 'active ' : '') + (sealed ? 'sealed ' : '') +
+        '" data-raid-trial="' + escapeHtml(trial.id) + '">' +
+        '<span class="raid-trial-icon">' + (trial.bossImage ? '<img src="' + escapeHtml(trial.bossImage) + '" alt="">' :
+          '<i class="fa-solid fa-lock"></i>') + '</span><span class="raid-trial-copy"><small>' +
+        escapeHtml(sealed ? '封印中' : (lockedByRealm ? '境界未達' : '可挑戰')) + '</small><strong>' +
+        escapeHtml(trial.title) + '</strong><em>' + escapeHtml(trial.recommended) + '</em></span></button>';
+    }).join('');
+
+    let detail = '';
+    if (selected.status !== 'open') {
+      detail = '<article class="raid-boss-card locked raid-future-card"><div class="raid-boss-art raid-future-art"><div class="raid-future-seal"><i class="fa-solid fa-lock"></i></div><span>未開放</span></div>' +
+        '<div class="raid-boss-info"><div class="raid-badges"><span>' + escapeHtml(selected.party) + '</span><span>' +
+        escapeHtml(selected.mechanic) + '</span></div><small>' + escapeHtml(selected.location) + '</small><h3>' +
+        escapeHtml(selected.bossTitle) + '</h3><p>' + escapeHtml(selected.description) + '</p>' +
+        '<div class="raid-future-drop"><i class="fa-solid fa-gem"></i><span><b>預定獎勵方向</b><small>' +
+        selected.rewards.map(escapeHtml).join('・') + '</small></span></div>' +
+        '<div class="raid-prototype-note"><i class="fa-solid fa-scroll"></i><span><b>團本列表骨架已完成</b><small>之後新增 Boss 時可直接加入目錄並接上各自的房間、機制與獎勵 adapter。</small></span></div></div></article>';
+    } else {
+      detail = '<article class="raid-boss-card ' + (selectedLocked ? 'locked' : '') + '">' +
+        '<div class="raid-boss-art"><img src="' + escapeHtml(selected.bossImage || RAID_MVP.bossImage) + '" alt="沈清霜"><span>正式試煉・第一境</span></div>' +
+        '<div class="raid-boss-info"><div class="raid-badges"><span>' + escapeHtml(selected.party) + '</span><span>' +
+        escapeHtml(selected.recommended) + '</span><span>' + escapeHtml(selected.mechanic) + '</span></div>' +
+        (data().raidProgress?.['shen-qingshuang']?.memento ? '<small>通關紀念・' + escapeHtml(data().raidProgress['shen-qingshuang'].memento.name) + '</small>' : '') +
+        '<small>' + escapeHtml(selected.location) + '</small><h3>' + escapeHtml(selected.bossTitle) + '</h3>' +
+        '<p>' + escapeHtml(selected.description) + '</p>' +
+        '<div class="raid-reward-preview"><b>主要戰利品</b><span>' + selected.rewards.map(escapeHtml).join('・') + '</span></div>' +
+        '<p class="raid-hub-rewards">答對：修為 +1、靈石 +20；元嬰另獲神識。通關另有境界素材；每日首勝會加贈團本關鍵材料。</p>' +
+        '<div class="raid-join-grid"><button class="raid-primary" type="button" data-quick ' + (selectedLocked ? 'disabled' : '') + '>快速加入／建立隊伍</button>' +
+        '<button class="raid-ghost" type="button" data-create ' + (selectedLocked ? 'disabled' : '') + '>建立私人隊伍</button></div>' +
+        '<div class="raid-code-join"><input id="raid-room-code-input" maxlength="6" placeholder="輸入 6 碼隊伍代碼"><button class="raid-ghost" type="button" data-code ' +
+        (selectedLocked ? 'disabled' : '') + '>加入隊伍</button></div></div></article>';
+    }
+
+    hub.innerHTML = '<header class="raid-heading"><button class="raid-back" type="button" data-home><i class="fa-solid fa-arrow-left"></i></button>' +
+      '<div><small>SECRET REALM ／ 秘境集結</small><h2>秘境試煉</h2><p>選擇試煉後再組隊；每個團本可有獨立 Boss、合作規則與專屬掉落。</p></div><span class="raid-seal">團</span></header>' +
+      '<div class="raid-trial-list" role="list">' + trialCards + '</div>' + detail;
+
     scheduleRaidHubFit();
     setTimeout(scheduleRaidHubFit, 120);
     setTimeout(scheduleRaidHubFit, 360);
@@ -343,11 +373,19 @@ import { rewardRepository } from './data/reward-repository.js';
       window.switchToPage?.('page-home');
       syncRaidViewportLock();
     });
-    hub.querySelector('[data-quick]')?.addEventListener('click', function () { void enterRoom('quick'); });
-    hub.querySelector('[data-create]')?.addEventListener('click', function () { void enterRoom('create'); });
-    hub.querySelector('[data-code]')?.addEventListener('click', function () {
-      void enterRoom('code', document.getElementById('raid-room-code-input')?.value || '');
+    hub.querySelectorAll('[data-raid-trial]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        state.selectedRaidId = button.dataset.raidTrial || RAID_MVP.bossId;
+        renderHub();
+      });
     });
+    if (selected.status === 'open') {
+      hub.querySelector('[data-quick]')?.addEventListener('click', function () { void enterRoom('quick'); });
+      hub.querySelector('[data-create]')?.addEventListener('click', function () { void enterRoom('create'); });
+      hub.querySelector('[data-code]')?.addEventListener('click', function () {
+        void enterRoom('code', document.getElementById('raid-room-code-input')?.value || '');
+      });
+    }
   }
 
   async function inviteOnlineFriends({ force = false } = {}) {
@@ -457,6 +495,28 @@ import { rewardRepository } from './data/reward-repository.js';
       baseAttack: state.boss?.baseAttack || 100
     });
   }
+  function teamworkState() {
+    const ids = [...new Set(Array.isArray(state.room?.teamCorrectUids) ? state.room.teamCorrectUids : [])];
+    return {
+      contributors: ids.length,
+      guardReady: state.room?.teamGuardReady === true,
+      burstTriggered: state.room?.teamBurstTriggered === true
+    };
+  }
+
+  function teamworkMarkup(compact = false) {
+    const team = teamworkState();
+    const guardProgress = Math.min(2, team.contributors);
+    const burstProgress = Math.min(3, team.contributors);
+    return '<div class="raid-teamwork ' + (compact ? 'compact ' : '') + (team.guardReady ? 'guard-ready ' : '') +
+      (team.burstTriggered ? 'burst-ready' : '') + '">' +
+      '<div><i class="fa-solid fa-shield-halved"></i><span><b>同心破陣 ' + guardProgress + '/2</b><small>' +
+      (team.guardReady ? '已完成：Boss 下一式傷害降低 45%' : '需要 2 名不同隊員在本輪答對') +
+      '</small></span></div><div><i class="fa-solid fa-khanda"></i><span><b>三才合擊 ' + burstProgress + '/3</b><small>' +
+      (team.burstTriggered ? '本輪已觸發 240 團隊傷害' : '3 名不同隊員答對時追加 240 團隊傷害') +
+      '</small></span></div></div>';
+  }
+
   function partyMarkup(alive, recent) {
     const members = raidRoomMembers(state.room);
     const count = Math.max(1, Math.min(4, members.length));
@@ -500,6 +560,7 @@ import { rewardRepository } from './data/reward-repository.js';
       '<div class="raid-stage"><section class="raid-boss-side"><div class="raid-name-row"><div><small>BOSS</small><h3>' + state.boss.name + '</h3></div>' +
       '<b id="raid-boss-hp-text">' + Math.round(state.boss.hp).toLocaleString() + ' / ' + Math.round(state.boss.maxHp).toLocaleString() + '</b></div>' +
       '<div class="raid-hp boss"><i id="raid-boss-hp-bar" style="width:' + hpPct(state.boss.hp, state.boss.maxHp) + '%"></i></div>' +
+      teamworkMarkup(false) +
       '<div class="raid-boss-portrait"><div class="raid-boss-aura"></div><img src="' + state.boss.image + '" alt="沈清霜"><span>「' + escapeHtml(intent.name) + '」</span></div>' +
       '<div class="raid-intent ' + intent.kind + '"><i class="fa-solid fa-khanda"></i><div><b>' + escapeHtml(intent.name) + '</b><span>' + escapeHtml(intent.cue) + '</span></div>' +
       '<em id="raid-boss-clock">' + (clock ? (clock.remainingMs / 1000).toFixed(1) : '18.0') + ' 秒</em></div></section>' +
@@ -634,6 +695,7 @@ import { rewardRepository } from './data/reward-repository.js';
     view.innerHTML = '<div class="raid-question-shell"><header><div><small>' + escapeHtml(q.subject) + '・' + escapeHtml(q.level) + '</small><strong>個人題號 ' +
       (state.playerActionCount + (review ? 0 : 1)) + '</strong></div><span id="raid-question-timer">不限時</span></header>' +
       '<div class="raid-question-boss"><img src="' + RAID_MVP.bossImage + '" alt="沈清霜"><span id="raid-question-boss-clock">Boss 行動倒數</span></div>' +
+      teamworkMarkup(true) +
       '<h2>' + rich(q.q) + '</h2><div class="raid-options">' + opts + '</div>' + explain + '</div>';
     typeset(view);
     if (!review) {
@@ -680,6 +742,10 @@ import { rewardRepository } from './data/reward-repository.js';
       state.lastPlayerAction = {
         correct: state.answerCorrect,
         damage: Math.max(0, Number(resolution.damage) || 0),
+        personalDamage: Math.max(0, Number(resolution.personalDamage) || 0),
+        teamBurstDamage: Math.max(0, Number(resolution.teamBurstDamage) || 0),
+        teamGuardReady: resolution.teamGuardReady === true,
+        teamContributors: Math.max(0, Number(resolution.teamContributors) || 0),
         healed: Math.max(0, Number(resolution.healed) || 0)
       };
 
@@ -702,13 +768,15 @@ import { rewardRepository } from './data/reward-repository.js';
           ? (result.spiritReward?.status === 'pending' ? '・神識待入帳' : '・神識 +1') : '';
         const learningText = Number(resolution.cultivationGain) > 0
           ? '・修為 +1・靈石 +20' + (result.spiritReward?.status === 'pending' ? '（待入帳）' : '') : '';
-        showCorrectAnswerFeedback((dealt > 0 ? '攻勢命中・' + dealt.toLocaleString() + ' 傷害' : '攻勢已凝聚') + learningText + spiritText);
+        const teamText = Number(resolution.teamBurstDamage) > 0 ? '・三才合擊 +' + Number(resolution.teamBurstDamage).toLocaleString() :
+          (resolution.teamGuardReady === true ? '・同心破陣已成' : '');
+        showCorrectAnswerFeedback((dealt > 0 ? '攻勢命中・' + dealt.toLocaleString() + ' 傷害' : '攻勢已凝聚') + teamText + learningText + spiritText);
       }
 
       if (state.answerCorrect && state.lastPlayerAction.damage > 0) {
         await playBattleScene({
           attacker: 'player',
-          actionName: '破勢一擊',
+          actionName: state.lastPlayerAction.teamBurstDamage > 0 ? '三才合擊' : '破勢一擊',
           damage: state.lastPlayerAction.damage,
           healed: state.lastPlayerAction.healed
         });
@@ -766,6 +834,7 @@ import { rewardRepository } from './data/reward-repository.js';
       }
 
       const bossHint = [
+        resolution.teamGuarded ? '同心破陣・Boss 傷害降低 45%' : '',
         resolution.guarded ? '道心護體擋下攻擊' : ('受到 ' + Math.max(0, Number(resolution.damage) || 0).toLocaleString() + ' 傷害'),
         Number(resolution.reflectedDamage) > 0 ? ('反擊 ' + Number(resolution.reflectedDamage).toLocaleString()) : ''
       ].filter(Boolean).join('・');
@@ -780,7 +849,7 @@ import { rewardRepository } from './data/reward-repository.js';
         damage: Math.max(0, Number(resolution.damage) || 0),
         reflectedDamage: Math.max(0, Number(resolution.reflectedDamage) || 0),
         guarded: resolution.guarded === true,
-        defenseSkill: ''
+        defenseSkill: resolution.teamGuarded ? '同心破陣・傷害降低 45%' : ''
       });
     } catch (error) {
       console.error('[Raid] authoritative boss action failed:', error);
@@ -1022,13 +1091,27 @@ import { rewardRepository } from './data/reward-repository.js';
     try {
       const payload = await rewardRepository.claimRaid(roomId);
       confirmed = true;
-      // A receipt's inventory may predate purchases or furnace consumption.
-      const fresh = uid ? await playerRepository.get(uid) : null;
       if (state.roomId !== roomId || local !== data() || playerRepository.currentUser()?.uid !== uid) return;
-      if (!fresh) throw new Error('背包同步尚未完成，請重試');
       state.rewardClaimedRoomId = roomId;
-      local.materialSystem = fresh.materialSystem || {inventory:{}};
-      local.raidProgress = fresh.raidProgress || {};
+
+      // 團本 API 回傳本次四種團本道具的權威庫存值；直接合併到本地玩家狀態，
+      // 不再為素材額外從瀏覽器讀取 Firebase users 文件。
+      local.materialSystem = local.materialSystem && typeof local.materialSystem === 'object'
+        ? local.materialSystem : {inventory:{}};
+      local.materialSystem.inventory = { ...(local.materialSystem.inventory || {}) };
+      Object.entries(payload.inventory || {}).forEach(([materialId, amount]) => {
+        const count = Math.max(0, Math.floor(Number(amount) || 0));
+        if (count > 0) local.materialSystem.inventory[materialId] = count;
+        else delete local.materialSystem.inventory[materialId];
+      });
+      if (payload.firstVictory && payload.memento) {
+        local.raidProgress = { ...(local.raidProgress || {}) };
+        local.raidProgress[RAID_MVP.bossId] = {
+          ...(local.raidProgress[RAID_MVP.bossId] || {}),
+          memento: payload.memento,
+          firstVictoryRoomId: roomId
+        };
+      }
       window.dispatchEvent(new CustomEvent('material-system-updated', {
         detail: { ...local.materialSystem, raidReward:true }
       }));
@@ -1068,7 +1151,7 @@ import { rewardRepository } from './data/reward-repository.js';
         Math.max(0, Number(member.correct) || 0) + ' / ' + Math.max(0, Number(member.attempts) || 0) + ' 答對' +
         (Number(member.spiritCorrect) > 0 ? '・神識 +' + Math.floor(member.spiritCorrect) + '（勝敗皆保留）' : '') + '</small></div>').join('') + '</div>' +
       '<div id="raid-learning-status" class="raid-learning-summary">' + renderRaidLearning(myRoomMember(), state.learningOutcome) + '</div>' +
-      '<div class="raid-prototype-note raid-loot-summary"><i class="fa-solid fa-gem"></i><span id="raid-reward-status"><b>' + (won ? '通關戰利品' : '再接再厲') + '</b><small>' + (won ? '正在確認道印、境界素材與首勝獎勵…' : '答題收益保留；擊敗大師姐另獲道印與境界素材。') + '</small></span></div>' +
+      '<div class="raid-prototype-note raid-loot-summary"><i class="fa-solid fa-gem"></i><span id="raid-reward-status"><b>' + (won ? '通關戰利品' : '再接再厲') + '</b><small>' + (won ? '正在確認玄髓、劍魄、煉製印記與首勝獎勵…' : '答題收益保留；擊敗大師姐另獲團本素材與煉製印記。') + '</small></span></div>' +
       '<div class="raid-result-actions"><button class="raid-ghost" type="button" data-home>返回仙府</button><button class="raid-ghost" type="button" data-refinery>前往煉器</button><button class="raid-primary" type="button" data-again>重新組隊</button></div></div>';
     result.querySelector('[data-home]')?.addEventListener('click', async function () {
       await leaveRaidRoom(state.roomId).catch(() => {});
