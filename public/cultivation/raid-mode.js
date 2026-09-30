@@ -15,7 +15,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
   'use strict';
 
   const PAGE_ID = 'page-raid';
-  const STYLE_HREF = 'styles/raid-mode.css?v=20260930-raid-loot1';
+  const STYLE_HREF = 'styles/raid-mode.css?v=20260930-teamwork-list1';
   const MALE = 'assets/story/characters/player-male-determined.png';
   const FEMALE = 'assets/story/characters/player-female-determined.png';
   const HEARTBEAT_MS = 8000;
