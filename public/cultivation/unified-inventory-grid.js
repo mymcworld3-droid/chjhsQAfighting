@@ -8,7 +8,7 @@ import {
   artifactRecipeDepth,
   MAX_ARTIFACT_RECIPE_NESTING,
   RAID_REFINEMENT_KEYS,
-  RAID_EXCLUSIVE_MATERIAL_IDS
+  RAID_CRAFT_MATERIAL_IDS
 } from './material-catalog.js';
 
 // 統一修煉背包：法寶、材料、消耗道具共用正方形格子；點擊後才顯示詳細資料。
@@ -19,7 +19,8 @@ import {
   const MODAL_ID = 'unified-bag-detail-modal';
   const STYLE_ID = 'unified-inventory-grid-runtime-style';
   const TYPE_ORDER = Object.freeze({ artifact: 0, material: 1, consumable: 2, training: 3 });
-  const RAID_KEY_IDS = new Set(RAID_EXCLUSIVE_MATERIAL_IDS);
+  const RAID_KEY_IDS = new Set(Object.values(RAID_REFINEMENT_KEYS));
+  const RAID_CRAFT_IDS = new Set(RAID_CRAFT_MATERIAL_IDS);
   const REALM_COLORS = Object.freeze({
     凡人: '#a1a1aa', 煉氣: '#86efac', 築基: '#60a5fa', 金丹: '#fbbf24', 元嬰: '#c084fc',
     化神: '#f472b6', 煉虛: '#818cf8', 合體: '#fb923c', 大乘: '#f87171', 渡劫: '#ef4444', 真仙: '#f8fafc'
@@ -135,6 +136,7 @@ import {
       const quantity = qty(value);
       if (!quantity) return;
       const item = getMaterialById(id);
+      if (!item) return;
       out.push({
         key: `material:${id}`,
         id,
@@ -149,7 +151,8 @@ import {
         description: item?.description || '此材料已不在目前材料清單中。',
         buyGold: Math.max(0, Number(item?.buyGold) || 0),
         raidKey: RAID_KEY_IDS.has(id),
-        raw: item || null
+        raidMaterial: RAID_CRAFT_IDS.has(id),
+        raw: item
       });
     });
 
@@ -225,13 +228,13 @@ import {
 
   function itemMarkup(item) {
     const color = qualityColor(item.realm);
-    return `<button type="button" class="uib-item ${item.raidKey ? 'uib-raid-key' : ''}" data-uib-item="${escapeHtml(item.key)}" style="--uib-quality:${escapeHtml(color)}" aria-label="查看 ${escapeHtml(item.name)} 詳細資料">
+    return `<button type="button" class="uib-item ${item.raidKey || item.raidMaterial ? 'uib-raid-key' : ''}" data-uib-item="${escapeHtml(item.key)}" style="--uib-quality:${escapeHtml(color)}" aria-label="查看 ${escapeHtml(item.name)} 詳細資料">
       <span class="uib-qty">×${item.quantity}</span>
       ${item.equipped ? '<span class="uib-equipped"><i class="fa-solid fa-circle-check"></i></span>' : ''}
-      ${item.raidKey ? '<span class="uib-raid-key-badge"><i class="fa-solid fa-stamp"></i> 團本</span>' : ''}
+      ${item.raidKey || item.raidMaterial ? '<span class="uib-raid-key-badge"><i class="fa-solid fa-stamp"></i> 團本</span>' : ''}
       <span class="uib-icon">${imageMarkup(item.imageUrl, item.icon || '◆', item.name)}</span>
       <span class="uib-name">${escapeHtml(item.name)}</span>
-      <span class="uib-bottom"><small>${escapeHtml(item.raidKey ? '團本關鍵材料' : typeLabel(item.type))}</small><em>${escapeHtml(item.realm || '凡人')}</em></span>
+      <span class="uib-bottom"><small>${escapeHtml(item.raidKey ? '團本印記' : item.raidMaterial ? '團本煉器素材' : typeLabel(item.type))}</small><em>${escapeHtml(item.realm || '凡人')}</em></span>
     </button>`;
   }
 
@@ -344,9 +347,9 @@ import {
         ? `<ul>${item.effects.map((effect) => `<li>${escapeHtml(effectLabel(effect))}</li>`).join('')}</ul>`
         : '<p>目前沒有額外效果資料。</p>'}${equippedHere ? '<p class="uib-equipped-note"><i class="fa-solid fa-circle-check"></i> 目前已裝備，效果正在生效</p>' : ''}${equipAction}</div>`;
     } else if (item.type === 'material') {
-      extra = item.raidKey
-        ? `<div class="uib-detail-section uib-raid-key-detail"><span><i class="fa-solid fa-stamp"></i> 團本關鍵材料</span><p>分類：團本專屬</p><p>用途：${item.id === RAID_REFINEMENT_KEYS[2] ? '第二次煉製的必要素材。' : item.id === RAID_REFINEMENT_KEYS[3] ? '第三次煉製的必要素材。' : item.id === 'raid-secret-realm-essence' ? '秘境玄髓，第二煉必要且僅能由團本取得。' : '清霜劍魄，第三煉必要且僅能由團本取得。'}</p><p>取得方式：擊敗指定團本 Boss 後由伺服器結算發放；不可由一般題目、洞天或系統商店取得。</p><p>持有數量：<b>×${item.quantity}</b></p></div>`
-        : `<div class="uib-detail-section"><span>材料資訊</span><p>分類：${escapeHtml(item.category)}</p><p>坊市參考單價：${materialMarketReferencePrice(item.realm).toLocaleString()} 金幣 · ${item.buyGold > 0 ? `系統採購價：${item.buyGold} 金幣` : '不可直接向系統採購'}</p></div>`;
+      extra = item.raidKey || item.raidMaterial
+        ? `<div class="uib-detail-section uib-raid-key-detail"><span><i class="fa-solid fa-stamp"></i> ${item.raidKey ? '團本印記' : '團本煉器素材'}</span><p>分類：${item.raidKey ? '煉製階段印記' : '八方煉器陣素材'}</p><p>用途：${item.id === RAID_REFINEMENT_KEYS[2] ? '第二次煉製的必要印記，不佔素材格。' : item.id === RAID_REFINEMENT_KEYS[3] ? '第三次煉製的必要印記，不佔素材格。' : item.id === 'raid-secret-realm-essence' ? '秘境玄髓，可直接放入八方煉器陣。' : '清霜劍魄，可直接放入八方煉器陣。'}</p><p>取得方式：只能由團本結算取得；問道、洞天、商店與玩家市集皆不會產出。</p><p>持有數量：<b>×${item.quantity}</b></p></div>`
+        : `<div class="uib-detail-section"><span>材料資訊</span><p>分類：${escapeHtml(item.category)}</p></div>`;
     } else if (item.id === 'revival-pill') {
       extra = `<div class="uib-detail-section"><span>使用效果</span><p>服用後立即增加 ${item.cultivationGain || 100} 修為。</p><button type="button" class="uib-use-btn" data-uib-use="revival-pill">服用一顆</button></div>`;
     }
