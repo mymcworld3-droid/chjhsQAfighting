@@ -23,36 +23,6 @@ function clamp(value, min, max) {
   return Math.min(max, Math.max(min, finite(value, min)));
 }
 
-export function createScaledShenBoss({ playerAttack = 200, playerMaxHp = 1000 } = {}) {
-  const attack = Math.max(1, Math.round(finite(playerAttack, 200)));
-  const maxHp = Math.max(1800, Math.round(attack * 8));
-  const referenceHp = Math.max(1, Math.round(finite(playerMaxHp, 1000)));
-  return {
-    id: RAID_MVP.bossId,
-    name: RAID_MVP.bossName,
-    title: RAID_MVP.bossTitle,
-    image: RAID_MVP.bossImage,
-    hp: maxHp,
-    maxHp,
-    // Boss 傷害跟挑戰者生命尺度同步，避免境界越高反而完全沒有威脅。
-    baseAttack: Math.max(70, Math.round(referenceHp * 0.105)),
-    phase: 1
-  };
-}
-
-export function createTeamScaledShenBoss(members = []) {
-  const team = Array.isArray(members) ? members.filter(Boolean).slice(0, 4) : [];
-  const count = Math.max(1, team.length);
-  const totalAttack = team.reduce((sum, member) => sum + Math.max(1, Math.round(finite(member?.atk, 200))), 0);
-  const averageHp = team.reduce((sum, member) => sum + Math.max(1, Math.round(finite(member?.maxHp, 1000))), 0) / count;
-  const boss = createScaledShenBoss({ playerAttack: totalAttack, playerMaxHp: averageHp });
-  // 多人時血量依全隊輸出尺度成長，但 Boss 單次傷害維持以平均生命尺度計算，
-  // 避免玩家數增加後單人承傷也被不合理放大。
-  boss.maxHp = Math.max(1800, Math.round(totalAttack * (6.5 + 0.5 * count)));
-  boss.hp = boss.maxHp;
-  return boss;
-}
-
 export function shenPhaseForHp(hp, maxHp) {
   const ratio = clamp(finite(hp) / Math.max(1, finite(maxHp, 1)), 0, 1);
   if (ratio > 0.70) return 1;
@@ -185,3 +155,4 @@ export function bossClockState({ startedAtMs = 0, nowMs = 0, actionCount = 0 } =
     enraged: false
   };
 }
+

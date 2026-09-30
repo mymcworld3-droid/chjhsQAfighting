@@ -42,12 +42,13 @@ test('room API returns already settled all-party damage and legacy acknowledgeme
   assert.equal(f.read().bossActionCount,1);
 });
 
-test('start uses the ready party stats instead of passing a function to scaling',async()=>{
+test('start assigns fixed Boss stats to the ready party',async()=>{
   const f=fixture('waiting');
   const result=await f.request('start');
   assert.equal(result.room.status,'active');
-  assert.equal(result.room.bossMaxHp,3000);
+  assert.equal(result.room.bossMaxHp,4800);
   assert.equal(result.room.serverDrivenBoss,true);
+  assert.equal(result.room.bossBaseAttack,70);
 });
 
 test('returning to a completed fight restores result for pending reward claim',async()=>{
@@ -55,4 +56,17 @@ test('returning to a completed fight restores result for pending reward claim',a
   const result=await f.request('reconnect');
   assert.equal(result.roomId,'room12345');
   assert.equal(result.room.status,'won');
+});
+
+test('room start assigns the same Boss HP and attack for one through four players',async()=>{
+  for(const size of [1,2,3,4]) {
+    const f=fixture('waiting'),room=f.read(),base=room.members.a;
+    room.members=Object.fromEntries(Array.from({length:size},(_,i)=>{
+      const uid=i===0?'a':'player'+i;
+      return [uid,{...base,uid,host:i===0,atk:200*(i+1),maxHp:1000*(i+1)}];
+    }));
+    const result=await f.request('start');
+    assert.equal(result.room.bossMaxHp,4800);
+    assert.equal(result.room.bossBaseAttack,70);
+  }
 });

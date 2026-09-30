@@ -3,7 +3,7 @@
 const { PROJECT_IDS } = require('./firebase-admin-projects.cjs');
 const { playerRepository, raidRepository } = require('./server-repositories.cjs');
 const {
-  loadTrustedRaidPlayer, memberSnapshotFromTrusted, createTeamBoss, bossPhase,
+  loadTrustedRaidPlayer, memberSnapshotFromTrusted, createRaidBoss, bossPhase,
   resolvePlayerAction
 } = require('./raid-authority.cjs');
 const { readRaidQuestionTicket, assertRaidQuestionTicket } = require('./raid-question-ticket.cjs');
@@ -298,7 +298,7 @@ function createHandler({
           if (!members.length || members.some(member => !member.ready)) {
             throw Object.assign(new Error('仍有隊員尚未準備'), { status: 409 });
           }
-          const boss = createTeamBoss(members);
+          const boss = createRaidBoss();
           const update = {
             status: 'active',
             serverDrivenBoss: true,

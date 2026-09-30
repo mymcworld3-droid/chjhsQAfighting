@@ -19,7 +19,7 @@ function loadEngine() {
   const code = engineSource
     .replace(/export const /g, 'const ')
     .replace(/export function /g, 'function ') +
-    '\nthis.__raid={RAID_MVP,createScaledShenBoss,createTeamScaledShenBoss,shenPhaseForHp,shenIntentForRound,resolveSoloRaidRound,nextPersonalQuestionAt,bossClockState};';
+    '\nthis.__raid={RAID_MVP,shenPhaseForHp,shenIntentForRound,resolveSoloRaidRound,nextPersonalQuestionAt,bossClockState};';
   vm.runInContext(code, context);
   return context.__raid;
 }
@@ -47,14 +47,11 @@ test('raid questions have no answer deadline while boss keeps its own clock', ()
   assert.notEqual(longRun.kind, 'finisher');
 });
 
-test('Shen boss supports team scaling and three HP phases', () => {
+test('fixed Shen boss retains three HP phases', () => {
   const e = loadEngine();
-  const boss = e.createTeamScaledShenBoss([
-    { atk: 300, maxHp: 1400 },
-    { atk: 250, maxHp: 1200 }
-  ]);
-  assert.ok(boss.maxHp > 2400);
-  assert.ok(boss.baseAttack >= 70);
+  const boss = require('../raid-authority.cjs').createRaidBoss();
+  assert.equal(boss.maxHp,4800);
+  assert.equal(boss.baseAttack,70);
   assert.equal(e.shenPhaseForHp(boss.maxHp * .8, boss.maxHp), 1);
   assert.equal(e.shenPhaseForHp(boss.maxHp * .5, boss.maxHp), 2);
   assert.equal(e.shenPhaseForHp(boss.maxHp * .2, boss.maxHp), 3);

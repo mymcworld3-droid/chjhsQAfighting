@@ -1,7 +1,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const { advanceRaidClock, advanceRaidRoom, startRaidScheduler } = require('../raid-clock.cjs');
-const { createTeamBoss } = require('../raid-authority.cjs');
+const { createRaidBoss } = require('../raid-authority.cjs');
 
 const START = 100000;
 function member(uid, extra = {}) {
@@ -95,9 +95,9 @@ test('all players dying produces a terminal loss with no further scheduled attac
   assert.equal(advanceRaidClock(next, 'room-test', START + 36000), null);
 });
 
-test('team Boss scales from the actual ready player array', () => {
-  const boss = createTeamBoss([member('a'), member('b')]);
-  assert.equal(boss.maxHp, 3000);
+test('Boss stats are fixed for the three-person benchmark', () => {
+  const boss = createRaidBoss([member('a'), member('b')]);
+  assert.equal(boss.maxHp, 4800);
 });
 
 function dbFor(initial) {
