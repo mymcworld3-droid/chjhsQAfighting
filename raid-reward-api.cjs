@@ -12,7 +12,9 @@ const RAID_BOSS_ID = 'shen-qingshuang';
 const RAID_ROOM_VERSION = 2;
 const REWARDS = Object.freeze({
   'raid-refine-key-ii': 2,
-  'raid-refine-key-iii': 1
+  'raid-refine-key-iii': 1,
+  'raid-secret-realm-essence': 2,
+  'raid-shen-sword-soul': 1
 });
 
 function finite(value, fallback = 0) {
@@ -90,6 +92,11 @@ async function awardRaidReward(db, uid, roomId, validation, {
       if (dailyFirstVictory) {
         granted['raid-refine-key-ii'] = (granted['raid-refine-key-ii'] || 0) + 1;
         granted['raid-refine-key-iii'] = (granted['raid-refine-key-iii'] || 0) + 1;
+        granted['raid-secret-realm-essence'] = (granted['raid-secret-realm-essence'] || 0) + 1;
+      }
+      // Boss 專屬材料讓首通也有一次明顯躍升，但後續仍可重複農取。
+      if (firstVictory) {
+        granted['raid-shen-sword-soul'] = (granted['raid-shen-sword-soul'] || 0) + 1;
       }
       const raidProgress = { ...(user.raidProgress || {}) };
       raidProgress[RAID_BOSS_ID] = { ...(raidProgress[RAID_BOSS_ID] || {}),
