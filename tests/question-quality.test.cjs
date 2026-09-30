@@ -21,3 +21,8 @@ test('rejects answer lists embedded in the stem and removes unstable letter refe
   assert.doesNotMatch(explanation, /選項[ABCD]|選項\([ABCD]\)|\([ABCD]\)/);
   assert.match(explanation, /相關敘述強調形影不離/);
 });
+
+test('removes Chinese and numeric choice order without changing solution steps or quantities', () => {
+  const explanation = removeUnstableOptionLabels('第一步先算500公尺。選項二的路網分析不適合；第一項錯誤；錯誤選項三錯誤；答案4是正解。');
+  assert.equal(explanation, '第一步先算500公尺。相關敘述的路網分析不適合；相關敘述錯誤；相關敘述錯誤；相關敘述是正解。');
+});

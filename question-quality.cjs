@@ -30,6 +30,8 @@ function questionQualityIssue({ q, correct, wrong, exp } = {}) {
 // explanation describe an imagined order and can point at the wrong choice.
 function removeUnstableOptionLabels(explanation) {
   return String(explanation || '')
+    .replace(/(?:錯誤\s*)?(?:選項|答案)\s*第?\s*[一二三四1-4](?:項|個)?/g, '相關敘述')
+    .replace(/第[一二三四1-4]項(?=\s*(?:的|是|為|正確|錯誤|與|雖|則|將|過度|強調))/g, '相關敘述')
     .replace(/(?:選項|答案)\s*[（(]?[A-D][）)]?/gi, '相關敘述')
     .replace(/[（(][A-D][）)](?=\s*(?:的|是|為|正確|錯誤|與|雖|則|將|過度|強調))/gi, '相關敘述');
 }
