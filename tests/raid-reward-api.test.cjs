@@ -113,6 +113,8 @@ test('raid-exclusive materials never leak into ordinary drops; refinement seals 
   assert.match(drops, /if \(raidOnly\.has\(material\.id\)\) return \[\]/);
   assert.match(jobs, /consumeRefinementKey\(consumed\.materialSystem, plan\.keyRequirement\)/);
   assert.match(jobs, /refinementStage: plan\.refinementStage/);
+  assert.match(ui, /RAID_EXCLUSIVE_MATERIAL_IDS/);
+  assert.match(ui, /const raidKeyIds = new Set\(RAID_EXCLUSIVE_MATERIAL_IDS\)/);
   assert.match(ui, /!raidKeyIds\.has\(m\.id\)/);
   assert.match(ui, /refinery-key-requirement/);
   assert.match(ui, /第二煉印記/);
