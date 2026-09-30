@@ -243,7 +243,7 @@ test('material listing validates total price above unit reference both before an
   assert.match(market,/境界統一參考單價/);
   assert.match(catalog,/export function materialMarketReferencePrice\(/);
   assert.doesNotMatch(materialSystem,/data-material-buy|buyMaterial|material-store/);
-  assert.match(market,/秘境玄髓與清霜劍魄可自由交易/);
+  assert.match(market,/六種木／鐵團本素材可自由交易/);
   const before = market.slice(market.indexOf('async function createListing()'),market.indexOf('async function buyListing('));
   assert.ok(before.indexOf('checkMaterialListingPrice(type, itemFor(type, id), count, price)') <
     before.indexOf("tx.update(sellerRef, { [systemField]: system })"));
