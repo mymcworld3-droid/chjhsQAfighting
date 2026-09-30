@@ -1091,13 +1091,27 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     try {
       const payload = await rewardRepository.claimRaid(roomId);
       confirmed = true;
-      // A receipt's inventory may predate purchases or furnace consumption.
-      const fresh = uid ? await playerRepository.get(uid) : null;
       if (state.roomId !== roomId || local !== data() || playerRepository.currentUser()?.uid !== uid) return;
-      if (!fresh) throw new Error('背包同步尚未完成，請重試');
       state.rewardClaimedRoomId = roomId;
-      local.materialSystem = fresh.materialSystem || {inventory:{}};
-      local.raidProgress = fresh.raidProgress || {};
+
+      // 團本 API 回傳本次四種團本道具的權威庫存值；直接合併到本地玩家狀態，
+      // 不再為素材額外從瀏覽器讀取 Firebase users 文件。
+      local.materialSystem = local.materialSystem && typeof local.materialSystem === 'object'
+        ? local.materialSystem : {inventory:{}};
+      local.materialSystem.inventory = { ...(local.materialSystem.inventory || {}) };
+      Object.entries(payload.inventory || {}).forEach(([materialId, amount]) => {
+        const count = Math.max(0, Math.floor(Number(amount) || 0));
+        if (count > 0) local.materialSystem.inventory[materialId] = count;
+        else delete local.materialSystem.inventory[materialId];
+      });
+      if (payload.firstVictory && payload.memento) {
+        local.raidProgress = { ...(local.raidProgress || {}) };
+        local.raidProgress[RAID_MVP.bossId] = {
+          ...(local.raidProgress[RAID_MVP.bossId] || {}),
+          memento: payload.memento,
+          firstVictoryRoomId: roomId
+        };
+      }
       window.dispatchEvent(new CustomEvent('material-system-updated', {
         detail: { ...local.materialSystem, raidReward:true }
       }));
@@ -1137,7 +1151,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
         Math.max(0, Number(member.correct) || 0) + ' / ' + Math.max(0, Number(member.attempts) || 0) + ' 答對' +
         (Number(member.spiritCorrect) > 0 ? '・神識 +' + Math.floor(member.spiritCorrect) + '（勝敗皆保留）' : '') + '</small></div>').join('') + '</div>' +
       '<div id="raid-learning-status" class="raid-learning-summary">' + renderRaidLearning(myRoomMember(), state.learningOutcome) + '</div>' +
-      '<div class="raid-prototype-note raid-loot-summary"><i class="fa-solid fa-gem"></i><span id="raid-reward-status"><b>' + (won ? '通關戰利品' : '再接再厲') + '</b><small>' + (won ? '正在確認道印、境界素材與首勝獎勵…' : '答題收益保留；擊敗大師姐另獲道印與境界素材。') + '</small></span></div>' +
+      '<div class="raid-prototype-note raid-loot-summary"><i class="fa-solid fa-gem"></i><span id="raid-reward-status"><b>' + (won ? '通關戰利品' : '再接再厲') + '</b><small>' + (won ? '正在確認玄髓、劍魄、煉製印記與首勝獎勵…' : '答題收益保留；擊敗大師姐另獲團本素材與煉製印記。') + '</small></span></div>' +
       '<div class="raid-result-actions"><button class="raid-ghost" type="button" data-home>返回仙府</button><button class="raid-ghost" type="button" data-refinery>前往煉器</button><button class="raid-primary" type="button" data-again>重新組隊</button></div></div>';
     result.querySelector('[data-home]')?.addEventListener('click', async function () {
       await leaveRaidRoom(state.roomId).catch(() => {});
