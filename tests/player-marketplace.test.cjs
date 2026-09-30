@@ -39,6 +39,13 @@ test('trade offers validate quantities, price, inventory, and restrict listed eq
   assert.match(market, /tx\.update\(listingRef, \{ status:'cancelled'/);
 });
 
+test('raid-exclusive materials cannot be listed or bought through the ordinary market', () => {
+  assert.match(market,/RAID_EXCLUSIVE_MATERIAL_IDS/);
+  assert.match(market,/const raidExclusive = new Set\(RAID_EXCLUSIVE_MATERIAL_IDS\)/);
+  assert.match(market,/raidExclusive\.has\(String\(id \|\| ''\)\) \? null : getMaterialById\(id\)/);
+  assert.match(market,/MATERIAL_CATALOG\.filter\(\(item\) => !raidExclusive\.has\(item\.id\)\)/);
+});
+
 test('recipe marketplace sells crafting knowledge while preserving the first discoverer', () => {
   assert.match(market, /const recipeSnap = type === 'recipe' \? await tx\.get/);
   assert.match(market, /const recipeSnap = listing\.type === 'recipe' \? await tx\.get/);
