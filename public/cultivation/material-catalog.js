@@ -1,5 +1,5 @@
-// 煉器材料與法寶配方的資料來源。
-// 材料清單與配方可由 material-catalog-sync.js 以 Firestore 全站設定覆蓋。
+// 煉器素材與法寶配方的資料來源。
+// 素材目錄固定在程式碼中，不再由 Firebase 同步；團本是四種素材／印記的唯一產生來源。
 
 import { ARTIFACT_CATALOG, ARTIFACT_REALMS, getArtifactById } from './artifact-catalog.js';
 
@@ -46,8 +46,8 @@ export const MATERIAL_REALMS = Object.freeze(ARTIFACT_REALMS.map((realm) => Obje
   dongtianRate: MATERIAL_REALM_DROP_BASE[realm.name]?.dongtianRate || 0.08
 })));
 
-// 完整材料系譜。既有五種材料保留原 ID，避免玩家 materialSystem.inventory 與既有配方失聯。
-// 新增高階材料預設 buyGold=0，主要由境界掉落取得；管理員仍可自行調整採購價。
+// 現行材料系統只保留四種團本道具：兩種可投入煉器陣的素材與兩種煉製印記。
+// 舊材料 ID 不再進入目錄、配方、掉落或背包顯示。
 const DEFAULT_MATERIAL_CATALOG = [
   { id: 'raid-secret-realm-essence', name: '秘境玄髓', icon: '玄髓', category: '煉器素材', realm: '築基',
     description: '由秘境核心凝成的通用煉器素材。只能透過團本結算取得，可直接投入八方煉器陣。', buyGold: 0 },
@@ -159,17 +159,9 @@ export function materialRealmForScore(score) {
   return current;
 }
 
-export function materialDropRateFor(materialOrRealm, playerScore, source = 'quiz') {
-  const realmName = typeof materialOrRealm === 'string' ? materialOrRealm : materialOrRealm?.realm;
-  const materialRealm = materialRealmMetaByName(realmName);
-  const playerRealm = materialRealmForScore(playerScore);
-  if (!materialRealm || !playerRealm || playerRealm.order < materialRealm.order) return 0;
-  const key = source === 'dongtian' ? 'dongtianRate' : 'quizRate';
-  const base = Math.max(0, Number(materialRealm[key]) || 0);
-  const gap = Math.max(0, playerRealm.order - materialRealm.order);
-  const multiplier = 1 + Math.min(gap, 5) * 0.30;
-  const cap = source === 'dongtian' ? 0.48 : 0.12;
-  return Math.min(cap, base * multiplier);
+export function materialDropRateFor() {
+  // 問道、洞天、商店與一般活動都不再自然產出煉器素材。
+  return 0;
 }
 
 export function normalizeMaterialDefinition(raw = {}) {
