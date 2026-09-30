@@ -39,14 +39,14 @@ test('trade offers validate quantities, price, inventory, and restrict listed eq
   assert.match(market, /tx\.update\(listingRef, \{ status:'cancelled'/);
 });
 
-test('essence and sword soul can trade while refinement seals stay bound', () => {
+test('all six wood/iron raid materials can trade while refinement seals stay bound', () => {
   assert.match(market,/RAID_CRAFT_MATERIAL_IDS/);
   assert.match(market,/RAID_REFINEMENT_KEYS/);
   assert.match(market,/const tradableMaterialIds = new Set\(RAID_CRAFT_MATERIAL_IDS\)/);
   assert.match(market,/const boundSealIds = new Set\(Object\.values\(RAID_REFINEMENT_KEYS\)\)/);
   assert.match(market,/tradableMaterialIds\.has\(String\(id \|\| ''\)\) \? getMaterialById\(id\) : null/);
   assert.match(market,/tradableMaterialIds\.has\(item\.id\) && !boundSealIds\.has\(item\.id\)/);
-  assert.match(market,/秘境玄髓與清霜劍魄可自由交易/);
+  assert.match(market,/六種木／鐵團本素材可自由交易/);
   assert.match(market,/淬靈玄印、玄天道印綁定玩家不可交易/);
 });
 
