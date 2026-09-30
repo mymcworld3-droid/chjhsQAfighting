@@ -2,7 +2,7 @@ import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.j
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, runTransaction } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { ARTIFACT_CATALOG, getArtifactById, artifactRealmColor, realmOrderByName } from './artifact-catalog.js';
-import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, RAID_EXCLUSIVE_MATERIAL_IDS, getMaterialById, getArtifactRecipe, materialRealmColor, materialRealmOrderByName, artifactRecipeDepth, MAX_ARTIFACT_RECIPE_NESTING } from './material-catalog.js';
+import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialById, getArtifactRecipe, materialRealmColor, materialRealmOrderByName, artifactRecipeDepth, MAX_ARTIFACT_RECIPE_NESTING } from './material-catalog.js';
 
 (function () {
   'use strict';
@@ -150,7 +150,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, RAID_EXCLUSIV
       stage,
       consumed,
       visible: (stage === 2 || stage === 3) && status.need > 0,
-      label: stage === 2 ? '第二煉素材' : stage === 3 ? '第三煉素材' : '煉製素材'
+      label: stage === 2 ? '第二煉印記' : stage === 3 ? '第三煉印記' : '煉製印記'
     };
   }
   function refinementKeyRequirementMarkup(plan, job = null) {
@@ -161,7 +161,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, RAID_EXCLUSIV
       : `持有 ${view.have} / 需要 ${view.need}`;
     return `<div class="refinery-key-requirement ${view.visible ? '' : 'is-hidden'} ${view.consumed ? 'is-consumed' : view.enough ? 'is-ready' : 'is-missing'}" data-refinery-key-requirement>
       <span class="refinery-key-icon" data-refinery-key-icon>${view.visible ? itemImageMarkup(item, item.icon || '印') : '印'}</span>
-      <span class="refinery-key-copy"><small data-refinery-key-stage>${esc(view.label)}</small><strong data-refinery-key-name>${esc(view.name || '煉製素材')}</strong><em data-refinery-key-stock>${esc(stock)}</em></span>
+      <span class="refinery-key-copy"><small data-refinery-key-stage>${esc(view.label)}</small><strong data-refinery-key-name>${esc(view.name || '煉製印記')}</strong><em data-refinery-key-stock>${esc(stock)}</em></span>
       <b data-refinery-key-count>${view.visible ? '×' + view.need : ''}</b>
     </div>`;
   }
@@ -177,7 +177,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, RAID_EXCLUSIV
     const icon = node.querySelector('[data-refinery-key-icon]');
     if (icon) icon.innerHTML = view.visible ? itemImageMarkup(item, item.icon || '印') : '印';
     setText(node.querySelector('[data-refinery-key-stage]'), view.label);
-    setText(node.querySelector('[data-refinery-key-name]'), view.name || '煉製素材');
+    setText(node.querySelector('[data-refinery-key-name]'), view.name || '煉製印記');
     setText(node.querySelector('[data-refinery-key-stock]'), view.consumed
       ? `本爐已消耗 ×${view.need} · 背包剩 ${view.have}`
       : `持有 ${view.have} / 需要 ${view.need}`);
@@ -644,7 +644,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, RAID_EXCLUSIV
     const equippedCounts = equippedArtifactCounts();
     const counts = selectedCounts();
     const used = selected.filter(Boolean).length;
-    const raidKeyIds = new Set(RAID_EXCLUSIVE_MATERIAL_IDS);
+    const raidKeyIds = new Set(Object.values(RAID_REFINEMENT_KEYS));
     const ownedMaterials = MATERIAL_CATALOG
       .filter((m) => !raidKeyIds.has(m.id) && (Number(matInv[m.id]) || 0) > 0)
       .slice()
