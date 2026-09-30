@@ -75,17 +75,17 @@ test('every defined artifact recipe requires at least two total ingredients', ()
   const api = loadRecipeApi();
   assert.equal(api.MIN_ARTIFACT_RECIPE_MATERIALS, 2);
   assert.throws(() => api.validateArtifactRecipes({
-    'seven-treasure-ruler': [{ materialId: 'raid-secret-realm-essence', quantity: 1 }]
+    'seven-treasure-ruler': [{ materialId: 'qi-spirit-iron', quantity: 1 }]
   }), /至少需要 2 個煉器素材/);
   assert.doesNotThrow(() => api.validateArtifactRecipes({
-    'seven-treasure-ruler': [{ materialId: 'raid-secret-realm-essence', quantity: 2 }]
+    'seven-treasure-ruler': [{ materialId: 'qi-spirit-iron', quantity: 2 }]
   }));
 });
 
 test('artifact recipe nesting allows depth two but rejects depth three', () => {
   const api = loadRecipeApi();
   const recipes = {
-    'seven-treasure-ruler': [{ materialId: 'raid-secret-realm-essence', quantity: 2 }],
+    'seven-treasure-ruler': [{ materialId: 'qi-spirit-iron', quantity: 2 }],
     'war-drum': [{ artifactId: 'seven-treasure-ruler', quantity: 2 }],
     'enlightenment-lamp': [{ artifactId: 'war-drum', quantity: 2 }]
   };
@@ -116,7 +116,7 @@ test('artifact recipe nesting rejects self-recursion and cycles', () => {
 test('orphan artifact recipes are repaired as a cascade without weakening strict validation', () => {
   const api = loadRecipeApi();
   const broken = {
-    'seven-treasure-ruler': [{ materialId: 'raid-secret-realm-essence', quantity: 2 }],
+    'seven-treasure-ruler': [{ materialId: 'qi-spirit-iron', quantity: 2 }],
     'war-drum': [{ artifactId: 'deleted-ai-artifact', quantity: 2 }],
     'enlightenment-lamp': [{ artifactId: 'war-drum', quantity: 2 }]
   };
