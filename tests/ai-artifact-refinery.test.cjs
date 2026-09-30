@@ -342,13 +342,13 @@ test('optional guidance review cannot replace a valid artifact with an invalid r
   } finally {router.generateJSON=saved;}
 });
 
-test('refinery economy uses qi baseline 10 minutes / 80 gold and varies with player realm gap', () => {
+test('refinery economy uses qi baseline 10 minutes / 120 spirit stones and varies with player realm gap', () => {
   const economy = loadEconomy();
   const qi = economy.calculateRefineryEconomy({ targetRealm:'煉氣', playerRealm:'煉氣', discovery:false });
   const qiDiscovery = economy.calculateRefineryEconomy({ targetRealm:'煉氣', playerRealm:'煉氣', discovery:true });
-  assert.equal(qi.gold, 80);
+  assert.equal(qi.gold, 120);
   assert.equal(qi.durationMs, 10 * 60 * 1000);
-  assert.equal(qiDiscovery.gold, 80);
+  assert.equal(qiDiscovery.gold, 120);
   assert.equal(qiDiscovery.durationMs, 10 * 60 * 1000);
 
   const same = economy.calculateRefineryEconomy({ targetRealm:'元嬰', playerRealm:'元嬰', discovery:false });
