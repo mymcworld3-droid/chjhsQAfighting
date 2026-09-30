@@ -43,53 +43,39 @@ test('trusted raid reward rejects unfinished, forged-damage and non-member rooms
 });
 
 function fakeDb(initialUser) {
-  const docs = new Map([['users/u1', JSON.parse(JSON.stringify(initialUser))]]);
-  const ref = (collection, id) => ({
-    key: collection + '/' + id,
-    async get() {
-      const value = docs.get(this.key);
-      return { exists:value !== undefined, data:() => JSON.parse(JSON.stringify(value)) };
-    }
-  });
-  return {
-    docs,
-    collection(name) { return { doc:id => ref(name,id) }; },
-    async runTransaction(fn) {
-      const tx = {
-        async get(target) {
-          const value = docs.get(target.key);
-          return { exists:value !== undefined, data:() => JSON.parse(JSON.stringify(value)) };
-        },
-        create(target, value) {
-          if (docs.has(target.key)) throw new Error('already-exists');
-          docs.set(target.key, JSON.parse(JSON.stringify(value)));
-        },
-        update(target, patch) {
-          const current = docs.get(target.key) || {};
-          docs.set(target.key, { ...current, ...JSON.parse(JSON.stringify(patch)) });
-        }
-      };
-      return fn(tx);
-    }
-  };
+  const docs = new Map([['users/u1', structuredClone(initialUser)]]);
+  let queue=Promise.resolve();
+  const snap=target=>({exists:docs.has(target.key),data:()=>structuredClone(docs.get(target.key))});
+  return {docs,collection(name){return {doc:id=>({key:name+'/'+id,get:async()=>snap({key:name+'/'+id})})};},
+    runTransaction(worker){
+      const job=queue.then(async()=>{
+        const pending=new Map();let writing=false;
+        const tx={get:async target=>{assert.equal(writing,false,'all reads precede writes');return snap(target);},
+          create(target,value){writing=true;if(docs.has(target.key)||pending.has(target.key))throw Error('already-exists');pending.set(target.key,structuredClone(value));},
+          update(target,value){writing=true;pending.set(target.key,{...structuredClone(docs.get(target.key)),...structuredClone(value)});}};
+        const result=await worker(tx);for(const [key,value] of pending)docs.set(key,value);return result;
+      });queue=job.catch(()=>{});return job;
+    }};
 }
 
 test('raid reward writes both refinement keys exactly once into A material inventory', async () => {
-  const db = fakeDb({ uid:'u1', materialSystem:{ inventory:{'spirit-iron':3} } });
+  const db = fakeDb({ uid:'u1', stats:{totalScore:68}, materialSystem:{ inventory:{'spirit-iron':3} } });
   const validation = api.validateRaidVictory(wonRoom(), 'u1');
   const fieldValue = { serverTimestamp:() => 12345 };
   const first = await api.awardRaidReward(db, 'u1', 'room_12345678', validation, { fieldValue });
   assert.equal(first.status, 'awarded');
-  assert.deepEqual(first.rewards, {'raid-refine-key-ii':2,'raid-refine-key-iii':1});
+  assert.deepEqual(first.rewards, {'raid-refine-key-ii':3,'raid-refine-key-iii':2,'taixu-mystic-iron':2,'nascent-soul-crystal':1});
+  assert.equal(first.firstVictory,true);
+  assert.equal(first.dailyFirstVictory,true);
   const inventory = db.docs.get('users/u1').materialSystem.inventory;
   assert.equal(inventory['spirit-iron'], 3);
-  assert.equal(inventory['raid-refine-key-ii'], 2);
-  assert.equal(inventory['raid-refine-key-iii'], 1);
+  assert.equal(inventory['raid-refine-key-ii'], 3);
+  assert.equal(inventory['raid-refine-key-iii'], 2);
 
   const second = await api.awardRaidReward(db, 'u1', 'room_12345678', validation, { fieldValue });
   assert.equal(second.status, 'duplicate');
-  assert.equal(db.docs.get('users/u1').materialSystem.inventory['raid-refine-key-ii'], 2);
-  assert.equal(db.docs.get('users/u1').materialSystem.inventory['raid-refine-key-iii'], 1);
+  assert.equal(db.docs.get('users/u1').materialSystem.inventory['raid-refine-key-ii'], 3);
+  assert.equal(db.docs.get('users/u1').materialSystem.inventory['raid-refine-key-iii'], 2);
 });
 
 test('raid reward API is registered and client claims through the settlement repository', () => {
@@ -97,7 +83,7 @@ test('raid reward API is registered and client claims through the settlement rep
   const raid = read('public/cultivation/raid-mode.js');
   const repository = read('public/cultivation/data/reward-repository.js');
   assert.match(server, /registerRaidRewardApi\(app\)/);
-  assert.match(raid, /rewardRepository\.claimRaid\(state\.roomId\)/);
+  assert.match(raid, /rewardRepository\.claimRaid\(roomId\)/);
   assert.doesNotMatch(raid, /fetch\('\/api\/raid\/reward'/);
   assert.match(repository, /\/api\/raid\/reward/);
   assert.match(repository, /authenticatedMainFetch/);
@@ -127,4 +113,55 @@ test('raid refinement keys are exclusive rewards and are consumed outside the ei
   assert.match(ui, /持有 \$\{view\.have\} \/ 需要 \$\{view\.need\}/);
   assert.match(ui, /keyStatus\.enough/);
   assert.match(ui, /請先挑戰團本取得/);
+});
+
+
+const fieldValue = {serverTimestamp:()=>12345};
+test('same-day second room receives base keys; next Taiwan day receives another daily bonus',async()=>{
+  const db=fakeDb({uid:'u1',stats:{totalScore:68}});
+  const validation=api.validateRaidVictory(wonRoom({finishedAtMs:Date.parse('2026-09-30T15:59:00Z')}),'u1');
+  const a=await api.awardRaidReward(db,'u1','room_first',validation,{fieldValue});
+  const b=await api.awardRaidReward(db,'u1','room_second',validation,{fieldValue});
+  const c=await api.awardRaidReward(db,'u1','room_third',{...validation,finishedAtMs:Date.parse('2026-09-30T16:00:00Z')},{fieldValue});
+  assert.equal(a.date,'2026-09-30');assert.equal(c.date,'2026-10-01');
+  assert.equal(b.firstVictory,false);assert.equal(b.dailyFirstVictory,false);
+  assert.equal(b.rewards['raid-refine-key-ii'],2);
+  assert.equal(c.dailyFirstVictory,true);assert.equal(c.firstVictory,false);
+  assert.equal(db.docs.get('users/u1').raidProgress['shen-qingshuang'].firstVictoryRoomId,'room_first');
+  // Claiming an old room on a later date cannot reset its original daily key.
+  const d=await api.awardRaidReward(db,'u1','room_fourth',validation,{fieldValue});
+  assert.equal(d.dailyFirstVictory,false);
+});
+test('legacy receipt stays unchanged and cannot restore consumed inventory',async()=>{
+  const db=fakeDb({uid:'u1',stats:{totalScore:68},materialSystem:{inventory:{'raid-refine-key-ii':0}}});
+  db.docs.set('raidRewardClaims/'+api.claimId('old_room','u1'),{rewards:api.REWARDS,inventory:{'raid-refine-key-ii':2}});
+  const result=await api.awardRaidReward(db,'u1','old_room',api.validateRaidVictory(wonRoom(),'u1'),{fieldValue});
+  assert.equal(result.awarded,false);assert.equal(result.firstVictory,false);
+  assert.equal(db.docs.get('users/u1').materialSystem.inventory['raid-refine-key-ii'],0);
+});
+test('realm material rewards use trusted battle snapshot and honor complete admin catalogs',async()=>{
+  const db=fakeDb({uid:'u1',stats:{totalScore:2588}});
+  const room=wonRoom();room.members.u1.totalScore=68;
+  const validation=api.validateRaidVictory(room,'u1');
+  db.docs.set('gameConfig/materialCatalogV1',{materialCatalogSchemaVersion:3,items:[
+    {id:'taixu-mystic-iron',realm:'元嬰'}, {id:'nascent-soul-crystal',realm:'金丹'}]});
+  const result=await api.awardRaidReward(db,'u1','realm_room',validation,{fieldValue});
+  assert.equal(result.realm,'元嬰');assert.equal(result.rewards['taixu-mystic-iron'],2);
+  assert.equal(result.rewards['nascent-soul-crystal'],undefined);assert.equal(result.rewards['immortal-gold'],undefined);
+});
+
+test('concurrent different rooms grant exactly one first victory and daily bonus',async()=>{
+  const db=fakeDb({uid:'u1',stats:{totalScore:68},materialSystem:{inventory:{}}});
+  const validation=api.validateRaidVictory(wonRoom(),'u1');
+  const results=await Promise.all(['room_aaaa','room_bbbb','room_aaaa'].map(id=>api.awardRaidReward(db,'u1',id,validation,{fieldValue})));
+  assert.equal(results.filter(r=>r.awarded&&r.firstVictory).length,1);
+  assert.equal(results.filter(r=>r.awarded&&r.dailyFirstVictory).length,1);
+  assert.equal(db.docs.get('users/u1').materialSystem.inventory['raid-refine-key-ii'],5);
+  assert.equal(db.docs.get('users/u1').materialSystem.inventory['raid-refine-key-iii'],3);
+  assert.equal(db.docs.get('users/u1').materialSystem.inventory['taixu-mystic-iron'],4);
+});
+test('missing player leaves no daily claim, reward receipt or partial inventory',async()=>{
+  const db=fakeDb({});db.docs.delete('users/u1');
+  await assert.rejects(api.awardRaidReward(db,'u1','room_missing',api.validateRaidVictory(wonRoom(),'u1'),{fieldValue}),/玩家資料不存在/);
+  assert.equal(db.docs.size,0);
 });

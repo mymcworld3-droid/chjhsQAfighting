@@ -3,6 +3,7 @@
 const crypto = require('node:crypto');
 const { PROJECT_IDS } = require('./firebase-admin-projects.cjs');
 const { playerRepository, raidRepository } = require('./server-repositories.cjs');
+const { realmMaterials, victoryDate, MEMENTO } = require('./raid-loot.cjs');
 const { runRewardReceipt } = require('./reward-receipt.cjs');
 
 const RAID_ROOM_COLLECTION = 'raidRooms';
@@ -59,7 +60,7 @@ function validateRaidVictory(room, uid) {
   // The boss can only reach zero through player damage or recorded reflection;
   // both are accumulated in members[*].damage by the room protocol.
   if (totalDamage < maxHp) return { ok:false, reason:'團本傷害紀錄不足以擊敗 Boss' };
-  return { ok:true, member, totalDamage, partySize:Object.keys(members).length, bossMaxHp:maxHp };
+  return { ok:true, finishedAtMs, member, totalDamage, partySize:Object.keys(members).length, bossMaxHp:maxHp };
 }
 
 async function awardRaidReward(db, uid, roomId, validation, {
@@ -76,29 +77,46 @@ async function awardRaidReward(db, uid, roomId, validation, {
       const userSnap = await tx.get(userRef);
       if (!userSnap.exists) throw new Error('玩家資料不存在');
       const user = userSnap.data() || {};
+      const catalogSnap = await tx.get(db.collection('gameConfig').doc('materialCatalogV1'));
+      const date = victoryDate(validation.finishedAtMs);
+      const dailyRef = date ? db.collection('raidDailyClaims').doc(claimId(RAID_BOSS_ID + ':' + date, uid)) : null;
+      const dailySnap = dailyRef ? await tx.get(dailyRef) : null;
       if (user.uid && user.uid !== uid) throw new Error('玩家資料 UID 不符');
 
+      const firstVictory = !user.raidProgress?.[RAID_BOSS_ID]?.firstVictoryRoomId;
+      const dailyFirstVictory = !!date && !dailySnap.exists;
+      const bundle = realmMaterials(validation.member?.totalScore ?? user.stats?.totalScore, catalogSnap.data());
+      const granted = { ...rewards, ...bundle.rewards };
+      if (dailyFirstVictory) {
+        granted['raid-refine-key-ii'] = (granted['raid-refine-key-ii'] || 0) + 1;
+        granted['raid-refine-key-iii'] = (granted['raid-refine-key-iii'] || 0) + 1;
+      }
+      const raidProgress = { ...(user.raidProgress || {}) };
+      raidProgress[RAID_BOSS_ID] = { ...(raidProgress[RAID_BOSS_ID] || {}),
+        ...(firstVictory ? {firstVictoryRoomId:roomId, firstVictoryAtMs:validation.finishedAtMs || 0, memento:MEMENTO} : {})
+      };
       const materialSystem = user.materialSystem && typeof user.materialSystem === 'object'
         ? JSON.parse(JSON.stringify(user.materialSystem)) : { inventory:{} };
       materialSystem.inventory = materialSystem.inventory && typeof materialSystem.inventory === 'object'
         ? { ...materialSystem.inventory } : {};
-      for (const [materialId, amount] of Object.entries(rewards)) {
+      for (const [materialId, amount] of Object.entries(granted)) {
         const qty = Math.max(0, Math.floor(Number(amount) || 0));
         if (!qty) continue;
         materialSystem.inventory[materialId] = Math.max(0, Math.floor(Number(materialSystem.inventory[materialId]) || 0)) + qty;
       }
       const inventory = Object.fromEntries(
-        Object.keys(rewards).map(id => [id, Number(materialSystem.inventory[id]) || 0])
+        Object.keys(granted).map(id => [id, Number(materialSystem.inventory[id]) || 0])
       );
-      tx.update(userRef, { materialSystem });
-      return { inventory };
+      tx.update(userRef, { materialSystem, raidProgress });
+      if (dailyFirstVictory) tx.create(dailyRef, {uid,roomId,bossId:RAID_BOSS_ID,date});
+      return { inventory, rewards:granted, firstVictory, dailyFirstVictory, date, realm:bundle.realm,
+        memento:firstVictory ? MEMENTO : null };
     },
     createReceipt: result => ({
       uid,
       roomId,
       bossId: RAID_BOSS_ID,
-      rewards,
-      inventory: result.inventory,
+      ...result,
       partySize: validation.partySize,
       totalDamage: validation.totalDamage,
       bossMaxHp: validation.bossMaxHp
@@ -110,14 +128,18 @@ async function awardRaidReward(db, uid, roomId, validation, {
       status:'duplicate',
       awarded:false,
       rewards:receipt.receipt.rewards || rewards,
-      inventory:receipt.receipt.inventory || null
+      inventory:receipt.receipt.inventory || null,
+      firstVictory:receipt.receipt.firstVictory || false,
+      dailyFirstVictory:receipt.receipt.dailyFirstVictory || false,
+      memento:receipt.receipt.memento || null,
+      realm:receipt.receipt.realm || null,
+      date:receipt.receipt.date || null
     };
   }
   return {
     status:'awarded',
     awarded:true,
-    rewards,
-    inventory:receipt.result.inventory
+    ...receipt.result
   };
 }
 
@@ -177,3 +199,4 @@ module.exports.__test = {
   REWARDS, safeRoomId, claimId, validateRaidVictory,
   awardRaidReward, createHandler
 };
+

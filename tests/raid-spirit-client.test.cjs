@@ -31,3 +31,18 @@ test('reward completing after account switch does not modify either account',asy
     raidRepository:{async request(){current=next;return {spiritReward:{uid:'a',totalSpirit:11}};}}});
   await api('get');assert.equal(original.stats.nascentSoulSpirit,10);assert.equal(next.stats.nascentSoulSpirit,4);
 });
+
+test('cached learning totals cannot restore spent gold or penalized cultivation',async()=>{
+  const local={uid:'a',stats:{totalScore:68,gold:50},raidLearningRewards:{cultivation:2,gold:40}};
+  let reward={uid:'a',learningTotals:{cultivation:3,gold:60}};
+  const api=vm.runInNewContext(source+'\napi',{
+    window:{getCurrentUserData:()=>local,updateUIStats(){}},
+    raidRepository:{async request(){return {spiritReward:reward};}}});
+  await api('get');assert.equal(local.stats.totalScore,69);assert.equal(local.stats.gold,70);
+  local.stats.gold=0;local.stats.totalScore=67;
+  await api('get');assert.equal(local.stats.gold,0);assert.equal(local.stats.totalScore,67);
+  reward={uid:'a',learningTotals:{cultivation:1,gold:20}};
+  await api('get');assert.equal(local.stats.gold,0);
+  reward={uid:'a',learningTotals:{cultivation:4,gold:80}};
+  await api('get');assert.equal(local.stats.gold,20);assert.equal(local.stats.totalScore,68);
+});

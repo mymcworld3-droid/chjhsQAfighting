@@ -7,13 +7,14 @@ import {
   commitRaidBossDefense, advanceRaidBossAction, leaveRaidRoom, raidRoomMembers, raidMemberOnline
 } from './raid-room.js';
 import { playerRepository } from './data/player-repository.js';
+import { renderRaidLoot, renderRaidLearning } from './raid-loot-view.js';
 import { rewardRepository } from './data/reward-repository.js';
 
 (function () {
   'use strict';
 
   const PAGE_ID = 'page-raid';
-  const STYLE_HREF = 'styles/raid-mode.css?v=20260929-qa-compact1';
+  const STYLE_HREF = 'styles/raid-mode.css?v=20260930-raid-loot1';
   const MALE = 'assets/story/characters/player-male-determined.png';
   const FEMALE = 'assets/story/characters/player-female-determined.png';
   const HEARTBEAT_MS = 8000;
@@ -53,7 +54,8 @@ import { rewardRepository } from './data/reward-repository.js';
     invitedRoomId: '',
     inviteCooldownUntil: 0,
     rewardClaiming: false,
-    rewardClaimedRoomId: ''
+    rewardClaimedRoomId: '',
+    learningOutcome: null
   };
 
   function now() { return Date.now(); }
@@ -326,8 +328,10 @@ import { rewardRepository } from './data/reward-repository.js';
       '<article class="raid-boss-card ' + (locked ? 'locked' : '') + '">' +
       '<div class="raid-boss-art"><img src="' + RAID_MVP.bossImage + '" alt="沈清霜"><span>多人 Boss</span></div>' +
       '<div class="raid-boss-info"><div class="raid-badges"><span>1–4 人</span></div>' +
+      (data().raidProgress?.['shen-qingshuang']?.memento ? '<small>通關紀念・' + escapeHtml(data().raidProgress['shen-qingshuang'].memento.name) + '</small>' : '') +
       '<small>青雲山・演武秘境</small><h3>' + RAID_MVP.bossTitle + '</h3>' +
       '<p>與隊友一同迎戰大師姐。答對即可出手，Boss 出招時會切回戰場呈現攻防結果。</p>' +
+      '<p class="raid-hub-rewards">答對：修為 +1、靈石 +20；元嬰另獲神識。通關：道印與境界素材；每日首勝加贈道印。</p>' +
       '<div class="raid-join-grid"><button class="raid-primary" type="button" data-quick ' + (locked ? 'disabled' : '') + '>快速加入／建立隊伍</button>' +
       '<button class="raid-ghost" type="button" data-create ' + (locked ? 'disabled' : '') + '>建立私人隊伍</button></div>' +
       '<div class="raid-code-join"><input id="raid-room-code-input" maxlength="6" placeholder="輸入 6 碼隊伍代碼"><button class="raid-ghost" type="button" data-code ' + (locked ? 'disabled' : '') + '>加入隊伍</button></div>' +
@@ -663,6 +667,7 @@ import { rewardRepository } from './data/reward-repository.js';
         ticket: question.ticket
       });
       const resolution = result?.resolution;
+      if (result.spiritReward) state.learningOutcome = result.spiritReward;
       if (!resolution) throw new Error('伺服器尚未完成本次出手結算');
 
       state.room = result.room || state.room;
@@ -695,7 +700,9 @@ import { rewardRepository } from './data/reward-repository.js';
         const dealt = Math.max(0, Number(state.lastPlayerAction.damage) || 0);
         const spiritText = Number(resolution.spiritGain) > 0
           ? (result.spiritReward?.status === 'pending' ? '・神識待入帳' : '・神識 +1') : '';
-        showCorrectAnswerFeedback((dealt > 0 ? '攻勢命中・' + dealt.toLocaleString() + ' 傷害' : '攻勢已凝聚') + spiritText);
+        const learningText = Number(resolution.cultivationGain) > 0
+          ? '・修為 +1・靈石 +20' + (result.spiritReward?.status === 'pending' ? '（待入帳）' : '') : '';
+        showCorrectAnswerFeedback((dealt > 0 ? '攻勢命中・' + dealt.toLocaleString() + ' 傷害' : '攻勢已凝聚') + learningText + spiritText);
       }
 
       if (state.answerCorrect && state.lastPlayerAction.damage > 0) {
@@ -943,7 +950,8 @@ import { rewardRepository } from './data/reward-repository.js';
     }
   }
 
-  function handleRoomSnapshot(room) {
+  function handleRoomSnapshot(room, learningOutcome) {
+    if (learningOutcome) state.learningOutcome = learningOutcome;
     if (!room) {
       toast('團本房間已關閉');
       resetRaid(false);
@@ -959,6 +967,8 @@ import { rewardRepository } from './data/reward-repository.js';
     }
     state.bossActionCount = Math.max(0, Number(room.bossActionCount) || 0);
     const mine = myRoomMember();
+    const learningStatus = document.getElementById('raid-learning-status');
+    if (learningStatus && state.status === 'finished') learningStatus.innerHTML = renderRaidLearning(mine, state.learningOutcome);
     if (mine && state.player) {
       Object.assign(state.player, mine);
       state.playerActionCount = Math.max(state.playerActionCount, Number(mine.lastActionId) || 0);
@@ -1002,41 +1012,38 @@ import { rewardRepository } from './data/reward-repository.js';
   async function claimRaidReward() {
     if (!state.roomId || state.room?.status !== 'won' || state.rewardClaiming ||
         state.rewardClaimedRoomId === state.roomId) return;
+    const roomId = state.roomId;
+    const local = data();
+    const uid = playerRepository.currentUser()?.uid;
     state.rewardClaiming = true;
     const status = document.getElementById('raid-reward-status');
     if (status) status.textContent = '正在確認本次試煉獎勵…';
+    let confirmed = false;
     try {
-      const payload = await rewardRepository.claimRaid(state.roomId);
-
-      state.rewardClaimedRoomId = state.roomId;
-      const local = data();
-      if (local) {
-        local.materialSystem = local.materialSystem && typeof local.materialSystem === 'object'
-          ? local.materialSystem : { inventory:{} };
-        local.materialSystem.inventory = local.materialSystem.inventory && typeof local.materialSystem.inventory === 'object'
-          ? local.materialSystem.inventory : {};
-        Object.entries(payload.inventory || {}).forEach(([id, quantity]) => {
-          local.materialSystem.inventory[id] = Math.max(0, Math.floor(Number(quantity) || 0));
-        });
-      }
+      const payload = await rewardRepository.claimRaid(roomId);
+      confirmed = true;
+      // A receipt's inventory may predate purchases or furnace consumption.
+      const fresh = uid ? await playerRepository.get(uid) : null;
+      if (state.roomId !== roomId || local !== data() || playerRepository.currentUser()?.uid !== uid) return;
+      if (!fresh) throw new Error('背包同步尚未完成，請重試');
+      state.rewardClaimedRoomId = roomId;
+      local.materialSystem = fresh.materialSystem || {inventory:{}};
+      local.raidProgress = fresh.raidProgress || {};
       window.dispatchEvent(new CustomEvent('material-system-updated', {
-        detail: { ...(local?.materialSystem || {}), raidReward:true }
+        detail: { ...local.materialSystem, raidReward:true }
       }));
-      const second = Number(payload.rewards?.['raid-refine-key-ii']) || 0;
-      const third = Number(payload.rewards?.['raid-refine-key-iii']) || 0;
-      if (status) status.innerHTML = payload.awarded
-        ? '<b>團本獎勵已入帳</b><small>淬靈玄印 ×' + second + '・玄天道印 ×' + third + '</small>'
-        : '<b>本場獎勵已領取</b><small>道印已收入背包。</small>';
+      if (status) status.innerHTML = renderRaidLoot(payload);
     } catch (error) {
+      if (state.roomId !== roomId || local !== data()) return;
       console.error('[Raid] trusted reward claim failed:', error);
-      if (status) status.innerHTML = '<b>獎勵尚未入帳</b><small>' + escapeHtml(error?.message || '請稍後再試') + '</small>' +
-        '<button type="button" class="raid-ghost" data-retry-reward>重新領取</button>';
-      document.querySelector('[data-retry-reward]')?.addEventListener('click', function () {
+      if (status) status.innerHTML = '<b>' + (confirmed ? '獎勵已入帳，背包待同步' : '獎勵尚未確認') + '</b><small>' +
+        escapeHtml(error?.message || '請稍後再試') + '</small><button type="button" class="raid-ghost" data-retry-reward>重試同步／領取</button>';
+      status?.querySelector('[data-retry-reward]')?.addEventListener('click', function () {
         state.rewardClaiming = false;
         void claimRaidReward();
       }, { once:true });
     } finally {
-      state.rewardClaiming = false;
+      if (state.roomId === roomId) state.rewardClaiming = false;
     }
   }
 
@@ -1060,8 +1067,9 @@ import { rewardRepository } from './data/reward-repository.js';
       '<div class="raid-result-team">' + members.map(member => '<div><span>' + escapeHtml(member.name) + '</span><b>' + Math.max(0, Number(member.damage) || 0).toLocaleString() + ' 傷害</b><small>' +
         Math.max(0, Number(member.correct) || 0) + ' / ' + Math.max(0, Number(member.attempts) || 0) + ' 答對' +
         (Number(member.spiritCorrect) > 0 ? '・神識 +' + Math.floor(member.spiritCorrect) + '（勝敗皆保留）' : '') + '</small></div>').join('') + '</div>' +
-      '<div class="raid-prototype-note"><i class="fa-solid fa-gem"></i><span id="raid-reward-status"><b>' + (won ? '試煉獎勵' : '本場無勝利獎勵') + '</b><small>' + (won ? '正在確認本次試煉獎勵，完成後道印會收入背包。' : '擊敗大師姐後可獲得煉器道印。') + '</small></span></div>' +
-      '<div class="raid-result-actions"><button class="raid-ghost" type="button" data-home>返回仙府</button><button class="raid-primary" type="button" data-again>重新組隊</button></div></div>';
+      '<div id="raid-learning-status" class="raid-learning-summary">' + renderRaidLearning(myRoomMember(), state.learningOutcome) + '</div>' +
+      '<div class="raid-prototype-note raid-loot-summary"><i class="fa-solid fa-gem"></i><span id="raid-reward-status"><b>' + (won ? '通關戰利品' : '再接再厲') + '</b><small>' + (won ? '正在確認道印、境界素材與首勝獎勵…' : '答題收益保留；擊敗大師姐另獲道印與境界素材。') + '</small></span></div>' +
+      '<div class="raid-result-actions"><button class="raid-ghost" type="button" data-home>返回仙府</button><button class="raid-ghost" type="button" data-refinery>前往煉器</button><button class="raid-primary" type="button" data-again>重新組隊</button></div></div>';
     result.querySelector('[data-home]')?.addEventListener('click', async function () {
       await leaveRaidRoom(state.roomId).catch(() => {});
       resetRaid(false);
@@ -1072,6 +1080,13 @@ import { rewardRepository } from './data/reward-repository.js';
       await leaveRaidRoom(state.roomId).catch(() => {});
       resetRaid(false);
       renderHub();
+    });
+    result.querySelector('[data-refinery]')?.addEventListener('click', async function () {
+      await leaveRaidRoom(state.roomId).catch(() => {});
+      resetRaid(false);
+      window.switchToPage?.('page-training');
+      window.dispatchEvent(new CustomEvent('xiuxian:refinery-open-request'));
+      syncRaidViewportLock();
     });
     updateHomeEntry();
     if (won) void claimRaidReward();
@@ -1090,7 +1105,8 @@ import { rewardRepository } from './data/reward-repository.js';
       lastBossAction: null, lastPlayerAction: null, questionLoading: false, roomId: '', room: null,
       lastBossActionSeen: 0, applyingBossAction: false, advancingBossAction: false,
       battleSceneToken: state.battleSceneToken + 1, battleScenePlaying: false, pendingFinishRoom: null, invitedRoomId: '',
-      rewardClaiming: false, rewardClaimedRoomId: ''
+      rewardClaiming: false, rewardClaimedRoomId: '',
+      learningOutcome: null
     });
     document.body.classList.remove('raid-session-active');
     setRaidCombatFocus(false);

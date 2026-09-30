@@ -111,6 +111,11 @@ test('signed player-action resolves damage and spirit, ignores client correctnes
   assert.equal(wrong.resolution.spiritGain,0);
   assert.equal(f.a.docs.get('users/a').stats.nascentSoulSpirit,11);
   assert.equal(wrong.room.members.a.correct,1);
+  assert.equal(f.a.docs.get('users/a').stats.totalScore,69);
+  assert.equal(f.a.docs.get('users/a').stats.gold,20);
+  assert.equal(wrong.resolution.cultivationGain,0);
+  assert.equal(wrong.resolution.goldGain,0);
+  assert.equal((await f.request('get')).spiritReward.learningAwarded,0);
 });
 
 test('pre-nascent raid answers grant no spirit',async()=>{
@@ -129,6 +134,9 @@ test('failed spirit grant is recovered by polling after loss, reconnect and serv
   const recovered=await f.request('reconnect');
   assert.equal(recovered.room.status,'lost');
   assert.equal(recovered.spiritReward.awarded,0);
+  assert.equal(recovered.spiritReward.learningAwarded,0);
+  assert.equal(f.a.docs.get('users/a').stats.totalScore,69);
+  assert.equal(f.a.docs.get('users/a').stats.gold,20);
   assert.equal(f.a.docs.get('users/a').stats.nascentSoulSpirit,11);
 });
 
@@ -140,4 +148,25 @@ test('killing answer settles spirit even when room is already won',async()=>{
   assert.equal(result.spiritReward.totalSpirit,11);
   await f.request('get');
   assert.equal(f.a.docs.get('users/a').stats.nascentSoulSpirit,11);
+});
+
+test('new answer earnings are cumulative, survive loss and do not retroactively reward old answers',async()=>{
+  const f=memoryDb({'users/a':{uid:'a',stats:{totalScore:28,gold:25}}});
+  const member=n=>({totalScore:28,learningCorrect:n,correct:n+5,attempts:n+7});
+  const results=await Promise.all([3,3,1,5,2].map(n=>awardRaidSpirit(f.db,'a','lost_room',member(n))));
+  assert.equal(results.reduce((sum,r)=>sum+r.learningAwarded,0),5);
+  assert.equal(f.docs.get('users/a').stats.totalScore,33);
+  assert.equal(f.docs.get('users/a').stats.gold,125);
+  assert.deepEqual(f.docs.get('users/a').raidLearningRewards,{cultivation:5,gold:100});
+  assert.equal((await awardRaidSpirit(f.db,'a','lost_room',member(5))).learningAwarded,0);
+});
+test('old spirit receipts are retained when new cultivation and gold begin',async()=>{
+  const {createHash}=require('node:crypto');
+  const id=createHash('sha256').update('old_room\na').digest('hex');
+  const f=memoryDb({'users/a':{uid:'a',stats:{totalScore:68,gold:0,nascentSoulSpirit:10}},
+    ['raidSpiritClaims/'+id]:{settledCorrect:5}});
+  const r=await awardRaidSpirit(f.db,'a','old_room',{totalScore:68,spiritCorrect:6,learningCorrect:1,correct:6,attempts:6});
+  assert.equal(r.awarded,1);assert.equal(r.learningAwarded,1);
+  assert.equal(f.docs.get('users/a').stats.nascentSoulSpirit,11);
+  assert.equal(f.docs.get('users/a').stats.gold,20);
 });
