@@ -82,7 +82,7 @@ import {
     if (!panel || !isAdmin()) return;
     const materialList = panel.querySelector('#admin-material-list');
     if (materialList) {
-      materialList.innerHTML = MATERIAL_CATALOG.map((item) => `<article class="amm-item"><div class="amm-icon">${item.imageUrl ? `<img src="${escapeHtml(item.imageUrl)}" alt="${escapeHtml(item.name)}" loading="lazy" decoding="async">` : escapeHtml(item.icon || '材')}</div><div class="amm-copy"><strong>${escapeHtml(item.name)}</strong><div class="amm-meta">${escapeHtml(item.id)} · ${escapeHtml(item.category)}${item.weaponForm ? ' · 器型 ' + escapeHtml(item.weaponForm) : ''} · 坊市參考 ${materialMarketReferencePrice(item.realm).toLocaleString()} 金幣 · ${item.buyGold > 0 ? `系統採購 ${item.buyGold} 金幣` : '不可直接採購'}</div><div class="amm-description">${escapeHtml(item.description || '')}</div></div><div class="amm-actions"><button type="button" class="amm-edit" data-material-edit="${escapeHtml(item.id)}"><i class="fa-solid fa-pen"></i> 編輯</button></div></article>`).join('');
+      materialList.innerHTML = MATERIAL_CATALOG.map((item) => `<article class="amm-item"><div class="amm-icon">${item.imageUrl ? `<img src="${escapeHtml(item.imageUrl)}" alt="${escapeHtml(item.name)}" loading="lazy" decoding="async">` : escapeHtml(item.icon || '材')}</div><div class="amm-copy"><strong>${escapeHtml(item.name)}</strong><div class="amm-meta">${escapeHtml(item.id)} · ${escapeHtml(item.category)}${item.weaponForm ? ' · 器型 ' + escapeHtml(item.weaponForm) : ''} · 坊市參考 ${materialMarketReferencePrice(item.realm).toLocaleString()} 金幣 · ${item.buyGold > 0 ? `系統採購 ${item.buyGold} 金幣` : '不可直接採購'}</div><div class="amm-description">${escapeHtml(item.description || '')}</div></div><div class="amm-actions"><span style="color:#7f7564;font-size:7px;font-weight:900">固定規則</span></div></article>`).join('');
     }
   }
 
@@ -285,23 +285,14 @@ import {
       else page.prepend(panel);
     }
 
-    panel.dataset.adminSectionTitle = '材料管理';
+    panel.dataset.adminSectionTitle = '團本材料';
     panel.dataset.adminSectionIcon = 'fa-gem';
 
     if (panel.dataset.materialManagerHydrated !== '1') {
       panel.dataset.materialManagerHydrated = '1';
       panel.classList.remove('admin-preload-shell');
-      panel.innerHTML = `<div class="amm-head"><div><h3><i class="fa-solid fa-gem" style="color:#d8b15d"></i> 團本材料管理</h3><p>固定四項：秘境玄髓、清霜劍魄、淬靈玄印、玄天道印；不可新增或刪除。</p></div></div><div class="amm-section-title"><span>材料清單</span><span>${MATERIAL_CATALOG.length} 種</span></div><div id="admin-material-list" class="amm-list"></div>`;
-      panel.addEventListener('click', (event) => {
-        const edit = event.target.closest('[data-material-edit]');
-        const del = event.target.closest('[data-material-delete]');
-        if (edit) {
-          const item = getMaterialById(edit.dataset.materialEdit);
-          if (item) openMaterialEditor(item);
-        } else if (del) {
-          deleteMaterial(del.dataset.materialDelete);
-        }
-      });
+      panel.innerHTML = `<div class="amm-head"><div><h3><i class="fa-solid fa-gem" style="color:#d8b15d"></i> 團本材料</h3><p>固定四項，不由 Firebase 材料目錄同步：秘境玄髓、清霜劍魄可投入煉器且可交易；淬靈玄印、玄天道印是二煉／三煉綁定印記。</p></div></div><div class="amm-section-title"><span>材料清單</span><span>${MATERIAL_CATALOG.length} 種</span></div><div id="admin-material-list" class="amm-list"></div>`;
+      // 團本材料清單為固定規則，只讀；不提供 Firebase 材料編輯入口。
     }
     render();
   }
