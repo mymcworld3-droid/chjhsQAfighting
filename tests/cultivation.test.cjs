@@ -37,6 +37,7 @@ function setup(totalScore = 0) {
   const logs = [];
   const context = vm.createContext({
     console, Math, Date, Number, WeakSet,
+    QASoulTalents:require('../public/cultivation/soul-talents.js'),
     document: {
       readyState: 'complete',
       getElementById: id => nodes.get(id) || null,
@@ -80,8 +81,7 @@ function setup(totalScore = 0) {
 'const quizHelperState = { answered:false, selectedIndex:null, correctIndex:null, explanation:\"\", question:\"\", messages:[], busy:false, requestSerial:0 };' +
     'function renderQuizHelperConversation() {};' +
     'const extendedPracticeState = { active:false };' +
-    'function nascentSoulSpiritReward() { return 0; };' +
-    'function normalizeSpirit(value) { return Math.max(0, Number(value) || 0); };' +
+    read('nascent-soul-rules.js').replace(/^export /gm, '') +
     'window.getCurrentUserData = () => currentUserData;' +
     read('cultivation-rules.js').replace(/export /g, '') +
     section(main, 'const REALMS = [', '// 綁定全域函式') +
@@ -241,4 +241,24 @@ test('wrong-answer Golden Core Dao-heart may form in time to block that mistake'
   await h.answer(1, 0);
   assert.equal(h.context.currentUserData.stats.totalScore, 28);
   assert.equal(h.context.currentUserData.stats.goldenCoreShield, false);
+});
+
+
+test('saved soul cultivation is applied by ordinary answer flow and persisted once', async () => {
+  const h=setup(68);
+  h.context.currentUserData.cultivationTraining={coreEnabled:true,equippedCore:{type:'sword'}};
+  h.context.currentUserData.nascentSoulTree={version:4,paths:{sword:{nodes:{leftBottom:5}}}};
+  await Promise.all([h.answer(),h.answer()]);
+  assert.equal(h.writes.length,1);
+  assert.equal(h.writes[0].data.stats.totalScore,75);
+  assert.equal(h.writes[0].data.stats.nascentSoulSpirit,1);
+  assert.equal(h.nodes.get('xiuxian-score').textContent,'75 修為');
+});
+
+test('saved disabled core suppresses soul cultivation in the real answer flow', async () => {
+  const h=setup(68);
+  h.context.currentUserData.cultivationTraining={coreEnabled:false,equippedCore:{type:'sword'}};
+  h.context.currentUserData.nascentSoulTree={version:4,paths:{sword:{nodes:{leftBottom:5}}}};
+  await h.answer();
+  assert.equal(h.writes[0].data.stats.totalScore,70);
 });
