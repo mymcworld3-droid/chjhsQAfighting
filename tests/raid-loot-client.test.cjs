@@ -5,7 +5,8 @@ const vm=require('node:vm');
 const path=require('node:path');
 const source=fs.readFileSync(path.join(__dirname,'../public/cultivation/raid-mode.js'),'utf8');
 const claim=source.slice(source.indexOf('  async function claimRaidReward()'),source.indexOf('  function finishRaid('));
-function fixture({fresh,claimError,getError,switchAccount=false}={}) {
+
+function fixture({inventory={'raid-refine-key-ii':0},claimError,switchAccount=false}={}) {
   const local={uid:'a',materialSystem:{inventory:{'raid-refine-key-ii':0}}};
   let current=local,claims=0,reads=0;
   const state={roomId:'room_test',room:{status:'won'}};
@@ -13,25 +14,53 @@ function fixture({fresh,claimError,getError,switchAccount=false}={}) {
   const call=vm.runInNewContext(claim+'\nclaimRaidReward',{
     state,data:()=>current,document:{getElementById:()=>status},console:{error(){}},
     window:{dispatchEvent(){}},CustomEvent:class{},escapeHtml:String,renderRaidLoot:()=>'<b>loot</b>',
-    rewardRepository:{async claimRaid(){claims++;if(claimError)throw Error('retry');return {awarded:false,inventory:{'raid-refine-key-ii':999}};}},
-    playerRepository:{currentUser:()=>({uid:current.uid}),async get(){reads++;if(switchAccount)current={uid:'b'};if(getError)throw Error('read failed');return fresh;}}
+    rewardRepository:{async claimRaid(){
+      claims++;
+      if(claimError)throw Error('retry');
+      if(switchAccount)current={uid:'b',materialSystem:{inventory:{}}};
+      return {awarded:false,inventory,firstVictory:false};
+    }},
+    playerRepository:{currentUser:()=>({uid:current.uid}),async get(){reads++;throw Error('material refresh must not be used');}}
   });
   return {call,state,local,status,claims:()=>claims,reads:()=>reads};
 }
-test('duplicate victory receipt cannot restore keys consumed since the original reward',async()=>{
-  const f=fixture({fresh:{materialSystem:{inventory:{'raid-refine-key-ii':0}},raidProgress:{}}});
-  await f.call();assert.equal(f.local.materialSystem.inventory['raid-refine-key-ii'],0);
-  assert.equal(f.state.rewardClaimedRoomId,'room_test');await f.call();assert.equal(f.claims(),1);
+
+test('authoritative duplicate payload cannot restore an already-consumed seal',async()=>{
+  const f=fixture({inventory:{'raid-refine-key-ii':0}});
+  await f.call();
+  assert.equal(f.local.materialSystem.inventory['raid-refine-key-ii'],0);
+  assert.equal(f.state.rewardClaimedRoomId,'room_test');
+  await f.call();
+  assert.equal(f.claims(),1);
+  assert.equal(f.reads(),0);
 });
-test('failed inventory refresh remains retryable after reward was committed',async()=>{
-  const f=fixture({getError:true});await f.call();assert.match(f.status.innerHTML,/已入帳，背包待同步/);
-  assert.equal(f.state.rewardClaimedRoomId,undefined);await f.call();assert.equal(f.claims(),2);
+
+test('successful reward settlement updates the local bag without an extra Firebase player read',async()=>{
+  const f=fixture({inventory:{'raid-refine-key-ii':3,'raid-secret-realm-essence':2}});
+  await f.call();
+  assert.equal(f.local.materialSystem.inventory['raid-refine-key-ii'],3);
+  assert.equal(f.local.materialSystem.inventory['raid-secret-realm-essence'],2);
+  assert.equal(f.reads(),0);
+  assert.equal(f.state.rewardClaimedRoomId,'room_test');
+  assert.match(f.status.innerHTML,/loot/);
 });
+
+test('failed reward claim remains retryable',async()=>{
+  const f=fixture({claimError:true});
+  await f.call();
+  assert.match(f.status.innerHTML,/獎勵尚未確認/);
+  assert.equal(f.state.rewardClaimedRoomId,undefined);
+  await f.call();
+  assert.equal(f.claims(),2);
+});
+
 test('victory response after account switch does not change the old account',async()=>{
-  const f=fixture({fresh:{materialSystem:{inventory:{x:10}}},switchAccount:true});
-  await f.call();assert.deepEqual(f.local.materialSystem.inventory,{'raid-refine-key-ii':0});
+  const f=fixture({inventory:{'raid-refine-key-ii':9},switchAccount:true});
+  await f.call();
+  assert.deepEqual(f.local.materialSystem.inventory,{'raid-refine-key-ii':0});
   assert.equal(f.state.rewardClaimedRoomId,undefined);
 });
+
 const view=fs.readFileSync(path.join(__dirname,'../public/cultivation/raid-loot-view.js'),'utf8').replace(/^import .*;\n/gm,'').replace(/^export /gm,'');
 test('loot view safely renders material names and blocks executable image URLs',()=>{
   const render=vm.runInNewContext(view+'\nrenderRaidLoot',{getMaterialById:()=>({name:'<script>x</script>',imageUrl:'javascript:alert(1)',icon:'<b>'})});
