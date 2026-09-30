@@ -39,11 +39,15 @@ test('trade offers validate quantities, price, inventory, and restrict listed eq
   assert.match(market, /tx\.update\(listingRef, \{ status:'cancelled'/);
 });
 
-test('raid-exclusive materials cannot be listed or bought through the ordinary market', () => {
-  assert.match(market,/RAID_EXCLUSIVE_MATERIAL_IDS/);
-  assert.match(market,/const raidExclusive = new Set\(RAID_EXCLUSIVE_MATERIAL_IDS\)/);
-  assert.match(market,/raidExclusive\.has\(String\(id \|\| ''\)\) \? null : getMaterialById\(id\)/);
-  assert.match(market,/MATERIAL_CATALOG\.filter\(\(item\) => !raidExclusive\.has\(item\.id\)\)/);
+test('essence and sword soul can trade while refinement seals stay bound', () => {
+  assert.match(market,/RAID_CRAFT_MATERIAL_IDS/);
+  assert.match(market,/RAID_REFINEMENT_KEYS/);
+  assert.match(market,/const tradableMaterialIds = new Set\(RAID_CRAFT_MATERIAL_IDS\)/);
+  assert.match(market,/const boundSealIds = new Set\(Object\.values\(RAID_REFINEMENT_KEYS\)\)/);
+  assert.match(market,/tradableMaterialIds\.has\(String\(id \|\| ''\)\) \? getMaterialById\(id\) : null/);
+  assert.match(market,/tradableMaterialIds\.has\(item\.id\) && !boundSealIds\.has\(item\.id\)/);
+  assert.match(market,/秘境玄髓與清霜劍魄可自由交易/);
+  assert.match(market,/淬靈玄印、玄天道印綁定玩家不可交易/);
 });
 
 test('recipe marketplace sells crafting knowledge while preserving the first discoverer', () => {
@@ -226,8 +230,7 @@ test('material market reference is unified by realm and strictly increases', () 
 test('material listing validates total price above unit reference both before and inside Firestore transaction', () => {
   const catalog = read('public/cultivation/material-catalog.js');
   const bag = read('public/cultivation/unified-inventory-grid.js');
-  const npc = read('public/cultivation/material-system.js');
-  const admin = read('public/cultivation/admin-material-manager.js');
+  const materialSystem = read('public/cultivation/material-system.js');
   assert.match(market,/materialMarketReferencePrice, materialMarketMinimumTotal/);
   assert.match(market,/function checkMaterialListingPrice\(type, item, count, price\)/);
   assert.match(market,/if \(price < minimum\)/);
@@ -239,10 +242,8 @@ test('material listing validates total price above unit reference both before an
   assert.match(market,/event\.target\.id === 'pm-sell-qty' \|\| event\.target\.id === 'pm-sell-price'/);
   assert.match(market,/境界統一參考單價/);
   assert.match(catalog,/export function materialMarketReferencePrice\(/);
-  assert.match(bag,/坊市參考單價：/);
-  assert.match(npc,/參考 \$\{materialMarketReferencePrice\(item\.realm\)/);
-  assert.match(admin,/坊市參考 \$\{materialMarketReferencePrice\(item\.realm\)/);
-  assert.match(admin,/採購價分開/);
+  assert.doesNotMatch(materialSystem,/data-material-buy|buyMaterial|material-store/);
+  assert.match(market,/秘境玄髓與清霜劍魄可自由交易/);
   const before = market.slice(market.indexOf('async function createListing()'),market.indexOf('async function buyListing('));
   assert.ok(before.indexOf('checkMaterialListingPrice(type, itemFor(type, id), count, price)') <
     before.indexOf("tx.update(sellerRef, { [systemField]: system })"));
