@@ -64,7 +64,7 @@ test('raid reward writes refinement seals and boss-exclusive materials exactly o
   const fieldValue = { serverTimestamp:() => 12345 };
   const first = await api.awardRaidReward(db, 'u1', 'room_12345678', validation, { fieldValue });
   assert.equal(first.status, 'awarded');
-  assert.deepEqual(first.rewards, {'raid-refine-key-ii':3,'raid-refine-key-iii':2,'raid-secret-realm-essence':3,'raid-shen-sword-soul':2,'taixu-mystic-iron':2,'nascent-soul-crystal':1});
+  assert.deepEqual(first.rewards, {'raid-refine-key-ii':3,'raid-refine-key-iii':2,'raid-secret-realm-essence':3,'raid-shen-sword-soul':2});
   assert.equal(first.firstVictory,true);
   assert.equal(first.dailyFirstVictory,true);
   const inventory = db.docs.get('users/u1').materialSystem.inventory;
@@ -109,12 +109,13 @@ test('raid-exclusive materials never leak into ordinary drops; refinement seals 
   assert.match(catalog, /function raidRefinementKeyRequirement\(stage, realm\)/);
   assert.match(catalog, /Math\.ceil\(order \/ 2\)/);
   assert.match(catalog, /Math\.ceil\(order \* 2 \/ 3\)/);
-  assert.match(drops, /new Set\(RAID_EXCLUSIVE_MATERIAL_IDS\)/);
-  assert.match(drops, /if \(raidOnly\.has\(material\.id\)\) return \[\]/);
+  assert.match(drops, /enabled:false/);
+  assert.match(drops, /quizDrops:false/);
+  assert.match(drops, /dongtianDrops:false/);
   assert.match(jobs, /consumeRefinementKey\(consumed\.materialSystem, plan\.keyRequirement\)/);
   assert.match(jobs, /refinementStage: plan\.refinementStage/);
-  assert.match(ui, /RAID_EXCLUSIVE_MATERIAL_IDS/);
-  assert.match(ui, /const raidKeyIds = new Set\(RAID_EXCLUSIVE_MATERIAL_IDS\)/);
+  assert.match(ui, /RAID_REFINEMENT_KEYS/);
+  assert.match(ui, /const raidKeyIds = new Set\(Object\.values\(RAID_REFINEMENT_KEYS\)\)/);
   assert.match(ui, /!raidKeyIds\.has\(m\.id\)/);
   assert.match(ui, /refinery-key-requirement/);
   assert.match(ui, /第二煉印記/);
@@ -157,8 +158,7 @@ test('realm material rewards use trusted battle snapshot and honor complete admi
   db.docs.set('gameConfig/materialCatalogV1',{materialCatalogSchemaVersion:3,items:[
     {id:'taixu-mystic-iron',realm:'元嬰'}, {id:'nascent-soul-crystal',realm:'金丹'}]});
   const result=await api.awardRaidReward(db,'u1','realm_room',validation,{fieldValue});
-  assert.equal(result.realm,'元嬰');assert.equal(result.rewards['taixu-mystic-iron'],2);
-  assert.equal(result.rewards['nascent-soul-crystal'],undefined);assert.equal(result.rewards['immortal-gold'],undefined);
+  assert.equal(result.realm,'元嬰');assert.equal(result.rewards['taixu-mystic-iron'],2);assert.equal(result.rewards['immortal-gold'],undefined);
 });
 
 test('concurrent different rooms grant exactly one first victory and daily bonus',async()=>{
@@ -171,7 +171,6 @@ test('concurrent different rooms grant exactly one first victory and daily bonus
   assert.equal(db.docs.get('users/u1').materialSystem.inventory['raid-refine-key-iii'],3);
   assert.equal(db.docs.get('users/u1').materialSystem.inventory['raid-secret-realm-essence'],5);
   assert.equal(db.docs.get('users/u1').materialSystem.inventory['raid-shen-sword-soul'],3);
-  assert.equal(db.docs.get('users/u1').materialSystem.inventory['taixu-mystic-iron'],4);
 });
 test('missing player leaves no daily claim, reward receipt or partial inventory',async()=>{
   const db=fakeDb({});db.docs.delete('users/u1');
