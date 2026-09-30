@@ -129,11 +129,24 @@ async function awardRaidReward(db, uid, roomId, validation, {
   });
 
   if (receipt.duplicate) {
+    // 收據中的 inventory 是當時的快照；玩家可能已把素材／印記拿去煉器或交易。
+    // 重複請求必須回傳目前庫存，避免舊收據把已消耗道具復原。
+    let currentInventory = null;
+    try {
+      const currentSnap = await userRef.get();
+      if (currentSnap.exists) {
+        const current = currentSnap.data()?.materialSystem?.inventory || {};
+        const rewardIds = Object.keys(receipt.receipt.rewards || rewards);
+        currentInventory = Object.fromEntries(rewardIds.map((id) => [
+          id, Math.max(0, Math.floor(Number(current[id]) || 0))
+        ]));
+      }
+    } catch (_) {}
     return {
       status:'duplicate',
       awarded:false,
       rewards:receipt.receipt.rewards || rewards,
-      inventory:receipt.receipt.inventory || null,
+      inventory:currentInventory || null,
       firstVictory:receipt.receipt.firstVictory || false,
       dailyFirstVictory:receipt.receipt.dailyFirstVictory || false,
       memento:receipt.receipt.memento || null,
