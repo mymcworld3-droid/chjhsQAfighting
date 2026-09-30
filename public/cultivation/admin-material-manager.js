@@ -19,7 +19,8 @@ import {
   getMaterialById,
   artifactRecipeDepth,
   MAX_ARTIFACT_RECIPE_NESTING,
-  MIN_ARTIFACT_RECIPE_MATERIALS
+  MIN_ARTIFACT_RECIPE_MATERIALS,
+  RAID_CRAFT_MATERIAL_IDS
 } from './material-catalog.js';
 
 (function () {
@@ -81,7 +82,7 @@ import {
     if (!panel || !isAdmin()) return;
     const materialList = panel.querySelector('#admin-material-list');
     if (materialList) {
-      materialList.innerHTML = MATERIAL_CATALOG.map((item) => `<article class="amm-item"><div class="amm-icon">${item.imageUrl ? `<img src="${escapeHtml(item.imageUrl)}" alt="${escapeHtml(item.name)}" loading="lazy" decoding="async">` : escapeHtml(item.icon || '材')}</div><div class="amm-copy"><strong>${escapeHtml(item.name)}</strong><div class="amm-meta">${escapeHtml(item.id)} · ${escapeHtml(item.category)}${item.weaponForm ? ' · 器型 ' + escapeHtml(item.weaponForm) : ''} · 坊市參考 ${materialMarketReferencePrice(item.realm).toLocaleString()} 金幣 · ${item.buyGold > 0 ? `系統採購 ${item.buyGold} 金幣` : '不可直接採購'}</div><div class="amm-description">${escapeHtml(item.description || '')}</div></div><div class="amm-actions"><button type="button" class="amm-edit" data-material-edit="${escapeHtml(item.id)}"><i class="fa-solid fa-pen"></i> 編輯</button><button type="button" class="amm-delete" data-material-delete="${escapeHtml(item.id)}"><i class="fa-solid fa-trash"></i> 刪除</button></div></article>`).join('');
+      materialList.innerHTML = MATERIAL_CATALOG.map((item) => `<article class="amm-item"><div class="amm-icon">${item.imageUrl ? `<img src="${escapeHtml(item.imageUrl)}" alt="${escapeHtml(item.name)}" loading="lazy" decoding="async">` : escapeHtml(item.icon || '材')}</div><div class="amm-copy"><strong>${escapeHtml(item.name)}</strong><div class="amm-meta">${escapeHtml(item.id)} · ${escapeHtml(item.category)}${item.weaponForm ? ' · 器型 ' + escapeHtml(item.weaponForm) : ''} · 坊市參考 ${materialMarketReferencePrice(item.realm).toLocaleString()} 金幣 · ${item.buyGold > 0 ? `系統採購 ${item.buyGold} 金幣` : '不可直接採購'}</div><div class="amm-description">${escapeHtml(item.description || '')}</div></div><div class="amm-actions"><button type="button" class="amm-edit" data-material-edit="${escapeHtml(item.id)}"><i class="fa-solid fa-pen"></i> 編輯</button></div></article>`).join('');
     }
   }
 
@@ -225,7 +226,7 @@ import {
     const modal = document.createElement('div');
     modal.id = RECIPE_MODAL_ID;
     modal.className = 'amm-modal';
-    modal.innerHTML = `<section class="amm-card" role="dialog" aria-modal="true"><h3>${escapeHtml(artifact.name)} · 合成配方</h3><p class="amm-note">材料與既有法寶都可以放入 8 格煉器陣；每個配方至少投入 2 個素材。法寶可做二次煉製素材，但套娃深度最多 ${MAX_ARTIFACT_RECIPE_NESTING} 層；自己吃自己、循環配方或第 3 層套娃都會被拒絕。被裝備中的法寶不會被玩家煉器消耗。</p><div class="amm-recipe-list"><div class="amm-recipe-group-title">一般材料</div>${MATERIAL_CATALOG.map((material) => `<div class="amm-recipe-row"><label>${escapeHtml(material.icon || '材')} ${escapeHtml(material.name)}<small>${escapeHtml(material.category)} · ${escapeHtml(material.realm || '凡人')} · ${material.buyGold > 0 ? `採購 ${material.buyGold} 金幣` : '不可購買'}</small></label><input type="number" min="0" step="1" value="${Math.max(0, Number(materialCurrent[material.id]) || 0)}" data-recipe-material="${escapeHtml(material.id)}"></div>`).join('')}<div class="amm-recipe-group-title">法寶素材（二次煉製）</div>${artifactChoices.map((item) => {
+    modal.innerHTML = `<section class="amm-card" role="dialog" aria-modal="true"><h3>${escapeHtml(artifact.name)} · 合成配方</h3><p class="amm-note">材料與既有法寶都可以放入 8 格煉器陣；每個配方至少投入 2 個素材。法寶可做二次煉製素材，但套娃深度最多 ${MAX_ARTIFACT_RECIPE_NESTING} 層；自己吃自己、循環配方或第 3 層套娃都會被拒絕。被裝備中的法寶不會被玩家煉器消耗。</p><div class="amm-recipe-list"><div class="amm-recipe-group-title">團本煉器素材</div>${MATERIAL_CATALOG.filter((material) => RAID_CRAFT_MATERIAL_IDS.includes(material.id)).map((material) => `<div class="amm-recipe-row"><label>${escapeHtml(material.icon || '材')} ${escapeHtml(material.name)}<small>${escapeHtml(material.category)} · ${escapeHtml(material.realm || '凡人')} · ${material.buyGold > 0 ? `採購 ${material.buyGold} 金幣` : '不可購買'}</small></label><input type="number" min="0" step="1" value="${Math.max(0, Number(materialCurrent[material.id]) || 0)}" data-recipe-material="${escapeHtml(material.id)}"></div>`).join('')}<div class="amm-recipe-group-title">法寶素材（二次煉製）</div>${artifactChoices.map((item) => {
       const color = artifactRealmColor(item.realm);
       return `<div class="amm-recipe-row is-artifact" style="--artifact-realm-color:${escapeHtml(color)}"><label>${escapeHtml(item.icon || '◆')} ${escapeHtml(item.name)}<small>${escapeHtml(item.realm)} · 目前配方深度 ${artifactRecipeDepth(item.id)}/${MAX_ARTIFACT_RECIPE_NESTING}</small></label><input type="number" min="0" step="1" value="${Math.max(0, Number(artifactCurrent[item.id]) || 0)}" data-recipe-artifact="${escapeHtml(item.id)}"></div>`;
     }).join('')}</div><div id="amm-recipe-status" class="amm-status"></div><div class="amm-modal-actions"><button type="button" class="amm-cancel">取消</button><button type="button" class="amm-save">儲存配方</button></div></section>`;
@@ -290,8 +291,7 @@ import {
     if (panel.dataset.materialManagerHydrated !== '1') {
       panel.dataset.materialManagerHydrated = '1';
       panel.classList.remove('admin-preload-shell');
-      panel.innerHTML = `<div class="amm-head"><div><h3><i class="fa-solid fa-gem" style="color:#d8b15d"></i> 材料管理</h3><p>管理全站煉器材料。法寶合成配方請直接到「法寶管理 → 編輯」內設定。</p></div><button type="button" class="amm-add" id="admin-material-add"><i class="fa-solid fa-plus"></i> 新增材料</button></div><div class="amm-section-title"><span>材料清單</span><span>${MATERIAL_CATALOG.length} 種</span></div><div id="admin-material-list" class="amm-list"></div>`;
-      panel.querySelector('#admin-material-add').onclick = () => openMaterialEditor();
+      panel.innerHTML = `<div class="amm-head"><div><h3><i class="fa-solid fa-gem" style="color:#d8b15d"></i> 團本材料管理</h3><p>固定四項：秘境玄髓、清霜劍魄、淬靈玄印、玄天道印；不可新增或刪除。</p></div></div><div class="amm-section-title"><span>材料清單</span><span>${MATERIAL_CATALOG.length} 種</span></div><div id="admin-material-list" class="amm-list"></div>`;
       panel.addEventListener('click', (event) => {
         const edit = event.target.closest('[data-material-edit]');
         const del = event.target.closest('[data-material-delete]');
