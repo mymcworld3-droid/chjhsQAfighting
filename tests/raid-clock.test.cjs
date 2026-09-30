@@ -31,6 +31,27 @@ test('no early hit; scheduled hit settles every member without browser acknowled
   assert.equal(advanceRaidClock(next, 'room-test', START + 18000), null, 'duplicate tick cannot hit twice');
 });
 
+
+test('two unique teammates weaken the next Boss strike and the cooperation window resets', () => {
+  const next = advanceRaidClock(room({
+    teamCycle: 1,
+    teamCorrectUids: ['a','b'],
+    teamGuardReady: true,
+    teamBurstTriggered: false
+  }), 'room-test', START + 18000);
+  assert.equal(next.lastBossAction.rawDamage, 64);
+  assert.equal(next.lastBossAction.damage, 35);
+  assert.equal(next.lastBossAction.teamGuarded, true);
+  assert.deepEqual(next.lastBossAction.teamContributors, ['a','b']);
+  assert.equal(next.members.a.hp, 965);
+  assert.equal(next.members.b.hp, 965);
+  assert.equal(next.members.a.lastBossResolution.teamGuarded, true);
+  assert.equal(next.teamCycle, 2);
+  assert.deepEqual(next.teamCorrectUids, []);
+  assert.equal(next.teamGuardReady, false);
+  assert.equal(next.teamBurstTriggered, false);
+});
+
 test('server restart catches up missed rounds at absolute scheduled timestamps', () => {
   const next = advanceRaidClock(room(), 'room-test', START + 37000);
   assert.equal(next.bossActionCount, 2);
