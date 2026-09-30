@@ -298,7 +298,7 @@ import { rewardRepository } from './data/reward-repository.js';
     button.type = 'button';
     button.className = 'raid-home-entry';
     button.innerHTML = '<span class="raid-home-emblem"><i class="fa-solid fa-users-rays"></i></span>' +
-      '<span class="raid-home-copy"><small>秘境集結 ／ RAID</small><strong>秘境討伐</strong><em>1–4 人挑戰大師姐・沈清霜</em></span>' +
+      '<span class="raid-home-copy"><small>秘境集結 ／ RAID</small><strong>秘境討伐</strong><em>建議 3 人同行・挑戰沈清霜</em></span>' +
       '<span class="raid-home-arrow"><i class="fa-solid fa-chevron-right"></i></span>';
     button.addEventListener('click', openHub);
     anchor.insertAdjacentElement('afterend', button);
@@ -311,7 +311,7 @@ import { rewardRepository } from './data/reward-repository.js';
     button.classList.toggle('locked', locked);
     const hint = button.querySelector('em');
     if (hint) hint.textContent = locked ? '築基初期（' + RAID_MVP.minimumScore + ' 修為）開放' :
-      (state.roomId ? '秘境隊伍進行中' : '1–4 人挑戰大師姐・沈清霜');
+      (state.roomId ? '秘境隊伍進行中' : '建議 3 人同行・挑戰沈清霜');
   }
 
   function renderHub() {
@@ -899,7 +899,7 @@ import { rewardRepository } from './data/reward-repository.js';
   async function hostStartRaid() {
     if (!state.room || !isHost()) return;
     try {
-      // Boss HP and attack are scaled from the server-trusted member snapshots.
+      // Boss HP and attack use the same fixed difficulty for every party.
       await startRaidRoom(state.roomId);
     } catch (error) {
       toast(error.message || '目前無法開始團本');

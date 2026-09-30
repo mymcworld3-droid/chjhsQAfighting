@@ -301,12 +301,11 @@ function memberSnapshotFromTrusted(player,host=false){
   return {...player,ready:false,alive:true,online:true,host,damage:0,correct:0,attempts:0,
     lastActionId:0,lastBossActionSeen:0,answeredQuestionIds:[],joinedAtMs:Date.now(),heartbeatAtMs:Date.now()};
 }
-function createTeamBoss(members=[]){
-  const team=(Array.isArray(members)?members:[]).filter(Boolean).slice(0,4),count=Math.max(1,team.length);
-  const totalAttack=team.reduce((sum,m)=>sum+Math.max(1,Math.round(finite(m?.atk,200))),0);
-  const averageHp=team.reduce((sum,m)=>sum+Math.max(1,Math.round(finite(m?.maxHp,1000))),0)/count;
-  const maxHp=Math.max(1800,Math.round(totalAttack*(6.5+.5*count)));
-  return {id:'shen-qingshuang',hp:maxHp,maxHp,baseAttack:Math.max(70,Math.round(averageHp*.105)),phase:1};
+// 固定三人基準試煉；隊伍人數、裝備與境界只改變玩家自身能力。
+const RAID_BOSS_DIFFICULTY = Object.freeze({ maxHp:4800, baseAttack:70 });
+function createRaidBoss(){
+  return {id:'shen-qingshuang',hp:RAID_BOSS_DIFFICULTY.maxHp,
+    maxHp:RAID_BOSS_DIFFICULTY.maxHp,baseAttack:RAID_BOSS_DIFFICULTY.baseAttack,phase:1};
 }
 function bossPhase(hp,maxHp){const r=clamp(finite(hp)/Math.max(1,finite(maxHp,1)),0,1);return r>.70?1:r>.30?2:3;}
 function bossIntent(room){
@@ -420,6 +419,6 @@ function resolveBossDefense(member,{roomId,bossAction}={}){
 
 module.exports={
   EQUIP_SLOTS,RUNTIME_EFFECTS,stableHash,artifactPower,combatPower,trustedKnowledgeScope,pickTrustedRaidKnowledge,
-  trustedRaidPlayerSnapshot,loadTrustedRaidPlayer,memberSnapshotFromTrusted,createTeamBoss,bossPhase,bossIntent,
+  trustedRaidPlayerSnapshot,loadTrustedRaidPlayer,memberSnapshotFromTrusted,createRaidBoss,RAID_BOSS_DIFFICULTY,bossPhase,bossIntent,
   resolvePlayerAction,resolveBossDefense
 };
