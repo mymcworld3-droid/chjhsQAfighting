@@ -206,7 +206,8 @@ export function validateMaterialCatalog(items) {
   if (!Array.isArray(items) || !items.length) throw new Error('材料清單不可為空');
   const seen = new Set();
   const allowed = new Set(Object.keys(DEFAULT_MATERIAL_REALM_BY_ID));
-  return items.map((raw) => {
+  if (items.length !== allowed.size) throw new Error('現行材料系統固定為 4 種團本道具，不可新增或刪除');
+  const normalized = items.map((raw) => {
     const item = normalizeMaterialDefinition(raw);
     if (!allowed.has(item.id)) throw new Error(`材料 ${item.id || '空白'} 已退出現行煉器系統；目前僅允許團本四種材料／印記`);
     if (!/^[a-z0-9][a-z0-9-]{1,63}$/.test(item.id)) throw new Error(`材料 ID 不合法：${item.id || '空白'}`);
@@ -216,6 +217,8 @@ export function validateMaterialCatalog(items) {
     if (!MATERIAL_REALMS.some((realm) => realm.name === item.realm)) throw new Error(`材料 ${item.name} 使用未知境界：${item.realm}`);
     return item;
   });
+  if ([...allowed].some((id) => !seen.has(id))) throw new Error('四種團本道具必須完整保留');
+  return normalized;
 }
 
 export const MATERIAL_CATALOG = DEFAULT_MATERIAL_CATALOG.map(normalizeMaterialDefinition);
