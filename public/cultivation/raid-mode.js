@@ -1025,6 +1025,9 @@ import { rewardRepository } from './data/reward-repository.js';
   }
 
   function finishRaid(won, reason) {
+    // Terminal room snapshots may repeat (for example on a heartbeat). Keep the
+    // existing result DOM so an asynchronous reward response is not overwritten.
+    if (state.status === 'finished') return;
     stopTick();
     state.status = 'finished';
     document.body.classList.remove('raid-session-active');
