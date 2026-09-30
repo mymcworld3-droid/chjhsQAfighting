@@ -7,7 +7,8 @@ import {
   materialMarketReferencePrice,
   artifactRecipeDepth,
   MAX_ARTIFACT_RECIPE_NESTING,
-  RAID_REFINEMENT_KEYS
+  RAID_REFINEMENT_KEYS,
+  RAID_EXCLUSIVE_MATERIAL_IDS
 } from './material-catalog.js';
 
 // 統一修煉背包：法寶、材料、消耗道具共用正方形格子；點擊後才顯示詳細資料。
@@ -18,7 +19,7 @@ import {
   const MODAL_ID = 'unified-bag-detail-modal';
   const STYLE_ID = 'unified-inventory-grid-runtime-style';
   const TYPE_ORDER = Object.freeze({ artifact: 0, material: 1, consumable: 2, training: 3 });
-  const RAID_KEY_IDS = new Set(Object.values(RAID_REFINEMENT_KEYS));
+  const RAID_KEY_IDS = new Set(RAID_EXCLUSIVE_MATERIAL_IDS);
   const REALM_COLORS = Object.freeze({
     凡人: '#a1a1aa', 煉氣: '#86efac', 築基: '#60a5fa', 金丹: '#fbbf24', 元嬰: '#c084fc',
     化神: '#f472b6', 煉虛: '#818cf8', 合體: '#fb923c', 大乘: '#f87171', 渡劫: '#ef4444', 真仙: '#f8fafc'
@@ -230,7 +231,7 @@ import {
       ${item.raidKey ? '<span class="uib-raid-key-badge"><i class="fa-solid fa-stamp"></i> 團本</span>' : ''}
       <span class="uib-icon">${imageMarkup(item.imageUrl, item.icon || '◆', item.name)}</span>
       <span class="uib-name">${escapeHtml(item.name)}</span>
-      <span class="uib-bottom"><small>${escapeHtml(item.raidKey ? '團本印記' : typeLabel(item.type))}</small><em>${escapeHtml(item.realm || '凡人')}</em></span>
+      <span class="uib-bottom"><small>${escapeHtml(item.raidKey ? '團本關鍵材料' : typeLabel(item.type))}</small><em>${escapeHtml(item.realm || '凡人')}</em></span>
     </button>`;
   }
 
@@ -344,7 +345,7 @@ import {
         : '<p>目前沒有額外效果資料。</p>'}${equippedHere ? '<p class="uib-equipped-note"><i class="fa-solid fa-circle-check"></i> 目前已裝備，效果正在生效</p>' : ''}${equipAction}</div>`;
     } else if (item.type === 'material') {
       extra = item.raidKey
-        ? `<div class="uib-detail-section uib-raid-key-detail"><span><i class="fa-solid fa-stamp"></i> 團本煉器印記</span><p>分類：團本印記</p><p>用途：${item.id === RAID_REFINEMENT_KEYS[2] ? '第二次煉製的必要印記。' : '第三次煉製的必要道印。'}</p><p>取得方式：擊敗團本 Boss 後由伺服器結算發放；不可由一般題目、洞天或系統商店取得。</p><p>持有數量：<b>×${item.quantity}</b></p></div>`
+        ? `<div class="uib-detail-section uib-raid-key-detail"><span><i class="fa-solid fa-stamp"></i> 團本關鍵材料</span><p>分類：團本專屬</p><p>用途：${item.id === RAID_REFINEMENT_KEYS[2] ? '第二次煉製的必要印記。' : item.id === RAID_REFINEMENT_KEYS[3] ? '第三次煉製的必要道印。' : item.id === 'raid-secret-realm-essence' ? '秘境通用玄髓，預留給特殊煉器、兌換與秘境裝備。' : '沈清霜 Boss 專屬劍魄，預留給清霜系法寶與覺醒配方。'}</p><p>取得方式：擊敗指定團本 Boss 後由伺服器結算發放；不可由一般題目、洞天或系統商店取得。</p><p>持有數量：<b>×${item.quantity}</b></p></div>`
         : `<div class="uib-detail-section"><span>材料資訊</span><p>分類：${escapeHtml(item.category)}</p><p>坊市參考單價：${materialMarketReferencePrice(item.realm).toLocaleString()} 金幣 · ${item.buyGold > 0 ? `系統採購價：${item.buyGold} 金幣` : '不可直接向系統採購'}</p></div>`;
     } else if (item.id === 'revival-pill') {
       extra = `<div class="uib-detail-section"><span>使用效果</span><p>服用後立即增加 ${item.cultivationGain || 100} 修為。</p><button type="button" class="uib-use-btn" data-uib-use="revival-pill">服用一顆</button></div>`;
