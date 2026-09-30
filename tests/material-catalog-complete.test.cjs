@@ -5,43 +5,47 @@ const path = require('node:path');
 
 const catalog = fs.readFileSync(path.join(__dirname, '..', 'public/cultivation/material-catalog.js'), 'utf8');
 
-const lineages = {
-  ore: ['玄鐵','赤銅精','紫金砂','太虛玄鐵','九天玄晶','虛空石','混元金','混沌晶','九霄神鐵','仙金'],
-  wood: ['靈草','靈木','百年靈木','雷擊木','千年靈木','神魂木','界木','太古神木','世界樹枝'],
-  crystal: ['青靈石','寒玉','靈晶','嬰靈晶','天雷晶','空冥晶','仙靈玉','劫雷晶核','仙晶'],
-  beast: ['獸皮','妖獸骨','妖丹碎片','完整妖丹','蛟龍鱗','鳳凰羽','真龍精血','鳳凰精血'],
-  special: ['靈符紙','地火石','星辰砂','天雷精魄','赤鳳石','五行精魄','天道碎片','法則碎片','大道碎片','鴻蒙紫氣']
-};
-
-test('all requested material lineages are present', () => {
-  for (const names of Object.values(lineages)) {
-    for (const name of names) assert.match(catalog, new RegExp(`name: '${name}'`));
-  }
-});
-
-test('default catalog contains lineage, weapon-forging and raid-only refinement materials', () => {
-  const block = catalog.match(/const DEFAULT_MATERIAL_CATALOG = \[([\s\S]*?)\n\];\n\nconst DEFAULT_MATERIAL_REALM_BY_ID/);
+test('material catalog is collapsed to exactly four raid-only entries', () => {
+  const block = catalog.match(/const DEFAULT_MATERIAL_CATALOG = \[([\s\S]*?)\n\]/);
   assert.ok(block, 'default material catalog block exists');
-  assert.equal((block[1].match(/\{ id:/g) || []).length, 52);
-  assert.match(block[1], /id: 'sword-forging-iron'/);
-  assert.match(block[1], /id: 'blade-forging-copper'/);
-  assert.match(block[1], /id: 'raid-refine-key-ii'/);
-  assert.match(block[1], /id: 'raid-refine-key-iii'/);
-  assert.match(block[1], /id: 'raid-secret-realm-essence'/);
-  assert.match(block[1], /id: 'raid-shen-sword-soul'/);
+  assert.equal((block[1].match(/\{ id:/g) || []).length, 4);
+  for (const id of [
+    'raid-secret-realm-essence',
+    'raid-shen-sword-soul',
+    'raid-refine-key-ii',
+    'raid-refine-key-iii'
+  ]) assert.match(block[1], new RegExp(`id: '${id}'`));
 });
 
-test('existing material ids remain stable for player inventories and recipes', () => {
-  for (const id of ['spirit-iron','spirit-wood','spirit-crystal','beast-core-shard','talisman-paper']) {
-    assert.match(catalog, new RegExp(`id: '${id}'`));
+test('old ordinary material families are removed from the active catalog', () => {
+  for (const id of ['spirit-iron','spirit-wood','spirit-crystal','beast-core-shard','talisman-paper','sword-forging-iron']) {
+    assert.doesNotMatch(catalog, new RegExp(`id: '${id}'`));
   }
 });
 
-test('expanded materials cover realm progression and special material category', () => {
-  for (const realm of ['凡人','煉氣','築基','金丹','元嬰','化神','煉虛','合體','大乘','渡劫','真仙']) {
-    assert.match(catalog, new RegExp(`realm: '${realm}'`));
-  }
-  assert.match(catalog, /'特殊材料'/);
-  assert.match(catalog, /mergeMaterialCatalogWithDefaults/);
-  assert.match(catalog, /MATERIAL_CATALOG_SCHEMA_VERSION = 3/);
+test('only essence and sword soul are furnace materials while seals stay refinement keys', () => {
+  assert.match(catalog,/export const RAID_CRAFT_MATERIAL_IDS/);
+  assert.match(catalog,/'raid-secret-realm-essence'/);
+  assert.match(catalog,/'raid-shen-sword-soul'/);
+  assert.match(catalog,/2: 'raid-refine-key-ii'/);
+  assert.match(catalog,/3: 'raid-refine-key-iii'/);
+  assert.match(catalog,/現行材料系統固定為 4 種團本道具/);
+});
+
+test('ordinary quiz and dongtian material drop rates are disabled', () => {
+  const start = catalog.indexOf('export function materialDropRateFor');
+  const end = catalog.indexOf('export function normalizeMaterialDefinition', start);
+  const block = catalog.slice(start,end);
+  assert.match(block,/return 0/);
+  assert.match(block,/問道、洞天、商店與一般活動都不再自然產出煉器素材/);
+});
+
+test('built-in artifact recipes use only the two raid crafting materials', () => {
+  const start = catalog.indexOf('const DEFAULT_ARTIFACT_RECIPES');
+  const end = catalog.indexOf('function clone', start);
+  const recipes = catalog.slice(start,end);
+  assert.doesNotMatch(recipes,/raid-refine-key-ii|raid-refine-key-iii/);
+  assert.doesNotMatch(recipes,/spirit-iron|spirit-wood|spirit-crystal|beast-core-shard|talisman-paper/);
+  assert.match(recipes,/raid-secret-realm-essence/);
+  assert.match(recipes,/raid-shen-sword-soul/);
 });
