@@ -166,7 +166,7 @@ test('raid hub bottom follows the real bottom navigation top edge', () => {
 
 
 test('raid hub card is measured directly to the navigation edge and cache-busted', () => {
-  assert.match(raidSource, /STYLE_HREF = 'styles\/raid-mode\.css\?v=20260930-teamwork-list1'/);
+  assert.match(raidSource, /STYLE_HREF = 'styles\/raid-mode\.css\?v=20260930-teamwork-ticket1'/);
   assert.match(raidSource, /function fitRaidHubToNavigation\(\)/);
   assert.match(raidSource, /navTop - cardTop - 8/);
   assert.match(raidSource, /card\.style\.setProperty\('height', targetHeight \+ 'px', 'important'\)/);
@@ -265,8 +265,9 @@ test('raid hub uses an extensible trial catalog instead of a single hard-coded b
   assert.match(catalogSource,/id: 'shen-qingshuang'/);
   assert.match(catalogSource,/id: 'sealed-trial-02'/);
   assert.match(catalogSource,/id: 'sealed-trial-03'/);
-  assert.match(catalogSource,/秘境玄髓/);
-  assert.match(catalogSource,/清霜劍魄/);
+  assert.match(catalogSource,/玄鐵／靈木/);
+  assert.match(catalogSource,/精煉玄鐵／百年靈木/);
+  assert.match(catalogSource,/紫金玄鐵／雷擊木/);
   assert.match(raidSource,/RAID_TRIALS\.map/);
   assert.match(raidSource,/class="raid-trial-list"/);
   assert.match(raidSource,/data-raid-trial=/);
@@ -287,4 +288,36 @@ test('raid teamwork requires distinct contributors and exposes progress in arena
   assert.match(raidSource,/teamworkMarkup\(false\)/);
   assert.match(raidSource,/teamworkMarkup\(true\)/);
   assert.match(cssSource,/\.raid-teamwork\{/);
+});
+
+
+test('raid tickets grant three per Taiwan day cap at ten and are consumed only at battle start', () => {
+  const ticket = require('../raid-room-api.cjs').__test;
+  assert.equal(ticket.RAID_DAILY_TICKETS,3);
+  assert.equal(ticket.RAID_TICKET_CAP,10);
+  assert.equal(ticket.raidTicketDate(Date.parse('2026-09-30T15:59:59Z')),'2026-09-30');
+  assert.equal(ticket.raidTicketDate(Date.parse('2026-09-30T16:00:00Z')),'2026-10-01');
+  assert.deepEqual(ticket.accrueRaidTickets({},'2026-09-30'),{
+    count:3,lastGrantDate:'2026-09-30',dailyGrant:3,cap:10
+  });
+  assert.equal(ticket.accrueRaidTickets({raidTickets:{count:9,lastGrantDate:'2026-09-29'}},'2026-09-30').count,10);
+  assert.equal(ticket.accrueRaidTickets({raidTickets:{count:1,lastGrantDate:'2026-09-27'}},'2026-09-30').count,10);
+  assert.equal(ticket.accrueRaidTickets({raidTickets:{count:5,lastGrantDate:'2026-09-30'}},'2026-09-30').count,5);
+  assert.match(roomApiSource,/action === 'ticket-status'/);
+  const createBlock=roomApiSource.slice(roomApiSource.indexOf("if (action === 'create')"),roomApiSource.indexOf("if (action === 'quick')"));
+  assert.doesNotMatch(createBlock,/reserveRaidTickets/);
+  const startBlock=roomApiSource.slice(roomApiSource.indexOf("if (action === 'start')"),roomApiSource.indexOf("if (action === 'heartbeat')"));
+  assert.match(startBlock,/reserveRaidTickets\(playerDb, roomId, preMembers\)/);
+  assert.match(startBlock,/refundRaidTicketReservation/);
+  assert.match(startBlock,/ticketMemberUids/);
+  assert.match(raidSource,/每日 \+3，最多 10 張/);
+  assert.match(raidSource,/正式開戰時每位隊員消耗 1 張/);
+  assert.match(cssSource,/\.raid-ticket-status\{/);
+});
+
+test('current raid advertises equal three-roll six-material probability independent of player realm', () => {
+  assert.match(raidSource,/每次通關抽取 3 次/);
+  assert.match(raidSource,/六種素材每抽皆為 1\/6/);
+  assert.match(raidSource,/所有玩家機率完全相同/);
+  assert.match(catalogSource,/每位玩家使用完全相同的掉落機率表/);
 });
