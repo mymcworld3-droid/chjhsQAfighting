@@ -77,16 +77,10 @@ const BRANCH_NAMES = Object.freeze({
   reverse:['兩儀化刃','陰陽逆轉','陰陽殺招','太極護元'],
   sword:['劍魄凌霄','萬劍歸宗','劍心殺招','劍魄護元']
 });
-// 九種金丹的終極增益依丹性分化；品級越高（數字越小），單級效果越強。
-const CORE_FINALE = Object.freeze({
-  ocean: { attack:18, heal:11 }, taichu:{attack:12,heal:20}, ningxin:{attack:13,heal:18},
-  pojing:{attack:22,heal:9}, xingchen:{attack:19,heal:12}, wugou:{attack:11,heal:21},
-  thunder:{attack:23,heal:10}, reverse:{attack:16,heal:16}, sword:{attack:24,heal:9}
-});
+// 右脈回復共用品級曲線；左脈差異交由本命能力結算。
 export function soulFinalePerLevel(type, grade = 9) {
-  const core = CORE_FINALE[type] || CORE_FINALE.taichu;
   const quality = 9 - Math.min(9, Math.max(1, Math.floor(Number(grade) || 9)));
-  return { coreAttack:core.attack + quality * 2, coreHeal:core.heal + quality };
+  return { coreHeal:12 + quality };
 }
 export const NASCENT_SOUL_ATTRIBUTES = Object.freeze(NODE_CONFIG.filter(item => !item.parent).map(item =>
   Object.freeze({ ...item, max: NASCENT_SOUL_NODE_CAP })
@@ -111,7 +105,16 @@ export function soulNodes(type, grade = 9) {
   const finale = soulFinalePerLevel(type, grade);
   return NASCENT_SOUL_NODE_ORDER.map(id => {
     const base = names[id] || NODE_CONFIG.find(item => item.id === id);
-    return { ...base, ...(id === 'leftFinal' ? {coreAttack:finale.coreAttack} : {}),
+    const weight = {leftTop:.3,leftFarBottom:.2,leftFinal:.5}[id] || 0;
+    const talents = globalThis.QASoulTalents;
+    const trait = talents?.TYPES[type];
+    const quality = (9 - Math.min(9, Math.max(1, Number(grade) || 9))) / 8;
+    return { ...base, ...(weight ? {
+      name:(trait?.name || base.name) + (id === 'leftFinal' ? '・本命' : id === 'leftTop' ? '・初悟' : '・精進'),
+      desc:(id === 'leftFinal' ? '' : base.desc + ' ') + (trait?.desc || '強化本命丹性能力。'),
+      coreAttack:0, talentWeight:weight, talentStrength:(.28+.04*quality)*weight/10,
+      talentTrueDamage:type === 'wugou' ? ({leftTop:2,leftFarBottom:1,leftFinal:3}[id])*(1+.2*quality) : 0
+    } : {}),
       ...(id === 'rightFinal' ? {coreHeal:finale.coreHeal} : {}) };
   });
 }
@@ -260,7 +263,7 @@ export function soulCombatBonuses(tree, type, grade = 9) {
   const result = {attackFlat:0,maxHpFlat:0,bonusDamage:0,reductionFlat:0,coreHeal:0};
   for (const node of soulNodes(type, grade)) {
     for (const key of Object.keys(result)) {
-      const effect = key === 'bonusDamage' ? (node.bonusDamage || 0) + (node.coreAttack || 0) : (node[key] || 0);
+      const effect = node[key] || 0;
       result[key] += effect * (nodes[node.id] || 0);
     }
   }

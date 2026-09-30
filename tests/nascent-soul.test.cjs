@@ -7,7 +7,8 @@ const vm = require('node:vm');
 const read = name => readFileSync(join(__dirname, '..', name), 'utf8');
 const source = read('public/cultivation/nascent-soul-rules.js');
 const rules = vm.runInNewContext(source.replace(/^export /gm, '') +
-  '\n({ NASCENT_SOUL_TYPES, nascentSoulForCore, nascentSoulStage, nascentSoulSpiritReward, normalizeSpirit, NASCENT_SOUL_ATTRIBUTES, NASCENT_SOUL_NODE_CAP, NASCENT_SOUL_BRANCH_UNLOCK, soulNodes, soulSkills, normalizeSoulTree, soulAvailableSpirit, soulSpentSpirit, soulNodeStatus, allocateSoulNode, soulCombatBonuses, soulNodeCost, soulCultivationBonuses, soulCultivationBonusForPlayer, soulFinalePerLevel })');
+  '\n({ NASCENT_SOUL_TYPES, nascentSoulForCore, nascentSoulStage, nascentSoulSpiritReward, normalizeSpirit, NASCENT_SOUL_ATTRIBUTES, NASCENT_SOUL_NODE_CAP, NASCENT_SOUL_BRANCH_UNLOCK, soulNodes, soulSkills, normalizeSoulTree, soulAvailableSpirit, soulSpentSpirit, soulNodeStatus, allocateSoulNode, soulCombatBonuses, soulNodeCost, soulCultivationBonuses, soulCultivationBonusForPlayer, soulFinalePerLevel })',
+  {QASoulTalents:require('../public/cultivation/soul-talents.js')});
 const { NASCENT_SOUL_TYPES, nascentSoulForCore, nascentSoulStage, nascentSoulSpiritReward,
   normalizeSpirit, NASCENT_SOUL_ATTRIBUTES, NASCENT_SOUL_NODE_CAP, NASCENT_SOUL_BRANCH_UNLOCK, soulNodes, soulSkills, normalizeSoulTree, soulAvailableSpirit, soulSpentSpirit, soulNodeStatus, allocateSoulNode, soulCombatBonuses, soulNodeCost, soulCultivationBonuses, soulCultivationBonusForPlayer, soulFinalePerLevel } = rules;
 
@@ -95,7 +96,7 @@ test('nine soul types have distinct final talents and separate investments', () 
   for(const type of all){
     assert.equal(soulSkills(type).length,10);
     assert.equal(soulNodes(type).length,12);
-    assert.ok(soulNodes(type).some(n=>n.id==='leftFinal'&&n.coreAttack>0));
+    assert.ok(soulNodes(type).some(n=>n.id==='leftFinal'&&n.talentStrength>0));
     assert.ok(soulNodes(type).some(n=>n.id==='rightFinal'&&n.coreHeal>0));
   }
   assert.equal(new Set(all.map(type=>soulNodes(type).find(n=>n.id==='leftFinal').name)).size,9);
@@ -389,10 +390,10 @@ test('dual outer prerequisites gate core-related final nodes', () => {
   for(let i=0;i<5;i++)tree=allocateSoulNode(tree,'thunder','leftFarBottom',400).tree;
   const fin=allocateSoulNode(tree,'thunder','leftFinal',400);
   assert.equal(fin.ok,true);assert.equal(fin.cost,8);
-  const low=soulCombatBonuses(fin.tree,'thunder',9).bonusDamage;
-  const high=soulCombatBonuses(fin.tree,'thunder',1).bonusDamage;
-  assert.equal(high-low,16);
-  assert.ok(soulFinalePerLevel('thunder',1).coreAttack>soulFinalePerLevel('ocean',9).coreAttack);
+  const low=soulNodes('thunder',9).find(n=>n.id==='leftFinal').talentStrength;
+  const high=soulNodes('thunder',1).find(n=>n.id==='leftFinal').talentStrength;
+  assert.ok(high > low);
+  assert.notEqual(soulNodes('thunder',1).find(n=>n.id==='leftFinal').name,soulNodes('ocean',1).find(n=>n.id==='leftFinal').name);
   assert.ok(soulFinalePerLevel('wugou',1).coreHeal>soulFinalePerLevel('thunder',9).coreHeal);
 });
 test('previous v3 allocations preserve paid costs', () => {

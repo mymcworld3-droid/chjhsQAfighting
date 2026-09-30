@@ -412,6 +412,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
       bonus.reductionFlat ? '-' + bonus.reductionFlat + ' 每次受擊傷害' : '',
       bonus.coreHeal ? '+' + bonus.coreHeal + ' 金丹護元回復' : '',
       bonus.coreAttack ? '+' + bonus.coreAttack + ' 金丹殺招傷害' : '',
+      bonus.talentStrength ? '丹性能力 +' + Math.round(bonus.talentStrength * 1000) / 10 + '%' : '',
       bonus.cultivationSolo ? '+' + bonus.cultivationSolo + ' 問道答對修為' : '',
       bonus.cultivationDaily ? '+' + bonus.cultivationDaily + ' 閉關全對修為' : '',
       bonus.cultivationCave ? '+' + bonus.cultivationCave + ' 洞天首次通關修為' : ''
@@ -445,6 +446,11 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
           <strong class="ns-detail-next">+${node[key] * nextLevel}</strong>
         </div>
       </div>`).join('');
+    const talent = globalThis.QASoulTalents?.TYPES[type];
+    const talentValue = level => node.talentTrueDamage ?
+      globalThis.QASoulTalents.trueDamage(globalThis.QASoulTalents.snapshot(type,state.equippedCore.grade,{...(normalizeSoulTree(tree).paths[type]?.nodes || {}),[node.id]:level})) :
+      Math.round(node.talentStrength * level * 1000) / 10 + '%';
+    const talentRow = node.talentWeight ? '<div class="ns-detail-stat"><span>' + talent.trait + (node.talentTrueDamage ? '合計' : '倍率') + '</span><div class="ns-detail-stat-values"><strong>' + talentValue(status.level) + '</strong><i class="fa-solid fa-arrow-right"></i><strong class="ns-detail-next">' + talentValue(nextLevel) + '</strong></div></div>' : '';
     const label = maxed ? '已點滿' : status.level ? '升級' : '點亮';
     const action = !status.ok ? status.reason : label + ' · ' + status.cost + ' 神識';
     return `
@@ -463,6 +469,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
         <div class="ns-detail-stats">
           <div class="ns-detail-stat-headers"><span>目前數值</span><span>升級後</span></div>
           ${statRows}
+          ${talentRow}
         </div>
         <div class="ns-detail-footer">
           <div class="ns-detail-cost"><span>可用神識</span><strong>${status.remaining}</strong></div>
@@ -558,7 +565,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
           <div class="ns-branch-title">
             <span class="ns-kicker">NASCENT SOUL · 本命元嬰</span>
             <h3>${soul.name}</h3>
-            <p>${soul.trait} · ${stage.name} · 裝配：${equippedName}（${equippedGrade} 品）</p>
+            <p>${globalThis.QASoulTalents?.TYPES[type]?.trait || soul.trait} · ${stage.name} · 裝配：${equippedName}（${equippedGrade} 品）</p>
           </div>
           <div class="ns-resource" aria-live="polite">
             <div><small>累計神識</small><strong>${earned}</strong></div>
@@ -743,7 +750,8 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     if (currentScore() < NASCENT_SOUL_THRESHOLD || state.coreEnabled === false || !state.equippedCore) return null;
     const type = state.equippedCore.type;
     const bonus = soulCombatBonuses(window.getCurrentUserData?.()?.nascentSoulTree, type, state.equippedCore.grade);
-    return { type, ...bonus };
+    const levels = normalizeSoulTree(window.getCurrentUserData?.()?.nascentSoulTree).paths[type]?.nodes || {};
+    return { type, ...bonus, talent: globalThis.QASoulTalents.snapshot(type, state.equippedCore.grade, levels) };
   };
 
   function bagTabMarkup() {
@@ -930,7 +938,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     modalShell('training-v3-detail-modal', `${core.grade} 品 · ${type.name}`, `
       <div class="training-v3-detail-top">${coreVisualMarkup(core, false)}</div>
       <div class="training-v3-lore training-core-detail-two">
-        <div class="training-core-feature"><span>特性</span><p><strong>效果：</strong>${type.effect(core.grade)}</p><p><strong>神通：</strong>${type.ability}</p><p><strong>修煉：</strong>${type.upkeep}</p><p><strong>提醒：</strong>${type.warning}</p></div>
+        <div class="training-core-feature"><span>特性</span><p><strong>效果：</strong>${type.effect(core.grade)}</p><p><strong>神通：</strong>${type.ability}</p><p><strong>元嬰左脈：</strong>${globalThis.QASoulTalents?.TYPES[core.type]?.trait || '本命能力'}（元嬰境界後修習）</p><p><strong>修煉：</strong>${type.upkeep}</p><p><strong>提醒：</strong>${type.warning}</p></div>
         <div class="training-core-story"><span>故事</span><p>${type.note}</p><p>此丹並非外來丹藥，而是修士在自身靈田／丹田中凝聚，並可透過洗髓重塑丹性與品級的本命金丹。</p></div>
       </div>
     `);
@@ -1230,3 +1238,4 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     boot();
   }
 })();
+import './soul-talents.js';
