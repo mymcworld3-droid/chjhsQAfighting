@@ -254,7 +254,7 @@ test('server and clients wire secure backfill and automatic generated-artifact i
   assert.match(materialCatalog, /imageUrl/);
 });
 
-test('major inventory surfaces render generated images with icon fallback', () => {
+test('active inventory and refinery surfaces render generated images with icon fallback', () => {
   const bag = read('public/cultivation/unified-inventory-grid.js');
   const refinery = read('public/cultivation/cultivation-refinery-v2.js');
   const materials = read('public/cultivation/material-system.js');
@@ -264,7 +264,6 @@ test('major inventory surfaces render generated images with icon fallback', () =
   assert.match(refinery, /function itemImageMarkup\(/);
   assert.match(refinery, /m\.imageUrl \|\| ''/);
   assert.match(refinery, /refinery-mat-icon img/);
-  assert.match(materials, /function itemImageMarkup\(/);
-  assert.match(materials, /item\.imageUrl \|\| ''/);
-  assert.match(materials, /material-store-icon img/);
+  assert.match(materials, /local-readonly/);
+  assert.doesNotMatch(materials, /material-store-icon|data-material-buy/);
 });
