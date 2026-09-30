@@ -11,6 +11,8 @@ const CLAIM_COLLECTION = 'raidRewardClaims';
 const RAID_BOSS_ID = 'shen-qingshuang';
 const RAID_ROOM_VERSION = 2;
 const REWARDS = Object.freeze({
+  'raid-refine-key-ii': 2,
+  'raid-refine-key-iii': 1,
   'raid-secret-realm-essence': 2,
   'raid-shen-sword-soul': 1
 });
@@ -86,6 +88,8 @@ async function awardRaidReward(db, uid, roomId, validation, {
       const dailyFirstVictory = !!date && !dailySnap.exists;
       const granted = { ...rewards };
       if (dailyFirstVictory) {
+        granted['raid-refine-key-ii'] = (granted['raid-refine-key-ii'] || 0) + 1;
+        granted['raid-refine-key-iii'] = (granted['raid-refine-key-iii'] || 0) + 1;
         granted['raid-secret-realm-essence'] = (granted['raid-secret-realm-essence'] || 0) + 1;
       }
       // Boss 專屬材料讓首通也有一次明顯躍升，但後續仍可重複農取。
