@@ -285,6 +285,8 @@ test('startup cloud curtain uses two full-screen overlapping PNG layers and prel
   assert.match(legacy, /fetchPriority = 'high'/);
   assert.match(legacy, /waitForStartupCloudTransform/);
   assert.match(legacy, /transitionend/);
+  assert.match(legacy, /object-fit:cover;object-position:center/);
+  assert.doesNotMatch(legacy, /object-fit:fill/);
   assert.match(legacy, /#startup-cloud-curtain \.startup-cloud-half\{[\s\S]*?position:absolute;inset:0;width:100vw;height:100dvh/);
   assert.match(legacy, /startup-cloud-left\{\s*transform:translate3d\(-102vw,0,0\)/);
   assert.match(legacy, /startup-cloud-right\{\s*transform:translate3d\(102vw,0,0\)/);
