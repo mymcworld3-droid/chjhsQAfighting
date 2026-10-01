@@ -170,7 +170,7 @@
         </section>
         <aside class="ss-cart" id="ss-cart" role="tabpanel" aria-labelledby="ss-tab-cart">
           <div class="ss-panel-head"><span class="ss-panel-mark"><i class="fa-solid fa-scroll" aria-hidden="true"></i></span><div><strong>我的修習卷</strong><small>已選 <span id="ss-selection-count">0</span> / 24 個範圍</small></div></div>
-          <div class="ss-cart-body" id="ss-cart-body"><p class="ss-cart-note"><strong>複習提示</strong>：選擇整章會包含其考點，也可以只挑個別細項。加入清單後記得儲存。</p>
+          <div class="ss-cart-body" id="ss-cart-body"><p class="ss-cart-note"><strong>複習提示</strong>：勾選整章會立即加入並包含其考點，也可以只挑個別細項；取消勾選會同步移除。完成後記得儲存。</p>
           </div>
           <div class="ss-foot-summary" aria-live="polite">
             <strong id="ss-footer-main">建立你的專屬修習計畫</strong>
