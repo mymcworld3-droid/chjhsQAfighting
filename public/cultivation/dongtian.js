@@ -839,6 +839,8 @@ export const featureReady = (async () => {
     const overlay = ensureOverlay();
     const q = s.dongtian.questions[s.index];
     if (!q) { finishDongtian(); return; }
+    const finishTransition = window.beginSceneTransition?.(overlay, overlay, 'raid', 'dongtian-question', true);
+    queueMicrotask(() => finishTransition?.());
     s.answered = false;
     const optionObjects = shuffle([{ text: q.correct, correct: true }, ...(q.wrong || []).map((text) => ({ text, correct: false }))]);
     s.currentOptions = optionObjects;
@@ -1407,7 +1409,10 @@ export const featureReady = (async () => {
     const source = state.session?.source;
     const tutorialOnly = !!state.session?.tutorialOnly;
     state.session = null;
-    document.getElementById('dongtian-overlay')?.remove();
+    const overlay = document.getElementById('dongtian-overlay');
+    const finishTransition = window.beginSceneTransition?.(overlay, document.querySelector('.active-page'), 'cloud', 'dongtian-close');
+    overlay?.remove();
+    finishTransition?.();
     if (source === 'owner' || tutorialOnly) {
       window.switchToPage?.('page-settings');
       const card = document.getElementById('dongtian-card');

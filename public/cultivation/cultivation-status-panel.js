@@ -293,12 +293,15 @@
     const page = document.getElementById('page-training');
     const button = document.getElementById('training-status-tab');
     if (!page || !button) return;
+    const content = document.getElementById('training-tab-content');
+    const finishTransition = !statusActive ? window.beginSceneTransition?.(content, content, 'cloud', 'training-tab', true) : null;
     statusActive = true;
     setNativeTabsInactive(page);
     button.classList.add('active');
     button.setAttribute('aria-selected', 'true');
     window.ensureCombatStats?.();
     renderStatus();
+    finishTransition?.();
   }
 
   function deactivateStatus() {

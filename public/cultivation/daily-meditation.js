@@ -110,7 +110,9 @@ import { buildMeditationMistakePool, chooseMeditationMistakes } from './daily-me
     document.body.appendChild(overlay);
     node('dm-close').addEventListener('click', () => {
       if (busy) { notify('正在同步閉關資料，請完成結算後再離開。'); return; }
+      const finishTransition = window.beginSceneTransition?.(overlay, document.querySelector('.active-page'), 'meditation', 'meditation-close');
       overlay.remove();
+      finishTransition?.();
       session = null;
       invalidateMistakes();
     });
@@ -118,7 +120,9 @@ import { buildMeditationMistakePool, chooseMeditationMistakes } from './daily-me
   }
   function setContent(html) {
     const content = node('dm-content');
+    const finishTransition = window.beginSceneTransition?.(content, content, 'meditation', 'meditation-content', true);
     if (content) content.innerHTML = html;
+    finishTransition?.();
     const status = node('dm-status');
     if (status) status.textContent = '';
   }

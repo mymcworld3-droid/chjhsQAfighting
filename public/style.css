@@ -191,7 +191,7 @@
    基礎樣式
    ========================================== */
 .page-section { display: none; }
-.active-page { display: block; animation: fadeInUp 0.4s ease-out; }
+.active-page { display: block; }
 body { 
     background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
     background-size: 200% 200%;

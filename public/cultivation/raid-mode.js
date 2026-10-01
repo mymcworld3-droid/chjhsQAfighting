@@ -265,10 +265,15 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
   }
   function show(name) {
     const page = ensurePage();
+    const previous = page.querySelector('#raid-' + page.dataset.raidView);
+    const next = page.querySelector('#raid-' + name);
+    const theme = name === 'result' ? 'raidResult' : name === 'question' ? 'scroll' : 'raid';
+    const finishTransition = window.beginSceneTransition?.(previous, next, theme, 'raid-phase');
     ['hub', 'lobby', 'arena', 'question', 'result'].forEach(function (id) {
       page.querySelector('#raid-' + id)?.classList.toggle('hidden', id !== name);
     });
     page.dataset.raidView = name;
+    finishTransition?.();
   }
   function portrait() { return data().storyProgressV1?.gender === 'female' ? FEMALE : MALE; }
   function hpPct(hp, maxHp) {
@@ -696,6 +701,10 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
   function renderQuestion(review) {
     const q = state.question;
     if (!q) return renderArena();
+    const questionView = document.getElementById('raid-question');
+    const repeatQuestionView = !review && document.getElementById(PAGE_ID)?.dataset.raidView === 'question';
+    const finishQuestionTransition = repeatQuestionView ? window.beginSceneTransition?.(questionView, questionView, 'scroll', 'raid-phase', true) : null;
+    queueMicrotask(() => finishQuestionTransition?.());
     document.body.classList.add('raid-session-active');
     show('question');
     syncRaidBottomClearance();

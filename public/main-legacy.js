@@ -1,3 +1,4 @@
+import { beginSceneTransition, sceneTheme } from './cultivation/scene-transitions.js';
 import './cultivation/true-immortal.js';
 import { createSoloQuestionCache } from './solo-question-cache.js';
 import { ensureSecondaryFirebaseAuth } from './cultivation/firebase-projects.js';
@@ -1496,6 +1497,9 @@ window.switchSocialTab = (tab) => {
     const btnChat = document.getElementById('tab-btn-chat');
     const secFriends = document.getElementById('section-friends');
     const secChat = document.getElementById('section-chat');
+    const next = tab === 'friends' ? secFriends : secChat;
+    const previous = [secFriends, secChat].find(el => !el.classList.contains('hidden'));
+    const finishTransition = beginSceneTransition(previous, next, 'cloud', 'social');
 
     if (tab === 'friends') {
         btnFriends.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-cyan-600 text-white shadow-lg";
@@ -1515,6 +1519,7 @@ window.switchSocialTab = (tab) => {
         // 啟用聊天室監聽
         listenToGlobalChat();
     }
+    finishTransition();
 };
 
 // 監聽聊天訊息
@@ -1835,6 +1840,10 @@ window.switchToPage = (pageId) => {
         return;
     }
 
+    const nextPage = document.getElementById(pageId);
+    if (!nextPage) return;
+    const finishTransition = beginSceneTransition(document.querySelector('.page-section.active-page'), nextPage, sceneTheme(pageId));
+
     // 問道答題時使用專注模式：隱藏全站底部導覽，離開答題頁後自動恢復。
     document.body.classList.toggle('quiz-session-active', pageId === 'page-quiz');
     
@@ -1890,6 +1899,7 @@ window.switchToPage = (pageId) => {
     }
     
     updateTexts();
+    finishTransition();
 };
 
 window.updateUIStats = updateUIStats; // 🔥 新增：將函式暴露給全域，讓修仙規則可以呼叫它來刷新畫面
@@ -3522,6 +3532,10 @@ window.toggleQuizWhiteboard = (forceOpen) => {
 };
 
 function renderQuiz(data, rank, topic) {
+    const quizPage = document.getElementById('page-quiz');
+    const finishQuestionTransition = beginSceneTransition(quizPage, quizPage, 'scroll', 'solo-question', true);
+    // Rendering stays synchronous; the old question dissolves over the new one.
+    queueMicrotask(finishQuestionTransition);
     // 每一道新題使用全新的計算空間與問答脈絡，避免上一題殘留。
     resetQuizWhiteboard({ close: true });
     resetQuizHelper(data, { topic });

@@ -889,6 +889,9 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
         button.addEventListener('click', () => {
           if (!isUnlocked() || page.dataset.foundationTraining === '1') return;
           const requested = button.dataset.trainingTab;
+          const content = document.getElementById('training-tab-content');
+          const theme = requested === 'refinery' ? 'alchemy' : requested === 'nascent-soul' ? 'raid' : 'alchemy';
+          const finishTransition = requested !== activeTab ? window.beginSceneTransition?.(content, content, theme, 'training-tab', true) : null;
           activeTab = ['bag', 'refinery', 'equipment'].includes(requested) || (requested === 'nascent-soul' && currentScore() >= NASCENT_SOUL_THRESHOLD) ? requested : 'core';
           page.querySelectorAll('[data-training-tab]').forEach((tab) => {
             const selected = tab.dataset.trainingTab === activeTab;
@@ -896,6 +899,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
             tab.setAttribute('aria-selected', selected ? 'true' : 'false');
           });
           renderTrainingPage();
+          finishTransition?.();
         });
       });
     }

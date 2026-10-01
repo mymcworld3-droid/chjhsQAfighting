@@ -12,7 +12,9 @@
   function clean(value) { return String(value || '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
   function setPage(page) {
     if (!root) return;
-    active = Math.max(0,Math.min(2,page));
+    const nextStep = Math.max(0,Math.min(2,page));
+    const finishTransition = window.beginSceneTransition?.($('cs-stage-'+active), $('cs-stage-'+nextStep), 'scroll', 'curriculum-step');
+    active = nextStep;
     root.dataset.step = String(active);
     for (let i=0;i<3;i++) {
       const item = $('cs-stage-'+i);
@@ -25,6 +27,7 @@
       next.disabled = active<2 && !current(fields[active]);
     }
     const scroller=$('ss-picker-body');if(scroller)scroller.scrollTop=0;
+    finishTransition?.();
   }
   function visibleOptions(stage) {
     const native=$(fields[stage]);
