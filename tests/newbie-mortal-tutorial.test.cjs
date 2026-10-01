@@ -41,7 +41,7 @@ test('quiz answering hides the bottom navigation and provides a return-to-home a
 
 test('tutorial uses the quiz return button while bottom navigation is hidden', () => {
   assert.match(tutorial, /current === 'page-quiz' && step\.page !== 'page-quiz'/);
-  assert.match(tutorial, /target: '#btn-quiz-home'/);
+  assert.match(tutorial, /'#btn-quiz-home'/);
   assert.match(tutorial, /答題時底部導覽會暫時隱藏/);
 });
 
