@@ -354,9 +354,14 @@ export const featureReady = (async () => {
   function showSection(name) {
     const page = ensurePage();
     if (!page) return;
+    const previous = page.querySelector(`#bv2-${page.dataset.bv2Phase}`);
+    const next = page.querySelector(`#bv2-${name}`);
+    const theme = name === 'result' ? 'battleResult' : name === 'quiz' ? 'scroll' : name === 'lobby' ? 'cloud' : 'sword';
+    const finishTransition = window.beginSceneTransition?.(previous, next, theme, 'battle-phase');
     page.dataset.bv2Phase = name;
     page.classList.toggle('bv2-quiz-active', name === 'quiz');
     ['lobby', 'intro', 'arena', 'quiz', 'result'].forEach((key) => page.querySelector(`#bv2-${key}`)?.classList.toggle('hidden', key !== name));
+    finishTransition?.();
   }
 
   function setText(id, value) {

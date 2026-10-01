@@ -38,6 +38,9 @@
   function setView(view) {
     if (!studio) return;
     const chosen = view === 'cart' ? 'cart' : 'course';
+    const previous = studio.dataset.view === 'cart' ? $('ss-cart') : $('ss-picker');
+    const next = chosen === 'cart' ? $('ss-cart') : $('ss-picker');
+    const finishTransition = window.beginSceneTransition?.(previous, next, 'scroll', 'scope-view');
     studio.dataset.view = chosen;
     for (const [name, id, panel] of [
       ['course', 'ss-tab-course', 'ss-picker'],
@@ -50,10 +53,12 @@
         button.setAttribute('aria-controls', panel);
       }
     }
+    finishTransition?.();
   }
 
   function open() {
     if (!mount() || opened) return;
+    const finishTransition = window.beginSceneTransition?.(document.querySelector('.active-page'), studio, 'scroll', 'scope-open');
     previousFocus = document.activeElement;
     baseline = snapshot();
     if (block.parentNode !== $('ss-picker-body')) $('ss-picker-body').append(block);
@@ -71,6 +76,7 @@
     window.resetCurriculumPages?.();
     updateSummary();
     $('ss-close')?.focus({ preventScroll: true });
+    finishTransition?.();
   }
 
   function close(force = false) {
@@ -83,6 +89,7 @@
       window.toggleSourceMode?.();
       window.renderSelectedUnitsList?.();
     }
+    const finishTransition = window.beginSceneTransition?.(studio, document.querySelector('.active-page'), 'scroll', 'scope-close');
     if (scopeBody) {
       // 關閉時把控制項送回隱藏的原始設定容器，保留相同 ID 與事件。
       scopeBody.prepend(block);
@@ -101,6 +108,7 @@
     updateSummary();
     if (previousFocus?.isConnected) previousFocus.focus({ preventScroll: true });
     else $('dongfu-scope-card')?.querySelector('.dongfu-collapse-head')?.focus({ preventScroll: true });
+    finishTransition?.();
     return true;
   }
 
