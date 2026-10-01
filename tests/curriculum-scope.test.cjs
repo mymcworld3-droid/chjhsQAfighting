@@ -37,6 +37,17 @@ test('all structured junior-high course data is valid JSON with subject, grade a
   }
 });
 
+test('checking curriculum ranges updates the selected list immediately without a manual add button', () => {
+  assert.match(script, /setChapterSelection\(i,c\.checked\)/);
+  assert.match(script, /setTopicSelection\(i,j,box\.checked\)/);
+  assert.match(script, /notifySelectionList\(\)/);
+  assert.match(script, /取消勾選會同步移除|已從已選範圍移除/);
+  assert.match(script, /項已勾選/);
+  assert.doesNotMatch(script, /id="cs-add"/);
+  assert.doesNotMatch(script, /加入勾選的單元/);
+  assert.doesNotMatch(script, /項待加入/);
+});
+
 test('semester and edition choices are automatic and both semesters feed one chapter list', () => {
   assert.match(script, /const AUTO_TERM='全學年',AUTO_EDITION='自動整合'/);
   assert.match(script, /id="cs-term" hidden aria-hidden="true"/);
