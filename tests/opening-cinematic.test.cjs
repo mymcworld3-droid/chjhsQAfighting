@@ -50,8 +50,9 @@ test('opening cinematic loads before story and gates story auto-start', () => {
   assert.match(story, /xiuxian:opening-cinematic-completed/);
 });
 
-test('opening respects reduced motion and waits for onboarding to finish', () => {
+test('opening respects reduced motion and waits for onboarding and startup cloud transition to finish', () => {
   assert.match(opening, /prefers-reduced-motion:reduce/);
   assert.match(opening, /#page-onboarding:not\(\.hidden\)/);
+  assert.match(opening, /#startup-cloud-curtain/);
   assert.match(opening, /hasCompletedPlayerProfile/);
 });
