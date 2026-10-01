@@ -275,6 +275,17 @@ test('startup completion closes cloud banks before revealing home and opens them
     'clouds close first, home is mounted while covered, then clouds open');
 });
 
+test('startup cloud curtain supports left and right PNG assets with a safe fallback', () => {
+  assert.match(legacy, /assets\/cloud-left\.png/);
+  assert.match(legacy, /assets\/cloud-right\.png/);
+  assert.match(legacy, /data-cloud-side="left"/);
+  assert.match(legacy, /data-cloud-side="right"/);
+  assert.match(legacy, /startup-cloud-image/);
+  assert.match(legacy, /classList\.add\('has-image'\)/);
+  assert.match(legacy, /image\.addEventListener\('error', markMissing/);
+  assert.match(legacy, /startup-cloud-half\.has-image::before\{opacity:0\}/);
+});
+
 test('startup progress section is horizontally centered on the viewport', () => {
   assert.match(legacy, /\.game-startup-copy\{width:100%;max-width:760px;margin-left:auto;margin-right:auto/);
   assert.match(legacy, /\.game-startup-progress-wrap\{width:min\(720px,100%\);margin:clamp\(20px,3\.2vh,34px\) auto 0/);
