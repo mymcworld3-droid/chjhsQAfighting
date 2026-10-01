@@ -1,14 +1,14 @@
 // Visual transitions only: navigation and combat state remain synchronous.
 const running = new Map();
 const themes = {
-  cloud: { duration: 380, color: 'rgba(176,213,216,.22)', exit: [0, -5] },
-  scroll: { duration: 340, color: 'rgba(230,190,102,.22)', exit: [-10, 0] },
-  sword: { duration: 300, color: 'rgba(123,204,255,.30)', exit: [-22, 0] },
-  raid: { duration: 460, color: 'rgba(155,128,218,.30)', exit: [0, -8] },
-  battleResult: { duration: 440, color: 'rgba(239,189,91,.25)', exit: [0, -5] },
-  raidResult: { duration: 500, color: 'rgba(226,177,96,.28)', exit: [0, -8] },
-  meditation: { duration: 440, color: 'rgba(192,184,130,.20)', exit: [0, -4] },
-  alchemy: { duration: 360, color: 'rgba(225,156,83,.24)', exit: [0, -6] }
+  cloud: { duration: 380, color: 'rgba(176,213,216,.22)' },
+  scroll: { duration: 340, color: 'rgba(230,190,102,.22)' },
+  sword: { duration: 300, color: 'rgba(123,204,255,.30)' },
+  raid: { duration: 460, color: 'rgba(155,128,218,.30)' },
+  battleResult: { duration: 440, color: 'rgba(239,189,91,.25)' },
+  raidResult: { duration: 500, color: 'rgba(226,177,96,.28)' },
+  meditation: { duration: 440, color: 'rgba(192,184,130,.20)' },
+  alchemy: { duration: 360, color: 'rgba(225,156,83,.24)' }
 };
 
 export function sceneTheme(pageId) {
@@ -17,6 +17,24 @@ export function sceneTheme(pageId) {
   if (/quiz|curriculum|scope|history/.test(pageId)) return 'scroll';
   if (/training|store/.test(pageId)) return 'alchemy';
   return 'cloud';
+}
+
+// Follow the navigation's visible order; fullscreen returns travel back.
+export function sceneDirection(from, to, scope = 'page') {
+  if (scope.endsWith('-close') || to?.id === 'page-home') return -1;
+  const groups = [
+    ['page-home', 'page-training', 'page-store', 'page-rank', 'page-social', 'page-settings'],
+    ['cs-stage-0', 'cs-stage-1', 'cs-stage-2'],
+    ['section-friends', 'section-chat'],
+    ['ss-picker', 'ss-cart'],
+    ['bv2-lobby', 'bv2-intro', 'bv2-arena', 'bv2-quiz', 'bv2-result'],
+    ['raid-hub', 'raid-lobby', 'raid-arena', 'raid-question', 'raid-result']
+  ];
+  for (const order of groups) {
+    const start = order.indexOf(from?.id), end = order.indexOf(to?.id);
+    if (start >= 0 && end >= 0 && start !== end) return end > start ? 1 : -1;
+  }
+  return 1;
 }
 
 // Keep IDs inside a shadow root, so the frozen old scene never interferes with
@@ -87,12 +105,12 @@ function snapshotScene(element, layer, scope) {
   layer.style.clipPath = `inset(${Math.max(0, top)}px ${Math.max(0, innerWidth - right)}px ${Math.max(0, innerHeight - bottom)}px ${Math.max(0, left)}px)`;
 }
 
-export function beginSceneTransition(from, to, theme = 'cloud', scope = 'page', force = false) {
+export function beginSceneTransition(from, to, theme = 'cloud', scope = 'page', force = false, direction = sceneDirection(from, to, scope)) {
   const noop = () => {};
   if ((!force && from === to) || !to && !from) return noop;
   running.get(scope)?.();
   // A page transition already covers its internal initial phase.
-  if (scope !== 'page' && running.has('page')) return noop;
+  if (scope !== 'page' && (running.has('page') || [...running.keys()].some(key => key !== scope && key.endsWith('-open')))) return noop;
   // Keep a departing fullscreen overlay above its destination page.
   if (scope === 'page' && [...running.keys()].some(key => key.endsWith('-close'))) return noop;
   if (scope === 'page') [...running.values()].forEach(cleanup => cleanup());
@@ -104,6 +122,11 @@ export function beginSceneTransition(from, to, theme = 'cloud', scope = 'page', 
   layer.setAttribute('aria-hidden', 'true');
   layer.inert = true;
   layer.style.cssText = 'position:fixed;inset:0;z-index:29000;pointer-events:none;overflow:hidden;contain:layout paint';
+  const outgoing = document.createElement('div');
+  const incoming = document.createElement('div');
+  outgoing.style.cssText = incoming.style.cssText = 'position:fixed;inset:0;pointer-events:none';
+  layer.appendChild(outgoing);
+  layer.appendChild(incoming);
   const animations = [];
   let timer;
   let disposed = false;
@@ -118,15 +141,25 @@ export function beginSceneTransition(from, to, theme = 'cloud', scope = 'page', 
   };
   try {
     document.body.appendChild(layer);
-    if (from?.getClientRects().length) snapshotScene(from, layer, scope);
+    if (from?.getClientRects().length) snapshotScene(from, outgoing, scope);
+    // Clip the moving copies to the scene's viewport, keeping fixed navigation visible.
+    layer.style.clipPath = outgoing.style.clipPath || '';
     running.set(scope, cleanup);
     // Also clean up if the caller fails before completing its render.
-    timer = setTimeout(cleanup, config.duration + 150);
+    timer = setTimeout(cleanup, Math.max(420, config.duration) + 150);
   } catch (_) { cleanup(); return noop; }
   return () => {
     if (disposed || started) return;
     started = true;
     try {
+      if (to?.getClientRects().length) snapshotScene(to, incoming, scope);
+      layer.style.clipPath ||= incoming.style.clipPath || '';
+      const distance = Math.max(1, from?.getBoundingClientRect().width || 0, to?.getBoundingClientRect().width || 0, scope === 'page' ? innerWidth : 0);
+      const sign = direction < 0 ? -1 : 1;
+      layer.dataset.sceneDirection = sign > 0 ? 'forward' : 'back';
+      const duration = Math.max(420, config.duration);
+      clearTimeout(timer);
+      timer = setTimeout(cleanup, duration + 150);
       const glow = document.createElement('div');
       const diagonal = theme === 'sword';
       const background = diagonal
@@ -138,17 +171,21 @@ export function beginSceneTransition(from, to, theme = 'cloud', scope = 'page', 
             : `radial-gradient(ellipse at 50% 55%,${config.color},transparent 72%)`;
       glow.style.cssText = `position:fixed;inset:0;pointer-events:none;background:${background}`;
       layer.appendChild(glow);
-      const [x, y] = config.exit;
-      animations.push(layer.animate([
-        { opacity: 1, transform: 'translate3d(0,0,0)', filter: 'blur(0px)' },
-        { opacity: 0, transform: `translate3d(${x}px,${y}px,0)`, filter: `blur(${theme === 'raid' ? 10 : theme === 'cloud' ? 5 : 0}px)` }
-      ], { duration: config.duration, easing: 'cubic-bezier(.22,.7,.24,1)', fill: 'both' }));
+      const options = { duration, easing: 'cubic-bezier(.22,.7,.24,1)', fill: 'both' };
+      animations.push(outgoing.animate([
+        { transform: 'translate3d(0,0,0)' },
+        { transform: `translate3d(${-sign * distance}px,0,0)` }
+      ], options));
+      animations.push(incoming.animate([
+        { transform: `translate3d(${sign * distance}px,0,0)` },
+        { transform: 'translate3d(0,0,0)' }
+      ], options));
       animations.push(glow.animate([
         { opacity: 0, transform: diagonal ? 'translateX(-25%)' : 'scale(.96)' },
         { opacity: 1, offset: .35 },
         { opacity: 0, transform: diagonal ? 'translateX(25%)' : 'scale(1.05)' }
-      ], { duration: config.duration, fill: 'both' }));
-      // Animate a visual copy only. Transforming live pages would change the
+      ], { duration, fill: 'both' }));
+      // Animate visual copies only. Transforming live pages would change the
       // containing block of fixed battle controls and bottom navigation.
       animations[0].finished.then(cleanup, cleanup);
     } catch (_) { cleanup(); }

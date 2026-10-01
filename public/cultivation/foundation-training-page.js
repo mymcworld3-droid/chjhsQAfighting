@@ -116,8 +116,19 @@ import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-she
     if (page.dataset.foundationTrainingBound === '1') return;
     page.dataset.foundationTrainingBound = '1';
 
+    function beginTabSlide(requested) {
+      const tabs = [...page.querySelectorAll('.training-subtab-v3')];
+      const current = tabs.findIndex(tab => tab.classList.contains('active'));
+      const next = tabs.findIndex(tab => tab.dataset.trainingTab === requested);
+      if (current === next) return null;
+      const content = page.querySelector('#training-tab-content');
+      return window.beginSceneTransition?.(content, content, 'alchemy', 'training-tab', true,
+        next > (current < 0 ? tabs.length - 1 : current) ? 1 : -1);
+    }
+
     page.querySelector('[data-training-tab="refinery"]')?.addEventListener('click', () => {
       if (!foundationStage()) return;
+      const finishTransition = beginTabSlide('refinery');
       // 同一個入口交給煉器模組負責狀態、內容與事件，避免兩個 click handler
       // 在使用者快速切換時互相覆寫。模組尚未準備好時才顯示預載殼層。
       const content = page.querySelector('#training-tab-content');
@@ -132,10 +143,12 @@ import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-she
         if (content && !content.querySelector('.cultivation-refinery')) content.innerHTML = refineryShellMarkup();
         window.dispatchEvent(new CustomEvent('xiuxian:refinery-open-request'));
       }
+      finishTransition?.();
     });
 
     page.querySelector('[data-training-tab="equipment"]')?.addEventListener('click', () => {
       if (!foundationStage()) return;
+      const finishTransition = beginTabSlide('equipment');
       page.querySelectorAll('[data-training-tab]').forEach((tab) => {
         const selected = tab.dataset.trainingTab === 'equipment';
         tab.classList.toggle('active', selected);
@@ -145,10 +158,12 @@ import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-she
       if (content) content.innerHTML = equipmentShellMarkup();
       window.openCultivationEquipment?.();
       window.dispatchEvent(new CustomEvent('xiuxian:equipment-open-request'));
+      finishTransition?.();
     });
 
     page.querySelector('[data-training-tab="bag"]')?.addEventListener('click', () => {
       if (!foundationStage()) return;
+      const finishTransition = beginTabSlide('bag');
       page.querySelectorAll('[data-training-tab]').forEach((tab) => {
         const selected = tab.dataset.trainingTab === 'bag';
         tab.classList.toggle('active', selected);
@@ -156,6 +171,7 @@ import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-she
       });
       const content = page.querySelector('#training-tab-content');
       if (content) content.innerHTML = bagMarkup();
+      finishTransition?.();
     });
   }
 

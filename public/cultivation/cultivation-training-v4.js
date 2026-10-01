@@ -891,7 +891,10 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
           const requested = button.dataset.trainingTab;
           const content = document.getElementById('training-tab-content');
           const theme = requested === 'refinery' ? 'alchemy' : requested === 'nascent-soul' ? 'raid' : 'alchemy';
-          const finishTransition = requested !== activeTab ? window.beginSceneTransition?.(content, content, theme, 'training-tab', true) : null;
+          const tabOrder = [...page.querySelectorAll('[data-training-tab]')].map(tab => tab.dataset.trainingTab);
+          const fromStatus = !page.querySelector('[data-training-tab].active');
+          const direction = fromStatus || tabOrder.indexOf(requested) < tabOrder.indexOf(activeTab) ? -1 : 1;
+          const finishTransition = requested !== activeTab || fromStatus ? window.beginSceneTransition?.(content, content, theme, 'training-tab', true, direction) : null;
           activeTab = ['bag', 'refinery', 'equipment'].includes(requested) || (requested === 'nascent-soul' && currentScore() >= NASCENT_SOUL_THRESHOLD) ? requested : 'core';
           page.querySelectorAll('[data-training-tab]').forEach((tab) => {
             const selected = tab.dataset.trainingTab === activeTab;
