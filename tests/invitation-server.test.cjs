@@ -35,6 +35,26 @@ test('server invitation hub tracks online listeners and delivers queued invitati
   assert.equal(hub.isOnline('u2'), false);
 });
 
+test('queued invitation survives a short listener suspension and is delivered on reconnect', () => {
+  let clock = 2000;
+  const hub = api.__test.createInvitationHub({
+    now: () => clock,
+    listenTimeoutMs: 20,
+    onlineTtlMs: 1000,
+    ttlMs: 5000
+  });
+  hub.push('u3', { id: 'queued-1', createdAtMs: clock });
+  clock += 500;
+  let payload = null;
+  const res = {
+    headersSent: false,
+    json(value) { this.headersSent = true; payload = value; },
+    once() {}
+  };
+  hub.listen('u3', res);
+  assert.deepEqual(payload, { ok: true, invitations: [{ id: 'queued-1', createdAtMs: 2000 }] });
+});
+
 test('client invitation lifecycle never reads or writes Firestore invitation documents', () => {
   const legacy = read('public/main-legacy.js');
   const repository = read('public/cultivation/data/player-repository.js');
@@ -42,6 +62,12 @@ test('client invitation lifecycle never reads or writes Firestore invitation doc
   assert.match(legacy, /\/api\/invitations\/send/);
   assert.match(legacy, /\/api\/invitations\/remove/);
   assert.match(repository, /\/api\/invitations\/send/);
+  assert.match(legacy, /pendingIncomingInvites/);
+  assert.match(legacy, /window\.addEventListener\('pageshow'/);
+  assert.match(legacy, /window\.addEventListener\('online'/);
+  assert.match(legacy, /window\.addEventListener\('focus'/);
+  assert.match(legacy, /document\.addEventListener\('visibilitychange'/);
+  assert.match(legacy, /startInvitationListener\(\);[\s\S]{0,300}載入可選功能/);
   assert.doesNotMatch(legacy, /["']invitations["']/);
   assert.doesNotMatch(repository, /["']invitations["']/);
   assert.doesNotMatch(repository, /sendInvitationsToActiveFriends/);
@@ -54,6 +80,9 @@ test('server validates room ownership and trusted friendship before delivery', (
   assert.match(source, /room\.host\?\.uid !== uid/);
   assert.match(source, /room\.hostUid !== uid/);
   assert.match(source, /hub\.isOnline\(uid\)/);
+  assert.match(source, /for \(const uid of requested\)/);
+  assert.match(source, /queuedTo: requested/);
+  assert.match(source, /Safari \/ iPad 暫時背景休眠者/);
   assert.match(source, /verifyIdToken/);
 });
 

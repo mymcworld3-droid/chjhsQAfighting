@@ -66,7 +66,10 @@ function ensureGameplayNavigationForReadyProfile() {
 let isBattleResultProcessed = false; // 防止重複領取獎勵
 let systemUnsub = null;              // 系統指令監聽 (強制重整)
 let localReloadToken = null;         // 本地重整標記
-let inviteUnsub = null;              // 邀請監聽
+let inviteUnsub = null;              // 鬥法／團本邀請常駐監聽
+let inviteRefreshTimer = null;
+let inviteListenerLastActivity = 0;
+const pendingIncomingInvites = new Map();
 let battleUnsub = null;              // 對戰房監聽
 let chatUnsub = null;                // 聊天室監聽
 let currentBattleId = null;          // 當前對戰 ID
@@ -1321,6 +1324,9 @@ onAuthStateChanged(auth, async (user) => {
             }
             if (auth.currentUser?.uid !== user.uid) return;
             window.__xiuxianMigrationApproved = true;
+            // 玩家一完成身分／資料驗證就開始常駐接收鬥法與團本邀請；
+            // 若功能模組尚未載入，邀請先暫存在 pendingIncomingInvites。
+            startInvitationListener();
             // 在載入可選功能前啟動管理員 Debugger，確保腳本載入失敗也有紀錄。
             checkAdminRole(currentUserData.isAdmin === true);
             // 玩家資料先就緒，通知主啟動器載入所有修仙功能模組。
@@ -1341,9 +1347,9 @@ onAuthStateChanged(auth, async (user) => {
                 return;
             }
 
-            // 所有腳本都已成功載入，現在才正式啟動各項監聽與遊戲介面。
+            // 所有腳本都已成功載入，現在才正式啟動其餘監聽與遊戲介面。
             startPresenceSystem();
-            startInvitationListener(); 
+            refreshInvitationListener();
             listenToSystemCommands();  
             
             updateUserAvatarDisplay();
@@ -1394,8 +1400,12 @@ onAuthStateChanged(auth, async (user) => {
         document.getElementById('login-screen').classList.remove('hidden');
         document.getElementById('bottom-nav').classList.add('hidden');
         
-        // 登出時取消監聽，節省資源
+        // 登出時取消常駐監聽與待顯示邀請，節省資源並避免跨帳號殘留。
         if (inviteUnsub) inviteUnsub();
+        clearTimeout(inviteRefreshTimer);
+        inviteRefreshTimer = null;
+        inviteListenerLastActivity = 0;
+        pendingIncomingInvites.clear();
         if (systemUnsub) systemUnsub();
         if (chatUnsub) chatUnsub();
     }
@@ -3872,10 +3882,44 @@ async function invitationServerRequest(path, body = {}, signal = undefined) {
     return payload;
 }
 
+function inviteHandlerReady(invite) {
+    if (Number(invite?.raidVersion) > 0) return typeof window.joinRaidRoomInvite === 'function';
+    if (Number(invite?.modeVersion) > 0) return typeof window.joinBattleRoomV2 === 'function';
+    return true;
+}
+
+function receiveIncomingInvite(invite) {
+    if (!invite?.id) return;
+    const born = Number(invite.createdAtMs) || Date.now();
+    if (Date.now() - born >= 2 * 60 * 1000) {
+        pendingIncomingInvites.delete(invite.id);
+        return;
+    }
+    if (!inviteHandlerReady(invite)) {
+        pendingIncomingInvites.set(invite.id, invite);
+        return;
+    }
+    pendingIncomingInvites.delete(invite.id);
+    showInviteToast(invite.id, invite);
+}
+
+function flushPendingIncomingInvites() {
+    for (const [id, invite] of [...pendingIncomingInvites]) {
+        const born = Number(invite?.createdAtMs) || Date.now();
+        if (Date.now() - born >= 2 * 60 * 1000) {
+            pendingIncomingInvites.delete(id);
+            continue;
+        }
+        if (!inviteHandlerReady(invite)) continue;
+        pendingIncomingInvites.delete(id);
+        showInviteToast(id, invite);
+    }
+}
+
 function startInvitationListener() {
     if (inviteUnsub) inviteUnsub();
     const user = auth.currentUser;
-    if (!user) return;
+    if (!user || !currentUserData || !window.__xiuxianMigrationApproved) return;
 
     const listenUid = user.uid;
     const controller = new AbortController();
@@ -3886,27 +3930,62 @@ function startInvitationListener() {
         if (inviteUnsub === stop) inviteUnsub = null;
     };
     inviteUnsub = stop;
+    inviteListenerLastActivity = Date.now();
 
     void (async () => {
         while (active && auth.currentUser?.uid === listenUid) {
             try {
+                inviteListenerLastActivity = Date.now();
                 const payload = await invitationServerRequest('/api/invitations/listen', {}, controller.signal);
+                inviteListenerLastActivity = Date.now();
                 const invites = Array.isArray(payload.invitations) ? payload.invitations : [];
                 for (const invite of invites) {
                     if (!active || auth.currentUser?.uid !== listenUid) break;
-                    const inviteTime = Number(invite?.createdAtMs) || Date.now();
-                    if (Date.now() - inviteTime < 2 * 60 * 1000 && invite?.id) {
-                        showInviteToast(invite.id, invite);
-                    }
+                    receiveIncomingInvite(invite);
                 }
+                flushPendingIncomingInvites();
             } catch (error) {
                 if (!active || error?.name === 'AbortError') break;
+                inviteListenerLastActivity = Date.now();
                 console.warn('[Invitation server] listen failed:', error?.message || error);
-                await new Promise(resolve => setTimeout(resolve, 1500));
+                await new Promise(resolve => setTimeout(resolve, 1200));
             }
         }
+        if (inviteUnsub === stop) inviteUnsub = null;
     })();
 }
+
+function refreshInvitationListener({ force = false } = {}) {
+    if (!auth.currentUser || !currentUserData || !window.__xiuxianMigrationApproved) return;
+    if (force && inviteUnsub) inviteUnsub();
+    if (!inviteUnsub) startInvitationListener();
+    flushPendingIncomingInvites();
+}
+
+function scheduleInvitationListenerRefresh({ force = false } = {}) {
+    clearTimeout(inviteRefreshTimer);
+    inviteRefreshTimer = setTimeout(() => {
+        inviteRefreshTimer = null;
+        refreshInvitationListener({ force });
+    }, 120);
+}
+
+function refreshInvitationListenerAfterResume() {
+    const stale = !inviteListenerLastActivity || Date.now() - inviteListenerLastActivity > 30000;
+    scheduleInvitationListenerRefresh({ force: stale });
+}
+
+window.addEventListener('online', () => scheduleInvitationListenerRefresh({ force: true }));
+window.addEventListener('pageshow', () => scheduleInvitationListenerRefresh({ force: true }));
+window.addEventListener('focus', refreshInvitationListenerAfterResume);
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') refreshInvitationListenerAfterResume();
+});
+window.addEventListener('xiuxian:features-ready', () => {
+    flushPendingIncomingInvites();
+    scheduleInvitationListenerRefresh();
+});
+window.addEventListener('xiuxian:user-ready', flushPendingIncomingInvites);
 
 // 系統強制重整監聽
 function listenToSystemCommands() {
