@@ -212,8 +212,7 @@ function registerInvitationApi(app, {
 
       const online = requested.filter(uid => hub.isOnline(uid));
       const createdAtMs = Date.now();
-      const invite = {
-        id: crypto.randomUUID(),
+      const inviteBase = {
         ...room,
         hostUid: identity.uid,
         hostName: safeText(sender.displayName || sender.profile?.displayName || '修士', 64),
@@ -222,8 +221,13 @@ function registerInvitationApi(app, {
         createdAtMs,
         expiresAtMs: createdAtMs + INVITE_TTL_MS
       };
-      for (const uid of online) hub.push(uid, invite);
-      return res.json({ ok: true, sentTo: online });
+
+      // 所有可信好友都先進短期邀請佇列。正在長輪詢的玩家會立即收到；
+      // Safari / iPad 暫時背景休眠者只要在 TTL 內恢復監聽，也能補收到邀請。
+      for (const uid of requested) {
+        hub.push(uid, { id: crypto.randomUUID(), ...inviteBase });
+      }
+      return res.json({ ok: true, sentTo: online, queuedTo: requested });
     } catch (error) {
       const status = error?.status || 503;
       if (status >= 500) logger.error('[Invitation server] send failed:', error?.message || error);
