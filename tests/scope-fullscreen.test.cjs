@@ -93,18 +93,21 @@ test('full-screen studio reparents original selectors and persistent selected li
   assert.match(studio,/const result = await window\.saveProfile\?\.\(saveButton\)/);
   assert.match(studio,/if \(result !== true\)/);
   assert.match(studio,/window\.confirm\('/);
+  assert.match(studio,/勾選整章會立即加入/);
   assert.match(studio,/window\.soloSelectedUnits = clone\(JSON\.parse\(baseline\.units\)\)/);
   assert.match(legacy,/return true;\s*\};\s*async function switchToAI/);
   assert.match(guard,/const persisted = await baseSaveProfile\.apply\(this, args\)/);
   assert.match(guard,/if \(persisted !== true\)/);
 });
 
-test('chapter/topic picks survive filtered rerenders and remain limited to the same saved contract', () => {
+test('chapter/topic picks survive rerenders, auto-sync to the cart and remain limited to the saved contract', () => {
   assert.match(selector,/const draft=new Set\(\)/);
+  assert.match(selector,/function syncDraftFromSelection\(\)/);
   assert.match(selector,/c\.checked=draft\.has\('c:'\+i\)/);
-  assert.match(selector,/box\.checked=draft\.has\('t:'\+i\+':'\+j\)/);
-  assert.match(selector,/const groups=\[\.\.\.draft\]/);
-  assert.match(selector,/draft\.clear\(\);display\(\)/);
+  assert.match(selector,/chapterSelected\|\|draft\.has\('t:'\+i\+':'\+j\)/);
+  assert.match(selector,/setChapterSelection\(i,c\.checked\)/);
+  assert.match(selector,/setTopicSelection\(i,j,box\.checked\)/);
+  assert.match(selector,/selectedUnits\(\).*24|list\.length>=24/s);
   assert.match(selector,/focusedUnits|sub_topics/);
   assert.match(selector,/elementary_school_unit_name/);
   assert.match(selector,/high_school_unit_name/);
