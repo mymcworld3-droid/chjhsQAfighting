@@ -19,7 +19,7 @@ test('curriculum selector parses and loads before Dongfu', () => {
 
 test('selected chapters and points use the existing focusedUnits contract', () => {
   assert.match(script, /sub_topics/);
-  assert.match(script, /path,detail/);
+  assert.match(script, /path:currentPath\(\),detail/);
   assert.match(legacy, /focusedUnits: \[\.\.\.\(window\.soloSelectedUnits \|\| \[\]\)\]/);
   assert.match(legacy, /const randomUnit = settings\.focusedUnits/);
 });
@@ -59,7 +59,7 @@ test('semester and edition choices are automatic and both semesters feed one cha
   assert.doesNotMatch(script, /el\('cs-term'\)\.onchange/);
   assert.doesNotMatch(script, /el\('cs-edition'\)\.onchange/);
   assert.match(script, /termBadge\.textContent=u\.term==='第一學期'\?'上學期'/);
-  assert.match(script, /\[canonicalSubject,grade,AUTO_TERM,subject\]\.join\('\/'\)/);
+  assert.match(script, /\[canonicalSubject\(\),grade,AUTO_TERM,subject\]\.join\('\/'\)/);
   assert.match(script, /\[subject,year\+'年級全學年'\]\.join\('\/'\)/);
 });
 
