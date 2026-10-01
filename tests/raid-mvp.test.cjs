@@ -310,14 +310,22 @@ test('raid tickets grant three per Taiwan day cap at ten and are consumed only a
   assert.match(startBlock,/reserveRaidTickets\(playerDb, roomId, preMembers\)/);
   assert.match(startBlock,/refundRaidTicketReservation/);
   assert.match(startBlock,/ticketMemberUids/);
-  assert.match(raidSource,/每日 \+3，最多 10 張/);
-  assert.match(raidSource,/正式開戰時每位隊員消耗 1 張/);
+  assert.match(raidSource,/全團本共用・每日 \+3・最多 10 張/);
+  assert.match(raidSource,/raid-ticket-status raid-global-ticket/);
   assert.match(cssSource,/\.raid-ticket-status\{/);
+  assert.match(cssSource,/\.raid-global-ticket\{/);
 });
 
-test('current raid advertises equal three-roll six-material probability independent of player realm', () => {
-  assert.match(raidSource,/每次通關抽取 3 次/);
-  assert.match(raidSource,/六種素材每抽皆為 1\/6/);
-  assert.match(raidSource,/所有玩家機率完全相同/);
-  assert.match(catalogSource,/每位玩家使用完全相同的掉落機率表/);
+test('drop probability remains internal and shared ticket is presented at the raid-system level', () => {
+  assert.doesNotMatch(raidSource,/本團本只掉落煉氣／築基／金丹的木材與鐵材/);
+  assert.doesNotMatch(raidSource,/六種素材每抽皆為 1\/6/);
+  assert.doesNotMatch(raidSource,/所有玩家機率完全相同/);
+  const hubStart = raidSource.indexOf('  function renderHub() {');
+  const hubEnd = raidSource.indexOf('  async function inviteOnlineFriends', hubStart);
+  const hub = raidSource.slice(hubStart, hubEnd);
+  assert.match(hub,/秘境試煉/);
+  assert.match(hub,/選擇試煉後再組隊；每個團本可有獨立 Boss、合作規則與專屬掉落/);
+  assert.match(hub,/raid-ticket-status raid-global-ticket/);
+  assert.match(hub,/全團本共用/);
+  assert.ok(hub.indexOf('raid-ticket-status raid-global-ticket') < hub.indexOf("'<div class=\"raid-trial-list\""));
 });

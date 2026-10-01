@@ -377,18 +377,17 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
         '<small>' + escapeHtml(selected.location) + '</small><h3>' + escapeHtml(selected.bossTitle) + '</h3>' +
         '<p>' + escapeHtml(selected.description) + '</p>' +
         '<div class="raid-reward-preview"><b>主要戰利品</b><span>' + selected.rewards.map(escapeHtml).join('・') + '</span></div>' +
-        '<div class="raid-ticket-status"><i class="fa-solid fa-ticket"></i><span><b>團本入場券 ' +
-          (state.ticketState?.count == null ? '讀取中' : escapeHtml(state.ticketState.count + ' / ' + state.ticketState.cap)) +
-          '</b><small>每日 +3，最多 10 張；正式開戰時每位隊員消耗 1 張</small></span></div>' +
-        '<p class="raid-hub-rewards">本團本只掉落煉氣／築基／金丹的木材與鐵材；每次通關抽取 3 次，六種素材每抽皆為 1/6，所有玩家機率完全相同。淬靈玄印、玄天道印另作煉製印記。</p>' +
         '<div class="raid-join-grid"><button class="raid-primary" type="button" data-quick ' + (selectedLocked ? 'disabled' : '') + '>快速加入／建立隊伍</button>' +
         '<button class="raid-ghost" type="button" data-create ' + (selectedLocked ? 'disabled' : '') + '>建立私人隊伍</button></div>' +
         '<div class="raid-code-join"><input id="raid-room-code-input" maxlength="6" placeholder="輸入 6 碼隊伍代碼"><button class="raid-ghost" type="button" data-code ' +
         (selectedLocked ? 'disabled' : '') + '>加入隊伍</button></div></div></article>';
     }
 
-    hub.innerHTML = '<header class="raid-heading"><button class="raid-back" type="button" data-home><i class="fa-solid fa-arrow-left"></i></button>' +
-      '<div><small>SECRET REALM ／ 秘境集結</small><h2>秘境試煉</h2><p>選擇試煉後再組隊；每個團本可有獨立 Boss、合作規則與專屬掉落。</p></div><span class="raid-seal">團</span></header>' +
+    hub.innerHTML = '<header class="raid-heading raid-hub-heading"><button class="raid-back" type="button" data-home><i class="fa-solid fa-arrow-left"></i></button>' +
+      '<div class="raid-heading-copy"><small>SECRET REALM ／ 秘境集結</small><h2>秘境試煉</h2><p>選擇試煉後再組隊；每個團本可有獨立 Boss、合作規則與專屬掉落。</p>' +
+      '<div class="raid-ticket-status raid-global-ticket"><i class="fa-solid fa-ticket"></i><span><b>團本入場券 ' +
+        (state.ticketState?.count == null ? '讀取中' : escapeHtml(state.ticketState.count + ' / ' + state.ticketState.cap)) +
+        '</b><small>全團本共用・每日 +3・最多 10 張</small></span></div></div><span class="raid-seal">團</span></header>' +
       '<div class="raid-trial-list" role="list">' + trialCards + '</div>' + detail;
 
     scheduleRaidHubFit();
