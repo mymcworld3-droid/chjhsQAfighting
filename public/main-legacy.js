@@ -819,20 +819,13 @@ function ensureGameStartupGateStyle() {
         }
         #startup-cloud-curtain .startup-cloud-half{
             position:absolute;top:-8vh;bottom:-8vh;width:58vw;
+            display:flex;align-items:stretch;overflow:visible;
             will-change:transform,filter;
             transition:transform 900ms cubic-bezier(.18,.76,.18,1),filter 900ms ease
         }
-        #startup-cloud-curtain .startup-cloud-half::before,
-        #startup-cloud-curtain .startup-cloud-half::after{
-            content:'';position:absolute;inset:0
-        }
-        #startup-cloud-curtain .startup-cloud-left{
-            left:-8vw;transform:translateX(-104%);
-        }
-        #startup-cloud-curtain .startup-cloud-right{
-            right:-8vw;transform:translateX(104%);
-        }
         #startup-cloud-curtain .startup-cloud-half::before{
+            content:'';position:absolute;inset:0;opacity:1;
+            transition:opacity 220ms ease;
             background:
                 radial-gradient(ellipse at 18% 17%,rgba(242,246,240,.98) 0 12%,rgba(209,220,211,.94) 28%,transparent 54%),
                 radial-gradient(ellipse at 54% 8%,rgba(250,250,243,.98) 0 14%,rgba(214,222,211,.94) 31%,transparent 57%),
@@ -843,12 +836,21 @@ function ensureGameStartupGateStyle() {
                 radial-gradient(ellipse at 83% 90%,rgba(249,247,232,.98) 0 19%,rgba(199,210,194,.95) 41%,transparent 69%);
             filter:blur(2px) drop-shadow(0 0 28px rgba(225,236,226,.2))
         }
-        #startup-cloud-curtain .startup-cloud-half::after{
-            background:
-                radial-gradient(ellipse at 45% 25%,rgba(255,255,248,.38),transparent 42%),
-                radial-gradient(ellipse at 66% 68%,rgba(226,190,111,.12),transparent 42%),
-                linear-gradient(180deg,rgba(232,239,229,.08),rgba(89,110,102,.2));
-            mix-blend-mode:screen
+        #startup-cloud-curtain .startup-cloud-half.has-image::before{opacity:0}
+        #startup-cloud-curtain .startup-cloud-image{
+            position:relative;z-index:1;width:100%;height:100%;display:block;
+            object-fit:fill;object-position:center;
+            opacity:0;transition:opacity 220ms ease;
+            user-select:none;-webkit-user-drag:none;
+            filter:drop-shadow(0 0 26px rgba(225,236,226,.18));
+            pointer-events:none
+        }
+        #startup-cloud-curtain .startup-cloud-half.has-image .startup-cloud-image{opacity:1}
+        #startup-cloud-curtain .startup-cloud-left{
+            left:-8vw;transform:translateX(-104%);
+        }
+        #startup-cloud-curtain .startup-cloud-right{
+            right:-8vw;transform:translateX(104%);
         }
         #startup-cloud-curtain .startup-cloud-mist{
             position:absolute;inset:0;opacity:0;
@@ -990,10 +992,31 @@ function ensureStartupCloudCurtain() {
     curtain.id = 'startup-cloud-curtain';
     curtain.setAttribute('aria-hidden', 'true');
     curtain.innerHTML = `
-        <div class="startup-cloud-half startup-cloud-left"></div>
-        <div class="startup-cloud-half startup-cloud-right"></div>
+        <div class="startup-cloud-half startup-cloud-left" data-cloud-side="left">
+            <img class="startup-cloud-image" src="assets/cloud-left.png" alt="" decoding="async" draggable="false">
+        </div>
+        <div class="startup-cloud-half startup-cloud-right" data-cloud-side="right">
+            <img class="startup-cloud-image" src="assets/cloud-right.png" alt="" decoding="async" draggable="false">
+        </div>
         <div class="startup-cloud-mist"></div>
     `;
+
+    // 真實透明 PNG 載入成功後覆蓋 CSS 備援雲；素材不存在時仍保留原本雲幕，不會顯示破圖。
+    curtain.querySelectorAll('.startup-cloud-image').forEach((image) => {
+        const container = image.closest('.startup-cloud-half');
+        const markLoaded = () => container?.classList.add('has-image');
+        const markMissing = () => {
+            container?.classList.remove('has-image');
+            image.style.display = 'none';
+        };
+        image.addEventListener('load', markLoaded, { once: true });
+        image.addEventListener('error', markMissing, { once: true });
+        if (image.complete) {
+            if (image.naturalWidth > 0) markLoaded();
+            else markMissing();
+        }
+    });
+
     document.body.appendChild(curtain);
     return curtain;
 }
