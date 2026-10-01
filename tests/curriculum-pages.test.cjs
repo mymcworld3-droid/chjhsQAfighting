@@ -13,7 +13,8 @@ test('three progressive pages go directly from subject to merged full-year chapt
   assert.match(pages,/setPage\(Math\.min\(2,stage\+1\)\)/);
   assert.match(pages,/native\.dispatchEvent\(new Event\('change',\{bubbles:true\}\)\)/);
   assert.match(pages,/const last=\$\('cs-stage-2'\)/);
-  assert.match(pages,/last\.append\(search,tools,chapter,add,custom,message\)/);
+  assert.match(pages,/last\.append\(search,tools,chapter,custom,message\)/);
+  assert.doesNotMatch(pages,/\$\('cs-add'\)|chapter,add/);
   assert.match(pages,/window\.openCurriculumPage=page/);
   assert.match(pages,/id="cs-prev" class="cs-back"/);
   assert.doesNotMatch(pages,/cs-page-tab-|cs-page-path|cs-page-progress|cs-page-tabs/);
@@ -25,6 +26,12 @@ test('three progressive pages go directly from subject to merged full-year chapt
   assert.match(scope,/function mergeYearUnits\(yearData\)/);
   assert.match(scope,/AUTO_TERM='全學年'/);
   assert.match(scope,/function addChecked\(\)/);
+  assert.match(scope,/setChapterSelection\(i,c\.checked\)/);
+  assert.match(scope,/setTopicSelection\(i,j,box\.checked\)/);
+  assert.match(scope,/el\('cs-all'\)\.onclick=selectAllCurrentChapters/);
+  assert.match(scope,/el\('cs-clear'\)\.onclick=clearCurrentSelection/);
+  assert.doesNotMatch(scope,/id="cs-add"/);
+  assert.doesNotMatch(scope,/項待加入/);
 });
 test('only one stage is visible while pages support scrolling, progress and mobile tiles',()=>{
   assert.match(pages,/item\.hidden = i!==active/);
