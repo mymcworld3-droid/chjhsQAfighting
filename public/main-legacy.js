@@ -1605,6 +1605,9 @@ window.switchToPage = (pageId) => {
         alert("Battle in progress!");
         return;
     }
+
+    // 問道答題時使用專注模式：隱藏全站底部導覽，離開答題頁後自動恢復。
+    document.body.classList.toggle('quiz-session-active', pageId === 'page-quiz');
     
     if (pageId !== 'page-social' && chatUnsub) {
         chatUnsub();

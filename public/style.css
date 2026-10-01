@@ -910,6 +910,26 @@ button:active::before {
     overflow: visible !important;
 }
 
+/* 問道答題採專注模式；返回仙府改由題目底部動作列提供。 */
+body.quiz-session-active #bottom-nav {
+    display: none !important;
+}
+
+.quiz-footer-actions > button {
+    min-width: 0;
+}
+
+@media (max-width: 420px) {
+    .quiz-footer-actions {
+        gap: 0.35rem !important;
+    }
+
+    .quiz-footer-actions > button {
+        padding-inline: 0.25rem;
+        font-size: 0.65rem;
+    }
+}
+
 #nav-grid {
     overflow: visible !important;
 }

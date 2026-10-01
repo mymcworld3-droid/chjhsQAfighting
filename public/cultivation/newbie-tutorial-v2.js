@@ -224,6 +224,16 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     const current = currentPageId();
     if (current === step.page) return null;
 
+    // 答題頁會隱藏底部導覽；任何跨頁操作都先使用題目下方的「返回仙府」。
+    if (current === 'page-quiz' && step.page !== 'page-quiz') {
+      return navRoute(
+        'page-home',
+        '返回仙府',
+        '#btn-quiz-home',
+        '答題時底部導覽會暫時隱藏。請使用題目下方的「返回仙府」回到仙府，再前往下一個功能。'
+      );
+    }
+
     // 問道不是底部獨立分頁：先回仙府，再由仙府的「問道試煉」進入。
     if (step.page === 'page-quiz') {
       if (current !== 'page-home') {
