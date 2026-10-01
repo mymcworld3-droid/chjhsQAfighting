@@ -841,7 +841,7 @@ function ensureGameStartupGateStyle() {
         #startup-cloud-curtain .startup-cloud-half.has-image::before{opacity:0}
         #startup-cloud-curtain .startup-cloud-image{
             position:absolute;inset:0;z-index:2;width:100vw;height:100dvh;display:block;
-            object-fit:fill;object-position:center;
+            object-fit:cover;object-position:center;
             opacity:0;transition:opacity 180ms ease;
             user-select:none;-webkit-user-drag:none;pointer-events:none;
             backface-visibility:hidden;
