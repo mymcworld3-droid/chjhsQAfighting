@@ -23,6 +23,7 @@ const visual = read('cultivation-core-visual.js');
 const equipWarning = read('cultivation-core-equip-warning.js');
 const battleEffects = read('golden-core-battle-effects.js');
 const legacy = readRoot('main-legacy.js');
+const index = readRoot('index.html');
 const startupScene = readRoot('assets/xianxia-loading-scene.svg');
 
 test('login core is isolated from optional cultivation module failures', () => {
@@ -275,15 +276,24 @@ test('startup completion closes cloud banks before revealing home and opens them
     'clouds close first, home is mounted while covered, then clouds open');
 });
 
-test('startup cloud curtain supports left and right PNG assets with a safe fallback', () => {
-  assert.match(legacy, /assets\/cloud-left\.png/);
-  assert.match(legacy, /assets\/cloud-right\.png/);
-  assert.match(legacy, /data-cloud-side="left"/);
-  assert.match(legacy, /data-cloud-side="right"/);
-  assert.match(legacy, /startup-cloud-image/);
+test('startup cloud curtain uses two full-screen overlapping PNG layers and preloads them early', () => {
+  assert.match(index, /rel="preload" as="image" href="assets\/cloud-left\.png" fetchpriority="high"/);
+  assert.match(index, /rel="preload" as="image" href="assets\/cloud-right\.png" fetchpriority="high"/);
+  assert.match(legacy, /STARTUP_CLOUD_ASSETS = Object\.freeze/);
+  assert.match(legacy, /preloadStartupCloudImages\(\)/);
+  assert.match(legacy, /image\.decode/);
+  assert.match(legacy, /fetchPriority = 'high'/);
+  assert.match(legacy, /waitForStartupCloudTransform/);
+  assert.match(legacy, /transitionend/);
+  assert.match(legacy, /#startup-cloud-curtain \.startup-cloud-half\{[\s\S]*?position:absolute;inset:0;width:100vw;height:100dvh/);
+  assert.match(legacy, /startup-cloud-left\{\s*transform:translate3d\(-102vw,0,0\)/);
+  assert.match(legacy, /startup-cloud-right\{\s*transform:translate3d\(102vw,0,0\)/);
+  assert.match(legacy, /is-closed \.startup-cloud-left\{[\s\S]*?translate3d\(0,0,0\)/);
+  assert.match(legacy, /is-closed \.startup-cloud-right\{[\s\S]*?translate3d\(0,0,0\)/);
+  assert.match(legacy, /startup-cloud-mist\{[\s\S]*?opacity:0/);
+  assert.match(legacy, /is-closed \.startup-cloud-mist\{opacity:\.96\}/);
   assert.match(legacy, /classList\.add\('has-image'\)/);
   assert.match(legacy, /image\.addEventListener\('error', markMissing/);
-  assert.match(legacy, /startup-cloud-half\.has-image::before\{opacity:0\}/);
 });
 
 test('startup progress section is horizontally centered on the viewport', () => {
