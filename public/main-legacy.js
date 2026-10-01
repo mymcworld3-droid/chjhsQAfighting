@@ -812,6 +812,72 @@ function ensureGameStartupGateStyle() {
             #game-startup-gate-progress,#game-startup-gate-tip{transition:none}
             #game-startup-gate .game-startup-visual img{transform:none}
         }
+
+        #startup-cloud-curtain{
+            position:fixed;inset:0;z-index:31000;overflow:hidden;pointer-events:none;
+            opacity:1;visibility:visible
+        }
+        #startup-cloud-curtain .startup-cloud-half{
+            position:absolute;top:-8vh;bottom:-8vh;width:58vw;
+            will-change:transform,filter;
+            transition:transform 900ms cubic-bezier(.18,.76,.18,1),filter 900ms ease
+        }
+        #startup-cloud-curtain .startup-cloud-half::before,
+        #startup-cloud-curtain .startup-cloud-half::after{
+            content:'';position:absolute;inset:0
+        }
+        #startup-cloud-curtain .startup-cloud-left{
+            left:-8vw;transform:translateX(-104%);
+        }
+        #startup-cloud-curtain .startup-cloud-right{
+            right:-8vw;transform:translateX(104%);
+        }
+        #startup-cloud-curtain .startup-cloud-half::before{
+            background:
+                radial-gradient(ellipse at 18% 17%,rgba(242,246,240,.98) 0 12%,rgba(209,220,211,.94) 28%,transparent 54%),
+                radial-gradient(ellipse at 54% 8%,rgba(250,250,243,.98) 0 14%,rgba(214,222,211,.94) 31%,transparent 57%),
+                radial-gradient(ellipse at 84% 26%,rgba(238,243,234,.97) 0 15%,rgba(198,211,202,.94) 34%,transparent 59%),
+                radial-gradient(ellipse at 34% 48%,rgba(226,235,226,.99) 0 22%,rgba(185,202,193,.96) 44%,transparent 70%),
+                radial-gradient(ellipse at 77% 58%,rgba(245,246,235,.98) 0 23%,rgba(194,208,197,.96) 45%,transparent 71%),
+                radial-gradient(ellipse at 30% 82%,rgba(235,241,232,.98) 0 20%,rgba(184,201,191,.95) 43%,transparent 72%),
+                radial-gradient(ellipse at 83% 90%,rgba(249,247,232,.98) 0 19%,rgba(199,210,194,.95) 41%,transparent 69%);
+            filter:blur(2px) drop-shadow(0 0 28px rgba(225,236,226,.2))
+        }
+        #startup-cloud-curtain .startup-cloud-half::after{
+            background:
+                radial-gradient(ellipse at 45% 25%,rgba(255,255,248,.38),transparent 42%),
+                radial-gradient(ellipse at 66% 68%,rgba(226,190,111,.12),transparent 42%),
+                linear-gradient(180deg,rgba(232,239,229,.08),rgba(89,110,102,.2));
+            mix-blend-mode:screen
+        }
+        #startup-cloud-curtain .startup-cloud-mist{
+            position:absolute;inset:0;opacity:0;
+            background:
+                radial-gradient(ellipse at center,rgba(238,244,237,.92),rgba(194,208,198,.62) 42%,rgba(112,132,124,.22) 72%,transparent);
+            transition:opacity 480ms ease
+        }
+        #startup-cloud-curtain.is-closing .startup-cloud-left,
+        #startup-cloud-curtain.is-closed .startup-cloud-left{transform:translateX(0)}
+        #startup-cloud-curtain.is-closing .startup-cloud-right,
+        #startup-cloud-curtain.is-closed .startup-cloud-right{transform:translateX(0)}
+        #startup-cloud-curtain.is-closing .startup-cloud-mist,
+        #startup-cloud-curtain.is-closed .startup-cloud-mist{opacity:.72}
+        #startup-cloud-curtain.is-opening .startup-cloud-half{
+            transition-duration:1150ms;
+            transition-timing-function:cubic-bezier(.22,.7,.16,1)
+        }
+        #startup-cloud-curtain.is-opening .startup-cloud-left{transform:translateX(-108%)}
+        #startup-cloud-curtain.is-opening .startup-cloud-right{transform:translateX(108%)}
+        #startup-cloud-curtain.is-opening .startup-cloud-mist{opacity:0;transition-duration:800ms}
+        @media(max-width:700px){
+            #startup-cloud-curtain .startup-cloud-half{width:68vw}
+            #startup-cloud-curtain .startup-cloud-left{left:-14vw}
+            #startup-cloud-curtain .startup-cloud-right{right:-14vw}
+        }
+        @media(prefers-reduced-motion:reduce){
+            #startup-cloud-curtain .startup-cloud-half,
+            #startup-cloud-curtain .startup-cloud-mist{transition-duration:1ms!important}
+        }
     `;
     document.head.appendChild(style);
 }
@@ -910,6 +976,52 @@ function showGameStartupFailure(message) {
 
 function hideGameStartupGate() {
     document.getElementById('game-startup-gate')?.remove();
+}
+
+function waitStartupTransition(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function ensureStartupCloudCurtain() {
+    let curtain = document.getElementById('startup-cloud-curtain');
+    if (curtain) return curtain;
+    ensureGameStartupGateStyle();
+    curtain = document.createElement('div');
+    curtain.id = 'startup-cloud-curtain';
+    curtain.setAttribute('aria-hidden', 'true');
+    curtain.innerHTML = `
+        <div class="startup-cloud-half startup-cloud-left"></div>
+        <div class="startup-cloud-half startup-cloud-right"></div>
+        <div class="startup-cloud-mist"></div>
+    `;
+    document.body.appendChild(curtain);
+    return curtain;
+}
+
+async function enterHomeWithStartupCloudCurtain() {
+    const curtain = ensureStartupCloudCurtain();
+    const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches === true;
+
+    // 載入畫面仍在底層，兩側雲海先合攏，完整遮住換頁瞬間。
+    curtain.className = '';
+    void curtain.offsetWidth;
+    curtain.classList.add('is-closing');
+    await waitStartupTransition(reducedMotion ? 20 : 920);
+    curtain.classList.remove('is-closing');
+    curtain.classList.add('is-closed');
+
+    // 雲幕完全閉合後才把底層切到仙府，玩家看不到 DOM 換頁或版面跳動。
+    document.getElementById('bottom-nav')?.classList.remove('hidden');
+    switchToPage('page-home');
+    hideGameStartupGate();
+    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+
+    // 仙府已在雲後完成佈局，再向兩側散開揭露畫面。
+    curtain.classList.remove('is-closed');
+    curtain.classList.add('is-opening');
+    await waitStartupTransition(reducedMotion ? 25 : 1180);
+    curtain.remove();
+    window.dispatchEvent(new CustomEvent('xiuxian:startup-cloud-transition-completed'));
 }
 
 async function waitForVerifiedPlayerMigration(user) {
@@ -1136,16 +1248,15 @@ onAuthStateChanged(auth, async (user) => {
                 userInfoEl.innerHTML = `<i class="fa-solid fa-user-astronaut"></i> ${currentUserData.displayName || user.displayName || '玩家'}`;
             }
 
-            // 根據資料完整度導向；到這裡才解除啟動遮罩並開始遊戲。
-            hideGameStartupGate();
+            // 根據資料完整度導向；完整玩家以雲幕遮住載入畫面與仙府之間的換頁瞬間。
             if (!hasCompletedPlayerProfile(currentUserData.profile)) {
+                hideGameStartupGate();
                 populateOnboardingInputs();
                 switchToPage('page-onboarding');
                 document.getElementById('bottom-nav').classList.add('hidden');
             } else {
-                // 個人資料完成後，不論凡人、煉氣或後續境界都保留底部導覽列。
-                document.getElementById('bottom-nav').classList.remove('hidden');
-                switchToPage('page-home');
+                // 個人資料完成後：雲海由左右合攏，仙府在遮幕後就位，再向兩側打開。
+                await enterHomeWithStartupCloudCurtain();
                 syncSoloQuestionCache();
                 fillBuffer();
             }

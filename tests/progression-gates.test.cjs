@@ -225,10 +225,14 @@ test('game waits for every feature script before revealing the playable UI', () 
   assert.match(legacy, /hideGameStartupGate\(\)/);
 
   const waitPos = legacy.indexOf('featureGateResult = await waitForAllGameScripts()');
-  const revealPos = legacy.indexOf("document.getElementById('bottom-nav').classList.remove('hidden')");
-  const homePos = legacy.indexOf("switchToPage('page-home')");
-  assert.ok(waitPos >= 0 && revealPos > waitPos && homePos > waitPos,
-    'bottom navigation and home page are not revealed until all feature modules finish loading');
+  const cloudEnterPos = legacy.indexOf('await enterHomeWithStartupCloudCurtain()', waitPos);
+  const transitionFnPos = legacy.indexOf('async function enterHomeWithStartupCloudCurtain()');
+  const revealPos = legacy.indexOf("document.getElementById('bottom-nav')?.classList.remove('hidden')", transitionFnPos);
+  const homePos = legacy.indexOf("switchToPage('page-home')", transitionFnPos);
+  assert.ok(waitPos >= 0 && cloudEnterPos > waitPos,
+    'cloud transition is not entered until all feature modules finish loading');
+  assert.ok(transitionFnPos >= 0 && revealPos > transitionFnPos && homePos > revealPos,
+    'home and navigation are revealed only inside the covered cloud transition');
 });
 
 
@@ -253,6 +257,24 @@ test('startup gate is a full-screen xianxia loading scene with real progress and
 });
 
 
+test('startup completion closes cloud banks before revealing home and opens them after home is ready', () => {
+  assert.match(legacy, /id = 'startup-cloud-curtain'/);
+  assert.match(legacy, /startup-cloud-left/);
+  assert.match(legacy, /startup-cloud-right/);
+  assert.match(legacy, /classList\.add\('is-closing'\)/);
+  assert.match(legacy, /classList\.add\('is-closed'\)/);
+  assert.match(legacy, /switchToPage\('page-home'\)/);
+  assert.match(legacy, /classList\.add\('is-opening'\)/);
+  assert.match(legacy, /await enterHomeWithStartupCloudCurtain\(\)/);
+  assert.match(legacy, /xiuxian:startup-cloud-transition-completed/);
+
+  const transitionStart = legacy.indexOf("curtain.classList.add('is-closing')");
+  const homeSwitch = legacy.indexOf("switchToPage('page-home')", transitionStart);
+  const transitionOpen = legacy.indexOf("curtain.classList.add('is-opening')", transitionStart);
+  assert.ok(transitionStart >= 0 && homeSwitch > transitionStart && transitionOpen > homeSwitch,
+    'clouds close first, home is mounted while covered, then clouds open');
+});
+
 test('startup progress section is horizontally centered on the viewport', () => {
   assert.match(legacy, /\.game-startup-copy\{width:100%;max-width:760px;margin-left:auto;margin-right:auto/);
   assert.match(legacy, /\.game-startup-progress-wrap\{width:min\(720px,100%\);margin:clamp\(20px,3\.2vh,34px\) auto 0/);
@@ -268,7 +290,8 @@ test('onboarding is complete only after grade, strengths and weaknesses, and nav
   assert.match(legacy, /populateOnboardingInputs\(\)/);
   assert.match(legacy, /請先填完整年級、擅長科目與弱項科目/);
   assert.match(legacy, /new CustomEvent\('xiuxian:onboarding-completed'/);
-  assert.match(legacy, /不論凡人、煉氣或後續境界都保留底部導覽列/);
+  assert.match(legacy, /個人資料完成後：雲海由左右合攏/);
+  assert.match(legacy, /document\.getElementById\('bottom-nav'\)\?\.classList\.remove\('hidden'\)/);
   assert.match(legacy, /xiuxian:stats-updated', ensureGameplayNavigationForReadyProfile/);
   assert.doesNotMatch(legacy, /ensureGameplayNavigationForReadyProfile[\s\S]{0,500}score\(\)\s*[><=]/);
 });
