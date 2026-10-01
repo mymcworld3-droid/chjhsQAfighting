@@ -294,7 +294,7 @@
     const button = document.getElementById('training-status-tab');
     if (!page || !button) return;
     const content = document.getElementById('training-tab-content');
-    const finishTransition = !statusActive ? window.beginSceneTransition?.(content, content, 'cloud', 'training-tab', true) : null;
+    const finishTransition = !statusActive ? window.beginSceneTransition?.(content, content, 'cloud', 'training-tab', true, 1) : null;
     statusActive = true;
     setNativeTabsInactive(page);
     button.classList.add('active');

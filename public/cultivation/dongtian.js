@@ -830,7 +830,9 @@ export const featureReady = (async () => {
   function showEncounterAnimation() {
     const s = state.session;
     const overlay = ensureOverlay();
+    const finishTransition = window.beginSceneTransition?.(document.querySelector('.active-page'), overlay, 'raid', 'dongtian-open');
     overlay.innerHTML = `<div class="dt-encounter"><div class="dt-portal"></div><div class="dt-encounter-copy"><span>${s.tutorialOnly ? '教學專用 · PRIVATE DEMO' : (s.source === 'encounter' ? '天地異象 · DONGTIAN ENCOUNTERED' : '洞天開啟 · ENTER SECRET REALM')}</span><h2>${escapeHtml(s.dongtian.name)}</h2><p>靈識已鎖定此洞天。進入後題序固定，除非主動退出或重新整理，否則不會切換成其他題目。</p><b>${escapeHtml(s.dongtian.level)} · ${difficultyLabel(s.dongtian.difficulty)} · ${escapeHtml(s.dongtian.subject)} · ${s.dongtian.questions.length} 題</b></div></div>`;
+    finishTransition?.();
   }
 
   function renderRunner() {

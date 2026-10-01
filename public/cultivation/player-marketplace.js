@@ -382,6 +382,8 @@ import { MATERIAL_CATALOG, RAID_CRAFT_MATERIAL_IDS, RAID_REFINEMENT_KEYS, getMat
       console.error('[Player market] market panel was not mounted before tab switch');
       return false;
     }
+    const changed = store.classList.contains('pm-market-active') !== open;
+    const finishTransition = changed ? window.beginSceneTransition?.(store, store, 'alchemy', 'market-view', true, open ? 1 : -1) : null;
     store.classList.toggle('pm-market-active', open);
     market.classList.toggle('hidden', !open);
     tabs?.classList.toggle('hidden', open);
@@ -408,6 +410,7 @@ import { MATERIAL_CATALOG, RAID_CRAFT_MATERIAL_IDS, RAID_REFINEMENT_KEYS, getMat
     const loading = document.getElementById('pm-market-load-state');
     if (loading) loading.textContent = '';
     if (open) { render(); void refreshWallet(); void refreshListings(); }
+    finishTransition?.();
     return true;
   }
   function installStyle() {

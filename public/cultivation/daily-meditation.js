@@ -107,7 +107,9 @@ import { buildMeditationMistakePool, chooseMeditationMistakes } from './daily-me
     overlay.setAttribute('aria-modal', 'true');
     overlay.setAttribute('aria-label', '每日閉關');
     overlay.innerHTML = '<section class="dm-card"><header class="dm-top"><div><div class="dm-eyebrow">洞府 · 每日修行</div><div class="dm-heading">靜心閉關</div></div><button type="button" class="dm-close" id="dm-close" aria-label="關閉">×</button></header><div class="dm-body"><div class="dm-scene"><div class="dm-circle"><span class="dm-monk">道</span></div><span class="dm-scene-label">凝神 · 內觀 · 運轉周天</span></div><div id="dm-content"></div><p id="dm-status" class="dm-status" role="status" aria-live="polite"></p></div></section>';
+    const finishTransition = window.beginSceneTransition?.(document.querySelector('.active-page'), overlay, 'meditation', 'meditation-open');
     document.body.appendChild(overlay);
+    queueMicrotask(() => finishTransition?.());
     node('dm-close').addEventListener('click', () => {
       if (busy) { notify('正在同步閉關資料，請完成結算後再離開。'); return; }
       const finishTransition = window.beginSceneTransition?.(overlay, document.querySelector('.active-page'), 'meditation', 'meditation-close');
