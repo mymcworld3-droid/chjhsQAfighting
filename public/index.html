@@ -956,12 +956,15 @@ body.xianxia-theme main:has(#page-training.active-page),
                         </div>
                         </div>
                         
-                        <div class="mt-8 flex gap-3 w-full">
+                        <div class="mt-8 flex gap-3 w-full quiz-footer-actions">
                         <button id="btn-giveup" onclick="giveUpQuiz()" class="flex-1 py-3 text-gray-600 text-xs text-center hover:text-red-400 transition border border-transparent hover:border-red-500/20 rounded-lg group">
                         <i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i> <span data-i18n="btn_giveup">ABORT MISSION</span>
                         </button>
                         <button id="btn-report" onclick="openReportModal()" class="flex-1 py-3 text-gray-600 text-xs text-center hover:text-yellow-400 transition border border-transparent hover:border-yellow-500/20 rounded-lg group">
                         <i class="fa-solid fa-bug group-hover:rotate-12 transition-transform"></i> <span>回報問題</span>
+                        </button>
+                        <button id="btn-quiz-home" type="button" onclick="switchToPage('page-home')" class="flex-1 py-3 text-gray-600 text-xs text-center hover:text-cyan-400 transition border border-transparent hover:border-cyan-500/20 rounded-lg group">
+                        <i class="fa-solid fa-house group-hover:-translate-y-0.5 transition-transform"></i> <span>返回仙府</span>
                         </button>
                         </div>
                     </div>
