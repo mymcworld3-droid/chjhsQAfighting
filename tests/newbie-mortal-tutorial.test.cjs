@@ -4,6 +4,9 @@ const { readFileSync } = require('node:fs');
 const { join } = require('node:path');
 
 const tutorial = readFileSync(join(__dirname, '../public/cultivation/newbie-tutorial-v2.js'), 'utf8');
+const indexHtml = readFileSync(join(__dirname, '../public/index.html'), 'utf8');
+const mainLegacy = readFileSync(join(__dirname, '../public/main-legacy.js'), 'utf8');
+const styleCss = readFileSync(join(__dirname, '../public/style.css'), 'utf8');
 
 test('mortal-stage tutorial teaches a real-looking sample quiz without awarding cultivation', () => {
   assert.match(tutorial, /const VERSION = 2;/);
@@ -25,6 +28,21 @@ test('mortal-stage tutorial teaches the existing report button without submittin
   assert.match(tutorial, /這次範例不會送到伺服器/);
   assert.match(tutorial, /答案明顯錯誤/);
   assert.match(tutorial, /題目或選項有歧義/);
+});
+
+test('quiz answering hides the bottom navigation and provides a return-to-home action beside report', () => {
+  assert.match(indexHtml, /id="btn-report"/);
+  assert.match(indexHtml, /id="btn-quiz-home"/);
+  assert.match(indexHtml, /返回仙府/);
+  assert.match(indexHtml, /quiz-footer-actions/);
+  assert.match(mainLegacy, /classList\.toggle\('quiz-session-active', pageId === 'page-quiz'\)/);
+  assert.match(styleCss, /body\.quiz-session-active #bottom-nav\s*\{[^}]*display:\s*none\s*!important/s);
+});
+
+test('tutorial uses the quiz return button while bottom navigation is hidden', () => {
+  assert.match(tutorial, /current === 'page-quiz' && step\.page !== 'page-quiz'/);
+  assert.match(tutorial, /target: '#btn-quiz-home'/);
+  assert.match(tutorial, /答題時底部導覽會暫時隱藏/);
 });
 
 
