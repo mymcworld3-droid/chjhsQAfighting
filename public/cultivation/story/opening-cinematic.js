@@ -451,7 +451,7 @@ function open(options = {}) {
 function maybeAutoStart() {
   if (active || document.getElementById(LAYER_ID)) return;
   if (!required()) return;
-  if (document.querySelector('#game-startup-gate,#page-onboarding:not(.hidden)')) {
+  if (document.querySelector('#game-startup-gate,#startup-cloud-curtain,#page-onboarding:not(.hidden)')) {
     setTimeout(maybeAutoStart, 500);
     return;
   }
