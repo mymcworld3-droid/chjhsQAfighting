@@ -79,6 +79,10 @@ function createInvitationHub({
   function flush(uid) {
     const set = waiters.get(uid);
     if (!set?.size) return false;
+    for (const waiter of [...set]) {
+      if (!waiter.isOpen()) waiter.cancel();
+    }
+    if (!set.size) return false;
     const items = take(uid);
     if (!items.length) return false;
     waiters.delete(uid);
@@ -104,6 +108,9 @@ function createInvitationHub({
   }
 
   function listen(uid, res) {
+    // Authentication may finish after a resumed browser has aborted the old
+    // request. Never let that dead response consume the next invitation.
+    if (res.destroyed || res.writableEnded) return () => {};
     markOnline(uid);
     const immediate = take(uid);
     if (immediate.length) {
@@ -115,6 +122,7 @@ function createInvitationHub({
     let timer = null;
     const set = waiters.get(uid) || new Set();
     const waiter = {
+      isOpen: () => !res.destroyed && !res.writableEnded,
       finish(items = []) {
         if (finished) return;
         finished = true;
@@ -134,6 +142,7 @@ function createInvitationHub({
       set.delete(waiter);
       if (!set.size) waiters.delete(uid);
     };
+    waiter.cancel = close;
     res.once?.('close', close);
     return close;
   }
@@ -186,6 +195,7 @@ function registerInvitationApi(app, {
     res.set('Cache-Control', 'no-store');
     try {
       const { uid } = await verifyRequest(req, resolveA);
+      if (res.destroyed || res.writableEnded) return;
       hub.listen(uid, res);
     } catch (error) {
       return res.status(error?.status || 503).json({ ok: false, error: error?.message || '邀請監聽服務暫時無法使用' });
@@ -203,12 +213,15 @@ function registerInvitationApi(app, {
     }
 
     try {
-      const senderSnap = await identity.a.db.collection('users').doc(identity.uid).get();
+      // These independent trusted checks should not add their network latency.
+      const [senderSnap, room] = await Promise.all([
+        identity.a.db.collection('users').doc(identity.uid).get(),
+        validateRoom(req.body?.invitation || {}, identity.uid, { a: identity.a, c })
+      ]);
       if (!senderSnap.exists) return res.status(404).json({ ok: false, error: '找不到玩家資料' });
       const sender = senderSnap.data() || {};
       const friends = new Set(uniqueUids(sender.friends, identity.uid));
       const requested = uniqueUids(req.body?.friendUids, identity.uid).filter(uid => friends.has(uid));
-      const room = await validateRoom(req.body?.invitation || {}, identity.uid, { a: identity.a, c });
 
       const online = requested.filter(uid => hub.isOnline(uid));
       const createdAtMs = Date.now();

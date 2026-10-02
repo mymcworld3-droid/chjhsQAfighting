@@ -69,6 +69,7 @@ let systemUnsub = null;              // 系統指令監聽 (強制重整)
 let localReloadToken = null;         // 本地重整標記
 let inviteUnsub = null;              // 鬥法／團本邀請常駐監聽
 let inviteRefreshTimer = null;
+let inviteRefreshForced = false;
 let inviteListenerLastActivity = 0;
 const pendingIncomingInvites = new Map();
 let battleUnsub = null;              // 對戰房監聽
@@ -1405,6 +1406,7 @@ onAuthStateChanged(auth, async (user) => {
         if (inviteUnsub) inviteUnsub();
         clearTimeout(inviteRefreshTimer);
         inviteRefreshTimer = null;
+        inviteRefreshForced = false;
         inviteListenerLastActivity = 0;
         pendingIncomingInvites.clear();
         if (systemUnsub) systemUnsub();
@@ -3878,24 +3880,46 @@ window.submitReport = async () => {
 async function invitationServerRequest(path, body = {}, signal = undefined) {
     const user = auth.currentUser;
     if (!user) throw new Error('請先登入');
-    const token = await user.getIdToken();
-    const response = await fetch(path, {
-        method: 'POST',
-        cache: 'no-store',
-        signal,
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token
-        },
-        body: JSON.stringify(body || {})
+    const request = new AbortController();
+    const abort = () => request.abort();
+    signal?.addEventListener('abort', abort, { once: true });
+    if (signal?.aborted) abort();
+    // The server's idle long poll ends at 25s. A stalled transport or token
+    // refresh must not leave the listener apparently active forever.
+    const timer = setTimeout(abort, path.endsWith('/listen') ? 30000 : 15000);
+    let cancelTokenWait;
+    const cancelled = new Promise((_, reject) => {
+        cancelTokenWait = () => reject(Object.assign(new Error('邀請連線已中止或逾時'), { name: 'AbortError' }));
+        request.signal.addEventListener('abort', cancelTokenWait, { once: true });
+        if (request.signal.aborted) cancelTokenWait();
     });
-    const payload = await response.json().catch(() => ({}));
-    if (!response.ok || payload.ok === false) {
-        const error = new Error(payload.error || '邀請服務暫時無法使用');
-        error.status = response.status;
-        throw error;
+    try {
+        const token = await Promise.race([user.getIdToken(), cancelled]);
+        const response = await fetch(path, {
+            method: 'POST',
+            cache: 'no-store',
+            signal: request.signal,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify(body || {})
+        });
+        const payload = await response.json().catch(error => {
+            if (request.signal.aborted) throw error;
+            return {};
+        });
+        if (!response.ok || payload.ok !== true) {
+            const error = new Error(payload.error || '邀請服務暫時無法使用');
+            error.status = response.status;
+            throw error;
+        }
+        return payload;
+    } finally {
+        clearTimeout(timer);
+        signal?.removeEventListener('abort', abort);
+        request.signal.removeEventListener('abort', cancelTokenWait);
     }
-    return payload;
 }
 
 function inviteHandlerReady(invite) {
@@ -3961,7 +3985,9 @@ function startInvitationListener() {
                 }
                 flushPendingIncomingInvites();
             } catch (error) {
-                if (!active || error?.name === 'AbortError') break;
+                // Only a lifecycle stop ends this loop. A request timeout
+                // should reconnect instead of silently disabling invitations.
+                if (!active || controller.signal.aborted) break;
                 inviteListenerLastActivity = Date.now();
                 console.warn('[Invitation server] listen failed:', error?.message || error);
                 await new Promise(resolve => setTimeout(resolve, 1200));
@@ -3979,16 +4005,20 @@ function refreshInvitationListener({ force = false } = {}) {
 }
 
 function scheduleInvitationListenerRefresh({ force = false } = {}) {
+    inviteRefreshForced = inviteRefreshForced || force;
     clearTimeout(inviteRefreshTimer);
     inviteRefreshTimer = setTimeout(() => {
         inviteRefreshTimer = null;
-        refreshInvitationListener({ force });
+        const reconnect = inviteRefreshForced;
+        inviteRefreshForced = false;
+        refreshInvitationListener({ force: reconnect });
     }, 120);
 }
 
 function refreshInvitationListenerAfterResume() {
-    const stale = !inviteListenerLastActivity || Date.now() - inviteListenerLastActivity > 30000;
-    scheduleInvitationListenerRefresh({ force: stale });
+    // Safari can suspend a socket immediately after starting it. Activity age
+    // cannot tell whether that socket is still usable after returning.
+    scheduleInvitationListenerRefresh({ force: true });
 }
 
 window.addEventListener('online', () => scheduleInvitationListenerRefresh({ force: true }));
