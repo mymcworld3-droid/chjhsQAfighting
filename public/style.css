@@ -915,6 +915,14 @@ body.quiz-session-active #bottom-nav {
     display: none !important;
 }
 
+/* Keep the real, fixed navigation visible through a page slide. */
+body.scene-page-sliding #bottom-nav {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+
 .quiz-footer-actions > button {
     min-width: 0;
 }
