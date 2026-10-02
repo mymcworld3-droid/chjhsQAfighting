@@ -1,3 +1,4 @@
+import './quest-rules.js';
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, collection, query, where, orderBy, limit, getDocs, doc, getDoc, runTransaction, increment, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
@@ -381,6 +382,7 @@ import { buildMeditationMistakePool, chooseMeditationMistakes } from './daily-me
           ? window.getXiuxianRealmIndex(newScore) : Math.max(0, Number(data.stats?.rankLevel) || 0);
         tx.update(ref, {
           dailyMeditation: newRecord,
+          questProgress: window.XianxiaQuestRules.recordEvent(data.questProgress, 'meditation', current.date),
           'stats.totalScore': increment(totalCultivation),
           'stats.gold': increment(reward.gold),
           'stats.nascentSoulSpirit': increment(spiritAdded),

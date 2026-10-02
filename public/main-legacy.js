@@ -1,3 +1,4 @@
+import './cultivation/quest-rules.js';
 import { beginSceneTransition, sceneTheme } from './cultivation/scene-transitions.js';
 import './cultivation/true-immortal.js';
 import { createSoloQuestionCache } from './solo-question-cache.js';
@@ -2259,6 +2260,7 @@ window.saveProfile = async (triggerButton = null) => {
     currentUserData.profile.strongSubjects = cleanStrong; 
     currentUserData.profile.weakSubjects = cleanWeak; 
     currentUserData.gameSettings = newSettings;
+    window.dispatchEvent(new CustomEvent('xiuxian:quest-progress-updated'));
     
     // 更新畫面上方顯示的名稱
     const userInfoEl = document.getElementById('user-info');
@@ -2970,9 +2972,32 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     // before the API can calculate a trusted refund.
     const shouldSaveAnswer = isCorrect || stats.totalScore !== scoreBeforeAnswer ||
         !!stats.goldenCoreShield !== shieldBeforeAnswer;
+    const cultivationDelta = stats.totalScore - scoreBeforeAnswer;
+    const answerUser = auth.currentUser;
     try {
         const p1 = shouldSaveAnswer
-            ? updateDoc(doc(db, "users", auth.currentUser.uid), { stats: stats })
+            ? runTransaction(db, async tx => {
+                const ref = doc(db, "users", answerUser.uid);
+                const snap = await tx.get(ref);
+                if (!snap.exists()) throw new Error('玩家資料不存在');
+                const remote = snap.data();
+                // Preserve currency/score changes from concurrent server settlements.
+                const savedStats = { ...stats,
+                    gold: Math.max(0, Number(remote.stats?.gold) || 0),
+                    totalScore: Math.max(0, (Number(remote.stats?.totalScore) || 0) + cultivationDelta)
+                };
+                savedStats.rankLevel = calculateRankFromScore(savedStats.totalScore);
+                if (spiritAdded) savedStats.nascentSoulSpirit = normalizeSpirit(remote.stats?.nascentSoulSpirit) + spiritAdded;
+                const patch = { stats: savedStats };
+                if (isCorrect) patch.questProgress = window.XianxiaQuestRules.recordEvent(remote.questProgress, 'solo');
+                tx.update(ref, patch);
+                return savedStats;
+            }).then(savedStats => {
+                if (auth.currentUser?.uid !== answerUser.uid || currentUserData?.stats !== stats) return;
+                Object.assign(stats, savedStats);
+                updateUIStats();
+                window.dispatchEvent(new CustomEvent('xiuxian:quest-progress-updated'));
+            })
                 .then(() => showCultivationFeedback(cultivationReward, isCorrect))
             : null;
         if (!shouldSaveAnswer) showCultivationFeedback(cultivationReward, isCorrect);

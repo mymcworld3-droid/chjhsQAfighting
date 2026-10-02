@@ -35,6 +35,7 @@ function setup(totalScore = 0) {
   const listeners = new Map();
   const writes = [];
   const logs = [];
+  let remoteUser = null;
   const context = vm.createContext({
     console, Math, Date, Number, WeakSet,
     QASoulTalents:require('../public/cultivation/soul-talents.js'),
@@ -46,17 +47,25 @@ function setup(totalScore = 0) {
       body: { appendChild() {} }
     },
     window: {
+      XianxiaQuestRules: require('../public/cultivation/quest-rules.js'),
       addEventListener(type, fn) { listeners.set(type, fn); },
       dispatchEvent(event) { listeners.get(event.type)?.(event); }
     },
     CustomEvent: class {
-      constructor(type, options) { this.type = type; this.detail = options.detail; }
+      constructor(type, options = {}) { this.type = type; this.detail = options.detail; }
     },
     navigator: {}, setTimeout() {}, db: {},
     auth: { currentUser: { uid: 'test-user', email: 'test@example.com' } },
     doc: (_, ...parts) => parts.join('/'),
     collection: (_, path) => path,
     updateDoc: async (path, data) => writes.push({ path, data: structuredClone(data) }),
+    runTransaction: async (_, worker) => worker({
+      get: async () => ({ exists: () => true, data: () => structuredClone(remoteUser) }),
+      update: (path, data) => {
+        writes.push({ path, data: structuredClone(data) });
+        remoteUser = { ...remoteUser, ...structuredClone(data) };
+      }
+    }),
     addDoc: async (_, data) => logs.push(structuredClone(data)),
     serverTimestamp: () => 123,
     t: key => key, parseMarkdownImages: text => text, fillBuffer() {},
@@ -101,10 +110,16 @@ function setup(totalScore = 0) {
     };
   }
   async function answer(userIdx = 0, correctIdx = 0) {
+    if (!remoteUser) remoteUser = structuredClone(context.currentUserData);
     return context.handleAnswer(userIdx, correctIdx, 'Question', 'Explanation');
   }
   newQuiz();
-  return { context, nodes, writes, logs, newQuiz, answer };
+  return { context, nodes, writes, logs, newQuiz, answer,
+    setRemoteStats(patch) {
+      remoteUser ||= structuredClone(context.currentUserData);
+      Object.assign(remoteUser.stats, patch);
+    }
+  };
 }
 
 test('correct answer updates saved stats and the top panel immediately', async () => {
@@ -261,4 +276,25 @@ test('saved disabled core suppresses soul cultivation in the real answer flow', 
   h.context.currentUserData.nascentSoulTree={version:4,paths:{sword:{nodes:{leftBottom:5}}}};
   await h.answer();
   assert.equal(h.writes[0].data.stats.totalScore,70);
+});
+
+
+test('ordinary correct answers atomically update quest progress; duplicate clicks and wrong answers do not count', async () => {
+  const h = setup();
+  await Promise.all([h.answer(), h.answer()]);
+  assert.equal(h.writes[0].data.questProgress.totals.solo, 1);
+  h.newQuiz(); await h.answer(1, 0);
+  assert.equal(h.writes.length, 1);
+  h.newQuiz(); await h.answer();
+  assert.equal(h.writes[1].data.questProgress.totals.solo, 2);
+  assert.equal(h.writes[1].data.questProgress.daily.counts.solo, 2);
+});
+
+test('ordinary answer transactions preserve server quest rewards arriving before persistence', async () => {
+  const h = setup(10);
+  h.setRemoteStats({ totalScore: 12, gold: 80 });
+  await h.answer();
+  assert.equal(h.writes[0].data.stats.totalScore, 13);
+  assert.equal(h.writes[0].data.stats.gold, 80);
+  assert.equal(h.context.currentUserData.stats.totalScore, 13);
 });

@@ -1,4 +1,5 @@
 'use strict';
+const { recordEvent } = require('./public/cultivation/quest-rules.js');
 
 const crypto = require('node:crypto');
 const { PROJECT_IDS } = require('./firebase-admin-projects.cjs');
@@ -126,7 +127,7 @@ async function awardRaidReward(db, uid, roomId, validation, {
       const inventory = Object.fromEntries(
         Object.keys(granted).map(id => [id, Number(materialSystem.inventory[id]) || 0])
       );
-      tx.update(userRef, { materialSystem, raidProgress });
+      tx.update(userRef, { materialSystem, raidProgress, questProgress: recordEvent(user.questProgress, 'raid') });
       if (dailyFirstVictory) tx.create(dailyRef, {uid,roomId,bossId:RAID_BOSS_ID,date});
       return { inventory, rewards:granted, firstVictory, dailyFirstVictory, date,
         memento:firstVictory ? MEMENTO : null };

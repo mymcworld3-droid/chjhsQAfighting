@@ -1,5 +1,6 @@
 'use strict';
 const crypto=require('node:crypto');
+const {recordEvent}=require('./public/cultivation/quest-rules.js');
 const {PROJECT_IDS}=require('./firebase-admin-projects.cjs');
 const {playerRepository,dongtianRepository}=require('./server-repositories.cjs');
 const {runRewardReceipt}=require('./reward-receipt.cjs');
@@ -31,7 +32,7 @@ async function awardProgress(db,uid,e){
   if(!userSnap.exists)throw new Error('玩家資料不存在');if(ownerRef&&!ownerSnap?.exists)throw new Error('洞天主人資料不存在');const player=userSnap.data()||{};if(player.uid&&player.uid!==uid)throw new Error('玩家資料 UID 不符');
   const first=!(play.exists&&!!play.data()?.completed),spirit=Math.floor(Number(player.stats?.totalScore)||0)>=NASCENT_SOUL_THRESHOLD?Math.max(0,Math.min(e.correct,e.total)):0,soul=first&&e.correct>0?caveSoulBonus(player):0,gold=first?firstCompletionGold(e.total):0,cult=first?e.correct+soul:0;
   tx.set(playRef,{uid,dongtianId:e.dongtianId,ownerUid,encountered:true,completed:true,correct:e.correct,total:e.total,lastSpiritRunId:e.runId,accuracy:e.accuracy,rewardTier:e.tier,completedAt:FieldValue.serverTimestamp(),completedAtMs:Date.now()},{merge:true});
-  const p={};if(gold)p['stats.gold']=FieldValue.increment(gold);if(cult)p['stats.totalScore']=FieldValue.increment(cult);if(spirit)p['stats.nascentSoulSpirit']=FieldValue.increment(spirit);if(Object.keys(p).length)tx.update(userRef,p);
+  const p={questProgress:recordEvent(player.questProgress,'dongtian')};if(gold)p['stats.gold']=FieldValue.increment(gold);if(cult)p['stats.totalScore']=FieldValue.increment(cult);if(spirit)p['stats.nascentSoulSpirit']=FieldValue.increment(spirit);if(Object.keys(p).length)tx.update(userRef,p);
   if(first&&ownerRef)tx.update(ownerRef,{'stats.totalScore':FieldValue.increment(OWNER_CULTIVATION_REWARD),'stats.gold':FieldValue.increment(OWNER_GOLD_REWARD)});
   return {firstCompletion:first,goldAdded:gold,cultivationAdded:cult,soulCultivationAdded:soul,spiritAdded:spirit,correct:e.correct,total:e.total,tier:e.tier};
  },createReceipt:r=>({uid,dongtianId:e.dongtianId,runId:e.runId,ownerUid,...r})});

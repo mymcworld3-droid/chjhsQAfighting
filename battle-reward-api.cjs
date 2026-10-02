@@ -1,5 +1,6 @@
 'use strict';
 const crypto=require('node:crypto');
+const {recordEvent}=require('./public/cultivation/quest-rules.js');
 const {PROJECT_IDS}=require('./firebase-admin-projects.cjs');
 const {playerRepository,battleRepository}=require('./server-repositories.cjs');
 const {runRewardReceipt}=require('./reward-receipt.cjs');
@@ -30,7 +31,7 @@ async function awardBattle(db,uid,roomId,reward){
     onFirstClaim:async({tx})=>{
       const snap=await tx.get(userRef);if(!snap.exists)throw new Error('玩家資料不存在');
       const user=snap.data()||{};if(user.uid&&user.uid!==uid)throw new Error('玩家資料 UID 不符');
-      const st=user.stats||{},patch={'stats.battleMatches':Math.max(0,Number(st.battleMatches)||0)+1};
+      const st=user.stats||{},patch={questProgress:recordEvent(user.questProgress,'battle'),'stats.battleMatches':Math.max(0,Number(st.battleMatches)||0)+1};
       if(reward.outcome==='win')patch['stats.battleWins']=Math.max(0,Number(st.battleWins)||0)+1;
       else if(reward.outcome==='loss')patch['stats.battleLosses']=Math.max(0,Number(st.battleLosses)||0)+1;
       else patch['stats.battleDraws']=Math.max(0,Number(st.battleDraws)||0)+1;

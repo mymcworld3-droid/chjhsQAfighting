@@ -59,6 +59,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/dongfu-settings-collapsible.js',
   './cultivation/scope-fullscreen.js',
   './cultivation/curriculum-pages.js',
+  './cultivation/quest-system.js',
   './cultivation/dongtian.js',
   './cultivation/story/opening-cinematic.js',
   './cultivation/story/story-engine.js',

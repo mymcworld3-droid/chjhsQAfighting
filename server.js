@@ -19,6 +19,7 @@ const registerRaidRoomApi = require('./raid-room-api.cjs');
 const registerBattleRewardApi = require('./battle-reward-api.cjs');
 const registerDongtianSettlementApi = require('./dongtian-settlement-api.cjs');
 const registerInvitationApi = require('./invitation-api.cjs');
+const registerQuestApi = require('./quest-api.cjs');
 const { raidRepository } = require('./server-repositories.cjs');
 const { pickTrustedRaidKnowledge } = require('./raid-authority.cjs');
 const { verifyMainIdentity, issueRaidQuestionTicket } = require('./raid-question-ticket.cjs');
@@ -46,6 +47,7 @@ registerRaidRewardApi(app);
 registerBattleRewardApi(app);
 registerDongtianSettlementApi(app);
 registerInvitationApi(app);
+registerQuestApi(app);
 
 // 根目錄路由
 app.get('/', (req, res) => {
