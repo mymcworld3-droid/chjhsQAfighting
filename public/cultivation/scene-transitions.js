@@ -80,7 +80,7 @@ export function beginSceneTransition(from, to, theme = 'cloud', scope = 'page', 
       const rect = target.getBoundingClientRect();
       const sign = direction < 0 ? -1 : 1;
       const distance = Math.max(1, Math.min(innerWidth, rect.width || innerWidth));
-      const duration = pageSlide ? 360 : 320;
+      const duration = pageSlide ? 480 : 400;
       const base = getComputedStyle(target).transform;
       const originalTransform = base && base !== 'none' ? base : '';
       oldWillChange = target.style.willChange;
@@ -88,11 +88,11 @@ export function beginSceneTransition(from, to, theme = 'cloud', scope = 'page', 
       target.style.willChange = 'transform';
       hadMotionClass = target.classList.contains('scene-content-moving');
       target.classList.add('scene-content-moving');
-      // A full-width horizontal journey with gentle acceleration makes the slide visible.
+      // Ease out across the full width: a clear initial slide and a gradual stop.
       animations.push(target.animate([
         { transform: `translate3d(${sign * distance}px,0,0) ${originalTransform}`.trim() },
         { transform: `translate3d(0,0,0) ${originalTransform}`.trim() }
-      ], { duration, easing: 'cubic-bezier(.25,.1,.25,1)', fill: 'both' }));
+      ], { duration, easing: 'cubic-bezier(.215,.61,.355,1)', fill: 'both' }));
 
       // Only this small, empty accent layer is created; no page DOM is copied.
       glow = document.createElement('div');
