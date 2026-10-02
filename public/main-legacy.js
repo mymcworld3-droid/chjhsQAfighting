@@ -1669,10 +1669,12 @@ function formatQuizRichText(text) {
         /\$\$[\s\S]*?\$\$/g,
         /\\\[[\s\S]*?\\\]/g,
         /\\\([\s\S]*?\\\)/g,
-        /\$(?!\$)(?:\\.|[^$\\])*?\$/g
+        /(?<!\\)\$(?!\$)(?:\\.|[^$\\])*?\$/g
     ];
     mathPatterns.forEach((pattern) => {
-        working = working.replace(pattern, (math) => protect(math));
+        // TeX still passes through innerHTML; keep inequalities and alignment
+        // markers as literal text for MathJax, rather than browser markup.
+        working = working.replace(pattern, (math) => protect(escapeHtml(math)));
     });
 
     working = escapeHtml(working).replace(/\n/g, '<br>');

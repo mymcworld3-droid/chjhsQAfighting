@@ -13,6 +13,17 @@ const tutorial = read('cultivation/battle-tutorial.js');
 const legacy = read('main-legacy.js');
 const server = readFileSync(join(__dirname, '../server.js'), 'utf8');
 
+test('MathJax loads the source-preserving error fallback before startup', () => {
+  const html = read('index.html');
+  const config = html.slice(html.indexOf('window.MathJax = {'), html.indexOf('</script>', html.indexOf('window.MathJax = {')));
+  const context = {window: {}};
+  vm.runInNewContext(config, context);
+  const mj = context.window.MathJax;
+  assert.ok(mj.loader.load.includes('[tex]/noerrors'));
+  assert.ok(mj.tex.packages['[+]'].includes('noerrors'));
+  assert.equal(mj.startup.typeset, false);
+});
+
 test('shared MathJax renderer loads before battle, story and Dongtian', () => {
   new vm.Script(math);
   const ix = p => main.indexOf("'" + p + "'");
