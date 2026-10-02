@@ -77,3 +77,22 @@ body.xianxia-theme #page-store #store-grid { grid-template-columns: repeat(auto-
     overflow-y: auto !important;
   }
 }
+
+/* Keep the cultivation summary and learning stats together above the quests.
+   Explicit grid placement prevents the full-width quest panel from pushing
+   streak/accuracy cards into a later row. Narrow screens keep their flow. */
+@media (min-width: 701px) {
+  body.xianxia-theme #page-home > .pb-4 > #xiuxian-panel {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  body.xianxia-theme #page-home > .pb-4 > .home-stats {
+    grid-column: 2;
+    grid-row: 1;
+    min-width: 0;
+  }
+  body.xianxia-theme #page-home > .pb-4 > #quest-panel {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+}
