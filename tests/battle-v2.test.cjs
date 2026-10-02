@@ -262,7 +262,7 @@ test('Battle v2 hidden phases cannot be overridden by phase display styles', () 
 
 
 test('formal battle uses Foundation realm only; incomplete tutorials never block pairing or recovery', async () => {
-  const src = battleSource.slice(battleSource.indexOf('  function storyOrTutorialOpen() {'), battleSource.indexOf('  async function forfeitCurrentRoom() {'));
+  const src = battleSource.slice(battleSource.indexOf('  function storyOrTutorialOpen() {'), battleSource.indexOf('  async function forfeitCurrentRoom('));
   const calls = [];
   let layerPresent = false;
   let currentScore = 9;
@@ -271,6 +271,7 @@ test('formal battle uses Foundation realm only; incomplete tutorials never block
     window: { getBattleTutorialState: () => ({active:false}), switchToPage: () => calls.push('page'), ensureCombatStats: async () => {}, dispatchEvent: () => {} },
     state: { starting:false, roomId:null, room:null, role:null },
     score: () => currentScore, FOUNDATION_SCORE:10, me: () => ({uid:'p'}),
+    cooldownBlocksMatch: () => false, matchCooldown: { refresh: async () => 0, remaining: () => 0 },
     toast: () => calls.push('toast'), alert: () => calls.push('alert'),
     resetRuntime: () => calls.push('reset'), ensurePage: () => calls.push('ensurePage'),
     showSection: () => calls.push('lobby'), renderLobby: () => calls.push('renderLobby'),

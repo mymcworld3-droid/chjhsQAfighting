@@ -8,6 +8,7 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
 import { battleRepository } from './data/battle-repository.js';
 import { playerRepository } from './data/player-repository.js';
 import { rewardRepository } from './data/reward-repository.js';
+import { createBattleMatchCooldown, battleCooldownLabel } from './battle-match-cooldown.js';
 
 // Battle v2 — 修仙配對鬥法。
 // 核心原則：房間與戰鬥狀態只寫 Firebase C；玩家邀請與獎勵留在 A／後端。
@@ -82,6 +83,27 @@ export const featureReady = (async () => {
   function userData() { return window.getCurrentUserData?.() || null; }
   function score() { return Math.max(0, Number(userData()?.stats?.totalScore) || 0); }
   function nowMs() { return Date.now(); }
+
+  let cooldownStorage;
+  try { cooldownStorage = window.localStorage; } catch (_) {}
+  const matchCooldown = createBattleMatchCooldown({
+    repository: playerRepository, currentUser: me, userData, storage: cooldownStorage, now: nowMs
+  });
+
+  function updateMatchCooldownLabel() {
+    const label = document.getElementById('battle-match-cooldown-label');
+    const remaining = matchCooldown.remaining();
+    if (label) label.textContent = remaining > 0
+      ? `配對冷卻 · ${battleCooldownLabel(remaining)}` : '切磋學識 · 道友同修';
+  }
+
+  function cooldownBlocksMatch() {
+    const remaining = matchCooldown.remaining();
+    if (!remaining) return false;
+    updateMatchCooldownLabel();
+    toast(`退出鬥法後需休息五分鐘，還剩 ${battleCooldownLabel(remaining)} 才能配對。`);
+    return true;
+  }
 
   // Story, realm tutorials and delayed chapter launches must not take over an active duel.
   // Reserve the lock throughout matchmaking/recovery and retain it through the result screen.
@@ -262,7 +284,7 @@ export const featureReady = (async () => {
             <div class="bv2-vs"><i></i><b>VS</b><i></i></div>
             <div class="bv2-match-card enemy"><span>對手修士</span>${avatarMarkup('bv2-match-enemy-avatar')}<strong id="bv2-match-enemy">搜尋中…</strong><small id="bv2-match-enemy-core">等待道友入場</small></div>
           </div>
-          <button id="bv2-cancel" class="bv2-btn ghost" type="button">收回靈識 · 取消配對</button>
+          <button id="bv2-cancel" class="bv2-btn ghost" type="button">取消配對 · 冷卻五分鐘</button>
         </section>
 
         <section id="bv2-intro" class="bv2-intro hidden">
@@ -1391,6 +1413,7 @@ export const featureReady = (async () => {
   async function startMatchmaking() {
     if (window.getBattleTutorialState?.().active || state.starting) return; if (score() < FOUNDATION_SCORE) { toast(`需達築基初期（${FOUNDATION_SCORE} 修為）才可配對鬥法。`); return; } if (!me()) { alert('請先登入！'); return; }
     if (state.roomId && state.room && state.room.status !== 'finished') { window.switchToPage?.('page-battle'); return; }
+    if (state.leaving || cooldownBlocksMatch()) return;
     // 境界是唯一的遊玩進度門檻；正在顯示的劇情或教學畫面仍不能與配對重疊。
     if (storyOrTutorialOpen()) {
       toast('請先關閉目前的劇情或教學畫面，再進入鬥法。');
@@ -1398,9 +1421,23 @@ export const featureReady = (async () => {
     }
     resetRuntime(); state.starting = true; ensurePage(); window.switchToPage?.('page-battle'); showSection('lobby'); renderLobby(null);
     try {
+      await matchCooldown.refresh();
+      if (cooldownBlocksMatch() || !state.starting) { window.switchToPage?.('page-home'); return; }
       await window.ensureCombatStats?.(); const myData = playerSnapshot(); setPlayerAvatar('bv2-match-me-avatar', myData); setText('bv2-match-me', myData.name); setText('bv2-match-me-core', `本命金丹：${playerCoreLabel(myData)}${playerPowerLabel(myData)}${playerNascentSealLabel(myData)}`);
-      const joined = await findAndClaimRoom(myData); if (joined) { state.role = 'guest'; subscribeRoom(joined); return; }
-      setText('bv2-lobby-status', '目前沒有可加入的道友，正在開啟鬥法臺…'); const created = await createWaitingRoom(myData); state.role = 'host'; subscribeRoom(created); scheduleReconcile(); inviteOnlineFriends(created);
+      if (cooldownBlocksMatch() || !state.starting) return;
+      const joined = await findAndClaimRoom(myData);
+      if (!state.starting || matchCooldown.remaining() > 0) {
+        if (joined) await forfeitCurrentRoom(joined, 'guest', myData.uid);
+        return;
+      }
+      if (joined) { state.role = 'guest'; subscribeRoom(joined); return; }
+      setText('bv2-lobby-status', '目前沒有可加入的道友，正在開啟鬥法臺…');
+      const created = await createWaitingRoom(myData);
+      if (!state.starting || matchCooldown.remaining() > 0) {
+        await forfeitCurrentRoom(created, 'host', myData.uid);
+        return;
+      }
+      state.role = 'host'; subscribeRoom(created); scheduleReconcile(); inviteOnlineFriends(created);
     } catch (error) {
       logBattleFirestoreError('matchmaking failed', error);
       toast(firebaseBattleErrorMessage(error));
@@ -1411,14 +1448,15 @@ export const featureReady = (async () => {
     finally { state.starting = false; }
   }
 
-  async function forfeitCurrentRoom() {
-    if (!state.roomId || !state.role) return; const ref = roomRef();
+  async function forfeitCurrentRoom(roomId = state.roomId, role = state.role, uid = me()?.uid) {
+    if (!roomId || !role || !uid) return; const ref = roomRef(roomId);
     try {
       await runTransaction(db(), async (tx) => {
         const snap = await tx.get(ref); if (!snap.exists()) return; const fresh = snap.data();
-        if (fresh.status === 'waiting' && state.role === 'host' && !fresh.guest) { tx.delete(ref); return; }
+        if (fresh.status === 'waiting' && role === 'host' && fresh.host?.uid === uid && !fresh.guest) { tx.delete(ref); return; }
         if (!['intro', 'playing', 'settled', 'preparing'].includes(fresh.status)) return;
-        const actualRole = fresh.host?.uid === me()?.uid ? 'host' : fresh.guest?.uid === me()?.uid ? 'guest' : state.role;
+        const actualRole = fresh.host?.uid === uid ? 'host' : fresh.guest?.uid === uid ? 'guest' : null;
+        if (!actualRole) return;
         const opponent = playerForRole(fresh, otherRole(actualRole));
         tx.update(ref, { status: 'finished', winner: opponent?.uid || 'draw', finishReason: 'forfeit', finishedAt: serverTimestamp(), updatedAt: serverTimestamp() });
       });
@@ -1428,6 +1466,11 @@ export const featureReady = (async () => {
   async function exitBattle({ navigate = true, forfeit = true } = {}) {
     if (state.leaving) return;
     state.leaving = true;
+    // Normal results and local tutorials incur no penalty.
+    if (forfeit && (state.starting || (state.roomId && state.room?.status !== 'finished'))) {
+      void matchCooldown.start().catch(error => console.warn('[Battle v2] cooldown sync will retry:', error));
+      updateMatchCooldownLabel();
+    }
     try {
       if (forfeit) {
         await forfeitCurrentRoom();
@@ -1445,11 +1488,18 @@ export const featureReady = (async () => {
 
   async function joinSpecificRoom(roomId) {
     if (state.starting || state.roomId || score() < FOUNDATION_SCORE || !me() || !roomId || storyOrTutorialOpen()) return false;
+    if (state.leaving || cooldownBlocksMatch()) return false;
     state.starting = true;
     try {
+      await matchCooldown.refresh();
+      if (cooldownBlocksMatch() || !state.starting) return false;
       const myData = playerSnapshot();
       const joined = await findAndClaimRoom(myData, roomId);
       if (!joined) return false;
+      if (!state.starting || matchCooldown.remaining() > 0) {
+        await forfeitCurrentRoom(joined, 'guest', myData.uid);
+        return false;
+      }
       resetRuntime(); state.starting = true;
       state.role = 'guest'; ensurePage(); window.switchToPage?.('page-battle'); subscribeRoom(joined);
       return true;
@@ -1489,7 +1539,12 @@ export const featureReady = (async () => {
       const active = ownRooms.filter((entry) => {
         const room = entry.data(); return Number(room.modeVersion) === BATTLE_V2.modeVersion && ['waiting', 'intro', 'playing', 'settled', 'preparing'].includes(room.status) && !(room.status === 'waiting' && isRoomStale(room));
       }).sort((a, b) => timestampMs(b.data().updatedAt, b.data().createdAtMs) - timestampMs(a.data().updatedAt, a.data().createdAtMs))[0];
-      if (!active) return; const room = active.data(); state.role = room.host?.uid === uid ? 'host' : 'guest'; ensurePage(); window.switchToPage?.('page-battle'); subscribeRoom(active.id); toast('已恢復上次尚未結束的鬥法。');
+      if (!active) return;
+      const room = active.data();
+      const role = room.host?.uid === uid ? 'host' : 'guest';
+      // Retry cleanup after an offline exit instead of reopening its old room.
+      if (matchCooldown.remaining() > 0) { await forfeitCurrentRoom(active.id, role, uid); return; }
+      state.role = role; ensurePage(); window.switchToPage?.('page-battle'); subscribeRoom(active.id); toast('已恢復上次尚未結束的鬥法。');
     } catch (error) { console.warn('[Battle v2] session recovery skipped:', error); }
     finally {
       state.recovering = false;
@@ -1561,6 +1616,9 @@ export const featureReady = (async () => {
 
   function boot() {
     ensurePage();
+    updateMatchCooldownLabel();
+    setInterval(updateMatchCooldownLabel, 1000);
+    window.addEventListener('xiuxian:user-ready', updateMatchCooldownLabel);
     // Register before story-engine's listener; block its automatic chapter while
     // looking for an unfinished room after login, then release if none exists.
     window.addEventListener('xiuxian:user-ready', recoverBattleSession);
