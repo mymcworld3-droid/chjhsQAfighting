@@ -2,8 +2,30 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
+const vm = require('node:vm');
 
 const legacy = fs.readFileSync(path.join(__dirname, '..', 'public/main-legacy.js'), 'utf8');
+const formatter = legacy.slice(legacy.indexOf('function escapeHtml(text)'), legacy.indexOf('// 保留舊名稱'));
+const context = {};
+vm.runInNewContext(formatter, context);
+
+test('formula inequalities, aligned rows and HTML-like text remain literal browser text', () => {
+  const rich = context.formatQuizRichText;
+  assert.equal(rich('$a<b$'), '$a&lt;b$');
+  assert.equal(rich(String.raw`\[\begin{aligned}x&<y\\y&>0\end{aligned}\]`),
+    String.raw`\[\begin{aligned}x&amp;&lt;y\\y&amp;&gt;0\end{aligned}\]`);
+  assert.equal(rich(String.raw`\(\text{<img src=x onerror=alert(1)>}\)`),
+    String.raw`\(\text{&lt;img src=x onerror=alert(1)&gt;}\)`);
+  assert.equal(rich('範圍 $0 &lt; x &lt; 3$'), '範圍 $0 &lt; x &lt; 3$');
+});
+
+test('escaped dollars and valid formulas survive formatting alongside images', () => {
+  const input = String.raw`售價 \$20，答案 $\frac{1}{2}$ ![圖](/quiz.png)`;
+  const output = context.formatQuizRichText(input);
+  assert.ok(output.includes(String.raw`售價 \$20，答案 $\frac{1}{2}$`));
+  assert.ok(output.includes('<img src="/quiz.png"'));
+  assert.equal(context.formatQuizRichText(String.raw`$\frac{1}{2$`), String.raw`$\frac{1}{2$`);
+});
 
 test('quiz rich-text formatter protects special symbols before rendering HTML', () => {
   assert.match(legacy, /function normalizeQuizSymbols\(text\)/);
