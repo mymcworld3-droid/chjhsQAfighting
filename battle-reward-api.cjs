@@ -5,18 +5,10 @@ const {PROJECT_IDS}=require('./firebase-admin-projects.cjs');
 const {playerRepository,battleRepository}=require('./server-repositories.cjs');
 const {runRewardReceipt}=require('./reward-receipt.cjs');
 const {FieldValue}=require('firebase-admin/firestore');
+const {battleReward}=require('./public/cultivation/battle-cultivation-rules.js');
 const ROOM_COLLECTION='rooms',CLAIM_COLLECTION='battleRewardClaims',MODE_VERSION=2,WIN_GOLD=500,WIN_CULTIVATION=5,LOSS_GOLD=200;
 function safeRoomId(v){const id=String(v||'').trim();return /^[A-Za-z0-9_-]{8,160}$/.test(id)?id:'';}
 function claimId(roomId,uid){return crypto.createHash('sha256').update(String(roomId)+'\n'+String(uid)).digest('hex');}
-function battleReward(room,uid){
-  if(!room||Number(room.modeVersion)!==MODE_VERSION||room.status!=='finished')return null;
-  const h=String(room.host?.uid||''),g=String(room.guest?.uid||''),role=uid===h?'host':uid===g?'guest':'';
-  if(!role||!h||!g)return null;
-  if(room.winner===uid)return {role,outcome:'win',gold:WIN_GOLD,cultivation:WIN_CULTIVATION};
-  if(room.winner===h||room.winner===g)return {role,outcome:'loss',gold:LOSS_GOLD,cultivation:0};
-  if(room.winner==='draw'||!room.winner)return {role,outcome:'draw',gold:0,cultivation:0};
-  return null;
-}
 async function verifyRequest(req,resolveA){
   const bearer=/^Bearer ([A-Za-z0-9_.-]+)$/.exec(String(req.get?.('authorization')||''));
   if(!bearer)throw Object.assign(new Error('請先登入後再領取鬥法獎勵'),{status:401});

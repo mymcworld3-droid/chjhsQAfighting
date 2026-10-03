@@ -1578,6 +1578,17 @@ function renderChatMessage(msg, container) {
             </div>
         </div>
     `;
+    if (msg.type === 'dongtian-share' && /^[A-Za-z0-9_-]{1,160}$/.test(String(msg.dongtianId || ''))) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'block mt-2 px-3 py-2 rounded-lg bg-purple-700 text-white text-xs';
+        button.textContent = '進入洞天：' + String(msg.dongtianName || '無名洞天');
+        button.onclick = () => {
+            if (window.openSharedDongtian) void window.openSharedDongtian(msg.dongtianId);
+            else alert('洞天功能載入中，請稍後再試。');
+        };
+        div.querySelector('.break-words').appendChild(button);
+    }
     container.appendChild(div);
 }
 

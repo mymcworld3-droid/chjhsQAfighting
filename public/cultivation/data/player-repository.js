@@ -33,6 +33,23 @@ export const playerRepository=Object.freeze({
   },
   async subscribe(uid,next,error){const {db}=await services();return onSnapshot(doc(db,COLLECTION,uidValue(uid)),snap=>next?.(snap.exists()?{id:snap.id,...snap.data()}:null),error);},
   async addExamLog(value={}){const {db}=await services();return addDoc(collection(db,'exam_logs'),value);},
+  async shareDongtian(cave){
+    const user=getMainUser();
+    if(!user)throw new Error('請先登入');
+    if(!/^[A-Za-z0-9_-]{1,160}$/.test(String(cave?.id||'')) || cave.ownerUid!==user.uid || cave.status!=='active' || cave.tutorialOnly)
+      throw new Error('只能分享自己已開放的正式洞天');
+    const {db}=await services();
+    const snap=await getDoc(doc(db,COLLECTION,user.uid));
+    if(!snap.exists() || getMainUser()?.uid!==user.uid)throw new Error('登入狀態已改變，請重新開啟洞天管理');
+    const player=snap.data();
+    return addDoc(collection(db,'global_chat'),{
+      uid:user.uid,displayName:String(player.displayName||'修士'),
+      avatar:player.equipped?.avatar||'',frame:player.equipped?.frame||'',
+      rankLevel:player.stats?.rankLevel||0,totalScore:player.stats?.totalScore||0,
+      type:'dongtian-share',dongtianId:cave.id,dongtianName:String(cave.name||'無名洞天').slice(0,80),
+      text:`分享洞天「${String(cave.name||'無名洞天').slice(0,80)}」`,timestamp:serverTimestamp()
+    });
+  },
   async sendInvitations(options){return sendServerInvitations(options);},
   async sendRaidInvitations(options){return sendServerInvitations(options);}
 });

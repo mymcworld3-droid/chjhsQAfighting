@@ -1,3 +1,4 @@
+import './battle-cultivation-rules.js';
 import {} from './soul-talents.js';
 import {
   doc, collection, query, where, limit, getDocs, getDoc,
@@ -16,6 +17,7 @@ export const featureReady = (async () => {
   (function () {
   'use strict';
 
+  const cultivationRules = window.XianxiaBattleCultivationRules;
   const FOUNDATION_SCORE = 10;
   const ROOM_COLLECTION = 'rooms';
   const HEARTBEAT_MS = 8000;
@@ -43,9 +45,6 @@ export const featureReady = (async () => {
     return Math.max(ROUND_ANIMATION_GRACE_MS, battleAnimationDuration(count) + 1500);
   }
   const ANSWER_WINDOW_MS = 25000;
-  const BATTLE_WIN_GOLD = 500;
-  const BATTLE_WIN_CULTIVATION = 5;
-  const BATTLE_LOSS_GOLD = 200;
 
   const state = {
     roomId: null,
@@ -282,7 +281,7 @@ export const featureReady = (async () => {
             <div class="bv2-fighter-head"><div><span>對手</span><strong id="bv2-enemy-name">—</strong></div><b id="bv2-enemy-hp-text">1000</b></div>
             <div class="bv2-hp"><i id="bv2-enemy-hp"></i></div><small id="bv2-enemy-core">本命金丹：—</small>
           </article>
-          <div class="bv2-stage-round"><span>ROUND</span><b id="bv2-round">1 / ${BATTLE_V2.maxRounds}</b></div>
+          <div class="bv2-stage-round"><span>ROUND</span><b id="bv2-round">1 / ${BATTLE_V2.maxRounds}</b><span id="bv2-cultivation-pool">修為池 0</span></div>
           <div class="bv2-stage" aria-label="雙人鬥法場">
             <div class="bv2-stage-architecture" aria-hidden="true"><i></i><i></i><i></i></div>
             <div class="bv2-stage-platform" aria-hidden="true"></div>
@@ -591,6 +590,7 @@ export const featureReady = (async () => {
 
   async function createWaitingRoom(myData) {
     const ref = await addDoc(collection(db(), ROOM_COLLECTION), {
+      battleCultivationVersion: cultivationRules.VERSION, battleCultivationLedger: {},
       modeVersion: BATTLE_V2.modeVersion, mode: 'matchmaking', host: myData, guest: null, status: 'waiting',
       round: 1, maxRounds: BATTLE_V2.maxRounds, responseWindowMs: ANSWER_WINDOW_MS,
       currentQuestion: null, questionHistory: [], knowledgeScope: null, questionReadyAtMs: null, settledRound: 0, battleLog: [], battleLogId: '', winner: null, finishReason: '',
@@ -998,6 +998,7 @@ export const featureReady = (async () => {
     setPlayerPortrait('bv2-enemy-fighter', enemy);
     setText('bv2-room-badge', '青雲演武場');
     setText('bv2-round', room.round + ' / ' + (room.maxRounds || BATTLE_V2.maxRounds));
+    setText('bv2-cultivation-pool', Number(room.battleCultivationVersion) === cultivationRules.VERSION ? '修為池 ' + cultivationRules.summary(room).pool : '舊制鬥法');
     setText('bv2-my-name', mine.name || '我方');
     setText('bv2-enemy-name', enemy.name || '對手');
     setText('bv2-my-core', '本命金丹：' + playerCoreLabel(mine) + playerPowerLabel(mine) + playerNascentSealLabel(mine) + (mine.coreShield ? ' · 道心護體' : ''));
@@ -1018,12 +1019,7 @@ export const featureReady = (async () => {
   }
 
   function battleReward(room, uid) {
-    if (room?.status !== 'finished' || !uid || !room.host?.uid || !room.guest?.uid ||
-        (uid !== room.host.uid && uid !== room.guest.uid)) return { outcome: 'none', gold: 0, cultivation: 0 };
-    if (room.winner === uid) return { outcome: 'win', gold: BATTLE_WIN_GOLD, cultivation: BATTLE_WIN_CULTIVATION };
-    if (room.winner === room.host.uid || room.winner === room.guest.uid) return { outcome: 'loss', gold: BATTLE_LOSS_GOLD, cultivation: 0 };
-    if (room.winner === 'draw' || !room.winner) return { outcome: 'draw', gold: 0, cultivation: 0 };
-    return { outcome: 'none', gold: 0, cultivation: 0 };
+    return cultivationRules.battleReward(room, uid) || { outcome: 'none', gold: 0, cultivation: 0 };
   }
 
   function renderResult(room) {
@@ -1047,12 +1043,21 @@ export const featureReady = (async () => {
     }
     const reward = battleReward(room, uid);
     const resultMarker = state.role === 'host' ? 'hostResultRecorded' : 'guestResultRecorded';
-    const rewardLabel = reward.outcome === 'draw' ? '平局不發放勝負獎勵' :
+    const rewardLabel = reward.outcome === 'draw' && !reward.cultivation ? '平局，本場無答題修為' :
       reward.outcome === 'none' ? '獎勵資料待確認' :
       `${room[resultMarker] ? '已發放' : '發放中'}：+${reward.gold} 靈石${reward.cultivation ? ` · +${reward.cultivation} 修為` : ''}`;
     if (stats) stats.innerHTML = `<div><span>你的生命</span><b>${Math.max(0, Number(mine?.hp) || 0)}</b></div><div><span>對手生命</span><b>${Math.max(0, Number(enemy?.hp) || 0)}</b></div><div><span>總回合</span><b>${room.round}</b></div><div><span>結果</span><b>${isDraw ? '平局' : won ? '勝' : '敗'}</b></div><div><span>本場獎勵</span><b id="bv2-reward-status">${rewardLabel}</b></div>`;
+    if (stats && reward.cultivationPool !== undefined) {
+      const totals = cultivationRules.summary(room);
+      const detail = document.createElement('div');
+      const label = document.createElement('span'); label.textContent = '雙方答題修為池';
+      const value = document.createElement('b'); value.textContent = `${totals.host} + ${totals.guest} = ${totals.pool}（${won ? '全額' : '一半'}）`;
+      detail.className = 'bv2-reward-summary';
+      document.getElementById('bv2-reward-status')?.parentElement.classList.add('bv2-reward-summary');
+      detail.append(label, value); stats.appendChild(detail);
+    }
     recordBattleResult(room).then((award) => {
-      if (award?.goldAdded > 0 && state.roomId === award.roomId) {
+      if (award && state.roomId === award.roomId) {
         setText('bv2-reward-status', `已發放：+${award.goldAdded} 靈石${award.cultivationAdded ? ` · +${award.cultivationAdded} 修為` : ''}`);
       }
     }).catch((error) => {
@@ -1093,6 +1098,9 @@ export const featureReady = (async () => {
           [`${state.role}.lastSeenAtMs`]: nowMs(),
           updatedAt: serverTimestamp()
         };
+        if (Number(room.battleCultivationVersion) === cultivationRules.VERSION) {
+          patch.battleCultivationLedger = cultivationRules.recordAnswer(room, state.role, Number(choice) === Number(room.currentQuestion.ans));
+        }
         // 關鍵規則：題目本身不倒數；第一位玩家提交答案後，才建立 25 秒應答窗。
         if (!otherAnswered && !room.answerWindowStartedAt && !room.answerWindowStartedAtMs) {
           patch.answerWindowStartedAt = serverTimestamp();
@@ -1169,6 +1177,10 @@ export const featureReady = (async () => {
           settledRound: round, battleLog: [...(Array.isArray(fresh.battleLog) ? fresh.battleLog : []), ...roundLogs].slice(-20), battleLogId: `${round}-${nowMs()}`,
           lastSettlement: { round, attackers: outcome.attackers, turnOrder: outcome.turnOrder, steps: outcome.steps, startHostHp: outcome.startHostHp, startGuestHp: outcome.startGuestHp, activations: outcome.activations, hostHp: outcome.hostHp, guestHp: outcome.guestHp, settledAtMs: nowMs() }, updatedAt: serverTimestamp()
         };
+        if (Number(fresh.battleCultivationVersion) === cultivationRules.VERSION) {
+          const hostLedger = cultivationRules.recordAnswer(fresh, 'host', fresh.host.answerCorrect === true && !fresh.host.timedOut);
+          common.battleCultivationLedger = cultivationRules.recordAnswer({ ...fresh, battleCultivationLedger: hostLedger }, 'guest', fresh.guest.answerCorrect === true && !fresh.guest.timedOut);
+        }
         if (outcome.finished) tx.update(ref, { ...common, status: 'finished', winner: outcome.winnerUid, finishReason: outcome.finishReason, finishedAt: serverTimestamp() });
         else tx.update(ref, { ...common, status: 'settled', nextRoundAtMs: null });
       });

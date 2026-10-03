@@ -167,19 +167,16 @@ test('Battle v2 handles disconnects, page reload recovery and atomic forfeits', 
   assert.match(battleSource, /fresh\.status === 'waiting'.*tx\.delete\(ref\)/s);
 });
 
-test('Battle v2 grants 500 stones and five cultivation to the winner, 200 stones to the loser', () => {
-  assert.match(battleSource, /const BATTLE_WIN_GOLD = 500/);
-  assert.match(battleSource, /const BATTLE_WIN_CULTIVATION = 5/);
-  assert.match(battleSource, /const BATTLE_LOSS_GOLD = 200/);
+test('Battle v2 preserves legacy room rewards through shared browser/server rules', () => {
   const start = battleSource.indexOf('  function battleReward(room, uid) {');
   const end = battleSource.indexOf('  function renderResult(room) {', start);
   assert.ok(start >= 0 && end > start);
-  const context = {};
+  const context = {cultivationRules: require('../public/cultivation/battle-cultivation-rules.js')};
   vm.createContext(context);
-  vm.runInContext(`const BATTLE_WIN_GOLD=500, BATTLE_WIN_CULTIVATION=5, BATTLE_LOSS_GOLD=200;
+  vm.runInContext(`
 ${battleSource.slice(start,end)}
 this.reward=battleReward;`, context);
-  const room = {status:'finished',host:{uid:'host'},guest:{uid:'guest'},winner:'host'};
+  const room = {modeVersion:2,status:'finished',host:{uid:'host'},guest:{uid:'guest'},winner:'host'};
   const win = context.reward(room,'host');
   const loss = context.reward(room,'guest');
   assert.equal(win.outcome,'win');

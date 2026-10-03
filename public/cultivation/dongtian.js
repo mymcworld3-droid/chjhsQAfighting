@@ -642,7 +642,7 @@ export const featureReady = (async () => {
             <div><div class="dt-item-name">${escapeHtml(item.name)}</div><div class="dt-item-meta">${escapeHtml(item.coverageSummary || '固定題序知識秘境')}</div></div>
             ${suspended
               ? `<div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end"><button type="button" class="dt-repair" data-dt-repair="${item.id}"><i class="fa-solid fa-screwdriver-wrench"></i> 修復題目</button><button type="button" class="dt-delete" data-dt-delete="${item.id}"><i class="fa-solid fa-trash"></i> 刪除</button></div>`
-              : `<div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end"><button type="button" class="dt-play" data-dt-play="${item.id}"><i class="fa-solid fa-play"></i> 進入</button><button type="button" class="dt-repair" data-dt-manage="${item.id}"><i class="fa-solid fa-pen-ruler"></i> 題目管理</button><button type="button" class="dt-delete" data-dt-delete="${item.id}"><i class="fa-solid fa-trash"></i> 刪除</button></div>`}
+              : `<div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end"><button type="button" class="dt-play" data-dt-play="${item.id}"><i class="fa-solid fa-play"></i> 進入</button><button type="button" class="dt-repair" data-dt-manage="${item.id}"><i class="fa-solid fa-pen-ruler"></i> 洞天管理</button><button type="button" class="dt-delete" data-dt-delete="${item.id}"><i class="fa-solid fa-trash"></i> 刪除</button></div>`}
           </div>
           <div class="dt-tags"><span class="dt-tag">${escapeHtml(item.level)}</span><span class="dt-tag">${difficultyLabel(item.difficulty)}</span><span class="dt-tag">${escapeHtml(item.subject)}</span><span class="dt-tag">${Number(item.questionCount) || 0} 題</span><span class="dt-tag">完成 ${Number(item.completionCount) || 0} 次</span>${suspended ? '<span class="dt-tag dt-status-bad">已封印 · 待修復</span>' : ''}</div>
           <div class="dt-owner-reward">${suspended ? `AI 已確認第 ${Number(item.flaggedQuestionIndex || 0) + 1} 題有誤；修復通過二次 AI 驗證前，其他修士不會再遇到此洞天。` : `其他不同修士首次完成：洞天主人 +${OWNER_CULTIVATION_REWARD} 修為、+${OWNER_GOLD_REWARD} 靈石 · 玩家首次完整通關獲得基礎 ${FIRST_COMPLETION_BASE_SPIRIT_STONES} + 每題 ${FIRST_COMPLETION_SPIRIT_STONE_PER_QUESTION} 靈石，主要機緣轉為煉器材料`}</div>
@@ -784,10 +784,16 @@ export const featureReady = (async () => {
 
   async function markEncountered(dongtian) {
     const ref = doc(progressDb, PLAY_COLLECTION, `${uid()}__${dongtian.id}`);
-    await setDoc(ref, {
-      uid: uid(), dongtianId: dongtian.id, ownerUid: dongtian.ownerUid || '',
-      encountered: true, encounteredAt: serverTimestamp(), encounteredAtMs: Date.now(), completed: false
-    }, { merge: true });
+    const visitor = uid();
+    await runTransaction(progressDb, async (tx) => {
+      const snap = await tx.get(ref);
+      if (uid() !== visitor) throw new Error('登入狀態已改變，請重新進入');
+      // Chat allows replaying a cave: never erase a previously completed run or its first reward.
+      tx.set(ref, snap.exists() ? { encountered: true } : {
+        uid: visitor, dongtianId: dongtian.id, ownerUid: dongtian.ownerUid || '',
+        encountered: true, encounteredAt: serverTimestamp(), encounteredAtMs: Date.now(), completed: false
+      }, { merge: true });
+    });
     dongtianCache.markEncountered(uid(), dongtian.id);
     updateDoc(doc(db, INDEX_COLLECTION, dongtian.id), { playCount: increment(1) }).catch(() => {});
   }
@@ -1105,9 +1111,32 @@ export const featureReady = (async () => {
     const modal = document.createElement('div');
     modal.id = 'dt-moderation-modal';
     modal.className = 'dt-modal';
-    modal.innerHTML = `<div class="dt-modal-card"><h3><i class="fa-solid fa-pen-ruler" style="color:#c4b5fd"></i> 主人題目管理</h3><p class="dt-modal-note">可主動修正自己發現的錯題，但不能任意換題。請先選題，再在修改提示詞中具體指出原題哪裡錯誤、不精確、條件不足或有歧義；AI 確認問題存在後才會允許修改。</p><div style="display:grid;gap:7px;max-height:52vh;overflow:auto">${dongtian.questions.map((q, index) => `<button type="button" class="dt-modal-cancel" style="text-align:left;min-height:48px" data-owner-edit-index="${index}"><strong>${index + 1}. ${escapeHtml(q.q)}</strong><br><span style="opacity:.65">${escapeHtml(q.subject || dongtian.subject)} · ${difficultyLabel(q.difficulty)}</span></button>`).join('')}</div><div class="dt-modal-actions"><button type="button" class="dt-modal-cancel" data-close-owner-manager>關閉</button></div></div>`;
+    modal.innerHTML = `<div class="dt-modal-card"><h3><i class="fa-solid fa-pen-ruler" style="color:#c4b5fd"></i> 洞天管理</h3><p class="dt-modal-note">可主動修正自己發現的錯題，但不能任意換題。請先選題，再在修改提示詞中具體指出原題哪裡錯誤、不精確、條件不足或有歧義；AI 確認問題存在後才會允許修改。</p><div style="display:grid;gap:7px;max-height:52vh;overflow:auto">${dongtian.questions.map((q, index) => `<button type="button" class="dt-modal-cancel" style="text-align:left;min-height:48px" data-owner-edit-index="${index}"><strong>${index + 1}. ${escapeHtml(q.q)}</strong><br><span style="opacity:.65">${escapeHtml(q.subject || dongtian.subject)} · ${difficultyLabel(q.difficulty)}</span></button>`).join('')}</div><div class="dt-modal-actions"><button type="button" class="dt-modal-cancel" data-close-owner-manager>關閉</button></div></div>`;
     document.body.appendChild(modal);
     modal.querySelector('[data-close-owner-manager]').onclick = removeModerationModal;
+    const shareButton = document.createElement('button');
+    shareButton.type = 'button';
+    shareButton.className = 'dt-modal-submit';
+    shareButton.dataset.dtShare = dongtian.id;
+    shareButton.textContent = '分享到聊天室';
+    modal.querySelector('.dt-modal-actions').appendChild(shareButton);
+    shareButton.onclick = async () => {
+      if (shareButton.disabled) return;
+      shareButton.disabled = true;
+      shareButton.textContent = '正在分享…';
+      try {
+        // Recheck ownership and availability online; the management snapshot may be stale.
+        const live = await getDoc(doc(db, DATA_COLLECTION, dongtian.id));
+        if (!live.exists()) throw new Error('洞天已刪除，無法分享');
+        await playerRepository.shareDongtian({ ...live.data(), id: live.id });
+        shareButton.textContent = '已分享到聊天室';
+        toast('洞天已分享到全服聊天室，其他修士可點擊進入。');
+      } catch (error) {
+        shareButton.disabled = false;
+        shareButton.textContent = '分享到聊天室';
+        toast(error.message || '分享失敗，請稍後再試。');
+      }
+    };
     modal.querySelectorAll('[data-owner-edit-index]').forEach((button) => {
       button.onclick = () => openOwnerQuestionRevision(dongtian, Number(button.dataset.ownerEditIndex));
     });
@@ -1489,6 +1518,26 @@ export const featureReady = (async () => {
       card.scrollIntoView?.({ behavior: 'smooth', block: 'center' });
       loadOwnDongtians();
     }
+  };
+
+  let openingSharedDongtian = false;
+  window.openSharedDongtian = async function (id) {
+    if (openingSharedDongtian) return;
+    if (!uid()) { toast('請先登入再進入洞天。'); return; }
+    if (state.session) { toast('請先完成或退出目前的洞天。'); return; }
+    if (!/^[A-Za-z0-9_-]{1,160}$/.test(String(id || ''))) { toast('洞天分享資料無效。'); return; }
+    openingSharedDongtian = true;
+    const viewer = uid();
+    try {
+      const snap = await getDoc(doc(db, DATA_COLLECTION, id));
+      if (uid() !== viewer) throw new Error('登入狀態已改變，請重新進入');
+      if (!snap.exists()) throw new Error('此洞天已刪除，無法進入');
+      const cave = { ...snap.data(), id: snap.id };
+      if (cave.status !== 'active' || cave.tutorialOnly) throw new Error('此洞天尚未開放或已封印');
+      if (!Array.isArray(cave.questions) || !cave.questions.length) throw new Error('洞天題目尚未準備完成');
+      await enterDongtian(cave, { source: cave.ownerUid === viewer ? 'owner' : 'chat', encountered: cave.ownerUid !== viewer });
+    } catch (error) { toast(error.message || '洞天尚未準備完成。'); }
+    finally { openingSharedDongtian = false; }
   };
 
   function boot() {
