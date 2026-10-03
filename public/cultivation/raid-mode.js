@@ -15,7 +15,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
   'use strict';
 
   const PAGE_ID = 'page-raid';
-  const STYLE_HREF = 'styles/raid-mode.css?v=20260930-teamwork-ticket1';
+  const STYLE_HREF = 'styles/raid-mode.css?v=20261003-stable-session1';
   const MALE = 'assets/story/characters/player-male-determined.png';
   const FEMALE = 'assets/story/characters/player-female-determined.png';
   const HEARTBEAT_MS = 8000;
@@ -50,6 +50,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     advancingBossAction: false,
     battleSceneToken: 0,
     battleScenePlaying: false,
+    battleSceneTail: null,
     pendingFinishRoom: null,
     reconnectTried: false,
     invitedRoomId: '',
@@ -166,12 +167,12 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     const visualWidth = Math.max(1, Number(vv?.width) || Number(window.innerWidth) || document.documentElement.clientWidth || 1);
     const visualTop = Math.max(0, Number(vv?.offsetTop) || 0);
     const visualLeft = Math.max(0, Number(vv?.offsetLeft) || 0);
-    const combatFocus = document.body.classList.contains('raid-combat-focus');
+    const sessionFullscreen = page.classList.contains('active-page') && !page.classList.contains('hidden') &&
+      ['arena', 'question'].includes(page.dataset.raidView);
 
-    // During the 1.15 s attack cut-in, bind the whole raid surface to the actual
-    // visual viewport. Mobile browser chrome can otherwise shrink the visible area
-    // between the quiz and arena renders and clip the battlefield.
-    if (combatFocus) {
+    // Questions and combat share one viewport throughout the session. Switching
+    // to an attack changes content, never the page's size or position.
+    if (sessionFullscreen) {
       page.style.setProperty('--raid-header-height', '0px');
       page.style.setProperty('--raid-bottom-clearance', '0px');
       page.style.setProperty('--raid-page-height', Math.floor(visualHeight) + 'px');
@@ -183,10 +184,12 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
       page.style.setProperty('max-height', Math.floor(visualHeight) + 'px', 'important');
       page.style.setProperty('bottom', 'auto', 'important');
       page.style.setProperty('transform', 'none', 'important');
+      document.body.classList.add('raid-fullscreen');
       return;
     }
+    document.body.classList.remove('raid-fullscreen');
 
-    // Remove attack-only inline geometry so the normal centered raid layout takes over.
+    // Hub, lobby and results retain the centered layout below the app header.
     page.style.removeProperty('left');
     page.style.removeProperty('width');
     page.style.removeProperty('max-width');
@@ -228,12 +231,17 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     const active = !!page?.classList.contains('active-page') && !page.classList.contains('hidden');
     document.documentElement.classList.toggle('raid-page-open', active);
     document.body.classList.toggle('raid-page-open', active);
+    if (!active) document.body.classList.remove('raid-fullscreen');
+    const entered = active && !page.dataset.raidViewportActive;
+    if (page) page.dataset.raidViewportActive = active ? '1' : '';
     if (active) {
       syncRaidBottomClearance();
       // The raid is a viewport surface, not part of the document's scroll flow.
       // Reset any inherited page offset so fixed header/navigation never move with raid content.
-      try { window.scrollTo({ top: 0, left: 0, behavior: 'auto' }); }
-      catch (_) { window.scrollTo?.(0, 0); }
+      if (entered) {
+        try { window.scrollTo({ top: 0, left: 0, behavior: 'auto' }); }
+        catch (_) { window.scrollTo?.(0, 0); }
+      }
     }
   }
 
@@ -263,16 +271,17 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     syncRaidViewportLock();
     return page;
   }
-  function show(name) {
+  function show(name, { transition = true } = {}) {
     const page = ensurePage();
     const previous = page.querySelector('#raid-' + page.dataset.raidView);
     const next = page.querySelector('#raid-' + name);
     const theme = name === 'result' ? 'raidResult' : name === 'question' ? 'scroll' : 'raid';
-    const finishTransition = window.beginSceneTransition?.(previous, next, theme, 'raid-phase');
+    const finishTransition = transition && previous !== next ? window.beginSceneTransition?.(previous, next, theme, 'raid-phase') : null;
     ['hub', 'lobby', 'arena', 'question', 'result'].forEach(function (id) {
       page.querySelector('#raid-' + id)?.classList.toggle('hidden', id !== name);
     });
     page.dataset.raidView = name;
+    syncRaidBottomClearance();
     finishTransition?.();
   }
   function portrait() { return data().storyProgressV1?.gender === 'female' ? FEMALE : MALE; }
@@ -546,21 +555,25 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
       '</small></span></div></div>';
   }
 
-  function partyMarkup(alive, recent) {
-    const members = raidRoomMembers(state.room);
-    const count = Math.max(1, Math.min(4, members.length));
-    const cards = members.map(member => {
+  function partyCardsMarkup(members) {
+    return members.map(member => {
       const pct = hpPct(member.hp, member.maxHp);
       const isMe = String(member.uid || '') === String(state.player?.uid || '');
       const hpId = isMe ? ' id="raid-player-hp-text"' : '';
       const barId = isMe ? ' id="raid-player-hp-bar"' : '';
-      return '<article class="raid-stage-player ' + (isMe ? 'me ' : '') + (member.alive === false ? 'down' : '') + '">' +
+      return '<article data-raid-member="' + escapeHtml(member.uid) + '" class="raid-stage-player ' + (isMe ? 'me ' : '') + (member.alive === false ? 'down' : '') + '">' +
         '<div class="raid-stage-player-art"><img src="' + escapeHtml(member.portrait || state.player?.portrait || '') + '" alt="' + escapeHtml(member.name || '玩家') + '"></div>' +
         '<div class="raid-stage-player-info"><strong>' + escapeHtml(member.name || '無名修士') + (isMe ? '<em>你</em>' : '') + '</strong>' +
         '<small' + hpId + '>' + Math.max(0, Number(member.hp) || 0).toLocaleString() + ' HP</small>' +
         '<div class="raid-stage-player-hp"><i' + barId + ' style="width:' + pct + '%"></i></div>' +
-        '<span>輸出 ' + Math.max(0, Number(member.damage) || 0).toLocaleString() + '</span></div></article>';
+        '<span data-member-damage>輸出 ' + Math.max(0, Number(member.damage) || 0).toLocaleString() + '</span></div></article>';
     }).join('');
+  }
+
+  function partyMarkup(alive, recent) {
+    const members = raidRoomMembers(state.room);
+    const count = Math.max(1, Math.min(4, members.length));
+    const cards = partyCardsMarkup(members);
     return '<section class="raid-party-floor"><div class="raid-player-lineup" style="grid-template-columns:repeat(' + count + ',minmax(0,1fr))">' +
       cards + '</div><div class="raid-party-controls"><div class="raid-current-status"><span>' +
       escapeHtml(alive ? recent : '你已倒下，等待隊友完成本次試煉。') + '</span><small>個人題號 ' + (state.playerActionCount + 1) +
@@ -571,21 +584,25 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
       '</button></div></section>';
   }
 
-  function renderArena() {
+  function renderArena({ transition = true } = {}) {
     if (!state.player || !state.boss || !state.room) return renderHub();
     document.body.classList.add('raid-session-active');
-    show('arena');
+    show('arena', { transition });
     syncRaidBottomClearance();
     const clock = currentBossClock();
     const intent = currentIntent();
     const arena = document.getElementById('raid-arena');
+    if (arena.querySelector('.raid-stage')) {
+      updateLiveLabels();
+      return;
+    }
     const recent = state.lastPlayerAction?.correct ? '你剛才命中 ' + state.lastPlayerAction.damage.toLocaleString() + ' 傷害。' :
       state.lastPlayerAction ? '上一題沒有形成有效攻勢。' : '大師姐已拔劍。';
     const alive = state.player.hp > 0 && myRoomMember()?.alive !== false;
     arena.innerHTML =
       '<header class="raid-battle-head"><button class="raid-back" type="button" data-leave><i class="fa-solid fa-door-open"></i></button>' +
-      '<div><small>清霜試煉・' + raidRoomMembers(state.room).length + ' 人隊伍</small><strong>Boss 已出招 ' + state.bossActionCount + ' 次</strong></div>' +
-      '<span>階段 ' + state.boss.phase + '・' + phaseName(state.boss.phase) + '</span></header>' +
+      '<div><small data-party-size>清霜試煉・' + raidRoomMembers(state.room).length + ' 人隊伍</small><strong data-boss-actions>Boss 已出招 ' + state.bossActionCount + ' 次</strong></div>' +
+      '<span data-boss-phase>階段 ' + state.boss.phase + '・' + phaseName(state.boss.phase) + '</span></header>' +
       '<div class="raid-stage"><section class="raid-boss-side"><div class="raid-name-row"><div><small>BOSS</small><h3>' + state.boss.name + '</h3></div>' +
       '<b id="raid-boss-hp-text">' + Math.round(state.boss.hp).toLocaleString() + ' / ' + Math.round(state.boss.maxHp).toLocaleString() + '</b></div>' +
       '<div class="raid-hp boss"><i id="raid-boss-hp-bar" style="width:' + hpPct(state.boss.hp, state.boss.maxHp) + '%"></i></div>' +
@@ -596,6 +613,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
       partyMarkup(alive, recent) + '</div>';
     arena.querySelector('[data-leave]')?.addEventListener('click', leaveRaid);
     arena.querySelector('[data-question]')?.addEventListener('click', function () { void openNextQuestion(); });
+    updateLiveLabels();
   }
 
   function wait(ms) {
@@ -611,12 +629,18 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     defenseSkill = '',
     healed = 0
   } = {}) {
-    const returnStatus = state.status;
-    const returnToQuestion = !!state.question && ['question', 'review'].includes(returnStatus);
-    const token = ++state.battleSceneToken;
+    // Boss and answer settlements may arrive together. Serialize their visual
+    // feedback without changing the authoritative combat or answer state.
+    const token = state.battleSceneToken;
+    const previous = state.battleSceneTail || Promise.resolve();
+    let release;
+    const tail = new Promise(resolve => { release = resolve; });
+    state.battleSceneTail = tail;
+    await previous;
+    if (token !== state.battleSceneToken) { release(); return; }
     state.battleScenePlaying = true;
     setRaidCombatFocus(true);
-    renderArena();
+    renderArena({ transition: false });
 
     const arena = document.getElementById('raid-arena');
     const stage = arena?.querySelector('.raid-stage');
@@ -639,12 +663,14 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     arena?.appendChild(notice);
 
     await wait(1150);
-    if (token !== state.battleSceneToken) return;
-
     notice.remove();
     stage?.classList.remove('raid-player-strike', 'raid-boss-strike');
+    if (token !== state.battleSceneToken) { release(); return; }
+    if (state.battleSceneTail !== tail) { release(); return; }
+    state.battleSceneTail = null;
     state.battleScenePlaying = false;
     setRaidCombatFocus(false);
+    release();
 
     if (state.pendingFinishRoom) {
       const terminal = state.pendingFinishRoom;
@@ -654,15 +680,19 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
       return;
     }
 
-    if (state.room?.status === 'active' && returnToQuestion && state.question) {
-      state.status = returnStatus;
-      renderQuestion(returnStatus === 'review');
+    if (state.player.hp <= 0 && state.status !== 'submitting') {
+      state.status = 'spectating';
+      updateLiveLabels();
+    } else if (state.room?.status === 'active' && state.question && ['question', 'submitting', 'review'].includes(state.status)) {
+      renderQuestion(state.status === 'review');
     }
   }
 
   async function prefetchQuestion() {
     if (state.questionLoading || state.pendingQuestion || !state.scope || state.room?.status !== 'active') return;
     state.questionLoading = true;
+    const roomId = state.roomId;
+    const token = state.battleSceneToken;
     try {
       const targetAction = state.playerActionCount + (state.status === 'question' ? 2 : 1);
       const generated = await generateRaidQuestion({
@@ -672,17 +702,19 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
         history: state.history,
         roomId: state.roomId
       });
-      if (state.room?.status === 'active') state.pendingQuestion = generated;
+      if (state.room?.status === 'active' && state.roomId === roomId && token === state.battleSceneToken) state.pendingQuestion = generated;
     } catch (error) {
+      if (token !== state.battleSceneToken || state.roomId !== roomId) return;
       console.warn('[Raid] question generation failed:', error);
       toast('題目生成失敗，請再試一次。');
     } finally {
-      state.questionLoading = false;
+      if (token === state.battleSceneToken) state.questionLoading = false;
     }
   }
 
   async function openNextQuestion() {
-    if (state.room?.status !== 'active' || state.player?.hp <= 0 || state.status === 'question') return;
+    if (state.room?.status !== 'active' || state.player?.hp <= 0 || state.status === 'submitting' || state.battleScenePlaying) return;
+    if (state.status === 'question' && state.question) return renderQuestion(false);
     if (!state.pendingQuestion) {
       await prefetchQuestion();
       if (!state.pendingQuestion) return renderArena();
@@ -702,18 +734,23 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     const q = state.question;
     if (!q) return renderArena();
     const questionView = document.getElementById('raid-question');
-    const repeatQuestionView = !review && document.getElementById(PAGE_ID)?.dataset.raidView === 'question';
-    const finishQuestionTransition = repeatQuestionView ? window.beginSceneTransition?.(questionView, questionView, 'scroll', 'raid-phase', true) : null;
-    queueMicrotask(() => finishQuestionTransition?.());
+    const sameQuestion = questionView?.raidQuestion === q && questionView.dataset.review === String(!!review);
     document.body.classList.add('raid-session-active');
-    show('question');
+    if (!state.battleScenePlaying) show('question', { transition: false });
     syncRaidBottomClearance();
     const view = document.getElementById('raid-question');
+    if (sameQuestion) {
+      view.querySelectorAll('[data-choice]').forEach(button => { button.disabled = review || state.status === 'submitting' || state.player.hp <= 0; });
+      updateLiveLabels();
+      return;
+    }
+    view.raidQuestion = q;
+    view.dataset.review = String(!!review);
     const opts = q.opts.map(function (option, i) {
       let cls = '';
       if (review && i === q.ans) cls = ' correct';
       else if (review && i === state.selectedChoice && i !== q.ans) cls = ' wrong';
-      return '<button class="raid-option' + cls + '" type="button" data-choice="' + i + '" ' + (review ? 'disabled' : '') + '><span>' +
+      return '<button class="raid-option' + cls + '" type="button" data-choice="' + i + '" ' + (review || state.status === 'submitting' || state.player.hp <= 0 ? 'disabled' : '') + '><span>' +
         String.fromCharCode(65 + i) + '</span><b>' + rich(option) + '</b></button>';
     }).join('');
     let explain = '';
@@ -726,11 +763,12 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
         '<button class="raid-primary" type="button" data-next>下一題</button><button class="raid-ghost" type="button" data-arena>先看戰場</button></div>';
     }
     view.innerHTML = '<div class="raid-question-shell"><header><div><small>' + escapeHtml(q.subject) + '・' + escapeHtml(q.level) + '</small><strong>個人題號 ' +
-      (state.playerActionCount + (review ? 0 : 1)) + '</strong></div><span id="raid-question-timer">不限時</span></header>' +
+      (state.playerActionCount + (review ? 0 : 1)) + '</strong></div><span id="raid-question-timer">不限時</span><button class="raid-ghost" type="button" data-question-arena>戰場</button></header>' +
       '<div class="raid-question-boss"><img src="' + RAID_MVP.bossImage + '" alt="沈清霜"><span id="raid-question-boss-clock">Boss 行動倒數</span></div>' +
       teamworkMarkup(true) +
       '<h2>' + rich(q.q) + '</h2><div class="raid-options">' + opts + '</div>' + explain + '</div>';
     typeset(view);
+    view.querySelector('[data-question-arena]')?.addEventListener('click', () => renderArena());
     if (!review) {
       view.querySelectorAll('[data-choice]').forEach(function (button) {
         button.addEventListener('click', function () { void answer(Number(button.dataset.choice)); });
@@ -748,6 +786,8 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     if (selectedChoice === null || selectedChoice < 0 || selectedChoice > 3) return;
     const actionId = state.playerActionCount + 1;
     const question = state.question;
+    const roomId = state.roomId;
+    const token = state.battleSceneToken;
 
     // Freeze the question while the server verifies the encrypted answer ticket and resolves combat.
     state.selectedChoice = selectedChoice;
@@ -755,12 +795,13 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     renderQuestion(false);
     try {
       const result = await commitRaidPlayerAction({
-        roomId: state.roomId,
+        roomId,
         actionId,
         questionId: question.id,
         choice: selectedChoice,
         ticket: question.ticket
       });
+      if (state.roomId !== roomId || token !== state.battleSceneToken) return;
       const resolution = result?.resolution;
       if (result.spiritReward) state.learningOutcome = result.spiritReward;
       if (!resolution) throw new Error('伺服器尚未完成本次出手結算');
@@ -813,7 +854,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
           damage: state.lastPlayerAction.damage,
           healed: state.lastPlayerAction.healed
         });
-      } else if (state.pendingFinishRoom) {
+      } else if (state.pendingFinishRoom && !state.battleSceneTail) {
         const terminal = state.pendingFinishRoom;
         state.pendingFinishRoom = null;
         finishRaid(terminal.status === 'won', terminal.status === 'won' ? 'boss-defeated' : 'team-defeated');
@@ -821,10 +862,17 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
         renderQuestion(true);
       }
     } catch (error) {
+      if (state.roomId !== roomId || token !== state.battleSceneToken) return;
       console.error('[Raid] authoritative action failed:', error);
       state.selectedChoice = null;
       state.answerCorrect = null;
       state.status = 'question';
+      if (state.pendingFinishRoom && !state.battleSceneTail) {
+        const terminal = state.pendingFinishRoom;
+        state.pendingFinishRoom = null;
+        finishRaid(terminal.status === 'won', terminal.status === 'won' ? 'boss-defeated' : 'team-defeated');
+        return;
+      }
       toast(error.message || '出手結算失敗，請再作答一次。');
       renderQuestion(false);
     }
@@ -835,6 +883,8 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     if (!action || state.applyingBossAction || Number(action.id) <= state.lastBossActionSeen ||
         !state.player) return;
     state.applyingBossAction = true;
+    const roomId = state.roomId;
+    const token = state.battleSceneToken;
     try {
       // The browser reports only which server-issued Boss action it is acknowledging.
       // HP, mitigation, shields and reflection are all resolved from the trusted room snapshot.
@@ -846,6 +896,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
         bossActionSeen: Number(action.id)
       });
       const resolution = result?.resolution;
+      if (state.roomId !== roomId || token !== state.battleSceneToken) return;
       if (!resolution) {
         const duplicate = result?.room?.members?.[state.player.uid];
         if (duplicate) {
@@ -887,7 +938,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     } catch (error) {
       console.error('[Raid] authoritative boss action failed:', error);
     } finally {
-      state.applyingBossAction = false;
+      if (token === state.battleSceneToken) state.applyingBossAction = false;
     }
   }
 
@@ -914,7 +965,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
   }
 
   function updateLiveLabels() {
-    if (state.room?.status !== 'active') return;
+    if (state.room?.status !== 'active' || !state.boss || !state.player) return;
     void maybeAdvanceBoss();
     const current = currentBossClock();
     const bossClock = document.getElementById('raid-boss-clock');
@@ -938,10 +989,68 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     if (bossBar) bossBar.style.width = hpPct(state.boss.hp, state.boss.maxHp) + '%';
     if (playerHp) playerHp.textContent = Math.round(state.player.hp).toLocaleString() + ' HP';
     if (playerBar) playerBar.style.width = hpPct(state.player.hp, state.player.maxHp) + '%';
+    const arena = document.getElementById('raid-arena');
+    const members = raidRoomMembers(state.room);
+    const lineup = arena?.querySelector('.raid-player-lineup');
+    if (lineup) {
+      const key = JSON.stringify(members.map(member => [member.uid, member.name, member.portrait]));
+      if (lineup.dataset.members !== key) {
+        // Membership changes replace the party row only, leaving the stage and
+        // Boss image alive. Heartbeats and HP changes never rebuild portraits.
+        const ids = [...lineup.querySelectorAll('[data-raid-member]')].map(el => el.dataset.raidMember);
+        if (lineup.dataset.members || JSON.stringify(ids) !== JSON.stringify(members.map(member => member.uid))) lineup.innerHTML = partyCardsMarkup(members);
+        lineup.dataset.members = key;
+        lineup.style.gridTemplateColumns = 'repeat(' + Math.max(1, members.length) + ',minmax(0,1fr))';
+      }
+      lineup.querySelectorAll('[data-raid-member]').forEach(card => {
+        const member = members.find(row => row.uid === card.dataset.raidMember);
+        if (!member) return;
+        card.classList.toggle('down', member.alive === false || member.hp <= 0);
+        card.querySelector('small').textContent = Math.max(0, Number(member.hp) || 0).toLocaleString() + ' HP';
+        card.querySelector('.raid-stage-player-hp i').style.width = hpPct(member.hp, member.maxHp) + '%';
+        card.querySelector('[data-member-damage]').textContent = '輸出 ' + Math.max(0, Number(member.damage) || 0).toLocaleString();
+      });
+    }
+    const setText = (selector, value) => {
+      const node = arena?.querySelector(selector);
+      if (node && node.textContent !== value) node.textContent = value;
+    };
+    const intent = currentIntent();
+    setText('[data-party-size]', '清霜試煉・' + members.length + ' 人隊伍');
+    setText('[data-boss-actions]', 'Boss 已出招 ' + state.bossActionCount + ' 次');
+    setText('[data-boss-phase]', '階段 ' + state.boss.phase + '・' + phaseName(state.boss.phase));
+    setText('.raid-intent b', intent.name);
+    setText('.raid-intent span', intent.cue);
+    if (!state.battleScenePlaying) setText('.raid-boss-portrait > span', '「' + intent.name + '」');
+    const alive = state.player.hp > 0 && myRoomMember()?.alive !== false;
+    const fight = arena?.querySelector('[data-question]');
+    if (fight) {
+      fight.disabled = !alive || state.battleScenePlaying || state.status === 'submitting';
+      const label = !alive ? '觀戰中' : state.question ? '繼續作答' : state.questionLoading ? '題目準備中…' : '準備下一題';
+      if (fight.textContent !== label) fight.textContent = label;
+    }
+    const recent = state.lastPlayerAction?.correct ? '你剛才命中 ' + state.lastPlayerAction.damage.toLocaleString() + ' 傷害。' :
+      state.lastPlayerAction ? '上一題沒有形成有效攻勢。' : '大師姐已拔劍。';
+    setText('.raid-current-status > span', alive ? recent : '你已倒下，等待隊友完成本次試煉。');
+    setText('.raid-current-status > small', '個人題號 ' + (state.playerActionCount + 1) + '・法寶護盾 ' +
+      Math.round(state.player.artifactShield || 0).toLocaleString() + '・' + (state.player.coreShield ? '道心護體已凝聚' : '道心護體未凝聚'));
+    for (const view of [arena, document.getElementById('raid-question')]) {
+      const team = view?.querySelector('.raid-teamwork');
+      if (!team) continue;
+      const markup = teamworkMarkup(view.id === 'raid-question');
+      if (team.dataset.markup !== markup) {
+        // Teamwork changes infrequently; clock ticks retain its DOM as well.
+        const holder = document.createElement('div');
+        holder.innerHTML = markup;
+        const next = holder.firstElementChild;
+        next.dataset.markup = markup;
+        team.replaceWith(next);
+      }
+    }
   }
 
   function startTick() {
-    stopTick();
+    if (state.tickTimer) return;
     state.tickTimer = setInterval(updateLiveLabels, 100);
   }
   function stopTick() {
@@ -985,6 +1094,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
   async function enterRoom(mode, roomCode = '') {
     if (score() < RAID_MVP.minimumScore) return toast('需達築基初期（' + RAID_MVP.minimumScore + ' 修為）才可進入秘境。');
     if (storyOpen()) return toast('目前有劇情或教學進行中。');
+    if (state.roomId && ['won', 'lost', 'closed'].includes(state.room?.status)) resetRaid(false);
     state.status = 'loading';
     document.body.classList.add('raid-session-active');
     window.switchToPage?.(PAGE_ID);
@@ -1083,7 +1193,13 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
       return;
     }
     if (room.status === 'active') {
-      void beginActiveRaid(room);
+      if (!state.bossStartedAtMs) void beginActiveRaid(room);
+      else if (!state.battleScenePlaying && state.status !== 'submitting') {
+        if (state.player?.hp <= 0 && state.status !== 'spectating') {
+          state.status = 'spectating';
+          renderArena({ transition: false });
+        }
+      }
       if (room.lastBossAction && Number(room.lastBossAction.id) > state.lastBossActionSeen) void applyRemoteBossAction(room.lastBossAction);
       updateLiveLabels();
       return;
@@ -1098,7 +1214,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
         if (!state.applyingBossAction) void applyRemoteBossAction(room.lastBossAction);
         return;
       }
-      if (state.battleScenePlaying) {
+      if (state.battleSceneTail || state.battleScenePlaying || state.status === 'submitting') {
         state.pendingFinishRoom = room;
         return;
       }
@@ -1221,10 +1337,11 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
       selectedChoice: null, answerCorrect: null, playerActionCount: 0, bossStartedAtMs: 0, bossActionCount: 0,
       lastBossAction: null, lastPlayerAction: null, questionLoading: false, roomId: '', room: null,
       lastBossActionSeen: 0, applyingBossAction: false, advancingBossAction: false,
-      battleSceneToken: state.battleSceneToken + 1, battleScenePlaying: false, pendingFinishRoom: null, invitedRoomId: '',
+      battleSceneToken: state.battleSceneToken + 1, battleScenePlaying: false, battleSceneTail: null, pendingFinishRoom: null, invitedRoomId: '',
       rewardClaiming: false, rewardClaimedRoomId: '',
       learningOutcome: null
     });
+    document.getElementById('raid-arena')?.replaceChildren();
     document.body.classList.remove('raid-session-active');
     setRaidCombatFocus(false);
     updateHomeEntry();

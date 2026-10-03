@@ -134,8 +134,8 @@ test('raid UI includes party lobby, join code, responsive fullscreen questions a
   assert.match(raidSource, /function syncRaidViewportLock\(\)/);
   assert.match(raidSource, /document\.documentElement\.classList\.toggle\('raid-page-open', active\)/);
   assert.match(raidSource, /new MutationObserver\(syncRaidViewportLock\)/);
-  assert.match(cssSource, /#raid-arena:not\(\.hidden\)\{display:grid;grid-template-rows:auto auto minmax\(0,1fr\);min-height:0;overflow:hidden\}/);
-  assert.match(cssSource, /\.raid-stage\{[^}]*height:100%[^}]*min-height:0[^}]*overflow:hidden/);
+  assert.match(cssSource, /#raid-arena:not\(\.hidden\)\{display:grid;grid-template-rows:auto minmax\(0,1fr\);min-height:0;overflow:hidden\}/);
+  assert.match(cssSource, /#raid-arena \.raid-stage\{[^}]*height:100%[^}]*min-height:0[^}]*overflow:hidden/);
   assert.doesNotMatch(cssSource, /\.raid-stage\{[^}]*min-height:min\(720px,calc\(100dvh - 145px\)\)/);
   assert.match(cssSource, /\.raid-party-list/);
   assert.match(cssSource, /\.raid-party-strip/);
@@ -166,7 +166,7 @@ test('raid hub bottom follows the real bottom navigation top edge', () => {
 
 
 test('raid hub card is measured directly to the navigation edge and cache-busted', () => {
-  assert.match(raidSource, /STYLE_HREF = 'styles\/raid-mode\.css\?v=20260930-teamwork-ticket1'/);
+  assert.match(raidSource, /STYLE_HREF = 'styles\/raid-mode\.css\?v=20261003-stable-session1'/);
   assert.match(raidSource, /function fitRaidHubToNavigation\(\)/);
   assert.match(raidSource, /navTop - cardTop - 8/);
   assert.match(raidSource, /card\.style\.setProperty\('height', targetHeight \+ 'px', 'important'\)/);
@@ -236,13 +236,13 @@ test('raid session height uses the real visual viewport', () => {
 
 
 test('raid arena and question force session viewport sync', () => {
-  const arenaStart = raidSource.indexOf('  function renderArena() {');
+  const arenaStart = raidSource.indexOf('  function renderArena(');
   const arenaEnd = raidSource.indexOf('  async function', arenaStart);
   const arena = raidSource.slice(arenaStart, arenaEnd);
   assert.match(arena, /document\.body\.classList\.add\('raid-session-active'\)/);
   assert.match(arena, /syncRaidBottomClearance\(\)/);
 
-  const questionStart = raidSource.indexOf('  function renderQuestion\(review\) {');
+  const questionStart = raidSource.indexOf('  function renderQuestion(review) {');
   const questionEnd = raidSource.indexOf('  async function answer', questionStart);
   const question = raidSource.slice(questionStart, questionEnd);
   assert.match(question, /document\.body\.classList\.add\('raid-session-active'\)/);

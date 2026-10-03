@@ -38,7 +38,7 @@ body.xianxia-theme main{
     linear-gradient(180deg,rgba(255,245,214,.018),transparent 22%);
 }
 
-body.xianxia-theme header,
+body.xianxia-theme > header,
 body.xianxia-theme .glass-strip{
   background:
     linear-gradient(180deg,rgba(48,39,24,.96),rgba(22,21,17,.95))!important;

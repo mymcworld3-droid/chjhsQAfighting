@@ -28,7 +28,7 @@ body.xianxia-theme::before {
   filter: grayscale(.55) sepia(.22) brightness(.42) contrast(1.12);
 }
 
-body.xianxia-theme header,
+body.xianxia-theme > header,
 body.xianxia-theme .glass-strip {
   background: rgba(8,8,8,.94);
   border-color: rgba(216,177,93,.28);
