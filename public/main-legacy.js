@@ -8,7 +8,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getAuth, signInWithPopup, signInAnonymously, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { 
     getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, addDoc, 
-    query, orderBy, limit, getDocs, serverTimestamp, where, onSnapshot, runTransaction, 
+    query, orderBy, limit, getDocs, getDocsFromServer, serverTimestamp, where, onSnapshot, runTransaction,
     arrayUnion, arrayRemove, writeBatch, startAfter 
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
@@ -5628,30 +5628,87 @@ window.loadAdminLogs = async () => {
 let leaderboardCachedSnapshot = null;
 let leaderboardCacheTime = 0;
 let leaderboardPending = null;
-window.loadLeaderboard = async () => {
+let leaderboardRevision = 0;
+let leaderboardRenderSerial = 0;
+let leaderboardPlayerKey = null;
+
+function invalidateLeaderboardCache() {
+    leaderboardCachedSnapshot = null;
+    leaderboardCacheTime = 0;
+    leaderboardRevision++;
+}
+
+function syncLeaderboardPlayerScore() {
+    const key = `${auth.currentUser?.uid || ''}:${Number(currentUserData?.stats?.totalScore) || 0}`;
+    if (key === leaderboardPlayerKey) return false;
+    leaderboardPlayerKey = key;
+    invalidateLeaderboardCache();
+    return true;
+}
+
+async function readLeaderboardSnapshot() {
+    while (true) {
+        if (leaderboardCachedSnapshot && Date.now() - leaderboardCacheTime < 120000) return leaderboardCachedSnapshot;
+        if (!leaderboardPending) {
+            // Realm levels are derived/capped and may be stale. Cultivation is
+            // the ranking source; apply the ordering before selecting the top ten.
+            const q = query(collection(db, "users"), orderBy("stats.totalScore", "desc"), limit(10));
+            leaderboardPending = { revision: leaderboardRevision, promise: getDocsFromServer(q) };
+        }
+        const pending = leaderboardPending;
+        let snap;
+        try {
+            snap = await pending.promise;
+        } catch (error) {
+            if (pending.revision !== leaderboardRevision) continue;
+            throw error;
+        } finally {
+            if (leaderboardPending === pending) leaderboardPending = null;
+        }
+        // A reward may settle during a read. Never cache that old response.
+        if (pending.revision !== leaderboardRevision) continue;
+        leaderboardCachedSnapshot = snap;
+        leaderboardCacheTime = Date.now();
+        return snap;
+    }
+}
+
+function refreshVisibleLeaderboard() {
+    const page = document.getElementById('page-rank');
+    if (page && !page.classList.contains('hidden')) void window.loadLeaderboard();
+}
+
+window.addEventListener('xiuxian:stats-updated', () => {
+    if (syncLeaderboardPlayerScore()) refreshVisibleLeaderboard();
+});
+window.addEventListener('xiuxian:user-data-ready', () => {
+    syncLeaderboardPlayerScore();
+    invalidateLeaderboardCache();
+});
+// Solo answers emit this after the transaction, including when their earlier
+// optimistic score notification happened before the write was committed.
+window.addEventListener('xiuxian:quest-progress-updated', () => {
+    invalidateLeaderboardCache();
+    refreshVisibleLeaderboard();
+});
+
+window.loadLeaderboard = async ({ force = false } = {}) => {
     const tbody = document.getElementById('leaderboard-body');
+    if (!tbody) return;
+    syncLeaderboardPlayerScore();
+    if (force) invalidateLeaderboardCache();
+    const renderSerial = ++leaderboardRenderSerial;
+    const uid = auth.currentUser?.uid;
     tbody.innerHTML = `<tr><td colspan="3" class="p-8 text-center text-gray-500"><div class="loader"></div> ${t('loading')}</td></tr>`;
     try {
-        let snap = leaderboardCachedSnapshot;
-        if (!snap || Date.now() - leaderboardCacheTime >= 120000) {
-            if (!leaderboardPending) {
-                const q = query(collection(db, "users"), orderBy("stats.rankLevel", "desc"), orderBy("stats.totalScore", "desc"), limit(10));
-                leaderboardPending = getDocs(q);
-            }
-            const pending = leaderboardPending;
-            try {
-                snap = await pending;
-                leaderboardCachedSnapshot = snap;
-                leaderboardCacheTime = Date.now();
-            } finally {
-                if (leaderboardPending === pending) leaderboardPending = null;
-            }
-        }
+        const snap = await readLeaderboardSnapshot();
+        if (renderSerial !== leaderboardRenderSerial || uid !== auth.currentUser?.uid) return;
         tbody.innerHTML = '';
         let i = 1;
         snap.forEach(doc => {
             const d = doc.data();
-            const isMe = auth.currentUser && d.uid === auth.currentUser.uid;
+            const isMe = auth.currentUser && doc.id === auth.currentUser.uid;
+            const score = Math.max(0, Number(d.stats?.totalScore) || 0);
             const equipped = d.equipped || {};
             const avatarHtml = getAvatarHtml(equipped, "w-8 h-8");
 
@@ -5663,16 +5720,16 @@ window.loadLeaderboard = async () => {
                         <button type="button" class="xpp-profile-trigger ${isMe ? 'text-blue-300 font-bold' : ''}" data-xiuxian-profile="${escapeHtml(doc.id)}">${escapeHtml(d.displayName || '修士')}</button>
                     </td>
                     <td class="px-4 py-4 text-right font-mono text-blue-300">
-                        ${getRankMarkup(calculateRankFromScore(d.stats.totalScore, doc.id), doc.id, d.stats.totalScore)} <span class="text-xs text-gray-500 block">${d.stats.totalScore} pts</span>
+                        ${getRankMarkup(calculateRankFromScore(score, doc.id), doc.id, score)} <span class="text-xs text-gray-500 block">${score} 修為</span>
                     </td>
                 </tr>`;
             tbody.innerHTML += row; 
             i++;
         });
     } catch (e) { 
+        if (renderSerial !== leaderboardRenderSerial || uid !== auth.currentUser?.uid) return;
         console.error(e); 
-        if(e.message.includes("index")) { tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-yellow-400 text-center text-xs">⚠️ Index Required (F12 Console)</td></tr>'; } 
-        else { tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-red-400 text-center">Load Error</td></tr>'; }
+        tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-red-400 text-center">排名更新失敗，請檢查連線後按「更新排名」重試。</td></tr>';
     }
 };
 

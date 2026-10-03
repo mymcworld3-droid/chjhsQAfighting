@@ -1054,6 +1054,7 @@ body.xianxia-theme main:has(#page-training.active-page),
         <div id="page-rank" class="page-section hidden px-4">
             <h2 class="text-xl font-bold mb-4 flex items-center gap-2 text-yellow-400 mt-4">
                 <i class="fa-solid fa-trophy"></i> <span data-i18n="rank_title">LEADERBOARD</span>
+                <button type="button" id="leaderboard-refresh" onclick="loadLeaderboard({force: true})" class="ml-auto rounded-lg border border-yellow-500/30 px-3 py-2 text-sm text-yellow-200">更新排名</button>
             </h2>
             <div class="glass-panel rounded-xl overflow-hidden shadow-lg border-t border-yellow-500/30">
                 <table class="w-full text-left text-sm text-gray-300">
