@@ -2,6 +2,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
+const vm = require('node:vm');
 
 function read(rel) {
   return fs.readFileSync(path.join(__dirname, '..', rel), 'utf8');
@@ -30,5 +31,18 @@ test('market category tabs span the available width', () => {
 
 test('market avatar frame previews stay compact without changing equipped frames elsewhere', () => {
   assert.match(layout, /#store-grid img\[class~="h-\[140%\]"\]\{[\s\S]*height:118%!important;[\s\S]*max-width:118%!important;/);
-  assert.match(layout, /#store-grid img:not\(\[class~="h-\[140%\]"\]\)/);
+  assert.match(layout, /#store-grid img:not\(\.avatar-img\):not\(\[class~="h-\[140%\]"\]\)/);
+});
+
+test('failed avatar previews show their fallback without an inline JavaScript error', () => {
+  const source = read('public/main-legacy.js');
+  const helper = source.slice(source.indexOf('function renderVisual('), source.indexOf('function getAvatarHtml('));
+  const context = vm.createContext({});
+  vm.runInContext(helper, context);
+  const html = context.renderVisual('avatar', 'assets/missing-avatar.png');
+  const handler = html.match(/onerror="([^"]+)"/)[1];
+  const image = { style: {}, nextElementSibling: { style: { display: 'none' } } };
+  new Function(handler).call(image);
+  assert.equal(image.style.display, 'none');
+  assert.equal(image.nextElementSibling.style.display, 'block');
 });

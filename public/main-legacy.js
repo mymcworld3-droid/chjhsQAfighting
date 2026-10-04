@@ -5772,8 +5772,9 @@ function renderVisual(type, value, sizeClass = "w-12 h-12") {
                     </div>`;
         }
     } else if (type === 'avatar') {
-        return `<div class="${sizeClass} rounded-full overflow-hidden bg-slate-800 border-2 border-slate-600 relative z-10">
-                    <img src="${value}" class="avatar-img" onerror="this.style.display='none';this.parentElement.innerHTML='<i class=\'fa-solid fa-image text-red-500\'></i>'">
+        return `<div class="${sizeClass} avatar-preview rounded-full overflow-hidden bg-slate-800 border-2 border-slate-600 relative z-10 flex items-center justify-center">
+                    <img src="${value}" class="avatar-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+                    <i class="fa-solid fa-image text-red-500" style="display:none" aria-hidden="true"></i>
                 </div>`;
     }
     return '';

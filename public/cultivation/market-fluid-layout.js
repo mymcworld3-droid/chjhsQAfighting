@@ -58,9 +58,26 @@
         box-sizing:border-box;
       }
 
-      body.xianxia-theme #store-grid img:not([class~="h-[140%]"]){
+      body.xianxia-theme #store-grid img:not(.avatar-img):not([class~="h-[140%]"]){
         max-width:100%;
         height:auto;
+      }
+
+      /* Non-square source images must fill the circular preview rather than
+         inherit the responsive image height and drift above/below its center. */
+      body.xianxia-theme #store-grid .avatar-preview{
+        flex:none;
+      }
+      body.xianxia-theme #store-grid .avatar-img{
+        width:100%;
+        height:100%;
+        object-fit:cover;
+        object-position:center;
+        transform:none;
+      }
+      body.xianxia-theme #store-grid > .store-card:hover,
+      body.xianxia-theme #store-grid > .store-card:active{
+        transform:none;
       }
 
       /* 坊市中的頭像框只縮商品預覽，不影響玩家實際裝備後的頭像框。 */
