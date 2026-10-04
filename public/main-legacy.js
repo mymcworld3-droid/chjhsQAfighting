@@ -5761,10 +5761,10 @@ function renderVisual(type, value, sizeClass = "w-12 h-12") {
         if (isImage) {
             return `
             <div class="${sizeClass} rounded-full bg-slate-800 flex items-center justify-center relative" style="overflow: visible !important;">
-                <div class="w-full h-full rounded-full overflow-hidden flex items-center justify-center bg-slate-800 relative z-0">
+                <div class="ui-avatar-viewport w-full h-full rounded-full overflow-hidden flex items-center justify-center bg-slate-800 relative z-0">
                     <i class="fa-solid fa-user text-gray-500"></i>
                 </div>
-                <img src="${value}" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[140%] w-auto object-contain pointer-events-none z-20" style="max-width: none;"> 
+                <img src="${value}" class="ui-product-frame absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[140%] w-auto object-contain pointer-events-none z-20" style="max-width: none;">
             </div>`;
         } else {
             return `<div class="${sizeClass} rounded-full border-2 border-gray-600 ${value} flex items-center justify-center bg-slate-800 relative z-0">
@@ -5786,19 +5786,19 @@ function getAvatarHtml(equipped, sizeClass = "w-10 h-10") {
     const isFrameImg = frame && (frame.includes('.') || frame.includes('/'));
 
     const imgContent = avatar 
-        ? `<img src="${avatar}" class="w-full h-full object-cover" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"> <i class="fa-solid fa-user text-gray-400 absolute hidden"></i>`
+        ? `<img src="${avatar}" class="ui-avatar-image w-full h-full object-cover" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"> <i class="ui-avatar-fallback fa-solid fa-user text-gray-400 absolute hidden"></i>`
         : `<i class="fa-solid fa-user text-gray-400"></i>`;
 
     const borderClass = frame ? '' : 'border-2 border-slate-600';
     const cssFrameClass = (!isFrameImg && frame) ? frame : '';
 
     const frameImgElement = isFrameImg 
-        ? `<img src="${frame}" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); height: 145%; width: auto; max-width: none; z-index: 50; pointer-events: none;">` 
+        ? `<img src="${frame}" class="ui-avatar-frame" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); height: 145%; width: auto; max-width: none; z-index: 50; pointer-events: none;">`
         : '';
 
     return `
     <div class="${sizeClass} rounded-full bg-slate-800 flex items-center justify-center relative ${borderClass} ${cssFrameClass}" style="overflow: visible !important;">
-        <div class="w-full h-full rounded-full overflow-hidden flex items-center justify-center bg-slate-800 relative z-0">
+        <div class="ui-avatar-viewport w-full h-full rounded-full overflow-hidden flex items-center justify-center bg-slate-800 relative z-0">
             ${imgContent}
         </div>
         ${frameImgElement}

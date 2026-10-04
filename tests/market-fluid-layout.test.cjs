@@ -10,6 +10,7 @@ function read(rel) {
 
 const layout = read('public/cultivation/market-fluid-layout.js');
 const main = read('public/main.js');
+const formats = read('public/styles/content-format.css');
 
 test('market fluid layout is loaded and removes the global page width cap', () => {
   assert.match(main, /\.\/cultivation\/market-fluid-layout\.js/);
@@ -30,8 +31,10 @@ test('market category tabs span the available width', () => {
 });
 
 test('market avatar frame previews stay compact without changing equipped frames elsewhere', () => {
-  assert.match(layout, /#store-grid img\[class~="h-\[140%\]"\]\{[\s\S]*height:118%!important;[\s\S]*max-width:118%!important;/);
-  assert.match(layout, /#store-grid img:not\(\.avatar-img\):not\(\[class~="h-\[140%\]"\]\)/);
+  assert.match(formats, /\.ui-avatar-frame,\.ui-product-frame/);
+  assert.match(formats, /height: 118% !important/);
+  assert.match(formats, /\.avatar-preview \.avatar-img[\s\S]*object-fit: contain/);
+  assert.doesNotMatch(layout, /object-fit:/);
 });
 
 test('failed avatar previews show their fallback without an inline JavaScript error', () => {

@@ -45,7 +45,7 @@
     const avatar = equipped?.avatar || '';
     const isFrameImage = frame && (frame.includes('.') || frame.includes('/'));
     const frameClass = frame && !isFrameImage ? frame : '';
-    return `<div class="${frameClass}" style="width:${size}px;height:${size}px;border-radius:50%;position:relative;background:#181612;border:1px solid rgba(216,177,93,.22);display:grid;place-items:center;overflow:visible"><div style="width:100%;height:100%;border-radius:50%;overflow:hidden;display:grid;place-items:center">${avatar ? `<img src="${avatar}" style="width:100%;height:100%;object-fit:cover" onerror="this.remove()">` : '<i class="fa-solid fa-user" style="color:#776b57"></i>'}</div>${isFrameImage ? `<img src="${frame}" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);height:145%;max-width:none;pointer-events:none">` : ''}</div>`;
+    return `<div class="${frameClass}" style="width:${size}px;height:${size}px;border-radius:50%;position:relative;background:#181612;border:1px solid rgba(216,177,93,.22);display:grid;place-items:center;overflow:visible"><div class="ui-avatar-viewport" style="width:100%;height:100%;border-radius:50%;overflow:hidden;display:grid;place-items:center">${avatar ? `<img src="${escapeHtml(avatar)}" class="ui-avatar-image" style="width:100%;height:100%;object-fit:cover" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><i class="ui-avatar-fallback fa-solid fa-user" hidden></i>` : '<i class="fa-solid fa-user" style="color:#776b57"></i>'}</div>${isFrameImage ? `<img src="${escapeHtml(frame)}" class="ui-avatar-frame" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);height:145%;max-width:none;pointer-events:none">` : ''}</div>`;
   }
 
   async function connect() {

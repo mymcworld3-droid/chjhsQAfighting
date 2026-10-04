@@ -43,7 +43,7 @@ import {
   function imageMarkup(imageUrl, fallback, alt = '') {
     const url = String(imageUrl || '').trim();
     if (!url) return escapeHtml(fallback || '◆');
-    return `<img src="${escapeHtml(url)}" alt="${escapeHtml(alt)}" loading="lazy" decoding="async">`;
+    return `<img class="ui-content-image" src="${escapeHtml(url)}" alt="${escapeHtml(alt)}" loading="lazy" decoding="async" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span class="ui-content-fallback" hidden>${escapeHtml(fallback || '◆')}</span>`;
   }
   function typeLabel(type) {
     if (type === 'artifact') return '法寶';

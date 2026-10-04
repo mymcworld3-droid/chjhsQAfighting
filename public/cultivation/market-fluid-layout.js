@@ -58,39 +58,7 @@
         box-sizing:border-box;
       }
 
-      body.xianxia-theme #store-grid img:not(.avatar-img):not([class~="h-[140%]"]){
-        max-width:100%;
-        height:auto;
-      }
-
-      /* Show the complete product image. A circular cover crop can hide hair,
-         captions and the corners even when the image is correctly centered. */
-      body.xianxia-theme #store-grid .avatar-preview{
-        flex:none;
-        padding:4px;
-        border-radius:8px!important;
-      }
-      body.xianxia-theme #store-grid .avatar-img{
-        width:100%;
-        height:100%;
-        display:block;
-        object-fit:contain;
-        object-position:center;
-        border-radius:0;
-        transform:none;
-      }
-      body.xianxia-theme #store-grid > .store-card:hover,
-      body.xianxia-theme #store-grid > .store-card:active{
-        transform:none;
-      }
-
-      /* 坊市中的頭像框只縮商品預覽，不影響玩家實際裝備後的頭像框。 */
-      body.xianxia-theme #store-grid img[class~="h-[140%]"]{
-        height:118%!important;
-        width:auto!important;
-        max-width:118%!important;
-        object-fit:contain!important;
-      }
+      /* Content appearance is owned by styles/content-format.css. */
 
       @media (min-width:1500px){
         body.xianxia-theme #store-grid{

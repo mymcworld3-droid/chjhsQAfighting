@@ -1,0 +1,280 @@
+/* Shared content roles. These rules change formatting, never scene geometry,
+   state colors, navigation visibility, or the sizes of battlefield artwork. */
+body.xianxia-theme {
+  --ui-font: 'Noto Sans TC', sans-serif;
+  --ui-serif: 'Noto Serif TC', serif;
+  --ui-text: 14px;
+  --ui-small: 12px;
+  --ui-meta: 11px;
+  --ui-control-radius: 12px;
+  --ui-card-radius: 16px;
+  --ui-panel-radius: 20px;
+  --ui-image-radius: 8px;
+  --ui-action-height: 40px;
+  --ui-icon-size: 36px;
+}
+
+/* Product/document thumbnails show the full source image at every entry point. */
+body.xianxia-theme .avatar-preview {
+  flex: none;
+  padding: 4px;
+  border-radius: var(--ui-image-radius) !important;
+}
+body.xianxia-theme .avatar-preview .avatar-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  border-radius: 0;
+  transform: none;
+}
+body.xianxia-theme :is(.ui-avatar-frame,.ui-product-frame) {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 118% !important;
+  width: auto !important;
+  max-width: none !important;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+/* Identity avatars retain their circular equipment frame. An inscribed square
+   preserves all image corners: 1/sqrt(2) of the circle's diameter. */
+body.xianxia-theme :is(.ui-avatar-viewport,.bv2-avatar,.xpp-avatar) {
+  display: grid;
+  grid-template-columns: minmax(0,1fr);
+  grid-template-rows: minmax(0,1fr);
+  align-content: stretch;
+  justify-content: stretch;
+  place-items: center;
+}
+body.xianxia-theme :is(.ui-avatar-viewport,.bv2-avatar,.xpp-avatar) > img:not(.ui-avatar-frame) {
+  width: 70.7% !important;
+  height: 70.7% !important;
+  margin: auto;
+  grid-area: 1 / 1;
+  object-fit: contain !important;
+  object-position: center !important;
+  border-radius: 0 !important;
+  transform: none;
+}
+body.xianxia-theme .xpp-avatar > img { inset: 0; }
+body.xianxia-theme .ui-avatar-viewport > img[hidden] { display: none !important; }
+body.xianxia-theme .ui-avatar-viewport > .ui-avatar-fallback[hidden] { display: none !important; }
+body.xianxia-theme .ui-avatar-fallback { color: #9c895f; }
+body.xianxia-theme :is(.ui-avatar-viewport,.bv2-avatar,.xpp-avatar) > :is(span,i) {
+  grid-area: 1 / 1;
+}
+
+/* The same item may appear in the bag, forge, marketplace, admin and loot view. */
+body.xianxia-theme :is(.uib-icon,.uib-modal-icon,.uib-equip-slot-frame.is-artifact,
+  .refinery-mat-icon,.refinery-key-icon,.refinery-slot .icon,
+  .refinery-recipe-artifact-icon,.refinery-recipe-material-icon,
+  .aam-icon,.amm-icon,.pm-icon,.raid-loot-icon,.dt-preview) img {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0;
+  min-height: 0;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  display: block;
+  object-fit: contain !important;
+  object-position: center !important;
+  border-radius: 0;
+}
+body.xianxia-theme :is(.uib-icon,.uib-modal-icon,.refinery-mat-icon,.refinery-key-icon,
+  .aam-icon,.amm-icon,.pm-icon,.dt-preview) {
+  display: grid;
+  grid-template-columns: minmax(0,1fr);
+  grid-template-rows: minmax(0,1fr);
+  place-items: center;
+  border-radius: var(--ui-image-radius) !important;
+}
+body.xianxia-theme .ui-content-image[hidden],
+body.xianxia-theme .ui-content-fallback[hidden] { display: none !important; }
+
+/* Standard actions share readable type, corners and hit area. Cards, answer
+   choices, nav items, the forge array and skill-tree nodes are separate roles. */
+body.xianxia-theme :is(.btn-cyber-primary,.btn-cyber-accent,.btn-cyber-ghost,.xiuxian-btn,
+  .quest-action,.quest-heading button,.bv2-btn,.raid-primary,.raid-ghost,
+  .dm-action,.dt-generate,.dt-play,.dt-delete,.dt-repair,.dt-next,.dt-back,.dt-exit,
+  .dt-report-question,.dt-modal-actions button,.dt-upload,
+  .uib-use-btn,.uib-equip-btn,.refinery-clear,
+  .refinery-recipe-craft,.refinery-recipe-market,.revival-pill-use,.core-equip-btn,
+  .core-equip-warning-cancel,.core-equip-warning-confirm,.ns-reset-btn,.ns-detail-action,
+  .fi-primary,.fi-ghost,.immortal-btn,.five-immortals-help,.dt-entry-start,
+  .aam-add,.aam-add-effect,.aam-admin-list-recipe,.aam-cancel,.aam-save,
+  .amm-cancel,.amm-save,.aiim-btn,.aiim-stop,.aum-action,
+  .bt-primary,.bt-later,.qfd-next,.qfd-later,
+  .newbie-tutorial-next,.newbie-tutorial-prev,.newbie-tutorial-skip,
+  .golden-core-tutorial-next,.golden-core-tutorial-prev,.golden-core-tutorial-skip,
+  .aam-item-actions button,.amm-actions button,.artifact-actions button,
+  .pm-card-foot button,.pm-connection button,.admin-product-close,
+  .admin-product-editor-actions button),
+body.xianxia-theme #player-market #pm-publish,
+body.xianxia-theme #scope-studio :is(.ss-close,.cs-page-actions button),
+body.xianxia-theme #scope-studio #dongfu-scope-save,
+body.xianxia-theme #store-grid > .store-card > button,
+body.xianxia-theme [data-close-owner-manager],
+body.xianxia-theme #leaderboard-refresh {
+  box-sizing: border-box;
+  min-height: var(--ui-action-height) !important;
+  border-radius: var(--ui-control-radius) !important;
+  font-family: var(--ui-font) !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  line-height: 1.45;
+  letter-spacing: .02em;
+  white-space: normal;
+}
+body.xianxia-theme :is(.dt-generate,.artifact-actions button,.uib-use-btn) small {
+  font-size: var(--ui-meta);
+  line-height: 1.5;
+}
+
+/* Close/back icon buttons have a separate fixed size; text close actions above
+   are allowed to grow with their label. */
+body.xianxia-theme :is(.bv2-icon-btn,.raid-back,.uib-close,.xpp-close,.dm-close,
+  .fi-close,.ns-detail-close,.training-v3-modal-close,.xiuxian-realm-atlas-close) {
+  box-sizing: border-box;
+  width: var(--ui-icon-size) !important;
+  height: var(--ui-icon-size) !important;
+  flex: 0 0 var(--ui-icon-size);
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border-radius: var(--ui-control-radius) !important;
+  font-size: 16px;
+}
+
+/* Category tabs have the same typography; each feature keeps its active color. */
+body.xianxia-theme :is(.store-tab,.quest-tabs button,.training-subtab-v3),
+body.xianxia-theme #player-market .pm-filters button,
+body.xianxia-theme #scope-studio .ss-tabs button {
+  box-sizing: border-box;
+  min-height: var(--ui-action-height) !important;
+  border-radius: var(--ui-control-radius) !important;
+  font: 700 13px/1.4 var(--ui-font) !important;
+}
+
+/* Page, section and dialog headings are distinct levels, not per-feature sizes. */
+body.xianxia-theme :is(.xianxia-page-heading h2,.bv2-head h2,.raid-heading h2),
+body.xianxia-theme :is(#page-rank,#page-settings,#page-history,#page-admin,#page-social) > h2,
+body.xianxia-theme #page-store > .sticky h2,
+body.xianxia-theme #scope-studio h2 {
+  font: 600 clamp(22px,2.4vw,28px)/1.35 var(--ui-serif) !important;
+  letter-spacing: .06em;
+}
+body.xianxia-theme :is(.quest-heading h3,.pm-header h3,.uib-modal-head h3,
+  .dt-modal-card h3,.dm-heading,.aam-head h3,.amm-head h3),
+body.xianxia-theme #scope-studio .ss-panel-head strong {
+  font: 700 18px/1.45 var(--ui-serif) !important;
+}
+body.xianxia-theme :is(.quest-card h4,.dt-create h4,.dt-library h4,.pm-compose h4,
+  .xpp-section h3,.cs-stage-title h4) {
+  font: 700 16px/1.45 var(--ui-serif) !important;
+}
+
+/* Repeated content cards use the same corners. Fullscreen surfaces and scenic
+   home panels keep their existing frame and composition. */
+body.xianxia-theme :is(.quest-card,.dt-item,.dt-create,.pm-card,.pm-compose,
+  .aam-item,.amm-item,.artifact-item,.refinery-material,.xpp-equip,.uib-item) {
+  border-radius: var(--ui-card-radius) !important;
+  min-width: 0;
+}
+body.xianxia-theme :is(.dt-modal-card,.xpp-dialog,.uib-modal,.dm-card) {
+  border-radius: var(--ui-panel-radius) !important;
+}
+body.xianxia-theme :is(.quest-card-heading,.dt-item-top,.pm-card-head,.aam-copy,
+  .amm-copy,.xpp-core > div) { min-width: 0; }
+body.xianxia-theme .dt-item-top { flex-wrap: wrap; }
+body.xianxia-theme :is(.dt-item-name,.pm-card-head b,.aam-copy strong,.amm-copy strong,
+  .uib-name,.refinery-mat-copy strong,.artifact-name-row strong) {
+  font-family: var(--ui-font);
+  font-size: var(--ui-small) !important;
+  line-height: 1.5;
+}
+body.xianxia-theme :is(.dt-item-meta,.dt-owner-reward,.pm-seller,.pm-hint,.aam-meta,
+  .amm-meta,.artifact-meta,.uib-toolbar label,.uib-summary span,
+  .refinery-mat-copy small,.quest-progress-label,.xpp-equip small) {
+  font-family: var(--ui-font);
+  font-size: var(--ui-meta) !important;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+body.xianxia-theme :is(.quest-progress-label b,.pm-price-reference,.xpp-stats b,
+  .uib-qty,.refinery-mat-qty,.dt-generation-head strong,.dt-result-grid strong) {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Common focus/disabled presentation. No new hover movement or page animation. */
+body.xianxia-theme button:focus-visible {
+  outline: 2px solid var(--xq-gold) !important;
+  outline-offset: 3px;
+}
+body.xianxia-theme button:disabled { cursor: default; }
+body.xianxia-theme :is(.quest-action,.bv2-btn,.raid-primary,.raid-ghost,.dm-action,
+  .dt-play,.dt-delete,.dt-repair,.dt-generate,.uib-use-btn,.uib-equip-btn):disabled {
+  opacity: .5;
+}
+body.xianxia-theme #store-grid > .store-card:hover,
+body.xianxia-theme #store-grid > .store-card:active { transform: none; }
+
+/* Question, option and explanation content use the same reading scale across
+   solo practice, daily meditation, caves, duels and raids. MathJax keeps its font. */
+body.xianxia-theme #question-text,
+body.xianxia-theme #bv2-question,
+body.xianxia-theme #page-raid .raid-question-shell > h2,
+body.xianxia-theme .dt-question h3,
+body.xianxia-theme .dm-question {
+  font-size: clamp(17px,1.6vw,23px) !important;
+  line-height: 1.8 !important;
+  overflow-wrap: anywhere;
+}
+body.xianxia-theme #options-container > button,
+body.xianxia-theme .bv2-option b,
+body.xianxia-theme #page-raid .raid-option > b,
+body.xianxia-theme .dt-option-math,
+body.xianxia-theme .dm-option span {
+  font-size: clamp(15px,1.3vw,18px) !important;
+  line-height: 1.65 !important;
+  overflow-wrap: anywhere;
+}
+body.xianxia-theme :is(.bv2-option,.raid-option,.dt-option,.dm-option),
+body.xianxia-theme #options-container > button {
+  border-radius: var(--ui-control-radius) !important;
+}
+body.xianxia-theme #feedback-text,
+body.xianxia-theme .bv2-explanation,
+body.xianxia-theme #page-raid .raid-explain,
+body.xianxia-theme .dt-explain {
+  font-size: 14px !important;
+  line-height: 1.8 !important;
+  overflow-wrap: anywhere;
+}
+
+body.xianxia-theme :is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="hidden"]):not([type="file"]),select,textarea) {
+  font-family: var(--ui-font) !important;
+  font-size: 14px !important;
+  line-height: 1.5;
+  border-radius: var(--ui-control-radius) !important;
+}
+body.xianxia-theme :is(.input-cyber,.dt-input,.dt-modal textarea),
+body.xianxia-theme #scope-studio :is(input:not([type="checkbox"]):not([type="radio"]),select,textarea),
+body.xianxia-theme #player-market .pm-form :is(input,select),
+body.xianxia-theme .uib-toolbar select {
+  font-family: var(--ui-font) !important;
+  font-size: 14px !important;
+  line-height: 1.5;
+}
+
+@media (max-width: 700px) {
+  body.xianxia-theme { --ui-action-height: 44px; }
+  body.xianxia-theme #page-store .store-tab {
+    font-size: 12px !important;
+    padding-inline: 4px;
+  }
+}
