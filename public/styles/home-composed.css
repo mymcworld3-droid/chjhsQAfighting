@@ -1,0 +1,217 @@
+/* The home screen has one scenic focal point. Records and quests use quieter
+   surfaces. Keep every override under #page-home so battle/settings are intact. */
+body.xianxia-theme #page-home {
+  --home-ink: #f2e8d3;
+  --home-muted: #c0b6a3;
+  --home-line: #dbc28c33;
+  --home-gold: #e1c58a;
+  font-family: 'Noto Sans TC', sans-serif;
+}
+
+body.xianxia-theme #page-home > .xianxia-page-heading {
+  min-height: 0;
+  margin: 4px 0 24px;
+  padding: 0 0 20px;
+  border: 0;
+  border-bottom: 1px solid var(--home-line);
+  border-radius: 0;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+body.xianxia-theme #page-home > .xianxia-page-heading::before,
+body.xianxia-theme #page-home > .xianxia-page-heading::after {
+  content: none;
+}
+body.xianxia-theme #page-home .xianxia-eyebrow {
+  margin-bottom: 8px;
+  color: var(--home-gold);
+  letter-spacing: .15em;
+}
+body.xianxia-theme #page-home .xianxia-page-heading h2 {
+  margin: 0;
+  color: var(--home-ink);
+  font-size: clamp(27px, 3vw, 34px);
+  text-shadow: none;
+}
+body.xianxia-theme #page-home .xianxia-page-heading p {
+  margin: 8px 0 0;
+  color: var(--home-muted);
+  font-size: 13px;
+  letter-spacing: .02em;
+}
+body.xianxia-theme #page-home > .pb-4 { gap: 24px; }
+
+body.xianxia-theme #page-home #xiuxian-panel {
+  padding: clamp(20px, 2.6vw, 32px);
+  border: 1px solid var(--home-line);
+  border-radius: 12px !important;
+  background: #1d2b24 !important;
+  box-shadow: none !important;
+}
+body.xianxia-theme #page-home #xiuxian-panel::before {
+  background: linear-gradient(90deg, #182c25f5, #1b3027b8 55%, #1b30274d),
+    url('../assets/immortal-mountains.svg') 68% center / cover !important;
+  filter: saturate(.65) brightness(.85);
+}
+body.xianxia-theme #page-home #xiuxian-panel::after { content: none; }
+body.xianxia-theme #page-home .xiuxian-kicker {
+  color: var(--home-gold);
+  font-size: 11px;
+  letter-spacing: .12em;
+}
+body.xianxia-theme #page-home .xiuxian-invocation {
+  margin: 8px 0 22px;
+  color: var(--home-muted);
+  font-size: 13px;
+  letter-spacing: .06em;
+}
+body.xianxia-theme #page-home .xiuxian-identity { margin-bottom: 22px; }
+body.xianxia-theme #page-home .xiuxian-realm {
+  color: var(--home-ink);
+  font-size: clamp(32px, 4vw, 44px);
+  text-shadow: none;
+}
+body.xianxia-theme #page-home .xiuxian-sub,
+body.xianxia-theme #page-home .xiuxian-label { color: #d0c8b6; }
+body.xianxia-theme #page-home .xiuxian-value { color: var(--home-gold); }
+body.xianxia-theme #page-home #xiuxian-score { color: var(--home-ink); }
+body.xianxia-theme #page-home .xiuxian-row { flex-wrap: wrap; row-gap: 4px; }
+body.xianxia-theme #page-home .xiuxian-bar {
+  height: 5px;
+  border: 0;
+  background: #ffffff1a;
+}
+body.xianxia-theme #page-home .xiuxian-bar > div {
+  background: #d9c08b;
+  box-shadow: none;
+}
+body.xianxia-theme #page-home .xiuxian-actions { gap: 10px; margin-top: 20px; }
+body.xianxia-theme #page-home .xiuxian-btn {
+  min-height: 44px;
+  border-radius: 8px !important;
+  background: #15221ccc;
+  border-color: #dbc28c66;
+  box-shadow: none;
+  color: var(--home-ink);
+}
+body.xianxia-theme #page-home #xiuxian-meditate {
+  background: #e1c58a;
+  border-color: #e1c58a;
+  color: #231f16;
+  font-weight: 700;
+}
+body.xianxia-theme #page-home .xiuxian-btn:hover { transform: none; filter: brightness(1.08); }
+
+body.xianxia-theme #page-home .home-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  padding: 12px 4px;
+  border-block: 1px solid var(--home-line);
+  align-self: stretch;
+}
+body.xianxia-theme #page-home .home-stats > .stat-card {
+  min-width: 0;
+  padding: 20px;
+  align-items: flex-start;
+  justify-content: center;
+  border: 0;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  animation: none;
+  transform: none;
+}
+body.xianxia-theme #page-home .home-stats > .stat-card:nth-child(even) {
+  border-left: 1px solid var(--home-line);
+}
+body.xianxia-theme #page-home .home-stats > .stat-card:nth-child(n+3) {
+  border-top: 1px solid var(--home-line);
+}
+body.xianxia-theme #page-home .stat-card .stat-icon { display: none; }
+body.xianxia-theme #page-home .stat-card .stat-label {
+  color: var(--home-muted);
+  font-size: 13px;
+  letter-spacing: .02em;
+}
+body.xianxia-theme #page-home .stat-card .stat-value {
+  max-width: 100%;
+  margin-top: 10px;
+  color: var(--home-ink) !important;
+  font: 500 clamp(23px, 2.6vw, 32px)/1.3 'Noto Sans TC', sans-serif;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+body.xianxia-theme #page-home #quest-panel {
+  margin: 4px 0 0;
+  padding: 24px 0 0;
+  border: 0;
+  border-top: 1px solid var(--home-line);
+  border-radius: 0;
+  background: transparent;
+}
+body.xianxia-theme #page-home .quest-heading {
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  text-align: left;
+}
+body.xianxia-theme #page-home .quest-heading h3 { color: var(--home-ink); font-size: 22px; }
+body.xianxia-theme #page-home .quest-heading small { color: var(--home-muted); }
+body.xianxia-theme #page-home .quest-heading button {
+  min-height: 44px;
+  border-color: var(--home-line);
+  color: var(--home-muted);
+}
+body.xianxia-theme #page-home .quest-tabs {
+  gap: 20px;
+  margin: 18px 0 8px;
+  border-bottom: 1px solid var(--home-line);
+}
+body.xianxia-theme #page-home .quest-tabs button {
+  flex: 0 1 auto;
+  min-height: 44px;
+  padding: 10px 2px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: var(--home-muted);
+}
+body.xianxia-theme #page-home .quest-tabs button[aria-selected=true] {
+  border-bottom-color: var(--home-gold);
+  color: var(--home-ink);
+}
+body.xianxia-theme #page-home .quest-tabs span { display: inline; }
+body.xianxia-theme #page-home .quest-note { color: var(--home-muted); }
+body.xianxia-theme #page-home .quest-card {
+  padding: 20px;
+  border: 1px solid var(--home-line);
+  border-radius: 10px;
+  background: #e8d5a905;
+}
+body.xianxia-theme #page-home .quest-card h4 { color: var(--home-ink); }
+body.xianxia-theme #page-home .quest-card > p { color: var(--home-muted); }
+body.xianxia-theme #page-home .quest-action { min-height: 44px; }
+body.xianxia-theme #page-home .quest-ready { border-color: #dbc28c80; }
+body.xianxia-theme #page-home .xianxia-footnote { margin-top: 28px; color: var(--home-muted); }
+body.xianxia-theme #page-home button:focus-visible {
+  outline: 2px solid var(--home-gold);
+  outline-offset: 4px;
+}
+
+@media (max-width: 700px) {
+  body.xianxia-theme #page-home > .pb-4 { gap: 20px; }
+  body.xianxia-theme #page-home > .xianxia-page-heading { margin-bottom: 20px; }
+  body.xianxia-theme #page-home .xiuxian-invocation { margin-bottom: 16px; }
+  body.xianxia-theme #page-home .xiuxian-identity { margin-bottom: 16px; }
+  body.xianxia-theme #page-home .home-stats { padding: 0; }
+  body.xianxia-theme #page-home .home-stats > .stat-card { padding: 16px; }
+  body.xianxia-theme #page-home .quest-card { padding: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.xianxia-theme #page-home .xiuxian-bar > div { transition: none; }
+}
