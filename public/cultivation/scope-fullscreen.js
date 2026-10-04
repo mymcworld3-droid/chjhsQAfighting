@@ -6,11 +6,12 @@
   let studio, block, scopeBody, saveButton, cartSource, opened = false;
   let baseline = null, previousFocus = null, bodyOverflow = '', htmlOverflow = '', saving = false;
   const clone = value => JSON.parse(JSON.stringify(value));
-  const units = () => Array.isArray(window.soloSelectedUnits) ? window.soloSelectedUnits : [];
+  const units = () => { const list = $('set-source-mode')?.value === 'random' ? window.soloComprehensiveUnits : window.soloSelectedUnits; return Array.isArray(list) ? list : []; };
 
   function snapshot() {
     return {
-      units: JSON.stringify(units()),
+      units: JSON.stringify(window.soloSelectedUnits || []),
+      comprehensive: JSON.stringify(window.soloComprehensiveUnits || []),
       mode: $('set-source-mode')?.value || 'random',
       bank: $('set-source-final-value')?.value || 'ai'
     };
@@ -19,7 +20,7 @@
   function changed() {
     if (!baseline) return false;
     const now = snapshot();
-    return now.units !== baseline.units || now.mode !== baseline.mode || now.bank !== baseline.bank;
+    return now.units !== baseline.units || now.comprehensive !== baseline.comprehensive || now.mode !== baseline.mode || now.bank !== baseline.bank;
   }
 
   function updateSummary() {
@@ -84,6 +85,7 @@
     if (!force && changed()) {
       if (!window.confirm('有尚未儲存的範圍變更。確定要放棄本次修改嗎？')) return false;
       window.soloSelectedUnits = clone(JSON.parse(baseline.units));
+      window.soloComprehensiveUnits = clone(JSON.parse(baseline.comprehensive));
       if ($('set-source-mode')) $('set-source-mode').value = baseline.mode;
       if ($('set-source-final-value')) $('set-source-final-value').value = baseline.bank;
       window.toggleSourceMode?.();
@@ -212,6 +214,7 @@
       window.renderSelectedUnitsList = wrapped;
     }
     $('set-source-mode').addEventListener('change', updateSummary);
+    window.addEventListener('curriculum:comprehensive-change', updateSummary);
     $('set-source-final-value')?.addEventListener('change', updateSummary);
     saveButton.removeAttribute('onclick');
     saveButton.addEventListener('click', save);

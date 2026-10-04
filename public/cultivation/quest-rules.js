@@ -62,7 +62,7 @@
       dailyClaimed: raw?.dailyDate === date && Array.isArray(raw.dailyClaimed) ? raw.dailyClaimed.filter(id => DAILY.some(q => q.id === id)) : [] };
   }
   function progressValue(q, user, p, kind, date) {
-    if (q.metric === 'scope') return Array.isArray(user?.gameSettings?.focusedUnits) && user.gameSettings.focusedUnits.length ? 1 : 0;
+    if (q.metric === 'scope') return (Array.isArray(user?.gameSettings?.focusedUnits) && user.gameSettings.focusedUnits.length) || (Array.isArray(user?.gameSettings?.comprehensiveUnits) && user.gameSettings.comprehensiveUnits.length) ? 1 : 0;
     if (q.metric === 'score') return number(user?.stats?.totalScore);
     if (kind === 'daily' && q.metric === 'meditation' && user?.dailyMeditation?.lastDate === date) return 1;
     // Existing verified milestones remain useful for returning players.

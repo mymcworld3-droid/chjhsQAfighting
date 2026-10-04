@@ -13,7 +13,7 @@ test('three progressive pages go directly from subject to merged full-year chapt
   assert.match(pages,/setPage\(Math\.min\(2,stage\+1\)\)/);
   assert.match(pages,/native\.dispatchEvent\(new Event\('change',\{bubbles:true\}\)\)/);
   assert.match(pages,/const last=\$\('cs-stage-2'\)/);
-  assert.match(pages,/last\.append\(search,tools,chapter,custom,message\)/);
+  assert.match(pages,/last\.append\(search,tools,chapter,message\)/);
   assert.doesNotMatch(pages,/\$\('cs-add'\)|chapter,add/);
   assert.match(pages,/window\.openCurriculumPage=page/);
   assert.match(pages,/id="cs-prev" class="cs-back"/);

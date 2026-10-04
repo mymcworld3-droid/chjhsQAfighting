@@ -34,7 +34,7 @@ el('cs-subject').onchange=e=>{subject=e.target.value;term=AUTO_TERM;edition=AUTO
 el('cs-search').oninput=()=>display();
 el('cs-all').onclick=selectAllCurrentChapters;
 el('cs-clear').onclick=clearCurrentSelection;
-el('cs-add-custom').onclick=addCustom;return true;}
+el('cs-add-custom').onclick=addCustom;el('comprehensive-source-container')?.append(parent.querySelector('.cs-custom-panel'));return true;}
 async function load(){const file=sourcePath(subject,grade);if(!memo.has(file))memo.set(file,fetch('/'+file.split('/').map(encodeURIComponent).join('/')).then(r=>{if(!r.ok)throw Error(r.status);return r.json();}).catch(e=>{memo.delete(file);throw e;}));return memo.get(file);}
 function canonicalSubject(){return /^數學(?:A|B|甲|乙)$/.test(subject)?'數學':subject==='國語'?'國文':subject;}
 function currentPath(){const year=['七','八','九'][grades.indexOf(grade)-6];return (grade.startsWith('高中')||grade.startsWith('國小'))?[canonicalSubject(),grade,AUTO_TERM,subject].join('/'):[subject,year+'年級全學年'].join('/');}
@@ -64,7 +64,7 @@ const label=document.createElement('b');label.textContent=u.unit;summary.append(
 const hint=document.createElement('small');hint.className='cs-card-count';hint.textContent=u.details.length?u.details.length+' 個考點 · 點開可個別選取':'勾選此章節';group.append(hint);
 u.details.forEach((t,j)=>{const row=document.createElement('label'),box=document.createElement('input'),chapterSelected=draft.has('c:'+i);box.type='checkbox';box.className='cs-topic';box.dataset.i=i;box.dataset.j=j;box.checked=chapterSelected||draft.has('t:'+i+':'+j);box.disabled=chapterSelected;box.addEventListener('change',()=>setTopicSelection(i,j,box.checked));
 const name=document.createElement('span');name.textContent=t;row.append(box,name);group.append(row);});host.append(group);});
-updateDraft();if(!count)status('此範圍無單元，請改用自訂主題。');}
+updateDraft();if(!count)status('此範圍無單元，請到綜合練習加入自訂主題。');}
 function normalizeUnitList(list,semesterName){
  const source=Array.isArray(list)?list:[];
  return source.map(u=>typeof u==='string'?{unit:u,details:[],term:semesterName}:{unit:u.unit||u.name||u.title||'',details:Array.isArray(u.details||u.sub_topics)?u.details||u.sub_topics:[],term:semesterName}).filter(u=>u.unit);
@@ -98,7 +98,7 @@ function mergeYearUnits(yearData){
  return semesterNames.flatMap(name=>semesterUnits(yearData?.[name],name));
 }
 async function render(){if(!init())return;const n=++serial;draft.clear();el('cs-grade').value=grade;subject=choices('cs-subject',subjectOptions(grade),subject,'選科目');term=choices('cs-term',[AUTO_TERM],AUTO_TERM,'全學年');edition=choices('cs-edition',[AUTO_EDITION],AUTO_EDITION,'自動整合');units=[];el('cs-units').replaceChildren();
-if(!grade.startsWith('國中')&&!grade.startsWith('高中')&&!grade.startsWith('國小')){display();status('這個年級目前請使用自訂複習範圍。');return;}
+if(!grade.startsWith('國中')&&!grade.startsWith('高中')&&!grade.startsWith('國小')){display();status('這個年級目前請到綜合練習加入自訂主題。');return;}
 status('正在載入全學年章節…');try{const data=await load();if(n!==serial)return;
 let yearData;
 if(grade.startsWith('高中')||grade.startsWith('國小')){
@@ -111,14 +111,21 @@ if(grade.startsWith('高中')||grade.startsWith('國小')){
 units=mergeYearUnits(yearData).filter(u=>u.unit);display();
 if(units.length)status('已合併第一、第二學期；勾選章節或考點後會自動加入已選範圍。');
 window.dispatchEvent(new CustomEvent('curriculum:options-ready',{detail:{grade,subject,term:AUTO_TERM,edition:AUTO_EDITION,available:units.length}}));
-}catch(e){if(n!==serial)return;display();status('單元資料讀取失敗，可以先使用自訂主題。');window.dispatchEvent(new CustomEvent('curriculum:options-ready',{detail:{grade,subject,term:AUTO_TERM,edition:AUTO_EDITION,available:0,error:true}}));console.error('[Curriculum]',e);}}
+}catch(e){if(n!==serial)return;display();status('單元資料讀取失敗，可以先到綜合練習加入自訂主題。');window.dispatchEvent(new CustomEvent('curriculum:options-ready',{detail:{grade,subject,term:AUTO_TERM,edition:AUTO_EDITION,available:0,error:true}}));console.error('[Curriculum]',e);}}
 function addList(items){const existing=selectedUnits(),keys=new Set(existing.map(itemKey));let added=0;
 for(const item of items){const k=itemKey(item);if(keys.has(k))continue;if(existing.length>=24)break;existing.push(item);keys.add(k);added++;}
 window.soloSelectedUnits=existing;notifySelectionList();status(added?'已加入 '+added+' 個範圍，請按「儲存出題範圍」。':'已存在，或達 24 個上限。');applyVisibleSelectionState();}
 function addChecked(){applyVisibleSelectionState();status('章節與考點在勾選時就會自動加入，不需要再按「加入」。');}
-function addCustom(){const value=el('cs-custom').value.trim();if(!value)return status('請先輸入主題。');addList([{path:canonicalSubject()+'/'+grade+'/自訂/'+subject,detail:value,sub_topics:[]}]);el('cs-custom').value='';}
-function removeSelectedAt(i){if(!Number.isInteger(i)||i<0||i>=selectedUnits().length)return;window.soloSelectedUnits.splice(i,1);notifySelectionList();applyVisibleSelectionState();}
-function showList(){const host=el('solo-selected-units-list');if(!host)return;host.replaceChildren();const items=selectedUnits();const p=document.createElement('p');p.className='cs-note';p.textContent='已選 '+items.length+' / 24 項';host.append(p);items.forEach((u,i)=>{const row=document.createElement('div');row.className='cs-unit';row.style.display='flex';row.style.gap='8px';const label=document.createElement('span');label.style.flex='1';label.style.overflowWrap='anywhere';label.textContent=u.path+' · '+(u.detail||'全部');const del=document.createElement('button');del.type='button';del.textContent='移除';del.onclick=()=>removeSelectedAt(i);row.append(label,del);host.append(row);});applyVisibleSelectionState();}
+function addCustom(){const value=el('cs-custom').value.trim();const message=el('cs-custom-message');if(!value){message.textContent='請先輸入主題。';return;}
+const subject=el('cs-custom-subject')?.value||'綜合',level=el('set-level')?.value||'國中一年級';
+const item={path:subject+'/'+level+'/自訂/'+subject,detail:value,sub_topics:[]};
+const list=Array.isArray(window.soloComprehensiveUnits)?window.soloComprehensiveUnits:[];
+if(list.some(u=>itemKey(u)===itemKey(item))){message.textContent='此主題已在綜合練習範圍內。';return;}
+if(list.length>=24){message.textContent='最多只能加入 24 個自訂主題。';return;}
+window.soloComprehensiveUnits=[...list,item];el('cs-custom').value='';message.textContent='已加入綜合練習，請儲存出題範圍。';notifySelectionList();window.dispatchEvent(new CustomEvent('curriculum:comprehensive-change'));}
+function displayUnits(){return el('set-source-mode')?.value==='random'?(window.soloComprehensiveUnits||[]):selectedUnits();}
+function removeSelectedAt(i){if(!Number.isInteger(i)||i<0||i>=displayUnits().length)return;if(el('set-source-mode')?.value==='random')window.soloComprehensiveUnits.splice(i,1);else window.soloSelectedUnits.splice(i,1);notifySelectionList();applyVisibleSelectionState();}
+function showList(){const host=el('solo-selected-units-list');if(!host)return;host.replaceChildren();const items=displayUnits();const p=document.createElement('p');p.className='cs-note';p.textContent='已選 '+items.length+' / 24 項';host.append(p);items.forEach((u,i)=>{const row=document.createElement('div');row.className='cs-unit';row.style.display='flex';row.style.gap='8px';const label=document.createElement('span');label.style.flex='1';label.style.overflowWrap='anywhere';label.textContent=u.path+' · '+(u.detail||'全部');const del=document.createElement('button');del.type='button';del.textContent='移除';del.onclick=()=>removeSelectedAt(i);row.append(label,del);host.append(row);});applyVisibleSelectionState();}
 window.renderSoloUnitSelectors=async()=>{const x=el('set-level')?.value;if(!el('cs-scope')){if(grades.includes(x))grade=x;else if(x==='國小中年級')grade='國小三年級';else if(x==='國小高年級')grade='國小五年級';else if(x==='高中職')grade='高中一年級';}await render();};
 window.addCurrentUnitToSelection=addChecked;window.renderSelectedUnitsList=showList;
 window.removeSelectedUnit=i=>removeSelectedAt(Number(i));

@@ -26,8 +26,8 @@ test('Qi-five tutorial carefully explains source material, amount, single-choice
   assert.match(tutorial, /中＝15～20 題/);
   assert.match(tutorial, /多＝21～30 題/);
   assert.match(tutorial, /四選一/);
-  assert.match(tutorial, /每批最多 5 題，末批依剩餘題數/);
-  assert.match(tutorial, /後一批會帶入前面全部題目/);
+  assert.match(tutorial, /每次只生成一題與完整解析/);
+  assert.match(tutorial, /下一題會帶入前面全部題目/);
 });
 
 test('Qi-five tutorial reuses the one-question private Dongtian demo, requiring play, return, then deletion', () => {

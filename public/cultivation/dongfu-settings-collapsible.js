@@ -138,7 +138,7 @@
     scopeCard.appendChild(scopeBody);
     analysisPanel.before(scopeCard);
     registerCard('scope', scopeCard, scopeBody, {
-      icon: 'fa-bullseye', title: '範圍設定', summary: '綜合題目、指定題庫與專注練習', className: 'dongfu-scope-card'
+      icon: 'fa-bullseye', title: '範圍設定', summary: '綜合練習、指定題庫與專注練習', className: 'dongfu-scope-card'
     });
 
     const oldAnalysisTitle = analysisPanel.querySelector('h3');

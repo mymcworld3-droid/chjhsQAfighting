@@ -164,7 +164,7 @@ export const featureReady = (async () => {
       <div id="dongtian-body" class="dongfu-collapse-body dt-body" hidden>
         <section class="dt-create">
           <h4>開闢新洞天</h4>
-          <p>可同時提供多張圖片與文字。AI 會先判斷需要的題數與固定單選結構，再每批最多 5 題生成；後一批會讀取前面已生成的全部題目以避免重複。</p>
+          <p>可同時提供多張圖片與文字。AI 會先判斷需要的題數與固定單選結構，再逐題生成完整題目與解析；每次都會參考前面已生成的題目以避免重複。</p>
           <textarea id="dt-source-text" class="dt-input" maxlength="16000" placeholder="貼上課文、筆記、公式說明、重點整理……（圖片與文字至少提供一種）"></textarea>
           <div class="dt-upload-row">
             <label class="dt-upload"><i class="fa-solid fa-images"></i> 上傳圖片（最多 ${MAX_IMAGES} 張）<input id="dt-images" type="file" accept="image/png,image/jpeg,image/webp" multiple></label>
@@ -179,7 +179,7 @@ export const featureReady = (async () => {
               <label class="dt-amount-choice"><input type="radio" name="dt-question-amount" value="high"><span>多 <small>21～30 題</small></span></label>
             </div>
           </div>
-          <button id="dt-generate" class="dt-generate" type="button">凝聚洞天<small>先規劃題數，再每批最多 5 題</small></button>
+          <button id="dt-generate" class="dt-generate" type="button">凝聚洞天<small>先規劃題數，再逐題生成完整解析</small></button>
           <div id="dt-generate-progress" class="dt-generation-progress" role="status" aria-live="polite" hidden>
             <div class="dt-generation-head"><span id="dt-progress-stage">準備生成</span><strong id="dt-progress-count"></strong></div>
             <div id="dt-progress-track" class="dt-generation-track" role="progressbar" aria-label="已生成題目" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="dt-progress-fill"></i></div>
@@ -393,7 +393,7 @@ export const featureReady = (async () => {
     state.generating = true;
     setProgress('整理素材');
     button.disabled = true;
-    button.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> 正在凝聚洞天…<small>先規劃題數，再每批最多 5 題</small>';
+    button.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> 正在凝聚洞天…<small>先規劃題數，再逐題生成完整解析</small>';
     status.textContent = state.files.length ? `正在整理 ${state.files.length} 張圖片與文字中的所有知識點…` : '正在整理文字中的所有知識點…';
     let responseStatus = null;
     let responseDiagnostics = null;
@@ -405,7 +405,7 @@ export const featureReady = (async () => {
         images.push(await compressImage(state.files[i].file));
       }
       const amountLabel = ({ low:'少量（10～14 題）', medium:'中量（15～20 題）', high:'大量（21～30 題）' })[questionAmount] || '中量';
-      status.textContent = `AI 正在依「${amountLabel}」先規劃總題數與單選題結構，接著每批最多 5 題生成…`;
+      status.textContent = `AI 正在依「${amountLabel}」先規劃總題數與單選題結構，接著逐題生成題目與完整解析…`;
       setProgress('AI 正在規劃題數');
       const level = userData()?.profile?.educationLevel || '國中一年級';
       const response = await fetch('/api/generate-dongtian', {
@@ -419,12 +419,12 @@ export const featureReady = (async () => {
           setProgress('AI 正在規劃題數');
         } else if (event.type === 'planned') {
           setProgress('題數規劃完成', event.completed, event.total);
-          status.textContent = `已規劃 ${event.total} 題，準備分批生成…`;
+          status.textContent = `已規劃 ${event.total} 題，準備逐題生成完整解析…`;
         } else if (event.type === 'batch-start') {
-          setProgress(`生成第 ${event.batch} / ${event.batches} 批`, event.completed, event.total);
-          status.textContent = `已完成 ${event.completed} / ${event.total} 題，正在生成下一批…`;
+          setProgress(`生成第 ${event.batch} / ${event.batches} 題與解析`, event.completed, event.total);
+          status.textContent = `已完成 ${event.completed} / ${event.total} 題，正在生成下一題與完整解析…`;
         } else if (event.type === 'batch-complete') {
-          setProgress(`第 ${event.batch} / ${event.batches} 批已完成`, event.completed, event.total);
+          setProgress(`第 ${event.batch} / ${event.batches} 題已完成`, event.completed, event.total);
           status.textContent = `已生成 ${event.completed} / ${event.total} 題。`;
         } else if (event.type === 'review') {
           setProgress('AI 正在複核全部題目', event.completed, event.total);
@@ -471,7 +471,7 @@ export const featureReady = (async () => {
     } finally {
       state.generating = false;
       button.disabled = false;
-      button.innerHTML = `凝聚洞天<small>先規劃題數，再每批最多 5 題</small>`;
+      button.innerHTML = `凝聚洞天<small>先規劃題數，再逐題生成完整解析</small>`;
     }
   }
 

@@ -65,7 +65,7 @@ test('new Dongtian names describe the learning content, not a xianxia realm', ()
   assert.match(api.buildDongtianDoubleCheckPrompt({ name:'進位制與補數', questions:[] }), /禁止修仙風格或空泛文藝名稱/);
 });
 
-test('Dongtian generates up to five questions per batch and carries all previous questions into the next prompt', () => {
+test('Dongtian generates one question per request and carries all previous questions into the next prompt', () => {
   const plan = api.normalizeDongtianPlan({
     name:'星軌算境', level:'國中三年級', difficulty:'medium', subject:'數學',
     knowledgePoints:['比例','函數'], questionCount:10,
@@ -75,36 +75,25 @@ test('Dongtian generates up to five questions per batch and carries all previous
     id:'DT-00'+(i+1), difficulty:'medium', q:'已生成題目'+(i+1),
     correct:'A'+i, wrong:['B'+i,'C'+i,'D'+i], exp:'解析'+i, subject:'數學'
   }));
-  const prompt = api.buildQuestionBatchPrompt('notes','國中三年級',0,plan,previous,5,5);
-  assert.match(prompt, /第 6～10 題，共恰好 5 題/);
-  assert.match(prompt, /每批最多 5 題/);
+  const prompt = api.buildQuestionBatchPrompt('notes','國中三年級',0,plan,previous,5,1);
+  assert.match(prompt, /第 6～6 題，共恰好 1 題/);
+  assert.match(prompt, /每次只生成一題/);
   assert.match(prompt, /先前已生成的全部題目/);
   assert.match(prompt, /已生成題目1/);
   assert.match(prompt, /已生成題目5/);
   assert.match(prompt, /不可複選/);
 });
 
-test('Dongtian final batch uses the exact remainder and keeps prior-question context', () => {
+test('Dongtian final request generates only the last remaining question with all prior context', () => {
   const plan = api.normalizeDongtianPlan({ questionCount:18, subject:'數學' }, '國中一年級', 'medium');
-  const previous = Array.from({ length:15 }, (_,i) => ({
-    id:`DT-${String(i+1).padStart(3,'0')}`, difficulty:'medium',
-    q:'先前題目'+(i+1), correct:'A'+i,
-    wrong:['B'+i,'C'+i,'D'+i], exp:'解析'+i, subject:'數學'
-  }));
-  const expectedCount = Math.min(api.QUESTION_BATCH_SIZE, plan.questionCount - previous.length);
-  assert.equal(plan.questionCount, 18);
-  assert.equal(expectedCount, 3);
-  const prompt = api.buildQuestionBatchPrompt('notes', '國中一年級', 0, plan, previous, 15, expectedCount);
-  assert.match(prompt, /第 16～18 題，共恰好 3 題/);
-  assert.match(prompt, /本批只生成剩餘所需的 3 題/);
-  assert.match(prompt, /先前題目15/);
-  const raw = { questions: Array.from({ length:3 }, (_,i) => ({
-    q:'末批'+i, correct:'A'+i, wrong:['B'+i,'C'+i,'D'+i], exp:'E'+i, subject:'數學'
-  })) };
-  const result = api.normalizeQuestionBatch(raw, plan, previous, 15, expectedCount);
-  assert.equal(result.length, 3);
-  assert.deepEqual(result.map(q => q.id), ['DT-016','DT-017','DT-018']);
-  assert.throws(() => api.normalizeQuestionBatch({ questions: raw.questions.slice(0,2) }, plan, previous, 15, 3));
+  const previous = Array.from({length:17},(_,i)=>({q:'先前題目'+(i+1)}));
+  const count = Math.min(api.QUESTION_BATCH_SIZE, plan.questionCount - previous.length);
+  assert.equal(count,1);
+  const prompt = api.buildQuestionBatchPrompt('notes','國中一年級',0,plan,previous,17,count);
+  assert.match(prompt,/第 18～18 題，共恰好 1 題/);
+  assert.match(prompt,/先前題目17/);
+  const result=api.normalizeQuestionBatch({questions:[{q:'末題',correct:'A',wrong:['B','C','D'],exp:'解析'}]},plan,previous,17,count);
+  assert.equal(result.length,1);assert.equal(result[0].id,'DT-018');
 });
 
 test('Dongtian batch normalization rejects multi-select and requires one correct plus three unique wrong choices', () => {
@@ -407,12 +396,12 @@ test('Dongtian API endpoint performs planning before batched generation and audi
   assert.match(apiSource, /buildQuestionBatchPrompt\([\s\S]*generatedQuestions/);
   assert.match(apiSource, /generatedQuestions\.push\(\.\.\.batch\)/);
   assert.match(apiSource, /priorQuestionCountInPrompt: startIndex/);
-  assert.match(apiSource, /QUESTION_BATCH_SIZE = 5/);
+  assert.match(apiSource, /QUESTION_BATCH_SIZE = 1/);
 });
 
-test('Dongtian creation UI describes planning first and five-question batch generation', () => {
-  assert.match(uiSource, /先判斷需要的題數與固定單選結構，再每批最多 5 題生成/);
-  assert.match(uiSource, /先規劃題數，再每批最多 5 題/);
+test('Dongtian creation UI describes planning first and single-question generation', () => {
+  assert.match(uiSource, /先判斷需要的題數與固定單選結構，再逐題生成完整題目與解析/);
+  assert.match(uiSource, /先規劃題數，再逐題生成完整解析/);
 });
 
 

@@ -21,7 +21,7 @@ test('selected chapters and points use the existing focusedUnits contract', () =
   assert.match(script, /sub_topics/);
   assert.match(script, /path:currentPath\(\),detail/);
   assert.match(legacy, /focusedUnits: \[\.\.\.\(window\.soloSelectedUnits \|\| \[\]\)\]/);
-  assert.match(legacy, /const randomUnit = settings\.focusedUnits/);
+  assert.match(legacy, /const randomUnit = practiceUnits/);
 });
 
 test('all structured junior-high course data is valid JSON with subject, grade and edition layers', () => {

@@ -25,9 +25,7 @@ test('NDJSON reports confirmed per-batch progress and final cave after independe
   const original = aiRouter.generateJSON;
   const responses = [
     { questionCount: 11, name: '代數重點', subject: '數學', level: '國中一年級' },
-    { questions: Array.from({ length: 5 }, (_, i) => ({ q: '算式 ' + (i + 1) + ' = ?', correct:'正解',wrong:['錯解1','錯解2','錯解3'],exp:'解析'+i,subject:'數學' })) },
-    { questions: Array.from({ length: 5 }, (_, i) => ({ q: '算式 ' + (i + 6) + ' = ?', correct:'正解',wrong:['錯解1','錯解2','錯解3'],exp:'解析'+i,subject:'數學' })) },
-    { questions: [{ q: '算式 11 = ?', correct:'正解',wrong:['錯解1','錯解2','錯解3'],exp:'解析11',subject:'數學' }] },
+    ...Array.from({length:11},(_,i)=>({ questions:[{q:'算式 '+(i+1)+' = ?',correct:'正解',wrong:['錯解1','錯解2','錯解3'],exp:'核心概念、逐步計算與三個錯誤選項判斷。'.repeat(8),subject:'數學'}] })),
     { approved: true, confidence: 0.96, issues: [], summary: '符合要求' }
   ];
   let calls = 0;
@@ -40,15 +38,12 @@ test('NDJSON reports confirmed per-batch progress and final cave after independe
       get: () => 'application/x-ndjson',
       body: { text: '一次函數與方程式', creatorLevel:'國中一年級', questionAmount:'low' }
     }, res);
-    assert.equal(calls, 5);
+    assert.equal(calls, 13);
     assert.equal(res.statusCode, 200);
     assert.match(res.headers['Content-Type'], /application\/x-ndjson/);
     assert.equal(res.ended, true);
-    assert.deepEqual(res.events.map(e => e.type), [
-      'planning','planned','batch-start','batch-complete','batch-start','batch-complete',
-      'batch-start','batch-complete','review','complete'
-    ]);
-    assert.deepEqual(res.events.filter(e => e.type === 'batch-complete').map(e => [e.completed,e.total]), [[5,11],[10,11],[11,11]]);
+    assert.deepEqual(res.events.map(e=>e.type),['planning','planned',...Array.from({length:11},()=>['batch-start','batch-complete']).flat(),'review','complete']);
+    assert.deepEqual(res.events.filter(e=>e.type==='batch-complete').map(e=>[e.completed,e.total]),Array.from({length:11},(_,i)=>[i+1,11]));
     assert.equal(res.events.at(-1).dongtian.questions.length, 11);
     assert.equal(res.events.at(-1).doubleCheck.passed, true);
   } finally { aiRouter.generateJSON = original; }
@@ -116,4 +111,37 @@ test('creation view shows real generated counts, review and committed save separ
   assert.match(ui, /event\.type === 'review'/);
   assert.ok(ui.indexOf("setProgress('題目複核完成，正在儲存洞天'") < ui.indexOf('await saveGeneratedDongtian('));
   assert.ok(ui.indexOf('await saveGeneratedDongtian(') < ui.indexOf("setProgress('洞天建立完成'"));
+});
+
+test('short explanations retry only that question; progress counts confirmed complete questions', async () => {
+  const original = aiRouter.generateJSON, prompts = [];
+  const detail = '核心概念與依據。步驟一列式，步驟二代入求解，步驟三檢查結果。逐一分析三個錯誤選項的迷思。'.repeat(3);
+  const responses = [{questionCount:10,subject:'數學'},
+    {questions:[{q:'題目1',correct:'A',wrong:['B','C','D'],exp:'答案是 A'}]},
+    ...Array.from({length:10},(_,i)=>({questions:[{q:'題目'+(i+1),correct:'A',wrong:['B','C','D'],exp:detail}]})),
+    {approved:true,confidence:0.96,issues:[]}];
+  aiRouter.generateJSON=async prompt=>{prompts.push(prompt);return{data:responses.shift(),provider:'test',model:'stub'};};
+  try {
+    const routes={};register({post(name,fn){routes[name]=fn;}});const res=mockResponse();
+    await routes['/api/generate-dongtian']({get:()=> 'application/x-ndjson',body:{text:'教材',questionAmount:'low'}},res);
+    assert.equal(res.events.at(-1).type,'complete');
+    assert.match(prompts[2],/上次生成未通過/);assert.match(prompts[2],/解析太簡短/);
+    assert.deepEqual(res.events.filter(e=>e.type==='batch-complete').map(e=>e.completed),Array.from({length:10},(_,i)=>i+1));
+    const result=res.events.at(-1);assert.ok(result.dongtian.questions.every(q=>q.exp===detail));
+    assert.ok(result.batches.every(b=>b.count===1));
+    assert.match(prompts[3],/題目1/);assert.match(prompts[3],/逐一分析三個錯誤選項/);
+  } finally {aiRouter.generateJSON=original;}
+});
+
+test('two short-explanation failures end creation without a partial or fabricated cave', async () => {
+  const original=aiRouter.generateJSON;let calls=0;
+  aiRouter.generateJSON=async()=>({data:calls++===0?{questionCount:10,subject:'數學'}:
+    {questions:[{q:'Q',correct:'A',wrong:['B','C','D'],exp:'因為 A 正確'}]}});
+  try {
+    const routes={};register({post(name,fn){routes[name]=fn;}});const res=mockResponse(),log=console.error;console.error=()=>{};
+    try {await routes['/api/generate-dongtian']({get:()=> 'application/x-ndjson',body:{text:'教材',questionAmount:'low'}},res);}
+    finally {console.error=log;}
+    assert.equal(calls,3);assert.equal(res.events.at(-1).type,'error');assert.match(res.events.at(-1).error,/解析太簡短/);
+    assert.equal(res.events.some(e=>e.type==='batch-complete'||e.type==='complete'),false);
+  } finally {aiRouter.generateJSON=original;}
 });

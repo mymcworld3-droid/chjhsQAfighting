@@ -15,7 +15,8 @@ const MAX_IMAGES = 8;
 const MAX_IMAGE_BASE64 = 2_800_000;
 const MAX_TEXT = 16000;
 const MIN_QUESTIONS = 10;
-const QUESTION_BATCH_SIZE = 5;
+const QUESTION_BATCH_SIZE = 1;
+const MIN_EXPLANATION_LENGTH = 80;
 const MAX_QUESTIONS = 30;
 const QUESTION_COUNT_CHOICES = Object.freeze(Array.from(
   { length: MAX_QUESTIONS - MIN_QUESTIONS + 1 }, (_, i) => MIN_QUESTIONS + i
@@ -148,7 +149,7 @@ function buildPlanningPrompt(text, creatorLevel, imageCount, questionAmount = 'm
 [規劃要求]
 1. 盡可能完整辨認素材中所有可獨立學習／考核的知識點。
 2. 使用者選擇的題量偏好是「${amountLabel}」。本次 questionCount 應為 ${allowedCounts[0]}～${allowedCounts[1]} 之間任一整數，依素材實際可考核知識點選出合適的題數，不要湊成 5 的倍數或無故補題。
-3. 無論使用者選哪一種題量，每個洞天至少 ${MIN_QUESTIONS} 題；後續每批最多 ${QUESTION_BATCH_SIZE} 題，最後一批僅生成剩餘題數（可為 1～${QUESTION_BATCH_SIZE} 題）。
+3. 無論使用者選哪一種題量，每個洞天至少 ${MIN_QUESTIONS} 題；後續每次只生成一題，依序完成所有題目與完整解析。
 4. 題目結構固定為「四選一單選題」：每題只能選一個答案、恰好一個 correct、恰好三個 wrong；禁止複選題、多選題、複數正解。
 5. questionBlueprints 必須恰好有 questionCount 筆，依實際遊玩順序規劃每一題要考的 focus、skill、difficulty、subject。
 6. 題序由基礎辨識 → 理解 → 應用／整合，避免規劃同義重複題。
@@ -195,7 +196,7 @@ function buildQuestionBatchPrompt(text, creatorLevel, imageCount, plan, generate
   return `
 [任務]
 你是「洞天」題目生成師。洞天規劃已完成。現在只生成第 ${startIndex + 1}～${endIndex} 題，共恰好 ${batchSize} 題。
-這是分批生成流程，每批最多 ${QUESTION_BATCH_SIZE} 題；本批只生成剩餘所需的 ${batchSize} 題，最後一批可少於 ${QUESTION_BATCH_SIZE} 題；不得額外湊題。
+這是逐題生成流程，每次只生成一題；本次只生成指定題號，將輸出篇幅集中在這一題及其完整解析，不得額外湊題。
 
 [洞天規劃]
 ${JSON.stringify({
@@ -220,7 +221,7 @@ ${generatedQuestions.length ? JSON.stringify(generatedQuestions) : '[]'}
 2. 題目必須依照本批藍圖順序生成，並與素材內容有直接依據。
 3. 每題只能是四選一單選題，不可複選：correct 必須是單一字串，wrong 必須恰好三個不同字串。
 4. correct 與三個 wrong 彼此不可重複，且只能有一個明確正確答案。
-5. exp 必須解釋為何正確，必要時說明其他選項錯在哪裡。
+5. exp 必須提供完整教學解析，建議 120～300 字，不得只寫答案或一句結論。先指出核心概念，再逐步推理／計算，說明正解為何成立，最後逐一指出三個錯誤選項的錯誤或常見迷思。數學與理科須寫出必要公式、代入與中間步驟；語文與社會科須提供判斷依據。依題目程度調整深度，避免無關填字；解析至少 ${MIN_EXPLANATION_LENGTH} 個非空白字元。
 6. id 依全洞天題序使用 DT-001、DT-002……，不得重號。
 7. 不要輸出已生成過的題目，只輸出本批 ${batchSize} 題。
 
@@ -247,7 +248,7 @@ ${cleanText(text, MAX_TEXT) || '（沒有額外文字，主要依圖片內容出
 不要輸出 markdown，不要加入 JSON 以外的文字。`;
 }
 
-function normalizeQuestionBatch(raw, plan, existingQuestions, startIndex, expectedCount) {
+function normalizeQuestionBatch(raw, plan, existingQuestions, startIndex, expectedCount, requireDetailedExplanation = false) {
   const data = raw && typeof raw === 'object' ? raw : {};
   const questions = Array.isArray(data.questions) ? data.questions : [];
   const fingerprints = new Set((existingQuestions || []).map((item) => questionFingerprint(item.q)).filter(Boolean));
@@ -261,6 +262,9 @@ function normalizeQuestionBatch(raw, plan, existingQuestions, startIndex, expect
     const wrong = Array.isArray(item?.wrong) ? item.wrong.map((x) => cleanText(x, 800)).filter(Boolean) : [];
     const exp = cleanText(item?.exp, 3500);
     if (!q || !correct || wrong.length !== 3 || !exp) continue;
+    if (requireDetailedExplanation && exp.replace(/\s/g, '').length < MIN_EXPLANATION_LENGTH) {
+      throw new Error(`第 ${startIndex + 1} 題解析太簡短，至少需要 ${MIN_EXPLANATION_LENGTH} 個非空白字元與完整解題步驟；將重新生成此題`);
+    }
     const uniqueWrong = [...new Set(wrong.filter((x) => x !== correct))];
     if (uniqueWrong.length !== 3) continue;
     const fp = questionFingerprint(q);
@@ -885,7 +889,7 @@ module.exports = function registerDongtianApi(app) {
       const plan = normalizeDongtianPlan(planningRun.data, creatorLevel, questionAmount);
       emit({ type: 'planned', total: plan.questionCount, completed: 0 });
 
-      // Pass 2+: generate up to five questions per batch; final batch uses the exact remainder.
+      // Pass 2+: generate exactly one question and its detailed explanation per request.
       // Every batch prompt includes every question already generated so the model can avoid repetition.
       const generatedQuestions = [];
       const batchAudit = [];
@@ -902,9 +906,9 @@ module.exports = function registerDongtianApi(app) {
           try {
             const prompt = buildQuestionBatchPrompt(
               text, creatorLevel, images.length, plan, generatedQuestions, startIndex, expectedCount
-            );
+            ) + (lastError ? `\n[上次生成未通過]\n${cleanText(lastError.message, 500)}\n請針對這個問題重新生成本題，尤其不要省略解析。` : '');
             const routed = await generateMultimodalJSON(prompt, images);
-            batch = normalizeQuestionBatch(routed.data, plan, generatedQuestions, startIndex, expectedCount);
+            batch = normalizeQuestionBatch(routed.data, plan, generatedQuestions, startIndex, expectedCount, true);
             successfulRun = routed;
           } catch (error) {
             lastError = error;
@@ -981,4 +985,4 @@ module.exports = function registerDongtianApi(app) {
   });
 };
 
-module.exports.__test = { LEVELS, MIN_QUESTIONS, QUESTION_BATCH_SIZE, QUESTION_COUNT_CHOICES, QUESTION_AMOUNT_PRESETS, normalizeLevel, normalizeDifficulty, normalizeQuestionAmount, allowedQuestionCounts, normalizePlannedQuestionCount, normalizeDongtianPlan, normalizeQuestionBatch, normalizeResult, buildPrompt, buildPlanningPrompt, buildQuestionBatchPrompt, validateImages, normalizeQuestionSnapshot, buildQuestionReviewPrompt, normalizeQuestionReview, buildRevisionPrompt, buildRevisionValidationPrompt, normalizeStandaloneQuestion, normalizeRevisionValidation, contentBasedDongtianName, normalizeDongtianDoubleCheck, buildDongtianDoubleCheckPrompt, verifyGeneratedDongtian, reviewAndRepairGeneratedDongtian };
+module.exports.__test = { LEVELS, MIN_QUESTIONS, QUESTION_BATCH_SIZE, MIN_EXPLANATION_LENGTH, QUESTION_COUNT_CHOICES, QUESTION_AMOUNT_PRESETS, normalizeLevel, normalizeDifficulty, normalizeQuestionAmount, allowedQuestionCounts, normalizePlannedQuestionCount, normalizeDongtianPlan, normalizeQuestionBatch, normalizeResult, buildPrompt, buildPlanningPrompt, buildQuestionBatchPrompt, validateImages, normalizeQuestionSnapshot, buildQuestionReviewPrompt, normalizeQuestionReview, buildRevisionPrompt, buildRevisionValidationPrompt, normalizeStandaloneQuestion, normalizeRevisionValidation, contentBasedDongtianName, normalizeDongtianDoubleCheck, buildDongtianDoubleCheckPrompt, verifyGeneratedDongtian, reviewAndRepairGeneratedDongtian };

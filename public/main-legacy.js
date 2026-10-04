@@ -115,8 +115,9 @@ function soloQuestionScope() {
     const settings = currentUserData?.gameSettings || {};
     const profile = currentUserData?.profile || {};
     const mode = settings.sourceMode || 'random';
-    const units = mode === 'focused' && Array.isArray(settings.focusedUnits)
-        ? settings.focusedUnits.map((unit) => ({
+    const activeUnits = mode === 'focused' ? settings.focusedUnits : mode === 'random' ? settings.comprehensiveUnits : [];
+    const units = Array.isArray(activeUnits)
+        ? activeUnits.map((unit) => ({
             path: String(unit?.path || ''),
             detail: String(unit?.detail || ''),
             topics: Array.isArray(unit?.sub_topics) ? unit.sub_topics.map(String).sort() : []
@@ -128,7 +129,7 @@ function soloQuestionScope() {
         units,
         difficulty: String(settings.difficulty || 'auto'),
         level: String(profile.educationLevel || ''),
-        weakSubjects: mode === 'focused' ? String(profile.weakSubjects || '') : '',
+        weakSubjects: (mode === 'focused' || (mode === 'random' && units.length > 0)) ? String(profile.weakSubjects || '') : '',
         language: currentLang
     });
 }
@@ -2097,6 +2098,8 @@ window.renderCascadingSelectors = (tree, currentPath) => {
 window.toggleSourceMode = () => {
     const mode = document.getElementById('set-source-mode').value;
     const bankContainer = document.getElementById('bank-source-container');
+    document.getElementById('comprehensive-source-container')?.classList.toggle('hidden', mode !== 'random');
+    window.renderSelectedUnitsList?.();
     const focusedContainer = document.getElementById('focused-source-container');
     
     if (mode === 'bank') {
@@ -2154,6 +2157,7 @@ async function updateSettingsInputs() {
 
         // 初始化專注練習清單
         window.soloSelectedUnits = settings.focusedUnits || [];
+        window.soloComprehensiveUnits = settings.comprehensiveUnits || [];
         window.renderSelectedUnitsList();
         try {
             const res = await fetch('/api/units');
@@ -2255,7 +2259,8 @@ window.saveProfile = async (triggerButton = null) => {
         sourceMode: sourceMode, 
         source: source, 
         difficulty: difficulty,
-        focusedUnits: [...(window.soloSelectedUnits || [])]
+        focusedUnits: [...(window.soloSelectedUnits || [])],
+        comprehensiveUnits: [...(window.soloComprehensiveUnits || [])]
     };
 
     await updateDoc(doc(db, "users", auth.currentUser.uid), { 
@@ -2663,8 +2668,9 @@ async function fetchOneQuestion() {
     const sourceMode = settings.sourceMode || 'random';
 
     // 1. 專注練習 (AI)
-    if (sourceMode === 'focused' && settings.focusedUnits && settings.focusedUnits.length > 0) {
-        const randomUnit = settings.focusedUnits[Math.floor(Math.random() * settings.focusedUnits.length)];
+    const practiceUnits = sourceMode === 'focused' ? settings.focusedUnits : sourceMode === 'random' ? settings.comprehensiveUnits : [];
+    if (Array.isArray(practiceUnits) && practiceUnits.length > 0) {
+        const randomUnit = practiceUnits[Math.floor(Math.random() * practiceUnits.length)];
         const parts = randomUnit.path.split('/');
         const subject = parts[0];
         // 專注練習的年級以選定單元為準，不應被玩家的個人程度覆蓋。

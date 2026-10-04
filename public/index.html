@@ -1116,10 +1116,16 @@ body.xianxia-theme main:has(#page-training.active-page),
                     <div class="pt-2 border-t border-white/5 mt-2">
                         <label class="text-[10px] font-bold text-yellow-500 mb-1 block uppercase">出題模式 (Source Mode)</label>
                         <select id="set-source-mode" class="input-cyber w-full mb-3" onchange="toggleSourceMode()">
-                            <option value="random">🌟 綜合題目 (隨機出題)</option>
+                            <option value="random">🌟 綜合練習 (隨機或自訂主題)</option>
                             <option value="focused">🎯 專注練習 (自訂單元)</option>
                             <option value="bank">📚 題庫練習 (固定題庫)</option>
                         </select>
+
+                        <div id="comprehensive-source-container" class="cs-scope">
+                            <p class="cs-note">可加入跨科自訂主題；留空時依程度隨機出題。完成後請儲存出題範圍。</p>
+                            <label>自訂主題科目<select id="cs-custom-subject" class="input-cyber w-full"><option>綜合</option><option>國文</option><option>英文</option><option>數學</option><option>物理</option><option>化學</option><option>生物</option><option>地球科學</option><option>歷史</option><option>地理</option><option>公民</option><option>資訊科技</option></select></label>
+                            <p id="cs-custom-message" class="cs-note" role="status"></p>
+                        </div>
 
                         <div id="bank-source-container" class="hidden bg-slate-900/50 p-3 rounded-lg border border-white/5">
                             <div id="bank-selectors-container" class="space-y-2"></div>
