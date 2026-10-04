@@ -63,16 +63,20 @@
         height:auto;
       }
 
-      /* Non-square source images must fill the circular preview rather than
-         inherit the responsive image height and drift above/below its center. */
+      /* Show the complete product image. A circular cover crop can hide hair,
+         captions and the corners even when the image is correctly centered. */
       body.xianxia-theme #store-grid .avatar-preview{
         flex:none;
+        padding:4px;
+        border-radius:8px!important;
       }
       body.xianxia-theme #store-grid .avatar-img{
         width:100%;
         height:100%;
-        object-fit:cover;
+        display:block;
+        object-fit:contain;
         object-position:center;
+        border-radius:0;
         transform:none;
       }
       body.xianxia-theme #store-grid > .store-card:hover,
