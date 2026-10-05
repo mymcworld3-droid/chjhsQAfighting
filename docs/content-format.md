@@ -4,6 +4,8 @@
 
 全站文字統一使用既有的修仙宋體 `Noto Serif TC`（思源宋體），透過 `--xq-serif` 與 `--ui-font` 共用字體堆疊；登入、導覽、按鈕、表單、動態彈窗與題目文字皆適用。Canvas 圖表另設定相同字體。MathJax／KaTeX／MathML 公式與 Font Awesome 圖示保留專用字型，避免符號失真或缺字。
 
+`main.js` 啟動流程不得以行內 `--xq-serif` 改回 Orbitron，也不得重新載入科技字體。字體驗證必須執行實際啟動程式再檢查計算樣式；只載入 CSS 無法發現 JavaScript 的字體覆寫。
+
 玩家帳戶的原始頭像保存於 `photoURL`，外觀裝備保存於 `equipped.avatar`；`profile-avatar.js` 統一優先使用裝備、其次帳戶頭像。坊市的「取消裝備」只清除頭像裝備，保留相框、背包與餘額。帳戶沒有原始頭像時顯示人物圖示。
 
 | 內容角色 | 統一規則 | 使用位置 |

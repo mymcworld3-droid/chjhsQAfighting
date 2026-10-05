@@ -225,17 +225,6 @@ if (document.readyState === 'loading') {
 // 使用者資料完成後立即開始載入；輪詢仍作為事件遺失時的保險。
 window.addEventListener('xiuxian:user-data-ready', startXiuxianFeaturesWhenReady);
 
-function restoreComputerFont() {
-  const fontHref = 'https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap';
-  if (!document.querySelector(`link[href="${fontHref}"]`)) {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = fontHref;
-    document.head.appendChild(link);
-  }
-  document.documentElement.style.setProperty('--xq-serif', "'Orbitron', 'Noto Sans TC', sans-serif");
-}
-
 function loadCelestialGoldTheme() {
   const themeHref = 'xianxia-gold.css';
   if (document.querySelector(`link[href="${themeHref}"]`)) return;
@@ -294,7 +283,7 @@ function registerBlackGoldChartTheme() {
   window.__blackGoldChartThemeRegistered = true;
 }
 
-restoreComputerFont();
+// Typography comes from the shared xianxia styles; startup must not override it.
 loadCelestialGoldTheme();
 loadBlackGoldHarmonyTheme();
 loadCompactTrainingLayout();
