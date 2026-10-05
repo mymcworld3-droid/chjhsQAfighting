@@ -252,7 +252,7 @@ import { playerRepository } from './data/player-repository.js';
     // Only called by the completed solo-question next action, never by opening a page.
     rolled.add(quiz);
     const account = uid(), scope = rules.scopeKey(data());
-    // Choose one inclusive 2–30-question interval per cycle. Changing scope does not erase progress.
+    // Choose one inclusive 20–30-question interval per cycle. Changing scope does not erase progress.
     const progress = schedule.step(account);
     if (!progress.due || inflight || restoring) return false;
     owner = account; inflight = true; const operation = ++serial;

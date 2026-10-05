@@ -57,7 +57,7 @@
     for (let i = 0; i < weights.length; i++) { roll -= weights[i]; if (roll < 0) { index = i; break; } }
     return { ...candidates[index], difficulty: scope.difficulty };
   }
-  const MIN_INTERVAL = 2, MAX_INTERVAL = 30, INTERVAL_KEY = 'qingyunOpportunityIntervalV2:';
+  const MIN_INTERVAL = 20, MAX_INTERVAL = 30, INTERVAL_KEY = 'qingyunOpportunityIntervalV2:';
   function drawInterval(random = Math.random) {
     const value = Number(random()), bounded = Number.isFinite(value) ? Math.max(0, Math.min(0.999999999, value)) : 0;
     return MIN_INTERVAL + Math.floor(bounded * (MAX_INTERVAL - MIN_INTERVAL + 1));

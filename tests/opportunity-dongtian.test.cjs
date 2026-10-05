@@ -75,44 +75,62 @@ test('unit weighting reduces recent repetitions within the saved range', () => {
   const history = Array.from({ length: 12 }, () => ({ path: s.units[0].path, detail: s.units[0].detail }));
   assert.equal(rules.chooseTarget(s, history, () => 0.15).detail, '幾何');
 });
-test('encounter intervals cover every integer from 2 through 30, including both endpoints', () => {
-  const all = Array.from({ length: 29 }, (_, i) => rules.drawInterval(() => (i + .5) / 29));
-  assert.deepEqual(all, Array.from({ length: 29 }, (_, i) => i + 2));
-  assert.equal(rules.drawInterval(() => 0), 2); assert.equal(rules.drawInterval(() => .999999), 30);
-  assert.equal(rules.drawInterval(() => -10), 2); assert.equal(rules.drawInterval(() => 2), 30);
+test('encounter intervals cover every integer from 20 through 30, including both endpoints', () => {
+  const all = Array.from({ length: 11 }, (_, i) => rules.drawInterval(() => (i + .5) / 11));
+  assert.deepEqual(all, Array.from({ length: 11 }, (_, i) => i + 20));
+  assert.equal(rules.drawInterval(() => 0), 20); assert.equal(rules.drawInterval(() => .999999), 30);
+  assert.equal(rules.drawInterval(() => -10), 20); assert.equal(rules.drawInterval(() => 2), 30);
 });
 function intervalStorage() {
   const values = new Map();
   return { getItem: key => values.get(key) || null, setItem: (key, value) => values.set(key, value), values };
 }
-test('minimum and maximum cycles become due on exactly the second and thirtieth steps', () => {
+test('minimum and maximum cycles become due on exactly the twentieth and thirtieth steps', () => {
   const randoms = [0, .999999], schedule = rules.createEncounterSchedule(intervalStorage(), () => randoms.shift());
-  assert.equal(schedule.step('u1').due, false); assert.equal(schedule.step('u1').due, true);
+  for (let i = 1; i < 20; i++) assert.equal(schedule.step('u1').due, false, 'not before step ' + i);
+  assert.equal(schedule.step('u1').due, true);
   assert.equal(schedule.reset('u1').interval, 30);
   for (let i = 1; i < 30; i++) assert.equal(schedule.step('u1').due, false, 'not before step ' + i);
   assert.equal(schedule.step('u1').due, true);
 });
 test('remaining interval survives reload and different accounts keep independent progress', () => {
-  const storage = intervalStorage(), first = rules.createEncounterSchedule(storage, () => 8.5 / 29);
+  const storage = intervalStorage(), first = rules.createEncounterSchedule(storage, () => 5.5 / 11);
   for (let i = 0; i < 3; i++) first.step('u1');
-  assert.equal(first.peek('u1').remaining, 7);
+  assert.equal(first.peek('u1').remaining, 22);
   const reloaded = rules.createEncounterSchedule(storage, () => .999999);
-  assert.equal(reloaded.peek('u1').interval, 10); assert.equal(reloaded.peek('u1').remaining, 7);
-  assert.equal(reloaded.step('u2').remaining, 29); assert.equal(reloaded.peek('u1').remaining, 7);
-  for (let i = 0; i < 6; i++) assert.equal(reloaded.step('u1').due, false);
+  assert.equal(reloaded.peek('u1').interval, 25); assert.equal(reloaded.peek('u1').remaining, 22);
+  assert.equal(reloaded.step('u2').remaining, 29); assert.equal(reloaded.peek('u1').remaining, 22);
+  for (let i = 0; i < 21; i++) assert.equal(reloaded.step('u1').due, false);
   assert.equal(reloaded.step('u1').due, true);
+});
+test('saved legacy intervals below 20 are replaced, while compliant progress remains intact', () => {
+  for (let old = 2; old < 20; old++) {
+    const storage = intervalStorage();
+    storage.setItem('qingyunOpportunityIntervalV2:u1', JSON.stringify({ version: 2, interval: old, remaining: 1, revision: 17 }));
+    const schedule = rules.createEncounterSchedule(storage, () => 0);
+    assert.equal(schedule.peek('u1').interval, 20); assert.equal(schedule.step('u1').remaining, 19);
+    assert.equal(rules.createEncounterSchedule(storage, () => .999999).peek('u1').remaining, 19, 'updated countdown survives another reload');
+  }
+  for (let interval = 20; interval <= 30; interval++) {
+    const storage = intervalStorage(), prior = { version: 2, interval, remaining: 1, revision: 17 };
+    storage.setItem('qingyunOpportunityIntervalV2:u1', JSON.stringify(prior));
+    const schedule = rules.createEncounterSchedule(storage, () => 0);
+    assert.deepEqual(schedule.peek('u1'), prior); assert.equal(schedule.step('u1').due, true);
+  }
 });
 test('due state is retained for retries, while corrupt or blocked storage remains usable', () => {
   const blocked = { getItem() { throw Error('blocked'); }, setItem() { throw Error('blocked'); } };
   const memory = rules.createEncounterSchedule(blocked, () => 0);
-  assert.equal(memory.step('u1').due, false); assert.equal(memory.step('u1').due, true);
+  for (let i = 0; i < 19; i++) assert.equal(memory.step('u1').due, false);
+  assert.equal(memory.step('u1').due, true);
   assert.equal(memory.step('u1').remaining, 0, 'generation failure must not redraw a long interval');
   const storage = intervalStorage(); storage.setItem('qingyunOpportunityIntervalV2:u1', '{broken');
-  const fresh = rules.createEncounterSchedule(storage, () => 0); assert.equal(fresh.step('u1').remaining, 1);
+  const fresh = rules.createEncounterSchedule(storage, () => 0); assert.equal(fresh.step('u1').remaining, 19);
   storage.setItem('qingyunOpportunityIntervalV2:u2', JSON.stringify({ version: 2, interval: 1, remaining: -4, revision: 0 }));
-  assert.equal(fresh.step('u2').remaining, 1);
+  assert.equal(fresh.step('u2').remaining, 19);
   const stale = intervalStorage(), fallback = rules.createEncounterSchedule(stale, () => 0);
   fallback.step('u1'); stale.setItem = () => { throw Error('cannot write'); };
+  for (let i = 0; i < 18; i++) assert.equal(fallback.step('u1').due, false);
   assert.equal(fallback.step('u1').due, true); assert.equal(fallback.peek('u1').remaining, 0, 'stale persisted state cannot erase memory progress');
 });
 test('browser counts each completed next only once, retains progress across scopes and counts during pending requests', async () => {
@@ -124,12 +142,14 @@ test('browser counts each completed next only once, retains progress across scop
     rules, schedule, inflight: false, restoring: false });
   vm.runInContext(hook, context);
   const first = {}; assert.equal(await context.window.maybeEncounterOpportunity({ quiz: first }), false);
-  assert.equal(await context.window.maybeEncounterOpportunity({ quiz: first }), false); assert.equal(schedule.peek('u1').remaining, 1);
+  assert.equal(await context.window.maybeEncounterOpportunity({ quiz: first }), false); assert.equal(schedule.peek('u1').remaining, 19);
   p.gameSettings.focusedUnits[0].detail = '分數';
+  for (let i = 0; i < 18; i++) assert.equal(await context.window.maybeEncounterOpportunity({ quiz: {} }), false);
   assert.equal(await context.window.maybeEncounterOpportunity({ quiz: {} }), true, 'scope changes keep the countdown');
   schedule.reset('u1'); context.inflight = true;
-  assert.equal(await context.window.maybeEncounterOpportunity({ quiz: {} }), false); assert.equal(schedule.peek('u1').remaining, 1);
-  assert.equal(await context.window.maybeEncounterOpportunity({ quiz: {} }), false); assert.equal(schedule.peek('u1').remaining, 0);
+  assert.equal(await context.window.maybeEncounterOpportunity({ quiz: {} }), false); assert.equal(schedule.peek('u1').remaining, 19);
+  for (let i = 0; i < 19; i++) assert.equal(await context.window.maybeEncounterOpportunity({ quiz: {} }), false);
+  assert.equal(schedule.peek('u1').remaining, 0);
   context.inflight = false;
   assert.equal(await context.window.maybeEncounterOpportunity({ quiz: {} }), true, 'a due cycle retries after pending request finishes');
 });
@@ -139,7 +159,8 @@ test('restoring a server-created encounter resets a due interval once after inte
   const restore = source.slice(start, source.indexOf('  function reconcile()', start));
   let random = 0, opens = 0;
   const schedule = rules.createEncounterSchedule(intervalStorage(), () => random), p = player();
-  schedule.step('u1'); schedule.step('u1'); random = 0.999;
+  for (let i = 0; i < 20; i++) schedule.step('u1');
+  random = 0.999;
   const context = vm.createContext({ window: { isOpportunityActive: () => false }, uid: () => 'u1', data: () => p, $: () => null,
     rules, schedule, inflight: false, restoring: false, restoredAccount: '', serial: 0,
     request: async () => ({ run: { scope: rules.scopeKey(p) } }), openRun: () => { opens++; }, console });
