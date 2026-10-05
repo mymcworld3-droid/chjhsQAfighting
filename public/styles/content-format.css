@@ -22,8 +22,9 @@ body.xianxia-theme .avatar-preview {
 }
 body.xianxia-theme .avatar-preview .avatar-img {
   display: block;
-  width: 100%;
-  height: 100%;
+  width: 100% !important;
+  height: 100% !important;
+  flex: none;
   object-fit: cover !important;
   object-position: center;
   border-radius: 50% !important;
