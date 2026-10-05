@@ -61,6 +61,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/curriculum-pages.js',
   './cultivation/quest-system.js',
   './cultivation/dongtian.js',
+  './cultivation/opportunity-dongtian.js',
   './cultivation/story/opening-cinematic.js',
   './cultivation/story/story-engine.js',
   './cultivation/battle-tutorial.js',

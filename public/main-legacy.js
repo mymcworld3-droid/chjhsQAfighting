@@ -2858,10 +2858,29 @@ async function fetchOneQuestion() {
 window.fetchDailyMeditationQuestion = fetchOneQuestion;
 
 /// 🔥 修改：在進入下一題前才清除舊題目，確保 startQuizFlow 能抓到新題目
-window.nextQuestion = () => {
-    // handleAnswer consumes the previous quiz before this action.
+let soloNextBusy = false;
+window.nextQuestion = async () => {
+    const quiz = window.currentActiveQuiz;
+    // One roll per completed question; rapid clicks and unanswered questions cannot farm encounters.
+    if (soloNextBusy || !quiz || !answeredSoloQuizzes.has(quiz) || window.isOpportunityActive?.()) return;
+    const account = auth.currentUser?.uid;
+    soloNextBusy = true;
+    const button = document.getElementById('btn-next-step');
+    if (button) button.disabled = true;
     window.currentActiveQuiz = null;
-    void startQuizFlow();
+    try {
+        const intercepted = await window.maybeEncounterOpportunity?.({ quiz });
+        if (auth.currentUser?.uid !== account) return;
+        if (!intercepted) await window.startQuizFlow();
+    } catch (error) {
+        console.warn('[Opportunity next]', error);
+        if (auth.currentUser?.uid === account) {
+            await window.startQuizFlow();
+        }
+    } finally {
+        soloNextBusy = false;
+        if (button?.isConnected) button.disabled = false;
+    }
 };
 
 async function handleAnswer(userIdx, correctIdx, questionText, explanation) {

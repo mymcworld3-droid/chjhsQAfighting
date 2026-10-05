@@ -1463,7 +1463,7 @@ export const featureReady = (async () => {
     state.originalStartQuizFlow = window.startQuizFlow;
     window.startQuizFlow = async function (...args) {
       // 問道助手延伸練習屬於玩家主動指定的知識點，不插入隨機洞天遭遇。
-      if (!window.isExtendedPracticeActive?.() && !state.session && !state.encounterBusy) {
+      if (!args[1]?.skipEncounter && !window.isOpportunityActive?.() && !window.isExtendedPracticeActive?.() && !state.session && !state.encounterBusy) {
         const intercepted = await maybeEncounterBeforeQuiz();
         if (intercepted) return;
       }
