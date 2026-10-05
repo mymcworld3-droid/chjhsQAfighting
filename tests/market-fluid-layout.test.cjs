@@ -33,7 +33,7 @@ test('market category tabs span the available width', () => {
 test('market avatar frame previews stay compact without changing equipped frames elsewhere', () => {
   assert.match(formats, /\.ui-avatar-frame,\.ui-product-frame/);
   assert.match(formats, /height: 118% !important/);
-  assert.match(formats, /\.avatar-preview \.avatar-img[\s\S]*object-fit: contain/);
+  assert.match(formats, /\.avatar-preview \.avatar-img[\s\S]*object-fit: cover !important/);
   assert.doesNotMatch(layout, /object-fit:/);
 });
 
