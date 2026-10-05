@@ -16,6 +16,12 @@ import {
 import { applyCultivationReward, showCultivationFeedback } from './cultivation-rules.js';
 import { nascentSoulSpiritReward, normalizeSpirit, soulCultivationBonusForPlayer } from './cultivation/nascent-soul-rules.js';
 
+// Canvas chart labels cannot inherit the shared page typography through CSS.
+const XIUXIAN_FONT_FAMILY = "'Noto Serif TC', 'Songti TC', 'PMingLiU', serif";
+if (window.Chart?.defaults?.font) {
+    window.Chart.defaults.font.family = XIUXIAN_FONT_FAMILY;
+}
+
 // Firebase Config
 const firebaseConfig = {
     apiKey: "AIzaSyDifdJmLTmwQATz__xUHSkXZ_xXOWyX-wU",
@@ -5589,7 +5595,7 @@ window.renderKnowledgeGraph = (targetSubject = null) => {
                     display: true, 
                     text: chartTitle, 
                     color: '#e2e8f0', 
-                    font: { size: 14, family: "'Orbitron', sans-serif" },
+                    font: { size: 14, family: XIUXIAN_FONT_FAMILY },
                     padding: { bottom: 15 }
                 },
                 legend: { display: false },
@@ -5612,7 +5618,7 @@ window.renderKnowledgeGraph = (targetSubject = null) => {
                     grid: { color: 'rgba(255, 255, 255, 0.1)', circular: true }, // 圓形網格更有科幻感
                     pointLabels: { 
                         color: '#94a3b8', 
-                        font: { size: 10, family: "'Noto Sans TC', sans-serif" } 
+                        font: { size: 10, family: XIUXIAN_FONT_FAMILY }
                     },
                     suggestedMin: 0,
                     suggestedMax: 100,

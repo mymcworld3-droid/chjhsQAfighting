@@ -17,7 +17,7 @@
 body.xianxia-theme {
   color: var(--xq-paper);
   background: #0d211f !important;
-  font-family: 'Noto Sans TC', sans-serif;
+  font-family: var(--xq-serif);
 }
 body.xianxia-theme::before {
   content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
@@ -402,7 +402,7 @@ body.xianxia-theme #options-container > button > span:first-child { background: 
 body.xianxia-theme #options-container > .bg-green-600 { background: #285a40; border-color: #a8d1a4; opacity: 1; }
 body.xianxia-theme #options-container > .bg-red-600 { background: #6b3830; border-color: #d9a492; opacity: 1; }
 body.xianxia-theme #feedback-section { border-color: #a6b78d70; }
-body.xianxia-theme #feedback-title { font-family: 'Noto Sans TC', sans-serif; }
+body.xianxia-theme #feedback-title { font-family: var(--xq-serif); }
 body.xianxia-theme #feedback-text { font-size: 15px; line-height: 1.9; }
 body.xianxia-theme #solo-progress-panel { position: static; margin-top: 8px; }
 /* 山門登入 */

@@ -1,8 +1,8 @@
 /* Shared content roles. These rules change formatting, never scene geometry,
    state colors, navigation visibility, or the sizes of battlefield artwork. */
 body.xianxia-theme {
-  --ui-font: 'Noto Sans TC', sans-serif;
-  --ui-serif: 'Noto Serif TC', serif;
+  --ui-font: var(--xq-serif, 'Noto Serif TC', 'Songti TC', 'PMingLiU', serif);
+  --ui-serif: var(--ui-font);
   --ui-text: 14px;
   --ui-small: 12px;
   --ui-meta: 11px;
@@ -12,6 +12,19 @@ body.xianxia-theme {
   --ui-image-radius: 8px;
   --ui-action-height: 40px;
   --ui-icon-size: 36px;
+}
+
+/* Apply the same xianxia type to text in every scene, including late-loaded
+   modules and controls. Formula and icon glyphs need their own font families. */
+body.xianxia-theme,
+body.xianxia-theme :not(:where(
+  .fa,.fas,.far,.fab,.fal,.fad,.fat,
+  .fa-solid,.fa-regular,.fa-brands,.fa-light,.fa-thin,.fa-duotone,
+  mjx-container,mjx-container *,
+  .MathJax,.MathJax *,
+  .katex,.katex *,math,math *
+)) {
+  font-family: var(--ui-font) !important;
 }
 
 /* Avatars fill the same circular viewport in previews and player identities. */
