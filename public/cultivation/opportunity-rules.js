@@ -57,6 +57,45 @@
     for (let i = 0; i < weights.length; i++) { roll -= weights[i]; if (roll < 0) { index = i; break; } }
     return { ...candidates[index], difficulty: scope.difficulty };
   }
-  function chance(misses = 0) { return Math.min(0.20, 0.08 + Math.max(0, Math.floor(Number(misses) || 0)) * 0.01); }
-  return { SKILLS, LABELS, SUBJECTS, signature, levelFor, normalizeScope, scopeKey, chooseTarget, chance };
+  const MIN_INTERVAL = 2, MAX_INTERVAL = 30, INTERVAL_KEY = 'qingyunOpportunityIntervalV2:';
+  function drawInterval(random = Math.random) {
+    const value = Number(random()), bounded = Number.isFinite(value) ? Math.max(0, Math.min(0.999999999, value)) : 0;
+    return MIN_INTERVAL + Math.floor(bounded * (MAX_INTERVAL - MIN_INTERVAL + 1));
+  }
+  function createEncounterSchedule(storage = null, random = Math.random) {
+    const memory = new Map();
+    function save(uid, state) {
+      memory.set(uid, { ...state });
+      try { storage?.setItem(INTERVAL_KEY + uid, JSON.stringify(state)); } catch (_) {}
+      return { ...state };
+    }
+    function load(uid) {
+      if (!uid) throw new Error('機緣計數需要登入帳號');
+      try {
+        const value = JSON.parse(storage?.getItem(INTERVAL_KEY + uid) || 'null');
+        if (value?.version === 2 && Number.isInteger(value.interval) && value.interval >= MIN_INTERVAL && value.interval <= MAX_INTERVAL &&
+            Number.isInteger(value.remaining) && value.remaining >= 0 && value.remaining <= value.interval && Number.isSafeInteger(value.revision) && value.revision >= 0) {
+          // A successful local write wins over a stale persisted value if storage later becomes unwritable.
+          const local = memory.get(uid);
+          if (!local || value.revision >= local.revision) { memory.set(uid, value); return { ...value }; }
+        }
+      } catch (_) {}
+      if (memory.has(uid)) return { ...memory.get(uid) };
+      const interval = drawInterval(random);
+      return save(uid, { version: 2, interval, remaining: interval, revision: 0 });
+    }
+    return Object.freeze({
+      peek(uid) { return load(uid); },
+      step(uid) {
+        const previous = load(uid), state = save(uid, { ...previous, remaining: Math.max(0, previous.remaining - 1), revision: previous.revision + 1 });
+        return { ...state, due: state.remaining === 0 };
+      },
+      reset(uid) {
+        const previous = load(uid), interval = drawInterval(random);
+        return save(uid, { version: 2, interval, remaining: interval, revision: previous.revision + 1 });
+      }
+    });
+  }
+  return { SKILLS, LABELS, SUBJECTS, signature, levelFor, normalizeScope, scopeKey, chooseTarget,
+    MIN_INTERVAL, MAX_INTERVAL, drawInterval, createEncounterSchedule };
 });

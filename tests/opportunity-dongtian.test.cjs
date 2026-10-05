@@ -70,11 +70,83 @@ test('bank scope stays in its selected subject and younger course overrides olde
   const t = rules.chooseTarget(rules.normalizeScope(p), [], () => 0);
   assert.equal(t.subject, '自然'); assert.equal(t.level, '國中二年級');
 });
-test('unit weighting reduces recent repetitions and chance grows without exceeding 20 percent', () => {
+test('unit weighting reduces recent repetitions within the saved range', () => {
   const s = rules.normalizeScope(player()); s.units.push({ ...s.units[0], path: '數學/七上/幾何', detail: '幾何' });
   const history = Array.from({ length: 12 }, () => ({ path: s.units[0].path, detail: s.units[0].detail }));
   assert.equal(rules.chooseTarget(s, history, () => 0.15).detail, '幾何');
-  assert.equal(rules.chance(0), .08); assert.equal(rules.chance(100), .2); assert.equal(rules.chance(-3), .08);
+});
+test('encounter intervals cover every integer from 2 through 30, including both endpoints', () => {
+  const all = Array.from({ length: 29 }, (_, i) => rules.drawInterval(() => (i + .5) / 29));
+  assert.deepEqual(all, Array.from({ length: 29 }, (_, i) => i + 2));
+  assert.equal(rules.drawInterval(() => 0), 2); assert.equal(rules.drawInterval(() => .999999), 30);
+  assert.equal(rules.drawInterval(() => -10), 2); assert.equal(rules.drawInterval(() => 2), 30);
+});
+function intervalStorage() {
+  const values = new Map();
+  return { getItem: key => values.get(key) || null, setItem: (key, value) => values.set(key, value), values };
+}
+test('minimum and maximum cycles become due on exactly the second and thirtieth steps', () => {
+  const randoms = [0, .999999], schedule = rules.createEncounterSchedule(intervalStorage(), () => randoms.shift());
+  assert.equal(schedule.step('u1').due, false); assert.equal(schedule.step('u1').due, true);
+  assert.equal(schedule.reset('u1').interval, 30);
+  for (let i = 1; i < 30; i++) assert.equal(schedule.step('u1').due, false, 'not before step ' + i);
+  assert.equal(schedule.step('u1').due, true);
+});
+test('remaining interval survives reload and different accounts keep independent progress', () => {
+  const storage = intervalStorage(), first = rules.createEncounterSchedule(storage, () => 8.5 / 29);
+  for (let i = 0; i < 3; i++) first.step('u1');
+  assert.equal(first.peek('u1').remaining, 7);
+  const reloaded = rules.createEncounterSchedule(storage, () => .999999);
+  assert.equal(reloaded.peek('u1').interval, 10); assert.equal(reloaded.peek('u1').remaining, 7);
+  assert.equal(reloaded.step('u2').remaining, 29); assert.equal(reloaded.peek('u1').remaining, 7);
+  for (let i = 0; i < 6; i++) assert.equal(reloaded.step('u1').due, false);
+  assert.equal(reloaded.step('u1').due, true);
+});
+test('due state is retained for retries, while corrupt or blocked storage remains usable', () => {
+  const blocked = { getItem() { throw Error('blocked'); }, setItem() { throw Error('blocked'); } };
+  const memory = rules.createEncounterSchedule(blocked, () => 0);
+  assert.equal(memory.step('u1').due, false); assert.equal(memory.step('u1').due, true);
+  assert.equal(memory.step('u1').remaining, 0, 'generation failure must not redraw a long interval');
+  const storage = intervalStorage(); storage.setItem('qingyunOpportunityIntervalV2:u1', '{broken');
+  const fresh = rules.createEncounterSchedule(storage, () => 0); assert.equal(fresh.step('u1').remaining, 1);
+  storage.setItem('qingyunOpportunityIntervalV2:u2', JSON.stringify({ version: 2, interval: 1, remaining: -4, revision: 0 }));
+  assert.equal(fresh.step('u2').remaining, 1);
+  const stale = intervalStorage(), fallback = rules.createEncounterSchedule(stale, () => 0);
+  fallback.step('u1'); stale.setItem = () => { throw Error('cannot write'); };
+  assert.equal(fallback.step('u1').due, true); assert.equal(fallback.peek('u1').remaining, 0, 'stale persisted state cannot erase memory progress');
+});
+test('browser counts each completed next only once, retains progress across scopes and counts during pending requests', async () => {
+  const source = fs.readFileSync(path.join(__dirname, '../public/cultivation/opportunity-dongtian.js'), 'utf8');
+  const start = source.indexOf('  window.maybeEncounterOpportunity =');
+  const hook = source.slice(start, source.indexOf('    owner = account; inflight', start)) + '\nreturn true;\n};';
+  const schedule = rules.createEncounterSchedule(intervalStorage(), () => 0), p = player(), rolled = new WeakSet();
+  const context = vm.createContext({ window: { isOpportunityActive: () => false }, rolled, uid: () => 'u1', data: () => p, $: () => null,
+    rules, schedule, inflight: false, restoring: false });
+  vm.runInContext(hook, context);
+  const first = {}; assert.equal(await context.window.maybeEncounterOpportunity({ quiz: first }), false);
+  assert.equal(await context.window.maybeEncounterOpportunity({ quiz: first }), false); assert.equal(schedule.peek('u1').remaining, 1);
+  p.gameSettings.focusedUnits[0].detail = '分數';
+  assert.equal(await context.window.maybeEncounterOpportunity({ quiz: {} }), true, 'scope changes keep the countdown');
+  schedule.reset('u1'); context.inflight = true;
+  assert.equal(await context.window.maybeEncounterOpportunity({ quiz: {} }), false); assert.equal(schedule.peek('u1').remaining, 1);
+  assert.equal(await context.window.maybeEncounterOpportunity({ quiz: {} }), false); assert.equal(schedule.peek('u1').remaining, 0);
+  context.inflight = false;
+  assert.equal(await context.window.maybeEncounterOpportunity({ quiz: {} }), true, 'a due cycle retries after pending request finishes');
+});
+test('restoring a server-created encounter resets a due interval once after interrupted start', async () => {
+  const source = fs.readFileSync(path.join(__dirname, '../public/cultivation/opportunity-dongtian.js'), 'utf8');
+  const start = source.indexOf('  async function restore()');
+  const restore = source.slice(start, source.indexOf('  function reconcile()', start));
+  let random = 0, opens = 0;
+  const schedule = rules.createEncounterSchedule(intervalStorage(), () => random), p = player();
+  schedule.step('u1'); schedule.step('u1'); random = 0.999;
+  const context = vm.createContext({ window: { isOpportunityActive: () => false }, uid: () => 'u1', data: () => p, $: () => null,
+    rules, schedule, inflight: false, restoring: false, restoredAccount: '', serial: 0,
+    request: async () => ({ run: { scope: rules.scopeKey(p) } }), openRun: () => { opens++; }, console });
+  vm.runInContext(restore + '\nthis.restoreCall = restore;', context);
+  await context.restoreCall(); assert.equal(opens, 1); assert.equal(schedule.peek('u1').remaining, 30);
+  context.restoredAccount = ''; random = 0;
+  await context.restoreCall(); assert.equal(opens, 2); assert.equal(schedule.peek('u1').remaining, 30, 'resume does not reroll an already reset interval');
 });
 test('exactly five independent skills and verbatim passage evidence are required', () => {
   const p = api.normalizePack(rawPack(), target); assert.equal(p.questions.length, 5);

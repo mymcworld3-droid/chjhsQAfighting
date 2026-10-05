@@ -4,7 +4,10 @@ import { playerRepository } from './data/player-repository.js';
 
 (function () {
   'use strict';
-  const rules = window.OpportunityRules, CHANCE_KEY = 'qingyunOpportunityChanceV1';
+  const rules = window.OpportunityRules;
+  let intervalStorage = null;
+  try { intervalStorage = localStorage; } catch (_) {}
+  const schedule = rules.createEncounterSchedule(intervalStorage);
   const rolled = new WeakSet();
   let run = null, index = 0, owner = '', busy = false, inflight = false, serial = 0, restoring = false, restoredAccount = '';
   let previousFocus = null, escapeHandler = null;
@@ -77,16 +80,6 @@ import { playerRepository } from './data/player-repository.js';
       // Resume the unanswered solo queue without drawing another encounter on the return trip.
       void window.startQuizFlow?.(false, { skipEncounter: true });
     }
-  }
-  function chanceRecord(account, scope) {
-    try {
-      const record = JSON.parse(localStorage.getItem(CHANCE_KEY) || 'null');
-      if (record?.uid === account && record.scope === scope) return Math.min(12, Math.max(0, Number(record.misses) || 0));
-    } catch (_) {}
-    return 0;
-  }
-  function saveMisses(account, scope, misses) {
-    try { localStorage.setItem(CHANCE_KEY, JSON.stringify({ uid: account, scope, misses: Math.min(12, misses) })); } catch (_) {}
   }
   function header(subtitle, title = '機緣洞天') {
     return `<header class="op-head"><div><small>${esc(subtitle)}</small><h2 id="op-title" tabindex="-1">${esc(title)}</h2></div><button id="op-leave" type="button" aria-label="返回問道">返回問道</button></header>`;
@@ -254,12 +247,14 @@ import { playerRepository } from './data/player-repository.js';
 
   window.isOpportunityActive = () => !!$('opportunity-overlay');
   window.maybeEncounterOpportunity = async ({ quiz } = {}) => {
-    if (!quiz || rolled.has(quiz) || inflight || restoring || !uid() || !data() || window.isOpportunityActive() ||
+    if (!quiz || rolled.has(quiz) || !uid() || !data() || window.isOpportunityActive() ||
         window.isExtendedPracticeActive?.() || $('newbie-tutorial-layer') || $('five-immortal-challenge') || $('dongtian-overlay')) return false;
     // Only called by the completed solo-question next action, never by opening a page.
     rolled.add(quiz);
-    const account = uid(), scope = rules.scopeKey(data()), misses = chanceRecord(account, scope);
-    if (Math.random() >= rules.chance(misses)) { saveMisses(account, scope, misses + 1); return false; }
+    const account = uid(), scope = rules.scopeKey(data());
+    // Choose one inclusive 2–30-question interval per cycle. Changing scope does not erase progress.
+    const progress = schedule.step(account);
+    if (!progress.due || inflight || restoring) return false;
     owner = account; inflight = true; const operation = ++serial;
     const requestId = crypto.randomUUID().replace(/-/g, '');
     const el = overlay();
@@ -268,7 +263,11 @@ import { playerRepository } from './data/player-repository.js';
     return new Promise(resolve => {
       let released = false;
       const release = () => { if (!released) { released = true; resolve(true); } };
-      const skip = () => { close(); release(); };
+      const skip = () => {
+        if (released) return;
+        if (validOwner()) schedule.reset(account);
+        close(); release();
+      };
       $('op-cancel-load').onclick = skip; $('op-leave').onclick = skip;
       void request('start', { requestId, scope }, 90000).then(result => {
         if (operation !== serial || uid() !== account || rules.scopeKey(data() || {}) !== scope || result.run.scope !== scope) {
@@ -276,7 +275,7 @@ import { playerRepository } from './data/player-repository.js';
           if (operation === serial) close();
           release(); return;
         }
-        saveMisses(account, scope, 0); openRun(result.run, account); release();
+        schedule.reset(account); openRun(result.run, account); release();
       }).catch(e => {
         if (operation === serial && uid() === account) { toast(`${e.message}，先繼續問道。`); close(); }
         release();
@@ -293,7 +292,11 @@ import { playerRepository } from './data/player-repository.js';
       if (uid() !== account || operation !== serial) return;
       if (window.isExtendedPracticeActive?.() || $('dongtian-overlay') || $('newbie-tutorial-layer') || $('five-immortal-challenge')) return;
       restoredAccount = account;
-      if (result.run && rules.scopeKey(data()) === result.run.scope) openRun(result.run, account);
+      if (result.run && rules.scopeKey(data()) === result.run.scope) {
+        // The server may have saved the encounter before the page received its start response.
+        if (schedule.peek(account).remaining === 0) schedule.reset(account);
+        openRun(result.run, account);
+      }
       else if (result.run) await request('abandon', { runId: result.run.id });
     } catch (e) { console.warn('[Opportunity restore]', e.message); }
     finally { restoring = false; }
