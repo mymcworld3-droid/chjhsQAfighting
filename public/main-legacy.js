@@ -1,4 +1,5 @@
 import './cultivation/quest-rules.js';
+import { resolvePlayerAvatar } from './cultivation/profile-avatar.js';
 import { beginSceneTransition, sceneTheme } from './cultivation/scene-transitions.js';
 import './cultivation/true-immortal.js';
 import { createSoloQuestionCache } from './solo-question-cache.js';
@@ -268,6 +269,7 @@ const translations = {
         msg_loading_products: "載入商品中...",
         btn_equip: "裝備",
         btn_equipped: "已裝備",
+        btn_unequip_avatar: "取消裝備頭像 · 使用帳戶頭像",
         msg_buy_confirm: "確定要花費 {price} 積分購買嗎？",
         msg_buy_success: "購買成功！",
         msg_no_funds: "積分不足！",
@@ -399,6 +401,7 @@ const translations = {
         msg_loading_products: "Loading products...",
         btn_equip: "Equip",
         btn_equipped: "Equipped",
+        btn_unequip_avatar: "Remove avatar · Use account photo",
         msg_buy_confirm: "Spend {price} points to buy?",
         msg_buy_success: "Purchase Successful!",
         msg_no_funds: "Insufficient Points!",
@@ -1288,6 +1291,13 @@ onAuthStateChanged(auth, async (user) => {
                 if (!currentUserData.inventory) currentUserData.inventory = [];
                 if (!currentUserData.equipped) currentUserData.equipped = { frame: '', avatar: '' };
                 if (!currentUserData.friends) currentUserData.friends = [];
+
+                // Keep the original account photo separate from cosmetic equipment.
+                if (user.photoURL && currentUserData.photoURL !== user.photoURL) {
+                    currentUserData.photoURL = user.photoURL;
+                    try { await updateDoc(userRef, { photoURL: user.photoURL }); }
+                    catch (error) { console.warn('帳戶頭像同步失敗', error); }
+                }
                 
                 if (!currentUserData.friendCode) {
                     const code = Math.random().toString(36).substring(2, 8).toUpperCase();
@@ -1299,6 +1309,7 @@ onAuthStateChanged(auth, async (user) => {
                 const code = Math.random().toString(36).substring(2, 8).toUpperCase();
                 currentUserData = {
                     uid: user.uid, displayName: user.displayName || '匿名修士', email: user.email || '',
+                    photoURL: user.photoURL || '',
                     profile: { educationLevel: "", strongSubjects: "", weakSubjects: "" },
                     inventory: [],
                     equipped: { frame: '', avatar: '' },
@@ -1605,7 +1616,7 @@ window.sendChatMessage = async () => {
         await addDoc(collection(db, "global_chat"), {
             uid: auth.currentUser.uid,
             displayName: currentUserData.displayName,
-            avatar: currentUserData.equipped?.avatar || '',
+            avatar: resolvePlayerAvatar(currentUserData, auth.currentUser),
             frame: currentUserData.equipped?.frame || '',
             rankLevel: currentUserData.stats?.rankLevel || 0,
         totalScore: currentUserData.stats?.totalScore || 0,
@@ -1822,7 +1833,7 @@ window.loadFriendList = async () => {
             const div = document.createElement('div');
             div.className = "bg-slate-800/50 p-3 rounded-xl border border-slate-700 flex items-center gap-3";
             div.innerHTML = `
-                <button type="button" class="xpp-profile-trigger" data-xiuxian-profile="${escapeHtml(d.id)}" aria-label="查看 ${escapeHtml(fData.displayName || '修士')} 的資料">${getAvatarHtml(fData.equipped, "w-12 h-12")}</button>
+                <button type="button" class="xpp-profile-trigger" data-xiuxian-profile="${escapeHtml(d.id)}" aria-label="查看 ${escapeHtml(fData.displayName || '修士')} 的資料">${getAvatarHtml(fData.equipped, "w-12 h-12", fData.photoURL)}</button>
                 <div class="flex-1 min-w-0">
                     <div class="flex justify-between items-center">
                         <button type="button" class="xpp-profile-trigger font-bold text-white" data-xiuxian-profile="${escapeHtml(d.id)}">${escapeHtml(fData.displayName || '修士')}</button>
@@ -4320,7 +4331,7 @@ window.showOpponentFoundAnimation = async (oppData) => {
     document.getElementById('battle-status-text').classList.add('text-red-400', 'font-bold');
     
     const oppUI = document.getElementById('match-opp');
-    const oppAvatar = oppData.equipped?.avatar || '';
+    const oppAvatar = resolvePlayerAvatar(oppData);
     const oppRank = getRankMarkup(oppData.rankLevel || 0, oppData.uid || null, oppData.totalScore ?? 0);
     
     if (navigator.vibrate) navigator.vibrate([100, 50, 200]);
@@ -4354,7 +4365,7 @@ function buildLocalBattlePlayer() {
     return {
         uid: auth.currentUser.uid,
         name: currentUserData.displayName || "Player",
-        equipped: currentUserData.equipped || { frame: '', avatar: '' },
+        equipped: { ...currentUserData.equipped, avatar: resolvePlayerAvatar(currentUserData, auth.currentUser) },
         goldenCore: window.getEquippedGoldenCoreBattleSnapshot?.() || null,
         artifactBattle,
         artifactShield: openingShield,
@@ -4440,7 +4451,7 @@ window.startBattleMatchmaking = async () => {
     document.getElementById('match-me-name').innerText = currentUserData.displayName || "Player";
     document.getElementById('match-me-rank').innerHTML = getRankMarkup(currentUserData.stats?.rankLevel || 0);
     const myAvatar = document.getElementById('match-me-avatar');
-    myAvatar.src = currentUserData.equipped?.avatar || '';
+    myAvatar.src = resolvePlayerAvatar(currentUserData, auth.currentUser);
     myAvatar.style.display = myAvatar.src ? 'block' : 'none';
 
     document.getElementById('match-opp').innerHTML = `
@@ -5727,7 +5738,7 @@ window.loadLeaderboard = async ({ force = false } = {}) => {
             const isMe = auth.currentUser && doc.id === auth.currentUser.uid;
             const score = Math.max(0, Number(d.stats?.totalScore) || 0);
             const equipped = d.equipped || {};
-            const avatarHtml = getAvatarHtml(equipped, "w-8 h-8");
+            const avatarHtml = getAvatarHtml(equipped, "w-8 h-8", isMe ? resolvePlayerAvatar(currentUserData, auth.currentUser) : d.photoURL);
 
             const row = `
                 <tr class="border-b border-slate-700/50 ${isMe ? 'bg-blue-900/20' : ''} hover:bg-slate-700/50 transition">
@@ -5780,13 +5791,13 @@ function renderVisual(type, value, sizeClass = "w-12 h-12") {
     return '';
 }
 
-function getAvatarHtml(equipped, sizeClass = "w-10 h-10") {
+function getAvatarHtml(equipped, sizeClass = "w-10 h-10", accountAvatar = '') {
     const frame = equipped?.frame || '';
-    const avatar = equipped?.avatar || '';
+    const avatar = equipped?.avatar || accountAvatar || '';
     const isFrameImg = frame && (frame.includes('.') || frame.includes('/'));
 
     const imgContent = avatar 
-        ? `<img src="${avatar}" class="ui-avatar-image w-full h-full object-cover" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"> <i class="ui-avatar-fallback fa-solid fa-user text-gray-400 absolute hidden"></i>`
+        ? `<img src="${escapeHtml(avatar)}" class="ui-avatar-image w-full h-full object-cover" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"> <i class="ui-avatar-fallback fa-solid fa-user text-gray-400 absolute hidden"></i>`
         : `<i class="fa-solid fa-user text-gray-400"></i>`;
 
     const borderClass = frame ? '' : 'border-2 border-slate-600';
@@ -5818,7 +5829,7 @@ window.updateUserAvatarDisplay = () => {
         homeSection.appendChild(avatarDiv);
         homeAvatarContainer = avatarDiv;
     }
-    homeAvatarContainer.innerHTML = getAvatarHtml(currentUserData.equipped, "w-16 h-16");
+    homeAvatarContainer.innerHTML = getAvatarHtml(currentUserData.equipped, "w-16 h-16", resolvePlayerAvatar(currentUserData, auth.currentUser));
 };
 
 // ==========================================
@@ -6332,6 +6343,7 @@ window.renderInventory = async (filterType = 'frame') => {
         const div = document.createElement('div');
         div.className = `inventory-item ${isEquipped ? 'selected' : ''}`;
         div.onclick = () => equipItem(item.type, pid, item.value); 
+        if (isEquipped && item.type === 'avatar') div.title = t('btn_unequip_avatar');
         
         const badge = isEquipped ? '<div class="absolute top-0 right-0 bg-green-500 text-[10px] px-1 rounded-bl">E</div>' : '';
 
@@ -6349,6 +6361,8 @@ window.renderInventory = async (filterType = 'frame') => {
 window.loadStoreItems = async () => {
     const grid = document.getElementById('store-grid');
     document.getElementById('store-user-points').innerText = currentUserData.stats.gold || 0;
+    const resetAvatar = document.getElementById('store-avatar-reset');
+    if (resetAvatar) resetAvatar.hidden = !currentUserData.equipped?.avatar;
     
     try {
         const q = query(collection(db, "products"), orderBy("price", "asc"));
@@ -6366,7 +6380,9 @@ window.loadStoreItems = async () => {
             let visual = renderVisual(item.type, item.value, "w-14 h-14");
             let btnAction = '';
             if (isEquipped) {
-                btnAction = `<button class="w-full mt-auto bg-green-600 text-white text-xs py-2 rounded cursor-default opacity-50 font-bold tracking-wider">${t('btn_equipped')}</button>`;
+                btnAction = item.type === 'avatar'
+                    ? `<button type="button" onclick="unequipAvatar()" class="w-full mt-auto bg-slate-600 text-white text-xs py-2 rounded font-bold">${t('btn_unequip_avatar')}</button>`
+                    : `<button class="w-full mt-auto bg-green-600 text-white text-xs py-2 rounded cursor-default opacity-50 font-bold tracking-wider">${t('btn_equipped')}</button>`;
             } else if (isOwned) {
                 btnAction = `<button onclick="equipItem('${item.type}', '${pid}', '${item.value}')" class="w-full mt-auto bg-slate-600 hover:bg-slate-500 text-white text-xs py-2 rounded font-bold tracking-wider">${t('btn_equip')}</button>`;
             } else {
@@ -6418,18 +6434,36 @@ window.buyItem = async (pid, price) => {
     } catch(e) { console.error(e); alert("Purchase failed: " + e.message); }
 };
 
+let cosmeticEquipBusy = false;
+window.unequipAvatar = () => window.equipItem('avatar', '', '');
 window.equipItem = async (type, pid, value) => {
+    const user = auth.currentUser;
+    const player = currentUserData;
+    if (!user || !player || !['avatar', 'frame'].includes(type) || cosmeticEquipBusy) return;
+    const nextValue = type === 'avatar' && player.equipped?.avatar === value ? '' : value;
+    cosmeticEquipBusy = true;
+    const resetAvatar = document.getElementById('store-avatar-reset');
+    if (resetAvatar) resetAvatar.disabled = true;
     try {
-        const userRef = doc(db, "users", auth.currentUser.uid);
-        if (type === 'frame') currentUserData.equipped.frame = value;
-        if (type === 'avatar') currentUserData.equipped.avatar = value;
-
-        await updateDoc(userRef, { "equipped": currentUserData.equipped });
-
+        const userRef = doc(db, "users", user.uid);
+        const patch = { [`equipped.${type}`]: nextValue };
+        if (user.photoURL) patch.photoURL = user.photoURL;
+        await updateDoc(userRef, patch);
+        if (auth.currentUser?.uid !== user.uid || currentUserData !== player) return;
+        player.equipped ||= { frame: '', avatar: '' };
+        player.equipped[type] = nextValue;
+        if (user.photoURL) player.photoURL = user.photoURL;
         updateUserAvatarDisplay();
-        loadStoreItems(); 
-        if(document.getElementById('page-settings').classList.contains('active-page')) renderInventory();
+        invalidateLeaderboardCache();
+        refreshVisibleLeaderboard();
+        void loadStoreItems();
+        window.dispatchEvent(new CustomEvent('xiuxian:appearance-updated'));
+        if(document.getElementById('page-settings')?.classList.contains('active-page')) void renderInventory();
     } catch (e) { console.error(e); alert("Equip failed"); }
+    finally {
+        cosmeticEquipBusy = false;
+        if (resetAvatar) resetAvatar.disabled = false;
+    }
 };
 
 window.filterStore = (type, btnElement) => {

@@ -229,7 +229,7 @@ function registerInvitationApi(app, {
         ...room,
         hostUid: identity.uid,
         hostName: safeText(sender.displayName || sender.profile?.displayName || '修士', 64),
-        hostAvatar: safeText(sender.equipped?.avatar, 512),
+        hostAvatar: safeText(sender.equipped?.avatar || sender.photoURL, 512),
         hostFrame: safeText(sender.equipped?.frame, 512),
         createdAtMs,
         expiresAtMs: createdAtMs + INVITE_TTL_MS

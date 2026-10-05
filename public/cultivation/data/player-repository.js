@@ -3,6 +3,7 @@ import {
   collection, addDoc, serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { getProjectServices, getMainUser, authenticatedMainFetch } from './project-repository.js';
+import { resolvePlayerAvatar } from '../profile-avatar.js';
 
 const COLLECTION='users';
 function uidValue(uid){const value=String(uid||'').trim();if(!value)throw new Error('玩家 UID 不可為空');return value;}
@@ -44,7 +45,7 @@ export const playerRepository=Object.freeze({
     const player=snap.data();
     return addDoc(collection(db,'global_chat'),{
       uid:user.uid,displayName:String(player.displayName||'修士'),
-      avatar:player.equipped?.avatar||'',frame:player.equipped?.frame||'',
+      avatar:resolvePlayerAvatar(player,user),frame:player.equipped?.frame||'',
       rankLevel:player.stats?.rankLevel||0,totalScore:player.stats?.totalScore||0,
       type:'dongtian-share',dongtianId:cave.id,dongtianName:String(cave.name||'無名洞天').slice(0,80),
       text:`分享洞天「${String(cave.name||'無名洞天').slice(0,80)}」`,timestamp:serverTimestamp()

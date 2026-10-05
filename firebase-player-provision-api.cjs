@@ -15,7 +15,7 @@ function projectPlayerData(role, uid, user) {
   const shared = {
     uid,
     displayName: safeText(user.displayName, 64) || '無名修士',
-    avatar: safeText(user.equipped?.avatar, 512),
+    avatar: safeText(user.equipped?.avatar || user.photoURL, 512),
     sourceProject: PROJECT_IDS.A,
     schemaVersion: SCHEMA_VERSION
   };

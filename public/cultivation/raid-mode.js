@@ -1,4 +1,5 @@
 import { RAID_MVP, shenPhaseForHp, shenIntentForRound, bossClockState } from './raid-engine.js';
+import { resolvePlayerAvatar } from './profile-avatar.js';
 import { snapshotBattleKnowledge, resolveBattleKnowledge } from './battle-question-scope.js';
 import { generateRaidQuestion } from './raid-question.js';
 import {
@@ -452,7 +453,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
           raidRoomId: state.roomId,
           hostUid: user.uid,
           hostName: state.player?.name || data()?.displayName || '修士',
-          hostAvatar: data()?.equipped?.avatar || '',
+          hostAvatar: resolvePlayerAvatar(data(), user),
           hostFrame: data()?.equipped?.frame || ''
         }
       });

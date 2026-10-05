@@ -1,4 +1,5 @@
 import './battle-cultivation-rules.js';
+import { resolvePlayerAvatar } from './profile-avatar.js';
 import {} from './soul-talents.js';
 import {
   doc, collection, query, where, limit, getDocs, getDoc,
@@ -409,7 +410,7 @@ export const featureReady = (async () => {
     return {
       uid: user.uid,
       name: data.displayName || user.displayName || '無名修士',
-      avatar: String(data.equipped?.avatar || '').trim().slice(0, 2048),
+      avatar: resolvePlayerAvatar(data, user),
       gender: data.storyProgressV1?.gender === 'female' ? 'female' : 'male',
       rankLevel: Math.max(0, Number(data.stats?.rankLevel) || 0),
       totalScore: Math.max(0, Number(data.stats?.totalScore) || 0),
@@ -622,7 +623,7 @@ export const featureReady = (async () => {
           modeVersion: BATTLE_V2.modeVersion,
           hostUid: owner.uid,
           hostName: host.name || userData()?.displayName || '修士',
-          hostAvatar: host.avatar || userData()?.equipped?.avatar || '',
+          hostAvatar: host.avatar || resolvePlayerAvatar(userData(), owner),
           hostFrame: userData()?.equipped?.frame || ''
         }
       });

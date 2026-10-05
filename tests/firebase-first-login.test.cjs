@@ -116,6 +116,14 @@ test('first entry creates minimal BD/C player records from trusted A data, never
   }
 });
 
+test('projected BD/C avatars use the account photo after removing cosmetic equipment', () => {
+  const player = { photoURL: 'https://example.test/account.jpg', equipped: { avatar: 'assets/custom.png', frame: 'assets/frame.png' } };
+  for (const role of ['BD', 'C']) {
+    assert.equal(projectPlayerData(role, 'me', player).avatar, 'assets/custom.png');
+    assert.equal(projectPlayerData(role, 'me', { ...player, equipped: { ...player.equipped, avatar: '' } }).avatar, player.photoURL);
+  }
+});
+
 test('verified players reuse the trusted A marker without rechecking BD/C or migration status', async () => {
   const context = setup();
   const first = await context.handler(request(), response());

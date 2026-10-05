@@ -74,10 +74,11 @@ test('send checks room and friendship concurrently and only delivers after both 
   await new Promise(resolve => setImmediate(resolve));
   assert.equal(roomRead, true);
   assert.equal(sent.length, 0);
-  resolveSender({ exists: true, data: () => ({ friends: ['friend'] }) });
+  resolveSender({ exists: true, data: () => ({ friends: ['friend'], photoURL: 'https://example.test/account.jpg', equipped: { avatar: '' } }) });
   await job;
   assert.equal(result.ok, true);
   assert.deepEqual(sent.map(item => item.uid), ['friend']);
+  assert.equal(sent[0].invite.hostAvatar, 'https://example.test/account.jpg');
 });
 
 function requestContext(getIdToken, fetch) {

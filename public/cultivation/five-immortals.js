@@ -1,4 +1,5 @@
 // 九州五大仙：渡劫以上修士，以國中程度連答問鼎。答錯即止，連答紀錄嚴格超過在榜者才可奪位。
+import { resolvePlayerAvatar } from './profile-avatar.js';
 (function () {
   'use strict';
 
@@ -84,7 +85,7 @@
         const usersSnap = await fs.getDocs(q);
         usersSnap.forEach((docSnap) => {
           const data = docSnap.data();
-          profiles[docSnap.id] = { displayName: data.displayName || data.name || '無名仙客', equipped: data.equipped || null, totalScore: Math.max(0, Number(data.stats?.totalScore) || 0) };
+          profiles[docSnap.id] = { displayName: data.displayName || data.name || '無名仙客', equipped: { ...data.equipped, avatar: resolvePlayerAvatar(data) }, totalScore: Math.max(0, Number(data.stats?.totalScore) || 0) };
         });
       }
       Object.values(owners).forEach((owner) => {
@@ -310,6 +311,7 @@
     connect();
     window.addEventListener('xiuxian:stats-updated', render);
     window.addEventListener('focus', () => { if (db) loadOwners(); });
+    window.addEventListener('xiuxian:appearance-updated', () => { if (db) void loadOwners(); });
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });

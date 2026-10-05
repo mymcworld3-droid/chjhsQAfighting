@@ -34,7 +34,7 @@ function loadAvatarController() {
 }
 
 test('room player snapshots carry saved equipped profile avatar, independent of core and combat power', () => {
-  assert.match(battle, /avatar: String\(data\.equipped\?\.avatar \|\| ''\)/);
+  assert.match(battle, /avatar: resolvePlayerAvatar\(data, user\)/);
   assert.match(battle, /combatPower:/);
   assert.match(battle, /artifactBattle,/);
 });

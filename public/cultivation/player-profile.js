@@ -2,6 +2,7 @@ import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.j
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { ARTIFACT_EQUIP_SLOTS, getArtifactById, realmForScore } from './artifact-catalog.js';
+import { resolvePlayerAvatar } from './profile-avatar.js';
 
 // Shared public-facing player card for ranking, friends and global chat.
 // Fetch only the selected users/{uid} document; never render email, friend code,
@@ -96,7 +97,7 @@ import { ARTIFACT_EQUIP_SLOTS, getArtifactById, realmForScore } from './artifact
     const realm = realmForScore(score)?.name || '凡人';
     const slots = ARTIFACT_EQUIP_SLOTS.map(slot => ({ slot, item: equippedArtifact(data, slot) }));
     return {
-      uid, name: String(data?.displayName || '無名修士'), avatar: safeImage(data?.equipped?.avatar),
+      uid, name: String(data?.displayName || '無名修士'), avatar: safeImage(resolvePlayerAvatar(data)),
       // A high enough score alone does not award the top-five True Immortal title.
       realm: realm === '真仙' ? '半仙' : realm, score, power, core, slots,
       answered, correct, accuracy: answered ? (correct / answered * 100).toFixed(1) + '%' : '尚無紀錄'

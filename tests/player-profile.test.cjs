@@ -33,6 +33,7 @@ function profileModule() {
     realmForScore: score=>({name:score>=868?'真仙':score>=28?'金丹':'築基'}),
     Number, String, Math, Set, Object
   };
+  vm.runInNewContext(read('public/cultivation/profile-avatar.js').replace(/^export /gm, ''), context);
   vm.runInNewContext(source.slice(from,to)+'\nthis.profile={projectProfile,profileMarkup,safeImage};', context);
   return context.profile;
 }

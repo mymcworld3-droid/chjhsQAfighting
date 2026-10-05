@@ -51,6 +51,7 @@ function harness(players, { deferred = false } = {}) {
     calculateRankFromScore: score => Math.floor(score / 10),
     getRankMarkup: rank => `realm-${rank}`
   });
+  vm.runInContext(readFileSync(join(__dirname, '../public/cultivation/profile-avatar.js'), 'utf8').replace(/^export /gm, ''), context);
   vm.runInContext(legacy.slice(start, end), context);
   return {
     context, tbody, reads, requests,

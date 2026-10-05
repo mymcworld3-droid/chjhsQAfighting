@@ -51,6 +51,7 @@ test('share repository writes a typed chat message in A using the authenticated 
     getDoc: async ref => { assert.equal(ref.id, 'owner'); return { exists: () => true, data: () => ({ displayName: '道友', stats: { totalScore: 30 }, equipped: {} }) }; },
     addDoc: async (collection, data) => { writes.push({ collection, data }); }, serverTimestamp: () => 'server-time' });
   const source = repositorySource.replace(/import\s+[\s\S]*?from\s+['"][^'"]+['"];\s*/g, '').replace('export const playerRepository', 'const playerRepository');
+  vm.runInContext(readFileSync(require.resolve('../public/cultivation/profile-avatar.js'), 'utf8').replace(/^export /gm, ''), context);
   vm.runInContext(source + '\nthis.repo = playerRepository;', context);
   await context.repo.shareDongtian(cave());
   assert.equal(writes[0].collection, 'global_chat');
