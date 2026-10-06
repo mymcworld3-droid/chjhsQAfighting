@@ -57,6 +57,6 @@ test('shop product edits retain Firestore save and delete behavior', () => {
 });
 
 test('browser loads the latest fullscreen editor core after index update', () => {
-  assert.match(main, /main-legacy\.js\?v=20261006-combat-invite-block1/);
+  assert.match(main, /main-legacy\.js\?v=20261006-solo-gold1/);
   assert.match(index, /main\.js\?v=20260927-vv-raid9/);
 });
