@@ -88,6 +88,12 @@ export const featureReady = (async () => {
   // Story, realm tutorials and delayed chapter launches must not take over an active duel.
   // Reserve the lock throughout matchmaking/recovery and retain it through the result screen.
   window.isXiuxianBattleBusy = () => Boolean(state.starting || state.leaving || state.recovering || state.roomId);
+  // Incoming duel/raid invitations are suppressed only while matchmaking or combat is active.
+  // The finished result screen can receive invitations again.
+  window.isXiuxianBattleInviteBlocked = () => Boolean(
+    state.starting || state.recovering ||
+    (state.roomId && state.room?.status !== 'finished')
+  );
 
   function finite(value, fallback) {
     const number = Number(value);
