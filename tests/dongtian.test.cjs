@@ -542,19 +542,25 @@ test('private tutorial Dongtian appears in My Dongtian and can be played then lo
   assert.match(uiSource, /window\.deleteNewbieDongtianDemo = deleteNewbieDongtianDemo/);
 });
 
-test('owners can delete real Dongtians with confirmation and public-data cascade cleanup', () => {
+test('owners delete real Dongtians through authenticated backend cascade cleanup', () => {
+  const repositorySource = readFileSync(join(root, 'public/cultivation/data/dongtian-repository.js'), 'utf8');
+  const deleteBlock = uiSource.slice(
+    uiSource.indexOf('async function deleteOwnedDongtian(dongtianId)'),
+    uiSource.indexOf('function renderOwnDongtians', uiSource.indexOf('async function deleteOwnedDongtian(dongtianId)'))
+  );
   assert.match(uiSource, /data-dt-delete=/);
-  assert.match(uiSource, /async function deleteOwnedDongtian\(dongtianId\)/);
-  assert.match(uiSource, /dongtian\.ownerUid !== uid\(\)/);
-  assert.match(uiSource, /window\.confirm/);
-  assert.match(uiSource, /where\('dongtianId', '==', id\)/);
-  assert.match(uiSource, /const contentBatch = writeBatch\(db\)/);
-  assert.match(uiSource, /contentBatch\.delete\(dataRef\)/);
-  assert.match(uiSource, /contentBatch\.delete\(indexRef\)/);
-  assert.match(uiSource, /collection\(progressDb, PLAY_COLLECTION\)/);
-  assert.match(uiSource, /const progressBatch = writeBatch\(progressDb\)/);
-  assert.match(uiSource, /plays\.docs\.forEach\(\(entry\) => progressBatch\.delete\(entry\.ref\)\)/);
-  assert.match(uiSource, /reports\.docs\.forEach\(\(entry\) => contentBatch\.delete\(entry\.ref\)\)/);
+  assert.match(deleteBlock, /window\.confirm/);
+  assert.match(deleteBlock, /dongtianRepository\.deleteOwned\(id\)/);
+  assert.doesNotMatch(deleteBlock, /getDoc\(|getDocs\(|writeBatch\(|runTransaction\(|collection\(/);
+  assert.match(repositorySource, /authenticatedMainFetch\('\/api\/dongtian\/delete'/);
+  assert.match(apiSource, /app\.post\('\/api\/dongtian\/delete'/);
+  assert.match(apiSource, /const uid = await verifyMainPlayer\(req\)/);
+  assert.match(apiSource, /ownerUid !== uid/);
+  assert.match(apiSource, /collection\('dongtianReports'\).*where\('dongtianId', '==', dongtianId\)/s);
+  assert.match(apiSource, /collection\('dongtianPlays'\).*where\('dongtianId', '==', dongtianId\)/s);
+  assert.match(apiSource, /deleteSnapshotsInChunks/);
+  assert.match(apiSource, /finalBatch\.delete\(dataRef\)/);
+  assert.match(apiSource, /finalBatch\.delete\(indexRef\)/);
   assert.match(uiSource, /dongtian:deleted/);
 });
 
