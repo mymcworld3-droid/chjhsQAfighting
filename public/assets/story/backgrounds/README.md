@@ -1,6 +1,8 @@
 # 主線背景圖
 
-將背景 PNG 放進此目錄。檔名使用 `public/cultivation/story/story-backgrounds.js` 的 `filename`，共 24 張，16:9、不透明背景，建議 1920×1080 或更高解析度。人物立繪與對話由播放器疊加，素材只畫場景。
+目前背景素材只製作到第二章：01–07 對應第一章、入門續篇與「竹簡天尊」夢境。第三章起的劇情將再修改，08–24 只是暫定檔名與場景，待劇本定稿後再製作；現階段繼續使用既有備援圖片。
+
+將背景 PNG 放進此目錄。檔名使用 `public/cultivation/story/story-backgrounds.js` 的 `filename`，16:9、不透明背景，建議 1920×1080 或更高解析度。人物立繪與對話由播放器疊加，素材只畫場景。竹簡天尊使用獨立透明立繪 `assets/story/characters/bamboo-tianzun.png`，不要畫入第 06 張藏書夢境。
 
 `story-scripts.js` 中每章的 `backgrounds` 以從 0 起算的 `fromLine` 指定切換位置；回到教學後會依目前台詞恢復背景。劇情開啟前先載入第一張，閱讀時預載下一個場景。相同場景翻台詞會保留圖片節點，換景時以透明度交疊淡入，不拉伸圖片。
 

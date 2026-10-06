@@ -7,7 +7,7 @@ export const STORY_VERSION = 1;
 export const STORY_CHARACTERS = Object.freeze({
   narrator: Object.freeze({ name: '旁白', side: 'center', image: '' }),
   player: Object.freeze({ name: '{{playerName}}', side: 'left', dynamicPlayer: true }),
-  bamboo: Object.freeze({ name: '竹簡天尊', side: 'right', image: '' }),
+  bamboo: Object.freeze({ name: '竹簡天尊', side: 'right', image: 'assets/story/characters/bamboo-tianzun.png' }),
   shen: Object.freeze({
     name: '沈清霜',
     side: 'right',
