@@ -141,6 +141,45 @@ test('inconclusive whole-cave review retries independently before rejecting gene
   } finally { router.generateJSON = saved; }
 });
 
+test('review summaries with DT ids are structured and auto-repaired even when issues is empty', async () => {
+  const router = require('../ai-router.js');
+  const saved = router.generateJSON;
+  const cave = {
+    name:'代數練習', level:'國中二年級', difficulty:'medium', subject:'數學',
+    questions:Array.from({length:14},(_,i)=>({
+      id:'DT-'+String(i+1).padStart(3,'0'), difficulty:'medium', subject:'數學',
+      q:'題目 '+(i+1), correct:'A'+i, wrong:['B'+i,'C'+i,'D'+i], exp:'解析 '+(i+1)
+    }))
+  };
+  const replies = [
+    { approved:false, confidence:0.85, summary:'DT-011與DT-014內容重複，DT-003與DT-012敘述或選項有問題。', issues:[] },
+    { approved:false, confidence:0.88, summary:'DT-011與DT-014重複；DT-003與DT-012需修正。', issues:[] },
+    { issues:[
+      {questionId:'DT-014',issue:'與DT-011內容重複，應改寫切入角度'},
+      {questionId:'DT-003',issue:'計算結果與選項不符'},
+      {questionId:'DT-012',issue:'題幹邏輯與正解矛盾'}
+    ]},
+    { q:'改寫後第14題',correct:'A14',wrong:['B14','C14','D14'],exp:'修正後解析14' },
+    { essencePreserved:true,errorResolved:true,singleCorrect:true,noNewError:true,levelAppropriate:true,confidence:0.96 },
+    { q:'改寫後第3題',correct:'A3',wrong:['B3','C3','D3'],exp:'修正後解析3' },
+    { essencePreserved:true,errorResolved:true,singleCorrect:true,noNewError:true,levelAppropriate:true,confidence:0.96 },
+    { q:'改寫後第12題',correct:'A12',wrong:['B12','C12','D12'],exp:'修正後解析12' },
+    { essencePreserved:true,errorResolved:true,singleCorrect:true,noNewError:true,levelAppropriate:true,confidence:0.96 },
+    { approved:true, confidence:0.97, summary:'修正後全題通過', issues:[] }
+  ];
+  let calls=0;
+  router.generateJSON=async()=>({data:replies[calls++],provider:'test',model:'stub'});
+  try {
+    const checked=await api.reviewAndRepairGeneratedDongtian(cave);
+    assert.equal(calls,10);
+    assert.equal(checked.doubleCheck.review.passed,true);
+    assert.equal(checked.repairs.length,3);
+    assert.equal(checked.dongtian.questions[13].q,'改寫後第14題');
+    assert.equal(checked.dongtian.questions[2].q,'改寫後第3題');
+    assert.equal(checked.dongtian.questions[11].q,'改寫後第12題');
+  } finally { router.generateJSON=saved; }
+});
+
 test('a concrete issue is repaired only after independent revision validation and full recheck', async () => {
   const router = require('../ai-router.js');
   const saved = router.generateJSON;
@@ -295,6 +334,16 @@ test('Dongtian API supports multimodal Gemini and OpenAI-compatible payloads', (
 });
 
 
+test('Dongtian index listing uses authenticated backend transport instead of browser BD queries', () => {
+  const repositorySource = readFileSync(join(root, 'public/cultivation/data/dongtian-repository.js'), 'utf8');
+  assert.match(apiSource, /\/api\/dongtian\/list-index/);
+  assert.match(apiSource, /verifyMainPlayer\(req\)/);
+  assert.match(apiSource, /dongtianRepository\.resolve\(\)\.db/);
+  assert.match(repositorySource, /authenticatedMainFetch\('\/api\/dongtian\/list-index'/);
+  assert.match(uiSource, /dongtianRepository\.listIndex\('owned'\)/);
+  assert.match(uiSource, /dongtianRepository\.listIndex\('public'\)/);
+});
+
 test('Dongtian is wired into server, feature loading, and grouped history', () => {
   assert.match(serverSource, /registerDongtianApi\(app\)/);
   assert.match(serverSource, /express\.json\(\{ limit: '20mb' \}\)/);
@@ -307,7 +356,8 @@ test('Dongtian is wired into server, feature loading, and grouped history', () =
 test('Dongtian does not persist raw creator source material and owner library has no artificial cap', () => {
   const saveBlock = uiSource.slice(uiSource.indexOf('async function saveGeneratedDongtian'), uiSource.indexOf('async function loadOwnDongtians'));
   assert.doesNotMatch(saveBlock, /sourceText:/);
-  assert.match(uiSource, /where\('ownerUid', '==', owner\)\)\)/);
+  assert.match(uiSource, /dongtianRepository\.listIndex\('owned'\)/);
+  assert.doesNotMatch(uiSource, /getDocs\(query\(collection\(db, INDEX_COLLECTION\), where\('ownerUid'/);
   assert.doesNotMatch(uiSource, /where\('ownerUid', '==', uid\(\)\), limit\(80\)/);
 });
 
