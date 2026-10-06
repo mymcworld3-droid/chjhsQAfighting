@@ -220,7 +220,7 @@ export function soulSpentSpirit(tree) {
 export function soulAvailableSpirit(tree, earned) {
   return Math.max(0, normalizeSpirit(earned) - soulSpentSpirit(tree));
 }
-// 各丹性共用累計神識；換丹不刪除舊配點。重修只釋放投入，不增加累計收入。
+// 各丹性共用累計神識；正式換丹與重修釋放所有投入，不增加累計收入。
 export function soulInvestmentSummary(tree, activeType) {
   const safe = normalizeSoulTree(tree);
   return Object.entries(safe.paths).map(([type, path]) => ({

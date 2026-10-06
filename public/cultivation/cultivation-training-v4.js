@@ -221,6 +221,12 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     };
   }
 
+  function sameGoldenCore(a, b) {
+    return !!a && !!b && (a.type || a.id) === (b.type || b.id) &&
+      clampGrade(a.grade) === clampGrade(b.grade) &&
+      Number(a.createdAt || a.formedAt || 0) === Number(b.createdAt || b.formedAt || 0);
+  }
+
   function starterCore() {
     return { type: 'taichu', grade: 9, createdAt: Date.now() };
   }
@@ -395,6 +401,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
           <button id="equip-current-core" type="button" class="core-equip-btn ${state.equipped ? 'equipped' : ''}" ${state.equipped || busy ? 'disabled' : ''}>
             ${state.equipped ? '<i class="fa-solid fa-circle-check"></i> 已調御此丹相' : '<i class="fa-solid fa-circle-dot"></i> 調御此丹相'}
           </button>
+          ${!state.equipped && currentScore() >= NASCENT_SOUL_THRESHOLD ? '<p class="ns-progress-caption">調御新丹相會自動重置所有元嬰配點，返還已投入神識。</p>' : ''}
         </div>
       </section>
     `;
@@ -575,7 +582,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
           </div>
         </div>
         <div class="ns-tree-tip ns-investment-guide">
-          <span>${retained.length ? '舊配點仍保留：' + retainedText + '。換回原丹性即可使用；重修可釋放全部投入。' : '配點依丹性保留，換丹不會返還神識；重修可重新分配。'}
+          <span>${retained.length ? '尚有舊丹性投入：' + retainedText + '。調御新丹相或重修時，會一併返還。' : '調御新丹相時，會自動重置所有元嬰配點並返還已投入神識；累計神識不變。'}
           <span class="ns-node-rules">左脈攻擊、右脈生存；前置 5 級解鎖下一層，每級消耗 1／3／5／8 神識。</span></span>
           <button type="button" class="ns-reset-btn" data-ns-reset ${soulBusy || !Object.keys(tree.paths).length ? 'disabled' : ''}>重修元嬰</button>
         </div>
@@ -603,7 +610,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
             aria-valuemax="${stage.next?.min || Math.max(earned, 1)}" aria-label="元嬰修煉進度">
             <span style="width:${progress}%"></span>
           </div>
-          <p class="ns-progress-caption">${stage.next ? '距離' + stage.next.name + '尚需 ' + Math.max(0, stage.next.min - earned) + ' 神識' : '神識圓滿'} · 配點依丹性保存，重修前均保留</p>
+          <p class="ns-progress-caption">${stage.next ? '距離' + stage.next.name + '尚需 ' + Math.max(0, stage.next.min - earned) + ' 神識' : '神識圓滿'} · 換丹或重修會返還已投入神識</p>
         </div>
         <div class="ns-reward-guide">
           <strong>神識來源</strong>
@@ -1070,25 +1077,64 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
   }
 
   async function equipCore() {
-    if (busy || state.equipped) return;
+    if (busy || soulBusy || state.equipped || !isUnlocked()) return;
+    const user = getAuth(getApp()).currentUser;
+    if (!user) return toast('尚未登入，無法保存調御結果。');
+    const candidate = { ...state.core };
     busy = true;
-    const previousEquippedCore = state.equippedCore ? { ...state.equippedCore } : null;
-    state.equippedCore = { ...state.core };
-    state.equipped = true;
     renderTrainingPage();
     try {
-      await persistRemote();
-      toast(`已調御丹相：${state.core.grade} 品 ${coreType(state.core.type).name}`);
-      window.dispatchEvent(new CustomEvent('golden-core-equipped-changed'));
+      const db = getFirestore(getApp());
+      const ref = doc(db, 'users', user.uid);
+      // 金丹與配點一起提交；交易重試時重新讀取投入，避免跨分頁重複返還。
+      const result = await runTransaction(db, async tx => {
+        const snapshot = await tx.get(ref);
+        if (!snapshot.exists()) throw new Error('找不到玩家資料');
+        if (getAuth(getApp()).currentUser?.uid !== user.uid) throw new Error('登入帳號已變更，請重新登入');
+        const remote = snapshot.data();
+        if (normalizeSpirit(remote.stats?.totalScore) < GOLDEN_CORE_SCORE) throw new Error('金丹境界不足');
+        const training = remote[REMOTE_FIELD];
+        if (!sameGoldenCore(training?.core, candidate)) throw new Error('候選金丹已變更，請重新開啟金丹頁');
+        const changed = !sameGoldenCore(training.equippedCore, candidate);
+        if (!changed && training.equipped === true) {
+          return { training, tree: remote.nascentSoulTree, changed, returned: 0 };
+        }
+        const refund = changed ? resetSoulTree(remote.nascentSoulTree, remote.stats?.nascentSoulSpirit) : null;
+        const next = { ...training, equippedCore: { ...candidate }, equipped: true };
+        const patch = { [REMOTE_FIELD]: next };
+        // 累計神識是收入帳本；清除投入即可返還可用額度，不能再把返還量加進收入。
+        if (changed) patch.nascentSoulTree = refund.tree;
+        tx.update(ref, patch);
+        return { training: next, tree: changed ? refund.tree : remote.nascentSoulTree,
+          changed, returned: refund?.returned || 0 };
+      });
+      if (getAuth(getApp()).currentUser?.uid !== user.uid) return;
+      state = migrate(result.training);
+      const local = window.getCurrentUserData?.();
+      if (local) {
+        local[REMOTE_FIELD] = result.training;
+        if (result.tree) local.nascentSoulTree = result.tree;
+      }
+      selectedSoulNodeId = null;
+      selectedSoulType = null;
+      try { saveLocal(); } catch (error) { console.warn('[Golden core] local cache save failed:', error); }
+      toast(`已調御丹相：${candidate.grade} 品 ${coreType(candidate.type).name}` +
+        (result.returned ? `，已自動返還 ${result.returned} 神識` : ''));
+      window.dispatchEvent(new CustomEvent('golden-core-equipped-changed', {
+        detail: { spiritReturned: result.returned }
+      }));
+      window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', {
+        detail: { source: 'golden-core-equip', spiritReturned: result.returned }
+      }));
     } catch (error) {
       console.error('Equip golden core failed:', error);
-      state.equippedCore = previousEquippedCore;
-      state.equipped = false;
-      saveLocal();
-      toast('調御失敗，請稍後再試。');
+      if (getAuth(getApp()).currentUser?.uid === user.uid) {
+        toast('調御未完成：' + (error?.message || '請檢查連線後重試'));
+      }
     } finally {
       busy = false;
-      renderTrainingPage();
+      if (getAuth(getApp()).currentUser?.uid !== user.uid) restoreRemoteTraining();
+      else renderTrainingPage();
     }
   }
 

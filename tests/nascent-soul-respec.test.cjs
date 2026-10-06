@@ -9,7 +9,7 @@ const tree=()=>({version:4,paths:{
   sword:{nodes:{leftMain:5,leftTop:2},baselineNodes:{},legacySpent:0},
   ocean:{nodes:{rightMain:5},baselineNodes:{},legacySpent:0}
 }});
-test('switching core preserves both trees and explains the shared balance',()=>{
+test('investment summary accounts for all existing paths in the shared balance',()=>{
   const before=tree(), raw=JSON.stringify(before);
   const summary=rules.soulInvestmentSummary(before,'ocean');
   assert.equal(summary.find(p=>p.type==='sword').spent,11);

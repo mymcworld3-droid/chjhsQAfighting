@@ -12,7 +12,7 @@ test('washing keeps the actually equipped Golden Core separate from the candidat
   assert.match(training, /equippedCore:\s*\{ \.\.\.core \}/);
   assert.match(training, /state\.core = fresh;[\s\S]*state\.equipped = false;/);
   assert.doesNotMatch(training, /state\.core = fresh;[\s\S]{0,160}state\.equippedCore\s*=\s*(?:null|fresh)/);
-  assert.match(training, /state\.equippedCore = \{ \.\.\.state\.core \};[\s\S]*state\.equipped = true;/);
+  assert.match(training, /const next = \{ \.\.\.training, equippedCore: \{ \.\.\.candidate \}, equipped: true \}/);
 });
 
 test('status, cultivation effects and battle effects use the equipped core, not a washed candidate', () => {
