@@ -3036,7 +3036,9 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
                 const remote = snap.data();
                 // Preserve currency/score changes from concurrent server settlements.
                 const savedStats = { ...stats,
-                    gold: Math.max(0, Number(remote.stats?.gold) || 0),
+                    // 問道答對的 +20 靈石必須以伺服器目前餘額為基準累加，
+                    // 才不會覆蓋同時發生的任務、團本、坊市等靈石變動。
+                    gold: Math.max(0, Number(remote.stats?.gold) || 0) + Math.max(0, Number(scoreGain) || 0),
                     totalScore: Math.max(0, (Number(remote.stats?.totalScore) || 0) + cultivationDelta)
                 };
                 savedStats.rankLevel = calculateRankFromScore(savedStats.totalScore);
