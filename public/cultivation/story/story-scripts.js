@@ -41,6 +41,7 @@ export const STORY_CHARACTERS = Object.freeze({
 });
 
 const c = (speaker, text, expression = 'neutral') => Object.freeze({ speaker, text, expression });
+const bg = (...scenes) => Object.freeze(scenes.map(([fromLine, id]) => Object.freeze({ fromLine, id })));
 
 export const STORY_CHAPTERS = Object.freeze([
   Object.freeze({
@@ -50,6 +51,7 @@ export const STORY_CHAPTERS = Object.freeze([
     realm: '凡人',
     title: '第一章 · 問道靈根',
     subtitle: '與宗主相同的靈根 · 師姐授課',
+    backgrounds: bg([0, 'sect-courtyard'], [2, 'spirit-root-hall'], [17, 'mountain-corridor'], [19, 'study-day']),
     scene: Object.freeze({ page: 'page-home' }),
     // 介紹靈根後交棒給實際的新手教學；結束後回到仙府接續對話。
     tutorialAfterLine: 32,
@@ -111,6 +113,7 @@ export const STORY_CHAPTERS = Object.freeze([
     realm: '煉氣一層',
     title: '入門續篇 · 問道不是猜答案',
     subtitle: '仙府的第一堂課',
+    backgrounds: bg([0, 'study-day']),
     scene: Object.freeze({ page: 'page-home' }),
     lines: Object.freeze([
       c('narrator', '沈清霜把你帶進一座殘舊仙府。正中央懸著一面古碑，碑面沒有經文，只有一道道尚未亮起的紋路。'),
@@ -141,6 +144,7 @@ export const STORY_CHAPTERS = Object.freeze([
     realm: '煉氣五層',
     title: '第二章 · 竹簡天尊',
     subtitle: '一場讓人不敢荒廢功課的夢',
+    backgrounds: bg([0, 'study-night'], [1, 'bamboo-dream'], [19, 'study-night'], [21, 'corridor-night']),
     scene: Object.freeze({ page: 'page-home' }),
     // 這一章只播放夢境；洞天實作由後續獨立仙道任務開啟。
     lines: Object.freeze([
@@ -179,6 +183,7 @@ export const STORY_CHAPTERS = Object.freeze([
     realm: '築基初期',
     title: '第三章 · 築基之後，別只會做題',
     subtitle: '第一次真正的鬥法',
+    backgrounds: bg([0, 'battle-arena']),
     scene: Object.freeze({ page: 'page-battle' }),
     // 兩次交棒：先與沈清霜交手，回到主線對話後，才由顧長風接手教學。
     tutorials: Object.freeze([
@@ -224,6 +229,7 @@ export const STORY_CHAPTERS = Object.freeze([
     realm: '築基初期',
     title: '第四章 · 法寶不是把東西丟進火裡',
     subtitle: '八方煉器陣',
+    backgrounds: bg([0, 'refinery']),
     scene: Object.freeze({ page: 'page-training', trainingTab: 'refinery' }),
     lines: Object.freeze([
       c('narrator', '鬥法結束後，沈清霜沒有讓你休息，而是把你帶到器坊。一名袖口沾著金屬灰的男子正對著一座八方火陣發脾氣。'),
@@ -252,6 +258,7 @@ export const STORY_CHAPTERS = Object.freeze([
     realm: '築基中期',
     title: '第五章 · 仙盟送來了一封很不吉利的信',
     subtitle: '古洞天異變',
+    backgrounds: bg([0, 'study-day'], [7, 'black-page']),
     scene: Object.freeze({ page: 'page-social' }),
     lines: Object.freeze([
       c('narrator', '築基中期後，宗門收到仙盟急信。使者蘇聞月來到仙府時，沈清霜正在看你整理洞天題目。'),
@@ -281,6 +288,7 @@ export const STORY_CHAPTERS = Object.freeze([
     realm: '築基後期',
     title: '第六章 · 沈清霜的劍第一次出鞘',
     subtitle: '無相客',
+    backgrounds: bg([0, 'sect-steps-dusk']),
     scene: Object.freeze({ page: 'page-home' }),
     lines: Object.freeze([
       c('narrator', '築基後期的一次洞天回返，你在仙府外看見一個陌生人。他沒有腳步聲，也沒有影子。'),
@@ -314,6 +322,7 @@ export const STORY_CHAPTERS = Object.freeze([
     realm: '金丹',
     title: '第七章 · 丹成之日，問道碑醒了',
     subtitle: '第一枚道印',
+    backgrounds: bg([0, 'golden-tablet']),
     scene: Object.freeze({ page: 'page-training', trainingTab: 'core' }),
     tutorialKind: 'golden-core',
     tutorialAfterLine: 14,
@@ -348,6 +357,7 @@ export const STORY_CHAPTERS = Object.freeze([
     realm: '元嬰',
     title: '第八章 · 仙盟不是來請你喝茶',
     subtitle: '北境問道臺',
+    backgrounds: bg([0, 'expedition-map'], [10, 'northern-ruins']),
     scene: Object.freeze({ page: 'page-social' }),
     lines: Object.freeze([
       c('narrator', '踏入元嬰後，蘇聞月第二次來到青雲宗。這一次，她沒有帶信，而是帶來一張北境古圖。'),
@@ -378,6 +388,7 @@ export const STORY_CHAPTERS = Object.freeze([
     realm: '化神',
     title: '第九章 · 天裂不是天災',
     subtitle: '許長老的舊卷',
+    backgrounds: bg([0, 'sealed-archive'], [8, 'ancient-collapse'], [13, 'sealed-archive']),
     scene: Object.freeze({ page: 'page-home' }),
     lines: Object.freeze([
       c('narrator', '化神之後，你的神識足以讀取問道碑深層殘文。許長老把一卷封存多年的宗門密錄交給你。'),
@@ -410,6 +421,7 @@ export const STORY_CHAPTERS = Object.freeze([
     realm: '煉虛',
     title: '第十章 · 無相客給了你一道沒有選項的題',
     subtitle: '唯一答案',
+    backgrounds: bg([0, 'abandoned-cave']),
     scene: Object.freeze({ page: 'page-home' }),
     lines: Object.freeze([
       c('narrator', '煉虛境後，你終於在一座廢棄洞天正面遇見無相客。這次沈清霜沒有立刻拔劍。'),
@@ -439,6 +451,7 @@ export const STORY_CHAPTERS = Object.freeze([
     realm: '合體',
     title: '第十一章 · 仙府真正的用途',
     subtitle: '不是考場',
+    backgrounds: bg([0, 'underground-palace'], [14, 'star-gate']),
     scene: Object.freeze({ page: 'page-settings' }),
     lines: Object.freeze([
       c('narrator', '合體境時，三枚道印在仙府中彼此共鳴。原本封閉的地宮開啟，你和沈清霜在最深處看見一行上古刻字。'),
@@ -466,6 +479,7 @@ export const STORY_CHAPTERS = Object.freeze([
     realm: '大乘',
     title: '第十二章 · 大家都來了，因為你已經不能裝沒事',
     subtitle: '決戰之前',
+    backgrounds: bg([0, 'war-council'], [14, 'star-gate']),
     scene: Object.freeze({ page: 'page-social' }),
     lines: Object.freeze([
       c('narrator', '大乘境後，仙盟、青雲宗與各地洞天主人齊聚仙府。石百煉帶來修好的法寶，顧長風帶來一身新傷，蘇聞月帶來一疊厚得像能當武器的情報。'),
@@ -493,6 +507,7 @@ export const STORY_CHAPTERS = Object.freeze([
     realm: '渡劫',
     title: '第十三章 · 天劫之上仍有一道題',
     subtitle: '問道天碑核心',
+    backgrounds: bg([0, 'core-storm'], [13, 'core-restored']),
     scene: Object.freeze({ page: 'page-rank' }),
     lines: Object.freeze([
       c('narrator', '渡劫之日，雷雲覆蓋九州。無相客在天碑核心完成了第八枚道印，最後缺的正是你手中那一枚。'),
@@ -528,6 +543,7 @@ export const STORY_CHAPTERS = Object.freeze([
     realm: '半仙',
     title: '終章 · 出師這件事，師姐說了算',
     subtitle: '問道不止',
+    backgrounds: bg([0, 'sect-dawn'], [8, 'study-restored']),
     scene: Object.freeze({ page: 'page-rank' }),
     lines: Object.freeze([
       c('narrator', '你踏入半仙境那日，青雲宗沒有天地異象。因為前一天的異象已經被沈清霜一劍劈散，理由是「太吵」。'),

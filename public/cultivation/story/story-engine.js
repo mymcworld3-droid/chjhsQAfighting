@@ -8,6 +8,7 @@ import {
   playerPortraitPath,
   storyChapterById
 } from './story-scripts.js';
+import { STORY_BACKGROUNDS, storyBackgroundForLine, nextStoryBackground, createStoryBackgroundLoader } from './story-backgrounds.js';
 
 // 沈清霜主線劇情播放器。
 // - 第一次進入先選擇性別。
@@ -39,6 +40,8 @@ import {
   let busyPersist = false;
   let storyImagesReady = false;
   let storyImagesPromise = null;
+  let chapterStartRequest = 0;
+  const backgroundLoader = createStoryBackgroundLoader(src => preloadImageAsset(src, 3500));
 
   const STORY_IMAGE_ASSETS = Object.freeze([
     ...Object.values(STORY_CHARACTERS).map((character) => character?.image).filter(Boolean),
@@ -79,14 +82,23 @@ import {
       .replaceAll('{{junior}}', juniorTitle());
   }
 
-  function preloadImageAsset(src) {
+  function preloadImageAsset(src, timeoutMs = 8000) {
     return new Promise((resolve) => {
       const image = new Image();
+      let settled = false;
+      const finish = ok => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        image.onload = image.onerror = null;
+        resolve({ src, ok });
+      };
+      const timer = setTimeout(() => finish(false), timeoutMs);
       image.decoding = 'async';
-      image.onload = () => resolve({ src, ok: true });
-      image.onerror = () => resolve({ src, ok: false });
+      image.onload = () => finish(true);
+      image.onerror = () => finish(false);
       image.src = src;
-      if (image.complete && image.naturalWidth > 0) resolve({ src, ok: true });
+      if (image.complete && image.naturalWidth > 0) finish(true);
     });
   }
 
@@ -105,7 +117,7 @@ import {
   function preloadStoryImages() {
     if (storyImagesPromise) return storyImagesPromise;
     addStoryPreloadHints();
-    storyImagesPromise = Promise.all(STORY_IMAGE_ASSETS.map(preloadImageAsset)).then((results) => {
+    storyImagesPromise = Promise.all(STORY_IMAGE_ASSETS.map(src => preloadImageAsset(src))).then((results) => {
       const failed = results.filter((item) => !item.ok).map((item) => item.src);
       storyImagesReady = true;
       window.__xiuxianStoryImagesReady = true;
@@ -160,18 +172,21 @@ import {
     const style = document.createElement('style');
     style.id = STYLE_ID;
     style.textContent = `
-      #${LAYER_ID}{position:fixed;inset:0;z-index:16000;overflow:hidden;background:rgba(2,5,3,.42);color:#eee6d4;font-family:var(--xq-serif,'Noto Sans TC',sans-serif);backdrop-filter:blur(1.5px) saturate(.82)}
-      #${LAYER_ID}:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.22),rgba(0,0,0,.04) 30%,rgba(0,0,0,.04) 70%,rgba(0,0,0,.22)),linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.18));pointer-events:none}
+      #${LAYER_ID}{position:fixed;inset:0;z-index:16000;isolation:isolate;overflow:hidden;background:rgba(2,5,3,.42);color:#eee6d4;font-family:var(--xq-serif,'Noto Sans TC',sans-serif);backdrop-filter:blur(1.5px) saturate(.82)}
+      #${LAYER_ID}:before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(0,0,0,.22),rgba(0,0,0,.04) 30%,rgba(0,0,0,.04) 70%,rgba(0,0,0,.22)),linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.18));pointer-events:none}
+      #${LAYER_ID} .story-background{position:absolute;inset:0;z-index:0;overflow:hidden;background:radial-gradient(ellipse at 50% 30%,#273c37,#101a20 60%,#090e13);pointer-events:none}
+      #${LAYER_ID} .story-background-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;opacity:0;transition:opacity .45s ease;pointer-events:none;user-select:none}
+      #${LAYER_ID} .story-background-image.is-visible{opacity:1}
       #${LAYER_ID} .story-chapter-mark{position:absolute;left:clamp(14px,3vw,42px);top:clamp(14px,3vw,32px);z-index:4;max-width:min(72vw,620px);text-shadow:0 4px 20px #000}
       #${LAYER_ID} .story-chapter-mark small{display:block;color:#9c8555;font-size:9px;font-weight:900;letter-spacing:.2em}
       #${LAYER_ID} .story-chapter-mark b{display:block;margin-top:5px;color:#e9ddc3;font-size:clamp(16px,2.5vw,25px)}
       #${LAYER_ID}.story-playing{cursor:pointer}
-      #${LAYER_ID} .story-portrait{position:absolute;z-index:1;bottom:0;height:min(89dvh,900px);width:min(48vw,620px);object-fit:contain;object-position:center bottom;filter:drop-shadow(0 18px 35px rgba(0,0,0,.56));user-select:none;pointer-events:none;transition:opacity .16s ease,transform .18s ease}
+      #${LAYER_ID} .story-portrait{position:absolute;z-index:2;bottom:0;height:min(89dvh,900px);width:min(48vw,620px);object-fit:contain;object-position:center bottom;filter:drop-shadow(0 18px 35px rgba(0,0,0,.56));user-select:none;pointer-events:none;transition:opacity .16s ease,transform .18s ease}
       #${LAYER_ID} .story-portrait.left{left:clamp(-60px,-3vw,-12px);transform:translateX(0)}
       #${LAYER_ID} .story-portrait.right{right:clamp(-60px,-3vw,-12px);transform:translateX(0)}
       #${LAYER_ID} .story-portrait.story-bounce{animation:story-character-hop .22s cubic-bezier(.2,.8,.3,1)}
       @keyframes story-character-hop{0%{transform:translateY(0)}42%{transform:translateY(-14px) scale(1.01)}100%{transform:translateY(0)}}
-      #${LAYER_ID} .story-narrator-seal{position:absolute;left:50%;top:30%;transform:translate(-50%,-50%);width:86px;height:86px;display:grid;place-items:center;border:1px solid rgba(216,177,93,.25);border-radius:50%;color:#b69854;font:900 34px serif;opacity:.58;box-shadow:0 0 40px rgba(216,177,93,.08)}
+      #${LAYER_ID} .story-narrator-seal{position:absolute;z-index:2;left:50%;top:30%;transform:translate(-50%,-50%);width:86px;height:86px;display:grid;place-items:center;border:1px solid rgba(216,177,93,.25);border-radius:50%;color:#b69854;font:900 34px serif;opacity:.58;box-shadow:0 0 40px rgba(216,177,93,.08)}
       #${LAYER_ID} .story-dialogue{position:absolute;z-index:5;left:50%;bottom:clamp(14px,3vh,34px);transform:translateX(-50%);width:min(calc(100vw - 28px),940px);min-height:170px;padding:20px 22px 17px;border:1px solid rgba(216,177,93,.3);border-radius:22px;background:linear-gradient(145deg,rgba(17,18,15,.91),rgba(5,6,5,.94));box-shadow:0 22px 75px rgba(0,0,0,.64),inset 0 1px rgba(255,255,255,.025);backdrop-filter:blur(10px)}
       #${LAYER_ID} .story-speaker{display:flex;align-items:center;gap:8px;color:#e0bd68;font-size:11px;font-weight:900;letter-spacing:.08em}
       #${LAYER_ID} .story-speaker:before{content:"";width:18px;height:1px;background:#b99143}
@@ -249,12 +264,54 @@ import {
     return interpolate(character.name);
   }
 
+  function updateStoryBackground(el) {
+    const scene = storyBackgroundForLine(currentChapter, lineIndex);
+    if (!scene) return;
+    let backdrop = el.querySelector('.story-background');
+    if (!backdrop) {
+      backdrop = document.createElement('div');
+      backdrop.className = 'story-background';
+      backdrop.setAttribute('aria-hidden', 'true');
+      el.prepend(backdrop);
+    }
+    if (backdrop.dataset.scene === scene.id) return;
+    backdrop.dataset.scene = scene.id;
+    const paint = src => {
+      // 快速翻頁／退出／教學接棒時，較慢的舊載入不能蓋過目前場景。
+      if (!src || !active || !backdrop.isConnected || backdrop.dataset.scene !== scene.id) return;
+      if (backdrop.dataset.src === src) return;
+      const previous = Array.from(backdrop.querySelectorAll('.story-background-image'));
+      const image = document.createElement('img');
+      image.className = 'story-background-image';
+      image.alt = '';
+      image.draggable = false;
+      image.decoding = 'async';
+      image.src = src;
+      backdrop.append(image);
+      backdrop.dataset.src = src;
+      backdrop.storyImage = image;
+      const reveal = () => {
+        if (!backdrop.isConnected || backdrop.storyImage !== image) { image.remove(); return; }
+        image.classList.add('is-visible');
+        previous.forEach(item => item.classList.remove('is-visible'));
+        setTimeout(() => previous.forEach(item => item.remove()), 500);
+      };
+      if (window.requestAnimationFrame) window.requestAnimationFrame(() => window.requestAnimationFrame(reveal));
+      else setTimeout(reveal, 0);
+    };
+    if (backgroundLoader.has(scene.id)) paint(backgroundLoader.get(scene.id));
+    else void backgroundLoader.load(scene).then(paint);
+    const next = nextStoryBackground(currentChapter, lineIndex);
+    if (next) void backgroundLoader.load(next);
+  }
+
   function renderLine(options = {}) {
     if (!active || !currentChapter) return;
     const line = currentChapter.lines[lineIndex];
     if (!line) { finishChapter(); return; }
 
     const el = layer();
+    const backdrop = el.querySelector('.story-background');
     const character = STORY_CHARACTERS[line.speaker] || STORY_CHARACTERS.narrator;
     const image = portraitFor(line);
     const last = lineIndex >= currentChapter.lines.length - 1;
@@ -276,6 +333,10 @@ import {
         </div>
         <div class="story-line-progress"><i style="width:${percent}%"></i></div>
       </section>`;
+
+    // 保留背景節點：同場景翻台詞時不重新建立圖片或重播淡入。
+    if (backdrop) el.prepend(backdrop);
+    updateStoryBackground(el);
 
     if (tutorialLaunchError || chapterSaveError) {
       const warning = document.createElement('p');
@@ -471,8 +532,16 @@ import {
   function startChapter(chapter, options = {}) {
     if (!chapter || active || storyTutorialPaused) return false;
     if (blocking()) return false;
+    const request = options.backgroundRequest ?? ++chapterStartRequest;
+    if (request !== chapterStartRequest) return false;
+    const resume = () => startChapter(chapter, { ...options, backgroundRequest: request });
     if (!storyImagesReady) {
-      preloadStoryImages().then(() => startChapter(chapter, options));
+      preloadStoryImages().then(resume);
+      return true;
+    }
+    const firstBackground = storyBackgroundForLine(chapter, 0);
+    if (firstBackground && !backgroundLoader.has(firstBackground.id)) {
+      backgroundLoader.load(firstBackground).then(resume);
       return true;
     }
     document.getElementById(ARCHIVE_ID)?.remove();
@@ -656,6 +725,7 @@ import {
   window.preloadXiuxianStoryImages = preloadStoryImages;
   window.getXiuxianStoryImageAssets = () => STORY_IMAGE_ASSETS.slice();
   window.openXiuxianStoryArchive = openArchive;
+  window.getXiuxianStoryBackgrounds = () => STORY_BACKGROUNDS.map(item => ({ ...item }));
   window.openXiuxianStoryChapter = (id, options = {}) => {
     const chapter = storyChapterById(id);
     if (!chapter || (!canPreviewAllStory() && score() < chapter.minScore)) return false;

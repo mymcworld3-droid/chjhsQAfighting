@@ -198,7 +198,7 @@ test('all story portraits preload before gender choice or chapter playback can s
   assert.match(engine, /\['neutral', 'confused', 'happy', 'determined'\]/);
   assert.match(engine, /Object\.values\(STORY_CHARACTERS\)/);
   assert.match(engine, /function preloadStoryImages\(\)/);
-  assert.match(engine, /Promise\.all\(STORY_IMAGE_ASSETS\.map\(preloadImageAsset\)\)/);
+  assert.match(engine, /Promise\.all\(STORY_IMAGE_ASSETS\.map\(src => preloadImageAsset\(src\)\)\)/);
   assert.match(engine, /link\.rel = 'preload'/);
   assert.match(engine, /link\.as = 'image'/);
   assert.match(engine, /if \(!storyImagesReady\)/);
