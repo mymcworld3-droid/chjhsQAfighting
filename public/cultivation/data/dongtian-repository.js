@@ -25,6 +25,17 @@ export const dongtianRepository = Object.freeze({
     const snap = await getDoc(doc(db, DONGTIAN_COLLECTIONS.data, String(id || '')));
     return snap.exists() ? { id:snap.id, ...snap.data() } : null;
   },
+  async deleteOwned(dongtianId) {
+    const response = await authenticatedMainFetch('/api/dongtian/delete', {
+      method: 'POST',
+      body: JSON.stringify({ dongtianId: String(dongtianId || '') })
+    });
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok || payload.ok !== true) {
+      throw new Error(payload.error || '洞天刪除失敗');
+    }
+    return payload;
+  },
   async listIndex(mode = 'owned') {
     const response = await authenticatedMainFetch('/api/dongtian/list-index', {
       method: 'POST',
