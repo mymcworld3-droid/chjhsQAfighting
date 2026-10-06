@@ -76,7 +76,7 @@ test('CSS blocks are balanced and browser loads the new build', () => {
   const tutorialCss = tutorial.slice(tutorial.indexOf('/* The training arena shares the fixed viewport'), trainingEnd);
   for (const text of [css, tutorialCss]) assert.equal(text.split('{').length, text.split('}').length);
   assert.ok(main.includes("XIUXIAN_FEATURE_BUILD = '20260930-economy-raid1'"));
-  assert.ok(main.includes("BATTLE_FEATURE_BUILD = '20261006-battle-invite-block1'"));
+  assert.ok(main.includes("BATTLE_FEATURE_BUILD = '20261006-battle-join-fix1'"));
   assert.ok(index.includes('main.js?v=20260927-vv-raid9'));
 });
 
