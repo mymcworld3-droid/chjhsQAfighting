@@ -588,43 +588,26 @@ export const featureReady = (async () => {
   async function deleteOwnedDongtian(dongtianId) {
     const id = String(dongtianId || '').trim();
     if (!uid() || !id) throw new Error('洞天資料不完整');
-    const dataRef = doc(db, DATA_COLLECTION, id);
-    const indexRef = doc(db, INDEX_COLLECTION, id);
-    const full = await getDoc(dataRef);
-    if (!full.exists()) throw new Error('洞天資料不存在');
-    const dongtian = { id: full.id, ...full.data() };
-    if (dongtian.ownerUid !== uid()) throw new Error('只有洞天主人可以刪除');
-    if (!window.confirm(`確定刪除洞天「${dongtian.name || '無名洞天'}」？\n\n刪除後不再公開，也無法復原。`)) return false;
 
-    const [plays, reports] = await Promise.all([
-      getDocs(query(collection(progressDb, PLAY_COLLECTION), where('dongtianId', '==', id), limit(440))),
-      getDocs(query(collection(db, REPORT_COLLECTION), where('dongtianId', '==', id), limit(40)))
-    ]);
-    if (plays.size >= 440 || reports.size >= 40) throw new Error('此洞天歷史資料過多，為避免只刪除一部分，請聯絡管理員處理');
+    const cachedItem = (dongtianCache.getOwnedList(uid()) || []).find((item) => item.id === id);
+    const displayName = cachedItem?.name || '這座洞天';
+    if (!window.confirm(`確定刪除洞天「${displayName}」？\n\n刪除後不再公開，也無法復原。`)) return false;
 
-    const contentBatch = writeBatch(db);
-    contentBatch.delete(dataRef);
-    contentBatch.delete(indexRef);
-    reports.docs.forEach((entry) => contentBatch.delete(entry.ref));
-    await contentBatch.commit();
-
-    if (!plays.empty) {
-      try {
-        const progressBatch = writeBatch(progressDb);
-        plays.docs.forEach((entry) => progressBatch.delete(entry.ref));
-        await progressBatch.commit();
-      } catch (error) {
-        console.warn('[Dongtian delete] stale play cleanup deferred:', error);
-      }
-    }
-
+    const result = await dongtianRepository.deleteOwned(id);
     const cached = dongtianCache.getOwnedList(uid());
-    if (cached) dongtianCache.setOwnedList(uid(), cached.filter(item => item.id !== id));
+    if (cached) dongtianCache.setOwnedList(uid(), cached.filter((item) => item.id !== id));
     invalidateOwnCave(id);
     state.listLoaded = false;
-    await loadOwnDongtians();
-    toast(`已刪除洞天「${dongtian.name || '無名洞天'}」`);
-    window.dispatchEvent(new CustomEvent('dongtian:deleted', { detail: { id, name: dongtian.name || '' } }));
+    renderCachedOwnList();
+    toast(`已刪除洞天「${result.name || displayName}」`);
+    window.dispatchEvent(new CustomEvent('dongtian:deleted', {
+      detail: {
+        id,
+        name: result.name || displayName,
+        deletedReports: Number(result.deletedReports) || 0,
+        deletedPlays: Number(result.deletedPlays) || 0
+      }
+    }));
     return true;
   }
 
