@@ -222,6 +222,28 @@ test('client invitation lifecycle never reads or writes Firestore invitation doc
   assert.doesNotMatch(repository, /sendInvitationsToActiveFriends/);
 });
 
+test('matchmaking and combat suppress incoming battle and raid invitations', () => {
+  const legacy = read('public/main-legacy.js');
+  const battle = read('public/cultivation/battle-mode-v2.js');
+  const raid = read('public/cultivation/raid-mode.js');
+  const receive = legacy.slice(legacy.indexOf('function receiveIncomingInvite('), legacy.indexOf('function startInvitationListener()'));
+  const toast = legacy.slice(legacy.indexOf('function showInviteToast('), legacy.indexOf('async function removeInvite('));
+
+  assert.match(legacy, /function invitationBlockedByCombat\(\)/);
+  assert.match(legacy, /window\.isXiuxianBattleInviteBlocked/);
+  assert.match(legacy, /window\.isXiuxianRaidInviteBlocked/);
+  assert.match(receive, /if \(invitationBlockedByCombat\(\)\)[\s\S]*pendingIncomingInvites\.delete\(invite\.id\)/);
+  assert.match(receive, /function flushPendingIncomingInvites\(\)[\s\S]*dismissVisibleGameInvites\(\)/);
+  assert.match(toast, /if \(invitationBlockedByCombat\(\)\)/);
+  assert.match(legacy, /xiuxian:invite-blocked/);
+  assert.match(battle, /window\.isXiuxianBattleInviteBlocked =/);
+  assert.match(battle, /state\.roomId && state\.room\?\.status !== 'finished'/);
+  assert.match(raid, /window\.isXiuxianRaidInviteBlocked = function/);
+  assert.match(raid, /\['waiting', 'active'\]\.includes\(state\.room\?\.status\)/);
+  assert.match(battle, /dispatchEvent\(new CustomEvent\('xiuxian:invite-blocked'\)\)/);
+  assert.match(raid, /dispatchEvent\(new CustomEvent\('xiuxian:invite-blocked'\)\)/);
+});
+
 test('server validates room ownership and trusted friendship before delivery', () => {
   const source = read('invitation-api.cjs');
   assert.match(source, /sender\.friends/);
