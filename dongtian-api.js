@@ -1,5 +1,7 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const aiRouter = require('./ai-router');
+const { PROJECT_IDS } = require('./firebase-admin-projects.cjs');
+const { playerRepository, dongtianRepository } = require('./server-repositories.cjs');
 
 const LEVELS = [
   '國小中年級',
@@ -29,6 +31,24 @@ const QUESTION_AMOUNT_PRESETS = Object.freeze({
 });
 const MAX_REPORT_REASON = 1200;
 const MAX_REVISION_HINT = 1600;
+const MAX_AUTO_REPAIR_ISSUES = 6;
+
+async function verifyMainPlayer(req) {
+  const bearer = /^Bearer ([A-Za-z0-9_.-]+)$/.exec(String(req.get?.('authorization') || ''));
+  if (!bearer) throw Object.assign(new Error('請先登入後再讀取洞天'), { status: 401 });
+  const a = playerRepository.resolve();
+  let verified;
+  try {
+    verified = await a.auth.verifyIdToken(bearer[1], true);
+  } catch (_) {
+    throw Object.assign(new Error('登入狀態已失效，請重新登入'), { status: 401 });
+  }
+  if (!verified?.uid || verified.aud !== PROJECT_IDS.A ||
+      verified.iss !== 'https://securetoken.google.com/' + PROJECT_IDS.A) {
+    throw Object.assign(new Error('登入身分驗證失敗'), { status: 401 });
+  }
+  return verified.uid;
+}
 
 function cleanText(value, max = 4000) {
   return String(value || '').replace(/\u0000/g, '').trim().slice(0, max);
@@ -467,6 +487,69 @@ function normalizeDongtianDoubleCheck(raw) {
   };
 }
 
+function buildDongtianIssueExpansionPrompt(dongtian, review) {
+  return `
+[任務]
+你是洞天品質審查結果整理員。前一位審核員判定洞天未通過，但可能把具體錯誤只寫在 summary，沒有正確填入 issues。請重新閱讀整份洞天與該審核結果，將所有「可實際修復」的錯誤整理成結構化 issues。
+
+[洞天 JSON]
+${JSON.stringify(dongtian)}
+
+[前一位審核結果]
+${JSON.stringify(review)}
+
+[規則]
+1. 只列出真實存在於洞天的 questionId，格式 DT-001、DT-002……。
+2. 每個 issue 必須具體說明該題哪裡錯：重複、正解錯誤、計算矛盾、選項錯植、題幹歧義、解析矛盾等。
+3. 若兩題內容重複，優先只標記「後出現／應改寫」的那一題，避免同時把兩題都改掉。
+4. 不要把名稱風格、個人喜好等非實質問題列為題目錯誤。
+5. 最多列出 ${MAX_AUTO_REPAIR_ISSUES} 題；若沒有可定位的題目錯誤，issues=[]。
+6. 不得只重複 summary，必須把錯誤對應到可修復的題號。
+
+[輸出 JSON Only]
+{
+  "issues": [
+    { "questionId": "DT-001", "issue": "具體、可驗證、可修復的錯誤說明" }
+  ]
+}`;
+}
+
+function normalizeExpandedDongtianIssues(raw, dongtian) {
+  const validIds = new Set((dongtian?.questions || []).map((question) => cleanText(question?.id, 40)).filter(Boolean));
+  const input = Array.isArray(raw?.issues) ? raw.issues : [];
+  const unique = new Map();
+  for (const item of input) {
+    const questionId = cleanText(item?.questionId, 40).toUpperCase();
+    const issue = cleanText(item?.issue, 1200);
+    if (!validIds.has(questionId) || !issue) continue;
+    unique.set(questionId, [unique.get(questionId), issue].filter(Boolean).join('；'));
+    if (unique.size >= MAX_AUTO_REPAIR_ISSUES) break;
+  }
+  return [...unique].map(([questionId, issue]) => ({ questionId, issue }));
+}
+
+function inferIssuesFromReviewSummary(dongtian, review) {
+  const validIds = new Set((dongtian?.questions || []).map((question) => cleanText(question?.id, 40)).filter(Boolean));
+  const summary = cleanText(review?.summary, 1200);
+  if (!summary) return [];
+  const ids = [...new Set((summary.match(/DT-\d{3}/gi) || []).map((id) => id.toUpperCase()))]
+    .filter((id) => validIds.has(id))
+    .slice(0, MAX_AUTO_REPAIR_ISSUES);
+  return ids.map((questionId) => ({ questionId, issue: summary }));
+}
+
+async function expandDongtianReviewIssues(dongtian, review) {
+  if (Array.isArray(review?.issues) && review.issues.length) return review.issues;
+  try {
+    const run = await aiRouter.generateJSON(buildDongtianIssueExpansionPrompt(dongtian, review), { timeoutMs: 60000 });
+    const issues = normalizeExpandedDongtianIssues(run.data, dongtian);
+    if (issues.length) return issues;
+  } catch (error) {
+    console.warn('[Dongtian issue expansion] failed:', error?.message || error);
+  }
+  return inferIssuesFromReviewSummary(dongtian, review);
+}
+
 async function verifyGeneratedDongtian(dongtian) {
   const run = await aiRouter.generateJSON(buildDongtianDoubleCheckPrompt(dongtian), { timeoutMs: 60000 });
   const review = normalizeDongtianDoubleCheck(run.data);
@@ -685,61 +768,155 @@ async function reviewAndRepairGeneratedDongtian(dongtian) {
     return { dongtian, doubleCheck: initial, initialDoubleCheck: initial, repairs: [] };
   }
 
-  const issues = initial.review.issues;
   const repairs = [];
   let candidate = dongtian;
+  let current = initial;
 
-  if (issues.length > 0 && issues.length <= 3) {
-    const ids = new Set(dongtian.questions.map((question) => question.id));
+  // A reviewer can reject a cave while accidentally leaving issues empty. Give a
+  // second independent reviewer a chance first; if it still rejects, structure
+  // the summary into concrete question IDs so the repair pipeline can act on it.
+  if (!current.review.issues.length) {
+    const retry = await verifyGeneratedDongtian(candidate);
+    current = retry;
+    if (current.review.passed) {
+      return { dongtian: candidate, doubleCheck: current, initialDoubleCheck: initial, repairs };
+    }
+  }
+
+  for (let repairRound = 0; repairRound < 2 && !current.review.passed; repairRound++) {
+    const issues = await expandDongtianReviewIssues(candidate, current.review);
+    if (!issues.length) {
+      return {
+        dongtian: candidate,
+        doubleCheck: current,
+        initialDoubleCheck: initial,
+        repairs,
+        blocked: 'quality_review_unstructured'
+      };
+    }
+    if (issues.length > MAX_AUTO_REPAIR_ISSUES) {
+      return {
+        dongtian: candidate,
+        doubleCheck: current,
+        initialDoubleCheck: initial,
+        repairs,
+        blocked: 'too_many_issues'
+      };
+    }
+
+    const ids = new Set(candidate.questions.map((question) => question.id));
     const uniqueIssues = new Map();
     for (const issue of issues) {
       if (!ids.has(issue.questionId)) {
-        // A fabricated or unidentifiable issue is inconclusive, not proof of a safe cave.
-        return { dongtian, doubleCheck: initial, initialDoubleCheck: initial, repairs, blocked: 'unknown_question_id' };
+        return {
+          dongtian: candidate,
+          doubleCheck: current,
+          initialDoubleCheck: initial,
+          repairs,
+          blocked: 'unknown_question_id'
+        };
       }
       uniqueIssues.set(issue.questionId, [
         uniqueIssues.get(issue.questionId), issue.issue
       ].filter(Boolean).join('；'));
     }
-    candidate = { ...dongtian, questions: dongtian.questions.map((question) => ({ ...question })) };
+
+    const nextCandidate = {
+      ...candidate,
+      questions: candidate.questions.map((question) => ({ ...question }))
+    };
+
     for (const [questionId, issue] of uniqueIssues) {
-      const index = candidate.questions.findIndex((question) => question.id === questionId);
-      const original = candidate.questions[index];
-      const hint = '只修正審核員指出的實質錯誤，維持原題的核心知識點、學習目標、難度和單選題結構。';
+      const index = nextCandidate.questions.findIndex((question) => question.id === questionId);
+      const original = nextCandidate.questions[index];
+      const hint = '只修正審核員指出的實質錯誤，維持原題的核心知識點、學習目標、難度和單選題結構；若問題是與別題重複，改變數值、情境或提問角度，但仍考同一藍圖知識點。';
       try {
         const rewrite = await aiRouter.generateJSON(
-          buildRevisionPrompt(original, hint, issue, candidate), { timeoutMs: 60000 }
+          buildRevisionPrompt(original, hint, issue, nextCandidate), { timeoutMs: 60000 }
         );
         const revised = normalizeStandaloneQuestion(rewrite.data, original);
         const validationRun = await aiRouter.generateJSON(
-          buildRevisionValidationPrompt(original, revised, issue, hint, candidate), { timeoutMs: 60000 }
+          buildRevisionValidationPrompt(original, revised, issue, hint, nextCandidate), { timeoutMs: 60000 }
         );
         const validation = normalizeRevisionValidation(validationRun.data);
-        repairs.push({ questionId, validated: validation.accepted, model: validationRun.model });
+        repairs.push({
+          questionId,
+          validated: validation.accepted,
+          model: validationRun.model,
+          round: repairRound + 1
+        });
         if (!validation.accepted) {
-          return { dongtian, doubleCheck: initial, initialDoubleCheck: initial, repairs, blocked: 'revision_validation' };
+          return {
+            dongtian: candidate,
+            doubleCheck: current,
+            initialDoubleCheck: initial,
+            repairs,
+            blocked: 'revision_validation'
+          };
         }
         const revisedFingerprint = questionFingerprint(revised.q);
-        if (candidate.questions.some((question, i) => i !== index && questionFingerprint(question.q) === revisedFingerprint)) {
-          return { dongtian, doubleCheck: initial, initialDoubleCheck: initial, repairs, blocked: 'duplicate_after_revision' };
+        if (nextCandidate.questions.some((question, i) =>
+          i !== index && questionFingerprint(question.q) === revisedFingerprint)) {
+          return {
+            dongtian: candidate,
+            doubleCheck: current,
+            initialDoubleCheck: initial,
+            repairs,
+            blocked: 'duplicate_after_revision'
+          };
         }
-        candidate.questions[index] = revised;
+        nextCandidate.questions[index] = revised;
       } catch (error) {
         console.warn('[Dongtian auto-repair] failed', questionId, error);
-        return { dongtian, doubleCheck: initial, initialDoubleCheck: initial, repairs, blocked: 'revision_error' };
+        return {
+          dongtian: candidate,
+          doubleCheck: current,
+          initialDoubleCheck: initial,
+          repairs,
+          blocked: 'revision_error'
+        };
       }
     }
-  } else if (issues.length > 3) {
-    return { dongtian, doubleCheck: initial, initialDoubleCheck: initial, repairs, blocked: 'too_many_issues' };
+
+    candidate = nextCandidate;
+    current = await verifyGeneratedDongtian(candidate);
   }
 
-  // Recheck independently after every accepted repair, or once when the initial
-  // reviewer rejected without identifying any actual question error.
-  const final = await verifyGeneratedDongtian(candidate);
-  return { dongtian: candidate, doubleCheck: final, initialDoubleCheck: initial, repairs };
+  return {
+    dongtian: candidate,
+    doubleCheck: current,
+    initialDoubleCheck: initial,
+    repairs,
+    ...(current.review.passed ? {} : { blocked: 'quality_review' })
+  };
 }
 
 module.exports = function registerDongtianApi(app) {
+  app.post('/api/dongtian/list-index', async (req, res) => {
+    res.set?.('Cache-Control', 'no-store');
+    try {
+      const uid = await verifyMainPlayer(req);
+      const mode = String(req.body?.mode || 'owned');
+      const db = dongtianRepository.resolve().db;
+      let queryRef;
+      if (mode === 'public') {
+        queryRef = db.collection('dongtianIndex').where('status', '==', 'active').limit(80);
+      } else {
+        queryRef = db.collection('dongtianIndex').where('ownerUid', '==', uid);
+      }
+      const snap = await queryRef.get();
+      const items = snap.docs.map((entry) => ({ id: entry.id, ...(entry.data() || {}) }))
+        .sort((a, b) => Number(b.createdAtMs || 0) - Number(a.createdAtMs || 0));
+      return res.json({ ok: true, items });
+    } catch (error) {
+      console.warn('[Dongtian list API]', error?.message || error);
+      return res.status(Number(error?.status) || 500).json({
+        ok: false,
+        error: error?.message || '洞天名冊暫時無法讀取'
+      });
+    }
+  });
+
   app.post('/api/review-dongtian-question', async (req, res) => {
     try {
       const question = normalizeQuestionSnapshot(req.body?.question);
@@ -985,4 +1162,4 @@ module.exports = function registerDongtianApi(app) {
   });
 };
 
-module.exports.__test = { LEVELS, MIN_QUESTIONS, QUESTION_BATCH_SIZE, MIN_EXPLANATION_LENGTH, QUESTION_COUNT_CHOICES, QUESTION_AMOUNT_PRESETS, normalizeLevel, normalizeDifficulty, normalizeQuestionAmount, allowedQuestionCounts, normalizePlannedQuestionCount, normalizeDongtianPlan, normalizeQuestionBatch, normalizeResult, buildPrompt, buildPlanningPrompt, buildQuestionBatchPrompt, validateImages, normalizeQuestionSnapshot, buildQuestionReviewPrompt, normalizeQuestionReview, buildRevisionPrompt, buildRevisionValidationPrompt, normalizeStandaloneQuestion, normalizeRevisionValidation, contentBasedDongtianName, normalizeDongtianDoubleCheck, buildDongtianDoubleCheckPrompt, verifyGeneratedDongtian, reviewAndRepairGeneratedDongtian };
+module.exports.__test = { LEVELS, MIN_QUESTIONS, QUESTION_BATCH_SIZE, MIN_EXPLANATION_LENGTH, QUESTION_COUNT_CHOICES, QUESTION_AMOUNT_PRESETS, normalizeLevel, normalizeDifficulty, normalizeQuestionAmount, allowedQuestionCounts, normalizePlannedQuestionCount, normalizeDongtianPlan, normalizeQuestionBatch, normalizeResult, buildPrompt, buildPlanningPrompt, buildQuestionBatchPrompt, validateImages, normalizeQuestionSnapshot, buildQuestionReviewPrompt, normalizeQuestionReview, buildRevisionPrompt, buildRevisionValidationPrompt, normalizeStandaloneQuestion, normalizeRevisionValidation, contentBasedDongtianName, normalizeDongtianDoubleCheck, buildDongtianDoubleCheckPrompt, buildDongtianIssueExpansionPrompt, normalizeExpandedDongtianIssues, inferIssuesFromReviewSummary, expandDongtianReviewIssues, verifyGeneratedDongtian, reviewAndRepairGeneratedDongtian };
