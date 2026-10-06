@@ -115,6 +115,20 @@ test('matchmaking is transactional, version isolated, self-match safe and cultiv
   assert.match(battleSource, /tx\.delete\(ownRef\)/);
 });
 
+test('waiting-room guest join only writes fields allowed by Firebase C rules', () => {
+  const start = battleSource.indexOf('  function guestJoinPatch(room, myData) {');
+  const end = battleSource.indexOf('  async function claimWaitingRoom', start);
+  assert.ok(start >= 0 && end > start);
+  const patch = battleSource.slice(start, end);
+  assert.match(patch, /status: 'intro'/);
+  assert.match(patch, /knowledgeScope:/);
+  assert.match(patch, /matchedAt:/);
+  assert.match(patch, /introUntilMs:/);
+  assert.doesNotMatch(patch, /prefetchedQuestion|prefetchedRound|prefetchOwnerUid|prefetchClaimedAtMs/);
+  assert.match(battleSource, /tx\.update\(targetRef, guestJoinPatch\(room, myData\)\)/);
+  assert.match(battleSource, /tx\.update\(target\.ref, guestJoinPatch\(other, myData\)\)/);
+});
+
 test('matched players synchronously enter a cinematic intro before answering', () => {
   assert.match(battleSource, /INTRO_DURATION_MS = 4800/);
   assert.match(battleSource, /status: 'intro'/);
@@ -212,11 +226,13 @@ test('Battle v2 rewards bridge Firebase C rooms to idempotent Firebase A receipt
 });
 
 
-test('Battle v2 displays paid rewards and retries server receipts after forfeits or reconnects', () => {
+test('Battle v2 displays paid rewards and only claims forfeits after a real duel finishes', () => {
   const rewardApi = readFileSync(join(__dirname, '../battle-reward-api.cjs'), 'utf8');
   assert.match(battleSource, /id="bv2-reward-status"/);
   assert.match(battleSource, /已發放.*靈石/);
-  assert.match(battleSource, /forfeitCurrentRoom\(\);[\s\S]*await recordBattleResult\(null, state\.roomId\)/);
+  assert.match(battleSource, /const rewardEligible = await forfeitCurrentRoom\(\)/);
+  assert.match(battleSource, /if \(rewardEligible\) \{[\s\S]*await recordBattleResult\(null, state\.roomId\)/);
+  assert.match(battleSource, /fresh\.status === 'waiting'[\s\S]*tx\.delete\(ref\)[\s\S]*rewardEligible = false/);
   assert.match(battleSource, /for \(const entry of ownRooms\)/);
   assert.match(battleSource, /await recordBattleResult\(null, entry\.id\)/);
   assert.match(battleSource, /rewardRepository\.claimBattle\(requestedRoomId\)/);
