@@ -660,8 +660,7 @@ export const featureReady = (async () => {
     list.innerHTML = '<div class="dt-empty"><i class="fa-solid fa-circle-notch fa-spin"></i> 讀取洞天名冊…</div>';
     const pending = (async () => {
       try {
-        const snap = await getDocs(query(collection(db, INDEX_COLLECTION), where('ownerUid', '==', owner)));
-        const items = snap.docs.map((entry) => ({ id: entry.id, ...entry.data() })).sort((a, b) => Number(b.createdAtMs || 0) - Number(a.createdAtMs || 0));
+        const items = await dongtianRepository.listIndex('owned');
         if (uid() !== owner) return;
         dongtianCache.setOwnedList(owner, items);
         renderOwnDongtians(items, list);
@@ -718,9 +717,8 @@ export const featureReady = (async () => {
     let publicItems = dongtianCache.getPublicList();
     if (!publicItems) {
       if (!state.publicListPending) {
-        state.publicListPending = getDocs(query(collection(db, INDEX_COLLECTION), where('status', '==', 'active'), limit(80)))
-          .then(snap => {
-            const items = snap.docs.map(entry => ({ id: entry.id, ...entry.data() }));
+        state.publicListPending = dongtianRepository.listIndex('public')
+          .then(items => {
             dongtianCache.setPublicList(items);
             return items;
           })
