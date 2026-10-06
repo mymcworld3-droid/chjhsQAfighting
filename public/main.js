@@ -1,6 +1,6 @@
 // 核心登入模組必須優先且獨立載入。
 // Google 登入本身不被附加模組阻斷；登入後的遊戲則必須等所有修仙模組載入成功才開始。
-import './main-legacy.js?v=20260925-helper-thinking1';
+import './main-legacy.js?v=20261006-combat-invite-block1';
 import './cultivation/dongtian-entry.js';
 // Repository 註冊屬於附加能力；即使載入失敗也不能阻斷 Google 登入核心。
 void import('./cultivation/data/index.js').catch((error) => {
@@ -85,8 +85,8 @@ let xiuxianReadyTimer = null;
 let resolveXiuxianFeatureGate;
 const xiuxianFeatureGate = new Promise((resolve) => { resolveXiuxianFeatureGate = resolve; });
 const XIUXIAN_FEATURE_BUILD = '20260930-economy-raid1';
-const RAID_FEATURE_BUILD = '20260930-teamwork-raid1';
-const BATTLE_FEATURE_BUILD = '20261006-battle-combatflow1';
+const RAID_FEATURE_BUILD = '20261006-raid-invite-block1';
+const BATTLE_FEATURE_BUILD = '20261006-battle-invite-block1';
 
 // 交易市集僅為可選功能，載入失敗不可阻止玩家登入或進入遊戲。
 let xiuxianMarketLoad = null;
