@@ -50,6 +50,24 @@ async function verifyMainPlayer(req) {
   return verified.uid;
 }
 
+function safeDongtianId(value) {
+  const id = String(value || '').trim();
+  return /^[A-Za-z0-9_-]{6,240}$/.test(id) ? id : '';
+}
+
+async function deleteSnapshotsInChunks(db, docs, chunkSize = 400) {
+  const rows = Array.isArray(docs) ? docs : [];
+  let deleted = 0;
+  for (let i = 0; i < rows.length; i += chunkSize) {
+    const batch = db.batch();
+    const chunk = rows.slice(i, i + chunkSize);
+    chunk.forEach((snap) => batch.delete(snap.ref));
+    await batch.commit();
+    deleted += chunk.length;
+  }
+  return deleted;
+}
+
 function cleanText(value, max = 4000) {
   return String(value || '').replace(/\u0000/g, '').trim().slice(0, max);
 }
@@ -892,6 +910,67 @@ async function reviewAndRepairGeneratedDongtian(dongtian) {
 }
 
 module.exports = function registerDongtianApi(app) {
+  app.post('/api/dongtian/delete', async (req, res) => {
+    res.set?.('Cache-Control', 'no-store');
+    try {
+      const uid = await verifyMainPlayer(req);
+      const dongtianId = safeDongtianId(req.body?.dongtianId);
+      if (!dongtianId) {
+        return res.status(400).json({ ok: false, error: '洞天代碼無效' });
+      }
+
+      const contentDb = dongtianRepository.resolve().db;
+      const progressDb = playerRepository.resolve().db;
+      const dataRef = contentDb.collection('dongtians').doc(dongtianId);
+      const indexRef = contentDb.collection('dongtianIndex').doc(dongtianId);
+
+      const [dataSnap, indexSnap] = await Promise.all([dataRef.get(), indexRef.get()]);
+      if (!dataSnap.exists && !indexSnap.exists) {
+        return res.status(404).json({ ok: false, error: '洞天資料不存在' });
+      }
+
+      const cave = dataSnap.exists ? (dataSnap.data() || {}) : {};
+      const index = indexSnap.exists ? (indexSnap.data() || {}) : {};
+      const ownerUid = String(cave.ownerUid || index.ownerUid || '');
+      if (!ownerUid || ownerUid !== uid) {
+        return res.status(403).json({ ok: false, error: '只有洞天主人可以刪除' });
+      }
+      if (cave.ownerUid && index.ownerUid && String(cave.ownerUid) !== String(index.ownerUid)) {
+        return res.status(409).json({ ok: false, error: '洞天索引與內容擁有人不一致，請聯絡管理員' });
+      }
+
+      const [reportSnap, playSnap] = await Promise.all([
+        contentDb.collection('dongtianReports').where('dongtianId', '==', dongtianId).get(),
+        progressDb.collection('dongtianPlays').where('dongtianId', '==', dongtianId).get()
+      ]);
+
+      // Delete auxiliary records first. If the final cave batch fails, the cave
+      // remains visible and can be retried safely; reward receipts are deliberately
+      // retained so deleting/recreating a cave cannot reclaim old rewards.
+      const deletedReports = await deleteSnapshotsInChunks(contentDb, reportSnap.docs);
+      const deletedPlays = await deleteSnapshotsInChunks(progressDb, playSnap.docs);
+
+      const finalBatch = contentDb.batch();
+      if (dataSnap.exists) finalBatch.delete(dataRef);
+      if (indexSnap.exists) finalBatch.delete(indexRef);
+      await finalBatch.commit();
+
+      return res.json({
+        ok: true,
+        dongtianId,
+        name: cleanText(cave.name || index.name || '無名洞天', 80),
+        deletedReports,
+        deletedPlays
+      });
+    } catch (error) {
+      console.error('[Dongtian delete API]', error);
+      return res.status(Number(error?.status) || 500).json({
+        ok: false,
+        error: error?.message || '洞天刪除失敗'
+      });
+    }
+  });
+
   app.post('/api/dongtian/list-index', async (req, res) => {
     res.set?.('Cache-Control', 'no-store');
     try {
@@ -1162,4 +1241,4 @@ module.exports = function registerDongtianApi(app) {
   });
 };
 
-module.exports.__test = { LEVELS, MIN_QUESTIONS, QUESTION_BATCH_SIZE, MIN_EXPLANATION_LENGTH, QUESTION_COUNT_CHOICES, QUESTION_AMOUNT_PRESETS, normalizeLevel, normalizeDifficulty, normalizeQuestionAmount, allowedQuestionCounts, normalizePlannedQuestionCount, normalizeDongtianPlan, normalizeQuestionBatch, normalizeResult, buildPrompt, buildPlanningPrompt, buildQuestionBatchPrompt, validateImages, normalizeQuestionSnapshot, buildQuestionReviewPrompt, normalizeQuestionReview, buildRevisionPrompt, buildRevisionValidationPrompt, normalizeStandaloneQuestion, normalizeRevisionValidation, contentBasedDongtianName, normalizeDongtianDoubleCheck, buildDongtianDoubleCheckPrompt, buildDongtianIssueExpansionPrompt, normalizeExpandedDongtianIssues, inferIssuesFromReviewSummary, expandDongtianReviewIssues, verifyGeneratedDongtian, reviewAndRepairGeneratedDongtian };
+module.exports.__test = { LEVELS, MIN_QUESTIONS, QUESTION_BATCH_SIZE, MIN_EXPLANATION_LENGTH, QUESTION_COUNT_CHOICES, QUESTION_AMOUNT_PRESETS, normalizeLevel, normalizeDifficulty, normalizeQuestionAmount, allowedQuestionCounts, normalizePlannedQuestionCount, normalizeDongtianPlan, normalizeQuestionBatch, normalizeResult, buildPrompt, buildPlanningPrompt, buildQuestionBatchPrompt, validateImages, normalizeQuestionSnapshot, buildQuestionReviewPrompt, normalizeQuestionReview, buildRevisionPrompt, buildRevisionValidationPrompt, normalizeStandaloneQuestion, normalizeRevisionValidation, contentBasedDongtianName, normalizeDongtianDoubleCheck, buildDongtianDoubleCheckPrompt, buildDongtianIssueExpansionPrompt, normalizeExpandedDongtianIssues, inferIssuesFromReviewSummary, expandDongtianReviewIssues, verifyGeneratedDongtian, reviewAndRepairGeneratedDongtian, safeDongtianId, deleteSnapshotsInChunks };
