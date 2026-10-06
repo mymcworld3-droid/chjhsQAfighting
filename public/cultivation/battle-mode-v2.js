@@ -652,6 +652,24 @@ export const featureReady = (async () => {
 
   function battlePlayer(player, round) { return { ...player, answer: answerObject(player, round) }; }
 
+  function guestJoinPatch(room, myData) {
+    const duel = applyNascentSoulDuelRule(room.host, myData);
+    return {
+      host: duel.host,
+      guest: duel.guest,
+      knowledgeScope: resolveBattleKnowledge(room.host?.knowledge, myData.knowledge),
+      status: 'intro',
+      matchedAt: serverTimestamp(), matchedAtMs: nowMs(),
+      introUntilMs: nowMs() + INTRO_DURATION_MS,
+      // IMPORTANT: do not claim the question-prefetch lease in the waiting→intro
+      // transition. Firebase C guest-join rules intentionally whitelist only
+      // matchmaking fields. Once the guest is a room member, prefetchRoundQuestion()
+      // claims these fields in a separate member-authorized transaction.
+      answerWindowStartedAt: null, answerWindowStartedAtMs: null, firstAnswerUid: null,
+      updatedAt: serverTimestamp()
+    };
+  }
+
   async function claimWaitingRoom(targetRef, myData) {
     let claimed = false;
     await runTransaction(db(), async (tx) => {
@@ -659,19 +677,7 @@ export const featureReady = (async () => {
       if (!snap.exists()) return;
       const room = snap.data();
       if (Number(room.modeVersion) !== BATTLE_V2.modeVersion || room.status !== 'waiting' || room.guest || room.host?.uid === myData.uid || isRoomStale(room)) return;
-      const duel = applyNascentSoulDuelRule(room.host, myData);
-      tx.update(targetRef, {
-        host: duel.host,
-        guest: duel.guest,
-        knowledgeScope: resolveBattleKnowledge(room.host?.knowledge, myData.knowledge),
-        status: 'intro',
-        matchedAt: serverTimestamp(), matchedAtMs: nowMs(),
-        introUntilMs: nowMs() + INTRO_DURATION_MS,
-        prefetchedQuestion: null, prefetchedRound: null,
-        prefetchOwnerUid: myData.uid, prefetchClaimedAtMs: nowMs(),
-        answerWindowStartedAt: null, answerWindowStartedAtMs: null, firstAnswerUid: null,
-        updatedAt: serverTimestamp()
-      });
+      tx.update(targetRef, guestJoinPatch(room, myData));
       claimed = true;
     });
     return claimed;
@@ -770,8 +776,7 @@ export const featureReady = (async () => {
         const other = targetSnap.data();
         if (own.status !== 'waiting' || own.guest || own.host?.uid !== myData.uid) return;
         if (other.status !== 'waiting' || other.guest || other.host?.uid === myData.uid || Number(other.modeVersion) !== BATTLE_V2.modeVersion || isRoomStale(other)) return;
-        const duel = applyNascentSoulDuelRule(other.host, myData);
-        tx.update(target.ref, { host: duel.host, guest: duel.guest, knowledgeScope: resolveBattleKnowledge(other.host?.knowledge, myData.knowledge), status: 'intro', matchedAt: serverTimestamp(), matchedAtMs: nowMs(), introUntilMs: nowMs() + INTRO_DURATION_MS, prefetchedQuestion: null, prefetchedRound: null, prefetchOwnerUid: myData.uid, prefetchClaimedAtMs: nowMs(), answerWindowStartedAt: null, answerWindowStartedAtMs: null, firstAnswerUid: null, updatedAt: serverTimestamp() });
+        tx.update(target.ref, guestJoinPatch(other, myData));
         tx.delete(ownRef);
         merged = true;
       });
@@ -1587,17 +1592,37 @@ export const featureReady = (async () => {
   }
 
   async function forfeitCurrentRoom() {
-    if (!state.roomId || !state.role) return; const ref = roomRef();
+    if (!state.roomId || !state.role) return false;
+    const ref = roomRef();
+    let rewardEligible = false;
     try {
       await runTransaction(db(), async (tx) => {
-        const snap = await tx.get(ref); if (!snap.exists()) return; const fresh = snap.data();
-        if (fresh.status === 'waiting' && state.role === 'host' && !fresh.guest) { tx.delete(ref); return; }
+        const snap = await tx.get(ref);
+        if (!snap.exists()) return;
+        const fresh = snap.data();
+        if (fresh.status === 'waiting' && state.role === 'host' && !fresh.guest) {
+          // Cancelling matchmaking is not a battle result and must never call
+          // the reward endpoint after the waiting room is deleted.
+          tx.delete(ref);
+          rewardEligible = false;
+          return;
+        }
+        if (fresh.status === 'finished') {
+          rewardEligible = true;
+          return;
+        }
         if (!['intro', 'playing', 'settled', 'preparing'].includes(fresh.status)) return;
-        const actualRole = fresh.host?.uid === me()?.uid ? 'host' : fresh.guest?.uid === me()?.uid ? 'guest' : state.role;
+        const actualRole = fresh.host?.uid === me()?.uid ? 'host' : fresh.guest?.uid === me()?.uid ? 'guest' : null;
+        if (!actualRole) return;
         const opponent = playerForRole(fresh, otherRole(actualRole));
         tx.update(ref, { status: 'finished', winner: opponent?.uid || 'draw', finishReason: 'forfeit', finishedAt: serverTimestamp(), updatedAt: serverTimestamp() });
+        rewardEligible = true;
       });
-    } catch (error) { console.warn('[Battle v2] leave update skipped:', error); }
+    } catch (error) {
+      rewardEligible = false;
+      console.warn('[Battle v2] leave update skipped:', error);
+    }
+    return rewardEligible;
   }
 
   async function exitBattle({ navigate = true, forfeit = true } = {}) {
@@ -1605,11 +1630,13 @@ export const featureReady = (async () => {
     state.leaving = true;
     try {
       if (forfeit) {
-        await forfeitCurrentRoom();
-        // The forfeiting loser leaves immediately and may never see the result page.
-        // Claim their one-time award before detaching from the finished room.
-        try { await recordBattleResult(null, state.roomId); }
-        catch (error) { console.warn('[Battle v2] forfeit reward will retry after reconnect:', error); }
+        const rewardEligible = await forfeitCurrentRoom();
+        // Only a real finished duel earns a receipt. Leaving an unmatched waiting
+        // room simply cancels matchmaking and intentionally skips this request.
+        if (rewardEligible) {
+          try { await recordBattleResult(null, state.roomId); }
+          catch (error) { console.warn('[Battle v2] forfeit reward will retry after reconnect:', error); }
+        }
       }
     } finally {
       resetRuntime();
