@@ -135,6 +135,8 @@ test('correct answer updates saved stats and the top panel immediately', async (
   assert.equal(h.writes[0].data.stats.totalScore, 1);
   assert.equal(h.writes[0].data.stats.rankLevel, 1);
   assert.equal(h.writes[0].data.stats.totalCorrect, 1);
+  assert.equal(h.writes[0].data.stats.gold, 20, '問道答對一題應獲得 20 靈石');
+  assert.equal(h.context.currentUserData.stats.gold, 20);
   assert.equal(h.logs.length, 1);
   h.context.render();
   assert.equal(h.nodes.get('xiuxian-score').textContent, '1 修為');
@@ -295,6 +297,7 @@ test('ordinary answer transactions preserve server quest rewards arriving before
   h.setRemoteStats({ totalScore: 12, gold: 80 });
   await h.answer();
   assert.equal(h.writes[0].data.stats.totalScore, 13);
-  assert.equal(h.writes[0].data.stats.gold, 80);
+  assert.equal(h.writes[0].data.stats.gold, 100, '保留遠端 80 靈石並加上本題 20 靈石');
+  assert.equal(h.context.currentUserData.stats.gold, 100);
   assert.equal(h.context.currentUserData.stats.totalScore, 13);
 });
