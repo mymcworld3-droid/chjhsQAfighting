@@ -4006,10 +4006,32 @@ function inviteHandlerReady(invite) {
     return true;
 }
 
+function invitationBlockedByCombat() {
+    try {
+        const battleBlocked = typeof window.isXiuxianBattleInviteBlocked === 'function'
+            ? window.isXiuxianBattleInviteBlocked()
+            : window.isXiuxianBattleBusy?.();
+        if (battleBlocked) return true;
+        if (window.isXiuxianRaidInviteBlocked?.()) return true;
+    } catch (_) {}
+    return false;
+}
+
+function dismissVisibleGameInvites() {
+    pendingIncomingInvites.clear();
+    document.querySelectorAll?.('[data-duel-invite]')?.forEach?.(toast => toast.remove());
+}
+
+window.addEventListener('xiuxian:invite-blocked', dismissVisibleGameInvites);
+
 function receiveIncomingInvite(invite) {
     if (!invite?.id) return;
     const born = Number(invite.createdAtMs) || Date.now();
     if (Date.now() - born >= 2 * 60 * 1000) {
+        pendingIncomingInvites.delete(invite.id);
+        return;
+    }
+    if (invitationBlockedByCombat()) {
         pendingIncomingInvites.delete(invite.id);
         return;
     }
@@ -4022,6 +4044,10 @@ function receiveIncomingInvite(invite) {
 }
 
 function flushPendingIncomingInvites() {
+    if (invitationBlockedByCombat()) {
+        dismissVisibleGameInvites();
+        return;
+    }
     for (const [id, invite] of [...pendingIncomingInvites]) {
         const born = Number(invite?.createdAtMs) || Date.now();
         if (Date.now() - born >= 2 * 60 * 1000) {
@@ -4141,6 +4167,11 @@ function listenToSystemCommands() {
 
 // 顯示邀請通知 (使用 getAvatarHtml 修正顯示)
 function showInviteToast(inviteId, data) {
+    if (invitationBlockedByCombat()) {
+        pendingIncomingInvites.delete(inviteId);
+        document.querySelector?.('[data-duel-invite="' + inviteId + '"]')?.remove();
+        return;
+    }
     // An active Dongtian quiz must never be covered or interrupted by a duel invitation.
     const dongtianActive = () => {
         const overlay = document.getElementById('dongtian-overlay');
@@ -4213,6 +4244,10 @@ function showInviteToast(inviteId, data) {
     requestAnimationFrame(() => toast.classList.remove('translate-x-full'));
 
     document.getElementById(`btn-acc-${inviteId}`).onclick = async () => {
+        if (invitationBlockedByCombat()) {
+            toast.remove();
+            return;
+        }
         if (data.raidVersion) {
             if (dongtianActive()) return;
             const active = window.getRaidMvpState?.();
