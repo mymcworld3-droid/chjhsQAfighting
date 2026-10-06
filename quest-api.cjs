@@ -21,7 +21,7 @@ async function questTransaction(db, uid, request = null, now = new Date()) {
       const list = request.kind === 'path' ? rules.PATH : rules.DAILY;
       const index = list.findIndex(q => q.id === request.id);
       if (index < 0) throw error('找不到此任務', 400);
-      const duplicate = request.kind === 'path' ? index < state.pathIndex : state.dailyClaimed.includes(request.id);
+      const duplicate = request.kind === 'path' ? state.pathClaimed.includes(request.id) : state.dailyClaimed.includes(request.id);
       if (!duplicate) {
         const snapshot = rules.view(user, state, date);
         const q = request.kind === 'path' ? snapshot.path : snapshot.daily.find(q => q.id === request.id);
@@ -37,8 +37,10 @@ async function questTransaction(db, uid, request = null, now = new Date()) {
           patch[`materialSystem.inventory.${id}`] = quantity;
           user.materialSystem = { ...(user.materialSystem || {}), inventory: { ...(user.materialSystem?.inventory || {}), [id]: quantity } };
         }
-        if (request.kind === 'path') state.pathIndex += 1;
-        else state.dailyClaimed.push(request.id);
+        if (request.kind === 'path') {
+          state.pathClaimed.push(request.id);
+          Object.assign(state, rules.normalizeState(state, date));
+        } else state.dailyClaimed.push(request.id);
         tx.update(userRef, patch);
         tx.set(stateRef, state);
         awarded = true;

@@ -16,11 +16,11 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
   }
   function status(message) { if ($('quest-status')) $('quest-status').textContent = message; }
   function card(q, kind) {
-    const label = q.claimed ? '已領取' : q.locked ? '築基開放' : q.claimable ? '領取獎勵' : '前往修行';
+    const label = q.claimed ? '已領取' : q.locked ? '尚未解鎖' : q.claimable ? '領取獎勵' : q.metric === 'story' ? '觀看劇情' : '前往修行';
     return `<article class="quest-card ${kind === 'path' ? 'quest-path-card' : ''} ${q.claimable ? 'quest-ready' : ''} ${q.claimed ? 'quest-claimed' : ''}">
       <div class="quest-card-heading"><h4>${esc(q.title)}</h4><span>${q.claimed ? '已完成' : q.claimable ? '待領獎' : '進行中'}</span></div>
       <p>${esc(q.description)}</p>
-      <div class="quest-progress-label"><span>${q.locked ? '需達築基初期（10 修為）' : '任務進度'}</span><b>${q.current} / ${q.target}</b></div>
+      <div class="quest-progress-label"><span>${q.locked ? `需 ${q.minScore} 修為 · 先繼續問道修行` : '任務進度'}</span><b>${q.current} / ${q.target}</b></div>
       <div class="quest-progress" role="progressbar" aria-label="${esc(q.title)}" aria-valuemin="0" aria-valuemax="${q.target}" aria-valuenow="${q.current}"><i style="width:${Math.round(q.current / q.target * 100)}%"></i></div>
       <div class="quest-reward"><i class="fa-solid fa-gift" aria-hidden="true"></i> ${esc(rewardText(q.reward))}</div>
       <button type="button" data-quest-id="${esc(q.id)}" data-quest-kind="${kind}" ${busy || q.claimed || q.locked ? 'disabled' : ''} class="quest-action ${q.claimable ? 'quest-claim' : ''}">${busy ? '正在同步…' : label}</button>
@@ -39,11 +39,11 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       $('quest-content').innerHTML = '<p class="quest-empty">正在讀取修行任務…</p>';
       return;
     }
-    $('quest-path-count').textContent = `${snapshot.pathIndex} / ${snapshot.pathTotal}`;
+    $('quest-path-count').textContent = `${snapshot.pathCompleted ?? snapshot.pathIndex} / ${snapshot.pathTotal}`;
     const available = snapshot.daily.filter(q => q.claimable).length;
     $('quest-daily-count').textContent = available ? `${available} 項待領獎` : `${snapshot.daily.filter(q => q.claimed).length} / ${snapshot.daily.length}`;
     $('quest-note').textContent = tab === 'path'
-      ? '仙道任務依序開啟，領取本項獎勵後才會出現下一項。已有的修行成果也可達成任務。'
+      ? '仙道任務依序開啟，領獎後接續下一項。觀看劇情請親自點擊，完整看完並儲存後即可領獎；已有紀錄也計入。'
       : `今日 ${snapshot.date} · 台灣時間每日 00:00 重置，請在當日領取獎勵。`;
     const content = $('quest-content');
     content.classList.toggle('quest-daily-grid', tab === 'daily');
@@ -122,14 +122,18 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       if (getMainUser()?.uid !== uid && visible()) invalidate();
     }
   }
-  function go(destination) {
+  function go(destination, q = {}) {
     const actions = {
       scope: () => { window.switchToPage?.('page-settings'); window.openCurriculumStudio?.(); },
       solo: () => { void window.startQuizFlow?.(true); },
       meditation: () => { void window.openDailyMeditation?.(); },
       battle: () => { void window.startBattleMatchmaking?.(); },
       raid: () => { void window.openRaidHub?.(); },
-      dongtian: () => { window.openDongtianPanel?.(); }
+      dongtian: () => { window.openDongtianPanel?.(); },
+      story: () => {
+        const opened = window.openXiuxianStoryChapter?.(q.chapterId);
+        if (!opened) status('劇情暫時無法開啟，請先結束目前的戰鬥或教學，再按「觀看劇情」。');
+      }
     };
     actions[destination]?.();
   }
@@ -156,13 +160,13 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       const kind = b.dataset.questKind;
       const q = kind === 'path' ? snapshot.path : snapshot.daily.find(q => q.id === b.dataset.questId);
       if (!q || q.id !== b.dataset.questId || q.claimed || q.locked) return;
-      if (q.claimable) void claim(q, kind); else go(q.destination);
+      if (q.claimable) void claim(q, kind); else go(q.destination, q);
     });
     new MutationObserver(() => { if (visible()) { reconcileAccount(); void refresh(); } }).observe($('page-home'), { attributes: true, attributeFilter: ['class'] });
     render();
   }
   mount();
-  ['xiuxian:user-ready', 'xiuxian:quest-progress-updated'].forEach(name => window.addEventListener(name, invalidate));
+  ['xiuxian:user-ready', 'xiuxian:quest-progress-updated', 'xiuxian:story-chapter-completed'].forEach(name => window.addEventListener(name, invalidate));
   window.addEventListener('material-system-updated', e => { if (!e.detail?.questReward) invalidate(); });
   window.addEventListener('xiuxian:stats-updated', e => { if (!applyingReward && e.detail?.source !== 'quest-reward') invalidate(); });
   document.addEventListener('visibilitychange', () => { if (!document.hidden) invalidate(); });

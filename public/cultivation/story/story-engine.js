@@ -12,13 +12,14 @@ import {
 // 沈清霜主線劇情播放器。
 // - 第一次進入先選擇性別。
 // - 劇情依修為節點逐章解鎖並保存在 users/{uid}.storyProgressV1。
-// - 同一個修為變化只自動彈一章，避免高境界舊玩家一次被所有章節淹沒。
+// - 只有第一章自動播放，後續章節由仙道任務或劇情清單的點擊開啟。
 // - 其他教學／戰鬥／洞天全螢幕介面存在時不搶畫面。
 
 (function () {
   'use strict';
 
   const FIELD = 'storyProgressV1';
+  const AUTO_CHAPTER_ID = 'prologue-enter-sect';
   const LAYER_ID = 'xiuxian-story-layer';
   const ARCHIVE_ID = 'xiuxian-story-archive';
   const STYLE_ID = 'xiuxian-story-style';
@@ -30,6 +31,8 @@ import {
   let storyTutorialPaused = false;
   let pendingStoryTutorial = '';
   let tutorialLaunchError = '';
+  let chapterSaveError = '';
+  let finishingChapter = false;
   let snoozeUntil = 0;
   let autoPermits = 1;
   let lastScore = -1;
@@ -128,7 +131,7 @@ import {
           seen: { ...(old.seen || {}), ...(patch.seen || {}) }
         };
       }
-      return;
+      return false;
     }
 
     const old = d[FIELD] || {};
@@ -143,8 +146,10 @@ import {
     busyPersist = true;
     try {
       await updateDoc(doc(getFirestore(getApp()), 'users', u.uid), { [FIELD]: next });
+      return true;
     } catch (error) {
       console.warn('[Story] progress save deferred:', error);
+      return false;
     } finally {
       busyPersist = false;
     }
@@ -272,14 +277,14 @@ import {
         <div class="story-line-progress"><i style="width:${percent}%"></i></div>
       </section>`;
 
-    if (tutorialLaunchError) {
+    if (tutorialLaunchError || chapterSaveError) {
       const warning = document.createElement('p');
       warning.className = 'story-tutorial-error';
       warning.setAttribute('role', 'alert');
-      warning.textContent = tutorialLaunchError;
+      warning.textContent = tutorialLaunchError || chapterSaveError;
       el.querySelector('.story-dialogue')?.insertBefore(warning, el.querySelector('.story-actions'));
       const next = el.querySelector('.story-next');
-      if (next) next.textContent = '重新啟動教學';
+      if (next) next.textContent = tutorialLaunchError ? '重新啟動教學' : '重新儲存觀看紀錄';
     }
 
     el.querySelector('.story-later')?.addEventListener('click', deferChapter);
@@ -387,12 +392,28 @@ import {
   }
 
   async function finishChapter() {
-    if (!currentChapter) return;
+    if (!currentChapter || finishingChapter) return;
+    finishingChapter = true;
     const finished = currentChapter;
     const wasReplay = replayMode;
     if (!replayMode) {
-      await persist({ seen: { [finished.id]: { completedAtMs: Date.now(), score: score() } } });
+      const profile = data();
+      const previous = seenMap()[finished.id];
+      const saved = await persist({ seen: { [finished.id]: { completedAtMs: Date.now(), score: score() } } });
+      if (!saved) {
+        const seen = profile?.[FIELD]?.seen;
+        if (seen) {
+          if (previous === undefined) delete seen[finished.id];
+          else seen[finished.id] = previous;
+        }
+        finishingChapter = false;
+        chapterSaveError = '觀看紀錄尚未儲存，請按「重新儲存觀看紀錄」再試一次。成功儲存後，仙道任務才會完成。';
+        renderLine();
+        return;
+      }
     }
+    finishingChapter = false;
+    chapterSaveError = '';
     active = false;
     document.getElementById(LAYER_ID)?.classList.remove('story-playing');
     currentChapter = null;
@@ -405,11 +426,13 @@ import {
   }
 
   function deferChapter() {
+    if (finishingChapter) return;
     active = false;
     document.getElementById(LAYER_ID)?.classList.remove('story-playing');
     currentChapter = null;
     lineIndex = 0;
     replayMode = false;
+    chapterSaveError = '';
     snoozeUntil = Date.now() + 5 * 60 * 1000;
     document.getElementById(LAYER_ID)?.remove();
   }
@@ -456,6 +479,7 @@ import {
     prepareStoryScene(chapter);
     currentChapter = chapter;
     tutorialLaunchError = '';
+    chapterSaveError = '';
     lineIndex = 0;
     replayMode = options.replay === true;
     active = true;
@@ -463,23 +487,10 @@ import {
     return true;
   }
 
-  function battleTutorialComplete() {
-    return !!data()?.battleTutorialV1?.completed;
-  }
-
   function nextEligibleChapter() {
-    const seen = seenMap();
-    const currentScore = score();
-    const ordered = STORY_CHAPTERS.slice().sort((a, b) => a.order - b.order);
-    for (const chapter of ordered) {
-      if (currentScore < chapter.minScore) continue;
-      // 相容舊紀錄：第三章已讀但演武未完成時，要重新從第三章接回教學。
-      if (chapter.id === 'foundation-first-battle' && seen[chapter.id] && !battleTutorialComplete()) return chapter;
-      if (seen[chapter.id]) continue;
-      if (chapter.order >= 4 && !battleTutorialComplete()) return null;
-      return chapter;
-    }
-    return null;
+    // 只有第一章可以自動開始，後續章節由仙道任務或劇情清單的點擊開啟。
+    const chapter = storyChapterById(AUTO_CHAPTER_ID);
+    return chapter && !seenMap()[chapter.id] && score() >= chapter.minScore ? chapter : null;
   }
 
   function openGenderChoice(options = {}) {
@@ -554,12 +565,12 @@ import {
     if (window.isXiuxianOpeningCinematicActive?.()) return;
     if (active || storyTutorialPaused || document.getElementById(ARCHIVE_ID) || Date.now() < snoozeUntil || blocking() || autoPermits <= 0) return;
     if (!data()?.stats || !user()) return;
+    const chapter = nextEligibleChapter();
+    if (!chapter) return;
     if (!gender()) {
       openGenderChoice();
       return;
     }
-    const chapter = nextEligibleChapter();
-    if (!chapter) return;
     autoPermits -= 1;
     startChapter(chapter);
   }
@@ -592,7 +603,7 @@ import {
       return `<button type="button" class="story-archive-item" data-story-chapter="${escapeHtml(chapter.id)}" ${unlocked ? '' : 'disabled'}><em>${escapeHtml(chapter.realm)}</em><span><b>${escapeHtml(chapter.title)}</b><small>${escapeHtml(chapter.subtitle)}</small></span><span>${!unlocked ? `需 ${chapter.minScore} 修為` : (read ? '已讀 · 重播' : '已解鎖')}</span></button>`;
     }).join('');
     const openingRow = '<button type="button" class="story-archive-item" data-story-opening-replay><em>世界觀</em><span><b>修仙世界 · 仙途之始</b><small>九幕世界觀影片 · 自由重播，不修改進度</small></span><span>重播</span></button>';
-    el.innerHTML = `<section class="story-archive-card"><div class="story-archive-head"><div><h3>主線劇情回顧</h3><p>已解鎖章節可隨時重播；重播不會改動修為與獎勵。</p></div><button type="button" class="story-archive-close">×</button></div><div class="story-archive-list">${canPreviewAllStory() ? '<button type="button" class="story-archive-item" data-admin-gender-preview><em>管理員</em><span><b>性別選擇</b><small>自由預覽 · 不修改角色性別</small></span></button>' : ''}${rows}${openingRow}${canPreviewAllStory() ? ['intro','shen-story','gu-intro','gu-result'].map((scene, i) => `<button type="button" class="story-archive-item" data-admin-battle-scene="${scene}"><em>管理員</em><span><b>${['沈清霜切磋','一劍之後 · 師姐震驚','顧長風入場','教學戰後對話'][i]}</b><small>自由預覽 · 不寫入進度</small></span></button>`).join('') : ''}</div></section>`;
+    el.innerHTML = `<section class="story-archive-card"><div class="story-archive-head"><div><h3>主線劇情回顧</h3><p>第一章後的劇情請自行點擊觀看。首次看完會記錄進度，已讀章節可隨時重播。</p></div><button type="button" class="story-archive-close">×</button></div><div class="story-archive-list">${canPreviewAllStory() ? '<button type="button" class="story-archive-item" data-admin-gender-preview><em>管理員</em><span><b>性別選擇</b><small>自由預覽 · 不修改角色性別</small></span></button>' : ''}${rows}${openingRow}${canPreviewAllStory() ? ['intro','shen-story','gu-intro','gu-result'].map((scene, i) => `<button type="button" class="story-archive-item" data-admin-battle-scene="${scene}"><em>管理員</em><span><b>${['沈清霜切磋','一劍之後 · 師姐震驚','顧長風入場','教學戰後對話'][i]}</b><small>自由預覽 · 不寫入進度</small></span></button>`).join('') : ''}</div></section>`;
     el.querySelector('[data-story-opening-replay]')?.addEventListener('click', () => {
       el.remove();
       window.openXiuxianOpeningCinematic?.({ replay: true });
@@ -614,7 +625,7 @@ import {
         const chapter = storyChapterById(button.dataset.storyChapter);
         if (chapter && (canPreviewAllStory() || score() >= chapter.minScore)) {
           el.remove();
-          startChapter(chapter, { replay: true });
+          window.openXiuxianStoryChapter(chapter.id);
         }
       });
     });
@@ -645,10 +656,14 @@ import {
   window.preloadXiuxianStoryImages = preloadStoryImages;
   window.getXiuxianStoryImageAssets = () => STORY_IMAGE_ASSETS.slice();
   window.openXiuxianStoryArchive = openArchive;
-  window.openXiuxianStoryChapter = (id) => {
+  window.openXiuxianStoryChapter = (id, options = {}) => {
     const chapter = storyChapterById(id);
     if (!chapter || (!canPreviewAllStory() && score() < chapter.minScore)) return false;
-    return startChapter(chapter, { replay: true });
+    const adminPreview = canPreviewAllStory() && score() < chapter.minScore;
+    const tutorials = chapter.tutorials || (chapter.tutorialKind ? [{ kind: chapter.tutorialKind }] : []);
+    const pendingTutorial = tutorials.some(item => !storyTutorialComplete(item.kind));
+    const replay = options.replay === true || adminPreview || (!!seenMap()[id] && !pendingTutorial);
+    return startChapter(chapter, { replay });
   };
   window.getXiuxianStoryChapters = () => STORY_CHAPTERS.map((chapter) => ({
     id: chapter.id,

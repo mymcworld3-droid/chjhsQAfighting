@@ -13,8 +13,9 @@
   }
   const quest = (id, title, description, metric, target, gold, cultivation, destination, minScore = 0, materials = {}) =>
     ({ id, title, description, metric, target, reward: { gold, cultivation, materials }, destination, minScore });
-  const PATH = [
-    quest('path-scope', '立下修習卷', '在仙府選擇至少一項學習範圍，並儲存出題範圍。', 'scope', 1, 30, 0, 'scope'),
+  // 保留舊目錄順序，用固定 ID 將既有 pathIndex 轉成已領清單。
+  const LEGACY_PATH = [
+    quest('path-scope', '立下修習卷', '在洞府的範圍設定選擇至少一項學習範圍，並儲存出題範圍。', 'scope', 1, 30, 0, 'scope'),
     quest('path-first-answer', '初次問道', '問道答對 1 題，踏出修行第一步。', 'solo', 1, 30, 0, 'solo'),
     quest('path-qi-five', '引氣入體', '修為達 5，晉至煉氣五層。', 'score', 5, 50, 0, 'solo'),
     quest('path-meditation', '靜心一日', '完成 1 次每日閉關，不要求全對。', 'meditation', 1, 40, 0, 'meditation'),
@@ -36,6 +37,33 @@
     quest('path-tribulation', '雷劫問道', '修為達 1868，晉至渡劫。', 'score', 1868, 1500, 0, 'solo'),
     quest('path-immortal', '仙門在望', '修為達 2588，晉至半仙。', 'score', 2588, 2000, 0, 'solo')
   ];
+  const storyQuest = (chapterId, chapterTitle, minScore) => ({
+    ...quest('path-story-' + chapterId, '觀看劇情 · ' + chapterTitle,
+      '完整觀看「' + chapterTitle + '」，在結束本章後儲存觀看紀錄。', 'story', 1, minScore === 0 ? 30 : 50, 0, 'story', minScore),
+    chapterId
+  });
+  const STORY_AFTER = {
+    'path-first-answer': [storyQuest('qi-one-ask-dao', '入門續篇 · 問道不是猜答案', 1)],
+    'path-qi-five': [storyQuest('qi-five-dongtian', '第二章 · 把知識煉成一座山', 5)],
+    'path-foundation': [
+      storyQuest('foundation-first-battle', '第三章 · 築基之後，別只會做題', 10),
+      storyQuest('foundation-refinery', '第四章 · 法寶不是把東西丟進火裡', 10)
+    ],
+    'path-solo-ten': [
+      storyQuest('foundation-mid-alliance', '第五章 · 仙盟送來了一封很不吉利的信', 16),
+      storyQuest('foundation-late-shadow', '第六章 · 沈清霜的劍第一次出鞘', 22)
+    ],
+    'path-golden': [storyQuest('golden-core-truth', '第七章 · 丹成之日，問道碑醒了', 28)],
+    'path-nascent': [storyQuest('nascent-soul-expedition', '第八章 · 仙盟不是來請你喝茶', 68)],
+    'path-spirit': [storyQuest('spirit-transformation-history', '第九章 · 天裂不是天災', 188)],
+    'path-void': [storyQuest('void-refinement-choice', '第十章 · 無相客給了你一道沒有選項的題', 428)],
+    'path-union': [storyQuest('integration-revelation', '第十一章 · 仙府真正的用途', 788)],
+    'path-mahayana': [storyQuest('mahayana-alliance', '第十二章 · 大家都來了，因為你已經不能裝沒事', 1268)],
+    'path-tribulation': [storyQuest('tribulation-final', '第十三章 · 天劫之上仍有一道題', 1868)],
+    'path-immortal': [storyQuest('true-immortal-epilogue', '終章 · 出師這件事，師姐說了算', 2588)]
+  };
+  const PATH = [storyQuest('prologue-enter-sect', '第一章 · 問道靈根', 0),
+    ...LEGACY_PATH.flatMap(q => [q, ...(STORY_AFTER[q.id] || [])])];
   const DAILY = [
     quest('daily-solo-three', '溫故知新', '今日問道答對 3 題。', 'solo', 3, 40, 1, 'solo'),
     quest('daily-solo-ten', '勤學不輟', '今日問道答對 10 題。', 'solo', 10, 80, 1, 'solo'),
@@ -58,10 +86,18 @@
     return p;
   }
   function normalizeState(raw = {}, date = dateKey()) {
-    return { pathIndex: Math.min(PATH.length, number(raw?.pathIndex)), dailyDate: date,
+    const claimed = Array.isArray(raw?.pathClaimed) ? raw.pathClaimed
+      : LEGACY_PATH.slice(0, number(raw?.pathIndex)).map(q => q.id);
+    const pathClaimed = PATH.filter(q => claimed.includes(q.id)).map(q => q.id);
+    const next = PATH.findIndex(q => !pathClaimed.includes(q.id));
+    return { version: 2, pathClaimed, pathIndex: next < 0 ? PATH.length : next, dailyDate: date,
       dailyClaimed: raw?.dailyDate === date && Array.isArray(raw.dailyClaimed) ? raw.dailyClaimed.filter(id => DAILY.some(q => q.id === id)) : [] };
   }
   function progressValue(q, user, p, kind, date) {
+    if (q.metric === 'story') {
+      const seen = user?.storyProgressV1?.seen?.[q.chapterId];
+      return seen === true || number(seen?.completedAtMs) > 0 ? 1 : 0;
+    }
     if (q.metric === 'scope') return (Array.isArray(user?.gameSettings?.focusedUnits) && user.gameSettings.focusedUnits.length) || (Array.isArray(user?.gameSettings?.comprehensiveUnits) && user.gameSettings.comprehensiveUnits.length) ? 1 : 0;
     if (q.metric === 'score') return number(user?.stats?.totalScore);
     if (kind === 'daily' && q.metric === 'meditation' && user?.dailyMeditation?.lastDate === date) return 1;
@@ -79,9 +115,9 @@
       const locked = number(user?.stats?.totalScore) < q.minScore;
       return { ...q, current, claimed, locked, complete: current >= q.target, claimable: !claimed && !locked && current >= q.target };
     }
-    return { date, pathIndex: state.pathIndex, pathTotal: PATH.length,
+    return { date, pathIndex: state.pathIndex, pathCompleted: state.pathClaimed.length, pathTotal: PATH.length,
       path: state.pathIndex < PATH.length ? row(PATH[state.pathIndex], 'path') : null,
       daily: DAILY.map(q => row(q, 'daily', state.dailyClaimed.includes(q.id))) };
   }
-  return { PATH, DAILY, dateKey, normalizeProgress, recordEvent, normalizeState, view };
+  return { PATH, LEGACY_PATH, DAILY, dateKey, normalizeProgress, recordEvent, normalizeState, view };
 });

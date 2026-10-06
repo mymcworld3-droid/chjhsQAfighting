@@ -53,28 +53,29 @@ test('quest dates use Taiwan midnight, while totals survive daily resets', () =>
 
 test('only the current path quest is exposed; existing achievements do not auto-claim', () => {
   const v = rules.view(sample(), {}, date);
-  assert.equal(v.path.id, 'path-scope'); assert.equal(v.path.claimable, true);
+  assert.equal(v.path.id, 'path-story-prologue-enter-sect'); assert.equal(v.path.claimable, false);
   assert.equal(v.pathIndex, 0); assert.equal(v.daily.length, 6);
   assert.equal(v.daily.find(q => q.metric === 'solo').current, 0, 'lifetime answers are not today answers');
-  assert.equal(rules.view(sample(), { pathIndex: rules.PATH.length }, date).path, null);
+  assert.equal(rules.view(sample(), { version: 2, pathClaimed: rules.PATH.map(q => q.id) }, date).path, null);
 });
 
 test('concurrent repeated path claims award exactly once and advance exactly one step', async () => {
-  const db = fakeDb(sample());
+  const db = fakeDb(sample(), { version: 2, pathClaimed: ['path-story-prologue-enter-sect'] });
   const r = await Promise.all(Array.from({ length: 5 }, () => questTransaction(db, 'u1', { kind: 'path', id: 'path-scope' }, now)));
   assert.equal(r.filter(x => x.awarded).length, 1);
   assert.equal(db.docs.get('users/u1').stats.gold, 50);
-  assert.equal(db.docs.get('questStates/u1').pathIndex, 1);
+  assert.equal(db.docs.get('questStates/u1').pathIndex, 2);
   assert.equal(r.at(-1).quests.path.id, 'path-first-answer');
   await assert.rejects(questTransaction(db, 'u1', { kind: 'path', id: 'path-golden' }, now), /尚未完成/);
 });
 
 test('unfinished quests and forged reward values do not change balances or advance the chain', async () => {
   const user = sample(); user.gameSettings.focusedUnits = [];
-  const db = fakeDb(user);
+  const state = { version: 2, pathClaimed: ['path-story-prologue-enter-sect'] };
+  const db = fakeDb(user, state);
   await assert.rejects(questTransaction(db, 'u1', { kind: 'path', id: 'path-scope', gold: 999999 }, now), /尚未完成/);
   assert.deepEqual(db.docs.get('users/u1'), user);
-  assert.equal(db.docs.has('questStates/u1'), false);
+  assert.deepEqual(db.docs.get('questStates/u1'), state);
   await assert.rejects(questTransaction(db, 'u1', { kind: 'wrong', id: 'path-scope' }, now), /類型/);
   await assert.rejects(questTransaction(db, 'u1', { kind: 'daily', id: 'invented', date }, now), /找不到/);
 });
@@ -89,11 +90,11 @@ test('daily rewards are independent, idempotent, and reset without resetting the
   const again = await questTransaction(db, 'u1', { kind: 'daily', id: 'daily-solo-three', date }, now);
   assert.equal(a.awarded, true); assert.equal(b.awarded, true); assert.equal(again.awarded, false);
   assert.equal(again.balances.gold, 140); assert.equal(again.balances.totalScore, 30);
-  assert.equal(again.quests.pathIndex, 8);
+  assert.equal(again.quests.pathCompleted, 8);
   const tomorrow = new Date('2026-10-02T16:00:01Z');
   const fresh = await questTransaction(db, 'u1', null, tomorrow);
   assert.equal(fresh.quests.daily[0].current, 0); assert.equal(fresh.quests.daily[0].claimed, false);
-  assert.equal(fresh.quests.pathIndex, 8);
+  assert.equal(fresh.quests.pathCompleted, 8);
   await assert.rejects(questTransaction(db, 'u1', { kind: 'daily', id: 'daily-solo-three', date }, tomorrow), /跨日/);
   const remote = db.docs.get('users/u1');
   remote.questProgress = rules.recordEvent(remote.questProgress, 'solo', '2026-10-03');
@@ -156,5 +157,79 @@ test('quest endpoint rejects absent or wrong-project authentication and takes UI
   res = response(); await handler({ get: () => 'Bearer token' }, res); assert.equal(res.code, 401);
   token = { uid: 'u1', aud: PROJECT_IDS.A, iss: 'https://securetoken.google.com/' + PROJECT_IDS.A };
   res = response(); await handler({ get: () => 'Bearer token', body: { uid: 'someone-else' } }, res);
-  assert.equal(res.code, 200); assert.equal(res.body.quests.path.id, 'path-scope');
+  assert.equal(res.code, 200); assert.equal(res.body.quests.path.id, 'path-story-prologue-enter-sect');
+});
+
+test('every chapter has one viewing quest with the same unlock threshold as the real script', async () => {
+  const fs = require('node:fs');
+  const source = fs.readFileSync(require('node:path').join(__dirname, '../public/cultivation/story/story-scripts.js'), 'utf8');
+  const { STORY_CHAPTERS } = await import('data:text/javascript;base64,' + Buffer.from(source).toString('base64'));
+  const watching = rules.PATH.filter(q => q.metric === 'story');
+  assert.equal(watching.length, STORY_CHAPTERS.length);
+  assert.equal(new Set(rules.PATH.map(q => q.id)).size, rules.PATH.length);
+  for (const chapter of STORY_CHAPTERS) {
+    const tasks = watching.filter(q => q.chapterId === chapter.id);
+    assert.equal(tasks.length, 1, chapter.id);
+    assert.equal(tasks[0].minScore, chapter.minScore);
+    assert.equal(tasks[0].reward.cultivation, 0);
+  }
+});
+
+test('opening a chapter does not satisfy its quest; completing and claiming it awards only once', async () => {
+  const user = sample();
+  user.storyProgressV1 = { seen: { 'prologue-enter-sect': { openedAtMs: now.getTime() } } };
+  const db = fakeDb(user);
+  const id = 'path-story-prologue-enter-sect';
+  assert.equal(rules.view(user, {}, date).path.current, 0);
+  await assert.rejects(questTransaction(db, 'u1', { kind: 'path', id }, now), /尚未完成/);
+  assert.equal(db.docs.get('users/u1').stats.gold, 20);
+  db.docs.get('users/u1').storyProgressV1.seen['prologue-enter-sect'].completedAtMs = now.getTime();
+  const results = await Promise.all(Array.from({ length: 6 }, () => questTransaction(db, 'u1', { kind: 'path', id }, now)));
+  assert.equal(results.filter(r => r.awarded).length, 1);
+  assert.equal(db.docs.get('users/u1').stats.gold, 50);
+  assert.equal(db.docs.get('users/u1').stats.totalScore, 28);
+  assert.equal(results.at(-1).quests.path.id, 'path-scope');
+  assert.equal(results.at(-1).quests.pathCompleted, 1);
+});
+
+test('legacy path indices retain claimed rewards while inserted story quests remain available', async () => {
+  const user = sample();
+  user.storyProgressV1 = { seen: { 'prologue-enter-sect': true, 'qi-one-ask-dao': { completedAtMs: 1 } } };
+  const legacy = { pathIndex: 8, dailyDate: date, dailyClaimed: ['daily-solo-three'] };
+  const db = fakeDb(user, legacy);
+  const before = await questTransaction(db, 'u1', null, now);
+  assert.equal(before.quests.pathCompleted, 8);
+  assert.equal(before.quests.path.id, 'path-story-prologue-enter-sect');
+  assert.equal(before.quests.daily.find(q => q.id === 'daily-solo-three').claimed, true);
+  const first = await questTransaction(db, 'u1', { kind: 'path', id: before.quests.path.id }, now);
+  assert.equal(first.awarded, true);
+  assert.equal(first.quests.path.id, 'path-story-qi-one-ask-dao', 'already claimed original tasks are skipped');
+  assert.equal(first.quests.pathCompleted, 9);
+  const duplicate = await questTransaction(db, 'u1', { kind: 'path', id: 'path-cave' }, now);
+  assert.equal(duplicate.awarded, false, 'a previously claimed task after the current index must remain paid');
+  assert.equal(duplicate.balances.gold, 50);
+  const stored = db.docs.get('questStates/u1');
+  assert.equal(stored.version, 2);
+  for (const q of rules.LEGACY_PATH.slice(0, 8)) assert.ok(stored.pathClaimed.includes(q.id));
+  assert.equal(rules.view(user, { pathIndex: 21 }, date).pathCompleted, 21);
+  assert.equal(rules.view(user, { pathIndex: 21 }, date).path.id, 'path-story-prologue-enter-sect');
+});
+
+test('saved previews below a chapter threshold cannot earn viewing rewards', async () => {
+  const id = 'path-story-qi-five-dongtian';
+  const index = rules.PATH.findIndex(q => q.id === id);
+  const user = sample();
+  user.stats.totalScore = 4;
+  user.storyProgressV1 = { seen: { 'qi-five-dongtian': { completedAtMs: 1 } } };
+  const state = { version: 2, pathClaimed: rules.PATH.slice(0, index).map(q => q.id) };
+  const db = fakeDb(user, state);
+  const q = rules.view(user, state, date).path;
+  assert.equal(q.complete, true);
+  assert.equal(q.locked, true);
+  assert.equal(q.claimable, false);
+  await assert.rejects(questTransaction(db, 'u1', { kind: 'path', id }, now), /尚未完成/);
+  db.docs.get('users/u1').stats.totalScore = 5;
+  const earned = await questTransaction(db, 'u1', { kind: 'path', id }, now);
+  assert.equal(earned.awarded, true);
+  assert.equal(earned.balances.totalScore, 5);
 });

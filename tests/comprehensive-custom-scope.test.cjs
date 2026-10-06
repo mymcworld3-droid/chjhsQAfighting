@@ -35,7 +35,7 @@ test('custom additions belong to comprehensive practice and support duplicates, 
 test('random without a custom range remains random; scope quest recognizes saved custom practice', () => {
   const quest=require('../public/cultivation/quest-rules.js');
   const user={stats:{totalScore:0},gameSettings:{sourceMode:'random',comprehensiveUnits:[{path:'綜合',detail:'複習'}]}};
-  assert.equal(quest.view(user,{}).path.claimable,true);
+  assert.equal(quest.view(user,{version:2,pathClaimed:['path-story-prologue-enter-sect']}).path.claimable,true);
   assert.match(legacy,/comprehensiveUnits: \[\.\.\.\(window\.soloComprehensiveUnits/);
   assert.match(legacy,/window\.soloComprehensiveUnits = settings\.comprehensiveUnits/);
   assert.match(read('cultivation/scope-fullscreen.js'),/window\.soloComprehensiveUnits = clone\(JSON\.parse\(baseline\.comprehensive\)\)/);

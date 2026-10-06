@@ -31,7 +31,7 @@ test('battle lock spans matchmaking, joined room, result screen, recovery and de
 
 test('automatic story and replay cannot start during a PvP session', () => {
   const guard = story.slice(story.indexOf('  function blocking() {'), story.indexOf('  function layer() {'));
-  const launch = story.slice(story.indexOf('  function startChapter('), story.indexOf('  function battleTutorialComplete()'));
+  const launch = story.slice(story.indexOf('  function startChapter('), story.indexOf('  function nextEligibleChapter()'));
   const ctx = {
     window: { isXiuxianBattleBusy: () => true },
     document: { querySelector() { throw new Error('battle busy must short-circuit DOM checks'); } },

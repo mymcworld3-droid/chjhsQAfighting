@@ -212,7 +212,8 @@ test('Foundation battle story now hands off to the dedicated Shen Qingshuang the
   assert.match(scripts, /演武，不會真的死亡/);
   assert.match(scripts, /上場，我帶你練習一次/);
   assert.match(engine, /battleTutorialV1/);
-  assert.match(engine, /chapter\.order >= 4 && !battleTutorialComplete\(\)/);
+  assert.match(engine, /const AUTO_CHAPTER_ID = 'prologue-enter-sect'/);
+  assert.match(engine, /const pendingTutorial = tutorials\.some/);
   assert.match(engine, /xiuxian:battle-tutorial-completed/);
 });
 
@@ -379,7 +380,7 @@ test('unavailable chapter tutorial gives a visible retry instead of silently loo
   assert.match(engine, /tutorialLaunchError = '教學暫時無法開啟/);
   assert.match(engine, /tutorialLaunchError = '教學模組尚未載入/);
   assert.match(engine, /warning\.setAttribute\('role', 'alert'\)/);
-  assert.match(engine, /next\.textContent = '重新啟動教學'/);
+  assert.match(engine, /tutorialLaunchError \? '重新啟動教學' : '重新儲存觀看紀錄'/);
   assert.match(engine, /error \|\| 'launcher returned false'/);
 });
 

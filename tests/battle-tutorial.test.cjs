@@ -50,13 +50,14 @@ test('battle tutorial is a local simulation and never creates a formal matchmaki
   assert.match(tutorial, /這場切磋到此為止，不計入正式戰績/);
 });
 
-test('battle tutorial only unlocks after the Foundation battle story and gates later story chapters until complete', () => {
+test('battle teaching remains in its selected chapter while automatic playback is limited to chapter one', () => {
   assert.match(tutorial, /storyProgressV1\?\.seen\?\.\['foundation-first-battle'\]/);
   assert.match(tutorial, /const FIELD = 'battleTutorialV1'/);
   assert.match(tutorial, /xiuxian:story-tutorial-finished/);
   assert.match(tutorial, /foundation-first-battle/);
-  assert.match(storyEngine, /battleTutorialV1\?\.completed/);
-  assert.match(storyEngine, /chapter\.order >= 4 && !battleTutorialComplete\(\)/);
+  assert.match(storyEngine, /battle: 'battleTutorialV1'/);
+  assert.match(storyEngine, /const AUTO_CHAPTER_ID = 'prologue-enter-sect'/);
+  assert.match(storyEngine, /const pendingTutorial = tutorials\.some/);
 });
 
 test('Foundation battle chapter explicitly sets up Shen as the first opponent before the local tutorial begins', () => {
