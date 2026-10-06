@@ -219,7 +219,7 @@ test('helper replies expose knowledge-point extended practice', () => {
 
 
 test('core import and page query change together to refresh browser cached code', () => {
-  assert.match(main, /main-legacy\.js\?v=20260925-helper-thinking1/);
+  assert.match(main, /main-legacy\.js\?v=20261006-combat-invite-block1/);
   assert.match(index, /main\.js\?v=20260927-vv-raid9/);
   assert.match(index, /xianxia\.css\?v=20260925-helper-fixed1/);
 });
