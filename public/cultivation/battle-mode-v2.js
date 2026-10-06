@@ -115,7 +115,7 @@ export const featureReady = (async () => {
   }
 
   function ensureStyle() {
-    const href = 'styles/battle-mode-v2.css?v=20260929-correct-feedback1&duel=20260922-diagonal1';
+    const href = 'styles/battle-mode-v2.css?v=20261006-combatflow1&duel=20261006-pregen1';
     if (document.querySelector(`link[href="${href}"]`)) return;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
