@@ -29,6 +29,7 @@ test('manual first viewing records progress while completed chapters and locked 
   const modes = [];
   const ctx = vm.createContext({
     window: {},
+    AUTO_CHAPTER_ID: 'prologue-enter-sect',
     storyChapterById: id => id === chapter.id ? chapter : null,
     canPreviewAllStory: () => admin,
     score: () => currentScore,

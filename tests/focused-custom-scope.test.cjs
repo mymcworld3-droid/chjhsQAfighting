@@ -12,7 +12,7 @@ function customPicker() {
     canonicalSubject: () => /^數學/.test(context.subject) ? '數學' : context.subject,
     selectedUnits: () => window.soloSelectedUnits, itemKey: u => JSON.stringify([u.path, u.detail, u.sub_topics]),
     notifySelectionList() { window.updated = true; } });
-  const start = selector.indexOf('function addFocusedCustom('), end = selector.indexOf('function addCustom(){', start);
+  const start = selector.indexOf('function addFocusedCustom('), end = selector.indexOf('function displayUnits(){', start);
   vm.runInContext(selector.slice(start, end) + '\nthis.addRange = addFocusedCustom;', context);
   return context;
 }
@@ -61,7 +61,7 @@ test('saving focused custom ranges persists them and both solo quizzes and oppor
   assert.equal(await context.window.saveProfile(), true);
   assert.equal(writes.length, 1); assert.equal(writes[0].ref.id, 'u1');
   assert.equal(writes[0].value.gameSettings.focusedUnits[0].detail, '一次函數的斜率');
-  assert.equal(writes[0].value.gameSettings.comprehensiveUnits[0].detail, '保留綜合範圍');
+  assert.equal(writes[0].value.gameSettings.comprehensiveUnits, undefined, 'saving removes obsolete comprehensive custom ranges');
   const quizStart = legacy.indexOf('async function fetchOneQuestion() {'), quizEnd = legacy.indexOf('async function handleAnswer', quizStart);
   vm.runInContext(legacy.slice(quizStart, quizEnd) + '\nthis.fetchQuiz = fetchOneQuestion;', context);
   await context.fetchQuiz();

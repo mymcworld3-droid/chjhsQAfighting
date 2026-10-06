@@ -22,7 +22,7 @@
   function normalizeScope(player = {}) {
     const s = player.gameSettings || {}, level = text(player.profile?.educationLevel, 40) || '國中一年級';
     const mode = ['focused', 'bank'].includes(s.sourceMode) ? s.sourceMode : 'random';
-    const raw = mode === 'focused' ? s.focusedUnits : mode === 'random' ? s.comprehensiveUnits : [];
+    const raw = mode === 'focused' ? s.focusedUnits : [];
     const units = [], seen = new Set();
     for (const u of (Array.isArray(raw) ? raw : []).slice(0, 100)) {
       const path = text(u?.path, 240).replace(/\\/g, '/');

@@ -56,11 +56,12 @@ const now = 1800000000000;
 async function begin(db, requestId = 'test-request-001') { return api.startRun(db, 'u1', requestId, api.normalizePack(rawPack(), target), rules.scopeKey(db.docs.get('users/u1')), now); }
 const response = () => ({ statusCode: 200, set() {}, status(n) { this.statusCode = n; return this; }, json(body) { this.body = body; return body; } });
 
-test('scope honors focused and comprehensive units, course level and canonical order', () => {
+test('scope honors focused units and ignores obsolete comprehensive units', () => {
   const p = player(), s = rules.normalizeScope(p);
   assert.equal(s.units[0].level, '國中一年級'); assert.equal(rules.chooseTarget(s, [], () => 0).detail, target.detail);
   p.gameSettings.sourceMode = 'random'; p.gameSettings.comprehensiveUnits = [{ path: '英文/八上/文法', detail: '現在完成式' }];
-  assert.equal(rules.chooseTarget(rules.normalizeScope(p), [], () => 0).subject, '英文');
+  assert.equal(rules.normalizeScope(p).units.length, 0);
+  assert.equal(rules.chooseTarget(rules.normalizeScope(p), [], () => 0).level, p.profile.educationLevel);
   p.gameSettings.sourceMode = 'focused'; p.gameSettings.focusedUnits.push({ path: '英文/八上/文法', detail: '現在完成式' });
   const key = rules.scopeKey(p); p.gameSettings.focusedUnits.reverse(); assert.equal(rules.scopeKey(p), key);
   p.gameSettings.focusedUnits = []; assert.throws(() => rules.chooseTarget(rules.normalizeScope(p)), /儲存有效/);

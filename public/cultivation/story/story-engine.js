@@ -13,7 +13,7 @@ import { STORY_BACKGROUNDS, storyBackgroundForLine, nextStoryBackground, createS
 // 沈清霜主線劇情播放器。
 // - 第一次進入先選擇性別。
 // - 劇情依修為節點逐章解鎖並保存在 users/{uid}.storyProgressV1。
-// - 只有第一章自動播放，後續章節由仙道任務或劇情清單的點擊開啟。
+// - 序章僅在新帳號首次登入時自動開啟一次，之後由仙道任務或劇情清單點擊開啟。
 // - 其他教學／戰鬥／洞天全螢幕介面存在時不搶畫面。
 
 (function () {
@@ -36,6 +36,7 @@ import { STORY_BACKGROUNDS, storyBackgroundForLine, nextStoryBackground, createS
   let finishingChapter = false;
   let snoozeUntil = 0;
   let autoPermits = 1;
+  let prologueAutoStartedUid = '';
   let lastScore = -1;
   let busyPersist = false;
   let storyImagesReady = false;
@@ -616,16 +617,18 @@ import { STORY_BACKGROUNDS, storyBackgroundForLine, nextStoryBackground, createS
         }
         active = false;
         el.remove();
-        const chapter = nextEligibleChapter();
-        if (chapter && autoPermits > 0) {
-          autoPermits -= 1;
+        const chapter = options.chapterId ? storyChapterById(options.chapterId) : nextEligibleChapter();
+        if (chapter && (options.chapterId || autoPermits > 0)) {
+          if (!options.chapterId) autoPermits -= 1;
           startChapter(chapter);
         }
       });
     });
+    return true;
   }
 
   function maybeAutoStart() {
+    if (!window.isXiuxianFirstLogin?.() || prologueAutoStartedUid === user()?.uid) return;
     if (!storyImagesReady) {
       preloadStoryImages().then(() => setTimeout(maybeAutoStart, 0));
       return;
@@ -636,6 +639,8 @@ import { STORY_BACKGROUNDS, storyBackgroundForLine, nextStoryBackground, createS
     if (!data()?.stats || !user()) return;
     const chapter = nextEligibleChapter();
     if (!chapter) return;
+    // 開啟就消耗本帳號的自動播放機會；稍後再看、修為更新都不會再次彈出。
+    prologueAutoStartedUid = user().uid;
     if (!gender()) {
       openGenderChoice();
       return;
@@ -729,6 +734,10 @@ import { STORY_BACKGROUNDS, storyBackgroundForLine, nextStoryBackground, createS
   window.openXiuxianStoryChapter = (id, options = {}) => {
     const chapter = storyChapterById(id);
     if (!chapter || (!canPreviewAllStory() && score() < chapter.minScore)) return false;
+    if (id === AUTO_CHAPTER_ID && !gender() && !options.replay) {
+      if (!onboardingReady() || blocking()) return false;
+      return openGenderChoice({ chapterId: id });
+    }
     const adminPreview = canPreviewAllStory() && score() < chapter.minScore;
     const tutorials = chapter.tutorials || (chapter.tutorialKind ? [{ kind: chapter.tutorialKind }] : []);
     const pendingTutorial = tutorials.some(item => !storyTutorialComplete(item.kind));

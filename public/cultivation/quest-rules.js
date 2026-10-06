@@ -107,7 +107,7 @@
       const seen = user?.storyProgressV1?.seen?.[q.chapterId];
       return seen === true || number(seen?.completedAtMs) > 0 ? 1 : 0;
     }
-    if (q.metric === 'scope') return (Array.isArray(user?.gameSettings?.focusedUnits) && user.gameSettings.focusedUnits.length) || (Array.isArray(user?.gameSettings?.comprehensiveUnits) && user.gameSettings.comprehensiveUnits.length) ? 1 : 0;
+    if (q.metric === 'scope') return Array.isArray(user?.gameSettings?.focusedUnits) && user.gameSettings.focusedUnits.length ? 1 : 0;
     if (q.metric === 'score') return number(user?.stats?.totalScore);
     if (kind === 'daily' && q.metric === 'meditation' && user?.dailyMeditation?.lastDate === date) return 1;
     // Existing verified milestones remain useful for returning players.

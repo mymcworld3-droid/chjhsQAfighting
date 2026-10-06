@@ -77,8 +77,6 @@ html.scope-studio-open,body.scope-studio-open{overflow:hidden!important;overscro
 #scope-studio .cs-unit label:last-child{margin-bottom:8px}
 #scope-studio .cs-unit label:hover{color:#eff0dc!important}
 #scope-studio .cs-unit input[type=checkbox]{flex:0 0 17px!important;width:17px;height:17px;margin:1px 0 0;accent-color:#7fc9b7;cursor:pointer}
-#scope-studio .cs-custom-panel{padding:15px!important;display:grid;gap:9px}
-#scope-studio .cs-custom-panel>b{font-family:"Noto Serif TC",serif;font-size:14px;color:#eddbb5}
 #scope-studio #cs-add{min-height:44px!important;background:linear-gradient(120deg,rgba(101,172,156,.18),rgba(101,172,156,.09))!important;border-color:rgba(125,211,192,.38)!important;color:#c9eee3!important}
 #scope-studio #cs-message{min-height:20px;margin:0;color:#a8d6c8!important}
 #scope-studio .cs-note{color:#918e82!important;font-size:11px!important;line-height:1.7}
@@ -171,4 +169,3 @@ html.scope-studio-open,body.scope-studio-open{overflow:hidden!important;overscro
 
 #scope-studio #comprehensive-source-container.hidden{display:none!important}
 #scope-studio #comprehensive-source-container{display:grid;gap:12px}
-#scope-studio #comprehensive-source-container .cs-custom-panel{display:grid;gap:9px}
