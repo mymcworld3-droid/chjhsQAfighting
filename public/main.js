@@ -1,6 +1,6 @@
 // 核心登入模組必須優先且獨立載入。
 // Google 登入本身不被附加模組阻斷；登入後的遊戲則必須等所有修仙模組載入成功才開始。
-import './main-legacy.js?v=20261006-combat-invite-block1';
+import './main-legacy.js?v=20261006-solo-gold1';
 import './cultivation/dongtian-entry.js';
 // Repository 註冊屬於附加能力；即使載入失敗也不能阻斷 Google 登入核心。
 void import('./cultivation/data/index.js').catch((error) => {
