@@ -4,6 +4,19 @@
   const $ = id => document.getElementById(id);
   const fields = ['cs-grade','cs-subject'];
   const names = ['選年級','選科目','選章節'];
+  const customRangeMarkup = `<section class="cs-range-panel" aria-labelledby="cs-range-title">
+    <h5 id="cs-range-title">自訂範圍</h5>
+    <p id="cs-range-help">輸入課程目錄以外的章節或考點，加入後記得儲存。</p>
+    <div class="cs-range-fields">
+      <label for="cs-range-grade">年級<select id="cs-range-grade"></select></label>
+      <label for="cs-range-subject">科目<select id="cs-range-subject"></select></label>
+    </div>
+    <label for="cs-range-input" class="cs-range-label">想練習的範圍
+      <input id="cs-range-input" type="text" maxlength="90" placeholder="例如：一元一次方程式的生活應用" aria-describedby="cs-range-help cs-range-message">
+    </label>
+    <button type="button" id="cs-range-add">加入自訂範圍</button>
+    <p id="cs-range-message" role="status" aria-live="polite"></p>
+  </section>`;
   let root, active = 0, ready = false;
   function options(id) {
     return [...($(id)?.options || [])].filter(o => o.value).map(o => ({value:o.value,label:o.textContent}));
@@ -58,6 +71,14 @@
   function refresh() {
     if (!root) return;
     for(let i=0;i<2;i++)visibleOptions(i);
+    for (const [id, source] of [['cs-range-grade','cs-grade'],['cs-range-subject','cs-subject']]) {
+      const select=$(id);if(!select)continue;
+      select.replaceChildren();
+      for (const item of options(source)) {
+        const option=document.createElement('option');option.value=item.value;option.textContent=item.label;select.append(option);
+      }
+      select.value=current(source);select.disabled=!select.options.length;
+    }
     const next=$('cs-next');
     if (next && active<2)next.disabled=!current(fields[active]);
   }
@@ -74,7 +95,7 @@
     if(!native||!search||!tools||!chapter||!message)return false;
     root=document.createElement('section');root.id='cs-pages';root.className='cs-pages';root.dataset.step='0';
     root.innerHTML='<div class="cs-page-navigation"><button type="button" id="cs-prev" class="cs-back">← 返回洞府</button></div>'+
-      names.map((name,i)=>'<section class="cs-stage" id="cs-stage-'+i+'" '+(i?'hidden':'')+' aria-label="'+name+'"><div class="cs-stage-title"><small>STEP 0'+(i+1)+'</small><h4>'+(['選擇你的年級','想練習哪一科？','勾選全學年章節與考點'][i])+'</h4><p>'+(['每個年級都可獨立安排，不必受個人資料的預設學制限制。','選完科目就直接進入章節；上下學期已合併，不再另外選版本。','上、下學期章節會一起顯示並標示原學期；可勾選整章或個別考點。'][i])+'</p></div><div id="cs-cards-'+i+'" class="cs-choice-grid"></div></section>').join('')+
+      names.map((name,i)=>'<section class="cs-stage" id="cs-stage-'+i+'" '+(i?'hidden':'')+' aria-label="'+name+'"><div class="cs-stage-title"><small>STEP 0'+(i+1)+'</small><h4>'+(['選擇你的年級','想練習哪一科？','勾選全學年章節與考點'][i])+'</h4><p>'+(['每個年級都可獨立安排，不必受個人資料的預設學制限制。','選完科目就直接進入章節；上下學期已合併，不再另外選版本。','上、下學期章節會一起顯示並標示原學期；可勾選整章或個別考點。'][i])+'</p></div>'+(i===0?customRangeMarkup:'')+'<div id="cs-cards-'+i+'" class="cs-choice-grid"></div></section>').join('')+
       '<div class="cs-page-actions"><button type="button" id="cs-next">下一步　→</button></div>';
     base.insertBefore(root,note||base.firstChild);
     // 保留原始 select 與事件處理器，僅從可見區域隱藏。
@@ -93,6 +114,22 @@
       setPage(active+1);
     });
     fields.forEach(id=>$(id)?.addEventListener('change',()=>{refresh();}));
+    for (const [id, source] of [['cs-range-grade','cs-grade'],['cs-range-subject','cs-subject']]) {
+      $(id).addEventListener('change',()=>{
+        $(source).value=$(id).value;$(source).dispatchEvent(new Event('change',{bubbles:true}));
+        $('cs-range-message').textContent='';refresh();
+      });
+    }
+    const addRange=()=>{
+      const input=$('cs-range-input'),result=window.addCustomCurriculumRange?.(input.value);
+      $('cs-range-message').textContent=result?.message||'範圍選擇器尚未準備好，請稍後再試。';
+      if(result?.ok)input.value='';
+      input.focus({preventScroll:true});
+    };
+    $('cs-range-add').addEventListener('click',addRange);
+    $('cs-range-input').addEventListener('keydown',e=>{
+      if(e.key==='Enter'&&!e.isComposing){e.preventDefault();addRange();}
+    });
     window.addEventListener('curriculum:options-ready',onOptions);
     ready=true;refresh();setPage(0);
     return true;

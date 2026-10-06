@@ -7,7 +7,8 @@
   'use strict';
   const SKILLS = Object.freeze(['retrieve', 'integrate', 'infer', 'apply', 'evaluate']);
   const LABELS = Object.freeze({ retrieve: '資訊擷取', integrate: '整合比較', infer: '推論理解', apply: '情境應用', evaluate: '評估判斷' });
-  const SUBJECTS = ['國文', '英文', '數學', '公民', '歷史', '地理', '物理', '化學', '生物', '自然', '社會', '國語', '生活'];
+  const SUBJECTS = ['國文', '英文', '數學', '公民', '歷史', '地理', '物理', '化學', '生物', '自然', '社會', '國語', '生活',
+    '自然科學', '藝術', '健康與體育', '本土語文', '綜合活動', '資訊科技', '綜合'];
   const text = (v, max = 240) => String(v || '').trim().slice(0, max);
   const signature = v => text(v, 8000).toLowerCase().replace(/[\s\p{P}\p{S}]/gu, '');
   function levelFor(path, fallback = '國中一年級') {

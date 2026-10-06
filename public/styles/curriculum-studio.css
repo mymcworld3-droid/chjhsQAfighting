@@ -129,6 +129,13 @@ html.scope-studio-open,body.scope-studio-open{overflow:hidden!important;overscro
 #scope-studio .cs-stage-title>small{color:#85c5b5;font-size:10px;letter-spacing:.18em;font-weight:900}
 #scope-studio .cs-stage-title>h4{margin:0;color:#f1e4cb;font:700 20px/1.4 "Noto Serif TC",serif}
 #scope-studio .cs-stage-title>p{margin:0;color:#aaa99f;font-size:12px;line-height:1.7}
+#scope-studio .cs-range-panel{display:grid;gap:10px;min-width:0;padding:16px;border:1px solid rgba(143,212,200,.24);border-radius:13px;background:rgba(93,163,144,.075)}
+#scope-studio .cs-range-panel h5{margin:0;color:#d8ede1;font-size:15px;line-height:1.5}
+#scope-studio .cs-range-panel p{margin:0;color:#adbdb4;font-size:12px;line-height:1.7;overflow-wrap:anywhere}
+#scope-studio .cs-range-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#scope-studio .cs-range-fields label,#scope-studio .cs-range-label{display:grid;gap:6px;min-width:0;color:#d8dfcf;font-size:12px}
+#scope-studio .cs-range-panel #cs-range-add{justify-self:start;min-height:44px!important;border-color:rgba(143,212,200,.4)!important;color:#d8ede1!important}
+#scope-studio #cs-range-message:empty{display:none}
 #scope-studio .cs-choice-grid{min-width:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:start}
 #scope-studio .cs-choice{display:grid;grid-template-columns:34px minmax(0,1fr) 15px;align-items:center;gap:12px;min-height:65px;padding:12px 13px;border:1px solid rgba(227,199,148,.18);border-radius:13px;background:linear-gradient(130deg,rgba(32,39,38,.95),rgba(18,27,27,.95));color:#e8deca;text-align:left;transition:background .16s,border-color .16s,transform .16s;cursor:pointer}
 #scope-studio .cs-choice:not(:disabled):hover{transform:translateY(-2px);border-color:rgba(236,204,132,.5);background:rgba(236,204,132,.09)}
@@ -152,7 +159,7 @@ html.scope-studio-open,body.scope-studio-open{overflow:hidden!important;overscro
 #scope-studio .cs-choice{min-height:57px}
 #scope-studio .cs-page-actions button{min-width:94px;padding:9px 10px}
 }
-@media(max-width:360px){#scope-studio .cs-choice-main{font-size:13px}}
+@media(max-width:360px){#scope-studio .cs-choice-main{font-size:13px}#scope-studio .cs-range-fields{grid-template-columns:1fr}}
 
 /* Paginated controls take priority over the legacy generic .cs-scope button rules. */
 #scope-studio .cs-scope .cs-choice{min-height:65px!important;padding:12px 13px!important;border:1px solid rgba(227,199,148,.18)!important;border-radius:13px!important;background:linear-gradient(130deg,rgba(32,39,38,.95),rgba(18,27,27,.95))!important;color:#e8deca!important;text-align:left!important}
