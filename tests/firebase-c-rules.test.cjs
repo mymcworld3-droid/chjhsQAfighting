@@ -26,3 +26,19 @@ test('Battle v2 surfaces actionable Firestore C failures', () => {
   assert.match(battle, /failed-precondition/);
   assert.match(battle, /Firebase C/);
 });
+
+
+test('guest join defers prefetch lease until after membership is established', () => {
+  const start = rules.indexOf('function isValidGuestJoin()');
+  const end = rules.indexOf('match /rooms/{roomId}', start);
+  assert.ok(start >= 0 && end > start);
+  const joinRules = rules.slice(start, end);
+  for (const field of ['prefetchedQuestion','prefetchedRound','prefetchOwnerUid','prefetchClaimedAtMs']) {
+    assert.doesNotMatch(joinRules, new RegExp("'" + field + "'"));
+  }
+  const startPatch = battle.indexOf('function guestJoinPatch(room, myData)');
+  const endPatch = battle.indexOf('async function claimWaitingRoom', startPatch);
+  const patch = battle.slice(startPatch, endPatch);
+  assert.doesNotMatch(patch, /prefetchedQuestion|prefetchedRound|prefetchOwnerUid|prefetchClaimedAtMs/);
+  assert.match(battle, /prefetchRoundQuestion\(room, 1\)/);
+});
