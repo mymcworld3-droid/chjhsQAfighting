@@ -61,7 +61,9 @@ export const featureReady = (async () => {
     settlingRound: null,
     timeoutRound: null,
     preparingRound: null,
+    prefetchingRound: null,
     prepareRetryAfterMs: 0,
+    prefetchRetryAfterMs: 0,
     advancingRound: null,
     introAdvancing: false,
     disconnectClaimRound: null,
@@ -285,6 +287,8 @@ export const featureReady = (async () => {
           <div class="bv2-stage-round"><span>ROUND</span><b id="bv2-round">1 / ${BATTLE_V2.maxRounds}</b><span id="bv2-cultivation-pool">修為池 0</span></div>
           <div class="bv2-stage" aria-label="雙人鬥法場">
             <div class="bv2-stage-architecture" aria-hidden="true"><i></i><i></i><i></i></div>
+            <div class="bv2-stage-aura" aria-hidden="true"><i></i><i></i><i></i></div>
+            <div class="bv2-stage-motes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
             <div class="bv2-stage-platform" aria-hidden="true"></div>
             ${portraitMarkup('bv2-my-fighter')}
             ${portraitMarkup('bv2-enemy-fighter')}
@@ -488,7 +492,18 @@ export const featureReady = (async () => {
   async function generateQuestion(room, round) {
     const scope = room.knowledgeScope || resolveBattleKnowledge(room.host?.knowledge, room.guest?.knowledge);
     const selected = pickBattleKnowledge(scope, round);
-    const recentHistory = (Array.isArray(room.questionHistory) ? room.questionHistory : []).slice(-30);
+    const historySource = Array.isArray(room.questionHistory) ? [...room.questionHistory] : [];
+    if (room.currentQuestion && Number(round) > Number(room.round)) {
+      historySource.push({
+        q: room.currentQuestion.q || '',
+        concept_id: room.currentQuestion.concept_id || '',
+        template_id: room.currentQuestion.template_id || '',
+        question_form: room.currentQuestion.question_form || '',
+        cognitive_level: Number(room.currentQuestion.cognitive_level) || 1,
+        reasoning_steps: Number(room.currentQuestion.reasoning_steps) || 1
+      });
+    }
+    const recentHistory = historySource.slice(-30);
     const avoidQuestions = recentHistory.map(entry => String(entry?.q || '')).filter(Boolean);
     const avoidQuestionMeta = recentHistory.map(entry => ({
       q: String(entry?.q || ''),
@@ -516,6 +531,88 @@ export const featureReady = (async () => {
       console.warn('[Battle v2] question generation unavailable; retaining scope:', error);
       toast('AI 出題暫時失敗，正依原範圍重新出題。');
       throw error;
+    }
+  }
+
+
+  function canPrefetchRound(room, round) {
+    if (!room || !Number.isInteger(Number(round))) return false;
+    const target = Number(round);
+    if (room.status === 'intro') return target === 1;
+    if (room.status === 'playing' || room.status === 'settled') return target === Number(room.round) + 1;
+    return false;
+  }
+
+  async function prefetchRoundQuestion(room, targetRound) {
+    const round = Number(targetRound);
+    const uid = me()?.uid;
+    if (!uid || !canPrefetchRound(room, round) || state.prefetchingRound === round ||
+        nowMs() < state.prefetchRetryAfterMs) return;
+    if (Number(room.prefetchedRound) === round && room.prefetchedQuestion) return;
+
+    if (room.prefetchOwnerUid !== uid) {
+      const claimedAt = Number(room.prefetchClaimedAtMs || 0);
+      if (!room.prefetchOwnerUid || nowMs() - claimedAt >= PREPARE_LEASE_MS) {
+        try {
+          await runTransaction(db(), async (tx) => {
+            const ref = roomRef();
+            const snap = await tx.get(ref);
+            if (!snap.exists()) return;
+            const fresh = snap.data();
+            if (!canPrefetchRound(fresh, round) || (Number(fresh.prefetchedRound) === round && fresh.prefetchedQuestion)) return;
+            const freshClaimedAt = Number(fresh.prefetchClaimedAtMs || 0);
+            if (fresh.prefetchOwnerUid && fresh.prefetchOwnerUid !== uid && nowMs() - freshClaimedAt < PREPARE_LEASE_MS) return;
+            tx.update(ref, { prefetchOwnerUid: uid, prefetchClaimedAtMs: nowMs(), updatedAt: serverTimestamp() });
+          });
+        } catch (_) {}
+      }
+      return;
+    }
+
+    state.prefetchingRound = round;
+    try {
+      const question = await generateQuestion(room, round);
+      await runTransaction(db(), async (tx) => {
+        const ref = roomRef();
+        const snap = await tx.get(ref);
+        if (!snap.exists()) return;
+        const fresh = snap.data();
+        if (fresh.prefetchOwnerUid !== uid) return;
+        if (Number(fresh.prefetchedRound) === round && fresh.prefetchedQuestion) return;
+
+        if (fresh.status === 'preparing' && Number(fresh.round) === round && !fresh.currentQuestion) {
+          tx.update(ref, {
+            status: 'playing',
+            currentQuestion: question,
+            questionReadyAtMs: questionReadyDeadline(round, nowMs()),
+            questionOwnerUid: null,
+            questionClaimedAtMs: null,
+            prefetchedQuestion: null,
+            prefetchedRound: null,
+            prefetchOwnerUid: uid,
+            prefetchClaimedAtMs: nowMs(),
+            answerWindowStartedAt: null,
+            answerWindowStartedAtMs: null,
+            firstAnswerUid: null,
+            updatedAt: serverTimestamp()
+          });
+          return;
+        }
+
+        if (!canPrefetchRound(fresh, round)) return;
+        tx.update(ref, {
+          prefetchedQuestion: question,
+          prefetchedRound: round,
+          prefetchOwnerUid: uid,
+          prefetchClaimedAtMs: nowMs(),
+          updatedAt: serverTimestamp()
+        });
+      });
+    } catch (error) {
+      console.warn('[Battle v2] question prefetch unavailable:', error);
+      state.prefetchRetryAfterMs = nowMs() + 3500;
+    } finally {
+      if (state.prefetchingRound === round) state.prefetchingRound = null;
     }
   }
 
@@ -564,6 +661,8 @@ export const featureReady = (async () => {
         status: 'intro',
         matchedAt: serverTimestamp(), matchedAtMs: nowMs(),
         introUntilMs: nowMs() + INTRO_DURATION_MS,
+        prefetchedQuestion: null, prefetchedRound: null,
+        prefetchOwnerUid: myData.uid, prefetchClaimedAtMs: nowMs(),
         answerWindowStartedAt: null, answerWindowStartedAtMs: null, firstAnswerUid: null,
         updatedAt: serverTimestamp()
       });
@@ -594,7 +693,9 @@ export const featureReady = (async () => {
       battleCultivationVersion: cultivationRules.VERSION, battleCultivationLedger: {},
       modeVersion: BATTLE_V2.modeVersion, mode: 'matchmaking', host: myData, guest: null, status: 'waiting',
       round: 1, maxRounds: BATTLE_V2.maxRounds, responseWindowMs: ANSWER_WINDOW_MS,
-      currentQuestion: null, questionHistory: [], knowledgeScope: null, questionReadyAtMs: null, settledRound: 0, battleLog: [], battleLogId: '', winner: null, finishReason: '',
+      currentQuestion: null, questionHistory: [], knowledgeScope: null, questionReadyAtMs: null,
+      prefetchedQuestion: null, prefetchedRound: null, prefetchOwnerUid: null, prefetchClaimedAtMs: null,
+      settledRound: 0, battleLog: [], battleLogId: '', winner: null, finishReason: '',
       hostResultRecorded: false, guestResultRecorded: false,
       answerWindowStartedAt: null, answerWindowStartedAtMs: null, firstAnswerUid: null,
       createdAt: serverTimestamp(), createdAtMs: nowMs(), updatedAt: serverTimestamp()
@@ -664,7 +765,7 @@ export const featureReady = (async () => {
         if (own.status !== 'waiting' || own.guest || own.host?.uid !== myData.uid) return;
         if (other.status !== 'waiting' || other.guest || other.host?.uid === myData.uid || Number(other.modeVersion) !== BATTLE_V2.modeVersion || isRoomStale(other)) return;
         const duel = applyNascentSoulDuelRule(other.host, myData);
-        tx.update(target.ref, { host: duel.host, guest: duel.guest, knowledgeScope: resolveBattleKnowledge(other.host?.knowledge, myData.knowledge), status: 'intro', matchedAt: serverTimestamp(), matchedAtMs: nowMs(), introUntilMs: nowMs() + INTRO_DURATION_MS, answerWindowStartedAt: null, answerWindowStartedAtMs: null, firstAnswerUid: null, updatedAt: serverTimestamp() });
+        tx.update(target.ref, { host: duel.host, guest: duel.guest, knowledgeScope: resolveBattleKnowledge(other.host?.knowledge, myData.knowledge), status: 'intro', matchedAt: serverTimestamp(), matchedAtMs: nowMs(), introUntilMs: nowMs() + INTRO_DURATION_MS, prefetchedQuestion: null, prefetchedRound: null, prefetchOwnerUid: myData.uid, prefetchClaimedAtMs: nowMs(), answerWindowStartedAt: null, answerWindowStartedAtMs: null, firstAnswerUid: null, updatedAt: serverTimestamp() });
         tx.delete(ownRef);
         merged = true;
       });
@@ -691,8 +792,8 @@ export const featureReady = (async () => {
   function resetRuntime() {
     detachRoomListener(); stopTimers();
     state.roomId = null; state.role = null; state.room = null; state.starting = false; state.leaving = false; state.invitedRoomId = null;
-    state.settlingRound = state.timeoutRound = state.preparingRound = state.advancingRound = state.disconnectClaimRound = null;
-    state.prepareRetryAfterMs = 0;
+    state.settlingRound = state.timeoutRound = state.preparingRound = state.prefetchingRound = state.advancingRound = state.disconnectClaimRound = null;
+    state.prepareRetryAfterMs = state.prefetchRetryAfterMs = 0;
     state.introAdvancing = false; state.renderedQuestionId = null; state.pendingAnswer = null;
     state.seenActivationKeys.clear(); state.seenSettlementKey = null; state.resultRecordedRoom = null;
     state.reviewedRound = state.reviewSubmittingRound = state.animationFinishedKey = null;
@@ -795,6 +896,7 @@ export const featureReady = (async () => {
     state.animationTimers = [];
 
     const startAtMs = nowMs();
+    updateArenaCombatState(room, true);
     const round = Number(room.round);
     const myRole = state.role;
     const original = {
@@ -877,6 +979,7 @@ export const featureReady = (async () => {
     scheduleBattleAt(startAtMs + battleAnimationDuration(steps.length), key, () => {
       if (!valid()) return;
       state.animationFinishedKey = key;
+      updateArenaCombatState(state.room, false);
       setHp('my', playerForRole(state.room, myRole));
       setHp('enemy', playerForRole(state.room, otherRole(myRole)));
       if (state.room?.status === 'finished') renderResult(state.room);
@@ -990,6 +1093,24 @@ export const featureReady = (async () => {
   }
 
 
+
+  function updateArenaCombatState(room, animating = false) {
+    const arena = document.getElementById('bv2-arena');
+    if (!arena || !room) return;
+    const countdown = room.status === 'playing' && Number(room.round) === 1 &&
+      nowMs() < Number(room.questionReadyAtMs || 0);
+    const next = animating ? 'clash' :
+      countdown ? 'countdown' :
+      room.status === 'preparing' ? 'charging' :
+      room.status === 'settled' ? 'aftermath' :
+      room.status === 'playing' ? 'ready' : 'idle';
+    if (arena.dataset.combatState === next) return;
+    arena.dataset.combatState = next;
+    arena.classList.remove('bv2-combat-state-change');
+    void arena.offsetWidth;
+    arena.classList.add('bv2-combat-state-change');
+  }
+
   function renderArena(room) {
     showSection('arena');
     const mine = playerForRole(room, state.role);
@@ -1008,6 +1129,7 @@ export const featureReady = (async () => {
     const replay = (room.status === 'settled' || room.status === 'finished') &&
       Number(room.lastSettlement?.round) === Number(room.round) && state.reviewedRound === Number(room.round);
     const animating = replay && state.seenSettlementKey === key && state.animationFinishedKey !== key;
+    updateArenaCombatState(room, animating);
     if (!animating) {
       setHp('my', mine);
       setHp('enemy', enemy);
@@ -1196,8 +1318,11 @@ export const featureReady = (async () => {
       await runTransaction(db(), async (tx) => {
         const ref = roomRef(); const snap = await tx.get(ref); if (!snap.exists()) return; const fresh = snap.data();
         if (fresh.status !== 'settled' || Number(fresh.round) !== round || !bothReviewed(fresh) || !fresh.nextRoundAtMs || nowMs() < Number(fresh.nextRoundAtMs)) return;
+        const nextRound = round + 1;
+        const prefetched = Number(fresh.prefetchedRound) === nextRound ? fresh.prefetchedQuestion : null;
+        const ownerUid = fresh.prefetchOwnerUid || me().uid;
         tx.update(ref, {
-          status: 'preparing', round: round + 1,
+          status: prefetched ? 'playing' : 'preparing', round: nextRound,
           questionHistory: [...(Array.isArray(fresh.questionHistory) ? fresh.questionHistory : []),
             {
               q: fresh.currentQuestion?.q || '',
@@ -1208,7 +1333,15 @@ export const featureReady = (async () => {
               cognitive_level: Number(fresh.currentQuestion?.cognitive_level) || 1,
               reasoning_steps: Number(fresh.currentQuestion?.reasoning_steps) || 1
             }].filter(entry => entry.q).slice(-30),
-          currentQuestion: null, questionReadyAtMs: null, nextRoundAtMs: null, questionOwnerUid: me().uid, questionClaimedAtMs: nowMs(),
+          currentQuestion: prefetched || null,
+          questionReadyAtMs: prefetched ? questionReadyDeadline(nextRound, nowMs()) : null,
+          nextRoundAtMs: null,
+          questionOwnerUid: prefetched ? null : ownerUid,
+          questionClaimedAtMs: prefetched ? null : nowMs(),
+          prefetchedQuestion: null,
+          prefetchedRound: null,
+          prefetchOwnerUid: ownerUid,
+          prefetchClaimedAtMs: nowMs(),
           answerWindowStartedAt: null, answerWindowStartedAtMs: null, firstAnswerUid: null,
           'host.answerChoice': null, 'host.answerCorrect': null, 'host.answerAt': null, 'host.answerClientAt': null, 'host.answerRound': null, 'host.timedOut': false,
           'guest.answerChoice': null, 'guest.answerCorrect': null, 'guest.answerAt': null, 'guest.answerClientAt': null, 'guest.answerRound': null, 'guest.timedOut': false, updatedAt: serverTimestamp()
@@ -1221,11 +1354,13 @@ export const featureReady = (async () => {
     const round = Number(room.round); if (state.preparingRound === round || room.status !== 'preparing' || room.currentQuestion || room.questionOwnerUid !== me()?.uid) return;
     state.preparingRound = round;
     try {
-      const question = await generateQuestion(room, round);
+      if (state.prefetchingRound === round) return;
+      const cached = Number(room.prefetchedRound) === round ? room.prefetchedQuestion : null;
+      const question = cached || await generateQuestion(room, round);
       await runTransaction(db(), async (tx) => {
         const ref = roomRef(); const snap = await tx.get(ref); if (!snap.exists()) return; const fresh = snap.data();
         if (fresh.status !== 'preparing' || Number(fresh.round) !== round || fresh.currentQuestion || fresh.questionOwnerUid !== me().uid) return;
-        tx.update(ref, { status: 'playing', currentQuestion: question, questionReadyAtMs: questionReadyDeadline(round, nowMs()), questionOwnerUid: null, questionClaimedAtMs: null, answerWindowStartedAt: null, answerWindowStartedAtMs: null, firstAnswerUid: null, updatedAt: serverTimestamp() });
+        tx.update(ref, { status: 'playing', currentQuestion: question, questionReadyAtMs: questionReadyDeadline(round, nowMs()), questionOwnerUid: null, questionClaimedAtMs: null, prefetchedQuestion: null, prefetchedRound: null, prefetchOwnerUid: me().uid, prefetchClaimedAtMs: nowMs(), answerWindowStartedAt: null, answerWindowStartedAtMs: null, firstAnswerUid: null, updatedAt: serverTimestamp() });
       });
     } catch (error) { console.error('[Battle v2] next question failed:', error); state.prepareRetryAfterMs = nowMs() + 4000; }
     finally { state.preparingRound = null; }
@@ -1249,9 +1384,13 @@ export const featureReady = (async () => {
       await runTransaction(db(), async (tx) => {
         const ref = roomRef(); const snap = await tx.get(ref); if (!snap.exists()) return; const fresh = snap.data();
         if (fresh.status !== 'intro' || nowMs() < Number(fresh.introUntilMs || 0)) return;
-        tx.update(ref, { status: 'preparing', currentQuestion: null, questionHistory: [],
+        const prefetched = Number(fresh.prefetchedRound) === 1 ? fresh.prefetchedQuestion : null;
+        const ownerUid = fresh.prefetchOwnerUid || me().uid;
+        tx.update(ref, { status: prefetched ? 'playing' : 'preparing', currentQuestion: prefetched || null, questionHistory: [],
           knowledgeScope: fresh.knowledgeScope || resolveBattleKnowledge(fresh.host?.knowledge, fresh.guest?.knowledge),
-          questionOwnerUid: me().uid, questionClaimedAtMs: nowMs(), questionReadyAtMs: null,
+          questionOwnerUid: prefetched ? null : ownerUid, questionClaimedAtMs: prefetched ? null : nowMs(),
+          questionReadyAtMs: prefetched ? questionReadyDeadline(1, nowMs()) : null,
+          prefetchedQuestion: null, prefetchedRound: null, prefetchOwnerUid: ownerUid, prefetchClaimedAtMs: nowMs(),
           battleStartedAt: serverTimestamp(), answerWindowStartedAt: null, answerWindowStartedAtMs: null,
           firstAnswerUid: null, updatedAt: serverTimestamp() });
       });
@@ -1282,8 +1421,15 @@ export const featureReady = (async () => {
     const room = state.room; if (!room || !state.roomId) return;
     const timerEl = document.getElementById('bv2-timer'); const barEl = document.getElementById('bv2-timer-bar'); const trackEl = document.getElementById('bv2-timer-track');
 
-    if (room.status === 'intro') { updateIntroText(room); advanceIntro(room); }
+    if (room.status === 'intro') {
+      updateIntroText(room);
+      if (nowMs() >= state.prefetchRetryAfterMs) void prefetchRoundQuestion(room, 1);
+      advanceIntro(room);
+    }
     else if (room.status === 'playing' && room.currentQuestion) {
+      if (Number(room.round) < Number(room.maxRounds || BATTLE_V2.maxRounds) && nowMs() >= state.prefetchRetryAfterMs) {
+        void prefetchRoundQuestion(room, Number(room.round) + 1);
+      }
       // Only the opening round waits three seconds; later rounds immediately show the quiz.
       if (nowMs() < Number(room.questionReadyAtMs || 0)) {
         if (document.getElementById('page-battle')?.dataset.bv2Phase !== 'arena') renderArena(room);
@@ -1311,6 +1457,9 @@ export const featureReady = (async () => {
         if (trackEl) trackEl.classList.add('idle'); if (barEl) barEl.style.width = '100%';
       }
     } else if (room.status === 'settled') {
+      if (Number(room.round) < Number(room.maxRounds || BATTLE_V2.maxRounds) && nowMs() >= state.prefetchRetryAfterMs) {
+        void prefetchRoundQuestion(room, Number(room.round) + 1);
+      }
       const ready = bothReviewed(room) && !!room.nextRoundAtMs;
       const left = ready ? Math.max(0, Number(room.nextRoundAtMs) - nowMs()) : 0;
       if (timerEl) { timerEl.textContent = ready ? (left / 1000).toFixed(1) + 's' : '等待雙方確認'; timerEl.classList.remove('idle'); }
@@ -1370,12 +1519,17 @@ export const featureReady = (async () => {
     const room = snap.data(); if (Number(room.modeVersion) !== BATTLE_V2.modeVersion) return; state.room = room;
     const uid = me()?.uid; if (room.host?.uid === uid) state.role = 'host'; else if (room.guest?.uid === uid) state.role = 'guest'; else return;
     if (room.status === 'waiting') { renderLobby(room); if (state.role === 'host') { scheduleReconcile(); inviteOnlineFriends(state.roomId); } }
-    else if (room.status === 'intro') renderIntro(room);
+    else if (room.status === 'intro') {
+      renderIntro(room);
+      void prefetchRoundQuestion(room, 1);
+    }
     else if (room.status === 'preparing') renderArena(room);
     else if (room.status === 'playing') {
+      if (Number(room.round) < Number(room.maxRounds || BATTLE_V2.maxRounds)) void prefetchRoundQuestion(room, Number(room.round) + 1);
       if (room.currentQuestion && nowMs() >= Number(room.questionReadyAtMs || 0)) renderQuiz(room);
       else renderArena(room);
     } else if (room.status === 'settled') {
+      if (Number(room.round) < Number(room.maxRounds || BATTLE_V2.maxRounds)) void prefetchRoundQuestion(room, Number(room.round) + 1);
       if (state.reviewedRound !== Number(room.round)) renderQuiz(room);
       else renderArena(room);
     } else if (room.status === 'finished') {
