@@ -41,6 +41,53 @@ function fakeDb(user, state) {
 }
 const sample = () => ({ uid: 'u1', stats: { gold: 20, totalScore: 28, totalCorrect: 10 }, gameSettings: { focusedUnits: [{ path: '數學', detail: '方程式' }] } });
 
+test('the independent Dongtian tutorial quest follows the mid-Qi story and preserves all existing quest IDs', () => {
+  const index = rules.PATH.findIndex(q => q.id === 'path-qi-five');
+  assert.deepEqual(rules.PATH.slice(index, index + 4).map(q => q.id),
+    ['path-qi-five', 'path-story-qi-five-dongtian', 'path-dongtian-tutorial', 'path-meditation']);
+  assert.equal(rules.PATH.length, 37);
+  const oldClaimed = rules.PATH.filter(q => q.id !== 'path-dongtian-tutorial').map(q => q.id);
+  const migrated = rules.normalizeState({ version: 2, pathClaimed: oldClaimed }, date);
+  assert.deepEqual(migrated.pathClaimed, oldClaimed);
+  assert.equal(rules.view(sample(), migrated, date).path.id, 'path-dongtian-tutorial');
+  assert.equal(rules.view(sample(), migrated, date).pathCompleted, 36);
+});
+
+test('watching the dream, starting a lesson, skipping, and completing formal caves cannot finish the lesson quest', () => {
+  const index = rules.PATH.findIndex(q => q.id === 'path-dongtian-tutorial');
+  const state = { version: 2, pathClaimed: rules.PATH.slice(0, index).map(q => q.id) };
+  const user = sample();
+  user.storyProgressV1 = { seen: { 'qi-five-dongtian': { completedAtMs: 1 } } };
+  user.questProgress = { totals: { dongtian: 10 } };
+  for (const marker of [undefined, { started: true }, { completed: false }, { completed: true, skipped: true }]) {
+    user.storyDongtianTutorialV1 = marker;
+    assert.equal(rules.view(user, state, date).path.claimable, false);
+  }
+  user.storyDongtianTutorialV1 = { completed: true, skipped: false };
+  assert.equal(rules.view(user, state, date).path.claimable, true);
+  user.storyDongtianTutorialV1 = { completed: true, skipped: true };
+  user.qiFiveDongtianTutorialV1 = { completed: true, played: true, deleted: false };
+  assert.equal(rules.view(user, state, date).path.claimable, false);
+  user.qiFiveDongtianTutorialV1.deleted = true;
+  assert.equal(rules.view(user, state, date).path.claimable, true, 'a fully completed legacy lesson counts');
+});
+
+test('a saved lesson grants only its fixed gold reward once and never counts as a formal cave', async () => {
+  const index = rules.PATH.findIndex(q => q.id === 'path-dongtian-tutorial');
+  const state = { version: 2, pathClaimed: rules.PATH.slice(0, index).map(q => q.id) };
+  const user = sample();
+  user.storyDongtianTutorialV1 = { completed: true, skipped: false };
+  const db = fakeDb(user, state);
+  const claims = await Promise.all(Array.from({ length: 5 }, () => questTransaction(db, 'u1', { kind: 'path', id: 'path-dongtian-tutorial' }, now)));
+  assert.equal(claims.filter(r => r.awarded).length, 1);
+  assert.equal(db.docs.get('users/u1').stats.gold, user.stats.gold + 50);
+  assert.equal(db.docs.get('users/u1').stats.totalScore, user.stats.totalScore);
+  assert.equal(db.docs.get('users/u1').questProgress, undefined);
+  assert.equal(claims.at(-1).quests.path.id, 'path-meditation');
+  user.stats.totalScore = 4;
+  await assert.rejects(questTransaction(fakeDb(user, state), 'u1', { kind: 'path', id: 'path-dongtian-tutorial' }, now), /尚未完成/);
+});
+
 test('quest dates use Taiwan midnight, while totals survive daily resets', () => {
   assert.equal(rules.dateKey(new Date('2026-10-02T15:59:59Z')), '2026-10-02');
   assert.equal(rules.dateKey(new Date('2026-10-02T16:00:00Z')), '2026-10-03');

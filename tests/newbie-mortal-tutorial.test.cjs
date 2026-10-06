@@ -107,8 +107,8 @@ test('clicking anywhere outside highlighted controls advances only informational
   assert.match(tutorial, /card\.querySelector\('\.newbie-tutorial-next'\)\.onclick=\(\)=>\{if\(!blocked\)advanceTutorial\(\);\}/);
 });
 
-test('chapter-two tutorial carefully teaches the complete Dongtian lifecycle', () => {
-  assert.match(tutorial, /第二章 · 洞天入口/);
+test('independent tutorial carefully teaches the complete Dongtian lifecycle', () => {
+  assert.match(tutorial, /洞天新手教程 · 找到入口/);
   assert.match(tutorial, /請親自點亮起的「洞天」入口/);
   assert.match(tutorial, /圖片與文字都可以煉成洞天/);
   assert.match(tutorial, /少＝10～14 題/);
@@ -119,7 +119,7 @@ test('chapter-two tutorial carefully teaches the complete Dongtian lifecycle', (
   assert.match(tutorial, /下一題會帶入前面全部已生成題目/);
 });
 
-test('chapter-two tutorial requires actual private Dongtian play, return, and deletion', () => {
+test('independent tutorial requires actual private Dongtian play, return, and deletion', () => {
   assert.match(tutorial, /prepareDongtianDemo: true/);
   assert.match(tutorial, /data-dt-tutorial-card/);
   assert.match(tutorial, /data-dt-tutorial-play/);
@@ -134,9 +134,9 @@ test('chapter-two tutorial requires actual private Dongtian play, return, and de
   assert.match(tutorial, /newbie:dongtian-demo-deleted/);
 });
 
-test('chapter-two tutorial explains real Dongtian rewards while the sample remains reward-free and private', () => {
+test('independent tutorial explains real Dongtian rewards while the sample remains reward-free and private', () => {
   assert.match(tutorial, /每題 100、最低 1000/);
-  assert.match(tutorial, /每答對 5 題 \+1/);
+  assert.match(tutorial, /每答對 1 題 \+1 修為/);
   assert.match(tutorial, /私人教學範例完全不發正式獎勵、不掉材料，也不寫入歷史紀錄/);
   assert.match(tutorial, /教學範例已刪除，而且從頭到尾都沒有公開/);
 });
@@ -164,20 +164,21 @@ test('mortal tutorial requires only one private Dongtian question before returni
 });
 
 
-test('the new mortal tutorial ends before the Dongtian practice handed off by chapter two', () => {
+test('the new mortal tutorial ends before the later independent Dongtian practice', () => {
   const question = tutorial.slice(tutorial.indexOf('const questionSteps = ['), tutorial.indexOf('const dongtianSteps = ['));
   const cave = tutorial.slice(tutorial.indexOf('const dongtianSteps = ['), tutorial.indexOf('function ensureStyle()'));
   assert.doesNotMatch(question, /requiresDongtianOpen|requiresDongtianComplete/);
-  assert.match(question, /煉氣五層時，沈清霜會在第二章帶你體驗洞天/);
+  assert.match(question, /觀看第二章，再另外開啟洞天新手教程/);
   assert.match(cave, /requiresDongtianComplete: true/);
   assert.match(cave, /requiresDongtianReturn: true/);
   assert.match(cave, /requiresDongtianDelete: true/);
 });
 
 
-test('standalone tutorial buttons replay their entire chapters, not detached tutorials', () => {
+test('the question button opens chapter one while the Dongtian button opens the independent lesson', () => {
   assert.match(tutorial, /openXiuxianStoryChapter\?\.\('prologue-enter-sect'\)/);
-  assert.match(tutorial, /openXiuxianStoryChapter\?\.\('qi-five-dongtian'\)/);
+  assert.match(tutorial, /button\.onclick = \(\) => window\.startDongtianTutorial\?\.\(\)/);
+  assert.doesNotMatch(tutorial, /openXiuxianStoryChapter\?\.\('qi-five-dongtian'\)/);
   assert.match(tutorial, /window\.startStoryQuestionTutorial = \(options = \{\}\)/);
   assert.match(tutorial, /window\.startStoryDongtianTutorial = \(options = \{\}\)/);
 });
@@ -191,6 +192,7 @@ test('prologue can launch the question lesson from its story checkpoint', () => 
     active:false, resizeHandler:null, index:99,
     ensureStyle(){}, bindDemoGuards(){}, bindNavigationGuards(){}, bindScopeTutorialEvents(){}, bindDongtianTutorialEvents(){}, bindAnywhereClick(){},
     userData:()=>({ newbieTutorialV1:{completed:true} }),
+    tutorialCompleted:()=>true,
     window:{ deleteNewbieDongtianDemo(){}, addEventListener(){} },
     questionSteps:[{title:'問道'}], dongtianSteps:[{title:'洞天'}],
     FIELD:'newbieTutorialV1', DONGTIAN_FIELD:'storyDongtianTutorialV1',

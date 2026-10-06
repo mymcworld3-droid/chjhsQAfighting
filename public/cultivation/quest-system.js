@@ -16,7 +16,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
   }
   function status(message) { if ($('quest-status')) $('quest-status').textContent = message; }
   function card(q, kind) {
-    const label = q.claimed ? '已領取' : q.locked ? '尚未解鎖' : q.claimable ? '領取獎勵' : q.metric === 'story' ? '觀看劇情' : '前往修行';
+    const label = q.claimed ? '已領取' : q.locked ? '尚未解鎖' : q.claimable ? '領取獎勵' : q.metric === 'story' ? '觀看劇情' : q.metric === 'dongtian-tutorial' ? '開始洞天教程' : '前往修行';
     return `<article class="quest-card ${kind === 'path' ? 'quest-path-card' : ''} ${q.claimable ? 'quest-ready' : ''} ${q.claimed ? 'quest-claimed' : ''}">
       <div class="quest-card-heading"><h4>${esc(q.title)}</h4><span>${q.claimed ? '已完成' : q.claimable ? '待領獎' : '進行中'}</span></div>
       <p>${esc(q.description)}</p>
@@ -130,6 +130,10 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       battle: () => { void window.startBattleMatchmaking?.(); },
       raid: () => { void window.openRaidHub?.(); },
       dongtian: () => { window.openDongtianPanel?.(); },
+      'dongtian-tutorial': () => {
+        const opened = window.startDongtianTutorial?.();
+        if (!opened) status('洞天教程暫時無法開啟，請先結束目前的戰鬥、劇情或教學，再按「開始洞天教程」。');
+      },
       story: () => {
         const opened = window.openXiuxianStoryChapter?.(q.chapterId);
         if (!opened) status('劇情暫時無法開啟，請先結束目前的戰鬥或教學，再按「觀看劇情」。');
@@ -166,7 +170,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     render();
   }
   mount();
-  ['xiuxian:user-ready', 'xiuxian:quest-progress-updated', 'xiuxian:story-chapter-completed'].forEach(name => window.addEventListener(name, invalidate));
+  ['xiuxian:user-ready', 'xiuxian:quest-progress-updated', 'xiuxian:story-chapter-completed', 'xiuxian:dongtian-tutorial-completed'].forEach(name => window.addEventListener(name, invalidate));
   window.addEventListener('material-system-updated', e => { if (!e.detail?.questReward) invalidate(); });
   window.addEventListener('xiuxian:stats-updated', e => { if (!applyingReward && e.detail?.source !== 'quest-reward') invalidate(); });
   document.addEventListener('visibilitychange', () => { if (!document.hidden) invalidate(); });

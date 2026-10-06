@@ -131,11 +131,11 @@ test('legacy compensation formula and item are preserved', () => {
   assert.match(progression, /'stats\.totalScore': FOUNDATION_SCORE/);
 });
 
-test('beginner tutorial covers scope and reserves later realm guidance for the story', () => {
+test('beginner tutorial covers scope and reserves Dongtian practice for a later independent lesson', () => {
   assert.match(tutorial, /綜合題目/);
   assert.match(tutorial, /指定題庫/);
   assert.match(tutorial, /專注練習/);
-  assert.match(tutorial, /煉氣五層時，沈清霜會在第二章帶你體驗洞天/);
+  assert.match(tutorial, /煉氣五層後，仙道任務會引導你觀看第二章，再另外開啟洞天新手教程/);
   assert.match(tutorial, /set-source-mode/);
   assert.match(tutorial, /set-difficulty/);
   assert.doesNotMatch(tutorial, /金丹/);

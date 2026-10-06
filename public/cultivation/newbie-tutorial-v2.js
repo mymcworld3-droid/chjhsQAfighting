@@ -2,7 +2,7 @@ import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.j
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
-// 第一章「問道靈根」的師姐授課：先練習一題，再認識修習範圍與難度。
+// 第一章問道授課，以及由仙道任務／洞府入口開啟的獨立洞天新手教程。
 (function () {
   'use strict';
 
@@ -15,6 +15,8 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   let steps = [];
   let index = 0;
   let replayOnly = false;
+  let finishing = false;
+  let completionError = '';
   let resizeHandler = null;
   let exampleInstalled = false;
   let exampleAnswered = false;
@@ -108,15 +110,15 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     {
       page: 'page-home', target: '#xiuxian-panel',
       kicker: '第一章 · 授課完成', title: '回到仙府，繼續與師姐對話',
-      body: '你已學會<strong>讀題 → 選答案 → 看解析 → 下一題</strong>，也認識了回報問題、修習範圍與難度設定。沈清霜仍在仙府等你，完成教學後會接續第一章對話。煉氣五層時，沈清霜會在第二章帶你體驗洞天。',
-      note: '洞天實作會隨第二章劇情開啟，不需要現在把所有功能一次學完。'
+      body: '你已學會<strong>讀題 → 選答案 → 看解析 → 下一題</strong>，也認識了回報問題、修習範圍與難度設定。沈清霜仍在仙府等你，完成教學後會接續第一章對話。煉氣五層後，仙道任務會引導你觀看第二章，再另外開啟洞天新手教程。',
+      note: '洞天實作與劇情分開，可從後續仙道任務或洞府的「查看洞天新手教程」開始。'
     }
   ];
 
   const dongtianSteps = [
     {
       page: 'page-settings', target: '#dongtian-card .dongfu-collapse-head, #dongtian-launcher-card .dt-entry-head', requiresDongtianOpen: true,
-      kicker: '第二章 · 洞天入口', title: '先找到洞天在哪裡',
+      kicker: '洞天新手教程 · 找到入口', title: '先找到洞天在哪裡',
       body: '洞天位在<strong>洞府</strong>裡，不會直接把你傳送進去。請找到「洞天」區塊並親自點開；自己的洞天建立、重玩、題目管理與刪除都從這裡進行。',
       note: '請親自點亮起的「洞天」入口，把區塊展開。'
     },
@@ -159,7 +161,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     {
       target: '#dongtian-overlay [data-dt-tutorial-result]',
       kicker: '洞天實作 · 通關結算', title: '看懂正式洞天的首次通關獎勵',
-      body: '正式洞天首次完整通關會依題數給靈石：<strong>每題 100、最低 1000</strong>；修為依答對題數計算：<strong>每答對 5 題 +1，至少答對 1 題保底 +1</strong>。同一洞天重玩不會重複領首次獎勵。',
+      body: '正式洞天首次完整通關會依題數給靈石：<strong>每題 100、最低 1000</strong>；修為依答對題數計算：<strong>每答對 1 題 +1 修為</strong>。同一洞天重玩不會重複領首次獎勵。',
       note: '這座私人教學範例完全不發正式獎勵、不掉材料，也不寫入歷史紀錄。'
     },
     {
@@ -176,9 +178,9 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     },
     {
       page: 'page-settings', target: '#dongtian-card .dt-library',
-      kicker: '完成 · 第二章洞天教學', title: '你已走完整個洞天流程',
+      kicker: '完成 · 洞天新手教程', title: '你已走完整個洞天流程',
       body: '你已經實際完成：<strong>找到入口 → 了解素材與題量 → 進入洞天 → 單選作答與看解析 → 通關結算 → 返回名冊 → 刪除洞天</strong>。之後建立正式洞天就是同一套操作。',
-      note: '教學範例已刪除，而且從頭到尾都沒有公開或留下正式獎勵紀錄。'
+      note: '教學範例已刪除，而且從頭到尾都沒有公開或留下正式獎勵紀錄。按「完成」儲存後，仙道任務才會計入。'
     },
   ];
   steps = questionSteps;
@@ -613,7 +615,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   }
 
   function advanceTutorial() {
-    if (!active) return;
+    if (!active || finishing) return;
     const step = displayStep();
     if (step.routeGate || nextBlocked(steps[index])) return;
     if (index === steps.length - 1) finish(false);
@@ -634,6 +636,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       if (withinHighlight) return; // 金框內必須保留原本的點擊，不當作「下一步」。
       event.preventDefault();
       event.stopImmediatePropagation(); // 金框外不可誤觸其他遊戲功能。
+      if (finishing) return;
       if (step.routeGate || nextBlocked(steps[index])) return;
       advanceTutorial();
     }, true);
@@ -645,14 +648,14 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     const step = displayStep();
     const card = document.querySelector('#newbie-tutorial-layer .newbie-tutorial-card');
     if (!card) return;
-    const blocked = !!step.routeGate || nextBlocked(baseStep);
-    const blockedLabel = step.routeGate
+    const blocked = finishing || !!step.routeGate || nextBlocked(baseStep);
+    const blockedLabel = finishing ? '正在儲存…' : completionError ? '重新儲存完成紀錄' : step.routeGate
       ? '請點亮起的入口'
       : (blocked ? blockedLabelForStep(baseStep) : (index===steps.length-1 ? '完成' : '下一步'));
-    card.innerHTML=`<div class="newbie-tutorial-kicker">${step.kicker}</div><h3>${step.title}</h3><p>${step.body}</p><p class="newbie-tutorial-note">${step.note}</p><div class="newbie-tutorial-progress">${steps.map((_,i)=>`<i class="${i===index?'active':''}"></i>`).join('')}</div><div class="newbie-tutorial-actions"><button class="newbie-tutorial-skip">跳過教學</button><button class="newbie-tutorial-prev" ${index===0?'disabled':''}>上一步</button><button class="newbie-tutorial-next" ${blocked?'disabled':''}>${blockedLabel}</button></div>`;
+    card.innerHTML=`<div class="newbie-tutorial-kicker">${step.kicker}</div><h3>${step.title}</h3><p>${step.body}</p><p class="newbie-tutorial-note">${step.note}</p>${completionError ? `<p role="alert">${completionError}</p>` : ''}<div class="newbie-tutorial-progress">${steps.map((_,i)=>`<i class="${i===index?'active':''}"></i>`).join('')}</div><div class="newbie-tutorial-actions"><button class="newbie-tutorial-skip" ${finishing?'disabled':''}>${tutorialMode === 'dongtian' ? '稍後再學' : '跳過教學'}</button><button class="newbie-tutorial-prev" ${index===0||finishing||completionError?'disabled':''}>上一步</button><button class="newbie-tutorial-next" ${blocked?'disabled':''}>${blockedLabel}</button></div>`;
     card.querySelector('.newbie-tutorial-skip').onclick=()=>finish(true);
     card.querySelector('.newbie-tutorial-prev').onclick=()=>{
-      if (index <= 0) return;
+      if (index <= 0 || finishing || completionError) return;
       if (steps[index - 1]?.requiresScopeOpen && scopeStudioOpen() &&
           window.closeCurriculumStudio?.() === false) return;
       index--;
@@ -699,26 +702,53 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     }, 120);
   }
 
+  function tutorialCompleted(mode) {
+    const current = userData();
+    if (mode !== 'dongtian') return !!current?.[FIELD]?.completed;
+    const lesson = current?.[DONGTIAN_FIELD], legacy = current?.qiFiveDongtianTutorialV1;
+    return (lesson?.completed === true && lesson?.skipped !== true) ||
+      (legacy?.completed === true && legacy?.played === true && legacy?.deleted === true);
+  }
+
   async function persistFinished(skipped, mode) {
     const current = userData();
     const person = getAuth(getApp()).currentUser;
-    if (!current || !person) return;
+    if (!current || !person) return false;
     const field = mode === 'dongtian' ? DONGTIAN_FIELD : FIELD;
     const value = { version: VERSION, completed: true, skipped: !!skipped, completedAt: Date.now(), scope: mode };
-    current[field] = value;
     try {
       await updateDoc(doc(getFirestore(getApp()), 'users', person.uid), { [field]: value });
+      if (getAuth(getApp()).currentUser?.uid !== person.uid) return false;
+      current[field] = value;
+      return true;
     } catch (error) {
       console.warn('[Tutorial] completion could not be persisted:', error);
+      return false;
     }
   }
 
-  function finish(skipped) {
-    if (!active) return;
+  async function finish(skipped) {
+    if (!active || finishing) return;
     const finishedMode = tutorialMode;
     const shouldResumeStory = startedByStory;
     if (scopeStudioOpen() && window.closeCurriculumStudio?.() === false) return;
+    if (!skipped && finishedMode === 'dongtian' &&
+        (!dongtianDemoCompleted || !dongtianDemoReturned || !dongtianDemoDeleted)) return;
+    finishing = true;
+    completionError = '';
+    renderCardOnly();
+    // 洞天「稍後再學」不寫完成標記；看完後必須成功儲存才通知任務。
+    if (!replayOnly && !(skipped && finishedMode === 'dongtian')) {
+      const saved = await persistFinished(skipped, finishedMode);
+      if (!saved) {
+        finishing = false;
+        completionError = '教學完成紀錄尚未儲存，請重新儲存。成功後才會完成仙道任務。';
+        renderCardOnly();
+        return;
+      }
+    }
     active = false;
+    finishing = false;
     startedByStory = false;
     cleanupExampleQuiz();
     try { window.deleteNewbieDongtianDemo?.({ silent: true }); } catch (_) {}
@@ -727,7 +757,9 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     resizeHandler = null;
     // 剧情交棒期间由主線播放器接手畫面，不額外跳回仙府。
     if (finishedMode === 'question') navigate('page-home');
-    if (!replayOnly) persistFinished(skipped, finishedMode);
+    if (finishedMode === 'dongtian' && !skipped && !replayOnly) {
+      window.dispatchEvent(new CustomEvent('xiuxian:dongtian-tutorial-completed', { detail: { kind: finishedMode } }));
+    }
     if (shouldResumeStory) {
       window.dispatchEvent(new CustomEvent('xiuxian:story-tutorial-finished', {
         detail: { kind: finishedMode, skipped: !!skipped, replay: replayOnly }
@@ -746,8 +778,9 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     try { window.deleteNewbieDongtianDemo?.({ silent: true }); } catch (_) {}
     tutorialMode = mode === 'dongtian' ? 'dongtian' : 'question';
     startedByStory = options.story === true;
-    const savedField = tutorialMode === 'dongtian' ? DONGTIAN_FIELD : FIELD;
-    replayOnly = options.replay === true || !!userData()?.[savedField]?.completed;
+    replayOnly = options.replay === true || tutorialCompleted(tutorialMode);
+    finishing = false;
+    completionError = '';
     steps = tutorialMode === 'dongtian' ? dongtianSteps : questionSteps;
     active = true;
     index = 0;
@@ -784,23 +817,32 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       button.id = 'dongtian-story-tutorial-replay';
       button.type = 'button';
       button.className = 'newbie-tutorial-replay';
-      button.innerHTML = '<i class="fa-solid fa-mountain"></i><span>重新查看洞天教學（第二章）</span>';
-      button.onclick = () => window.openXiuxianStoryChapter?.('qi-five-dongtian');
+      button.innerHTML = '<i class="fa-solid fa-mountain"></i><span>查看洞天新手教程</span>';
+      button.onclick = () => window.startDongtianTutorial?.();
       const after = document.getElementById('newbie-tutorial-replay');
       if (after) after.insertAdjacentElement('afterend', button);
       else page.prepend(button);
     }
+    const dongtianButton = document.getElementById('dongtian-story-tutorial-replay');
+    if (dongtianButton) {
+      dongtianButton.disabled = Number(userData()?.stats?.totalScore || 0) < 5;
+      dongtianButton.title = dongtianButton.disabled ? '修為達 5（煉氣五層）後開啟' : '獨立洞天實作教程';
+    }
   }
 
   function blocking() {
-    return !!document.querySelector('#xiuxian-story-layer,#battle-tutorial-layer,#progression-v2-modal,.training-v3-modal-backdrop,#realm-breakthrough-feedback,#golden-core-tutorial-layer,#report-modal:not(.hidden)');
+    return !!document.querySelector('#xiuxian-story-layer,#xiuxian-story-archive,#battle-tutorial-layer,#progression-v2-modal,.training-v3-modal-backdrop,#realm-breakthrough-feedback,#golden-core-tutorial-layer,#dongtian-overlay,#report-modal:not(.hidden)');
   }
 
-  // 問道與洞天教學都由所屬章節接棒，不再由登入後的定時器搶先啟動。
+  // 問道由第一章接棒；洞天教程獨立點擊開啟，兩者皆不由定時器啟動。
   window.startNewbieTutorial = () => start('question', { replay: !!userData()?.[FIELD]?.completed });
   window.startStoryQuestionTutorial = (options = {}) => start('question', { ...options, story: true });
   window.startStoryDongtianTutorial = (options = {}) => start('dongtian', { ...options, story: true });
-  window.replayStoryDongtianTutorial = () => window.openXiuxianStoryChapter?.('qi-five-dongtian');
+  window.startDongtianTutorial = () => {
+    if (!userData() || Number(userData()?.stats?.totalScore || 0) < 5 || blocking()) return false;
+    return start('dongtian');
+  };
+  window.replayStoryDongtianTutorial = () => window.startDongtianTutorial();
   function boot() {
     ensureStyle();
     bindDemoGuards();

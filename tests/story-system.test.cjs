@@ -152,7 +152,7 @@ test('each main story chapter declares a related game page and scene preparation
   assert.match(engine, /xiuxian:story-scene-prepared/);
 
   const expected = [
-    ["qi-five-dongtian", "page-settings"],
+    ["qi-five-dongtian", "page-home"],
     ["foundation-first-battle", "page-battle"],
     ["foundation-refinery", "page-training"],
     ["foundation-mid-alliance", "page-social"],
@@ -239,14 +239,13 @@ test('main story cannot auto-start until grade, strong subjects and weak subject
 });
 
 
-test('chapter two pauses between its opening and aftermath for one-question Dongtian practice', () => {
+test('chapter two is a Bamboo Heavenly Venerable dream with no embedded Dongtian lesson', () => {
   const chapter = scripts.slice(scripts.indexOf("id: 'qi-five-dongtian'"), scripts.indexOf("id: 'foundation-first-battle'"));
-  assert.match(chapter, /tutorialAfterLine: 11/);
-  const before = chapter.slice(chapter.indexOf('lines: Object.freeze'), chapter.indexOf('我在這裡等你'));
-  const after = chapter.slice(chapter.indexOf('我在這裡等你'));
-  assert.match(before, /私人範例，只需一題/);
-  assert.match(after, /你重新回到紫色門扉前/);
-  assert.match(after, /黑色符紋/);
+  assert.doesNotMatch(chapter, /tutorialKind:|tutorialAfterLine:|tutorials:/);
+  assert.match(chapter, /第二章 · 竹簡天尊/);
+  assert.match(chapter, /收回指尖的入夢靈光/);
+  assert.match(chapter, /更加用心修煉/);
+  assert.match(chapter, /心滿意足地離開/);
   assert.match(engine, /function handoffStoryTutorial\(kind\)/);
   assert.match(engine, /window\.startStoryDongtianTutorial/);
   assert.match(engine, /storyTutorialPaused = true/);
@@ -258,7 +257,7 @@ test('chapter two pauses between its opening and aftermath for one-question Dong
   assert.match(engine, /prepareStoryScene\(currentChapter\)/);
 });
 
-test('main newbie walkthrough teaches question solving; the separate Dongtian walkthrough belongs to chapter two', () => {
+test('main newbie walkthrough teaches question solving; Dongtian is a separate manual walkthrough', () => {
   const question = newbie.slice(newbie.indexOf('const questionSteps = ['), newbie.indexOf('const dongtianSteps = ['));
   const cave = newbie.slice(newbie.indexOf('const dongtianSteps = ['), newbie.indexOf('function ensureStyle()'));
   assert.match(question, /讀題 → 選答案 → 看解析 → 下一題/);
@@ -266,16 +265,16 @@ test('main newbie walkthrough teaches question solving; the separate Dongtian wa
   assert.match(cave, /requiresDongtianOpen: true/);
   assert.match(cave, /requiresDongtianDelete: true/);
   assert.match(newbie, /window\.startStoryDongtianTutorial = \(options = \{\}\) => start\('dongtian', \{ \.\.\.options, story: true \}\)/);
+  assert.match(newbie, /window\.startDongtianTutorial = \(\) =>/);
   assert.match(newbie, /scope: mode/);
   assert.match(newbie, /DONGTIAN_FIELD = 'storyDongtianTutorialV1'/);
   assert.match(newbie, /if \(shouldResumeStory\)/);
 });
 
 
-test('every main tutorial is a scene in its own chapter and chapter replay visits its tutorial', () => {
+test('chapters with embedded main tutorials replay their own lessons', () => {
   const definitions = [
     ['prologue-enter-sect', 'question', 32],
-    ['qi-five-dongtian', 'dongtian', 11],
     ['golden-core-truth', 'golden-core', 14]
   ];
   for (const [id, kind, checkpoint] of definitions) {
@@ -303,8 +302,8 @@ test('story-run tutorial replay is read only and returns to the next dialogue', 
   assert.match(engine, /detail\?\.kind/);
   assert.match(engine, /pendingStoryTutorial !== kind/);
   assert.match(engine, /lineIndex = Math\.min\(lineIndex \+ 1/);
-  assert.match(newbie, /if \(!replayOnly\) persistFinished\(skipped, finishedMode\)/);
-  assert.match(newbie, /replayOnly = options\.replay === true \|\| !!userData\(\)\?\.\[savedField\]\?\.completed/);
+  assert.match(newbie, /const saved = await persistFinished\(skipped, finishedMode\)/);
+  assert.match(newbie, /replayOnly = options\.replay === true \|\| tutorialCompleted\(tutorialMode\)/);
   assert.match(battle, /if \(previewOnly\) return;/);
   assert.match(battle, /startedByStory = options\.story === true/);
   assert.match(battle, /kind: 'battle-shen', replay: previewOnly/);

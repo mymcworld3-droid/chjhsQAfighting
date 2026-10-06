@@ -44,7 +44,10 @@
   });
   const STORY_AFTER = {
     'path-first-answer': [storyQuest('qi-one-ask-dao', '入門續篇 · 問道不是猜答案', 1)],
-    'path-qi-five': [storyQuest('qi-five-dongtian', '第二章 · 把知識煉成一座山', 5)],
+    'path-qi-five': [
+      storyQuest('qi-five-dongtian', '第二章 · 竹簡天尊', 5),
+      quest('path-dongtian-tutorial', '完成洞天新手教程', '親自完成洞天範例的作答、結算、返回與刪除，並在最後儲存教學完成紀錄。稍後再學不算完成。', 'dongtian-tutorial', 1, 50, 0, 'dongtian-tutorial', 5)
+    ],
     'path-foundation': [
       storyQuest('foundation-first-battle', '第三章 · 築基之後，別只會做題', 10),
       storyQuest('foundation-refinery', '第四章 · 法寶不是把東西丟進火裡', 10)
@@ -94,6 +97,12 @@
       dailyClaimed: raw?.dailyDate === date && Array.isArray(raw.dailyClaimed) ? raw.dailyClaimed.filter(id => DAILY.some(q => q.id === id)) : [] };
   }
   function progressValue(q, user, p, kind, date) {
+    if (q.metric === 'dongtian-tutorial') {
+      const lesson = user?.storyDongtianTutorialV1;
+      const legacy = user?.qiFiveDongtianTutorialV1;
+      return (lesson?.completed === true && lesson?.skipped !== true) ||
+        (legacy?.completed === true && legacy?.played === true && legacy?.deleted === true) ? 1 : 0;
+    }
     if (q.metric === 'story') {
       const seen = user?.storyProgressV1?.seen?.[q.chapterId];
       return seen === true || number(seen?.completedAtMs) > 0 ? 1 : 0;
