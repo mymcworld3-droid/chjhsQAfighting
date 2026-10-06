@@ -1569,7 +1569,9 @@ export const featureReady = (async () => {
       toast('請先關閉目前的劇情或教學畫面，再進入鬥法。');
       return;
     }
-    resetRuntime(); state.starting = true; ensurePage(); window.switchToPage?.('page-battle'); showSection('lobby'); renderLobby(null);
+    resetRuntime(); state.starting = true;
+    window.dispatchEvent(new CustomEvent('xiuxian:invite-blocked'));
+    ensurePage(); window.switchToPage?.('page-battle'); showSection('lobby'); renderLobby(null);
     try {
       await window.ensureCombatStats?.(); const myData = playerSnapshot(); setPlayerAvatar('bv2-match-me-avatar', myData); setText('bv2-match-me', myData.name); setText('bv2-match-me-core', `本命金丹：${playerCoreLabel(myData)}${playerPowerLabel(myData)}${playerNascentSealLabel(myData)}`);
       const joined = await findAndClaimRoom(myData); if (joined) { state.role = 'guest'; subscribeRoom(joined); return; }
@@ -1619,6 +1621,7 @@ export const featureReady = (async () => {
   async function joinSpecificRoom(roomId) {
     if (state.starting || state.roomId || score() < FOUNDATION_SCORE || !me() || !roomId || storyOrTutorialOpen()) return false;
     state.starting = true;
+    window.dispatchEvent(new CustomEvent('xiuxian:invite-blocked'));
     try {
       const myData = playerSnapshot();
       const joined = await findAndClaimRoom(myData, roomId);
@@ -1662,7 +1665,9 @@ export const featureReady = (async () => {
       const active = ownRooms.filter((entry) => {
         const room = entry.data(); return Number(room.modeVersion) === BATTLE_V2.modeVersion && ['waiting', 'intro', 'playing', 'settled', 'preparing'].includes(room.status) && !(room.status === 'waiting' && isRoomStale(room));
       }).sort((a, b) => timestampMs(b.data().updatedAt, b.data().createdAtMs) - timestampMs(a.data().updatedAt, a.data().createdAtMs))[0];
-      if (!active) return; const room = active.data(); state.role = room.host?.uid === uid ? 'host' : 'guest'; ensurePage(); window.switchToPage?.('page-battle'); subscribeRoom(active.id); toast('已恢復上次尚未結束的鬥法。');
+      if (!active) return; const room = active.data();
+      window.dispatchEvent(new CustomEvent('xiuxian:invite-blocked'));
+      state.role = room.host?.uid === uid ? 'host' : 'guest'; ensurePage(); window.switchToPage?.('page-battle'); subscribeRoom(active.id); toast('已恢復上次尚未結束的鬥法。');
     } catch (error) { console.warn('[Battle v2] session recovery skipped:', error); }
     finally {
       state.recovering = false;
