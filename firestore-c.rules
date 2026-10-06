@@ -31,9 +31,11 @@ service cloud.firestore {
       return isHost() || isGuest();
     }
 
-    // A player may claim an unoccupied waiting room as guest.  The Battle v2
+    // A player may claim an unoccupied waiting room as guest. The Battle v2
     // client also applies the nascent-soul duel snapshot to the host at this
     // transition, so host data may change, but the host UID must remain fixed.
+    // Question-prefetch lease fields are intentionally NOT allowed here: the
+    // guest first becomes a member, then claims prefetch in a separate update.
     function isValidGuestJoin() {
       return signedIn()
         && resource.data.status == 'waiting'
