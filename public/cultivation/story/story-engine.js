@@ -204,6 +204,9 @@ import {
     // The PvP room remains busy even when the result overlay is hidden or a scene is preparing.
     if (window.isXiuxianBattleBusy?.()) return true;
     return !!document.querySelector([
+      '#game-startup-gate',
+      '#startup-cloud-curtain',
+      '#page-onboarding:not(.hidden)',
       '#newbie-tutorial-layer',
       '#qi-five-dongtian-tutorial-layer',
       '#golden-core-tutorial-layer',
@@ -548,7 +551,7 @@ import {
       return;
     }
     if (!onboardingReady()) return;
-    if (window.isXiuxianOpeningCinematicRequired?.() || window.isXiuxianOpeningCinematicActive?.()) return;
+    if (window.isXiuxianOpeningCinematicActive?.()) return;
     if (active || storyTutorialPaused || document.getElementById(ARCHIVE_ID) || Date.now() < snoozeUntil || blocking() || autoPermits <= 0) return;
     if (!data()?.stats || !user()) return;
     if (!gender()) {
@@ -588,8 +591,8 @@ import {
       const read = !!seen[chapter.id];
       return `<button type="button" class="story-archive-item" data-story-chapter="${escapeHtml(chapter.id)}" ${unlocked ? '' : 'disabled'}><em>${escapeHtml(chapter.realm)}</em><span><b>${escapeHtml(chapter.title)}</b><small>${escapeHtml(chapter.subtitle)}</small></span><span>${!unlocked ? `需 ${chapter.minScore} 修為` : (read ? '已讀 · 重播' : '已解鎖')}</span></button>`;
     }).join('');
-    const openingRow = '<button type="button" class="story-archive-item" data-story-opening-replay><em>序幕</em><span><b>修仙世界 · 仙途之始</b><small>九幕世界觀開場 · 重播不修改進度</small></span><span>重播</span></button>';
-    el.innerHTML = `<section class="story-archive-card"><div class="story-archive-head"><div><h3>主線劇情回顧</h3><p>已解鎖章節可隨時重播；重播不會改動修為與獎勵。</p></div><button type="button" class="story-archive-close">×</button></div><div class="story-archive-list">${openingRow}${canPreviewAllStory() ? '<button type="button" class="story-archive-item" data-admin-gender-preview><em>管理員</em><span><b>性別選擇</b><small>自由預覽 · 不修改角色性別</small></span></button>' : ''}${rows}${canPreviewAllStory() ? ['intro','shen-story','gu-intro','gu-result'].map((scene, i) => `<button type="button" class="story-archive-item" data-admin-battle-scene="${scene}"><em>管理員</em><span><b>${['沈清霜切磋','一劍之後 · 師姐震驚','顧長風入場','教學戰後對話'][i]}</b><small>自由預覽 · 不寫入進度</small></span></button>`).join('') : ''}</div></section>`;
+    const openingRow = '<button type="button" class="story-archive-item" data-story-opening-replay><em>世界觀</em><span><b>修仙世界 · 仙途之始</b><small>九幕世界觀影片 · 自由重播，不修改進度</small></span><span>重播</span></button>';
+    el.innerHTML = `<section class="story-archive-card"><div class="story-archive-head"><div><h3>主線劇情回顧</h3><p>已解鎖章節可隨時重播；重播不會改動修為與獎勵。</p></div><button type="button" class="story-archive-close">×</button></div><div class="story-archive-list">${canPreviewAllStory() ? '<button type="button" class="story-archive-item" data-admin-gender-preview><em>管理員</em><span><b>性別選擇</b><small>自由預覽 · 不修改角色性別</small></span></button>' : ''}${rows}${openingRow}${canPreviewAllStory() ? ['intro','shen-story','gu-intro','gu-result'].map((scene, i) => `<button type="button" class="story-archive-item" data-admin-battle-scene="${scene}"><em>管理員</em><span><b>${['沈清霜切磋','一劍之後 · 師姐震驚','顧長風入場','教學戰後對話'][i]}</b><small>自由預覽 · 不寫入進度</small></span></button>`).join('') : ''}</div></section>`;
     el.querySelector('[data-story-opening-replay]')?.addEventListener('click', () => {
       el.remove();
       window.openXiuxianOpeningCinematic?.({ replay: true });
@@ -665,7 +668,8 @@ import {
     document.addEventListener('keydown', onKeydown);
     window.addEventListener('xiuxian:stats-updated', handleScoreUpdate);
     window.addEventListener('xiuxian:battle-session-ended', () => setTimeout(maybeAutoStart, 180));
-    window.addEventListener('xiuxian:opening-cinematic-completed', () => {
+    window.addEventListener('xiuxian:opening-cinematic-completed', (event) => {
+      if (event.detail?.replay) return;
       autoPermits = Math.max(1, autoPermits);
       snoozeUntil = 0;
       setTimeout(maybeAutoStart, 120);

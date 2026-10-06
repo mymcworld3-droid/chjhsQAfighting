@@ -14,13 +14,36 @@ test('opening cinematic uses all nine uploaded PNG panels in order', () => {
   assert.match(opening, /const SCENES = Object\.freeze\(\[/);
 });
 
-test('first unseen viewing is mandatory and only completes after final scene', () => {
-  assert.match(opening, /openingCinematicSeen === true/);
-  assert.match(opening, /FIRST_VIEW_MIN_MS = 2200/);
-  assert.match(opening, /if \(!wasReplay\) await persistSeen\(\)/);
-  assert.match(opening, /openingCinematicSeen: true/);
-  assert.match(opening, /踏上仙途/);
-  assert.doesNotMatch(opening, /略過/);
+test('the world cinematic is optional and does not load images or start for a new player', () => {
+  const vm = require('node:vm');
+  let imageLoads = 0;
+  let scheduled = 0;
+  const events = [];
+  const ctx = vm.createContext({
+    window: {
+      getCurrentUserData: () => ({ stats: { totalScore: 0 }, storyProgressV1: {} }),
+      addEventListener: (name) => events.push(name)
+    },
+    document: {
+      readyState: 'loading',
+      getElementById: () => null,
+      createElement: () => ({}),
+      head: { appendChild() {} },
+      addEventListener() {}
+    },
+    getApp: () => ({}),
+    getAuth: () => ({ currentUser: { uid: 'new-player' } }),
+    Image: function () { imageLoads += 1; },
+    setTimeout: () => { scheduled += 1; },
+    console
+  });
+  vm.runInContext(opening.replace(/^import .*;\n/gm, '') + '\nboot();', ctx);
+  assert.equal(ctx.window.isXiuxianOpeningCinematicRequired(), false);
+  assert.equal(ctx.window.isXiuxianOpeningCinematicActive(), false);
+  assert.equal(ctx.window.openXiuxianOpeningCinematic(), false);
+  assert.equal(imageLoads, 0, 'the optional film should not compete with chapter portraits');
+  assert.equal(scheduled, 0, 'no automatic cinematic playback should be scheduled');
+  assert.deepEqual(events, []);
 });
 
 test('opening captions preserve the intended cultivation-world message', () => {
@@ -40,19 +63,22 @@ test('opening captions preserve the intended cultivation-world message', () => {
   }
 });
 
-test('opening cinematic loads before story and gates story auto-start', () => {
+test('world cinematic remains available for manual replay without gating the new first chapter', () => {
   const openingPos = main.indexOf("'./cultivation/story/opening-cinematic.js'");
   const storyPos = main.indexOf("'./cultivation/story/story-engine.js'");
   assert.ok(openingPos >= 0 && storyPos > openingPos);
   assert.match(story, /#xiuxian-opening-cinematic/);
-  assert.match(story, /isXiuxianOpeningCinematicRequired/);
+  assert.match(story, /isXiuxianOpeningCinematicActive/);
+  assert.doesNotMatch(story, /isXiuxianOpeningCinematicRequired/);
   assert.match(story, /data-story-opening-replay/);
   assert.match(story, /xiuxian:opening-cinematic-completed/);
+  assert.match(story, /if \(event\.detail\?\.replay\) return/);
 });
 
-test('opening respects reduced motion and waits for onboarding and startup cloud transition to finish', () => {
+test('the replacement chapter waits for profile and startup clouds and the optional film respects reduced motion', () => {
   assert.match(opening, /prefers-reduced-motion:reduce/);
-  assert.match(opening, /#page-onboarding:not\(\.hidden\)/);
-  assert.match(opening, /#startup-cloud-curtain/);
-  assert.match(opening, /hasCompletedPlayerProfile/);
+  assert.match(story, /#page-onboarding:not\(\.hidden\)/);
+  assert.match(story, /#startup-cloud-curtain/);
+  assert.match(story, /#game-startup-gate/);
+  assert.match(story, /hasCompletedPlayerProfile/);
 });

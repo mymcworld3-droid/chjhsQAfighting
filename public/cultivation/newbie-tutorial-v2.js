@@ -2,7 +2,7 @@ import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.j
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
-// 凡人期新手教學：先用不計修為的範例題教會答題、看題解與回報問題，再介紹後續功能。
+// 第一章「問道靈根」的師姐授課：先練習一題，再認識修習範圍與難度。
 (function () {
   'use strict';
 
@@ -37,13 +37,13 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
 
   const questionSteps = [
     {
-      page: 'page-home', target: '#xiuxian-panel', kicker: '第一步 · 凡人入門', title: '先學會問道答題',
-      body: '凡人期最重要的事情就是學會答題。接下來先做一題<strong>不計修為的範例題</strong>，帶你看懂題目、選答案、查看題解，以及題目有問題時如何回報。',
+      page: 'page-home', target: '#xiuxian-panel', kicker: '第一章 · 師姐授課', title: '問道靈根的第一堂課',
+      body: '沈清霜：「問道靈根靠理解凝聚悟念。先做一題<strong>不計修為的範例題</strong>，我帶你讀題、選答案、查看題解，再學會如何回報題目中的問題。」',
       note: '範例題只用來教學，不會改變修為、答題紀錄或連勝。'
     },
     {
       page: 'page-quiz', target: '#question-text', demo: true, kicker: '第二步 · 看題目', title: '先讀清楚題目',
-      body: '正式問道時，題目會顯示在這裡。上方標籤會告訴你題目類型；這次的範例題是 <strong>2 + 3 = ?</strong>。',
+      body: '沈清霜：「先讀題，再動手。上方標籤會告訴你題目類型；這枚入門玉簡的範例題是 <strong>2 + 3 = ?</strong>。」',
       note: '先理解題意，再往下選答案。這題不計修為。'
     },
     {
@@ -53,7 +53,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     },
     {
       page: 'page-quiz', target: '#feedback-section', demo: true, requiresAnswer: true, kicker: '第四步 · 看題解', title: '答完一定要看題解',
-      body: '作答後這裡會顯示結果與<strong>題解參悟</strong>。不論答對或答錯，都建議看清楚解析，確認自己是真的理解，而不是只記答案。',
+      body: '作答後這裡會顯示結果與<strong>題解參悟</strong>。沈清霜：「不論答對或答錯，都把解析讀清楚。知道為什麼，才能將所學用在下一題。」',
       note: '正式題目答對會增加修為；這題只是教學範例。'
     },
     {
@@ -63,7 +63,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     },
     {
       page: 'page-quiz', target: '#btn-report', demo: true, requiresReport: true, kicker: '第六步 · 回報問題', title: '題目有錯就按「回報問題」',
-      body: '如果遇到<strong>答案錯誤、題意不清、選項有問題、錯字或解析不合理</strong>，請按下這顆「回報問題」。現在請實際按一次看看。',
+      body: '沈清霜：「玉簡也可能有錯。遇到<strong>答案錯誤、題意不清、選項有問題、錯字或解析不合理</strong>，便按『回報問題』，把理由說清楚。」現在請實際按一次看看。',
       note: '教學期間不會真的送出回報。'
     },
     {
@@ -78,8 +78,8 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     },
     {
       page: 'page-settings', target: '#dongfu-scope-card .dongfu-collapse-head', requiresScopeOpen: true,
-      kicker: '第九步 · 進入研修所', title: '點亮起的「範圍設定」',
-      body: '複習範圍現在是<strong>獨立的全螢幕課程研修所</strong>，不再展開下拉選單。請親自點擊洞府中亮起的「範圍設定」進入。',
+      kicker: '第九步 · 安排修習範圍', title: '點亮起的「範圍設定」',
+      body: '沈清霜：「先選你要鑽研的學問。」複習範圍位於<strong>獨立的全螢幕課程研修所</strong>，請親自點擊洞府中亮起的「範圍設定」進入。',
       note: '請點亮起的入口；點其他地方不會略過這個操作。'
     },
     {
@@ -91,7 +91,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     {
       page: 'page-settings', target: '#scope-studio .ss-picker .ss-panel-head', requiresScopeOpenView: true,
       kicker: '研修所 · 三步選課', title: '選完科目就直接挑章節',
-      body: '在「探索課程」依序選<strong>年級 → 科目 → 章節與考點</strong>。上下學期已自動合併，也不需要再選「複習版」或出版社版本；加入後可在「我的修習卷」檢查，最後按「儲存出題範圍」。',
+      body: '在「探索課程」依序選<strong>年級 → 科目 → 章節與考點</strong>。上下學期已自動合併，也不需要再選「複習版」或出版社版本。所有年級選項下方還有<strong>自訂範圍</strong>，可選年級、科目並填入想練習的內容。加入後在「我的修習卷」檢查，最後按「儲存出題範圍」。',
       note: '章節旁會標示上／下學期，方便辨識原冊次。理解後點非金框處繼續。'
     },
     {
@@ -107,8 +107,8 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     },
     {
       page: 'page-home', target: '#xiuxian-panel',
-      kicker: '完成 · 問道入門', title: '現在可以開始正式問道',
-      body: '你已學會<strong>讀題 → 選答案 → 看解析 → 下一題</strong>，也知道題目有問題時如何回報。先靠問道提升修為；煉氣五層時，沈清霜會在第二章帶你體驗洞天。',
+      kicker: '第一章 · 授課完成', title: '回到仙府，繼續與師姐對話',
+      body: '你已學會<strong>讀題 → 選答案 → 看解析 → 下一題</strong>，也認識了回報問題、修習範圍與難度設定。沈清霜仍在仙府等你，完成教學後會接續第一章對話。煉氣五層時，沈清霜會在第二章帶你體驗洞天。',
       note: '洞天實作會隨第二章劇情開啟，不需要現在把所有功能一次學完。'
     }
   ];
@@ -773,7 +773,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       button.id = 'newbie-tutorial-replay';
       button.type = 'button';
       button.className = 'newbie-tutorial-replay';
-      button.innerHTML = '<i class="fa-solid fa-circle-question"></i><span>重新查看問道教學</span>';
+      button.innerHTML = '<i class="fa-solid fa-circle-question"></i><span>重新查看問道靈根與教學（第一章）</span>';
       button.onclick = () => window.openXiuxianStoryChapter?.('prologue-enter-sect');
       const first = page.firstElementChild;
       if (first) first.insertAdjacentElement('afterend', button);

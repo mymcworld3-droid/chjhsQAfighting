@@ -62,7 +62,7 @@ test('main story spans the complete current realm curve from mortal to true immo
 
 test('Shen Qingshuang remains the main guide and the comedy comes from deadpan contrast', () => {
   assert.match(scripts, /name: '沈清霜'/);
-  assert.match(scripts, /其他人都走了/);
+  assert.match(scripts, /不必回頭。再聽一會兒/);
   assert.match(scripts, /所以先從你不會的開始/);
   assert.match(scripts, /比較亮的失敗品/);
   assert.match(scripts, /我只是懶得重新教一個/);
@@ -273,7 +273,7 @@ test('main newbie walkthrough teaches question solving; the separate Dongtian wa
 
 test('every main tutorial is a scene in its own chapter and chapter replay visits its tutorial', () => {
   const definitions = [
-    ['prologue-enter-sect', 'question', 20],
+    ['prologue-enter-sect', 'question', 32],
     ['qi-five-dongtian', 'dongtian', 11],
     ['golden-core-truth', 'golden-core', 14]
   ];

@@ -106,25 +106,9 @@ function currentUser() {
   try { return getAuth(getApp()).currentUser; } catch (_) { return null; }
 }
 
-function progress() {
-  return userData()?.[FIELD] || {};
-}
-
-function onboardingReady() {
-  const profile = userData()?.profile || {};
-  if (typeof window.hasCompletedPlayerProfile === 'function') {
-    return window.hasCompletedPlayerProfile(profile);
-  }
-  const value = (input) => String(input ?? '').trim();
-  return Boolean(value(profile.educationLevel) && value(profile.strongSubjects) && value(profile.weakSubjects));
-}
-
-function hasSeenOpening() {
-  return progress()?.openingCinematicSeen === true;
-}
-
 function required() {
-  return !!currentUser() && !!userData()?.stats && onboardingReady() && !hasSeenOpening();
+  // 自動開場已由第一章「問道靈根」接手；九幕影片僅供玩家自行重播。
+  return false;
 }
 
 function escapeHtml(value) {
@@ -273,7 +257,7 @@ function layer() {
     el.id = LAYER_ID;
     el.setAttribute('role', 'dialog');
     el.setAttribute('aria-modal', 'true');
-    el.setAttribute('aria-label', '修仙世界序章');
+    el.setAttribute('aria-label', '修仙世界觀影片');
     document.body.appendChild(el);
   }
   return el;
@@ -319,7 +303,7 @@ function renderScene() {
       <div class="xoc-vignette"></div>
       <div class="xoc-particles">${particleMarkup()}</div>
       <div class="xoc-top">
-        <div class="xoc-counter">序幕 · ${String(sceneIndex + 1).padStart(2, '0')} / 09</div>
+        <div class="xoc-counter">世界觀 · ${String(sceneIndex + 1).padStart(2, '0')} / 09</div>
         ${close}
       </div>
       <div class="xoc-caption">
@@ -448,16 +432,6 @@ function open(options = {}) {
   return true;
 }
 
-function maybeAutoStart() {
-  if (active || document.getElementById(LAYER_ID)) return;
-  if (!required()) return;
-  if (document.querySelector('#game-startup-gate,#startup-cloud-curtain,#page-onboarding:not(.hidden)')) {
-    setTimeout(maybeAutoStart, 500);
-    return;
-  }
-  open();
-}
-
 function onKeydown(event) {
   if (!active) return;
   if (event.target?.matches?.('input,textarea,select,button')) return;
@@ -487,15 +461,7 @@ window.getXiuxianOpeningCinematicScenes = () => SCENES.map((scene, index) => ({
 function boot() {
   ensureStyle();
   document.addEventListener('keydown', onKeydown);
-  void preloadImages();
-
-  window.addEventListener('xiuxian:user-ready', () => setTimeout(maybeAutoStart, 60));
-  window.addEventListener('xiuxian:onboarding-completed', () => setTimeout(maybeAutoStart, 80));
-  window.addEventListener('xiuxian:opening-cinematic-completed', () => {
-    setTimeout(() => window.dispatchEvent(new CustomEvent('xiuxian:story-opening-released')), 50);
-  });
-
-  setTimeout(maybeAutoStart, 120);
+  // 影片圖片在 open() 時才預載，讓新玩家先進入主線與入門教學。
 }
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
