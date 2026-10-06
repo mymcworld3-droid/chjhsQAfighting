@@ -1386,6 +1386,11 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
   }
 
   window.openRaidHub = openHub;
+  window.isXiuxianRaidInviteBlocked = function () {
+    return state.status === 'loading' ||
+      (state.roomId && ['waiting', 'active'].includes(state.room?.status)) ||
+      ['lobby', 'active', 'question', 'review', 'submitting', 'spectating'].includes(state.status);
+  };
   window.joinRaidRoomInvite = async function (roomCode) {
     if (state.roomId && state.room?.status && !['won', 'lost', 'closed'].includes(state.room.status)) return false;
     await enterRoom('code', roomCode);
