@@ -1084,6 +1084,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
   function attachRoom(roomId) {
     state.roomUnsub?.();
     state.roomId = roomId;
+    window.dispatchEvent(new CustomEvent('xiuxian:invite-blocked'));
     state.roomUnsub = subscribeRaidRoom(roomId, handleRoomSnapshot, error => {
       console.error('[Raid] room listener failed:', error);
       toast('團本連線中斷，正在嘗試保留房間。');
@@ -1097,6 +1098,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     if (storyOpen()) return toast('目前有劇情或教學進行中。');
     if (state.roomId && ['won', 'lost', 'closed'].includes(state.room?.status)) resetRaid(false);
     state.status = 'loading';
+    window.dispatchEvent(new CustomEvent('xiuxian:invite-blocked'));
     document.body.classList.add('raid-session-active');
     window.switchToPage?.(PAGE_ID);
     show('question');
