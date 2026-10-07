@@ -272,7 +272,7 @@ test('solo next rolls once on answered questions and never clears a question res
   const w = { currentActiveQuiz: quiz, isOpportunityActive: () => false,
     maybeEncounterOpportunity: () => { rolls++; return new Promise(r => { resolve = r; }); },
     startQuizFlow: async () => { starts++; w.currentActiveQuiz = fresh; } };
-  const ctx = vm.createContext({ window: w, auth: { currentUser: { uid: 'u1' } }, answeredSoloQuizzes: answered, document: { getElementById: () => null }, console });
+  const ctx = vm.createContext({ window: w, auth: { currentUser: { uid: 'u1' } }, extendedPracticeState: { active: false, pending: null }, answeredSoloQuizzes: answered, document: { getElementById: () => null }, console });
   vm.runInContext(source.slice(start, end), ctx);
   const first = w.nextQuestion(); await w.nextQuestion(); assert.equal(rolls, 1);
   await w.startQuizFlow(); resolve(true); await first;

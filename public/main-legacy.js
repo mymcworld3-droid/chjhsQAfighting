@@ -2507,6 +2507,13 @@ window.startQuizFlow = async (isNewSession = false) => {
     const opening = ++soloQuizOpenSerial;
     if (!scope || !uid) return;
 
+    // 返回題面時沿用尚未完成的延伸題，包含已停止延伸但尚未答完的本題。
+    const activeQuiz = window.currentActiveQuiz;
+    if (activeQuiz?.extendedPractice && !answeredSoloQuizzes.has(activeQuiz)) {
+        renderQuiz(activeQuiz.data, activeQuiz.rank, activeQuiz.badge);
+        return;
+    }
+
     if (extendedPracticeState.active) {
         document.getElementById('quiz-loading').classList.remove('hidden');
         document.getElementById('loading-text').innerText = `正在生成「${extendedPracticeState.knowledgePoint}」延伸練習…`;
@@ -2948,9 +2955,18 @@ window.nextQuestion = async () => {
     soloNextBusy = true;
     const button = document.getElementById('btn-next-step');
     if (button) button.disabled = true;
+    // 只有完成來源題並按下一題，才啟動先前選定的延伸範圍。
+    const pending = extendedPracticeState.pending;
+    extendedPracticeState.pending = null;
+    if (pending?.quiz === quiz && pending.uid === account && pending.scope === soloQuestionScope()) {
+        extendedPracticeState.active = true;
+        extendedPracticeState.subject = pending.subject;
+        extendedPracticeState.knowledgePoint = pending.knowledgePoint;
+        extendedPracticeState.originQuestion = pending.originQuestion;
+    }
     window.currentActiveQuiz = null;
     try {
-        const intercepted = await window.maybeEncounterOpportunity?.({ quiz });
+        const intercepted = extendedPracticeState.active ? false : await window.maybeEncounterOpportunity?.({ quiz });
         if (auth.currentUser?.uid !== account) return;
         if (!intercepted) await window.startQuizFlow();
     } catch (error) {
@@ -3176,10 +3192,29 @@ const extendedPracticeState = {
     active: false,
     subject: '',
     knowledgePoint: '',
-    originQuestion: ''
+    originQuestion: '',
+    pending: null
 };
 
 window.isExtendedPracticeActive = () => extendedPracticeState.active;
+
+function syncQuizExtendedPracticeControls() {
+    const pending = extendedPracticeState.pending;
+    const stop = document.getElementById('btn-extended-practice-stop');
+    stop?.classList.toggle('hidden', !extendedPracticeState.active && !pending);
+    if (stop) {
+        stop.title = pending ? (extendedPracticeState.active ? '結束延伸練習並取消下一題' : '取消已排入下一題的延伸練習') : '結束延伸練習';
+        const label = stop.querySelector('span');
+        if (label) label.textContent = pending ? '下一題延伸' : '延伸中';
+    }
+    for (const button of document.querySelectorAll('.quiz-helper-practice-btn')) {
+        const queued = !!pending && pending.quiz === window.currentActiveQuiz && pending.knowledgePoint === button.dataset.knowledgePoint;
+        button.disabled = queued;
+        button.title = queued ? '已排入下一題，本題完成後再開始' : '本題完成後，從下一題開始延伸練習';
+        const label = button.querySelector('span');
+        if (label) label.textContent = queued ? '已排入下一題' : '延伸練習';
+    }
+}
 
 const quizHelperState = {
     messages: [],
@@ -3257,11 +3292,13 @@ function quizHelperAppendMessage(role, text, { knowledgePoint = '' } = {}) {
         const practice = document.createElement('button');
         practice.type = 'button';
         practice.className = 'quiz-helper-practice-btn';
-        practice.title = '針對這個知識點繼續練習';
+        practice.dataset.knowledgePoint = point;
+        practice.title = '本題完成後，從下一題開始延伸練習';
         practice.innerHTML = '<i class="fa-solid fa-graduation-cap"></i><span>延伸練習</span><small></small><i class="fa-solid fa-chevron-right"></i>';
         practice.querySelector('small').textContent = point;
         practice.onclick = () => window.startQuizExtendedPractice(point);
         stack.appendChild(practice);
+        syncQuizExtendedPracticeControls();
     }
 
     requestAnimationFrame(() => {
@@ -3329,6 +3366,10 @@ function initQuizHelper() {
 }
 
 function resetQuizHelper(data = {}, { topic = '' } = {}) {
+    const pending = extendedPracticeState.pending;
+    if (pending && (pending.quiz !== window.currentActiveQuiz || pending.uid !== auth.currentUser?.uid || pending.scope !== soloQuestionScope())) {
+        extendedPracticeState.pending = null;
+    }
     initQuizHelper();
     const { shell, input, send, status } = quizHelperElements();
     const hadPreviousQuestion = !!quizHelperState.question;
@@ -3479,33 +3520,34 @@ window.startQuizExtendedPractice = async (knowledgePoint) => {
     if (!point || !currentUserData) return;
 
     const currentQuiz = window.currentActiveQuiz;
-    syncSoloQuestionCache();
-    if (currentQuiz && !answeredSoloQuizzes.has(currentQuiz)) {
-        if (soloQuestionCache.getActive()?.data?.q === currentQuiz.data?.q) {
-            soloQuestionCache.consumeActive({ remember: true });
-        } else {
-            soloQuestionCache.remember?.(currentQuiz);
-        }
-    }
+    const uid = auth.currentUser?.uid;
+    if (!currentQuiz?.data || !uid || soloNextBusy || window.isOpportunityActive?.()) return;
+    if (extendedPracticeState.pending?.quiz === currentQuiz && extendedPracticeState.pending.knowledgePoint === point) return;
 
-    extendedPracticeState.active = true;
-    extendedPracticeState.subject = String(quizHelperState.subject || currentQuiz?.extendedPracticeSubject || '綜合').slice(0, 40);
-    extendedPracticeState.knowledgePoint = point;
-    extendedPracticeState.originQuestion = String(quizHelperState.question || currentQuiz?.data?.q || '').slice(0, 1000);
-    window.currentActiveQuiz = null;
-    setQuizHelperOpen(false, { remember: false });
-    void window.startQuizFlow();
+    extendedPracticeState.pending = {
+        quiz: currentQuiz,
+        uid,
+        scope: soloQuestionScope(),
+        subject: String(quizHelperState.subject || currentQuiz.extendedPracticeSubject || '綜合').slice(0, 40),
+        knowledgePoint: point,
+        originQuestion: String(quizHelperState.question || currentQuiz.data.q || '').slice(0, 1000)
+    };
+    syncQuizExtendedPracticeControls();
+    window.showToast?.(answeredSoloQuizzes.has(currentQuiz)
+        ? `已排入「${point}」，按「下一題」開始延伸練習。`
+        : `已排入「${point}」，完成本題後按「下一題」開始延伸練習。`);
 };
 
 window.endQuizExtendedPractice = () => {
-    if (!extendedPracticeState.active) return;
+    if (!extendedPracticeState.active && !extendedPracticeState.pending) return;
+    const wasActive = extendedPracticeState.active;
     extendedPracticeState.active = false;
     extendedPracticeState.subject = '';
     extendedPracticeState.knowledgePoint = '';
     extendedPracticeState.originQuestion = '';
-    const stop = document.getElementById('btn-extended-practice-stop');
-    stop?.classList.add('hidden');
-    window.showToast?.('已結束延伸練習，下一題回到原本範圍。');
+    extendedPracticeState.pending = null;
+    syncQuizExtendedPracticeControls();
+    window.showToast?.(wasActive ? '已結束延伸練習，下一題回到原本範圍。' : '已取消下一題的延伸練習。');
 };
 
 const quizWhiteboardState = {
@@ -3705,8 +3747,7 @@ function renderQuiz(data, rank, topic) {
     // 每一道新題使用全新的計算空間與問答脈絡，避免上一題殘留。
     resetQuizWhiteboard({ close: true });
     resetQuizHelper(data, { topic });
-    const extendedStop = document.getElementById('btn-extended-practice-stop');
-    extendedStop?.classList.toggle('hidden', !extendedPracticeState.active);
+    syncQuizExtendedPracticeControls();
     document.getElementById('quiz-loading').classList.add('hidden');
     document.getElementById('quiz-container').classList.remove('hidden');
     document.getElementById('quiz-badge').innerText = `${topic} | ${rank}`;
