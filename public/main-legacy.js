@@ -1,5 +1,6 @@
 import './cultivation/quest-rules.js';
 import { resolvePlayerAvatar } from './cultivation/profile-avatar.js';
+import './cultivation/curriculum-range-rules.js';
 import { beginSceneTransition, sceneTheme } from './cultivation/scene-transitions.js';
 import './cultivation/true-immortal.js';
 import { createSoloQuestionCache } from './solo-question-cache.js';
@@ -1611,6 +1612,30 @@ function renderChatMessage(msg, container) {
             else alert('洞天功能載入中，請稍後再試。');
         };
         div.querySelector('.break-words').appendChild(button);
+    }
+    if (msg.type === 'curriculum-share') {
+        const shared = window.CurriculumRangeRules.readChatShare(msg);
+        if (shared.ok) {
+            const card = document.createElement('div');
+            card.className = 'mt-2 p-3 rounded-lg border border-white/20 bg-black/20';
+            card.style.overflowWrap = 'anywhere';
+            const title = document.createElement('strong');
+            title.className = 'block';
+            title.textContent = shared.title;
+            const summary = document.createElement('p');
+            summary.className = 'text-xs mt-1';
+            summary.textContent = shared.units.length + ' 個範圍 · ' + shared.units.slice(0, 3).map(u => u.detail || u.path).join('、') + (shared.units.length > 3 ? '…' : '');
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'block mt-2 px-3 py-2 rounded-lg bg-cyan-700 text-white text-xs';
+            button.textContent = '查看並加入清單';
+            button.onclick = () => {
+                if (window.openSharedCurriculum) window.openSharedCurriculum(msg);
+                else alert('修習清單功能載入中，請稍後再試。');
+            };
+            card.append(title, summary, button);
+            div.querySelector('.break-words').appendChild(card);
+        }
     }
     container.appendChild(div);
 }

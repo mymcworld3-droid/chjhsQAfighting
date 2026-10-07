@@ -1,10 +1,12 @@
 // 範圍研修所：將現有單元選擇器搬入全螢幕，不複製欄位或更改 focusedUnits 結構。
+import { playerRepository } from './data/player-repository.js';
 (function () {
   'use strict';
 
   const $ = id => document.getElementById(id);
   let studio, block, scopeBody, saveButton, cartSource, opened = false;
   let baseline = null, previousFocus = null, bodyOverflow = '', htmlOverflow = '', saving = false;
+  let sharing = false, lastShared = '';
   const clone = value => JSON.parse(JSON.stringify(value));
   const units = () => { const list = $('set-source-mode')?.value === 'focused' ? window.soloSelectedUnits : []; return Array.isArray(list) ? list : []; };
 
@@ -35,6 +37,16 @@
     if (cardSummary) cardSummary.textContent = selected.length ? '已選 ' + selected.length + ' 個範圍 · 點擊全螢幕編輯' : '全螢幕選課 · 選章節、定考點';
     for (const id of ['ss-organize', 'ss-share']) if ($(id)) $(id).disabled = saving || !selected.length;
     if ($('ss-import')) $('ss-import').disabled = saving;
+    const title = window.CurriculumRangeRules.validateShareTitle($('ss-share-title')?.value);
+    if ($('ss-share-title-count')) $('ss-share-title-count').textContent = (title.length || 0) + ' / 20 字' + (title.ok ? '' : '（超過上限或含換行）');
+    $('ss-share-title')?.setAttribute('aria-invalid', String(!title.ok));
+    if ($('ss-share-title')) $('ss-share-title').disabled = sharing;
+    const chatShare = window.CurriculumRangeRules.createChatShare(selected, $('ss-share-title')?.value);
+    const sent = chatShare.ok && JSON.stringify(chatShare.message) === lastShared;
+    if ($('ss-transfer-chat')) {
+      $('ss-transfer-chat').disabled = saving || sharing || !chatShare.ok || sent;
+      $('ss-transfer-chat').textContent = sharing ? '分享中…' : sent ? '已分享到聊天室' : '分享到聊天室';
+    }
     if ($('ss-transfer-panel')?.dataset.mode === 'share') {
       if (!selected.length) $('ss-transfer-panel').hidden = true;
       else {
@@ -58,12 +70,48 @@
     panel.hidden = false;
     input.readOnly = mode === 'share';
     $('ss-transfer-title').textContent = mode === 'share' ? '分享已選清單' : '匯入修習清單';
-    $('ss-transfer-help').textContent = mode === 'share' ? '複製後即可分享給其他修士；對方可在「匯入清單」貼上使用。' : '貼上收到的完整分享內容或分享碼，會加入目前清單並略過重複項目。完成後記得儲存。';
+    $('ss-transfer-help').textContent = mode === 'share' ? '填寫標題後可分享到全服聊天室，其他修士可查看並加入；也可複製分享內容。' : '貼上收到的完整分享內容或分享碼，會加入目前清單並略過重複項目。完成後記得儲存。';
+    $('ss-share-title-field').hidden = mode !== 'share';
+    $('ss-transfer-chat').hidden = mode !== 'share';
     $('ss-transfer-copy').hidden = mode !== 'share';
     $('ss-transfer-native').hidden = mode !== 'share' || typeof navigator.share !== 'function';
     $('ss-transfer-apply').hidden = mode !== 'import';
-    input.focus({ preventScroll:true });
+    (mode === 'share' ? $('ss-share-title') : input).focus({ preventScroll:true });
     panel.scrollIntoView({ block:'nearest' });
+    updateSummary();
+  }
+
+  async function shareToChat() {
+    if (saving || sharing) return;
+    const shared = window.CurriculumRangeRules.createChatShare(units(), $('ss-share-title').value);
+    if (!shared.ok) { feedback(shared.message); return; }
+    const key = JSON.stringify(shared.message);
+    if (key === lastShared) return;
+    sharing = true; updateSummary(); feedback('正在分享到全服聊天室…');
+    try {
+      await playerRepository.shareCurriculum({ code:shared.message.scopeCode, title:shared.message.scopeTitle });
+      lastShared = key;
+      feedback('已分享到全服聊天室，其他修士可查看並加入清單。');
+    } catch (error) {
+      feedback(error?.message || '分享失敗，請檢查連線後再試。');
+    } finally { sharing = false; updateSummary(); }
+  }
+
+  function openShared(message) {
+    const shared = window.CurriculumRangeRules.readChatShare(message);
+    if (!shared.ok) { window.showToast?.(shared.message); return false; }
+    if (!playerRepository.currentUser()) { window.showToast?.('請先登入'); return false; }
+    if (opened || saving || sharing || document.querySelector('.page-section.active-page')?.id !== 'page-social' ||
+        window.isXiuxianBattleBusy?.() || window.isXiuxianRaidInviteBlocked?.()) return false;
+    if (typeof window.importCustomCurriculumRanges !== 'function' || !mount()) {
+      window.showToast?.('修習清單功能載入中，請稍後再試。'); return false;
+    }
+    const importedShare = window.CurriculumRangeRules.shareSelection(shared.units);
+    if (!importedShare.ok) { window.showToast?.(importedShare.message); return false; }
+    open(); setView('cart'); transferPanel('import');
+    $('ss-transfer-text').value = importedShare.text;
+    $('ss-transfer-help').textContent = '「' + shared.title + '」共 ' + shared.units.length + ' 個範圍。確認下方清單後按「加入修習卷」，再儲存出題範圍。';
+    return true;
   }
 
   async function copySelection() {
@@ -133,6 +181,8 @@
     baseline = snapshot();
     $('ss-transfer-panel').hidden = true;
     $('ss-transfer-text').value = '';
+    $('ss-share-title').value = '';
+    lastShared = '';
     feedback('');
     if (block.parentNode !== $('ss-picker-body')) $('ss-picker-body').append(block);
     if (saveButton.parentNode !== $('ss-foot-actions')) $('ss-foot-actions').append(saveButton);
@@ -153,7 +203,7 @@
   }
 
   function close(force = false) {
-    if (!opened || saving) return false;
+    if (!opened || saving || sharing) return false;
     if (!force && changed()) {
       if (!window.confirm('有尚未儲存的範圍變更。確定要放棄本次修改嗎？')) return false;
       window.soloSelectedUnits = clone(JSON.parse(baseline.units));
@@ -186,7 +236,7 @@
   }
 
   async function save() {
-    if (saving) return;
+    if (saving || sharing) return;
     saving = true;
     updateSummary();
     const feedback = $('ss-feedback');
@@ -226,7 +276,7 @@
     const link = document.createElement('link');
     link.id = 'ss-studio-style';
     link.rel = 'stylesheet';
-    link.href = './styles/curriculum-studio.css?v=20261007-scope-share1';
+    link.href = './styles/curriculum-studio.css?v=20261007-scope-chat1';
     if (!$('ss-studio-style')) document.head.append(link);
 
     studio = document.createElement('section');
@@ -262,9 +312,15 @@
             <section id="ss-transfer-panel" class="ss-transfer-panel" hidden aria-labelledby="ss-transfer-title">
               <strong id="ss-transfer-title">分享已選清單</strong>
               <p id="ss-transfer-help"></p>
+              <div id="ss-share-title-field" class="ss-share-title-field">
+                <label for="ss-share-title">聊天室標題（選填，最多 20 字）</label>
+                <input id="ss-share-title" type="text" placeholder="例如：物理段考複習" aria-describedby="ss-share-title-count" autocomplete="off">
+                <small id="ss-share-title-count" aria-live="polite">0 / 20 字</small>
+              </div>
               <label for="ss-transfer-text" class="ss-transfer-label">清單分享內容</label>
               <textarea id="ss-transfer-text" rows="5" maxlength="64000" aria-describedby="ss-transfer-help"></textarea>
               <div class="ss-transfer-actions">
+                <button id="ss-transfer-chat" type="button">分享到聊天室</button>
                 <button id="ss-transfer-copy" type="button">複製清單</button>
                 <button id="ss-transfer-native" type="button">系統分享</button>
                 <button id="ss-transfer-apply" type="button">加入修習卷</button>
@@ -298,6 +354,8 @@
     $('ss-share').addEventListener('click', () => transferPanel('share'));
     $('ss-import').addEventListener('click', () => transferPanel('import'));
     $('ss-transfer-copy').addEventListener('click', copySelection);
+    $('ss-share-title').addEventListener('input', updateSummary);
+    $('ss-transfer-chat').addEventListener('click', shareToChat);
     $('ss-transfer-native').addEventListener('click', nativeShare);
     $('ss-transfer-apply').addEventListener('click', importSelection);
     $('ss-transfer-close').addEventListener('click', () => {
@@ -325,6 +383,7 @@
 
   window.openCurriculumStudio = open;
   window.closeCurriculumStudio = close;
+  window.openSharedCurriculum = openShared;
   window.addEventListener('dongfu:settings-collapsible-ready', mount);
   window.addEventListener('curriculum:scope-draft-change', updateSummary);
   function boot() { mount(); }

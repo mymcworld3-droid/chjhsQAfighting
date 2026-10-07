@@ -4,6 +4,7 @@ import {
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { getProjectServices, getMainUser, authenticatedMainFetch } from './project-repository.js';
 import { resolvePlayerAvatar } from '../profile-avatar.js';
+import '../curriculum-range-rules.js';
 
 const COLLECTION='users';
 function uidValue(uid){const value=String(uid||'').trim();if(!value)throw new Error('玩家 UID 不可為空');return value;}
@@ -34,6 +35,24 @@ export const playerRepository=Object.freeze({
   },
   async subscribe(uid,next,error){const {db}=await services();return onSnapshot(doc(db,COLLECTION,uidValue(uid)),snap=>next?.(snap.exists()?{id:snap.id,...snap.data()}:null),error);},
   async addExamLog(value={}){const {db}=await services();return addDoc(collection(db,'exam_logs'),value);},
+  async shareCurriculum({code,title}={}){
+    const user=getMainUser();
+    if(!user)throw new Error('請先登入');
+    const parsed=globalThis.CurriculumRangeRules.readSharedSelection(code);
+    if(!parsed.ok)throw new Error(parsed.message);
+    const shared=globalThis.CurriculumRangeRules.createChatShare(parsed.units,title);
+    if(!shared.ok)throw new Error(shared.message);
+    const {db}=await services();
+    const snap=await getDoc(doc(db,COLLECTION,user.uid));
+    if(!snap.exists() || getMainUser()?.uid!==user.uid)throw new Error('登入狀態已改變，請重新開啟修習清單');
+    const player=snap.data();
+    return addDoc(collection(db,'global_chat'),{
+      uid:user.uid,displayName:String(player.displayName||'修士'),
+      avatar:resolvePlayerAvatar(player,user),frame:player.equipped?.frame||'',
+      rankLevel:player.stats?.rankLevel||0,totalScore:player.stats?.totalScore||0,
+      ...shared.message,timestamp:serverTimestamp()
+    });
+  },
   async shareDongtian(cave){
     const user=getMainUser();
     if(!user)throw new Error('請先登入');

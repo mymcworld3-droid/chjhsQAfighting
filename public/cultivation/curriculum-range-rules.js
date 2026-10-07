@@ -120,5 +120,33 @@
     } catch (error) { return { ok:false, message:error instanceof SyntaxError ? '分享碼不完整或格式有誤，請重新複製。' : error.message }; }
   }
 
-  return { parseChapters, mergeSelection, organizeSelection, shareSelection, readSharedSelection };
+  function validateShareTitle(value) {
+    if (value != null && typeof value !== 'string') return { ok:false, message:'請輸入清單標題。' };
+    const title = (value || '').trim();
+    const length = typeof Intl.Segmenter === 'function'
+      ? Array.from(new Intl.Segmenter('zh-Hant', { granularity:'grapheme' }).segment(title)).length
+      : Array.from(title).length;
+    if (length > 20 || /[\u0000-\u001f\u007f]/.test(title)) return { ok:false, length, message:'清單標題最多 20 字，請使用單行文字。' };
+    return { ok:true, length, title:title || '我的修習清單' };
+  }
+
+  function createChatShare(list, value) {
+    const title = validateShareTitle(value);
+    if (!title.ok) return title;
+    const shared = shareSelection(list);
+    if (!shared.ok) return shared;
+    return { ok:true, message:{ type:'curriculum-share', scopeTitle:title.title,
+      scopeCode:shared.code, text:'分享了修習清單' } };
+  }
+
+  function readChatShare(message) {
+    if (message?.type !== 'curriculum-share') return { ok:false, message:'這不是修習清單。' };
+    const title = validateShareTitle(message.scopeTitle);
+    if (!title.ok) return title;
+    const parsed = readSharedSelection(message.scopeCode);
+    return parsed.ok ? { ...parsed, title:title.title } : parsed;
+  }
+
+  return { parseChapters, mergeSelection, organizeSelection, shareSelection, readSharedSelection,
+    validateShareTitle, createChatShare, readChatShare };
 });

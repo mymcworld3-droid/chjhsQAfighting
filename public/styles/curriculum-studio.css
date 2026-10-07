@@ -33,6 +33,11 @@ html.scope-studio-open,body.scope-studio-open{overflow:hidden!important;overscro
 #scope-studio .ss-transfer-panel>strong{font-size:14px;color:#d8ede1}
 #scope-studio .ss-transfer-panel p{margin:0;font-size:11px;line-height:1.7;color:#b6c8bf}
 #scope-studio .ss-transfer-label{font-size:11px;color:#b6c8bf}
+#scope-studio .ss-share-title-field{display:grid;gap:6px;font-size:12px;color:#d8ede1}
+#scope-studio .ss-share-title-field[hidden]{display:none!important}
+#scope-studio #ss-share-title{width:100%;min-width:0;min-height:40px;padding:8px 10px;border:1px solid rgba(143,212,200,.28);border-radius:9px;color:#eee1c8;background:#091315;font:inherit}
+#scope-studio #ss-share-title[aria-invalid=true]{border-color:#e7a084}
+#scope-studio #ss-share-title-count{color:#b6c8bf;font-size:11px;text-align:right}
 #scope-studio .ss-transfer-actions{display:flex;gap:7px;flex-wrap:wrap}
 #scope-studio :is(#cs-range-input,#ss-transfer-text){box-sizing:border-box;width:100%;min-width:0;min-height:90px;resize:vertical;padding:10px 12px;border:1px solid rgba(143,212,200,.28);border-radius:10px;background:#091315;color:#eee1c8;font:inherit;font-size:13px;line-height:1.7}
 #scope-studio :is(#cs-range-input,#ss-transfer-text):focus{outline:2px solid #86cfc4;outline-offset:2px}
