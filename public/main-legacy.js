@@ -3304,8 +3304,8 @@ function renderQuizHelperConversation() {
     const introBody = document.createElement('div');
     introBody.className = 'quiz-helper-message-body';
     introBody.textContent = quizHelperState.answered
-        ? '你已經作答，可以問我完整解法、錯因或相關觀念。'
-        : '卡住了嗎？可以直接問這題。我會先給提示，不會在作答前直接揭曉答案。';
+        ? '可以一起核對解法、討論錯因，也能重新檢查題目或解析有沒有疑點。'
+        : '可以一起核對你的步驟或答案，也能討論題目的疑點。直接貼出你的計算或疑問吧。';
     intro.appendChild(introBody);
     messages.appendChild(intro);
 
@@ -3381,14 +3381,15 @@ async function sendQuizHelperMessage(rawMessage) {
             body: JSON.stringify({
                 question: quizHelperState.question,
                 options: quizHelperState.options,
+                subject: quizHelperState.subject,
                 message,
                 history,
                 answered: quizHelperState.answered,
-                ...(quizHelperState.answered ? {
-                    explanation: quizHelperState.explanation,
-                    selectedOption: quizHelperState.selectedIndex >= 0 ? quizHelperState.options[quizHelperState.selectedIndex] : '',
-                    correctOption: quizHelperState.correctIndex >= 0 ? quizHelperState.options[quizHelperState.correctIndex] : ''
-                } : {})
+                explanation: quizHelperState.explanation,
+                selectedOption: quizHelperState.answered && Number.isInteger(quizHelperState.selectedIndex)
+                    ? quizHelperState.options[quizHelperState.selectedIndex] || '' : '',
+                correctOption: Number.isInteger(quizHelperState.correctIndex)
+                    ? quizHelperState.options[quizHelperState.correctIndex] || '' : ''
             })
         });
         const payload = await response.json().catch(() => ({}));

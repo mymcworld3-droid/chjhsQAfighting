@@ -990,7 +990,7 @@ body.xianxia-theme main:has(#page-training.active-page),
                                     <span class="quiz-helper-avatar"><i class="fa-solid fa-user-graduate"></i></span>
                                     <div>
                                         <strong>問道助手</strong>
-                                        <small>針對此題提問</small>
+                                        <small>一起核對、討論題目</small>
                                     </div>
                                 </div>
                                 <button type="button" class="quiz-helper-collapse" onclick="toggleQuizHelper(false)" aria-label="縮小問道助手" title="縮小">
@@ -1002,9 +1002,10 @@ body.xianxia-theme main:has(#page-training.active-page),
                                 <button type="button" onclick="askQuizHelperPreset('給我一個提示，但不要直接告訴我答案。')">給我提示</button>
                                 <button type="button" onclick="askQuizHelperPreset('這題應該先從哪個觀念開始？')">從哪開始</button>
                                 <button type="button" onclick="askQuizHelperPreset('可以把這題拆成幾個步驟嗎？')">拆解步驟</button>
+                                <button type="button" onclick="askQuizHelperPreset('請重新檢查題目條件、選項和原題解析是否一致，並說明你的依據。')">檢查題目</button>
                             </div>
                             <form class="quiz-helper-compose" onsubmit="submitQuizHelper(event)">
-                                <textarea id="quiz-helper-input" rows="1" maxlength="600" placeholder="輸入你對這題的疑問…" aria-label="輸入對題目的疑問"></textarea>
+                                <textarea id="quiz-helper-input" rows="1" maxlength="600" placeholder="例如：總功是 58 嗎？題目有矛盾嗎？" aria-label="輸入對題目的疑問"></textarea>
                                 <button id="quiz-helper-send" type="submit" aria-label="送出問題" title="送出">
                                     <i class="fa-solid fa-paper-plane"></i>
                                 </button>
