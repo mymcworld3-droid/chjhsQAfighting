@@ -10,6 +10,16 @@
   --app-vv-height:100dvh;
 }
 
+/* Only a displayed question/review may use native pinch zoom. Keep normal scrolling
+   in locked views, including nested scrollers that stop touch-action inheritance. */
+html.app-zoom-locked,
+html.app-zoom-locked body,
+html.app-zoom-locked body *{
+  touch-action:pan-x pan-y!important;
+}
+/* In question views no override is applied: the handwriting canvas retains its
+   own touch-action:none, while text and reading passages allow browser zoom. */
+
 /* True fullscreen roots: constrain them to the visual viewport, never the layout viewport. */
 html.app-visual-viewport-ready :is(
   #dongtian-overlay.dt-overlay,
