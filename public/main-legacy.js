@@ -1456,7 +1456,7 @@ function injectSocialUI() {
     btn.setAttribute("onclick", "switchToPage('page-social')");
     btn.dataset.target = "page-social";
     btn.className = "nav-btn group w-full flex flex-col items-center justify-center h-full transition-all";
-    btn.innerHTML = `<i class="fa-solid fa-users mb-1 text-lg group-hover:text-cyan-400 transition-colors"></i><span class="text-[10px]" data-i18n="nav_social">${t('nav_social')}</span>`;
+    btn.innerHTML = `<i class="fa-solid fa-users mb-1 text-lg transition-colors"></i><span class="text-[10px]" data-i18n="nav_social">${t('nav_social')}</span>`;
     
     const settingsBtn = navGrid.lastElementChild;
     navGrid.insertBefore(btn, settingsBtn);
@@ -1908,16 +1908,6 @@ window.switchToPage = (pageId) => {
     document.querySelectorAll('#nav-grid button').forEach(btn => {
         if(isBattleActive) btn.classList.add('nav-locked');
         else btn.classList.remove('nav-locked');
-
-        if (btn.dataset.target === pageId) { 
-            btn.classList.add('text-white'); 
-            btn.classList.remove('text-gray-400');
-            if (pageId === 'page-social') btn.querySelector('i').className = "fa-solid fa-users mb-1 text-lg text-cyan-400 transition-colors";
-        } else { 
-            btn.classList.remove('text-white'); 
-            btn.classList.add('text-gray-400'); 
-            if (btn.dataset.target === 'page-social') btn.querySelector('i').className = "fa-solid fa-users mb-1 text-lg group-hover:text-cyan-400 transition-colors";
-        }
     });
     
     // --- 修改這裡 ---
@@ -6572,9 +6562,9 @@ function checkAdminRole(isAdmin) {
     if (isAdmin && !document.getElementById('btn-admin-nav')) {
         const btn = document.createElement('button');
         btn.id = "btn-admin-nav"; btn.dataset.target = "page-admin";
-        btn.className = "flex flex-col items-center justify-center hover:bg-white/5 text-gray-400 hover:text-red-400 transition group";
+        btn.className = "nav-btn group w-full flex flex-col items-center justify-center h-full transition-all";
         btn.onclick = () => { loadAdminLogs(); switchToPage('page-admin'); };
-        btn.innerHTML = `<i class="fa-solid fa-user-shield mb-1 text-lg group-hover:text-red-400 transition-colors"></i><span class="text-[10px]">${t('nav_admin')}</span>`;
+        btn.innerHTML = `<i class="fa-solid fa-user-shield mb-1 text-lg transition-colors"></i><span class="text-[10px]">${t('nav_admin')}</span>`;
         navGrid.appendChild(btn);
     }
 }

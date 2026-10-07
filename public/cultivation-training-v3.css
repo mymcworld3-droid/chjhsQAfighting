@@ -1,9 +1,5 @@
 /* 修煉 v3：極簡金丹頁。黑金、圓角、中央單顆金丹。 */
 body.xianxia-theme.cultivation-training-unlocked #nav-grid { gap: 4px; }
-body.xianxia-theme .training-nav-btn { color:#9d927d; }
-body.xianxia-theme .training-nav-btn i { color:#d9af55; }
-body.xianxia-theme .training-nav-btn.active-nav-btn { background:linear-gradient(180deg,rgba(216,177,93,.14),rgba(0,0,0,.02)); border-top:1px solid #d8b15d; }
-body.xianxia-theme .training-nav-orb { filter:drop-shadow(0 0 7px rgba(216,177,93,.22)); }
 
 body.xianxia-theme .training-page-v3 { max-width:900px; margin:0 auto; padding-bottom:140px; }
 .training-page-heading-v3 { display:flex; align-items:flex-start; justify-content:space-between; gap:20px; margin:8px 0 22px; }

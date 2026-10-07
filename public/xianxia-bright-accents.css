@@ -361,7 +361,7 @@ body.xianxia-theme #options-container>.bg-red-600{
   border-color:#e2ad9a!important;
 }
 
-/* 底部導覽只改亮度，不碰寬度規則。 */
+/* 導覽的靜止、懸停與選取配色集中管理，包含動態加入的修煉、仙盟與管理員。 */
 body.xianxia-theme #bottom-nav>.glass-capsule{
   background:
     linear-gradient(180deg,rgba(47,39,25,.96),rgba(22,24,19,.97))!important;
@@ -369,12 +369,33 @@ body.xianxia-theme #bottom-nav>.glass-capsule{
   box-shadow:0 12px 34px rgba(0,0,0,.32),inset 0 1px rgba(255,248,225,.065)!important;
 }
 body.xianxia-theme #nav-grid button{
-  background:rgba(255,245,214,.015);
+  color:var(--xq-muted)!important;
+  background:rgba(255,245,214,.015)!important;
+  border:1px solid transparent;
+  box-shadow:none!important;
 }
-body.xianxia-theme #nav-grid button:hover{
-  background:rgba(235,199,114,.07);
+body.xianxia-theme #nav-grid button :is(i,span){
+  color:inherit!important;
+  text-shadow:none!important;
+}
+body.xianxia-theme #nav-grid button>span{
+  font-weight:600!important;
+}
+body.xianxia-theme #nav-grid .training-nav-orb{
+  filter:none;
+}
+@media(hover:hover){
+  body.xianxia-theme #nav-grid button:hover{
+    color:#f4d99b!important;
+    background:rgba(235,199,114,.07)!important;
+  }
+}
+body.xianxia-theme #nav-grid button:focus-visible{
+  outline:2px solid #efc96f;
+  outline-offset:2px;
 }
 body.xianxia-theme #nav-grid button.active-nav-btn{
+  color:#f4d99b!important;
   background:
     linear-gradient(180deg,rgba(235,197,108,.18),rgba(107,144,110,.065))!important;
   border-top-color:#efc96f!important;
