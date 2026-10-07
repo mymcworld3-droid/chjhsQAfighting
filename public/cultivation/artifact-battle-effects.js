@@ -262,6 +262,7 @@
     const damage = Math.max(0, Math.round(Number(defense.hpDamage) || 0));
     return {
       damage,
+      critical: attack.critical === true,
       soulReductionApplied:true,
       normalDamage: attack.normalDamage,
       trueDamage: attack.trueDamage,
@@ -286,6 +287,8 @@
     return {
       damage,
       trueDamage,
+      // This follow-up excludes the critical opening hit that the core blocked.
+      critical: false,
       soulReductionApplied:true,
       reflectDamage: Math.max(0, Math.round(Number(defense.reflectDamage) || 0)),
       reflectSkill: defense.skill ? `法寶反傷・${defense.skill}` : '法寶反傷',

@@ -343,11 +343,14 @@ export function settleBattleRound({
     const targetBefore = role === 'host' ? guestHp : hostHp;
     if (role === 'host') guestHp = Math.max(0, guestHp - damage);
     else hostHp = Math.max(0, hostHp - damage);
-    const attack = { type: 'attack', actorRole: role, actorUid: player.uid, targetUid: defender.uid, damage, baseDamage: plan.baseDamage, extraDamage: plan.extraDamage + talent.normal + talent.trueDamage, skill: [plan.activation?.skill, plan.soulDamage ? '元嬰神通' : '', talent.normal || talent.trueDamage ? '元嬰・' + talent.name + (talent.trueDamage ? '真傷' : '') : '', equipment?.skill].filter(Boolean).join('・') };
+    const coreEffect = plan.activation || (support.bonusDamage > 0 ? support.activations[0] : null);
+    const attack = { type: 'attack', actorRole: role, actorUid: player.uid, targetUid: defender.uid, damage, baseDamage: plan.baseDamage, extraDamage: plan.extraDamage + talent.normal + talent.trueDamage,
+      critical: !guarded && equipment?.critical === true, coreEffect,
+      skill: [coreEffect?.skill, plan.soulDamage ? '元嬰神通' : '', talent.normal || talent.trueDamage ? '元嬰・' + talent.name + (talent.trueDamage ? '真傷' : '') : '', equipment?.skill].filter(Boolean).join('・') };
     logs.push(attack);
     if (guarded) {
       steps.push({ ...attack, damage: 0, guarded: true, hostHp: beforeHostHp, guestHp: beforeGuestHp });
-      if (equipment || guardedTrue) steps.push({ ...attack, damage, guarded: false, skill: [attack.skill, guardedTrue || equipment?.trueDamage ? '真傷・穿透道心' : '連擊'].filter(Boolean).join('・'), hostHp, guestHp });
+      if (equipment || guardedTrue) steps.push({ ...attack, damage, guarded: false, coreEffect: null, skill: [attack.skill, guardedTrue || equipment?.trueDamage ? '真傷・穿透道心' : '連擊'].filter(Boolean).join('・'), hostHp, guestHp });
     } else {
       steps.push({ ...attack, guarded: false, hostHp, guestHp });
     }
@@ -407,7 +410,9 @@ export function settleBattleRound({
           activations.push({ type: player.goldenCore?.type || 'shield', name: player.goldenCore?.name || '金丹', ownerUid: player.uid, skill: '金丹道心護體', message: '金丹道心護體發動並消耗，須重新凝聚', kind: '鬥法防護' });
         } else if (role === 'host') hostHp = Math.max(0, hostHp - counter.reflectDamage);
         else guestHp = Math.max(0, guestHp - counter.reflectDamage);
-        const reflected = { type: 'counter', actorRole: targetRole, actorUid: defender.uid, targetUid: player.uid, damage: counterGuarded ? 0 : counter.reflectDamage, guarded: counterGuarded, skill: counter.activation?.skill || '' };
+        const reflected = { type: 'counter', actorRole: targetRole, actorUid: defender.uid, targetUid: player.uid, damage: counterGuarded ? 0 : counter.reflectDamage, guarded: counterGuarded, critical: false,
+          coreEffect: counter.activation?.type === defender.goldenCore?.type ? counter.activation : null,
+          skill: counter.activation?.skill || '' };
         logs.push(reflected);
         steps.push({ ...reflected, hostHp, guestHp });
         if (counter.activation) activations.push({ ...counter.activation, ownerUid: defender.uid });

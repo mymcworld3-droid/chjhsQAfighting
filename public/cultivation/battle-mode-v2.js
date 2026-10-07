@@ -10,6 +10,7 @@ import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } 
 import { battleRepository } from './data/battle-repository.js';
 import { playerRepository } from './data/player-repository.js';
 import { rewardRepository } from './data/reward-repository.js';
+import { battleStepFeedback, createBattleImpact } from './battle-combat-feedback.js';
 
 // Battle v2 — 修仙配對鬥法。
 // 核心原則：房間與戰鬥狀態只寫 Firebase C；玩家邀請與獎勵留在 A／後端。
@@ -797,6 +798,12 @@ export const featureReady = (async () => {
     if (state.heartbeat) clearInterval(state.heartbeat);
     if (state.reconcile) clearTimeout(state.reconcile);
     state.animationTimers.forEach(clearTimeout); state.animationTimers = [];
+    document.querySelectorAll('#bv2-arena .bv2-stage-impact, #bv2-arena .bv2-damage-pop').forEach(node => node.remove());
+    for (const id of ['bv2-my-fighter', 'bv2-enemy-fighter']) {
+      const fighter = document.getElementById(id);
+      fighter?.classList.remove('strike', 'hit', 'miss', 'guarded');
+      if (fighter) fighter.style.animationDelay = '';
+    }
     state.tick = state.heartbeat = state.reconcile = null;
   }
 
@@ -935,15 +942,16 @@ export const featureReady = (async () => {
       const missed = step.type === 'miss';
       const guarded = !!step.guarded;
       const counter = step.type === 'counter';
-      const label = missed ? 'MISS' : guarded ? '護體' : (counter ? '反擊 -' : '-') + damage;
+      const feedback = battleStepFeedback(step, original[step.actorRole]);
+      const label = feedback.label;
       let pop = null;
       let impact = null;
       scheduleBattleAt(strikeAtMs, key, (atMs) => {
         if (!valid() || atMs >= clearAtMs) return;
         setText('bv2-cue-kicker', index === 0 ? '先手出招' : counter ? '雷光反擊' : '後手出招');
-        setText('bv2-cue-count', missed ? '落空' : guarded ? '護體' : counter ? '反擊' : '出招');
+        setText('bv2-cue-count', missed ? '落空' : guarded ? '護體' : feedback.critical ? '爆擊' : counter ? '反擊' : feedback.enhanced ? '金丹神通' : '出招');
         setText('bv2-cue-message', (step.actorRole === myRole ? '我方' : '對手') +
-          (missed ? '作答未命中！' : guarded ? '出招被道心護體抵擋' : counter ? '發動反擊！' : '造成 ' + damage + ' 點傷害'));
+          (missed ? '作答未命中！' : guarded ? '出招被道心護體抵擋' : counter ? '發動反擊！' : (feedback.critical ? '爆擊！' : '') + '造成 ' + damage + ' 點傷害'));
         if (actor) {
           actor.style.animationDelay = '-' + Math.max(0, atMs - strikeAtMs) + 'ms';
           actor.classList.add(missed ? 'miss' : 'strike');
@@ -957,11 +965,8 @@ export const featureReady = (async () => {
         setHp('enemy', { ...original[otherRole(myRole)], hp: Number(step[otherRole(myRole) + 'Hp']) });
         if (atMs >= clearAtMs) return;
         if (!missed && !guarded && stage) {
-          impact = document.createElement('i');
-          impact.className = 'bv2-stage-impact ' + (step.actorRole === myRole ? 'from-me' : 'from-enemy');
-          impact.setAttribute('aria-hidden', 'true');
-          impact.style.animationDelay = '-' + Math.max(0, atMs - impactAtMs) + 'ms';
-          stage.appendChild(impact);
+          impact = createBattleImpact(stage, { step, player: original[step.actorRole],
+            fromMe: step.actorRole === myRole, elapsedMs: atMs - impactAtMs });
         }
         if (target) {
           target.style.animationDelay = '-' + Math.max(0, atMs - impactAtMs) + 'ms';
@@ -971,7 +976,7 @@ export const featureReady = (async () => {
         const holder = missed ? actor : target;
         if (holder) {
           pop = document.createElement('b');
-          pop.className = 'bv2-damage-pop' + (missed ? ' miss' : guarded ? ' blocked' : '');
+          pop.className = 'bv2-damage-pop' + (missed ? ' miss' : guarded ? ' blocked' : feedback.critical ? ' critical' : '');
           pop.textContent = label;
           pop.style.animationDelay = '-' + Math.max(0, atMs - impactAtMs) + 'ms';
           holder.appendChild(pop);

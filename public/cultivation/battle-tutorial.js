@@ -2,6 +2,7 @@ import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.j
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { settleBattleRound } from './battle-engine-v2.js?v=20260922-first-answer1';
+import { battleStepFeedback, createBattleImpact } from './battle-combat-feedback.js';
 
 // 築基鬥法教學：完全本機模擬，不建立 rooms、不寫正式戰績。
 // 第一戰固定由沈清霜以 65,000 真實傷害擊倒演武投影；第二戰再由顧長風教正式鬥法規則。
@@ -158,14 +159,14 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260922-first-answer
       #${LAYER_ID} .bt-later{border:1px solid rgba(255,255,255,.08);border-radius:10px;background:#0b0c0b;color:#817a6d;padding:8px 11px;font-size:8px;font-weight:900}
       #${LAYER_ID} .bt-arena{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 84px minmax(0,1fr);gap:10px;align-items:stretch;padding:16px 18px 8px;overflow:hidden}
       #${LAYER_ID} .bt-arena:before{content:"";position:absolute;inset:10px 20%;background:radial-gradient(circle,rgba(216,177,93,.08),transparent 65%);pointer-events:none}
-      #${LAYER_ID} .bt-fighter{position:relative;min-height:255px;overflow:hidden;border:1px solid rgba(216,177,93,.18);border-radius:18px;background:linear-gradient(145deg,rgba(24,22,16,.92),rgba(7,7,6,.96))}
+      #${LAYER_ID} .bt-fighter{position:relative;min-height:255px;overflow:hidden;border:1px solid rgba(216,177,93,.18);border-radius:18px;background:linear-gradient(145deg,rgba(24,22,16,.92),rgba(7,7,6,.96));transform:none!important}
       #${LAYER_ID} .bt-fighter.enemy{border-color:rgba(181,79,62,.28)}
       #${LAYER_ID} .bt-fighter img{position:absolute;inset:38px 0 34px;width:100%;height:calc(100% - 72px);object-fit:contain;object-position:center bottom;filter:drop-shadow(0 12px 25px rgba(0,0,0,.48));pointer-events:none}
       #${LAYER_ID} .bt-fighter-head{position:relative;z-index:3;display:flex;justify-content:space-between;gap:10px;padding:10px 11px 0}.bt-fighter-head span{display:block;color:#756b59;font-size:7px}.bt-fighter-head strong{display:block;color:#eadcbb;font-size:11px}.bt-fighter-head b{color:#d7b968;font-size:9px}
       #${LAYER_ID} .bt-hp{position:absolute;z-index:3;left:10px;right:10px;bottom:10px;height:8px;border:1px solid rgba(255,255,255,.05);border-radius:999px;background:#17130d;overflow:hidden}.bt-hp i{display:block;height:100%;background:linear-gradient(90deg,#826322,#e3bf61);transition:width .45s ease}.bt-fighter.enemy .bt-hp i{background:linear-gradient(90deg,#743629,#cc705c)}
       #${LAYER_ID} .bt-vs{display:grid;place-items:center;align-self:center;height:74px;border:1px solid rgba(216,177,93,.16);border-radius:50%;background:#0b0a07;color:#d5b55f;font-size:18px;font-weight:1000;box-shadow:0 0 35px rgba(216,177,93,.05)}
       #${LAYER_ID} .bt-fighter.strike{animation:btStrike .42s ease-out}#${LAYER_ID} .bt-fighter.hit{animation:btHit .5s ease-out}
-      @keyframes btStrike{45%{transform:translateX(12px) scale(1.025)}100%{transform:none}}@keyframes btHit{20%{transform:translateX(-8px);filter:brightness(1.7)}45%{transform:translateX(7px)}70%{transform:translateX(-3px)}100%{transform:none;filter:none}}
+      @keyframes btStrike{45%{filter:brightness(1.25)}100%{filter:none}}@keyframes btHit{20%{filter:brightness(1.65)}65%{filter:brightness(1.15)}100%{filter:none}}
       #${LAYER_ID} .bt-slash{position:absolute;z-index:7;left:34%;top:11%;width:4px;height:78%;background:linear-gradient(180deg,transparent,#fff2bd 22%,#d9a849 55%,transparent);transform:rotate(54deg) scaleY(0);filter:drop-shadow(0 0 12px #f2ce78);pointer-events:none}.bt-slash.go{animation:btSlash .44s ease-out}@keyframes btSlash{30%{transform:rotate(54deg) scaleY(1);opacity:1}100%{transform:rotate(54deg) scaleY(1.25);opacity:0}}
       #${LAYER_ID} .bt-damage{position:absolute;z-index:9;left:72%;top:32%;transform:translate(-50%,-50%);text-align:center;color:#ff806d;font-size:32px;font-weight:1000;text-shadow:0 5px 18px #000;pointer-events:none;animation:btDamage 1s ease-out forwards}.bt-damage small{display:block;margin-top:2px;color:#ffc6b9;font-size:9px;letter-spacing:.12em}@keyframes btDamage{0%{opacity:0;transform:translate(-50%,-20%) scale(.65)}22%{opacity:1;transform:translate(-50%,-50%) scale(1.16)}100%{opacity:0;transform:translate(-50%,-105%) scale(1)}}
       #${LAYER_ID} .bt-body{padding:10px 18px 18px}.bt-dialogue{padding:14px;border:1px solid rgba(216,177,93,.13);border-radius:16px;background:rgba(216,177,93,.03)}.bt-speaker{color:#d9b85f;font-size:8px;font-weight:900;letter-spacing:.1em}.bt-dialogue p{margin:7px 0 0;color:#d9ceb4;font-size:12px;line-height:1.75}
@@ -329,10 +330,10 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260922-first-answer
       #${LAYER_ID} .bt-slash{z-index:7}#${LAYER_ID} .bt-damage{z-index:9}
       #${LAYER_ID} .bt-fighter.me.strike{animation:btStageAdvanceMe 1450ms ease-out both!important}#${LAYER_ID} .bt-fighter.enemy.strike{animation:btStageAdvanceEnemy 1450ms ease-out both!important}
       #${LAYER_ID} .bt-fighter.me.hit{animation:btStageRecoilMe 750ms ease-out both!important}#${LAYER_ID} .bt-fighter.enemy.hit{animation:btStageRecoilEnemy 750ms ease-out both!important}
-      @keyframes btStageAdvanceMe{0%,100%{transform:translateX(0) scale(1)}18%{transform:translateX(-9px) scale(.98)}45%,66%{transform:translate(clamp(30px,8vw,108px),-12px) scale(1.07)}}
-      @keyframes btStageAdvanceEnemy{0%,100%{transform:translateX(0) scale(1)}18%{transform:translateX(9px) scale(.98)}45%,66%{transform:translate(clamp(-108px,-8vw,-30px),12px) scale(1.07)}}
-      @keyframes btStageRecoilMe{0%,100%{transform:translateX(0);filter:brightness(1)}24%{transform:translateX(-16px);filter:brightness(1.9)}50%{transform:translateX(8px);filter:brightness(.9)}}
-      @keyframes btStageRecoilEnemy{0%,100%{transform:translateX(0);filter:brightness(1)}24%{transform:translateX(16px);filter:brightness(1.9)}50%{transform:translateX(-8px);filter:brightness(.9)}}
+      @keyframes btStageAdvanceMe{0%,100%{filter:brightness(1)}45%,66%{filter:brightness(1.25) drop-shadow(0 0 14px rgba(255,220,147,.55))}}
+      @keyframes btStageAdvanceEnemy{0%,100%{filter:brightness(1)}45%,66%{filter:brightness(1.25) drop-shadow(0 0 14px rgba(255,159,155,.5))}}
+      @keyframes btStageRecoilMe{0%,100%{filter:brightness(1)}24%{filter:brightness(1.65)}65%{filter:brightness(1.15)}}
+      @keyframes btStageRecoilEnemy{0%,100%{filter:brightness(1)}24%{filter:brightness(1.65)}65%{filter:brightness(1.15)}}
       @media(max-width:620px){#page-battle .bv2-arena.bt-tutorial-active #${LAYER_ID} .bt-arena{height:clamp(175px,35dvh,340px)!important}#${LAYER_ID} .bt-fighter.me{left:-4%;bottom:-6%;width:54%!important;height:84%!important}#${LAYER_ID} .bt-fighter.enemy{right:-1%;bottom:23%;width:46%!important;height:67%!important}#${LAYER_ID} .bt-fighter-head{left:5px;right:5px;padding:3px 5px!important}#${LAYER_ID} .bt-fighter.enemy .bt-hp{top:44px}#${LAYER_ID} .bt-fighter.me .bt-fighter-head{bottom:25px}#${LAYER_ID} .bt-hp{bottom:12px;height:7px}}
       @media(max-height:540px){#page-battle .bv2-arena.bt-tutorial-active #${LAYER_ID} .bt-arena{height:clamp(115px,36dvh,210px)!important}#${LAYER_ID} .bt-fighter-head span{display:none}#${LAYER_ID} .bt-fighter.enemy .bt-hp{top:31px}#${LAYER_ID} .bt-fighter.me .bt-fighter-head{bottom:23px}}
       @media(prefers-reduced-motion:reduce){#${LAYER_ID} .bt-fighter.me.strike,#${LAYER_ID} .bt-fighter.enemy.strike,#${LAYER_ID} .bt-fighter.me.hit,#${LAYER_ID} .bt-fighter.enemy.hit{animation:none!important}}
@@ -842,7 +843,9 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260922-first-answer
       const missed = step.type === 'miss';
       const blocked = !!step.guarded;
       const damage = Math.max(0, Number(step.damage) || 0);
-      const label = missed ? 'MISS' : blocked ? '護體' : '-' + damage;
+      const attacker = meAttacking ? guPlayer : guOpponent;
+      const feedback = battleStepFeedback(step, attacker);
+      const label = feedback.label;
       const cue = el.querySelector('#bt-combat-cue');
       if (cue) cue.innerHTML = (index === 0 ? '先手' : step.type === 'counter' ? '雷光反擊' : '後手') +
         ' · ' + (meAttacking ? '我方' : '顧長風') + '<strong>' + esc(label) + '</strong>';
@@ -855,17 +858,20 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260922-first-answer
       await waitUntil(impactAtMs);
       if (!active || token !== sceneToken) return;
       let pop = null;
+      let impact = null;
       if (Date.now() < clearAtMs) {
+        impact = createBattleImpact(el.querySelector('.bt-arena'), { step, player: attacker,
+          fromMe: meAttacking, elapsedMs: Date.now() - impactAtMs });
         if (target && !missed && !blocked) {
           target.style.animationDelay = '-' + Math.max(0, Date.now() - impactAtMs) + 'ms';
           target.classList.add('hit');
         }
         pop = document.createElement('div');
-        pop.className = 'bt-damage' + (missed ? ' miss' : '');
+        pop.className = 'bt-damage' + (missed ? ' miss' : feedback.critical ? ' critical' : '');
         pop.style.left = (missed ? (meAttacking ? '28%' : '72%') : (meAttacking ? '72%' : '28%'));
         pop.style.animationDelay = '-' + Math.max(0, Date.now() - impactAtMs) + 'ms';
         pop.innerHTML = esc(label) + '<small>' +
-          (missed ? '答題未命中' : blocked ? '道心護體' : step.type === 'counter' ? '反擊' : '攻擊命中') + '</small>';
+          (missed ? '答題未命中' : blocked ? '道心護體' : feedback.critical ? '爆擊命中' : step.type === 'counter' ? '反擊' : '攻擊命中') + '</small>';
         el.querySelector('.bt-arena')?.appendChild(pop);
       }
       // Preserve the settled engine's step-by-step HP regardless of tab throttling.
@@ -878,6 +884,7 @@ import { settleBattleRound } from './battle-engine-v2.js?v=20260922-first-answer
       if (actor) actor.style.animationDelay = '';
       if (target) target.style.animationDelay = '';
       pop?.remove();
+      impact?.remove();
       // The shared engine emits no further steps after a lethal hit or reflection.
     }
     if (!active || token !== sceneToken) return;

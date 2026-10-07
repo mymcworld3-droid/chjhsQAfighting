@@ -28,12 +28,11 @@ test('battle prefetch avoids repeating the active question and retains preparing
   assert.match(battle, /cached \|\| await generateQuestion\(room, round\)/);
 });
 
-test('arena keeps combat motion outside strike frames', () => {
+test('arena keeps ambient combat motion while portraits stand still outside strike frames', () => {
   assert.match(battle, /function updateArenaCombatState\(room, animating = false\)/);
   assert.match(battle, /arena\.dataset\.combatState/);
   assert.match(css, /Continuous combat presence/);
-  assert.match(css, /bv2IdleMe/);
-  assert.match(css, /bv2IdleEnemy/);
+  assert.doesNotMatch(css, /bv2IdleMe|bv2IdleEnemy/);
   assert.match(css, /bv2MoteRise/);
   assert.match(css, /\[data-combat-state="charging"\]/);
   assert.match(css, /\[data-combat-state="aftermath"\]/);
