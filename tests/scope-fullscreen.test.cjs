@@ -93,7 +93,7 @@ test('full-screen studio reparents original selectors and persistent selected li
   assert.match(studio,/const result = await window\.saveProfile\?\.\(saveButton\)/);
   assert.match(studio,/if \(result !== true\)/);
   assert.match(studio,/window\.confirm\('/);
-  assert.match(studio,/勾選整章會立即加入/);
+  assert.doesNotMatch(studio,/ss-cart-note|複習提示/);
   assert.match(studio,/window\.soloSelectedUnits = clone\(JSON\.parse\(baseline\.units\)\)/);
   assert.match(legacy,/return true;\s*\};\s*async function switchToAI/);
   assert.match(guard,/const persisted = await baseSaveProfile\.apply\(this, args\)/);

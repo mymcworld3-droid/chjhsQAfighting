@@ -22,8 +22,6 @@ html.scope-studio-open,body.scope-studio-open{overflow:hidden!important;overscro
 #scope-studio .ss-picker-body,#scope-studio .ss-cart-body{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:rgba(215,178,109,.32) transparent}
 #scope-studio .ss-picker-body{padding:18px 20px 22px}
 #scope-studio .ss-cart-body{padding:14px}
-#scope-studio .ss-cart-note{margin:0 0 12px;padding:11px 12px;border-radius:12px;color:#adada4;background:rgba(115,178,164,.065);border:1px solid rgba(115,178,164,.13);font-size:11px;line-height:1.75}
-#scope-studio .ss-cart-note strong{color:#a5ddd0}
 #scope-studio .ss-cart-tools{display:flex;flex:0 0 auto;gap:7px;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid rgba(238,205,141,.1)}
 #scope-studio :is(.ss-cart-tools,.ss-transfer-actions) button{min-height:38px;padding:8px 10px;border:1px solid rgba(143,212,200,.28);border-radius:9px;color:#d8ede1;background:rgba(93,163,144,.09);font-size:12px;cursor:pointer}
 #scope-studio :is(.ss-cart-tools,.ss-transfer-actions) button:disabled{opacity:.4;cursor:default}

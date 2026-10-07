@@ -276,7 +276,7 @@ import { playerRepository } from './data/player-repository.js';
     const link = document.createElement('link');
     link.id = 'ss-studio-style';
     link.rel = 'stylesheet';
-    link.href = './styles/curriculum-studio.css?v=20261007-scope-chat1';
+    link.href = './styles/curriculum-studio.css?v=20261007-scope-chat2';
     if (!$('ss-studio-style')) document.head.append(link);
 
     studio = document.createElement('section');
@@ -327,7 +327,6 @@ import { playerRepository } from './data/player-repository.js';
                 <button id="ss-transfer-close" type="button">收起</button>
               </div>
             </section>
-            <p class="ss-cart-note"><strong>複習提示</strong>：勾選整章會立即加入；自訂章節可用頓號等標點分開。按「重新整理」可拆開舊項目並去除重複。完成後記得儲存。</p>
           </div>
           <div class="ss-foot-summary" aria-live="polite">
             <strong id="ss-footer-main">建立你的專屬修習計畫</strong>
