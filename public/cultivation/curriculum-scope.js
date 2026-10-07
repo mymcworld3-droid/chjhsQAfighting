@@ -1,4 +1,5 @@
 // 教材範圍選擇器；年級 → 科目 → 全學年章節，保持原有 focusedUnits 儲存格式。
+import './curriculum-range-rules.js';
 (function(){
 'use strict';
 const files={國文:'國文/chinese.json',英文:'英文/english.json',數學:'數學/math.json',生物:'生物理化/science.json',物理:'生物理化/science.json',化學:'生物理化/science.json',地球科學:'生物理化/science.json',歷史:'歷史/history.json',地理:'地理/geogrophy.json',公民:'公民/civics.json',資訊科技:'高中專屬'};
@@ -116,21 +117,37 @@ function addList(items){const existing=selectedUnits(),keys=new Set(existing.map
 for(const item of items){const k=itemKey(item);if(keys.has(k))continue;if(existing.length>=24)break;existing.push(item);keys.add(k);added++;}
 window.soloSelectedUnits=existing;notifySelectionList();status(added?'已加入 '+added+' 個範圍，請按「儲存出題範圍」。':'已存在，或達 24 個上限。');applyVisibleSelectionState();}
 function addChecked(){applyVisibleSelectionState();status('章節與考點在勾選時就會自動加入，不需要再按「加入」。');}
-function addFocusedCustom(value){const detail=String(value||'').trim();
-if(!detail)return{ok:false,message:'請先輸入想練習的範圍。'};
-if(detail.length>90)return{ok:false,message:'自訂範圍最多 90 字，請精簡後再加入。'};
+function addFocusedCustom(value){const parsed=window.CurriculumRangeRules.parseChapters(value);
+if(!parsed.ok)return parsed;
 if(!grades.includes(grade)||!subjectOptions(grade).includes(subject))return{ok:false,message:'請先選擇有效的年級與科目。'};
-const item={path:[canonicalSubject(),grade,'自訂',subject].join('/'),detail,sub_topics:[]},list=selectedUnits();
-if(list.some(u=>itemKey(u)===itemKey(item)))return{ok:false,message:'此自訂範圍已在修習卷內。'};
-if(list.length>=24)return{ok:false,message:'最多只能選 24 個範圍，請先移除其他項目。'};
-window.soloSelectedUnits=[...list,item];notifySelectionList();
-return{ok:true,message:'已加入修習卷，請儲存出題範圍。'};}
+const path=[canonicalSubject(),grade,'自訂',subject].join('/');
+const items=parsed.details.map(detail=>({path,detail,sub_topics:[]}));
+const result=window.CurriculumRangeRules.mergeSelection(selectedUnits(),items);
+if(!result.ok)return result;
+if(!result.added)return{ok:false,message:'這些自訂範圍已在修習卷內。'};
+window.soloSelectedUnits=result.units;notifySelectionList();
+return{ok:true,added:result.added,message:'已加入 '+result.added+' 個自訂範圍，請儲存出題範圍。'};}
+function organizeSelected(){const result=window.CurriculumRangeRules.organizeSelection(selectedUnits());
+if(!result.ok)return result;
+window.soloSelectedUnits=result.units;notifySelectionList();
+return{ok:true,message:result.changed?'已重新整理：拆開 '+result.split+' 項自訂範圍，移除 '+result.duplicates+' 項重複。請儲存出題範圍。':'清單已整理，沒有待拆分或重複的項目。'};}
+function importSelection(value){const parsed=window.CurriculumRangeRules.readSharedSelection(value);
+if(!parsed.ok)return parsed;
+const result=window.CurriculumRangeRules.mergeSelection(selectedUnits(),parsed.units);
+if(!result.ok)return result;
+window.soloSelectedUnits=result.units;
+const mode=el('set-source-mode');if(mode){mode.value='focused';window.toggleSourceMode?.();mode.dispatchEvent(new Event('change',{bubbles:true}));}
+notifySelectionList();
+return{ok:true,message:result.added?'已匯入 '+result.added+' 個範圍，請儲存出題範圍。':'分享內容已在清單內，沒有重複加入。'};}
 function displayUnits(){return el('set-source-mode')?.value==='focused'?selectedUnits():[];}
 function removeSelectedAt(i){if(!Number.isInteger(i)||i<0||i>=displayUnits().length)return;window.soloSelectedUnits.splice(i,1);notifySelectionList();applyVisibleSelectionState();}
 function showList(){const host=el('solo-selected-units-list');if(!host)return;host.replaceChildren();const items=displayUnits();const p=document.createElement('p');p.className='cs-note';p.textContent='已選 '+items.length+' / 24 項';host.append(p);items.forEach((u,i)=>{const row=document.createElement('div');row.className='cs-unit';row.style.display='flex';row.style.gap='8px';const label=document.createElement('span');label.style.flex='1';label.style.overflowWrap='anywhere';label.textContent=u.path+' · '+(u.detail||'全部');const del=document.createElement('button');del.type='button';del.textContent='移除';del.onclick=()=>removeSelectedAt(i);row.append(label,del);host.append(row);});applyVisibleSelectionState();}
 window.renderSoloUnitSelectors=async()=>{const x=el('set-level')?.value;if(!el('cs-scope')){if(grades.includes(x))grade=x;else if(x==='國小中年級')grade='國小三年級';else if(x==='國小高年級')grade='國小五年級';else if(x==='高中職')grade='高中一年級';}await render();};
 window.addCurrentUnitToSelection=addChecked;window.renderSelectedUnitsList=showList;
 window.addCustomCurriculumRange=addFocusedCustom;
+window.organizeCustomCurriculumRanges=organizeSelected;
+window.shareCustomCurriculumRanges=()=>window.CurriculumRangeRules.shareSelection(displayUnits());
+window.importCustomCurriculumRanges=importSelection;
 window.removeSelectedUnit=i=>removeSelectedAt(Number(i));
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>void render(),{once:true});else void render();
 })();

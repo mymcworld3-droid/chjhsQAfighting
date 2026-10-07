@@ -6,13 +6,13 @@
   const names = ['選年級','選科目','選章節'];
   const customRangeMarkup = `<section class="cs-range-panel" aria-labelledby="cs-range-title">
     <h5 id="cs-range-title">自訂範圍</h5>
-    <p id="cs-range-help">輸入課程目錄以外的章節或考點，加入後記得儲存。</p>
+    <p id="cs-range-help">可一次輸入多個章節或考點，用頓號、逗號、分號或換行分開；每項最多 90 字，會沿用下方的年級與科目。加入後記得儲存。</p>
     <div class="cs-range-fields">
       <label for="cs-range-grade">年級<select id="cs-range-grade"></select></label>
       <label for="cs-range-subject">科目<select id="cs-range-subject"></select></label>
     </div>
     <label for="cs-range-input" class="cs-range-label">想練習的範圍
-      <input id="cs-range-input" type="text" maxlength="90" placeholder="例如：一元一次方程式的生活應用" aria-describedby="cs-range-help cs-range-message">
+      <textarea id="cs-range-input" rows="3" maxlength="2400" placeholder="例如：功與動能、角動量" aria-describedby="cs-range-help cs-range-message"></textarea>
     </label>
     <button type="button" id="cs-range-add">加入自訂範圍</button>
     <p id="cs-range-message" role="status" aria-live="polite"></p>
@@ -128,7 +128,7 @@
     };
     $('cs-range-add').addEventListener('click',addRange);
     $('cs-range-input').addEventListener('keydown',e=>{
-      if(e.key==='Enter'&&!e.isComposing){e.preventDefault();addRange();}
+      if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)&&!e.isComposing){e.preventDefault();addRange();}
     });
     window.addEventListener('curriculum:options-ready',onOptions);
     ready=true;refresh();setPage(0);

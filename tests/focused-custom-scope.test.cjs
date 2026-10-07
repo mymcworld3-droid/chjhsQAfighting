@@ -6,14 +6,17 @@ const legacy = readFileSync(require.resolve('../public/main-legacy.js'), 'utf8')
 const opportunity = require('../public/cultivation/opportunity-rules.js');
 
 function customPicker() {
-  const window = { soloSelectedUnits: [], soloComprehensiveUnits: [{ path: '英文', detail: '保留綜合範圍' }] };
+  const window = { CurriculumRangeRules: require('../public/cultivation/curriculum-range-rules.js'),
+    soloSelectedUnits: [], soloComprehensiveUnits: [{ path: '英文', detail: '保留綜合範圍' }] };
+  const mode={value:'focused',dispatchEvent(){this.changes=(this.changes||0)+1;}};
   const context = vm.createContext({ window, grade: '國中二年級', subject: '數學',
     grades: ['國中二年級', '高中二年級', '國小三年級'], subjectOptions: () => ['數學', '數學A', '資訊科技', '藝術'],
     canonicalSubject: () => /^數學/.test(context.subject) ? '數學' : context.subject,
     selectedUnits: () => window.soloSelectedUnits, itemKey: u => JSON.stringify([u.path, u.detail, u.sub_topics]),
+    el: id=>id==='set-source-mode'?mode:null, Event:class {},
     notifySelectionList() { window.updated = true; } });
   const start = selector.indexOf('function addFocusedCustom('), end = selector.indexOf('function displayUnits(){', start);
-  vm.runInContext(selector.slice(start, end) + '\nthis.addRange = addFocusedCustom;', context);
+  vm.runInContext(selector.slice(start, end) + '\nthis.addRange=addFocusedCustom; this.organize=organizeSelected; this.importList=importSelection; this.mode=el("set-source-mode");', context);
   return context;
 }
 
@@ -39,6 +42,32 @@ test('blank, overlong, duplicate and invalid custom ranges never change the sele
   picker.window.soloSelectedUnits = Array.from({ length: 23 }, (_, i) => ({ path: '數學/八年級', detail: '章節' + i, sub_topics: [] }));
   assert.equal(picker.addRange('自訂末項').ok, true); assert.equal(picker.addRange('超出上限').ok, false);
   assert.equal(picker.window.soloSelectedUnits.length, 24);
+});
+
+test('multiple custom chapters retain the selected grade and course and apply as one complete batch', () => {
+  const picker=customPicker(); picker.grade='高中二年級'; picker.subject='數學A';
+  assert.equal(picker.addRange('指數函數、對數函數；指數函數').added,2);
+  assert.deepEqual(Array.from(picker.window.soloSelectedUnits,u=>u.detail),['指數函數','對數函數']);
+  assert.ok(picker.window.soloSelectedUnits.every(u=>u.path==='數學/高中二年級/自訂/數學A'));
+  const before=Array.from({length:23},(_,i)=>({path:'數學/八年級',detail:'章節'+i,sub_topics:[]}));
+  picker.window.soloSelectedUnits=before;
+  assert.equal(picker.addRange('功與動能、角動量').ok,false);
+  assert.equal(picker.window.soloSelectedUnits,before,'a full batch failure never mutates the old selection');
+});
+
+test('organizing and importing update the same draft, switch to focused practice and preserve old selections', () => {
+  const picker=customPicker();
+  picker.window.soloSelectedUnits=[{path:'數學/國中二年級/自訂/數學',detail:'指數律、平方根',sub_topics:[]}];
+  assert.equal(picker.organize().ok,true);
+  assert.deepEqual(Array.from(picker.window.soloSelectedUnits,u=>u.detail),['指數律','平方根']);
+  const shared=picker.window.CurriculumRangeRules.shareSelection([{path:'物理/高中二年級/自訂/物理',detail:'功與動能、角動量',sub_topics:[]}]);
+  picker.mode.value='random';
+  assert.equal(picker.importList(shared.text).ok,true);
+  assert.equal(picker.mode.value,'focused'); assert.equal(picker.mode.changes,1);
+  assert.deepEqual(Array.from(picker.window.soloSelectedUnits,u=>u.detail),['指數律','平方根','功與動能','角動量']);
+  assert.equal(picker.importList(shared.text).ok,true); assert.equal(picker.window.soloSelectedUnits.length,4);
+  const before=picker.window.soloSelectedUnits;
+  assert.equal(picker.importList('{invalid').ok,false); assert.equal(picker.window.soloSelectedUnits,before);
 });
 
 test('saving focused custom ranges persists them and both solo quizzes and opportunity passages use their scope', async () => {

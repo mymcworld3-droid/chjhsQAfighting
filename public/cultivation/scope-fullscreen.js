@@ -33,6 +33,76 @@
     if (foot) foot.textContent = changed() ? '變更尚未儲存，離開前記得儲存。' : '可跨科選擇，最多 24 個範圍。';
     const cardSummary = $('dongfu-scope-card')?.querySelector('.dongfu-collapse-summary');
     if (cardSummary) cardSummary.textContent = selected.length ? '已選 ' + selected.length + ' 個範圍 · 點擊全螢幕編輯' : '全螢幕選課 · 選章節、定考點';
+    for (const id of ['ss-organize', 'ss-share']) if ($(id)) $(id).disabled = saving || !selected.length;
+    if ($('ss-import')) $('ss-import').disabled = saving;
+    if ($('ss-transfer-panel')?.dataset.mode === 'share') {
+      if (!selected.length) $('ss-transfer-panel').hidden = true;
+      else {
+        const result = window.shareCustomCurriculumRanges?.();
+        if (result?.ok) $('ss-transfer-text').value = result.text;
+      }
+    }
+  }
+
+  function feedback(message) { if ($('ss-feedback')) $('ss-feedback').textContent = message; }
+
+  function transferPanel(mode) {
+    if (saving) return;
+    const panel = $('ss-transfer-panel'), input = $('ss-transfer-text');
+    if (mode === 'share') {
+      const result = window.shareCustomCurriculumRanges?.();
+      if (!result?.ok) { feedback(result?.message || '清單尚未準備好。'); return; }
+      input.value = result.text;
+    } else input.value = '';
+    panel.dataset.mode = mode;
+    panel.hidden = false;
+    input.readOnly = mode === 'share';
+    $('ss-transfer-title').textContent = mode === 'share' ? '分享已選清單' : '匯入修習清單';
+    $('ss-transfer-help').textContent = mode === 'share' ? '複製後即可分享給其他修士；對方可在「匯入清單」貼上使用。' : '貼上收到的完整分享內容或分享碼，會加入目前清單並略過重複項目。完成後記得儲存。';
+    $('ss-transfer-copy').hidden = mode !== 'share';
+    $('ss-transfer-native').hidden = mode !== 'share' || typeof navigator.share !== 'function';
+    $('ss-transfer-apply').hidden = mode !== 'import';
+    input.focus({ preventScroll:true });
+    panel.scrollIntoView({ block:'nearest' });
+  }
+
+  async function copySelection() {
+    const result = window.shareCustomCurriculumRanges?.();
+    if (!result?.ok) { feedback(result?.message || '清單尚未準備好。'); return; }
+    const input = $('ss-transfer-text'); input.value = result.text;
+    try {
+      if (typeof navigator.clipboard?.writeText !== 'function') throw Error('clipboard unavailable');
+      await navigator.clipboard.writeText(result.text);
+      feedback('清單已複製，可分享給其他修士。');
+    } catch (_) {
+      input.focus({ preventScroll:true }); input.select();
+      feedback('已選取分享內容，請用複製功能或 Ctrl／⌘＋C 複製。');
+    }
+  }
+
+  async function nativeShare() {
+    const result = window.shareCustomCurriculumRanges?.();
+    if (!result?.ok) { feedback(result?.message || '清單尚未準備好。'); return; }
+    try {
+      await navigator.share({ title:'青雲問道 · 修習清單', text:result.text });
+      feedback('已開啟系統分享。');
+    } catch (error) {
+      feedback(error?.name === 'AbortError' ? '已取消分享，仍可複製清單。' : '系統分享無法使用，請按「複製清單」。');
+    }
+  }
+
+  function organize() {
+    if (saving) return;
+    const result = window.organizeCustomCurriculumRanges?.();
+    feedback(result?.message || '範圍選擇器尚未準備好。'); updateSummary();
+  }
+
+  function importSelection() {
+    if (saving) return;
+    const result = window.importCustomCurriculumRanges?.($('ss-transfer-text').value);
+    feedback(result?.message || '範圍選擇器尚未準備好。');
+    if (result?.ok) $('ss-transfer-panel').hidden = true;
+    updateSummary();
   }
 
   function setView(view) {
@@ -61,6 +131,9 @@
     const finishTransition = window.beginSceneTransition?.(document.querySelector('.active-page'), studio, 'scroll', 'scope-open');
     previousFocus = document.activeElement;
     baseline = snapshot();
+    $('ss-transfer-panel').hidden = true;
+    $('ss-transfer-text').value = '';
+    feedback('');
     if (block.parentNode !== $('ss-picker-body')) $('ss-picker-body').append(block);
     if (saveButton.parentNode !== $('ss-foot-actions')) $('ss-foot-actions').append(saveButton);
     saveButton.style.display = '';
@@ -115,6 +188,7 @@
   async function save() {
     if (saving) return;
     saving = true;
+    updateSummary();
     const feedback = $('ss-feedback');
     if (feedback) feedback.textContent = '正在儲存出題範圍…';
     try {
@@ -136,6 +210,7 @@
       if (feedback) feedback.textContent = '儲存失敗，變更仍在畫面上。請檢查連線後再試。';
     } finally {
       saving = false;
+      updateSummary();
     }
   }
 
@@ -151,7 +226,7 @@
     const link = document.createElement('link');
     link.id = 'ss-studio-style';
     link.rel = 'stylesheet';
-    link.href = './styles/curriculum-studio.css';
+    link.href = './styles/curriculum-studio.css?v=20261007-scope-share1';
     if (!$('ss-studio-style')) document.head.append(link);
 
     studio = document.createElement('section');
@@ -178,7 +253,25 @@
         </section>
         <aside class="ss-cart" id="ss-cart" role="tabpanel" aria-labelledby="ss-tab-cart">
           <div class="ss-panel-head"><span class="ss-panel-mark"><i class="fa-solid fa-scroll" aria-hidden="true"></i></span><div><strong>我的修習卷</strong><small>已選 <span id="ss-selection-count">0</span> / 24 個範圍</small></div></div>
-          <div class="ss-cart-body" id="ss-cart-body"><p class="ss-cart-note"><strong>複習提示</strong>：勾選整章會立即加入並包含其考點，也可以只挑個別細項；取消勾選會同步移除。完成後記得儲存。</p>
+          <div class="ss-cart-tools" aria-label="已選清單操作">
+            <button id="ss-organize" type="button" title="拆開舊的自訂章節並移除重複項目">重新整理</button>
+            <button id="ss-share" type="button">分享清單</button>
+            <button id="ss-import" type="button">匯入清單</button>
+          </div>
+          <div class="ss-cart-body" id="ss-cart-body">
+            <section id="ss-transfer-panel" class="ss-transfer-panel" hidden aria-labelledby="ss-transfer-title">
+              <strong id="ss-transfer-title">分享已選清單</strong>
+              <p id="ss-transfer-help"></p>
+              <label for="ss-transfer-text" class="ss-transfer-label">清單分享內容</label>
+              <textarea id="ss-transfer-text" rows="5" maxlength="64000" aria-describedby="ss-transfer-help"></textarea>
+              <div class="ss-transfer-actions">
+                <button id="ss-transfer-copy" type="button">複製清單</button>
+                <button id="ss-transfer-native" type="button">系統分享</button>
+                <button id="ss-transfer-apply" type="button">加入修習卷</button>
+                <button id="ss-transfer-close" type="button">收起</button>
+              </div>
+            </section>
+            <p class="ss-cart-note"><strong>複習提示</strong>：勾選整章會立即加入；自訂章節可用頓號等標點分開。按「重新整理」可拆開舊項目並去除重複。完成後記得儲存。</p>
           </div>
           <div class="ss-foot-summary" aria-live="polite">
             <strong id="ss-footer-main">建立你的專屬修習計畫</strong>
@@ -201,6 +294,16 @@
     $('ss-close').addEventListener('click', () => close());
     $('ss-tab-course').addEventListener('click', () => setView('course'));
     $('ss-tab-cart').addEventListener('click', () => setView('cart'));
+    $('ss-organize').addEventListener('click', organize);
+    $('ss-share').addEventListener('click', () => transferPanel('share'));
+    $('ss-import').addEventListener('click', () => transferPanel('import'));
+    $('ss-transfer-copy').addEventListener('click', copySelection);
+    $('ss-transfer-native').addEventListener('click', nativeShare);
+    $('ss-transfer-apply').addEventListener('click', importSelection);
+    $('ss-transfer-close').addEventListener('click', () => {
+      const origin = $('ss-transfer-panel').dataset.mode === 'share' ? $('ss-share') : $('ss-import');
+      $('ss-transfer-panel').hidden = true; origin.focus({ preventScroll:true });
+    });
     studio.addEventListener('keydown', e => {
       if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); close(); }
     });
