@@ -10,15 +10,37 @@
   --app-vv-height:100dvh;
 }
 
-/* Only a displayed question/review may use native pinch zoom. Keep normal scrolling
-   in locked views, including nested scrollers that stop touch-action inheritance. */
+/* Native page zoom cannot reliably be reset on exit. The question policy owns
+   magnification; both view types keep ordinary one-finger/nested scrolling. */
 html.app-zoom-locked,
 html.app-zoom-locked body,
 html.app-zoom-locked body *{
   touch-action:pan-x pan-y!important;
 }
-/* In question views no override is applied: the handwriting canvas retains its
-   own touch-action:none, while text and reading passages allow browser zoom. */
+html.app-answer-zoom-allowed,
+html.app-answer-zoom-allowed body,
+html.app-answer-zoom-allowed body *{
+  touch-action:pan-x pan-y!important;
+}
+html.app-answer-zoom-allowed #quiz-whiteboard-canvas{
+  touch-action:none!important;
+}
+/* Scale the question contents inside their existing scrollers. Fullscreen roots,
+   navigation and the fixed handwriting panel retain their original geometry. */
+html.app-answer-zoom-allowed :is(
+  #quiz-container .quiz-main-column > :not(#quiz-whiteboard-panel),
+  #quiz-whiteboard-question,
+  #bv2-quiz .bv2-question-card > *,
+  #bv2-quiz .bt-quiz-fullscreen > *,
+  #raid-question .raid-question-shell > *,
+  #dongtian-overlay .dt-question > *,
+  #opportunity-overlay .op-workspace > *,
+  #daily-meditation-overlay #dm-content,
+  #five-immortal-challenge #fi-body
+){
+  zoom:var(--app-answer-zoom,1);
+  min-width:0;
+}
 
 /* True fullscreen roots: constrain them to the visual viewport, never the layout viewport. */
 html.app-visual-viewport-ready :is(
