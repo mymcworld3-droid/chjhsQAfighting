@@ -1306,12 +1306,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
       '<div id="raid-learning-status" class="raid-learning-summary">' + renderRaidLearning(myRoomMember(), state.learningOutcome) + '</div>' +
       '<div class="raid-prototype-note raid-loot-summary"><i class="fa-solid fa-gem"></i><span id="raid-reward-status"><b>' + (won ? '通關戰利品' : '再接再厲') + '</b><small>' + (won ? '正在確認玄髓、劍魄、煉製印記與首勝獎勵…' : '答題收益保留；擊敗大師姐另獲團本素材與煉製印記。') + '</small></span></div>' +
       '<div class="raid-result-actions"><button class="raid-ghost" type="button" data-home>返回仙府</button><button class="raid-ghost" type="button" data-refinery>前往煉器</button><button class="raid-primary" type="button" data-again>重新組隊</button></div></div>';
-    result.querySelector('[data-home]')?.addEventListener('click', async function () {
-      await leaveRaidRoom(state.roomId).catch(() => {});
-      resetRaid(false);
-      window.switchToPage?.('page-home');
-      syncRaidViewportLock();
-    });
+    result.querySelector('[data-home]')?.addEventListener('click', returnFromRaidResult);
     result.querySelector('[data-again]')?.addEventListener('click', async function () {
       await leaveRaidRoom(state.roomId).catch(() => {});
       resetRaid(false);
@@ -1326,6 +1321,24 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     });
     updateHomeEntry();
     if (won) void claimRaidReward();
+  }
+
+  let returningFromRaidResult = false;
+  async function returnFromRaidResult() {
+    if (returningFromRaidResult || state.status !== 'finished' || !state.roomId) return false;
+    const roomId = state.roomId;
+    returningFromRaidResult = true;
+    try {
+      await leaveRaidRoom(roomId).catch(() => {});
+      // 返回途中若已加入新隊伍，不可清除新房間或把玩家帶離戰場。
+      if (state.roomId !== roomId || state.status !== 'finished') return false;
+      resetRaid(false);
+      window.switchToPage?.('page-home');
+      syncRaidViewportLock();
+      return true;
+    } finally {
+      returningFromRaidResult = false;
+    }
   }
 
   function resetRaid(clearRoom = true) {
@@ -1388,6 +1401,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
   }
 
   window.openRaidHub = openHub;
+  window.returnFromRaidResult = returnFromRaidResult;
   window.isXiuxianRaidInviteBlocked = function () {
     return state.status === 'loading' ||
       (state.roomId && ['waiting', 'active'].includes(state.room?.status)) ||

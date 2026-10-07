@@ -1931,6 +1931,69 @@ window.switchToPage = (pageId) => {
     finishTransition();
 };
 
+let brandHomeNavigationPending = false;
+function brandHomeFlowBlocked() {
+    // 標題不能繞過登入、劇情、教學或既有彈窗的完成／關閉流程。
+    if (window.getBattleTutorialState?.().active || window.isXiuxianOpeningCinematicActive?.()) return true;
+    return Boolean(document.querySelector([
+        '#login-screen:not(.hidden)', '#page-onboarding:not(.hidden)',
+        '#game-startup-gate', '#startup-cloud-curtain', '#xiuxian-opening-cinematic',
+        '#xiuxian-story-layer', '#xiuxian-story-archive', '#newbie-tutorial-layer',
+        '#qi-five-dongtian-tutorial-layer', '#golden-core-tutorial-layer', '#battle-tutorial-layer',
+        '#daily-meditation-overlay', '#dongtian-overlay', '#opportunity-overlay', '#five-immortal-challenge',
+        '#custom-alert-modal:not(.hidden)', '#custom-confirm-modal:not(.hidden)', '#report-modal:not(.hidden)'
+    ].join(',')) || Array.from(document.querySelectorAll('[aria-modal="true"], [role="dialog"]'))
+        .some(el => el.getClientRects().length > 0));
+}
+window.returnToImmortalHome = async () => {
+    if (brandHomeNavigationPending || !auth.currentUser || !currentUserData ||
+        !hasCompletedPlayerProfile() || brandHomeFlowBlocked()) return false;
+
+    const page = document.querySelector('.page-section.active-page');
+    if (!page || page.id === 'page-home') return false;
+    const account = auth.currentUser.uid;
+    brandHomeNavigationPending = true;
+    try {
+        const battle = window.getBattleV2State?.();
+        if (isBattleActive || window.isXiuxianBattleBusy?.() || battle?.roomId) {
+            if (!isBattleActive && battle?.status === 'finished' &&
+                typeof window.returnFromBattleResult === 'function') {
+                return await window.returnFromBattleResult();
+            }
+            window.showToast?.('鬥法配對或戰鬥尚未結束，請使用鬥法頁的退出按鈕。');
+            return false;
+        }
+        const raid = window.getRaidMvpState?.();
+        if (raid?.roomId && raid.status === 'finished' &&
+            typeof window.returnFromRaidResult === 'function') {
+            return await window.returnFromRaidResult();
+        }
+        if (window.isXiuxianRaidInviteBlocked?.() || raid?.roomId ||
+            document.body.classList.contains('raid-session-active')) {
+            window.showToast?.('團本隊伍尚未離開，請使用團本頁的退出按鈕。');
+            return false;
+        }
+        if (page.id === 'page-quiz') {
+            if (isAnswering || soloNextBusy || document.querySelector('#quiz-loading:not(.hidden)')) {
+                window.showToast?.('題目正在處理，請稍候再返回仙府。');
+                return false;
+            }
+            // 保留未答題目；已作答的收益先完成儲存，再沿用原本的分頁轉場。
+            await window.currentActiveQuiz?.answerPersistence?.catch(() => {});
+            if (auth.currentUser?.uid !== account || document.querySelector('.page-section.active-page') !== page ||
+                brandHomeFlowBlocked()) return false;
+        }
+        window.switchToPage('page-home');
+        return true;
+    } catch (error) {
+        console.warn('[Home navigation]', error);
+        window.showToast?.('暫時無法返回仙府，請稍後再試。');
+        return false;
+    } finally {
+        brandHomeNavigationPending = false;
+    }
+};
+
 window.updateUIStats = updateUIStats; // 🔥 新增：將函式暴露給全域，讓修仙規則可以呼叫它來刷新畫面
 function updateUIStats() {
     if(!currentUserData) return;

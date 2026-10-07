@@ -353,7 +353,7 @@ export const featureReady = (async () => {
     page.querySelector('#bv2-review-continue')?.addEventListener('click', confirmReview);
     page.querySelector('#bv2-cancel')?.addEventListener('click', () => exitBattle({ navigate: true, forfeit: true }));
     page.querySelector('#bv2-leave-top')?.addEventListener('click', () => exitBattle({ navigate: true, forfeit: true }));
-    page.querySelector('#bv2-home')?.addEventListener('click', () => exitBattle({ navigate: true, forfeit: false }));
+    page.querySelector('#bv2-home')?.addEventListener('click', returnFromBattleResult);
     page.querySelector('#bv2-rematch')?.addEventListener('click', async () => {
       await exitBattle({ navigate: false, forfeit: false });
       startMatchmaking();
@@ -1645,6 +1645,12 @@ export const featureReady = (async () => {
     }
   }
 
+  async function returnFromBattleResult() {
+    if (state.starting || state.leaving || state.recovering || state.room?.status !== 'finished') return false;
+    await exitBattle({ navigate: true, forfeit: false });
+    return true;
+  }
+
   async function joinSpecificRoom(roomId) {
     if (state.starting || state.roomId || score() < FOUNDATION_SCORE || !me() || !roomId || storyOrTutorialOpen()) return false;
     state.starting = true;
@@ -1761,6 +1767,7 @@ export const featureReady = (async () => {
 
   window.startBattleMatchmaking = startMatchmaking;
   window.leaveBattle = () => exitBattle({ navigate: true, forfeit: true });
+  window.returnFromBattleResult = returnFromBattleResult;
   window.joinBattleRoomV2 = joinSpecificRoom;
   window.getBattleV2State = () => ({ roomId: state.roomId, role: state.role, status: state.room?.status || 'idle', round: state.room?.round || 0, modeVersion: BATTLE_V2.modeVersion });
 

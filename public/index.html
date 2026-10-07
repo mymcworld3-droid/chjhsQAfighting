@@ -680,8 +680,10 @@ body.xianxia-theme main:has(#page-training.active-page),
 
     <header class="fixed top-0 left-0 w-full z-40 px-4 py-3 flex justify-between items-center glass-strip border-b border-white/5">
         <h1 class="xianxia-brand">
-            <span class="xianxia-seal" aria-hidden="true">道</span>
-            <span><span data-i18n="app_name">青雲問道</span><small>以學入道 · 積微成仙</small></span>
+            <button id="brand-home" type="button" class="xianxia-brand-home" onclick="returnToImmortalHome()" aria-label="青雲問道，返回仙府" title="返回仙府">
+                <span class="xianxia-seal" aria-hidden="true">道</span>
+                <span><span data-i18n="app_name">青雲問道</span><small>以學入道 · 積微成仙</small></span>
+            </button>
         </h1>
 
         <div class="flex items-center gap-3">
