@@ -7,6 +7,7 @@ import { playerRepository } from './data/player-repository.js';
   let studio, block, scopeBody, saveButton, cartSource, opened = false;
   let baseline = null, previousFocus = null, bodyOverflow = '', htmlOverflow = '', saving = false;
   let sharing = false, lastShared = '';
+  let transferFocus = null;
   const clone = value => JSON.parse(JSON.stringify(value));
   const units = () => { const list = $('set-source-mode')?.value === 'focused' ? window.soloSelectedUnits : []; return Array.isArray(list) ? list : []; };
 
@@ -30,6 +31,7 @@ import { playerRepository } from './data/player-repository.js';
     const c = $('ss-selection-count'),
       sum = $('ss-footer-main'), foot = $('ss-footer-sub'), tab = $('ss-tab-count');
     if (c) c.textContent = String(selected.length);
+    if ($('ss-list-count')) $('ss-list-count').textContent = '已選 ' + selected.length + ' / 24 項';
     if (tab) tab.textContent = String(selected.length);
     if (sum) sum.textContent = selected.length ? '已選 ' + selected.length + ' 個複習範圍' : '建立你的專屬修習計畫';
     if (foot) foot.textContent = changed() ? '變更尚未儲存，離開前記得儲存。' : '可跨科選擇，最多 24 個範圍。';
@@ -47,8 +49,9 @@ import { playerRepository } from './data/player-repository.js';
       $('ss-transfer-chat').disabled = saving || sharing || !chatShare.ok || sent;
       $('ss-transfer-chat').textContent = sharing ? '分享中…' : sent ? '已分享到聊天室' : '分享到聊天室';
     }
+    for (const id of ['ss-transfer-close', 'ss-transfer-dismiss']) if ($(id)) $(id).disabled = sharing;
     if ($('ss-transfer-panel')?.dataset.mode === 'share') {
-      if (!selected.length) $('ss-transfer-panel').hidden = true;
+      if (!selected.length && !sharing) closeTransfer();
       else {
         const result = window.shareCustomCurriculumRanges?.();
         if (result?.ok) $('ss-transfer-text').value = result.text;
@@ -56,10 +59,27 @@ import { playerRepository } from './data/player-repository.js';
     }
   }
 
-  function feedback(message) { if ($('ss-feedback')) $('ss-feedback').textContent = message; }
+  function feedback(message) {
+    for (const id of ['ss-feedback', 'ss-transfer-feedback']) if ($(id)) $(id).textContent = message;
+  }
+
+  function closeTransfer(force = false, restoreFocus = true) {
+    if (sharing && !force) return false;
+    const panel = $('ss-transfer-panel');
+    if (!panel) return false;
+    const wasOpen = panel.open;
+    if (wasOpen) panel.close();
+    panel.hidden = true;
+    if (wasOpen && restoreFocus) {
+      const target = transferFocus?.isConnected && !transferFocus.disabled ? transferFocus : $('ss-close');
+      target?.focus({ preventScroll:true });
+    }
+    transferFocus = null;
+    return true;
+  }
 
   function transferPanel(mode) {
-    if (saving) return;
+    if (saving || sharing || !opened) return;
     const panel = $('ss-transfer-panel'), input = $('ss-transfer-text');
     if (mode === 'share') {
       const result = window.shareCustomCurriculumRanges?.();
@@ -67,7 +87,6 @@ import { playerRepository } from './data/player-repository.js';
       input.value = result.text;
     } else input.value = '';
     panel.dataset.mode = mode;
-    panel.hidden = false;
     input.readOnly = mode === 'share';
     $('ss-transfer-title').textContent = mode === 'share' ? '分享已選清單' : '匯入修習清單';
     $('ss-transfer-help').textContent = mode === 'share' ? '填寫標題後可分享到全服聊天室，其他修士可查看並加入；也可複製分享內容。' : '貼上收到的完整分享內容或分享碼，會加入目前清單並略過重複項目。完成後記得儲存。';
@@ -76,8 +95,13 @@ import { playerRepository } from './data/player-repository.js';
     $('ss-transfer-copy').hidden = mode !== 'share';
     $('ss-transfer-native').hidden = mode !== 'share' || typeof navigator.share !== 'function';
     $('ss-transfer-apply').hidden = mode !== 'import';
+    feedback('');
+    if (!panel.open) {
+      transferFocus = document.activeElement;
+      panel.hidden = false;
+      panel.showModal();
+    }
     (mode === 'share' ? $('ss-share-title') : input).focus({ preventScroll:true });
-    panel.scrollIntoView({ block:'nearest' });
     updateSummary();
   }
 
@@ -149,7 +173,7 @@ import { playerRepository } from './data/player-repository.js';
     if (saving) return;
     const result = window.importCustomCurriculumRanges?.($('ss-transfer-text').value);
     feedback(result?.message || '範圍選擇器尚未準備好。');
-    if (result?.ok) $('ss-transfer-panel').hidden = true;
+    if (result?.ok) closeTransfer();
     updateSummary();
   }
 
@@ -179,7 +203,7 @@ import { playerRepository } from './data/player-repository.js';
     const finishTransition = window.beginSceneTransition?.(document.querySelector('.active-page'), studio, 'scroll', 'scope-open');
     previousFocus = document.activeElement;
     baseline = snapshot();
-    $('ss-transfer-panel').hidden = true;
+    closeTransfer(true, false);
     $('ss-transfer-text').value = '';
     $('ss-share-title').value = '';
     lastShared = '';
@@ -213,6 +237,7 @@ import { playerRepository } from './data/player-repository.js';
       window.renderSelectedUnitsList?.();
     }
     const finishTransition = window.beginSceneTransition?.(studio, document.querySelector('.active-page'), 'scroll', 'scope-close');
+    closeTransfer(true, false);
     if (scopeBody) {
       // 關閉時把控制項送回隱藏的原始設定容器，保留相同 ID 與事件。
       scopeBody.prepend(block);
@@ -276,7 +301,7 @@ import { playerRepository } from './data/player-repository.js';
     const link = document.createElement('link');
     link.id = 'ss-studio-style';
     link.rel = 'stylesheet';
-    link.href = './styles/curriculum-studio.css?v=20261007-scope-chat2';
+    link.href = './styles/curriculum-studio.css?v=20261007-scope-modal1';
     if (!$('ss-studio-style')) document.head.append(link);
 
     studio = document.createElement('section');
@@ -303,30 +328,21 @@ import { playerRepository } from './data/player-repository.js';
         </section>
         <aside class="ss-cart" id="ss-cart" role="tabpanel" aria-labelledby="ss-tab-cart">
           <div class="ss-panel-head"><span class="ss-panel-mark"><i class="fa-solid fa-scroll" aria-hidden="true"></i></span><div><strong>我的修習卷</strong><small>已選 <span id="ss-selection-count">0</span> / 24 個範圍</small></div></div>
-          <div class="ss-cart-tools" aria-label="已選清單操作">
-            <button id="ss-organize" type="button" title="拆開舊的自訂章節並移除重複項目">重新整理</button>
-            <button id="ss-share" type="button">分享清單</button>
-            <button id="ss-import" type="button">匯入清單</button>
-          </div>
           <div class="ss-cart-body" id="ss-cart-body">
-            <section id="ss-transfer-panel" class="ss-transfer-panel" hidden aria-labelledby="ss-transfer-title">
-              <strong id="ss-transfer-title">分享已選清單</strong>
-              <p id="ss-transfer-help"></p>
-              <div id="ss-share-title-field" class="ss-share-title-field">
-                <label for="ss-share-title">聊天室標題（選填，最多 20 字）</label>
-                <input id="ss-share-title" type="text" placeholder="例如：物理段考複習" aria-describedby="ss-share-title-count" autocomplete="off">
-                <small id="ss-share-title-count" aria-live="polite">0 / 20 字</small>
+            <div class="ss-selection-toolbar">
+              <div class="ss-selection-caption"><strong>已選清單：</strong><small id="ss-list-count">已選 0 / 24 項</small></div>
+              <div class="ss-cart-tools" role="group" aria-label="已選清單操作">
+                <button id="ss-organize" type="button" aria-label="重新整理" title="重新整理：拆開自訂章節並去重">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M6 6a8 8 0 0 1 14 6M18 18a8 8 0 0 1-14-6"/></svg>
+                </button>
+                <button id="ss-share" type="button" aria-label="分享清單" title="分享清單" aria-haspopup="dialog" aria-controls="ss-transfer-panel">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m9 10.5 6-4M9 13.5l6 4"/></svg>
+                </button>
+                <button id="ss-import" type="button" aria-label="匯入清單" title="匯入清單" aria-haspopup="dialog" aria-controls="ss-transfer-panel">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M4 15v6h16v-6"/></svg>
+                </button>
               </div>
-              <label for="ss-transfer-text" class="ss-transfer-label">清單分享內容</label>
-              <textarea id="ss-transfer-text" rows="5" maxlength="64000" aria-describedby="ss-transfer-help"></textarea>
-              <div class="ss-transfer-actions">
-                <button id="ss-transfer-chat" type="button">分享到聊天室</button>
-                <button id="ss-transfer-copy" type="button">複製清單</button>
-                <button id="ss-transfer-native" type="button">系統分享</button>
-                <button id="ss-transfer-apply" type="button">加入修習卷</button>
-                <button id="ss-transfer-close" type="button">收起</button>
-              </div>
-            </section>
+            </div>
           </div>
           <div class="ss-foot-summary" aria-live="polite">
             <strong id="ss-footer-main">建立你的專屬修習計畫</strong>
@@ -337,7 +353,31 @@ import { playerRepository } from './data/player-repository.js';
       <footer class="ss-foot">
         <small id="ss-feedback" role="status" aria-live="polite"></small>
         <div id="ss-foot-actions"></div>
-      </footer>`;
+      </footer>
+      <dialog id="ss-transfer-panel" class="ss-transfer-panel" hidden aria-labelledby="ss-transfer-title" aria-describedby="ss-transfer-help">
+        <header class="ss-transfer-head">
+          <strong id="ss-transfer-title">分享已選清單</strong>
+          <button id="ss-transfer-dismiss" type="button" aria-label="關閉彈窗" title="關閉彈窗"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+        </header>
+        <div class="ss-transfer-body">
+          <p id="ss-transfer-help"></p>
+          <div id="ss-share-title-field" class="ss-share-title-field">
+            <label for="ss-share-title">聊天室標題（選填，最多 20 字）</label>
+            <input id="ss-share-title" type="text" placeholder="例如：物理段考複習" aria-describedby="ss-share-title-count" autocomplete="off">
+            <small id="ss-share-title-count" aria-live="polite">0 / 20 字</small>
+          </div>
+          <label for="ss-transfer-text" class="ss-transfer-label">清單分享內容</label>
+          <textarea id="ss-transfer-text" rows="5" maxlength="64000" aria-describedby="ss-transfer-help"></textarea>
+        </div>
+        <p id="ss-transfer-feedback" role="status" aria-live="polite"></p>
+        <div class="ss-transfer-actions">
+          <button id="ss-transfer-chat" type="button">分享到聊天室</button>
+          <button id="ss-transfer-copy" type="button">複製清單</button>
+          <button id="ss-transfer-native" type="button">系統分享</button>
+          <button id="ss-transfer-apply" type="button">加入修習卷</button>
+          <button id="ss-transfer-close" type="button">關閉</button>
+        </div>
+      </dialog>`;
     document.body.append(studio);
 
     // 已選清單與原有 selector 為同一份 DOM；這樣移除/儲存仍走既有流程。
@@ -357,9 +397,24 @@ import { playerRepository } from './data/player-repository.js';
     $('ss-transfer-chat').addEventListener('click', shareToChat);
     $('ss-transfer-native').addEventListener('click', nativeShare);
     $('ss-transfer-apply').addEventListener('click', importSelection);
-    $('ss-transfer-close').addEventListener('click', () => {
-      const origin = $('ss-transfer-panel').dataset.mode === 'share' ? $('ss-share') : $('ss-import');
-      $('ss-transfer-panel').hidden = true; origin.focus({ preventScroll:true });
+    $('ss-transfer-close').addEventListener('click', () => closeTransfer());
+    $('ss-transfer-dismiss').addEventListener('click', () => closeTransfer());
+    $('ss-transfer-panel').addEventListener('cancel', e => { e.preventDefault(); closeTransfer(); });
+    $('ss-transfer-panel').addEventListener('keydown', e => {
+      if (e.key === 'Escape') { e.stopPropagation(); return; }
+      if (e.key !== 'Tab') return;
+      const controls = Array.from(e.currentTarget.querySelectorAll('button:not(:disabled), input:not(:disabled), textarea:not(:disabled)'))
+        .filter(node => node.getClientRects().length > 0);
+      const first = controls[0], last = controls[controls.length - 1];
+      if (!first) { e.preventDefault(); return; }
+      if (e.shiftKey && document.activeElement === first || !e.shiftKey && document.activeElement === last) {
+        e.preventDefault(); (e.shiftKey ? last : first).focus({ preventScroll:true });
+      }
+    });
+    $('ss-transfer-panel').addEventListener('click', e => {
+      if (e.target !== $('ss-transfer-panel')) return;
+      const rect = e.target.getBoundingClientRect();
+      if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) closeTransfer();
     });
     studio.addEventListener('keydown', e => {
       if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); close(); }

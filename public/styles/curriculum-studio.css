@@ -22,26 +22,42 @@ html.scope-studio-open,body.scope-studio-open{overflow:hidden!important;overscro
 #scope-studio .ss-picker-body,#scope-studio .ss-cart-body{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:rgba(215,178,109,.32) transparent}
 #scope-studio .ss-picker-body{padding:18px 20px 22px}
 #scope-studio .ss-cart-body{padding:14px}
-#scope-studio .ss-cart-tools{display:flex;flex:0 0 auto;gap:7px;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid rgba(238,205,141,.1)}
-#scope-studio :is(.ss-cart-tools,.ss-transfer-actions) button{min-height:38px;padding:8px 10px;border:1px solid rgba(143,212,200,.28);border-radius:9px;color:#d8ede1;background:rgba(93,163,144,.09);font-size:12px;cursor:pointer}
-#scope-studio :is(.ss-cart-tools,.ss-transfer-actions) button:disabled{opacity:.4;cursor:default}
-#scope-studio :is(.ss-cart-tools,.ss-transfer-actions) button:hover:not(:disabled){border-color:#86cfc4;background:rgba(93,163,144,.18)}
-#scope-studio .ss-transfer-panel{display:grid;gap:9px;margin-bottom:12px;padding:12px;border:1px solid rgba(143,212,200,.28);border-radius:12px;background:#101b1d}
-#scope-studio .ss-transfer-panel[hidden],#scope-studio .ss-transfer-actions button[hidden]{display:none!important}
-#scope-studio .ss-transfer-panel>strong{font-size:14px;color:#d8ede1}
+#scope-studio .ss-selection-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:13px}
+#scope-studio .ss-selection-caption{min-width:0;display:grid;gap:3px}
+#scope-studio .ss-selection-caption strong{font-size:12px;color:#b7dfcc}
+#scope-studio .ss-selection-caption small{font-size:11px;color:#aaa99c}
+#scope-studio .ss-cart-tools{display:flex;flex:0 0 auto;gap:5px}
+#scope-studio :is(.ss-cart-tools,.ss-transfer-actions,.ss-transfer-head) button{min-height:38px;padding:8px 10px;border:1px solid rgba(143,212,200,.28);border-radius:9px;color:#d8ede1;background:rgba(93,163,144,.09);font-size:12px;cursor:pointer}
+#scope-studio :is(.ss-cart-tools,.ss-transfer-actions,.ss-transfer-head) button:disabled{opacity:.4;cursor:default}
+#scope-studio :is(.ss-cart-tools,.ss-transfer-actions,.ss-transfer-head) button:hover:not(:disabled){border-color:#86cfc4;background:rgba(93,163,144,.18)}
+#scope-studio :is(.ss-cart-tools,.ss-transfer-head) button{display:grid;place-items:center;width:32px;height:32px;min-height:32px;padding:0;flex:0 0 32px}
+#scope-studio :is(.ss-cart-tools,.ss-transfer-head) svg{display:block;width:17px;height:17px;pointer-events:none}
+#scope-studio .ss-cart-source{margin:0!important;padding:0!important;border:0!important}
+#scope-studio .ss-cart-source>:first-child:not(#solo-selected-units-list){display:none!important}
+#scope-studio .ss-transfer-panel{width:min(560px,calc(100vw - 32px));max-width:calc(100vw - 32px);max-height:calc(100dvh - 32px);margin:auto;padding:18px;overflow:hidden;border:1px solid rgba(143,212,200,.35);border-radius:18px;background:#101b1d;color:#eee1c8;box-shadow:0 24px 90px rgba(0,0,0,.6);font:inherit}
+#scope-studio .ss-transfer-panel[open]{display:flex;flex-direction:column;gap:13px;animation:ss-transfer-enter .16s ease-out}
+#scope-studio .ss-transfer-panel::backdrop{background:rgba(3,8,10,.76);backdrop-filter:blur(3px)}
+#scope-studio .ss-transfer-panel:not([open]),#scope-studio .ss-transfer-panel[hidden],#scope-studio .ss-transfer-actions button[hidden]{display:none!important}
+#scope-studio .ss-transfer-head{display:flex;flex:0 0 auto;align-items:center;justify-content:space-between;gap:12px}
+#scope-studio .ss-transfer-head strong{font-size:16px;color:#d8ede1}
+#scope-studio .ss-transfer-body{display:grid;gap:10px;min-height:0;overflow:auto;overscroll-behavior:contain}
 #scope-studio .ss-transfer-panel p{margin:0;font-size:11px;line-height:1.7;color:#b6c8bf}
+#scope-studio #ss-transfer-feedback{flex:0 0 auto;overflow-wrap:anywhere;color:#a8d6c8}
+#scope-studio #ss-transfer-feedback:empty{display:none}
+@keyframes ss-transfer-enter{from{opacity:0;transform:translateY(7px) scale(.985)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){#scope-studio .ss-transfer-panel[open]{animation:none}}
 #scope-studio .ss-transfer-label{font-size:11px;color:#b6c8bf}
 #scope-studio .ss-share-title-field{display:grid;gap:6px;font-size:12px;color:#d8ede1}
 #scope-studio .ss-share-title-field[hidden]{display:none!important}
 #scope-studio #ss-share-title{width:100%;min-width:0;min-height:40px;padding:8px 10px;border:1px solid rgba(143,212,200,.28);border-radius:9px;color:#eee1c8;background:#091315;font:inherit}
 #scope-studio #ss-share-title[aria-invalid=true]{border-color:#e7a084}
 #scope-studio #ss-share-title-count{color:#b6c8bf;font-size:11px;text-align:right}
-#scope-studio .ss-transfer-actions{display:flex;gap:7px;flex-wrap:wrap}
+#scope-studio .ss-transfer-actions{display:flex;flex:0 0 auto;gap:7px;flex-wrap:wrap;padding-top:12px;border-top:1px solid rgba(143,212,200,.15)}
 #scope-studio :is(#cs-range-input,#ss-transfer-text){box-sizing:border-box;width:100%;min-width:0;min-height:90px;resize:vertical;padding:10px 12px;border:1px solid rgba(143,212,200,.28);border-radius:10px;background:#091315;color:#eee1c8;font:inherit;font-size:13px;line-height:1.7}
 #scope-studio :is(#cs-range-input,#ss-transfer-text):focus{outline:2px solid #86cfc4;outline-offset:2px}
 #scope-studio #ss-transfer-text{overflow-wrap:anywhere;white-space:pre-wrap}
 #scope-studio .ss-cart #solo-selected-units-list{max-height:none!important;height:auto!important;overflow:visible!important;padding:0!important;display:grid;gap:9px}
-#scope-studio .ss-cart #solo-selected-units-list>p{margin:0 0 3px}
+#scope-studio .ss-cart #solo-selected-units-list>p{display:none}
 #scope-studio .ss-cart #solo-selected-units-list .cs-unit{margin:0}
 #scope-studio .ss-cart #solo-selected-units-list .cs-unit span{font-size:12px!important;line-height:1.65!important;color:#e7dfcc!important}
 #scope-studio .ss-cart #solo-selected-units-list .cs-unit button{align-self:center;flex:0 0 auto}
