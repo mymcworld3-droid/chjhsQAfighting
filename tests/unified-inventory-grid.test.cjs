@@ -13,7 +13,7 @@ const main = read('public/main.js');
 
 test('unified backpack combines artifacts materials and cultivation items', () => {
   assert.match(bag, /artifactSystem\?\.inventory/);
-  assert.match(bag, /materialSystem\?\.inventory/);
+  assert.match(bag, /QANascentGrowth.prepare\(data\).inventory/);
   assert.match(bag, /getCultivationInventoryItems/);
   assert.match(bag, /readTrainingLocalItems/);
 });

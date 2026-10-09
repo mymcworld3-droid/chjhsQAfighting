@@ -1,3 +1,5 @@
+globalThis.QACombatCombo = require('../public/cultivation/combat-combo.js');
+globalThis.QANascentGrowth = require('../public/cultivation/nascent-growth.js');
 const assert = require('node:assert/strict');
 const { test } = require('node:test');
 const { readFileSync } = require('node:fs');
@@ -38,6 +40,7 @@ function setup(totalScore = 0) {
   let remoteUser = null;
   const context = vm.createContext({
     console, Math, Date, Number, WeakSet,
+    QANascentGrowth:globalThis.QANascentGrowth,QACombatCombo:globalThis.QACombatCombo,
     QASoulTalents:require('../public/cultivation/soul-talents.js'),
     document: {
       readyState: 'complete',
@@ -90,7 +93,7 @@ function setup(totalScore = 0) {
 'const quizHelperState = { answered:false, selectedIndex:null, correctIndex:null, explanation:\"\", question:\"\", messages:[], busy:false, requestSerial:0 };' +
     'function renderQuizHelperConversation() {};' +
     'const extendedPracticeState = { active:false };' +
-    read('nascent-soul-rules.js').replace(/^export /gm, '') +
+    read('nascent-soul-rules.js').replace(/^import \{\} from .*;\n/gm,'').replace(/^export /gm, '') +
     'window.getCurrentUserData = () => currentUserData;' +
     read('cultivation-rules.js').replace(/export /g, '') +
     section(main, 'const REALMS = [', '// 綁定全域函式') +
@@ -264,18 +267,18 @@ test('wrong-answer Golden Core Dao-heart may form in time to block that mistake'
 test('saved soul cultivation is applied by ordinary answer flow and persisted once', async () => {
   const h=setup(68);
   h.context.currentUserData.cultivationTraining={coreEnabled:true,equippedCore:{type:'sword'}};
-  h.context.currentUserData.nascentSoulTree={version:4,paths:{sword:{nodes:{leftBottom:5}}}};
+  h.context.currentUserData.nascentSoulGrowth={version:1,branches:{cultivation:5}};
   await Promise.all([h.answer(),h.answer()]);
   assert.equal(h.writes.length,1);
   assert.equal(h.writes[0].data.stats.totalScore,75);
-  assert.equal(h.writes[0].data.stats.nascentSoulSpirit,1);
+  assert.equal(h.writes[0].data.stats.nascentSoulSpirit,undefined);
   assert.equal(h.nodes.get('xiuxian-score').textContent,'75 修為');
 });
 
 test('saved disabled core suppresses soul cultivation in the real answer flow', async () => {
   const h=setup(68);
   h.context.currentUserData.cultivationTraining={coreEnabled:false,equippedCore:{type:'sword'}};
-  h.context.currentUserData.nascentSoulTree={version:4,paths:{sword:{nodes:{leftBottom:5}}}};
+  h.context.currentUserData.nascentSoulGrowth={version:1,branches:{cultivation:5}};
   await h.answer();
   assert.equal(h.writes[0].data.stats.totalScore,70);
 });

@@ -628,7 +628,9 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     reflectedDamage = 0,
     guarded = false,
     defenseSkill = '',
-    healed = 0
+    healed = 0,
+    critical = false,
+    comboHits = []
   } = {}) {
     // Boss and answer settlements may arrive together. Serialize their visual
     // feedback without changing the authoritative combat or answer state.
@@ -650,8 +652,10 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     if (actionCaption && actionName) actionCaption.textContent = '「' + actionName + '」';
 
     const notice = document.createElement('div');
-    notice.className = 'raid-combat-event ' + (attacker === 'player' ? 'player' : 'boss');
+    notice.className = 'raid-combat-event ' + (critical ? 'is-critical ' : '') + (comboHits.length ? 'has-combo ' : '') + (attacker === 'player' ? 'player' : 'boss');
     const details = [];
+    if (critical) details.push('爆擊');
+    if (comboHits.length) details.push('連擊 ×'+comboHits.length+'：'+comboHits.map(n=>Math.round(n)).join('／'));
     if (guarded) details.push('道心護體・完全抵擋');
     if (defenseSkill) details.push(defenseSkill);
     if (reflectedDamage > 0) details.push('反擊 ' + Math.round(reflectedDamage).toLocaleString());
@@ -817,6 +821,8 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
       state.lastPlayerAction = {
         correct: state.answerCorrect,
         damage: Math.max(0, Number(resolution.damage) || 0),
+        critical: resolution.critical === true,
+        comboHits: resolution.comboHits || [],
         personalDamage: Math.max(0, Number(resolution.personalDamage) || 0),
         teamBurstDamage: Math.max(0, Number(resolution.teamBurstDamage) || 0),
         teamGuardReady: resolution.teamGuardReady === true,
@@ -839,19 +845,22 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
 
       if (state.answerCorrect) {
         const dealt = Math.max(0, Number(state.lastPlayerAction.damage) || 0);
+        const hitText = (state.lastPlayerAction.critical ? '・爆擊' : '') + (state.lastPlayerAction.comboHits.length ? '・連擊 ×'+state.lastPlayerAction.comboHits.length : '');
         const spiritText = Number(resolution.spiritGain) > 0
-          ? (result.spiritReward?.status === 'pending' ? '・神識待入帳' : '・神識 +1') : '';
+          ? (result.spiritReward?.status === 'pending' ? '・元嬰碎精待入帳' : '・元嬰碎精 +1') : '';
         const learningText = Number(resolution.cultivationGain) > 0
-          ? '・修為 +1・靈石 +20' + (result.spiritReward?.status === 'pending' ? '（待入帳）' : '') : '';
+          ? '・修為 +'+Math.max(1,Number(result.spiritReward?.cultivationAdded)||1)+'・靈石 +20' + (result.spiritReward?.status === 'pending' ? '（待入帳）' : '') : '';
         const teamText = Number(resolution.teamBurstDamage) > 0 ? '・三才合擊 +' + Number(resolution.teamBurstDamage).toLocaleString() :
           (resolution.teamGuardReady === true ? '・同心破陣已成' : '');
-        showCorrectAnswerFeedback((dealt > 0 ? '攻勢命中・' + dealt.toLocaleString() + ' 傷害' : '攻勢已凝聚') + teamText + learningText + spiritText);
+        showCorrectAnswerFeedback((dealt > 0 ? '攻勢命中・' + dealt.toLocaleString() + ' 傷害' : '攻勢已凝聚') + hitText + teamText + learningText + spiritText);
       }
 
       if (state.answerCorrect && state.lastPlayerAction.damage > 0) {
         await playBattleScene({
           attacker: 'player',
-          actionName: state.lastPlayerAction.teamBurstDamage > 0 ? '三才合擊' : '破勢一擊',
+          actionName: state.lastPlayerAction.teamBurstDamage > 0 ? '三才合擊' : state.lastPlayerAction.critical ? '爆擊' : state.lastPlayerAction.comboHits.length ? '連擊' : '破勢一擊',
+          critical: state.lastPlayerAction.critical,
+          comboHits: state.lastPlayerAction.comboHits,
           damage: state.lastPlayerAction.damage,
           healed: state.lastPlayerAction.healed
         });
@@ -1302,7 +1311,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
       '<div><span>Boss 剩餘生命</span><b>' + Math.round(state.room?.bossHp || 0).toLocaleString() + '</b></div><div><span>題目時間</span><b>不限時</b></div></div>' +
       '<div class="raid-result-team">' + members.map(member => '<div><span>' + escapeHtml(member.name) + '</span><b>' + Math.max(0, Number(member.damage) || 0).toLocaleString() + ' 傷害</b><small>' +
         Math.max(0, Number(member.correct) || 0) + ' / ' + Math.max(0, Number(member.attempts) || 0) + ' 答對' +
-        (Number(member.spiritCorrect) > 0 ? '・神識 +' + Math.floor(member.spiritCorrect) + '（勝敗皆保留）' : '') + '</small></div>').join('') + '</div>' +
+        (Number(member.spiritCorrect) > 0 ? '・元嬰碎精 +' + Math.floor(member.spiritCorrect) + '（勝敗皆保留）' : '') + '</small></div>').join('') + '</div>' +
       '<div id="raid-learning-status" class="raid-learning-summary">' + renderRaidLearning(myRoomMember(), state.learningOutcome) + '</div>' +
       '<div class="raid-prototype-note raid-loot-summary"><i class="fa-solid fa-gem"></i><span id="raid-reward-status"><b>' + (won ? '通關戰利品' : '再接再厲') + '</b><small>' + (won ? '正在確認玄髓、劍魄、煉製印記與首勝獎勵…' : '答題收益保留；擊敗大師姐另獲團本素材與煉製印記。') + '</small></span></div>' +
       '<div class="raid-result-actions"><button class="raid-ghost" type="button" data-home>返回仙府</button><button class="raid-ghost" type="button" data-refinery>前往煉器</button><button class="raid-primary" type="button" data-again>重新組隊</button></div></div>';

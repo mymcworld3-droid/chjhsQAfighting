@@ -12,7 +12,7 @@ import { getFirestore, doc, runTransaction, serverTimestamp } from 'https://www.
   const CAPS = Object.freeze({
     equip_attack_percent:5, equip_hp_percent:5, equip_damage_percent:3,
     equip_damage_reduction_percent:0.8, equip_crit_chance:0.75, equip_crit_damage_percent:3,
-    equip_combo_chance:0.1, equip_lifesteal_percent:0.5, equip_reflect_percent:1,
+    equip_combo_chance:0.1, equip_combo_damage_percent:3, equip_lifesteal_percent:0.5, equip_reflect_percent:1,
     equip_low_hp_damage_percent:2, equip_low_hp_reduction_percent:0.8,
     equip_first_hit_reduction_percent:0.9, equip_damage_cap_percent:1
   });

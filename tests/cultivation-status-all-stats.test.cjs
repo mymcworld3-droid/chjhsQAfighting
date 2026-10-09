@@ -34,7 +34,7 @@ test('displayed values sort as HP 1000, attack 200, combo 9%, reduction 5%', () 
     ]
   });
   assert.deepEqual(Array.from(list, item => [item.label, item.value]), [
-    ['生命值', '1,000'], ['攻擊力', '200'], ['連擊率', '9%'], ['減傷', '5%']
+    ['生命值', '1,000'], ['攻擊力', '200'], ['連擊傷害', '30%'], ['連擊率', '9%'], ['減傷', '5%']
   ]);
 });
 

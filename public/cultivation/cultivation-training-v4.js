@@ -1,12 +1,8 @@
 import {} from './soul-talents.js';
 import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-shells.js';
 import { createGoldenCoreWashAnimation } from './golden-core-wash-animation.js';
-import {
-  NASCENT_SOUL_THRESHOLD, NASCENT_SOUL_ATTRIBUTES, nascentSoulForCore, nascentSoulStage,
-  normalizeSpirit, normalizeSoulTree, soulNodes, NASCENT_SOUL_NODE_CAP, NASCENT_SOUL_BRANCH_UNLOCK,
-  soulAvailableSpirit, soulSpentSpirit, soulNodeStatus, allocateSoulNode, soulCombatBonuses, soulCultivationBonuses,
-  soulInvestmentSummary, resetSoulTree
-} from './nascent-soul-rules.js';
+import {} from './nascent-growth.js';
+import { NASCENT_SOUL_THRESHOLD, normalizeSpirit } from './nascent-soul-rules.js';
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
@@ -42,8 +38,8 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
   let activeTab = 'core';
   let busy = false;
   let soulBusy = false;
-  let selectedSoulNodeId = null;
-  let selectedSoulType = null;
+  const Growth = globalThis.QANascentGrowth;
+  let migrationBusy = false;
   let lastUnlocked = false;
 
   function clampGrade(value) {
@@ -115,7 +111,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     },
     {
       id: 'ningxin', name: '凝心靜音丹', icon: '◈', tone: 'ivory',
-      effect(grade) { return `連續悟道達 ${Math.max(1, Math.ceil(grade / 3)) + 1} 次，即凝聚金丹道心護體；鬥法中連續答對同樣次數也可形成道心護體；護體每次僅抵銷一次傷害後就消失，須由金丹再次凝聚；連擊的第二段傷害仍會命中。`; },
+      effect(grade) { return `連續悟道達 ${Math.max(1, Math.ceil(grade / 3)) + 1} 次，即凝聚金丹道心護體；鬥法中連續答對同樣次數也可形成道心護體；護體每次僅抵銷一次傷害後就消失，須由金丹再次凝聚；完全擋下普通首擊時不觸發連擊；真傷與追擊依各自效果結算。`; },
       ability: '凝神斂念，以連續悟道穩固金丹道心。',
       upkeep: '保持專注即可。',
       warning: '一般連勝本身沒有護體，必須調御此丹相才會觸發。',
@@ -155,7 +151,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     },
     {
       id: 'wugou', name: '無垢清心丹', icon: '◇', tone: 'silver',
-      effect(grade) { return `答錯時有 ${chanceByGrade(grade, 20, 10, 100)}% 機率凝聚金丹道心護體；鬥法答錯時也有相同機率產生道心護體；護體每次僅抵銷一次傷害後就消失，須由金丹再次凝聚；連擊的第二段傷害仍會命中。`; },
+      effect(grade) { return `答錯時有 ${chanceByGrade(grade, 20, 10, 100)}% 機率凝聚金丹道心護體；鬥法答錯時也有相同機率產生道心護體；護體每次僅抵銷一次傷害後就消失，須由金丹再次凝聚；完全擋下普通首擊時不觸發連擊；真傷與追擊依各自效果結算。`; },
       ability: '失誤之際清心去垢，反而護住道心。',
       upkeep: '答錯後重新定神即可。',
       warning: '只產生金丹道心，不屬於舊版通用道心系統。',
@@ -388,6 +384,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
           <h3 class="core-minimal-name">${type.name}</h3>
           <div class="core-minimal-grade">${clampGrade(core.grade)} 品</div>
 
+          <p class="core-gold-balance" aria-live="polite">現有靈石：<strong>${Growth.count(window.getCurrentUserData?.()?.stats?.gold).toLocaleString("zh-TW")}</strong></p>
           <div class="core-wash-row">
             <button id="wash-golden-core" type="button" class="core-wash-btn" ${busy ? 'disabled' : ''}>
               <i class="fa-solid fa-rotate"></i>
@@ -401,7 +398,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
           <button id="equip-current-core" type="button" class="core-equip-btn ${state.equipped ? 'equipped' : ''}" ${state.equipped || busy ? 'disabled' : ''}>
             ${state.equipped ? '<i class="fa-solid fa-circle-check"></i> 已調御此丹相' : '<i class="fa-solid fa-circle-dot"></i> 調御此丹相'}
           </button>
-          ${!state.equipped && currentScore() >= NASCENT_SOUL_THRESHOLD ? '<p class="ns-progress-caption">調御新丹相會自動重置所有元嬰配點，返還已投入神識。</p>' : ''}
+          ${!state.equipped && currentScore() >= NASCENT_SOUL_THRESHOLD ? '<p class="ns-progress-caption">調御新丹相會自動重置所有元嬰配點，返還已投入元嬰碎精。</p>' : ''}
         </div>
       </section>
     `;
@@ -412,355 +409,96 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     return state.equippedCore?.type || null;
   }
 
-  function soulBonusLabel(bonus) {
-    return [
-      bonus.attackFlat ? '+' + bonus.attackFlat + ' 攻擊' : '',
-      bonus.maxHpFlat ? '+' + bonus.maxHpFlat + ' 生命' : '',
-      bonus.bonusDamage ? '+' + bonus.bonusDamage + ' 答對攻擊傷害' : '',
-      bonus.reductionFlat ? '-' + bonus.reductionFlat + ' 每次受擊傷害' : '',
-      bonus.coreHeal ? '+' + bonus.coreHeal + ' 金丹護元回復' : '',
-      bonus.coreAttack ? '+' + bonus.coreAttack + ' 金丹殺招傷害' : '',
-      bonus.talentStrength ? '丹性能力 +' + Math.round(bonus.talentStrength * 1000) / 10 + '%' : '',
-      bonus.cultivationSolo ? '+' + bonus.cultivationSolo + ' 問道答對修為' : '',
-      bonus.cultivationDaily ? '+' + bonus.cultivationDaily + ' 閉關全對修為' : '',
-      bonus.cultivationCave ? '+' + bonus.cultivationCave + ' 洞天首次通關修為' : ''
-    ].filter(Boolean).join(' · ');
-  }
-
-  // 地圖節點只做選取。數值預覽及唯一的升級操作都放在右側詳情頁。
-  function soulNodeDetailMarkup(type, tree, earned) {
-    if (!selectedSoulNodeId) return '';
-    const node = soulNodes(type, state.equippedCore?.grade).find(item => item.id === selectedSoulNodeId);
-    if (!node) return '';
-    const status = soulNodeStatus(tree, type, node.id, earned);
-    const nextLevel = Math.min(NASCENT_SOUL_NODE_CAP, status.level + 1);
-    const maxed = status.level >= NASCENT_SOUL_NODE_CAP;
-    const statRows = [
-      ['attackFlat', '攻擊力'],
-      ['maxHpFlat', '生命上限'],
-      ['bonusDamage', '答對攻擊傷害'],
-      ['reductionFlat', '每次受擊減傷'],
-      ['coreHeal', '本命護元回復'],
-      ['coreAttack', '金丹殺招傷害'],
-      ['cultivationSolo', '問道答對修為'],
-      ['cultivationDaily', '每日閉關全對修為'],
-      ['cultivationCave', '洞天首次通關修為']
-    ].filter(([key]) => node[key] > 0).map(([key, name]) => `
-      <div class="ns-detail-stat">
-        <span>${name}</span>
-        <div class="ns-detail-stat-values">
-          <strong>+${node[key] * status.level}</strong>
-          <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-          <strong class="ns-detail-next">+${node[key] * nextLevel}</strong>
-        </div>
-      </div>`).join('');
-    const talent = globalThis.QASoulTalents?.TYPES[type];
-    const talentValue = level => node.talentTrueDamage ?
-      globalThis.QASoulTalents.trueDamage(globalThis.QASoulTalents.snapshot(type,state.equippedCore.grade,{...(normalizeSoulTree(tree).paths[type]?.nodes || {}),[node.id]:level})) :
-      Math.round(node.talentStrength * level * 1000) / 10 + '%';
-    const talentRow = node.talentWeight ? '<div class="ns-detail-stat"><span>' + talent.trait + (node.talentTrueDamage ? '合計' : '倍率') + '</span><div class="ns-detail-stat-values"><strong>' + talentValue(status.level) + '</strong><i class="fa-solid fa-arrow-right"></i><strong class="ns-detail-next">' + talentValue(nextLevel) + '</strong></div></div>' : '';
-    const label = maxed ? '已點滿' : status.level ? '升級' : '點亮';
-    const action = !status.ok ? status.reason : label + ' · ' + status.cost + ' 神識';
-    return `
-      <aside class="ns-node-detail" aria-labelledby="ns-detail-title">
-        <div class="ns-detail-header">
-          <span>元嬰分支 · 節點詳情</span>
-          <button type="button" class="ns-detail-close" data-ns-close aria-label="關閉節點詳情">
-            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
-          </button>
-        </div>
-        <div class="ns-detail-identity">
-          <span class="ns-detail-icon"><i class="fa-solid ${node.icon}" aria-hidden="true"></i></span>
-          <div><h4 id="ns-detail-title">${node.name}</h4><p>${status.level} / 10 級</p></div>
-        </div>
-        <p class="ns-detail-description">${node.desc}</p>
-        <div class="ns-detail-stats">
-          <div class="ns-detail-stat-headers"><span>目前數值</span><span>升級後</span></div>
-          ${statRows}
-          ${talentRow}
-        </div>
-        <div class="ns-detail-footer">
-          <div class="ns-detail-cost"><span>可用神識</span><strong>${status.remaining}</strong></div>
-          ${node.parent ? '<p class="ns-detail-requirement">' + (Array.isArray(node.parent) ? '兩條前置支脈' : '前置節點') + '須達 5 / 10 級</p>' : ''}
-          <button type="button" class="ns-detail-action" data-ns-upgrade="${node.id}"
-            ${!status.ok || soulBusy ? 'disabled' : ''}>
-            ${soulBusy ? '保存中…' : action}
-          </button>
-          <p class="ns-detail-note">${maxed ? '此節點已達最高等級' : status.ok ? '僅在此處確認後，才會消耗神識並保存。' : status.reason}</p>
-        </div>
-      </aside>`;
-  }
-
   function nascentSoulTabMarkup() {
-    if (currentScore() < NASCENT_SOUL_THRESHOLD) {
-      return '<section class="ns-panel"><h3>元嬰未成</h3><p>修為達到 68 後，方可凝聚本命元嬰。</p></section>';
-    }
-    const type = currentSoulType();
-    if (!type) {
-      selectedSoulNodeId = null;
-      selectedSoulType = null;
-      return '<section class="ns-panel ns-no-core"><h3>尚未裝配金丹</h3><p>請先前往金丹分頁，調御目前的金丹後，再查看本命元嬰與技能樹。</p></section>';
-    }
-    if (selectedSoulType !== type) {
-      selectedSoulNodeId = null;
-      selectedSoulType = type;
-    }
-    const soul = nascentSoulForCore(type);
-    const equippedCore = state.equippedCore;
-    const equippedName = coreType(equippedCore.type).name;
-    const equippedGrade = clampGrade(equippedCore.grade);
+    if (currentScore() < NASCENT_SOUL_THRESHOLD) return '<section class="ns-panel"><h3>元嬰未成</h3><p>修為達到 68 後，方可凝聚本命元嬰。</p></section>';
+    if (!state.equippedCore) return '<section class="ns-panel"><h3>尚未調御金丹</h3><p>請先在金丹頁調御丹相，再溫養元嬰。</p></section>';
     const player = window.getCurrentUserData?.() || {};
-    const earned = normalizeSpirit(player.stats?.nascentSoulSpirit);
-    const tree = normalizeSoulTree(player.nascentSoulTree);
-    const spent = soulSpentSpirit(tree);
-    const available = soulAvailableSpirit(tree, earned);
-    const retained = soulInvestmentSummary(tree, type).filter(path => !path.active);
-    const retainedText = retained.map(path => path.name + ' ' + path.spent + ' 神識').join('、');
-    const combatBonuses = soulCombatBonuses(tree, type, equippedGrade);
-    const cultivationBonuses = soulCultivationBonuses(tree, type);
-    const bonuses = { ...combatBonuses, cultivationSolo: cultivationBonuses.solo,
-      cultivationDaily: cultivationBonuses.daily, cultivationCave: cultivationBonuses.cave };
-    const stage = nascentSoulStage(earned);
-    const levels = tree.paths[type]?.nodes || {};
-    const progress = stage.next ? Math.min(100, (earned - stage.min) / (stage.next.min - stage.min) * 100) : 100;
-
-    const nodes = soulNodes(type, equippedGrade).map(node => {
-      const status = soulNodeStatus(tree, type, node.id, earned);
-      const isLit = status.level > 0;
-      const parents = Array.isArray(node.parent) ? node.parent : node.parent ? [node.parent] : [];
-      const isUnlocked = parents.every(parent => (levels[parent] || 0) >= NASCENT_SOUL_BRANCH_UNLOCK);
-      const statSummary = soulBonusLabel(node);
-      const label = status.level >= NASCENT_SOUL_NODE_CAP ? '已圓滿' :
-        !isUnlocked ? '需前置 5 級' : !status.ok ? status.reason : '消耗 ' + status.cost + ' 神識';
-      return `
-        <button type="button"
-          class="ns-orbit-node ns-pos-${node.id} ${isLit ? 'is-lit' : ''} ${!isUnlocked ? 'is-locked' : ''} ${selectedSoulNodeId === node.id ? 'is-selected' : ''} ns-light-btn"
-          data-ns-node="${node.id}" aria-pressed="${selectedSoulNodeId === node.id}"
-          aria-label="${node.name}，${status.level} / 10 級，${node.desc}，${label}"
-          title="${node.desc} ${statSummary}；${label}">
-          <span class="ns-orbit-symbol"><i class="fa-solid ${node.icon}" aria-hidden="true"></i></span>
-          <strong>${node.name}</strong>
-          <span class="ns-orbit-rank">${status.level} / 10</span>
-          <span class="ns-orbit-glimmer" aria-hidden="true" style="--lit:${status.level / 10 * 100}%"></span>
-          <span class="ns-orbit-hint">${label}</span>
-        </button>`;
+    const prepared = Growth.prepare(player);
+    const core = state.equippedCore;
+    const branches = Growth.branches(core);
+    const cards = branches.map(branch => {
+      const status = Growth.status({...player,cultivationTraining:{...player.cultivationTraining,equippedCore:core}},branch.id);
+      const level = status.level;
+      const quality = (9 - clampGrade(core.grade)) / 8;
+      const max = branch.id === 'coreChance' ? 10 + 5 * quality : branch.id === 'coreDamage' ? (core.type === 'sword' ? 30 : 50) : branch.maxBonus;
+      const value = Math.round(max * level / 10 * 10) / 10;
+      const name = branch.id === 'coreChance' ? (core.type === 'sword' ? '連擊機率' : '爆擊機率') : branch.id === 'coreDamage' ? (core.type === 'sword' ? '連擊傷害' : '爆擊傷害') : branch.name;
+      const description = branch.id === 'core' ? globalThis.QASoulTalents?.TYPES[core.type]?.desc || branch.description : branch.description;
+      return `<article class="ns-growth-card"><span class="ns-growth-icon"><i class="fa-solid ${branch.icon}" aria-hidden="true"></i></span><h4>${name}</h4><p class="ns-growth-level">${level} / 10 級</p><strong class="ns-growth-value">+${value}${branch.unit} <small>／升滿 +${Math.round(max*10)/10}${branch.unit}</small></strong><progress max="10" value="${level}" aria-label="${name}等級"></progress><p>${description}</p><button type="button" data-ns-upgrade="${branch.id}" ${!status.ok || soulBusy ? 'disabled' : ''}>${soulBusy ? '保存中…' : status.ok ? '升級 · '+status.cost+' 碎精' : status.reason}</button></article>`;
     }).join('');
-    const line = (id, path, unlocked, lit) => `
-      <path d="${path}" class="ns-branch-line ${unlocked ? 'is-open' : ''} ${lit ? 'is-lit' : ''}"
-        data-branch="${id}" />`;
-    const links = [
-      line('core-left','M 530 260 L 414 260',true,!!levels.leftMain),
-      line('core-right','M 670 260 L 786 260',true,!!levels.rightMain),
-      line('leftTop','M 414 260 Q 390 260 355 105',(levels.leftMain||0)>=5,!!levels.leftTop),
-      line('leftBottom','M 414 260 Q 390 260 355 415',(levels.leftMain||0)>=5,!!levels.leftBottom),
-      line('leftFarTop','M 355 105 L 215 105',(levels.leftTop||0)>=5,!!levels.leftFarTop),
-      line('leftFarBottom','M 355 415 L 215 415',(levels.leftBottom||0)>=5,!!levels.leftFarBottom),
-      line('leftFinalTop','M 215 105 Q 145 105 90 260',(levels.leftFarTop||0)>=5,!!levels.leftFinal),
-      line('leftFinalBottom','M 215 415 Q 145 415 90 260',(levels.leftFarBottom||0)>=5,!!levels.leftFinal),
-      line('rightTop','M 786 260 Q 810 260 845 105',(levels.rightMain||0)>=5,!!levels.rightTop),
-      line('rightBottom','M 786 260 Q 810 260 845 415',(levels.rightMain||0)>=5,!!levels.rightBottom),
-      line('rightFarTop','M 845 105 L 985 105',(levels.rightTop||0)>=5,!!levels.rightFarTop),
-      line('rightFarBottom','M 845 415 L 985 415',(levels.rightBottom||0)>=5,!!levels.rightFarBottom),
-      line('rightFinalTop','M 985 105 Q 1055 105 1110 260',(levels.rightFarTop||0)>=5,!!levels.rightFinal),
-      line('rightFinalBottom','M 985 415 Q 1055 415 1110 260',(levels.rightFarBottom||0)>=5,!!levels.rightFinal)
-    ].join('');
-
-    // 中央金丹只能使用正式裝配的金丹，絕不能回退到洗髓候選丹。
-    const core = equippedCore;
-    return `
-      <section class="ns-panel ns-branch-panel" aria-label="本命元嬰">
-        <div class="ns-branch-intro">
-          <div class="ns-branch-title">
-            <span class="ns-kicker">NASCENT SOUL · 本命元嬰</span>
-            <h3>${soul.name}</h3>
-            <p>${globalThis.QASoulTalents?.TYPES[type]?.trait || soul.trait} · ${stage.name} · 裝配：${equippedName}（${equippedGrade} 品）</p>
-          </div>
-          <div class="ns-resource" aria-live="polite">
-            <div><small>累計神識</small><strong>${earned}</strong></div>
-            <div><small>各丹性總投入</small><strong>${spent}</strong></div>
-            <div class="ns-resource-free"><small>可用神識</small><strong>${available}</strong></div>
-          </div>
-        </div>
-        <div class="ns-tree-tip ns-investment-guide">
-          <span>${retained.length ? '尚有舊丹性投入：' + retainedText + '。調御新丹相或重修時，會一併返還。' : '調御新丹相時，會自動重置所有元嬰配點並返還已投入神識；累計神識不變。'}
-          <span class="ns-node-rules">左脈攻擊、右脈生存；前置 5 級解鎖下一層，每級消耗 1／3／5／8 神識。</span></span>
-          <button type="button" class="ns-reset-btn" data-ns-reset ${soulBusy || !Object.keys(tree.paths).length ? 'disabled' : ''}>重修元嬰</button>
-        </div>
-        <div class="ns-tree-viewport ns-trees" role="group" aria-label="元嬰左右分支技能地圖">
-          <div class="ns-diagram" aria-label="中央金丹與十二枚元嬰節點">
-            <div class="ns-map-side-label ns-map-side-left" aria-hidden="true">攻擊靈脈</div>
-            <div class="ns-map-side-label ns-map-side-right" aria-hidden="true">生存靈脈</div>
-            <svg class="ns-branches" viewBox="0 0 1200 520" preserveAspectRatio="none" aria-hidden="true">
-              <defs><linearGradient id="ns-link-gold"><stop stop-color="#aa814c"/><stop offset="0.5" stop-color="#f8dfa0"/><stop offset="1" stop-color="#aa814c"/></linearGradient></defs>
-              ${links}
-            </svg>
-            ${nodes}
-            <div class="ns-tree-core" aria-label="已裝配 ${equippedGrade} 品 ${equippedName}">
-              ${coreVisualMarkup(core, false)}
-              <span class="ns-tree-core-name">${equippedName}</span>
-              <span class="ns-tree-core-desc">${equippedGrade} 品 · 已調御</span>
-              <span class="ns-tree-core-stage">${stage.name}</span>
-            </div>
-          </div>
-          ${soulNodeDetailMarkup(type, tree, earned)}
-        </div>
-        <div class="ns-branch-bottom">
-          <p class="ns-combat-summary">已點亮：${soulBonusLabel(bonuses) || '尚無額外屬性'}</p>
-          <div class="ns-progress" role="progressbar" aria-valuemin="${stage.min}" aria-valuenow="${earned}"
-            aria-valuemax="${stage.next?.min || Math.max(earned, 1)}" aria-label="元嬰修煉進度">
-            <span style="width:${progress}%"></span>
-          </div>
-          <p class="ns-progress-caption">${stage.next ? '距離' + stage.next.name + '尚需 ' + Math.max(0, stage.next.min - earned) + ' 神識' : '神識圓滿'} · 換丹或重修會返還已投入神識</p>
-        </div>
-        <div class="ns-reward-guide">
-          <strong>神識來源</strong>
-          <span>問道答對一題 +1</span>
-          <span>團本答對一題 +1，勝敗皆保留</span>
-          <span>每日閉關全對 +3</span>
-          <span>完成洞天：依答對題數獲得神識</span>
-        </div>
-      </section>`;
+    return `<section class="ns-panel ns-growth-panel"><div class="ns-branch-intro"><div><h3>本命元嬰</h3><p>${coreType(core.type).name} · ${clampGrade(core.grade)} 品 · ${branches.length} 個獨立分支</p></div><div class="ns-resource"><div><small>元嬰碎精</small><strong>${prepared.fragments}</strong></div></div></div><p class="ns-growth-note">各分支共 10 級，可直接升級。團本答對每題 +1 碎精，閉關全對 +3 碎精（元嬰境界起）。${prepared.converted ? '舊神識將一次性轉為 '+prepared.converted+' 碎精。' : ''}</p><div class="ns-growth-grid">${cards}</div><div class="ns-growth-footer"><span>調御新丹相時自動重置分支並返還投入的碎精。</span><button type="button" class="ns-reset-btn" data-ns-reset ${soulBusy || !Growth.spent(prepared.growth) ? 'disabled' : ''}>重修元嬰</button></div></section>`;
   }
 
-  async function illuminateSoulNode(nodeId) {
-    if (soulBusy || busy || currentScore() < NASCENT_SOUL_THRESHOLD) return;
+  async function saveSoulBranch(branchId, reset = false) {
+    if (soulBusy || busy) return;
     const user = getAuth(getApp()).currentUser;
-    if (!user) return toast('尚未登入，無法保存元嬰技能。');
-    const type = currentSoulType();
-    const originalData = window.getCurrentUserData?.();
-    const preview = soulNodeStatus(originalData?.nascentSoulTree,
-      type, nodeId, originalData?.stats?.nascentSoulSpirit);
-    if (!preview.ok) return toast(preview.reason);
-
-    soulBusy = true;
-    renderTrainingPage();
-    try {
-      let awarded;
-      const db = getFirestore(getApp());
-      await runTransaction(db, async tx => {
-        const ref = doc(db, 'users', user.uid);
-        const snapshot = await tx.get(ref);
-        if (!snapshot.exists()) throw new Error('找不到玩家資料');
-        const remote = snapshot.data();
-        if (normalizeSpirit(remote.stats?.totalScore) < NASCENT_SOUL_THRESHOLD) throw new Error('元嬰境界不足');
-        const remoteCore = remote.cultivationTraining?.equippedCore;
-        if (!remoteCore || remoteCore.type !== type ||
-          clampGrade(remoteCore.grade) !== clampGrade(state.equippedCore?.grade)) {
-          throw new Error('裝配金丹已變更，請重新開啟元嬰頁');
-        }
-        awarded = allocateSoulNode(remote.nascentSoulTree, type, nodeId, remote.stats?.nascentSoulSpirit);
-        if (!awarded.ok) throw new Error(awarded.reason);
-        tx.update(ref, { nascentSoulTree: awarded.tree });
-      });
-      const local = window.getCurrentUserData?.();
-      if (getAuth(getApp()).currentUser?.uid === user.uid && local) {
-        local.nascentSoulTree = awarded.tree;
-        toast('元嬰點亮成功，消耗 ' + awarded.cost + ' 神識');
-        window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', { detail: {
-          source: 'nascent-soul-tree', spiritSpent: awarded.cost
-        } }));
-      }
-    } catch (error) {
-      console.error('[Nascent soul allocation]', error);
-      toast('點亮未完成：' + (error?.message || '請檢查連線後重試'));
-    } finally {
-      soulBusy = false;
-      if (activeTab === 'nascent-soul') renderTrainingPage();
-    }
-  }
-
-  async function respecSoulTree() {
-    if (soulBusy || busy || currentScore() < NASCENT_SOUL_THRESHOLD) return;
-    const user = getAuth(getApp()).currentUser;
-    if (!user) return toast('尚未登入，無法保存元嬰技能。');
+    if (!user) return toast('尚未登入，無法保存元嬰。');
+    const core = {...state.equippedCore};
+    if (reset && await window.openConfirm?.('重修將清除元嬰分支並返還全部已投入碎精，確定重修？') !== true) return;
     soulBusy = true;
     renderTrainingPage();
     try {
       const db = getFirestore(getApp());
-      const ref = doc(db, 'users', user.uid);
-      // 先以雲端資料預覽，避免用過期的本機配點確認重修。
-      const preview = await runTransaction(db, async tx => {
-        const snapshot = await tx.get(ref);
-        if (!snapshot.exists()) throw new Error('找不到玩家資料');
-        const data = snapshot.data();
-        return { tree: normalizeSoulTree(data.nascentSoulTree), earned: normalizeSpirit(data.stats?.nascentSoulSpirit) };
+      const result = await runTransaction(db, async tx => {
+        const ref = doc(db, 'users', user.uid), snap = await tx.get(ref);
+        if (!snap.exists()) throw new Error('找不到玩家資料');
+        if (getAuth(getApp()).currentUser?.uid !== user.uid) throw new Error('登入帳號已變更');
+        const data = snap.data();
+        if (!sameGoldenCore(data.cultivationTraining?.equippedCore, core)) throw new Error('裝配金丹已變更，請重開元嬰頁');
+        if (Growth.count(data.stats?.totalScore) < NASCENT_SOUL_THRESHOLD) throw new Error('元嬰境界不足');
+        const next = reset ? Growth.reset(data) : Growth.upgrade(data, branchId);
+        if (!reset && !next.ok) throw new Error(next.reason);
+        tx.update(ref, Growth.patch(next));
+        return next;
       });
-      if (!Object.keys(preview.tree.paths).length) return toast('尚無元嬰配點可重修。');
-      const result = resetSoulTree(preview.tree, preview.earned);
-      const paths = soulInvestmentSummary(preview.tree, currentSoulType()).map(path => path.name).join('、');
-      const confirmed = await window.openConfirm?.('重修將清除所有丹性的元嬰配點（' + paths + '），返還可用神識 ' + result.returned + '，重修後可用 ' + result.remaining + '。累計神識與金丹不變。確定重修？');
-      if (confirmed !== true) return;
-      if (getAuth(getApp()).currentUser?.uid !== user.uid) throw new Error('登入帳號已變更，請重新登入');
-      let awarded;
-      await runTransaction(db, async tx => {
-        const snapshot = await tx.get(ref);
-        if (!snapshot.exists()) throw new Error('找不到玩家資料');
-        const remote = snapshot.data();
-        if (normalizeSpirit(remote.stats?.totalScore) < NASCENT_SOUL_THRESHOLD) throw new Error('元嬰境界不足');
-        if (JSON.stringify(normalizeSoulTree(remote.nascentSoulTree)) !== JSON.stringify(preview.tree)) {
-          throw new Error('配點已變更，請重新確認重修');
-        }
-        awarded = resetSoulTree(remote.nascentSoulTree, remote.stats?.nascentSoulSpirit);
-        tx.update(ref, { nascentSoulTree: awarded.tree });
-      });
-      const local = window.getCurrentUserData?.();
-      if (getAuth(getApp()).currentUser?.uid === user.uid && local) {
-        local.nascentSoulTree = awarded.tree;
-        selectedSoulNodeId = null;
-        toast('元嬰已重修，返還可用神識 ' + awarded.returned);
-        window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', { detail: { source: 'nascent-soul-respec' } }));
+      if (getAuth(getApp()).currentUser?.uid === user.uid) {
+        const local = window.getCurrentUserData?.();
+        if (local) Growth.apply(local,result);
+        toast(reset ? '元嬰已重修，返還 '+result.returned+' 碎精' : '升級成功，消耗 '+result.cost+' 碎精');
+        window.dispatchEvent(new CustomEvent('xiuxian:stats-updated',{detail:{source:'nascent-growth'}}));
       }
-    } catch (error) {
-      console.error('[Nascent soul respec]', error);
-      toast('重修未完成：' + (error?.message || '請檢查連線後重試'));
-    } finally {
-      soulBusy = false;
-      if (activeTab === 'nascent-soul') renderTrainingPage();
-    }
+    } catch (error) { toast('保存未完成：'+(error?.message || '請重試')); }
+    finally { soulBusy = false; renderTrainingPage(); }
+  }
+
+  async function migrateSoulResources() {
+    const local = window.getCurrentUserData?.();
+    const user = getAuth(getApp()).currentUser;
+    if (!local || !user || local.nascentSoulGrowth?.version === 1 || migrationBusy || soulBusy) return;
+    migrationBusy = true;
+    try {
+      const db = getFirestore(getApp());
+      const result = await runTransaction(db, async tx => {
+        const ref = doc(db,'users',user.uid), snap = await tx.get(ref);
+        if (!snap.exists()) throw new Error('找不到玩家資料');
+        const remote = snap.data();
+        const next = Growth.prepare(remote);
+        if (remote.nascentSoulGrowth?.version !== 1) tx.update(ref,Growth.patch(next));
+        return next;
+      });
+      if (getAuth(getApp()).currentUser?.uid === user.uid && local === window.getCurrentUserData?.()) {
+        Growth.apply(local,result);
+        window.dispatchEvent(new CustomEvent('xiuxian:stats-updated',{detail:{source:'nascent-migration'}}));
+        renderTrainingPage();
+      }
+    } catch (error) { console.warn('[Nascent migration]',error); }
+    finally { migrationBusy = false; }
   }
 
   function bindSoulActions() {
     const content = document.getElementById('training-tab-content');
-    if (!content) return;
-    content.querySelector('[data-ns-reset]')?.addEventListener('click', () => void respecSoulTree());
-    content.querySelectorAll('[data-ns-node]').forEach(button => {
-      button.addEventListener('click', () => {
-        if (soulBusy) return;
-        selectedSoulNodeId = button.dataset.nsNode;
-        renderTrainingPage();
-        const detail = document.querySelector('#training-tab-content .ns-node-detail');
-        (detail?.querySelector('.ns-detail-action:not(:disabled)') ||
-          detail?.querySelector('.ns-detail-close'))?.focus({ preventScroll: true });
-      });
-    });
-    content.querySelector('[data-ns-close]')?.addEventListener('click', () => {
-      const lastId = selectedSoulNodeId;
-      selectedSoulNodeId = null;
-      renderTrainingPage();
-      content.querySelector('[data-ns-node="' + lastId + '"]')?.focus({ preventScroll: true });
-    });
-    content.querySelector('[data-ns-upgrade]')?.addEventListener('click', (event) => {
-      // 只能從詳情頁發起點亮；Firestore 交易會再次檢查餘額、前置與上限。
-      if (!selectedSoulNodeId || soulBusy) return;
-      const id = event.currentTarget.dataset.nsUpgrade;
-      if (id === selectedSoulNodeId) void illuminateSoulNode(id);
-    });
+    content?.querySelectorAll('[data-ns-upgrade]').forEach(button => button.addEventListener('click',()=>void saveSoulBranch(button.dataset.nsUpgrade)));
+    content?.querySelector('[data-ns-reset]')?.addEventListener('click',()=>void saveSoulBranch(null,true));
+    void migrateSoulResources();
   }
 
-  // 鬥法配對時讀取已投資節點，生成固定單場快照；不寫回角色原始攻擊／生命。
   window.getNascentSoulCultivationBonuses = function () {
-    if (currentScore() < NASCENT_SOUL_THRESHOLD || state.coreEnabled === false || !state.equippedCore) {
-      return { solo: 0, daily: 0, cave: 0 };
-    }
-    return soulCultivationBonuses(window.getCurrentUserData?.()?.nascentSoulTree, state.equippedCore.type);
+    const data = window.getCurrentUserData?.() || {};
+    return Object.fromEntries(['solo','daily','cave'].map(source=>[source,Growth.cultivation(data,source)]));
   };
-
   window.getNascentSoulBattleSnapshot = function () {
-    if (currentScore() < NASCENT_SOUL_THRESHOLD || state.coreEnabled === false || !state.equippedCore) return null;
-    const type = state.equippedCore.type;
-    const bonus = soulCombatBonuses(window.getCurrentUserData?.()?.nascentSoulTree, type, state.equippedCore.grade);
-    const levels = normalizeSoulTree(window.getCurrentUserData?.()?.nascentSoulTree).paths[type]?.nodes || {};
-    return { type, ...bonus, talent: globalThis.QASoulTalents.snapshot(type, state.equippedCore.grade, levels) };
+    if (state.coreEnabled === false) return null;
+    return Growth.bonuses(window.getCurrentUserData?.() || {}, state.equippedCore);
   };
 
   function bagTabMarkup() {
@@ -789,8 +527,8 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
       : activeTab === 'nascent-soul' ? nascentSoulTabMarkup() : coreTabMarkup();
     const enteringSoulMap = activeTab === 'nascent-soul' && currentScore() >= NASCENT_SOUL_THRESHOLD;
     const previouslySoulMap = document.body.classList.contains('ns-map-active');
-    document.body.classList.toggle('ns-map-active', enteringSoulMap);
-    // 從可能已捲動的煉器／背包切入元嬰時，讓分頁與神識摘要回到畫面最上方。
+    document.body.classList.remove('ns-map-active');
+    // 從可能已捲動的煉器／背包切入元嬰時，讓分頁與碎精摘要回到畫面最上方。
     if (enteringSoulMap && !previouslySoulMap) {
       const main = document.querySelector('main');
       if (main) main.scrollTop = 0;
@@ -1097,15 +835,14 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
         if (!sameGoldenCore(training?.core, candidate)) throw new Error('候選金丹已變更，請重新開啟金丹頁');
         const changed = !sameGoldenCore(training.equippedCore, candidate);
         if (!changed && training.equipped === true) {
-          return { training, tree: remote.nascentSoulTree, changed, returned: 0 };
+          return { training, growthState: Growth.prepare(remote), changed, returned: 0 };
         }
-        const refund = changed ? resetSoulTree(remote.nascentSoulTree, remote.stats?.nascentSoulSpirit) : null;
+        const refund = changed ? Growth.reset(remote) : Growth.prepare(remote);
         const next = { ...training, equippedCore: { ...candidate }, equipped: true };
-        const patch = { [REMOTE_FIELD]: next };
-        // 累計神識是收入帳本；清除投入即可返還可用額度，不能再把返還量加進收入。
-        if (changed) patch.nascentSoulTree = refund.tree;
+        const patch = { [REMOTE_FIELD]: next, ...Growth.patch(refund) };
+
         tx.update(ref, patch);
-        return { training: next, tree: changed ? refund.tree : remote.nascentSoulTree,
+        return { training: next, growthState: refund,
           changed, returned: refund?.returned || 0 };
       });
       if (getAuth(getApp()).currentUser?.uid !== user.uid) return;
@@ -1113,18 +850,16 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
       const local = window.getCurrentUserData?.();
       if (local) {
         local[REMOTE_FIELD] = result.training;
-        if (result.tree) local.nascentSoulTree = result.tree;
+        if (result.growthState) Growth.apply(local,result.growthState);
       }
-      selectedSoulNodeId = null;
-      selectedSoulType = null;
       try { saveLocal(); } catch (error) { console.warn('[Golden core] local cache save failed:', error); }
       toast(`已調御丹相：${candidate.grade} 品 ${coreType(candidate.type).name}` +
-        (result.returned ? `，已自動返還 ${result.returned} 神識` : ''));
+        (result.returned ? `，已自動返還 ${result.returned} 元嬰碎精` : ''));
       window.dispatchEvent(new CustomEvent('golden-core-equipped-changed', {
-        detail: { spiritReturned: result.returned }
+        detail: { fragmentsReturned: result.returned }
       }));
       window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', {
-        detail: { source: 'golden-core-equip', spiritReturned: result.returned }
+        detail: { source: 'golden-core-equip', fragmentsReturned: result.returned }
       }));
     } catch (error) {
       console.error('Equip golden core failed:', error);
@@ -1152,8 +887,6 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
 
   function removeLockedUI() {
     document.body.classList.remove('ns-map-active');
-    selectedSoulNodeId = null;
-    selectedSoulType = null;
     // 金丹回落至築基（例如舊角色修為重算）時，築基模組已接管同一個
     // #page-training 和 #nav-training。不能在後觸發的金丹清理中把它們刪掉。
     if (window.isFoundationTrainingStage?.() &&
@@ -1263,11 +996,12 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
 
   function syncUnlock() {
     const unlocked = window.isGoldenCoreUnlocked?.() ?? isUnlocked();
+    if (unlocked) void migrateSoulResources();
     if (lastUnlocked === unlocked) {
       if (unlocked) {
         const soulTab = document.querySelector('#page-training [data-training-tab="nascent-soul"]');
         if (soulTab) soulTab.hidden = currentScore() < NASCENT_SOUL_THRESHOLD;
-        if (activeTab === 'nascent-soul') renderTrainingPage();
+        if (['core','nascent-soul'].includes(activeTab)) renderTrainingPage();
       }
       return;
     }

@@ -1,3 +1,4 @@
+const Growth=require('../public/cultivation/nascent-growth.js');
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const { awardRaidSpirit, eligibleCorrect } = require('../raid-spirit-reward.cjs');
@@ -44,7 +45,7 @@ test('concurrent, replayed and older cumulative claims grant each correct answer
   const member=n=>({totalScore:68,spiritCorrect:n,correct:n,attempts:n});
   const results=await Promise.all([3,3,1,5,2,5].map(n=>awardRaidSpirit(f.db,'a','room12345',member(n))));
   assert.equal(results.reduce((sum,r)=>sum+r.awarded,0),5);
-  assert.equal(f.docs.get('users/a').stats.nascentSoulSpirit,17);
+  assert.equal(f.docs.get('users/a').materialSystem.inventory[Growth.ITEM_ID],17);
   assert.equal(f.docs.get('users/a').stats.gold,25);
   assert.equal(f.docs.get('users/a').stats.totalScore,68);
   assert.equal((await awardRaidSpirit(f.db,'a','room12345',member(5))).awarded,0);
@@ -103,13 +104,13 @@ test('signed player-action resolves damage and spirit, ignores client correctnes
   assert.ok(correct.resolution.damage>0);
   assert.equal(correct.room.bossHp,1800-correct.resolution.damage);
   assert.equal(correct.resolution.spiritGain,1);
-  assert.equal(correct.spiritReward.totalSpirit,11);
+  assert.equal(correct.spiritReward.totalFragments,11);
   await f.answer(1);
   const wrong=await f.answer(2,1);
   assert.equal(wrong.resolution.correct,false);
   assert.equal(wrong.resolution.damage,0);
   assert.equal(wrong.resolution.spiritGain,0);
-  assert.equal(f.a.docs.get('users/a').stats.nascentSoulSpirit,11);
+  assert.equal(f.a.docs.get('users/a').materialSystem.inventory[Growth.ITEM_ID],11);
   assert.equal(wrong.room.members.a.correct,1);
   assert.equal(f.a.docs.get('users/a').stats.totalScore,69);
   assert.equal(f.a.docs.get('users/a').stats.gold,20);
@@ -121,7 +122,7 @@ test('signed player-action resolves damage and spirit, ignores client correctnes
 test('pre-nascent raid answers grant no spirit',async()=>{
   const f=raidFixture({score:67});
   assert.equal((await f.answer(1)).resolution.spiritGain,0);
-  assert.equal(f.a.docs.get('users/a').stats.nascentSoulSpirit,10);
+  assert.equal(f.a.docs.get('users/a').materialSystem.inventory[Growth.ITEM_ID],10);
 });
 
 test('failed spirit grant is recovered by polling after loss, reconnect and server restart never duplicate',async()=>{
@@ -129,7 +130,7 @@ test('failed spirit grant is recovered by polling after loss, reconnect and serv
   assert.equal((await f.answer(1)).spiritReward.status,'pending');
   assert.equal(f.c.docs.get('raidRooms/room12345').members.a.correct,1);
   f.c.docs.get('raidRooms/room12345').status='lost';
-  assert.equal((await f.request('get')).spiritReward.totalSpirit,11);
+  assert.equal((await f.request('get')).spiritReward.totalFragments,11);
   f.restart();
   const recovered=await f.request('reconnect');
   assert.equal(recovered.room.status,'lost');
@@ -137,7 +138,7 @@ test('failed spirit grant is recovered by polling after loss, reconnect and serv
   assert.equal(recovered.spiritReward.learningAwarded,0);
   assert.equal(f.a.docs.get('users/a').stats.totalScore,69);
   assert.equal(f.a.docs.get('users/a').stats.gold,20);
-  assert.equal(f.a.docs.get('users/a').stats.nascentSoulSpirit,11);
+  assert.equal(f.a.docs.get('users/a').materialSystem.inventory[Growth.ITEM_ID],11);
 });
 
 test('killing answer settles spirit even when room is already won',async()=>{
@@ -145,9 +146,9 @@ test('killing answer settles spirit even when room is already won',async()=>{
   f.c.docs.get('raidRooms/room12345').bossHp=1;
   const result=await f.answer(1);
   assert.equal(result.room.status,'won');
-  assert.equal(result.spiritReward.totalSpirit,11);
+  assert.equal(result.spiritReward.totalFragments,11);
   await f.request('get');
-  assert.equal(f.a.docs.get('users/a').stats.nascentSoulSpirit,11);
+  assert.equal(f.a.docs.get('users/a').materialSystem.inventory[Growth.ITEM_ID],11);
 });
 
 test('new answer earnings are cumulative, survive loss and do not retroactively reward old answers',async()=>{
@@ -157,7 +158,7 @@ test('new answer earnings are cumulative, survive loss and do not retroactively 
   assert.equal(results.reduce((sum,r)=>sum+r.learningAwarded,0),5);
   assert.equal(f.docs.get('users/a').stats.totalScore,33);
   assert.equal(f.docs.get('users/a').stats.gold,125);
-  assert.deepEqual(f.docs.get('users/a').raidLearningRewards,{cultivation:5,gold:100});
+  assert.deepEqual(f.docs.get('users/a').raidLearningRewards,{cultivation:5,gold:100,fragments:0});
   assert.equal((await awardRaidSpirit(f.db,'a','lost_room',member(5))).learningAwarded,0);
 });
 test('old spirit receipts are retained when new cultivation and gold begin',async()=>{
@@ -167,6 +168,6 @@ test('old spirit receipts are retained when new cultivation and gold begin',asyn
     ['raidSpiritClaims/'+id]:{settledCorrect:5}});
   const r=await awardRaidSpirit(f.db,'a','old_room',{totalScore:68,spiritCorrect:6,learningCorrect:1,correct:6,attempts:6});
   assert.equal(r.awarded,1);assert.equal(r.learningAwarded,1);
-  assert.equal(f.docs.get('users/a').stats.nascentSoulSpirit,11);
+  assert.equal(f.docs.get('users/a').materialSystem.inventory[Growth.ITEM_ID],11);
   assert.equal(f.docs.get('users/a').stats.gold,20);
 });

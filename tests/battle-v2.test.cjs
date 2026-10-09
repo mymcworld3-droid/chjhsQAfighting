@@ -1,3 +1,5 @@
+globalThis.QACombatCombo = require('../public/cultivation/combat-combo.js');
+globalThis.QANascentGrowth = require('../public/cultivation/nascent-growth.js');
 const assert = require('node:assert/strict');
 const { test } = require('node:test');
 const { readFileSync } = require('node:fs');
@@ -11,8 +13,8 @@ const mainSource = readPublic('main.js');
 const cssSource = readPublic('styles/battle-mode-v2.css');
 
 function loadEngine() {
-  const context = vm.createContext({ console, Math, Number, String, Object, Array });
-  const code = engineSource
+  const context = vm.createContext({ console, Math, Number, String, Object, Array,QACombatCombo:globalThis.QACombatCombo });
+  const code = engineSource.replace(/^import \{\} from .*;\n/gm,'')
     .replace(/export const /g, 'const ')
     .replace(/export function /g, 'function ') + `\nthis.__engine={BATTLE_V2,deterministicPercent,resolveDeterministicAttackCore,resolveDeterministicCounterCore,resolveDeterministicCoreSupport,decideRoundAttackers,settleBattleRound};`;
   vm.runInContext(code, context);

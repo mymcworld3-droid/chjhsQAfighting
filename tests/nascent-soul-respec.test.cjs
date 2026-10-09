@@ -1,9 +1,11 @@
+globalThis.QACombatCombo = require('../public/cultivation/combat-combo.js');
+globalThis.QANascentGrowth = require('../public/cultivation/nascent-growth.js');
 const {test}=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const vm=require('node:vm');
 const read=p=>fs.readFileSync(require('node:path').join(__dirname,'..',p),'utf8');
-const rules=vm.runInNewContext(read('public/cultivation/nascent-soul-rules.js').replace(/^export /gm,'')+
+const rules=vm.runInNewContext(read('public/cultivation/nascent-soul-rules.js').replace(/^import \{\} from .*;\n/gm,'').replace(/^export /gm,'')+
   '\n({normalizeSpirit,normalizeSoulTree,soulSpentSpirit,soulAvailableSpirit,soulInvestmentSummary,resetSoulTree,allocateSoulNode})');
 const tree=()=>({version:4,paths:{
   sword:{nodes:{leftMain:5,leftTop:2},baselineNodes:{},legacySpent:0},
@@ -41,66 +43,6 @@ test('damaged balance cannot mint spirit from costs greater than lifetime earnin
   const r=rules.resetSoulTree(tree(),3);
   assert.equal(r.released,16);assert.equal(r.returned,3);assert.equal(r.remaining,3);
 });
-const training=read('public/cultivation/cultivation-training-v4.js');
-const start=training.indexOf('  async function respecSoulTree() {');
-const end=training.indexOf('  function bindSoulActions()',start);
-async function run({confirm=true,concurrent=false,fail=false,accountChanged=false}={}){
-  const remote={nascentSoulTree:tree(),stats:{totalScore:68,nascentSoulSpirit:30}};
-  const local=JSON.parse(JSON.stringify(remote)),original=JSON.stringify(remote), writes=[],messages=[];
-  let uid='test', calls=0;
-  const context={
-    ...rules,soulBusy:false,busy:false,NASCENT_SOUL_THRESHOLD:68,activeTab:'nascent-soul',
-    currentScore:()=>68,getApp:()=>({}),getAuth:()=>({currentUser:{uid}}),
-    getFirestore:()=>({}),doc:()=>({}),renderTrainingPage:()=>{},currentSoulType:()=>'ocean',
-    selectedSoulNodeId:'leftMain',toast:x=>messages.push(x),console:{error:()=>{}},
-    CustomEvent:class{constructor(type,options){this.type=type;this.detail=options.detail;}},
-    window:{getCurrentUserData:()=>local,dispatchEvent:()=>{},
-      openConfirm:async()=>{
-        if(concurrent)remote.nascentSoulTree.paths.sword.nodes.leftMain=6;
-        if(accountChanged)uid='other';
-        return confirm;
-      }},
-    runTransaction:async(db,worker)=>{
-      calls++;if(fail&&calls===2)throw new Error('offline');
-      const staged=[];
-      const result=await worker({get:async()=>({exists:()=>true,data:()=>remote}),
-        update:(ref,patch)=>staged.push(patch)});
-      for(const patch of staged){writes.push(patch);Object.assign(remote,patch);}
-      return result;
-    }
-  };
-  vm.createContext(context);
-  vm.runInContext(training.slice(start,end)+'\nthis.runRespec=respecSoulTree;',context);
-  await context.runRespec();
-  return {remote,local,original,writes,messages,context};
-}
-test('confirmed transaction clears only tree, preserves earned balance and updates local projection',async()=>{
-  const r=await run();
-  assert.equal(r.writes.length,1);
-  assert.deepEqual(Object.keys(r.writes[0]),['nascentSoulTree']);
-  assert.equal(Object.keys(r.remote.nascentSoulTree.paths).length,0);
-  assert.equal(Object.keys(r.local.nascentSoulTree.paths).length,0);
-  assert.equal(r.remote.stats.nascentSoulSpirit,30);
-  assert.equal(r.local.stats.nascentSoulSpirit,30);
-  assert.equal(r.context.soulBusy,false);
-});
-test('cancelled confirmation preserves remote and local nodes without a write',async()=>{
-  const r=await run({confirm:false});
-  assert.equal(r.writes.length,0);assert.equal(JSON.stringify(r.remote),r.original);
-  assert.equal(JSON.stringify(r.local),r.original);
-});
-test('new allocation during confirmation prevents resetting unseen investments',async()=>{
-  const r=await run({concurrent:true});
-  assert.equal(r.writes.length,0);assert.equal(r.remote.nascentSoulTree.paths.sword.nodes.leftMain,6);
-  assert.match(r.messages.join(' '),/配點已變更/);
-});
-test('failed persistence never clears the local tree or reports success',async()=>{
-  const r=await run({fail:true});
-  assert.equal(r.writes.length,0);assert.equal(JSON.stringify(r.local),r.original);
-  assert.equal(JSON.stringify(r.remote),r.original);assert.match(r.messages.join(' '),/重修未完成/);
-});
-test('account change during confirmation prevents a write to the former player',async()=>{
-  const r=await run({accountChanged:true});
-  assert.equal(r.writes.length,0);assert.equal(JSON.stringify(r.remote),r.original);
-  assert.match(r.messages.join(' '),/登入帳號已變更/);
+test('new branch reset returns purchased fragments and retires legacy allocations',()=>{
+ const Growth=globalThis.QANascentGrowth,p={stats:{nascentSoulSpirit:0},nascentSoulGrowth:{version:1,branches:{attack:3,vitality:2}},materialSystem:{inventory:{[Growth.ITEM_ID]:4}}};const result=Growth.reset(p);assert.equal(result.returned,9);assert.equal(result.fragments,13);Growth.apply(p,result);assert.equal(Growth.spent(p.nascentSoulGrowth),0);assert.equal(Growth.reset(p).returned,0);
 });

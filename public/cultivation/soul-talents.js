@@ -7,7 +7,7 @@
     ningxin:{name:'凝鋒',trait:'會心',desc:'答對時有 25% 機率追加 3 倍能力倍率的普通傷害；不再觸發法寶暴擊。修習後道心改為每連答至少 3 題凝聚一次。'},
     pojing:{name:'破境',trait:'斬殺',desc:'敵方生命不高於 50% 時，額外普通傷害為能力倍率的 3.8 倍；其餘為 0.4 倍。'},
     xingchen:{name:'星隕',trait:'連答蓄力',desc:'每連續答對 3 題追加 4 倍能力倍率的普通傷害，答錯會中斷蓄力。'},
-    wugou:{name:'清光',trait:'真傷',desc:'答對追加固定真傷，穿過道心護體與普通減傷；法寶護盾與保命仍有效。完整左脈提供 60–72 真傷，依金丹品級提高。'},
+    wugou:{name:'清光',trait:'真傷',desc:'答對追加固定真傷，穿過道心護體與普通減傷；法寶護盾與保命仍有效。金丹屬性分支升滿提供 60–72 真傷，依金丹品級提高。'},
     thunder:{name:'雷返',trait:'反傷',desc:'受到直接傷害後反傷，按能力倍率計算，最多能力倍率 × 攻擊力；反傷不再觸發反傷。修習後金丹雷劫反擊為實際受傷的 25%。'},
     reverse:{name:'逆命',trait:'低血增傷',desc:'自身生命不高於 50% 時，額外普通傷害為能力倍率的 1.8 倍；其餘為 0.25 倍。'},
     sword:{name:'追魂',trait:'連擊',desc:'答對追加一次 1.4 × 能力倍率 × 攻擊力的普通追擊；首擊被道心擋下仍可追擊，追擊不觸發法寶攻擊效果。'}
@@ -32,12 +32,12 @@
     const own=clamp(player.hp/Math.max(1,player.maxHp),0,1),enemy=clamp(target?.hp/Math.max(1,target?.maxHp),0,1);
     if(t.type==='ocean')out.normal=budget*(enemy>=.7?2:.6);
     if(t.type==='taichu')out.leech=budget*1.2;
-    if(t.type==='ningxin'&&hash(seed+':soul-critical')<.25)out.normal=budget*3;
+    if(t.type==='ningxin'&&!t.comboMode&&hash(seed+':soul-critical')<.25)out.normal=budget*3;
     if(t.type==='pojing')out.normal=budget*(enemy<=.5?3.8:.4);
     if(t.type==='xingchen'&&streak>0&&streak%3===0)out.normal=budget*4;
     if(t.type==='wugou')out.trueDamage=trueDamage(t);
     if(t.type==='reverse')out.normal=budget*(own<=.5?1.8:.25);
-    if(t.type==='sword')out.followup=budget*1.4;
+    if(t.type==='sword'&&!t.comboMode)out.followup=budget*1.4;
     for(const key of ['normal','trueDamage','followup','leech'])out[key]=Math.round(out[key]);
     return out;
   }

@@ -297,7 +297,7 @@ import { MATERIAL_CATALOG, RAID_CRAFT_MATERIAL_IDS, RAID_REFINEMENT_KEYS, getMat
     equip_hp_percent:'生命加成', equip_damage_percent:'傷害加成',
     equip_damage_reduction_flat:'固定減傷', equip_damage_reduction_percent:'減傷',
     equip_crit_chance:'暴擊率', equip_crit_damage_percent:'暴擊傷害',
-    equip_combo_chance:'連擊率', equip_lifesteal_percent:'吸血',
+    equip_combo_chance:'連擊率', equip_combo_damage_percent:'連擊傷害加成', equip_lifesteal_percent:'吸血',
     equip_reflect_percent:'反彈', equip_shield_flat:'初始護盾',
     equip_true_damage_flat:'真實傷害', equip_cheat_death:'保命',
     remove_wrong_option:'排除錯誤選項', timed_attack_multiplier:'限時攻擊加成',

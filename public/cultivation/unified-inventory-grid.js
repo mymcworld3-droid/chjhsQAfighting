@@ -1,3 +1,4 @@
+import {} from './nascent-growth.js';
 import { ARTIFACT_CATALOG, ARTIFACT_EQUIP_SLOTS, getArtifactById, realmForScore, realmOrderByName } from './artifact-catalog.js';
 import {
   MATERIAL_CATALOG,
@@ -132,10 +133,10 @@ import {
       });
     });
 
-    Object.entries(data.materialSystem?.inventory || {}).forEach(([id, value]) => {
+    Object.entries(globalThis.QANascentGrowth.prepare(data).inventory).forEach(([id, value]) => {
       const quantity = qty(value);
       if (!quantity) return;
-      const item = getMaterialById(id);
+      const item = id === globalThis.QANascentGrowth.ITEM_ID ? globalThis.QANascentGrowth.ITEM : getMaterialById(id);
       if (!item) return;
       out.push({
         key: `material:${id}`,
@@ -150,6 +151,7 @@ import {
         qualityRank: materialRealmOrderByName(item?.realm || '凡人'),
         description: item?.description || '此材料已不在目前材料清單中。',
         buyGold: Math.max(0, Number(item?.buyGold) || 0),
+        nascentMaterial: item.nascentMaterial === true,
         raidKey: RAID_KEY_IDS.has(id),
         raidMaterial: RAID_CRAFT_IDS.has(id),
         raw: item
@@ -228,9 +230,10 @@ import {
 
   function itemMarkup(item) {
     const color = qualityColor(item.realm);
-    return `<button type="button" class="uib-item ${item.raidKey || item.raidMaterial ? 'uib-raid-key' : ''}" data-uib-item="${escapeHtml(item.key)}" style="--uib-quality:${escapeHtml(color)}" aria-label="查看 ${escapeHtml(item.name)} 詳細資料">
+    return `<button type="button" class="uib-item ${item.nascentMaterial ? 'uib-nascent uib-raid-key' : ''} ${item.raidKey || item.raidMaterial ? 'uib-raid-key' : ''}" data-uib-item="${escapeHtml(item.key)}" style="--uib-quality:${escapeHtml(color)}" aria-label="查看 ${escapeHtml(item.name)} 詳細資料">
       <span class="uib-qty">×${item.quantity}</span>
       ${item.equipped ? '<span class="uib-equipped"><i class="fa-solid fa-circle-check"></i></span>' : ''}
+      ${item.nascentMaterial ? '<span class="uib-raid-key-badge uib-nascent-badge">元嬰</span>' : ''}
       ${item.raidKey || item.raidMaterial ? '<span class="uib-raid-key-badge"><i class="fa-solid fa-stamp"></i> 團本</span>' : ''}
       <span class="uib-icon">${imageMarkup(item.imageUrl, item.icon || '◆', item.name)}</span>
       <span class="uib-name">${escapeHtml(item.name)}</span>
@@ -303,6 +306,7 @@ import {
     if (effect?.type === 'equip_damage_reduction_percent') return `受到傷害 -${pct(effect.value)}`;
     if (effect?.type === 'equip_crit_chance') return `暴擊率 +${pct(effect.value)}`;
     if (effect?.type === 'equip_crit_damage_percent') return `暴擊額外傷害 +${pct(effect.value)}`;
+    if (effect?.type === 'equip_combo_damage_percent') return `連擊傷害 +${pct(effect.value)}（基礎 30%）`;
     if (effect?.type === 'equip_combo_chance') return `連擊率 ${pct(Math.min(0.10, Number(effect.value) || 0))}（上限 10%）`;
     if (effect?.type === 'equip_lifesteal_percent') return `吸血 ${pct(effect.value)}`;
     if (effect?.type === 'equip_reflect_percent') return `反傷 ${pct(effect.value)}`;
@@ -347,7 +351,7 @@ import {
         ? `<ul>${item.effects.map((effect) => `<li>${escapeHtml(effectLabel(effect))}</li>`).join('')}</ul>`
         : '<p>目前沒有額外效果資料。</p>'}${equippedHere ? '<p class="uib-equipped-note"><i class="fa-solid fa-circle-check"></i> 目前已裝備，效果正在生效</p>' : ''}${equipAction}</div>`;
     } else if (item.type === 'material') {
-      extra = item.raidKey || item.raidMaterial
+      extra = item.nascentMaterial ? `<div class="uib-detail-section"><span>元嬰養成</span><p>用途：升級修為、攻擊、生命及金丹屬性分支。</p><p>不可交易或煉器。可於修煉 → 元嬰使用。</p><p>持有數量：<b>×${item.quantity}</b></p></div>` : item.raidKey || item.raidMaterial
         ? `<div class="uib-detail-section uib-raid-key-detail"><span><i class="fa-solid fa-stamp"></i> ${item.raidKey ? '團本印記' : '團本煉器素材'}</span><p>分類：${item.raidKey ? '煉製階段印記' : '八方煉器陣素材'}</p><p>用途：${item.id === RAID_REFINEMENT_KEYS[2] ? '第二次煉製的必要印記，不佔素材格。' : item.id === RAID_REFINEMENT_KEYS[3] ? '第三次煉製的必要印記，不佔素材格。' : escapeHtml(item.name) + '，可直接放入八方煉器陣。'}</p><p>取得方式：素材只能由對應團本產生，但木／鐵素材可在玩家市集轉手；問道、洞天與系統商店不會產出。</p><p>持有數量：<b>×${item.quantity}</b></p></div>`
         : `<div class="uib-detail-section"><span>材料資訊</span><p>分類：${escapeHtml(item.category)}</p></div>`;
     } else if (item.id === 'revival-pill') {
@@ -501,7 +505,7 @@ import {
       .uib-toolbar{flex:0 0 auto;display:flex;align-items:end;gap:8px;padding:9px 10px;border:1px solid rgba(216,177,93,.16);border-radius:14px;background:rgba(13,11,8,.84)}
       .uib-summary{display:grid;gap:2px;margin-right:auto}.uib-summary b{color:#f0dfb6;font-size:11px}.uib-summary span{color:#847864;font-size:7px}.uib-toolbar label{display:grid;gap:3px;color:#8e816c;font-size:6px;font-weight:900}.uib-toolbar select{min-width:126px;height:32px;padding:0 28px 0 9px;border:1px solid rgba(216,177,93,.2);border-radius:9px;background:#090807;color:#e2d5ba;font-size:8px;outline:none}
       .uib-grid{flex:1;min-height:0;overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(108px,140px));grid-auto-rows:max-content;align-content:start;justify-content:start;gap:10px;padding:2px 4px 12px 2px;scrollbar-width:thin;scrollbar-color:rgba(216,177,93,.26) transparent}
-      .uib-item{position:relative;aspect-ratio:1/1;min-width:0;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:12px 8px 9px;border:1px solid color-mix(in srgb,var(--uib-quality) 42%,rgba(255,255,255,.08));border-radius:16px;background:radial-gradient(circle at 50% 27%,color-mix(in srgb,var(--uib-quality) 15%,transparent),transparent 46%),linear-gradient(145deg,rgba(22,18,12,.96),rgba(7,7,7,.98));color:#eee2ca;text-align:center;box-shadow:inset 0 0 22px rgba(255,255,255,.015);transition:.15s ease;overflow:hidden}.uib-item:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--uib-quality) 72%,#fff 8%);box-shadow:0 10px 24px rgba(0,0,0,.25)}.uib-item.uib-raid-key{border-color:color-mix(in srgb,var(--uib-quality) 68%,#e7c779);background:radial-gradient(circle at 50% 24%,rgba(231,199,121,.2),transparent 48%),linear-gradient(145deg,#20180d,#080807);box-shadow:inset 0 0 25px rgba(231,199,121,.04)}.uib-raid-key-badge{position:absolute;left:6px;top:6px;padding:2px 5px;border:1px solid rgba(231,199,121,.3);border-radius:999px;background:rgba(35,24,9,.88);color:#e7c779;font-size:5.5px;font-weight:900;letter-spacing:.04em}.uib-raid-key-badge i{margin-right:2px}
+      .uib-item{position:relative;aspect-ratio:1/1;min-width:0;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:12px 8px 9px;border:1px solid color-mix(in srgb,var(--uib-quality) 42%,rgba(255,255,255,.08));border-radius:16px;background:radial-gradient(circle at 50% 27%,color-mix(in srgb,var(--uib-quality) 15%,transparent),transparent 46%),linear-gradient(145deg,rgba(22,18,12,.96),rgba(7,7,7,.98));color:#eee2ca;text-align:center;box-shadow:inset 0 0 22px rgba(255,255,255,.015);transition:.15s ease;overflow:hidden}.uib-item:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--uib-quality) 72%,#fff 8%);box-shadow:0 10px 24px rgba(0,0,0,.25)}.uib-nascent-badge{background:#563975!important;color:#ecd5ff!important}.uib-item.uib-raid-key{border-color:color-mix(in srgb,var(--uib-quality) 68%,#e7c779);background:radial-gradient(circle at 50% 24%,rgba(231,199,121,.2),transparent 48%),linear-gradient(145deg,#20180d,#080807);box-shadow:inset 0 0 25px rgba(231,199,121,.04)}.uib-raid-key-badge{position:absolute;left:6px;top:6px;padding:2px 5px;border:1px solid rgba(231,199,121,.3);border-radius:999px;background:rgba(35,24,9,.88);color:#e7c779;font-size:5.5px;font-weight:900;letter-spacing:.04em}.uib-raid-key-badge i{margin-right:2px}
       .uib-icon{width:46px;height:46px;display:grid;place-items:center;overflow:hidden;border-radius:13px;border:1px solid color-mix(in srgb,var(--uib-quality) 58%,transparent);background:color-mix(in srgb,var(--uib-quality) 11%,#090807);color:var(--uib-quality);font-size:15px;font-weight:900;box-shadow:0 0 20px color-mix(in srgb,var(--uib-quality) 12%,transparent)}.uib-icon img,.uib-equip-slot-frame img{width:100%;height:100%;display:block;object-fit:cover}.uib-equip-slot-frame{overflow:hidden}.uib-name{width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#eee2ca;font-size:8px;font-weight:900}.uib-bottom{width:100%;display:flex;justify-content:space-between;gap:5px;align-items:center}.uib-bottom small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#827661;font-size:6px}.uib-bottom em{color:var(--uib-quality);font-size:6px;font-style:normal;white-space:nowrap}.uib-qty{position:absolute;right:7px;top:7px;padding:2px 5px;border-radius:999px;background:rgba(0,0,0,.64);border:1px solid rgba(255,255,255,.08);color:#ead49a;font-size:7px;font-weight:900}.uib-equipped{position:absolute;left:7px;top:7px;color:#f6d77e;font-size:8px}
       /* Materials are round mineral tokens; forged artifacts retain angular framed emblems. */
       .uib-item[data-uib-item^="material:"] .uib-icon,.uib-modal-material .uib-modal-icon{border-radius:50%!important;background:radial-gradient(circle at 31% 25%,color-mix(in srgb,var(--uib-quality) 36%,#fff),color-mix(in srgb,var(--uib-quality) 14%,#16110a) 43%,#0b0b09 100%);box-shadow:inset 0 0 0 2px rgba(255,255,255,.07),0 0 12px color-mix(in srgb,var(--uib-quality) 12%,transparent)}

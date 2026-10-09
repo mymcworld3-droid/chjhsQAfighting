@@ -1,3 +1,4 @@
+import {} from './nascent-growth.js';
 import { raidRepository } from './data/raid-repository.js';
 
 const STORAGE_KEY = 'xiuxian:raid-room:v2';
@@ -21,10 +22,17 @@ async function api(action, payload = {}) {
       (!local.uid || local.uid === reward?.uid)) {
     local.stats = local.stats || {};
     let changed = false;
-    if (Number.isFinite(reward?.totalSpirit)) {
-      const before = Math.max(0, Number(local.stats.nascentSoulSpirit) || 0);
-      local.stats.nascentSoulSpirit = Math.max(before, reward.totalSpirit);
-      changed = local.stats.nascentSoulSpirit !== before;
+    const fragmentsEarned = reward?.learningTotals?.fragments;
+    if (Number.isFinite(fragmentsEarned) && fragmentsEarned >= 0) {
+      local.raidLearningRewards ||= {};
+      const before = Math.max(0, Number(local.raidLearningRewards.fragments) || 0);
+      const delta = Math.max(0,fragmentsEarned-before);
+      // Migration and unseen receipt income are distinct; cached balances never restore spent fragments.
+      if (delta || local.nascentSoulGrowth?.version !== 1) {
+        globalThis.QANascentGrowth.apply(local,globalThis.QANascentGrowth.award(local,delta));
+        local.raidLearningRewards.fragments = fragmentsEarned;
+        changed = true;
+      }
     }
     for (const [key, stat] of [['cultivation', 'totalScore'], ['gold', 'gold']]) {
       const earned = reward?.learningTotals?.[key];
@@ -38,7 +46,7 @@ async function api(action, payload = {}) {
         changed = true;
       }
     }
-    if (changed) window.updateUIStats?.();
+    if (changed) { window.updateUIStats?.(); window.dispatchEvent(new CustomEvent('xiuxian:stats-updated',{detail:{source:'raid-fragments'}})); }
   }
   return result;
 }

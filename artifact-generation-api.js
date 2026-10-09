@@ -5,7 +5,7 @@ const aiRouter = require('./ai-router');
 const ALLOWED_EFFECTS = new Set([
   'equip_attack_flat','equip_attack_percent','equip_hp_flat','equip_hp_percent',
   'equip_damage_percent','equip_damage_reduction_flat','equip_damage_reduction_percent',
-  'equip_crit_chance','equip_crit_damage_percent','equip_combo_chance',
+  'equip_crit_chance','equip_crit_damage_percent','equip_combo_chance', 'equip_combo_damage_percent',
   'equip_lifesteal_percent','equip_reflect_percent','equip_shield_flat',
   'equip_true_damage_flat','equip_low_hp_damage_percent','equip_low_hp_reduction_percent',
   'equip_first_hit_reduction_percent','equip_damage_cap_percent',
@@ -115,7 +115,7 @@ function minRealmForEffect(type) {
     equip_cheat_death: 5,
     equip_copy_enemy_artifact: 6,
     equip_damage_cap_percent: 4,
-    equip_combo_chance: 2,
+    equip_combo_chance: 2, equip_combo_damage_percent: 2,
     equip_lifesteal_percent: 2,
     equip_reflect_percent: 2
   })[type] || 0;
@@ -134,7 +134,7 @@ const EFFECT_LABELS = Object.freeze({
   equip_damage_reduction_percent:'百分比減傷',
   equip_crit_chance:'暴擊率',
   equip_crit_damage_percent:'暴擊增傷',
-  equip_combo_chance:'連擊率',
+  equip_combo_chance:'連擊率', equip_combo_damage_percent:'連擊傷害加成',
   equip_lifesteal_percent:'吸血',
   equip_reflect_percent:'反傷',
   equip_shield_flat:'開場護盾',
@@ -162,7 +162,7 @@ function roundRange(value, digits = 4) {
 const HARD_EFFECT_CAPS = Object.freeze({
   equip_attack_percent:5, equip_hp_percent:5, equip_damage_percent:3,
   equip_damage_reduction_percent:0.8, equip_crit_chance:0.75, equip_crit_damage_percent:3,
-  equip_combo_chance:0.10, equip_lifesteal_percent:0.5, equip_reflect_percent:1,
+  equip_combo_chance:0.10, equip_combo_damage_percent:3, equip_lifesteal_percent:0.5, equip_reflect_percent:1,
   equip_low_hp_damage_percent:2, equip_low_hp_reduction_percent:0.8,
   equip_first_hit_reduction_percent:0.9, equip_damage_cap_percent:1
 });
@@ -188,7 +188,7 @@ function normalizeEffectBounds(raw) {
         const lower = type === 'equip_damage_cap_percent' ? 0.05 : (defaults.field === 'multiplier' ? 1.01 : (integer ? 1 : 0.0001));
         const hardCaps = { equip_attack_percent:5, equip_hp_percent:5, equip_damage_percent:3,
           equip_damage_reduction_percent:0.8, equip_crit_chance:0.75, equip_crit_damage_percent:3,
-          equip_combo_chance:0.10, equip_lifesteal_percent:0.5, equip_reflect_percent:1,
+          equip_combo_chance:0.10, equip_combo_damage_percent:3, equip_lifesteal_percent:0.5, equip_reflect_percent:1,
           equip_low_hp_damage_percent:2, equip_low_hp_reduction_percent:0.8,
           equip_first_hit_reduction_percent:0.9, equip_damage_cap_percent:1 };
         const upper = integer ? 1000000 : defaults.field === 'multiplier' ? 5 : hardCaps[type] ?? 1;
@@ -333,6 +333,7 @@ function effectRange(type, order, stage = 1, effectBoundsV1 = {}, rawDefault = f
     equip_crit_chance: 0.025 + order * 0.007,
     equip_crit_damage_percent: 0.15 + order * 0.045,
     equip_combo_chance: Math.min(0.10, 0.02 + order * 0.005),
+    equip_combo_damage_percent: 0.08 + order * 0.025,
     equip_lifesteal_percent: 0.03 + order * 0.012,
     equip_reflect_percent: 0.04 + order * 0.015,
     equip_low_hp_damage_percent: 0.10 + order * 0.03,

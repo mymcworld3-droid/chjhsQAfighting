@@ -1,3 +1,4 @@
+import {} from './combat-combo.js';
 // 法寶鬥法效果結算：只依房間內的 artifactBattle 快照運算，不讀取本地玩家資料。
 // 由房主在 Firestore transaction 內統一結算，確保雙方看到相同結果。
 (function () {
@@ -15,7 +16,7 @@
     'equip_damage_reduction_percent',
     'equip_crit_chance',
     'equip_crit_damage_percent',
-    'equip_combo_chance',
+    'equip_combo_chance', 'equip_combo_damage_percent',
     'equip_lifesteal_percent',
     'equip_reflect_percent',
     'equip_true_damage_flat',
@@ -127,9 +128,10 @@
       damagePercent += sumValue(effects, 'equip_low_hp_damage_percent');
     }
 
-    const critChance = clamp(sumValue(effects, 'equip_crit_chance'), 0, CRIT_CHANCE_CAP);
-    const critBonus = Math.max(0, sumValue(effects, 'equip_crit_damage_percent'));
-    const comboChance = clamp(sumValue(effects, 'equip_combo_chance'), 0, COMBO_CHANCE_CAP);
+    const critChance = clamp(sumValue(effects, 'equip_crit_chance') + num(attacker?.nascentSoul?.critChance), 0, CRIT_CHANCE_CAP);
+    const critBonus = Math.max(0, sumValue(effects, 'equip_crit_damage_percent') + num(attacker?.nascentSoul?.critDamageBonus));
+    const comboStats = globalThis.QACombatCombo.stats(attacker,effects);
+    const comboChance = comboStats.chance;
     const lifestealPercent = clamp(sumValue(effects, 'equip_lifesteal_percent'), 0, LIFESTEAL_CAP);
     const trueDamage = Math.max(0, Math.round(sumValue(effects, 'equip_true_damage_flat')));
     const shieldGain = Math.max(0, Math.round(sumValue(effects, 'equip_on_correct_shield_flat')));
@@ -141,28 +143,22 @@
       ? Math.random()
       : stableHash(String(seed) + ':' + kind) / 4294967296;
     const critical = critChance > 0 && roll('critical') < critChance;
-    const combo = comboChance > 0 && roll('combo') < comboChance;
 
     let normalDamage = normalBase;
     if (critical) normalDamage *= 1.5 + critBonus;
-    // 連擊只追加一次同等基礎攻擊，不會再遞迴觸發連擊或暴擊。
-    if (combo) normalDamage += normalBase;
 
     const labels = [];
     const copied = copyLabel(effects);
     if (copied) labels.push(copied);
     if (damagePercent > 0) labels.push(`增傷+${Math.round(damagePercent * 100)}%`);
     if (critical) labels.push('暴擊');
-    if (combo) labels.push('連擊');
     if (trueDamage > 0) labels.push(`真傷+${trueDamage}`);
 
     return {
       normalDamage: Math.max(0, Math.round(normalDamage)),
-      // 將連擊額外的一擊保留為獨立數值，道心只能擋住其中第一擊。
-      comboNormalDamage: combo ? Math.max(0, Math.round(normalBase)) : 0,
+      comboMultiplier: comboStats.multiplier,
       trueDamage,
       critical,
-      combo,
       comboChance,
       lifestealPercent,
       shieldGain,
@@ -263,6 +259,8 @@
     return {
       damage,
       critical: attack.critical === true,
+      comboChance: attack.comboChance,
+      comboMultiplier: attack.comboMultiplier,
       soulReductionApplied:true,
       normalDamage: attack.normalDamage,
       trueDamage: attack.trueDamage,
@@ -274,19 +272,20 @@
     };
   };
 
-  // 第一擊被金丹道心擋下時，仍需判定本次攻擊是否觸發額外連擊。
-  // 只處理穿透道心的真傷及第二擊，普通首擊不誤耗法寶護盾或一次性保命。
+  // 道心擋下普通首擊後，只有真傷可穿透。零傷害不能触發連擊。
   window.resolveArtifactGuardedFollowup = function ({ attacker, defender, baseDamage, seed = null, bonusTrueDamage=0 } = {}) {
     const attack = window.resolveArtifactBattleAttack({ attacker, defender, baseDamage, seed });
     const trueDamage=attack.trueDamage+bonusTrueDamage;
-    if ((!attack.combo || attack.comboNormalDamage <= 0) && trueDamage <= 0) return null;
+    if (trueDamage <= 0) return null;
     const defense = window.resolveArtifactBattleDefense({
-      defender, attacker, normalDamage: attack.combo ? attack.comboNormalDamage : 0, trueDamage
+      defender, attacker, normalDamage: 0, trueDamage
     });
     const damage = Math.max(0, Math.round(Number(defense.hpDamage) || 0));
     return {
       damage,
       trueDamage,
+      comboChance: attack.comboChance,
+      comboMultiplier: attack.comboMultiplier,
       // This follow-up excludes the critical opening hit that the core blocked.
       critical: false,
       soulReductionApplied:true,

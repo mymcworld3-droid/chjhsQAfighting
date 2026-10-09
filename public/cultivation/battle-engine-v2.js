@@ -1,3 +1,4 @@
+import {} from './combat-combo.js';
 // Battle v2 pure engine: deterministic, replay-safe PvP settlement.
 // No Firebase / DOM dependencies so round rules can be regression-tested independently.
 
@@ -245,8 +246,9 @@ function hitPlan({ roomId, round, role, player, support }) {
   return {
     role,
     baseDamage: attackPower(player),
-    extraDamage: core.extraDamage + support.bonusDamage + soulDamage,
-    totalDamage: attackPower(player) + core.extraDamage + support.bonusDamage + soulDamage,
+    followupDamage: player?.goldenCore?.type === 'sword' ? core.extraDamage : 0,
+    extraDamage: (player?.goldenCore?.type === 'sword' ? 0 : core.extraDamage) + support.bonusDamage + soulDamage,
+    totalDamage: attackPower(player) + (player?.goldenCore?.type === 'sword' ? 0 : core.extraDamage) + support.bonusDamage + soulDamage,
     soulDamage,
     activation: core.activation
   };
@@ -332,7 +334,7 @@ export function settleBattleRound({
       : guarded && typeof resolveGuardedFollowup === 'function'
         ? (resolveGuardedFollowup({ attacker: player, defender, baseDamage: plan.totalDamage, bonusTrueDamage:talent.trueDamage, role, round, seed: `${roomId}:${round}:${player.uid}:artifact` }) || null)
         : null;
-    // 連擊是第二次獨立傷害：首擊被道心抵銷後，連擊仍會正常命中。
+    // 首擊實際造成傷害後，才會開始逐段獨立連擊。
     const guardedTrue = guarded && !equipment && talent.trueDamage > 0 ? (resolveTalentDefense ?
       Math.max(0,Math.round(resolveTalentDefense({attacker:player,defender,normalDamage:0,trueDamage:talent.trueDamage})?.hpDamage || 0)) : talent.trueDamage) : 0;
     const incomingDamage = (equipment ? Math.max(0, Math.round(Number(equipment.damage) || 0)) : guarded ? 0 : plan.totalDamage + talent.normal) + guardedTrue;
@@ -368,18 +370,35 @@ export function settleBattleRound({
       }
     }
     let talentReceived = Math.min(targetBefore, damage), talentReflect = 0;
+    const comboStats = globalThis.QACombatCombo.stats(player,player.artifactBattle?.effects || []);
+    const combos = globalThis.QACombatCombo.chain({damage:Math.min(targetBefore,damage),
+      chance:equipment?.comboChance ?? comboStats.chance,multiplier:equipment?.comboMultiplier ?? comboStats.multiplier,
+      seed:`${roomId}:${round}:${player.uid}:artifact`,remainingHp:role === 'host' ? guestHp : hostHp,
+      onHit(raw,index) {
+        defender.hp = role === 'host' ? guestHp : hostHp;
+        const defended = resolveTalentDefense?.({attacker:player,defender,normalDamage:raw,trueDamage:0});
+        const dealt = defended ? Math.max(0,Math.round(defended.hpDamage || 0)) : Math.max(0,raw-(Number(defender.nascentSoul?.reductionFlat)||0));
+        if (!dealt) return 0;
+        talentReceived += Math.min(defender.hp,dealt);
+        talentReflect += Math.max(0,Math.round(defended?.reflectDamage || 0));
+        if (role === 'host') guestHp = Math.max(0,guestHp-dealt); else hostHp = Math.max(0,hostHp-dealt);
+        const step = {type:'attack',actorRole:role,actorUid:player.uid,targetUid:defender.uid,damage:dealt,baseDamage:0,extraDamage:dealt,combo:true,comboIndex:index+1,critical:false,guarded:false,skill:'連擊 '+(index+1),hostHp,guestHp};
+        steps.push(step); logs.push(step);
+        return dealt;
+      }});
+    const pursuit = talent.followup + plan.followupDamage;
     // One isolated follow-up: defense still applies, attack procs never run again.
-    if (talent.followup > 0 && hostHp > 0 && guestHp > 0) {
+    if (pursuit > 0 && hostHp > 0 && guestHp > 0) {
       defender.hp = role === 'host' ? guestHp : hostHp;
-      const defended = resolveTalentDefense?.({attacker:player,defender,normalDamage:talent.followup,trueDamage:0});
+      const defended = resolveTalentDefense?.({attacker:player,defender,normalDamage:pursuit,trueDamage:0});
       const followDamage = defended ? Math.max(0, Math.round(defended.hpDamage || 0)) :
-        Math.max(0,talent.followup - Math.max(0,Number(defender?.nascentSoul?.reductionFlat)||0));
+        Math.max(0,pursuit - Math.max(0,Number(defender?.nascentSoul?.reductionFlat)||0));
       talentReceived += Math.min(defender.hp, followDamage);
-      talentReflect = Math.max(0,Math.round(defended?.reflectDamage || 0));
+      talentReflect += Math.max(0,Math.round(defended?.reflectDamage || 0));
       if (role === 'host') guestHp = Math.max(0,guestHp-followDamage);
       else hostHp = Math.max(0,hostHp-followDamage);
       steps.push({type:'attack',actorRole:role,actorUid:player.uid,targetUid:defender.uid,
-        damage:followDamage,baseDamage:0,extraDamage:followDamage,guarded:false,skill:'元嬰・' + talent.name + '連擊',hostHp,guestHp});
+        damage:followDamage,baseDamage:0,extraDamage:followDamage,guarded:false,pursuit:true,critical:false,skill:plan.followupDamage ? '九天劍氣丹・追擊' : '元嬰・' + talent.name + '追擊',hostHp,guestHp});
     }
     const soulLeech = soulTalents?.healing(player,talentReceived,talent.leech) || 0;
     if(soulLeech > 0 && (role === 'host' ? hostHp : guestHp) > 0) {

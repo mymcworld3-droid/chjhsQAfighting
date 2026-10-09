@@ -3,7 +3,8 @@ import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.j
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, collection, query, where, orderBy, limit, getDocs, doc, getDoc, runTransaction, increment, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { meditationDateKey, nextMeditationStreak, meditationReward } from './daily-meditation-rules.js';
-import { nascentSoulSpiritReward, normalizeSpirit, soulCultivationBonusForPlayer } from './nascent-soul-rules.js';
+import {} from './nascent-growth.js';
+import { soulCultivationBonusForPlayer } from './nascent-soul-rules.js';
 import { buildMeditationMistakePool, chooseMeditationMistakes } from './daily-meditation-mistakes.js';
 
 (function () {
@@ -157,7 +158,7 @@ import { buildMeditationMistakePool, chooseMeditationMistakes } from './daily-me
     if (r.lastDate === today()) {
       const result = r.lastResult || {};
       setContent('<h3 class="dm-result">今日已出關</h3>' +
-        summary([['連續閉關', (r.streak || 1) + ' 日'], ['修為收穫', '+' + (result.cultivation || 0)], ['靈石收穫', '+' + (result.gold || 0)], ['神識收穫', '+' + (result.spirit || 0)]]) +
+        summary([['連續閉關', (r.streak || 1) + ' 日'], ['修為收穫', '+' + (result.cultivation || 0)], ['靈石收穫', '+' + (result.gold || 0)], ['元嬰碎精收穫', '+' + (result.fragments || 0)]]) +
         '<p class="dm-note">今日已完成閉關，明日再來運轉周天。累計閉關 ' + (r.totalDays || 1) + ' 日。</p>' +
         '<button type="button" class="dm-action dm-action-secondary" id="dm-done">返回仙府</button>');
       node('dm-done').onclick = () => node('daily-meditation-overlay')?.remove();
@@ -165,7 +166,7 @@ import { buildMeditationMistakePool, chooseMeditationMistakes } from './daily-me
       return;
     }
     const reward = currentPreview();
-    setContent(summary([['今日連續', '第 ' + reward.streak + ' 天'], ['全對修為', '+' + reward.cultivation], ['全對靈石', '+' + reward.gold], ['全對神識', (Number(userData()?.stats?.totalScore) || 0) >= 68 ? '+3' : '元嬰解鎖']]) +
+    setContent(summary([['今日連續', '第 ' + reward.streak + ' 天'], ['全對修為', '+' + reward.cultivation], ['全對靈石', '+' + reward.gold], ['全對元嬰碎精', (Number(userData()?.stats?.totalScore) || 0) >= 68 ? '+3' : '元嬰解鎖']]) +
       '<p class="dm-note">從你過去問道、洞天及閉關的錯題中抽出 3 道不同題目重新參悟。優先選擇尚未訂正的錯題。<br>全對獲完整獎勵，答對 2 題獲半額基礎獎勵與連續加成；未滿 2 題仍可累積天數並獲得 5 靈石。每日 00:00（台灣時間）重置。</p>' +
       '<button type="button" class="dm-action" id="dm-start">開始閉關</button>');
     node('dm-start').onclick = () => void start();
@@ -367,15 +368,13 @@ import { buildMeditationMistakePool, chooseMeditationMistakes } from './daily-me
         const soulCultivationAdded = current.correct === QUESTION_TOTAL
           ? soulCultivationBonusForPlayer(data, 'daily') : 0;
         const totalCultivation = reward.cultivation + soulCultivationAdded;
-        const spiritAdded = nascentSoulSpiritReward({
-          source: 'daily-meditation', score: originalScore, correct: current.correct, total: QUESTION_TOTAL
-        });
-        const newSpirit = normalizeSpirit(data.stats?.nascentSoulSpirit) + spiritAdded;
+        const fragmentsAdded = originalScore >= 68 && current.correct === QUESTION_TOTAL ? 3 : 0;
+        const growthState = globalThis.QANascentGrowth.award(data,fragmentsAdded);
         const newScore = originalScore + totalCultivation;
         const newRecord = {
           lastDate: current.date, streak, totalDays: Math.max(0, Number(old.totalDays) || 0) + 1,
           bestStreak: Math.max(streak, Number(old.bestStreak) || 0),
-          lastResult: { correct: current.correct, total: QUESTION_TOTAL, cultivation: totalCultivation, soulCultivation: soulCultivationAdded, gold: reward.gold, spirit: spiritAdded, realm: reward.realm },
+          lastResult: { correct: current.correct, total: QUESTION_TOTAL, cultivation: totalCultivation, soulCultivation: soulCultivationAdded, gold: reward.gold, fragments: fragmentsAdded, realm: reward.realm },
           updatedAt: serverTimestamp()
         };
         const rank = typeof window.getXiuxianRealmIndex === 'function'
@@ -385,7 +384,7 @@ import { buildMeditationMistakePool, chooseMeditationMistakes } from './daily-me
           questProgress: window.XianxiaQuestRules.recordEvent(data.questProgress, 'meditation', current.date),
           'stats.totalScore': increment(totalCultivation),
           'stats.gold': increment(reward.gold),
-          'stats.nascentSoulSpirit': increment(spiritAdded),
+          ...globalThis.QANascentGrowth.patch(growthState),
           'stats.rankLevel': rank
         });
         tx.set(logRef, {
@@ -396,7 +395,7 @@ import { buildMeditationMistakePool, chooseMeditationMistakes } from './daily-me
           dailyMeditationAnswers: current.answers.map(answer => ({ ...answer })),
           timestamp: serverTimestamp()
         });
-        outcome = { reward, newRecord, newScore, newGold: Math.max(0, Number(data.stats?.gold) || 0) + reward.gold, newSpirit, spiritAdded, soulCultivationAdded, totalCultivation, rank };
+        outcome = { reward, newRecord, newScore, newGold: Math.max(0, Number(data.stats?.gold) || 0) + reward.gold, growthState, fragmentsAdded, soulCultivationAdded, totalCultivation, rank };
       });
       if (uid() !== current.uid) throw new Error('閉關已結算，但帳號已切換，請重新登入查看。');
       remoteUid = current.uid;
@@ -406,7 +405,7 @@ import { buildMeditationMistakePool, chooseMeditationMistakes } from './daily-me
         local.dailyMeditation = outcome.newRecord;
         local.stats.totalScore = outcome.newScore;
         local.stats.gold = outcome.newGold;
-        local.stats.nascentSoulSpirit = outcome.newSpirit;
+        globalThis.QANascentGrowth.apply(local,outcome.growthState);
         local.stats.rankLevel = outcome.rank;
       }
       session = null;
@@ -414,7 +413,7 @@ import { buildMeditationMistakePool, chooseMeditationMistakes } from './daily-me
       window.updateUIStats?.();
       window.refreshCultivationRealmUI?.();
       window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', {
-        detail: { source: 'daily-meditation', totalScore: outcome.newScore, gold: outcome.newGold, cultivationAdded: outcome.totalCultivation, soulCultivationAdded: outcome.soulCultivationAdded, goldAdded: outcome.reward.gold, spiritAdded: outcome.spiritAdded }
+        detail: { source: 'daily-meditation', totalScore: outcome.newScore, gold: outcome.newGold, cultivationAdded: outcome.totalCultivation, soulCultivationAdded: outcome.soulCultivationAdded, goldAdded: outcome.reward.gold, fragmentsAdded: outcome.fragmentsAdded }
       }));
       renderIntro();
     } catch (error) {

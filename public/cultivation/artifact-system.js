@@ -13,7 +13,7 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
   const SUPPORTED_EFFECTS = new Set([
     'equip_attack_flat', 'equip_attack_percent', 'equip_hp_flat', 'equip_hp_percent',
     'equip_damage_percent', 'equip_damage_reduction_flat', 'equip_damage_reduction_percent',
-    'equip_crit_chance', 'equip_crit_damage_percent', 'equip_combo_chance',
+    'equip_crit_chance', 'equip_crit_damage_percent', 'equip_combo_chance', 'equip_combo_damage_percent',
     'equip_lifesteal_percent', 'equip_reflect_percent', 'equip_shield_flat',
     'equip_true_damage_flat', 'equip_low_hp_damage_percent', 'equip_low_hp_reduction_percent',
     'equip_first_hit_reduction_percent', 'equip_damage_cap_percent',
@@ -22,7 +22,7 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
   ]);
   const BATTLE_RUNTIME_EFFECTS = new Set([
     'equip_damage_percent', 'equip_damage_reduction_flat', 'equip_damage_reduction_percent',
-    'equip_crit_chance', 'equip_crit_damage_percent', 'equip_combo_chance',
+    'equip_crit_chance', 'equip_crit_damage_percent', 'equip_combo_chance', 'equip_combo_damage_percent',
     'equip_lifesteal_percent', 'equip_reflect_percent', 'equip_shield_flat',
     'equip_true_damage_flat', 'equip_low_hp_damage_percent', 'equip_low_hp_reduction_percent',
     'equip_first_hit_reduction_percent', 'equip_damage_cap_percent',
@@ -167,6 +167,7 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
       case 'equip_damage_reduction_percent': return `鬥法：受到傷害 -${pct(effect.value)}`;
       case 'equip_crit_chance': return `鬥法：暴擊率 +${pct(effect.value)}`;
       case 'equip_crit_damage_percent': return `鬥法：暴擊額外 +${pct(effect.value)}`;
+      case 'equip_combo_damage_percent': return `鬥法：連擊傷害 +${pct(effect.value)}（基礎 30%）`;
       case 'equip_combo_chance': return `鬥法：連擊率 ${pct(Math.min(0.10, Number(effect.value) || 0))}（上限 10%）`;
       case 'equip_lifesteal_percent': return `鬥法：吸血 ${pct(effect.value)}`;
       case 'equip_reflect_percent': return `鬥法：反傷 ${pct(effect.value)}`;

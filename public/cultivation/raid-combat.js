@@ -1,3 +1,4 @@
+import {} from './combat-combo.js';
 import { resolveSoloRaidRound } from './raid-engine.js';
 import {
   resolveDeterministicAttackCore,
@@ -38,7 +39,7 @@ export function resolveShenRaidCombat({ runId, round, player, boss, intent, corr
     const coreAttack = resolveDeterministicAttackCore(p, seed + ':core-attack');
     if (coreAttack.activation) activations.push(coreAttack.activation);
     const soulBonus = Math.max(0, Number(p.nascentSoul?.bonusDamage) || 0);
-    const baseDamage = Math.max(0, Number(p.atk) || 0) + support.bonusDamage + coreAttack.extraDamage + soulBonus;
+    const baseDamage = Math.max(0, Number(p.atk) || 0) + support.bonusDamage + (p.goldenCore?.type === 'sword' ? 0 : coreAttack.extraDamage) + soulBonus;
     if (typeof window.resolveArtifactBattleHit === 'function') {
       artifactAttack = window.resolveArtifactBattleHit({
         attacker: p,
@@ -56,6 +57,12 @@ export function resolveShenRaidCombat({ runId, round, player, boss, intent, corr
     }
   }
 
+  if (correct && outgoingDamage > 0) {
+    const stats = globalThis.QACombatCombo.stats(p,p.artifactBattle?.effects || []);
+    const hits = globalThis.QACombatCombo.chain({damage:Math.min(boss.hp,outgoingDamage),chance:artifactAttack?.comboChance ?? stats.chance,multiplier:artifactAttack?.comboMultiplier ?? stats.multiplier,seed:seed+':artifact',remainingHp:Math.max(0,boss.hp-outgoingDamage)});
+    outgoingDamage += hits.reduce((n,v)=>n+v,0);
+    if (p.goldenCore?.type === 'sword' && boss.hp > outgoingDamage) outgoingDamage += resolveDeterministicAttackCore(p,seed+':core-attack').extraDamage;
+  }
   const projectedBossHp = Math.max(0, Number(boss.hp) - outgoingDamage);
   let incomingDamage = 0;
   let reflectedDamage = 0;
@@ -132,7 +139,7 @@ export function resolveShenPlayerAction({ runId, actionId = 1, player, boss, cor
     const coreAttack = resolveDeterministicAttackCore(p, seed + ':core-attack');
     if (coreAttack.activation) activations.push(coreAttack.activation);
     const soulBonus = Math.max(0, Number(p.nascentSoul?.bonusDamage) || 0);
-    const baseDamage = Math.max(0, Number(p.atk) || 0) + support.bonusDamage + coreAttack.extraDamage + soulBonus;
+    const baseDamage = Math.max(0, Number(p.atk) || 0) + support.bonusDamage + (p.goldenCore?.type === 'sword' ? 0 : coreAttack.extraDamage) + soulBonus;
     if (typeof window.resolveArtifactBattleHit === 'function') {
       artifactAttack = window.resolveArtifactBattleHit({
         attacker: p,
@@ -151,6 +158,13 @@ export function resolveShenPlayerAction({ runId, actionId = 1, player, boss, cor
     }
   }
 
+  if (correct && damage > 0) {
+    const stats = globalThis.QACombatCombo.stats(p,p.artifactBattle?.effects || []);
+    const hits = globalThis.QACombatCombo.chain({damage:Math.min(boss.hp,damage),chance:artifactAttack?.comboChance ?? stats.chance,multiplier:artifactAttack?.comboMultiplier ?? stats.multiplier,seed:seed+':artifact',remainingHp:Math.max(0,boss.hp-damage)});
+    damage += hits.reduce((n,v)=>n+v,0);
+    if (artifactAttack) artifactAttack.comboHits=hits;
+    if (p.goldenCore?.type === 'sword' && boss.hp > damage) damage += resolveDeterministicAttackCore(p,seed+':core-attack').extraDamage;
+  }
   boss.hp = Math.max(0, Math.round(Number(boss.hp) || 0) - damage);
   boss.phase = boss.hp <= 0 ? 3 : boss.phase;
   return {

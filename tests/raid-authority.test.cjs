@@ -24,11 +24,11 @@ test('trusted raid snapshot derives combat stats from the A user document and eq
     effects:[{type:'equip_attack_flat',value:50},{type:'equip_hp_flat',value:200},{type:'equip_shield_flat',value:90}]}]};
   const snap=authority.trustedRaidPlayerSnapshot(user,'u1',catalog);
   assert.equal(snap.uid,'u1');
-  assert.equal(snap.atk,274); // 200 + 50 equipment + 24 nascent soul
-  assert.equal(snap.maxHp,1410); // 1000 + 200 equipment + 210 nascent soul
+  assert.equal(snap.atk,250); // 200 + 50 equipment + 24 nascent soul
+  assert.equal(snap.maxHp,1200); // 1000 + 200 equipment + 210 nascent soul
   assert.equal(snap.artifactShield,90);
   assert.equal(snap.goldenCore.type,'sword');
-  assert.equal(snap.nascentSoul.bonusDamage,8);
+  assert.equal(snap.nascentSoul.bonusDamage,0);
   assert.ok(snap.combatPower>0);
 });
 

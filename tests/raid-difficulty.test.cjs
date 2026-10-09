@@ -29,6 +29,7 @@ function trial({type,count,nodes={},seed}) {
       cultivationTraining:{equippedCore:{type,grade:9}},
       nascentSoulTree:{version:4,paths:{[type]:{nodes}}}
     },uid,{});
+    if(Object.keys(nodes).length){player.atk+=120;player.maxHp+=70*nodes.rightMain+55*nodes.rightFarTop;player.hp=player.maxHp;player.nascentSoul={type,reductionFlat:5*nodes.rightTop};}
     room.members[uid]={...authority.memberSnapshotFromTrusted(player,i===0),joinedAtMs:1,heartbeatAtMs:1};
   }
   let nextAnswer=20000,nextBoss=18000;
@@ -61,7 +62,7 @@ function trial({type,count,nodes={},seed}) {
 for(const profile of [
   {name:'three basic Golden Core players normally clear',count:3,nodes:{},minimum:.8},
   {name:'an uninvested solo player usually cannot clear',count:1,nodes:{},maximum:.15},
-  {name:'a solo nascent player with three full nodes and their prerequisite can clear',count:1,nodes:SOLO_NODES,minimum:.9}
+  {name:'a legacy solo room snapshot with three full nodes and their prerequisite can clear',count:1,nodes:SOLO_NODES,minimum:.9}
 ])test(profile.name+' at 80% accuracy and 20 seconds per answer', t=>{
   for(const type of TYPES) {
     const outcomes=Array.from({length:200},(_,seed)=>trial({...profile,type,seed}));

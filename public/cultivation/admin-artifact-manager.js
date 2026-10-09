@@ -46,7 +46,8 @@ import {
     equip_damage_reduction_percent: { title: '百分比減傷', summary: '每次受到傷害按比例降低', hint: '例如：0.2 = -20% 傷害', icon: 'fa-shield-halved' },
     equip_crit_chance: { title: '暴擊率', summary: '攻擊時有機率造成暴擊', hint: '例如：0.15 = 15%', icon: 'fa-crosshairs' },
     equip_crit_damage_percent: { title: '暴擊增傷', summary: '暴擊時提高額外倍率', hint: '例如：0.5 = 暴擊額外 +50%', icon: 'fa-bolt' },
-    equip_combo_chance: { title: '連擊率', summary: '最多 10% 機率追加一次同等基礎攻擊', hint: '硬上限：0.10 = 10%', icon: 'fa-forward-fast' },
+    equip_combo_damage_percent: { title:'連擊傷害',summary:'增加連擊傷害（基礎 30%），每段可再次連擊',hint:'0.30 = 額外 30 個百分點',icon:'fa-burst' },
+    equip_combo_chance: { title: '連擊率', summary: '最多 10% 法寶連擊率，每段可再次連擊，基礎傷害 30%', hint: '硬上限：0.10 = 10%', icon: 'fa-forward-fast' },
     equip_lifesteal_percent: { title: '吸血', summary: '依實際造成的生命傷害回復生命', hint: '例如：0.1 = 10%', icon: 'fa-droplet' },
     equip_reflect_percent: { title: '反傷', summary: '反射實際受到的生命傷害', hint: '例如：0.15 = 15%', icon: 'fa-reply' },
     equip_shield_flat: { title: '開場護盾', summary: '每場鬥法開始時獲得固定護盾', hint: '例如：300 護盾', icon: 'fa-shield-heart' },
@@ -74,7 +75,7 @@ import {
       id: 'crit-combo',
       title: '暴擊・連擊・吸血',
       icon: 'fa-bolt',
-      types: ['equip_crit_chance', 'equip_crit_damage_percent', 'equip_combo_chance', 'equip_lifesteal_percent']
+      types: ['equip_crit_chance', 'equip_crit_damage_percent', 'equip_combo_chance', 'equip_combo_damage_percent', 'equip_lifesteal_percent']
     },
     {
       id: 'defense',
@@ -136,6 +137,7 @@ import {
       equip_damage_reduction_percent: `減傷 ${pct(effect.value)}`,
       equip_crit_chance: `暴擊率 ${pct(effect.value)}`,
       equip_crit_damage_percent: `暴擊增傷 ${pct(effect.value)}`,
+      equip_combo_damage_percent: `連擊傷害 +${pct(effect.value)}（基礎 30%）`,
       equip_combo_chance: `連擊率 ${pct(Math.min(0.10, Number(effect.value) || 0))}`,
       equip_lifesteal_percent: `吸血 ${pct(effect.value)}`,
       equip_reflect_percent: `反傷 ${pct(effect.value)}`,
@@ -165,7 +167,7 @@ import {
     equip_damage_reduction_percent: 0.15,
     equip_crit_chance: 0.10,
     equip_crit_damage_percent: 0.50,
-    equip_combo_chance: 0.05,
+    equip_combo_chance: 0.05, equip_combo_damage_percent: 0.10,
     equip_lifesteal_percent: 0.10,
     equip_reflect_percent: 0.10,
     equip_shield_flat: 250,
@@ -344,7 +346,7 @@ import {
   const depthHintCache = new Map();
   const effectMinRealms = Object.freeze({
     equip_cheat_death:5, equip_copy_enemy_artifact:6, equip_damage_cap_percent:4,
-    equip_combo_chance:2, equip_lifesteal_percent:2, equip_reflect_percent:2
+    equip_combo_chance:2, equip_combo_damage_percent:2, equip_lifesteal_percent:2, equip_reflect_percent:2
   });
 
   function currentEditorStage(modal) {
@@ -372,7 +374,7 @@ import {
   const EFFECT_HINT_CAPS = Object.freeze({
     equip_attack_percent:5, equip_hp_percent:5, equip_damage_percent:3,
     equip_damage_reduction_percent:0.8, equip_crit_chance:0.75, equip_crit_damage_percent:3,
-    equip_combo_chance:0.1, equip_lifesteal_percent:0.5, equip_reflect_percent:1,
+    equip_combo_chance:0.1, equip_combo_damage_percent:3, equip_lifesteal_percent:0.5, equip_reflect_percent:1,
     equip_low_hp_damage_percent:2, equip_low_hp_reduction_percent:0.8,
     equip_first_hit_reduction_percent:0.9, equip_damage_cap_percent:1
   });

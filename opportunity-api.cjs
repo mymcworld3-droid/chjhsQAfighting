@@ -1,3 +1,4 @@
+const Growth = require('./public/cultivation/nascent-growth.js');
 'use strict';
 const crypto = require('node:crypto');
 const aiRouter = require('./ai-router');
@@ -116,9 +117,8 @@ function publicRun(run) {
 function rewardFor(run, player) {
   const correct = run.questions.filter((q, i) => q.answer === run.answers[i]).length;
   const score = Math.max(0, Number(player.stats?.totalScore) || 0), training = player.cultivationTraining || {}, type = training.equippedCore?.type;
-  const soul = score >= 68 && training.coreEnabled !== false && type && correct > 0
-    ? Math.min(10, Math.max(0, Math.floor(Number(player.nascentSoulTree?.paths?.[type]?.nodes?.rightFarBottom) || 0))) : 0;
-  return { correct, total: 5, goldAdded: 50 + 20 * correct, cultivationAdded: correct + soul, soulCultivationAdded: soul, spiritAdded: score >= 68 ? correct : 0 };
+  const soul = correct > 0 ? Growth.cultivation(player,'cave') : 0;
+  return { correct, total: 5, goldAdded: 50 + 20 * correct, cultivationAdded: correct + soul, soulCultivationAdded: soul, spiritAdded: 0 };
 }
 async function currentRun(db, uid, now = Date.now()) {
   const state = await db.collection(STATES).doc(uid).get();
@@ -183,10 +183,9 @@ async function updateRun(db, uid, id, action, body, now = Date.now()) {
     if (!userSnap.exists) throw fail('玩家資料不存在', 404);
     const player = userSnap.data(), reward = rewardFor(run, player);
     const balances = { gold: Math.max(0, Number(player.stats?.gold) || 0) + reward.goldAdded,
-      totalScore: Math.max(0, Number(player.stats?.totalScore) || 0) + reward.cultivationAdded,
-      nascentSoulSpirit: Math.max(0, Number(player.stats?.nascentSoulSpirit) || 0) + reward.spiritAdded };
+      totalScore: Math.max(0, Number(player.stats?.totalScore) || 0) + reward.cultivationAdded };
     tx.update(userRef, { 'stats.gold': balances.gold, 'stats.totalScore': balances.totalScore,
-      'stats.nascentSoulSpirit': balances.nascentSoulSpirit, questProgress: recordEvent(player.questProgress, 'dongtian') });
+      questProgress: recordEvent(player.questProgress, 'dongtian') });
     run.status = 'completed'; run.reward = { ...reward, balances };
     tx.update(runRef, { status: run.status, reward: run.reward, completedAt: now });
     if (stateSnap.data()?.active === id) tx.set(stateRef, { active: null }, { merge: true });

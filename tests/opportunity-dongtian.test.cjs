@@ -228,9 +228,9 @@ test('all five answers are required and simultaneous settlement awards only once
   assert.equal(db.docs.get('opportunityStates/u1').active, null); assert.equal(outcomes[0].run.reward.correct, 5);
 });
 test('nascent soul rewards apply correct-answer and equipped cave bonus without client authority', () => {
-  const p = player(); p.stats.totalScore = 68; p.cultivationTraining = { equippedCore: { type: 'gold' } }; p.nascentSoulTree = { paths: { gold: { nodes: { rightFarBottom: 4 } } } };
+  const p = player(); p.stats.totalScore = 68; p.cultivationTraining = { equippedCore: { type: 'gold' } }; p.nascentSoulGrowth = {version:1,branches:{cultivation:4}};
   const questions = api.makeQuestions(api.normalizePack(rawPack(), target), () => 0), run = { questions, answers: questions.map(q => q.answer) };
-  assert.deepEqual(api.rewardFor(run, p), { correct: 5, total: 5, goldAdded: 150, cultivationAdded: 9, soulCultivationAdded: 4, spiritAdded: 5 });
+  assert.deepEqual(api.rewardFor(run, p), { correct: 5, total: 5, goldAdded: 150, cultivationAdded: 9, soulCultivationAdded: 4, spiritAdded: 0 });
   p.cultivationTraining.coreEnabled = false; assert.equal(api.rewardFor(run, p).cultivationAdded, 5);
 });
 test('abandoned and expired runs cannot be answered or farm rewards', async () => {

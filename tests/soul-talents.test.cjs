@@ -1,7 +1,9 @@
+globalThis.QACombatCombo = require('../public/cultivation/combat-combo.js');
+globalThis.QANascentGrowth = require('../public/cultivation/nascent-growth.js');
 const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
 const talents=require('../public/cultivation/soul-talents.js');
 const authority=require('../raid-authority.cjs');
-const engine=new Function(fs.readFileSync(require('node:path').join(__dirname,'../public/cultivation/battle-engine-v2.js'),'utf8').replace(/^export /gm,'')+'\nreturn settleBattleRound;')();
+const engine=new Function(fs.readFileSync(require('node:path').join(__dirname,'../public/cultivation/battle-engine-v2.js'),'utf8').replace(/^import \{\} from .*;\n/gm,'').replace(/^export /gm,'')+'\nreturn settleBattleRound;')();
 const p=(type,grade=1,levels={leftTop:10,leftFarBottom:10,leftFinal:10})=>({
  uid:type,totalScore:68,hp:1000,maxHp:1000,atk:200,coreCorrectStreak:0,goldenCore:null,
  nascentSoul:{talent:talents.snapshot(type,grade,levels)},answer:{correct:true,atMs:1000}
@@ -41,7 +43,7 @@ test('sword followup survives the first shield, has its own step and never calls
  const r=engine({roomId:'combo-shield',round:1,host,guest,soulTalents:talents,
   resolveGuardedFollowup:()=>{calls++;return null;}});
  assert.equal(r.guestHp,910);assert.equal(calls,1);
- assert.ok(r.steps.some(s=>/追魂連擊/.test(s.skill)&&s.damage===90));
+ assert.ok(r.steps.some(s=>/追魂追擊/.test(s.skill)&&s.damage===90));
 });
 test('charge requires three consecutive correct answers and low HP talents use current HP',()=>{
  const target=p('ocean');
@@ -85,8 +87,8 @@ test('raid server applies fixed true damage, charge, reflection and real Boss HP
  assert.equal(authority.resolveBossDefense(p('thunder'),{roomId:'r',bossAction:{id:1,damage:50}}).reflectedDamage,16);
 });
 test('real artifact defense preserves true damage through Dao but still absorbs it with artifact shields',()=>{
- const context={window:{}};vm.createContext(context);
- vm.runInContext(fs.readFileSync(require('node:path').join(__dirname,'../public/cultivation/artifact-battle-effects.js'),'utf8'),context);
+ const context={window:{},QACombatCombo:globalThis.QACombatCombo};vm.createContext(context);
+ vm.runInContext(fs.readFileSync(require('node:path').join(__dirname,'../public/cultivation/artifact-battle-effects.js'),'utf8').replace(/^import \{\} from .*;\n/gm,''),context);
  const run=shield=>{
   const host=p('wugou'),guest=p('ocean');guest.answer.correct=false;guest.coreShield=true;guest.goldenCore={type:'wugou',grade:9};
   guest.artifactShield=shield;guest.nascentSoul.reductionFlat=500;
@@ -98,24 +100,12 @@ test('real artifact defense preserves true damage through Dao but still absorbs 
  };
  assert.equal(run(0).guestHp,928);assert.equal(run(100).guestHp,1000);
 });
-test('raid trusted snapshot and browser rules agree, and changing talents preserves tree spending',()=>{
- const source=fs.readFileSync(require('node:path').join(__dirname,'../public/cultivation/nascent-soul-rules.js'),'utf8');
- const rules=vm.runInNewContext(source.replace(/^export /gm,'')+'\n({soulCombatBonuses,soulSpentSpirit,normalizeSoulTree,soulNodes})',{QASoulTalents:talents});
- for(const type of Object.keys(talents.TYPES)){
-  const nodes={leftMain:10,leftTop:10,leftFarTop:10,leftFarBottom:10,leftFinal:10,rightFinal:10};
-  const tree={version:4,paths:{[type]:{nodes}}},before=JSON.stringify(tree);
-  const client=rules.soulCombatBonuses(tree,type,1);
-  const server=authority.trustedRaidPlayerSnapshot({stats:{totalScore:68},cultivationTraining:{equippedCore:{type,grade:1}},nascentSoulTree:tree},'u',{items:[]}).nascentSoul;
-  for(const key of Object.keys(client))assert.equal(server[key],client[key],type+':'+key);
-  assert.equal(client.bonusDamage,140);
-  assert.equal(rules.soulSpentSpirit(tree),10+30+50+50+80+80);
-  assert.equal(JSON.stringify(tree),before);
-  assert.equal(rules.soulNodes(type,1).find(n=>n.id==='leftFinal').coreAttack,0);
- }
+test('raid trusted snapshot and browser growth rules agree for every equipped core',()=>{
+ const Growth=globalThis.QANascentGrowth;for(const type of Object.keys(talents.TYPES)){const p={stats:{totalScore:68},cultivationTraining:{equippedCore:{type,grade:1}},nascentSoulGrowth:{version:1,branches:{attack:10,vitality:10,core:10,coreChance:10,coreDamage:10}}};const client=Growth.bonuses(p,p.cultivationTraining.equippedCore);const server=authority.trustedRaidPlayerSnapshot(p,'u',{items:[]}).nascentSoul;assert.equal(JSON.stringify(server),JSON.stringify(client));assert.equal(client.attackFlat,70);assert.equal(client.maxHpFlat,500);}
 });
 test('artifact true damage values remain unchanged and combine with Dao-piercing soul true damage once',()=>{
- const context={window:{}};vm.createContext(context);
- vm.runInContext(fs.readFileSync(require('node:path').join(__dirname,'../public/cultivation/artifact-battle-effects.js'),'utf8'),context);
+ const context={window:{},QACombatCombo:globalThis.QACombatCombo};vm.createContext(context);
+ vm.runInContext(fs.readFileSync(require('node:path').join(__dirname,'../public/cultivation/artifact-battle-effects.js'),'utf8').replace(/^import \{\} from .*;\n/gm,''),context);
  const host=p('wugou'),guest=p('ocean');guest.answer.correct=false;guest.coreShield=true;guest.goldenCore={type:'wugou',grade:9};
  host.artifactBattle={effects:[{type:'equip_true_damage_flat',value:5}]};
  const r=engine({roomId:'combined-true',round:1,host,guest,soulTalents:talents,

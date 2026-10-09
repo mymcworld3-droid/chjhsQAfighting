@@ -30,7 +30,7 @@ export function renderRaidLearning(member, outcome) {
   const spirit = Math.max(0, Math.floor(Number(member?.spiritCorrect) || 0));
   const pending = learning > (Number(outcome?.settledLearningCorrect) || 0) || spirit > (Number(outcome?.settledCorrect) || 0);
   return '<b>本場答題收益・勝敗皆保留</b><div class="raid-learning-grid">' +
-    [['修為',learning],['靈石',learning * 20],['神識',spirit]].map(([label,qty]) =>
+    [['修為',Math.max(learning,Number(outcome?.roomCultivation) || learning)],['靈石',learning * 20],['元嬰碎精',spirit]].map(([label,qty]) =>
       '<div><small>' + label + '</small><strong>+' + qty + '</strong></div>').join('') + '</div><small>' +
     (pending ? '部分收益待入帳，請保持此頁開啟；系統會自動重試。' : '答題收益已入帳。') + '</small>';
 }

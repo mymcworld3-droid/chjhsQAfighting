@@ -1,3 +1,4 @@
+import {} from './nascent-growth.js';
 // 元嬰規則純函式：九種丹性皆有唯一對應元嬰；神識與原修為分開儲存。
 export const NASCENT_SOUL_THRESHOLD = 68;
 export const NASCENT_SOUL_TYPES = Object.freeze({
@@ -274,8 +275,5 @@ export function soulCultivationBonuses(tree, type) {
   return {solo:nodes.leftBottom || 0, daily:nodes.rightBottom || 0, cave:nodes.rightFarBottom || 0};
 }
 export function soulCultivationBonusForPlayer(player, source) {
-  if (normalizeSpirit(player?.stats?.totalScore) < NASCENT_SOUL_THRESHOLD) return 0;
-  const training = player?.cultivationTraining;
-  if (training?.coreEnabled === false || !training?.equippedCore?.type) return 0;
-  return normalizeSpirit(soulCultivationBonuses(player?.nascentSoulTree,training.equippedCore.type)[source]);
+  return globalThis.QANascentGrowth.cultivation(player, source);
 }

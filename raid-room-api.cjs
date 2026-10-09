@@ -537,6 +537,8 @@ function createHandler({
             explanation: cleanString(question.explanation || '', 3000),
             damage: dealt,
             personalDamage,
+            critical: combat.critical === true,
+            comboHits: combat.comboHits || [],
             teamBurstDamage,
             teamContributors: teamCorrectUids.length,
             teamGuardReady,

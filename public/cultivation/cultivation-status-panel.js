@@ -127,7 +127,8 @@
     equip_damage_reduction_percent: { label: '減傷', icon: 'fa-shield', percent: true, cap: 0.90 },
     equip_crit_chance: { label: '暴擊率', icon: 'fa-crosshairs', percent: true, cap: 0.75 },
     equip_crit_damage_percent: { label: '暴擊傷害', icon: 'fa-bolt', percent: true },
-    equip_combo_chance: { label: '連擊率', icon: 'fa-arrows-rotate', percent: true, cap: 0.10 },
+    equip_combo_chance: { label: '連擊率', icon: 'fa-arrows-rotate', percent: true, cap: 0.75 },
+    equip_combo_damage_percent: { label:'連擊傷害',icon:'fa-forward-fast',percent:true },
     equip_lifesteal_percent: { label: '吸血率', icon: 'fa-droplet', percent: true, cap: 0.50 },
     equip_reflect_percent: { label: '反傷率', icon: 'fa-shield-heart', percent: true, cap: 1 },
     equip_shield_flat: { label: '開場護盾', icon: 'fa-shield-halved' },
@@ -171,17 +172,22 @@
         totals.set(key, (totals.get(key) || 0) + value);
       }
     }
+    const soul = player?.nascentSoul || {};
+    totals.set('equip_combo_chance',Math.min(.10,totals.get('equip_combo_chance') || 0) + finitePositive(soul.comboChance));
+    totals.set('equip_combo_damage_percent',Math.min(4,.30 + (totals.get('equip_combo_damage_percent') || 0) + finitePositive(soul.comboDamageBonus)));
+    totals.set('equip_crit_chance',(totals.get('equip_crit_chance') || 0) + finitePositive(soul.critChance));
+    totals.set('equip_crit_damage_percent',(totals.get('equip_crit_damage_percent') || 0) + finitePositive(soul.critDamageBonus));
     for (const [key, raw] of totals) {
       // 額外暴傷不是最終倍率；等確認暴擊率大於 0 後再顯示完整暴擊傷害。
       if (key === 'equip_crit_damage_percent') continue;
       const meta = BATTLE_STAT_META[key];
       const finalValue = meta.cap ? Math.min(raw, meta.cap) : raw;
-      if (finalValue <= 0) continue;
+      if (finalValue <= 0 && key !== 'equip_combo_chance') continue;
       const display = meta.percent ? finalValue * 100 : finalValue;
       values.push({
         key, label: meta.label, icon: meta.icon, sortValue: display,
         value: formatStatNumber(display) + (meta.percent ? '%' : ''),
-        note: meta.note || (meta.cap && raw > meta.cap ? '已達鬥法生效上限' : '')
+        note: (key === 'equip_combo_damage_percent' ? '基礎 30%；每段可再次連擊，追擊與反擊除外' : meta.note) || (meta.cap && raw > meta.cap ? '已達鬥法生效上限' : '')
       });
     }
     const critChance = Math.min(totals.get('equip_crit_chance') || 0, BATTLE_STAT_META.equip_crit_chance.cap);
@@ -204,7 +210,7 @@
 
   function statusSnapshot() {
     return {
-      player: getCombatSnapshot(),
+      player: {...getCombatSnapshot(),nascentSoul:window.getNascentSoulBattleSnapshot?.()},
       battle: window.getArtifactBattleSnapshot?.() || { effects: [] },
       core: currentCoreSnapshot(),
       power: window.getCombatPower?.() || null,

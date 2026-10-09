@@ -1,3 +1,5 @@
+globalThis.QACombatCombo = require('../public/cultivation/combat-combo.js');
+globalThis.QANascentGrowth = require('../public/cultivation/nascent-growth.js');
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
@@ -13,9 +15,9 @@ function loadFeedback(document = {}) {
   return context.api;
 }
 function loadCombat() {
-  const context = { window: {} };
-  vm.runInNewContext(read('cultivation/artifact-battle-effects.js'), context);
-  vm.runInNewContext(read('cultivation/battle-engine-v2.js').replace(/export (const|function) /g, '$1 ') +
+  const context = { window: {},QACombatCombo:globalThis.QACombatCombo };
+  vm.runInNewContext(read('cultivation/artifact-battle-effects.js').replace(/^import \{\} from .*;\n/gm,''), context);
+  vm.runInNewContext(read('cultivation/battle-engine-v2.js').replace(/^import \{\} from .*;\n/gm,'').replace(/export (const|function) /g, '$1 ') +
     '\nthis.settle=settleBattleRound;', context);
   return { ...context.window, settle: context.settle };
 }
@@ -81,7 +83,7 @@ test('core proc metadata follows the real ocean, sword and support skills', () =
     const attack = outcome.steps[0];
     assert.equal(attack.coreEffect.type, type);
     assert.match(attack.skill, new RegExp(attack.coreEffect.skill));
-    assert.ok(attack.damage > 200);
+    assert.ok(outcome.steps.filter(x=>x.actorUid==='h').reduce((sum,x)=>sum+x.damage,0) > 200);
     assert.equal(loadFeedback().battleStepFeedback(attack, { goldenCore: { type } }).enhanced, true);
   }
 });

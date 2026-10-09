@@ -15,7 +15,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 import { applyCultivationReward, showCultivationFeedback } from './cultivation-rules.js';
-import { nascentSoulSpiritReward, normalizeSpirit, soulCultivationBonusForPlayer } from './cultivation/nascent-soul-rules.js';
+import { soulCultivationBonusForPlayer } from './cultivation/nascent-soul-rules.js';
 
 // Canvas chart labels cannot inherit the shared page typography through CSS.
 const XIUXIAN_FONT_FAMILY = "'Noto Serif TC', 'Songti TC', 'PMingLiU', serif";
@@ -3067,8 +3067,6 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         soulBonusGain: soulCultivationBonusForPlayer(currentUserData, 'solo')
     });
     // 問道每答對一題 +1 神識；以本題作答前的境界判斷，不能越境提前獲取。
-    const spiritAdded = nascentSoulSpiritReward({ source: 'solo', score: scoreBeforeAnswer, isCorrect });
-    if (spiritAdded) stats.nascentSoulSpirit = normalizeSpirit(stats.nascentSoulSpirit) + spiritAdded;
     // 記下實際扣除的修為；道心擋住扣分或尚未達金丹時皆為 0。
     // 隨本次答題的 stats 一起存入，補償 API 不信任瀏覽器另外送來的扣分金額。
     if (quiz?.data?.q) {
@@ -3088,7 +3086,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         if (stats.currentStreak > stats.bestStreak) stats.bestStreak = stats.currentStreak;
         
         scoreGain = 20; // 無限模式獎勵
-        fbTitle.innerHTML += ` <span class="text-yellow-400 text-sm ml-2 border border-yellow-500 rounded px-1">+${scoreGain}💰 · +${cultivationReward.gain} 修為${spiritAdded ? ` · +${spiritAdded} 神識` : ''}</span>`;
+        fbTitle.innerHTML += ` <span class="text-yellow-400 text-sm ml-2 border border-yellow-500 rounded px-1">+${scoreGain}💰 · +${cultivationReward.gain} 修為</span>`;
     } else {
         stats.currentStreak = 0; 
     }
@@ -3139,7 +3137,6 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
                     totalScore: Math.max(0, (Number(remote.stats?.totalScore) || 0) + cultivationDelta)
                 };
                 savedStats.rankLevel = calculateRankFromScore(savedStats.totalScore);
-                if (spiritAdded) savedStats.nascentSoulSpirit = normalizeSpirit(remote.stats?.nascentSoulSpirit) + spiritAdded;
                 const patch = { stats: savedStats };
                 if (isCorrect) patch.questProgress = window.XianxiaQuestRules.recordEvent(remote.questProgress, 'solo');
                 tx.update(ref, patch);
@@ -5163,12 +5160,14 @@ async function resolveRoundLogic(roomId, room) {
                 const baseDamage = Math.max(1, Number(attacker.atk) || 1);
                 const coreAttack = window.resolveGoldenCoreBattleAttack?.({ attacker, defender, baseDamage }) || {};
                 const coreExtraDamage = Math.max(0, Number(coreAttack.extraDamage) || 0);
+                const pursuitDamage = attacker.goldenCore?.type === 'sword' ? coreExtraDamage : 0;
                 const artifactAttack = window.resolveArtifactBattleAttack?.({
                     attacker,
                     defender,
-                    baseDamage: baseDamage + coreExtraDamage
+                    baseDamage: baseDamage + (pursuitDamage ? 0 : coreExtraDamage),
+                    seed: `${roomId}:${freshRoom.round || 1}:${attacker.uid}:artifact`
                 }) || {
-                    normalDamage: baseDamage + coreExtraDamage,
+                    normalDamage: baseDamage + (pursuitDamage ? 0 : coreExtraDamage),
                     trueDamage: 0,
                     lifestealPercent: 0,
                     shieldGain: 0,
@@ -5188,8 +5187,29 @@ async function resolveRoundLogic(roomId, room) {
 
                 const defenderHpBefore = Math.max(0, Number(defender.hp) || 0);
                 const intendedDamage = Math.max(0, Math.round(Number(artifactDefense.hpDamage) || 0));
-                const receivedDamage = Math.min(defenderHpBefore, intendedDamage);
+                let receivedDamage = Math.min(defenderHpBefore, intendedDamage);
                 defender.hp = Math.max(0, defenderHpBefore - intendedDamage);
+                const extraHits = [];
+                const comboStats = globalThis.QACombatCombo.stats(attacker,attacker.artifactBattle?.effects || []);
+                globalThis.QACombatCombo.chain({damage:receivedDamage,chance:artifactAttack.comboChance ?? comboStats.chance,
+                    multiplier:artifactAttack.comboMultiplier ?? comboStats.multiplier,seed:`${roomId}:${freshRoom.round || 1}:${attacker.uid}:artifact`,remainingHp:defender.hp,
+                    onHit(raw,index) {
+                        const defense = window.resolveArtifactBattleDefense?.({attacker,defender,normalDamage:raw,trueDamage:0}) || {hpDamage:raw};
+                        const dealt = Math.max(0,Math.round(Number(defense.hpDamage)||0));
+                        receivedDamage += Math.min(defender.hp,dealt);
+                        defender.hp = Math.max(0,defender.hp-dealt);
+                        artifactDefense.reflectDamage += Math.max(0,Number(defense.reflectDamage)||0);
+                        if(dealt)extraHits.push({attacker:attackerRole,isHit:true,dmg:dealt,skill:'連擊 '+(index+1),combo:true,healed:null});
+                        return dealt;
+                    }});
+                if (pursuitDamage && defender.hp > 0) {
+                    const defense = window.resolveArtifactBattleDefense?.({attacker,defender,normalDamage:pursuitDamage,trueDamage:0}) || {hpDamage:pursuitDamage};
+                    const dealt = Math.max(0,Math.round(Number(defense.hpDamage)||0));
+                    receivedDamage += Math.min(defender.hp,dealt);
+                    defender.hp = Math.max(0,defender.hp-dealt);
+                    artifactDefense.reflectDamage += Math.max(0,Number(defense.reflectDamage)||0);
+                    extraHits.push({attacker:attackerRole,isHit:true,dmg:dealt,skill:'金丹劍氣・追擊',pursuit:true,healed:null});
+                }
                 if (defender.hp === 0) defender.isDead = true;
 
                 const shieldGain = Math.max(0, Math.round(Number(artifactAttack.shieldGain) || 0));
@@ -5219,6 +5239,8 @@ async function resolveRoundLogic(roomId, room) {
                     skill: attackSkill,
                     healed: healed || null
                 });
+
+                battleLog.push(...extraHits);
 
                 if (defender.hp > 0 && receivedDamage > 0) {
                     const defenderRole = attackerRole === 'host' ? 'guest' : 'host';

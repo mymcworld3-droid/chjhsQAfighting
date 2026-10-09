@@ -26,7 +26,7 @@ export function battleStepFeedback(step = {}, player = {}) {
   const enhanced = !!core && effectType === core.type;
   const damage = Math.max(0, Math.round(Number(step.damage) || 0));
   const label = missed ? 'MISS' : guarded ? '護體' :
-    (critical ? '爆擊 -' : counter ? '反擊 -' : '-') + damage;
+    (critical ? '爆擊 -' : counter ? '反擊 -' : step.combo ? '連擊 '+(step.comboIndex || 1)+' -' : '-') + damage;
   return { missed, guarded, counter, landed, critical, core, enhanced, damage, label };
 }
 

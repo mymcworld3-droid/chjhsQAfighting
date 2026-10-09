@@ -270,3 +270,5 @@ body.raid-page-open #page-raid.active-page>#raid-result:not(.hidden){
 @media(max-width:420px) { #raid-result .raid-result-card>img { height:96px!important; max-height:96px!important; } }
 
 @media(max-width:700px){.raid-trial-card{flex-basis:190px}.raid-teamwork{grid-template-columns:1fr}.raid-boss-info{padding-top:18px}}
+
+.raid-combat-event.is-critical{border-color:#ffc163;box-shadow:0 0 34px #ffb13f66}.raid-combat-event.is-critical b{color:#ffbe62;font-size:1.6em}.raid-combat-event.has-combo{border-color:#cdb0ff}

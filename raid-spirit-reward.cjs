@@ -1,6 +1,7 @@
 'use strict';
 
 const { createHash } = require('node:crypto');
+const Growth = require('./public/cultivation/nascent-growth.js');
 const COLLECTION = 'raidSpiritClaims';
 function count(value) { const n = Number(value); return Number.isFinite(n) ? Math.max(0, Math.floor(n)) : 0; }
 function eligibleCorrect(member) {
@@ -32,24 +33,28 @@ async function awardRaidSpirit(db, uid, roomId, member) {
     const awarded = Math.max(0, target - prior);
     const priorLearning = count(receiptSnap.data()?.settledLearningCorrect);
     const learningAwarded = Math.max(0, learningTarget - priorLearning);
+    const cultivationAdded = learningAwarded * (1 + Growth.cultivation(user,'raid'));
+    const growthState = Growth.award(user,awarded);
     const learningTotals = {
-      cultivation: count(user.raidLearningRewards?.cultivation) + learningAwarded,
-      gold: count(user.raidLearningRewards?.gold) + learningAwarded * 20
+      cultivation: count(user.raidLearningRewards?.cultivation) + cultivationAdded,
+      gold: count(user.raidLearningRewards?.gold) + learningAwarded * 20,
+      fragments: count(user.raidLearningRewards?.fragments) + awarded
     };
-    const totalSpirit = count(user.stats?.nascentSoulSpirit) + awarded;
+    const totalFragments = growthState.fragments;
     if (awarded || learningAwarded) {
-      const patch = { 'stats.nascentSoulSpirit': totalSpirit };
+      const patch = { ...Growth.patch(growthState), raidLearningRewards: learningTotals };
       if (learningAwarded) Object.assign(patch, {
-        'stats.totalScore': count(user.stats?.totalScore) + learningAwarded,
+        'stats.totalScore': count(user.stats?.totalScore) + cultivationAdded,
         'stats.gold': count(user.stats?.gold) + learningAwarded * 20,
         raidLearningRewards: learningTotals
       });
       tx.update(userRef, patch);
       tx.set(receiptRef, { uid, roomId, settledCorrect:Math.max(prior,target),
-        settledLearningCorrect:Math.max(priorLearning,learningTarget) });
+        settledLearningCorrect:Math.max(priorLearning,learningTarget),
+        roomCultivation:count(receiptSnap.data()?.roomCultivation ?? priorLearning)+cultivationAdded });
     }
     return { uid, status:(awarded || learningAwarded) ? 'awarded' : 'duplicate', awarded,
-      totalSpirit, learningAwarded, learningTotals,
+      totalFragments, cultivationAdded, roomCultivation:count(receiptSnap.data()?.roomCultivation ?? priorLearning)+cultivationAdded, learningAwarded, learningTotals,
       settledLearningCorrect:Math.max(priorLearning,learningTarget), settledCorrect:Math.max(prior, target) };
   });
 }

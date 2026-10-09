@@ -89,7 +89,7 @@ test('AI artifact sanitizer cannot change locked realm and keeps combo at ten pe
 test('every supported AI effect has explicit safe bounds for each eligible realm and refinement stage', () => {
   const types = [...api.ALLOWED_EFFECTS];
   assert.equal(api.REALMS.length, 11);
-  assert.equal(types.length, 24);
+  assert.equal(types.length, 25);
   for (const [order, realm] of api.REALMS.entries()) {
     for (const stage of [1, 2, 3]) {
       const ranges = api.effectRangesForRealm(realm, stage);

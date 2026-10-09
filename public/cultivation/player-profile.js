@@ -30,7 +30,7 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
   const PERCENT_EFFECTS = new Set([
     'equip_attack_percent', 'equip_hp_percent', 'equip_damage_percent',
     'equip_damage_reduction_percent', 'equip_crit_chance', 'equip_crit_damage_percent',
-    'equip_combo_chance', 'equip_lifesteal_percent', 'equip_reflect_percent',
+    'equip_combo_chance', 'equip_combo_damage_percent', 'equip_lifesteal_percent', 'equip_reflect_percent',
     'equip_low_hp_damage_percent', 'equip_low_hp_reduction_percent',
     'equip_first_hit_reduction_percent', 'equip_damage_cap_percent'
   ]);
@@ -39,7 +39,7 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
     equip_hp_flat:'生命', equip_hp_percent:'生命',
     equip_damage_percent:'增傷', equip_damage_reduction_flat:'固定減傷',
     equip_damage_reduction_percent:'減傷', equip_crit_chance:'暴擊率',
-    equip_crit_damage_percent:'暴傷', equip_combo_chance:'連擊率',
+    equip_crit_damage_percent:'暴傷', equip_combo_chance:'連擊率', equip_combo_damage_percent:'連擊傷害加成',
     equip_lifesteal_percent:'吸血', equip_reflect_percent:'反傷',
     equip_shield_flat:'護盾', equip_true_damage_flat:'真實傷害',
     equip_low_hp_damage_percent:'低血量增傷', equip_low_hp_reduction_percent:'低血量減傷',

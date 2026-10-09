@@ -656,3 +656,8 @@ body.xianxia-theme.ns-map-active #page-training .ns-branch-line[data-branch="cor
 .ns-node-detail .ns-detail-stats { overflow-y:auto; }
 .ns-node-detail .ns-detail-footer { flex-shrink:0; }
 @media(max-width:600px) { .ns-node-detail .ns-detail-description { max-height:65px; } }
+
+/* 元嬰分支可獨立升級；保留正常頁面捲動。 */
+.ns-growth-panel{max-width:1100px;margin:auto}.ns-growth-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}.ns-growth-card{display:flex;flex-direction:column;gap:10px;padding:22px;border:1px solid #8f71984d;background:#15121bd9;border-radius:14px}.ns-growth-icon{font-size:24px;color:#d4b4f1}.ns-growth-card h4{font-size:18px;margin:0}.ns-growth-card p{font-size:13px;color:#c8becb;line-height:1.7;margin:0}.ns-growth-value{font-size:20px;color:#ebd7ff}.ns-growth-value small{display:block;font-size:12px;color:#aaa0b2}.ns-growth-card progress{width:100%;accent-color:#bc8ee2}.ns-growth-card button{margin-top:auto;padding:10px;background:#644980;color:#fff;border:1px solid #ba9ed4;border-radius:8px}.ns-growth-card button:disabled{opacity:.45}.ns-growth-note,.ns-growth-footer{font-size:13px;color:#c5b9cc;line-height:1.8;margin:16px 0}.ns-growth-footer{display:flex;align-items:center;justify-content:space-between;gap:12px}.core-gold-balance{color:#dbc08a;margin:12px 0}.core-gold-balance strong{color:#f5d890}@media(max-width:480px){.ns-growth-grid{grid-template-columns:1fr}.ns-growth-footer{align-items:flex-start;flex-direction:column}}
+
+.ns-growth-grid{width:100%;text-align:left}.ns-growth-panel .ns-branch-intro{width:100%;text-align:left}.ns-growth-panel .ns-resource{grid-template-columns:1fr;width:120px}.ns-growth-panel .ns-growth-note{width:100%;text-align:left}.ns-growth-footer{width:100%}

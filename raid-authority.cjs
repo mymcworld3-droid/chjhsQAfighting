@@ -1,3 +1,5 @@
+const Growth = require('./public/cultivation/nascent-growth.js');
+const Combo = require('./public/cultivation/combat-combo.js');
 'use strict';
 const soulTalents = require('./public/cultivation/soul-talents.js');
 
@@ -22,7 +24,7 @@ const DEFAULT_ARTIFACTS = Object.freeze([
 
 const RUNTIME_EFFECTS = new Set([
   'equip_damage_percent','equip_damage_reduction_flat','equip_damage_reduction_percent',
-  'equip_crit_chance','equip_crit_damage_percent','equip_combo_chance','equip_lifesteal_percent',
+  'equip_crit_chance','equip_crit_damage_percent','equip_combo_chance', 'equip_combo_damage_percent','equip_lifesteal_percent',
   'equip_reflect_percent','equip_shield_flat','equip_true_damage_flat','equip_low_hp_damage_percent',
   'equip_low_hp_reduction_percent','equip_first_hit_reduction_percent','equip_damage_cap_percent',
   'equip_on_correct_shield_flat','equip_cheat_death','equip_copy_enemy_artifact'
@@ -31,7 +33,7 @@ const RUNTIME_EFFECTS = new Set([
 const EFFECT_WEIGHTS = Object.freeze({
   equip_attack_flat:1.5,equip_attack_percent:600,equip_hp_flat:.3,equip_hp_percent:400,
   equip_damage_percent:900,equip_damage_reduction_flat:1,equip_damage_reduction_percent:650,
-  equip_crit_chance:700,equip_crit_damage_percent:300,equip_combo_chance:1500,
+  equip_crit_chance:700,equip_crit_damage_percent:300,equip_combo_chance:1500,equip_combo_damage_percent:300,
   equip_lifesteal_percent:400,equip_reflect_percent:400,equip_shield_flat:.3,
   equip_true_damage_flat:2,equip_low_hp_damage_percent:350,equip_low_hp_reduction_percent:250,
   equip_first_hit_reduction_percent:250,equip_damage_cap_percent:-500,
@@ -40,7 +42,7 @@ const EFFECT_WEIGHTS = Object.freeze({
 const EFFECT_LIMITS = Object.freeze({
   equip_attack_flat:100000,equip_attack_percent:5,equip_hp_flat:100000,equip_hp_percent:5,
   equip_damage_percent:3,equip_damage_reduction_flat:100000,equip_damage_reduction_percent:.9,
-  equip_crit_chance:.75,equip_crit_damage_percent:3,equip_combo_chance:.1,
+  equip_crit_chance:.75,equip_crit_damage_percent:3,equip_combo_chance:.1,equip_combo_damage_percent:3,
   equip_lifesteal_percent:.5,equip_reflect_percent:1,equip_shield_flat:100000,
   equip_true_damage_flat:100000,equip_low_hp_damage_percent:2,equip_low_hp_reduction_percent:.9,
   equip_first_hit_reduction_percent:.9,equip_on_correct_shield_flat:100000
@@ -166,20 +168,7 @@ function soulNodeLevels(tree,type){
   if((migrated.rightTop||migrated.rightBottom)&&migrated.rightMain<5)migrated.rightMain=5;
   return migrated;
 }
-function soulSnapshot(data,core){
-  if(!core||positive(data?.stats?.totalScore)<NASCENT_SOUL_THRESHOLD)return null;
-  const nodes=soulNodeLevels(data?.nascentSoulTree,core.type);
-  const quality=9-core.grade;
-  return {
-    type:core.type,
-    attackFlat:level(nodes.leftMain)*12+level(nodes.leftFarTop)*7,
-    maxHpFlat:level(nodes.rightMain)*70+level(nodes.rightFarTop)*55,
-    bonusDamage:level(nodes.leftTop)*8+level(nodes.leftFarBottom)*6,
-    talent:soulTalents.snapshot(core.type,core.grade,nodes),
-    reductionFlat:level(nodes.rightTop)*5,
-    coreHeal:level(nodes.rightFinal)*(12+quality)
-  };
-}
+function soulSnapshot(data,core){return Growth.bonuses(data,core);}
 function artifactCatalog(data){
   const items=Array.isArray(data?.items)?data.items.filter(x=>x&&typeof x==='object'&&x.id):[];
   if(!items.length)return DEFAULT_ARTIFACTS;
@@ -363,12 +352,12 @@ function resolveArtifactAttack(member,baseDamage,seed){
   const effects=runtimeEffects(member);let damagePercent=sumEffect(effects,'equip_damage_percent');
   if(hpRatio(member)<=.30)damagePercent+=sumEffect(effects,'equip_low_hp_damage_percent');
   const normalBase=Math.max(0,baseDamage*(1+damagePercent));
-  const crit=roll01(seed,'critical')<clamp(sumEffect(effects,'equip_crit_chance'),0,.75);
-  const combo=roll01(seed,'combo')<clamp(sumEffect(effects,'equip_combo_chance'),0,.10);
-  const critBonus=sumEffect(effects,'equip_crit_damage_percent');
-  let normal=normalBase;if(crit)normal*=1.5+critBonus;if(combo)normal+=normalBase;
+  const crit=roll01(seed,'critical')<clamp(sumEffect(effects,'equip_crit_chance')+finite(member?.nascentSoul?.critChance),0,.75);
+  const comboStats=Combo.stats(member,effects);
+  const critBonus=sumEffect(effects,'equip_crit_damage_percent')+finite(member?.nascentSoul?.critDamageBonus);
+  let normal=normalBase;if(crit)normal*=1.5+critBonus;
   const trueDamage=Math.round(sumEffect(effects,'equip_true_damage_flat'));
-  return {damage:Math.max(0,Math.round(normal)+trueDamage),
+  return {damage:Math.max(0,Math.round(normal)+trueDamage),critical:crit,comboStats,
     lifesteal:clamp(sumEffect(effects,'equip_lifesteal_percent'),0,.5),
     shieldGain:Math.max(0,Math.round(sumEffect(effects,'equip_on_correct_shield_flat')))};
 }
@@ -378,20 +367,25 @@ function resolvePlayerAction(member,{roomId,actionId,correct,bossHp=1,bossMaxHp=
   next.coreCorrectStreak=support.streak;next.coreShield=support.shield;
   let healed=support.heal+(correct?Math.max(0,Math.round(finite(next?.nascentSoul?.coreHeal))):0);
   next.hp=Math.min(next.maxHp,next.hp+healed);
-  let damage=0;
+  let damage=0, critical=false, comboHits=[];
   if(correct){
+    const coreDamage=coreAttack(next,seed+':core-attack');
+    const pursuit=next.goldenCore?.type==='sword'?coreDamage:0;
     const base=Math.max(1,Math.round(finite(next.atk,200)))+support.bonusDamage+
-      coreAttack(next,seed+':core-attack')+Math.max(0,Math.min(1000,Math.round(finite(next?.nascentSoul?.bonusDamage))));
+      (pursuit?0:coreDamage)+Math.max(0,Math.min(1000,Math.round(finite(next?.nascentSoul?.bonusDamage))));
     const artifact=resolveArtifactAttack(next,base,seed+':artifact');
     const talent=soulTalents.attack(next,{hp:bossHp,maxHp:bossMaxHp},{seed,streak:support.streak});
-    damage=artifact.damage+talent.normal+talent.trueDamage+talent.followup;
+    damage=artifact.damage+talent.normal+talent.trueDamage;
+    critical=artifact.critical;
+    comboHits=Combo.chain({damage:Math.min(bossHp,damage),chance:artifact.comboStats.chance,multiplier:artifact.comboStats.multiplier,seed:seed+':artifact',remainingHp:Math.max(0,bossHp-damage)});
+    damage+=comboHits.reduce((sum,n)=>sum+n,0)+talent.followup+pursuit;
     const soulHeal=soulTalents.healing(next,Math.min(Math.max(0,bossHp),damage),talent.leech);
     healed+=soulHeal;next.hp=Math.min(next.maxHp,next.hp+soulHeal);
     const lifesteal=Math.max(0,Math.round(damage*artifact.lifesteal));healed+=lifesteal;
     next.hp=Math.min(next.maxHp,next.hp+lifesteal);
     next.artifactShield=Math.max(0,Math.round(finite(next.artifactShield)))+artifact.shieldGain;
   }
-  return {member:next,damage,healed,correct:correct===true};
+  return {member:next,damage,healed,critical,comboHits,correct:correct===true};
 }
 function resolveArtifactDefense(member,incoming){
   const effects=runtimeEffects(member);let reduction=sumEffect(effects,'equip_damage_reduction_percent');

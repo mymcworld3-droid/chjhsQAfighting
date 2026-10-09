@@ -1,4 +1,5 @@
 'use strict';
+const Growth=require('./public/cultivation/nascent-growth.js');
 const crypto=require('node:crypto');
 const {recordEvent}=require('./public/cultivation/quest-rules.js');
 const {PROJECT_IDS}=require('./firebase-admin-projects.cjs');
@@ -19,7 +20,7 @@ function verifyAnswers(cave,submitted){
  return {correct,total,accuracy,tier};
 }
 function firstCompletionGold(total){return FIRST_COMPLETION_BASE_SPIRIT_STONES+Math.max(0,Math.floor(Number(total)||0))*FIRST_COMPLETION_SPIRIT_STONE_PER_QUESTION;}
-function caveSoulBonus(player){const score=Math.max(0,Number(player?.stats?.totalScore)||0),t=player?.cultivationTraining||{},type=t?.equippedCore?.type;if(score<68||t.coreEnabled===false||!type)return 0;return Math.min(10,Math.max(0,Math.floor(Number(player?.nascentSoulTree?.paths?.[type]?.nodes?.rightFarBottom)||0)));}
+function caveSoulBonus(player){return Growth.cultivation(player,'cave');}
 async function verifyRequest(req,resolveA){const b=/^Bearer ([A-Za-z0-9_.-]+)$/.exec(String(req.get?.('authorization')||''));if(!b)throw Object.assign(new Error('請先登入後再結算洞天'),{status:401});const a=resolveA();let v;try{v=await a.auth.verifyIdToken(b[1],true);}catch(_){throw Object.assign(new Error('登入狀態已失效，請重新登入'),{status:401});}if(!v?.uid||v.aud!==PROJECT_IDS.A||v.iss!=='https://securetoken.google.com/'+PROJECT_IDS.A)throw Object.assign(new Error('登入身分驗證失敗'),{status:401});return {uid:v.uid,a};}
 async function claimEligibility(db,uid,dongtianId,runId,answers){
  const id=receiptId(uid,dongtianId,runId),claimRef=db.collection(ELIGIBILITY_COLLECTION).doc(id),indexRef=db.collection(INDEX_COLLECTION).doc(dongtianId),caveRef=db.collection(DATA_COLLECTION).doc(dongtianId);
@@ -30,9 +31,9 @@ async function awardProgress(db,uid,e){
  const receipt=await runRewardReceipt({db,collection:REWARD_COLLECTION,receiptId:e.id,fieldValue:FieldValue,onFirstClaim:async({tx})=>{
   const refs=[playRef,userRef,...(ownerRef?[ownerRef]:[])],snaps=await Promise.all(refs.map(ref=>tx.get(ref))),play=snaps[0],userSnap=snaps[1],ownerSnap=ownerRef?snaps[2]:null;
   if(!userSnap.exists)throw new Error('玩家資料不存在');if(ownerRef&&!ownerSnap?.exists)throw new Error('洞天主人資料不存在');const player=userSnap.data()||{};if(player.uid&&player.uid!==uid)throw new Error('玩家資料 UID 不符');
-  const first=!(play.exists&&!!play.data()?.completed),spirit=Math.floor(Number(player.stats?.totalScore)||0)>=NASCENT_SOUL_THRESHOLD?Math.max(0,Math.min(e.correct,e.total)):0,soul=first&&e.correct>0?caveSoulBonus(player):0,gold=first?firstCompletionGold(e.total):0,cult=first?e.correct+soul:0;
+  const first=!(play.exists&&!!play.data()?.completed),spirit=0,soul=first&&e.correct>0?caveSoulBonus(player):0,gold=first?firstCompletionGold(e.total):0,cult=first?e.correct+soul:0;
   tx.set(playRef,{uid,dongtianId:e.dongtianId,ownerUid,encountered:true,completed:true,correct:e.correct,total:e.total,lastSpiritRunId:e.runId,accuracy:e.accuracy,rewardTier:e.tier,completedAt:FieldValue.serverTimestamp(),completedAtMs:Date.now()},{merge:true});
-  const p={questProgress:recordEvent(player.questProgress,'dongtian')};if(gold)p['stats.gold']=FieldValue.increment(gold);if(cult)p['stats.totalScore']=FieldValue.increment(cult);if(spirit)p['stats.nascentSoulSpirit']=FieldValue.increment(spirit);if(Object.keys(p).length)tx.update(userRef,p);
+  const p={questProgress:recordEvent(player.questProgress,'dongtian')};if(gold)p['stats.gold']=FieldValue.increment(gold);if(cult)p['stats.totalScore']=FieldValue.increment(cult);if(Object.keys(p).length)tx.update(userRef,p);
   if(first&&ownerRef)tx.update(ownerRef,{'stats.totalScore':FieldValue.increment(OWNER_CULTIVATION_REWARD),'stats.gold':FieldValue.increment(OWNER_GOLD_REWARD)});
   return {firstCompletion:first,goldAdded:gold,cultivationAdded:cult,soulCultivationAdded:soul,spiritAdded:spirit,correct:e.correct,total:e.total,tier:e.tier};
  },createReceipt:r=>({uid,dongtianId:e.dongtianId,runId:e.runId,ownerUid,...r})});

@@ -1,3 +1,5 @@
+globalThis.QACombatCombo = require('../public/cultivation/combat-combo.js');
+globalThis.QANascentGrowth = require('../public/cultivation/nascent-growth.js');
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const { readFileSync } = require('node:fs');
@@ -6,9 +8,9 @@ const vm = require('node:vm');
 
 const read = name => readFileSync(join(__dirname, '..', name), 'utf8');
 const source = read('public/cultivation/nascent-soul-rules.js');
-const rules = vm.runInNewContext(source.replace(/^export /gm, '') +
+const rules = vm.runInNewContext(source.replace(/^import \{\} from .*;\n/gm,'').replace(/^export /gm, '') +
   '\n({ NASCENT_SOUL_TYPES, nascentSoulForCore, nascentSoulStage, nascentSoulSpiritReward, normalizeSpirit, NASCENT_SOUL_ATTRIBUTES, NASCENT_SOUL_NODE_CAP, NASCENT_SOUL_BRANCH_UNLOCK, soulNodes, soulSkills, normalizeSoulTree, soulAvailableSpirit, soulSpentSpirit, soulNodeStatus, allocateSoulNode, soulCombatBonuses, soulNodeCost, soulCultivationBonuses, soulCultivationBonusForPlayer, soulFinalePerLevel })',
-  {QASoulTalents:require('../public/cultivation/soul-talents.js')});
+  {QANascentGrowth:globalThis.QANascentGrowth,QACombatCombo:globalThis.QACombatCombo,QASoulTalents:require('../public/cultivation/soul-talents.js')});
 const { NASCENT_SOUL_TYPES, nascentSoulForCore, nascentSoulStage, nascentSoulSpiritReward,
   normalizeSpirit, NASCENT_SOUL_ATTRIBUTES, NASCENT_SOUL_NODE_CAP, NASCENT_SOUL_BRANCH_UNLOCK, soulNodes, soulSkills, normalizeSoulTree, soulAvailableSpirit, soulSpentSpirit, soulNodeStatus, allocateSoulNode, soulCombatBonuses, soulNodeCost, soulCultivationBonuses, soulCultivationBonusForPlayer, soulFinalePerLevel } = rules;
 
@@ -42,19 +44,11 @@ test('each cave completion awards number of correct answers; stage thresholds ar
   assert.equal(nascentSoulStage(250).name,'圓滿');
 });
 
-test('rewards persist through existing settlement, and cave replay is idempotent by runId', () => {
-  const solo = read('public/main-legacy.js');
-  const daily = read('public/cultivation/daily-meditation.js');
-  const cave = read('public/cultivation/dongtian.js');
-  const training = read('public/cultivation/cultivation-training-v4.js');
-  assert.match(solo,/stats\.nascentSoulSpirit = normalizeSpirit\(stats\.nascentSoulSpirit\) \+ spiritAdded/);
-  assert.match(daily,/lastDate === current\.date[\s\S]*'stats\.nascentSoulSpirit': increment\(spiritAdded\)/);
-  const caveSettlement = read('dongtian-settlement-api.cjs');
-  assert.match(cave,/rewardRepository\.claimDongtian/);
-  assert.match(caveSettlement,/lastSpiritRunId:e\.runId/);
-  assert.match(caveSettlement,/receiptId:e\.id/);
-  assert.match(caveSettlement,/if\(spirit\)p\['stats\.nascentSoulSpirit'\]=FieldValue\.increment\(spirit\)/);
-  assert.match(training,/activeTab === 'nascent-soul' \? nascentSoulTabMarkup\(\)/);
+test('only raids and perfect meditation award new fragments; solo and cave retain cultivation',()=>{
+ const solo=read('public/main-legacy.js'),daily=read('public/cultivation/daily-meditation.js'),cave=read('dongtian-settlement-api.cjs');
+ assert.doesNotMatch(solo,/nascentSoulSpiritReward|savedStats.nascentSoulSpirit/);
+ assert.match(daily,/originalScore >= 68 && current.correct === QUESTION_TOTAL \? 3 : 0/);
+ assert.match(daily,/QANascentGrowth.patch\(growthState\)/);assert.doesNotMatch(cave,/stats.nascentSoulSpirit.*increment/);
 });
 
 
@@ -161,50 +155,16 @@ test('available spirit cannot go below zero or spend again at cap', () => {
   assert.equal(allocateSoulNode(tree,'taichu','rightMain',earned).ok,false);
 });
 
-test('training mutations use Firestore transaction and separate trees from the reward ledger', () => {
-  const training = read('public/cultivation/cultivation-training-v4.js');
-  const combat = read('public/cultivation/cultivation-combat-stats.js');
-  const power = read('public/cultivation/combat-power.js');
-  const battle = read('public/cultivation/battle-mode-v2.js');
-  const engine = read('public/cultivation/battle-engine-v2.js');
-  const css = read('public/cultivation-training-v3.css');
-  assert.match(training, /await runTransaction\(db, async tx =>/);
-  assert.match(training, /tx\.update\(ref, \{ nascentSoulTree: awarded\.tree \}\)/);
-  assert.match(training, /data-ns-node=/);
-  assert.match(training, /window\.getNascentSoulBattleSnapshot/);
-  assert.match(training, /window\.getNascentSoulCultivationBonuses/);
-  assert.match(combat, /window\.getNascentSoulBattleSnapshot\?\.\(\)/);
-  assert.match(power, /window\.getNascentSoulBattleSnapshot\?\.\(\)/);
-  assert.match(battle, /nascentSoul: nascentSoul \?/);
-  assert.match(battle, /reductionFlat:/);
-  assert.match(battle, /coreHeal:/);
-  assert.match(battle, /baseAtk: baseCombat\.attack/);
-  assert.match(battle, /baseMaxHp: baseCombat\.maxHp/);
-  assert.match(battle, /applyNascentSoulDuelRule\(room\.host, myData\)/);
-  assert.match(battle, /元嬰封印/);
-  assert.match(engine, /NASCENT_SOUL_SCORE = 68/);
-  assert.match(engine, /applyNascentSoulDuelRule\(host, guest\)/);
-  assert.match(engine, /soulDamage/);
-  assert.match(css, /\.ns-tree-viewport/);
-  assert.match(css, /\.ns-orbit-node\.ns-light-btn:disabled/);
-  assert.match(training, /ns-tree-viewport ns-trees/);
-  assert.match(training, /ns-branches/);
-  assert.match(training, /ns-map-side-left/);
-  assert.match(training, /ns-map-side-right/);
-  assert.match(training, /中央金丹與十二枚元嬰節點/);
-  assert.match(training, /leftFinalTop/);
-  assert.match(training, /rightFinalBottom/);
-  assert.match(css, /ns-pos-leftFarBottom/);
-  assert.match(css, /ns-pos-rightFarTop/);
-  assert.match(css, /\.ns-pos-leftTop/);
-  assert.match(css, /\.ns-pos-rightBottom/);
+test('new branch upgrades validate cloud core and currency inside one transaction',()=>{
+ const training=read('public/cultivation/cultivation-training-v4.js');assert.match(training,/await runTransaction\(db, async tx =>/);assert.match(training,/Growth.upgrade\(data, branchId\)/);assert.match(training,/tx.update\(ref, Growth.patch\(next\)\)/);assert.match(training,/sameGoldenCore\(data.cultivationTraining\?\.equippedCore, core\)/);
 });
 
+
 test('duel bonus damage from nascent soul is fixed in the match and applies only on a correct hit', () => {
-  const source = read('public/cultivation/battle-engine-v2.js')
+  const source = read('public/cultivation/battle-engine-v2.js').replace(/^import \{\} from .*;\n/gm,'')
     .replace(/export const /g, 'const ')
     .replace(/export function /g, 'function ');
-  const context = vm.createContext({ console, Math, Number, String, Object, Array });
+  const context = vm.createContext({ console, Math, Number, String, Object, Array,QACombatCombo:globalThis.QACombatCombo });
   vm.runInContext(source + '\nthis.settle=settleBattleRound;', context);
   const player = (id, correct, withSoul) => ({
     uid: id, name: id, totalScore: 68, hp: 1000, maxHp: 1000, atk: 200, goldenCore: null,
@@ -220,10 +180,10 @@ test('duel bonus damage from nascent soul is fixed in the match and applies only
 
 
 test('nascent soul combat attributes are sealed against Golden Core or lower opponents', () => {
-  const source = read('public/cultivation/battle-engine-v2.js')
+  const source = read('public/cultivation/battle-engine-v2.js').replace(/^import \{\} from .*;\n/gm,'')
     .replace(/export const /g, 'const ')
     .replace(/export function /g, 'function ');
-  const context = vm.createContext({ console, Math, Number, String, Object, Array });
+  const context = vm.createContext({ console, Math, Number, String, Object, Array,QACombatCombo:globalThis.QACombatCombo });
   vm.runInContext(source + '\nthis.settle=settleBattleRound;this.applyRule=applyNascentSoulDuelRule;', context);
 
   const soulHost = {
@@ -263,77 +223,18 @@ test('nascent soul combat attributes are sealed against Golden Core or lower opp
 });
 
 
-test('nascent soul map stays inside one viewport with fixed navigation and HUD', () => {
-  const training = read('public/cultivation/cultivation-training-v4.js');
-  const css = read('public/cultivation-training-v3.css');
-  assert.match(training, /document\.body\.classList\.toggle\('ns-map-active'/);
-  assert.match(training, /class="ns-branch-intro"/);
-  assert.match(training, /class="ns-tree-tip ns-investment-guide"/);
-  assert.match(training, /class="ns-tree-viewport ns-trees" role="group"/);
-  assert.doesNotMatch(training, /ns-tree-viewport'\)\?\.scrollLeft/);
-  assert.doesNotMatch(training, /窄螢幕可左右捲動|手機或窄螢幕可左右滑動/);
-  assert.match(css, /body\.xianxia-theme\.ns-map-active main:has\(#page-training\.active-page\)\s*\{[\s\S]*?overflow:\s*hidden\s*!important/);
-  assert.match(css, /\.ns-branch-panel\s*\{[\s\S]*?grid-template-rows:\s*auto auto minmax\(0,1fr\) auto auto\s*!important/);
-  assert.match(css, /#training-tab-content\s*\{[\s\S]*?max-height:\s*100%\s*!important/);
-  assert.match(css, /\.ns-tree-viewport\s*\{[\s\S]*?overflow:\s*hidden\s*!important/);
-  assert.match(css, /\.ns-diagram\s*\{[\s\S]*?min-width:\s*0\s*!important/);
-  assert.match(css, /\.ns-tree-core \.golden-core-stage-v3\s*\{[\s\S]*?min-height:\s*0\s*!important/);
+test('branch cards use responsive page scrolling instead of the retired fixed skill map',()=>{
+ const training=read('public/cultivation/cultivation-training-v4.js'),css=read('public/cultivation-training-v3.css');assert.match(training,/class="ns-growth-grid"/);assert.doesNotMatch(training,/ns-tree-viewport|ns-orbit-node/);assert.match(css,/ns-growth-grid.*display:grid/);assert.match(training,/classList.remove\('ns-map-active'\)/);
 });
 
 
-test('map nodes only select; the right-hand detail is the sole upgrade control', () => {
-  const training = read('public/cultivation/cultivation-training-v4.js');
-  const css = read('public/cultivation-training-v3.css');
-  const nodeMarkup = training.slice(training.indexOf('    const nodes = soulNodes(type, equippedGrade).map(node => {'), training.indexOf('    const line = (id, path', training.indexOf('    const nodes = soulNodes(type, equippedGrade).map(node => {')));
-  const action = training.slice(training.indexOf('  function bindSoulActions() {'), training.indexOf('  // 鬥法配對時讀取已投資節點', training.indexOf('  function bindSoulActions() {')));
-  assert.match(nodeMarkup, /data-ns-node="\$\{node\.id\}"/);
-  assert.doesNotMatch(nodeMarkup, /data-ns-upgrade|disabled' : ''/);
-  assert.match(training, /soulNodeDetailMarkup\(type, tree, earned\)/);
-  assert.match(training, /data-ns-close/);
-  assert.match(training, /data-ns-upgrade="\$\{node\.id\}"/);
-  assert.match(action, /selectedSoulNodeId = button\.dataset\.nsNode/);
-  assert.match(action, /content\.querySelector\('\[data-ns-upgrade\]'\)/);
-  assert.match(action, /id === selectedSoulNodeId\) void illuminateSoulNode\(id\)/);
-  assert.doesNotMatch(action, /\[data-ns-node\][\s\S]*?void illuminateSoulNode\(button\.dataset\.nsNode\)/);
-  assert.match(css, /\.ns-node-detail/);
-  assert.match(css, /position:\s*absolute/);
-  assert.match(css, /right:\s*1px/);
-  assert.match(css, /overflow:\s*hidden/);
-  assert.match(css, /\.ns-detail-action:disabled/);
+test('each independent branch card has its own upgrade button',()=>{
+ const source=read('public/cultivation/cultivation-training-v4.js');assert.match(source,/data-ns-upgrade="\$\{branch.id\}"/);assert.match(source,/saveSoulBranch\(button.dataset.nsUpgrade\)/);assert.doesNotMatch(source,/selectedSoulNodeId|前置節點/);
 });
 
-test('node detail previews current and next values including locked or capped nodes', () => {
-  const training = read('public/cultivation/cultivation-training-v4.js');
-  const start = training.indexOf('  function soulNodeDetailMarkup(');
-  const end = training.indexOf('  function nascentSoulTabMarkup()', start);
-  assert.ok(start >= 0 && end > start);
-  const func = training.slice(start, end);
-  const render = (id, tree, earned) => {
-    const context = { soulNodes, soulNodeStatus, NASCENT_SOUL_NODE_CAP:10, soulBusy:false, selectedSoulNodeId:id, state:{equippedCore:{type:'sword',grade:9}} };
-    const fn = new Function(...Object.keys(context), func + '\nreturn soulNodeDetailMarkup;');
-    return fn(...Object.values(context))('sword',tree,earned);
-  };
-  const initial = render('leftMain',null,50);
-  assert.match(initial,/目前數值/);
-  assert.match(initial,/升級後/);
-  assert.match(initial, /<strong>\+0<\/strong>/);
-  assert.match(initial, /<strong class="ns-detail-next">\+12<\/strong>/);
-  assert.match(initial,/點亮 · 1 神識/);
-  const first = allocateSoulNode(null,'sword','leftMain',50);
-  const upgraded = render('leftMain',first.tree,50);
-  assert.match(upgraded, /<strong>\+12<\/strong>/);
-  assert.match(upgraded, /<strong class="ns-detail-next">\+24<\/strong>/);
-  assert.match(upgraded,/升級 · 1 神識/);
-  const locked = render('rightTop',first.tree,50);
-  assert.match(locked,/前置需達 5 \/ 10/);
-  assert.match(locked,/data-ns-upgrade="rightTop"\s+disabled/);
-  let tree=first.tree;
-  for(let i=1;i<10;i++) tree=allocateSoulNode(tree,'sword','leftMain',50).tree;
-  const capped=render('leftMain',tree,50);
-  assert.match(capped,/已點滿/);
-  assert.match(capped, /<strong>\+120<\/strong>/);
-  assert.match(capped, /<strong class="ns-detail-next">\+120<\/strong>/);
-  assert.match(capped,/data-ns-upgrade="leftMain"\s+disabled/);
+
+test('growth status previews rising fragment costs and caps directly',()=>{
+ const Growth=globalThis.QANascentGrowth,p={stats:{totalScore:68},cultivationTraining:{equippedCore:{type:'ocean'}},nascentSoulGrowth:{version:1,branches:{attack:3}},materialSystem:{inventory:{[Growth.ITEM_ID]:4}}};const ready=Growth.status(p,'attack');assert.equal(ready.cost,4);assert.equal(ready.ok,true);p.nascentSoulGrowth.branches.attack=10;assert.equal(Growth.status(p,'attack').reason,'已圓滿');
 });
 
 
@@ -355,28 +256,14 @@ test('node costs rise with distance and cultivation nodes are minority', () => {
   assert.equal(soulCombatBonuses(r.tree,'sword').maxHpFlat,350);
   assert.equal(soulCultivationBonusForPlayer({stats:{totalScore:68},
     cultivationTraining:{equippedCore:{type:'sword'},coreEnabled:true},
-    nascentSoulTree:r.tree},'daily'),5);
+    nascentSoulTree:r.tree},'daily'),0);
   assert.equal(soulCultivationBonusForPlayer({stats:{totalScore:68},
     cultivationTraining:{equippedCore:{type:'sword'},coreEnabled:false},
     nascentSoulTree:r.tree},'daily'),0);
 });
 
-test('cultivation branches are integrated into the three correct settlement flows', () => {
-  const rules = read('public/cultivation/cultivation-rules.js');
-  const daily = read('public/cultivation/daily-meditation.js');
-  const cave = read('public/cultivation/dongtian.js');
-  const training = read('public/cultivation/cultivation-training-v4.js');
-  assert.match(rules,/getNascentSoulCultivationBonuses/);
-  assert.match(rules,/baseGain \+ bonusGain \+ soulBonusGain/);
-  assert.match(daily,/current\.correct === QUESTION_TOTAL\s*\? soulCultivationBonusForPlayer\(data, 'daily'\) : 0/);
-  assert.match(daily,/'stats\.totalScore': increment\(totalCultivation\)/);
-  const caveSettlement = read('dongtian-settlement-api.cjs');
-  assert.match(cave,/rewardRepository\.claimDongtian/);
-  assert.match(caveSettlement,/soul=first&&e\.correct>0\?caveSoulBonus\(player\):0/);
-  assert.match(caveSettlement,/cult=first\?e\.correct\+soul:0/);
-  assert.match(caveSettlement,/if\(cult\)p\['stats\.totalScore'\]=FieldValue\.increment\(cult\)/);
-  assert.match(training,/左脈攻擊、右脈生存/);
-  assert.match(training,/status\.cost \+ ' 神識'/);
+test('new cultivation branch reaches solo, meditation and server cave settlement',()=>{
+ const rules=read('public/cultivation/nascent-soul-rules.js');assert.match(rules,/QANascentGrowth.cultivation\(player, source\)/);assert.match(read('public/cultivation/daily-meditation.js'),/soulCultivationBonusForPlayer\(data, 'daily'\)/);assert.match(read('dongtian-settlement-api.cjs'),/Growth.cultivation\(player,'cave'\)/);
 });
 
 
@@ -406,7 +293,7 @@ test('previous v3 allocations preserve paid costs', () => {
   assert.equal(soulSpentSpirit(newer.tree),28);
 });
 test('duel survival reduction and core-linked correct-answer healing', () => {
-  const code=read('public/cultivation/battle-engine-v2.js').replace(/^export /gm,'');
+  const code=read('public/cultivation/battle-engine-v2.js').replace(/^import \{\} from .*;\n/gm,'').replace(/^export /gm,'');
   const settle=new Function(code+'\nreturn settleBattleRound;')();
   const p=(uid,correct,hp,ns)=>({uid,hp,maxHp:1000,atk:200,totalScore:68,goldenCore:null,nascentSoul:ns,answer:{correct,atMs:1000}});
   const host=p('host',true,700,{bonusDamage:30,reductionFlat:15,coreHeal:24});
@@ -421,26 +308,8 @@ test('duel survival reduction and core-linked correct-answer healing', () => {
 });
 
 
-test('nascent soul center and final bonuses strictly follow equipped core, not washed candidate', () => {
-  const training = read('public/cultivation/cultivation-training-v4.js');
-  const source = training.slice(training.indexOf('  function currentSoulType() {'),
-    training.indexOf('  function soulBonusLabel(', training.indexOf('  function currentSoulType() {')));
-  assert.match(source, /return state\.equippedCore\?\.type \|\| null/);
-  assert.doesNotMatch(source, /state\.core\?\.type/);
-  const soul = training.slice(training.indexOf('  function nascentSoulTabMarkup() {'),
-    training.indexOf('  async function illuminateSoulNode(', training.indexOf('  function nascentSoulTabMarkup() {')));
-  assert.match(soul, /const equippedCore = state\.equippedCore/);
-  assert.match(soul, /const core = equippedCore/);
-  assert.match(soul, /coreVisualMarkup\(core, false\)/);
-  assert.match(soul, /ns-tree-core-name">\$\{equippedName\}/);
-  assert.match(soul, /ns-tree-core-desc">\$\{equippedGrade\} 品 · 已調御/);
-  assert.match(soul, /soulNodes\(type, equippedGrade\)/);
-  assert.match(soul, /soulCombatBonuses\(tree, type, equippedGrade\)/);
-  assert.match(soul, /尚未裝配金丹/);
-  const transaction = training.slice(training.indexOf('  async function illuminateSoulNode('),
-    training.indexOf('  function bindSoulActions(', training.indexOf('  async function illuminateSoulNode(')));
-  assert.match(transaction, /const remoteCore = remote\.cultivationTraining\?\.equippedCore/);
-  assert.doesNotMatch(transaction, /remote\.cultivationTraining\?\.core\?\.type \|\| type/);
+test('growth and available branch count follow equipped core, never wash candidate',()=>{
+ const source=read('public/cultivation/cultivation-training-v4.js');const start=source.indexOf('  function nascentSoulTabMarkup()');const end=source.indexOf('  async function saveSoulBranch',start);const markup=source.slice(start,end);assert.match(markup,/const core = state.equippedCore/);assert.match(markup,/Growth.branches\(core\)/);assert.doesNotMatch(markup,/state.core[?.]/);assert.match(source,/Growth.bonuses\(window.getCurrentUserData\?\.\(\) \|\| \{\}, state.equippedCore\)/);
 });
 
 
@@ -451,8 +320,6 @@ test('core-grade decoration uses each rendered core, never applies the wash cand
   const css = read('public/cultivation-training-v3.css');
   const visualsCss = read('public/cultivation-core-visual.css');
   assert.match(training, /data-core-visual-grade="\$\{clampGrade\(core\.grade\)\}"/);
-  assert.match(training, /const core = equippedCore/);
-  assert.match(training, /coreVisualMarkup\(core, false\)/);
   assert.match(visual, /const explicitGrade = Number\(stage\.dataset\.coreVisualGrade\)/);
   assert.match(visual, /Number\.isInteger\(explicitGrade\)/);
   assert.match(visual, /decorateStage\(stage, grade\)/);

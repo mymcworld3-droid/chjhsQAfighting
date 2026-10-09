@@ -229,7 +229,7 @@ import { playerRepository } from './data/player-repository.js';
   }
   function renderResult() {
     const reward = run.reward;
-    overlay().innerHTML = `${header('五重參悟 · 機緣結算')}<div class="op-result"><span class="op-seal" aria-hidden="true">悟</span><h3>${esc(run.title)}</h3><p>已完成同卷五題，答對 ${reward.correct} / 5 題。</p><div class="op-rewards"><span>靈石 <b>+${reward.goldAdded}</b></span><span>修為 <b>+${reward.cultivationAdded}</b></span>${reward.spiritAdded ? `<span>神識 <b>+${reward.spiritAdded}</b></span>` : ''}</div>${reward.soulCultivationAdded ? `<p>修為含元嬰洞天加成 +${reward.soulCultivationAdded}。</p>` : ''}<button class="op-primary" id="op-review" type="button">回顧本文與五題解析</button><button class="op-secondary" id="op-return" type="button">繼續問道</button></div>`;
+    overlay().innerHTML = `${header('五重參悟 · 機緣結算')}<div class="op-result"><span class="op-seal" aria-hidden="true">悟</span><h3>${esc(run.title)}</h3><p>已完成同卷五題，答對 ${reward.correct} / 5 題。</p><div class="op-rewards"><span>靈石 <b>+${reward.goldAdded}</b></span><span>修為 <b>+${reward.cultivationAdded}</b></span></div>${reward.soulCultivationAdded ? `<p>修為含元嬰洞天加成 +${reward.soulCultivationAdded}。</p>` : ''}<button class="op-primary" id="op-review" type="button">回顧本文與五題解析</button><button class="op-secondary" id="op-return" type="button">繼續問道</button></div>`;
     $('op-leave').onclick = () => close(); $('op-return').onclick = () => close();
     $('op-review').onclick = () => {
       const el = overlay();

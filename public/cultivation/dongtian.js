@@ -1341,10 +1341,9 @@ export const featureReady = (async () => {
     void writeDongtianHistory(s, true, correct, total, tier)
       .catch((error) => console.warn('[Dongtian completion history]', error));
     if (state.session !== s) return;
-    const spiritAward = Math.max(0, Number(s.spiritAdded) || 0);
     const soulCultivationAdded = Math.max(0, Number(s.soulCultivationAdded) || 0);
     const totalCultivation = firstCompletionCultivationReward + soulCultivationAdded;
-    overlay.innerHTML = `<div class="dt-result"><div class="dt-result-seal">天</div><h2>${escapeHtml(s.dongtian.name)} · 通關</h2><p>這次洞天題序已全部走完。答對率越高，未來洞天獎勵池開放後可對應更好的機緣。</p><div class="dt-result-grid"><div><span>答對</span><b>${correct} / ${total}</b></div><div><span>正確率</span><b>${Math.round(accuracy * 100)}%</b></div><div><span>機緣評級</span><b>${escapeHtml(tier.replace('洞天機緣', ''))}</b></div></div><div class="dt-reward">${firstCompletion ? `<strong style="color:#dfbdf5">首次通關洞天獎勵</strong><br>+${firstCompletionReward.toLocaleString()} 靈石 ·  +${totalCultivation} 修為（答對題數 +${firstCompletionCultivationReward}${soulCultivationAdded ? `，元嬰加成 +${soulCultivationAdded}` : ''}）${spiritAward ? ` · +${spiritAward} 神識` : ''}。` : `此洞天的首次通關紀錄已存在；本次為重遊，不重複領取首次獎勵${spiritAward ? `；本次答題獲得 +${spiritAward} 神識` : ''}。`}${s.dongtian.ownerUid !== uid() && firstCompletion ? `<br><br>洞天主人已獲得 +${OWNER_CULTIVATION_REWARD} 修為與 +${OWNER_GOLD_REWARD} 靈石。` : ''}</div><button id="dt-back" class="dt-back" type="button">返回</button></div>`;
+    overlay.innerHTML = `<div class="dt-result"><div class="dt-result-seal">天</div><h2>${escapeHtml(s.dongtian.name)} · 通關</h2><p>這次洞天題序已全部走完。答對率越高，未來洞天獎勵池開放後可對應更好的機緣。</p><div class="dt-result-grid"><div><span>答對</span><b>${correct} / ${total}</b></div><div><span>正確率</span><b>${Math.round(accuracy * 100)}%</b></div><div><span>機緣評級</span><b>${escapeHtml(tier.replace('洞天機緣', ''))}</b></div></div><div class="dt-reward">${firstCompletion ? `<strong style="color:#dfbdf5">首次通關洞天獎勵</strong><br>+${firstCompletionReward.toLocaleString()} 靈石 ·  +${totalCultivation} 修為（答對題數 +${firstCompletionCultivationReward}${soulCultivationAdded ? `，元嬰加成 +${soulCultivationAdded}` : ''}）。` : `此洞天的首次通關紀錄已存在；本次為重遊，不重複領取首次獎勵。`}${s.dongtian.ownerUid !== uid() && firstCompletion ? `<br><br>洞天主人已獲得 +${OWNER_CULTIVATION_REWARD} 修為與 +${OWNER_GOLD_REWARD} 靈石。` : ''}</div><button id="dt-back" class="dt-back" type="button">返回</button></div>`;
     document.getElementById('dt-back').onclick = closeAfterSession;
   }
 
@@ -1373,7 +1372,6 @@ export const featureReady = (async () => {
         data.stats = data.stats || {};
         data.stats.gold = Math.max(0, Number(data.stats.gold) || 0) + goldAdded;
         data.stats.totalScore = Math.max(0, Number(data.stats.totalScore) || 0) + cultivationAdded;
-        if (spiritAdded) data.stats.nascentSoulSpirit = normalizeSpirit(data.stats.nascentSoulSpirit) + spiritAdded;
       }
       window.updateUIStats?.();
       window.refreshCultivationRealmUI?.();

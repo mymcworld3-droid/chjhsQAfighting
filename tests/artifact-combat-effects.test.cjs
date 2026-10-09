@@ -1,3 +1,5 @@
+globalThis.QACombatCombo = require('../public/cultivation/combat-combo.js');
+globalThis.QANascentGrowth = require('../public/cultivation/nascent-growth.js');
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
@@ -18,8 +20,8 @@ const formal = read('public/cultivation/battle-mode-v2.js');
 const engineSource = read('public/cultivation/battle-engine-v2.js');
 
 function loadCombatEngine() {
-  const ctx = {};
-  const code = engineSource
+  const ctx = {QACombatCombo:globalThis.QACombatCombo};
+  const code = engineSource.replace(/^import \{\} from .*;\n/gm,'')
     .replace(/export const /g, 'const ')
     .replace(/export function /g, 'function ')
     + '\nthis.api={settleBattleRound};';
@@ -30,8 +32,8 @@ function loadCombatEngine() {
 function loadResolver(randomValue = 0.5) {
   const math = Object.create(Math);
   math.random = () => randomValue;
-  const context = { window: {}, Math: math };
-  vm.runInNewContext(resolverSource, context);
+  const context = { window: {}, Math: math, QACombatCombo:globalThis.QACombatCombo };
+  vm.runInNewContext(resolverSource.replace(/^import \{\} from .*;\n/gm,''), context);
   return context.window;
 }
 
@@ -92,45 +94,12 @@ test('combo chance is hard capped at ten percent in catalog, admin and runtime',
     baseDamage: 100
   });
   assert.equal(attack.comboChance, 0.10);
-  assert.equal(attack.combo, true);
-  assert.equal(attack.normalDamage, 200);
+  assert.equal(attack.comboMultiplier, .30);
+  assert.equal(attack.normalDamage, 100);
 });
 
-test('Golden Core blocks opening combo strike but second strike uses equipment defense normally', () => {
-  const runtime=loadResolver(0);
-  const engine=loadCombatEngine();
-  const guest=player([{type:'equip_combo_chance',value:0.10}], {
-    uid:'g', atk:200, answer:{correct:true,atMs:1000}
-  });
-  const host=player([{type:'equip_damage_reduction_percent',value:0.25}], {
-    uid:'h', atk:200, artifactShield:30, coreShield:true,
-    goldenCore:{type:'ningxin',name:'凝心靜音丹',grade:6},
-    answer:{correct:false,atMs:2000}
-  });
-  let roomId='';
-  for(let index=0;index<5000;index++){
-    const candidate='guarded-artifact-combo-'+index;
-    if(runtime.resolveArtifactBattleAttack({
-      attacker:guest,defender:host,baseDamage:200,
-      seed:candidate+':1:g:artifact'
-    }).combo){roomId=candidate;break;}
-  }
-  assert.ok(roomId,'find seeded combo without random retries');
-  const outcome=engine.settleBattleRound({
-    roomId,round:1,host,guest,
-    resolveEquipmentHit:runtime.resolveArtifactBattleHit,
-    resolveGuardedFollowup:runtime.resolveArtifactGuardedFollowup
-  });
-  const comboSteps = outcome.steps.filter(step => step.type === 'attack');
-  assert.equal(comboSteps.length,2);
-  assert.equal(comboSteps[0].guarded,true);
-  assert.equal(comboSteps[0].damage,0);
-  assert.equal(comboSteps[1].damage,120,'second 200 hit reduced to 150 then 30 artifact shield');
-  assert.equal(outcome.hostHp,880);
-  assert.equal(outcome.hostCoreShield,false,'shield is consumed by first strike, not refreshed next round');
-  assert.equal(outcome.hostArtifactState.artifactShield,0,'only followup consumes equipment shield');
-  assert.match(formal,/resolveGuardedFollowup: window.resolveArtifactGuardedFollowup/);
-  assert.match(read('public/cultivation/battle-tutorial.js'),/resolveGuardedFollowup: resolveTutorialGuardedFollowup/);
+test('a fully Dao-guarded opening cannot trigger combo or consume artifact defense',()=>{
+ const runtime=loadResolver(0),engine=loadCombatEngine();const guest=player([{type:'equip_combo_chance',value:.1}],{uid:'g',atk:200,answer:{correct:true,atMs:1000}});const host=player([{type:'equip_damage_reduction_percent',value:.25}],{uid:'h',atk:200,artifactShield:30,coreShield:true,goldenCore:{type:'ningxin',grade:6},answer:{correct:false,atMs:2000}});const outcome=engine.settleBattleRound({roomId:'guarded-combo',round:1,host,guest,resolveEquipmentHit:runtime.resolveArtifactBattleHit,resolveGuardedFollowup:runtime.resolveArtifactGuardedFollowup});assert.equal(outcome.hostHp,1000);assert.equal(outcome.hostArtifactState.artifactShield,30);assert.equal(outcome.steps.filter(x=>x.combo).length,0);assert.equal(outcome.hostCoreShield,false);
 });
 
 test('flat and percentage damage reduction stack in actual PvP resolver', () => {
