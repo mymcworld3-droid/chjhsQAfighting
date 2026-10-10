@@ -268,13 +268,14 @@ test('equipped core sits at the radial center with one connector per four or fiv
   assert.match(css, /\.ns-growth-core \.golden-core-stage-v3 \{ width:100% !important; height:100% !important; min-width:0; min-height:0/);
 });
 
-test('radial UI keeps ranks, limits, cost and disabled states without repeated explanations', () => {
+test('radial UI keeps current bonuses, ranks and costs without upper limits or explanations', () => {
   const markup = renderGrowthMap('sword', {attack:10, coreDamage:4}, 0);
   assert.match(markup, /ns-growth-resource">元嬰碎精 <strong aria-live="polite">0/);
   assert.match(markup, /data-ns-upgrade="attack"[^>]*disabled/);
   assert.match(markup, /data-ns-upgrade="coreDamage"[^>]*元嬰碎精不足[^>]*disabled/);
-  assert.match(markup, /上限 \+70/);
-  assert.match(markup, /上限 \+30%/);
+  assert.match(markup, /ns-growth-value">\+70</);
+  assert.match(markup, /ns-growth-value">\+12%</);
+  assert.doesNotMatch(markup, /上限|ns-growth-cap/);
   assert.match(markup, /10 \/ 10/);
   assert.match(markup, /已圓滿/);
   assert.match(markup, /↑ 5 碎精/);

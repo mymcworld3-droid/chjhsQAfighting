@@ -433,7 +433,6 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
       return `<button type="button" class="ns-growth-node ${level ? 'is-grown' : ''}" style="--branch-x:${x}%;--branch-y:${y}%" data-ns-upgrade="${branch.id}" aria-label="${label}" title="${status.reason || '升級消耗 '+status.cost+' 碎精'}" ${!status.ok || soulBusy ? 'disabled' : ''}>
         <span class="ns-growth-name"><i class="fa-solid ${branch.icon}" aria-hidden="true"></i>${name}</span>
         <strong class="ns-growth-value">+${value}${unit}</strong>
-        <span class="ns-growth-cap">上限 +${Math.round(max*10)/10}${unit}</span>
         <span class="ns-growth-level">${level} / 10</span>
         <span class="ns-growth-track" aria-hidden="true"><span style="width:${level * 10}%"></span></span>
         <span class="ns-growth-action">${action}</span>

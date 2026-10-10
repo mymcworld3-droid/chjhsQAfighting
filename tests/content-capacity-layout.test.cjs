@@ -30,6 +30,22 @@ test('training content is not clipped and golden core can use the available heig
   assert.match(layout, /height:clamp\(240px,44dvh,430px\)!important/);
 });
 
+test('large golden core rules target the core page, not the nascent radial center', () => {
+  const index = read('public/index.html');
+  const fluid = read('public/cultivation/training-fluid-layout.js');
+  for (const source of [layout, fluid, index]) {
+    assert.doesNotMatch(source, /#page-training \.golden-core-stage-v3\s*\{/);
+    assert.match(source, /#page-training \.core-minimal-card \.golden-core-stage-v3\s*\{/);
+  }
+  // Keep the initial inline CSS and later injected CSS identical at every breakpoint.
+  for (const [id, source] of [['content-capacity-layout-style', layout], ['training-fluid-layout-style', fluid]]) {
+    const inline = index.match(new RegExp('<style id="'+id+'">([\\s\\S]*?)<\\/style>'))[1];
+    const injected = source.match(/style\.textContent = `([\s\S]*?)`;/)[1];
+    const selectors = text => [...text.matchAll(/body\.xianxia-theme #page-training[^\n]*golden-core-stage-v3\{/g)].map(match => match[0]);
+    assert.deepEqual(selectors(inline), selectors(injected));
+  }
+});
+
 test('refinery fills available content height and shifts the material divider down 96px', () => {
   assert.match(layout, /#page-training \.cultivation-refinery/);
   assert.match(layout, /min-height:var\(--training-content-height/);

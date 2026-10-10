@@ -125,7 +125,7 @@
       }
 
       @media (min-width:1280px){
-        body.xianxia-theme #page-training .golden-core-stage-v3{
+        body.xianxia-theme #page-training .core-minimal-card .golden-core-stage-v3{
           max-height:260px!important;
         }
         body.xianxia-theme #page-training .training-v3-bag-grid,
