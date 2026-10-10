@@ -416,17 +416,38 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     const prepared = Growth.prepare(player);
     const core = state.equippedCore;
     const branches = Growth.branches(core);
-    const cards = branches.map(branch => {
+    const positions = branches.length === 5
+      ? [[50, 15], [82, 39], [70, 84], [30, 84], [18, 39]]
+      : [[24, 20], [76, 20], [76, 84], [24, 84]];
+    const nodes = branches.map((branch, index) => {
       const status = Growth.status({...player,cultivationTraining:{...player.cultivationTraining,equippedCore:core}},branch.id);
       const level = status.level;
       const quality = (9 - clampGrade(core.grade)) / 8;
       const max = branch.id === 'coreChance' ? 10 + 5 * quality : branch.id === 'coreDamage' ? (core.type === 'sword' ? 30 : 50) : branch.maxBonus;
       const value = Math.round(max * level / 10 * 10) / 10;
       const name = branch.id === 'coreChance' ? (core.type === 'sword' ? '連擊機率' : '爆擊機率') : branch.id === 'coreDamage' ? (core.type === 'sword' ? '連擊傷害' : '爆擊傷害') : branch.name;
-      const description = branch.id === 'core' ? globalThis.QASoulTalents?.TYPES[core.type]?.desc || branch.description : branch.description;
-      return `<article class="ns-growth-card"><span class="ns-growth-icon"><i class="fa-solid ${branch.icon}" aria-hidden="true"></i></span><h4>${name}</h4><p class="ns-growth-level">${level} / 10 級</p><strong class="ns-growth-value">+${value}${branch.unit} <small>／升滿 +${Math.round(max*10)/10}${branch.unit}</small></strong><progress max="10" value="${level}" aria-label="${name}等級"></progress><p>${description}</p><button type="button" data-ns-upgrade="${branch.id}" ${!status.ok || soulBusy ? 'disabled' : ''}>${soulBusy ? '保存中…' : status.ok ? '升級 · '+status.cost+' 碎精' : status.reason}</button></article>`;
+      const [x, y] = positions[index];
+      const unit = branch.unit === '%' ? '%' : '';
+      const action = soulBusy ? '保存中…' : level === 10 ? '已圓滿' : '↑ '+status.cost+' 碎精';
+      const label = `${name}，${level} / 10 級，加成 ${value}${unit}，${soulBusy ? '保存中' : status.ok ? '升級消耗 '+status.cost+' 碎精' : status.reason}`;
+      return `<button type="button" class="ns-growth-node ${level ? 'is-grown' : ''}" style="--branch-x:${x}%;--branch-y:${y}%" data-ns-upgrade="${branch.id}" aria-label="${label}" title="${status.reason || '升級消耗 '+status.cost+' 碎精'}" ${!status.ok || soulBusy ? 'disabled' : ''}>
+        <span class="ns-growth-name"><i class="fa-solid ${branch.icon}" aria-hidden="true"></i>${name}</span>
+        <strong class="ns-growth-value">+${value}${unit}</strong>
+        <span class="ns-growth-cap">上限 +${Math.round(max*10)/10}${unit}</span>
+        <span class="ns-growth-level">${level} / 10</span>
+        <span class="ns-growth-track" aria-hidden="true"><span style="width:${level * 10}%"></span></span>
+        <span class="ns-growth-action">${action}</span>
+      </button>`;
     }).join('');
-    return `<section class="ns-panel ns-growth-panel"><div class="ns-branch-intro"><div><h3>本命元嬰</h3><p>${coreType(core.type).name} · ${clampGrade(core.grade)} 品 · ${branches.length} 個獨立分支</p></div><div class="ns-resource"><div><small>元嬰碎精</small><strong>${prepared.fragments}</strong></div></div></div><p class="ns-growth-note">各分支共 10 級，可直接升級。團本答對每題 +1 碎精，閉關全對 +3 碎精（元嬰境界起）。${prepared.converted ? '舊神識將一次性轉為 '+prepared.converted+' 碎精。' : ''}</p><div class="ns-growth-grid">${cards}</div><div class="ns-growth-footer"><span>調御新丹相時自動重置分支並返還投入的碎精。</span><button type="button" class="ns-reset-btn" data-ns-reset ${soulBusy || !Growth.spent(prepared.growth) ? 'disabled' : ''}>重修元嬰</button></div></section>`;
+    const lines = positions.map(([x, y], index) => `<line class="ns-growth-link ${prepared.growth.branches[branches[index].id] ? 'is-grown' : ''}" x1="50" y1="50" x2="${x}" y2="${y}"/>`).join('');
+    return `<section class="ns-panel ns-growth-panel">
+      <div class="ns-growth-toolbar"><span class="ns-growth-resource">元嬰碎精 <strong aria-live="polite">${prepared.fragments}</strong></span><button type="button" class="ns-reset-btn" data-ns-reset ${soulBusy || !Growth.spent(prepared.growth) ? 'disabled' : ''}>重修</button></div>
+      <div class="ns-growth-map" data-branch-count="${branches.length}" role="group" aria-label="元嬰分支">
+        <svg class="ns-growth-links" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">${lines}</svg>
+        <div class="ns-growth-core">${coreVisualMarkup(core, false)}<div class="ns-growth-core-caption"><strong>${coreType(core.type).name}</strong><span>${clampGrade(core.grade)} 品</span></div></div>
+        ${nodes}
+      </div>
+    </section>`;
   }
 
   async function saveSoulBranch(branchId, reset = false) {
@@ -575,7 +596,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
       page.className = 'page-section hidden px-4 training-page training-page-v3';
       page.innerHTML = `
         <div class="training-page-heading-v3">
-          <div><div class="training-eyebrow-v3">INNER ALCHEMY ／ 內丹修行</div><h2>修煉</h2></div>
+          <div><h2>修煉</h2></div>
           <div class="training-realm-seal-v3">金丹</div>
         </div>
         <div class="training-subtabs-v3" role="tablist">
@@ -606,7 +627,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
       heading.className = 'training-page-heading-v3';
       page.prepend(heading);
     }
-    heading.innerHTML = '<div><div class="training-eyebrow-v3">INNER ALCHEMY ／ 內丹修行</div><h2>修煉</h2></div><div class="training-realm-seal-v3">金丹</div>';
+    heading.innerHTML = '<div><h2>修煉</h2></div><div class="training-realm-seal-v3">金丹</div>';
 
     const tabs = page.querySelector('.training-subtabs-v3');
     if (!tabs) return;

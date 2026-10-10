@@ -223,13 +223,65 @@ test('nascent soul combat attributes are sealed against Golden Core or lower opp
 });
 
 
-test('branch cards use responsive page scrolling instead of the retired fixed skill map',()=>{
- const training=read('public/cultivation/cultivation-training-v4.js'),css=read('public/cultivation-training-v3.css');assert.match(training,/class="ns-growth-grid"/);assert.doesNotMatch(training,/ns-tree-viewport|ns-orbit-node/);assert.match(css,/ns-growth-grid.*display:grid/);assert.match(training,/classList.remove\('ns-map-active'\)/);
+test('radial branches retain page scrolling instead of the retired fixed skill map',()=>{
+ const training=read('public/cultivation/cultivation-training-v4.js'),css=read('public/cultivation-training-v3.css');assert.match(training,/class="ns-growth-map"/);assert.doesNotMatch(training,/ns-tree-viewport|ns-orbit-node|ns-growth-grid/);assert.match(css,/\.ns-growth-map \{ position:relative/);assert.match(css,/\.ns-growth-node \{ position:absolute/);assert.match(training,/classList.remove\('ns-map-active'\)/);
 });
 
 
-test('each independent branch card has its own upgrade button',()=>{
+test('each independent radial branch is an accessible upgrade button',()=>{
  const source=read('public/cultivation/cultivation-training-v4.js');assert.match(source,/data-ns-upgrade="\$\{branch.id\}"/);assert.match(source,/saveSoulBranch\(button.dataset.nsUpgrade\)/);assert.doesNotMatch(source,/selectedSoulNodeId|前置節點/);
+});
+
+function renderGrowthMap(type, branches = {}, fragments = 20, soulBusy = false) {
+  const source = read('public/cultivation/cultivation-training-v4.js');
+  const start = source.indexOf('  function nascentSoulTabMarkup()');
+  const end = source.indexOf('  async function saveSoulBranch', start);
+  const core = {type, grade:1};
+  const player = {stats:{totalScore:68}, cultivationTraining:{equippedCore:core},
+    nascentSoulGrowth:{version:1, branches}, materialSystem:{inventory:{'nascent-soul-essence':fragments}}};
+  return new Function('state', 'Growth', 'currentScore', 'NASCENT_SOUL_THRESHOLD', 'window',
+    'clampGrade', 'coreType', 'coreVisualMarkup', 'soulBusy',
+    source.slice(start, end) + '\nreturn nascentSoulTabMarkup();')(
+      {equippedCore:core, core:{type:'thunder', grade:9}}, globalThis.QANascentGrowth,
+      () => 68, 68, {getCurrentUserData:() => player}, grade => grade,
+      type => ({name:type}), core => `<div data-test-core="${core.type}" data-test-grade="${core.grade}"></div>`, soulBusy);
+}
+
+test('equipped core sits at the radial center with one connector per four or five branches', () => {
+  for (const [type, count] of [['ocean',4], ['ningxin',5], ['sword',5]]) {
+    const markup = renderGrowthMap(type);
+    assert.match(markup, new RegExp(`data-branch-count="${count}"`));
+    assert.match(markup, new RegExp(`class="ns-growth-core"><div data-test-core="${type}" data-test-grade="1"`));
+    assert.doesNotMatch(markup, /data-test-core="thunder"/);
+    assert.equal((markup.match(/data-ns-upgrade=/g) || []).length, count);
+    assert.equal((markup.match(/<line /g) || []).length, count);
+    const positions = [...markup.matchAll(/--branch-x:(\d+)%;--branch-y:(\d+)%/g)];
+    assert.equal(new Set(positions.map(match => match[1]+','+match[2])).size, count);
+    assert.ok(positions.every(match => Number(match[1]) !== 50 || Number(match[2]) !== 50));
+    assert.equal((markup.match(/x1="50" y1="50"/g) || []).length, count);
+  }
+  const css = read('public/cultivation-training-v3.css');
+  assert.match(css, /\.ns-growth-core \{[^}]*left:50%; top:50%/);
+  assert.match(css, /@media\(max-width:640px\)[\s\S]*\.ns-growth-map \{ height:480px/);
+  assert.match(css, /#training-tab-content:has\(\.ns-growth-panel\) \{ overflow-y:auto/);
+  assert.match(css, /\.training-page-v3:has\(\.ns-growth-panel\) \{[^}]*padding-bottom:0/);
+  assert.match(css, /\.ns-growth-core \.golden-core-stage-v3 \{ width:100% !important; height:100% !important; min-width:0; min-height:0/);
+});
+
+test('radial UI keeps ranks, limits, cost and disabled states without repeated explanations', () => {
+  const markup = renderGrowthMap('sword', {attack:10, coreDamage:4}, 0);
+  assert.match(markup, /ns-growth-resource">元嬰碎精 <strong aria-live="polite">0/);
+  assert.match(markup, /data-ns-upgrade="attack"[^>]*disabled/);
+  assert.match(markup, /data-ns-upgrade="coreDamage"[^>]*元嬰碎精不足[^>]*disabled/);
+  assert.match(markup, /上限 \+70/);
+  assert.match(markup, /上限 \+30%/);
+  assert.match(markup, /10 \/ 10/);
+  assert.match(markup, /已圓滿/);
+  assert.match(markup, /↑ 5 碎精/);
+  assert.doesNotMatch(markup, /<p>|ns-growth-note|個獨立分支|舊神識|團本答對|各分支共/);
+  const busy = renderGrowthMap('ocean', {}, 20, true);
+  assert.equal((busy.match(/data-ns-upgrade="[^"]+"[^>]*disabled/g) || []).length, 4);
+  assert.match(busy, /保存中/);
 });
 
 

@@ -657,7 +657,61 @@ body.xianxia-theme.ns-map-active #page-training .ns-branch-line[data-branch="cor
 .ns-node-detail .ns-detail-footer { flex-shrink:0; }
 @media(max-width:600px) { .ns-node-detail .ns-detail-description { max-height:65px; } }
 
-/* 元嬰分支可獨立升級；保留正常頁面捲動。 */
-.ns-growth-panel{max-width:1100px;margin:auto}.ns-growth-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}.ns-growth-card{display:flex;flex-direction:column;gap:10px;padding:22px;border:1px solid #8f71984d;background:#15121bd9;border-radius:14px}.ns-growth-icon{font-size:24px;color:#d4b4f1}.ns-growth-card h4{font-size:18px;margin:0}.ns-growth-card p{font-size:13px;color:#c8becb;line-height:1.7;margin:0}.ns-growth-value{font-size:20px;color:#ebd7ff}.ns-growth-value small{display:block;font-size:12px;color:#aaa0b2}.ns-growth-card progress{width:100%;accent-color:#bc8ee2}.ns-growth-card button{margin-top:auto;padding:10px;background:#644980;color:#fff;border:1px solid #ba9ed4;border-radius:8px}.ns-growth-card button:disabled{opacity:.45}.ns-growth-note,.ns-growth-footer{font-size:13px;color:#c5b9cc;line-height:1.8;margin:16px 0}.ns-growth-footer{display:flex;align-items:center;justify-content:space-between;gap:12px}.core-gold-balance{color:#dbc08a;margin:12px 0}.core-gold-balance strong{color:#f5d890}@media(max-width:480px){.ns-growth-grid{grid-template-columns:1fr}.ns-growth-footer{align-items:flex-start;flex-direction:column}}
-
-.ns-growth-grid{width:100%;text-align:left}.ns-growth-panel .ns-branch-intro{width:100%;text-align:left}.ns-growth-panel .ns-resource{grid-template-columns:1fr;width:120px}.ns-growth-panel .ns-growth-note{width:100%;text-align:left}.ns-growth-footer{width:100%}
+/* 目前調御金丹居中，獨立分支向外展開；不切換全頁縮放或捲動模式。 */
+.ns-growth-panel { box-sizing:border-box; max-width:900px; height:100%; min-height:0; margin:auto; padding:18px 12px 8px; gap:0; border-color:rgba(216,177,93,.2); background:radial-gradient(circle at 50% 50%,rgba(216,177,93,.05),transparent 40%),#0c0d0f; }
+body.xianxia-theme #training-tab-content:has(.ns-growth-panel) { overflow-y:auto; overscroll-behavior-y:contain; }
+body.xianxia-theme .training-page-v3:has(.ns-growth-panel) { grid-template-columns:minmax(0,1fr); padding-bottom:0; }
+body.xianxia-theme .training-page-v3:has(.ns-growth-panel) .training-subtabs-v3 { min-width:0; overflow-x:auto; }
+.ns-growth-toolbar { display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%; padding:0 8px; box-sizing:border-box; }
+.ns-growth-resource { color:#aa9f8c; font-size:13px; }
+.ns-growth-resource strong { margin-left:8px; color:#f2d69b; font-size:18px; font-variant-numeric:tabular-nums; }
+.ns-growth-map { position:relative; flex:1 0 560px; width:min(100%,780px); height:620px; isolation:isolate; }
+.ns-growth-links { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+.ns-growth-link { stroke:#6c5a37; stroke-width:1; vector-effect:non-scaling-stroke; }
+.ns-growth-link.is-grown { stroke:#c5a76b; }
+.ns-growth-core { position:absolute; z-index:1; left:50%; top:50%; width:140px; height:140px; transform:translate(-50%,-50%); }
+body.xianxia-theme .ns-growth-core .golden-core-stage-v3 { width:100% !important; height:100% !important; min-width:0; min-height:0; max-width:none; max-height:none; margin:0; }
+.ns-growth-core .golden-core-halo-v3.halo-a { inset:7px; }
+.ns-growth-core .golden-core-halo-v3.halo-b { inset:18px; }
+body.xianxia-theme .ns-growth-core .golden-core-sphere-v3 { width:70px !important; height:70px !important; font-size:26px; animation:none; }
+.ns-growth-core .golden-core-orbit-v3 { width:124px; height:52px; }
+.ns-growth-core .golden-core-shadow-v3 { width:64px; bottom:8px; }
+.ns-growth-core-caption { position:absolute; top:100%; left:50%; transform:translateX(-50%); display:grid; gap:3px; width:160px; color:#e8d6b2; line-height:1.4; }
+.ns-growth-core-caption strong { font-size:16px; font-weight:600; }
+.ns-growth-core-caption span { font-size:12px; color:#ab9366; }
+.ns-growth-node { position:absolute; z-index:2; left:var(--branch-x); top:var(--branch-y); transform:translate(-50%,-50%); box-sizing:border-box; width:148px; display:flex; flex-direction:column; align-items:center; gap:5px; padding:13px 10px 10px; border:1px solid #554a35; border-radius:12px; background:#141413; color:#cec5b4; font:inherit; line-height:1.3; cursor:pointer; transition:border-color .15s,background .15s; }
+.ns-growth-node.is-grown { border-color:#9d8250; }
+.ns-growth-node:hover:not(:disabled) { border-color:#e1bd75; background:#1e1b15; }
+.ns-growth-node:focus-visible { outline:2px solid #ffe1a0; outline-offset:4px; }
+.ns-growth-node:disabled { cursor:default; }
+.ns-growth-name { font-size:15px; font-weight:600; white-space:nowrap; }
+.ns-growth-name i { margin-right:6px; font-size:12px; color:#ac9363; }
+.ns-growth-value { font-size:24px; color:#f0d69e; font-variant-numeric:tabular-nums; }
+.ns-growth-cap { font-size:11px; color:#a69981; }
+.ns-growth-level { font-size:11px; color:#bbb09b; font-variant-numeric:tabular-nums; }
+.ns-growth-track { width:100%; height:3px; border-radius:2px; overflow:hidden; background:#302c24; }
+.ns-growth-track > span { display:block; height:100%; background:#bfa26a; }
+.ns-growth-action { margin-top:3px; font-size:12px; color:#e6c98f; }
+.ns-growth-node:disabled .ns-growth-action { color:#827a6c; }
+.core-gold-balance { color:#dbc08a; margin:12px 0; }
+.core-gold-balance strong { color:#f5d890; }
+@media(max-width:640px) {
+  .ns-growth-panel { padding:14px 6px 4px; }
+  .ns-growth-toolbar { padding:0 6px; }
+  .ns-growth-map { height:480px; flex-basis:480px; }
+  .ns-growth-node { width:min(96px,30%); gap:4px; padding:10px 5px 8px; }
+  .ns-growth-name { font-size:13px; }
+  .ns-growth-name i { display:none; }
+  .ns-growth-value { font-size:21px; }
+  .ns-growth-core { width:84px; height:84px; }
+  body.xianxia-theme .ns-growth-core .golden-core-sphere-v3 { width:48px !important; height:48px !important; font-size:21px; }
+  .ns-growth-core .golden-core-orbit-v3 { width:80px; height:34px; }
+  .ns-growth-core .golden-core-halo-v3.halo-a { inset:0; }
+  .ns-growth-core .golden-core-halo-v3.halo-b { inset:9px; }
+  .ns-growth-core-caption { width:112px; gap:1px; }
+  .ns-growth-core-caption strong { font-size:13px; }
+  .ns-growth-core-caption span { font-size:11px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .ns-growth-core :is(.golden-core-halo-v3,.golden-core-orbit-v3) { animation:none; }
+}
