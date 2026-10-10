@@ -13,7 +13,36 @@
   ].map(Object.freeze));
   const SPECIAL_BRANCHES = [{id:'coreChance',name:'金丹機率',icon:'fa-dice',maxBonus:15,unit:'%',description:'逐級增加爆擊或連擊機率，依金丹品級升滿增加 10–15%。'},
     {id:'coreDamage',name:'金丹傷害',icon:'fa-burst',maxBonus:100,unit:'%',description:'逐級增加爆擊或連擊傷害。爆擊升滿增加 50 個百分點，連擊升滿增加 30 個百分點。'}].map(Object.freeze);
-  function branches(core) { return ['ningxin','sword'].includes(core?.type) ? [...BRANCHES.slice(0,3),...SPECIAL_BRANCHES] : BRANCHES; }
+  // 百分比為對應神通的攻擊力係數；真傷直接使用戰鬥結算的固定傷害。
+  const CORE_FACTORS = Object.freeze({ocean:2,taichu:1.2,pojing:3.8,xingchen:4,thunder:1,reverse:1.8});
+  const CORE_ICONS = Object.freeze({ocean:'fa-water',taichu:'fa-heart-circle-plus',pojing:'fa-skull',
+    xingchen:'fa-star',wugou:'fa-shield-halved',thunder:'fa-bolt',reverse:'fa-fire'});
+  const roundBonus = value => Math.round(value * 10) / 10;
+  function coreValue(core, level) {
+    const rules = talents || root.QASoulTalents;
+    const rank = Math.min(CAP,count(level));
+    const talent = rules?.snapshot(core?.type,core?.grade,{leftTop:rank,leftFarBottom:rank,leftFinal:rank});
+    if(core?.type === 'wugou') return rules?.trueDamage(talent) || 0;
+    return roundBonus((rules?.strength(talent) || 0) * (CORE_FACTORS[core?.type] || 0) * 100);
+  }
+  function branches(core) {
+    const base = BRANCHES.slice(0,3);
+    if(['ningxin','sword'].includes(core?.type)) {
+      const combo = core.type === 'sword';
+      const quality = (9-Math.min(9,Math.max(1,count(core.grade)||9)))/8;
+      return [...base,
+        {...SPECIAL_BRANCHES[0],name:combo?'連擊率':'爆擊率',maxBonus:10+5*quality},
+        {...SPECIAL_BRANCHES[1],name:combo?'連擊傷害':'爆擊傷害',maxBonus:combo?30:50}];
+    }
+    const rules = talents || root.QASoulTalents;
+    return [...base,{...BRANCHES[3],name:rules?.TYPES[core?.type]?.trait || '丹性',
+      icon:CORE_ICONS[core?.type] || BRANCHES[3].icon,maxBonus:coreValue(core,CAP),unit:core?.type==='wugou'?'':'%'}];
+  }
+  function branchValue(core, id, level) {
+    if(id === 'core') return coreValue(core,level);
+    const branch = branches(core).find(item=>item.id===id);
+    return branch ? roundBonus(branch.maxBonus * Math.min(CAP,count(level)) / CAP) : 0;
+  }
   const count = value => Number.isFinite(Number(value)) ? Math.max(0,Math.floor(Number(value))) : 0;
   function normalize(raw) {
     const branches={};
@@ -75,6 +104,6 @@
   function award(player,amount) {
     const state=prepare(player);state.inventory[ITEM_ID]+=count(amount);state.fragments+=count(amount);return state;
   }
-  const api=Object.freeze({THRESHOLD,CAP,ITEM_ID,ITEM,BRANCHES,branches,count,normalize,prepare,patch,apply,spent,status,upgrade,reset,bonuses,cultivation,award});
+  const api=Object.freeze({THRESHOLD,CAP,ITEM_ID,ITEM,BRANCHES,branches,branchValue,count,normalize,prepare,patch,apply,spent,status,upgrade,reset,bonuses,cultivation,award});
   if(typeof module==='object'&&module.exports)module.exports=api;else root.QANascentGrowth=api;
 })(globalThis);

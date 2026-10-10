@@ -702,6 +702,7 @@ body.xianxia-theme .ns-growth-core .golden-core-sphere-v3 { width:70px !importan
   .ns-growth-name { font-size:13px; }
   .ns-growth-name i { display:none; }
   .ns-growth-value { font-size:21px; }
+  .ns-growth-value.is-percent { font-size:clamp(16px,4.6vw,18px); }
   .ns-growth-core { width:84px; height:84px; }
   body.xianxia-theme .ns-growth-core .golden-core-sphere-v3 { width:48px !important; height:48px !important; font-size:21px; }
   .ns-growth-core .golden-core-orbit-v3 { width:80px; height:34px; }

@@ -17,6 +17,43 @@ test('four ordinary branches and five critical/combo branches replace prerequisi
  for(const type of ['ocean','taichu','pojing','xingchen','wugou','thunder','reverse'])assert.deepEqual(Growth.branches({type}).map(x=>x.id),['cultivation','attack','vitality','core']);
  for(const type of ['ningxin','sword']){assert.deepEqual(Growth.branches({type}).map(x=>x.id),['cultivation','attack','vitality','coreChance','coreDamage']);assert.equal(Growth.upgrade(player(type),'core').ok,false);assert.equal(Growth.upgrade(player(type),'coreDamage').ok,true);}
 });
+test('branch metadata names the real trait and reports grade-dependent bonuses',()=>{
+ const expected={ocean:['蓄潮爆發',64,'%'],taichu:['吸血',38.4,'%'],pojing:['斬殺',121.6,'%'],
+  xingchen:['連答蓄力',128,'%'],wugou:['真傷',72,''],thunder:['反傷',32,'%'],reverse:['低血增傷',57.6,'%']};
+ for(const [type,[name,value,unit]] of Object.entries(expected)){
+  const core={type,grade:1},branch=Growth.branches(core).at(-1);
+  assert.equal(branch.name,name);assert.equal(branch.unit,unit);assert.equal(Growth.branchValue(core,'core',10),value);
+  assert.equal(Growth.branchValue(core,'core',0),0);
+ }
+ for(const [type,rate,damage,maxDamage] of [['ningxin','爆擊率','爆擊傷害',50],['sword','連擊率','連擊傷害',30]]){
+  const core={type,grade:1},branches=Growth.branches(core);
+  assert.equal(branches[3].name,rate);assert.equal(branches[4].name,damage);
+  assert.equal(Growth.branchValue(core,'coreChance',10),15);assert.equal(Growth.branchValue(core,'coreDamage',10),maxDamage);
+  assert.equal(Growth.branchValue({...core,grade:9},'coreChance',10),10);
+ }
+ assert.equal(Growth.branchValue({type:'wugou',grade:2},'core',10),71);
+ assert.equal(Growth.branchValue({type:'wugou',grade:9},'core',10),60);
+});
+test('trait previews agree with battle effects at every rank and grade',()=>{
+ for(let grade=1;grade<=9;grade++)for(let level=0;level<=10;level++){
+  for(const type of ['ocean','taichu','pojing','xingchen','wugou','thunder','reverse']){
+   const core={type,grade},p=player(type,{core:level});p.cultivationTraining.equippedCore=core;
+   const talent=Growth.bonuses(p,core).talent;
+   const fighter={atk:600,hp:2000,maxHp:10000,nascentSoul:{talent}};
+   const hit=Talents.attack(fighter,{hp:type==='ocean'?9000:2000,maxHp:10000},{streak:3});
+   const value=Growth.branchValue(core,'core',level);
+   if(type==='wugou')assert.equal(value,hit.trueDamage);
+   else if(type==='thunder')assert.ok(Math.abs(Math.round(value)-Talents.reflection(fighter,100))<=1);
+   else assert.ok(Math.abs(Math.round(value/100*600)-(type==='taichu'?hit.leech:hit.normal))<=1,`${type} grade ${grade} rank ${level}`);
+  }
+  for(const type of ['ningxin','sword']){
+   const core={type,grade},p=player(type,{coreChance:level,coreDamage:level}),b=Growth.bonuses(p,core);
+   const rate=type==='sword'?b.comboChance:b.critChance,damage=type==='sword'?b.comboDamageBonus:b.critDamageBonus;
+   assert.equal(Growth.branchValue(core,'coreChance',level),Math.round(rate*1000)/10);
+   assert.equal(Growth.branchValue(core,'coreDamage',level),Math.round(damage*1000)/10);
+  }
+ }
+});
 test('max bonuses are total +10 cultivation +70 attack +500 HP and all ranks cap at ten',()=>{
  const p=player('ocean',{cultivation:99,attack:99,vitality:99,core:99}),b=Growth.bonuses(p,p.cultivationTraining.equippedCore);
  assert.equal(b.attackFlat,70);assert.equal(b.maxHpFlat,500);for(const source of ['solo','daily','cave','raid'])assert.equal(Growth.cultivation(p,source),10);assert.equal(Growth.upgrade(p,'attack').ok,false);

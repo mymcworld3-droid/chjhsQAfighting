@@ -232,11 +232,11 @@ test('each independent radial branch is an accessible upgrade button',()=>{
  const source=read('public/cultivation/cultivation-training-v4.js');assert.match(source,/data-ns-upgrade="\$\{branch.id\}"/);assert.match(source,/saveSoulBranch\(button.dataset.nsUpgrade\)/);assert.doesNotMatch(source,/selectedSoulNodeId|前置節點/);
 });
 
-function renderGrowthMap(type, branches = {}, fragments = 20, soulBusy = false) {
+function renderGrowthMap(type, branches = {}, fragments = 20, soulBusy = false, grade = 1) {
   const source = read('public/cultivation/cultivation-training-v4.js');
   const start = source.indexOf('  function nascentSoulTabMarkup()');
   const end = source.indexOf('  async function saveSoulBranch', start);
-  const core = {type, grade:1};
+  const core = {type, grade};
   const player = {stats:{totalScore:68}, cultivationTraining:{equippedCore:core},
     nascentSoulGrowth:{version:1, branches}, materialSystem:{inventory:{'nascent-soul-essence':fragments}}};
   return new Function('state', 'Growth', 'currentScore', 'NASCENT_SOUL_THRESHOLD', 'window',
@@ -273,8 +273,8 @@ test('radial UI keeps current bonuses, ranks and costs without upper limits or e
   assert.match(markup, /ns-growth-resource">元嬰碎精 <strong aria-live="polite">0/);
   assert.match(markup, /data-ns-upgrade="attack"[^>]*disabled/);
   assert.match(markup, /data-ns-upgrade="coreDamage"[^>]*元嬰碎精不足[^>]*disabled/);
-  assert.match(markup, /ns-growth-value">\+70</);
-  assert.match(markup, /ns-growth-value">\+12%</);
+  assert.match(markup, /ns-growth-value ">\+70</);
+  assert.match(markup, /ns-growth-value is-percent">\+12%</);
   assert.doesNotMatch(markup, /上限|ns-growth-cap/);
   assert.match(markup, /10 \/ 10/);
   assert.match(markup, /已圓滿/);
@@ -283,6 +283,25 @@ test('radial UI keeps current bonuses, ranks and costs without upper limits or e
   const busy = renderGrowthMap('ocean', {}, 20, true);
   assert.equal((busy.match(/data-ns-upgrade="[^"]+"[^>]*disabled/g) || []).length, 4);
   assert.match(busy, /保存中/);
+});
+
+test('radial branch labels show the equipped core ability and its actual bonus', () => {
+  const expected = {ocean:'蓄潮爆發',taichu:'吸血',pojing:'斬殺',xingchen:'連答蓄力',
+    wugou:'真傷',thunder:'反傷',reverse:'低血增傷'};
+  for (const [type, name] of Object.entries(expected)) {
+    const markup = renderGrowthMap(type,{core:4});
+    assert.match(markup,new RegExp('ns-growth-name">[^<]*<i[^>]*><\\/i>'+name+'<'));
+    assert.doesNotMatch(markup,/金丹屬性|金丹機率|金丹傷害|上限/);
+  }
+  const trueDamage = renderGrowthMap('wugou',{core:10},20,false,2);
+  assert.match(trueDamage,/ns-growth-value ">\+71</);
+  assert.doesNotMatch(trueDamage,/\+100%|\+71%/);
+  for (const [type, rate, damage] of [['ningxin','爆擊率','爆擊傷害'],['sword','連擊率','連擊傷害']]) {
+    const markup = renderGrowthMap(type,{coreChance:4,coreDamage:4});
+    assert.match(markup,new RegExp('<\\/i>'+rate+'<'));
+    assert.match(markup,new RegExp('<\\/i>'+damage+'<'));
+    assert.doesNotMatch(markup,/金丹屬性|金丹機率|金丹傷害|上限/);
+  }
 });
 
 

@@ -422,17 +422,15 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     const nodes = branches.map((branch, index) => {
       const status = Growth.status({...player,cultivationTraining:{...player.cultivationTraining,equippedCore:core}},branch.id);
       const level = status.level;
-      const quality = (9 - clampGrade(core.grade)) / 8;
-      const max = branch.id === 'coreChance' ? 10 + 5 * quality : branch.id === 'coreDamage' ? (core.type === 'sword' ? 30 : 50) : branch.maxBonus;
-      const value = Math.round(max * level / 10 * 10) / 10;
-      const name = branch.id === 'coreChance' ? (core.type === 'sword' ? '連擊機率' : '爆擊機率') : branch.id === 'coreDamage' ? (core.type === 'sword' ? '連擊傷害' : '爆擊傷害') : branch.name;
+      const value = Growth.branchValue(core,branch.id,level);
+      const name = branch.name;
       const [x, y] = positions[index];
       const unit = branch.unit === '%' ? '%' : '';
       const action = soulBusy ? '保存中…' : level === 10 ? '已圓滿' : '↑ '+status.cost+' 碎精';
       const label = `${name}，${level} / 10 級，加成 ${value}${unit}，${soulBusy ? '保存中' : status.ok ? '升級消耗 '+status.cost+' 碎精' : status.reason}`;
       return `<button type="button" class="ns-growth-node ${level ? 'is-grown' : ''}" style="--branch-x:${x}%;--branch-y:${y}%" data-ns-upgrade="${branch.id}" aria-label="${label}" title="${status.reason || '升級消耗 '+status.cost+' 碎精'}" ${!status.ok || soulBusy ? 'disabled' : ''}>
         <span class="ns-growth-name"><i class="fa-solid ${branch.icon}" aria-hidden="true"></i>${name}</span>
-        <strong class="ns-growth-value">+${value}${unit}</strong>
+        <strong class="ns-growth-value ${unit ? 'is-percent' : ''}">+${value}${unit}</strong>
         <span class="ns-growth-level">${level} / 10</span>
         <span class="ns-growth-track" aria-hidden="true"><span style="width:${level * 10}%"></span></span>
         <span class="ns-growth-action">${action}</span>
