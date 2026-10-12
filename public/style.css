@@ -917,7 +917,6 @@ body.quiz-session-active #bottom-nav {
 
 /* Keep the real, fixed navigation visible through a page slide. */
 body.scene-page-sliding #bottom-nav {
-    display: flex !important;
     visibility: visible !important;
     opacity: 1 !important;
 }
