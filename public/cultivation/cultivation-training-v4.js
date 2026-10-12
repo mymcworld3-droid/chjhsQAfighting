@@ -541,10 +541,11 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
       window.dispatchEvent(new CustomEvent('xiuxian:equipment-open-request'));
       return;
     }
+    // 舊畫面仍是元嬰分支時，只更新數值，不視為再次切入分頁。
+    const previouslySoulMap = !!content.querySelector('.ns-growth-panel');
     content.innerHTML = activeTab === 'bag' ? bagTabMarkup()
       : activeTab === 'nascent-soul' ? nascentSoulTabMarkup() : coreTabMarkup();
     const enteringSoulMap = activeTab === 'nascent-soul' && currentScore() >= NASCENT_SOUL_THRESHOLD;
-    const previouslySoulMap = document.body.classList.contains('ns-map-active');
     document.body.classList.remove('ns-map-active');
     // 從可能已捲動的煉器／背包切入元嬰時，讓分頁與碎精摘要回到畫面最上方。
     if (enteringSoulMap && !previouslySoulMap) {

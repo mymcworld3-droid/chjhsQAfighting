@@ -2,6 +2,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
+const vm = require('node:vm');
 
 function read(rel) {
   return fs.readFileSync(path.join(__dirname, '..', rel), 'utf8');
@@ -47,4 +48,56 @@ test('scroll reset only fires on hidden-to-visible transition', () => {
 test('access guard no longer watches every body mutation', () => {
   assert.doesNotMatch(guard, /new MutationObserver/);
   assert.match(guard, /xiuxian:features-ready/);
+});
+
+function trainingRenderRuntime() {
+  let markup = '';
+  const content = {
+    get innerHTML() { return markup; },
+    set innerHTML(value) { markup = value; },
+    querySelector: selector => selector === '.ns-growth-panel' && markup.includes('ns-growth-panel') ? {} : null
+  };
+  const main = {scrollTop:200}, page = {scrollTop:80};
+  const context = {
+    activeTab:'nascent-soul', NASCENT_SOUL_THRESHOLD:68, currentScore:() => 68,
+    document:{
+      getElementById:id => id === 'training-tab-content' ? content : page,
+      querySelector:() => main,
+      body:{classList:{remove(){}}}
+    },
+    nascentSoulTabMarkup:() => '<section class="ns-growth-panel"></section>',
+    coreTabMarkup:() => '<section class="core-minimal-card"></section>',
+    bagTabMarkup:() => '<section class="uib-bag-loading"></section>',
+    bindCoreActions(){}, bindSoulActions(){}
+  };
+  const start = training.indexOf('  function renderTrainingPage()');
+  const end = training.indexOf('  function createNavButton()',start);
+  vm.createContext(context);
+  vm.runInContext(training.slice(start,end),context);
+  return {context,main,page,render:() => context.renderTrainingPage()};
+}
+
+test('redrawing existing nascent branches preserves both scroll containers', () => {
+  const runtime = trainingRenderRuntime();
+  runtime.render();
+  assert.equal(runtime.main.scrollTop,0);
+  assert.equal(runtime.page.scrollTop,0);
+  runtime.main.scrollTop = 230;
+  runtime.page.scrollTop = 90;
+  runtime.render();
+  assert.equal(runtime.main.scrollTop,230);
+  assert.equal(runtime.page.scrollTop,90);
+});
+
+test('switching into nascent branches still starts at the top after another tab', () => {
+  const runtime = trainingRenderRuntime();
+  runtime.render();
+  runtime.context.activeTab = 'bag';
+  runtime.render();
+  runtime.main.scrollTop = 310;
+  runtime.page.scrollTop = 120;
+  runtime.context.activeTab = 'nascent-soul';
+  runtime.render();
+  assert.equal(runtime.main.scrollTop,0);
+  assert.equal(runtime.page.scrollTop,0);
 });
