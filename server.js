@@ -21,6 +21,7 @@ const registerDongtianSettlementApi = require('./dongtian-settlement-api.cjs');
 const registerInvitationApi = require('./invitation-api.cjs');
 const registerQuestApi = require('./quest-api.cjs');
 const registerOpportunityApi = require('./opportunity-api.cjs');
+const registerGameStage = require('./game-stage.cjs');
 const { raidRepository } = require('./server-repositories.cjs');
 const { pickTrustedRaidKnowledge } = require('./raid-authority.cjs');
 const { verifyMainIdentity, issueRaidQuestionTicket } = require('./raid-question-ticket.cjs');
@@ -32,6 +33,7 @@ const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json({ limit: '20mb' }));
+registerGameStage(app);
 app.use(express.static(path.join(__dirname, 'public')));
 registerDongtianApi(app);
 registerIdentityApi(app);
@@ -50,11 +52,6 @@ registerDongtianSettlementApi(app);
 registerInvitationApi(app);
 registerQuestApi(app);
 registerOpportunityApi(app);
-
-// 根目錄路由
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
 
 // 僅回傳已配置 provider 的名稱與模型，不暴露 API key。
 app.get('/api/ai-status', (req, res) => {

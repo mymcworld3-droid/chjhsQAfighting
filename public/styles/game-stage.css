@@ -1,0 +1,11 @@
+:root { color-scheme:dark; background:#000; }
+html,body { width:100%; height:100%; margin:0; padding:0; overflow:hidden; background:#000; overscroll-behavior:none; -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+#game-safe-area { position:fixed; inset:0; visibility:hidden; pointer-events:none;
+  padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px); }
+#game-stage { position:fixed; margin:0; padding:0; border:0;
+  left:var(--stage-left,0); top:var(--stage-top,0); width:var(--stage-width,0); height:var(--stage-height,0);
+  overflow:hidden; background:#000; isolation:isolate; }
+#game-frame { display:block; margin:0; padding:0; border:0; background:#000;
+  width:var(--stage-design-width); height:var(--stage-design-height);
+  transform:scale(var(--stage-scale,1)); transform-origin:0 0; }
+noscript { position:fixed; inset:0; display:grid; place-items:center; color:#ddc591; }

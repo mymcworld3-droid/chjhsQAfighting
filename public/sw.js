@@ -7,6 +7,8 @@
 const SCOPE = self.registration.scope;
 const MANIFEST_URL = new URL('module-versions.json', SCOPE).href;
 const STATIC_CACHE = 'xiuxian-static-versioned-v1';
+// 舊版根頁面與新比例外框不可共用文件快取鍵，避免內框再次載入外框。
+const DOCUMENT_CACHE = 'xiuxian-stage-documents-v1';
 const META_CACHE = 'xiuxian-static-meta-v1';
 const ITEM_IMAGE_CACHE = 'xiuxian-item-images-v1';
 const ITEM_IMAGE_CACHE_MAX = 400;
@@ -79,7 +81,7 @@ function cacheKey(path, version) {
 async function serveStatic(request, path, manifest) {
   const version = manifest?.files?.[path];
   if (!version) return fetch(request);
-  const storage = await caches.open(STATIC_CACHE);
+  const storage = await caches.open(/\.html$/.test(path) ? DOCUMENT_CACHE : STATIC_CACHE);
   const key = cacheKey(path, version);
   const saved = await storage.match(key);
   if (saved) return saved;
@@ -88,7 +90,8 @@ async function serveStatic(request, path, manifest) {
   if (!pendingAssets.has(pendingKey)) {
     const pending = (async () => {
       // 已知版本不同時，讀取原始同源 URL 並略過舊 HTTP 快取。
-      const network = await fetch(new URL(path, SCOPE).href, { cache: 'no-store' });
+      const networkPath = path === 'index.html' && manifest?.files?.['stage.html'] ? 'app.html' : path;
+      const network = await fetch(new URL(networkPath, SCOPE).href, { cache: 'no-store' });
       if (!network.ok || network.type === 'opaque') throw new Error('Static asset unavailable: ' + path);
       await storage.put(key, network.clone());
       return network;
@@ -174,10 +177,12 @@ self.addEventListener('fetch', event => {
   if (!path || path === 'module-versions.json' || path === 'sw.js') return;
   if (event.request.mode === 'navigate') {
     // 頁面導覽時只核對小型版本表，其後資源皆按各自 hash 命中本機。
-    if (path !== 'index.html') return;
+    if (!['index.html','app.html','stage.html'].includes(path)) return;
     event.respondWith((async () => {
       const manifest = await loadManifest(true);
-      return serveStatic(event.request, 'index.html', manifest);
+      const documentPath = path === 'app.html' ? 'index.html'
+        : path === 'index.html' && manifest?.files?.['stage.html'] ? 'stage.html' : path;
+      return serveStatic(event.request, documentPath, manifest);
     })());
     return;
   }

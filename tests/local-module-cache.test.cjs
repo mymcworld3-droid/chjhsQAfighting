@@ -74,6 +74,8 @@ function mockWorker() {
       : uri.pathname.replace(/^\/+/, '');
     networkCalls.push({ path, url: uri.href, options });
     if (uri.pathname.endsWith('/module-versions.json')) return new Response(JSON.stringify(versions), { status:200 });
+    if (path === 'app.html') return new Response('file:index.html',{status:200});
+    if ((path === '' || path === 'index.html') && versions.files['stage.html']) return new Response('file:stage.html',{status:200});
     return new Response('file:' + path, { status:200 });
   }
   const self = {
@@ -101,7 +103,12 @@ function mockWorker() {
     assert.ok(event.result, 'generated item image should be intercepted');
     return (await event.result).text();
   }
-  return { events, scope, versions, networkCalls, resource, imageResource, setOffline(v) { offline = v; } };
+  return { events, scope, versions, networkCalls, resource, imageResource, setOffline(v) { offline = v; },
+    async seedLegacyDocument(path,body) {
+      const key=new URL(path,scope);key.searchParams.set('__xiuxian_asset_sha',versions.files[path]);
+      await (await caches.open('xiuxian-static-versioned-v1')).put(key.href,new Response(body));
+    }
+  };
 }
 
 test('cached version is reused without another asset download, even with a changed query string', async () => {
@@ -132,6 +139,16 @@ test('offline navigation uses the previous manifest and local code', async () =>
   sw.setOffline(true);
   assert.equal(await sw.resource('index.html', 'navigate'), 'file:index.html');
   assert.equal(await sw.resource('main.js'), 'file:main.js');
+});
+
+test('stage and app navigation never reuse the same HTML cache, including an old worker upgrade',async()=>{
+  const sw=mockWorker();sw.versions.files['stage.html']='e'.repeat(40);
+  await sw.seedLegacyDocument('index.html','file:stage.html');
+  assert.equal(await sw.resource('index.html','navigate'),'file:stage.html');
+  assert.equal(await sw.resource('app.html','navigate'),'file:index.html');
+  sw.setOffline(true);
+  assert.equal(await sw.resource('index.html','navigate'),'file:stage.html');
+  assert.equal(await sw.resource('app.html','navigate'),'file:index.html');
 });
 
 test('generated R2 item images are cache-first and remain available offline', async () => {
