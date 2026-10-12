@@ -2,8 +2,9 @@ import {} from './nascent-growth.js';
 import { raidRepository } from './data/raid-repository.js';
 
 const STORAGE_KEY = 'xiuxian:raid-room:v2';
-const POLL_MS = 1000;
+const POLL_MS = 500; // 即時串流中斷時才使用；正常狀態沒有輪詢等待。
 const STALE_MS = 45000;
+const roomObservers = new Map();
 
 function now() { return Date.now(); }
 function finite(value, fallback = 0) {
@@ -15,6 +16,13 @@ async function api(action, payload = {}) {
   // 房間狀態由伺服器權威處理；瀏覽器只送出意圖與 A 專案登入憑證。
   const local = window.getCurrentUserData?.();
   const result = await raidRepository.request(action, payload, RAID_ROOM_ENDPOINT);
+  applyRaidResponse(result,local);
+  if (local === window.getCurrentUserData?.() && result.room?.id) {
+    roomObservers.get(result.room.id)?.forEach(emit => emit(result));
+  }
+  return result;
+}
+function applyRaidResponse(result,local = window.getCurrentUserData?.()) {
   const reward = result?.spiritReward;
   // Apply only unseen lifetime earnings. Cached totals must never restore gold
   // already spent or cultivation lost in another activity.
@@ -64,22 +72,25 @@ export async function getRaidTicketState() {
   const result = await api('ticket-status');
   return result.ticketState || null;
 }
-export async function createRaidRoom() {
+export async function createRaidRoom(onResult) {
   const result = await api('create');
   remember(result.roomId);
+  onResult?.(result);
   return result.roomId;
 }
-export async function findOrCreateRaidRoom() {
+export async function findOrCreateRaidRoom(onResult) {
   const result = await api('quick');
   remember(result.roomId);
+  onResult?.(result);
   return result.roomId;
 }
-export async function joinRaidRoomByCode(roomCode) {
+export async function joinRaidRoomByCode(roomCode,onResult) {
   const result = await api('join-code', { roomCode });
   remember(result.roomId);
+  onResult?.(result);
   return result.roomId;
 }
-export async function reconnectRaidRoom() {
+export async function reconnectRaidRoom(onResult) {
   const roomId = localStorage.getItem(STORAGE_KEY);
   if (!roomId) return null;
   try {
@@ -89,6 +100,7 @@ export async function reconnectRaidRoom() {
       return null;
     }
     remember(result.roomId);
+    onResult?.(result);
     return result.roomId;
   } catch (error) {
     if (error?.status === 404 || error?.status === 403) forget();
@@ -96,48 +108,68 @@ export async function reconnectRaidRoom() {
   }
 }
 export async function setRaidReady(roomId, ready) {
-  await api('ready', { roomId, ready: !!ready });
+  return api('ready', { roomId, ready: !!ready });
 }
 export async function startRaidRoom(roomId) {
   return api('start', { roomId });
 }
-export function subscribeRaidRoom(roomId, callback, onError) {
+export function subscribeRaidRoom(roomId, callback, onError, initialResult) {
   let stopped = false;
   let timer = null;
   let busy = false;
   let lastError = '';
+  let lastRoom = null, revision = -1, streamUnsub;
+  function emit(result) {
+    if (stopped) return;
+    applyRaidResponse(result);
+    if (result.room) {
+      const next = Number(result.room.revision) || 0;
+      if (next < revision) {
+        if (result.spiritReward) callback(lastRoom,result.spiritReward);
+        return;
+      }
+      revision = next; lastRoom = result.room;
+    }
+    callback(lastRoom,result.spiritReward || null);
+  }
+  function stop() {
+    stopped = true;
+    clearInterval(timer); timer = null;
+    streamUnsub?.();
+    const observers = roomObservers.get(roomId);
+    observers?.delete(emit);
+    if (!observers?.size) roomObservers.delete(roomId);
+  }
+  function failure(error) {
+    if (stopped) return;
+    const signature = String(error?.status || '') + ':' + String(error?.message || error);
+    if (signature !== lastError) { lastError = signature; onError?.(error); }
+    if ([401,403,404].includes(error?.status)) { stop(); callback(null); }
+  }
 
   const poll = async () => {
     if (stopped || busy) return;
     busy = true;
     try {
-      const result = await api('get', { roomId });
+      await api('get', { roomId });
       lastError = '';
-      callback(result.room || null, result.spiritReward || null);
     } catch (error) {
-      const signature = String(error?.status || '') + ':' + String(error?.message || error);
-      if (signature !== lastError) {
-        lastError = signature;
-        onError?.(error);
-      }
-      if (error?.status === 404 || error?.status === 403) {
-        stopped = true;
-        if (timer) clearInterval(timer);
-        timer = null;
-        callback(null);
-      }
+      failure(error);
     } finally {
       busy = false;
     }
   };
 
-  void poll();
-  timer = setInterval(poll, POLL_MS);
-  return () => {
-    stopped = true;
-    if (timer) clearInterval(timer);
-    timer = null;
-  };
+  if (!roomObservers.has(roomId)) roomObservers.set(roomId,new Set());
+  roomObservers.get(roomId).add(emit);
+  if (initialResult) emit(initialResult);
+  streamUnsub = raidRepository.subscribeRoom(roomId,result => { lastError = ''; emit(result); },failure,connected => {
+    if (stopped) return;
+    if (connected) { clearInterval(timer); timer = null; }
+    else if (!timer) { void poll(); timer = setInterval(poll,POLL_MS); }
+  });
+  if (stopped) streamUnsub?.();
+  return stop;
 }
 export async function heartbeatRaidRoom(roomId) {
   await api('heartbeat', { roomId });

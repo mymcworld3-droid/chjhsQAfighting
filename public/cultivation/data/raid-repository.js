@@ -1,4 +1,5 @@
 import { authenticatedMainFetch, getMainUser } from './project-repository.js';
+import { readRoomEvents } from './room-event-stream.js';
 
 const DEFAULT_ENDPOINT = '/api/raid/room';
 
@@ -26,5 +27,40 @@ export const raidRepository = Object.freeze({
       throw error;
     }
     return data;
+  },
+
+  subscribeRoom(roomId, next, onError, connected) {
+    const uid = getMainUser()?.uid;
+    let stopped = false, controller, retry;
+    async function connect() {
+      if (stopped) return;
+      controller = new AbortController();
+      const current = controller;
+      let watchdog = setTimeout(() => current.abort(),6000);
+      try {
+        if (!uid || getMainUser()?.uid !== uid) throw Object.assign(new Error('登入帳號已變更'),{status:401});
+        const response = await authenticatedMainFetch(DEFAULT_ENDPOINT,{
+          method:'POST',body:JSON.stringify({action:'subscribe',roomId}),signal:current.signal
+        });
+        await readRoomEvents(response,packet => {
+          if (stopped || getMainUser()?.uid !== uid) { current.abort(); return; }
+          connected?.(true);
+          next(packet);
+        },current.signal,() => {
+          clearTimeout(watchdog);
+          watchdog = setTimeout(() => current.abort(),25000);
+        });
+      } catch (error) {
+        if (stopped) return;
+        onError?.(error);
+        if ([401,403,404].includes(error?.status)) { stopped = true; current.abort(); return; }
+      } finally {
+        clearTimeout(watchdog);
+        current.abort();
+        if (!stopped) { connected?.(false); retry = setTimeout(connect,500); }
+      }
+    }
+    void connect();
+    return () => { stopped = true; clearTimeout(retry); controller?.abort(); };
   }
 });

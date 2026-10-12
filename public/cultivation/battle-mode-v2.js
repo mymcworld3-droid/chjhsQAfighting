@@ -56,6 +56,9 @@ export const featureReady = (async () => {
     tick: null,
     heartbeat: null,
     reconcile: null,
+    waitingUnsub: null,
+    reconcileBusy: false,
+    waitingSnapshot: null,
     starting: false,
     leaving: false,
     recovering: false,
@@ -755,12 +758,21 @@ export const featureReady = (async () => {
     }, delay);
   }
 
-  async function reconcileOwnWaitingRoom() {
+  function watchWaitingRooms() {
+    if (state.waitingUnsub || state.role !== 'host' || state.room?.status !== 'waiting') return;
+    state.waitingUnsub = onSnapshot(query(collection(db(),ROOM_COLLECTION),where('status','==','waiting'),limit(MATCH_SCAN_LIMIT)),
+      snap => { state.waitingSnapshot = snap; void reconcileOwnWaitingRoom(snap); },
+      error => { logBattleFirestoreError('waiting listener failed',error); scheduleReconcile(0); });
+  }
+
+  async function reconcileOwnWaitingRoom(waitingSnapshot) {
     const ownId = state.roomId;
-    if (!ownId || state.role !== 'host' || state.room?.status !== 'waiting') return;
+    if (!ownId || state.role !== 'host' || state.room?.status !== 'waiting' || state.reconcileBusy) return;
+    state.reconcileBusy = true;
+    state.waitingSnapshot = null;
     const myData = playerSnapshot();
     try {
-      const snap = await getDocs(query(collection(db(), ROOM_COLLECTION), where('status', '==', 'waiting'), limit(MATCH_SCAN_LIMIT)));
+      const snap = waitingSnapshot || await getDocs(query(collection(db(), ROOM_COLLECTION), where('status', '==', 'waiting'), limit(MATCH_SCAN_LIMIT)));
       const target = snap.docs.filter((entry) => {
         const room = entry.data();
         return entry.id < ownId && Number(room.modeVersion) === BATTLE_V2.modeVersion && room.host?.uid !== myData.uid && !room.guest && !isRoomStale(room);
@@ -782,15 +794,22 @@ export const featureReady = (async () => {
         merged = true;
       });
       if (!merged) return;
+      if (state.roomId !== ownId || state.role !== 'host') return;
       detachRoomListener();
       state.roomId = target.id;
       state.role = 'guest';
       subscribeRoom(target.id);
     } catch (error) { console.warn('[Battle v2] simultaneous room merge skipped:', error); }
+    finally {
+      state.reconcileBusy = false;
+      if (state.waitingSnapshot) void reconcileOwnWaitingRoom(state.waitingSnapshot);
+    }
   }
 
   function detachRoomListener() {
     if (state.unsub) { try { state.unsub(); } catch (_) {} state.unsub = null; }
+    state.waitingUnsub?.(); state.waitingUnsub = null;
+    state.waitingSnapshot = null;
   }
 
   function stopTimers() {
@@ -1534,7 +1553,8 @@ export const featureReady = (async () => {
     if (!snap.exists()) { toast('鬥法房間已不存在。'); resetRuntime(); window.switchToPage?.('page-home'); return; }
     const room = snap.data(); if (Number(room.modeVersion) !== BATTLE_V2.modeVersion) return; state.room = room;
     const uid = me()?.uid; if (room.host?.uid === uid) state.role = 'host'; else if (room.guest?.uid === uid) state.role = 'guest'; else return;
-    if (room.status === 'waiting') { renderLobby(room); if (state.role === 'host') { scheduleReconcile(); inviteOnlineFriends(state.roomId); } }
+    if (room.status !== 'waiting') { state.waitingUnsub?.(); state.waitingUnsub = null; state.waitingSnapshot = null; }
+    if (room.status === 'waiting') { renderLobby(room); if (state.role === 'host') { watchWaitingRooms(); scheduleReconcile(); inviteOnlineFriends(state.roomId); } }
     else if (room.status === 'intro') {
       renderIntro(room);
       void prefetchRoundQuestion(room, 1);

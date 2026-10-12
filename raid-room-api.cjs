@@ -9,6 +9,7 @@ const {
 const { readRaidQuestionTicket, assertRaidQuestionTicket } = require('./raid-question-ticket.cjs');
 const { advanceRaidRoom, startRaidScheduler } = require('./raid-clock.cjs');
 const { eligibleCorrect, learningCorrect, awardRaidSpirit } = require('./raid-spirit-reward.cjs');
+const { streamRaidRoom } = require('./raid-room-stream.cjs');
 
 const COLLECTION = 'raidRooms';
 const MAX_MEMBERS = 4;
@@ -67,8 +68,7 @@ async function reserveRaidTickets(db, roomId, members, nowMs = now()) {
   const today = raidTicketDate(nowMs);
   return db.runTransaction(async tx => {
     const reservationSnap = await tx.get(reservationRef);
-    const snaps = [];
-    for (const ref of refs) snaps.push(await tx.get(ref));
+    const snaps = await Promise.all(refs.map(ref => tx.get(ref)));
     if (snaps.some(snap => !snap.exists)) throw Object.assign(new Error('隊伍中有玩家資料不存在'), { status:409 });
 
     const states = {};
@@ -109,8 +109,7 @@ async function refundRaidTicketReservation(db, roomId, nowMs = now()) {
     if (reservation.state !== 'reserved') return false;
     const memberUids = Array.isArray(reservation.memberUids) ? reservation.memberUids.map(String).filter(Boolean) : [];
     const refs = memberUids.map(uid => db.collection('users').doc(uid));
-    const snaps = [];
-    for (const ref of refs) snaps.push(await tx.get(ref));
+    const snaps = await Promise.all(refs.map(ref => tx.get(ref)));
     const today = raidTicketDate(nowMs);
     refs.forEach((ref, index) => {
       if (!snaps[index]?.exists) return;
@@ -184,6 +183,7 @@ async function createRoom(db, uid, player) {
   const ref = db.collection(COLLECTION).doc();
   const room = {
     version: RAID_ROOM_VERSION,
+    revision: 1,
     code: await uniqueCode(db),
     status: 'waiting',
     hostUid: uid,
@@ -230,8 +230,9 @@ async function joinWaitingRoom(db, uid, roomId, player) {
           heartbeatAtMs: now()
         }
       : memberSnapshot(player, uid, false);
-    tx.update(ref, { members });
-    return { roomId, room: publicRoom(roomId, { ...room, members }) };
+    const update = {members,revision:Math.max(0,finite(room.revision))+1};
+    tx.update(ref, update);
+    return { roomId, room: publicRoom(roomId, { ...room, ...update }) };
   });
 }
 async function findOrCreate(db, uid, player) {
@@ -328,23 +329,20 @@ function createHandler({
         return res.json({ ok:true, ticketState });
       }
       if (action === 'create') {
-        const ticketState = await syncRaidTickets(playerDb, uid);
+        const [ticketState, player] = await Promise.all([syncRaidTickets(playerDb, uid), loadTrustedRaidPlayer(playerDb, uid)]);
         if (ticketState.count < 1) throw Object.assign(new Error('目前沒有團本入場券；每日會補充 3 張，最多持有 10 張'), { status:409, code:'raid-ticket-empty' });
-        const player = await loadTrustedRaidPlayer(playerDb, uid);
         const result = await createRoom(db, uid, player);
         return res.json({ ok: true, ...result, ticketState });
       }
       if (action === 'quick') {
-        const ticketState = await syncRaidTickets(playerDb, uid);
+        const [ticketState, player] = await Promise.all([syncRaidTickets(playerDb, uid), loadTrustedRaidPlayer(playerDb, uid)]);
         if (ticketState.count < 1) throw Object.assign(new Error('目前沒有團本入場券；每日會補充 3 張，最多持有 10 張'), { status:409, code:'raid-ticket-empty' });
-        const player = await loadTrustedRaidPlayer(playerDb, uid);
         const result = await findOrCreate(db, uid, player);
         return res.json({ ok: true, ...result, ticketState });
       }
       if (action === 'join-code') {
-        const ticketState = await syncRaidTickets(playerDb, uid);
+        const [ticketState, player] = await Promise.all([syncRaidTickets(playerDb, uid), loadTrustedRaidPlayer(playerDb, uid)]);
         if (ticketState.count < 1) throw Object.assign(new Error('目前沒有團本入場券；每日會補充 3 張，最多持有 10 張'), { status:409, code:'raid-ticket-empty' });
-        const player = await loadTrustedRaidPlayer(playerDb, uid);
         const result = await joinByCode(db, uid, req.body?.roomCode, player);
         return res.json({ ok: true, ...result, ticketState });
       }
@@ -354,12 +352,21 @@ function createHandler({
       const ref = db.collection(COLLECTION).doc(roomId);
       // Catch up before accepting an answer, reconnect or heartbeat as well as
       // on the background timer. A sleeping/restarted server cannot skip damage.
-      await advanceRaidRoom(db, ref);
+      const [advanced, readyPlayer] = await Promise.all([
+        advanceRaidRoom(db, ref),
+        action === 'ready' ? loadTrustedRaidPlayer(playerDb, uid) : null
+      ]);
+
+      if (action === 'subscribe') {
+        if (!advanced) return res.status(404).json({ok:false,error:'團本房間不存在'});
+        requireMember(advanced,uid);
+        return streamRaidRoom({req,res,ref,uid,initialRoom:advanced,logger,
+          settleSpirit:room => settleSpirit(playerDb,uid,roomId,room)});
+      }
 
       if (action === 'get') {
-        const snap = await ref.get();
-        if (!snap.exists) return res.status(404).json({ ok: false, error: '團本房間不存在' });
-        const room = snap.data() || {};
+        if (!advanced) return res.status(404).json({ ok: false, error: '團本房間不存在' });
+        const room = advanced;
         requireMember(room, uid);
         const spiritReward = await settleSpirit(playerDb, uid, roomId, room);
         return res.json({ ok: true, room: publicRoom(roomId, room), spiritReward });
@@ -376,8 +383,9 @@ function createHandler({
           // reward if the server completed the fight while their tab was away.
           if (['won', 'lost'].includes(room.status)) return publicRoom(roomId, room);
           members[uid] = { ...members[uid], online: true, heartbeatAtMs: now() };
-          tx.update(ref, { members });
-          return publicRoom(roomId, { ...room, members });
+          const update = {members,revision:Math.max(0,finite(room.revision))+1};
+          tx.update(ref, update);
+          return publicRoom(roomId, { ...room, ...update });
         });
         const spiritReward = await settleSpirit(playerDb, uid, roomId, result);
         return res.json({ ok: true, roomId: result ? roomId : null, room: result, spiritReward });
@@ -386,7 +394,7 @@ function createHandler({
       if (action === 'ready') {
         // Refresh the combat projection from Firebase A at the last safe pre-battle boundary.
         // Equipment/stat changes after Ready do not mutate an active raid.
-        const trusted = await loadTrustedRaidPlayer(playerDb, uid);
+        const trusted = readyPlayer;
         const room = await db.runTransaction(async tx => {
           const snap = await tx.get(ref);
           if (!snap.exists) throw Object.assign(new Error('隊伍不存在'), { status: 404 });
@@ -401,16 +409,16 @@ function createHandler({
             online: true,
             heartbeatAtMs: now()
           };
-          tx.update(ref, { members });
-          return publicRoom(roomId, { ...current, members });
+          const update = {members,revision:Math.max(0,finite(current.revision))+1};
+          tx.update(ref, update);
+          return publicRoom(roomId, { ...current, ...update });
         });
         return res.json({ ok: true, room });
       }
 
       if (action === 'start') {
-        const preSnap = await ref.get();
-        if (!preSnap.exists) throw Object.assign(new Error('隊伍不存在'), { status:404 });
-        const pre = preSnap.data() || {};
+        if (!advanced) throw Object.assign(new Error('隊伍不存在'), { status:404 });
+        const pre = advanced;
         requireMember(pre, uid);
         if (pre.hostUid !== uid) throw Object.assign(new Error('只有隊長可以開始'), { status:403 });
         if (pre.status !== 'waiting') {
@@ -441,6 +449,7 @@ function createHandler({
             }
             const boss = createRaidBoss();
             const update = {
+              revision: Math.max(0,finite(current.revision))+1,
               status: 'active',
               serverDrivenBoss: true,
               startedAtMs: now(),
@@ -475,7 +484,7 @@ function createHandler({
           const members = { ...membersOf(current) };
           if (!members[uid]) return;
           members[uid] = { ...members[uid], online: true, heartbeatAtMs: now() };
-          tx.update(ref, { members });
+          tx.update(ref, { members,revision:Math.max(0,finite(current.revision))+1 });
         });
         return res.json({ ok: true });
       }
@@ -561,6 +570,7 @@ function createHandler({
             heartbeatAtMs: now()
           };
           const update = {
+            revision: Math.max(0,finite(current.revision))+1,
             members,
             bossHp: nextBossHp,
             bossPhase: bossPhase(nextBossHp, current.bossMaxHp),
@@ -607,7 +617,7 @@ function createHandler({
             hostUid = replacement?.uid || uid;
             if (replacement) members[replacement.uid] = { ...replacement, host: true };
           }
-          const update = { members, hostUid };
+          const update = { members, hostUid,revision:Math.max(0,finite(current.revision))+1 };
           if (!Object.values(members).some(memberOnline)) update.status = 'closed';
           tx.update(ref, update);
         });

@@ -100,6 +100,7 @@ function advanceRaidClock(room, roomId, at = Date.now()) {
       if (member.host !== flag) { member.host = flag; changed = true; }
     }
   }
+  if (changed) next.revision = Math.max(0,finite(room.revision)) + 1;
   return changed ? next : null;
 }
 
@@ -114,7 +115,7 @@ async function advanceRaidRoom(db, ref, at = Date.now()) {
   });
 }
 
-function startRaidScheduler({ resolveDb, logger = console, intervalMs = 5000,
+function startRaidScheduler({ resolveDb, logger = console, intervalMs = 1000,
   setIntervalFn = setInterval, clearIntervalFn = clearInterval } = {}) {
   let busy = false, stopped = false, lastError = '';
   async function tick() {

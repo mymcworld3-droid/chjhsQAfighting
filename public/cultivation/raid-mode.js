@@ -45,6 +45,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     roomId: '',
     room: null,
     roomUnsub: null,
+    roomCommand: '',
     heartbeatTimer: null,
     lastBossActionSeen: 0,
     applyingBossAction: false,
@@ -491,8 +492,8 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
       }).join('') + '</div>' +
       '<div class="raid-lobby-actions"><button class="raid-ghost" type="button" data-copy>複製隊伍代碼</button>' +
       (isHost() ? '<button class="raid-ghost" type="button" data-invite><i class="fa-solid fa-user-plus"></i> 邀請好友</button>' : '') +
-      '<button class="raid-primary" type="button" data-ready>' + (me?.ready ? '取消準備' : '準備') + '</button>' +
-      (isHost() ? '<button class="raid-primary" type="button" data-start ' + (allReady ? '' : 'disabled') + '>開始團本</button>' : '<span class="raid-wait-host">等待隊長開始</span>') + '</div>';
+      '<button class="raid-primary" type="button" data-ready ' + (state.roomCommand ? 'disabled' : '') + '>' + (state.roomCommand === 'ready' ? '準備中…' : me?.ready ? '取消準備' : '準備') + '</button>' +
+      (isHost() ? '<button class="raid-primary" type="button" data-start ' + (allReady && !state.roomCommand ? '' : 'disabled') + '>' + (state.roomCommand === 'start' ? '開戰中…' : '開始團本') + '</button>' : '<span class="raid-wait-host">等待隊長開始</span>') + '</div>';
     lobby.querySelector('[data-leave]')?.addEventListener('click', leaveRaid);
     lobby.querySelector('[data-copy]')?.addEventListener('click', async function () {
       try { await navigator.clipboard.writeText(String(state.room.code || '')); toast('隊伍代碼已複製'); }
@@ -516,7 +517,14 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
       }, Math.max(0, state.inviteCooldownUntil - now()));
     });
     lobby.querySelector('[data-ready]')?.addEventListener('click', function () {
-      void setRaidReady(state.roomId, !me?.ready).catch(error => toast(error.message || '準備狀態更新失敗'));
+      if (state.roomCommand) return;
+      const roomId = state.roomId;
+      state.roomCommand = 'ready'; renderLobby();
+      void setRaidReady(roomId, !me?.ready).catch(error => toast(error.message || '準備狀態更新失敗')).finally(() => {
+        if (state.roomId !== roomId) return;
+        state.roomCommand = '';
+        if (state.room?.status === 'waiting') renderLobby();
+      });
     });
     lobby.querySelector('[data-start]')?.addEventListener('click', function () { void hostStartRaid(); });
     syncRaidBottomClearance();
@@ -811,7 +819,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
       if (result.spiritReward) state.learningOutcome = result.spiritReward;
       if (!resolution) throw new Error('伺服器尚未完成本次出手結算');
 
-      state.room = result.room || state.room;
+      if (result.room && (Number(result.room.revision) || 0) >= (Number(state.room?.revision) || 0)) state.room = result.room;
       state.playerActionCount = actionId;
       state.answerCorrect = resolution.correct === true;
       state.questionResolvedAtMs = now();
@@ -910,14 +918,15 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
       if (!resolution) {
         const duplicate = result?.room?.members?.[state.player.uid];
         if (duplicate) {
-          state.room = result.room;
-          Object.assign(state.player, duplicate);
-          state.lastBossActionSeen = Math.max(state.lastBossActionSeen, Number(duplicate.lastBossActionSeen) || 0);
+          if ((Number(result.room.revision) || 0) >= (Number(state.room?.revision) || 0)) state.room = result.room;
+          const mine = state.room?.members?.[state.player.uid] || duplicate;
+          Object.assign(state.player, mine);
+          state.lastBossActionSeen = Math.max(state.lastBossActionSeen, Number(mine.lastBossActionSeen) || 0);
         }
         return;
       }
 
-      state.room = result.room || state.room;
+      if (result.room && (Number(result.room.revision) || 0) >= (Number(state.room?.revision) || 0)) state.room = result.room;
       state.lastBossActionSeen = Math.max(state.lastBossActionSeen, Number(resolution.bossActionSeen) || Number(action.id));
       state.lastBossAction = { intent: action, result: resolution };
       const mine = state.room?.members?.[state.player.uid];
@@ -960,7 +969,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     state.advancingBossAction = true;
     try {
       const room = await advanceRaidBossAction({ roomId: state.roomId });
-      if (room) {
+      if (room && (Number(room.revision) || 0) >= (Number(state.room?.revision) || 0)) {
         state.room = room;
         state.bossActionCount = Math.max(state.bossActionCount, Number(room.bossActionCount) || 0);
         if (room.lastBossAction && Number(room.lastBossAction.id) > state.lastBossActionSeen) {
@@ -1081,7 +1090,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
 
   async function ensureLocalPlayer() {
     if (state.player) return state.player;
-    await window.ensureCombatStats?.();
+    // 戰力由伺服器的隊員快照覆寫；加入不等待瀏覽器重載法寶／裝備。
     state.player = snapshotPlayer();
     const auth = await ensureRaidRoomAuth();
     if (!auth.uid) throw new Error('團本身分建立失敗');
@@ -1090,14 +1099,14 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     return state.player;
   }
 
-  function attachRoom(roomId) {
+  function attachRoom(roomId, initialResult) {
     state.roomUnsub?.();
     state.roomId = roomId;
     window.dispatchEvent(new CustomEvent('xiuxian:invite-blocked'));
     state.roomUnsub = subscribeRaidRoom(roomId, handleRoomSnapshot, error => {
       console.error('[Raid] room listener failed:', error);
       toast('團本連線中斷，正在嘗試保留房間。');
-    });
+    }, initialResult);
     startHeartbeat();
     updateHomeEntry();
   }
@@ -1115,10 +1124,12 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     try {
       await ensureLocalPlayer();
       // The server rebuilds the combat snapshot from Firebase A; no client combat stats are submitted.
-      const roomId = mode === 'create' ? await createRaidRoom() :
-        mode === 'code' ? await joinRaidRoomByCode(roomCode) :
-        await findOrCreateRaidRoom();
-      attachRoom(roomId);
+      let initialResult;
+      const receive = result => { initialResult = result; };
+      const roomId = mode === 'create' ? await createRaidRoom(receive) :
+        mode === 'code' ? await joinRaidRoomByCode(roomCode,receive) :
+        await findOrCreateRaidRoom(receive);
+      attachRoom(roomId, initialResult);
     } catch (error) {
       console.error('[Raid] enter room failed:', error);
       toast(error.message || '秘境隊伍建立失敗');
@@ -1128,13 +1139,21 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
   }
 
   async function hostStartRaid() {
-    if (!state.room || !isHost()) return;
+    if (!state.room || !isHost() || state.roomCommand) return;
+    const roomId = state.roomId;
+    state.roomCommand = 'start'; renderLobby();
     try {
       // Boss HP and attack use the same fixed difficulty for every party.
       const result = await startRaidRoom(state.roomId);
+      if (state.roomId !== roomId) return;
       if (result?.ticketState) state.ticketState = { ...state.ticketState, ...result.ticketState };
     } catch (error) {
       toast(error.message || '目前無法開始團本');
+    } finally {
+      if (state.roomId === roomId) {
+        state.roomCommand = '';
+        if (state.room?.status === 'waiting') renderLobby();
+      }
     }
   }
 
@@ -1167,7 +1186,11 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     startTick();
     if (room.lastBossAction && Number(room.lastBossAction.id) > state.lastBossActionSeen) void applyRemoteBossAction(room.lastBossAction);
     if (state.player.hp > 0 && !state.question && !state.pendingQuestion) {
+      const roomId = state.roomId;
+      // 開戰立即顯示戰場；AI 出題在背景完成。
+      renderArena();
       await prefetchQuestion();
+      if (state.roomId !== roomId || state.room?.status !== 'active') return;
       if (state.pendingQuestion) await openNextQuestion();
       else renderArena();
     } else if (!['question', 'review'].includes(state.status)) {
@@ -1364,7 +1387,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
       lastBossActionSeen: 0, applyingBossAction: false, advancingBossAction: false,
       battleSceneToken: state.battleSceneToken + 1, battleScenePlaying: false, battleSceneTail: null, pendingFinishRoom: null, invitedRoomId: '',
       rewardClaiming: false, rewardClaimedRoomId: '',
-      learningOutcome: null
+      learningOutcome: null, roomCommand: ''
     });
     document.getElementById('raid-arena')?.replaceChildren();
     document.body.classList.remove('raid-session-active');
@@ -1389,9 +1412,10 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     if (state.reconnectTried || state.roomId || score() < RAID_MVP.minimumScore) return;
     state.reconnectTried = true;
     try {
-      const player = await ensureLocalPlayer();
-      const roomId = await reconnectRaidRoom(player);
-      if (roomId) attachRoom(roomId);
+      await ensureLocalPlayer();
+      let initialResult;
+      const roomId = await reconnectRaidRoom(result => { initialResult = result; });
+      if (roomId) attachRoom(roomId,initialResult);
     } catch (_) {}
   }
 
