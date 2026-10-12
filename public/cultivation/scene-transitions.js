@@ -40,6 +40,12 @@ export function sceneDirection(from, to, scope = 'page') {
 // Animate the real content. Never clone trees or stylesheets during navigation.
 export function beginSceneTransition(from, to, theme = 'cloud', scope = 'page', force = false, direction = sceneDirection(from, to, scope)) {
   const noop = () => {};
+  // The training cloud curtain owns this navigation. Starting a second page
+  // or tab slide underneath it makes the reveal appear to jump.
+  if (document.body.classList.contains('training-cloud-navigating')) {
+    running.get(scope)?.();
+    return noop;
+  }
   if ((!force && from === to) || (!from && !to)) return noop;
   running.get(scope)?.();
   if (scope !== 'page' && (running.has('page') || [...running.keys()].some(key => key !== scope && key.endsWith('-open')))) return noop;

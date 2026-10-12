@@ -125,3 +125,18 @@ test('closing a fullscreen scene is not interrupted by its destination navigatio
   assert.equal(h.animations.length, 2);
   assert.equal(h.animations[0].canceled, false);
 });
+
+test('training cloud navigation replaces a pending tab slide and normal slides resume afterward', () => {
+  const h = harness();
+  h.begin(h.target, h.target, 'alchemy', 'training-tab', true)();
+  h.body.classList.add('training-cloud-navigating');
+  h.begin(h.target, h.target, 'alchemy', 'training-tab', true)();
+  h.begin(null, h.target, 'raid', 'page')();
+  assert.equal(h.animations.length, 2);
+  assert.ok(h.animations.every(animation => animation.canceled));
+  assert.equal(h.body.classList.contains('scene-motion-active'), false);
+  h.body.classList.remove('training-cloud-navigating');
+  h.begin(null, h.target, 'cloud')();
+  assert.equal(h.animations.length, 4);
+  assert.equal(h.animations[2].canceled, false);
+});

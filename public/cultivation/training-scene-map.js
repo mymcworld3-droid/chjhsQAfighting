@@ -36,12 +36,22 @@ function setDetail(placeId) {
   bar.hidden = false;
   page.dataset.trainingPlace = place.id;
   bar.querySelector('strong').textContent = place.name;
+  updateDetailTabs();
+}
+function updateDetailTabs() {
+  if (!page) return;
+  const place = page.dataset.trainingPlace;
+  const tabs = [...page.querySelectorAll('.training-subtab-v3')].filter(tab =>
+    tabPlace[tab.dataset.trainingTab || (tab.id === 'training-status-tab' ? 'status' : '')] === place &&
+    !tab.hidden && !tab.classList.contains('hidden'));
+  page.classList.toggle('training-single-tab', !!place && tabs.length <= 1);
 }
 function showMap({ focus = false } = {}) {
   navigationRevision++;
   ensure();
   if (!page) return;
   delete page.dataset.trainingPlace;
+  page.classList.remove('training-single-tab');
   page.classList.add('training-scene-map-active');
   map.hidden = false;
   bar.hidden = true;
@@ -63,10 +73,16 @@ function openPlace(place) {
   window.resetTrainingScroll?.();
   bar.querySelector('button').focus({ preventScroll: true });
 }
-async function animate(node, frames, duration) {
-  if (!node.animate) return;
-  const animation = node.animate(frames, { duration, easing: 'cubic-bezier(.22,.7,.25,1)', fill: 'forwards' });
-  try { await animation.finished; } catch (_) {}
+async function animate(node, frames, duration, { preserve = false, easing = 'cubic-bezier(.22,.7,.25,1)' } = {}) {
+  const keepEndState = () => {
+    if (!preserve) return;
+    for (const property of ['transform', 'opacity']) {
+      if (frames.at(-1)[property] !== undefined) node.style[property] = frames.at(-1)[property];
+    }
+  };
+  if (!node.animate) { keepEndState(); return; }
+  const animation = node.animate(frames, { duration, easing, fill: 'both' });
+  try { await animation.finished; keepEndState(); } catch (_) {}
   animation.cancel();
 }
 async function enter(place, button) {
@@ -80,40 +96,54 @@ async function enter(place, button) {
   let curtain;
   try {
     if (!reducedMotion()) {
+      const clouds = ['left', 'right'].map(side => {
+        const image = document.createElement('img');
+        image.className = `training-cloud-${side}`;
+        image.src = `assets/cloud-${side}.png`;
+        image.alt = '';
+        image.draggable = false;
+        return image;
+      });
+      // Decode while the button pulses, so the first cloud frame is ready.
+      const cloudsReady = Promise.allSettled(clouds.map(image => image.decode?.()));
       await animate(button, [{ transform: 'scale(1)' }, { transform: 'scale(1.065)', offset: .42 },
         { transform: 'scale(.985)', offset: .82 }, { transform: 'scale(1)' }], 230);
-    }
-    if (!stillCurrent()) return;
-    if (reducedMotion()) { openPlace(place); return; }
-    curtain = document.createElement('div');
-    curtain.className = 'training-cloud-transition';
-    curtain.setAttribute('aria-hidden', 'true');
-    const mist = document.createElement('div');
-    mist.className = 'training-cloud-mist';
-    const clouds = ['left', 'right'].map(side => {
-      const image = document.createElement('img');
-      image.src = `assets/cloud-${side}.png`;
-      image.alt = '';
-      image.draggable = false;
-      return image;
-    });
-    curtain.append(mist, ...clouds);
-    document.body.appendChild(curtain);
-    await Promise.all([
-      animate(mist, [{ opacity: 0 }, { opacity: 1 }], 300),
-      ...clouds.map((cloud, index) => animate(cloud, [
-        { transform: `translateX(${index ? 102 : -102}%) scale(1.08)` },
-        { transform: 'translateX(0) scale(1)' }
-      ], 300))
-    ]);
-    if (!stillCurrent()) return;
-    // Mount the destination while covered, then contract the clouds into its centre.
-    openPlace(place);
-    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-    await animate(curtain, [{ clipPath: 'circle(150% at 50% 50%)', opacity: 1, transform: 'scale(1)' },
-      { clipPath: 'circle(0% at 50% 50%)', opacity: 0, transform: 'scale(.82)' }], 420);
+      if (!stillCurrent()) return;
+      await cloudsReady;
+      if (!stillCurrent()) return;
+      curtain = document.createElement('div');
+      curtain.className = 'training-cloud-transition';
+      curtain.setAttribute('aria-hidden', 'true');
+      const mist = document.createElement('div');
+      mist.className = 'training-cloud-mist';
+      curtain.append(mist, ...clouds);
+      document.body.appendChild(curtain);
+      document.body.classList.add('training-cloud-navigating');
+      await Promise.all([
+        animate(mist, [{ opacity: 0 }, { opacity: .28, offset: .55 }, { opacity: 1 }], 360,
+          { preserve: true, easing: 'cubic-bezier(.32,0,.2,1)' }),
+        ...clouds.map((cloud, index) => animate(cloud, [
+          { transform: `translateX(${index ? 105 : -105}%) scale(1.04)`, opacity: 1 },
+          { transform: 'translateX(0) scale(1)', opacity: 1 }
+        ], 360, { preserve: true, easing: 'cubic-bezier(.32,0,.2,1)' }))
+      ]);
+      if (!stillCurrent()) return;
+      // Keep the closed pose while the destination paints; the same clouds then
+      // gather into the centre and dissolve without a hard circular wipe.
+      openPlace(place);
+      await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+      await Promise.all([
+        animate(mist, [{ opacity: 1 }, { opacity: .96, offset: .2 }, { opacity: .24, offset: .65 }, { opacity: 0 }], 520,
+          { preserve: true, easing: 'cubic-bezier(.45,0,.25,1)' }),
+        ...clouds.map((cloud, index) => animate(cloud, [
+          { transform: 'translateX(0) scale(1)', opacity: 1 },
+          { transform: `translateX(${index ? -30 : 30}%) scale(.08)`, opacity: 0 }
+        ], 520, { preserve: true, easing: 'cubic-bezier(.45,0,.25,1)' }))
+      ]);
+    } else if (stillCurrent()) openPlace(place);
   } finally {
     curtain?.remove();
+    document.body.classList.remove('training-cloud-navigating');
     running = false;
     map?.removeAttribute('aria-busy');
   }
@@ -130,7 +160,7 @@ function makeButton(place, layout) {
   // sprite is shared by both maps, with no hand-drawn polygon or stroke.
   const art = document.createElement('span');
   art.className = 'training-place-art';
-  art.style.height = `${(region.label[1] - y - layout.font * .82) / height * 100}%`;
+  art.style.height = `${(region.label[1] - y - layout.font * 1.06) / height * 100}%`;
   const sprite = region.sprite;
   for (const layer of ['aura', 'cutout']) {
     const svg = svgNode('svg', { viewBox: sprite.crop.join(' '), 'aria-hidden': 'true',
@@ -141,8 +171,11 @@ function makeButton(place, layout) {
   }
   const label = document.createElement('span');
   label.className = 'training-place-label';
-  label.style.cssText = `left:${(region.label[0] - x) / width * 100}%;top:${(region.label[1] - y) / height * 100}%`;
+  // Anchor the name below the artwork. Adding an unlock line extends the
+  // plaque downward instead of moving the name up over the building.
+  label.style.cssText = `left:${(region.label[0] - x) / width * 100}%;top:${(region.label[1] - y - layout.font * .84) / height * 100}%`;
   const name = document.createElement('span');
+  name.className = 'training-place-name';
   name.textContent = place.name;
   const realm = document.createElement('small');
   realm.className = 'training-place-realm';
@@ -257,6 +290,7 @@ function sync() {
   ensure();
   wrapNavigation();
   updateLocks();
+  updateDetailTabs();
   scheduleFit();
 }
 function boot() {
