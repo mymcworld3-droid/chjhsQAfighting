@@ -73,16 +73,10 @@ function openPlace(place) {
   window.resetTrainingScroll?.();
   bar.querySelector('button').focus({ preventScroll: true });
 }
-async function animate(node, frames, duration, { preserve = false, easing = 'cubic-bezier(.22,.7,.25,1)' } = {}) {
-  const keepEndState = () => {
-    if (!preserve) return;
-    for (const property of ['transform', 'opacity']) {
-      if (frames.at(-1)[property] !== undefined) node.style[property] = frames.at(-1)[property];
-    }
-  };
-  if (!node.animate) { keepEndState(); return; }
-  const animation = node.animate(frames, { duration, easing, fill: 'both' });
-  try { await animation.finished; keepEndState(); } catch (_) {}
+async function animate(node, frames, duration) {
+  if (!node.animate) return;
+  const animation = node.animate(frames, { duration, easing: 'cubic-bezier(.22,.7,.25,1)', fill: 'both' });
+  try { await animation.finished; } catch (_) {}
   animation.cancel();
 }
 async function enter(place, button) {
@@ -93,57 +87,14 @@ async function enter(place, button) {
   const stillCurrent = () => revision === navigationRevision && visible() && unlocked(place) && uid === getMainUser()?.uid;
   running = true;
   map.setAttribute('aria-busy', 'true');
-  let curtain;
   try {
     if (!reducedMotion()) {
-      const clouds = ['left', 'right'].map(side => {
-        const image = document.createElement('img');
-        image.className = `training-cloud-${side}`;
-        image.src = `assets/cloud-${side}.png`;
-        image.alt = '';
-        image.draggable = false;
-        return image;
-      });
-      // Decode while the button pulses, so the first cloud frame is ready.
-      const cloudsReady = Promise.allSettled(clouds.map(image => image.decode?.()));
       await animate(button, [{ transform: 'scale(1)' }, { transform: 'scale(1.065)', offset: .42 },
         { transform: 'scale(.985)', offset: .82 }, { transform: 'scale(1)' }], 230);
       if (!stillCurrent()) return;
-      await cloudsReady;
-      if (!stillCurrent()) return;
-      curtain = document.createElement('div');
-      curtain.className = 'training-cloud-transition';
-      curtain.setAttribute('aria-hidden', 'true');
-      const mist = document.createElement('div');
-      mist.className = 'training-cloud-mist';
-      curtain.append(mist, ...clouds);
-      document.body.appendChild(curtain);
-      document.body.classList.add('training-cloud-navigating');
-      await Promise.all([
-        animate(mist, [{ opacity: 0 }, { opacity: .28, offset: .55 }, { opacity: 1 }], 360,
-          { preserve: true, easing: 'cubic-bezier(.32,0,.2,1)' }),
-        ...clouds.map((cloud, index) => animate(cloud, [
-          { transform: `translateX(${index ? 105 : -105}%) scale(1.04)`, opacity: 1 },
-          { transform: 'translateX(0) scale(1)', opacity: 1 }
-        ], 360, { preserve: true, easing: 'cubic-bezier(.32,0,.2,1)' }))
-      ]);
-      if (!stillCurrent()) return;
-      // Keep the closed pose while the destination paints; the same clouds then
-      // gather into the centre and dissolve without a hard circular wipe.
-      openPlace(place);
-      await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-      await Promise.all([
-        animate(mist, [{ opacity: 1 }, { opacity: .96, offset: .2 }, { opacity: .24, offset: .65 }, { opacity: 0 }], 520,
-          { preserve: true, easing: 'cubic-bezier(.45,0,.25,1)' }),
-        ...clouds.map((cloud, index) => animate(cloud, [
-          { transform: 'translateX(0) scale(1)', opacity: 1 },
-          { transform: `translateX(${index ? -30 : 30}%) scale(.08)`, opacity: 0 }
-        ], 520, { preserve: true, easing: 'cubic-bezier(.45,0,.25,1)' }))
-      ]);
+      await window.playStartupCloudCurtain(() => openPlace(place), { isCurrent: stillCurrent, blockInput: true });
     } else if (stillCurrent()) openPlace(place);
   } finally {
-    curtain?.remove();
-    document.body.classList.remove('training-cloud-navigating');
     running = false;
     map?.removeAttribute('aria-busy');
   }

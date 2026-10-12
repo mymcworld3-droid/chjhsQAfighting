@@ -161,27 +161,4 @@ body.xianxia-theme #page-training .training-scene-back {
 #page-training[data-training-place="forge"] .training-subtab-v3:not([data-training-tab="refinery"]),
 #page-training[data-training-place="vault"] .training-subtab-v3:not([data-training-tab="bag"]):not([data-training-tab="equipment"]),
 #page-training[data-training-place="status"] .training-subtab-v3:not(#training-status-tab) { display: none !important; }
-.training-cloud-transition {
-  position: fixed;
-  inset: 0;
-  z-index: 29010;
-  overflow: hidden;
-  pointer-events: auto;
-  background: transparent;
-}
-.training-cloud-transition img {
-  position: absolute;
-  top: 0;
-  width: 68%;
-  height: 100%;
-  object-fit: cover;
-  pointer-events: none;
-  /* Feather the outside of each cloud bank, including its cropped edges. */
-  -webkit-mask-image: radial-gradient(ellipse closest-side at 50% 50%, #000 60%, #000000b3 78%, transparent 100%);
-  mask-image: radial-gradient(ellipse closest-side at 50% 50%, #000 60%, #000000b3 78%, transparent 100%);
-  will-change: transform, opacity;
-}
-.training-cloud-left { left: -4%; object-position: right center; transform: translateX(-105%) scale(1.04); }
-.training-cloud-right { right: -4%; object-position: left center; transform: translateX(105%) scale(1.04); }
-.training-cloud-mist { position: absolute; inset: 0; opacity: 0; background: radial-gradient(ellipse, #f2f4ec, #dee8e3); will-change: opacity; }
 @media (prefers-reduced-motion: reduce) { .training-place-cutout, .training-place-aura { transition: none; } }

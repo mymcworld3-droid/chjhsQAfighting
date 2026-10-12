@@ -1061,9 +1061,17 @@ function waitForStartupCloudTransform(curtain, timeout = 1700) {
 
     return Promise.all(halves.map(half => new Promise(resolve => {
         let settled = false;
-        const done = () => {
+        const done = (forceEnd = false) => {
             if (settled) return;
             settled = true;
+            // A missing transitionend must still leave this bank at its final
+            // pose before navigation proceeds (for example after tab sleep).
+            if (forceEnd) {
+                const previous = half.style.transition;
+                half.style.transition = 'none';
+                half.getBoundingClientRect();
+                half.style.transition = previous;
+            }
             half.removeEventListener('transitionend', onEnd);
             clearTimeout(timer);
             resolve();
@@ -1071,7 +1079,7 @@ function waitForStartupCloudTransform(curtain, timeout = 1700) {
         const onEnd = event => {
             if (event.target === half && event.propertyName === 'transform') done();
         };
-        const timer = setTimeout(done, timeout);
+        const timer = setTimeout(() => done(true), timeout);
         half.addEventListener('transitionend', onEnd);
     })));
 }
@@ -1117,38 +1125,61 @@ function ensureStartupCloudCurtain() {
     return curtain;
 }
 
+let startupCloudTransitionPromise = Promise.resolve();
+
+function playStartupCloudCurtain(onClosed, { isCurrent = () => true, blockInput = false } = {}) {
+    // Startup and subsequent navigation share one curtain and one motion.
+    // Queue requests so an opening curtain cannot be reset by another caller.
+    const transition = startupCloudTransitionPromise.then(async () => {
+        await preloadStartupCloudImages();
+        if (!isCurrent()) return false;
+        const curtain = ensureStartupCloudCurtain();
+        const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches === true;
+        try {
+            if (blockInput) {
+                curtain.style.pointerEvents = 'auto';
+                document.body.classList.add('training-cloud-navigating');
+            }
+            curtain.className = '';
+            await nextStartupFrame();
+            curtain.classList.add('is-closing');
+            if (reducedMotion) await waitStartupTransition(20);
+            else await waitForStartupCloudTransform(curtain, 1650);
+
+            // Both full-screen banks have arrived at the exact same inset:0
+            // pose. Paint it before changing anything behind the cloud wall.
+            curtain.classList.add('is-closed');
+            curtain.classList.remove('is-closing');
+            curtain.style.backgroundColor = '#d9e3dc';
+            await nextStartupFrame();
+            if (!isCurrent()) return false;
+            await onClosed();
+            await nextStartupFrame();
+            if (!reducedMotion) await waitStartupTransition(180);
+
+            curtain.style.removeProperty('background-color');
+            curtain.classList.remove('is-closed');
+            curtain.classList.add('is-opening');
+            if (reducedMotion) await waitStartupTransition(25);
+            else await waitForStartupCloudTransform(curtain, 1800);
+            return true;
+        } finally {
+            curtain.remove();
+            if (blockInput) document.body.classList.remove('training-cloud-navigating');
+        }
+    });
+    startupCloudTransitionPromise = transition.catch(() => {});
+    return transition;
+}
+
+window.playStartupCloudCurtain = playStartupCloudCurtain;
+
 async function enterHomeWithStartupCloudCurtain() {
-    // 載入畫面期間就先下載並 decode；此處只等待同一個預載 Promise，不重新抓圖。
-    await preloadStartupCloudImages();
-
-    const curtain = ensureStartupCloudCurtain();
-    const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches === true;
-
-    // 兩張圖都以完整 viewport 為座標。起點分別在左右螢幕外，終點完全重疊於 inset:0。
-    curtain.className = '';
-    await nextStartupFrame();
-    curtain.classList.add('is-closing');
-
-    if (reducedMotion) await waitStartupTransition(20);
-    else await waitForStartupCloudTransform(curtain, 1650);
-
-    curtain.classList.add('is-closed');
-    curtain.classList.remove('is-closing');
-
-    // 雲幕完全閉合後才把底層切到仙府，透明區也由 mist 層遮住。
-    document.getElementById('bottom-nav')?.classList.remove('hidden');
-    switchToPage('page-home');
-    hideGameStartupGate();
-    await nextStartupFrame();
-
-    // 仙府已在雲後完成佈局，再讓兩張全螢幕雲層分別向左右滑出。
-    curtain.classList.remove('is-closed');
-    curtain.classList.add('is-opening');
-
-    if (reducedMotion) await waitStartupTransition(25);
-    else await waitForStartupCloudTransform(curtain, 1800);
-
-    curtain.remove();
+    await playStartupCloudCurtain(() => {
+        document.getElementById('bottom-nav')?.classList.remove('hidden');
+        switchToPage('page-home');
+        hideGameStartupGate();
+    });
     window.dispatchEvent(new CustomEvent('xiuxian:startup-cloud-transition-completed'));
 }
 

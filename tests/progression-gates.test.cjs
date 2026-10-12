@@ -270,10 +270,11 @@ test('startup completion closes cloud banks before revealing home and opens them
   assert.match(legacy, /xiuxian:startup-cloud-transition-completed/);
 
   const transitionStart = legacy.indexOf("curtain.classList.add('is-closing')");
-  const homeSwitch = legacy.indexOf("switchToPage('page-home')", transitionStart);
+  const coveredSwitch = legacy.indexOf('await onClosed()', transitionStart);
   const transitionOpen = legacy.indexOf("curtain.classList.add('is-opening')", transitionStart);
-  assert.ok(transitionStart >= 0 && homeSwitch > transitionStart && transitionOpen > homeSwitch,
+  assert.ok(transitionStart >= 0 && coveredSwitch > transitionStart && transitionOpen > coveredSwitch,
     'clouds close first, home is mounted while covered, then clouds open');
+  assert.match(legacy, /enterHomeWithStartupCloudCurtain\(\)[\s\S]*?await playStartupCloudCurtain\(\(\) =>/);
 });
 
 test('startup cloud curtain uses two full-screen overlapping PNG layers and preloads them early', () => {
