@@ -58,7 +58,7 @@ test('previously unlocked soul upgrades and trusted combat core remain usable af
   assert.equal(Authority.trustedRaidPlayerSnapshot(player, 'u1').goldenCore, null);
 });
 
-test('both independently composed scenes match the original assets and contain five non-overlapping targets', () => {
+test('both clean scene plates match their assets and contain five non-overlapping targets', () => {
   for (const [name, layout] of Object.entries(Layouts)) {
     const file = fs.readFileSync(path.join(__dirname, '../public', layout.image.replace(/\.webp$/, '.png')));
     assert.equal(file.readUInt32BE(16), layout.width, `${name} image width`);
@@ -67,6 +67,13 @@ test('both independently composed scenes match the original assets and contain f
     assert.deepEqual(Object.keys(layout.places).sort(), Rules.PLACES.map(place => place.id).sort());
     const regions = Object.values(layout.places);
     for (const region of regions) {
+      const sprite = region.sprite;
+      const png = fs.readFileSync(path.join(__dirname, '../public', sprite.image.replace(/\.webp$/, '.png')));
+      assert.equal(png.readUInt32BE(16), sprite.width);
+      assert.equal(png.readUInt32BE(20), sprite.height);
+      assert.equal(png[25], 6, 'each AI building asset must have a real RGBA alpha channel');
+      const [sx, sy, sw, sh] = sprite.crop;
+      assert.ok(sx >= 0 && sy >= 0 && sw > 0 && sh > 0 && sx + sw <= sprite.width && sy + sh <= sprite.height);
       const [x, y, width, height] = region.bounds;
       assert.ok(x >= 0 && y >= 0 && x + width <= layout.width && y + height <= layout.height);
       for (const point of [region.label, region.lock]) {
@@ -79,6 +86,10 @@ test('both independently composed scenes match the original assets and contain f
       const overlapHeight = Math.max(0, Math.min(ay + ah, by + bh) - Math.max(ay, by));
       assert.ok(overlapWidth * overlapHeight < Math.min(aw * ah, bw * bh) * .02, `${name} targets overlap`);
     }
+  }
+  for (const id of Rules.PLACES.map(place => place.id)) {
+    assert.equal(Layouts.landscape.places[id].sprite, Layouts.portrait.places[id].sprite,
+      'both orientations share the same extracted building and its aspect ratio');
   }
 });
 

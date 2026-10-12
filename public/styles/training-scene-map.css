@@ -29,8 +29,9 @@ body.xianxia-theme #page-training.training-scene-map-active > :not(.training-map
   touch-action: pan-x pan-y;
 }
 .training-map[hidden], .training-scene-detailbar[hidden] { display: none !important; }
-.training-map-plane { position: absolute; transform-origin: 0 0; }
-.training-map-background { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; user-select: none; }
+.training-map-plane { position: absolute; transform-origin: 0 0; background-size: 100% 100%; background-repeat: no-repeat; }
+/* Warm and decode the plate without a competing composited image layer. */
+.training-map-background { position: absolute; inset: 0; visibility: hidden; width: 100%; height: 100%; pointer-events: none; user-select: none; }
 .training-map::after {
   content: '';
   position: absolute;
@@ -59,10 +60,18 @@ body.xianxia-theme #page-training .training-place {
   outline: none;
 }
 .training-place svg { display: block; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
-.training-place-art { filter: drop-shadow(0 0 4px #fff) drop-shadow(0 0 10px #ffffff73); transition: filter .18s ease; }
-.training-place-cutout { filter: brightness(1.04); }
-.training-place-edge { fill: none; stroke: #ffffffcc; stroke-width: 1.7; stroke-linejoin: round; }
-.training-map[data-orientation="portrait"] .training-place-edge { stroke-width: 2.6; }
+.training-place-art { position: absolute; inset: 0; pointer-events: none; }
+.training-place-art > svg { position: absolute; inset: 0; }
+/* The broad bloom sits behind the sprite; the delicate rim follows its alpha. */
+.training-place-aura {
+  opacity: .24;
+  filter: brightness(0) invert(1) blur(13px);
+  transition: opacity .2s ease;
+}
+.training-place-cutout {
+  filter: drop-shadow(0 0 1.6px #fcfffce0) drop-shadow(0 0 5px #f1fff24d);
+  transition: filter .2s ease;
+}
 .training-place-label {
   position: absolute;
   display: flex;
@@ -105,14 +114,15 @@ body.xianxia-theme #page-training .training-place {
 }
 .training-place.is-locked { cursor: default !important; }
 .training-place-lock svg { width: .82em; height: .95em; fill: none; stroke: currentColor; stroke-width: 2; }
-.training-place.is-locked .training-place-art { filter: none; }
-.training-place.is-locked .training-place-cutout { filter: brightness(.3) saturate(.25); }
-.training-place.is-locked .training-place-edge { stroke: #d1d5d133; }
+.training-place.is-locked .training-place-aura { opacity: 0; }
+.training-place.is-locked .training-place-cutout { filter: brightness(.32) saturate(.2); }
 .training-place.is-locked .training-place-label { color: #c8c8bf; border-color: #92958d66; }
 .training-place:not(:disabled):focus-visible .training-place-label { outline: 3px solid white; outline-offset: 4px; }
-.training-place:not(:disabled):focus-visible .training-place-art { filter: drop-shadow(0 0 7px #fff) drop-shadow(0 0 18px #ffffffb3); }
+.training-place:not(:disabled):focus-visible .training-place-aura { opacity: .48; }
+.training-place:not(:disabled):focus-visible .training-place-cutout { filter: brightness(1.08) drop-shadow(0 0 2px #fff) drop-shadow(0 0 8px #effff280); }
 @media (hover: hover) {
-  .training-place:not(:disabled):hover .training-place-art { filter: drop-shadow(0 0 6px #fff) drop-shadow(0 0 16px #ffffffa6); }
+  .training-place:not(:disabled):hover .training-place-aura { opacity: .42; }
+  .training-place:not(:disabled):hover .training-place-cutout { filter: brightness(1.06) drop-shadow(0 0 2px #fff) drop-shadow(0 0 7px #effff266); }
   .training-place:not(:disabled):hover .training-place-label { border-color: #fff8dc; }
 }
 body.xianxia-theme #page-training .training-scene-detailbar {
@@ -154,4 +164,4 @@ body.xianxia-theme #page-training .training-scene-back {
 }
 .training-cloud-transition img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
 .training-cloud-mist { position: absolute; inset: 0; background: radial-gradient(ellipse, #eef1eaf7, #d5e2e3f2); }
-@media (prefers-reduced-motion: reduce) { .training-place-art { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .training-place-cutout, .training-place-aura { transition: none; } }

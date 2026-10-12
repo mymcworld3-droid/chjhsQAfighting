@@ -1,36 +1,84 @@
-// Coordinates follow the original paintings, so each SVG cutout aligns exactly
-// with its background. Both layouts are independently art-directed, never stretched.
+// Shared AI-extracted alpha sprites retain fine roof tips, railings and ornaments.
+// Both fixed-ratio maps use the same five sprites on independently composed clean plates.
 (function (root) {
   'use strict';
+  const sprites = {
+  "meditation": {
+    "image": "assets/training/cutouts/meditation-ai.webp",
+    "width": 1672,
+    "height": 941,
+    "crop": [
+      285,
+      9,
+      1102,
+      880
+    ]
+  },
+  "vault": {
+    "image": "assets/training/cutouts/vault-ai.webp",
+    "width": 1536,
+    "height": 1024,
+    "crop": [
+      91,
+      10,
+      1353,
+      983
+    ]
+  },
+  "forge": {
+    "image": "assets/training/cutouts/forge-ai.webp",
+    "width": 1672,
+    "height": 941,
+    "crop": [
+      98,
+      9,
+      1488,
+      925
+    ]
+  },
+  "secret": {
+    "image": "assets/training/cutouts/secret-ai.webp",
+    "width": 1487,
+    "height": 1058,
+    "crop": [
+      138,
+      17,
+      1307,
+      1021
+    ]
+  },
+  "status": {
+    "image": "assets/training/cutouts/status-ai.webp",
+    "width": 1536,
+    "height": 1024,
+    "crop": [
+      162,
+      5,
+      1219,
+      1010
+    ]
+  }
+};
+  const place = (id, bounds, label, lock) => ({ bounds, label, lock, sprite: sprites[id] });
   const layouts = {
     landscape: {
-      image: 'assets/training/cultivation-landscape.webp', width: 1672, height: 941, font: 28,
+      image: 'assets/training/cultivation-landscape-clean.webp', width: 1672, height: 941, font: 28,
       places: {
-        meditation: { bounds: [602, 130, 505, 480], label: [845, 566], lock: [845, 406],
-          outline: 'M620 314 L651 303 L692 278 L754 259 L788 227 L814 230 L829 213 L833 197 L835 181 L840 173 L837 157 L842 146 L844 133 L848 146 L852 154 L849 163 L852 174 L854 183 L850 195 L859 210 L871 230 L892 249 L941 271 L998 285 L1025 300 L1042 290 L1044 305 L1067 319 L1050 330 L1031 339 L1031 400 L1053 430 L1074 447 L1078 482 L1055 496 L1010 510 L969 541 L895 552 L822 557 L750 544 L703 523 L652 504 L627 480 L635 446 L654 424 L650 354 L630 341 Z' },
-        vault: { bounds: [150, 140, 340, 288], label: [310, 389], lock: [311, 286],
-          outline: 'M184 205 L213 204 L233 182 L277 174 L289 152 L305 140 L321 164 L345 172 L376 183 L399 200 L426 196 L422 213 L411 228 L410 276 L444 287 L463 296 L469 330 L460 347 L428 355 L374 366 L321 379 L264 369 L205 358 L160 340 L152 315 L166 294 L202 280 L203 244 L197 226 Z' },
-        forge: { bounds: [43, 438, 502, 341], label: [305, 739], lock: [303, 614],
-          outline: 'M50 550 L111 538 L165 520 L212 479 L244 467 L254 446 L267 439 L278 465 L308 481 L349 491 L375 516 L405 536 L448 538 L450 553 L475 563 L492 590 L503 620 L523 634 L532 672 L503 699 L455 712 L399 727 L319 741 L234 728 L168 710 L109 695 L71 672 L62 631 L54 598 Z' },
-        secret: { bounds: [1208, 137, 310, 293], label: [1360, 390], lock: [1367, 271],
-          outline: 'M1254 322 L1254 270 L1261 224 L1284 199 L1316 174 L1353 157 L1390 150 L1430 165 L1454 189 L1470 220 L1469 267 L1460 301 L1478 317 L1503 331 L1501 351 L1474 365 L1432 379 L1378 385 L1325 379 L1284 368 L1242 353 L1218 338 L1227 316 Z' },
-        status: { bounds: [1183, 465, 378, 345], label: [1368, 770], lock: [1376, 637],
-          outline: 'M1227 524 L1276 530 L1316 499 L1350 480 L1360 468 L1371 487 L1400 505 L1443 528 L1475 531 L1491 509 L1513 516 L1521 533 L1540 553 L1545 617 L1533 665 L1539 692 L1549 716 L1542 737 L1495 756 L1434 772 L1367 778 L1300 766 L1243 749 L1200 726 L1191 701 L1223 677 L1248 657 L1249 567 L1235 554 Z' }
+        meditation: place('meditation', [602,130,505,480], [845,566], [845,406]),
+        vault: place('vault', [150,140,340,288], [310,389], [311,286]),
+        forge: place('forge', [43,438,502,341], [305,739], [303,614]),
+        secret: place('secret', [1208,137,310,293], [1360,390], [1367,271]),
+        status: place('status', [1183,465,378,345], [1368,770], [1376,637])
       }
     },
     portrait: {
-      image: 'assets/training/cultivation-portrait.webp', width: 941, height: 1672, font: 40,
+      image: 'assets/training/cultivation-portrait-clean.webp', width: 941, height: 1672, font: 40,
       places: {
-        meditation: { bounds: [237, 574, 482, 378], label: [486, 900], lock: [481, 766],
-          outline: 'M266 681 L292 674 L334 648 L383 631 L423 604 L460 603 L484 580 L496 599 L522 610 L552 631 L596 648 L640 664 L674 682 L705 675 L700 695 L677 711 L677 773 L694 790 L708 815 L704 846 L666 866 L623 884 L559 902 L488 911 L418 907 L352 893 L302 871 L258 852 L246 826 L264 798 L286 783 L286 724 L272 709 Z' },
-        vault: { bounds: [17, 228, 354, 311], label: [198, 479], lock: [198, 374],
-          outline: 'M50 291 L84 293 L116 269 L153 254 L173 231 L188 240 L210 260 L244 271 L284 284 L305 302 L329 287 L332 306 L345 325 L331 339 L330 407 L351 421 L361 446 L346 461 L309 476 L269 483 L218 492 L154 484 L101 475 L61 458 L31 438 L22 414 L35 389 L65 382 L63 335 L52 320 Z' },
-        forge: { bounds: [18, 945, 425, 361], label: [238, 1246], lock: [244, 1131],
-          outline: 'M20 1055 L83 1051 L119 1031 L157 1001 L189 980 L204 953 L218 960 L243 991 L282 1006 L316 1024 L339 1038 L367 1031 L366 1050 L384 1066 L398 1099 L404 1158 L424 1183 L432 1211 L408 1238 L360 1254 L303 1268 L250 1275 L191 1268 L138 1255 L86 1239 L38 1212 L23 1188 L30 1150 L27 1102 Z' },
-        secret: { bounds: [603, 265, 316, 315], label: [763, 521], lock: [773, 419],
-          outline: 'M650 460 L652 404 L658 350 L682 319 L716 295 L759 282 L800 286 L838 306 L862 337 L871 380 L869 432 L857 467 L883 482 L904 500 L903 526 L878 538 L833 548 L786 553 L731 548 L684 537 L641 520 L617 499 L623 474 Z' },
-        status: { bounds: [561, 952, 362, 435], label: [762, 1302], lock: [771, 1151],
-          outline: 'M601 1040 L635 1047 L677 1021 L713 1001 L751 980 L765 957 L777 980 L803 997 L838 1016 L873 1036 L895 1024 L909 1044 L918 1067 L912 1143 L901 1193 L911 1230 L916 1266 L903 1287 L870 1303 L825 1317 L767 1323 L709 1315 L655 1297 L606 1277 L578 1251 L574 1226 L594 1198 L613 1183 L616 1093 L607 1069 Z' }
+        meditation: place('meditation', [237,574,482,378], [486,900], [481,766]),
+        vault: place('vault', [17,228,354,311], [198,479], [198,374]),
+        forge: place('forge', [18,945,425,361], [238,1246], [244,1131]),
+        secret: place('secret', [603,265,316,315], [763,521], [773,419]),
+        status: place('status', [561,952,362,435], [762,1302], [771,1151])
       }
     }
   };

@@ -1,11 +1,31 @@
 # 修煉場景圖
 
+## AI 建築去背與分層（2026-10-12）
+
+目前畫面使用 `cultivation-landscape-clean.webp` 與 `cultivation-portrait-clean.webp` 兩張背景底圖；AI 移除原本的五處前景建築，保留仙山、橋梁與地面，避免按鈕縮放時露出重複建築。
+
+五個建築皆以內建 imagegen 從原圖提取，PNG 保留真正的 RGBA 透明背景，WebP 為遊戲載入版本：
+
+- `cutouts/meditation-ai.png`：修煉室。
+- `cutouts/vault-ai.png`：寶庫。
+- `cutouts/forge-ai.png`：鍛造坊。
+- `cutouts/secret-ai.png`：秘境。
+- `cutouts/status-ai.png`：狀態亭與星鏡。
+
+橫直版共用這五個素材，以 alpha 範圍的 SVG viewBox 等比放置，取消手繪多邊形切片和外框描線。光暈沿實際透明輪廓，包含細白亮邊與獨立的柔霧層；滑過／聚焦時增亮，未解鎖時關閉。背景與所有建築均在載入階段預載。
+
+[完整 AI 提示詞](cutouts/PROMPTS.md)
+
+最終版面驗證預覽：[橫式](../../../docs/previews/training-ai-landscape.png)／[直式](../../../docs/previews/training-ai-portrait.png)。預覽使用實際頁面 HTML、CSS 與修煉模組，以及測試用登入／資料介面。
+
+## 原始場景繪畫
+
 Generated with the built-in imagegen tool. The portrait uses the landscape as a style reference.
 
 - `cultivation-landscape.png`: 1672 × 941, 16:9.
 - `cultivation-portrait.png`: 941 × 1672, 9:16.
-- The page uses matching `.webp` versions (about 0.56 MB / 0.68 MB) and preloads both before play, including before orientation changes. Original PNG paintings are retained.
-- Interactive location cutouts reuse these exact images with silhouette SVG clip paths in `public/cultivation/training-scene-layouts.js`; no separate repainting or stretched artwork.
+- Matching `.webp` versions of the original paintings are retained for reference; the current page preloads the clean plates and five transparent sprites listed above.
+- These original paintings are retained as the AI extraction and clean-plate editing references. The current page uses the layered assets listed above.
 - Labels, locks and the white edge glow are live UI, not baked into the paintings.
 
 ## Landscape prompt

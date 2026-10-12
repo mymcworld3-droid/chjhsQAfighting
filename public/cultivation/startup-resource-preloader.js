@@ -113,8 +113,13 @@ function collectStartupImageUrls() {
   const nearbyMaterials = priority.materialIds.map(getMaterialById).filter(Boolean);
 
   const urls = unique([
-    'assets/training/cultivation-landscape.webp',
-    'assets/training/cultivation-portrait.webp',
+    'assets/training/cultivation-landscape-clean.webp',
+    'assets/training/cultivation-portrait-clean.webp',
+    'assets/training/cutouts/meditation-ai.webp',
+    'assets/training/cutouts/vault-ai.webp',
+    'assets/training/cutouts/forge-ai.webp',
+    'assets/training/cutouts/secret-ai.webp',
+    'assets/training/cutouts/status-ai.webp',
     ...definitionImageUrls(equippedArtifacts),
     ...definitionImageUrls(ownedArtifacts),
     ...definitionImageUrls(ownedMaterials),

@@ -126,16 +126,19 @@ function makeButton(place, layout) {
   button.className = 'training-place';
   button.dataset.trainingLocation = place.id;
   button.style.cssText = `left:${x / layout.width * 100}%;top:${y / layout.height * 100}%;width:${width / layout.width * 100}%;height:${height / layout.height * 100}%`;
-  const svg = svgNode('svg', { viewBox: `${x} ${y} ${width} ${height}`, 'aria-hidden': 'true', focusable: 'false' });
-  const id = `training-cutout-${orientation}-${place.id}`;
-  const defs = svgNode('defs'), clip = svgNode('clipPath', { id, clipPathUnits: 'userSpaceOnUse' });
-  clip.appendChild(svgNode('path', { d: region.outline }));
-  defs.appendChild(clip);
-  const art = svgNode('g', { class: 'training-place-art' });
-  art.appendChild(svgNode('image', { class: 'training-place-cutout', href: layout.image, x: 0, y: 0,
-    width: layout.width, height: layout.height, 'clip-path': `url(#${id})`, preserveAspectRatio: 'none' }));
-  art.appendChild(svgNode('path', { class: 'training-place-edge', d: region.outline }));
-  svg.append(defs, art);
+  // AI-derived alpha retains roof curls, railings and fine details. The same
+  // sprite is shared by both maps, with no hand-drawn polygon or stroke.
+  const art = document.createElement('span');
+  art.className = 'training-place-art';
+  art.style.height = `${(region.label[1] - y - layout.font * .82) / height * 100}%`;
+  const sprite = region.sprite;
+  for (const layer of ['aura', 'cutout']) {
+    const svg = svgNode('svg', { viewBox: sprite.crop.join(' '), 'aria-hidden': 'true',
+      focusable: 'false', preserveAspectRatio: 'xMidYMax meet', class: `training-place-${layer}` });
+    svg.appendChild(svgNode('image', { href: sprite.image, x: 0, y: 0,
+      width: sprite.width, height: sprite.height }));
+    art.appendChild(svg);
+  }
   const label = document.createElement('span');
   label.className = 'training-place-label';
   label.style.cssText = `left:${(region.label[0] - x) / width * 100}%;top:${(region.label[1] - y) / height * 100}%`;
@@ -150,7 +153,7 @@ function makeButton(place, layout) {
   lock.setAttribute('aria-hidden', 'true');
   lock.style.cssText = `left:${(region.lock[0] - x) / width * 100}%;top:${(region.lock[1] - y) / height * 100}%`;
   lock.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="10" width="16" height="12" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3M12 15v3"/></svg>';
-  button.append(svg, label, lock);
+  button.append(art, label, lock);
   button.addEventListener('click', () => void enter(place, button));
   return button;
 }
@@ -160,6 +163,7 @@ function renderScene(next) {
   const layout = Layouts[next];
   map.dataset.orientation = next;
   plane.style.setProperty('--training-map-font', `${layout.font}px`);
+  plane.style.backgroundImage = `url("${layout.image}")`;
   background = document.createElement('img');
   background.className = 'training-map-background';
   background.src = layout.image;
