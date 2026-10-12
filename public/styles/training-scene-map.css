@@ -1,7 +1,7 @@
 /* The outer game stage scales these logical coordinates as one fixed canvas. */
 body.xianxia-theme #page-training.training-scene-map-active.active-page {
   position: fixed !important;
-  inset: var(--training-scene-top, 72px) 0 var(--training-scene-bottom, 98px) !important;
+  inset: var(--training-scene-top, 72px) 0 0 !important;
   display: block !important;
   width: 100% !important;
   max-width: none !important;
@@ -11,7 +11,7 @@ body.xianxia-theme #page-training.training-scene-map-active.active-page {
   margin: 0 !important;
   padding: 0 !important;
   overflow: hidden !important;
-  background: #0b151c;
+  background: #889b9f;
   isolation: isolate;
 }
 body.xianxia-theme main:has(#page-training.training-scene-map-active.active-page) {
@@ -25,19 +25,78 @@ body.xianxia-theme #page-training.training-scene-map-active > :not(.training-map
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: #0b151c;
+  background: #889b9f;
+  isolation: isolate;
   touch-action: pan-x pan-y;
 }
 .training-map[hidden], .training-scene-detailbar[hidden] { display: none !important; }
-.training-map-plane { position: absolute; transform-origin: 0 0; background-size: 100% 100%; background-repeat: no-repeat; }
+.training-map-scenery, .training-map-plane { position: absolute; transform-origin: 0 0; }
+.training-map-scenery { z-index: 0; background-size: 100% 100%; background-repeat: no-repeat; pointer-events: none; }
+.training-map-plane { z-index: 2; }
 /* Warm and decode the plate without a competing composited image layer. */
 .training-map-background { position: absolute; inset: 0; visibility: hidden; width: 100%; height: 100%; pointer-events: none; user-select: none; }
 .training-map::after {
   content: '';
   position: absolute;
   inset: 0;
+  z-index: 3;
   pointer-events: none;
-  background: linear-gradient(180deg, #0810154d, transparent 12%, transparent 88%, #08101573);
+  background: linear-gradient(180deg, #08101538, transparent 10%);
+}
+.training-map-atmosphere, .training-map-motes { position: absolute; inset: 0; pointer-events: none; }
+.training-map-atmosphere { z-index: 1; overflow: hidden; }
+.training-map-atmosphere > span { position: absolute; pointer-events: none; }
+.training-map-light {
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 40%, #ffe4a12e, transparent 42%),
+    radial-gradient(ellipse at 82% 24%, #beceff20, transparent 26%);
+  animation: training-light-breathe 14s ease-in-out infinite;
+}
+.training-map-mist-far {
+  left: -15%;
+  top: 18%;
+  width: 130%;
+  height: 48%;
+  background: radial-gradient(ellipse at 15% 62%, #dceae5a6, transparent 35%),
+    radial-gradient(ellipse at 74% 48%, #e0eaf0a6, transparent 40%);
+  animation: training-mist-drift 30s ease-in-out infinite alternate;
+}
+.training-map-mist-near {
+  left: -15%;
+  bottom: -9%;
+  width: 130%;
+  height: 44%;
+  background: radial-gradient(ellipse at 25% 65%, #eff5eab3, transparent 43%),
+    radial-gradient(ellipse at 80% 75%, #dce7edb3, transparent 45%);
+  animation: training-mist-drift 24s ease-in-out -12s infinite alternate-reverse;
+}
+.training-map-motes { z-index: 0; }
+.training-map-mote {
+  position: absolute;
+  width: var(--mote-size);
+  height: var(--mote-size);
+  border-radius: 50%;
+  background: #fff7d6;
+  box-shadow: 0 0 5px 1px #fff1af80, 0 0 14px 3px #ffe6a233;
+  opacity: 0;
+  animation: training-mote-rise var(--mote-duration) linear var(--mote-delay) infinite;
+}
+.training-map-atmosphere > span, .training-map-mote { animation-play-state: paused; }
+.training-scene-map-active.active-page .training-map-atmosphere > span,
+.training-scene-map-active.active-page .training-map-mote { animation-play-state: running; }
+@keyframes training-mist-drift {
+  from { transform: translate3d(-3%, 1%, 0); opacity: .25; }
+  to { transform: translate3d(3%, -2%, 0); opacity: .42; }
+}
+@keyframes training-light-breathe {
+  0%, 100% { opacity: .55; }
+  50% { opacity: 1; }
+}
+@keyframes training-mote-rise {
+  0% { transform: translate3d(0, 10px, 0); opacity: 0; }
+  18% { opacity: .75; }
+  70% { opacity: .45; }
+  100% { transform: translate3d(var(--mote-drift), -55px, 0); opacity: 0; }
 }
 body.xianxia-theme #page-training .training-place {
   position: absolute;
@@ -161,4 +220,9 @@ body.xianxia-theme #page-training .training-scene-back {
 #page-training[data-training-place="forge"] .training-subtab-v3:not([data-training-tab="refinery"]),
 #page-training[data-training-place="vault"] .training-subtab-v3:not([data-training-tab="bag"]):not([data-training-tab="equipment"]),
 #page-training[data-training-place="status"] .training-subtab-v3:not(#training-status-tab) { display: none !important; }
-@media (prefers-reduced-motion: reduce) { .training-place-cutout, .training-place-aura { transition: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .training-place-cutout, .training-place-aura { transition: none; }
+  .training-map-atmosphere > span, .training-map-mote { animation: none; }
+  .training-map-mist-far, .training-map-mist-near { opacity: .3; }
+  .training-map-light { opacity: .7; }
+}

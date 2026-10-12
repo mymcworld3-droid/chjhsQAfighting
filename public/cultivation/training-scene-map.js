@@ -7,7 +7,7 @@ const Layouts = globalThis.QATrainingSceneLayouts;
 const SVG = 'http://www.w3.org/2000/svg';
 const PAGE = 'page-training';
 const tabPlace = { core: 'meditation', 'nascent-soul': 'meditation', refinery: 'forge', bag: 'vault', equipment: 'vault', status: 'status' };
-let page, map, plane, bar, background, resizeObserver, pageObserver;
+let page, map, scenery, plane, bar, background, resizeObserver, pageObserver;
 let orientation = '', scheduled = false, running = false, navigation = null;
 let navigationRevision = 0;
 const unlocked = place => !!window.getCurrentUserData?.()?.stats &&
@@ -141,20 +141,35 @@ function makeButton(place, layout) {
   button.addEventListener('click', () => void enter(place, button));
   return button;
 }
+function makeMotes() {
+  const motes = document.createElement('div');
+  motes.className = 'training-map-motes';
+  motes.setAttribute('aria-hidden', 'true');
+  // Fixed, sparse positions make the atmosphere consistent after every visit.
+  const positions = [[12,35], [23,57], [32,43], [42,24], [51,48], [58,69],
+    [65,31], [73,54], [82,38], [89,72], [38,77], [16,81]];
+  for (const [index, [x, y]] of positions.entries()) {
+    const mote = document.createElement('span');
+    mote.className = 'training-map-mote';
+    mote.style.cssText = `left:${x}%;top:${y}%;--mote-size:${index % 3 === 0 ? 5 : 3}px;--mote-drift:${index % 2 ? -15 : 18}px;--mote-duration:${12 + index % 5 * 2}s;--mote-delay:${-index * 1.7}s`;
+    motes.appendChild(mote);
+  }
+  return motes;
+}
 function renderScene(next) {
   const focused = map.contains(document.activeElement) ? document.activeElement.dataset.trainingLocation : null;
   orientation = next;
   const layout = Layouts[next];
   map.dataset.orientation = next;
   plane.style.setProperty('--training-map-font', `${layout.font}px`);
-  plane.style.backgroundImage = `url("${layout.image}")`;
+  scenery.style.backgroundImage = `url("${layout.image}")`;
   background = document.createElement('img');
   background.className = 'training-map-background';
   background.src = layout.image;
   background.alt = '';
   background.draggable = false;
   background.decoding = 'async';
-  plane.replaceChildren(background, ...Rules.PLACES.map(place => makeButton(place, layout)));
+  plane.replaceChildren(background, makeMotes(), ...Rules.PLACES.map(place => makeButton(place, layout)));
   updateLocks();
   if (focused) plane.querySelector(`[data-training-location="${focused}"]:not(:disabled)`)?.focus({ preventScroll: true });
 }
@@ -179,18 +194,26 @@ function fit() {
   const navTop = nav?.getBoundingClientRect().top;
   const bottom = Number.isFinite(navTop) && navTop > top && navTop < innerHeight ? innerHeight - navTop + 4 : 0;
   page.style.setProperty('--training-scene-top', `${top}px`);
-  page.style.setProperty('--training-scene-bottom', `${bottom}px`);
   const next = innerWidth >= innerHeight ? 'landscape' : 'portrait';
   if (orientation !== next) renderScene(next);
   const layout = Layouts[next], rect = map.getBoundingClientRect();
   if (!rect.width || !rect.height) return;
-  const scale = Math.max(rect.width / layout.width, rect.height / layout.height);
-  const left = (rect.width - layout.width * scale) / 2, offset = (rect.height - layout.height * scale) / 2;
+  // The plate continues beneath navigation; targets keep the same safe area.
+  const availableHeight = Math.max(1, rect.height - bottom);
+  const scale = Math.max(rect.width / layout.width, availableHeight / layout.height);
+  const left = (rect.width - layout.width * scale) / 2, offset = (availableHeight - layout.height * scale) / 2;
   plane.style.width = `${layout.width}px`;
   plane.style.height = `${layout.height}px`;
   plane.style.left = `${left}px`;
   plane.style.top = `${offset}px`;
   plane.style.transform = `scale(${scale})`;
+  // Extend the plate's lower edge just enough to reach the canvas bottom,
+  // without scaling or moving the buildings, labels, or their hit areas.
+  scenery.style.width = `${layout.width}px`;
+  scenery.style.height = `${Math.max(layout.height, (rect.height - offset + 1) / scale)}px`;
+  scenery.style.left = `${left}px`;
+  scenery.style.top = `${offset}px`;
+  scenery.style.transform = `scale(${scale})`;
 }
 function scheduleFit() {
   if (scheduled) return;
@@ -208,9 +231,20 @@ function ensure() {
   map.className = 'training-map';
   map.setAttribute('aria-label', '修煉場景');
   map.hidden = true;
+  scenery = document.createElement('div');
+  scenery.className = 'training-map-scenery';
+  scenery.setAttribute('aria-hidden', 'true');
+  const atmosphere = document.createElement('div');
+  atmosphere.className = 'training-map-atmosphere';
+  atmosphere.setAttribute('aria-hidden', 'true');
+  for (const layer of ['light', 'mist-far', 'mist-near']) {
+    const node = document.createElement('span');
+    node.className = `training-map-${layer}`;
+    atmosphere.appendChild(node);
+  }
   plane = document.createElement('div');
   plane.className = 'training-map-plane';
-  map.appendChild(plane);
+  map.append(scenery, atmosphere, plane);
   bar = document.createElement('div');
   bar.className = 'training-scene-detailbar';
   bar.hidden = true;
