@@ -46,7 +46,7 @@ test('Status opens at account creation, Foundation features at 10, Golden Core a
   assert.match(guard, /html:not\(\.training-access-ready\) #nav-training/);
   assert.doesNotMatch(guard, /html:not\(\.golden-core-access-ready\) #training-status-tab/);
   assert.doesNotMatch(readRoot('index.html'), /html:not\(\.golden-core-access-ready\) #training-status-tab/);
-  assert.match(guard, /migrationReady\(\) && score\(\) >= GOLDEN_CORE_SCORE/);
+  assert.match(guard, /migrationReady\(\) && \(score\(\) >= GOLDEN_CORE_SCORE \|\| window\.getTrainingAccessScore\?\.\(\) >= GOLDEN_CORE_SCORE\)/);
   assert.match(guard, /\[data-training-tab="core"\]/);
   assert.match(statusPanel, /function ensureInitialStatusShell\(\)/);
   assert.match(statusPanel, /window\.isFoundationTrainingStage\?\.\(\) \|\| window\.isGoldenCoreUnlocked\?\.\(\)/);
@@ -338,5 +338,5 @@ test('Foundation refinery access does not depend on the legacy migration marker'
   assert.match(foundationTraining, /return !!window\.getCurrentUserData\?\.\(\)\?\.stats[\s\S]*value >= FOUNDATION_SCORE && value < GOLDEN_CORE_SCORE/);
   assert.match(guard, /築基 10 開背包、煉器/);
   assert.doesNotMatch(guard, /function trainingAllowed\(\) \{\s*return migrationReady\(\)/);
-  assert.match(guard, /function coreAllowed\(\) \{\s*return migrationReady\(\) && score\(\) >= GOLDEN_CORE_SCORE/);
+  assert.match(guard, /function coreAllowed\(\) \{\s*return migrationReady\(\) && \(score\(\) >= GOLDEN_CORE_SCORE \|\| window\.getTrainingAccessScore\?\.\(\) >= GOLDEN_CORE_SCORE\)/);
 });

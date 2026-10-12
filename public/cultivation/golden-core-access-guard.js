@@ -52,7 +52,7 @@
   }
 
   function coreAllowed() {
-    return migrationReady() && score() >= GOLDEN_CORE_SCORE;
+    return migrationReady() && (score() >= GOLDEN_CORE_SCORE || window.getTrainingAccessScore?.() >= GOLDEN_CORE_SCORE);
   }
 
   function removeAllTrainingUI() {
@@ -144,7 +144,8 @@
       'xiuxian:migration-ready',
       'golden-core-state-changed',
       'golden-core-runtime-ready',
-      'xiuxian:features-ready'
+      'xiuxian:features-ready',
+      'xiuxian:training-access-updated'
     ].forEach((name) => window.addEventListener(name, enforce));
   }
 

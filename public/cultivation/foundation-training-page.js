@@ -9,7 +9,7 @@ import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-she
   let lastStage = null;
 
   function score() {
-    return Math.max(0, Number(window.getCurrentUserData?.()?.stats?.totalScore) || 0);
+    return window.getTrainingAccessScore?.() ?? Math.max(0, Number(window.getCurrentUserData?.()?.stats?.totalScore) || 0);
   }
 
   function migrationReady() {
@@ -231,7 +231,7 @@ import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-she
 
   function boot() {
     sync();
-    ['xiuxian:stats-updated','xiuxian:user-ready','xiuxian:migration-ready','golden-core-access-changed']
+    ['xiuxian:stats-updated','xiuxian:user-ready','xiuxian:migration-ready','golden-core-access-changed','xiuxian:training-access-updated']
       .forEach((name) => window.addEventListener(name, sync));
   }
 

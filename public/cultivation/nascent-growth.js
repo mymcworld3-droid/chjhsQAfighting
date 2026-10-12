@@ -2,6 +2,8 @@
 (function (root) {
   'use strict';
   const talents = typeof module === 'object' && module.exports ? require('./soul-talents.js') : root.QASoulTalents;
+  const access = typeof module === 'object' && module.exports ? require('./training-access-rules.js') : null;
+  const accessScore = player => (access || root.QATrainingAccessRules)?.score(player) ?? count(player?.stats?.totalScore);
   const THRESHOLD = 68, CAP = 10, ITEM_ID = 'nascent-soul-essence';
   const ITEM = Object.freeze({id:ITEM_ID,name:'元嬰碎精',icon:'嬰',realm:'元嬰',category:'元嬰養成',
     description:'溫養元嬰各分支的碎精。元嬰境界團本答對每題 +1、每日閉關全對 +3。不可交易或用於煉器。',nascentMaterial:true,buyGold:0,sellGold:0});
@@ -71,7 +73,7 @@
   }
   function status(player,id) {
     const state=prepare(player),branch=branches(player.cultivationTraining?.equippedCore).find(item=>item.id===id),level=state.growth.branches[id]||0,cost=level+1;
-    const reason=!player.cultivationTraining?.equippedCore?.type?'請先調御金丹':!branch?'未知元嬰分支':count(player?.stats?.totalScore)<THRESHOLD?'元嬰境界不足':level>=CAP?'已圓滿':state.fragments<cost?'元嬰碎精不足':'';
+    const reason=!player.cultivationTraining?.equippedCore?.type?'請先調御金丹':!branch?'未知元嬰分支':accessScore(player)<THRESHOLD?'元嬰境界不足':level>=CAP?'已圓滿':state.fragments<cost?'元嬰碎精不足':'';
     return {...state,ok:!reason,reason,branch,level,cost:level>=CAP?0:cost};
   }
   function upgrade(player,id) {
@@ -86,7 +88,7 @@
     return {...state,returned};
   }
   function bonuses(player,core) {
-    if(count(player?.stats?.totalScore)<THRESHOLD||player?.cultivationTraining?.coreEnabled===false||!core?.type)return null;
+    if(accessScore(player)<THRESHOLD||player?.cultivationTraining?.coreEnabled===false||!core?.type)return null;
     const levels=normalize(player.nascentSoulGrowth).branches,n=levels.core;
     const talent=(talents || root.QASoulTalents)?.snapshot(core.type,core.grade,{leftTop:n,leftFarBottom:n,leftFinal:n})||null;
     if(talent)talent.comboMode=true;

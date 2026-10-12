@@ -322,7 +322,11 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
   }
 
   function isUnlocked() {
-    return currentScore() >= GOLDEN_CORE_SCORE;
+    return currentScore() >= GOLDEN_CORE_SCORE || window.getTrainingAccessScore?.() >= GOLDEN_CORE_SCORE;
+  }
+
+  function nascentUnlocked() {
+    return currentScore() >= NASCENT_SOUL_THRESHOLD || window.getTrainingAccessScore?.() >= NASCENT_SOUL_THRESHOLD;
   }
 
   function loadStyle() {
@@ -410,7 +414,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
   }
 
   function nascentSoulTabMarkup() {
-    if (currentScore() < NASCENT_SOUL_THRESHOLD) return '<section class="ns-panel"><h3>元嬰未成</h3><p>修為達到 68 後，方可凝聚本命元嬰。</p></section>';
+    if (!nascentUnlocked()) return '<section class="ns-panel"><h3>元嬰未成</h3><p>修為達到 68 後，方可凝聚本命元嬰。</p></section>';
     if (!state.equippedCore) return '<section class="ns-panel"><h3>尚未調御金丹</h3><p>請先在金丹頁調御丹相，再溫養元嬰。</p></section>';
     const player = window.getCurrentUserData?.() || {};
     const prepared = Growth.prepare(player);
@@ -463,7 +467,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
         if (getAuth(getApp()).currentUser?.uid !== user.uid) throw new Error('登入帳號已變更');
         const data = snap.data();
         if (!sameGoldenCore(data.cultivationTraining?.equippedCore, core)) throw new Error('裝配金丹已變更，請重開元嬰頁');
-        if (Growth.count(data.stats?.totalScore) < NASCENT_SOUL_THRESHOLD) throw new Error('元嬰境界不足');
+        if ((globalThis.QATrainingAccessRules?.score(data) ?? Growth.count(data.stats?.totalScore)) < NASCENT_SOUL_THRESHOLD) throw new Error('元嬰境界不足');
         const next = reset ? Growth.reset(data) : Growth.upgrade(data, branchId);
         if (!reset && !next.ok) throw new Error(next.reason);
         tx.update(ref, Growth.patch(next));
@@ -545,7 +549,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     const previouslySoulMap = !!content.querySelector('.ns-growth-panel');
     content.innerHTML = activeTab === 'bag' ? bagTabMarkup()
       : activeTab === 'nascent-soul' ? nascentSoulTabMarkup() : coreTabMarkup();
-    const enteringSoulMap = activeTab === 'nascent-soul' && currentScore() >= NASCENT_SOUL_THRESHOLD;
+    const enteringSoulMap = activeTab === 'nascent-soul' && (currentScore() >= NASCENT_SOUL_THRESHOLD || window.getTrainingAccessScore?.() >= NASCENT_SOUL_THRESHOLD);
     document.body.classList.remove('ns-map-active');
     // 從可能已捲動的煉器／背包切入元嬰時，讓分頁與碎精摘要回到畫面最上方。
     if (enteringSoulMap && !previouslySoulMap) {
@@ -615,7 +619,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     page.classList.add('training-page', 'training-page-v3');
     if (alreadyHydrated) {
       const soulTab = page.querySelector('[data-training-tab="nascent-soul"]');
-      if (soulTab) soulTab.hidden = currentScore() < NASCENT_SOUL_THRESHOLD;
+      if (soulTab) soulTab.hidden = !nascentUnlocked();
       return;
     }
 
@@ -641,7 +645,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
       coreTab?.insertAdjacentHTML('afterend', '<button type="button" class="training-subtab-v3" data-training-tab="nascent-soul" aria-selected="false"><i class="fa-solid fa-child-reaching"></i><span>元嬰</span></button>');
       soulTab = tabs.querySelector('[data-training-tab="nascent-soul"]');
     }
-    if (soulTab) soulTab.hidden = currentScore() < NASCENT_SOUL_THRESHOLD;
+    if (soulTab) soulTab.hidden = !nascentUnlocked();
     if (!tabs.querySelector('[data-training-tab="equipment"]')) {
       tabs.querySelector('[data-training-tab="bag"]')?.insertAdjacentHTML('beforebegin',
         '<button type="button" class="training-subtab-v3" data-training-tab="equipment" aria-selected="false"><i class="fa-solid fa-shield-halved"></i><span>裝備</span></button>');
@@ -659,7 +663,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
           const fromStatus = !page.querySelector('[data-training-tab].active');
           const direction = fromStatus || tabOrder.indexOf(requested) < tabOrder.indexOf(activeTab) ? -1 : 1;
           const finishTransition = requested !== activeTab || fromStatus ? window.beginSceneTransition?.(content, content, theme, 'training-tab', true, direction) : null;
-          activeTab = ['bag', 'refinery', 'equipment'].includes(requested) || (requested === 'nascent-soul' && currentScore() >= NASCENT_SOUL_THRESHOLD) ? requested : 'core';
+          activeTab = ['bag', 'refinery', 'equipment'].includes(requested) || (requested === 'nascent-soul' && nascentUnlocked()) ? requested : 'core';
           page.querySelectorAll('[data-training-tab]').forEach((tab) => {
             const selected = tab.dataset.trainingTab === activeTab;
             tab.classList.toggle('active', selected);
@@ -849,7 +853,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
         if (!snapshot.exists()) throw new Error('找不到玩家資料');
         if (getAuth(getApp()).currentUser?.uid !== user.uid) throw new Error('登入帳號已變更，請重新登入');
         const remote = snapshot.data();
-        if (normalizeSpirit(remote.stats?.totalScore) < GOLDEN_CORE_SCORE) throw new Error('金丹境界不足');
+        if ((globalThis.QATrainingAccessRules?.score(remote) ?? normalizeSpirit(remote.stats?.totalScore)) < GOLDEN_CORE_SCORE) throw new Error('金丹境界不足');
         const training = remote[REMOTE_FIELD];
         if (!sameGoldenCore(training?.core, candidate)) throw new Error('候選金丹已變更，請重新開啟金丹頁');
         const changed = !sameGoldenCore(training.equippedCore, candidate);
@@ -1019,7 +1023,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     if (lastUnlocked === unlocked) {
       if (unlocked) {
         const soulTab = document.querySelector('#page-training [data-training-tab="nascent-soul"]');
-        if (soulTab) soulTab.hidden = currentScore() < NASCENT_SOUL_THRESHOLD;
+        if (soulTab) soulTab.hidden = !nascentUnlocked();
         if (['core','nascent-soul'].includes(activeTab)) renderTrainingPage();
       }
       return;
@@ -1035,7 +1039,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     restoreRemoteTraining();
     syncUnlock();
     window.addEventListener('xiuxian:user-ready', restoreRemoteTraining);
-    ['xiuxian:stats-updated','xiuxian:user-ready','xiuxian:migration-ready','golden-core-access-changed']
+    ['xiuxian:stats-updated','xiuxian:user-ready','xiuxian:migration-ready','golden-core-access-changed','xiuxian:training-access-updated']
       .forEach((name) => window.addEventListener(name, syncUnlock));
     window.dispatchEvent(new CustomEvent('golden-core-runtime-ready'));
   }

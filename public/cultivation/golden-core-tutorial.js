@@ -17,7 +17,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   const steps = [
     {
       target: '#nav-training', title: '金丹期已開啟', kicker: '金丹教學 · 1/5',
-      body: '踏入金丹期後，修煉頁會從原本只有背包，擴充為「金丹／背包／狀態」三個分頁。',
+      body: '踏入金丹期後，「修煉室」開啟本命金丹。修煉場景中的寶庫可查看背包與裝備，也能前往鍛造坊、秘境與狀態。',
       note: '這套教學只會在踏入金丹期後出現。'
     },
     {
@@ -60,8 +60,12 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
 
   function ensureCoreTabOpen(){
     window.switchToPage?.('page-training');
+    if (steps[index].target === '#training-status-tab') {
+      document.getElementById('training-status-tab')?.click();
+      return;
+    }
     const coreTab=document.querySelector('[data-training-tab="core"]');
-    if(coreTab && !coreTab.classList.contains('active')) coreTab.click();
+    if(coreTab && (!coreTab.classList.contains('active') || document.getElementById('page-training')?.classList.contains('training-scene-map-active'))) coreTab.click();
   }
 
   function updateSpotlight(){

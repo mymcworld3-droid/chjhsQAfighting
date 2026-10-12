@@ -65,6 +65,17 @@ test('switching core atomically migrates old currency and resets branches withou
  const r=runtime();await r.context.equip();assert.equal(r.writes.length,1);assert.equal(r.remote.stats.nascentSoulSpirit,0);assert.equal(r.remote.materialSystem.inventory[globalThis.QANascentGrowth.ITEM_ID],30);assert.equal(r.local.materialSystem.inventory[globalThis.QANascentGrowth.ITEM_ID],30);assert.equal(Object.keys(r.remote.nascentSoulTree.paths).length,0);assert.equal(r.remote.stats.gold,900);assert.equal(r.remote.cultivationTraining.coreEnabled,false);assert.deepEqual(r.remote.cultivationTraining.counters,{correct:17});
 });
 
+test('a saved Golden Core unlock permits equipping after cultivation drops without restoring cultivation', async () => {
+  const r = runtime();
+  r.remote.stats.totalScore = 0;
+  r.remote.trainingAccess = { version: 1, highestRealmScore: 28 };
+  r.context.QATrainingAccessRules = require('../public/cultivation/training-access-rules.js');
+  await r.context.equip();
+  assert.equal(r.writes.length, 1);
+  assert.equal(r.remote.stats.totalScore, 0);
+  assert.equal(r.remote.cultivationTraining.equippedCore.type, newCore.type);
+});
+
 
 test('a newly washed core of the same type and grade still refunds, while repeated clicks refund only once', async () => {
   const r = runtime({ candidate: { ...oldCore, createdAt: 200 } });

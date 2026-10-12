@@ -113,6 +113,8 @@ function collectStartupImageUrls() {
   const nearbyMaterials = priority.materialIds.map(getMaterialById).filter(Boolean);
 
   const urls = unique([
+    'assets/training/cultivation-landscape.webp',
+    'assets/training/cultivation-portrait.webp',
     ...definitionImageUrls(equippedArtifacts),
     ...definitionImageUrls(ownedArtifacts),
     ...definitionImageUrls(ownedMaterials),

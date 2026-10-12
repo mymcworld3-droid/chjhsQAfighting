@@ -240,11 +240,11 @@ function renderGrowthMap(type, branches = {}, fragments = 20, soulBusy = false, 
   const player = {stats:{totalScore:68}, cultivationTraining:{equippedCore:core},
     nascentSoulGrowth:{version:1, branches}, materialSystem:{inventory:{'nascent-soul-essence':fragments}}};
   return new Function('state', 'Growth', 'currentScore', 'NASCENT_SOUL_THRESHOLD', 'window',
-    'clampGrade', 'coreType', 'coreVisualMarkup', 'soulBusy',
+    'clampGrade', 'coreType', 'coreVisualMarkup', 'soulBusy', 'nascentUnlocked',
     source.slice(start, end) + '\nreturn nascentSoulTabMarkup();')(
       {equippedCore:core, core:{type:'thunder', grade:9}}, globalThis.QANascentGrowth,
       () => 68, 68, {getCurrentUserData:() => player}, grade => grade,
-      type => ({name:type}), core => `<div data-test-core="${core.type}" data-test-grade="${core.grade}"></div>`, soulBusy);
+      type => ({name:type}), core => `<div data-test-core="${core.type}" data-test-grade="${core.grade}"></div>`, soulBusy, () => true);
 }
 
 test('equipped core sits at the radial center with one connector per four or five branches', () => {

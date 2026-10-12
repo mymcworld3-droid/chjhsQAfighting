@@ -1,0 +1,157 @@
+/* The outer game stage scales these logical coordinates as one fixed canvas. */
+body.xianxia-theme #page-training.training-scene-map-active.active-page {
+  position: fixed !important;
+  inset: var(--training-scene-top, 72px) 0 var(--training-scene-bottom, 98px) !important;
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  background: #0b151c;
+  isolation: isolate;
+}
+body.xianxia-theme main:has(#page-training.training-scene-map-active.active-page) {
+  overflow: hidden !important;
+}
+body.xianxia-theme #page-training.training-scene-map-active > :not(.training-map) {
+  display: none !important;
+}
+.training-map {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #0b151c;
+  touch-action: pan-x pan-y;
+}
+.training-map[hidden], .training-scene-detailbar[hidden] { display: none !important; }
+.training-map-plane { position: absolute; transform-origin: 0 0; }
+.training-map-background { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; user-select: none; }
+.training-map::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, #0810154d, transparent 12%, transparent 88%, #08101573);
+}
+body.xianxia-theme #page-training .training-place {
+  position: absolute;
+  z-index: 1;
+  display: block;
+  border: 0 !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  max-width: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+  color: #fffaf1;
+  font: inherit;
+  cursor: pointer;
+  transform-origin: 50% 65%;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+.training-place svg { display: block; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.training-place-art { filter: drop-shadow(0 0 4px #fff) drop-shadow(0 0 10px #ffffff73); transition: filter .18s ease; }
+.training-place-cutout { filter: brightness(1.04); }
+.training-place-edge { fill: none; stroke: #ffffffcc; stroke-width: 1.7; stroke-linejoin: round; }
+.training-map[data-orientation="portrait"] .training-place-edge { stroke-width: 2.6; }
+.training-place-label {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: max-content;
+  max-width: none;
+  transform: translate(-50%, -50%);
+  padding: .18em .7em .24em;
+  border: 1px solid #e2d1a37a;
+  border-radius: .2em;
+  background: linear-gradient(180deg, #0c161be8, #101c20e8);
+  box-shadow: 0 .13em .55em #0009, inset 0 1px #ffffff1f;
+  color: #fff5df;
+  font-family: var(--xq-serif, serif);
+  font-size: var(--training-map-font);
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: .08em;
+  white-space: nowrap;
+  text-shadow: 0 1px 3px #000;
+  pointer-events: none;
+}
+.training-place-realm { font-size: .64em; letter-spacing: .02em; color: #d9d5ca; }
+.training-place-realm[hidden], .training-place-lock[hidden] { display: none; }
+.training-place-lock {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 1.5em;
+  height: 1.5em;
+  display: grid;
+  place-items: center;
+  border: 1px solid #e8e3d47a;
+  border-radius: 50%;
+  background: #0a101de0;
+  color: #efebe1;
+  font-size: calc(var(--training-map-font) * 1.1);
+  box-shadow: 0 .1em .5em #000a;
+  pointer-events: none;
+}
+.training-place.is-locked { cursor: default !important; }
+.training-place-lock svg { width: .82em; height: .95em; fill: none; stroke: currentColor; stroke-width: 2; }
+.training-place.is-locked .training-place-art { filter: none; }
+.training-place.is-locked .training-place-cutout { filter: brightness(.3) saturate(.25); }
+.training-place.is-locked .training-place-edge { stroke: #d1d5d133; }
+.training-place.is-locked .training-place-label { color: #c8c8bf; border-color: #92958d66; }
+.training-place:not(:disabled):focus-visible .training-place-label { outline: 3px solid white; outline-offset: 4px; }
+.training-place:not(:disabled):focus-visible .training-place-art { filter: drop-shadow(0 0 7px #fff) drop-shadow(0 0 18px #ffffffb3); }
+@media (hover: hover) {
+  .training-place:not(:disabled):hover .training-place-art { filter: drop-shadow(0 0 6px #fff) drop-shadow(0 0 16px #ffffffa6); }
+  .training-place:not(:disabled):hover .training-place-label { border-color: #fff8dc; }
+}
+body.xianxia-theme #page-training .training-scene-detailbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 30px;
+  padding: 0 0 5px;
+  color: #e9d5a4;
+  font: 500 12px/1.4 var(--xq-serif, serif);
+}
+body.xianxia-theme #page-training.training-page-v3.active-page[data-training-place] {
+  grid-template-rows: auto auto minmax(0, 1fr) !important;
+}
+body.xianxia-theme #page-training .training-scene-back {
+  display: inline-flex;
+  align-items: center;
+  gap: .6em;
+  padding: 5px 7px;
+  border: 1px solid #e9d5a438;
+  border-radius: 5px;
+  background: #e9d5a408;
+  color: #eadab6;
+  font: inherit;
+  cursor: pointer;
+}
+.training-scene-back:focus-visible { outline: 2px solid white; outline-offset: 2px; }
+#page-training[data-training-place="meditation"] .training-subtab-v3:not([data-training-tab="core"]):not([data-training-tab="nascent-soul"]),
+#page-training[data-training-place="forge"] .training-subtab-v3:not([data-training-tab="refinery"]),
+#page-training[data-training-place="vault"] .training-subtab-v3:not([data-training-tab="bag"]):not([data-training-tab="equipment"]),
+#page-training[data-training-place="status"] .training-subtab-v3:not(#training-status-tab) { display: none !important; }
+.training-cloud-transition {
+  position: fixed;
+  inset: 0;
+  z-index: 29010;
+  overflow: hidden;
+  pointer-events: auto;
+  background: transparent;
+}
+.training-cloud-transition img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+.training-cloud-mist { position: absolute; inset: 0; background: radial-gradient(ellipse, #eef1eaf7, #d5e2e3f2); }
+@media (prefers-reduced-motion: reduce) { .training-place-art { transition: none; } }

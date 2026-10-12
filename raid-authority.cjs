@@ -1,6 +1,7 @@
 const Growth = require('./public/cultivation/nascent-growth.js');
 const Combo = require('./public/cultivation/combat-combo.js');
 'use strict';
+const trainingAccess = require('./public/cultivation/training-access-rules.js');
 const soulTalents = require('./public/cultivation/soul-talents.js');
 
 const EQUIP_SLOTS = Object.freeze(['本命法寶','護身法寶','佩飾法寶','輔助法寶']);
@@ -139,7 +140,7 @@ function pickTrustedRaidKnowledge(scope,actionId){
 }
 
 function coreSnapshot(data){
-  const score=positive(data?.stats?.totalScore), training=data?.cultivationTraining||{};
+  const score=trainingAccess.score(data), training=data?.cultivationTraining||{};
   const raw=training.equippedCore || (training.equipped===true?training.core:null);
   if(score<GOLDEN_CORE_THRESHOLD||training.coreEnabled===false||!raw?.type)return null;
   return {type:String(raw.type),grade:clampGrade(raw.grade),name:safeName(raw.name||CORE_NAMES[raw.type]||'本命金丹',40)};

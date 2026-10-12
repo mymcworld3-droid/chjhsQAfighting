@@ -86,7 +86,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     return state.ticketState;
   }
   function data() { return window.getCurrentUserData?.() || {}; }
-  function score() { return Math.max(0, Number(data()?.stats?.totalScore) || 0); }
+  function score() { return window.getTrainingAccessScore?.() ?? Math.max(0, Number(data()?.stats?.totalScore) || 0); }
   function escapeHtml(value) {
     return String(value ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;')
       .replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;');
