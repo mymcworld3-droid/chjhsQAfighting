@@ -5,6 +5,7 @@ const STORAGE_KEY = 'xiuxian:raid-room:v2';
 const POLL_MS = 500; // 即時串流中斷時才使用；正常狀態沒有輪詢等待。
 const STALE_MS = 45000;
 const roomObservers = new Map();
+let ticketRequestSequence = 0, appliedTicketSequence = 0;
 
 function now() { return Date.now(); }
 function finite(value, fallback = 0) {
@@ -15,12 +16,27 @@ const RAID_ROOM_ENDPOINT = '/api/raid/room';
 async function api(action, payload = {}) {
   // 房間狀態由伺服器權威處理；瀏覽器只送出意圖與 A 專案登入憑證。
   const local = window.getCurrentUserData?.();
+  const sequence = ++ticketRequestSequence;
   const result = await raidRepository.request(action, payload, RAID_ROOM_ENDPOINT);
+  applyRaidTicketResponse(result, local, sequence);
   applyRaidResponse(result,local);
   if (local === window.getCurrentUserData?.() && result.room?.id) {
     roomObservers.get(result.room.id)?.forEach(emit => emit(result));
   }
   return result;
+}
+function applyRaidTicketResponse(result, local, sequence) {
+  const next = result?.ticketState;
+  if (!local || local !== window.getCurrentUserData?.() || sequence < appliedTicketSequence ||
+      next?.count == null || !Number.isFinite(Number(next.count))) return;
+  appliedTicketSequence = sequence;
+  const tickets = { count:Math.max(0, Math.min(10, Math.floor(Number(next.count)))),
+    dailyGrant:3, cap:10, lastGrantDate:String(next.lastGrantDate || '') };
+  const previous = local.raidTickets;
+  if (previous?.count === tickets.count && previous?.lastGrantDate === tickets.lastGrantDate &&
+      previous?.dailyGrant === tickets.dailyGrant && previous?.cap === tickets.cap) return;
+  local.raidTickets = tickets;
+  window.dispatchEvent?.(new CustomEvent('xiuxian:raid-tickets-updated', { detail:{uid:local.uid, ticketState:tickets} }));
 }
 function applyRaidResponse(result,local = window.getCurrentUserData?.()) {
   const reward = result?.spiritReward;
@@ -119,6 +135,7 @@ export function subscribeRaidRoom(roomId, callback, onError, initialResult) {
   let busy = false;
   let lastError = '';
   let lastRoom = null, revision = -1, streamUnsub;
+  let ticketsChecked = false;
   function emit(result) {
     if (stopped) return;
     applyRaidResponse(result);
@@ -129,6 +146,12 @@ export function subscribeRaidRoom(roomId, callback, onError, initialResult) {
         return;
       }
       revision = next; lastRoom = result.room;
+      // The captain's HTTP reply includes the spent ticket balance. Other
+      // members learn about the reservation through this room push instead.
+      if (!ticketsChecked && result.room.ticketMemberUids?.includes(window.getCurrentUserData?.()?.uid)) {
+        ticketsChecked = true;
+        void getRaidTicketState().catch(error => console.warn('[Raid] ticket sync deferred:', error?.message || error));
+      }
     }
     callback(lastRoom,result.spiritReward || null);
   }

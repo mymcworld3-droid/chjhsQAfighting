@@ -174,7 +174,7 @@ function renderScene(next) {
   if (focused) plane.querySelector(`[data-training-location="${focused}"]:not(:disabled)`)?.focus({ preventScroll: true });
 }
 function updateLocks() {
-  if (!plane) return;
+  if (!plane) { updateTicketIndicators(); return; }
   for (const place of Rules.PLACES) {
     const button = plane.querySelector(`[data-training-location="${place.id}"]`);
     if (!button) continue;
@@ -184,6 +184,29 @@ function updateLocks() {
     button.setAttribute('aria-label', locked ? `${place.name}，${place.realm}解鎖` : `進入${place.name}`);
     button.querySelector('.training-place-realm').hidden = !locked;
     button.querySelector('.training-place-lock').hidden = !locked;
+  }
+  updateTicketIndicators();
+}
+function updateTicketIndicators() {
+  const player = window.getCurrentUserData?.(), uid = getMainUser()?.uid;
+  const secret = Rules.PLACES.find(place => place.id === 'secret');
+  const ready = !!uid && !!player?.stats && (!player.uid || player.uid === uid) &&
+    unlocked(secret) && Number(player.raidTickets?.count) >= 1;
+  const building = plane?.querySelector('[data-training-location="secret"]');
+  const nav = document.getElementById('nav-training');
+  for (const [button, host] of [[nav, nav?.querySelector('.training-nav-orb')],
+    [building, building?.querySelector('.training-place-label')]]) {
+    if (!button || !host) continue;
+    let dot = host.querySelector('.raid-ticket-dot');
+    if (!dot) {
+      dot = document.createElement('span');
+      dot.className = 'raid-ticket-dot';
+      dot.setAttribute('aria-hidden', 'true');
+      host.appendChild(dot);
+    }
+    dot.hidden = !ready;
+    if (ready) button.setAttribute('aria-description', '尚有團本入場券，可挑戰秘境試煉');
+    else button.removeAttribute('aria-description');
   }
 }
 function fit() {
@@ -290,6 +313,9 @@ function boot() {
   }, true);
   ['xiuxian:user-ready', 'xiuxian:stats-updated', 'xiuxian:features-ready', 'xiuxian:training-access-updated',
     'foundation-training-stage-changed', 'golden-core-access-changed'].forEach(name => window.addEventListener(name, sync));
+  window.addEventListener('xiuxian:raid-tickets-updated', updateTicketIndicators);
+  const navGrid = document.getElementById('nav-grid');
+  if (navGrid) new MutationObserver(updateTicketIndicators).observe(navGrid, { childList:true });
   window.addEventListener('resize', scheduleFit, { passive: true });
   sync();
 }

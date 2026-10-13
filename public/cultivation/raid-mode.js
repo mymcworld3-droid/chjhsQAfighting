@@ -67,24 +67,66 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
   };
 
   function now() { return Date.now(); }
+  let ticketAccount = '', ticketRefreshVersion = 0, ticketDayTimer;
+  function currentTicketAccount() {
+    const uid = playerRepository.currentUser()?.uid, player = data();
+    return uid && player?.stats && (!player.uid || player.uid === uid) ? uid : '';
+  }
+  function syncRaidTicketState() {
+    const uid = currentTicketAccount();
+    if (ticketAccount !== uid) {
+      ticketAccount = uid;
+      ticketRefreshVersion++;
+      state.ticketLoading = false;
+      state.ticketState = { count:null, dailyGrant:3, cap:10, lastGrantDate:'' };
+    }
+    const next = uid ? data().raidTickets : null;
+    if (next?.count != null && Number.isFinite(Number(next.count))) state.ticketState = {
+      count:Math.max(0, Math.min(10, Math.floor(Number(next.count)))), dailyGrant:3, cap:10,
+      lastGrantDate:String(next.lastGrantDate || '')
+    };
+    const label = document.querySelector('#raid-hub .raid-global-ticket b');
+    if (label) label.textContent = '團本入場券 ' + (state.ticketState.count == null ? '讀取中' : state.ticketState.count + ' / 10');
+    if (state.status === 'hub') {
+      const selected = raidTrialById(state.selectedRaidId);
+      const locked = selected.status !== 'open' || score() < selected.minimumScore || Number(state.ticketState.count) === 0;
+      document.querySelectorAll('#raid-hub [data-quick],#raid-hub [data-create],#raid-hub [data-code]')
+        .forEach(button => { button.disabled = locked; });
+    }
+  }
   async function refreshRaidTickets({ rerender = true } = {}) {
+    syncRaidTicketState();
+    const uid = currentTicketAccount();
+    if (!uid) return state.ticketState;
     if (state.ticketLoading) return state.ticketState;
     state.ticketLoading = true;
+    const version = ++ticketRefreshVersion;
     try {
       const next = await getRaidTicketState();
+      if (version !== ticketRefreshVersion || uid !== currentTicketAccount()) return state.ticketState;
       if (next) state.ticketState = {
         count: Math.max(0, Number(next.count) || 0),
         dailyGrant: Math.max(0, Number(next.dailyGrant) || 3),
         cap: Math.max(1, Number(next.cap) || 10),
         lastGrantDate: String(next.lastGrantDate || '')
       };
+      syncRaidTicketState();
       if (rerender && state.status === 'hub' && !state.roomId) renderHub();
     } catch (error) {
       console.warn('[Raid] ticket status unavailable:', error);
     } finally {
-      state.ticketLoading = false;
+      if (version === ticketRefreshVersion) state.ticketLoading = false;
     }
     return state.ticketState;
+  }
+  function scheduleRaidTicketDay() {
+    clearTimeout(ticketDayTimer);
+    const dayMs = 86400000, taipeiOffset = 8 * 60 * 60 * 1000;
+    const nextDay = (Math.floor((now() + taipeiOffset) / dayMs) + 1) * dayMs - taipeiOffset;
+    ticketDayTimer = setTimeout(() => {
+      if (!document.hidden) void refreshRaidTickets({ rerender:false });
+      scheduleRaidTicketDay();
+    }, Math.max(100, nextDay - now() + 100));
   }
   function data() { return window.getCurrentUserData?.() || {}; }
   function score() { return window.getTrainingAccessScore?.() ?? Math.max(0, Number(data()?.stats?.totalScore) || 0); }
@@ -1504,10 +1546,16 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     });
     function refreshAccess() {
       updateHomeEntry();
+      syncRaidTicketState();
       if (state.status === 'hub' && !state.roomId && state.hubAccessSignature !== hubAccessSignature()) renderHub();
     }
     window.addEventListener('xiuxian:stats-updated', refreshAccess);
     window.addEventListener('xiuxian:training-access-updated', refreshAccess);
+    window.addEventListener('xiuxian:raid-tickets-updated', syncRaidTicketState);
+    const refreshVisibleTickets = () => { if (!document.hidden) void refreshRaidTickets({ rerender:false }); };
+    ['focus', 'pageshow', 'online'].forEach(name => window.addEventListener(name, refreshVisibleTickets));
+    document.addEventListener('visibilitychange', refreshVisibleTickets);
+    scheduleRaidTicketDay();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
   else boot();
