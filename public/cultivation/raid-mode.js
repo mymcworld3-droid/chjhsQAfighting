@@ -62,7 +62,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     learningOutcome: null,
     selectedRaidId: RAID_MVP.bossId,
     hubAccessSignature: '',
-    ticketState: { count:null, dailyGrant:3, cap:10, lastGrantDate:'' },
+    ticketState: { count:null, dailyGrant:2, cap:10, lastGrantDate:'' },
     ticketLoading: false
   };
 
@@ -78,11 +78,11 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
       ticketAccount = uid;
       ticketRefreshVersion++;
       state.ticketLoading = false;
-      state.ticketState = { count:null, dailyGrant:3, cap:10, lastGrantDate:'' };
+      state.ticketState = { count:null, dailyGrant:2, cap:10, lastGrantDate:'' };
     }
     const next = uid ? data().raidTickets : null;
     if (next?.count != null && Number.isFinite(Number(next.count))) state.ticketState = {
-      count:Math.max(0, Math.min(10, Math.floor(Number(next.count)))), dailyGrant:3, cap:10,
+      count:Math.max(0, Math.min(10, Math.floor(Number(next.count)))), dailyGrant:2, cap:10,
       lastGrantDate:String(next.lastGrantDate || '')
     };
     const label = document.querySelector('#raid-hub .raid-global-ticket b');
@@ -108,7 +108,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
       if (version !== ticketRefreshVersion || uid !== currentTicketAccount()) return state.ticketState;
       if (next) state.ticketState = {
         count: Math.max(0, Number(next.count) || 0),
-        dailyGrant: Math.max(0, Number(next.dailyGrant) || 3),
+        dailyGrant: Math.max(0, Number(next.dailyGrant) || 2),
         cap: Math.max(1, Number(next.cap) || 10),
         lastGrantDate: String(next.lastGrantDate || '')
       };
@@ -459,7 +459,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
       '<div class="raid-heading-copy"><small>SECRET REALM ／ 秘境集結</small><h2>秘境試煉</h2><p>選擇試煉後再組隊；每個團本可有獨立 Boss、合作規則與專屬掉落。</p>' +
       '<div class="raid-ticket-status raid-global-ticket"><i class="fa-solid fa-ticket"></i><span><b>團本入場券 ' +
         (state.ticketState?.count == null ? '讀取中' : escapeHtml(state.ticketState.count + ' / ' + state.ticketState.cap)) +
-        '</b><small>全團本共用・每日 +3・最多 10 張</small></span><span class="raid-global-ticket-dot" aria-hidden="true"' +
+        '</b><small>全團本共用・每日 +2・最多 10 張</small></span><span class="raid-global-ticket-dot" aria-hidden="true"' +
         (Number(state.ticketState.count) > 0 ? '' : ' hidden') + '></span></div></div><span class="raid-seal">團</span></header>' +
       '<div class="raid-trial-list" role="list">' + trialCards + '</div>' + detail;
 

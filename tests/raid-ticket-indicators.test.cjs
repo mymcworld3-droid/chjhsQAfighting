@@ -23,12 +23,13 @@ function ticketRuntime(player = {uid:'a',stats:{totalScore:10}}) {
 test('ticket status and start responses mirror available tickets and publish changes once',async()=>{
   const f=ticketRuntime();await f.api.getRaidTicketState();
   assert.equal(f.current().raidTickets.count,1);assert.equal(f.events.length,1);
+  assert.equal(f.current().raidTickets.dailyGrant,2);
   assert.equal(f.events[0].type,'xiuxian:raid-tickets-updated');
   await f.api.getRaidTicketState();assert.equal(f.events.length,1,'same balance does not churn the indicators');
   f.setResponse({ticketState:{count:0,lastGrantDate:'2026-10-13'}});await f.api.startRaidRoom('room12345');
   assert.equal(f.current().raidTickets.count,0);assert.equal(f.events.length,2);
-  f.setResponse({ticketState:{count:3,lastGrantDate:'2026-10-14'}});await f.api.getRaidTicketState();
-  assert.equal(f.current().raidTickets.count,3,'the next daily grant restores the reminder');
+  f.setResponse({ticketState:{count:2,lastGrantDate:'2026-10-14'}});await f.api.getRaidTicketState();
+  assert.equal(f.current().raidTickets.count,2,'the next daily grant restores the reminder');
 });
 
 test('an older in-flight status response cannot restore a ticket already consumed by start',async()=>{

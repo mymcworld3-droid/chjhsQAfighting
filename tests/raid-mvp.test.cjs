@@ -292,17 +292,18 @@ test('raid teamwork requires distinct contributors and exposes progress in arena
 });
 
 
-test('raid tickets grant three per Taiwan day cap at ten and are consumed only at battle start', () => {
+test('raid tickets grant two per Taiwan day cap at ten and are consumed only at battle start', () => {
   const ticket = require('../raid-room-api.cjs').__test;
-  assert.equal(ticket.RAID_DAILY_TICKETS,3);
+  assert.equal(ticket.RAID_DAILY_TICKETS,2);
   assert.equal(ticket.RAID_TICKET_CAP,10);
   assert.equal(ticket.raidTicketDate(Date.parse('2026-09-30T15:59:59Z')),'2026-09-30');
   assert.equal(ticket.raidTicketDate(Date.parse('2026-09-30T16:00:00Z')),'2026-10-01');
   assert.deepEqual(ticket.accrueRaidTickets({},'2026-09-30'),{
-    count:3,lastGrantDate:'2026-09-30',dailyGrant:3,cap:10
+    count:2,lastGrantDate:'2026-09-30',dailyGrant:2,cap:10
   });
   assert.equal(ticket.accrueRaidTickets({raidTickets:{count:9,lastGrantDate:'2026-09-29'}},'2026-09-30').count,10);
-  assert.equal(ticket.accrueRaidTickets({raidTickets:{count:1,lastGrantDate:'2026-09-27'}},'2026-09-30').count,10);
+  assert.equal(ticket.accrueRaidTickets({raidTickets:{count:1,lastGrantDate:'2026-09-27'}},'2026-09-30').count,7);
+  assert.equal(ticket.accrueRaidTickets({raidTickets:{count:1,lastGrantDate:'2026-09-25'}},'2026-09-30').count,10);
   assert.equal(ticket.accrueRaidTickets({raidTickets:{count:5,lastGrantDate:'2026-09-30'}},'2026-09-30').count,5);
   assert.match(roomApiSource,/action === 'ticket-status'/);
   const createBlock=roomApiSource.slice(roomApiSource.indexOf("if (action === 'create')"),roomApiSource.indexOf("if (action === 'quick')"));
@@ -311,7 +312,7 @@ test('raid tickets grant three per Taiwan day cap at ten and are consumed only a
   assert.match(startBlock,/reserveRaidTickets\(playerDb, roomId, preMembers\)/);
   assert.match(startBlock,/refundRaidTicketReservation/);
   assert.match(startBlock,/ticketMemberUids/);
-  assert.match(raidSource,/全團本共用・每日 \+3・最多 10 張/);
+  assert.match(raidSource,/全團本共用・每日 \+2・最多 10 張/);
   assert.match(raidSource,/raid-ticket-status raid-global-ticket/);
   assert.match(cssSource,/\.raid-ticket-status\{/);
   assert.match(cssSource,/\.raid-global-ticket\{/);
