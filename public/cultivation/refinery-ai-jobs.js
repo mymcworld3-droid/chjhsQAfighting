@@ -134,6 +134,11 @@ import {
     if (total < 2 || total > 8) return { valid: false, reason: '煉器需要 2 到 8 個素材。', total };
 
     const known = knownArtifactId ? getArtifactById(knownArtifactId) : null;
+    const hasSoulboundBase = recipe.some((row) =>
+      row.artifactId && getArtifactById(row.artifactId)?.equipSlot === '本命法寶');
+    if (known?.equipSlot === '本命法寶' && !hasSoulboundBase) {
+      return { valid:false, reason:'本命法寶只能由靈石抽取取得；已有本命法寶可作素材二次精煉。', total };
+    }
     const targetRealm = known?.realm || highestIngredientRealm(ingredients);
     const pRealm = playerRealm().name;
     const depth = known ? artifactRecipeDepth(known.id) : resultingDepth(recipe);
@@ -482,9 +487,15 @@ import {
       firstDiscovery = !awardedId;
       if (!awardedId) {
         const id = uniqueGeneratedId(latestItems);
+        // Do not trust an AI-chosen slot at the final catalog commit.
+        const realSoulboundSource = Number(fresh.refinementStage) >= 2 &&
+          (fresh.recipe || []).some((row) => row.artifactId &&
+            latestItems.some((item) => item.id === row.artifactId && item.equipSlot === '本命法寶'));
+        const generatedArtifact = { ...generated.artifact };
+        if (generatedArtifact.equipSlot === '本命法寶' && !realSoulboundSource) generatedArtifact.equipSlot = '輔助法寶';
         const candidate = normalizeArtifactDefinition({
           id,
-          ...generated.artifact,
+          ...generatedArtifact,
           realm: fresh.targetRealm,
           craft: { gold: baseRealmForgeGold(fresh.targetRealm), yield: 1 },
           reviewStatus: 'pending',
