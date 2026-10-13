@@ -11,6 +11,8 @@ const tabPlace = { core: 'meditation', 'nascent-soul': 'meditation', refinery: '
 let page, map, scenery, plane, bar, background, resizeObserver, pageObserver;
 let orientation = '', scheduled = false, running = false, navigation = null;
 let navigationRevision = 0;
+let pageNavigation = null;
+let committingPageNavigation = false;
 const unlocked = place => !!window.getCurrentUserData?.()?.stats &&
   (window.getTrainingAccessScore?.() ?? Rules.score(window.getCurrentUserData?.())) >= place.threshold;
 const visible = () => !!page?.classList.contains('active-page') && !page.classList.contains('hidden');
@@ -32,6 +34,9 @@ function setDetail(placeId) {
   if (!page) return;
   const place = Rules.PLACES.find(place => place.id === placeId);
   if (!place) return;
+  // Tutorials may select their tab immediately after requesting this page.
+  // Preserve that selection when the deferred page change is committed.
+  if (pageNavigation?.isCurrent()) pageNavigation.place = place.id;
   page.classList.remove('training-scene-map-active');
   map.hidden = true;
   bar.hidden = false;
@@ -61,13 +66,13 @@ function showMap({ focus = false } = {}) {
   window.resetTrainingScroll?.();
   if (focus) map.querySelector('.training-place:not(:disabled)')?.focus({ preventScroll: true });
 }
-function openPlace(place) {
+function openPlace(place, selectedTab = place.tab) {
   if (place.page) {
     window.openRaidHub?.();
     return;
   }
-  const tab = place.tab === 'status' ? page.querySelector('#training-status-tab')
-    : page.querySelector(`[data-training-tab="${place.tab}"]`);
+  const tab = selectedTab === 'status' ? page.querySelector('#training-status-tab')
+    : page.querySelector(`[data-training-tab="${selectedTab}"]`);
   if (!tab) return;
   setDetail(place.id);
   tab.click();
@@ -313,8 +318,43 @@ function wrapNavigation() {
   const base = window.switchToPage;
   if (typeof base !== 'function' || base === navigation) return;
   navigation = function (id, ...args) {
+    // Another navigation wrapper may call an older copy of this wrapper.
+    // Committing behind the curtain must reach the original synchronous route.
+    if (id === PAGE && committingPageNavigation) return base.call(this, id, ...args);
     const wasVisible = visible();
     if (id !== PAGE) navigationRevision++;
+    const uid = getMainUser()?.uid;
+    if (id === PAGE && pageNavigation?.isCurrent()) return pageNavigation.promise;
+    const alreadyCovered = document.getElementById('startup-cloud-curtain')?.classList.contains('is-closed');
+    if (id === PAGE && page?.isConnected && !wasVisible && uid &&
+        !alreadyCovered && !document.hidden && !reducedMotion() &&
+        typeof window.playStartupCloudCurtain === 'function') {
+      const origin = document.querySelector('.page-section.active-page');
+      const revision = ++navigationRevision;
+      const pending = { isCurrent: () => revision === navigationRevision &&
+        uid === getMainUser()?.uid && document.querySelector('.page-section.active-page') === origin };
+      // Keep the source visible until both startup cloud banks are closed.
+      // Repeated clicks share this request; another page/account cancels it.
+      pending.promise = window.playStartupCloudCurtain(() => {
+        committingPageNavigation = true;
+        try {
+          const result = base.call(this, id, ...args);
+          if (visible()) {
+            showMap();
+            const destination = Rules.PLACES.find(place => place.id === pending.place);
+            if (destination && unlocked(destination)) openPlace(destination, pending.tab);
+          }
+          return result;
+        } finally { committingPageNavigation = false; }
+      }, { isCurrent: pending.isCurrent, blockInput: true }).catch(error => {
+        console.warn('[Training navigation]', error);
+        return false;
+      }).finally(() => {
+        if (pageNavigation === pending) pageNavigation = null;
+      });
+      pageNavigation = pending;
+      return pending.promise;
+    }
     const result = base.call(this, id, ...args);
     if (id === PAGE && visible() && !wasVisible) showMap();
     return result;
@@ -335,8 +375,13 @@ function boot() {
   document.addEventListener('click', event => {
     const target = event.target.closest?.('#nav-training,[data-target="page-training"],[data-training-tab],#training-status-tab');
     if (!target) return;
-    if (target.id === 'nav-training' || target.dataset.target === PAGE) showMap();
-    else if (target.closest(`#${PAGE}`)) setDetail(tabPlace[target.dataset.trainingTab || 'status']);
+    // Navigation resets the map behind the closed curtain, not on pointerdown.
+    if (target.id === 'nav-training' || target.dataset.target === PAGE) {
+      if (visible()) showMap();
+      return;
+    }
+    if (pageNavigation?.isCurrent()) pageNavigation.tab = target.dataset.trainingTab || 'status';
+    if (target.closest(`#${PAGE}`)) setDetail(tabPlace[target.dataset.trainingTab || 'status']);
   }, true);
   ['xiuxian:user-ready', 'xiuxian:stats-updated', 'xiuxian:features-ready', 'xiuxian:training-access-updated',
     'foundation-training-stage-changed', 'golden-core-access-changed'].forEach(name => window.addEventListener(name, sync));
