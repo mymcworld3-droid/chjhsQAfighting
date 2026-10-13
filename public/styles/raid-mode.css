@@ -272,3 +272,26 @@ body.raid-page-open #page-raid.active-page>#raid-result:not(.hidden){
 @media(max-width:700px){.raid-trial-card{flex-basis:190px}.raid-teamwork{grid-template-columns:1fr}.raid-boss-info{padding-top:18px}}
 
 .raid-combat-event.is-critical{border-color:#ffc163;box-shadow:0 0 34px #ffb13f66}.raid-combat-event.is-critical b{color:#ffbe62;font-size:1.6em}.raid-combat-event.has-combo{border-color:#cdb0ff}
+
+/* Reserve a complete action row above navigation; only the trial description
+   scrolls when the fixed-ratio portrait canvas has less room. */
+#raid-hub .raid-boss-card { box-sizing:border-box; grid-template-rows:minmax(0,1fr) auto; }
+#raid-hub .raid-boss-art { grid-column:1; grid-row:1 / -1; }
+#raid-hub .raid-boss-info { grid-column:2; grid-row:1; min-height:0; overflow-y:auto; overscroll-behavior:contain; scrollbar-width:thin; padding-top:18px; }
+#raid-hub .raid-boss-info > * { flex-shrink:0; }
+#raid-hub .raid-unlock-status { color:var(--raid-cyan); margin:0 0 8px; }
+#raid-hub .raid-entry-actions { grid-column:2; grid-row:2; min-width:0; padding:10px 14px 14px; border-top:1px solid rgba(231,199,121,.14); background:rgba(11,10,9,.96); }
+#raid-hub .raid-entry-actions .raid-join-grid { grid-template-columns:repeat(2,minmax(0,1fr)); margin:0; }
+#raid-hub .raid-entry-actions .raid-code-join { grid-template-columns:minmax(0,1fr) auto; }
+#raid-hub .raid-entry-actions button { min-width:0; min-height:42px; padding:7px 10px; font-size:10px; }
+#raid-hub .raid-entry-actions .raid-ghost:disabled { opacity:.45; cursor:not-allowed; }
+@media (orientation:portrait) {
+  #raid-hub .raid-boss-card { grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr); }
+  #raid-hub .raid-boss-art { grid-row:1; }
+  #raid-hub .raid-boss-art > span { left:8px; top:8px; padding:4px 6px; }
+  #raid-hub .raid-boss-info { padding:10px 12px; }
+  #raid-hub .raid-badges { gap:4px; margin-bottom:6px; }
+  #raid-hub .raid-boss-info h3 { font-size:18px; }
+  #raid-hub .raid-reward-preview { margin-top:8px; }
+  #raid-hub .raid-entry-actions { grid-column:1 / -1; padding:10px; }
+}

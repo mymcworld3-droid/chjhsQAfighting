@@ -91,7 +91,7 @@ test('disconnected stream gets fast fallback polling and recovers without leavin
 
 test('all party ticket documents are read concurrently and deducted atomically',async()=>{
   const reads=[],pending=[],writes=[];
-  const docs=new Map(['a','b','c','d'].map(uid=>['users/'+uid,{raidTickets:{count:3,lastGrantDate:'2026-10-12'}}]));
+  const docs=new Map(['a','b','c','d'].map(uid=>['users/'+uid,{stats:{totalScore:10},raidTickets:{count:3,lastGrantDate:'2026-10-12'}}]));
   const db={collection:name=>({doc:id=>({key:name+'/'+id})}),runTransaction:fn=>fn({
     get:ref=>{reads.push(ref.key);if(ref.key.startsWith('raidTicketReservations/'))return Promise.resolve({exists:false});
       return new Promise(resolve=>pending.push(()=>resolve({exists:true,data:()=>docs.get(ref.key)})));},

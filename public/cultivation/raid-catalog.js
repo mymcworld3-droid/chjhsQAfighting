@@ -1,5 +1,7 @@
 // 秘境試煉目錄：入口只負責選擇試煉；實際房間／戰鬥仍由各團本後端權威結算。
 // 之後新增團本時，先在此加入卡片資料，再接對應 room/boss/reward adapter。
+import { RAID_MVP } from './raid-engine.js';
+
 export const RAID_TRIALS = Object.freeze([
   Object.freeze({
     id: 'shen-qingshuang',
@@ -7,7 +9,8 @@ export const RAID_TRIALS = Object.freeze([
     title: '清霜試煉',
     bossTitle: '大師姐・沈清霜',
     location: '青雲山・演武秘境',
-    minimumScore: 10,
+    minimumScore: RAID_MVP.minimumScore,
+    minimumRealm: RAID_MVP.minimumRealm,
     party: '1–4 人',
     recommended: '建議 3 人',
     bossImage: 'assets/story/characters/shen-qingshuang.png',

@@ -6,7 +6,7 @@
     { id: 'meditation', name: '修煉室', threshold: 28, realm: '金丹境', tab: 'core' },
     { id: 'forge', name: '鍛造坊', threshold: 10, realm: '築基初期', tab: 'refinery' },
     { id: 'vault', name: '寶庫', threshold: 10, realm: '築基初期', tab: 'bag' },
-    { id: 'secret', name: '秘境', threshold: 10, realm: '築基初期', page: 'page-raid' },
+    { id: 'secret', name: '秘境', threshold: 10, realm: '築基期', page: 'page-raid' },
     { id: 'status', name: '狀態', threshold: 0, realm: '', tab: 'status' }
   ].map(Object.freeze));
   const number = value => Number.isFinite(Number(value)) ? Math.max(0, Math.floor(Number(value))) : 0;

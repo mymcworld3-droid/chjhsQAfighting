@@ -10,6 +10,14 @@ const { readRaidQuestionTicket, assertRaidQuestionTicket } = require('./raid-que
 const { advanceRaidRoom, startRaidScheduler } = require('./raid-clock.cjs');
 const { eligibleCorrect, learningCorrect, awardRaidSpirit } = require('./raid-spirit-reward.cjs');
 const { streamRaidRoom } = require('./raid-room-stream.cjs');
+const trainingAccess = require('./public/cultivation/training-access-rules.js');
+const RAID_ACCESS = trainingAccess.PLACES.find(place => place.id === 'secret');
+
+function assertRaidAccess(accessScore, name = '') {
+  if (finite(accessScore) >= RAID_ACCESS.threshold) return;
+  throw Object.assign(new Error((name ? name + '需達' : '需達') + RAID_ACCESS.realm +
+    '（' + RAID_ACCESS.threshold + ' 修為）才可進入秘境與清霜試煉'), { status:403, code:'raid-realm-locked' });
+}
 
 const COLLECTION = 'raidRooms';
 const MAX_MEMBERS = 4;
@@ -73,6 +81,8 @@ async function reserveRaidTickets(db, roomId, members, nowMs = now()) {
 
     const states = {};
     snaps.forEach((snap, index) => {
+      const uid = memberUids[index];
+      assertRaidAccess(trainingAccess.score(snap.data() || {}), entries.find(member => member.uid === uid)?.name);
       states[memberUids[index]] = accrueRaidTickets(snap.data() || {}, today);
     });
     const existing = reservationSnap.exists ? reservationSnap.data() || {} : null;
@@ -329,19 +339,25 @@ function createHandler({
         return res.json({ ok:true, ticketState });
       }
       if (action === 'create') {
-        const [ticketState, player] = await Promise.all([syncRaidTickets(playerDb, uid), loadTrustedRaidPlayer(playerDb, uid)]);
+        const player = await loadTrustedRaidPlayer(playerDb, uid);
+        assertRaidAccess(player.trainingAccessScore);
+        const ticketState = await syncRaidTickets(playerDb, uid);
         if (ticketState.count < 1) throw Object.assign(new Error('目前沒有團本入場券；每日會補充 3 張，最多持有 10 張'), { status:409, code:'raid-ticket-empty' });
         const result = await createRoom(db, uid, player);
         return res.json({ ok: true, ...result, ticketState });
       }
       if (action === 'quick') {
-        const [ticketState, player] = await Promise.all([syncRaidTickets(playerDb, uid), loadTrustedRaidPlayer(playerDb, uid)]);
+        const player = await loadTrustedRaidPlayer(playerDb, uid);
+        assertRaidAccess(player.trainingAccessScore);
+        const ticketState = await syncRaidTickets(playerDb, uid);
         if (ticketState.count < 1) throw Object.assign(new Error('目前沒有團本入場券；每日會補充 3 張，最多持有 10 張'), { status:409, code:'raid-ticket-empty' });
         const result = await findOrCreate(db, uid, player);
         return res.json({ ok: true, ...result, ticketState });
       }
       if (action === 'join-code') {
-        const [ticketState, player] = await Promise.all([syncRaidTickets(playerDb, uid), loadTrustedRaidPlayer(playerDb, uid)]);
+        const player = await loadTrustedRaidPlayer(playerDb, uid);
+        assertRaidAccess(player.trainingAccessScore);
+        const ticketState = await syncRaidTickets(playerDb, uid);
         if (ticketState.count < 1) throw Object.assign(new Error('目前沒有團本入場券；每日會補充 3 張，最多持有 10 張'), { status:409, code:'raid-ticket-empty' });
         const result = await joinByCode(db, uid, req.body?.roomCode, player);
         return res.json({ ok: true, ...result, ticketState });
@@ -395,6 +411,7 @@ function createHandler({
         // Refresh the combat projection from Firebase A at the last safe pre-battle boundary.
         // Equipment/stat changes after Ready do not mutate an active raid.
         const trusted = readyPlayer;
+        assertRaidAccess(trusted.trainingAccessScore);
         const room = await db.runTransaction(async tx => {
           const snap = await tx.get(ref);
           if (!snap.exists) throw Object.assign(new Error('隊伍不存在'), { status: 404 });

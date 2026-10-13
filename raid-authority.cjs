@@ -270,6 +270,7 @@ function trustedRaidPlayerSnapshot(player,uid,catalogDoc={}){
   return {
     uid:String(uid),name:safeName(player.displayName||player?.profile?.displayName||'無名修士',40),
     portrait,totalScore:positive(player?.stats?.totalScore),rankLevel:positive(player?.stats?.rankLevel),
+    trainingAccessScore:trainingAccess.score(player),
     // Combat power intentionally scores raw+soul base stats and equipment separately,
     // matching public/cultivation/combat-power.js without double-counting equipment stats.
     combatPower:combatPower({attack:baseAttack+soulAttack,maxHp:baseMaxHp+soulMaxHp},core,equipped),

@@ -16,7 +16,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
   'use strict';
 
   const PAGE_ID = 'page-raid';
-  const STYLE_HREF = 'styles/raid-mode.css?v=20261003-stable-session1';
+  const STYLE_HREF = 'styles/raid-mode.css?v=20261013-entry-actions1';
   const MALE = 'assets/story/characters/player-male-determined.png';
   const FEMALE = 'assets/story/characters/player-female-determined.png';
   const HEARTBEAT_MS = 8000;
@@ -61,6 +61,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     rewardClaimedRoomId: '',
     learningOutcome: null,
     selectedRaidId: RAID_MVP.bossId,
+    hubAccessSignature: '',
     ticketState: { count:null, dailyGrant:3, cap:10, lastGrantDate:'' },
     ticketLoading: false
   };
@@ -87,6 +88,10 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
   }
   function data() { return window.getCurrentUserData?.() || {}; }
   function score() { return window.getTrainingAccessScore?.() ?? Math.max(0, Number(data()?.stats?.totalScore) || 0); }
+  function hubAccessSignature() {
+    const access = score();
+    return RAID_TRIALS.map(trial => access >= trial.minimumScore ? '1' : '0').join('');
+  }
   function escapeHtml(value) {
     return String(value ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;')
       .replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;');
@@ -350,12 +355,16 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     if (!button) return;
     const locked = score() < RAID_MVP.minimumScore;
     button.classList.toggle('locked', locked);
+    button.setAttribute('aria-disabled', String(locked));
+    button.querySelector('.raid-home-emblem i')?.classList.toggle('fa-lock', locked);
+    button.querySelector('.raid-home-emblem i')?.classList.toggle('fa-users-rays', !locked);
     const hint = button.querySelector('em');
-    if (hint) hint.textContent = locked ? '築基初期（' + RAID_MVP.minimumScore + ' 修為）開放' :
+    if (hint) hint.textContent = locked ? RAID_MVP.minimumRealm + '（' + RAID_MVP.minimumScore + ' 修為）解鎖' :
       (state.roomId ? '秘境隊伍進行中' : '選擇團本・建議 3 人同行');
   }
 
   function renderHub() {
+    state.hubAccessSignature = hubAccessSignature();
     state.status = state.roomId ? state.status : 'hub';
     document.body.classList.remove('raid-session-active');
     show('hub');
@@ -371,7 +380,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
         '" data-raid-trial="' + escapeHtml(trial.id) + '">' +
         '<span class="raid-trial-icon">' + (trial.bossImage ? '<img src="' + escapeHtml(trial.bossImage) + '" alt="">' :
           '<i class="fa-solid fa-lock"></i>') + '</span><span class="raid-trial-copy"><small>' +
-        escapeHtml(sealed ? '封印中' : (lockedByRealm ? '境界未達' : '可挑戰')) + '</small><strong>' +
+        escapeHtml(sealed ? '封印中' : (lockedByRealm ? (trial.minimumRealm || '境界未達') + '解鎖' : '可挑戰')) + '</small><strong>' +
         escapeHtml(trial.title) + '</strong><em>' + escapeHtml(trial.recommended) + '</em></span></button>';
     }).join('');
 
@@ -391,11 +400,13 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
         escapeHtml(selected.recommended) + '</span><span>' + escapeHtml(selected.mechanic) + '</span></div>' +
         (data().raidProgress?.['shen-qingshuang']?.memento ? '<small>通關紀念・' + escapeHtml(data().raidProgress['shen-qingshuang'].memento.name) + '</small>' : '') +
         '<small>' + escapeHtml(selected.location) + '</small><h3>' + escapeHtml(selected.bossTitle) + '</h3>' +
+        '<small class="raid-unlock-status">' + escapeHtml(selected.minimumRealm) + '解鎖' + '</small>' +
         '<p>' + escapeHtml(selected.description) + '</p>' +
-        '<div class="raid-reward-preview"><b>主要戰利品</b><span>' + selected.rewards.map(escapeHtml).join('・') + '</span></div>' +
+        '<div class="raid-reward-preview"><b>主要戰利品</b><span>' + selected.rewards.map(escapeHtml).join('・') + '</span></div></div>' +
+        '<div class="raid-entry-actions" role="group" aria-label="試煉組隊">' +
         '<div class="raid-join-grid"><button class="raid-primary" type="button" data-quick ' + (selectedLocked ? 'disabled' : '') + '>快速加入／建立隊伍</button>' +
         '<button class="raid-ghost" type="button" data-create ' + (selectedLocked ? 'disabled' : '') + '>建立私人隊伍</button></div>' +
-        '<div class="raid-code-join"><input id="raid-room-code-input" maxlength="6" placeholder="輸入 6 碼隊伍代碼"><button class="raid-ghost" type="button" data-code ' +
+        '<div class="raid-code-join"><input id="raid-room-code-input" maxlength="6" aria-label="六碼隊伍代碼" placeholder="輸入 6 碼隊伍代碼"><button class="raid-ghost" type="button" data-code ' +
         (selectedLocked ? 'disabled' : '') + '>加入隊伍</button></div></div></article>';
     }
 
@@ -1112,7 +1123,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
   }
 
   async function enterRoom(mode, roomCode = '') {
-    if (score() < RAID_MVP.minimumScore) return toast('需達築基初期（' + RAID_MVP.minimumScore + ' 修為）才可進入秘境。');
+    if (score() < RAID_MVP.minimumScore) return toast('需達' + RAID_MVP.minimumRealm + '（' + RAID_MVP.minimumScore + ' 修為）才可進入秘境。');
     if (storyOpen()) return toast('目前有劇情或教學進行中。');
     if (state.roomId && ['won', 'lost', 'closed'].includes(state.room?.status)) resetRaid(false);
     state.status = 'loading';
@@ -1420,6 +1431,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
   }
 
   function openHub() {
+    if (score() < RAID_MVP.minimumScore) return toast('秘境於' + RAID_MVP.minimumRealm + '（' + RAID_MVP.minimumScore + ' 修為）解鎖。');
     ensurePage();
     window.switchToPage?.(PAGE_ID);
     syncRaidViewportLock();
@@ -1490,7 +1502,12 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
       void refreshRaidTickets();
       void tryReconnect();
     });
-    window.addEventListener('xiuxian:stats-updated', updateHomeEntry);
+    function refreshAccess() {
+      updateHomeEntry();
+      if (state.status === 'hub' && !state.roomId && state.hubAccessSignature !== hubAccessSignature()) renderHub();
+    }
+    window.addEventListener('xiuxian:stats-updated', refreshAccess);
+    window.addEventListener('xiuxian:training-access-updated', refreshAccess);
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
   else boot();

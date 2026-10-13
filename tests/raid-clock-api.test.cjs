@@ -17,11 +17,11 @@ function fixture(status = 'active') {
     chain=job.catch(()=>{});return job;
   }};
   const playerDocs = new Map([
-    ['users/a',{uid:'a',raidTickets:{count:10,lastGrantDate:'2099-01-01'}}],
-    ['users/b',{uid:'b',raidTickets:{count:10,lastGrantDate:'2099-01-01'}}],
-    ['users/player1',{uid:'player1',raidTickets:{count:10,lastGrantDate:'2099-01-01'}}],
-    ['users/player2',{uid:'player2',raidTickets:{count:10,lastGrantDate:'2099-01-01'}}],
-    ['users/player3',{uid:'player3',raidTickets:{count:10,lastGrantDate:'2099-01-01'}}]
+    ['users/a',{uid:'a',stats:{totalScore:10},raidTickets:{count:10,lastGrantDate:'2099-01-01'}}],
+    ['users/b',{uid:'b',stats:{totalScore:10},raidTickets:{count:10,lastGrantDate:'2099-01-01'}}],
+    ['users/player1',{uid:'player1',stats:{totalScore:10},raidTickets:{count:10,lastGrantDate:'2099-01-01'}}],
+    ['users/player2',{uid:'player2',stats:{totalScore:10},raidTickets:{count:10,lastGrantDate:'2099-01-01'}}],
+    ['users/player3',{uid:'player3',stats:{totalScore:10},raidTickets:{count:10,lastGrantDate:'2099-01-01'}}]
   ]);
   const playerSnapshot = ref => ({exists:playerDocs.has(ref.key),data:()=>structuredClone(playerDocs.get(ref.key))});
   const playerDb = {
