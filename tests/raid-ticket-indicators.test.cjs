@@ -59,20 +59,20 @@ test('a team member refreshes spent tickets once when a room push announces the 
   stop();
 });
 
-test('both indicators require an authenticated unlocked realm and at least one ticket',()=>{
+test('sect, training navigation and map indicators share authenticated unlocked ticket state',()=>{
   const source=read('training-scene-map.js');
   const start=source.indexOf('function updateTicketIndicators()'),end=source.indexOf('\nfunction fit()',start);
   let uid='a',player={uid,stats:{totalScore:9},raidTickets:{count:3}};
-  const makeHost=()=>({dot:null,querySelector(){return this.dot;},appendChild(dot){this.dot=dot;}});
-  const hostA=makeHost(),hostB=makeHost();
+  const makeHost=()=>({dot:null,querySelector(){return this.dot;},appendChild(dot){this.dot=dot;},setAttribute(){},removeAttribute(){}});
+  const hostA=makeHost(),hostB=makeHost(),home=makeHost();
   const button=host=>({querySelector:()=>host,setAttribute(){},removeAttribute(){}});
   const nav=button(hostA),building=button(hostB);
   const context={Rules,getMainUser:()=>uid ? {uid} : null,
     unlocked:place=>Rules.allows(player,place.threshold),
-    plane:{querySelector:()=>building},document:{getElementById:()=>nav,createElement:()=>({setAttribute(){}})},
+    plane:{querySelector:()=>building},document:{getElementById:id=>id==='sect-raid-entry'?home:nav,createElement:()=>({setAttribute(){}})},
     window:{getCurrentUserData:()=>player}};
   vm.runInNewContext(source.slice(start,end)+'\nthis.update=updateTicketIndicators;',context);
-  const check=visible=>{context.update();assert.equal(hostA.dot.hidden,!visible);assert.equal(hostB.dot.hidden,!visible);};
+  const check=visible=>{context.update();assert.equal(hostA.dot.hidden,!visible);assert.equal(hostB.dot.hidden,!visible);assert.equal(home.dot.hidden,!visible);};
   check(false);player.stats.totalScore=10;check(true);
   player.raidTickets.count=0;check(false);player.raidTickets.count=1;check(true);
   player.trainingAccess=Rules.record(player);player.stats.totalScore=0;check(true);

@@ -226,8 +226,9 @@ function updateTicketIndicators() {
     unlocked(secret) && Number(player.raidTickets?.count) >= 1;
   const building = plane?.querySelector('[data-training-location="secret"]');
   const nav = document.getElementById('nav-training');
+  const home = document.getElementById('sect-raid-entry');
   for (const [button, host] of [[nav, nav?.querySelector('.training-nav-orb')],
-    [building, building?.querySelector('.training-place-label')]]) {
+    [building, building?.querySelector('.training-place-label')], [home, home]]) {
     if (!button || !host) continue;
     let dot = host.querySelector('.raid-ticket-dot');
     if (!dot) {
