@@ -11,6 +11,7 @@ import { buildMeditationMistakePool, chooseMeditationMistakes } from './daily-me
   'use strict';
   const auth = getAuth(getApp());
   const db = getFirestore(getApp());
+  let panelAccount = auth.currentUser?.uid || '';
   const QUESTION_TOTAL = 3;
   let session = null;
   let busy = false;
@@ -142,6 +143,12 @@ import { buildMeditationMistakePool, chooseMeditationMistakes } from './daily-me
     const el = node('xiuxian-meditate');
     if (!el) return;
     const current = panelState();
+    const player = userData(), id = uid();
+    const ready = !!id && !!player?.stats && (player.uid ? player.uid === id : panelAccount === id);
+    const pending = ready && !current.done;
+    const dot = node('meditation-pending-dot');
+    if (dot) dot.hidden = !pending;
+    el.setAttribute('aria-label', pending ? '閉關，今日尚未完成' : current.done && ready ? '查看今日閉關' : '閉關');
     const labelNode = el.querySelector('.sect-action-label') || el;
     labelNode.textContent = current.done ? '查看閉關' : '閉關';
     el.disabled = false;
@@ -430,11 +437,14 @@ import { buildMeditationMistakePool, chooseMeditationMistakes } from './daily-me
   window.refreshDailyMeditationPanel = syncPanel;
   window.addEventListener('xiuxian:stats-updated', syncPanel);
   window.addEventListener('xiuxian:user-data-ready', () => {
+    panelAccount = uid();
     remoteUid = '';
     remoteRecord = null;
     session = null;
     invalidateMistakes();
     syncPanel();
   });
+  window.addEventListener('xiuxian:user-ready', syncPanel);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) syncPanel(); });
   syncPanel();
 })();

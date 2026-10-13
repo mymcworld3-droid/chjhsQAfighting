@@ -40,6 +40,7 @@ import { STORY_BACKGROUNDS, storyBackgroundForLine, nextStoryBackground, createS
   let lastScore = -1;
   let busyPersist = false;
   let storyImagesReady = false;
+  let storyIndicatorAccount = '';
   let storyImagesPromise = null;
   let chapterStartRequest = 0;
   const backgroundLoader = createStoryBackgroundLoader(src => preloadImageAsset(src, 3500));
@@ -714,7 +715,8 @@ import { STORY_BACKGROUNDS, storyBackgroundForLine, nextStoryBackground, createS
     const button = document.getElementById('story-archive-launcher');
     const dot = document.getElementById('story-unread-dot');
     if (!button || !dot) return;
-    const ready = user()?.uid && data()?.uid === user().uid;
+    const id = user()?.uid, player = data();
+    const ready = !!id && !!player?.stats && (player.uid ? player.uid === id : storyIndicatorAccount === id);
     // persist() updates the local seen map before its write finishes. Keep the
     // current dot until that write succeeds, while clearing it on account changes.
     if (ready && busyPersist) return;
@@ -769,13 +771,18 @@ import { STORY_BACKGROUNDS, storyBackgroundForLine, nextStoryBackground, createS
   }));
 
   function boot() {
+    storyIndicatorAccount = user()?.uid || '';
     ensureStyle();
     window.__xiuxianStoryImagesReady = false;
     preloadStoryImages().then(() => setTimeout(maybeAutoStart, 0));
     lastScore = score();
     document.addEventListener('keydown', onKeydown);
     window.addEventListener('xiuxian:stats-updated', handleScoreUpdate);
-    ['xiuxian:user-data-ready', 'xiuxian:story-chapter-completed'].forEach(name => window.addEventListener(name, syncArchiveIndicator));
+    window.addEventListener('xiuxian:user-data-ready', () => {
+      storyIndicatorAccount = user()?.uid || '';
+      syncArchiveIndicator();
+    });
+    window.addEventListener('xiuxian:story-chapter-completed', syncArchiveIndicator);
     window.addEventListener('xiuxian:battle-session-ended', () => setTimeout(maybeAutoStart, 180));
     window.addEventListener('xiuxian:opening-cinematic-completed', (event) => {
       if (event.detail?.replay) return;
