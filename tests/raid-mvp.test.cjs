@@ -159,9 +159,9 @@ test('raid hub bottom follows the real bottom navigation top edge', () => {
   assert.match(raidSource, /function syncRaidBottomClearance\(\)/);
   assert.match(raidSource, /getElementById\('bottom-nav'\)/);
   assert.match(raidSource, /getBoundingClientRect\?\.\(\)\.top/);
-  assert.match(raidSource, /visualHeight - navTop \+ 8/);
+  assert.match(raidSource, /layoutHeight - navTop \+ 8/);
   assert.match(raidSource, /--raid-bottom-clearance/);
-  assert.match(raidSource, /visualViewport\?\.addEventListener/);
+  assert.match(raidSource, /window\.addEventListener\('app:layout-viewport'/);
   assert.match(cssSource, /height:var\(--raid-page-height/);
 });
 
@@ -223,15 +223,15 @@ test('raid leave uses the built-in confirmation modal', () => {
 });
 
 
-test('raid session height uses the real visual viewport', () => {
-  assert.match(raidSource, /const vv = window\.visualViewport/);
-  assert.match(raidSource, /const visualHeight = Math\.max\(1, Number\(vv\?\.height\)/);
+test('raid session height uses the page layout bounds', () => {
+  assert.doesNotMatch(raidSource, /window\.visualViewport/);
+  assert.match(raidSource, /const layoutHeight = Math\.max\(1, Number\(document\.documentElement\.clientHeight\)/);
   assert.match(raidSource, /document\.querySelector\('body > header'\)/);
   assert.match(raidSource, /headerRect\?\.bottom/);
-  assert.match(raidSource, /visualHeight - headerBottom - \(sessionActive \? 0 : clearance\)/);
+  assert.match(raidSource, /layoutHeight - headerBottom - \(sessionActive \? 0 : clearance\)/);
   assert.match(raidSource, /page\.style\.setProperty\('height', pageHeight \+ 'px', 'important'\)/);
   assert.match(raidSource, /page\.style\.setProperty\('bottom', 'auto', 'important'\)/);
-  assert.match(raidSource, /window\.addEventListener\('app:visual-viewport', scheduleRaidHubFit/);
+  assert.match(raidSource, /window\.addEventListener\('app:layout-viewport', scheduleRaidHubFit/);
   assert.match(cssSource, /height:var\(--raid-page-height,calc\(100dvh - 72px\)\)!important/);
 });
 

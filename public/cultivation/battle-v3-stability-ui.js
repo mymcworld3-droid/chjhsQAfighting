@@ -491,14 +491,12 @@
 
   let battleViewportFrame = 0;
 
-  function syncBattleVisualViewport() {
+  function syncBattlePageViewport() {
     const page = document.getElementById('page-battle');
     if (!page) return;
-    const vv = window.visualViewport;
-    const width = Math.max(1, Number(vv?.width) || Number(window.innerWidth) || document.documentElement.clientWidth || 1);
-    const height = Math.max(1, Number(vv?.height) || Number(window.innerHeight) || document.documentElement.clientHeight || 1);
-    const top = Math.max(0, Number(vv?.offsetTop) || 0);
-    const left = Math.max(0, Number(vv?.offsetLeft) || 0);
+    const width = Math.max(1, Number(document.documentElement.clientWidth) || Number(window.innerWidth) || 1);
+    const height = Math.max(1, Number(document.documentElement.clientHeight) || Number(window.innerHeight) || 1);
+    const top = 0, left = 0;
 
     page.style.setProperty('--battle-vv-width', width + 'px');
     page.style.setProperty('--battle-vv-height', height + 'px');
@@ -511,11 +509,11 @@
     page.style.setProperty('max-height', height + 'px', 'important');
   }
 
-  function scheduleBattleVisualViewportSync() {
+  function scheduleBattlePageViewportSync() {
     cancelAnimationFrame(battleViewportFrame);
     battleViewportFrame = requestAnimationFrame(() => {
-      syncBattleVisualViewport();
-      requestAnimationFrame(syncBattleVisualViewport);
+      syncBattlePageViewport();
+      requestAnimationFrame(syncBattlePageViewport);
     });
   }
 
@@ -524,7 +522,7 @@
     const active = !!page && !page.classList.contains('hidden');
     document.documentElement.classList.toggle(ACTIVE_CLASS, active);
     document.body?.classList.toggle(ACTIVE_CLASS, active);
-    if (active) scheduleBattleVisualViewportSync();
+    if (active) scheduleBattlePageViewportSync();
   }
 
   function observeBattlePage() {
@@ -552,8 +550,6 @@
   observeBattlePage();
   window.addEventListener('pageshow', syncFullscreenState);
   window.addEventListener('popstate', syncFullscreenState);
-  window.addEventListener('resize', scheduleBattleVisualViewportSync, { passive: true });
-  window.visualViewport?.addEventListener?.('resize', scheduleBattleVisualViewportSync, { passive: true });
-  window.visualViewport?.addEventListener?.('scroll', scheduleBattleVisualViewportSync, { passive: true });
-  window.addEventListener('app:visual-viewport', scheduleBattleVisualViewportSync, { passive: true });
+  window.addEventListener('resize', scheduleBattlePageViewportSync, { passive: true });
+  window.addEventListener('app:layout-viewport', scheduleBattlePageViewportSync, { passive: true });
 })();

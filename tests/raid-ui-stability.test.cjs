@@ -156,16 +156,17 @@ test('old room question generation cannot deposit a ticket or clear loading in a
   assert.equal(context.state.questionLoading,true);
 });
 
-test('questions, arena and attack focus use identical visual viewport geometry', () => {
+test('questions, arena and attack focus share document bounds despite keyboard and visual panning', () => {
   const props=new Map(),classes=new Set(['raid-session-active']);
   const page={dataset:{raidView:'question'},classList:{contains:name=>name==='active-page'},style:{setProperty:(key,value)=>props.set(key,value),removeProperty:key=>props.delete(key)}};
-  const context={PAGE_ID:'page-raid',window:{innerHeight:900,innerWidth:1440,visualViewport:{height:840,width:1300,offsetTop:12,offsetLeft:4}},
-    document:{documentElement:{},body:{classList:{contains:name=>classes.has(name),add:name=>classes.add(name),remove:name=>classes.delete(name)}},getElementById:id=>id==='page-raid'?page:{getBoundingClientRect:()=>({top:800})},querySelector:()=>({getBoundingClientRect:()=>({bottom:72})})}};
+  const context={PAGE_ID:'page-raid',window:{innerHeight:1000,innerWidth:1600,visualViewport:{height:840,width:1300,offsetTop:12,offsetLeft:4}},
+    document:{documentElement:{clientWidth:1440,clientHeight:900},body:{classList:{contains:name=>classes.has(name),add:name=>classes.add(name),remove:name=>classes.delete(name)}},getElementById:id=>id==='page-raid'?page:{getBoundingClientRect:()=>({top:800})},querySelector:()=>({getBoundingClientRect:()=>({bottom:72})})}};
   vm.runInNewContext(section('  function syncRaidBottomClearance()', '  function setRaidCombatFocus(')+'\nthis.sync=syncRaidBottomClearance;',context);
   context.sync();const question=[...props];
   page.dataset.raidView='arena';classes.add('raid-combat-focus');context.sync();
   assert.deepEqual([...props],question);
-  assert.equal(props.get('width'),'1300px');assert.equal(props.get('height'),'840px');assert.equal(props.get('top'),'12px');
+  assert.equal(props.get('width'),'1440px');assert.equal(props.get('height'),'900px');assert.equal(props.get('top'),'0px');assert.equal(props.get('left'),'0px');
+  Object.assign(context.window.visualViewport,{height:300,width:900,offsetTop:70,offsetLeft:20});context.sync();assert.deepEqual([...props],question);
   page.dataset.raidView='lobby';context.sync();
   assert.equal(classes.has('raid-fullscreen'),false);
   assert.equal(props.has('width'),false,'lobby regains its centered width');

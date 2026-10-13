@@ -213,11 +213,9 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     const page = document.getElementById(PAGE_ID);
     const nav = document.getElementById('bottom-nav');
     if (!page) return;
-    const vv = window.visualViewport;
-    const visualHeight = Math.max(1, Number(vv?.height) || Number(window.innerHeight) || document.documentElement.clientHeight || 1);
-    const visualWidth = Math.max(1, Number(vv?.width) || Number(window.innerWidth) || document.documentElement.clientWidth || 1);
-    const visualTop = Math.max(0, Number(vv?.offsetTop) || 0);
-    const visualLeft = Math.max(0, Number(vv?.offsetLeft) || 0);
+    const layoutHeight = Math.max(1, Number(document.documentElement.clientHeight) || Number(window.innerHeight) || 1);
+    const layoutWidth = Math.max(1, Number(document.documentElement.clientWidth) || Number(window.innerWidth) || 1);
+    const layoutTop = 0, layoutLeft = 0;
     const sessionFullscreen = page.classList.contains('active-page') && !page.classList.contains('hidden') &&
       ['arena', 'question'].includes(page.dataset.raidView);
 
@@ -226,13 +224,13 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     if (sessionFullscreen) {
       page.style.setProperty('--raid-header-height', '0px');
       page.style.setProperty('--raid-bottom-clearance', '0px');
-      page.style.setProperty('--raid-page-height', Math.floor(visualHeight) + 'px');
-      page.style.setProperty('top', visualTop + 'px', 'important');
-      page.style.setProperty('left', visualLeft + 'px', 'important');
-      page.style.setProperty('width', Math.floor(visualWidth) + 'px', 'important');
-      page.style.setProperty('max-width', Math.floor(visualWidth) + 'px', 'important');
-      page.style.setProperty('height', Math.floor(visualHeight) + 'px', 'important');
-      page.style.setProperty('max-height', Math.floor(visualHeight) + 'px', 'important');
+      page.style.setProperty('--raid-page-height', Math.floor(layoutHeight) + 'px');
+      page.style.setProperty('top', layoutTop + 'px', 'important');
+      page.style.setProperty('left', layoutLeft + 'px', 'important');
+      page.style.setProperty('width', Math.floor(layoutWidth) + 'px', 'important');
+      page.style.setProperty('max-width', Math.floor(layoutWidth) + 'px', 'important');
+      page.style.setProperty('height', Math.floor(layoutHeight) + 'px', 'important');
+      page.style.setProperty('max-height', Math.floor(layoutHeight) + 'px', 'important');
       page.style.setProperty('bottom', 'auto', 'important');
       page.style.setProperty('transform', 'none', 'important');
       document.body.classList.add('raid-fullscreen');
@@ -252,11 +250,11 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     const sessionActive = document.body.classList.contains('raid-session-active');
 
     const navTop = Math.max(0, Number(nav?.getBoundingClientRect?.().top) || 0);
-    const clearance = navTop > 0 && visualHeight > navTop
-      ? Math.ceil(visualHeight - navTop + 8)
+    const clearance = navTop > 0 && layoutHeight > navTop
+      ? Math.ceil(layoutHeight - navTop + 8)
       : 116;
     const pageHeight = Math.max(180, Math.floor(
-      visualHeight - headerBottom - (sessionActive ? 0 : clearance)
+      layoutHeight - headerBottom - (sessionActive ? 0 : clearance)
     ));
 
     page.style.setProperty('--raid-header-height', headerBottom + 'px');
@@ -1531,9 +1529,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     ensurePage();
     const nav = document.getElementById('bottom-nav');
     window.addEventListener('resize', scheduleRaidHubFit, { passive: true });
-    window.visualViewport?.addEventListener?.('resize', scheduleRaidHubFit, { passive: true });
-    window.visualViewport?.addEventListener?.('scroll', scheduleRaidHubFit, { passive: true });
-    window.addEventListener('app:visual-viewport', scheduleRaidHubFit, { passive: true });
+    window.addEventListener('app:layout-viewport', scheduleRaidHubFit, { passive: true });
     if (nav && globalThis.ResizeObserver) new ResizeObserver(scheduleRaidHubFit).observe(nav);
     if (nav) new MutationObserver(scheduleRaidHubFit).observe(nav, {
       attributes: true,

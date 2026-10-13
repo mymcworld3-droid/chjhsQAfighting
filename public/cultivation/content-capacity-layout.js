@@ -232,7 +232,7 @@
     const pageRect = page.getBoundingClientRect();
     if (!pageRect.height && !pageRect.top) return;
 
-    const viewportBottom = window.visualViewport?.height || window.innerHeight || document.documentElement.clientHeight || 0;
+    const viewportBottom = document.documentElement.clientHeight || window.innerHeight || 0;
     const navRect = nav && !nav.classList.contains('hidden') ? nav.getBoundingClientRect() : null;
     const navTop = navRect && navRect.top > pageRect.top ? navRect.top : viewportBottom;
     const safeGap = 8;
@@ -257,7 +257,7 @@
     ensureStyle();
     scheduleMeasure();
     window.addEventListener('resize', scheduleMeasure, { passive:true });
-    window.visualViewport?.addEventListener('resize', scheduleMeasure, { passive:true });
+    window.addEventListener('app:layout-viewport', scheduleMeasure, { passive:true });
     window.addEventListener('orientationchange', scheduleMeasure, { passive:true });
     document.addEventListener('click', (event) => {
       if (event.target.closest?.('#nav-training,[data-training-tab],[data-target="page-training"]')) scheduleMeasure();

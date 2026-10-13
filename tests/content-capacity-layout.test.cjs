@@ -2,6 +2,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
+const vm = require('node:vm');
 
 function read(rel) {
   return fs.readFileSync(path.join(__dirname, '..', rel), 'utf8');
@@ -19,7 +20,8 @@ test('training content measures the real space above bottom navigation', () => {
   assert.match(layout, /--training-content-height/);
   assert.match(layout, /navTop - pageRect\.top - safeGap/);
   assert.match(layout, /navTop - contentTop - safeGap/);
-  assert.match(layout, /visualViewport\?\.height/);
+  assert.match(layout, /document\.documentElement\.clientHeight \|\| window\.innerHeight/);
+  assert.doesNotMatch(layout, /window\.visualViewport/);
 });
 
 test('training content is not clipped and golden core can use the available height', () => {
@@ -88,4 +90,18 @@ test('material lower edge extends 64px while the existing divider stays visually
   assert.match(layout, /min-height:calc\(var\(--training-content-height,calc\(100dvh - 270px\)\) \+ 60px\)!important/);
   assert.match(layout, /height:calc\(min\(42dvh,360px\) \+ 64px\)!important/);
   assert.match(layout, /height:294px!important;min-height:294px!important/);
+});
+
+
+test('training height uses the page bottom when navigation is hidden, independent of keyboard visibility', () => {
+  const props=new Map(),root={clientHeight:720};
+  const page={classList:{contains:()=>false},getBoundingClientRect:()=>({top:100,height:500}),
+    querySelector:()=>({getBoundingClientRect:()=>({bottom:140})}),style:{setProperty:(key,value)=>props.set(key,value)}};
+  const context={PAGE_ID:'page-training',NAV_ID:'bottom-nav',window:{innerHeight:900,visualViewport:{height:200}},
+    document:{documentElement:root,getElementById:id=>id==='page-training'?page:{classList:{contains:()=>true}}}};
+  const start=layout.indexOf('  function updateTrainingFillHeight()'),end=layout.indexOf('  function scheduleMeasure()',start);
+  vm.runInNewContext(layout.slice(start,end)+'\nthis.sync=updateTrainingFillHeight;',context);
+  context.sync();assert.equal(props.get('--training-fill-height'),'612px');assert.equal(props.get('--training-content-height'),'568px');
+  context.window.visualViewport.height=100;context.sync();assert.equal(props.get('--training-fill-height'),'612px');
+  root.clientHeight=640;context.sync();assert.equal(props.get('--training-fill-height'),'532px');
 });

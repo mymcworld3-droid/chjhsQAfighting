@@ -3,6 +3,7 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
+const vm = require('node:vm');
 
 const read = (file) => fs.readFileSync(path.join(__dirname, '..', file), 'utf8');
 const full = read('public/cultivation/battle-v3-stability-ui.js');
@@ -100,14 +101,21 @@ test('stage portraits keep the near-left and far-right duel depth in formal and 
 });
 
 
-test('battle runtime pins the page to the browser visual viewport', () => {
-  assert.match(full, /function syncBattleVisualViewport\(\)/);
-  assert.match(full, /window\.visualViewport/);
-  assert.match(full, /vv\?\.height/);
-  assert.match(full, /page\.style\.setProperty\('height', height \+ 'px', 'important'\)/);
-  assert.match(full, /page\.style\.setProperty\('top', top \+ 'px', 'important'\)/);
-  assert.match(full, /visualViewport\?\.addEventListener\?\.\('resize'/);
-  assert.match(full, /visualViewport\?\.addEventListener\?\.\('scroll'/);
-  assert.match(full, /app:visual-viewport/);
-  assert.doesNotMatch(viewport, /height:100dvh!important;min-height:100dvh!important/);
+test('battle runtime follows document dimensions and ignores visual viewport shrink and offsets', () => {
+  const props=new Map(),root={clientWidth:1280,clientHeight:720};
+  const page={style:{setProperty:(key,value)=>props.set(key,value)}};
+  const context={window:{innerWidth:1440,innerHeight:900,visualViewport:{width:700,height:280,offsetTop:20,offsetLeft:30}},
+    document:{documentElement:root,getElementById:()=>page}};
+  const start=full.indexOf('  function syncBattlePageViewport()');
+  const end=full.indexOf('  function scheduleBattlePageViewportSync()',start);
+  vm.runInNewContext(full.slice(start,end)+'\nthis.sync=syncBattlePageViewport;',context);
+  context.sync();
+  assert.equal(props.get('width'),'1280px');assert.equal(props.get('height'),'720px');
+  assert.equal(props.get('top'),'0px');assert.equal(props.get('left'),'0px');
+  const before=[...props];Object.assign(context.window.visualViewport,{height:100,width:300,offsetTop:150});context.sync();
+  assert.deepEqual([...props],before);
+  root.clientWidth=360;root.clientHeight=640;context.sync();
+  assert.equal(props.get('width'),'360px');assert.equal(props.get('height'),'640px');
+  assert.match(full,/app:layout-viewport/);assert.doesNotMatch(full,/window\.visualViewport/);
+  assert.doesNotMatch(viewport,/height:100dvh!important;min-height:100dvh!important/);
 });

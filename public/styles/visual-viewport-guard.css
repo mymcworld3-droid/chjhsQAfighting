@@ -1,13 +1,12 @@
-/* Global visual viewport protection.
-   env(safe-area-inset-*) handles device cutouts/home indicator;
-   --app-vv-* handles Safari/Chrome browser chrome that CSS 100vh/100dvh can still overlap. */
+/* Page layout sizing. Hardware safe areas remain respected; legacy --app-vv-*
+   now describe the document bounds, independent of visual-viewport panning or keyboards. */
 :root{
   --app-vv-top:0px;
   --app-vv-left:0px;
   --app-vv-right:0px;
   --app-vv-bottom:0px;
   --app-vv-width:100vw;
-  --app-vv-height:100dvh;
+  --app-vv-height:100vh;
 }
 
 /* Native page zoom cannot reliably be reset on exit. The question policy owns
@@ -42,7 +41,7 @@ html.app-answer-zoom-allowed :is(
   min-width:0;
 }
 
-/* True fullscreen roots: constrain them to the visual viewport, never the layout viewport. */
+/* Fullscreen roots share the page layout bounds. */
 html.app-visual-viewport-ready :is(
   #dongtian-overlay.dt-overlay,
   #page-battle.battle-v2-page,
@@ -55,7 +54,8 @@ html.app-visual-viewport-ready :is(
   #golden-core-tutorial-layer,
   #qi-five-dongtian-tutorial-layer,
   #battle-tutorial-layer.bt-final-mode,
-  #game-startup-gate
+  #game-startup-gate,
+  #first-visit-layer
 ){
   position:fixed!important;
   inset:auto!important;
@@ -71,7 +71,7 @@ html.app-visual-viewport-ready :is(
   box-sizing:border-box!important;
 }
 
-/* Fullscreen/modal backdrops also stay inside the visible browser area. */
+/* Modal backdrops cover the same page bounds. */
 html.app-visual-viewport-ready :is(
   .dt-modal,
   .uib-modal-backdrop,
@@ -94,7 +94,7 @@ html.app-visual-viewport-ready :is(
   box-sizing:border-box!important;
 }
 
-/* Fixed bottom UI must clear mobile browser chrome, not only the hardware safe area. */
+/* Bottom UI keeps its page-relative offset and hardware safe area. */
 html.app-visual-viewport-ready body.xianxia-theme #bottom-nav{
   bottom:max(14px,calc(var(--app-vv-bottom) + env(safe-area-inset-bottom,0px)))!important;
 }
@@ -106,7 +106,7 @@ html.app-visual-viewport-ready :is(
   bottom:max(14px,calc(var(--app-vv-bottom) + env(safe-area-inset-bottom,0px)))!important;
 }
 
-/* Scrollable fullscreen content gets a visible bottom runway. */
+/* Scrollable fullscreen content retains bottom padding. */
 html.app-visual-viewport-ready :is(
   .raid-question-shell,
   #dongtian-overlay .dt-question,
@@ -120,7 +120,7 @@ html.app-visual-viewport-ready :is(
   scroll-padding-bottom:max(18px,env(safe-area-inset-bottom,0px))!important;
 }
 
-/* Common centered dialogs use the real visual viewport for their cap. */
+/* Centered dialog height is capped by the page, independent of the visual viewport. */
 html.app-visual-viewport-ready :is(
   .dt-modal-card,
   .uib-modal,
@@ -133,11 +133,11 @@ html.app-visual-viewport-ready :is(
   #report-box,
   #custom-confirm-box
 ){
-  max-height:min(calc(var(--app-vv-height) - 28px),92dvh)!important;
+  max-height:min(calc(var(--app-vv-height) - 28px),calc(var(--app-vv-height) * .92))!important;
   box-sizing:border-box!important;
 }
 
-/* Toasts should never land behind the browser toolbar. */
+/* Toasts retain their page-relative bottom offset. */
 html.app-visual-viewport-ready :is(
   .training-v3-toast,
   .raid-toast
@@ -157,7 +157,7 @@ html.app-visual-viewport-ready #xiuxian-story-layer .story-dialogue{
   bottom:max(12px,calc(var(--app-vv-bottom) + env(safe-area-inset-bottom,0px)))!important;
 }
 
-/* Existing fixed toasts keep their designed offset, plus any browser-chrome overlap. */
+/* Existing fixed toasts keep their designed offset within the page. */
 html.app-visual-viewport-ready :is(
   #cultivation-rule-toast,
   #artifact-toast,

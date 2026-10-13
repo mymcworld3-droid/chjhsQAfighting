@@ -1,5 +1,5 @@
-// Global visual viewport guard for mobile Safari / iPad browser chrome.
-// Keeps fullscreen gameplay surfaces inside the actually visible viewport.
+// Fullscreen surfaces follow the page layout, including the fixed-size game document.
+// Legacy --app-vv-* properties remain compatible but no longer follow visualViewport.
 (function () {
   'use strict';
 
@@ -12,16 +12,11 @@
     return (Number.isFinite(n) ? Math.max(0, n) : 0).toFixed(2) + 'px';
   }
 
-  function syncVisualViewport() {
-    const vv = window.visualViewport;
-    const layoutWidth = Math.max(1, Number(window.innerWidth) || ROOT.clientWidth || 1);
-    const layoutHeight = Math.max(1, Number(window.innerHeight) || ROOT.clientHeight || 1);
-    const width = Math.max(1, Number(vv?.width) || layoutWidth);
-    const height = Math.max(1, Number(vv?.height) || layoutHeight);
-    const top = Math.max(0, Number(vv?.offsetTop) || 0);
-    const left = Math.max(0, Number(vv?.offsetLeft) || 0);
-    const bottom = Math.max(0, layoutHeight - (top + height));
-    const right = Math.max(0, layoutWidth - (left + width));
+  function syncPageViewport() {
+    const layoutWidth = Math.max(1, Number(ROOT.clientWidth) || Number(window.innerWidth) || 1);
+    const layoutHeight = Math.max(1, Number(ROOT.clientHeight) || Number(window.innerHeight) || 1);
+    const width = layoutWidth, height = layoutHeight;
+    const top = 0, left = 0, bottom = 0, right = 0;
 
     ROOT.style.setProperty('--app-vv-top', px(top));
     ROOT.style.setProperty('--app-vv-left', px(left));
@@ -31,32 +26,31 @@
     ROOT.style.setProperty('--app-vv-right', px(right));
     ROOT.classList.add('app-visual-viewport-ready');
 
-    window.dispatchEvent(new CustomEvent('app:visual-viewport', {
+    window.dispatchEvent(new CustomEvent('app:layout-viewport', {
       detail: { top, left, right, bottom, width, height, layoutWidth, layoutHeight }
     }));
   }
 
-  function scheduleVisualViewportSync() {
+  function schedulePageViewportSync() {
     cancelAnimationFrame(raf);
     raf = requestAnimationFrame(() => {
-      syncVisualViewport();
+      syncPageViewport();
       cancelAnimationFrame(delayed);
-      delayed = requestAnimationFrame(syncVisualViewport);
+      delayed = requestAnimationFrame(syncPageViewport);
     });
   }
 
-  syncVisualViewport();
-  window.addEventListener('resize', scheduleVisualViewportSync, { passive: true });
-  window.addEventListener('orientationchange', scheduleVisualViewportSync, { passive: true });
-  window.addEventListener('pageshow', scheduleVisualViewportSync, { passive: true });
-  window.visualViewport?.addEventListener?.('resize', scheduleVisualViewportSync, { passive: true });
-  window.visualViewport?.addEventListener?.('scroll', scheduleVisualViewportSync, { passive: true });
+  syncPageViewport();
+  window.addEventListener('resize', schedulePageViewportSync, { passive: true });
+  window.addEventListener('orientationchange', schedulePageViewportSync, { passive: true });
+  window.addEventListener('pageshow', schedulePageViewportSync, { passive: true });
+  if (window.ResizeObserver) new ResizeObserver(schedulePageViewportSync).observe(ROOT);
 
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) {
-      scheduleVisualViewportSync();
-      setTimeout(scheduleVisualViewportSync, 80);
-      setTimeout(scheduleVisualViewportSync, 320);
+      schedulePageViewportSync();
+      setTimeout(schedulePageViewportSync, 80);
+      setTimeout(schedulePageViewportSync, 320);
     }
   });
 })();

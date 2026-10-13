@@ -29,6 +29,32 @@ test('doubling screen pixels doubles every displayed dimension while logical lay
   close(keyboard.width/keyboard.height,9/16);
 });
 
+test('outer stage fits document bounds and safe areas without reacting to keyboard or visual panning',()=>{
+  const props=new Map(),handlers={},frames=[],root={clientWidth:390,clientHeight:844};
+  let loads=0,observed;
+  const frame={set src(value){loads++;this.url=value;}};
+  const stage={dataset:{},style:{getPropertyValue:key=>props.get(key),setProperty:(key,value)=>props.set(key,value)}};
+  class ResizeObserver {constructor(callback){this.callback=callback;}observe(node){observed=node;}}
+  let visualListeners=0;
+  const window={innerWidth:1000,innerHeight:700,QAGameStageRules:rules,ResizeObserver,
+    visualViewport:{width:300,height:200,offsetLeft:40,offsetTop:80,addEventListener(){visualListeners++;}},
+    addEventListener:(type,callback)=>handlers[type]=callback};
+  vm.runInNewContext(read('public/game-stage.js'),{window,document:{documentElement:root,
+    getElementById:id=>id==='game-stage'?stage:id==='game-frame'?frame:{},addEventListener(){}},
+    getComputedStyle:()=>({paddingLeft:'4px',paddingRight:'6px',paddingTop:'20px',paddingBottom:'24px'}),
+    ResizeObserver,requestAnimationFrame:callback=>{frames.push(callback);return frames.length;},URL,
+    location:{href:'https://example.test/stage.html?qa=1',search:'?qa=1',hash:''}});
+  const first=window.QAGameStage.getState();
+  const expected=rules.fit({width:380,height:800,left:4,top:20,mode:'portrait'});
+  for(const key of ['width','height','left','top','scale'])close(first[key],expected[key]);
+  assert.equal(first.mode,'portrait');assert.equal(observed,root);assert.equal(visualListeners,0);
+  window.visualViewport.height=100;window.visualViewport.offsetTop=250;window.QAGameStage.sync();
+  assert.deepEqual(window.QAGameStage.getState(),first);
+  root.clientWidth=1280;root.clientHeight=720;handlers.resize();while(frames.length)frames.shift()();
+  assert.equal(window.QAGameStage.getState().mode,'landscape');
+  assert.equal(loads,1,'resizing never reloads the authenticated game document');
+});
+
 test('server separates the outer page from its single authenticated app document',async t=>{
   const app=express();register(app);app.use(express.static(path.join(__dirname,'../public')));
   const server=app.listen(0,'127.0.0.1');await new Promise(resolve=>server.once('listening',resolve));
