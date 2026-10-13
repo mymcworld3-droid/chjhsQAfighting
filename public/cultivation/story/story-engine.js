@@ -650,6 +650,7 @@ import { STORY_BACKGROUNDS, storyBackgroundForLine, nextStoryBackground, createS
   }
 
   function handleScoreUpdate() {
+    syncArchiveIndicator();
     const now = score();
     if (lastScore < 0) lastScore = now;
     if (now !== lastScore) {
@@ -669,6 +670,9 @@ import { STORY_BACKGROUNDS, storyBackgroundForLine, nextStoryBackground, createS
     document.getElementById(ARCHIVE_ID)?.remove();
     const el = document.createElement('div');
     el.id = ARCHIVE_ID;
+    el.setAttribute('role', 'dialog');
+    el.setAttribute('aria-modal', 'true');
+    el.setAttribute('aria-label', '主線劇情回顧');
     const seen = seenMap();
     const currentScore = score();
     const rows = STORY_CHAPTERS.map((chapter) => {
@@ -706,17 +710,27 @@ import { STORY_BACKGROUNDS, storyBackgroundForLine, nextStoryBackground, createS
     document.body.appendChild(el);
   }
 
+  function syncArchiveIndicator() {
+    const button = document.getElementById('story-archive-launcher');
+    const dot = document.getElementById('story-unread-dot');
+    if (!button || !dot) return;
+    const ready = user()?.uid && data()?.uid === user().uid;
+    // persist() updates the local seen map before its write finishes. Keep the
+    // current dot until that write succeeds, while clearing it on account changes.
+    if (ready && busyPersist) return;
+    const unread = ready && STORY_CHAPTERS.some(chapter => score() >= chapter.minScore && !seenMap()[chapter.id]);
+    dot.hidden = !unread;
+    button.setAttribute('aria-label', unread ? '劇情，有新的未讀章節' : '劇情');
+  }
+
   function mountArchiveLauncher() {
-    if (document.getElementById('story-archive-launcher')) return;
-    const panel = document.getElementById('xiuxian-panel');
-    if (!panel) return;
-    const button = document.createElement('button');
-    button.id = 'story-archive-launcher';
-    button.type = 'button';
-    button.className = 'story-archive-launcher';
-    button.innerHTML = '<i class="fa-solid fa-book-open"></i> 主線劇情';
-    button.addEventListener('click', openArchive);
-    panel.appendChild(button);
+    const button = document.getElementById('story-archive-launcher');
+    if (!button) return;
+    if (button.dataset.storyBound !== '1') {
+      button.dataset.storyBound = '1';
+      button.addEventListener('click', openArchive);
+    }
+    syncArchiveIndicator();
   }
 
   function onKeydown(event) {
@@ -761,6 +775,7 @@ import { STORY_BACKGROUNDS, storyBackgroundForLine, nextStoryBackground, createS
     lastScore = score();
     document.addEventListener('keydown', onKeydown);
     window.addEventListener('xiuxian:stats-updated', handleScoreUpdate);
+    ['xiuxian:user-data-ready', 'xiuxian:story-chapter-completed'].forEach(name => window.addEventListener(name, syncArchiveIndicator));
     window.addEventListener('xiuxian:battle-session-ended', () => setTimeout(maybeAutoStart, 180));
     window.addEventListener('xiuxian:opening-cinematic-completed', (event) => {
       if (event.detail?.replay) return;

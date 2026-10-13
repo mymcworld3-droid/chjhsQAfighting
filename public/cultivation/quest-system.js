@@ -15,6 +15,13 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     return parts.join(' · ');
   }
   function status(message) { if ($('quest-status')) $('quest-status').textContent = message; }
+  function syncQuestIndicator() {
+    const ready = q => q?.claimable && !q.claimed && !q.locked;
+    const available = account === getMainUser()?.uid && snapshot &&
+      (ready(snapshot.path) || (snapshot.date === window.XianxiaQuestRules.dateKey() && snapshot.daily.some(ready)));
+    if ($('quest-ready-dot')) $('quest-ready-dot').hidden = !available;
+    $('quest-open')?.setAttribute('aria-label', available ? '任務，有獎勵可領取' : '任務');
+  }
   function card(q, kind) {
     const label = q.claimed ? '已領取' : q.locked ? '尚未解鎖' : q.claimable ? '領取獎勵' : q.metric === 'story' ? '觀看劇情' : q.metric === 'dongtian-tutorial' ? '開始洞天教程' : '前往修行';
     return `<article class="quest-card ${kind === 'path' ? 'quest-path-card' : ''} ${q.claimable ? 'quest-ready' : ''} ${q.claimed ? 'quest-claimed' : ''}">
@@ -27,6 +34,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     </article>`;
   }
   function render() {
+    syncQuestIndicator();
     if (!$('quest-content')) return;
     ['path', 'daily'].forEach(key => {
       const button = $('quest-tab-' + key);
@@ -88,6 +96,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
   }
   function invalidate() {
     revision += 1; dirty = true;
+    reconcileAccount(); syncQuestIndicator();
     clearTimeout(timer);
     timer = setTimeout(() => { void refresh(); }, 350);
   }
@@ -185,7 +194,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     render();
   }
   mount();
-  ['xiuxian:user-ready', 'xiuxian:quest-progress-updated', 'xiuxian:story-chapter-completed', 'xiuxian:dongtian-tutorial-completed'].forEach(name => window.addEventListener(name, invalidate));
+  ['xiuxian:user-data-ready', 'xiuxian:user-ready', 'xiuxian:quest-progress-updated', 'xiuxian:story-chapter-completed', 'xiuxian:dongtian-tutorial-completed'].forEach(name => window.addEventListener(name, invalidate));
   window.addEventListener('material-system-updated', e => { if (!e.detail?.questReward) invalidate(); });
   window.addEventListener('xiuxian:stats-updated', e => { if (!applyingReward && e.detail?.source !== 'quest-reward') invalidate(); });
   document.addEventListener('visibilitychange', () => { if (!document.hidden) invalidate(); });
