@@ -4,3 +4,47 @@
 .quest-note{color:#a9a18f;font-size:12px;line-height:1.75;margin:8px 0 13px}.quest-card{display:flex;flex-direction:column;min-width:0;padding:15px;border-radius:13px;border:1px solid #8a713836;background:#ffffff03}.quest-card-heading{display:flex;align-items:center;justify-content:space-between;gap:10px}.quest-card h4{margin:0;font-size:16px;color:#e4d5b4}.quest-card-heading>span{flex-shrink:0;font-size:11px;color:#a89b7c}.quest-card>p{font-size:13px;line-height:1.7;color:#b4ad9e;flex:1;margin:9px 0 13px}.quest-path-card{border-color:#b99a5154;background:linear-gradient(120deg,#b6964511,transparent)}.quest-path-card h4{font-size:19px}.quest-daily-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .quest-progress-label{display:flex;justify-content:space-between;gap:10px;font-size:11px;color:#938775}.quest-progress-label b{font-variant-numeric:tabular-nums;color:#d7c393}.quest-progress{height:5px;border-radius:10px;background:#ffffff0c;margin:7px 0 12px;overflow:hidden}.quest-progress i{display:block;height:100%;background:linear-gradient(90deg,#8b6b30,#e0bd6d);border-radius:inherit}.quest-reward{color:#d3b77f;font-size:12px;line-height:1.8;overflow-wrap:anywhere}.quest-reward i{margin-right:4px}.quest-action{margin-top:12px;min-height:40px;border:1px solid #b3944e50;border-radius:9px;background:#ffffff04;color:#cdbd9c;font-size:13px;font-weight:700;cursor:pointer}.quest-claim{background:linear-gradient(110deg,#926a32,#5f431f);color:#fff0cb;border-color:#d2ad68}.quest-ready{border-color:#c6a25988}.quest-ready .quest-card-heading>span{color:#e6c578}.quest-claimed{opacity:.6}.quest-panel button:disabled{opacity:.5;cursor:default}.quest-panel button:focus-visible{outline:2px solid #efd28f;outline-offset:3px}#quest-status{font-size:12px;line-height:1.7;margin:10px 0 0;color:#ead5a4;overflow-wrap:anywhere}#quest-status:empty{display:none}.quest-empty{font-size:13px;color:#c7b997;line-height:1.8;margin:12px 0}
 @media(max-width:520px){.quest-panel{padding:13px}.quest-daily-grid{grid-template-columns:1fr}.quest-card{padding:13px}.quest-tabs span{display:block;margin:4px 0 0}}
+
+/* Native modal keeps keyboard focus inside the scroll and the page underneath fixed. */
+.quest-dialog {
+  width: min(720px, calc(100% - 28px)); height: min(620px, calc(100dvh - 40px));
+  max-width: none; max-height: none; padding: 0; border: 0; margin: auto;
+  color: #e5ddcc; background: transparent; overflow: visible;
+}
+.quest-dialog:not([open]) { display: none; }
+.quest-dialog::backdrop { background: #030a08c9; backdrop-filter: blur(5px); }
+.quest-dialog .quest-panel {
+  position: relative; display: flex; flex-direction: column; height: 100%; margin: 0;
+  padding: 28px 22px 25px; border-radius: 7px; border-color: #b99a5180;
+  background: linear-gradient(90deg, #b6964510, transparent 12%, transparent 88%, #b6964510),
+    radial-gradient(ellipse at 50% 0, #b38d4312, transparent 65%), #171b13;
+  box-shadow: inset 0 0 22px #070b0866, 0 16px 36px #0006;
+}
+.quest-dialog .quest-panel::before, .quest-dialog .quest-panel::after {
+  content: ''; position: absolute; inset-inline: 7px; height: 12px;
+  border: 1px solid #bd995460; border-radius: 5px;
+  background: linear-gradient(90deg, #47321d 0 8px, #ceaa64 8px 11px, transparent 11px calc(100% - 11px), #ceaa64 calc(100% - 11px) calc(100% - 8px), #47321d calc(100% - 8px)),
+    linear-gradient(#302316, #b68c4a 38%, #6e4c27 70%, #241b12);
+  box-shadow: 0 2px 5px #0006; pointer-events: none;
+}
+.quest-dialog .quest-panel::before { top: 6px; }
+.quest-dialog .quest-panel::after { bottom: 6px; }
+.quest-heading, .quest-tabs { flex: 0 0 auto; }
+.quest-heading-actions { display: flex; gap: 7px; align-items: center; }
+.quest-heading #quest-close { display: grid; place-items: center; min-width: 36px; min-height: 36px; padding: 5px; font-size: 17px; }
+.quest-scroll {
+  flex: 1 1 0; min-height: 0; overflow-x: hidden; overflow-y: auto;
+  overscroll-behavior-y: contain; scrollbar-gutter: stable; scrollbar-width: thin;
+  scrollbar-color: #987944 #ffffff08; padding: 0 5px 3px 0;
+}
+.quest-scroll:focus-visible { outline: 1px solid #d8b15d; outline-offset: -1px; }
+.quest-scroll::-webkit-scrollbar { width: 5px; }
+.quest-scroll::-webkit-scrollbar-track { background: #ffffff08; }
+.quest-scroll::-webkit-scrollbar-thumb { background: #987944; border-radius: 5px; }
+@media (max-width: 520px) {
+  .quest-dialog { width: calc(100% - 20px); height: calc(100dvh - 24px); }
+  .quest-dialog .quest-panel { padding: 25px 13px 24px; }
+  .quest-heading { gap: 7px; }
+  .quest-heading h3 { font-size: 19px; }
+  .quest-heading button { padding: 7px; font-size: 10px; }
+}

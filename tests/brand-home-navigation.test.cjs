@@ -51,7 +51,7 @@ test('the entire brand is a native button that calls guarded navigation', () => 
   assert.ok(button);
   assert.match(button[0], /type="button"/);
   assert.match(button[0], /onclick="returnToImmortalHome\(\)"/);
-  assert.match(button[0], /aria-label="青雲問道，返回仙府"/);
+  assert.match(button[0], /aria-label="青雲問道，返回宗門"/);
   assert.match(button[1], /青雲問道/);
   assert.match(button[1], /以學入道 · 積微成仙/);
 });

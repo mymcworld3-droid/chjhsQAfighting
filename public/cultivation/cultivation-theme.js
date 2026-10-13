@@ -142,22 +142,21 @@
         <div class="xiuxian-bar"><div id="xiuxian-progress" style="width:0%"></div></div>
         <div class="xiuxian-row"><span id="xiuxian-progress-label" class="xiuxian-label">距離下一境界</span><span id="xiuxian-next" class="xiuxian-value">5 修為</span></div>
         <div class="xiuxian-row"><span class="xiuxian-label" id="xiuxian-meditation-streak">連續閉關 0 日 · 累計 0 日</span></div>
-        <div class="xiuxian-actions"><button id="xiuxian-meditate" class="xiuxian-btn" type="button">今日閉關</button><button id="xiuxian-path" class="xiuxian-btn" type="button">境界圖錄</button></div>
       `;
       anchor.parentNode.insertBefore(panel, anchor);
     }
 
     if (panel.dataset.xiuxianBound !== '1') {
       panel.dataset.xiuxianBound = '1';
-      panel.querySelector('#xiuxian-meditate')?.addEventListener('click', () => window.openDailyMeditation?.());
-      panel.querySelector('#xiuxian-path')?.addEventListener('click', openRealmAtlas);
+      document.getElementById('xiuxian-meditate')?.addEventListener('click', () => window.openDailyMeditation?.());
+      document.getElementById('xiuxian-path')?.addEventListener('click', openRealmAtlas);
     }
   }
 
   function rewriteLabels() {
     text('[data-i18n="btn_solo"]', '問道試煉');
     text('[data-i18n="btn_pvp"]', '鬥法論道');
-    text('[data-i18n="nav_home"]', '仙府');
+    text('[data-i18n="nav_home"]', '宗門');
     text('[data-i18n="nav_store"]', '坊市');
     text('[data-i18n="store_title"]', '雲間坊市');
     text('[data-i18n="nav_quiz"]', '問道');
@@ -168,7 +167,7 @@
     text('[data-i18n="rank_title"]', '九州仙榜');
     text('[data-i18n="th_rank"]', '境界');
     text('[data-i18n="btn_next_q"]', '繼續悟道');
-    text('[data-i18n="btn_back_home"]', '返回仙府');
+    text('[data-i18n="btn_back_home"]', '返回宗門');
 
     document.querySelectorAll('.stat-label').forEach((el) => {
       if (el.innerText === 'ACCURACY') el.innerText = '悟性 (正確率)';

@@ -349,7 +349,7 @@ export const featureReady = (async () => {
             <p id="bv2-result-msg">正在寫入戰績…</p>
             <div class="bv2-result-names"><span id="bv2-result-my-name">我方</span><i>／</i><span id="bv2-result-enemy-name">對手</span></div>
             <div id="bv2-result-stats" class="bv2-result-stats"></div>
-            <div class="bv2-result-actions"><button id="bv2-home" class="bv2-btn ghost" type="button">返回仙府</button><button id="bv2-rematch" class="bv2-btn primary" type="button">再尋道友</button></div>
+            <div class="bv2-result-actions"><button id="bv2-home" class="bv2-btn ghost" type="button">返回宗門</button><button id="bv2-rematch" class="bv2-btn primary" type="button">再尋道友</button></div>
           </div>
         </section>
       </div>`;

@@ -142,7 +142,8 @@ import { buildMeditationMistakePool, chooseMeditationMistakes } from './daily-me
     const el = node('xiuxian-meditate');
     if (!el) return;
     const current = panelState();
-    el.textContent = current.done ? '查看今日閉關' : '今日閉關';
+    const labelNode = el.querySelector('.sect-action-label') || el;
+    labelNode.textContent = current.done ? '查看閉關' : '閉關';
     el.disabled = false;
     el.style.opacity = '1';
     const label = node('xiuxian-meditation-streak');
@@ -160,7 +161,7 @@ import { buildMeditationMistakePool, chooseMeditationMistakes } from './daily-me
       setContent('<h3 class="dm-result">今日已出關</h3>' +
         summary([['連續閉關', (r.streak || 1) + ' 日'], ['修為收穫', '+' + (result.cultivation || 0)], ['靈石收穫', '+' + (result.gold || 0)], ['元嬰碎精收穫', '+' + (result.fragments || 0)]]) +
         '<p class="dm-note">今日已完成閉關，明日再來運轉周天。累計閉關 ' + (r.totalDays || 1) + ' 日。</p>' +
-        '<button type="button" class="dm-action dm-action-secondary" id="dm-done">返回仙府</button>');
+        '<button type="button" class="dm-action dm-action-secondary" id="dm-done">返回宗門</button>');
       node('dm-done').onclick = () => node('daily-meditation-overlay')?.remove();
       syncPanel();
       return;
@@ -326,7 +327,7 @@ import { buildMeditationMistakePool, chooseMeditationMistakes } from './daily-me
         setContent('<h3 class="dm-result">錯題尚未集齊</h3><p class="dm-note">目前可用的不同錯題共有 ' +
           available + ' 題，還需要 ' + (QUESTION_TOTAL - selected.length) +
           ' 題才能進行每日閉關。請先到「問道」或「洞天」練習；不會以新題冒充舊錯題，也不會扣除今日閉關次數。</p>' +
-          '<button type="button" class="dm-action" id="dm-return">返回仙府</button>');
+          '<button type="button" class="dm-action" id="dm-return">返回宗門</button>');
         node('dm-return').onclick = () => node('daily-meditation-overlay')?.remove();
         return;
       }

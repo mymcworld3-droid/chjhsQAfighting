@@ -1310,7 +1310,7 @@ export const featureReady = (async () => {
     // Show an actionable settlement screen immediately rather than leaving the
     // last answered question visible while the transaction waits on Firestore.
     const overlay = ensureOverlay();
-    const settlementBack = `<button id="dt-settle-back" class="dt-back" type="button">返回洞府／仙府</button>`;
+    const settlementBack = `<button id="dt-settle-back" class="dt-back" type="button">返回洞府／宗門</button>`;
     const bindSettlementBack = () => {
       overlay.querySelector('#dt-settle-back').onclick = () => {
         if (state.session !== s) return;

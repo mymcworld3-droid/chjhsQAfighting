@@ -666,7 +666,7 @@ body.xianxia-theme main:has(#page-training.active-page),
     </script>
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="stylesheet" href="xianxia-bright-accents.css?v=20261013-ai-scenes1">
-    <link rel="stylesheet" href="styles/page-layout-unified.css?v=20260929-audit1">
+    <link rel="stylesheet" href="styles/page-layout-unified.css?v=20261013-home-scroll1">
     <link rel="stylesheet" href="styles/content-format.css?v=20261005-xianxia-font1">
     <style id="debug-top-layer-style">
       /* Admin debugger must remain above every app modal, battle overlay and tutorial layer. */
@@ -688,7 +688,7 @@ body.xianxia-theme main:has(#page-training.active-page),
 
     <header class="fixed top-0 left-0 w-full z-40 px-4 py-3 flex justify-between items-center glass-strip border-b border-white/5">
         <h1 class="xianxia-brand">
-            <button id="brand-home" type="button" class="xianxia-brand-home" onclick="returnToImmortalHome()" aria-label="青雲問道，返回仙府" title="返回仙府">
+            <button id="brand-home" type="button" class="xianxia-brand-home" onclick="returnToImmortalHome()" aria-label="青雲問道，返回宗門" title="返回宗門">
                 <span class="xianxia-seal" aria-hidden="true">道</span>
                 <span><span data-i18n="app_name">青雲問道</span><small>以學入道 · 積微成仙</small></span>
             </button>
@@ -757,7 +757,7 @@ body.xianxia-theme main:has(#page-training.active-page),
 
         <div id="page-home" class="page-section hidden px-4 relative">
             <div class="xianxia-page-heading">
-                <div><div class="xianxia-eyebrow">青雲山境 ／ 修行手札</div><h2>仙府</h2><p>山靜日長，今日亦是問道之時。</p></div>
+                <div><div class="xianxia-eyebrow">青雲山境 ／ 修行手札</div><h2>宗門</h2><p>山靜日長，今日亦是問道之時。</p></div>
                 <span class="xianxia-chapter" aria-hidden="true">壹 · 仙途</span>
             </div>
     
@@ -810,11 +810,26 @@ body.xianxia-theme main:has(#page-training.active-page),
                         <span id="xiuxian-next" class="xiuxian-value">5 修為</span>
                     </div>
                     <div class="xiuxian-row"><span class="xiuxian-label" id="xiuxian-meditation-streak">連續閉關 0 日 · 累計 0 日</span></div>
-                    <div class="xiuxian-actions">
-                        <button id="xiuxian-meditate" class="xiuxian-btn" type="button">今日閉關</button>
-                        <button id="xiuxian-path" class="xiuxian-btn" type="button">境界圖錄</button>
-                    </div>
                 </section>
+
+                <aside class="sect-actions" aria-label="宗門事務">
+                    <button id="quest-open" class="sect-action" type="button" aria-haspopup="dialog" aria-controls="quest-dialog" aria-expanded="false">
+                        <span class="sect-action-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5h14v22H9a3 3 0 0 1 0-6h17a3 3 0 0 1 0 6h-3M9 5a3 3 0 0 0-3 3v16M23 5h3a3 3 0 0 1 0 6h-3M12 12h7m-7 5h7"/></svg></span>
+                        <span class="sect-action-label">任務</span>
+                    </button>
+                    <button id="xiuxian-meditate" class="sect-action" type="button">
+                        <span class="sect-action-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16 5c-7 7-8 13 0 20 8-7 7-13 0-20zM16 25C7 26 3 20 4 13c6 0 10 4 12 12zm0 0c9 1 13-5 12-12-6 0-10 4-12 12zM7 28h18"/></svg></span>
+                        <span class="sect-action-label">閉關</span>
+                    </button>
+                    <button id="xiuxian-path" class="sect-action" type="button">
+                        <span class="sect-action-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16 9c-4-3-8-3-12-2v19c4-1 8-1 12 2 4-3 8-3 12-2V7c-4-1-8-1-12 2zm0 0v19M8 12l4 1m-4 5 4 1m8-6 4-1m-4 7 4-1"/></svg></span>
+                        <span class="sect-action-label">境界圖錄</span>
+                    </button>
+                    <button id="sect-raid-entry" class="sect-action" type="button" onclick="openRaidHub()">
+                        <span class="sect-action-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 26 10 9l6 10 6-14 7 21M7 26h18M14 26v-7h6v7M21 8l3 3M9 12l3 3"/></svg></span>
+                        <span class="sect-action-label">秘境試煉</span>
+                    </button>
+                </aside>
 
                 <div class="grid grid-cols-2 gap-3 mb-4 home-stats">
                     <div class="stat-card group">
@@ -970,7 +985,7 @@ body.xianxia-theme main:has(#page-training.active-page),
                         <span id="feedback-text"></span>
                         </div>
                         <div class="flex gap-3">
-                        <button onclick="switchToPage('page-home')" class="btn-cyber-ghost flex-1 py-3 rounded-lg text-xs" data-i18n="btn_back_home">HOME</button>
+                        <button onclick="switchToPage('page-home')" class="btn-cyber-ghost flex-1 py-3 rounded-lg text-xs" data-i18n="btn_back_home">返回宗門</button>
                         <button id="btn-next-step" onclick="nextQuestion()" class="btn-cyber-primary flex-1 py-3 rounded-lg text-xs" data-i18n="btn_next_q">NEXT</button>
                         </div>
                         </div>
@@ -983,7 +998,7 @@ body.xianxia-theme main:has(#page-training.active-page),
                         <i class="fa-solid fa-bug group-hover:rotate-12 transition-transform"></i> <span>回報問題</span>
                         </button>
                         <button id="btn-quiz-home" type="button" onclick="switchToPage('page-home')" class="flex-1 py-3 text-gray-600 text-xs text-center hover:text-cyan-400 transition border border-transparent hover:border-cyan-500/20 rounded-lg group">
-                        <i class="fa-solid fa-house group-hover:-translate-y-0.5 transition-transform"></i> <span>返回仙府</span>
+                        <i class="fa-solid fa-house group-hover:-translate-y-0.5 transition-transform"></i> <span>返回宗門</span>
                         </button>
                         </div>
                     </div>
@@ -1368,7 +1383,7 @@ body.xianxia-theme main:has(#page-training.active-page),
                         <i class="fa-solid fa-house text-xl text-gray-500 group-hover:text-cyan-400 group-[.active-nav-btn]:text-cyan-400 transition-colors mb-0.5"></i>
                         <span class="active-dot absolute top-0 right-0 w-1.5 h-1.5 bg-cyan-400 rounded-full opacity-0"></span>
                     </div>
-                    <span class="text-[10px] font-bold text-gray-500 group-hover:text-cyan-400 group-[.active-nav-btn]:text-cyan-400 transition-colors font-sci tracking-wider" data-i18n="nav_home">HOME</span>
+                    <span class="text-[10px] font-bold text-gray-500 group-hover:text-cyan-400 group-[.active-nav-btn]:text-cyan-400 transition-colors font-sci tracking-wider" data-i18n="nav_home">宗門</span>
                 </button>
 
                 <button onclick="loadStoreItems(); switchToPage('page-store')" class="nav-btn group flex-1 flex flex-col items-center justify-center h-full transition-all" data-target="page-store">

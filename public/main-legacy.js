@@ -340,7 +340,7 @@ const translations = {
         admin_inventory_title: "📦 現有商品庫存",
 
         // Nav
-        nav_home: "仙府",
+        nav_home: "宗門",
         nav_quiz: "答題",
         nav_store: "商店",
         nav_rank: "排行",
@@ -961,7 +961,7 @@ function ensureGameStartupGate() {
             <div class="game-startup-brand">QINGYUN · CULTIVATION REALM</div>
             <div class="game-startup-copy">
                 <div class="game-startup-kicker">一念入道 · 萬法將啟</div>
-                <h1>仙府載入中</h1>
+                <h1>宗門載入中</h1>
                 <p id="game-startup-gate-text">正在準備玩家資料…</p>
                 <div class="game-startup-progress-wrap">
                     <div class="game-startup-tip-row">
@@ -973,7 +973,7 @@ function ensureGameStartupGate() {
                     </div>
                     <div class="game-startup-meta">
                         <span id="game-startup-gate-count">準備載入</span>
-                        <span>正在喚醒仙府諸般法門</span>
+                        <span>正在喚醒宗門諸般法門</span>
                     </div>
                 </div>
                 <div id="game-startup-gate-error">
@@ -1266,7 +1266,7 @@ window.addEventListener('xiuxian:feature-load-progress', (event) => {
     const loaded = Math.min(Number(detail.loaded) || 0, Number(detail.total) || 0);
     const text = document.getElementById('game-startup-gate-text');
     if (text) text.textContent = loaded >= detail.total
-        ? '諸般法門已就緒，正在進入仙府…'
+        ? '諸般法門已就緒，正在進入宗門…'
         : '正在載入修仙功能模組…';
     updateGameStartupProgress(loaded, detail.total);
 });
@@ -1425,14 +1425,14 @@ onAuthStateChanged(auth, async (user) => {
                 userInfoEl.innerHTML = `<i class="fa-solid fa-user-astronaut"></i> ${currentUserData.displayName || user.displayName || '玩家'}`;
             }
 
-            // 根據資料完整度導向；完整玩家以雲幕遮住載入畫面與仙府之間的換頁瞬間。
+            // 根據資料完整度導向；完整玩家以雲幕遮住載入畫面與宗門之間的換頁瞬間。
             if (!hasCompletedPlayerProfile(currentUserData.profile)) {
                 hideGameStartupGate();
                 populateOnboardingInputs();
                 switchToPage('page-onboarding');
                 document.getElementById('bottom-nav').classList.add('hidden');
             } else {
-                // 個人資料完成後：雲海由左右合攏，仙府在遮幕後就位，再向兩側打開。
+                // 個人資料完成後：雲海由左右合攏，宗門在遮幕後就位，再向兩側打開。
                 await enterHomeWithStartupCloudCurtain();
                 syncSoloQuestionCache();
                 fillBuffer();
@@ -2036,7 +2036,7 @@ window.returnToImmortalHome = async () => {
         }
         if (page.id === 'page-quiz') {
             if (isAnswering || soloNextBusy || document.querySelector('#quiz-loading:not(.hidden)')) {
-                window.showToast?.('題目正在處理，請稍候再返回仙府。');
+                window.showToast?.('題目正在處理，請稍候再返回宗門。');
                 return false;
             }
             // 保留未答題目；已作答的收益先完成儲存，再沿用原本的分頁轉場。
@@ -2048,7 +2048,7 @@ window.returnToImmortalHome = async () => {
         return true;
     } catch (error) {
         console.warn('[Home navigation]', error);
-        window.showToast?.('暫時無法返回仙府，請稍後再試。');
+        window.showToast?.('暫時無法返回宗門，請稍後再試。');
         return false;
     } finally {
         brandHomeNavigationPending = false;

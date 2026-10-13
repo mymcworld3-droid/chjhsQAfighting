@@ -143,19 +143,31 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
   }
   function mount() {
     if ($('quest-panel')) return;
-    const anchor = $('xiuxian-panel');
-    if (!anchor) return;
+    const entry = $('quest-open');
+    if (!entry) return;
     const link = document.createElement('link'); link.rel = 'stylesheet'; link.href = '/styles/quest-system.css'; document.head.append(link);
+    const dialog = document.createElement('dialog'); dialog.id = 'quest-dialog'; dialog.className = 'quest-dialog'; dialog.setAttribute('role', 'dialog'); dialog.setAttribute('aria-modal', 'true'); dialog.setAttribute('aria-labelledby', 'quest-title');
     const panel = document.createElement('section'); panel.id = 'quest-panel'; panel.className = 'quest-panel'; panel.setAttribute('aria-label', '修行任務');
-    panel.innerHTML = `<header class="quest-heading"><div><small>宗門手札</small><h3>修行任務</h3></div><button type="button" id="quest-refresh" aria-label="重新同步任務">重新同步</button></header>
+    panel.innerHTML = `<header class="quest-heading"><div><small>宗門手札</small><h3 id="quest-title">修行任務</h3></div><div class="quest-heading-actions"><button type="button" id="quest-refresh" aria-label="重新同步任務">重新同步</button><button type="button" id="quest-close" aria-label="關閉任務">✕</button></div></header>
       <div class="quest-tabs" role="tablist" aria-label="任務類別"><button id="quest-tab-path" type="button" role="tab" aria-controls="quest-content" aria-selected="true">仙道 <span id="quest-path-count"></span></button><button id="quest-tab-daily" type="button" role="tab" aria-controls="quest-content" aria-selected="false" tabindex="-1">日常 <span id="quest-daily-count"></span></button></div>
-      <p id="quest-note" class="quest-note"></p><div id="quest-content" role="tabpanel" aria-labelledby="quest-tab-path"></div><p id="quest-status" role="status" aria-live="polite"></p>`;
-    anchor.after(panel);
-    ['path', 'daily'].forEach(key => $('quest-tab-' + key).addEventListener('click', () => { tab = key; render(); void refresh(); }));
+      <div class="quest-scroll" tabindex="0" role="region" aria-label="任務清單，可捲動"><p id="quest-note" class="quest-note"></p><div id="quest-content" role="tabpanel" aria-labelledby="quest-tab-path"></div><p id="quest-status" role="status" aria-live="polite"></p></div>`;
+    dialog.append(panel); document.body.append(dialog);
+    entry.addEventListener('click', () => {
+      if (!dialog.open) dialog.showModal();
+      entry.setAttribute('aria-expanded', 'true');
+      reconcileAccount(); void refresh();
+    });
+    $('quest-close').addEventListener('click', () => dialog.close());
+    dialog.addEventListener('close', () => entry.setAttribute('aria-expanded', String(dialog.open)));
+    dialog.addEventListener('click', e => { if (e.target === dialog) dialog.close(); });
+    const selectTab = key => {
+      tab = key; render(); panel.querySelector('.quest-scroll').scrollTop = 0; void refresh();
+    };
+    ['path', 'daily'].forEach(key => $('quest-tab-' + key).addEventListener('click', () => selectTab(key)));
     panel.querySelector('.quest-tabs').addEventListener('keydown', e => {
       if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
-      e.preventDefault(); tab = e.key === 'Home' ? 'path' : e.key === 'End' ? 'daily' : tab === 'path' ? 'daily' : 'path';
-      render(); $('quest-tab-' + tab).focus();
+      e.preventDefault(); selectTab(e.key === 'Home' ? 'path' : e.key === 'End' ? 'daily' : tab === 'path' ? 'daily' : 'path');
+      $('quest-tab-' + tab).focus();
     });
     $('quest-refresh').addEventListener('click', () => { void refresh(true); });
     $('quest-content').addEventListener('click', e => {
@@ -164,9 +176,12 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       const kind = b.dataset.questKind;
       const q = kind === 'path' ? snapshot.path : snapshot.daily.find(q => q.id === b.dataset.questId);
       if (!q || q.id !== b.dataset.questId || q.claimed || q.locked) return;
-      if (q.claimable) void claim(q, kind); else go(q.destination, q);
+      if (q.claimable) void claim(q, kind); else { dialog.close(); go(q.destination, q); }
     });
-    new MutationObserver(() => { if (visible()) { reconcileAccount(); void refresh(); } }).observe($('page-home'), { attributes: true, attributeFilter: ['class'] });
+    new MutationObserver(() => {
+      if (visible()) { reconcileAccount(); void refresh(); }
+      else if (dialog.open) dialog.close();
+    }).observe($('page-home'), { attributes: true, attributeFilter: ['class'] });
     render();
   }
   mount();

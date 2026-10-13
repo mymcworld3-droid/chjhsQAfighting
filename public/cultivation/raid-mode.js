@@ -378,6 +378,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
   }
 
   function mountHomeEntry() {
+    if (document.getElementById('sect-raid-entry')) { updateHomeEntry(); return; }
     if (document.getElementById('raid-home-entry')) return;
     const anchor = document.querySelector('#page-home .home-stats');
     if (!anchor) return;
@@ -393,11 +394,12 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     updateHomeEntry();
   }
   function updateHomeEntry() {
-    const button = document.getElementById('raid-home-entry');
+    const button = document.getElementById('sect-raid-entry') || document.getElementById('raid-home-entry');
     if (!button) return;
     const locked = score() < RAID_MVP.minimumScore;
     button.classList.toggle('locked', locked);
     button.setAttribute('aria-disabled', String(locked));
+    button.title = locked ? RAID_MVP.minimumRealm + '（' + RAID_MVP.minimumScore + ' 修為）解鎖' : '選擇秘境試煉';
     button.querySelector('.raid-home-emblem i')?.classList.toggle('fa-lock', locked);
     button.querySelector('.raid-home-emblem i')?.classList.toggle('fa-users-rays', !locked);
     const hint = button.querySelector('em');
@@ -1390,7 +1392,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
         (Number(member.spiritCorrect) > 0 ? '・元嬰碎精 +' + Math.floor(member.spiritCorrect) + '（勝敗皆保留）' : '') + '</small></div>').join('') + '</div>' +
       '<div id="raid-learning-status" class="raid-learning-summary">' + renderRaidLearning(myRoomMember(), state.learningOutcome) + '</div>' +
       '<div class="raid-prototype-note raid-loot-summary"><i class="fa-solid fa-gem"></i><span id="raid-reward-status"><b>' + (won ? '通關戰利品' : '再接再厲') + '</b><small>' + (won ? '正在確認玄髓、劍魄、煉製印記與首勝獎勵…' : '答題收益保留；擊敗大師姐另獲團本素材與煉製印記。') + '</small></span></div>' +
-      '<div class="raid-result-actions"><button class="raid-ghost" type="button" data-home>返回仙府</button><button class="raid-ghost" type="button" data-refinery>前往煉器</button><button class="raid-primary" type="button" data-again>重新組隊</button></div></div>';
+      '<div class="raid-result-actions"><button class="raid-ghost" type="button" data-home>返回宗門</button><button class="raid-ghost" type="button" data-refinery>前往煉器</button><button class="raid-primary" type="button" data-again>重新組隊</button></div></div>';
     result.querySelector('[data-home]')?.addEventListener('click', returnFromRaidResult);
     result.querySelector('[data-again]')?.addEventListener('click', async function () {
       await leaveRaidRoom(state.roomId).catch(() => {});

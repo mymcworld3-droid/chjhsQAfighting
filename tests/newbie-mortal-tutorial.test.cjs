@@ -33,7 +33,7 @@ test('mortal-stage tutorial teaches the existing report button without submittin
 test('quiz answering hides the bottom navigation and provides a return-to-home action beside report', () => {
   assert.match(indexHtml, /id="btn-report"/);
   assert.match(indexHtml, /id="btn-quiz-home"/);
-  assert.match(indexHtml, /返回仙府/);
+  assert.match(indexHtml, /返回宗門/);
   assert.match(indexHtml, /quiz-footer-actions/);
   assert.match(mainLegacy, /classList\.toggle\('quiz-session-active', pageId === 'page-quiz'\)/);
   assert.match(styleCss, /body\.quiz-session-active #bottom-nav\s*\{[^}]*display:\s*none\s*!important/s);
@@ -56,7 +56,7 @@ test('tutorial teaches where features live before changing pages instead of tele
   assert.match(tutorial, /event\.stopImmediatePropagation\(\)/);
   assert.match(tutorial, /navigate\(route\.destination\)/);
   assert.match(tutorial, /先找到「\$\{label\}」在哪裡/);
-  assert.match(tutorial, /仙府/);
+  assert.match(tutorial, /宗門/);
   assert.doesNotMatch(tutorial, /首頁/);
   assert.doesNotMatch(tutorial, /\n\s*navigate\(step\.page\);/);
 });

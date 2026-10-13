@@ -60,7 +60,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     },
     {
       page: 'page-quiz', target: '#btn-next-step', demo: true, kicker: '第五步 · 下一題', title: '看完解析再進下一題',
-      body: '正式答題時，看完題解後按「下一題」即可繼續問道。若想先離開，也可以回到仙府。',
+      body: '正式答題時，看完題解後按「下一題」即可繼續問道。若想先離開，也可以回到宗門。',
       note: '教學範例不會真的產生下一題。'
     },
     {
@@ -75,7 +75,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     },
     {
       page: 'page-home', target: '#btn-home-start', kicker: '第八步 · 正式問道', title: '現在會正式答題了',
-      body: '回到仙府後，點「問道試煉」就能開始真正的單人答題。正式題目答對會增加修為，答錯不扣修為。',
+      body: '回到宗門後，點「問道試煉」就能開始真正的單人答題。正式題目答對會增加修為，答錯不扣修為。',
       note: '凡人期先靠問道累積修為，一步一步往築基前進。'
     },
     {
@@ -109,8 +109,8 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     },
     {
       page: 'page-home', target: '#xiuxian-panel',
-      kicker: '第一章 · 授課完成', title: '回到仙府，繼續與師姐對話',
-      body: '你已學會<strong>讀題 → 選答案 → 看解析 → 下一題</strong>，也認識了回報問題、修習範圍與難度設定。沈清霜仍在仙府等你，完成教學後會接續第一章對話。煉氣五層後，仙道任務會引導你觀看第二章，再另外開啟洞天新手教程。',
+      kicker: '第一章 · 授課完成', title: '回到宗門，繼續與師姐對話',
+      body: '你已學會<strong>讀題 → 選答案 → 看解析 → 下一題</strong>，也認識了回報問題、修習範圍與難度設定。沈清霜仍在宗門等你，完成教學後會接續第一章對話。煉氣五層後，仙道任務會引導你觀看第二章，再另外開啟洞天新手教程。',
       note: '洞天實作與劇情分開，可從後續仙道任務或洞府的「查看洞天新手教程」開始。'
     }
   ];
@@ -226,24 +226,24 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     const current = currentPageId();
     if (current === step.page) return null;
 
-    // 答題頁會隱藏底部導覽；任何跨頁操作都先使用題目下方的「返回仙府」。
+    // 答題頁會隱藏底部導覽；任何跨頁操作都先使用題目下方的「返回宗門」。
     if (current === 'page-quiz' && step.page !== 'page-quiz') {
       return navRoute(
         'page-home',
-        '返回仙府',
+        '返回宗門',
         '#btn-quiz-home',
-        '答題時底部導覽會暫時隱藏。請使用題目下方的「返回仙府」回到仙府，再前往下一個功能。'
+        '答題時底部導覽會暫時隱藏。請使用題目下方的「返回宗門」回到宗門，再前往下一個功能。'
       );
     }
 
-    // 問道不是底部獨立分頁：先回仙府，再由仙府的「問道試煉」進入。
+    // 問道不是底部獨立分頁：先回宗門，再由宗門的「問道試煉」進入。
     if (step.page === 'page-quiz') {
       if (current !== 'page-home') {
         return navRoute(
           'page-home',
-          '仙府',
+          '宗門',
           '#bottom-nav #nav-grid > button[data-target="page-home"]',
-          '問道試煉的入口在仙府。請先看底部導覽，找到並點擊「仙府」。'
+          '問道試煉的入口在宗門。請先看底部導覽，找到並點擊「宗門」。'
         );
       }
       return navRoute(
@@ -266,9 +266,9 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     if (step.page === 'page-home') {
       return navRoute(
         'page-home',
-        '仙府',
+        '宗門',
         '#bottom-nav #nav-grid > button[data-target="page-home"]',
-        '這個功能位在仙府。請看底部導覽，找到並點擊「仙府」。'
+        '這個功能位在宗門。請看底部導覽，找到並點擊「宗門」。'
       );
     }
 
@@ -694,7 +694,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     updateSpotlight();
     setTimeout(() => {
       const highlighted = target(displayStep().target);
-      // 固定底部的仙府／洞府按鈕不可 scrollIntoView：它們本來就在視窗內。
+      // 固定底部的宗門／洞府按鈕不可 scrollIntoView：它們本來就在視窗內。
       if (highlighted && !highlighted.closest('#bottom-nav')) {
         highlighted.scrollIntoView?.({behavior:'smooth',block:'center'});
       }
@@ -755,7 +755,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     document.getElementById('newbie-tutorial-layer')?.remove();
     if (resizeHandler) window.removeEventListener('resize', resizeHandler);
     resizeHandler = null;
-    // 剧情交棒期间由主線播放器接手畫面，不額外跳回仙府。
+    // 剧情交棒期间由主線播放器接手畫面，不額外跳回宗門。
     if (finishedMode === 'question') navigate('page-home');
     if (finishedMode === 'dongtian' && !skipped && !replayOnly) {
       window.dispatchEvent(new CustomEvent('xiuxian:dongtian-tutorial-completed', { detail: { kind: finishedMode } }));
