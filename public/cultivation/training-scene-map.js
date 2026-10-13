@@ -1,4 +1,5 @@
 import './training-access-rules.js';
+import './training-scene-layer-art.js';
 import './training-scene-layouts.js';
 import { getMainUser } from './data/project-repository.js';
 
@@ -156,6 +157,31 @@ function makeMotes() {
   }
   return motes;
 }
+function makeSceneryLayers(layout) {
+  return layout.layers.map(layer => {
+    const image = document.createElement('img');
+    image.className = `training-map-layer training-map-${layer.id}`;
+    image.src = layer.image;
+    image.alt = '';
+    image.draggable = false;
+    image.decoding = 'async';
+    image.dataset.sceneLayer = layer.id;
+    const [x, y, width, height] = layer.bounds;
+    image.style.cssText = `left:${x / layout.width * 100}%;top:${y / layout.height * 100}%;width:${width / layout.width * 100}%;height:${height / layout.height * 100}%`;
+    if (layer.kind !== 'cloud') return image;
+    // Animate the transparent bank rather than its mountain occlusion layer.
+    // Overscan lets it drift without exposing a hard edge on either side.
+    const bank = document.createElement('div');
+    bank.className = `training-map-cloud training-map-cloud-${layer.motion}`;
+    bank.dataset.cloudDepth = layer.id;
+    image.className = 'training-map-layer';
+    bank.appendChild(image);
+    const band = document.createElement('div');
+    band.className = `training-map-cloud-band training-map-band-${layer.band || 'full'}`;
+    band.appendChild(bank);
+    return band;
+  });
+}
 function renderScene(next) {
   const focused = map.contains(document.activeElement) ? document.activeElement.dataset.trainingLocation : null;
   orientation = next;
@@ -163,6 +189,7 @@ function renderScene(next) {
   map.dataset.orientation = next;
   plane.style.setProperty('--training-map-font', `${layout.font}px`);
   scenery.style.backgroundImage = `url("${layout.image}")`;
+  scenery.replaceChildren(...makeSceneryLayers(layout));
   background = document.createElement('img');
   background.className = 'training-map-background';
   background.src = layout.image;

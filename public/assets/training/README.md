@@ -1,8 +1,23 @@
 # 修煉場景圖
 
+## AI 山景、五島與雲層（2026-10-13）
+
+目前修煉地圖改用 `layers/` 中橫式、直式各十張 AI 素材。原本的兩張 `cultivation-*-clean.webp` 為分層來源，保留作為參考。
+
+- `*-far`：星空與遠山底圖，最後移除月亮。
+- `*-mountains-middle`：獨立透明的中景山峰，補出雲後的岩壁。
+- `*-island-vault`、`*-island-secret`、`*-island-meditation`、`*-island-forge`、`*-island-status`：五座山島各自去背，保留松樹、山臺、瀑布與橋梁。
+- `*-cloud-far`、`*-cloud-middle`、`*-cloud-near`：三張透明雲原稿。中層雲分成上、中、下三個柔邊區域，分別插入不同島嶼之間，總共形成五層雲。
+
+PNG 原稿保留完整 1672×941／941×1672 畫布，WebP 以 alpha 範圍加八像素邊距裁去空白。`public/cultivation/training-scene-layer-art.js` 保存裁切座標，`training-scene-layouts.js` 將各島山臺對齊既有建築底座，建築按鈕與名稱的位置維持一致。
+
+雲層單程移動分別為 78、68、56、48、42 秒，方向與相位不同，來回平滑轉向。山峰與五島保持固定，雲從山後與島間穿過；手機版不受一般動畫 0.5 秒限制。離開地圖後暫停，減少動態效果時保持靜止。當前方向的全部圖層加入啟動預載，另一方向在背景預載。
+
+[內建 imagegen 的完整提示詞](layers/PROMPTS.md)。
+
 ## AI 建築去背與分層（2026-10-12）
 
-目前畫面使用 `cultivation-landscape-clean.webp` 與 `cultivation-portrait-clean.webp` 兩張背景底圖；AI 移除原本的五處前景建築，保留仙山、橋梁與地面，避免按鈕縮放時露出重複建築。
+此前畫面使用 `cultivation-landscape-clean.webp` 與 `cultivation-portrait-clean.webp` 兩張背景底圖；AI 移除原本的五處前景建築，保留仙山、橋梁與地面，避免按鈕縮放時露出重複建築。現在進一步分離山島與雲層，但仍沿用這五個獨立建築。
 
 五個建築皆以內建 imagegen 從原圖提取，PNG 保留真正的 RGBA 透明背景，WebP 為遊戲載入版本：
 

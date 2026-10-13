@@ -32,6 +32,95 @@ body.xianxia-theme #page-training.training-scene-map-active > :not(.training-map
 .training-map[hidden], .training-scene-detailbar[hidden] { display: none !important; }
 .training-map-scenery, .training-map-plane { position: absolute; transform-origin: 0 0; }
 .training-map-scenery { z-index: 0; background-size: 100% 100%; background-repeat: no-repeat; pointer-events: none; }
+.training-map-layer { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; user-select: none; }
+.training-map-cloud-band { position: absolute; inset: 0; pointer-events: none; }
+.training-map-band-upper { --cloud-band-mask: linear-gradient(180deg, transparent 14%, #000 23%, #000 43%, transparent 57%); }
+.training-map-band-middle { --cloud-band-mask: linear-gradient(180deg, transparent 31%, #000 43%, #000 68%, transparent 83%); }
+.training-map-band-lower { --cloud-band-mask: linear-gradient(180deg, transparent 54%, #000 68%, #000); }
+.training-map-band-near { --cloud-band-mask: linear-gradient(180deg, transparent 55%, #000 72%, #000); }
+.training-map[data-orientation="portrait"] .training-map-band-upper { --cloud-band-mask: linear-gradient(180deg, transparent 12%, #000 21%, #000 36%, transparent 47%); }
+.training-map-cloud-band:not(.training-map-band-full) {
+  -webkit-mask-image: var(--cloud-band-mask);
+  mask-image: var(--cloud-band-mask);
+}
+/* Source-frame edges of the nearest islands dissolve into the moving cloud
+   bank. Resizing an extracted island must never leave a straight cliff cut. */
+.training-map-island-forge, .training-map-island-status, .training-map-island-meditation {
+  -webkit-mask-image: linear-gradient(180deg, #000 78%, transparent);
+  mask-image: linear-gradient(180deg, #000 78%, transparent);
+}
+.training-map-cloud {
+  position: absolute;
+  top: 0;
+  left: -10%;
+  width: 120%;
+  height: 100%;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  animation: training-cloud-drift var(--cloud-duration) ease-in-out var(--cloud-delay) infinite alternate;
+  animation-play-state: paused;
+}
+.training-map-cloud-far {
+  --cloud-duration: 78s;
+  --cloud-delay: -19s;
+  --cloud-from-x: -3%;
+  --cloud-to-x: 3%;
+  --cloud-from-y: .2%;
+  --cloud-to-y: -.4%;
+  opacity: .85;
+}
+.training-map-cloud-middle {
+  --cloud-duration: 56s;
+  --cloud-delay: -28s;
+  --cloud-from-x: 4%;
+  --cloud-to-x: -4%;
+  --cloud-from-y: -.5%;
+  --cloud-to-y: .5%;
+  opacity: .6;
+}
+.training-map-cloud-upper {
+  --cloud-duration: 68s;
+  --cloud-delay: -26s;
+  --cloud-from-x: -3.5%;
+  --cloud-to-x: 3.5%;
+  --cloud-from-y: .3%;
+  --cloud-to-y: -.3%;
+  opacity: .7;
+}
+.training-map-cloud-lower {
+  --cloud-duration: 48s;
+  --cloud-delay: -17s;
+  --cloud-from-x: 5%;
+  --cloud-to-x: -5%;
+  --cloud-from-y: -.6%;
+  --cloud-to-y: .6%;
+  opacity: .5;
+}
+.training-map-cloud-near {
+  --cloud-duration: 42s;
+  --cloud-delay: -9s;
+  --cloud-from-x: -6%;
+  --cloud-to-x: 6%;
+  --cloud-from-y: .7%;
+  --cloud-to-y: -.7%;
+  opacity: .45;
+}
+/* The mobile theme caps general animations at .5s. Scenic drift keeps its own
+   long timing and pauses instead of racing through that cap. */
+body.xianxia-theme #page-training .training-map-cloud {
+  animation: training-cloud-drift var(--cloud-duration) ease-in-out var(--cloud-delay) infinite alternate !important;
+  animation-play-state: paused !important;
+}
+body.xianxia-theme #page-training.training-scene-map-active.active-page .training-map-cloud { animation-play-state: running !important; }
+body.xianxia-theme #page-training .training-map-light { animation-duration: 14s !important; }
+body.xianxia-theme #page-training .training-map-mist-far { animation-duration: 30s !important; }
+body.xianxia-theme #page-training .training-map-mist-near { animation-duration: 24s !important; }
+body.xianxia-theme #page-training .training-map-mote { animation-duration: var(--mote-duration) !important; }
+@keyframes training-cloud-drift {
+  from { transform: translate3d(var(--cloud-from-x), var(--cloud-from-y), 0); }
+  to { transform: translate3d(var(--cloud-to-x), var(--cloud-to-y), 0); }
+}
 .training-map-plane { z-index: 2; }
 /* Warm and decode the plate without a competing composited image layer. */
 .training-map-background { position: absolute; inset: 0; visibility: hidden; width: 100%; height: 100%; pointer-events: none; user-select: none; }
@@ -57,8 +146,8 @@ body.xianxia-theme #page-training.training-scene-map-active > :not(.training-map
   top: 18%;
   width: 130%;
   height: 48%;
-  background: radial-gradient(ellipse at 15% 62%, #dceae5a6, transparent 35%),
-    radial-gradient(ellipse at 74% 48%, #e0eaf0a6, transparent 40%);
+  background: radial-gradient(ellipse at 15% 62%, #dceae533, transparent 35%),
+    radial-gradient(ellipse at 74% 48%, #e0eaf033, transparent 40%);
   animation: training-mist-drift 30s ease-in-out infinite alternate;
 }
 .training-map-mist-near {
@@ -66,8 +155,8 @@ body.xianxia-theme #page-training.training-scene-map-active > :not(.training-map
   bottom: -9%;
   width: 130%;
   height: 44%;
-  background: radial-gradient(ellipse at 25% 65%, #eff5eab3, transparent 43%),
-    radial-gradient(ellipse at 80% 75%, #dce7edb3, transparent 45%);
+  background: radial-gradient(ellipse at 25% 65%, #eff5ea33, transparent 43%),
+    radial-gradient(ellipse at 80% 75%, #dce7ed33, transparent 45%);
   animation: training-mist-drift 24s ease-in-out -12s infinite alternate-reverse;
 }
 .training-map-motes { z-index: 0; }
@@ -237,7 +326,10 @@ body.xianxia-theme #page-training .training-scene-back {
 #page-training[data-training-place="status"] .training-subtab-v3:not(#training-status-tab) { display: none !important; }
 @media (prefers-reduced-motion: reduce) {
   .training-place-cutout, .training-place-aura { transition: none; }
-  .training-map-atmosphere > span, .training-map-mote { animation: none; }
+  .training-map-atmosphere > span, .training-map-mote, .training-map-cloud { animation: none; }
   .training-map-mist-far, .training-map-mist-near { opacity: .3; }
   .training-map-light { opacity: .7; }
+  body.xianxia-theme #page-training .training-map-cloud,
+  body.xianxia-theme #page-training .training-map-atmosphere > span,
+  body.xianxia-theme #page-training .training-map-mote { animation: none !important; }
 }

@@ -5,6 +5,8 @@ import {
   getMaterialById,
   materialRealmOrderByName
 } from './material-catalog.js';
+import './training-scene-layer-art.js';
+import './training-scene-layouts.js';
 
 // 啟動資源預熱：玩家資料已由 main-legacy 載入，本模組只在 startup gate 期間
 // 整理法寶／材料／配方與常用圖片，避免第一次打開背包、裝備或煉器才等待。
@@ -119,8 +121,8 @@ function collectStartupImageUrls() {
 
   const urls = unique([
     ...SCENE_ART[sceneOrientation],
-    'assets/training/cultivation-landscape-clean.webp',
-    'assets/training/cultivation-portrait-clean.webp',
+    globalThis.QATrainingSceneLayouts[sceneOrientation].image,
+    ...globalThis.QATrainingSceneLayouts[sceneOrientation].layers.map(layer => layer.image),
     'assets/training/cutouts/meditation-ai.webp',
     'assets/training/cutouts/vault-ai.webp',
     'assets/training/cutouts/forge-ai.webp',
@@ -139,6 +141,8 @@ function collectStartupImageUrls() {
     startup: urls.slice(0, STARTUP_IMAGE_LIMIT),
     remaining: unique([
       ...SCENE_ART[sceneOrientation === 'portrait' ? 'landscape' : 'portrait'],
+      globalThis.QATrainingSceneLayouts[sceneOrientation === 'portrait' ? 'landscape' : 'portrait'].image,
+      ...globalThis.QATrainingSceneLayouts[sceneOrientation === 'portrait' ? 'landscape' : 'portrait'].layers.map(layer => layer.image),
       ...definitionImageUrls(ARTIFACT_CATALOG),
       ...definitionImageUrls(MATERIAL_CATALOG)
     ]).filter((url) => !urls.slice(0, STARTUP_IMAGE_LIMIT).includes(url))
