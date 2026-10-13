@@ -443,6 +443,10 @@ function sanitizeGeneratedArtifact(raw, targetRealm, refinementStage = 1, effect
   const stage = normalizeRefinementStage(refinementStage);
   const requested = Array.isArray(raw?.effects) ? raw.effects.map((e) => sanitizeEffect(e, order, stage, effectBoundsV1, effectBoundsV2, ingredientCount)).filter(Boolean) : [];
   const primaryItems = Array.isArray(options.primaryArtifacts) ? options.primaryArtifacts : [];
+  // Soulbound status comes only from an existing soulbound primary in a later refinement.
+  const inheritsSoulbound = stage >= 2 && primaryItems.some((item) =>
+    item?.equipSlot === '本命法寶' &&
+    Array.isArray(item.effects) && item.effects.some((effect) => String(effect?.type || '').startsWith('equip_')));
   const inheritedCore = primaryItems.flatMap((item) => Array.isArray(item.effects) ? item.effects : [])
     .map((effect) => sanitizeEffect(effect, order, stage, effectBoundsV1, effectBoundsV2, ingredientCount))
     .find(Boolean);
@@ -500,7 +504,9 @@ function sanitizeGeneratedArtifact(raw, targetRealm, refinementStage = 1, effect
   };
   if (equipped) {
     const slot = cleanText(raw?.equipSlot, 16);
-    result.equipSlot = EQUIP_SLOTS.includes(slot) ? slot : EQUIP_SLOTS[order % EQUIP_SLOTS.length];
+    const ordinarySlots = EQUIP_SLOTS.filter((name) => name !== '本命法寶');
+    result.equipSlot = inheritsSoulbound ? '本命法寶'
+      : ordinarySlots.includes(slot) ? slot : ordinarySlots[order % ordinarySlots.length];
   }
   return result;
 }
@@ -610,7 +616,7 @@ function buildPrompt(payload) {
     '4a. 法寶無修士境界裝備限制：不論玩家境界高低，只要持有裝備型法寶就能裝備；本表的「境界」僅影響法寶效果數值。',
     '4b. 單次生命傷害上限 equip_damage_cap_percent 數值越小代表越強，不要誤選較大數字當成強化。',
     '4c. 限時特性只填 multiplier 和 durationMinutes；每場固定一次的保命／鏡映不填數值；排除錯誤選項每題固定 1 個，不填自訂 value。',
-    '5. 若使用任何 equip_ 效果，equipSlot 從：' + EQUIP_SLOTS.join('、') + ' 選一個。',
+    '5. 若使用 equip_ 效果，一般煉製的 equipSlot 只能選「護身法寶、佩飾法寶、輔助法寶」。只有投入既有「本命法寶」作為最深主材進行第二或第三煉，才可繼承「本命法寶」欄位。嚴禁從普通素材新造本命法寶，管理員提示也不可例外。',
     '6. 若做消耗型，只使用 timed_attack_multiplier / timed_cultivation_multiplier / remove_wrong_option。',
     '7. 避免與既有法寶名稱、描述、效果組合高度重複。',
     '8. icon 用 1 個中文字或常見符號，避免 emoji 組合。',
@@ -643,7 +649,7 @@ function buildPrompt(payload) {
     '',
     '輸出前自行核對：成品是否能由主材及其故事推導？是否保留適當原法寶能力？是否遵守管理員每一項可行要求？是否僅使用本階段允許的效果與數值？全部確認後才輸出 JSON。',
     '輸出格式：',
-    '{"name":"法寶名","icon":"單字或符號","description":"繁體中文描述","weaponForm":"器型（劍、刀、法盾、符籙、陣盤等）","equipSlot":"本命法寶|護身法寶|佩飾法寶|輔助法寶（若為裝備型）","effects":[{"type":"表中允許效果之一","value":"依該 type 的 value 範圍填數字；無 value 時省略","multiplier":"只有限時類才填","durationMinutes":"只有限時類才填"}]}'
+    '{"name":"法寶名","icon":"單字或符號","description":"繁體中文描述","weaponForm":"器型（劍、刀、法盾、符籙、陣盤等）","equipSlot":"護身法寶|佩飾法寶|輔助法寶（裝備型；只有本命法寶精煉才繼承本命法寶）","effects":[{"type":"表中允許效果之一","value":"依該 type 的 value 範圍填數字；無 value 時省略","multiplier":"只有限時類才填","durationMinutes":"只有限時類才填"}]}'
   ].join('\\n');
 }
 
