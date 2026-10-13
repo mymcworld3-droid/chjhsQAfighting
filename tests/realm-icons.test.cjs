@@ -37,6 +37,8 @@ test('every cultivation realm has a unique safe SVG crest and a color definition
   }
   assert.match(window.getRealmIconMarkup('<img src=x>'), /data-realm="凡人"/);
   assert.doesNotMatch(window.getRealmIconMarkup('金丹', '" onclick="bad()'), /onclick/);
+  assert.match(window.getRealmIconMarkup('金丹', '', 'player-123'), /data-realm-owner="player-123"/);
+  assert.doesNotMatch(window.getRealmIconMarkup('金丹', '', '" onload="bad()'), /onload/);
 });
 
 test('True Immortal uses its celestial seal instead of the old star medal', () => {
@@ -67,7 +69,9 @@ test('realm UI, breakthrough, chat and matchmaking no longer use realm emoji', (
 
 test('shared icon module loads first and cache manifest contains all new resources', () => {
   assert.ok(main.indexOf("'./cultivation/realm-icons.js'") < main.indexOf("'./cultivation/cultivation-theme.js'"));
-  for (const path of ['cultivation/realm-icons.js', 'realm-icons.css',
+  assert.ok(main.indexOf("'./cultivation/realm-icons.js'") < main.indexOf("'./cultivation/realm-icon-motion.js'"));
+  assert.ok(main.indexOf("'./cultivation/realm-icon-motion.js'") < main.indexOf("'./cultivation/cultivation-theme.js'"));
+  for (const path of ['cultivation/realm-icons.js', 'cultivation/realm-icon-motion.js', 'realm-icons.css',
     'cultivation/cultivation-theme.js', 'cultivation/xiuxian-live-sync.js',
     'cultivation/realm-breakthrough-feedback.js', 'main-legacy.js', 'main.js',
     'realm-breakthrough-feedback.css']) {

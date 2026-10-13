@@ -1,4 +1,4 @@
-/* 共用境界紋章：色彩、尺寸與留白統一，採固定線稿 SVG，不渲染 Emoji。 */
+/* 共用境界紋章：尺寸與留白統一，出現動畫支援 SVG 與 AI 點陣圖。 */
 .realm-icon {
   --realm-ink: #d4c8ad;
   --realm-glow: rgba(212,200,173,.19);
@@ -11,8 +11,163 @@
   line-height: 1;
   vertical-align: -.12em;
   color: var(--realm-ink);
+  position: relative;
+  isolation: isolate;
+  --realm-entry: realm-appear-mortal;
+  --realm-entry-time: 1.1s;
+  --realm-halo: realm-halo-gather;
+  --realm-light: realm-light-expand;
 }
 .realm-icon svg { display: block; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 0 3px var(--realm-glow)); }
+.realm-icon > img { display: block; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 0 3px var(--realm-glow)); }
+.realm-icon > :is(svg,img) { flex: none; transform-origin: 50% 50%; pointer-events: none; }
+.realm-icon::before, .realm-icon::after {
+  content: ''; position: absolute; inset: -15%; z-index: -1; opacity: 0;
+  pointer-events: none; border-radius: 50%;
+}
+.realm-icon::before { border: 1px solid var(--realm-ink); box-shadow: 0 0 .2em var(--realm-glow); }
+.realm-icon::after { background: radial-gradient(circle, var(--realm-ink), transparent 68%); }
+.realm-icon.realm-motion-pending > :is(svg,img) { opacity: 0; }
+.realm-icon.realm-appearing > :is(svg,img) {
+  animation: var(--realm-entry) var(--realm-entry-time) var(--realm-entry-delay,0ms) cubic-bezier(.2,.75,.22,1) both;
+}
+.realm-icon.realm-appearing::before { animation: var(--realm-halo) var(--realm-entry-time) var(--realm-entry-delay,0ms) ease-out both; }
+.realm-icon.realm-appearing::after { animation: var(--realm-light) var(--realm-entry-time) var(--realm-entry-delay,0ms) ease-out both; }
+.realm-icon[data-realm="煉氣"] { --realm-entry: realm-appear-qi; --realm-entry-time: 1.25s; --realm-halo: realm-halo-spiral; }
+.realm-icon[data-realm="築基"] { --realm-entry: realm-appear-foundation; --realm-entry-time: 1.25s; }
+.realm-icon[data-realm="金丹"] { --realm-entry: realm-appear-core; --realm-entry-time: 1.3s; }
+.realm-icon[data-realm="元嬰"] { --realm-entry: realm-appear-soul; --realm-entry-time: 1.4s; --realm-light: realm-light-rise; }
+.realm-icon[data-realm="化神"] { --realm-entry: realm-appear-spirit; --realm-entry-time: 1.35s; }
+.realm-icon[data-realm="煉虛"] { --realm-entry: realm-appear-void; --realm-entry-time: 1.5s; --realm-halo: realm-halo-spiral; }
+.realm-icon[data-realm="合體"] { --realm-entry: realm-appear-union; --realm-entry-time: 1.45s; --realm-halo: realm-union-left; --realm-light: realm-union-right; }
+.realm-icon[data-realm="大乘"] { --realm-entry: realm-appear-mahayana; --realm-entry-time: 1.55s; --realm-light: realm-light-rise; }
+.realm-icon[data-realm="渡劫"] { --realm-entry: realm-appear-tribulation; --realm-entry-time: 1.4s; --realm-light: realm-light-thunder; }
+.realm-icon[data-realm="半仙"] { --realm-entry: realm-appear-gate; --realm-entry-time: 1.55s; }
+.realm-icon[data-realm="真仙"] { --realm-entry: realm-appear-immortal; --realm-entry-time: 1.8s; }
+.realm-icon[data-realm="凡人"]::before, .realm-icon[data-realm="築基"]::before { border-radius: 14%; }
+.realm-icon[data-realm="煉氣"]::before, .realm-icon[data-realm="煉虛"]::before { border-style: dashed; }
+.realm-icon[data-realm="化神"]::before { border-radius: 70% 25%; }
+.realm-icon[data-realm="合體"]::after { border: 1px solid var(--realm-ink); background: none; }
+.realm-icon[data-realm="渡劫"]::after {
+  background: linear-gradient(114deg,transparent 42%,var(--realm-ink) 47%,#fff7db 49%,transparent 54%),
+    linear-gradient(66deg,transparent 42%,var(--realm-ink) 47%,transparent 53%);
+}
+.realm-icon[data-realm="半仙"]::before { border-radius: 45% 45% 5% 5%; }
+.realm-icon[data-realm="真仙"]::after {
+  background: repeating-conic-gradient(from 0deg,var(--realm-ink) 0deg 3deg,transparent 3deg 30deg);
+  -webkit-mask: radial-gradient(circle,transparent 30%,#000 42%,transparent 70%);
+  mask: radial-gradient(circle,transparent 30%,#000 42%,transparent 70%);
+}
+body.xianxia-theme .xiuxian-realm { display: flex; align-items: center; gap: .32em; }
+.xiuxian-realm > .realm-icon { width: .9em; height: .9em; }
+@keyframes realm-appear-mortal {
+  0% { opacity: 0; transform: translateY(12%) scale(.78) rotate(-8deg); }
+  65% { opacity: 1; transform: translateY(0) scale(1.04) rotate(1deg); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes realm-appear-qi {
+  0% { opacity: 0; transform: scale(.25) rotate(-130deg); }
+  65% { opacity: 1; transform: scale(1.06) rotate(8deg); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes realm-appear-foundation {
+  0% { opacity: 0; transform: scale(1.35) rotate(30deg); }
+  65% { opacity: 1; transform: scale(.96) rotate(0); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes realm-appear-core {
+  0% { opacity: 0; transform: scale(.12); }
+  55% { opacity: 1; transform: scale(1.12); }
+  78% { opacity: 1; transform: scale(.97); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes realm-appear-soul {
+  0% { opacity: 0; transform: translateY(35%) scale(.68); }
+  65% { opacity: 1; transform: translateY(-7%) scale(1.04); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes realm-appear-spirit {
+  0% { opacity: 0; transform: scaleX(.05) scaleY(.8); }
+  60% { opacity: 1; transform: scaleX(1.08) scaleY(1); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes realm-appear-void {
+  0% { opacity: 0; transform: translateY(-20%) scale(.3) rotate(-50deg); }
+  45% { opacity: .45; transform: scale(.85) rotate(-12deg); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes realm-appear-union {
+  0% { opacity: 0; transform: rotate(120deg) scale(.6); }
+  70% { opacity: 1; transform: rotate(-6deg) scale(1.04); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes realm-appear-mahayana {
+  0% { opacity: 0; transform: translateY(20%) scaleY(.12); }
+  65% { opacity: 1; transform: translateY(-4%) scaleY(1.08); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes realm-appear-tribulation {
+  0% { opacity: 0; transform: translateY(-45%) scale(.9); }
+  42% { opacity: 1; transform: translateY(3%) scale(1.08); }
+  65% { opacity: .75; transform: translateY(-2%) scale(.98); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes realm-appear-gate {
+  0% { opacity: 0; transform: scaleX(.2); }
+  65% { opacity: 1; transform: scaleX(1.06); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes realm-appear-immortal {
+  0% { opacity: 0; transform: translateY(-25%) scale(.35); }
+  60% { opacity: 1; transform: translateY(0) scale(1.1); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes realm-halo-gather {
+  0% { opacity: 0; transform: rotate(45deg) scale(1.6); }
+  35% { opacity: .6; }
+  70% { opacity: .3; transform: rotate(0) scale(.85); }
+  100% { opacity: 0; transform: scale(.8); }
+}
+@keyframes realm-halo-spiral {
+  0% { opacity: 0; transform: scale(1.5) rotate(-150deg); }
+  35% { opacity: .6; }
+  75% { opacity: .25; transform: scale(.7) rotate(25deg); }
+  100% { opacity: 0; transform: scale(.6) rotate(50deg); }
+}
+@keyframes realm-light-expand {
+  0% { opacity: 0; transform: scale(.2); }
+  40% { opacity: .32; }
+  80% { opacity: .15; transform: scale(1.5); }
+  100% { opacity: 0; transform: scale(1.6); }
+}
+@keyframes realm-light-rise {
+  0% { opacity: 0; transform: translateY(40%) scale(.4); }
+  45% { opacity: .28; }
+  100% { opacity: 0; transform: translateY(-30%) scale(1.35); }
+}
+@keyframes realm-union-left {
+  0% { opacity: 0; transform: translateX(-65%) scale(.4); }
+  45% { opacity: .5; }
+  85% { opacity: .15; transform: translateX(0) scale(1); }
+  100% { opacity: 0; }
+}
+@keyframes realm-union-right {
+  0% { opacity: 0; transform: translateX(65%) scale(.4); }
+  45% { opacity: .5; }
+  85% { opacity: .15; transform: translateX(0) scale(1); }
+  100% { opacity: 0; }
+}
+@keyframes realm-light-thunder {
+  0%, 20% { opacity: 0; transform: scaleY(1.3); }
+  42% { opacity: .65; transform: scaleY(1); }
+  65% { opacity: .12; }
+  82% { opacity: .3; }
+  100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .realm-icon.realm-motion-pending > :is(svg,img), .realm-icon.realm-appearing > :is(svg,img) { animation: none; opacity: 1; transform: none; }
+  .realm-icon.realm-appearing::before, .realm-icon.realm-appearing::after { animation: none; opacity: 0; }
+}
 .realm-icon[data-realm="凡人"] { --realm-ink: #c5b99f; --realm-glow: rgba(197,185,159,.18); }
 .realm-icon[data-realm="煉氣"] { --realm-ink: #83dcc2; --realm-glow: rgba(131,220,194,.23); }
 .realm-icon[data-realm="築基"] { --realm-ink: #93bce8; --realm-glow: rgba(147,188,232,.24); }

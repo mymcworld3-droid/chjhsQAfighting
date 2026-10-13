@@ -196,7 +196,11 @@
     updateRankNode(rank, realm);
 
     const realmEl = document.getElementById('xiuxian-realm');
-    if (realmEl) realmEl.textContent = realm.name;
+    if (realmEl && typeof window.getRealmIconMarkup !== 'function') realmEl.textContent = realm.name;
+    else if (realmEl && (realmEl.dataset.realm !== realm.name || !realmEl.querySelector('.realm-icon'))) {
+      realmEl.dataset.realm = realm.name;
+      realmEl.innerHTML = `${window.getRealmIconMarkup?.(realm.name) || ''}<span>${realm.name}</span>`;
+    }
 
     const scoreEl = document.getElementById('xiuxian-score');
     if (scoreEl && scoreEl.textContent !== `${value.toLocaleString()} 修為`) {

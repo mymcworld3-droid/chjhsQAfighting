@@ -686,11 +686,11 @@ function getRankName(level, uid = auth.currentUser?.uid, score = currentUserData
     return `${r.name} ${r.sub}`;
 }
 
-// 僅在 HTML 顯示場合附加向量紋章；AI 題目難度與資料欄位仍保留純文字境界。
+// 僅在 HTML 顯示場合附加境界紋章；AI 題目難度與資料欄位仍保留純文字境界。
 function getRankMarkup(level, uid = auth.currentUser?.uid, score = currentUserData?.stats?.totalScore) {
     const idx = window.limitImmortalRank(Math.min(level || 0, REALMS.length - 1), score, REALMS, uid);
     const realm = REALMS[idx] || REALMS[0];
-    return `${window.getRealmIconMarkup?.(realm.name) || ''} ${realm.name} ${realm.sub}`;
+    return `${window.getRealmIconMarkup?.(realm.name, '', uid) || ''} ${realm.name} ${realm.sub}`;
 }
 
 function calculateRankFromScore(totalScore, uid = auth.currentUser?.uid) {

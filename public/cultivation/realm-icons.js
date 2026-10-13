@@ -17,13 +17,14 @@
     '真仙': '<path d="M24 3v5M19 6l5-3 5 3"/><path d="M13 17l4-8 7 5 7-5 4 8"/><circle cx="24" cy="26" r="11"/><path d="M24 18l7 8-7 8-7-8 7-8z" class="immortal-jewel"/><circle cx="24" cy="26" r="2" class="immortal-heart"/><path d="M12 28c-4-3-8-1-8 3 0 3 3 5 7 4m25-7c4-3 8-1 8 3 0 3-3 5-7 4"/><path d="M18 41h12M21 44h6"/>'
   });
 
-  const CSS_HREF = 'realm-icons.css?v=20260922-immortal-seal2';
+  const CSS_HREF = 'realm-icons.css?v=20261013-realm-appear1';
 
   // name 僅經白名單索引；不得拼接使用者資料到 SVG 或 HTML。
-  function getRealmIconMarkup(name, className = '') {
+  function getRealmIconMarkup(name, className = '', owner = '') {
     const key = Object.prototype.hasOwnProperty.call(GLYPHS, name) ? name : '凡人';
     const extra = String(className).split(/\s+/).filter(part => /^[a-zA-Z0-9_-]+$/.test(part)).join(' ');
-    return `<span class="realm-icon${extra ? ' ' + extra : ''}" data-realm="${key}" aria-hidden="true"><svg viewBox="0 0 48 48" focusable="false" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round">${GLYPHS[key]}</svg></span>`;
+    const identity = typeof owner === 'string' && /^[a-zA-Z0-9_-]{1,128}$/.test(owner) ? ` data-realm-owner="${owner}"` : '';
+    return `<span class="realm-icon${extra ? ' ' + extra : ''}" data-realm="${key}"${identity} aria-hidden="true"><svg viewBox="0 0 48 48" focusable="false" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round">${GLYPHS[key]}</svg></span>`;
   }
 
   window.getRealmIconMarkup = getRealmIconMarkup;
