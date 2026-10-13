@@ -29,7 +29,7 @@ const startupScenes = ['loading-landscape-ai.webp', 'loading-portrait-ai.webp'].
 
 test('login core is isolated from optional cultivation module failures', () => {
   const staticImports = main.match(/^import\s+['"][^'"]+['"];$/gm) || [];
-  assert.deepEqual(staticImports, ["import './main-legacy.js?v=20261006-solo-gold1';", "import './cultivation/dongtian-entry.js';"]);
+  assert.deepEqual(staticImports, ["import './main-legacy.js?v=20261013-arrival1';", "import './cultivation/dongtian-entry.js';"]);
   const dongtianEntry = read('dongtian-entry.js');
   assert.doesNotMatch(dongtianEntry, /firebasejs|firebase-firestore|getFirestore|getAuth/);
   assert.match(main, /const XIUXIAN_FEATURE_MODULES = \[/);
@@ -308,19 +308,23 @@ test('startup progress section is horizontally centered on the viewport', () => 
 });
 
 
-test('onboarding is complete only after grade, strengths and weaknesses, and navigation remains available in Qi Refining', () => {
-  assert.match(legacy, /function hasCompletedPlayerProfile\(profile = currentUserData\?\.profile\)/);
-  assert.match(legacy, /profile\?\.educationLevel/);
-  assert.match(legacy, /profile\?\.strongSubjects/);
-  assert.match(legacy, /profile\?\.weakSubjects/);
-  assert.match(legacy, /if \(!hasCompletedPlayerProfile\(currentUserData\.profile\)\)/);
-  assert.match(legacy, /populateOnboardingInputs\(\)/);
-  assert.match(legacy, /請先填完整年級、擅長科目與弱項科目/);
-  assert.match(legacy, /new CustomEvent\('xiuxian:onboarding-completed'/);
-  assert.match(legacy, /個人資料完成後：雲海由左右合攏/);
-  assert.match(legacy, /document\.getElementById\('bottom-nav'\)\?\.classList\.remove\('hidden'\)/);
-  assert.match(legacy, /xiuxian:stats-updated', ensureGameplayNavigationForReadyProfile/);
-  assert.doesNotMatch(legacy, /ensureGameplayNavigationForReadyProfile[\s\S]{0,500}score\(\)\s*[><=]/);
+test('grade and subject preferences are optional Dongfu settings, and navigation stays hidden during arrival', () => {
+  const vm = require('node:vm');
+  const source = legacy.slice(legacy.indexOf('function hasCompletedPlayerProfile('), legacy.indexOf('// --- 全域狀態變數 ---'));
+  const nav = { classList: { remove() { this.visible = true; } } };
+  const ctx = vm.createContext({ currentUserData: { stats: {}, profile: {} },
+    auth: { currentUser: { uid: 'u' } }, window: {},
+    document: { getElementById: id => id === 'bottom-nav' ? nav : null }
+  });
+  vm.runInContext(source, ctx);
+  assert.equal(ctx.hasCompletedPlayerProfile(), true);
+  ctx.ensureGameplayNavigationForReadyProfile();
+  assert.equal(nav.classList.visible, true);
+  nav.classList.visible = false;
+  ctx.window.isFirstVisitActive = () => true;
+  ctx.ensureGameplayNavigationForReadyProfile();
+  assert.equal(nav.classList.visible, false);
+  assert.doesNotMatch(legacy, /populateOnboardingInputs|submitOnboarding/);
 });
 
 

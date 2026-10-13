@@ -31,6 +31,7 @@
   let initialized = false;
   let lastRealmIndex = 0;
   let closingTimer = null;
+  let finishFeedback = null;
 
   function loadStyle() {
     if (document.querySelector(`link[href="${CSS_HREF}"]`)) return;
@@ -70,7 +71,11 @@
     const overlay = document.getElementById('realm-breakthrough-feedback');
     if (!overlay) return;
     overlay.classList.add('leaving');
-    setTimeout(() => overlay.remove(), 520);
+    setTimeout(() => {
+      overlay.remove();
+      finishFeedback?.();
+      finishFeedback = null;
+    }, 520);
   }
 
   function particleMarkup(count) {
@@ -87,20 +92,24 @@
     const from = REALMS[Math.max(0, fromIndex)] || REALMS[0];
     const to = REALMS[Math.max(0, toIndex)] || REALMS[0];
     const major = from.name !== to.name;
+    const firstQi = fromIndex === 0 && toIndex === 1;
 
     document.getElementById('realm-breakthrough-feedback')?.remove();
     clearTimeout(closingTimer);
+    finishFeedback?.();
+    const completion = new Promise(resolve => { finishFeedback = resolve; });
 
     const overlay = document.createElement('div');
     overlay.id = 'realm-breakthrough-feedback';
-    overlay.className = `realm-breakthrough-feedback ${major ? 'major' : 'minor'}`;
+    overlay.className = `realm-breakthrough-feedback ${major ? 'major' : 'minor'} ${firstQi ? 'first-qi' : ''}`;
     overlay.setAttribute('aria-live', 'assertive');
     overlay.innerHTML = `
       <div class="realm-breakthrough-flash"></div>
       <div class="realm-breakthrough-rays"></div>
       <div class="realm-breakthrough-ring ring-a"></div>
       <div class="realm-breakthrough-ring ring-b"></div>
-      <div class="realm-breakthrough-particles">${particleMarkup(major ? 36 : 20)}</div>
+      ${firstQi ? '<div class="realm-breakthrough-sigil" aria-hidden="true">引氣入體</div><div class="realm-breakthrough-wave wave-a"></div><div class="realm-breakthrough-wave wave-b"></div>' : ''}
+      <div class="realm-breakthrough-particles">${particleMarkup(firstQi ? 52 : major ? 36 : 20)}</div>
       <section class="realm-breakthrough-card">
         <div class="realm-breakthrough-kicker">${major ? 'BREAKTHROUGH' : 'REALM ASCENSION'}</div>
         <div class="realm-breakthrough-title">${major ? '境界突破' : '境界提升'}</div>
@@ -109,7 +118,7 @@
         <div class="realm-breakthrough-sub">${escapeHtml(to.sub)}</div>
         <div class="realm-breakthrough-divider"><span></span><b>◆</b><span></span></div>
         <div class="realm-breakthrough-route">${escapeHtml(from.name)} ${escapeHtml(from.sub)} <i class="fa-solid fa-arrow-right-long"></i> ${escapeHtml(to.name)} ${escapeHtml(to.sub)}</div>
-        <p>${major ? '天地共鳴，道途再開。' : '靈台清明，修為更進一境。'}</p>
+        <p>${firstQi ? '一念明悟，靈氣入體。你的第一步，已刻入仙途。' : major ? '天地共鳴，道途再開。' : '靈台清明，修為更進一境。'}</p>
       </section>
     `;
 
@@ -124,7 +133,8 @@
       detail: { from: { ...from }, to: { ...to }, major }
     }));
 
-    closingTimer = setTimeout(removeFeedback, major ? 3300 : 2500);
+    closingTimer = setTimeout(removeFeedback, firstQi ? 3800 : major ? 3300 : 2500);
+    return completion;
   }
 
   function checkRealm() {
@@ -141,12 +151,21 @@
     if (currentIndex > lastRealmIndex) {
       const previousIndex = lastRealmIndex;
       lastRealmIndex = currentIndex;
+      // 首題先等資料保存成功，再由首次流程交棒播放突破。
+      if (window.isFirstVisitTrial?.()) return;
       showBreakthrough(previousIndex, currentIndex);
       return;
     }
 
     if (currentIndex < lastRealmIndex) lastRealmIndex = currentIndex;
   }
+
+  window.showFirstQiBreakthrough = () => {
+    loadStyle();
+    initialized = true;
+    lastRealmIndex = realmIndexFor(currentScore() || 1);
+    return showBreakthrough(0, 1);
+  };
 
   function boot() {
     loadStyle();

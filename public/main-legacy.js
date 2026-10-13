@@ -1,4 +1,5 @@
 import './cultivation/quest-rules.js';
+import './cultivation/first-visit.js';
 import { resolvePlayerAvatar } from './cultivation/profile-avatar.js';
 import './cultivation/curriculum-range-rules.js';
 import { beginSceneTransition, sceneTheme } from './cultivation/scene-transitions.js';
@@ -7,7 +8,7 @@ import { createSoloQuestionCache } from './solo-question-cache.js';
 import { ensureSecondaryFirebaseAuth } from './cultivation/firebase-projects.js';
 // 🔥 修正：使用純 URL 引入 Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, signInWithPopup, signInAnonymously, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getAuth, signInWithPopup, signInAnonymously, linkWithPopup, signInWithCredential, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { 
     getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, addDoc, 
     query, orderBy, limit, getDocs, getDocsFromServer, serverTimestamp, where, onSnapshot, runTransaction,
@@ -44,34 +45,21 @@ window.__xiuxianMigrationApproved = false;
 
 let currentUserData = null;
 let firstLoginUid = '';
-// 只有成功建立玩家文件的這次登入才可自動開啟序章。
+// 新帳號先完成世界介紹／角色設定；序章由仙道任務手動開啟。
 window.isXiuxianFirstLogin = () => Boolean(firstLoginUid && auth.currentUser?.uid === firstLoginUid);
 // 🔥 新增這行：將玩家資料開放給修仙模組讀取
 window.getCurrentUserData = () => currentUserData;
 
 function hasCompletedPlayerProfile(profile = currentUserData?.profile) {
-    const value = (input) => String(input ?? '').trim();
-    return Boolean(
-        value(profile?.educationLevel) &&
-        value(profile?.strongSubjects) &&
-        value(profile?.weakSubjects)
-    );
+    // 年級與強弱項皆為洞府內的選填設定，不再是遊戲門檻。
+    return Boolean(currentUserData?.stats);
 }
 window.hasCompletedPlayerProfile = hasCompletedPlayerProfile;
-
-function populateOnboardingInputs() {
-    const profile = currentUserData?.profile || {};
-    const level = document.getElementById('ob-level');
-    const strong = document.getElementById('ob-strong');
-    const weak = document.getElementById('ob-weak');
-    if (level && profile.educationLevel) level.value = profile.educationLevel;
-    if (strong) strong.value = String(profile.strongSubjects || '');
-    if (weak) weak.value = String(profile.weakSubjects || '');
-}
 
 function ensureGameplayNavigationForReadyProfile() {
     if (!auth.currentUser || document.getElementById('game-startup-gate')) return;
     if (!hasCompletedPlayerProfile(currentUserData?.profile)) return;
+    if (window.isFirstVisitActive?.()) return;
     document.getElementById('bottom-nav')?.classList.remove('hidden');
 }
 
@@ -705,7 +693,61 @@ function calculateRankFromScore(totalScore, uid = auth.currentUser?.uid) {
 }
 
 // 綁定全域函式
-window.googleLogin = () => { signInWithPopup(auth, provider).catch((error) => alert("Login Failed: " + error.code)); };
+window.startFirstVisitGuest = () => signInAnonymously(auth);
+window.googleLogin = async () => {
+    const guest = auth.currentUser;
+    try {
+        if (guest?.isAnonymous) {
+            let result;
+            try {
+                // Linking preserves the anonymous UID, answer, scope, and rewards.
+                result = await linkWithPopup(guest, provider);
+            } catch (error) {
+                if (!['auth/credential-already-in-use', 'auth/email-already-in-use'].includes(error?.code)) throw error;
+                const credential = GoogleAuthProvider.credentialFromError(error);
+                if (!credential) throw error;
+                // Existing accounts retain their own character, inventory and balances.
+                return await signInWithCredential(auth, credential);
+            }
+            const person = result.user;
+            const identity = { email: person.email || '', photoURL: person.photoURL || '' };
+            if (!currentUserData?.displayName || currentUserData.displayName === '匿名修士') identity.displayName = person.displayName || '青雲修士';
+            await updateDoc(doc(db, 'users', person.uid), identity);
+            if (auth.currentUser?.uid !== person.uid) return result;
+            Object.assign(currentUserData, identity);
+            document.getElementById('settings-email').textContent = person.email || '';
+            await updateSettingsInputs();
+            await window.handleFirstVisitReady?.(person, currentUserData, false);
+            return result;
+        }
+        const result = await signInWithPopup(auth, provider);
+        // A same-account popup need not fire an auth-state change; resume setup explicitly.
+        if (currentUserData?.uid === result.user.uid && window.__xiuxianFeaturesReady && window.getFirstVisitState?.().joining) {
+            await window.handleFirstVisitReady?.(result.user, currentUserData, false);
+        }
+        return result;
+    } catch (error) {
+        if (!window.isFirstVisitActive?.() && !document.getElementById('first-visit-layer')) {
+            alert('登入未完成，請再試一次。');
+            return null;
+        }
+        throw error;
+    }
+};
+window.completeFirstVisitSetup = async (gender = '', name = '') => {
+    const person = auth.currentUser;
+    if (!person || person.isAnonymous) throw new Error('請先綁定或登入帳號。');
+    if (gender && !['male', 'female'].includes(gender)) throw new Error('請重新選擇角色。');
+    if (gender) await window.updatePlayerDisplayName(name);
+    const patch = { arrivalOnboardingV1: { version: 1, completed: true, completedAtMs: Date.now() } };
+    if (gender) patch['storyProgressV1.gender'] = gender;
+    await updateDoc(doc(db, 'users', person.uid), patch);
+    if (auth.currentUser?.uid !== person.uid) throw new Error('帳號已更換，請重新整理。');
+    currentUserData.arrivalOnboardingV1 = patch.arrivalOnboardingV1;
+    if (gender) currentUserData.storyProgressV1 = { ...currentUserData.storyProgressV1, gender };
+    updateUIStats();
+    window.dispatchEvent(new CustomEvent('xiuxian:quest-progress-updated'));
+};
 window.anonymousLogin = () => {
     const button = document.getElementById('btn-anonymous-login');
     if (button) button.disabled = true;
@@ -1324,7 +1366,7 @@ onAuthStateChanged(auth, async (user) => {
         }
 
         showGameStartupGate('正在載入玩家資料…');
-        document.getElementById('settings-email').innerText = user.email || '匿名測試帳號';
+        document.getElementById('settings-email').innerText = user.email || '免註冊修行 · 尚未綁定帳號';
 
         injectSocialUI();
 
@@ -1416,7 +1458,7 @@ onAuthStateChanged(auth, async (user) => {
             listenToSystemCommands();  
             
             updateUserAvatarDisplay();
-            updateSettingsInputs();
+            await updateSettingsInputs();
             checkAdminRole(currentUserData.isAdmin);
             updateUIStats();
             // saved game identity wins over Google profile in every game session
@@ -1425,15 +1467,18 @@ onAuthStateChanged(auth, async (user) => {
                 userInfoEl.innerHTML = `<i class="fa-solid fa-user-astronaut"></i> ${currentUserData.displayName || user.displayName || '玩家'}`;
             }
 
-            // 根據資料完整度導向；完整玩家以雲幕遮住載入畫面與宗門之間的換頁瞬間。
-            if (!hasCompletedPlayerProfile(currentUserData.profile)) {
+            // 個人學制／強弱項留在洞府選填；首次流程由同一載具的到訪狀態接棒。
+            const arrival = window.getFirstVisitState?.();
+            if ((user.isAnonymous && !arrival?.completed && new URLSearchParams(location.search).get('qa') !== '1') ||
+                arrival?.joining || firstLoginUid === user.uid && !user.isAnonymous ||
+                ['background', 'gender'].includes(arrival?.stage)) {
                 hideGameStartupGate();
-                populateOnboardingInputs();
-                switchToPage('page-onboarding');
-                document.getElementById('bottom-nav').classList.add('hidden');
+                const handled = await window.handleFirstVisitReady?.(user, currentUserData, firstLoginUid === user.uid);
+                if (!handled) await enterHomeWithStartupCloudCurtain();
             } else {
                 // 個人資料完成後：雲海由左右合攏，宗門在遮幕後就位，再向兩側打開。
                 await enterHomeWithStartupCloudCurtain();
+                await window.handleFirstVisitReady?.(user, currentUserData, false);
                 syncSoloQuestionCache();
                 fillBuffer();
             }
@@ -1462,6 +1507,7 @@ onAuthStateChanged(auth, async (user) => {
         hideGameStartupGate();
         document.getElementById('login-screen').classList.remove('hidden');
         document.getElementById('bottom-nav').classList.add('hidden');
+        window.handleFirstVisitSignedOut?.();
         
         // 登出時取消常駐監聽與待顯示邀請，節省資源並避免跨帳號殘留。
         if (inviteUnsub) inviteUnsub();
@@ -1935,6 +1981,7 @@ function getTimeAgo(date) {
 
 // 修改原本的 switchToPage
 window.switchToPage = (pageId) => {
+    if (window.canFirstVisitNavigate?.(pageId) === false) return false;
     if (isBattleActive && pageId !== 'page-battle') {
         alert("Battle in progress!");
         return;
@@ -2252,8 +2299,9 @@ window.toggleSourceMode = () => {
 
 async function updateSettingsInputs() {
     if (currentUserData && currentUserData.profile) {
+        document.getElementById('btn-bind-guest')?.classList.toggle('hidden', !auth.currentUser?.isAnonymous);
         document.getElementById('set-display-name').value = currentUserData.displayName || "";
-        document.getElementById('set-level').value = currentUserData.profile.educationLevel || "國中一年級";
+        document.getElementById('set-level').value = currentUserData.profile.educationLevel || '';
         document.getElementById('set-strong').value = currentUserData.profile.strongSubjects || "";
         document.getElementById('set-weak').value = currentUserData.profile.weakSubjects || "";
         
@@ -2315,56 +2363,6 @@ async function getCleanSubjects(rawText) {
         return data.subjects;
     } catch (e) { return rawText; }
 }
-
-window.submitOnboarding = async () => {
-    const level = String(document.getElementById('ob-level')?.value || '').trim();
-    const rawStrong = String(document.getElementById('ob-strong')?.value || '').trim();
-    const rawWeak = String(document.getElementById('ob-weak')?.value || '').trim();
-    if (!level || !rawStrong || !rawWeak) {
-        alert('請先填完整年級、擅長科目與弱項科目，再開始仙途。');
-        return;
-    }
-
-    const btn = document.querySelector('button[onclick="submitOnboarding()"]');
-    const originalLabel = btn?.innerText || '開始旅程';
-    if (btn) { btn.innerText = '資料確認中...'; btn.disabled = true; }
-
-    try {
-        const analyzedStrong = await getCleanSubjects(rawStrong);
-        const analyzedWeak = await getCleanSubjects(rawWeak);
-        const cleanStrong = String(analyzedStrong || rawStrong).trim();
-        const cleanWeak = String(analyzedWeak || rawWeak).trim();
-        if (!cleanStrong || !cleanWeak) throw new Error('強項或弱項整理後為空白，請重新填寫。');
-
-        await updateDoc(doc(db, "users", auth.currentUser.uid), {
-            "profile.educationLevel": level,
-            "profile.strongSubjects": cleanStrong,
-            "profile.weakSubjects": cleanWeak
-        });
-
-        currentUserData.profile.educationLevel = level;
-        currentUserData.profile.strongSubjects = cleanStrong;
-        currentUserData.profile.weakSubjects = cleanWeak;
-
-        updateSettingsInputs();
-        updateUIStats();
-        document.getElementById('bottom-nav').classList.remove('hidden');
-        switchToPage('page-home');
-        localStorage.removeItem('currentQuiz');
-        syncSoloQuestionCache();
-        fillBuffer();
-
-        // 劇情只能在這個事件之後開始：先完成年級、強項、弱項，再進主線。
-        window.dispatchEvent(new CustomEvent('xiuxian:onboarding-completed', {
-            detail: { educationLevel: level, strongSubjects: cleanStrong, weakSubjects: cleanWeak }
-        }));
-    } catch (error) {
-        console.error('Onboarding save failed:', error);
-        alert(error?.message || '資料儲存失敗，請稍後再試。');
-    } finally {
-        if (btn) { btn.innerText = originalLabel; btn.disabled = false; }
-    }
-};
 
 window.saveProfile = async (triggerButton = null) => {
     const displayName = document.getElementById('set-display-name').value.trim();
@@ -2513,6 +2511,7 @@ async function fillBuffer() {
 //  Quiz UI Logic
 // ==========================================
 window.startQuizFlow = async (isNewSession = false) => {
+    if (window.isFirstVisitTrial?.() && !window.isFirstVisitQuestion?.()) return;
     if (!soloSession.active && !isNewSession) {
         // 直接默認啟動無限模式
         soloSession = {
@@ -2598,6 +2597,7 @@ window.startQuizFlow = async (isNewSession = false) => {
         } catch (e) {
             if (opening !== soloQuizOpenSerial || auth.currentUser?.uid !== uid) return;
             console.error(e);
+            if (window.handleFirstVisitQuestionFailure?.()) return;
             alert("Failed to start");
             switchToPage('page-home');
         }
@@ -2984,6 +2984,7 @@ window.fetchDailyMeditationQuestion = fetchOneQuestion;
 /// 🔥 修改：在進入下一題前才清除舊題目，確保 startQuizFlow 能抓到新題目
 let soloNextBusy = false;
 window.nextQuestion = async () => {
+    if (window.isFirstVisitTrial?.() && !window.isFirstVisitQuestion?.()) return;
     const quiz = window.currentActiveQuiz;
     // One roll per completed question; rapid clicks and unanswered questions cannot farm encounters.
     if (soloNextBusy || !quiz || !answeredSoloQuizzes.has(quiz) || window.isOpportunityActive?.()) return;
@@ -3002,7 +3003,7 @@ window.nextQuestion = async () => {
     }
     window.currentActiveQuiz = null;
     try {
-        const intercepted = extendedPracticeState.active ? false : await window.maybeEncounterOpportunity?.({ quiz });
+        const intercepted = extendedPracticeState.active || window.isFirstVisitTrial?.() ? false : await window.maybeEncounterOpportunity?.({ quiz });
         if (auth.currentUser?.uid !== account) return;
         if (!intercepted) await window.startQuizFlow();
     } catch (error) {
@@ -3032,6 +3033,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
 
     const timeTaken = (Date.now() - (window.quizStartTime || Date.now())) / 1000;
     const isCorrect = userIdx === correctIdx;
+    const firstVisitAnswer = window.beginFirstVisitAnswer?.(isCorrect) === true;
     quizHelperState.answered = true;
     quizHelperState.selectedIndex = Number.isInteger(userIdx) ? userIdx : null;
     quizHelperState.correctIndex = Number.isInteger(correctIdx) ? correctIdx : quizHelperState.correctIndex;
@@ -3158,37 +3160,40 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         !!stats.goldenCoreShield !== shieldBeforeAnswer;
     const cultivationDelta = stats.totalScore - scoreBeforeAnswer;
     const answerUser = auth.currentUser;
-    try {
-        const p1 = shouldSaveAnswer
-            ? runTransaction(db, async tx => {
+    const trialAnswerId = firstVisitAnswer ? `${answerUser.uid}:${Date.now()}:${Math.random().toString(36).slice(2)}` : '';
+    let answerSaved = false;
+    const persistAnswer = () => runTransaction(db, async tx => {
+                if (auth.currentUser?.uid !== answerUser.uid) throw new Error('帳號已更換，請重新整理。');
                 const ref = doc(db, "users", answerUser.uid);
                 const snap = await tx.get(ref);
                 if (!snap.exists()) throw new Error('玩家資料不存在');
                 const remote = snap.data();
-                // Preserve currency/score changes from concurrent server settlements.
+                // A retry after an uncertain network result cannot award the first answer twice.
+                if (trialAnswerId && remote.arrivalTrialAnswerV1?.id) return remote.stats;
                 const savedStats = { ...stats,
-                    // 問道答對的 +20 靈石必須以伺服器目前餘額為基準累加，
-                    // 才不會覆蓋同時發生的任務、團本、坊市等靈石變動。
                     gold: Math.max(0, Number(remote.stats?.gold) || 0) + Math.max(0, Number(scoreGain) || 0),
                     totalScore: Math.max(0, (Number(remote.stats?.totalScore) || 0) + cultivationDelta)
                 };
                 savedStats.rankLevel = calculateRankFromScore(savedStats.totalScore);
                 const patch = { stats: savedStats };
                 if (isCorrect) patch.questProgress = window.XianxiaQuestRules.recordEvent(remote.questProgress, 'solo');
+                if (trialAnswerId) patch.arrivalTrialAnswerV1 = { id: trialAnswerId, completedAtMs: Date.now() };
                 tx.update(ref, patch);
                 return savedStats;
             }).then(savedStats => {
-                if (auth.currentUser?.uid !== answerUser.uid || currentUserData?.stats !== stats) return;
+                if (auth.currentUser?.uid !== answerUser.uid || currentUserData?.stats !== stats) throw new Error('帳號已更換，請重新整理。');
                 Object.assign(stats, savedStats);
                 updateUIStats();
                 window.dispatchEvent(new CustomEvent('xiuxian:quest-progress-updated'));
-            })
-                .then(() => showCultivationFeedback(cultivationReward, isCorrect))
+            }).then(() => showCultivationFeedback(cultivationReward, isCorrect));
+    try {
+        const p1 = shouldSaveAnswer
+            ? persistAnswer()
             : null;
         if (!shouldSaveAnswer) showCultivationFeedback(cultivationReward, isCorrect);
         void addDoc(collection(db, "exam_logs"), { 
             uid: auth.currentUser.uid, 
-            email: auth.currentUser.email, 
+            email: auth.currentUser.email || '',
             question: questionText, 
             isCorrect: isCorrect, 
             timeTaken: timeTaken,
@@ -3210,7 +3215,17 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
             quiz.answerPersistenceDeferred = !shouldSaveAnswer;
         }
         if (p1) await p1;
+        answerSaved = true;
     } catch (e) { console.error("Firebase Error", e); }
+
+    if (firstVisitAnswer) {
+        await window.handleFirstVisitAnswer?.({ isCorrect, saved: answerSaved, retry: async () => {
+            const saving = persistAnswer();
+            if (quiz) quiz.answerPersistence = saving;
+            await saving;
+        } });
+        return;
+    }
     
     if (!extendedPracticeState.active) fillBuffer();
 }

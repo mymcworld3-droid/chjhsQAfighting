@@ -1,4 +1,13 @@
 /* 境界突破：黑金全螢幕反饋。 */
+.realm-breakthrough-feedback.first-qi{background:radial-gradient(circle at 50% 48%,rgba(166,223,198,.22),transparent 45%),rgba(2,9,12,.85)}
+.realm-breakthrough-feedback.first-qi .realm-breakthrough-card{border-color:#ebd09c;box-shadow:0 0 100px #aac6ab3d,0 30px 80px #000a}
+.realm-breakthrough-feedback.first-qi .realm-breakthrough-rays{opacity:.8;background:repeating-conic-gradient(from 0deg,#d4ebbd66 0deg 1.2deg,transparent 1.2deg 8deg)}
+.realm-breakthrough-sigil{position:absolute;top:8%;letter-spacing:.65em;padding-left:.65em;color:#d8efcf;font-size:clamp(18px,4vw,32px);text-shadow:0 0 28px #d9eabd;animation:realmQiSigil 1.4s ease both}
+.realm-breakthrough-wave{position:absolute;width:min(62vw,440px);aspect-ratio:1;border-radius:50%;border:2px solid #d9edbca8;box-shadow:0 0 35px #cde7ab44;animation:realmQiWave 2.4s ease-out both;pointer-events:none}
+.realm-breakthrough-wave.wave-b{animation-delay:.45s}
+@keyframes realmQiWave{0%{transform:scale(.45);opacity:0}25%{opacity:.8}100%{transform:scale(2.8);opacity:0}}
+@keyframes realmQiSigil{from{opacity:0;transform:translateY(18px);letter-spacing:.15em}to{opacity:1;transform:translateY(0);letter-spacing:.65em}}
+@media(prefers-reduced-motion:reduce){.realm-breakthrough-sigil,.realm-breakthrough-wave{animation:none}.realm-breakthrough-wave{display:none}}
 .realm-breakthrough-feedback {
   --rb-gold: 216,177,93;
   --rb-pale: 255,235,180;

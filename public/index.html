@@ -23,6 +23,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles/first-visit.css?v=20261013-arrival1">
     <link rel="stylesheet" href="xianxia.css?v=20261013-ai-scenes1">
     <link rel="stylesheet" href="xianxia-gold.css">
     <link rel="stylesheet" href="xianxia-blackgold-harmony.css">
@@ -724,37 +725,6 @@ body.xianxia-theme main:has(#page-training.active-page),
             </div>
         </div>
 
-        <div id="page-onboarding" class="page-section hidden p-6">
-            <div class="glass-panel p-8 rounded-3xl max-w-md mx-auto mt-10 relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-purple-500"></div>
-                <h2 class="text-2xl font-bold text-white mb-6 text-center" data-i18n="ob_title">INITIALIZE</h2>
-                
-                <div class="space-y-5">
-                    <div class="form-group">
-                        <label class="text-xs text-cyan-400 font-bold mb-1 block" data-i18n="ob_label_level">LEVEL</label>
-                        <select id="ob-level" class="input-cyber w-full">
-                            <option value="國小中年級" data-i18n="level_elem_mid">國小 (中年級)</option>
-                            <option value="國小高年級" data-i18n="level_elem_high">國小 (高年級)</option>
-                            <option value="國中一年級" data-i18n="level_jh_1">國中 (一年級)</option>
-                            <option value="國中二年級" data-i18n="level_jh_2">國中 (二年級)</option>
-                            <option value="國中三年級" data-i18n="level_jh_3">國中 (三年級)</option>
-                            <option value="高中職" data-i18n="level_sh">高中 / 高職</option>
-                            <option value="大學以上" data-i18n="level_univ">大學 / 社會人士</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="text-xs text-green-400 font-bold mb-1 block" data-i18n="ob_label_strong">STRONG</label>
-                        <input type="text" id="ob-strong" class="input-cyber w-full" data-i18n-placeholder="ob_placeholder_strong">
-                    </div>
-                    <div class="form-group">
-                        <label class="text-xs text-red-400 font-bold mb-1 block" data-i18n="ob_label_weak">WEAK</label>
-                        <input type="text" id="ob-weak" class="input-cyber w-full" data-i18n-placeholder="ob_placeholder_weak">
-                    </div>
-                    <button onclick="submitOnboarding()" class="btn-cyber-accent w-full py-3 rounded-xl font-bold mt-4 bg-gradient-to-r from-cyan-600 to-blue-600" data-i18n="btn_start_journey">START</button>
-                </div>
-            </div>
-        </div>
-
         <div id="page-home" class="page-section hidden px-4 relative">
             <div class="xianxia-page-heading">
                 <div><div class="xianxia-eyebrow">青雲山境 ／ 修行手札</div><h2>宗門</h2><p>山靜日長，今日亦是問道之時。</p></div>
@@ -1114,6 +1084,8 @@ body.xianxia-theme main:has(#page-training.active-page),
                 <div class="absolute -top-10 -right-10 w-32 h-32 bg-green-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
                 <div class="space-y-4">
+                    <p class="text-xs text-gray-400">年級、擅長科目與想加強的科目都可選填；出題範圍可另外設定。</p>
+                    <button id="btn-bind-guest" type="button" onclick="openFirstVisitAccountBinding()" class="hidden btn-cyber-primary w-full py-3 rounded-xl">綁定帳號，保存修行</button>
                     <div class="form-group">
                         <label class="text-[10px] font-bold text-gray-400 mb-1 block uppercase">ID / Email</label>
                         <div class="text-sm font-mono text-cyan-200 truncate p-2 bg-slate-900/50 rounded border border-white/5" id="settings-email">...</div>
@@ -1127,6 +1099,7 @@ body.xianxia-theme main:has(#page-training.active-page),
                     <div class="form-group">
                         <label class="text-[10px] font-bold text-gray-400 mb-1 block uppercase" data-i18n="label_level">Level</label>
                         <select id="set-level" class="input-cyber w-full">
+                            <option value="">尚未設定（可稍後選擇）</option>
                             <option value="國小中年級" data-i18n="level_elem_mid">國小 (中年級)</option>
                             <option value="國小高年級" data-i18n="level_elem_high">國小 (高年級)</option>
                             <option value="國中一年級" data-i18n="level_jh_1">國中 (一年級)</option>
@@ -1531,6 +1504,6 @@ body.xianxia-theme main:has(#page-training.active-page),
     </script>
     <script src="visual-viewport-guard.js?v=20260927-vv2"></script>
     <script src="answer-zoom-policy.js?v=20261007-answer-zoom2"></script>
-    <script type="module" src="main.js?v=20260927-vv-raid9"></script>
+    <script type="module" src="main.js?v=20261013-arrival1"></script>
 </body>
 </html>

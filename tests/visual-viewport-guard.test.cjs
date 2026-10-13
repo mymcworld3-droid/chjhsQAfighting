@@ -12,7 +12,7 @@ test('global visual viewport guard loads before the main app', () => {
   assert.match(index, /styles\/visual-viewport-guard\.css\?v=[\w-]+/);
   assert.match(index, /visual-viewport-guard\.js\?v=20260927-vv2/);
   assert.ok(index.indexOf('visual-viewport-guard.js?v=20260927-vv2') <
-    index.indexOf('main.js?v=20260927-vv-raid9'));
+    index.indexOf('main.js?v=20261013-arrival1'));
 });
 
 test('guard tracks Safari visual viewport geometry and browser chrome', () => {

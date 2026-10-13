@@ -13,7 +13,7 @@ import { STORY_BACKGROUNDS, storyBackgroundForLine, nextStoryBackground, createS
 // 沈清霜主線劇情播放器。
 // - 第一次進入先選擇性別。
 // - 劇情依修為節點逐章解鎖並保存在 users/{uid}.storyProgressV1。
-// - 序章僅在新帳號首次登入時自動開啟一次，之後由仙道任務或劇情清單點擊開啟。
+// - 序章由仙道任務或劇情清單點擊開啟；登入與選擇性別不自動播放。
 // - 其他教學／戰鬥／洞天全螢幕介面存在時不搶畫面。
 
 (function () {
@@ -54,12 +54,8 @@ import { STORY_BACKGROUNDS, storyBackgroundForLine, nextStoryBackground, createS
 
   function data() { return window.getCurrentUserData?.() || null; }
   function onboardingReady() {
-    const profile = data()?.profile || {};
-    if (typeof window.hasCompletedPlayerProfile === 'function') {
-      return window.hasCompletedPlayerProfile(profile);
-    }
-    const value = (input) => String(input ?? '').trim();
-    return Boolean(value(profile.educationLevel) && value(profile.strongSubjects) && value(profile.weakSubjects));
+    if (window.isFirstVisitActive?.()) return false;
+    return Boolean(data()?.stats && user());
   }
   function user() {
     try { return getAuth(getApp()).currentUser; } catch (_) { return null; }
@@ -629,25 +625,8 @@ import { STORY_BACKGROUNDS, storyBackgroundForLine, nextStoryBackground, createS
   }
 
   function maybeAutoStart() {
-    if (!window.isXiuxianFirstLogin?.() || prologueAutoStartedUid === user()?.uid) return;
-    if (!storyImagesReady) {
-      preloadStoryImages().then(() => setTimeout(maybeAutoStart, 0));
-      return;
-    }
-    if (!onboardingReady()) return;
-    if (window.isXiuxianOpeningCinematicActive?.()) return;
-    if (active || storyTutorialPaused || document.getElementById(ARCHIVE_ID) || Date.now() < snoozeUntil || blocking() || autoPermits <= 0) return;
-    if (!data()?.stats || !user()) return;
-    const chapter = nextEligibleChapter();
-    if (!chapter) return;
-    // 開啟就消耗本帳號的自動播放機會；稍後再看、修為更新都不會再次彈出。
-    prologueAutoStartedUid = user().uid;
-    if (!gender()) {
-      openGenderChoice();
-      return;
-    }
-    autoPermits -= 1;
-    startChapter(chapter);
+    // 所有新手劇情均由任務／劇情入口開啟。保留事件掛鉤供既有模組使用。
+    return false;
   }
 
   function handleScoreUpdate() {

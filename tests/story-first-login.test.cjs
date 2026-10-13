@@ -31,7 +31,7 @@ function loginContext({ failSave = false } = {}) {
   return { ctx, rows, login: async uid => { auth.currentUser = { uid }; await handler(auth.currentUser); } };
 }
 
-test('only a successfully created player document grants first-login autoplay, including after reload', async () => {
+test('only a successfully created player document grants new-account setup, including after reload', async () => {
   const first = loginContext();
   await first.login('new-player');
   assert.equal(first.ctx.window.isXiuxianFirstLogin(), true);
@@ -40,7 +40,7 @@ test('only a successfully created player document grants first-login autoplay, i
   await returning.login('new-player');
   assert.equal(returning.ctx.window.isXiuxianFirstLogin(), false, 'an unread prologue does not make a returning player new');
   await first.login('new-player');
-  assert.equal(first.ctx.window.isXiuxianFirstLogin(), false, 'signing in again resets first-login eligibility');
+  assert.equal(first.ctx.window.isXiuxianFirstLogin(), false, 'signing in again resets new-account eligibility');
 });
 
 test('first-login eligibility belongs to the authenticated account and failed initialization grants none', async () => {
@@ -73,32 +73,15 @@ function autoContext({ firstLogin = true, gender = 'male' } = {}) {
   return { ctx, calls };
 }
 
-test('first login opens the prologue once; later timers, score updates and deferral never reopen it', () => {
-  const { ctx, calls } = autoContext();
-  ctx.maybeAutoStart();
-  assert.deepEqual(calls, ['prologue-enter-sect']);
-  ctx.autoPermits = 1;
-  ctx.snoozeUntil = 0;
-  ctx.maybeAutoStart();
-  assert.equal(calls.length, 1);
-  const returning = autoContext({ firstLogin: false });
-  returning.ctx.maybeAutoStart();
-  assert.equal(returning.calls.length, 0);
-});
-
-test('onboarding and busy screens defer the first opening without consuming it; gender selection also opens once', () => {
-  const { ctx, calls } = autoContext({ gender: '' });
-  ctx.onboardingReady = () => false;
-  ctx.maybeAutoStart();
-  assert.equal(ctx.prologueAutoStartedUid, '');
-  ctx.onboardingReady = () => true;
-  ctx.blocking = () => true;
-  ctx.maybeAutoStart();
-  assert.equal(calls.length, 0);
-  ctx.blocking = () => false;
-  ctx.maybeAutoStart();
-  ctx.maybeAutoStart();
-  assert.deepEqual(calls, ['gender']);
+test('first login, score updates and deferral never autoplay the prologue or gender choice', () => {
+  for (const firstLogin of [true, false]) for (const gender of ['male', '']) {
+    const { ctx, calls } = autoContext({ firstLogin, gender });
+    ctx.maybeAutoStart();
+    ctx.autoPermits = 1;
+    ctx.snoozeUntil = 0;
+    ctx.maybeAutoStart();
+    assert.deepEqual(calls, []);
+  }
 });
 
 test('a returning player can manually open the prologue and choose a gender without an autoplay permit', () => {

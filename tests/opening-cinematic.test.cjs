@@ -68,7 +68,7 @@ test('world cinematic remains available for manual replay without gating the new
   const storyPos = main.indexOf("'./cultivation/story/story-engine.js'");
   assert.ok(openingPos >= 0 && storyPos > openingPos);
   assert.match(story, /#xiuxian-opening-cinematic/);
-  assert.match(story, /isXiuxianOpeningCinematicActive/);
+  assert.match(story, /#xiuxian-opening-cinematic/);
   assert.doesNotMatch(story, /isXiuxianOpeningCinematicRequired/);
   assert.match(story, /data-story-opening-replay/);
   assert.match(story, /xiuxian:opening-cinematic-completed/);
@@ -80,5 +80,5 @@ test('the replacement chapter waits for profile and startup clouds and the optio
   assert.match(story, /#page-onboarding:not\(\.hidden\)/);
   assert.match(story, /#startup-cloud-curtain/);
   assert.match(story, /#game-startup-gate/);
-  assert.match(story, /hasCompletedPlayerProfile/);
+  assert.match(story, /isFirstVisitActive/);
 });

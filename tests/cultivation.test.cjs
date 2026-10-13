@@ -125,6 +125,30 @@ function setup(totalScore = 0) {
   };
 }
 
+test('first-visit answer waits for persistence before advancing; an uncertain-write retry cannot award twice', async () => {
+  const { context, writes, answer } = setup();
+  let transition;
+  context.window.beginFirstVisitAnswer = correct => correct;
+  context.window.handleFirstVisitAnswer = async value => { transition = value; };
+  const original = context.runTransaction;
+  let attempts = 0;
+  context.runTransaction = async (...args) => {
+    const result = await original(...args);
+    if (++attempts === 1) throw new Error('response lost after commit');
+    return result;
+  };
+  await answer();
+  assert.equal(transition.saved, false);
+  assert.equal(writes.length, 1);
+  assert.equal(writes[0].data.stats.totalScore, 1);
+  await transition.retry();
+  await transition.retry();
+  assert.equal(writes.length, 1);
+  assert.equal(context.currentUserData.stats.totalScore, 1);
+  assert.equal(context.currentUserData.stats.gold, 20);
+  assert.equal(writes[0].data.questProgress.totals.solo, 1);
+});
+
 test('correct answer updates saved stats and the top panel immediately', async () => {
   const h = setup(0);
   const pending = h.answer();

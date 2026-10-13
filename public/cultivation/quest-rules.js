@@ -65,7 +65,9 @@
     'path-tribulation': [storyQuest('tribulation-final', '第十三章 · 天劫之上仍有一道題', 1868)],
     'path-immortal': [storyQuest('true-immortal-epilogue', '終章 · 出師這件事，師姐說了算', 2588)]
   };
-  const PATH = [storyQuest('prologue-enter-sect', '第一章 · 問道靈根', 0),
+  const PATH = [{ ...storyQuest('prologue-enter-sect', '第一章 · 問道靈根', 0),
+    title: '完成新手劇情 · 問道靈根',
+    description: '準備好後，點「前往」認識青雲宗並完整觀看新手劇情；登入與選擇性別不會自動播放。' },
     ...LEGACY_PATH.flatMap(q => [q, ...(STORY_AFTER[q.id] || [])])];
   const DAILY = [
     quest('daily-solo-three', '溫故知新', '今日問道答對 3 題。', 'solo', 3, 40, 1, 'solo'),

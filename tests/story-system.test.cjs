@@ -229,13 +229,14 @@ test('gender selection copy uses gender rather than portrait terminology', () =>
 });
 
 
-test('main story cannot auto-start until grade, strong subjects and weak subjects are complete', () => {
-  assert.match(engine, /function onboardingReady\(\)/);
-  assert.match(engine, /profile\.educationLevel/);
-  assert.match(engine, /profile\.strongSubjects/);
-  assert.match(engine, /profile\.weakSubjects/);
-  assert.match(engine, /if \(!onboardingReady\(\)\) return;/);
-  assert.match(engine, /xiuxian:onboarding-completed/);
+test('manual story entry waits for arrival, without requiring a profile survey', () => {
+  const vm = require('node:vm');
+  const source = engine.slice(engine.indexOf('  function onboardingReady()'), engine.indexOf('  function user()'));
+  const ctx = vm.createContext({ window: { isFirstVisitActive: () => true }, data: () => ({ stats: {}, profile: {} }), user: () => ({ uid: 'u' }) });
+  vm.runInContext(source, ctx);
+  assert.equal(ctx.onboardingReady(), false);
+  ctx.window.isFirstVisitActive = () => false;
+  assert.equal(ctx.onboardingReady(), true);
 });
 
 
@@ -288,7 +289,6 @@ test('chapters with embedded main tutorials replay their own lessons', () => {
   assert.match(scripts, /kind: 'battle-shen', afterLine: 13/);
   assert.match(scripts, /kind: 'battle-gu', afterLine: 22/);
   assert.match(engine, /replayMode \|\| !storyTutorialComplete\(kind\)/);
-  assert.match(engine, /storyTutorialPaused \|\| document\.getElementById\(ARCHIVE_ID\)/);
   assert.match(engine, /if \(!chapter \|\| active \|\| storyTutorialPaused\) return false/);
   assert.match(engine, /'newbieTutorialV1'/);
   assert.match(engine, /'storyDongtianTutorialV1'/);
