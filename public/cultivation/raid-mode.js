@@ -87,6 +87,8 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     };
     const label = document.querySelector('#raid-hub .raid-global-ticket b');
     if (label) label.textContent = '團本入場券 ' + (state.ticketState.count == null ? '讀取中' : state.ticketState.count + ' / 10');
+    const dot = document.querySelector('#raid-hub .raid-global-ticket-dot');
+    if (dot) dot.hidden = !uid || !(Number(state.ticketState.count) > 0);
     if (state.status === 'hub') {
       const selected = raidTrialById(state.selectedRaidId);
       const locked = selected.status !== 'open' || score() < selected.minimumScore || Number(state.ticketState.count) === 0;
@@ -408,6 +410,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
   }
 
   function renderHub() {
+    syncRaidTicketState();
     state.hubAccessSignature = hubAccessSignature();
     state.status = state.roomId ? state.status : 'hub';
     document.body.classList.remove('raid-session-active');
@@ -458,7 +461,8 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
       '<div class="raid-heading-copy"><small>SECRET REALM ／ 秘境集結</small><h2>秘境試煉</h2><p>選擇試煉後再組隊；每個團本可有獨立 Boss、合作規則與專屬掉落。</p>' +
       '<div class="raid-ticket-status raid-global-ticket"><i class="fa-solid fa-ticket"></i><span><b>團本入場券 ' +
         (state.ticketState?.count == null ? '讀取中' : escapeHtml(state.ticketState.count + ' / ' + state.ticketState.cap)) +
-        '</b><small>全團本共用・每日 +3・最多 10 張</small></span></div></div><span class="raid-seal">團</span></header>' +
+        '</b><small>全團本共用・每日 +3・最多 10 張</small></span><span class="raid-global-ticket-dot" aria-hidden="true"' +
+        (Number(state.ticketState.count) > 0 ? '' : ' hidden') + '></span></div></div><span class="raid-seal">團</span></header>' +
       '<div class="raid-trial-list" role="list">' + trialCards + '</div>' + detail;
 
     scheduleRaidHubFit();

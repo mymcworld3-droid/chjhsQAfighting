@@ -17,9 +17,17 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
   function status(message) { if ($('quest-status')) $('quest-status').textContent = message; }
   function syncQuestIndicator() {
     const ready = q => q?.claimable && !q.claimed && !q.locked;
-    const available = account === getMainUser()?.uid && snapshot &&
-      (ready(snapshot.path) || (snapshot.date === window.XianxiaQuestRules.dateKey() && snapshot.daily.some(ready)));
+    const current = account === getMainUser()?.uid ? snapshot : null;
+    const pathReady = !!current && !!ready(current.path);
+    const dailyReady = !!current && current.date === window.XianxiaQuestRules.dateKey() && current.daily.some(ready);
+    const available = pathReady || dailyReady;
     if ($('quest-ready-dot')) $('quest-ready-dot').hidden = !available;
+    for (const [key, pending] of [['path', pathReady], ['daily', dailyReady]]) {
+      if ($('quest-' + key + '-dot')) $('quest-' + key + '-dot').hidden = !pending;
+      const button = $('quest-tab-' + key);
+      if (pending) button?.setAttribute('aria-description', '有任務獎勵可領取');
+      else button?.removeAttribute('aria-description');
+    }
     $('quest-open')?.setAttribute('aria-label', available ? '任務，有獎勵可領取' : '任務');
   }
   function card(q, kind) {
@@ -158,7 +166,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     const dialog = document.createElement('dialog'); dialog.id = 'quest-dialog'; dialog.className = 'quest-dialog'; dialog.setAttribute('role', 'dialog'); dialog.setAttribute('aria-modal', 'true'); dialog.setAttribute('aria-labelledby', 'quest-title');
     const panel = document.createElement('section'); panel.id = 'quest-panel'; panel.className = 'quest-panel'; panel.setAttribute('aria-label', '修行任務');
     panel.innerHTML = `<header class="quest-heading"><div><small>宗門手札</small><h3 id="quest-title">修行任務</h3></div><div class="quest-heading-actions"><button type="button" id="quest-refresh" aria-label="重新同步任務">重新同步</button><button type="button" id="quest-close" aria-label="關閉任務">✕</button></div></header>
-      <div class="quest-tabs" role="tablist" aria-label="任務類別"><button id="quest-tab-path" type="button" role="tab" aria-controls="quest-content" aria-selected="true">仙道 <span id="quest-path-count"></span></button><button id="quest-tab-daily" type="button" role="tab" aria-controls="quest-content" aria-selected="false" tabindex="-1">日常 <span id="quest-daily-count"></span></button></div>
+      <div class="quest-tabs" role="tablist" aria-label="任務類別"><button id="quest-tab-path" type="button" role="tab" aria-controls="quest-content" aria-selected="true">仙道 <span id="quest-path-count"></span><span id="quest-path-dot" class="quest-tab-dot" hidden aria-hidden="true"></span></button><button id="quest-tab-daily" type="button" role="tab" aria-controls="quest-content" aria-selected="false" tabindex="-1">日常 <span id="quest-daily-count"></span><span id="quest-daily-dot" class="quest-tab-dot" hidden aria-hidden="true"></span></button></div>
       <div class="quest-scroll" tabindex="0" role="region" aria-label="任務清單，可捲動"><p id="quest-note" class="quest-note"></p><div id="quest-content" role="tabpanel" aria-labelledby="quest-tab-path"></div><p id="quest-status" role="status" aria-live="polite"></p></div>`;
     dialog.append(panel); document.body.append(dialog);
     entry.addEventListener('click', () => {

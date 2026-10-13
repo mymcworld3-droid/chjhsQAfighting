@@ -295,3 +295,12 @@ body.raid-page-open #page-raid.active-page>#raid-result:not(.hidden){
   #raid-hub .raid-reward-preview { margin-top:8px; }
   #raid-hub .raid-entry-actions { grid-column:1 / -1; padding:10px; }
 }
+
+/* Shared ticket reminder stays inside the balance card without shifting its text. */
+.raid-global-ticket { position: relative; padding-right: 18px; }
+.raid-global-ticket .raid-global-ticket-dot {
+  position: absolute; top: 5px; right: 5px; display: block; width: 8px; height: 8px;
+  border: 1px solid #ffd0c6; border-radius: 50%; background: #f05249;
+  box-shadow: 0 0 7px #f0524966; pointer-events: none;
+}
+.raid-global-ticket .raid-global-ticket-dot[hidden] { display: none; }

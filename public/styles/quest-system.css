@@ -4,6 +4,13 @@
 .quest-note{color:#a9a18f;font-size:12px;line-height:1.75;margin:8px 0 13px}.quest-card{display:flex;flex-direction:column;min-width:0;padding:15px;border-radius:13px;border:1px solid #8a713836;background:#ffffff03}.quest-card-heading{display:flex;align-items:center;justify-content:space-between;gap:10px}.quest-card h4{margin:0;font-size:16px;color:#e4d5b4}.quest-card-heading>span{flex-shrink:0;font-size:11px;color:#a89b7c}.quest-card>p{font-size:13px;line-height:1.7;color:#b4ad9e;flex:1;margin:9px 0 13px}.quest-path-card{border-color:#b99a5154;background:linear-gradient(120deg,#b6964511,transparent)}.quest-path-card h4{font-size:19px}.quest-daily-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .quest-progress-label{display:flex;justify-content:space-between;gap:10px;font-size:11px;color:#938775}.quest-progress-label b{font-variant-numeric:tabular-nums;color:#d7c393}.quest-progress{height:5px;border-radius:10px;background:#ffffff0c;margin:7px 0 12px;overflow:hidden}.quest-progress i{display:block;height:100%;background:linear-gradient(90deg,#8b6b30,#e0bd6d);border-radius:inherit}.quest-reward{color:#d3b77f;font-size:12px;line-height:1.8;overflow-wrap:anywhere}.quest-reward i{margin-right:4px}.quest-action{margin-top:12px;min-height:40px;border:1px solid #b3944e50;border-radius:9px;background:#ffffff04;color:#cdbd9c;font-size:13px;font-weight:700;cursor:pointer}.quest-claim{background:linear-gradient(110deg,#926a32,#5f431f);color:#fff0cb;border-color:#d2ad68}.quest-ready{border-color:#c6a25988}.quest-ready .quest-card-heading>span{color:#e6c578}.quest-claimed{opacity:.6}.quest-panel button:disabled{opacity:.5;cursor:default}.quest-panel button:focus-visible{outline:2px solid #efd28f;outline-offset:3px}#quest-status{font-size:12px;line-height:1.7;margin:10px 0 0;color:#ead5a4;overflow-wrap:anywhere}#quest-status:empty{display:none}.quest-empty{font-size:13px;color:#c7b997;line-height:1.8;margin:12px 0}
 @media(max-width:520px){.quest-panel{padding:13px}.quest-daily-grid{grid-template-columns:1fr}.quest-card{padding:13px}.quest-tabs span{display:block;margin:4px 0 0}}
+.quest-tabs button { position: relative; padding-inline: 18px; }
+.quest-tabs .quest-tab-dot {
+  position: absolute; top: 7px; right: 7px; display: block; width: 8px; height: 8px; margin: 0;
+  border: 1px solid #ffd0c6; border-radius: 50%; background: #f05249;
+  box-shadow: 0 0 7px #f0524966; pointer-events: none;
+}
+.quest-tabs .quest-tab-dot[hidden] { display: none; }
 
 /* Native modal keeps keyboard focus inside the scroll and the page underneath fixed. */
 .quest-dialog {
