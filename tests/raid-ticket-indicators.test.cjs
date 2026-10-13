@@ -95,3 +95,34 @@ test('daily ticket refresh runs at Taiwan midnight and waits for visibility when
   assert.equal(requests.length,1,'a hidden tab does not perform a daily network request');
   assert.equal(timers.length,3,'the next midnight remains scheduled');
 });
+
+test('upgrade reminders use real branch costs, caps, core types and current account without changing points',()=>{
+  const Growth = require('../public/cultivation/nascent-growth.js');
+  const source=read('training-scene-map.js'),start=source.indexOf('function updateTicketIndicators()'),end=source.indexOf('\nfunction fit()',start);
+  let uid='a',player;
+  const host=()=>({children:[],attributes:{},querySelector(selector){return this.children.find(dot=>dot.className===selector.slice(1))||null;},appendChild(dot){this.children.push(dot);},setAttribute(key,value){this.attributes[key]=value;},removeAttribute(key){delete this.attributes[key];}});
+  const navHost=host(),roomHost=host(),secretHost=host(),soulTab=host(),home=host();
+  const button=label=>({...host(),querySelector:selector=>selector.includes('dot')?label.querySelector(selector):label});
+  const nav=button(navHost),room=button(roomHost),secret=button(secretHost);
+  const context={Rules,QANascentGrowth:Growth,getMainUser:()=>uid?{uid}:null,
+    unlocked:place=>Rules.allows(player,place.threshold),plane:{querySelector:selector=>selector.includes('meditation')?room:secret},
+    document:{getElementById:id=>id==='nav-training'?nav:home,querySelector:()=>soulTab,createElement:()=>({setAttribute(){}})},window:{getCurrentUserData:()=>player}};
+  vm.runInNewContext(source.slice(start,end)+'\nthis.update=updateTicketIndicators;',context);
+  const check=(grow,raid=false)=>{const before=JSON.stringify(player);context.update();assert.equal(JSON.stringify(player),before,'checking badges never spends or migrates resources');assert.equal(!navHost.querySelector('.raid-ticket-dot').hidden,grow||raid);assert.equal(!roomHost.querySelector('.nascent-upgrade-dot').hidden,grow);assert.equal(!soulTab.querySelector('.nascent-upgrade-dot').hidden,grow);assert.equal(!secretHost.querySelector('.raid-ticket-dot').hidden,raid);};
+  for(const type of ['ocean','taichu','ningxin','pojing','xingchen','wugou','thunder','reverse','sword']){
+    const core={type,grade:5},branches=Growth.branches(core);
+    player={uid,stats:{totalScore:68},cultivationTraining:{equippedCore:core},nascentSoulGrowth:{version:1,branches:Object.fromEntries(branches.map(branch=>[branch.id,10]))},materialSystem:{inventory:{[Growth.ITEM_ID]:100}}};
+    check(false);
+    const last=branches.at(-1).id;player.nascentSoulGrowth.branches[last]=5;
+    player.materialSystem.inventory[Growth.ITEM_ID]=5;check(false);
+    player.materialSystem.inventory[Growth.ITEM_ID]=6;check(true);
+    Growth.apply(player,Growth.upgrade(player,last));check(false);
+    Growth.apply(player,Growth.reset(player));check(true);
+  }
+  delete player.cultivationTraining.equippedCore;check(false);
+  player.cultivationTraining.equippedCore={type:'sword',grade:5};player.stats.totalScore=67;check(false);
+  player.stats.totalScore=68;player.materialSystem.inventory[Growth.ITEM_ID]=0;check(false);
+  player.raidTickets={count:1};check(false,true);
+  player.materialSystem.inventory[Growth.ITEM_ID]=1;check(true,true);
+  uid='other';check(false);uid=null;check(false);
+});

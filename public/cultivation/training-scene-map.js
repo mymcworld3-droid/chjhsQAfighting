@@ -1,4 +1,5 @@
 import './training-access-rules.js';
+import './nascent-growth.js';
 import './training-scene-layer-art.js';
 import './training-scene-layouts.js';
 import { getMainUser } from './data/project-repository.js';
@@ -222,8 +223,11 @@ function updateLocks() {
 function updateTicketIndicators() {
   const player = window.getCurrentUserData?.(), uid = getMainUser()?.uid;
   const secret = Rules.PLACES.find(place => place.id === 'secret');
-  const ready = !!uid && !!player?.stats && (!player.uid || player.uid === uid) &&
-    unlocked(secret) && Number(player.raidTickets?.count) >= 1;
+  const accountReady = !!uid && !!player?.stats && (!player.uid || player.uid === uid);
+  const ready = accountReady && unlocked(secret) && Number(player.raidTickets?.count) >= 1;
+  const growth = globalThis.QANascentGrowth;
+  const canUpgrade = !!(accountReady && growth?.branches(player.cultivationTraining?.equippedCore)
+    .some(branch => growth.status(player, branch.id).ok));
   const building = plane?.querySelector('[data-training-location="secret"]');
   const nav = document.getElementById('nav-training');
   const home = document.getElementById('sect-raid-entry');
@@ -237,9 +241,28 @@ function updateTicketIndicators() {
       dot.setAttribute('aria-hidden', 'true');
       host.appendChild(dot);
     }
-    dot.hidden = !ready;
-    if (ready) button.setAttribute('aria-description', '尚有團本入場券，可挑戰秘境試煉');
+    const pending = button === nav ? ready || canUpgrade : ready;
+    dot.hidden = !pending;
+    const description = [ready ? '尚有團本入場券，可挑戰秘境試煉' : '', button === nav && canUpgrade ? '元嬰有分支可升級' : ''].filter(Boolean).join('；');
+    if (pending) button.setAttribute('aria-description', description);
     else button.removeAttribute('aria-description');
+  }
+  if (growth) {
+    const room = plane?.querySelector('[data-training-location="meditation"]');
+    const soulTab = document.querySelector?.('#page-training [data-training-tab="nascent-soul"]');
+    for (const [button, host] of [[room, room?.querySelector('.training-place-label')], [soulTab, soulTab]]) {
+      if (!button || !host) continue;
+      let dot = host.querySelector('.nascent-upgrade-dot');
+      if (!dot) {
+        dot = document.createElement('span');
+        dot.className = 'nascent-upgrade-dot';
+        dot.setAttribute('aria-hidden', 'true');
+        host.appendChild(dot);
+      }
+      dot.hidden = !canUpgrade;
+      if (canUpgrade) button.setAttribute('aria-description', '元嬰有分支可升級');
+      else button.removeAttribute('aria-description');
+    }
   }
 }
 function fit() {
@@ -384,9 +407,11 @@ function boot() {
     if (pageNavigation?.isCurrent()) pageNavigation.tab = target.dataset.trainingTab || 'status';
     if (target.closest(`#${PAGE}`)) setDetail(tabPlace[target.dataset.trainingTab || 'status']);
   }, true);
-  ['xiuxian:user-ready', 'xiuxian:stats-updated', 'xiuxian:features-ready', 'xiuxian:training-access-updated',
+  ['xiuxian:user-data-ready', 'xiuxian:user-ready', 'xiuxian:stats-updated', 'xiuxian:features-ready', 'xiuxian:training-access-updated',
     'foundation-training-stage-changed', 'golden-core-access-changed'].forEach(name => window.addEventListener(name, sync));
   window.addEventListener('xiuxian:raid-tickets-updated', updateTicketIndicators);
+  window.addEventListener('material-system-updated', updateTicketIndicators);
+  window.addEventListener('golden-core-equipped-changed', updateTicketIndicators);
   const navGrid = document.getElementById('nav-grid');
   if (navGrid) new MutationObserver(updateTicketIndicators).observe(navGrid, { childList:true });
   window.addEventListener('resize', scheduleFit, { passive: true });

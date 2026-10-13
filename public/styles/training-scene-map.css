@@ -246,7 +246,7 @@ body.xianxia-theme #page-training .training-place {
   pointer-events: auto;
 }
 .training-place-name { display: block; }
-.raid-ticket-dot {
+.raid-ticket-dot, .nascent-upgrade-dot {
   position:absolute;
   z-index:4;
   display:block;
@@ -257,10 +257,13 @@ body.xianxia-theme #page-training .training-place {
   box-shadow:0 0 3px #6d1118, 0 0 7px #ff453b80;
   pointer-events:none;
 }
-.raid-ticket-dot[hidden] { display:none!important; }
-.training-place-label > .raid-ticket-dot { width:.42em; height:.42em; right:-.15em; top:-.15em; }
+.raid-ticket-dot[hidden], .nascent-upgrade-dot[hidden] { display:none!important; }
+.training-place-label > .raid-ticket-dot,
+.training-place-label > .nascent-upgrade-dot { width:.42em; height:.42em; right:-.15em; top:-.15em; }
 #nav-training .training-nav-orb { position:relative; }
 #nav-training .raid-ticket-dot { width:8px; height:8px; right:0; top:0; }
+#page-training [data-training-tab="nascent-soul"] { position:relative; }
+#page-training [data-training-tab="nascent-soul"] > .nascent-upgrade-dot { width:8px; height:8px; right:6px; top:6px; }
 .training-place-realm { font-size: .6em; font-weight: 500; letter-spacing: .02em; color: #d9d5ca; }
 .training-place-realm[hidden], .training-place-lock[hidden] { display: none; }
 .training-place-lock {
