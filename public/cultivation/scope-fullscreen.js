@@ -28,13 +28,14 @@ import { playerRepository } from './data/player-repository.js';
   function updateSummary() {
     if (!studio) return;
     const selected = units();
+    const comprehensive = $('set-source-mode')?.value === 'random';
     const c = $('ss-selection-count'),
       sum = $('ss-footer-main'), foot = $('ss-footer-sub'), tab = $('ss-tab-count');
     if (c) c.textContent = String(selected.length);
     if ($('ss-list-count')) $('ss-list-count').textContent = '已選 ' + selected.length + ' / 24 項';
     if (tab) tab.textContent = String(selected.length);
-    if (sum) sum.textContent = selected.length ? '已選 ' + selected.length + ' 個複習範圍' : '建立你的專屬修習計畫';
-    if (foot) foot.textContent = changed() ? '變更尚未儲存，離開前記得儲存。' : '可跨科選擇，最多 24 個範圍。';
+    if (sum) sum.textContent = comprehensive ? '綜合練習 · 跨科隨機出題' : selected.length ? '已選 ' + selected.length + ' 個複習範圍' : '建立你的專屬修習計畫';
+    if (foot) foot.textContent = changed() ? '變更尚未儲存，離開前記得儲存。' : comprehensive ? '無須挑選章節，可以直接儲存開始。' : '可跨科選擇，最多 24 個範圍。';
     const cardSummary = $('dongfu-scope-card')?.querySelector('.dongfu-collapse-summary');
     if (cardSummary) cardSummary.textContent = selected.length ? '已選 ' + selected.length + ' 個範圍 · 點擊全螢幕編輯' : '全螢幕選課 · 選章節、定考點';
     for (const id of ['ss-organize', 'ss-share']) if ($(id)) $(id).disabled = saving || !selected.length;

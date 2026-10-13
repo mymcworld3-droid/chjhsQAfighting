@@ -38,8 +38,8 @@ body.first-visit-active #bottom-nav,body.first-visit-active #btn-extended-practi
 body[data-first-visit-stage="invite"] #realm-breakthrough-feedback{z-index:43000;pointer-events:auto}
 body[data-first-visit-stage="question"] #btn-quiz-home{font-size:0}
 body[data-first-visit-stage="question"] #btn-quiz-home::after{content:'調整答題範圍';font-size:12px}
-#scope-studio.fv-scope #ss-share,#scope-studio.fv-scope #ss-import,#scope-studio.fv-scope #ss-organize,#scope-studio.fv-scope .cs-range-panel{display:none!important}
-#scope-studio.fv-scope .ss-picker-body>.dongfu-scope-content>label,#scope-studio.fv-scope #set-source-mode,#scope-studio.fv-scope #set-source-mode~p{display:none!important}
+#scope-studio.fv-scope #ss-share,#scope-studio.fv-scope #ss-import,#scope-studio.fv-scope #ss-organize{display:none!important}
+#scope-studio.fv-scope #set-source-mode{min-height:48px;font-size:16px!important}
 #scope-studio.fv-scope .cs-stage-title h4{font-size:24px}
 #scope-studio.fv-scope .cs-stage-title p{font-size:14px;color:#c4d4c7}
 #scope-studio.fv-scope .cs-choice{min-height:62px}

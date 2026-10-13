@@ -11,6 +11,7 @@ import './first-visit-rules.js';
   try { state = Rules.normalize(JSON.parse(localStorage.getItem(KEY) || '{}')); }
   catch (_) { state = Rules.normalize(); }
   let user = null, ready = false, busy = false, scene = 0, readySerial = 0, trialAnswerPending = false;
+  let trialBankOption = null;
   const portraits = ['male', 'female'].map(g => `assets/story/characters/player-${g}-neutral.png`);
   const scenes = [
     ['opening-1.png', '知識，就是你的靈根', '歡迎來到青雲宗。每一次思考與作答，都會化為修行的力量。'],
@@ -82,7 +83,14 @@ import './first-visit-rules.js';
     removeLayer();
     window.switchToPage?.('page-settings');
     const mode = $('set-source-mode');
-    if (mode) { mode.value = 'focused'; window.toggleSourceMode?.(); }
+    if (mode) {
+      if (!['random', 'focused'].includes(mode.value)) mode.value = 'focused';
+      // Keep the chosen practice mode when returning to adjust the scope.
+      // Detach the incomplete bank option so native mobile selects omit it too.
+      trialBankOption ||= mode.querySelector('option[value="bank"]');
+      trialBankOption?.remove();
+      window.toggleSourceMode?.();
+    }
     window.openCurriculumStudio?.();
     const studio = $('scope-studio');
     if (!studio || studio.hidden) {
@@ -92,7 +100,7 @@ import './first-visit-rules.js';
     }
     studio.classList.add('fv-scope');
     $('ss-title').textContent = '第一步 · 選擇答題範圍';
-    $('ss-picker')?.querySelector('.ss-panel-head small')?.replaceChildren(document.createTextNode('選年級 → 選科目 → 勾一章；儲存後就能開始。'));
+    $('ss-picker')?.querySelector('.ss-panel-head small')?.replaceChildren(document.createTextNode('綜合練習可直接開始；專注練習可選章節或輸入自訂範圍。'));
     $('dongfu-scope-save').textContent = '選好了，開始答題';
     $('ss-close')?.setAttribute('aria-label', '返回歡迎畫面');
     const closeText = $('ss-close')?.querySelector('span'); if (closeText) closeText.textContent = '返回歡迎畫面';
@@ -146,6 +154,7 @@ import './first-visit-rules.js';
   }
   function cleanup() {
     removeLayer();
+    if (trialBankOption) { $('set-source-mode')?.append(trialBankOption); trialBankOption = null; }
     $('scope-studio')?.classList.remove('fv-scope');
     if ($('ss-title')) $('ss-title').textContent = '課程研修所';
     $('ss-picker')?.querySelector('.ss-panel-head small')?.replaceChildren(document.createTextNode('先選出題模式，再從課程目錄挑選章節或細項。'));
