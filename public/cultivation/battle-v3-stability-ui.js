@@ -417,7 +417,7 @@
         border-radius:8px 8px 20px 20px!important;
         border:1px solid rgba(207,179,118,.26);
         background:linear-gradient(180deg,rgba(3,10,10,.18),rgba(5,8,8,.22) 62%,rgba(0,0,0,.64)),
-          url('assets/immortal-mountains.svg') center 48% / cover no-repeat,#102521!important;
+          var(--xq-scene-art) center 48% / cover no-repeat,#102521!important;
         box-shadow:inset 0 0 70px rgba(0,0,0,.48),0 8px 26px rgba(0,0,0,.28)
       }
       #page-battle .bv2-stage::before{

@@ -8,11 +8,20 @@
   --xq-muted: #aab7a6;
   --xq-line: rgba(199, 181, 133, .25);
   --xq-serif: 'Noto Serif TC', 'Songti TC', 'PMingLiU', serif;
+  /* Shared plates also appear in stylesheets under styles/. */
+  --xq-scene-art: url('/assets/scenes/mountains-landscape-ai.webp');
+  --xq-loading-art: url('/assets/scenes/loading-landscape-ai.webp');
   --glass-bg: rgba(19, 42, 37, .94);
   --glass-border: var(--xq-line);
   --neon-cyan: #a9c6af;
   --neon-blue: #659580;
   --neon-pink: #cfb27b;
+}
+@media (orientation: portrait) {
+  :root {
+    --xq-scene-art: url('/assets/scenes/mountains-portrait-ai.webp');
+    --xq-loading-art: url('/assets/scenes/loading-portrait-ai.webp');
+  }
 }
 body.xianxia-theme {
   color: var(--xq-paper);
@@ -22,7 +31,7 @@ body.xianxia-theme {
 body.xianxia-theme::before {
   content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
   background: linear-gradient(90deg, rgba(8, 26, 23, .78), rgba(8, 26, 23, .87)),
-    url('assets/immortal-mountains.svg') center / cover;
+    var(--xq-scene-art) center / cover;
 }
 body.xianxia-theme main { padding-top: 92px; padding-bottom: 116px; }
 body.xianxia-theme .page-section { max-width: 1060px; margin-inline: auto; width: 100%; }
@@ -104,7 +113,7 @@ body.xianxia-theme .xiuxian-panel {
 body.xianxia-theme .xiuxian-panel::before {
   content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit;
   background: linear-gradient(90deg, #112b25f2 0%, #173129b8 52%, #18352b22),
-    url('assets/immortal-mountains.svg') 68% center / cover;
+    var(--xq-scene-art) 68% center / cover;
 }
 body.xianxia-theme .xiuxian-panel::after {
   content: ''; position: absolute; inset: 8px; border: 1px solid #c4b18024; border-radius: 3px; pointer-events: none; z-index: -1;
@@ -413,7 +422,7 @@ body.xianxia-theme #feedback-text { font-size: 15px; line-height: 1.9; }
 body.xianxia-theme #solo-progress-panel { position: static; margin-top: 8px; }
 /* 山門登入 */
 body.xianxia-theme #login-screen { min-height: calc(100dvh - 200px); max-width: 100%; }
-.xianxia-login-art { position: absolute; inset: -20px 0 0; background: linear-gradient(0deg, #0d211f 0%, #0d211f33 70%), url('assets/immortal-mountains.svg') 65% center / cover; opacity: .85; pointer-events: none; }
+.xianxia-login-art { position: absolute; inset: -20px 0 0; background: linear-gradient(0deg, #0d211f 0%, #0d211f33 70%), var(--xq-scene-art) 65% center / cover; opacity: .85; pointer-events: none; }
 .xianxia-login-card { max-width: 480px; padding: 46px 34px; border: 1px solid #c6b78355; background: #0f2822c7; box-shadow: 0 20px 80px #02150a40; border-radius: 6px; backdrop-filter: blur(4px); }
 .xianxia-login-emblem { display: inline-grid; place-items: center; width: 80px; height: 80px; border: 1px solid #c9b67d99; outline: 1px solid #c9b67d33; outline-offset: 7px; border-radius: 50%; color: #d5c18b; font: 40px var(--xq-serif); margin-bottom: 32px; }
 body.xianxia-theme #login-screen h2 { font-size: 34px; font-weight: 500; margin-bottom: 18px; }
@@ -424,7 +433,7 @@ body.xianxia-theme :is(#page-store, #page-settings, #page-history, #page-rank) >
 body.xianxia-theme #page-store > .sticky { background: #0f2822f5; border-color: var(--xq-line); }
 body.xianxia-theme :is(.store-tab.active, .inventory-item.selected) { background: #60704744; color: #eedaa3; border-color: var(--xq-gold); }
 body.xianxia-theme :is(.inventory-item, .admin-item-row) { border-color: var(--xq-line); background: #142e26; }
-body.xianxia-theme .five-immortals { background: linear-gradient(#18362deb, #122b24f5), url('assets/immortal-mountains.svg') center / cover; border: 1px solid var(--xq-line); border-radius: 7px; padding: 28px 18px; box-shadow: none; }
+body.xianxia-theme .five-immortals { background: linear-gradient(#18362deb, #122b24f5), var(--xq-scene-art) center / cover; border: 1px solid var(--xq-line); border-radius: 7px; padding: 28px 18px; box-shadow: none; }
 body.xianxia-theme .five-immortals h3 { font: 25px var(--xq-serif); color: #ead5a2; }
 body.xianxia-theme .five-immortals p { color: #b6c2ad; font-size: 11px; }
 body.xianxia-theme .podium-slot { background: linear-gradient(0deg, #a6b58f0a, #71866720); border-radius: 3px 3px 0 0; border-color: #b3aa7960; }

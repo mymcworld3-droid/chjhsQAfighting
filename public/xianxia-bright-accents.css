@@ -27,7 +27,7 @@ body.xianxia-theme::before{
     linear-gradient(115deg,rgba(9,8,6,.78),rgba(24,20,13,.67)),
     radial-gradient(circle at 12% 8%,rgba(111,193,163,.12),transparent 30%),
     radial-gradient(circle at 82% 10%,rgba(238,196,104,.16),transparent 34%),
-    url('assets/immortal-mountains.svg') center / cover!important;
+    var(--xq-scene-art) center / cover!important;
   filter:grayscale(.28) sepia(.16) brightness(.68) contrast(1.04)!important;
 }
 
@@ -132,9 +132,13 @@ body.xianxia-theme .xiuxian-panel{
 }
 body.xianxia-theme .xiuxian-panel::before{
   background:
-    linear-gradient(90deg,rgba(25,50,41,.85),rgba(38,54,41,.54) 52%,rgba(72,71,45,.16)),
-    url('assets/immortal-mountains.svg') 68% center / cover!important;
-  filter:brightness(1.18) saturate(.94);
+    linear-gradient(0deg,rgba(5,16,20,.72),rgba(5,16,20,.35) 42%,transparent 76%),
+    linear-gradient(90deg,rgba(7,22,26,.84),rgba(10,27,30,.62) 42%,rgba(12,25,28,.12)),
+    var(--xq-scene-art) 68% center / cover!important;
+  filter:none;
+}
+body.xianxia-theme .xiuxian-panel :is(.xiuxian-kicker,.xiuxian-invocation,.xiuxian-label,.xiuxian-value){
+  text-shadow:0 1px 4px #000a;
 }
 body.xianxia-theme .stat-card{
   background:
@@ -260,7 +264,7 @@ body.xianxia-theme #store-grid>*{
 body.xianxia-theme .five-immortals{
   background:
     linear-gradient(rgba(45,56,42,.76),rgba(26,35,29,.86)),
-    url('assets/immortal-mountains.svg') center / cover!important;
+    var(--xq-scene-art) center / cover!important;
   border-color:rgba(233,200,122,.35)!important;
   box-shadow:inset 0 1px rgba(255,255,255,.06),0 13px 32px rgba(0,0,0,.20)!important;
 }

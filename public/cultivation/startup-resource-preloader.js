@@ -11,6 +11,10 @@ import {
 const STARTUP_IMAGE_LIMIT = 28;
 const STARTUP_TIMEOUT_MS = 5200;
 const IMAGE_CONCURRENCY = 4;
+const SCENE_ART = Object.freeze({
+  landscape: ['assets/scenes/mountains-landscape-ai.webp', 'assets/scenes/loading-landscape-ai.webp'],
+  portrait: ['assets/scenes/mountains-portrait-ai.webp', 'assets/scenes/loading-portrait-ai.webp']
+});
 
 function userData() {
   try { return window.getCurrentUserData?.() || {}; } catch (_) { return {}; }
@@ -104,6 +108,7 @@ function definitionImageUrls(defs) {
 
 function collectStartupImageUrls() {
   const priority = collectPriorityDefinitions();
+  const sceneOrientation = window.matchMedia?.('(orientation: portrait)')?.matches ? 'portrait' : 'landscape';
 
   const equippedArtifacts = priority.equippedArtifactIds.map(getArtifactById).filter(Boolean);
   const ownedArtifacts = priority.ownedArtifactIds.map(getArtifactById).filter(Boolean);
@@ -113,6 +118,7 @@ function collectStartupImageUrls() {
   const nearbyMaterials = priority.materialIds.map(getMaterialById).filter(Boolean);
 
   const urls = unique([
+    ...SCENE_ART[sceneOrientation],
     'assets/training/cultivation-landscape-clean.webp',
     'assets/training/cultivation-portrait-clean.webp',
     'assets/training/cutouts/meditation-ai.webp',
@@ -132,6 +138,7 @@ function collectStartupImageUrls() {
     priority,
     startup: urls.slice(0, STARTUP_IMAGE_LIMIT),
     remaining: unique([
+      ...SCENE_ART[sceneOrientation === 'portrait' ? 'landscape' : 'portrait'],
       ...definitionImageUrls(ARTIFACT_CATALOG),
       ...definitionImageUrls(MATERIAL_CATALOG)
     ]).filter((url) => !urls.slice(0, STARTUP_IMAGE_LIMIT).includes(url))

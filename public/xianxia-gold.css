@@ -24,7 +24,7 @@ body.xianxia-theme::before {
   background:
     linear-gradient(115deg, rgba(0,0,0,.91), rgba(12,10,6,.84)),
     radial-gradient(circle at 78% 8%, rgba(215,174,87,.10), transparent 38%),
-    url('assets/immortal-mountains.svg') center / cover;
+    var(--xq-scene-art) center / cover;
   filter: grayscale(.55) sepia(.22) brightness(.42) contrast(1.12);
 }
 
@@ -129,7 +129,7 @@ body.xianxia-theme .xiuxian-panel {
 body.xianxia-theme .xiuxian-panel::before {
   background:
     linear-gradient(95deg, rgba(8,8,8,.97) 0%, rgba(15,13,9,.90) 52%, rgba(35,27,12,.54)),
-    url('assets/immortal-mountains.svg') 68% center / cover;
+    var(--xq-scene-art) 68% center / cover;
   filter: grayscale(.58) sepia(.30) brightness(.42) contrast(1.10);
 }
 

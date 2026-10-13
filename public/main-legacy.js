@@ -749,11 +749,13 @@ function ensureGameStartupGateStyle() {
             font-family:var(--xq-serif,'Noto Sans TC',sans-serif)
         }
         #game-startup-gate .game-startup-visual{
-            position:absolute;inset:0;overflow:hidden;background:#070704
+            position:absolute;inset:0;overflow:hidden;
+            background:#070704 var(--xq-loading-art) center/cover no-repeat
         }
+        #game-startup-gate .game-startup-visual picture{display:block;width:100%;height:100%}
         #game-startup-gate .game-startup-visual img{
             width:100%;height:100%;display:block;object-fit:cover;object-position:center 56%;
-            filter:saturate(.82) contrast(1.08) brightness(.72);transform:scale(1.015)
+            visibility:hidden
         }
         #game-startup-gate .game-startup-veil{
             position:absolute;inset:0;
@@ -830,7 +832,6 @@ function ensureGameStartupGateStyle() {
         }
         @media(prefers-reduced-motion:reduce){
             #game-startup-gate-progress,#game-startup-gate-tip{transition:none}
-            #game-startup-gate .game-startup-visual img{transform:none}
         }
 
         #startup-cloud-curtain{
@@ -949,7 +950,11 @@ function ensureGameStartupGate() {
     gate.setAttribute('aria-live', 'polite');
     gate.innerHTML = `
         <div class="game-startup-visual" aria-hidden="true">
-            <img src="assets/xianxia-loading-scene.svg" alt="" decoding="async">
+            <!-- Decode the selected plate; the native background paints it. -->
+            <picture>
+                <source media="(orientation: portrait)" srcset="assets/scenes/loading-portrait-ai.webp">
+                <img src="assets/scenes/loading-landscape-ai.webp" width="1672" height="941" alt="" decoding="async" fetchpriority="high">
+            </picture>
             <div class="game-startup-veil"></div>
         </div>
         <div class="game-startup-content">
