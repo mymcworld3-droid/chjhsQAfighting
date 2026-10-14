@@ -27,7 +27,8 @@
     icon: type.icon, weaponForm: type.form, category: '裝備法寶', equipSlot: '本命法寶',
     poolVersion: VERSION, archetype: type.id, coreEffect: type.effect,
     description: `${type.label} ${valueText(type.effect, amount(type, rank))}。適合${type.synergy}配法，也可跨丹性搭配。不可交易；持有原器後可二次、三次精煉。`,
-    imageUrl: `/assets/soulbound/${type.id}.svg`, imageStatus: 'ready',
+    imageUrl: `/assets/soulbound/${type.id}-ai.webp`, imageStatus: 'ready',
+    imageModel: 'imagegen', imagePromptVersion: 'soulbound-art-v1',
     craft: Object.freeze({ gold: 0, yield: 1 }),
     // Defining effect first so legacy refinement paths also inherit it.
     effects: Object.freeze([
