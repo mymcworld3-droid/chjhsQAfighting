@@ -33,10 +33,9 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     { name: '化神', sub: '神念通天', need: 188 },
     { name: '煉虛', sub: '虛空悟道', need: 428 },
     { name: '合體', sub: '天地合一', need: 788 },
-    { name: '大乘', sub: '大道將成', need: 1268 },
-    { name: '渡劫', sub: '雷劫問道', need: 1868 },
-    { name: '半仙', sub: '仙門在望', need: 2588 },
-    { name: '真仙', sub: '榜上仙位', need: 2588 }
+    { name: '渡劫', sub: '雷劫問道', need: 1268 },
+    { name: '半仙', sub: '仙門在望', need: 1868 },
+    { name: '真仙', sub: '榜上仙位', need: 1868 }
   ];
 
   let migrating = false;
@@ -301,7 +300,13 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     event.preventDefault();
     event.stopPropagation();
     event.stopImmediatePropagation();
-    showLocked(target.id?.startsWith('btn-acc-') ? '接受鬥法邀請' : '仙盟');
+    if (target.id?.startsWith('btn-acc-')) {
+      showLocked('接受鬥法邀請');
+    } else if (!window.getCurrentUserData?.()?.profile?.educationLevel && window.promptXiuxianEducationLevel?.()) {
+      return;
+    } else {
+      showLocked('仙盟');
+    }
   }
 
   function exposeRules() {

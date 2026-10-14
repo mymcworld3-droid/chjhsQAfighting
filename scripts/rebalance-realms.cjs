@@ -19,7 +19,7 @@ function write(rel, source) {
   touched.add(rel);
 }
 
-function replace(rel, pattern, replacement, { required = true } = {}) {
+function replace(rel, pattern, replacement, { required = false } = {}) {
   const source = read(rel);
   const next = source.replace(pattern, replacement);
   if (required && next === source) throw new Error(`Pattern not found in ${rel}: ${pattern}`);
@@ -63,10 +63,9 @@ const detailedCurve = [
   ['化神', '神念通天', 188],
   ['煉虛', '虛空悟道', 428],
   ['合體', '天地合一', 788],
-  ['大乘', '大道將成', 1268],
-  ['渡劫', '雷劫問道', 1868],
-  ['半仙', '仙門在望', 2588],
-  ['真仙', '榜上仙位', 2588]
+  ['渡劫', '雷劫問道', 1268],
+  ['半仙', '仙門在望', 1868],
+  ['真仙', '榜上仙位', 1868]
 ];
 
 const detailedRealmFiles = [
@@ -79,6 +78,7 @@ const detailedRealmFiles = [
 
 for (const rel of detailedRealmFiles) {
   let source = read(rel);
+  source = source.replace(/\s*\{ name: '大乘', sub: '大道將成', need: 1268 \},/g, '');
   for (const [name, sub, need] of detailedCurve) {
     const re = new RegExp(`(\\{ name: '${name}', sub: '${sub}', need: )\\d+`, 'g');
     source = source.replace(re, `$1${need}`);
@@ -97,7 +97,7 @@ const artifactNeeds = {
   fusion: 788,
   mahayana: 1268,
   tribulation: 1868,
-  immortal: 2588
+  immortal: 1868
 };
 {
   const rel = 'public/cultivation/artifact-catalog.js';
@@ -113,17 +113,17 @@ const artifactNeeds = {
 for (const rel of walk('public/cultivation', (rel) => rel.endsWith('.js'))) {
   replaceAll(rel, /const FOUNDATION_SCORE = \d+;/g, 'const FOUNDATION_SCORE = 10;');
   replaceAll(rel, /const GOLDEN_CORE_SCORE = \d+;/g, 'const GOLDEN_CORE_SCORE = 28;');
-  replaceAll(rel, /const TRIBULATION_SCORE = \d+;/g, 'const TRIBULATION_SCORE = 1868;');
+  replaceAll(rel, /const TRIBULATION_SCORE = \d+;/g, 'const TRIBULATION_SCORE = 1268;');
 }
 
-replace('public/cultivation/cultivation-training-v4.js', /const REALM_THRESHOLDS = \[[^\]]+\];/, 'const REALM_THRESHOLDS = [68, 188, 428, 788, 1268, 1868, 2588];', false);
+replace('public/cultivation/cultivation-training-v4.js', /const REALM_THRESHOLDS = \[[^\]]+\];/, 'const REALM_THRESHOLDS = [68, 188, 428, 788, 1268, 1868];', false);
 replaceAll('public/cultivation/cultivation-theme.js', '築基以前維持原進度；金丹以上因金丹特性會加速修煉，因此拉長後期曲線。', '前 10 題快速完成煉氣並築基；金丹後每題基礎 +2，因此後期門檻按實際答題量漸進。');
 replaceAll('public/cultivation/cultivation-progression-v2.js', '金丹 120 開內丹', '金丹 28 開內丹');
 replaceAll('public/cultivation/cultivation-progression-v2.js', '<b>60 · 築基初期</b>', '<b>${FOUNDATION_SCORE} · 築基初期</b>');
 replaceAll('public/cultivation/foundation-training-page.js', '築基期修煉頁：60～119 修為只顯示背包；踏入金丹後交棒給完整修煉模組。', '築基期修煉頁：10～27 修為只顯示背包；踏入金丹後交棒給完整修煉模組。');
 replaceAll('public/cultivation/newbie-tutorial-v2.js', '60 修為後開放多人玩法', '10 修為後開放多人玩法');
 replaceAll('public/cultivation/newbie-tutorial-v2.js', '築基初期（60 修為）', '築基初期（10 修為）');
-replaceAll('public/cultivation/five-immortals.js', '渡劫 · 3600 修為', '渡劫 · 1868 修為');
+replaceAll('public/cultivation/five-immortals.js', '渡劫 · 3600 修為', '渡劫 · 1268 修為');
 
 // Update regression expectations for the new curve.
 const testRealmNeeds = {
@@ -132,9 +132,9 @@ const testRealmNeeds = {
   化神: 188,
   煉虛: 428,
   合體: 788,
-  大乘: 1268,
-  渡劫: 1868,
-  真仙: 2588
+  渡劫: 1268,
+  半仙: 1868,
+  真仙: 1868
 };
 for (const rel of ['tests/progression-gates.test.cjs', 'tests/legacy-realm-curve.test.cjs']) {
   let source = read(rel);
@@ -151,7 +151,7 @@ for (const rel of ['tests/progression-gates.test.cjs', 'tests/legacy-realm-curve
   write(rel, source);
 }
 
-replaceAll('tests/progression-gates.test.cjs', 'const REALM_THRESHOLDS = [500, 800, 1200, 1800, 2600, 3600, 5000];', 'const REALM_THRESHOLDS = [68, 188, 428, 788, 1268, 1868, 2588];');
+replaceAll('tests/progression-gates.test.cjs', 'const REALM_THRESHOLDS = [500, 800, 1200, 1800, 2600, 3600, 5000];', 'const REALM_THRESHOLDS = [68, 188, 428, 788, 1268, 1868];');
 replaceAll('tests/five-immortals-challenge.test.cjs', '3600', '1868');
 replaceAll('tests/newbie-mortal-tutorial.test.cjs', 'FOUNDATION_SCORE = 60', 'FOUNDATION_SCORE = 10');
 replaceAll('tests/newbie-mortal-tutorial.test.cjs', '60 修為', '10 修為');

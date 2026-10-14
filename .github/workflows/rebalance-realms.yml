@@ -50,14 +50,7 @@ jobs:
           npm install --no-audit --no-fund
           npm run build:module-versions
           npm test
-      - name: Commit rebalance
+      - name: Verify migration output
         run: |
-          if git diff --quiet && git diff --cached --quiet; then
-            echo 'No changes to commit.'
-            exit 0
-          fi
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -A
-          git commit -m 'feat: rebalance cultivation realm pacing'
-          git push origin HEAD:main
+          echo "Historical rebalance is a verification run only."
+          echo "Changes from this script are not pushed to main automatically."

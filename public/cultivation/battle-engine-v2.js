@@ -153,7 +153,7 @@ export function applyNascentSoulDuelRule(host, guest) {
   };
 }
 
-const NEXT_REALM_THRESHOLDS = [28, 68, 188, 428, 788, 1268, 1868, 2588];
+const NEXT_REALM_THRESHOLDS = [28, 68, 188, 428, 788, 1268, 1868];
 function nearBreakthrough(score, grade) {
   const current = Math.max(0, Number(score) || 0);
   const next = NEXT_REALM_THRESHOLDS.find((need) => need > current);

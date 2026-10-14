@@ -22,10 +22,9 @@
     { name: '化神', sub: '神念通天', need: 188 },
     { name: '煉虛', sub: '虛空悟道', need: 428 },
     { name: '合體', sub: '天地合一', need: 788 },
-    { name: '大乘', sub: '大道將成', need: 1268 },
-    { name: '渡劫', sub: '雷劫問道', need: 1868 },
-    { name: '半仙', sub: '仙門在望', need: 2588 },
-    { name: '真仙', sub: '榜上仙位', need: 2588 }
+    { name: '渡劫', sub: '雷劫問道', need: 1268 },
+    { name: '半仙', sub: '仙門在望', need: 1868 },
+    { name: '真仙', sub: '榜上仙位', need: 1868 }
   ];
 
   window.XIUXIAN_REALMS = REALMS.map((realm) => ({ ...realm }));
@@ -94,7 +93,7 @@
           ${grouped.map(realm => {
             const subtitle = realm.name === '煉氣' ? '一至九層' :
               realm.name === '築基' ? '初期 · 中期 · 後期' : realm.sub;
-            const requirement = realm.name === '真仙' ? '868 修為＋榜上仙位' : `${realm.need} 修為起`;
+            const requirement = realm.name === '真仙' ? '1868 修為＋榜上仙位' : `${realm.need} 修為起`;
             return `<li class="xiuxian-realm-atlas-item" data-current="${current.name === realm.name}">
               ${window.getRealmIconMarkup?.(realm.name) || ''}
               <span class="xiuxian-realm-atlas-name"><strong>${realm.name}</strong><small>${subtitle}</small></span>

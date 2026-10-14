@@ -662,10 +662,9 @@ const REALMS = [
     { name: '化神', sub: '神念通天', need: 188 },
     { name: '煉虛', sub: '虛空悟道', need: 428 },
     { name: '合體', sub: '天地合一', need: 788 },
-    { name: '大乘', sub: '大道將成', need: 1268 },
-    { name: '渡劫', sub: '雷劫問道', need: 1868 },
-    { name: '半仙', sub: '仙門在望', need: 2588 },
-    { name: '真仙', sub: '榜上仙位', need: 2588 }
+    { name: '渡劫', sub: '雷劫問道', need: 1268 },
+    { name: '半仙', sub: '仙門在望', need: 1868 },
+    { name: '真仙', sub: '榜上仙位', need: 1868 }
 ];
 
 function getRankName(level, uid = auth.currentUser?.uid, score = currentUserData?.stats?.totalScore) {
@@ -1979,8 +1978,28 @@ function getTimeAgo(date) {
     return "Just now";
 }
 
+// 學制是既有的年級選項，不收集出生日期。未設定時由玩家自行點擊前往設定。
+window.promptXiuxianEducationLevel = () => {
+    if (currentUserData?.profile?.educationLevel) return false;
+    if (document.getElementById('xiuxian-education-prompt')) return true;
+    const overlay = document.createElement('div');
+    overlay.id = 'xiuxian-education-prompt';
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:35000;display:grid;place-items:center;padding:20px;background:rgba(3,8,13,.82);backdrop-filter:blur(8px)';
+    overlay.innerHTML = '<section role="dialog" aria-modal="true" aria-labelledby="xep-title" style="width:min(430px,100%);padding:24px;border-radius:20px;border:1px solid #cba95d6b;background:#121a1b;color:#f0e1bd;text-align:center;box-shadow:0 24px 70px #000a"><h3 id="xep-title" style="font-size:20px;margin:0 0 12px">先設定年級</h3><p style="font-size:14px;line-height:1.7;margin:0 0 22px">進入仙盟前，請先到設定選擇你的年級／學制。</p><div style="display:flex;gap:10px;justify-content:center"><button type="button" id="xep-dismiss" style="padding:10px 16px;border:1px solid #81745d;border-radius:9px">稍後</button><button type="button" id="xep-go" style="padding:10px 16px;border:1px solid #d2af68;border-radius:9px;background:#554018;color:#fff1d1">前往設定</button></div></section>';
+    document.body.appendChild(overlay);
+    overlay.querySelector('#xep-dismiss').onclick = () => overlay.remove();
+    overlay.querySelector('#xep-go').onclick = () => {
+        overlay.remove();
+        window.switchToPage('page-settings');
+        document.getElementById('set-level')?.focus();
+        document.getElementById('set-level')?.scrollIntoView?.({ block: 'center', behavior: 'smooth' });
+    };
+    return true;
+};
+
 // 修改原本的 switchToPage
 window.switchToPage = (pageId) => {
+    if (pageId === 'page-social' && window.promptXiuxianEducationLevel()) return false;
     if (window.canFirstVisitNavigate?.(pageId) === false) return false;
     if (isBattleActive && pageId !== 'page-battle') {
         alert("Battle in progress!");
@@ -5910,13 +5929,25 @@ window.loadAdminLogs = async () => {
     } catch (e) { ul.innerHTML = '<li class="text-center text-red-400 py-4">Error (Permission Denied)</li>'; }
 };
 
-// 短時間重開排行榜不必再讀取相同的前十名。
+// 九州仙榜按教育程度分流。最低上榜資格為渡劫（1268 修為）。
+// 榜單為 users 的即時排序視圖，不保存名次；門檻以下的舊玩家自然移出名單。
+const LEADERBOARD_MIN_SCORE = 1268;
+const LEADERBOARD_PAGE_SIZE = 40;
+const LEADERBOARD_LIMIT_PER_GROUP = 10;
 let leaderboardCachedSnapshot = null;
 let leaderboardCacheTime = 0;
 let leaderboardPending = null;
 let leaderboardRevision = 0;
 let leaderboardRenderSerial = 0;
 let leaderboardPlayerKey = null;
+let leaderboardSelectedGroup = 'junior';
+
+function leaderboardEducationGroup(level) {
+    const grade = String(level || '').trim();
+    if (/^(國小|小學|幼兒|學齡前|未就學)/.test(grade)) return 'elementary';
+    if (/^(國中|初中|高中|高職|高中職|大學|專科|研究所|社會人士|成人)/.test(grade)) return 'junior';
+    return null; // 未設定學制者不能混進任何組別。
+}
 
 function invalidateLeaderboardCache() {
     leaderboardCachedSnapshot = null;
@@ -5925,7 +5956,7 @@ function invalidateLeaderboardCache() {
 }
 
 function syncLeaderboardPlayerScore() {
-    const key = `${auth.currentUser?.uid || ''}:${Number(currentUserData?.stats?.totalScore) || 0}`;
+    const key = `${auth.currentUser?.uid || ''}:${Number(currentUserData?.stats?.totalScore) || 0}:${currentUserData?.profile?.educationLevel || ''}`;
     if (key === leaderboardPlayerKey) return false;
     leaderboardPlayerKey = key;
     invalidateLeaderboardCache();
@@ -5936,26 +5967,50 @@ async function readLeaderboardSnapshot() {
     while (true) {
         if (leaderboardCachedSnapshot && Date.now() - leaderboardCacheTime < 120000) return leaderboardCachedSnapshot;
         if (!leaderboardPending) {
-            // Realm levels are derived/capped and may be stale. Cultivation is
-            // the ranking source; apply the ordering before selecting the top ten.
-            const q = query(collection(db, "users"), orderBy("stats.totalScore", "desc"), limit(10));
-            leaderboardPending = { revision: leaderboardRevision, promise: getDocsFromServer(q) };
+            const revision = leaderboardRevision;
+            const promise = (async () => {
+                const groups = { elementary: [], junior: [] };
+                let cursor = null;
+                // 篩選在取前十名之前進行；分頁直到兩組各足十名，避免某組被另一組佔滿。
+                while (groups.elementary.length < LEADERBOARD_LIMIT_PER_GROUP ||
+                       groups.junior.length < LEADERBOARD_LIMIT_PER_GROUP) {
+                    const constraints = [
+                        where('stats.totalScore', '>=', LEADERBOARD_MIN_SCORE),
+                        orderBy('stats.totalScore', 'desc'),
+                        limit(LEADERBOARD_PAGE_SIZE)
+                    ];
+                    if (cursor) constraints.push(startAfter(cursor));
+                    const snap = await getDocsFromServer(query(collection(db, 'users'), ...constraints));
+                    const docs = snap.docs || [];
+                    for (const row of docs) {
+                        const data = row.data();
+                        const score = Number(data.stats?.totalScore) || 0;
+                        if (score < LEADERBOARD_MIN_SCORE) continue;
+                        const group = leaderboardEducationGroup(data.profile?.educationLevel);
+                        if (group && groups[group].length < LEADERBOARD_LIMIT_PER_GROUP) groups[group].push(row);
+                    }
+                    if (docs.length < LEADERBOARD_PAGE_SIZE) break;
+                    const next = docs[docs.length - 1];
+                    if (!next || next.id === cursor?.id) break;
+                    cursor = next;
+                }
+                return groups;
+            })();
+            leaderboardPending = { revision, promise };
         }
         const pending = leaderboardPending;
-        let snap;
-        try {
-            snap = await pending.promise;
-        } catch (error) {
+        let groups;
+        try { groups = await pending.promise; }
+        catch (error) {
             if (pending.revision !== leaderboardRevision) continue;
             throw error;
         } finally {
             if (leaderboardPending === pending) leaderboardPending = null;
         }
-        // A reward may settle during a read. Never cache that old response.
         if (pending.revision !== leaderboardRevision) continue;
-        leaderboardCachedSnapshot = snap;
+        leaderboardCachedSnapshot = groups;
         leaderboardCacheTime = Date.now();
-        return snap;
+        return groups;
     }
 }
 
@@ -5963,7 +6018,6 @@ function refreshVisibleLeaderboard() {
     const page = document.getElementById('page-rank');
     if (page && !page.classList.contains('hidden')) void window.loadLeaderboard();
 }
-
 window.addEventListener('xiuxian:stats-updated', () => {
     if (syncLeaderboardPlayerScore()) refreshVisibleLeaderboard();
 });
@@ -5971,12 +6025,16 @@ window.addEventListener('xiuxian:user-data-ready', () => {
     syncLeaderboardPlayerScore();
     invalidateLeaderboardCache();
 });
-// Solo answers emit this after the transaction, including when their earlier
-// optimistic score notification happened before the write was committed.
 window.addEventListener('xiuxian:quest-progress-updated', () => {
     invalidateLeaderboardCache();
     refreshVisibleLeaderboard();
 });
+
+window.selectLeaderboardGroup = (group) => {
+    if (group !== 'elementary' && group !== 'junior') return;
+    leaderboardSelectedGroup = group;
+    void window.loadLeaderboard();
+};
 
 window.loadLeaderboard = async ({ force = false } = {}) => {
     const tbody = document.getElementById('leaderboard-body');
@@ -5985,36 +6043,46 @@ window.loadLeaderboard = async ({ force = false } = {}) => {
     if (force) invalidateLeaderboardCache();
     const renderSerial = ++leaderboardRenderSerial;
     const uid = auth.currentUser?.uid;
+    const tabButtons = document.querySelectorAll?.('[data-leaderboard-group]') || [];
+    tabButtons.forEach(button => {
+        const active = button.dataset.leaderboardGroup === leaderboardSelectedGroup;
+        button.setAttribute('aria-selected', String(active));
+        button.classList.toggle('is-active', active);
+    });
     tbody.innerHTML = `<tr><td colspan="3" class="p-8 text-center text-gray-500"><div class="loader"></div> ${t('loading')}</td></tr>`;
     try {
-        const snap = await readLeaderboardSnapshot();
+        const groups = await readLeaderboardSnapshot();
         if (renderSerial !== leaderboardRenderSerial || uid !== auth.currentUser?.uid) return;
         tbody.innerHTML = '';
+        const entries = groups[leaderboardSelectedGroup] || [];
+        if (!entries.length) {
+            tbody.innerHTML = '<tr><td colspan="3" class="p-8 text-center text-yellow-200/80">尚無達到渡劫期的上榜修士。</td></tr>';
+            return;
+        }
         let i = 1;
-        snap.forEach(doc => {
-            const d = doc.data();
-            const isMe = auth.currentUser && doc.id === auth.currentUser.uid;
+        for (const record of entries) {
+            const d = record.data();
+            const isMe = auth.currentUser && record.id === auth.currentUser.uid;
             const score = Math.max(0, Number(d.stats?.totalScore) || 0);
             const equipped = d.equipped || {};
             const avatarHtml = getAvatarHtml(equipped, "w-8 h-8", isMe ? resolvePlayerAvatar(currentUserData, auth.currentUser) : d.photoURL);
-
             const row = `
                 <tr class="border-b border-slate-700/50 ${isMe ? 'bg-blue-900/20' : ''} hover:bg-slate-700/50 transition">
                     <td class="px-4 py-4 font-bold ${i===1?'text-yellow-400':(i===2?'text-gray-300':(i===3?'text-orange-400':'text-gray-500'))}">${i}</td>
                     <td class="px-4 py-4 flex items-center gap-3">
-                        <button type="button" class="xpp-profile-trigger" data-xiuxian-profile="${escapeHtml(doc.id)}" aria-label="查看 ${escapeHtml(d.displayName || '修士')} 的資料">${avatarHtml}</button>
-                        <button type="button" class="xpp-profile-trigger ${isMe ? 'text-blue-300 font-bold' : ''}" data-xiuxian-profile="${escapeHtml(doc.id)}">${escapeHtml(d.displayName || '修士')}</button>
+                        <button type="button" class="xpp-profile-trigger" data-xiuxian-profile="${escapeHtml(record.id)}" aria-label="查看 ${escapeHtml(d.displayName || '修士')} 的資料">${avatarHtml}</button>
+                        <button type="button" class="xpp-profile-trigger ${isMe ? 'text-blue-300 font-bold' : ''}" data-xiuxian-profile="${escapeHtml(record.id)}">${escapeHtml(d.displayName || '修士')}</button>
                     </td>
                     <td class="px-4 py-4 text-right font-mono text-blue-300">
-                        ${getRankMarkup(calculateRankFromScore(score, doc.id), doc.id, score)} <span class="text-xs text-gray-500 block">${score} 修為</span>
+                        ${getRankMarkup(calculateRankFromScore(score, record.id), record.id, score)} <span class="text-xs text-gray-500 block">${score} 修為</span>
                     </td>
                 </tr>`;
-            tbody.innerHTML += row; 
+            tbody.innerHTML += row;
             i++;
-        });
-    } catch (e) { 
+        }
+    } catch (e) {
         if (renderSerial !== leaderboardRenderSerial || uid !== auth.currentUser?.uid) return;
-        console.error(e); 
+        console.error(e);
         tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-red-400 text-center">排名更新失敗，請檢查連線後按「更新排名」重試。</td></tr>';
     }
 };
