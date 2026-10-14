@@ -7,6 +7,7 @@ import {
 } from './material-catalog.js';
 import './training-scene-layer-art.js';
 import './training-scene-layouts.js';
+import './training-access-rules.js';
 
 // 啟動資源預熱：玩家資料已由 main-legacy 載入，本模組只在 startup gate 期間
 // 整理法寶／材料／配方與常用圖片，避免第一次打開背包、裝備或煉器才等待。
@@ -118,6 +119,9 @@ function collectStartupImageUrls() {
   const recipeMaterials = priority.recipeMaterialIds.map(getMaterialById).filter(Boolean);
   const nearbyArtifacts = priority.artifactIds.map(getArtifactById).filter(Boolean);
   const nearbyMaterials = priority.materialIds.map(getMaterialById).filter(Boolean);
+  const accessScore = window.getTrainingAccessScore?.() ?? globalThis.QATrainingAccessRules.score(userData());
+  const pool = globalThis.QASoulboundPool;
+  const permanentArtifacts = pool.candidates(pool.rankFor(accessScore));
 
   const urls = unique([
     ...SCENE_ART[sceneOrientation],
@@ -129,6 +133,9 @@ function collectStartupImageUrls() {
     'assets/training/cutouts/secret-ai.webp',
     'assets/training/cutouts/status-ai.webp',
     ...definitionImageUrls(equippedArtifacts),
+    // Reserve the eight pool images before owned materials fill the startup cap.
+    // Permanent access also covers returning players whose current score fell.
+    ...definitionImageUrls(permanentArtifacts),
     ...definitionImageUrls(ownedArtifacts),
     ...definitionImageUrls(ownedMaterials),
     ...definitionImageUrls(recipeMaterials),
