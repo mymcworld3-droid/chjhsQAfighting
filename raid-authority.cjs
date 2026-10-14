@@ -5,7 +5,7 @@ const trainingAccess = require('./public/cultivation/training-access-rules.js');
 const soulTalents = require('./public/cultivation/soul-talents.js');
 
 const EQUIP_SLOTS = Object.freeze(['本命法寶','護身法寶','佩飾法寶','輔助法寶']);
-const REALM_ORDER = Object.freeze({凡人:0,煉氣:1,築基:2,金丹:3,元嬰:4,化神:5,煉虛:6,合體:7,大乘:8,渡劫:9,真仙:10});
+const REALM_ORDER = Object.freeze({凡人:0,煉氣:1,築基:2,金丹:3,元嬰:4,化神:5,煉虛:6,合體:7,大乘:8,渡劫:8,半仙:9,真仙:10});
 const CORE_LOWEST_POWER = 4000;
 const CORE_GRADE_STEP = 2000;
 const NASCENT_SOUL_THRESHOLD = 68;
@@ -53,7 +53,7 @@ const CORE_NAMES = Object.freeze({
   ocean:'大海無垠丹',taichu:'太初回元丹',ningxin:'凝心靜音丹',pojing:'破境衝仙丹',
   xingchen:'星辰吞月丹',wugou:'無垢清心丹',thunder:'萬劫雷霆丹',reverse:'陰陽反轉丹',sword:'破鋒劍心丹'
 });
-const NEXT_REALM_THRESHOLDS = Object.freeze([28,68,188,428,788,1268,1868,2588]);
+const NEXT_REALM_THRESHOLDS = Object.freeze([28,68,188,428,788,1268,1868]);
 const BATTLE_SUBJECTS = Object.freeze(['國文','英文','數學','公民','歷史','地理','物理','化學','生物']);
 
 function finite(value,fallback=0){const n=Number(value);return Number.isFinite(n)?n:fallback;}
