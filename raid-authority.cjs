@@ -2,6 +2,7 @@ const Growth = require('./public/cultivation/nascent-growth.js');
 const Combo = require('./public/cultivation/combat-combo.js');
 'use strict';
 const trainingAccess = require('./public/cultivation/training-access-rules.js');
+const soulboundPool = require('./public/cultivation/soulbound-pool.js');
 const soulTalents = require('./public/cultivation/soul-talents.js');
 
 const EQUIP_SLOTS = Object.freeze(['本命法寶','護身法寶','佩飾法寶','輔助法寶']);
@@ -24,7 +25,7 @@ const DEFAULT_ARTIFACTS = Object.freeze([
 ]);
 
 const RUNTIME_EFFECTS = new Set([
-  'equip_damage_percent','equip_damage_reduction_flat','equip_damage_reduction_percent',
+  'equip_damage_percent','equip_streak_damage_percent','equip_damage_reduction_flat','equip_damage_reduction_percent',
   'equip_crit_chance','equip_crit_damage_percent','equip_combo_chance', 'equip_combo_damage_percent','equip_lifesteal_percent',
   'equip_reflect_percent','equip_shield_flat','equip_true_damage_flat','equip_low_hp_damage_percent',
   'equip_low_hp_reduction_percent','equip_first_hit_reduction_percent','equip_damage_cap_percent',
@@ -33,7 +34,7 @@ const RUNTIME_EFFECTS = new Set([
 
 const EFFECT_WEIGHTS = Object.freeze({
   equip_attack_flat:1.5,equip_attack_percent:600,equip_hp_flat:.3,equip_hp_percent:400,
-  equip_damage_percent:900,equip_damage_reduction_flat:1,equip_damage_reduction_percent:650,
+  equip_damage_percent:900,equip_streak_damage_percent:300,equip_damage_reduction_flat:1,equip_damage_reduction_percent:650,
   equip_crit_chance:700,equip_crit_damage_percent:300,equip_combo_chance:1500,equip_combo_damage_percent:300,
   equip_lifesteal_percent:400,equip_reflect_percent:400,equip_shield_flat:.3,
   equip_true_damage_flat:2,equip_low_hp_damage_percent:350,equip_low_hp_reduction_percent:250,
@@ -42,7 +43,7 @@ const EFFECT_WEIGHTS = Object.freeze({
 });
 const EFFECT_LIMITS = Object.freeze({
   equip_attack_flat:100000,equip_attack_percent:5,equip_hp_flat:100000,equip_hp_percent:5,
-  equip_damage_percent:3,equip_damage_reduction_flat:100000,equip_damage_reduction_percent:.9,
+  equip_damage_percent:3,equip_streak_damage_percent:3,equip_damage_reduction_flat:100000,equip_damage_reduction_percent:.9,
   equip_crit_chance:.75,equip_crit_damage_percent:3,equip_combo_chance:.1,equip_combo_damage_percent:3,
   equip_lifesteal_percent:.5,equip_reflect_percent:1,equip_shield_flat:100000,
   equip_true_damage_flat:100000,equip_low_hp_damage_percent:2,equip_low_hp_reduction_percent:.9,
@@ -170,17 +171,20 @@ function soulNodeLevels(tree,type){
   return migrated;
 }
 function soulSnapshot(data,core){return Growth.bonuses(data,core);}
+function withPermanentPool(items){
+  return [...items.filter(item=>!soulboundPool.get(item.id)),...soulboundPool.ITEMS];
+}
 function artifactCatalog(data){
   const items=Array.isArray(data?.items)?data.items.filter(x=>x&&typeof x==='object'&&x.id):[];
-  if(!items.length)return DEFAULT_ARTIFACTS;
-  if(Math.max(0,Math.floor(finite(data?.artifactCatalogSchemaVersion)))>=2)return items;
+  if(!items.length)return withPermanentPool(DEFAULT_ARTIFACTS);
+  if(Math.max(0,Math.floor(finite(data?.artifactCatalogSchemaVersion)))>=2)return withPermanentPool(items);
   // Match the client catalog backfill path for legacy remote configs.
   const merged=new Map(DEFAULT_ARTIFACTS.map(item=>[item.id,item]));
   for(const item of items){
     const id=String(item.id||'').trim();if(!id)continue;
     merged.set(id,{...(merged.get(id)||{}),...item,id});
   }
-  return [...merged.values()];
+  return withPermanentPool([...merged.values()]);
 }
 function equippedArtifacts(player,catalog){
   const system=player?.artifactSystem||{}, inventory=system.inventory||{}, equipped=system.equipped||{};
@@ -352,6 +356,8 @@ function runtimeEffects(member){return Array.isArray(member?.artifactBattle?.eff
 function hpRatio(member){return clamp(finite(member?.hp)/Math.max(1,finite(member?.maxHp,1)),0,1);}
 function resolveArtifactAttack(member,baseDamage,seed){
   const effects=runtimeEffects(member);let damagePercent=sumEffect(effects,'equip_damage_percent');
+  const streak=Math.max(0,Math.floor(finite(member?.coreCorrectStreak)));
+  if(streak>0&&streak%3===0)damagePercent+=sumEffect(effects,'equip_streak_damage_percent');
   if(hpRatio(member)<=.30)damagePercent+=sumEffect(effects,'equip_low_hp_damage_percent');
   const normalBase=Math.max(0,baseDamage*(1+damagePercent));
   const crit=roll01(seed,'critical')<clamp(sumEffect(effects,'equip_crit_chance')+finite(member?.nascentSoul?.critChance),0,.75);

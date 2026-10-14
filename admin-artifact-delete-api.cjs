@@ -338,6 +338,9 @@ function createAdminArtifactDeleteHandler({
       }
 
       const { a, uid, admin } = await verifiedAdmin(req, resolve);
+      if (require('./public/cultivation/soulbound-pool.js').get(itemId)) {
+        return res.status(409).json({ error: '常駐本命獎池原器由固定版本管理，不可刪除。' });
+      }
       const plan = await buildDeletionPlan(a, itemId);
       if (action === 'preview') {
         return res.status(200).json({ ok: true, preview: publicPlan(plan) });

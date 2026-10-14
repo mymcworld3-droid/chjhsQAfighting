@@ -1,3 +1,4 @@
+import {} from './soulbound-pool.js';
 // 法寶清單：內建清單是預設值與遠端設定失敗時的備援。
 // 正式遊戲執行時可由 artifact-catalog-sync.js 用 Firestore 全站設定替換同一個陣列。
 // 因為 artifact-system.js 始終持有這個陣列的同一個 reference，所以管理員新增／編輯後，
@@ -75,7 +76,7 @@ export const SUPPORTED_ARTIFACT_EFFECTS = Object.freeze([
   'equip_attack_percent',
   'equip_hp_flat',
   'equip_hp_percent',
-  'equip_damage_percent',
+  'equip_damage_percent', 'equip_streak_damage_percent',
   'equip_damage_reduction_flat',
   'equip_damage_reduction_percent',
   'equip_crit_chance',
@@ -188,7 +189,7 @@ function finite(value, fallback = 0) {
 const PERCENT_EFFECT_CAPS = Object.freeze({
   equip_attack_percent: 5,
   equip_hp_percent: 5,
-  equip_damage_percent: 3,
+  equip_damage_percent: 3, equip_streak_damage_percent: 3,
   equip_damage_reduction_percent: 0.8,
   equip_crit_chance: 0.75,
   equip_crit_damage_percent: 3,
@@ -312,10 +313,15 @@ export function validateArtifactCatalog(items) {
   });
 }
 
-export const ARTIFACT_CATALOG = DEFAULT_ARTIFACT_CATALOG.map(normalizeArtifactDefinition);
+function permanentCatalog(items) {
+  const fixed = globalThis.QASoulboundPool.ITEMS;
+  return [...items.filter(item => !globalThis.QASoulboundPool.get(item.id)), ...fixed];
+}
+
+export const ARTIFACT_CATALOG = permanentCatalog(DEFAULT_ARTIFACT_CATALOG).map(normalizeArtifactDefinition);
 
 export function getDefaultArtifactCatalog() {
-  return clone(DEFAULT_ARTIFACT_CATALOG.map(normalizeArtifactDefinition));
+  return clone(permanentCatalog(DEFAULT_ARTIFACT_CATALOG).map(normalizeArtifactDefinition));
 }
 
 // 舊版 Firestore 全站法寶清單可能缺少後來加入的內建法寶。
@@ -328,11 +334,11 @@ export function mergeArtifactCatalogWithDefaults(items = []) {
     const base = merged.get(id) || {};
     merged.set(id, normalizeArtifactDefinition({ ...base, ...raw, id }));
   });
-  return validateArtifactCatalog([...merged.values()]);
+  return validateArtifactCatalog(permanentCatalog([...merged.values()]));
 }
 
 export function replaceArtifactCatalog(items, source = 'runtime') {
-  const normalized = validateArtifactCatalog(items);
+  const normalized = validateArtifactCatalog(permanentCatalog(items));
   ARTIFACT_CATALOG.splice(0, ARTIFACT_CATALOG.length, ...normalized);
   if (typeof window !== 'undefined') {
     window.XIUXIAN_ARTIFACT_CATALOG = ARTIFACT_CATALOG;

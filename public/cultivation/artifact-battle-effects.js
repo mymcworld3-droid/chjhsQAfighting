@@ -11,7 +11,7 @@ import {} from './combat-combo.js';
   const REDUCTION_CAP = 0.90;
 
   const RUNTIME_TYPES = new Set([
-    'equip_damage_percent',
+    'equip_damage_percent', 'equip_streak_damage_percent',
     'equip_damage_reduction_flat',
     'equip_damage_reduction_percent',
     'equip_crit_chance',
@@ -123,7 +123,10 @@ import {} from './combat-combo.js';
     const effects = effectiveEffects(attacker, defender);
     const base = Math.max(0, num(baseDamage));
 
-    let damagePercent = sumValue(effects, 'equip_damage_percent');
+    const streak = Math.max(0, Math.floor(num(attacker?.coreCorrectStreak)));
+    const streakBurst = streak > 0 && streak % 3 === 0
+      ? sumValue(effects, 'equip_streak_damage_percent') : 0;
+    let damagePercent = sumValue(effects, 'equip_damage_percent') + streakBurst;
     if (hpRatio(attacker) <= 0.30) {
       damagePercent += sumValue(effects, 'equip_low_hp_damage_percent');
     }
@@ -148,6 +151,7 @@ import {} from './combat-combo.js';
     if (critical) normalDamage *= 1.5 + critBonus;
 
     const labels = [];
+    if (streakBurst > 0) labels.push('星盤・連答爆發');
     const copied = copyLabel(effects);
     if (copied) labels.push(copied);
     if (damagePercent > 0) labels.push(`增傷+${Math.round(damagePercent * 100)}%`);

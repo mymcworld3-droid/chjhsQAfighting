@@ -12,7 +12,7 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
   const COLLAPSE_KEY = 'artifactForgeCollapsedV1';
   const SUPPORTED_EFFECTS = new Set([
     'equip_attack_flat', 'equip_attack_percent', 'equip_hp_flat', 'equip_hp_percent',
-    'equip_damage_percent', 'equip_damage_reduction_flat', 'equip_damage_reduction_percent',
+    'equip_damage_percent', 'equip_streak_damage_percent', 'equip_damage_reduction_flat', 'equip_damage_reduction_percent',
     'equip_crit_chance', 'equip_crit_damage_percent', 'equip_combo_chance', 'equip_combo_damage_percent',
     'equip_lifesteal_percent', 'equip_reflect_percent', 'equip_shield_flat',
     'equip_true_damage_flat', 'equip_low_hp_damage_percent', 'equip_low_hp_reduction_percent',
@@ -21,7 +21,7 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
     'timed_attack_multiplier', 'timed_cultivation_multiplier', 'remove_wrong_option'
   ]);
   const BATTLE_RUNTIME_EFFECTS = new Set([
-    'equip_damage_percent', 'equip_damage_reduction_flat', 'equip_damage_reduction_percent',
+    'equip_damage_percent', 'equip_streak_damage_percent', 'equip_damage_reduction_flat', 'equip_damage_reduction_percent',
     'equip_crit_chance', 'equip_crit_damage_percent', 'equip_combo_chance', 'equip_combo_damage_percent',
     'equip_lifesteal_percent', 'equip_reflect_percent', 'equip_shield_flat',
     'equip_true_damage_flat', 'equip_low_hp_damage_percent', 'equip_low_hp_reduction_percent',
@@ -162,6 +162,7 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
       case 'equip_attack_percent': return `裝備：攻擊 +${pct(effect.value)}`;
       case 'equip_hp_flat': return `裝備：生命 +${Number(effect.value) || 0}`;
       case 'equip_hp_percent': return `裝備：生命 +${pct(effect.value)}`;
+      case 'equip_streak_damage_percent': return `鬥法：每連答三題當次增傷 +${pct(effect.value)}`;
       case 'equip_damage_percent': return `鬥法：傷害 +${pct(effect.value)}`;
       case 'equip_damage_reduction_flat': return `鬥法：每次受傷 -${Number(effect.value) || 0}`;
       case 'equip_damage_reduction_percent': return `鬥法：受到傷害 -${pct(effect.value)}`;
@@ -222,7 +223,7 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
     const item = getArtifactById(itemId);
     const user = authUser();
     if (!item || !user) return;
-    if (item.equipSlot === '本命法寶') throw new Error('本命法寶僅能透過靈石抽取取得；目前尚未開放。');
+    if (item.equipSlot === '本命法寶') throw new Error('本命法寶僅能透過契器台靈石抽取取得。');
     const cost = Math.max(0, Math.floor(Number(item.craft?.gold) || 0));
     const gain = Math.max(1, Math.floor(Number(item.craft?.yield) || 1));
     busyAction = `craft:${itemId}`; scheduleRender();
@@ -527,7 +528,7 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
         <div class="artifact-meta">持有 <b>×${qty}</b>${eqSlot ? ` · 已裝備於 <b>${escapeHtml(eqSlot)}</b>` : ''}${buff ? ` · 效果剩餘 <b data-artifact-expire="${buff.expiresAt}">${formatRemaining(buff.expiresAt - Date.now())}</b>` : ''}</div>
       </div>
       <div class="artifact-actions">
-        ${soulboundOnly ? '<span class="artifact-soulbound-only">本命法寶 · 僅能靈石抽取（尚未開放）</span>' : `<button type="button" data-artifact-craft="${escapeHtml(item.id)}" ${busyAction ? 'disabled' : ''}>${busyAction === `craft:${item.id}` ? '煉製中…' : `煉製 ×${yieldCount}`}<small>${cost} 金幣</small></button>`}
+        ${soulboundOnly ? '<span class="artifact-soulbound-only">本命法寶 · 契器台常駐抽取</span>' : `<button type="button" data-artifact-craft="${escapeHtml(item.id)}" ${busyAction ? 'disabled' : ''}>${busyAction === `craft:${item.id}` ? '煉製中…' : `煉製 ×${yieldCount}`}<small>${cost} 金幣</small></button>`}
         ${hasEquip ? `<button type="button" data-artifact-equip="${escapeHtml(item.id)}" ${qty <= 0 || !canEquip || busyAction ? 'disabled' : ''}>${eqSlot ? '卸下' : '裝備'}<small>${escapeHtml(item.equipSlot || '法寶')}</small></button>` : ''}
         ${hasTimed ? `<button type="button" data-artifact-use="${escapeHtml(item.id)}" ${qty <= 0 || busyAction ? 'disabled' : ''}>${buff ? '重新催動' : '催動'}<small>消耗 1 件</small></button>` : ''}
         ${(item.effects || []).some((effect) => effect.type === 'remove_wrong_option') ? `<span class="artifact-question-only">於題目作答前使用</span>` : ''}

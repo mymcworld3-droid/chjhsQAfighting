@@ -89,7 +89,7 @@ test('AI artifact sanitizer cannot change locked realm and keeps combo at ten pe
 test('every supported AI effect has explicit safe bounds for each eligible realm and refinement stage', () => {
   const types = [...api.ALLOWED_EFFECTS];
   assert.equal(api.REALMS.length, 11);
-  assert.equal(types.length, 25);
+  assert.equal(types.length, 26);
   for (const [order, realm] of api.REALMS.entries()) {
     for (const stage of [1, 2, 3]) {
       const ranges = api.effectRangesForRealm(realm, stage);
@@ -575,8 +575,8 @@ test('first successfully registered recipe gains immutable ownership without cha
 });
 
 test('recipe owner survives catalog normalization and concurrent admin saves', () => {
-  const context = vm.createContext({console, Math, Number, String, Object, Array});
-  const source = artifactCatalog
+  const context = vm.createContext({console, Math, Number, String, Object, Array, QASoulboundPool: require('../public/cultivation/soulbound-pool.js')});
+  const source = artifactCatalog.replace(/^import .*;\n/gm,'')
     .replace(/export const /g, 'const ')
     .replace(/export function /g, 'function ')
     + '\n;globalThis.__catalog={normalizeArtifactDefinition};';
