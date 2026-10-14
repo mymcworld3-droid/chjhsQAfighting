@@ -1,3 +1,4 @@
+import {} from './cultivation/solo-learning-rules.js';
 import './cultivation/quest-rules.js';
 import './cultivation/first-visit.js';
 import { resolvePlayerAvatar } from './cultivation/profile-avatar.js';
@@ -2880,7 +2881,7 @@ async function fetchOneQuestion() {
 
         const weakSubjects = (currentUserData.profile.weakSubjects || "").split(',').map(s => s.trim());
         // 弱科不等於永遠做 easy；最多只把 hard 暫時降為 medium，保留真正練習深度。
-        if (weakSubjects.includes(subject) && finalDifficulty === "hard") finalDifficulty = "medium";
+        if (weakSubjects.includes(subject) && finalDifficulty === "hard" && settings.difficulty !== "hard") finalDifficulty = "medium";
 
         console.log(`[AI-專注出題] 學科: ${subject} | 範圍: ${targetTopic} | 難度: ${finalDifficulty}`);
 
@@ -2911,7 +2912,8 @@ async function fetchOneQuestion() {
                 data: { q: rawData.q, opts: allOptions, ans: allOptions.indexOf(rawData.correct), exp: rawData.exp },
                 meta: quizMetaFromRaw(rawData),
                 rank: rankName,
-                badge: `🎯 ${subject} | ${rawData.sub_topic || '精選'}`
+                badge: `🎯 ${subject} | ${rawData.sub_topic || '精選'}`,
+                learningSubject:subject, learningTopic:rawData.sub_topic || '精選', learningDifficulty:finalDifficulty
             };
         } catch (e) {
             console.error("[AI-出題失敗]", e);
@@ -2977,7 +2979,8 @@ async function fetchOneQuestion() {
         return { 
             data: { q: rawData.q, opts: allOptions, ans: allOptions.indexOf(rawData.correct), exp: rawData.exp }, 
             rank: rankName, 
-            badge: `🎯 ${displaySubject} | ${finalDifficulty.toUpperCase()}` 
+            badge: `🎯 ${displaySubject} | ${finalDifficulty.toUpperCase()}`,
+            learningSubject:displaySubject, learningTopic:rawData.sub_topic || '題庫', learningDifficulty:rawData.difficulty || finalDifficulty
         };
     } 
     // 3. 綜合題目 (AI Random)
@@ -3012,7 +3015,8 @@ async function fetchOneQuestion() {
                 data: { q: rawData.q, opts: allOptions, ans: allOptions.indexOf(rawData.correct), exp: rawData.exp },
                 meta: quizMetaFromRaw(rawData),
                 rank: rankName,
-                badge: `🎯 ${rawData.subject} | ${rawData.sub_topic || '綜合'}`
+                badge: `🎯 ${rawData.subject} | ${rawData.sub_topic || '綜合'}`,
+                learningSubject:rawData.subject || targetSubject, learningTopic:rawData.sub_topic || '綜合', learningDifficulty:finalDifficulty
             };
         } catch (e) {
             console.error("[Fetch-AI-Error] AI 一般模式生成失敗:", e);
@@ -3043,6 +3047,7 @@ window.nextQuestion = async () => {
         extendedPracticeState.subject = pending.subject;
         extendedPracticeState.knowledgePoint = pending.knowledgePoint;
         extendedPracticeState.originQuestion = pending.originQuestion;
+        extendedPracticeState.recoveryOrigin = pending.recoveryOrigin;
     }
     window.currentActiveQuiz = null;
     try {
@@ -3142,12 +3147,17 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
 
     let stats = currentUserData.stats;
     let scoreGain = 0;
+    if (quiz) quiz.answerSelectedIndex = userIdx;
+    const learningRules = window.QASoloLearningRules || globalThis.QASoloLearningRules;
+    const learningReward = learningRules?.reward(stats, quiz, isCorrect, currentUserData.profile) || {gain:0,gold:0,recovery:false};
+    if (learningReward.progress) stats.soloLearningV1 = learningReward.progress;
     const scoreBeforeAnswer = Math.max(0, Number(stats.totalScore) || 0);
     const shieldBeforeAnswer = !!stats.goldenCoreShield;
     const cultivationReward = applyCultivationReward(stats, isCorrect, {
-        soulBonusGain: soulCultivationBonusForPlayer(currentUserData, 'solo')
+        soulBonusGain: soulCultivationBonusForPlayer(currentUserData, 'solo'),
+        learningBonusGain:learningReward.gain, isRecovery:learningReward.recovery
     });
-    // 問道每答對一題 +1 神識；以本題作答前的境界判斷，不能越境提前獲取。
+    cultivationReward.learningMessage = learningReward.message || '';
     // 記下實際扣除的修為；道心擋住扣分或尚未達金丹時皆為 0。
     // 隨本次答題的 stats 一起存入，補償 API 不信任瀏覽器另外送來的扣分金額。
     if (quiz?.data?.q) {
@@ -3166,10 +3176,10 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         stats.currentStreak++;
         if (stats.currentStreak > stats.bestStreak) stats.bestStreak = stats.currentStreak;
         
-        scoreGain = 20; // 無限模式獎勵
+        scoreGain = 20 + learningReward.gold; // 一般答對與學習加成
         fbTitle.innerHTML += ` <span class="text-yellow-400 text-sm ml-2 border border-yellow-500 rounded px-1">+${scoreGain}💰 · +${cultivationReward.gain} 修為</span>`;
     } else {
-        stats.currentStreak = 0; 
+        if (!cultivationReward.streakPreserved) stats.currentStreak = 0;
     }
 
     if (window.currentActiveQuiz && window.currentActiveQuiz.badge) {
@@ -3191,6 +3201,8 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         }
     }
 
+    const nextStepButton = document.getElementById('btn-next-step');
+    if (nextStepButton && soloSession.active) nextStepButton.innerText = `下一題 (目前連對: ${stats.currentStreak})`;
     const newRank = calculateRankFromScore(stats.totalScore || 0);
     if (newRank > stats.rankLevel) stats.rankLevel = newRank;
 
@@ -3199,9 +3211,11 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     // Neutral answers (no reward, cultivation loss, or persistent shield change)
     // stay local until the next reward. A report explicitly saves its last answer
     // before the API can calculate a trusted refund.
-    const shouldSaveAnswer = isCorrect || stats.totalScore !== scoreBeforeAnswer ||
+    const shouldSaveAnswer = isCorrect || (learningRules && userIdx >= 0) || stats.totalScore !== scoreBeforeAnswer ||
         !!stats.goldenCoreShield !== shieldBeforeAnswer;
     const cultivationDelta = stats.totalScore - scoreBeforeAnswer;
+    const recoveryCoreGain = cultivationReward.recoveryBonusGain;
+    const originalGoldenMessage = cultivationReward.goldenCoreMessage;
     const answerUser = auth.currentUser;
     const trialAnswerId = firstVisitAnswer ? `${answerUser.uid}:${Date.now()}:${Math.random().toString(36).slice(2)}` : '';
     let answerSaved = false;
@@ -3213,10 +3227,19 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
                 const remote = snap.data();
                 // A retry after an uncertain network result cannot award the first answer twice.
                 if (trialAnswerId && remote.arrivalTrialAnswerV1?.id) return remote.stats;
+                const verifiedLearning = learningRules?.reward(remote.stats || {}, quiz, isCorrect, remote.profile) || learningReward;
+                const learningDelta = verifiedLearning.gain - learningReward.gain +
+                    (verifiedLearning.recovery ? 0 : -recoveryCoreGain);
                 const savedStats = { ...stats,
-                    gold: Math.max(0, Number(remote.stats?.gold) || 0) + Math.max(0, Number(scoreGain) || 0),
-                    totalScore: Math.max(0, (Number(remote.stats?.totalScore) || 0) + cultivationDelta)
+                    ...(verifiedLearning.progress ? {soloLearningV1:verifiedLearning.progress} : {}),
+                    gold: Math.max(0, Number(remote.stats?.gold) || 0) + Math.max(0, Number(scoreGain) || 0) + verifiedLearning.gold - learningReward.gold,
+                    totalScore: Math.max(0, (Number(remote.stats?.totalScore) || 0) + cultivationDelta + learningDelta)
                 };
+                cultivationReward.gain = Math.max(0,cultivationDelta + learningDelta);
+                cultivationReward.learningGain = verifiedLearning.gain;
+                cultivationReward.learningMessage = verifiedLearning.message || '';
+                cultivationReward.recoveryBonusGain = verifiedLearning.recovery ? recoveryCoreGain : 0;
+                if (recoveryCoreGain) cultivationReward.goldenCoreMessage = verifiedLearning.recovery ? originalGoldenMessage : '';
                 savedStats.rankLevel = calculateRankFromScore(savedStats.totalScore);
                 const patch = { stats: savedStats };
                 if (isCorrect) patch.questProgress = window.XianxiaQuestRules.recordEvent(remote.questProgress, 'solo');
@@ -3227,6 +3250,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
                 if (auth.currentUser?.uid !== answerUser.uid || currentUserData?.stats !== stats) throw new Error('帳號已更換，請重新整理。');
                 Object.assign(stats, savedStats);
                 updateUIStats();
+                if (isCorrect && fbTitle) fbTitle.innerHTML = `${t('msg_correct')} <span class="text-yellow-400 text-sm ml-2">+${20 + (cultivationReward.learningGain || 0) * 10}💰 · +${cultivationReward.gain} 修為</span>`;
                 window.dispatchEvent(new CustomEvent('xiuxian:quest-progress-updated'));
             }).then(() => showCultivationFeedback(cultivationReward, isCorrect));
     try {
@@ -3270,6 +3294,18 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         return;
     }
     
+    document.getElementById('solo-correction-practice')?.remove();
+    if (!isCorrect && userIdx >= 0 && quiz && fbSection) {
+        const correction = document.createElement('button');
+        correction.id = 'solo-correction-practice'; correction.type = 'button';
+        correction.className = 'btn-cyber-primary mt-3 px-4 py-2 rounded-lg text-xs';
+        correction.textContent = '練同類題 · 訂正修為 +1';
+        correction.onclick = () => {
+            window.startQuizExtendedPractice(quiz.learningTopic || quiz.meta?.concept_id || '本題核心觀念');
+            correction.disabled = true; correction.textContent = '已排入訂正練習，按下一題開始';
+        };
+        fbSection.appendChild(correction);
+    }
     if (!extendedPracticeState.active) fillBuffer();
 }
 
@@ -3284,6 +3320,7 @@ const extendedPracticeState = {
     subject: '',
     knowledgePoint: '',
     originQuestion: '',
+    recoveryOrigin: '',
     pending: null
 };
 
@@ -3568,12 +3605,14 @@ async function fetchExtendedPracticeQuestion() {
     let difficulty = settings.difficulty;
     if (!difficulty || difficulty === 'auto') difficulty = getSmartDifficulty();
 
+    let specificTopic = knowledgePoint;
+    if (extendedPracticeState.recoveryOrigin) specificTopic = `${knowledgePoint}。針對原題「${extendedPracticeState.originQuestion}」的同一概念出一道新情境變式，勿重複原題。`.slice(0,1800);
     const response = await fetch('/api/generate-quiz', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             subject,
-            specificTopic: knowledgePoint,
+            specificTopic,
             level: currentUserData?.profile?.educationLevel || 'General',
             rank: rankName,
             difficulty,
@@ -3602,7 +3641,9 @@ async function fetchExtendedPracticeQuestion() {
         badge: `📚 延伸練習 | ${subject} · ${knowledgePoint}`,
         extendedPractice: true,
         extendedPracticeSubject: subject,
-        extendedPracticeKnowledgePoint: knowledgePoint
+        extendedPracticeKnowledgePoint: knowledgePoint,
+        learningSubject:subject, learningTopic:knowledgePoint, learningDifficulty:difficulty,
+        recoveryOrigin:extendedPracticeState.recoveryOrigin || ''
     };
 }
 
@@ -3621,7 +3662,9 @@ window.startQuizExtendedPractice = async (knowledgePoint) => {
         scope: soloQuestionScope(),
         subject: String(quizHelperState.subject || currentQuiz.extendedPracticeSubject || '綜合').slice(0, 40),
         knowledgePoint: point,
-        originQuestion: String(quizHelperState.question || currentQuiz.data.q || '').slice(0, 1000)
+        originQuestion: String(quizHelperState.question || currentQuiz.data.q || '').slice(0, 1000),
+        recoveryOrigin:answeredSoloQuizzes.has(currentQuiz) && quizHelperState.selectedIndex >= 0 &&
+            quizHelperState.selectedIndex !== quizHelperState.correctIndex ? currentQuiz.data.q : (currentQuiz.recoveryOrigin || '')
     };
     syncQuizExtendedPracticeControls();
     window.showToast?.(answeredSoloQuizzes.has(currentQuiz)
@@ -3636,6 +3679,7 @@ window.endQuizExtendedPractice = () => {
     extendedPracticeState.subject = '';
     extendedPracticeState.knowledgePoint = '';
     extendedPracticeState.originQuestion = '';
+    extendedPracticeState.recoveryOrigin = '';
     extendedPracticeState.pending = null;
     syncQuizExtendedPracticeControls();
     window.showToast?.(wasActive ? '已結束延伸練習，下一題回到原本範圍。' : '已取消下一題的延伸練習。');

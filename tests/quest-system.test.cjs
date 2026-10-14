@@ -188,7 +188,7 @@ test('existing battle, raid, and cave settlements record activities only on firs
   assert.equal(db.docs.get('users/u1').questProgress.totals.raid, 1);
   // Replayed cave completion: no currency/spirit update, but a new receipt
   // counts this finished run exactly once.
-  db.docs.set('dongtianPlays/u1__cave1', { completed: true });
+  db.docs.set('dongtianPlays/u1__cave1', { completed: true, learningRewardV2:{version:2,masteredKeys:[],creditedCorrect:0,goldPaid:30,soulClaimed:false,ownerRewardClaimed:true} });
   const u = db.docs.get('users/u1'); u.stats.totalScore = 10;
   const e = { id: 'eligible1', dongtianId: 'cave1', runId: 'run1', ownerUid: 'u1', correct: 0, total: 1 };
   await cave.awardProgress(db, 'u1', e); await cave.awardProgress(db, 'u1', e);

@@ -208,7 +208,7 @@ test('helper replies expose knowledge-point extended practice', () => {
   assert.match(legacy, /quiz-helper-practice-btn/);
   assert.match(legacy, /window\.startQuizExtendedPractice = async/);
   assert.match(legacy, /async function fetchExtendedPracticeQuestion\(\)/);
-  assert.match(legacy, /specificTopic: knowledgePoint/);
+  assert.match(legacy, /let specificTopic = knowledgePoint/);
   assert.match(legacy, /extendedPracticeState\.active/);
   assert.match(legacy, /window\.endQuizExtendedPractice =/);
   assert.match(xianxia, /\.quiz-helper-practice-btn/);

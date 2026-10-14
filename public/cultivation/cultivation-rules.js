@@ -1,11 +1,10 @@
 // 修為與答題統計由主流程一次儲存，避免另一次讀寫扣回獎勵。
-// 築基期以前答對固定 +1；金丹期起答對固定 +2、答錯 -1。金丹道心護體可抵銷一次修為下降。
+// 築基期以前答對 +1；金丹期起答對 +2。一般問道答錯不扣修為，只中斷連答。
 const GOLDEN_CORE_SCORE = 28;
 const PRE_GOLDEN_CORE_GAIN = 1;
 const GOLDEN_CORE_GAIN = 2;
-const GOLDEN_CORE_MISS_PENALTY = 1;
 
-export function applyCultivationReward(stats, isCorrect, { soulBonusGain: suppliedSoulBonusGain } = {}) {
+export function applyCultivationReward(stats, isCorrect, { soulBonusGain: suppliedSoulBonusGain, learningBonusGain = 0, isRecovery = false } = {}) {
   stats.totalScore = Math.max(0, Number(stats.totalScore) || 0);
   const scoreBeforeAnswer = stats.totalScore;
   const isGoldenCoreOrAbove = scoreBeforeAnswer >= GOLDEN_CORE_SCORE;
@@ -24,7 +23,7 @@ export function applyCultivationReward(stats, isCorrect, { soulBonusGain: suppli
     try {
       goldenCoreEffect = {
         ...goldenCoreEffect,
-        ...(window.resolveGoldenCoreCultivationReward({ stats, isCorrect }) || {})
+        ...(window.resolveGoldenCoreCultivationReward({ stats, isCorrect, isRecovery }) || {})
       };
     } catch (error) {
       console.warn('Golden Core reward effect skipped:', error);
@@ -55,33 +54,30 @@ export function applyCultivationReward(stats, isCorrect, { soulBonusGain: suppli
       console.warn('Artifact cultivation reward effect skipped:', error);
     }
   }
-  const gain = isCorrect ? Math.max(0, Number(artifactEffect.gain) || preArtifactGain) : 0;
-  const artifactBonusGain = isCorrect ? Math.max(0, gain - preArtifactGain) : 0;
+  const learningGain = isCorrect ? Math.max(0, Number(learningBonusGain) || 0) : 0;
+  const recoveryBonusGain = isCorrect && isRecovery ? Math.max(0, Number(goldenCoreEffect.recoveryBonusGain) || 0) : 0;
+  const gain = isCorrect ? Math.max(0, Number(artifactEffect.gain) || preArtifactGain) + learningGain + recoveryBonusGain : 0;
+  const artifactBonusGain = isCorrect ? Math.max(0, gain - preArtifactGain - learningGain - recoveryBonusGain) : 0;
   const goldenCoreMindReady = !!goldenCoreEffect.forceShield;
 
-  // 已有金丹道心，或本次答錯當下由金丹凝聚出的道心，都能擋下這一次 -1。
-  const shieldBlockedPenalty = !isCorrect && isGoldenCoreOrAbove && (hadGoldenCoreShield || goldenCoreMindReady);
-  const penalty = !isCorrect && isGoldenCoreOrAbove && !shieldBlockedPenalty ? GOLDEN_CORE_MISS_PENALTY : 0;
-
+  const shieldBlockedPenalty = false, penalty = 0;
+  const streakPreserved = !isCorrect && !!goldenCoreEffect.preserveStreak && Number(stats.currentStreak) > 0;
   if (isCorrect) {
     stats.totalScore += gain;
     if (goldenCoreMindReady) stats.goldenCoreShield = true;
-  } else if (shieldBlockedPenalty) {
-    // 道心護體是一次性防護：抵銷本次修為下降後消耗，之後需再次凝聚。
+  } else if (streakPreserved) {
+    // 凝心丹消耗已凝聚的道心，只保留一次當次連答；戰鬥規則仍由鬥法引擎處理。
     stats.goldenCoreShield = false;
-  } else {
-    if (penalty > 0) stats.totalScore = Math.max(0, stats.totalScore - penalty);
-
-    if (goldenCoreMindReady) {
-      stats.goldenCoreShield = true;
-    } else if (goldenCoreEnabled) {
-      stats.goldenCoreShield = !!goldenCoreEffect.preserveShield && !!stats.goldenCoreShield;
-    }
+  } else if (goldenCoreMindReady) {
+    stats.goldenCoreShield = true;
+  } else if (goldenCoreEnabled) {
+    stats.goldenCoreShield = !!goldenCoreEffect.preserveShield && !!stats.goldenCoreShield;
   }
 
   return {
     gain,
     baseGain,
+    learningGain, recoveryBonusGain, streakPreserved,
     bonusGain,
     soulBonusGain,
     artifactBonusGain,
@@ -92,7 +88,7 @@ export function applyCultivationReward(stats, isCorrect, { soulBonusGain: suppli
     goldenCoreMindReady,
     hadGoldenCoreShield,
     shieldBlockedPenalty,
-    goldenCoreShieldConsumed: shieldBlockedPenalty,
+    goldenCoreShieldConsumed: streakPreserved,
     preservedGoldenCoreMind: !isCorrect && !shieldBlockedPenalty && !goldenCoreMindReady && !!goldenCoreEffect.preserveShield && !!stats.goldenCoreShield,
     goldenCoreMessage: goldenCoreEffect.message || ''
   };
@@ -100,7 +96,7 @@ export function applyCultivationReward(stats, isCorrect, { soulBonusGain: suppli
 
 function showGoldenCoreTrigger(reward) {
   const message = reward?.goldenCoreMessage ||
-    (reward?.shieldBlockedPenalty ? '金丹道心護體發動，抵銷本次修為下降' : '') ||
+    (reward?.streakPreserved ? '凝心道心保留一次連答' : '') ||
     (reward?.goldenCoreMindReady ? '金丹道心護體成形' : '');
   if (!message || typeof window.showGoldenCoreActivation !== 'function') return;
   const core = window.getEquippedGoldenCoreState?.() || {};
@@ -108,8 +104,8 @@ function showGoldenCoreTrigger(reward) {
     type: core.type,
     name: core.name || '金丹',
     message,
-    kind: reward?.shieldBlockedPenalty
-      ? '道心護體・修為不減'
+    kind: reward?.streakPreserved
+      ? '道心護體・連答保留'
       : (reward?.bonusGain > 0 ? `修為額外 +${reward.bonusGain}` : '金丹道心效果')
   });
 }
@@ -123,17 +119,17 @@ export function showCultivationFeedback(reward, isCorrect) {
     if (reward.goldenCoreMindReady) extras.push('金丹道心凝聚');
     if (reward.goldenCoreMessage) extras.push(reward.goldenCoreMessage);
     if (reward.artifactMessage) extras.push(reward.artifactMessage);
+    if (reward.learningMessage) extras.push(reward.learningMessage);
     showToast(`悟道成功！修為 +${reward.gain}${extras.length ? `，${extras.join('；')}` : ''}`);
     return;
   }
 
-  if (reward.shieldBlockedPenalty) {
-    const detail = reward.goldenCoreMessage ? `；${reward.goldenCoreMessage}` : '';
-    showToast(`本次失誤，金丹道心護體抵銷修為下降，修為不減${detail}`);
+  if (reward.streakPreserved) {
+    showToast('本次失誤，修為不減；凝心道心保留本次連答，護體已消耗。');
     return;
   }
 
-  const lossText = reward.penalty > 0 ? `修為 -${reward.penalty}` : '修為不減';
+  const lossText = '修為不減，連答已中斷';
 
   if (reward.goldenCoreMindReady) {
     showToast(`本次失誤，${lossText}；${reward.goldenCoreMessage || '金丹道心護體成形'}`);

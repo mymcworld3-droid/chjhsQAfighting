@@ -51,10 +51,10 @@ test('formal Dongtian first completion grants cultivation from correct answers a
   assert.doesNotMatch(dongtian, /FIRST_COMPLETION_CULTIVATION_CORRECT_STEP/);
   assert.match(dongtian, /function firstCompletionCultivation\(correctCount\)/);
   assert.match(dongtian, /rewardRepository\.claimDongtian/);
-  assert.match(dongtianSettlement, /cult=first\?e\.correct\+soul:0/);
-  assert.match(dongtianSettlement, /if\(cult\)p\['stats\.totalScore'\]=FieldValue\.increment\(cult\)/);
-  assert.match(dongtianSettlement, /cultivationAdded:cult/);
-  assert.match(dongtian, /每答對 1 題 \+1 修為/);
+  assert.match(dongtianSettlement, /cultivationAdded:newCorrect\+soulCultivationAdded/);
+  assert.match(dongtianSettlement, /if\(paid\.cultivationAdded\) p\['stats\.totalScore'\]=FieldValue\.increment\(paid\.cultivationAdded\)/);
+  assert.match(dongtianSettlement, /cultivationAdded:count\(d\?\.cultivationAdded\)/);
+  assert.match(dongtian, /每(?:道首次答對 \+30 靈石、\+1 修為|答對 1 題 \+1 修為)/);
   assert.doesNotMatch(dongtian, /答對至少 1 題保底 \+1/);
 });
 
@@ -63,8 +63,8 @@ test('private tutorial cave has no formal rewards while teaching the real formal
   const tutorialBranch = finish.slice(finish.indexOf('if (s.tutorialOnly)'), finish.indexOf('const firstCompletionReward'));
   assert.match(tutorialBranch, /教學範例不發正式獎勵/);
   assert.doesNotMatch(tutorialBranch, /completeProgress\(/);
-  assert.match(tutorialBranch, /正式洞天首次通關每題 100 靈石/);
-  assert.match(tutorialBranch, /每答對 1 題 \+1 修為/);
+  assert.match(tutorialBranch, /正式洞天首次完成 \+30 靈石/);
+  assert.match(tutorialBranch, /每(?:道首次答對 \+30 靈石、\+1 修為|答對 1 題 \+1 修為)/);
 });
 
 test('legacy Qi-five Dongtian tutorial is no longer auto-loaded because onboarding is part of the main newbie tutorial', () => {

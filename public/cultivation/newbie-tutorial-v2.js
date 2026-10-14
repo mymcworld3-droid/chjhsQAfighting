@@ -161,7 +161,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     {
       target: '#dongtian-overlay [data-dt-tutorial-result]',
       kicker: '洞天實作 · 通關結算', title: '看懂正式洞天的首次通關獎勵',
-      body: '正式洞天首次完整通關會依題數給靈石：<strong>每題 100、最低 1000</strong>；修為依答對題數計算：<strong>每答對 1 題 +1 修為</strong>。同一洞天重玩不會重複領首次獎勵。',
+      body: '正式洞天首次完成給 <strong>30 靈石</strong>，每道首次答對再給 <strong>30 靈石與 1 修為</strong>。重遊訂正可補領尚未取得的部分，已領題目不重複發獎。',
       note: '這座私人教學範例完全不發正式獎勵、不掉材料，也不寫入歷史紀錄。'
     },
     {

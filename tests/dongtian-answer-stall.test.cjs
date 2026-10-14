@@ -30,7 +30,7 @@ test('status timeout or network warning never bypasses the server-authoritative 
   assert.match(check, /sealCurrentSession\(/);
   assert.match(check, /result\.error \|\| result\.timedOut/);
   assert.match(settlement, /rewardRepository\.claimDongtian/);
-  assert.match(settlementSource, /index\.status!=='active'\|\|cave\.status!=='active'/);
+  assert.match(settlementSource, /index\.status!=='active'\s*\|\|\s*cave\.status!=='active'/);
   assert.match(settlementSource, /runRewardReceipt/);
 });
 
