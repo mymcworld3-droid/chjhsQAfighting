@@ -5,7 +5,7 @@ const { join } = require('node:path');
 const vm = require('node:vm');
 
 const legacy = readFileSync(join(__dirname, '../public/main-legacy.js'), 'utf8');
-const start = legacy.indexOf('// 九州仙榜按教育程度分流');
+const start = legacy.indexOf('// 九州仙榜只顯示玩家已設定學制所屬分流');
 const end = legacy.indexOf('//  Visual Helpers', start);
 assert.ok(start >= 0 && end > start);
 
