@@ -5,7 +5,7 @@ const { join } = require('node:path');
 const vm = require('node:vm');
 
 const legacy = readFileSync(join(__dirname, '../public/main-legacy.js'), 'utf8');
-const start = legacy.indexOf('// 短時間重開排行榜');
+const start = legacy.indexOf('// 九州仙榜按教育程度分流');
 const end = legacy.indexOf('//  Visual Helpers', start);
 assert.ok(start >= 0 && end > start);
 
@@ -21,27 +21,31 @@ function harness(players, { deferred = false } = {}) {
     console: { error() {} },
     Date: { now: () => now },
     auth: { currentUser: { uid: 'me' } },
-    currentUserData: { uid: 'me', stats: { totalScore: players.find(p => p.id === 'me')?.stats.totalScore || 0 } },
+    currentUserData: { uid: 'me', profile: { educationLevel: '國中一年級' }, stats: { totalScore: players.find(p => p.id === 'me')?.stats.totalScore || 0 } },
     db: {},
     document: { getElementById: id => id === 'leaderboard-body' ? tbody : id === 'page-rank' ? {
       classList: { contains: () => !visible }
-    } : null },
+    } : null, querySelectorAll: () => [] },
     window: { addEventListener(type, fn) { listeners.set(type, fn); } },
     collection: (_, name) => name,
     orderBy: (field, direction) => ({ field, direction }),
+    where: (field, operator, value) => ({ where: field, operator, value }),
+    startAfter: doc => ({ cursor: doc.id }),
     limit: count => ({ count }),
     query: (collection, ...constraints) => ({ collection, constraints }),
     getDocsFromServer(query) {
       reads.push(query);
-      const docs = structuredClone(remote);
+      const docs = structuredClone(remote).filter(p => query.constraints.filter(c => c.where).every(c => c.operator === '>=' && c.where.split('.').reduce((v,k) => v?.[k],p) >= c.value));
       for (const order of query.constraints.filter(c => c.field).reverse()) {
         docs.sort((a, b) => {
           const value = p => order.field.split('.').reduce((v, key) => v?.[key], p);
           return (value(a) - value(b)) * (order.direction === 'desc' ? -1 : 1);
         });
       }
-      const top = docs.slice(0, query.constraints.find(c => c.count).count);
-      const snap = { forEach: fn => top.forEach(p => fn({ id: p.id, data: () => p })) };
+      const cursor = query.constraints.find(c => c.cursor)?.cursor;
+      const start = cursor ? docs.findIndex(p => p.id === cursor) + 1 : 0;
+      const top = docs.slice(start,start + query.constraints.find(c => c.count).count);
+      const snap = { docs: top.map(p => ({ id:p.id, data: () => p })) };
       if (!deferred) return Promise.resolve(snap);
       return new Promise((resolve, reject) => requests.push({ resolve: () => resolve(snap), reject }));
     },
@@ -57,14 +61,14 @@ function harness(players, { deferred = false } = {}) {
     context, tbody, reads, requests,
     load: options => context.window.loadLeaderboard(options),
     event: type => listeners.get(type)?.({}),
-    score: score => { context.currentUserData.stats.totalScore = score; },
+    score: score => { context.currentUserData.stats.totalScore = score + 1268; },
     remote: players => { remote = structuredClone(players); },
     visible: value => { visible = value; },
     advance: ms => { now += ms; }
   };
 }
 
-const player = (id, totalScore, rankLevel = 0) => ({ id, displayName: id, stats: { totalScore, rankLevel } });
+const player = (id, totalScore, rankLevel = 0, educationLevel = '國中一年級') => ({ id, displayName:id, profile:{ educationLevel }, stats:{ totalScore:totalScore+1268, rankLevel } });
 const tick = () => new Promise(resolve => setImmediate(resolve));
 function names(h) { return [...h.tbody.innerHTML.matchAll(/data-xiuxian-profile="([^"]+)"/g)].filter((_, i) => i % 2 === 0).map(m => m[1]); }
 
@@ -74,8 +78,8 @@ test('higher cultivation ranks first despite stale, capped or missing stored rea
   const h = harness([player('former-first', 20, 99), player('me', 30, 0), missing]);
   await h.load();
   assert.deepEqual(names(h), ['no-rank', 'me', 'former-first']);
-  assert.deepEqual(JSON.parse(JSON.stringify(h.reads[0].constraints)), [{ field: 'stats.totalScore', direction: 'desc' }, { count: 10 }]);
-  assert.match(h.tbody.innerHTML, /30 修為/);
+  assert.deepEqual(JSON.parse(JSON.stringify(h.reads[0].constraints)), [{ where: 'stats.totalScore', operator: '>=', value: 1268 }, { field: 'stats.totalScore', direction: 'desc' }, { count: 40 }]);
+  assert.match(h.tbody.innerHTML, /1298 修為/);
   assert.match(h.tbody.innerHTML, /bg-blue-900\/20/, 'document UID identifies the current player even without a redundant uid field');
 });
 
@@ -191,4 +195,25 @@ test('a refresh supersedes an older failing request and account changes suppress
   assert.equal(h.reads.length, 4, 'new account does not reuse the old account cache');
   h.requests[3].resolve();
   await changed;
+});
+
+test('age bands filter profiles independently, with no rank for unconfigured grades', async () => {
+ const h=harness([player('me',20),player('small',65,0,'國小中年級'),player('secondary',40),player('unset',400,0,'')]);
+ await h.load();
+ assert.deepEqual(names(h),['secondary','me']);
+ h.context.window.selectLeaderboardGroup('elementary');
+ await tick();
+ assert.deepEqual(names(h),['small']);
+ assert.equal(h.reads.length,1);
+});
+test('legacy top-ranked accounts below 1268 lose their position', async () => {
+ const h=harness([player('me',2),player('former',-4,999)]);
+ await h.load();
+ assert.deepEqual(names(h),['me']);
+});
+test('pagination finds the secondary group beyond the first batch of elementary players', async () => {
+ const h=harness([...Array.from({length:43},(_,i)=>player('small-'+i,2000-i,0,'國小高年級')),player('me',2),player('other',1)]);
+ await h.load();
+ assert.deepEqual(names(h),['me','other']);
+ assert.equal(h.reads.length,2);
 });
