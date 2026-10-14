@@ -13,7 +13,9 @@ const index = read('public/index.html');
 test('bright accent layer is loaded statically after dark theme/preload styles', () => {
   const dark = index.indexOf('xianxia-blackgold-harmony.css');
   const inlineLayout = index.indexOf('id="content-capacity-layout-style"');
-  const bright = index.indexOf('xianxia-bright-accents.css?v=20260918-bright2');
+  // Asset cache-busting versions change; test inclusion and cascade order, not an old hash.
+  const brightAsset = /<link\s+rel="stylesheet"\s+href="xianxia-bright-accents\.css(?:\?[^"]*)?"\s*>/.exec(index);
+  const bright = brightAsset ? index.indexOf(brightAsset[0]) : -1;
   const debug = index.indexOf('id="debug-top-layer-style"');
   assert.ok(dark >= 0);
   assert.ok(inlineLayout > dark);
