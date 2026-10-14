@@ -39,7 +39,7 @@ function profileModule() {
 }
 
 test('ranking, friends and chat avatars and names open the same UID-backed read-only profile', () => {
-  assert.match(legacy,/data-xiuxian-profile="\$\{escapeHtml\(doc\.id\)\}"/);
+  assert.match(legacy,/data-xiuxian-profile="\$\{escapeHtml\(record\.id\)\}"/);
   assert.match(legacy,/data-xiuxian-profile="\$\{escapeHtml\(d\.id\)\}"/);
   assert.match(legacy,/const chatProfile = msg\.uid \?/);
   assert.match(legacy,/class="xpp-profile-trigger" \$\{chatProfile\}/);
