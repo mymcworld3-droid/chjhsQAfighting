@@ -304,7 +304,7 @@ import { playerRepository } from './data/player-repository.js';
     const link = document.createElement('link');
     link.id = 'ss-studio-style';
     link.rel = 'stylesheet';
-    link.href = './styles/curriculum-studio.css?v=20261007-scope-modal1';
+    link.href = './styles/curriculum-studio.css?v=20261014-scope-concise1';
     if (!$('ss-studio-style')) document.head.append(link);
 
     studio = document.createElement('section');
