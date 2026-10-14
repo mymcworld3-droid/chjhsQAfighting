@@ -298,7 +298,7 @@ test('formal battle uses Foundation realm only; incomplete tutorials never block
     scheduleReconcile:()=>{}, console,
     CustomEvent: class { constructor(type, options = {}) { this.type = type; this.detail = options.detail; } }
   });
-  vm.runInContext(src,ctx);
+  vm.runInContext(battleSource.slice(battleSource.indexOf('  function isMatchSessionActive('),battleSource.indexOf('  // 舊的過期房間')) + src,ctx);
   await vm.runInContext('startMatchmaking()',ctx);
   assert.deepEqual(calls,['toast'],'not yet Foundation blocks');
   currentScore=10;

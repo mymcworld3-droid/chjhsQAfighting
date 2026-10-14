@@ -142,17 +142,17 @@ test('battle waiting-query updates merge simultaneous hosts without waiting for 
   const start=source.indexOf('  function watchWaitingRooms()'),end=source.indexOf('  function stopTimers()',start);
   let next, unsub=0;const writes=[],subscribed=[];
   const state={roomId:'zzroom',role:'host',room:{status:'waiting'},unsub:null,reconcileBusy:false};
-  const own={status:'waiting',host:{uid:'a'}},other={status:'waiting',host:{uid:'b'},modeVersion:2};
+  const own={status:'waiting',host:{uid:'a'},modeVersion:2},other={status:'waiting',host:{uid:'b'},modeVersion:2};
   const ref={id:'aaroom'};
   const snapshot={docs:[{id:'aaroom',ref,data:()=>other}]};
-  const context={state,ROOM_COLLECTION:'rooms',MATCH_SCAN_LIMIT:80,BATTLE_V2:{modeVersion:2},console,
+  const context={state,ROOM_COLLECTION:'rooms',MATCH_SCAN_LIMIT:80,MATCH_SCAN_MAX_PAGES:4,me:()=>({uid:'a'}),BATTLE_V2:{modeVersion:2},console,
     collection(){},query(){},where(){},limit(){},onSnapshot(_,fn){next=fn;return()=>unsub++;},
     playerSnapshot:()=>({uid:'a'}),isRoomStale:()=>false,roomRef:id=>({id}),db:()=>({}),
     getDocs(){throw Error('unexpected polling');},guestJoinPatch:()=>({guest:{uid:'a'},status:'intro'}),
     runTransaction:async(_,fn)=>fn({get:async target=>({exists:()=>true,data:()=>target.id==='zzroom'?own:other}),
       update:(target,patch)=>writes.push({id:target.id,patch}),delete:target=>writes.push({deleted:target.id})}),
-    subscribeRoom:id=>subscribed.push(id),scheduleReconcile(){},logBattleFirestoreError(){}};
-  vm.runInNewContext(source.slice(start,end)+'\nthis.watch=watchWaitingRooms;',context);
+    subscribeRoom:id=>{context.detachRoomListener();state.roomId=id;subscribed.push(id);},scheduleReconcile(){},logBattleFirestoreError(){}};
+  vm.runInNewContext(source.slice(source.indexOf('  function isMatchSessionActive('),source.indexOf('  async function claimWaitingRoom('))+source.slice(start,end)+'\nthis.watch=watchWaitingRooms;',context);
   context.watch();next(snapshot);await flush();
   assert.deepEqual(subscribed,['aaroom']);assert.equal(state.role,'guest');assert.equal(writes.length,2);assert.equal(unsub,1);
 });

@@ -2,7 +2,7 @@ import './battle-cultivation-rules.js';
 import { resolvePlayerAvatar } from './profile-avatar.js';
 import {} from './soul-talents.js';
 import {
-  doc, collection, query, where, limit, getDocs, getDoc,
+  doc, collection, query, where, limit, startAfter, getDocs, getDoc,
   addDoc, updateDoc, onSnapshot, runTransaction, serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { BATTLE_V2, settleBattleRound, applyNascentSoulDuelRule } from './battle-engine-v2.js?v=20260926-nascent-seal1';
@@ -26,6 +26,7 @@ export const featureReady = (async () => {
   const PREPARE_LEASE_MS = 7000;
   const MATCH_RECONCILE_MS = 1100;
   const MATCH_SCAN_LIMIT = 80;
+  const MATCH_SCAN_MAX_PAGES = 4;
   const INTRO_DURATION_MS = 4800;
   const ROUND_COUNTDOWN_MS = 3000;
   // Only the opening round has a shared three-second countdown.
@@ -59,6 +60,10 @@ export const featureReady = (async () => {
     waitingUnsub: null,
     reconcileBusy: false,
     waitingSnapshot: null,
+    matchSerial: 0,
+    subscriptionSerial: 0,
+    mergeAttempt: null,
+    waitingScanCursor: null,
     starting: false,
     leaving: false,
     recovering: false,
@@ -639,7 +644,9 @@ export const featureReady = (async () => {
 
   function isRoomStale(room) {
     const created = timestampMs(room?.createdAt, Number(room?.createdAtMs) || 0);
-    return created > 0 && nowMs() - created > BATTLE_V2.waitingRoomTtlMs;
+    // 等待中的活躍房主有心跳；房間建立超過九十秒不等於房主已離線。
+    const lastActive = Math.max(created, Number(room?.host?.lastSeenAtMs) || 0);
+    return lastActive > 0 && nowMs() - lastActive > BATTLE_V2.waitingRoomTtlMs;
   }
 
   function hasSubmittedAnswer(player, round) {
@@ -674,32 +681,108 @@ export const featureReady = (async () => {
     };
   }
 
-  async function claimWaitingRoom(targetRef, myData) {
-    let claimed = false;
-    await runTransaction(db(), async (tx) => {
+  function isMatchSessionActive(session, uid) {
+    return (Number(state.matchSerial) || 0) === session && me()?.uid === uid && !state.leaving;
+  }
+
+  // 舊的過期房間不能永久佔滿前八十筆；分頁掃描，單輪最多四頁，下一輪接續游標。
+  async function readWaitingRooms(isCandidate, firstSnapshot = null) {
+    const session = Number(state.matchSerial) || 0, uid = me()?.uid;
+    if (firstSnapshot?.docs.some(isCandidate)) return {docs:firstSnapshot.docs.filter(isCandidate)};
+    let cursor = state.waitingScanCursor;
+    for (let page = 0; page < MATCH_SCAN_MAX_PAGES; page++) {
+      const snap = !cursor && page === 0 && firstSnapshot ? firstSnapshot : await getDocs(query(
+        collection(db(), ROOM_COLLECTION), where('status', '==', 'waiting'),
+        ...(cursor ? [startAfter(cursor)] : []), limit(MATCH_SCAN_LIMIT)));
+      if (!isMatchSessionActive(session, uid)) return {docs:[]};
+      const candidates = snap.docs.filter(isCandidate);
+      if (candidates.length || snap.docs.length < MATCH_SCAN_LIMIT) {
+        state.waitingScanCursor = null;
+        return {docs:candidates};
+      }
+      cursor = snap.docs[snap.docs.length-1];
+    }
+    state.waitingScanCursor = cursor;
+    return {docs:[]};
+  }
+
+  // 配對請求完成時玩家可能已取消；只清理該玩家實際擁有的房間。
+  async function releaseMatchmakingRoom(roomId, uid) {
+    if (!roomId || !uid) return;
+    // 新一輪已恢復同一個房間時，舊請求的清理不能把新會話判成投降。
+    if (state.roomId === roomId && me()?.uid === uid && !state.leaving) return;
+    try {
+      await runTransaction(db(), async tx => {
+        const ref = roomRef(roomId), snap = await tx.get(ref);
+        if (!snap.exists()) return;
+        const room = snap.data();
+        if (Number(room.modeVersion) !== BATTLE_V2.modeVersion) return;
+        if (room.host?.uid === uid && room.status === 'waiting' && !room.guest) { tx.delete(ref); return; }
+        if (!['intro', 'preparing', 'playing', 'settled'].includes(room.status)) return;
+        const opponent = room.host?.uid === uid ? room.guest : room.guest?.uid === uid ? room.host : null;
+        if (!opponent?.uid) return;
+        tx.update(ref, {status:'finished',winner:opponent.uid,finishReason:'forfeit',finishedAt:serverTimestamp(),updatedAt:serverTimestamp()});
+      });
+    } catch (error) { console.warn('[Battle v2] cancelled matchmaking cleanup will recover:', error); }
+  }
+
+  async function finishRoomMerge(attempt, committed = false) {
+    if (!isMatchSessionActive(attempt.session, attempt.uid) || state.roomId !== attempt.ownId) {
+      await releaseMatchmakingRoom(attempt.targetId, attempt.uid);
+      return false;
+    }
+    try {
+      if (!committed) {
+        const [target, own] = await Promise.all([getDoc(roomRef(attempt.targetId)), getDoc(roomRef(attempt.ownId))]);
+        if (!isMatchSessionActive(attempt.session, attempt.uid) || state.roomId !== attempt.ownId) {
+          await releaseMatchmakingRoom(attempt.targetId, attempt.uid); return false;
+        }
+        const targetRoom = target.exists() ? target.data() : null;
+        committed = targetRoom?.guest?.uid === attempt.uid && Number(targetRoom.modeVersion) === BATTLE_V2.modeVersion;
+        if (!committed) {
+          if (state.mergeAttempt === attempt) state.mergeAttempt = null;
+          onRoomSnapshot(own); // 未提交時保留原房；確實被刪除時才結束等待。
+          return false;
+        }
+      }
+      if (state.mergeAttempt === attempt) state.mergeAttempt = null;
+      state.role = 'guest';
+      subscribeRoom(attempt.targetId);
+      return true;
+    } catch (error) {
+      // 回應遺失且讀取也暫時失敗時，保留轉移資訊；下一輪先確認，不重新配到另一房。
+      console.warn('[Battle v2] room transfer awaiting confirmation:', error);
+      return false;
+    }
+  }
+
+  async function claimWaitingRoom(targetRef, myData, session = Number(state.matchSerial) || 0) {
+    // 成功與否必須是最後一次已提交交易的回傳值；不可保留被 Firestore 丟棄的嘗試旗標。
+    return runTransaction(db(), async tx => {
       const snap = await tx.get(targetRef);
-      if (!snap.exists()) return;
+      if (!isMatchSessionActive(session, myData.uid) || !snap.exists()) return false;
       const room = snap.data();
-      if (Number(room.modeVersion) !== BATTLE_V2.modeVersion || room.status !== 'waiting' || room.guest || room.host?.uid === myData.uid || isRoomStale(room)) return;
+      if (Number(room.modeVersion) !== BATTLE_V2.modeVersion || room.status !== 'waiting' || room.guest || room.host?.uid === myData.uid || isRoomStale(room)) return false;
       tx.update(targetRef, guestJoinPatch(room, myData));
-      claimed = true;
+      return true;
     });
-    return claimed;
   }
 
   async function findAndClaimRoom(myData, onlyRoomId = null) {
-    if (onlyRoomId) return await claimWaitingRoom(roomRef(onlyRoomId), myData) ? onlyRoomId : null;
-    const snap = await getDocs(query(collection(db(), ROOM_COLLECTION), where('status', '==', 'waiting'), limit(MATCH_SCAN_LIMIT)));
-    const candidates = snap.docs.filter((entry) => {
+    const session = Number(state.matchSerial) || 0;
+    if (onlyRoomId) return await claimWaitingRoom(roomRef(onlyRoomId), myData, session) ? onlyRoomId : null;
+    const snap = await readWaitingRooms(entry => {
       const room = entry.data();
       return Number(room.modeVersion) === BATTLE_V2.modeVersion && room.host?.uid !== myData.uid && !room.guest && !isRoomStale(room);
-    }).sort((a, b) => {
+    });
+    const candidates = snap.docs.sort((a, b) => {
       const aGap = Math.abs((Number(a.data().host?.totalScore) || 0) - myData.totalScore);
       const bGap = Math.abs((Number(b.data().host?.totalScore) || 0) - myData.totalScore);
       return aGap - bGap || Number(a.data().createdAtMs || 0) - Number(b.data().createdAtMs || 0) || a.id.localeCompare(b.id);
     });
     for (const candidate of candidates) {
-      try { if (await claimWaitingRoom(candidate.ref, myData)) return candidate.id; } catch (_) {}
+      if (!isMatchSessionActive(session, myData.uid)) return null;
+      try { if (await claimWaitingRoom(candidate.ref, myData, session)) return candidate.id; } catch (_) {}
     }
     return null;
   }
@@ -766,47 +849,49 @@ export const featureReady = (async () => {
   }
 
   async function reconcileOwnWaitingRoom(waitingSnapshot) {
-    const ownId = state.roomId;
-    if (!ownId || state.role !== 'host' || state.room?.status !== 'waiting' || state.reconcileBusy) return;
+    const ownId = state.roomId, session = Number(state.matchSerial) || 0;
+    if (!ownId || state.role !== 'host' || state.room?.status !== 'waiting' || state.reconcileBusy || state.leaving) return;
+    const myData = playerSnapshot();
     state.reconcileBusy = true;
     state.waitingSnapshot = null;
-    const myData = playerSnapshot();
+    let attempt = state.mergeAttempt;
     try {
-      const snap = waitingSnapshot || await getDocs(query(collection(db(), ROOM_COLLECTION), where('status', '==', 'waiting'), limit(MATCH_SCAN_LIMIT)));
-      const target = snap.docs.filter((entry) => {
+      if (attempt) { await finishRoomMerge(attempt); return; }
+      const snap = await readWaitingRooms(entry => {
         const room = entry.data();
-        return entry.id < ownId && Number(room.modeVersion) === BATTLE_V2.modeVersion && room.host?.uid !== myData.uid && !room.guest && !isRoomStale(room);
-      }).sort((a, b) => a.id.localeCompare(b.id))[0];
+        return entry.id < ownId && room.status === 'waiting' && Number(room.modeVersion) === BATTLE_V2.modeVersion && room.host?.uid !== myData.uid && !room.guest && !isRoomStale(room);
+      }, waitingSnapshot);
+      if (!isMatchSessionActive(session, myData.uid) || state.roomId !== ownId) return;
+      const target = snap.docs.sort((a,b) => a.id.localeCompare(b.id))[0];
       if (!target) return;
-
-      let merged = false;
-      await runTransaction(db(), async (tx) => {
+      attempt = {ownId,targetId:target.id,session,uid:myData.uid,missing:false};
+      state.mergeAttempt = attempt;
+      const merged = await runTransaction(db(), async tx => {
         const ownRef = roomRef(ownId);
-        const ownSnap = await tx.get(ownRef);
-        const targetSnap = await tx.get(target.ref);
-        if (!ownSnap.exists() || !targetSnap.exists()) return;
-        const own = ownSnap.data();
-        const other = targetSnap.data();
-        if (own.status !== 'waiting' || own.guest || own.host?.uid !== myData.uid) return;
-        if (other.status !== 'waiting' || other.guest || other.host?.uid === myData.uid || Number(other.modeVersion) !== BATTLE_V2.modeVersion || isRoomStale(other)) return;
+        const ownSnap = await tx.get(ownRef), targetSnap = await tx.get(target.ref);
+        if (!isMatchSessionActive(session, myData.uid) || state.roomId !== ownId || !ownSnap.exists() || !targetSnap.exists()) return false;
+        const own = ownSnap.data(), other = targetSnap.data();
+        if (Number(own.modeVersion) !== BATTLE_V2.modeVersion || own.status !== 'waiting' || own.guest || own.host?.uid !== myData.uid) return false;
+        if (other.status !== 'waiting' || other.guest || other.host?.uid === myData.uid || Number(other.modeVersion) !== BATTLE_V2.modeVersion || isRoomStale(other)) return false;
         tx.update(target.ref, guestJoinPatch(other, myData));
         tx.delete(ownRef);
-        merged = true;
+        return true;
       });
-      if (!merged) return;
-      if (state.roomId !== ownId || state.role !== 'host') return;
-      detachRoomListener();
-      state.roomId = target.id;
-      state.role = 'guest';
-      subscribeRoom(target.id);
-    } catch (error) { console.warn('[Battle v2] simultaneous room merge skipped:', error); }
-    finally {
-      state.reconcileBusy = false;
-      if (state.waitingSnapshot) void reconcileOwnWaitingRoom(state.waitingSnapshot);
+      if (merged || attempt.missing) await finishRoomMerge(attempt, merged);
+      else if (state.mergeAttempt === attempt) state.mergeAttempt = null;
+    } catch (error) {
+      console.warn('[Battle v2] simultaneous room merge awaiting recovery:', error);
+      if (attempt) await finishRoomMerge(attempt);
+    } finally {
+      if ((Number(state.matchSerial) || 0) === session) {
+        state.reconcileBusy = false;
+        if (state.waitingSnapshot) void reconcileOwnWaitingRoom(state.waitingSnapshot);
+      }
     }
   }
 
   function detachRoomListener() {
+    state.subscriptionSerial = (Number(state.subscriptionSerial) || 0) + 1;
     if (state.unsub) { try { state.unsub(); } catch (_) {} state.unsub = null; }
     state.waitingUnsub?.(); state.waitingUnsub = null;
     state.waitingSnapshot = null;
@@ -828,6 +913,8 @@ export const featureReady = (async () => {
 
   function resetRuntime() {
     detachRoomListener(); stopTimers();
+    state.matchSerial = (Number(state.matchSerial) || 0) + 1;
+    state.mergeAttempt = null; state.reconcileBusy = false; state.waitingScanCursor = null;
     state.roomId = null; state.role = null; state.room = null; state.starting = false; state.leaving = false; state.invitedRoomId = null;
     state.settlingRound = state.timeoutRound = state.preparingRound = state.prefetchingRound = state.advancingRound = state.disconnectClaimRound = null;
     state.prepareRetryAfterMs = state.prefetchRetryAfterMs = 0;
@@ -1550,9 +1637,12 @@ export const featureReady = (async () => {
   }
 
   function onRoomSnapshot(snap) {
-    if (!snap.exists()) { toast('鬥法房間已不存在。'); resetRuntime(); window.switchToPage?.('page-home'); return; }
-    const room = snap.data(); if (Number(room.modeVersion) !== BATTLE_V2.modeVersion) return; state.room = room;
+    if (!snap.exists()) {
+      if (state.mergeAttempt?.ownId === state.roomId) { state.mergeAttempt.missing = true; return; }
+      toast('鬥法房間已不存在。'); resetRuntime(); window.switchToPage?.('page-home'); return; }
+    const room = snap.data(); if (Number(room.modeVersion) !== BATTLE_V2.modeVersion) return;
     const uid = me()?.uid; if (room.host?.uid === uid) state.role = 'host'; else if (room.guest?.uid === uid) state.role = 'guest'; else return;
+    state.room = room;
     if (room.status !== 'waiting') { state.waitingUnsub?.(); state.waitingUnsub = null; state.waitingSnapshot = null; }
     if (room.status === 'waiting') { renderLobby(room); if (state.role === 'host') { watchWaitingRooms(); scheduleReconcile(); inviteOnlineFriends(state.roomId); } }
     else if (room.status === 'intro') {
@@ -1580,7 +1670,12 @@ export const featureReady = (async () => {
 
   function subscribeRoom(roomId) {
     detachRoomListener(); state.roomId = roomId;
-    state.unsub = onSnapshot(roomRef(roomId), onRoomSnapshot, (error) => {
+    const serial = state.subscriptionSerial, uid = me()?.uid;
+    const current = () => state.roomId === roomId && state.subscriptionSerial === serial && me()?.uid === uid;
+    state.unsub = onSnapshot(roomRef(roomId), snap => {
+      if (current()) onRoomSnapshot(snap);
+    }, (error) => {
+      if (!current()) return;
       logBattleFirestoreError('listener failed', error);
       toast(firebaseBattleErrorMessage(error, '鬥法同步暫時中斷，房間仍會保留。'));
     });
@@ -1600,20 +1695,28 @@ export const featureReady = (async () => {
       return;
     }
     resetRuntime(); state.starting = true;
+    const session = Number(state.matchSerial) || 0, uid = me().uid;
     window.dispatchEvent(new CustomEvent('xiuxian:invite-blocked'));
     ensurePage(); window.switchToPage?.('page-battle'); showSection('lobby'); renderLobby(null);
     try {
-      await window.ensureCombatStats?.(); const myData = playerSnapshot(); setPlayerAvatar('bv2-match-me-avatar', myData); setText('bv2-match-me', myData.name); setText('bv2-match-me-core', `本命金丹：${playerCoreLabel(myData)}${playerPowerLabel(myData)}${playerNascentSealLabel(myData)}`);
-      const joined = await findAndClaimRoom(myData); if (joined) { state.role = 'guest'; subscribeRoom(joined); return; }
-      setText('bv2-lobby-status', '目前沒有可加入的道友，正在開啟鬥法臺…'); const created = await createWaitingRoom(myData); state.role = 'host'; subscribeRoom(created); scheduleReconcile(); inviteOnlineFriends(created);
+      await window.ensureCombatStats?.();
+      if (!isMatchSessionActive(session, uid)) return;
+      const myData = playerSnapshot(); setPlayerAvatar('bv2-match-me-avatar', myData); setText('bv2-match-me', myData.name); setText('bv2-match-me-core', `本命金丹：${playerCoreLabel(myData)}${playerPowerLabel(myData)}${playerNascentSealLabel(myData)}`);
+      const joined = await findAndClaimRoom(myData);
+      if (!isMatchSessionActive(session, uid)) { if (joined) await releaseMatchmakingRoom(joined, uid); return; }
+      if (joined) { state.role = 'guest'; subscribeRoom(joined); return; }
+      setText('bv2-lobby-status', '目前沒有可加入的道友，正在開啟鬥法臺…'); const created = await createWaitingRoom(myData);
+      if (!isMatchSessionActive(session, uid)) { await releaseMatchmakingRoom(created, uid); return; }
+      state.role = 'host'; subscribeRoom(created); scheduleReconcile(); inviteOnlineFriends(created);
     } catch (error) {
+      if (!isMatchSessionActive(session, uid)) return;
       logBattleFirestoreError('matchmaking failed', error);
       toast(firebaseBattleErrorMessage(error));
       resetRuntime();
       window.switchToPage?.('page-home');
       window.dispatchEvent(new CustomEvent('xiuxian:battle-session-ended'));
     }
-    finally { state.starting = false; }
+    finally { if ((Number(state.matchSerial) || 0) === session) state.starting = false; }
   }
 
   async function forfeitCurrentRoom() {
