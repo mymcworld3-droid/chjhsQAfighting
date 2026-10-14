@@ -49,15 +49,16 @@ async function pruneInvalidSeats(db) {
     const targets = await Promise.all(targetIds.map(id => tx.get(seatCollection.doc(id))));
     const targetMap = new Map(targetIds.map((id,i) => [id,targets[i]]));
     const existingMap = new Map(records.map((row,i) => [row.id,current[i]]));
-    let removed = 0;
+    const deletes = new Map();
+    const promotions = new Map();
+    const promotedOwners = new Set();
     // Existing scoped seats must belong to a qualified player of that cohort.
     for (const row of records) {
       const seat = existingMap.get(row.id);
       if (!seat?.exists) continue;
       const details = seatDetails(row.id);
       if (!details.legacy && invalidSeat(seat.data(),users.get(seat.data().uid),row.id)) {
-        tx.delete(row.ref);
-        removed++;
+        deletes.set(row.id,row.ref);
       }
     }
     // Place valid legacy seat holders in their own school cohort. Never replace
@@ -75,19 +76,24 @@ async function pruneInvalidSeats(db) {
         const destSnapshot = targetMap.get(destination);
         const destInvalid = destSnapshot.exists &&
           invalidSeat(destSnapshot.data(),users.get(destSnapshot.data().uid),destination);
-        const alreadyHasSeat = targetIds.some(id => {
+        const alreadyHasSeat = promotedOwners.has(group + ':' + data.uid) || targetIds.some(id => {
           if (!id.startsWith(group + '__') || id === destination) return false;
           const other = targetMap.get(id);
           return other?.exists && other.data().uid === data.uid &&
             !invalidSeat(other.data(),users.get(other.data().uid),id);
         });
         if ((!destSnapshot.exists || destInvalid) && !alreadyHasSeat) {
-          tx.set(seatCollection.doc(destination), { ...data, cohort:group, role:details.role, migratedFrom:'legacy' });
+          promotions.set(destination, { ...data, cohort:group, role:details.role, migratedFrom:'legacy' });
+          promotedOwners.add(group + ':' + data.uid);
         }
       }
-      tx.delete(row.ref);
-      removed++;
+      deletes.set(row.id,row.ref);
     }
+    // Apply at most one mutation per destination; a promotion takes priority
+    // over the deletion of an invalid occupant at that destination.
+    for (const [id,ref] of deletes) if (!promotions.has(id)) tx.delete(ref);
+    for (const [id,data] of promotions) tx.set(seatCollection.doc(id),data);
+    const removed = deletes.size;
     return removed;
   });
 }
