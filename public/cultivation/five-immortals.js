@@ -3,7 +3,7 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
 (function () {
   'use strict';
 
-  const TRIBULATION_SCORE = 1868;
+  const TRIBULATION_SCORE = 1268;
   const QUIZ_LEVEL = '國中三年級';
   const QUIZ_DIFFICULTY = 'medium';
   const ROLES = [
@@ -88,8 +88,14 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
           profiles[docSnap.id] = { displayName: data.displayName || data.name || '無名仙客', equipped: { ...data.equipped, avatar: resolvePlayerAvatar(data) }, totalScore: Math.max(0, Number(data.stats?.totalScore) || 0) };
         });
       }
-      Object.values(owners).forEach((owner) => {
-        const profile = profiles[owner.uid] || {};
+      Object.keys(owners).forEach((roleId) => {
+        const owner = owners[roleId];
+        const profile = profiles[owner.uid];
+        // Filter historical placements if the owner was deleted or fell below Tribulation.
+        if (!profile || profile.totalScore < TRIBULATION_SCORE) {
+          delete owners[roleId];
+          return;
+        }
         owner.displayName = profile.displayName || owner.displayName || '無名仙客';
         owner.equipped = profile.equipped || owner.equipped || null;
         owner.totalScore = profile.totalScore || 0;
@@ -290,7 +296,7 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
       box = document.createElement('section');
       box.id = 'five-immortals';
       box.className = 'five-immortals';
-      box.innerHTML = `<div class="five-immortals-head"><h3>九州五大仙</h3><button id="five-immortals-help" class="five-immortals-help" type="button" aria-label="查看五大仙遊戲方式" aria-expanded="false" title="遊戲方式">!</button></div><div id="five-immortals-guide" class="five-immortal-guide" hidden><p>渡劫以上方可問鼎 · 國中程度連答 · 一錯即止 · 2588 修為先入半仙 · 榜上五席方為真仙</p><div class="five-immortal-rule"><div><span>境界門檻</span><b>渡劫 · 1868 修為</b></div><div><span>問鼎方式</span><b>連續答對直到答錯</b></div><div><span>挑戰限制</span><b>無限次嘗試</b></div></div><p class="five-immortal-extra">每一仙位對應固定科目；挑戰沒有總題數，也沒有次數限制。一路答到第一次答錯為止，只有嚴格超過目前紀錄才能奪位，同分不換榜；每名修士同時只能據有一席仙位。真仙境界須同時達到 2588 修為並在榜；掉榜後恢復渡劫，修為保留。</p></div><div id="five-immortal-list" class="podium-container"></div><div id="five-immortal-lock" class="five-locked"></div>`;
+      box.innerHTML = `<div class="five-immortals-head"><h3>九州五大仙</h3><button id="five-immortals-help" class="five-immortals-help" type="button" aria-label="查看五大仙遊戲方式" aria-expanded="false" title="遊戲方式">!</button></div><div id="five-immortals-guide" class="five-immortal-guide" hidden><p>渡劫以上方可問鼎 · 國中程度連答 · 一錯即止 · 1868 修為先入半仙 · 榜上五席方為真仙</p><div class="five-immortal-rule"><div><span>境界門檻</span><b>渡劫 · 1268 修為</b></div><div><span>問鼎方式</span><b>連續答對直到答錯</b></div><div><span>挑戰限制</span><b>無限次嘗試</b></div></div><p class="five-immortal-extra">每一仙位對應固定科目；挑戰沒有總題數，也沒有次數限制。一路答到第一次答錯為止，只有嚴格超過目前紀錄才能奪位，同分不換榜；每名修士同時只能據有一席仙位。真仙境界須同時達到 1868 修為並在榜；掉榜後恢復半仙，修為保留。</p></div><div id="five-immortal-list" class="podium-container"></div><div id="five-immortal-lock" class="five-locked"></div>`;
       const anchor = rank.querySelector('.glass-panel') || rank.firstElementChild;
       if (anchor) anchor.before(box); else rank.prepend(box);
     }
