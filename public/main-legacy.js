@@ -1339,19 +1339,43 @@ window.addEventListener('xiuxian:startup-resource-progress', (event) => {
 // 🔐 登入狀態監聽 (核心邏輯)
 // ==========================================
 let immortalBoardUnsub = null;
+let immortalBoardGroup = null;
+function subscribeOwnImmortalBoard() {
+    const group = window.getLeaderboardEducationGroup?.(currentUserData?.profile?.educationLevel);
+    if (group === immortalBoardGroup && immortalBoardUnsub) return;
+    immortalBoardUnsub?.();
+    immortalBoardUnsub = null;
+    immortalBoardGroup = group || null;
+    window.setTrueImmortalBoard([], false);
+    if (!auth.currentUser || !group) return;
+    const uid = auth.currentUser.uid;
+    // Only subscribe to the player's configured cohort, never the other school board.
+    immortalBoardUnsub = onSnapshot(
+        query(collection(db, 'worldImmortals'), where('cohort', '==', group)),
+        snapshot => {
+            if (auth.currentUser?.uid !== uid ||
+                window.getLeaderboardEducationGroup?.(currentUserData?.profile?.educationLevel) !== group) return;
+            window.setTrueImmortalBoard(snapshot.docs.map(item => ({ ...item.data(), id: item.id })));
+        }, error => {
+            window.setTrueImmortalBoard([], false);
+            console.warn('仙位資格讀取失敗', error);
+        }
+    );
+}
+window.addEventListener('xiuxian:user-data-ready', subscribeOwnImmortalBoard);
+window.addEventListener('xiuxian:quest-progress-updated', () => {
+    const group = window.getLeaderboardEducationGroup?.(currentUserData?.profile?.educationLevel);
+    if (group !== immortalBoardGroup) subscribeOwnImmortalBoard();
+});
 window.addEventListener('xiuxian:immortals-updated', () => {
     if (currentUserData) updateUIStats();
 });
 onAuthStateChanged(auth, async (user) => {
     firstLoginUid = '';
     immortalBoardUnsub?.();
+    immortalBoardUnsub = null;
+    immortalBoardGroup = null;
     window.setTrueImmortalBoard([], false);
-    if (user) immortalBoardUnsub = onSnapshot(collection(db, 'worldImmortals'), (snapshot) => {
-        window.setTrueImmortalBoard(snapshot.docs.map(item => ({ ...item.data(), id: item.id })));
-    }, (error) => {
-        window.setTrueImmortalBoard([], false);
-        console.warn('仙位資格讀取失敗', error);
-    });
     // 先更新一次介面文字
     updateTexts();
 
