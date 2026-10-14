@@ -23,7 +23,7 @@ function setup(totalScore = 0) {
   function element() {
     return {
       innerText: '', textContent: '', innerHTML: '', style: {}, dataset: {}, querySelector: () => null,
-      classList: { add() {}, remove() {} }, remove() {}
+      classList: { add() {}, remove() {} }, remove() {}, appendChild() {}
     };
   }
   const ids = [
@@ -224,7 +224,7 @@ test('ordinary streaks never create Dao-heart shields or bonus cultivation', asy
   assert.equal(h.context.currentUserData.stats.goldenCoreShield, undefined);
 });
 
-test('Golden Core realm changes base cultivation to +2 correct and -1 wrong', async () => {
+test('Golden Core realm gives +2 correct and never removes cultivation for wrong or skipped answers', async () => {
   const h = setup(27);
 
   await h.answer();
@@ -236,28 +236,30 @@ test('Golden Core realm changes base cultivation to +2 correct and -1 wrong', as
 
   h.newQuiz();
   await h.answer(1, 0);
-  assert.equal(h.context.currentUserData.stats.totalScore, 29);
+  assert.equal(h.context.currentUserData.stats.totalScore, 30);
 
   h.newQuiz();
   await h.answer(-1, -2);
-  assert.equal(h.context.currentUserData.stats.totalScore, 28);
+  assert.equal(h.context.currentUserData.stats.totalScore, 30);
 
   h.newQuiz();
   await h.answer(1, 0);
-  assert.equal(h.context.currentUserData.stats.totalScore, 27);
+  assert.equal(h.context.currentUserData.stats.totalScore, 30);
 });
 
-test('Golden Core Dao-heart blocks one cultivation loss and is consumed', async () => {
+test('Ningxin Dao-heart preserves one streak on a mistake and is consumed', async () => {
   const h = setup(28);
   h.context.currentUserData.stats.goldenCoreShield = true;
-
-  await h.answer(1, 0);
-  assert.equal(h.context.currentUserData.stats.totalScore, 28);
-  assert.equal(h.context.currentUserData.stats.goldenCoreShield, false);
-
-  h.newQuiz();
-  await h.answer(1, 0);
-  assert.equal(h.context.currentUserData.stats.totalScore, 27);
+  h.context.currentUserData.stats.currentStreak = 5;
+  h.context.window.resolveGoldenCoreCultivationReward = ({stats,isCorrect}) =>
+    ({preserveStreak:!isCorrect && stats.goldenCoreShield && stats.currentStreak>0});
+  await h.answer(1,0);
+  assert.equal(h.context.currentUserData.stats.totalScore,28);
+  assert.equal(h.context.currentUserData.stats.currentStreak,5);
+  assert.equal(h.context.currentUserData.stats.goldenCoreShield,false);
+  h.newQuiz(); await h.answer(1,0);
+  assert.equal(h.context.currentUserData.stats.totalScore,28);
+  assert.equal(h.context.currentUserData.stats.currentStreak,0);
 });
 
 test('Golden Core alone may create its own Dao-heart state and cultivation bonus', async () => {
@@ -279,12 +281,12 @@ test('legacy missing or string scores become numeric cultivation totals', async 
   }
 });
 
-test('wrong-answer Golden Core Dao-heart may form in time to block that mistake', async () => {
+test('wrong-answer Golden Core Dao-heart can form without reducing cultivation', async () => {
   const h = setup(28);
   h.context.window.resolveGoldenCoreCultivationReward = () => ({ forceShield: true, message: '清心護體' });
   await h.answer(1, 0);
   assert.equal(h.context.currentUserData.stats.totalScore, 28);
-  assert.equal(h.context.currentUserData.stats.goldenCoreShield, false);
+  assert.equal(h.context.currentUserData.stats.goldenCoreShield, true);
 });
 
 
@@ -327,4 +329,23 @@ test('ordinary answer transactions preserve server quest rewards arriving before
   assert.equal(h.writes[0].data.stats.gold, 100, '保留遠端 80 靈石並加上本題 20 靈石');
   assert.equal(h.context.currentUserData.stats.gold, 100);
   assert.equal(h.context.currentUserData.stats.totalScore, 13);
+});
+
+test('real answer flow persists mistakes and awards correction variants exactly once',async()=>{
+ const h=setup(28);h.context.window.QASoloLearningRules=require('../public/cultivation/solo-learning-rules.js');
+ const origin=h.context.window.currentActiveQuiz.data.q;
+ await h.answer(1,0);assert.equal(h.writes.length,1);assert.equal(h.context.currentUserData.stats.totalScore,28);
+ h.newQuiz();h.context.window.currentActiveQuiz.data.q='A new variation';h.context.window.currentActiveQuiz.recoveryOrigin=origin;
+ await h.answer();assert.equal(h.context.currentUserData.stats.totalScore,31);assert.equal(h.context.currentUserData.stats.gold,30);
+ h.newQuiz();h.context.window.currentActiveQuiz.data.q='Another variation';h.context.window.currentActiveQuiz.recoveryOrigin=origin;
+ await h.answer();assert.equal(h.context.currentUserData.stats.totalScore,33);assert.equal(h.context.currentUserData.stats.gold,50);
+});
+test('a second tab cannot claim an already corrected origin again',async()=>{
+ const h=setup(28),rules=require('../public/cultivation/solo-learning-rules.js');h.context.window.QASoloLearningRules=rules;
+ const origin='Old mistake',key=rules.key(origin);
+ h.context.currentUserData.stats.soloLearningV1={version:1,mistakes:{[key]:{recovered:false}}};
+ h.setRemoteStats({soloLearningV1:{version:1,mistakes:{[key]:{recovered:true}}}});
+ h.context.window.currentActiveQuiz.recoveryOrigin=origin;
+ await h.answer();assert.equal(h.context.currentUserData.stats.totalScore,30);assert.equal(h.context.currentUserData.stats.gold,20);
+ assert.match(h.nodes.get('feedback-title').innerHTML,/\+2 修為/);
 });

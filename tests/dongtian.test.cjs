@@ -266,11 +266,11 @@ test('Dongtian session keeps a fixed ordered question array until completion or 
 
 test('Dongtian first completion grants rewards through the A/BD settlement bridge', () => {
   assert.match(uiSource, /FIRST_COMPLETION_SPIRIT_STONE_PER_QUESTION = 30/);
-  assert.match(uiSource, /FIRST_COMPLETION_BASE_SPIRIT_STONES = 150/);
+  assert.match(uiSource, /FIRST_COMPLETION_BASE_SPIRIT_STONES = 30/);
   assert.match(uiSource, /function firstCompletionCultivation\(correctCount\)/);
   assert.match(uiSource, /rewardRepository\.claimDongtian/);
   assert.match(settlementSource, /FIRST_COMPLETION_SPIRIT_STONE_PER_QUESTION=30/);
-  assert.match(settlementSource, /FIRST_COMPLETION_BASE_SPIRIT_STONES=150/);
+  assert.match(settlementSource, /FIRST_COMPLETION_BASE_SPIRIT_STONES=30/);
   assert.match(settlementSource, /runRewardReceipt/);
   assert.match(settlementSource, /PLAY_COLLECTION='dongtianPlays'/);
   assert.match(settlementSource, /OWNER_CULTIVATION_REWARD=1/);
@@ -285,13 +285,13 @@ test('Dongtian first-clear spirit stones use a modest base plus per-question rew
   const source = uiSource.slice(start, end);
   const context = vm.createContext({
     Math, Number,
-    FIRST_COMPLETION_BASE_SPIRIT_STONES:150,
+    FIRST_COMPLETION_BASE_SPIRIT_STONES:30,
     FIRST_COMPLETION_SPIRIT_STONE_PER_QUESTION:30
   });
   vm.runInContext(source + '\nthis.reward = firstCompletionSpiritStones;', context);
-  assert.equal(context.reward(0),150);
-  assert.equal(context.reward(10),450);
-  assert.equal(context.reward(20),750);
+  assert.equal(context.reward(0),30);
+  assert.equal(context.reward(10),330);
+  assert.equal(context.reward(20),630);
 });
 
 test('Dongtian one-point cultivation calculation depends on correct answers, not total questions', () => {
@@ -308,7 +308,7 @@ test('Dongtian encounter confirmation prominently shows the owner name and prosp
   assert.match(uiSource, /const owner = dongtian\.ownerName \|\| '無名修士'/);
   assert.match(uiSource, /此洞天由「\$\{escapeHtml\(owner\)\}」開闢/);
   assert.match(uiSource, /洞天主人：<\/strong>\$\{escapeHtml\(owner\)\}/);
-  assert.match(uiSource, /首次完整通關：<\/strong>\+\$\{firstReward\.toLocaleString\(\)\} 靈石/);
+  assert.match(uiSource, /首次完整通關：<\/strong>全對最高 \+\$\{firstReward\.toLocaleString\(\)\} 靈石/);
   assert.match(uiSource, /是否現在進入？/);
 });
 
@@ -438,11 +438,11 @@ test('Completion settlement claims active BD content before the A reward receipt
   const completion = uiSource.slice(uiSource.indexOf('async function completeProgress'), uiSource.indexOf('async function writeDongtianHistory'));
   assert.match(completion, /rewardRepository\.claimDongtian/);
   assert.match(completion, /selected: String\(answer\.options\?\.\[answer\.userIdx\]/);
-  assert.match(settlementSource, /index\.status!=='active'\|\|cave\.status!=='active'/);
+  assert.match(settlementSource, /index\.status!=='active'\s*\|\|\s*cave\.status!=='active'/);
   assert.match(settlementSource, /ELIGIBILITY_COLLECTION='dongtianSettlementClaims'/);
   assert.match(settlementSource, /REWARD_COLLECTION='dongtianRewardClaims'/);
   assert.match(settlementSource, /runRewardReceipt/);
-  assert.match(settlementSource, /claim\.finalized===true/);
+  assert.match(settlementSource, /cs\.data\(\)\?\.finalized===true/);
 });
 
 test('Dongtian API endpoint performs planning before batched generation and audits prior-question context', () => {

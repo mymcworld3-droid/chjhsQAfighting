@@ -135,8 +135,8 @@ test('independent tutorial requires actual private Dongtian play, return, and de
 });
 
 test('independent tutorial explains real Dongtian rewards while the sample remains reward-free and private', () => {
-  assert.match(tutorial, /每題 100、最低 1000/);
-  assert.match(tutorial, /每答對 1 題 \+1 修為/);
+  assert.match(tutorial, /首次完成給 <strong>30 靈石/);
+  assert.match(tutorial, /每道首次答對再給 <strong>30 靈石與 1 修為/);
   assert.match(tutorial, /私人教學範例完全不發正式獎勵、不掉材料，也不寫入歷史紀錄/);
   assert.match(tutorial, /教學範例已刪除，而且從頭到尾都沒有公開/);
 });

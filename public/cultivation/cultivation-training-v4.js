@@ -1,3 +1,4 @@
+import {} from './golden-core-pity.js';
 import {} from './soul-talents.js';
 import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-shells.js';
 import { createGoldenCoreWashAnimation } from './golden-core-wash-animation.js';
@@ -13,6 +14,8 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
 
   const GOLDEN_CORE_SCORE = 28;
   const WASH_COST = 100;
+  const Pity = globalThis.QAGoldenCorePity;
+  const WASH_FIELD = 'goldenCoreWashV1';
   const STATE_KEY = 'xiuxian_training_state_v4';
   const LEGACY_KEYS = [
     'xiuxian_training_state_v3',
@@ -111,13 +114,13 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     },
     {
       id: 'ningxin', name: '凝心靜音丹', icon: '◈', tone: 'ivory',
-      effect(grade) { return `連續悟道達 ${Math.max(1, Math.ceil(grade / 3)) + 1} 次，即凝聚金丹道心護體；鬥法中連續答對同樣次數也可形成道心護體；護體每次僅抵銷一次傷害後就消失，須由金丹再次凝聚；完全擋下普通首擊時不觸發連擊；真傷與追擊依各自效果結算。`; },
+      effect(grade) { return `連續悟道達 ${Math.max(1, Math.ceil(grade / 3)) + 1} 次，即凝聚金丹道心，問道失誤可消耗道心保留一次連答；鬥法中連續答對同樣次數也可形成道心護體；護體每次僅抵銷一次傷害後就消失，須由金丹再次凝聚；完全擋下普通首擊時不觸發連擊；真傷與追擊依各自效果結算。`; },
       ability: '凝神斂念，以連續悟道穩固金丹道心。',
       upkeep: '保持專注即可。',
       warning: '一般連勝本身沒有護體，必須調御此丹相才會觸發。',
       note: '金丹會替你隔絕雜念。師尊叫三次都沒回應時，通常會改用物理方式突破你的靜音結界。',
-      resolve({ isCorrect, grade, previousStreak }) {
-        if (!isCorrect) return {};
+      resolve({ isCorrect, grade, previousStreak, hasShield }) {
+        if (!isCorrect) return hasShield && previousStreak > 0 ? {preserveStreak:true,message:'凝心道心保留一次連答'} : {};
         const threshold = Math.max(1, Math.ceil(grade / 3));
         return previousStreak >= threshold
           ? { forceShield: true, message: `${this.name}凝神，金丹道心護體成形` }
@@ -151,17 +154,13 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     },
     {
       id: 'wugou', name: '無垢清心丹', icon: '◇', tone: 'silver',
-      effect(grade) { return `答錯時有 ${chanceByGrade(grade, 20, 10, 100)}% 機率凝聚金丹道心護體；鬥法答錯時也有相同機率產生道心護體；護體每次僅抵銷一次傷害後就消失，須由金丹再次凝聚；完全擋下普通首擊時不觸發連擊；真傷與追擊依各自效果結算。`; },
-      ability: '失誤之際清心去垢，反而護住道心。',
+      effect(grade) { return `首次答對先前錯題的同概念變式，額外 +1 修為；鬥法答錯時有 ${chanceByGrade(grade, 20, 10, 100)}% 機率產生道心護體；護體每次僅抵銷一次傷害後就消失，須由金丹再次凝聚；完全擋下普通首擊時不觸發連擊；真傷與追擊依各自效果結算。`; },
+      ability: '以訂正清心悟道，鬥法失誤時可凝聚護體。',
       upkeep: '答錯後重新定神即可。',
-      warning: '只產生金丹道心，不屬於舊版通用道心系統。',
+      warning: '訂正加成每道來源錯題一次，戰鬥護體仍只抵擋一次普通傷害。',
       note: '號稱心如明鏡、萬念不生。答錯時仍可能先懷疑答案，再懷疑出題老師。',
-      resolve({ isCorrect, grade }) {
-        if (isCorrect) return {};
-        const chance = chanceByGrade(grade, 20, 10, 100);
-        return randomPercent(chance)
-          ? { forceShield: true, message: `${this.name}清心去垢，金丹道心護體成形` }
-          : {};
+      resolve({ isCorrect, isRecovery }) {
+        return isCorrect && isRecovery ? {recoveryBonusGain:1,message:'無垢明心，訂正額外 +1 修為'} : {};
       }
     },
     {
@@ -389,6 +388,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
           <div class="core-minimal-grade">${clampGrade(core.grade)} 品</div>
 
           <p class="core-gold-balance" aria-live="polite">現有靈石：<strong>${Growth.count(window.getCurrentUserData?.()?.stats?.gold).toLocaleString("zh-TW")}</strong></p>
+          <p class="ns-progress-caption" aria-live="polite">再洗髓 ${Pity.remaining(window.getCurrentUserData?.()?.[WASH_FIELD]?.count)} 次，必得三品以上金丹</p>
           <div class="core-wash-row">
             <button id="wash-golden-core" type="button" class="core-wash-btn" ${busy ? 'disabled' : ''}>
               <i class="fa-solid fa-rotate"></i>
@@ -704,6 +704,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
 
   function showOdds() {
     modalShell('training-v3-odds-modal', '金丹品質機率', `
+      <p>每第 5 次成功洗髓必得一至三品；前四次使用下列機率。保底三／二／一品機率為 5/11、4/11、2/11，丹性仍等機率。</p>
       <div class="training-v3-odds-list">
         ${GRADE_WEIGHTS.slice().reverse().map((item) => `<div class="training-v3-odds-row grade-${item.grade}"><span>${item.grade} 品</span><strong>${item.chance}%</strong></div>`).join('')}
       </div>
@@ -792,48 +793,60 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
   };
 
   async function washCore() {
-    if (busy) return;
-    const userData = window.getCurrentUserData?.();
-    if (!userData?.stats) return toast('尚未讀取到修士資料。');
-    if (!getAuth(getApp()).currentUser) return toast('尚未登入，無法保存洗髓結果。');
-
-    const stones = currentSpiritStones();
-    if (stones < WASH_COST) return toast(`靈石不足，洗髓需要 ${WASH_COST} 靈石。`);
-
+    if (busy || !isUnlocked()) return;
+    const user = getAuth(getApp()).currentUser;
+    const local = window.getCurrentUserData?.();
+    if (!user || !local?.stats) return toast('尚未登入或玩家資料尚未準備完成。');
+    const storageKey = 'xiuxian:golden-wash:' + user.uid;
+    let request;
+    try { request = JSON.parse(localStorage.getItem(storageKey)); } catch (_) {}
+    if (!request?.id) {
+      request = {id:Date.now()+':'+Math.random().toString(36).slice(2),expectedCount:Pity.count(local[WASH_FIELD]?.count),
+        typeRoll:Math.random(),gradeRoll:Math.random(),createdAt:Date.now()};
+      try { localStorage.setItem(storageKey,JSON.stringify(request)); } catch (_) {}
+    }
     busy = true;
     renderTrainingPage();
-    const previousCore = { ...state.core };
-    const previousEquippedCore = state.equippedCore ? { ...state.equippedCore } : null;
-    const previousEquipped = state.equipped;
-    const previousGold = stones;
-
-    let animation = null;
+    let animation;
     try {
-      // 在原本金丹位置播放發光、脈動動畫，不建立光束或彈窗。
       animation = createGoldenCoreWashAnimation();
-      const fresh = randomCore();
-      state.core = fresh;
-      // 洗髓只產生候選丹；原本裝備中的丹繼續生效，直到玩家主動裝配新丹。
-      state.equipped = false;
-      userData.stats.gold = stones - WASH_COST;
-      await persistRemote({ 'stats.gold': stones - WASH_COST });
-      // 保存成功後才在原位置揭曉丹相；保留最短演出時間，避免網路過快導致特效閃過。
-      await animation.minimumDuration;
-      await animation.reveal(fresh, coreType(fresh.type));
-      toast(`洗髓完成：${fresh.grade} 品 ${coreType(fresh.type).name}`);
-    } catch (error) {
-      console.error('Wash golden core failed:', error);
-      state.core = previousCore;
-      state.equippedCore = previousEquippedCore;
-      state.equipped = previousEquipped;
-      userData.stats.gold = previousGold;
-      saveLocal();
-      if (animation) await animation.fail();
-      toast('洗髓未完成，請重新整理確認靈石與丹相。');
+      const ref = doc(getFirestore(getApp()),'users',user.uid);
+      const result = await runTransaction(getFirestore(getApp()),async tx => {
+        const snap=await tx.get(ref);
+        if(!snap.exists()) throw new Error('玩家資料不存在');
+        if(getAuth(getApp()).currentUser?.uid !== user.uid) throw new Error('登入帳號已變更');
+        const remote=snap.data(), saved=remote[WASH_FIELD] || {}, training=migrate(remote[REMOTE_FIELD]);
+        if(saved.lastRequestId===request.id) return {training,gold:remote.stats.gold,wash:saved};
+        if(Pity.count(saved.count)!==request.expectedCount) throw new Error('洗髓紀錄已由其他分頁更新，請重新整理');
+        if((globalThis.QATrainingAccessRules?.score(remote) ?? Number(remote.stats?.totalScore))<GOLDEN_CORE_SCORE) throw new Error('金丹境界不足');
+        const gold=Number(remote.stats?.gold) || 0;
+        if(gold<WASH_COST) throw new Error('靈石不足，洗髓需要 100 靈石');
+        const draw=Pity.draw(saved.count,request.typeRoll,request.gradeRoll,CORE_TYPES.map(item=>item.id),request.createdAt);
+        const next={...training,core:draw.core,equipped:false,counters:{
+          correct:Math.max(Pity.count(training.counters.correct),Pity.count(state.counters.correct)),
+          mistakes:Math.max(Pity.count(training.counters.mistakes),Pity.count(state.counters.mistakes))}};
+        const wash={version:1,count:draw.count,lastRequestId:request.id,guaranteed:draw.guaranteed};
+        tx.update(ref,{[REMOTE_FIELD]:next,[WASH_FIELD]:wash,'stats.gold':gold-WASH_COST});
+        return {training:next,gold:gold-WASH_COST,wash};
+      });
+      if(getAuth(getApp()).currentUser?.uid !== user.uid) return;
+      state=migrate(result.training);local[REMOTE_FIELD]=result.training;local[WASH_FIELD]=result.wash;local.stats.gold=result.gold;
+      try { saveLocal(); } catch (_) {}
+      try { localStorage.removeItem(storageKey); } catch (_) {}
+      try {
+        await animation.minimumDuration;
+        await animation.reveal(state.core,coreType(state.core.type));
+      } catch (error) { console.warn('[Golden core] reveal unavailable after successful save:',error); }
+      toast(`${result.wash.guaranteed?'五次保底！':''}洗髓完成：${state.core.grade} 品 ${coreType(state.core.type).name}`);
+      window.dispatchEvent(new CustomEvent('xiuxian:stats-updated',{detail:{source:'golden-core-wash'}}));
+    } catch(error) {
+      console.error('Wash golden core failed:',error);
+      if(animation) await animation.fail();
+      if(/其他分頁|不足/.test(error?.message || '')) try {localStorage.removeItem(storageKey);} catch(_) {}
+      toast('洗髓尚未確認：'+(error?.message || '請再按洗髓確認同次結果，不會重複扣款'));
     } finally {
-      animation?.cleanup();
-      busy = false;
-      renderTrainingPage();
+      animation?.cleanup();busy=false;
+      if(getAuth(getApp()).currentUser?.uid !== user.uid) restoreRemoteTraining(); else renderTrainingPage();
     }
   }
 
@@ -929,7 +942,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     document.body.classList.remove('cultivation-training-unlocked');
   }
 
-  window.resolveGoldenCoreCultivationReward = function ({ stats, isCorrect }) {
+  window.resolveGoldenCoreCultivationReward = function ({ stats, isCorrect, isRecovery = false }) {
     const equippedCore = state.equippedCore;
     if (!isUnlocked() || !equippedCore || state.coreEnabled === false) {
       return { bonusGain: 0, message: '' };
@@ -949,6 +962,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
       previousStreak,
       score,
       counters: state.counters,
+      isRecovery,
       hasShield: !!stats?.goldenCoreShield
     }) || {};
 
@@ -957,6 +971,8 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
       bonusGain: Math.max(0, Number(effect.bonusGain) || 0),
       forceShield: !!effect.forceShield,
       preserveShield: !!effect.preserveShield,
+      preserveStreak: !!effect.preserveStreak,
+      recoveryBonusGain: Math.max(0,Number(effect.recoveryBonusGain) || 0),
       message: effect.message || ''
     };
   };

@@ -10,7 +10,7 @@ const battle = read('golden-core-battle-effects.js');
 
 test('washing keeps the actually equipped Golden Core separate from the candidate core', () => {
   assert.match(training, /equippedCore:\s*\{ \.\.\.core \}/);
-  assert.match(training, /state\.core = fresh;[\s\S]*state\.equipped = false;/);
+  assert.match(training, /const next=\{\.\.\.training,core:draw\.core,equipped:false/);
   assert.doesNotMatch(training, /state\.core = fresh;[\s\S]{0,160}state\.equippedCore\s*=\s*(?:null|fresh)/);
   assert.match(training, /const next = \{ \.\.\.training, equippedCore: \{ \.\.\.candidate \}, equipped: true \}/);
 });

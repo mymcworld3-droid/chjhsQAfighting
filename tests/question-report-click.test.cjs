@@ -84,7 +84,7 @@ test('only an approved and paid review can show rewards; a technical failure is 
 });
 
 test('neutral answers avoid unnecessary stats writes while report persists their audit record', () => {
-  assert.match(legacy, /const shouldSaveAnswer = isCorrect \|\| stats\.totalScore !== scoreBeforeAnswer \|\|/);
+  assert.match(legacy, /const shouldSaveAnswer = isCorrect \|\| \(learningRules && userIdx >= 0\) \|\| stats\.totalScore !== scoreBeforeAnswer \|\|/);
   assert.match(legacy, /\? persistAnswer\(\)/);
   assert.match(legacy, /quiz\.answerPersistenceDeferred = !shouldSaveAnswer/);
   assert.match(legacy, /if \(quiz\.answerPersistenceDeferred && !quiz\.answerPersistence\)/);

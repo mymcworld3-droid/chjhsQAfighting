@@ -102,8 +102,8 @@ test('dormant core shield is suspended without being consumed by a wrong answer'
   const context = { window, console };
   vm.runInNewContext(code, context);
   const result = context.apply(stats, false);
-  assert.equal(result.penalty, 1);
+  assert.equal(result.penalty, 0);
   assert.equal(result.shieldBlockedPenalty, false);
   assert.equal(stats.goldenCoreShield, true);
-  assert.equal(stats.totalScore, 41);
+  assert.equal(stats.totalScore, 42);
 });

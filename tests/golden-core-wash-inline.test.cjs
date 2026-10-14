@@ -92,8 +92,8 @@ test('core changes only on successful reveal; failed wash keeps original appeara
 });
 
 test('wash keeps saving before revealing and CSS retains glow without rays or modal', () => {
-  assert.match(training, /await persistRemote\(\{ 'stats\.gold': stones - WASH_COST \}\);[\s\S]*await animation\.minimumDuration;[\s\S]*await animation\.reveal/);
-  assert.match(training, /state\.equipped = false;/);
+  assert.match(training, /await runTransaction[\s\S]*await animation\.minimumDuration;[\s\S]*await animation\.reveal/);
+  assert.match(training, /core:draw\.core,equipped:false/);
   assert.doesNotMatch(css, /position\s*:\s*fixed|golden-core-wash-overlay|gc-wash-(?:beam|ray|lightfield|impact)/);
   assert.match(css, /gcWashSphere/);
   assert.match(css, /gcWashReborn/);

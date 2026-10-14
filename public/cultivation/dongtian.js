@@ -21,7 +21,7 @@ export const featureReady = (async () => {
   const STATUS_CHECK_TIMEOUT_MS = 4500;
   const OWNER_CULTIVATION_REWARD = 1;
   const OWNER_GOLD_REWARD = 5;
-  const FIRST_COMPLETION_BASE_SPIRIT_STONES = 150;
+  const FIRST_COMPLETION_BASE_SPIRIT_STONES = 30;
   const FIRST_COMPLETION_SPIRIT_STONE_PER_QUESTION = 30;
   const INDEX_COLLECTION = 'dongtianIndex';
   const DATA_COLLECTION = 'dongtians';
@@ -88,8 +88,8 @@ export const featureReady = (async () => {
   }
   function levelOrder(level) { return LEVELS.indexOf(level); }
   function difficultyLabel(value) { return ({ easy: '簡單', medium: '中等', hard: '困難' })[value] || value || '中等'; }
-  function firstCompletionSpiritStones(questionCount) {
-    const count = Math.max(0, Math.floor(Number(questionCount) || 0));
+  function firstCompletionSpiritStones(correctCount) {
+    const count = Math.max(0, Math.floor(Number(correctCount) || 0));
     return FIRST_COMPLETION_BASE_SPIRIT_STONES + count * FIRST_COMPLETION_SPIRIT_STONE_PER_QUESTION;
   }
   function firstCompletionCultivation(correctCount) {
@@ -627,7 +627,7 @@ export const featureReady = (async () => {
               : `<div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end"><button type="button" class="dt-play" data-dt-play="${item.id}"><i class="fa-solid fa-play"></i> 進入</button><button type="button" class="dt-repair" data-dt-manage="${item.id}"><i class="fa-solid fa-pen-ruler"></i> 洞天管理</button><button type="button" class="dt-delete" data-dt-delete="${item.id}"><i class="fa-solid fa-trash"></i> 刪除</button></div>`}
           </div>
           <div class="dt-tags"><span class="dt-tag">${escapeHtml(item.level)}</span><span class="dt-tag">${difficultyLabel(item.difficulty)}</span><span class="dt-tag">${escapeHtml(item.subject)}</span><span class="dt-tag">${Number(item.questionCount) || 0} 題</span><span class="dt-tag">完成 ${Number(item.completionCount) || 0} 次</span>${suspended ? '<span class="dt-tag dt-status-bad">已封印 · 待修復</span>' : ''}</div>
-          <div class="dt-owner-reward">${suspended ? `AI 已確認第 ${Number(item.flaggedQuestionIndex || 0) + 1} 題有誤；修復通過二次 AI 驗證前，其他修士不會再遇到此洞天。` : `其他不同修士首次完成：洞天主人 +${OWNER_CULTIVATION_REWARD} 修為、+${OWNER_GOLD_REWARD} 靈石 · 玩家首次完整通關獲得基礎 ${FIRST_COMPLETION_BASE_SPIRIT_STONES} + 每題 ${FIRST_COMPLETION_SPIRIT_STONE_PER_QUESTION} 靈石，主要機緣轉為煉器材料`}</div>
+          <div class="dt-owner-reward">${suspended ? `AI 已確認第 ${Number(item.flaggedQuestionIndex || 0) + 1} 題有誤；修復通過二次 AI 驗證前，其他修士不會再遇到此洞天。` : `其他不同修士答對至少六成且題目通過基本品質檢查：洞天主人 +${OWNER_CULTIVATION_REWARD} 修為、+${OWNER_GOLD_REWARD} 靈石 · 玩家首次完成 +${FIRST_COMPLETION_BASE_SPIRIT_STONES} 靈石，每道首次答對再 +${FIRST_COMPLETION_SPIRIT_STONE_PER_QUESTION} 靈石、+1 修為；重遊訂正可補領`}</div>
         </article>`;
       }).join('');
   }
@@ -756,7 +756,7 @@ export const featureReady = (async () => {
       const owner = dongtian.ownerName || '無名修士';
       const questionCount = dongtian.questions?.length || dongtian.questionCount || 0;
       const firstReward = firstCompletionSpiritStones(questionCount);
-      overlay.innerHTML = `<div class="dt-encounter"><div class="dt-portal"></div><div class="dt-encounter-copy"><span>天地異象 · 發現洞天</span><h2>${escapeHtml(dongtian.name)}</h2><p><strong style="color:#eadcff">此洞天由「${escapeHtml(owner)}」開闢。</strong><br>你感應到這座知識秘境。每位修士只會遇見同一座洞天一次，是否現在進入？</p><div style="margin:14px auto;max-width:520px;padding:12px;border:1px solid rgba(205,154,255,.18);border-radius:14px;background:rgba(0,0,0,.2);font-size:9px;line-height:1.8;color:#bca9c4;text-align:left"><strong style="color:#eadcff">洞天主人：</strong>${escapeHtml(owner)}<br><strong>程度：</strong>${escapeHtml(dongtian.level)}　<strong>難度：</strong>${difficultyLabel(dongtian.difficulty)}<br><strong>科目：</strong>${escapeHtml(dongtian.subject)}　<strong>題數：</strong>${questionCount}<br><strong style="color:#dfbdf5">首次完整通關：</strong>+${firstReward.toLocaleString()} 靈石<br><strong style="color:#c4b5fd">首次修為：</strong>每答對 1 題 +1 修為</div><div style="display:flex;gap:9px;justify-content:center;flex-wrap:wrap"><button id="dt-decline-encounter" class="dt-back" type="button">略過洞天，繼續一般修行</button><button id="dt-enter-encounter" class="dt-next" style="width:auto;padding:0 20px;margin:0" type="button">進入洞天</button></div></div></div>`;
+      overlay.innerHTML = `<div class="dt-encounter"><div class="dt-portal"></div><div class="dt-encounter-copy"><span>天地異象 · 發現洞天</span><h2>${escapeHtml(dongtian.name)}</h2><p><strong style="color:#eadcff">此洞天由「${escapeHtml(owner)}」開闢。</strong><br>你感應到這座知識秘境。每位修士只會遇見同一座洞天一次，是否現在進入？</p><div style="margin:14px auto;max-width:520px;padding:12px;border:1px solid rgba(205,154,255,.18);border-radius:14px;background:rgba(0,0,0,.2);font-size:9px;line-height:1.8;color:#bca9c4;text-align:left"><strong style="color:#eadcff">洞天主人：</strong>${escapeHtml(owner)}<br><strong>程度：</strong>${escapeHtml(dongtian.level)}　<strong>難度：</strong>${difficultyLabel(dongtian.difficulty)}<br><strong>科目：</strong>${escapeHtml(dongtian.subject)}　<strong>題數：</strong>${questionCount}<br><strong style="color:#dfbdf5">首次完整通關：</strong>全對最高 +${firstReward.toLocaleString()} 靈石（完成 30，每道首次答對 30）<br><strong style="color:#c4b5fd">首次修為：</strong>每答對 1 題 +1 修為；重遊可補領未取得部分</div><div style="display:flex;gap:9px;justify-content:center;flex-wrap:wrap"><button id="dt-decline-encounter" class="dt-back" type="button">略過洞天，繼續一般修行</button><button id="dt-enter-encounter" class="dt-next" style="width:auto;padding:0 20px;margin:0" type="button">進入洞天</button></div></div></div>`;
       document.getElementById('dt-enter-encounter').onclick = () => { overlay.remove(); resolve(true); };
       document.getElementById('dt-decline-encounter').onclick = () => { overlay.remove(); resolve(false); };
     });
@@ -1300,7 +1300,7 @@ export const featureReady = (async () => {
     if (s.tutorialOnly) {
       state.tutorialDemoCompleted = true;
       const overlay = ensureOverlay();
-      overlay.innerHTML = `<div class="dt-result" data-dt-tutorial-result><div class="dt-result-seal">習</div><h2>${escapeHtml(s.dongtian.name)} · 教學通關</h2><p>你已走完整個洞天流程：固定題序 → 單選作答 → 查看解析 → 前往下一境 → 完成結算。</p><div class="dt-result-grid"><div><span>答對</span><b>${correct} / ${total}</b></div><div><span>正確率</span><b>${Math.round(accuracy * 100)}%</b></div><div><span>公開狀態</span><b>不公開</b></div></div><div class="dt-reward"><strong style="color:#93c5fd">教學範例不發正式獎勵</strong><br>你已完成 1 題教學體驗。正式洞天首次通關每題 100 靈石（最低 1000），並依答對題數給修為：每答對 1 題 +1 修為。</div><button id="dt-back" class="dt-back" type="button">返回「我的洞天」</button></div>`;
+      overlay.innerHTML = `<div class="dt-result" data-dt-tutorial-result><div class="dt-result-seal">習</div><h2>${escapeHtml(s.dongtian.name)} · 教學通關</h2><p>你已走完整個洞天流程：固定題序 → 單選作答 → 查看解析 → 前往下一境 → 完成結算。</p><div class="dt-result-grid"><div><span>答對</span><b>${correct} / ${total}</b></div><div><span>正確率</span><b>${Math.round(accuracy * 100)}%</b></div><div><span>公開狀態</span><b>不公開</b></div></div><div class="dt-reward"><strong style="color:#93c5fd">教學範例不發正式獎勵</strong><br>你已完成 1 題教學體驗。正式洞天首次完成 +30 靈石，每道首次答對 +30 靈石、+1 修為；重遊訂正可補領。</div><button id="dt-back" class="dt-back" type="button">返回「我的洞天」</button></div>`;
       document.getElementById('dt-back').onclick = closeAfterSession;
       window.dispatchEvent(new CustomEvent('newbie:dongtian-demo-completed', { detail: { correct, total } }));
       return;
@@ -1320,7 +1320,7 @@ export const featureReady = (async () => {
     overlay.innerHTML = `<div class="dt-result"><div class="dt-result-seal"><i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i></div><h2>洞天通關 · 正在結算</h2><p role="status">已完成 ${total} 題，正在確認通關紀錄與首次獎勵。連線較慢時可稍候，或返回後再查看獎勵。</p><div class="dt-result-grid"><div><span>答對</span><b>${correct} / ${total}</b></div><div><span>正確率</span><b>${Math.round(accuracy * 100)}%</b></div><div><span>狀態</span><b>確認中</b></div></div>${settlementBack}</div>`;
     bindSettlementBack();
 
-    const firstCompletionReward = firstCompletionSpiritStones(total);
+    const firstCompletionReward = firstCompletionSpiritStones(correct);
     const firstCompletionCultivationReward = firstCompletionCultivation(correct);
     let firstCompletion;
     try {
@@ -1341,8 +1341,10 @@ export const featureReady = (async () => {
       .catch((error) => console.warn('[Dongtian completion history]', error));
     if (state.session !== s) return;
     const soulCultivationAdded = Math.max(0, Number(s.soulCultivationAdded) || 0);
-    const totalCultivation = firstCompletionCultivationReward + soulCultivationAdded;
-    overlay.innerHTML = `<div class="dt-result"><div class="dt-result-seal">天</div><h2>${escapeHtml(s.dongtian.name)} · 通關</h2><p>這次洞天題序已全部走完。答對率越高，未來洞天獎勵池開放後可對應更好的機緣。</p><div class="dt-result-grid"><div><span>答對</span><b>${correct} / ${total}</b></div><div><span>正確率</span><b>${Math.round(accuracy * 100)}%</b></div><div><span>機緣評級</span><b>${escapeHtml(tier.replace('洞天機緣', ''))}</b></div></div><div class="dt-reward">${firstCompletion ? `<strong style="color:#dfbdf5">首次通關洞天獎勵</strong><br>+${firstCompletionReward.toLocaleString()} 靈石 ·  +${totalCultivation} 修為（答對題數 +${firstCompletionCultivationReward}${soulCultivationAdded ? `，元嬰加成 +${soulCultivationAdded}` : ''}）。` : `此洞天的首次通關紀錄已存在；本次為重遊，不重複領取首次獎勵。`}${s.dongtian.ownerUid !== uid() && firstCompletion ? `<br><br>洞天主人已獲得 +${OWNER_CULTIVATION_REWARD} 修為與 +${OWNER_GOLD_REWARD} 靈石。` : ''}</div><button id="dt-back" class="dt-back" type="button">返回</button></div>`;
+    const reward = s.settlementReward || {};
+    const totalCultivation = Number(reward.cultivationAdded) || 0;
+    const rewardLabel = firstCompletion ? '首次完成獎勵' : reward.newCorrect > 0 ? '訂正補領獎勵' : '本次重遊';
+    overlay.innerHTML = `<div class="dt-result"><div class="dt-result-seal">天</div><h2>${escapeHtml(s.dongtian.name)} · 通關</h2><p>首次完成與首次答對分開計算；重遊訂正只補領尚未取得的獎勵。</p><div class="dt-result-grid"><div><span>答對</span><b>${correct} / ${total}</b></div><div><span>正確率</span><b>${Math.round(accuracy * 100)}%</b></div><div><span>新增掌握</span><b>${Number(reward.newCorrect) || 0} 題</b></div></div><div class="dt-reward"><strong>${rewardLabel}</strong><br>+${Number(reward.goldAdded) || 0} 靈石 · +${totalCultivation} 修為${soulCultivationAdded ? `（含元嬰 +${soulCultivationAdded}）` : ''}<br>已領取的題目不重複發獎。${reward.ownerRewarded ? `<br>洞天主人已獲得 +${OWNER_CULTIVATION_REWARD} 修為、+${OWNER_GOLD_REWARD} 靈石。` : ''}</div><button id="dt-back" class="dt-back" type="button">返回</button></div>`;
     document.getElementById('dt-back').onclick = closeAfterSession;
   }
 
@@ -1362,6 +1364,7 @@ export const featureReady = (async () => {
     const spiritAdded = Math.max(0, Number(result?.spiritAdded) || 0);
     const goldAdded = Math.max(0, Number(result?.goldAdded) || 0);
     const cultivationAdded = Math.max(0, Number(result?.cultivationAdded) || 0);
+    s.settlementReward = result;
     s.spiritAdded = spiritAdded;
     s.soulCultivationAdded = soulCultivationAdded;
 
@@ -1377,7 +1380,7 @@ export const featureReady = (async () => {
       window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', {
         detail: { source:first ? 'dongtian-first-completion' : 'dongtian-repeat-completion',
           goldAdded, cultivationAdded, soulCultivationAdded, spiritAdded, correct, questionCount:total,
-          baseCultivation:first ? cultivationReward : 0 }
+          baseCultivation:Math.max(0,cultivationAdded-soulCultivationAdded) }
       }));
     }
     return first;

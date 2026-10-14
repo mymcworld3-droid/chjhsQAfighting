@@ -14,7 +14,7 @@ test('Dongtian answers are recomputed from trusted BD questions',()=>{
  assert.throws(()=>cave.verifyAnswers(trusted,[{id:'DT-001',selected:'4'}]),/不完整/);
 });
 test('Dongtian reward formulas remain deterministic',()=>{
- assert.equal(cave.firstCompletionGold(1),180);assert.equal(cave.firstCompletionGold(24),870);
+ assert.equal(cave.firstCompletionGold(1),60);assert.equal(cave.firstCompletionGold(24),750);
  const p={stats:{totalScore:80},cultivationTraining:{coreEnabled:true,equippedCore:{type:'sword'}},nascentSoulGrowth:{version:1,branches:{cultivation:7}}};
  assert.equal(cave.caveSoulBonus(p),7);assert.equal(cave.caveSoulBonus({...p,stats:{totalScore:67}}),0);
 });
