@@ -1,0 +1,79 @@
+{
+  "version": "soulbound-art-v1",
+  "tool": "built-in imagegen",
+  "artwork": "Each named archetype has an individually generated image; realm versions retain the archetype silhouette.",
+  "items": [
+    {
+      "id": "sword",
+      "file": "public/assets/soulbound/sword-ai.webp",
+      "sourcePrompt": "Use case: stylized-concept. Asset type: premium xianxia RPG legendary soulbound weapon artwork, square 1024x1024, transparent background. Subject: 逐風飛劍, ONE awe-inspiring celestial flying sword. Its unique silhouette is a long, slender, dramatically sweeping blade rising diagonally from lower left to upper right, with a bifurcated aerodynamic wing-shaped dragon guard and a pierced jade spine. The weapon must look godlike, powerful and intimidating, exquisitely forged pale silver and deep cyan jade, crisp gold inlays and wind-swept engravings, luminous ice-blue cutting edge, restrained cyan wind ribbons. High-end Chinese fantasy game promotional object painting, realistic metal and polished jade, sculptural depth, razor-sharp detailed silhouette, dramatic rim lighting. Entire sword fully visible, centered, fills about 82 percent of the square, safe margin on all sides. A finished weapon, not a flat icon. Strong recognizable weapon shape at thumbnail size. No character, hands, pedestal, environment, card border, text, letters, logo or watermark. No other weapons. Preserve genuine transparent alpha around the weapon and subtle aura.",
+      "format": "WebP",
+      "width": 768,
+      "height": 768,
+      "transparent": true
+    },
+    {
+      "id": "seal",
+      "file": "public/assets/soulbound/seal-ai.webp",
+      "sourcePrompt": "Use case: stylized-concept. Asset type: square 1024x1024 premium xianxia RPG soulbound artifact illustration, genuine transparent background. High-end Chinese fantasy legendary loot art, godlike, intimidating and majestic, extremely detailed realistically rendered metal and jade, crisp golden filigree, sculptural three-dimensional depth, strong dramatic rim lighting. ONE integrated artifact, centered and wholly visible with 8 percent safe margins, fills about 80 percent of square, an unmistakable clean silhouette readable at thumbnail size. No characters, hands, environment, pedestal, card border, text, readable letters, logo or watermark. Preserve true alpha outside the artifact and restrained elemental aura. Do not turn the artifact into a generic flat icon. Subject: 九霄雷印, a colossal thunder-god ritual SEAL. Unique shape: a squat monumental SQUARE STAMP BLOCK with sharply stepped cubic base, heavy vertical corner ribs, topped with an imposing horned lightning crown. Entire object is a squared architectural jade stamp, NOT a sword or orb. Obsidian-black and amethyst stone, ancient gold carving, violet lightning running through the block and erupting between crown horns. Three-quarter view shows the front and one side. Solid enormous weight, sacred terrifying power.",
+      "format": "WebP",
+      "width": 768,
+      "height": 768,
+      "transparent": true
+    },
+    {
+      "id": "pearl",
+      "file": "public/assets/soulbound/pearl-ai.webp",
+      "sourcePrompt": "Use case: stylized-concept. Asset type: square 1024x1024 premium xianxia RPG soulbound artifact illustration, genuine transparent background. High-end Chinese fantasy legendary loot art, godlike, intimidating and majestic, extremely detailed realistically rendered metal and jade, crisp golden filigree, sculptural three-dimensional depth, strong dramatic rim lighting. ONE integrated artifact, centered and wholly visible with 8 percent safe margins, fills about 80 percent of square, an unmistakable clean silhouette readable at thumbnail size. No characters, hands, environment, pedestal, card border, text, readable letters, logo or watermark. Preserve true alpha outside the artifact and restrained elemental aura. Do not turn the artifact into a generic flat icon. Subject: 太初靈珠, an enormous divine life PEARL. Unique shape: one brilliant perfectly ROUND EMERALD SPHERE floating inside three open crescent-shaped dragon claws that form a broad triangular cradle with clear negative spaces. No long handle or flat disk. Translucent jade-white inner core, verdant emerald and pale gold, ancient refined golden claw mounting with jade inlays, luminous delicate swirling life threads inside the sphere, restrained mist rings. The sphere is visibly a polished three-dimensional pearl with round volume, not a planet landscape. Awe-inspiring ancient life source.",
+      "format": "WebP",
+      "width": 768,
+      "height": 768,
+      "transparent": true
+    },
+    {
+      "id": "star",
+      "file": "public/assets/soulbound/star-ai.webp",
+      "sourcePrompt": "Use case: stylized-concept. Asset type: square 1024x1024 premium xianxia RPG soulbound artifact illustration, genuine transparent background. High-end Chinese fantasy legendary loot art, godlike, intimidating and majestic, extremely detailed realistically rendered metal and jade, crisp golden filigree, sculptural three-dimensional depth, strong dramatic rim lighting. ONE integrated artifact, centered and wholly visible with 8 percent safe margins, fills about 80 percent of square, an unmistakable clean silhouette readable at thumbnail size. No characters, hands, environment, pedestal, card border, text, readable letters, logo or watermark. Preserve true alpha outside the artifact and restrained elemental aura. Do not turn the artifact into a generic flat icon. Subject: 七曜星盤, a divine battle ASTROLABE. Unique shape: a broad flattened SEVEN-POINTED STAR DISC with seven long angular metal blades radiating from a small inset constellation core, broken segmented orbital rings weaving through the seven tips. This is a rigid flat instrument at a three-quarter angle, clearly unlike a round orb, a handheld mirror or a seal. Indigo star-fire, deep navy celestial metal and ancient pale gold, seven embedded luminous star stones, dense radial astronomical engravings with no readable letters. Powerful sharp geometric silhouette, godlike celestial precision.",
+      "format": "WebP",
+      "width": 768,
+      "height": 768,
+      "transparent": true
+    },
+    {
+      "id": "mirror",
+      "file": "public/assets/soulbound/mirror-ai.webp",
+      "sourcePrompt": "Use case: stylized-concept. Asset type: square 1024x1024 premium xianxia RPG soulbound artifact illustration, genuine transparent background. High-end Chinese fantasy legendary loot art, godlike, intimidating and majestic, extremely detailed realistically rendered metal and jade, crisp golden filigree, sculptural three-dimensional depth, strong dramatic rim lighting. ONE integrated artifact, centered and wholly visible with 8 percent safe margins, fills about 80 percent of square, unmistakable clean silhouette readable at thumbnail size. No characters, hands, environment, pedestal, card border, text, readable letters, logo or watermark. Preserve true alpha outside the artifact and restrained elemental aura. Subject: 澄心法鏡, a majestic guardian MIRROR. Unique shape: a tall pointed OVAL REFLECTIVE MIRROR with an imposing pair of silver phoenix wings sweeping upward and outward to form the frame, and a short ornate tapered jade handle below. Very elongated winged silhouette, not a star disk, orb, blade or rectangular seal. Deep ice-blue polished reflective glass, silver-white and celestial jade, subtle golden accents, intricate feather relief and sacred guardian motifs. Three-quarter view shows thin glass plane and thick carved frame. A crystalline blue shield aura surrounds the mirror without hiding its recognizable form. Formidable protective relic.",
+      "format": "WebP",
+      "width": 768,
+      "height": 768,
+      "transparent": true
+    },
+    {
+      "id": "bell",
+      "file": "public/assets/soulbound/bell-ai.webp",
+      "sourcePrompt": "Use case: stylized-concept. Asset type: square 1024x1024 premium xianxia RPG soulbound artifact illustration, genuine transparent background. High-end Chinese fantasy legendary loot art, godlike, intimidating and majestic, extremely detailed realistically rendered metal and jade, crisp golden filigree, sculptural three-dimensional depth, strong dramatic rim lighting. ONE integrated artifact, centered and wholly visible with 8 percent safe margins, fills about 80 percent of square, unmistakable clean silhouette readable at thumbnail size. No characters, hands, environment, pedestal, card border, text, readable letters, logo or watermark. Preserve true alpha outside the artifact and restrained elemental aura. Subject: 鎮岳古鐘, a colossal ancient ritual BELL. Unique shape: a massively heavy domed BRONZE BELL with a wide flared open mouth, four sturdy ridged corners, and a fierce double-horn dragon lifting ring on top. Bold tapering tower silhouette, unmistakably a bell, not a cubic stamp or spherical orb. Weathered dark-gold bronze, black jade ridge inlays, mountain and dragon relief, glowing amber cracks and restrained earth-gold pressure waves. Three-quarter view with dark visible bell opening. Massive imperial sacred power, weight of an entire mountain, terrifying battlefield authority.",
+      "format": "WebP",
+      "width": 768,
+      "height": 768,
+      "transparent": true
+    },
+    {
+      "id": "banner",
+      "file": "public/assets/soulbound/banner-ai.webp",
+      "sourcePrompt": "Use case: stylized-concept. Asset type: square 1024x1024 premium xianxia RPG soulbound artifact illustration, genuine transparent background. High-end Chinese fantasy legendary loot art, godlike, intimidating and majestic, extremely detailed realistically rendered metal and jade, crisp golden filigree, sculptural three-dimensional depth, strong dramatic rim lighting. ONE integrated artifact, centered and wholly visible with 8 percent safe margins, fills about 80 percent of square, unmistakable clean silhouette readable at thumbnail size. No characters, hands, environment, pedestal, card border, text, readable letters, logo or watermark. Preserve true alpha outside the artifact and restrained elemental aura. Subject: 燎原靈幡, an awe-inspiring phoenix fire WAR BANNER. Unique shape: a tall dark-jade twisted POLE capped by a flame-shaped golden spear finial, with a huge crimson ceremonial flag extending to the RIGHT in three sharp flowing split pennants like a phoenix wing. Slender pole plus wide asymmetrical fabric fan silhouette, NOT a sword, axe or mirror. Entire pole, finial and full flag visible. Obsidian shaft, gold dragon wraps, richly embroidered deep-red silk with phoenix relief, blazing orange-gold edges, restrained fire ribbons, a commanding immortal warlord's relic. Cloth looks richly layered and physically believable, terrifying martial grandeur.",
+      "format": "WebP",
+      "width": 768,
+      "height": 768,
+      "transparent": true
+    },
+    {
+      "id": "axe",
+      "file": "public/assets/soulbound/axe-ai.webp",
+      "sourcePrompt": "Use case: stylized-concept. Asset type: square 1024x1024 premium xianxia RPG soulbound artifact illustration, genuine transparent background. High-end Chinese fantasy legendary loot art, godlike, intimidating and majestic, extremely detailed realistically rendered metal and jade, crisp golden filigree, sculptural three-dimensional depth, strong dramatic rim lighting. ONE integrated artifact, centered and wholly visible with 8 percent safe margins, fills about 80 percent of square, unmistakable clean silhouette readable at thumbnail size. No characters, hands, environment, pedestal, card border, text, readable letters, logo or watermark. Preserve true alpha outside the artifact and restrained elemental aura. Subject: 破障玄斧, an overwhelming ancient battle AXE. Unique shape: a long sturdy slightly curved shaft supporting an extremely broad ASYMMETRICAL AXE HEAD: one huge crescent cleaver blade to the LEFT and a smaller hooked armor-piercing spike to the RIGHT, with angular cutout gaps. Entire weapon visible on a diagonal. Clearly a massive axe with a dominating broad head, unlike a slender sword or cloth banner. Blackened celestial iron, blood-red jade cores, sharp polished silver edge, dense ancient pale-gold dragon filigree, crimson-gold cracks radiating unstoppable barrier-breaking force. Strong structural solidity and aggressive silhouette, a legendary god-slaying martial artifact, no actual blood or characters.",
+      "format": "WebP",
+      "width": 768,
+      "height": 768,
+      "transparent": true
+    }
+  ]
+}

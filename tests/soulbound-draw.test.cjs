@@ -46,14 +46,17 @@ const request = (index, count = 1) => ({ requestId: `draw-request-${String(index
 const low = () => .5;
 const ack = (db, r) => transaction(db, 'u1', 'ack', { requestId: r.result.requestId });
 
-test('permanent pool has 64 unique items, eight archetypes per tier and fixed SVG artwork', () => {
+test('permanent pool has 64 unique items, eight archetypes per tier and distinct AI artwork', () => {
   assert.equal(pool.ITEMS.length, 64); assert.equal(new Set(pool.ITEMS.map(a => a.id)).size, 64);
   for (let rank = 0; rank < 8; rank++) {
     assert.equal(pool.candidates(rank).length, 8);
     for (const item of pool.candidates(rank)) {
       assert.equal(item.equipSlot, '本命法寶'); assert.equal(item.effects.length, 3);
       assert.equal(item.effects[0].type, item.coreEffect);
-      assert.match(fs.readFileSync('public' + item.imageUrl, 'utf8'), /<svg/);
+      const artwork = fs.readFileSync('public' + item.imageUrl);
+      assert.equal(artwork.toString('ascii', 0, 4), 'RIFF');
+      assert.equal(artwork.toString('ascii', 8, 12), 'WEBP');
+      assert.equal(item.imageModel, 'imagegen');
     }
   }
 });

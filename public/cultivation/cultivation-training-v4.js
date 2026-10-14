@@ -533,6 +533,10 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     if (!content) return;
     // 煉器／裝備可提前返回，先清理元嬰專屬的一屏模式，避免裁切其他分頁。
     if (activeTab !== 'nascent-soul') document.body.classList.remove('ns-map-active');
+    if (activeTab === 'contract') {
+      window.mountSoulboundTrainingPage?.(content);
+      return;
+    }
     if (activeTab === 'refinery') {
       if (!content.querySelector('.cultivation-refinery')) content.innerHTML = refineryShellMarkup();
       window.dispatchEvent(new CustomEvent('xiuxian:refinery-open-request'));
@@ -605,6 +609,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
           <button type="button" class="training-subtab-v3 active" data-training-tab="core" aria-selected="true"><i class="fa-solid fa-circle-dot"></i><span>金丹</span></button>
           <button type="button" class="training-subtab-v3" data-training-tab="nascent-soul" aria-selected="false" disabled><i class="fa-solid fa-child-reaching"></i><span>元嬰</span></button>
           <button type="button" class="training-subtab-v3" data-training-tab="refinery" aria-selected="false"><i class="fa-solid fa-hammer"></i><span>煉器</span></button>
+          <button type="button" class="training-subtab-v3" data-training-tab="contract" aria-selected="false"><i class="fa-solid fa-dharmachakra"></i><span>契器</span></button>
           <button type="button" class="training-subtab-v3" data-training-tab="equipment" aria-selected="false"><i class="fa-solid fa-shield-halved"></i><span>裝備</span></button>
           <button type="button" class="training-subtab-v3" data-training-tab="bag" aria-selected="false"><i class="fa-solid fa-box-open"></i><span>背包</span></button>
         </div>
@@ -651,6 +656,10 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
         '<button type="button" class="training-subtab-v3" data-training-tab="equipment" aria-selected="false"><i class="fa-solid fa-shield-halved"></i><span>裝備</span></button>');
     }
 
+    if (!tabs.querySelector('[data-training-tab="contract"]')) {
+      tabs.querySelector('[data-training-tab="refinery"]')?.insertAdjacentHTML('afterend', '<button type="button" class="training-subtab-v3" data-training-tab="contract" aria-selected="false"><i class="fa-solid fa-dharmachakra"></i><span>契器</span></button>');
+    }
+
     if (page.dataset.trainingV4Bound !== '1') {
       page.dataset.trainingV4Bound = '1';
       page.querySelectorAll('[data-training-tab]').forEach((button) => {
@@ -663,7 +672,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
           const fromStatus = !page.querySelector('[data-training-tab].active');
           const direction = fromStatus || tabOrder.indexOf(requested) < tabOrder.indexOf(activeTab) ? -1 : 1;
           const finishTransition = requested !== activeTab || fromStatus ? window.beginSceneTransition?.(content, content, theme, 'training-tab', true, direction) : null;
-          activeTab = ['bag', 'refinery', 'equipment'].includes(requested) || (requested === 'nascent-soul' && nascentUnlocked()) ? requested : 'core';
+          activeTab = ['bag', 'refinery', 'equipment', 'contract'].includes(requested) || (requested === 'nascent-soul' && nascentUnlocked()) ? requested : 'core';
           page.querySelectorAll('[data-training-tab]').forEach((tab) => {
             const selected = tab.dataset.trainingTab === activeTab;
             tab.classList.toggle('active', selected);
@@ -1051,6 +1060,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
   }
 
   function boot() {
+    window.addEventListener('xiuxian:contract-page-opened', () => { activeTab = 'contract'; });
     loadStyle();
     restoreRemoteTraining();
     syncUnlock();
