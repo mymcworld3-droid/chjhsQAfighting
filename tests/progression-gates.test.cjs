@@ -120,7 +120,7 @@ test('post-Golden-Core realm curve is consistent across active realm renderers',
       assert.match(source, new RegExp(`name: '${name}'.*need: ${need}`), `${name} threshold ${need} is synchronized`);
     }
   }
-  assert.match(training, /const REALM_THRESHOLDS = \[68, 188, 428, 788, 1268, 1868, 2588\];/);
+  assert.match(training, /const REALM_THRESHOLDS = \[68, 188, 428, 788, 1268, 1868\];/);
 });
 
 test('legacy compensation formula and item are preserved', () => {
