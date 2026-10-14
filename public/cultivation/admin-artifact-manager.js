@@ -41,6 +41,7 @@ import {
     equip_attack_percent: { title: '百分比攻擊', summary: '裝備後按比例提高攻擊力', hint: '例如：0.2 = +20%', icon: 'fa-chart-line' },
     equip_hp_flat: { title: '固定生命', summary: '裝備後固定增加生命上限', hint: '例如：+400 生命', icon: 'fa-heart' },
     equip_hp_percent: { title: '百分比生命', summary: '裝備後按比例提高生命上限', hint: '例如：0.2 = +20%', icon: 'fa-heart-pulse' },
+    equip_streak_damage_percent: { title: '連答爆發', summary: '每連答三題當次增傷', hint: '例如：0.15 = +15%', icon: 'fa-star' },
     equip_damage_percent: { title: '百分比增傷', summary: '每次攻擊造成更多傷害', hint: '例如：0.15 = +15%', icon: 'fa-burst' },
     equip_damage_reduction_flat: { title: '固定減傷', summary: '每次受到傷害先固定扣除數值', hint: '例如：80 = 每次少 80 傷害', icon: 'fa-shield' },
     equip_damage_reduction_percent: { title: '百分比減傷', summary: '每次受到傷害按比例降低', hint: '例如：0.2 = -20% 傷害', icon: 'fa-shield-halved' },
@@ -93,7 +94,7 @@ import {
       id: 'conditional',
       title: '條件觸發',
       icon: 'fa-fire-flame-curved',
-      types: ['equip_low_hp_damage_percent', 'equip_low_hp_reduction_percent', 'equip_on_correct_shield_flat']
+      types: ['equip_low_hp_damage_percent', 'equip_low_hp_reduction_percent', 'equip_on_correct_shield_flat', 'equip_streak_damage_percent']
     },
     {
       id: 'special',
@@ -132,7 +133,8 @@ import {
       equip_attack_percent: `攻擊 +${pct(effect.value)}`,
       equip_hp_flat: `生命 +${Number(effect.value) || 0}`,
       equip_hp_percent: `生命 +${pct(effect.value)}`,
-      equip_damage_percent: `傷害 +${pct(effect.value)}`,
+      equip_streak_damage_percent: `每連答三題當次增傷 +${pct(effect.value)}`,
+    equip_damage_percent: `傷害 +${pct(effect.value)}`,
       equip_damage_reduction_flat: `固定減傷 ${Number(effect.value) || 0}`,
       equip_damage_reduction_percent: `減傷 ${pct(effect.value)}`,
       equip_crit_chance: `暴擊率 ${pct(effect.value)}`,
@@ -163,6 +165,7 @@ import {
     equip_hp_flat: 400,
     equip_hp_percent: 0.15,
     equip_damage_percent: 0.15,
+    equip_streak_damage_percent: 0.15,
     equip_damage_reduction_flat: 60,
     equip_damage_reduction_percent: 0.15,
     equip_crit_chance: 0.10,
@@ -336,7 +339,7 @@ import {
       const aiMeta = item.generatedByAI
         ? `<div class="aam-ai-meta">AI 生成${item.aiProvider ? ` · ${escapeHtml(item.aiProvider)}` : ''}${item.generationMaterials?.length ? ` · 素材：${item.generationMaterials.map((row) => `${escapeHtml(row.name || row.id)}×${Number(row.quantity) || 1}`).join('、')}` : ''}</div>`
         : '';
-      return `<article class="aam-item ${pending ? 'is-pending' : ''}" data-admin-pending="${pending ? '1' : '0'}" style="--artifact-realm-color:${escapeHtml(color)};border-color:color-mix(in srgb,${escapeHtml(color)} 28%,rgba(255,255,255,.07))"><div class="aam-icon" style="border-color:color-mix(in srgb,${escapeHtml(color)} 55%,transparent);color:${escapeHtml(color)};background:color-mix(in srgb,${escapeHtml(color)} 10%,#171005)">${item.imageUrl ? `<img src="${escapeHtml(item.imageUrl)}" alt="${escapeHtml(item.name)}" loading="lazy" decoding="async">` : escapeHtml(item.icon || '◆')}</div><div class="aam-copy"><strong style="color:${escapeHtml(color)}">${escapeHtml(item.name)}</strong>${pending ? '<span class="aam-pending"><i class="fa-solid fa-wand-magic-sparkles"></i> AI・待處理</span>' : ''}<div class="aam-meta">${escapeHtml(item.id)} · ${escapeHtml(item.realm)} · ${escapeHtml(item.category || '法寶')} · 打造 ${Number(item.craft?.gold) || 0} 金幣 · 配方：${escapeHtml(recipeSummaryText(item.id))} · 擁有人：${escapeHtml(item.recipeOwnerName || '公共配方')}（${escapeHtml(item.recipeOwnerUid || '無 UID')}）${item.recipeSaleLocked ? ' · 付費配方' : ''}</div>${aiMeta}<div class="aam-effects">${(item.effects || []).map((effect) => `<span>${escapeHtml(effectLabel(effect))}</span>`).join('')}</div></div><div class="aam-item-actions">${pending ? `<button type="button" class="aam-approve" data-admin-artifact-approve="${escapeHtml(item.id)}"><i class="fa-solid fa-check"></i> 確認已檢查</button>` : ''}<button type="button" class="aam-edit" data-admin-artifact-edit="${escapeHtml(item.id)}"><i class="fa-solid fa-pen"></i> 編輯</button></div></article>`;
+      return `<article class="aam-item ${pending ? 'is-pending' : ''}" data-admin-pending="${pending ? '1' : '0'}" style="--artifact-realm-color:${escapeHtml(color)};border-color:color-mix(in srgb,${escapeHtml(color)} 28%,rgba(255,255,255,.07))"><div class="aam-icon" style="border-color:color-mix(in srgb,${escapeHtml(color)} 55%,transparent);color:${escapeHtml(color)};background:color-mix(in srgb,${escapeHtml(color)} 10%,#171005)">${item.imageUrl ? `<img src="${escapeHtml(item.imageUrl)}" alt="${escapeHtml(item.name)}" loading="lazy" decoding="async">` : escapeHtml(item.icon || '◆')}</div><div class="aam-copy"><strong style="color:${escapeHtml(color)}">${escapeHtml(item.name)}</strong>${pending ? '<span class="aam-pending"><i class="fa-solid fa-wand-magic-sparkles"></i> AI・待處理</span>' : ''}<div class="aam-meta">${escapeHtml(item.id)} · ${escapeHtml(item.realm)} · ${escapeHtml(item.category || '法寶')} · 打造 ${Number(item.craft?.gold) || 0} 金幣 · 配方：${escapeHtml(recipeSummaryText(item.id))} · 擁有人：${escapeHtml(item.recipeOwnerName || '公共配方')}（${escapeHtml(item.recipeOwnerUid || '無 UID')}）${item.recipeSaleLocked ? ' · 付費配方' : ''}</div>${aiMeta}<div class="aam-effects">${(item.effects || []).map((effect) => `<span>${escapeHtml(effectLabel(effect))}</span>`).join('')}</div></div><div class="aam-item-actions">${pending ? `<button type="button" class="aam-approve" data-admin-artifact-approve="${escapeHtml(item.id)}"><i class="fa-solid fa-check"></i> 確認已檢查</button>` : ''}<button type="button" class="aam-edit" ${globalThis.QASoulboundPool?.get(item.id) ? 'disabled title="常駐池由版本化固定資料管理"' : ''} data-admin-artifact-edit="${escapeHtml(item.id)}"><i class="fa-solid fa-pen"></i> 編輯</button></div></article>`;
     }).join('') || '<div class="text-gray-500 text-xs">目前沒有法寶。</div>';
   }
 
@@ -372,7 +375,7 @@ import {
     return Number((1 + (Math.max(2, Math.min(8, count)) - 3) * 0.05).toFixed(2));
   }
   const EFFECT_HINT_CAPS = Object.freeze({
-    equip_attack_percent:5, equip_hp_percent:5, equip_damage_percent:3,
+    equip_attack_percent:5, equip_hp_percent:5, equip_damage_percent:3, equip_streak_damage_percent:3,
     equip_damage_reduction_percent:0.8, equip_crit_chance:0.75, equip_crit_damage_percent:3,
     equip_combo_chance:0.1, equip_combo_damage_percent:3, equip_lifesteal_percent:0.5, equip_reflect_percent:1,
     equip_low_hp_damage_percent:2, equip_low_hp_reduction_percent:0.8,

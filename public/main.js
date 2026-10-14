@@ -38,6 +38,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/artifact-catalog-sync.js',
   './cultivation/material-catalog-sync.js',
   './cultivation/artifact-system.js',
+  './cultivation/soulbound-draw.js',
   './cultivation/artifact-battle-effects.js',
   './cultivation/combat-power.js',
   './cultivation/player-profile.js',

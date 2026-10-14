@@ -89,11 +89,11 @@ import {
       const canEquipOwned = soulbound && Object.entries(userData()?.artifactSystem?.inventory || {}).some(([artifactId, count]) =>
         qty(count) > 0 && artifactSlot(getArtifactById(artifactId)) === slot);
       const hint = soulbound
-        ? (canEquipOwned ? '點擊裝配已有本命法寶' : '靈石抽取取得 · 尚未開放')
+        ? (canEquipOwned ? '契器台 · 抽取或調御已有法器' : '金丹開放 · 常駐契器台')
         : '點擊裝配';
       return `<button type="button" class="uib-equip-slot is-empty${soulboundClass}${equipmentPickSlot === slot ? ' is-picking' : ''}" data-uib-empty-slot="${escapeHtml(slot)}" aria-label="${escapeHtml(slot)}：${escapeHtml(hint)}">${crest}${label}
         <span class="uib-equip-slot-frame${soulbound ? ' is-soulbound-frame' : ''}">${soulbound ? '<i class="fa-solid fa-khanda"></i>' : '<i class="fa-solid fa-plus"></i>'}</span>
-        <b class="uib-equip-slot-name">${soulbound ? '本命待契' : '空裝備欄'}</b><small class="uib-equip-slot-hint">${hint}</small></button>`;
+        <b class="uib-equip-slot-name">${soulbound ? '締結本命' : '空裝備欄'}</b><small class="uib-equip-slot-hint">${hint}</small></button>`;
     }
     const color = qualityColor(item.realm);
     return `<button type="button" class="uib-equip-slot is-filled${soulboundClass}" data-uib-equipped-item="artifact:${escapeHtml(id)}" style="--uib-quality:${escapeHtml(color)}">${crest}${label}
@@ -314,6 +314,7 @@ import {
     if (effect?.type === 'equip_attack_percent') return `裝備後攻擊 +${pct(effect.value)}`;
     if (effect?.type === 'equip_hp_flat') return `裝備後生命 +${Number(effect.value) || 0}`;
     if (effect?.type === 'equip_hp_percent') return `裝備後生命 +${pct(effect.value)}`;
+    if (effect?.type === 'equip_streak_damage_percent') return `每連答三題當次增傷 +${pct(effect.value)}`;
     if (effect?.type === 'equip_damage_percent') return `鬥法傷害 +${pct(effect.value)}`;
     if (effect?.type === 'equip_damage_reduction_flat') return `每次受傷固定 -${Number(effect.value) || 0}`;
     if (effect?.type === 'equip_damage_reduction_percent') return `受到傷害 -${pct(effect.value)}`;
@@ -360,7 +361,7 @@ import {
       const equipAction = hasEquip && equipSlot
         ? `<button type="button" class="uib-equip-btn" data-uib-equip="${escapeHtml(item.id)}" ${!equippedHere && !canEquip ? 'disabled' : ''}>${equippedHere ? '<i class="fa-solid fa-box-archive"></i> 卸下' : '<i class="fa-solid fa-shield-halved"></i> 裝備'} · ${escapeHtml(equipSlot)}</button>`
         : '';
-      extra = `<div class="uib-detail-section"><span>法寶資訊</span>${item.raw?.weaponForm ? `<p>器型：${escapeHtml(item.raw.weaponForm)}</p>` : ''}${item.raw?.forgeMethod && item.raw.forgeMethod !== '自由發揮' ? `<p>煉器手法：${escapeHtml(item.raw.forgeMethod)}</p>` : ''}<p>二次煉製深度：${item.refinementDepth || 0}/${MAX_ARTIFACT_RECIPE_NESTING}</p>${hasEquip ? `<p>法寶戰力：<b>${itemPower.toLocaleString("zh-TW")}</b>（境界品質及裝備效果）</p>` : ""}${hasEquip ? `<p>裝備欄位：<b>${escapeHtml(equipSlot)}</b></p>${equipSlot === '本命法寶' ? '<p>取得方式：靈石抽取（尚未開放）。已持有本命法寶可投入八方煉器陣進行後續精煉。</p>' : ''}` : ''}${replacing ? `<p>裝備後會替換：<b>${escapeHtml(replacing.name)}</b></p>` : ''}</div><div class="uib-detail-section"><span>法寶效果</span>${item.effects.length
+      extra = `<div class="uib-detail-section"><span>法寶資訊</span>${item.raw?.weaponForm ? `<p>器型：${escapeHtml(item.raw.weaponForm)}</p>` : ''}${item.raw?.forgeMethod && item.raw.forgeMethod !== '自由發揮' ? `<p>煉器手法：${escapeHtml(item.raw.forgeMethod)}</p>` : ''}<p>二次煉製深度：${item.refinementDepth || 0}/${MAX_ARTIFACT_RECIPE_NESTING}</p>${hasEquip ? `<p>法寶戰力：<b>${itemPower.toLocaleString("zh-TW")}</b>（境界品質及裝備效果）</p>` : ""}${hasEquip ? `<p>裝備欄位：<b>${escapeHtml(equipSlot)}</b></p>${equipSlot === '本命法寶' ? '<p>取得方式：契器台常駐靈石抽取。已持有本命法寶可投入八方煉器陣進行後續精煉。</p>' : ''}` : ''}${replacing ? `<p>裝備後會替換：<b>${escapeHtml(replacing.name)}</b></p>` : ''}</div><div class="uib-detail-section"><span>法寶效果</span>${item.effects.length
         ? `<ul>${item.effects.map((effect) => `<li>${escapeHtml(effectLabel(effect))}</li>`).join('')}</ul>`
         : '<p>目前沒有額外效果資料。</p>'}${equippedHere ? '<p class="uib-equipped-note"><i class="fa-solid fa-circle-check"></i> 目前已裝備，效果正在生效</p>' : ''}${equipAction}</div>`;
     } else if (item.type === 'material') {
@@ -375,10 +376,12 @@ import {
       <div class="uib-modal-head"><div class="uib-modal-icon">${escapeHtml(item.icon || '◆')}</div><div><small>${escapeHtml(typeLabel(item.type))} · ${escapeHtml(item.category || '')}</small><h3>${escapeHtml(item.name)}</h3><span>${escapeHtml(item.realm || '凡人')} · 持有 ×${item.quantity}</span></div><button type="button" class="uib-close" aria-label="關閉"><i class="fa-solid fa-xmark"></i></button></div>
       <div class="uib-description">${escapeHtml(item.description || '沒有說明。')}</div>
       ${extra}
+      ${item.raw?.equipSlot === '本命法寶' ? '<button type="button" class="uib-use-btn" data-uib-contract>前往契器台</button>' : ''}
     </section>`;
 
     const close = () => modal.remove();
     modal.querySelector('.uib-close')?.addEventListener('click', close);
+    modal.querySelector('[data-uib-contract]')?.addEventListener('click', () => { close(); window.openSoulboundDraw?.(); });
     modal.addEventListener('click', (event) => { if (event.target === modal) close(); });
     modal.querySelector('[data-uib-use="revival-pill"]')?.addEventListener('click', async () => {
       const button = modal.querySelector('[data-uib-use="revival-pill"]');
@@ -447,6 +450,7 @@ import {
     });
     root.querySelectorAll('[data-uib-empty-slot]').forEach((button) => {
       button.addEventListener('click', () => {
+        if (button.dataset.uibEmptySlot === '本命法寶' && window.openSoulboundDraw) { window.openSoulboundDraw(); return; }
         equipmentPickSlot = button.dataset.uibEmptySlot || '';
         filterType = 'artifact';
         scheduleRender(true);
@@ -502,7 +506,7 @@ import {
     const style = document.createElement('style');
     style.id = STYLE_ID;
     style.textContent = `
-      /* Ornamental, non-commercial soulbound heirloom slot. No draw action is installed. */
+      /* Permanent soulbound contract entry. */
       .uib-equip-slot.is-soulbound{isolation:isolate;border:1px solid rgba(244,202,113,.72);background:radial-gradient(ellipse at 50% 46%,rgba(214,164,74,.23),transparent 63%),radial-gradient(ellipse at 50% -16%,rgba(228,200,137,.17),transparent 65%),linear-gradient(145deg,#302315,#0b0d10 80%);box-shadow:inset 0 0 0 1px rgba(247,223,159,.09),inset 0 0 30px rgba(222,167,63,.07),0 8px 30px rgba(0,0,0,.28);gap:6px}
       .uib-equip-slot.is-soulbound:before{inset:6px;border:1px solid rgba(242,199,119,.32);border-radius:11px;background:linear-gradient(135deg,rgba(250,221,152,.095),transparent 25%,transparent 75%,rgba(250,221,152,.07));box-shadow:inset 0 0 0 3px rgba(23,17,11,.62)}
       .uib-equip-slot.is-soulbound:after{content:"✦";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(75%,130px);aspect-ratio:1;border:1px solid rgba(239,199,117,.28);border-radius:50%;display:grid;place-items:center;color:rgba(237,205,143,.16);font-size:72px;box-shadow:0 0 0 5px rgba(237,205,143,.035),inset 0 0 18px rgba(224,167,65,.1);pointer-events:none;z-index:-1}

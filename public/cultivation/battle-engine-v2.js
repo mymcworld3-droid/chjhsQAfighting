@@ -312,6 +312,7 @@ export function settleBattleRound({
       continue;
     }
 
+    player.coreCorrectStreak = support.streak;
     player.hp = role === 'host' ? hostHp : guestHp;
     defender.hp = role === 'host' ? guestHp : hostHp;
     const plan = hitPlan({ roomId, round, role, player, support });

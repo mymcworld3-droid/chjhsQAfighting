@@ -4,7 +4,7 @@ const aiRouter = require('./ai-router');
 
 const ALLOWED_EFFECTS = new Set([
   'equip_attack_flat','equip_attack_percent','equip_hp_flat','equip_hp_percent',
-  'equip_damage_percent','equip_damage_reduction_flat','equip_damage_reduction_percent',
+  'equip_damage_percent','equip_streak_damage_percent','equip_damage_reduction_flat','equip_damage_reduction_percent',
   'equip_crit_chance','equip_crit_damage_percent','equip_combo_chance', 'equip_combo_damage_percent',
   'equip_lifesteal_percent','equip_reflect_percent','equip_shield_flat',
   'equip_true_damage_flat','equip_low_hp_damage_percent','equip_low_hp_reduction_percent',
@@ -130,6 +130,7 @@ const EFFECT_LABELS = Object.freeze({
   equip_hp_flat:'固定生命',
   equip_hp_percent:'百分比生命',
   equip_damage_percent:'百分比增傷',
+  equip_streak_damage_percent:'每連答三題當次增傷',
   equip_damage_reduction_flat:'固定減傷',
   equip_damage_reduction_percent:'百分比減傷',
   equip_crit_chance:'暴擊率',
@@ -160,7 +161,7 @@ function roundRange(value, digits = 4) {
 // Legacy V1 is accepted for historical unit tests, but new administrator edits
 // use the simpler V2 scheme: refinement depth -> effect -> one global min/max.
 const HARD_EFFECT_CAPS = Object.freeze({
-  equip_attack_percent:5, equip_hp_percent:5, equip_damage_percent:3,
+  equip_attack_percent:5, equip_hp_percent:5, equip_damage_percent:3, equip_streak_damage_percent:3,
   equip_damage_reduction_percent:0.8, equip_crit_chance:0.75, equip_crit_damage_percent:3,
   equip_combo_chance:0.10, equip_combo_damage_percent:3, equip_lifesteal_percent:0.5, equip_reflect_percent:1,
   equip_low_hp_damage_percent:2, equip_low_hp_reduction_percent:0.8,
@@ -186,7 +187,7 @@ function normalizeEffectBounds(raw) {
         const bounds = Object.fromEntries(keys.map(key => [key, Number(values[key])]));
         const integer = FLAT_VALUE_TYPES.has(type);
         const lower = type === 'equip_damage_cap_percent' ? 0.05 : (defaults.field === 'multiplier' ? 1.01 : (integer ? 1 : 0.0001));
-        const hardCaps = { equip_attack_percent:5, equip_hp_percent:5, equip_damage_percent:3,
+        const hardCaps = { equip_attack_percent:5, equip_hp_percent:5, equip_damage_percent:3, equip_streak_damage_percent:3,
           equip_damage_reduction_percent:0.8, equip_crit_chance:0.75, equip_crit_damage_percent:3,
           equip_combo_chance:0.10, equip_combo_damage_percent:3, equip_lifesteal_percent:0.5, equip_reflect_percent:1,
           equip_low_hp_damage_percent:2, equip_low_hp_reduction_percent:0.8,
@@ -329,6 +330,7 @@ function effectRange(type, order, stage = 1, effectBoundsV1 = {}, rawDefault = f
     equip_attack_percent: 0.06 + order * 0.025,
     equip_hp_percent: 0.07 + order * 0.025,
     equip_damage_percent: 0.05 + order * 0.02,
+    equip_streak_damage_percent: 0.15 + order * 0.04,
     equip_damage_reduction_percent: 0.04 + order * 0.015,
     equip_crit_chance: 0.025 + order * 0.007,
     equip_crit_damage_percent: 0.15 + order * 0.045,
@@ -447,7 +449,11 @@ function sanitizeGeneratedArtifact(raw, targetRealm, refinementStage = 1, effect
   const inheritsSoulbound = stage >= 2 && primaryItems.some((item) =>
     item?.equipSlot === '本命法寶' &&
     Array.isArray(item.effects) && item.effects.some((effect) => String(effect?.type || '').startsWith('equip_')));
-  const inheritedCore = primaryItems.flatMap((item) => Array.isArray(item.effects) ? item.effects : [])
+  const orderedPrimaryEffects = primaryItems.flatMap((item) => {
+    const effects = Array.isArray(item.effects) ? item.effects : [];
+    return [...effects.filter(effect => effect.type === item.coreEffect), ...effects.filter(effect => effect.type !== item.coreEffect)];
+  });
+  const inheritedCore = orderedPrimaryEffects
     .map((effect) => sanitizeEffect(effect, order, stage, effectBoundsV1, effectBoundsV2, ingredientCount))
     .find(Boolean);
   const targetForm = options.weaponForm || raw?.weaponForm || '';
@@ -459,8 +465,7 @@ function sanitizeGeneratedArtifact(raw, targetRealm, refinementStage = 1, effect
     ? requested.filter((effect) => effect.type.startsWith('equip_'))
     : requested.filter((effect) => !effect.type.startsWith('equip_'));
   // Never let the model silently erase the deepest artifact's defining effect.
-  const primaryArtifacts = primaryItems;
-  const inherited = primaryArtifacts.flatMap((item) => Array.isArray(item.effects) ? item.effects : [])
+  const inherited = orderedPrimaryEffects
     .map((effect) => sanitizeEffect(effect, order, stage, effectBoundsV1, effectBoundsV2, ingredientCount))
     .filter(Boolean);
   const core = inherited.find((effect) => effect.type.startsWith('equip_')) || inherited[0];
