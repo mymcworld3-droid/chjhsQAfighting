@@ -31,11 +31,17 @@ test('battle stability layer preserves the original payload while enriching gene
   assert.doesNotMatch(fix, /\/api\/generate-battle-quiz/);
 });
 
-test('battle opens as a true fullscreen viewport with separate arena and quiz scenes', () => {
+test('battle fills the page-sized viewport with separate arena and quiz scenes', () => {
   assert.match(fix, /#page-battle\.battle-v2-page\{/);
   assert.match(fix, /position:fixed!important;inset:0!important/);
   assert.match(fix, /width:var\(--battle-vv-width,100vw\)!important;height:var\(--battle-vv-height,100dvh\)!important/);
-  assert.match(fix, /function syncBattleVisualViewport\(\)/);
+  // Game bounds are based on document/page dimensions, not visualViewport zoom.
+  assert.match(fix, /function syncBattlePageViewport\(\)/);
+  assert.match(fix, /document\.documentElement\.clientWidth/);
+  assert.match(fix, /document\.documentElement\.clientHeight/);
+  assert.match(fix, /page\.style\.setProperty\('--battle-vv-width', width \+ 'px'\)/);
+  assert.match(fix, /page\.style\.setProperty\('--battle-vv-height', height \+ 'px'\)/);
+  assert.match(fix, /window\.addEventListener\('app:layout-viewport', scheduleBattlePageViewportSync/);
   assert.match(fix, /z-index:15000!important/);
   assert.match(fix, /grid-template-areas:'score' 'rule' 'cue' 'log'/);
   assert.match(fix, /#page-battle \.bv2-quiz:not\(\.hidden\)/);
