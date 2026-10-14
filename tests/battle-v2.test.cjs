@@ -167,7 +167,10 @@ test('round lifecycle is one-time, replay safe and question generation can fail 
   assert.match(battleSource, /takeoverQuestionLease/);
   assert.match(battleSource, /PREPARE_LEASE_MS = 7000/);
   assert.match(battleSource, /knowledgeScope: resolveBattleKnowledge/);
-  assert.match(battleSource, /status: 'preparing'/);
+  // A prefetched question starts immediately; otherwise the room enters preparing.
+  assert.match(battleSource, /status: prefetched \? 'playing' : 'preparing'/);
+  assert.match(battleSource, /fresh\.status !== 'preparing'/);
+  assert.match(battleSource, /takeoverQuestionLease\(room\)/);
   assert.match(battleSource, /retaining scope/);
   assert.doesNotMatch(battleSource, /return fallbackQuestion\(/);
   assert.match(battleSource, /AI 出題暫時失敗/);
