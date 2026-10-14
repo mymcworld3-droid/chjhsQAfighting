@@ -1339,19 +1339,43 @@ window.addEventListener('xiuxian:startup-resource-progress', (event) => {
 // 🔐 登入狀態監聽 (核心邏輯)
 // ==========================================
 let immortalBoardUnsub = null;
+let immortalBoardGroup = null;
+function subscribeOwnImmortalBoard() {
+    const group = window.getLeaderboardEducationGroup?.(currentUserData?.profile?.educationLevel);
+    if (group === immortalBoardGroup && immortalBoardUnsub) return;
+    immortalBoardUnsub?.();
+    immortalBoardUnsub = null;
+    immortalBoardGroup = group || null;
+    window.setTrueImmortalBoard([], false);
+    if (!auth.currentUser || !group) return;
+    const uid = auth.currentUser.uid;
+    // Only subscribe to the player's configured cohort, never the other school board.
+    immortalBoardUnsub = onSnapshot(
+        query(collection(db, 'worldImmortals'), where('cohort', '==', group)),
+        snapshot => {
+            if (auth.currentUser?.uid !== uid ||
+                window.getLeaderboardEducationGroup?.(currentUserData?.profile?.educationLevel) !== group) return;
+            window.setTrueImmortalBoard(snapshot.docs.map(item => ({ ...item.data(), id: item.id })));
+        }, error => {
+            window.setTrueImmortalBoard([], false);
+            console.warn('仙位資格讀取失敗', error);
+        }
+    );
+}
+window.addEventListener('xiuxian:user-data-ready', subscribeOwnImmortalBoard);
+window.addEventListener('xiuxian:quest-progress-updated', () => {
+    const group = window.getLeaderboardEducationGroup?.(currentUserData?.profile?.educationLevel);
+    if (group !== immortalBoardGroup) subscribeOwnImmortalBoard();
+});
 window.addEventListener('xiuxian:immortals-updated', () => {
     if (currentUserData) updateUIStats();
 });
 onAuthStateChanged(auth, async (user) => {
     firstLoginUid = '';
     immortalBoardUnsub?.();
+    immortalBoardUnsub = null;
+    immortalBoardGroup = null;
     window.setTrueImmortalBoard([], false);
-    if (user) immortalBoardUnsub = onSnapshot(collection(db, 'worldImmortals'), (snapshot) => {
-        window.setTrueImmortalBoard(snapshot.docs.map(item => ({ ...item.data(), id: item.id })));
-    }, (error) => {
-        window.setTrueImmortalBoard([], false);
-        console.warn('仙位資格讀取失敗', error);
-    });
     // 先更新一次介面文字
     updateTexts();
 
@@ -5929,9 +5953,8 @@ window.loadAdminLogs = async () => {
     } catch (e) { ul.innerHTML = '<li class="text-center text-red-400 py-4">Error (Permission Denied)</li>'; }
 };
 
-// 九州仙榜按教育程度分流。最低上榜資格為渡劫（1268 修為）。
-// 榜單為 users 的即時排序視圖，不保存名次；門檻以下的舊玩家自然移出名單。
-const LEADERBOARD_MIN_SCORE = 1268;
+// 九州仙榜只顯示玩家已設定學制所屬分流；普通仙榜沒有境界門檻。
+// 五大仙問鼎的渡劫門檻另外驗證，不影響一般仙榜。
 const LEADERBOARD_PAGE_SIZE = 40;
 const LEADERBOARD_LIMIT_PER_GROUP = 10;
 let leaderboardCachedSnapshot = null;
@@ -5940,7 +5963,6 @@ let leaderboardPending = null;
 let leaderboardRevision = 0;
 let leaderboardRenderSerial = 0;
 let leaderboardPlayerKey = null;
-let leaderboardSelectedGroup = 'junior';
 
 function leaderboardEducationGroup(level) {
     const grade = String(level || '').trim();
@@ -5948,6 +5970,8 @@ function leaderboardEducationGroup(level) {
     if (/^(國中|初中|高中|高職|高中職|大學|專科|研究所|社會人士|成人)/.test(grade)) return 'junior';
     return null; // 未設定學制者不能混進任何組別。
 }
+
+window.getLeaderboardEducationGroup = leaderboardEducationGroup;
 
 function invalidateLeaderboardCache() {
     leaderboardCachedSnapshot = null;
@@ -5963,44 +5987,39 @@ function syncLeaderboardPlayerScore() {
     return true;
 }
 
-async function readLeaderboardSnapshot() {
+async function readLeaderboardSnapshot(group) {
     while (true) {
-        if (leaderboardCachedSnapshot && Date.now() - leaderboardCacheTime < 120000) return leaderboardCachedSnapshot;
-        if (!leaderboardPending) {
+        if (leaderboardCachedSnapshot?.group === group && Date.now() - leaderboardCacheTime < 120000)
+            return leaderboardCachedSnapshot.rows;
+        if (!leaderboardPending || leaderboardPending.group !== group) {
             const revision = leaderboardRevision;
             const promise = (async () => {
-                const groups = { elementary: [], junior: [] };
+                const rows = [];
                 let cursor = null;
-                // 篩選在取前十名之前進行；分頁直到兩組各足十名，避免某組被另一組佔滿。
-                while (groups.elementary.length < LEADERBOARD_LIMIT_PER_GROUP ||
-                       groups.junior.length < LEADERBOARD_LIMIT_PER_GROUP) {
-                    const constraints = [
-                        where('stats.totalScore', '>=', LEADERBOARD_MIN_SCORE),
-                        orderBy('stats.totalScore', 'desc'),
-                        limit(LEADERBOARD_PAGE_SIZE)
-                    ];
+                // 依修為排序逐頁找出此玩家所屬學制的前十名；其他學制不渲染。
+                while (rows.length < LEADERBOARD_LIMIT_PER_GROUP) {
+                    const constraints = [orderBy('stats.totalScore', 'desc'), limit(LEADERBOARD_PAGE_SIZE)];
                     if (cursor) constraints.push(startAfter(cursor));
                     const snap = await getDocsFromServer(query(collection(db, 'users'), ...constraints));
                     const docs = snap.docs || [];
-                    for (const row of docs) {
-                        const data = row.data();
-                        const score = Number(data.stats?.totalScore) || 0;
-                        if (score < LEADERBOARD_MIN_SCORE) continue;
-                        const group = leaderboardEducationGroup(data.profile?.educationLevel);
-                        if (group && groups[group].length < LEADERBOARD_LIMIT_PER_GROUP) groups[group].push(row);
+                    for (const entry of docs) {
+                        if (leaderboardEducationGroup(entry.data().profile?.educationLevel) === group) {
+                            rows.push(entry);
+                            if (rows.length === LEADERBOARD_LIMIT_PER_GROUP) break;
+                        }
                     }
-                    if (docs.length < LEADERBOARD_PAGE_SIZE) break;
+                    if (rows.length === LEADERBOARD_LIMIT_PER_GROUP || docs.length < LEADERBOARD_PAGE_SIZE) break;
                     const next = docs[docs.length - 1];
                     if (!next || next.id === cursor?.id) break;
                     cursor = next;
                 }
-                return groups;
+                return rows;
             })();
-            leaderboardPending = { revision, promise };
+            leaderboardPending = { group, revision, promise };
         }
         const pending = leaderboardPending;
-        let groups;
-        try { groups = await pending.promise; }
+        let rows;
+        try { rows = await pending.promise; }
         catch (error) {
             if (pending.revision !== leaderboardRevision) continue;
             throw error;
@@ -6008,9 +6027,9 @@ async function readLeaderboardSnapshot() {
             if (leaderboardPending === pending) leaderboardPending = null;
         }
         if (pending.revision !== leaderboardRevision) continue;
-        leaderboardCachedSnapshot = groups;
+        leaderboardCachedSnapshot = { group, rows };
         leaderboardCacheTime = Date.now();
-        return groups;
+        return rows;
     }
 }
 
@@ -6030,11 +6049,6 @@ window.addEventListener('xiuxian:quest-progress-updated', () => {
     refreshVisibleLeaderboard();
 });
 
-window.selectLeaderboardGroup = (group) => {
-    if (group !== 'elementary' && group !== 'junior') return;
-    leaderboardSelectedGroup = group;
-    void window.loadLeaderboard();
-};
 
 window.loadLeaderboard = async ({ force = false } = {}) => {
     const tbody = document.getElementById('leaderboard-body');
@@ -6043,20 +6057,19 @@ window.loadLeaderboard = async ({ force = false } = {}) => {
     if (force) invalidateLeaderboardCache();
     const renderSerial = ++leaderboardRenderSerial;
     const uid = auth.currentUser?.uid;
-    const tabButtons = document.querySelectorAll?.('[data-leaderboard-group]') || [];
-    tabButtons.forEach(button => {
-        const active = button.dataset.leaderboardGroup === leaderboardSelectedGroup;
-        button.setAttribute('aria-selected', String(active));
-        button.classList.toggle('is-active', active);
-    });
+    const group = leaderboardEducationGroup(currentUserData?.profile?.educationLevel);
+    if (!group) {
+        tbody.innerHTML = '<tr><td colspan="3" class="p-8 text-center text-yellow-200">請先在洞府設定年級，才能查看你的仙榜。 <button type="button" id="leaderboard-set-grade" class="underline text-cyan-200">前往設定</button></td></tr>';
+        tbody.querySelector('#leaderboard-set-grade')?.addEventListener('click', () => window.switchToPage('page-settings'));
+        return;
+    }
     tbody.innerHTML = `<tr><td colspan="3" class="p-8 text-center text-gray-500"><div class="loader"></div> ${t('loading')}</td></tr>`;
     try {
-        const groups = await readLeaderboardSnapshot();
-        if (renderSerial !== leaderboardRenderSerial || uid !== auth.currentUser?.uid) return;
+        const entries = await readLeaderboardSnapshot(group);
+        if (renderSerial !== leaderboardRenderSerial || uid !== auth.currentUser?.uid || group !== leaderboardEducationGroup(currentUserData?.profile?.educationLevel)) return;
         tbody.innerHTML = '';
-        const entries = groups[leaderboardSelectedGroup] || [];
         if (!entries.length) {
-            tbody.innerHTML = '<tr><td colspan="3" class="p-8 text-center text-yellow-200/80">尚無達到渡劫期的上榜修士。</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="3" class="p-8 text-center text-yellow-200/80">目前還沒有此學制的上榜修士。</td></tr>';
             return;
         }
         let i = 1;
@@ -6081,7 +6094,7 @@ window.loadLeaderboard = async ({ force = false } = {}) => {
             i++;
         }
     } catch (e) {
-        if (renderSerial !== leaderboardRenderSerial || uid !== auth.currentUser?.uid) return;
+        if (renderSerial !== leaderboardRenderSerial || uid !== auth.currentUser?.uid || group !== leaderboardEducationGroup(currentUserData?.profile?.educationLevel)) return;
         console.error(e);
         tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-red-400 text-center">排名更新失敗，請檢查連線後按「更新排名」重試。</td></tr>';
     }

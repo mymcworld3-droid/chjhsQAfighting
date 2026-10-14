@@ -14,8 +14,9 @@ test('Five Immortals requires Tribulation realm at 1268 cultivation', () => {
 test('Five Immortals challenge uses junior-high questions by subject', () => {
   assert.match(source, /const QUIZ_LEVEL = '國中三年級'/);
   assert.match(source, /subject: role\.subject/);
-  assert.match(source, /level: QUIZ_LEVEL/);
-  assert.match(source, /國中程度綜合題/);
+  assert.match(source, /level, difficulty: QUIZ_DIFFICULTY/);
+  assert.match(source, /const ELEMENTARY_QUIZ_LEVEL = '國小高年級'/);
+  assert.match(source, /國小' : '國中'/);
 });
 
 test('challenge continues after correct answers and ends on first wrong answer', () => {
@@ -51,4 +52,12 @@ test('Five Immortals hides game instructions behind a circular info button', () 
   assert.match(source, /aria-expanded/);
   assert.match(source, /同分不換榜/);
   assert.match(source, /每名修士同時只能據有一席仙位/);
+});
+
+test('five-immortal challenges use separate cohort seat documents',()=>{
+  assert.match(source,/seatId\(cohort, item\.id\)/);
+  assert.match(source,/seatId\(cohort, role\.id\)/);
+  assert.match(source,/challenge = \{ active: true, serial, cohort: currentGroup\(\)/);
+  assert.match(source,/fs\.where\('cohort', '==', cohort\)/);
+  assert.match(source,/WRONG_COHORT/);
 });

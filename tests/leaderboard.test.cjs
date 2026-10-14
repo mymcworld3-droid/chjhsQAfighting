@@ -5,12 +5,12 @@ const { join } = require('node:path');
 const vm = require('node:vm');
 
 const legacy = readFileSync(join(__dirname, '../public/main-legacy.js'), 'utf8');
-const start = legacy.indexOf('// 九州仙榜按教育程度分流');
+const start = legacy.indexOf('// 九州仙榜只顯示玩家已設定學制所屬分流');
 const end = legacy.indexOf('//  Visual Helpers', start);
 assert.ok(start >= 0 && end > start);
 
 function harness(players, { deferred = false } = {}) {
-  const tbody = { innerHTML: '' };
+  const tbody = { innerHTML: '', querySelector: () => ({ addEventListener() {} }) };
   let visible = false;
   let now = 1000;
   let remote = structuredClone(players);
@@ -78,7 +78,7 @@ test('higher cultivation ranks first despite stale, capped or missing stored rea
   const h = harness([player('former-first', 20, 99), player('me', 30, 0), missing]);
   await h.load();
   assert.deepEqual(names(h), ['no-rank', 'me', 'former-first']);
-  assert.deepEqual(JSON.parse(JSON.stringify(h.reads[0].constraints)), [{ where: 'stats.totalScore', operator: '>=', value: 1268 }, { field: 'stats.totalScore', direction: 'desc' }, { count: 40 }]);
+  assert.deepEqual(JSON.parse(JSON.stringify(h.reads[0].constraints)), [{ field: 'stats.totalScore', direction: 'desc' }, { count: 40 }]);
   assert.match(h.tbody.innerHTML, /1298 修為/);
   assert.match(h.tbody.innerHTML, /bg-blue-900\/20/, 'document UID identifies the current player even without a redundant uid field');
 });
@@ -197,20 +197,33 @@ test('a refresh supersedes an older failing request and account changes suppress
   await changed;
 });
 
-test('age bands filter profiles independently, with no rank for unconfigured grades', async () => {
+test('each player sees only their own school cohort without a manual switch', async () => {
  const h=harness([player('me',20),player('small',65,0,'國小中年級'),player('secondary',40),player('unset',400,0,'')]);
  await h.load();
  assert.deepEqual(names(h),['secondary','me']);
- h.context.window.selectLeaderboardGroup('elementary');
- await tick();
- assert.deepEqual(names(h),['small']);
- assert.equal(h.reads.length,1);
-});
-test('legacy top-ranked accounts below 1268 lose their position', async () => {
- const h=harness([player('me',2),player('former',-4,999)]);
+ assert.equal(h.context.window.selectLeaderboardGroup,undefined);
+ h.context.currentUserData.profile.educationLevel='國小高年級';
+ h.event('xiuxian:user-data-ready');
  await h.load();
- assert.deepEqual(names(h),['me']);
+ assert.deepEqual(names(h),['small']);
+ assert.equal(h.reads.length,2);
 });
+
+test('ordinary rank includes low-level players, regardless of a saved realmLevel', async () => {
+ const h=harness([player('me',2),player('former',-4,999),player('beginner',-1268,0)]);
+ await h.load();
+ assert.deepEqual(names(h),['me','former','beginner']);
+});
+
+test('users without a configured grade cannot see any cohort', async () => {
+ const h=harness([player('me',5),player('primary',40,0,'國小高年級')]);
+ h.context.currentUserData.profile.educationLevel='';
+ await h.load();
+ assert.deepEqual(names(h),[]);
+ assert.equal(h.reads.length,0);
+ assert.match(h.tbody.innerHTML,/leaderboard-set-grade/);
+});
+
 test('pagination finds the secondary group beyond the first batch of elementary players', async () => {
  const h=harness([...Array.from({length:43},(_,i)=>player('small-'+i,2000-i,0,'國小高年級')),player('me',2),player('other',1)]);
  await h.load();
