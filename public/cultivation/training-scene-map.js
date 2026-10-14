@@ -13,6 +13,7 @@ const DETAIL_TABS = [
   { id: 'core', name: '金丹', icon: 'fa-circle-dot', threshold: 28, unlock: '金丹境解鎖' },
   { id: 'nascent-soul', name: '元嬰', icon: 'fa-child-reaching', threshold: 68, unlock: '元嬰境解鎖' },
   { id: 'refinery', name: '煉器', icon: 'fa-hammer', threshold: 10, unlock: '築基期解鎖' },
+  { id: 'contract', name: '契器', icon: 'fa-dharmachakra', threshold: 28, unlock: '金丹境解鎖', action: 'soulbound' },
   { id: 'equipment', name: '裝備', icon: 'fa-shield-halved', threshold: 10, unlock: '築基期解鎖' },
   { id: 'bag', name: '背包', icon: 'fa-box-open', threshold: 10, unlock: '築基期解鎖' }
 ];
@@ -58,15 +59,22 @@ function updateDetailTabs() {
   if (!list) return;
   const score = window.getTrainingAccessScore?.() ?? Rules.score(window.getCurrentUserData?.());
   const buttons = DETAIL_TABS.map(def => {
-    let button = list.querySelector(`[data-training-tab="${def.id}"]`);
+    let button = list.querySelector(def.action ? '[data-training-contract]' : `[data-training-tab="${def.id}"]`);
     if (!button) {
       // Early accounts have only a Status shell. Reserve the same native tabs
       // now; Foundation/Golden Core bind their usual handlers when unlocked.
       button = document.createElement('button');
       button.type = 'button';
       button.className = 'training-subtab-v3';
-      button.dataset.trainingTab = def.id;
-      button.setAttribute('aria-selected', 'false');
+      if (def.action) {
+        // Open the contract dialog without changing the current native tab.
+        button.dataset.trainingContract = '1';
+        button.setAttribute('aria-haspopup', 'dialog');
+        button.addEventListener('click', () => { window.openSoulboundDraw?.(); });
+      } else {
+        button.dataset.trainingTab = def.id;
+        button.setAttribute('aria-selected', 'false');
+      }
       button.innerHTML = `<i class="fa-solid ${def.icon}" aria-hidden="true"></i><span>${def.name}</span>`;
     }
     const locked = score < def.threshold || (def.id === 'core' && window.isGoldenCoreUnlocked?.() === false);
@@ -74,7 +82,7 @@ function updateDetailTabs() {
     button.classList.remove('hidden');
     button.disabled = locked;
     button.classList.toggle('is-locked', locked);
-    button.setAttribute('role', 'tab');
+    button.setAttribute('role', def.action ? 'button' : 'tab');
     button.setAttribute('aria-disabled', String(locked));
     button.setAttribute('aria-label', locked ? `${def.name}，${def.unlock}` : def.name);
     button.title = locked ? def.unlock : '';
