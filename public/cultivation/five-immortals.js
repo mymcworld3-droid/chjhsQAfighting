@@ -79,14 +79,14 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
       // If unavailable, the local eligibility filter below still keeps the board clean.
       try {
         const needsCleanup = Date.now() - lastCleanupAt > 180000;
-        if (needsCleanup) lastCleanupAt = Date.now();
         const token = needsCleanup ? await auth?.currentUser?.getIdToken?.() : null;
         if (token) {
           const cleaned = await fetch('/api/immortals/prune-ineligible', {
             method: 'POST', cache: 'no-store',
             headers: { 'Authorization': 'Bearer ' + token }
           });
-          if (!cleaned.ok) console.warn('[Five Immortals] background seat cleanup deferred:', cleaned.status);
+          if (cleaned.ok) lastCleanupAt = Date.now();
+          else console.warn('[Five Immortals] background seat cleanup deferred:', cleaned.status);
         }
       } catch (cleanupError) {
         console.warn('[Five Immortals] background cleanup unavailable:', cleanupError?.message || cleanupError);
@@ -177,7 +177,7 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
     const backdrop = document.createElement('div');
     backdrop.id = 'five-immortal-challenge';
     backdrop.className = 'fi-backdrop';
-    backdrop.innerHTML = `<section class="fi-modal" role="dialog" aria-modal="true"><div class="fi-head"><div><span class="fi-kicker">渡劫問鼎 · ENDLESS TRIAL</span><h3 id="fi-title">五仙問鼎</h3></div><button class="fi-close" type="button">×</button></div><div class="fi-scoreboard"><div><span>本次連答</span><b id="fi-streak">0</b></div><div><span>在榜紀錄</span><b id="fi-target">0</b></div><div><span>資格</span><b>渡劫+</b></div></div><div class="fi-note">固定國中程度。沒有總題數，也沒有挑戰次數限制；一路答到第一次錯誤為止。要奪位，必須<strong>嚴格超過</strong>目前仙主紀錄，同分不換榜。</div><div id="fi-body"></div></section>`;
+    backdrop.innerHTML = `<section class="fi-modal" role="dialog" aria-modal="true"><div class="fi-head"><div><span class="fi-kicker">渡劫問鼎 · ENDLESS TRIAL</span><h3 id="fi-title">五仙問鼎</h3></div><button class="fi-close" type="button">×</button></div><div class="fi-scoreboard"><div><span>本次連答</span><b id="fi-streak">0</b></div><div><span>在榜紀錄</span><b id="fi-target">0</b></div><div><span>資格</span><b>渡劫+</b></div></div><div class="fi-note">${currentGroup() === 'elementary' ? '國小高年級' : '國中三年級'}程度。沒有總題數，也沒有挑戰次數限制；一路答到第一次錯誤為止。要奪位，必須<strong>嚴格超過</strong>目前仙主紀錄，同分不換榜。</div><div id="fi-body"></div></section>`;
     backdrop.querySelector('.fi-close').onclick = () => closeChallenge();
     backdrop.addEventListener('click', (event) => { if (event.target === backdrop) closeChallenge(); });
     document.body.appendChild(backdrop);
