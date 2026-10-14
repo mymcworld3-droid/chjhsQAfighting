@@ -300,7 +300,13 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     event.preventDefault();
     event.stopPropagation();
     event.stopImmediatePropagation();
-    showLocked(target.id?.startsWith('btn-acc-') ? '接受鬥法邀請' : '仙盟');
+    if (target.id?.startsWith('btn-acc-')) {
+      showLocked('接受鬥法邀請');
+    } else if (!window.getCurrentUserData?.()?.profile?.educationLevel && window.promptXiuxianEducationLevel?.()) {
+      return;
+    } else {
+      showLocked('仙盟');
+    }
   }
 
   function exposeRules() {
