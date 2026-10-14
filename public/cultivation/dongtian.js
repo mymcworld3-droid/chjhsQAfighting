@@ -164,7 +164,6 @@ export const featureReady = (async () => {
       <div id="dongtian-body" class="dongfu-collapse-body dt-body" hidden>
         <section class="dt-create">
           <h4>開闢新洞天</h4>
-          <p>可同時提供多張圖片與文字。AI 會先判斷需要的題數與固定單選結構，再逐題生成完整題目與解析；每次都會參考前面已生成的題目以避免重複。</p>
           <textarea id="dt-source-text" class="dt-input" maxlength="16000" placeholder="貼上課文、筆記、公式說明、重點整理……（圖片與文字至少提供一種）"></textarea>
           <div class="dt-upload-row">
             <label class="dt-upload"><i class="fa-solid fa-images"></i> 上傳圖片（最多 ${MAX_IMAGES} 張）<input id="dt-images" type="file" accept="image/png,image/jpeg,image/webp" multiple></label>
