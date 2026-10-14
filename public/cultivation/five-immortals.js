@@ -70,6 +70,20 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
   async function loadOwners() {
     if (!db) return;
     try {
+      // Server-side cleanup removes old below-threshold owners from Firestore itself.
+      // If unavailable, the local eligibility filter below still keeps the board clean.
+      try {
+        const token = await auth?.currentUser?.getIdToken?.();
+        if (token) {
+          const cleaned = await fetch('/api/immortals/prune-ineligible', {
+            method: 'POST', cache: 'no-store',
+            headers: { 'Authorization': 'Bearer ' + token }
+          });
+          if (!cleaned.ok) console.warn('[Five Immortals] background seat cleanup deferred:', cleaned.status);
+        }
+      } catch (cleanupError) {
+        console.warn('[Five Immortals] background cleanup unavailable:', cleanupError?.message || cleanupError);
+      }
       const snap = await fs.getDocs(fs.collection(db, 'worldImmortals'));
       owners = {};
       const uids = [];
