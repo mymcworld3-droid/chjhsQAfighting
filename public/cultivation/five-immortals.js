@@ -5,6 +5,7 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
 
   const TRIBULATION_SCORE = 1268;
   const QUIZ_LEVEL = '國中三年級';
+  const ELEMENTARY_QUIZ_LEVEL = '國小高年級';
   const QUIZ_DIFFICULTY = 'medium';
   const ROLES = [
     { id: 'ru-xian', name: '儒仙', subject: '國文', desc: '以文載道' },
@@ -27,7 +28,9 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
 
   function userData() { return window.getCurrentUserData?.() || null; }
   function currentScore() { return Math.max(0, Number(userData()?.stats?.totalScore) || 0); }
-  function eligible() { return currentScore() >= TRIBULATION_SCORE; }
+  function currentGroup() { return window.getLeaderboardEducationGroup?.(userData()?.profile?.educationLevel) || null; }
+  function seatId(group, role) { return group + '__' + role; }
+  function eligible() { return !!currentGroup() && currentScore() >= TRIBULATION_SCORE; }
   function roleById(id) { return ROLES.find((r) => r.id === id) || null; }
   function ownerRecord(id) { return Math.max(0, Number(owners[id]?.challengeScore) || 0); }
   function escapeHtml(value) { return String(value ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;'); }
@@ -70,7 +73,7 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
   async function loadOwners() {
     if (!db) return;
     try {
-      // Server-side cleanup removes old below-threshold owners from Firestore itself.
+      // Server-side migration moves old shared seats to their owner's school cohort.
       // If unavailable, the local eligibility filter below still keeps the board clean.
       try {
         const token = await auth?.currentUser?.getIdToken?.();
@@ -84,12 +87,21 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
       } catch (cleanupError) {
         console.warn('[Five Immortals] background cleanup unavailable:', cleanupError?.message || cleanupError);
       }
-      const snap = await fs.getDocs(fs.collection(db, 'worldImmortals'));
+      const cohort = currentGroup();
+      if (!cohort) { owners = {}; render(); return; }
+      const snap = await fs.getDocs(fs.query(
+        fs.collection(db, 'worldImmortals'), fs.where('cohort', '==', cohort)
+      ));
+      if (cohort !== currentGroup()) return;
       owners = {};
       const uids = [];
       snap.forEach((docSnap) => {
         const data = docSnap.data();
-        owners[docSnap.id] = data;
+        const prefix = cohort + '__';
+        if (!docSnap.id.startsWith(prefix)) return;
+        const role = docSnap.id.slice(prefix.length);
+        if (!ROLES.some(item => item.id === role) || data.cohort !== cohort) return;
+        owners[role] = data;
         if (data.uid && !uids.includes(data.uid)) uids.push(data.uid);
       });
       const profiles = {};
@@ -99,14 +111,19 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
         const usersSnap = await fs.getDocs(q);
         usersSnap.forEach((docSnap) => {
           const data = docSnap.data();
-          profiles[docSnap.id] = { displayName: data.displayName || data.name || '無名仙客', equipped: { ...data.equipped, avatar: resolvePlayerAvatar(data) }, totalScore: Math.max(0, Number(data.stats?.totalScore) || 0) };
+          profiles[docSnap.id] = {
+            displayName: data.displayName || data.name || '無名仙客',
+            equipped: { ...data.equipped, avatar: resolvePlayerAvatar(data) },
+            totalScore: Math.max(0, Number(data.stats?.totalScore) || 0),
+            cohort: window.getLeaderboardEducationGroup?.(data.profile?.educationLevel)
+          };
         });
       }
       Object.keys(owners).forEach((roleId) => {
         const owner = owners[roleId];
         const profile = profiles[owner.uid];
         // Filter historical placements if the owner was deleted or fell below Tribulation.
-        if (!profile || profile.totalScore < TRIBULATION_SCORE) {
+        if (!profile || profile.totalScore < TRIBULATION_SCORE || profile.cohort !== cohort) {
           delete owners[roleId];
           return;
         }
@@ -134,10 +151,11 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
   }
 
   async function fetchChallengeQuestion(role) {
+    const level = currentGroup() === 'elementary' ? ELEMENTARY_QUIZ_LEVEL : QUIZ_LEVEL;
     const response = await fetch('/api/generate-quiz', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ subject: role.subject, level: QUIZ_LEVEL, difficulty: QUIZ_DIFFICULTY, rank: userData()?.stats?.rankLevel || 0, specificTopic: `${role.subject}國中程度綜合題。題目需有唯一明確答案。` })
+      body: JSON.stringify({ subject: role.subject, level, difficulty: QUIZ_DIFFICULTY, rank: userData()?.stats?.rankLevel || 0, specificTopic: `${role.subject}${currentGroup() === 'elementary' ? '國小' : '國中'}程度綜合題。題目需有唯一明確答案。` })
     });
     if (!response.ok) throw new Error(`QUIZ_API_${response.status}`);
     const body = await response.json();
@@ -171,9 +189,10 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
     const role = roleById(roleId);
     const user = auth?.currentUser;
     if (!role || !user) { toast('請先登入，才能問鼎五仙。'); return; }
+    if (!currentGroup()) { toast('請先到洞府設定年級，才能查看及問鼎五仙。'); return; }
     if (!eligible()) { toast(`只有渡劫以上修士（${TRIBULATION_SCORE} 修為）能問鼎五仙。`); return; }
     const serial = ++sessionSerial;
-    challenge = { active: true, serial, role, streak: 0, target: ownerRecord(roleId), busy: false, question: null };
+    challenge = { active: true, serial, cohort: currentGroup(), role, streak: 0, target: ownerRecord(roleId), busy: false, question: null };
     ensureModal();
     document.getElementById('fi-title').textContent = `問鼎${role.name} · ${role.subject}`;
     document.getElementById('fi-target').textContent = String(challenge.target);
@@ -241,14 +260,17 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
     let result = 'miss';
     let liveTarget = challenge.target;
     try {
-      const roleRef = fs.doc(db, 'worldImmortals', role.id);
+      const cohort = challenge.cohort;
+      const roleRef = fs.doc(db, 'worldImmortals', seatId(cohort, role.id));
       const userRef = fs.doc(db, 'users', user.uid);
       await fs.runTransaction(db, async (tx) => {
-        const refs = ROLES.map((item) => fs.doc(db, 'worldImmortals', item.id));
+        const refs = ROLES.map((item) => fs.doc(db, 'worldImmortals', seatId(cohort, item.id)));
         const [userSnap, ...roleSnaps] = await Promise.all([tx.get(userRef), ...refs.map((ref) => tx.get(ref))]);
         if (!userSnap.exists()) throw new Error('NO_USER');
         const latestUser = userSnap.data();
         if ((Number(latestUser.stats?.totalScore) || 0) < TRIBULATION_SCORE) throw new Error('NOT_TRIBULATION');
+        if (window.getLeaderboardEducationGroup?.(latestUser.profile?.educationLevel) !== cohort)
+          throw new Error('WRONG_COHORT');
         const targetIndex = ROLES.findIndex((item) => item.id === role.id);
         const targetSnap = roleSnaps[targetIndex];
         const targetData = targetSnap.exists() ? targetSnap.data() : null;
@@ -256,11 +278,12 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
         const alreadyOwnsOther = roleSnaps.some((snap, index) => snap.exists() && snap.data().uid === user.uid && index !== targetIndex);
         if (alreadyOwnsOther) throw new Error('ALREADY_IMMORTAL');
         if (streak <= liveTarget) return;
-        tx.set(roleRef, { uid: user.uid, displayName: latestUser.displayName || user.displayName || '無名仙客', role: role.id, subject: role.subject, challengeScore: streak, previousRecord: liveTarget, claimedAt: fs.serverTimestamp(), challengeLevel: QUIZ_LEVEL, challengeDifficulty: QUIZ_DIFFICULTY });
+        tx.set(roleRef, { uid: user.uid, cohort, displayName: latestUser.displayName || user.displayName || '無名仙客', role: role.id, subject: role.subject, challengeScore: streak, previousRecord: liveTarget, claimedAt: fs.serverTimestamp(), challengeLevel: cohort === 'elementary' ? ELEMENTARY_QUIZ_LEVEL : QUIZ_LEVEL, challengeDifficulty: QUIZ_DIFFICULTY });
         result = targetData?.uid === user.uid ? 'improved' : 'claimed';
       });
     } catch (error) {
       if (error.message === 'NOT_TRIBULATION') result = 'not-eligible';
+      else if (error.message === 'WRONG_COHORT') result = 'wrong-cohort';
       else if (error.message === 'ALREADY_IMMORTAL') result = 'already-other';
       else { console.error('五仙問鼎結算失敗', error); result = 'error'; }
     }
@@ -272,8 +295,8 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
     const body = document.getElementById('fi-body');
     if (!body || !challenge || challenge.serial !== serial) return;
     const success = result === 'claimed' || result === 'improved';
-    const title = result === 'claimed' ? `問鼎成功 · 登臨${role.name}` : result === 'improved' ? `仙位鞏固 · 新紀錄 ${streak}` : result === 'already-other' ? '你已位列五仙' : result === 'not-eligible' ? '境界已不足' : result === 'error' ? '天道結算失敗' : streak === target ? '只差一步 · 同分不換榜' : '問鼎未成';
-    const message = success ? `本次連答 ${streak} 題，超過原紀錄 ${target} 題。` : result === 'already-other' ? '一名修士同時只能據有一席仙位；可回到自己的仙位刷新紀錄。' : result === 'not-eligible' ? '真正寫榜前再次驗證修為，只有渡劫以上修士可以成為五仙。' : result === 'error' ? '這次沒有改動榜單，可以立即重新挑戰。' : `本次連答 ${streak} 題；目前${role.name}紀錄為 ${target} 題。必須嚴格超過才能奪位。`;
+    const title = result === 'claimed' ? `問鼎成功 · 登臨${role.name}` : result === 'improved' ? `仙位鞏固 · 新紀錄 ${streak}` : result === 'already-other' ? '你已位列五仙' : result === 'not-eligible' ? '境界已不足' : result === 'wrong-cohort' ? '年級已變更' : result === 'error' ? '天道結算失敗' : streak === target ? '只差一步 · 同分不換榜' : '問鼎未成';
+    const message = success ? `本次連答 ${streak} 題，超過原紀錄 ${target} 題。` : result === 'already-other' ? '一名修士同時只能據有一席仙位；可回到自己的仙位刷新紀錄。' : result === 'not-eligible' ? '真正寫榜前再次驗證修為，只有渡劫以上修士可以成為五仙。' : result === 'wrong-cohort' ? '你的年級已變更，本次紀錄不會寫入另一組仙榜。' : result === 'error' ? '這次沒有改動榜單，可以立即重新挑戰。' : `本次連答 ${streak} 題；目前${role.name}紀錄為 ${target} 題。必須嚴格超過才能奪位。`;
     body.innerHTML = `<div class="fi-result"><div class="fi-result-seal">${success ? '仙' : '問'}</div><h4>${title}</h4><p>${message}</p><div class="fi-actions"><button id="fi-close-result" class="fi-ghost">返回榜單</button><button id="fi-again" class="fi-primary">再次問鼎</button></div></div>`;
     document.getElementById('fi-close-result').onclick = () => closeChallenge();
     document.getElementById('fi-again').onclick = () => startChallenge(role.id);
@@ -283,12 +306,20 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
     const container = document.getElementById('five-immortal-list');
     if (!container) return;
     const uid = auth?.currentUser?.uid || '';
+    const cohort = currentGroup();
+    if (!cohort) {
+      container.innerHTML = '<p style="padding:26px 12px;text-align:center;color:#cdbb91">請先在洞府設定年級，才能查看你的五大仙榜。 <button type="button" id="five-set-grade" style="text-decoration:underline;color:#c9eedc">前往設定</button></p>';
+      container.querySelector('#five-set-grade')?.addEventListener('click', () => window.switchToPage?.('page-settings'));
+      const note = document.getElementById('five-immortal-lock');
+      if (note) note.textContent = '';
+      return;
+    }
     const sorted = [...ROLES].sort((a, b) => ownerRecord(b.id) - ownerRecord(a.id) || a.id.localeCompare(b.id));
     const renderData = ROLES.map((role) => ({ ...role, rank: sorted.findIndex((item) => item.id === role.id) + 1, owner: owners[role.id] || null }));
     container.innerHTML = renderData.map((role) => {
       const owner = role.owner;
       const mine = owner?.uid === uid;
-      const canTry = !!uid && eligible();
+      const canTry = !!uid && !!cohort && eligible();
       return `<div class="podium-slot rank-${role.rank}"><div class="avatar-wrapper">${avatarHtml(owner?.equipped, role.rank === 1)}</div><div class="immortal-name">${role.name}</div><div class="immortal-subject">${role.subject} · ${role.desc}</div><div class="immortal-owner-box">${owner ? `<div class="immortal-owner">${escapeHtml(owner.displayName || '無名仙客')}</div><div class="immortal-record">連答 ${ownerRecord(role.id)} 題</div><div class="immortal-status">${mine ? '你的仙位' : '在榜仙主'}</div>` : `<div class="immortal-owner" style="color:#625949">仙位懸空</div><div class="immortal-record">紀錄 0 題</div>`}<button class="immortal-btn" data-immortal="${role.id}" ${canTry ? '' : 'disabled'}>${mine ? '刷新紀錄' : owner ? '挑戰仙主' : '問鼎仙位'}</button></div></div>`;
     }).join('');
     container.querySelectorAll('[data-immortal]').forEach((button) => { button.onclick = () => startChallenge(button.dataset.immortal); });
@@ -310,7 +341,7 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
       box = document.createElement('section');
       box.id = 'five-immortals';
       box.className = 'five-immortals';
-      box.innerHTML = `<div class="five-immortals-head"><h3>九州五大仙</h3><button id="five-immortals-help" class="five-immortals-help" type="button" aria-label="查看五大仙遊戲方式" aria-expanded="false" title="遊戲方式">!</button></div><div id="five-immortals-guide" class="five-immortal-guide" hidden><p>渡劫以上方可問鼎 · 國中程度連答 · 一錯即止 · 1868 修為先入半仙 · 榜上五席方為真仙</p><div class="five-immortal-rule"><div><span>境界門檻</span><b>渡劫 · 1268 修為</b></div><div><span>問鼎方式</span><b>連續答對直到答錯</b></div><div><span>挑戰限制</span><b>無限次嘗試</b></div></div><p class="five-immortal-extra">每一仙位對應固定科目；挑戰沒有總題數，也沒有次數限制。一路答到第一次答錯為止，只有嚴格超過目前紀錄才能奪位，同分不換榜；每名修士同時只能據有一席仙位。真仙境界須同時達到 1868 修為並在榜；掉榜後恢復半仙，修為保留。</p></div><div id="five-immortal-list" class="podium-container"></div><div id="five-immortal-lock" class="five-locked"></div>`;
+      box.innerHTML = `<div class="five-immortals-head"><h3>九州五大仙</h3><button id="five-immortals-help" class="five-immortals-help" type="button" aria-label="查看五大仙遊戲方式" aria-expanded="false" title="遊戲方式">!</button></div><div id="five-immortals-guide" class="five-immortal-guide" hidden><p>渡劫以上方可問鼎 · 依學制出題 · 一錯即止 · 1868 修為先入半仙 · 榜上五席方為真仙</p><div class="five-immortal-rule"><div><span>境界門檻</span><b>渡劫 · 1268 修為</b></div><div><span>問鼎方式</span><b>連續答對直到答錯</b></div><div><span>挑戰限制</span><b>無限次嘗試</b></div></div><p class="five-immortal-extra">每一仙位對應固定科目；挑戰沒有總題數，也沒有次數限制。一路答到第一次答錯為止，只有嚴格超過目前紀錄才能奪位，同分不換榜；每名修士同時只能據有一席仙位。真仙境界須同時達到 1868 修為並在榜；掉榜後恢復半仙，修為保留。</p></div><div id="five-immortal-list" class="podium-container"></div><div id="five-immortal-lock" class="five-locked"></div>`;
       const anchor = rank.querySelector('.glass-panel') || rank.firstElementChild;
       if (anchor) anchor.before(box); else rank.prepend(box);
     }
@@ -330,6 +361,8 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
     mount();
     connect();
     window.addEventListener('xiuxian:stats-updated', render);
+    window.addEventListener('xiuxian:user-data-ready', () => { if (db) void loadOwners(); else render(); });
+    window.addEventListener('xiuxian:quest-progress-updated', () => { if (db) void loadOwners(); else render(); });
     window.addEventListener('focus', () => { if (db) loadOwners(); });
     window.addEventListener('xiuxian:appearance-updated', () => { if (db) void loadOwners(); });
   }
