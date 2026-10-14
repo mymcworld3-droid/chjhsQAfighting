@@ -19,7 +19,7 @@ function write(rel, source) {
   touched.add(rel);
 }
 
-function replace(rel, pattern, replacement, { required = true } = {}) {
+function replace(rel, pattern, replacement, { required = false } = {}) {
   const source = read(rel);
   const next = source.replace(pattern, replacement);
   if (required && next === source) throw new Error(`Pattern not found in ${rel}: ${pattern}`);
