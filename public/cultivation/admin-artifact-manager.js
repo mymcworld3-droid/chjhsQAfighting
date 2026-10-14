@@ -801,7 +801,7 @@ import {
       modal.remove();
       render();
       toast(originalId ? `已更新 ${item.name}` : `已建立 ${item.name}`);
-      if (!item.imageUrl) {
+      if (item.equipSlot === '本命法寶' && !item.imageUrl) {
         void window.ensureAdminItemImage?.('artifact', item.id).catch((error) =>
           console.warn('[Admin artifact image]', error));
       }
