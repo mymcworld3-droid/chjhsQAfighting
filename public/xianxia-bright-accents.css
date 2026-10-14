@@ -468,8 +468,3 @@ body.xianxia-theme #page-training .cultivation-refinery > .refinery-panel {
   border: 0 !important;
   box-shadow: none !important;
 }
-
-/* Two school bands share one lightweight rank board. */
-#leaderboard-groups [data-leaderboard-group]{transition:background .18s,border-color .18s,color .18s}
-#leaderboard-groups [data-leaderboard-group].is-active{background:linear-gradient(120deg,rgba(208,173,91,.26),rgba(129,98,45,.13));border-color:rgba(233,190,95,.8);color:#ffe6ad;box-shadow:0 0 0 1px rgba(231,191,101,.12) inset}
-#leaderboard-groups [data-leaderboard-group]:focus-visible{outline:2px solid #e6c987;outline-offset:3px}
