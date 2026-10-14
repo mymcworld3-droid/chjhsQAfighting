@@ -96,6 +96,7 @@ import {
 
   function missingQueue() {
     const artifactRows = ARTIFACT_CATALOG
+      .filter((item) => item.equipSlot === '本命法寶' && !globalThis.QASoulboundPool?.get(item.id))
       .filter((item) => !String(item?.imageUrl || '').trim())
       .map((item) => ({ kind: 'artifact', id: item.id, name: item.name || item.id }));
     const materialRows = MATERIAL_CATALOG
@@ -106,6 +107,7 @@ import {
 
   function regenerateQueue() {
     const artifactRows = ARTIFACT_CATALOG
+      .filter((item) => item.equipSlot === '本命法寶' && !globalThis.QASoulboundPool?.get(item.id))
       .map((item) => ({ kind: 'artifact', id: item.id, name: item.name || item.id }));
     const materialRows = MATERIAL_CATALOG
       .map((item) => ({ kind: 'material', id: item.id, name: item.name || item.id }));
@@ -113,11 +115,11 @@ import {
   }
 
   function counts() {
-    const artifactsReady = ARTIFACT_CATALOG.filter((item) => item.imageUrl).length;
+    const artifactsReady = ARTIFACT_CATALOG.filter((item) => item.equipSlot === '本命法寶' && item.imageUrl).length;
     const materialsReady = MATERIAL_CATALOG.filter((item) => item.imageUrl).length;
     return {
       artifactsReady,
-      artifactsTotal: ARTIFACT_CATALOG.length,
+      artifactsTotal: ARTIFACT_CATALOG.filter((item) => item.equipSlot === '本命法寶').length,
       materialsReady,
       materialsTotal: MATERIAL_CATALOG.length
     };
@@ -144,7 +146,7 @@ import {
     const c = counts();
     panel.innerHTML = `
       <div class="aiim-head">
-        <div><h3><i class="fa-solid fa-images"></i> 法寶／素材圖片</h3><p>使用 Cloudflare FLUX.1 Schnell。補圖只處理缺圖；一鍵重生會強制重新生成全部法寶與素材圖片。</p></div>
+        <div><h3><i class="fa-solid fa-images"></i> 法寶／素材圖片</h3><p>使用 Cloudflare FLUX.1 Schnell。僅處理本命法寶與素材圖片；一般法寶使用圖標，常駐本命原器使用固定圖片。補圖只處理缺圖；一鍵重生會重新生成可補圖項目。</p></div>
         <div class="aiim-actions">
           <button type="button" class="aiim-btn" id="aiim-backfill" ${busy ? 'disabled' : ''}><i class="fa-solid fa-wand-magic-sparkles"></i> 補圖</button>
           <button type="button" class="aiim-btn" id="aiim-regenerate" ${busy ? 'disabled' : ''}><i class="fa-solid fa-arrows-rotate"></i> 一鍵重生</button>

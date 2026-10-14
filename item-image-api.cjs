@@ -665,6 +665,12 @@ async function reserveImageJob({ project, kind, id, overwrite = false, requester
         throw error;
       }
     }
+    if (kind === 'artifact' && current.equipSlot !== '本命法寶') {
+      const item = { ...current };
+      delete item.imageUrl;
+      reserved = { skipped: true, item, ref };
+      return;
+    }
     if (current.imageUrl && !overwrite) {
       reserved = { skipped: true, item: current, ref };
       return;

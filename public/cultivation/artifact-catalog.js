@@ -269,7 +269,8 @@ export function normalizeArtifactDefinition(raw = {}) {
   if (raw.generationSignature) item.generationSignature = String(raw.generationSignature).trim().slice(0, 512);
   if (raw.aiProvider) item.aiProvider = String(raw.aiProvider).trim().slice(0, 80);
   if (raw.aiModel) item.aiModel = String(raw.aiModel).trim().slice(0, 120);
-  if (raw.imageUrl) item.imageUrl = String(raw.imageUrl).trim().slice(0, 2048);
+  // Only soulbound artifacts use artwork; ordinary artifacts render their icon.
+  if (item.equipSlot === '本命法寶' && raw.imageUrl) item.imageUrl = String(raw.imageUrl).trim().slice(0, 2048);
   if (['generating','ready','error'].includes(raw.imageStatus)) item.imageStatus = raw.imageStatus;
   if (raw.imageModel) item.imageModel = String(raw.imageModel).trim().slice(0, 120);
   if (raw.imagePromptVersion) item.imagePromptVersion = String(raw.imagePromptVersion).trim().slice(0, 80);

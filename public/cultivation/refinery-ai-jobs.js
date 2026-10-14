@@ -341,7 +341,7 @@ import {
 
   async function ensureGeneratedArtifactImage(artifactId) {
     const user = authUser();
-    if (!user || !artifactId) return null;
+    if (!user || !artifactId || getArtifactById(artifactId)?.equipSlot !== '本命法寶') return null;
     const token = await user.getIdToken();
     const response = await fetch('/api/item-image/ensure-artifact', {
       method: 'POST',
