@@ -17,6 +17,8 @@ test('ordinary board has no realm entry gate or manual school-cohort switch', ()
   assert.match(legacy, /leaderboardEducationGroup\(entry\.data\(\)\.profile\?\.educationLevel\) === group/);
   assert.match(legacy, /orderBy\('stats\.totalScore', 'desc'\)/);
   assert.match(legacy, /startAfter\(cursor\)/);
+  assert.match(legacy, /where\('cohort', '==', group\)/);
+  assert.doesNotMatch(legacy, /onSnapshot\(collection\(db, 'worldImmortals'\)/);
 });
 
 test('without grade the player is invited to settings, with no unrelated group shown', () => {
