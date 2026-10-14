@@ -454,8 +454,8 @@ test('Dongtian API endpoint performs planning before batched generation and audi
   assert.match(apiSource, /QUESTION_BATCH_SIZE = 1/);
 });
 
-test('Dongtian creation UI describes planning first and single-question generation', () => {
-  assert.match(uiSource, /先判斷需要的題數與固定單選結構，再逐題生成完整題目與解析/);
+test('Dongtian creation keeps concise generation progress but omits long instructions', () => {
+  assert.doesNotMatch(uiSource, /先判斷需要的題數與固定單選結構，再逐題生成完整題目與解析/);
   assert.match(uiSource, /先規劃題數，再逐題生成完整解析/);
 });
 
