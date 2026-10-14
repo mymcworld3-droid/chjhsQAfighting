@@ -1,7 +1,7 @@
 // Shared permanent entrance gates. Current cultivation still drives realm/rewards.
 (function (root) {
   'use strict';
-  const REALMS = Object.freeze([0, 10, 28, 68, 188, 428, 788, 1268, 1868, 2588]);
+  const REALMS = Object.freeze([0, 10, 28, 68, 188, 428, 788, 1268, 1868]);
   const PLACES = Object.freeze([
     { id: 'meditation', name: '修煉室', threshold: 28, realm: '金丹境', tab: 'core' },
     { id: 'forge', name: '鍛造坊', threshold: 10, realm: '築基初期', tab: 'refinery' },
