@@ -87,7 +87,8 @@ import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-she
     if (heading) heading.innerHTML = '';
 
     const coreTab = page.querySelector('[data-training-tab="core"]');
-    coreTab?.classList.add('hidden');
+    coreTab?.classList.remove('hidden');
+    if (coreTab) coreTab.disabled = true;
     // A newly created account already owns a Status-only shell. Add Foundation
     // tabs to that same page rather than replacing the Status controls.
     const tabs = page.querySelector('.training-subtabs-v3');

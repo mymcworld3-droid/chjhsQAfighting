@@ -603,7 +603,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
         </div>
         <div class="training-subtabs-v3" role="tablist">
           <button type="button" class="training-subtab-v3 active" data-training-tab="core" aria-selected="true"><i class="fa-solid fa-circle-dot"></i><span>金丹</span></button>
-          <button type="button" class="training-subtab-v3" data-training-tab="nascent-soul" aria-selected="false" hidden><i class="fa-solid fa-child-reaching"></i><span>元嬰</span></button>
+          <button type="button" class="training-subtab-v3" data-training-tab="nascent-soul" aria-selected="false" disabled><i class="fa-solid fa-child-reaching"></i><span>元嬰</span></button>
           <button type="button" class="training-subtab-v3" data-training-tab="refinery" aria-selected="false"><i class="fa-solid fa-hammer"></i><span>煉器</span></button>
           <button type="button" class="training-subtab-v3" data-training-tab="equipment" aria-selected="false"><i class="fa-solid fa-shield-halved"></i><span>裝備</span></button>
           <button type="button" class="training-subtab-v3" data-training-tab="bag" aria-selected="false"><i class="fa-solid fa-box-open"></i><span>背包</span></button>
@@ -619,7 +619,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     page.classList.add('training-page', 'training-page-v3');
     if (alreadyHydrated) {
       const soulTab = page.querySelector('[data-training-tab="nascent-soul"]');
-      if (soulTab) soulTab.hidden = !nascentUnlocked();
+      if (soulTab) { soulTab.hidden = false; soulTab.disabled = !nascentUnlocked(); }
       return;
     }
 
@@ -645,7 +645,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
       coreTab?.insertAdjacentHTML('afterend', '<button type="button" class="training-subtab-v3" data-training-tab="nascent-soul" aria-selected="false"><i class="fa-solid fa-child-reaching"></i><span>元嬰</span></button>');
       soulTab = tabs.querySelector('[data-training-tab="nascent-soul"]');
     }
-    if (soulTab) soulTab.hidden = !nascentUnlocked();
+    if (soulTab) { soulTab.hidden = false; soulTab.disabled = !nascentUnlocked(); }
     if (!tabs.querySelector('[data-training-tab="equipment"]')) {
       tabs.querySelector('[data-training-tab="bag"]')?.insertAdjacentHTML('beforebegin',
         '<button type="button" class="training-subtab-v3" data-training-tab="equipment" aria-selected="false"><i class="fa-solid fa-shield-halved"></i><span>裝備</span></button>');
@@ -1039,7 +1039,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     if (lastUnlocked === unlocked) {
       if (unlocked) {
         const soulTab = document.querySelector('#page-training [data-training-tab="nascent-soul"]');
-        if (soulTab) soulTab.hidden = !nascentUnlocked();
+        if (soulTab) { soulTab.hidden = false; soulTab.disabled = !nascentUnlocked(); }
         if (['core','nascent-soul'].includes(activeTab)) renderTrainingPage();
       }
       return;

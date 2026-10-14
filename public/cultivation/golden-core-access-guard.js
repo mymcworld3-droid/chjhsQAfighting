@@ -24,8 +24,7 @@
       }
 
       html:not(.golden-core-access-ready) [data-training-tab="core"] {
-        display: none !important;
-        visibility: hidden !important;
+        opacity: .45;
         pointer-events: none !important;
       }
     `;

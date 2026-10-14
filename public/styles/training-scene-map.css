@@ -306,10 +306,11 @@ body.xianxia-theme #page-training .training-scene-detailbar {
 body.xianxia-theme #page-training.training-page-v3.active-page[data-training-place] {
   grid-template-rows: auto auto minmax(0, 1fr) !important;
 }
-body.xianxia-theme #page-training.training-page-v3.active-page[data-training-place].training-single-tab {
-  grid-template-rows: auto minmax(0, 1fr) !important;
-}
-body.xianxia-theme #page-training.training-single-tab .training-subtabs-v3 { display: none !important; }
+body.xianxia-theme #page-training[data-training-place] > .training-subtabs-v3 { grid-row: 1; }
+body.xianxia-theme #page-training[data-training-place] > .training-scene-detailbar { grid-row: 2; }
+body.xianxia-theme #page-training[data-training-place] > #training-tab-content { grid-row: 3; }
+body.xianxia-theme #page-training .training-subtab-v3:disabled { opacity: .45; cursor: not-allowed; }
+body.xianxia-theme #page-training .training-subtab-v3.is-locked::after { content: '🔒'; font-size: .8em; }
 body.xianxia-theme #page-training .training-scene-back {
   display: inline-flex;
   align-items: center;
@@ -323,10 +324,6 @@ body.xianxia-theme #page-training .training-scene-back {
   cursor: pointer;
 }
 .training-scene-back:focus-visible { outline: 2px solid white; outline-offset: 2px; }
-#page-training[data-training-place="meditation"] .training-subtab-v3:not([data-training-tab="core"]):not([data-training-tab="nascent-soul"]),
-#page-training[data-training-place="forge"] .training-subtab-v3:not([data-training-tab="refinery"]),
-#page-training[data-training-place="vault"] .training-subtab-v3:not([data-training-tab="bag"]):not([data-training-tab="equipment"]),
-#page-training[data-training-place="status"] .training-subtab-v3:not(#training-status-tab) { display: none !important; }
 @media (prefers-reduced-motion: reduce) {
   .training-place-cutout, .training-place-aura { transition: none; }
   .training-map-atmosphere > span, .training-map-mote, .training-map-cloud { animation: none; }
