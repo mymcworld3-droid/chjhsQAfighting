@@ -10,12 +10,12 @@ function setup() {
   return window;
 }
 const realms = [{ name: '凡人' }, { name: '渡劫' }, { name: '半仙' }, { name: '真仙' }];
-test('True Immortal requires both the 2588 threshold and an active named seat', () => {
+test('True Immortal requires both the 1868 threshold and an active named seat', () => {
   const w = setup();
   for (const listed of [false, true]) {
     w.setTrueImmortalBoard(listed ? [{ id: 'ru-xian', uid: 'alice' }] : []);
     for (const score of [0, 627, 1868, 629, 867, 2588, 9999]) {
-      assert.equal(w.isTrueImmortal(score), listed && score >= 2588);
+      assert.equal(w.isTrueImmortal(score), listed && score >= 1868);
     }
   }
 });
