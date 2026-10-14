@@ -59,7 +59,7 @@ test('Status opens at account creation, Foundation features at 10, Golden Core a
   assert.doesNotMatch(foundationTraining, /return migrationReady\(\) && value >= FOUNDATION_SCORE/);
   assert.match(foundationTraining, /data-training-tab="bag"/);
   assert.match(foundationTraining, /data-training-tab="refinery"/);
-  assert.match(foundationTraining, /coreTab\?\.classList\.add\('hidden'\)/);
+  assert.match(foundationTraining, /if \(coreTab\) coreTab\.disabled = true/);
   assert.match(foundationTraining, /const preserveStatus = !!page\.querySelector\('#training-status-tab\.active'\)/);
   assert.match(foundationTraining, /if \(tabs && !tabs\.querySelector\('\[data-training-tab="bag"\]'\)\)/);
 

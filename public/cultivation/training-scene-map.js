@@ -9,6 +9,13 @@ const Layouts = globalThis.QATrainingSceneLayouts;
 const SVG = 'http://www.w3.org/2000/svg';
 const PAGE = 'page-training';
 const tabPlace = { core: 'meditation', 'nascent-soul': 'meditation', refinery: 'forge', bag: 'vault', equipment: 'vault', status: 'status' };
+const DETAIL_TABS = [
+  { id: 'core', name: '金丹', icon: 'fa-circle-dot', threshold: 28, unlock: '金丹境解鎖' },
+  { id: 'nascent-soul', name: '元嬰', icon: 'fa-child-reaching', threshold: 68, unlock: '元嬰境解鎖' },
+  { id: 'refinery', name: '煉器', icon: 'fa-hammer', threshold: 10, unlock: '築基期解鎖' },
+  { id: 'equipment', name: '裝備', icon: 'fa-shield-halved', threshold: 10, unlock: '築基期解鎖' },
+  { id: 'bag', name: '背包', icon: 'fa-box-open', threshold: 10, unlock: '築基期解鎖' }
+];
 let page, map, scenery, plane, bar, background, resizeObserver, pageObserver;
 let orientation = '', scheduled = false, running = false, navigation = null;
 let navigationRevision = 0;
@@ -47,11 +54,37 @@ function setDetail(placeId) {
 }
 function updateDetailTabs() {
   if (!page) return;
-  const place = page.dataset.trainingPlace;
-  const tabs = [...page.querySelectorAll('.training-subtab-v3')].filter(tab =>
-    tabPlace[tab.dataset.trainingTab || (tab.id === 'training-status-tab' ? 'status' : '')] === place &&
-    !tab.hidden && !tab.classList.contains('hidden'));
-  page.classList.toggle('training-single-tab', !!place && tabs.length <= 1);
+  const list = page.querySelector('.training-subtabs-v3');
+  if (!list) return;
+  const score = window.getTrainingAccessScore?.() ?? Rules.score(window.getCurrentUserData?.());
+  const buttons = DETAIL_TABS.map(def => {
+    let button = list.querySelector(`[data-training-tab="${def.id}"]`);
+    if (!button) {
+      // Early accounts have only a Status shell. Reserve the same native tabs
+      // now; Foundation/Golden Core bind their usual handlers when unlocked.
+      button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'training-subtab-v3';
+      button.dataset.trainingTab = def.id;
+      button.setAttribute('aria-selected', 'false');
+      button.innerHTML = `<i class="fa-solid ${def.icon}" aria-hidden="true"></i><span>${def.name}</span>`;
+    }
+    const locked = score < def.threshold || (def.id === 'core' && window.isGoldenCoreUnlocked?.() === false);
+    button.hidden = false;
+    button.classList.remove('hidden');
+    button.disabled = locked;
+    button.classList.toggle('is-locked', locked);
+    button.setAttribute('role', 'tab');
+    button.setAttribute('aria-disabled', String(locked));
+    button.setAttribute('aria-label', locked ? `${def.name}，${def.unlock}` : def.name);
+    button.title = locked ? def.unlock : '';
+    return button;
+  });
+  const status = list.querySelector('#training-status-tab');
+  if (status) buttons.push(status);
+  // Avoid moving unchanged nodes and disturbing focus or observer-driven UI.
+  if (buttons.some((button, i) => list.children[i] !== button)) list.append(...buttons);
+  page.classList.remove('training-single-tab');
 }
 function showMap({ focus = false } = {}) {
   navigationRevision++;
@@ -399,6 +432,7 @@ function boot() {
   document.addEventListener('click', event => {
     const target = event.target.closest?.('#nav-training,[data-target="page-training"],[data-training-tab],#training-status-tab');
     if (!target) return;
+    if (target.disabled) return;
     // Navigation resets the map behind the closed curtain, not on pointerdown.
     if (target.id === 'nav-training' || target.dataset.target === PAGE) {
       if (visible()) showMap();
