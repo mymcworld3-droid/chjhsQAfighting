@@ -384,7 +384,12 @@ test('Dongtian question reports require double AI confirmation before sealing th
 });
 
 test('Suspended Dongtians are excluded from encounters and owners receive a repair action', () => {
-  assert.match(uiSource, /where\('status', '==', 'active'\)/);
+  // Public indices are now filtered by the authenticated server endpoint.
+  assert.match(apiSource, /if \(mode === 'public'\)/);
+  assert.match(apiSource, /\.where\('status', '==', 'active'\)/);
+  assert.match(uiSource, /dongtianRepository\.listIndex\('public'\)/);
+  // A cave could be sealed after index lookup; verify the full cave again.
+  assert.match(uiSource, /full\.data\(\)\?\.status === 'active'/);
   assert.match(uiSource, /data-dt-repair/);
   assert.match(uiSource, /已封印 · 待修復/);
   assert.match(uiSource, /if \(dongtian\.status && dongtian\.status !== 'active'\)/);
