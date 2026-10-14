@@ -10,7 +10,7 @@ const end = legacy.indexOf('//  Visual Helpers', start);
 assert.ok(start >= 0 && end > start);
 
 function harness(players, { deferred = false } = {}) {
-  const tbody = { innerHTML: '' };
+  const tbody = { innerHTML: '', querySelector: () => ({ addEventListener() {} }) };
   let visible = false;
   let now = 1000;
   let remote = structuredClone(players);
