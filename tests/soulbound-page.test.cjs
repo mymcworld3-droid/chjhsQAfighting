@@ -71,7 +71,7 @@ function pageRuntime() {
 }
 const settle = () => new Promise(resolve => setImmediate(resolve));
 const snapshot = (rank = 0) => ({ ok: true, rank, balance: 10000, poolVersion: Pool.VERSION,
-  draws: 0, untilPity: 5, prices: { single: 250, five: Pool.cost(rank, 0, 5) }, inventory: {}, pending: null, recovery: [] });
+  draws: 0, misses:0, fragments:0, untilPity: 50, prices: { single: 250, five: Pool.cost(rank, 0, 5) }, inventory: {}, pending: null, recovery: [] });
 function assertGallery(html, rank = 0) {
   assert.equal((html.match(/data-sb-preview=/g) || []).length, 8);
   for (const item of Pool.candidates(rank)) assert.ok(html.includes(item.imageUrl), item.name);
@@ -96,6 +96,7 @@ test('pool previews remain usable during a slow or failed first sync, with draws
   runtime.requests[1].reply(snapshot(1));
   await settle();
   assertGallery(runtime.html(), 1);
+  assert.match(runtime.html(), /class="sb-lobby"/);
   assert.match(runtime.html(), /aria-label="太初靈珠展示"/);
   assert.equal((runtime.html().match(/data-sb-draw=/g) || []).length, 2);
   assert.match(runtime.html(), /五連抽 · 2650 靈石/);
@@ -114,4 +115,25 @@ test('reentering while sync is pending shares the request and renders its result
   assert.equal((runtime.html().match(/data-sb-draw=/g) || []).length, 2);
   assert.equal(runtime.nodes.get('soulbound-refresh').disabled, false);
   assert.equal(runtime.requests.length, 1);
+});
+
+test('fragment-only pending results can be viewed and acknowledged without equipping a weapon', async () => {
+  const runtime=pageRuntime();runtime.open();
+  const batch={requestId:'fragment-request-0001',cost:250,results:[{kind:'fragments',fragments:30,ordinal:1}]};
+  runtime.requests[0].reply({...snapshot(),fragments:30,pending:batch,misses:1,untilPity:49});await settle();
+  assert.match(runtime.html(),/煉器碎片 ×30/);assert.match(runtime.html(),/data-sb-vault/);assert.doesNotMatch(runtime.html(),/data-sb-equip=/);
+  const button={disabled:false,dataset:{},hasAttribute:name=>name==='data-sb-vault'};
+  runtime.nodes.get('soulbound-content').fire('click',{target:{closest:()=>button}});
+  assert.equal(runtime.requests[1].url,'/api/soulbound/ack');assert.equal(JSON.parse(runtime.requests[1].init.body).requestId,batch.requestId);
+  runtime.requests[1].reply({...snapshot(),fragments:30,misses:1,untilPity:49});await settle();assert.doesNotMatch(runtime.html(),/data-sb-vault/);
+});
+
+test('mixed batches retain weapon comparison and older weapon-only receipts remain readable', async () => {
+  for(const legacy of [false,true]){
+    const runtime=pageRuntime();runtime.open();const item=Pool.ITEMS[0];
+    const weapon={itemId:item.id,realm:item.realm,...(legacy?{}:{kind:'weapon',pity:true})};
+    runtime.requests[0].reply({...snapshot(),inventory:{[item.id]:1},pending:{requestId:'weapon-request-00001',cost:500,results:legacy?[weapon]:[weapon,{kind:'fragments',fragments:25}]}});await settle();
+    assert.match(runtime.html(),/調御比較/);assert.ok(runtime.html().includes(`data-sb-equip="${item.id}"`));
+    assert.equal((runtime.html().match(/data-sb-select=/g)||[]).length,legacy?1:2);
+  }
 });

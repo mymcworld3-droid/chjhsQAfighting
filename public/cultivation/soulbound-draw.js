@@ -6,7 +6,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
 (function () {
   'use strict';
   const pool = globalThis.QASoulboundPool;
-  let snapshot = null, account = '', busy = false, selected = 0, message = '', animationTimer = null, previewArchetype = 'sword';
+  let snapshot = null, account = '', busy = false, selected = 0, message = '', animationTimer = null, previewArchetype = 'sword', externalDirty = false;
   const $ = id => document.getElementById(id);
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const visible = () => document.getElementById('page-training')?.classList.contains('active-page') &&
@@ -21,7 +21,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
   function reconcile() {
     const uid = getMainUser()?.uid || '';
     if (account !== uid) {
-      clearTimeout(animationTimer); account = uid; snapshot = null; selected = 0; message = '';
+      clearTimeout(animationTimer); account = uid; snapshot = null; selected = 0; message = ''; externalDirty = false;
       $('soulbound-animation')?.remove();
     }
     return uid;
@@ -45,7 +45,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     snapshot = payload;
     const current = data();
     if (current) {
-      current.stats ||= {}; current.stats.gold = payload.balance;
+      current.stats ||= {}; current.stats.gold = payload.balance; current.forgeFragments = Number(payload.fragments) || 0;
       current.artifactSystem ||= {}; current.artifactSystem.inventory = { ...payload.inventory };
       window.updateUIStats?.();
       window.dispatchEvent(new CustomEvent('artifact-system-updated'));
@@ -76,7 +76,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
   function galleryMarkup(candidates, rank, version = pool.VERSION) {
     return `<section class="sb-gallery"><div class="sb-gallery-heading"><h3>八種常駐本命法器</h3><span>點選查看器型與核心能力</span></div>
       <div class="sb-pool">${candidates.map(a => `<button type="button" data-sb-preview="${esc(a.id)}" aria-pressed="${a.archetype === previewArchetype}" style="--sb-color:${artifactRealmColor(a.realm)}">${image(a)}<b>${esc(a.name)}</b><small>${esc(a.realm)} · ${esc(effectText(a))}</small></button>`).join('')}</div>
-      <details class="sb-details"><summary>完整機率與高一階效果</summary><p>版本 ${esc(version)}。${rank === 7 ? '一般抽取八種器型各 12.5%；第五次飛劍、靈珠、星盤、古鐘各 25%。' : '一般抽取同境界八種器型各 10%，高一階各 2.5%；第五次高一階各 12.5%。'}數值依境界提升，所有器型均可跨丹性搭配。</p>
+      <details class="sb-details"><summary>完整機率與品質</summary><p>版本 ${esc(version)}。一般完整武器機率 2%，其餘 98% 獲得 20–40 個煉器碎片；連續 49 抽未出武器，第 50 抽必出。出武器後重新計數。八種器型共用一池，完整武器各佔武器結果的 12.5%。${rank === 7 ? '真仙品質不再升階。' : '抽中武器時，80% 為目前品質、20% 高一階。'}數值依境界提升，所有器型均可跨丹性搭配。</p>
         ${rank >= 0 && rank < 7 ? `<ul>${pool.candidates(rank + 1).map(a => `<li>${esc(a.name)}（${esc(a.realm)}）：${esc(effectText(a))}；攻擊 +${base(a, 'equip_attack_flat')}、生命 +${base(a, 'equip_hp_flat')}</li>`).join('')}</ul>` : ''}</details>
     </section>`;
   }
@@ -102,35 +102,32 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       $('soulbound-content').innerHTML = `<p class="sb-empty">${status}</p>${showcaseMarkup(previewItem(candidates))}${galleryMarkup(candidates, rank)}`;
       return;
     }
-    const pending = s.pending, row = pending?.results[Math.min(selected, pending.results.length - 1)], item = row && getArtifactById(row.itemId);
-    const rank = s.rank, realm = pool.REALMS[rank], next = pool.REALMS[Math.min(7, Math.max(0, rank) + 1)];
-    const candidates = pool.candidates(Math.max(0, rank));
-    const preview = previewItem(candidates);
+    const pending = s.pending, row = pending?.results[Math.min(selected, pending.results.length - 1)], item = row?.itemId && getArtifactById(row.itemId);
+    const rank = s.rank, candidates = pool.candidates(Math.max(0, rank)), preview = previewItem(candidates);
     const owned = Object.entries(s.inventory).flatMap(([id, count]) => {
       const item = getArtifactById(id);
       return count > 0 && item?.equipSlot === '本命法寶' ? [{ item, count }] : [];
     });
-    $('soulbound-content').innerHTML = `<div class="sb-summary"><div><small>靈石餘額</small><strong>${s.balance.toLocaleString('zh-TW')}</strong></div><div><small>目前本命</small><b>${esc(current?.name || '尚未調御')}</b><span>${esc(current?.realm || '選擇適合自己的器型')}</span></div><div><small>距離品質保底</small><b>${s.untilPity} 次</b><span>累計 ${s.draws} 抽 · 升境界保留</span></div></div>
-      <div class="sb-pity" aria-label="本輪已抽 ${s.draws % 5} 次，共五次">${Array.from({ length: 5 }, (_, i) => `<i class="${i < s.draws % 5 ? 'filled' : ''}">${i === 4 ? '✦' : '◆'}</i>`).join('')}<span>第五次${rank === 7 ? '必得真仙精選器型' : `必得${esc(next?.name || '高一階')}法器`}</span></div>
+    $('soulbound-content').innerHTML = `<div class="sb-summary"><div><small>靈石餘額</small><strong>${s.balance.toLocaleString('zh-TW')}</strong></div><div><small>煉器碎片</small><strong>${Number(s.fragments || 0).toLocaleString('zh-TW')}</strong></div><div><small>目前本命</small><b>${esc(current?.name || '尚未調御')}</b><span>${esc(current?.realm || '選擇適合自己的器型')}</span></div><div><small>距離武器保底</small><b>${s.untilPity} 抽</b><span>累計 ${s.draws} 抽 · 出武器後重計</span></div></div>
+      <div class="sb-pity"><progress value="${Number(s.misses || 0)}" max="50" aria-label="本輪未出武器 ${Number(s.misses || 0)} 抽"></progress><span>八種武器同池 · 至多 50 抽必得一件完整武器</span></div>
       ${operation && !pending ? '<button type="button" data-sb-retry class="sb-primary">重試上次未確認的操作</button><p class="sb-note">重試只確認原結果，不會重新抽取或重複扣款。</p>' : ''}
-      ${item ? `<section class="sb-results"><div class="sb-result-heading"><h3>契印已成 · ${pending.results.length} 件已收入寶庫</h3><span>本批 ${pending.cost} 靈石</span></div>
-        <div class="sb-result-tabs" role="group" aria-label="查看每件結果">${pending.results.map((r, i) => {
-          const a = getArtifactById(r.itemId);
-          return `<button type="button" data-sb-select="${i}" aria-pressed="${i === selected}" style="--sb-color:${artifactRealmColor(r.realm)}">${esc(a?.name || r.itemId)}<small>${esc(r.realm)}${r.pity ? ' · 保底' : r.higher ? ' · 高階' : ''}</small></button>`;
-        }).join('')}</div><div class="sb-featured" style="--sb-color:${artifactRealmColor(item.realm)}">${image(item)}<div><small>${esc(item.realm)} · 本命法器 · 不可交易</small><h3>${esc(item.name)}</h3><p>${esc(effectText(item))}</p><span>攻擊 +${base(item, 'equip_attack_flat')} · 生命 +${base(item, 'equip_hp_flat')} · 持有 ×${s.inventory[item.id]}</span></div></div>
-        ${comparison(item)}<div class="sb-actions"><button type="button" data-sb-equip="${esc(item.id)}" class="sb-primary" ${busy || current?.id === item.id ? 'disabled' : ''}>${current?.id === item.id ? '正在調御' : '調御此器'}</button><button type="button" data-sb-vault ${busy ? 'disabled' : ''}>收入寶庫</button><button type="button" data-sb-again ${busy ? 'disabled' : ''}>再次抽取</button></div></section>` : ''}
-      <div class="sb-lobby">${showcaseMarkup(preview)}<section class="sb-draw-controls"><small>常駐契器台 · ${esc(realm?.name || '金丹境開放')}</small><h3>一器一契，長伴仙途</h3>
-        <p>${rank < 0 ? '到達金丹境即可抽取。既有本命法器仍可調御與精煉。' : rank === 7 ? '真仙品質固定；每第五次必得四種精選器型之一。' : `一般抽取：80% ${esc(realm.name)}、20% ${esc(next.name)}。提早抽到高階不重置保底。`}</p>
-        ${s.draws === 0 ? '<p class="sb-first">首抽只需 250 靈石；每抽必得一件，五連逐抽共享保底。結果先保存再演出，法器不會因關頁而遺失。</p>' : ''}
+      ${row ? `<section class="sb-results"><div class="sb-result-heading"><h3>${pending.results.length} 抽結果已保存</h3><span>本批 ${pending.cost} 靈石</span></div>
+        <div class="sb-result-tabs" role="group" aria-label="查看每抽結果">${pending.results.map((r, i) => {
+          const a = r.itemId && getArtifactById(r.itemId);
+          return `<button type="button" data-sb-select="${i}" aria-pressed="${i === selected}" style="--sb-color:${r.realm ? artifactRealmColor(r.realm) : '#f5cf83'}">${esc(a?.name || (r.itemId ? r.itemId : '煉器碎片 ×' + r.fragments))}<small>${a ? esc(r.realm) : '碎片'}${r.pity ? ' · 武器保底' : r.higher ? ' · 高階' : ''}</small></button>`;
+        }).join('')}</div><div class="sb-featured" style="--sb-color:${item ? artifactRealmColor(item.realm) : '#f5cf83'}">${item ? image(item) : '<span class="sb-fragment-art" aria-hidden="true">✦</span>'}<div><small>${item ? esc(item.realm) : '煉器資源'}</small><h3>${item ? esc(item.name) : '煉器碎片 ×' + Number(row.fragments || 0)}</h3><p>${item ? esc(effectText(item)) : '已加入碎片餘額，可在八方煉器陣使用。'}</p></div></div>${item ? comparison(item) : ''}
+        <div class="sb-actions">${item ? `<button type="button" class="sb-primary" data-sb-equip="${esc(item.id)}" ${busy || operation || !Number(s.inventory[item.id]) ? 'disabled' : ''}>調御此器</button>` : ''}<button type="button" data-sb-vault ${busy || operation ? 'disabled' : ''}>確認收入</button><button type="button" data-sb-again ${busy || operation ? 'disabled' : ''}>再次抽取</button></div></section>` : ''}
+      <div class="sb-lobby">${showcaseMarkup(preview)}<section class="sb-draw-controls"><small>常駐共用池 · 八器同契</small><h3>締結本命</h3><p>抽取煉器碎片，至多 50 抽必出完整武器。</p>
+        ${s.draws === 0 ? '<p class="sb-first">首抽 250 靈石；單抽與五連共用 50 抽保底，結果先保存再演出。</p>' : ''}
         <div class="sb-actions"><button type="button" data-sb-draw="1" class="sb-primary" ${busy || operation || pending || rank < 0 || s.balance < s.prices?.single ? 'disabled' : ''}>單抽 · ${s.prices?.single ?? '—'} 靈石</button><button type="button" data-sb-draw="5" ${busy || operation || pending || rank < 0 || s.balance < s.prices?.five ? 'disabled' : ''}>五連抽 · ${s.prices?.five ?? '—'} 靈石</button></div>
-        <p class="sb-note">${pending ? '先調御或收入本批結果，即可繼續抽取。' : s.draws === 0 ? '首批五連已包含一次首抽優惠。' : `每抽 ${rank < 0 ? 500 : pool.price(rank)} 靈石；沒有空抽，也不會自動替換裝備。`}</p></section></div>
+        <p class="sb-note">${pending ? '先確認本批結果，即可繼續抽取。' : `一般武器機率 2%；其餘獲得 20–40 碎片。出武器後重置保底進度。`}</p></section></div>
       ${galleryMarkup(candidates, rank, s.poolVersion)}
-      <details class="sb-details"><summary>寶庫 · 調御與精煉（${owned.reduce((n, a) => n + Number(a.count), 0)} 件）</summary><p>已持有的原器可投入八方煉器陣，使用團本素材與印記二次、三次精煉；先卸下裝備中的法器。</p><div class="sb-owned">${owned.length ? owned.map(({ item: a, count }) => `<article><div><b>${esc(a.name)}</b><small>${esc(a.realm)} · ×${count} · ${esc(effectText(a))}</small></div><button type="button" data-sb-equip="${esc(a.id)}" ${busy || a.id === current?.id ? 'disabled' : ''}>${a.id === current?.id ? '正在調御' : '調御'}</button></article>`).join('') : '<p>尚無本命法器。</p>'}</div><button type="button" data-sb-refine>前往八方煉器陣</button></details>
-      <details class="sb-details"><summary>重複原器回收 · 返還實付價格的 30%</summary><p>只回收你選擇的一件重複原器，至少保留一件。裝備中的一件與精煉器不會被回收；相同器型依較低實付價格先回收。</p><div class="sb-owned">${s.recovery.map(r => `<article><div><b>${esc(getArtifactById(r.itemId)?.name || r.itemId)}</b><small>${esc(getArtifactById(r.itemId)?.realm)} · 可回收 ${r.available} 件 · 該次實付 ${r.paid}</small></div><button type="button" data-sb-recover="${esc(r.itemId)}" ${busy || operation || pending ? 'disabled' : ''}>回收一件 +${r.refund} 靈石</button></article>`).join('') || '<p>尚無可回收的重複原器。</p>'}</div></details>`;
+      <details class="sb-details"><summary>寶庫 · 調御與精煉（${owned.reduce((n, a) => n + Number(a.count), 0)} 件）</summary><p>原器可使用團本素材、印記與煉器碎片二次、三次精煉；先卸下裝備中的法器。</p><div class="sb-owned">${owned.length ? owned.map(({ item: a, count }) => `<article><div><b>${esc(a.name)}</b><small>${esc(a.realm)} · ×${count} · ${esc(effectText(a))}</small></div><button type="button" data-sb-equip="${esc(a.id)}" ${busy || a.id === current?.id ? 'disabled' : ''}>${a.id === current?.id ? '正在調御' : '調御'}</button></article>`).join('') : '<p>尚無本命法器。</p>'}</div><button type="button" data-sb-refine>前往八方煉器陣</button></details>
+      <details class="sb-details"><summary>物品分解與碎片煉器</summary><p>材料、普通法器及本命法器可多選分解，確認後換成煉器碎片；裝備中的份數會保留。</p><button type="button" data-inventory-dismantle>物品分解</button></details>`;
   }
   async function refresh() {
     if (busy || !reconcile()) { render(); return; }
-    const uid = account; busy = true; render();
+    const uid = account; externalDirty = false; busy = true; render();
     try {
       const payload = await request();
       if (getMainUser()?.uid !== uid) return;
@@ -139,12 +136,12 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       if (operation?.action === 'draw' && payload.pending?.requestId === operation.body.requestId) forgetOperation();
       message = payload.pending ? '已找回尚未查看完的抽取結果。' : '';
     } catch (e) { if (getMainUser()?.uid === uid) message = e.message; }
-    finally { busy = false; render(); if (getMainUser()?.uid !== uid && visible()) void refresh(); }
+    finally { busy = false; render(); if (visible() && (getMainUser()?.uid !== uid || externalDirty)) { externalDirty = false; void refresh(); } }
   }
   function reveal() { clearTimeout(animationTimer); animationTimer = null; $('soulbound-animation')?.remove(); render(); }
   function animate(batch) {
     if (!visible() || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const higher = batch.results.some(r => r.higher || r.featured);
+    const higher = batch.results.some(r => r.itemId);
     const el = document.createElement('div'); el.id = 'soulbound-animation'; el.className = 'sb-animation' + (higher ? ' is-higher' : '');
     el.innerHTML = '<div class="sb-seal"><span>契</span></div><p>靈光聚合 · 契印開啟</p><button type="button">略過演出</button>';
     $('soulbound-page').append(el); el.querySelector('button').addEventListener('click', reveal);
@@ -174,14 +171,14 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       const payload = await request(operation.action, operation.body);
       if (getMainUser()?.uid !== uid) return;
       forgetOperation(); apply(payload); selected = 0;
-      message = operation.action === 'draw' ? '法器已保存，可選擇調御或收入寶庫。' : `已回收一件，獲得 ${payload.result.refund} 靈石。`;
+      message = operation.action === 'draw' ? '抽取結果已保存，可確認收入。' : `已回收一件，獲得 ${payload.result.refund} 靈石。`;
       if (operation.action === 'draw' && payload.pending?.requestId === operation.body.requestId) {
         $('soulbound-page')?.querySelector('.sb-scroll')?.scrollTo({ top: 0 });
         animate(payload.result);
       }
     } catch (e) {
       if (getMainUser()?.uid === uid) { if (e.definitive) forgetOperation(); message = e.message; }
-    } finally { busy = false; render(); if (getMainUser()?.uid !== uid && visible()) void refresh(); }
+    } finally { busy = false; render(); if (visible() && (getMainUser()?.uid !== uid || externalDirty)) { externalDirty = false; void refresh(); } }
   }
   async function acknowledge() {
     if (!snapshot?.pending) return;
@@ -198,14 +195,14 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       if (getMainUser()?.uid !== uid) return;
       await acknowledge(); if (getMainUser()?.uid === uid) message = '已調御；原本法器保留在寶庫。';
     } catch (e) { if (getMainUser()?.uid === uid) message = e.message; }
-    finally { busy = false; render(); if (getMainUser()?.uid !== uid && visible()) void refresh(); }
+    finally { busy = false; render(); if (visible() && (getMainUser()?.uid !== uid || externalDirty)) { externalDirty = false; void refresh(); } }
   }
   async function keepResults() {
     if (busy) return;
     const uid = reconcile(); busy = true; render();
-    try { await acknowledge(); if (getMainUser()?.uid === uid) message = '本批法器已收入寶庫。'; }
+    try { await acknowledge(); if (getMainUser()?.uid === uid) message = '本批結果已確認收入。'; }
     catch (e) { if (getMainUser()?.uid === uid) message = e.message; }
-    finally { busy = false; render(); if (getMainUser()?.uid !== uid && visible()) void refresh(); }
+    finally { busy = false; render(); if (visible() && (getMainUser()?.uid !== uid || externalDirty)) { externalDirty = false; void refresh(); } }
   }
   function mount(content = document.getElementById('training-tab-content')) {
     if (!content) return false;
@@ -227,11 +224,10 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       }
       if (busy) return;
       if (button.hasAttribute('data-sb-select')) { selected = Number(button.dataset.sbSelect); render(); }
-      else if (button.hasAttribute('data-sb-draw')) void runOperation({ action: 'draw', body: { count: Number(button.dataset.sbDraw), expectedCost: Number(button.dataset.sbDraw) === 5 ? snapshot.prices.five : snapshot.prices.single, requestId: crypto.randomUUID() } });
+      else if (button.hasAttribute('data-sb-draw')) void runOperation({ action: 'draw', body: { count: Number(button.dataset.sbDraw), poolVersion: pool.VERSION, expectedCost: Number(button.dataset.sbDraw) === 5 ? snapshot.prices.five : snapshot.prices.single, requestId: crypto.randomUUID() } });
       else if (button.hasAttribute('data-sb-retry')) { const op = storedOperation(); if (op) void runOperation(op); }
       else if (button.hasAttribute('data-sb-equip')) void equipmentAction(button.dataset.sbEquip);
       else if (button.hasAttribute('data-sb-vault') || button.hasAttribute('data-sb-again')) void keepResults();
-      else if (button.hasAttribute('data-sb-recover')) void runOperation({ action: 'recover', body: { itemId: button.dataset.sbRecover, requestId: crypto.randomUUID() } });
       else if (button.hasAttribute('data-sb-refine')) document.querySelector('[data-training-tab="refinery"]')?.click();
     });
     return true;
@@ -253,6 +249,10 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
   document.addEventListener('click', e => {
     const button = e.target.closest?.('[data-training-tab="contract"]');
     if (button && !button.disabled) activate();
+  });
+  window.addEventListener('xiuxian:stats-updated', event => {
+    if (event.detail?.source !== 'dismantle') return;
+    externalDirty = true; if (visible() && !busy) void refresh();
   });
   window.openSoulboundDraw = async () => {
     await window.switchToPage?.('page-training');

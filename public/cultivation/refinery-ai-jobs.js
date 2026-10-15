@@ -1,4 +1,5 @@
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import './forge-fragments.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, runTransaction } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import {
@@ -257,7 +258,9 @@ import {
       depth: plan.depth,
       refinementStage: plan.refinementStage,
       keyRequirement: plan.keyRequirement,
-      goldCost: plan.gold,
+      fragmentCost: plan.fragments,
+      currency: 'forgeFragments',
+      goldCost: 0,
       durationMs: plan.durationMs,
       startedAtMs: now,
       readyAtMs: now + plan.durationMs,
@@ -278,36 +281,37 @@ import {
       // 配方是提供製作方法的知識，不是煉器許可證。
       // 玩家即使未持有配方，也能靠自行投入素材煉製。
       if (raw[REFINERY_JOB_FIELD]?.id) throw new Error('目前已有一件法寶正在煉製');
-      const gold = Math.max(0, Number(raw.stats?.gold) || 0);
-      if (gold < plan.gold) throw new Error('金幣不足，需要 ' + plan.gold + '，目前只有 ' + gold);
+      const fragments = globalThis.QAForgeFragments.balance(raw);
+      if (fragments < plan.fragments) throw new Error('煉器碎片不足，需要 ' + plan.fragments + '，目前只有 ' + fragments);
 
       const consumed = consumeRecipe(raw, plan.recipe);
       consumeRefinementKey(consumed.materialSystem, plan.keyRequirement);
       committed = {
         materialSystem: consumed.materialSystem,
         artifactSystem: consumed.artifactSystem,
-        gold: gold - plan.gold,
+        fragments: fragments - plan.fragments,
         job
       };
       tx.update(ref, {
         materialSystem: consumed.materialSystem,
         artifactSystem: consumed.artifactSystem,
-        'stats.gold': committed.gold,
+        'forgeFragments': committed.fragments,
         [REFINERY_JOB_FIELD]: job
       });
     });
 
     const local = data();
-    if (local && committed) {
+    if (authUser()?.uid !== user.uid) return job;
+    if (local && committed && authUser()?.uid === user.uid) {
       local.materialSystem = committed.materialSystem;
       local.artifactSystem = committed.artifactSystem;
       local.stats = local.stats || {};
-      local.stats.gold = committed.gold;
+      local.forgeFragments = committed.fragments;
       local[REFINERY_JOB_FIELD] = job;
     }
     window.dispatchEvent(new CustomEvent('material-system-updated', { detail: committed?.materialSystem }));
     window.dispatchEvent(new CustomEvent('artifact-system-updated', { detail: committed?.artifactSystem }));
-    window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', { detail: { gold: committed?.gold, refineryJobStarted: job.id } }));
+    window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', { detail: { forgeFragments: committed?.fragments, refineryJobStarted: job.id } }));
     window.dispatchEvent(new CustomEvent('xiuxian:refinery-job-updated', { detail: job }));
     return job;
   }

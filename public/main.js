@@ -44,6 +44,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/player-profile.js',
   './cultivation/material-system.js',
   './cultivation/startup-resource-preloader.js',
+  './cultivation/inventory-dismantle.js',
   './cultivation/unified-inventory-grid.js',
   './cultivation/refinery-ai-jobs.js',
   './cultivation/cultivation-refinery-v2.js',

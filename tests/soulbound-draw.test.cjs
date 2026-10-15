@@ -7,42 +7,10 @@ const pool = require('../public/cultivation/soulbound-pool.js');
 const { transaction, createHandler } = require('../soulbound-draw-api.cjs').__test;
 const { PROJECT_IDS } = require('../firebase-admin-projects.cjs');
 const generation = require('../artifact-generation-api.js');
-function fakeDb(user, state) {
-  const docs = new Map([['users/u1', structuredClone(user)]]);
-  if (state) docs.set('soulboundDrawStates/u1', structuredClone(state));
-  let queue = Promise.resolve(), failCreate = false;
-  const snap = key => ({ exists: docs.has(key), data: () => structuredClone(docs.get(key)) });
-  return { docs, failNextCreate() { failCreate = true; },
-    collection(name) { return { doc(id) { return { key: name + '/' + id }; } }; },
-    runTransaction(worker) {
-      const promise = queue.then(async () => {
-        let writing = false; const writes = new Map();
-        const tx = {
-          get: async ref => { assert.equal(writing, false, 'reads must precede writes'); return snap(ref.key); },
-          set(ref, value) { writing = true; writes.set(ref.key, structuredClone(value)); },
-          create(ref, value) { writing = true; if (failCreate) { failCreate = false; throw new Error('database unavailable'); }
-            assert.ok(!docs.has(ref.key)); writes.set(ref.key, structuredClone(value)); },
-          update(ref, patch) {
-            writing = true; assert.ok(docs.has(ref.key)); const value = structuredClone(docs.get(ref.key));
-            for (const [path, v] of Object.entries(patch)) {
-              const parts = path.split('.'), last = parts.pop(); let target = value;
-              for (const part of parts) target = target[part] ||= {};
-              target[last] = structuredClone(v);
-            }
-            writes.set(ref.key, value);
-          }
-        };
-        const result = await worker(tx);
-        for (const [key, value] of writes) docs.set(key, value);
-        return result;
-      });
-      queue = promise.catch(() => {}); return promise;
-    }
-  };
-}
+const { fakeDb } = require('./helpers/inventory-db.cjs');
 const sample = () => ({ uid: 'u1', stats: { gold: 10000, totalScore: 28 },
   artifactSystem: { inventory: { 'void-sword': 1 }, equipped: { '本命法寶': 'void-sword' }, buffs: {} } });
-const request = (index, count = 1) => ({ requestId: `draw-request-${String(index).padStart(6, '0')}`, count });
+const request = (index, count = 1) => ({ requestId: `draw-request-${String(index).padStart(6, '0')}`, count, poolVersion:pool.VERSION });
 const low = () => .5;
 const ack = (db, r) => transaction(db, 'u1', 'ack', { requestId: r.result.requestId });
 
@@ -69,20 +37,19 @@ test('remote catalog replacement cannot remove or override the permanent pool', 
   assert.equal(context.api.getArtifactById(pool.ITEMS[0].id).effects[0].type, pool.ITEMS[0].coreEffect);
   assert.equal(context.api.validateArtifactCatalog(pool.ITEMS).length, 64);
 });
-test('first five-pull costs 2250, grants all five and preserves legacy equipment', async () => {
-  assert.equal(pool.cost(0, 0, 1), 250); assert.equal(pool.cost(0, 0, 5), 2250);
-  assert.equal(pool.cost(0, 1, 5), 2500); assert.equal(pool.cost(7, 1, 1), 1200);
-  const db = fakeDb(sample()), r = await transaction(db, 'u1', 'draw', request(1, 5), low);
-  assert.equal(r.balance, 7750); assert.equal(r.draws, 5); assert.equal(r.untilPity, 5);
-  assert.deepEqual(r.result.results.map(r => r.paid), [250, 500, 500, 500, 500]);
-  assert.equal(r.result.results[4].pity, true); assert.equal(r.result.results[4].realm, '元嬰');
-  assert.equal(Object.values(r.inventory).reduce((sum, n) => sum + n, 0), 6);
-  assert.equal(db.docs.get('users/u1').artifactSystem.equipped['本命法寶'], 'void-sword');
+test('first five-pull costs 2250 and grants fragments without changing legacy equipment', async () => {
+  assert.equal(pool.cost(0,0,1),250);assert.equal(pool.cost(0,0,5),2250);assert.equal(pool.cost(0,1,5),2500);
+  const db=fakeDb(sample()),r=await transaction(db,'u1','draw',request(1,5),low);
+  assert.equal(r.balance,7750);assert.equal(r.fragments,150);assert.equal(r.untilPity,45);
+  assert.deepEqual(r.result.results.map(x=>x.kind),Array(5).fill('fragments'));
+  assert.equal(r.inventory['void-sword'],1);assert.equal(Object.hasOwn(r.inventory,'undefined'),false);
+  assert.equal(db.docs.get('users/u1').artifactSystem.equipped['本命法寶'],'void-sword');
 });
+
 test('concurrent same-ID retries charge and roll only once, and reject changed intent', async () => {
   const db = fakeDb(sample()); let rolls = 0;
   const results = await Promise.all(Array.from({ length: 6 }, () => transaction(db, 'u1', 'draw', request(1, 5), () => { rolls++; return .5; })));
-  assert.equal(rolls, 9);
+  assert.equal(rolls, 10);
   for (const r of results) assert.deepEqual(r.result, results[0].result);
   assert.equal(db.docs.get('users/u1').stats.gold, 7750); assert.equal(db.docs.get('soulboundDrawStates/u1').draws, 5);
   await assert.rejects(transaction(db, 'u1', 'draw', request(1, 1)), /其他操作/);
@@ -95,36 +62,47 @@ test('different simultaneous IDs cannot replace an unseen batch', async () => {
   assert.match(r.find(x => x.status === 'rejected').reason.message, /上一批/);
   assert.equal(db.docs.get('users/u1').stats.gold, 9750);
 });
-test('single and five pulls share pity, including a crossing batch; early high tiers never reset it', async () => {
-  const db = fakeDb(sample()), first = await transaction(db, 'u1', 'draw', request(1), () => 0);
-  assert.equal(first.result.results[0].higher, true); assert.equal(first.untilPity, 4); await ack(db, first);
-  const r = await transaction(db, 'u1', 'draw', request(2, 5), low);
-  assert.deepEqual(r.result.results.map(r => r.ordinal), [2, 3, 4, 5, 6]);
-  assert.deepEqual(r.result.results.map(r => r.pity), [false, false, false, true, false]);
-  assert.equal(r.result.results[3].realm, '元嬰'); assert.equal(r.untilPity, 4);
+test('single and five pulls share 50-pull pity and a weapon resets the counter within a batch', async () => {
+ const db=fakeDb(sample(),{draws:100,misses:48,lots:{},poolVersion:pool.VERSION});
+ const r=await transaction(db,'u1','draw',request(1,5),low);
+ assert.deepEqual(r.result.results.map(x=>x.kind),['fragments','weapon','fragments','fragments','fragments']);
+ assert.equal(r.result.results[1].pity,true);assert.equal(r.misses,3);assert.equal(r.untilPity,47);assert.equal(r.draws,105);
+ const earlyDb=fakeDb(sample(),{draws:100,misses:30,poolVersion:pool.VERSION});
+ const early=await transaction(earlyDb,'u1','draw',request(2),()=>0);assert.equal(early.result.results[0].kind,'weapon');assert.equal(early.untilPity,50);
 });
-test('20% normal roll boundary and maximal featured pool contain only actual realms', () => {
-  const random = chance => { const values = [chance, .999999]; return () => values.shift(); };
-  assert.equal(pool.roll(0, 1, random(.19999)).higher, true); assert.equal(pool.roll(0, 1, random(.2)).higher, false);
-  for (let i = 0; i < 4; i++) {
-    const r = pool.roll(7, 5, () => i / 4);
-    assert.equal(r.realm, '真仙'); assert.equal(r.higher, false); assert.equal(r.featured, true);
-    assert.ok(pool.FEATURED.includes(pool.get(r.itemId).archetype));
+
+test('2% weapon boundary, fragment bounds and guarantee include all eight common weapons', () => {
+ const sequence=(...values)=>()=>values.shift();
+ assert.equal(pool.roll(0,0,sequence(.019999,.5,.5)).kind,'weapon');
+ assert.equal(pool.roll(0,0,sequence(.02,0)).fragments,20);
+ assert.equal(pool.roll(0,0,sequence(.5,.999999)).fragments,40);
+ for(let i=0;i<8;i++){
+  const row=pool.roll(7,49,()=>i/8);assert.equal(row.kind,'weapon');assert.equal(row.pity,true);assert.equal(row.realm,'真仙');
+  assert.equal(pool.get(row.itemId).archetype,pool.TYPES[i].id);
+ }
+});
+
+test('fifty consecutive non-weapon rolls cannot pass without awarding a common-pool weapon', async () => {
+  const player=sample();player.stats.gold=100000;const db=fakeDb(player);
+  for(let i=1;i<=50;i++){
+    const result=await transaction(db,'u1','draw',request(i),low);
+    assert.equal(result.result.results[0].kind,i===50?'weapon':'fragments');
+    if(i<50)assert.equal(result.untilPity,50-i);else{assert.equal(result.untilPity,50);assert.equal(result.result.results[0].pity,true);}
+    await ack(db,result);
   }
+  assert.equal(db.docs.get('users/u1').forgeFragments,49*30);
 });
-test('highest unlocked realm keeps pity through promotion, and server verifies cohort seats for immortal pool', async () => {
-  const user = sample(); user.stats.totalScore = 1; user.trainingAccess = { version: 1, highestRealmScore: 68 };
-  const r = await transaction(fakeDb(user, { draws: 4, lots: {} }), 'u1', 'draw', request(1), low);
-  assert.equal(r.realm, '元嬰'); assert.equal(r.result.results[0].realm, '化神'); assert.equal(r.draws, 5);
-  const high = sample(); high.stats.totalScore = 1868; high.profile = { educationLevel: '國中' };
-  const db = fakeDb(high, { draws: 4, lots: {} });
-  assert.equal((await transaction(db, 'u1')).realm, '半仙');
-  db.docs.set('worldImmortals/elementary__ru-xian', { uid: 'u1', cohort: 'elementary' });
-  assert.equal((await transaction(db, 'u1')).realm, '半仙');
-  db.docs.set('worldImmortals/junior__ru-xian', { uid: 'u1', cohort: 'junior' });
-  const top = await transaction(db, 'u1', 'draw', request(1), low);
-  assert.equal(top.realm, '真仙'); assert.equal(top.result.results[0].featured, true);
+
+test('promotion preserves the consecutive counter and server verifies immortal cohort seats', async () => {
+ const user=sample();user.stats.totalScore=1;user.trainingAccess={version:1,highestRealmScore:68};
+ const r=await transaction(fakeDb(user,{draws:49,misses:49,poolVersion:pool.VERSION}),'u1','draw',request(1),()=>0);
+ assert.equal(r.realm,'元嬰');assert.equal(r.result.results[0].realm,'化神');assert.equal(r.untilPity,50);
+ const high=sample();high.stats.totalScore=1868;high.profile={educationLevel:'國中'};
+ const db=fakeDb(high);assert.equal((await transaction(db,'u1')).realm,'半仙');
+ db.docs.set('worldImmortals/elementary__ru-xian',{uid:'u1',cohort:'elementary'});assert.equal((await transaction(db,'u1')).realm,'半仙');
+ db.docs.set('worldImmortals/junior__ru-xian',{uid:'u1',cohort:'junior'});assert.equal((await transaction(db,'u1')).realm,'真仙');
 });
+
 test('invalid sizes, malformed request IDs, insufficient funds and locked access cannot mint', async () => {
   for (const count of [0, 2, 4, 6, '5']) await assert.rejects(transaction(fakeDb(sample()), 'u1', 'draw', request(1, count)), /單抽或五連/);
   const poor = sample(); poor.stats.gold = 2249; const db = fakeDb(poor);
@@ -149,25 +127,20 @@ test('reload returns saved results and stale acknowledgement cannot clear a newe
   const retry = await transaction(db, 'u1', 'draw', request(1, 5), () => { throw new Error('must not roll'); });
   assert.deepEqual(retry.result, first.result); assert.deepEqual(retry.pending, next.result);
 });
-test('recovery refunds actual paid prices, preserves equipped copy, and cannot pay twice', async () => {
-  const db = fakeDb(sample()), batch = await transaction(db, 'u1', 'draw', request(1, 5), low); await ack(db, batch);
-  const id = batch.result.results[0].itemId; db.docs.get('users/u1').artifactSystem.equipped['本命法寶'] = id;
-  const sell = { requestId: 'recover-request-000001', itemId: id, refund: 99999, paid: 99999 };
-  const sales = await Promise.all([transaction(db, 'u1', 'recover', sell), transaction(db, 'u1', 'recover', sell)]);
-  assert.equal(sales[0].result.refund, 75); assert.deepEqual(sales[0].result, sales[1].result);
-  assert.equal(sales[0].inventory[id], 3); assert.equal(db.docs.get('users/u1').stats.gold, 7825);
-  const sale2 = await transaction(db, 'u1', 'recover', { ...sell, requestId: 'recover-request-000002' });
-  assert.equal(sale2.result.refund, 150); assert.equal(sale2.inventory[id], 2);
-  await transaction(db, 'u1', 'recover', { ...sell, requestId: 'recover-request-000003' });
-  await assert.rejects(transaction(db, 'u1', 'recover', { ...sell, requestId: 'recover-request-000004' }), /至少保留一件/);
-  assert.equal(db.docs.get('users/u1').artifactSystem.equipped['本命法寶'], id);
+test('new gold recovery requests are disabled in favor of confirmed fragment dismantling', async () => {
+ const db=fakeDb(sample());await assert.rejects(transaction(db,'u1','recover',{requestId:'recover-request-000001',itemId:pool.ITEMS[0].id}),/碎片分解/);
+ assert.equal(db.docs.get('users/u1').stats.gold,10000);
 });
-test('legacy and refined items, or copies already consumed by refinement, cannot be recovered', async () => {
-  const user = sample(), id = pool.ITEMS[0].id; user.artifactSystem.inventory[id] = 1; user.artifactSystem.inventory['refined-item'] = 3;
-  const db = fakeDb(user, { draws: 4, lots: { [id]: { 500: 4 }, 'refined-item': { 500: 4 } } });
-  for (const itemId of [id, 'refined-item', 'void-sword']) await assert.rejects(transaction(db, 'u1', 'recover', { requestId: 'recover-request-000001', itemId }), /重複原器/);
-  assert.equal(db.docs.get('users/u1').stats.gold, 10000);
+
+test('legacy draw history and unfinished weapon receipts survive migration without counting old weapon draws as misses', async () => {
+ const result={requestId:'old-draw-request-000001',poolVersion:'soulbound-v1',cost:500,results:[{itemId:pool.ITEMS[0].id,realm:'金丹',paid:500,ordinal:125}]};
+ const db=fakeDb(sample(),{draws:125,pending:'old-receipt',lots:{}});
+ db.docs.set('soulboundDrawReceipts/old-receipt',{uid:'u1',action:'draw',count:1,result});
+ const view=await transaction(db,'u1');assert.deepEqual(view.pending,result);assert.equal(view.draws,125);assert.equal(view.misses,0);assert.equal(view.untilPity,50);
+ await assert.rejects(transaction(db,'u1','draw',request(1)),/上一批/);
+ await transaction(db,'u1','ack',{requestId:result.requestId});const next=await transaction(db,'u1','draw',request(1),low);assert.equal(next.misses,1);
 });
+
 test('all eight archetypes inherit their explicit core even when reordered during refinement', () => {
   for (const item of pool.candidates(0)) for (const stage of [2, 3]) {
     const original = { ...item, effects: [...item.effects].reverse() };
@@ -195,14 +168,9 @@ test('star burst deterministically boosts only every third correct hit, through 
   assert.match(fs.readFileSync('public/cultivation/raid-combat.js', 'utf8'), /p.coreCorrectStreak = support.streak/);
 });
 
-test('refining raw copies removes low-price lots before a later actual-price recovery', async () => {
-  const user = sample(), id = pool.ITEMS[0].id;
-  user.artifactSystem.inventory[id] = 2;
-  const db = fakeDb(user, { draws: 4, lots: { [id]: { 250: 1, 500: 3 } } });
-  const view = await transaction(db, 'u1');
-  assert.equal(view.recovery[0].refund, 150);
-  assert.equal(db.docs.get('soulboundDrawStates/u1').lots[id][250], 0);
-  assert.equal(db.docs.get('soulboundDrawStates/u1').lots[id][500], 2);
+test('a stale pool version cannot spend currency, and database transaction retries commit only one fragment award', async () => {
+ const db=fakeDb(sample());await assert.rejects(transaction(db,'u1','draw',{...request(1),poolVersion:'soulbound-v1'}),/獎池已更新/);
+ db.retryNextTransaction();const result=await transaction(db,'u1','draw',request(1),low);assert.equal(result.fragments,30);assert.equal(result.draws,1);assert.equal(result.balance,9750);
 });
 
 test('administrator deletion cannot remove permanent pool originals or player copies', async () => {

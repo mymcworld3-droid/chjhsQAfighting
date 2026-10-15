@@ -311,15 +311,15 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
         ? `<div class="refinery-recipe-ingredients-head"><b><i class="fa-solid fa-cubes-stacked"></i> 合成材料</b><span>${cost} / ${SLOT_COUNT} 格 · ${missing ? `尚缺 ${missing} 個` : '素材齊備'}</span></div>
            <ul class="refinery-recipe-ingredients">${recipe.map(recipeIngredientMarkup).join('')}</ul>`
         : `<div class="refinery-recipe-sealed" role="note"><div class="refinery-recipe-seal-mark"><i class="fa-solid fa-lock"></i></div><strong>製作方法尚未習得</strong><p>此配方的素材與數量尚未公開。可在交易市集取得製作指南，或自行投入材料探索。</p></div>`;
-      const gold = Math.max(0, Number(userData()?.stats?.gold) || 0);
+      const fragments = Math.max(0, Number(userData()?.forgeFragments) || 0);
       const canCraft = !!myUid && canReadRecipe && unique && !missing && plan?.valid && keyStatus.enough &&
-        gold >= Number(plan.gold || 0) && !busy && !job;
+        fragments >= Number(plan.fragments || 0) && !busy && !job;
       const actionText = !myUid ? '請先登入' : job ? '已有法寶正在煉製' :
         missing ? `尚缺 ${missing} 個素材` :
         !unique ? '配方待修正' :
         !plan?.valid ? (plan?.reason || '目前無法煉製') :
         !keyStatus.enough ? `${keyStatus.name} ${keyStatus.have}/${keyStatus.need}` :
-        gold < Number(plan.gold || 0) ? '靈石不足' : '以此煉製';
+        fragments < Number(plan.fragments || 0) ? '煉器碎片不足' : '以此煉製';
       const stage = Math.min(3, artifactRecipeDepth(item.id) + 1);
       const teaser = canReadRecipe && item.description
         ? String(item.description).trim().slice(0, 72)
@@ -347,11 +347,11 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
             <h4><i class="fa-solid fa-scroll"></i> 製作方法</h4>
             <ol>
               <li><b>備齊材料</b><span>依上方配方投入共 ${cost} 件素材，已裝備的法寶不可投入。</span></li>
-              <li><b>八方煉製</b><span>消耗 ${Math.max(0, Number(plan?.gold) || 0).toLocaleString()} 靈石，${plan?.valid ? `約需 ${esc(window.formatCultivationRefineryDuration?.(plan.durationMs) || '一段時間')}` : '目前無法計算煉製時間'}。</span></li>
+              <li><b>八方煉製</b><span>消耗 ${Math.max(0, Number(plan?.fragments) || 0).toLocaleString()} 煉器碎片，${plan?.valid ? `約需 ${esc(window.formatCultivationRefineryDuration?.(plan.durationMs) || '一段時間')}` : '目前無法計算煉製時間'}。</span></li>
               <li><b>開爐取寶</b><span>煉製完成後，按陣心「開爐」領取 ${esc(item.name)}。</span></li>
             </ol>
             <button type="button" class="refinery-recipe-craft" data-refinery-craft-recipe="${esc(item.id)}" ${canCraft ? '' : 'disabled'}><i class="fa-solid fa-fire-flame-curved"></i> ${esc(actionText)}</button>
-            <p class="refinery-recipe-craft-note">${canCraft ? '點擊即按此配方投入素材、扣除靈石並開始煉製。' : '請先確認配方、材料、靈石及目前的煉製狀態。'}</p>
+            <p class="refinery-recipe-craft-note">${canCraft ? '點擊即按此配方投入素材、扣除煉器碎片並開始煉製。' : '請先確認配方、材料、煉器碎片及目前的煉製狀態。'}</p>
           </section>` : ''}
           <footer class="refinery-recipe-card-foot">
             <span class="refinery-recipe-owner"><i class="fa-solid fa-fingerprint"></i> ${owner}${access}</span>
@@ -381,6 +381,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
     const style = document.createElement('style');
     style.id = 'cultivation-refinery-v2-runtime-style';
     style.textContent = `
+      .refinery-head{flex-wrap:wrap}.refinery-dismantle{flex-shrink:0;border:1px solid #d9b56d66;border-radius:9px;background:#d9b56d12;color:#e8c985;min-height:36px;padding:7px 10px;font-size:10px;cursor:pointer}.refinery-dismantle small{display:block;font-size:9px;color:#a99b80}
       #page-settings #artifact-forge-card,#page-settings #material-store-card{display:none!important}
       .cultivation-refinery{width:min(100%,1080px);margin:0 auto;display:grid;grid-template-columns:minmax(300px,.88fr) minmax(430px,1.12fr);gap:14px}
       .refinery-panel{min-width:0;padding:14px;border:1px solid rgba(216,177,93,.2);border-radius:20px;background:linear-gradient(145deg,rgba(21,17,10,.97),rgba(7,7,7,.985));box-shadow:0 16px 42px rgba(0,0,0,.34);position:relative;overflow:hidden}.refinery-material-panel{--refinery-bottom-extension:64px;padding:0;display:grid;grid-template-rows:minmax(0,1fr);overflow:hidden}
@@ -618,7 +619,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
       materials: MATERIAL_CATALOG.map((m) => [m.id, m.name, m.icon, m.imageUrl || '', m.category, m.realm, m.description]),
       artifacts: ARTIFACT_CATALOG.map((a) => [a.id, a.name, a.icon, a.imageUrl || '', a.realm, a.category, a.description, a.weaponForm, a.forgeMethod, a.generationSignature, a.craft?.yield || 1, a.recipeOwnerUid, a.recipeDiscoveredAtMs]),
       licenses: Object.entries(userData()?.recipeLicenses || {}).sort(([a], [b]) => a.localeCompare(b)),
-      gold: Number(userData()?.stats?.gold) || 0,
+      fragments: Number(userData()?.forgeFragments) || 0,
       cultivation: Number(userData()?.stats?.totalScore) || 0,
       recipes: ARTIFACT_RECIPES,
       refineryJob: window.getCultivationRefineryJob?.() || null,
@@ -711,7 +712,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
       const matchedDepth = artifactRecipeDepth(matching[0].id);
       matchClass = 'ready';
       matchPrefix = '既有配方：';
-      matchPlain = `${matching[0].icon || '◆'} ${matching[0].name} · 深度 ${matchedDepth}/${MAX_ARTIFACT_RECIPE_NESTING} · 金幣 ${plan?.gold || 0} · 約 ${window.formatCultivationRefineryDuration?.(plan?.durationMs || 0) || ''}` +
+      matchPlain = `${matching[0].icon || '◆'} ${matching[0].name} · 深度 ${matchedDepth}/${MAX_ARTIFACT_RECIPE_NESTING} · 煉器碎片 ${plan?.fragments || 0} · 約 ${window.formatCultivationRefineryDuration?.(plan?.durationMs || 0) || ''}` +
         (keyStatus.need ? ` · ${keyStatus.name} ${keyStatus.have}/${keyStatus.need}` : '');
       if (!keyStatus.enough) matchClass = 'error';
     } else if (used && matching.length > 1) {
@@ -720,7 +721,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
     } else if (used && plan?.valid) {
       matchClass = 'ready';
       matchPrefix = '未知配方：';
-      matchPlain = `新法寶境界「${plan.targetRealm}」 · 金幣 ${plan.gold} · 約 ${window.formatCultivationRefineryDuration?.(plan.durationMs) || ''}` +
+      matchPlain = `新法寶境界「${plan.targetRealm}」 · 煉器碎片 ${plan.fragments} · 約 ${window.formatCultivationRefineryDuration?.(plan.durationMs) || ''}` +
         (keyStatus.need ? ` · ${keyStatus.name} ${keyStatus.have}/${keyStatus.need}` : '');
       if (!keyStatus.enough) matchClass = 'error';
     } else if (used) {
@@ -728,14 +729,14 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
       matchPlain = plan?.reason || '煉器至少需要 2 個素材。';
     }
 
-    const craftReady = !busy && (job ? jobReady : (!!plan?.valid && keyStatus.enough)) && matching.length <= 1;
+    const craftReady = !busy && (job ? jobReady : (!!plan?.valid && keyStatus.enough && Number(userData()?.forgeFragments || 0) >= Number(plan.fragments || 0))) && matching.length <= 1;
     const craftLabel = job ? (jobReady ? '開爐' : '煉製中') : '煉製';
-    const jobBox = job ? `<div class="refinery-job-box"><strong>${job.kind === 'discovery' ? '未知配方煉製' : '法寶煉製中'}</strong><div class="refinery-job-grid"><div class="refinery-job-stat">法寶境界<b>${esc(job.targetRealm || '凡人')}</b></div><div class="refinery-job-stat">已付金幣<b>${Math.max(0, Number(job.goldCost) || 0)}</b></div><div class="refinery-job-stat">剩餘時間<b data-refinery-job-clock>--</b></div></div><div class="refinery-job-progress"><i data-refinery-job-progress></i></div><div class="refinery-note ${job.kind === 'discovery' ? 'refinery-discovery-note' : ''}">${job.kind === 'discovery' ? '此組合沒有既有配方；煉製完成後按「開爐」即可取得新法寶。' : '素材與金幣已在按「煉製」時扣除，完成後按「開爐」取出。'}</div>${canAdminSkip ? `<div class="refinery-actions"><button type="button" class="refinery-clear" data-refinery-admin-skip ${busy ? 'disabled' : ''}><i class="fa-solid fa-forward-fast"></i> 管理員：跳過等待</button></div>` : ''}</div>` : '';
+    const jobBox = job ? `<div class="refinery-job-box"><strong>${job.kind === 'discovery' ? '未知配方煉製' : '法寶煉製中'}</strong><div class="refinery-job-grid"><div class="refinery-job-stat">法寶境界<b>${esc(job.targetRealm || '凡人')}</b></div><div class="refinery-job-stat">已付${job.currency === 'forgeFragments' ? '煉器碎片' : '靈石（舊工作）'}<b>${Math.max(0, Number(job.currency === 'forgeFragments' ? job.fragmentCost : job.goldCost) || 0)}</b></div><div class="refinery-job-stat">剩餘時間<b data-refinery-job-clock>--</b></div></div><div class="refinery-job-progress"><i data-refinery-job-progress></i></div><div class="refinery-note ${job.kind === 'discovery' ? 'refinery-discovery-note' : ''}">${job.kind === 'discovery' ? '此組合沒有既有配方；煉製完成後按「開爐」即可取得新法寶。' : '素材與煉器碎片已在按「煉製」時扣除，完成後按「開爐」取出。'}</div>${canAdminSkip ? `<div class="refinery-actions"><button type="button" class="refinery-clear" data-refinery-admin-skip ${busy ? 'disabled' : ''}><i class="fa-solid fa-forward-fast"></i> 管理員：跳過等待</button></div>` : ''}</div>` : '';
 
     const adminGuidance = adminGuidanceMarkup(job, matching.length);
 
 
-    return `<section class="cultivation-refinery"><article class="refinery-panel refinery-material-panel"><div class="refinery-material-list ${job ? 'is-job-locked' : ''}">${ingredientHtml}</div></article><article class="refinery-panel refinery-forge-panel"><div class="refinery-head"><div><h3><i class="fa-solid fa-fire-burner"></i> 八方煉器陣</h3><p>八方歸位，陣心煉器；點已放入素材可取回。</p></div><span class="refinery-badge" data-refinery-used-badge>${used}/${SLOT_COUNT}</span></div>${methodSelect}${keyRequirementHtml}<div class="refinery-array-wrap"><div class="refinery-slots" aria-label="八方煉器陣"><span class="refinery-array-lines"></span><span class="refinery-array-ring"></span>${slotHtml}<div class="refinery-array-center"><button type="button" class="refinery-craft ${craftReady ? 'ready' : ''} ${jobReady ? 'job-ready' : ''}" data-refinery-craft ${craftReady ? '' : 'disabled'}><i class="fa-solid fa-fire-flame-curved"></i><span class="craft-main" data-refinery-craft-label>${busy ? '處理中' : craftLabel}</span><span class="craft-sub">REFINE</span></button></div><span class="refinery-array-caption">八方聚靈 · 一器成形</span></div></div>${jobBox}${adminGuidance}<div class="refinery-summary"><strong>投入：</strong><span data-refinery-summary-text>${esc(summary)}</span></div><div class="refinery-match ${matchClass}" data-refinery-match><b data-refinery-match-prefix>${esc(matchPrefix)}</b><span data-refinery-match-text>${esc(matchPlain)}</span></div><div class="refinery-actions"><button type="button" class="refinery-clear" data-refinery-clear ${!used || busy ? 'disabled' : ''}><i class="fa-solid fa-rotate-left"></i> 清空陣位</button></div><div class="refinery-note"><b>陣法規則：</b>按「煉製」即扣素材與金幣；境界越高、玩家境界越低，耗時與費用越高。煉製完成後按「開爐」取出法寶。本命法器由契器台常駐靈石抽取取得，普通煉器不得新造；持有原器可使用團本材料與印記二次、三次精煉。</div>${recipeBookMarkup()}</article></section>`;
+    return `<section class="cultivation-refinery"><article class="refinery-panel refinery-material-panel"><div class="refinery-material-list ${job ? 'is-job-locked' : ''}">${ingredientHtml}</div></article><article class="refinery-panel refinery-forge-panel"><div class="refinery-head"><div><h3><i class="fa-solid fa-fire-burner"></i> 八方煉器陣</h3><p>八方歸位，陣心煉器；點已放入素材可取回。</p></div><button type="button" class="refinery-dismantle" data-inventory-dismantle>物品分解 <small>碎片 ${Math.max(0, Math.floor(Number(userData()?.forgeFragments) || 0))}</small></button><span class="refinery-badge" data-refinery-used-badge>${used}/${SLOT_COUNT}</span></div>${methodSelect}${keyRequirementHtml}<div class="refinery-array-wrap"><div class="refinery-slots" aria-label="八方煉器陣"><span class="refinery-array-lines"></span><span class="refinery-array-ring"></span>${slotHtml}<div class="refinery-array-center"><button type="button" class="refinery-craft ${craftReady ? 'ready' : ''} ${jobReady ? 'job-ready' : ''}" data-refinery-craft ${craftReady ? '' : 'disabled'}><i class="fa-solid fa-fire-flame-curved"></i><span class="craft-main" data-refinery-craft-label>${busy ? '處理中' : craftLabel}</span><span class="craft-sub">REFINE</span></button></div><span class="refinery-array-caption">八方聚靈 · 一器成形</span></div></div>${jobBox}${adminGuidance}<div class="refinery-summary"><strong>投入：</strong><span data-refinery-summary-text>${esc(summary)}</span></div><div class="refinery-match ${matchClass}" data-refinery-match><b data-refinery-match-prefix>${esc(matchPrefix)}</b><span data-refinery-match-text>${esc(matchPlain)}</span></div><div class="refinery-actions"><button type="button" class="refinery-clear" data-refinery-clear ${!used || busy ? 'disabled' : ''}><i class="fa-solid fa-rotate-left"></i> 清空陣位</button></div><div class="refinery-note"><b>陣法規則：</b>按「煉製」即扣素材與煉器碎片；境界越高、玩家境界越低，耗時與費用越高。煉製完成後按「開爐」取出法寶。本命法器由契器台常駐靈石抽取取得，普通煉器不得新造；持有原器可使用團本材料與印記二次、三次精煉。</div>${recipeBookMarkup()}</article></section>`;
   }
 
   function setText(node, value) {
@@ -820,7 +821,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
       const item = matching[0];
       matchNode?.classList.add('ready');
       prefix = '既有配方：';
-      message = `${item.icon || '◆'} ${item.name} · 深度 ${artifactRecipeDepth(item.id)}/${MAX_ARTIFACT_RECIPE_NESTING} · 金幣 ${plan.gold} · 約 ${window.formatCultivationRefineryDuration?.(plan.durationMs) || ''}` +
+      message = `${item.icon || '◆'} ${item.name} · 深度 ${artifactRecipeDepth(item.id)}/${MAX_ARTIFACT_RECIPE_NESTING} · 煉器碎片 ${plan.fragments} · 約 ${window.formatCultivationRefineryDuration?.(plan.durationMs) || ''}` +
         (keyStatus.need ? ` · ${keyStatus.name} ${keyStatus.have}/${keyStatus.need}` : '');
     } else if (used && matching.length > 1) {
       matchNode?.classList.add('error');
@@ -828,7 +829,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
     } else if (used && plan?.valid) {
       matchNode?.classList.add('ready');
       prefix = '未知配方：';
-      message = `新法寶境界「${plan.targetRealm}」 · 金幣 ${plan.gold} · 約 ${window.formatCultivationRefineryDuration?.(plan.durationMs) || ''}` +
+      message = `新法寶境界「${plan.targetRealm}」 · 煉器碎片 ${plan.fragments} · 約 ${window.formatCultivationRefineryDuration?.(plan.durationMs) || ''}` +
         (keyStatus.need ? ` · ${keyStatus.name} ${keyStatus.have}/${keyStatus.need}` : '');
     } else if (used) {
       matchNode?.classList.add('error');
@@ -841,7 +842,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
     if (clearButton) clearButton.disabled = !used || busy;
     const craftButton = content.querySelector('[data-refinery-craft]');
     if (craftButton) {
-      const ready = !!plan?.valid && matching.length <= 1 && keyStatus.enough && !busy;
+      const ready = !!plan?.valid && matching.length <= 1 && keyStatus.enough && Number(userData()?.forgeFragments || 0) >= Number(plan.fragments || 0) && !busy;
       craftButton.disabled = !ready;
       craftButton.classList.toggle('ready', ready);
     }
@@ -931,8 +932,8 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
       toast(`${keyStatus.name}不足，需要 ${keyStatus.need}，目前只有 ${keyStatus.have}。請先挑戰團本取得。`, false);
       return;
     }
-    if (Math.max(0, Number(userData()?.stats?.gold) || 0) < Number(plan.gold || 0)) {
-      toast('靈石不足，無法開始這張配方。', false);
+    if (Math.max(0, Number(userData()?.forgeFragments) || 0) < Number(plan.fragments || 0)) {
+      toast('煉器碎片不足，無法開始這張配方。', false);
       return;
     }
     // The recipe's own method must be selected before deciding whether this is a known item.
@@ -1013,7 +1014,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
       return '法寶推演暫時無法完成，煉製進度已保留。請稍後再按「開爐」。';
     }
     if (transient && phase === 'start') {
-      return '目前無法確認是否開始煉製。請重新整理確認素材、靈石和煉製進度後再操作。';
+      return '目前無法確認是否開始煉製。請重新整理確認素材、煉器碎片和煉製進度後再操作。';
     }
     if (transient && phase.startsWith('claim')) {
       return '開爐暫時未完成，煉製工作已保留。請確認連線後再按「開爐」。';
@@ -1058,7 +1059,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
         adminForgeDirection = '自由發揮';
         adminForgePrompt = '';
         forgeMethod = '自由發揮';
-        toast(`開始煉製：消耗 ${started.goldCost} 金幣，約 ${window.formatCultivationRefineryDuration?.(started.durationMs) || ''} 完成`);
+        toast(`開始煉製：消耗 ${started.fragmentCost} 煉器碎片，約 ${window.formatCultivationRefineryDuration?.(started.durationMs) || ''} 完成`);
       }
     } catch (error) {
       console.error('[Cultivation refinery job]', {
@@ -1141,7 +1142,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
   function boot() {
     ensureStyle();
     schedule();
-    ['foundation-training-stage-changed','golden-core-access-changed','material-system-updated','artifact-system-updated','material-catalog-updated','artifact-catalog-updated','artifact-recipes-updated','xiuxian:recipe-license-updated','xiuxian:user-ready','xiuxian:refinery-job-updated'].forEach((name) => window.addEventListener(name, schedule));
+    ['foundation-training-stage-changed','golden-core-access-changed','material-system-updated','artifact-system-updated','material-catalog-updated','artifact-catalog-updated','artifact-recipes-updated','xiuxian:recipe-license-updated','xiuxian:user-ready','xiuxian:refinery-job-updated','xiuxian:stats-updated'].forEach((name) => window.addEventListener(name, schedule));
     window.addEventListener('xiuxian:refinery-open-request', () => activate());
     window.openCultivationRefinery = () => activate();
 

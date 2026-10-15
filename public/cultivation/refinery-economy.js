@@ -1,14 +1,15 @@
 export const REFINERY_JOB_FIELD = 'refineryJobV1';
 
 export const REFINERY_REALMS = Object.freeze([
-  '凡人','煉氣','築基','金丹','元嬰','化神','煉虛','合體','大乘','渡劫','真仙'
+  '凡人','煉氣','築基','金丹','元嬰','化神','煉虛','合體','渡劫','半仙','真仙'
 ]);
 
 const BASE_GOLD = Object.freeze([60,120,240,420,700,1100,1650,2350,3250,4400,5800]);
 const BASE_SECONDS = Object.freeze([5,10,15,25,40,60,90,130,180,240,300].map((minutes) => minutes * 60));
 
 export function refineryRealmOrder(name) {
-  const index = REFINERY_REALMS.indexOf(String(name || '').trim());
+  const normalized = String(name || '').trim();
+  const index = REFINERY_REALMS.indexOf(normalized === '大乘' ? '渡劫' : normalized);
   return index < 0 ? 0 : index;
 }
 
@@ -30,15 +31,15 @@ export function calculateRefineryEconomy({
   const goldGapMultiplier = gap > 0 ? 1 + gap * 0.35 : Math.max(0.70, 1 + gap * 0.07);
   const timeGapMultiplier = gap > 0 ? 1 + gap * 0.25 : Math.max(0.55, 1 + gap * 0.07);
   // 未知配方不另外加價；價格與時間只由法寶境界、管理員基礎價與玩家境界差決定。
-  // 同境界煉製煉氣期法寶的標準值為 120 靈石、10 分鐘；中後期成本逐階拉開，讓洞天材料與團本道具有實際價值。
-  const gold = Math.max(1, Math.round(realmGold * goldGapMultiplier));
+  // 舊管理員基礎價僅作為定價資料；每 10 靈石基準換算 1 碎片，不扣靈石。
+  const fragments = Math.max(1, Math.ceil(realmGold * goldGapMultiplier / 10));
   const durationMs = Math.max(
     5000,
     Math.round((BASE_SECONDS[targetOrder] || BASE_SECONDS[0]) * 1000 * timeGapMultiplier)
   );
 
   return {
-    gold,
+    fragments,
     durationMs,
     targetRealm,
     playerRealm,

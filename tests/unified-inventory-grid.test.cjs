@@ -138,7 +138,7 @@ test('real markup puts exactly four equipment slots on Equipment tab, none in Ba
   const rootSource = bag.slice(bag.indexOf('  function rootMarkup('),bag.indexOf('  function effectLabel('));
   const slots = ['本命法寶','護身法寶','佩飾法寶','輔助法寶'];
   const ctx = vm.createContext({
-    ROOT_ID: 'unified-cultivation-bag', equipmentPickSlot:'', filterType:'all',sortMode:'type-quality',
+    fragmentBalance:()=>0, ROOT_ID: 'unified-cultivation-bag', equipmentPickSlot:'', filterType:'all',sortMode:'type-quality',
     escapeHtml:String, equipmentMarkup:() => '<section class="uib-equipment-panel"><div class="uib-equipment-grid">'+slots.map(name=>'<button class="uib-equip-slot">'+name+'</button>').join('')+'</div></section>',
     sortedVisibleItems:()=>[], itemMarkup:()=>'', artifactSlot:()=>'', String
   });
