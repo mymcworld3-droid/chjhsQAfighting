@@ -4,6 +4,7 @@ const { playerRepository } = require('./server-repositories.cjs');
 const { PROJECT_IDS } = require('./firebase-admin-projects.cjs');
 const access = require('./public/cultivation/training-access-rules.js');
 const pool = require('./public/cultivation/soulbound-pool.js');
+const fragments = require('./public/cultivation/forge-fragments.js');
 const { educationCohort, ROLE_IDS } = require('./world-immortals-cleanup-api.cjs').__test;
 const fail = (message, status = 409) => Object.assign(new Error(message), { status });
 const number = value => Number.isFinite(Number(value)) ? Math.max(0, Math.floor(Number(value))) : 0;
@@ -24,16 +25,6 @@ function reconcileLots(user, state) {
 function requestKey(uid, id) {
   if (!/^[a-zA-Z0-9_-]{16,80}$/.test(String(id || ''))) throw fail('抽取請求編號無效', 400);
   return crypto.createHash('sha256').update(uid + ':' + id).digest('hex');
-}
-function recovery(user, state) {
-  return Object.entries(state.lots || {}).flatMap(([itemId, prices]) => {
-    if (!pool.get(itemId)) return [];
-    const owned = number(user.artifactSystem?.inventory?.[itemId]);
-    const reserved = Object.values(user.artifactSystem?.equipped || {}).filter(id => id === itemId).length;
-    const available = Math.min(Math.max(0, owned - Math.max(1, reserved)), Object.values(prices).reduce((sum, qty) => sum + number(qty), 0));
-    const paid = Object.keys(prices).map(Number).filter(p => p > 0 && number(prices[p]) > 0).sort((a, b) => a - b)[0];
-    return available && paid ? [{ itemId, available, paid, refund: Math.floor(paid * .3) }] : [];
-  });
 }
 async function transaction(db, uid, action = 'view', body = {}, random = () => crypto.randomInt(0, 0x100000000) / 0x100000000) {
   const stateRef = db.collection('soulboundDrawStates').doc(uid), userRef = db.collection('users').doc(uid);
@@ -57,12 +48,19 @@ async function transaction(db, uid, action = 'view', body = {}, random = () => c
     const pendingSnap = pendingRef ? await tx.get(pendingRef) : null;
     let pending = pendingSnap?.data()?.result || null, result = null;
     let stateDirty = reconcileLots(user, state);
+    if (state.poolVersion !== pool.VERSION) {
+      // Old draws always granted weapons. Preserve lifetime draws and pending
+      // receipts; the new consecutive-miss counter therefore starts at zero.
+      state.poolVersion = pool.VERSION; state.misses = 0; stateDirty = true;
+    }
+    state.misses = Math.min(pool.PITY - 1, number(state.misses));
     if (receiptSnap?.exists) {
       const saved = receiptSnap.data();
       if (saved.action !== action || (action === 'draw' && saved.count !== body.count) ||
           (action === 'recover' && saved.itemId !== body.itemId)) throw fail('此請求編號已用於其他操作');
       result = saved.result;
     } else if (action === 'draw') {
+      if (body.poolVersion !== pool.VERSION) throw fail('獎池已更新，請重新整理契器台後抽取');
       if (![1, 5].includes(body.count)) throw fail('只能選擇單抽或五連抽', 400);
       if (rank < 0) throw fail('金丹境開放締結本命');
       if (pending) throw fail('請先查看並收入上一批抽取結果');
@@ -71,38 +69,35 @@ async function transaction(db, uid, action = 'view', body = {}, random = () => c
       if (number(user.stats?.gold) < cost) throw fail('靈石不足');
       const results = Array.from({ length: body.count }, (_, index) => {
         const ordinal = state.draws + index + 1, paid = ordinal === 1 ? 250 : pool.price(rank);
-        const row = { ...pool.roll(rank, ordinal, random), ordinal, paid };
-        user.artifactSystem ||= {}; user.artifactSystem.inventory ||= {};
-        user.artifactSystem.inventory[row.itemId] = number(user.artifactSystem.inventory[row.itemId]) + 1;
-        (state.lots[row.itemId] ||= {})[paid] = number(state.lots[row.itemId][paid]) + 1;
+        const row = { ...pool.roll(rank, state.misses, random), ordinal, paid };
+        if (row.kind === 'weapon') {
+          user.artifactSystem ||= {}; user.artifactSystem.inventory ||= {};
+          user.artifactSystem.inventory[row.itemId] = number(user.artifactSystem.inventory[row.itemId]) + 1;
+          state.misses = 0;
+        } else {
+          user.stats ||= {}; user.forgeFragments = fragments.balance(user) + row.fragments;
+          state.misses += 1;
+        }
         return row;
       });
       user.stats.gold = number(user.stats.gold) - cost;
       state.draws += body.count; state.pending = key;
       result = { requestId: body.requestId, poolVersion: pool.VERSION, createdAtMs: Date.now(), cost, results };
       pending = result;
-      tx.update(userRef, { 'stats.gold': user.stats.gold, 'artifactSystem.inventory': user.artifactSystem.inventory });
+      tx.update(userRef, { 'stats.gold': user.stats.gold, 'forgeFragments':fragments.balance(user), 'artifactSystem.inventory': user.artifactSystem?.inventory || {} });
       stateDirty = true;
       tx.create(receiptRef, { uid, action, count: body.count, result });
     } else if (action === 'recover') {
-      const eligible = recovery(user, state).find(row => row.itemId === body.itemId);
-      if (!eligible) throw fail('只能回收未裝備的重複原器，至少保留一件；精煉器不可回收');
-      user.artifactSystem.inventory[body.itemId] -= 1;
-      state.lots[body.itemId][eligible.paid] -= 1;
-      user.stats.gold = number(user.stats.gold) + eligible.refund;
-      result = { requestId: body.requestId, itemId: body.itemId, refund: eligible.refund };
-      tx.update(userRef, { 'stats.gold': user.stats.gold, [`artifactSystem.inventory.${body.itemId}`]: user.artifactSystem.inventory[body.itemId] });
-      stateDirty = true;
-      tx.create(receiptRef, { uid, action, itemId: body.itemId, result });
+      throw fail('原器回收已改為碎片分解，請從背包或煉器的「物品分解」操作');
     } else if (action === 'ack') {
       if (pending && pending.requestId === body.requestId) {
         state.pending = null; pending = null; stateDirty = true;
       }
     }
     if (stateDirty) tx.set(stateRef, state);
-    return { ok: true, result, pending, balance: number(user.stats?.gold), inventory: user.artifactSystem?.inventory || {},
-      draws: state.draws, untilPity: 5 - state.draws % 5, poolVersion: pool.VERSION, rank, realm: pool.REALMS[rank]?.name || null,
-      prices: rank < 0 ? null : { single: pool.cost(rank, state.draws, 1), five: pool.cost(rank, state.draws, 5) }, recovery: recovery(user, state) };
+    return { ok: true, result, pending, balance: number(user.stats?.gold), fragments:fragments.balance(user), inventory: user.artifactSystem?.inventory || {},
+      draws: state.draws, misses:state.misses, untilPity: pool.PITY - state.misses, poolVersion: pool.VERSION, rank, realm: pool.REALMS[rank]?.name || null,
+      prices: rank < 0 ? null : { single: pool.cost(rank, state.draws, 1), five: pool.cost(rank, state.draws, 5) }, recovery: [] };
   });
 }
 function createHandler({ action = 'view', resolveA = () => playerRepository.resolve(), logger = console } = {}) {
@@ -125,4 +120,4 @@ module.exports = app => {
   app.get('/api/soulbound', createHandler());
   for (const action of ['draw', 'ack', 'recover']) app.post('/api/soulbound/' + action, createHandler({ action }));
 };
-module.exports.__test = { transaction, createHandler, recovery, requestKey, reconcileLots };
+module.exports.__test = { transaction, createHandler, requestKey, reconcileLots };

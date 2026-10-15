@@ -1,4 +1,5 @@
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import './forge-fragments.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, runTransaction } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactById, realmForScore, realmOrderByName, artifactRealmColor } from './artifact-catalog.js';
@@ -224,29 +225,30 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
     const user = authUser();
     if (!item || !user) return;
     if (item.equipSlot === '本命法寶') throw new Error('本命法寶僅能透過契器台靈石抽取取得。');
-    const cost = Math.max(0, Math.floor(Number(item.craft?.gold) || 0));
+    const cost = Math.max(globalThis.QAForgeFragments.baseCost(item.realm), Math.ceil((Number(item.craft?.gold) || 0) / 10));
     const gain = Math.max(1, Math.floor(Number(item.craft?.yield) || 1));
     busyAction = `craft:${itemId}`; scheduleRender();
     try {
-      let newGold = 0;
+      let newFragments = 0;
       let committed = null;
       await runTransaction(database(), async (tx) => {
         const ref = doc(database(), 'users', user.uid);
         const snap = await tx.get(ref);
         if (!snap.exists()) throw new Error('玩家資料不存在');
         const raw = snap.data();
-        const gold = Math.max(0, Number(raw.stats?.gold) || 0);
-        if (gold < cost) throw new Error(`金幣不足，打造需要 ${cost}`);
+        const fragments = globalThis.QAForgeFragments.balance(raw);
+        if (fragments < cost) throw new Error(`煉器碎片不足，打造需要 ${cost}`);
         const next = normalizeSystem(raw[FIELD] || {});
         next.inventory[itemId] = (Number(next.inventory[itemId]) || 0) + gain;
-        newGold = gold - cost;
+        newFragments = fragments - cost;
         committed = next;
-        tx.update(ref, { [FIELD]: next, 'stats.gold': newGold });
+        tx.update(ref, { [FIELD]: next, 'forgeFragments': newFragments });
       });
       const data = userData();
-      if (data?.stats) data.stats.gold = newGold;
+      if (authUser()?.uid !== user.uid) return;
+      if (data) data.forgeFragments = newFragments;
       setLocalState(committed);
-      window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', { detail: { gold: newGold, artifactCrafted: itemId } }));
+      window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', { detail: { forgeFragments: newFragments, artifactCrafted: itemId } }));
       toast(`煉器成功：${item.name} × ${gain}`);
     } finally {
       busyAction = ''; scheduleRender();
@@ -509,7 +511,7 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
   }
   function forgeItemMarkup(item) {
     const qty = quantity(item.id);
-    const cost = Math.max(0, Number(item.craft?.gold) || 0);
+    const cost = Math.max(globalThis.QAForgeFragments.baseCost(item.realm), Math.ceil((Number(item.craft?.gold) || 0) / 10));
     const yieldCount = Math.max(1, Number(item.craft?.yield) || 1);
     const hasEquip = itemHasEquipEffects(item);
     const hasTimed = itemHasTimedEffects(item);
@@ -528,7 +530,7 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
         <div class="artifact-meta">持有 <b>×${qty}</b>${eqSlot ? ` · 已裝備於 <b>${escapeHtml(eqSlot)}</b>` : ''}${buff ? ` · 效果剩餘 <b data-artifact-expire="${buff.expiresAt}">${formatRemaining(buff.expiresAt - Date.now())}</b>` : ''}</div>
       </div>
       <div class="artifact-actions">
-        ${soulboundOnly ? '<span class="artifact-soulbound-only">本命法寶 · 契器台常駐抽取</span>' : `<button type="button" data-artifact-craft="${escapeHtml(item.id)}" ${busyAction ? 'disabled' : ''}>${busyAction === `craft:${item.id}` ? '煉製中…' : `煉製 ×${yieldCount}`}<small>${cost} 金幣</small></button>`}
+        ${soulboundOnly ? '<span class="artifact-soulbound-only">本命法寶 · 契器台常駐抽取</span>' : `<button type="button" data-artifact-craft="${escapeHtml(item.id)}" ${busyAction ? 'disabled' : ''}>${busyAction === `craft:${item.id}` ? '煉製中…' : `煉製 ×${yieldCount}`}<small>${cost} 碎片</small></button>`}
         ${hasEquip ? `<button type="button" data-artifact-equip="${escapeHtml(item.id)}" ${qty <= 0 || !canEquip || busyAction ? 'disabled' : ''}>${eqSlot ? '卸下' : '裝備'}<small>${escapeHtml(item.equipSlot || '法寶')}</small></button>` : ''}
         ${hasTimed ? `<button type="button" data-artifact-use="${escapeHtml(item.id)}" ${qty <= 0 || busyAction ? 'disabled' : ''}>${buff ? '重新催動' : '催動'}<small>消耗 1 件</small></button>` : ''}
         ${(item.effects || []).some((effect) => effect.type === 'remove_wrong_option') ? `<span class="artifact-question-only">於題目作答前使用</span>` : ''}
@@ -587,10 +589,10 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
     const content = document.getElementById('artifact-forge-content');
     if (!content) return;
     const data = userData();
-    const gold = Math.max(0, Number(data?.stats?.gold) || 0);
+    const fragments = globalThis.QAForgeFragments.balance(data);
     const equippedCount = Object.keys(state().equipped).length;
     const activeCount = activeBuffs().length;
-    content.innerHTML = `<div class="artifact-forge-summary"><div><span>目前境界</span><b>${escapeHtml(currentRealm().name)}</b></div><div><span>金幣</span><b>${gold.toLocaleString()}</b></div><div><span>已裝備／限時效果</span><b>${equippedCount} ／ ${activeCount}</b></div></div><p class="artifact-forge-note">所有境界的修士都能裝備任何境界的裝備型法寶；只需要持有法寶並使用對應的四個裝備欄位。法寶境界僅代表品質與生成數值範圍。法寶資料全部來自 <code>artifact-catalog.js</code>，新增清單項目後會自動出現在這裡。</p><div class="artifact-list">${ARTIFACT_CATALOG.map(forgeItemMarkup).join('')}</div>`;
+    content.innerHTML = `<div class="artifact-forge-summary"><div><span>目前境界</span><b>${escapeHtml(currentRealm().name)}</b></div><div><span>煉器碎片</span><b>${fragments.toLocaleString()}</b></div><div><span>已裝備／限時效果</span><b>${equippedCount} ／ ${activeCount}</b></div></div><p class="artifact-forge-note">所有境界的修士都能裝備任何境界的裝備型法寶；只需要持有法寶並使用對應的四個裝備欄位。法寶境界僅代表品質與生成數值範圍。</p><div class="artifact-list">${ARTIFACT_CATALOG.map(forgeItemMarkup).join('')}</div>`;
   }
   function scheduleRender() {
     if (renderQueued) return;

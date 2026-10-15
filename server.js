@@ -21,6 +21,7 @@ const registerDongtianSettlementApi = require('./dongtian-settlement-api.cjs');
 const registerImmortalsCleanupApi = require('./world-immortals-cleanup-api.cjs');
 const registerInvitationApi = require('./invitation-api.cjs');
 const registerSoulboundDrawApi = require('./soulbound-draw-api.cjs');
+const registerInventoryDismantleApi = require('./inventory-dismantle-api.cjs');
 const registerQuestApi = require('./quest-api.cjs');
 const registerOpportunityApi = require('./opportunity-api.cjs');
 const registerGameStage = require('./game-stage.cjs');
@@ -55,6 +56,7 @@ registerImmortalsCleanupApi(app);
 registerInvitationApi(app);
 registerQuestApi(app);
 registerSoulboundDrawApi(app);
+registerInventoryDismantleApi(app);
 registerOpportunityApi(app);
 
 // 僅回傳已配置 provider 的名稱與模型，不暴露 API key。

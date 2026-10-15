@@ -1,7 +1,8 @@
 // Versioned, permanent pool shared by browser and server. Never generated at draw time.
 (function (root) {
   'use strict';
-  const VERSION = 'soulbound-v1';
+  const VERSION = 'soulbound-v2-fragments50';
+  const PITY = 50, WEAPON_RATE = .02, FRAGMENT_MIN = 20, FRAGMENT_MAX = 40;
   const REALMS = Object.freeze([
     ['golden-core', '金丹', 28], ['nascent-soul', '元嬰', 68], ['spirit', '化神', 188],
     ['void', '煉虛', 428], ['fusion', '合體', 788], ['mahayana', '渡劫', 1268],
@@ -18,7 +19,6 @@
     ['axe', '破障玄斧', '斧', '斧', 'equip_true_damage_flat', 15, 6, '命中追加真實傷害', '攻堅', '#fda4af']
   ].map(([id, name, form, icon, effect, base, step, label, synergy, color]) =>
     Object.freeze({ id, name, form, icon, effect, base, step, label, synergy, color })));
-  const FEATURED = Object.freeze(['sword', 'pearl', 'star', 'bell']);
   const amount = (type, rank) => Number((type.base + type.step * rank).toFixed(4));
   const valueText = (effect, value) => effect.endsWith('_percent') || effect.endsWith('_chance')
     ? `${Number((value * 100).toFixed(1))}%` : `${value} 點`;
@@ -46,18 +46,22 @@
   }
   const price = rank => 500 + Math.max(0, rank) * 100;
   const cost = (rank, draws, count) => price(rank) * count - (draws === 0 ? price(rank) - 250 : 0);
-  function candidates(rank, featured = false) {
+  function candidates(rank) {
     const realm = REALMS[rank]?.name;
-    return ITEMS.filter(item => item.realm === realm && (!featured || FEATURED.includes(item.archetype)));
+    return ITEMS.filter(item => item.realm === realm);
   }
-  function roll(rank, ordinal, random) {
-    const pity = ordinal % 5 === 0;
-    const higher = rank < REALMS.length - 1 && (pity || random() < .2);
-    const list = candidates(higher ? rank + 1 : rank, pity && rank === REALMS.length - 1);
+  function roll(rank, misses, random) {
+    const pity = misses >= PITY - 1;
+    if (!pity && random() >= WEAPON_RATE) {
+      return {kind:'fragments',fragments:FRAGMENT_MIN+Math.floor(random()*(FRAGMENT_MAX-FRAGMENT_MIN+1)),pity:false};
+    }
+    const higher = rank < REALMS.length - 1 && random() < .2;
+    // All eight archetypes share one permanent pool, including the guarantee.
+    const list = candidates(higher ? rank + 1 : rank);
     const item = list[Math.min(list.length - 1, Math.floor(random() * list.length))];
-    return { itemId: item.id, realm: item.realm, higher, pity, featured: pity && rank === REALMS.length - 1 };
+    return { kind:'weapon',itemId: item.id, realm: item.realm, higher, pity };
   }
-  const api = Object.freeze({ VERSION, REALMS, TYPES, FEATURED, ITEMS, get, rankFor, price, cost, candidates, roll, valueText });
+  const api = Object.freeze({ VERSION, PITY, WEAPON_RATE, FRAGMENT_MIN, FRAGMENT_MAX, REALMS, TYPES, ITEMS, get, rankFor, price, cost, candidates, roll, valueText });
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.QASoulboundPool = api;
 })(globalThis);

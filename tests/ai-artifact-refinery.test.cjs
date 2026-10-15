@@ -339,17 +339,17 @@ test('refinery economy uses qi baseline 10 minutes / 120 spirit stones and varie
   const economy = loadEconomy();
   const qi = economy.calculateRefineryEconomy({ targetRealm:'煉氣', playerRealm:'煉氣', discovery:false });
   const qiDiscovery = economy.calculateRefineryEconomy({ targetRealm:'煉氣', playerRealm:'煉氣', discovery:true });
-  assert.equal(qi.gold, 120);
+  assert.equal(qi.fragments, 12);
   assert.equal(qi.durationMs, 10 * 60 * 1000);
-  assert.equal(qiDiscovery.gold, 120);
+  assert.equal(qiDiscovery.fragments, 12);
   assert.equal(qiDiscovery.durationMs, 10 * 60 * 1000);
 
   const same = economy.calculateRefineryEconomy({ targetRealm:'元嬰', playerRealm:'元嬰', discovery:false });
   const underRealm = economy.calculateRefineryEconomy({ targetRealm:'元嬰', playerRealm:'築基', discovery:false });
   const overRealm = economy.calculateRefineryEconomy({ targetRealm:'元嬰', playerRealm:'大乘', discovery:false });
-  assert.ok(underRealm.gold > same.gold);
+  assert.ok(underRealm.fragments > same.fragments);
   assert.ok(underRealm.durationMs > same.durationMs);
-  assert.ok(overRealm.gold < same.gold);
+  assert.ok(overRealm.fragments < same.fragments);
   assert.ok(overRealm.durationMs < same.durationMs);
 });
 
@@ -372,9 +372,9 @@ test('admin refinery guidance is admin-only, stored with the furnace job, and re
 
 test('unknown recipes start a timed paid job and AI runs only when claiming the completed artifact', () => {
   assert.match(aiJobs, /status: 'refining'/);
-  assert.match(aiJobs, /goldCost: plan\.gold/);
+  assert.match(aiJobs, /fragmentCost: plan\.fragments/);
   assert.match(aiJobs, /readyAtMs: now \+ plan\.durationMs/);
-  assert.match(aiJobs, /'stats\.gold': committed\.gold/);
+  assert.match(aiJobs, /'forgeFragments': committed\.fragments/);
   assert.match(aiJobs, /consumeRecipe\(raw, plan\.recipe\)/);
 
   const generatePos = aiJobs.indexOf('async function generateCandidate');
@@ -414,7 +414,7 @@ test('same discovered recipe is reused instead of generating duplicate permanent
 
 test('refinery button flow is 煉製 -> 煉製中 -> 開爐 and claim only after ready time', () => {
   assert.match(refinery, /data-refinery-job-clock/);
-  assert.match(refinery, /已付金幣/);
+  assert.match(refinery, /job\.fragmentCost : job\.goldCost/);
   assert.match(refinery, /法寶境界/);
   assert.match(refinery, /Date\.now\(\) >= Number\(job\.readyAtMs/);
   assert.match(refinery, /const craftLabel = job \? \(jobReady \? '開爐' : '煉製中'\) : '煉製'/);
@@ -713,7 +713,7 @@ test('recipe craft action rechecks license, inventory, payment and calls the rea
     busy: false, SLOT_COUNT: 8, selected: Array(8).fill('old'),
     forgeMethod: '自由發揮', recipeMethod: (item) => item?.forgeMethod || '自由發揮',
     window: { getCultivationRefineryJob: () => null,
-      getCultivationRefineryPlan: (tokens, id) => ({ valid: true, knownArtifactId: id, gold: 80 }) },
+      getCultivationRefineryPlan: (tokens, id) => ({ valid: true, knownArtifactId: id, fragments: 80 }) },
     toast: (msg) => messages.push(msg),
     authUser: () => ({ uid: 'player' }),
     getArtifactById: (id) => id === 'blade' ? { id: 'blade' } : null,
@@ -724,7 +724,7 @@ test('recipe craft action rechecks license, inventory, payment and calls the rea
     recipeCounts: () => ({ 'material:iron': 2 }),
     ingredientAvailable: () => stock,
     refinementKeyStatus: () => ({ materialId:'', need:0, have:0, enough:true, name:'' }),
-    userData: () => ({ stats: { gold } }),
+    userData: () => ({ forgeFragments: gold }),
     render: () => { renders++; },
     craft: async () => {
       calledCraft++;
@@ -751,7 +751,7 @@ test('recipe craft action rechecks license, inventory, payment and calls the rea
   assert.equal(renders, 1);
   assert.ok(messages.some(message => message.includes('配方')));
   assert.ok(messages.some(message => message.includes('製作材料不足')));
-  assert.ok(messages.some(message => message.includes('靈石不足')));
+  assert.ok(messages.some(message => message.includes('煉器碎片不足')));
 });
 
 test('refinery recipe book displays discovered formulas and first-owner details', () => {

@@ -41,6 +41,7 @@ import {
       .replaceAll('"', '&quot;').replaceAll("'", '&#039;');
   }
   function qty(value) { return Math.max(0, Math.floor(Number(value) || 0)); }
+  function fragmentBalance() { return qty(userData()?.forgeFragments); }
   function imageMarkup(imageUrl, fallback, alt = '') {
     const url = String(imageUrl || '').trim();
     if (!url) return escapeHtml(fallback || '◆');
@@ -286,6 +287,7 @@ import {
     return `<section id="${ROOT_ID}" class="uib-root uib-bag-view">
       <div class="uib-toolbar">
         <div class="uib-summary"><b>背包</b><span>${allItems.length} 種物品</span></div>
+        <button type="button" class="uib-dismantle-btn" data-inventory-dismantle>物品分解 <small>碎片 ${fragmentBalance().toLocaleString('zh-TW')}</small></button>
         <label>種類
           <select id="uib-filter-type">
             <option value="all" ${filterType === 'all' ? 'selected' : ''}>全部</option>
@@ -475,6 +477,7 @@ import {
       filterType,
       sortMode,
       equipmentPickSlot,
+      fragments: fragmentBalance(),
       items: allItems.map((item) => [item.key, item.quantity, item.realm, item.name, item.equipped ? 1 : 0]),
       equipment: ARTIFACT_EQUIP_SLOTS.map((slot) => [slot, equippedIdForSlot(slot)])
     });
@@ -508,6 +511,7 @@ import {
     const style = document.createElement('style');
     style.id = STYLE_ID;
     style.textContent = `
+      .uib-dismantle-btn{border:1px solid #d9b56d66;border-radius:9px;background:#d9b56d12;color:#e8c985;min-height:36px;padding:7px 11px;font-size:11px;cursor:pointer}.uib-dismantle-btn small{display:block;color:#a99b80;font-size:10px}
       /* Permanent soulbound contract entry. */
       .uib-equip-slot.is-soulbound{isolation:isolate;border:1px solid rgba(244,202,113,.72);background:radial-gradient(ellipse at 50% 46%,rgba(214,164,74,.23),transparent 63%),radial-gradient(ellipse at 50% -16%,rgba(228,200,137,.17),transparent 65%),linear-gradient(145deg,#302315,#0b0d10 80%);box-shadow:inset 0 0 0 1px rgba(247,223,159,.09),inset 0 0 30px rgba(222,167,63,.07),0 8px 30px rgba(0,0,0,.28);gap:6px}
       .uib-equip-slot.is-soulbound:before{inset:6px;border:1px solid rgba(242,199,119,.32);border-radius:11px;background:linear-gradient(135deg,rgba(250,221,152,.095),transparent 25%,transparent 75%,rgba(250,221,152,.07));box-shadow:inset 0 0 0 3px rgba(23,17,11,.62)}
