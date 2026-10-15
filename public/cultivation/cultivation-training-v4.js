@@ -402,7 +402,6 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
           <button id="equip-current-core" type="button" class="core-equip-btn ${state.equipped ? 'equipped' : ''}" ${state.equipped || busy ? 'disabled' : ''}>
             ${state.equipped ? '<i class="fa-solid fa-circle-check"></i> 已調御此丹相' : '<i class="fa-solid fa-circle-dot"></i> 調御此丹相'}
           </button>
-          ${!state.equipped && currentScore() >= NASCENT_SOUL_THRESHOLD ? '<p class="ns-progress-caption">調御新丹相會自動重置所有元嬰配點，返還已投入元嬰碎精。</p>' : ''}
         </div>
       </section>
     `;
