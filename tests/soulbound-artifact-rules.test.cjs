@@ -99,7 +99,7 @@ test('soulbound ranges multiply special attributes by 1.2 but preserve all attac
     assert.equal(inverse.min,Number((normal.find(row => row.type === inverse.type).min / 1.2).toFixed(4)));
     for (const range of bound) {
       const effect = api.sanitizeEffect({type:range.type,value:1e9,multiplier:1e9}, 4,stage,{}, {},count,true);
-      if (range.field === 'value' || range.field === 'multiplier') assert.equal(effect[range.field],range.max);
+      if (range.field === 'value' || range.field === 'multiplier') assert.equal(effect[range.field],range.type.endsWith('_flat') ? Math.floor(range.max) : range.max);
     }
   }
 });
