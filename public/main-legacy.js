@@ -1593,7 +1593,7 @@ function injectSocialUI() {
     btn.setAttribute("onclick", "switchToPage('page-social')");
     btn.dataset.target = "page-social";
     btn.className = "nav-btn group w-full flex flex-col items-center justify-center h-full transition-all";
-    btn.innerHTML = `<i class="fa-solid fa-users mb-1 text-lg transition-colors"></i><span class="text-[10px]" data-i18n="nav_social">${t('nav_social')}</span>`;
+    btn.innerHTML = `<i class="fa-solid fa-users mb-1 text-lg transition-colors"></i><span class="text-[10px]" data-i18n="nav_social">${t('nav_social')}</span><span class="alliance-chat-badge" id="alliance-chat-nav-unread" hidden aria-label="有未讀好友私訊"></span>`;
     
     const settingsBtn = navGrid.lastElementChild;
     navGrid.insertBefore(btn, settingsBtn);
@@ -1606,15 +1606,15 @@ function injectSocialUI() {
     pageSocial.innerHTML = `
         <div class="sticky top-0 bg-slate-900/95 backdrop-blur-sm z-20 border-b border-slate-800">
             <h2 class="text-2xl font-bold text-cyan-400 flex items-center gap-2 p-4 pb-2">
-                <i class="fa-solid fa-comments"></i> 社交中心
+                <i class="fa-solid fa-comments"></i> 社交中心 <span id="alliance-chat-title-unread" class="alliance-chat-badge with-count" hidden aria-label="未讀好友訊息"></span>
             </h2>
             
             <div class="flex px-4 gap-2 mb-2">
                 <button onclick="switchSocialTab('friends')" id="tab-btn-friends" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-cyan-600 text-white shadow-lg">
-                    <i class="fa-solid fa-user-group"></i> 好友
+                    <i class="fa-solid fa-user-group"></i> 好友 <span id="alliance-friend-unread" class="alliance-chat-badge with-count" hidden aria-label="好友私訊未讀"></span>
                 </button>
                 <button onclick="switchSocialTab('chat')" id="tab-btn-chat" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-slate-800 text-gray-400 hover:bg-slate-700">
-                    <i class="fa-solid fa-earth-asia"></i> 全服聊天
+                    <i class="fa-solid fa-earth-asia"></i> 全服聊天 <span id="alliance-global-unread" class="alliance-chat-badge" hidden aria-label="全服有新訊息"></span>
                 </button>
             </div>
         </div>
@@ -1652,6 +1652,7 @@ function injectSocialUI() {
         </div>
     `;
     main.appendChild(pageSocial);
+    window.QAFriendChat?.start();
 }
 
 // 切換分頁 (好友/聊天)
@@ -1679,9 +1680,11 @@ window.switchSocialTab = (tab) => {
         secChat.classList.remove('hidden');
         secFriends.classList.add('hidden');
         
-        // 啟用聊天室監聽
+        // 啟用聊天室監聽：清除全服分頁內的紅點，但不影響好友私訊紅點。
         listenToGlobalChat();
+        window.QAFriendChat?.ackGlobalChat();
     }
+    window.QAFriendChat?.updateBadges();
     finishTransition();
 };
 
@@ -2020,8 +2023,21 @@ window.loadFriendList = async () => {
                     </div>
                 </div>
             `;
+            const chatButton = document.createElement('button');
+            chatButton.type = 'button';
+            chatButton.className = 'alliance-chat-friend-btn';
+            chatButton.innerHTML = '<i class="fa-regular fa-comment-dots"></i><span>私訊</span>';
+            chatButton.setAttribute('aria-label', '私訊給 ' + String(fData.displayName || '修士'));
+            const unread = document.createElement('span');
+            unread.className = 'alliance-chat-badge with-count';
+            unread.dataset.friendChatUnread = d.id;
+            unread.hidden = true;
+            chatButton.appendChild(unread);
+            chatButton.addEventListener('click', () => window.QAFriendChat?.open(d.id, fData.displayName || '修士'));
+            div.append(chatButton);
             container.appendChild(div);
         });
+        window.QAFriendChat?.updateBadges();
     } catch (e) {
         console.error(e);
         container.innerHTML = '<div class="text-red-400 text-center">Load Failed</div>';
