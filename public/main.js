@@ -25,6 +25,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/math-guard.js',
   './cultivation/quiz-math.js',
   './cultivation/quiz-history-view.js',
+  './cultivation/alliance-friend-chat.js',
   './cultivation/golden-core-activation-feedback.js',
   './cultivation/cultivation-rules.js',
   './cultivation/xiuxian-live-sync.js',
