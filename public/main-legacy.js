@@ -347,7 +347,7 @@ const translations = {
         rank_grandmaster: "🔥 宗師",
         rank_king: "👑 王者",
         analysis_title: "能力分析圖譜",
-        analysis_desc: "基於近期答題表現分析 (正確率)"
+        analysis_desc: "依答題紀錄估計各單元能力，並提供 AI 補強建議"
     },
     'en': {
         app_title: "Qingyun · The Path of Learning",
@@ -471,7 +471,7 @@ const translations = {
         rank_grandmaster: "🔥 Grandmaster",
         rank_king: "👑 King",
         analysis_title: "能力分析圖譜",
-        analysis_desc: "基於近期答題表現分析 (正確率)"
+        analysis_desc: "依答題紀錄估計各單元能力，並提供 AI 補強建議"
     }
 };
 
@@ -1842,7 +1842,10 @@ function sanitizeQuizImageUrl(rawUrl) {
 }
 
 function formatQuizRichText(text) {
-    const source = normalizeQuizSymbols(text);
+    // The formatter also runs in isolated test/import contexts without window.
+    const guard = typeof window === 'undefined' ? null : window.QAMathGuard;
+    const decoded = guard?.expandTextEscapes?.(text) ?? text;
+    const source = normalizeQuizSymbols(decoded);
     if (!source) return '';
 
     const protectedParts = [];
@@ -3297,6 +3300,15 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
             question: questionText, 
             isCorrect: isCorrect, 
             timeTaken: timeTaken,
+            // Structured category for future recent-topic learning trends.
+            // Older logs without these fields remain usable for general history.
+            subject: String(window.currentActiveQuiz?.badge || '').replace('🎯 ', '').split(' | ')[0]?.trim().slice(0, 40) || '',
+            subTopic: String(window.currentActiveQuiz?.badge || '').replace('🎯 ', '').split(' | ')[1]?.trim().slice(0, 75) || '',
+            // AI-generated question metadata, not an AI inference from correctness.
+            questionForm: String(quiz?.meta?.question_form || '').slice(0, 40),
+            cognitiveLevel: Number(quiz?.meta?.cognitive_level) || null,
+            reasoningSteps: Number(quiz?.meta?.reasoning_steps) || null,
+            conceptId: String(quiz?.meta?.concept_id || '').slice(0, 100),
             topic: "Solo", 
             mode: 'infinite', 
             timestamp: serverTimestamp(),
@@ -5825,6 +5837,14 @@ window.updatePercentileDisplay = async (targetSubject, myMap) => {
 window.renderKnowledgeGraph = (targetSubject = null) => {
     const ctx = document.getElementById('knowledgeChart');
     if (!ctx) return;
+    if (window.QAAbilityGraph?.render) {
+        if (knowledgeChartInstance) { knowledgeChartInstance.destroy(); knowledgeChartInstance = null; }
+        return window.QAAbilityGraph.render({
+            targetSubject,
+            map: currentUserData?.stats?.knowledgeMap || {},
+            onPercentile: window.updatePercentileDisplay
+        });
+    }
 
     // 安全取得使用者知識圖譜數據 (如果尚未產生則給空物件)
     const map = (currentUserData && currentUserData.stats && currentUserData.stats.knowledgeMap) ? currentUserData.stats.knowledgeMap : {};
