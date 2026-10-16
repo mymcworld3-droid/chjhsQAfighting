@@ -18,6 +18,8 @@ test('fixed matured D1 and D7 cohorts exclude too-recent players', () => {
   const now = new Date('2026-10-16T04:00:00Z');
   const players = [
     { uid: 'a', firstDay: '2026-10-15', cohortEligible: true, firstQuestionAt: new Date('2026-10-15T04:00:00Z'), firstThreeAt: new Date('2026-10-15T06:00:00Z'), seenDays: ['2026-10-15','2026-10-16'], socialDays: ['2026-10-15'] },
+    { uid: 'e', firstDay: '2026-10-13', cohortEligible: true, seenDays: ['2026-10-13','2026-10-14'], socialDays: ['2026-10-13'] },
+    { uid: 'f', firstDay: '2026-10-08', cohortEligible: true, seenDays: ['2026-10-08','2026-10-15'], socialDays: [] },
     { uid: 'b', firstDay: '2026-10-09', cohortEligible: true, firstQuestionAt: now, seenDays: ['2026-10-09','2026-10-16'], socialDays: [] },
     { uid: 'c', firstDay: '2026-10-16', cohortEligible: true, firstQuestionAt: now, seenDays: ['2026-10-16'], socialDays: [] },
     { uid: 'd', firstDay: '2026-10-14', cohortEligible: true, seenDays: ['2026-10-14'], socialDays: [] },
@@ -28,7 +30,7 @@ test('fixed matured D1 and D7 cohorts exclude too-recent players', () => {
     { uid: 'b', day: '2026-10-16', answers: 3, starts: 1, social: 0, loadFailures: 0, duelAnswers: 3, appLoads: 1 }
   ];
   const report = buildReport({
-    visitors: [{firstDay:'2026-10-16',started:true,firstStartDay:'2026-10-16'}, {firstDay:'2026-10-15',started:false,firstStartDay:null}],
+    visitors: [{firstDay:'2026-10-15',started:true,firstStartDay:'2026-10-15'}, {firstDay:'2026-10-14',started:false,firstStartDay:null}],
     players, days:daily, events:[], now, range:7, truncated:false
   });
   assert.deepEqual(report.visitors, { total:2, started:1, rate:50 });
