@@ -47,6 +47,24 @@ test('recent trend requires at least five samples in both windows', () => {
   assert.equal(Core.recentTrend(records.slice(0, 4), null, now).delta, null);
 });
 
+test('reasoning-form abilities use labeled question metadata only', () => {
+  const records = [
+    { questionForm: 'multi-step', subject: '數學', isCorrect: true },
+    { questionForm: 'multi-step', subject: '數學', isCorrect: false },
+    { questionForm: 'concept-transfer', subject: '英文', isCorrect: false },
+    { questionForm: 'invented', subject: '數學', isCorrect: true },
+    { questionForm: '', subject: '數學', isCorrect: false }
+  ];
+  const skills = Core.skillStats(records, '數學');
+  assert.equal(skills.length, 8);
+  assert.equal(skills.find(x => x.code === 'multi-step').total, 2);
+  assert.equal(skills.find(x => x.code === 'multi-step').estimate, 50);
+  assert.equal(skills.find(x => x.code === 'concept-transfer').estimate, null);
+  const summary = Core.aiSummary(Core.build({ 數學: { '函數': { total: 12, correct: 5 } } }),
+    '數學', null, skills);
+  assert.deepEqual(summary.skills, [{ name: '多步推理', total: 2, correct: 1 }]);
+});
+
 test('AI summary excludes question bodies and personal identifiers', () => {
   const report = Core.build({ 數學: { '函數': { total: 10, correct: 4 } } });
   const summary = Core.aiSummary(report, '數學');
@@ -73,6 +91,11 @@ test('AI request sanitizes aggregates, validates response and rate-limits per ui
     { subject: '數學', topic: '機率', total: 8, correct: 19, secret: 'email@foo.com' }
   ] });
   assert.equal(normalized.topics[0].correct, 8);
+  const withSkills = abilityApi.normalizeInput({ ...normalized, skills: [
+    { name: '多步推理', total: 4, correct: 9 },
+    { name: '個資', total: 10, correct: 10 }
+  ] });
+  assert.deepEqual(withSkills.skills, [{ name: '多步推理', total: 4, correct: 4 }]);
   assert.doesNotMatch(JSON.stringify(normalized), /secret|foo.com/);
   assert.deepEqual(abilityApi.normalizeAdvice({ headline: '試試這樣做', plan: [
     { topic: '機率', action: '每天五題', questions: 999 }
