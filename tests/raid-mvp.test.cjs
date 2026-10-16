@@ -107,8 +107,8 @@ test('shared room layer supports party lifecycle, boss HP and reconnect', () => 
   assert.match(serverSource, /registerRaidRoomApi\(app\)/);
 });
 
-test('raid questions use the quick simple generation profile', () => {
-  assert.match(questionSource, /difficulty:\s*'easy'/);
+test('raid questions use standard Wen Dao complexity with server-issued answer tickets', () => {
+  assert.match(questionSource, /difficulty:\s*'medium'/);
   assert.match(questionSource, /quizMode:\s*'raid-standard'/);
   assert.match(serverSource, /raidQuickSimple/);
   assert.match(serverSource, /團本快答模式/);
