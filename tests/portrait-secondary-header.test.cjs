@@ -8,21 +8,20 @@ const publicFile = name => fs.readFileSync(path.join(__dirname, '../public', nam
 const css = publicFile('styles/xianxia-quiet.css');
 const html = publicFile('index.html');
 
-test('portrait-only CSS hides exactly the top brand on market, ranking, and alliance', () => {
-  const match = css.match(/@media\s*\(orientation:\s*portrait\)\s*\{([\s\S]*?)\n\}/g) || [];
-  const rule = match.find(block => block.includes('> header > h1.xianxia-brand'));
-  assert.ok(rule, 'portrait media query for the global brand must exist');
-  for (const page of ['#page-store', '#page-rank', '#page-social']) {
-    assert.ok(rule.includes(page), page + ' should hide the brand only when active');
-  }
-  assert.match(rule, /:has\(:is\([^)]*\)\.active-page\)/);
-  assert.match(rule, /> header > h1\.xianxia-brand\s*\{\s*display:\s*none\s*!important/);
-  assert.match(rule, /> header\s*\{\s*justify-content:\s*flex-end\s*!important/);
+test('portrait-only rules hide the entire global header on store, ranking, and alliance', () => {
+  const blocks = css.match(/@media\s*\(orientation:\s*portrait\)\s*\{([\s\S]*?)\n\}/g) || [];
+  const block = blocks.find(item => item.includes('> header {') && item.includes('> main {'));
+  assert.ok(block, 'portrait-only rule must target both header and main');
+  const activeScope = 'body.xianxia-theme:has(:is(#page-store, #page-rank, #page-social).active-page)';
+  assert.equal(block.split(activeScope).length - 1, 2, 'same scoped selector must hide header and recover vertical space');
+  assert.match(block, /> header\s*\{\s*display:\s*none\s*!important/);
+  assert.match(block, /> main\s*\{\s*padding-top:\s*max\(8px, env\(safe-area-inset-top, 0px\)\)\s*!important/);
+  assert.doesNotMatch(block, /> header > h1\.xianxia-brand\s*\{/);
   for (const excluded of ['#page-home', '#page-training', '#page-quiz', '#page-settings', '#page-history']) {
-    assert.ok(!rule.includes(excluded), excluded + ' must retain its branding');
+    assert.ok(!block.includes(excluded), excluded + ' retains the original full header');
   }
-  assert.ok(!/display:\s*none\s*!important[\s\S]{0,80}> header > div/.test(rule));
 });
+
 
 test('brand remains intact as a return-home button; user controls remain in top header', () => {
   const header = html.match(/<header class="fixed top-0[^]*?<\/header>/);
@@ -33,5 +32,5 @@ test('brand remains intact as a return-home button; user controls remain in top 
   assert.match(header[0], /以學入道 · 積微成仙/);
   assert.match(header[0], /id="user-info"/);
   assert.match(header[0], /id="lang-display"/);
-  assert.match(html, /styles\/xianxia-quiet\.css\?v=20261016-portrait-secondary-brand1/);
+  assert.match(html, /styles\/xianxia-quiet\.css\?v=20261016-portrait-hide-full-header1/);
 });
