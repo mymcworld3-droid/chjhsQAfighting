@@ -72,10 +72,10 @@ async function start(db,uid,selection={},now=Date.now()) {
     const available=candidateWeaknesses(user.stats?.knowledgeMap);
     if(!available.length)throw error('目前沒有足夠證據判斷弱項。請先在問道同一單元完成至少五題。');
     const desiredSubject=clean(selection.subject,40),desiredTopic=clean(selection.topic);
-    const selected=available.find(x=>x.subject===desiredSubject && x.topic===desiredTopic) || available[0];
     const progress=user.enlightenmentProgress||{};
     const mastered=progress.masteredTopics||{};
-    const chosen=available.find(x=>!mastered[fingerprint(x.subject,x.topic)])||selected;
+    const selected=available.find(x=>x.subject===desiredSubject && x.topic===desiredTopic && !mastered[fingerprint(x.subject,x.topic)]);
+    const chosen=selected||available.find(x=>!mastered[fingerprint(x.subject,x.topic)])||available[0];
     const state={version:1,runId:crypto.randomUUID(),day:day(now),status:'active',
       subject:chosen.subject,topic:chosen.topic,level:clean(user.profile?.educationLevel,32)||'國中一年級',
       index:0,correct:0,pendingQuestion:null,lastReview:null,history:[],
