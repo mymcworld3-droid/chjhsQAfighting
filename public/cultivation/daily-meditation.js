@@ -11,10 +11,11 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
   const uid = () => getMainUser()?.uid || '';
   const userData = () => window.getCurrentUserData?.();
   const today = () => Rules.meditationDateKey();
-  let account='', state=null, session=null, busy=false, generation=0, statusSequence=0, clock=null, lastStatusAt=0;
+  const STATUS_CACHE_MS=60000;
+  let account='', state=null, session=null, busy=false, generation=0, statusSequence=0, clock=null, lastStatusAt=0, statusRequest=null;
   function reconcile() {
     const id=uid();
-    if(id!==account){pauseClock();account=id;state=null;session=null;clock=null;busy=false;lastStatusAt=0;generation++;statusSequence++;node('daily-meditation-overlay')?.remove();}
+    if(id!==account){pauseClock();account=id;state=null;session=null;clock=null;busy=false;lastStatusAt=0;statusRequest=null;generation++;statusSequence++;node('daily-meditation-overlay')?.remove();}
     return id;
   }
   function notify(message) {const el=node('dm-status');if(el)el.textContent=message;else console.info('[閉關]',message);}
@@ -79,10 +80,20 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
     el.disabled=false;el.style.opacity='1';
     const label=node('xiuxian-meditation-streak');if(label)label.textContent='連續閉關 '+current.streak+' 日 · 累計 '+current.totalDays+' 日';
   }
-  async function refresh({render=false}={}) {
+  async function refresh({render=false,force=false}={}) {
     const id=reconcile();if(!id)return;
-    const serial=++statusSequence,result=await request('status');
-    if(uid()!==id||serial!==statusSequence)return;
+    if(!force&&state?.date===today()&&Date.now()-lastStatusAt<STATUS_CACHE_MS)return;
+    // Startup and foreground events can arrive together. Reuse one request;
+    // mutations advance statusSequence so older replies cannot undo a claim.
+    let pending=statusRequest;
+    if(!pending||pending.uid!==id||pending.sequence!==statusSequence){
+      pending={uid:id,sequence:++statusSequence,promise:request('status')};
+      statusRequest=pending;
+    }
+    let result;
+    try{result=await pending.promise;}
+    finally{if(statusRequest===pending)statusRequest=null;}
+    if(uid()!==id||pending.sequence!==statusSequence)return;
     state=result;lastStatusAt=Date.now();
     if(userData())userData().dailyMeditation=result.record;
     syncPanel();
@@ -124,6 +135,7 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
       '.dm-note,.dm-status{font-size:12px;line-height:1.7;color:#beb7a7;white-space:pre-wrap}.dm-status:empty{display:none}',
       '.dm-action{min-height:47px;padding:10px 18px;border-radius:12px;border:1px solid #d7b66e8a;background:linear-gradient(125deg,#8a642f,#4c381c);font-size:14px;font-weight:800;color:#fff1d0;cursor:pointer}',
       '.dm-action:disabled{opacity:.5;cursor:wait}.dm-action-secondary{background:#ffffff0a;border-color:#e5c77c3d}',
+      '.dm-start{position:relative;isolation:isolate;display:flex;align-items:center;justify-content:space-between;gap:18px;width:100%;min-height:84px;margin:0 0 22px;padding:18px 24px;overflow:hidden;border:1px solid #ffe0a0;border-radius:16px;background:linear-gradient(115deg,#f2cd7d,#dca64e 55%,#ba7b2d);color:#38220c;box-shadow:0 8px 28px #b97c283d,inset 0 1px 0 #fff2c5;transition:transform .18s ease,box-shadow .18s ease,filter .18s ease}.dm-start:before{content:"";position:absolute;z-index:-1;inset:5px;border:1px solid #fff0c54d;border-radius:11px;pointer-events:none}.dm-start-symbol{display:grid;place-items:center;flex:0 0 46px;width:46px;height:46px;border:1px solid #7046194d;border-radius:50%;background:#fff0be40;font-size:30px;line-height:1}.dm-start-label{flex:1;text-align:left;font:900 24px "Noto Serif TC",serif;letter-spacing:.12em}.dm-start-arrow{flex:0 0 26px;width:26px;height:26px}.dm-start:not(:disabled):hover{filter:brightness(1.07);transform:translateY(-2px);box-shadow:0 10px 34px #c28a3459,inset 0 1px 0 #fff2c5}.dm-start:not(:disabled):active{transform:translateY(1px) scale(.99)}.dm-start:focus-visible{outline:3px solid #fff2cf;outline-offset:5px}.dm-start:disabled{opacity:.6}.dm-start:disabled .dm-start-symbol{animation:dm-spin 2s linear infinite}',
       '.dm-progress{height:5px;background:#2e2c25;border-radius:8px;overflow:hidden}.dm-progress span{display:block;height:100%;background:#dcb55c;transition:width .3s}',
       '.dm-question{font-size:17px;font-weight:700;line-height:1.8;color:#f5ead5;white-space:pre-wrap;overflow-wrap:anywhere}',
       '.dm-options{display:grid;gap:9px}.dm-option{display:flex;align-items:flex-start;text-align:left;gap:10px;min-height:47px;padding:12px;border:1px solid #c4a7763b;border-radius:12px;background:#ffffff08;color:#e9e4db;line-height:1.65;cursor:pointer;overflow-wrap:anywhere;white-space:pre-wrap}',
@@ -135,7 +147,8 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
       '.dm-milestones{position:relative;display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}.dm-milestone{transform:translateX(50%);min-width:0;display:flex;flex-direction:column;align-items:center;text-align:center;gap:7px;padding:0 3px}.dm-checkpoint{position:relative;flex:0 0 auto;display:grid;place-items:center;width:44px;height:44px;padding:0;border:2px solid #665b41;border-radius:50%;background:#27291f;color:#857a60;font-size:21px;cursor:pointer}.dm-checkpoint:disabled{cursor:default}.dm-milestone.is-reached .dm-checkpoint{border-color:#c9a75b;color:#efcf83;background:#46391e}.dm-milestone.is-claimable .dm-checkpoint{border-color:#ffdc8c;background:linear-gradient(140deg,#b1843b,#705022);color:#fff1c6;box-shadow:0 0 0 4px #e6bb5320,0 0 20px #e6bb5333}.dm-checkpoint:focus-visible{outline:3px solid #fff1c6;outline-offset:4px}.dm-checkpoint:not(:disabled):hover{filter:brightness(1.2)}.dm-milestone.is-claimed .dm-checkpoint{background:#303a29;border-color:#93a77a;color:#c6d6a8}.dm-milestone strong{font-size:13px;color:#c0b598}.dm-milestone.is-reached strong{color:#eacf8a}.dm-milestone p{margin:0;font-size:12px;line-height:1.65;color:#b4ae9e;overflow-wrap:anywhere}.dm-milestone small{font-size:11px;color:#918c7e}.dm-milestone.is-claimable small{color:#f3d58e}.dm-milestone.is-claimed small{color:#b2c297}',
       '.dm-board{width:100%;border-collapse:collapse;font-size:13px}.dm-board td,.dm-board th{padding:11px 8px;text-align:left;border-bottom:1px solid #ffffff15}.dm-board th{color:#bbae91;font-weight:500}.dm-board tr.is-me{background:#dfc27f10}.dm-section-title{margin:18px 0 8px;font:700 18px Noto Serif TC,serif;color:#ead29c}.dm-body{width:min(100%,1020px)}.dm-top-actions{display:flex;gap:8px;align-items:center}.dm-top-actions .dm-action{min-height:35px;font-size:12px;padding:5px 11px}.dm-timing{font-size:11px;color:#999486}.dm-note strong{color:#eacf8a}.dm-claim-status{margin-top:10px}@media(max-width:600px){.dm-milestone p{font-size:11px}.dm-heading{font-size:17px}.dm-board td,.dm-board th{padding:10px 4px;font-size:12px}}@media(prefers-reduced-motion:reduce){.dm-star-fill{transition:none}}',
       '@keyframes dm-pulse{50%{box-shadow:0 0 64px #c49a465c,inset 0 0 45px #d7ac3955;transform:scale(1.025)}}@keyframes dm-spin{to{transform:rotate(360deg)}}',
-      '@media(max-width:500px){.dm-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.dm-top{padding:12px 15px}.dm-body{padding:13px}.dm-scene{min-height:125px}.dm-circle{width:88px;height:88px}.dm-circle:before{width:110px;height:110px}.dm-question{font-size:15px}.dm-summary strong{font-size:14px}}'
+      '@media(max-width:500px){.dm-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.dm-top{padding:12px 15px}.dm-body{padding:13px}.dm-scene{min-height:125px}.dm-circle{width:88px;height:88px}.dm-circle:before{width:110px;height:110px}.dm-question{font-size:15px}.dm-summary strong{font-size:14px}.dm-start{min-height:78px;gap:12px;padding:16px 18px;margin-bottom:18px}.dm-start-label{font-size:22px;letter-spacing:.08em}.dm-start-symbol{flex-basis:40px;width:40px;height:40px;font-size:27px}}',
+      '@media(prefers-reduced-motion:reduce){.dm-start{transition:none}.dm-start:disabled .dm-start-symbol{animation:none}}'
     ].join('\n');
     document.head.appendChild(el);
   }
@@ -147,7 +160,7 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
     overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');overlay.setAttribute('aria-label','閉關共修');
     overlay.innerHTML='<section class="dm-card"><header class="dm-top"><div><div class="dm-eyebrow">每日三題 · 同門共修</div><div class="dm-heading">聚星閉關</div></div><div class="dm-top-actions"><button class="dm-action dm-action-secondary" id="dm-refresh" type="button">重新同步</button><button type="button" class="dm-close" id="dm-close" aria-label="關閉">×</button></div></header><div class="dm-body"><div id="dm-content"></div><p id="dm-status" class="dm-status" role="status" aria-live="polite"></p></div></section>';
     document.body.appendChild(overlay);node('dm-close').onclick=close;
-    node('dm-refresh').onclick=()=>void task(async()=>{pauseClock();await refresh({render:true});});
+    node('dm-refresh').onclick=()=>void task(async()=>{pauseClock();await refresh({render:true,force:true});});
     overlay.addEventListener('keydown',event=>{
       if(event.key==='Escape'){event.preventDefault();close();return;}
       if(event.key!=='Tab')return;
@@ -169,7 +182,8 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
     pauseClock();
     const savedStatus=node('dm-status')?.textContent;
     const result=state.record?.lastResult || {};
-    let html=summary([['我的星星',state.personalStars+' / 3'],['好友共修',state.stars+' / 15'],['連續閉關',(state.record?.streak||0)+' 日'],['本命抽獎券',(state.drawTickets||0)+' 張']]);
+    let html=state.completed?'':'<button type="button" class="dm-action dm-start" id="dm-start" '+(busy?'disabled aria-busy="true"':'')+'><span class="dm-start-symbol" aria-hidden="true">✦</span><span class="dm-start-label">'+(busy?'正在入定…':state.session?'繼續今日閉關':'開始閉關')+'</span><svg class="dm-start-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 12h15M13 5l7 7-7 7"/></svg></button>';
+    html+=summary([['我的星星',state.personalStars+' / 3'],['好友共修',state.stars+' / 15'],['連續閉關',(state.record?.streak||0)+' 日'],['本命抽獎券',(state.drawTickets||0)+' 張']]);
     const nextMilestone=state.milestones.find(step=>step.stars>state.stars);
     html+='<div class="dm-star-heading"><h3 class="dm-section-title">同門聚星</h3><span class="dm-star-total">★ <strong>'+state.stars+'</strong> / 15</span></div>';
     html+='<p class="dm-star-hint">'+(!state.completed?'完成自己的三題後，即可點擊達標的星星領獎。':nextMilestone?'再集 '+(nextMilestone.stars-state.stars)+' 星，解鎖 '+nextMilestone.stars+' 星獎勵。':state.milestones.some(step=>step.claimable)?'共修進度已滿，點擊亮起的星星領取獎勵。':'今日共修獎勵已全數領取。')+'</p>';
@@ -185,8 +199,6 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
       html+='<h3 class="dm-section-title">今日出關 · '+state.personalStars+' 星</h3>'+summary([['答對',state.personalStars+' / 3'],['作答時間',duration(result.answerTimeMs)],['個人靈石','+'+(result.gold||0)],['個人元嬰碎精','+'+(result.fragments||0)]]);
       html+='<h3 class="dm-section-title">好友今日成績</h3><p class="dm-timing">星數優先，同星依作答時間排序。各自複習的錯題不同，排行供交流參考。</p><table class="dm-board"><thead><tr><th>排名</th><th>同門</th><th>星數</th><th>作答時間</th></tr></thead><tbody>'+state.rankings.map(row=>'<tr'+(row.uid===uid()?' class="is-me"':'')+'><td>'+row.rank+'</td><td>'+esc(row.name)+(row.uid===uid()?'（你）':'')+'</td><td>'+row.stars+' / 3</td><td>'+esc(duration(row.answerTimeMs))+'</td></tr>').join('')+'</tbody></table>';
       html+='<p class="dm-note">僅列出今日已完成閉關的好友。每日 00:00（台灣時間）重置。</p><button type="button" class="dm-action dm-action-secondary" id="dm-done">返回宗門</button>';
-    }else{
-      html+='<h3 class="dm-section-title">完成自己的三題，開啟共修獎勵</h3><p class="dm-note">從歷史錯題選出三道不同題目重新參悟；答對即得星星。個人閉關獎勵仍依境界與連續天數結算。出關後可查看好友星數與答題時間。</p><button type="button" class="dm-action" id="dm-start" '+(busy?'disabled':'')+'>'+(state.session?'繼續今日閉關':'開始閉關')+'</button>';
     }
     setContent(html);if(!clearStatus&&savedStatus)notify(savedStatus);
     node('dm-start')?.addEventListener('click',()=>void start());node('dm-done')?.addEventListener('click',close);
@@ -195,7 +207,7 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
   async function open() {
     if(!reconcile()){notify('請先登入再閉關。');return;}
     ensureOverlay();pauseClock();setContent('<p class="dm-note">正在同步今日共修與閉關紀錄…</p>');
-    await task(()=>refresh({render:true}));
+    await task(()=>refresh({render:true,force:true}));
   }
   function typeset(callback) {
     const el=node('dm-content');
@@ -218,7 +230,7 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
       typeset(()=>{});
     }else typeset(()=>{if(session?.question.id===q.id&&!session.questionAnswered)startClock(q);});
   }
-  async function start() {await task(async()=>{const result=await request('start');if(result.completed){await refresh();session=null;renderDashboard();}else{session=result.session;renderQuestion();}});}
+  async function start() {await task(async()=>{renderDashboard();const result=await request('start');if(result.completed){await refresh({force:true});session=null;renderDashboard();}else{session=result.session;renderQuestion();}});}
   async function nextQuestion() {await task(async()=>{const result=await request('next');session=result.session;renderQuestion();});}
   async function answer(choice) {
     if(busy||!session||session.questionAnswered)return;
@@ -232,19 +244,27 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
       }
     });
   }
-  async function finish() {await task(async()=>{const result=await request('finish');applyEconomy(result.economy);session=null;clock=null;await refresh();renderDashboard();});}
-  async function claim(stars) {await task(async()=>{const result=await request('claim',{stars,date:state.date});state=result;applyEconomy(result.economy);renderDashboard();notify(result.claimedNow?'已領取 '+stars+' 星共修獎勵。':'此節點今日已領取。');});}
+  async function finish() {await task(async()=>{const result=await request('finish');applyEconomy(result.economy);session=null;clock=null;await refresh({force:true});renderDashboard();});}
+  async function claim(stars) {await task(async()=>{const result=await request('claim',{stars,date:state.date});state=result;lastStatusAt=Date.now();applyEconomy(result.economy);renderDashboard();notify(result.claimedNow?'已領取 '+stars+' 星共修獎勵。':'此節點今日已領取。');});}
   window.openDailyMeditation=open;window.getDailyMeditationPanelState=panelState;window.refreshDailyMeditationPanel=syncPanel;
   window.addEventListener('xiuxian:stats-updated',syncPanel);
   for(const name of ['xiuxian:user-data-ready','xiuxian:user-ready'])window.addEventListener(name,()=>{reconcile();syncPanel();if(!busy)void refresh().catch(()=>{});});
-  function foreground(){if(document.hidden||navigator.onLine===false){pauseClock();return;}resumeClock();if(!busy)void refresh().catch(()=>{});}
+  function foreground(){
+    if(document.hidden||navigator.onLine===false){pauseClock();return;}
+    resumeClock();syncPanel();
+    if(busy||session?.date===today()&&!state?.completed)return;
+    const opened=!!node('daily-meditation-overlay');
+    if(opened||state?.date!==today())void refresh().catch(()=>{});
+    else poll();
+  }
   document.addEventListener('visibilitychange',foreground);window.addEventListener('offline',pauseClock);window.addEventListener('online',foreground);window.addEventListener('pagehide',pauseClock);
   window.addEventListener('pageshow',foreground);
   function poll() {
     syncPanel();
     if(document.hidden||navigator.onLine===false||busy||!uid())return;
+    if(session?.date===today()&&!state?.completed)return;
     const opened=!!node('daily-meditation-overlay');
-    const waiting=panelState().done&&(!state||state.date!==today()||state.stars<15);
+    const waiting=panelState().done&&userData()?.friends?.length>0&&(!state||state.date!==today()||state.stars<15);
     // The badge is already on before personal completion. Stop background
     // friend reads once all fifteen stars have arrived.
     if(opened||waiting&&Date.now()-lastStatusAt>=300000)void refresh().catch(()=>{});

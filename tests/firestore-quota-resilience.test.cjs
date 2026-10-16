@@ -99,7 +99,7 @@ test('expired artifact buffs only attempt one cleanup at a time and wait after f
 test('cooperative meditation only polls open views or unfinished shared progress, with slower background-page refresh',()=>{
   const vm=require('node:vm');
   let reads=0,time=1000000,done=false,opened=false;
-  const context={document:{hidden:false},navigator:{onLine:true},busy:false,lastStatusAt:time-60000,
+  const context={document:{hidden:false},navigator:{onLine:true},busy:false,session:null,userData:()=>({friends:['friend']}),lastStatusAt:time-60000,
     state:{date:'2026-10-16',stars:6},uid:()=> 'u1',today:()=> '2026-10-16',
     syncPanel(){},node:()=>opened?{}:null,panelState:()=>({done}),Date:{now:()=>time},refresh:()=>{reads++;return Promise.resolve();}};
   const section=meditation.slice(meditation.indexOf('  function poll() {'),meditation.indexOf('  setInterval(poll,60000);'));
