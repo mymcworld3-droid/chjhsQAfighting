@@ -1,0 +1,94 @@
+'use strict';
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const vm = require('node:vm');
+const fs = require('node:fs');
+const path = require('node:path');
+const Guard = require('../public/cultivation/math-guard.js');
+const { questionQualityIssue } = require('../question-quality.cjs');
+const math = fs.readFileSync(path.join(__dirname, '../public/cultivation/quiz-math.js'), 'utf8');
+const main = fs.readFileSync(path.join(__dirname, '../public/main.js'), 'utf8');
+
+test('math guard accepts valid inline/display TeX, ordinary CJK and escaped dollars', () => {
+  for (const source of [
+    'x < 3 且 A&B',
+    String.raw`設 \(x^2+\frac{1}{2}\) 求值`,
+    String.raw`$\frac{1}{2}$`,
+    String.raw`$$\begin{aligned}x&=2\\y&=3\end{aligned}$$`,
+    String.raw`\[ \left(\frac{1}{2}\right)^2 \]`,
+    String.raw`價格是 \$50 美元`
+  ]) assert.equal(Guard.inspect(source).valid, true, source);
+});
+
+test('math guard rejects unmatched math delimiters, braces and TeX environments', () => {
+  for (const source of [
+    String.raw`公式 \(x^2+1`,
+    String.raw`$x^{2$`,
+    String.raw`$$\frac{1}{2}$`,
+    String.raw`\( \left(x+1 \)`,
+    String.raw`\[\begin{aligned}x=1\end{cases}\]`,
+    String.raw`x \)`
+  ]) assert.equal(Guard.inspect(source).valid, false, source);
+});
+
+test('math error fallback is escaped, ignored by MathJax, and keeps raw source readable', () => {
+  const invalid = String.raw`<script>x</script> \(x^2`;
+  const markup = Guard.fallback(invalid);
+  assert.match(markup, /tex2jax_ignore/);
+  assert.match(markup, /&lt;script&gt;/);
+  assert.doesNotMatch(markup, /<script>/);
+  assert.match(markup, /\\\(x\^2/);
+});
+
+test('AI generated questions are rejected if any option or solution contains broken math', () => {
+  const good = { q: String.raw`計算 \(\frac12+1\)`,
+    correct: String.raw`\(\frac32\)`, wrong: ['1', '2', '0'],
+    exp: String.raw`計算得到 \(\frac32\)` };
+  assert.equal(questionQualityIssue(good), '');
+  assert.match(questionQualityIssue({ ...good, exp: String.raw`因為 \(x^{2\)` }), /數學公式/);
+  assert.match(questionQualityIssue({ ...good, wrong: ['1', '2', String.raw`$x`] }), /數學公式/);
+});
+
+test('shared MathJax renderer is guarded and a malformed expression stays legible', () => {
+  const context = { window: { QAMathGuard: Guard }, console };
+  vm.runInNewContext(math, context);
+  const rich = context.window.quizMathRichText;
+  const wrong = String.raw`設 \(x^2+1`;
+  assert.match(rich(wrong), /quiz-math-fallback/);
+  assert.match(rich(wrong), /tex2jax_ignore/);
+  const valid = String.raw`\(x^2+1\)`;
+  assert.equal(rich(valid), valid);
+  const ix = p => main.indexOf("'" + p + "'");
+  assert.ok(ix('./cultivation/math-guard.js') >= 0);
+  assert.ok(ix('./cultivation/math-guard.js') < ix('./cultivation/quiz-math.js'));
+});
+
+test('MathJax merror is turned into readable text; a typeset exception does not break future questions', async () => {
+  const errors = [], mock = {
+    startup: { promise: Promise.resolve() },
+    typesetClear() {},
+    async typesetPromise(roots) {
+      for (const node of roots) {
+        if (node.innerHTML.includes('BAD')) node.hasError = true;
+        if (node.innerHTML.includes('THROW')) throw Error('renderer broke');
+      }
+    }
+  };
+  const context = { window: { QAMathGuard: Guard, MathJax: mock },
+    console: { warn(...args) { errors.push(args); } } };
+  vm.runInNewContext(math, context);
+  function node() {
+    return { isConnected: true, innerHTML: '', textContent: 'BAD',
+      querySelector(selector) { return this.hasError ? {} : null; } };
+  }
+  const bad = node();
+  await context.window.quizMathSet(bad, 'BAD');
+  assert.match(bad.innerHTML, /tex2jax_ignore/);
+  const thrown = node();
+  await context.window.quizMathSet(thrown, 'THROW');
+  assert.equal(thrown.innerHTML, 'THROW');
+  const good = node();
+  await context.window.quizMathSet(good, '$x^2$');
+  assert.equal(good.innerHTML, '$x^2$');
+  assert.ok(errors.length >= 1);
+});
