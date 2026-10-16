@@ -147,6 +147,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     if (!showcase || !candidates.length) return;
     carouselStart = (carouselStart + delta + candidates.length) % candidates.length;
     showcase.outerHTML = showcaseMarkup(candidates);
+    $('soulbound-content')?.querySelector(delta < 0 ? '[data-sb-carousel-prev]' : '[data-sb-carousel-next]')?.focus({ preventScroll: true });
     scheduleCarousel();
   }
   function previewMarkup(item) {
