@@ -1,5 +1,6 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const aiRouter = require('./ai-router');
+const { questionIntegrityIssue } = require('./question-answer-integrity.cjs');
 const { PROJECT_IDS } = require('./firebase-admin-projects.cjs');
 const { playerRepository, dongtianRepository } = require('./server-repositories.cjs');
 
@@ -300,6 +301,10 @@ function normalizeQuestionBatch(raw, plan, existingQuestions, startIndex, expect
     const wrong = Array.isArray(item?.wrong) ? item.wrong.map((x) => cleanText(x, 800)).filter(Boolean) : [];
     const exp = cleanText(item?.exp, 3500);
     if (!q || !correct || wrong.length !== 3 || !exp) continue;
+    if (requireDetailedExplanation) {
+      const issue = questionIntegrityIssue({ q, correct, wrong, exp });
+      if (issue) throw new Error(`第 ${startIndex + 1} 題答案與解析一致性未通過：${issue}；請完整重寫題目與解析`);
+    }
     if (requireDetailedExplanation && exp.replace(/\s/g, '').length < MIN_EXPLANATION_LENGTH) {
       throw new Error(`第 ${startIndex + 1} 題解析太簡短，至少需要 ${MIN_EXPLANATION_LENGTH} 個非空白字元與完整解題步驟；將重新生成此題`);
     }
@@ -571,6 +576,16 @@ async function expandDongtianReviewIssues(dongtian, review) {
 async function verifyGeneratedDongtian(dongtian) {
   const run = await aiRouter.generateJSON(buildDongtianDoubleCheckPrompt(dongtian), { timeoutMs: 60000 });
   const review = normalizeDongtianDoubleCheck(run.data);
+  // Deterministic checks override optimistic AI approvals. The reviewer may
+  // miss an explicit conflict or return approved=true with issues=[].
+  const alreadyFlagged = new Set(review.issues.map(item => item.questionId));
+  for (const question of dongtian?.questions || []) {
+    const issue = questionIntegrityIssue(question);
+    if (issue && !alreadyFlagged.has(question.id)) {
+      review.issues.push({ questionId: question.id, issue });
+      alreadyFlagged.add(question.id);
+    }
+  }
   review.passed = review.approved && review.confidence >= 0.8 && review.issues.length === 0;
   return { review, provider: run.provider, model: run.model };
 }
@@ -679,6 +694,8 @@ function normalizeStandaloneQuestion(raw, original) {
   const wrong = Array.isArray(data.wrong) ? [...new Set(data.wrong.map((x) => cleanText(x, 800)).filter(Boolean).filter((x) => x !== correct))].slice(0, 3) : [];
   const exp = cleanText(data.exp, 3500);
   if (!q || !correct || wrong.length !== 3 || !exp) throw new Error('AI 修改後的題目格式不完整');
+  const integrityIssue = questionIntegrityIssue({ q, correct, wrong, exp });
+  if (integrityIssue) throw new Error('修復結果不合格：' + integrityIssue);
   return {
     id: base.id,
     difficulty: base.difficulty,
