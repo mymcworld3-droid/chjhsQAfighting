@@ -95,3 +95,59 @@ body.xianxia-theme #dongfu-analysis-body {color:#ede0c8}
 .ai-ability-skill-empty{grid-column:1/-1;font-size:12px;color:#ab9c82;
   padding:12px;background:rgba(218,174,90,.03);border-radius:8px;margin:0}
 @media(max-width:380px){.ai-ability-skill-grid{grid-template-columns:1fr}}
+
+
+/* 分層圖譜：縮減科目按鈕堆疊，強調診斷而非多餘裝飾。 */
+body.xianxia-theme .dongfu-analysis-card{
+  background:linear-gradient(170deg,rgba(23,21,18,.98),rgba(13,14,13,.98))!important;
+  border-color:rgba(211,175,109,.20)!important;
+  box-shadow:none!important;
+}
+#chart-controls{
+  display:flex!important;flex-wrap:nowrap!important;justify-content:flex-start!important;
+  gap:7px!important;overflow-x:auto;overscroll-behavior-x:contain;
+  scrollbar-width:thin;scrollbar-color:rgba(213,175,103,.30) transparent;
+  padding:10px!important;margin:0 0 12px!important;border-radius:9px!important;
+}
+#chart-controls .ai-ability-filter{flex:0 0 auto;white-space:nowrap;min-height:32px}
+#ability-chart-views{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:5px;padding:4px;border:1px solid rgba(212,175,110,.17);
+  border-radius:10px;background:rgba(9,10,10,.48);margin:0 0 12px;
+}
+#ability-chart-views button{
+  min-width:0;padding:9px 4px;border-radius:7px;border:1px solid transparent;
+  background:transparent;color:#ae9e84;white-space:nowrap;
+  font-size:12px;font-weight:800;cursor:pointer;letter-spacing:.015em;
+}
+#ability-chart-views button.is-active{
+  color:#f2dbb5;background:rgba(215,178,109,.12);border-color:rgba(218,183,110,.30)
+}
+#ability-chart-views button:focus-visible{
+  outline:2px solid #e6c37d;outline-offset:1px
+}
+.ai-ability-chart-frame{
+  width:100%!important;aspect-ratio:auto!important;height:clamp(230px,36vw,335px)!important;
+  max-height:none!important;display:grid;place-items:center;margin:4px auto 12px!important;
+}
+.ai-ability-chart-frame canvas{
+  width:100%!important;height:100%!important;min-width:0;min-height:0
+}
+.ai-ability-chart-frame canvas[hidden]{display:none!important}
+.ai-ability-chart-empty{
+  display:grid;place-items:center;min-height:140px;width:100%;max-width:420px;
+  padding:25px 24px;color:#ad9c80;text-align:center;font-size:12px;line-height:1.9;
+  border:1px dashed rgba(220,180,110,.25);border-radius:13px;
+  background:radial-gradient(ellipse at center,rgba(222,183,112,.055),transparent 75%)
+}
+.ai-ability-chart-empty[hidden]{display:none!important}
+.ai-ability-panel .ai-ability-stats>div{
+  background:linear-gradient(150deg,rgba(219,176,103,.065),rgba(255,255,255,.008));
+}
+.ai-ability-panel .ai-ability-priority,
+.ai-ability-panel .ai-ability-coach{box-shadow:none!important}
+@media(max-width:600px){
+  .ai-ability-chart-frame{height:255px!important}
+  #ability-chart-views button{padding:8px 0;font-size:11px}
+  #chart-controls{margin-bottom:9px!important}
+}
