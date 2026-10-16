@@ -149,7 +149,7 @@ function activeMembers(room) {
   return Object.values(membersOf(room)).filter(memberOnline);
 }
 function roomUsable(room) {
-  if (!room || room.status !== 'waiting') return false;
+  if (!room || room.status !== 'waiting' || Number(room.version) !== RAID_ROOM_VERSION) return false;
   if (now() - finite(room.createdAtMs) > ROOM_TTL_MS) return false;
   return activeMembers(room).length < MAX_MEMBERS;
 }
@@ -177,6 +177,33 @@ function publicRoom(roomId, room) {
   if (!room) return null;
   return { id: roomId, ...room };
 }
+// Recruitment discovery is intentionally a narrow public projection, not the
+// internal party document. Never leak private invite codes or other members' UIDs.
+function recruitmentCard(roomId, room) {
+  if (!safeRoomId(roomId) || room?.visibility !== 'public' || !roomUsable(room) ||
+      room.bossId !== RAID_BOSS_ID) return null;
+  const host=membersOf(room)[room.hostUid];
+  if (!memberOnline(host)) return null;
+  const members=activeMembers(room),tier=raidDifficulty.fromRoom(room);
+  if (!tier || !members.length || members.length>=MAX_MEMBERS) return null;
+  return {
+    roomId,
+    difficulty:tier.id,
+    difficultyName:tier.name,
+    hostName:cleanString(host.name||'無名修士',32),
+    playerCount:members.length,
+    maxMembers:MAX_MEMBERS,
+    readyCount:members.filter(member=>member.ready===true).length,
+    status:'waiting',
+    createdAtMs:Math.max(0,finite(room.createdAtMs)),
+    joinable:true
+  };
+}
+async function listPublicRooms(db) {
+  const snap=await db.collection(COLLECTION).where('status','==','waiting').limit(120).get();
+  return snap.docs.map(row=>recruitmentCard(row.id,row.data())).filter(Boolean)
+    .sort((a,b)=>b.playerCount-a.playerCount || b.createdAtMs-a.createdAtMs).slice(0,24);
+}
 function requireMember(room, uid) {
   const member = membersOf(room)[uid];
   if (!member) {
@@ -194,13 +221,14 @@ async function uniqueCode(db) {
   }
   throw new Error('無法建立唯一隊伍代碼');
 }
-async function createRoom(db, uid, player, difficulty = 'normal') {
+async function createRoom(db, uid, player, difficulty = 'normal', visibility = 'private') {
   const ref = db.collection(COLLECTION).doc();
   const room = {
     version: RAID_ROOM_VERSION,
     revision: 1,
     code: await uniqueCode(db),
     status: 'waiting',
+    visibility:visibility==='public'?'public':'private',
     hostUid: uid,
     createdAt: new Date(),
     createdAtMs: now(),
@@ -225,14 +253,16 @@ async function createRoom(db, uid, player, difficulty = 'normal') {
   await ref.set(room);
   return { roomId: ref.id, room: publicRoom(ref.id, room) };
 }
-async function joinWaitingRoom(db, uid, roomId, player, preferredDifficulty = null) {
+async function joinWaitingRoom(db, uid, roomId, player, preferredDifficulty = null, requirePublic = false) {
   const ref = db.collection(COLLECTION).doc(roomId);
   return db.runTransaction(async tx => {
     const snap = await tx.get(ref);
     if (!snap.exists) throw Object.assign(new Error('隊伍已不存在'), { status: 404 });
     const room = snap.data() || {};
     const members = { ...membersOf(room) };
-    if (!roomUsable(room)) throw Object.assign(new Error('隊伍已滿或已開始'), { status: 409 });
+    if (!roomUsable(room)) throw Object.assign(new Error('隊伍已滿、已開始或已過期'), { status: 409 });
+    if (requirePublic && (room.visibility !== 'public' || !memberOnline(members[room.hostUid])))
+      throw Object.assign(new Error('這個公開隊伍已關閉招募'), {status:409});
     const tier = raidDifficulty.fromRoom(room);
     if (!tier || (preferredDifficulty && tier.id !== preferredDifficulty)) {
       throw Object.assign(new Error('隊伍難度不符'), {status:409});
@@ -260,16 +290,36 @@ async function findOrCreate(db, uid, player, difficulty = 'normal') {
   const snap = await db.collection(COLLECTION).where('status', '==', 'waiting').limit(24).get();
   const candidates = snap.docs
     .map(item => ({ id: item.id, ...item.data() }))
-    .filter(room => roomUsable(room) && raidDifficulty.fromRoom(room)?.id === difficulty)
+    .filter(room => room.visibility === 'public' && memberOnline(membersOf(room)[room.hostUid]) &&
+      roomUsable(room) && raidDifficulty.fromRoom(room)?.id === difficulty)
     .sort((a, b) => activeMembers(b).length - activeMembers(a).length || finite(a.createdAtMs) - finite(b.createdAtMs));
   for (const candidate of candidates) {
     try {
-      return await joinWaitingRoom(db, uid, candidate.id, player, difficulty);
+      return await joinWaitingRoom(db, uid, candidate.id, player, difficulty, true);
     } catch (error) {
       if (![404, 409].includes(error?.status)) throw error;
     }
   }
-  return createRoom(db, uid, player, difficulty);
+  return createRoom(db, uid, player, difficulty, 'public');
+}
+async function changeRecruitmentVisibility(db, uid, roomId, visibility) {
+  if (!['public','private'].includes(visibility))
+    throw Object.assign(new Error('招募狀態無效'),{status:400});
+  const ref=db.collection(COLLECTION).doc(roomId);
+  return db.runTransaction(async tx=>{
+    const snap=await tx.get(ref);
+    if (!snap.exists) throw Object.assign(new Error('隊伍不存在'),{status:404});
+    const room=snap.data()||{};
+    if (room.hostUid!==uid || !membersOf(room)[uid])
+      throw Object.assign(new Error('只有隊長能調整公開招募'),{status:403});
+    if (!roomUsable(room) && room.status!=='waiting')
+      throw Object.assign(new Error('隊伍已開始，無法調整招募'),{status:409});
+    if (room.status!=='waiting' || !memberOnline(membersOf(room)[uid]))
+      throw Object.assign(new Error('隊長目前不在線，無法調整招募'),{status:409});
+    const patch={visibility,revision:Math.max(0,finite(room.revision))+1};
+    tx.update(ref,patch);
+    return publicRoom(roomId,{...room,...patch});
+  });
 }
 async function joinByCode(db, uid, roomCode, player) {
   const target = safeRoomCode(roomCode);
@@ -345,6 +395,20 @@ function createHandler({
 
     const action = String(req.body?.action || '').trim();
     try {
+      if (action === 'list-public') {
+        const ticketState = await syncRaidTickets(playerDb, uid);
+        return res.json({ok:true,rooms:await listPublicRooms(db),ticketState});
+      }
+      if (action === 'join-public') {
+        const roomId=safeRoomId(req.body?.roomId);
+        if (!roomId) throw Object.assign(new Error('公開隊伍已失效'),{status:400});
+        const player=await loadTrustedRaidPlayer(playerDb,uid);
+        assertRaidAccess(player.trainingAccessScore);
+        const ticketState=await syncRaidTickets(playerDb,uid);
+        if(ticketState.count<1) throw Object.assign(new Error('沒有團本入場券'),{status:409,code:'raid-ticket-empty'});
+        const result=await joinWaitingRoom(db,uid,roomId,player,null,true);
+        return res.json({ok:true,...result,ticketState});
+      }
       if (action === 'ticket-status') {
         const ticketState = await syncRaidTickets(playerDb, uid);
         return res.json({ ok:true, ticketState });
@@ -355,7 +419,8 @@ function createHandler({
         assertRaidAccess(player.trainingAccessScore, '', difficulty);
         const ticketState = await syncRaidTickets(playerDb, uid);
         if (ticketState.count < 1) throw Object.assign(new Error('目前沒有團本入場券；每日會補充 2 張，最多持有 10 張'), { status:409, code:'raid-ticket-empty' });
-        const result = await createRoom(db, uid, player, difficulty);
+        const visibility=req.body?.visibility==='public'?'public':'private';
+        const result = await createRoom(db, uid, player, difficulty, visibility);
         return res.json({ ok: true, ...result, ticketState });
       }
       if (action === 'quick') {
@@ -378,6 +443,10 @@ function createHandler({
 
       const roomId = safeRoomId(req.body?.roomId);
       if (!roomId) return res.status(400).json({ ok: false, error: '團本房間代碼無效' });
+      if (action === 'set-visibility') {
+        const result=await changeRecruitmentVisibility(db,uid,roomId,req.body?.visibility);
+        return res.json({ok:true,room:result});
+      }
       const ref = db.collection(COLLECTION).doc(roomId);
       // Catch up before accepting an answer, reconnect or heartbeat as well as
       // on the background timer. A sleeping/restarted server cannot skip damage.
@@ -674,5 +743,6 @@ module.exports.__test = {
   BOSS_ACTION_INTERVAL_MS, RAID_DAILY_TICKETS, RAID_TICKET_CAP, RAID_TICKET_RESERVATION_COLLECTION,
   finite, membersOf, memberOnline, activeMembers, roomUsable, safeRoomId, safeRoomCode,
   raidTicketDate, accrueRaidTickets, syncRaidTickets, reserveRaidTickets, refundRaidTicketReservation,
-  memberSnapshot, createHandler
+  memberSnapshot, createRoom, joinWaitingRoom, findOrCreate, listPublicRooms, recruitmentCard,
+  changeRecruitmentVisibility, createHandler
 };
