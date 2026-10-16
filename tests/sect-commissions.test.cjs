@@ -46,7 +46,8 @@ test('assignment is stored once, cannot claim unassigned mission or claim assign
  const again=await questTransaction(db,'u1',null,today);
  assert.deepEqual(again.quests.commissions.map(q=>q.id),assigned.map(q=>q.id));
  assert.deepEqual(db.docs.get('questStates/u1'),initial);
- await assert.rejects(questTransaction(db,'u1',{kind:'commission',id:'commission-raid',date},today),
+ const unassigned=rules.COMMISSION_POOL.find(q=>!initial.commissionIds.includes(q.id));
+ await assert.rejects(questTransaction(db,'u1',{kind:'commission',id:unassigned.id,date},today),
    /找不到今日指定的委託/);
  const solo=assigned.find(q=>q.metric==='solo');
  assert.ok(solo);
