@@ -21,6 +21,46 @@
     ]) if (text.startsWith(mark, at)) return { mark, kind, open };
     return null;
   }
+  // Interpret serialized prose escapes outside math; never damage TeX commands.
+  function expandTextEscapes(value) {
+    const input = String(value ?? '');
+    let output = '', mode = null;
+    for (let i = 0; i < input.length;) {
+      const token = tokenAt(input, i);
+      const ending = token && mode && (
+        (mode === 'inline-dollar' && token.mark === '$') ||
+        (mode === 'display-dollar' && token.mark === '$$') ||
+        (mode === 'inline-bracket' && token.mark === '\\)') ||
+        (mode === 'display-bracket' && token.mark === '\\]')
+      );
+      if (token && ((!mode && token.open) || ending)) {
+        output += token.mark;
+        mode = ending ? null : token.kind;
+        i += token.mark.length;
+        continue;
+      }
+      if (!mode && input[i] === '\\' && !isEscaped(input, i)) {
+        const tail = input.slice(i), pair = tail.slice(0, 2);
+        if (tail.startsWith('\\r\\n')) { output += '\n'; i += 4; continue; }
+        if (!/[a-z]/.test(input[i + 2] || '')) {
+          if (pair === '\\n' || pair === '\\r') { output += '\n'; i += 2; continue; }
+          if (pair === '\\t') { output += '\u3000'; i += 2; continue; }
+        }
+        if (pair === '\\"' || pair === '\\/') { output += input[i + 1]; i += 2; continue; }
+        const unicode = /^\\u\{([0-9a-fA-F]{1,6})\}/.exec(tail) ||
+          /^\\u([0-9a-fA-F]{4})(?![0-9a-fA-F])/.exec(tail) ||
+          /^\\x([0-9a-fA-F]{2})(?![0-9a-fA-F])/.exec(tail);
+        if (unicode) {
+          const point = parseInt(unicode[1], 16);
+          if (point >= 32 && point <= 0x10ffff && !(point >= 0xd800 && point <= 0xdfff)) {
+            output += String.fromCodePoint(point); i += unicode[0].length; continue;
+          }
+        }
+      }
+      output += input[i++];
+    }
+    return output.replace(/\r\n?/g, '\n');
+  }
   function validBody(body) {
     let depth = 0;
     const envs = [];
@@ -82,7 +122,7 @@
   }
   function fallback(value) {
     return '<span class="tex2jax_ignore quiz-math-fallback" title="原始數學式未能安全排版">' +
-      escape(value).replace(/\n/g, '<br>') + '</span>';
+      escape(expandTextEscapes(value)).replace(/\n/g, '<br>') + '</span>';
   }
-  return Object.freeze({ inspect, fallback, escape });
+  return Object.freeze({ inspect, fallback, escape, expandTextEscapes });
 });
