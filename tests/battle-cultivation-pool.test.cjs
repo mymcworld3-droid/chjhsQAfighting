@@ -210,7 +210,7 @@ test('actual browser submit transaction preserves both players and rejects repla
   const end = source.indexOf('  async function timeoutMissingAnswer', start);
   let live = room({ status: 'playing', currentQuestion: { id: 'q1', ans: 0 } });
   let updates = 0;
-  const context = vm.createContext({ cultivationRules: rules, console,
+  const context = vm.createContext({ cultivationRules: rules, console, window: {},
     state: { roomId: 'room12345', role: 'host', room: live }, nowMs: () => 1000,
     db: () => ({}), roomRef: () => ({}), playerForRole: (r, role) => r[role], otherRole: role => role === 'host' ? 'guest' : 'host',
     hasSubmittedAnswer: (p, n) => p.answerRound === n && typeof p.answerCorrect === 'boolean',
