@@ -236,7 +236,7 @@ import { playerRepository } from './data/player-repository.js';
     if (!currentGroup()) { toast('請先到洞府設定年級，才能查看及問鼎五仙。'); return; }
     if (!eligible()) { toast(`只有渡劫以上修士（${TRIBULATION_SCORE} 修為）能問鼎五仙。`); return; }
     const serial = ++sessionSerial;
-    challenge = { active: true, serial, attemptId: Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,9), cohort: currentGroup(), role, streak: 0, questionNumber: 0, target: ownerRecord(roleId), busy: false, question: null, seenQuestions: [], nextPromise: null };
+    challenge = { active: true, serial, cohort: currentGroup(), attemptId: Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,9), role, streak: 0, questionNumber: 0, target: ownerRecord(roleId), busy: false, question: null, seenQuestions: [], nextPromise: null };
     ensureModal();
     document.getElementById('fi-title').textContent = `問鼎${role.name} · ${role.subject}`;
     document.getElementById('fi-target').textContent = String(challenge.target);
