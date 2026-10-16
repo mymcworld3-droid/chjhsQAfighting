@@ -9,14 +9,14 @@ const css = publicFile('styles/xianxia-quiet.css');
 const html = publicFile('index.html');
 
 test('portrait-only rules hide the entire global header on store, ranking, and alliance', () => {
-  const blocks = css.match(/@media\\s*\\(orientation:\\s*portrait\\)\\s*\\{([\\s\\S]*?)\\n\\}/g) || [];
+  const blocks = css.match(/@media\s*\(orientation:\s*portrait\)\s*\{([\s\S]*?)\n\}/g) || [];
   const block = blocks.find(item => item.includes('> header {') && item.includes('> main {'));
   assert.ok(block, 'portrait-only rule must target both header and main');
   const activeScope = 'body.xianxia-theme:has(:is(#page-store, #page-rank, #page-social).active-page)';
   assert.equal(block.split(activeScope).length - 1, 2, 'same scoped selector must hide header and recover vertical space');
-  assert.match(block, /> header\\s*\\{\\s*display:\\s*none\\s*!important/);
-  assert.match(block, /> main\\s*\\{\\s*padding-top:\\s*max\\(8px, env\\(safe-area-inset-top, 0px\\)\\)\\s*!important/);
-  assert.doesNotMatch(block, /> header > h1\\.xianxia-brand\\s*\\{/);
+  assert.match(block, /> header\s*\{\s*display:\s*none\s*!important/);
+  assert.match(block, /> main\s*\{\s*padding-top:\s*max\(8px, env\(safe-area-inset-top, 0px\)\)\s*!important/);
+  assert.doesNotMatch(block, /> header > h1\.xianxia-brand\s*\{/);
   for (const excluded of ['#page-home', '#page-training', '#page-quiz', '#page-settings', '#page-history']) {
     assert.ok(!block.includes(excluded), excluded + ' retains the original full header');
   }
