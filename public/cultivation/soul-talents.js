@@ -21,7 +21,7 @@
   function strength(t) {
     if(t?.version!==1||!TYPES[t.type])return 0;
     const quality=(9-clamp(t.grade,1,9))/8;
-    return (0.28+0.04*quality)*(0.3*clamp(t.top,0,10)+0.2*clamp(t.far,0,10)+0.5*clamp(t.final,0,10))/10;
+    return (0.28+0.04*quality)*(0.3*clamp(t.top,0,10)+0.2*clamp(t.far,0,10)+0.5*clamp(t.final,0,10))/10*(t.powerScale===.5?.5:1);
   }
   function hash(seed){let n=2166136261;for(const ch of String(seed)){n^=ch.charCodeAt(0);n=Math.imul(n,16777619);}return(n>>>0)/4294967296;}
   function power(p){return clamp(p?.atk,0,600);}
@@ -49,7 +49,7 @@
     if(t?.version!==1||t.type!=='wugou')return 0;
     // Balance through node supply (2/1/3 per rank), no clamp on settled true damage.
     return Math.round((2*clamp(t.top,0,10)+clamp(t.far,0,10)+3*clamp(t.final,0,10))*
-      (1+.2*(9-clamp(t.grade,1,9))/8));
+      (1+.2*(9-clamp(t.grade,1,9))/8)*(t.powerScale===.5?.5:1));
   }
   function healing(player,dealt,limit) {return Math.round(Math.min(Math.max(0,dealt),Math.max(0,limit),Math.max(1,Number(player.maxHp)||1)*.15));}
   const api=Object.freeze({TYPES,snapshot,strength,attack,reflection,healing,power,trueDamage});
