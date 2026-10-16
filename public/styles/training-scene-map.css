@@ -333,3 +333,12 @@ body.xianxia-theme #page-training .training-scene-back {
   body.xianxia-theme #page-training .training-map-atmosphere > span,
   body.xianxia-theme #page-training .training-map-mote { animation: none !important; }
 }
+
+/* Refinery completion notice: always distinct from challenge/raid indicators. */
+.training-place-label { position:relative; }
+.training-subtab-v3 { position:relative; }
+.refinery-ready-dot { position:absolute;top:2px;right:2px;width:10px;height:10px;border-radius:50%;background:#f13a34;box-shadow:0 0 0 2px #24170b,0 0 12px rgba(255,66,50,.72);z-index:10;pointer-events:none;animation:refinery-dot-breath 1.6s ease-in-out infinite; }
+.refinery-ready-dot[hidden] { display:none!important; }
+.training-place-label > .refinery-ready-dot { top:-.18em;right:-.18em;width:.45em;height:.45em;min-width:9px;min-height:9px; }
+@keyframes refinery-dot-breath { 50% { box-shadow:0 0 0 3px #24170b,0 0 20px rgba(255,66,50,.9);transform:scale(1.13); } }
+@media(prefers-reduced-motion:reduce) { .refinery-ready-dot { animation:none; } }
