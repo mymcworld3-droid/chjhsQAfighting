@@ -30,7 +30,7 @@ async function transaction(db, uid, action = 'view', body = {}, random = () => c
   const payment = body.payment || 'gold';
   if (!['gold', 'ticket'].includes(payment)) throw fail('抽取方式不正確', 400);
   const stateRef = db.collection('soulboundDrawStates').doc(uid), userRef = db.collection('users').doc(uid);
-  const key = ['draw', 'recover'].includes(action) ? requestKey(uid, body.requestId) : null;
+  const key = ['draw', 'redeem', 'recover'].includes(action) ? requestKey(uid, body.requestId) : null;
   const receiptRef = key ? db.collection('soulboundDrawReceipts').doc(key) : null;
   // A committed receipt survives retries, account reloads, and transaction reruns.
   return db.runTransaction(async tx => {
@@ -60,7 +60,7 @@ async function transaction(db, uid, action = 'view', body = {}, random = () => c
     if (receiptSnap?.exists) {
       const saved = receiptSnap.data();
       if (saved.action !== action || (action === 'draw' && (saved.count !== body.count || (saved.payment || 'gold') !== payment)) ||
-          (action === 'recover' && saved.itemId !== body.itemId)) throw fail('此請求編號已用於其他操作');
+          ((action === 'recover' || action === 'redeem') && saved.itemId !== body.itemId)) throw fail('此請求編號已用於其他操作');
       result = saved.result;
     } else if (action === 'draw') {
       if (body.poolVersion !== pool.VERSION) throw fail('獎池已更新，請重新整理契器台後抽取');
@@ -94,6 +94,24 @@ async function transaction(db, uid, action = 'view', body = {}, random = () => c
       tx.update(userRef, { 'stats.gold': user.stats.gold, soulboundDrawTickets:user.soulboundDrawTickets, 'forgeFragments':fragments.balance(user), 'artifactSystem.inventory': user.artifactSystem?.inventory || {} });
       stateDirty = true;
       tx.create(receiptRef, { uid, action, count: body.count, payment, result });
+    } else if (action === 'redeem') {
+      if (body.poolVersion !== pool.VERSION) throw fail('獎池已更新，請重新整理契器台後兌換');
+      if (rank < 0) throw fail('金丹境開放締結本命');
+      if (pending) throw fail('請先查看並收入上一批抽取結果');
+      const item = pool.get(body.itemId);
+      if (!item || !pool.candidates(rank).some(row => row.id === item.id)) {
+        throw fail('只能兌換目前境界的常駐本命法器', 400);
+      }
+      const cost = pool.redemptionCost(rank);
+      if (body.expectedFragments !== cost) throw fail('碎片兌換價格已更新，請重新同步後兌換');
+      const available = fragments.balance(user);
+      if (available < cost) throw fail('煉器碎片不足');
+      user.artifactSystem ||= {}; user.artifactSystem.inventory ||= {};
+      user.artifactSystem.inventory[item.id] = number(user.artifactSystem.inventory[item.id]) + 1;
+      user.forgeFragments = available - cost;
+      result = { requestId:body.requestId, kind:'redemption', itemId:item.id, name:item.name, costFragments:cost };
+      tx.update(userRef, { 'forgeFragments':user.forgeFragments, 'artifactSystem.inventory':user.artifactSystem.inventory });
+      tx.create(receiptRef, { uid, action, itemId:item.id, result });
     } else if (action === 'recover') {
       throw fail('原器回收已改為碎片分解，請從背包或煉器的「物品分解」操作');
     } else if (action === 'ack') {
@@ -104,7 +122,8 @@ async function transaction(db, uid, action = 'view', body = {}, random = () => c
     if (stateDirty) tx.set(stateRef, state);
     return { ok: true, result, pending, balance: number(user.stats?.gold), drawTickets:number(user.soulboundDrawTickets), fragments:fragments.balance(user), inventory: user.artifactSystem?.inventory || {},
       draws: state.draws, misses:state.misses, untilPity: pool.PITY - state.misses, poolVersion: pool.VERSION, rank, realm: pool.REALMS[rank]?.name || null,
-      prices: rank < 0 ? null : { single: pool.cost(rank, state.draws, 1), five: pool.cost(rank, state.draws, 5) }, recovery: [] };
+      prices: rank < 0 ? null : { single: pool.cost(rank, state.draws, 1), five: pool.cost(rank, state.draws, 5) },
+      redemptionCost: rank < 0 ? null : pool.redemptionCost(rank), recovery: [] };
   });
 }
 function createHandler({ action = 'view', resolveA = () => playerRepository.resolve(), logger = console } = {}) {
@@ -125,6 +144,6 @@ function createHandler({ action = 'view', resolveA = () => playerRepository.reso
 }
 module.exports = app => {
   app.get('/api/soulbound', createHandler());
-  for (const action of ['draw', 'ack', 'recover']) app.post('/api/soulbound/' + action, createHandler({ action }));
+  for (const action of ['draw', 'ack', 'recover', 'redeem']) app.post('/api/soulbound/' + action, createHandler({ action }));
 };
 module.exports.__test = { transaction, createHandler, requestKey, reconcileLots };

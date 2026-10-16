@@ -136,9 +136,9 @@ import {
 
     let known = knownArtifactId ? getArtifactById(knownArtifactId) : null;
     const hasSoulboundBase = recipe.some((row) =>
-      row.artifactId && getArtifactById(row.artifactId)?.equipSlot === '本命法寶');
+      row.artifactId && isSoulboundSourceItem(row.artifactId));
     if (known?.equipSlot === '本命法寶' && !hasSoulboundBase) {
-      return { valid:false, reason:'本命法寶只能由靈石抽取取得；已有本命法寶可作素材二次精煉。', total };
+      return { valid:false, reason:'本命法寶原器需經抽取或碎片兌換取得，已有本命法寶可作素材精煉。', total };
     }
     if (known && !globalThis.QASoulboundPool.refinementCompatible(known, hasSoulboundBase)) known = null;
     const targetRealm = known?.realm || highestIngredientRealm(ingredients);
@@ -326,6 +326,11 @@ import {
     }));
   }
 
+  // Permanent soulbound originals may be absent from the stored admin catalog.
+  function isSoulboundSourceItem(id, catalog = ARTIFACT_CATALOG) {
+    return (globalThis.QASoulboundPool.get(id) || catalog.find(item => item.id === id))?.equipSlot === '本命法寶';
+  }
+
   function apiArtifacts() {
     return ARTIFACT_CATALOG.map((item) => ({
       id: item.id, name: item.name, icon: item.icon, realm: item.realm, category: item.category,
@@ -419,7 +424,7 @@ import {
     for (const [artifactId, recipe] of Object.entries(recipes || {})) {
       const item = catalog.find((candidate) => candidate.id === artifactId);
       const hasSoulboundBase = (recipe || []).some(row => row.artifactId &&
-        catalog.some(source => source.id === row.artifactId && source.equipSlot === '本命法寶'));
+        isSoulboundSourceItem(row.artifactId, catalog));
       if (!globalThis.QASoulboundPool.refinementCompatible(item, hasSoulboundBase)) continue;
       // Use current recipe + saved method so edited recipes remain reproducible.
       const currentSignature = recipeSignature(recipe, item?.forgeMethod || '自由發揮');
@@ -496,9 +501,8 @@ import {
       if (!awardedId) {
         const id = uniqueGeneratedId(latestItems);
         // Do not trust an AI-chosen slot at the final catalog commit.
-        const realSoulboundSource = Number(fresh.refinementStage) >= 2 &&
-          (fresh.recipe || []).some((row) => row.artifactId &&
-            latestItems.some((item) => item.id === row.artifactId && item.equipSlot === '本命法寶'));
+        const realSoulboundSource = (fresh.recipe || []).some((row) =>
+          row.artifactId && isSoulboundSourceItem(row.artifactId, latestItems));
         const generatedArtifact = { ...generated.artifact };
         if (realSoulboundSource) {
           generatedArtifact.equipSlot = '本命法寶';

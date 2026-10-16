@@ -410,7 +410,9 @@ function sanitizeValue(type, value, order, stage = 1, effectBoundsV1 = {}, effec
   const proposed = Number(value);
   const chosen = Number.isFinite(proposed) ? proposed : (range.min + range.max) / 2;
   const bounded = clamp(chosen, range.min, range.max);
-  return FLAT_VALUE_TYPES.has(type) ? Math.round(bounded) : roundRange(bounded);
+  return FLAT_VALUE_TYPES.has(type)
+    ? Math.min(Math.floor(range.max), Math.max(Math.ceil(range.min), Math.round(bounded)))
+    : roundRange(bounded);
 }
 function sanitizeEffect(raw, order, stage = 1, effectBoundsV1 = {}, effectBoundsV2 = {}, ingredientCount = 3, soulbound = false) {
   const type = cleanText(raw?.type, 64);
@@ -448,7 +450,7 @@ function sanitizeGeneratedArtifact(raw, targetRealm, refinementStage = 1, effect
   const boundSources = sources.filter(item => item?.equipSlot === '本命法寶');
   const primaryItems = boundSources.length ? boundSources : sources;
   // Only resolved catalog ingredients can confer soulbound status.
-  const inheritsSoulbound = stage >= 2 && primaryItems.some((item) =>
+  const inheritsSoulbound = primaryItems.some((item) =>
     item?.equipSlot === '本命法寶' &&
     Array.isArray(item.effects) && item.effects.some((effect) => String(effect?.type || '').startsWith('equip_')));
   const sanitize = effect => sanitizeEffect(effect, order, stage, effectBoundsV1, effectBoundsV2, ingredientCount, inheritsSoulbound);
@@ -631,9 +633,9 @@ function buildPrompt(payload) {
     '1. 法寶境界已由遊戲鎖定為「' + targetRealm + '」，不得改境界。',
     '2. 只輸出 JSON，不要 Markdown。',
     '3. 效果只能使用下方允許的 type；依本次內部煉器階段與境界，最多 ' + (soulbound ? Math.max(3, maxEffectsForGeneration(order, refinementStage)) : maxEffectsForGeneration(order, refinementStage)) + ' 個效果。',
-    '4. 每個效果必須使用下方境界＋煉製階段與投入素材數量調整後的 min～max（含上下限），不准填 0、不得突破範圍；百分比一律用小數，例如 0.10 = 10%。普通法器連擊上限 0.10，本命法寶上限 0.40。',
+    '4. 每個效果必須使用下方境界＋煉製階段與投入素材數量調整後的 min～max（含上下限），不准填 0、不得突破範圍；百分比一律用小數，例如 0.10 = 10%。普通法器連擊上限 0.10，本命法寶上限 0.12。',
     '4d. 本次投入素材總數 ' + ingredientCount + '，數值範圍倍率 ×' + ingredientCountMultiplier(ingredientCount) + '；表內已計入此倍率，請勿再次乘算。',
-    soulbound ? '4e. 本命法寶精煉：表內已套用普通法器四倍屬性範圍，不可再次乘算。攻擊與生命（固定值、百分比）不乘四；機率及減傷比例不超過 100%。傷害上限為反向效果，數值除四才是強化。原本本命法寶的核心效果、攻擊與生命屬性優先保留，至少保留其三項屬性。戰鬥疊加總上限仍依原戰鬥規則。' : '',
+    soulbound ? '4e. 本命法寶精煉：表內已套用普通法器 1.2 倍屬性範圍，不可再次乘算。攻擊與生命（固定值、百分比）不乘 1.2；機率及減傷比例不超過 100%。傷害上限為反向效果，數值除以 1.2 才是強化。原本本命法寶的核心效果、攻擊與生命屬性優先保留，至少保留其三項屬性。戰鬥疊加總上限仍依原戰鬥規則。' : '',
     '4a. 法寶無修士境界裝備限制：不論玩家境界高低，只要持有裝備型法寶就能裝備；本表的「境界」僅影響法寶效果數值。',
     '4b. 單次生命傷害上限 equip_damage_cap_percent 數值越小代表越強，不要誤選較大數字當成強化。',
     '4c. 限時特性只填 multiplier 和 durationMinutes；每場固定一次的保命／鏡映不填數值；排除錯誤選項每題固定 1 個，不填自訂 value。',

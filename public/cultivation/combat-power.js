@@ -77,7 +77,7 @@ export function calculateArtifactPower(item) {
   const effectsPower = effects.reduce((sum, effect) => {
     const type = effect.type;
     if (type === 'equip_damage_cap_percent') {
-      return sum + Math.round((1 - Math.max(item.equipSlot === '本命法寶' ? 0.0125 : 0.05, Math.min(1, finite(effect.value, 1)))) * 500);
+      return sum + Math.round((1 - Math.max(item.equipSlot === '本命法寶' ? 0.05 / 1.2 : 0.05, Math.min(1, finite(effect.value, 1)))) * 500);
     }
     if (type === 'equip_cheat_death' || type === 'equip_copy_enemy_artifact') return sum + EFFECT_WEIGHTS[type];
     const value = Math.min(positive(effect.value), globalThis.QASoulboundPool.refinementCap(type, EFFECT_LIMITS[type] ?? 100000, item.equipSlot === '本命法寶'));

@@ -94,7 +94,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       <div class="sb-carousel-viewport" aria-label="每次展示三件法器，中央法器較大">
         <div class="sb-carousel-track">${cards}</div>
       </div>
-      <p class="sb-carousel-hint">點擊法器查看詳細資料</p>
+      <p class="sb-carousel-hint">點擊法器查看詳細資料，亦可使用碎片指定兌換</p>
     </section>`;
   }
   function probabilityMarkup(rank, version = pool.VERSION) {
@@ -152,6 +152,10 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     scheduleCarousel();
   }
   function previewMarkup(item) {
+    const rank = snapshot?.rank ?? -1;
+    const canRedeem = rank >= 0 && pool.candidates(rank).some(row => row.id === item.id);
+    const price = snapshot?.redemptionCost ?? pool.redemptionCost(Math.max(0, rank));
+    const disabled = busy || !!snapshot?.pending || !!storedOperation() || Number(snapshot?.fragments || 0) < price;
     return `<section class="sb-preview-card" role="dialog" aria-modal="true" aria-labelledby="sb-preview-title"
       style="--sb-color:${esc(artifactRealmColor(item.realm))}">
       <button type="button" class="sb-preview-close" data-sb-close aria-label="關閉法器詳細資料">×</button>
@@ -163,7 +167,8 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
         <div class="sb-preview-stats"><span>攻擊 +${base(item, 'equip_attack_flat')}</span>
         <span>生命 +${base(item, 'equip_hp_flat')}</span></div>
         <p class="sb-preview-description">${esc(item.description || '')}</p>
-        <span class="sb-preview-hint">僅查看法器資料，實際抽取仍為八器共用池。</span>
+        <span class="sb-preview-hint">抽獎仍為八器共用池；碎片兌換可指定目前境界的器型。</span>
+         ${canRedeem ? `<button type="button" class="sb-primary" data-sb-redeem="${esc(item.id)}" ${disabled ? 'disabled' : ''}>${price.toLocaleString('zh-TW')} 碎片兌換此器</button>` : ''}
       </div></section>`;
   }
   function showPreview(itemId, trigger) {
@@ -179,7 +184,13 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     overlay.innerHTML = previewMarkup(item);
     page.appendChild(overlay);
     overlay.addEventListener('click', e => {
-      if (e.target.closest?.('[data-sb-close]') || e.target === overlay) hidePreview();
+      const redeem = e.target.closest?.('[data-sb-redeem]');
+      if (redeem && !redeem.disabled && !busy) {
+        const itemId = redeem.dataset.sbRedeem;
+        const expectedFragments = snapshot?.redemptionCost;
+        hidePreview();
+        void runOperation({ action:'redeem', body:{ itemId, expectedFragments, poolVersion:pool.VERSION, requestId:crypto.randomUUID() } });
+      } else if (e.target.closest?.('[data-sb-close]') || e.target === overlay) hidePreview();
     });
     overlay.querySelector('[data-sb-close]')?.focus();
   }
@@ -220,7 +231,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     const rank = s.rank, candidates = pool.candidates(Math.max(0, rank));
     $('soulbound-content').innerHTML = `<div class="sb-summary"><div><small>靈石餘額</small><strong>${s.balance.toLocaleString('zh-TW')}</strong></div><div><small>煉器碎片</small><strong>${Number(s.fragments || 0).toLocaleString('zh-TW')}</strong></div><div><small>目前本命</small><b>${esc(current?.name || '尚未調御')}</b><span>${esc(current?.realm || '選擇適合自己的器型')}</span></div><div><small>距離武器保底</small><b>${s.untilPity} 抽</b><span>累計 ${s.draws} 抽 · 出武器後重計</span></div></div>
       <div class="sb-pity"><progress value="${Number(s.misses || 0)}" max="${pool.PITY}" aria-label="本輪未出武器 ${Number(s.misses || 0)} 抽"></progress><span>八種武器同池 · 至多 ${pool.PITY} 抽必得一件完整武器</span></div>
-      ${operation && !pending ? '<button type="button" data-sb-retry class="sb-primary">重試上次未確認的操作</button><p class="sb-note">重試只確認原結果，不會重新抽取或重複扣款。</p>' : ''}
+      ${operation && !pending ? '<button type="button" data-sb-retry class="sb-primary">重試上次未確認的操作</button><p class="sb-note">使用同一編號重試，不會再次扣除碎片或靈石。</p>' : ''}
       ${row ? `<section class="sb-results"><div class="sb-result-heading"><h3>${pending.results.length} 抽結果已保存</h3><span>本批 ${pending.payment === 'ticket' ? pending.ticketsSpent + ' 張抽獎券' : pending.cost + ' 靈石'}</span></div>
         <div class="sb-result-tabs" role="group" aria-label="查看每抽結果">${pending.results.map((r, i) => {
           const a = r.itemId && getArtifactById(r.itemId);
@@ -232,7 +243,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
         <div class="sb-actions"><button type="button" data-sb-draw="1" class="sb-primary" ${busy || operation || pending || rank < 0 || s.balance < s.prices?.single ? 'disabled' : ''}>單抽 · ${s.prices?.single ?? '—'} 靈石</button><button type="button" data-sb-draw="5" ${busy || operation || pending || rank < 0 || s.balance < s.prices?.five ? 'disabled' : ''}>五連抽 · ${s.prices?.five ?? '—'} 靈石</button></div>
         <p class="sb-first">本命法器抽獎券：${Number(s.drawTickets || 0)} 張 · 閉關共修可獲得</p>
         <div class="sb-actions"><button type="button" data-sb-draw="1" data-sb-payment="ticket" ${busy || operation || pending || rank < 0 || Number(s.drawTickets || 0) < 1 ? 'disabled' : ''}>用券單抽 · 1 張</button><button type="button" data-sb-draw="5" data-sb-payment="ticket" ${busy || operation || pending || rank < 0 || Number(s.drawTickets || 0) < 5 ? 'disabled' : ''}>用券五連 · 5 張</button></div>
-        <p class="sb-note">${pending ? '先確認本批結果，即可繼續抽取。' : `一般武器機率 2%；其餘獲得 20–40 碎片。出武器後重置保底進度。`}</p></section></div>
+        <p class="sb-note">${pending ? '先確認本批結果，即可繼續抽取或兌換。' : `一般武器機率 2%；其餘獲得 20–40 碎片。出武器後重置保底進度。`}</p></section></div>
       ${probabilityMarkup(rank, s.poolVersion)}
       <details class="sb-details"><summary>物品分解與碎片煉器</summary><p>材料、普通法器及本命法器可多選分解，確認後換成煉器碎片；裝備中的份數會保留。</p><button type="button" data-inventory-dismantle>物品分解</button></details>`;
     scheduleCarousel();
@@ -277,13 +288,15 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     const uid = account;
     // Persist the exact intent before sending so a timed-out POST can be retried.
     try { localStorage.setItem(storageKey(uid), JSON.stringify(operation)); }
-    catch (_) { message = '瀏覽器無法保存重試紀錄，請允許網站儲存後再抽取或回收。'; render(); return; }
+    catch (_) { message = '瀏覽器無法保存重試紀錄，請允許網站儲存後再進行抽取或兌換。'; render(); return; }
     busy = true; message = '正在締結契印…'; render();
     try {
       const payload = await request(operation.action, operation.body);
       if (getMainUser()?.uid !== uid) return;
       forgetOperation(); apply(payload); selected = 0;
-      message = operation.action === 'draw' ? '抽取結果已保存，可確認收入。' : `已回收一件，獲得 ${payload.result.refund} 靈石。`;
+      message = operation.action === 'draw' ? '抽取結果已保存，可確認收入。'
+        : operation.action === 'redeem' ? `已兌換 ${payload.result.name}，消耗 ${payload.result.costFragments} 碎片；法器已存入寶庫。`
+        : '操作已完成。';
       if (operation.action === 'draw' && payload.pending?.requestId === operation.body.requestId) {
         $('soulbound-page')?.querySelector('.sb-scroll')?.scrollTo({ top: 0 });
         animate(payload.result);
