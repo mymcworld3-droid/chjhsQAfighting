@@ -57,8 +57,9 @@ test('fullscreen gameplay roots use the document bounds', () => {
   assert.match(css, /top:var\(--app-vv-top\)!important/);
 });
 
-test('bottom navigation, tutorial cards and modals retain their safe-area offsets', () => {
+test('navigation docks to the canvas edge while tutorial cards and modals keep safe-area offsets', () => {
   assert.match(css, /body\.xianxia-theme #bottom-nav/);
+  assert.match(css, /#bottom-nav\s*\{\s*bottom:var\(--app-vv-bottom\)!important/);
   assert.match(css, /var\(--app-vv-bottom\)/);
   assert.match(css, /\.newbie-tutorial-card/);
   assert.match(css, /\.golden-core-tutorial-card/);

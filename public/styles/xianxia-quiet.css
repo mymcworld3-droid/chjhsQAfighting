@@ -1,5 +1,6 @@
-/* 青雲問道 · 墨玉
-   Presentation only: keep the existing grids, spacing, scrolling and hit areas.
+/* 青雲問道 · 墨金
+   Keep the existing content grids, spacing, scrolling and hit areas; the dock
+   below fills the navigation safe area without a gap at the canvas edge.
    Scene art, item silhouettes, rarity, combat feedback and notification dots
    retain their own rules. Load after content-format.css. */
 body.xianxia-theme {
@@ -8,29 +9,29 @@ body.xianxia-theme {
   --ui-control-radius: 8px;
   --ui-card-radius: 10px;
   --ui-panel-radius: 14px;
-  --xq-ink: #111715;
-  --xq-surface: #1b2420;
-  --xq-paper: #e8e5da;
-  --xq-muted: #adb4a9;
-  --xq-gold: #c5ad79;
-  --xq-jade: #a6c4b4;
-  --xq-line: rgba(197,173,121,.22);
-  --glass-bg: rgba(24,32,28,.96);
-  --glass-border: rgba(197,173,121,.22);
-  --xq-bright-gold: #cfbb92;
-  --xq-bright-jade: #a6c4b4;
-  --xq-bright-ivory: #e8e5da;
-  --quiet-surface: #1b2420;
-  --quiet-inset: #151d19;
-  --quiet-line: rgba(205,213,198,.15);
-  --quiet-accent-line: rgba(166,196,180,.48);
+  --xq-ink: #17140f;
+  --xq-surface: #242018;
+  --xq-paper: #eee4d0;
+  --xq-muted: #bcae94;
+  --xq-gold: #c7a35e;
+  --xq-jade: #d9b66d;
+  --xq-line: rgba(199,163,94,.24);
+  --glass-bg: rgba(32,28,21,.96);
+  --glass-border: rgba(199,163,94,.24);
+  --xq-bright-gold: #dfbd79;
+  --xq-bright-jade: #d9b66d;
+  --xq-bright-ivory: #eee4d0;
+  --quiet-surface: #242018;
+  --quiet-inset: #1b1812;
+  --quiet-line: rgba(211,181,124,.2);
+  --quiet-accent-line: rgba(217,182,109,.55);
   background: var(--xq-ink) !important;
   color: var(--xq-paper);
 }
 
 /* One distant landscape; remove the additional colored spotlights on pages. */
 body.xianxia-theme::before {
-  background: linear-gradient(115deg,rgba(13,20,16,.88),rgba(17,24,20,.8)),
+  background: linear-gradient(115deg,rgba(20,17,12,.88),rgba(27,23,17,.8)),
     var(--xq-scene-art) center / cover !important;
   filter: saturate(.55) brightness(.8) !important;
 }
@@ -40,7 +41,7 @@ body.xianxia-theme .page-section { background-image: none !important; }
 body.xianxia-theme > header,
 body.xianxia-theme .glass-strip,
 body.xianxia-theme #bottom-nav > .glass-capsule {
-  background: rgba(20,28,24,.97) !important;
+  background: rgba(28,24,18,.97) !important;
   border-color: var(--quiet-line) !important;
   box-shadow: 0 5px 18px rgba(0,0,0,.16) !important;
 }
@@ -55,16 +56,16 @@ body.xianxia-theme .glass-capsule {
   box-shadow: none !important;
 }
 body.xianxia-theme .xianxia-page-heading {
-  background: rgba(166,196,180,.035) !important;
+  background: rgba(217,182,109,.035) !important;
   border-color: transparent !important;
-  border-left-color: #829c8d !important;
+  border-left-color: #b49558 !important;
   border-radius: 4px !important;
   box-shadow: none !important;
 }
 body.xianxia-theme :is(.xianxia-page-heading h2,.bv2-head h2,.raid-heading h2),
 body.xianxia-theme :is(#page-rank,#page-settings,#page-history,#page-admin,#page-social) > h2,
 body.xianxia-theme #page-store > .sticky h2 {
-  color: var(--xq-paper) !important;
+  color: #e6c98b !important;
   text-shadow: none !important;
   letter-spacing: .035em;
 }
@@ -95,37 +96,41 @@ body.xianxia-theme .xiuxian-panel {
   box-shadow: none !important;
 }
 body.xianxia-theme .stat-card {
-  background: rgba(28,39,32,.93) !important;
+  background: rgba(39,33,23,.93) !important;
   border-color: var(--quiet-line) !important;
   border-radius: var(--ui-card-radius) !important;
   box-shadow: none !important;
 }
-body.xianxia-theme .stat-card .stat-icon { color: #9eae96 !important; }
+body.xianxia-theme .stat-card .stat-icon { color: #c6a466 !important; }
 body.xianxia-theme .stat-card .stat-value {
   color: var(--xq-paper) !important;
   text-shadow: none !important;
   font-variant-numeric: tabular-nums;
 }
 body.xianxia-theme #bottom-nav > .xiuxian-quick-actions > button {
-  background: #293e31 !important;
-  border-color: #6f8774 !important;
+  background: #4a391f !important;
+  border-color: #a1844b !important;
   box-shadow: none !important;
 }
 body.xianxia-theme #bottom-nav > .xiuxian-quick-actions > #btn-home-pvp {
-  background: #35362a !important;
-  border-color: #918563 !important;
+  background: #362c20 !important;
+  border-color: #9d8151 !important;
 }
 
 /* Navigation reads as one rail, rather than a row of illuminated cards. */
+body.xianxia-theme #bottom-nav > .glass-capsule {
+  border-radius: 14px 14px 0 0 !important;
+  padding-bottom: calc(7px + env(safe-area-inset-bottom,0px)) !important;
+}
 body.xianxia-theme #nav-grid button {
   color: var(--xq-muted) !important;
   background: transparent !important;
   border-radius: var(--ui-control-radius) !important;
 }
 body.xianxia-theme #nav-grid button.active-nav-btn {
-  color: #d6e3d9 !important;
-  background: #2b3c32 !important;
-  border-top-color: #a6c4b4 !important;
+  color: #f1d79f !important;
+  background: #44351f !important;
+  border-top-color: #d9b66d !important;
   box-shadow: none !important;
 }
 body.xianxia-theme #nav-grid button.active-nav-btn :is(i,span) {
@@ -144,8 +149,8 @@ body.xianxia-theme .quest-tabs button {
 body.xianxia-theme #page-training .training-subtab-v3.active,
 body.xianxia-theme #page-store .store-tab.active,
 body.xianxia-theme .quest-tabs button[aria-selected=true] {
-  color: #d6e3d9 !important;
-  background: #2b3c32 !important;
+  color: #f1d79f !important;
+  background: #44351f !important;
   border-color: var(--quiet-accent-line) !important;
   font-weight: 600 !important;
 }
@@ -164,7 +169,7 @@ body.xianxia-theme #store-grid > .store-card,
 body.xianxia-theme #page-admin :is(.admin-collapse-card,.admin-stat-card) {
   border-color: var(--quiet-line) !important;
 }
-body.xianxia-theme .quest-card.quest-ready { border-color: rgba(197,173,121,.6) !important; }
+body.xianxia-theme .quest-card.quest-ready { border-color: rgba(199,163,94,.65) !important; }
 body.xianxia-theme #page-training .uib-toolbar,
 body.xianxia-theme #page-training .refinery-panel,
 body.xianxia-theme #page-training .refinery-forge-panel,
@@ -179,15 +184,15 @@ body.xianxia-theme #page-training .uib-item {
   box-shadow: none !important;
 }
 body.xianxia-theme #page-training .refinery-material {
-  background: color-mix(in srgb,var(--material-realm-color,#c5ad79) 4%,var(--quiet-surface)) !important;
+  background: color-mix(in srgb,var(--material-realm-color,#c7a35e) 4%,var(--quiet-surface)) !important;
   box-shadow: none !important;
 }
 body.xianxia-theme #page-training .refinery-slot {
-  background: color-mix(in srgb,var(--material-realm-color,#c5ad79) 6%,var(--quiet-inset)) !important;
+  background: color-mix(in srgb,var(--material-realm-color,#c7a35e) 6%,var(--quiet-inset)) !important;
   box-shadow: none !important;
 }
 body.xianxia-theme #page-training :is(.refinery-summary,.refinery-match,.refinery-job-box) {
-  background: rgba(166,196,180,.04) !important;
+  background: rgba(217,182,109,.04) !important;
   border-color: var(--quiet-line) !important;
 }
 body.xianxia-theme :is(.uib-fragment-balance,.refinery-fragment-balance) {
@@ -198,8 +203,8 @@ body.xianxia-theme :is(.uib-fragment-balance,.refinery-fragment-balance) {
 /* Dialogs share the same material, including the two existing dismantle bags. */
 body.xianxia-theme :is(.uib-modal,.xpp-dialog,.dt-modal-card,.dm-card,
   .ids-panel,.ids-confirmation,.quest-dialog .quest-panel) {
-  background: #1a231e !important;
-  border-color: rgba(197,173,121,.32) !important;
+  background: #272118 !important;
+  border-color: rgba(199,163,94,.32) !important;
   box-shadow: 0 18px 55px rgba(0,0,0,.32) !important;
 }
 body.xianxia-theme .ids-bag-pane {
@@ -211,29 +216,35 @@ body.xianxia-theme .ids-panel .ids-item {
   box-shadow: none !important;
 }
 body.xianxia-theme .ids-selected-footer {
-  background: rgba(166,196,180,.04) !important;
+  background: rgba(217,182,109,.04) !important;
   border-color: var(--quiet-line) !important;
 }
 
-/* Primary actions use solid jade; secondary actions stay quiet. Destructive
+/* Primary actions use solid gold; secondary actions stay quiet. Destructive
    controls and game success/failure colors are intentionally separate. */
 body.xianxia-theme :is(.btn-cyber-primary,.bv2-btn.primary,.raid-primary,.quest-claim,
   .refinery-recipe-craft,.uib-use-btn,.uib-equip-btn,.dt-play,.fi-primary,
-  .ids-panel button.ids-primary),
+  .ids-panel button.ids-primary,.sb-page button.sb-primary),
 body.xianxia-theme #scope-studio #dongfu-scope-save {
-  color: #f1f3e9 !important;
-  background: #3a5748 !important;
-  border-color: #799482 !important;
+  color: #241b10 !important;
+  background: #c6a15c !important;
+  border-color: #e0c486 !important;
   box-shadow: none !important;
   text-shadow: none !important;
   font-weight: 600 !important;
   letter-spacing: .015em;
 }
+body.xianxia-theme :is(.btn-cyber-primary,.bv2-btn.primary,.raid-primary,.quest-claim,
+  .refinery-recipe-craft,.uib-use-btn,.uib-equip-btn,.dt-play,.fi-primary,
+  .ids-panel button.ids-primary,.sb-page button.sb-primary) :is(small,i),
+body.xianxia-theme #scope-studio #dongfu-scope-save i {
+  color: inherit !important;
+}
 body.xianxia-theme :is(.btn-cyber-accent,.btn-cyber-ghost,.xiuxian-btn,
   .bv2-btn.ghost,.raid-ghost,.quest-heading button) {
-  color: #d1d6c9 !important;
-  background: #202c25 !important;
-  border-color: #5e6b5b !important;
+  color: #e3d2ac !important;
+  background: #30271b !important;
+  border-color: #877044 !important;
   box-shadow: none !important;
   text-shadow: none !important;
   font-weight: 500 !important;
@@ -242,15 +253,15 @@ body.xianxia-theme :is(.input-cyber,input:not([type=checkbox]):not([type=radio])
 body.xianxia-theme :is(#page-admin,#page-settings,#page-social) :is(input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea),
 body.xianxia-theme #scope-studio :is(#set-source-mode,.cs-scope select,.cs-scope input:not([type=checkbox])) {
   color: var(--xq-paper) !important;
-  background: #131c17 !important;
-  border-color: #626e5e !important;
+  background: #1b1711 !important;
+  border-color: #89754f !important;
   border-radius: var(--ui-control-radius) !important;
   box-shadow: none !important;
-  --tw-ring-color: rgba(166,196,180,.2);
+  --tw-ring-color: rgba(217,182,109,.2);
 }
-body.xianxia-theme :is(input,textarea)::placeholder { color: #9ba698 !important; }
+body.xianxia-theme :is(input,textarea)::placeholder { color: #b4a58a !important; }
 body.xianxia-theme :is(button,input,select,textarea):focus-visible {
-  outline: 2px solid #b5cebc !important;
+  outline: 2px solid #e1c382 !important;
   outline-offset: 3px;
 }
 
@@ -263,17 +274,17 @@ body.xianxia-theme .quiz-main-column > .glass-panel:first-child {
 }
 body.xianxia-theme #page-battle .bv2-question-sheet { box-shadow: none !important; }
 body.xianxia-theme #options-container > button:not(.bg-green-600):not(.bg-red-600) {
-  background: #24372c !important;
-  border-color: #71826a !important;
+  background: #322c20 !important;
+  border-color: #927c4e !important;
   border-radius: var(--ui-card-radius) !important;
   box-shadow: none !important;
 }
 
 body.xianxia-theme #scope-studio {
-  --ss-gold: #c5ad79;
-  --ss-cream: #e8e5da;
-  --ss-teal: #a6c4b4;
-  background: #111a15 !important;
+  --ss-gold: #c7a35e;
+  --ss-cream: #eee4d0;
+  --ss-teal: #d9b66d;
+  background: #1a160f !important;
 }
 body.xianxia-theme #scope-studio::before { opacity: .035; }
 body.xianxia-theme #scope-studio :is(.ss-picker,.ss-cart) {
@@ -287,19 +298,19 @@ body.xianxia-theme #scope-studio :is(.ss-picker,.ss-cart) {
   body.xianxia-theme #page-training .training-subtab-v3:not(.active):hover,
   body.xianxia-theme #page-store .store-tab:not(.active):hover,
   body.xianxia-theme .quest-tabs button:not([aria-selected=true]):hover {
-    color: #e0e8dd !important;
-    background: #23352a !important;
+    color: #f4dfb5 !important;
+    background: #3c301e !important;
   }
   body.xianxia-theme :is(.btn-cyber-primary,.bv2-btn.primary,.raid-primary,
     .quest-claim,.refinery-recipe-craft,.uib-use-btn,.uib-equip-btn,.dt-play,
-    .fi-primary,.ids-panel button.ids-primary):hover:not(:disabled),
+    .fi-primary,.ids-panel button.ids-primary,.sb-page button.sb-primary):hover:not(:disabled),
   body.xianxia-theme #scope-studio #dongfu-scope-save:hover:not(:disabled) {
-    background: #476650 !important;
-    border-color: #a6c4b4 !important;
+    background: #d2b16e !important;
+    border-color: #d9b66d !important;
     box-shadow: none !important;
   }
   body.xianxia-theme #options-container > button:not(.cursor-not-allowed):not(.bg-green-600):not(.bg-red-600):hover {
-    background: #334e3d !important;
-    border-color: #a6c4b4 !important;
+    background: #4a3a23 !important;
+    border-color: #d9b66d !important;
   }
 }

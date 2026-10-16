@@ -94,9 +94,10 @@ html.app-visual-viewport-ready :is(
   box-sizing:border-box!important;
 }
 
-/* Bottom UI keeps its page-relative offset and hardware safe area. */
+/* Dock the navigation surface to the canvas edge. Its own padding protects
+   controls from the hardware safe area instead of leaving a gap below it. */
 html.app-visual-viewport-ready body.xianxia-theme #bottom-nav{
-  bottom:max(14px,calc(var(--app-vv-bottom) + env(safe-area-inset-bottom,0px)))!important;
+  bottom:var(--app-vv-bottom)!important;
 }
 html.app-visual-viewport-ready :is(
   .newbie-tutorial-card,

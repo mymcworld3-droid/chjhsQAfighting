@@ -445,7 +445,7 @@ body.xianxia-theme .immortal-subject { color: #c4be99; }
 body.xianxia-theme #page-battle { background: #102920; }
 body.xianxia-theme #leaderboard-body tr:hover { background: #b9bd8510; box-shadow: none; }
 /* 浮木式導覽，保留管理按鈕與動態仙盟入口。 */
-body.xianxia-theme #bottom-nav { bottom: max(14px, env(safe-area-inset-bottom)); }
+body.xianxia-theme #bottom-nav { bottom: 0; }
 body.xianxia-theme #bottom-nav > .glass-capsule { max-width: 680px; min-height: 72px; background: #102a22f5; border: 1px solid #b4ac795c; border-radius: 7px; box-shadow: 0 8px 35px #010d0aaa; padding: 7px 10px; }
 body.xianxia-theme #nav-grid { display: flex; gap: 3px; }
 body.xianxia-theme #nav-grid button { flex: 1; min-width: 0; min-height: 54px; border-radius: 4px; }
