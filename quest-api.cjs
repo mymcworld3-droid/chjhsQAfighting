@@ -7,27 +7,44 @@ const error = (message, status = 409) => Object.assign(new Error(message), { sta
 // Claim state lives outside the client-written player document. The same
 // transaction advances the chain and deposits rewards, including materials.
 async function questTransaction(db, uid, request = null, now = new Date()) {
-  const date = rules.dateKey(now), userRef = db.collection('users').doc(uid), stateRef = db.collection('questStates').doc(uid);
+  const date = rules.dateKey(now), userRef = db.collection('users').doc(uid),
+    stateRef = db.collection('questStates').doc(uid),
+    enlightenmentRef = db.collection('enlightenmentTrialStates').doc(uid);
   return db.runTransaction(async tx => {
-    const [userSnap, stateSnap] = await Promise.all([tx.get(userRef), tx.get(stateRef)]);
+    const [userSnap, stateSnap, enlightenmentSnap] = await Promise.all([tx.get(userRef), tx.get(stateRef), tx.get(enlightenmentRef)]);
     if (!userSnap.exists) throw error('玩家資料不存在', 404);
     const user = userSnap.data() || {}, rawState = stateSnap.exists ? stateSnap.data() : {};
     if (user.uid && user.uid !== uid) throw error('玩家身分不符', 403);
     const state = rules.normalizeState(rawState, date);
+    const verifiedTrial = enlightenmentSnap.exists ? enlightenmentSnap.data() : null;
+    let stateChanged = false;
+    // Mint today's assignments once on the server; a new realm or ability score
+    // cannot reshuffle missions halfway through the day.
+    if (state.commissionDate !== date || state.commissionIds.length !== 2) {
+      state.commissionDate = date;
+      state.commissionIds = rules.dailyCommissions(user, uid, date).map(q=>q.id);
+      state.commissionClaimed = [];
+      stateChanged = true;
+    }
     let awarded = false, reward = null;
     if (request) {
-      if (!['path', 'daily'].includes(request.kind)) throw error('任務類型無效', 400);
-      if (request.kind === 'daily' && request.date !== date) throw error('日常任務已跨日，請重新查看今日任務');
-      const list = request.kind === 'path' ? rules.PATH : rules.DAILY;
+      if (!['path', 'daily', 'commission'].includes(request.kind)) throw error('任務類型無效', 400);
+      if (request.kind !== 'path' && request.date !== date) throw error('今日委託已跨日，請重新查看今日任務');
+      const list = request.kind === 'path' ? rules.PATH : request.kind === 'daily' ? rules.DAILY : rules.COMMISSION_POOL;
       const index = list.findIndex(q => q.id === request.id);
-      if (index < 0) throw error('找不到此任務', 400);
-      const duplicate = request.kind === 'path' ? state.pathClaimed.includes(request.id) : state.dailyClaimed.includes(request.id);
+      if (index < 0 || (request.kind === 'commission' && !state.commissionIds.includes(request.id)))
+        throw error('找不到今日指定的委託', 400);
+      const duplicate = request.kind === 'path' ? state.pathClaimed.includes(request.id)
+        : request.kind === 'commission' ? state.commissionClaimed.includes(request.id)
+        : state.dailyClaimed.includes(request.id);
       const ticketOnly = request.kind === 'path' && duplicate && list[index].reward.drawTickets > 0 &&
         (state.pathTicketAmounts[request.id] || 0) < list[index].reward.drawTickets;
       if (!duplicate || ticketOnly) {
-        const snapshot = rules.view(user, state, date);
+        const snapshot = rules.view(user, state, date, verifiedTrial);
         const q = ticketOnly ? snapshot.pathTicketRewards.find(q => q.id === request.id)
-          : request.kind === 'path' ? snapshot.path : snapshot.daily.find(q => q.id === request.id);
+          : request.kind === 'path' ? snapshot.path
+          : request.kind === 'commission' ? snapshot.commissions.find(q => q.id === request.id)
+          : snapshot.daily.find(q => q.id === request.id);
         if (!q || q.id !== request.id || !q.claimable) throw error('任務尚未完成，請先達成目標');
         reward = q.reward;
         const patch = {
@@ -48,13 +65,15 @@ async function questTransaction(db, uid, request = null, now = new Date()) {
         if (request.kind === 'path') {
           if (!duplicate) state.pathClaimed.push(request.id);
           Object.assign(state, rules.normalizeState(state, date));
-        } else state.dailyClaimed.push(request.id);
+        } else if (request.kind === 'commission') state.commissionClaimed.push(request.id);
+        else state.dailyClaimed.push(request.id);
         tx.update(userRef, patch);
-        tx.set(stateRef, state);
+        stateChanged = true;
         awarded = true;
       }
     }
-    return { ok: true, awarded, reward, quests: rules.view(user, state, date),
+    if (stateChanged) tx.set(stateRef, state);
+    return { ok: true, awarded, reward, quests: rules.view(user, state, date, verifiedTrial),
       drawTickets: Math.max(0, Math.floor(Number(user.soulboundDrawTickets) || 0)),
       balances: { gold: Math.max(0, Number(user.stats?.gold) || 0), totalScore: Math.max(0, Number(user.stats?.totalScore) || 0) },
       materials: Object.fromEntries(['raid-refine-key-ii', 'raid-refine-key-iii'].map(id => [id, Math.max(0, Number(user.materialSystem?.inventory?.[id]) || 0)])) };
