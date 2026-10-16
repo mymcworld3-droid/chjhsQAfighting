@@ -2641,6 +2641,7 @@ window.startQuizFlow = async (isNewSession = false) => {
         } catch (e) {
             if (opening !== soloQuizOpenSerial || auth.currentUser?.uid !== uid) return;
             console.error(e);
+            void window.trackPlayerAnalytics?.('question_load_failed', { mode: 'solo' });
             if (window.handleFirstVisitQuestionFailure?.()) return;
             alert("Failed to start");
             switchToPage('page-home');
@@ -3285,6 +3286,11 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         answerSaved = true;
     } catch (e) { console.error("Firebase Error", e); }
 
+    if (answerSaved && userIdx >= 0) {
+        const eventId = quiz ? (quiz.analyticsAnswerEventId ||= window.newPlayerAnalyticsEventId?.()) : window.newPlayerAnalyticsEventId?.();
+        void window.trackPlayerAnalytics?.('answer_completed', { mode: 'solo', eventId });
+    }
+
     if (firstVisitAnswer) {
         await window.handleFirstVisitAnswer?.({ isCorrect, saved: answerSaved, retry: async () => {
             const saving = persistAnswer();
@@ -3907,6 +3913,11 @@ function renderQuiz(data, rank, topic) {
         btn.onclick = () => handleAnswer(idx, data.ans, data.q, data.exp);
         container.appendChild(btn);
     });
+
+    // The same unanswered question can be revisited; reuse its event ID.
+    const analyticsQuiz = window.currentActiveQuiz;
+    if (analyticsQuiz) analyticsQuiz.analyticsStartEventId ||= window.newPlayerAnalyticsEventId?.();
+    void window.trackPlayerAnalytics?.('question_started', { mode: 'solo', eventId: analyticsQuiz?.analyticsStartEventId });
 
     // 等 MathJax 初始化後依序排版，避免快速換題時併發渲染。
     const mathTargets = [questionTextEl, container, whiteboardQuestionEl].filter(Boolean);
