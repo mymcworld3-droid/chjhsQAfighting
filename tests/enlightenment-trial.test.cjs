@@ -48,7 +48,7 @@ function database(user={}){
 function user(){
   return {uid:'u1',profile:{educationLevel:'國中二年級'},
     stats:{totalScore:30,gold:70,totalAnswered:11,totalCorrect:4,
-      knowledgeMap:{數學:{二次函數:{total:8,correct:1},一次方程式:{total:7,correct:6}},
+      knowledgeMap:{數學:{二次函數:{total:8,correct:1},一次方程式:{total:7,correct:7}},
         英文:{單字:{total:2,correct:0}}}}};
 }
 const parsed=n=>({q:'請計算 '+n+' 與二次函數的根如何相關？',correct:'判別式',wrong:['一次項係數','常數項','未知數名稱'],exp:'判別式可用來判斷二次方程式的根。'});
