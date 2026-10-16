@@ -411,3 +411,13 @@
     animation:none!important;
   }
 }
+
+/* 道心護體誕生：環形結界從鬥法角色中心展開，獨立於普通受擊閃光。 */
+.bv2-shield-formation{position:absolute;inset:-14px;z-index:12;pointer-events:none;display:grid;place-items:center}
+.bv2-shield-formation i{position:absolute;width:95%;height:90%;border:2px solid rgba(177,243,255,.95);border-radius:50%;
+ box-shadow:0 0 17px #8be9ff,0 0 38px #8be9ff55,inset 0 0 15px #b5f0ff44;
+ animation:bv2ShieldForm 1.5s cubic-bezier(.12,.78,.3,1) both}
+.bv2-shield-formation i:nth-child(2){width:70%;height:76%;animation-delay:80ms}
+.bv2-shield-formation i:nth-child(3){width:120%;height:105%;animation-delay:140ms}
+@keyframes bv2ShieldForm{0%{opacity:0;transform:scale(.3)}20%{opacity:1}64%{opacity:.85;transform:scale(1.12)}100%{opacity:0;transform:scale(1.3)}}
+@media(prefers-reduced-motion:reduce){.bv2-shield-formation{display:none}}

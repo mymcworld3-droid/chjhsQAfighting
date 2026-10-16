@@ -101,7 +101,7 @@ test('real artifact defense preserves true damage through Dao but still absorbs 
  assert.equal(run(0).guestHp,928);assert.equal(run(100).guestHp,1000);
 });
 test('raid trusted snapshot and browser growth rules agree for every equipped core',()=>{
- const Growth=globalThis.QANascentGrowth;for(const type of Object.keys(talents.TYPES)){const p={stats:{totalScore:68},cultivationTraining:{equippedCore:{type,grade:1}},nascentSoulGrowth:{version:1,branches:{attack:10,vitality:10,core:10,coreChance:10,coreDamage:10}}};const client=Growth.bonuses(p,p.cultivationTraining.equippedCore);const server=authority.trustedRaidPlayerSnapshot(p,'u',{items:[]}).nascentSoul;assert.equal(JSON.stringify(server),JSON.stringify(client));assert.equal(client.attackFlat,70);assert.equal(client.maxHpFlat,500);}
+ const Growth=globalThis.QANascentGrowth;for(const type of Object.keys(talents.TYPES)){const p={stats:{totalScore:68},cultivationTraining:{equippedCore:{type,grade:1}},nascentSoulGrowth:{version:1,branches:{attack:10,vitality:10,core:10,coreChance:10,coreDamage:10}}};const client=Growth.bonuses(p,p.cultivationTraining.equippedCore);const server=authority.trustedRaidPlayerSnapshot(p,'u',{items:[]}).nascentSoul;assert.equal(JSON.stringify(server),JSON.stringify(client));assert.equal(client.attackFlat,35);assert.equal(client.maxHpFlat,250);}
 });
 test('artifact true damage values remain unchanged and combine with Dao-piercing soul true damage once',()=>{
  const context={window:{},QACombatCombo:globalThis.QACombatCombo};vm.createContext(context);

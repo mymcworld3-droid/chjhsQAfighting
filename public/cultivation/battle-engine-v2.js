@@ -183,7 +183,7 @@ export function resolveDeterministicCoreSupport(player, seed) {
     activate('凝心靜音丹・道心護體', '連續答對，金丹道心護體成形', '鬥法防護');
   }
   if (core.type === 'wugou' && !correct && !result.shield) {
-    const chance = chanceByGrade(grade, 20, 10, 100);
+    const chance = chanceByGrade(grade, 20, 5, 60);
     if (deterministicPercent(`${seed}:wugou`) < chance) {
       result.shield = true;
       activate('無垢清心丹・道心護體', `答錯時清心護體（${chance}%）`, '鬥法防護');

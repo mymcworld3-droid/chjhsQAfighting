@@ -1003,12 +1003,29 @@ export const featureReady = (async () => {
     document.getElementById(`bv2-${prefix === 'my' ? 'my' : 'enemy'}-fighter`)?.classList.toggle('low-hp', hp / maxHp <= .3);
   }
 
+  function animateShieldAcquisition(activation) {
+    const mine = activation.ownerUid === me()?.uid;
+    const fighter = document.getElementById(mine ? 'bv2-my-fighter' : 'bv2-enemy-fighter');
+    if (!fighter || window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches) return;
+    const glow = document.createElement('span');
+    glow.className = 'bv2-shield-formation';
+    glow.setAttribute('aria-hidden','true');
+    glow.innerHTML = '<i></i><i></i><i></i>';
+    fighter.appendChild(glow);
+    setTimeout(() => glow.remove(), 1750);
+  }
   function announceActivations(room) {
     const batch = room?.lastSettlement?.activations; if (!Array.isArray(batch)) return;
     batch.forEach((activation, index) => {
       const key = `${room.battleLogId}:${index}:${activation.ownerUid}:${activation.skill}`;
       if (state.seenActivationKeys.has(key)) return; state.seenActivationKeys.add(key);
-      if (activation.ownerUid === me()?.uid) window.showGoldenCoreActivation?.({ type: activation.type, name: activation.name || '金丹', message: activation.message || activation.skill, kind: activation.kind || '鬥法金丹效果' });
+      if (/道心護體/.test(String(activation.skill||'')) && !/消耗/.test(String(activation.message||'')))
+        animateShieldAcquisition(activation);
+      if (activation.ownerUid === me()?.uid) window.showGoldenCoreActivation?.({
+        type: activation.type, name: activation.name || '金丹', message: activation.message || activation.skill,
+        kind: activation.kind || '鬥法金丹效果',
+        shield: /道心護體/.test(String(activation.skill||'')) && !/消耗/.test(String(activation.message||''))
+      });
     });
   }
 

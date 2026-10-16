@@ -88,7 +88,13 @@ test('older and fully completed paths can claim full ticket rewards without repe
     const db = fakeDb(user, state), before = structuredClone(db.docs.get('questStates/u1'));
     const view = await questTransaction(db, 'u1', null, now);
     assert.equal(view.quests.pathTicketRewards.length, view.quests.pathCompleted);
-    assert.deepEqual(db.docs.get('questStates/u1'), before, 'viewing never awards or rewrites claim state');
+    const minted = db.docs.get('questStates/u1');
+    assert.equal(minted.commissionDate, date, 'first view stores its daily assignment');
+    assert.equal(minted.commissionIds.length,2);
+    assert.equal(minted.pathClaimed.length,view.quests.pathCompleted,'reading preserves old path claims');
+    const repeatView = await questTransaction(db,'u1',null,now);
+    assert.deepEqual(db.docs.get('questStates/u1'),minted,'subsequent reads must not reshuffle commissions');
+    assert.equal(repeatView.quests.pathCompleted,view.quests.pathCompleted);
     for (const {id} of view.quests.pathTicketRewards) {
       const results = await Promise.all([1, 2, 3].map(() => questTransaction(db, 'u1', { kind: 'path', id }, now)));
       assert.equal(results.filter(r => r.awarded).length, 1);

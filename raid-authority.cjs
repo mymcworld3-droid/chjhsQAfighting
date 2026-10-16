@@ -337,7 +337,7 @@ function coreSupport(member,correct,seed){
   const soulShieldReady=soulTalents.strength(member?.nascentSoul?.talent)>0?streak%Math.max(3,Math.ceil(grade/3)+1)===0:previous>=Math.max(1,Math.ceil(grade/3));
   if(core.type==='ningxin'&&correct&&soulShieldReady)out.shield=true;
   if(core.type==='wugou'&&!correct&&!out.shield&&
-      deterministicPercent(seed+':wugou')<chanceByGrade(grade,20,10,100))out.shield=true;
+      deterministicPercent(seed+':wugou')<chanceByGrade(grade,20,5,60))out.shield=true;
   if(core.type==='taichu'&&correct&&streak%Math.max(2,grade+1)===0)out.heal=100;
   if(core.type==='pojing'&&correct&&nearBreakthrough(member.totalScore,grade))out.bonusDamage=100;
   if(core.type==='xingchen'&&correct&&previous>=Math.max(1,grade))out.bonusDamage=80;

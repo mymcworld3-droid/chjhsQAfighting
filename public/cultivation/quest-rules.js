@@ -81,6 +81,37 @@
     quest('daily-dongtian', '洞天探幽', '今日完成 1 次洞天答題並結算。', 'dongtian', 1, 60, 0, 'dongtian'),
     quest('daily-raid', '同門協力', '今日成功通關團本 1 次。', 'raid', 1, 100, 1, 'raid', 10, { 'raid-refine-key-ii': 1 })
   ];
+
+  // 固定每日 UID + 臺灣日期種子；候選任務只採用現有可驗證的活動計數，
+  // 特殊補強使用獨立伺服器簽發的悟道試煉完成紀錄。
+  const COMMISSION_POOL = Object.freeze([
+    quest('commission-solo-four', '今日誦經・四問', '今日問道答對 4 題。', 'solo', 4, 55, 0, 'solo'),
+    quest('commission-solo-six', '今日誦經・六問', '今日問道答對 6 題。', 'solo', 6, 75, 0, 'solo'),
+    quest('commission-solo-eight', '今日誦經・八問', '今日問道答對 8 題。', 'solo', 8, 100, 0, 'solo'),
+    quest('commission-meditation', '宗門靜修令', '今日完成一次閉關，無須全對。', 'meditation', 1, 65, 0, 'meditation'),
+    quest('commission-dongtian', '洞天巡訪令', '今日完成一次洞天答題並結算。', 'dongtian', 1, 85, 0, 'dongtian'),
+    quest('commission-battle', '演武短箋', '今日完成一場正式鬥法，勝負皆可。', 'battle', 1, 100, 0, 'battle', 10),
+    quest('commission-raid', '師門援戰令', '今日通關一次清霜秘境，任何難度均可。', 'raid', 1, 120, 0, 'raid', 10),
+    quest('commission-enlightenment', '弱項研修令', '今日完成一次悟道試煉，依能力圖譜的弱項單元補強。', 'enlightenment', 1, 90, 0, 'enlightenment')
+  ]);
+  function seedNumber(value) {
+    let hash = 2166136261;
+    for (const char of String(value)) { hash ^= char.charCodeAt(0); hash = Math.imul(hash, 16777619); }
+    return hash >>> 0;
+  }
+  function dailyCommissions(user = {}, uid = '', date = dateKey()) {
+    const score = number(user?.stats?.totalScore);
+    const solo = COMMISSION_POOL.filter(q => q.metric === 'solo');
+    const learningMap = user?.stats?.knowledgeMap || {};
+    const hasWeakTopic = Object.values(learningMap).some(subject => subject && typeof subject === 'object' &&
+      Object.values(subject).some(x => x && typeof x === 'object' && number(x.total) >= 5 &&
+        ((number(x.correct) + 2) / (number(x.total) + 4)) < .78));
+    const other = COMMISSION_POOL.filter(q => q.metric !== 'solo' && score >= q.minScore &&
+      (q.metric !== 'enlightenment' || hasWeakTopic));
+    const first = solo[seedNumber(uid + '|' + date + '|solo') % solo.length];
+    const second = other[seedNumber(uid + '|' + date + '|activity') % other.length];
+    return [first, second];
+  }
   const METRICS = ['solo', 'meditation', 'battle', 'dongtian', 'raid'];
   function normalizeProgress(raw = {}, date = dateKey()) {
     const totals = Object.fromEntries(METRICS.map(key => [key, number(raw?.totals?.[key])]));
@@ -111,9 +142,15 @@
       (pathTicketAmounts[q.id] || 0) >= q.reward.drawTickets).map(q => q.id);
     const next = PATH.findIndex(q => !pathClaimed.includes(q.id));
     return { version: 2, pathClaimed, pathTicketsClaimed, pathTicketAmounts, pathIndex: next < 0 ? PATH.length : next, dailyDate: date,
-      dailyClaimed: raw?.dailyDate === date && Array.isArray(raw.dailyClaimed) ? raw.dailyClaimed.filter(id => DAILY.some(q => q.id === id)) : [] };
+      dailyClaimed: raw?.dailyDate === date && Array.isArray(raw.dailyClaimed) ? raw.dailyClaimed.filter(id => DAILY.some(q => q.id === id)) : [],
+      commissionDate:raw?.commissionDate===date ? date : '',
+      commissionIds:raw?.commissionDate===date && Array.isArray(raw.commissionIds) ? raw.commissionIds.filter(id => COMMISSION_POOL.some(q=>q.id===id)).slice(0,2) : [],
+      commissionClaimed:raw?.commissionDate===date && Array.isArray(raw.commissionClaimed)
+        ? raw.commissionClaimed.filter(id=>COMMISSION_POOL.some(q=>q.id===id)) : [] };
   }
-  function progressValue(q, user, p, kind, date) {
+  function progressValue(q, user, p, kind, date, verifiedTrial = null) {
+    if (q.metric === 'enlightenment')
+      return verifiedTrial?.day===date && verifiedTrial.status==='completed' ? 1 : 0;
     if (q.metric === 'dongtian-tutorial') {
       const lesson = user?.storyDongtianTutorialV1;
       const legacy = user?.qiFiveDongtianTutorialV1;
@@ -126,18 +163,18 @@
     }
     if (q.metric === 'scope') return Array.isArray(user?.gameSettings?.focusedUnits) && user.gameSettings.focusedUnits.length ? 1 : 0;
     if (q.metric === 'score') return number(user?.stats?.totalScore);
-    if (kind === 'daily' && q.metric === 'meditation' && user?.dailyMeditation?.lastDate === date) return 1;
+    if (kind !== 'path' && q.metric === 'meditation' && user?.dailyMeditation?.lastDate === date) return 1;
     // Existing verified milestones remain useful for returning players.
     if (kind === 'path' && q.metric === 'meditation') return Math.max(p.totals.meditation, number(user?.dailyMeditation?.totalDays));
     if (kind === 'path' && q.metric === 'solo') return Math.max(p.totals.solo, number(user?.stats?.totalCorrect));
     if (kind === 'path' && q.metric === 'battle') return Math.max(p.totals.battle, number(user?.stats?.battleMatches));
     if (kind === 'path' && q.metric === 'raid' && user?.raidProgress?.['shen-qingshuang']?.firstVictoryRoomId) return Math.max(1, p.totals.raid);
-    return kind === 'daily' ? p.daily.counts[q.metric] : p.totals[q.metric];
+    return kind !== 'path' ? p.daily.counts[q.metric] : p.totals[q.metric];
   }
-  function view(user = {}, rawState = {}, date = dateKey()) {
+  function view(user = {}, rawState = {}, date = dateKey(), verifiedTrial = null) {
     const p = normalizeProgress(user.questProgress, date), state = normalizeState(rawState, date);
     function row(q, kind, claimed = false) {
-      const current = Math.min(q.target, progressValue(q, user, p, kind, date));
+      const current = Math.min(q.target, progressValue(q, user, p, kind, date, verifiedTrial));
       const locked = number(user?.stats?.totalScore) < q.minScore;
       return { ...q, current, claimed, locked, complete: current >= q.target, claimable: !claimed && !locked && current >= q.target };
     }
@@ -148,7 +185,9 @@
           description: '已完成此仙道任務，可補領尚未領取的本命法器抽獎券。',
           current: 1, target: 1, complete: true, claimable: true, claimed: false, locked: false,
           reward: { gold: 0, cultivation: 0, materials: {}, drawTickets: q.reward.drawTickets - (state.pathTicketAmounts[q.id] || 0) } })),
-      daily: DAILY.map(q => row(q, 'daily', state.dailyClaimed.includes(q.id))) };
+      daily: DAILY.map(q => row(q, 'daily', state.dailyClaimed.includes(q.id))),
+      commissions:(state.commissionIds||[]).map(id=>COMMISSION_POOL.find(q=>q.id===id))
+        .filter(Boolean).map(q=>row(q,'commission',state.commissionClaimed.includes(q.id))) };
   }
-  return { PATH, LEGACY_PATH, DAILY, dateKey, normalizeProgress, recordEvent, normalizeState, view };
+  return { PATH, LEGACY_PATH, DAILY, COMMISSION_POOL, dailyCommissions, seedNumber, dateKey, normalizeProgress, recordEvent, normalizeState, view };
 });

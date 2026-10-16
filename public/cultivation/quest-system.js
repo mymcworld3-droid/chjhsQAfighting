@@ -21,7 +21,8 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     const ready = q => q?.claimable && !q.claimed && !q.locked;
     const current = account === getMainUser()?.uid ? snapshot : null;
     const pathReady = !!current && (!!ready(current.path) || !!current.pathTicketRewards?.some(ready));
-    const dailyReady = !!current && current.date === window.XianxiaQuestRules.dateKey() && current.daily.some(ready);
+    const dailyReady = !!current && current.date === window.XianxiaQuestRules.dateKey() &&
+      [...current.daily,...(current.commissions||[])].some(ready);
     const available = pathReady || dailyReady;
     if ($('quest-ready-dot')) $('quest-ready-dot').hidden = !available;
     for (const [key, pending] of [['path', pathReady], ['daily', dailyReady]]) {
@@ -58,14 +59,18 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       return;
     }
     $('quest-path-count').textContent = `${snapshot.pathCompleted ?? snapshot.pathIndex} / ${snapshot.pathTotal}`;
-    const available = snapshot.daily.filter(q => q.claimable).length;
-    $('quest-daily-count').textContent = available ? `${available} 項待領獎` : `${snapshot.daily.filter(q => q.claimed).length} / ${snapshot.daily.length}`;
+    const available = [...snapshot.daily,...(snapshot.commissions||[])].filter(q => q.claimable).length;
+    $('quest-daily-count').textContent = available ? `${available} 項待領獎` : `${[...snapshot.daily,...(snapshot.commissions||[])].filter(q => q.claimed).length} / ${snapshot.daily.length+(snapshot.commissions||[]).length}`;
     $('quest-note').textContent = tab === 'path'
       ? '仙道任務依序開啟，領獎後接續下一項。觀看劇情請親自點擊，完整看完並儲存後即可領獎；已有紀錄也計入。'
-      : `今日 ${snapshot.date} · 台灣時間每日 00:00 重置，請在當日領取獎勵。`;
+      : `今日 ${snapshot.date} · 原有日常任務與隨機宗門委託；台灣時間每日 00:00 重置。`;
     const content = $('quest-content');
     content.classList.toggle('quest-daily-grid', tab === 'daily');
-    content.innerHTML = tab === 'daily' ? snapshot.daily.map(q => card(q, 'daily')).join('')
+    content.innerHTML = tab === 'daily' ?
+      '<div class="quest-commission-heading"><i class="fa-solid fa-scroll"></i><b>今日宗門委託</b><small>每日隨機兩項 · 額外獎勵 · 不影響原日常</small></div>' +
+      (snapshot.commissions||[]).map(q => card(q,'commission')).join('') +
+      '<div class="quest-commission-heading"><i class="fa-solid fa-calendar-check"></i><b>原有日常任務</b></div>' +
+      snapshot.daily.map(q => card(q, 'daily')).join('')
       : snapshot.path ? card(snapshot.path, 'path') : '<p class="quest-empty">仙道任務已全部完成。仙途無盡，日常修行仍可繼續。</p>';
     if (tab === 'path') content.innerHTML += (snapshot.pathTicketRewards || []).map(q => card(q, 'path')).join('');
   }
@@ -148,6 +153,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       scope: () => { window.switchToPage?.('page-settings'); window.openCurriculumStudio?.(); },
       solo: () => { void window.startQuizFlow?.(true); },
       meditation: () => { void window.openDailyMeditation?.(); },
+      enlightenment: () => { window.dispatchEvent(new CustomEvent('xiuxian:enlightenment-open')); },
       battle: () => { void window.startBattleMatchmaking?.(); },
       raid: () => { void window.openRaidHub?.(); },
       dongtian: () => { window.openDongtianPanel?.(); },
@@ -196,6 +202,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       if (!b || b.disabled || busy || !snapshot) return;
       const kind = b.dataset.questKind;
       const q = kind === 'path' ? [snapshot.path, ...(snapshot.pathTicketRewards || [])].find(q => q?.id === b.dataset.questId)
+        : kind === 'commission' ? (snapshot.commissions||[]).find(q=>q.id===b.dataset.questId)
         : snapshot.daily.find(q => q.id === b.dataset.questId);
       if (!q || q.id !== b.dataset.questId || q.claimed || q.locked) return;
       if (q.claimable) void claim(q, kind); else { dialog.close(); go(q.destination, q); }
@@ -207,7 +214,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     render();
   }
   mount();
-  ['xiuxian:user-data-ready', 'xiuxian:user-ready', 'xiuxian:quest-progress-updated', 'xiuxian:story-chapter-completed', 'xiuxian:dongtian-tutorial-completed'].forEach(name => window.addEventListener(name, invalidate));
+  ['xiuxian:user-data-ready', 'xiuxian:user-ready', 'xiuxian:quest-progress-updated', 'xiuxian:enlightenment-updated', 'xiuxian:story-chapter-completed', 'xiuxian:dongtian-tutorial-completed'].forEach(name => window.addEventListener(name, invalidate));
   window.addEventListener('material-system-updated', e => { if (!e.detail?.questReward) invalidate(); });
   window.addEventListener('xiuxian:stats-updated', e => { if (!applyingReward && e.detail?.source !== 'quest-reward') invalidate(); });
   document.addEventListener('visibilitychange', () => { if (!document.hidden) invalidate(); });

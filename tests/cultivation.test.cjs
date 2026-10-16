@@ -299,9 +299,9 @@ test('saved soul cultivation is applied by ordinary answer flow and persisted on
   h.context.currentUserData.nascentSoulGrowth={version:1,branches:{cultivation:5}};
   await Promise.all([h.answer(),h.answer()]);
   assert.equal(h.writes.length,1);
-  assert.equal(h.writes[0].data.stats.totalScore,75);
+  assert.equal(h.writes[0].data.stats.totalScore,73);
   assert.equal(h.writes[0].data.stats.nascentSoulSpirit,undefined);
-  assert.equal(h.nodes.get('xiuxian-score').textContent,'75 修為');
+  assert.equal(h.nodes.get('xiuxian-score').textContent,'73 修為');
 });
 
 test('saved disabled core suppresses soul cultivation in the real answer flow', async () => {

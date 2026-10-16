@@ -273,8 +273,8 @@ test('radial UI keeps current bonuses, ranks and costs without upper limits or e
   assert.match(markup, /ns-growth-resource">元嬰碎精 <strong aria-live="polite">0/);
   assert.match(markup, /data-ns-upgrade="attack"[^>]*disabled/);
   assert.match(markup, /data-ns-upgrade="coreDamage"[^>]*元嬰碎精不足[^>]*disabled/);
-  assert.match(markup, /ns-growth-value ">\+70</);
-  assert.match(markup, /ns-growth-value is-percent">\+12%</);
+  assert.match(markup, /ns-growth-value ">\+35</);
+  assert.match(markup, /ns-growth-value is-percent">\+6%</);
   assert.doesNotMatch(markup, /上限|ns-growth-cap/);
   assert.match(markup, /10 \/ 10/);
   assert.match(markup, /已圓滿/);
@@ -294,8 +294,8 @@ test('radial branch labels show the equipped core ability and its actual bonus',
     assert.doesNotMatch(markup,/金丹屬性|金丹機率|金丹傷害|上限/);
   }
   const trueDamage = renderGrowthMap('wugou',{core:10},20,false,2);
-  assert.match(trueDamage,/ns-growth-value ">\+71</);
-  assert.doesNotMatch(trueDamage,/\+100%|\+71%/);
+  assert.match(trueDamage,/ns-growth-value ">\+35</);
+  assert.doesNotMatch(trueDamage,/\+100%|\+35%/);
   for (const [type, rate, damage] of [['ningxin','爆擊率','爆擊傷害'],['sword','連擊率','連擊傷害']]) {
     const markup = renderGrowthMap(type,{coreChance:4,coreDamage:4});
     assert.match(markup,new RegExp('<\\/i>'+rate+'<'));
