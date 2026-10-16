@@ -751,11 +751,10 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     }
   }
 
-  let pendingQuestionWork = null;
-  function prefetchQuestion() {
+  async function prefetchQuestion() {
     // Await an already running generation instead of returning immediately and
     // briefly showing the arena while the exact next question is still loading.
-    if (state.questionLoading) return pendingQuestionWork || Promise.resolve();
+    if (state.questionLoading) return state.pendingQuestionWork || Promise.resolve();
     if (state.pendingQuestion || !state.scope || state.room?.status !== 'active') return Promise.resolve();
     state.questionLoading = true;
     const roomId = state.roomId;
@@ -779,8 +778,8 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
         if (token === state.battleSceneToken) state.questionLoading = false;
       }
     })();
-    pendingQuestionWork = work;
-    void work.finally(() => { if (pendingQuestionWork === work) pendingQuestionWork = null; });
+    state.pendingQuestionWork = work;
+    void work.finally(() => { if (state.pendingQuestionWork === work) state.pendingQuestionWork = null; });
     return work;
   }
 
