@@ -89,8 +89,8 @@ test('MathJax merror is turned into readable text; a typeset exception does not 
   assert.match(thrown.innerHTML, /tex2jax_ignore/);
   assert.match(thrown.innerHTML, /THROW/);
   const good = node('valid formula');
-  await context.window.quizMathSet(good, '$x^2
-  assert.equal(good.innerHTML, '$x^2$');
+  await context.window.quizMathSet(good, 'VALID');
+  assert.equal(good.innerHTML, 'VALID');
   assert.ok(errors.length >= 1);
 });
 
