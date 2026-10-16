@@ -407,3 +407,29 @@ body.raid-page-open #page-raid.active-page>#raid-result:not(.hidden){
 @media(prefers-reduced-motion:reduce){
  #page-raid .raid-study-card .raid-option{transition:none}
 }
+
+/* 伺服器公開招募名單：保留秘境原有墨金配色，不顯示私人邀請碼。 */
+#raid-hub .raid-public-recruitment{margin-top:12px;padding:12px 13px;border:1px solid rgba(220,183,108,.26);border-radius:13px;background:rgba(12,17,16,.79)}
+#raid-hub .raid-public-recruitment>header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:11px}
+#raid-hub .raid-public-recruitment>header>div{min-width:0}
+#raid-hub .raid-public-recruitment>header small{color:#a98a57;font-size:9px;letter-spacing:.15em}
+#raid-hub .raid-public-recruitment>header h3{margin:3px 0;color:#f0d6a5;font-size:17px}
+#raid-hub .raid-public-recruitment>header p{margin:3px 0 0;color:#a49b88;font-size:11px;line-height:1.5}
+#raid-hub .raid-public-recruitment [data-public-refresh]{min-height:34px;padding:0 13px;flex:none;font-size:11px}
+#raid-hub .raid-public-rooms{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+#raid-hub .raid-public-entry{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:9px;align-items:center;padding:12px;border:1px solid rgba(226,198,135,.2);border-radius:10px;background:rgba(255,255,255,.025)}
+#raid-hub .raid-public-entry-main{min-width:0;display:grid;gap:5px}
+#raid-hub .raid-public-entry-main strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#ecdec2;font-size:13px}
+#raid-hub .raid-public-entry-main strong small{font-size:10px;color:#afa58c}
+#raid-hub .raid-public-entry-main>span{color:#a6b7ae;font-size:11px;line-height:1.5}
+#raid-hub .raid-public-entry-main i{font-style:normal;color:#827a69}
+#raid-hub .raid-public-join{min-width:54px;min-height:36px;padding:5px 12px;border:1px solid rgba(232,194,117,.55);border-radius:9px;background:rgba(190,133,49,.19);color:#f2d797;font-size:12px;cursor:pointer}
+#raid-hub .raid-public-join:disabled{opacity:.48;cursor:not-allowed}
+#raid-hub .raid-public-join:not(:disabled):hover{background:rgba(190,133,49,.33)}
+#raid-hub .raid-public-empty{grid-column:1/-1;margin:0;padding:18px 10px;border:1px dashed rgba(214,184,116,.18);border-radius:10px;text-align:center;color:#a79b87;font-size:12px}
+.raid-lobby-visibility{display:inline-flex;align-items:center;min-height:34px;padding:5px 10px;border-radius:9px;background:rgba(119,178,151,.12);color:#afddba;font-size:11px;letter-spacing:.05em}
+@media(max-width:670px){
+ #raid-hub .raid-public-rooms{grid-template-columns:1fr}
+ #raid-hub .raid-public-recruitment{padding:10px}
+ #raid-hub .raid-public-entry{padding:9px}
+}
