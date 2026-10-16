@@ -72,7 +72,7 @@
     title: '完成新手劇情 · 問道靈根',
     description: '準備好後，點「前往」認識青雲宗並完整觀看新手劇情；登入與選擇性別不會自動播放。' },
     ...LEGACY_PATH.flatMap(q => [q, ...(STORY_AFTER[q.id] || [])])]
-    .map(q => ({ ...q, reward: { ...q.reward, drawTickets: PATH_DRAW_TICKETS[q.id] || 0 } }));
+    .map(q => ({ ...q, reward: { ...q.reward, drawTickets: PATH_DRAW_TICKETS[q.id] || 1 } }));
   const DAILY = [
     quest('daily-solo-three', '溫故知新', '今日問道答對 3 題。', 'solo', 3, 40, 1, 'solo'),
     quest('daily-solo-ten', '勤學不輟', '今日問道答對 10 題。', 'solo', 10, 80, 1, 'solo'),
