@@ -28,15 +28,20 @@ async function questTransaction(db, uid, request = null, now = new Date()) {
     }
     let awarded = false, reward = null;
     if (request) {
-      if (!['path', 'daily', 'commission'].includes(request.kind)) throw error('任務類型無效', 400);
-      if (request.kind !== 'path' && request.date !== date) throw error('今日委託已跨日，請重新查看今日任務');
-      const list = request.kind === 'path' ? rules.PATH : request.kind === 'daily' ? rules.DAILY : rules.COMMISSION_POOL;
+      if (!['path', 'daily', 'commission', 'weekly'].includes(request.kind)) throw error('任務類型無效', 400);
+      if (['daily','commission'].includes(request.kind) && request.date !== date)
+        throw error('今日委託已跨日，請重新查看今日任務');
+      if (request.kind === 'weekly' && request.weeklyKey !== rules.weekKey(date))
+        throw error('每週目標已跨週，請同步最新任務');
+      const list = request.kind === 'path' ? rules.PATH : request.kind === 'daily' ? rules.DAILY
+        : request.kind === 'weekly' ? rules.WEEKLY : rules.COMMISSION_POOL;
       const index = list.findIndex(q => q.id === request.id);
       if (index < 0 || (request.kind === 'commission' && !state.commissionIds.includes(request.id)))
         throw error('找不到今日指定的委託', 400);
       const duplicate = request.kind === 'path' ? state.pathClaimed.includes(request.id)
         : request.kind === 'commission' ? state.commissionClaimed.includes(request.id)
-        : state.dailyClaimed.includes(request.id);
+        : request.kind === 'weekly' && state.weeklyKey === rules.weekKey(date)
+          ? state.weeklyClaimed.includes(request.id) : state.dailyClaimed.includes(request.id);
       const ticketOnly = request.kind === 'path' && duplicate && list[index].reward.drawTickets > 0 &&
         (state.pathTicketAmounts[request.id] || 0) < list[index].reward.drawTickets;
       if (!duplicate || ticketOnly) {
@@ -44,6 +49,7 @@ async function questTransaction(db, uid, request = null, now = new Date()) {
         const q = ticketOnly ? snapshot.pathTicketRewards.find(q => q.id === request.id)
           : request.kind === 'path' ? snapshot.path
           : request.kind === 'commission' ? snapshot.commissions.find(q => q.id === request.id)
+          : request.kind === 'weekly' ? snapshot.weekly.find(q => q.id === request.id)
           : snapshot.daily.find(q => q.id === request.id);
         if (!q || q.id !== request.id || !q.claimable) throw error('任務尚未完成，請先達成目標');
         reward = q.reward;
@@ -66,7 +72,11 @@ async function questTransaction(db, uid, request = null, now = new Date()) {
           if (!duplicate) state.pathClaimed.push(request.id);
           Object.assign(state, rules.normalizeState(state, date));
         } else if (request.kind === 'commission') state.commissionClaimed.push(request.id);
-        else state.dailyClaimed.push(request.id);
+        else if (request.kind === 'weekly') {
+          if (state.weeklyKey !== rules.weekKey(date)) state.weeklyClaimed = [];
+          state.weeklyKey = rules.weekKey(date);
+          state.weeklyClaimed.push(request.id);
+        } else state.dailyClaimed.push(request.id);
         tx.update(userRef, patch);
         stateChanged = true;
         awarded = true;
@@ -89,7 +99,8 @@ function createHandler({ resolveA = () => playerRepository.resolve(), claim = fa
       let identity;
       try { identity = await a.auth.verifyIdToken(bearer[1], true); } catch (_) { throw error('登入狀態已失效，請重新登入', 401); }
       if (!identity?.uid || identity.aud !== PROJECT_IDS.A || identity.iss !== 'https://securetoken.google.com/' + PROJECT_IDS.A) throw error('登入身分驗證失敗', 401);
-      const request = claim ? { kind: req.body?.kind, id: req.body?.id, date: req.body?.date } : null;
+      const request = claim ? { kind: req.body?.kind, id: req.body?.id,
+        date: req.body?.date, weeklyKey: req.body?.weeklyKey } : null;
       return res.json(await questTransaction(a.db, identity.uid, request, now()));
     } catch (e) {
       if (!e.status) logger.error('[Quests]', e.code || e.message);

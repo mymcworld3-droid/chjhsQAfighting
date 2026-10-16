@@ -23,9 +23,11 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     const pathReady = !!current && (!!ready(current.path) || !!current.pathTicketRewards?.some(ready));
     const dailyReady = !!current && current.date === window.XianxiaQuestRules.dateKey() &&
       [...current.daily,...(current.commissions||[])].some(ready);
-    const available = pathReady || dailyReady;
+    const weeklyReady = !!current && current.weeklyKey === window.XianxiaQuestRules.weekKey()
+      && (current.weekly||[]).some(ready);
+    const available = pathReady || dailyReady || weeklyReady;
     if ($('quest-ready-dot')) $('quest-ready-dot').hidden = !available;
-    for (const [key, pending] of [['path', pathReady], ['daily', dailyReady]]) {
+    for (const [key, pending] of [['path', pathReady], ['daily', dailyReady], ['weekly', weeklyReady]]) {
       if ($('quest-' + key + '-dot')) $('quest-' + key + '-dot').hidden = !pending;
       const button = $('quest-tab-' + key);
       if (pending) button?.setAttribute('aria-description', '有任務獎勵可領取');
@@ -47,7 +49,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
   function render() {
     syncQuestIndicator();
     if (!$('quest-content')) return;
-    ['path', 'daily'].forEach(key => {
+    ['path', 'daily', 'weekly'].forEach(key => {
       const button = $('quest-tab-' + key);
       button.setAttribute('aria-selected', String(tab === key));
       button.tabIndex = tab === key ? 0 : -1;
@@ -61,16 +63,23 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     $('quest-path-count').textContent = `${snapshot.pathCompleted ?? snapshot.pathIndex} / ${snapshot.pathTotal}`;
     const available = [...snapshot.daily,...(snapshot.commissions||[])].filter(q => q.claimable).length;
     $('quest-daily-count').textContent = available ? `${available} 項待領獎` : `${[...snapshot.daily,...(snapshot.commissions||[])].filter(q => q.claimed).length} / ${snapshot.daily.length+(snapshot.commissions||[]).length}`;
+    const weekly = snapshot.weekly || [];
+    const weeklyReadyCount = weekly.filter(q=>q.claimable).length;
+    $('quest-weekly-count').textContent = weeklyReadyCount ? `${weeklyReadyCount} 項待領`
+      : `${weekly.filter(q=>q.claimed).length} / ${weekly.length}`;
     $('quest-note').textContent = tab === 'path'
       ? '仙道任務依序開啟，領獎後接續下一項。觀看劇情請親自點擊，完整看完並儲存後即可領獎；已有紀錄也計入。'
-      : `今日 ${snapshot.date} · 原有日常任務與隨機宗門委託；台灣時間每日 00:00 重置。`;
+      : tab === 'weekly'
+        ? `本週 ${snapshot.weeklyKey} 起（台灣時間週一 00:00 重置）· 7 天累積，不需要天天登入。請於週末前領取已完成獎勵。`
+        : `今日 ${snapshot.date} · 原有日常任務與隨機宗門委託；台灣時間每日 00:00 重置。`;
     const content = $('quest-content');
-    content.classList.toggle('quest-daily-grid', tab === 'daily');
+    content.classList.toggle('quest-daily-grid', tab === 'daily' || tab === 'weekly');
     content.innerHTML = tab === 'daily' ?
       '<div class="quest-commission-heading"><i class="fa-solid fa-scroll"></i><b>今日宗門委託</b><small>每日隨機兩項 · 額外獎勵 · 不影響原日常</small></div>' +
       (snapshot.commissions||[]).map(q => card(q,'commission')).join('') +
       '<div class="quest-commission-heading"><i class="fa-solid fa-calendar-check"></i><b>原有日常任務</b></div>' +
       snapshot.daily.map(q => card(q, 'daily')).join('')
+      : tab === 'weekly' ? (snapshot.weekly||[]).map(q => card(q,'weekly')).join('')
       : snapshot.path ? card(snapshot.path, 'path') : '<p class="quest-empty">仙道任務已全部完成。仙途無盡，日常修行仍可繼續。</p>';
     if (tab === 'path') content.innerHTML += (snapshot.pathTicketRewards || []).map(q => card(q, 'path')).join('');
   }
@@ -122,7 +131,8 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     if (!uid) return;
     busy = true; render(); status('正在領取獎勵…');
     try {
-      const result = await request('/api/quests/claim', { kind, id: q.id, date: snapshot.date });
+      const result = await request('/api/quests/claim', { kind, id: q.id,
+        date: snapshot.date, weeklyKey:snapshot.weeklyKey });
       if (getMainUser()?.uid !== uid) return;
       snapshot = result.quests;
       const data = window.getCurrentUserData?.();
@@ -176,7 +186,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     const dialog = document.createElement('dialog'); dialog.id = 'quest-dialog'; dialog.className = 'quest-dialog'; dialog.setAttribute('role', 'dialog'); dialog.setAttribute('aria-modal', 'true'); dialog.setAttribute('aria-labelledby', 'quest-title');
     const panel = document.createElement('section'); panel.id = 'quest-panel'; panel.className = 'quest-panel'; panel.setAttribute('aria-label', '修行任務');
     panel.innerHTML = `<header class="quest-heading"><div><small>宗門手札</small><h3 id="quest-title">修行任務</h3></div><div class="quest-heading-actions"><button type="button" id="quest-refresh" aria-label="重新同步任務">重新同步</button><button type="button" id="quest-close" aria-label="關閉任務">✕</button></div></header>
-      <div class="quest-tabs" role="tablist" aria-label="任務類別"><button id="quest-tab-path" type="button" role="tab" aria-controls="quest-content" aria-selected="true">仙道 <span id="quest-path-count"></span><span id="quest-path-dot" class="quest-tab-dot" hidden aria-hidden="true"></span></button><button id="quest-tab-daily" type="button" role="tab" aria-controls="quest-content" aria-selected="false" tabindex="-1">日常 <span id="quest-daily-count"></span><span id="quest-daily-dot" class="quest-tab-dot" hidden aria-hidden="true"></span></button></div>
+      <div class="quest-tabs" role="tablist" aria-label="任務類別"><button id="quest-tab-path" type="button" role="tab" aria-controls="quest-content" aria-selected="true">仙道 <span id="quest-path-count"></span><span id="quest-path-dot" class="quest-tab-dot" hidden aria-hidden="true"></span></button><button id="quest-tab-daily" type="button" role="tab" aria-controls="quest-content" aria-selected="false" tabindex="-1">日常 <span id="quest-daily-count"></span><span id="quest-daily-dot" class="quest-tab-dot" hidden aria-hidden="true"></span></button><button id="quest-tab-weekly" type="button" role="tab" aria-controls="quest-content" aria-selected="false" tabindex="-1">每週 <span id="quest-weekly-count"></span><span id="quest-weekly-dot" class="quest-tab-dot" hidden aria-hidden="true"></span></button></div>
       <div class="quest-scroll" tabindex="0" role="region" aria-label="任務清單，可捲動"><p id="quest-note" class="quest-note"></p><div id="quest-content" role="tabpanel" aria-labelledby="quest-tab-path"></div><p id="quest-status" role="status" aria-live="polite"></p></div>`;
     dialog.append(panel); document.body.append(dialog);
     entry.addEventListener('click', () => {
@@ -190,10 +200,12 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     const selectTab = key => {
       tab = key; render(); panel.querySelector('.quest-scroll').scrollTop = 0; void refresh();
     };
-    ['path', 'daily'].forEach(key => $('quest-tab-' + key).addEventListener('click', () => selectTab(key)));
+    ['path', 'daily', 'weekly'].forEach(key => $('quest-tab-' + key).addEventListener('click', () => selectTab(key)));
     panel.querySelector('.quest-tabs').addEventListener('keydown', e => {
       if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
-      e.preventDefault(); selectTab(e.key === 'Home' ? 'path' : e.key === 'End' ? 'daily' : tab === 'path' ? 'daily' : 'path');
+      const tabs=['path','daily','weekly'],index=tabs.indexOf(tab);
+      e.preventDefault(); selectTab(e.key === 'Home' ? tabs[0] : e.key === 'End' ? tabs.at(-1)
+        : tabs[(index+(e.key==='ArrowRight'?1:2))%3]);
       $('quest-tab-' + tab).focus();
     });
     $('quest-refresh').addEventListener('click', () => { void refresh(true); });
@@ -203,6 +215,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       const kind = b.dataset.questKind;
       const q = kind === 'path' ? [snapshot.path, ...(snapshot.pathTicketRewards || [])].find(q => q?.id === b.dataset.questId)
         : kind === 'commission' ? (snapshot.commissions||[]).find(q=>q.id===b.dataset.questId)
+        : kind === 'weekly' ? (snapshot.weekly||[]).find(q=>q.id===b.dataset.questId)
         : snapshot.daily.find(q => q.id === b.dataset.questId);
       if (!q || q.id !== b.dataset.questId || q.claimed || q.locked) return;
       if (q.claimable) void claim(q, kind); else { dialog.close(); go(q.destination, q); }
@@ -219,7 +232,8 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
   window.addEventListener('xiuxian:stats-updated', e => { if (!applyingReward && e.detail?.source !== 'quest-reward') invalidate(); });
   document.addEventListener('visibilitychange', () => { if (!document.hidden) invalidate(); });
   // Only invalidate at a date change, without periodic API polling.
-  setInterval(() => { if (snapshot && snapshot.date !== window.XianxiaQuestRules.dateKey()) invalidate(); }, 60000);
+  setInterval(() => { if (snapshot && (snapshot.date !== window.XianxiaQuestRules.dateKey() ||
+      snapshot.weeklyKey !== window.XianxiaQuestRules.weekKey())) invalidate(); }, 60000);
   window.refreshCultivationQuests = () => refresh(true);
   void refresh();
 })();

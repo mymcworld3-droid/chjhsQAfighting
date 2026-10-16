@@ -3298,6 +3298,8 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
                 savedStats.rankLevel = calculateRankFromScore(savedStats.totalScore);
                 const patch = { stats: savedStats };
                 if (isCorrect) patch.questProgress = window.XianxiaQuestRules.recordEvent(remote.questProgress, 'solo');
+                if (isCorrect && verifiedLearning.recovery)
+                  patch.questProgress = window.XianxiaQuestRules.recordEvent(patch.questProgress, 'correction');
                 if (trialAnswerId) patch.arrivalTrialAnswerV1 = { id: trialAnswerId, completedAtMs: Date.now() };
                 tx.update(ref, patch);
                 return savedStats;
