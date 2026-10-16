@@ -5,7 +5,7 @@ import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/
 
 (function () {
   'use strict';
-  const EVENTS = new Set(['question_started', 'answer_completed', 'social_participated', 'question_load_failed']);
+  const EVENTS = new Set(['question_started', 'answer_completed', 'social_participated', 'question_load_failed', 'app_load_success', 'app_load_failed']);
   const MODES = new Set(['solo', 'raid', 'duel', 'meditation', 'other']);
   const once = new Set();
   let initialVisit = null;
@@ -56,6 +56,12 @@ import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/
     }
   }
   installAuthObserver();
+  window.addEventListener('xiuxian:features-ready', () => {
+    void window.trackPlayerAnalytics?.('app_load_success', { mode:'other' });
+  });
+  window.addEventListener('xiuxian:features-failed', () => {
+    void window.trackPlayerAnalytics?.('app_load_failed', { mode:'other' });
+  });
 
   window.newPlayerAnalyticsEventId = key;
   window.trackPlayerAnalytics = async function (type, options = {}) {
