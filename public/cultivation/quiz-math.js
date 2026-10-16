@@ -65,7 +65,9 @@
         try {
           await mj.typesetPromise(live);
           for (const entry of backups) {
-            const broken = entry.node.querySelector?.('mjx-merror, .mjx-merror, [data-mjx-error]');
+            const broken = entry.node.querySelector?.('mjx-merror, .mjx-merror, [data-mjx-error]') ||
+              (/(?:Math input error|TeX parse error|MathJax internal error)/i.test(entry.node.textContent || '') &&
+                entry.node.querySelector?.('mjx-container'));
             if (!entry.node.isConnected || !broken) continue;
             // Mark as ignored so a future MathJax pass cannot re-trigger
             // the same parse failure. Never insert unescaped source text.
