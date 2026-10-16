@@ -12,6 +12,7 @@ const registerFirebaseProjectAuthApi = require('./firebase-project-auth-api.cjs'
 const registerAutoMigrationApi = require('./firebase-auto-migration-api.cjs');
 const registerPlayerProvisionApi = require('./firebase-player-provision-api.cjs');
 const registerAdminAccountApi = require('./admin-account-api.cjs');
+const registerPlayerAnalyticsApi = require('./player-analytics-api.cjs');
 const registerAdminArtifactDeleteApi = require('./admin-artifact-delete-api.cjs');
 const { registerItemImageApi } = require('./item-image-api.cjs');
 const registerRaidRewardApi = require('./raid-reward-api.cjs');
@@ -46,6 +47,7 @@ registerFirebaseProjectAuthApi(app);
 const migrationController = registerAutoMigrationApi(app);
 registerPlayerProvisionApi(app, { migrationController });
 registerAdminAccountApi(app);
+registerPlayerAnalyticsApi(app);
 registerAdminArtifactDeleteApi(app);
 registerItemImageApi(app);
 registerRaidRoomApi(app);
