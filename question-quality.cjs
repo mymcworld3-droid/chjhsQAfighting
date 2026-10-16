@@ -7,7 +7,8 @@ const { questionIntegrityIssue } = require('./question-answer-integrity.cjs');
 function questionQualityIssue({ q, correct, wrong, exp } = {}) {
   // Partial legacy checks still report their specific problems; full generated
   // questions receive the stronger answer/explanation consistency verification.
-  if (correct !== undefined || wrong !== undefined) {
+  if (typeof correct === 'string' && Array.isArray(wrong) && wrong.length === 3 &&
+      typeof exp === 'string') {
     const concreteIssue = questionIntegrityIssue({ q, correct, wrong, exp });
     if (concreteIssue) return concreteIssue;
   }
