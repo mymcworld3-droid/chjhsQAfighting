@@ -151,7 +151,7 @@ function activeMembers(room) {
 function roomUsable(room) {
   if (!room || room.status !== 'waiting' || Number(room.version) !== RAID_ROOM_VERSION) return false;
   if (now() - finite(room.createdAtMs) > ROOM_TTL_MS) return false;
-  return activeMembers(room).length < MAX_MEMBERS;
+  return Object.keys(membersOf(room)).length < MAX_MEMBERS && activeMembers(room).length < MAX_MEMBERS;
 }
 function safeRoomId(value) {
   const roomId = String(value || '').trim();
@@ -200,7 +200,8 @@ function recruitmentCard(roomId, room) {
   };
 }
 async function listPublicRooms(db) {
-  const snap=await db.collection(COLLECTION).where('status','==','waiting').limit(120).get();
+  const snap=await db.collection(COLLECTION).where('status','==','waiting')
+    .where('visibility','==','public').limit(120).get();
   return snap.docs.map(row=>recruitmentCard(row.id,row.data())).filter(Boolean)
     .sort((a,b)=>b.playerCount-a.playerCount || b.createdAtMs-a.createdAtMs).slice(0,24);
 }
