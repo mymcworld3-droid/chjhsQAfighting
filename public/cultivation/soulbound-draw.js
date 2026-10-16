@@ -100,7 +100,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
   function probabilityMarkup(rank, version = pool.VERSION) {
     return `<details class="sb-details sb-probability"><summary>抽取機率與保底</summary>
       <p>獎池版本 ${esc(version)}。完整武器機率 2%，其餘 98% 獲得 20–40 個煉器碎片；
-      連續 49 抽未出武器，第 50 抽必出。八種器型共用常駐池，
+      連續 ${pool.PITY - 1} 抽未出武器，第 ${pool.PITY} 抽必出。八種器型共用常駐池，
       每種器型佔完整武器結果的 12.5%。${rank === 7 ? '真仙品質不再升階。' : '抽中武器時，80% 為目前品質、20% 高一階。'}
       抽取不指定器型。</p></details>`;
   }
@@ -219,7 +219,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     const pending = s.pending, row = pending?.results[Math.min(selected, pending.results.length - 1)], item = row?.itemId && getArtifactById(row.itemId);
     const rank = s.rank, candidates = pool.candidates(Math.max(0, rank));
     $('soulbound-content').innerHTML = `<div class="sb-summary"><div><small>靈石餘額</small><strong>${s.balance.toLocaleString('zh-TW')}</strong></div><div><small>煉器碎片</small><strong>${Number(s.fragments || 0).toLocaleString('zh-TW')}</strong></div><div><small>目前本命</small><b>${esc(current?.name || '尚未調御')}</b><span>${esc(current?.realm || '選擇適合自己的器型')}</span></div><div><small>距離武器保底</small><b>${s.untilPity} 抽</b><span>累計 ${s.draws} 抽 · 出武器後重計</span></div></div>
-      <div class="sb-pity"><progress value="${Number(s.misses || 0)}" max="50" aria-label="本輪未出武器 ${Number(s.misses || 0)} 抽"></progress><span>八種武器同池 · 至多 50 抽必得一件完整武器</span></div>
+      <div class="sb-pity"><progress value="${Number(s.misses || 0)}" max="${pool.PITY}" aria-label="本輪未出武器 ${Number(s.misses || 0)} 抽"></progress><span>八種武器同池 · 至多 ${pool.PITY} 抽必得一件完整武器</span></div>
       ${operation && !pending ? '<button type="button" data-sb-retry class="sb-primary">重試上次未確認的操作</button><p class="sb-note">重試只確認原結果，不會重新抽取或重複扣款。</p>' : ''}
       ${row ? `<section class="sb-results"><div class="sb-result-heading"><h3>${pending.results.length} 抽結果已保存</h3><span>本批 ${pending.payment === 'ticket' ? pending.ticketsSpent + ' 張抽獎券' : pending.cost + ' 靈石'}</span></div>
         <div class="sb-result-tabs" role="group" aria-label="查看每抽結果">${pending.results.map((r, i) => {
@@ -227,8 +227,8 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
           return `<button type="button" data-sb-select="${i}" aria-pressed="${i === selected}" style="--sb-color:${r.realm ? artifactRealmColor(r.realm) : '#f5cf83'}">${esc(a?.name || (r.itemId ? r.itemId : '煉器碎片 ×' + r.fragments))}<small>${a ? esc(r.realm) : '碎片'}${r.pity ? ' · 武器保底' : r.higher ? ' · 高階' : ''}</small></button>`;
         }).join('')}</div><div class="sb-featured" style="--sb-color:${item ? artifactRealmColor(item.realm) : '#f5cf83'}">${item ? image(item) : '<span class="sb-fragment-art" aria-hidden="true">✦</span>'}<div><small>${item ? esc(item.realm) : '煉器資源'}</small><h3>${item ? esc(item.name) : '煉器碎片 ×' + Number(row.fragments || 0)}</h3><p>${item ? esc(effectText(item)) : '已加入碎片餘額，可在八方煉器陣使用。'}</p></div></div>${item ? comparison(item) : ''}
         <div class="sb-actions">${item ? `<button type="button" class="sb-primary" data-sb-equip="${esc(item.id)}" ${busy || operation || !Number(s.inventory[item.id]) ? 'disabled' : ''}>調御此器</button>` : ''}<button type="button" data-sb-vault ${busy || operation ? 'disabled' : ''}>確認收入</button><button type="button" data-sb-again ${busy || operation ? 'disabled' : ''}>再次抽取</button></div></section>` : ''}
-      <div class="sb-lobby">${showcaseMarkup(candidates)}<section class="sb-draw-controls"><h3>締結本命</h3><p>八種本命法器一起抽；至多 50 抽必得其中一件完整武器。</p>
-        ${s.draws === 0 ? '<p class="sb-first">首抽 250 靈石；單抽與五連共用 50 抽保底，結果先保存再演出。</p>' : ''}
+      <div class="sb-lobby">${showcaseMarkup(candidates)}<section class="sb-draw-controls"><h3>締結本命</h3><p>八種本命法器一起抽；至多 ${pool.PITY} 抽必得其中一件完整武器。</p>
+        ${s.draws === 0 ? `<p class="sb-first">首抽 250 靈石；單抽與五連共用 ${pool.PITY} 抽保底，結果先保存再演出。</p>` : ''}
         <div class="sb-actions"><button type="button" data-sb-draw="1" class="sb-primary" ${busy || operation || pending || rank < 0 || s.balance < s.prices?.single ? 'disabled' : ''}>單抽 · ${s.prices?.single ?? '—'} 靈石</button><button type="button" data-sb-draw="5" ${busy || operation || pending || rank < 0 || s.balance < s.prices?.five ? 'disabled' : ''}>五連抽 · ${s.prices?.five ?? '—'} 靈石</button></div>
         <p class="sb-first">本命法器抽獎券：${Number(s.drawTickets || 0)} 張 · 閉關共修可獲得</p>
         <div class="sb-actions"><button type="button" data-sb-draw="1" data-sb-payment="ticket" ${busy || operation || pending || rank < 0 || Number(s.drawTickets || 0) < 1 ? 'disabled' : ''}>用券單抽 · 1 張</button><button type="button" data-sb-draw="5" data-sb-payment="ticket" ${busy || operation || pending || rank < 0 || Number(s.drawTickets || 0) < 5 ? 'disabled' : ''}>用券五連 · 5 張</button></div>

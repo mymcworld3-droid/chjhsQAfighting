@@ -40,7 +40,7 @@ test('remote catalog replacement cannot remove or override the permanent pool', 
 test('first five-pull costs 2250 and grants fragments without changing legacy equipment', async () => {
   assert.equal(pool.cost(0,0,1),250);assert.equal(pool.cost(0,0,5),2250);assert.equal(pool.cost(0,1,5),2500);
   const db=fakeDb(sample()),r=await transaction(db,'u1','draw',request(1,5),low);
-  assert.equal(r.balance,7750);assert.equal(r.fragments,150);assert.equal(r.untilPity,45);
+  assert.equal(r.balance,7750);assert.equal(r.fragments,150);assert.equal(r.untilPity,15);
   assert.deepEqual(r.result.results.map(x=>x.kind),Array(5).fill('fragments'));
   assert.equal(r.inventory['void-sword'],1);assert.equal(Object.hasOwn(r.inventory,'undefined'),false);
   assert.equal(db.docs.get('users/u1').artifactSystem.equipped['本命法寶'],'void-sword');
@@ -62,13 +62,13 @@ test('different simultaneous IDs cannot replace an unseen batch', async () => {
   assert.match(r.find(x => x.status === 'rejected').reason.message, /上一批/);
   assert.equal(db.docs.get('users/u1').stats.gold, 9750);
 });
-test('single and five pulls share 50-pull pity and a weapon resets the counter within a batch', async () => {
- const db=fakeDb(sample(),{draws:100,misses:48,lots:{},poolVersion:pool.VERSION});
+test('single and five pulls share 20-pull pity and a weapon resets the counter within a batch', async () => {
+ const db=fakeDb(sample(),{draws:100,misses:18,lots:{},poolVersion:pool.VERSION});
  const r=await transaction(db,'u1','draw',request(1,5),low);
  assert.deepEqual(r.result.results.map(x=>x.kind),['fragments','weapon','fragments','fragments','fragments']);
- assert.equal(r.result.results[1].pity,true);assert.equal(r.misses,3);assert.equal(r.untilPity,47);assert.equal(r.draws,105);
- const earlyDb=fakeDb(sample(),{draws:100,misses:30,poolVersion:pool.VERSION});
- const early=await transaction(earlyDb,'u1','draw',request(2),()=>0);assert.equal(early.result.results[0].kind,'weapon');assert.equal(early.untilPity,50);
+ assert.equal(r.result.results[1].pity,true);assert.equal(r.misses,3);assert.equal(r.untilPity,17);assert.equal(r.draws,105);
+ const earlyDb=fakeDb(sample(),{draws:100,misses:10,poolVersion:pool.VERSION});
+ const early=await transaction(earlyDb,'u1','draw',request(2),()=>0);assert.equal(early.result.results[0].kind,'weapon');assert.equal(early.untilPity,20);
 });
 
 test('2% weapon boundary, fragment bounds and guarantee include all eight common weapons', () => {
@@ -77,24 +77,24 @@ test('2% weapon boundary, fragment bounds and guarantee include all eight common
  assert.equal(pool.roll(0,0,sequence(.02,0)).fragments,20);
  assert.equal(pool.roll(0,0,sequence(.5,.999999)).fragments,40);
  for(let i=0;i<8;i++){
-  const row=pool.roll(7,49,()=>i/8);assert.equal(row.kind,'weapon');assert.equal(row.pity,true);assert.equal(row.realm,'真仙');
+  const row=pool.roll(7,19,()=>i/8);assert.equal(row.kind,'weapon');assert.equal(row.pity,true);assert.equal(row.realm,'真仙');
   assert.equal(pool.get(row.itemId).archetype,pool.TYPES[i].id);
  }
 });
 
-test('fifty consecutive non-weapon rolls cannot pass without awarding a common-pool weapon', async () => {
+test('twenty consecutive non-weapon rolls cannot pass without awarding a common-pool weapon', async () => {
   const player=sample();player.stats.gold=100000;const db=fakeDb(player);
-  for(let i=1;i<=50;i++){
+  for(let i=1;i<=20;i++){
     const result=await transaction(db,'u1','draw',request(i),low);
-    assert.equal(result.result.results[0].kind,i===50?'weapon':'fragments');
-    if(i<50)assert.equal(result.untilPity,50-i);else{assert.equal(result.untilPity,50);assert.equal(result.result.results[0].pity,true);}
+    assert.equal(result.result.results[0].kind,i===20?'weapon':'fragments');
+    if(i<20)assert.equal(result.untilPity,20-i);else{assert.equal(result.untilPity,20);assert.equal(result.result.results[0].pity,true);}
     await ack(db,result);
   }
-  assert.equal(db.docs.get('users/u1').forgeFragments,49*30);
+  assert.equal(db.docs.get('users/u1').forgeFragments,19*30);
 });
 
 test('normal and guaranteed draws use all eight weapons regardless of a requested target', async () => {
-  for (const misses of [0, 49]) for (let i = 0; i < pool.TYPES.length; i++) {
+  for (const misses of [0, 19]) for (let i = 0; i < pool.TYPES.length; i++) {
     const db = fakeDb(sample(), { draws: 100, misses, lots: {}, poolVersion: pool.VERSION });
     const values = [...(misses === 0 ? [0] : []), .9, (i + .5) / pool.TYPES.length];
     const result = await transaction(db, 'u1', 'draw', {
@@ -102,8 +102,8 @@ test('normal and guaranteed draws use all eight weapons regardless of a requeste
     }, () => { assert.ok(values.length, 'unexpected random call'); return values.shift(); });
     const row = result.result.results[0];
     assert.equal(pool.get(row.itemId).archetype, pool.TYPES[i].id);
-    assert.equal(row.pity, misses === 49);
-    assert.equal(result.untilPity, 50);
+    assert.equal(row.pity, misses === 19);
+    assert.equal(result.untilPity, 20);
     assert.equal(db.docs.get('users/u1').artifactSystem.inventory[row.itemId], 1);
   }
 });
@@ -139,8 +139,8 @@ test('common-pool presentation rotates three visible weapons without selecting a
 
 test('promotion preserves the consecutive counter and server verifies immortal cohort seats', async () => {
  const user=sample();user.stats.totalScore=1;user.trainingAccess={version:1,highestRealmScore:68};
- const r=await transaction(fakeDb(user,{draws:49,misses:49,poolVersion:pool.VERSION}),'u1','draw',request(1),()=>0);
- assert.equal(r.realm,'元嬰');assert.equal(r.result.results[0].realm,'化神');assert.equal(r.untilPity,50);
+ const r=await transaction(fakeDb(user,{draws:19,misses:19,poolVersion:pool.VERSION}),'u1','draw',request(1),()=>0);
+ assert.equal(r.realm,'元嬰');assert.equal(r.result.results[0].realm,'化神');assert.equal(r.untilPity,20);
  const high=sample();high.stats.totalScore=1868;high.profile={educationLevel:'國中'};
  const db=fakeDb(high);assert.equal((await transaction(db,'u1')).realm,'半仙');
  db.docs.set('worldImmortals/elementary__ru-xian',{uid:'u1',cohort:'elementary'});assert.equal((await transaction(db,'u1')).realm,'半仙');
@@ -180,9 +180,48 @@ test('legacy draw history and unfinished weapon receipts survive migration witho
  const result={requestId:'old-draw-request-000001',poolVersion:'soulbound-v1',cost:500,results:[{itemId:pool.ITEMS[0].id,realm:'金丹',paid:500,ordinal:125}]};
  const db=fakeDb(sample(),{draws:125,pending:'old-receipt',lots:{}});
  db.docs.set('soulboundDrawReceipts/old-receipt',{uid:'u1',action:'draw',count:1,result});
- const view=await transaction(db,'u1');assert.deepEqual(view.pending,result);assert.equal(view.draws,125);assert.equal(view.misses,0);assert.equal(view.untilPity,50);
+ const view=await transaction(db,'u1');assert.deepEqual(view.pending,result);assert.equal(view.draws,125);assert.equal(view.misses,0);assert.equal(view.untilPity,20);
  await assert.rejects(transaction(db,'u1','draw',request(1)),/上一批/);
  await transaction(db,'u1','ack',{requestId:result.requestId});const next=await transaction(db,'u1','draw',request(1),low);assert.equal(next.misses,1);
+});
+
+test('the former fifty-pull pool retains miss progress and guarantees the next draw once nineteen are reached', async () => {
+ assert.equal(pool.PITY,20);
+ for(const misses of [0,5,18,19,20,35,49]) {
+  for(const payment of ['gold','ticket']) {
+   const user=sample();user.soulboundDrawTickets=1;
+   const db=fakeDb(user,{draws:100,misses,poolVersion:'soulbound-v2-fragments50'});
+   const view=await transaction(db,'u1');
+   assert.equal(view.draws,100);assert.equal(view.misses,Math.min(19,misses));
+   assert.equal(view.untilPity,Math.max(1,20-misses));
+   assert.equal(db.docs.get('soulboundDrawStates/u1').poolVersion,pool.VERSION);
+   const result=await transaction(db,'u1','draw',{...request(950),payment},low);
+   assert.equal(result.result.results[0].kind,misses>=19?'weapon':'fragments');
+   assert.equal(result.result.results[0].pity,misses>=19);
+   assert.equal(result.untilPity,misses>=19?20:19-misses);
+   assert.equal(result.draws,101);
+   assert.equal(result.balance,payment==='ticket'?10000:9500);
+  }
+ }
+});
+
+test('old fragment receipts replay unchanged and pending batches must be acknowledged before the new guarantee', async () => {
+ const {requestKey}=require('../soulbound-draw-api.cjs').__test;
+ const body={...request(951),poolVersion:'soulbound-v2-fragments50'};
+ const key=requestKey('u1',body.requestId),saved={requestId:body.requestId,poolVersion:body.poolVersion,cost:500,
+  payment:'gold',ticketsSpent:0,results:[{kind:'fragments',fragments:30,pity:false,paid:500,ordinal:36}]};
+ const user=sample();user.stats.gold=9500;user.forgeFragments=30;
+ const db=fakeDb(user,{draws:36,misses:36,pending:key,poolVersion:body.poolVersion});
+ db.docs.set('soulboundDrawReceipts/'+key,{uid:'u1',action:'draw',count:1,result:saved});
+ const repeat=await transaction(db,'u1','draw',body,()=>assert.fail('saved receipts must not reroll'));
+ assert.deepEqual(repeat.result,saved);assert.deepEqual(repeat.pending,saved);
+ assert.equal(repeat.balance,9500);assert.equal(repeat.fragments,30);assert.equal(repeat.untilPity,1);
+ await assert.rejects(transaction(db,'u1','draw',request(952),low),/上一批/);
+ await transaction(db,'u1','ack',{requestId:body.requestId});
+ await assert.rejects(transaction(db,'u1','draw',{...request(952),poolVersion:body.poolVersion}),/獎池已更新/);
+ const next=await transaction(db,'u1','draw',request(952),low);
+ assert.equal(next.result.results[0].pity,true);assert.equal(next.untilPity,20);
+ assert.equal(next.balance,9000);assert.equal(next.fragments,30);
 });
 
 test('all eight archetypes inherit their explicit core even when reordered during refinement', () => {
@@ -249,7 +288,7 @@ test('a stale displayed quote cannot charge a higher amount after a realm promot
 
 test('ticket draws share pity, consume the requested vouchers atomically and never spend gold',async()=>{
   const p=sample();p.soulboundDrawTickets=5;p.stats.gold=0;
-  const db=fakeDb(p,{draws:10,misses:48,poolVersion:pool.VERSION});
+  const db=fakeDb(p,{draws:10,misses:18,poolVersion:pool.VERSION});
   const body={...request(900,5),payment:'ticket',expectedCost:0};
   const result=await transaction(db,'u1','draw',body,low);
   assert.equal(result.result.ticketsSpent,5);assert.equal(result.drawTickets,0);assert.equal(result.balance,0);

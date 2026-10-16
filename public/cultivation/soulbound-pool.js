@@ -1,8 +1,8 @@
 // Versioned, permanent pool shared by browser and server. Never generated at draw time.
 (function (root) {
   'use strict';
-  const VERSION = 'soulbound-v2-fragments50';
-  const PITY = 50, WEAPON_RATE = .02, FRAGMENT_MIN = 20, FRAGMENT_MAX = 40;
+  const VERSION = 'soulbound-v3-fragments20';
+  const PITY = 20, WEAPON_RATE = .02, FRAGMENT_MIN = 20, FRAGMENT_MAX = 40;
   const REALMS = Object.freeze([
     ['golden-core', '金丹', 28], ['nascent-soul', '元嬰', 68], ['spirit', '化神', 188],
     ['void', '煉虛', 428], ['fusion', '合體', 788], ['mahayana', '渡劫', 1268],

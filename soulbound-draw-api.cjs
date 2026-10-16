@@ -51,9 +51,10 @@ async function transaction(db, uid, action = 'view', body = {}, random = () => c
     let pending = pendingSnap?.data()?.result || null, result = null;
     let stateDirty = reconcileLots(user, state);
     if (state.poolVersion !== pool.VERSION) {
-      // Old draws always granted weapons. Preserve lifetime draws and pending
-      // receipts; the new consecutive-miss counter therefore starts at zero.
-      state.poolVersion = pool.VERSION; state.misses = 0; stateDirty = true;
+      // The previous fragment pool has a valid consecutive-miss counter.
+      // Earlier weapon-only pools start at zero; lifetime draws and receipts survive.
+      if (state.poolVersion !== 'soulbound-v2-fragments50') state.misses = 0;
+      state.poolVersion = pool.VERSION; stateDirty = true;
     }
     state.misses = Math.min(pool.PITY - 1, number(state.misses));
     if (receiptSnap?.exists) {

@@ -82,7 +82,7 @@ function pageRuntime() {
 }
 const settle = () => new Promise(resolve => setImmediate(resolve));
 const snapshot = (rank = 0) => ({ ok: true, rank, balance: 10000, poolVersion: Pool.VERSION,
-  draws: 0, misses:0, fragments:0, untilPity: 50, prices: { single: 250, five: Pool.cost(rank, 0, 5) }, inventory: {}, pending: null, recovery: [] });
+  draws: 0, misses:0, fragments:0, untilPity: 20, prices: { single: 250, five: Pool.cost(rank, 0, 5) }, inventory: {}, pending: null, recovery: [] });
 function assertShowcase(html, rank = 0) {
   assert.match(html, /<h3>常駐法器<\/h3>/);
   assert.equal((html.match(/data-sb-preview=/g) || []).length, 4,
@@ -140,6 +140,16 @@ test('single and five draw buttons send one common-pool request without a target
   }
 });
 
+test('the contract page explains twenty-pull pity and displays the retained miss counter', async () => {
+  const runtime = pageRuntime(); runtime.open();
+  runtime.requests[0].reply({ ...snapshot(), draws: 17, misses: 17, untilPity: 3 }); await settle();
+  assert.match(runtime.html(), /<progress value="17" max="20"/);
+  assert.match(runtime.html(), /連續 19 抽未出武器，第 20 抽必出/);
+  assert.match(runtime.html(), /至多 20 抽必得/);
+  assert.match(runtime.html(), /<b>3 抽<\/b>/);
+  assert.doesNotMatch(runtime.html(), /50 抽|第 50 抽|max="50"/);
+});
+
 test('reentering while sync is pending shares the request and renders its result on the new page', async () => {
   const runtime = pageRuntime();
   runtime.open();
@@ -157,12 +167,12 @@ test('reentering while sync is pending shares the request and renders its result
 test('fragment-only pending results can be viewed and acknowledged without equipping a weapon', async () => {
   const runtime=pageRuntime();runtime.open();
   const batch={requestId:'fragment-request-0001',cost:250,results:[{kind:'fragments',fragments:30,ordinal:1}]};
-  runtime.requests[0].reply({...snapshot(),fragments:30,pending:batch,misses:1,untilPity:49});await settle();
+  runtime.requests[0].reply({...snapshot(),fragments:30,pending:batch,misses:1,untilPity:19});await settle();
   assert.match(runtime.html(),/煉器碎片 ×30/);assert.match(runtime.html(),/data-sb-vault/);assert.doesNotMatch(runtime.html(),/data-sb-equip=/);
   const button={disabled:false,dataset:{},hasAttribute:name=>name==='data-sb-vault'};
   runtime.nodes.get('soulbound-content').fire('click',{target:{closest:()=>button}});
   assert.equal(runtime.requests[1].url,'/api/soulbound/ack');assert.equal(JSON.parse(runtime.requests[1].init.body).requestId,batch.requestId);
-  runtime.requests[1].reply({...snapshot(),fragments:30,misses:1,untilPity:49});await settle();assert.doesNotMatch(runtime.html(),/data-sb-vault/);
+  runtime.requests[1].reply({...snapshot(),fragments:30,misses:1,untilPity:19});await settle();assert.doesNotMatch(runtime.html(),/data-sb-vault/);
 });
 
 test('mixed batches retain weapon comparison and older weapon-only receipts remain readable', async () => {
