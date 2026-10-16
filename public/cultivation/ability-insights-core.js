@@ -12,6 +12,12 @@
     { id: 'science', name: '自然', subjects: ['物理', '化學', '生物', '地球科學'] },
     { id: 'tech', name: '科技', subjects: ['資訊科技'] }
   ]);
+  const FORMS = Object.freeze([
+    ['direct-application', '基本應用'], ['inverse-reasoning', '逆向推理'],
+    ['error-analysis', '錯誤辨識'], ['scenario-modeling', '情境建模'],
+    ['data-interpretation', '資料判讀'], ['comparison', '比較辨析'],
+    ['multi-step', '多步推理'], ['concept-transfer', '概念遷移']
+  ]);
   const finiteCount = n => Number.isFinite(Number(n)) ? Math.min(10000000, Math.max(0, Math.floor(Number(n)))) : 0;
   const cleanLabel = value => String(value ?? '').trim().slice(0, 55);
   const isoDay = value => {
@@ -106,7 +112,17 @@
       previous: { count: previous.length, accuracy: percentage(previous) },
       delta: recent.length >= 5 && previous.length >= 5 ? percentage(recent) - percentage(previous) : null };
   }
-  function aiSummary(report, subject = null, trend = null) {
+  function skillStats(records, subject = null) {
+    // Only count an explicitly labeled reasoning form, never guess it from a wrong answer.
+    const accepted = (Array.isArray(records) ? records : []).filter(x =>
+      x && typeof x.isCorrect === 'boolean' && (!subject || x.subject === subject));
+    return FORMS.map(([code, name]) => {
+      const subset = accepted.filter(x => x.questionForm === code);
+      return { code, ...row('推理題型', name,
+        { total: subset.length, correct: subset.filter(x => x.isCorrect).length }) };
+    });
+  }
+  function aiSummary(report, subject = null, trend = null, skills = []) {
     const scope = subject ? report.topics.filter(x => x.subject === subject) : report.topics;
     const rows = scope.filter(x => x.total > 0)
       .sort((a, b) => a.estimate - b.estimate).slice(0, 20);
@@ -127,7 +143,9 @@
           return order(a) - order(b) || (a.estimate ?? 100) - (b.estimate ?? 100);
         }).slice(0, 4)
         .map(x => ({ subject: x.subject, topic: x.topic, total: x.total, estimate: x.estimate })),
+      skills: (Array.isArray(skills) ? skills : []).filter(x => x.total).slice(0, 8)
+        .map(x => ({ name: x.topic, total: x.total, correct: x.correct })),
       ...(trend ? { trend } : {}) };
   }
-  return Object.freeze({ DOMAINS, row, sum, build, recentTrend, aiSummary });
+  return Object.freeze({ DOMAINS, FORMS, row, sum, build, recentTrend, skillStats, aiSummary });
 });
