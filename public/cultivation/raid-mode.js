@@ -16,7 +16,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
   'use strict';
 
   const PAGE_ID = 'page-raid';
-  const STYLE_HREF = 'styles/raid-mode.css?v=20261013-entry-actions1';
+  const STYLE_HREF = 'styles/raid-mode.css?v=20261016-hide-navigation1';
   const MALE = 'assets/story/characters/player-male-determined.png';
   const FEMALE = 'assets/story/characters/player-female-determined.png';
   const HEARTBEAT_MS = 8000;
@@ -184,17 +184,18 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
   }
   let raidHubFitFrame = 0;
 
-  function fitRaidHubToNavigation() {
+  function fitRaidHubToViewport() {
+    const page = document.getElementById(PAGE_ID);
     const hub = document.getElementById('raid-hub');
     const card = hub?.querySelector?.('.raid-boss-card');
-    const nav = document.getElementById('bottom-nav');
-    if (!hub || hub.classList.contains('hidden') || !card || !nav) return;
-    const navRect = nav.getBoundingClientRect?.();
+    if (!page?.classList.contains('active-page') || page.classList.contains('hidden') ||
+        !hub || hub.classList.contains('hidden') || !card) return;
+    const pageRect = page.getBoundingClientRect?.();
     const cardRect = card.getBoundingClientRect?.();
-    const navTop = Number(navRect?.top) || 0;
+    const pageBottom = Number(pageRect?.bottom) || 0;
     const cardTop = Number(cardRect?.top) || 0;
-    if (!(navTop > cardTop && cardTop > 0)) return;
-    const targetHeight = Math.max(180, Math.floor(navTop - cardTop - 8));
+    if (!(pageBottom > cardTop && cardTop > 0)) return;
+    const targetHeight = Math.max(180, Math.floor(pageBottom - cardTop - 8));
     card.style.setProperty('height', targetHeight + 'px', 'important');
     card.style.setProperty('max-height', targetHeight + 'px', 'important');
   }
@@ -204,14 +205,13 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     raidHubFitFrame = requestAnimationFrame(() => {
       raidHubFitFrame = requestAnimationFrame(() => {
         syncRaidBottomClearance();
-        fitRaidHubToNavigation();
+        fitRaidHubToViewport();
       });
     });
   }
 
   function syncRaidBottomClearance() {
     const page = document.getElementById(PAGE_ID);
-    const nav = document.getElementById('bottom-nav');
     if (!page) return;
     const layoutHeight = Math.max(1, Number(document.documentElement.clientHeight) || Number(window.innerHeight) || 1);
     const layoutWidth = Math.max(1, Number(document.documentElement.clientWidth) || Number(window.innerWidth) || 1);
@@ -247,18 +247,11 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     const appHeader = document.querySelector('body > header');
     const headerRect = appHeader?.getBoundingClientRect?.();
     const headerBottom = Math.max(0, Math.ceil(Number(headerRect?.bottom) || Number(headerRect?.height) || 72));
-    const sessionActive = document.body.classList.contains('raid-session-active');
-
-    const navTop = Math.max(0, Number(nav?.getBoundingClientRect?.().top) || 0);
-    const clearance = navTop > 0 && layoutHeight > navTop
-      ? Math.ceil(layoutHeight - navTop + 8)
-      : 116;
-    const pageHeight = Math.max(180, Math.floor(
-      layoutHeight - headerBottom - (sessionActive ? 0 : clearance)
-    ));
+    // Navigation is hidden throughout the trial page, including its hub and results.
+    const pageHeight = Math.max(180, Math.floor(layoutHeight - headerBottom));
 
     page.style.setProperty('--raid-header-height', headerBottom + 'px');
-    page.style.setProperty('--raid-bottom-clearance', clearance + 'px');
+    page.style.setProperty('--raid-bottom-clearance', '0px');
     page.style.setProperty('--raid-page-height', pageHeight + 'px');
     page.style.setProperty('top', headerBottom + 'px', 'important');
     page.style.setProperty('height', pageHeight + 'px', 'important');
@@ -286,7 +279,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     if (active) {
       syncRaidBottomClearance();
       // The raid is a viewport surface, not part of the document's scroll flow.
-      // Reset any inherited page offset so fixed header/navigation never move with raid content.
+      // Reset any inherited page offset so the fixed header never moves with raid content.
       if (entered) {
         try { window.scrollTo({ top: 0, left: 0, behavior: 'auto' }); }
         catch (_) { window.scrollTo?.(0, 0); }
@@ -1533,16 +1526,8 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
   function boot() {
     ensureStyle();
     ensurePage();
-    const nav = document.getElementById('bottom-nav');
     window.addEventListener('resize', scheduleRaidHubFit, { passive: true });
     window.addEventListener('app:layout-viewport', scheduleRaidHubFit, { passive: true });
-    if (nav && globalThis.ResizeObserver) new ResizeObserver(scheduleRaidHubFit).observe(nav);
-    if (nav) new MutationObserver(scheduleRaidHubFit).observe(nav, {
-      attributes: true,
-      attributeFilter: ['class', 'style'],
-      childList: true,
-      subtree: true
-    });
     mountHomeEntry();
     renderHub();
     void refreshRaidTickets();

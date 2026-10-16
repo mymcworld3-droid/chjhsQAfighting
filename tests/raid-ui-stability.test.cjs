@@ -167,9 +167,13 @@ test('questions, arena and attack focus share document bounds despite keyboard a
   assert.deepEqual([...props],question);
   assert.equal(props.get('width'),'1440px');assert.equal(props.get('height'),'900px');assert.equal(props.get('top'),'0px');assert.equal(props.get('left'),'0px');
   Object.assign(context.window.visualViewport,{height:300,width:900,offsetTop:70,offsetLeft:20});context.sync();assert.deepEqual([...props],question);
-  page.dataset.raidView='lobby';context.sync();
-  assert.equal(classes.has('raid-fullscreen'),false);
-  assert.equal(props.has('width'),false,'lobby regains its centered width');
+  for (const view of ['hub','lobby','result']) {
+    page.dataset.raidView=view;classes.delete('raid-session-active');context.sync();
+    assert.equal(classes.has('raid-fullscreen'),false);
+    assert.equal(props.has('width'),false,view+' regains its centered width');
+    assert.equal(props.get('--raid-bottom-clearance'),'0px');
+    assert.equal(props.get('height'),'828px',view+' does not reserve room for hidden navigation');
+  }
 });
 
 test('battle CSS has one set of attack keyframes and app header themes do not style nested question headers', () => {

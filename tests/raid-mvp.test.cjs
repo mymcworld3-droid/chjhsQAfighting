@@ -155,23 +155,23 @@ test('boss information panel is anchored near the top instead of vertically cent
 });
 
 
-test('raid hub bottom follows the real bottom navigation top edge', () => {
+test('the entire trial page hides navigation and uses the available viewport', () => {
   assert.match(raidSource, /function syncRaidBottomClearance\(\)/);
-  assert.match(raidSource, /getElementById\('bottom-nav'\)/);
-  assert.match(raidSource, /getBoundingClientRect\?\.\(\)\.top/);
-  assert.match(raidSource, /layoutHeight - navTop \+ 8/);
+  assert.match(cssSource, /body\.raid-page-open #bottom-nav\{display:none!important\}/);
+  assert.doesNotMatch(cssSource, /\.raid-session-active #bottom-nav/);
+  assert.match(raidSource, /layoutHeight - headerBottom/);
   assert.match(raidSource, /--raid-bottom-clearance/);
   assert.match(raidSource, /window\.addEventListener\('app:layout-viewport'/);
   assert.match(cssSource, /height:var\(--raid-page-height/);
 });
 
 
-test('raid hub card is measured directly to the navigation edge and cache-busted', () => {
-  assert.match(raidSource, /STYLE_HREF = 'styles\/raid-mode\.css\?v=20261013-entry-actions1'/);
-  assert.match(raidSource, /function fitRaidHubToNavigation\(\)/);
-  assert.match(raidSource, /navTop - cardTop - 8/);
+test('raid hub card is measured to the page bottom and cache-busted', () => {
+  assert.match(raidSource, /STYLE_HREF = 'styles\/raid-mode\.css\?v=20261016-hide-navigation1'/);
+  assert.match(raidSource, /function fitRaidHubToViewport\(\)/);
+  assert.match(raidSource, /pageBottom - cardTop - 8/);
   assert.match(raidSource, /card\.style\.setProperty\('height', targetHeight \+ 'px', 'important'\)/);
-  assert.match(raidSource, /new ResizeObserver\(scheduleRaidHubFit\)\.observe\(nav\)/);
+  assert.match(raidSource, /window\.addEventListener\('resize', scheduleRaidHubFit/);
   assert.match(raidSource, /setTimeout\(scheduleRaidHubFit, 360\)/);
 });
 
@@ -228,7 +228,7 @@ test('raid session height uses the page layout bounds', () => {
   assert.match(raidSource, /const layoutHeight = Math\.max\(1, Number\(document\.documentElement\.clientHeight\)/);
   assert.match(raidSource, /document\.querySelector\('body > header'\)/);
   assert.match(raidSource, /headerRect\?\.bottom/);
-  assert.match(raidSource, /layoutHeight - headerBottom - \(sessionActive \? 0 : clearance\)/);
+  assert.match(raidSource, /Math\.floor\(layoutHeight - headerBottom\)/);
   assert.match(raidSource, /page\.style\.setProperty\('height', pageHeight \+ 'px', 'important'\)/);
   assert.match(raidSource, /page\.style\.setProperty\('bottom', 'auto', 'important'\)/);
   assert.match(raidSource, /window\.addEventListener\('app:layout-viewport', scheduleRaidHubFit/);
