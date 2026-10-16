@@ -12,9 +12,9 @@ const artifactAdmin = read('public/cultivation/admin-artifact-manager.js');
 const refinery = read('public/cultivation/cultivation-refinery-v2.js');
 const main = read('public/main.js');
 
-test('fixed material catalog contains six tradable forge materials and two refinement seals', () => {
+test('fixed material catalog contains eight tradable forge materials and two refinement seals', () => {
   assert.match(catalog,/RAID_CRAFT_MATERIAL_IDS/);
-  for (const id of ['qi-spirit-iron','foundation-refined-iron','golden-purple-iron','qi-spirit-wood','foundation-century-wood','golden-lightning-wood']) {
+  for (const id of ['qi-spirit-iron','foundation-refined-iron','golden-purple-iron','qi-spirit-wood','foundation-century-wood','golden-lightning-wood','nascent-star-iron','nascent-soul-wood']) {
     assert.match(catalog,new RegExp(id));
   }
   assert.match(catalog,/2: 'raid-refine-key-ii'/);
@@ -35,15 +35,15 @@ test('material system is read-only on the client and has no purchase or Firebase
   assert.doesNotMatch(system,/getFirestore|runTransaction|data-material-buy|buyMaterial|material-store/);
 });
 
-test('six wood/iron materials enter the furnace while refinement seals stay external', () => {
+test('eight wood/iron materials enter the furnace while refinement seals stay external', () => {
   assert.match(refinery,/new Set\(Object\.values\(RAID_REFINEMENT_KEYS\)\)/);
   assert.match(refinery,/filter\(\(m\) => !raidKeyIds\.has\(m\.id\)/);
   assert.match(refinery,/第二煉印記/);
   assert.match(refinery,/第三煉印記/);
 });
 
-test('admin material catalog is fixed to eight entries while artifact recipe editor remains available', () => {
-  assert.match(admin,/固定八項/);
+test('admin material catalog is fixed to ten entries while artifact recipe editor remains available', () => {
+  assert.match(admin,/固定十項/);
   assert.match(admin,/固定規則/);
   assert.doesNotMatch(main,/admin-material-realm-editor\.js/);
   assert.match(artifactAdmin,/煉器配方/);
