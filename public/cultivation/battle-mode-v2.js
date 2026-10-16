@@ -1220,7 +1220,7 @@ export const featureReady = (async () => {
     const optionsEl = document.getElementById('bv2-options');
     return usableQuestion(question) &&
       questionEl?.dataset.questionId === String(question.id) &&
-      !!questionEl.textContent?.trim() &&
+      !!questionEl.innerHTML?.trim() &&
       optionsEl?.querySelectorAll('.bv2-option').length === 4;
   }
 
@@ -1238,7 +1238,7 @@ export const featureReady = (async () => {
     // A formula renderer or a DOM refresh can clear the question without
     // changing its Firestore ID. Reconstruct the missing content if needed.
     if (state.renderedQuestionId !== question.id || !questionDomReady(question)) {
-      state.pendingAnswer = null;
+      if (state.renderedQuestionId !== question.id) state.pendingAnswer = null;
       state.quizScrollSerial += 1; state.quizFooterScrollKey = null;
       const card = document.querySelector('#bv2-quiz > .bv2-question-card');
       if (card) card.scrollTop = 0;
