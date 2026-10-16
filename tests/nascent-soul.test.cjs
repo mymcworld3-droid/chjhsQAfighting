@@ -44,11 +44,11 @@ test('each cave completion awards number of correct answers; stage thresholds ar
   assert.equal(nascentSoulStage(250).name,'圓滿');
 });
 
-test('only raids and perfect meditation award new fragments; solo and cave retain cultivation',()=>{
- const solo=read('public/main-legacy.js'),daily=read('public/cultivation/daily-meditation.js'),cave=read('dongtian-settlement-api.cjs');
+test('raids, perfect meditation and cooperative nodes award fragments; solo and cave retain cultivation',()=>{
+ const solo=read('public/main-legacy.js'),daily=read('daily-meditation-api.cjs'),cave=read('dongtian-settlement-api.cjs');
  assert.doesNotMatch(solo,/nascentSoulSpiritReward|savedStats.nascentSoulSpirit/);
- assert.match(daily,/originalScore >= 68 && current.correct === QUESTION_TOTAL \? 3 : 0/);
- assert.match(daily,/QANascentGrowth.patch\(growthState\)/);assert.doesNotMatch(cave,/stats.nascentSoulSpirit.*increment/);
+ assert.match(daily,/const fragments=score>=68 && correct===3\?3:0/);
+ assert.match(daily,/Growth.patch\(growth\)/);assert.doesNotMatch(cave,/stats.nascentSoulSpirit.*increment/);
 });
 
 
@@ -335,7 +335,7 @@ test('node costs rise with distance and cultivation nodes are minority', () => {
 });
 
 test('new cultivation branch reaches solo, meditation and server cave settlement',()=>{
- const rules=read('public/cultivation/nascent-soul-rules.js');assert.match(rules,/QANascentGrowth.cultivation\(player, source\)/);assert.match(read('public/cultivation/daily-meditation.js'),/soulCultivationBonusForPlayer\(data, 'daily'\)/);assert.match(read('dongtian-settlement-api.cjs'),/Growth.cultivation\(player,'cave'\)/);
+ const rules=read('public/cultivation/nascent-soul-rules.js');assert.match(rules,/QANascentGrowth.cultivation\(player, source\)/);assert.match(read('daily-meditation-api.cjs'),/Growth.cultivation\(user,'daily'\)/);assert.match(read('dongtian-settlement-api.cjs'),/Growth.cultivation\(player,'cave'\)/);
 });
 
 

@@ -108,14 +108,20 @@ test('failed branch persistence leaves local fragments unchanged and reset refun
  const failed=branchRuntime({fail:true});await failed.context.save('attack');assert.equal(failed.local.materialSystem.inventory[Growth.ITEM_ID],1000);assert.equal(failed.local.nascentSoulGrowth.branches.attack,2);assert.equal(failed.writes.length,0);
  const reset=branchRuntime();await reset.context.save(null,true);assert.equal(reset.remote.nascentSoulGrowth.branches.attack,0);assert.equal(reset.local.materialSystem.inventory[Growth.ITEM_ID],1003);assert.equal(reset.writes.length,1);
 });
-function meditationRuntime(score,correct,fail=false) {
- const remote=player('ocean',{cultivation:10});remote.stats.totalScore=score;remote.stats.gold=0;const local=structuredClone(remote),writes=[];
- const source=read('public/cultivation/daily-meditation.js'),start=source.indexOf('  async function finish()'),end=source.indexOf('  window.openDailyMeditation',start);
- const rules=vm.runInNewContext(clean(read('public/cultivation/daily-meditation-rules.js'))+'\n({meditationReward,nextMeditationStreak})');
- const context={...rules,QANascentGrowth:Growth,busy:false,session:{uid:'h',date:'2026-10-10',questionAnswered:true,answered:3,correct,answers:[{},{},{}]},QUESTION_TOTAL:3,uid:()=> 'h',today:()=> '2026-10-10',userData:()=>local,userRef:()=>({id:'h'}),db:{},collection:()=>({}),doc:()=>({}),increment:n=>({delta:n}),serverTimestamp:()=>0,soulCultivationBonusForPlayer:Growth.cultivation,setContent(){},notify(){},invalidateMistakes(){},renderIntro(){},syncPanel(){},node:()=>({}),window:{XianxiaQuestRules:require('../public/cultivation/quest-rules.js'),getXiuxianRealmIndex:()=>3,dispatchEvent(){}},CustomEvent:class{},runTransaction:async(_,worker)=>{const patches=[];await worker({get:async()=>({exists:()=>true,data:()=>structuredClone(remote)}),update:(_,patch)=>patches.push(patch),set(){}});if(fail)throw Error('offline');for(const patch of patches){writes.push(patch);for(const [key,value] of Object.entries(patch)){const parts=key.split('.');let target=remote;for(const part of parts.slice(0,-1))target=target[part]||={};target[parts.at(-1)]=value?.delta!==undefined?(target[parts.at(-1)]||0)+value.delta:value;}}}};
- vm.createContext(context);vm.runInContext(source.slice(start,end)+'\nthis.finishNow=finish;',context);return {context,remote,local,writes};
-}
-test('real daily settlement awards +3 fragments only for perfect answers at nascent realm and cannot replay',async()=>{
- for(const [score,correct,earned] of [[68,3,3],[68,2,0],[67,3,0]]){const r=meditationRuntime(score,correct);await r.context.finishNow();assert.equal(r.remote.materialSystem.inventory[Growth.ITEM_ID],1000+earned);assert.equal(r.local.materialSystem.inventory[Growth.ITEM_ID],1000+earned);assert.equal(r.remote.dailyMeditation.lastResult.fragments,earned);assert.equal(r.remote.stats.nascentSoulSpirit,0);assert.equal(r.writes.length,1);await r.context.finishNow();assert.equal(r.writes.length,1);}
- const failed=meditationRuntime(68,3,true);await failed.context.finishNow();assert.equal(failed.local.materialSystem.inventory[Growth.ITEM_ID],1000);assert.equal(failed.writes.length,0);
+test('server daily settlement awards perfect-answer fragments with saved soul bonus and cannot replay',async()=>{
+ const {fakeDb}=require('./helpers/inventory-db.cjs');
+ const {createService,SESSIONS,dayId}=require('../daily-meditation-api.cjs').__test;
+ for(const [score,correct,earned] of [[68,3,3],[68,2,0],[67,3,0]]){
+  const remote=player('ocean',{cultivation:10});remote.uid='u1';remote.stats.totalScore=score;remote.stats.gold=0;
+  const db=fakeDb(remote),date='2026-10-10';
+  db.docs.set(SESSIONS+'/'+dayId('u1',date),{uid:'u1',date,index:2,questions:[{},{},{}],answers:Array.from({length:3},(_,i)=>({isCorrect:i<correct,activeMs:1000})),issuedAtMs:0});
+  const service=createService({db,now:()=>Date.parse(date+'T04:00:00Z')});
+  const result=await service.finish('u1');
+  assert.equal(db.docs.get('users/u1').materialSystem.inventory[Growth.ITEM_ID],1000+earned);
+  assert.equal(result.economy.growthState.fragments,1000+earned);
+  assert.equal(result.record.lastResult.fragments,earned);
+  assert.equal(result.record.lastResult.soulCultivation,score>=68&&correct===3?10:0);
+  assert.equal(db.docs.get('users/u1').stats.nascentSoulSpirit,0);
+  const before=structuredClone(db.docs.get('users/u1'));await service.finish('u1');assert.deepEqual(db.docs.get('users/u1'),before);
+ }
 });

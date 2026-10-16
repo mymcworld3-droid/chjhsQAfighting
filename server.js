@@ -24,6 +24,7 @@ const registerDongtianSettlementApi = require('./dongtian-settlement-api.cjs');
 const registerImmortalsCleanupApi = require('./world-immortals-cleanup-api.cjs');
 const registerInvitationApi = require('./invitation-api.cjs');
 const registerSoulboundDrawApi = require('./soulbound-draw-api.cjs');
+const registerMeditationApi = require('./daily-meditation-api.cjs');
 const registerInventoryDismantleApi = require('./inventory-dismantle-api.cjs');
 const registerQuestApi = require('./quest-api.cjs');
 const registerOpportunityApi = require('./opportunity-api.cjs');
@@ -62,6 +63,7 @@ registerImmortalsCleanupApi(app);
 registerInvitationApi(app);
 registerQuestApi(app);
 registerSoulboundDrawApi(app);
+registerMeditationApi(app);
 registerInventoryDismantleApi(app);
 registerOpportunityApi(app);
 

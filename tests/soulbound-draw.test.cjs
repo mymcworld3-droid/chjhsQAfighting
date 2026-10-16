@@ -245,3 +245,28 @@ test('a stale displayed quote cannot charge a higher amount after a realm promot
   await assert.rejects(transaction(db,'u1','draw',{...request(1),expectedCost:500}),/價格已更新/);
   assert.deepEqual(db.docs.get('users/u1'),user);
 });
+
+
+test('ticket draws share pity, consume the requested vouchers atomically and never spend gold',async()=>{
+  const p=sample();p.soulboundDrawTickets=5;p.stats.gold=0;
+  const db=fakeDb(p,{draws:10,misses:48,poolVersion:pool.VERSION});
+  const body={...request(900,5),payment:'ticket',expectedCost:0};
+  const result=await transaction(db,'u1','draw',body,low);
+  assert.equal(result.result.ticketsSpent,5);assert.equal(result.drawTickets,0);assert.equal(result.balance,0);
+  assert.equal(result.result.results[1].pity,true);assert.ok(result.result.results.every(row=>row.paid===0));
+  await transaction(db,'u1','draw',body,low);assert.equal(db.docs.get('users/u1').soulboundDrawTickets,0);
+  await assert.rejects(transaction(db,'u1','draw',{...body,payment:'gold'}),/其他操作/);
+});
+test('insufficient tickets never fall back to gold and failures do not consume tickets or pity',async()=>{
+  const p=sample();p.soulboundDrawTickets=1;const db=fakeDb(p);
+  await assert.rejects(transaction(db,'u1','draw',{...request(901,5),payment:'ticket'}),/抽獎券不足/);
+  assert.equal(db.docs.get('users/u1').stats.gold,10000);assert.equal(db.docs.get('users/u1').soulboundDrawTickets,1);
+  db.failNextCreate();await assert.rejects(transaction(db,'u1','draw',{...request(902),payment:'ticket'},low),/database unavailable/);
+  assert.equal(db.docs.get('users/u1').soulboundDrawTickets,1);assert.equal(db.docs.has('soulboundDrawStates/u1'),false);
+});
+test('pre-Golden players keep their vouchers, and unrecognized payment types are rejected',async()=>{
+  const p=sample();p.stats.totalScore=27;p.soulboundDrawTickets=3;const db=fakeDb(p);
+  await assert.rejects(transaction(db,'u1','draw',{...request(903),payment:'ticket'}),/金丹境/);
+  await assert.rejects(transaction(db,'u1','draw',{...request(904),payment:'free'}),/抽取方式/);
+  assert.equal(db.docs.get('users/u1').soulboundDrawTickets,3);
+});

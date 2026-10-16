@@ -19,7 +19,7 @@ function normalizeQuestion(row, source) {
   };
 }
 
-export function buildMeditationMistakePool(logs) {
+function buildMeditationMistakePool(logs) {
   const latest = new Map();
   for (const log of Array.isArray(logs) ? logs : []) {
     const mode = String(log?.mode || '');
@@ -57,7 +57,7 @@ export function buildMeditationMistakePool(logs) {
 }
 
 // 優先抽尚未訂正的錯題；不足時才使用已經重新答對過的歷史錯題。
-export function chooseMeditationMistakes(pool, count = 3, random = Math.random) {
+function chooseMeditationMistakes(pool, count = 3, random = Math.random) {
   const chosen = [];
   for (const group of [pool?.unresolved || [], pool?.reviewed || []]) {
     const available = group.slice(0, 30);
@@ -74,3 +74,6 @@ export function chooseMeditationMistakes(pool, count = 3, random = Math.random) 
   }
   return chosen;
 }
+
+if (typeof module === 'object' && module.exports) module.exports = { buildMeditationMistakePool, chooseMeditationMistakes };
+else globalThis.QAMeditationMistakes = { buildMeditationMistakePool, chooseMeditationMistakes };

@@ -32,11 +32,12 @@ test('wallet read is single-flight and throttles Firestore resource exhaustion',
   assert.match(market, /walletRetryAfter = Date\.now\(\) \+ 60000/);
 });
 
-test('meditation reuses the just-fetched daily record and keeps atomic settlement', () => {
-  const start = meditation.slice(meditation.indexOf('  async function start() {'), meditation.indexOf('  async function finish() {'));
-  assert.match(start, /if \(remoteUid !== uid\(\) \|\| !remoteRecord\) await loadRemote\(\)/);
-  assert.match(meditation, /await runTransaction\(db,/);
-  assert.match(meditation, /if \(old\.lastDate === current\.date\)/);
+test('meditation reuses existing server sessions and keeps settlement atomic without client Firestore reads', () => {
+  const api=readFileSync(join(__dirname,'../daily-meditation-api.cjs'),'utf8');
+  assert.match(api,/if\(existing.session\)return/);
+  assert.match(api,/db.runTransaction/);
+  assert.match(api,/if\(c.result\)return \{completed:true/);
+  assert.doesNotMatch(meditation,/getDoc\(|getDocs\(|runTransaction\(/);
 });
 
 const legacy = read('main-legacy.js');
@@ -93,4 +94,21 @@ test('expired artifact buffs only attempt one cleanup at a time and wait after f
   assert.match(artifact, /expiredBuffBusy = true/);
   assert.match(artifact, /finally \{ expiredBuffBusy = false; \}/);
   assert.match(artifact, /expiredBuffRetryAfter = Date\.now\(\) \+ \(isQuotaFailure\(error\) \? QUOTA_RETRY_MS : ORDINARY_RETRY_MS\)/);
+});
+
+test('cooperative meditation only polls open views or unfinished shared progress, with slower background-page refresh',()=>{
+  const vm=require('node:vm');
+  let reads=0,time=1000000,done=false,opened=false;
+  const context={document:{hidden:false},navigator:{onLine:true},busy:false,lastStatusAt:time-60000,
+    state:{date:'2026-10-16',stars:6},uid:()=> 'u1',today:()=> '2026-10-16',
+    syncPanel(){},node:()=>opened?{}:null,panelState:()=>({done}),Date:{now:()=>time},refresh:()=>{reads++;return Promise.resolve();}};
+  const section=meditation.slice(meditation.indexOf('  function poll() {'),meditation.indexOf('  setInterval(poll,60000);'));
+  vm.runInNewContext(section+'\nthis.run=poll;',context);
+  context.run();assert.equal(reads,0,'before personal completion the existing badge needs no friend polling');
+  done=true;context.run();assert.equal(reads,0,'closed views wait five minutes');
+  time+=300000;context.run();assert.equal(reads,1);
+  context.state.stars=15;context.run();assert.equal(reads,1,'complete shared progress stops further friend reads');
+  opened=true;context.run();assert.equal(reads,2,'open rankings can still refresh');
+  context.document.hidden=true;context.run();assert.equal(reads,2);
+  context.document.hidden=false;context.navigator.onLine=false;context.run();assert.equal(reads,2);
 });

@@ -27,6 +27,8 @@ function requestKey(uid, id) {
   return crypto.createHash('sha256').update(uid + ':' + id).digest('hex');
 }
 async function transaction(db, uid, action = 'view', body = {}, random = () => crypto.randomInt(0, 0x100000000) / 0x100000000) {
+  const payment = body.payment || 'gold';
+  if (!['gold', 'ticket'].includes(payment)) throw fail('抽取方式不正確', 400);
   const stateRef = db.collection('soulboundDrawStates').doc(uid), userRef = db.collection('users').doc(uid);
   const key = ['draw', 'recover'].includes(action) ? requestKey(uid, body.requestId) : null;
   const receiptRef = key ? db.collection('soulboundDrawReceipts').doc(key) : null;
@@ -56,7 +58,7 @@ async function transaction(db, uid, action = 'view', body = {}, random = () => c
     state.misses = Math.min(pool.PITY - 1, number(state.misses));
     if (receiptSnap?.exists) {
       const saved = receiptSnap.data();
-      if (saved.action !== action || (action === 'draw' && saved.count !== body.count) ||
+      if (saved.action !== action || (action === 'draw' && (saved.count !== body.count || (saved.payment || 'gold') !== payment)) ||
           (action === 'recover' && saved.itemId !== body.itemId)) throw fail('此請求編號已用於其他操作');
       result = saved.result;
     } else if (action === 'draw') {
@@ -64,11 +66,13 @@ async function transaction(db, uid, action = 'view', body = {}, random = () => c
       if (![1, 5].includes(body.count)) throw fail('只能選擇單抽或五連抽', 400);
       if (rank < 0) throw fail('金丹境開放締結本命');
       if (pending) throw fail('請先查看並收入上一批抽取結果');
-      const cost = pool.cost(rank, state.draws, body.count);
+      const ticketsSpent = payment === 'ticket' ? body.count : 0;
+      const cost = ticketsSpent ? 0 : pool.cost(rank, state.draws, body.count);
       if (body.expectedCost !== undefined && body.expectedCost !== cost) throw fail('境界或價格已更新，請重新同步後抽取');
       if (number(user.stats?.gold) < cost) throw fail('靈石不足');
+      if (number(user.soulboundDrawTickets) < ticketsSpent) throw fail('本命法器抽獎券不足');
       const results = Array.from({ length: body.count }, (_, index) => {
-        const ordinal = state.draws + index + 1, paid = ordinal === 1 ? 250 : pool.price(rank);
+        const ordinal = state.draws + index + 1, paid = ticketsSpent ? 0 : ordinal === 1 ? 250 : pool.price(rank);
         const row = { ...pool.roll(rank, state.misses, random), ordinal, paid };
         if (row.kind === 'weapon') {
           user.artifactSystem ||= {}; user.artifactSystem.inventory ||= {};
@@ -80,13 +84,15 @@ async function transaction(db, uid, action = 'view', body = {}, random = () => c
         }
         return row;
       });
+      user.stats ||= {};
       user.stats.gold = number(user.stats.gold) - cost;
+      user.soulboundDrawTickets = number(user.soulboundDrawTickets) - ticketsSpent;
       state.draws += body.count; state.pending = key;
-      result = { requestId: body.requestId, poolVersion: pool.VERSION, createdAtMs: Date.now(), cost, results };
+      result = { requestId: body.requestId, poolVersion: pool.VERSION, createdAtMs: Date.now(), cost, payment, ticketsSpent, results };
       pending = result;
-      tx.update(userRef, { 'stats.gold': user.stats.gold, 'forgeFragments':fragments.balance(user), 'artifactSystem.inventory': user.artifactSystem?.inventory || {} });
+      tx.update(userRef, { 'stats.gold': user.stats.gold, soulboundDrawTickets:user.soulboundDrawTickets, 'forgeFragments':fragments.balance(user), 'artifactSystem.inventory': user.artifactSystem?.inventory || {} });
       stateDirty = true;
-      tx.create(receiptRef, { uid, action, count: body.count, result });
+      tx.create(receiptRef, { uid, action, count: body.count, payment, result });
     } else if (action === 'recover') {
       throw fail('原器回收已改為碎片分解，請從背包或煉器的「物品分解」操作');
     } else if (action === 'ack') {
@@ -95,7 +101,7 @@ async function transaction(db, uid, action = 'view', body = {}, random = () => c
       }
     }
     if (stateDirty) tx.set(stateRef, state);
-    return { ok: true, result, pending, balance: number(user.stats?.gold), fragments:fragments.balance(user), inventory: user.artifactSystem?.inventory || {},
+    return { ok: true, result, pending, balance: number(user.stats?.gold), drawTickets:number(user.soulboundDrawTickets), fragments:fragments.balance(user), inventory: user.artifactSystem?.inventory || {},
       draws: state.draws, misses:state.misses, untilPity: pool.PITY - state.misses, poolVersion: pool.VERSION, rank, realm: pool.REALMS[rank]?.name || null,
       prices: rank < 0 ? null : { single: pool.cost(rank, state.draws, 1), five: pool.cost(rank, state.draws, 5) }, recovery: [] };
   });

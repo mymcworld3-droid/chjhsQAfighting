@@ -64,8 +64,8 @@ function pageRuntime() {
   return { window, requests, nodes, player,
     open() { documentEvents.get('click')({ target: { closest: () => tab } }); },
     leave() { for (const id of [...nodes.keys()]) if (id.startsWith('soulbound-')) nodes.delete(id); tab.classList.remove('active'); },
-    draw(count) {
-      const button = { disabled: false, dataset: { sbDraw: String(count) }, hasAttribute: name => name === 'data-sb-draw' };
+    draw(count, payment = 'gold') {
+      const button = { disabled: false, dataset: { sbDraw: String(count), sbPayment: payment }, hasAttribute: name => name === 'data-sb-draw' };
       nodes.get('soulbound-content').fire('click', { target: { closest: () => button } });
     },
     refresh() { nodes.get('soulbound-refresh').fire('click'); },
@@ -115,7 +115,7 @@ test('three common-pool weapons remain visible during slow or failed sync, with 
   assertShowcase(runtime.html(), 1);
   assert.match(runtime.html(), /class="sb-lobby"/);
   assert.match(runtime.html(), /aria-label="常駐本命法器共用池"/);
-  assert.equal((runtime.html().match(/data-sb-draw=/g) || []).length, 2);
+  assert.equal((runtime.html().match(/data-sb-draw=/g) || []).length, 4);
   assert.match(runtime.html(), /五連抽 · 2650 靈石/);
   assert.equal(runtime.requests.length, 2, 'displaying the common pool never sends a purchase request');
 });
@@ -130,7 +130,7 @@ test('single and five draw buttons send one common-pool request without a target
     const body = JSON.parse(request.init.body);
     assert.equal(body.count, count);
     assert.equal(body.poolVersion, Pool.VERSION);
-    assert.deepEqual(Object.keys(body).sort(), ['count', 'expectedCost', 'poolVersion', 'requestId']);
+    assert.deepEqual(Object.keys(body).sort(), ['count', 'expectedCost', 'payment', 'poolVersion', 'requestId']);
     const batch = { requestId: body.requestId, cost: body.expectedCost,
       results: Array.from({ length: count }, () => ({ kind: 'fragments', fragments: 30 })) };
     runtime.requests[1].reply({ ...snapshot(), result: batch, pending: batch, fragments: count * 30 });
@@ -149,7 +149,7 @@ test('reentering while sync is pending shares the request and renders its result
   assert.equal(runtime.requests.length, 1);
   runtime.requests[0].reply(snapshot());
   await settle();
-  assert.equal((runtime.html().match(/data-sb-draw=/g) || []).length, 2);
+  assert.equal((runtime.html().match(/data-sb-draw=/g) || []).length, 4);
   assert.equal(runtime.nodes.get('soulbound-refresh').disabled, false);
   assert.equal(runtime.requests.length, 1);
 });
@@ -204,4 +204,16 @@ test('showcase motion and coloring remain responsive without exposing all eight 
   assert.match(css, /#training-tab-content:has\(> #soulbound-page\)/);
   assert.doesNotMatch(css, /#0b1018/);
   assert.doesNotMatch(css, /#090c16f5/);
+});
+
+
+test('voucher buttons display balance and send explicit ticket payment with zero gold cost', async () => {
+  const runtime=pageRuntime();runtime.open();runtime.requests[0].reply({...snapshot(),drawTickets:5});await settle();
+  assert.match(runtime.html(),/本命法器抽獎券：5 張/);
+  assert.match(runtime.html(),/data-sb-payment="ticket"/);
+  runtime.draw(5,'ticket');
+  const body=JSON.parse(runtime.requests[1].init.body);assert.equal(body.payment,'ticket');assert.equal(body.count,5);assert.equal(body.expectedCost,0);
+  const batch={requestId:body.requestId,payment:'ticket',ticketsSpent:5,cost:0,results:Array.from({length:5},()=>({kind:'fragments',fragments:30}))};
+  runtime.requests[1].reply({...snapshot(),result:batch,pending:batch,drawTickets:0});await settle();
+  assert.match(runtime.html(),/本批 5 張抽獎券/);assert.equal(runtime.player.soulboundDrawTickets,0);
 });

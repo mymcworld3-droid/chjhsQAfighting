@@ -1,72 +1,106 @@
-import './quest-rules.js';
-import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-import { getFirestore, collection, query, where, orderBy, limit, getDocs, doc, getDoc, runTransaction, increment, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-import { meditationDateKey, nextMeditationStreak, meditationReward } from './daily-meditation-rules.js';
-import {} from './nascent-growth.js';
-import { soulCultivationBonusForPlayer } from './nascent-soul-rules.js';
-import { buildMeditationMistakePool, chooseMeditationMistakes } from './daily-meditation-mistakes.js';
+import './daily-meditation-rules.js';
+import './nascent-growth.js';
+import { getMainUser, authenticatedMainFetch } from './data/project-repository.js';
 
 (function () {
   'use strict';
-  const auth = getAuth(getApp());
-  const db = getFirestore(getApp());
-  let panelAccount = auth.currentUser?.uid || '';
-  const QUESTION_TOTAL = 3;
-  let session = null;
-  let busy = false;
-  let remoteUid = '';
-  let remoteRecord = null;
-  // 同一次進入閉關只查詢一次錯題；日期或帳號變更時必須失效。
-  let mistakeKey = '';
-  let mistakeResult = null;
-  let mistakePending = null;
-
-  function invalidateMistakes() {
-    mistakeKey = '';
-    mistakeResult = null;
-    mistakePending = null;
+  const Rules = globalThis.QADailyMeditationRules;
+  const Growth = globalThis.QANascentGrowth;
+  const node = id => document.getElementById(id);
+  const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const uid = () => getMainUser()?.uid || '';
+  const userData = () => window.getCurrentUserData?.();
+  const today = () => Rules.meditationDateKey();
+  let account='', state=null, session=null, busy=false, generation=0, statusSequence=0, clock=null, lastStatusAt=0;
+  function reconcile() {
+    const id=uid();
+    if(id!==account){pauseClock();account=id;state=null;session=null;clock=null;busy=false;lastStatusAt=0;generation++;statusSequence++;node('daily-meditation-overlay')?.remove();}
+    return id;
   }
-  function prepareMistakes(id, date) {
-    const key = id + '|' + date;
-    if (mistakeKey !== key) {
-      mistakeKey = key;
-      mistakeResult = null;
-      mistakePending = null;
+  function notify(message) {const el=node('dm-status');if(el)el.textContent=message;else console.info('[閉關]',message);}
+  function setContent(html) {const el=node('dm-content');if(el){el.innerHTML=html;el.closest('.dm-body')?.scrollTo?.({top:0});}const status=node('dm-status');if(status)status.textContent='';}
+  function summary(items) {return '<div class="dm-summary">'+items.map(([label,value])=>'<div><small>'+esc(label)+'</small><strong>'+esc(value)+'</strong></div>').join('')+'</div>';}
+  function duration(ms) {if(typeof ms!=='number')return '—';const seconds=Math.max(0,ms)/1000;return seconds<60?seconds.toFixed(1)+' 秒':Math.floor(seconds/60)+' 分 '+(seconds%60).toFixed(1)+' 秒';}
+  function clockKey() {return clock?'meditation-time:'+clock.uid+':'+clock.id:'';}
+  function pauseClock() {
+    if(!clock)return;
+    if(clock.started!==null){clock.total+=Math.max(0,performance.now()-clock.started);clock.started=null;}
+    try{localStorage.setItem(clockKey(),String(Math.floor(clock.total)));}catch(_){}
+  }
+  function resumeClock() {
+    if(!clock||clock.uid!==uid()||!node('daily-meditation-overlay')||session?.questionAnswered||document.hidden||navigator.onLine===false)return;
+    if(clock.started===null)clock.started=performance.now();
+  }
+  function startClock(question) {
+    pauseClock();
+    if(clock?.id!==question.id || clock.uid!==uid()){
+      clock={uid:uid(),id:question.id,total:0,started:null};
+      try{clock.total=Math.max(0,Number(localStorage.getItem(clockKey()))||0);}catch(_){}
     }
-    if (mistakeResult) return Promise.resolve(mistakeResult);
-    if (mistakePending) return mistakePending;
-    const pending = loadMistakes(id).then(result => {
-      if (mistakeKey === key && uid() === id && today() === date) mistakeResult = result;
-      return result;
-    }).finally(() => {
-      if (mistakePending === pending) mistakePending = null;
-    });
-    mistakePending = pending;
-    return pending;
+    resumeClock();
   }
-
-  function uid() { return auth.currentUser?.uid || ''; }
-  function userData() { return window.getCurrentUserData?.() || null; }
-  function today() { return meditationDateKey(); }
-  function userRef(id) { return doc(db, 'users', id); }
-  function node(id) { return document.getElementById(id); }
-  function record() {
-    const id = uid();
-    if (!id) return {};
-    return remoteUid === id && remoteRecord ? remoteRecord : (userData()?.dailyMeditation || {});
+  async function request(action,body={}) {
+    const id=uid();if(!id)throw new Error('請先登入再閉關。');
+    const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),20000);
+    try{
+      const response=await authenticatedMainFetch('/api/meditation/'+action,{method:'POST',body:JSON.stringify(body),signal:controller.signal});
+      const payload=await response.json().catch(()=>({}));
+      if(uid()!==id)throw new Error('帳號已切換，請重新開啟閉關。');
+      if(!response.ok||payload.ok!==true)throw new Error(payload.error||'閉關同步暫時未完成，請重新同步。');
+      return payload;
+    }catch(error){if(error.name==='AbortError')throw new Error('閉關同步逾時，可重試原操作。');throw error;}
+    finally{clearTimeout(timer);}
   }
-  function notify(message) {
-    const status = node('dm-status');
-    if (status) status.textContent = message;
-    else {
-      const el = document.createElement('div');
-      el.className = 'xiuxian-toast';
-      el.textContent = message;
-      document.body.appendChild(el);
-      requestAnimationFrame(() => el.classList.add('show'));
-      setTimeout(() => el.remove(), 3000);
-    }
+  function applyEconomy(value) {
+    const player=userData();if(!value||!player||uid()!==account)return;
+    player.stats ||= {};player.stats.gold=value.gold;player.stats.totalScore=value.score;
+    player.soulboundDrawTickets=value.drawTickets;
+    if(value.growthState)Growth.apply(player,value.growthState);
+    if(value.raidTickets){player.raidTickets=value.raidTickets;window.dispatchEvent(new CustomEvent('xiuxian:raid-tickets-updated',{detail:{uid:account,ticketState:value.raidTickets}}));}
+    window.updateUIStats?.();window.refreshCultivationRealmUI?.();
+    window.dispatchEvent(new CustomEvent('xiuxian:stats-updated',{detail:{source:'daily-meditation'}}));
+    window.dispatchEvent(new CustomEvent('xiuxian:soulbound-tickets-updated'));
+  }
+  function panelState() {
+    const id=uid(), player=userData();
+    const record=state?.date===today()?state.record:player?.dailyMeditation || {};
+    const done=record?.lastDate===today();
+    return {done,streak:Math.max(0,Number(record?.streak)||0),totalDays:Math.max(0,Number(record?.totalDays)||0),
+      claimable:!!id && state?.date===today() && !!state.claimable};
+  }
+  function syncPanel() {
+    const el=node('xiuxian-meditate');if(!el)return;
+    const current=panelState(),player=userData(),id=uid();
+    const ready=!!id&&!!player?.stats&&(!player.uid||player.uid===id);
+    const pending=ready&&(!current.done||current.claimable),dot=node('meditation-pending-dot');
+    if(dot)dot.hidden=!pending;
+    el.setAttribute('aria-label',current.claimable?'閉關，有共修獎勵可領':current.done?'查看今日閉關':'閉關，今日尚未完成');
+    (el.querySelector('.sect-action-label')||el).textContent=current.claimable?'領取共修':current.done?'查看閉關':'閉關';
+    el.disabled=false;el.style.opacity='1';
+    const label=node('xiuxian-meditation-streak');if(label)label.textContent='連續閉關 '+current.streak+' 日 · 累計 '+current.totalDays+' 日';
+  }
+  async function refresh({render=false}={}) {
+    const id=reconcile();if(!id)return;
+    const serial=++statusSequence,result=await request('status');
+    if(uid()!==id||serial!==statusSequence)return;
+    state=result;lastStatusAt=Date.now();
+    if(userData())userData().dailyMeditation=result.record;
+    syncPanel();
+    if(render&&node('daily-meditation-overlay')){
+      session=result.session;
+      if(session&&!result.completed)renderQuestion();else renderDashboard();
+    }else if(!busy&&node('daily-meditation-overlay')&&!session)renderDashboard();
+  }
+  async function task(job) {
+    if(busy)return;const id=reconcile();if(!id)return;
+    busy=true;const version=++generation;statusSequence++;
+    node('daily-meditation-overlay')?.querySelectorAll('button').forEach(button=>button.disabled=true);
+    let failed=false;
+    try{await job();}catch(error){failed=true;if(uid()===id&&generation===version)notify(error.message||'閉關同步未完成，請重試。');}
+    finally{if(uid()===id&&generation===version){busy=false;node('dm-close')?.removeAttribute('disabled');node('dm-refresh')?.removeAttribute('disabled');
+      if(!session)renderDashboard(false);
+      else if(failed&&node('daily-meditation-overlay')){const message=node('dm-status')?.textContent;renderQuestion();notify(message);}
+      syncPanel();}}
   }
   function ensureStyle() {
     if (node('daily-meditation-style')) return;
@@ -94,361 +128,114 @@ import { buildMeditationMistakePool, chooseMeditationMistakes } from './daily-me
       '.dm-options{display:grid;gap:9px}.dm-option{display:flex;align-items:flex-start;text-align:left;gap:10px;min-height:47px;padding:12px;border:1px solid #c4a7763b;border-radius:12px;background:#ffffff08;color:#e9e4db;line-height:1.65;cursor:pointer;overflow-wrap:anywhere;white-space:pre-wrap}',
       '.dm-option b{flex:0 0 25px;color:#e6c477}.dm-option:disabled{cursor:default;opacity:.8}.dm-option.dm-correct{border-color:#80bb8e;background:#32583a49}.dm-option.dm-wrong{border-color:#c58181;background:#6c303049}',
       '.dm-result{font:700 27px "Noto Serif TC",serif;color:#e5c77c;text-align:center;letter-spacing:.1em}',
+      '.dm-star-track{display:grid;grid-template-columns:repeat(15,minmax(0,1fr));gap:3px;margin:12px 0}.dm-star{color:#555047;font-size:20px;text-align:center}.dm-star.earned{color:#edcc78}.dm-milestones{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}.dm-milestone{padding:13px 10px;border:1px solid #b9964b40;background:#ffffff05;border-radius:10px;display:grid;gap:9px}.dm-milestone h4{margin:0;color:#eacf8a}.dm-milestone p{font-size:12px;line-height:1.7;margin:0;min-height:62px}.dm-milestone button{min-height:39px;padding:8px;font-size:12px}.dm-board{width:100%;border-collapse:collapse;font-size:13px}.dm-board td,.dm-board th{padding:11px 8px;text-align:left;border-bottom:1px solid #ffffff15}.dm-board th{color:#bbae91;font-weight:500}.dm-board tr.is-me{background:#dfc27f10}.dm-section-title{margin:18px 0 8px;font:700 18px Noto Serif TC,serif;color:#ead29c}.dm-body{width:min(100%,1020px)}.dm-milestone.is-claimed{opacity:.65}.dm-top-actions{display:flex;gap:8px;align-items:center}.dm-top-actions .dm-action{min-height:35px;font-size:12px;padding:5px 11px}.dm-timing{font-size:11px;color:#999486}.dm-note strong{color:#eacf8a}.dm-claim-status{margin-top:10px}@media(max-width:600px){.dm-milestones{grid-template-columns:repeat(2,minmax(0,1fr))}.dm-milestone:last-child{grid-column:1/-1}.dm-milestone p{min-height:0}.dm-star{font-size:16px}.dm-heading{font-size:17px}.dm-board td,.dm-board th{padding:10px 4px;font-size:12px}}',
       '@keyframes dm-pulse{50%{box-shadow:0 0 64px #c49a465c,inset 0 0 45px #d7ac3955;transform:scale(1.025)}}@keyframes dm-spin{to{transform:rotate(360deg)}}',
       '@media(max-width:500px){.dm-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.dm-top{padding:12px 15px}.dm-body{padding:13px}.dm-scene{min-height:125px}.dm-circle{width:88px;height:88px}.dm-circle:before{width:110px;height:110px}.dm-question{font-size:15px}.dm-summary strong{font-size:14px}}'
     ].join('\n');
     document.head.appendChild(el);
   }
+
+  function close() {if(busy)return;pauseClock();node('daily-meditation-overlay')?.remove();}
   function ensureOverlay() {
-    ensureStyle();
-    let overlay = node('daily-meditation-overlay');
-    if (overlay) return overlay;
-    overlay = document.createElement('div');
-    overlay.id = 'daily-meditation-overlay';
-    overlay.className = 'dm-overlay';
-    overlay.setAttribute('role', 'dialog');
-    overlay.setAttribute('aria-modal', 'true');
-    overlay.setAttribute('aria-label', '每日閉關');
-    overlay.innerHTML = '<section class="dm-card"><header class="dm-top"><div><div class="dm-eyebrow">洞府 · 每日修行</div><div class="dm-heading">靜心閉關</div></div><button type="button" class="dm-close" id="dm-close" aria-label="關閉">×</button></header><div class="dm-body"><div class="dm-scene"><div class="dm-circle"><span class="dm-monk">道</span></div><span class="dm-scene-label">凝神 · 內觀 · 運轉周天</span></div><div id="dm-content"></div><p id="dm-status" class="dm-status" role="status" aria-live="polite"></p></div></section>';
-    const finishTransition = window.beginSceneTransition?.(document.querySelector('.active-page'), overlay, 'meditation', 'meditation-open');
-    document.body.appendChild(overlay);
-    queueMicrotask(() => finishTransition?.());
-    node('dm-close').addEventListener('click', () => {
-      if (busy) { notify('正在同步閉關資料，請完成結算後再離開。'); return; }
-      const finishTransition = window.beginSceneTransition?.(overlay, document.querySelector('.active-page'), 'meditation', 'meditation-close');
-      overlay.remove();
-      finishTransition?.();
-      session = null;
-      invalidateMistakes();
+    ensureStyle();if(node('daily-meditation-overlay'))return;
+    const overlay=document.createElement('div');overlay.id='daily-meditation-overlay';overlay.className='dm-overlay';
+    overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');overlay.setAttribute('aria-label','閉關共修');
+    overlay.innerHTML='<section class="dm-card"><header class="dm-top"><div><div class="dm-eyebrow">每日三題 · 同門共修</div><div class="dm-heading">聚星閉關</div></div><div class="dm-top-actions"><button class="dm-action dm-action-secondary" id="dm-refresh" type="button">重新同步</button><button type="button" class="dm-close" id="dm-close" aria-label="關閉">×</button></div></header><div class="dm-body"><div id="dm-content"></div><p id="dm-status" class="dm-status" role="status" aria-live="polite"></p></div></section>';
+    document.body.appendChild(overlay);node('dm-close').onclick=close;
+    node('dm-refresh').onclick=()=>void task(async()=>{pauseClock();await refresh({render:true});});
+    overlay.addEventListener('keydown',event=>{
+      if(event.key==='Escape'){event.preventDefault();close();return;}
+      if(event.key!=='Tab')return;
+      const controls=[...overlay.querySelectorAll('button:not(:disabled)')];
+      const first=controls[0],last=controls.at(-1);if(!first)return;
+      if(event.shiftKey&&document.activeElement===first||!event.shiftKey&&document.activeElement===last){event.preventDefault();(event.shiftKey?last:first).focus();}
     });
-    return overlay;
+    node('dm-close').focus({preventScroll:true});
   }
-  function setContent(html) {
-    const content = node('dm-content');
-    const finishTransition = window.beginSceneTransition?.(content, content, 'meditation', 'meditation-content', true);
-    if (content) content.innerHTML = html;
-    finishTransition?.();
-    const status = node('dm-status');
-    if (status) status.textContent = '';
+  function rewardText(reward) {
+    const parts=[reward.gold+' 靈石'];
+    if(reward.fragments)parts.push('元嬰碎精 ×'+reward.fragments);
+    if(reward.raidTickets)parts.push('團本入場券 ×'+reward.raidTickets);
+    if(reward.drawTickets)parts.push('本命法器抽獎券 ×'+reward.drawTickets);
+    return parts.map(esc).join('<br>');
   }
-  function summary(items) {
-    return '<div class="dm-summary">' + items.map(item => '<div><small>' + item[0] + '</small><strong>' + item[1] + '</strong></div>').join('') + '</div>';
-  }
-  function panelState() {
-    const r = record();
-    const done = r.lastDate === today();
-    return { done, streak: Math.max(0, Number(r.streak) || 0), totalDays: Math.max(0, Number(r.totalDays) || 0) };
-  }
-  function syncPanel() {
-    const el = node('xiuxian-meditate');
-    if (!el) return;
-    const current = panelState();
-    const player = userData(), id = uid();
-    const ready = !!id && !!player?.stats && (player.uid ? player.uid === id : panelAccount === id);
-    const pending = ready && !current.done;
-    const dot = node('meditation-pending-dot');
-    if (dot) dot.hidden = !pending;
-    el.setAttribute('aria-label', pending ? '閉關，今日尚未完成' : current.done && ready ? '查看今日閉關' : '閉關');
-    const labelNode = el.querySelector('.sect-action-label') || el;
-    labelNode.textContent = current.done ? '查看閉關' : '閉關';
-    el.disabled = false;
-    el.style.opacity = '1';
-    const label = node('xiuxian-meditation-streak');
-    if (label) label.textContent = '連續閉關 ' + current.streak + ' 日 · 累計 ' + current.totalDays + ' 日';
-  }
-  function currentPreview() {
-    const r = record();
-    const streak = nextMeditationStreak(r.lastDate, r.streak, today());
-    return meditationReward(userData()?.stats?.totalScore, streak, QUESTION_TOTAL);
-  }
-  function renderIntro() {
-    const r = record();
-    if (r.lastDate === today()) {
-      const result = r.lastResult || {};
-      setContent('<h3 class="dm-result">今日已出關</h3>' +
-        summary([['連續閉關', (r.streak || 1) + ' 日'], ['修為收穫', '+' + (result.cultivation || 0)], ['靈石收穫', '+' + (result.gold || 0)], ['元嬰碎精收穫', '+' + (result.fragments || 0)]]) +
-        '<p class="dm-note">今日已完成閉關，明日再來運轉周天。累計閉關 ' + (r.totalDays || 1) + ' 日。</p>' +
-        '<button type="button" class="dm-action dm-action-secondary" id="dm-done">返回宗門</button>');
-      node('dm-done').onclick = () => node('daily-meditation-overlay')?.remove();
-      syncPanel();
-      return;
+  function renderDashboard(clearStatus=true) {
+    if(!state||!node('dm-content'))return;
+    pauseClock();
+    const savedStatus=node('dm-status')?.textContent;
+    const result=state.record?.lastResult || {};
+    let html=summary([['我的星星',state.personalStars+' / 3'],['好友共修',state.stars+' / 15'],['連續閉關',(state.record?.streak||0)+' 日'],['本命抽獎券',(state.drawTickets||0)+' 張']]);
+    html+='<h3 class="dm-section-title">同門聚星</h3><div class="dm-star-track" role="img" aria-label="共修 '+state.stars+' 顆星，最多十五顆">'+Array.from({length:15},(_,i)=>'<span aria-hidden="true" class="dm-star'+(i<state.stars?' earned':'')+'">★</span>').join('')+'</div>';
+    html+='<div class="dm-milestones">'+state.milestones.map(step=>'<section class="dm-milestone'+(step.claimed?' is-claimed':'')+'"><h4>'+step.stars+' 星</h4><p>'+rewardText(step.reward)+'</p><button type="button" class="dm-action" data-dm-claim="'+step.stars+'" '+(!step.claimable||busy?'disabled':'')+'>'+(step.claimed?'已領取':step.claimable?'領取獎勵':!state.completed?'完成閉關後解鎖':'尚差 '+Math.max(0,step.stars-state.stars)+' 星')+'</button></section>').join('')+'</div>';
+    html+='<p class="dm-note">自己與互為好友的同門，答對一題各得一星；達到節點即可領獎，每日最多十五星。好友稍後出關仍會增加進度。元嬰碎精與抽獎券可提前累積，金丹境開放抽取。團本券已滿時，該券折為額外靈石。</p>';
+    if(state.completed){
+      html+='<h3 class="dm-section-title">今日出關 · '+state.personalStars+' 星</h3>'+summary([['答對',state.personalStars+' / 3'],['作答時間',duration(result.answerTimeMs)],['個人靈石','+'+(result.gold||0)],['個人元嬰碎精','+'+(result.fragments||0)]]);
+      html+='<h3 class="dm-section-title">好友今日成績</h3><p class="dm-timing">星數優先，同星依作答時間排序。各自複習的錯題不同，排行供交流參考。</p><table class="dm-board"><thead><tr><th>排名</th><th>同門</th><th>星數</th><th>作答時間</th></tr></thead><tbody>'+state.rankings.map(row=>'<tr'+(row.uid===uid()?' class="is-me"':'')+'><td>'+row.rank+'</td><td>'+esc(row.name)+(row.uid===uid()?'（你）':'')+'</td><td>'+row.stars+' / 3</td><td>'+esc(duration(row.answerTimeMs))+'</td></tr>').join('')+'</tbody></table>';
+      html+='<p class="dm-note">僅列出今日已完成閉關的好友。每日 00:00（台灣時間）重置。</p><button type="button" class="dm-action dm-action-secondary" id="dm-done">返回宗門</button>';
+    }else{
+      html+='<h3 class="dm-section-title">完成自己的三題，開啟共修獎勵</h3><p class="dm-note">從歷史錯題選出三道不同題目重新參悟；答對即得星星。個人閉關獎勵仍依境界與連續天數結算。出關後可查看好友星數與答題時間。</p><button type="button" class="dm-action" id="dm-start" '+(busy?'disabled':'')+'>'+(state.session?'繼續今日閉關':'開始閉關')+'</button>';
     }
-    const reward = currentPreview();
-    setContent(summary([['今日連續', '第 ' + reward.streak + ' 天'], ['全對修為', '+' + reward.cultivation], ['全對靈石', '+' + reward.gold], ['全對元嬰碎精', (Number(userData()?.stats?.totalScore) || 0) >= 68 ? '+3' : '元嬰解鎖']]) +
-      '<p class="dm-note">從你過去問道、洞天及閉關的錯題中抽出 3 道不同題目重新參悟。優先選擇尚未訂正的錯題。<br>全對獲完整獎勵，答對 2 題獲半額基礎獎勵與連續加成；未滿 2 題仍可累積天數並獲得 5 靈石。每日 00:00（台灣時間）重置。</p>' +
-      '<button type="button" class="dm-action" id="dm-start">開始閉關</button>');
-    node('dm-start').onclick = () => void start();
-    syncPanel();
-  }
-  async function loadRemote() {
-    const id = uid();
-    if (!id) throw new Error('請先登入再閉關。');
-    const snap = await getDoc(userRef(id));
-    if (!snap.exists()) throw new Error('玩家資料尚未建立，請重新登入。');
-    if (id !== uid()) throw new Error('帳號已切換，請重新開啟閉關。');
-    remoteUid = id;
-    remoteRecord = snap.data()?.dailyMeditation || {};
-    const data = userData();
-    if (data) data.dailyMeditation = remoteRecord;
-    syncPanel();
+    setContent(html);if(!clearStatus&&savedStatus)notify(savedStatus);
+    node('dm-start')?.addEventListener('click',()=>void start());node('dm-done')?.addEventListener('click',close);
+    node('dm-content').querySelectorAll('[data-dm-claim]').forEach(button=>button.onclick=()=>void claim(Number(button.dataset.dmClaim)));
   }
   async function open() {
-    if (!uid()) { notify('請先登入再閉關。'); return; }
-    const id = uid(), date = today();
-    ensureOverlay();
-    setContent('<p class="dm-note">正在確認今日閉關紀錄…</p>');
-    // 畫面顯示前就與玩家紀錄並行預取錯題，而非按「開始」後才開始查 250 筆。
-    // 若既有 session 正在作答或今天已完成，則不額外查詢。
-    if (record().lastDate !== date && !(session && session.uid === id && session.date === date)) {
-      void prepareMistakes(id, date).then(() => {
-        if (node('dm-start')) notify('歷史錯題已備妥，可以開始閉關。');
-      }).catch(error => {
-        console.warn('[Meditation] mistake prefetch failed', error);
-        if (node('dm-start')) notify('錯題預載失敗；按開始閉關時會重新嘗試。');
-      });
-    }
-    try {
-      await loadRemote();
-      if (!node('daily-meditation-overlay') || uid() !== id || today() !== date) return;
-      if (session && session.uid === uid() && session.date === today() && record().lastDate !== today()) {
-        if (session.answered === QUESTION_TOTAL) {
-          setContent('<p class="dm-note">本次三題已答完，但尚未領取獎勵。</p><button type="button" class="dm-action" id="dm-resume-finish">出關結算</button>');
-          node('dm-resume-finish').onclick = () => void finish();
-        } else if (session.questionAnswered) {
-          setContent('<p class="dm-note">已作答的題目不會重複計分，繼續參悟下一題。</p><button type="button" class="dm-action" id="dm-resume-next">繼續參悟</button>');
-          node('dm-resume-next').onclick = () => void nextQuestion();
-        } else renderQuestion();
-      } else {
-        session = null;
-        renderIntro();
-        if (mistakePending && node('dm-start')) notify('正在預先整理歷史錯題，可先閱讀閉關說明。');
-      }
-    } catch (error) { notify(error.message || '無法讀取閉關紀錄，請檢查網路。'); }
+    if(!reconcile()){notify('請先登入再閉關。');return;}
+    ensureOverlay();pauseClock();setContent('<p class="dm-note">正在同步今日共修與閉關紀錄…</p>');
+    await task(()=>refresh({render:true}));
   }
-  function typeset() {
-    const root = node('dm-content');
-    if (!root) return;
-    try {
-      window.MathJax?.typesetClear?.([root]);
-      window.MathJax?.typesetPromise?.([root])?.catch(error => console.warn('[Meditation MathJax]', error));
-    } catch (error) { console.warn('[Meditation MathJax]', error); }
+  function typeset(callback) {
+    const el=node('dm-content');
+    try{window.MathJax?.typesetClear?.([el]);Promise.resolve(window.MathJax?.typesetPromise?.([el])).catch(()=>{}).finally(callback);}
+    catch(_){callback();}
   }
   function renderQuestion() {
-    if (!session || session.uid !== uid()) { session = null; renderIntro(); return; }
-    if (session.date !== today()) {
-      session = null;
-      setContent('<p class="dm-note">已跨日，請重新開始今日閉關。</p><button type="button" class="dm-action" id="dm-restart">重新確認</button>');
-      node('dm-restart').onclick = () => void open();
-      return;
-    }
-    const q = session.question?.data;
-    if (!q) { notify('題目尚未備妥。'); return; }
-    setContent('<div class="dm-eyebrow">' + (session.question.source || '昔日錯題') + ' · 參悟 ' + (session.answered + 1) + ' / ' + QUESTION_TOTAL + '　·　已答對 ' + session.correct + ' 題</div>' +
-      '<div class="dm-progress"><span style="width:' + Math.round(session.answered / QUESTION_TOTAL * 100) + '%"></span></div>' +
-      '<h3 class="dm-question" id="dm-question"></h3><div class="dm-options" id="dm-options"></div>' +
-      '<p class="dm-note">本次閉關獨立結算，不重複觸發一般答題獎勵。</p>');
-    node('dm-question').textContent = String(q.q || '');
-    q.opts.forEach((value, i) => {
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'dm-option';
-      const mark = document.createElement('b');
-      mark.textContent = String.fromCharCode(65 + i);
-      button.appendChild(mark);
-      const text = document.createElement('span');
-      text.textContent = String(value);
-      button.appendChild(text);
-      button.addEventListener('click', () => answer(i));
-      node('dm-options').appendChild(button);
-    });
-    typeset();
+    if(!session||!node('dm-content'))return;
+    pauseClock();const q=session.question;
+    setContent('<div class="dm-eyebrow">'+esc(q.source)+' · '+(session.index+1)+' / 3 · 已得 '+session.correct+' 星</div><div class="dm-progress"><span style="width:'+Math.round(session.answered/3*100)+'%"></span></div><h3 class="dm-question" id="dm-question"></h3><div class="dm-options" id="dm-options"></div><div id="dm-feedback" class="dm-note"></div>');
+    node('dm-question').textContent=q.q;
+    q.opts.forEach((value,index)=>{const button=document.createElement('button');button.type='button';button.className='dm-option';
+      const mark=document.createElement('b');mark.textContent=String.fromCharCode(65+index);const text=document.createElement('span');text.textContent=value;button.append(mark,text);
+      button.disabled=session.questionAnswered;button.onclick=()=>void answer(index);node('dm-options').appendChild(button);
+      if(session.questionAnswered&&index===session.feedback.correctIdx)button.classList.add('dm-correct');});
+    if(session.questionAnswered){
+      node('dm-feedback').textContent=(session.feedback.isCorrect?'參悟成功，獲得一顆星。':'本題未得星星。')+'\n'+session.feedback.exp;
+      const next=document.createElement('button');next.type='button';next.className='dm-action';next.textContent=session.answered===3?'出關結算':'繼續參悟';
+      next.onclick=()=>session.answered===3?void finish():void nextQuestion();node('dm-content').appendChild(next);
+      typeset(()=>{});
+    }else typeset(()=>{if(session?.question.id===q.id&&!session.questionAnswered)startClock(q);});
   }
-  function answer(choice) {
-    if (!session || session.busy || session.questionAnswered || session.date !== today()) return;
-    const q = session.question.data;
-    session.questionAnswered = true;
-    const correct = choice === q.ans;
-    session.answered += 1;
-    if (correct) session.correct += 1;
-    session.answers.push({ q: q.q, options: q.opts.slice(), correctIdx: q.ans, userIdx: choice, isCorrect: correct, exp: q.exp || '', source: session.question.source || '昔日錯題' });
-    // A finished selection is counted once per daily meditation question.
-    void window.trackPlayerAnalytics?.('answer_completed', {
-      mode: 'meditation', eventId: 'meditation_' + session.date + '_' + session.answered
-    });
-    node('dm-options').querySelectorAll('button').forEach((button, i) => {
-      button.disabled = true;
-      if (i === q.ans) button.classList.add('dm-correct');
-      if (i === choice && !correct) button.classList.add('dm-wrong');
-    });
-    const feedback = document.createElement('div');
-    feedback.className = 'dm-note';
-    const title = document.createElement('strong');
-    title.textContent = correct ? '參悟成功' : '本次未能參透';
-    feedback.appendChild(title);
-    const explanation = document.createElement('p');
-    explanation.textContent = String(q.exp || '未提供題解。');
-    feedback.appendChild(explanation);
-    node('dm-content').appendChild(feedback);
-    const next = document.createElement('button');
-    next.className = 'dm-action';
-    next.type = 'button';
-    next.textContent = session.answered === QUESTION_TOTAL ? '出關結算' : '繼續參悟';
-    next.onclick = () => session.answered === QUESTION_TOTAL ? void finish() : void nextQuestion();
-    node('dm-content').appendChild(next);
-    typeset();
-  }
-  async function loadMistakes(id) {
-    // 與原有「答題紀錄」相同索引（uid + timestamp），避免全站掃描。
-    const history = query(collection(db, 'exam_logs'),
-      where('uid', '==', id), orderBy('timestamp', 'desc'), limit(250));
-    const snapshot = await getDocs(history);
-    if (uid() !== id) throw new Error('帳號已切換，請重新開啟閉關。');
-    const pool = buildMeditationMistakePool(snapshot.docs.map(item => item.data()));
-    return { selected: chooseMeditationMistakes(pool, QUESTION_TOTAL), available: pool.total };
-  }
-  async function nextQuestion() {
-    if (!session || session.busy || session.answered >= QUESTION_TOTAL) return;
-    session.busy = true;
-    const question = session.questions[session.answered];
-    if (!question) {
-      session.busy = false;
-      notify('錯題資料不足，無法繼續閉關。');
-      return;
-    }
-    session.question = question;
-    session.questionAnswered = false;
-    session.busy = false;
-    renderQuestion();
-  }
-  async function start() {
-    if (busy) return;
-    busy = true;
-    try {
-      // 點開閉關時已讀取今日記錄；開始答題不再重讀同一份 users 文件。
-      // 真正發獎仍由結算交易重新檢查每日領取狀態。
-      if (remoteUid !== uid() || !remoteRecord) await loadRemote();
-      if (record().lastDate === today()) { renderIntro(); return; }
-      const id = uid();
-      const date = today();
-      setContent('<p class="dm-note">正在從過去的答題紀錄搜尋錯題…</p>');
-      const { selected, available } = await prepareMistakes(id, date);
-      if (id !== uid() || date !== today()) throw new Error('已跨日或切換帳號，請重新開始閉關。');
-      if (selected.length < QUESTION_TOTAL) {
-        session = null;
-        setContent('<h3 class="dm-result">錯題尚未集齊</h3><p class="dm-note">目前可用的不同錯題共有 ' +
-          available + ' 題，還需要 ' + (QUESTION_TOTAL - selected.length) +
-          ' 題才能進行每日閉關。請先到「問道」或「洞天」練習；不會以新題冒充舊錯題，也不會扣除今日閉關次數。</p>' +
-          '<button type="button" class="dm-action" id="dm-return">返回宗門</button>');
-        node('dm-return').onclick = () => node('daily-meditation-overlay')?.remove();
-        return;
+  async function start() {await task(async()=>{const result=await request('start');if(result.completed){await refresh();session=null;renderDashboard();}else{session=result.session;renderQuestion();}});}
+  async function nextQuestion() {await task(async()=>{const result=await request('next');session=result.session;renderQuestion();});}
+  async function answer(choice) {
+    if(busy||!session||session.questionAnswered)return;
+    pauseClock();const body={questionId:session.question.id,choice,activeMs:Math.floor(clock?.total||0)};
+    await task(async()=>{
+      try{const result=await request('answer',body);session=result.session;renderQuestion();
+        void window.trackPlayerAnalytics?.('answer_completed',{mode:'meditation',eventId:'meditation_'+session.date+'_'+session.answered});
+      }catch(error){
+        notify(error.message);const retry=document.createElement('button');retry.type='button';retry.className='dm-action';retry.textContent='重試保存本題答案';
+        retry.onclick=()=>void task(async()=>{const result=await request('answer',body);session=result.session;renderQuestion();});node('dm-content')?.appendChild(retry);
       }
-      session = { uid: id, date, answered: 0, correct: 0, questionAnswered: false,
-        questions: selected, answers: [], question: null, busy: false };
-      await nextQuestion();
-    } catch (error) {
-      setContent('<p class="dm-note">目前無法讀取歷史錯題，今日閉關尚未開始。請確認網路連線後重試。</p>' +
-        '<button type="button" class="dm-action" id="dm-retry-start">重新查詢錯題</button>');
-      node('dm-retry-start').onclick = () => void start();
-      notify(error.message || '讀取錯題紀錄失敗。');
-    } finally { busy = false; }
+    });
   }
-  async function finish() {
-    if (busy || !session || !session.questionAnswered || session.answered !== QUESTION_TOTAL || session.answers.length !== QUESTION_TOTAL) return;
-    const current = session;
-    if (current.uid !== uid() || current.date !== today()) {
-      notify('已跨日或切換帳號，請重新開始。');
-      return;
-    }
-    busy = true;
-    setContent('<p class="dm-note">正在結算修行成果，請勿關閉…</p>');
-    try {
-      let outcome;
-      const logRef = doc(collection(db, 'exam_logs'));
-      await runTransaction(db, async tx => {
-        const ref = userRef(current.uid);
-        const snap = await tx.get(ref);
-        if (!snap.exists()) throw new Error('找不到玩家資料。');
-        const data = snap.data();
-        const old = data.dailyMeditation || {};
-        if (old.lastDate === current.date) throw new Error('今日已領取閉關獎勵。');
-        if (old.lastDate && String(old.lastDate) > current.date) throw new Error('閉關日期異常，請檢查裝置日期。');
-        if (today() !== current.date || uid() !== current.uid) throw new Error('已跨日或切換帳號，請重新開始。');
-        const streak = nextMeditationStreak(old.lastDate, old.streak, current.date);
-        const originalScore = Math.max(0, Number(data.stats?.totalScore) || 0);
-        const reward = meditationReward(originalScore, streak, current.correct);
-        // 在每日閉關的同一筆交易內依已調御元嬰與全對狀態計算修為加成。
-        const soulCultivationAdded = current.correct === QUESTION_TOTAL
-          ? soulCultivationBonusForPlayer(data, 'daily') : 0;
-        const totalCultivation = reward.cultivation + soulCultivationAdded;
-        const fragmentsAdded = originalScore >= 68 && current.correct === QUESTION_TOTAL ? 3 : 0;
-        const growthState = globalThis.QANascentGrowth.award(data,fragmentsAdded);
-        const newScore = originalScore + totalCultivation;
-        const newRecord = {
-          lastDate: current.date, streak, totalDays: Math.max(0, Number(old.totalDays) || 0) + 1,
-          bestStreak: Math.max(streak, Number(old.bestStreak) || 0),
-          lastResult: { correct: current.correct, total: QUESTION_TOTAL, cultivation: totalCultivation, soulCultivation: soulCultivationAdded, gold: reward.gold, fragments: fragmentsAdded, realm: reward.realm },
-          updatedAt: serverTimestamp()
-        };
-        const rank = typeof window.getXiuxianRealmIndex === 'function'
-          ? window.getXiuxianRealmIndex(newScore) : Math.max(0, Number(data.stats?.rankLevel) || 0);
-        tx.update(ref, {
-          dailyMeditation: newRecord,
-          questProgress: window.XianxiaQuestRules.recordEvent(data.questProgress, 'meditation', current.date),
-          'stats.totalScore': increment(totalCultivation),
-          'stats.gold': increment(reward.gold),
-          ...globalThis.QANascentGrowth.patch(growthState),
-          'stats.rankLevel': rank
-        });
-        tx.set(logRef, {
-          uid: current.uid, mode: 'daily-meditation', topic: '閉關錯題',
-          question: '每日閉關 · ' + current.correct + '/' + QUESTION_TOTAL,
-          isCorrect: current.correct === QUESTION_TOTAL,
-          correctCount: current.correct, totalCount: QUESTION_TOTAL,
-          dailyMeditationAnswers: current.answers.map(answer => ({ ...answer })),
-          timestamp: serverTimestamp()
-        });
-        outcome = { reward, newRecord, newScore, newGold: Math.max(0, Number(data.stats?.gold) || 0) + reward.gold, growthState, fragmentsAdded, soulCultivationAdded, totalCultivation, rank };
-      });
-      if (uid() !== current.uid) throw new Error('閉關已結算，但帳號已切換，請重新登入查看。');
-      remoteUid = current.uid;
-      remoteRecord = outcome.newRecord;
-      const local = userData();
-      if (local?.stats) {
-        local.dailyMeditation = outcome.newRecord;
-        local.stats.totalScore = outcome.newScore;
-        local.stats.gold = outcome.newGold;
-        globalThis.QANascentGrowth.apply(local,outcome.growthState);
-        local.stats.rankLevel = outcome.rank;
-      }
-      session = null;
-      invalidateMistakes();
-      window.updateUIStats?.();
-      window.refreshCultivationRealmUI?.();
-      window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', {
-        detail: { source: 'daily-meditation', totalScore: outcome.newScore, gold: outcome.newGold, cultivationAdded: outcome.totalCultivation, soulCultivationAdded: outcome.soulCultivationAdded, goldAdded: outcome.reward.gold, fragmentsAdded: outcome.fragmentsAdded }
-      }));
-      renderIntro();
-    } catch (error) {
-      setContent('<p class="dm-note">結算未能完成。若已完成領取，重新開啟會顯示今日結果；否則可重新結算。</p><button type="button" class="dm-action" id="dm-retry-finish">重新結算</button><button type="button" class="dm-action dm-action-secondary" id="dm-check">查詢閉關紀錄</button>');
-      node('dm-retry-finish').onclick = () => void finish();
-      node('dm-check').onclick = () => void open();
-      notify(error.message || '儲存失敗，請檢查連線。');
-    } finally { busy = false; syncPanel(); }
-  }
-
-  window.openDailyMeditation = open;
-  window.getDailyMeditationPanelState = panelState;
-  window.refreshDailyMeditationPanel = syncPanel;
-  window.addEventListener('xiuxian:stats-updated', syncPanel);
-  window.addEventListener('xiuxian:user-data-ready', () => {
-    panelAccount = uid();
-    remoteUid = '';
-    remoteRecord = null;
-    session = null;
-    invalidateMistakes();
+  async function finish() {await task(async()=>{const result=await request('finish');applyEconomy(result.economy);session=null;clock=null;await refresh();renderDashboard();});}
+  async function claim(stars) {await task(async()=>{const result=await request('claim',{stars,date:state.date});state=result;applyEconomy(result.economy);renderDashboard();notify(result.claimedNow?'已領取 '+stars+' 星共修獎勵。':'此節點今日已領取。');});}
+  window.openDailyMeditation=open;window.getDailyMeditationPanelState=panelState;window.refreshDailyMeditationPanel=syncPanel;
+  window.addEventListener('xiuxian:stats-updated',syncPanel);
+  for(const name of ['xiuxian:user-data-ready','xiuxian:user-ready'])window.addEventListener(name,()=>{reconcile();syncPanel();if(!busy)void refresh().catch(()=>{});});
+  function foreground(){if(document.hidden||navigator.onLine===false){pauseClock();return;}resumeClock();if(!busy)void refresh().catch(()=>{});}
+  document.addEventListener('visibilitychange',foreground);window.addEventListener('offline',pauseClock);window.addEventListener('online',foreground);window.addEventListener('pagehide',pauseClock);
+  window.addEventListener('pageshow',foreground);
+  function poll() {
     syncPanel();
-  });
-  window.addEventListener('xiuxian:user-ready', syncPanel);
-  document.addEventListener('visibilitychange', () => { if (!document.hidden) syncPanel(); });
-  syncPanel();
+    if(document.hidden||navigator.onLine===false||busy||!uid())return;
+    const opened=!!node('daily-meditation-overlay');
+    const waiting=panelState().done&&(!state||state.date!==today()||state.stars<15);
+    // The badge is already on before personal completion. Stop background
+    // friend reads once all fifteen stars have arrived.
+    if(opened||waiting&&Date.now()-lastStatusAt>=300000)void refresh().catch(()=>{});
+  }
+  setInterval(poll,60000);
+  reconcile();syncPanel();
 })();
