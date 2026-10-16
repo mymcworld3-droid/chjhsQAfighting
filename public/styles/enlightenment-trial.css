@@ -1,0 +1,36 @@
+/* 悟道試煉：沿用宗門墨色、淡金線條，置頂獨立答題，不佔原問道版面。 */
+.enlightenment-overlay{position:fixed;inset:0;z-index:22000;display:grid;place-items:center;padding:16px;background:rgba(3,7,10,.83);backdrop-filter:blur(8px);box-sizing:border-box}
+.enlightenment-panel{width:min(680px,100%);max-height:min(790px,94dvh);display:flex;flex-direction:column;overflow:hidden;border:1px solid rgba(225,191,112,.35);border-radius:18px;background:linear-gradient(160deg,#22201b,#101318 73%);box-shadow:0 25px 85px #000b;color:#e7dbc2}
+.enlightenment-panel>header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 22px;border-bottom:1px solid #d9be7c29}
+.enlightenment-panel>header h2{font-family:serif;font-size:24px;letter-spacing:.16em;margin:3px 0;color:#f2dfae}
+.enlightenment-panel>header small{font-size:10px;letter-spacing:.17em;color:#a5a08c}
+.enlightenment-panel>header button{border:1px solid #ffffff21;border-radius:9px;background:transparent;color:#e7dbc2;font-size:25px;width:38px;height:38px;cursor:pointer}
+#enlightenment-body{padding:20px 22px 25px;min-height:0;overflow:auto;overscroll-behavior:contain}
+.enlightenment-overview{display:grid;gap:6px;border-left:3px solid #d6bd79;padding:11px 15px;background:#e0c57c0a;margin-bottom:18px}
+.enlightenment-overview span,.enlightenment-overview small{font-size:12px;color:#a49b87}
+.enlightenment-overview strong{font-size:16px;color:#efddb3}
+.enlightenment-step{display:flex;justify-content:space-between;gap:10px;margin:12px 0 14px;color:#cebf96;font-size:12px}
+.enlightenment-question{margin:8px 0 20px;font-size:19px;line-height:1.8;font-weight:600;overflow-wrap:anywhere}
+.enlightenment-options{display:grid;gap:9px}
+.enlightenment-options button{display:flex;align-items:center;gap:12px;text-align:left;border:1px solid #ddc88c32;background:#ffffff08;border-radius:11px;color:#f0e5cc;min-height:58px;padding:11px 14px;cursor:pointer}
+.enlightenment-options button:hover:not(:disabled){border-color:#e3c780; background:#c6ab6321}
+.enlightenment-options button:disabled{opacity:.55}
+.enlightenment-options button>span{display:grid;place-items:center;width:29px;height:29px;flex:0 0 29px;border:1px solid #d6b76d77;border-radius:8px;color:#dec58c}
+.enlightenment-options button>b{font-weight:500;line-height:1.65;min-width:0;overflow-wrap:anywhere}
+.enlightenment-footnote{display:block;margin-top:15px;color:#918d80;line-height:1.6}
+.enlightenment-primary{width:100%;margin-top:16px;padding:12px 14px;border:1px solid #d8ba73;border-radius:10px;background:linear-gradient(110deg,#70552b,#473824);color:#faedce;font-weight:700;cursor:pointer}
+.enlightenment-primary:disabled{opacity:.5;cursor:wait}
+.enlightenment-review,.enlightenment-finish{display:grid;gap:10px;line-height:1.7}
+.enlightenment-review>strong{font-size:20px;color:#e3b68c}
+.enlightenment-review>strong.correct,.enlightenment-finish.passed>b{color:#a8ddba}
+.enlightenment-explanation{border:1px solid #d8bb7930;background:#d8bb7909;border-radius:10px;padding:16px;line-height:1.85;overflow-wrap:anywhere}
+.enlightenment-finish{text-align:center}
+.enlightenment-finish>b{font-size:18px}.enlightenment-finish>strong{font-size:40px;color:#eed28f}
+.enlightenment-mastery{padding:12px;border:1px solid #d8bb7930;border-radius:10px;color:#f1d7a0}
+.enlightenment-status{padding:38px 10px;text-align:center;color:#d5c6a8}
+.enlightenment-intro{line-height:1.8}
+.enlightenment-intro>small,.enlightenment-empty{color:#a9a18d}
+.enlightenment-error{color:#f2a5a2;line-height:1.7}
+.ai-ability-priority [data-ability-start]{margin-left:8px;border:1px solid #c8ad63a9;background:#9975382a;color:inherit;border-radius:9px;padding:8px 12px;cursor:pointer}
+@media(max-width:600px){.enlightenment-overlay{padding:6px}.enlightenment-panel{max-height:98dvh;border-radius:11px}.enlightenment-panel>header{padding:12px 15px}.enlightenment-panel>header h2{font-size:21px}#enlightenment-body{padding:14px}.enlightenment-question{font-size:17px}.enlightenment-options button{min-height:55px}}
+@media(prefers-reduced-motion:reduce){.enlightenment-overlay{backdrop-filter:none}}
