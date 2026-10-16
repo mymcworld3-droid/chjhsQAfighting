@@ -20,7 +20,7 @@ import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 
   const percent = value => value == null ? '—' : String(value) + '%';
   function canShow() {
     return !!$('knowledgeChart') && $('page-settings')?.classList.contains('active-page') &&
-      !$('dongfu-analysis-card')?.classList.contains('is-collapsed');
+      !document.querySelector('.dongfu-analysis-card.is-collapsed');
   }
   function mount() {
     const canvas = $('knowledgeChart');
