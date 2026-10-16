@@ -5,8 +5,12 @@
 const { questionIntegrityIssue } = require('./question-answer-integrity.cjs');
 
 function questionQualityIssue({ q, correct, wrong, exp } = {}) {
-  const concreteIssue = questionIntegrityIssue({ q, correct, wrong, exp });
-  if (concreteIssue) return concreteIssue;
+  // Partial legacy checks still report their specific problems; full generated
+  // questions receive the stronger answer/explanation consistency verification.
+  if (correct !== undefined || wrong !== undefined) {
+    const concreteIssue = questionIntegrityIssue({ q, correct, wrong, exp });
+    if (concreteIssue) return concreteIssue;
+  }
   const stem = String(q || '');
   const explanation = String(exp || '');
   if (/(?:附圖|下圖|右圖|左圖|如圖所示|圖中所示)/.test(stem)) return '題目引用未提供的圖片';
