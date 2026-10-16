@@ -76,10 +76,13 @@
             console.warn('[Quiz Math] invalid TeX displayed as literal text');
           }
         } catch (renderError) {
-          for (const { node, html } of backups) {
+          for (const { node, html, literal } of backups) {
             if (node.isConnected) {
               try { mj.typesetClear?.([node]); } catch (_) {}
-              node.innerHTML = html;
+              // Never retry the same failed MathJax input unchanged.
+              const original = literal || html.replace(/<[^>]*>/g, ' ');
+              node.innerHTML = window.QAMathGuard?.fallback(original) ||
+                '<span class="tex2jax_ignore">' + escape(original) + '</span>';
             }
           }
           throw renderError;
