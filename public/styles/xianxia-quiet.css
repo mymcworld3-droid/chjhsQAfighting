@@ -322,3 +322,20 @@ body.xianxia-theme #scope-studio :is(.ss-picker,.ss-cart) {
     border-color: #d9b66d !important;
   }
 }
+
+
+/*
+ * 坊市 / 仙榜 / 仙盟：僅在直式且分頁啟用時隱藏頂部宗門徽印與標語。
+ * 保留語言、玩家資訊等頁首操作；橫式與其餘頁面不受影響。
+ * CSS :has() follows active-page immediately, so rotation/navigation requires no JS.
+ */
+@media (orientation: portrait) {
+  body.xianxia-theme:has(:is(#page-store, #page-rank, #page-social).active-page)
+    > header > h1.xianxia-brand {
+    display: none !important;
+  }
+  body.xianxia-theme:has(:is(#page-store, #page-rank, #page-social).active-page)
+    > header {
+    justify-content: flex-end !important;
+  }
+}
