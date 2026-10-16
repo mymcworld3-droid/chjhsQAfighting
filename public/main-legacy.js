@@ -692,6 +692,20 @@ function calculateRankFromScore(totalScore, uid = auth.currentUser?.uid) {
     return window.limitImmortalRank(rank, totalScore, REALMS, uid);
 }
 
+// Linking a provider preserves the UID; Firebase onAuthStateChanged may not
+// fire again, and the currentUser anonymous flag may lag until token refresh.
+// This is UI-only identity state, never used to authorize protected actions.
+let linkedGoogleIdentity = null;
+function syncAccountBindingUI(user = auth.currentUser) {
+    const linked = !!user && (user.isAnonymous === false || linkedGoogleIdentity?.uid === user.uid);
+    const bindingButton = document.getElementById('btn-bind-guest');
+    bindingButton?.classList.toggle('hidden', !user || linked);
+    const email = document.getElementById('settings-email');
+    if (email) email.textContent = !user ? '' : linked
+        ? (user.email || linkedGoogleIdentity?.email || currentUserData?.email || '已綁定 Google 帳號')
+        : '免註冊修行 · 尚未綁定帳號';
+}
+
 // 綁定全域函式
 window.startFirstVisitGuest = () => signInAnonymously(auth);
 window.googleLogin = async () => {
@@ -707,20 +721,37 @@ window.googleLogin = async () => {
                 const credential = GoogleAuthProvider.credentialFromError(error);
                 if (!credential) throw error;
                 // Existing accounts retain their own character, inventory and balances.
-                return await signInWithCredential(auth, credential);
+                const existing = await signInWithCredential(auth, credential);
+                linkedGoogleIdentity = null;
+                syncAccountBindingUI(existing.user);
+                return existing;
             }
             const person = result.user;
+            // Identity is now linked even if auth.currentUser still reports
+            // isAnonymous for this same UID until Firebase refreshes its state.
+            linkedGoogleIdentity = { uid: person.uid, email: person.email || '' };
+            syncAccountBindingUI(person);
             const identity = { email: person.email || '', photoURL: person.photoURL || '' };
             if (!currentUserData?.displayName || currentUserData.displayName === '匿名修士') identity.displayName = person.displayName || '青雲修士';
-            await updateDoc(doc(db, 'users', person.uid), identity);
+            try { await updateDoc(doc(db, 'users', person.uid), identity); }
+            catch (error) {
+                // Authentication succeeded; a transient profile sync failure must
+                // not leave the UI falsely claiming the Google link failed.
+                console.warn('[Account link] Profile identity sync deferred', error);
+            }
             if (auth.currentUser?.uid !== person.uid) return result;
-            Object.assign(currentUserData, identity);
-            document.getElementById('settings-email').textContent = person.email || '';
+            if (currentUserData) Object.assign(currentUserData, identity);
             await updateSettingsInputs();
+            syncAccountBindingUI(person);
+            const displayName = document.getElementById('user-info');
+            if (displayName && currentUserData?.displayName)
+                displayName.textContent = currentUserData.displayName;
             await window.handleFirstVisitReady?.(person, currentUserData, false);
             return result;
         }
         const result = await signInWithPopup(auth, provider);
+        linkedGoogleIdentity = null;
+        syncAccountBindingUI(result.user);
         // A same-account popup need not fire an auth-state change; resume setup explicitly.
         if (currentUserData?.uid === result.user.uid && window.__xiuxianFeaturesReady && window.getFirstVisitState?.().joining) {
             await window.handleFirstVisitReady?.(result.user, currentUserData, false);
@@ -1390,7 +1421,7 @@ onAuthStateChanged(auth, async (user) => {
         }
 
         showGameStartupGate('正在載入玩家資料…');
-        document.getElementById('settings-email').innerText = user.email || '免註冊修行 · 尚未綁定帳號';
+        syncAccountBindingUI(user);
 
         injectSocialUI();
 
@@ -1513,6 +1544,8 @@ onAuthStateChanged(auth, async (user) => {
         }
     } else {
         // 👋 登出狀態
+        linkedGoogleIdentity = null;
+        syncAccountBindingUI(null);
         window.__xiuxianMigrationApproved = false;
         checkAdminRole(false);
         currentUserData = null;
@@ -2342,8 +2375,9 @@ window.toggleSourceMode = () => {
 };
 
 async function updateSettingsInputs() {
+    // Bind button/email follow provider-link success even without a new UID.
+    syncAccountBindingUI();
     if (currentUserData && currentUserData.profile) {
-        document.getElementById('btn-bind-guest')?.classList.toggle('hidden', !auth.currentUser?.isAnonymous);
         document.getElementById('set-display-name').value = currentUserData.displayName || "";
         document.getElementById('set-level').value = currentUserData.profile.educationLevel || '';
         document.getElementById('set-strong').value = currentUserData.profile.strongSubjects || "";
