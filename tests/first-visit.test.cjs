@@ -37,13 +37,22 @@ test('new accounts and account linking show backgrounds before gender, while ret
   assert.equal(rules.needsGender({}), true);
 });
 
-function loginHarness({ collision = false, cancel = false } = {}) {
+function loginHarness({ collision = false, cancel = false, staleAuth = false } = {}) {
   const calls = [], player = { uid: guest.uid, displayName: '匿名修士', stats: { totalScore: 1, gold: 20 }, gameSettings: { sourceMode: 'focused' }, inventory: [] };
   const person = { ...guest, isAnonymous: false, displayName: 'New name', email: 'new@example.test', photoURL: 'https://example.test/photo.png' };
   const auth = { currentUser: { ...guest } };
+  const nodes = new Map([
+    ['btn-bind-guest', { hidden: false, classList: {
+      classes: new Set(), toggle(name, enabled) {
+        if (enabled) this.classes.add(name); else this.classes.delete(name);
+      },
+      contains(name) { return this.classes.has(name); }
+    } }],
+    ['settings-email', { textContent: '' }]
+  ]);
   const ctx = vm.createContext({
     auth, provider: {}, db: {}, currentUserData: player,
-    document: { getElementById: () => ({ textContent: '' }) },
+    document: { getElementById: id => nodes.get(id) || { textContent: '' } },
     window: { isFirstVisitActive: () => true, handleFirstVisitReady: async (user, data) => calls.push(['ready', user.uid, data.stats.totalScore]) },
     alert: message => calls.push(['alert', message]),
     signInAnonymously: async () => ({ user: auth.currentUser }),
@@ -51,7 +60,7 @@ function loginHarness({ collision = false, cancel = false } = {}) {
       calls.push(['link', user.uid]);
       if (cancel) throw Object.assign(new Error('cancel'), { code: 'auth/popup-closed-by-user' });
       if (collision) throw Object.assign(new Error('existing'), { code: 'auth/credential-already-in-use', credential: 'verified-credential' });
-      auth.currentUser = person;
+      if (!staleAuth) auth.currentUser = person;
       return { user: person };
     },
     GoogleAuthProvider: { credentialFromError: error => error.credential },
@@ -61,10 +70,10 @@ function loginHarness({ collision = false, cancel = false } = {}) {
     updateDoc: async (ref, patch) => calls.push(['save', ref.uid, patch]),
     updateSettingsInputs: async () => {}
   });
-  const start = legacy.indexOf('window.startFirstVisitGuest =');
+  const start = legacy.indexOf('let linkedGoogleIdentity =');
   const end = legacy.indexOf('window.completeFirstVisitSetup =', start);
   vm.runInContext(legacy.slice(start, end), ctx);
-  return { ctx, calls, player };
+  return { ctx, calls, player, nodes };
 }
 
 test('Google binding preserves anonymous UID and first-answer rewards, updating only account identity', async () => {
@@ -75,6 +84,21 @@ test('Google binding preserves anonymous UID and first-answer rewards, updating 
   assert.equal(player.gameSettings.sourceMode, 'focused');
   assert.deepEqual(calls.map(row => row[0]), ['link', 'save', 'ready']);
   assert.deepEqual(Object.keys(calls[1][2]).sort(), ['displayName', 'email', 'photoURL']);
+});
+
+test('provider linking synchronizes guest binding UI even if Firebase keeps the anonymous currentUser object', async () => {
+  const { ctx, player, nodes } = loginHarness({ staleAuth: true });
+  assert.equal(ctx.auth.currentUser.isAnonymous, true);
+  await ctx.window.googleLogin();
+  assert.equal(ctx.auth.currentUser.isAnonymous, true, 'stale SDK flag reproduces reported issue');
+  assert.equal(ctx.auth.currentUser.uid, guest.uid);
+  assert.equal(nodes.get('btn-bind-guest').classList.contains('hidden'), true);
+  assert.equal(nodes.get('settings-email').textContent, 'new@example.test');
+  assert.equal(player.email, 'new@example.test');
+  // Re-rendering the profile form must not resurrect the link button.
+  vm.runInContext('syncAccountBindingUI()', ctx);
+  assert.equal(nodes.get('btn-bind-guest').classList.contains('hidden'), true);
+  assert.equal(nodes.get('settings-email').textContent, 'new@example.test');
 });
 
 test('existing Google credential signs into its own account and never overwrites that account with guest data', async () => {
