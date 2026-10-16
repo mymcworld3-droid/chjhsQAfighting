@@ -25,6 +25,11 @@ export const featureReady = (async () => {
   const ROOM_COLLECTION = 'rooms';
   const HEARTBEAT_MS = 8000;
   const PREPARE_LEASE_MS = 7000;
+  // A validated AI question may need several upstream attempts. Never let the
+  // opponent steal a live generation job every seven seconds.
+  const ACTIVE_QUESTION_LEASE_MS = 65000;
+  const QUIZ_REQUEST_TIMEOUT_MS = 58000;
+  const EMPTY_QUESTION_REPAIR_MS = 2500;
   const MATCH_RECONCILE_MS = 1100;
   const MATCH_SCAN_LIMIT = 80;
   const MATCH_SCAN_MAX_PAGES = 4;
@@ -78,6 +83,10 @@ export const featureReady = (async () => {
     introAdvancing: false,
     disconnectClaimRound: null,
     renderedQuestionId: null,
+    missingQuestionRound: null,
+    missingQuestionSinceMs: 0,
+    repairingQuestionRound: null,
+    repairRetryAfterMs: 0,
     pendingAnswer: null,
     quizScrollSerial: 0,
     quizFooterScrollKey: null,
@@ -511,6 +520,22 @@ export const featureReady = (async () => {
       reasoning_steps: Math.max(1, Math.min(6, Number(source.reasoning_steps) || 1)) };
   }
 
+  function usableQuestion(question) {
+    return !!question && typeof question.id === 'string' && !!question.id &&
+      typeof question.q === 'string' && question.q.trim().length >= 5 &&
+      Array.isArray(question.opts) && question.opts.length === 4 &&
+      question.opts.every(option => typeof option === 'string' && !!option.trim()) &&
+      Number.isInteger(Number(question.ans)) && Number(question.ans) >= 0 &&
+      Number(question.ans) < 4;
+  }
+
+  function questionLeaseExpired(room, ownerUid, claimedAtMs) {
+    const owner = [room?.host, room?.guest].find(player => player?.uid === ownerUid);
+    const ownerOffline = !owner || nowMs() - Number(owner.lastSeenAtMs || 0) >= BATTLE_V2.disconnectTtlMs;
+    return nowMs() - Number(claimedAtMs || 0) >=
+      (ownerOffline ? PREPARE_LEASE_MS : ACTIVE_QUESTION_LEASE_MS);
+  }
+
   async function generateQuestion(room, round) {
     const scope = room.knowledgeScope || resolveBattleKnowledge(room.host?.knowledge, room.guest?.knowledge);
     const selected = pickBattleKnowledge(scope, round);
@@ -537,10 +562,12 @@ export const featureReady = (async () => {
     }));
     const request = { ...selected, rank: Math.min(Number(room.host?.rankLevel) || 0, Number(room.guest?.rankLevel) || 0),
       avoidQuestions, avoidQuestionMeta, quizMode: 'battle-fast' };
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), QUIZ_REQUEST_TIMEOUT_MS);
     try {
       const response = await fetch('/api/generate-quiz', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(request)
+        body: JSON.stringify(request), signal: controller.signal
       });
       if (!response.ok) throw new Error('quiz api ' + response.status);
       const body = await response.json();
@@ -553,6 +580,8 @@ export const featureReady = (async () => {
       console.warn('[Battle v2] question generation unavailable; retaining scope:', error);
       toast('AI 出題暫時失敗，正依原範圍重新出題。');
       throw error;
+    } finally {
+      clearTimeout(timeout);
     }
   }
 
@@ -574,7 +603,7 @@ export const featureReady = (async () => {
 
     if (room.prefetchOwnerUid !== uid) {
       const claimedAt = Number(room.prefetchClaimedAtMs || 0);
-      if (!room.prefetchOwnerUid || nowMs() - claimedAt >= PREPARE_LEASE_MS) {
+      if (!room.prefetchOwnerUid || questionLeaseExpired(room, room.prefetchOwnerUid, claimedAt)) {
         try {
           await runTransaction(db(), async (tx) => {
             const ref = roomRef();
@@ -583,7 +612,7 @@ export const featureReady = (async () => {
             const fresh = snap.data();
             if (!canPrefetchRound(fresh, round) || (Number(fresh.prefetchedRound) === round && fresh.prefetchedQuestion)) return;
             const freshClaimedAt = Number(fresh.prefetchClaimedAtMs || 0);
-            if (fresh.prefetchOwnerUid && fresh.prefetchOwnerUid !== uid && nowMs() - freshClaimedAt < PREPARE_LEASE_MS) return;
+            if (fresh.prefetchOwnerUid && fresh.prefetchOwnerUid !== uid && !questionLeaseExpired(fresh, fresh.prefetchOwnerUid, freshClaimedAt)) return;
             tx.update(ref, { prefetchOwnerUid: uid, prefetchClaimedAtMs: nowMs(), updatedAt: serverTimestamp() });
           });
         } catch (_) {}
@@ -926,6 +955,8 @@ export const featureReady = (async () => {
     state.settlingRound = state.timeoutRound = state.preparingRound = state.prefetchingRound = state.advancingRound = state.disconnectClaimRound = null;
     state.prepareRetryAfterMs = state.prefetchRetryAfterMs = 0;
     state.introAdvancing = false; state.renderedQuestionId = null; state.pendingAnswer = null;
+    state.missingQuestionRound = state.repairingQuestionRound = null;
+    state.missingQuestionSinceMs = state.repairRetryAfterMs = 0;
     state.quizScrollSerial += 1; state.quizFooterScrollKey = null; state.quizMathReady = null;
     state.seenActivationKeys.clear(); state.seenSettlementKey = null; state.resultRecordedRoom = null;
     state.reviewedRound = state.reviewSubmittingRound = state.animationFinishedKey = null;
@@ -1201,29 +1232,58 @@ export const featureReady = (async () => {
     if (afterTypeset?.then) Promise.resolve(afterTypeset).then(schedule, schedule);
   }
 
+  function questionDomReady(question) {
+    const questionEl = document.getElementById('bv2-question');
+    const optionsEl = document.getElementById('bv2-options');
+    return usableQuestion(question) &&
+      questionEl?.dataset.questionId === String(question.id) &&
+      !!questionEl.innerHTML?.trim() &&
+      optionsEl?.querySelectorAll('.bv2-option').length === 4;
+  }
+
   function renderQuestion(room, mine) {
     const qEl = document.getElementById('bv2-question'); const optionsEl = document.getElementById('bv2-options'); const expEl = document.getElementById('bv2-explanation');
     if (!qEl || !optionsEl || !expEl) return;
     const question = room.currentQuestion;
-    if (!question) {
-      qEl.textContent = room.status === 'preparing' ? '下一題凝聚中…' : '等待題目同步…'; optionsEl.innerHTML = ''; expEl.classList.add('hidden');
-      setText('bv2-answer-status', '題目正在由鬥法臺同步。'); return;
+    if (!usableQuestion(question)) {
+      state.renderedQuestionId = null;
+      qEl.textContent = '題目同步異常，正在重新取得…';
+      optionsEl.replaceChildren(); expEl.classList.add('hidden');
+      setText('bv2-answer-status', '系統正在修復題目，不會要求你在空白畫面作答。');
+      return;
     }
-    if (state.renderedQuestionId !== question.id) {
-      state.renderedQuestionId = question.id; state.pendingAnswer = null;
+    // A formula renderer or a DOM refresh can clear the question without
+    // changing its Firestore ID. Reconstruct the missing content if needed.
+    if (state.renderedQuestionId !== question.id || !questionDomReady(question)) {
+      if (state.renderedQuestionId !== question.id) state.pendingAnswer = null;
       state.quizScrollSerial += 1; state.quizFooterScrollKey = null;
       const card = document.querySelector('#bv2-quiz > .bv2-question-card');
       if (card) card.scrollTop = 0;
-      const rich = window.quizMathRichText || escapeHtml;
-      window.quizMathClear?.([qEl, optionsEl, expEl]);
+      const rich = value => {
+        try {
+          const html = window.quizMathRichText?.(value);
+          if (typeof html === 'string' && html.trim()) return html;
+        } catch (error) {
+          console.warn('[Battle v2] rich text failed; using readable fallback:', error);
+        }
+        return escapeHtml(value);
+      };
+      try { window.quizMathClear?.([qEl, optionsEl, expEl]); }
+      catch (error) { console.warn('[Battle v2] math cleanup failed:', error); }
       qEl.innerHTML = rich(question.q); optionsEl.replaceChildren();
       question.opts.forEach((option, index) => {
         const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'bv2-option'; btn.dataset.index = String(index);
         btn.innerHTML = `<span>${String.fromCharCode(65 + index)}</span><b class="bv2-option-math">${rich(option)}</b>`;
         btn.addEventListener('click', () => submitAnswer(index)); optionsEl.appendChild(btn);
       });
+      qEl.dataset.questionId = String(question.id);
+      state.renderedQuestionId = question.id;
       expEl.classList.add('hidden'); expEl.textContent = ''; delete expEl.dataset.mathQuestionId;
-      state.quizMathReady = window.quizMathTypeset?.([qEl, optionsEl]);
+      try { state.quizMathReady = window.quizMathTypeset?.([qEl, optionsEl]); }
+      catch (error) {
+        state.quizMathReady = null;
+        console.warn('[Battle v2] math typesetting failed; retaining readable question:', error);
+      }
     }
     const answered = answerObject(mine, room.round); if (answered) state.pendingAnswer = null;
     const pending = state.pendingAnswer?.round === Number(room.round) ? state.pendingAnswer : null;
@@ -1552,11 +1612,13 @@ export const featureReady = (async () => {
   }
 
   async function takeoverQuestionLease(room) {
-    if (room.status !== 'preparing' || room.currentQuestion || room.questionOwnerUid === me()?.uid || nowMs() - Number(room.questionClaimedAtMs || 0) < PREPARE_LEASE_MS) return;
+    if (room.status !== 'preparing' || room.currentQuestion || room.questionOwnerUid === me()?.uid ||
+        (room.questionOwnerUid && !questionLeaseExpired(room, room.questionOwnerUid, room.questionClaimedAtMs))) return;
     try {
       await runTransaction(db(), async (tx) => {
         const ref = roomRef(); const snap = await tx.get(ref); if (!snap.exists()) return; const fresh = snap.data();
-        if (fresh.status !== 'preparing' || fresh.currentQuestion || nowMs() - Number(fresh.questionClaimedAtMs || 0) < PREPARE_LEASE_MS) return;
+        if (fresh.status !== 'preparing' || fresh.currentQuestion ||
+            (fresh.questionOwnerUid && !questionLeaseExpired(fresh, fresh.questionOwnerUid, fresh.questionClaimedAtMs))) return;
         tx.update(ref, { questionOwnerUid: me().uid, questionClaimedAtMs: nowMs(), updatedAt: serverTimestamp() });
       });
     } catch (_) {}
@@ -1602,6 +1664,45 @@ export const featureReady = (async () => {
     } catch (_) {} finally { setTimeout(() => { if (state.disconnectClaimRound === round) state.disconnectClaimRound = null; }, 3000); }
   }
 
+  function repairMissingPlayingQuestion(room) {
+    if (room.status !== 'playing' || usableQuestion(room.currentQuestion) ||
+        hasSubmittedAnswer(room.host, room.round) || hasSubmittedAnswer(room.guest, room.round)) {
+      state.missingQuestionRound = null;
+      return;
+    }
+    const round = Number(room.round);
+    if (state.missingQuestionRound !== round) {
+      state.missingQuestionRound = round;
+      state.missingQuestionSinceMs = nowMs();
+    }
+    if (nowMs() - state.missingQuestionSinceMs < EMPTY_QUESTION_REPAIR_MS ||
+        state.repairingQuestionRound === round || nowMs() < state.repairRetryAfterMs) return;
+    const roomId = state.roomId, uid = me()?.uid;
+    if (!uid || !roomId) return;
+    state.repairingQuestionRound = round;
+    void runTransaction(db(), async tx => {
+      const ref = roomRef(roomId);
+      const snap = await tx.get(ref);
+      if (!snap.exists()) return;
+      const fresh = snap.data();
+      if (fresh.status !== 'playing' || Number(fresh.round) !== round ||
+          usableQuestion(fresh.currentQuestion) ||
+          hasSubmittedAnswer(fresh.host, round) || hasSubmittedAnswer(fresh.guest, round)) return;
+      // Keep the same round for both players; never start a timer or score
+      // an answer while the room is missing a usable question.
+      tx.update(ref, {
+        status: 'preparing', currentQuestion: null, questionReadyAtMs: null,
+        questionOwnerUid: uid, questionClaimedAtMs: nowMs(),
+        answerWindowStartedAt: null, answerWindowStartedAtMs: null,
+        firstAnswerUid: null, updatedAt: serverTimestamp()
+      });
+    }).catch(error => console.warn('[Battle v2] missing question repair failed:', error))
+      .finally(() => {
+        if (state.repairingQuestionRound === round) state.repairingQuestionRound = null;
+        state.repairRetryAfterMs = nowMs() + 3000;
+      });
+  }
+
   function tickRoom() {
     const room = state.room; if (!room || !state.roomId) return;
     const timerEl = document.getElementById('bv2-timer'); const barEl = document.getElementById('bv2-timer-bar'); const trackEl = document.getElementById('bv2-timer-track');
@@ -1611,7 +1712,7 @@ export const featureReady = (async () => {
       if (nowMs() >= state.prefetchRetryAfterMs) void prefetchRoundQuestion(room, 1);
       advanceIntro(room);
     }
-    else if (room.status === 'playing' && room.currentQuestion) {
+    else if (room.status === 'playing' && usableQuestion(room.currentQuestion)) {
       if (Number(room.round) < Number(room.maxRounds || BATTLE_V2.maxRounds) && nowMs() >= state.prefetchRetryAfterMs) {
         void prefetchRoundQuestion(room, Number(room.round) + 1);
       }
@@ -1622,7 +1723,8 @@ export const featureReady = (async () => {
         claimDisconnectedOpponent(room);
         return;
       }
-      if (document.getElementById('page-battle')?.dataset.bv2Phase !== 'quiz') renderQuiz(room);
+      if (document.getElementById('page-battle')?.dataset.bv2Phase !== 'quiz' ||
+          !questionDomReady(room.currentQuestion)) renderQuiz(room);
       const hostSubmitted = hasSubmittedAnswer(room.host, room.round);
       const guestSubmitted = hasSubmittedAnswer(room.guest, room.round);
       const hostAnswer = answerObject(room.host, room.round);
@@ -1641,6 +1743,9 @@ export const featureReady = (async () => {
         if (timerEl) { timerEl.textContent = '等待首答'; timerEl.classList.add('idle'); }
         if (trackEl) trackEl.classList.add('idle'); if (barEl) barEl.style.width = '100%';
       }
+    } else if (room.status === 'playing') {
+      repairMissingPlayingQuestion(room);
+      if (timerEl) timerEl.textContent = '題目修復中';
     } else if (room.status === 'settled') {
       if (Number(room.round) < Number(room.maxRounds || BATTLE_V2.maxRounds) && nowMs() >= state.prefetchRetryAfterMs) {
         void prefetchRoundQuestion(room, Number(room.round) + 1);
@@ -1725,8 +1830,11 @@ export const featureReady = (async () => {
     else if (room.status === 'preparing') renderArena(room);
     else if (room.status === 'playing') {
       if (Number(room.round) < Number(room.maxRounds || BATTLE_V2.maxRounds)) void prefetchRoundQuestion(room, Number(room.round) + 1);
-      if (room.currentQuestion && nowMs() >= Number(room.questionReadyAtMs || 0)) renderQuiz(room);
-      else renderArena(room);
+      if (usableQuestion(room.currentQuestion) && nowMs() >= Number(room.questionReadyAtMs || 0)) renderQuiz(room);
+      else {
+        renderArena(room);
+        if (!usableQuestion(room.currentQuestion)) setText('bv2-cue-message', '題目未能同步，正在自動修復…');
+      }
     } else if (room.status === 'settled') {
       if (Number(room.round) < Number(room.maxRounds || BATTLE_V2.maxRounds)) void prefetchRoundQuestion(room, Number(room.round) + 1);
       if (state.reviewedRound !== Number(room.round)) renderQuiz(room);

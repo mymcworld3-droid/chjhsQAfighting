@@ -19,7 +19,7 @@ test('opening round waits exactly three seconds; later rounds have no extra dela
 
 test('both the snapshot and periodic tick use the same first-round deadline', () => {
   assert.match(battle, /questionReadyAtMs: questionReadyDeadline\(round, nowMs\(\)\)/);
-  assert.match(battle, /room\.currentQuestion && nowMs\(\) >= Number\(room\.questionReadyAtMs \|\| 0\)/);
+  assert.match(battle, /usableQuestion\(room\.currentQuestion\) && nowMs\(\) >= Number\(room\.questionReadyAtMs \|\| 0\)/);
   assert.match(battle, /if \(nowMs\(\) < Number\(room\.questionReadyAtMs \|\| 0\)\)/);
   assert.match(battle, /Number\(room\.round\) === 1 && remaining > 0/);
   assert.doesNotMatch(battle, /下一題倒數/);
