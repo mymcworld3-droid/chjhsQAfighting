@@ -56,7 +56,7 @@ export function refineryShellMarkup() {
                 <button type="button" class="refinery-craft" disabled>
                   <i class="fa-solid fa-fire-flame-curved"></i>
                   <span class="craft-main">煉製</span>
-                  <span class="craft-sub">REFINE</span>
+                  <span class="craft-sub">需 — 碎片</span>
                 </button>
               </div>
               <span class="refinery-array-caption">八方聚靈 · 一器成形</span>
