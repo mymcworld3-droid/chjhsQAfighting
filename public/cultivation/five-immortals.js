@@ -1,5 +1,6 @@
 // 九州五大仙：渡劫以上修士，以國中程度連答問鼎。答錯即止，連答紀錄嚴格超過在榜者才可奪位。
 import { resolvePlayerAvatar } from './profile-avatar.js';
+import { playerRepository } from './data/player-repository.js';
 (function () {
   'use strict';
 
@@ -235,7 +236,7 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
     if (!currentGroup()) { toast('請先到洞府設定年級，才能查看及問鼎五仙。'); return; }
     if (!eligible()) { toast(`只有渡劫以上修士（${TRIBULATION_SCORE} 修為）能問鼎五仙。`); return; }
     const serial = ++sessionSerial;
-    challenge = { active: true, serial, cohort: currentGroup(), role, streak: 0, target: ownerRecord(roleId), busy: false, question: null, seenQuestions: [], nextPromise: null };
+    challenge = { active: true, serial, attemptId: Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,9), cohort: currentGroup(), role, streak: 0, questionNumber: 0, target: ownerRecord(roleId), busy: false, question: null, seenQuestions: [], nextPromise: null };
     ensureModal();
     document.getElementById('fi-title').textContent = `問鼎${role.name} · ${role.subject}`;
     document.getElementById('fi-target').textContent = String(challenge.target);
@@ -280,10 +281,24 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
     try { window.MathJax?.typesetPromise?.([body]); } catch (_) {}
   }
 
+  function preserveChallengeAnswer(q, choice, serial) {
+    const run=challenge,user=auth?.currentUser;
+    if (!run || run.serial!==serial || !user?.uid) return;
+    const key='immortal_'+user.uid+'_'+run.attemptId+'_'+run.questionNumber;
+    void playerRepository.saveExamAnswer(key,{
+      mode:'immortal',topic:'Immortal',rankAtTime:'問鼎 · '+run.role.name,
+      question:q.question,options:q.options,correctIdx:q.answer,userIdx:choice,
+      explanation:q.explanation,subject:run.role.subject,
+      subTopic:run.role.name,isCorrect:choice===q.answer,timeTaken:0
+    }).catch(error=>console.warn('[Immortal answer history]',error?.message||error));
+  }
+
   async function answerChallenge(choice, serial) {
     if (!challenge?.active || challenge.serial !== serial || challenge.busy || !challenge.question) return;
     challenge.busy = true;
     const q = challenge.question;
+    challenge.questionNumber += 1;
+    preserveChallengeAnswer(q, choice, serial);
     const body = document.getElementById('fi-body');
     const buttons = [...body.querySelectorAll('[data-answer]')];
     buttons.forEach((button) => {
