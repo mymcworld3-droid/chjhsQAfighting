@@ -86,7 +86,8 @@ test('MathJax merror is turned into readable text; a typeset exception does not 
   assert.match(bad.innerHTML, /tex2jax_ignore/);
   const thrown = node();
   await context.window.quizMathSet(thrown, 'THROW');
-  assert.equal(thrown.innerHTML, 'THROW');
+  assert.match(thrown.innerHTML, /tex2jax_ignore/);
+  assert.match(thrown.innerHTML, /THROW/);
   const good = node();
   await context.window.quizMathSet(good, '$x^2$');
   assert.equal(good.innerHTML, '$x^2$');
