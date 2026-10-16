@@ -37,7 +37,7 @@ export const playerRepository=Object.freeze({
   async addExamLog(value={}){const {db}=await services();return addDoc(collection(db,'exam_logs'),value);},
   // 關鍵作答採固定來源鍵：跨裝置／監聽重複觸發不得建立兩筆相同歷史。
   async saveExamAnswer(key, value={}) {
-    const user=currentUser();
+    const user=getMainUser();
     if(!user?.uid) throw new Error('請先登入才能儲存答題紀錄');
     const stable=String(key||'').replace(/[^a-zA-Z0-9_-]/g,'_').slice(0,480);
     if(stable.length<6) throw new Error('答題紀錄缺少固定來源鍵');
