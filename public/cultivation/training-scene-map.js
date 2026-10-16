@@ -36,7 +36,7 @@ function loadStyle() {
   const link = document.createElement('link');
   link.id = 'training-scene-map-style';
   link.rel = 'stylesheet';
-  link.href = 'styles/training-scene-map.css';
+  link.href = 'styles/training-scene-map.css?v=20261016-forge-ready';
   document.head.appendChild(link);
 }
 function setDetail(placeId) {
