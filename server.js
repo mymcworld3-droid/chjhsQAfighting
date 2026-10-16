@@ -413,12 +413,15 @@ function chooseQuestionForm(previousMeta, seed) {
 // ==========================================
 // API 2: 生成測驗題目 (優化版：單次請求 + 安全 JSON 解析)
 // ==========================================
+const { MODES: FAST_QUIZ_MODES, quickQuizPrompt } = require('./fast-quiz-prompt.cjs');
+
 app.post('/api/generate-quiz', async (req, res) => {
     // 兼容前端可能傳來的 specificTopic 或 topic
     let { subject, level, rank, difficulty, knowledgeMap, specificTopic, topic, avoidQuestions, avoidQuestionMeta, quizMode } = req.body || {};
     subject = String(subject || '').trim().slice(0, 40);
     level = String(level || '國中一年級').slice(0, 32);
     const raidQuickSimple = String(quizMode || '') === 'raid-quick-simple';
+    const combatFastMode = FAST_QUIZ_MODES.has(String(quizMode || ''));
     let raidIdentity = null;
     let raidRoomId = '';
     let raidActionId = 0;
@@ -569,7 +572,15 @@ app.post('/api/generate-quiz', async (req, res) => {
             const retryCorrection = lastGenerationIssue ?
                 '\n[前一版未通過驗證]\n' + lastGenerationIssue.slice(0, 600) +
                 '\n這一版必須從頭重寫整個題目 JSON 的 q、correct、wrong、exp，不能只在解析加註更正。' : '';
-            const routed = await aiRouter.generateJSON(generationPrompt + retryCorrection);
+            const prompt = combatFastMode ? quickQuizPrompt({
+                mode: String(quizMode), subject, level, topic: targetTopic, rank, difficulty,
+                previousQuestions, previousMeta, targetForm, quality,
+                retryIssue: lastGenerationIssue, randomSeed
+            }) : generationPrompt + retryCorrection;
+            // Shorter instructions and bounded provider latency only for combat.
+            // Every generated candidate still undergoes the SAME server-side
+            // TeX, quality, answer consistency, and duplicate validation below.
+            const routed = await aiRouter.generateJSON(prompt, combatFastMode ? { timeoutMs: 16000 } : {});
             const parsed = routed.data;
             const wrong = Array.isArray(parsed?.wrong) ? parsed.wrong : [];
             const options = [parsed?.correct, ...wrong];
