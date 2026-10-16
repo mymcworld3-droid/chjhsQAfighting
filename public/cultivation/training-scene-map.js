@@ -286,7 +286,7 @@ function updateTicketIndicators() {
   // Forge completion is distinct from raid tickets and nascent upgrades.
   // Keep a dot on the forge building and on the refinery detail tab.
   const forge = plane?.querySelector('[data-training-location="forge"]');
-  const forgeTab = document.querySelector('#page-training [data-training-tab="refinery"]');
+  const forgeTab = document.querySelector?.('#page-training [data-training-tab="refinery"]');
   for (const [button, host] of [[forge, forge?.querySelector('.training-place-label')], [forgeTab, forgeTab]]) {
     if (!button || !host) continue;
     let dot = host.querySelector('.refinery-ready-dot');
