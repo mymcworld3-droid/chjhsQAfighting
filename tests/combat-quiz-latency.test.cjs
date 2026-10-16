@@ -31,7 +31,7 @@ test('three combat modes use a compact but strict full-question AI prompt', () =
     assert.match(prompt, /TeX/);
   }
   assert.match(battle, /quizMode: 'battle-fast'/);
-  assert.match(raid, /quizMode: 'raid-standard'/);
+  assert.match(raid, /quizMode: 'raid-quick-simple'/);
   assert.match(five, /quizMode: 'immortal-fast'/);
   assert.match(server, /FAST_QUIZ_MODES\.has/);
   assert.match(server, /combatFastMode \? quickQuizPrompt/);
