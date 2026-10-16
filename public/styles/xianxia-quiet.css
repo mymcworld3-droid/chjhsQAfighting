@@ -325,17 +325,18 @@ body.xianxia-theme #scope-studio :is(.ss-picker,.ss-cart) {
 
 
 /*
- * 坊市 / 仙榜 / 仙盟：僅在直式且分頁啟用時隱藏頂部宗門徽印與標語。
- * 保留語言、玩家資訊等頁首操作；橫式與其餘頁面不受影響。
- * CSS :has() follows active-page immediately, so rotation/navigation requires no JS.
+ * 直式坊市、仙榜、仙盟：移除完整的頂部全站導覽橫欄
+ * （徽印、宗門名稱、標語、語言切換、玩家資訊及背景一起隱藏），
+ * 並收回原本為固定頁首保留的 main 上方空間。
+ * 僅在目標分頁 active 時啟用；回宗門、切頁或轉橫式自動還原。
  */
 @media (orientation: portrait) {
   body.xianxia-theme:has(:is(#page-store, #page-rank, #page-social).active-page)
-    > header > h1.xianxia-brand {
+    > header {
     display: none !important;
   }
   body.xianxia-theme:has(:is(#page-store, #page-rank, #page-social).active-page)
-    > header {
-    justify-content: flex-end !important;
+    > main {
+    padding-top: max(8px, env(safe-area-inset-top, 0px)) !important;
   }
 }
