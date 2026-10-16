@@ -17,27 +17,27 @@ test('90-day activity list is unique and sorted', () => {
 test('fixed matured D1 and D7 cohorts exclude too-recent players', () => {
   const now = new Date('2026-10-16T04:00:00Z');
   const players = [
-    { uid: 'a', firstDay: '2026-10-15', cohortEligible: true, firstQuestionAt: now, firstThreeAt: now, seenDays: ['2026-10-15','2026-10-16'], socialDays: ['2026-10-15'] },
+    { uid: 'a', firstDay: '2026-10-15', cohortEligible: true, firstQuestionAt: new Date('2026-10-15T04:00:00Z'), firstThreeAt: new Date('2026-10-15T06:00:00Z'), seenDays: ['2026-10-15','2026-10-16'], socialDays: ['2026-10-15'] },
     { uid: 'b', firstDay: '2026-10-09', cohortEligible: true, firstQuestionAt: now, seenDays: ['2026-10-09','2026-10-16'], socialDays: [] },
     { uid: 'c', firstDay: '2026-10-16', cohortEligible: true, firstQuestionAt: now, seenDays: ['2026-10-16'], socialDays: [] },
     { uid: 'd', firstDay: '2026-10-14', cohortEligible: true, seenDays: ['2026-10-14'], socialDays: [] },
     { uid: 'old', firstDay: '2026-10-09', cohortEligible: false, seenDays: ['2026-10-09', '2026-10-16'] }
   ];
   const daily = [
-    { uid: 'a', day: '2026-10-16', answers: 2, starts: 2, social: 1, loadFailures: 1, soloAnswers: 1, raidAnswers: 1 },
-    { uid: 'b', day: '2026-10-16', answers: 3, starts: 1, social: 0, loadFailures: 0, duelAnswers: 3 }
+    { uid: 'a', day: '2026-10-16', answers: 2, starts: 2, social: 1, loadFailures: 1, soloAnswers: 1, raidAnswers: 1, appLoads: 1, appFailures: 1 },
+    { uid: 'b', day: '2026-10-16', answers: 3, starts: 1, social: 0, loadFailures: 0, duelAnswers: 3, appLoads: 1 }
   ];
   const report = buildReport({
-    visitors: [{firstDay:'2026-10-16',started:true}, {firstDay:'2026-10-15',started:false}],
+    visitors: [{firstDay:'2026-10-16',started:true,firstStartDay:'2026-10-16'}, {firstDay:'2026-10-15',started:false,firstStartDay:null}],
     players, days:daily, events:[], now, range:7, truncated:false
   });
   assert.deepEqual(report.visitors, { total:2, started:1, rate:50 });
-  assert.deepEqual(report.firstThree, { completed:1, started:2, rate:50 });
+  assert.deepEqual(report.firstThree, { completed:1, started:1, rate:100 });
   assert.deepEqual(report.d1, { returned:1, eligible:3, rate:33.3 });
   assert.deepEqual(report.d7, { returned:1, eligible:1, rate:100 });
   assert.deepEqual(report.weekly, { answers:5, active:2, solo:1, raid:1, duel:3, meditation:0 });
   assert.deepEqual({ participants:report.social.participants, rate:report.social.rate }, { participants:1, rate:50 });
-  assert.deepEqual(report.loading, { success:3, failed:1, rate:25 });
+  assert.deepEqual(report.loading, { success:3, failed:1, rate:25, appLoads:2, appFailures:1, appRate:50 });
   assert.equal(report.social.cohortD1Social.rate, 100);
   assert.equal(report.social.cohortD1Other.rate, 0);
 });
