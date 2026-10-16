@@ -38,6 +38,7 @@ import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
   }
   function setBody(markup){
     if(!layer)return;
+    window.quizMathClear?.($('enlightenment-body'));
     $('enlightenment-body').innerHTML=markup;
     math($('enlightenment-body'));
   }
@@ -184,8 +185,8 @@ import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
   function open(event){
     identity=getMainUser()?.uid||'';
     if(!identity){window.showToast?.('請先登入才能開始悟道試煉');return;}
-    selected={subject:String(event?.detail?.subject||''),topic:String(event?.detail?.topic||'')};
     close();
+    selected={subject:String(event?.detail?.subject||''),topic:String(event?.detail?.topic||'')};
     identity=getMainUser()?.uid||'';
     ensureLayer();document.body.classList.add('enlightenment-open');
     void load();
