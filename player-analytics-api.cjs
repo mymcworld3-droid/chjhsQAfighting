@@ -5,7 +5,7 @@
 const crypto = require('node:crypto');
 const { adminProject, PROJECT_IDS } = require('./firebase-admin-projects.cjs');
 const COOKIE = 'qa_analytics_vid';
-const TYPES = new Set(['question_started', 'answer_completed', 'social_participated', 'question_load_failed']);
+const TYPES = new Set(['question_started', 'answer_completed', 'social_participated', 'question_load_failed', 'app_load_success', 'app_load_failed']);
 const MODES = new Set(['solo', 'raid', 'duel', 'meditation', 'other']);
 const LIMIT = 12000;
 const DAY_MS = 86400000;
@@ -79,7 +79,7 @@ async function recordVisit(db, a, uid, vid, today, now) {
     const player = playerRef ? await tx.get(playerRef) : null;
     if (dailyRef) await tx.get(dailyRef);
     if (!visitor.exists) {
-      tx.set(visitorRef, { firstDay: today, firstAt: now, lastDay: today, lastAt: now, started: false });
+      tx.set(visitorRef, { firstDay: today, firstAt: now, lastDay: today, lastAt: now, started: false, firstStartDay: null });
     } else {
       tx.update(visitorRef, { lastDay: today, lastAt: now });
     }
@@ -131,10 +131,12 @@ async function recordEvent(db, a, uid, vid, item, today, now) {
     if (!player.exists) tx.set(playerRef, { ...p, ...playerPatch });
     else tx.update(playerRef, playerPatch);
     if (!visitor.exists) tx.set(visitorRef, {
-      firstDay: today, firstAt: now, lastDay: today, lastAt: now, started: isStart || isSoloAnswer
+      firstDay: today, firstAt: now, lastDay: today, lastAt: now, started: isStart || isSoloAnswer,
+      firstStartDay: isStart || isSoloAnswer ? today : null
     });
     else tx.update(visitorRef, {
-      lastDay: today, lastAt: now, started: !!visitor.data().started || isStart || isSoloAnswer
+      lastDay: today, lastAt: now, started: !!visitor.data().started || isStart || isSoloAnswer,
+      firstStartDay: visitor.data().firstStartDay || (isStart || isSoloAnswer ? today : null)
     });
     tx.set(dailyRef, {
       uid, day: today, lastAt: now,
@@ -145,7 +147,9 @@ async function recordEvent(db, a, uid, vid, item, today, now) {
       soloAnswers: increment('soloAnswers', isAnswer && mode === 'solo'),
       raidAnswers: increment('raidAnswers', isAnswer && mode === 'raid'),
       duelAnswers: increment('duelAnswers', isAnswer && mode === 'duel'),
-      meditationAnswers: increment('meditationAnswers', isAnswer && mode === 'meditation')
+      meditationAnswers: increment('meditationAnswers', isAnswer && mode === 'meditation'),
+      appLoads: increment('appLoads', type === 'app_load_success' || type === 'app_load_failed'),
+      appFailures: increment('appFailures', type === 'app_load_failed')
     }, { merge: true });
     tx.create(eventRef, {
       uid, day: today, type, mode, at: now,
@@ -160,9 +164,19 @@ function buildReport({ visitors, players, days, events, now, range, truncated })
   const visitorCohorts = visitors.filter(v => v.firstDay >= first && v.firstDay <= today);
   const playerCohorts = players.filter(p => p.cohortEligible === true && p.firstDay >= first && p.firstDay <= today);
   const eligible = players.filter(p => p.cohortEligible === true);
-  const startedVisitors = visitorCohorts.filter(v => v.started).length;
-  const startedPlayers = playerCohorts.filter(p => !!p.firstQuestionAt).length;
-  const threePlayers = playerCohorts.filter(p => !!p.firstThreeAt && !!p.firstQuestionAt).length;
+  const startedVisitors = visitorCohorts.filter(v => v.firstStartDay === v.firstDay).length;
+  const toMs = v => v?.toMillis?.() || v?.toDate?.()?.getTime?.() || (v ? new Date(v).getTime() : 0);
+  // A completed first loop means three answers within 24 hours of the first
+  // successfully displayed solo question; immature starters are excluded.
+  const matureStarters = playerCohorts.filter(p => {
+    const t = toMs(p.firstQuestionAt);
+    return t > 0 && t <= now.getTime() - DAY_MS;
+  });
+  const startedPlayers = matureStarters.length;
+  const threePlayers = matureStarters.filter(p => {
+    const first = toMs(p.firstQuestionAt), third = toMs(p.firstThreeAt);
+    return third >= first && third <= first + DAY_MS;
+  }).length;
   const retained = n => {
     // Fixed-size, fully matured cohorts: for a 7-day range D7 includes
     // registrations 7-13 days ago, not today's incomplete cohorts.
@@ -192,7 +206,8 @@ function buildReport({ visitors, players, days, events, now, range, truncated })
       solo: sum('soloAnswers'), raid: sum('raidAnswers'), duel: sum('duelAnswers'), meditation: sum('meditationAnswers') },
     social: { participants: social.size, active: active.size, rate: percent(social.size, active.size),
       cohortD1Social: cohortD1(socialCohort), cohortD1Other: cohortD1(nonSocialCohort) },
-    loading: { success: started, failed, rate: percent(failed, started + failed) },
+    loading: { success: started, failed, rate: percent(failed, started + failed),
+      appLoads: sum('appLoads'), appFailures: sum('appFailures'), appRate: percent(sum('appFailures'), sum('appLoads')) },
     daily: Array.from({ length: 7 }, (_, i) => {
       const day = plusDays(today, i - 6);
       const entries = weeklyDays.filter(d => d.day === day);
