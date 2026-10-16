@@ -52,7 +52,12 @@ test('AI summary excludes question bodies and personal identifiers', () => {
   const summary = Core.aiSummary(report, '數學');
   assert.equal(summary.topics.length, 1);
   assert.equal(summary.topics[0].topic, '函數');
+  assert.equal(summary.total, 10);
+  assert.equal(summary.correct, 4);
   assert.doesNotMatch(JSON.stringify(summary), /email|uid|question|option|explanation/i);
+  const mixed = Core.build({ 數學: { '函數': { total: 10, correct: 4 } },
+    英文: { '閱讀': { total: 30, correct: 25 } } });
+  assert.equal(Core.aiSummary(mixed, '數學').total, 10, 'subject-specific summaries do not include other subjects');
 });
 
 test('AI request sanitizes aggregates, validates response and rate-limits per uid', async () => {
@@ -65,6 +70,9 @@ test('AI request sanitizes aggregates, validates response and rate-limits per ui
   assert.deepEqual(abilityApi.normalizeAdvice({ headline: '試試這樣做', plan: [
     { topic: '機率', action: '每天五題', questions: 999 }
   ] }).plan[0].questions, 10);
+  assert.throws(() => abilityApi.normalizeAdvice({
+    headline: '其他學科', plan: [{ topic: '不存在單元', action: '學習', questions: 3 }]
+  }, normalized), /結構不完整/, 'AI cannot invent learning topics');
   let handler, modelCalls = 0;
   const app = { post(path, fn) { assert.equal(path, '/api/learning/ability-coach'); handler = fn; } };
   const fakeRouter = { async generateJSON() { modelCalls++; return {
