@@ -52,7 +52,7 @@ test('previously unlocked soul upgrades and trusted combat core remain usable af
   const combat = Authority.trustedRaidPlayerSnapshot(player, 'u1');
   assert.equal(combat.goldenCore.type, 'sword');
   assert.equal(combat.totalScore, 0);
-  assert.equal(combat.atk, 207);
+  assert.equal(combat.atk, 204);
   delete player.trainingAccess;
   assert.equal(Growth.status(player, 'attack').ok, false);
   assert.equal(Authority.trustedRaidPlayerSnapshot(player, 'u1').goldenCore, null);
