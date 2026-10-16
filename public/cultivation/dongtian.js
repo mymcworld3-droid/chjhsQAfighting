@@ -1473,14 +1473,42 @@ export const featureReady = (async () => {
     if (log?.mode !== 'dongtian') return null;
     const answers = Array.isArray(log.dongtianAnswers) ? log.dongtianAnswers : [];
     const li = document.createElement('li');
-    li.className = 'dt-history p-3 rounded-lg text-xs border-l-4 mb-2 transition cursor-pointer';
-    const correct = Number(log.correctCount ?? answers.filter((a) => a.isCorrect).length) || 0;
+    li.className = 'dt-history history-quiz-entry';
+    const correct = Number(log.correctCount ?? answers.filter(a => a.isCorrect).length) || 0;
     const total = Number(log.totalCount ?? answers.length) || answers.length;
-    li.innerHTML = `<div class="flex justify-between mb-1"><span class="text-gray-400 font-mono">${escapeHtml(time)}</span><span class="text-purple-300 font-bold">洞天紀錄</span></div><div class="text-white mb-1 text-sm font-bold">${escapeHtml(log.dongtianName || '無名洞天')}</div><div class="flex gap-2 flex-wrap text-[9px] text-gray-400"><span>${escapeHtml(log.dongtianLevel || '')}</span><span>${escapeHtml(log.dongtianSubject || '')}</span><span>${difficultyLabel(log.dongtianDifficulty)}</span><span>${log.dongtianCompleted ? '完整通關' : '中途退出'}</span><span>答對 ${correct}/${total}</span></div><div class="mt-2 text-[9px] text-purple-300/70"><i class="fa-solid fa-chevron-down"></i> 點擊展開整座洞天的答題紀錄</div><div class="details-panel hidden mt-3 pt-3 border-t border-white/10"><div class="dt-history-questions">${answers.map((answer, i) => `<article class="dt-history-q"><h5>${i + 1}. ${escapeHtml(answer.q)}</h5><div style="color:${answer.isCorrect ? '#86efac' : '#fca5a5'};font-size:9px;font-weight:900">${answer.isCorrect ? '答對' : '答錯'} · ${escapeHtml(answer.subject || '')}</div>${(answer.options || []).map((option, idx) => `<div style="margin-top:4px;color:${idx === answer.correctIdx ? '#86efac' : (idx === answer.userIdx ? '#fca5a5' : '#9ca3af')};font-size:9px">${String.fromCharCode(65 + idx)}. ${escapeHtml(option)}${idx === answer.correctIdx ? ' ✓' : (idx === answer.userIdx ? ' ✕' : '')}</div>`).join('')}<p><strong style="color:#c4b5fd">解析：</strong>${escapeHtml(answer.exp || '')}</p></article>`).join('')}</div></div>`;
-    li.onclick = (event) => {
-      if (event.target.closest('.details-panel')) return;
-      li.querySelector('.details-panel')?.classList.toggle('hidden');
-    };
+    const rich = window.quizMathRichText || window.formatQuizRichText || escapeHtml;
+    const itemHtml = (answer, index) => `<article class="dt-history-q history-quiz-group-question">
+      <h5 class="history-quiz-question">${index + 1}. ${rich(answer.q || '')}</h5>
+      <div class="history-quiz-outcome ${answer.isCorrect ? 'is-correct' : 'is-wrong'}">
+        ${answer.isCorrect ? '答對' : '答錯'} · ${escapeHtml(answer.subject || '')}</div>
+      <div class="history-quiz-options">${(Array.isArray(answer.options) ? answer.options : []).map((option, idx) => {
+        const right = idx === answer.correctIdx, chosen = idx === answer.userIdx;
+        return `<div class="history-quiz-option${right ? ' is-correct' : ''}${chosen && !right ? ' is-wrong' : ''}">
+          <span class="history-quiz-letter">${String.fromCharCode(65 + idx)}</span>
+          <div class="history-quiz-option-text quiz-rich-option">${rich(option)}</div>
+          ${right ? '<span class="history-quiz-label">正確答案</span>' :
+            chosen ? '<span class="history-quiz-label">你的答案</span>' : ''}
+        </div>`;
+      }).join('')}</div>
+      <section class="history-quiz-explanation"><h4>題目解析</h4>
+        <div class="history-quiz-rich">${rich(answer.exp || '無解析')}</div></section></article>`;
+    li.innerHTML = `<div class="history-quiz-topline">
+      <time>${escapeHtml(time)}</time><span class="history-quiz-outcome">洞天紀錄</span></div>
+      <div class="history-quiz-question">${escapeHtml(log.dongtianName || '無名洞天')}</div>
+      <div class="history-quiz-caption">${escapeHtml(log.dongtianLevel || '')} · ${escapeHtml(log.dongtianSubject || '')}
+        · ${difficultyLabel(log.dongtianDifficulty)} · ${log.dongtianCompleted ? '完整通關' : '中途退出'}
+        · 答對 ${correct}/${total}</div>
+      <button type="button" class="history-quiz-expand" aria-expanded="false" aria-label="展開洞天題目與解析">
+        查看整座洞天的答題紀錄 <span aria-hidden="true">⌄</span></button>
+      <div class="history-quiz-details" hidden><div class="dt-history-questions">
+        ${answers.map(itemHtml).join('')}</div></div>`;
+    li.querySelector('.history-quiz-expand')?.addEventListener('click', () => {
+      const details = li.querySelector('.history-quiz-details');
+      if (!details) return;
+      const expanded = window.QAQuizHistoryView?.toggle(li) ??
+        (details.hidden = !details.hidden, !details.hidden);
+      if (expanded) void window.quizMathTypeset?.(details);
+    });
     return li;
   };
 

@@ -14,6 +14,8 @@ function loginContext({ failSave = false } = {}) {
     auth, db: {}, firstLoginUid: '', currentUserData: null, immortalBoardUnsub: null,
     window: { setTrueImmortalBoard() {} }, document: { getElementById: () => node },
     collection: () => ({}), onSnapshot: () => () => {}, updateTexts() {}, injectSocialUI() {},
+    // This isolated slice does not evaluate the production identity UI helper.
+    syncAccountBindingUI() {},
     showGameStartupGate() {}, showGameStartupFailure() {}, alert() {},
     doc: (_, collection, uid) => ({ collection, uid }),
     getDoc: async ref => ({ exists: () => rows.has(ref.uid), data: () => rows.get(ref.uid) }),

@@ -1,0 +1,64 @@
+/* 答題紀錄沿用問道題幹／選項的字級比例及相同數學排版。 */
+#page-history .history-quiz-entry{
+  padding:16px 18px;border:1px solid rgba(215,177,107,.22);
+  border-left:3px solid rgba(215,177,107,.54);border-radius:12px;
+  background:linear-gradient(150deg,rgba(32,28,23,.96),rgba(14,14,13,.96));
+  color:#f0e5d3;min-width:0;overflow-wrap:anywhere
+}
+#page-history .history-quiz-entry.history-quiz-right{border-left-color:#8daf84}
+#page-history .history-quiz-entry.history-quiz-wrong{border-left-color:#d89b8c}
+#page-history .history-quiz-topline{display:flex;align-items:center;justify-content:space-between;gap:12px}
+#page-history .history-quiz-topline time{font-size:11px;color:#ab9b81;line-height:1.4}
+#page-history .history-quiz-outcome{font-size:11px;font-weight:800}
+#page-history .history-quiz-outcome.is-correct{color:#b2d3a4}
+#page-history .history-quiz-outcome.is-wrong{color:#e4aca0}
+#page-history .history-quiz-question{
+  font-size:clamp(15px,2vw,19px);font-weight:650;line-height:1.85;
+  color:#f7eddd;margin:14px 0;padding-bottom:4px;
+  overflow-x:auto;white-space:normal;overflow-wrap:anywhere
+}
+#page-history .history-quiz-expand{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:10px;width:100%;padding:10px 2px;margin:0;background:none;
+  border:0;border-top:1px solid rgba(215,177,107,.15);
+  font-size:12px;font-weight:750;color:#ddc395;text-align:left;cursor:pointer
+}
+#page-history .history-quiz-expand[aria-expanded=true] span{transform:rotate(180deg)}
+#page-history .history-quiz-expand:focus-visible{outline:2px solid #e5c178;outline-offset:3px}
+#page-history .history-quiz-details[hidden]{display:none!important}
+#page-history .history-quiz-options{display:grid;gap:9px;padding-top:10px}
+#page-history .history-quiz-option{
+  display:flex;align-items:flex-start;gap:12px;padding:12px 14px;
+  background:rgba(255,255,255,.025);border:1px solid rgba(211,177,116,.2);
+  border-radius:11px;min-width:0;overflow-wrap:anywhere
+}
+#page-history .history-quiz-letter{
+  width:32px;height:32px;flex:none;display:grid;place-items:center;
+  border-radius:50%;border:1px solid rgba(206,169,102,.4);
+  background:rgba(23,24,24,.72);font-weight:800;font-size:13px;color:#ebcf9c
+}
+#page-history .history-quiz-option-text{flex:1;min-width:0;overflow-x:auto;
+  font-size:14px;line-height:1.75;color:#e8dfcf;white-space:normal}
+#page-history .history-quiz-option.is-correct{border-color:rgba(135,188,132,.48);background:rgba(74,120,78,.12)}
+#page-history .history-quiz-option.is-correct .history-quiz-letter{color:#aed3a7;border-color:#8bb88c}
+#page-history .history-quiz-option.is-wrong{border-color:rgba(217,125,109,.5);background:rgba(159,76,65,.1)}
+#page-history .history-quiz-option.is-wrong .history-quiz-letter{color:#e9b1a1;border-color:#ca9389}
+#page-history .history-quiz-label{flex:none;font-size:10px;color:#cbb79a;align-self:center}
+#page-history .history-quiz-explanation{margin-top:14px;padding:14px 15px;
+  border:1px solid rgba(215,177,107,.17);border-radius:11px;background:rgba(0,0,0,.2)}
+#page-history .history-quiz-explanation h4{margin:0 0 8px;font-size:13px;font-weight:800;color:#e4c796}
+#page-history .history-quiz-rich{color:#dfd5c4;font-size:14px;line-height:1.85;overflow-x:auto;white-space:normal}
+#page-history .history-quiz-caption{font-size:10px;color:#897e6b;text-align:right;margin-top:7px}
+#page-history .history-quiz-legacy{font-size:12px;color:#afa08a;padding:12px 2px}
+#page-history .history-quiz-entry :is(.history-quiz-question,.history-quiz-option-text,.history-quiz-rich) mjx-container{max-width:100%}
+#page-history .history-quiz-entry mjx-container[display=true]{
+  overflow-x:auto;overflow-y:hidden;max-width:100%;padding:4px 0;margin:10px auto!important
+}
+@media(max-width:600px){
+  #page-history .history-quiz-entry{padding:12px}
+  #page-history .history-quiz-option{gap:9px;padding:10px}
+  #page-history .history-quiz-letter{width:28px;height:28px}
+  #page-history .history-quiz-question{font-size:16px}
+  #page-history .history-quiz-option-text,#page-history .history-quiz-rich{font-size:13px}
+  #page-history .history-quiz-label{font-size:9px;max-width:56px}
+}

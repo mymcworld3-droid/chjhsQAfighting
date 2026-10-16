@@ -692,6 +692,20 @@ function calculateRankFromScore(totalScore, uid = auth.currentUser?.uid) {
     return window.limitImmortalRank(rank, totalScore, REALMS, uid);
 }
 
+// Linking a provider preserves the UID; Firebase onAuthStateChanged may not
+// fire again, and the currentUser anonymous flag may lag until token refresh.
+// This is UI-only identity state, never used to authorize protected actions.
+let linkedGoogleIdentity = null;
+function syncAccountBindingUI(user = auth.currentUser) {
+    const linked = !!user && (user.isAnonymous === false || linkedGoogleIdentity?.uid === user.uid);
+    const bindingButton = document.getElementById('btn-bind-guest');
+    bindingButton?.classList.toggle('hidden', !user || linked);
+    const email = document.getElementById('settings-email');
+    if (email) email.textContent = !user ? '' : linked
+        ? (user.email || linkedGoogleIdentity?.email || currentUserData?.email || '已綁定 Google 帳號')
+        : '免註冊修行 · 尚未綁定帳號';
+}
+
 // 綁定全域函式
 window.startFirstVisitGuest = () => signInAnonymously(auth);
 window.googleLogin = async () => {
@@ -707,20 +721,34 @@ window.googleLogin = async () => {
                 const credential = GoogleAuthProvider.credentialFromError(error);
                 if (!credential) throw error;
                 // Existing accounts retain their own character, inventory and balances.
-                return await signInWithCredential(auth, credential);
+                const existing = await signInWithCredential(auth, credential);
+                linkedGoogleIdentity = null;
+                syncAccountBindingUI(existing.user);
+                return existing;
             }
             const person = result.user;
+            // Identity is now linked even if auth.currentUser still reports
+            // isAnonymous for this same UID until Firebase refreshes its state.
+            linkedGoogleIdentity = { uid: person.uid, email: person.email || '' };
+            syncAccountBindingUI(person);
             const identity = { email: person.email || '', photoURL: person.photoURL || '' };
             if (!currentUserData?.displayName || currentUserData.displayName === '匿名修士') identity.displayName = person.displayName || '青雲修士';
-            await updateDoc(doc(db, 'users', person.uid), identity);
+            try { await updateDoc(doc(db, 'users', person.uid), identity); }
+            catch (error) {
+                // Authentication succeeded; a transient profile sync failure must
+                // not leave the UI falsely claiming the Google link failed.
+                console.warn('[Account link] Profile identity sync deferred', error);
+            }
             if (auth.currentUser?.uid !== person.uid) return result;
-            Object.assign(currentUserData, identity);
-            document.getElementById('settings-email').textContent = person.email || '';
+            if (currentUserData) Object.assign(currentUserData, identity);
             await updateSettingsInputs();
+            syncAccountBindingUI(person);
             await window.handleFirstVisitReady?.(person, currentUserData, false);
             return result;
         }
         const result = await signInWithPopup(auth, provider);
+        linkedGoogleIdentity = null;
+        syncAccountBindingUI(result.user);
         // A same-account popup need not fire an auth-state change; resume setup explicitly.
         if (currentUserData?.uid === result.user.uid && window.__xiuxianFeaturesReady && window.getFirstVisitState?.().joining) {
             await window.handleFirstVisitReady?.(result.user, currentUserData, false);
@@ -1390,7 +1418,7 @@ onAuthStateChanged(auth, async (user) => {
         }
 
         showGameStartupGate('正在載入玩家資料…');
-        document.getElementById('settings-email').innerText = user.email || '免註冊修行 · 尚未綁定帳號';
+        syncAccountBindingUI(user);
 
         injectSocialUI();
 
@@ -1513,6 +1541,8 @@ onAuthStateChanged(auth, async (user) => {
         }
     } else {
         // 👋 登出狀態
+        linkedGoogleIdentity = null;
+        syncAccountBindingUI(null);
         window.__xiuxianMigrationApproved = false;
         checkAdminRole(false);
         currentUserData = null;
@@ -2342,8 +2372,9 @@ window.toggleSourceMode = () => {
 };
 
 async function updateSettingsInputs() {
+    // Bind button/email follow provider-link success even without a new UID.
+    syncAccountBindingUI();
     if (currentUserData && currentUserData.profile) {
-        document.getElementById('btn-bind-guest')?.classList.toggle('hidden', !auth.currentUser?.isAnonymous);
         document.getElementById('set-display-name').value = currentUserData.displayName || "";
         document.getElementById('set-level').value = currentUserData.profile.educationLevel || '';
         document.getElementById('set-strong').value = currentUserData.profile.strongSubjects || "";
@@ -5513,12 +5544,27 @@ async function handleBattleAnswer(roomId, userIdx, correctIdx, isHost) {
     } catch (e) { console.error(e); }
 }
 
-let lastVisibleHistoryDoc = null; // 🔥 記錄最後一筆文件，用於分頁
+let lastVisibleHistoryDoc = null; // 答題紀錄分頁游標
+let historyRequestEpoch = 0;
+let historyLoadedUid = '';
 
 window.loadUserHistory = async (isLoadMore = false) => {
     const ul = document.getElementById('history-list');
     const loadMoreBtn = document.getElementById('btn-load-more-history');
-    if(!ul) return; 
+    if (!ul) return;
+    const uid = auth.currentUser?.uid;
+    if (!uid) { ul.replaceChildren(); return; }
+    if (historyLoadedUid !== uid) { historyLoadedUid = uid; isLoadMore = false; lastVisibleHistoryDoc = null; }
+    const epoch = ++historyRequestEpoch;
+    // The same safe renderer is used for questions, options and explanations.
+    const historyView = window.QAQuizHistoryView;
+    if (!document.getElementById('quiz-history-stylesheet')) {
+        const link = document.createElement('link');
+        link.id = 'quiz-history-stylesheet';
+        link.rel = 'stylesheet';
+        link.href = '/styles/quiz-history.css';
+        document.head.appendChild(link);
+    } 
     
     // 首次載入時：清空列表與重置指標
     if (!isLoadMore) {
@@ -5537,7 +5583,7 @@ window.loadUserHistory = async (isLoadMore = false) => {
         let q;
         const baseQueryArgs = [
             collection(db, "exam_logs"),
-            where("uid", "==", auth.currentUser.uid),
+            where("uid", "==", uid),
             orderBy("timestamp", "desc")
         ];
 
@@ -5548,8 +5594,12 @@ window.loadUserHistory = async (isLoadMore = false) => {
         }
 
         const snap = await getDocs(q);
-        
-        if (!isLoadMore) ul.innerHTML = ''; // 首次載入成功後清空 loader
+        if (auth.currentUser?.uid !== uid || epoch !== historyRequestEpoch) return;
+
+        if (!isLoadMore) {
+            window.quizMathClear?.(ul);
+            ul.replaceChildren();
+        } // 首次載入成功後清空 loader
 
         if (snap.empty) { 
             if (!isLoadMore) ul.innerHTML = `<li class="text-center text-gray-500 py-4">目前還沒有答題紀錄</li>`;
@@ -5562,89 +5612,41 @@ window.loadUserHistory = async (isLoadMore = false) => {
 
         snap.forEach(doc => {
             const log = doc.data();
-            const time = log.timestamp ? new Date(log.timestamp.toDate()).toLocaleString() : '--';
+            const time = log.timestamp?.toDate
+                ? log.timestamp.toDate().toLocaleString('zh-TW')
+                : '--';
             if (log.mode === 'dongtian' && typeof window.renderDongtianHistoryLog === 'function') {
-                const groupedDongtianLog = window.renderDongtianHistoryLog(log, time);
-                if (groupedDongtianLog) { ul.appendChild(groupedDongtianLog); return; }
+                const grouped = window.renderDongtianHistoryLog(log, time);
+                if (grouped) { ul.appendChild(grouped); return; }
             }
             const li = document.createElement('li');
-            
-            // 加入 hover 效果與滑鼠游標樣式，提示可點擊
-            li.className = `p-3 rounded-lg text-xs border-l-4 mb-2 bg-slate-700/50 hover:bg-slate-600/60 transition cursor-pointer ${log.isCorrect ? 'border-green-500' : 'border-red-500'}`;
-            
-            // 🔥 建立隱藏的詳細資料區塊 HTML
-            let detailsHtml = '';
-            if (log.options && log.options.length > 0) {
-                // 渲染四個選項，並標示對錯顏色
-                const optsHtml = log.options.map((opt, i) => {
-                    let isUserAns = (i === log.userIdx);
-                    let isCorrectAns = (i === log.correctIdx);
-                    
-                    let bgClass = "bg-slate-800/50";
-                    let textClass = "text-gray-400";
-                    let icon = "";
-                    
-                    if (isCorrectAns) {
-                        bgClass = "bg-green-900/30 border border-green-500/50";
-                        textClass = "text-green-400 font-bold";
-                        icon = "<i class='fa-solid fa-check ml-1'></i>";
-                    } else if (isUserAns) {
-                        bgClass = "bg-red-900/30 border border-red-500/50";
-                        textClass = "text-red-400";
-                        icon = "<i class='fa-solid fa-xmark ml-1'></i>";
+            const rich = window.quizMathRichText || window.formatQuizRichText || parseMarkdownImages;
+            if (historyView) {
+                const rendered = historyView.normalize(log, time, rich);
+                li.className = rendered.classes;
+                li.innerHTML = rendered.html;
+                li.querySelector('.history-quiz-expand')?.addEventListener('click', () => {
+                    const expanded = historyView.toggle(li);
+                    if (expanded) {
+                        // TeX in hidden options cannot be measured reliably.
+                        void window.quizMathTypeset?.(li.querySelector('.history-quiz-details'));
                     }
-
-                    return `<div class="p-2 mb-1 rounded text-[11px] ${bgClass} ${textClass} flex items-start gap-2">
-                        <span class="shrink-0 w-4">${String.fromCharCode(65+i)}.</span>
-                        <span class="flex-1">${(window.quizMathRichText || parseMarkdownImages)(opt)} ${icon}</span>
-                    </div>`;
-                }).join('');
-
-                detailsHtml = `
-                    <div class="hidden mt-3 pt-3 border-t border-white/10 details-panel transition-all">
-                        <div class="space-y-1 mb-2">${optsHtml}</div>
-                        <div class="bg-slate-900/80 p-3 rounded-lg text-gray-300 border border-white/5 text-[11px] leading-relaxed">
-                            <span class="text-cyan-400 font-bold mb-1 block"><i class="fa-solid fa-magnifying-glass"></i> AI 解析：</span>
-                            ${parseMarkdownImages(log.explanation) || "無解析"}
-                        </div>
-                    </div>
-                `;
+                });
             } else {
-                // 針對以前沒有存到詳細資料的舊紀錄
-                detailsHtml = `
-                    <div class="hidden mt-3 pt-3 border-t border-white/10 details-panel transition-all text-gray-500 text-center text-[10px]">
-                        (此為早期紀錄，未保留選項與解析資料)
-                    </div>
-                `;
+                // Optional history module failure must not conceal the actual record.
+                li.className = 'p-3 rounded-lg border border-white/10';
+                li.innerHTML = '<div class="history-quiz-question">' + rich(log.question || '（未保留題幹）') + '</div>';
             }
-
-            // 綁定點擊展開/收合事件
-            li.onclick = function(e) {
-                // 若玩家點擊的是解析文字本身 (為了反白複製等)，不要觸發收合
-                if (e.target.closest('.details-panel')) return;
-                const panel = this.querySelector('.details-panel');
-                if (panel) panel.classList.toggle('hidden');
-            };
-
-            // ... 前面的 snap.forEach 迴圈 ...
-            li.innerHTML = `
-                <div class="flex justify-between mb-1">
-                    <span class="text-gray-400 font-mono">${time}</span>
-                    <span class="${log.isCorrect ? 'text-green-400' : 'text-red-400'} font-bold">${log.isCorrect ? 'Correct' : 'Wrong'}</span>
-                </div>
-                <div class="text-white mb-2 text-sm">${(window.quizMathRichText || parseMarkdownImages)(log.question)}</div>
-                <div class="flex justify-between items-center text-gray-500 mt-2">
-                    <span class="text-[10px] text-cyan-500/70 opacity-80"><i class="fa-solid fa-chevron-down"></i> 點擊展開詳解</span>
-                    <span class="text-right">${log.rankAtTime || '單人模式'}</span>
-                </div>
-                ${detailsHtml}
-            `;
             ul.appendChild(li);
-        }); // 迴圈結束在這裡
+        });
 
-        // 🔥 新增這段：資料載入完畢後，要求 MathJax 重新掃描歷史清單
-        if (window.quizMathTypeset) void window.quizMathTypeset(ul);
-        else window.MathJax?.typesetPromise?.([ul]).catch(err => console.warn('[History Math]', err));
+        // Only visible question stems are typeset initially; expanded details
+        // are rendered on demand using the same MathJax queue as live 問道.
+        const historyQuestions = [...ul.querySelectorAll('.history-quiz-question')]
+            .filter(node => !node.closest('.history-quiz-details'));
+        if (window.quizMathTypeset) void window.quizMathTypeset(historyQuestions);
+        else if (historyQuestions.length) void window.MathJax?.typesetPromise?.(historyQuestions)
+            .catch(err => console.warn('[History Math]', err));
 
         if (loadMoreBtn) {
             if (snap.docs.length === 20) {
