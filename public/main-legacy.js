@@ -743,9 +743,6 @@ window.googleLogin = async () => {
             if (currentUserData) Object.assign(currentUserData, identity);
             await updateSettingsInputs();
             syncAccountBindingUI(person);
-            const displayName = document.getElementById('user-info');
-            if (displayName && currentUserData?.displayName)
-                displayName.textContent = currentUserData.displayName;
             await window.handleFirstVisitReady?.(person, currentUserData, false);
             return result;
         }
@@ -5645,7 +5642,8 @@ window.loadUserHistory = async (isLoadMore = false) => {
 
         // Only visible question stems are typeset initially; expanded details
         // are rendered on demand using the same MathJax queue as live 問道.
-        const historyQuestions = [...ul.querySelectorAll('.history-quiz-question')];
+        const historyQuestions = [...ul.querySelectorAll('.history-quiz-question')]
+            .filter(node => !node.closest('.history-quiz-details'));
         if (window.quizMathTypeset) void window.quizMathTypeset(historyQuestions);
         else if (historyQuestions.length) void window.MathJax?.typesetPromise?.(historyQuestions)
             .catch(err => console.warn('[History Math]', err));
