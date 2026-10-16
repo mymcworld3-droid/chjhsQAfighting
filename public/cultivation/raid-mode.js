@@ -865,7 +865,8 @@ import './raid-difficulty.js';
       (state.playerActionCount + (review ? 0 : 1)) + '</strong></div><span id="raid-question-timer">不限時</span><button class="raid-ghost" type="button" data-question-arena>戰場</button></header>' +
       '<div class="raid-question-boss"><img src="' + RAID_MVP.bossImage + '" alt="沈清霜"><span id="raid-question-boss-clock">Boss 行動倒數</span></div>' +
       teamworkMarkup(true) +
-      '<h2>' + rich(q.q) + '</h2><div class="raid-options">' + opts + '</div>' + explain + '</div>';
+      '<div class="raid-study-card"><span class="raid-study-heading">問道 · 秘境試題</span>' +
+      '<h2 class="raid-study-stem">' + rich(q.q) + '</h2><div class="raid-options">' + opts + '</div>' + explain + '</div></div>';
     typeset(view);
     view.querySelector('[data-question-arena]')?.addEventListener('click', () => renderArena());
     if (!review) {
@@ -931,6 +932,13 @@ import './raid-difficulty.js';
         state.boss.phase = shenPhaseForHp(state.boss.hp, state.boss.maxHp);
       }
       state.status = 'review';
+      // 對應團本伺服器簽名票證的完成結算；不信任未確認的前端選擇。
+      void playerRepository.saveExamAnswer('raid_'+roomId+'_'+state.player?.uid+'_'+actionId,{
+        mode:'raid',topic:'Raid',rankAtTime:'團本 · 清霜秘境',
+        question:question.q,options:question.opts,correctIdx:question.ans,userIdx:selectedChoice,
+        explanation:question.exp,subject:question.subject,subTopic:question.topic,
+        isCorrect:state.answerCorrect,timeTaken:Math.max(0,now()-state.questionIssuedAtMs)/1000
+      }).catch(error=>console.warn('[Raid answer history]',error?.message||error));
       // Only a verified, settled raid action counts as learning/social participation.
       const analyticsId = 'raid_' + roomId + '_' + actionId;
       void window.trackPlayerAnalytics?.('answer_completed', { mode: 'raid', eventId: analyticsId });

@@ -54,7 +54,7 @@ export async function generateRaidQuestion({ scope, round, rank = 0, history = [
     ...selected,
     rank: Math.max(0, Number(rank) || 0),
     difficulty: 'medium',
-    quizMode: 'raid-standard',
+    quizMode: 'raid-quick-simple',
     roomId: String(roomId || ''),
     actionId: Math.max(1, Math.floor(Number(round) || 1)),
     avoidQuestions: recent.map(item => String(item?.q || '')).filter(Boolean),

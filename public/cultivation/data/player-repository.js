@@ -35,6 +35,35 @@ export const playerRepository=Object.freeze({
   },
   async subscribe(uid,next,error){const {db}=await services();return onSnapshot(doc(db,COLLECTION,uidValue(uid)),snap=>next?.(snap.exists()?{id:snap.id,...snap.data()}:null),error);},
   async addExamLog(value={}){const {db}=await services();return addDoc(collection(db,'exam_logs'),value);},
+  // 關鍵作答採固定來源鍵：跨裝置／監聽重複觸發不得建立兩筆相同歷史。
+  async saveExamAnswer(key, value={}) {
+    const user=getMainUser();
+    if(!user?.uid) throw new Error('請先登入才能儲存答題紀錄');
+    const stable=String(key||'').replace(/[^a-zA-Z0-9_-]/g,'_').slice(0,480);
+    if(stable.length<6) throw new Error('答題紀錄缺少固定來源鍵');
+    const {db}=await services(),ref=doc(db,'exam_logs',stable);
+    return runTransaction(db,async tx=>{
+      const existing=await tx.get(ref);
+      if(existing.exists()) return false;
+      const opts=Array.isArray(value.options)?value.options.slice(0,4).map(x=>String(x??'').slice(0,1500)):[];
+      tx.set(ref,{
+        uid:user.uid,email:user.email||'',timestamp:serverTimestamp(),
+        mode:['raid','duel','immortal'].includes(value.mode)?value.mode:'raid',
+        topic:String(value.topic||'').slice(0,70),
+        rankAtTime:String(value.rankAtTime||'').slice(0,80),
+        question:String(value.question||'').slice(0,3000),
+        subject:String(value.subject||'').slice(0,50),
+        subTopic:String(value.subTopic||'').slice(0,150),
+        isCorrect:value.isCorrect===true,
+        options:opts,
+        correctIdx:Number.isInteger(value.correctIdx)?value.correctIdx:-1,
+        userIdx:Number.isInteger(value.userIdx)?value.userIdx:-1,
+        explanation:String(value.explanation||'').slice(0,3500),
+        timeTaken:Math.max(0,Number(value.timeTaken)||0)
+      });
+      return true;
+    });
+  },
   async shareCurriculum({code,title}={}){
     const user=getMainUser();
     if(!user)throw new Error('請先登入');

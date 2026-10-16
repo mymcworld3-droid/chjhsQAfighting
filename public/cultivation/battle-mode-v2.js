@@ -93,6 +93,7 @@ export const featureReady = (async () => {
     quizMathReady: null,
     seenActivationKeys: new Set(),
     seenSettlementKey: null,
+    recordedQuestionKeys: new Set(),
     resultRecordedRoom: null,
     reviewedRound: null,
     reviewSubmittingRound: null,
@@ -959,6 +960,7 @@ export const featureReady = (async () => {
     state.missingQuestionSinceMs = state.repairRetryAfterMs = 0;
     state.quizScrollSerial += 1; state.quizFooterScrollKey = null; state.quizMathReady = null;
     state.seenActivationKeys.clear(); state.seenSettlementKey = null; state.resultRecordedRoom = null;
+    state.recordedQuestionKeys.clear();
     state.reviewedRound = state.reviewSubmittingRound = state.animationFinishedKey = null;
   }
 
@@ -1814,6 +1816,27 @@ export const featureReady = (async () => {
     }
   }
 
+  function persistSettledAnswer(room) {
+    if (!['settled','finished'].includes(room?.status) || !state.roomId || !state.role) return;
+    const q = room.currentQuestion,answer = answerObject(playerForRole(room,state.role),room.round);
+    if (!usableQuestion(q) || !answer || !Number.isInteger(Number(q.ans))) return;
+    const uid = me()?.uid,round=Number(room.round);
+    if (!uid || !Number.isFinite(round)) return;
+    const key = 'duel_'+state.roomId+'_'+uid+'_'+round;
+    if(state.recordedQuestionKeys.has(key)) return;
+    state.recordedQuestionKeys.add(key);
+    void playerRepository.saveExamAnswer(key,{
+      mode:'duel',topic:'Duel',rankAtTime:'鬥法 · 第 '+round+' 回合',
+      question:q.q,options:q.opts,correctIdx:Number(q.ans),
+      userIdx:answer.timedOut?-1:Number(answer.choice),
+      isCorrect:answer.correct===true,explanation:q.exp||'',
+      subject:q.subject,subTopic:q.topic,
+      timeTaken:0
+    }).catch(error=>{
+      state.recordedQuestionKeys.delete(key);
+      console.warn('[Duel answer history]',error?.message||error);
+    });
+  }
   function onRoomSnapshot(snap) {
     if (!snap.exists()) {
       if (state.mergeAttempt?.ownId === state.roomId) { state.mergeAttempt.missing = true; return; }
@@ -1821,6 +1844,7 @@ export const featureReady = (async () => {
     const room = snap.data(); if (Number(room.modeVersion) !== BATTLE_V2.modeVersion) return;
     const uid = me()?.uid; if (room.host?.uid === uid) state.role = 'host'; else if (room.guest?.uid === uid) state.role = 'guest'; else return;
     state.room = room;
+    if (typeof persistSettledAnswer === 'function') persistSettledAnswer(room);
     if (room.status !== 'waiting') { state.waitingUnsub?.(); state.waitingUnsub = null; state.waitingSnapshot = null; }
     if (room.status === 'waiting') { renderLobby(room); if (state.role === 'host') { watchWaitingRooms(); scheduleReconcile(); inviteOnlineFriends(state.roomId); } }
     else if (room.status === 'intro') {
