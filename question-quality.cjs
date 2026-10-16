@@ -2,7 +2,14 @@
 
 // Generated questions are text only. Reject prompts that depend on an absent
 // figure and explanations that explicitly contradict or correct the answer.
+const MathGuard = require('./public/cultivation/math-guard.js');
+
 function questionQualityIssue({ q, correct, wrong, exp } = {}) {
+  // Reject broken TeX BEFORE sending it to a player. The generator may retry.
+  for (const piece of [q, correct, ...(Array.isArray(wrong) ? wrong : []), exp]) {
+    const checked = MathGuard.inspect(piece);
+    if (!checked.valid) return '數學公式定界符或結構不完整';
+  }
   const stem = String(q || '');
   const explanation = String(exp || '');
   if (/(?:附圖|下圖|右圖|左圖|如圖所示|圖中所示)/.test(stem)) return '題目引用未提供的圖片';
