@@ -580,7 +580,7 @@ app.post('/api/generate-quiz', async (req, res) => {
             // Shorter instructions and bounded provider latency only for combat.
             // Every generated candidate still undergoes the SAME server-side
             // TeX, quality, answer consistency, and duplicate validation below.
-            const routed = await aiRouter.generateJSON(prompt, combatFastMode ? { timeoutMs: 16000 } : {});
+            const routed = await aiRouter.generateJSON(prompt, { ...(combatFastMode ? { timeoutMs: 16000 } : {}), parallel: true });
             const parsed = routed.data;
             const wrong = Array.isArray(parsed?.wrong) ? parsed.wrong : [];
             const options = [parsed?.correct, ...wrong];
