@@ -119,6 +119,9 @@ test('stale, expired, off-line host, closed and started parties are absent',asyn
   assert.equal(recruitmentCard('room12345',{...baseline,status:'active'}),null);
   assert.equal(recruitmentCard('room12345',{...baseline,createdAtMs:now()-31*60*1000}),null);
   assert.equal(recruitmentCard('room12345',{...baseline,members:{a:{...online,heartbeatAtMs:now()-60*1000}}}),null);
+  const four={a:online,b:{uid:'b',online:false},c:{uid:'c',online:false},d:{uid:'d',online:false}};
+  assert.equal(recruitmentCard('room12345',{...baseline,members:four}),null,
+    'occupied offline seats must not render misleading available slots');
   assert.equal(roomUsable({...baseline,status:'closed'}),false);
 });
 test('public recruitment client renders visible cards and reuses room state reconnect',()=>{
