@@ -1,8 +1,11 @@
 // 核心登入模組必須優先且獨立載入。
 // Google 登入本身不被附加模組阻斷；登入後的遊戲則必須等所有修仙模組載入成功才開始。
 import './main-legacy.js?v=20261013-arrival1';
-import './cultivation/player-analytics-client.js?v=20261016-events1';
 import './cultivation/dongtian-entry.js';
+// Analytics is optional: a tracking failure must never prevent core login.
+void import('./cultivation/player-analytics-client.js?v=20261016-events1').catch(error => {
+  console.warn('[Player Analytics] optional tracking module unavailable', error);
+});
 // Repository 註冊屬於附加能力；即使載入失敗也不能阻斷 Google 登入核心。
 void import('./cultivation/data/index.js').catch((error) => {
   console.error('[Data repositories] failed to initialize repository registry', error);
