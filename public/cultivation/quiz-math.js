@@ -19,7 +19,8 @@
   }
 
   function rich(value) {
-    const text = normalize(value);
+    // Normalize only prose escapes; TeX commands and math environments stay intact.
+    const text = normalize(window.QAMathGuard?.expandTextEscapes?.(value) ?? value);
     // If the AI supplied malformed delimiters/TeX, preserve its original
     // readable expression as literal text rather than expose Math input error.
     const guard = window.QAMathGuard;
