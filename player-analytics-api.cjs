@@ -162,7 +162,7 @@ function buildReport({ visitors, players, days, events, now, range, truncated })
   const eligible = players.filter(p => p.cohortEligible === true);
   const startedVisitors = visitorCohorts.filter(v => v.started).length;
   const startedPlayers = playerCohorts.filter(p => !!p.firstQuestionAt).length;
-  const threePlayers = playerCohorts.filter(p => !!p.firstThreeAt).length;
+  const threePlayers = playerCohorts.filter(p => !!p.firstThreeAt && !!p.firstQuestionAt).length;
   const retained = n => {
     // Fixed-size, fully matured cohorts: for a 7-day range D7 includes
     // registrations 7-13 days ago, not today's incomplete cohorts.
