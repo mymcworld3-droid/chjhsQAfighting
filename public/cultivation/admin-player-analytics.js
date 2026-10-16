@@ -7,7 +7,8 @@ import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth
   let loading = false, queued = false, requestId = 0, loaded = false, range = 7;
   const NAMES = {
     question_started: '進入問道題目', answer_completed: '完成有效作答',
-    social_participated: '參與多人玩法', question_load_failed: '題目載入失敗'
+    social_participated: '參與多人玩法', question_load_failed: '題目載入失敗',
+    app_load_success: '功能模組成功載入', app_load_failed: '功能模組載入失敗'
   };
   const MODES = { solo: '問道', raid: '團本', duel: '鬥法', meditation: '閉關', other: '其他' };
   function authUser() {
@@ -81,11 +82,11 @@ import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth
       '<h4 class="apa-section">最近 7 天有效答題量</h4><div class="apa-chart" id="apa-chart"></div>',
       '<h4 class="apa-section">最近玩家事件（最多 25 筆）</h4><div class="apa-events" id="apa-events"></div>',
       '<div class="apa-defs">',
-      '<p class="apa-note">首題開始率：所選期間首次到訪的瀏覽器中，曾成功顯示問道題目的比例；清除 Cookie 或換裝置會成為新訪客。</p>',
-      '<p class="apa-note">首三題完成率：同期新建玩家帳號中，曾開始問道且已完成至少 3 題有效作答的比例；略過題目不計。</p>',
+      '<p class="apa-note">首題開始率：所選期間首次到訪的瀏覽器中，當日曾成功顯示問道題目的比例；清除 Cookie 或換裝置會成為新訪客。</p>',
+      '<p class="apa-note">首三題完成率：同期新建玩家帳號中，已滿首題開始後 24 小時觀察期，且在首題後 24 小時內完成 3 題的比例；略過題目不計。</p>',
       '<p class="apa-note">D1／D7：依 Firebase 帳號建立日期固定分群，隔 1／7 個台灣日曆日有回訪即算留存。只納入在註冊當日被追蹤到、並已滿觀察天數的玩家；分母另行顯示。</p>',
       '<p class="apa-note">有效答題：問道、閉關、鬥法及團本的已完成作答（以事件識別碼去重）。社交參與：成功提交鬥法或團本行動；不以開啟頁面計算。</p>',
-      '<p class="apa-note">載入失敗率：最近 7 天問道題目載入失敗／（成功顯示＋失敗）。社交與 D1 的比較僅代表相關，不能推論多人玩法造成留存成長。</p>',
+      '<p class="apa-note">載入失敗率分開計算：最近 7 天問道題目失敗／（顯示成功＋失敗），以及已登入玩家功能模組啟動失敗／全部啟動結果；未成功進入登入流程的失敗不在後者分母。社交與 D1 的比較僅代表相關，不能推論多人玩法造成留存成長。</p>',
       '<p class="apa-note">匿名 Cookie 與已登入玩家分開計算。追蹤功能停用、封鎖請求或網路中斷會使資料低估；事件不記錄題幹、答案、Email 或 IP。歷史資料不補算。</p>',
       '</div>'
     ].join('');
@@ -124,6 +125,8 @@ import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth
       value(data.social.participants) + '／' + value(data.social.active) + ' 位活躍玩家');
     card(grid, '題目載入失敗率（7 天）', ratio(data.loading.rate),
       value(data.loading.failed) + ' 次失敗／' + value(data.loading.success + data.loading.failed) + ' 次載入');
+    card(grid, '功能模組載入失敗率', ratio(data.loading.appRate),
+      value(data.loading.appFailures) + ' 次失敗／' + value(data.loading.appLoads) + ' 次啟動');
     card(grid, '社交玩家 D1', ratio(data.social.cohortD1Social.rate),
       '首日參與多人 ' + value(data.social.cohortD1Social.eligible) + ' 人；未參與 ' + ratio(data.social.cohortD1Other.rate));
     const chart = panel.querySelector('#apa-chart');
