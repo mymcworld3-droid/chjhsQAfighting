@@ -106,7 +106,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
   }
   function carouselAllowed() {
     if (previewItemId || !visible() || document.hidden || $('soulbound-animation')) return false;
-    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return false;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return false;
     return true;
   }
   function scheduleCarousel() {
@@ -185,6 +185,8 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
   function render() {
     if (!$('soulbound-content')) return;
     reconcile();
+    // Switching tabs can replace the contract page while its dialog was open.
+    if (previewItemId && !$('soulbound-preview')) { previewItemId = ''; previewTrigger = null; }
     const operation = storedOperation(), current = equipped(), s = snapshot;
     $('soulbound-status').textContent = message;
     $('soulbound-refresh').disabled = busy;
@@ -207,7 +209,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
           return `<button type="button" data-sb-select="${i}" aria-pressed="${i === selected}" style="--sb-color:${r.realm ? artifactRealmColor(r.realm) : '#f5cf83'}">${esc(a?.name || (r.itemId ? r.itemId : '煉器碎片 ×' + r.fragments))}<small>${a ? esc(r.realm) : '碎片'}${r.pity ? ' · 武器保底' : r.higher ? ' · 高階' : ''}</small></button>`;
         }).join('')}</div><div class="sb-featured" style="--sb-color:${item ? artifactRealmColor(item.realm) : '#f5cf83'}">${item ? image(item) : '<span class="sb-fragment-art" aria-hidden="true">✦</span>'}<div><small>${item ? esc(item.realm) : '煉器資源'}</small><h3>${item ? esc(item.name) : '煉器碎片 ×' + Number(row.fragments || 0)}</h3><p>${item ? esc(effectText(item)) : '已加入碎片餘額，可在八方煉器陣使用。'}</p></div></div>${item ? comparison(item) : ''}
         <div class="sb-actions">${item ? `<button type="button" class="sb-primary" data-sb-equip="${esc(item.id)}" ${busy || operation || !Number(s.inventory[item.id]) ? 'disabled' : ''}>調御此器</button>` : ''}<button type="button" data-sb-vault ${busy || operation ? 'disabled' : ''}>確認收入</button><button type="button" data-sb-again ${busy || operation ? 'disabled' : ''}>再次抽取</button></div></section>` : ''}
-      <div class="sb-lobby">${showcaseMarkup(candidates)}<section class="sb-draw-controls"><small>常駐共用池 · 八器同契</small><h3>締結本命</h3><p>八種本命法器一起抽；至多 50 抽必得其中一件完整武器。</p>
+      <div class="sb-lobby">${showcaseMarkup(candidates)}<section class="sb-draw-controls"><h3>締結本命</h3><p>八種本命法器一起抽；至多 50 抽必得其中一件完整武器。</p>
         ${s.draws === 0 ? '<p class="sb-first">首抽 250 靈石；單抽與五連共用 50 抽保底，結果先保存再演出。</p>' : ''}
         <div class="sb-actions"><button type="button" data-sb-draw="1" class="sb-primary" ${busy || operation || pending || rank < 0 || s.balance < s.prices?.single ? 'disabled' : ''}>單抽 · ${s.prices?.single ?? '—'} 靈石</button><button type="button" data-sb-draw="5" ${busy || operation || pending || rank < 0 || s.balance < s.prices?.five ? 'disabled' : ''}>五連抽 · ${s.prices?.five ?? '—'} 靈石</button></div>
         <p class="sb-note">${pending ? '先確認本批結果，即可繼續抽取。' : `一般武器機率 2%；其餘獲得 20–40 碎片。出武器後重置保底進度。`}</p></section></div>
