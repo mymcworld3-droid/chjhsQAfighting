@@ -55,14 +55,16 @@ function pageRuntime() {
       }));
     },
     AbortController, setTimeout, clearTimeout,
+    crypto: { randomUUID: () => 'ui-draw-request-000001' },
+    matchMedia: () => ({ matches: true }),
     CustomEvent: class { constructor(type, options) { this.type = type; this.detail = options?.detail; } }
   };
   vm.runInNewContext(source, context);
   return { window, requests, nodes, player,
     open() { documentEvents.get('click')({ target: { closest: () => tab } }); },
     leave() { for (const id of [...nodes.keys()]) if (id.startsWith('soulbound-')) nodes.delete(id); tab.classList.remove('active'); },
-    preview(id) {
-      const button = { disabled: false, dataset: { sbPreview: id }, hasAttribute: name => name === 'data-sb-preview' };
+    draw(count) {
+      const button = { disabled: false, dataset: { sbDraw: String(count) }, hasAttribute: name => name === 'data-sb-draw' };
       nodes.get('soulbound-content').fire('click', { target: { closest: () => button } });
     },
     refresh() { nodes.get('soulbound-refresh').fire('click'); },
@@ -73,17 +75,18 @@ const settle = () => new Promise(resolve => setImmediate(resolve));
 const snapshot = (rank = 0) => ({ ok: true, rank, balance: 10000, poolVersion: Pool.VERSION,
   draws: 0, misses:0, fragments:0, untilPity: 50, prices: { single: 250, five: Pool.cost(rank, 0, 5) }, inventory: {}, pending: null, recovery: [] });
 function assertGallery(html, rank = 0) {
-  assert.equal((html.match(/data-sb-preview=/g) || []).length, 8);
+  assert.equal((html.match(/<figure>/g) || []).length, 8);
+  assert.equal((html.match(/<article /g) || []).length, 8);
+  assert.doesNotMatch(html, /data-sb-preview/);
   for (const item of Pool.candidates(rank)) assert.ok(html.includes(item.imageUrl), item.name);
 }
 
-test('pool previews remain usable during a slow or failed first sync, with draws gated until retry succeeds', async () => {
+test('all common-pool weapons remain visible during slow or failed sync, with draws gated until retry succeeds', async () => {
   const runtime = pageRuntime();
   runtime.open();
   assertGallery(runtime.html());
   assert.equal(runtime.html().includes('data-sb-draw='), false);
-  runtime.preview('soul-axe-golden-core');
-  assert.match(runtime.html(), /aria-label="破障玄斧展示"/);
+  assert.match(runtime.html(), /aria-label="常駐本命法器共用池"/);
   runtime.requests[0].reply({ ok: false, error: '契器暫時離線' }, 503);
   await settle();
   assertGallery(runtime.html());
@@ -92,15 +95,34 @@ test('pool previews remain usable during a slow or failed first sync, with draws
   assert.equal(runtime.nodes.get('soulbound-status').textContent, '契器暫時離線');
   assert.equal(runtime.nodes.get('soulbound-refresh').disabled, false);
   runtime.refresh();
-  runtime.preview('soul-pearl-golden-core');
   runtime.requests[1].reply(snapshot(1));
   await settle();
   assertGallery(runtime.html(), 1);
   assert.match(runtime.html(), /class="sb-lobby"/);
-  assert.match(runtime.html(), /aria-label="太初靈珠展示"/);
+  assert.match(runtime.html(), /aria-label="常駐本命法器共用池"/);
   assert.equal((runtime.html().match(/data-sb-draw=/g) || []).length, 2);
   assert.match(runtime.html(), /五連抽 · 2650 靈石/);
-  assert.equal(runtime.requests.length, 2, 'previewing never sends a purchase request');
+  assert.equal(runtime.requests.length, 2, 'displaying the common pool never sends a purchase request');
+});
+
+test('single and five draw buttons send one common-pool request without a target weapon', async () => {
+  for (const count of [1, 5]) {
+    const runtime = pageRuntime(); runtime.open();
+    runtime.requests[0].reply(snapshot()); await settle();
+    runtime.draw(count);
+    const request = runtime.requests[1];
+    assert.equal(request.url, '/api/soulbound/draw');
+    const body = JSON.parse(request.init.body);
+    assert.equal(body.count, count);
+    assert.equal(body.poolVersion, Pool.VERSION);
+    assert.deepEqual(Object.keys(body).sort(), ['count', 'expectedCost', 'poolVersion', 'requestId']);
+    const batch = { requestId: body.requestId, cost: body.expectedCost,
+      results: Array.from({ length: count }, () => ({ kind: 'fragments', fragments: 30 })) };
+    runtime.requests[1].reply({ ...snapshot(), result: batch, pending: batch, fragments: count * 30 });
+    await settle();
+    assert.equal(runtime.requests.length, 2);
+    assert.match(runtime.html(), /抽結果已保存/);
+  }
 });
 
 test('reentering while sync is pending shares the request and renders its result on the new page', async () => {

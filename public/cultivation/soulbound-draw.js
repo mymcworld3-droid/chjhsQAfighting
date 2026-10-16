@@ -6,7 +6,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
 (function () {
   'use strict';
   const pool = globalThis.QASoulboundPool;
-  let snapshot = null, account = '', busy = false, selected = 0, message = '', animationTimer = null, previewArchetype = 'sword', externalDirty = false;
+  let snapshot = null, account = '', busy = false, selected = 0, message = '', animationTimer = null, externalDirty = false;
   const $ = id => document.getElementById(id);
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const visible = () => document.getElementById('page-training')?.classList.contains('active-page') &&
@@ -65,17 +65,16 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     return item?.imageUrl ? `<img src="${esc(item.imageUrl)}" alt="${esc(item.name)}" width="144" height="144">`
       : `<span class="sb-fallback" aria-hidden="true">${esc(item?.icon || '契')}</span>`;
   }
-  function previewItem(candidates) {
-    return candidates.find(a => a.archetype === previewArchetype) || candidates[0];
-  }
-  function showcaseMarkup(preview) {
-    return `<section class="sb-showcase" style="--sb-color:${artifactRealmColor(preview.realm)}" aria-label="${esc(preview.name)}展示">
-      <small>常駐本命法器 · ${esc(preview.realm)}</small><div class="sb-showcase-art">${image(preview)}</div><h3>${esc(preview.name)}</h3><p>${esc(effectText(preview))}</p><span>攻擊 +${base(preview, 'equip_attack_flat')} · 生命 +${base(preview, 'equip_hp_flat')}</span>
+  function showcaseMarkup(candidates) {
+    return `<section class="sb-showcase" aria-label="常駐本命法器共用池">
+      <small>常駐共用池 · ${esc(candidates[0]?.realm)}</small><h3>八器同池</h3>
+      <div class="sb-common-pool-art">${candidates.map(a => `<figure>${image(a)}<figcaption>${esc(a.name)}</figcaption></figure>`).join('')}</div>
+      <p>完整武器隨機獲得八種之一</p><span>每種器型佔完整武器結果的 12.5%</span>
     </section>`;
   }
   function galleryMarkup(candidates, rank, version = pool.VERSION) {
-    return `<section class="sb-gallery"><div class="sb-gallery-heading"><h3>八種常駐本命法器</h3><span>點選查看器型與核心能力</span></div>
-      <div class="sb-pool">${candidates.map(a => `<button type="button" data-sb-preview="${esc(a.id)}" aria-pressed="${a.archetype === previewArchetype}" style="--sb-color:${artifactRealmColor(a.realm)}">${image(a)}<b>${esc(a.name)}</b><small>${esc(a.realm)} · ${esc(effectText(a))}</small></button>`).join('')}</div>
+    return `<section class="sb-gallery"><div class="sb-gallery-heading"><h3>池內法器一覽</h3><span>八種同池 · 隨機獲得</span></div>
+      <div class="sb-pool">${candidates.map(a => `<article style="--sb-color:${artifactRealmColor(a.realm)}">${image(a)}<b>${esc(a.name)}</b><small>${esc(a.realm)} · ${esc(effectText(a))}</small></article>`).join('')}</div>
       <details class="sb-details"><summary>完整機率與品質</summary><p>版本 ${esc(version)}。一般完整武器機率 2%，其餘 98% 獲得 20–40 個煉器碎片；連續 49 抽未出武器，第 50 抽必出。出武器後重新計數。八種器型共用一池，完整武器各佔武器結果的 12.5%。${rank === 7 ? '真仙品質不再升階。' : '抽中武器時，80% 為目前品質、20% 高一階。'}數值依境界提升，所有器型均可跨丹性搭配。</p>
         ${rank >= 0 && rank < 7 ? `<ul>${pool.candidates(rank + 1).map(a => `<li>${esc(a.name)}（${esc(a.realm)}）：${esc(effectText(a))}；攻擊 +${base(a, 'equip_attack_flat')}、生命 +${base(a, 'equip_hp_flat')}</li>`).join('')}</ul>` : ''}</details>
     </section>`;
@@ -99,11 +98,11 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       const score = window.getTrainingAccessScore?.() ?? globalThis.QATrainingAccessRules.score(data());
       const rank = Math.max(0, pool.rankFor(score)), candidates = pool.candidates(rank);
       const status = !account ? '請登入後締結本命。' : busy ? '正在同步契印…' : '契印尚未同步，請按「重新同步」。';
-      $('soulbound-content').innerHTML = `<p class="sb-empty">${status}</p>${showcaseMarkup(previewItem(candidates))}${galleryMarkup(candidates, rank)}`;
+      $('soulbound-content').innerHTML = `<p class="sb-empty">${status}</p>${showcaseMarkup(candidates)}${galleryMarkup(candidates, rank)}`;
       return;
     }
     const pending = s.pending, row = pending?.results[Math.min(selected, pending.results.length - 1)], item = row?.itemId && getArtifactById(row.itemId);
-    const rank = s.rank, candidates = pool.candidates(Math.max(0, rank)), preview = previewItem(candidates);
+    const rank = s.rank, candidates = pool.candidates(Math.max(0, rank));
     const owned = Object.entries(s.inventory).flatMap(([id, count]) => {
       const item = getArtifactById(id);
       return count > 0 && item?.equipSlot === '本命法寶' ? [{ item, count }] : [];
@@ -117,7 +116,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
           return `<button type="button" data-sb-select="${i}" aria-pressed="${i === selected}" style="--sb-color:${r.realm ? artifactRealmColor(r.realm) : '#f5cf83'}">${esc(a?.name || (r.itemId ? r.itemId : '煉器碎片 ×' + r.fragments))}<small>${a ? esc(r.realm) : '碎片'}${r.pity ? ' · 武器保底' : r.higher ? ' · 高階' : ''}</small></button>`;
         }).join('')}</div><div class="sb-featured" style="--sb-color:${item ? artifactRealmColor(item.realm) : '#f5cf83'}">${item ? image(item) : '<span class="sb-fragment-art" aria-hidden="true">✦</span>'}<div><small>${item ? esc(item.realm) : '煉器資源'}</small><h3>${item ? esc(item.name) : '煉器碎片 ×' + Number(row.fragments || 0)}</h3><p>${item ? esc(effectText(item)) : '已加入碎片餘額，可在八方煉器陣使用。'}</p></div></div>${item ? comparison(item) : ''}
         <div class="sb-actions">${item ? `<button type="button" class="sb-primary" data-sb-equip="${esc(item.id)}" ${busy || operation || !Number(s.inventory[item.id]) ? 'disabled' : ''}>調御此器</button>` : ''}<button type="button" data-sb-vault ${busy || operation ? 'disabled' : ''}>確認收入</button><button type="button" data-sb-again ${busy || operation ? 'disabled' : ''}>再次抽取</button></div></section>` : ''}
-      <div class="sb-lobby">${showcaseMarkup(preview)}<section class="sb-draw-controls"><small>常駐共用池 · 八器同契</small><h3>締結本命</h3><p>抽取煉器碎片，至多 50 抽必出完整武器。</p>
+      <div class="sb-lobby">${showcaseMarkup(candidates)}<section class="sb-draw-controls"><small>常駐共用池 · 八器同契</small><h3>締結本命</h3><p>八種本命法器一起抽；至多 50 抽必得其中一件完整武器。</p>
         ${s.draws === 0 ? '<p class="sb-first">首抽 250 靈石；單抽與五連共用 50 抽保底，結果先保存再演出。</p>' : ''}
         <div class="sb-actions"><button type="button" data-sb-draw="1" class="sb-primary" ${busy || operation || pending || rank < 0 || s.balance < s.prices?.single ? 'disabled' : ''}>單抽 · ${s.prices?.single ?? '—'} 靈石</button><button type="button" data-sb-draw="5" ${busy || operation || pending || rank < 0 || s.balance < s.prices?.five ? 'disabled' : ''}>五連抽 · ${s.prices?.five ?? '—'} 靈石</button></div>
         <p class="sb-note">${pending ? '先確認本批結果，即可繼續抽取。' : `一般武器機率 2%；其餘獲得 20–40 碎片。出武器後重置保底進度。`}</p></section></div>
@@ -217,11 +216,6 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     $('soulbound-refresh').addEventListener('click', () => { void refresh(); });
     $('soulbound-content').addEventListener('click', e => {
       const button = e.target.closest('button'); if (!button || button.disabled) return;
-      if (button.hasAttribute('data-sb-preview')) {
-        previewArchetype = pool.get(button.dataset.sbPreview)?.archetype || 'sword'; render();
-        $('soulbound-content')?.querySelector(`[data-sb-preview="${button.dataset.sbPreview}"]`)?.focus({ preventScroll: true });
-        return;
-      }
       if (busy) return;
       if (button.hasAttribute('data-sb-select')) { selected = Number(button.dataset.sbSelect); render(); }
       else if (button.hasAttribute('data-sb-draw')) void runOperation({ action: 'draw', body: { count: Number(button.dataset.sbDraw), poolVersion: pool.VERSION, expectedCost: Number(button.dataset.sbDraw) === 5 ? snapshot.prices.five : snapshot.prices.single, requestId: crypto.randomUUID() } });

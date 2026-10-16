@@ -93,6 +93,38 @@ test('fifty consecutive non-weapon rolls cannot pass without awarding a common-p
   assert.equal(db.docs.get('users/u1').forgeFragments,49*30);
 });
 
+test('normal and guaranteed draws use all eight weapons regardless of a requested target', async () => {
+  for (const misses of [0, 49]) for (let i = 0; i < pool.TYPES.length; i++) {
+    const db = fakeDb(sample(), { draws: 100, misses, lots: {}, poolVersion: pool.VERSION });
+    const values = [...(misses === 0 ? [0] : []), .9, (i + .5) / pool.TYPES.length];
+    const result = await transaction(db, 'u1', 'draw', {
+      ...request(1), itemId: pool.candidates(0)[0].id, targetArchetype: 'sword'
+    }, () => { assert.ok(values.length, 'unexpected random call'); return values.shift(); });
+    const row = result.result.results[0];
+    assert.equal(pool.get(row.itemId).archetype, pool.TYPES[i].id);
+    assert.equal(row.pity, misses === 49);
+    assert.equal(result.untilPity, 50);
+    assert.equal(db.docs.get('users/u1').artifactSystem.inventory[row.itemId], 1);
+  }
+});
+
+test('common-pool presentation shows all weapons without a selectable draw target', () => {
+  const source = fs.readFileSync('public/cultivation/soulbound-draw.js', 'utf8');
+  const markup = source.slice(source.indexOf('  function effectText('), source.indexOf('  function comparison('));
+  const context = { pool, esc: value => String(value ?? ''), artifactRealmColor: () => '#c7a35e' };
+  vm.runInNewContext(markup + '\nthis.views = { showcaseMarkup, galleryMarkup };', context);
+  for (let rank = 0; rank < pool.REALMS.length; rank++) {
+    const candidates = pool.candidates(rank);
+    const showcase = context.views.showcaseMarkup(candidates);
+    const gallery = context.views.galleryMarkup(candidates, rank);
+    assert.equal((showcase.match(/<figure>/g) || []).length, 8);
+    assert.equal((gallery.match(/<article /g) || []).length, 8);
+    for (const item of candidates) assert.ok(showcase.includes(item.name));
+    assert.doesNotMatch(showcase + gallery, /<button|aria-pressed|data-sb-preview/);
+  }
+  assert.doesNotMatch(source, /previewArchetype|data-sb-preview/);
+});
+
 test('promotion preserves the consecutive counter and server verifies immortal cohort seats', async () => {
  const user=sample();user.stats.totalScore=1;user.trainingAccess={version:1,highestRealmScore:68};
  const r=await transaction(fakeDb(user,{draws:49,misses:49,poolVersion:pool.VERSION}),'u1','draw',request(1),()=>0);
