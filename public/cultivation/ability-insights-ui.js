@@ -115,7 +115,14 @@ import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 
         : '目前沒有足夠的單元紀錄。先在問道練習數題，即可累積圖譜。'}</p>
       ${strong.length ? '<small>較穩定項目：' + escape(strong.map(x => x.topic).slice(0,2).join('、')) + '</small>' : ''}
       ${recommendation ? '<button type="button" data-ability-copy="' +
-        escape(recommendation.subject + '｜' + recommendation.topic) + '">複製此練習單元</button>' : ''}`;
+        escape(recommendation.subject + '｜' + recommendation.topic) + '">複製此練習單元</button>' +
+        (recommendation.total >= 5 && recommendation.estimate < 78 ?
+          '<button type="button" data-ability-start>開始悟道試煉 · 5 題</button>' : '') : ''}`;
+    node.querySelector('[data-ability-start]')?.addEventListener('click', () => {
+      window.dispatchEvent(new CustomEvent('xiuxian:enlightenment-open', {
+        detail:{subject:recommendation.subject,topic:recommendation.topic}
+      }));
+    });
     node.querySelector('[data-ability-copy]')?.addEventListener('click', event => {
       const topic = event.currentTarget.dataset.abilityCopy;
       if (navigator.clipboard?.writeText) {
