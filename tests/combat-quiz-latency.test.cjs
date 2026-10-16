@@ -12,7 +12,7 @@ test('three combat modes use a compact but strict full-question AI prompt', () =
   const battle = read('public/cultivation/battle-mode-v2.js');
   const raid = read('public/cultivation/raid-question.js');
   const five = read('public/cultivation/five-immortals.js');
-  for (const mode of ['raid-quick-simple', 'battle-fast', 'immortal-fast']) {
+  for (const mode of ['raid-quick-simple', 'raid-standard', 'battle-fast', 'immortal-fast']) {
     assert.ok(MODES.has(mode));
     const prompt = quickQuizPrompt({
       mode, subject: '數學', level: '國中三年級',
@@ -31,7 +31,7 @@ test('three combat modes use a compact but strict full-question AI prompt', () =
     assert.match(prompt, /TeX/);
   }
   assert.match(battle, /quizMode: 'battle-fast'/);
-  assert.match(raid, /quizMode: 'raid-quick-simple'/);
+  assert.match(raid, /quizMode: 'raid-standard'/);
   assert.match(five, /quizMode: 'immortal-fast'/);
   assert.match(server, /FAST_QUIZ_MODES\.has/);
   assert.match(server, /combatFastMode \? quickQuizPrompt/);
