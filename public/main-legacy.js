@@ -2604,6 +2604,7 @@ window.startQuizFlow = async (isNewSession = false) => {
             return;
         } catch (error) {
             console.error('[Extended Practice]', error);
+            void window.trackPlayerAnalytics?.('question_load_failed', { mode: 'solo' });
             extendedPracticeState.active = false;
             document.getElementById('btn-extended-practice-stop')?.classList.add('hidden');
             window.showToast?.('延伸練習出題失敗，已回到原本練習。');
