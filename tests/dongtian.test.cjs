@@ -221,11 +221,67 @@ test('failed repair validation blocks publication rather than skipping quality c
   router.generateJSON = async () => ({ data: replies[calls++], provider:'gemini-test', model:'test-model' });
   try {
     const checked = await api.reviewAndRepairGeneratedDongtian(cave);
-    assert.equal(calls, 3);
+    assert.equal(calls, 4, 'the repair pipeline must attempt one more full rewrite before blocking publication');
     assert.equal(checked.doubleCheck.review.passed, false);
     assert.equal(checked.blocked, 'revision_validation');
     assert.equal(checked.dongtian, cave);
   } finally { router.generateJSON = saved; }
+});
+
+test('a repair that only labels the original answer as wrong is retried with a complete fresh question', async () => {
+  const router = require('../ai-router.js'), saved = router.generateJSON;
+  const original = { id:'DT-001', subject:'數學', difficulty:'medium',
+    q:'2 + 2 = ?', correct:'5', wrong:['3','4','6'], exp:'2 + 2 = 5' };
+  const prompts = [];
+  const replies = [
+    { q:'2 + 2 = ?', correct:'5', wrong:['3','4','6'], exp:'原答案有誤，應更正為 4' },
+    { q:'2 + 2 = ?', correct:'4', wrong:['3','5','6'], exp:'先算 2 + 2 = 4，故唯一正解是 4。' },
+    { essencePreserved:true, errorResolved:true, singleCorrect:true,
+      noNewError:true, levelAppropriate:true, confidence:0.99 }
+  ];
+  router.generateJSON = async prompt => {
+    prompts.push(prompt);
+    return { data:replies[prompts.length-1], provider:'test',model:'test' };
+  };
+  try {
+    const repaired = await api.rewriteAndValidateQuestion(original,'請修正答案','算術結果不正確',{subject:'數學'});
+    assert.equal(repaired.accepted,true);
+    assert.equal(repaired.attempts,2);
+    assert.equal(repaired.revised.correct,'4');
+    assert.equal(repaired.revised.wrong.includes('4'),false);
+    assert.doesNotMatch(repaired.revised.exp,/原答案|應更正/);
+    assert.match(prompts[1],/前次重寫未通過/);
+    assert.equal(original.correct,'5');
+  } finally { router.generateJSON=saved; }
+});
+
+test('local answer checks override an optimistic AI whole-cave approval', async () => {
+  const router = require('../ai-router.js'),saved=router.generateJSON;
+  router.generateJSON=async()=>({data:{approved:true,confidence:0.99,issues:[],summary:'通過'},provider:'test',model:'test'});
+  try {
+    const result = await api.verifyGeneratedDongtian({questions:[{
+      id:'DT-001',q:'2 + 2 = ?',correct:'5',wrong:['3','4','6'],exp:'2 + 2 = 5'
+    }]});
+    assert.equal(result.review.passed,false);
+    assert.equal(result.review.issues.length,1);
+    assert.equal(result.review.issues[0].questionId,'DT-001');
+    assert.match(result.review.issues[0].issue,/數值答案/);
+  } finally { router.generateJSON=saved; }
+});
+
+test('second verification demands fresh solving and forbids revision notes in the explanation', () => {
+  const doublePrompt=api.buildDongtianDoubleCheckPrompt({questions:[]});
+  const rewritePrompt=api.buildRevisionPrompt(
+    {id:'DT-001',q:'2 + 2 = ?',correct:'5',wrong:['3','4','6'],exp:'2 + 2 = 5'},
+    '修正答案','計算有誤',{subject:'數學'});
+  assert.match(doublePrompt,/自行解出每題/);
+  assert.match(doublePrompt,/不能靠在 summary\/exp 說/);
+  assert.match(rewritePrompt,/同時重寫 q、correct、wrong\[3\]、exp/);
+  assert.match(rewritePrompt,/不要對學生提到原題、審核或修復/);
+  const validation=api.buildRevisionValidationPrompt(
+    {q:'2 + 2 = ?',correct:'5',wrong:['3','4','6'],exp:'2 + 2 = 5'},
+    {q:'2 + 2 = ?',correct:'4',wrong:['3','5','6'],exp:'2 + 2 = 4'},'答案錯','修復');
+  assert.match(validation,/獨立計算\/推導/);
 });
 
 test('unknown question IDs in reviewer feedback cannot approve or rewrite the cave', async () => {
