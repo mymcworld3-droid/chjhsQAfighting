@@ -69,8 +69,10 @@ import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 
   function showPriority(report) {
     const node = $('ai-ability-priority');
     if (!node) return;
-    const scoped = report.priorities.filter(x => !currentSubject || x.subject === currentSubject);
-    const strong = report.strengths.filter(x => !currentSubject || x.subject === currentSubject);
+    const scoped = Core.aiSummary(report, currentSubject).priorities;
+    const strong = report.topics.filter(x => x.total >= 5 && x.estimate >= 78 &&
+      (!currentSubject || x.subject === currentSubject))
+      .sort((a, b) => b.estimate - a.estimate || b.total - a.total);
     const recommendation = scoped[0];
     node.innerHTML = `<div class="ai-ability-priority-heading">
       <span>${recommendation ? '下一步的修煉目標' : '目前診斷'}</span></div>
@@ -106,8 +108,9 @@ import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 
     const markup = item => `<div class="ai-ability-item">
       <div class="ai-ability-item-head"><b>${escape(item.topic)}</b>
         <span class="ai-ability-state is-${statusClass(item.status)}">${item.status}</span></div>
-      <div class="ai-ability-meter" role="meter" aria-valuemin="0" aria-valuemax="100"
-        aria-valuenow="${item.estimate ?? 0}" aria-label="${escape(item.topic)} 的保守能力估計">
+      <div class="ai-ability-meter" ${item.estimate == null ? 'role="img" aria-label="尚無作答資料，不予評分"' :
+        'role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' +
+        item.estimate + '" aria-label="' + escape(item.topic) + ' 的保守能力估計"'}>
         ${item.estimate == null ? '<span class="is-unknown"></span>' :
           '<span style="width:' + item.estimate + '%"></span>'}</div>
       <small>${item.total ? escape('答對 ' + item.correct + '/' + item.total + ' · 原始 ' +
@@ -126,7 +129,7 @@ import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 
   function initFilters(report) {
     const controls = $('chart-controls'); if (!controls) return;
     const available = report.subjects.filter(x => x.studiedTopics > 0);
-    const other = report.subjects.filter(x => !x.studiedTopics).slice(0, 8);
+    const other = report.subjects.filter(x => !x.studiedTopics);
     const labels = [{ id: null, name: '總覽' }, ...available, ...other]
       .map(x => ({ id: x.id === null ? null : x.name, name: x.name }));
     if (currentSubject && !labels.some(x => x.id === currentSubject)) currentSubject = null;
