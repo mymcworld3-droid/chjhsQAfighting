@@ -227,7 +227,7 @@ function artifactPower(item){
   const realmPower=45*(realm+1)**2;
   const effectsPower=effects.reduce((sum,e)=>{
     const type=e.type;
-    if(type==='equip_damage_cap_percent')return sum+Math.round((1-clamp(e.value,item.equipSlot==='本命法寶' ? .0125 : .05,1))*500);
+    if(type==='equip_damage_cap_percent')return sum+Math.round((1-clamp(e.value,item.equipSlot==='本命法寶' ? .05/1.2 : .05,1))*500);
     if(type==='equip_cheat_death'||type==='equip_copy_enemy_artifact')return sum+EFFECT_WEIGHTS[type];
     return sum+Math.round(Math.min(positive(e.value),soulboundPool.refinementCap(type,EFFECT_LIMITS[type]??100000,item.equipSlot==='本命法寶'))*EFFECT_WEIGHTS[type]);
   },0);
@@ -403,7 +403,7 @@ function resolveArtifactDefense(member,incoming){
   }
   reduction=clamp(reduction,0,.9);
   let damage=Math.max(0,incoming*(1-reduction)-sumEffect(effects,'equip_damage_reduction_flat'));
-  const caps=effects.filter(e=>e.type==='equip_damage_cap_percent').map(e=>clamp(e.value,e.soulbound ? .0125 : .05,1));
+  const caps=effects.filter(e=>e.type==='equip_damage_cap_percent').map(e=>clamp(e.value,e.soulbound ? .05/1.2 : .05,1));
   if(caps.length)damage=Math.min(damage,Math.max(1,Math.round(member.maxHp*Math.min(...caps))));
   const absorbed=Math.min(Math.max(0,finite(member.artifactShield)),damage);
   member.artifactShield=Math.max(0,Math.round(finite(member.artifactShield)-absorbed));damage-=absorbed;
