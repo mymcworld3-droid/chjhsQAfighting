@@ -55,6 +55,22 @@
       .golden-core-activation-name{font-size:15px;font-weight:900;color:#fff0c9;line-height:1.25}
       .golden-core-activation-message{margin-top:4px;font-size:11px;line-height:1.5;color:#c9b992}
       .golden-core-activation-kind{color:#8f7d59;font-size:9px;margin-top:3px}
+      #golden-core-activation-banner.shield-awaken .golden-core-activation-card{
+        border-color:rgba(174,234,255,.9);box-shadow:0 18px 55px rgba(0,0,0,.65),0 0 36px rgba(164,230,255,.43);
+      }
+      #golden-core-activation-banner.shield-awaken .golden-core-activation-icon{
+        color:#dcf7ff;border-color:#d6f6ff;background:radial-gradient(circle,#81d9ec77,#173e55aa);
+        animation:goldenShieldPulse 1.25s ease-out both;
+      }
+      #golden-core-activation-banner.shield-awaken::after{
+        content:'';position:absolute;inset:-13px;border:2px solid #c5f5ff;border-radius:26px;
+        opacity:0;pointer-events:none;animation:goldenShieldBloom 1.15s ease-out both;
+      }
+      @keyframes goldenShieldBloom{0%{opacity:0;transform:scale(.84)}22%{opacity:.88}100%{opacity:0;transform:scale(1.15)}}
+      @keyframes goldenShieldPulse{0%{transform:scale(.74);filter:brightness(2)}35%{transform:scale(1.2)}100%{transform:scale(1);filter:brightness(1)}}
+      @media(prefers-reduced-motion:reduce){#golden-core-activation-banner.shield-awaken::after,
+        #golden-core-activation-banner.shield-awaken .golden-core-activation-icon{animation:none}}
+
       @media(max-width:520px){#golden-core-activation-banner{top:64px}.golden-core-activation-card{grid-template-columns:44px 1fr;padding:12px 13px}.golden-core-activation-icon{width:44px;height:44px;font-size:21px}}
     `;
     document.head.appendChild(style);
@@ -69,7 +85,8 @@
       icon: data.icon || ICONS[type] || '◆',
       name: data.name || equipped?.name || '金丹',
       message: data.message || '金丹神通發動',
-      kind: data.kind || ''
+      kind: data.kind || '',
+      shield: data.shield === true || /道心護體(?:成形|凝聚)?|道心護體/.test(String(data.message||'')) && !/消耗|保留/.test(String(data.message||''))
     };
   }
 
@@ -82,6 +99,7 @@
     document.getElementById('golden-core-activation-banner')?.remove();
     const el = document.createElement('div');
     el.id = 'golden-core-activation-banner';
+    if (data.shield) el.classList.add('shield-awaken');
     el.innerHTML = `
       <div class="golden-core-activation-card">
         <div class="golden-core-activation-icon">${data.icon}</div>
