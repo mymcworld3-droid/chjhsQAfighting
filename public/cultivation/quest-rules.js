@@ -102,7 +102,12 @@
   function dailyCommissions(user = {}, uid = '', date = dateKey()) {
     const score = number(user?.stats?.totalScore);
     const solo = COMMISSION_POOL.filter(q => q.metric === 'solo');
-    const other = COMMISSION_POOL.filter(q => q.metric !== 'solo' && score >= q.minScore);
+    const learningMap = user?.stats?.knowledgeMap || {};
+    const hasWeakTopic = Object.values(learningMap).some(subject => subject && typeof subject === 'object' &&
+      Object.values(subject).some(x => x && typeof x === 'object' && number(x.total) >= 5 &&
+        ((number(x.correct) + 2) / (number(x.total) + 4)) < .78));
+    const other = COMMISSION_POOL.filter(q => q.metric !== 'solo' && score >= q.minScore &&
+      (q.metric !== 'enlightenment' || hasWeakTopic));
     const first = solo[seedNumber(uid + '|' + date + '|solo') % solo.length];
     const second = other[seedNumber(uid + '|' + date + '|activity') % other.length];
     return [first, second];
