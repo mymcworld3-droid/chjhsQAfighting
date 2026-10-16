@@ -204,7 +204,7 @@ import {} from './combat-combo.js';
 
     const caps = effects
       .filter((effect) => effect.type === 'equip_damage_cap_percent')
-      .map((effect) => clamp(effect.value, effect.soulbound ? 0.0125 : 0.05, 1));
+      .map((effect) => clamp(effect.value, effect.soulbound ? 0.05 / 1.2 : 0.05, 1));
     let damageCap = null;
     if (caps.length) {
       const capPercent = Math.min(...caps);
