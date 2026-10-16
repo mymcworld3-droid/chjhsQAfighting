@@ -110,7 +110,7 @@ function createHandlers({ projects = adminProject, now = Date.now, cooldowns = s
       const existing = await tx.get(ref);
       const row = existing.exists ? existing.data() : {};
       const unread = { ...(row.unread || {}) };
-      unread[uid] = 0;
+      unread[uid] = Math.max(0, Number(unread[uid]) || 0); // sending does not silently mark incoming messages as read
       unread[peerUid] = Math.min(9999, (Number(unread[peerUid]) || 0) + 1);
       tx.set(ref, { memberUids: [uid, peerUid].sort(),
         names: { [uid]: String(own.displayName || '修士').slice(0, 35),
@@ -120,6 +120,9 @@ function createHandlers({ projects = adminProject, now = Date.now, cooldowns = s
       tx.create(messageRef, { senderUid: uid, text, sentAt: current });
     });
     cooldowns.set(uid, current);
+    if (cooldowns.size > 5000) {
+      for (const [key, value] of cooldowns) if (current - value > 60000) cooldowns.delete(key);
+    }
     return { message: { id: messageRef.id, senderUid: uid, text, sentAt: current } };
   });
   const read = withAuth(async ({ uid, aDb, bdDb, req }) => {
