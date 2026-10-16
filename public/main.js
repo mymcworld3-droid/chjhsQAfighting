@@ -66,6 +66,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/cultivation-rank-sync.js',
   './cultivation/curriculum-scope.js',
   './cultivation/dongfu-settings-collapsible.js',
+  './cultivation/ability-insights-ui.js',
   './cultivation/scope-fullscreen.js',
   './cultivation/curriculum-pages.js',
   './cultivation/quest-system.js',
