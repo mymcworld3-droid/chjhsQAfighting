@@ -183,6 +183,9 @@ import {
   }
 
   function consumeRecipe(raw, recipe) {
+    // Admin materials are virtual in the refinery: never mint or save fake stock.
+    // Only the authoritative Firestore user record can grant this privilege.
+    const unlimitedMaterials = raw.isAdmin === true;
     const materialSystem = raw.materialSystem && typeof raw.materialSystem === 'object' ? clone(raw.materialSystem) : { inventory: {} };
     materialSystem.inventory = normalizeInventory(materialSystem.inventory);
     const artifactSystem = raw.artifactSystem && typeof raw.artifactSystem === 'object' ? clone(raw.artifactSystem) : { inventory: {}, equipped: {}, buffs: [] };
@@ -199,7 +202,7 @@ import {
       const need = Math.max(1, Math.floor(Number(row.quantity) || 1));
       if (row.materialId) {
         const have = Math.max(0, Number(materialSystem.inventory[row.materialId]) || 0);
-        if (have < need) throw new Error((getMaterialById(row.materialId)?.name || row.materialId) + ' 數量不足');
+        if (!unlimitedMaterials && have < need) throw new Error((getMaterialById(row.materialId)?.name || row.materialId) + ' 數量不足');
       } else if (row.artifactId) {
         const have = Math.max(0, Number(artifactSystem.inventory[row.artifactId]) || 0);
         const reserved = Math.max(0, Number(equippedCounts[row.artifactId]) || 0);
@@ -210,6 +213,7 @@ import {
     for (const row of recipe) {
       const need = Math.max(1, Math.floor(Number(row.quantity) || 1));
       if (row.materialId) {
+        if (unlimitedMaterials) continue;
         const remain = (Number(materialSystem.inventory[row.materialId]) || 0) - need;
         if (remain > 0) materialSystem.inventory[row.materialId] = remain;
         else delete materialSystem.inventory[row.materialId];
@@ -222,10 +226,10 @@ import {
     return { materialSystem, artifactSystem };
   }
 
-  function consumeRefinementKey(materialSystem, requirement) {
+  function consumeRefinementKey(materialSystem, requirement, unlimitedMaterials = false) {
     const materialId = String(requirement?.materialId || '');
     const need = Math.max(0, Math.floor(Number(requirement?.quantity) || 0));
-    if (!materialId || !need) return materialSystem;
+    if (!materialId || !need || unlimitedMaterials) return materialSystem;
     const inventory = materialSystem?.inventory || {};
     const have = Math.max(0, Math.floor(Number(inventory[materialId]) || 0));
     const material = getMaterialById(materialId);
@@ -286,7 +290,7 @@ import {
       if (fragments < plan.fragments) throw new Error('煉器碎片不足，需要 ' + plan.fragments + '，目前只有 ' + fragments);
 
       const consumed = consumeRecipe(raw, plan.recipe);
-      consumeRefinementKey(consumed.materialSystem, plan.keyRequirement);
+      consumeRefinementKey(consumed.materialSystem, plan.keyRequirement, raw.isAdmin === true);
       committed = {
         materialSystem: consumed.materialSystem,
         artifactSystem: consumed.artifactSystem,
