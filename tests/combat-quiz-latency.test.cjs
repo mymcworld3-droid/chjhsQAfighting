@@ -84,9 +84,9 @@ test('Five Immortals prefetches only one next question per live challenge and ne
 
 test('raid awaits its in-flight prefetch rather than losing the next question during an ongoing request', () => {
   const source = read('public/cultivation/raid-mode.js');
-  assert.match(source, /let pendingQuestionWork = null/);
-  assert.match(source, /if \(state\.questionLoading\) return pendingQuestionWork \|\| Promise\.resolve\(\)/);
-  assert.match(source, /pendingQuestionWork = work/);
+  assert.match(source, /async function prefetchQuestion\(\)/);
+  assert.match(source, /if \(state\.questionLoading\) return state\.pendingQuestionWork \|\| Promise\.resolve\(\)/);
+  assert.match(source, /state\.pendingQuestionWork = work/);
   assert.match(source, /await prefetchQuestion\(\)/);
   assert.match(source, /state\.roomId === roomId && token === state\.battleSceneToken/);
   assert.match(source, /if \(!state\.pendingQuestion\) return renderArena\(\)/);
