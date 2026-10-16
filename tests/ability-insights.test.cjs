@@ -125,10 +125,18 @@ test('AI request sanitizes aggregates, validates response and rate-limits per ui
   assert.equal(noAuth.status, 401); assert.equal(modelCalls, 0);
   const good = await invoke({ key: 'A', body: { summary: normalized } });
   assert.equal(good.json.ok, true); assert.equal(modelCalls, 1);
+  assert.equal(good.json.source, 'ai');
+  assert.equal(good.json.advice.plan[0].reason, '已答對 8/8 題；樣本證據中等');
   const repeat = await invoke({ key: 'A', body: { summary: normalized } });
   assert.equal(repeat.status, 429); assert.equal(modelCalls, 1);
   const other = await invoke({ key: 'B', body: { summary: normalized } });
   assert.equal(other.json.ok, true);
+  fakeRouter.generateJSON = async () => { throw Error('AI provider timeout'); };
+  const fallback = await invoke({ key: 'C', body: { summary: normalized } });
+  assert.equal(fallback.json.ok, true);
+  assert.equal(fallback.json.source, 'local');
+  assert.equal(fallback.json.advice.plan[0].topic, '機率');
+  assert.match(fallback.json.note, /備用/);
 });
 
 test('legacy graph delegates to enhanced module and recent logs include subject metadata', () => {
@@ -139,4 +147,18 @@ test('legacy graph delegates to enhanced module and recent logs include subject 
   assert.match(legacy, /subTopic: String\(window\.currentActiveQuiz/);
   assert.match(entry, /cultivation\/ability-insights-ui\.js/);
   assert.match(server, /registerAbilityCoachApi\(app\)/);
+});
+
+test('ability graph shows separate knowledge, reasoning and trend modes without fabricating unknown scores', () => {
+  const source = fs.readFileSync(path.join(__dirname, '../public/cultivation/ability-insights-ui.js'), 'utf8');
+  const style = fs.readFileSync(path.join(__dirname, '../public/styles/ability-insights.css'), 'utf8');
+  assert.match(source, /data-ability-view=/);
+  assert.match(source, /currentView === 'skills'/);
+  assert.match(source, /currentView === 'trend'/);
+  assert.match(source, /axes.filter\(x => x.total > 0\).length >= 3/);
+  assert.match(source, /' 尚無紀錄（不是 0 分）'/);
+  assert.match(source, /payload.source === 'local'/);
+  assert.match(style, /#ability-chart-views/);
+  assert.match(style, /ai-ability-chart-empty/);
+  assert.match(style, /@media\(max-width:600px\)/);
 });
