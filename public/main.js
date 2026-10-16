@@ -25,7 +25,6 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/math-guard.js',
   './cultivation/quiz-math.js',
   './cultivation/quiz-history-view.js',
-  './cultivation/alliance-friend-chat.js',
   './cultivation/golden-core-activation-feedback.js',
   './cultivation/cultivation-rules.js',
   './cultivation/xiuxian-live-sync.js',
@@ -194,6 +193,10 @@ async function loadXiuxianFeaturesSafely() {
   window.dispatchEvent(new CustomEvent('xiuxian:features-ready', { detail: result }));
   // user-ready 僅在所有功能模組都已註冊監聽器後才派發。
   window.dispatchEvent(new CustomEvent('xiuxian:user-ready'));
+  // Friend chat is optional: a slow BD connection must never block login,
+  // quizzes, battles or the existing global chat.
+  void import('./cultivation/alliance-friend-chat.js?v=20261016-chat1')
+    .catch(error => console.warn('[Alliance chat] optional module unavailable:', error));
   resolveXiuxianFeatureGate(result);
   // 遊戲已可開始，再載入市集。市集若故障不影響其餘功能。
   void loadPlayerMarketSafely();
