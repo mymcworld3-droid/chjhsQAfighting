@@ -396,8 +396,8 @@ function createHandler({
     const action = String(req.body?.action || '').trim();
     try {
       if (action === 'list-public') {
-        const ticketState = await syncRaidTickets(playerDb, uid);
-        return res.json({ok:true,rooms:await listPublicRooms(db),ticketState});
+        // Browsing recruitment must never spend tickets or mutate A state.
+        return res.json({ok:true,rooms:await listPublicRooms(db)});
       }
       if (action === 'join-public') {
         const roomId=safeRoomId(req.body?.roomId);
