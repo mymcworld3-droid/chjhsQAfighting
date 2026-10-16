@@ -905,7 +905,9 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
       // Only a verified, settled raid action counts as learning/social participation.
       const analyticsId = 'raid_' + roomId + '_' + actionId;
       void window.trackPlayerAnalytics?.('answer_completed', { mode: 'raid', eventId: analyticsId });
-      void window.trackPlayerAnalytics?.('social_participated', { mode: 'raid', eventId: analyticsId + '_social' });
+      if (Object.keys(state.room?.members || {}).length > 1) {
+        void window.trackPlayerAnalytics?.('social_participated', { mode: 'raid', eventId: analyticsId + '_social' });
+      }
 
       if (state.room?.status === 'won' || state.room?.status === 'lost') {
         state.pendingFinishRoom = state.room;
