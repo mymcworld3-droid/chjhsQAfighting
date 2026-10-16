@@ -197,7 +197,7 @@ test('Golden Core roster matches the nine current pills and battle effects', () 
   }
   assert.match(training, /chanceByGrade\(grade, 10, 5, 50\)/);
   assert.match(training, /breakthroughPercent\(grade\)/);
-  assert.match(training, /chanceByGrade\(grade, 20, 10, 100\)/);
+  assert.match(training, /chanceByGrade\(grade, 20, 5, 60\)/);
   assert.match(training, /bonusGain: 3/);
   assert.match(statusPanel, /sword: \{ icon: '⚔', tone: 'silver' \}/);
   assert.match(battleEffects, /extraDamage: 100/);
