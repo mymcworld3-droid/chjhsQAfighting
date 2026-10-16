@@ -37,12 +37,45 @@ function normalizeAdvice(data, summary = null) {
   const knownTopics = summary ? new Set(summary.topics.map(item => item.topic)) : null;
   const headline = clean(data?.headline, 90);
   const explanation = clean(data?.explanation, 500);
-  const plan = (Array.isArray(data?.plan) ? data.plan : []).slice(0, 3).map(item => ({
-    topic: clean(item?.topic, 60), reason: clean(item?.reason, 130),
-    action: clean(item?.action, 150), questions: within(item?.questions, 3, 10)
-  })).filter(item => item.topic && item.action && (!knownTopics || knownTopics.has(item.topic)));
+  const plan = (Array.isArray(data?.plan) ? data.plan : []).slice(0, 3).map(item => {
+    const topic = clean(item?.topic, 60);
+    const observed = summary?.topics.find(row => row.topic === topic);
+    return { topic,
+      // AI can propose learning actions, but the displayed evidence must
+      // always be computed from actual input, not hallucinated prose.
+      reason: observed ? '已答對 ' + observed.correct + '/' + observed.total +
+        ' 題；樣本證據' + (observed.total >= 20 ? '較高' : observed.total >= 8 ? '中等' : '不足') :
+        clean(item?.reason, 130),
+      action: clean(item?.action, 150), questions: within(item?.questions, 3, 10) };
+  }).filter(item => item.topic && item.action && (!knownTopics || knownTopics.has(item.topic)));
   if (!headline || !plan.length) throw new Error('AI 診斷回傳結構不完整');
   return { headline, explanation, plan };
+}
+// Deterministic fallback: visible even when AI is disabled, throttled upstream,
+// or returns an invalid plan. Uses only the same aggregated evidence.
+function localPracticePlan(summary) {
+  const topics = summary.topics.slice().sort((a, b) => {
+    const group = x => x.total < 5 ? 1 : (x.correct + 2) / (x.total + 4) < .60 ? 0 : 2;
+    return group(a) - group(b) || (a.correct + 2) / (a.total + 4) - (b.correct + 2) / (b.total + 4);
+  }).slice(0, 3);
+  const plan = topics.map(item => {
+    const rate = (item.correct + 2) / (item.total + 4);
+    return {
+      topic: item.topic,
+      reason: '已答對 ' + item.correct + '/' + item.total + ' 題；樣本證據' +
+        (item.total >= 20 ? '較高' : item.total >= 8 ? '中等' : '不足'),
+      action: item.total < 5 ? '先完成至少五道涵蓋不同觀念的診斷題，再觀察常見錯誤。' :
+        rate < .60 ? '先回顧基本概念，再做五道同類題並逐題核對解題步驟。' :
+        '先做兩題概念辨識，再用三題不同情境練習遷移應用。',
+      questions: 5
+    };
+  });
+  return {
+    headline: '依現有紀錄建議的下一步練習',
+    explanation: '這是統計規則產生的備用計畫，並非 AI 模型回覆。' +
+      '題目難度與來源不一致時，正確率不代表正式能力等級。',
+    plan
+  };
 }
 function canRequest(uid, now = Date.now()) {
   const kept = (requests.get(uid) || []).filter(time => now - time < DAY_MS);
@@ -79,9 +112,20 @@ ${JSON.stringify(summary)}
 請回傳單一 JSON：
 {"headline":"一行保守且具體的診斷","explanation":"約50至120字、包含資料限制與最重要差距","plan":[{"topic":"統計摘要中確實出現的科目或單元","reason":"附上實際樣本依據或標示證據不足","action":"可執行的練習方法（例如先回想概念、再做指定類型題、檢查錯因）","questions":5}]}
 約二到三步；每步練習題數 3 到 10；不要依據數據猜測具體錯因，也不要把 AI 推測說成已證實。`;
-      const reply = await router.generateJSON(prompt, { timeoutMs: 25000 });
-      return res.json({ ok: true, advice: normalizeAdvice(reply.data, summary), provider: reply.provider, model: reply.model,
-        note: 'AI 解讀為建議，分數由本地統計計算，AI 不會修改玩家資料。' });
+      let advice, source = 'ai', provider = '', model = '';
+      try {
+        const reply = await router.generateJSON(prompt, { timeoutMs: 25000 });
+        advice = normalizeAdvice(reply.data, summary);
+        provider = reply.provider || '';
+        model = reply.model || '';
+      } catch (error) {
+        console.warn('[Ability coach] AI unavailable; using local evidence plan:', error?.message || String(error));
+        advice = localPracticePlan(summary);
+        source = 'local';
+      }
+      return res.json({ ok: true, advice, source, provider, model,
+        note: source === 'ai' ? 'AI 提供學習策略，客觀分數由答題紀錄計算。' :
+          'AI 暫時不可使用，以下為統計資料產生的備用練習計畫。' });
     } catch (e) {
       if (e.status) return res.status(e.status).json({ error: e.message });
       console.error('[Ability coach]', e?.message || String(e));
@@ -93,3 +137,4 @@ module.exports = registerAbilityCoachApi;
 module.exports.normalizeInput = normalizeInput;
 module.exports.normalizeAdvice = normalizeAdvice;
 module.exports.canRequest = canRequest;
+module.exports.localPracticePlan = localPracticePlan;
