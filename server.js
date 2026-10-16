@@ -528,6 +528,8 @@ app.post('/api/generate-quiz', async (req, res) => {
         13. 錯誤選項應對應常見迷思、計算錯誤或推理錯誤，不能只是隨機湊數。
         14. 必須提供四個不重複且僅有一個正解的選項，以及完整解析；解析須點出關鍵觀念與主要步驟。
         14a. 本介面不能呈現附圖，題目不可引用未提供的圖片。若條件互相矛盾、答案需要更正或解析與正解不符，請重新構思整題後才輸出。
+        14c. **獨立驗算**：不先看預定的 correct，重新解題，再將四個選項逐一代入，確認只有一個選項正確、解析每一步及最後結論都指向 correct。
+        14d. **發現錯誤一律完整重寫 JSON**：題幹 q、正確答案 correct、三個 wrong 與解析 exp 必須一起修好。解析禁止說「這題有誤」「原答案錯誤」「應修改答案為」「原解析有問題」等修訂註記；不得只改 exp 或重新標示答案而保留錯誤的 correct。
         14b. 四個選項會重新排序；題幹不要再列出 (A) 至 (D)，解析請以選項內容描述，不要使用 A／B／C／D 字母、選項一至四或第一項至第四項等排序指稱。
         ${raidQuickSimple ? '15. **團本快答模式**：題目要比一般練習更簡單、直覺。題幹盡量 1–2 句；選項簡短；優先考基本辨識、直接代入、單一步驟計算或明確概念判斷。不要設文字陷阱，不要要求多層推論，不要故意混淆相近概念。' : ''}
         16. **LaTeX 排版**：題幹、正確選項、三個錯誤選項及解析中的所有數學式都必須使用 TeX 語法。行內數學用 $...$，獨立公式用 $...$；例如 $x^2+1$、$\\frac{1}{2}$。一般中文保留純文字，不要將整段中文包進公式；不要輸出 HTML 或 Markdown 程式碼區塊。
@@ -554,12 +556,16 @@ app.post('/api/generate-quiz', async (req, res) => {
 
     // 6. 呼叫 AI (取消雙重呼叫，改為直接解析)
     let attempts = 0;
+    let lastGenerationIssue = '';
     const maxAttempts = 3;
 
     while (attempts < maxAttempts) {
         try {
             console.log(`[Gen] ${subject} > ${targetTopic} (${difficulty}) - 嘗試 ${attempts + 1}`); 
-            const routed = await aiRouter.generateJSON(generationPrompt);
+            const retryCorrection = lastGenerationIssue ?
+                '\n[前一版未通過驗證]\n' + lastGenerationIssue.slice(0, 600) +
+                '\n這一版必須從頭重寫整個題目 JSON 的 q、correct、wrong、exp，不能只在解析加註更正。' : '';
+            const routed = await aiRouter.generateJSON(generationPrompt + retryCorrection);
             const parsed = routed.data;
             const wrong = Array.isArray(parsed?.wrong) ? parsed.wrong : [];
             const options = [parsed?.correct, ...wrong];
@@ -575,6 +581,8 @@ app.post('/api/generate-quiz', async (req, res) => {
             const qualityIssue = questionQualityIssue(parsed);
             if (qualityIssue) throw new Error('AI 題目品質檢查失敗：' + qualityIssue);
             parsed.exp = removeUnstableOptionLabels(parsed.exp);
+            const finalIssue = questionQualityIssue(parsed);
+            if (finalIssue) throw new Error('解析整理後答案一致性檢查失敗：' + finalIssue);
 
             parsed.subject = subject;
             parsed.sub_topic = targetTopic;
@@ -636,6 +644,7 @@ app.post('/api/generate-quiz', async (req, res) => {
 
         } catch (error) {
             console.error(`Attempt ${attempts + 1} failed:`, error.message);
+            lastGenerationIssue = String(error?.message || '答案與解析不一致');
             attempts++;
             if (attempts === maxAttempts) return res.status(500).json({ error: "生成失敗" });
         }
