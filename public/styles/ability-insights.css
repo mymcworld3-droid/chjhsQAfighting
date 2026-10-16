@@ -151,3 +151,6 @@ body.xianxia-theme .dongfu-analysis-card{
   #ability-chart-views button{padding:8px 0;font-size:11px}
   #chart-controls{margin-bottom:9px!important}
 }
+
+/* Preserve AI-authored line breaks as safe text, without injecting HTML. */
+#ai-ability-response :is(h5,p,li){white-space:pre-line}
