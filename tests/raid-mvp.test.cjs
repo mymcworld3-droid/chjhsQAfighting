@@ -109,7 +109,7 @@ test('shared room layer supports party lifecycle, boss HP and reconnect', () => 
 
 test('raid questions use the quick simple generation profile', () => {
   assert.match(questionSource, /difficulty:\s*'easy'/);
-  assert.match(questionSource, /quizMode:\s*'raid-quick-simple'/);
+  assert.match(questionSource, /quizMode:\s*'raid-standard'/);
   assert.match(serverSource, /raidQuickSimple/);
   assert.match(serverSource, /團本快答模式/);
 });
@@ -167,7 +167,7 @@ test('the entire trial page hides navigation and uses the available viewport', (
 
 
 test('raid hub card is measured to the page bottom and cache-busted', () => {
-  assert.match(raidSource, /STYLE_HREF = 'styles\/raid-mode\.css\?v=20261016-hide-navigation1'/);
+  assert.match(raidSource, /STYLE_HREF = 'styles\/raid-mode\.css\?v=20261016-three-difficulties'/);
   assert.match(raidSource, /function fitRaidHubToViewport\(\)/);
   assert.match(raidSource, /pageBottom - cardTop - 8/);
   assert.match(raidSource, /card\.style\.setProperty\('height', targetHeight \+ 'px', 'important'\)/);
