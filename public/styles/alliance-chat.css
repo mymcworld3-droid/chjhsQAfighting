@@ -1,0 +1,54 @@
+/* 仙盟：低干擾金青私訊彈窗，手機及橫式皆有可讀空間。 */
+#alliance-chat-layer[hidden],.alliance-chat-badge[hidden]{display:none!important}
+#alliance-chat-layer{position:fixed;inset:0;z-index:35000;display:grid;place-items:center;
+  padding:max(12px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right))
+  max(12px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));
+  background:rgba(3,8,12,.78);backdrop-filter:blur(7px)}
+.alliance-chat-dialog{width:min(450px,100%);max-height:min(620px,88dvh);height:min(580px,86dvh);
+  display:flex;flex-direction:column;overflow:hidden;border:1px solid rgba(212,180,111,.40);
+  border-radius:17px;color:#efe7d5;background:linear-gradient(165deg,#19252b,#0c1016 75%);
+  box-shadow:0 20px 75px rgba(0,0,0,.64)}
+.alliance-chat-header{display:flex;justify-content:space-between;align-items:center;gap:12px;
+  padding:16px 18px;border-bottom:1px solid rgba(219,179,107,.19)}
+.alliance-chat-header small{font-size:10px;letter-spacing:.16em;color:#bba780}
+.alliance-chat-header h3{margin:3px 0 0;font-size:18px;font-weight:800;color:#f3dba5}
+#alliance-chat-close{border:1px solid rgba(232,201,145,.25);background:rgba(255,255,255,.035);
+  color:#e3ceac;width:33px;height:33px;border-radius:9px;font-size:23px;cursor:pointer}
+.alliance-chat-messages{display:flex;flex-direction:column;gap:9px;flex:1;min-height:0;
+  overflow:auto;padding:18px 15px;overscroll-behavior:contain}
+.alliance-chat-empty{margin:auto;color:#aeb3b0;font-size:13px;text-align:center}
+.alliance-chat-bubble{align-self:flex-start;max-width:82%;min-width:52px;padding:10px 12px;
+  border:1px solid rgba(209,202,177,.16);border-radius:14px 14px 14px 4px;
+  background:#28323a;color:#e8ebea}
+.alliance-chat-bubble.mine{align-self:flex-end;background:#27535c;
+  border-color:rgba(127,210,197,.32);border-radius:14px 14px 4px 14px}
+.alliance-chat-bubble p{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.65;font-size:13px;margin:0}
+.alliance-chat-bubble time{display:block;margin-top:4px;text-align:right;color:#c9c8bc;font-size:9px}
+.alliance-chat-error{margin:0 12px 5px;color:#f5b8a9;font-size:12px}
+.alliance-chat-error[hidden]{display:none}
+.alliance-chat-form{display:flex;gap:8px;padding:11px 12px;border-top:1px solid rgba(219,179,107,.18)}
+.alliance-chat-form input{flex:1;min-width:0;border:1px solid rgba(220,192,135,.26);
+  border-radius:10px;background:#101a21;color:#f5ebd6;padding:11px 12px;font-size:13px}
+.alliance-chat-form input:focus-visible{outline:2px solid #b9d6c5}
+.alliance-chat-form button{border:none;border-radius:10px;padding:0 15px;color:#0d171c;
+  background:#d5b67c;font-size:18px;cursor:pointer}
+.alliance-chat-form button:disabled{opacity:.35;cursor:wait}
+.alliance-chat-footnote{font-size:10px;text-align:center;color:#a7a19a;padding:0 10px 11px}
+.alliance-chat-badge{position:absolute;top:-5px;right:-6px;min-width:9px;height:9px;
+  border-radius:999px;background:#eb5f65;box-shadow:0 0 0 2px rgba(11,19,26,.96);
+  pointer-events:none}
+.alliance-chat-badge.with-count{min-width:17px;height:17px;top:-7px;right:-8px;
+  display:grid;place-items:center;color:#fff;font-size:10px;padding:0 3px;line-height:1}
+#btn-social-nav,#tab-btn-friends,#tab-btn-chat,.alliance-chat-friend-btn,
+#page-social h2{position:relative}
+#alliance-chat-nav-unread{right:calc(50% - 19px);top:3px}
+#alliance-chat-title-unread{position:static;display:inline-grid;vertical-align:middle;margin-left:7px}
+.alliance-chat-friend-btn{display:inline-flex;gap:6px;align-items:center;justify-content:center;
+  margin-left:9px;flex:none;padding:8px 10px;min-height:33px;border-radius:9px;
+  border:1px solid rgba(214,182,122,.3);color:#eed7a6;background:rgba(197,153,80,.075);
+  font-weight:700;font-size:12px}
+.alliance-chat-friend-btn:focus-visible{outline:2px solid #dcc397;outline-offset:2px}
+@media(max-width:600px){#alliance-chat-layer{padding:8px}.alliance-chat-dialog{
+  height:min(690px,94dvh);max-height:94dvh;border-radius:13px}
+  .alliance-chat-messages{padding:12px 10px}.alliance-chat-header{padding:12px}
+  .alliance-chat-friend-btn{padding:8px;font-size:11px}}
