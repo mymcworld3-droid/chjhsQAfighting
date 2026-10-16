@@ -55,9 +55,9 @@ function daysWith(values, today) {
 }
 function newPlayerData(uid, createdDay, today, now) {
   return {
-    uid, firstDay: createdDay, firstTrackedDay: today,
-    // Old users who first appear after instrumentation are not new-user cohorts.
-    cohortEligible: createdDay === today,
+    uid, firstDay: createdDay || today, firstTrackedDay: today,
+    // Unknown creation dates must not be treated as new registrations.
+    cohortEligible: !!createdDay && createdDay === today,
     seenDays: [today], totalAnswers: 0,
     firstQuestionAt: null, firstThreeAt: null, socialDays: [],
     lastDay: today, lastAt: now
@@ -66,7 +66,7 @@ function newPlayerData(uid, createdDay, today, now) {
 async function createdDayFor(a, uid, today) {
   const user = await a.auth.getUser(uid);
   const date = new Date(user.metadata?.creationTime || 0);
-  return Number.isFinite(date.getTime()) && date.getTime() > 0 ? dayOf(date) : today;
+  return Number.isFinite(date.getTime()) && date.getTime() > 0 ? dayOf(date) : null;
 }
 async function recordVisit(db, a, uid, vid, today, now) {
   const visitorRef = db.collection('playerAnalyticsVisitors').doc(vid);
@@ -77,17 +77,17 @@ async function recordVisit(db, a, uid, vid, today, now) {
   await db.runTransaction(async tx => {
     const visitor = await tx.get(visitorRef);
     const player = playerRef ? await tx.get(playerRef) : null;
-    if (dailyRef) await tx.get(dailyRef);
+    const daily = dailyRef ? await tx.get(dailyRef) : null;
     if (!visitor.exists) {
       tx.set(visitorRef, { firstDay: today, firstAt: now, lastDay: today, lastAt: now, started: false, firstStartDay: null });
-    } else {
+    } else if (visitor.data().lastDay !== today) {
       tx.update(visitorRef, { lastDay: today, lastAt: now });
     }
     if (playerRef) {
       if (!player.exists) tx.set(playerRef, newPlayerData(uid, createdDay, today, now));
-      else tx.update(playerRef, { lastDay: today, lastAt: now, seenDays: daysWith(player.data().seenDays, today) });
+      else if (player.data().lastDay !== today) tx.update(playerRef, { lastDay: today, lastAt: now, seenDays: daysWith(player.data().seenDays, today) });
       // A returning player who does not answer is still active on that day.
-      tx.set(dailyRef, { uid, day: today, lastAt: now }, { merge: true });
+      if (!daily.exists) tx.set(dailyRef, { uid, day: today, lastAt: now }, { merge: true });
     }
   });
 }
@@ -126,7 +126,8 @@ async function recordEvent(db, a, uid, vid, item, today, now) {
       totalAnswers,
       firstQuestionAt: p.firstQuestionAt || (isStart || isSoloAnswer ? now : null),
       firstThreeAt: p.firstThreeAt || (totalAnswers >= 3 ? now : null),
-      socialDays: isSocial ? daysWith(p.socialDays, today) : (p.socialDays || [])
+      socialDays: isSocial ? daysWith(p.socialDays, today) : (p.socialDays || []),
+      hadFirstDayFailure: !!p.hadFirstDayFailure || (type === 'app_load_failed' && p.firstDay === today)
     };
     if (!player.exists) tx.set(playerRef, { ...p, ...playerPatch });
     else tx.update(playerRef, playerPatch);
@@ -193,6 +194,8 @@ function buildReport({ visitors, players, days, events, now, range, truncated })
   const d1Group = eligible.filter(p => p.firstDay >= plusDays(today, -range) && p.firstDay <= plusDays(today, -1));
   const socialCohort = d1Group.filter(p => (p.socialDays || []).includes(p.firstDay));
   const nonSocialCohort = d1Group.filter(p => !(p.socialDays || []).includes(p.firstDay));
+  const failCohort = d1Group.filter(p => p.hadFirstDayFailure);
+  const noFailCohort = d1Group.filter(p => !p.hadFirstDayFailure);
   const cohortD1 = group => {
     const returned = group.filter(p => (p.seenDays || []).includes(plusDays(p.firstDay, 1))).length;
     return { returned, eligible: group.length, rate: percent(returned, group.length) };
@@ -206,6 +209,7 @@ function buildReport({ visitors, players, days, events, now, range, truncated })
       solo: sum('soloAnswers'), raid: sum('raidAnswers'), duel: sum('duelAnswers'), meditation: sum('meditationAnswers') },
     social: { participants: social.size, active: active.size, rate: percent(social.size, active.size),
       cohortD1Social: cohortD1(socialCohort), cohortD1Other: cohortD1(nonSocialCohort) },
+    failureRetention: { cohortD1Failure: cohortD1(failCohort), cohortD1Other: cohortD1(noFailCohort) },
     loading: { success: started, failed, rate: percent(failed, started + failed),
       appLoads: sum('appLoads'), appFailures: sum('appFailures'), appRate: percent(sum('appFailures'), sum('appLoads')) },
     daily: Array.from({ length: 7 }, (_, i) => {
