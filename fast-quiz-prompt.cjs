@@ -1,6 +1,6 @@
 'use strict';
 // Compact generation instruction. Existing server validation is always retained.
-const MODES = new Set(['raid-quick-simple', 'battle-fast', 'immortal-fast']);
+const MODES = new Set(['raid-quick-simple', 'raid-standard', 'battle-fast', 'immortal-fast']);
 function quickQuizPrompt({ mode, subject, level, topic, rank, difficulty, previousQuestions = [],
   previousMeta = [], targetForm = '', quality = {}, retryIssue = '', randomSeed = '' } = {}) {
   if (!MODES.has(mode)) throw new Error('Unsupported fast quiz mode');
