@@ -7,6 +7,9 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
   'use strict';
   const pool = globalThis.QASoulboundPool;
   let snapshot = null, account = '', busy = false, selected = 0, message = '', animationTimer = null, externalDirty = false;
+  const CAROUSEL_DELAY_MS = 4800, CAROUSEL_MOVE_MS = 660;
+  let carouselStart = 0, carouselTimer = null, carouselMoveTimer = null;
+  let previewItemId = '', previewTrigger = null;
   const $ = id => document.getElementById(id);
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const visible = () => document.getElementById('page-training')?.classList.contains('active-page') &&
@@ -21,8 +24,9 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
   function reconcile() {
     const uid = getMainUser()?.uid || '';
     if (account !== uid) {
-      clearTimeout(animationTimer); account = uid; snapshot = null; selected = 0; message = ''; externalDirty = false;
-      $('soulbound-animation')?.remove();
+      clearTimeout(animationTimer); stopCarousel(); account = uid; snapshot = null; selected = 0;
+      carouselStart = 0; message = ''; externalDirty = false; previewItemId = ''; previewTrigger = null;
+      $('soulbound-animation')?.remove(); $('soulbound-preview')?.remove();
     }
     return uid;
   }
@@ -66,18 +70,108 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       : `<span class="sb-fallback" aria-hidden="true">${esc(item?.icon || '契')}</span>`;
   }
   function showcaseMarkup(candidates) {
+    // Three visible weapons; a fourth offscreen card enters from the right
+    // as the leftmost one slides away.
+    const count = candidates.length, length = Math.min(count, 4);
+    const cards = Array.from({ length }, (_, position) => {
+      const a = candidates[(carouselStart + position) % count];
+      const offscreen = position >= 3;
+      return `<button type="button" class="sb-carousel-card${position === 1 ? ' is-center' : ''}"
+        data-sb-preview="${esc(a.id)}" style="--sb-color:${esc(artifactRealmColor(a.realm))}"
+        aria-label="查看${esc(a.name)}詳細資料"${offscreen ? ' aria-hidden="true" tabindex="-1"' : ''}>
+        <span class="sb-carousel-art">${image(a)}</span><b>${esc(a.name)}</b>
+        <small>${esc(a.realm)}</small></button>`;
+    }).join('');
+    const number = count ? ((carouselStart + 1) % count) + 1 : 0;
     return `<section class="sb-showcase" aria-label="常駐本命法器共用池">
-      <small>常駐共用池 · ${esc(candidates[0]?.realm)}</small><h3>八器同池</h3>
-      <div class="sb-common-pool-art">${candidates.map(a => `<figure>${image(a)}<figcaption>${esc(a.name)}</figcaption></figure>`).join('')}</div>
-      <p>完整武器隨機獲得八種之一</p><span>每種器型佔完整武器結果的 12.5%</span>
+      <div class="sb-showcase-heading"><h3>常駐法器</h3>
+      <span class="sb-carousel-count" aria-label="中央法器為第 ${number} 件，共 ${count} 件">${String(number).padStart(2, '0')} / ${String(count).padStart(2, '0')}</span></div>
+      <div class="sb-carousel-viewport" aria-label="每次展示三件法器，中央法器較大">
+        <div class="sb-carousel-track">${cards}</div>
+      </div>
+      <p class="sb-carousel-hint">點擊法器查看詳細資料</p>
     </section>`;
   }
-  function galleryMarkup(candidates, rank, version = pool.VERSION) {
-    return `<section class="sb-gallery"><div class="sb-gallery-heading"><h3>池內法器一覽</h3><span>八種同池 · 隨機獲得</span></div>
-      <div class="sb-pool">${candidates.map(a => `<article style="--sb-color:${artifactRealmColor(a.realm)}">${image(a)}<b>${esc(a.name)}</b><small>${esc(a.realm)} · ${esc(effectText(a))}</small></article>`).join('')}</div>
-      <details class="sb-details"><summary>完整機率與品質</summary><p>版本 ${esc(version)}。一般完整武器機率 2%，其餘 98% 獲得 20–40 個煉器碎片；連續 49 抽未出武器，第 50 抽必出。出武器後重新計數。八種器型共用一池，完整武器各佔武器結果的 12.5%。${rank === 7 ? '真仙品質不再升階。' : '抽中武器時，80% 為目前品質、20% 高一階。'}數值依境界提升，所有器型均可跨丹性搭配。</p>
-        ${rank >= 0 && rank < 7 ? `<ul>${pool.candidates(rank + 1).map(a => `<li>${esc(a.name)}（${esc(a.realm)}）：${esc(effectText(a))}；攻擊 +${base(a, 'equip_attack_flat')}、生命 +${base(a, 'equip_hp_flat')}</li>`).join('')}</ul>` : ''}</details>
-    </section>`;
+  function probabilityMarkup(rank, version = pool.VERSION) {
+    return `<details class="sb-details sb-probability"><summary>抽取機率與保底</summary>
+      <p>獎池版本 ${esc(version)}。完整武器機率 2%，其餘 98% 獲得 20–40 個煉器碎片；
+      連續 49 抽未出武器，第 50 抽必出。八種器型共用常駐池，
+      每種器型佔完整武器結果的 12.5%。${rank === 7 ? '真仙品質不再升階。' : '抽中武器時，80% 為目前品質、20% 高一階。'}
+      抽取不指定器型。</p></details>`;
+  }
+  function stopCarousel() {
+    clearTimeout(carouselTimer); clearTimeout(carouselMoveTimer);
+    carouselTimer = null; carouselMoveTimer = null;
+    $('soulbound-content')?.querySelector('.sb-carousel-track')?.classList.remove('is-shifting');
+  }
+  function carouselAllowed() {
+    if (previewItemId || !visible() || document.hidden || $('soulbound-animation')) return false;
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return false;
+    return true;
+  }
+  function scheduleCarousel() {
+    clearTimeout(carouselTimer); carouselTimer = null;
+    if (!carouselAllowed()) return;
+    carouselTimer = setTimeout(() => {
+      carouselTimer = null;
+      const showcase = $('soulbound-content')?.querySelector('.sb-showcase');
+      if (!showcase || !carouselAllowed()) return;
+      if (showcase.matches?.(':hover') || showcase.matches?.(':focus-within')) {
+        scheduleCarousel(); return;
+      }
+      const track = showcase.querySelector('.sb-carousel-track');
+      if (!track || track.children.length < 4) return;
+      track.classList.add('is-shifting');
+      carouselMoveTimer = setTimeout(() => {
+        carouselMoveTimer = null;
+        if (!carouselAllowed() || !showcase.isConnected) return;
+        carouselStart = (carouselStart + 1) % pool.TYPES.length;
+        const rank = snapshot?.rank ?? Math.max(0, pool.rankFor(window.getTrainingAccessScore?.() ??
+          globalThis.QATrainingAccessRules.score(data())));
+        const candidates = pool.candidates(Math.max(0, rank));
+        if (candidates.length) showcase.outerHTML = showcaseMarkup(candidates);
+        scheduleCarousel();
+      }, CAROUSEL_MOVE_MS);
+    }, CAROUSEL_DELAY_MS);
+  }
+  function previewMarkup(item) {
+    return `<section class="sb-preview-card" role="dialog" aria-modal="true" aria-labelledby="sb-preview-title"
+      style="--sb-color:${esc(artifactRealmColor(item.realm))}">
+      <button type="button" class="sb-preview-close" data-sb-close aria-label="關閉法器詳細資料">×</button>
+      <div class="sb-preview-art">${image(item)}</div>
+      <div class="sb-preview-info">
+        <small>${esc(item.realm)} · ${esc(item.weaponForm || '本命法器')}</small>
+        <h3 id="sb-preview-title">${esc(item.name)}</h3>
+        <p>${esc(effectText(item))}</p>
+        <div class="sb-preview-stats"><span>攻擊 +${base(item, 'equip_attack_flat')}</span>
+        <span>生命 +${base(item, 'equip_hp_flat')}</span></div>
+        <p class="sb-preview-description">${esc(item.description || '')}</p>
+        <span class="sb-preview-hint">僅查看法器資料，實際抽取仍為八器共用池。</span>
+      </div></section>`;
+  }
+  function showPreview(itemId, trigger) {
+    const item = getArtifactById(itemId) || pool.get(itemId);
+    if (!item || item.equipSlot !== '本命法寶') return;
+    stopCarousel();
+    previewItemId = itemId; previewTrigger = trigger || null;
+    const page = $('soulbound-page');
+    if (!page) return;
+    $('soulbound-preview')?.remove();
+    const overlay = document.createElement('div');
+    overlay.id = 'soulbound-preview'; overlay.className = 'sb-preview-overlay';
+    overlay.innerHTML = previewMarkup(item);
+    page.appendChild(overlay);
+    overlay.addEventListener('click', e => {
+      if (e.target.closest?.('[data-sb-close]') || e.target === overlay) hidePreview();
+    });
+    overlay.querySelector('[data-sb-close]')?.focus();
+  }
+  function hidePreview() {
+    if (!previewItemId) return;
+    previewItemId = ''; $('soulbound-preview')?.remove();
+    if (previewTrigger?.isConnected) previewTrigger.focus();
+    previewTrigger = null;
+    scheduleCarousel();
   }
   function comparison(item) {
     const current = equipped();
