@@ -71,11 +71,13 @@ async function createdDayFor(a, uid, today) {
 async function recordVisit(db, a, uid, vid, today, now) {
   const visitorRef = db.collection('playerAnalyticsVisitors').doc(vid);
   const playerRef = uid ? db.collection('playerAnalyticsPlayers').doc(uid) : null;
+  const dailyRef = uid ? db.collection('playerAnalyticsDaily').doc(crypto.createHash('sha256').update(uid + ':' + today).digest('hex')) : null;
   const prior = playerRef ? await playerRef.get() : null;
   const createdDay = uid && !prior.exists ? await createdDayFor(a, uid, today) : null;
   await db.runTransaction(async tx => {
     const visitor = await tx.get(visitorRef);
     const player = playerRef ? await tx.get(playerRef) : null;
+    if (dailyRef) await tx.get(dailyRef);
     if (!visitor.exists) {
       tx.set(visitorRef, { firstDay: today, firstAt: now, lastDay: today, lastAt: now, started: false });
     } else {
@@ -84,6 +86,8 @@ async function recordVisit(db, a, uid, vid, today, now) {
     if (playerRef) {
       if (!player.exists) tx.set(playerRef, newPlayerData(uid, createdDay, today, now));
       else tx.update(playerRef, { lastDay: today, lastAt: now, seenDays: daysWith(player.data().seenDays, today) });
+      // A returning player who does not answer is still active on that day.
+      tx.set(dailyRef, { uid, day: today, lastAt: now }, { merge: true });
     }
   });
 }
@@ -114,22 +118,23 @@ async function recordEvent(db, a, uid, vid, item, today, now) {
     const increment = (name, bool) => (Number(d[name]) || 0) + (bool ? 1 : 0);
     const isAnswer = type === 'answer_completed';
     const isStart = type === 'question_started';
+    const isSoloAnswer = isAnswer && mode === 'solo';
     const isSocial = type === 'social_participated';
     const totalAnswers = (Number(p.totalAnswers) || 0) + (isAnswer ? 1 : 0);
     const playerPatch = {
       lastDay: today, lastAt: now, seenDays: daysWith(p.seenDays, today),
       totalAnswers,
-      firstQuestionAt: p.firstQuestionAt || (isStart ? now : null),
+      firstQuestionAt: p.firstQuestionAt || (isStart || isSoloAnswer ? now : null),
       firstThreeAt: p.firstThreeAt || (totalAnswers >= 3 ? now : null),
       socialDays: isSocial ? daysWith(p.socialDays, today) : (p.socialDays || [])
     };
     if (!player.exists) tx.set(playerRef, { ...p, ...playerPatch });
     else tx.update(playerRef, playerPatch);
     if (!visitor.exists) tx.set(visitorRef, {
-      firstDay: today, firstAt: now, lastDay: today, lastAt: now, started: isStart
+      firstDay: today, firstAt: now, lastDay: today, lastAt: now, started: isStart || isSoloAnswer
     });
     else tx.update(visitorRef, {
-      lastDay: today, lastAt: now, started: !!visitor.data().started || isStart
+      lastDay: today, lastAt: now, started: !!visitor.data().started || isStart || isSoloAnswer
     });
     tx.set(dailyRef, {
       uid, day: today, lastAt: now,
@@ -154,11 +159,14 @@ function buildReport({ visitors, players, days, events, now, range, truncated })
   const recent = plusDays(today, -6);
   const visitorCohorts = visitors.filter(v => v.firstDay >= first && v.firstDay <= today);
   const playerCohorts = players.filter(p => p.cohortEligible === true && p.firstDay >= first && p.firstDay <= today);
+  const eligible = players.filter(p => p.cohortEligible === true);
   const startedVisitors = visitorCohorts.filter(v => v.started).length;
   const startedPlayers = playerCohorts.filter(p => !!p.firstQuestionAt).length;
   const threePlayers = playerCohorts.filter(p => !!p.firstThreeAt).length;
   const retained = n => {
-    const matured = playerCohorts.filter(p => p.firstDay <= plusDays(today, -n));
+    // Fixed-size, fully matured cohorts: for a 7-day range D7 includes
+    // registrations 7-13 days ago, not today's incomplete cohorts.
+    const matured = eligible.filter(p => p.firstDay >= plusDays(today, -(range + n - 1)) && p.firstDay <= plusDays(today, -n));
     const returned = matured.filter(p => (p.seenDays || []).includes(plusDays(p.firstDay, n))).length;
     return { returned, eligible: matured.length, rate: percent(returned, matured.length) };
   };
@@ -168,8 +176,9 @@ function buildReport({ visitors, players, days, events, now, range, truncated })
   const social = new Set(weeklyDays.filter(d => (Number(d.social) || 0) > 0).map(d => d.uid));
   const sum = key => weeklyDays.reduce((n, d) => n + (Number(d[key]) || 0), 0);
   const started = sum('starts'), failed = sum('loadFailures');
-  const socialCohort = playerCohorts.filter(p => (p.socialDays || []).includes(p.firstDay) && p.firstDay <= plusDays(today, -1));
-  const nonSocialCohort = playerCohorts.filter(p => !(p.socialDays || []).includes(p.firstDay) && p.firstDay <= plusDays(today, -1));
+  const d1Group = eligible.filter(p => p.firstDay >= plusDays(today, -range) && p.firstDay <= plusDays(today, -1));
+  const socialCohort = d1Group.filter(p => (p.socialDays || []).includes(p.firstDay));
+  const nonSocialCohort = d1Group.filter(p => !(p.socialDays || []).includes(p.firstDay));
   const cohortD1 = group => {
     const returned = group.filter(p => (p.seenDays || []).includes(plusDays(p.firstDay, 1))).length;
     return { returned, eligible: group.length, rate: percent(returned, group.length) };
@@ -202,7 +211,7 @@ async function report(db, now, range) {
   const today = dayOf(now), first = plusDays(today, 1 - range), recent = plusDays(today, -6);
   const [v, p, d, e] = await Promise.all([
     db.collection('playerAnalyticsVisitors').where('firstDay', '>=', first).limit(LIMIT).get(),
-    db.collection('playerAnalyticsPlayers').where('firstDay', '>=', first).limit(LIMIT).get(),
+    db.collection('playerAnalyticsPlayers').where('firstDay', '>=', plusDays(first, -7)).limit(LIMIT).get(),
     db.collection('playerAnalyticsDaily').where('day', '>=', recent).limit(LIMIT).get(),
     db.collection('playerAnalyticsEvents').orderBy('at', 'desc').limit(25).get()
   ]);
