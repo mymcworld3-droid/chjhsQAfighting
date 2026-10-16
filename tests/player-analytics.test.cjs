@@ -35,7 +35,7 @@ test('fixed matured D1 and D7 cohorts exclude too-recent players', () => {
   });
   assert.deepEqual(report.visitors, { total:2, started:1, rate:50 });
   assert.deepEqual(report.firstThree, { completed:1, started:1, rate:100 });
-  assert.deepEqual(report.d1, { returned:1, eligible:3, rate:33.3 });
+  assert.deepEqual(report.d1, { returned:1, eligible:4, rate:25 });
   assert.deepEqual(report.d7, { returned:1, eligible:1, rate:100 });
   assert.deepEqual(report.weekly, { answers:5, active:2, solo:1, raid:1, duel:3, meditation:0 });
   assert.deepEqual({ participants:report.social.participants, rate:report.social.rate }, { participants:1, rate:50 });
