@@ -309,3 +309,59 @@ test('pre-Golden players keep their vouchers, and unrecognized payment types are
   await assert.rejects(transaction(db,'u1','draw',{...request(904),payment:'free'}),/抽取方式/);
   assert.equal(db.docs.get('users/u1').soulboundDrawTickets,3);
 });
+
+test('fragments redeem a selected permanent weapon exactly once without touching draw pity', async () => {
+  const user = sample();
+  const cost = pool.redemptionCost(0);
+  user.forgeFragments = cost + 25;
+  const db = fakeDb(user);
+  const itemId = pool.candidates(0)[3].id;
+  const body = { requestId:'redeem-request-000001', itemId, expectedFragments:cost, poolVersion:pool.VERSION };
+  const first = await transaction(db,'u1','redeem',body);
+  assert.equal(first.result.kind,'redemption');
+  assert.equal(first.result.itemId,itemId);
+  assert.equal(first.fragments,25);
+  assert.equal(first.inventory[itemId],1);
+  assert.equal(first.draws,0);
+  assert.equal(first.untilPity,20);
+  assert.equal(first.balance,10000);
+  const replay = await transaction(db,'u1','redeem',body);
+  assert.deepEqual(replay.result,first.result);
+  assert.equal(replay.fragments,25);
+  assert.equal(replay.inventory[itemId],1);
+  await assert.rejects(transaction(db,'u1','redeem',{...body,itemId:pool.candidates(0)[4].id}),/其他操作/);
+});
+
+test('fragment redemption checks tier, price, sufficient funds and a pending draw', async () => {
+  const cost = pool.redemptionCost(0);
+  const user = sample(); user.forgeFragments = cost - 1;
+  const db = fakeDb(user);
+  const id = pool.candidates(0)[0].id;
+  const base = {requestId:'redeem-request-000002',itemId:id,expectedFragments:cost,poolVersion:pool.VERSION};
+  await assert.rejects(transaction(db,'u1','redeem',base),/碎片不足/);
+  await assert.rejects(transaction(db,'u1','redeem',{...base,expectedFragments:cost-1}),/價格已更新/);
+  await assert.rejects(transaction(db,'u1','redeem',{...base,itemId:pool.candidates(1)[0].id}),/目前境界/);
+  await assert.rejects(transaction(db,'u1','redeem',{...base,itemId:'forged-id'}),/目前境界/);
+  assert.deepEqual(db.docs.get('users/u1'),user);
+  db.docs.get('users/u1').forgeFragments = cost;
+  const drawn = await transaction(db,'u1','draw',request(3),low);
+  await assert.rejects(transaction(db,'u1','redeem',base),/上一批/);
+  await ack(db,drawn);
+  const purchased = await transaction(db,'u1','redeem',base);
+  assert.equal(purchased.fragments,30); // drawn fragment reward is still available
+  assert.equal(purchased.untilPity,19);
+});
+
+test('failed and concurrent fragment redemptions never duplicate an item or overspend', async () => {
+  const cost = pool.redemptionCost(0), user = sample();
+  user.forgeFragments=cost;
+  const db=fakeDb(user), a=pool.candidates(0)[0].id,b=pool.candidates(0)[1].id;
+  const body=(itemId,n)=>({requestId:'redeem-request-'+String(n).padStart(6,'0'),itemId,expectedFragments:cost,poolVersion:pool.VERSION});
+  db.failNextCreate();
+  await assert.rejects(transaction(db,'u1','redeem',body(a,10)),/unavailable/);
+  assert.deepEqual(db.docs.get('users/u1'),user);
+  const pair=await Promise.allSettled([transaction(db,'u1','redeem',body(a,10)),transaction(db,'u1','redeem',body(b,11))]);
+  assert.equal(pair.filter(row=>row.status==='fulfilled').length,1);
+  assert.equal(db.docs.get('users/u1').forgeFragments,0);
+  assert.equal(Object.values(db.docs.get('users/u1').artifactSystem.inventory).reduce((a,b)=>a+b,0),2);
+});
