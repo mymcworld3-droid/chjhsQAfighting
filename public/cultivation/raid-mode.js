@@ -902,6 +902,10 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
         state.boss.phase = shenPhaseForHp(state.boss.hp, state.boss.maxHp);
       }
       state.status = 'review';
+      // Only a verified, settled raid action counts as learning/social participation.
+      const analyticsId = 'raid_' + roomId + '_' + actionId;
+      void window.trackPlayerAnalytics?.('answer_completed', { mode: 'raid', eventId: analyticsId });
+      void window.trackPlayerAnalytics?.('social_participated', { mode: 'raid', eventId: analyticsId + '_social' });
 
       if (state.room?.status === 'won' || state.room?.status === 'lost') {
         state.pendingFinishRoom = state.room;
