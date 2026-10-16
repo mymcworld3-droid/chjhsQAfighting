@@ -1844,7 +1844,7 @@ export const featureReady = (async () => {
     const room = snap.data(); if (Number(room.modeVersion) !== BATTLE_V2.modeVersion) return;
     const uid = me()?.uid; if (room.host?.uid === uid) state.role = 'host'; else if (room.guest?.uid === uid) state.role = 'guest'; else return;
     state.room = room;
-    persistSettledAnswer(room);
+    if (typeof persistSettledAnswer === 'function') persistSettledAnswer(room);
     if (room.status !== 'waiting') { state.waitingUnsub?.(); state.waitingUnsub = null; state.waitingSnapshot = null; }
     if (room.status === 'waiting') { renderLobby(room); if (state.role === 'host') { watchWaitingRooms(); scheduleReconcile(); inviteOnlineFriends(state.roomId); } }
     else if (room.status === 'intro') {
