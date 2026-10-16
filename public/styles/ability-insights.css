@@ -79,3 +79,19 @@ body.xianxia-theme #dongfu-analysis-body {color:#ede0c8}
   #chart-controls .ai-ability-filter{font-size:11px;padding:6px 9px}
   .ai-ability-panel{gap:12px}
 }
+
+.ai-ability-skills{border-top:1px solid var(--ability-line);padding-top:13px}
+.ai-ability-skill-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}
+.ai-ability-skill{min-width:0;padding:10px 11px;border:1px solid var(--ability-line);
+  border-radius:9px;background:rgba(218,174,90,.038)}
+.ai-ability-skill>div:first-child{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.ai-ability-skill b{font-size:12px;color:#e8d3ae}
+.ai-ability-skill span{font-size:12px;color:#e8cb96;font-variant-numeric:tabular-nums}
+.ai-ability-skill-track{margin:8px 0 6px;overflow:hidden;height:5px;
+  border-radius:5px;background:rgba(238,210,150,.10)}
+.ai-ability-skill-track>span{display:block;height:100%;border-radius:5px;
+  background:linear-gradient(90deg,#a17b47,#ecc88a)}
+.ai-ability-skill small{font-size:10px;color:#aa9a80}
+.ai-ability-skill-empty{grid-column:1/-1;font-size:12px;color:#ab9c82;
+  padding:12px;background:rgba(218,174,90,.03);border-radius:8px;margin:0}
+@media(max-width:380px){.ai-ability-skill-grid{grid-template-columns:1fr}}
