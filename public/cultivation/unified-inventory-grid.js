@@ -328,7 +328,7 @@ import {
     if (effect?.type === 'equip_crit_chance') return `暴擊率 +${pct(effect.value)}`;
     if (effect?.type === 'equip_crit_damage_percent') return `暴擊額外傷害 +${pct(effect.value)}`;
     if (effect?.type === 'equip_combo_damage_percent') return `連擊傷害 +${pct(effect.value)}（基礎 30%）`;
-    if (effect?.type === 'equip_combo_chance') return `連擊率 ${pct(Math.min(0.10, Number(effect.value) || 0))}（上限 10%）`;
+    if (effect?.type === 'equip_combo_chance') return `連擊率 ${pct(effect.value)}`;
     if (effect?.type === 'equip_lifesteal_percent') return `吸血 ${pct(effect.value)}`;
     if (effect?.type === 'equip_reflect_percent') return `反傷 ${pct(effect.value)}`;
     if (effect?.type === 'equip_shield_flat') return `每場鬥法護盾 +${Number(effect.value) || 0}`;

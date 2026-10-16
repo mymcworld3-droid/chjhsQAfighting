@@ -221,6 +221,8 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
     const signature = key + (forgeMethod === '自由發揮' ? '' : '|method:' + forgeMethod);
     return ARTIFACT_CATALOG.filter((item) => {
       const recipe = getArtifactRecipe(item.id);
+      const hasSoulboundBase = recipe.some(row => row.artifactId && getArtifactById(row.artifactId)?.equipSlot === '本命法寶');
+      if (!globalThis.QASoulboundPool.refinementCompatible(item, hasSoulboundBase)) return false;
       return recipe.length && recipeTotal(recipe) <= SLOT_COUNT &&
         recipeSignatureFor(item, recipe) === signature;
     });
@@ -278,6 +280,8 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
     const signature = key + (recipeMethod(target) === '自由發揮' ? '' : '|method:' + recipeMethod(target));
     const found = ARTIFACT_CATALOG.filter((item) => {
       const recipe = getArtifactRecipe(item.id);
+      const hasSoulboundBase = recipe.some(row => row.artifactId && getArtifactById(row.artifactId)?.equipSlot === '本命法寶');
+      if (!globalThis.QASoulboundPool.refinementCompatible(item, hasSoulboundBase)) return false;
       return recipe.length && recipeTotal(recipe) <= SLOT_COUNT &&
         recipeSignatureFor(item, recipe) === signature;
     });
@@ -745,7 +749,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
     const adminGuidance = adminGuidanceMarkup(job, matching.length);
 
 
-    return `<section class="cultivation-refinery"><article class="refinery-panel refinery-material-panel"><div class="refinery-material-list ${job ? 'is-job-locked' : ''}">${ingredientHtml}</div></article><article class="refinery-panel refinery-forge-panel"><div class="refinery-head"><div><h3><i class="fa-solid fa-fire-burner"></i> 八方煉器陣</h3><p>八方歸位，陣心煉器；點已放入素材可取回。</p></div><div class="refinery-head-actions"><div class="refinery-fragment-balance" aria-label="持有煉器碎片"><span>煉器碎片</span><b data-refinery-fragment-balance>${fragmentBalance().toLocaleString('zh-TW')}</b></div><button type="button" class="refinery-dismantle" data-inventory-dismantle>物品分解</button><span class="refinery-badge" data-refinery-used-badge>${used}/${SLOT_COUNT}</span></div></div>${methodSelect}${keyRequirementHtml}<div class="refinery-array-wrap"><div class="refinery-slots" aria-label="八方煉器陣"><span class="refinery-array-lines"></span><span class="refinery-array-ring"></span>${slotHtml}<div class="refinery-array-center"><button type="button" class="refinery-craft ${craftReady ? 'ready' : ''} ${jobReady ? 'job-ready' : ''}" data-refinery-craft ${craftReady ? '' : 'disabled'}><i class="fa-solid fa-fire-flame-curved"></i><span class="craft-main" data-refinery-craft-label>${busy ? '處理中' : craftLabel}</span><span class="craft-sub" data-refinery-craft-cost aria-live="polite">${esc(craftCostText(plan, job))}</span></button></div><span class="refinery-array-caption">八方聚靈 · 一器成形</span></div></div>${jobBox}${adminGuidance}<div class="refinery-summary"><strong>投入：</strong><span data-refinery-summary-text>${esc(summary)}</span></div><div class="refinery-match ${matchClass}" data-refinery-match><b data-refinery-match-prefix>${esc(matchPrefix)}</b><span data-refinery-match-text>${esc(matchPlain)}</span></div><div class="refinery-actions"><button type="button" class="refinery-clear" data-refinery-clear ${!used || busy ? 'disabled' : ''}><i class="fa-solid fa-rotate-left"></i> 清空陣位</button></div><div class="refinery-note"><b>陣法規則：</b>按「煉製」即扣素材與煉器碎片；境界越高、玩家境界越低，耗時與費用越高。煉製完成後按「開爐」取出法寶。本命法器由契器台常駐靈石抽取取得，普通煉器不得新造；持有原器可使用團本材料與印記二次、三次精煉。</div>${recipeBookMarkup()}</article></section>`;
+    return `<section class="cultivation-refinery"><article class="refinery-panel refinery-material-panel"><div class="refinery-material-list ${job ? 'is-job-locked' : ''}">${ingredientHtml}</div></article><article class="refinery-panel refinery-forge-panel"><div class="refinery-head"><div><h3><i class="fa-solid fa-fire-burner"></i> 八方煉器陣</h3><p>八方歸位，陣心煉器；點已放入素材可取回。</p></div><div class="refinery-head-actions"><div class="refinery-fragment-balance" aria-label="持有煉器碎片"><span>煉器碎片</span><b data-refinery-fragment-balance>${fragmentBalance().toLocaleString('zh-TW')}</b></div><button type="button" class="refinery-dismantle" data-inventory-dismantle>物品分解</button><span class="refinery-badge" data-refinery-used-badge>${used}/${SLOT_COUNT}</span></div></div>${methodSelect}${keyRequirementHtml}<div class="refinery-array-wrap"><div class="refinery-slots" aria-label="八方煉器陣"><span class="refinery-array-lines"></span><span class="refinery-array-ring"></span>${slotHtml}<div class="refinery-array-center"><button type="button" class="refinery-craft ${craftReady ? 'ready' : ''} ${jobReady ? 'job-ready' : ''}" data-refinery-craft ${craftReady ? '' : 'disabled'}><i class="fa-solid fa-fire-flame-curved"></i><span class="craft-main" data-refinery-craft-label>${busy ? '處理中' : craftLabel}</span><span class="craft-sub" data-refinery-craft-cost aria-live="polite">${esc(craftCostText(plan, job))}</span></button></div><span class="refinery-array-caption">八方聚靈 · 一器成形</span></div></div>${jobBox}${adminGuidance}<div class="refinery-summary"><strong>投入：</strong><span data-refinery-summary-text>${esc(summary)}</span></div><div class="refinery-match ${matchClass}" data-refinery-match><b data-refinery-match-prefix>${esc(matchPrefix)}</b><span data-refinery-match-text>${esc(matchPlain)}</span></div><div class="refinery-actions"><button type="button" class="refinery-clear" data-refinery-clear ${!used || busy ? 'disabled' : ''}><i class="fa-solid fa-rotate-left"></i> 清空陣位</button></div><div class="refinery-note"><b>陣法規則：</b>按「煉製」即扣素材與煉器碎片；境界越高、玩家境界越低，耗時與費用越高。煉製完成後按「開爐」取出法寶。本命法器由契器台常駐靈石抽取取得，普通煉器不得新造；投入本命法寶時，成品必為本命法寶並保留其器型與屬性；特殊屬性範圍為普通法器四倍，攻擊與生命加成維持原範圍。</div>${recipeBookMarkup()}</article></section>`;
   }
 
   function setText(node, value) {
@@ -934,7 +938,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
       }
     }
     const plan = window.getCultivationRefineryPlan?.(tokens, item.id);
-    if (!plan?.valid || plan.knownArtifactId !== item.id) {
+    if (!plan?.valid) {
       toast(plan?.reason || '配方暫時無法煉製。', false);
       return;
     }

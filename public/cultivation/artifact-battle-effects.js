@@ -59,6 +59,7 @@ import {} from './combat-combo.js';
         value: num(effect.value),
         artifactId: String(effect.artifactId || ''),
         artifactName: String(effect.artifactName || ''),
+        soulbound: effect.soulbound === true,
         effectIndex: Math.max(0, Math.floor(num(effect.effectIndex)))
       }));
   }
@@ -203,7 +204,7 @@ import {} from './combat-combo.js';
 
     const caps = effects
       .filter((effect) => effect.type === 'equip_damage_cap_percent')
-      .map((effect) => clamp(effect.value, 0.05, 1));
+      .map((effect) => clamp(effect.value, effect.soulbound ? 0.0125 : 0.05, 1));
     let damageCap = null;
     if (caps.length) {
       const capPercent = Math.min(...caps);

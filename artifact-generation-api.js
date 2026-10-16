@@ -1,6 +1,7 @@
 'use strict';
 
 const aiRouter = require('./ai-router');
+const soulboundRules = require('./public/cultivation/soulbound-pool.js');
 
 const ALLOWED_EFFECTS = new Set([
   'equip_attack_flat','equip_attack_percent','equip_hp_flat','equip_hp_percent',
@@ -398,26 +399,26 @@ function effectRange(type, order, stage = 1, effectBoundsV1 = {}, rawDefault = f
     max:override?.max ?? max, unit:integer ? '點' : '比例',
     note:integer ? '使用整數' : '0.10 代表 10%' };
 }
-function effectRangesForRealm(realm, stage = 1, effectBoundsV1 = {}, effectBoundsV2 = {}, ingredientCount = 3) {
+function effectRangesForRealm(realm, stage = 1, effectBoundsV1 = {}, effectBoundsV2 = {}, ingredientCount = 3, soulbound = false) {
   const order = realmOrder(realm);
   if (order < 1) return [];
-  return [...ALLOWED_EFFECTS].map((type) => effectRange(type, order, stage, effectBoundsV1, false, effectBoundsV2, ingredientCount)).filter(Boolean);
+  return [...ALLOWED_EFFECTS].map((type) => soulboundRules.refinementRange(effectRange(type, order, stage, effectBoundsV1, false, effectBoundsV2, ingredientCount), soulbound)).filter(Boolean);
 }
-function sanitizeValue(type, value, order, stage = 1, effectBoundsV1 = {}, effectBoundsV2 = {}, ingredientCount = 3) {
-  const range = effectRange(type, order, stage, effectBoundsV1, false, effectBoundsV2, ingredientCount);
+function sanitizeValue(type, value, order, stage = 1, effectBoundsV1 = {}, effectBoundsV2 = {}, ingredientCount = 3, soulbound = false) {
+  const range = soulboundRules.refinementRange(effectRange(type, order, stage, effectBoundsV1, false, effectBoundsV2, ingredientCount), soulbound);
   if (!range || range.field !== 'value') return null;
   const proposed = Number(value);
   const chosen = Number.isFinite(proposed) ? proposed : (range.min + range.max) / 2;
   const bounded = clamp(chosen, range.min, range.max);
   return FLAT_VALUE_TYPES.has(type) ? Math.round(bounded) : roundRange(bounded);
 }
-function sanitizeEffect(raw, order, stage = 1, effectBoundsV1 = {}, effectBoundsV2 = {}, ingredientCount = 3) {
+function sanitizeEffect(raw, order, stage = 1, effectBoundsV1 = {}, effectBoundsV2 = {}, ingredientCount = 3, soulbound = false) {
   const type = cleanText(raw?.type, 64);
-  const range = effectRange(type, order, stage, effectBoundsV1, false, effectBoundsV2, ingredientCount);
+  const range = soulboundRules.refinementRange(effectRange(type, order, stage, effectBoundsV1, false, effectBoundsV2, ingredientCount), soulbound);
   if (!range) return null;
   const out = { type };
   if (range.field === 'value') {
-    out.value = sanitizeValue(type, raw?.value, order, stage, effectBoundsV1, effectBoundsV2, ingredientCount);
+    out.value = sanitizeValue(type, raw?.value, order, stage, effectBoundsV1, effectBoundsV2, ingredientCount, soulbound);
   } else if (range.field === 'multiplier') {
     const proposed = Number(raw?.multiplier);
     out.multiplier = roundRange(clamp(
@@ -443,20 +444,23 @@ function sanitizeGeneratedArtifact(raw, targetRealm, refinementStage = 1, effect
   const realm = REALMS.includes(targetRealm) && targetRealm !== '凡人' ? targetRealm : '煉氣';
   const order = realmOrder(realm);
   const stage = normalizeRefinementStage(refinementStage);
-  const requested = Array.isArray(raw?.effects) ? raw.effects.map((e) => sanitizeEffect(e, order, stage, effectBoundsV1, effectBoundsV2, ingredientCount)).filter(Boolean) : [];
-  const primaryItems = Array.isArray(options.primaryArtifacts) ? options.primaryArtifacts : [];
-  // Soulbound status comes only from an existing soulbound primary in a later refinement.
+  const sources = Array.isArray(options.primaryArtifacts) ? options.primaryArtifacts : [];
+  const boundSources = sources.filter(item => item?.equipSlot === '本命法寶');
+  const primaryItems = boundSources.length ? boundSources : sources;
+  // Only resolved catalog ingredients can confer soulbound status.
   const inheritsSoulbound = stage >= 2 && primaryItems.some((item) =>
     item?.equipSlot === '本命法寶' &&
     Array.isArray(item.effects) && item.effects.some((effect) => String(effect?.type || '').startsWith('equip_')));
+  const sanitize = effect => sanitizeEffect(effect, order, stage, effectBoundsV1, effectBoundsV2, ingredientCount, inheritsSoulbound);
+  const requested = Array.isArray(raw?.effects) ? raw.effects.map(sanitize).filter(Boolean) : [];
   const orderedPrimaryEffects = primaryItems.flatMap((item) => {
     const effects = Array.isArray(item.effects) ? item.effects : [];
     return [...effects.filter(effect => effect.type === item.coreEffect), ...effects.filter(effect => effect.type !== item.coreEffect)];
   });
   const inheritedCore = orderedPrimaryEffects
-    .map((effect) => sanitizeEffect(effect, order, stage, effectBoundsV1, effectBoundsV2, ingredientCount))
+    .map(sanitize)
     .find(Boolean);
-  const targetForm = options.weaponForm || raw?.weaponForm || '';
+  const targetForm = (inheritsSoulbound && primaryItems.find(item => WEAPON_FORMS.includes(item.weaponForm))?.weaponForm) || options.weaponForm || raw?.weaponForm || '';
   const forceEquip = !inheritedCore && ['劍','刀','槍','弓','斧','錘','戟','棍','鞭','匕首','飛劍','法盾','法杖','陣盤','寶珠','法鏡','鈴','幡','印','鼎','鐘'].includes(targetForm);
   const forceConsumable = !inheritedCore && targetForm === '符籙';
   const wantsEquip = inheritedCore ? inheritedCore.type.startsWith('equip_')
@@ -466,7 +470,7 @@ function sanitizeGeneratedArtifact(raw, targetRealm, refinementStage = 1, effect
     : requested.filter((effect) => !effect.type.startsWith('equip_'));
   // Never let the model silently erase the deepest artifact's defining effect.
   const inherited = orderedPrimaryEffects
-    .map((effect) => sanitizeEffect(effect, order, stage, effectBoundsV1, effectBoundsV2, ingredientCount))
+    .map(sanitize)
     .filter(Boolean);
   const core = inherited.find((effect) => effect.type.startsWith('equip_')) || inherited[0];
   if (core) {
@@ -476,8 +480,14 @@ function sanitizeGeneratedArtifact(raw, targetRealm, refinementStage = 1, effect
     if (already < 0) effects.unshift(core);
     else if (already > 0) effects.unshift(effects.splice(already, 1)[0]);
   }
+  if (inheritsSoulbound) {
+    // Preserve the soulbound's attribute set before considering supporting effects.
+    const defining = inherited.filter((effect, index, all) => all.findIndex(row => row.type === effect.type) === index);
+    effects = [...defining.map(effect => effects.find(row => row.type === effect.type) || effect),
+      ...effects.filter(effect => !defining.some(row => row.type === effect.type))];
+  }
   effects = effects.filter((effect, index, all) => all.findIndex((row) => row.type === effect.type) === index)
-    .slice(0, maxEffectsForGeneration(order, stage));
+    .slice(0, inheritsSoulbound ? Math.max(3, maxEffectsForGeneration(order, stage)) : maxEffectsForGeneration(order, stage));
 
   if (!effects.length) {
     const fallbackType = forceConsumable ? 'timed_attack_multiplier'
@@ -492,7 +502,7 @@ function sanitizeGeneratedArtifact(raw, targetRealm, refinementStage = 1, effect
   const iconByForm = { 劍:'劍',刀:'刀',槍:'槍',弓:'弓',斧:'斧',錘:'錘',戟:'戟',棍:'棍',
     鞭:'鞭',匕首:'匕',飛劍:'飛',法盾:'盾',法杖:'杖',符籙:'符',陣盤:'陣',
     寶珠:'珠',玉佩:'玉',法鏡:'鏡',鈴:'鈴',幡:'幡',印:'印',鼎:'鼎',鐘:'鐘',器胚:'胚' };
-  const chosenForm = WEAPON_FORMS.includes(options.weaponForm) ? options.weaponForm :
+  const chosenForm = inheritsSoulbound && WEAPON_FORMS.includes(targetForm) ? targetForm : WEAPON_FORMS.includes(options.weaponForm) ? options.weaponForm :
     (WEAPON_FORMS.includes(raw?.weaponForm) ? raw.weaponForm : '其他');
   const generatedIcon = cleanText(raw?.icon, 4);
   const result = {
@@ -513,6 +523,7 @@ function sanitizeGeneratedArtifact(raw, targetRealm, refinementStage = 1, effect
     result.equipSlot = inheritsSoulbound ? '本命法寶'
       : ordinarySlots.includes(slot) ? slot : ordinarySlots[order % ordinarySlots.length];
   }
+  if (inheritsSoulbound) result.soulboundRefinementVersion = soulboundRules.REFINEMENT_VERSION;
   return result;
 }
 
@@ -529,6 +540,9 @@ function ingredientHierarchy(payload = {}) {
     return { ...record, id, type, quantity:Math.max(1, Math.floor(finite(row.quantity, 1))), ingredientDepth:depth };
   });
   const deepest = Math.max(0, ...ingredients.map(item => item.ingredientDepth));
+  const bound = ingredients.filter(item => item.type === 'artifact' && item.equipSlot === '本命法寶')
+    .sort((a, b) => b.ingredientDepth - a.ingredientDepth || a.id.localeCompare(b.id));
+  if (bound.length) return { primary:bound, supporting:ingredients.filter(item => !bound.includes(item)) };
   return {
     primary: ingredients.filter(item => item.ingredientDepth === deepest),
     supporting: ingredients.filter(item => item.ingredientDepth < deepest)
@@ -577,7 +591,8 @@ function buildPrompt(payload) {
     : '';
   const hiddenStageDirection = stageDirections[refinementStage].join('\n');
   const ingredientCount = ingredientTotal(payload.selectedIngredients);
-  const allowedRanges = effectRangesForRealm(targetRealm, refinementStage, {}, payload.effectBoundsV2, ingredientCount);
+  const soulbound = hierarchy.primary.some(item => item.type === 'artifact' && item.equipSlot === '本命法寶');
+  const allowedRanges = effectRangesForRealm(targetRealm, refinementStage, {}, payload.effectBoundsV2, ingredientCount, soulbound);
   const allowedTypes = allowedRanges.map((range) => range.type);
   const hasAdminGuidance = !!(adminGenerationDirection || adminGenerationPrompt);
   // Six of eight ordinary creative directions favor offense (~75% of sampled
@@ -615,19 +630,20 @@ function buildPrompt(payload) {
     '硬性規則：',
     '1. 法寶境界已由遊戲鎖定為「' + targetRealm + '」，不得改境界。',
     '2. 只輸出 JSON，不要 Markdown。',
-    '3. 效果只能使用下方允許的 type；依本次內部煉器階段與境界，最多 ' + maxEffectsForGeneration(order, refinementStage) + ' 個效果。',
-    '4. 每個效果必須使用下方境界＋煉製階段與投入素材數量調整後的 min～max（含上下限），不准填 0、不得突破範圍；百分比一律用小數，例如 0.10 = 10%。連擊上限 0.10。',
+    '3. 效果只能使用下方允許的 type；依本次內部煉器階段與境界，最多 ' + (soulbound ? Math.max(3, maxEffectsForGeneration(order, refinementStage)) : maxEffectsForGeneration(order, refinementStage)) + ' 個效果。',
+    '4. 每個效果必須使用下方境界＋煉製階段與投入素材數量調整後的 min～max（含上下限），不准填 0、不得突破範圍；百分比一律用小數，例如 0.10 = 10%。普通法器連擊上限 0.10，本命法寶上限 0.40。',
     '4d. 本次投入素材總數 ' + ingredientCount + '，數值範圍倍率 ×' + ingredientCountMultiplier(ingredientCount) + '；表內已計入此倍率，請勿再次乘算。',
+    soulbound ? '4e. 本命法寶精煉：表內已套用普通法器四倍屬性範圍，不可再次乘算。攻擊與生命（固定值、百分比）不乘四；機率及減傷比例不超過 100%。傷害上限為反向效果，數值除四才是強化。原本本命法寶的核心效果、攻擊與生命屬性優先保留，至少保留其三項屬性。戰鬥疊加總上限仍依原戰鬥規則。' : '',
     '4a. 法寶無修士境界裝備限制：不論玩家境界高低，只要持有裝備型法寶就能裝備；本表的「境界」僅影響法寶效果數值。',
     '4b. 單次生命傷害上限 equip_damage_cap_percent 數值越小代表越強，不要誤選較大數字當成強化。',
     '4c. 限時特性只填 multiplier 和 durationMinutes；每場固定一次的保命／鏡映不填數值；排除錯誤選項每題固定 1 個，不填自訂 value。',
-    '5. 若使用 equip_ 效果，一般煉製的 equipSlot 只能選「護身法寶、佩飾法寶、輔助法寶」。只有投入既有「本命法寶」作為最深主材進行第二或第三煉，才可繼承「本命法寶」欄位。嚴禁從普通素材新造本命法寶，管理員提示也不可例外。',
+    '5. 若使用 equip_ 效果，一般煉製的 equipSlot 只能選「護身法寶、佩飾法寶、輔助法寶」。只要任一投入素材是既有「本命法寶」，成品就必須繼承「本命法寶」欄位並保留其器型與原屬性，優先於其他素材的深度與手法。嚴禁從普通素材新造本命法寶，管理員提示也不可例外。',
     '6. 若做消耗型，只使用 timed_attack_multiplier / timed_cultivation_multiplier / remove_wrong_option。',
     '7. 避免與既有法寶名稱、描述、效果組合高度重複。',
     '8. icon 用 1 個中文字或常見符號，避免 emoji 組合。',
-    '9. 必須以投入素材中煉製深度最深者為主體：保留其器型、核心意象、主要用途與代表性能力，再由較淺素材補強或賦予次要特性，不得讓輔材取代主體。',
+    '9. 有本命法寶時，以本命法寶為主體；否則必須以投入素材中煉製深度最深者為主體：保留其器型、核心意象、主要用途與代表性能力，再由較淺素材補強或賦予次要特性，不得讓輔材取代主體。',
     '9a. 第一煉允許直接生成攻擊型器胚與其實際攻擊效果；禁止誤認器胚只能給防禦或無戰鬥特性。若正式主材料指定 weaponForm，第一煉直接完成對應兵器；第二、三煉承接攻擊型主材時也應保留其攻擊路線。',
-    '10. 若有多件同為最深的素材，將它們作為共同主體融合；全為原材料時才自由組合。數量、境界、投入順序、隨機創意方向與管理員風格提示均不得推翻主從關係。效果繼承仍須遵守境界、效果數量及平衡限制。',
+    '10. 若有多件本命法寶，先按原精煉深度由深到淺、同深度按 ID 排序決定主要器型與核心，其餘本命法寶提供相容特性。沒有本命法寶時，若有多件同為最深的素材，將它們作為共同主體融合；全為原材料時才自由組合。數量、境界、投入順序、隨機創意方向與管理員風格提示均不得推翻主從關係。效果繼承仍須遵守境界、效果數量及平衡限制。',
     '11. 管理員的額外提示詞與大概動向不是可忽略的隨機風格：逐條落實其中與素材、煉製階段、允許特性及數值範圍相容的要求，包括名稱禁用詞、器型、故事、用途、效果方向及不要使用的特性。若有衝突，只調整衝突部分，其他要求仍須遵守；絕不能單純以預設創意方向推翻。',
     '內部素材主從表（完整圖鑑記錄，優先於投入列自述；勿在玩家描述中提及深度或主從規則）：',
     JSON.stringify(hierarchy, null, 2),
@@ -679,7 +695,7 @@ function buildGuidanceReviewPrompt(payload, artifact, targetRealm, stage) {
     '投入主素材完整設定：', JSON.stringify(hierarchy.primary),
     '投入輔素材完整設定：', JSON.stringify(hierarchy.supporting),
     '鎖定境界與煉製階段：', JSON.stringify({ targetRealm, stage }),
-    '可用特性範圍：', JSON.stringify(effectRangesForRealm(targetRealm, stage, {}, payload.effectBoundsV2, ingredientTotal(payload.selectedIngredients))),
+    '可用特性範圍：', JSON.stringify(effectRangesForRealm(targetRealm, stage, {}, payload.effectBoundsV2, ingredientTotal(payload.selectedIngredients), hierarchy.primary.some(item => item.type === 'artifact' && item.equipSlot === '本命法寶'))),
     '目前成品：', JSON.stringify(artifact)
   ].join('\n');
 }
@@ -705,7 +721,11 @@ async function reviewGuidedArtifact(payload, artifact, targetRealm, stage) {
         !Array.isArray(revised.effects) || !revised.effects.length) {
       return { artifact, guidanceReview: 'unresolved' };
     }
-    const sanitized = sanitizeGeneratedArtifact(revised, targetRealm, stage, {}, payload.effectBoundsV2, ingredientTotal(payload.selectedIngredients));
+    const hierarchy = ingredientHierarchy(payload);
+    const sanitized = sanitizeGeneratedArtifact(revised, targetRealm, stage, {}, payload.effectBoundsV2, ingredientTotal(payload.selectedIngredients), {
+      weaponForm:lockedWeaponForm(payload), forgeMethod:payload.forgeMethod,
+      primaryArtifacts:hierarchy.primary.filter(item => item.type === 'artifact')
+    });
     const validType = revised.effects.some((effect) =>
       effectRange(cleanText(effect?.type, 64), realmOrder(targetRealm), stage, {}, false, payload.effectBoundsV2, ingredientTotal(payload.selectedIngredients)) !== null
     );

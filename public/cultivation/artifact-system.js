@@ -140,6 +140,7 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
         value: Number(effect.value) || 0,
         artifactId: effect.item?.id || '',
         artifactName: effect.item?.name || '',
+        soulbound: effect.item?.equipSlot === '本命法寶',
         effectIndex: Number(effect.effectIndex) || 0
       }));
     const openingShield = effects
@@ -170,7 +171,7 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
       case 'equip_crit_chance': return `鬥法：暴擊率 +${pct(effect.value)}`;
       case 'equip_crit_damage_percent': return `鬥法：暴擊額外 +${pct(effect.value)}`;
       case 'equip_combo_damage_percent': return `鬥法：連擊傷害 +${pct(effect.value)}（基礎 30%）`;
-      case 'equip_combo_chance': return `鬥法：連擊率 ${pct(Math.min(0.10, Number(effect.value) || 0))}（上限 10%）`;
+      case 'equip_combo_chance': return `鬥法：連擊率 ${pct(effect.value)}`;
       case 'equip_lifesteal_percent': return `鬥法：吸血 ${pct(effect.value)}`;
       case 'equip_reflect_percent': return `鬥法：反傷 ${pct(effect.value)}`;
       case 'equip_shield_flat': return `鬥法：開場護盾 +${Number(effect.value) || 0}`;

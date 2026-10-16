@@ -48,7 +48,7 @@ import {
     equip_crit_chance: { title: '暴擊率', summary: '攻擊時有機率造成暴擊', hint: '例如：0.15 = 15%', icon: 'fa-crosshairs' },
     equip_crit_damage_percent: { title: '暴擊增傷', summary: '暴擊時提高額外倍率', hint: '例如：0.5 = 暴擊額外 +50%', icon: 'fa-bolt' },
     equip_combo_damage_percent: { title:'連擊傷害',summary:'增加連擊傷害（基礎 30%），每段可再次連擊',hint:'0.30 = 額外 30 個百分點',icon:'fa-burst' },
-    equip_combo_chance: { title: '連擊率', summary: '最多 10% 法寶連擊率，每段可再次連擊，基礎傷害 30%', hint: '硬上限：0.10 = 10%', icon: 'fa-forward-fast' },
+    equip_combo_chance: { title: '連擊率', summary: '普通法器最多 10%、本命法寶最多 40%，每段可再次連擊，基礎傷害 30%', hint: '普通上限：0.10 = 10%；本命上限：0.40 = 40%', icon: 'fa-forward-fast' },
     equip_lifesteal_percent: { title: '吸血', summary: '依實際造成的生命傷害回復生命', hint: '例如：0.1 = 10%', icon: 'fa-droplet' },
     equip_reflect_percent: { title: '反傷', summary: '反射實際受到的生命傷害', hint: '例如：0.15 = 15%', icon: 'fa-reply' },
     equip_shield_flat: { title: '開場護盾', summary: '每場鬥法開始時獲得固定護盾', hint: '例如：300 護盾', icon: 'fa-shield-heart' },
@@ -457,10 +457,11 @@ import {
     const [realmMin, realmMax] = depthHintForRealm(bounds, index, inverse, integer);
     const quantity = currentEditorIngredientCount(modal);
     const factor = ingredientHintMultiplier(quantity);
-    const [min, max] = scaleIngredientHint(realmMin, realmMax, base, factor);
+    const scaled = scaleIngredientHint(realmMin, realmMax, base, factor);
+    const { min, max } = globalThis.QASoulboundPool.refinementRange({ ...base, min:scaled[0], max:scaled[1] }, modal.querySelector('#aam-slot')?.value === '本命法寶');
     const number = (value) => Number(value).toLocaleString('zh-TW', { maximumFractionDigits:4 });
     let text = prefix + number(min) + '～' + number(max) + ' ' + base.unit +
-      '（素材 ' + quantity + ' 個 ×' + factor + '）';
+      '（素材 ' + quantity + ' 個 ×' + factor + '）' + (modal.querySelector('#aam-slot')?.value === '本命法寶' ? '；本命特殊屬性 ×4，攻擊／生命不變' : '');
     if (base.field === 'multiplier') {
       const [durationMin, durationMax] = depthHintForRealm({
         min:bounds.durationMinutesMin, max:bounds.durationMinutesMax
@@ -503,11 +504,11 @@ import {
         valueInput.removeAttribute('max');
         valueInput.removeAttribute('min');
         if (current === 'equip_combo_chance') {
-          valueInput.max = '0.10';
+          valueInput.max = document.getElementById(MODAL_ID)?.querySelector('#aam-slot')?.value === '本命法寶' ? '0.40' : '0.10';
           valueInput.min = '0';
-          if (Number(valueInput.value) > 0.10) valueInput.value = '0.10';
+          if (Number(valueInput.value) > Number(valueInput.max)) valueInput.value = valueInput.max;
         } else if (current === 'equip_damage_cap_percent') {
-          valueInput.min = '0.05';
+          valueInput.min = document.getElementById(MODAL_ID)?.querySelector('#aam-slot')?.value === '本命法寶' ? '0.0125' : '0.05';
           valueInput.max = '1';
         }
       }
@@ -530,7 +531,7 @@ import {
     const modal = document.createElement('div');
     modal.id = MODAL_ID;
     modal.className = 'aam-modal';
-    modal.innerHTML = `<section class="aam-card" role="dialog" aria-modal="true"><h3>${editing ? '編輯法寶' : '新增法寶'}</h3><p class="aam-note">這裡直接維護全站正式法寶清單。建立後 ID 會鎖定，避免玩家既有背包與裝備失聯。右側「可用功能」可直接加入效果。</p><div class="aam-editor-layout"><div class="aam-editor-main"><div class="aam-grid"><div class="aam-field"><label>法寶 ID（英文小寫與 -）</label><input id="aam-id" maxlength="64" ${editing ? 'readonly' : ''} value="${escapeHtml(item?.id || '')}" placeholder="例如 thunder-seal"></div><div class="aam-field"><label>名稱</label><input id="aam-name" maxlength="80" value="${escapeHtml(item?.name || '')}"></div><div class="aam-field"><label>圖示（1–4 字）</label><input id="aam-icon" maxlength="4" value="${escapeHtml(item?.icon || '◆')}"></div><div class="aam-field"><label>境界</label><select id="aam-realm">${ARTIFACT_REALMS.filter((realm) => realm.name !== '凡人' || item?.realm === '凡人').map((realm) => `<option value="${realm.name}" ${realm.name === (item?.realm || '築基') ? 'selected' : ''}>${realm.name}</option>`).join('')}</select></div><div class="aam-field"><label>分類</label><select id="aam-category">${categoryOptions(item?.category)}</select></div><div class="aam-field"><label>正式器型</label><select id="aam-weapon-form"><option value="">未指定</option>${ARTIFACT_WEAPON_FORMS.map((form) => `<option value="${escapeHtml(form)}" ${form === (item?.weaponForm || '') ? 'selected' : ''}>${escapeHtml(form)}</option>`).join('')}</select></div><div class="aam-field"><label>煉器手法</label><select id="aam-forge-method">${ARTIFACT_FORGE_METHODS.map((method) => `<option value="${escapeHtml(method)}" ${method === (item?.forgeMethod || '自由發揮') ? 'selected' : ''}>${escapeHtml(method)}</option>`).join('')}</select></div><div class="aam-field"><label>裝備欄位（裝備效果才需要）</label><select id="aam-slot"><option value="">不使用裝備欄位</option>${ARTIFACT_EQUIP_SLOTS.map((slot) => `<option value="${escapeHtml(slot)}" ${slot === (item?.equipSlot || '') ? 'selected' : ''}>${escapeHtml(slot)}</option>`).join('')}</select></div><div class="aam-field"><label>煉器費用基準（10 點＝1 碎片）</label><input id="aam-gold" type="number" min="0" step="1" value="${Number(item?.craft?.gold) || 0}"></div><div class="aam-field"><label>每次打造數量</label><input id="aam-yield" type="number" min="1" step="1" value="${Math.max(1, Number(item?.craft?.yield) || 1)}"></div><div class="aam-field full"><label>說明</label><textarea id="aam-description" maxlength="500">${escapeHtml(item?.description || '')}</textarea></div></div><div class="aam-effects-editor"><div class="aam-effects-head"><span>法寶效果</span><button type="button" id="aam-add-effect" class="aam-add-effect"><i class="fa-solid fa-plus"></i> 新增效果</button></div><div id="aam-effect-list"></div></div><section class="aam-recipe-owner-editor"><h4><i class="fa-solid fa-crown"></i> 配方擁有人（管理員）</h4><p class="aam-note">現任：${escapeHtml(item?.recipeOwnerName || '公共配方／無首發者')}<br>UID：<span class="aam-owner-current-uid">${escapeHtml(item?.recipeOwnerUid || '無')}</span><br>更改後不轉移已購買者的製作指南；原擁有人的待售委託將失效。</p><label class="aam-owner-toggle" for="aam-owner-change"><input type="checkbox" id="aam-owner-change" ${editing ? '' : 'disabled'}><span>我確認要更改此配方的擁有人</span></label><div class="aam-owner-fields"><label for="aam-owner-uid">新擁有人 UID（留空設為公共配方）<input id="aam-owner-uid" maxlength="128" value="${escapeHtml(item?.recipeOwnerUid || '')}" placeholder="玩家 Firebase UID"></label><label for="aam-owner-name">新擁有人名稱<input id="aam-owner-name" maxlength="36" value="${escapeHtml(item?.recipeOwnerName || '')}" placeholder="修士名稱"></label></div></section>${editing && getArtifactRecipe(item.id).length ? `<section class="aam-recipe-listing"><h4><i class="fa-solid fa-store"></i> 管理員配方上架</h4><p class="aam-note">由管理員作為賣家上架永久製作指南；不改變配方擁有權。請先儲存配方或擁有人變更，再上架。</p><div class="aam-admin-sale-row"><input type="number" id="aam-listing-price" min="1" max="1000000000" step="1" value="500" aria-label="配方售價（靈石）"><button type="button" class="aam-admin-list-recipe" data-aam-list-recipe="${escapeHtml(item.id)}"><i class="fa-solid fa-tags"></i> 上架配方</button></div></section>` : ''}${recipeEditorMarkup(item)}<div id="aam-status" class="aam-note" style="margin-top:10px"></div></div><aside class="aam-guide"><h4><i class="fa-solid fa-list-check"></i> 可用功能</h4><p>依類別展開或縮小；功能區可獨立捲動，點選功能即可加入左側法寶效果。</p>${effectGuideMarkup()}<div class="aam-guide-note"><b>裝備類：</b>必須從四個正式裝備欄位中選擇。<br><b>連擊：</b>不論組合多少效果，總機率硬上限 10%。<br><b>鏡映：</b>每場固定複製敵方一項可複製戰鬥效果。<br><b>限時類：</b>催動時消耗 1 件法寶。<br><b>排除錯項：</b>可指定問道、鬥法、洞天。</div></aside></div><div class="aam-actions"><button type="button" class="aam-cancel">取消</button><button type="button" class="aam-save">${editing ? '儲存變更' : '建立法寶'}</button></div></section>`;
+    modal.innerHTML = `<section class="aam-card" role="dialog" aria-modal="true"><h3>${editing ? '編輯法寶' : '新增法寶'}</h3><p class="aam-note">這裡直接維護全站正式法寶清單。建立後 ID 會鎖定，避免玩家既有背包與裝備失聯。右側「可用功能」可直接加入效果。</p><div class="aam-editor-layout"><div class="aam-editor-main"><div class="aam-grid"><div class="aam-field"><label>法寶 ID（英文小寫與 -）</label><input id="aam-id" maxlength="64" ${editing ? 'readonly' : ''} value="${escapeHtml(item?.id || '')}" placeholder="例如 thunder-seal"></div><div class="aam-field"><label>名稱</label><input id="aam-name" maxlength="80" value="${escapeHtml(item?.name || '')}"></div><div class="aam-field"><label>圖示（1–4 字）</label><input id="aam-icon" maxlength="4" value="${escapeHtml(item?.icon || '◆')}"></div><div class="aam-field"><label>境界</label><select id="aam-realm">${ARTIFACT_REALMS.filter((realm) => realm.name !== '凡人' || item?.realm === '凡人').map((realm) => `<option value="${realm.name}" ${realm.name === (item?.realm || '築基') ? 'selected' : ''}>${realm.name}</option>`).join('')}</select></div><div class="aam-field"><label>分類</label><select id="aam-category">${categoryOptions(item?.category)}</select></div><div class="aam-field"><label>正式器型</label><select id="aam-weapon-form"><option value="">未指定</option>${ARTIFACT_WEAPON_FORMS.map((form) => `<option value="${escapeHtml(form)}" ${form === (item?.weaponForm || '') ? 'selected' : ''}>${escapeHtml(form)}</option>`).join('')}</select></div><div class="aam-field"><label>煉器手法</label><select id="aam-forge-method">${ARTIFACT_FORGE_METHODS.map((method) => `<option value="${escapeHtml(method)}" ${method === (item?.forgeMethod || '自由發揮') ? 'selected' : ''}>${escapeHtml(method)}</option>`).join('')}</select></div><div class="aam-field"><label>裝備欄位（裝備效果才需要）</label><select id="aam-slot"><option value="">不使用裝備欄位</option>${ARTIFACT_EQUIP_SLOTS.map((slot) => `<option value="${escapeHtml(slot)}" ${slot === (item?.equipSlot || '') ? 'selected' : ''}>${escapeHtml(slot)}</option>`).join('')}</select></div><div class="aam-field"><label>煉器費用基準（10 點＝1 碎片）</label><input id="aam-gold" type="number" min="0" step="1" value="${Number(item?.craft?.gold) || 0}"></div><div class="aam-field"><label>每次打造數量</label><input id="aam-yield" type="number" min="1" step="1" value="${Math.max(1, Number(item?.craft?.yield) || 1)}"></div><div class="aam-field full"><label>說明</label><textarea id="aam-description" maxlength="500">${escapeHtml(item?.description || '')}</textarea></div></div><div class="aam-effects-editor"><div class="aam-effects-head"><span>法寶效果</span><button type="button" id="aam-add-effect" class="aam-add-effect"><i class="fa-solid fa-plus"></i> 新增效果</button></div><div id="aam-effect-list"></div></div><section class="aam-recipe-owner-editor"><h4><i class="fa-solid fa-crown"></i> 配方擁有人（管理員）</h4><p class="aam-note">現任：${escapeHtml(item?.recipeOwnerName || '公共配方／無首發者')}<br>UID：<span class="aam-owner-current-uid">${escapeHtml(item?.recipeOwnerUid || '無')}</span><br>更改後不轉移已購買者的製作指南；原擁有人的待售委託將失效。</p><label class="aam-owner-toggle" for="aam-owner-change"><input type="checkbox" id="aam-owner-change" ${editing ? '' : 'disabled'}><span>我確認要更改此配方的擁有人</span></label><div class="aam-owner-fields"><label for="aam-owner-uid">新擁有人 UID（留空設為公共配方）<input id="aam-owner-uid" maxlength="128" value="${escapeHtml(item?.recipeOwnerUid || '')}" placeholder="玩家 Firebase UID"></label><label for="aam-owner-name">新擁有人名稱<input id="aam-owner-name" maxlength="36" value="${escapeHtml(item?.recipeOwnerName || '')}" placeholder="修士名稱"></label></div></section>${editing && getArtifactRecipe(item.id).length ? `<section class="aam-recipe-listing"><h4><i class="fa-solid fa-store"></i> 管理員配方上架</h4><p class="aam-note">由管理員作為賣家上架永久製作指南；不改變配方擁有權。請先儲存配方或擁有人變更，再上架。</p><div class="aam-admin-sale-row"><input type="number" id="aam-listing-price" min="1" max="1000000000" step="1" value="500" aria-label="配方售價（靈石）"><button type="button" class="aam-admin-list-recipe" data-aam-list-recipe="${escapeHtml(item.id)}"><i class="fa-solid fa-tags"></i> 上架配方</button></div></section>` : ''}${recipeEditorMarkup(item)}<div id="aam-status" class="aam-note" style="margin-top:10px"></div></div><aside class="aam-guide"><h4><i class="fa-solid fa-list-check"></i> 可用功能</h4><p>依類別展開或縮小；功能區可獨立捲動，點選功能即可加入左側法寶效果。</p>${effectGuideMarkup()}<div class="aam-guide-note"><b>裝備類：</b>必須從四個正式裝備欄位中選擇。<br><b>連擊：</b>普通法器供給上限 10%，含本命法寶時供給上限 40%；元嬰機率另計。<br><b>鏡映：</b>每場固定複製敵方一項可複製戰鬥效果。<br><b>限時類：</b>催動時消耗 1 件法寶。<br><b>排除錯項：</b>可指定問道、鬥法、洞天。</div></aside></div><div class="aam-actions"><button type="button" class="aam-cancel">取消</button><button type="button" class="aam-save">${editing ? '儲存變更' : '建立法寶'}</button></div></section>`;
     document.body.appendChild(modal);
     const effectList = modal.querySelector('#aam-effect-list');
     (item?.effects?.length ? item.effects : [defaultEffect('equip_attack_flat')]).forEach((effect) => effectList.appendChild(effectRow(effect)));
@@ -549,6 +550,7 @@ import {
     });
     bindRecipeEditor(modal);
     modal.querySelector('#aam-realm').addEventListener('change', () => refreshEffectHints(modal));
+    modal.querySelector('#aam-slot').addEventListener('change', () => refreshEffectHints(modal));
     refreshEffectHints(modal);
     modal.querySelector('[data-aam-list-recipe]')?.addEventListener('click', () => {
       const price = Number(modal.querySelector('#aam-listing-price')?.value);
@@ -563,7 +565,7 @@ import {
       const type = row.querySelector('[data-aam-effect-type]').value;
       if (effectUsesValue(type)) {
         let value = Number(row.querySelector('[data-aam-effect-value]').value) || 0;
-        if (type === 'equip_combo_chance') value = Math.min(0.10, Math.max(0, value));
+        if (type === 'equip_combo_chance') value = Math.min(modal.querySelector('#aam-slot')?.value === '本命法寶' ? 0.40 : 0.10, Math.max(0, value));
         return { type, value };
       }
       if (type.startsWith('timed_')) {
@@ -726,6 +728,7 @@ import {
       weaponForm: modal.querySelector('#aam-weapon-form').value,
       forgeMethod: modal.querySelector('#aam-forge-method').value,
       coreEffect: original?.coreEffect || '',
+      soulboundRefinementVersion: original?.soulboundRefinementVersion || 0,
       equipSlot: modal.querySelector('#aam-slot').value,
       description: modal.querySelector('#aam-description').value,
       craft: { gold: modal.querySelector('#aam-gold').value, yield: modal.querySelector('#aam-yield').value },

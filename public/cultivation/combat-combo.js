@@ -6,8 +6,12 @@
   function hash(seed){let h=2166136261;for(const ch of String(seed)){h^=ch.charCodeAt(0);h=Math.imul(h,16777619);}h^=h>>>16;h=Math.imul(h,0x7feb352d);h^=h>>>15;h=Math.imul(h,0x846ca68b);h^=h>>>16;return(h>>>0)/4294967296;}
   function stats(player,effects=[]) {
     const sum=type=>effects.filter(x=>x?.type===type).reduce((n,x)=>n+Math.max(0,finite(x.value)),0);
-    // 法寶連擊率仍遵守原來 10% 的供給上限，元嬰丹性可額外提供機率。
-    return {chance:clamp(clamp(sum('equip_combo_chance'),0,.10)+finite(player?.comboChance)+finite(player?.nascentSoul?.comboChance),0,.75),
+    // Ordinary artifacts share 10%; a soulbound refinement can supply up to 40%.
+    const combo = effects.filter(x=>x?.type==='equip_combo_chance');
+    const total = rows => rows.reduce((n,x)=>n+Math.max(0,finite(x.value)),0);
+    const ordinary = clamp(total(combo.filter(x=>!x.soulbound)),0,.10);
+    const bound = clamp(total(combo.filter(x=>x.soulbound)),0,.40);
+    return {chance:clamp(clamp(ordinary+bound,0,bound>0?.40:.10)+finite(player?.comboChance)+finite(player?.nascentSoul?.comboChance),0,.75),
       multiplier:clamp(.30+sum('equip_combo_damage_percent')+finite(player?.comboDamageBonus)+finite(player?.nascentSoul?.comboDamageBonus),0,4)};
   }
   function chain({damage,chance=0,multiplier=.30,seed='',kind='attack',remainingHp=0,roll,onHit}={}) {

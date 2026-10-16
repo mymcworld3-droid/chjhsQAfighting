@@ -22,7 +22,7 @@ const fixtures = {
 };
 function loadPower() {
   const window = {};
-  const context = { window, ARTIFACT_EQUIP_SLOTS: slots, getArtifactById:(id) => fixtures[id] || null, realmOrderByName:(name) => realm[name] ?? 0 };
+  const context = { QASoulboundPool:require('../public/cultivation/soulbound-pool.js'), window, ARTIFACT_EQUIP_SLOTS: slots, getArtifactById:(id) => fixtures[id] || null, realmOrderByName:(name) => realm[name] ?? 0 };
   const code = source.replace(/^import .*?;\s*$/gm, '').replace(/export function /g, 'function ') +
     '\nthis.power={calculateGoldenCorePower,calculateArtifactPower,calculateCombatPower,getCurrentCombatPower};';
   vm.runInNewContext(code, context);

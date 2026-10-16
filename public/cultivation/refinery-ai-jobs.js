@@ -134,12 +134,13 @@ import {
     const total = ingredients.reduce((sum, row) => sum + row.quantity, 0);
     if (total < 2 || total > 8) return { valid: false, reason: '煉器需要 2 到 8 個素材。', total };
 
-    const known = knownArtifactId ? getArtifactById(knownArtifactId) : null;
+    let known = knownArtifactId ? getArtifactById(knownArtifactId) : null;
     const hasSoulboundBase = recipe.some((row) =>
       row.artifactId && getArtifactById(row.artifactId)?.equipSlot === '本命法寶');
     if (known?.equipSlot === '本命法寶' && !hasSoulboundBase) {
       return { valid:false, reason:'本命法寶只能由靈石抽取取得；已有本命法寶可作素材二次精煉。', total };
     }
+    if (known && !globalThis.QASoulboundPool.refinementCompatible(known, hasSoulboundBase)) known = null;
     const targetRealm = known?.realm || highestIngredientRealm(ingredients);
     const pRealm = playerRealm().name;
     const depth = known ? artifactRecipeDepth(known.id) : resultingDepth(recipe);
@@ -417,6 +418,9 @@ import {
   function findRecipeBySignature(recipes, signature, catalog = ARTIFACT_CATALOG) {
     for (const [artifactId, recipe] of Object.entries(recipes || {})) {
       const item = catalog.find((candidate) => candidate.id === artifactId);
+      const hasSoulboundBase = (recipe || []).some(row => row.artifactId &&
+        catalog.some(source => source.id === row.artifactId && source.equipSlot === '本命法寶'));
+      if (!globalThis.QASoulboundPool.refinementCompatible(item, hasSoulboundBase)) continue;
       // Use current recipe + saved method so edited recipes remain reproducible.
       const currentSignature = recipeSignature(recipe, item?.forgeMethod || '自由發揮');
       if (currentSignature === signature) return artifactId;
@@ -496,6 +500,10 @@ import {
           (fresh.recipe || []).some((row) => row.artifactId &&
             latestItems.some((item) => item.id === row.artifactId && item.equipSlot === '本命法寶'));
         const generatedArtifact = { ...generated.artifact };
+        if (realSoulboundSource) {
+          generatedArtifact.equipSlot = '本命法寶';
+          generatedArtifact.soulboundRefinementVersion = globalThis.QASoulboundPool.REFINEMENT_VERSION;
+        }
         if (generatedArtifact.equipSlot === '本命法寶' && !realSoulboundSource) generatedArtifact.equipSlot = '輔助法寶';
         const candidate = normalizeArtifactDefinition({
           id,
@@ -569,7 +577,9 @@ import {
     const job = currentJob();
     if (!job) throw new Error('目前沒有煉器任務');
     if (Date.now() < Number(job.readyAtMs || 0)) throw new Error('尚需 ' + formatRefineryDuration(Number(job.readyAtMs) - Date.now()));
-    return job.kind === 'discovery' ? claimDiscovery(job) : claimKnown(job);
+    const hasSoulboundBase = (job.recipe || []).some(row => row.artifactId && getArtifactById(row.artifactId)?.equipSlot === '本命法寶');
+    const outdated = hasSoulboundBase && !globalThis.QASoulboundPool.refinementCompatible(getArtifactById(job.knownArtifactId), true);
+    return job.kind === 'discovery' || outdated ? claimDiscovery(job) : claimKnown(job);
   }
 
   async function skipJobWait() {

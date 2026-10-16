@@ -3,6 +3,8 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const api = require('../artifact-generation-api.js');
+const pool = require('../public/cultivation/soulbound-pool.js');
+const vm = require('node:vm');
 const read = (name) => fs.readFileSync(path.join(__dirname, '..', name), 'utf8');
 
 const proposed = (slot = '本命法寶') => ({
@@ -43,6 +45,211 @@ test('non-soulbound primary cannot assign itself a soulbound slot through AI', (
     primaryArtifacts:[{ ...boundBase, equipSlot:'護身法寶' }]
   });
   assert.notEqual(artifact.equipSlot, '本命法寶');
+});
+
+function payloadForBound(sources = [pool.ITEMS.find(item => item.id === 'soul-sword-golden-core')]) {
+  return {
+    selectedIngredients:[{type:'artifact',id:'ordinary',quantity:1}, ...sources.map(item => ({type:'artifact',id:item.id,quantity:1}))],
+    allMaterials:[{id:'ore',name:'礦石',realm:'金丹'}],
+    existingArtifacts:[{id:'ordinary',name:'普通法盾',realm:'元嬰',equipSlot:'護身法寶',refinementDepth:1,weaponForm:'法盾',effects:[{type:'equip_shield_flat',value:99}]}, ...sources],
+    forgeMethod:'護體鑄造'
+  };
+}
+
+test('a shallower soulbound ingredient wins over deeper ordinary artifacts in either order', () => {
+  const payload = payloadForBound();
+  for (const selectedIngredients of [payload.selectedIngredients, [...payload.selectedIngredients].reverse()]) {
+    const input = {...payload,selectedIngredients};
+    const hierarchy = api.ingredientHierarchy(input);
+    assert.deepEqual(hierarchy.primary.map(item => item.id), ['soul-sword-golden-core']);
+    assert.equal(api.lockedWeaponForm(input), '飛劍');
+    const result = api.sanitizeGeneratedArtifact({ ...proposed('護身法寶'), effects:[{type:'equip_shield_flat',value:9999}] }, '元嬰', 3, {}, {}, 2, {
+      primaryArtifacts:hierarchy.primary, weaponForm:api.lockedWeaponForm(input)
+    });
+    assert.equal(result.equipSlot, '本命法寶');
+    assert.equal(result.weaponForm, '飛劍');
+    assert.equal(result.coreEffect, 'equip_combo_chance');
+    assert.deepEqual(result.effects.map(effect => effect.type), ['equip_combo_chance','equip_attack_flat','equip_hp_flat']);
+    assert.equal(result.soulboundRefinementVersion, pool.REFINEMENT_VERSION);
+  }
+});
+
+test('multiple soulbound inputs select the same core and form regardless of input order', () => {
+  const payload = payloadForBound([pool.ITEMS[0], pool.ITEMS[1]]);
+  const first = api.ingredientHierarchy(payload).primary;
+  const second = api.ingredientHierarchy({...payload,selectedIngredients:[...payload.selectedIngredients].reverse()}).primary;
+  assert.deepEqual(first, second);
+  assert.equal(api.lockedWeaponForm(payload), first[0].weaponForm);
+});
+
+test('soulbound ranges multiply special attributes by four but preserve all attack and HP bounds', () => {
+  for (const stage of [2, 3]) for (const count of [2, 3, 8]) {
+    const normal = api.effectRangesForRealm('元嬰',stage,{}, {},count);
+    const bound = api.effectRangesForRealm('元嬰',stage,{}, {},count,true);
+    for (const type of ['equip_damage_percent','equip_streak_damage_percent','equip_reflect_percent','equip_true_damage_flat','equip_shield_flat','equip_on_correct_shield_flat']) {
+      const ordinary = normal.find(row => row.type === type);
+      const soulbound = bound.find(row => row.type === type);
+      assert.equal(soulbound.min, Number((ordinary.min * 4).toFixed(4)), type);
+      assert.equal(soulbound.max, Number((ordinary.max * 4).toFixed(4)), type);
+    }
+    for (const type of ['equip_attack_flat','equip_attack_percent','equip_hp_flat','equip_hp_percent','timed_attack_multiplier']) {
+      assert.deepEqual(bound.find(row => row.type === type),normal.find(row => row.type === type));
+    }
+    const inverse = bound.find(row => row.type === 'equip_damage_cap_percent');
+    assert.equal(inverse.min,Number((normal.find(row => row.type === inverse.type).min / 4).toFixed(4)));
+    for (const range of bound) {
+      const effect = api.sanitizeEffect({type:range.type,value:1e9,multiplier:1e9}, 4,stage,{}, {},count,true);
+      if (range.field === 'value' || range.field === 'multiplier') assert.equal(effect[range.field],range.max);
+    }
+  }
+});
+
+test('catalog saving and reading preserves soulbound special bounds and attack/HP exceptions', () => {
+  const context = {QASoulboundPool:pool};
+  const source = read('public/cultivation/artifact-catalog.js').replace(/^import .*;\n/gm,'').replace(/export (const|function) /g,'$1 ');
+  vm.runInNewContext(source+'\nthis.validate=validateArtifactCatalog;',context);
+  for (const soulbound of [false,true]) {
+    const item = context.validate([{
+      id:'refined-test',name:'精煉法寶',realm:'元嬰',equipSlot:soulbound ? '本命法寶' : '護身法寶',
+      soulboundRefinementVersion:pool.REFINEMENT_VERSION,
+      effects:[{type:'equip_combo_chance',value:.4},{type:'equip_streak_damage_percent',value:9},
+        {type:'equip_attack_percent',value:20},{type:'equip_hp_percent',value:20},
+        {type:'equip_damage_cap_percent',value:.0125}]
+    }])[0];
+    assert.equal(item.effects[0].value,soulbound ? .4 : .1);
+    assert.equal(item.effects[1].value,soulbound ? 9 : 3);
+    assert.equal(item.effects[2].value,5);
+    assert.equal(item.effects[3].value,5);
+    assert.equal(item.effects[4].value,soulbound ? .0125 : .05);
+    assert.equal(item.soulboundRefinementVersion,soulbound ? pool.REFINEMENT_VERSION : undefined);
+  }
+});
+
+test('existing ordinary results from soulbound recipes must be rediscovered using the new rules', () => {
+  assert.equal(pool.refinementCompatible({equipSlot:'護身法寶'},true),false);
+  assert.equal(pool.refinementCompatible({equipSlot:'本命法寶'},true),false);
+  assert.equal(pool.refinementCompatible({equipSlot:'本命法寶',soulboundRefinementVersion:pool.REFINEMENT_VERSION},true),true);
+  assert.equal(pool.refinementCompatible({equipSlot:'護身法寶'},false),true);
+  assert.equal(pool.refinementCompatible({equipSlot:'本命法寶',soulboundRefinementVersion:pool.REFINEMENT_VERSION},false),false);
+});
+
+test('soulbound combo and inverse damage cap work in actual PvP resolution', () => {
+  const combo = require('../public/cultivation/combat-combo.js');
+  const ctx = {window:{},QACombatCombo:combo};
+  vm.runInNewContext(read('public/cultivation/artifact-battle-effects.js').replace(/^import .*;\n/gm,''),ctx);
+  const attacker = {hp:1000,maxHp:1000,artifactBattle:{effects:[{type:'equip_combo_chance',value:.35,soulbound:true}]}};
+  const defender = {hp:1000,maxHp:1000,artifactBattle:{effects:[{type:'equip_damage_cap_percent',value:.025,soulbound:true}]}};
+  const attack = ctx.window.resolveArtifactBattleAttack({attacker,defender,baseDamage:500});
+  assert.equal(attack.comboChance,.35);
+  const defense = ctx.window.resolveArtifactBattleDefense({attacker,defender,normalDamage:500,trueDamage:0});
+  assert.equal(defense.hpDamage,25);
+  defender.artifactBattle.effects[0].soulbound=false;
+  const ordinary = ctx.window.resolveArtifactBattleDefense({attacker,defender,normalDamage:500,trueDamage:0});
+  assert.equal(ordinary.hpDamage,50);
+  assert.equal(combo.stats({},[{type:'equip_combo_chance',value:999}]).chance,.1);
+  assert.equal(combo.stats({},[{type:'equip_combo_chance',value:999,soulbound:true}]).chance,.4);
+});
+
+test('trusted raid snapshots and boss defense honor refined soulbound values', () => {
+  const authority = require('../raid-authority.cjs');
+  const catalog = {items:[{id:'refined-sword',name:'精煉劍',realm:'元嬰',equipSlot:'本命法寶',
+    effects:[{type:'equip_combo_chance',value:.35},{type:'equip_damage_cap_percent',value:.025}]}]};
+  const user = {stats:{attack:200,maxHp:1000,totalScore:10},artifactSystem:{inventory:{'refined-sword':1},equipped:{'本命法寶':'refined-sword'}}};
+  const member = authority.trustedRaidPlayerSnapshot(user,'tester',catalog);
+  assert.ok(member.artifactBattle.effects.every(effect=>effect.soulbound===true));
+  assert.equal(require('../public/cultivation/combat-combo.js').stats(member,member.artifactBattle.effects).chance,.35);
+  const result = authority.resolveBossDefense(member,{roomId:'room-test',bossAction:{id:1,damage:500}});
+  assert.equal(result.damage,25);
+});
+
+test('generation and guidance review both use soulbound priority and expanded ranges', async () => {
+  const router = require('../ai-router');
+  const original = router.generateJSON;
+  const payload = {...payloadForBound(), adminGenerationPrompt:'名稱用測試二字'};
+  let calls = 0;
+  router.generateJSON = async prompt => {
+    calls++;
+    assert.match(prompt,/本命/);
+    const revised = {...proposed('護身法寶'),name:'測試劍',description:'承接劍心。',effects:[{type:'equip_combo_chance',value:999}]};
+    return {data:calls === 1 ? revised : {aligned:false,issues:['改名'],revisedArtifact:revised}};
+  };
+  try {
+    let handler;
+    api({get(){},post(route,fn){handler=fn;}});
+    let result;
+    await handler({body:payload},{json(value){result=value;},status(){return this;}});
+    assert.equal(calls,2);
+    assert.equal(result.artifact.equipSlot,'本命法寶');
+    assert.equal(result.artifact.weaponForm,'飛劍');
+    assert.equal(result.artifact.coreEffect,'equip_combo_chance');
+    const limit = api.effectRangesForRealm('元嬰',3,{}, {},2,true).find(row=>row.type==='equip_combo_chance').max;
+    assert.equal(result.artifact.effects[0].value,limit);
+    assert.equal(result.artifact.effects.length,3);
+  } finally {router.generateJSON=original;}
+});
+
+test('an already-paid old known job upgrades on opening and a failed commit retries without another generation or award', async () => {
+  const payload = payloadForBound();
+  const catalog = [...payload.existingArtifacts,{id:'old-result',name:'舊普通成品',realm:'元嬰',equipSlot:'護身法寶',effects:[{type:'equip_shield_flat',value:50}]}];
+  const recipe = payload.selectedIngredients.map(row=>({artifactId:row.id,quantity:row.quantity}));
+  const recipes = {'old-result':recipe};
+  const signature = recipe.map(row=>'artifact:'+row.artifactId+':1').sort().join('|');
+  const clone = value=>JSON.parse(JSON.stringify(value));
+  const job = {id:'old-paid-job',kind:'known',knownArtifactId:'old-result',targetRealm:'元嬰',refinementStage:3,
+    readyAtMs:1,signature,recipe,ingredients:payload.selectedIngredients,forgeMethod:'自由發揮'};
+  const field = 'refineryJob';
+  const user = {[field]:job,forgeFragments:12,artifactSystem:{inventory:{},equipped:{}},stats:{totalScore:68}};
+  const docs = new Map([['users/tester',clone(user)],['gameConfig/artifactCatalogV1',{items:clone(catalog)}],['gameConfig/materialCatalogV1',{recipes:clone(recipes)}]]);
+  let failCommit = true, generations = 0;
+  const ctx = {console,QASoulboundPool:pool,
+    window:{getCurrentUserData:()=>user,dispatchEvent(){}},CustomEvent:class {},
+    ARTIFACT_CATALOG:catalog,MATERIAL_CATALOG:payload.allMaterials,ARTIFACT_RECIPES:recipes,REFINERY_JOB_FIELD:field,
+    SUPPORTED_ARTIFACT_EFFECTS:[...api.ALLOWED_EFFECTS],MAX_ARTIFACT_RECIPE_NESTING:2,
+    getArtifactById:id=>catalog.find(item=>item.id===id),getMaterialById:()=>null,
+    artifactRecipeDepth:id=>id==='ordinary'?1:0,realmForScore:()=>({name:'元嬰'}),realmOrderByName:realm=>api.REALMS.indexOf(realm),
+    baseRealmForgeGold:()=>100,calculateRefineryEconomy:()=>({fragments:10,durationMs:1}),raidRefinementKeyRequirement:()=>null,formatRefineryDuration:String,
+    getApp:()=>({}),getAuth:()=>({currentUser:{uid:'tester',getIdToken:async()=>''}}),getFirestore:()=>({}),doc:(_, ...parts)=>parts.join('/'),
+    repairArtifactRecipes:rows=>({recipes:rows,changed:false,removedRecipeIds:[]}),validateArtifactRecipes:rows=>rows,
+    replaceArtifactCatalog:rows=>catalog.splice(0,catalog.length,...rows),replaceArtifactRecipes:rows=>Object.assign(recipes,rows),
+    runTransaction:async(_,callback)=>{
+      const writes=[];
+      await callback({get:async ref=>({exists:()=>docs.has(ref),data:()=>clone(docs.get(ref))}),
+        update:(ref,value)=>writes.push([ref,value]),set:(ref,value)=>writes.push([ref,value])});
+      if(failCommit){failCommit=false;throw new Error('暫時無法提交');}
+      for(const [ref,value] of writes) docs.set(ref,{...docs.get(ref),...clone(value)});
+    },
+    fetch:async(url,options)=>{
+      if(url!=='/api/generate-artifact')return {ok:true,json:async()=>({ok:true})};
+      generations++;
+      const request=JSON.parse(options.body);
+      const hierarchy=api.ingredientHierarchy(request);
+      const artifact=api.sanitizeGeneratedArtifact(proposed('護身法寶'),'元嬰',3,{}, {},2,{primaryArtifacts:hierarchy.primary,weaponForm:api.lockedWeaponForm(request)});
+      return {ok:true,json:async()=>({artifact})};
+    }
+  };
+  vm.createContext(ctx);
+  const catalogSource=read('public/cultivation/artifact-catalog.js').replace(/^import .*;\n/gm,'').replace(/export (const|function) /g,'$1 ');
+  const catalogContext={QASoulboundPool:pool};
+  vm.runInNewContext(catalogSource+'\nthis.api={normalizeArtifactDefinition,validateArtifactCatalog};',catalogContext);
+  Object.assign(ctx,catalogContext.api);
+  vm.runInContext(read('public/cultivation/refinery-ai-jobs.js').replace(/^import\s[\s\S]*?;\n/gm,''),ctx);
+  const plan=ctx.window.getCultivationRefineryPlan(payload.selectedIngredients.map(row=>'artifact:'+row.id),'old-result');
+  assert.equal(plan.discovery,true);
+  assert.equal(plan.targetRealm,'元嬰');
+  await assert.rejects(ctx.window.claimCultivationRefineryJob(),/暫時無法提交/);
+  assert.equal(user[field].id,job.id);
+  assert.equal(docs.get('users/tester').forgeFragments,12);
+  const awarded=await ctx.window.claimCultivationRefineryJob();
+  assert.equal(awarded.equipSlot,'本命法寶');
+  assert.equal(awarded.coreEffect,'equip_combo_chance');
+  assert.equal(awarded.effects.length,3);
+  assert.equal(awarded.soulboundRefinementVersion,1);
+  assert.equal(generations,1);
+  assert.equal(docs.get('users/tester').forgeFragments,12);
+  assert.equal(docs.get('users/tester').artifactSystem.inventory[awarded.id],1);
+  assert.equal(docs.get('users/tester')[field],null);
+  await assert.rejects(ctx.window.claimCultivationRefineryJob(),/目前沒有/);
+  assert.equal(docs.get('users/tester').artifactSystem.inventory[awarded.id],1);
 });
 
 test('legacy and known-recipe paths block minting while equipment slot stays operable', () => {

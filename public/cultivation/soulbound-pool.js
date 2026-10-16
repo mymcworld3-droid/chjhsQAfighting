@@ -61,7 +61,32 @@
     const item = list[Math.min(list.length - 1, Math.floor(random() * list.length))];
     return { kind:'weapon',itemId: item.id, realm: item.realm, higher, pity };
   }
-  const api = Object.freeze({ VERSION, PITY, WEAPON_RATE, FRAGMENT_MIN, FRAGMENT_MAX, REALMS, TYPES, ITEMS, get, rankFor, price, cost, candidates, roll, valueText });
+  // Shared by generation and catalog persistence. Attack/HP keep ordinary bounds.
+  const REFINEMENT_VERSION = 1;
+  function refinementCompatible(item, hasSoulbound) {
+    return hasSoulbound
+      ? item?.equipSlot === '本命法寶' && item.soulboundRefinementVersion === REFINEMENT_VERSION
+      : item?.equipSlot !== '本命法寶';
+  }
+  const BASE_STATS = new Set(['equip_attack_flat','equip_attack_percent','equip_hp_flat','equip_hp_percent','timed_attack_multiplier']);
+  function refinementCap(type, ordinaryCap, soulbound = false) {
+    if (!soulbound || BASE_STATS.has(type)) return ordinaryCap;
+    const cap = ordinaryCap * 4;
+    if (type.endsWith('_chance')) return Math.min(1, cap);
+    if (['equip_damage_reduction_percent','equip_low_hp_reduction_percent','equip_first_hit_reduction_percent','equip_damage_cap_percent'].includes(type)) return Math.min(1, cap);
+    return cap;
+  }
+  function refinementRange(range, soulbound = false) {
+    if (!soulbound || !range || BASE_STATS.has(range.type) || !['value','multiplier'].includes(range.field)) return range;
+    const round = n => Number(n.toFixed(4));
+    if (range.type === 'equip_damage_cap_percent') {
+      return { ...range, min:round(range.min / 4), max:round(range.max / 4) };
+    }
+    const cap = range.type.endsWith('_chance') || ['equip_damage_reduction_percent','equip_low_hp_reduction_percent','equip_first_hit_reduction_percent'].includes(range.type) ? 1 : Infinity;
+    const scale = n => Math.min(cap, round(range.field === 'multiplier' ? 1 + (n - 1) * 4 : n * 4));
+    return { ...range, min:scale(range.min), max:scale(range.max) };
+  }
+  const api = Object.freeze({ VERSION, PITY, WEAPON_RATE, FRAGMENT_MIN, FRAGMENT_MAX, REALMS, TYPES, ITEMS, get, rankFor, price, cost, candidates, roll, valueText, REFINEMENT_VERSION, refinementCap, refinementRange, refinementCompatible });
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.QASoulboundPool = api;
 })(globalThis);
