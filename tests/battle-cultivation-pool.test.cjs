@@ -137,11 +137,11 @@ test('server pays trusted nascent contributions for wins, losses and draws, once
     const awards=await Promise.all(['h','g','h','g'].map(uid=>api.awardBattle(db,uid,'room12345',api.battleReward(r,uid),r)));
     assert.equal(awards.filter(a=>a.awarded).length,2);
     for(const award of awards) {
-      assert.equal(award.cultivationPool,16);assert.equal(award.hostCultivation,10);assert.equal(award.guestCultivation,6);
-      assert.equal(award.cultivationAdded,award.outcome==='win'?16:8);
+      assert.equal(award.cultivationPool,14);assert.equal(award.hostCultivation,8);assert.equal(award.guestCultivation,6);
+      assert.equal(award.cultivationAdded,award.outcome==='win'?14:7);
     }
-    assert.equal(docs.get('users/h').stats.totalScore,winner==='h'?84:76);
-    assert.equal(docs.get('users/g').stats.totalScore,76);
+    assert.equal(docs.get('users/h').stats.totalScore,winner==='h'?82:75);
+    assert.equal(docs.get('users/g').stats.totalScore,75);
   }
 });
 
@@ -153,11 +153,11 @@ test('either player can claim first; later upgrades, resets and retries retain t
     docs.get('users/h').nascentSoulGrowth.branches.cultivation=0;
     docs.get('users/g').nascentSoulGrowth.branches.cultivation=10;
     const award=await api.awardBattle(db,second,'room12345',api.battleReward(r,second),r);
-    assert.equal(award.cultivationPool,16);
-    assert.equal(award.cultivationAdded,second==='h'?16:8);
+    assert.equal(award.cultivationPool,14);
+    assert.equal(award.cultivationAdded,second==='h'?14:7);
     const retry=await api.awardBattle(db,first,'room12345',api.battleReward(r,first),r);
-    assert.equal(retry.awarded,false);assert.equal(retry.cultivationPool,16);
-    assert.equal(docs.get('users/h').stats.totalScore,84);assert.equal(docs.get('users/g').stats.totalScore,76);
+    assert.equal(retry.awarded,false);assert.equal(retry.cultivationPool,14);
+    assert.equal(docs.get('users/h').stats.totalScore,82);assert.equal(docs.get('users/g').stats.totalScore,75);
   }
 });
 
@@ -173,7 +173,7 @@ test('server enforces nascent unlock, equipped core and enabled conditions; zero
   docs.set('users/h',nascentUser('h',10));docs.set('users/g',nascentUser('g',10));
   const award=await api.awardBattle(db,'h','room12345',api.battleReward(r,'h'),r);
   assert.equal(award.cultivationAdded,0);assert.equal(docs.get('users/h').stats.totalScore,68);
-  assert.equal(Growth.cultivation(nascentUser('h',10),'battle'),10);
+  assert.equal(Growth.cultivation(nascentUser('h',10),'battle'),5);
 });
 
 test('reward endpoint publishes the authoritative pool and ignores room and request bonus overrides', async () => {
@@ -186,9 +186,9 @@ test('reward endpoint publishes the authoritative pool and ignores room and requ
   });
   await handler({body:{roomId:'room12345',cultivationBonus:999999,cultivationPool:999999},get:()=> 'Bearer test-token'},
     {set(){},status(){return this;},json:data=>{payload=data;}});
-  assert.equal(payload.ok,true);assert.equal(payload.cultivationAdded,16);
-  assert.deepEqual(marker.battleCultivationSummary,{host:10,guest:6,pool:16});
-  assert.equal(docs.get('users/h').stats.totalScore,84);
+  assert.equal(payload.ok,true);assert.equal(payload.cultivationAdded,14);
+  assert.deepEqual(marker.battleCultivationSummary,{host:8,guest:6,pool:14});
+  assert.equal(docs.get('users/h').stats.totalScore,82);
 });
 
 test('browser applies the actual server reward and settled pool instead of adding the preview bonus again', async () => {
