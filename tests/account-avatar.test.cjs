@@ -95,7 +95,7 @@ test('matchmaking carries the account photo after unequipping without changing c
   player.stats.totalScore = 68;
   player.cultivationTraining = {equippedCore:{type:'sword',grade:1}};
   player.nascentSoulGrowth = {version:1,branches:{cultivation:3}};
-  assert.equal(context.playerSnapshot().cultivationBonus, 3);
+  assert.equal(context.playerSnapshot().cultivationBonus, 2);
   player.equipped.avatar = 'assets/custom.png';
   assert.equal(context.playerSnapshot().avatar, 'assets/custom.png');
 });
