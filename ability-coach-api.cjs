@@ -26,13 +26,14 @@ function normalizeInput(raw) {
   } : null;
   return { subject: clean(raw.subject, 24) || '綜合', topics, priorities, trend };
 }
-function normalizeAdvice(data) {
+function normalizeAdvice(data, summary = null) {
+  const knownTopics = summary ? new Set(summary.topics.map(item => item.topic)) : null;
   const headline = clean(data?.headline, 90);
   const explanation = clean(data?.explanation, 500);
   const plan = (Array.isArray(data?.plan) ? data.plan : []).slice(0, 3).map(item => ({
     topic: clean(item?.topic, 60), reason: clean(item?.reason, 130),
     action: clean(item?.action, 150), questions: within(item?.questions, 3, 10)
-  })).filter(item => item.topic && item.action);
+  })).filter(item => item.topic && item.action && (!knownTopics || knownTopics.has(item.topic)));
   if (!headline || !plan.length) throw new Error('AI 診斷回傳結構不完整');
   return { headline, explanation, plan };
 }
@@ -70,7 +71,7 @@ ${JSON.stringify(summary)}
 {"headline":"一行保守且具體的診斷","explanation":"約50至120字、包含資料限制與最重要差距","plan":[{"topic":"統計摘要中確實出現的科目或單元","reason":"附上實際樣本依據或標示證據不足","action":"可執行的練習方法（例如先回想概念、再做指定類型題、檢查錯因）","questions":5}]}
 約二到三步；每步練習題數 3 到 10；不要依據數據猜測具體錯因，也不要把 AI 推測說成已證實。`;
       const reply = await router.generateJSON(prompt, { timeoutMs: 25000 });
-      return res.json({ ok: true, advice: normalizeAdvice(reply.data), provider: reply.provider, model: reply.model,
+      return res.json({ ok: true, advice: normalizeAdvice(reply.data, summary), provider: reply.provider, model: reply.model,
         note: 'AI 解讀為建議，分數由本地統計計算，AI 不會修改玩家資料。' });
     } catch (e) {
       if (e.status) return res.status(e.status).json({ error: e.message });
