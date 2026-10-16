@@ -32,5 +32,5 @@ test('brand remains intact as a return-home button; user controls remain in top 
   assert.match(header[0], /以學入道 · 積微成仙/);
   assert.match(header[0], /id="user-info"/);
   assert.match(header[0], /id="lang-display"/);
-  assert.match(html, /styles\/xianxia-quiet\.css\?v=20261016-portrait-secondary-brand1/);
+  assert.match(html, /styles\/xianxia-quiet\.css\?v=20261016-portrait-hide-full-header1/);
 });
