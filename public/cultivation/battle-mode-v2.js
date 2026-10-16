@@ -1394,8 +1394,13 @@ export const featureReady = (async () => {
       if (!submitted) {
         state.pendingAnswer = null;
         if (state.room) renderQuestion(state.room, playerForRole(state.room, state.role));
-      } else if (Number(choice) === Number(state.room?.currentQuestion?.ans)) {
-        showCorrectAnswerFeedback('攻勢已凝聚，等待對手作答');
+      } else {
+        const eventId = 'duel_' + state.roomId + '_' + round;
+        void window.trackPlayerAnalytics?.('answer_completed', { mode: 'duel', eventId });
+        void window.trackPlayerAnalytics?.('social_participated', { mode: 'duel', eventId: eventId + '_social' });
+        if (Number(choice) === Number(state.room?.currentQuestion?.ans)) {
+          showCorrectAnswerFeedback('攻勢已凝聚，等待對手作答');
+        }
       }
     } catch (error) {
       state.pendingAnswer = null;
