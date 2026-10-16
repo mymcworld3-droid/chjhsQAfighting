@@ -27,6 +27,8 @@ const registerSoulboundDrawApi = require('./soulbound-draw-api.cjs');
 const registerMeditationApi = require('./daily-meditation-api.cjs');
 const registerInventoryDismantleApi = require('./inventory-dismantle-api.cjs');
 const registerQuestApi = require('./quest-api.cjs');
+const registerEnlightenmentTrialApi = require('./enlightenment-trial-api.cjs');
+const enlightenmentTrial = require('./enlightenment-trial-api.cjs').__test;
 const registerOpportunityApi = require('./opportunity-api.cjs');
 const registerGameStage = require('./game-stage.cjs');
 const { raidRepository } = require('./server-repositories.cjs');
@@ -62,6 +64,7 @@ registerDongtianSettlementApi(app);
 registerImmortalsCleanupApi(app);
 registerInvitationApi(app);
 registerQuestApi(app);
+registerEnlightenmentTrialApi(app);
 registerSoulboundDrawApi(app);
 registerMeditationApi(app);
 registerInventoryDismantleApi(app);
@@ -423,12 +426,14 @@ app.post('/api/generate-quiz', async (req, res) => {
     level = String(level || '國中一年級').slice(0, 32);
     const raidQuickSimple = String(quizMode || '') === 'raid-quick-simple';
     const raidTicketMode = raidQuickSimple || String(quizMode || '') === 'raid-standard';
+    const enlightenmentMode = String(quizMode || '') === 'enlightenment-trial';
     const combatFastMode = FAST_QUIZ_MODES.has(String(quizMode || ''));
     let raidIdentity = null;
     let raidRoomId = '';
     let raidActionId = 0;
     let raidTrustedTopic = '';
     let raidTrustedDifficulty = 'medium';
+    let enlightenmentContext = null;
     if (raidTicketMode) {
         try {
             raidIdentity = await verifyMainIdentity(req);
@@ -465,6 +470,27 @@ app.post('/api/generate-quiz', async (req, res) => {
             return res.status(status).json({ error: error?.message || '團本題目驗證失敗' });
         }
     }
+    if (enlightenmentMode) {
+        try {
+            const uid = await verifyMainIdentity(req);
+            const db = playerRepository.resolve().db;
+            enlightenmentContext = {
+                uid, db,
+                ...(await enlightenmentTrial.prepareQuestion(db,uid))
+            };
+            if (enlightenmentContext.pending) {
+                return res.json({trialQuestion:enlightenmentContext.pending});
+            }
+            subject = enlightenmentContext.subject;
+            level = enlightenmentContext.level;
+            rank = 0;
+            knowledgeMap = null;
+            avoidQuestions = enlightenmentContext.history;
+            avoidQuestionMeta = [];
+        } catch (error) {
+            return res.status(error.status||503).json({error:error.status?error.message:'悟道試煉題目準備失敗'});
+        }
+    }
     difficulty = raidTicketMode ? (raidQuickSimple ? 'easy' : raidTrustedDifficulty)
         : (['easy', 'medium', 'hard'].includes(difficulty) ? difficulty : 'medium');
     const previousQuestions = (Array.isArray(avoidQuestions) ? avoidQuestions : [])
@@ -477,6 +503,7 @@ app.post('/api/generate-quiz', async (req, res) => {
     const fingerprint = value => String(value).replace(/\s+/g, '').toLowerCase();
     let targetTopic = String(specificTopic || topic || '').trim().slice(0, 240);
     if (raidTicketMode) targetTopic = String(raidTrustedTopic || '').trim().slice(0, 240);
+    if (enlightenmentMode) targetTopic = String(enlightenmentContext.topic || '').trim().slice(0, 240);
 
     // 1. 科目選擇
     if (!subject) {
@@ -624,6 +651,12 @@ app.post('/api/generate-quiz', async (req, res) => {
                 throw new Error('AI 題目與近期解題骨架重複');
             }
 
+            if (enlightenmentMode) {
+                const question = await enlightenmentTrial.commitQuestion(
+                    enlightenmentContext.db,enlightenmentContext.uid,enlightenmentContext,parsed
+                );
+                return res.json({trialQuestion:question,provider:routed.provider,model:routed.model});
+            }
             if (raidTicketMode) {
                 const choices = [parsed.correct, ...wrong].map(value => String(value || '').trim());
                 let answerIndex = 0;
