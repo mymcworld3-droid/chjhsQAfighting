@@ -20,7 +20,7 @@ function explicitSolutionAnswer(explanation) {
   // Only a clearly delimited answer statement is strong enough for a hard
   // mismatch: do not infer a numeric answer from unrelated intermediate steps.
   const patterns = [
-    /(?:正確答案|標準答案|最終答案|唯一正解|答案應為|答案為|答案是|正解為|正解是|故選|應選|因此選)\s*[:：]?\s*[「『"'（(]?\s*([^\s，。；;。\n「」『』"'（）()]{1,100})/gi
+    /(?:正確答案|標準答案|最終答案|唯一正解|答案應為|答案為|答案是|正解為|正解是|故選|應選|因此選)\s*(?:[:：]|為|是)?\s*[「『"'（(]?\s*([^\s,，。；;。\n「」『』"'（）()]{1,100})/gi
   ];
   const results = [];
   for (const pattern of patterns) {
