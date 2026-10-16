@@ -224,8 +224,10 @@ import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 
         history = records.docs.map(x => x.data()).filter(x => x.subject);
         historyFetchedAt = Date.now();
       } catch (error) {
-        historyError = '近期趨勢無法載入（圖譜累積統計仍可使用）';
-        historyFetchedAt = Date.now();
+        if (getMainUser()?.uid === uid) {
+          historyError = '近期趨勢無法載入（圖譜累積統計仍可使用）';
+          historyFetchedAt = Date.now();
+        }
         console.warn('[Ability analysis] recent logs unavailable:', error?.code || error?.message);
       } finally { if (historyLoading === pending) historyLoading = null; }
     })();
