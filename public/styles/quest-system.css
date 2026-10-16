@@ -55,3 +55,8 @@
   .quest-heading h3 { font-size: 19px; }
   .quest-heading button { padding: 7px; font-size: 10px; }
 }
+
+/* 既有六項日常任務保留，今日委託以墨金分隔顯示。 */
+.quest-commission-heading{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:10px 2px 5px;margin-top:4px;border-bottom:1px solid rgba(221,194,124,.19);color:#e4c889}
+.quest-commission-heading b{font-size:13px;letter-spacing:.09em}.quest-commission-heading small{color:#a59a7d;font-size:10px}
+.quest-card [data-quest-kind="commission"]{border-color:rgba(221,194,124,.46)}
