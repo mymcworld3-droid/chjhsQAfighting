@@ -1,0 +1,81 @@
+/* 洞府能力圖譜：與全站黑金風格一致，不以未作答冒充零分。 */
+body.xianxia-theme .dongfu-analysis-card,
+body.xianxia-theme #dongfu-analysis-body {color:#ede0c8}
+#chart-controls{background:rgba(19,17,14,.7)!important;border-color:rgba(220,175,95,.14)!important}
+#chart-controls .ai-ability-filter{
+  padding:6px 12px;border:1px solid rgba(206,171,107,.24);border-radius:8px;
+  color:#c9bda6;background:rgba(255,255,255,.025);font-size:12px;font-weight:650;
+  transition:background .15s ease,border-color .15s ease;cursor:pointer;
+}
+#chart-controls .ai-ability-filter.is-active{
+  background:rgba(221,182,109,.16);border-color:rgba(232,193,115,.65);
+  color:#f5dfb4;box-shadow:inset 0 0 0 1px rgba(232,193,115,.15);
+}
+#chart-controls .ai-ability-filter:focus-visible,
+.ai-ability-panel button:focus-visible,.ai-ability-panel summary:focus-visible{
+  outline:2px solid #e8c47d;outline-offset:2px;
+}
+.ai-ability-panel{--ability-line:rgba(219,181,114,.18);margin-top:16px;display:grid;gap:16px;color:#eadfc9}
+.ai-ability-panel p,.ai-ability-panel small{line-height:1.7}
+.ai-ability-definition{font-size:12px;color:#c1b397;background:rgba(193,158,92,.055);
+  border-left:2px solid rgba(224,184,107,.55);padding:10px 12px;margin:0}
+.ai-ability-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.ai-ability-stats>div{min-width:0;display:flex;flex-direction:column;padding:11px 12px;
+  border:1px solid var(--ability-line);border-radius:12px;background:rgba(218,174,90,.055)}
+.ai-ability-stats small{font-size:11px;color:#bdae93}
+.ai-ability-stats strong{font-size:24px;line-height:1.45;color:#f2d39b;font-weight:800;overflow-wrap:anywhere}
+.ai-ability-stats span{font-size:10px;color:#a79b83;line-height:1.65}
+.ai-ability-priority{padding:14px;border:1px solid rgba(232,193,115,.33);border-radius:12px;
+  background:radial-gradient(ellipse at 80% 0,rgba(235,191,107,.10),transparent 65%),rgba(13,13,12,.4)}
+.ai-ability-priority-heading{display:flex;justify-content:space-between;font-weight:800;font-size:13px;color:#f0d6a9}
+.ai-ability-priority p{font-size:12px;color:#ddccb0;margin:9px 0}
+.ai-ability-priority small{font-size:11px;color:#b8a489;display:block}
+.ai-ability-priority button,.ai-ability-coach button{
+  border:1px solid rgba(229,186,105,.48);border-radius:9px;color:#f1d29a;
+  background:rgba(226,182,100,.10);padding:8px 12px;cursor:pointer;
+  font-weight:700;font-size:12px;margin-top:10px;
+}
+.ai-ability-priority button:hover,.ai-ability-coach button:hover:not(:disabled){background:rgba(229,185,107,.2)}
+.ai-ability-coach button:disabled{opacity:.5;cursor:not-allowed}
+.ai-ability-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.ai-ability-head h4{font-size:15px;margin:0;font-weight:850;color:#e8d2ad}
+.ai-ability-head small,.ai-ability-head span{font-size:11px;color:#ac9e89}
+.ai-ability-list{display:grid;gap:8px}
+.ai-ability-list>.ai-ability-item,.ai-ability-list details{padding:10px 12px;border:1px solid var(--ability-line);
+  border-radius:10px;background:rgba(255,255,255,.025)}
+.ai-ability-list details{padding:10px 12px}
+.ai-ability-list details .ai-ability-item{padding:11px 0;border-bottom:1px solid var(--ability-line)}
+.ai-ability-list details .ai-ability-item:last-child{border-bottom:0}
+.ai-ability-list summary,.ai-ability-method summary{font-size:12px;color:#dfc797;cursor:pointer;font-weight:750}
+.ai-ability-item-head{display:flex;justify-content:space-between;gap:9px;align-items:center}
+.ai-ability-item-head b{font-size:12px;min-width:0;overflow-wrap:anywhere}
+.ai-ability-state{font-size:10px;flex-shrink:0;border-radius:5px;padding:3px 6px;background:rgba(255,255,255,.06);color:#b2a68f}
+.ai-ability-state.is-good{color:#a9d3a9;background:rgba(91,160,109,.1)}
+.ai-ability-state.is-review{color:#f1d295;background:rgba(221,167,72,.1)}
+.ai-ability-state.is-needs{color:#e5b0a5;background:rgba(204,109,87,.1)}
+.ai-ability-meter{height:6px;background:rgba(236,215,177,.10);border-radius:7px;overflow:hidden;margin:9px 0 4px}
+.ai-ability-meter>span{display:block;height:100%;background:linear-gradient(90deg,#957240,#f0cd88);border-radius:7px}
+.ai-ability-meter>span.is-unknown{width:100%;height:1px;background:repeating-linear-gradient(90deg,#99876a 0 3px,transparent 3px 10px);opacity:.4}
+.ai-ability-item>small{font-size:10px;color:#a99b84}
+.ai-ability-method{border-top:1px solid var(--ability-line);padding-top:11px}
+.ai-ability-method p{font-size:11px;color:#a99b85;margin:8px 0}
+.ai-ability-coach{border:1px solid rgba(222,181,103,.27);border-radius:13px;
+  background:linear-gradient(145deg,rgba(226,178,94,.065),rgba(12,12,11,.5));padding:15px}
+.ai-ability-coach>p{margin:11px 0;font-size:12px;color:#bdad91}
+#ai-ability-response{margin-top:12px;font-size:12px;line-height:1.7;color:#dcc8a6;overflow-wrap:anywhere}
+#ai-ability-response h5{font-size:14px;font-weight:850;color:#f2d59f;margin:0 0 8px}
+#ai-ability-response ol{counter-reset:step;list-style:none;margin:12px 0;padding:0;display:grid;gap:9px}
+#ai-ability-response li{padding:10px 11px;border-left:2px solid rgba(222,183,112,.38);
+  background:rgba(255,255,255,.02)}
+#ai-ability-response li b{color:#e9cf9f;display:block;margin-bottom:4px}
+#ai-ability-response li p{margin:3px 0;font-size:12px;color:#b8a98d}
+#ai-ability-response>small{display:block;margin-top:11px;font-size:10px;color:#988d78}
+@media(min-width:860px){
+  .ai-ability-stats{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media(max-width:480px){
+  .ai-ability-stats>div{padding:9px 10px}
+  .ai-ability-stats strong{font-size:20px}
+  #chart-controls .ai-ability-filter{font-size:11px;padding:6px 9px}
+  .ai-ability-panel{gap:12px}
+}
