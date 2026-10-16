@@ -24,11 +24,11 @@ test('ordinary new forging cannot create a soulbound equipment slot', () => {
   }
 });
 
-test('first forging cannot falsely inherit an existing soulbound base', () => {
+test('any genuine soulbound input retains its slot even if a legacy job says stage one', () => {
   const artifact = api.sanitizeGeneratedArtifact(proposed(), '元嬰', 1, {}, {}, 3, {
     primaryArtifacts: [boundBase]
   });
-  assert.notEqual(artifact.equipSlot, '本命法寶');
+  assert.equal(artifact.equipSlot, '本命法寶');
 });
 
 test('existing soulbound primary remains soulbound after second and third refinements', () => {
@@ -82,21 +82,21 @@ test('multiple soulbound inputs select the same core and form regardless of inpu
   assert.equal(api.lockedWeaponForm(payload), first[0].weaponForm);
 });
 
-test('soulbound ranges multiply special attributes by four but preserve all attack and HP bounds', () => {
+test('soulbound ranges multiply special attributes by 1.2 but preserve all attack and HP bounds', () => {
   for (const stage of [2, 3]) for (const count of [2, 3, 8]) {
     const normal = api.effectRangesForRealm('元嬰',stage,{}, {},count);
     const bound = api.effectRangesForRealm('元嬰',stage,{}, {},count,true);
     for (const type of ['equip_damage_percent','equip_streak_damage_percent','equip_reflect_percent','equip_true_damage_flat','equip_shield_flat','equip_on_correct_shield_flat']) {
       const ordinary = normal.find(row => row.type === type);
       const soulbound = bound.find(row => row.type === type);
-      assert.equal(soulbound.min, Number((ordinary.min * 4).toFixed(4)), type);
-      assert.equal(soulbound.max, Number((ordinary.max * 4).toFixed(4)), type);
+      assert.equal(soulbound.min, Number((ordinary.min * 1.2).toFixed(4)), type);
+      assert.equal(soulbound.max, Number((ordinary.max * 1.2).toFixed(4)), type);
     }
     for (const type of ['equip_attack_flat','equip_attack_percent','equip_hp_flat','equip_hp_percent','timed_attack_multiplier']) {
       assert.deepEqual(bound.find(row => row.type === type),normal.find(row => row.type === type));
     }
     const inverse = bound.find(row => row.type === 'equip_damage_cap_percent');
-    assert.equal(inverse.min,Number((normal.find(row => row.type === inverse.type).min / 4).toFixed(4)));
+    assert.equal(inverse.min,Number((normal.find(row => row.type === inverse.type).min / 1.2).toFixed(4)));
     for (const range of bound) {
       const effect = api.sanitizeEffect({type:range.type,value:1e9,multiplier:1e9}, 4,stage,{}, {},count,true);
       if (range.field === 'value' || range.field === 'multiplier') assert.equal(effect[range.field],range.max);
@@ -116,11 +116,11 @@ test('catalog saving and reading preserves soulbound special bounds and attack/H
         {type:'equip_attack_percent',value:20},{type:'equip_hp_percent',value:20},
         {type:'equip_damage_cap_percent',value:.0125}]
     }])[0];
-    assert.equal(item.effects[0].value,soulbound ? .4 : .1);
-    assert.equal(item.effects[1].value,soulbound ? 9 : 3);
+    assert.equal(item.effects[0].value,soulbound ? .12 : .1);
+    assert.equal(item.effects[1].value,soulbound ? 3.6 : 3);
     assert.equal(item.effects[2].value,5);
     assert.equal(item.effects[3].value,5);
-    assert.equal(item.effects[4].value,soulbound ? .0125 : .05);
+    assert.equal(item.effects[4].value,soulbound ? .05 / 1.2 : .05);
     assert.equal(item.soulboundRefinementVersion,soulbound ? pool.REFINEMENT_VERSION : undefined);
   }
 });
@@ -140,14 +140,14 @@ test('soulbound combo and inverse damage cap work in actual PvP resolution', () 
   const attacker = {hp:1000,maxHp:1000,artifactBattle:{effects:[{type:'equip_combo_chance',value:.35,soulbound:true}]}};
   const defender = {hp:1000,maxHp:1000,artifactBattle:{effects:[{type:'equip_damage_cap_percent',value:.025,soulbound:true}]}};
   const attack = ctx.window.resolveArtifactBattleAttack({attacker,defender,baseDamage:500});
-  assert.equal(attack.comboChance,.35);
+  assert.equal(attack.comboChance,.12);
   const defense = ctx.window.resolveArtifactBattleDefense({attacker,defender,normalDamage:500,trueDamage:0});
-  assert.equal(defense.hpDamage,25);
+  assert.equal(defense.hpDamage,42);
   defender.artifactBattle.effects[0].soulbound=false;
   const ordinary = ctx.window.resolveArtifactBattleDefense({attacker,defender,normalDamage:500,trueDamage:0});
   assert.equal(ordinary.hpDamage,50);
   assert.equal(combo.stats({},[{type:'equip_combo_chance',value:999}]).chance,.1);
-  assert.equal(combo.stats({},[{type:'equip_combo_chance',value:999,soulbound:true}]).chance,.4);
+  assert.equal(combo.stats({},[{type:'equip_combo_chance',value:999,soulbound:true}]).chance,.12);
 });
 
 test('trusted raid snapshots and boss defense honor refined soulbound values', () => {
@@ -157,9 +157,9 @@ test('trusted raid snapshots and boss defense honor refined soulbound values', (
   const user = {stats:{attack:200,maxHp:1000,totalScore:10},artifactSystem:{inventory:{'refined-sword':1},equipped:{'本命法寶':'refined-sword'}}};
   const member = authority.trustedRaidPlayerSnapshot(user,'tester',catalog);
   assert.ok(member.artifactBattle.effects.every(effect=>effect.soulbound===true));
-  assert.equal(require('../public/cultivation/combat-combo.js').stats(member,member.artifactBattle.effects).chance,.35);
+  assert.equal(require('../public/cultivation/combat-combo.js').stats(member,member.artifactBattle.effects).chance,.12);
   const result = authority.resolveBossDefense(member,{roomId:'room-test',bossAction:{id:1,damage:500}});
-  assert.equal(result.damage,25);
+  assert.equal(result.damage,42);
 });
 
 test('generation and guidance review both use soulbound priority and expanded ranges', async () => {
@@ -200,6 +200,7 @@ test('an already-paid old known job upgrades on opening and a failed commit retr
   const field = 'refineryJob';
   const user = {[field]:job,forgeFragments:12,artifactSystem:{inventory:{},equipped:{}},stats:{totalScore:68}};
   const docs = new Map([['users/tester',clone(user)],['gameConfig/artifactCatalogV1',{items:clone(catalog)}],['gameConfig/materialCatalogV1',{recipes:clone(recipes)}]]);
+  docs.set('gameConfig/artifactCatalogV1',{items:clone(catalog.filter(item=>item.id !== 'soul-sword-golden-core'))});
   let failCommit = true, generations = 0;
   const ctx = {console,QASoulboundPool:pool,
     window:{getCurrentUserData:()=>user,dispatchEvent(){}},CustomEvent:class {},
