@@ -18,21 +18,21 @@ test('four ordinary branches and five critical/combo branches replace prerequisi
  for(const type of ['ningxin','sword']){assert.deepEqual(Growth.branches({type}).map(x=>x.id),['cultivation','attack','vitality','coreChance','coreDamage']);assert.equal(Growth.upgrade(player(type),'core').ok,false);assert.equal(Growth.upgrade(player(type),'coreDamage').ok,true);}
 });
 test('branch metadata names the real trait and reports grade-dependent bonuses',()=>{
- const expected={ocean:['蓄潮爆發',64,'%'],taichu:['吸血',38.4,'%'],pojing:['斬殺',121.6,'%'],
-  xingchen:['連答蓄力',128,'%'],wugou:['真傷',72,''],thunder:['反傷',32,'%'],reverse:['低血增傷',57.6,'%']};
+ const expected={ocean:['蓄潮爆發',32,'%'],taichu:['吸血',19.2,'%'],pojing:['斬殺',60.8,'%'],
+  xingchen:['連答蓄力',64,'%'],wugou:['真傷',36,''],thunder:['反傷',16,'%'],reverse:['低血增傷',28.8,'%']};
  for(const [type,[name,value,unit]] of Object.entries(expected)){
   const core={type,grade:1},branch=Growth.branches(core).at(-1);
   assert.equal(branch.name,name);assert.equal(branch.unit,unit);assert.equal(Growth.branchValue(core,'core',10),value);
   assert.equal(Growth.branchValue(core,'core',0),0);
  }
- for(const [type,rate,damage,maxDamage] of [['ningxin','爆擊率','爆擊傷害',50],['sword','連擊率','連擊傷害',30]]){
+ for(const [type,rate,damage,maxDamage] of [['ningxin','爆擊率','爆擊傷害',25],['sword','連擊率','連擊傷害',15]]){
   const core={type,grade:1},branches=Growth.branches(core);
   assert.equal(branches[3].name,rate);assert.equal(branches[4].name,damage);
-  assert.equal(Growth.branchValue(core,'coreChance',10),15);assert.equal(Growth.branchValue(core,'coreDamage',10),maxDamage);
-  assert.equal(Growth.branchValue({...core,grade:9},'coreChance',10),10);
+  assert.equal(Growth.branchValue(core,'coreChance',10),7.5);assert.equal(Growth.branchValue(core,'coreDamage',10),maxDamage);
+  assert.equal(Growth.branchValue({...core,grade:9},'coreChance',10),5);
  }
- assert.equal(Growth.branchValue({type:'wugou',grade:2},'core',10),71);
- assert.equal(Growth.branchValue({type:'wugou',grade:9},'core',10),60);
+ assert.equal(Growth.branchValue({type:'wugou',grade:2},'core',10),35);
+ assert.equal(Growth.branchValue({type:'wugou',grade:9},'core',10),30);
 });
 test('trait previews agree with battle effects at every rank and grade',()=>{
  for(let grade=1;grade<=9;grade++)for(let level=0;level<=10;level++){
@@ -54,9 +54,9 @@ test('trait previews agree with battle effects at every rank and grade',()=>{
   }
  }
 });
-test('max bonuses are total +10 cultivation +70 attack +500 HP and all ranks cap at ten',()=>{
+test('max bonuses are total +5 cultivation +35 attack +250 HP and all ranks cap at ten',()=>{
  const p=player('ocean',{cultivation:99,attack:99,vitality:99,core:99}),b=Growth.bonuses(p,p.cultivationTraining.equippedCore);
- assert.equal(b.attackFlat,70);assert.equal(b.maxHpFlat,500);for(const source of ['solo','daily','cave','raid','battle'])assert.equal(Growth.cultivation(p,source),10);assert.equal(Growth.upgrade(p,'attack').ok,false);
+ assert.equal(b.attackFlat,35);assert.equal(b.maxHpFlat,250);for(const source of ['solo','daily','cave','raid','battle'])assert.equal(Growth.cultivation(p,source),5);assert.equal(Growth.upgrade(p,'attack').ok,false);
 });
 test('upgrade subtracts each rising cost once; full branch costs 55 fragments and reset refunds exactly',()=>{
  const p=player();for(let n=1;n<=10;n++){const next=Growth.upgrade(p,'attack');assert.equal(next.cost,n);Growth.apply(p,next);}assert.equal(p.materialSystem.inventory[Growth.ITEM_ID],945);const refund=Growth.reset(p);assert.equal(refund.returned,55);Growth.apply(p,refund);assert.equal(Growth.reset(p).returned,0);assert.equal(p.materialSystem.inventory[Growth.ITEM_ID],1000);
@@ -69,8 +69,8 @@ test('pre-nascent realm, disabled core and insufficient fragments cannot activat
  const p=player('ocean',{attack:10});p.stats.totalScore=67;assert.equal(Growth.upgrade(p,'attack').ok,false);assert.equal(Growth.bonuses(p,p.cultivationTraining.equippedCore),null);p.stats.totalScore=68;p.cultivationTraining.coreEnabled=false;assert.equal(Growth.cultivation(p,'solo'),0);p.materialSystem.inventory[Growth.ITEM_ID]=0;assert.equal(Growth.upgrade(p,'core').ok,false);
 });
 test('critical and combo chance and damage grow independently and do not inherit old guaranteed pursuits',()=>{
- const p=player('sword',{coreChance:10,coreDamage:10}),b=Growth.bonuses(p,p.cultivationTraining.equippedCore);assert.ok(Math.abs(b.comboChance-.15)<1e-9);assert.equal(b.comboDamageBonus,.3);assert.equal(Talents.attack({atk:270,hp:1500,maxHp:1500,nascentSoul:b},{hp:5000,maxHp:5000}).followup,0);
- const q=player('ningxin',{coreChance:10,coreDamage:10}),c=Growth.bonuses(q,q.cultivationTraining.equippedCore);assert.ok(Math.abs(c.critChance-.15)<1e-9);assert.equal(c.critDamageBonus,.5);assert.equal(c.comboChance,0);
+ const p=player('sword',{coreChance:10,coreDamage:10}),b=Growth.bonuses(p,p.cultivationTraining.equippedCore);assert.ok(Math.abs(b.comboChance-.075)<1e-9);assert.equal(b.comboDamageBonus,.15);assert.equal(Talents.attack({atk:270,hp:1500,maxHp:1500,nascentSoul:b},{hp:5000,maxHp:5000}).followup,0);
+ const q=player('ningxin',{coreChance:10,coreDamage:10}),c=Growth.bonuses(q,q.cultivationTraining.equippedCore);assert.ok(Math.abs(c.critChance-.075)<1e-9);assert.equal(c.critDamageBonus,.25);assert.equal(c.comboChance,0);
 });
 test('combo defaults to 30%, supports further combos, and excludes pursuit and counter events',()=>{
  assert.equal(Combo.stats({}).multiplier,.30);assert.deepEqual(Combo.chain({damage:200,chance:.5,remainingHp:1000,roll:i=>i<3?0:1}),[60,60,60]);
@@ -89,8 +89,8 @@ test('zero-damage Dao shield blocks combo and normal extra segments apply defens
  const g=fighters({artifactBattle:{effects:[{type:'equip_combo_chance',value:.1}]}});g.guest.artifactBattle={effects:[{type:'equip_damage_reduction_percent',value:.5}]};const reduced=r.settle({roomId,round:1,...g,resolveEquipmentHit:r.window.resolveArtifactBattleHit,resolveTalentDefense:r.window.resolveArtifactBattleDefense});assert.deepEqual(Array.from(reduced.steps.filter(x=>x.combo),x=>x.damage),[15,15]);assert.equal(reduced.guestHp,2870);
 });
 test('raid uses new trusted bonuses and records critical/combo metadata without client claims',()=>{
- const p=player('sword',{attack:10,vitality:10,coreChance:10,coreDamage:10}),snapshot=trustedRaidPlayerSnapshot(p,'h');assert.equal(snapshot.atk,270);assert.equal(snapshot.maxHp,1500);assert.ok(Math.abs(snapshot.nascentSoul.comboChance-.15)<1e-9);
- snapshot.goldenCore=null;let result;for(let actionId=1;actionId<5000;actionId++){result=resolvePlayerAction(snapshot,{roomId:'raid-chain',actionId,correct:true,bossHp:10000,bossMaxHp:10000});if(result.comboHits.length>=2)break;}assert.ok(result.comboHits.length>=2);assert.ok(result.comboHits.every(n=>n===162));assert.equal(result.damage,270+162*result.comboHits.length);
+ const p=player('sword',{attack:10,vitality:10,coreChance:10,coreDamage:10}),snapshot=trustedRaidPlayerSnapshot(p,'h');assert.equal(snapshot.atk,235);assert.equal(snapshot.maxHp,1250);assert.ok(Math.abs(snapshot.nascentSoul.comboChance-.075)<1e-9);
+ snapshot.goldenCore=null;let result;for(let actionId=1;actionId<5000;actionId++){result=resolvePlayerAction(snapshot,{roomId:'raid-chain',actionId,correct:true,bossHp:10000,bossMaxHp:10000});if(result.comboHits.length>=2)break;}assert.ok(result.comboHits.length>=2);assert.ok(result.comboHits.every(n=>n===106));assert.equal(result.damage,235+106*result.comboHits.length);
 });
 
 function branchRuntime({fail=false,retry=false,changeCore=false,reset=false}={}) {
@@ -120,7 +120,7 @@ test('server daily settlement awards perfect-answer fragments with saved soul bo
   assert.equal(db.docs.get('users/u1').materialSystem.inventory[Growth.ITEM_ID],1000+earned);
   assert.equal(result.economy.growthState.fragments,1000+earned);
   assert.equal(result.record.lastResult.fragments,earned);
-  assert.equal(result.record.lastResult.soulCultivation,score>=68&&correct===3?10:0);
+  assert.equal(result.record.lastResult.soulCultivation,score>=68&&correct===3?5:0);
   assert.equal(db.docs.get('users/u1').stats.nascentSoulSpirit,0);
   const before=structuredClone(db.docs.get('users/u1'));await service.finish('u1');assert.deepEqual(db.docs.get('users/u1'),before);
  }
