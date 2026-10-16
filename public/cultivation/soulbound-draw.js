@@ -184,6 +184,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
   }
   function render() {
     if (!$('soulbound-content')) return;
+    stopCarousel(); // Data refreshes must not leave an obsolete slide transition alive.
     reconcile();
     // Switching tabs can replace the contract page while its dialog was open.
     if (previewItemId && !$('soulbound-preview')) { previewItemId = ''; previewTrigger = null; }
@@ -319,7 +320,6 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       else if (button.hasAttribute('data-sb-retry')) { const op = storedOperation(); if (op) void runOperation(op); }
       else if (button.hasAttribute('data-sb-equip')) void equipmentAction(button.dataset.sbEquip);
       else if (button.hasAttribute('data-sb-vault') || button.hasAttribute('data-sb-again')) void keepResults();
-      else if (button.hasAttribute('data-sb-refine')) document.querySelector('[data-training-tab="refinery"]')?.click();
     });
     return true;
   }
@@ -340,6 +340,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
   document.addEventListener('click', e => {
     const button = e.target.closest?.('[data-training-tab="contract"]');
     if (button && !button.disabled) activate();
+    else if (previewItemId && e.target.closest?.('[data-training-tab]')) hidePreview();
   });
   window.addEventListener('xiuxian:stats-updated', event => {
     if (event.detail?.source !== 'dismantle') return;
