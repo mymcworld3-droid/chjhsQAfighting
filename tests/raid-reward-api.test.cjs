@@ -57,17 +57,18 @@ function fakeDb(initialUser) {
     }};
 }
 
-test('current raid uses exactly six equal-table wood and iron materials with three rolls', () => {
-  assert.equal(api.RAID_MATERIAL_POOL.length,6);
+test('raid difficulty selects equal-probability tier materials with three rolls', () => {
+  assert.equal(api.RAID_MATERIAL_POOL.length,8);
   assert.equal(api.RAID_MATERIAL_ROLLS,3);
   assert.deepEqual([...api.RAID_MATERIAL_POOL],[
     'qi-spirit-iron','foundation-refined-iron','golden-purple-iron',
-    'qi-spirit-wood','foundation-century-wood','golden-lightning-wood'
+    'qi-spirit-wood','foundation-century-wood','golden-lightning-wood',
+    'nascent-star-iron','nascent-soul-wood'
   ]);
   for (let player=0;player<50;player++) {
     const drops=api.rollRaidMaterials('room_equal_probability','u'+player);
     assert.equal(Object.values(drops).reduce((sum,n)=>sum+n,0),3);
-    for (const id of Object.keys(drops)) assert.ok(api.RAID_MATERIAL_POOL.includes(id));
+    for (const id of Object.keys(drops)) assert.ok(['qi-spirit-iron','foundation-refined-iron','qi-spirit-wood','foundation-century-wood'].includes(id));
   }
   assert.deepEqual(api.rollRaidMaterials('room_x','u1'),api.rollRaidMaterials('room_x','u1'),'replay is deterministic');
 });
@@ -80,6 +81,8 @@ test('raid reward grants three material rolls plus refinement seals exactly once
   assert.equal(first.status, 'awarded');
   assert.equal(first.rewards['raid-refine-key-ii'],3);
   assert.equal(first.rewards['raid-refine-key-iii'],2);
+  assert.equal(first.rewards['nascent-soul-essence'],5);
+  assert.equal(db.docs.get('users/u1').materialSystem.inventory['nascent-soul-essence'],5);
   assert.equal(api.RAID_MATERIAL_POOL.reduce((sum,id)=>sum+(first.rewards[id]||0),0),3);
   assert.equal(first.firstVictory,true);
   assert.equal(first.dailyFirstVictory,true);
@@ -143,11 +146,11 @@ test('legacy receipt cannot restore consumed inventory',async()=>{
   assert.equal(db.docs.get('users/u1').materialSystem.inventory['raid-refine-key-ii'],0);
 });
 
-test('raid victory never grants material outside the six-item current pool',async()=>{
+test('raid victory only grants configured forge materials, seals and bound fragments',async()=>{
   const db=fakeDb({uid:'u1',stats:{totalScore:2588}});
   const validation=api.validateRaidVictory(wonRoom(),'u1');
   const result=await api.awardRaidReward(db,'u1','realm_room',validation,{fieldValue});
-  const allowed=new Set([...api.RAID_MATERIAL_POOL,'raid-refine-key-ii','raid-refine-key-iii']);
+  const allowed=new Set([...api.RAID_MATERIAL_POOL,'raid-refine-key-ii','raid-refine-key-iii','nascent-soul-essence']);
   for(const id of Object.keys(result.rewards)) assert.ok(allowed.has(id),id);
   assert.equal(result.rewards['raid-secret-realm-essence'],undefined);
   assert.equal(result.rewards['raid-shen-sword-soul'],undefined);
@@ -162,6 +165,7 @@ test('concurrent different rooms grant one first victory one daily bonus and six
   const inventory=db.docs.get('users/u1').materialSystem.inventory;
   assert.equal(inventory['raid-refine-key-ii'],5);
   assert.equal(inventory['raid-refine-key-iii'],3);
+  assert.equal(inventory['nascent-soul-essence'],10);
   assert.equal(api.RAID_MATERIAL_POOL.reduce((sum,id)=>sum+(inventory[id]||0),0),6);
 });
 
@@ -169,4 +173,29 @@ test('missing player leaves no reward receipt or partial inventory',async()=>{
   const db=fakeDb({});db.docs.delete('users/u1');
   await assert.rejects(api.awardRaidReward(db,'u1','room_missing',api.validateRaidVictory(wonRoom(),'u1'),{fieldValue}),/玩家資料不存在/);
   assert.equal(db.docs.size,0);
+});
+
+test('each tier awards 5/10/15 guaranteed Yuan Ying fragments and its exclusive realm pool', async () => {
+  const pools = {
+    normal:['qi-spirit-iron','foundation-refined-iron','qi-spirit-wood','foundation-century-wood'],
+    hard:['foundation-refined-iron','golden-purple-iron','foundation-century-wood','golden-lightning-wood'],
+    extreme:['golden-purple-iron','nascent-star-iron','golden-lightning-wood','nascent-soul-wood']
+  };
+  for (const [difficulty,essence] of [['normal',5],['hard',10],['extreme',15]]) {
+    const db = fakeDb({uid:'u1',stats:{totalScore:500},materialSystem:{inventory:{}}});
+    const validation = api.validateRaidVictory(wonRoom({difficulty}),'u1');
+    assert.equal(validation.ok,true);
+    assert.equal(validation.difficulty,difficulty);
+    const first = await api.awardRaidReward(db,'u1','tier_room_'+difficulty,validation,{fieldValue});
+    assert.equal(first.difficulty,difficulty);
+    assert.equal(first.rewards['nascent-soul-essence'],essence);
+    assert.equal(first.essenceGranted,essence);
+    const rolled = Object.keys(first.rewards).filter(id=>pools[difficulty].includes(id));
+    assert.equal(rolled.reduce((sum,id)=>sum+first.rewards[id],0),3);
+    const unexpected = Object.keys(first.rewards).filter(id=>api.RAID_MATERIAL_POOL.includes(id) && !pools[difficulty].includes(id));
+    assert.deepEqual(unexpected,[]);
+    const replay = await api.awardRaidReward(db,'u1','tier_room_'+difficulty,validation,{fieldValue});
+    assert.equal(replay.awarded,false);
+    assert.equal(db.docs.get('users/u1').materialSystem.inventory['nascent-soul-essence'],essence);
+  }
 });
