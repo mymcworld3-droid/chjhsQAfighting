@@ -1812,7 +1812,8 @@ function sanitizeQuizImageUrl(rawUrl) {
 }
 
 function formatQuizRichText(text) {
-    const source = normalizeQuizSymbols(text);
+    const decoded = window.QAMathGuard?.expandTextEscapes?.(text) ?? text;
+    const source = normalizeQuizSymbols(decoded);
     if (!source) return '';
 
     const protectedParts = [];
