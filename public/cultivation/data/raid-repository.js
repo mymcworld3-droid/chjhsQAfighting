@@ -31,7 +31,7 @@ export const raidRepository = Object.freeze({
 
   subscribeRoom(roomId, next, onError, connected) {
     const uid = getMainUser()?.uid;
-    let stopped = false, controller, retry;
+    let stopped = false, controller, retry, retryDelay = 1000;
     async function connect() {
       if (stopped) return;
       controller = new AbortController();
@@ -44,6 +44,7 @@ export const raidRepository = Object.freeze({
         });
         await readRoomEvents(response,packet => {
           if (stopped || getMainUser()?.uid !== uid) { current.abort(); return; }
+          retryDelay = 1000;
           connected?.(true);
           next(packet);
         },current.signal,() => {
@@ -57,7 +58,11 @@ export const raidRepository = Object.freeze({
       } finally {
         clearTimeout(watchdog);
         current.abort();
-        if (!stopped) { connected?.(false); retry = setTimeout(connect,500); }
+        if (!stopped) {
+          connected?.(false);
+          retry = setTimeout(connect,retryDelay);
+          retryDelay = Math.min(30000,retryDelay * 2);
+        }
       }
     }
     void connect();

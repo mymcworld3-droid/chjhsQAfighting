@@ -11,7 +11,7 @@ function ticketRuntime(player = {uid:'a',stats:{totalScore:10}}) {
   let current=player, response={ticketState:{count:1,lastGrantDate:'2026-10-13'}}, stream;
   const events=[],requests=[];
   const context={CustomEvent:class {constructor(type,init){this.type=type;this.detail=init?.detail;}},console,
-    localStorage:{setItem(){},removeItem(){}},setInterval,clearInterval,
+    localStorage:{setItem(){},removeItem(){}},setTimeout,clearTimeout,
     window:{getCurrentUserData:()=>current,dispatchEvent:event=>events.push(event)},
     raidRepository:{request:async action=>{requests.push(action);return typeof response==='function' ? response(action) : response;},
       subscribeRoom:(_id,next)=>{stream=next;return()=>{};}}};

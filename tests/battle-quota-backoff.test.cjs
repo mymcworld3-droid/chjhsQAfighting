@@ -52,6 +52,20 @@ test('slow heartbeat and lease-takeover requests cannot overlap on subsequent ti
   const lease=ctx.take(room);for(let i=0;i<100;i++) await ctx.take(room);assert.equal(transactions,1);finishTx();await lease;
 });
 
+test('waiting heartbeats update every twenty-four seconds while combat keeps its eight-second cadence', async () => {
+  let now=100000,writes=0;
+  const ctx={state:{roomId:'a',role:'host',room:{status:'waiting',host:{lastSeenAtMs:now}}},
+    roomQuota:{blocked:()=>false},WAITING_HEARTBEAT_MS:24000,playerForRole:(room,role)=>room[role],
+    updateDoc:async()=>{writes++;ctx.state.room.host.lastSeenAtMs=now;},
+    roomRef:()=>({}),nowMs:()=>now,serverTimestamp:()=>now};
+  vm.runInNewContext(section('  async function heartbeat()', '  async function claimDisconnectedOpponent')+'\nthis.beat=heartbeat;',ctx);
+  for(let i=1;i<=9;i++){now=100000+i*8000;await ctx.beat();}
+  assert.equal(writes,3,'nine waiting ticks require only three writes and their listener updates');
+  ctx.state.room.status='playing';
+  for(let i=0;i<3;i++){now+=8000;await ctx.beat();}
+  assert.equal(writes,6,'active duel heartbeat remains unchanged');
+});
+
 test('quota reconnect ignores cached data, waits for server metadata, and cannot revive a cancelled room', () => {
   let now=1000,next,error,detaches=0;const timers=new Map();let id=0;
   const ctx={state:{roomId:'a',subscriptionSerial:0,matchSerial:1,role:'host',animationTimers:[]},

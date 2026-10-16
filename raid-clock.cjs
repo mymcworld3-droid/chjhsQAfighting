@@ -116,29 +116,74 @@ async function advanceRaidRoom(db, ref, at = Date.now()) {
 }
 
 function startRaidScheduler({ resolveDb, logger = console, intervalMs = 1000,
-  setIntervalFn = setInterval, clearIntervalFn = clearInterval } = {}) {
-  let busy = false, stopped = false, lastError = '';
+  setIntervalFn = setInterval, clearIntervalFn = clearInterval, now = Date.now } = {}) {
+  let busy = false, stopped = false, lastError = '', unsubscribe = null;
+  let retryAt = 0, failures = 0, generation = 0;
+  const rooms = new Map();
+  function report(error) {
+    const message = String(error?.message || error);
+    if (message !== lastError) logger.error('[Raid clock]', message);
+    lastError = message;
+  }
+  function failed(error) {
+    generation++;
+    unsubscribe?.(); unsubscribe = null;
+    rooms.clear();
+    const quota = ['8', 'resource-exhausted'].includes(String(error?.code).replace(/^firestore\//, ''));
+    retryAt = now() + Math.min(1800000, (quota ? 60000 : 5000) * 2 ** Math.min(failures++, 9));
+    report(error);
+  }
+  function watch(db) {
+    if (unsubscribe || now() < retryAt) return;
+    const serial = ++generation;
+    const current = () => !stopped && generation === serial;
+    const cancel = db.collection('raidRooms').where('status', 'in', ['waiting', 'active']).onSnapshot(snap => {
+      if (!current()) return;
+      // The listener pays for changed documents rather than scanning the same
+      // rooms every second. Cached data only schedules work; transactions below
+      // always re-read the authoritative document before applying any damage.
+      rooms.clear();
+      for (const doc of snap.docs) rooms.set(doc.id, { ref:doc.ref, room:doc.data() });
+      failures = 0; retryAt = 0;
+      void tick();
+    }, error => { if (current()) failed(error); });
+    if (current()) unsubscribe = cancel;
+    else cancel();
+  }
   async function tick() {
     if (busy || stopped) return;
     busy = true;
     try {
       const db = resolveDb();
-      const snap = await db.collection('raidRooms').where('status', 'in', ['waiting', 'active']).get();
+      watch(db);
+      const at = now();
       // Settle rooms independently so one bad document cannot stall every team.
-      const results = await Promise.allSettled(snap.docs.map(doc => advanceRaidRoom(db, doc.ref)));
-      const failed = results.find(result => result.status === 'rejected');
-      if (failed) throw failed.reason;
-      lastError = '';
+      // A timer tick without a due transition makes zero Firestore requests.
+      const due = [...rooms.entries()].filter(([id, entry]) => advanceRaidClock(entry.room, id, at));
+      const results = await Promise.allSettled(due.map(async ([id, entry]) => {
+        const room = await advanceRaidRoom(db, entry.ref, at);
+        // A newer listener update must win over an older transaction response.
+        if (!stopped && rooms.get(id) === entry) {
+          if (room && ['waiting', 'active'].includes(room.status)) rooms.set(id, {ref:entry.ref, room});
+          else rooms.delete(id);
+        }
+      }));
+      const failure = results.find(result => result.status === 'rejected');
+      if (failure) throw failure.reason;
+      if (unsubscribe) lastError = '';
     } catch (error) {
-      const message = String(error?.message || error);
-      if (message !== lastError) logger.error('[Raid clock]', message);
-      lastError = message;
+      // Also back off failed transactions; quota exhaustion must not trigger
+      // another read every second while the listener still has cached data.
+      failed(error);
     } finally { busy = false; }
   }
   const timer = setIntervalFn(() => void tick(), intervalMs);
   timer?.unref?.();
   void tick();
-  return { tick, stop() { stopped = true; clearIntervalFn(timer); } };
+  return { tick, stop() {
+    stopped = true; generation++; clearIntervalFn(timer);
+    unsubscribe?.(); unsubscribe = null; rooms.clear();
+  } };
 }
 
 module.exports = { STALE_MS, BOSS_ACTION_INTERVAL_MS, ROOM_TTL_MS, onlineAt, advanceRaidClock, advanceRaidRoom, startRaidScheduler };

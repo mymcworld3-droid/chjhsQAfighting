@@ -58,8 +58,8 @@ function clientFixture() {
   let next, failure, connected, cancelled=0, result;
   const requests=[], timers=new Map();let timerId=0;
   const context={window:{getCurrentUserData:()=>null},localStorage:{setItem(){},removeItem(){}},
-    setInterval(fn,ms){const id=++timerId;timers.set(id,{fn,ms});return id;},clearInterval:id=>timers.delete(id),
-    raidRepository:{request:async action=>{requests.push(action);return result;},
+    setTimeout(fn,ms){const id=++timerId;timers.set(id,{fn,ms});return id;},clearTimeout:id=>timers.delete(id),
+    raidRepository:{request:async action=>{requests.push(action);if(result instanceof Error)throw result;return result;},
       subscribeRoom(id,n,f,c){next=n;failure=f;connected=c;return()=>cancelled++;}}};
   const source=read('public/cultivation/raid-room.js').replace(/^import .*;\n/gm,'').replace(/^export /gm,'');
   vm.runInNewContext(source+'\nthis.operations={subscribeRaidRoom,setRaidReady,startRaidRoom};',context);
@@ -79,14 +79,61 @@ test('initial and operation responses update immediately; stale HTTP cannot roll
   stop();f.emit({room:room(5)});assert.equal(seen.at(-1).revision,4);assert.equal(f.cancelled(),1);
 });
 
-test('disconnected stream gets fast fallback polling and recovers without leaving an extra poller',async()=>{
+test('disconnected stream checks immediately then every two seconds and recovery removes the poller',async()=>{
   const f=clientFixture(), seen=[];
   const stop=f.api.subscribeRaidRoom('room12345',value=>seen.push(value),()=>{},{room:room(1)});
   f.setResult({room:room(2)});f.connection(false);await flush();
-  assert.equal(seen.at(-1).revision,2);assert.equal(f.timers.size,1);assert.equal([...f.timers.values()][0].ms,500);
+  assert.equal(seen.at(-1).revision,2);assert.equal(f.timers.size,1);assert.equal([...f.timers.values()][0].ms,2000);
   f.connection(true);assert.equal(f.timers.size,0);
   f.failure({status:403,message:'removed'});assert.equal(seen.at(-1),null);assert.equal(f.cancelled(),1);
   stop();
+});
+
+test('failed fallback reads back off, repeated disconnect notices do not add requests, and slow recovery leaves no timer',async()=>{
+  const f=clientFixture();
+  const stop=f.api.subscribeRaidRoom('room12345',()=>{},()=>{},{room:room(1)});
+  f.setResult(Object.assign(Error('quota'),{status:503}));
+  f.connection(false);await flush();
+  const delays=[];
+  for(let i=0;i<5;i++){
+    const [id,timer]=[...f.timers.entries()][0];delays.push(timer.ms);
+    const before=f.requests.length;f.connection(false);await flush();assert.equal(f.requests.length,before);
+    f.timers.delete(id);timer.fn();await flush();
+  }
+  assert.deepEqual(delays,[4000,8000,16000,30000,30000]);
+  f.connection(true);assert.equal(f.timers.size,0);stop();
+});
+
+test('stream recovery during an in-flight fallback read prevents any later polling timer',async()=>{
+  const f=clientFixture();let release;
+  f.setResult(new Promise(resolve=>{release=resolve;}));
+  const stop=f.api.subscribeRaidRoom('room12345',()=>{},()=>{},{room:room(1)});
+  f.connection(false);await flush();
+  assert.equal(f.requests.length,1);assert.equal(f.timers.size,0);
+  f.connection(true);release({room:room(2)});await flush();
+  assert.equal(f.timers.size,0);stop();
+});
+
+test('room stream reconnection backs off to thirty seconds and resets after a real packet',async()=>{
+  const timers=new Map();let id=0,calls=0,available=false,finish;
+  const source=read('public/cultivation/data/raid-repository.js').replace(/^import .*;\n/gm,'').replace(/^export /gm,'');
+  const context={AbortController,getMainUser:()=>({uid:'a'}),
+    setTimeout(fn,ms){timers.set(++id,{fn,ms});return id;},clearTimeout:id=>timers.delete(id),
+    authenticatedMainFetch:async()=>{calls++;if(!available)throw Error('unavailable');return {};},
+    readRoomEvents:async(_,next)=>{next({room:room(1)});await new Promise(resolve=>{finish=resolve;});}};
+  vm.runInNewContext(source+'\nthis.repo=raidRepository;',context);
+  const stop=context.repo.subscribeRoom('room12345',()=>{},()=>{},()=>{});
+  await flush();
+  const delays=[];
+  for(let i=0;i<7;i++){
+    const [key,timer]=[...timers.entries()][0];delays.push(timer.ms);
+    timers.delete(key);timer.fn();await flush();
+  }
+  assert.deepEqual(delays,[1000,2000,4000,8000,16000,30000,30000]);assert.equal(calls,8);
+  available=true;
+  const [key,timer]=[...timers.entries()][0];timers.delete(key);timer.fn();await flush();
+  finish();await flush();assert.equal([...timers.values()][0].ms,1000);
+  stop();assert.equal(timers.size,0);
 });
 
 test('all party ticket documents are read concurrently and deducted atomically',async()=>{

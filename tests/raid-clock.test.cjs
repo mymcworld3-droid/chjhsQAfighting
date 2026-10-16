@@ -139,20 +139,19 @@ test('concurrent server ticks serialize through transactions and settle once', a
   assert.equal(db.writes(), 1);
 });
 
-test('background scheduler stops without overlapping scans', async () => {
-  let callback, release, scans = 0, cleared = false;
+test('background scheduler reuses one live query and stops without further reads', async () => {
+  let callback, next, watches = 0, cleared = false, cancelled = 0;
   const errors = [];
-  const db = {collection:()=>({where:()=>({get:async()=>{
-    scans++; await new Promise(resolve=>{release=resolve;}); return {docs:[]};
+  const db = {collection:()=>({where:()=>({onSnapshot(fn){
+    watches++; next=fn; fn({docs:[]}); return ()=>cancelled++;
   }})})};
   const scheduler = startRaidScheduler({resolveDb:()=>db, logger:{error:(...args)=>errors.push(args)},
     setIntervalFn(fn){callback=fn;return{unref(){}};},clearIntervalFn(){cleared=true;}});
-  await Promise.resolve();
-  await scheduler.tick();
-  assert.equal(scans, 1);
-  release(); await new Promise(resolve=>setImmediate(resolve));
+  for (let i=0;i<60;i++) await scheduler.tick();
+  assert.equal(watches, 1);
   scheduler.stop(); callback(); await scheduler.tick();
-  assert.equal(cleared, true); assert.equal(scans, 1); assert.deepEqual(errors, []);
+  next({docs:[{data(){throw Error('late callbacks must be ignored');}}]});
+  assert.equal(cleared, true); assert.equal(watches, 1); assert.equal(cancelled,1); assert.deepEqual(errors, []);
 });
 
 test('a failed room does not prevent a different room from settling', async () => {
@@ -161,7 +160,9 @@ test('a failed room does not prevent a different room from settling', async () =
   const errors = [];
   const db = {runTransaction:fn=>good.runTransaction(tx=>fn({
     ...tx, get:ref=>ref.id==='broken'?Promise.reject(new Error('broken room')):tx.get(ref)
-  })), collection:()=>({where:()=>({get:async()=>({docs:[{ref:failedRef},{ref:good.ref}]})})})};
+  })), collection:()=>({where:()=>({onSnapshot(next){
+    next({docs:[failedRef,good.ref].map(ref=>({id:ref.id,ref,data:()=>structuredClone(good.read())}))});return()=>{};
+  }})})};
   // Keep the fake room near current time so scheduler time is deterministic.
   const started = Date.now()-18001;
   Object.assign(good.read(), {startedAtMs:started});
@@ -173,4 +174,50 @@ test('a failed room does not prevent a different room from settling', async () =
   assert.equal(good.read().bossActionCount, 1);
   assert.equal(good.read().members.a.hp, 936);
   assert.equal(errors.length, 1);
+});
+
+function schedulerFixture(initial = room({serverDrivenBoss:true})) {
+  const data = dbFor(initial), errors = [];
+  let at = START, next, failure, watches = 0, reads = 0, cancelled = 0;
+  const db = {runTransaction(fn){reads++;return data.runTransaction(fn);},
+    collection:()=>({where:()=>({onSnapshot(n,e){next=n;failure=e;watches++;return()=>cancelled++;}})})};
+  const scheduler = startRaidScheduler({resolveDb:()=>db,now:()=>at,logger:{error:(...args)=>errors.push(args)},
+    setIntervalFn(){return{unref(){}};},clearIntervalFn(){}});
+  return {...scheduler, data, errors, time:value=>{at=value;},
+    emit(value=data.read()){next({docs:value?[{id:data.ref.id,ref:data.ref,data:()=>structuredClone(value)}]:[]});},
+    fail:error=>failure(error),counts:()=>({reads,watches,cancelled})};
+}
+const flush = () => new Promise(resolve=>setImmediate(resolve));
+
+test('idle ticks make zero reads; due Boss action revalidates once and does not repeat', async () => {
+  const f=schedulerFixture(); f.emit(); await flush();
+  for(let i=1;i<18;i++){f.time(START+i*1000);await f.tick();}
+  assert.equal(f.counts().reads,0);
+  f.time(START+18000); await f.tick();
+  assert.equal(f.data.read().bossActionCount,1);assert.equal(f.counts().reads,1);
+  await f.tick();assert.equal(f.counts().reads,1,'transaction result advances the local schedule before the next push');
+  f.emit(null);f.time(START+36000);await f.tick();assert.equal(f.counts().reads,1,'removed rooms are not scheduled');
+  f.stop();
+});
+
+test('a stale schedule cannot expire a member whose heartbeat was refreshed on the server', async () => {
+  const f=schedulerFixture(room({status:'waiting',serverDrivenBoss:true}));f.emit();await flush();
+  for(const m of Object.values(f.data.read().members))m.heartbeatAtMs=START+30000;
+  f.time(START+46000);await f.tick();
+  assert.equal(f.data.read().status,'waiting');assert.equal(f.data.read().members.a.online,true);
+  assert.equal(f.data.writes(),0);assert.equal(f.counts().reads,1);
+  await f.tick();assert.equal(f.counts().reads,1);
+  f.stop();
+});
+
+test('quota errors discard stale room schedules and back off query reconnection', async () => {
+  const f=schedulerFixture();f.emit();await flush();
+  f.fail(Object.assign(Error('Quota exceeded'),{code:8}));
+  for(let i=1;i<60;i++){f.time(START+i*1000);await f.tick();}
+  assert.deepEqual(f.counts(),{reads:0,watches:1,cancelled:1});
+  f.time(START+60000);await f.tick();assert.equal(f.counts().watches,2);
+  f.fail(Object.assign(Error('Quota exceeded'),{code:8}));
+  f.time(START+179999);await f.tick();assert.equal(f.counts().watches,2);
+  f.time(START+180000);await f.tick();assert.equal(f.counts().watches,3);
+  f.stop();
 });
