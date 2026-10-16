@@ -25,6 +25,11 @@ export const featureReady = (async () => {
   const ROOM_COLLECTION = 'rooms';
   const HEARTBEAT_MS = 8000;
   const PREPARE_LEASE_MS = 7000;
+  // A validated AI question may need several upstream attempts. Never let the
+  // opponent steal a live generation job every seven seconds.
+  const ACTIVE_QUESTION_LEASE_MS = 65000;
+  const QUIZ_REQUEST_TIMEOUT_MS = 58000;
+  const EMPTY_QUESTION_REPAIR_MS = 2500;
   const MATCH_RECONCILE_MS = 1100;
   const MATCH_SCAN_LIMIT = 80;
   const MATCH_SCAN_MAX_PAGES = 4;
@@ -78,6 +83,10 @@ export const featureReady = (async () => {
     introAdvancing: false,
     disconnectClaimRound: null,
     renderedQuestionId: null,
+    missingQuestionRound: null,
+    missingQuestionSinceMs: 0,
+    repairingQuestionRound: null,
+    repairRetryAfterMs: 0,
     pendingAnswer: null,
     quizScrollSerial: 0,
     quizFooterScrollKey: null,
@@ -511,6 +520,22 @@ export const featureReady = (async () => {
       reasoning_steps: Math.max(1, Math.min(6, Number(source.reasoning_steps) || 1)) };
   }
 
+  function usableQuestion(question) {
+    return !!question && typeof question.id === 'string' && !!question.id &&
+      typeof question.q === 'string' && question.q.trim().length >= 5 &&
+      Array.isArray(question.opts) && question.opts.length === 4 &&
+      question.opts.every(option => typeof option === 'string' && !!option.trim()) &&
+      Number.isInteger(Number(question.ans)) && Number(question.ans) >= 0 &&
+      Number(question.ans) < 4;
+  }
+
+  function questionLeaseExpired(room, ownerUid, claimedAtMs) {
+    const owner = [room?.host, room?.guest].find(player => player?.uid === ownerUid);
+    const ownerOffline = !owner || nowMs() - Number(owner.lastSeenAtMs || 0) >= BATTLE_V2.disconnectTtlMs;
+    return nowMs() - Number(claimedAtMs || 0) >=
+      (ownerOffline ? PREPARE_LEASE_MS : ACTIVE_QUESTION_LEASE_MS);
+  }
+
   async function generateQuestion(room, round) {
     const scope = room.knowledgeScope || resolveBattleKnowledge(room.host?.knowledge, room.guest?.knowledge);
     const selected = pickBattleKnowledge(scope, round);
@@ -537,10 +562,12 @@ export const featureReady = (async () => {
     }));
     const request = { ...selected, rank: Math.min(Number(room.host?.rankLevel) || 0, Number(room.guest?.rankLevel) || 0),
       avoidQuestions, avoidQuestionMeta, quizMode: 'battle-fast' };
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), QUIZ_REQUEST_TIMEOUT_MS);
     try {
       const response = await fetch('/api/generate-quiz', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(request)
+        body: JSON.stringify(request), signal: controller.signal
       });
       if (!response.ok) throw new Error('quiz api ' + response.status);
       const body = await response.json();
@@ -553,6 +580,8 @@ export const featureReady = (async () => {
       console.warn('[Battle v2] question generation unavailable; retaining scope:', error);
       toast('AI 出題暫時失敗，正依原範圍重新出題。');
       throw error;
+    } finally {
+      clearTimeout(timeout);
     }
   }
 
@@ -574,7 +603,7 @@ export const featureReady = (async () => {
 
     if (room.prefetchOwnerUid !== uid) {
       const claimedAt = Number(room.prefetchClaimedAtMs || 0);
-      if (!room.prefetchOwnerUid || nowMs() - claimedAt >= PREPARE_LEASE_MS) {
+      if (!room.prefetchOwnerUid || questionLeaseExpired(room, room.prefetchOwnerUid, claimedAt)) {
         try {
           await runTransaction(db(), async (tx) => {
             const ref = roomRef();
@@ -583,7 +612,7 @@ export const featureReady = (async () => {
             const fresh = snap.data();
             if (!canPrefetchRound(fresh, round) || (Number(fresh.prefetchedRound) === round && fresh.prefetchedQuestion)) return;
             const freshClaimedAt = Number(fresh.prefetchClaimedAtMs || 0);
-            if (fresh.prefetchOwnerUid && fresh.prefetchOwnerUid !== uid && nowMs() - freshClaimedAt < PREPARE_LEASE_MS) return;
+            if (fresh.prefetchOwnerUid && fresh.prefetchOwnerUid !== uid && !questionLeaseExpired(fresh, fresh.prefetchOwnerUid, freshClaimedAt)) return;
             tx.update(ref, { prefetchOwnerUid: uid, prefetchClaimedAtMs: nowMs(), updatedAt: serverTimestamp() });
           });
         } catch (_) {}
@@ -926,6 +955,8 @@ export const featureReady = (async () => {
     state.settlingRound = state.timeoutRound = state.preparingRound = state.prefetchingRound = state.advancingRound = state.disconnectClaimRound = null;
     state.prepareRetryAfterMs = state.prefetchRetryAfterMs = 0;
     state.introAdvancing = false; state.renderedQuestionId = null; state.pendingAnswer = null;
+    state.missingQuestionRound = state.repairingQuestionRound = null;
+    state.missingQuestionSinceMs = state.repairRetryAfterMs = 0;
     state.quizScrollSerial += 1; state.quizFooterScrollKey = null; state.quizMathReady = null;
     state.seenActivationKeys.clear(); state.seenSettlementKey = null; state.resultRecordedRoom = null;
     state.reviewedRound = state.reviewSubmittingRound = state.animationFinishedKey = null;
@@ -1535,11 +1566,13 @@ export const featureReady = (async () => {
   }
 
   async function takeoverQuestionLease(room) {
-    if (room.status !== 'preparing' || room.currentQuestion || room.questionOwnerUid === me()?.uid || nowMs() - Number(room.questionClaimedAtMs || 0) < PREPARE_LEASE_MS) return;
+    if (room.status !== 'preparing' || room.currentQuestion || room.questionOwnerUid === me()?.uid ||
+        (room.questionOwnerUid && !questionLeaseExpired(room, room.questionOwnerUid, room.questionClaimedAtMs))) return;
     try {
       await runTransaction(db(), async (tx) => {
         const ref = roomRef(); const snap = await tx.get(ref); if (!snap.exists()) return; const fresh = snap.data();
-        if (fresh.status !== 'preparing' || fresh.currentQuestion || nowMs() - Number(fresh.questionClaimedAtMs || 0) < PREPARE_LEASE_MS) return;
+        if (fresh.status !== 'preparing' || fresh.currentQuestion ||
+            (fresh.questionOwnerUid && !questionLeaseExpired(fresh, fresh.questionOwnerUid, fresh.questionClaimedAtMs))) return;
         tx.update(ref, { questionOwnerUid: me().uid, questionClaimedAtMs: nowMs(), updatedAt: serverTimestamp() });
       });
     } catch (_) {}
