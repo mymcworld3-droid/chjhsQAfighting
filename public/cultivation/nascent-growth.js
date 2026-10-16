@@ -8,13 +8,13 @@
   const ITEM = Object.freeze({id:ITEM_ID,name:'元嬰碎精',icon:'嬰',realm:'元嬰',category:'元嬰養成',
     description:'溫養元嬰各分支的碎精。元嬰境界團本答對每題 +1、每日閉關全對 +3。不可交易或用於煉器。',nascentMaterial:true,buyGold:0,sellGold:0});
   const BRANCHES = Object.freeze([
-    {id:'cultivation',name:'修為',icon:'fa-book-open',maxBonus:10,unit:'修為',description:'升滿後問道、鬥法及團本答對、閉關全對與洞天通關的元嬰修為加成為 +10。'},
-    {id:'attack',name:'攻擊',icon:'fa-khanda',maxBonus:70,unit:'攻擊',description:'升滿後增加 70 攻擊。'},
-    {id:'vitality',name:'生命',icon:'fa-heart',maxBonus:500,unit:'生命',description:'升滿後增加 500 生命上限。'},
+    {id:'cultivation',name:'修為',icon:'fa-book-open',maxBonus:5,unit:'修為',description:'升滿後問道、鬥法及團本答對、閉關全對與洞天通關的元嬰修為加成為 +5。'},
+    {id:'attack',name:'攻擊',icon:'fa-khanda',maxBonus:35,unit:'攻擊',description:'升滿後增加 35 攻擊。'},
+    {id:'vitality',name:'生命',icon:'fa-heart',maxBonus:250,unit:'生命',description:'升滿後增加 250 生命上限。'},
     {id:'core',name:'金丹屬性',icon:'fa-circle-nodes',maxBonus:100,unit:'%',description:'逐級強化已調御金丹對應的元嬰丹性能力，升滿後達到完整效果。'}
   ].map(Object.freeze));
-  const SPECIAL_BRANCHES = [{id:'coreChance',name:'金丹機率',icon:'fa-dice',maxBonus:15,unit:'%',description:'逐級增加爆擊或連擊機率，依金丹品級升滿增加 10–15%。'},
-    {id:'coreDamage',name:'金丹傷害',icon:'fa-burst',maxBonus:100,unit:'%',description:'逐級增加爆擊或連擊傷害。爆擊升滿增加 50 個百分點，連擊升滿增加 30 個百分點。'}].map(Object.freeze);
+  const SPECIAL_BRANCHES = [{id:'coreChance',name:'金丹機率',icon:'fa-dice',maxBonus:7.5,unit:'%',description:'逐級增加爆擊或連擊機率，依金丹品級升滿增加 5–7.5%。'},
+    {id:'coreDamage',name:'金丹傷害',icon:'fa-burst',maxBonus:50,unit:'%',description:'逐級增加爆擊或連擊傷害。爆擊升滿增加 25 個百分點，連擊升滿增加 15 個百分點。'}].map(Object.freeze);
   // 百分比為對應神通的攻擊力係數；真傷直接使用戰鬥結算的固定傷害。
   const CORE_FACTORS = Object.freeze({ocean:2,taichu:1.2,pojing:3.8,xingchen:4,thunder:1,reverse:1.8});
   const CORE_ICONS = Object.freeze({ocean:'fa-water',taichu:'fa-heart-circle-plus',pojing:'fa-skull',
@@ -24,6 +24,7 @@
     const rules = talents || root.QASoulTalents;
     const rank = Math.min(CAP,count(level));
     const talent = rules?.snapshot(core?.type,core?.grade,{leftTop:rank,leftFarBottom:rank,leftFinal:rank});
+    if(talent) talent.powerScale=.5;
     if(core?.type === 'wugou') return rules?.trueDamage(talent) || 0;
     return roundBonus((rules?.strength(talent) || 0) * (CORE_FACTORS[core?.type] || 0) * 100);
   }
@@ -33,8 +34,8 @@
       const combo = core.type === 'sword';
       const quality = (9-Math.min(9,Math.max(1,count(core.grade)||9)))/8;
       return [...base,
-        {...SPECIAL_BRANCHES[0],name:combo?'連擊率':'爆擊率',maxBonus:10+5*quality},
-        {...SPECIAL_BRANCHES[1],name:combo?'連擊傷害':'爆擊傷害',maxBonus:combo?30:50}];
+        {...SPECIAL_BRANCHES[0],name:combo?'連擊率':'爆擊率',maxBonus:5+2.5*quality},
+        {...SPECIAL_BRANCHES[1],name:combo?'連擊傷害':'爆擊傷害',maxBonus:combo?15:25}];
     }
     const rules = talents || root.QASoulTalents;
     return [...base,{...BRANCHES[3],name:rules?.TYPES[core?.type]?.trait || '丹性',
@@ -91,17 +92,17 @@
     if(accessScore(player)<THRESHOLD||player?.cultivationTraining?.coreEnabled===false||!core?.type)return null;
     const levels=normalize(player.nascentSoulGrowth).branches,n=levels.core;
     const talent=(talents || root.QASoulTalents)?.snapshot(core.type,core.grade,{leftTop:n,leftFarBottom:n,leftFinal:n})||null;
-    if(talent)talent.comboMode=true;
+    if(talent){talent.comboMode=true;talent.powerScale=.5;}
     const quality=(9-Math.min(9,Math.max(1,count(core.grade)||9)))/8;
-    const chance=levels.coreChance/10*(.10+.05*quality);
-    return {type:core.type,attackFlat:levels.attack*7,maxHpFlat:levels.vitality*50,
+    const chance=levels.coreChance/10*(.05+.025*quality);
+    return {type:core.type,attackFlat:Math.round(levels.attack*3.5),maxHpFlat:levels.vitality*25,
       bonusDamage:0,reductionFlat:0,coreHeal:0,talent,
-      comboChance:core.type==='sword'?chance:0,comboDamageBonus:core.type==='sword'?levels.coreDamage*.03:0,
-      critChance:core.type==='ningxin'?chance:0,critDamageBonus:core.type==='ningxin'?levels.coreDamage*.05:0};
+      comboChance:core.type==='sword'?chance:0,comboDamageBonus:core.type==='sword'?levels.coreDamage*.015:0,
+      critChance:core.type==='ningxin'?chance:0,critDamageBonus:core.type==='ningxin'?levels.coreDamage*.025:0};
   }
   function cultivation(player,source) {
     if(!['solo','daily','cave','raid','battle'].includes(source)||!bonuses(player,player?.cultivationTraining?.equippedCore))return 0;
-    return normalize(player.nascentSoulGrowth).branches.cultivation;
+    return Math.round(normalize(player.nascentSoulGrowth).branches.cultivation/2);
   }
   function award(player,amount) {
     const state=prepare(player);state.inventory[ITEM_ID]+=count(amount);state.fragments+=count(amount);return state;
