@@ -74,7 +74,7 @@
   const BASE_STATS = new Set(['equip_attack_flat','equip_attack_percent','equip_hp_flat','equip_hp_percent','timed_attack_multiplier']);
   function refinementCap(type, ordinaryCap, soulbound = false) {
     if (!soulbound || BASE_STATS.has(type)) return ordinaryCap;
-    const cap = ordinaryCap * REFINEMENT_MULTIPLIER;
+    const cap = Number((ordinaryCap * REFINEMENT_MULTIPLIER).toFixed(4));
     if (type.endsWith('_chance')) return Math.min(1, cap);
     if (['equip_damage_reduction_percent','equip_low_hp_reduction_percent','equip_first_hit_reduction_percent','equip_damage_cap_percent'].includes(type)) return Math.min(1, cap);
     return cap;
