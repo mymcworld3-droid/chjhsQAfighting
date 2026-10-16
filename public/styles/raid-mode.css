@@ -304,3 +304,18 @@ body.raid-page-open #page-raid.active-page>#raid-result:not(.hidden){
   box-shadow: 0 0 7px #f0524966; pointer-events: none;
 }
 .raid-global-ticket .raid-global-ticket-dot[hidden] { display: none; }
+
+/* 清霜三難度：固定在隊伍建立時，避免選項擠壓主視覺。 */
+.raid-difficulty-picker{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;width:100%;margin:0 0 10px}
+.raid-difficulty-picker button{min-width:0;display:grid;gap:3px;padding:9px 6px;border:1px solid rgba(231,199,121,.2);border-radius:10px;background:rgba(12,13,16,.82);color:#d7c9a6;text-align:center;cursor:pointer}
+.raid-difficulty-picker button.active{border-color:#e5c977;background:rgba(145,104,36,.23);box-shadow:inset 0 0 0 1px rgba(231,199,121,.13)}
+.raid-difficulty-picker button.locked:not(.active){opacity:.64}
+.raid-difficulty-picker strong{font-size:12px;letter-spacing:.08em}
+.raid-difficulty-picker small{font-size:9px;line-height:1.45;color:#aaa08c}
+.raid-difficulty-picker button:focus-visible{outline:2px solid #e5c977;outline-offset:2px}
+@media(max-width:640px){
+ .raid-difficulty-picker{gap:4px}
+ .raid-difficulty-picker button{padding:7px 3px}
+ .raid-difficulty-picker strong{font-size:11px}
+ .raid-difficulty-picker small{font-size:8px}
+}
