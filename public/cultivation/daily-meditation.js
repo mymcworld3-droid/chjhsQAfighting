@@ -271,6 +271,10 @@ import { buildMeditationMistakePool, chooseMeditationMistakes } from './daily-me
     session.answered += 1;
     if (correct) session.correct += 1;
     session.answers.push({ q: q.q, options: q.opts.slice(), correctIdx: q.ans, userIdx: choice, isCorrect: correct, exp: q.exp || '', source: session.question.source || '昔日錯題' });
+    // A finished selection is counted once per daily meditation question.
+    void window.trackPlayerAnalytics?.('answer_completed', {
+      mode: 'meditation', eventId: 'meditation_' + session.date + '_' + session.answered
+    });
     node('dm-options').querySelectorAll('button').forEach((button, i) => {
       button.disabled = true;
       if (i === q.ans) button.classList.add('dm-correct');
