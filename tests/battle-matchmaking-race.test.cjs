@@ -24,7 +24,7 @@ function bus(initial){
 function client(shared,uid,roomId){
  const messages=[],pages=[],staleCallbacks=[];
  const ctx=vm.createContext({console:{warn(){},error(){}},uid,time:10000,BATTLE_V2:{modeVersion:2,waitingRoomTtlMs:90000,maxRounds:15},
-  ROOM_COLLECTION:'rooms',MATCH_SCAN_LIMIT:80,MATCH_SCAN_MAX_PAGES:4,MATCH_RECONCILE_MS:15000,INTRO_DURATION_MS:4800,ANSWER_WINDOW_MS:25000,HEARTBEAT_MS:8000,
+  ROOM_COLLECTION:'rooms',MATCH_SCAN_LIMIT:80,MATCH_SCAN_MAX_PAGES:4,MATCH_RECONCILE_MS:5000,INTRO_DURATION_MS:4800,ANSWER_WINDOW_MS:25000,HEARTBEAT_MS:8000,
   roomQuota:{blocked:()=>false,success(){},failure(){}},
   cultivationRules:{VERSION:1},battleDb:shared,playerRepository:{currentUser:()=>({uid:ctx.uid})},
   doc:(_,collection,id)=>({id}),collection:()=>({}),query:(...args)=>({cursor:args.find(arg=>arg?.cursor)?.cursor}),where:()=>({}),limit:()=>({}),startAfter:snap=>({cursor:snap.id}),

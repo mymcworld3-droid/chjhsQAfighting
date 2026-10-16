@@ -54,8 +54,8 @@ test('expensive full-user percentile scans require an explicit click and share a
   assert.match(section, /renderSerial !== percentileRenderSerial/);
 });
 
-test('waiting-room matchmaking uses a 15-second fallback while preserving immediate initial search and room listener', () => {
-  assert.match(battle, /MATCH_RECONCILE_MS = 15000/);
+test('waiting-room matchmaking uses a 5-second fallback while preserving immediate initial search and room listener', () => {
+  assert.match(battle, /MATCH_RECONCILE_MS = 5000/);
   assert.match(battle, /await findAndClaimRoom\(myData\)/);
   assert.match(battle, /onSnapshot\(roomRef\(roomId\), \{ includeMetadataChanges: true \}, snap =>/);
   assert.match(battle, /if \(state\.roomId && state\.role === 'host' && state\.room\?\.status === 'waiting'\) scheduleReconcile\(\)/);
