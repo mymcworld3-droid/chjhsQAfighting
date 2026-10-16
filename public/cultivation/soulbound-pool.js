@@ -3,6 +3,9 @@
   'use strict';
   const VERSION = 'soulbound-v3-fragments20';
   const PITY = 20, WEAPON_RATE = .02, FRAGMENT_MIN = 20, FRAGMENT_MAX = 40;
+  const REFINEMENT_MULTIPLIER = 1.2;
+  // A deliberate choice of archetype costs roughly twenty average fragment drops.
+  const redemptionCost = rank => 600 + Math.max(0, rank) * 120;
   const REALMS = Object.freeze([
     ['golden-core', '金丹', 28], ['nascent-soul', '元嬰', 68], ['spirit', '化神', 188],
     ['void', '煉虛', 428], ['fusion', '合體', 788], ['mahayana', '渡劫', 1268],
@@ -71,7 +74,7 @@
   const BASE_STATS = new Set(['equip_attack_flat','equip_attack_percent','equip_hp_flat','equip_hp_percent','timed_attack_multiplier']);
   function refinementCap(type, ordinaryCap, soulbound = false) {
     if (!soulbound || BASE_STATS.has(type)) return ordinaryCap;
-    const cap = ordinaryCap * 4;
+    const cap = ordinaryCap * REFINEMENT_MULTIPLIER;
     if (type.endsWith('_chance')) return Math.min(1, cap);
     if (['equip_damage_reduction_percent','equip_low_hp_reduction_percent','equip_first_hit_reduction_percent','equip_damage_cap_percent'].includes(type)) return Math.min(1, cap);
     return cap;
@@ -80,13 +83,13 @@
     if (!soulbound || !range || BASE_STATS.has(range.type) || !['value','multiplier'].includes(range.field)) return range;
     const round = n => Number(n.toFixed(4));
     if (range.type === 'equip_damage_cap_percent') {
-      return { ...range, min:round(range.min / 4), max:round(range.max / 4) };
+      return { ...range, min:round(range.min / REFINEMENT_MULTIPLIER), max:round(range.max / REFINEMENT_MULTIPLIER) };
     }
     const cap = range.type.endsWith('_chance') || ['equip_damage_reduction_percent','equip_low_hp_reduction_percent','equip_first_hit_reduction_percent'].includes(range.type) ? 1 : Infinity;
-    const scale = n => Math.min(cap, round(range.field === 'multiplier' ? 1 + (n - 1) * 4 : n * 4));
+    const scale = n => Math.min(cap, round(range.field === 'multiplier' ? 1 + (n - 1) * REFINEMENT_MULTIPLIER : n * REFINEMENT_MULTIPLIER));
     return { ...range, min:scale(range.min), max:scale(range.max) };
   }
-  const api = Object.freeze({ VERSION, PITY, WEAPON_RATE, FRAGMENT_MIN, FRAGMENT_MAX, REALMS, TYPES, ITEMS, get, rankFor, price, cost, candidates, roll, valueText, REFINEMENT_VERSION, refinementCap, refinementRange, refinementCompatible });
+  const api = Object.freeze({ VERSION, PITY, WEAPON_RATE, FRAGMENT_MIN, FRAGMENT_MAX, REALMS, TYPES, ITEMS, get, rankFor, price, cost, candidates, roll, valueText, REFINEMENT_VERSION, REFINEMENT_MULTIPLIER, redemptionCost, refinementCap, refinementRange, refinementCompatible });
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.QASoulboundPool = api;
 })(globalThis);
