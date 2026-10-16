@@ -410,7 +410,9 @@ function sanitizeValue(type, value, order, stage = 1, effectBoundsV1 = {}, effec
   const proposed = Number(value);
   const chosen = Number.isFinite(proposed) ? proposed : (range.min + range.max) / 2;
   const bounded = clamp(chosen, range.min, range.max);
-  return FLAT_VALUE_TYPES.has(type) ? Math.round(bounded) : roundRange(bounded);
+  return FLAT_VALUE_TYPES.has(type)
+    ? Math.min(Math.floor(range.max), Math.max(Math.ceil(range.min), Math.round(bounded)))
+    : roundRange(bounded);
 }
 function sanitizeEffect(raw, order, stage = 1, effectBoundsV1 = {}, effectBoundsV2 = {}, ingredientCount = 3, soulbound = false) {
   const type = cleanText(raw?.type, 64);
