@@ -58,6 +58,13 @@ test('AI summary excludes question bodies and personal identifiers', () => {
   const mixed = Core.build({ 數學: { '函數': { total: 10, correct: 4 } },
     英文: { '閱讀': { total: 30, correct: 25 } } });
   assert.equal(Core.aiSummary(mixed, '數學').total, 10, 'subject-specific summaries do not include other subjects');
+  const other = Core.build({ '藝術': { '素描': { total: 8, correct: 6 } } });
+  assert.equal(other.domains.find(x => x.id === 'other').total, 8,
+    'nonstandard subjects must still appear on overview radar');
+  const priorities = Core.aiSummary(Core.build({ 數學: { '函數': { total: 9, correct: 1 } },
+    英文: { '閱讀': { total: 9, correct: 8 } } }), '英文').priorities;
+  assert.ok(priorities.every(x => x.subject === '英文'),
+    'AI focus respects selected subject even when another subject is weaker');
 });
 
 test('AI request sanitizes aggregates, validates response and rate-limits per uid', async () => {
