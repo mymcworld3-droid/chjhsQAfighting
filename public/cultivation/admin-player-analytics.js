@@ -4,7 +4,7 @@ import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth
 (function () {
   'use strict';
   const ID = 'admin-player-analytics';
-  let loading = false, requestId = 0, loaded = false, range = 7;
+  let loading = false, queued = false, requestId = 0, loaded = false, range = 7;
   const NAMES = {
     question_started: '進入問道題目', answer_completed: '完成有效作答',
     social_participated: '參與多人玩法', question_load_failed: '題目載入失敗'
@@ -156,7 +156,8 @@ import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth
   }
   async function load() {
     const panel = mount();
-    if (!panel || !isAdmin() || loading) return;
+    if (!panel || !isAdmin()) return;
+    if (loading) { queued = true; return; }
     const user = authUser(), id = ++requestId;
     loading = true;
     panel.querySelector('#apa-status').textContent = '正在彙整事件與固定玩家群組…';
@@ -177,6 +178,7 @@ import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth
     } finally {
       loading = false;
       panel.querySelector('#apa-refresh').disabled = false;
+      if (queued) { queued = false; void load(); }
     }
   }
   function boot() {
