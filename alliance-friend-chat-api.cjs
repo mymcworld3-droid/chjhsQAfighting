@@ -83,8 +83,14 @@ function createHandlers({ projects = adminProject, now = Date.now, cooldowns = s
     if (!friends.length) return { conversations: [], unread: 0 };
     // Single-field array-contains index; no additional composite index required.
     const snap = await bdDb.collection(CHAT_COLLECTION).where('memberUids', 'array-contains', uid).limit(100).get();
-    const conversations = snap.docs.map(x => cleanChat(x.data(), uid, friends))
-      .filter(Boolean).sort((x, y) => y.updatedAt - x.updatedAt);
+    const candidates = snap.docs.map(x => cleanChat(x.data(), uid, friends)).filter(Boolean);
+    // A friend may have removed you since the thread was created. Do not leak
+    // even the preview / unread count without checking the current reciprocal link.
+    const confirmed = await Promise.all(candidates.map(async row => {
+      const peer = await aDb.collection('users').doc(row.peerUid).get();
+      return peer.exists && friendUids(peer.data(), row.peerUid).includes(uid) ? row : null;
+    }));
+    const conversations = confirmed.filter(Boolean).sort((x, y) => y.updatedAt - x.updatedAt);
     return { conversations, unread: conversations.reduce((n, x) => n + x.unread, 0) };
   });
   const thread = withAuth(async ({ uid, aDb, bdDb, req }) => {
