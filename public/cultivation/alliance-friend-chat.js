@@ -186,8 +186,9 @@ async function listenGlobal() {
         lastSeen = latest; // No false alert for messages predating first login.
       }
       state.globalLatest = latest;
-      state.globalUnread = Boolean(latest && latest !== lastSeen && !globalChatVisible());
-      if (globalChatVisible()) ackGlobalChat();
+      const mine = snap.docs[0]?.data()?.uid === uid;
+      state.globalUnread = Boolean(latest && latest !== lastSeen && !mine && !globalChatVisible());
+      if (globalChatVisible() || (mine && latest)) ackGlobalChat();
       updateBadges();
     }, err => console.warn('[Friend chat] public badge unavailable', err.message));
   } catch (err) { console.warn('[Friend chat] public listener unavailable', err.message); }
