@@ -298,6 +298,7 @@ function memberSnapshotFromTrusted(player,host=false){
 }
 // 固定三人基準試煉；隊伍人數、裝備與境界只改變玩家自身能力。
 const raidDifficulty = require('./public/cultivation/raid-difficulty.js');
+const RAID_BOSS_DIFFICULTY = Object.freeze({maxHp:raidDifficulty.TIERS.normal.maxHp,baseAttack:raidDifficulty.TIERS.normal.baseAttack});
 // 清霜試煉的合作窗口：兩名不同隊員答對可削弱下一式，三名不同隊員再觸發一次合擊。
 // 單人仍可硬打，但無法取得隊伍破陣減傷與三才合擊，符合「三人正常通關、單人需高養成」定位。
 const RAID_TEAMWORK = Object.freeze({
