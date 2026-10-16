@@ -38,6 +38,9 @@ import {
   // 同一工作生成成功後若 Firestore 暫時中斷，可再次開爐而不重複呼叫生成服務。
   // 僅保存在本次頁面記憶體；實際領取狀態仍以 Firestore transaction 為準。
   const generatedCandidateCache = new Map();
+  const generatedCandidatePromises = new Map();
+  const backgroundGenerationAttempted = new Set();
+  let generationOwnerUid = '';
 
   const data = () => window.getCurrentUserData?.() || null;
   const authUser = () => { try { return getAuth(getApp()).currentUser; } catch (_) { return null; } };
@@ -464,6 +467,9 @@ import {
   }
 
   async function claimDiscovery(job) {
+    // Reuse the background request, if still pending, instead of calling twice.
+    const pending = generatedCandidatePromises.get(job.id);
+    if (pending) await pending.catch(() => null);
     const generated = generatedCandidateCache.get(job.id) || await generateCandidate(job);
     generatedCandidateCache.set(job.id, generated);
     const user = authUser();
@@ -577,17 +583,54 @@ import {
     }
 
     generatedCandidateCache.delete(job.id);
+    generatedCandidatePromises.delete(job.id);
+    backgroundGenerationAttempted.delete(job.id);
     const awarded = getArtifactById(awardedId) || committedCatalog?.find((item) => item.id === awardedId) || { id: awardedId, name: '新生法寶' };
     return { ...awarded, recipeFirstDiscovery: firstDiscovery };
+  }
+
+  function requiresGeneratedCandidate(job) {
+    if (!job) return false;
+    const hasSoulboundBase = (job.recipe || []).some(row => row.artifactId && getArtifactById(row.artifactId)?.equipSlot === '本命法寶');
+    const outdated = hasSoulboundBase && !globalThis.QASoulboundPool.refinementCompatible(getArtifactById(job.knownArtifactId), true);
+    return job.kind === 'discovery' || outdated;
+  }
+
+  // While the player is online, forge the AI candidate ahead of opening the
+  // furnace. Awarding the item, registering a recipe and clearing the job must
+  // STILL happen exclusively in the authoritative claim transaction.
+  function preGenerateOnlineCandidate() {
+    const user = authUser();
+    if (!user) return;
+    if (generationOwnerUid !== user.uid) {
+      generatedCandidateCache.clear();
+      generatedCandidatePromises.clear();
+      backgroundGenerationAttempted.clear();
+      generationOwnerUid = user.uid;
+    }
+    const job = currentJob();
+    if (!job?.id || !requiresGeneratedCandidate(job)) return;
+    if (backgroundGenerationAttempted.has(job.id) || generatedCandidateCache.has(job.id)) return;
+    backgroundGenerationAttempted.add(job.id);
+    const pending = generateCandidate(job)
+      .then(result => {
+        if (authUser()?.uid === user.uid && currentJob()?.id === job.id) generatedCandidateCache.set(job.id, result);
+        return result;
+      })
+      .catch(error => {
+        // Never alter an active forge job or claim outcome on a background error.
+        console.warn('[Refinery pre-generation] retry on opening furnace:', error?.message || error);
+        return null;
+      })
+      .finally(() => generatedCandidatePromises.delete(job.id));
+    generatedCandidatePromises.set(job.id, pending);
   }
 
   async function claimJob() {
     const job = currentJob();
     if (!job) throw new Error('目前沒有煉器任務');
     if (Date.now() < Number(job.readyAtMs || 0)) throw new Error('尚需 ' + formatRefineryDuration(Number(job.readyAtMs) - Date.now()));
-    const hasSoulboundBase = (job.recipe || []).some(row => row.artifactId && getArtifactById(row.artifactId)?.equipSlot === '本命法寶');
-    const outdated = hasSoulboundBase && !globalThis.QASoulboundPool.refinementCompatible(getArtifactById(job.knownArtifactId), true);
-    return job.kind === 'discovery' || outdated ? claimDiscovery(job) : claimKnown(job);
+    return requiresGeneratedCandidate(job) ? claimDiscovery(job) : claimKnown(job);
   }
 
   async function skipJobWait() {
@@ -618,6 +661,16 @@ import {
     if (local) local[REFINERY_JOB_FIELD] = updatedJob;
     window.dispatchEvent(new CustomEvent('xiuxian:refinery-job-updated', { detail: updatedJob }));
     return updatedJob;
+  }
+
+  // A login, restored account, freshly started job or administrator skip all
+  // provide opportunities to precompute before the user taps 開爐.
+  if (typeof window.addEventListener === 'function') {
+    ['xiuxian:user-ready', 'xiuxian:user-data-ready', 'xiuxian:refinery-job-updated']
+      .forEach(name => window.addEventListener(name, preGenerateOnlineCandidate));
+    if (typeof document !== 'undefined' && document.readyState === 'loading')
+      document.addEventListener('DOMContentLoaded', preGenerateOnlineCandidate, { once: true });
+    else preGenerateOnlineCandidate();
   }
 
   window.getCultivationRefineryJob = currentJob;

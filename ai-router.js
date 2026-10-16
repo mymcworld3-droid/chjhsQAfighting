@@ -202,15 +202,18 @@ function orderedProviders(providers) {
   return providers.slice(start).concat(providers.slice(0, start));
 }
 
+// Concurrent quiz providers race to return the first syntactically valid JSON.
+// If the first wave fails, preserve the existing sequential provider fallback.
+// Requests use the same prompt; server-side quiz integrity checks still run.
 async function generateJSON(prompt, options = {}) {
   const providers = buildProviders();
   if (!providers.length) {
     throw new Error('No AI provider configured. Set GEMINI_API_KEY(S) or AI_PROVIDERS_JSON.');
   }
-
   const timeoutMs = Math.max(3000, Number(options.timeoutMs) || DEFAULT_TIMEOUT_MS);
+  const ordered = orderedProviders(providers);
   const errors = [];
-  for (const provider of orderedProviders(providers)) {
+  const attempt = async (provider) => {
     try {
       const raw = await callProvider(provider, prompt, timeoutMs);
       const text = extractJsonText(raw);
@@ -223,9 +226,36 @@ async function generateJSON(prompt, options = {}) {
       const message = error?.name === 'AbortError' ? 'timeout' : (error?.message || String(error));
       errors.push(`${provider.name}: ${message}`);
       console.warn(`[AI Router] ${provider.name}/${provider.model} failed: ${message}`);
+      throw error;
     }
-  }
+  };
 
+  // Use distinct credentials in the first wave rather than saturating one
+  // Gemini key with multiple models. Cap extra calls to control API spend.
+  const requested = options.parallel === true ? 3 : 1;
+  const wave = [];
+  const seenCredentials = new Set();
+  for (const provider of ordered) {
+    const credential = provider.type + ':' + provider.key;
+    if (wave.length >= requested) break;
+    if (seenCredentials.has(credential)) continue;
+    wave.push(provider);
+    seenCredentials.add(credential);
+  }
+  if (wave.length > 1) {
+    try {
+      return await Promise.any(wave.map(attempt));
+    } catch (_) {
+      // All parallel attempts failed; remaining providers still get a chance.
+    }
+  } else if (wave.length === 1) {
+    try { return await attempt(wave[0]); } catch (_) { /* retry other providers */ }
+  }
+  const attempted = new Set(wave);
+  for (const provider of ordered) {
+    if (attempted.has(provider)) continue;
+    try { return await attempt(provider); } catch (_) { /* continue fallback */ }
+  }
   throw new Error(`All AI providers failed: ${errors.join(' | ')}`);
 }
 

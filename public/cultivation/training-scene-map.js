@@ -36,7 +36,7 @@ function loadStyle() {
   const link = document.createElement('link');
   link.id = 'training-scene-map-style';
   link.rel = 'stylesheet';
-  link.href = 'styles/training-scene-map.css';
+  link.href = 'styles/training-scene-map.css?v=20261016-forge-ready';
   document.head.appendChild(link);
 }
 function setDetail(placeId) {
@@ -259,6 +259,8 @@ function updateTicketIndicators() {
   const secret = Rules.PLACES.find(place => place.id === 'secret');
   const accountReady = !!uid && !!player?.stats && (!player.uid || player.uid === uid);
   const ready = accountReady && unlocked(secret) && Number(player.raidTickets?.count) >= 1;
+  const forgeJob = accountReady ? player.refineryJobV1 : null;
+  const forgeReady = !!(forgeJob?.id && Number(forgeJob.readyAtMs || 0) <= Date.now());
   const growth = globalThis.QANascentGrowth;
   const canUpgrade = !!(accountReady && growth?.branches(player.cultivationTraining?.equippedCore)
     .some(branch => growth.status(player, branch.id).ok));
@@ -275,10 +277,28 @@ function updateTicketIndicators() {
       dot.setAttribute('aria-hidden', 'true');
       host.appendChild(dot);
     }
-    const pending = button === nav ? ready || canUpgrade : ready;
+    const pending = button === nav ? ready || canUpgrade || forgeReady : ready;
     dot.hidden = !pending;
-    const description = [ready ? '尚有團本入場券，可挑戰秘境試煉' : '', button === nav && canUpgrade ? '元嬰有分支可升級' : ''].filter(Boolean).join('；');
+    const description = [ready ? '尚有團本入場券，可挑戰秘境試煉' : '', button === nav && canUpgrade ? '元嬰有分支可升級' : '', button === nav && forgeReady ? '煉器已完成，可立即開爐' : ''].filter(Boolean).join('；');
     if (pending) button.setAttribute('aria-description', description);
+    else button.removeAttribute('aria-description');
+  }
+  // Forge completion is distinct from raid tickets and nascent upgrades.
+  // Keep a dot on the forge building and on the refinery detail tab.
+  const forgeCandidate = plane?.querySelector('[data-training-location="forge"]');
+  const forge = forgeCandidate?.dataset?.trainingLocation === 'forge' ? forgeCandidate : null;
+  const forgeTab = document.querySelector?.('#page-training [data-training-tab="refinery"]');
+  for (const [button, host] of [[forge, forge?.querySelector('.training-place-label')], [forgeTab, forgeTab]]) {
+    if (!button || !host) continue;
+    let dot = host.querySelector('.refinery-ready-dot');
+    if (!dot) {
+      dot = document.createElement('span');
+      dot.className = 'refinery-ready-dot';
+      dot.setAttribute('aria-hidden', 'true');
+      host.appendChild(dot);
+    }
+    dot.hidden = !forgeReady;
+    if (forgeReady) button.setAttribute('aria-description', '煉器完成，請前往八方煉器陣開爐');
     else button.removeAttribute('aria-description');
   }
   if (growth) {
@@ -447,6 +467,9 @@ function boot() {
   window.addEventListener('xiuxian:raid-tickets-updated', updateTicketIndicators);
   window.addEventListener('material-system-updated', updateTicketIndicators);
   window.addEventListener('golden-core-equipped-changed', updateTicketIndicators);
+  window.addEventListener('xiuxian:refinery-job-updated', updateTicketIndicators);
+  // Readiness changes with wall-clock time even if the player never opens the forge.
+  setInterval(updateTicketIndicators, 10000);
   const navGrid = document.getElementById('nav-grid');
   if (navGrid) new MutationObserver(updateTicketIndicators).observe(navGrid, { childList:true });
   window.addEventListener('resize', scheduleFit, { passive: true });
