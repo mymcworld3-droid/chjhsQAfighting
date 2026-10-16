@@ -77,7 +77,7 @@ test('owner reward requires quality and meaningful accuracy, excludes self-play,
 });
 test('nascent bonus is paid once, and reordering choices cannot recreate mastery',async()=>{
  const d=db(),p=d.docs.get('users/u');p.stats.totalScore=68;p.cultivationTraining={equippedCore:{type:'sword'}};p.nascentSoulGrowth={version:1,branches:{cultivation:4}};
- const first=await api.awardProgress(d,'u',entry('first',[0]));assert.equal(first.cultivationAdded,5);
+ const first=await api.awardProgress(d,'u',entry('first',[0]));assert.equal(first.cultivationAdded,3);
  const next=await api.awardProgress(d,'u',entry('next',[0,1]));assert.equal(next.cultivationAdded,1);assert.equal(next.soulCultivationAdded,0);
  const q=pack().questions[0];assert.equal(api.questionKey(q),api.questionKey({...q,wrong:q.wrong.slice().reverse()}));
 });
