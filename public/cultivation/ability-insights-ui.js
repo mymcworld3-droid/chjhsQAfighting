@@ -12,7 +12,8 @@ import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 
     ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   let currentSubject = null, chart = null, history = [], historyUid = '',
     historyFetchedAt = 0, historyLoading = null, historyError = '',
-    latestReport = null, latestTrend = null, latestSkills = [], renderEpoch = 0, aiBusy = false;
+    latestReport = null, latestTrend = null, latestSkills = [], renderEpoch = 0, aiBusy = false,
+    lastRenderedSubject = null;
   const ms = 5 * 60 * 1000;
   const description = '保守估計 = (答對數 + 2) / (答題數 + 4)。少量樣本會趨近 50%；這不是 AI 評分、智力測驗或考試成績。';
   const statusClass = value => value === '表現穩定' ? 'good' :
@@ -212,9 +213,9 @@ import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 
   async function loadRecent(uid) {
     if (!uid) return;
     if (historyUid === uid && historyFetchedAt && Date.now() - historyFetchedAt < ms) return;
-    if (historyLoading) return historyLoading;
+    if (historyLoading && historyUid === uid) return historyLoading;
     historyUid = uid; history = []; historyError = ''; historyFetchedAt = 0;
-    historyLoading = (async () => {
+    const pending = (async () => {
       try {
         const db = getFirestore(getApp());
         const records = await getDocs(query(collection(db, 'exam_logs'),
@@ -226,9 +227,10 @@ import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 
         historyError = '近期趨勢無法載入（圖譜累積統計仍可使用）';
         historyFetchedAt = Date.now();
         console.warn('[Ability analysis] recent logs unavailable:', error?.code || error?.message);
-      } finally { historyLoading = null; }
+      } finally { if (historyLoading === pending) historyLoading = null; }
     })();
-    return historyLoading;
+    historyLoading = pending;
+    return pending;
   }
   async function askCoach() {
     if (aiBusy || !latestReport || latestReport.total === 0) return;
@@ -271,6 +273,15 @@ import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 
   function render({ map = {}, targetSubject = null, onPercentile } = {}) {
     const ctx = mount(); if (!ctx) return;
     currentSubject = targetSubject;
+    const uid = getMainUser()?.uid || '';
+    if (uid !== historyUid) {
+      history = []; historyUid = uid; historyFetchedAt = 0; historyError = '';
+    }
+    if (currentSubject !== lastRenderedSubject) {
+      lastRenderedSubject = currentSubject;
+      if ($('ai-ability-response')) $('ai-ability-response').replaceChildren();
+      if ($('ai-ability-request') && !aiBusy) $('ai-ability-request').textContent = '讓 AI 制訂補強計畫';
+    }
     const report = Core.build(map, window.SUBJECT_SCHEMA_FRONTEND || {});
     latestReport = report;
     initFilters(report);
@@ -285,8 +296,8 @@ import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 
     }
     const button = $('ai-ability-request');
     if (button) button.disabled = aiBusy || !report.topics.some(x => x.total > 0 && (!currentSubject || x.subject === currentSubject));
-    const uid = getMainUser()?.uid, serial = ++renderEpoch;
-    if (canShow() && uid && (uid !== historyUid || !historyFetchedAt) && !historyLoading) {
+    const serial = ++renderEpoch;
+    if (canShow() && uid && !historyFetchedAt) {
       void loadRecent(uid).then(() => {
         if (serial === renderEpoch && uid === getMainUser()?.uid && canShow()) {
           const updated = Core.recentTrend(history, currentSubject); latestTrend = updated;
