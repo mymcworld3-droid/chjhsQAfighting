@@ -491,7 +491,7 @@ app.post('/api/generate-quiz', async (req, res) => {
             return res.status(error.status||503).json({error:error.status?error.message:'悟道試煉題目準備失敗'});
         }
     }
-    difficulty = raidTicketMode ? (raidQuickSimple ? 'easy' : raidTrustedDifficulty)
+    difficulty = enlightenmentMode ? 'medium' : raidTicketMode ? (raidQuickSimple ? 'easy' : raidTrustedDifficulty)
         : (['easy', 'medium', 'hard'].includes(difficulty) ? difficulty : 'medium');
     const previousQuestions = (Array.isArray(avoidQuestions) ? avoidQuestions : [])
         .map(cleanQuestionText).filter(Boolean).slice(-80);
