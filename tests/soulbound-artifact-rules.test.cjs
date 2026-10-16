@@ -53,7 +53,7 @@ test('legacy and known-recipe paths block minting while equipment slot stays ope
   assert.match(legacy, /item\.equipSlot === '本命法寶'.*throw new Error/);
   assert.match(jobs, /hasSoulboundBase/);
   assert.match(jobs, /realSoulboundSource/);
-  assert.match(equip, /金丹開放 · 常駐契器台/);
+  assert.match(equip, /點擊選擇本命法器/);
   assert.match(equip, /data-uib-empty-slot/);
   assert.match(equip, /window\.openSoulboundDraw/);
   assert.match(market, /function isSoulboundListing\(type, id\)/);

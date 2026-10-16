@@ -91,11 +91,11 @@ import {
       const canEquipOwned = soulbound && Object.entries(userData()?.artifactSystem?.inventory || {}).some(([artifactId, count]) =>
         qty(count) > 0 && artifactSlot(getArtifactById(artifactId)) === slot);
       const hint = soulbound
-        ? (canEquipOwned ? '契器台 · 抽取或調御已有法器' : '金丹開放 · 常駐契器台')
+        ? (canEquipOwned ? '點擊選擇本命法器' : '尚未持有本命法器')
         : '點擊裝配';
       return `<button type="button" class="uib-equip-slot is-empty${soulboundClass}${equipmentPickSlot === slot ? ' is-picking' : ''}" data-uib-empty-slot="${escapeHtml(slot)}" aria-label="${escapeHtml(slot)}：${escapeHtml(hint)}">${crest}${label}
         <span class="uib-equip-slot-frame${soulbound ? ' is-soulbound-frame' : ''}">${soulbound ? soulboundItemFrameMarkup() + '<i class="fa-solid fa-khanda"></i>' : '<i class="fa-solid fa-plus"></i>'}</span>
-        <b class="uib-equip-slot-name">${soulbound ? '締結本命' : '空裝備欄'}</b><small class="uib-equip-slot-hint">${hint}</small></button>`;
+        <b class="uib-equip-slot-name">空裝備欄</b><small class="uib-equip-slot-hint">${hint}</small></button>`;
     }
     const color = qualityColor(item.realm);
     return `<button type="button" class="uib-equip-slot is-filled${soulboundClass}" data-uib-equipped-item="artifact:${escapeHtml(id)}" style="--uib-quality:${escapeHtml(color)}">${crest}${label}
@@ -264,7 +264,9 @@ import {
       const equipmentItems = equippedCandidates
         .filter((item) => !equipmentPickSlot || artifactSlot(item.raw) === equipmentPickSlot)
         .sort((a, b) => (b.qualityRank || 0) - (a.qualityRank || 0) || String(a.name).localeCompare(String(b.name), 'zh-Hant'));
-      const noEquipmentHint = ownedArtifacts.length && !equippedCandidates.length
+      const noEquipmentHint = equipmentPickSlot === '本命法寶'
+        ? '取得本命法器後，即可在此選擇裝配。'
+        : ownedArtifacts.length && !equippedCandidates.length
         ? '目前持有的法寶都是消耗型或答題型，不能放入裝配格。請先煉製具有裝備效果的法寶。'
         : equipmentPickSlot && equippedCandidates.length
           ? '目前持有的裝備型法寶屬於其他欄位。請取消選擇後查看可用欄位。'
@@ -455,7 +457,6 @@ import {
     });
     root.querySelectorAll('[data-uib-empty-slot]').forEach((button) => {
       button.addEventListener('click', () => {
-        if (button.dataset.uibEmptySlot === '本命法寶' && window.openSoulboundDraw) { window.openSoulboundDraw(); return; }
         equipmentPickSlot = button.dataset.uibEmptySlot || '';
         filterType = 'artifact';
         scheduleRender(true);
