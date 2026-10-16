@@ -96,8 +96,10 @@ import './raid-difficulty.js';
       const selected = raidTrialById(state.selectedRaidId);
       const tier = DIFFICULTY.get(state.selectedDifficulty) || DIFFICULTY.TIERS.normal;
       const locked = selected.status !== 'open' || score() < tier.minScore || Number(state.ticketState.count) === 0;
-      document.querySelectorAll('#raid-hub [data-quick],#raid-hub [data-create],#raid-hub [data-code]')
+      document.querySelectorAll('#raid-hub [data-quick],#raid-hub [data-create]')
         .forEach(button => { button.disabled = locked; });
+      const joinByCode = document.querySelector('#raid-hub [data-code]');
+      if (joinByCode) joinByCode.disabled = score() < RAID_MVP.minimumScore || Number(state.ticketState.count) === 0;
     }
   }
   async function refreshRaidTickets({ rerender = true } = {}) {
@@ -415,6 +417,7 @@ import './raid-difficulty.js';
     const tier = DIFFICULTY.get(state.selectedDifficulty) || DIFFICULTY.TIERS.normal;
     const noTickets = Number(state.ticketState?.count) === 0;
     const selectedLocked = selected.status !== 'open' || score() < tier.minScore || noTickets;
+    const joinCodeLocked = score() < RAID_MVP.minimumScore || noTickets;
     const hub = document.getElementById('raid-hub');
     const trialCards = RAID_TRIALS.map(function (trial) {
       const active = trial.id === selected.id;
@@ -439,7 +442,7 @@ import './raid-difficulty.js';
         '<div class="raid-prototype-note"><i class="fa-solid fa-scroll"></i><span><b>團本列表骨架已完成</b><small>之後新增 Boss 時可直接加入目錄並接上各自的房間、機制與獎勵 adapter。</small></span></div></div></article>';
     } else {
       detail = '<article class="raid-boss-card ' + (selectedLocked ? 'locked' : '') + '">' +
-        '<div class="raid-boss-art"><img src="' + escapeHtml(selected.bossImage || RAID_MVP.bossImage) + '" alt="沈清霜"><span>正式試煉・第一境</span></div>' +
+        '<div class="raid-boss-art"><img src="' + escapeHtml(selected.bossImage || RAID_MVP.bossImage) + '" alt="沈清霜"><span>清霜試煉・' + escapeHtml(tier.name) + '</span></div>' +
         '<div class="raid-boss-info"><div class="raid-badges"><span>' + escapeHtml(selected.party) + '</span><span>' +
         escapeHtml(selected.recommended) + '</span><span>' + escapeHtml(selected.mechanic) + '</span></div>' +
         (data().raidProgress?.['shen-qingshuang']?.memento ? '<small>通關紀念・' + escapeHtml(data().raidProgress['shen-qingshuang'].memento.name) + '</small>' : '') +
@@ -463,7 +466,7 @@ import './raid-difficulty.js';
         '<div class="raid-join-grid"><button class="raid-primary" type="button" data-quick ' + (selectedLocked ? 'disabled' : '') + '>快速加入／建立隊伍</button>' +
         '<button class="raid-ghost" type="button" data-create ' + (selectedLocked ? 'disabled' : '') + '>建立私人隊伍</button></div>' +
         '<div class="raid-code-join"><input id="raid-room-code-input" maxlength="6" aria-label="六碼隊伍代碼" placeholder="輸入 6 碼隊伍代碼"><button class="raid-ghost" type="button" data-code ' +
-        (selectedLocked ? 'disabled' : '') + '>加入隊伍</button></div></div></article>';
+        (joinCodeLocked ? 'disabled' : '') + '>加入隊伍</button></div></div></article>';
     }
 
     hub.innerHTML = '<header class="raid-heading raid-hub-heading"><button class="raid-back" type="button" data-home><i class="fa-solid fa-arrow-left"></i></button>' +
