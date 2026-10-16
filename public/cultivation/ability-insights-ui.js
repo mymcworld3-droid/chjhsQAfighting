@@ -340,6 +340,11 @@ import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 
       if (uid !== getMainUser()?.uid || subject !== currentSubject) return;
       const advice = payload.advice;
       replyBox.replaceChildren();
+      const source = document.createElement('small');
+      source.className = 'ai-ability-coach-source';
+      source.textContent = payload.source === 'local' ?
+        '統計備用建議 · AI 暫時不可用' : 'AI 學習策略 · 依玩家答題統計產生';
+      replyBox.append(source);
       const heading = document.createElement('h5'); heading.textContent = advice.headline; replyBox.append(heading);
       const explanation = document.createElement('p'); explanation.textContent = advice.explanation; replyBox.append(explanation);
       const list = document.createElement('ol');
@@ -351,7 +356,9 @@ import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 
         li.append(title, reason, action); list.append(li);
       }
       replyBox.append(list);
-      const footer = document.createElement('small'); footer.textContent = 'AI 建議僅供學習參考，不會修改能力分數或獎勵。';
+      const footer = document.createElement('small'); footer.textContent =
+        payload.source === 'local' ? '這是規則式備用方案，不代表 AI 已完成診斷，也不會修改玩家資料。' :
+          'AI 建議僅供學習參考，不會修改能力分數或獎勵。';
       replyBox.append(footer);
     } catch (error) {
       replyBox.textContent = (error?.message || 'AI 暫時不可用') +
