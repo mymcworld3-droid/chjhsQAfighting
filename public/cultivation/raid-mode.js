@@ -18,7 +18,7 @@ import './raid-difficulty.js';
 
   const DIFFICULTY = globalThis.QARaidDifficulty;
   const PAGE_ID = 'page-raid';
-  const STYLE_HREF = 'styles/raid-mode.css?v=20261016-hide-navigation1';
+  const STYLE_HREF = 'styles/raid-mode.css?v=20261016-three-difficulties';
   const MALE = 'assets/story/characters/player-male-determined.png';
   const FEMALE = 'assets/story/characters/player-female-determined.png';
   const HEARTBEAT_MS = 8000;
