@@ -22,6 +22,7 @@ function pageRuntime() {
     const element = { id, innerHTML: '', textContent: '', disabled: false, classList: classes(),
       setAttribute() {}, focus() {}, scrollTo() {}, remove() { nodes.delete(this.id); },
       addEventListener(name, callback) { callbacks.set(name, callback); },
+      appendChild(child) { nodes.set(child.id, child); return child; },
       fire(name, event = {}) { callbacks.get(name)?.(event); },
       querySelector(selector) { return selector.startsWith('#') ? nodes.get(selector.slice(1)) : null; },
       querySelectorAll() { return [tab]; },
@@ -68,28 +69,42 @@ function pageRuntime() {
       nodes.get('soulbound-content').fire('click', { target: { closest: () => button } });
     },
     refresh() { nodes.get('soulbound-refresh').fire('click'); },
+    preview(id) {
+      const button = { disabled: false, dataset: { sbPreview: id }, hasAttribute: name => name === 'data-sb-preview' };
+      nodes.get('soulbound-content').fire('click', { target: { closest: () => button } });
+    },
+    closePreview() {
+      const overlay = nodes.get('soulbound-preview');
+      if (overlay) overlay.fire('click', { target: overlay });
+    },
     html: () => nodes.get('soulbound-content').innerHTML
   };
 }
 const settle = () => new Promise(resolve => setImmediate(resolve));
 const snapshot = (rank = 0) => ({ ok: true, rank, balance: 10000, poolVersion: Pool.VERSION,
   draws: 0, misses:0, fragments:0, untilPity: 50, prices: { single: 250, five: Pool.cost(rank, 0, 5) }, inventory: {}, pending: null, recovery: [] });
-function assertGallery(html, rank = 0) {
-  assert.equal((html.match(/<figure>/g) || []).length, 8);
-  assert.equal((html.match(/<article /g) || []).length, 8);
-  assert.doesNotMatch(html, /data-sb-preview/);
-  for (const item of Pool.candidates(rank)) assert.ok(html.includes(item.imageUrl), item.name);
+function assertShowcase(html, rank = 0) {
+  assert.match(html, /<h3>常駐法器<\/h3>/);
+  assert.equal((html.match(/data-sb-preview=/g) || []).length, 4,
+    'three visible weapons and one offscreen incoming weapon');
+  assert.equal((html.match(/class="sb-carousel-card is-center"/g) || []).length, 1);
+  assert.equal((html.match(/aria-hidden="true" tabindex="-1"/g) || []).length, 1);
+  assert.match(html, /每次展示三件法器/);
+  assert.doesNotMatch(html, /池內法器一覽|sb-gallery|寶庫 · 調御與精煉|八器同池|常駐共用池 · /);
+  assert.doesNotMatch(html, /data-sb-refine/);
+  for (const item of Pool.candidates(rank).slice(0, 4)) assert.ok(html.includes(item.imageUrl), item.name);
 }
 
-test('all common-pool weapons remain visible during slow or failed sync, with draws gated until retry succeeds', async () => {
+
+test('three common-pool weapons remain visible during slow or failed sync, with draws gated until retry succeeds', async () => {
   const runtime = pageRuntime();
   runtime.open();
-  assertGallery(runtime.html());
+  assertShowcase(runtime.html());
   assert.equal(runtime.html().includes('data-sb-draw='), false);
   assert.match(runtime.html(), /aria-label="常駐本命法器共用池"/);
   runtime.requests[0].reply({ ok: false, error: '契器暫時離線' }, 503);
   await settle();
-  assertGallery(runtime.html());
+  assertShowcase(runtime.html());
   assert.equal(runtime.html().includes('正在同步契印'), false);
   assert.match(runtime.html(), /重新同步/);
   assert.equal(runtime.nodes.get('soulbound-status').textContent, '契器暫時離線');
@@ -97,7 +112,7 @@ test('all common-pool weapons remain visible during slow or failed sync, with dr
   runtime.refresh();
   runtime.requests[1].reply(snapshot(1));
   await settle();
-  assertGallery(runtime.html(), 1);
+  assertShowcase(runtime.html(), 1);
   assert.match(runtime.html(), /class="sb-lobby"/);
   assert.match(runtime.html(), /aria-label="常駐本命法器共用池"/);
   assert.equal((runtime.html().match(/data-sb-draw=/g) || []).length, 2);
@@ -130,7 +145,7 @@ test('reentering while sync is pending shares the request and renders its result
   runtime.open();
   runtime.leave();
   runtime.open();
-  assertGallery(runtime.html());
+  assertShowcase(runtime.html());
   assert.equal(runtime.requests.length, 1);
   runtime.requests[0].reply(snapshot());
   await settle();
@@ -158,4 +173,35 @@ test('mixed batches retain weapon comparison and older weapon-only receipts rema
     assert.match(runtime.html(),/調御比較/);assert.ok(runtime.html().includes(`data-sb-equip="${item.id}"`));
     assert.equal((runtime.html().match(/data-sb-select=/g)||[]).length,legacy?1:2);
   }
+});
+
+
+test('clicking a showcase weapon opens details without changing draw target or making a purchase', async () => {
+  const runtime = pageRuntime();
+  runtime.open();
+  runtime.requests[0].reply(snapshot(5)); await settle();
+  const item = Pool.candidates(5)[1];
+  runtime.preview(item.id);
+  const modal = runtime.nodes.get('soulbound-preview');
+  assert.ok(modal, 'detail overlay is mounted');
+  assert.match(modal.innerHTML, /role="dialog" aria-modal="true"/);
+  assert.ok(modal.innerHTML.includes(item.name));
+  assert.ok(modal.innerHTML.includes(item.description));
+  assert.match(modal.innerHTML, /攻擊 \+100/);
+  assert.match(modal.innerHTML, /生命 \+305/);
+  assert.equal(runtime.requests.length, 1, 'preview must not issue a draw');
+  runtime.closePreview();
+  assert.equal(runtime.nodes.has('soulbound-preview'), false);
+  assertShowcase(runtime.html(), 5);
+});
+
+test('showcase motion and coloring remain responsive without exposing all eight items simultaneously', () => {
+  const css = fs.readFileSync(path.join(__dirname, '../public/styles/soulbound-draw.css'), 'utf8');
+  assert.match(css, /\.sb-carousel-track\.is-shifting/);
+  assert.match(css, /nth-child\(3\)/);
+  assert.match(css, /prefers-reduced-motion:reduce/);
+  assert.match(css, /--sb-carousel-gap:8px/);
+  assert.match(css, /#training-tab-content:has\(> #soulbound-page\)/);
+  assert.doesNotMatch(css, /#0b1018/);
+  assert.doesNotMatch(css, /#090c16f5/);
 });
