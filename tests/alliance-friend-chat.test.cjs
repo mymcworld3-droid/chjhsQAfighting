@@ -135,6 +135,17 @@ test('one friend sends, recipient sees unread, opening and marking read clears o
   assert.equal((await request(h.read, 'bob', { peerUid: 'alice', lastMessageId: bobThread.data.lastMessageId })).data.cleared, false,
     'stale client read must never discard a new incoming message');
 });
+test('revoking friendship also hides already-written BD chat previews and unread counts', async () => {
+  const context = mockProjects();
+  const h = createHandlers({ projects: context.projects, now: () => 10000, cooldowns: new Map() });
+  await request(h.send, 'alice', { peerUid: 'bob', text: '不能外洩的內容' });
+  assert.equal((await request(h.inbox, 'bob')).data.unread, 1);
+  context.players.get('alice').friends = [];
+  assert.equal((await request(h.inbox, 'bob')).data.unread, 0);
+  assert.deepEqual((await request(h.inbox, 'bob')).data.conversations, []);
+  assert.equal((await request(h.thread, 'bob', { peerUid: 'alice' })).status, 403);
+});
+
 test('message length, send cooldown and account isolation are enforced by server', async () => {
   const context = mockProjects();
   let clock = 3000;
