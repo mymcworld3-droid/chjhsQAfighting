@@ -102,9 +102,12 @@
   function aiSummary(report, subject = null, trend = null) {
     const rows = (subject ? report.topics.filter(x => x.subject === subject) : report.topics)
       .filter(x => x.total > 0).sort((a, b) => a.estimate - b.estimate).slice(0, 20);
-    return { subject: cleanLabel(subject || '綜合'), total: Math.min(200000, report.total),
-      correct: Math.min(200000, report.correct), studiedTopics: report.studiedTopics,
-      availableTopics: report.availableTopics,
+    const selectedRows = subject ? report.topics.filter(x => x.subject === subject) : report.topics;
+    const scopedStats = sum(selectedRows.filter(x => x.total));
+    return { subject: cleanLabel(subject || '綜合'), total: Math.min(200000, scopedStats.total),
+      correct: Math.min(200000, scopedStats.correct),
+      studiedTopics: selectedRows.filter(x => x.total).length,
+      availableTopics: selectedRows.length,
       topics: rows.map(x => ({ subject: x.subject, topic: x.topic, total: x.total,
         correct: x.correct, estimate: x.estimate, confidence: x.confidence })),
       priorities: report.priorities.filter(x => !subject || x.subject === subject).slice(0, 4)
