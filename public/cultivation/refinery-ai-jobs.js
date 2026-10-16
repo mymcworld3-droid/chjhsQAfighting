@@ -665,10 +665,13 @@ import {
 
   // A login, restored account, freshly started job or administrator skip all
   // provide opportunities to precompute before the user taps 開爐.
-  ['xiuxian:user-ready', 'xiuxian:user-data-ready', 'xiuxian:refinery-job-updated']
-    .forEach(name => window.addEventListener(name, preGenerateOnlineCandidate));
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', preGenerateOnlineCandidate, { once: true });
-  else preGenerateOnlineCandidate();
+  if (typeof window.addEventListener === 'function') {
+    ['xiuxian:user-ready', 'xiuxian:user-data-ready', 'xiuxian:refinery-job-updated']
+      .forEach(name => window.addEventListener(name, preGenerateOnlineCandidate));
+    if (typeof document !== 'undefined' && document.readyState === 'loading')
+      document.addEventListener('DOMContentLoaded', preGenerateOnlineCandidate, { once: true });
+    else preGenerateOnlineCandidate();
+  }
 
   window.getCultivationRefineryJob = currentJob;
   window.getCultivationRefineryPlan = buildPlan;
