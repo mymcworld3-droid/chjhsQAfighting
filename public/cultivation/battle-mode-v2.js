@@ -67,6 +67,8 @@ export const featureReady = (async () => {
     prefetchClaimBusy: false,
     takeoverBusy: false,
     syncPaused: false,
+    syncPauseReason: null,
+    connectionFailures: 0,
     disconnectGraceUntilMs: 0,
     quotaReconnect: null,
     waitingCache: null,
@@ -128,32 +130,65 @@ export const featureReady = (async () => {
 
   const roomQuota = createFirestoreQuotaGuard({ now: nowMs, onExhausted: pauseForRoomQuota });
   // Keep the familiar Firestore signatures; every room operation shares the gate.
-  const runTransaction = (...args) => roomQuota.run(() => firestoreRunTransaction(...args));
-  const getDoc = (...args) => roomQuota.run(() => firestoreGetDoc(...args));
-  const getDocs = (...args) => roomQuota.run(() => firestoreGetDocs(...args));
-  const addDoc = (...args) => roomQuota.run(() => firestoreAddDoc(...args));
-  const updateDoc = (...args) => roomQuota.run(() => firestoreUpdateDoc(...args));
+  const runTransaction = (...args) => runRoomRequest(() => firestoreRunTransaction(...args));
+  const getDoc = (...args) => runRoomRequest(() => firestoreGetDoc(...args));
+  const getDocs = (...args) => runRoomRequest(() => firestoreGetDocs(...args));
+  const addDoc = (...args) => runRoomRequest(() => firestoreAddDoc(...args));
+  const updateDoc = (...args) => runRoomRequest(() => firestoreUpdateDoc(...args));
+
+  async function runRoomRequest(operation) {
+    if (state.syncPaused && state.syncPauseReason === 'offline') {
+      const error = new Error('鬥法連線中斷，正在等待伺服器同步。');
+      error.code = 'unavailable';
+      throw error;
+    }
+    try { return await roomQuota.run(operation); }
+    catch (error) {
+      if (String(error?.code || '').replace(/^firestore\//, '') === 'unavailable') pauseForRoomConnection(true);
+      throw error;
+    }
+  }
+
+  // Cached snapshots can be emitted without a listener error when the SDK goes
+  // offline. Keep that listener alive so its own reconnect can deliver fresh data.
+  function pauseForRoomConnection(restartListener = false) {
+    if (!state.roomId || state.syncPauseReason === 'quota' || roomQuota.blocked()) return;
+    state.syncPaused = true; state.syncPauseReason = 'offline';
+    state.waitingUnsub?.(); state.waitingUnsub = null;
+    state.waitingSnapshot = state.waitingCache = null;
+    if (state.reconcile) clearTimeout(state.reconcile);
+    state.reconcile = null;
+    setText('bv2-timer', '等待重連');
+    setText('bv2-cue-message', '鬥法連線中斷，正在重新連線…');
+    setText('bv2-lobby-status', '鬥法連線中斷，正在重新連線…');
+    if (restartListener) {
+      detachRoomListener();
+      const delay = Math.min(60000, 5000 * 2 ** Math.min(Number(state.connectionFailures) || 0, 4));
+      state.connectionFailures = (Number(state.connectionFailures) || 0) + 1;
+      scheduleRoomReconnect(delay);
+    }
+  }
 
   function pauseForRoomQuota() {
     if (!state.roomId) return;
-    state.syncPaused = true;
+    state.syncPaused = true; state.syncPauseReason = 'quota';
     detachRoomListener();
     if (state.reconcile) clearTimeout(state.reconcile);
     state.reconcile = null;
     toast(firebaseBattleErrorMessage({ code: 'resource-exhausted' }));
-    scheduleQuotaReconnect();
+    scheduleRoomReconnect();
   }
 
-  function scheduleQuotaReconnect() {
+  function scheduleRoomReconnect(delay = 5000) {
     if (!state.roomId || state.quotaReconnect) return;
     const roomId = state.roomId, uid = me()?.uid, session = state.matchSerial;
     state.quotaReconnect = setTimeout(() => {
       state.quotaReconnect = null;
       if (state.roomId !== roomId || me()?.uid !== uid || state.matchSerial !== session) return;
-      if (roomQuota.blocked()) { scheduleQuotaReconnect(); return; }
+      if (roomQuota.blocked()) { scheduleRoomReconnect(); return; }
       // Resume gameplay only after a fresh server snapshot, never the old room.
       subscribeRoom(roomId);
-    }, Math.max(1000, roomQuota.retryAt() - nowMs()));
+    }, Math.max(delay, roomQuota.retryAt() - nowMs()));
   }
 
   function finite(value, fallback) {
@@ -935,6 +970,7 @@ export const featureReady = (async () => {
         if (!current()) return;
         state.waitingUnsub = null; state.waitingCache = null;
         roomQuota.failure(error);
+        if (String(error?.code || '').replace(/^firestore\//, '') === 'unavailable') pauseForRoomConnection(true);
         logBattleFirestoreError('waiting listener failed',error);
         if (!roomQuota.blocked()) scheduleReconcile();
       });
@@ -1010,7 +1046,7 @@ export const featureReady = (async () => {
     detachRoomListener(); stopTimers();
     state.matchSerial = (Number(state.matchSerial) || 0) + 1;
     state.mergeAttempt = null; state.reconcileBusy = false; state.waitingScanCursor = null;
-    state.syncPaused = false; state.disconnectGraceUntilMs = 0;
+    state.syncPaused = false; state.syncPauseReason = null; state.connectionFailures = 0; state.disconnectGraceUntilMs = 0;
     state.roomId = null; state.role = null; state.room = null; state.starting = false; state.leaving = false; state.invitedRoomId = null;
     state.settlingRound = state.timeoutRound = state.preparingRound = state.prefetchingRound = state.advancingRound = state.disconnectClaimRound = null;
     state.prepareRetryAfterMs = state.prefetchRetryAfterMs = 0;
@@ -1774,8 +1810,9 @@ export const featureReady = (async () => {
     const room = state.room; if (!room || !state.roomId) return;
     if (state.syncPaused || roomQuota.blocked()) {
       setText('bv2-timer', '等待重連');
-      setText('bv2-cue-message', '鬥法資料庫暫時受限，等待重連中…');
-      setText('bv2-lobby-status', '鬥法資料庫暫時受限，已暫停請求，等待重連。');
+      const message = state.syncPauseReason === 'offline' ? '鬥法連線中斷，正在重新連線…' : '鬥法資料庫暫時受限，已暫停請求，等待重連。';
+      setText('bv2-cue-message', message);
+      setText('bv2-lobby-status', message);
       return;
     }
     const timerEl = document.getElementById('bv2-timer'); const barEl = document.getElementById('bv2-timer-bar'); const trackEl = document.getElementById('bv2-timer-track');
@@ -1946,18 +1983,24 @@ export const featureReady = (async () => {
 
   function subscribeRoom(roomId) {
     detachRoomListener(); state.roomId = roomId;
+    state.syncPaused = true;
+    if (state.syncPauseReason !== 'quota') state.syncPauseReason = 'offline';
     const serial = state.subscriptionSerial, uid = me()?.uid;
     const current = () => state.roomId === roomId && state.subscriptionSerial === serial && me()?.uid === uid;
     state.unsub = onSnapshot(roomRef(roomId), { includeMetadataChanges: true }, snap => {
       if (!current()) return;
-      if (state.syncPaused && (snap.metadata?.fromCache || snap.metadata?.hasPendingWrites)) return;
+      if (snap.metadata?.fromCache) { pauseForRoomConnection(); return; }
+      if (state.syncPaused && snap.metadata?.hasPendingWrites) return;
       if (state.syncPaused) state.disconnectGraceUntilMs = nowMs() + BATTLE_V2.disconnectTtlMs;
-      state.syncPaused = false;
+      state.syncPaused = false; state.syncPauseReason = null; state.connectionFailures = 0;
+      if (state.quotaReconnect) clearTimeout(state.quotaReconnect);
+      state.quotaReconnect = null;
       if (!snap.metadata?.fromCache && !snap.metadata?.hasPendingWrites) roomQuota.success();
       onRoomSnapshot(snap);
     }, (error) => {
       if (!current()) return;
       roomQuota.failure(error);
+      if (String(error?.code || '').replace(/^firestore\//, '') === 'unavailable') pauseForRoomConnection(true);
       logBattleFirestoreError('listener failed', error);
       toast(firebaseBattleErrorMessage(error, '鬥法同步暫時中斷，房間仍會保留。'));
     });

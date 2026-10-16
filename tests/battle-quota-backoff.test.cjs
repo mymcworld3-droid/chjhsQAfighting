@@ -56,13 +56,13 @@ test('quota reconnect ignores cached data, waits for server metadata, and cannot
   let now=1000,next,error,detaches=0;const timers=new Map();let id=0;
   const ctx={state:{roomId:'a',subscriptionSerial:0,matchSerial:1,role:'host',animationTimers:[]},
     HEARTBEAT_MS:8000,nowMs:()=>now,me:()=>({uid:'u'}),BATTLE_V2:{disconnectTtlMs:45000},roomRef:()=>({}),
-    createFirestoreQuotaGuard,toast(){},firebaseBattleErrorMessage:()=>'',logBattleFirestoreError(){},
+    createFirestoreQuotaGuard,setText(){},toast(){},firebaseBattleErrorMessage:()=>'',logBattleFirestoreError(){},
     setTimeout:(f,ms)=>{timers.set(++id,{f,ms});return id;},clearTimeout:i=>timers.delete(i),
     setInterval:()=>1,clearInterval(){},heartbeat(){},tickRoom(){},
     onSnapshot:(_,options,n,e)=>{assert.equal(options.includeMetadataChanges,true);next=n;error=e;return ()=>detaches++;},
     onRoomSnapshot:()=>{ctx.applied=(ctx.applied||0)+1;}};
   vm.runInNewContext('const roomQuota=createFirestoreQuotaGuard({now:nowMs,onExhausted:pauseForRoomQuota});'+
-    section('  function pauseForRoomQuota()', '  function finite(')+
+    section('  async function runRoomRequest(', '  function finite(')+
     section('  function detachRoomListener()', '  function stopTimers()')+
     section('  function subscribeRoom(', '  function storyOrTutorialOpen(')+'\nthis.sub=subscribeRoom;',ctx);
   ctx.sub('a');error(quota());assert.equal(ctx.state.syncPaused,true);assert.equal(detaches,1);assert.equal(timers.size,1);
@@ -82,4 +82,56 @@ test('paused battle ticks never settle, time out, or claim a disconnected oppone
     document:{getElementById(){calls++;}},claimDisconnectedOpponent(){calls++;},settleRound(){calls++;}};
   vm.runInNewContext(section('  function tickRoom()', '  async function recordBattleResult(')+'\nthis.tick=tickRoom;',ctx);
   for(let i=0;i<100;i++) ctx.tick();assert.equal(calls,0);
+});
+
+
+function connectionHarness() {
+  let next,error,id=0,detaches=0,requests=0,time=1000;
+  const timers=new Map(),messages=[];
+  const ctx={state:{roomId:'a',subscriptionSerial:0,matchSerial:1,role:'host',animationTimers:[]},
+    HEARTBEAT_MS:8000,nowMs:()=>time,me:()=>({uid:'u'}),BATTLE_V2:{disconnectTtlMs:45000},roomRef:()=>({}),
+    createFirestoreQuotaGuard,setText:(id,text)=>messages.push(text),toast(){},firebaseBattleErrorMessage:()=>'',logBattleFirestoreError(){},
+    setTimeout:(f,ms)=>{timers.set(++id,{f,ms});return id;},clearTimeout:i=>timers.delete(i),
+    setInterval:()=>1,clearInterval(){},heartbeat(){},tickRoom(){},
+    onSnapshot:(_,options,n,e)=>{next=n;error=e;return ()=>detaches++;},
+    onRoomSnapshot:()=>{ctx.applied=(ctx.applied||0)+1;}};
+  vm.runInNewContext('const roomQuota=createFirestoreQuotaGuard({now:nowMs,onExhausted:pauseForRoomQuota});'+
+    section('  async function runRoomRequest(', '  function finite(')+
+    section('  function detachRoomListener()', '  function stopTimers()')+
+    section('  function subscribeRoom(', '  function storyOrTutorialOpen(')+
+    '\nthis.sub=subscribeRoom;this.request=runRoomRequest;',ctx);
+  ctx.sub('a');
+  return {ctx,timers,messages,snap:s=>next(s),fail:e=>error(e),get detaches(){return detaches;},
+    request:()=>ctx.request(()=>{requests++;}),get requests(){return requests;},
+    retry(){const [key,timer]=[...timers.entries()][0];timers.delete(key);time+=timer.ms;timer.f();return timer.ms;}};
+}
+
+test('an initial cached missing room does not eject the player, and cached updates pause an active battle', async () => {
+  const h=connectionHarness();
+  h.snap({metadata:{fromCache:true},exists:()=>false});
+  assert.equal(h.ctx.applied,undefined);assert.equal(h.ctx.state.syncPauseReason,'offline');
+  assert.equal(h.detaches,0,'keep the SDK listener alive for automatic reconnect');
+  for(let i=0;i<30;i++) await assert.rejects(h.request(),{code:'unavailable'});
+  assert.equal(h.requests,0);assert.equal(h.timers.size,0,'no parallel polling while SDK listener reconnects');
+  h.snap({metadata:{fromCache:false,hasPendingWrites:false}});
+  assert.equal(h.ctx.applied,1);assert.equal(h.ctx.state.syncPaused,false);
+  await h.request();assert.equal(h.requests,1);
+  h.snap({metadata:{fromCache:true}});assert.equal(h.ctx.applied,1);assert.equal(h.ctx.state.syncPaused,true);
+});
+
+test('terminated unavailable listeners retry with a short backoff, separate from quota cooldown', () => {
+  const h=connectionHarness(),offline=()=>Object.assign(Error('network'),{code:'unavailable'});
+  h.fail(offline());assert.equal(h.detaches,1);assert.equal(h.ctx.state.syncPauseReason,'offline');
+  assert.equal(h.retry(),5000);h.fail(offline());assert.equal(h.retry(),10000);
+  h.snap({metadata:{fromCache:false,hasPendingWrites:false}});assert.equal(h.ctx.state.connectionFailures,0);
+  assert.equal(h.ctx.state.syncPaused,false);assert.equal(h.timers.size,0);
+  h.fail(offline());assert.equal(h.retry(),5000,'server recovery resets network backoff');
+});
+
+test('unavailable RPCs pause the room and restart its listener; cancelled sessions cannot reconnect', async () => {
+  const h=connectionHarness();h.snap({metadata:{fromCache:false,hasPendingWrites:false}});
+  await assert.rejects(h.ctx.request(()=>{throw Object.assign(Error('network'),{code:'firestore/unavailable'});}),{code:'firestore/unavailable'});
+  assert.equal(h.ctx.state.syncPauseReason,'offline');assert.equal(h.timers.size,1);
+  const callback=[...h.timers.values()][0].f;
+  h.ctx.state.roomId=null;h.ctx.state.matchSerial++;callback();assert.equal(h.ctx.state.roomId,null);
 });
