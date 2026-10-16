@@ -107,6 +107,7 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
     const el = document.createElement('style');
     el.id = 'daily-meditation-style';
     el.textContent = [
+      '.dm-overlay,.dm-overlay *{box-sizing:border-box}',
       '.dm-overlay{position:fixed;inset:0;z-index:12000;display:grid;place-items:center;padding:0;background:rgba(3,4,7,.94);backdrop-filter:blur(15px);color:#f2e9d7}',
       '.dm-card{position:relative;display:flex;flex-direction:column;width:100%;height:100dvh;max-height:100dvh;overflow:hidden;border:1px solid rgba(216,177,93,.32);border-radius:0;background:radial-gradient(ellipse at 50% -20%,rgba(201,154,69,.19),transparent 55%),linear-gradient(165deg,#171810,#090c10 70%);box-shadow:0 25px 85px #000b}',
       '.dm-top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 20px;border-bottom:1px solid #b9964b30}',
@@ -128,7 +129,11 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
       '.dm-options{display:grid;gap:9px}.dm-option{display:flex;align-items:flex-start;text-align:left;gap:10px;min-height:47px;padding:12px;border:1px solid #c4a7763b;border-radius:12px;background:#ffffff08;color:#e9e4db;line-height:1.65;cursor:pointer;overflow-wrap:anywhere;white-space:pre-wrap}',
       '.dm-option b{flex:0 0 25px;color:#e6c477}.dm-option:disabled{cursor:default;opacity:.8}.dm-option.dm-correct{border-color:#80bb8e;background:#32583a49}.dm-option.dm-wrong{border-color:#c58181;background:#6c303049}',
       '.dm-result{font:700 27px "Noto Serif TC",serif;color:#e5c77c;text-align:center;letter-spacing:.1em}',
-      '.dm-star-track{display:grid;grid-template-columns:repeat(15,minmax(0,1fr));gap:3px;margin:12px 0}.dm-star{color:#555047;font-size:20px;text-align:center}.dm-star.earned{color:#edcc78}.dm-milestones{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}.dm-milestone{padding:13px 10px;border:1px solid #b9964b40;background:#ffffff05;border-radius:10px;display:grid;gap:9px}.dm-milestone h4{margin:0;color:#eacf8a}.dm-milestone p{font-size:12px;line-height:1.7;margin:0;min-height:62px}.dm-milestone button{min-height:39px;padding:8px;font-size:12px}.dm-board{width:100%;border-collapse:collapse;font-size:13px}.dm-board td,.dm-board th{padding:11px 8px;text-align:left;border-bottom:1px solid #ffffff15}.dm-board th{color:#bbae91;font-weight:500}.dm-board tr.is-me{background:#dfc27f10}.dm-section-title{margin:18px 0 8px;font:700 18px Noto Serif TC,serif;color:#ead29c}.dm-body{width:min(100%,1020px)}.dm-milestone.is-claimed{opacity:.65}.dm-top-actions{display:flex;gap:8px;align-items:center}.dm-top-actions .dm-action{min-height:35px;font-size:12px;padding:5px 11px}.dm-timing{font-size:11px;color:#999486}.dm-note strong{color:#eacf8a}.dm-claim-status{margin-top:10px}@media(max-width:600px){.dm-milestones{grid-template-columns:repeat(2,minmax(0,1fr))}.dm-milestone:last-child{grid-column:1/-1}.dm-milestone p{min-height:0}.dm-star{font-size:16px}.dm-heading{font-size:17px}.dm-board td,.dm-board th{padding:10px 4px;font-size:12px}}',
+      '.dm-star-heading{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:18px 0 16px}.dm-star-heading h3{margin:0}.dm-star-total{font-size:14px;color:#edcc78}.dm-star-total strong{font-size:23px}.dm-star-hint{margin:0 0 16px;font-size:12px;color:#beb7a7;line-height:1.7}',
+      // Reserve half a milestone column on the right; checkpoint centers then match 3/15 through 15/15 of the rail.
+      '.dm-star-journey{position:relative;margin-right:calc(100% / 11);margin-bottom:20px}.dm-star-track{position:absolute;top:16px;left:0;right:0;height:12px;border:1px solid #c0a36740;border-radius:20px;background:#282820;overflow:hidden}.dm-star-fill{height:100%;border-radius:inherit;background:linear-gradient(90deg,#94672e,#e5c06b);box-shadow:0 0 14px #dfb45155;transition:width .4s ease}.dm-star-track:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0,transparent calc(100% / 15 - 1px),#15170f80 calc(100% / 15 - 1px),#15170f80 calc(100% / 15))}',
+      '.dm-milestones{position:relative;display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}.dm-milestone{transform:translateX(50%);min-width:0;display:flex;flex-direction:column;align-items:center;text-align:center;gap:7px;padding:0 3px}.dm-checkpoint{position:relative;flex:0 0 auto;display:grid;place-items:center;width:44px;height:44px;padding:0;border:2px solid #665b41;border-radius:50%;background:#27291f;color:#857a60;font-size:21px;cursor:pointer}.dm-checkpoint:disabled{cursor:default}.dm-milestone.is-reached .dm-checkpoint{border-color:#c9a75b;color:#efcf83;background:#46391e}.dm-milestone.is-claimable .dm-checkpoint{border-color:#ffdc8c;background:linear-gradient(140deg,#b1843b,#705022);color:#fff1c6;box-shadow:0 0 0 4px #e6bb5320,0 0 20px #e6bb5333}.dm-checkpoint:focus-visible{outline:3px solid #fff1c6;outline-offset:4px}.dm-checkpoint:not(:disabled):hover{filter:brightness(1.2)}.dm-milestone.is-claimed .dm-checkpoint{background:#303a29;border-color:#93a77a;color:#c6d6a8}.dm-milestone strong{font-size:13px;color:#c0b598}.dm-milestone.is-reached strong{color:#eacf8a}.dm-milestone p{margin:0;font-size:12px;line-height:1.65;color:#b4ae9e;overflow-wrap:anywhere}.dm-milestone small{font-size:11px;color:#918c7e}.dm-milestone.is-claimable small{color:#f3d58e}.dm-milestone.is-claimed small{color:#b2c297}',
+      '.dm-board{width:100%;border-collapse:collapse;font-size:13px}.dm-board td,.dm-board th{padding:11px 8px;text-align:left;border-bottom:1px solid #ffffff15}.dm-board th{color:#bbae91;font-weight:500}.dm-board tr.is-me{background:#dfc27f10}.dm-section-title{margin:18px 0 8px;font:700 18px Noto Serif TC,serif;color:#ead29c}.dm-body{width:min(100%,1020px)}.dm-top-actions{display:flex;gap:8px;align-items:center}.dm-top-actions .dm-action{min-height:35px;font-size:12px;padding:5px 11px}.dm-timing{font-size:11px;color:#999486}.dm-note strong{color:#eacf8a}.dm-claim-status{margin-top:10px}@media(max-width:600px){.dm-milestone p{font-size:11px}.dm-heading{font-size:17px}.dm-board td,.dm-board th{padding:10px 4px;font-size:12px}}@media(prefers-reduced-motion:reduce){.dm-star-fill{transition:none}}',
       '@keyframes dm-pulse{50%{box-shadow:0 0 64px #c49a465c,inset 0 0 45px #d7ac3955;transform:scale(1.025)}}@keyframes dm-spin{to{transform:rotate(360deg)}}',
       '@media(max-width:500px){.dm-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.dm-top{padding:12px 15px}.dm-body{padding:13px}.dm-scene{min-height:125px}.dm-circle{width:88px;height:88px}.dm-circle:before{width:110px;height:110px}.dm-question{font-size:15px}.dm-summary strong{font-size:14px}}'
     ].join('\n');
@@ -152,11 +157,11 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
     });
     node('dm-close').focus({preventScroll:true});
   }
-  function rewardText(reward) {
+  function rewardText(reward,compact=false) {
     const parts=[reward.gold+' 靈石'];
-    if(reward.fragments)parts.push('元嬰碎精 ×'+reward.fragments);
-    if(reward.raidTickets)parts.push('團本入場券 ×'+reward.raidTickets);
-    if(reward.drawTickets)parts.push('本命法器抽獎券 ×'+reward.drawTickets);
+    if(reward.fragments)parts.push((compact?'碎精':'元嬰碎精')+' ×'+reward.fragments);
+    if(reward.raidTickets)parts.push((compact?'團本券':'團本入場券')+' ×'+reward.raidTickets);
+    if(reward.drawTickets)parts.push((compact?'抽獎券':'本命法器抽獎券')+' ×'+reward.drawTickets);
     return parts.map(esc).join('<br>');
   }
   function renderDashboard(clearStatus=true) {
@@ -165,9 +170,17 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
     const savedStatus=node('dm-status')?.textContent;
     const result=state.record?.lastResult || {};
     let html=summary([['我的星星',state.personalStars+' / 3'],['好友共修',state.stars+' / 15'],['連續閉關',(state.record?.streak||0)+' 日'],['本命抽獎券',(state.drawTickets||0)+' 張']]);
-    html+='<h3 class="dm-section-title">同門聚星</h3><div class="dm-star-track" role="img" aria-label="共修 '+state.stars+' 顆星，最多十五顆">'+Array.from({length:15},(_,i)=>'<span aria-hidden="true" class="dm-star'+(i<state.stars?' earned':'')+'">★</span>').join('')+'</div>';
-    html+='<div class="dm-milestones">'+state.milestones.map(step=>'<section class="dm-milestone'+(step.claimed?' is-claimed':'')+'"><h4>'+step.stars+' 星</h4><p>'+rewardText(step.reward)+'</p><button type="button" class="dm-action" data-dm-claim="'+step.stars+'" '+(!step.claimable||busy?'disabled':'')+'>'+(step.claimed?'已領取':step.claimable?'領取獎勵':!state.completed?'完成閉關後解鎖':'尚差 '+Math.max(0,step.stars-state.stars)+' 星')+'</button></section>').join('')+'</div>';
-    html+='<p class="dm-note">自己與互為好友的同門，答對一題各得一星；達到節點即可領獎，每日最多十五星。好友稍後出關仍會增加進度。元嬰碎精與抽獎券可提前累積，金丹境開放抽取。團本券已滿時，該券折為額外靈石。</p>';
+    const nextMilestone=state.milestones.find(step=>step.stars>state.stars);
+    html+='<div class="dm-star-heading"><h3 class="dm-section-title">同門聚星</h3><span class="dm-star-total">★ <strong>'+state.stars+'</strong> / 15</span></div>';
+    html+='<p class="dm-star-hint">'+(!state.completed?'完成自己的三題後，即可點擊達標的星星領獎。':nextMilestone?'再集 '+(nextMilestone.stars-state.stars)+' 星，解鎖 '+nextMilestone.stars+' 星獎勵。':state.milestones.some(step=>step.claimable)?'共修進度已滿，點擊亮起的星星領取獎勵。':'今日共修獎勵已全數領取。')+'</p>';
+    html+='<div class="dm-star-journey"><div class="dm-star-track" role="progressbar" aria-label="同門共修星數" aria-valuemin="0" aria-valuemax="15" aria-valuenow="'+state.stars+'" aria-valuetext="已集 '+state.stars+' 星，最多十五顆"><div class="dm-star-fill" style="width:'+(state.stars/15*100)+'%"></div></div>';
+    html+='<div class="dm-milestones">'+state.milestones.map(step=>{
+      const reached=state.stars>=step.stars;
+      const status=step.claimed?'已領取':step.claimable?'點擊領取':reached?'待出關':'差 '+(step.stars-state.stars)+' 星';
+      const label=step.stars+' 星，'+status+'，'+rewardText(step.reward).replace(/<br>/g,'、');
+      return '<section class="dm-milestone'+(reached?' is-reached':'')+(step.claimed?' is-claimed':'')+(step.claimable?' is-claimable':'')+'"><button type="button" class="dm-checkpoint" data-dm-claim="'+step.stars+'" aria-label="'+label+'" title="'+label+'" '+(!step.claimable||busy?'disabled':'')+'><span aria-hidden="true">'+(step.claimed?'✓':'★')+'</span></button><strong>'+step.stars+' 星</strong><p>'+rewardText(step.reward,true)+'</p><small>'+status+'</small></section>';
+    }).join('')+'</div></div>';
+    html+='<p class="dm-note">自己與互為好友的同門，答對一題各得一星；達到節點即可領獎，每日最多十五星。好友稍後出關仍會增加進度。元嬰碎精與本命法器抽獎券可提前累積，金丹境開放抽取。團本券已滿時，該券折為額外靈石。</p>';
     if(state.completed){
       html+='<h3 class="dm-section-title">今日出關 · '+state.personalStars+' 星</h3>'+summary([['答對',state.personalStars+' / 3'],['作答時間',duration(result.answerTimeMs)],['個人靈石','+'+(result.gold||0)],['個人元嬰碎精','+'+(result.fragments||0)]]);
       html+='<h3 class="dm-section-title">好友今日成績</h3><p class="dm-timing">星數優先，同星依作答時間排序。各自複習的錯題不同，排行供交流參考。</p><table class="dm-board"><thead><tr><th>排名</th><th>同門</th><th>星數</th><th>作答時間</th></tr></thead><tbody>'+state.rankings.map(row=>'<tr'+(row.uid===uid()?' class="is-me"':'')+'><td>'+row.rank+'</td><td>'+esc(row.name)+(row.uid===uid()?'（你）':'')+'</td><td>'+row.stars+' / 3</td><td>'+esc(duration(row.answerTimeMs))+'</td></tr>').join('')+'</tbody></table>';
