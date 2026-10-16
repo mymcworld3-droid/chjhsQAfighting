@@ -1,4 +1,5 @@
 import {} from './cultivation/solo-learning-rules.js';
+import './cultivation/answer-gold-rules.js';
 import './cultivation/quest-rules.js';
 import './cultivation/first-visit.js';
 import { resolvePlayerAvatar } from './cultivation/profile-avatar.js';
@@ -3228,7 +3229,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         stats.currentStreak++;
         if (stats.currentStreak > stats.bestStreak) stats.bestStreak = stats.currentStreak;
         
-        scoreGain = 20 + learningReward.gold; // 一般答對與學習加成
+        scoreGain = window.QAAnswerGoldRules.perCorrect(scoreBeforeAnswer) + learningReward.gold;
         fbTitle.innerHTML += ` <span class="text-yellow-400 text-sm ml-2 border border-yellow-500 rounded px-1">+${scoreGain}💰 · +${cultivationReward.gain} 修為</span>`;
     } else {
         if (!cultivationReward.streakPreserved) stats.currentStreak = 0;
@@ -3280,14 +3281,16 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
                 // A retry after an uncertain network result cannot award the first answer twice.
                 if (trialAnswerId && remote.arrivalTrialAnswerV1?.id) return remote.stats;
                 const verifiedLearning = learningRules?.reward(remote.stats || {}, quiz, isCorrect, remote.profile) || learningReward;
+                const verifiedGold = isCorrect ? window.QAAnswerGoldRules.perCorrect(remote.stats?.totalScore) + verifiedLearning.gold : 0;
                 const learningDelta = verifiedLearning.gain - learningReward.gain +
                     (verifiedLearning.recovery ? 0 : -recoveryCoreGain);
                 const savedStats = { ...stats,
                     ...(verifiedLearning.progress ? {soloLearningV1:verifiedLearning.progress} : {}),
-                    gold: Math.max(0, Number(remote.stats?.gold) || 0) + Math.max(0, Number(scoreGain) || 0) + verifiedLearning.gold - learningReward.gold,
+                    gold: Math.max(0, Number(remote.stats?.gold) || 0) + verifiedGold,
                     totalScore: Math.max(0, (Number(remote.stats?.totalScore) || 0) + cultivationDelta + learningDelta)
                 };
                 cultivationReward.gain = Math.max(0,cultivationDelta + learningDelta);
+                scoreGain = verifiedGold;
                 cultivationReward.learningGain = verifiedLearning.gain;
                 cultivationReward.learningMessage = verifiedLearning.message || '';
                 cultivationReward.recoveryBonusGain = verifiedLearning.recovery ? recoveryCoreGain : 0;
@@ -3302,7 +3305,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
                 if (auth.currentUser?.uid !== answerUser.uid || currentUserData?.stats !== stats) throw new Error('帳號已更換，請重新整理。');
                 Object.assign(stats, savedStats);
                 updateUIStats();
-                if (isCorrect && fbTitle) fbTitle.innerHTML = `${t('msg_correct')} <span class="text-yellow-400 text-sm ml-2">+${20 + (cultivationReward.learningGain || 0) * 10}💰 · +${cultivationReward.gain} 修為</span>`;
+                if (isCorrect && fbTitle) fbTitle.innerHTML = `${t('msg_correct')} <span class="text-yellow-400 text-sm ml-2">+${scoreGain}💰 · +${cultivationReward.gain} 修為</span>`;
                 window.dispatchEvent(new CustomEvent('xiuxian:quest-progress-updated'));
             }).then(() => showCultivationFeedback(cultivationReward, isCorrect));
     try {

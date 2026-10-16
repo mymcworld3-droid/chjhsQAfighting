@@ -51,6 +51,7 @@ function setup(totalScore = 0) {
     },
     window: {
       XianxiaQuestRules: require('../public/cultivation/quest-rules.js'),
+      QAAnswerGoldRules: require('../public/cultivation/answer-gold-rules.js'),
       addEventListener(type, fn) { listeners.set(type, fn); },
       dispatchEvent(event) { listeners.get(event.type)?.(event); }
     },
@@ -229,10 +230,12 @@ test('Golden Core realm gives +2 correct and never removes cultivation for wrong
 
   await h.answer();
   assert.equal(h.context.currentUserData.stats.totalScore, 28);
+  assert.equal(h.context.currentUserData.stats.gold, 25, 'the breakthrough answer uses the realm before this answer');
 
   h.newQuiz();
   await h.answer();
   assert.equal(h.context.currentUserData.stats.totalScore, 30);
+  assert.equal(h.context.currentUserData.stats.gold, 55, 'the next answer receives Golden Core gold');
 
   h.newQuiz();
   await h.answer(1, 0);
@@ -326,8 +329,8 @@ test('ordinary answer transactions preserve server quest rewards arriving before
   h.setRemoteStats({ totalScore: 12, gold: 80 });
   await h.answer();
   assert.equal(h.writes[0].data.stats.totalScore, 13);
-  assert.equal(h.writes[0].data.stats.gold, 100, '保留遠端 80 靈石並加上本題 20 靈石');
-  assert.equal(h.context.currentUserData.stats.gold, 100);
+  assert.equal(h.writes[0].data.stats.gold, 105, '保留遠端 80 靈石並加上築基每題 25 靈石');
+  assert.equal(h.context.currentUserData.stats.gold, 105);
   assert.equal(h.context.currentUserData.stats.totalScore, 13);
 });
 
@@ -336,9 +339,9 @@ test('real answer flow persists mistakes and awards correction variants exactly 
  const origin=h.context.window.currentActiveQuiz.data.q;
  await h.answer(1,0);assert.equal(h.writes.length,1);assert.equal(h.context.currentUserData.stats.totalScore,28);
  h.newQuiz();h.context.window.currentActiveQuiz.data.q='A new variation';h.context.window.currentActiveQuiz.recoveryOrigin=origin;
- await h.answer();assert.equal(h.context.currentUserData.stats.totalScore,31);assert.equal(h.context.currentUserData.stats.gold,30);
+ await h.answer();assert.equal(h.context.currentUserData.stats.totalScore,31);assert.equal(h.context.currentUserData.stats.gold,40);
  h.newQuiz();h.context.window.currentActiveQuiz.data.q='Another variation';h.context.window.currentActiveQuiz.recoveryOrigin=origin;
- await h.answer();assert.equal(h.context.currentUserData.stats.totalScore,33);assert.equal(h.context.currentUserData.stats.gold,50);
+ await h.answer();assert.equal(h.context.currentUserData.stats.totalScore,33);assert.equal(h.context.currentUserData.stats.gold,70);
 });
 test('a second tab cannot claim an already corrected origin again',async()=>{
  const h=setup(28),rules=require('../public/cultivation/solo-learning-rules.js');h.context.window.QASoloLearningRules=rules;
@@ -346,6 +349,6 @@ test('a second tab cannot claim an already corrected origin again',async()=>{
  h.context.currentUserData.stats.soloLearningV1={version:1,mistakes:{[key]:{recovered:false}}};
  h.setRemoteStats({soloLearningV1:{version:1,mistakes:{[key]:{recovered:true}}}});
  h.context.window.currentActiveQuiz.recoveryOrigin=origin;
- await h.answer();assert.equal(h.context.currentUserData.stats.totalScore,30);assert.equal(h.context.currentUserData.stats.gold,20);
+ await h.answer();assert.equal(h.context.currentUserData.stats.totalScore,30);assert.equal(h.context.currentUserData.stats.gold,30);
  assert.match(h.nodes.get('feedback-title').innerHTML,/\+2 修為/);
 });

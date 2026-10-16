@@ -1,5 +1,6 @@
 'use strict';
 const Growth = require('./public/cultivation/nascent-growth.js');
+const Gold = require('./public/cultivation/answer-gold-rules.js');
 const crypto = require('node:crypto');
 const { recordEvent } = require('./public/cultivation/quest-rules.js');
 const { PROJECT_IDS } = require('./firebase-admin-projects.cjs');
@@ -52,13 +53,15 @@ function learningReward(previous,e,player,legacyReceipt) {
   const masteredCount=Math.min(count(e.total),Math.max(masteredKeys.length,Array.isArray(e.masteredKeys)?0:count(e.correct))); // 相容更新前尚未結算的資格紀錄
   const newCorrect=Math.max(0,masteredCount-count(ledger.creditedCorrect));
   const targetGold=firstCompletionGold(masteredCount);
-  const goldAdded=Math.max(0,targetGold-count(ledger.goldPaid));
+  const realmGoldAdded=newCorrect*Gold.realm(player?.stats?.totalScore).bonus;
+  const goldAdded=Math.max(0,targetGold-count(ledger.goldPaid))+realmGoldAdded;
   const soulCultivationAdded=!ledger.soulClaimed && masteredCount>0 ? caveSoulBonus(player) : 0;
   const ownerRewarded=!ledger.ownerRewardClaimed && e.qualityEligible===true && e.accuracy>=.6;
-  return {firstCompletion:first,goldAdded,cultivationAdded:newCorrect+soulCultivationAdded,
+  return {firstCompletion:first,goldAdded,realmGoldAdded,cultivationAdded:newCorrect+soulCultivationAdded,
     soulCultivationAdded,spiritAdded:0,newCorrect,masteredCount,ownerRewarded,
     ledger:{version:2,masteredKeys,creditedCorrect:Math.max(count(ledger.creditedCorrect),masteredCount),
       goldPaid:Math.max(count(ledger.goldPaid),targetGold),soulClaimed:ledger.soulClaimed || masteredCount>0,
+      realmGoldPaid:count(ledger.realmGoldPaid)+realmGoldAdded,
       ownerRewardClaimed:ledger.ownerRewardClaimed || ownerRewarded}};
 }
 async function verifyRequest(req,resolveA) {
@@ -115,7 +118,7 @@ async function awardProgress(db,uid,e) {
     },createReceipt:r=>({uid,dongtianId:e.dongtianId,runId:e.runId,ownerUid,...r})});
   const d=receipt.duplicate ? receipt.receipt : receipt.result;
   return {applied:!receipt.duplicate,firstCompletion:d?.firstCompletion===true,
-    goldAdded:count(d?.goldAdded),cultivationAdded:count(d?.cultivationAdded),soulCultivationAdded:count(d?.soulCultivationAdded),
+    goldAdded:count(d?.goldAdded),realmGoldAdded:count(d?.realmGoldAdded),cultivationAdded:count(d?.cultivationAdded),soulCultivationAdded:count(d?.soulCultivationAdded),
     spiritAdded:count(d?.spiritAdded),correct:count(d?.correct),total:count(d?.total),tier:String(d?.tier || e.tier || ''),
     newCorrect:count(d?.newCorrect),masteredCount:count(d?.masteredCount),ownerRewarded:d?.ownerRewarded===true};
 }

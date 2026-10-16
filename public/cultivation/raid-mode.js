@@ -913,7 +913,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
         const spiritText = Number(resolution.spiritGain) > 0
           ? (result.spiritReward?.status === 'pending' ? '・元嬰碎精待入帳' : '・元嬰碎精 +1') : '';
         const learningText = Number(resolution.cultivationGain) > 0
-          ? '・修為 +'+Math.max(1,Number(result.spiritReward?.cultivationAdded)||1)+'・靈石 +20' + (result.spiritReward?.status === 'pending' ? '（待入帳）' : '') : '';
+          ? '・修為 +'+Math.max(1,Number(result.spiritReward?.cultivationAdded)||1)+'・靈石 +'+Number(result.spiritReward?.goldPerCorrect ?? resolution.goldGain ?? 0) + (result.spiritReward?.status === 'pending' ? '（待入帳）' : '') : '';
         const teamText = Number(resolution.teamBurstDamage) > 0 ? '・三才合擊 +' + Number(resolution.teamBurstDamage).toLocaleString() :
           (resolution.teamGuardReady === true ? '・同心破陣已成' : '');
         showCorrectAnswerFeedback((dealt > 0 ? '攻勢命中・' + dealt.toLocaleString() + ' 傷害' : '攻勢已凝聚') + hitText + teamText + learningText + spiritText);

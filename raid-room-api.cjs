@@ -11,6 +11,7 @@ const { advanceRaidRoom, startRaidScheduler } = require('./raid-clock.cjs');
 const { eligibleCorrect, learningCorrect, awardRaidSpirit } = require('./raid-spirit-reward.cjs');
 const { streamRaidRoom } = require('./raid-room-stream.cjs');
 const trainingAccess = require('./public/cultivation/training-access-rules.js');
+const answerGold = require('./public/cultivation/answer-gold-rules.js');
 const RAID_ACCESS = trainingAccess.PLACES.find(place => place.id === 'secret');
 
 function assertRaidAccess(accessScore, name = '') {
@@ -303,7 +304,7 @@ function createHandler({
     const key = roomId + ':' + uid;
     const cached = spiritCache.get(key);
     if (cached?.settledCorrect >= target && (cached.settledLearningCorrect || 0) >= learningTarget) {
-      return { ...cached, awarded:0, learningAwarded:0, status:'duplicate' };
+      return { ...cached, awarded:0, learningAwarded:0, goldAdded:0, status:'duplicate' };
     }
     try {
       const outcome = await awardSpirit(playerDb, uid, roomId, member);
@@ -557,7 +558,7 @@ function createHandler({
             questionId,
             correct,
             cultivationGain: correct ? 1 : 0,
-            goldGain: correct ? 20 : 0,
+            goldGain: correct ? answerGold.perCorrect(me.totalScore) : 0,
             spiritGain: correct && finite(me.totalScore) >= 68 ? 1 : 0,
             correctIndex: question.answerIndex,
             explanation: cleanString(question.explanation || '', 3000),

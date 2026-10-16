@@ -113,7 +113,7 @@ test('signed player-action resolves damage and spirit, ignores client correctnes
   assert.equal(f.a.docs.get('users/a').materialSystem.inventory[Growth.ITEM_ID],11);
   assert.equal(wrong.room.members.a.correct,1);
   assert.equal(f.a.docs.get('users/a').stats.totalScore,69);
-  assert.equal(f.a.docs.get('users/a').stats.gold,20);
+  assert.equal(f.a.docs.get('users/a').stats.gold,40);
   assert.equal(wrong.resolution.cultivationGain,0);
   assert.equal(wrong.resolution.goldGain,0);
   assert.equal((await f.request('get')).spiritReward.learningAwarded,0);
@@ -137,7 +137,7 @@ test('failed spirit grant is recovered by polling after loss, reconnect and serv
   assert.equal(recovered.spiritReward.awarded,0);
   assert.equal(recovered.spiritReward.learningAwarded,0);
   assert.equal(f.a.docs.get('users/a').stats.totalScore,69);
-  assert.equal(f.a.docs.get('users/a').stats.gold,20);
+  assert.equal(f.a.docs.get('users/a').stats.gold,40);
   assert.equal(f.a.docs.get('users/a').materialSystem.inventory[Growth.ITEM_ID],11);
 });
 
@@ -157,8 +157,8 @@ test('new answer earnings are cumulative, survive loss and do not retroactively 
   const results=await Promise.all([3,3,1,5,2].map(n=>awardRaidSpirit(f.db,'a','lost_room',member(n))));
   assert.equal(results.reduce((sum,r)=>sum+r.learningAwarded,0),5);
   assert.equal(f.docs.get('users/a').stats.totalScore,33);
-  assert.equal(f.docs.get('users/a').stats.gold,125);
-  assert.deepEqual(f.docs.get('users/a').raidLearningRewards,{cultivation:5,gold:100,fragments:0});
+  assert.equal(f.docs.get('users/a').stats.gold,175);
+  assert.deepEqual(f.docs.get('users/a').raidLearningRewards,{cultivation:5,gold:150,fragments:0});
   assert.equal((await awardRaidSpirit(f.db,'a','lost_room',member(5))).learningAwarded,0);
 });
 test('old spirit receipts are retained when new cultivation and gold begin',async()=>{
@@ -169,5 +169,29 @@ test('old spirit receipts are retained when new cultivation and gold begin',asyn
   const r=await awardRaidSpirit(f.db,'a','old_room',{totalScore:68,spiritCorrect:6,learningCorrect:1,correct:6,attempts:6});
   assert.equal(r.awarded,1);assert.equal(r.learningAwarded,1);
   assert.equal(f.docs.get('users/a').materialSystem.inventory[Growth.ITEM_ID],11);
-  assert.equal(f.docs.get('users/a').stats.gold,20);
+  assert.equal(f.docs.get('users/a').stats.gold,40);
+});
+test('raid entry realm fixes the per-answer rate, while a new room uses the promoted realm',async()=>{
+  const f=memoryDb({'users/a':{uid:'a',stats:{totalScore:28,gold:0}}});
+  const member=(n,score=28)=>({totalScore:score,learningCorrect:n,correct:n,attempts:n});
+  const first=await awardRaidSpirit(f.db,'a','realm-room',member(1));
+  assert.equal(first.goldPerCorrect,30);assert.equal(first.goldAdded,30);
+  f.docs.get('users/a').stats.totalScore=68;
+  const second=await awardRaidSpirit(f.db,'a','realm-room',member(2,68));
+  assert.equal(second.goldPerCorrect,30);assert.equal(second.goldAdded,30);
+  assert.equal((await awardRaidSpirit(f.db,'a','realm-room',member(2,68))).goldAdded,0);
+  const promoted=await awardRaidSpirit(f.db,'a','promoted-room',member(1,68));
+  assert.equal(promoted.goldPerCorrect,40);assert.equal(promoted.goldAdded,40);
+  assert.equal(f.docs.get('users/a').stats.gold,100);
+});
+test('old paid raid answers are never repriced when new realm gold begins',async()=>{
+  const {createHash}=require('node:crypto');
+  const id=createHash('sha256').update('old-paid-room\na').digest('hex');
+  const f=memoryDb({'users/a':{uid:'a',stats:{totalScore:68,gold:40}},
+    ['raidSpiritClaims/'+id]:{settledCorrect:0,settledLearningCorrect:2}});
+  const member=n=>({totalScore:68,learningCorrect:n,correct:n,attempts:n});
+  assert.equal((await awardRaidSpirit(f.db,'a','old-paid-room',member(2))).goldAdded,0);
+  assert.equal(f.docs.get('users/a').stats.gold,40);
+  const next=await awardRaidSpirit(f.db,'a','old-paid-room',member(3));
+  assert.equal(next.goldAdded,40);assert.equal(f.docs.get('users/a').stats.gold,80);
 });

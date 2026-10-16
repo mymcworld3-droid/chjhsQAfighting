@@ -22,23 +22,51 @@ const entry=(run,correctIndices,owner='owner')=>({id:run,uid:'u',dongtianId:'c',
 const db=()=>fakeDb({'users/u':player(),'users/owner':{stats:{gold:0,totalScore:0}}});
 test('all-wrong first completion gives only 30 stones, then correction pays newly mastered questions',async()=>{
  const d=db();let r=await api.awardProgress(d,'u',entry('r1',[]));assert.equal(r.goldAdded,30);assert.equal(r.cultivationAdded,0);assert.equal(r.ownerRewarded,false);
- r=await api.awardProgress(d,'u',entry('r2',[0,1]));assert.equal(r.goldAdded,60);assert.equal(r.cultivationAdded,2);assert.equal(r.newCorrect,2);
- r=await api.awardProgress(d,'u',entry('r3',[1,2]));assert.equal(r.goldAdded,30);assert.equal(r.newCorrect,1);
- r=await api.awardProgress(d,'u',entry('r4',[0,1,2,3]));assert.equal(r.goldAdded,30);assert.equal(r.newCorrect,1);assert.equal(r.ownerRewarded,true);
+ r=await api.awardProgress(d,'u',entry('r2',[0,1]));assert.equal(r.goldAdded,80);assert.equal(r.cultivationAdded,2);assert.equal(r.newCorrect,2);
+ r=await api.awardProgress(d,'u',entry('r3',[1,2]));assert.equal(r.goldAdded,40);assert.equal(r.newCorrect,1);
+ r=await api.awardProgress(d,'u',entry('r4',[0,1,2,3]));assert.equal(r.goldAdded,40);assert.equal(r.newCorrect,1);assert.equal(r.ownerRewarded,true);
  r=await api.awardProgress(d,'u',entry('r5',[0,1,2,3]));assert.equal(r.goldAdded,0);assert.equal(r.cultivationAdded,0);assert.equal(r.ownerRewarded,false);
- assert.equal(d.docs.get('users/u').stats.gold,150);assert.equal(d.docs.get('users/u').stats.totalScore,32);
+ assert.equal(d.docs.get('users/u').stats.gold,190);assert.equal(d.docs.get('users/u').stats.totalScore,32);
  assert.equal(d.docs.get('users/owner').stats.gold,5);
 });
 test('concurrent replays and duplicate receipts cannot award an overlapping question twice',async()=>{
  const d=db();const results=await Promise.all([api.awardProgress(d,'u',entry('a',[0,1,2])),api.awardProgress(d,'u',entry('b',[1,2,3]))]);
- assert.equal(results.reduce((s,r)=>s+r.cultivationAdded,0),4);assert.equal(d.docs.get('users/u').stats.gold,150);
- const repeat=await api.awardProgress(d,'u',entry('a',[0,1,2]));assert.equal(repeat.applied,false);assert.equal(d.docs.get('users/u').stats.gold,150);
+ assert.equal(results.reduce((s,r)=>s+r.cultivationAdded,0),4);assert.equal(d.docs.get('users/u').stats.gold,190);
+ const repeat=await api.awardProgress(d,'u',entry('a',[0,1,2]));assert.equal(repeat.applied,false);assert.equal(d.docs.get('users/u').stats.gold,190);
+});
+test('promotion increases gold for newly mastered questions without repricing previously paid mastery',async()=>{
+ const d=db(),p=d.docs.get('users/u');p.stats.totalScore=67;
+ const first=await api.awardProgress(d,'u',entry('realm-first',[0]));
+ assert.equal(first.goldAdded,70);assert.equal(first.realmGoldAdded,10);
+ assert.equal(d.docs.get('users/u').stats.totalScore,68);
+ assert.equal((await api.awardProgress(d,'u',entry('same-after-promotion',[0]))).goldAdded,0);
+ const second=await api.awardProgress(d,'u',entry('realm-second',[0,1]));
+ assert.equal(second.goldAdded,50);assert.equal(second.realmGoldAdded,20);
+ d.docs.get('users/u').stats.totalScore=188;
+ const third=await api.awardProgress(d,'u',entry('realm-third',[0,1,2]));
+ assert.equal(third.goldAdded,60);assert.equal(third.realmGoldAdded,30);
+ const paid=d.docs.get('users/u').stats.gold;
+ assert.equal(paid,180);
+ const repeat=await api.awardProgress(d,'u',entry('realm-first',[0]));
+ assert.equal(repeat.applied,false);assert.equal(repeat.goldAdded,70);
+ assert.equal(d.docs.get('users/u').stats.gold,paid);
+ const ledger=d.docs.get('dongtianPlays/u__c').learningRewardV2;
+ assert.equal(ledger.goldPaid,120);assert.equal(ledger.realmGoldPaid,60);
+});
+test('old mastery ledgers do not grant retroactive realm bonuses or repeat them after promotion',async()=>{
+ const d=db();d.docs.get('users/u').stats.totalScore=188;
+ d.docs.set('dongtianPlays/u__c',{completed:true,learningRewardV2:{version:2,
+  masteredKeys:entry('old',[0,1]).masteredKeys,creditedCorrect:2,goldPaid:90,soulClaimed:true,ownerRewardClaimed:true}});
+ assert.equal((await api.awardProgress(d,'u',entry('repeat-old',[0,1]))).goldAdded,0);
+ const newer=await api.awardProgress(d,'u',entry('learn-new',[0,1,2]));
+ assert.equal(newer.goldAdded,60);assert.equal(newer.realmGoldAdded,30);
+ assert.equal((await api.awardProgress(d,'u',entry('repeat-new',[0,1,2]))).goldAdded,0);
 });
 test('legacy first receipt protects paid stones and derives correction baseline even after a worse replay',async()=>{
  const d=db();d.docs.set('dongtianPlays/u__c',{completed:true,correct:0,total:4});
  d.docs.set('dongtianRewardClaims/old',{uid:'u',dongtianId:'c',firstCompletion:true,correct:2,goldAdded:270,cultivationAdded:2});
- const r=await api.awardProgress(d,'u',entry('new',[0,1,2]));assert.equal(r.goldAdded,0);assert.equal(r.newCorrect,1);assert.equal(r.cultivationAdded,1);assert.equal(r.ownerRewarded,false);
- const again=await api.awardProgress(d,'u',entry('next',[0,1,2,3]));assert.equal(again.goldAdded,0);assert.equal(again.cultivationAdded,1);
+ const r=await api.awardProgress(d,'u',entry('new',[0,1,2]));assert.equal(r.goldAdded,10);assert.equal(r.newCorrect,1);assert.equal(r.cultivationAdded,1);assert.equal(r.ownerRewarded,false);
+ const again=await api.awardProgress(d,'u',entry('next',[0,1,2,3]));assert.equal(again.goldAdded,10);assert.equal(again.cultivationAdded,1);
 });
 test('owner reward requires quality and meaningful accuracy, excludes self-play, and can be earned on correction',async()=>{
  const d=db();const bad=entry('bad',[0,1,2,3]);bad.qualityEligible=false;
