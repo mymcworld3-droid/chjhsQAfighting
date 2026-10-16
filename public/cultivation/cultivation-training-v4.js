@@ -154,7 +154,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     },
     {
       id: 'wugou', name: '無垢清心丹', icon: '◇', tone: 'silver',
-      effect(grade) { return `首次答對先前錯題的同概念變式，額外 +1 修為；鬥法答錯時有 ${chanceByGrade(grade, 20, 10, 100)}% 機率產生道心護體；護體每次僅抵銷一次傷害後就消失，須由金丹再次凝聚；完全擋下普通首擊時不觸發連擊；真傷與追擊依各自效果結算。`; },
+      effect(grade) { return `首次答對先前錯題的同概念變式，額外 +1 修為；鬥法答錯時有 ${chanceByGrade(grade, 20, 5, 60)}% 機率產生道心護體；護體每次僅抵銷一次傷害後就消失，須由金丹再次凝聚；完全擋下普通首擊時不觸發連擊；真傷與追擊依各自效果結算。`; },
       ability: '以訂正清心悟道，鬥法失誤時可凝聚護體。',
       upkeep: '答錯後重新定神即可。',
       warning: '訂正加成每道來源錯題一次，戰鬥護體仍只抵擋一次普通傷害。',
