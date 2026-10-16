@@ -107,3 +107,23 @@ test('the trial catalog, raid engine and training map agree on the Foundation un
   assert.equal(context.trial.minimumScore,secret.threshold);
   assert.equal(context.trial.minimumRealm,secret.realm);
 });
+
+test('hard/extreme rooms require their own trusted realm and quick matchmaking never downgrades tier',async()=>{
+  const tooLow=fixture({stats:{totalScore:28}});
+  const rejected=await tooLow.request('create',{difficulty:'extreme'});
+  assert.equal(rejected.status,403);
+  assert.match(rejected.body.error,/元嬰/);
+
+  const eligible=fixture({stats:{totalScore:68}});
+  const created=await eligible.request('quick',{difficulty:'extreme'});
+  assert.equal(created.status,200);
+  assert.notEqual(created.body.roomId,'room12345','normal waiting rooms are excluded');
+  assert.equal(created.body.room.difficulty,'extreme');
+
+  const invited=fixture({stats:{totalScore:10}});
+  const old=invited.c.docs.get('raidRooms/room12345');
+  invited.c.docs.set('raidRooms/room12345',{...old,difficulty:'hard'});
+  const mismatch=await invited.request('join-code');
+  assert.equal(mismatch.status,403);
+  assert.match(mismatch.body.error,/金丹/);
+});
