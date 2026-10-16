@@ -1,6 +1,6 @@
 import { getMaterialById } from './material-catalog.js';
 import './raid-difficulty.js';
-const raidDifficulty = globalThis.QARaidDifficulty;
+const raidDifficulty = globalThis.QARaidDifficulty || {get:()=>null, TIERS:{normal:{name:'普通'}}};
 function escape(value) {
   return String(value ?? '').replaceAll('&','&amp;').replaceAll('<','&lt;')
     .replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;');
