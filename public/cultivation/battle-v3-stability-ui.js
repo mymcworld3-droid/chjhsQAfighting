@@ -371,6 +371,59 @@
         #page-battle .bv2-quiz .bv2-option{min-height:44px!important}
       }
 
+      /* Solo-style reading layout. The timer is a sibling of the only question
+         scroller, so long questions, explanations and answer zoom cannot hide it. */
+      #page-battle.bv2-quiz-active{
+        background:radial-gradient(ellipse at 50% 0,rgba(97,116,67,.14),transparent 55%),linear-gradient(180deg,#10221b,#070f0b)!important
+      }
+      #page-battle #bv2-quiz:not(.hidden){flex-direction:column;gap:0}
+      #page-battle #bv2-quiz > .bv2-quiz-timing{
+        box-sizing:border-box;position:relative;z-index:3;flex:0 0 auto;
+        width:100%;padding:9px clamp(10px,2.2vw,32px) 10px;
+        border-bottom:1px solid rgba(194,178,120,.22);background:rgba(12,25,19,.97)
+      }
+      #page-battle .bv2-quiz-timing .bv2-question-meta{
+        width:min(100%,900px);margin:0 auto;gap:10px;align-items:center;font-size:clamp(10px,1vw,12px);line-height:1.4
+      }
+      #page-battle .bv2-quiz-timing #bv2-phase{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#c8bb96}
+      #page-battle .bv2-quiz-timing #bv2-timer{flex:0 0 auto;white-space:nowrap;font-variant-numeric:tabular-nums}
+      #page-battle .bv2-quiz-timing .bv2-timer-track{width:min(100%,900px);height:5px;margin:8px auto 0!important}
+      #page-battle #bv2-quiz:not(.hidden) > .bv2-question-card{
+        flex:1 1 0;height:auto!important;min-height:0!important;
+        padding:clamp(12px,2vw,26px)!important;border:0;border-radius:0;
+        background:transparent;box-shadow:none;scroll-padding-block:14px
+      }
+      #page-battle #bv2-quiz > .bv2-question-card > *{flex-shrink:0;width:100%;max-width:900px;margin-left:auto;margin-right:auto}
+      #page-battle .bv2-quiz .bv2-question-sheet{
+        box-sizing:border-box;padding:clamp(20px,3vw,32px);margin-bottom:18px;
+        border:1px solid #9b8357;border-left:5px solid #8c7750;border-radius:4px;
+        background:radial-gradient(circle at 18% 12%,rgba(255,244,211,.2),transparent 35%),linear-gradient(110deg,#d2c4a4,#b9a681);
+        box-shadow:0 14px 35px rgba(4,21,17,.24),inset 0 0 32px rgba(82,60,30,.1);color:#211a10
+      }
+      #page-battle .bv2-question-kicker{display:block;margin-bottom:10px;font-size:11px;color:#665437;letter-spacing:.16em}
+      #page-battle .bv2-quiz .bv2-question-sheet h3{font-size:clamp(17px,1.6vw,23px)!important;line-height:1.8!important;font-weight:500;margin:0!important}
+      #page-battle .bv2-question-sheet h3,#page-battle .bv2-question-sheet h3 *{color:#211a10!important;text-shadow:none!important}
+      #page-battle #bv2-quiz .bv2-options{grid-template-columns:minmax(0,1fr)!important;gap:12px!important}
+      #page-battle #bv2-quiz .bv2-option{
+        min-height:68px!important;padding:16px 20px;border:1px solid rgba(218,202,139,.42);
+        border-radius:var(--ui-control-radius,8px);color:#eee8d5;
+        background:linear-gradient(145deg,rgba(46,54,39,.96),rgba(26,36,29,.97));
+        box-shadow:inset 0 1px rgba(255,255,255,.045),0 7px 18px rgba(0,0,0,.14)
+      }
+      #page-battle #bv2-quiz .bv2-option:not(:disabled):hover{background:linear-gradient(145deg,#3f4f36,#233126);border-color:#e1c77d}
+      #page-battle #bv2-quiz .bv2-option > span{border-radius:4px;color:#decb98;border-color:#a7ac7750;background:#a5b58a12}
+      #page-battle #bv2-quiz .bv2-option b{min-width:0;font-size:clamp(15px,1.3vw,18px)!important;line-height:1.65!important;font-weight:500}
+      #page-battle #bv2-quiz .bv2-option.selected{border-color:#dcc078;background:linear-gradient(145deg,#3c4930,#273b2d)}
+      #page-battle #bv2-quiz .bv2-option.correct{border-color:#b7dcae;background:linear-gradient(145deg,#3f7654,#285a40);color:#e1f3db;opacity:1}
+      #page-battle #bv2-quiz .bv2-option.wrong{border-color:#e2ad9a;background:linear-gradient(145deg,#835047,#69372f);color:#ffe4db;opacity:1}
+      #page-battle #bv2-quiz .bv2-explanation{box-sizing:border-box;margin-top:20px;padding:16px 20px;border:1px solid #a6b78d70;border-left:3px solid #ab975e;border-radius:10px;background:rgba(19,35,29,.88);color:#e5dbc4;line-height:1.8}
+      #page-battle #bv2-quiz .bv2-answer-status{margin-top:12px;color:#c2b69c;line-height:1.6}
+      #page-battle #bv2-quiz #bv2-review-continue{box-sizing:border-box;min-height:48px;margin-top:16px;padding:12px 20px;font-size:14px}
+      @media(max-width:620px){
+        #page-battle #bv2-quiz .bv2-question-sheet{padding:20px 16px;margin-bottom:14px}
+        #page-battle #bv2-quiz .bv2-option{padding:13px 14px;min-height:60px!important}
+      }
+
       /* Duel stage: one battlefield, not six stacked information cards. */
       #page-battle .bv2-arena:not(.hidden):not(.bt-tutorial-active){
         position:relative;grid-template-areas:'enemy' 'stage' 'mine'!important;

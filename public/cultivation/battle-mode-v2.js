@@ -78,6 +78,9 @@ export const featureReady = (async () => {
     disconnectClaimRound: null,
     renderedQuestionId: null,
     pendingAnswer: null,
+    quizScrollSerial: 0,
+    quizFooterScrollKey: null,
+    quizMathReady: null,
     seenActivationKeys: new Set(),
     seenSettlementKey: null,
     resultRecordedRoom: null,
@@ -324,14 +327,16 @@ export const featureReady = (async () => {
         </section>
 
         <section id="bv2-quiz" class="bv2-quiz hidden" aria-label="全畫面鬥法題目">
-          <div class="bv2-question-card">
+          <header class="bv2-quiz-timing" aria-label="作答計時">
             <div class="bv2-question-meta"><span id="bv2-phase">靜觀題意</span><span id="bv2-timer" class="idle">等待首答</span></div>
             <div class="bv2-timer-track idle" id="bv2-timer-track"><i id="bv2-timer-bar"></i></div>
-            <h3 id="bv2-question">正在凝聚題目…</h3>
+          </header>
+          <div class="bv2-question-card" tabindex="0" role="region" aria-label="鬥法題目與解析">
+            <section class="bv2-question-sheet"><span class="bv2-question-kicker">題目</span><h3 id="bv2-question">正在凝聚題目…</h3></section>
             <div id="bv2-options" class="bv2-options"></div>
             <div id="bv2-explanation" class="bv2-explanation hidden"></div>
             <p id="bv2-answer-status" class="bv2-answer-status">先看清題意；第一位作答者會啟動對手的 25 秒限時。</p>
-            <button id="bv2-review-continue" class="bv2-btn primary hidden" type="button">看完解析 · 返回戰場</button>
+            <button id="bv2-review-continue" class="bv2-btn primary hidden" type="button">繼續 · 返回戰場</button>
           </div>
         </section>
 
@@ -919,6 +924,7 @@ export const featureReady = (async () => {
     state.settlingRound = state.timeoutRound = state.preparingRound = state.prefetchingRound = state.advancingRound = state.disconnectClaimRound = null;
     state.prepareRetryAfterMs = state.prefetchRetryAfterMs = 0;
     state.introAdvancing = false; state.renderedQuestionId = null; state.pendingAnswer = null;
+    state.quizScrollSerial += 1; state.quizFooterScrollKey = null; state.quizMathReady = null;
     state.seenActivationKeys.clear(); state.seenSettlementKey = null; state.resultRecordedRoom = null;
     state.reviewedRound = state.reviewSubmittingRound = state.animationFinishedKey = null;
   }
@@ -1160,6 +1166,22 @@ export const featureReady = (async () => {
       (room.status === 'playing' ? (answered ? '等待對手回答' : '凝神答題') : '本回合解析'));
   }
 
+  function scrollQuizToBottom(questionId, afterTypeset = null) {
+    const roomId = state.roomId, serial = ++state.quizScrollSerial;
+    const schedule = () => requestAnimationFrame(() => {
+      const page = document.getElementById('page-battle');
+      const card = page?.querySelector('#bv2-quiz > .bv2-question-card');
+      if (!card?.isConnected || page.classList.contains('hidden') || page.dataset.bv2Phase !== 'quiz' ||
+          state.roomId !== roomId || state.renderedQuestionId !== questionId || state.quizScrollSerial !== serial) return;
+      const top = Math.max(0, card.scrollHeight - card.clientHeight);
+      if (typeof card.scrollTo === 'function') card.scrollTo({ top, behavior: window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ? 'auto' : 'smooth' });
+      else card.scrollTop = top;
+    });
+    schedule();
+    // Formula layout may grow after the first frame; keep the current footer in view.
+    if (afterTypeset?.then) Promise.resolve(afterTypeset).then(schedule, schedule);
+  }
+
   function renderQuestion(room, mine) {
     const qEl = document.getElementById('bv2-question'); const optionsEl = document.getElementById('bv2-options'); const expEl = document.getElementById('bv2-explanation');
     if (!qEl || !optionsEl || !expEl) return;
@@ -1170,6 +1192,9 @@ export const featureReady = (async () => {
     }
     if (state.renderedQuestionId !== question.id) {
       state.renderedQuestionId = question.id; state.pendingAnswer = null;
+      state.quizScrollSerial += 1; state.quizFooterScrollKey = null;
+      const card = document.querySelector('#bv2-quiz > .bv2-question-card');
+      if (card) card.scrollTop = 0;
       const rich = window.quizMathRichText || escapeHtml;
       window.quizMathClear?.([qEl, optionsEl, expEl]);
       qEl.innerHTML = rich(question.q); optionsEl.replaceChildren();
@@ -1179,7 +1204,7 @@ export const featureReady = (async () => {
         btn.addEventListener('click', () => submitAnswer(index)); optionsEl.appendChild(btn);
       });
       expEl.classList.add('hidden'); expEl.textContent = ''; delete expEl.dataset.mathQuestionId;
-      void window.quizMathTypeset?.([qEl, optionsEl]);
+      state.quizMathReady = window.quizMathTypeset?.([qEl, optionsEl]);
     }
     const answered = answerObject(mine, room.round); if (answered) state.pendingAnswer = null;
     const pending = state.pendingAnswer?.round === Number(room.round) ? state.pendingAnswer : null;
@@ -1189,6 +1214,7 @@ export const featureReady = (async () => {
       btn.classList.toggle('selected', answered?.choice === idx || pending?.choice === idx);
       btn.classList.toggle('correct', settled && idx === Number(question.ans)); btn.classList.toggle('wrong', settled && answered?.choice === idx && idx !== Number(question.ans));
     });
+    let explanationTypeset = null;
     if (settled) {
       // Firestore listeners can render this round repeatedly. Re-typeset only on
       // first settlement or if the explanation itself changed.
@@ -1198,7 +1224,7 @@ export const featureReady = (async () => {
         window.quizMathClear?.(expEl);
         expEl.innerHTML = '<strong>解析：</strong>' + (window.quizMathRichText || escapeHtml)(explanation);
         expEl.dataset.mathQuestionId = renderKey;
-        void window.quizMathTypeset?.(expEl);
+        explanationTypeset = window.quizMathTypeset?.(expEl);
       }
       expEl.classList.remove('hidden');
       setText('bv2-answer-status', answered?.correct
@@ -1211,7 +1237,15 @@ export const featureReady = (async () => {
     else if (room.answerWindowStartedAt || room.answerWindowStartedAtMs) setText('bv2-answer-status', '對手已先作答！你的 25 秒倒數已開始。');
     else setText('bv2-answer-status', '不限讀題時間；第一位作答者會啟動另一方的 25 秒倒數。');
     const continueButton = document.getElementById('bv2-review-continue');
-    if (continueButton) continueButton.classList.toggle('hidden', !settled || state.reviewedRound === Number(room.round));
+    const showContinue = settled && state.reviewedRound !== Number(room.round);
+    if (continueButton) continueButton.classList.toggle('hidden', !showContinue);
+    if (showContinue || (!settled && (answered || pending))) {
+      const footerKey = `${state.roomId}:${room.round}:${question.id}:${showContinue ? 'review' : 'submitted'}`;
+      if (state.quizFooterScrollKey !== footerKey) {
+        state.quizFooterScrollKey = footerKey;
+        scrollQuizToBottom(question.id, explanationTypeset || state.quizMathReady);
+      }
+    } else state.quizFooterScrollKey = null;
   }
 
 
