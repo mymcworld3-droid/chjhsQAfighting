@@ -3266,6 +3266,10 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
             question: questionText, 
             isCorrect: isCorrect, 
             timeTaken: timeTaken,
+            // Structured category for future recent-topic learning trends.
+            // Older logs without these fields remain usable for general history.
+            subject: String(window.currentActiveQuiz?.badge || '').replace('🎯 ', '').split(' | ')[0]?.trim().slice(0, 40) || '',
+            subTopic: String(window.currentActiveQuiz?.badge || '').replace('🎯 ', '').split(' | ')[1]?.trim().slice(0, 75) || '',
             topic: "Solo", 
             mode: 'infinite', 
             timestamp: serverTimestamp(),
@@ -5823,6 +5827,14 @@ window.updatePercentileDisplay = async (targetSubject, myMap) => {
 window.renderKnowledgeGraph = (targetSubject = null) => {
     const ctx = document.getElementById('knowledgeChart');
     if (!ctx) return;
+    if (window.QAAbilityGraph?.render) {
+        if (knowledgeChartInstance) { knowledgeChartInstance.destroy(); knowledgeChartInstance = null; }
+        return window.QAAbilityGraph.render({
+            targetSubject,
+            map: currentUserData?.stats?.knowledgeMap || {},
+            onPercentile: window.updatePercentileDisplay
+        });
+    }
 
     // 安全取得使用者知識圖譜數據 (如果尚未產生則給空物件)
     const map = (currentUserData && currentUserData.stats && currentUserData.stats.knowledgeMap) ? currentUserData.stats.knowledgeMap : {};
