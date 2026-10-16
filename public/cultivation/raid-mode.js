@@ -752,27 +752,35 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
   }
 
   async function prefetchQuestion() {
-    if (state.questionLoading || state.pendingQuestion || !state.scope || state.room?.status !== 'active') return;
+    // Await an already running generation instead of returning immediately and
+    // briefly showing the arena while the exact next question is still loading.
+    if (state.questionLoading) return state.pendingQuestionWork || Promise.resolve();
+    if (state.pendingQuestion || !state.scope || state.room?.status !== 'active') return Promise.resolve();
     state.questionLoading = true;
     const roomId = state.roomId;
     const token = state.battleSceneToken;
-    try {
-      const targetAction = state.playerActionCount + (state.status === 'question' ? 2 : 1);
-      const generated = await generateRaidQuestion({
-        scope: state.scope,
-        round: targetAction,
-        rank: state.player.rankLevel,
-        history: state.history,
-        roomId: state.roomId
-      });
-      if (state.room?.status === 'active' && state.roomId === roomId && token === state.battleSceneToken) state.pendingQuestion = generated;
-    } catch (error) {
-      if (token !== state.battleSceneToken || state.roomId !== roomId) return;
-      console.warn('[Raid] question generation failed:', error);
-      toast('題目生成失敗，請再試一次。');
-    } finally {
-      if (token === state.battleSceneToken) state.questionLoading = false;
-    }
+    const work = (async () => {
+      try {
+        const targetAction = state.playerActionCount + (state.status === 'question' ? 2 : 1);
+        const generated = await generateRaidQuestion({
+          scope: state.scope,
+          round: targetAction,
+          rank: state.player.rankLevel,
+          history: state.history,
+          roomId: state.roomId
+        });
+        if (state.room?.status === 'active' && state.roomId === roomId && token === state.battleSceneToken) state.pendingQuestion = generated;
+      } catch (error) {
+        if (token !== state.battleSceneToken || state.roomId !== roomId) return;
+        console.warn('[Raid] question generation failed:', error);
+        toast('題目生成失敗，請再試一次。');
+      } finally {
+        if (token === state.battleSceneToken) state.questionLoading = false;
+      }
+    })();
+    state.pendingQuestionWork = work;
+    void work.finally(() => { if (state.pendingQuestionWork === work) state.pendingQuestionWork = null; });
+    return work;
   }
 
   async function openNextQuestion() {

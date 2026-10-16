@@ -146,21 +146,43 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
   function normalizeQuestion(raw) {
     const source = Array.isArray(raw) ? raw[0] : (raw?.questions?.[0] || raw || {});
     const question = String(source.q ?? source.question ?? '').trim();
-    const options = Array.isArray(source.opts) ? source.opts : (Array.isArray(source.options) ? source.options : []);
+    // The shared /api/generate-quiz returns { correct, wrong[3] }, whereas
+    // older cached questions can still use { opts, ans }. Support both.
+    let options = Array.isArray(source.opts) ? [...source.opts] :
+      (Array.isArray(source.options) ? [...source.options] : null);
     let answer = source.ans ?? source.answer ?? source.correctIndex;
+    let needsShuffle = false;
+    if (!options && typeof source.correct === 'string' && Array.isArray(source.wrong) && source.wrong.length === 3) {
+      options = [source.correct, ...source.wrong];
+      answer = 0;
+      needsShuffle = true;
+    }
+    if (!options) throw new Error('INVALID_QUESTION_OPTIONS');
     if (typeof answer === 'string' && /^[A-Da-d]$/.test(answer.trim())) answer = answer.trim().toUpperCase().charCodeAt(0) - 65;
-    if (!Number.isInteger(Number(answer)) && typeof answer === 'string') answer = options.findIndex((item) => String(item) === answer);
+    if (!Number.isInteger(Number(answer)) && typeof answer === 'string') answer = options.findIndex(item => String(item) === answer);
     answer = Number(answer);
-    if (!question || options.length < 2 || !Number.isInteger(answer) || answer < 0 || answer >= options.length) throw new Error('INVALID_QUESTION');
-    return { question, options: options.map(String).slice(0, 6), answer, explanation: String(source.exp ?? source.explanation ?? '') };
+    const choices = options.map(value => String(value ?? '').trim());
+    const explanation = String(source.exp ?? source.explanation ?? '').trim();
+    if (question.length < 5 || choices.length !== 4 || choices.some(value => !value) ||
+        new Set(choices.map(value => value.replace(/\s+/g, '').toLowerCase())).size !== 4 ||
+        !Number.isInteger(answer) || answer < 0 || answer > 3 || explanation.length < 5)
+      throw new Error('INVALID_QUESTION');
+    if (needsShuffle) {
+      for (let i = choices.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [choices[i], choices[j]] = [choices[j], choices[i]];
+        if (answer === i) answer = j; else if (answer === j) answer = i;
+      }
+    }
+    return { question, options: choices, answer, explanation };
   }
 
-  async function fetchChallengeQuestion(role) {
+  async function fetchChallengeQuestion(role, avoidQuestions = []) {
     const level = currentGroup() === 'elementary' ? ELEMENTARY_QUIZ_LEVEL : QUIZ_LEVEL;
     const response = await fetch('/api/generate-quiz', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ subject: role.subject, level, difficulty: QUIZ_DIFFICULTY, rank: userData()?.stats?.rankLevel || 0, specificTopic: `${role.subject}${currentGroup() === 'elementary' ? '國小' : '國中'}程度綜合題。題目需有唯一明確答案。` })
+      body: JSON.stringify({ subject: role.subject, level, difficulty: QUIZ_DIFFICULTY, rank: userData()?.stats?.rankLevel || 0, quizMode: 'immortal-fast', avoidQuestions: avoidQuestions.slice(-12), specificTopic: `${role.subject}${currentGroup() === 'elementary' ? '國小' : '國中'}程度綜合題。題目需有唯一明確答案。` })
     });
     if (!response.ok) throw new Error(`QUIZ_API_${response.status}`);
     const body = await response.json();
@@ -169,7 +191,23 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
       raw = raw.replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/i, '').trim();
       raw = JSON.parse(raw);
     }
-    return normalizeQuestion(raw);
+    const normalized = normalizeQuestion(raw);
+    if (avoidQuestions.some(previous => String(previous).replace(/\s+/g, '') === normalized.question.replace(/\s+/g, ''))) throw new Error('DUPLICATE_IMMORTAL_QUESTION');
+    return normalized;
+  }
+
+  // Generate exactly one question ahead while the player reads the current one.
+  // The prefetch promise belongs to a single challenge; closing/restarting
+  // cannot reuse an old session's questions or spend extra requests forever.
+  function prefetchNextChallengeQuestion(serial) {
+    const current = challenge;
+    if (!current?.active || current.serial !== serial || current.nextPromise) return;
+    const seen = (current.seenQuestions || []).slice(-12);
+    const job = fetchChallengeQuestion(current.role, seen).catch(error => {
+      console.warn('[Five Immortals] background next question failed', error.message);
+      return null;
+    });
+    current.nextPromise = job;
   }
 
   function ensureModal() {
@@ -197,7 +235,7 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
     if (!currentGroup()) { toast('請先到洞府設定年級，才能查看及問鼎五仙。'); return; }
     if (!eligible()) { toast(`只有渡劫以上修士（${TRIBULATION_SCORE} 修為）能問鼎五仙。`); return; }
     const serial = ++sessionSerial;
-    challenge = { active: true, serial, cohort: currentGroup(), role, streak: 0, target: ownerRecord(roleId), busy: false, question: null };
+    challenge = { active: true, serial, cohort: currentGroup(), role, streak: 0, target: ownerRecord(roleId), busy: false, question: null, seenQuestions: [], nextPromise: null };
     ensureModal();
     document.getElementById('fi-title').textContent = `問鼎${role.name} · ${role.subject}`;
     document.getElementById('fi-target').textContent = String(challenge.target);
@@ -211,11 +249,18 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
     challenge.busy = true;
     body.innerHTML = `<div class="fi-loading"><i class="fa-solid fa-circle-notch fa-spin"></i><br><br>天機凝題中…</div>`;
     try {
-      const question = await fetchChallengeQuestion(challenge.role);
+      const current = challenge;
+      const waiting = current.nextPromise;
+      current.nextPromise = null;
+      let question = waiting ? await waiting : null;
+      if (!question) question = await fetchChallengeQuestion(current.role, current.seenQuestions);
       if (!challenge?.active || challenge.serial !== serial) return;
       challenge.question = question;
+      challenge.seenQuestions.push(question.question);
+      if (challenge.seenQuestions.length > 20) challenge.seenQuestions.shift();
       challenge.busy = false;
       renderQuestion(serial);
+      prefetchNextChallengeQuestion(serial);
     } catch (error) {
       console.warn('五仙問鼎出題失敗', error);
       if (!challenge?.active || challenge.serial !== serial) return;

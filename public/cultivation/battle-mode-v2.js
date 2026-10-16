@@ -536,7 +536,7 @@ export const featureReady = (async () => {
       reasoning_steps: Number(entry?.reasoning_steps) || 1
     }));
     const request = { ...selected, rank: Math.min(Number(room.host?.rankLevel) || 0, Number(room.guest?.rankLevel) || 0),
-      avoidQuestions, avoidQuestionMeta };
+      avoidQuestions, avoidQuestionMeta, quizMode: 'battle-fast' };
     try {
       const response = await fetch('/api/generate-quiz', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
