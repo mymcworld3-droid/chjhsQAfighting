@@ -146,13 +146,35 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
   function normalizeQuestion(raw) {
     const source = Array.isArray(raw) ? raw[0] : (raw?.questions?.[0] || raw || {});
     const question = String(source.q ?? source.question ?? '').trim();
-    const options = Array.isArray(source.opts) ? source.opts : (Array.isArray(source.options) ? source.options : []);
+    // The shared /api/generate-quiz returns { correct, wrong[3] }, whereas
+    // older cached questions can still use { opts, ans }. Support both.
+    let options = Array.isArray(source.opts) ? [...source.opts] :
+      (Array.isArray(source.options) ? [...source.options] : null);
     let answer = source.ans ?? source.answer ?? source.correctIndex;
+    let needsShuffle = false;
+    if (!options && typeof source.correct === 'string' && Array.isArray(source.wrong) && source.wrong.length === 3) {
+      options = [source.correct, ...source.wrong];
+      answer = 0;
+      needsShuffle = true;
+    }
+    if (!options) throw new Error('INVALID_QUESTION_OPTIONS');
     if (typeof answer === 'string' && /^[A-Da-d]$/.test(answer.trim())) answer = answer.trim().toUpperCase().charCodeAt(0) - 65;
-    if (!Number.isInteger(Number(answer)) && typeof answer === 'string') answer = options.findIndex((item) => String(item) === answer);
+    if (!Number.isInteger(Number(answer)) && typeof answer === 'string') answer = options.findIndex(item => String(item) === answer);
     answer = Number(answer);
-    if (!question || options.length < 2 || !Number.isInteger(answer) || answer < 0 || answer >= options.length) throw new Error('INVALID_QUESTION');
-    return { question, options: options.map(String).slice(0, 6), answer, explanation: String(source.exp ?? source.explanation ?? '') };
+    const choices = options.map(value => String(value ?? '').trim());
+    const explanation = String(source.exp ?? source.explanation ?? '').trim();
+    if (question.length < 5 || choices.length !== 4 || choices.some(value => !value) ||
+        new Set(choices.map(value => value.replace(/\s+/g, '').toLowerCase())).size !== 4 ||
+        !Number.isInteger(answer) || answer < 0 || answer > 3 || explanation.length < 5)
+      throw new Error('INVALID_QUESTION');
+    if (needsShuffle) {
+      for (let i = choices.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [choices[i], choices[j]] = [choices[j], choices[i]];
+        if (answer === i) answer = j; else if (answer === j) answer = i;
+      }
+    }
+    return { question, options: choices, answer, explanation };
   }
 
   async function fetchChallengeQuestion(role, avoidQuestions = []) {
