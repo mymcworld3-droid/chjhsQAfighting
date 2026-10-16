@@ -95,6 +95,14 @@ body.xianxia-theme .xiuxian-panel {
   border-radius: var(--ui-panel-radius) !important;
   box-shadow: none !important;
 }
+/* Tint only the cultivation landscape, beneath the foreground text and avatar. */
+body.xianxia-theme #page-home .xiuxian-panel::before {
+  background:
+    linear-gradient(0deg,rgba(32,24,12,.72),rgba(66,48,20,.3) 42%,rgba(207,165,79,.12) 76%),
+    linear-gradient(90deg,rgba(39,29,14,.84),rgba(74,55,25,.56) 42%,rgba(187,144,61,.18)),
+    var(--xq-scene-art) 68% center / cover !important;
+  filter: sepia(.55) saturate(.85);
+}
 body.xianxia-theme .stat-card {
   background: rgba(39,33,23,.93) !important;
   border-color: var(--quiet-line) !important;
