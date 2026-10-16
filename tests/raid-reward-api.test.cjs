@@ -111,7 +111,7 @@ test('wood iron materials never leak into ordinary drops and seals remain extern
   assert.match(drops, /enabled:false/);
   assert.match(drops, /quizDrops:false/);
   assert.match(drops, /dongtianDrops:false/);
-  assert.match(jobs, /consumeRefinementKey\(consumed\.materialSystem, plan\.keyRequirement\)/);
+  assert.match(jobs, /consumeRefinementKey\(consumed\.materialSystem, plan\.keyRequirement, raw\.isAdmin === true\)/);
   assert.match(ui, /const raidKeyIds = new Set\(Object\.values\(RAID_REFINEMENT_KEYS\)\)/);
   assert.match(ui, /!raidKeyIds\.has\(m\.id\)/);
 });
