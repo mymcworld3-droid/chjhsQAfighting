@@ -36,7 +36,7 @@ function client(shared,uid,roomId){
   FOUNDATION_SCORE:10,score:()=>20,ensurePage(){},showSection(){},setText(){},setPlayerAvatar(){},playerCoreLabel:()=>'',playerPowerLabel:()=>'',playerNascentSealLabel:()=>'',
   window:{ensureCombatStats:async()=>{},getCurrentUserData:()=>({stats:{totalScore:20}}),switchToPage:p=>pages.push(p),dispatchEvent(){}},
   document:{querySelector:()=>null,querySelectorAll:()=>[],getElementById:()=>null},setTimeout:()=>1,setInterval:()=>1,clearTimeout(){},clearInterval(){},
-  toast:m=>messages.push(m),logBattleFirestoreError(){},heartbeat(){},tickRoom(){},renderLobby(){},renderIntro(){},prefetchRoundQuestion(){},
+  pauseForRoomConnection(){},toast:m=>messages.push(m),logBattleFirestoreError(){},heartbeat(){},tickRoom(){},renderLobby(){},renderIntro(){},prefetchRoundQuestion(){},
   renderArena(){},renderQuiz(){},renderResult(){},answerObject:()=>null,settleRound(){},settlementKey:()=>'',CustomEvent:class{},alert(){},inviteOnlineFriends(){},
  });
  vm.runInContext(section('  const state = {','  function db()')+
