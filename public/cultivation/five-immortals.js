@@ -155,12 +155,12 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
     return { question, options: options.map(String).slice(0, 6), answer, explanation: String(source.exp ?? source.explanation ?? '') };
   }
 
-  async function fetchChallengeQuestion(role) {
+  async function fetchChallengeQuestion(role, avoidQuestions = []) {
     const level = currentGroup() === 'elementary' ? ELEMENTARY_QUIZ_LEVEL : QUIZ_LEVEL;
     const response = await fetch('/api/generate-quiz', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ subject: role.subject, level, difficulty: QUIZ_DIFFICULTY, rank: userData()?.stats?.rankLevel || 0, specificTopic: `${role.subject}${currentGroup() === 'elementary' ? '國小' : '國中'}程度綜合題。題目需有唯一明確答案。` })
+      body: JSON.stringify({ subject: role.subject, level, difficulty: QUIZ_DIFFICULTY, rank: userData()?.stats?.rankLevel || 0, quizMode: 'immortal-fast', avoidQuestions: avoidQuestions.slice(-12), specificTopic: `${role.subject}${currentGroup() === 'elementary' ? '國小' : '國中'}程度綜合題。題目需有唯一明確答案。` })
     });
     if (!response.ok) throw new Error(`QUIZ_API_${response.status}`);
     const body = await response.json();
@@ -169,7 +169,23 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
       raw = raw.replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/i, '').trim();
       raw = JSON.parse(raw);
     }
-    return normalizeQuestion(raw);
+    const normalized = normalizeQuestion(raw);
+    if (avoidQuestions.some(previous => String(previous).replace(/\s+/g, '') === normalized.question.replace(/\s+/g, ''))) throw new Error('DUPLICATE_IMMORTAL_QUESTION');
+    return normalized;
+  }
+
+  // Generate exactly one question ahead while the player reads the current one.
+  // The prefetch promise belongs to a single challenge; closing/restarting
+  // cannot reuse an old session's questions or spend extra requests forever.
+  function prefetchNextChallengeQuestion(serial) {
+    const current = challenge;
+    if (!current?.active || current.serial !== serial || current.nextPromise) return;
+    const seen = (current.seenQuestions || []).slice(-12);
+    const job = fetchChallengeQuestion(current.role, seen).catch(error => {
+      console.warn('[Five Immortals] background next question failed', error.message);
+      return null;
+    });
+    current.nextPromise = job;
   }
 
   function ensureModal() {
@@ -197,7 +213,7 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
     if (!currentGroup()) { toast('請先到洞府設定年級，才能查看及問鼎五仙。'); return; }
     if (!eligible()) { toast(`只有渡劫以上修士（${TRIBULATION_SCORE} 修為）能問鼎五仙。`); return; }
     const serial = ++sessionSerial;
-    challenge = { active: true, serial, cohort: currentGroup(), role, streak: 0, target: ownerRecord(roleId), busy: false, question: null };
+    challenge = { active: true, serial, cohort: currentGroup(), role, streak: 0, target: ownerRecord(roleId), busy: false, question: null, seenQuestions: [], nextPromise: null };
     ensureModal();
     document.getElementById('fi-title').textContent = `問鼎${role.name} · ${role.subject}`;
     document.getElementById('fi-target').textContent = String(challenge.target);
@@ -211,11 +227,18 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
     challenge.busy = true;
     body.innerHTML = `<div class="fi-loading"><i class="fa-solid fa-circle-notch fa-spin"></i><br><br>天機凝題中…</div>`;
     try {
-      const question = await fetchChallengeQuestion(challenge.role);
+      const current = challenge;
+      const waiting = current.nextPromise;
+      current.nextPromise = null;
+      let question = waiting ? await waiting : null;
+      if (!question) question = await fetchChallengeQuestion(current.role, current.seenQuestions);
       if (!challenge?.active || challenge.serial !== serial) return;
       challenge.question = question;
+      challenge.seenQuestions.push(question.question);
+      if (challenge.seenQuestions.length > 20) challenge.seenQuestions.shift();
       challenge.busy = false;
       renderQuestion(serial);
+      prefetchNextChallengeQuestion(serial);
     } catch (error) {
       console.warn('五仙問鼎出題失敗', error);
       if (!challenge?.active || challenge.serial !== serial) return;
