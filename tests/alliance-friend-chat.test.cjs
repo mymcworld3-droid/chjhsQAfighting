@@ -162,7 +162,7 @@ test('UI uses safe textContent and lights navigation only for private friend mes
   assert.match(ui, /alliance-chat-seen:|xiuxian-global-chat-seen:/);
   assert.match(ui, /request\('read', \{ peerUid, lastMessageId: state\.lastMessageId \}\)/);
   assert.match(ui, /state\.uid !== uid|uid !== currentUid\(\)/);
-  assert.match(legacy, /data\.friendChatUnread = d\.id/); // selector uses DOM attr, no inline user scripts
+  assert.match(legacy, /unread\.dataset\.friendChatUnread = d\.id/); // selector uses DOM attr, no inline user scripts
   assert.match(legacy, /alliance-chat-nav-unread/);
   assert.match(legacy, /alliance-global-unread/);
   assert.match(main, /cultivation\/alliance-friend-chat\.js/);
