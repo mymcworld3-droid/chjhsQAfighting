@@ -4,6 +4,7 @@ const assert = require('node:assert/strict');
 const { readFileSync } = require('node:fs');
 const vm = require('node:vm');
 const rules = require('../public/cultivation/battle-cultivation-rules.js');
+const Growth = require('../public/cultivation/nascent-growth.js');
 const api = require('../battle-reward-api.cjs').__test;
 const room = (patch = {}) => ({ modeVersion: 2, battleCultivationVersion: 1, battleCultivationLedger: {},
   status: 'finished', winner: 'h', round: 1, maxRounds: 15,
@@ -16,6 +17,19 @@ test('both correct answers contribute even when the second player dies before at
   assert.equal(api.battleReward(r, 'g').cultivation, 1.5);
   assert.equal(api.battleReward(r, 'h').gold, 500);
   assert.equal(api.battleReward(r, 'g').gold, 200);
+});
+
+test('each correct answer contributes its base and nascent cultivation bonus before splitting the pool', () => {
+  const r = room({round:2,battleCultivationLedger:{1:{host:true,guest:true},2:{host:true,guest:false}}});
+  r.host.cultivationBonus=3;r.guest.cultivationBonus=1;
+  r.host.nascentSoulSuppressed=true;
+  assert.deepEqual(rules.summary(r),{host:8,guest:3,pool:11});
+  assert.equal(rules.battleReward(r,'h').cultivation,11);
+  assert.equal(rules.battleReward(r,'g').cultivation,5.5);
+  assert.equal(rules.answerCultivation({...r.guest,cultivationBonus:999}),12);
+  for(const invalid of [-10,NaN,Infinity,'invalid'])assert.equal(rules.answerCultivation({...r.guest,cultivationBonus:invalid}),2);
+  r.battleCultivationLedger={1:{host:false,guest:false},2:{host:false,guest:false}};
+  assert.equal(rules.summary(r).pool,0,'wrong answers cannot grant a flat end-of-battle bonus');
 });
 
 test('per-round ledger survives answer clearing, duplicate submissions and truncated combat logs', () => {
@@ -104,6 +118,90 @@ test('concurrent winner/loser claims and retries deposit their pooled amounts on
   assert.equal(docs.get('users/g').stats.battleMatches, 1);
   const retry = await api.awardBattle(db, 'g', 'room12345', { role: 'guest', outcome: 'loss', gold: 999, cultivation: 999 });
   assert.equal(retry.cultivationAdded, 1.5); assert.equal(retry.goldAdded, 200);
+});
+
+function nascentUser(uid,level,patch={}) {
+  return {uid,stats:{totalScore:68,gold:0},cultivationTraining:{coreEnabled:true,equippedCore:{type:'sword',grade:1}},
+    nascentSoulGrowth:{version:1,branches:{cultivation:level}},...patch};
+}
+function nascentRoom(patch={}) {
+  return room({round:2,host:{uid:'h',totalScore:68,cultivationBonus:999},guest:{uid:'g',totalScore:68,cultivationBonus:999},
+    battleCultivationSummary:{host:99999,guest:99999,pool:199998},
+    battleCultivationLedger:{1:{host:true,guest:true},2:{host:true,guest:true}},...patch});
+}
+
+test('server pays trusted nascent contributions for wins, losses and draws, once per player', async () => {
+  for(const winner of ['h','draw']) {
+    const {db,docs}=memoryDb(),r=nascentRoom({winner});
+    docs.set('users/h',nascentUser('h',3));docs.set('users/g',nascentUser('g',1));
+    const awards=await Promise.all(['h','g','h','g'].map(uid=>api.awardBattle(db,uid,'room12345',api.battleReward(r,uid),r)));
+    assert.equal(awards.filter(a=>a.awarded).length,2);
+    for(const award of awards) {
+      assert.equal(award.cultivationPool,16);assert.equal(award.hostCultivation,10);assert.equal(award.guestCultivation,6);
+      assert.equal(award.cultivationAdded,award.outcome==='win'?16:8);
+    }
+    assert.equal(docs.get('users/h').stats.totalScore,winner==='h'?84:76);
+    assert.equal(docs.get('users/g').stats.totalScore,76);
+  }
+});
+
+test('either player can claim first; later upgrades, resets and retries retain the same settled pool', async () => {
+  for(const first of ['h','g']) {
+    const {db,docs}=memoryDb(),r=nascentRoom(),second=first==='h'?'g':'h';
+    docs.set('users/h',nascentUser('h',3));docs.set('users/g',nascentUser('g',1));
+    await api.awardBattle(db,first,'room12345',api.battleReward(r,first),r);
+    docs.get('users/h').nascentSoulGrowth.branches.cultivation=0;
+    docs.get('users/g').nascentSoulGrowth.branches.cultivation=10;
+    const award=await api.awardBattle(db,second,'room12345',api.battleReward(r,second),r);
+    assert.equal(award.cultivationPool,16);
+    assert.equal(award.cultivationAdded,second==='h'?16:8);
+    const retry=await api.awardBattle(db,first,'room12345',api.battleReward(r,first),r);
+    assert.equal(retry.awarded,false);assert.equal(retry.cultivationPool,16);
+    assert.equal(docs.get('users/h').stats.totalScore,84);assert.equal(docs.get('users/g').stats.totalScore,76);
+  }
+});
+
+test('server enforces nascent unlock, equipped core and enabled conditions; zero correct grants zero', async () => {
+  for(const user of [nascentUser('h',10,{stats:{totalScore:67,gold:0}}),
+    nascentUser('h',10,{cultivationTraining:{coreEnabled:false,equippedCore:{type:'sword'}}}),
+    nascentUser('h',10,{cultivationTraining:{}})]) {
+    const {db,docs}=memoryDb(),r=nascentRoom();docs.set('users/h',user);
+    const award=await api.awardBattle(db,'h','room12345',api.battleReward(r,'h'),r);
+    assert.equal(award.hostCultivation,4,'ineligible host gets only base cultivation');
+  }
+  const {db,docs}=memoryDb(),r=nascentRoom({battleCultivationLedger:{1:{host:false,guest:false},2:{host:false,guest:false}}});
+  docs.set('users/h',nascentUser('h',10));docs.set('users/g',nascentUser('g',10));
+  const award=await api.awardBattle(db,'h','room12345',api.battleReward(r,'h'),r);
+  assert.equal(award.cultivationAdded,0);assert.equal(docs.get('users/h').stats.totalScore,68);
+  assert.equal(Growth.cultivation(nascentUser('h',10),'battle'),10);
+});
+
+test('reward endpoint publishes the authoritative pool and ignores room and request bonus overrides', async () => {
+  const {PROJECT_IDS}=require('../firebase-admin-projects.cjs');
+  const {db,docs}=memoryDb(),r=nascentRoom();let payload,marker;
+  docs.set('users/h',nascentUser('h',3));docs.set('users/g',nascentUser('g',1));
+  const handler=api.createHandler({
+    resolveA:()=>({db,auth:{verifyIdToken:async()=>({uid:'h',aud:PROJECT_IDS.A,iss:'https://securetoken.google.com/'+PROJECT_IDS.A})}}),
+    resolveC:()=>({db:{collection:()=>({doc:()=>({get:async()=>({exists:true,data:()=>r}),update:async patch=>{marker=patch;}})})}})
+  });
+  await handler({body:{roomId:'room12345',cultivationBonus:999999,cultivationPool:999999},get:()=> 'Bearer test-token'},
+    {set(){},status(){return this;},json:data=>{payload=data;}});
+  assert.equal(payload.ok,true);assert.equal(payload.cultivationAdded,16);
+  assert.deepEqual(marker.battleCultivationSummary,{host:10,guest:6,pool:16});
+  assert.equal(docs.get('users/h').stats.totalScore,84);
+});
+
+test('browser applies the actual server reward and settled pool instead of adding the preview bonus again', async () => {
+  const source=readFileSync(require.resolve('../public/cultivation/battle-mode-v2.js'),'utf8');
+  const start=source.indexOf('  async function recordBattleResult('),end=source.indexOf('  function onRoomSnapshot(',start);
+  const local=nascentUser('h',3),state={roomId:'room12345',room:nascentRoom()};let calls=0;
+  const context={state,me:()=>({uid:'h'}),userData:()=>local,CustomEvent:class{},window:{dispatchEvent(){}},
+    rewardRepository:{claimBattle:async()=>{calls++;return {awarded:true,outcome:'win',goldAdded:500,cultivationAdded:16,cultivationPool:16,hostCultivation:10,guestCultivation:6};}}};
+  vm.runInNewContext(source.slice(start,end)+'\nthis.record=recordBattleResult;',context);
+  const award=await context.record(state.room);
+  assert.equal(award.cultivationSummary.pool,16);assert.equal(state.room.battleCultivationSummary.pool,16);
+  assert.equal(local.stats.totalScore,84);assert.equal(local.stats.gold,500);
+  await context.record(state.room);assert.equal(calls,1);assert.equal(local.stats.totalScore,84);
 });
 
 test('actual browser submit transaction preserves both players and rejects replayed answers', async () => {

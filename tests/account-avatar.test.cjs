@@ -85,12 +85,17 @@ test('matchmaking carries the account photo after unequipping without changing c
   const player = { photoURL: photo, equipped: { avatar: '' }, stats: {} };
   const context = vm.createContext({ me: () => ({ uid: 'me' }), userData: () => player,
     baseCombatSnapshot: () => ({ attack: 200, maxHp: 1000 }), combatSnapshot: () => ({ attack: 200, maxHp: 1000 }),
-    window: {}, snapshotBattleKnowledge: () => ({}), nowMs: () => 100 });
+    window: {QANascentGrowth:require('../public/cultivation/nascent-growth.js')}, snapshotBattleKnowledge: () => ({}), nowMs: () => 100 });
   vm.runInContext(resolver, context);
   vm.runInContext(battle.slice(battle.indexOf('  function playerSnapshot() {'), battle.indexOf('  function normalizeQuestion(')), context);
   assert.equal(context.playerSnapshot().avatar, photo);
   assert.equal(context.playerSnapshot().atk, 200);
   assert.equal(context.playerSnapshot().maxHp, 1000);
+  assert.equal(context.playerSnapshot().cultivationBonus, 0);
+  player.stats.totalScore = 68;
+  player.cultivationTraining = {equippedCore:{type:'sword',grade:1}};
+  player.nascentSoulGrowth = {version:1,branches:{cultivation:3}};
+  assert.equal(context.playerSnapshot().cultivationBonus, 3);
   player.equipped.avatar = 'assets/custom.png';
   assert.equal(context.playerSnapshot().avatar, 'assets/custom.png');
 });

@@ -12,7 +12,9 @@
   }
   function answerCultivation(player) {
     const score = Number(player?.totalScore);
-    return Number.isFinite(score) && score >= 28 ? 2 : 1;
+    const base = Number.isFinite(score) && score >= 28 ? 2 : 1;
+    const bonus = Number(player?.cultivationBonus);
+    return base + (Number.isFinite(bonus) ? Math.min(10, Math.max(0, Math.floor(bonus))) : 0);
   }
   function recordAnswer(room, role, correct) {
     const ledger = { ...(room?.battleCultivationLedger || {}) };
@@ -43,7 +45,7 @@
     }
     return { host, guest, pool: host + guest };
   }
-  function battleReward(room, uid) {
+  function battleReward(room, uid, settledTotals) {
     if (!room || Number(room.modeVersion) !== 2 || room.status !== 'finished' || !uid) return null;
     const h = String(room.host?.uid || ''), g = String(room.guest?.uid || '');
     const role = uid === h ? 'host' : uid === g ? 'guest' : '';
@@ -54,7 +56,7 @@
     const gold = outcome === 'win' ? 500 : outcome === 'loss' ? 200 : 0;
     // Already-running legacy rooms retain their original reward agreement.
     if (Number(room.battleCultivationVersion) !== VERSION) return { role, outcome, gold, cultivation: outcome === 'win' ? 5 : 0 };
-    const totals = summary(room);
+    const totals = settledTotals || summary(room);
     return { role, outcome, gold, cultivation: outcome === 'win' ? totals.pool : totals.pool / 2,
       cultivationPool: totals.pool, hostCultivation: totals.host, guestCultivation: totals.guest };
   }

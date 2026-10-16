@@ -5,7 +5,8 @@ const {PROJECT_IDS}=require('./firebase-admin-projects.cjs');
 const {playerRepository,battleRepository}=require('./server-repositories.cjs');
 const {runRewardReceipt}=require('./reward-receipt.cjs');
 const {FieldValue}=require('firebase-admin/firestore');
-const {battleReward}=require('./public/cultivation/battle-cultivation-rules.js');
+const {battleReward,summary}=require('./public/cultivation/battle-cultivation-rules.js');
+const Growth=require('./public/cultivation/nascent-growth.js');
 const ROOM_COLLECTION='rooms',CLAIM_COLLECTION='battleRewardClaims',MODE_VERSION=2,WIN_GOLD=500,WIN_CULTIVATION=5,LOSS_GOLD=200;
 function safeRoomId(v){const id=String(v||'').trim();return /^[A-Za-z0-9_-]{8,160}$/.test(id)?id:'';}
 function claimId(roomId,uid){return crypto.createHash('sha256').update(String(roomId)+'\n'+String(uid)).digest('hex');}
@@ -17,23 +18,50 @@ async function verifyRequest(req,resolveA){
   if(!verified?.uid||verified.aud!==PROJECT_IDS.A||verified.iss!=='https://securetoken.google.com/'+PROJECT_IDS.A)throw Object.assign(new Error('登入身分驗證失敗'),{status:401});
   return {uid:verified.uid,a};
 }
-async function awardBattle(db,uid,roomId,reward){
+function cultivationBreakdown(reward){
+  return reward?.cultivationPool===undefined?{}:{
+    cultivationPool:Math.max(0,Number(reward.cultivationPool)||0),
+    hostCultivation:Math.max(0,Number(reward.hostCultivation)||0),
+    guestCultivation:Math.max(0,Number(reward.guestCultivation)||0)
+  };
+}
+async function awardBattle(db,uid,roomId,reward,room){
   const userRef=db.collection('users').doc(uid);
   const receipt=await runRewardReceipt({db,collection:CLAIM_COLLECTION,receiptId:claimId(roomId,uid),fieldValue:FieldValue,
     onFirstClaim:async({tx})=>{
       const snap=await tx.get(userRef);if(!snap.exists)throw new Error('玩家資料不存在');
       const user=snap.data()||{};if(user.uid&&user.uid!==uid)throw new Error('玩家資料 UID 不符');
+      let settled=reward;
+      if(room&&reward.cultivationPool!==undefined){
+        const otherRole=reward.role==='host'?'guest':'host',otherUid=room[otherRole].uid;
+        const otherClaim=await tx.get(db.collection(CLAIM_COLLECTION).doc(claimId(roomId,otherUid)));
+        const prior=otherClaim.data();
+        let totals;
+        // Reading the other receipt serializes simultaneous claims. Both players
+        // use the same pool even if either upgrades a branch after the first payout.
+        if(prior?.cultivationPool!==undefined){
+          totals={host:prior.hostCultivation,guest:prior.guestCultivation,pool:prior.cultivationPool};
+        }else{
+          const otherSnap=await tx.get(db.collection('users').doc(otherUid));
+          const players={[reward.role]:user,[otherRole]:otherSnap.data()||{}};
+          totals=summary({...room,
+            host:{...room.host,cultivationBonus:Growth.cultivation(players.host,'battle')},
+            guest:{...room.guest,cultivationBonus:Growth.cultivation(players.guest,'battle')}
+          });
+        }
+        settled=battleReward(room,uid,totals);
+      }
       const st=user.stats||{},patch={questProgress:recordEvent(user.questProgress,'battle'),'stats.battleMatches':Math.max(0,Number(st.battleMatches)||0)+1};
-      if(reward.outcome==='win')patch['stats.battleWins']=Math.max(0,Number(st.battleWins)||0)+1;
-      else if(reward.outcome==='loss')patch['stats.battleLosses']=Math.max(0,Number(st.battleLosses)||0)+1;
+      if(settled.outcome==='win')patch['stats.battleWins']=Math.max(0,Number(st.battleWins)||0)+1;
+      else if(settled.outcome==='loss')patch['stats.battleLosses']=Math.max(0,Number(st.battleLosses)||0)+1;
       else patch['stats.battleDraws']=Math.max(0,Number(st.battleDraws)||0)+1;
-      if(reward.gold)patch['stats.gold']=Math.max(0,Number(st.gold)||0)+reward.gold;
-      if(reward.cultivation)patch['stats.totalScore']=Math.max(0,Number(st.totalScore)||0)+reward.cultivation;
+      if(settled.gold)patch['stats.gold']=Math.max(0,Number(st.gold)||0)+settled.gold;
+      if(settled.cultivation)patch['stats.totalScore']=Math.max(0,Number(st.totalScore)||0)+settled.cultivation;
       tx.update(userRef,patch);
-      return {outcome:reward.outcome,goldAdded:reward.gold,cultivationAdded:reward.cultivation,role:reward.role};
+      return {outcome:settled.outcome,goldAdded:settled.gold,cultivationAdded:settled.cultivation,role:settled.role,...cultivationBreakdown(settled)};
     },createReceipt:r=>({uid,roomId,...r})});
   const data=receipt.duplicate?receipt.receipt:receipt.result;
-  return {awarded:!receipt.duplicate,outcome:data?.outcome||reward.outcome,goldAdded:Math.max(0,Number(data?.goldAdded)||0),cultivationAdded:Math.max(0,Number(data?.cultivationAdded)||0),role:data?.role||reward.role};
+  return {awarded:!receipt.duplicate,outcome:data?.outcome||reward.outcome,goldAdded:Math.max(0,Number(data?.goldAdded)||0),cultivationAdded:Math.max(0,Number(data?.cultivationAdded)||0),role:data?.role||reward.role,...cultivationBreakdown(data)};
 }
 function createHandler({resolveA=()=>playerRepository.resolve(),resolveC=()=>battleRepository.resolve(),award=awardBattle,logger=console}={}){
  return async function(req,res){
@@ -43,10 +71,11 @@ function createHandler({resolveA=()=>playerRepository.resolve(),resolveC=()=>bat
   try{
     const ref=c.db.collection(ROOM_COLLECTION).doc(roomId),snap=await ref.get();
     if(!snap.exists)return res.status(404).json({ok:false,error:'找不到鬥法結算紀錄'});
-    const reward=battleReward(snap.data()||{},identity.uid);
+    const room=snap.data()||{},reward=battleReward(room,identity.uid);
     if(!reward)return res.status(409).json({ok:false,error:'鬥法尚未完成，或你不是此場參戰玩家'});
-    const result=await award(identity.a.db,identity.uid,roomId,reward),marker=result.role==='host'?'hostResultRecorded':'guestResultRecorded';
-    try{await ref.update({[marker]:true,updatedAt:FieldValue.serverTimestamp()});}catch(error){logger.warn('[Battle reward] C marker deferred:',error?.message||error);}
+    const result=await award(identity.a.db,identity.uid,roomId,reward,room),marker=result.role==='host'?'hostResultRecorded':'guestResultRecorded';
+    const poolPatch=result.cultivationPool===undefined?{}:{battleCultivationSummary:{host:result.hostCultivation,guest:result.guestCultivation,pool:result.cultivationPool}};
+    try{await ref.update({[marker]:true,...poolPatch,updatedAt:FieldValue.serverTimestamp()});}catch(error){logger.warn('[Battle reward] C marker deferred:',error?.message||error);}
     return res.json({ok:true,roomId,...result});
   }catch(error){logger.error('[Battle reward] settlement failed:',error?.code||error?.message||error);return res.status(503).json({ok:false,error:'鬥法獎勵尚未完成入帳，請稍後重試'});}
  };

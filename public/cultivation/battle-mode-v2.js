@@ -1,6 +1,7 @@
 import './battle-cultivation-rules.js';
 import { resolvePlayerAvatar } from './profile-avatar.js';
 import {} from './soul-talents.js';
+import './nascent-growth.js';
 import {
   doc, collection, query, where, limit, startAfter, getDocs, getDoc,
   addDoc, updateDoc, onSnapshot, runTransaction, serverTimestamp
@@ -438,6 +439,7 @@ export const featureReady = (async () => {
       gender: data.storyProgressV1?.gender === 'female' ? 'female' : 'male',
       rankLevel: Math.max(0, Number(data.stats?.rankLevel) || 0),
       totalScore: Math.max(0, Number(data.stats?.totalScore) || 0),
+      cultivationBonus: window.QANascentGrowth.cultivation(data, 'battle'),
       combatPower: Math.max(0, Math.round(Number(window.getCombatPower?.().total) || 0)),
       baseAtk: baseCombat.attack,
       baseMaxHp: baseCombat.maxHp,
@@ -1298,7 +1300,7 @@ export const featureReady = (async () => {
   }
 
   function battleReward(room, uid) {
-    return cultivationRules.battleReward(room, uid) || { outcome: 'none', gold: 0, cultivation: 0 };
+    return cultivationRules.battleReward(room, uid, room?.battleCultivationSummary) || { outcome: 'none', gold: 0, cultivation: 0 };
   }
 
   function renderResult(room) {
@@ -1327,10 +1329,11 @@ export const featureReady = (async () => {
       `${room[resultMarker] ? '已發放' : '發放中'}：+${reward.gold} 靈石${reward.cultivation ? ` · +${reward.cultivation} 修為` : ''}`;
     if (stats) stats.innerHTML = `<div><span>你的生命</span><b>${Math.max(0, Number(mine?.hp) || 0)}</b></div><div><span>對手生命</span><b>${Math.max(0, Number(enemy?.hp) || 0)}</b></div><div><span>總回合</span><b>${room.round}</b></div><div><span>結果</span><b>${isDraw ? '平局' : won ? '勝' : '敗'}</b></div><div><span>本場獎勵</span><b id="bv2-reward-status">${rewardLabel}</b></div>`;
     if (stats && reward.cultivationPool !== undefined) {
-      const totals = cultivationRules.summary(room);
+      const totals = room.battleCultivationSummary || cultivationRules.summary(room);
       const detail = document.createElement('div');
       const label = document.createElement('span'); label.textContent = '雙方答題修為池';
-      const value = document.createElement('b'); value.textContent = `${totals.host} + ${totals.guest} = ${totals.pool}（${won ? '全額' : '一半'}）`;
+      const value = document.createElement('b'); value.id = 'bv2-result-cultivation-pool';
+      value.textContent = `${totals.host} + ${totals.guest} = ${totals.pool}（含元嬰加成・${won ? '全額' : '一半'}）`;
       detail.className = 'bv2-reward-summary';
       document.getElementById('bv2-reward-status')?.parentElement.classList.add('bv2-reward-summary');
       detail.append(label, value); stats.appendChild(detail);
@@ -1338,6 +1341,10 @@ export const featureReady = (async () => {
     recordBattleResult(room).then((award) => {
       if (award && state.roomId === award.roomId) {
         setText('bv2-reward-status', `已發放：+${award.goldAdded} 靈石${award.cultivationAdded ? ` · +${award.cultivationAdded} 修為` : ''}`);
+        if (award.cultivationSummary) {
+          const totals = award.cultivationSummary;
+          setText('bv2-result-cultivation-pool', `${totals.host} + ${totals.guest} = ${totals.pool}（含元嬰加成・${won ? '全額' : '一半'}）`);
+        }
       }
     }).catch((error) => {
       console.warn('[Battle v2] result reward not yet delivered:', error);
@@ -1651,6 +1658,16 @@ export const featureReady = (async () => {
         goldAdded: Math.max(0, Number(result?.goldAdded) || 0),
         cultivationAdded: Math.max(0, Number(result?.cultivationAdded) || 0)
       };
+      if (result?.cultivationPool !== undefined) {
+        awarded.cultivationSummary = {
+          host: Math.max(0, Number(result.hostCultivation) || 0),
+          guest: Math.max(0, Number(result.guestCultivation) || 0),
+          pool: Math.max(0, Number(result.cultivationPool) || 0)
+        };
+        if (state.roomId === requestedRoomId && state.room && me()?.uid === uid) {
+          state.room.battleCultivationSummary = awarded.cultivationSummary;
+        }
+      }
       if (awarded.awarded && me()?.uid === uid) {
         const local = userData();
         if (local?.stats) {

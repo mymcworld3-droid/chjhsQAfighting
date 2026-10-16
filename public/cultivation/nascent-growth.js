@@ -8,7 +8,7 @@
   const ITEM = Object.freeze({id:ITEM_ID,name:'元嬰碎精',icon:'嬰',realm:'元嬰',category:'元嬰養成',
     description:'溫養元嬰各分支的碎精。元嬰境界團本答對每題 +1、每日閉關全對 +3。不可交易或用於煉器。',nascentMaterial:true,buyGold:0,sellGold:0});
   const BRANCHES = Object.freeze([
-    {id:'cultivation',name:'修為',icon:'fa-book-open',maxBonus:10,unit:'修為',description:'升滿後問道答對、閉關全對與洞天通關的元嬰修為加成為 +10。'},
+    {id:'cultivation',name:'修為',icon:'fa-book-open',maxBonus:10,unit:'修為',description:'升滿後問道、鬥法及團本答對、閉關全對與洞天通關的元嬰修為加成為 +10。'},
     {id:'attack',name:'攻擊',icon:'fa-khanda',maxBonus:70,unit:'攻擊',description:'升滿後增加 70 攻擊。'},
     {id:'vitality',name:'生命',icon:'fa-heart',maxBonus:500,unit:'生命',description:'升滿後增加 500 生命上限。'},
     {id:'core',name:'金丹屬性',icon:'fa-circle-nodes',maxBonus:100,unit:'%',description:'逐級強化已調御金丹對應的元嬰丹性能力，升滿後達到完整效果。'}
@@ -100,7 +100,7 @@
       critChance:core.type==='ningxin'?chance:0,critDamageBonus:core.type==='ningxin'?levels.coreDamage*.05:0};
   }
   function cultivation(player,source) {
-    if(!['solo','daily','cave','raid'].includes(source)||!bonuses(player,player?.cultivationTraining?.equippedCore))return 0;
+    if(!['solo','daily','cave','raid','battle'].includes(source)||!bonuses(player,player?.cultivationTraining?.equippedCore))return 0;
     return normalize(player.nascentSoulGrowth).branches.cultivation;
   }
   function award(player,amount) {

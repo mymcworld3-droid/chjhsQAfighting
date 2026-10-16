@@ -56,7 +56,7 @@ test('trait previews agree with battle effects at every rank and grade',()=>{
 });
 test('max bonuses are total +10 cultivation +70 attack +500 HP and all ranks cap at ten',()=>{
  const p=player('ocean',{cultivation:99,attack:99,vitality:99,core:99}),b=Growth.bonuses(p,p.cultivationTraining.equippedCore);
- assert.equal(b.attackFlat,70);assert.equal(b.maxHpFlat,500);for(const source of ['solo','daily','cave','raid'])assert.equal(Growth.cultivation(p,source),10);assert.equal(Growth.upgrade(p,'attack').ok,false);
+ assert.equal(b.attackFlat,70);assert.equal(b.maxHpFlat,500);for(const source of ['solo','daily','cave','raid','battle'])assert.equal(Growth.cultivation(p,source),10);assert.equal(Growth.upgrade(p,'attack').ok,false);
 });
 test('upgrade subtracts each rising cost once; full branch costs 55 fragments and reset refunds exactly',()=>{
  const p=player();for(let n=1;n<=10;n++){const next=Growth.upgrade(p,'attack');assert.equal(next.cost,n);Growth.apply(p,next);}assert.equal(p.materialSystem.inventory[Growth.ITEM_ID],945);const refund=Growth.reset(p);assert.equal(refund.returned,55);Growth.apply(p,refund);assert.equal(Growth.reset(p).returned,0);assert.equal(p.materialSystem.inventory[Growth.ITEM_ID],1000);
