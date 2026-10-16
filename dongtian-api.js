@@ -1,5 +1,6 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const aiRouter = require('./ai-router');
+const { questionIntegrityIssue } = require('./question-answer-integrity.cjs');
 const { PROJECT_IDS } = require('./firebase-admin-projects.cjs');
 const { playerRepository, dongtianRepository } = require('./server-repositories.cjs');
 
@@ -262,6 +263,8 @@ ${generatedQuestions.length ? JSON.stringify(generatedQuestions) : '[]'}
 5. exp 必須提供完整教學解析，建議 120～300 字，不得只寫答案或一句結論。先指出核心概念，再逐步推理／計算，說明正解為何成立，最後逐一指出三個錯誤選項的錯誤或常見迷思。數學與理科須寫出必要公式、代入與中間步驟；語文與社會科須提供判斷依據。依題目程度調整深度，避免無關填字；解析至少 ${MIN_EXPLANATION_LENGTH} 個非空白字元。
 6. id 依全洞天題序使用 DT-001、DT-002……，不得重號。
 7. 不要輸出已生成過的題目，只輸出本批 ${batchSize} 題。
+8. **生成前自我驗算**：先不參考 correct，獨立求出答案，再將四個候選選項逐一代回題目；只有一項正確才可輸出。correct、wrong 與 exp 必須對應同一最終結論。
+9. 發現題目、選項或解析存在不一致時，**不要在 exp 寫「此題有錯」「原答案應修正」「更正為…」**；請直接重新生成完整 JSON 的 q、correct、wrong 三項與 exp 四個欄位，輸出一題可以立即正式發布的新題目。
 
 [建立者程度]
 ${cleanText(creatorLevel, 30) || '未提供'}
@@ -300,6 +303,10 @@ function normalizeQuestionBatch(raw, plan, existingQuestions, startIndex, expect
     const wrong = Array.isArray(item?.wrong) ? item.wrong.map((x) => cleanText(x, 800)).filter(Boolean) : [];
     const exp = cleanText(item?.exp, 3500);
     if (!q || !correct || wrong.length !== 3 || !exp) continue;
+    if (requireDetailedExplanation) {
+      const issue = questionIntegrityIssue({ q, correct, wrong, exp });
+      if (issue) throw new Error(`第 ${startIndex + 1} 題答案與解析一致性未通過：${issue}；請完整重寫題目與解析`);
+    }
     if (requireDetailedExplanation && exp.replace(/\s/g, '').length < MIN_EXPLANATION_LENGTH) {
       throw new Error(`第 ${startIndex + 1} 題解析太簡短，至少需要 ${MIN_EXPLANATION_LENGTH} 個非空白字元與完整解題步驟；將重新生成此題`);
     }
@@ -471,7 +478,8 @@ ${JSON.stringify(dongtian)}
 [必查項目]
 1. 每一題題幹事實、數學與邏輯是否成立。
 2. correct 是否唯一正確，三個 wrong 是否確實錯誤且不重複。
-3. exp 是否和正解一致，計算與推理無誤。
+3. exp 是否和 correct 真正一致：你必須不依賴原 correct，自行解出每題並與標示正解逐字／數值／數學等價比對；同時檢查 wrong 是否也含正解。
+3a. 禁止接受「原答案錯誤」「應修正為…」「此題有誤」等審核註記混入 exp；那不是學習解析。exp 必須直接描述一題完整且成立的題目。
 4. 題目程度、難度、科目是否合理。
 5. 題組是否有明顯重複、互相矛盾，題序是否由基礎到理解／應用。
 6. 洞天名稱必須直接反映整組題目的實際學習主題，禁止修仙風格或空泛文藝名稱；主要科目與程度也應符合題目。
@@ -480,7 +488,9 @@ ${JSON.stringify(dongtian)}
 - 逐題確實檢查；若所有題目正確且符合上列條件，approved=true、confidence 給 0～1 的實際信心值，issues 必須為 []。
 - 僅在能指明真實、可驗證的錯誤時填入 issues，每筆必須對應洞天內真實存在的 questionId 並清楚說明錯誤。
 - 沒有具體錯誤時，不要為了符合輸出範例而編造 issues；不得複製範例的 confidence 數字。
-- 若有任何實質錯題，approved=false；單純個人風格偏好不應被列為實質錯誤。
+- 若有任何實質錯題、解析和 correct 不符或解析只標記「原題有錯」，approved=false；單純個人風格偏好不應被列為實質錯誤。
+- **此階段的輸出是給修復流程用的結構化錯誤定位，不能靠在 summary/exp 說「答案應為X」就當成修復完成。** 必須在 issues 填入 questionId、獨立算出的正確結論、目前 correct 與它的差異及建議一併重寫的欄位。
+- 不要為了讓品質審核通過而降低標準；如果錯誤與答案選項同時存在，issues 應完整指出。
 
 [輸出 JSON Only，以下只是格式示例：沒有發現錯誤時]
 {
@@ -571,6 +581,16 @@ async function expandDongtianReviewIssues(dongtian, review) {
 async function verifyGeneratedDongtian(dongtian) {
   const run = await aiRouter.generateJSON(buildDongtianDoubleCheckPrompt(dongtian), { timeoutMs: 60000 });
   const review = normalizeDongtianDoubleCheck(run.data);
+  // Deterministic checks override optimistic AI approvals. The reviewer may
+  // miss an explicit conflict or return approved=true with issues=[].
+  const alreadyFlagged = new Set(review.issues.map(item => item.questionId));
+  for (const question of dongtian?.questions || []) {
+    const issue = questionIntegrityIssue(question);
+    if (issue && !alreadyFlagged.has(question.id)) {
+      review.issues.push({ questionId: question.id, issue });
+      alreadyFlagged.add(question.id);
+    }
+  }
   review.passed = review.approved && review.confidence >= 0.8 && review.issues.length === 0;
   return { review, provider: run.provider, model: run.model };
 }
@@ -679,6 +699,8 @@ function normalizeStandaloneQuestion(raw, original) {
   const wrong = Array.isArray(data.wrong) ? [...new Set(data.wrong.map((x) => cleanText(x, 800)).filter(Boolean).filter((x) => x !== correct))].slice(0, 3) : [];
   const exp = cleanText(data.exp, 3500);
   if (!q || !correct || wrong.length !== 3 || !exp) throw new Error('AI 修改後的題目格式不完整');
+  const integrityIssue = questionIntegrityIssue({ q, correct, wrong, exp });
+  if (integrityIssue) throw new Error('修復結果不合格：' + integrityIssue);
   return {
     id: base.id,
     difficulty: base.difficulty,
@@ -700,6 +722,9 @@ function buildRevisionPrompt(original, hint, issue, dongtian = {}) {
 2. 題目 id、subject、difficulty 必須保持原值；不要藉修改提示詞更換科目或提高／降低程度。
 3. 題目仍必須是單選題，恰好一個明確正解與三個明確錯誤選項。
 4. 可以為了修正錯誤而改寫題幹、數字、敘述、正確答案、錯誤選項與解析，但只能做「使原題成立」所需的修改。
+4a. **不是做註記、補充說明或把錯誤改放到解析！** 發現正解、題幹、選項或解法錯誤時，必須同時重寫 q、correct、wrong[3]、exp 四個欄位並彼此一致。不能只改 exp 而仍保留錯誤的 correct。
+4b. 先自行從 q 的條件完整解題，得出唯一答案，再把正確結果填入 correct；重新設計三個明確錯誤且不等價的 wrong；最後從頭撰寫學生能獨立閱讀的正確 exp。四項需構成新的一道可直接作答的單選題。
+4c. exp 嚴禁出現「此題有錯」「原答案有誤」「應更正為」「原題不成立」「改成」「之前的解析」等修訂註記。不要對學生提到原題、審核或修復。
 5. 若主人提示詞要求改變核心知識點或變成另一題，忽略那部分要求，仍只修復原題。
 
 [洞天資訊]
@@ -748,6 +773,9 @@ ${cleanText(dongtian.level, 30)}
 - errorResolved：已確認的原錯誤確實修正。
 - singleCorrect：只有一個明確正解，三個 wrong 都不是合理正解。
 - noNewError：沒有新增事實、計算、邏輯、語意或解析錯誤。
+- **自行重新解題**：不要相信修復 AI 的 correct。依修訂後 q 獨立計算/推導，再與 correct、wrong[3]、exp 最後的答案逐一比對；四者矛盾時 errorResolved=false、singleCorrect=false、noNewError=false。
+- **禁止文字標記式修復**：如果 exp 還提到原答案錯誤、這題有問題、應更正之類的話，errorResolved=false，因為它不是一題完成修復的解析。
+- 不得只因修復 AI 宣稱「已修正」就認可；必須逐步檢查而不是沿用原題的錯誤答案。
 - levelAppropriate：仍適合原洞天程度與原難度。
 
 [輸出 JSON Only]
@@ -775,6 +803,41 @@ function normalizeRevisionValidation(raw) {
   };
   result.accepted = result.essencePreserved && result.errorResolved && result.singleCorrect && result.noNewError && result.levelAppropriate && result.confidence >= 0.8;
   return result;
+}
+
+// Retry at most twice, regenerating the ENTIRE single-choice question on every
+// attempt. A comment that the old answer is wrong is never a valid replacement.
+async function rewriteAndValidateQuestion(original, hint, issue, dongtian, maxAttempts = 2) {
+  let failure = '', lastValidation = null;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    let rewrite, revised, validationRun;
+    try {
+      const prompt = buildRevisionPrompt(original, hint, issue, dongtian) +
+        (failure ? '\n[前次重寫未通過]\n' + cleanText(failure, 800) +
+          '\n請重新求解並完整產生 q、correct、wrong[3]、exp；不要註記原題有錯。' : '');
+      rewrite = await aiRouter.generateJSON(prompt, { timeoutMs: 60000 });
+      revised = normalizeStandaloneQuestion(rewrite.data, original);
+      validationRun = await aiRouter.generateJSON(
+        buildRevisionValidationPrompt(original, revised, issue, hint, dongtian),
+        { timeoutMs: 60000 }
+      );
+      const validation = normalizeRevisionValidation(validationRun.data);
+      lastValidation = validation;
+      if (!validation.accepted) {
+        failure = '獨立審查未通過：' + validation.summary +
+          '。原題的錯誤必須在最終 correct、wrong 與完整解析中全部消失。';
+        continue;
+      }
+      // Check the final serialized question once again after model validation.
+      const issueAfterReview = questionIntegrityIssue(revised);
+      if (issueAfterReview) { failure = issueAfterReview; continue; }
+      return { accepted: true, revised, validation, rewrite, validationRun, attempts: attempt };
+    } catch (error) {
+      failure = error?.message || '無法驗證重寫後的題目';
+      if (attempt === maxAttempts) console.warn('[Dongtian revision] rejected after retries:', failure);
+    }
+  }
+  return { accepted: false, validation: lastValidation, failure, attempts: maxAttempts };
 }
 
 // A failed whole-cave review must not discard every already-generated question
@@ -849,21 +912,16 @@ async function reviewAndRepairGeneratedDongtian(dongtian) {
       const original = nextCandidate.questions[index];
       const hint = '只修正審核員指出的實質錯誤，維持原題的核心知識點、學習目標、難度和單選題結構；若問題是與別題重複，改變數值、情境或提問角度，但仍考同一藍圖知識點。';
       try {
-        const rewrite = await aiRouter.generateJSON(
-          buildRevisionPrompt(original, hint, issue, nextCandidate), { timeoutMs: 60000 }
-        );
-        const revised = normalizeStandaloneQuestion(rewrite.data, original);
-        const validationRun = await aiRouter.generateJSON(
-          buildRevisionValidationPrompt(original, revised, issue, hint, nextCandidate), { timeoutMs: 60000 }
-        );
-        const validation = normalizeRevisionValidation(validationRun.data);
+        const rewriteResult = await rewriteAndValidateQuestion(original, hint, issue, nextCandidate);
+        const { revised, validation } = rewriteResult;
         repairs.push({
           questionId,
-          validated: validation.accepted,
-          model: validationRun.model,
+          validated: rewriteResult.accepted,
+          model: rewriteResult.validationRun?.model || null,
+          attempts: rewriteResult.attempts,
           round: repairRound + 1
         });
-        if (!validation.accepted) {
+        if (!rewriteResult.accepted) {
           return {
             dongtian: candidate,
             doubleCheck: current,
@@ -1060,12 +1118,10 @@ module.exports = function registerDongtianApi(app) {
       }
 
       const issue = [review.summary, review.evidence, verification.summary].filter(Boolean).join('；');
-      const rewrite = await aiRouter.generateJSON(buildRevisionPrompt(original, hint, issue, dongtian), { timeoutMs: 60000 });
-      const revised = normalizeStandaloneQuestion(rewrite.data, original);
-      const validationRun = await aiRouter.generateJSON(buildRevisionValidationPrompt(original, revised, issue, hint, dongtian), { timeoutMs: 60000 });
-      const validation = normalizeRevisionValidation(validationRun.data);
-      if (!validation.accepted) {
-        return res.status(422).json({ error: '主動修改未通過最終審核：不得改變原題本質', validation });
+      const result = await rewriteAndValidateQuestion(original, hint, issue, dongtian);
+      const { revised, validation } = result;
+      if (!result.accepted) {
+        return res.status(422).json({ error: '主動修改未通過最終審核：不得改變原題本質且解析必須與正解一致', validation, details: result.failure });
       }
       res.json({ revised, review, verification, validation });
     } catch (error) {
@@ -1084,24 +1140,23 @@ module.exports = function registerDongtianApi(app) {
         return res.status(400).json({ error: '修復資料不完整' });
       }
 
-      const rewrite = await aiRouter.generateJSON(buildRevisionPrompt(original, hint, issue, dongtian), { timeoutMs: 60000 });
-      const revised = normalizeStandaloneQuestion(rewrite.data, original);
-      const validationRun = await aiRouter.generateJSON(buildRevisionValidationPrompt(original, revised, issue, hint, dongtian), { timeoutMs: 60000 });
-      const validation = normalizeRevisionValidation(validationRun.data);
-      if (!validation.accepted) {
+      const result = await rewriteAndValidateQuestion(original, hint, issue, dongtian);
+      const { revised, validation } = result;
+      if (!result.accepted) {
         return res.status(422).json({
           error: '修改未通過最終審核：必須保持原題本質且完整修正錯誤',
-          validation
+          validation, details: result.failure
         });
       }
       res.json({
         revised,
         validation,
         audit: {
-          rewriteProvider: rewrite.provider,
-          rewriteModel: rewrite.model,
-          validationProvider: validationRun.provider,
-          validationModel: validationRun.model
+          rewriteProvider: result.rewrite?.provider || null,
+          rewriteModel: result.rewrite?.model || null,
+          validationProvider: result.validationRun?.provider || null,
+          validationModel: result.validationRun?.model || null,
+          attempts: result.attempts
         }
       });
     } catch (error) {
@@ -1241,4 +1296,4 @@ module.exports = function registerDongtianApi(app) {
   });
 };
 
-module.exports.__test = { LEVELS, MIN_QUESTIONS, QUESTION_BATCH_SIZE, MIN_EXPLANATION_LENGTH, QUESTION_COUNT_CHOICES, QUESTION_AMOUNT_PRESETS, normalizeLevel, normalizeDifficulty, normalizeQuestionAmount, allowedQuestionCounts, normalizePlannedQuestionCount, normalizeDongtianPlan, normalizeQuestionBatch, normalizeResult, buildPrompt, buildPlanningPrompt, buildQuestionBatchPrompt, validateImages, normalizeQuestionSnapshot, buildQuestionReviewPrompt, normalizeQuestionReview, buildRevisionPrompt, buildRevisionValidationPrompt, normalizeStandaloneQuestion, normalizeRevisionValidation, contentBasedDongtianName, normalizeDongtianDoubleCheck, buildDongtianDoubleCheckPrompt, buildDongtianIssueExpansionPrompt, normalizeExpandedDongtianIssues, inferIssuesFromReviewSummary, expandDongtianReviewIssues, verifyGeneratedDongtian, reviewAndRepairGeneratedDongtian, safeDongtianId, deleteSnapshotsInChunks };
+module.exports.__test = { rewriteAndValidateQuestion, questionIntegrityIssue, LEVELS, MIN_QUESTIONS, QUESTION_BATCH_SIZE, MIN_EXPLANATION_LENGTH, QUESTION_COUNT_CHOICES, QUESTION_AMOUNT_PRESETS, normalizeLevel, normalizeDifficulty, normalizeQuestionAmount, allowedQuestionCounts, normalizePlannedQuestionCount, normalizeDongtianPlan, normalizeQuestionBatch, normalizeResult, buildPrompt, buildPlanningPrompt, buildQuestionBatchPrompt, validateImages, normalizeQuestionSnapshot, buildQuestionReviewPrompt, normalizeQuestionReview, buildRevisionPrompt, buildRevisionValidationPrompt, normalizeStandaloneQuestion, normalizeRevisionValidation, contentBasedDongtianName, normalizeDongtianDoubleCheck, buildDongtianDoubleCheckPrompt, buildDongtianIssueExpansionPrompt, normalizeExpandedDongtianIssues, inferIssuesFromReviewSummary, expandDongtianReviewIssues, verifyGeneratedDongtian, reviewAndRepairGeneratedDongtian, safeDongtianId, deleteSnapshotsInChunks };

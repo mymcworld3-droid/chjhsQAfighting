@@ -2,7 +2,16 @@
 
 // Generated questions are text only. Reject prompts that depend on an absent
 // figure and explanations that explicitly contradict or correct the answer.
+const { questionIntegrityIssue } = require('./question-answer-integrity.cjs');
+
 function questionQualityIssue({ q, correct, wrong, exp } = {}) {
+  // Partial legacy checks still report their specific problems; full generated
+  // questions receive the stronger answer/explanation consistency verification.
+  if (typeof correct === 'string' && Array.isArray(wrong) && wrong.length === 3 &&
+      typeof exp === 'string') {
+    const concreteIssue = questionIntegrityIssue({ q, correct, wrong, exp });
+    if (concreteIssue) return concreteIssue;
+  }
   const stem = String(q || '');
   const explanation = String(exp || '');
   if (/(?:附圖|下圖|右圖|左圖|如圖所示|圖中所示)/.test(stem)) return '題目引用未提供的圖片';
