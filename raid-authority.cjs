@@ -297,7 +297,8 @@ function memberSnapshotFromTrusted(player,host=false){
     lastActionId:0,lastBossActionSeen:0,answeredQuestionIds:[],joinedAtMs:Date.now(),heartbeatAtMs:Date.now()};
 }
 // 固定三人基準試煉；隊伍人數、裝備與境界只改變玩家自身能力。
-const RAID_BOSS_DIFFICULTY = Object.freeze({ maxHp:4800, baseAttack:70 });
+const raidDifficulty = require('./public/cultivation/raid-difficulty.js');
+const RAID_BOSS_DIFFICULTY = Object.freeze({maxHp:raidDifficulty.TIERS.normal.maxHp,baseAttack:raidDifficulty.TIERS.normal.baseAttack});
 // 清霜試煉的合作窗口：兩名不同隊員答對可削弱下一式，三名不同隊員再觸發一次合擊。
 // 單人仍可硬打，但無法取得隊伍破陣減傷與三才合擊，符合「三人正常通關、單人需高養成」定位。
 const RAID_TEAMWORK = Object.freeze({
@@ -306,9 +307,11 @@ const RAID_TEAMWORK = Object.freeze({
   burstContributors: 3,
   burstDamage: 240
 });
-function createRaidBoss(){
-  return {id:'shen-qingshuang',hp:RAID_BOSS_DIFFICULTY.maxHp,
-    maxHp:RAID_BOSS_DIFFICULTY.maxHp,baseAttack:RAID_BOSS_DIFFICULTY.baseAttack,phase:1};
+function createRaidBoss(difficulty = 'normal'){
+  // Legacy callers pass a player array; difficulty is only selected by the server-owned room.
+  const rule = raidDifficulty.get(typeof difficulty === 'string' ? difficulty : 'normal') || raidDifficulty.TIERS.normal;
+  return {id:'shen-qingshuang',hp:rule.maxHp,
+    maxHp:rule.maxHp,baseAttack:rule.baseAttack,phase:1};
 }
 function bossPhase(hp,maxHp){const r=clamp(finite(hp)/Math.max(1,finite(maxHp,1)),0,1);return r>.70?1:r>.30?2:3;}
 function bossIntent(room){

@@ -89,7 +89,7 @@ test('raid protocol ignores client combat claims and uses trusted A/C server res
   const server=read('server.js');
 
   assert.match(api,/loadTrustedRaidPlayer\(playerDb, uid\)/);
-  assert.match(api,/createRaidBoss\(\)/);
+  assert.match(api,/createRaidBoss\(raidDifficulty\.fromRoom\(current\)/);
   assert.match(api,/resolvePlayerAction\(\{ \.\.\.me \}, \{ roomId, actionId: id, correct, bossHp:current\.bossHp, bossMaxHp:current\.bossMaxHp \}\)/);
   assert.match(read('raid-clock.cjs'),/resolveBossDefense\(member, \{ roomId, bossAction: action \}\)/);
   assert.match(api,/readRaidQuestionTicket\(req\.body\.ticket\)/);
@@ -101,8 +101,8 @@ test('raid protocol ignores client combat claims and uses trusted A/C server res
   assert.doesNotMatch(api,/const intent = req\.body\?\.intent/);
   assert.doesNotMatch(api,/req\.body\?\.reflectedDamage/);
 
-  assert.match(room,/api\('create'\)/);
-  assert.match(room,/api\('quick'\)/);
+  assert.match(room,/api\('create', \{difficulty\}\)/);
+  assert.match(room,/api\('quick', \{difficulty\}\)/);
   assert.match(room,/api\('join-code', \{ roomCode \}\)/);
   assert.match(room,/player-action', \{ roomId, actionId, questionId, choice, ticket \}/);
   assert.match(room,/boss-defense', \{ roomId, bossActionSeen \}/);

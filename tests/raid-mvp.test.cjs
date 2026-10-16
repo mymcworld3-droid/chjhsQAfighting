@@ -107,9 +107,9 @@ test('shared room layer supports party lifecycle, boss HP and reconnect', () => 
   assert.match(serverSource, /registerRaidRoomApi\(app\)/);
 });
 
-test('raid questions use the quick simple generation profile', () => {
-  assert.match(questionSource, /difficulty:\s*'easy'/);
-  assert.match(questionSource, /quizMode:\s*'raid-quick-simple'/);
+test('raid questions use standard Wen Dao complexity with server-issued answer tickets', () => {
+  assert.match(questionSource, /difficulty:\s*'medium'/);
+  assert.match(questionSource, /quizMode:\s*'raid-standard'/);
   assert.match(serverSource, /raidQuickSimple/);
   assert.match(serverSource, /團本快答模式/);
 });
@@ -167,7 +167,7 @@ test('the entire trial page hides navigation and uses the available viewport', (
 
 
 test('raid hub card is measured to the page bottom and cache-busted', () => {
-  assert.match(raidSource, /STYLE_HREF = 'styles\/raid-mode\.css\?v=20261016-hide-navigation1'/);
+  assert.match(raidSource, /STYLE_HREF = 'styles\/raid-mode\.css\?v=20261016-three-difficulties'/);
   assert.match(raidSource, /function fitRaidHubToViewport\(\)/);
   assert.match(raidSource, /pageBottom - cardTop - 8/);
   assert.match(raidSource, /card\.style\.setProperty\('height', targetHeight \+ 'px', 'important'\)/);
@@ -309,7 +309,7 @@ test('raid tickets grant two per Taiwan day cap at ten and are consumed only at 
   const createBlock=roomApiSource.slice(roomApiSource.indexOf("if (action === 'create')"),roomApiSource.indexOf("if (action === 'quick')"));
   assert.doesNotMatch(createBlock,/reserveRaidTickets/);
   const startBlock=roomApiSource.slice(roomApiSource.indexOf("if (action === 'start')"),roomApiSource.indexOf("if (action === 'heartbeat')"));
-  assert.match(startBlock,/reserveRaidTickets\(playerDb, roomId, preMembers\)/);
+  assert.match(startBlock,/reserveRaidTickets\(playerDb, roomId, preMembers, undefined, raidDifficulty\.fromRoom\(pre\)/);
   assert.match(startBlock,/refundRaidTicketReservation/);
   assert.match(startBlock,/ticketMemberUids/);
   assert.match(raidSource,/全團本共用・每日 \+2・最多 10 張/);

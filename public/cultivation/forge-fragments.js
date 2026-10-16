@@ -26,6 +26,7 @@
     ['qi-spirit-iron','玄鐵','煉氣'], ['foundation-refined-iron','精煉玄鐵','築基'],
     ['golden-purple-iron','紫金玄鐵','金丹'], ['qi-spirit-wood','靈木','煉氣'],
     ['foundation-century-wood','百年靈木','築基'], ['golden-lightning-wood','雷擊木','金丹'],
+    ['nascent-star-iron','玄冥星鐵','元嬰'], ['nascent-soul-wood','千載魂木','元嬰'],
     ['raid-refine-key-ii','淬靈玄印','築基'], ['raid-refine-key-iii','玄天道印','金丹']
   ].map(([id,name,realm]) => Object.freeze({id,name,realm})));
   const api = Object.freeze({VERSION,FIELD,REALMS,BASE,integer,order,baseCost,balance,unitValue,DEFAULT_ARTIFACTS,MATERIALS});

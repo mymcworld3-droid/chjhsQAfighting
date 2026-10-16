@@ -88,14 +88,14 @@ export async function getRaidTicketState() {
   const result = await api('ticket-status');
   return result.ticketState || null;
 }
-export async function createRaidRoom(onResult) {
-  const result = await api('create');
+export async function createRaidRoom(onResult, difficulty = 'normal') {
+  const result = await api('create', {difficulty});
   remember(result.roomId);
   onResult?.(result);
   return result.roomId;
 }
-export async function findOrCreateRaidRoom(onResult) {
-  const result = await api('quick');
+export async function findOrCreateRaidRoom(onResult, difficulty = 'normal') {
+  const result = await api('quick', {difficulty});
   remember(result.roomId);
   onResult?.(result);
   return result.roomId;

@@ -12,12 +12,16 @@ const { eligibleCorrect, learningCorrect, awardRaidSpirit } = require('./raid-sp
 const { streamRaidRoom } = require('./raid-room-stream.cjs');
 const trainingAccess = require('./public/cultivation/training-access-rules.js');
 const answerGold = require('./public/cultivation/answer-gold-rules.js');
+const raidDifficulty = require('./public/cultivation/raid-difficulty.js');
 const RAID_ACCESS = trainingAccess.PLACES.find(place => place.id === 'secret');
 
-function assertRaidAccess(accessScore, name = '') {
-  if (finite(accessScore) >= RAID_ACCESS.threshold) return;
-  throw Object.assign(new Error((name ? name + '需達' : '需達') + RAID_ACCESS.realm +
-    '（' + RAID_ACCESS.threshold + ' 修為）才可進入秘境與清霜試煉'), { status:403, code:'raid-realm-locked' });
+function assertRaidAccess(accessScore, name = '', difficulty = 'normal') {
+  const tier = raidDifficulty.get(difficulty);
+  if (!tier) throw Object.assign(new Error('未知的清霜試煉難度'), {status:400});
+  if (finite(accessScore) < tier.minScore) {
+    throw Object.assign(new Error((name ? name + '需達' : '需達') + tier.minRealm +
+      '（' + tier.minScore + ' 修為）才可挑戰' + tier.name + '清霜試煉'), {status:403,code:'raid-realm-locked'});
+  }
 }
 
 const COLLECTION = 'raidRooms';
@@ -66,7 +70,7 @@ async function syncRaidTickets(db, uid, nowMs = now()) {
     return next;
   });
 }
-async function reserveRaidTickets(db, roomId, members, nowMs = now()) {
+async function reserveRaidTickets(db, roomId, members, nowMs = now(), difficulty = 'normal') {
   const entries = (Array.isArray(members) ? members : [])
     .map(member => ({ uid:String(member?.uid || ''), name:cleanString(member?.name || member?.displayName || member?.uid || '', 60) }))
     .filter(member => member.uid);
@@ -83,7 +87,7 @@ async function reserveRaidTickets(db, roomId, members, nowMs = now()) {
     const states = {};
     snaps.forEach((snap, index) => {
       const uid = memberUids[index];
-      assertRaidAccess(trainingAccess.score(snap.data() || {}), entries.find(member => member.uid === uid)?.name);
+      assertRaidAccess(trainingAccess.score(snap.data() || {}), entries.find(member => member.uid === uid)?.name, difficulty);
       states[memberUids[index]] = accrueRaidTickets(snap.data() || {}, today);
     });
     const existing = reservationSnap.exists ? reservationSnap.data() || {} : null;
@@ -190,7 +194,7 @@ async function uniqueCode(db) {
   }
   throw new Error('無法建立唯一隊伍代碼');
 }
-async function createRoom(db, uid, player) {
+async function createRoom(db, uid, player, difficulty = 'normal') {
   const ref = db.collection(COLLECTION).doc();
   const room = {
     version: RAID_ROOM_VERSION,
@@ -203,6 +207,7 @@ async function createRoom(db, uid, player) {
     startedAtMs: 0,
     finishedAtMs: 0,
     bossId: RAID_BOSS_ID,
+    difficulty,
     bossHp: 0,
     bossMaxHp: 0,
     bossBaseAttack: 0,
@@ -220,7 +225,7 @@ async function createRoom(db, uid, player) {
   await ref.set(room);
   return { roomId: ref.id, room: publicRoom(ref.id, room) };
 }
-async function joinWaitingRoom(db, uid, roomId, player) {
+async function joinWaitingRoom(db, uid, roomId, player, preferredDifficulty = null) {
   const ref = db.collection(COLLECTION).doc(roomId);
   return db.runTransaction(async tx => {
     const snap = await tx.get(ref);
@@ -228,6 +233,11 @@ async function joinWaitingRoom(db, uid, roomId, player) {
     const room = snap.data() || {};
     const members = { ...membersOf(room) };
     if (!roomUsable(room)) throw Object.assign(new Error('隊伍已滿或已開始'), { status: 409 });
+    const tier = raidDifficulty.fromRoom(room);
+    if (!tier || (preferredDifficulty && tier.id !== preferredDifficulty)) {
+      throw Object.assign(new Error('隊伍難度不符'), {status:409});
+    }
+    assertRaidAccess(player.trainingAccessScore, '', tier.id);
     if (!members[uid] && Object.keys(members).length >= MAX_MEMBERS) {
       throw Object.assign(new Error('隊伍已滿或已開始'), { status: 409 });
     }
@@ -246,20 +256,20 @@ async function joinWaitingRoom(db, uid, roomId, player) {
     return { roomId, room: publicRoom(roomId, { ...room, ...update }) };
   });
 }
-async function findOrCreate(db, uid, player) {
+async function findOrCreate(db, uid, player, difficulty = 'normal') {
   const snap = await db.collection(COLLECTION).where('status', '==', 'waiting').limit(24).get();
   const candidates = snap.docs
     .map(item => ({ id: item.id, ...item.data() }))
-    .filter(roomUsable)
+    .filter(room => roomUsable(room) && raidDifficulty.fromRoom(room)?.id === difficulty)
     .sort((a, b) => activeMembers(b).length - activeMembers(a).length || finite(a.createdAtMs) - finite(b.createdAtMs));
   for (const candidate of candidates) {
     try {
-      return await joinWaitingRoom(db, uid, candidate.id, player);
+      return await joinWaitingRoom(db, uid, candidate.id, player, difficulty);
     } catch (error) {
       if (![404, 409].includes(error?.status)) throw error;
     }
   }
-  return createRoom(db, uid, player);
+  return createRoom(db, uid, player, difficulty);
 }
 async function joinByCode(db, uid, roomCode, player) {
   const target = safeRoomCode(roomCode);
@@ -341,25 +351,27 @@ function createHandler({
       }
       if (action === 'create') {
         const player = await loadTrustedRaidPlayer(playerDb, uid);
-        assertRaidAccess(player.trainingAccessScore);
+        const difficulty = String(req.body?.difficulty || 'normal');
+        assertRaidAccess(player.trainingAccessScore, '', difficulty);
         const ticketState = await syncRaidTickets(playerDb, uid);
-        if (ticketState.count < 1) throw Object.assign(new Error('目前沒有團本入場券；每日會補充 3 張，最多持有 10 張'), { status:409, code:'raid-ticket-empty' });
-        const result = await createRoom(db, uid, player);
+        if (ticketState.count < 1) throw Object.assign(new Error('目前沒有團本入場券；每日會補充 2 張，最多持有 10 張'), { status:409, code:'raid-ticket-empty' });
+        const result = await createRoom(db, uid, player, difficulty);
         return res.json({ ok: true, ...result, ticketState });
       }
       if (action === 'quick') {
         const player = await loadTrustedRaidPlayer(playerDb, uid);
-        assertRaidAccess(player.trainingAccessScore);
+        const difficulty = String(req.body?.difficulty || 'normal');
+        assertRaidAccess(player.trainingAccessScore, '', difficulty);
         const ticketState = await syncRaidTickets(playerDb, uid);
-        if (ticketState.count < 1) throw Object.assign(new Error('目前沒有團本入場券；每日會補充 3 張，最多持有 10 張'), { status:409, code:'raid-ticket-empty' });
-        const result = await findOrCreate(db, uid, player);
+        if (ticketState.count < 1) throw Object.assign(new Error('目前沒有團本入場券；每日會補充 2 張，最多持有 10 張'), { status:409, code:'raid-ticket-empty' });
+        const result = await findOrCreate(db, uid, player, difficulty);
         return res.json({ ok: true, ...result, ticketState });
       }
       if (action === 'join-code') {
         const player = await loadTrustedRaidPlayer(playerDb, uid);
         assertRaidAccess(player.trainingAccessScore);
         const ticketState = await syncRaidTickets(playerDb, uid);
-        if (ticketState.count < 1) throw Object.assign(new Error('目前沒有團本入場券；每日會補充 3 張，最多持有 10 張'), { status:409, code:'raid-ticket-empty' });
+        if (ticketState.count < 1) throw Object.assign(new Error('目前沒有團本入場券；每日會補充 2 張，最多持有 10 張'), { status:409, code:'raid-ticket-empty' });
         const result = await joinByCode(db, uid, req.body?.roomCode, player);
         return res.json({ ok: true, ...result, ticketState });
       }
@@ -448,7 +460,7 @@ function createHandler({
           throw Object.assign(new Error('仍有隊員尚未準備'), { status:409 });
         }
 
-        const reservation = await reserveRaidTickets(playerDb, roomId, preMembers);
+        const reservation = await reserveRaidTickets(playerDb, roomId, preMembers, undefined, raidDifficulty.fromRoom(pre)?.id || 'normal');
         try {
           const room = await db.runTransaction(async tx => {
             const snap = await tx.get(ref);
@@ -465,7 +477,7 @@ function createHandler({
             if (JSON.stringify(currentUids) !== JSON.stringify(reservation.memberUids)) {
               throw Object.assign(new Error('隊伍成員已變更，請重新確認後再開始'), { status:409 });
             }
-            const boss = createRaidBoss();
+            const boss = createRaidBoss(raidDifficulty.fromRoom(current)?.id || 'normal');
             const update = {
               revision: Math.max(0,finite(current.revision))+1,
               status: 'active',

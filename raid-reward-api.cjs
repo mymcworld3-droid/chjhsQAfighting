@@ -6,6 +6,7 @@ const { PROJECT_IDS } = require('./firebase-admin-projects.cjs');
 const { playerRepository, raidRepository } = require('./server-repositories.cjs');
 const { victoryDate, MEMENTO } = require('./raid-loot.cjs');
 const { runRewardReceipt } = require('./reward-receipt.cjs');
+const raidDifficulty = require('./public/cultivation/raid-difficulty.js');
 
 const RAID_ROOM_COLLECTION = 'raidRooms';
 const CLAIM_COLLECTION = 'raidRewardClaims';
@@ -21,17 +22,20 @@ const RAID_MATERIAL_POOL = Object.freeze([
   'golden-purple-iron',
   'qi-spirit-wood',
   'foundation-century-wood',
-  'golden-lightning-wood'
+  'golden-lightning-wood',
+  'nascent-star-iron',
+  'nascent-soul-wood'
 ]);
 const RAID_MATERIAL_ROLLS = 3;
 
-function rollRaidMaterials(roomId, uid, rolls = RAID_MATERIAL_ROLLS) {
+function rollRaidMaterials(roomId, uid, rolls = RAID_MATERIAL_ROLLS, difficulty = 'normal') {
+  const pool = raidDifficulty.get(difficulty)?.materials || raidDifficulty.TIERS.normal.materials;
   const granted = {};
   const total = Math.max(0, Math.floor(Number(rolls) || 0));
   for (let i = 0; i < total; i += 1) {
-    // Deterministic per room/player/roll for replay safety; every player uses the same 1/6 table.
+    // Deterministic per room/player/roll; each tier has its own equal-probability material pool.
     const digest = crypto.createHash('sha256').update(String(roomId) + '\n' + String(uid) + '\nmaterial-roll:' + i).digest();
-    const id = RAID_MATERIAL_POOL[digest.readUInt32BE(0) % RAID_MATERIAL_POOL.length];
+    const id = pool[digest.readUInt32BE(0) % pool.length];
     granted[id] = (granted[id] || 0) + 1;
   }
   return granted;
@@ -82,7 +86,9 @@ function validateRaidVictory(room, uid) {
   // The boss can only reach zero through player damage or recorded reflection;
   // both are accumulated in members[*].damage by the room protocol.
   if (totalDamage < maxHp) return { ok:false, reason:'團本傷害紀錄不足以擊敗 Boss' };
-  return { ok:true, finishedAtMs, member, totalDamage, partySize:Object.keys(members).length, bossMaxHp:maxHp };
+  const tier = raidDifficulty.fromRoom(room);
+  if (!tier) return {ok:false,reason:'未知的團本難度'};
+  return { ok:true, finishedAtMs, member, totalDamage, partySize:Object.keys(members).length, bossMaxHp:maxHp, difficulty:tier.id };
 }
 
 async function awardRaidReward(db, uid, roomId, validation, {
@@ -106,7 +112,9 @@ async function awardRaidReward(db, uid, roomId, validation, {
 
       const firstVictory = !user.raidProgress?.[RAID_BOSS_ID]?.firstVictoryRoomId;
       const dailyFirstVictory = !!date && !dailySnap.exists;
-      const granted = { ...rewards, ...rollRaidMaterials(roomId, uid) };
+      const tier = raidDifficulty.get(validation.difficulty) || raidDifficulty.TIERS.normal;
+      const granted = { ...rewards, ...rollRaidMaterials(roomId, uid, RAID_MATERIAL_ROLLS, tier.id),
+        'nascent-soul-essence': tier.fragments };
       if (dailyFirstVictory) {
         granted['raid-refine-key-ii'] = (granted['raid-refine-key-ii'] || 0) + 1;
         granted['raid-refine-key-iii'] = (granted['raid-refine-key-iii'] || 0) + 1;
@@ -130,7 +138,7 @@ async function awardRaidReward(db, uid, roomId, validation, {
       tx.update(userRef, { materialSystem, raidProgress, questProgress: recordEvent(user.questProgress, 'raid') });
       if (dailyFirstVictory) tx.create(dailyRef, {uid,roomId,bossId:RAID_BOSS_ID,date});
       return { inventory, rewards:granted, firstVictory, dailyFirstVictory, date,
-        memento:firstVictory ? MEMENTO : null };
+        difficulty:tier.id, essenceGranted:tier.fragments, memento:firstVictory ? MEMENTO : null };
     },
     createReceipt: result => ({
       uid,
@@ -166,6 +174,8 @@ async function awardRaidReward(db, uid, roomId, validation, {
       dailyFirstVictory:receipt.receipt.dailyFirstVictory || false,
       memento:receipt.receipt.memento || null,
       realm:receipt.receipt.realm || null,
+      difficulty:receipt.receipt.difficulty || 'normal',
+      essenceGranted:receipt.receipt.essenceGranted || 0,
       date:receipt.receipt.date || null
     };
   }

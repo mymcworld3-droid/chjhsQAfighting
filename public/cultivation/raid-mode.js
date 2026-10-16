@@ -11,12 +11,14 @@ import { playerRepository } from './data/player-repository.js';
 import { renderRaidLoot, renderRaidLearning } from './raid-loot-view.js';
 import { rewardRepository } from './data/reward-repository.js';
 import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
+import './raid-difficulty.js';
 
 (function () {
   'use strict';
 
+  const DIFFICULTY = globalThis.QARaidDifficulty;
   const PAGE_ID = 'page-raid';
-  const STYLE_HREF = 'styles/raid-mode.css?v=20261016-hide-navigation1';
+  const STYLE_HREF = 'styles/raid-mode.css?v=20261016-three-difficulties';
   const MALE = 'assets/story/characters/player-male-determined.png';
   const FEMALE = 'assets/story/characters/player-female-determined.png';
   const HEARTBEAT_MS = 8000;
@@ -61,6 +63,7 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     rewardClaimedRoomId: '',
     learningOutcome: null,
     selectedRaidId: RAID_MVP.bossId,
+    selectedDifficulty: 'normal',
     hubAccessSignature: '',
     ticketState: { count:null, dailyGrant:2, cap:10, lastGrantDate:'' },
     ticketLoading: false
@@ -91,9 +94,12 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     if (dot) dot.hidden = !uid || !(Number(state.ticketState.count) > 0);
     if (state.status === 'hub') {
       const selected = raidTrialById(state.selectedRaidId);
-      const locked = selected.status !== 'open' || score() < selected.minimumScore || Number(state.ticketState.count) === 0;
-      document.querySelectorAll('#raid-hub [data-quick],#raid-hub [data-create],#raid-hub [data-code]')
+      const tier = DIFFICULTY.get(state.selectedDifficulty) || DIFFICULTY.TIERS.normal;
+      const locked = selected.status !== 'open' || score() < tier.minScore || Number(state.ticketState.count) === 0;
+      document.querySelectorAll('#raid-hub [data-quick],#raid-hub [data-create]')
         .forEach(button => { button.disabled = locked; });
+      const joinByCode = document.querySelector('#raid-hub [data-code]');
+      if (joinByCode) joinByCode.disabled = score() < RAID_MVP.minimumScore || Number(state.ticketState.count) === 0;
     }
   }
   async function refreshRaidTickets({ rerender = true } = {}) {
@@ -134,7 +140,8 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
   function score() { return window.getTrainingAccessScore?.() ?? Math.max(0, Number(data()?.stats?.totalScore) || 0); }
   function hubAccessSignature() {
     const access = score();
-    return RAID_TRIALS.map(trial => access >= trial.minimumScore ? '1' : '0').join('');
+    return RAID_TRIALS.map(trial => access >= trial.minimumScore ? '1' : '0').join('') +
+      ':' + Object.values(DIFFICULTY.TIERS).map(tier => access >= tier.minScore ? '1' : '0').join('');
   }
   function escapeHtml(value) {
     return String(value ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;')
@@ -407,8 +414,10 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     document.body.classList.remove('raid-session-active');
     show('hub');
     const selected = raidTrialById(state.selectedRaidId);
+    const tier = DIFFICULTY.get(state.selectedDifficulty) || DIFFICULTY.TIERS.normal;
     const noTickets = Number(state.ticketState?.count) === 0;
-    const selectedLocked = selected.status !== 'open' || score() < selected.minimumScore || noTickets;
+    const selectedLocked = selected.status !== 'open' || score() < tier.minScore || noTickets;
+    const joinCodeLocked = score() < RAID_MVP.minimumScore || noTickets;
     const hub = document.getElementById('raid-hub');
     const trialCards = RAID_TRIALS.map(function (trial) {
       const active = trial.id === selected.id;
@@ -433,19 +442,31 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
         '<div class="raid-prototype-note"><i class="fa-solid fa-scroll"></i><span><b>團本列表骨架已完成</b><small>之後新增 Boss 時可直接加入目錄並接上各自的房間、機制與獎勵 adapter。</small></span></div></div></article>';
     } else {
       detail = '<article class="raid-boss-card ' + (selectedLocked ? 'locked' : '') + '">' +
-        '<div class="raid-boss-art"><img src="' + escapeHtml(selected.bossImage || RAID_MVP.bossImage) + '" alt="沈清霜"><span>正式試煉・第一境</span></div>' +
+        '<div class="raid-boss-art"><img src="' + escapeHtml(selected.bossImage || RAID_MVP.bossImage) + '" alt="沈清霜"><span>清霜試煉・' + escapeHtml(tier.name) + '</span></div>' +
         '<div class="raid-boss-info"><div class="raid-badges"><span>' + escapeHtml(selected.party) + '</span><span>' +
         escapeHtml(selected.recommended) + '</span><span>' + escapeHtml(selected.mechanic) + '</span></div>' +
         (data().raidProgress?.['shen-qingshuang']?.memento ? '<small>通關紀念・' + escapeHtml(data().raidProgress['shen-qingshuang'].memento.name) + '</small>' : '') +
         '<small>' + escapeHtml(selected.location) + '</small><h3>' + escapeHtml(selected.bossTitle) + '</h3>' +
-        '<small class="raid-unlock-status">' + escapeHtml(selected.minimumRealm) + '解鎖' + '</small>' +
+        '<small class="raid-unlock-status">' + escapeHtml(tier.minRealm) + '解鎖・' + tier.minScore + ' 修為</small>' +
         '<p>' + escapeHtml(selected.description) + '</p>' +
-        '<div class="raid-reward-preview"><b>主要戰利品</b><span>' + selected.rewards.map(escapeHtml).join('・') + '</span></div></div>' +
+        '<div class="raid-reward-preview"><b>' + escapeHtml(tier.name) + '戰利品</b><span>' +
+          escapeHtml(tier.materialRealms.join('／')) + '境界木鐵素材・元嬰碎精必得 ×' + tier.fragments +
+          '・淬靈玄印・玄天道印</span></div></div>' +
         '<div class="raid-entry-actions" role="group" aria-label="試煉組隊">' +
+        '<div class="raid-difficulty-picker" role="group" aria-label="清霜試煉難度">' +
+        Object.values(DIFFICULTY.TIERS).map(function (option) {
+          const locked = score() < option.minScore;
+          return '<button type="button" data-raid-difficulty="' + option.id +
+            '" class="' + (tier.id === option.id ? 'active ' : '') + (locked ? 'locked' : '') +
+            '" aria-pressed="' + (tier.id === option.id) + '"><strong>' + escapeHtml(option.name) +
+            '</strong><small>元嬰碎精 ×' + option.fragments + '・' +
+            escapeHtml(option.materialRealms.join('～')) + (locked ? '・需' + escapeHtml(option.minRealm) : '') +
+            '</small></button>';
+        }).join('') + '</div>' +
         '<div class="raid-join-grid"><button class="raid-primary" type="button" data-quick ' + (selectedLocked ? 'disabled' : '') + '>快速加入／建立隊伍</button>' +
         '<button class="raid-ghost" type="button" data-create ' + (selectedLocked ? 'disabled' : '') + '>建立私人隊伍</button></div>' +
         '<div class="raid-code-join"><input id="raid-room-code-input" maxlength="6" aria-label="六碼隊伍代碼" placeholder="輸入 6 碼隊伍代碼"><button class="raid-ghost" type="button" data-code ' +
-        (selectedLocked ? 'disabled' : '') + '>加入隊伍</button></div></div></article>';
+        (joinCodeLocked ? 'disabled' : '') + '>加入隊伍</button></div></div></article>';
     }
 
     hub.innerHTML = '<header class="raid-heading raid-hub-heading"><button class="raid-back" type="button" data-home><i class="fa-solid fa-arrow-left"></i></button>' +
@@ -470,6 +491,12 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
       });
     });
     if (selected.status === 'open') {
+      hub.querySelectorAll('[data-raid-difficulty]').forEach(function (button) {
+        button.addEventListener('click', function () {
+          state.selectedDifficulty = button.dataset.raidDifficulty || 'normal';
+          renderHub();
+        });
+      });
       hub.querySelector('[data-quick]')?.addEventListener('click', function () { void enterRoom('quick'); });
       hub.querySelector('[data-create]')?.addEventListener('click', function () { void enterRoom('create'); });
       hub.querySelector('[data-code]')?.addEventListener('click', function () {
@@ -528,10 +555,11 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     void inviteOnlineFriends();
     const allReady = members.length > 0 && members.every(member => member.ready && raidMemberOnline(member));
     const lobby = document.getElementById('raid-lobby');
+    const tier = DIFFICULTY.fromRoom(state.room) || DIFFICULTY.TIERS.normal;
     lobby.dataset.partySize = String(members.length);
     lobby.innerHTML =
       '<header class="raid-heading"><button class="raid-back" type="button" data-leave><i class="fa-solid fa-arrow-left"></i></button>' +
-      '<div><small>RAID PARTY ／ 秘境隊伍</small><h2>清霜試煉隊伍</h2><p>隊伍代碼 <b class="raid-room-code">' + escapeHtml(state.room.code || '------') + '</b></p></div><span class="raid-seal">' + members.length + '/4</span></header>' +
+      '<div><small>RAID PARTY ／ 秘境隊伍</small><h2>清霜試煉・' + escapeHtml(tier.name) + '</h2><p>隊伍代碼 <b class="raid-room-code">' + escapeHtml(state.room.code || '------') + '</b></p></div><span class="raid-seal">' + members.length + '/4</span></header>' +
       '<div class="raid-party-list" data-party-count="' + members.length + '">' + members.map(member => {
         const hp = Math.max(1, Number(member.maxHp) || 1);
         return '<article class="raid-party-member ' + (member.uid === state.player.uid ? 'me' : '') + '">' +
@@ -1178,6 +1206,8 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
   async function enterRoom(mode, roomCode = '') {
     if (score() < RAID_MVP.minimumScore) return toast('需達' + RAID_MVP.minimumRealm + '（' + RAID_MVP.minimumScore + ' 修為）才可進入秘境。');
     if (storyOpen()) return toast('目前有劇情或教學進行中。');
+    const tier = DIFFICULTY.get(state.selectedDifficulty) || DIFFICULTY.TIERS.normal;
+    if (mode !== 'code' && score() < tier.minScore) return toast('需達' + tier.minRealm + '才能挑戰' + tier.name + '清霜試煉。');
     if (state.roomId && ['won', 'lost', 'closed'].includes(state.room?.status)) resetRaid(false);
     state.status = 'loading';
     window.dispatchEvent(new CustomEvent('xiuxian:invite-blocked'));
@@ -1190,9 +1220,9 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
       // The server rebuilds the combat snapshot from Firebase A; no client combat stats are submitted.
       let initialResult;
       const receive = result => { initialResult = result; };
-      const roomId = mode === 'create' ? await createRaidRoom(receive) :
+      const roomId = mode === 'create' ? await createRaidRoom(receive,state.selectedDifficulty) :
         mode === 'code' ? await joinRaidRoomByCode(roomCode,receive) :
-        await findOrCreateRaidRoom(receive);
+        await findOrCreateRaidRoom(receive,state.selectedDifficulty);
       attachRoom(roomId, initialResult);
     } catch (error) {
       console.error('[Raid] enter room failed:', error);
@@ -1391,16 +1421,17 @@ import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
     const result = document.getElementById('raid-result');
     const members = raidRoomMembers(state.room);
     const title = won ? '試煉突破' : '試煉中止';
+    const tier = DIFFICULTY.fromRoom(state.room) || DIFFICULTY.TIERS.normal;
     const quote = won ? '「配合得還行。下次帶更難的題來。」' : '「先整隊，再來。」';
     result.innerHTML = '<div class="raid-result-card ' + (won ? 'win' : 'loss') + '"><span class="raid-result-seal">' + (won ? '破' : '止') + '</span>' +
-      '<small>SHEN QINGSHUANG RAID</small><h2>' + title + '</h2><p>' + quote + '</p><img src="' + RAID_MVP.bossImage + '" alt="沈清霜">' +
+      '<small>SHEN QINGSHUANG RAID ・ ' + escapeHtml(tier.name) + '</small><h2>' + title + '</h2><p>' + quote + '</p><img src="' + RAID_MVP.bossImage + '" alt="沈清霜">' +
       '<div class="raid-result-grid"><div><span>隊伍人數</span><b>' + members.length + ' 人</b></div><div><span>Boss 已出招</span><b>' + state.bossActionCount + ' 次</b></div>' +
       '<div><span>Boss 剩餘生命</span><b>' + Math.round(state.room?.bossHp || 0).toLocaleString() + '</b></div><div><span>題目時間</span><b>不限時</b></div></div>' +
       '<div class="raid-result-team">' + members.map(member => '<div><span>' + escapeHtml(member.name) + '</span><b>' + Math.max(0, Number(member.damage) || 0).toLocaleString() + ' 傷害</b><small>' +
         Math.max(0, Number(member.correct) || 0) + ' / ' + Math.max(0, Number(member.attempts) || 0) + ' 答對' +
         (Number(member.spiritCorrect) > 0 ? '・元嬰碎精 +' + Math.floor(member.spiritCorrect) + '（勝敗皆保留）' : '') + '</small></div>').join('') + '</div>' +
       '<div id="raid-learning-status" class="raid-learning-summary">' + renderRaidLearning(myRoomMember(), state.learningOutcome) + '</div>' +
-      '<div class="raid-prototype-note raid-loot-summary"><i class="fa-solid fa-gem"></i><span id="raid-reward-status"><b>' + (won ? '通關戰利品' : '再接再厲') + '</b><small>' + (won ? '正在確認玄髓、劍魄、煉製印記與首勝獎勵…' : '答題收益保留；擊敗大師姐另獲團本素材與煉製印記。') + '</small></span></div>' +
+      '<div class="raid-prototype-note raid-loot-summary"><i class="fa-solid fa-gem"></i><span id="raid-reward-status"><b>' + (won ? '必得元嬰碎精 ×' + tier.fragments + '・通關戰利品' : '再接再厲') + '</b><small>' + (won ? '正在確認元嬰碎精、木鐵素材、煉製印記與首勝獎勵…' : '答題收益保留；擊敗大師姐另獲團本素材與煉製印記。') + '</small></span></div>' +
       '<div class="raid-result-actions"><button class="raid-ghost" type="button" data-home>返回宗門</button><button class="raid-ghost" type="button" data-refinery>前往煉器</button><button class="raid-primary" type="button" data-again>重新組隊</button></div></div>';
     result.querySelector('[data-home]')?.addEventListener('click', returnFromRaidResult);
     result.querySelector('[data-again]')?.addEventListener('click', async function () {

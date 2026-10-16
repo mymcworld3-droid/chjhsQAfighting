@@ -414,6 +414,7 @@ function chooseQuestionForm(previousMeta, seed) {
 // API 2: 生成測驗題目 (優化版：單次請求 + 安全 JSON 解析)
 // ==========================================
 const { MODES: FAST_QUIZ_MODES, quickQuizPrompt } = require('./fast-quiz-prompt.cjs');
+const raidDifficultyRules = require('./public/cultivation/raid-difficulty.js');
 
 app.post('/api/generate-quiz', async (req, res) => {
     // 兼容前端可能傳來的 specificTopic 或 topic
@@ -421,12 +422,14 @@ app.post('/api/generate-quiz', async (req, res) => {
     subject = String(subject || '').trim().slice(0, 40);
     level = String(level || '國中一年級').slice(0, 32);
     const raidQuickSimple = String(quizMode || '') === 'raid-quick-simple';
+    const raidTicketMode = raidQuickSimple || String(quizMode || '') === 'raid-standard';
     const combatFastMode = FAST_QUIZ_MODES.has(String(quizMode || ''));
     let raidIdentity = null;
     let raidRoomId = '';
     let raidActionId = 0;
     let raidTrustedTopic = '';
-    if (raidQuickSimple) {
+    let raidTrustedDifficulty = 'medium';
+    if (raidTicketMode) {
         try {
             raidIdentity = await verifyMainIdentity(req);
             raidRoomId = String(req.body?.roomId || '').trim();
@@ -437,6 +440,9 @@ app.post('/api/generate-quiz', async (req, res) => {
             const roomSnap = await raidRepository.resolve().db.collection('raidRooms').doc(raidRoomId).get();
             if (!roomSnap.exists) return res.status(404).json({ error: '團本房間不存在' });
             const room = roomSnap.data() || {};
+            const tier = raidDifficultyRules.fromRoom(room);
+            if (!tier) return res.status(409).json({error:'團本難度資料無效'});
+            raidTrustedDifficulty = tier.quizDifficulty;
             const member = room?.members?.[raidIdentity];
             if (!member) return res.status(403).json({ error: '你不在這個團本隊伍' });
             if (room.status !== 'active' || member.alive === false) {
@@ -452,14 +458,15 @@ app.post('/api/generate-quiz', async (req, res) => {
             level = trusted.level;
             rank = Math.max(0, Math.floor(Number(member.rankLevel) || 0));
             raidTrustedTopic = trusted.specificTopic;
-            // Raid difficulty is intentionally fixed to easy below; knowledgeMap is not client-authoritative.
+            // Subject, scope and tier difficulty are trusted room properties.
             knowledgeMap = null;
         } catch (error) {
             const status = error?.status || 503;
             return res.status(status).json({ error: error?.message || '團本題目驗證失敗' });
         }
     }
-    difficulty = raidQuickSimple ? 'easy' : (['easy', 'medium', 'hard'].includes(difficulty) ? difficulty : 'medium');
+    difficulty = raidTicketMode ? (raidQuickSimple ? 'easy' : raidTrustedDifficulty)
+        : (['easy', 'medium', 'hard'].includes(difficulty) ? difficulty : 'medium');
     const previousQuestions = (Array.isArray(avoidQuestions) ? avoidQuestions : [])
         .map(cleanQuestionText).filter(Boolean).slice(-80);
     const previousMeta = (Array.isArray(avoidQuestionMeta) ? avoidQuestionMeta : [])
@@ -469,7 +476,7 @@ app.post('/api/generate-quiz', async (req, res) => {
     }
     const fingerprint = value => String(value).replace(/\s+/g, '').toLowerCase();
     let targetTopic = String(specificTopic || topic || '').trim().slice(0, 240);
-    if (raidQuickSimple) targetTopic = String(raidTrustedTopic || '').trim().slice(0, 240);
+    if (raidTicketMode) targetTopic = String(raidTrustedTopic || '').trim().slice(0, 240);
 
     // 1. 科目選擇
     if (!subject) {
@@ -617,7 +624,7 @@ app.post('/api/generate-quiz', async (req, res) => {
                 throw new Error('AI 題目與近期解題骨架重複');
             }
 
-            if (raidQuickSimple) {
+            if (raidTicketMode) {
                 const choices = [parsed.correct, ...wrong].map(value => String(value || '').trim());
                 let answerIndex = 0;
                 for (let i = choices.length - 1; i > 0; i -= 1) {

@@ -61,6 +61,10 @@ const DEFAULT_MATERIAL_CATALOG = [
     description: '生長百年的築基境靈木，木質穩定而能長時間蓄靈。只能由對應團本產生。', buyGold: 0 },
   { id: 'golden-lightning-wood', name: '雷擊木', icon: '雷木', category: '木材', realm: '金丹',
     description: '經天雷洗鍊仍存生機的金丹境木材，兼具堅韌與導靈性。只能由對應團本產生。', buyGold: 0 },
+  { id: 'nascent-star-iron', name: '玄冥星鐵', icon: '星鐵', category: '鐵材', realm: '元嬰',
+    description: '元嬰境星辰淬鍊的稀有鐵材，僅從極境清霜試煉取得。', buyGold: 0 },
+  { id: 'nascent-soul-wood', name: '千載魂木', icon: '魂木', category: '木材', realm: '元嬰',
+    description: '經千年溫養的元嬰境靈木，僅從極境清霜試煉取得。', buyGold: 0 },
   { id: 'raid-refine-key-ii', name: '淬靈玄印', icon: '玄印', category: '團本印記', realm: '築基',
     description: '第二煉的必要印記。只由團本結算取得，不佔八方煉器陣素材格。', buyGold: 0 },
   { id: 'raid-refine-key-iii', name: '玄天道印', icon: '道印', category: '團本印記', realm: '金丹',
@@ -137,7 +141,9 @@ export const RAID_CRAFT_MATERIAL_IDS = Object.freeze([
   'golden-purple-iron',
   'qi-spirit-wood',
   'foundation-century-wood',
-  'golden-lightning-wood'
+  'golden-lightning-wood',
+  'nascent-star-iron',
+  'nascent-soul-wood'
 ]);
 export const RAID_REFINEMENT_KEYS = Object.freeze({
   2: 'raid-refine-key-ii',
@@ -211,10 +217,10 @@ export function validateMaterialCatalog(items) {
   if (!Array.isArray(items) || !items.length) throw new Error('材料清單不可為空');
   const seen = new Set();
   const allowed = new Set(Object.keys(DEFAULT_MATERIAL_REALM_BY_ID));
-  if (items.length !== allowed.size) throw new Error('現行材料系統固定為 8 種團本道具，不可新增或刪除');
+  if (items.length !== allowed.size) throw new Error('現行材料系統固定為 10 種團本道具，不可新增或刪除');
   const normalized = items.map((raw) => {
     const item = normalizeMaterialDefinition(raw);
-    if (!allowed.has(item.id)) throw new Error(`材料 ${item.id || '空白'} 已退出現行煉器系統；目前僅允許本團本六種木鐵素材與兩種印記`);
+    if (!allowed.has(item.id)) throw new Error(`材料 ${item.id || '空白'} 已退出現行煉器系統；目前僅允許本團本八種木鐵素材與兩種印記`);
     if (!/^[a-z0-9][a-z0-9-]{1,63}$/.test(item.id)) throw new Error(`材料 ID 不合法：${item.id || '空白'}`);
     if (seen.has(item.id)) throw new Error(`材料 ID 重複：${item.id}`);
     seen.add(item.id);

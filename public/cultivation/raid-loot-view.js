@@ -1,13 +1,16 @@
 import { getMaterialById } from './material-catalog.js';
+import './raid-difficulty.js';
+const raidDifficulty = globalThis.QARaidDifficulty || {get:()=>null, TIERS:{normal:{name:'普通'}}};
 function escape(value) {
   return String(value ?? '').replaceAll('&','&amp;').replaceAll('<','&lt;')
     .replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;');
 }
 export function renderRaidLoot(payload) {
   const items = Object.entries(payload?.rewards || {}).filter(([,qty]) => Number(qty) > 0);
-  return '<b>' + (payload.awarded ? '戰利品已入帳' : '本場戰利品已領取') + '</b>' +
+  const tier = raidDifficulty.get(payload?.difficulty) || raidDifficulty.TIERS.normal;
+  return '<b>' + tier.name + '清霜試煉・' + (payload.awarded ? '戰利品已入帳' : '本場戰利品已領取') + '</b>' +
     '<div class="raid-loot-grid">' + items.map(([id,qty]) => {
-      const item = getMaterialById(id);
+      const item = id === 'nascent-soul-essence' ? {name:'元嬰碎精',icon:'嬰'} : getMaterialById(id);
       const keyLabels = {
         'raid-refine-key-ii':'第二煉印記・團本限定',
         'raid-refine-key-iii':'第三煉印記・團本限定'
@@ -19,7 +22,7 @@ export function renderRaidLoot(payload) {
         : '<span aria-hidden="true">' + escape(item?.icon || '材') + '</span>';
       return '<div class="raid-loot-item"><div class="raid-loot-icon">' + icon + '</div><div><strong>' +
         escape(item?.name || id) + ' ×' + Math.floor(Number(qty)) + '</strong><small>' +
-        (key ? key : '團本素材') + '</small></div></div>';
+        (id === 'nascent-soul-essence' ? '通關必得・元嬰養成' : key ? key : '團本素材') + '</small></div></div>';
     }).join('') + '</div>' +
     (payload.dailyFirstVictory ? '<small class="raid-loot-bonus">每日首勝：淬靈玄印、玄天道印各額外 ×1</small>' : '') +
     (payload.firstVictory ? '<div class="raid-memento"><b>首次通關・' + escape(payload.memento?.name || '清霜劍印') +
