@@ -1215,29 +1215,58 @@ export const featureReady = (async () => {
     if (afterTypeset?.then) Promise.resolve(afterTypeset).then(schedule, schedule);
   }
 
+  function questionDomReady(question) {
+    const questionEl = document.getElementById('bv2-question');
+    const optionsEl = document.getElementById('bv2-options');
+    return usableQuestion(question) &&
+      questionEl?.dataset.questionId === String(question.id) &&
+      !!questionEl.textContent?.trim() &&
+      optionsEl?.querySelectorAll('.bv2-option').length === 4;
+  }
+
   function renderQuestion(room, mine) {
     const qEl = document.getElementById('bv2-question'); const optionsEl = document.getElementById('bv2-options'); const expEl = document.getElementById('bv2-explanation');
     if (!qEl || !optionsEl || !expEl) return;
     const question = room.currentQuestion;
-    if (!question) {
-      qEl.textContent = room.status === 'preparing' ? '下一題凝聚中…' : '等待題目同步…'; optionsEl.innerHTML = ''; expEl.classList.add('hidden');
-      setText('bv2-answer-status', '題目正在由鬥法臺同步。'); return;
+    if (!usableQuestion(question)) {
+      state.renderedQuestionId = null;
+      qEl.textContent = '題目同步異常，正在重新取得…';
+      optionsEl.replaceChildren(); expEl.classList.add('hidden');
+      setText('bv2-answer-status', '系統正在修復題目，不會要求你在空白畫面作答。');
+      return;
     }
-    if (state.renderedQuestionId !== question.id) {
-      state.renderedQuestionId = question.id; state.pendingAnswer = null;
+    // A formula renderer or a DOM refresh can clear the question without
+    // changing its Firestore ID. Reconstruct the missing content if needed.
+    if (state.renderedQuestionId !== question.id || !questionDomReady(question)) {
+      state.pendingAnswer = null;
       state.quizScrollSerial += 1; state.quizFooterScrollKey = null;
       const card = document.querySelector('#bv2-quiz > .bv2-question-card');
       if (card) card.scrollTop = 0;
-      const rich = window.quizMathRichText || escapeHtml;
-      window.quizMathClear?.([qEl, optionsEl, expEl]);
+      const rich = value => {
+        try {
+          const html = window.quizMathRichText?.(value);
+          if (typeof html === 'string' && html.trim()) return html;
+        } catch (error) {
+          console.warn('[Battle v2] rich text failed; using readable fallback:', error);
+        }
+        return escapeHtml(value);
+      };
+      try { window.quizMathClear?.([qEl, optionsEl, expEl]); }
+      catch (error) { console.warn('[Battle v2] math cleanup failed:', error); }
       qEl.innerHTML = rich(question.q); optionsEl.replaceChildren();
       question.opts.forEach((option, index) => {
         const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'bv2-option'; btn.dataset.index = String(index);
         btn.innerHTML = `<span>${String.fromCharCode(65 + index)}</span><b class="bv2-option-math">${rich(option)}</b>`;
         btn.addEventListener('click', () => submitAnswer(index)); optionsEl.appendChild(btn);
       });
+      qEl.dataset.questionId = String(question.id);
+      state.renderedQuestionId = question.id;
       expEl.classList.add('hidden'); expEl.textContent = ''; delete expEl.dataset.mathQuestionId;
-      state.quizMathReady = window.quizMathTypeset?.([qEl, optionsEl]);
+      try { state.quizMathReady = window.quizMathTypeset?.([qEl, optionsEl]); }
+      catch (error) {
+        state.quizMathReady = null;
+        console.warn('[Battle v2] math typesetting failed; retaining readable question:', error);
+      }
     }
     const answered = answerObject(mine, room.round); if (answered) state.pendingAnswer = null;
     const pending = state.pendingAnswer?.round === Number(room.round) ? state.pendingAnswer : null;
@@ -1618,6 +1647,45 @@ export const featureReady = (async () => {
     } catch (_) {} finally { setTimeout(() => { if (state.disconnectClaimRound === round) state.disconnectClaimRound = null; }, 3000); }
   }
 
+  function repairMissingPlayingQuestion(room) {
+    if (room.status !== 'playing' || usableQuestion(room.currentQuestion) ||
+        hasSubmittedAnswer(room.host, room.round) || hasSubmittedAnswer(room.guest, room.round)) {
+      state.missingQuestionRound = null;
+      return;
+    }
+    const round = Number(room.round);
+    if (state.missingQuestionRound !== round) {
+      state.missingQuestionRound = round;
+      state.missingQuestionSinceMs = nowMs();
+    }
+    if (nowMs() - state.missingQuestionSinceMs < EMPTY_QUESTION_REPAIR_MS ||
+        state.repairingQuestionRound === round || nowMs() < state.repairRetryAfterMs) return;
+    const roomId = state.roomId, uid = me()?.uid;
+    if (!uid || !roomId) return;
+    state.repairingQuestionRound = round;
+    void runTransaction(db(), async tx => {
+      const ref = roomRef(roomId);
+      const snap = await tx.get(ref);
+      if (!snap.exists()) return;
+      const fresh = snap.data();
+      if (fresh.status !== 'playing' || Number(fresh.round) !== round ||
+          usableQuestion(fresh.currentQuestion) ||
+          hasSubmittedAnswer(fresh.host, round) || hasSubmittedAnswer(fresh.guest, round)) return;
+      // Keep the same round for both players; never start a timer or score
+      // an answer while the room is missing a usable question.
+      tx.update(ref, {
+        status: 'preparing', currentQuestion: null, questionReadyAtMs: null,
+        questionOwnerUid: uid, questionClaimedAtMs: nowMs(),
+        answerWindowStartedAt: null, answerWindowStartedAtMs: null,
+        firstAnswerUid: null, updatedAt: serverTimestamp()
+      });
+    }).catch(error => console.warn('[Battle v2] missing question repair failed:', error))
+      .finally(() => {
+        if (state.repairingQuestionRound === round) state.repairingQuestionRound = null;
+        state.repairRetryAfterMs = nowMs() + 3000;
+      });
+  }
+
   function tickRoom() {
     const room = state.room; if (!room || !state.roomId) return;
     const timerEl = document.getElementById('bv2-timer'); const barEl = document.getElementById('bv2-timer-bar'); const trackEl = document.getElementById('bv2-timer-track');
@@ -1627,7 +1695,7 @@ export const featureReady = (async () => {
       if (nowMs() >= state.prefetchRetryAfterMs) void prefetchRoundQuestion(room, 1);
       advanceIntro(room);
     }
-    else if (room.status === 'playing' && room.currentQuestion) {
+    else if (room.status === 'playing' && usableQuestion(room.currentQuestion)) {
       if (Number(room.round) < Number(room.maxRounds || BATTLE_V2.maxRounds) && nowMs() >= state.prefetchRetryAfterMs) {
         void prefetchRoundQuestion(room, Number(room.round) + 1);
       }
@@ -1638,7 +1706,8 @@ export const featureReady = (async () => {
         claimDisconnectedOpponent(room);
         return;
       }
-      if (document.getElementById('page-battle')?.dataset.bv2Phase !== 'quiz') renderQuiz(room);
+      if (document.getElementById('page-battle')?.dataset.bv2Phase !== 'quiz' ||
+          !questionDomReady(room.currentQuestion)) renderQuiz(room);
       const hostSubmitted = hasSubmittedAnswer(room.host, room.round);
       const guestSubmitted = hasSubmittedAnswer(room.guest, room.round);
       const hostAnswer = answerObject(room.host, room.round);
@@ -1657,6 +1726,9 @@ export const featureReady = (async () => {
         if (timerEl) { timerEl.textContent = '等待首答'; timerEl.classList.add('idle'); }
         if (trackEl) trackEl.classList.add('idle'); if (barEl) barEl.style.width = '100%';
       }
+    } else if (room.status === 'playing') {
+      repairMissingPlayingQuestion(room);
+      if (timerEl) timerEl.textContent = '題目修復中';
     } else if (room.status === 'settled') {
       if (Number(room.round) < Number(room.maxRounds || BATTLE_V2.maxRounds) && nowMs() >= state.prefetchRetryAfterMs) {
         void prefetchRoundQuestion(room, Number(room.round) + 1);
@@ -1741,8 +1813,11 @@ export const featureReady = (async () => {
     else if (room.status === 'preparing') renderArena(room);
     else if (room.status === 'playing') {
       if (Number(room.round) < Number(room.maxRounds || BATTLE_V2.maxRounds)) void prefetchRoundQuestion(room, Number(room.round) + 1);
-      if (room.currentQuestion && nowMs() >= Number(room.questionReadyAtMs || 0)) renderQuiz(room);
-      else renderArena(room);
+      if (usableQuestion(room.currentQuestion) && nowMs() >= Number(room.questionReadyAtMs || 0)) renderQuiz(room);
+      else {
+        renderArena(room);
+        if (!usableQuestion(room.currentQuestion)) setText('bv2-cue-message', '題目未能同步，正在自動修復…');
+      }
     } else if (room.status === 'settled') {
       if (Number(room.round) < Number(room.maxRounds || BATTLE_V2.maxRounds)) void prefetchRoundQuestion(room, Number(room.round) + 1);
       if (state.reviewedRound !== Number(room.round)) renderQuiz(room);
