@@ -12,7 +12,7 @@ import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 
     ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   let currentSubject = null, chart = null, history = [], historyUid = '',
     historyFetchedAt = 0, historyLoading = null, historyError = '',
-    latestReport = null, latestTrend = null, renderEpoch = 0, aiBusy = false;
+    latestReport = null, latestTrend = null, latestSkills = [], renderEpoch = 0, aiBusy = false;
   const ms = 5 * 60 * 1000;
   const description = '保守估計 = (答對數 + 2) / (答題數 + 4)。少量樣本會趨近 50%；這不是 AI 評分、智力測驗或考試成績。';
   const statusClass = value => value === '表現穩定' ? 'good' :
@@ -39,9 +39,12 @@ import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 
         <div id="ai-ability-priority" class="ai-ability-priority"></div>
         <div class="ai-ability-head"><h4>能力細項</h4><small>點選科目查看各單元</small></div>
         <div id="ai-ability-list" class="ai-ability-list"></div>
+        <div class="ai-ability-skills"><div class="ai-ability-head"><h4>推理題型能力</h4>
+          <small>依 AI 題目提供的題型標記；無紀錄則留白</small></div>
+          <div id="ai-ability-skills-list" class="ai-ability-skill-grid"></div></div>
         <details class="ai-ability-method"><summary>診斷方法與數據限制</summary><p>${escape(description)}</p>
         <p>少於 5 題的單元不判定熟練；8 題以上才有中等證據。圖表以保守估計展示，沒有資料的領域會留白而非 0 分。
-        近期趨勢僅使用最新最多 160 筆可讀取、且具有分類的單人答題紀錄；其他玩法未必涵蓋。數據不適合跨玩家公平排名。</p></details>
+        近期趨勢與推理題型僅使用最新最多 160 筆可讀取的單人答題紀錄；題型維度須由題目原本提供標記才會納入，舊題目與其他玩法不一定涵蓋。數據不適合跨玩家公平排名。</p></details>
         <section class="ai-ability-coach"><div class="ai-ability-head"><h4>AI 學習教練</h4><span>主動啟用</span></div>
         <p>根據各單元答題數及正確數提供個人化練習建議。點擊才會將科目與彙總統計傳送至已設定的 AI 供應商，不傳送題目、姓名或完整作答紀錄。</p>
         <button type="button" id="ai-ability-request">讓 AI 制訂補強計畫</button>
@@ -125,6 +128,26 @@ import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 
       ((observed.length > first.length || none.length) ? '<details><summary>查看更多／尚未練習的單元（' +
       (observed.length - first.length + none.length) + '）</summary>' +
       [...observed.slice(first.length), ...none].map(markup).join('') + '</details>' : '');
+  }
+  function showSkills(records = []) {
+    const node = $('ai-ability-skills-list');
+    if (!node) return;
+    const skills = Core.skillStats(records, currentSubject);
+    latestSkills = skills;
+    const used = skills.filter(x => x.total > 0);
+    if (!used.length) {
+      node.innerHTML = '<p class="ai-ability-skill-empty">尚無可辨識題型的作答紀錄。此欄會隨新題目累積，不會以 0 分代替未知能力。</p>';
+      return;
+    }
+    node.innerHTML = skills.map(skill => `<div class="ai-ability-skill">
+      <div><b>${escape(skill.topic)}</b>
+        <span>${skill.total ? percent(skill.estimate) : '尚無資料'}</span></div>
+      <div class="ai-ability-skill-track">${skill.total
+        ? '<span style="width:' + skill.estimate + '%"></span>' : ''}</div>
+      <small>${skill.total
+        ? escape(skill.correct + '/' + skill.total + ' 題 · 證據' + skill.confidence)
+        : '未有可分類紀錄'}</small>
+      </div>`).join('');
   }
   function initFilters(report) {
     const controls = $('chart-controls'); if (!controls) return;
@@ -214,7 +237,7 @@ import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 
     const uid = getMainUser()?.uid;
     if (!uid) { replyBox.textContent = '請先登入才能取得 AI 建議。'; return; }
     const subject = currentSubject;
-    const summary = Core.aiSummary(latestReport, subject, latestTrend);
+    const summary = Core.aiSummary(latestReport, subject, latestTrend, latestSkills);
     if (!summary.topics.length) { replyBox.textContent = '此科目尚沒有已答題的單元。'; return; }
     aiBusy = true; btn.disabled = true; btn.textContent = '正在整理個人化練習策略…';
     replyBox.textContent = '僅傳送分類彙總，不會傳送題目或個人身分。';
@@ -256,7 +279,7 @@ import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 
     const trend = Core.recentTrend(history, currentSubject);
     latestTrend = trend;
     showSummary(report, historyFetchedAt ? trend : null);
-    showPriority(report); showDetails(report); drawChart(report);
+    showPriority(report); showDetails(report); showSkills(history); drawChart(report);
     if (historyError && $('ai-ability-summary')) {
       $('ai-ability-summary').setAttribute('title', historyError);
     }
@@ -267,7 +290,7 @@ import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 
       void loadRecent(uid).then(() => {
         if (serial === renderEpoch && uid === getMainUser()?.uid && canShow()) {
           const updated = Core.recentTrend(history, currentSubject); latestTrend = updated;
-          showSummary(latestReport, updated);
+          showSummary(latestReport, updated); showSkills(history);
         }
       });
     }
