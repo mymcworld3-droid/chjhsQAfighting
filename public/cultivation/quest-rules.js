@@ -11,6 +11,14 @@
     const p = Object.fromEntries(parts.map(row => [row.type, row.value]));
     return `${p.year}-${p.month}-${p.day}`;
   }
+  function weekKey(value = dateKey()) {
+    const date = typeof value === 'string' ? value : dateKey(value);
+    // Every weekly season begins Monday 00:00 Asia/Taipei; label by Monday date.
+    const day = new Date(date + 'T00:00:00Z');
+    if (!Number.isFinite(day.getTime())) return weekKey(dateKey());
+    day.setUTCDate(day.getUTCDate() - (day.getUTCDay() + 6) % 7);
+    return day.toISOString().slice(0, 10);
+  }
   const quest = (id, title, description, metric, target, gold, cultivation, destination, minScore = 0, materials = {}) =>
     ({ id, title, description, metric, target, reward: { gold, cultivation, materials }, destination, minScore });
   // 保留舊目錄順序，用固定 ID 將既有 pathIndex 轉成已領清單。
@@ -112,17 +120,30 @@
     const second = other[seedNumber(uid + '|' + date + '|activity') % other.length];
     return [first, second];
   }
-  const METRICS = ['solo', 'meditation', 'battle', 'dongtian', 'raid'];
+  // 每週任務採七天累積，不要求每天到場；原日常、委託的獎勵均不受影響。
+  const WEEKLY = Object.freeze([
+    quest('week-solo-20','七日問道・勤習','本週累積問道答對 20 題，任意時間完成。','solo',20,140,1,'solo'),
+    quest('week-solo-50','七日問道・精進','本週累積問道答對 50 題。','solo',50,230,2,'solo'),
+    quest('week-correction-2','溫故研習','本週累積訂正並答對 2 題。','correction',2,100,0,'solo'),
+    quest('week-activity-2','百藝兼修','本週累積完成 2 次閉關、洞天、鬥法或團本活動，不須每日連續。','activity',2,125,0,'meditation'),
+    quest('week-raid-1','同門共進','本週通關團本 1 次，任意難度。','raid',1,130,0,'raid',10)
+  ]);
+  const METRICS = ['solo', 'meditation', 'battle', 'dongtian', 'raid', 'correction'];
   function normalizeProgress(raw = {}, date = dateKey()) {
     const totals = Object.fromEntries(METRICS.map(key => [key, number(raw?.totals?.[key])]));
     const counts = Object.fromEntries(METRICS.map(key => [key, raw?.daily?.date === date ? number(raw.daily.counts?.[key]) : 0]));
-    return { version: 1, totals, daily: { date, counts } };
+    const week = weekKey(date);
+    const weeklyCounts = Object.fromEntries(METRICS.map(key => [
+      key,raw?.weekly?.key===week ? number(raw.weekly.counts?.[key]) : 0
+    ]));
+    return { version: 2, totals, daily: { date, counts }, weekly:{key:week,counts:weeklyCounts} };
   }
   function recordEvent(raw, metric, date = dateKey()) {
     if (!METRICS.includes(metric)) throw new Error('Unknown quest activity');
     const p = normalizeProgress(raw, date);
     p.totals[metric] += 1;
     p.daily.counts[metric] += 1;
+    p.weekly.counts[metric] += 1;
     return p;
   }
   function normalizeState(raw = {}, date = dateKey()) {
@@ -146,9 +167,16 @@
       commissionDate:raw?.commissionDate===date ? date : '',
       commissionIds:raw?.commissionDate===date && Array.isArray(raw.commissionIds) ? raw.commissionIds.filter(id => COMMISSION_POOL.some(q=>q.id===id)).slice(0,2) : [],
       commissionClaimed:raw?.commissionDate===date && Array.isArray(raw.commissionClaimed)
-        ? raw.commissionClaimed.filter(id=>COMMISSION_POOL.some(q=>q.id===id)) : [] };
+        ? raw.commissionClaimed.filter(id=>COMMISSION_POOL.some(q=>q.id===id)) : [],
+      weeklyKey:raw?.weeklyKey===weekKey(date)?weekKey(date):'',
+      weeklyClaimed:raw?.weeklyKey===weekKey(date)&&Array.isArray(raw.weeklyClaimed)
+        ? raw.weeklyClaimed.filter(id=>WEEKLY.some(q=>q.id===id)) : [] };
   }
   function progressValue(q, user, p, kind, date, verifiedTrial = null) {
+    if (kind === 'weekly') {
+      const c=p.weekly.counts;
+      return q.metric === 'activity' ? c.meditation+c.dongtian+c.battle+c.raid : number(c[q.metric]);
+    }
     if (q.metric === 'enlightenment')
       return verifiedTrial?.day===date && verifiedTrial.status==='completed' ? 1 : 0;
     if (q.metric === 'dongtian-tutorial') {
@@ -185,9 +213,11 @@
           description: '已完成此仙道任務，可補領尚未領取的本命法器抽獎券。',
           current: 1, target: 1, complete: true, claimable: true, claimed: false, locked: false,
           reward: { gold: 0, cultivation: 0, materials: {}, drawTickets: q.reward.drawTickets - (state.pathTicketAmounts[q.id] || 0) } })),
+      weeklyKey:weekKey(date),weekStart:weekKey(date),
+      weekly: WEEKLY.map(q => row(q,'weekly',state.weeklyClaimed.includes(q.id))),
       daily: DAILY.map(q => row(q, 'daily', state.dailyClaimed.includes(q.id))),
       commissions:(state.commissionIds||[]).map(id=>COMMISSION_POOL.find(q=>q.id===id))
         .filter(Boolean).map(q=>row(q,'commission',state.commissionClaimed.includes(q.id))) };
   }
-  return { PATH, LEGACY_PATH, DAILY, COMMISSION_POOL, dailyCommissions, seedNumber, dateKey, normalizeProgress, recordEvent, normalizeState, view };
+  return { PATH, LEGACY_PATH, DAILY, WEEKLY, COMMISSION_POOL, dailyCommissions, seedNumber, dateKey, weekKey, normalizeProgress, recordEvent, normalizeState, view };
 });
