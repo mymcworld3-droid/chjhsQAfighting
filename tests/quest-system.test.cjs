@@ -43,15 +43,15 @@ const sample = () => ({ uid: 'u1', stats: { gold: 20, totalScore: 28, totalCorre
 const ticketQuestIds = ['path-golden', 'path-raid-one', 'path-nascent', 'path-raid-ten', 'path-solo-hundred'];
 const beforeQuest = id => ({ version: 2, pathClaimed: rules.PATH.slice(0, rules.PATH.findIndex(q => q.id === id)).map(q => q.id) });
 
-test('exactly five path milestones grant one permanent-pool ticket each; dailies do not grant tickets', () => {
+test('selected path quests grant one to five tickets each without a five-ticket chain cap', () => {
   const quests = rules.PATH.filter(q => q.reward.drawTickets);
   assert.deepEqual(quests.map(q => q.id), ticketQuestIds);
-  assert.equal(quests.reduce((sum, q) => sum + q.reward.drawTickets, 0), 5);
-  assert.ok(quests.every(q => q.reward.drawTickets === 1));
+  assert.deepEqual(quests.map(q => q.reward.drawTickets), [1, 2, 3, 5, 5]);
+  assert.ok(quests.every(q => q.reward.drawTickets >= 1 && q.reward.drawTickets <= 5));
   assert.ok(rules.DAILY.every(q => !q.reward.drawTickets));
 });
 
-test('the complete path deposits at most five tickets, preserves an existing wallet and cannot replay', async () => {
+test('the complete path deposits all quest ticket quantities, preserves an existing wallet and cannot replay', async () => {
   const user = sample(); user.stats.totalScore = 3000; user.stats.totalCorrect = 100; user.soulboundDrawTickets = 7;
   user.questProgress = { totals: { solo: 100, meditation: 1, battle: 5, dongtian: 1, raid: 10 } };
   user.storyProgressV1 = { seen: Object.fromEntries(rules.PATH.filter(q => q.chapterId).map(q => [q.chapterId, true])) };
@@ -64,7 +64,7 @@ test('the complete path deposits at most five tickets, preserves an existing wal
     assert.equal(paid.drawTickets, ticketCount);
     assert.equal((await questTransaction(db, 'u1', { kind: 'path', id: q.id }, now)).awarded, false);
   }
-  assert.equal(ticketCount, 12);
+  assert.equal(ticketCount, 23);
   const final = await questTransaction(db, 'u1', null, now);
   assert.equal(final.quests.path, null); assert.deepEqual(final.quests.pathTicketRewards, []);
   assert.deepEqual(db.docs.get('questStates/u1').pathTicketsClaimed, ticketQuestIds);
@@ -81,7 +81,7 @@ test('unclaimed milestones award currency and tickets atomically, including tran
   assert.ok(db.docs.get('questStates/u1').pathTicketsClaimed.includes('path-golden'));
 });
 
-test('older and fully completed paths can claim only the five added tickets without repeating original rewards', async () => {
+test('older and fully completed paths can claim full ticket rewards without repeating original rewards', async () => {
   for (const state of [{ pathIndex: 21 }, { version: 2, pathClaimed: rules.PATH.map(q => q.id) }]) {
     const user = sample(); user.materialSystem = { inventory: { 'raid-refine-key-iii': 9 } };
     const db = fakeDb(user, state), before = structuredClone(db.docs.get('questStates/u1'));
@@ -94,13 +94,51 @@ test('older and fully completed paths can claim only the five added tickets with
       assert.equal(results.find(r => r.awarded).reward.gold, 0);
     }
     const remote = db.docs.get('users/u1');
-    assert.equal(remote.soulboundDrawTickets, 5); assert.deepEqual(remote.stats, user.stats);
+    assert.equal(remote.soulboundDrawTickets, 16); assert.deepEqual(remote.stats, user.stats);
     assert.deepEqual(remote.materialSystem, user.materialSystem);
     const final = await questTransaction(db, 'u1', null, now);
     assert.equal(final.quests.pathCompleted, view.quests.pathCompleted);
     assert.equal(final.quests.path?.id, view.quests.path?.id);
     assert.deepEqual(final.quests.pathTicketRewards, []);
   }
+});
+
+test('the first one-ticket rollout migrates paid quantities and awards only differences even after spending', async () => {
+  const user = sample(); user.soulboundDrawTickets = 0;
+  const state = { version: 2, pathClaimed: rules.PATH.map(q => q.id), pathTicketsClaimed: ticketQuestIds };
+  const db = fakeDb(user, state);
+  const first = await questTransaction(db, 'u1', null, now);
+  assert.deepEqual(first.quests.pathTicketRewards.map(q => [q.id, q.reward.drawTickets]),
+    [['path-raid-one', 1], ['path-nascent', 2], ['path-raid-ten', 4], ['path-solo-hundred', 4]]);
+  assert.equal((await questTransaction(db, 'u1', { kind: 'path', id: 'path-golden' }, now)).awarded, false);
+  for (const q of first.quests.pathTicketRewards) {
+    const claims = await Promise.all([1, 2, 3].map(() => questTransaction(db, 'u1', { kind: 'path', id: q.id, drawTickets: 5 }, now)));
+    assert.equal(claims.filter(r => r.awarded).length, 1);
+    assert.equal(claims.find(r => r.awarded).reward.drawTickets, q.reward.drawTickets);
+  }
+  assert.equal(db.docs.get('users/u1').soulboundDrawTickets, 11, 'five already-issued tickets are not re-awarded');
+  assert.deepEqual(db.docs.get('users/u1').stats, user.stats);
+  assert.deepEqual(db.docs.get('questStates/u1').pathTicketAmounts,
+    { 'path-golden': 1, 'path-raid-one': 2, 'path-nascent': 3, 'path-raid-ten': 5, 'path-solo-hundred': 5 });
+  db.docs.get('users/u1').soulboundDrawTickets = 0;
+  const tomorrow = new Date('2026-10-03T12:00:00Z');
+  assert.deepEqual((await questTransaction(db, 'u1', null, tomorrow)).quests.pathTicketRewards, []);
+  assert.equal((await questTransaction(db, 'u1', { kind: 'path', id: 'path-raid-ten' }, tomorrow)).awarded, false);
+});
+
+test('a partially paid quest retains its amount across daily claims and concurrent supplemental retries', async () => {
+  const user = sample(); user.soulboundDrawTickets = 2;
+  for (let i = 0; i < 3; i++) user.questProgress = rules.recordEvent(user.questProgress, 'solo', date);
+  const state = { version: 2, pathClaimed: rules.PATH.map(q => q.id), pathTicketsClaimed: ['path-raid-ten'],
+    pathTicketAmounts: { 'path-raid-ten': 3 } };
+  const db = fakeDb(user, state);
+  await questTransaction(db, 'u1', { kind: 'daily', id: 'daily-solo-three', date }, now);
+  const before = await questTransaction(db, 'u1', null, now);
+  assert.equal(before.quests.pathTicketRewards.find(q => q.id === 'path-raid-ten').reward.drawTickets, 2);
+  const claims = await Promise.all(Array.from({ length: 5 }, () => questTransaction(db, 'u1', { kind: 'path', id: 'path-raid-ten' }, now)));
+  assert.equal(claims.filter(r => r.awarded).length, 1);
+  assert.equal(db.docs.get('users/u1').soulboundDrawTickets, 4);
+  assert.equal(db.docs.get('questStates/u1').pathTicketAmounts['path-raid-ten'], 5);
 });
 
 test('failed ticket deposits roll back the quest claim, and earned tickets can immediately pay for a draw', async () => {

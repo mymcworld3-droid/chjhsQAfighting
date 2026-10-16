@@ -23,7 +23,7 @@ async function questTransaction(db, uid, request = null, now = new Date()) {
       if (index < 0) throw error('找不到此任務', 400);
       const duplicate = request.kind === 'path' ? state.pathClaimed.includes(request.id) : state.dailyClaimed.includes(request.id);
       const ticketOnly = request.kind === 'path' && duplicate && list[index].reward.drawTickets > 0 &&
-        !state.pathTicketsClaimed.includes(request.id);
+        (state.pathTicketAmounts[request.id] || 0) < list[index].reward.drawTickets;
       if (!duplicate || ticketOnly) {
         const snapshot = rules.view(user, state, date);
         const q = ticketOnly ? snapshot.pathTicketRewards.find(q => q.id === request.id)
@@ -38,7 +38,7 @@ async function questTransaction(db, uid, request = null, now = new Date()) {
         if (reward.drawTickets) {
           user.soulboundDrawTickets = Math.max(0, Math.floor(Number(user.soulboundDrawTickets) || 0)) + reward.drawTickets;
           patch.soulboundDrawTickets = user.soulboundDrawTickets;
-          state.pathTicketsClaimed.push(request.id);
+          state.pathTicketAmounts[request.id] = (state.pathTicketAmounts[request.id] || 0) + reward.drawTickets;
         }
         for (const [id, amount] of Object.entries(reward.materials)) {
           const quantity = Math.max(0, Math.floor(Number(user.materialSystem?.inventory?.[id]) || 0)) + amount;

@@ -66,7 +66,7 @@
     'path-immortal': [storyQuest('true-immortal-epilogue', '終章 · 出師這件事，師姐說了算', 2588)]
   };
   const PATH_DRAW_TICKETS = Object.freeze({
-    'path-golden': 1, 'path-raid-one': 1, 'path-nascent': 1, 'path-raid-ten': 1, 'path-solo-hundred': 1
+    'path-golden': 1, 'path-raid-one': 2, 'path-nascent': 3, 'path-raid-ten': 5, 'path-solo-hundred': 5
   });
   const PATH = [{ ...storyQuest('prologue-enter-sect', '第一章 · 問道靈根', 0),
     title: '完成新手劇情 · 問道靈根',
@@ -98,10 +98,19 @@
     const claimed = Array.isArray(raw?.pathClaimed) ? raw.pathClaimed
       : LEGACY_PATH.slice(0, number(raw?.pathIndex)).map(q => q.id);
     const pathClaimed = PATH.filter(q => claimed.includes(q.id)).map(q => q.id);
-    const pathTicketsClaimed = PATH.filter(q => q.reward.drawTickets && pathClaimed.includes(q.id) &&
-      Array.isArray(raw?.pathTicketsClaimed) && raw.pathTicketsClaimed.includes(q.id)).map(q => q.id);
+    // The first ticket rollout stored IDs only and paid exactly one per quest.
+    // Preserve that amount even when the tickets have already been spent.
+    const pathTicketAmounts = {};
+    for (const q of PATH.filter(q => q.reward.drawTickets && pathClaimed.includes(q.id))) {
+      const legacy = Array.isArray(raw?.pathTicketsClaimed) && raw.pathTicketsClaimed.includes(q.id) ? 1 : 0;
+      const paid = Number(raw?.pathTicketAmounts?.[q.id]);
+      const amount = Math.max(legacy, Number.isFinite(paid) ? number(paid) : 0);
+      if (amount) pathTicketAmounts[q.id] = amount;
+    }
+    const pathTicketsClaimed = PATH.filter(q => q.reward.drawTickets &&
+      (pathTicketAmounts[q.id] || 0) >= q.reward.drawTickets).map(q => q.id);
     const next = PATH.findIndex(q => !pathClaimed.includes(q.id));
-    return { version: 2, pathClaimed, pathTicketsClaimed, pathIndex: next < 0 ? PATH.length : next, dailyDate: date,
+    return { version: 2, pathClaimed, pathTicketsClaimed, pathTicketAmounts, pathIndex: next < 0 ? PATH.length : next, dailyDate: date,
       dailyClaimed: raw?.dailyDate === date && Array.isArray(raw.dailyClaimed) ? raw.dailyClaimed.filter(id => DAILY.some(q => q.id === id)) : [] };
   }
   function progressValue(q, user, p, kind, date) {
@@ -135,10 +144,10 @@
     return { date, pathIndex: state.pathIndex, pathCompleted: state.pathClaimed.length, pathTotal: PATH.length,
       path: state.pathIndex < PATH.length ? row(PATH[state.pathIndex], 'path') : null,
       pathTicketRewards: PATH.filter(q => q.reward.drawTickets && state.pathClaimed.includes(q.id) &&
-        !state.pathTicketsClaimed.includes(q.id)).map(q => ({ ...q, supplemental: true,
-          description: '已完成此仙道任務，可補領新增的本命法器抽獎券。',
+        (state.pathTicketAmounts[q.id] || 0) < q.reward.drawTickets).map(q => ({ ...q, supplemental: true,
+          description: '已完成此仙道任務，可補領尚未領取的本命法器抽獎券。',
           current: 1, target: 1, complete: true, claimable: true, claimed: false, locked: false,
-          reward: { gold: 0, cultivation: 0, materials: {}, drawTickets: q.reward.drawTickets } })),
+          reward: { gold: 0, cultivation: 0, materials: {}, drawTickets: q.reward.drawTickets - (state.pathTicketAmounts[q.id] || 0) } })),
       daily: DAILY.map(q => row(q, 'daily', state.dailyClaimed.includes(q.id))) };
   }
   return { PATH, LEGACY_PATH, DAILY, dateKey, normalizeProgress, recordEvent, normalizeState, view };
