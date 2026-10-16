@@ -2,10 +2,18 @@
 
 // Generated questions are text only. Reject prompts that depend on an absent
 // figure and explanations that explicitly contradict or correct the answer.
+const { questionIntegrityIssue } = require('./question-answer-integrity.cjs');
 const MathGuard = require('./public/cultivation/math-guard.js');
 
 function questionQualityIssue({ q, correct, wrong, exp } = {}) {
-  // Reject broken TeX BEFORE sending it to a player. The generator may retry.
+  // Partial legacy checks still report their specific problems; full generated
+  // questions receive the stronger answer/explanation consistency verification.
+  if (typeof correct === 'string' && Array.isArray(wrong) && wrong.length === 3 &&
+      typeof exp === 'string') {
+    const concreteIssue = questionIntegrityIssue({ q, correct, wrong, exp });
+    if (concreteIssue) return concreteIssue;
+  }
+  // Validate TeX even when a human-readable explanation superficially looks correct.
   for (const piece of [q, correct, ...(Array.isArray(wrong) ? wrong : []), exp]) {
     const checked = MathGuard.inspect(piece);
     if (!checked.valid) return '數學公式定界符或結構不完整';
