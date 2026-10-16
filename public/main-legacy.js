@@ -3270,6 +3270,11 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
             // Older logs without these fields remain usable for general history.
             subject: String(window.currentActiveQuiz?.badge || '').replace('🎯 ', '').split(' | ')[0]?.trim().slice(0, 40) || '',
             subTopic: String(window.currentActiveQuiz?.badge || '').replace('🎯 ', '').split(' | ')[1]?.trim().slice(0, 75) || '',
+            // AI-generated question metadata, not an AI inference from correctness.
+            questionForm: String(quiz?.meta?.question_form || '').slice(0, 40),
+            cognitiveLevel: Number(quiz?.meta?.cognitive_level) || null,
+            reasoningSteps: Number(quiz?.meta?.reasoning_steps) || null,
+            conceptId: String(quiz?.meta?.concept_id || '').slice(0, 100),
             topic: "Solo", 
             mode: 'infinite', 
             timestamp: serverTimestamp(),
