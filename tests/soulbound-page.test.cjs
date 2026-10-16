@@ -227,3 +227,35 @@ test('voucher buttons display balance and send explicit ticket payment with zero
   runtime.requests[1].reply({...snapshot(),result:batch,pending:batch,drawTickets:0});await settle();
   assert.match(runtime.html(),/本批 5 張抽獎券/);assert.equal(runtime.player.soulboundDrawTickets,0);
 });
+
+test('showcase preview redeems its selected weapon with the displayed fragment cost', async () => {
+  const runtime=pageRuntime(); runtime.open();
+  const cost=Pool.redemptionCost(0),item=Pool.candidates(0)[2];
+  runtime.requests[0].reply({...snapshot(),fragments:cost+10,redemptionCost:cost}); await settle();
+  runtime.preview(item.id);
+  const dialog=runtime.nodes.get('soulbound-preview');
+  assert.match(dialog.innerHTML,new RegExp('data-sb-redeem="'+item.id+'"'));
+  assert.match(dialog.innerHTML,/600 碎片兌換此器/);
+  const button={disabled:false,dataset:{sbRedeem:item.id}};
+  dialog.fire('click',{target:{closest:selector=>selector==='[data-sb-redeem]'?button:null}});
+  assert.equal(runtime.requests[1].url,'/api/soulbound/redeem');
+  const body=JSON.parse(runtime.requests[1].init.body);
+  assert.deepEqual(Object.keys(body).sort(),['expectedFragments','itemId','poolVersion','requestId']);
+  assert.equal(body.itemId,item.id);
+  assert.equal(body.expectedFragments,cost);
+  const result={requestId:body.requestId,kind:'redemption',itemId:item.id,name:item.name,costFragments:cost};
+  runtime.requests[1].reply({...snapshot(),fragments:10,inventory:{[item.id]:1},result,redemptionCost:cost});
+  await settle();
+  assert.equal(runtime.player.forgeFragments,10);
+  assert.equal(runtime.player.artifactSystem.inventory[item.id],1);
+  assert.match(runtime.nodes.get('soulbound-status').textContent,/已兌換/);
+});
+
+test('fragment redemption is not offered when short on fragments or a draw batch is pending', async () => {
+  for (const pending of [null,{requestId:'waiting-batch-0001',results:[{kind:'fragments',fragments:30}] }]) {
+    const runtime=pageRuntime();runtime.open();
+    runtime.requests[0].reply({...snapshot(),fragments:pending?900:200,redemptionCost:600,pending});
+    await settle();runtime.preview(Pool.candidates(0)[0].id);
+    assert.match(runtime.nodes.get('soulbound-preview').innerHTML,/data-sb-redeem="[^"]+" disabled/);
+  }
+});
