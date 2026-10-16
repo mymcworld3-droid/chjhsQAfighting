@@ -326,6 +326,11 @@ import {
     }));
   }
 
+  // Permanent soulbound originals may be absent from the stored admin catalog.
+  function isSoulboundSourceItem(id, catalog = ARTIFACT_CATALOG) {
+    return (globalThis.QASoulboundPool.get(id) || catalog.find(item => item.id === id))?.equipSlot === '本命法寶';
+  }
+
   function apiArtifacts() {
     return ARTIFACT_CATALOG.map((item) => ({
       id: item.id, name: item.name, icon: item.icon, realm: item.realm, category: item.category,
@@ -496,9 +501,8 @@ import {
       if (!awardedId) {
         const id = uniqueGeneratedId(latestItems);
         // Do not trust an AI-chosen slot at the final catalog commit.
-        const realSoulboundSource = Number(fresh.refinementStage) >= 2 &&
-          (fresh.recipe || []).some((row) => row.artifactId &&
-            latestItems.some((item) => item.id === row.artifactId && item.equipSlot === '本命法寶'));
+        const realSoulboundSource = (fresh.recipe || []).some((row) =>
+          row.artifactId && isSoulboundSourceItem(row.artifactId, latestItems));
         const generatedArtifact = { ...generated.artifact };
         if (realSoulboundSource) {
           generatedArtifact.equipSlot = '本命法寶';
