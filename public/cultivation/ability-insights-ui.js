@@ -13,7 +13,7 @@ import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 
   let currentSubject = null, chart = null, history = [], historyUid = '',
     historyFetchedAt = 0, historyLoading = null, historyError = '',
     latestReport = null, latestTrend = null, latestSkills = [], renderEpoch = 0, aiBusy = false,
-    lastRenderedSubject = null;
+    lastRenderedSubject = null, currentView = 'knowledge';
   const ms = 5 * 60 * 1000;
   const description = '保守估計 = (答對數 + 2) / (答題數 + 4)。少量樣本會趨近 50%；這不是 AI 評分、智力測驗或考試成績。';
   const statusClass = value => value === '表現穩定' ? 'good' :
@@ -30,6 +30,34 @@ import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 
       const link = document.createElement('link');
       link.id = 'ability-insights-style'; link.rel = 'stylesheet';
       link.href = '/styles/ability-insights.css'; document.head.appendChild(link);
+    }
+    const frame = canvas.parentElement;
+    frame?.classList.add('ai-ability-chart-frame');
+    if (frame && !$('ability-chart-empty')) {
+      const empty = document.createElement('div');
+      empty.id = 'ability-chart-empty';
+      empty.className = 'ai-ability-chart-empty';
+      empty.hidden = true;
+      empty.setAttribute('role', 'status');
+      empty.textContent = '尚無可呈現的作答數據；先完成幾題，圖譜就會開始成長。';
+      frame.append(empty);
+    }
+    if (frame && !$('ability-chart-views')) {
+      const controls = document.createElement('nav');
+      controls.id = 'ability-chart-views';
+      controls.className = 'ai-ability-views';
+      controls.setAttribute('aria-label', '切換能力圖譜分析面向');
+      controls.innerHTML = [
+        ['knowledge', '知識掌握'], ['skills', '推理能力'], ['trend', '學習趨勢']
+      ].map(([value, label]) => '<button type="button" data-ability-view="' + value +
+        '" aria-pressed="false">' + label + '</button>').join('');
+      controls.addEventListener('click', event => {
+        const button = event.target.closest('[data-ability-view]');
+        if (!button) return;
+        currentView = button.dataset.abilityView;
+        if (latestReport) drawChart(latestReport);
+      });
+      frame.before(controls);
     }
     if (!$('ability-insights-panel')) {
       const root = document.createElement('section');
@@ -171,42 +199,100 @@ import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 
     const ctx = $('knowledgeChart');
     if (!ctx) return;
     if (chart) { chart.destroy(); chart = null; }
-    if (!window.Chart) return;
-    const items = currentSubject ? report.topics.filter(x => x.subject === currentSubject) :
-      report.domains.filter(x => x.topicCount > 0 || x.total > 0);
-    const chosen = items.slice(0, 12);
-    if (!chosen.length) return;
-    const type = chosen.length >= 3 ? 'radar' : 'bar';
-    const labels = chosen.map(x => x.topic || x.name);
+    const empty = $('ability-chart-empty');
+    for (const button of document.querySelectorAll('#ability-chart-views [data-ability-view]')) {
+      const selected = button.dataset.abilityView === currentView;
+      button.classList.toggle('is-active', selected);
+      button.setAttribute('aria-pressed', String(selected));
+    }
+    if (!window.Chart) {
+      ctx.hidden = true;
+      if (empty) { empty.hidden = false; empty.textContent = '圖表元件暫時無法載入；下方的能力細項仍可正常查看。'; }
+      return;
+    }
+    const trend = Core.recentTrend(history, currentSubject);
+    const skills = Core.skillStats(history, currentSubject);
+    let axes, chartType, title, series;
+    if (currentView === 'trend') {
+      const last = trend.recent, prev = trend.previous;
+      axes = [{ name: '前 7 日', ...prev, total: prev.count, estimate: prev.accuracy },
+        { name: '近 7 日', ...last, total: last.count, estimate: last.accuracy }];
+      chartType = 'bar';
+      title = '最近兩週 · 答題表現';
+      series = axes.map(x => x.estimate);
+    } else if (currentView === 'skills') {
+      axes = skills;
+      chartType = axes.filter(x => x.total > 0).length >= 3 ? 'radar' : 'bar';
+      title = '八種推理能力 · 樣本校正';
+      series = axes.map(x => x.estimate);
+    } else {
+      const topics = currentSubject ? report.topics.filter(x => x.subject === currentSubject) :
+        report.domains.filter(x => x.topicCount > 0 || x.total > 0);
+      axes = currentSubject ?
+        [...topics.filter(x => x.total), ...topics.filter(x => !x.total)].slice(0, 9) :
+        topics.slice(0, 7);
+      chartType = axes.filter(x => x.total > 0).length >= 3 ? 'radar' : 'bar';
+      title = currentSubject ? currentSubject + ' · 單元掌握' : '綜合能力領域';
+      series = axes.map(x => x.estimate);
+    }
+    const known = axes.filter(x => x.total > 0).length;
+    if (!axes.length || !known) {
+      ctx.hidden = true;
+      if (empty) {
+        empty.hidden = false;
+        empty.textContent = currentView === 'skills' ?
+          '目前尚無標記推理題型的作答紀錄。完成新題目後，八種推理能力會逐步顯示。' :
+          currentView === 'trend' ? '目前沒有近期可分類的答題紀錄，無法計算趨勢。' :
+          '尚無本領域的作答資料；未練習不是零分。';
+      }
+      return;
+    }
+    ctx.hidden = false;
+    if (empty) empty.hidden = true;
+    const useRadar = chartType === 'radar';
+    const labels = axes.map(x => {
+      const name = String(x.topic || x.name);
+      return name.length > 9 ? name.slice(0, 9) + '…' : name;
+    });
     chart = new window.Chart(ctx, {
-      type,
+      type: chartType,
       data: { labels, datasets: [{
-        label: '保守能力估計 (%)',
-        data: chosen.map(x => x.estimate), spanGaps: false,
-        backgroundColor: type === 'bar' ? 'rgba(226,188,121,.72)' : 'rgba(226,188,121,.18)',
-        borderColor: '#dfbc79', pointBackgroundColor: '#efd19a',
-        pointBorderColor: '#dfbc79', pointRadius: 4, borderWidth: 2
+        label: '保守估計 (%)',
+        data: series,
+        spanGaps: false,
+        borderColor: '#dfbc79', pointBackgroundColor: '#efd19a', pointBorderColor: '#dfbc79',
+        pointRadius: useRadar ? 4 : 0,
+        backgroundColor: useRadar ? 'rgba(226,188,121,.18)' :
+          axes.map(x => x.total ? 'rgba(226,188,121,.75)' : 'rgba(226,188,121,.12)'),
+        borderWidth: 2
       }] },
       options: {
         responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { display: false }, title: { display: true, color: '#f4e6c7',
-          text: currentSubject ? currentSubject + ' · 單元能力' : '五領域能力估計',
-          font: { size: 14, family: "'Noto Serif TC',serif" } },
-          tooltip: { callbacks: { label: context => {
-            const item = chosen[context.dataIndex];
-            return item.total ? ' 估計 ' + item.estimate + '% / ' + item.correct + '/' + item.total + ' 題' : ' 尚無資料';
-          } } } },
-        scales: type === 'radar' ? {
-          r: { min: 0, max: 100, beginAtZero: true,
-            angleLines: { color: 'rgba(214,181,124,.18)' },
-            grid: { color: 'rgba(214,181,124,.16)' },
-            pointLabels: { color: '#d8c7a8', font: { size: 11 } },
-            ticks: { stepSize: 25, color: '#af9d7f', backdropColor: 'transparent' } }
-        } : {
-          x: { min: 0, max: 100, ticks: { color: '#d8c7a8' }, grid: { color: 'rgba(214,181,124,.14)' } },
-          y: { ticks: { color: '#d8c7a8' }, grid: { display: false } }
+        animation: { duration: matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 260 },
+        plugins: {
+          legend: { display: false },
+          title: { display: true, color: '#f4e6c7', text: title,
+            font: { size: 13, family: "'Noto Serif TC',serif" } },
+          tooltip: { callbacks: { title: context => {
+            return context[0] ? String(axes[context[0].dataIndex].topic || axes[context[0].dataIndex].name) : '';
+          }, label: context => {
+            const entry = axes[context.dataIndex];
+            return entry.total ? ' ' + entry.estimate + '% · ' +
+              (entry.correct == null ? entry.total + ' 題' : entry.correct + '/' + entry.total + ' 題') :
+              ' 尚無紀錄（不是 0 分）';
+          } } }
         },
-        indexAxis: type === 'bar' ? 'y' : undefined
+        scales: useRadar ? {
+          r: { min: 0, max: 100, beginAtZero: true,
+            angleLines: { color: 'rgba(214,181,124,.18)' }, grid: { color: 'rgba(214,181,124,.16)' },
+            pointLabels: { color: '#d8c7a8', font: { size: 10 } },
+            ticks: { stepSize: 25, color: '#b19d7c', backdropColor: 'transparent' } }
+        } : {
+          x: { min: 0, max: 100, ticks: { color: '#d8c7a8' },
+            grid: { color: 'rgba(214,181,124,.12)' } },
+          y: { ticks: { color: '#d8c7a8', font: { size: 10 } }, grid: { display: false } }
+        },
+        indexAxis: useRadar ? undefined : 'y'
       }
     });
   }
@@ -304,6 +390,7 @@ import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 
         if (serial === renderEpoch && uid === getMainUser()?.uid && canShow()) {
           const updated = Core.recentTrend(history, currentSubject); latestTrend = updated;
           showSummary(latestReport, updated); showSkills(history);
+          if (currentView !== 'knowledge') drawChart(latestReport);
         }
       });
     }
