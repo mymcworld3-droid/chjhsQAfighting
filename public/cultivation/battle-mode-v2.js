@@ -3,11 +3,12 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
 import {} from './soul-talents.js';
 import './nascent-growth.js';
 import {
-  doc, collection, query, where, limit, startAfter, getDocs, getDoc,
-  addDoc, updateDoc, onSnapshot, runTransaction, serverTimestamp
+  doc, collection, query, where, limit, startAfter, getDocs as firestoreGetDocs, getDoc as firestoreGetDoc,
+  addDoc as firestoreAddDoc, updateDoc as firestoreUpdateDoc, onSnapshot, runTransaction as firestoreRunTransaction, serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { BATTLE_V2, settleBattleRound, applyNascentSoulDuelRule } from './battle-engine-v2.js?v=20260926-nascent-seal1';
 import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } from './battle-question-scope.js?v=20260922-range1';
+import { createFirestoreQuotaGuard } from './data/firestore-quota-guard.js';
 import { battleRepository } from './data/battle-repository.js';
 import { playerRepository } from './data/player-repository.js';
 import { rewardRepository } from './data/reward-repository.js';
@@ -30,7 +31,7 @@ export const featureReady = (async () => {
   const ACTIVE_QUESTION_LEASE_MS = 65000;
   const QUIZ_REQUEST_TIMEOUT_MS = 58000;
   const EMPTY_QUESTION_REPAIR_MS = 2500;
-  const MATCH_RECONCILE_MS = 1100;
+  const MATCH_RECONCILE_MS = 15000;
   const MATCH_SCAN_LIMIT = 80;
   const MATCH_SCAN_MAX_PAGES = 4;
   const INTRO_DURATION_MS = 4800;
@@ -62,6 +63,13 @@ export const featureReady = (async () => {
     unsub: null,
     tick: null,
     heartbeat: null,
+    heartbeatBusy: false,
+    prefetchClaimBusy: false,
+    takeoverBusy: false,
+    syncPaused: false,
+    disconnectGraceUntilMs: 0,
+    quotaReconnect: null,
+    waitingCache: null,
     reconcile: null,
     waitingUnsub: null,
     reconcileBusy: false,
@@ -118,6 +126,36 @@ export const featureReady = (async () => {
     (state.roomId && state.room?.status !== 'finished')
   );
 
+  const roomQuota = createFirestoreQuotaGuard({ now: nowMs, onExhausted: pauseForRoomQuota });
+  // Keep the familiar Firestore signatures; every room operation shares the gate.
+  const runTransaction = (...args) => roomQuota.run(() => firestoreRunTransaction(...args));
+  const getDoc = (...args) => roomQuota.run(() => firestoreGetDoc(...args));
+  const getDocs = (...args) => roomQuota.run(() => firestoreGetDocs(...args));
+  const addDoc = (...args) => roomQuota.run(() => firestoreAddDoc(...args));
+  const updateDoc = (...args) => roomQuota.run(() => firestoreUpdateDoc(...args));
+
+  function pauseForRoomQuota() {
+    if (!state.roomId) return;
+    state.syncPaused = true;
+    detachRoomListener();
+    if (state.reconcile) clearTimeout(state.reconcile);
+    state.reconcile = null;
+    toast(firebaseBattleErrorMessage({ code: 'resource-exhausted' }));
+    scheduleQuotaReconnect();
+  }
+
+  function scheduleQuotaReconnect() {
+    if (!state.roomId || state.quotaReconnect) return;
+    const roomId = state.roomId, uid = me()?.uid, session = state.matchSerial;
+    state.quotaReconnect = setTimeout(() => {
+      state.quotaReconnect = null;
+      if (state.roomId !== roomId || me()?.uid !== uid || state.matchSerial !== session) return;
+      if (roomQuota.blocked()) { scheduleQuotaReconnect(); return; }
+      // Resume gameplay only after a fresh server snapshot, never the old room.
+      subscribeRoom(roomId);
+    }, Math.max(1000, roomQuota.retryAt() - nowMs()));
+  }
+
   function finite(value, fallback) {
     const number = Number(value);
     return Number.isFinite(number) ? number : fallback;
@@ -165,6 +203,9 @@ export const featureReady = (async () => {
 
   function firebaseBattleErrorMessage(error, fallback = '配對失敗，請稍後再試。') {
     const code = String(error?.code || '').replace(/^firestore\//, '');
+    if (code === 'resource-exhausted') {
+      return '鬥法資料庫額度已達上限或暫時受限，已暫停密集請求，請稍後再試。';
+    }
     if (code === 'permission-denied') {
       return 'Firebase C 尚未允許鬥法房間存取，請部署 firestore-c.rules。';
     }
@@ -598,13 +639,16 @@ export const featureReady = (async () => {
   async function prefetchRoundQuestion(room, targetRound) {
     const round = Number(targetRound);
     const uid = me()?.uid;
+    if (state.syncPaused || roomQuota.blocked()) return;
     if (!uid || !canPrefetchRound(room, round) || state.prefetchingRound === round ||
         nowMs() < state.prefetchRetryAfterMs) return;
     if (Number(room.prefetchedRound) === round && room.prefetchedQuestion) return;
 
     if (room.prefetchOwnerUid !== uid) {
+      if (state.prefetchClaimBusy) return;
       const claimedAt = Number(room.prefetchClaimedAtMs || 0);
       if (!room.prefetchOwnerUid || questionLeaseExpired(room, room.prefetchOwnerUid, claimedAt)) {
+        state.prefetchClaimBusy = true;
         try {
           await runTransaction(db(), async (tx) => {
             const ref = roomRef();
@@ -616,7 +660,8 @@ export const featureReady = (async () => {
             if (fresh.prefetchOwnerUid && fresh.prefetchOwnerUid !== uid && !questionLeaseExpired(fresh, fresh.prefetchOwnerUid, freshClaimedAt)) return;
             tx.update(ref, { prefetchOwnerUid: uid, prefetchClaimedAtMs: nowMs(), updatedAt: serverTimestamp() });
           });
-        } catch (_) {}
+        } catch (_) { state.prefetchRetryAfterMs = nowMs() + 3500; }
+        finally { state.prefetchClaimBusy = false; state.prefetchRetryAfterMs = Math.max(state.prefetchRetryAfterMs, nowMs() + 1000); }
       }
       return;
     }
@@ -726,6 +771,8 @@ export const featureReady = (async () => {
   async function readWaitingRooms(isCandidate, firstSnapshot = null) {
     const session = Number(state.matchSerial) || 0, uid = me()?.uid;
     if (firstSnapshot?.docs.some(isCandidate)) return {docs:firstSnapshot.docs.filter(isCandidate)};
+    // A complete listener snapshot already includes every waiting room.
+    if (firstSnapshot && firstSnapshot.docs.length < MATCH_SCAN_LIMIT) return {docs:[]};
     let cursor = state.waitingScanCursor;
     for (let page = 0; page < MATCH_SCAN_MAX_PAGES; page++) {
       const snap = !cursor && page === 0 && firstSnapshot ? firstSnapshot : await getDocs(query(
@@ -819,7 +866,8 @@ export const featureReady = (async () => {
     });
     for (const candidate of candidates) {
       if (!isMatchSessionActive(session, myData.uid)) return null;
-      try { if (await claimWaitingRoom(candidate.ref, myData, session)) return candidate.id; } catch (_) {}
+      try { if (await claimWaitingRoom(candidate.ref, myData, session)) return candidate.id; }
+      catch (error) { if (roomQuota.blocked()) throw error; }
     }
     return null;
   }
@@ -868,25 +916,33 @@ export const featureReady = (async () => {
   }
 
   function scheduleReconcile(delay = MATCH_RECONCILE_MS) {
-    if (state.reconcile || state.role !== 'host' || !state.roomId) return;
+    if (state.syncPaused || roomQuota.blocked() || state.reconcile || state.role !== 'host' || !state.roomId) return;
     state.reconcile = setTimeout(async () => {
       state.reconcile = null;
       await reconcileOwnWaitingRoom();
-      // 只要仍在自己的等待房，就每 1.1 秒尋找另一個同時建立的等待房。
-      // 修正兩名玩家同時按配對、各自成為房主後永久互相等不到的情況。
+      // 即時監聽立即處理新房；低頻補查只負責分頁與轉移確認。
       if (state.roomId && state.role === 'host' && state.room?.status === 'waiting') scheduleReconcile();
     }, delay);
   }
 
   function watchWaitingRooms() {
-    if (state.waitingUnsub || state.role !== 'host' || state.room?.status !== 'waiting') return;
+    if (state.syncPaused || roomQuota.blocked() || state.waitingUnsub || state.role !== 'host' || state.room?.status !== 'waiting') return;
+    const serial = state.subscriptionSerial, roomId = state.roomId;
+    const current = () => state.subscriptionSerial === serial && state.roomId === roomId && !state.syncPaused;
     state.waitingUnsub = onSnapshot(query(collection(db(),ROOM_COLLECTION),where('status','==','waiting'),limit(MATCH_SCAN_LIMIT)),
-      snap => { state.waitingSnapshot = snap; void reconcileOwnWaitingRoom(snap); },
-      error => { logBattleFirestoreError('waiting listener failed',error); scheduleReconcile(0); });
+      snap => { if (!current()) return; state.waitingCache = snap; state.waitingSnapshot = snap; void reconcileOwnWaitingRoom(snap); },
+      error => {
+        if (!current()) return;
+        state.waitingUnsub = null; state.waitingCache = null;
+        roomQuota.failure(error);
+        logBattleFirestoreError('waiting listener failed',error);
+        if (!roomQuota.blocked()) scheduleReconcile();
+      });
   }
 
-  async function reconcileOwnWaitingRoom(waitingSnapshot) {
+  async function reconcileOwnWaitingRoom(waitingSnapshot = state.waitingCache) {
     const ownId = state.roomId, session = Number(state.matchSerial) || 0;
+    if (state.syncPaused || roomQuota.blocked()) return;
     if (!ownId || state.role !== 'host' || state.room?.status !== 'waiting' || state.reconcileBusy || state.leaving) return;
     const myData = playerSnapshot();
     state.reconcileBusy = true;
@@ -931,13 +987,15 @@ export const featureReady = (async () => {
     state.subscriptionSerial = (Number(state.subscriptionSerial) || 0) + 1;
     if (state.unsub) { try { state.unsub(); } catch (_) {} state.unsub = null; }
     state.waitingUnsub?.(); state.waitingUnsub = null;
-    state.waitingSnapshot = null;
+    state.waitingSnapshot = null; state.waitingCache = null;
   }
 
   function stopTimers() {
     if (state.tick) clearInterval(state.tick);
     if (state.heartbeat) clearInterval(state.heartbeat);
     if (state.reconcile) clearTimeout(state.reconcile);
+    if (state.quotaReconnect) clearTimeout(state.quotaReconnect);
+    state.quotaReconnect = null;
     state.animationTimers.forEach(clearTimeout); state.animationTimers = [];
     document.querySelectorAll('#bv2-arena .bv2-stage-impact, #bv2-arena .bv2-damage-pop').forEach(node => node.remove());
     for (const id of ['bv2-my-fighter', 'bv2-enemy-fighter']) {
@@ -952,6 +1010,7 @@ export const featureReady = (async () => {
     detachRoomListener(); stopTimers();
     state.matchSerial = (Number(state.matchSerial) || 0) + 1;
     state.mergeAttempt = null; state.reconcileBusy = false; state.waitingScanCursor = null;
+    state.syncPaused = false; state.disconnectGraceUntilMs = 0;
     state.roomId = null; state.role = null; state.room = null; state.starting = false; state.leaving = false; state.invitedRoomId = null;
     state.settlingRound = state.timeoutRound = state.preparingRound = state.prefetchingRound = state.advancingRound = state.disconnectClaimRound = null;
     state.prepareRetryAfterMs = state.prefetchRetryAfterMs = 0;
@@ -1492,7 +1551,7 @@ export const featureReady = (async () => {
       state.pendingAnswer = null;
       if (state.room) renderQuestion(state.room, playerForRole(state.room, state.role));
       console.error('[Battle v2] answer submit failed:', error);
-      toast('答案送出失敗，請再點一次。');
+      toast(firebaseBattleErrorMessage(error, '答案送出失敗，請再點一次。'));
     }
   }
 
@@ -1614,8 +1673,10 @@ export const featureReady = (async () => {
   }
 
   async function takeoverQuestionLease(room) {
+    if (state.takeoverBusy || state.syncPaused || roomQuota.blocked()) return;
     if (room.status !== 'preparing' || room.currentQuestion || room.questionOwnerUid === me()?.uid ||
         (room.questionOwnerUid && !questionLeaseExpired(room, room.questionOwnerUid, room.questionClaimedAtMs))) return;
+    state.takeoverBusy = true;
     try {
       await runTransaction(db(), async (tx) => {
         const ref = roomRef(); const snap = await tx.get(ref); if (!snap.exists()) return; const fresh = snap.data();
@@ -1624,6 +1685,7 @@ export const featureReady = (async () => {
         tx.update(ref, { questionOwnerUid: me().uid, questionClaimedAtMs: nowMs(), updatedAt: serverTimestamp() });
       });
     } catch (_) {}
+    finally { setTimeout(() => { state.takeoverBusy = false; }, 3000); }
   }
 
   async function advanceIntro(room) {
@@ -1647,12 +1709,15 @@ export const featureReady = (async () => {
   }
 
   async function heartbeat() {
+    if (state.heartbeatBusy || state.syncPaused || roomQuota.blocked()) return;
     if (!state.roomId || !state.role || !state.room || !['waiting', 'intro', 'playing', 'settled', 'preparing'].includes(state.room.status)) return;
+    state.heartbeatBusy = true;
     try { await updateDoc(roomRef(), { [`${state.role}.lastSeenAtMs`]: nowMs(), updatedAt: serverTimestamp() }); } catch (_) {}
+    finally { state.heartbeatBusy = false; }
   }
 
   async function claimDisconnectedOpponent(room) {
-    if (!state.role || !['intro', 'playing', 'settled', 'preparing'].includes(room.status)) return;
+    if (!state.role || nowMs() < state.disconnectGraceUntilMs || !['intro', 'playing', 'settled', 'preparing'].includes(room.status)) return;
     const enemyRole = otherRole(state.role); const enemy = playerForRole(room, enemyRole);
     if (!enemy?.uid || nowMs() - Number(enemy.lastSeenAtMs || 0) <= BATTLE_V2.disconnectTtlMs) return;
     const round = Number(room.round); if (state.disconnectClaimRound === round) return; state.disconnectClaimRound = round;
@@ -1707,6 +1772,12 @@ export const featureReady = (async () => {
 
   function tickRoom() {
     const room = state.room; if (!room || !state.roomId) return;
+    if (state.syncPaused || roomQuota.blocked()) {
+      setText('bv2-timer', '等待重連');
+      setText('bv2-cue-message', '鬥法資料庫暫時受限，等待重連中…');
+      setText('bv2-lobby-status', '鬥法資料庫暫時受限，已暫停請求，等待重連。');
+      return;
+    }
     const timerEl = document.getElementById('bv2-timer'); const barEl = document.getElementById('bv2-timer-bar'); const trackEl = document.getElementById('bv2-timer-track');
 
     if (room.status === 'intro') {
@@ -1877,10 +1948,16 @@ export const featureReady = (async () => {
     detachRoomListener(); state.roomId = roomId;
     const serial = state.subscriptionSerial, uid = me()?.uid;
     const current = () => state.roomId === roomId && state.subscriptionSerial === serial && me()?.uid === uid;
-    state.unsub = onSnapshot(roomRef(roomId), snap => {
-      if (current()) onRoomSnapshot(snap);
+    state.unsub = onSnapshot(roomRef(roomId), { includeMetadataChanges: true }, snap => {
+      if (!current()) return;
+      if (state.syncPaused && (snap.metadata?.fromCache || snap.metadata?.hasPendingWrites)) return;
+      if (state.syncPaused) state.disconnectGraceUntilMs = nowMs() + BATTLE_V2.disconnectTtlMs;
+      state.syncPaused = false;
+      if (!snap.metadata?.fromCache && !snap.metadata?.hasPendingWrites) roomQuota.success();
+      onRoomSnapshot(snap);
     }, (error) => {
       if (!current()) return;
+      roomQuota.failure(error);
       logBattleFirestoreError('listener failed', error);
       toast(firebaseBattleErrorMessage(error, '鬥法同步暫時中斷，房間仍會保留。'));
     });

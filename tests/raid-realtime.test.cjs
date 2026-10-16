@@ -145,7 +145,7 @@ test('battle waiting-query updates merge simultaneous hosts without waiting for 
   const own={status:'waiting',host:{uid:'a'},modeVersion:2},other={status:'waiting',host:{uid:'b'},modeVersion:2};
   const ref={id:'aaroom'};
   const snapshot={docs:[{id:'aaroom',ref,data:()=>other}]};
-  const context={state,ROOM_COLLECTION:'rooms',MATCH_SCAN_LIMIT:80,MATCH_SCAN_MAX_PAGES:4,me:()=>({uid:'a'}),BATTLE_V2:{modeVersion:2},console,
+  const context={roomQuota:{blocked:()=>false,failure(){}},state,ROOM_COLLECTION:'rooms',MATCH_SCAN_LIMIT:80,MATCH_SCAN_MAX_PAGES:4,me:()=>({uid:'a'}),BATTLE_V2:{modeVersion:2},console,
     collection(){},query(){},where(){},limit(){},onSnapshot(_,fn){next=fn;return()=>unsub++;},
     playerSnapshot:()=>({uid:'a'}),isRoomStale:()=>false,roomRef:id=>({id}),db:()=>({}),
     getDocs(){throw Error('unexpected polling');},guestJoinPatch:()=>({guest:{uid:'a'},status:'intro'}),

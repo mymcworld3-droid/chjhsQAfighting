@@ -261,7 +261,7 @@ test('Battle v2 keeps reconciling simultaneous waiting rooms and scans a wider w
   assert.match(battleSource, /MATCH_SCAN_LIMIT = 80/);
   assert.match(battleSource, /function scheduleReconcile/);
   assert.match(battleSource, /limit\(MATCH_SCAN_LIMIT\)/);
-  assert.match(battleSource, /同時按配對/);
+  assert.match(battleSource, /MATCH_RECONCILE_MS = 15000/);
 });
 
 test('Battle v2 never leaves answer buttons locked after a no-op transaction', () => {
