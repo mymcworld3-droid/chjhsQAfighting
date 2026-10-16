@@ -68,6 +68,10 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
     return { inventory };
   }
   function materialInventory() { return normalizeMaterials(userData()?.materialSystem || {}).inventory; }
+  // Unlimited materials are only a refinery view for administrators, not actual
+  // inventory that could be traded, dismantled, or written back to Firestore.
+  function adminUnlimitedMaterials() { return userData()?.isAdmin === true; }
+  function amountLabel(amount) { return Number.isFinite(amount) ? String(amount) : '∞'; }
   function artifactInventory() {
     const inventory = {};
     Object.entries(userData()?.artifactSystem?.inventory || {}).forEach(([id, value]) => {
@@ -126,7 +130,8 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
   function ingredientOwned(token) {
     const parsed = parseToken(token);
     if (parsed.type === 'artifact') return Math.max(0, Number(artifactInventory()[parsed.id]) || 0);
-    return Math.max(0, Number(materialInventory()[parsed.id]) || 0);
+    return adminUnlimitedMaterials() && getMaterialById(parsed.id)
+      ? Infinity : Math.max(0, Number(materialInventory()[parsed.id]) || 0);
   }
   function ingredientAvailable(token) {
     const parsed = parseToken(token);
@@ -135,14 +140,15 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
       const equipped = Math.max(0, Number(equippedArtifactCounts()[parsed.id]) || 0);
       return Math.max(0, owned - equipped);
     }
-    return Math.max(0, Number(materialInventory()[parsed.id]) || 0);
+    return ingredientOwned(token);
   }
   function refinementKeyStatus(plan) {
     const materialId = String(plan?.keyRequirement?.materialId || '');
     const need = Math.max(0, Math.floor(Number(plan?.keyRequirement?.quantity) || 0));
     if (!materialId || !need) return { materialId: '', need: 0, have: 0, enough: true, name: '', item: null };
-    const have = Math.max(0, Math.floor(Number(materialInventory()[materialId]) || 0));
     const item = getMaterialById(materialId);
+    const have = adminUnlimitedMaterials() && item ? Infinity
+      : Math.max(0, Math.floor(Number(materialInventory()[materialId]) || 0));
     return {
       materialId, need, have, enough: have >= need,
       name: item?.name || '團本煉製關鍵道具',
@@ -153,7 +159,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
     const source = job ? { keyRequirement: job.keyRequirement } : plan;
     const status = refinementKeyStatus(source);
     const stage = Math.max(0, Math.floor(Number(job?.refinementStage ?? plan?.refinementStage) || 0));
-    const consumed = !!job && status.need > 0;
+    const consumed = !!job && status.need > 0 && !adminUnlimitedMaterials();
     return {
       ...status,
       stage,
@@ -167,7 +173,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
     const item = view.item || {};
     const stock = view.consumed
       ? `本爐已消耗 ×${view.need} · 背包剩 ${view.have}`
-      : `持有 ${view.have} / 需要 ${view.need}`;
+      : `${adminUnlimitedMaterials() ? '管理員無限提供' : `持有 ${amountLabel(view.have)}`} / 需要 ${view.need}`;
     return `<div class="refinery-key-requirement ${view.visible ? '' : 'is-hidden'} ${view.consumed ? 'is-consumed' : view.enough ? 'is-ready' : 'is-missing'}" data-refinery-key-requirement>
       <span class="refinery-key-icon" data-refinery-key-icon>${view.visible ? itemImageMarkup(item, item.icon || '印') : '印'}</span>
       <span class="refinery-key-copy"><small data-refinery-key-stage>${esc(view.label)}</small><strong data-refinery-key-name>${esc(view.name || '煉製印記')}</strong><em data-refinery-key-stock>${esc(stock)}</em></span>
@@ -189,7 +195,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
     setText(node.querySelector('[data-refinery-key-name]'), view.name || '煉製印記');
     setText(node.querySelector('[data-refinery-key-stock]'), view.consumed
       ? `本爐已消耗 ×${view.need} · 背包剩 ${view.have}`
-      : `持有 ${view.have} / 需要 ${view.need}`);
+      : `${adminUnlimitedMaterials() ? '管理員無限提供' : `持有 ${amountLabel(view.have)}`} / 需要 ${view.need}`);
     setText(node.querySelector('[data-refinery-key-count]'), view.visible ? `×${view.need}` : '');
   }
   function selectedCounts() {
@@ -243,7 +249,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
           <strong>${esc(meta.name)}</strong>
           <span class="refinery-recipe-material-meta">${esc(meta.realm)} · ${esc(meta.category)}</span>
           ${description ? `<small class="refinery-recipe-material-note">${esc(description)}</small>` : ''}
-          <span class="refinery-recipe-stock ${enough ? 'is-ready' : 'is-missing'}">可用 ${available} / 需要 ${needed}${enough ? ' · 齊備' : ' · 尚缺 ' + (needed - available)}</span>
+          <span class="refinery-recipe-stock ${enough ? 'is-ready' : 'is-missing'}">可用 ${amountLabel(available)} / 需要 ${needed}${enough ? ' · 齊備' : ' · 尚缺 ' + (needed - available)}</span>
         </div>
         <b class="refinery-recipe-required">×${needed}</b>
       </li>`;
@@ -354,7 +360,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
         <div class="refinery-recipe-detail">
           ${canReadRecipe && item.description ? `<p class="refinery-recipe-description">${esc(item.description)}</p>` : ''}
           ${canReadRecipe ? `<p class="refinery-recipe-depth"><i class="fa-solid fa-gem"></i> 煉製深度 ${artifactRecipeDepth(item.id)}/${MAX_ARTIFACT_RECIPE_NESTING} · 第 ${stage} 煉</p>` : ''}
-          ${canReadRecipe && keyStatus.need ? `<div class="refinery-recipe-key ${keyStatus.enough ? 'is-ready' : 'is-missing'}"><i class="fa-solid fa-stamp"></i><span><b>${esc(keyStatus.name)}</b><small>持有 ${keyStatus.have} / 需要 ${keyStatus.need} · 團本取得</small></span><strong>×${keyStatus.need}</strong></div>` : ''}
+          ${canReadRecipe && keyStatus.need ? `<div class="refinery-recipe-key ${keyStatus.enough ? 'is-ready' : 'is-missing'}"><i class="fa-solid fa-stamp"></i><span><b>${esc(keyStatus.name)}</b><small>持有 ${amountLabel(keyStatus.have)} / 需要 ${keyStatus.need}${adminUnlimitedMaterials() ? ' · 管理員無限提供' : ' · 團本取得'}</small></span><strong>×${keyStatus.need}</strong></div>` : ''}
           ${ingredients}
           ${canReadRecipe ? `<section class="refinery-recipe-method" aria-label="製作方法">
             <h4><i class="fa-solid fa-scroll"></i> 製作方法</h4>
@@ -660,7 +666,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
     const used = selected.filter(Boolean).length;
     const raidKeyIds = new Set(Object.values(RAID_REFINEMENT_KEYS));
     const ownedMaterials = MATERIAL_CATALOG
-      .filter((m) => !raidKeyIds.has(m.id) && (Number(matInv[m.id]) || 0) > 0)
+      .filter((m) => !raidKeyIds.has(m.id) && (adminUnlimitedMaterials() || (Number(matInv[m.id]) || 0) > 0))
       .slice()
       .sort(compareOwnedMaterials);
     const ownedArtifacts = ARTIFACT_CATALOG
@@ -684,11 +690,11 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
 
     const materialHtml = ownedMaterials.map((m) => {
       const token = `material:${m.id}`;
-      const owned = Number(matInv[m.id]) || 0;
+      const owned = ingredientOwned(token);
       const placed = Number(counts[token]) || 0;
       const remaining = Math.max(0, owned - placed);
       const color = materialRealmColor(m.realm);
-      return `<button type="button" class="refinery-material" data-refinery-ingredient="${esc(token)}" style="--material-realm-color:${esc(color)}" ${remaining <= 0 || used >= SLOT_COUNT || busy || job ? 'disabled' : ''}><span class="refinery-mat-icon is-material">${itemImageMarkup(m, m.icon || '材')}</span><span class="refinery-mat-copy"><strong>${esc(m.name)}</strong><small>${esc(m.category || '材料')} · 已放入 ${placed}</small><span class="material-realm-badge">${esc(m.realm || '凡人')}</span></span><span class="refinery-mat-qty">可用 ${remaining}/${owned}</span></button>`;
+      return `<button type="button" class="refinery-material" data-refinery-ingredient="${esc(token)}" style="--material-realm-color:${esc(color)}" ${remaining <= 0 || used >= SLOT_COUNT || busy || job ? 'disabled' : ''}><span class="refinery-mat-icon is-material">${itemImageMarkup(m, m.icon || '材')}</span><span class="refinery-mat-copy"><strong>${esc(m.name)}</strong><small>${esc(m.category || '材料')} · 已放入 ${placed}</small><span class="material-realm-badge">${esc(m.realm || '凡人')}</span></span><span class="refinery-mat-qty">可用 ${amountLabel(remaining)}${adminUnlimitedMaterials() ? ' · 管理員無限' : '/' + amountLabel(owned)}</span></button>`;
     }).join('');
 
     const artifactHtml = ownedArtifacts.map((a) => {
@@ -703,7 +709,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
       return `<button type="button" class="refinery-material refinery-artifact-ingredient" data-refinery-ingredient="${esc(token)}" style="--material-realm-color:${esc(color)}" ${remaining <= 0 || used >= SLOT_COUNT || busy || job ? 'disabled' : ''}><span class="refinery-mat-icon is-artifact">${itemImageMarkup(a, a.icon || '◆')}</span><span class="refinery-mat-copy"><strong>${esc(a.name)}</strong><small>${a.weaponForm ? esc(a.weaponForm) + ' · ' : ''}法寶素材 · 深度 ${depth}/${MAX_ARTIFACT_RECIPE_NESTING} · 已放入 ${placed}</small><span class="material-realm-badge">${esc(a.realm || '凡人')}</span></span><span class="refinery-mat-qty">可用 ${remaining}/${owned}${reserved ? ` · 裝備保留 ${reserved}` : ''}</span></button>`;
     }).join('');
 
-    const ingredientHtml = `<section class="refinery-material-roll" data-refinery-material-roll="materials"><div class="refinery-group-title"><span><i class="fa-solid fa-gem"></i> 持有煉器素材 · 一般素材</span><span>${ownedMaterials.length} 種</span></div><div class="refinery-material-roll-body" data-refinery-material-roll-body="materials">${materialHtml || '<div class="refinery-empty">目前沒有一般素材。</div>'}</div></section><section class="refinery-material-roll" data-refinery-material-roll="artifacts"><div class="refinery-group-title"><span><i class="fa-solid fa-recycle"></i> 二次煉製</span><span>${ownedArtifacts.length} 種 · 最多 2 層</span></div><div class="refinery-material-roll-body ${artifactHtml ? '' : 'is-empty'}" data-refinery-material-roll-body="artifacts">${artifactHtml || '<div class="refinery-empty">目前沒有可投入的法寶；已裝備法寶會保留。</div>'}</div></section>`;
+    const ingredientHtml = `<section class="refinery-material-roll" data-refinery-material-roll="materials"><div class="refinery-group-title"><span><i class="fa-solid fa-gem"></i> 煉器素材 · ${adminUnlimitedMaterials() ? '管理員無限' : '一般素材'}</span><span>${ownedMaterials.length} 種</span></div><div class="refinery-material-roll-body" data-refinery-material-roll-body="materials">${materialHtml || '<div class="refinery-empty">目前沒有一般素材。</div>'}</div></section><section class="refinery-material-roll" data-refinery-material-roll="artifacts"><div class="refinery-group-title"><span><i class="fa-solid fa-recycle"></i> 二次煉製</span><span>${ownedArtifacts.length} 種 · 最多 2 層</span></div><div class="refinery-material-roll-body ${artifactHtml ? '' : 'is-empty'}" data-refinery-material-roll-body="artifacts">${artifactHtml || '<div class="refinery-empty">目前沒有可投入的法寶；已裝備法寶會保留。</div>'}</div></section>`;
 
     const slotHtml = selected.map((token, index) => {
       const meta = token ? ingredientMeta(token) : null;
@@ -798,7 +804,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
         : `${meta.category} · 已放入 ${placed}`;
       setText(button.querySelector('.refinery-mat-copy small'), detail);
       const reserved = meta.type === 'artifact' ? Math.max(0, owned - available) : 0;
-      setText(button.querySelector('.refinery-mat-qty'), `可用 ${remaining}/${owned}${reserved ? ` · 裝備保留 ${reserved}` : ''}`);
+      setText(button.querySelector('.refinery-mat-qty'), `可用 ${amountLabel(remaining)}${meta.type === 'material' && adminUnlimitedMaterials() ? ' · 管理員無限' : '/' + amountLabel(owned)}${reserved ? ` · 裝備保留 ${reserved}` : ''}`);
     });
 
     content.querySelectorAll('[data-refinery-slot]').forEach((button) => {
