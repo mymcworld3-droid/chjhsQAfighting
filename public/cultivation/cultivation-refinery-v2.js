@@ -536,6 +536,28 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
       .refinery-recipe-craft-note{margin:6px 0 0!important;color:#95876e!important;font-size:9px!important;line-height:1.55!important}
       @media(max-width:520px){.refinery-recipe-card>summary{padding:9px;gap:8px}.refinery-recipe-card .refinery-recipe-artifact-icon{flex-basis:39px;width:39px;height:39px}.refinery-recipe-access{font-size:8px}.refinery-recipe-card-chevron{font-size:9px}}
       .refinery-job-box{position:relative;z-index:3;margin:8px 0;padding:11px 12px;border:1px solid rgba(216,177,93,.22);border-radius:13px;background:linear-gradient(135deg,rgba(216,177,93,.075),rgba(255,255,255,.015));color:#a99a7d;font-size:8px;line-height:1.65}.refinery-job-box strong{color:#efd58e}.refinery-job-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:7px}.refinery-job-stat{padding:7px;border-radius:9px;background:rgba(0,0,0,.22);text-align:center}.refinery-job-stat b{display:block;color:#ead59b;font-size:9px}.refinery-job-progress{height:5px;margin-top:9px;border-radius:999px;overflow:hidden;background:rgba(255,255,255,.06)}.refinery-job-progress>i{display:block;height:100%;width:0;background:linear-gradient(90deg,#8a611e,#f1cd6d);transition:width .25s linear}.refinery-discovery-note{color:#c6a85f!important}.refinery-admin-guidance{position:relative;z-index:3;margin:8px 0;padding:11px 12px;border:1px solid rgba(125,211,252,.22);border-radius:13px;background:linear-gradient(135deg,rgba(56,189,248,.065),rgba(216,177,93,.035));box-shadow:inset 0 1px rgba(255,255,255,.035)}.refinery-admin-guidance-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;color:#c8e9ec;font-size:8px;font-weight:900}.refinery-admin-guidance-head small{color:#758d8a;font-size:6px;font-weight:700}.refinery-admin-guidance-grid{display:grid;grid-template-columns:170px minmax(0,1fr);gap:8px}.refinery-admin-guidance label{display:grid;gap:4px;color:#9eb9b4;font-size:6px;font-weight:900}.refinery-admin-guidance select,.refinery-admin-guidance textarea{width:100%;border:1px solid rgba(148,209,198,.18);border-radius:9px;background:rgba(7,12,11,.84);color:#e8eee9;outline:none}.refinery-admin-guidance select{min-height:36px;padding:6px 8px;font-size:8px}.refinery-admin-guidance textarea{min-height:66px;max-height:150px;padding:8px;resize:vertical;font-size:8px;line-height:1.55}.refinery-admin-guidance select:focus,.refinery-admin-guidance textarea:focus{border-color:rgba(147,230,211,.48);box-shadow:0 0 0 2px rgba(147,230,211,.05)}.refinery-admin-guidance-note{margin-top:6px;color:#74847d;font-size:6px;line-height:1.5}.refinery-admin-guidance-preview{margin-top:7px;padding:7px 8px;border-radius:9px;background:rgba(0,0,0,.18);color:#8fa39b;font-size:6px;line-height:1.55}.refinery-admin-guidance-preview b{color:#c5ddd4}.refinery-craft.job-ready{animation:refinery-craft-pulse 1.1s ease-in-out infinite}.refinery-material-list.is-job-locked{opacity:.52;pointer-events:none}@media(max-width:520px){.refinery-job-grid{grid-template-columns:1fr 1fr}.refinery-job-stat:last-child{grid-column:1/-1}.refinery-admin-guidance-grid{grid-template-columns:1fr}}
+
+      /* Attention hierarchy: a legible primary CTA plus the original eight-way mechanism. */
+      .refinery-forge-panel .refinery-action-banner{position:relative;z-index:6;width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;min-height:67px;padding:13px 17px;margin:12px 0 4px;border-radius:14px;border:1px solid rgba(224,177,77,.45);background:linear-gradient(115deg,#5b3a12,#9a6624 60%,#624116);color:#ffe9b2;box-shadow:0 9px 24px rgba(0,0,0,.32),inset 0 1px rgba(255,233,186,.16);cursor:pointer;transition:transform .18s,filter .18s,box-shadow .18s}
+      .refinery-action-banner .refinery-banner-copy{display:flex;flex-direction:column;gap:5px;min-width:0}.refinery-action-banner strong{font-size:clamp(14px,1.55vw,19px);line-height:1.28;letter-spacing:.05em}.refinery-action-banner small{font-size:11px;line-height:1.45;color:#f2d6a0}.refinery-action-banner>i{font-size:24px;flex-shrink:0}.refinery-action-banner:not(:disabled):hover{transform:translateY(-2px);filter:brightness(1.12)}.refinery-action-banner:focus-visible,.refinery-craft:focus-visible{outline:3px solid #fff0b4;outline-offset:3px}
+      .refinery-action-banner:disabled{cursor:not-allowed;opacity:.67}.refinery-action-banner.is-idle{border-color:#726348;background:#201a13;color:#b7a88c;box-shadow:none}.refinery-action-banner.is-idle small{color:#8b7d68}
+      .refinery-action-banner.is-working{background:linear-gradient(115deg,#242019,#433016,#211c16);border-color:#927541}
+      .refinery-action-banner.is-claimable{background:linear-gradient(115deg,#7f3617,#c67d2c 55%,#7c3115);border-color:#ffcf79;color:#fff7d7;box-shadow:0 0 0 2px rgba(245,183,74,.17),0 10px 32px rgba(191,85,25,.32);animation:refinery-claim-glow 1.8s ease-in-out infinite}
+      .refinery-action-banner.is-claimable small{color:#ffebc7}
+      .refinery-ready-pip{position:absolute;top:-6px;right:-6px;width:15px;height:15px;background:#f33c32;border:3px solid #25170a;border-radius:50%;box-shadow:0 0 14px #f33c3280;pointer-events:none}
+      .refinery-ready-pip[hidden]{display:none!important}
+      .refinery-array-center{width:36%;box-shadow:0 0 34px rgba(247,186,73,.16)}
+      .refinery-craft{width:82%;font-size:12px;letter-spacing:.06em}
+      .refinery-craft i{font-size:20px}
+      .refinery-craft .craft-main{font-size:clamp(13px,1.5vw,18px);line-height:1.25}
+      .refinery-craft .craft-sub{font-size:10px;max-width:85%}
+      .refinery-craft.job-ready:not(:disabled){border:2px solid #ffe4a1;box-shadow:0 0 0 5px rgba(247,186,73,.16),0 0 40px rgba(255,174,51,.42);animation:refinery-craft-pulse 1.15s ease-in-out infinite}
+      .refinery-slots.is-finished:before{filter:drop-shadow(0 0 18px rgba(250,199,88,.42))}
+      .refinery-job-box.is-claimable{border-color:rgba(248,201,112,.7);background:linear-gradient(120deg,rgba(132,63,22,.3),rgba(61,38,14,.52));box-shadow:0 0 20px rgba(226,146,57,.13)}
+      .refinery-job-box.is-claimable>strong{font-size:13px;color:#ffe6a1}
+      @keyframes refinery-claim-glow{50%{box-shadow:0 0 0 3px rgba(245,183,74,.24),0 10px 37px rgba(238,119,37,.37)}}
+      @media(max-width:520px){.refinery-array-center{width:36%}.refinery-craft .craft-main{font-size:13px}.refinery-craft i{font-size:18px}.refinery-action-banner strong{font-size:14px}.refinery-action-banner small{font-size:10px}}
+      @media(prefers-reduced-motion:reduce){.refinery-action-banner.is-claimable,.refinery-craft.job-ready:not(:disabled){animation:none}}
       @keyframes refinery-array-spin{to{transform:rotate(360deg)}}@keyframes refinery-craft-pulse{0%,100%{box-shadow:0 0 0 5px rgba(216,177,93,.07),0 0 20px rgba(241,191,72,.15),0 12px 28px rgba(0,0,0,.42)}50%{box-shadow:0 0 0 8px rgba(216,177,93,.11),0 0 34px rgba(241,191,72,.31),0 12px 28px rgba(0,0,0,.42)}}
       @media(max-width:900px){.cultivation-refinery{grid-template-columns:1fr}.refinery-material-panel{height:clamp(520px,70dvh,680px);min-height:520px}.refinery-material-list{height:100%;max-height:none}.refinery-slots{--array-size:min(62vw,410px)}}
       @media(max-width:520px){.refinery-slots{--array-size:min(88vw,350px);--slot-size:clamp(52px,18%,64px)}.refinery-array-center{width:30%}.refinery-craft .craft-main{font-size:8px}.refinery-craft i{font-size:12px}.refinery-slot .name{max-width:50px;font-size:5.5px}.refinery-slot .direction{font-size:6px}}
@@ -749,13 +771,16 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
     }
 
     const craftReady = !busy && (job ? jobReady : (!!plan?.valid && keyStatus.enough && Number(userData()?.forgeFragments || 0) >= Number(plan.fragments || 0))) && matching.length <= 1;
-    const craftLabel = job ? (jobReady ? '開爐' : '煉製中') : '煉製';
-    const jobBox = job ? `<div class="refinery-job-box"><strong>${job.kind === 'discovery' ? '未知配方煉製' : '法寶煉製中'}</strong><div class="refinery-job-grid"><div class="refinery-job-stat">法寶境界<b>${esc(job.targetRealm || '凡人')}</b></div><div class="refinery-job-stat">已付${job.currency === 'forgeFragments' ? '煉器碎片' : '靈石（舊工作）'}<b>${Math.max(0, Number(job.currency === 'forgeFragments' ? job.fragmentCost : job.goldCost) || 0)}</b></div><div class="refinery-job-stat">剩餘時間<b data-refinery-job-clock>--</b></div></div><div class="refinery-job-progress"><i data-refinery-job-progress></i></div><div class="refinery-note ${job.kind === 'discovery' ? 'refinery-discovery-note' : ''}">${job.kind === 'discovery' ? '此組合沒有既有配方；煉製完成後按「開爐」即可取得新法寶。' : '素材與煉器碎片已在按「煉製」時扣除，完成後按「開爐」取出。'}</div>${canAdminSkip ? `<div class="refinery-actions"><button type="button" class="refinery-clear" data-refinery-admin-skip ${busy ? 'disabled' : ''}><i class="fa-solid fa-forward-fast"></i> 管理員：跳過等待</button></div>` : ''}</div>` : '';
+    const craftLabel = job ? (jobReady ? '開爐取寶' : '煉製中') : '開始煉製';
+    const bannerPhase = job ? (jobReady ? 'is-claimable' : 'is-working') : craftReady ? 'is-claimable' : 'is-idle';
+    const bannerTitle = job ? (jobReady ? '法寶已成 · 立即開爐！' : '爐火運轉中 · 靜候成器') : craftReady ? '材料齊備 · 點此開始煉製' : '選擇材料 · 啟動八方煉器陣';
+    const bannerDetail = job ? (jobReady ? '煉製完成，點擊領取法寶' : '完成後將在此提示開爐') : craftReady ? craftCostText(plan) : '投入至少 2 件素材後即可查看煉製需求';
+    const jobBox = job ? `<div class="refinery-job-box ${jobReady ? 'is-claimable' : ''}" data-refinery-job-box><strong>${job.kind === 'discovery' ? '未知配方煉製' : '法寶煉製中'}</strong><div class="refinery-job-grid"><div class="refinery-job-stat">法寶境界<b>${esc(job.targetRealm || '凡人')}</b></div><div class="refinery-job-stat">已付${job.currency === 'forgeFragments' ? '煉器碎片' : '靈石（舊工作）'}<b>${Math.max(0, Number(job.currency === 'forgeFragments' ? job.fragmentCost : job.goldCost) || 0)}</b></div><div class="refinery-job-stat">剩餘時間<b data-refinery-job-clock>--</b></div></div><div class="refinery-job-progress"><i data-refinery-job-progress></i></div><div class="refinery-note ${job.kind === 'discovery' ? 'refinery-discovery-note' : ''}">${job.kind === 'discovery' ? '此組合沒有既有配方；煉製完成後按「開爐」即可取得新法寶。' : '素材與煉器碎片已在按「煉製」時扣除，完成後按「開爐」取出。'}</div>${canAdminSkip ? `<div class="refinery-actions"><button type="button" class="refinery-clear" data-refinery-admin-skip ${busy ? 'disabled' : ''}><i class="fa-solid fa-forward-fast"></i> 管理員：跳過等待</button></div>` : ''}</div>` : '';
 
     const adminGuidance = adminGuidanceMarkup(job, matching.length);
 
 
-    return `<section class="cultivation-refinery"><article class="refinery-panel refinery-material-panel"><div class="refinery-material-list ${job ? 'is-job-locked' : ''}">${ingredientHtml}</div></article><article class="refinery-panel refinery-forge-panel"><div class="refinery-head"><div><h3><i class="fa-solid fa-fire-burner"></i> 八方煉器陣</h3><p>八方歸位，陣心煉器；點已放入素材可取回。</p></div><div class="refinery-head-actions"><div class="refinery-fragment-balance" aria-label="持有煉器碎片"><span>煉器碎片</span><b data-refinery-fragment-balance>${fragmentBalance().toLocaleString('zh-TW')}</b></div><button type="button" class="refinery-dismantle" data-inventory-dismantle>物品分解</button><span class="refinery-badge" data-refinery-used-badge>${used}/${SLOT_COUNT}</span></div></div>${methodSelect}${keyRequirementHtml}<div class="refinery-array-wrap"><div class="refinery-slots" aria-label="八方煉器陣"><span class="refinery-array-lines"></span><span class="refinery-array-ring"></span>${slotHtml}<div class="refinery-array-center"><button type="button" class="refinery-craft ${craftReady ? 'ready' : ''} ${jobReady ? 'job-ready' : ''}" data-refinery-craft ${craftReady ? '' : 'disabled'}><i class="fa-solid fa-fire-flame-curved"></i><span class="craft-main" data-refinery-craft-label>${busy ? '處理中' : craftLabel}</span><span class="craft-sub" data-refinery-craft-cost aria-live="polite">${esc(craftCostText(plan, job))}</span></button></div><span class="refinery-array-caption">八方聚靈 · 一器成形</span></div></div>${jobBox}${adminGuidance}<div class="refinery-summary"><strong>投入：</strong><span data-refinery-summary-text>${esc(summary)}</span></div><div class="refinery-match ${matchClass}" data-refinery-match><b data-refinery-match-prefix>${esc(matchPrefix)}</b><span data-refinery-match-text>${esc(matchPlain)}</span></div><div class="refinery-actions"><button type="button" class="refinery-clear" data-refinery-clear ${!used || busy ? 'disabled' : ''}><i class="fa-solid fa-rotate-left"></i> 清空陣位</button></div><div class="refinery-note"><b>陣法規則：</b>按「煉製」即扣素材與煉器碎片；境界越高、玩家境界越低，耗時與費用越高。煉製完成後按「開爐」取出法寶。本命法器由契器台常駐靈石抽取取得，普通煉器不得新造；投入本命法寶時，成品必為本命法寶並保留其器型與屬性；特殊屬性範圍為普通法器四倍，攻擊與生命加成維持原範圍。</div>${recipeBookMarkup()}</article></section>`;
+    return `<section class="cultivation-refinery"><article class="refinery-panel refinery-material-panel"><div class="refinery-material-list ${job ? 'is-job-locked' : ''}">${ingredientHtml}</div></article><article class="refinery-panel refinery-forge-panel"><div class="refinery-head"><div><h3><i class="fa-solid fa-fire-burner"></i> 八方煉器陣</h3><p>八方歸位，陣心煉器；點已放入素材可取回。</p></div><div class="refinery-head-actions"><div class="refinery-fragment-balance" aria-label="持有煉器碎片"><span>煉器碎片</span><b data-refinery-fragment-balance>${fragmentBalance().toLocaleString('zh-TW')}</b></div><button type="button" class="refinery-dismantle" data-inventory-dismantle>物品分解</button><span class="refinery-badge" data-refinery-used-badge>${used}/${SLOT_COUNT}</span></div></div>${methodSelect}${keyRequirementHtml}<button type="button" class="refinery-action-banner ${bannerPhase}" data-refinery-action-banner ${craftReady ? '' : 'disabled'}><span class="refinery-banner-copy"><strong data-refinery-banner-title>${esc(bannerTitle)}</strong><small data-refinery-banner-detail>${esc(bannerDetail)}</small></span><i class="fa-solid ${jobReady ? 'fa-gift' : 'fa-fire-flame-curved'}" aria-hidden="true"></i><span class="refinery-ready-pip" data-refinery-ready-pip ${jobReady ? '' : 'hidden'}></span></button><div class="refinery-array-wrap"><div class="refinery-slots ${jobReady ? 'is-finished' : ''}" aria-label="八方煉器陣"><span class="refinery-array-lines"></span><span class="refinery-array-ring"></span>${slotHtml}<div class="refinery-array-center"><button type="button" class="refinery-craft ${craftReady ? 'ready' : ''} ${jobReady ? 'job-ready' : ''}" data-refinery-craft ${craftReady ? '' : 'disabled'}><i class="fa-solid fa-fire-flame-curved"></i><span class="craft-main" data-refinery-craft-label>${busy ? '處理中' : craftLabel}</span><span class="craft-sub" data-refinery-craft-cost aria-live="polite">${esc(craftCostText(plan, job))}</span></button></div><span class="refinery-array-caption">八方聚靈 · 一器成形</span></div></div>${jobBox}${adminGuidance}<div class="refinery-summary"><strong>投入：</strong><span data-refinery-summary-text>${esc(summary)}</span></div><div class="refinery-match ${matchClass}" data-refinery-match><b data-refinery-match-prefix>${esc(matchPrefix)}</b><span data-refinery-match-text>${esc(matchPlain)}</span></div><div class="refinery-actions"><button type="button" class="refinery-clear" data-refinery-clear ${!used || busy ? 'disabled' : ''}><i class="fa-solid fa-rotate-left"></i> 清空陣位</button></div><div class="refinery-note"><b>陣法規則：</b>按「煉製」即扣素材與煉器碎片；境界越高、玩家境界越低，耗時與費用越高。煉製完成後按「開爐」取出法寶。本命法器由契器台常駐靈石抽取取得，普通煉器不得新造；投入本命法寶時，成品必為本命法寶並保留其器型與屬性；特殊屬性範圍為普通法器的 1.2 倍，攻擊與生命加成維持原範圍。</div>${recipeBookMarkup()}</article></section>`;
   }
 
   function setText(node, value) {
@@ -865,7 +890,15 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
       craftButton.disabled = !ready;
       craftButton.classList.toggle('ready', ready);
     }
-    setText(content.querySelector('[data-refinery-craft-label]'), busy ? '處理中' : '煉製');
+    setText(content.querySelector('[data-refinery-craft-label]'), busy ? '處理中' : '開始煉製');
+    const banner = content.querySelector('[data-refinery-action-banner]');
+    if (banner) {
+      banner.disabled = !craftButton || craftButton.disabled;
+      banner.classList.toggle('is-idle', !ready);
+      banner.classList.toggle('is-claimable', ready);
+      setText(banner.querySelector('[data-refinery-banner-title]'), ready ? '材料齊備 · 點此開始煉製' : '選擇材料 · 啟動八方煉器陣');
+      setText(banner.querySelector('[data-refinery-banner-detail]'), ready ? craftCostText(plan) : '投入至少 2 件素材後即可查看煉製需求');
+    }
     setText(content.querySelector('[data-refinery-craft-cost]'), craftCostText(plan));
     setText(content.querySelector('[data-refinery-fragment-balance]'), fragmentBalance().toLocaleString('zh-TW'));
     content.dataset.refineryRenderKey = currentSignature();
@@ -897,6 +930,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
       render(true);
     });
     content.querySelector('[data-refinery-craft]')?.addEventListener('click', craft);
+    content.querySelector('[data-refinery-action-banner]')?.addEventListener('click', craft);
     content.querySelector('[data-refinery-admin-skip]')?.addEventListener('click', skipAdminWait);
     const direction = content.querySelector('[data-refinery-admin-direction]');
     if (direction) direction.addEventListener('change', () => { adminForgeDirection = direction.value || '自由發揮'; });
@@ -1119,7 +1153,19 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
       button.disabled = !ready;
       button.classList.toggle('ready', ready);
       button.classList.toggle('job-ready', ready);
-      setText(button.querySelector('[data-refinery-craft-label]'), busy ? '處理中' : (ready ? '開爐' : '煉製中'));
+      setText(button.querySelector('[data-refinery-craft-label]'), busy ? '處理中' : (ready ? '開爐取寶' : '煉製中'));
+      const banner = content.querySelector('[data-refinery-action-banner]');
+      if (banner) {
+        banner.disabled = !ready;
+        banner.classList.toggle('is-working', !ready);
+        banner.classList.toggle('is-claimable', ready);
+        setText(banner.querySelector('[data-refinery-banner-title]'), ready ? '法寶已成 · 立即開爐！' : '爐火運轉中 · 靜候成器');
+        setText(banner.querySelector('[data-refinery-banner-detail]'), ready ? '煉製完成，點擊領取法寶' : '剩餘 ' + (window.formatCultivationRefineryDuration?.(remaining) || '一段時間'));
+        const pip = banner.querySelector('[data-refinery-ready-pip]');
+        if (pip) pip.hidden = !ready;
+        content.querySelector('.refinery-slots')?.classList.toggle('is-finished', ready);
+        content.querySelector('[data-refinery-job-box]')?.classList.toggle('is-claimable', ready);
+      }
     }
   }
 
