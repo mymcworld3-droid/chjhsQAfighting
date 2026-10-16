@@ -560,7 +560,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
       @media(prefers-reduced-motion:reduce){.refinery-action-banner.is-claimable,.refinery-craft.job-ready:not(:disabled){animation:none}}
       @keyframes refinery-array-spin{to{transform:rotate(360deg)}}@keyframes refinery-craft-pulse{0%,100%{box-shadow:0 0 0 5px rgba(216,177,93,.07),0 0 20px rgba(241,191,72,.15),0 12px 28px rgba(0,0,0,.42)}50%{box-shadow:0 0 0 8px rgba(216,177,93,.11),0 0 34px rgba(241,191,72,.31),0 12px 28px rgba(0,0,0,.42)}}
       @media(max-width:900px){.cultivation-refinery{grid-template-columns:1fr}.refinery-material-panel{height:clamp(520px,70dvh,680px);min-height:520px}.refinery-material-list{height:100%;max-height:none}.refinery-slots{--array-size:min(62vw,410px)}}
-      @media(max-width:520px){.refinery-slots{--array-size:min(88vw,350px);--slot-size:clamp(52px,18%,64px)}.refinery-array-center{width:30%}.refinery-craft .craft-main{font-size:8px}.refinery-craft i{font-size:12px}.refinery-slot .name{max-width:50px;font-size:5.5px}.refinery-slot .direction{font-size:6px}}
+      @media(max-width:520px){.refinery-slots{--array-size:min(88vw,350px);--slot-size:clamp(52px,18%,64px)}.refinery-array-center{width:36%}.refinery-craft .craft-main{font-size:13px}.refinery-craft i{font-size:18px}.refinery-slot .name{max-width:50px;font-size:5.5px}.refinery-slot .direction{font-size:6px}}
       @media(max-width:430px){.refinery-material-list{gap:7px}.refinery-material-roll{padding:5px}.refinery-material-roll-body{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.refinery-material{padding:7px 5px}.refinery-mat-icon{width:36px;height:36px;flex-basis:36px}.refinery-mat-copy strong{font-size:7px}.refinery-mat-copy small{font-size:5.5px}}
     `;
     document.head.appendChild(style);
@@ -885,8 +885,8 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
     const clearButton = content.querySelector('[data-refinery-clear]');
     if (clearButton) clearButton.disabled = !used || busy;
     const craftButton = content.querySelector('[data-refinery-craft]');
+    const ready = !!plan?.valid && matching.length <= 1 && keyStatus.enough && Number(userData()?.forgeFragments || 0) >= Number(plan.fragments || 0) && !busy;
     if (craftButton) {
-      const ready = !!plan?.valid && matching.length <= 1 && keyStatus.enough && Number(userData()?.forgeFragments || 0) >= Number(plan.fragments || 0) && !busy;
       craftButton.disabled = !ready;
       craftButton.classList.toggle('ready', ready);
     }
