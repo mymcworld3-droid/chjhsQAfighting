@@ -129,6 +129,8 @@ import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth
       value(data.loading.appFailures) + ' 次失敗／' + value(data.loading.appLoads) + ' 次啟動');
     card(grid, '社交玩家 D1', ratio(data.social.cohortD1Social.rate),
       '首日參與多人 ' + value(data.social.cohortD1Social.eligible) + ' 人；未參與 ' + ratio(data.social.cohortD1Other.rate));
+    card(grid, '載入失敗玩家 D1', ratio(data.failureRetention.cohortD1Failure.rate),
+      '首日遇過模組失敗 ' + value(data.failureRetention.cohortD1Failure.eligible) + ' 人；未遇過 ' + ratio(data.failureRetention.cohortD1Other.rate));
     const chart = panel.querySelector('#apa-chart');
     chart.replaceChildren();
     const top = Math.max(1, ...data.daily.map(d => Number(d.answers) || 0));
