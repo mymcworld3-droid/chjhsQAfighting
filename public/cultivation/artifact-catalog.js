@@ -16,7 +16,7 @@ import {} from './soulbound-pool.js';
 // - equip_damage_reduction_percent     每次受傷百分比減傷
 // - equip_crit_chance                  暴擊率
 // - equip_crit_damage_percent          暴擊額外倍率
-// - equip_combo_chance                 連擊率；普通法器 10%，本命法寶 40%
+// - equip_combo_chance                 連擊率；普通法器 10%，本命法寶最多 12%
 // - equip_lifesteal_percent            戰鬥吸血
 // - equip_reflect_percent              反射實際受到的生命傷害
 // - equip_shield_flat                  每場鬥法初始護盾
@@ -215,7 +215,7 @@ const FLAT_NONNEGATIVE_EFFECTS = new Set([
 function normalizeEffectValue(type, value, soulbound = false) {
   const raw = finite(value, 0);
   if (Object.prototype.hasOwnProperty.call(PERCENT_EFFECT_CAPS, type)) {
-    if (type === 'equip_damage_cap_percent') return Math.min(1, Math.max(soulbound ? 0.0125 : 0.05, raw || 1));
+    if (type === 'equip_damage_cap_percent') return Math.min(1, Math.max(soulbound ? 0.05 / globalThis.QASoulboundPool.REFINEMENT_MULTIPLIER : 0.05, raw || 1));
     return Math.min(globalThis.QASoulboundPool.refinementCap(type, PERCENT_EFFECT_CAPS[type], soulbound), Math.max(0, raw));
   }
   if (FLAT_NONNEGATIVE_EFFECTS.has(type)) return Math.max(0, raw);
@@ -306,8 +306,8 @@ export function validateArtifactCatalog(items) {
       if (!SUPPORTED_ARTIFACT_EFFECTS.includes(effect.type)) throw new Error(`法寶 ${item.name} 使用尚未支援的效果：${effect.type}`);
       if (effect.type.startsWith('timed_') && (!(effect.multiplier > 0) || !(effect.durationMs >= 1000))) throw new Error(`法寶 ${item.name} 的限時效果數值不合法`);
       if (effect.type === 'remove_wrong_option' && (!Array.isArray(effect.contexts) || !effect.contexts.length)) throw new Error(`法寶 ${item.name} 至少要指定一個答題場景`);
-      if (effect.type === 'equip_combo_chance' && Number(effect.value) > (item.equipSlot === '本命法寶' ? 0.40 : 0.10)) throw new Error(`法寶 ${item.name} 的連擊率超出欄位上限`);
-      if (effect.type === 'equip_damage_cap_percent' && (!(Number(effect.value) >= (item.equipSlot === '本命法寶' ? 0.0125 : 0.05)) || Number(effect.value) > 1)) throw new Error(`法寶 ${item.name} 的單次傷害上限比例不合法`);
+      if (effect.type === 'equip_combo_chance' && Number(effect.value) > (item.equipSlot === '本命法寶' ? 0.12 : 0.10)) throw new Error(`法寶 ${item.name} 的連擊率超出欄位上限`);
+      if (effect.type === 'equip_damage_cap_percent' && (!(Number(effect.value) >= (item.equipSlot === '本命法寶' ? 0.05 / globalThis.QASoulboundPool.REFINEMENT_MULTIPLIER : 0.05)) || Number(effect.value) > 1)) throw new Error(`法寶 ${item.name} 的單次傷害上限比例不合法`);
     });
     const needsSlot = item.effects.some((effect) => effect.type.startsWith('equip_'));
     if (needsSlot && !item.equipSlot) throw new Error(`裝備法寶 ${item.name} 必須指定裝備欄位`);
