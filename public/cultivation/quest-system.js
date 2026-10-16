@@ -9,8 +9,10 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
   const visible = () => $('page-home')?.classList.contains('active-page');
   const materialNames = { 'raid-refine-key-ii': '淬靈玄印', 'raid-refine-key-iii': '玄天道印' };
   function rewardText(reward) {
-    const parts = [`${reward.gold} 靈石`];
+    const parts = [];
+    if (reward.gold) parts.push(`${reward.gold} 靈石`);
     if (reward.cultivation) parts.push(`${reward.cultivation} 修為`);
+    if (reward.drawTickets) parts.push(`本命法器抽獎券 ×${reward.drawTickets}`);
     Object.entries(reward.materials || {}).forEach(([id, count]) => parts.push(`${materialNames[id] || id} ×${count}`));
     return parts.join(' · ');
   }
@@ -18,7 +20,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
   function syncQuestIndicator() {
     const ready = q => q?.claimable && !q.claimed && !q.locked;
     const current = account === getMainUser()?.uid ? snapshot : null;
-    const pathReady = !!current && !!ready(current.path);
+    const pathReady = !!current && (!!ready(current.path) || !!current.pathTicketRewards?.some(ready));
     const dailyReady = !!current && current.date === window.XianxiaQuestRules.dateKey() && current.daily.some(ready);
     const available = pathReady || dailyReady;
     if ($('quest-ready-dot')) $('quest-ready-dot').hidden = !available;
@@ -31,7 +33,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     $('quest-open')?.setAttribute('aria-label', available ? '任務，有獎勵可領取' : '任務');
   }
   function card(q, kind) {
-    const label = q.claimed ? '已領取' : q.locked ? '尚未解鎖' : q.claimable ? '領取獎勵' : q.metric === 'story' ? '觀看劇情' : q.metric === 'dongtian-tutorial' ? '開始洞天教程' : '前往修行';
+    const label = q.claimed ? '已領取' : q.locked ? '尚未解鎖' : q.supplemental ? '補領抽獎券' : q.claimable ? '領取獎勵' : q.metric === 'story' ? '觀看劇情' : q.metric === 'dongtian-tutorial' ? '開始洞天教程' : '前往修行';
     return `<article class="quest-card ${kind === 'path' ? 'quest-path-card' : ''} ${q.claimable ? 'quest-ready' : ''} ${q.claimed ? 'quest-claimed' : ''}">
       <div class="quest-card-heading"><h4>${esc(q.title)}</h4><span>${q.claimed ? '已完成' : q.claimable ? '待領獎' : '進行中'}</span></div>
       <p>${esc(q.description)}</p>
@@ -65,6 +67,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     content.classList.toggle('quest-daily-grid', tab === 'daily');
     content.innerHTML = tab === 'daily' ? snapshot.daily.map(q => card(q, 'daily')).join('')
       : snapshot.path ? card(snapshot.path, 'path') : '<p class="quest-empty">仙道任務已全部完成。仙途無盡，日常修行仍可繼續。</p>';
+    if (tab === 'path') content.innerHTML += (snapshot.pathTicketRewards || []).map(q => card(q, 'path')).join('');
   }
   async function request(path, body) {
     const controller = new AbortController();
@@ -118,6 +121,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       if (getMainUser()?.uid !== uid) return;
       snapshot = result.quests;
       const data = window.getCurrentUserData?.();
+      if (data && result.drawTickets !== undefined) data.soulboundDrawTickets = result.drawTickets;
       if (data?.stats) {
         Object.assign(data.stats, result.balances);
         const rank = window.getXiuxianRealmIndex?.(data.stats.totalScore);
@@ -131,7 +135,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
         } finally { applyingReward = false; }
         window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', { detail: { source: 'quest-reward', ...result.balances } }));
       }
-      status(result.awarded ? `已獲得 ${rewardText(result.reward)}${kind === 'path' && snapshot.path ? '，下一個仙道任務已開啟。' : '。'}` : '此任務已領取過，進度已同步。');
+      status(result.awarded ? `已獲得 ${rewardText(result.reward)}${kind === 'path' && !q.supplemental && snapshot.path ? '，下一個仙道任務已開啟。' : '。'}` : '此任務已領取過，進度已同步。');
     } catch (e) {
       if (getMainUser()?.uid === uid) { status(`${e.message}，請重新同步後重試。`); dirty = true; }
     } finally {
@@ -191,7 +195,8 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       const b = e.target.closest('[data-quest-id]');
       if (!b || b.disabled || busy || !snapshot) return;
       const kind = b.dataset.questKind;
-      const q = kind === 'path' ? snapshot.path : snapshot.daily.find(q => q.id === b.dataset.questId);
+      const q = kind === 'path' ? [snapshot.path, ...(snapshot.pathTicketRewards || [])].find(q => q?.id === b.dataset.questId)
+        : snapshot.daily.find(q => q.id === b.dataset.questId);
       if (!q || q.id !== b.dataset.questId || q.claimed || q.locked) return;
       if (q.claimable) void claim(q, kind); else { dialog.close(); go(q.destination, q); }
     });

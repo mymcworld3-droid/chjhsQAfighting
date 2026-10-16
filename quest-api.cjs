@@ -22,9 +22,12 @@ async function questTransaction(db, uid, request = null, now = new Date()) {
       const index = list.findIndex(q => q.id === request.id);
       if (index < 0) throw error('找不到此任務', 400);
       const duplicate = request.kind === 'path' ? state.pathClaimed.includes(request.id) : state.dailyClaimed.includes(request.id);
-      if (!duplicate) {
+      const ticketOnly = request.kind === 'path' && duplicate && list[index].reward.drawTickets > 0 &&
+        !state.pathTicketsClaimed.includes(request.id);
+      if (!duplicate || ticketOnly) {
         const snapshot = rules.view(user, state, date);
-        const q = request.kind === 'path' ? snapshot.path : snapshot.daily.find(q => q.id === request.id);
+        const q = ticketOnly ? snapshot.pathTicketRewards.find(q => q.id === request.id)
+          : request.kind === 'path' ? snapshot.path : snapshot.daily.find(q => q.id === request.id);
         if (!q || q.id !== request.id || !q.claimable) throw error('任務尚未完成，請先達成目標');
         reward = q.reward;
         const patch = {
@@ -32,13 +35,18 @@ async function questTransaction(db, uid, request = null, now = new Date()) {
           'stats.totalScore': Math.max(0, Number(user.stats?.totalScore) || 0) + reward.cultivation
         };
         user.stats = { ...(user.stats || {}), gold: patch['stats.gold'], totalScore: patch['stats.totalScore'] };
+        if (reward.drawTickets) {
+          user.soulboundDrawTickets = Math.max(0, Math.floor(Number(user.soulboundDrawTickets) || 0)) + reward.drawTickets;
+          patch.soulboundDrawTickets = user.soulboundDrawTickets;
+          state.pathTicketsClaimed.push(request.id);
+        }
         for (const [id, amount] of Object.entries(reward.materials)) {
           const quantity = Math.max(0, Math.floor(Number(user.materialSystem?.inventory?.[id]) || 0)) + amount;
           patch[`materialSystem.inventory.${id}`] = quantity;
           user.materialSystem = { ...(user.materialSystem || {}), inventory: { ...(user.materialSystem?.inventory || {}), [id]: quantity } };
         }
         if (request.kind === 'path') {
-          state.pathClaimed.push(request.id);
+          if (!duplicate) state.pathClaimed.push(request.id);
           Object.assign(state, rules.normalizeState(state, date));
         } else state.dailyClaimed.push(request.id);
         tx.update(userRef, patch);
@@ -47,6 +55,7 @@ async function questTransaction(db, uid, request = null, now = new Date()) {
       }
     }
     return { ok: true, awarded, reward, quests: rules.view(user, state, date),
+      drawTickets: Math.max(0, Math.floor(Number(user.soulboundDrawTickets) || 0)),
       balances: { gold: Math.max(0, Number(user.stats?.gold) || 0), totalScore: Math.max(0, Number(user.stats?.totalScore) || 0) },
       materials: Object.fromEntries(['raid-refine-key-ii', 'raid-refine-key-iii'].map(id => [id, Math.max(0, Number(user.materialSystem?.inventory?.[id]) || 0)])) };
   });

@@ -65,10 +65,14 @@
     'path-tribulation': [storyQuest('tribulation-final', '第十三章 · 天劫之上仍有一道題', 1868)],
     'path-immortal': [storyQuest('true-immortal-epilogue', '終章 · 出師這件事，師姐說了算', 2588)]
   };
+  const PATH_DRAW_TICKETS = Object.freeze({
+    'path-golden': 1, 'path-raid-one': 1, 'path-nascent': 1, 'path-raid-ten': 1, 'path-solo-hundred': 1
+  });
   const PATH = [{ ...storyQuest('prologue-enter-sect', '第一章 · 問道靈根', 0),
     title: '完成新手劇情 · 問道靈根',
     description: '準備好後，點「前往」認識青雲宗並完整觀看新手劇情；登入與選擇性別不會自動播放。' },
-    ...LEGACY_PATH.flatMap(q => [q, ...(STORY_AFTER[q.id] || [])])];
+    ...LEGACY_PATH.flatMap(q => [q, ...(STORY_AFTER[q.id] || [])])]
+    .map(q => ({ ...q, reward: { ...q.reward, drawTickets: PATH_DRAW_TICKETS[q.id] || 0 } }));
   const DAILY = [
     quest('daily-solo-three', '溫故知新', '今日問道答對 3 題。', 'solo', 3, 40, 1, 'solo'),
     quest('daily-solo-ten', '勤學不輟', '今日問道答對 10 題。', 'solo', 10, 80, 1, 'solo'),
@@ -94,8 +98,10 @@
     const claimed = Array.isArray(raw?.pathClaimed) ? raw.pathClaimed
       : LEGACY_PATH.slice(0, number(raw?.pathIndex)).map(q => q.id);
     const pathClaimed = PATH.filter(q => claimed.includes(q.id)).map(q => q.id);
+    const pathTicketsClaimed = PATH.filter(q => q.reward.drawTickets && pathClaimed.includes(q.id) &&
+      Array.isArray(raw?.pathTicketsClaimed) && raw.pathTicketsClaimed.includes(q.id)).map(q => q.id);
     const next = PATH.findIndex(q => !pathClaimed.includes(q.id));
-    return { version: 2, pathClaimed, pathIndex: next < 0 ? PATH.length : next, dailyDate: date,
+    return { version: 2, pathClaimed, pathTicketsClaimed, pathIndex: next < 0 ? PATH.length : next, dailyDate: date,
       dailyClaimed: raw?.dailyDate === date && Array.isArray(raw.dailyClaimed) ? raw.dailyClaimed.filter(id => DAILY.some(q => q.id === id)) : [] };
   }
   function progressValue(q, user, p, kind, date) {
@@ -128,6 +134,11 @@
     }
     return { date, pathIndex: state.pathIndex, pathCompleted: state.pathClaimed.length, pathTotal: PATH.length,
       path: state.pathIndex < PATH.length ? row(PATH[state.pathIndex], 'path') : null,
+      pathTicketRewards: PATH.filter(q => q.reward.drawTickets && state.pathClaimed.includes(q.id) &&
+        !state.pathTicketsClaimed.includes(q.id)).map(q => ({ ...q, supplemental: true,
+          description: '已完成此仙道任務，可補領新增的本命法器抽獎券。',
+          current: 1, target: 1, complete: true, claimable: true, claimed: false, locked: false,
+          reward: { gold: 0, cultivation: 0, materials: {}, drawTickets: q.reward.drawTickets } })),
       daily: DAILY.map(q => row(q, 'daily', state.dailyClaimed.includes(q.id))) };
   }
   return { PATH, LEGACY_PATH, DAILY, dateKey, normalizeProgress, recordEvent, normalizeState, view };

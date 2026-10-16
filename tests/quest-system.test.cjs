@@ -40,6 +40,93 @@ function fakeDb(user, state) {
   };
 }
 const sample = () => ({ uid: 'u1', stats: { gold: 20, totalScore: 28, totalCorrect: 10 }, gameSettings: { focusedUnits: [{ path: '數學', detail: '方程式' }] } });
+const ticketQuestIds = ['path-golden', 'path-raid-one', 'path-nascent', 'path-raid-ten', 'path-solo-hundred'];
+const beforeQuest = id => ({ version: 2, pathClaimed: rules.PATH.slice(0, rules.PATH.findIndex(q => q.id === id)).map(q => q.id) });
+
+test('exactly five path milestones grant one permanent-pool ticket each; dailies do not grant tickets', () => {
+  const quests = rules.PATH.filter(q => q.reward.drawTickets);
+  assert.deepEqual(quests.map(q => q.id), ticketQuestIds);
+  assert.equal(quests.reduce((sum, q) => sum + q.reward.drawTickets, 0), 5);
+  assert.ok(quests.every(q => q.reward.drawTickets === 1));
+  assert.ok(rules.DAILY.every(q => !q.reward.drawTickets));
+});
+
+test('the complete path deposits at most five tickets, preserves an existing wallet and cannot replay', async () => {
+  const user = sample(); user.stats.totalScore = 3000; user.stats.totalCorrect = 100; user.soulboundDrawTickets = 7;
+  user.questProgress = { totals: { solo: 100, meditation: 1, battle: 5, dongtian: 1, raid: 10 } };
+  user.storyProgressV1 = { seen: Object.fromEntries(rules.PATH.filter(q => q.chapterId).map(q => [q.chapterId, true])) };
+  user.storyDongtianTutorialV1 = { completed: true };
+  const db = fakeDb(user); let ticketCount = 7;
+  for (const q of rules.PATH) {
+    const paid = await questTransaction(db, 'u1', { kind: 'path', id: q.id, drawTickets: 999 }, now);
+    assert.equal(paid.awarded, true, q.id);
+    ticketCount += q.reward.drawTickets;
+    assert.equal(paid.drawTickets, ticketCount);
+    assert.equal((await questTransaction(db, 'u1', { kind: 'path', id: q.id }, now)).awarded, false);
+  }
+  assert.equal(ticketCount, 12);
+  const final = await questTransaction(db, 'u1', null, now);
+  assert.equal(final.quests.path, null); assert.deepEqual(final.quests.pathTicketRewards, []);
+  assert.deepEqual(db.docs.get('questStates/u1').pathTicketsClaimed, ticketQuestIds);
+});
+
+test('unclaimed milestones award currency and tickets atomically, including transaction retry and double-clicks', async () => {
+  const { fakeDb: inventoryDb } = require('./helpers/inventory-db.cjs');
+  const db = inventoryDb(sample()); db.docs.set('questStates/u1', beforeQuest('path-golden')); db.retryNextTransaction();
+  const results = await Promise.all(Array.from({ length: 5 }, () => questTransaction(db, 'u1', { kind: 'path', id: 'path-golden' }, now)));
+  assert.equal(results.filter(r => r.awarded).length, 1);
+  assert.equal(db.docs.get('users/u1').soulboundDrawTickets, 1);
+  assert.equal(db.docs.get('users/u1').stats.gold, 220);
+  assert.equal(results.at(-1).drawTickets, 1);
+  assert.ok(db.docs.get('questStates/u1').pathTicketsClaimed.includes('path-golden'));
+});
+
+test('older and fully completed paths can claim only the five added tickets without repeating original rewards', async () => {
+  for (const state of [{ pathIndex: 21 }, { version: 2, pathClaimed: rules.PATH.map(q => q.id) }]) {
+    const user = sample(); user.materialSystem = { inventory: { 'raid-refine-key-iii': 9 } };
+    const db = fakeDb(user, state), before = structuredClone(db.docs.get('questStates/u1'));
+    const view = await questTransaction(db, 'u1', null, now);
+    assert.equal(view.quests.pathTicketRewards.length, 5);
+    assert.deepEqual(db.docs.get('questStates/u1'), before, 'viewing never awards or rewrites claim state');
+    for (const id of ticketQuestIds) {
+      const results = await Promise.all([1, 2, 3].map(() => questTransaction(db, 'u1', { kind: 'path', id }, now)));
+      assert.equal(results.filter(r => r.awarded).length, 1);
+      assert.equal(results.find(r => r.awarded).reward.gold, 0);
+    }
+    const remote = db.docs.get('users/u1');
+    assert.equal(remote.soulboundDrawTickets, 5); assert.deepEqual(remote.stats, user.stats);
+    assert.deepEqual(remote.materialSystem, user.materialSystem);
+    const final = await questTransaction(db, 'u1', null, now);
+    assert.equal(final.quests.pathCompleted, view.quests.pathCompleted);
+    assert.equal(final.quests.path?.id, view.quests.path?.id);
+    assert.deepEqual(final.quests.pathTicketRewards, []);
+  }
+});
+
+test('failed ticket deposits roll back the quest claim, and earned tickets can immediately pay for a draw', async () => {
+  const { fakeDb: inventoryDb } = require('./helpers/inventory-db.cjs');
+  const { transaction } = require('../soulbound-draw-api.cjs').__test;
+  const pool = require('../public/cultivation/soulbound-pool.js');
+  const db = inventoryDb(sample()); const state = beforeQuest('path-golden'); db.docs.set('questStates/u1', state);
+  const run = db.runTransaction;
+  db.runTransaction = worker => run(tx => worker({ ...tx, set() { throw Error('database unavailable'); } }));
+  await assert.rejects(questTransaction(db, 'u1', { kind: 'path', id: 'path-golden' }, now), /database unavailable/);
+  assert.equal(db.docs.get('users/u1').soulboundDrawTickets, undefined);
+  assert.equal(db.docs.get('users/u1').stats.gold, 20); assert.deepEqual(db.docs.get('questStates/u1'), state);
+  db.runTransaction = run;
+  await questTransaction(db, 'u1', { kind: 'path', id: 'path-golden' }, now);
+  const drawn = await transaction(db, 'u1', 'draw', { requestId: 'quest-ticket-draw-001', count: 1, payment: 'ticket', poolVersion: pool.VERSION }, () => .5);
+  assert.equal(drawn.drawTickets, 0); assert.equal(drawn.balance, 220); assert.equal(drawn.result.ticketsSpent, 1);
+  assert.equal((await questTransaction(db, 'u1', { kind: 'path', id: 'path-golden' }, now)).drawTickets, 0, 'spending the ticket cannot make the quest claimable again');
+});
+
+test('unfinished and out-of-order ticket quests cannot be claimed with caller-selected ticket amounts', async () => {
+  const user = sample(); user.stats.totalScore = 27;
+  const db = fakeDb(user, beforeQuest('path-golden'));
+  await assert.rejects(questTransaction(db, 'u1', { kind: 'path', id: 'path-golden', drawTickets: 999 }, now), /尚未完成/);
+  await assert.rejects(questTransaction(db, 'u1', { kind: 'path', id: 'path-nascent', drawTickets: 999 }, now), /尚未完成/);
+  assert.equal(db.docs.get('users/u1').soulboundDrawTickets, undefined);
+});
 
 test('the independent Dongtian tutorial quest follows the mid-Qi story and preserves all existing quest IDs', () => {
   const index = rules.PATH.findIndex(q => q.id === 'path-qi-five');
