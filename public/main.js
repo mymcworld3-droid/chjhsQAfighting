@@ -22,6 +22,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/cultivation-theme.js',
   './cultivation/daily-meditation.js',
   './cultivation/identity-system.js',
+  './cultivation/math-guard.js',
   './cultivation/quiz-math.js',
   './cultivation/golden-core-activation-feedback.js',
   './cultivation/cultivation-rules.js',
