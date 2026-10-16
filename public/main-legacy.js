@@ -1812,7 +1812,9 @@ function sanitizeQuizImageUrl(rawUrl) {
 }
 
 function formatQuizRichText(text) {
-    const decoded = window.QAMathGuard?.expandTextEscapes?.(text) ?? text;
+    // The formatter also runs in isolated test/import contexts without window.
+    const guard = typeof window === 'undefined' ? null : window.QAMathGuard;
+    const decoded = guard?.expandTextEscapes?.(text) ?? text;
     const source = normalizeQuizSymbols(decoded);
     if (!source) return '';
 
