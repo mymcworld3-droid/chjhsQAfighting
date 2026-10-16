@@ -2,7 +2,7 @@ import {} from './nascent-growth.js';
 import { raidRepository } from './data/raid-repository.js';
 
 const STORAGE_KEY = 'xiuxian:raid-room:v2';
-const POLL_MS = 500; // 即時串流中斷時才使用；正常狀態沒有輪詢等待。
+const POLL_MS = 2000; // 只在串流中斷時補查；失敗時逐步退避，正常狀態不輪詢。
 const STALE_MS = 45000;
 const roomObservers = new Map();
 let ticketRequestSequence = 0, appliedTicketSequence = 0;
@@ -146,6 +146,7 @@ export function subscribeRaidRoom(roomId, callback, onError, initialResult) {
   let stopped = false;
   let timer = null;
   let busy = false;
+  let polling = false, pollFailures = 0;
   let lastError = '';
   let lastRoom = null, revision = -1, streamUnsub;
   let ticketsChecked = false;
@@ -170,7 +171,7 @@ export function subscribeRaidRoom(roomId, callback, onError, initialResult) {
   }
   function stop() {
     stopped = true;
-    clearInterval(timer); timer = null;
+    clearTimeout(timer); timer = null;
     streamUnsub?.();
     const observers = roomObservers.get(roomId);
     observers?.delete(emit);
@@ -183,16 +184,22 @@ export function subscribeRaidRoom(roomId, callback, onError, initialResult) {
     if ([401,403,404].includes(error?.status)) { stop(); callback(null); }
   }
 
+  function schedulePoll() {
+    if (stopped || !polling || timer !== null) return;
+    timer = setTimeout(() => { timer = null; void poll(); }, Math.min(30000, POLL_MS * 2 ** Math.min(pollFailures, 4)));
+  }
   const poll = async () => {
-    if (stopped || busy) return;
+    if (stopped || !polling || busy) return;
     busy = true;
     try {
       await api('get', { roomId });
-      lastError = '';
+      lastError = ''; pollFailures = 0;
     } catch (error) {
+      pollFailures++;
       failure(error);
     } finally {
       busy = false;
+      schedulePoll();
     }
   };
 
@@ -201,8 +208,12 @@ export function subscribeRaidRoom(roomId, callback, onError, initialResult) {
   if (initialResult) emit(initialResult);
   streamUnsub = raidRepository.subscribeRoom(roomId,result => { lastError = ''; emit(result); },failure,connected => {
     if (stopped) return;
-    if (connected) { clearInterval(timer); timer = null; }
-    else if (!timer) { void poll(); timer = setInterval(poll,POLL_MS); }
+    if (connected) {
+      polling = false; pollFailures = 0;
+      clearTimeout(timer); timer = null;
+    } else if (!polling) {
+      polling = true; void poll();
+    }
   });
   if (stopped) streamUnsub?.();
   return stop;

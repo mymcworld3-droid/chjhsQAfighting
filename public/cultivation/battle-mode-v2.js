@@ -25,6 +25,7 @@ export const featureReady = (async () => {
   const FOUNDATION_SCORE = 10;
   const ROOM_COLLECTION = 'rooms';
   const HEARTBEAT_MS = 8000;
+  const WAITING_HEARTBEAT_MS = 24000;
   const PREPARE_LEASE_MS = 7000;
   // A validated AI question may need several upstream attempts. Never let the
   // opponent steal a live generation job every seven seconds.
@@ -1747,6 +1748,11 @@ export const featureReady = (async () => {
   async function heartbeat() {
     if (state.heartbeatBusy || state.syncPaused || roomQuota.blocked()) return;
     if (!state.roomId || !state.role || !state.room || !['waiting', 'intro', 'playing', 'settled', 'preparing'].includes(state.room.status)) return;
+    // Waiting-room heartbeats fan out to every matchmaking listener. Twenty-four
+    // seconds remains well within the ninety-second waiting-room expiry; active
+    // combat keeps its original eight-second heartbeat and disconnect detection.
+    if (state.room.status === 'waiting' &&
+        nowMs() - Number(playerForRole(state.room, state.role)?.lastSeenAtMs || 0) < WAITING_HEARTBEAT_MS) return;
     state.heartbeatBusy = true;
     try { await updateDoc(roomRef(), { [`${state.role}.lastSeenAtMs`]: nowMs(), updatedAt: serverTimestamp() }); } catch (_) {}
     finally { state.heartbeatBusy = false; }
