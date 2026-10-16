@@ -7,6 +7,9 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
   'use strict';
   const pool = globalThis.QASoulboundPool;
   let snapshot = null, account = '', busy = false, selected = 0, message = '', animationTimer = null, externalDirty = false;
+  const CAROUSEL_DELAY_MS = 4800, CAROUSEL_MOVE_MS = 660;
+  let carouselStart = 0, carouselTimer = null, carouselMoveTimer = null;
+  let previewItemId = '', previewTrigger = null;
   const $ = id => document.getElementById(id);
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const visible = () => document.getElementById('page-training')?.classList.contains('active-page') &&
@@ -21,8 +24,9 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
   function reconcile() {
     const uid = getMainUser()?.uid || '';
     if (account !== uid) {
-      clearTimeout(animationTimer); account = uid; snapshot = null; selected = 0; message = ''; externalDirty = false;
-      $('soulbound-animation')?.remove();
+      clearTimeout(animationTimer); stopCarousel(); account = uid; snapshot = null; selected = 0;
+      carouselStart = 0; message = ''; externalDirty = false; previewItemId = ''; previewTrigger = null;
+      $('soulbound-animation')?.remove(); $('soulbound-preview')?.remove();
     }
     return uid;
   }
@@ -66,18 +70,124 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       : `<span class="sb-fallback" aria-hidden="true">${esc(item?.icon || '契')}</span>`;
   }
   function showcaseMarkup(candidates) {
+    // Three visible weapons; a fourth offscreen card enters from the right
+    // as the leftmost one slides away.
+    const count = candidates.length, length = Math.min(count, 4);
+    const cards = Array.from({ length }, (_, position) => {
+      const a = candidates[(carouselStart + position) % count];
+      const offscreen = position >= 3;
+      return `<button type="button" class="sb-carousel-card${position === 1 ? ' is-center' : ''}"
+        data-sb-preview="${esc(a.id)}" style="--sb-color:${esc(artifactRealmColor(a.realm))}"
+        aria-label="查看${esc(a.name)}詳細資料"${offscreen ? ' aria-hidden="true" tabindex="-1"' : ''}>
+        <span class="sb-carousel-art">${image(a)}</span><b>${esc(a.name)}</b>
+        <small>${esc(a.realm)}</small></button>`;
+    }).join('');
+    const number = count ? ((carouselStart + 1) % count) + 1 : 0;
     return `<section class="sb-showcase" aria-label="常駐本命法器共用池">
-      <small>常駐共用池 · ${esc(candidates[0]?.realm)}</small><h3>八器同池</h3>
-      <div class="sb-common-pool-art">${candidates.map(a => `<figure>${image(a)}<figcaption>${esc(a.name)}</figcaption></figure>`).join('')}</div>
-      <p>完整武器隨機獲得八種之一</p><span>每種器型佔完整武器結果的 12.5%</span>
+      <div class="sb-showcase-heading"><h3>常駐法器</h3>
+      <div class="sb-carousel-nav">
+        <button type="button" data-sb-carousel-prev aria-label="查看上一件法器">‹</button>
+        <span class="sb-carousel-count" aria-label="中央法器為第 ${number} 件，共 ${count} 件">${String(number).padStart(2, '0')} / ${String(count).padStart(2, '0')}</span>
+        <button type="button" data-sb-carousel-next aria-label="查看下一件法器">›</button>
+      </div></div>
+      <div class="sb-carousel-viewport" aria-label="每次展示三件法器，中央法器較大">
+        <div class="sb-carousel-track">${cards}</div>
+      </div>
+      <p class="sb-carousel-hint">點擊法器查看詳細資料</p>
     </section>`;
   }
-  function galleryMarkup(candidates, rank, version = pool.VERSION) {
-    return `<section class="sb-gallery"><div class="sb-gallery-heading"><h3>池內法器一覽</h3><span>八種同池 · 隨機獲得</span></div>
-      <div class="sb-pool">${candidates.map(a => `<article style="--sb-color:${artifactRealmColor(a.realm)}">${image(a)}<b>${esc(a.name)}</b><small>${esc(a.realm)} · ${esc(effectText(a))}</small></article>`).join('')}</div>
-      <details class="sb-details"><summary>完整機率與品質</summary><p>版本 ${esc(version)}。一般完整武器機率 2%，其餘 98% 獲得 20–40 個煉器碎片；連續 49 抽未出武器，第 50 抽必出。出武器後重新計數。八種器型共用一池，完整武器各佔武器結果的 12.5%。${rank === 7 ? '真仙品質不再升階。' : '抽中武器時，80% 為目前品質、20% 高一階。'}數值依境界提升，所有器型均可跨丹性搭配。</p>
-        ${rank >= 0 && rank < 7 ? `<ul>${pool.candidates(rank + 1).map(a => `<li>${esc(a.name)}（${esc(a.realm)}）：${esc(effectText(a))}；攻擊 +${base(a, 'equip_attack_flat')}、生命 +${base(a, 'equip_hp_flat')}</li>`).join('')}</ul>` : ''}</details>
-    </section>`;
+  function probabilityMarkup(rank, version = pool.VERSION) {
+    return `<details class="sb-details sb-probability"><summary>抽取機率與保底</summary>
+      <p>獎池版本 ${esc(version)}。完整武器機率 2%，其餘 98% 獲得 20–40 個煉器碎片；
+      連續 49 抽未出武器，第 50 抽必出。八種器型共用常駐池，
+      每種器型佔完整武器結果的 12.5%。${rank === 7 ? '真仙品質不再升階。' : '抽中武器時，80% 為目前品質、20% 高一階。'}
+      抽取不指定器型。</p></details>`;
+  }
+  function stopCarousel() {
+    clearTimeout(carouselTimer); clearTimeout(carouselMoveTimer);
+    carouselTimer = null; carouselMoveTimer = null;
+    $('soulbound-content')?.querySelector('.sb-carousel-track')?.classList.remove('is-shifting');
+  }
+  function carouselAllowed() {
+    if (previewItemId || !visible() || document.hidden || $('soulbound-animation')) return false;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return false;
+    return true;
+  }
+  function scheduleCarousel() {
+    clearTimeout(carouselTimer); carouselTimer = null;
+    if (!carouselAllowed()) return;
+    carouselTimer = setTimeout(() => {
+      carouselTimer = null;
+      const showcase = $('soulbound-content')?.querySelector('.sb-showcase');
+      if (!showcase || !carouselAllowed()) return;
+      if (showcase.matches?.(':hover') || showcase.matches?.(':focus-within')) {
+        scheduleCarousel(); return;
+      }
+      const track = showcase.querySelector('.sb-carousel-track');
+      if (!track || track.children.length < 4) return;
+      track.classList.add('is-shifting');
+      carouselMoveTimer = setTimeout(() => {
+        carouselMoveTimer = null;
+        if (!carouselAllowed() || !showcase.isConnected) return;
+        carouselStart = (carouselStart + 1) % pool.TYPES.length;
+        const rank = snapshot?.rank ?? Math.max(0, pool.rankFor(window.getTrainingAccessScore?.() ??
+          globalThis.QATrainingAccessRules.score(data())));
+        const candidates = pool.candidates(Math.max(0, rank));
+        if (candidates.length) showcase.outerHTML = showcaseMarkup(candidates);
+        scheduleCarousel();
+      }, CAROUSEL_MOVE_MS);
+    }, CAROUSEL_DELAY_MS);
+  }
+  function manualCarousel(delta) {
+    stopCarousel();
+    const showcase = $('soulbound-content')?.querySelector('.sb-showcase');
+    const rank = snapshot?.rank ?? Math.max(0, pool.rankFor(window.getTrainingAccessScore?.() ??
+      globalThis.QATrainingAccessRules.score(data())));
+    const candidates = pool.candidates(Math.max(0, rank));
+    if (!showcase || !candidates.length) return;
+    carouselStart = (carouselStart + delta + candidates.length) % candidates.length;
+    showcase.outerHTML = showcaseMarkup(candidates);
+    $('soulbound-content')?.querySelector(delta < 0 ? '[data-sb-carousel-prev]' : '[data-sb-carousel-next]')?.focus({ preventScroll: true });
+    scheduleCarousel();
+  }
+  function previewMarkup(item) {
+    return `<section class="sb-preview-card" role="dialog" aria-modal="true" aria-labelledby="sb-preview-title"
+      style="--sb-color:${esc(artifactRealmColor(item.realm))}">
+      <button type="button" class="sb-preview-close" data-sb-close aria-label="關閉法器詳細資料">×</button>
+      <div class="sb-preview-art">${image(item)}</div>
+      <div class="sb-preview-info">
+        <small>${esc(item.realm)} · ${esc(item.weaponForm || '本命法器')}</small>
+        <h3 id="sb-preview-title">${esc(item.name)}</h3>
+        <p>${esc(effectText(item))}</p>
+        <div class="sb-preview-stats"><span>攻擊 +${base(item, 'equip_attack_flat')}</span>
+        <span>生命 +${base(item, 'equip_hp_flat')}</span></div>
+        <p class="sb-preview-description">${esc(item.description || '')}</p>
+        <span class="sb-preview-hint">僅查看法器資料，實際抽取仍為八器共用池。</span>
+      </div></section>`;
+  }
+  function showPreview(itemId, trigger) {
+    const item = getArtifactById(itemId) || pool.get(itemId);
+    if (!item || item.equipSlot !== '本命法寶') return;
+    stopCarousel();
+    previewItemId = itemId; previewTrigger = trigger || null;
+    const page = $('soulbound-page');
+    if (!page) return;
+    $('soulbound-preview')?.remove();
+    const overlay = document.createElement('div');
+    overlay.id = 'soulbound-preview'; overlay.className = 'sb-preview-overlay';
+    overlay.innerHTML = previewMarkup(item);
+    page.appendChild(overlay);
+    overlay.addEventListener('click', e => {
+      if (e.target.closest?.('[data-sb-close]') || e.target === overlay) hidePreview();
+    });
+    overlay.querySelector('[data-sb-close]')?.focus();
+  }
+  function hidePreview() {
+    if (!previewItemId) return;
+    previewItemId = ''; $('soulbound-preview')?.remove();
+    if (previewTrigger?.isConnected) previewTrigger.focus();
+    previewTrigger = null;
+    scheduleCarousel();
   }
   function comparison(item) {
     const current = equipped();
@@ -90,7 +200,10 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
   }
   function render() {
     if (!$('soulbound-content')) return;
+    stopCarousel(); // Data refreshes must not leave an obsolete slide transition alive.
     reconcile();
+    // Switching tabs can replace the contract page while its dialog was open.
+    if (previewItemId && !$('soulbound-preview')) { previewItemId = ''; previewTrigger = null; }
     const operation = storedOperation(), current = equipped(), s = snapshot;
     $('soulbound-status').textContent = message;
     $('soulbound-refresh').disabled = busy;
@@ -98,15 +211,12 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       const score = window.getTrainingAccessScore?.() ?? globalThis.QATrainingAccessRules.score(data());
       const rank = Math.max(0, pool.rankFor(score)), candidates = pool.candidates(rank);
       const status = !account ? '請登入後締結本命。' : busy ? '正在同步契印…' : '契印尚未同步，請按「重新同步」。';
-      $('soulbound-content').innerHTML = `<p class="sb-empty">${status}</p>${showcaseMarkup(candidates)}${galleryMarkup(candidates, rank)}`;
+      $('soulbound-content').innerHTML = `<p class="sb-empty">${status}</p>${showcaseMarkup(candidates)}${probabilityMarkup(rank)}`;
+      scheduleCarousel();
       return;
     }
     const pending = s.pending, row = pending?.results[Math.min(selected, pending.results.length - 1)], item = row?.itemId && getArtifactById(row.itemId);
     const rank = s.rank, candidates = pool.candidates(Math.max(0, rank));
-    const owned = Object.entries(s.inventory).flatMap(([id, count]) => {
-      const item = getArtifactById(id);
-      return count > 0 && item?.equipSlot === '本命法寶' ? [{ item, count }] : [];
-    });
     $('soulbound-content').innerHTML = `<div class="sb-summary"><div><small>靈石餘額</small><strong>${s.balance.toLocaleString('zh-TW')}</strong></div><div><small>煉器碎片</small><strong>${Number(s.fragments || 0).toLocaleString('zh-TW')}</strong></div><div><small>目前本命</small><b>${esc(current?.name || '尚未調御')}</b><span>${esc(current?.realm || '選擇適合自己的器型')}</span></div><div><small>距離武器保底</small><b>${s.untilPity} 抽</b><span>累計 ${s.draws} 抽 · 出武器後重計</span></div></div>
       <div class="sb-pity"><progress value="${Number(s.misses || 0)}" max="50" aria-label="本輪未出武器 ${Number(s.misses || 0)} 抽"></progress><span>八種武器同池 · 至多 50 抽必得一件完整武器</span></div>
       ${operation && !pending ? '<button type="button" data-sb-retry class="sb-primary">重試上次未確認的操作</button><p class="sb-note">重試只確認原結果，不會重新抽取或重複扣款。</p>' : ''}
@@ -116,13 +226,13 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
           return `<button type="button" data-sb-select="${i}" aria-pressed="${i === selected}" style="--sb-color:${r.realm ? artifactRealmColor(r.realm) : '#f5cf83'}">${esc(a?.name || (r.itemId ? r.itemId : '煉器碎片 ×' + r.fragments))}<small>${a ? esc(r.realm) : '碎片'}${r.pity ? ' · 武器保底' : r.higher ? ' · 高階' : ''}</small></button>`;
         }).join('')}</div><div class="sb-featured" style="--sb-color:${item ? artifactRealmColor(item.realm) : '#f5cf83'}">${item ? image(item) : '<span class="sb-fragment-art" aria-hidden="true">✦</span>'}<div><small>${item ? esc(item.realm) : '煉器資源'}</small><h3>${item ? esc(item.name) : '煉器碎片 ×' + Number(row.fragments || 0)}</h3><p>${item ? esc(effectText(item)) : '已加入碎片餘額，可在八方煉器陣使用。'}</p></div></div>${item ? comparison(item) : ''}
         <div class="sb-actions">${item ? `<button type="button" class="sb-primary" data-sb-equip="${esc(item.id)}" ${busy || operation || !Number(s.inventory[item.id]) ? 'disabled' : ''}>調御此器</button>` : ''}<button type="button" data-sb-vault ${busy || operation ? 'disabled' : ''}>確認收入</button><button type="button" data-sb-again ${busy || operation ? 'disabled' : ''}>再次抽取</button></div></section>` : ''}
-      <div class="sb-lobby">${showcaseMarkup(candidates)}<section class="sb-draw-controls"><small>常駐共用池 · 八器同契</small><h3>締結本命</h3><p>八種本命法器一起抽；至多 50 抽必得其中一件完整武器。</p>
+      <div class="sb-lobby">${showcaseMarkup(candidates)}<section class="sb-draw-controls"><h3>締結本命</h3><p>八種本命法器一起抽；至多 50 抽必得其中一件完整武器。</p>
         ${s.draws === 0 ? '<p class="sb-first">首抽 250 靈石；單抽與五連共用 50 抽保底，結果先保存再演出。</p>' : ''}
         <div class="sb-actions"><button type="button" data-sb-draw="1" class="sb-primary" ${busy || operation || pending || rank < 0 || s.balance < s.prices?.single ? 'disabled' : ''}>單抽 · ${s.prices?.single ?? '—'} 靈石</button><button type="button" data-sb-draw="5" ${busy || operation || pending || rank < 0 || s.balance < s.prices?.five ? 'disabled' : ''}>五連抽 · ${s.prices?.five ?? '—'} 靈石</button></div>
         <p class="sb-note">${pending ? '先確認本批結果，即可繼續抽取。' : `一般武器機率 2%；其餘獲得 20–40 碎片。出武器後重置保底進度。`}</p></section></div>
-      ${galleryMarkup(candidates, rank, s.poolVersion)}
-      <details class="sb-details"><summary>寶庫 · 調御與精煉（${owned.reduce((n, a) => n + Number(a.count), 0)} 件）</summary><p>原器可使用團本素材、印記與煉器碎片二次、三次精煉；先卸下裝備中的法器。</p><div class="sb-owned">${owned.length ? owned.map(({ item: a, count }) => `<article><div><b>${esc(a.name)}</b><small>${esc(a.realm)} · ×${count} · ${esc(effectText(a))}</small></div><button type="button" data-sb-equip="${esc(a.id)}" ${busy || a.id === current?.id ? 'disabled' : ''}>${a.id === current?.id ? '正在調御' : '調御'}</button></article>`).join('') : '<p>尚無本命法器。</p>'}</div><button type="button" data-sb-refine>前往八方煉器陣</button></details>
+      ${probabilityMarkup(rank, s.poolVersion)}
       <details class="sb-details"><summary>物品分解與碎片煉器</summary><p>材料、普通法器及本命法器可多選分解，確認後換成煉器碎片；裝備中的份數會保留。</p><button type="button" data-inventory-dismantle>物品分解</button></details>`;
+    scheduleCarousel();
   }
   async function refresh() {
     if (busy || !reconcile()) { render(); return; }
@@ -216,13 +326,20 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     $('soulbound-refresh').addEventListener('click', () => { void refresh(); });
     $('soulbound-content').addEventListener('click', e => {
       const button = e.target.closest('button'); if (!button || button.disabled) return;
+      if (button.hasAttribute('data-sb-preview')) {
+        showPreview(button.dataset.sbPreview, button);
+        return;
+      }
+      if (button.hasAttribute('data-sb-carousel-prev') || button.hasAttribute('data-sb-carousel-next')) {
+        manualCarousel(button.hasAttribute('data-sb-carousel-prev') ? -1 : 1);
+        return;
+      }
       if (busy) return;
       if (button.hasAttribute('data-sb-select')) { selected = Number(button.dataset.sbSelect); render(); }
       else if (button.hasAttribute('data-sb-draw')) void runOperation({ action: 'draw', body: { count: Number(button.dataset.sbDraw), poolVersion: pool.VERSION, expectedCost: Number(button.dataset.sbDraw) === 5 ? snapshot.prices.five : snapshot.prices.single, requestId: crypto.randomUUID() } });
       else if (button.hasAttribute('data-sb-retry')) { const op = storedOperation(); if (op) void runOperation(op); }
       else if (button.hasAttribute('data-sb-equip')) void equipmentAction(button.dataset.sbEquip);
       else if (button.hasAttribute('data-sb-vault') || button.hasAttribute('data-sb-again')) void keepResults();
-      else if (button.hasAttribute('data-sb-refine')) document.querySelector('[data-training-tab="refinery"]')?.click();
     });
     return true;
   }
@@ -243,6 +360,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
   document.addEventListener('click', e => {
     const button = e.target.closest?.('[data-training-tab="contract"]');
     if (button && !button.disabled) activate();
+    else if (previewItemId && e.target.closest?.('[data-training-tab]')) hidePreview();
   });
   window.addEventListener('xiuxian:stats-updated', event => {
     if (event.detail?.source !== 'dismantle') return;
@@ -255,4 +373,20 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
   ['xiuxian:user-ready', 'xiuxian:user-data-ready'].forEach(name => window.addEventListener(name, () => {
     reconcile(); if (visible()) void refresh();
   }));
+  document.addEventListener('keydown', event => {
+    if (!previewItemId) return;
+    if (event.key === 'Escape') { event.preventDefault(); hidePreview(); }
+    if (event.key !== 'Tab') return;
+    const buttons = [...($('soulbound-preview')?.querySelectorAll('button:not(:disabled)') || [])];
+    if (!buttons.length) return;
+    if (event.shiftKey && document.activeElement === buttons[0]) {
+      event.preventDefault(); buttons[buttons.length - 1].focus();
+    } else if (!event.shiftKey && document.activeElement === buttons[buttons.length - 1]) {
+      event.preventDefault(); buttons[0].focus();
+    }
+  });
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stopCarousel(); else scheduleCarousel();
+  });
+  window.addEventListener('pagehide', stopCarousel);
 })();
