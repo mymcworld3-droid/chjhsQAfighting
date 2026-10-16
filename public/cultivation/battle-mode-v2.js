@@ -31,7 +31,7 @@ export const featureReady = (async () => {
   const ACTIVE_QUESTION_LEASE_MS = 65000;
   const QUIZ_REQUEST_TIMEOUT_MS = 58000;
   const EMPTY_QUESTION_REPAIR_MS = 2500;
-  const MATCH_RECONCILE_MS = 15000;
+  const MATCH_RECONCILE_MS = 5000;
   const MATCH_SCAN_LIMIT = 80;
   const MATCH_SCAN_MAX_PAGES = 4;
   const INTRO_DURATION_MS = 4800;
