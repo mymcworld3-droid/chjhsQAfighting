@@ -160,10 +160,10 @@ async function recordEvent(db, a, uid, vid, item, today, now) {
   });
 }
 function buildReport({ visitors, players, days, events, now, range, truncated }) {
-  const today = dayOf(now), first = plusDays(today, 1 - range);
+  const today = dayOf(now), first = plusDays(today, -range), cohortEnd = plusDays(today, -1);
   const recent = plusDays(today, -6);
-  const visitorCohorts = visitors.filter(v => v.firstDay >= first && v.firstDay <= today);
-  const playerCohorts = players.filter(p => p.cohortEligible === true && p.firstDay >= first && p.firstDay <= today);
+  const visitorCohorts = visitors.filter(v => v.firstDay >= first && v.firstDay <= cohortEnd);
+  const playerCohorts = players.filter(p => p.cohortEligible === true && p.firstDay >= first && p.firstDay <= cohortEnd);
   const eligible = players.filter(p => p.cohortEligible === true);
   const startedVisitors = visitorCohorts.filter(v => v.firstStartDay === v.firstDay).length;
   const toMs = v => v?.toMillis?.() || v?.toDate?.()?.getTime?.() || (v ? new Date(v).getTime() : 0);
@@ -179,9 +179,8 @@ function buildReport({ visitors, players, days, events, now, range, truncated })
     return third >= first && third <= first + DAY_MS;
   }).length;
   const retained = n => {
-    // Fixed-size, fully matured cohorts: for a 7-day range D7 includes
-    // registrations 7-13 days ago, not today's incomplete cohorts.
-    const matured = eligible.filter(p => p.firstDay >= plusDays(today, -(range + n - 1)) && p.firstDay <= plusDays(today, -n));
+    // Compare seven fully completed return days, never the incomplete current day.
+    const matured = eligible.filter(p => p.firstDay >= plusDays(today, -(range + n)) && p.firstDay <= plusDays(today, -(n + 1)));
     const returned = matured.filter(p => (p.seenDays || []).includes(plusDays(p.firstDay, n))).length;
     return { returned, eligible: matured.length, rate: percent(returned, matured.length) };
   };
@@ -191,7 +190,7 @@ function buildReport({ visitors, players, days, events, now, range, truncated })
   const social = new Set(weeklyDays.filter(d => (Number(d.social) || 0) > 0).map(d => d.uid));
   const sum = key => weeklyDays.reduce((n, d) => n + (Number(d[key]) || 0), 0);
   const started = sum('starts'), failed = sum('loadFailures');
-  const d1Group = eligible.filter(p => p.firstDay >= plusDays(today, -range) && p.firstDay <= plusDays(today, -1));
+  const d1Group = eligible.filter(p => p.firstDay >= plusDays(today, -(range + 1)) && p.firstDay <= plusDays(today, -2));
   const socialCohort = d1Group.filter(p => (p.socialDays || []).includes(p.firstDay));
   const nonSocialCohort = d1Group.filter(p => !(p.socialDays || []).includes(p.firstDay));
   const failCohort = d1Group.filter(p => p.hadFirstDayFailure);
@@ -201,7 +200,7 @@ function buildReport({ visitors, players, days, events, now, range, truncated })
     return { returned, eligible: group.length, rate: percent(returned, group.length) };
   };
   return {
-    range, from: first, to: today, timezone: 'Asia/Taipei',
+    range, from: first, to: cohortEnd, timezone: 'Asia/Taipei',
     visitors: { total: visitorCohorts.length, started: startedVisitors, rate: percent(startedVisitors, visitorCohorts.length) },
     firstThree: { completed: threePlayers, started: startedPlayers, rate: percent(threePlayers, startedPlayers) },
     d1, d7,
@@ -227,7 +226,7 @@ function buildReport({ visitors, players, days, events, now, range, truncated })
   };
 }
 async function report(db, now, range) {
-  const today = dayOf(now), first = plusDays(today, 1 - range), recent = plusDays(today, -6);
+  const today = dayOf(now), first = plusDays(today, -range), recent = plusDays(today, -6);
   const [v, p, d, e] = await Promise.all([
     db.collection('playerAnalyticsVisitors').where('firstDay', '>=', first).limit(LIMIT).get(),
     db.collection('playerAnalyticsPlayers').where('firstDay', '>=', plusDays(first, -7)).limit(LIMIT).get(),
