@@ -1,4 +1,5 @@
 import './forge-fragments.js';
+import { soulboundItemFrameMarkup } from './soulbound-item-frame.js';
 import { getArtifactById, artifactRealmColor } from './artifact-catalog.js';
 import { getMaterialById, materialRealmColor } from './material-catalog.js';
 import { authenticatedMainFetch, getMainUser } from './data/project-repository.js';
@@ -49,7 +50,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     const blocked=disabled||(!left&&(selected||!row.available||s.selected.size>=100));
     const action=left?'移回玩家背包':selected?'已加入待分解':!row.available?'裝備中，無可分解份數':'加入待分解';
     return `<article class="ids-grid-entry"><button type="button" class="ids-item is-${row.type}${soulbound?' is-soulbound':''}${!left&&selected?' is-selected':''}${!row.available?' is-locked':''}" ${left?'data-ids-remove':'data-ids-add'}="${esc(id)}" style="--ids-quality:${esc(color)}" aria-label="${esc(action+'：'+row.name)}" title="${esc(row.name+' · '+row.realm+' · 每件 '+row.unitFragments+' 碎片'+(row.reserved?' · 裝備保留 '+row.reserved:''))}" ${blocked?'disabled':''}>
-      <span class="ids-qty">×${quantity}</span>${!left&&selected?'<span class="ids-selected-marker">已選</span>':''}<span class="ids-icon">${icon}</span><b class="ids-name">${esc(row.name)}</b><span class="ids-meta">${esc(row.realm)}${!left&&row.reserved?' · 保留 '+row.reserved:''}</span>
+      <span class="ids-qty">×${quantity}</span>${!left&&selected?'<span class="ids-selected-marker">已選</span>':''}<span class="ids-icon">${soulbound?soulboundItemFrameMarkup():''}${icon}</span><b class="ids-name">${esc(row.name)}</b><span class="ids-meta">${esc(row.realm)}${!left&&row.reserved?' · 保留 '+row.reserved:''}</span>
       </button>${left?`<label class="ids-quantity">數量<input type="number" inputmode="numeric" min="1" max="${row.available}" value="${quantity}" data-ids-quantity="${esc(id)}" aria-label="${esc(row.name)}分解數量" ${disabled?'disabled':''}></label>`:''}</article>`;
   }
   function emptySlots(count=8) {return '<div class="ids-slot-empty" aria-hidden="true"></div>'.repeat(Math.max(0,count));}

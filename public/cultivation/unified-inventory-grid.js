@@ -1,4 +1,5 @@
 import {} from './nascent-growth.js';
+import { soulboundItemFrameMarkup } from './soulbound-item-frame.js';
 import { ARTIFACT_CATALOG, ARTIFACT_EQUIP_SLOTS, getArtifactById, realmForScore, realmOrderByName } from './artifact-catalog.js';
 import {
   MATERIAL_CATALOG,
@@ -93,12 +94,12 @@ import {
         ? (canEquipOwned ? '契器台 · 抽取或調御已有法器' : '金丹開放 · 常駐契器台')
         : '點擊裝配';
       return `<button type="button" class="uib-equip-slot is-empty${soulboundClass}${equipmentPickSlot === slot ? ' is-picking' : ''}" data-uib-empty-slot="${escapeHtml(slot)}" aria-label="${escapeHtml(slot)}：${escapeHtml(hint)}">${crest}${label}
-        <span class="uib-equip-slot-frame${soulbound ? ' is-soulbound-frame' : ''}">${soulbound ? '<i class="fa-solid fa-khanda"></i>' : '<i class="fa-solid fa-plus"></i>'}</span>
+        <span class="uib-equip-slot-frame${soulbound ? ' is-soulbound-frame' : ''}">${soulbound ? soulboundItemFrameMarkup() + '<i class="fa-solid fa-khanda"></i>' : '<i class="fa-solid fa-plus"></i>'}</span>
         <b class="uib-equip-slot-name">${soulbound ? '締結本命' : '空裝備欄'}</b><small class="uib-equip-slot-hint">${hint}</small></button>`;
     }
     const color = qualityColor(item.realm);
     return `<button type="button" class="uib-equip-slot is-filled${soulboundClass}" data-uib-equipped-item="artifact:${escapeHtml(id)}" style="--uib-quality:${escapeHtml(color)}">${crest}${label}
-      <span class="uib-equip-slot-frame is-artifact${soulbound ? ' is-soulbound-frame' : ''}">${imageMarkup(item.imageUrl, item.icon || '◆', item.name)}</span><b class="uib-equip-slot-name">${escapeHtml(item.name)}</b>
+      <span class="uib-equip-slot-frame is-artifact${soulbound ? ' is-soulbound-frame' : ''}">${soulbound ? soulboundItemFrameMarkup() : ''}${imageMarkup(item.imageUrl, item.icon || '◆', item.name)}</span><b class="uib-equip-slot-name">${escapeHtml(item.name)}</b>
       <small class="uib-equip-slot-hint">${escapeHtml(item.realm)} · 戰力 ${Math.max(0, Number(window.calculateArtifactPower?.(item)) || 0).toLocaleString("zh-TW")}</small></button>`;
   }
   function equipmentMarkup() {
@@ -250,7 +251,7 @@ import {
       ${item.equipped ? '<span class="uib-equipped"><i class="fa-solid fa-circle-check"></i></span>' : ''}
       ${item.nascentMaterial ? '<span class="uib-raid-key-badge uib-nascent-badge">元嬰</span>' : ''}
       ${item.raidKey || item.raidMaterial ? '<span class="uib-raid-key-badge"><i class="fa-solid fa-stamp"></i> 團本</span>' : ''}
-      <span class="uib-icon">${imageMarkup(item.imageUrl, item.icon || '◆', item.name)}</span>
+      <span class="uib-icon">${soulbound ? soulboundItemFrameMarkup() : ''}${imageMarkup(item.imageUrl, item.icon || '◆', item.name)}</span>
       <span class="uib-name">${escapeHtml(item.name)}</span>
       <span class="uib-bottom"><small>${escapeHtml(item.raidKey ? '團本印記' : item.raidMaterial ? '團本煉器素材' : typeLabel(item.type))}</small><em>${escapeHtml(item.realm || '凡人')}</em></span>
     </button>`;
@@ -377,7 +378,7 @@ import {
     }
 
     modal.innerHTML = `<section class="uib-modal uib-modal-${escapeHtml(item.type)}${soulbound ? ' uib-modal-soulbound' : ''}" role="dialog" aria-modal="true" aria-label="${escapeHtml(item.name)}" style="--uib-quality:${escapeHtml(color)}">
-      <div class="uib-modal-head"><div class="uib-modal-icon">${soulbound ? imageMarkup(item.imageUrl, item.icon || '◆', item.name) : escapeHtml(item.icon || '◆')}</div><div><small>${escapeHtml(typeLabel(item.type))} · ${escapeHtml(item.category || '')}</small><h3>${escapeHtml(item.name)}</h3><span>${escapeHtml(item.realm || '凡人')} · 持有 ×${item.quantity}</span></div><button type="button" class="uib-close" aria-label="關閉"><i class="fa-solid fa-xmark"></i></button></div>
+      <div class="uib-modal-head"><div class="uib-modal-icon">${soulbound ? soulboundItemFrameMarkup() + imageMarkup(item.imageUrl, item.icon || '◆', item.name) : escapeHtml(item.icon || '◆')}</div><div><small>${escapeHtml(typeLabel(item.type))} · ${escapeHtml(item.category || '')}</small><h3>${escapeHtml(item.name)}</h3><span>${escapeHtml(item.realm || '凡人')} · 持有 ×${item.quantity}</span></div><button type="button" class="uib-close" aria-label="關閉"><i class="fa-solid fa-xmark"></i></button></div>
       <div class="uib-description">${escapeHtml(item.description || '沒有說明。')}</div>
       ${extra}
       ${item.raw?.equipSlot === '本命法寶' ? '<button type="button" class="uib-use-btn" data-uib-contract>前往契器台</button>' : ''}
@@ -549,9 +550,8 @@ import {
       .uib-item[data-uib-item^="material:"] .uib-icon,.uib-modal-material .uib-modal-icon{border-radius:50%!important;background:radial-gradient(circle at 31% 25%,color-mix(in srgb,var(--uib-quality) 36%,#fff),color-mix(in srgb,var(--uib-quality) 14%,#16110a) 43%,#0b0b09 100%);box-shadow:inset 0 0 0 2px rgba(255,255,255,.07),0 0 12px color-mix(in srgb,var(--uib-quality) 12%,transparent)}
       .uib-equip-slot-frame.is-soulbound-frame img{object-fit:contain;padding:16%}.uib-item.is-soulbound .uib-icon img{object-fit:contain;padding:12%}.uib-modal-icon img{width:100%;height:100%;object-fit:contain;padding:5%;border-radius:inherit}
       .uib-item[data-uib-item^="artifact:"] .uib-icon,.uib-modal-artifact .uib-modal-icon{border-radius:12px;box-shadow:inset 0 0 0 2px rgba(255,235,169,.1),0 0 17px color-mix(in srgb,var(--uib-quality) 16%,transparent)}
-      /* Soulbound originals and refinements share an eight-point contract star with right-angle tips and shorter cardinal points. Only the icon is clipped, so names and counts stay readable. */
-      :is(.uib-item.is-soulbound .uib-icon,.uib-modal-soulbound .uib-modal-icon,.uib-equip-slot-frame.is-soulbound-frame){--uib-seal-shape:polygon(50% 0,60% 10%,90% 10%,90% 40%,100% 50%,90% 60%,90% 90%,60% 90%,50% 100%,40% 90%,10% 90%,10% 60%,0 50%,10% 40%,10% 10%,40% 10%);position:relative;isolation:isolate;overflow:hidden;border:0;border-radius:0!important;clip-path:var(--uib-seal-shape);background:linear-gradient(135deg,#fff0be,var(--uib-quality,#f5d590) 48%,#a77635);box-shadow:none}
-      :is(.uib-item.is-soulbound .uib-icon,.uib-modal-soulbound .uib-modal-icon,.uib-equip-slot-frame.is-soulbound-frame)::before{content:"";position:absolute;inset:2px;clip-path:var(--uib-seal-shape);background:radial-gradient(circle at 35% 22%,color-mix(in srgb,var(--uib-quality,#f5d590) 24%,#262016),#101019 80%);pointer-events:none;z-index:-1}
+      /* Keep the ordinary artifact surface and realm tint; only four small side points distinguish soulbound frames. */
+      :is(.uib-item.is-soulbound .uib-icon,.uib-modal-soulbound .uib-modal-icon,.uib-equip-slot-frame.is-soulbound-frame){--soulbound-frame-fill:color-mix(in srgb,var(--uib-quality,#d9b56d) 11%,#090807);--soulbound-frame-stroke:color-mix(in srgb,var(--uib-quality,#d9b56d) 58%,transparent);--soulbound-frame-inset:rgba(255,235,169,.1);--soulbound-frame-glow:color-mix(in srgb,var(--uib-quality,#d9b56d) 16%,transparent);position:relative;isolation:isolate;overflow:visible;border:0;border-radius:12px!important;background:transparent;box-shadow:none;color:var(--uib-quality,#d9b56d)}
       .uib-modal-soulbound .uib-modal-icon img{padding:12%}
       .uib-empty{flex:1;min-height:180px;display:grid;place-items:center;align-content:center;gap:7px;color:#706653;text-align:center}.uib-empty i{font-size:25px}.uib-empty b{color:#a99b80;font-size:10px}.uib-empty span{font-size:7px}
       .uib-raid-key-detail{border-color:rgba(231,199,121,.26);background:rgba(231,199,121,.035)}.uib-raid-key-detail>span{color:#e7c779}.uib-raid-key-detail b{color:#f1d791}
