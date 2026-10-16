@@ -74,6 +74,13 @@
       return { id: domain.id, name: domain.name, ...sum(rows), topicCount: rows.length,
         studiedTopics: rows.filter(x => x.total).length };
     });
+    const knownSubjects = new Set(DOMAINS.flatMap(x => x.subjects));
+    const uncategorized = topics.filter(x => !knownSubjects.has(x.subject));
+    if (uncategorized.length) domainStats.push({
+      id: 'other', name: '其他領域', ...sum(uncategorized),
+      topicCount: uncategorized.length,
+      studiedTopics: uncategorized.filter(x => x.total).length
+    });
     const practiced = topics.filter(x => x.total > 0);
     const strengths = practiced.filter(x => x.total >= 5 && x.estimate >= 78)
       .sort((a, b) => b.estimate - a.estimate || b.total - a.total).slice(0, 4);
@@ -100,9 +107,10 @@
       delta: recent.length >= 5 && previous.length >= 5 ? percentage(recent) - percentage(previous) : null };
   }
   function aiSummary(report, subject = null, trend = null) {
-    const rows = (subject ? report.topics.filter(x => x.subject === subject) : report.topics)
-      .filter(x => x.total > 0).sort((a, b) => a.estimate - b.estimate).slice(0, 20);
-    const selectedRows = subject ? report.topics.filter(x => x.subject === subject) : report.topics;
+    const scope = subject ? report.topics.filter(x => x.subject === subject) : report.topics;
+    const rows = scope.filter(x => x.total > 0)
+      .sort((a, b) => a.estimate - b.estimate).slice(0, 20);
+    const selectedRows = scope;
     const scopedStats = sum(selectedRows.filter(x => x.total));
     return { subject: cleanLabel(subject || '綜合'), total: Math.min(200000, scopedStats.total),
       correct: Math.min(200000, scopedStats.correct),
@@ -110,7 +118,14 @@
       availableTopics: selectedRows.length,
       topics: rows.map(x => ({ subject: x.subject, topic: x.topic, total: x.total,
         correct: x.correct, estimate: x.estimate, confidence: x.confidence })),
-      priorities: report.priorities.filter(x => !subject || x.subject === subject).slice(0, 4)
+      priorities: [...scope.filter(x => x.total >= 5 && x.estimate < 60),
+        ...scope.filter(x => x.total >= 5 && x.estimate >= 60 && x.estimate < 78),
+        ...scope.filter(x => x.total < 5)]
+        .sort((a, b) => {
+          const order = x => x.total >= 5 && x.estimate < 60 ? 0 :
+            x.total >= 5 && x.estimate < 78 ? 1 : 2;
+          return order(a) - order(b) || (a.estimate ?? 100) - (b.estimate ?? 100);
+        }).slice(0, 4)
         .map(x => ({ subject: x.subject, topic: x.topic, total: x.total, estimate: x.estimate })),
       ...(trend ? { trend } : {}) };
   }
