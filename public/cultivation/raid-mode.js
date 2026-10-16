@@ -3,7 +3,8 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
 import { snapshotBattleKnowledge, resolveBattleKnowledge } from './battle-question-scope.js';
 import { generateRaidQuestion } from './raid-question.js';
 import {
-  ensureRaidRoomAuth, getRaidTicketState, createRaidRoom, findOrCreateRaidRoom, joinRaidRoomByCode, reconnectRaidRoom,
+  ensureRaidRoomAuth, getRaidTicketState, createRaidRoom, findOrCreateRaidRoom, joinRaidRoomByCode,
+  listPublicRaidRooms, joinPublicRaidRoom, setRaidPublicVisibility, reconnectRaidRoom,
   setRaidReady, startRaidRoom, subscribeRaidRoom, heartbeatRaidRoom, commitRaidPlayerAction,
   commitRaidBossDefense, advanceRaidBossAction, leaveRaidRoom, raidRoomMembers, raidMemberOnline
 } from './raid-room.js';
@@ -66,7 +67,9 @@ import './raid-difficulty.js';
     selectedDifficulty: 'normal',
     hubAccessSignature: '',
     ticketState: { count:null, dailyGrant:2, cap:10, lastGrantDate:'' },
-    ticketLoading: false
+    ticketLoading: false,
+    publicRooms: [], publicRoomsLoadedAt: 0, publicRoomsLoading: false,
+    publicJoinBusy: false, publicListError: '', publicRefreshSerial: 0
   };
 
   function now() { return Date.now(); }
@@ -407,6 +410,51 @@ import './raid-difficulty.js';
       (state.roomId ? '秘境隊伍進行中' : '選擇團本・建議 3 人同行');
   }
 
+  function renderRecruitmentList() {
+    const target=document.getElementById('raid-public-rooms');
+    if (!target || state.roomId || state.status!=='hub') return;
+    const visible=(state.publicRooms||[]);
+    const ticketMissing=Number(state.ticketState?.count)===0;
+    const rows=visible.map(room=>{
+      const tier=DIFFICULTY.get(room.difficulty)||DIFFICULTY.TIERS.normal;
+      const locked=score()<tier.minScore || ticketMissing;
+      const full=Number(room.playerCount)>=Number(room.maxMembers||4);
+      return '<article class="raid-public-entry"><div class="raid-public-entry-main">' +
+        '<strong>'+escapeHtml(room.hostName||'無名修士')+' <small>發起的隊伍</small></strong>' +
+        '<span>清霜試煉・'+escapeHtml(tier.name)+' <i>·</i> '+Number(room.playerCount)+' / '+Number(room.maxMembers||4)+' 人 <i>·</i> 準備 '+Number(room.readyCount)+' 人</span>' +
+        '</div><button type="button" class="raid-public-join" data-public-room-id="'+escapeHtml(room.roomId)+'" '+
+        (locked||full||state.publicJoinBusy?'disabled':'')+'>'+ (full?'已滿':locked?'境界或券不足':'加入')+'</button></article>';
+    }).join('');
+    target.innerHTML=rows ||
+      '<p class="raid-public-empty">'+(state.publicListError?escapeHtml(state.publicListError):
+        state.publicRoomsLoading?'正在尋找公開隊伍…':'目前沒有可加入的公開隊伍，可先建立隊伍開放招募。')+'</p>';
+    const refresh=target.parentElement?.querySelector('[data-public-refresh]');
+    if(refresh) refresh.disabled=state.publicRoomsLoading;
+  }
+
+  async function refreshPublicRecruitment({force=false}={}) {
+    const uid=playerRepository.currentUser()?.uid;
+    if(!uid || state.roomId || state.publicRoomsLoading || state.status!=='hub' ||
+       (!force && now()-state.publicRoomsLoadedAt<12000)) return;
+    state.publicRoomsLoading=true;
+    const serial=++state.publicRefreshSerial;
+    renderRecruitmentList();
+    try {
+      const rows=await listPublicRaidRooms();
+      if(serial!==state.publicRefreshSerial || uid!==playerRepository.currentUser()?.uid) return;
+      state.publicRooms=rows.filter(row=>row && /^[A-Za-z0-9_-]{8,160}$/.test(row.roomId));
+      state.publicListError='';
+    } catch(error) {
+      if(serial!==state.publicRefreshSerial) return;
+      state.publicListError=error.message||'公開招募暫時無法讀取';
+    } finally {
+      if(serial===state.publicRefreshSerial) {
+        state.publicRoomsLoading=false;state.publicRoomsLoadedAt=now();
+        renderRecruitmentList();
+      }
+    }
+  }
+
   function renderHub() {
     syncRaidTicketState();
     state.hubAccessSignature = hubAccessSignature();
@@ -463,7 +511,7 @@ import './raid-difficulty.js';
             escapeHtml(option.materialRealms.join('～')) + (locked ? '・需' + escapeHtml(option.minRealm) : '') +
             '</small></button>';
         }).join('') + '</div>' +
-        '<div class="raid-join-grid"><button class="raid-primary" type="button" data-quick ' + (selectedLocked ? 'disabled' : '') + '>快速加入／建立隊伍</button>' +
+        '<div class="raid-join-grid"><button class="raid-primary" type="button" data-quick ' + (selectedLocked ? 'disabled' : '') + '>快速加入／建立公開隊伍</button>' +
         '<button class="raid-ghost" type="button" data-create ' + (selectedLocked ? 'disabled' : '') + '>建立私人隊伍</button></div>' +
         '<div class="raid-code-join"><input id="raid-room-code-input" maxlength="6" aria-label="六碼隊伍代碼" placeholder="輸入 6 碼隊伍代碼"><button class="raid-ghost" type="button" data-code ' +
         (joinCodeLocked ? 'disabled' : '') + '>加入隊伍</button></div></div></article>';
@@ -475,8 +523,14 @@ import './raid-difficulty.js';
         (state.ticketState?.count == null ? '讀取中' : escapeHtml(state.ticketState.count + ' / ' + state.ticketState.cap)) +
         '</b><small>全團本共用・每日 +2・最多 10 張</small></span><span class="raid-global-ticket-dot" aria-hidden="true"' +
         (Number(state.ticketState.count) > 0 ? '' : ' hidden') + '></span></div></div><span class="raid-seal">團</span></header>' +
-      '<div class="raid-trial-list" role="list">' + trialCards + '</div>' + detail;
+      '<div class="raid-trial-list" role="list">' + trialCards + '</div>' + detail +
+      (selected.status==='open' ? '<section class="raid-public-recruitment" aria-label="公開隊伍招募">' +
+        '<header><div><small>PUBLIC RAID ／ 宗門招募</small><h3>公開隊伍</h3><p>顯示其他修士公開中的隊伍；私人隊伍僅能憑邀請代碼加入。</p></div>' +
+        '<button class="raid-ghost" type="button" data-public-refresh aria-label="重新整理公開隊伍">刷新</button></header>' +
+        '<div id="raid-public-rooms" class="raid-public-rooms" aria-live="polite"></div></section>' : '');
 
+    renderRecruitmentList();
+    if(selected.status==='open') void refreshPublicRecruitment();
     scheduleRaidHubFit();
     setTimeout(scheduleRaidHubFit, 120);
     setTimeout(scheduleRaidHubFit, 360);
@@ -498,6 +552,20 @@ import './raid-difficulty.js';
         });
       });
       hub.querySelector('[data-quick]')?.addEventListener('click', function () { void enterRoom('quick'); });
+      hub.querySelector('[data-public-refresh]')?.addEventListener('click',()=>{
+        state.publicRoomsLoadedAt=0;void refreshPublicRecruitment({force:true});
+      });
+      hub.querySelector('#raid-public-rooms')?.addEventListener('click',event=>{
+        const button=event.target.closest('[data-public-room-id]');
+        if(!button || button.disabled || state.publicJoinBusy)return;
+        const id=button.dataset.publicRoomId;
+        if(!/^[A-Za-z0-9_-]{8,160}$/.test(id))return;
+        state.publicJoinBusy=true;
+        void enterRoom('public',id).finally(()=>{
+          state.publicJoinBusy=false;
+          if(state.status==='hub'){state.publicRoomsLoadedAt=0;void refreshPublicRecruitment({force:true});}
+        });
+      });
       hub.querySelector('[data-create]')?.addEventListener('click', function () { void enterRoom('create'); });
       hub.querySelector('[data-code]')?.addEventListener('click', function () {
         void enterRoom('code', document.getElementById('raid-room-code-input')?.value || '');
@@ -568,7 +636,12 @@ import './raid-difficulty.js';
           '<span>戰力 ' + Math.max(0, Number(member.combatPower) || 0).toLocaleString() + '・HP ' + hp.toLocaleString() + '</span></div>' +
           '<b class="' + (member.ready ? 'ready' : '') + '">' + (member.ready ? '已準備' : '未準備') + '</b></article>';
       }).join('') + '</div>' +
-      '<div class="raid-lobby-actions"><button class="raid-ghost" type="button" data-copy>複製隊伍代碼</button>' +
+      '<div class="raid-lobby-actions"><span class="raid-lobby-visibility">'+
+      (state.room.visibility==='public'?'公開招募中':'私人隊伍')+'</span>' +
+      (isHost() ? '<button class="raid-ghost" type="button" data-visibility '+
+        (state.roomCommand?'disabled':'')+'>'+ (state.room.visibility==='public'?'改成私人隊伍':'開放公開招募')+
+        '</button>' : '') +
+      '<button class="raid-ghost" type="button" data-copy>複製隊伍代碼</button>' +
       (isHost() ? '<button class="raid-ghost" type="button" data-invite><i class="fa-solid fa-user-plus"></i> 邀請好友</button>' : '') +
       '<button class="raid-primary" type="button" data-ready ' + (state.roomCommand ? 'disabled' : '') + '>' + (state.roomCommand === 'ready' ? '準備中…' : me?.ready ? '取消準備' : '準備') + '</button>' +
       (isHost() ? '<button class="raid-primary" type="button" data-start ' + (allReady && !state.roomCommand ? '' : 'disabled') + '>' + (state.roomCommand === 'start' ? '開戰中…' : '開始團本') + '</button>' : '<span class="raid-wait-host">等待隊長開始</span>') + '</div>';
@@ -576,6 +649,20 @@ import './raid-difficulty.js';
     lobby.querySelector('[data-copy]')?.addEventListener('click', async function () {
       try { await navigator.clipboard.writeText(String(state.room.code || '')); toast('隊伍代碼已複製'); }
       catch (_) { toast('隊伍代碼：' + String(state.room.code || '')); }
+    });
+    lobby.querySelector('[data-visibility]')?.addEventListener('click',function(){
+      if(!isHost()||state.roomCommand)return;
+      const roomId=state.roomId;
+      state.roomCommand='visibility';renderLobby();
+      const visibility=state.room?.visibility==='public'?'private':'public';
+      void setRaidPublicVisibility(roomId,visibility).then(result=>{
+        if(state.roomId!==roomId)return;
+        if(result?.room)state.room=result.room;
+      }).catch(error=>toast(error.message||'修改招募狀態失敗')).finally(()=>{
+        if(state.roomId!==roomId)return;
+        state.roomCommand='';
+        if(state.room?.status==='waiting')renderLobby();
+      });
     });
     lobby.querySelector('[data-invite]')?.addEventListener('click', async function (event) {
       const button = event.currentTarget;
@@ -1215,7 +1302,7 @@ import './raid-difficulty.js';
     if (score() < RAID_MVP.minimumScore) return toast('需達' + RAID_MVP.minimumRealm + '（' + RAID_MVP.minimumScore + ' 修為）才可進入秘境。');
     if (storyOpen()) return toast('目前有劇情或教學進行中。');
     const tier = DIFFICULTY.get(state.selectedDifficulty) || DIFFICULTY.TIERS.normal;
-    if (mode !== 'code' && score() < tier.minScore) return toast('需達' + tier.minRealm + '才能挑戰' + tier.name + '清霜試煉。');
+    if (!['code','public'].includes(mode) && score() < tier.minScore) return toast('需達' + tier.minRealm + '才能挑戰' + tier.name + '清霜試煉。');
     if (state.roomId && ['won', 'lost', 'closed'].includes(state.room?.status)) resetRaid(false);
     state.status = 'loading';
     window.dispatchEvent(new CustomEvent('xiuxian:invite-blocked'));
@@ -1230,6 +1317,7 @@ import './raid-difficulty.js';
       const receive = result => { initialResult = result; };
       const roomId = mode === 'create' ? await createRaidRoom(receive,state.selectedDifficulty) :
         mode === 'code' ? await joinRaidRoomByCode(roomCode,receive) :
+        mode === 'public' ? await joinPublicRaidRoom(roomCode,receive) :
         await findOrCreateRaidRoom(receive,state.selectedDifficulty);
       attachRoom(roomId, initialResult);
     } catch (error) {
@@ -1592,7 +1680,17 @@ import './raid-difficulty.js';
     window.addEventListener('xiuxian:stats-updated', refreshAccess);
     window.addEventListener('xiuxian:training-access-updated', refreshAccess);
     window.addEventListener('xiuxian:raid-tickets-updated', syncRaidTicketState);
-    const refreshVisibleTickets = () => { if (!document.hidden) void refreshRaidTickets({ rerender:false }); };
+    window.setInterval(()=>{
+      if(!document.hidden && !state.roomId && state.status==='hub' &&
+        document.getElementById(PAGE_ID)?.classList.contains('hidden')===false)
+        void refreshPublicRecruitment();
+    },12000);
+    const refreshVisibleTickets = () => {
+      if (!document.hidden) {
+        void refreshRaidTickets({ rerender:false });
+        if(state.status==='hub') void refreshPublicRecruitment();
+      }
+    };
     ['focus', 'pageshow', 'online'].forEach(name => window.addEventListener(name, refreshVisibleTickets));
     document.addEventListener('visibilitychange', refreshVisibleTickets);
     scheduleRaidTicketDay();

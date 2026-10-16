@@ -100,6 +100,19 @@ export async function findOrCreateRaidRoom(onResult, difficulty = 'normal') {
   onResult?.(result);
   return result.roomId;
 }
+export async function listPublicRaidRooms() {
+  const result=await api('list-public');
+  return Array.isArray(result.rooms)?result.rooms:[];
+}
+export async function joinPublicRaidRoom(roomId,onResult) {
+  const result=await api('join-public',{roomId});
+  remember(result.roomId);
+  onResult?.(result);
+  return result.roomId;
+}
+export async function setRaidPublicVisibility(roomId, visibility) {
+  return api('set-visibility',{roomId,visibility});
+}
 export async function joinRaidRoomByCode(roomCode,onResult) {
   const result = await api('join-code', { roomCode });
   remember(result.roomId);
