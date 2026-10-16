@@ -85,7 +85,11 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     const number = count ? ((carouselStart + 1) % count) + 1 : 0;
     return `<section class="sb-showcase" aria-label="常駐本命法器共用池">
       <div class="sb-showcase-heading"><h3>常駐法器</h3>
-      <span class="sb-carousel-count" aria-label="中央法器為第 ${number} 件，共 ${count} 件">${String(number).padStart(2, '0')} / ${String(count).padStart(2, '0')}</span></div>
+      <div class="sb-carousel-nav">
+        <button type="button" data-sb-carousel-prev aria-label="查看上一件法器">‹</button>
+        <span class="sb-carousel-count" aria-label="中央法器為第 ${number} 件，共 ${count} 件">${String(number).padStart(2, '0')} / ${String(count).padStart(2, '0')}</span>
+        <button type="button" data-sb-carousel-next aria-label="查看下一件法器">›</button>
+      </div></div>
       <div class="sb-carousel-viewport" aria-label="每次展示三件法器，中央法器較大">
         <div class="sb-carousel-track">${cards}</div>
       </div>
@@ -133,6 +137,17 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
         scheduleCarousel();
       }, CAROUSEL_MOVE_MS);
     }, CAROUSEL_DELAY_MS);
+  }
+  function manualCarousel(delta) {
+    stopCarousel();
+    const showcase = $('soulbound-content')?.querySelector('.sb-showcase');
+    const rank = snapshot?.rank ?? Math.max(0, pool.rankFor(window.getTrainingAccessScore?.() ??
+      globalThis.QATrainingAccessRules.score(data())));
+    const candidates = pool.candidates(Math.max(0, rank));
+    if (!showcase || !candidates.length) return;
+    carouselStart = (carouselStart + delta + candidates.length) % candidates.length;
+    showcase.outerHTML = showcaseMarkup(candidates);
+    scheduleCarousel();
   }
   function previewMarkup(item) {
     return `<section class="sb-preview-card" role="dialog" aria-modal="true" aria-labelledby="sb-preview-title"
@@ -312,6 +327,10 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       const button = e.target.closest('button'); if (!button || button.disabled) return;
       if (button.hasAttribute('data-sb-preview')) {
         showPreview(button.dataset.sbPreview, button);
+        return;
+      }
+      if (button.hasAttribute('data-sb-carousel-prev') || button.hasAttribute('data-sb-carousel-next')) {
+        manualCarousel(button.hasAttribute('data-sb-carousel-prev') ? -1 : 1);
         return;
       }
       if (busy) return;
