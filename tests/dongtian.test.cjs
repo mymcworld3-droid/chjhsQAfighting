@@ -159,11 +159,11 @@ test('review summaries with DT ids are structured and auto-repaired even when is
       {questionId:'DT-003',issue:'計算結果與選項不符'},
       {questionId:'DT-012',issue:'題幹邏輯與正解矛盾'}
     ]},
-    { q:'改寫後第14題',correct:'A14',wrong:['B14','C14','D14'],exp:'修正後解析14' },
+    { q:'改寫後第14題',correct:'A14',wrong:['B14','C14','D14'],exp:'根據條件計算，此題只有 A14 符合題意。' },
     { essencePreserved:true,errorResolved:true,singleCorrect:true,noNewError:true,levelAppropriate:true,confidence:0.96 },
-    { q:'改寫後第3題',correct:'A3',wrong:['B3','C3','D3'],exp:'修正後解析3' },
+    { q:'改寫後第3題',correct:'A3',wrong:['B3','C3','D3'],exp:'根據條件計算，此題只有 A3 符合題意。' },
     { essencePreserved:true,errorResolved:true,singleCorrect:true,noNewError:true,levelAppropriate:true,confidence:0.96 },
-    { q:'改寫後第12題',correct:'A12',wrong:['B12','C12','D12'],exp:'修正後解析12' },
+    { q:'改寫後第12題',correct:'A12',wrong:['B12','C12','D12'],exp:'根據條件計算，此題只有 A12 符合題意。' },
     { essencePreserved:true,errorResolved:true,singleCorrect:true,noNewError:true,levelAppropriate:true,confidence:0.96 },
     { approved:true, confidence:0.97, summary:'修正後全題通過', issues:[] }
   ];
@@ -471,7 +471,7 @@ test('Owner repair is prompt-only, preserves question identity, and requires a s
 test('Standalone revision normalization cannot change id, subject, or difficulty', () => {
   const original = { id: 'DT-007', difficulty: 'hard', q: '原題', correct: '甲', wrong: ['乙','丙','丁'], exp: '原解析', subject: '數學' };
   const revised = api.normalizeStandaloneQuestion({
-    id: 'HACK', difficulty: 'easy', subject: '歷史', q: '修正題', correct: '1', wrong: ['2','3','4'], exp: '修正解析'
+    id: 'HACK', difficulty: 'easy', subject: '歷史', q: '修正題', correct: '1', wrong: ['2','3','4'], exp: '依據條件可知唯一正解為 1。'
   }, original);
   assert.equal(revised.id, 'DT-007');
   assert.equal(revised.difficulty, 'hard');
