@@ -108,22 +108,34 @@ test('normal and guaranteed draws use all eight weapons regardless of a requeste
   }
 });
 
-test('common-pool presentation shows all weapons without a selectable draw target', () => {
+test('common-pool presentation rotates three visible weapons without selecting a draw target', () => {
   const source = fs.readFileSync('public/cultivation/soulbound-draw.js', 'utf8');
-  const markup = source.slice(source.indexOf('  function effectText('), source.indexOf('  function comparison('));
-  const context = { pool, esc: value => String(value ?? ''), artifactRealmColor: () => '#c7a35e' };
-  vm.runInNewContext(markup + '\nthis.views = { showcaseMarkup, galleryMarkup };', context);
+  const markup = source.slice(source.indexOf('  function showcaseMarkup('), source.indexOf('  function probabilityMarkup('));
+  const context = {
+    pool, carouselStart: 0, esc: value => String(value ?? ''),
+    image: item => '<img src="' + item.imageUrl + '">',
+    artifactRealmColor: () => '#c7a35e'
+  };
+  vm.runInNewContext(markup + '\nthis.showcaseMarkup = showcaseMarkup;', context);
   for (let rank = 0; rank < pool.REALMS.length; rank++) {
     const candidates = pool.candidates(rank);
-    const showcase = context.views.showcaseMarkup(candidates);
-    const gallery = context.views.galleryMarkup(candidates, rank);
-    assert.equal((showcase.match(/<figure>/g) || []).length, 8);
-    assert.equal((gallery.match(/<article /g) || []).length, 8);
-    for (const item of candidates) assert.ok(showcase.includes(item.name));
-    assert.doesNotMatch(showcase + gallery, /<button|aria-pressed|data-sb-preview/);
+    const first = context.showcaseMarkup(candidates);
+    assert.match(first, /<h3>常駐法器<\/h3>/);
+    assert.equal((first.match(/data-sb-preview=/g) || []).length, 4);
+    assert.equal((first.match(/aria-hidden="true"/g) || []).length, 1);
+    assert.equal((first.match(/is-center/g) || []).length, 1);
+    for (const item of candidates.slice(0, 4)) assert.ok(first.includes(item.imageUrl), item.name);
+    context.carouselStart = 1;
+    const second = context.showcaseMarkup(candidates);
+    assert.ok(!second.includes(candidates[0].imageUrl));
+    assert.ok(second.includes(candidates[4].imageUrl), 'new weapon enters from right');
+    context.carouselStart = 0;
   }
-  assert.doesNotMatch(source, /previewArchetype|data-sb-preview/);
+  assert.doesNotMatch(source, /galleryMarkup|池內法器一覽|寶庫 · 調御與精煉|data-sb-refine/);
+  assert.match(source, /data-sb-preview/);
+  assert.doesNotMatch(source, /previewArchetype|targetArchetype/);
 });
+
 
 test('promotion preserves the consecutive counter and server verifies immortal cohort seats', async () => {
  const user=sample();user.stats.totalScore=1;user.trainingAccess={version:1,highestRealmScore:68};
