@@ -347,7 +347,7 @@ const translations = {
         rank_grandmaster: "🔥 宗師",
         rank_king: "👑 王者",
         analysis_title: "能力分析圖譜",
-        analysis_desc: "基於近期答題表現分析 (正確率)"
+        analysis_desc: "依答題紀錄估計各單元能力，並提供 AI 補強建議"
     },
     'en': {
         app_title: "Qingyun · The Path of Learning",
@@ -471,7 +471,7 @@ const translations = {
         rank_grandmaster: "🔥 Grandmaster",
         rank_king: "👑 King",
         analysis_title: "能力分析圖譜",
-        analysis_desc: "基於近期答題表現分析 (正確率)"
+        analysis_desc: "依答題紀錄估計各單元能力，並提供 AI 補強建議"
     }
 };
 
