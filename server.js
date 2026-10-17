@@ -418,10 +418,12 @@ function chooseQuestionForm(previousMeta, seed) {
 // ==========================================
 const { MODES: FAST_QUIZ_MODES, quickQuizPrompt } = require('./fast-quiz-prompt.cjs');
 const raidDifficultyRules = require('./public/cultivation/raid-difficulty.js');
+const { createSparePool } = require('./quiz-spare-pool.cjs');
+const quizSparePool = createSparePool({ similar: (a, b) => isTooSimilarQuestion(a, [b]) });
 
 app.post('/api/generate-quiz', async (req, res) => {
     // 兼容前端可能傳來的 specificTopic 或 topic
-    let { subject, level, rank, difficulty, knowledgeMap, specificTopic, topic, avoidQuestions, avoidQuestionMeta, quizMode } = req.body || {};
+    let { subject, level, rank, difficulty, knowledgeMap, specificTopic, topic, avoidQuestions, avoidQuestionMeta, quizMode, quizSessionId } = req.body || {};
     subject = String(subject || '').trim().slice(0, 40);
     level = String(level || '國中一年級').slice(0, 32);
     const raidQuickSimple = String(quizMode || '') === 'raid-quick-simple';
@@ -595,7 +597,44 @@ app.post('/api/generate-quiz', async (req, res) => {
         請檢查：答案 "correct" 只有一個、錯誤答案中沒有正確答案、選項必須在選項裡不可在題目裡、不可為多選題。
     `;
 
-    // 6. 呼叫 AI (取消雙重呼叫，改為直接解析)
+    // Cache is private to a verified raid/trial player, or to a high-entropy
+    // client session for regular/duel quizzes. Different topics or difficulty
+    // never share saved candidates. Do not store question tickets or credentials.
+    const requestedSession = String(quizSessionId || '');
+    const sessionOwner = raidTicketMode ? `raid:${raidIdentity}:${raidRoomId}`
+        : enlightenmentMode ? `trial:${enlightenmentContext.uid}`
+        : /^[a-zA-Z0-9_-]{20,128}$/.test(requestedSession) ? `session:${requestedSession}` : '';
+    const spareKey = quizSparePool.key({
+        owner: sessionOwner, mode: String(quizMode || 'solo'), subject, level,
+        topic: targetTopic, difficulty, rank,
+        knowledge: diagnosticInfo // never share between different diagnostic modes
+    });
+    const validateCandidate = (parsed, extraQuestions = [], extraTemplates = []) => {
+        const wrong = Array.isArray(parsed?.wrong) ? parsed.wrong : [];
+        const options = [parsed?.correct, ...wrong];
+        if (typeof parsed?.q !== 'string' || parsed.q.trim().length < 5 ||
+            typeof parsed.correct !== 'string' || wrong.length !== 3 ||
+            options.some(item => typeof item !== 'string' || !item.trim()) ||
+            new Set(options.map(fingerprint)).size !== 4 ||
+            typeof parsed.exp !== 'string' || parsed.exp.trim().length < 5 ||
+            (parsed.subject && String(parsed.subject).trim() !== subject) ||
+            isTooSimilarQuestion(parsed.q, [...previousQuestions, ...extraQuestions])) {
+            throw new Error('AI 題目未通過範圍、格式或結構去重檢查');
+        }
+        const qualityIssue = questionQualityIssue(parsed);
+        if (qualityIssue) throw new Error('AI 題目品質檢查失敗：' + qualityIssue);
+        const cleanedExplanation = removeUnstableOptionLabels(parsed.exp);
+        if (questionQualityIssue({ ...parsed, exp: cleanedExplanation })) {
+            throw new Error('解析整理後答案一致性檢查失敗');
+        }
+        const template = String(parsed.template_id || '').trim();
+        if (template && [...recentTemplates, ...extraTemplates].includes(template)) {
+            throw new Error('AI 題目與近期解題骨架重複');
+        }
+        return true;
+    };
+
+    // 6. Consume a previously validated spare before buying new API calls.
     let attempts = 0;
     let lastGenerationIssue = '';
     const maxAttempts = 3;
@@ -614,7 +653,16 @@ app.post('/api/generate-quiz', async (req, res) => {
             // Shorter instructions and bounded provider latency only for combat.
             // Every generated candidate still undergoes the SAME server-side
             // TeX, quality, answer consistency, and duplicate validation below.
-            const routed = await aiRouter.generateJSON(prompt, { ...(combatFastMode ? { timeoutMs: 16000 } : {}), parallel: true });
+            const saved = attempts === 0 ? quizSparePool.take(spareKey, validateCandidate) : null;
+            const routed = saved || await aiRouter.generateJSON(prompt, {
+                ...(combatFastMode ? { timeoutMs: 16000 } : {}),
+                parallel: true,
+                validate: validateCandidate,
+                promptForProvider: (base, index) => index === 0 ? base
+                    : base + `\n[候選題目差異化] 本次候選編號 ${index + 1}，請以不同情境、數字與考點切入，但維持指定學制、範圍及難度，產生獨立完整單選題。`,
+                onWinner: winner => quizSparePool.markServed(spareKey, winner.data),
+                onSpare: spare => quizSparePool.offer(spareKey, spare)
+            });
             const parsed = routed.data;
             const wrong = Array.isArray(parsed?.wrong) ? parsed.wrong : [];
             const options = [parsed?.correct, ...wrong];
