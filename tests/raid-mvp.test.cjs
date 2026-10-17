@@ -166,11 +166,12 @@ test('the entire trial page hides navigation and uses the available viewport', (
 });
 
 
-test('raid hub card is measured to the page bottom and cache-busted', () => {
-  assert.match(raidSource, /STYLE_HREF = 'styles\/raid-mode\.css\?v=20261016-three-difficulties'/);
-  assert.match(raidSource, /function fitRaidHubToViewport\(\)/);
-  assert.match(raidSource, /pageBottom - cardTop - 8/);
-  assert.match(raidSource, /card\.style\.setProperty\('height', targetHeight \+ 'px', 'important'\)/);
+test('raid hub scrolls as a whole without forcing its Boss card to the page bottom', () => {
+  assert.match(raidSource, /STYLE_HREF = 'styles\/raid-mode\.css\?v=20261017-scrollable-hub'/);
+  assert.doesNotMatch(raidSource, /function fitRaidHubToViewport\(\)/);
+  assert.doesNotMatch(raidSource, /card\.style\.setProperty\('height'/);
+  assert.match(cssSource, /#raid-hub:not\(\.hidden\)\s*\{[^}]*overflow-y:auto!important/);
+  assert.match(cssSource, /#raid-hub \.raid-boss-card\s*\{[^}]*height:auto; max-height:none/);
   assert.match(raidSource, /window\.addEventListener\('resize', scheduleRaidHubFit/);
   assert.match(raidSource, /setTimeout\(scheduleRaidHubFit, 360\)/);
 });
@@ -326,7 +327,7 @@ test('drop probability remains internal and shared ticket is presented at the ra
   const hubEnd = raidSource.indexOf('  async function inviteOnlineFriends', hubStart);
   const hub = raidSource.slice(hubStart, hubEnd);
   assert.match(hub,/秘境試煉/);
-  assert.match(hub,/選擇試煉後再組隊；每個團本可有獨立 Boss、合作規則與專屬掉落/);
+  assert.doesNotMatch(hub,/選擇試煉後再組隊；每個團本可有獨立 Boss、合作規則與專屬掉落/);
   assert.match(hub,/raid-ticket-status raid-global-ticket/);
   assert.match(hub,/全團本共用/);
   assert.ok(hub.indexOf('raid-ticket-status raid-global-ticket') < hub.indexOf("'<div class=\"raid-trial-list\""));
