@@ -8,6 +8,7 @@ import { playerRepository } from './data/player-repository.js';
   const QUIZ_LEVEL = '國中三年級';
   const ELEMENTARY_QUIZ_LEVEL = '國小高年級';
   const QUIZ_DIFFICULTY = 'medium';
+  const IMMORTAL_QUIZ_SESSION = (globalThis.crypto?.randomUUID?.() || Math.random().toString(36).slice(2) + Date.now().toString(36));
   const ROLES = [
     { id: 'ru-xian', name: '儒仙', subject: '國文', desc: '以文載道' },
     { id: 'fa-xian', name: '法仙', subject: '社會', desc: '洞察世事' },
@@ -183,7 +184,7 @@ import { playerRepository } from './data/player-repository.js';
     const response = await fetch('/api/generate-quiz', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ subject: role.subject, level, difficulty: QUIZ_DIFFICULTY, rank: userData()?.stats?.rankLevel || 0, quizMode: 'immortal-fast', avoidQuestions: avoidQuestions.slice(-12), specificTopic: `${role.subject}${currentGroup() === 'elementary' ? '國小' : '國中'}程度綜合題。題目需有唯一明確答案。` })
+      body: JSON.stringify({ subject: role.subject, level, difficulty: QUIZ_DIFFICULTY, rank: userData()?.stats?.rankLevel || 0, quizMode: 'immortal-fast', quizSessionId: IMMORTAL_QUIZ_SESSION + '-' + (auth?.currentUser?.uid || 'guest'), avoidQuestions: avoidQuestions.slice(-12), specificTopic: `${role.subject}${currentGroup() === 'elementary' ? '國小' : '國中'}程度綜合題。題目需有唯一明確答案。` })
     });
     if (!response.ok) throw new Error(`QUIZ_API_${response.status}`);
     const body = await response.json();

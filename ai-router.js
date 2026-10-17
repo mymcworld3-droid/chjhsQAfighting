@@ -213,11 +213,13 @@ async function generateJSON(prompt, options = {}) {
   const timeoutMs = Math.max(3000, Number(options.timeoutMs) || DEFAULT_TIMEOUT_MS);
   const ordered = orderedProviders(providers);
   const errors = [];
-  const attempt = async (provider) => {
+  const attempt = async (provider, index = 0) => {
     try {
-      const raw = await callProvider(provider, prompt, timeoutMs);
+      const candidatePrompt = typeof options.promptForProvider === 'function' ? options.promptForProvider(prompt, index) : prompt;
+      const raw = await callProvider(provider, candidatePrompt, timeoutMs);
       const text = extractJsonText(raw);
       const data = JSON.parse(text);
+      if (typeof options.validate === 'function') options.validate(data);
       recordAttempt(provider, 'success');
       console.log(`[AI Router] ${provider.name}/${provider.model} success`);
       return { data, text, provider: provider.name, model: provider.model };
@@ -242,19 +244,31 @@ async function generateJSON(prompt, options = {}) {
     wave.push(provider);
     seenCredentials.add(credential);
   }
+  // The first fully validated answer goes out immediately. Keep listening to
+  // slower providers: their valid unused results are donated to the next quiz.
+  let winnerChosen = false;
+  const collect = result => {
+    if (!winnerChosen) {
+      winnerChosen = true;
+      try { options.onWinner?.(result); } catch (error) { console.warn('[AI Router] winner callback failed:', error?.message); }
+    } else {
+      try { options.onSpare?.(result); } catch (error) { console.warn('[AI Router] spare callback failed:', error?.message); }
+    }
+    return result;
+  };
   if (wave.length > 1) {
     try {
-      return await Promise.any(wave.map(attempt));
+      return await Promise.any(wave.map((provider, index) => attempt(provider, index).then(collect)));
     } catch (_) {
       // All parallel attempts failed; remaining providers still get a chance.
     }
   } else if (wave.length === 1) {
-    try { return await attempt(wave[0]); } catch (_) { /* retry other providers */ }
+    try { return collect(await attempt(wave[0], 0)); } catch (_) { /* retry other providers */ }
   }
   const attempted = new Set(wave);
-  for (const provider of ordered) {
+  for (const [index, provider] of ordered.entries()) {
     if (attempted.has(provider)) continue;
-    try { return await attempt(provider); } catch (_) { /* continue fallback */ }
+    try { return collect(await attempt(provider, index)); } catch (_) { /* continue fallback */ }
   }
   throw new Error(`All AI providers failed: ${errors.join(' | ')}`);
 }
