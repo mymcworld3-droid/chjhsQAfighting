@@ -1092,10 +1092,8 @@ input:focus, textarea:focus {
     .loader { width: 30px; height: 30px; }
     .radar-scan { width: 100px; height: 100px; }
     
-    /* 減少移動端的動畫以提升性能 */
-    * {
-        animation-duration: 0.5s !important;
-    }
+    /* 動畫保留各自以秒設定的時間軸；低幀率不應改變播放速度。
+       不可全域縮短 duration，否則主頁卡片與突破特效也會被加速。 */
 }
 
 /* ==========================================

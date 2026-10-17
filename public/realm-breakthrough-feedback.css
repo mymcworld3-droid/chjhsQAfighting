@@ -17,7 +17,8 @@
   display: grid;
   place-items: center;
   overflow: hidden;
-  pointer-events: none;
+  pointer-events: auto;
+  touch-action: manipulation;
   opacity: 0;
   background:
     radial-gradient(circle at 50% 48%, rgba(216,177,93,.10), transparent 26%),
@@ -29,6 +30,23 @@
 
 .realm-breakthrough-feedback.show { opacity: 1; }
 .realm-breakthrough-feedback.leaving { opacity: 0; }
+.realm-breakthrough-feedback.can-continue { cursor: pointer; }
+.realm-breakthrough-continue {
+  display: block;
+  width: 100%;
+  margin-top: 18px;
+  padding: 8px;
+  border: 0;
+  background: transparent;
+  color: #f3dca2;
+  font: inherit;
+  font-size: 13px;
+  letter-spacing: .12em;
+  cursor: pointer;
+  animation: realmContinuePulse 2s ease-in-out infinite;
+}
+.realm-breakthrough-continue[hidden] { display: block; visibility: hidden; }
+@keyframes realmContinuePulse { 50% { opacity: .55; } }
 
 .realm-breakthrough-flash {
   position: absolute;
@@ -265,7 +283,8 @@
   .realm-breakthrough-ring,
   .realm-breakthrough-particle,
   .realm-breakthrough-card,
-  .realm-breakthrough-icon {
+  .realm-breakthrough-icon,
+  .realm-breakthrough-continue {
     animation: none !important;
   }
   .realm-breakthrough-card { opacity: 1; transform: none; }

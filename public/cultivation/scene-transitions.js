@@ -1,4 +1,4 @@
-// Slide effects only; the training map coordinates its own cloud navigation.
+// Page navigation uses the same in-document slide, including the training map.
 const running = new Map();
 const themes = {
   cloud: { duration: 380, color: 'rgba(176,213,216,.22)' },
@@ -42,8 +42,7 @@ export function beginSceneTransition(from, to, theme = 'cloud', scope = 'page', 
   const noop = () => {};
   // The training cloud curtain owns this navigation. Starting a second page
   // or tab slide underneath it makes the reveal appear to jump.
-  if (document.body.classList.contains('training-cloud-navigating') ||
-      (scope === 'page' && to?.id === 'page-training')) {
+  if (document.body.classList.contains('training-cloud-navigating')) {
     running.get(scope)?.();
     return noop;
   }

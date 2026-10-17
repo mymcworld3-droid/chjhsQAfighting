@@ -37,12 +37,14 @@ test('realm observers defer breakthroughs until absorption ends, including the e
     isSoloCultivationFeedbackActive: () => active,
     waitForSoloCultivationFeedback: () => new Promise(resolve => { resolveAbsorption = resolve; }),
     addEventListener: (type, fn) => listeners.set(type, fn),
+    removeEventListener() {},
     dispatchEvent: event => events.push(event)
   };
-  const node = () => ({ classList:{add(){}},setAttribute(){},remove(){} });
+  const node = () => ({ classList:{add(){}},setAttribute(){},remove(){},focus(){},querySelector:()=>({hidden:true}) });
   vm.runInNewContext(read('realm-breakthrough-feedback.js'), {
     window, navigator:{}, CustomEvent: class { constructor(type, options) { this.type=type;this.detail=options.detail; } },
     document:{readyState:'complete',querySelector:()=>true, getElementById:id=>overlays.get(id),createElement:node,
+      addEventListener(){},removeEventListener(){},
       body:{appendChild:el=>overlays.set(el.id,el)}},
     setTimeout(){},clearTimeout(){},setInterval(){},requestAnimationFrame:fn=>fn()
   });
