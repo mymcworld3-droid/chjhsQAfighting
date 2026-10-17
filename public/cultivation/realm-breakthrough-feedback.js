@@ -137,6 +137,8 @@
   }
 
   function checkRealm() {
+    // 問道收益先完成光球吸收與進度條；保留舊境界，結束後才檢查跨境。
+    if (window.isSoloCultivationFeedbackActive?.()) return;
     const value = currentScore();
     if (value == null) return;
     const currentIndex = realmIndexFor(value);
@@ -159,7 +161,8 @@
     if (currentIndex < lastRealmIndex) lastRealmIndex = currentIndex;
   }
 
-  window.showFirstQiBreakthrough = () => {
+  window.showFirstQiBreakthrough = async () => {
+    await window.waitForSoloCultivationFeedback?.();
     loadStyle();
     initialized = true;
     lastRealmIndex = realmIndexFor(currentScore() || 1);
@@ -181,6 +184,7 @@
     }
 
     window.addEventListener('xiuxian:stats-updated', checkRealm);
+    window.addEventListener('xiuxian:solo-cultivation-feedback-end', checkRealm);
   }
 
   if (document.readyState === 'loading') {

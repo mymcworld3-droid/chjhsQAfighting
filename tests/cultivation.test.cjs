@@ -37,6 +37,7 @@ function setup(totalScore = 0) {
   const listeners = new Map();
   const writes = [];
   const logs = [];
+  const feedback = [];
   let remoteUser = null;
   const context = vm.createContext({
     console, Math, Date, Number, WeakSet,
@@ -59,6 +60,16 @@ function setup(totalScore = 0) {
       constructor(type, options = {}) { this.type = type; this.detail = options.detail; }
     },
     navigator: {}, setTimeout() {}, db: {},
+    beginSoloCultivationFeedback(options) {
+      feedback.push({ type: 'begin', scoreBefore: options.scoreBefore });
+      return {
+        async play(reward) {
+          feedback.push({ type: 'play', ...reward });
+          await context.waitForCultivationFeedback?.();
+        },
+        cancel() { feedback.push({ type: 'cancel' }); }
+      };
+    },
     auth: { currentUser: { uid: 'test-user', email: 'test@example.com' } },
     doc: (_, ...parts) => parts.join('/'),
     collection: (_, path) => path,
@@ -118,13 +129,43 @@ function setup(totalScore = 0) {
     return context.handleAnswer(userIdx, correctIdx, 'Question', 'Explanation');
   }
   newQuiz();
-  return { context, nodes, writes, logs, newQuiz, answer,
+  return { context, nodes, writes, logs, feedback, newQuiz, answer,
     setRemoteStats(patch) {
       remoteUser ||= structuredClone(context.currentUserData);
       Object.assign(remoteUser.stats, patch);
     }
   };
 }
+
+test('first-answer breakthrough handoff waits for verified cultivation absorption without another reward write', async () => {
+  const h = setup(27);
+  let release, handedOff = false;
+  h.context.waitForCultivationFeedback = () => new Promise(resolve => { release = resolve; });
+  h.context.window.beginFirstVisitAnswer = () => true;
+  h.context.window.handleFirstVisitAnswer = async () => { handedOff = true; };
+  const answering = h.answer();
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(h.writes.length, 1);
+  assert.equal(handedOff, false);
+  assert.deepEqual(h.feedback[0], { type: 'begin', scoreBefore: 27 });
+  assert.deepEqual(h.feedback[1], { type: 'play', gain: 1, totalScore: 28 });
+  release();
+  await answering;
+  assert.equal(handedOff, true);
+  assert.equal(h.writes.length, 1);
+  assert.equal(h.feedback.at(-1).type, 'cancel');
+});
+
+test('failed answer persistence releases cultivation feedback and wrong answers create none', async () => {
+  const h = setup(28);
+  h.context.runTransaction = async () => { throw new Error('offline'); };
+  await h.answer();
+  assert.equal(h.feedback.at(-1).type, 'cancel');
+  assert.equal(h.feedback.some(item => item.type === 'play'), false);
+  const miss = setup(28);
+  await miss.answer(1, 0);
+  assert.equal(miss.feedback.length, 0);
+});
 
 test('first-visit answer waits for persistence before advancing; an uncertain-write retry cannot award twice', async () => {
   const { context, writes, answer } = setup();

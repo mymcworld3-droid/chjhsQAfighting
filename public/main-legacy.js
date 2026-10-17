@@ -19,6 +19,7 @@ import {
 
 import { applyCultivationReward, showCultivationFeedback } from './cultivation-rules.js';
 import { soulCultivationBonusForPlayer } from './cultivation/nascent-soul-rules.js';
+import { beginSoloCultivationFeedback } from './cultivation/solo-cultivation-feedback.js';
 
 // Canvas chart labels cannot inherit the shared page typography through CSS.
 const XIUXIAN_FONT_FAMILY = "'Noto Serif TC', 'Songti TC', 'PMingLiU', serif";
@@ -3086,6 +3087,7 @@ window.fetchDailyMeditationQuestion = fetchOneQuestion;
 /// 🔥 修改：在進入下一題前才清除舊題目，確保 startQuizFlow 能抓到新題目
 let soloNextBusy = false;
 window.nextQuestion = async () => {
+    if (window.isSoloCultivationFeedbackActive?.()) return;
     if (window.isFirstVisitTrial?.() && !window.isFirstVisitQuestion?.()) return;
     const quiz = window.currentActiveQuiz;
     // One roll per completed question; rapid clicks and unanswered questions cannot farm encounters.
@@ -3207,6 +3209,12 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     const learningReward = learningRules?.reward(stats, quiz, isCorrect, currentUserData.profile) || {gain:0,gold:0,recovery:false};
     if (learningReward.progress) stats.soloLearningV1 = learningReward.progress;
     const scoreBeforeAnswer = Math.max(0, Number(stats.totalScore) || 0);
+    // 必須先攔住境界監看，再套用修為，避免突破提示搶在靈氣入體之前。
+    const cultivationFeedback = isCorrect ? beginSoloCultivationFeedback({
+        scoreBefore: scoreBeforeAnswer,
+        source: document.getElementById(`option-btn-${correctIdx}`),
+        realms: REALMS
+    }) : null;
     const shieldBeforeAnswer = !!stats.goldenCoreShield;
     const cultivationReward = applyCultivationReward(stats, isCorrect, {
         soulBonusGain: soulCultivationBonusForPlayer(currentUserData, 'solo'),
@@ -3311,7 +3319,10 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
                 updateUIStats();
                 if (isCorrect && fbTitle) fbTitle.innerHTML = `${t('msg_correct')} <span class="text-yellow-400 text-sm ml-2">+${scoreGain}💰 · +${cultivationReward.gain} 修為</span>`;
                 window.dispatchEvent(new CustomEvent('xiuxian:quest-progress-updated'));
-            }).then(() => showCultivationFeedback(cultivationReward, isCorrect));
+            }).then(async () => {
+                await cultivationFeedback?.play({ gain: cultivationReward.gain, totalScore: stats.totalScore });
+                showCultivationFeedback(cultivationReward, isCorrect);
+            });
     try {
         const p1 = shouldSaveAnswer
             ? persistAnswer()
@@ -3352,6 +3363,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         if (p1) await p1;
         answerSaved = true;
     } catch (e) { console.error("Firebase Error", e); }
+    finally { cultivationFeedback?.cancel(); }
 
     if (answerSaved && userIdx >= 0) {
         const eventId = quiz ? (quiz.analyticsAnswerEventId ||= window.newPlayerAnalyticsEventId?.()) : window.newPlayerAnalyticsEventId?.();
