@@ -19,7 +19,7 @@ import './raid-difficulty.js';
 
   const DIFFICULTY = globalThis.QARaidDifficulty;
   const PAGE_ID = 'page-raid';
-  const STYLE_HREF = 'styles/raid-mode.css?v=20261016-three-difficulties';
+  const STYLE_HREF = 'styles/raid-mode.css?v=20261017-scrollable-hub';
   const MALE = 'assets/story/characters/player-male-determined.png';
   const FEMALE = 'assets/story/characters/player-female-determined.png';
   const HEARTBEAT_MS = 8000;
@@ -194,28 +194,11 @@ import './raid-difficulty.js';
   }
   let raidHubFitFrame = 0;
 
-  function fitRaidHubToViewport() {
-    const page = document.getElementById(PAGE_ID);
-    const hub = document.getElementById('raid-hub');
-    const card = hub?.querySelector?.('.raid-boss-card');
-    if (!page?.classList.contains('active-page') || page.classList.contains('hidden') ||
-        !hub || hub.classList.contains('hidden') || !card) return;
-    const pageRect = page.getBoundingClientRect?.();
-    const cardRect = card.getBoundingClientRect?.();
-    const pageBottom = Number(pageRect?.bottom) || 0;
-    const cardTop = Number(cardRect?.top) || 0;
-    if (!(pageBottom > cardTop && cardTop > 0)) return;
-    const targetHeight = Math.max(180, Math.floor(pageBottom - cardTop - 8));
-    card.style.setProperty('height', targetHeight + 'px', 'important');
-    card.style.setProperty('max-height', targetHeight + 'px', 'important');
-  }
-
   function scheduleRaidHubFit() {
     cancelAnimationFrame(raidHubFitFrame);
     raidHubFitFrame = requestAnimationFrame(() => {
       raidHubFitFrame = requestAnimationFrame(() => {
         syncRaidBottomClearance();
-        fitRaidHubToViewport();
       });
     });
   }
@@ -420,14 +403,14 @@ import './raid-difficulty.js';
       const locked=score()<tier.minScore || ticketMissing;
       const full=Number(room.playerCount)>=Number(room.maxMembers||4);
       return '<article class="raid-public-entry"><div class="raid-public-entry-main">' +
-        '<strong>'+escapeHtml(room.hostName||'無名修士')+' <small>發起的隊伍</small></strong>' +
-        '<span>清霜試煉・'+escapeHtml(tier.name)+' <i>·</i> '+Number(room.playerCount)+' / '+Number(room.maxMembers||4)+' 人 <i>·</i> 準備 '+Number(room.readyCount)+' 人</span>' +
+        '<strong>'+escapeHtml(room.hostName||'無名修士')+'</strong>' +
+        '<span>'+escapeHtml(tier.name)+' <i>·</i> '+Number(room.playerCount)+' / '+Number(room.maxMembers||4)+' 人 <i>·</i> '+Number(room.readyCount)+' 人準備</span>' +
         '</div><button type="button" class="raid-public-join" data-public-room-id="'+escapeHtml(room.roomId)+'" '+
-        (locked||full||state.publicJoinBusy?'disabled':'')+'>'+ (full?'已滿':locked?'境界或券不足':'加入')+'</button></article>';
+        (locked||full||state.publicJoinBusy?'disabled':'')+'>'+ (full?'已滿':ticketMissing?'缺入場券':locked?'未解鎖':'加入')+'</button></article>';
     }).join('');
     target.innerHTML=rows ||
       '<p class="raid-public-empty">'+(state.publicListError?escapeHtml(state.publicListError):
-        state.publicRoomsLoading?'正在尋找公開隊伍…':'目前沒有可加入的公開隊伍，可先建立隊伍開放招募。')+'</p>';
+        state.publicRoomsLoading?'尋找隊伍中…':'暫無隊伍，可點「快速組隊」開房。')+'</p>';
     const refresh=target.parentElement?.querySelector('[data-public-refresh]');
     if(refresh) refresh.disabled=state.publicRoomsLoading;
   }
@@ -446,7 +429,8 @@ import './raid-difficulty.js';
       state.publicListError='';
     } catch(error) {
       if(serial!==state.publicRefreshSerial) return;
-      state.publicListError=error.message||'公開招募暫時無法讀取';
+      state.publicListError='暫時無法讀取隊伍，請稍後刷新。';
+      console.warn('[Raid] recruitment unavailable:',error?.message||error);
     } finally {
       if(serial===state.publicRefreshSerial) {
         state.publicRoomsLoading=false;state.publicRoomsLoadedAt=now();
@@ -486,20 +470,17 @@ import './raid-difficulty.js';
         escapeHtml(selected.mechanic) + '</span></div><small>' + escapeHtml(selected.location) + '</small><h3>' +
         escapeHtml(selected.bossTitle) + '</h3><p>' + escapeHtml(selected.description) + '</p>' +
         '<div class="raid-future-drop"><i class="fa-solid fa-gem"></i><span><b>預定獎勵方向</b><small>' +
-        selected.rewards.map(escapeHtml).join('・') + '</small></span></div>' +
-        '<div class="raid-prototype-note"><i class="fa-solid fa-scroll"></i><span><b>團本列表骨架已完成</b><small>之後新增 Boss 時可直接加入目錄並接上各自的房間、機制與獎勵 adapter。</small></span></div></div></article>';
+        selected.rewards.map(escapeHtml).join('・') + '</small></span></div></div></article>';
     } else {
       detail = '<article class="raid-boss-card ' + (selectedLocked ? 'locked' : '') + '">' +
         '<div class="raid-boss-art"><img src="' + escapeHtml(selected.bossImage || RAID_MVP.bossImage) + '" alt="沈清霜"><span>清霜試煉・' + escapeHtml(tier.name) + '</span></div>' +
         '<div class="raid-boss-info"><div class="raid-badges"><span>' + escapeHtml(selected.party) + '</span><span>' +
         escapeHtml(selected.recommended) + '</span><span>' + escapeHtml(selected.mechanic) + '</span></div>' +
         (data().raidProgress?.['shen-qingshuang']?.memento ? '<small>通關紀念・' + escapeHtml(data().raidProgress['shen-qingshuang'].memento.name) + '</small>' : '') +
-        '<small>' + escapeHtml(selected.location) + '</small><h3>' + escapeHtml(selected.bossTitle) + '</h3>' +
+        '<h3>' + escapeHtml(selected.bossTitle) + '</h3>' +
         '<small class="raid-unlock-status">' + escapeHtml(tier.minRealm) + '解鎖・' + tier.minScore + ' 修為</small>' +
-        '<p>' + escapeHtml(selected.description) + '</p>' +
-        '<div class="raid-reward-preview"><b>' + escapeHtml(tier.name) + '戰利品</b><span>' +
-          escapeHtml(tier.materialRealms.join('／')) + '境界木鐵素材・元嬰碎精必得 ×' + tier.fragments +
-          '・淬靈玄印・玄天道印</span></div></div>' +
+        '<div class="raid-reward-preview"><b>通關必得 元嬰碎精 ×' + tier.fragments + '</b><span>' +
+          escapeHtml(tier.materialRealms.join('～')) + '木鐵素材</span><span>淬靈玄印・玄天道印</span></div></div>' +
         '<div class="raid-entry-actions" role="group" aria-label="試煉組隊">' +
         '<div class="raid-difficulty-picker" role="group" aria-label="清霜試煉難度">' +
         Object.values(DIFFICULTY.TIERS).map(function (option) {
@@ -507,25 +488,24 @@ import './raid-difficulty.js';
           return '<button type="button" data-raid-difficulty="' + option.id +
             '" class="' + (tier.id === option.id ? 'active ' : '') + (locked ? 'locked' : '') +
             '" aria-pressed="' + (tier.id === option.id) + '"><strong>' + escapeHtml(option.name) +
-            '</strong><small>元嬰碎精 ×' + option.fragments + '・' +
-            escapeHtml(option.materialRealms.join('～')) + (locked ? '・需' + escapeHtml(option.minRealm) : '') +
+            '</strong><small>碎精 ×' + option.fragments + (locked ? '<br>需' + escapeHtml(option.minRealm) : '') +
             '</small></button>';
         }).join('') + '</div>' +
-        '<div class="raid-join-grid"><button class="raid-primary" type="button" data-quick ' + (selectedLocked ? 'disabled' : '') + '>快速加入／建立公開隊伍</button>' +
-        '<button class="raid-ghost" type="button" data-create ' + (selectedLocked ? 'disabled' : '') + '>建立私人隊伍</button></div>' +
-        '<div class="raid-code-join"><input id="raid-room-code-input" maxlength="6" aria-label="六碼隊伍代碼" placeholder="輸入 6 碼隊伍代碼"><button class="raid-ghost" type="button" data-code ' +
-        (joinCodeLocked ? 'disabled' : '') + '>加入隊伍</button></div></div></article>';
+        '<div class="raid-join-grid"><button class="raid-primary" type="button" data-quick title="加入公開隊伍，或建立新隊伍" ' + (selectedLocked ? 'disabled' : '') + '>快速組隊</button>' +
+        '<button class="raid-ghost" type="button" data-create title="建立私人隊伍" ' + (selectedLocked ? 'disabled' : '') + '>私人開房</button></div>' +
+        '<div class="raid-code-join"><input id="raid-room-code-input" maxlength="6" aria-label="六碼隊伍代碼" placeholder="6 碼邀請碼"><button class="raid-ghost" type="button" data-code ' +
+        (joinCodeLocked ? 'disabled' : '') + '>加入</button></div></div></article>';
     }
 
     hub.innerHTML = '<header class="raid-heading raid-hub-heading"><button class="raid-back" type="button" data-home><i class="fa-solid fa-arrow-left"></i></button>' +
-      '<div class="raid-heading-copy"><small>SECRET REALM ／ 秘境集結</small><h2>秘境試煉</h2><p>選擇試煉後再組隊；每個團本可有獨立 Boss、合作規則與專屬掉落。</p>' +
+      '<div class="raid-heading-copy"><h2>秘境試煉</h2>' +
       '<div class="raid-ticket-status raid-global-ticket"><i class="fa-solid fa-ticket"></i><span><b>團本入場券 ' +
         (state.ticketState?.count == null ? '讀取中' : escapeHtml(state.ticketState.count + ' / ' + state.ticketState.cap)) +
         '</b><small>全團本共用・每日 +2・最多 10 張</small></span><span class="raid-global-ticket-dot" aria-hidden="true"' +
-        (Number(state.ticketState.count) > 0 ? '' : ' hidden') + '></span></div></div><span class="raid-seal">團</span></header>' +
+        (Number(state.ticketState.count) > 0 ? '' : ' hidden') + '></span></div></div></header>' +
       '<div class="raid-trial-list" role="list">' + trialCards + '</div>' + detail +
       (selected.status==='open' ? '<section class="raid-public-recruitment" aria-label="公開隊伍招募">' +
-        '<header><div><small>PUBLIC RAID ／ 宗門招募</small><h3>公開隊伍</h3><p>顯示其他修士公開中的隊伍；私人隊伍僅能憑邀請代碼加入。</p></div>' +
+        '<header><h3>公開隊伍</h3>' +
         '<button class="raid-ghost" type="button" data-public-refresh aria-label="重新整理公開隊伍">刷新</button></header>' +
         '<div id="raid-public-rooms" class="raid-public-rooms" aria-live="polite"></div></section>' : '');
 

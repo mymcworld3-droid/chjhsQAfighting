@@ -14,7 +14,7 @@ export const RAID_TRIALS = Object.freeze([
     party: '1–4 人',
     recommended: '建議 3 人',
     bossImage: 'assets/story/characters/shen-qingshuang.png',
-    description: '與隊友共同破除霜華劍陣，取得煉氣、築基、金丹境的木／鐵煉器素材。每位玩家使用完全相同的掉落機率表。',
+    description: '組隊挑戰霜華劍陣，收集煉器素材。',
     rewards: ['玄鐵／靈木', '精煉玄鐵／百年靈木', '紫金玄鐵／雷擊木', '淬靈玄印', '玄天道印'],
     mechanic: '2 人破陣減傷・3 人觸發合擊'
   }),
@@ -28,7 +28,7 @@ export const RAID_TRIALS = Object.freeze([
     party: '多人試煉',
     recommended: '開發中',
     bossImage: '',
-    description: '預留給下一個正式團本。未來可配置獨立 Boss、合作規則、專屬材料與首通紀念。',
+    description: '新秘境籌備中，敬請期待。',
     rewards: ['未公開專屬素材'],
     mechanic: '封印中'
   }),
@@ -42,7 +42,7 @@ export const RAID_TRIALS = Object.freeze([
     party: '多人試煉',
     recommended: '開發中',
     bossImage: '',
-    description: '高階團本預留槽。入口與資料結構已先做成列表，不必再重做整個秘境頁。',
+    description: '新秘境籌備中，敬請期待。',
     rewards: ['秘境玄髓', '清霜劍魄'],
     mechanic: '封印中'
   })

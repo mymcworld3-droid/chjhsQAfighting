@@ -273,27 +273,65 @@ body.raid-page-open #page-raid.active-page>#raid-result:not(.hidden){
 
 .raid-combat-event.is-critical{border-color:#ffc163;box-shadow:0 0 34px #ffb13f66}.raid-combat-event.is-critical b{color:#ffbe62;font-size:1.6em}.raid-combat-event.has-combo{border-color:#cdb0ff}
 
-/* Reserve a complete action row above navigation; only the trial description
-   scrolls when the fixed-ratio portrait canvas has less room. */
-#raid-hub .raid-boss-card { box-sizing:border-box; grid-template-rows:minmax(0,1fr) auto; }
+/* The hub has one vertical scroll area. Its cards use their natural height so
+   recruitment and actions cannot overlap on short or fixed-ratio viewports. */
+body.raid-page-open #page-raid.active-page > #raid-hub:not(.hidden) {
+  display:flex; flex-direction:column; gap:14px;
+  overflow-y:auto!important; overflow-x:hidden!important;
+  padding:8px 2px max(24px,env(safe-area-inset-bottom,0px));
+  box-sizing:border-box; overscroll-behavior-y:contain;
+  scrollbar-width:thin; scrollbar-color:#b6975266 transparent;
+  scroll-padding:16px;
+}
+#raid-hub > * { flex:0 0 auto; min-width:0; }
+#raid-hub .raid-heading { grid-template-columns:44px minmax(0,1fr); margin:0; padding:14px; }
+#raid-hub .raid-back { width:44px; height:44px; font-size:18px; cursor:pointer; }
+#raid-hub .raid-heading h2 { font-size:26px; line-height:1.3; }
+#raid-hub .raid-global-ticket { padding:8px 22px 8px 10px; margin-top:8px; }
+#raid-hub .raid-global-ticket b { font-size:14px; line-height:1.5; }
+#raid-hub .raid-global-ticket small { font-size:12px; line-height:1.5; }
+#raid-hub .raid-trial-list { padding-bottom:6px; }
+#raid-hub .raid-trial-card { min-height:80px; }
+#raid-hub .raid-trial-copy small { font-size:12px; }
+#raid-hub .raid-trial-copy strong { font-size:16px; }
+#raid-hub .raid-trial-copy em { font-size:13px; }
+#raid-hub .raid-boss-card { box-sizing:border-box; grid-template-columns:minmax(180px,.7fr) minmax(0,1.3fr); grid-template-rows:auto auto; height:auto; max-height:none; border-radius:18px; }
 #raid-hub .raid-boss-art { grid-column:1; grid-row:1 / -1; }
-#raid-hub .raid-boss-info { grid-column:2; grid-row:1; min-height:0; overflow-y:auto; overscroll-behavior:contain; scrollbar-width:thin; padding-top:18px; }
+#raid-hub .raid-boss-art > span { font-size:12px; }
+#raid-hub .raid-boss-info { grid-column:2; grid-row:1; min-height:0; overflow:visible; padding:20px; }
 #raid-hub .raid-boss-info > * { flex-shrink:0; }
-#raid-hub .raid-unlock-status { color:var(--raid-cyan); margin:0 0 8px; }
-#raid-hub .raid-entry-actions { grid-column:2; grid-row:2; min-width:0; padding:10px 14px 14px; border-top:1px solid rgba(231,199,121,.14); background:rgba(11,10,9,.96); }
-#raid-hub .raid-entry-actions .raid-join-grid { grid-template-columns:repeat(2,minmax(0,1fr)); margin:0; }
-#raid-hub .raid-entry-actions .raid-code-join { grid-template-columns:minmax(0,1fr) auto; }
-#raid-hub .raid-entry-actions button { min-width:0; min-height:42px; padding:7px 10px; font-size:10px; }
+#raid-hub .raid-badges { margin-bottom:10px; }
+#raid-hub .raid-badges span { font-size:12px; line-height:1.5; }
+#raid-hub .raid-boss-info h3 { font-size:24px; line-height:1.5; margin:0 0 8px; }
+#raid-hub .raid-boss-info > small,#raid-hub .raid-boss-info > p { font-size:14px; line-height:1.7; }
+#raid-hub .raid-unlock-status { color:var(--raid-cyan); margin:0; }
+#raid-hub .raid-reward-preview { gap:5px; margin-top:14px; padding:12px; }
+#raid-hub .raid-reward-preview b { font-size:15px; line-height:1.6; }
+#raid-hub .raid-reward-preview span { font-size:13px; line-height:1.6; }
+#raid-hub .raid-entry-actions { grid-column:2; grid-row:2; min-width:0; padding:16px 20px 20px; border-top:1px solid rgba(231,199,121,.14); background:rgba(11,10,9,.96); }
+#raid-hub .raid-entry-actions .raid-join-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin:0; }
+#raid-hub .raid-entry-actions .raid-code-join { grid-template-columns:minmax(0,1fr) auto; gap:10px; margin-top:12px; }
+#raid-hub .raid-entry-actions button { min-width:0; min-height:48px; margin:0; padding:10px 12px; font-size:15px; line-height:1.4; white-space:normal; overflow-wrap:anywhere; cursor:pointer; }
+#raid-hub .raid-entry-actions .raid-primary { background:linear-gradient(135deg,#d0a95e,#a67b39); color:#21180c; border-color:#e7c779; }
+#raid-hub .raid-code-join input { min-width:0; width:100%; min-height:48px; padding:10px 12px; box-sizing:border-box; font-size:16px; }
+#raid-hub .raid-difficulty-picker { gap:8px; margin-bottom:14px; }
+#raid-hub .raid-difficulty-picker button { min-height:72px; padding:10px 6px; }
+#raid-hub .raid-difficulty-picker strong { font-size:16px; }
+#raid-hub .raid-difficulty-picker small { font-size:12px; line-height:1.5; }
+#raid-hub .raid-future-drop { margin-top:16px; }
+#raid-hub .raid-future-drop b { font-size:14px; }
+#raid-hub .raid-future-drop small { font-size:13px; }
+#raid-hub button:focus-visible,#raid-hub input:focus-visible { outline:2px solid #e7c779; outline-offset:3px; }
 #raid-hub .raid-entry-actions .raid-ghost:disabled { opacity:.45; cursor:not-allowed; }
-@media (orientation:portrait) {
-  #raid-hub .raid-boss-card { grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr); }
+@media (max-width:700px) {
+  #raid-hub .raid-boss-card { grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr); }
   #raid-hub .raid-boss-art { grid-row:1; }
-  #raid-hub .raid-boss-art > span { left:8px; top:8px; padding:4px 6px; }
-  #raid-hub .raid-boss-info { padding:10px 12px; }
+  #raid-hub .raid-boss-art > span { left:6px; top:8px; padding:4px 6px; font-size:11px; }
+  #raid-hub .raid-boss-info { padding:14px 12px; }
   #raid-hub .raid-badges { gap:4px; margin-bottom:6px; }
-  #raid-hub .raid-boss-info h3 { font-size:18px; }
-  #raid-hub .raid-reward-preview { margin-top:8px; }
-  #raid-hub .raid-entry-actions { grid-column:1 / -1; padding:10px; }
+  #raid-hub .raid-boss-info h3 { font-size:20px; }
+  #raid-hub .raid-reward-preview { margin-top:10px; padding:10px; }
+  #raid-hub .raid-entry-actions { grid-column:1 / -1; padding:14px 12px; }
 }
 
 /* Shared ticket reminder stays inside the balance card without shifting its text. */
@@ -410,23 +448,23 @@ body.raid-page-open #page-raid.active-page>#raid-result:not(.hidden){
 
 /* 伺服器公開招募名單：保留秘境原有墨金配色，不顯示私人邀請碼。 */
 #raid-hub .raid-public-recruitment{margin-top:12px;padding:12px 13px;border:1px solid rgba(220,183,108,.26);border-radius:13px;background:rgba(12,17,16,.79)}
-#raid-hub .raid-public-recruitment>header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:11px}
+#raid-hub .raid-public-recruitment>header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:11px}
 #raid-hub .raid-public-recruitment>header>div{min-width:0}
 #raid-hub .raid-public-recruitment>header small{color:#a98a57;font-size:9px;letter-spacing:.15em}
-#raid-hub .raid-public-recruitment>header h3{margin:3px 0;color:#f0d6a5;font-size:17px}
+#raid-hub .raid-public-recruitment>header h3{margin:3px 0;color:#f0d6a5;font-size:20px}
 #raid-hub .raid-public-recruitment>header p{margin:3px 0 0;color:#a49b88;font-size:11px;line-height:1.5}
-#raid-hub .raid-public-recruitment [data-public-refresh]{min-height:34px;padding:0 13px;flex:none;font-size:11px}
+#raid-hub .raid-public-recruitment [data-public-refresh]{min-height:44px;padding:0 16px;flex:none;font-size:14px;cursor:pointer}
 #raid-hub .raid-public-rooms{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
 #raid-hub .raid-public-entry{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:9px;align-items:center;padding:12px;border:1px solid rgba(226,198,135,.2);border-radius:10px;background:rgba(255,255,255,.025)}
 #raid-hub .raid-public-entry-main{min-width:0;display:grid;gap:5px}
-#raid-hub .raid-public-entry-main strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#ecdec2;font-size:13px}
+#raid-hub .raid-public-entry-main strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#ecdec2;font-size:15px}
 #raid-hub .raid-public-entry-main strong small{font-size:10px;color:#afa58c}
-#raid-hub .raid-public-entry-main>span{color:#a6b7ae;font-size:11px;line-height:1.5}
+#raid-hub .raid-public-entry-main>span{color:#a6b7ae;font-size:13px;line-height:1.6}
 #raid-hub .raid-public-entry-main i{font-style:normal;color:#827a69}
-#raid-hub .raid-public-join{min-width:54px;min-height:36px;padding:5px 12px;border:1px solid rgba(232,194,117,.55);border-radius:9px;background:rgba(190,133,49,.19);color:#f2d797;font-size:12px;cursor:pointer}
+#raid-hub .raid-public-join{min-width:64px;min-height:44px;padding:8px 12px;border:1px solid rgba(232,194,117,.55);border-radius:9px;background:rgba(190,133,49,.19);color:#f2d797;font-size:14px;cursor:pointer}
 #raid-hub .raid-public-join:disabled{opacity:.48;cursor:not-allowed}
 #raid-hub .raid-public-join:not(:disabled):hover{background:rgba(190,133,49,.33)}
-#raid-hub .raid-public-empty{grid-column:1/-1;margin:0;padding:18px 10px;border:1px dashed rgba(214,184,116,.18);border-radius:10px;text-align:center;color:#a79b87;font-size:12px}
+#raid-hub .raid-public-empty{grid-column:1/-1;margin:0;padding:18px 10px;border:1px dashed rgba(214,184,116,.18);border-radius:10px;text-align:center;color:#bdb097;font-size:14px;line-height:1.7;overflow-wrap:anywhere}
 .raid-lobby-visibility{display:inline-flex;align-items:center;min-height:34px;padding:5px 10px;border-radius:9px;background:rgba(119,178,151,.12);color:#afddba;font-size:11px;letter-spacing:.05em}
 @media(max-width:670px){
  #raid-hub .raid-public-rooms{grid-template-columns:1fr}
