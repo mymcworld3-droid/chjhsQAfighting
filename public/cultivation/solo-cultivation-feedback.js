@@ -129,7 +129,9 @@ export function beginSoloCultivationFeedback({ scoreBefore, source, realms }) {
     const width = window.innerWidth, height = window.innerHeight;
     sky.setAttribute('viewBox', `0 0 ${width} ${height}`);
     const start = { x: Math.max(20, Math.min(width - 20, sourceRect ? sourceRect.left + sourceRect.width * .7 : width * .5)),
-      y: Math.max(panel.getBoundingClientRect().bottom + 28, Math.min(height - 24, sourceRect ? sourceRect.top + sourceRect.height / 2 : height * .55)) };
+      y: Math.max(20, Math.min(height - 24, sourceRect ? sourceRect.top + sourceRect.height / 2 : height * .55)) };
+    const receiverRect = receiver.getBoundingClientRect();
+    const destinationY = receiverRect.top + receiverRect.height / 2;
     const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
     const defs = svgElement('defs');
     sky.appendChild(defs);
@@ -144,7 +146,7 @@ export function beginSoloCultivationFeedback({ scoreBefore, source, realms }) {
       sky.append(trail, core, head);
       return { trail, core, head, gradient, absorbed: false, delay: reduced ? 0 : i * 48,
         control: { x: Math.max(16, Math.min(width - 16, start.x + (i % 2 ? 1 : -1) * (65 + i * 9))),
-          y: start.y - Math.max(80, (start.y - panel.getBoundingClientRect().bottom) * .4) } };
+          y: start.y + (destinationY - start.y) * .45 } };
     });
     return new Promise(resolve => {
       let started;
