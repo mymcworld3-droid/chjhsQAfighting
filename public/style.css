@@ -2,6 +2,10 @@
    Cyber-Glass Theme Core
    ========================================= */
 
+.quiz-correction-notice{display:flex;align-items:center;flex-wrap:wrap;gap:6px 12px;margin:0 0 12px;padding:12px 16px;border:1px solid rgba(225,185,99,.48);border-left:4px solid #e1b963;border-radius:12px;background:linear-gradient(110deg,rgba(122,81,18,.24),rgba(27,20,9,.75));color:#e9d5ac;font-size:12px;line-height:1.6}
+.quiz-correction-notice[hidden]{display:none}
+.quiz-correction-notice strong{color:#ffe3a0;font-size:14px;letter-spacing:.12em;white-space:nowrap}
+
 /* 1. 全域變數 */
 :root {
     --glass-bg: rgba(15, 23, 42, 0.7);

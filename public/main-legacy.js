@@ -110,6 +110,7 @@ let soloSession = {
 // Persist unanswered solo questions for the current account/range only.
 const soloQuestionCache = createSoloQuestionCache(window.localStorage);
 let soloCacheIdentity = '';
+let soloCacheRevision = 0;
 let soloQuizOpenSerial = 0;
 
 function soloQuestionScope() {
@@ -144,6 +145,7 @@ function syncSoloQuestionCache() {
         // Discard the previous account/range and any in-flight buffer when scope changes.
         soloQuestionCache.activate(uid, scope);
         soloCacheIdentity = identity;
+        soloCacheRevision += 1;
         quizBuffer = soloQuestionCache.getQueue();
         window.currentActiveQuiz = soloQuestionCache.getActive();
         soloQuizOpenSerial += 1;
@@ -1412,6 +1414,7 @@ onAuthStateChanged(auth, async (user) => {
         checkAdminRole(false);
         currentUserData = null;
         soloCacheIdentity = '';
+        soloCacheRevision += 1;
         soloQuizOpenSerial += 1;
         soloQuestionCache.activate('', '');
         quizBuffer = [];
@@ -2508,6 +2511,16 @@ window.startQuizFlow = async (isNewSession = false) => {
         return;
     }
 
+    // 訂正題只在取新題時插隊；保留既有待答題與一般預取題。
+    if (!soloQuestionCache.getActive() && window.hasReadySoloCorrection?.()) {
+        const correction = soloQuestionCache.takeNext();
+        quizBuffer = soloQuestionCache.getQueue();
+        window.currentActiveQuiz = correction;
+        renderQuiz(correction.data, correction.rank, correction.badge);
+        void fillBuffer();
+        return;
+    }
+
     if (extendedPracticeState.active) {
         document.getElementById('quiz-loading').classList.remove('hidden');
         document.getElementById('loading-text').innerText = `正在生成「${extendedPracticeState.knowledgePoint}」延伸練習…`;
@@ -2550,9 +2563,14 @@ window.startQuizFlow = async (isNewSession = false) => {
                 void window.startQuizFlow();
                 return;
             }
-            soloQuestionCache.setActive(q);
-            window.currentActiveQuiz = q;
-            renderQuiz(q.data, q.rank, q.badge);
+            let displayQuestion = q;
+            if (window.hasReadySoloCorrection?.()) {
+                soloQuestionCache.append(q);
+                displayQuestion = soloQuestionCache.takeNext() || q;
+            } else soloQuestionCache.setActive(q);
+            window.currentActiveQuiz = displayQuestion;
+            quizBuffer = soloQuestionCache.getQueue();
+            renderQuiz(displayQuestion.data, displayQuestion.rank, displayQuestion.badge);
             void fillBuffer();
         } catch (e) {
             if (opening !== soloQuizOpenSerial || auth.currentUser?.uid !== uid) return;
@@ -2971,7 +2989,7 @@ window.nextQuestion = async () => {
     }
     window.currentActiveQuiz = null;
     try {
-        const intercepted = extendedPracticeState.active || window.isFirstVisitTrial?.() ? false : await window.maybeEncounterOpportunity?.({ quiz });
+        const intercepted = extendedPracticeState.active || window.hasReadySoloCorrection?.() || window.isFirstVisitTrial?.() ? false : await window.maybeEncounterOpportunity?.({ quiz });
         if (auth.currentUser?.uid !== account) return;
         if (!intercepted) await window.startQuizFlow();
     } catch (error) {
@@ -3247,10 +3265,9 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         const correction = document.createElement('button');
         correction.id = 'solo-correction-practice'; correction.type = 'button';
         correction.className = 'btn-cyber-primary mt-3 px-4 py-2 rounded-lg text-xs';
-        correction.textContent = '練同類題 · 訂正修為 +1';
+        correction.textContent = '加入訂正練習 · 訂正修為 +1';
         correction.onclick = () => {
-            window.startQuizExtendedPractice(quiz.learningTopic || quiz.meta?.concept_id || '本題核心觀念');
-            correction.disabled = true; correction.textContent = '已排入訂正練習，按下一題開始';
+            void window.startQuizExtendedPractice(quiz.learningTopic || quiz.meta?.concept_id || '本題核心觀念', { correction: true });
         };
         fbSection.appendChild(correction);
     }
@@ -3269,7 +3286,8 @@ const extendedPracticeState = {
     knowledgePoint: '',
     originQuestion: '',
     recoveryOrigin: '',
-    pending: null
+    pending: null,
+    correctionRequests: new Map()
 };
 
 window.isExtendedPracticeActive = () => extendedPracticeState.active;
@@ -3545,16 +3563,17 @@ window.askQuizHelperPreset = (message) => {
     void sendQuizHelperMessage(message);
 };
 
-async function fetchExtendedPracticeQuestion() {
-    const subject = String(extendedPracticeState.subject || quizHelperState.subject || '綜合').trim().slice(0, 40);
-    const knowledgePoint = String(extendedPracticeState.knowledgePoint || '本題核心觀念').trim().slice(0, 60);
+async function fetchExtendedPracticeQuestion(practice = extendedPracticeState) {
+    const subject = String(practice.subject || quizHelperState.subject || '綜合').trim().slice(0, 40);
+    const knowledgePoint = String(practice.knowledgePoint || '本題核心觀念').trim().slice(0, 60);
+    const recoveryOrigin = String(practice.recoveryOrigin || '');
     const settings = currentUserData?.gameSettings || {};
     const rankName = getRankName(currentUserData?.stats?.rankLevel || 0);
     let difficulty = settings.difficulty;
     if (!difficulty || difficulty === 'auto') difficulty = getSmartDifficulty();
 
     let specificTopic = knowledgePoint;
-    if (extendedPracticeState.recoveryOrigin) specificTopic = `${knowledgePoint}。針對原題「${extendedPracticeState.originQuestion}」的同一概念出一道新情境變式，勿重複原題。`.slice(0,1800);
+    if (recoveryOrigin) specificTopic = `${knowledgePoint}。針對原題「${practice.originQuestion}」的同一概念出一道新情境變式，勿重複原題。`.slice(0,1800);
     const response = await fetch('/api/generate-quiz', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -3587,34 +3606,87 @@ async function fetchExtendedPracticeQuestion() {
         },
         meta: quizMetaFromRaw(rawData),
         rank: rankName,
-        badge: `📚 延伸練習 | ${subject} · ${knowledgePoint}`,
-        extendedPractice: true,
+        badge: `${recoveryOrigin ? '📝 訂正練習' : '📚 延伸練習'} | ${subject} · ${knowledgePoint}`,
+        extendedPractice: !recoveryOrigin,
         extendedPracticeSubject: subject,
         extendedPracticeKnowledgePoint: knowledgePoint,
         learningSubject:subject, learningTopic:knowledgePoint, learningDifficulty:difficulty,
-        recoveryOrigin:extendedPracticeState.recoveryOrigin || ''
+        recoveryOrigin
     };
 }
 
-window.startQuizExtendedPractice = async (knowledgePoint) => {
+window.hasReadySoloCorrection = () => soloQuestionCache.getQueue().some(item => !!item.recoveryOrigin);
+
+function syncCorrectionPracticeButton(quiz, { busy = false, ready = false, failed = false } = {}) {
+    if (window.currentActiveQuiz !== quiz) return;
+    const button = document.getElementById('solo-correction-practice');
+    if (!button) return;
+    button.disabled = busy || ready;
+    button.textContent = ready ? '訂正題已就緒 · 下一題優先出題'
+        : busy ? '訂正題生成中 · 可先繼續一般練習'
+        : failed ? '訂正題生成失敗 · 點此重試'
+        : '加入訂正練習 · 訂正修為 +1';
+}
+
+function queueCorrectionPractice(practice) {
+    const generation = soloCacheRevision;
+    const requests = extendedPracticeState.correctionRequests;
+    const key = JSON.stringify([practice.uid, practice.scope, practice.recoveryOrigin, practice.knowledgePoint]);
+    const existing = requests.get(key);
+    if (existing?.generation === generation) return existing.work;
+    if (soloQuestionCache.getQueue().some(item => item.recoveryOrigin === practice.recoveryOrigin &&
+        item.extendedPracticeKnowledgePoint === practice.knowledgePoint)) {
+        syncCorrectionPracticeButton(practice.quiz, { ready: true });
+        return Promise.resolve();
+    }
+    const job = { generation, work: null };
+    requests.set(key, job);
+    syncCorrectionPracticeButton(practice.quiz, { busy: true });
+    window.showToast?.('訂正題已排入背景生成；完成後下一題優先顯示，現在可繼續一般練習。');
+    job.work = (async () => {
+        try {
+            const question = await fetchExtendedPracticeQuestion(practice);
+            if (requests.get(key) !== job || generation !== soloCacheRevision ||
+                auth.currentUser?.uid !== practice.uid || soloQuestionScope() !== practice.scope ||
+                !soloQuestionCache.isCurrent(practice.uid, practice.scope)) return;
+            if (!soloQuestionCache.append(question)) throw new Error('訂正題重複或題目格式無效');
+            quizBuffer = soloQuestionCache.getQueue();
+            syncCorrectionPracticeButton(practice.quiz, { ready: true });
+            return question;
+        } catch (error) {
+            console.warn('[Correction practice]', error);
+            if (generation === soloCacheRevision && auth.currentUser?.uid === practice.uid && soloQuestionScope() === practice.scope) {
+                syncCorrectionPracticeButton(practice.quiz, { failed: true });
+                window.showToast?.('訂正題暫時生成失敗，一般練習仍可繼續。');
+            }
+        } finally {
+            if (requests.get(key) === job) requests.delete(key);
+        }
+    })();
+    return job.work;
+}
+
+window.startQuizExtendedPractice = async (knowledgePoint, options = {}) => {
     const point = String(knowledgePoint || '').trim().slice(0, 60);
     if (!point || !currentUserData) return;
 
     const currentQuiz = window.currentActiveQuiz;
     const uid = auth.currentUser?.uid;
     if (!currentQuiz?.data || !uid || soloNextBusy || window.isOpportunityActive?.()) return;
-    if (extendedPracticeState.pending?.quiz === currentQuiz && extendedPracticeState.pending.knowledgePoint === point) return;
 
-    extendedPracticeState.pending = {
+    const practice = {
         quiz: currentQuiz,
         uid,
         scope: soloQuestionScope(),
-        subject: String(quizHelperState.subject || currentQuiz.extendedPracticeSubject || '綜合').slice(0, 40),
+        subject: String(currentQuiz.learningSubject || quizHelperState.subject || currentQuiz.extendedPracticeSubject || '綜合').slice(0, 40),
         knowledgePoint: point,
-        originQuestion: String(quizHelperState.question || currentQuiz.data.q || '').slice(0, 1000),
-        recoveryOrigin:answeredSoloQuizzes.has(currentQuiz) && quizHelperState.selectedIndex >= 0 &&
-            quizHelperState.selectedIndex !== quizHelperState.correctIndex ? currentQuiz.data.q : (currentQuiz.recoveryOrigin || '')
+        originQuestion: String(currentQuiz.data.q || quizHelperState.question || '').slice(0, 1000),
+        recoveryOrigin:options.correction || (answeredSoloQuizzes.has(currentQuiz) && quizHelperState.selectedIndex >= 0 &&
+            quizHelperState.selectedIndex !== quizHelperState.correctIndex) ? currentQuiz.data.q : (currentQuiz.recoveryOrigin || '')
     };
+    if (practice.recoveryOrigin) return queueCorrectionPractice(practice);
+    if (extendedPracticeState.pending?.quiz === currentQuiz && extendedPracticeState.pending.knowledgePoint === point) return;
+    extendedPracticeState.pending = practice;
     syncQuizExtendedPracticeControls();
     window.showToast?.(answeredSoloQuizzes.has(currentQuiz)
         ? `已排入「${point}」，按「下一題」開始延伸練習。`
@@ -3835,6 +3907,8 @@ function renderQuiz(data, rank, topic) {
     document.getElementById('quiz-loading').classList.add('hidden');
     document.getElementById('quiz-container').classList.remove('hidden');
     document.getElementById('quiz-badge').innerText = `${topic} | ${rank}`;
+    const correctionNotice = document.getElementById('quiz-correction-notice');
+    if (correctionNotice) correctionNotice.hidden = !window.currentActiveQuiz?.recoveryOrigin;
     
     const questionTextEl = document.getElementById('question-text');
     // 更換題目時先清理舊公式，避免 MathJax 快取殘留。

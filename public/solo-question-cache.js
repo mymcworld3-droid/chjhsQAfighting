@@ -160,7 +160,10 @@ export function createSoloQuestionCache(storage) {
 
   function takeNext() {
     if (active) return active;
-    active = queue.shift() || null;
+    // 訂正題生成後仍追加在隊尾；取下一題時優先選已完成的訂正題。
+    // 目前正在作答的 active 永遠不被中途替換。
+    const correction = queue.findIndex(item => !!item.recoveryOrigin);
+    active = (correction >= 0 ? queue.splice(correction, 1)[0] : queue.shift()) || null;
     save();
     return active;
   }

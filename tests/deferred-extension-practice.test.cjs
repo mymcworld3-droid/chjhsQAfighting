@@ -69,7 +69,7 @@ function setup() {
     context.cache.setActive(normal);
     context.cache.append(buffered);
     context.soloQuestionCache = context.cache;
-    vm.runInContext('let soloQuizOpenSerial = 0, quizBuffer = [], isFetchingBuffer = false; const soloSession = { active:true, mode:"infinite", correctCount:0, wrongCount:0 };'
+    vm.runInContext('let soloQuizOpenSerial = 0, soloCacheRevision = 0, quizBuffer = [], isFetchingBuffer = false; const soloSession = { active:true, mode:"infinite", correctCount:0, wrongCount:0 };'
         + section('const extendedPracticeState =', 'const quizHelperState =')
         + section('let soloNextBusy = false;', 'async function handleAnswer(')
         + section('async function fetchExtendedPracticeQuestion(', 'const quizWhiteboardState =')
@@ -246,4 +246,112 @@ test('rapid next clicks and extension clicks during generation start only one ne
     resolve(); await pending;
     assert.equal(h.generated.length, 1);
     assert.equal(h.generated[0].specificTopic, '功與動能');
+});
+
+test('ready correction appends behind the buffer but is selected next without discarding normal questions', async () => {
+    const h = setup(); h.complete();
+    await h.w.startQuizExtendedPractice('功與動能', { correction: true });
+    assert.equal(h.w.currentActiveQuiz, h.normal, 'completion never replaces the current feedback');
+    assert.equal(h.state.active, false);
+    assert.equal(h.cache.getQueue()[0].data.q, h.buffered.data.q);
+    const correction = h.cache.getQueue()[1];
+    assert.equal(correction.recoveryOrigin, h.normal.data.q);
+    assert.equal(correction.extendedPractice, false, 'one correction does not enter endless extension mode');
+    assert.match(correction.badge, /訂正練習/);
+    assert.match(h.get('solo-correction-practice').textContent, /已就緒/);
+    await h.w.nextQuestion();
+    assert.equal(h.w.currentActiveQuiz, correction);
+    assert.equal(h.rolls, 0, 'a ready correction takes precedence over random encounters');
+    assert.equal(h.cache.getQueue()[0].data.q, h.buffered.data.q);
+    h.complete(); await h.w.nextQuestion();
+    assert.equal(h.w.currentActiveQuiz.data.q, h.buffered.data.q);
+    assert.equal(h.generated.length, 1);
+});
+
+test('unfinished correction lets the player continue, then takes priority after the current normal question', async () => {
+    const h = setup(); h.complete();
+    let release;
+    const fetch = h.context.fetch;
+    h.context.fetch = async (...args) => { await new Promise(r => { release = r; }); return fetch(...args); };
+    const generating = h.w.startQuizExtendedPractice('功與動能', { correction: true });
+    assert.match(h.get('solo-correction-practice').textContent, /生成中/);
+    await h.w.nextQuestion();
+    assert.equal(h.w.currentActiveQuiz.data.q, h.buffered.data.q);
+    const ongoing = h.w.currentActiveQuiz;
+    release(); await generating;
+    assert.equal(h.w.currentActiveQuiz, ongoing, 'late completion cannot interrupt an unanswered question');
+    await h.w.startQuizFlow();
+    assert.equal(h.w.currentActiveQuiz, ongoing, 'reopening also preserves that unanswered question');
+    h.complete(); await h.w.nextQuestion();
+    assert.equal(h.w.currentActiveQuiz.recoveryOrigin, h.normal.data.q);
+    assert.equal(h.rolls, 1, 'only the earlier ordinary next step could roll an encounter');
+});
+
+test('repeated correction clicks share one generation and the ready question cannot be queued twice', async () => {
+    const h = setup(); h.complete();
+    let release, calls = 0;
+    const fetch = h.context.fetch;
+    h.context.fetch = async (...args) => { calls++; await new Promise(r => { release = r; }); return fetch(...args); };
+    const a = h.w.startQuizExtendedPractice('功與動能', { correction: true });
+    const b = h.w.startQuizExtendedPractice('功與動能', { correction: true });
+    assert.equal(calls, 1);
+    release(); await Promise.all([a, b]);
+    await h.w.startQuizExtendedPractice('功與動能', { correction: true });
+    assert.equal(calls, 1);
+    assert.equal(h.cache.getQueue().filter(item => item.recoveryOrigin).length, 1);
+});
+
+test('correction generation failure preserves the normal buffer and allows an explicit retry', async () => {
+    const h = setup(); h.complete();
+    const fetch = h.context.fetch;
+    h.context.fetch = async () => { throw Error('offline'); };
+    await h.w.startQuizExtendedPractice('功與動能', { correction: true });
+    assert.equal(h.cache.getQueue().length, 1);
+    assert.equal(h.get('solo-correction-practice').disabled, false);
+    assert.match(h.get('solo-correction-practice').textContent, /重試/);
+    h.context.fetch = fetch;
+    await h.w.startQuizExtendedPractice('功與動能', { correction: true });
+    assert.equal(h.cache.getQueue().filter(item => item.recoveryOrigin).length, 1);
+});
+
+test('a correction response from an old account, scope or cache generation is ignored', async () => {
+    for (const change of ['account', 'scope', 'generation']) {
+        const h = setup(); h.complete();
+        let release;
+        const fetch = h.context.fetch;
+        h.context.fetch = async (...args) => { await new Promise(r => { release = r; }); return fetch(...args); };
+        const generating = h.w.startQuizExtendedPractice('功與動能', { correction: true });
+        if (change === 'account') h.auth.currentUser = { uid: 'u2' };
+        if (change === 'scope') h.setScope('新範圍');
+        if (change === 'generation') vm.runInContext('soloCacheRevision += 1;', h.context);
+        release(); await generating;
+        assert.equal(h.cache.getQueue().length, 1, change);
+        assert.equal(h.cache.getQueue().some(item => item.recoveryOrigin), false, change);
+    }
+});
+
+test('wrong-answer helper selections use correction prefetch instead of the next-question extension gate', async () => {
+    const h = setup(); h.complete();
+    h.context.quizHelperState.selectedIndex = 1;
+    h.context.quizHelperState.correctIndex = 0;
+    await h.w.startQuizExtendedPractice('功與動能');
+    assert.equal(h.state.pending, null);
+    assert.equal(h.generated.length, 1);
+    assert.equal(h.w.hasReadySoloCorrection(), true);
+});
+
+test('correction finishing during a cold normal request is selected first and keeps that new normal question', async () => {
+    const h = setup(); h.complete();
+    h.cache.takeNext(); h.cache.consumeActive();
+    let releaseCorrection, releaseNormal;
+    const fetch = h.context.fetch;
+    h.context.fetch = async (...args) => { await new Promise(r => { releaseCorrection = r; }); return fetch(...args); };
+    h.context.fetchOneQuestion = () => new Promise(r => { releaseNormal = r; });
+    const generating = h.w.startQuizExtendedPractice('功與動能', { correction: true });
+    const next = h.w.nextQuestion();
+    await new Promise(resolve => setImmediate(resolve));
+    releaseCorrection(); await generating;
+    releaseNormal(h.buffered); await next;
+    assert.equal(h.w.currentActiveQuiz.recoveryOrigin, h.normal.data.q);
+    assert.equal(h.cache.getQueue()[0].data.q, h.buffered.data.q);
 });

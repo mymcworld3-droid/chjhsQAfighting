@@ -37,6 +37,30 @@ function cacheAPI() {
   return context.__cache;
 }
 
+test('corrections retain origin and priority after reload without replacing an unfinished ordinary question', () => {
+  const { createSoloQuestionCache } = cacheAPI();
+  const storage = createMemoryStorage();
+  const cache = createSoloQuestionCache(storage);
+  cache.activate('uid-correction', scope());
+  cache.setActive(makeQuiz('目前待答'));
+  cache.append(makeQuiz('一般甲'));
+  cache.append(makeQuiz('一般乙'));
+  cache.append({ ...makeQuiz('訂正甲'), recoveryOrigin: '錯題甲', badge: '📝 訂正練習 | 數學' });
+  cache.append({ ...makeQuiz('訂正乙'), recoveryOrigin: '錯題乙', badge: '📝 訂正練習 | 數學' });
+  assert.deepEqual(Array.from(cache.getQueue(), q => q.data.q), ['一般甲', '一般乙', '訂正甲', '訂正乙']);
+  const refreshed = createSoloQuestionCache(storage);
+  refreshed.activate('uid-correction', scope());
+  assert.equal(refreshed.takeNext().data.q, '目前待答');
+  refreshed.consumeActive();
+  assert.equal(refreshed.takeNext().recoveryOrigin, '錯題甲');
+  refreshed.consumeActive();
+  assert.equal(refreshed.takeNext().recoveryOrigin, '錯題乙');
+  refreshed.consumeActive();
+  assert.equal(refreshed.takeNext().data.q, '一般甲');
+  refreshed.consumeActive();
+  assert.equal(refreshed.takeNext().data.q, '一般乙');
+});
+
 test('browser cache module and bootstrap pass module syntax checks', () => {
   for (const name of ['solo-question-cache.js', 'main-legacy.js', 'main.js']) {
     const result = spawnSync(process.execPath, ['--check', '--input-type=module'], {
@@ -207,7 +231,7 @@ test('helper replies expose knowledge-point extended practice', () => {
   assert.match(index, /id="btn-extended-practice-stop"/);
   assert.match(legacy, /quiz-helper-practice-btn/);
   assert.match(legacy, /window\.startQuizExtendedPractice = async/);
-  assert.match(legacy, /async function fetchExtendedPracticeQuestion\(\)/);
+  assert.match(legacy, /async function fetchExtendedPracticeQuestion\(practice = extendedPracticeState\)/);
   assert.match(legacy, /let specificTopic = knowledgePoint/);
   assert.match(legacy, /extendedPracticeState\.active/);
   assert.match(legacy, /window\.endQuizExtendedPractice =/);
