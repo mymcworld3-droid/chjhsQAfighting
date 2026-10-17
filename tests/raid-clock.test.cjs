@@ -118,7 +118,7 @@ test('all players dying produces a terminal loss with no further scheduled attac
 
 test('Boss stats are fixed for the three-person benchmark', () => {
   const boss = createRaidBoss([member('a'), member('b')]);
-  assert.equal(boss.maxHp, 4800);
+  assert.equal(boss.maxHp, 2000);
 });
 
 function dbFor(initial) {

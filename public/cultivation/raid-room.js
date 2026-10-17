@@ -30,8 +30,8 @@ function applyRaidTicketResponse(result, local, sequence) {
   if (!local || local !== window.getCurrentUserData?.() || sequence < appliedTicketSequence ||
       next?.count == null || !Number.isFinite(Number(next.count))) return;
   appliedTicketSequence = sequence;
-  const tickets = { count:Math.max(0, Math.min(10, Math.floor(Number(next.count)))),
-    dailyGrant:2, cap:10, lastGrantDate:String(next.lastGrantDate || '') };
+  const tickets = { count:Math.max(0, Math.min(5, Math.floor(Number(next.count)))),
+    dailyGrant:2, cap:5, lastGrantDate:String(next.lastGrantDate || '') };
   const previous = local.raidTickets;
   if (previous?.count === tickets.count && previous?.lastGrantDate === tickets.lastGrantDate &&
       previous?.dailyGrant === tickets.dailyGrant && previous?.cap === tickets.cap) return;

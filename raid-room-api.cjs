@@ -32,7 +32,7 @@ const RAID_ROOM_VERSION = 2;
 const RAID_BOSS_ID = 'shen-qingshuang';
 const BOSS_ACTION_INTERVAL_MS = 18000;
 const RAID_DAILY_TICKETS = 2;
-const RAID_TICKET_CAP = 10;
+const RAID_TICKET_CAP = 5;
 const RAID_TICKET_RESERVATION_COLLECTION = 'raidTicketReservations';
 const TAIPEI_OFFSET_MS = 8 * 60 * 60 * 1000;
 
@@ -419,7 +419,7 @@ function createHandler({
         const difficulty = String(req.body?.difficulty || 'normal');
         assertRaidAccess(player.trainingAccessScore, '', difficulty);
         const ticketState = await syncRaidTickets(playerDb, uid);
-        if (ticketState.count < 1) throw Object.assign(new Error('目前沒有團本入場券；每日會補充 2 張，最多持有 10 張'), { status:409, code:'raid-ticket-empty' });
+        if (ticketState.count < 1) throw Object.assign(new Error('目前沒有團本入場券；每日會補充 2 張，最多持有 5 張'), { status:409, code:'raid-ticket-empty' });
         const visibility=req.body?.visibility==='public'?'public':'private';
         const result = await createRoom(db, uid, player, difficulty, visibility);
         return res.json({ ok: true, ...result, ticketState });
@@ -429,7 +429,7 @@ function createHandler({
         const difficulty = String(req.body?.difficulty || 'normal');
         assertRaidAccess(player.trainingAccessScore, '', difficulty);
         const ticketState = await syncRaidTickets(playerDb, uid);
-        if (ticketState.count < 1) throw Object.assign(new Error('目前沒有團本入場券；每日會補充 2 張，最多持有 10 張'), { status:409, code:'raid-ticket-empty' });
+        if (ticketState.count < 1) throw Object.assign(new Error('目前沒有團本入場券；每日會補充 2 張，最多持有 5 張'), { status:409, code:'raid-ticket-empty' });
         const result = await findOrCreate(db, uid, player, difficulty);
         return res.json({ ok: true, ...result, ticketState });
       }
@@ -437,7 +437,7 @@ function createHandler({
         const player = await loadTrustedRaidPlayer(playerDb, uid);
         assertRaidAccess(player.trainingAccessScore);
         const ticketState = await syncRaidTickets(playerDb, uid);
-        if (ticketState.count < 1) throw Object.assign(new Error('目前沒有團本入場券；每日會補充 2 張，最多持有 10 張'), { status:409, code:'raid-ticket-empty' });
+        if (ticketState.count < 1) throw Object.assign(new Error('目前沒有團本入場券；每日會補充 2 張，最多持有 5 張'), { status:409, code:'raid-ticket-empty' });
         const result = await joinByCode(db, uid, req.body?.roomCode, player);
         return res.json({ ok: true, ...result, ticketState });
       }

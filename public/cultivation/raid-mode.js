@@ -66,7 +66,7 @@ import './raid-difficulty.js';
     selectedRaidId: RAID_MVP.bossId,
     selectedDifficulty: 'normal',
     hubAccessSignature: '',
-    ticketState: { count:null, dailyGrant:2, cap:10, lastGrantDate:'' },
+    ticketState: { count:null, dailyGrant:2, cap:5, lastGrantDate:'' },
     ticketLoading: false,
     publicRooms: [], publicRoomsLoadedAt: 0, publicRoomsLoading: false,
     publicJoinBusy: false, publicListError: '', publicRefreshSerial: 0
@@ -84,15 +84,15 @@ import './raid-difficulty.js';
       ticketAccount = uid;
       ticketRefreshVersion++;
       state.ticketLoading = false;
-      state.ticketState = { count:null, dailyGrant:2, cap:10, lastGrantDate:'' };
+      state.ticketState = { count:null, dailyGrant:2, cap:5, lastGrantDate:'' };
     }
     const next = uid ? data().raidTickets : null;
     if (next?.count != null && Number.isFinite(Number(next.count))) state.ticketState = {
-      count:Math.max(0, Math.min(10, Math.floor(Number(next.count)))), dailyGrant:2, cap:10,
+      count:Math.max(0, Math.min(5, Math.floor(Number(next.count)))), dailyGrant:2, cap:5,
       lastGrantDate:String(next.lastGrantDate || '')
     };
     const label = document.querySelector('#raid-hub .raid-global-ticket b');
-    if (label) label.textContent = '團本入場券 ' + (state.ticketState.count == null ? '讀取中' : state.ticketState.count + ' / 10');
+    if (label) label.textContent = '團本入場券 ' + (state.ticketState.count == null ? '讀取中' : state.ticketState.count + ' / 5');
     const dot = document.querySelector('#raid-hub .raid-global-ticket-dot');
     if (dot) dot.hidden = !uid || !(Number(state.ticketState.count) > 0);
     if (state.status === 'hub') {
@@ -501,7 +501,7 @@ import './raid-difficulty.js';
       '<div class="raid-heading-copy"><h2>秘境試煉</h2>' +
       '<div class="raid-ticket-status raid-global-ticket"><i class="fa-solid fa-ticket"></i><span><b>團本入場券 ' +
         (state.ticketState?.count == null ? '讀取中' : escapeHtml(state.ticketState.count + ' / ' + state.ticketState.cap)) +
-        '</b><small>全團本共用・每日 +2・最多 10 張</small></span><span class="raid-global-ticket-dot" aria-hidden="true"' +
+        '</b><small>全團本共用・每日 +2・最多 5 張</small></span><span class="raid-global-ticket-dot" aria-hidden="true"' +
         (Number(state.ticketState.count) > 0 ? '' : ' hidden') + '></span></div></div></header>' +
       '<div class="raid-trial-list" role="list">' + trialCards + '</div>' + detail +
       (selected.status==='open' ? '<section class="raid-public-recruitment" aria-label="公開隊伍招募">' +
@@ -1665,7 +1665,7 @@ import './raid-difficulty.js';
       questionTimeLimit: null,
       multiplayer: true,
       raidTickets: state.ticketState?.count ?? null,
-      raidTicketCap: state.ticketState?.cap ?? 10
+      raidTicketCap: state.ticketState?.cap ?? 5
     };
   };
 

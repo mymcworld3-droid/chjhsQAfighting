@@ -32,6 +32,13 @@ test('ticket status and start responses mirror available tickets and publish cha
   assert.equal(f.current().raidTickets.count,2,'the next daily grant restores the reminder');
 });
 
+test('legacy balances above the new cap are shown as five and retain the daily grant',async()=>{
+  const f=ticketRuntime();f.setResponse({ticketState:{count:10,lastGrantDate:'2026-10-13'}});
+  await f.api.getRaidTicketState();
+  assert.equal(f.current().raidTickets.count,5);assert.equal(f.current().raidTickets.cap,5);
+  assert.equal(f.current().raidTickets.dailyGrant,2);
+});
+
 test('an older in-flight status response cannot restore a ticket already consumed by start',async()=>{
   const f=ticketRuntime();let release;
   f.setResponse(action=>action==='ticket-status' ? new Promise(resolve=>{release=resolve;}) :

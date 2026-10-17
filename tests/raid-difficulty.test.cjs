@@ -7,6 +7,13 @@ const { advanceRaidClock } = require('../raid-clock.cjs');
 const TYPES = ['ocean','taichu','ningxin','pojing','xingchen','wugou','thunder','reverse','sword'];
 const SOLO_NODES = {leftMain:10,rightMain:10,rightTop:5,rightFarTop:10};
 
+test('all tiers reduce Boss HP while keeping each original attack value',()=>{
+  for(const [difficulty,hp,attack] of [['normal',2000,70],['hard',4800,110],['extreme',7200,160]]) {
+    const boss=authority.createRaidBoss(difficulty);
+    assert.equal(boss.hp,hp);assert.equal(boss.maxHp,hp);assert.equal(boss.baseAttack,attack);
+  }
+});
+
 test('Boss difficulty ignores party size, player stats, deaths and departing teammates', () => {
   const expected = authority.createRaidBoss();
   for (const count of [0,1,2,3,4]) {
@@ -14,12 +21,13 @@ test('Boss difficulty ignores party size, player stats, deaths and departing tea
     assert.deepEqual(authority.createRaidBoss(members),expected);
     assert.deepEqual(authority.createRaidBoss(members.slice(1)),expected);
   }
-  assert.equal(expected.maxHp,4800);
+  assert.equal(expected.maxHp,2000);
   assert.equal(expected.baseAttack,70);
 });
 
-function trial({type,count,nodes={},seed}) {
+function trial({type,count,nodes={},seed,maxHp}) {
   const roomId='sim'+seed, boss=authority.createRaidBoss();
+  if (maxHp) boss.hp = boss.maxHp = maxHp;
   let room={version:2,status:'active',hostUid:'p0',startedAtMs:1,createdAtMs:1,
     bossHp:boss.hp,bossMaxHp:boss.maxHp,bossBaseAttack:boss.baseAttack,bossActionCount:0,members:{}};
   for(let i=0;i<count;i++) {
@@ -61,7 +69,7 @@ function trial({type,count,nodes={},seed}) {
 
 for(const profile of [
   {name:'three basic Golden Core players normally clear',count:3,nodes:{},minimum:.8},
-  {name:'an uninvested solo player usually cannot clear',count:1,nodes:{},maximum:.15},
+  {name:'lower HP improves basic solo clear chances without reducing attack',count:1,nodes:{},comparePrevious:true},
   {name:'a legacy solo room snapshot with three full nodes and their prerequisite can clear',count:1,nodes:SOLO_NODES,minimum:.9}
 ])test(profile.name+' at 80% accuracy and 20 seconds per answer', t=>{
   for(const type of TYPES) {
@@ -70,5 +78,10 @@ for(const profile of [
     t.diagnostic(type+': '+wins.length+'/200 cleared');
     if(profile.minimum!==undefined)assert.ok(rate>=profile.minimum,type+': '+rate);
     if(profile.maximum!==undefined)assert.ok(rate<=profile.maximum,type+': '+rate);
+    if(profile.comparePrevious) {
+      const previous=Array.from({length:200},(_,seed)=>trial({...profile,type,seed,maxHp:4800}));
+      const previousRate=previous.filter(result=>result.won).length/previous.length;
+      assert.ok(rate>previousRate,type+': new '+rate+' vs previous '+previousRate);
+    }
   }
 });

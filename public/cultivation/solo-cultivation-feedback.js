@@ -119,6 +119,10 @@ export function beginSoloCultivationFeedback({ scoreBefore, source, realms }) {
     });
   }
 
+  function waitUntil(deadline) {
+    return wait(Math.max(0, deadline - performance.now()));
+  }
+
   function pageChanged() {
     if (!document.getElementById('page-quiz')?.classList.contains('active-page')) finish();
   }
@@ -148,14 +152,15 @@ export function beginSoloCultivationFeedback({ scoreBefore, source, realms }) {
         control: { x: Math.max(16, Math.min(width - 16, start.x + (i % 2 ? 1 : -1) * (65 + i * 9))),
           y: start.y + (destinationY - start.y) * .45 } };
     });
+    // rAF 只負責繪製。首幀若延後，也必須從呼叫時刻計算進度。
+    const started = performance.now();
+    const endAt = started + 110 + (reduced ? 160 : 680) + (orbs.length - 1) * (reduced ? 0 : 48);
     return new Promise(resolve => {
-      let started;
       let absorbed = 0;
-      const release = () => { waiting.delete(release); resolve(); };
+      const release = () => { waiting.delete(release); resolve(endAt); };
       waiting.add(release);
       function tick(now) {
         if (done) return release();
-        started ??= now;
         // 目的地以吸收點的當下位置計算，手機轉向／調整視窗時仍命中進度條。
         const target = receiver.getBoundingClientRect();
         const end = { x: target.left + target.width / 2, y: target.top + target.height / 2 };
@@ -210,15 +215,16 @@ export function beginSoloCultivationFeedback({ scoreBefore, source, realms }) {
       const fromScore = Math.max(0, finalScore - amount);
       const initial = render(fromScore);
       gainLabel.textContent = `+${numberText(amount)} 修為`;
-      await fly(amount, fromScore, initial.index);
+      const flightEnd = await fly(amount, fromScore, initial.index);
       if (done) return;
       // 先完整呈現滿條，再顯示突破後帶入下一境的剩餘修為。
-      await wait(260);
+      await waitUntil(flightEnd + 260);
       if (done) return;
       const final = cultivationProgress(finalScore, realmList);
-      if (final.index !== initial.index) { render(finalScore); await wait(280); }
+      const carryMs = final.index !== initial.index ? 280 : 0;
+      if (carryMs) { render(finalScore); await waitUntil(flightEnd + 260 + carryMs); }
       root.classList.add('leaving');
-      await wait(180);
+      await waitUntil(flightEnd + 260 + carryMs + 180);
     } catch (error) {
       console.warn('[Solo cultivation feedback]', error);
     } finally { finish(); }

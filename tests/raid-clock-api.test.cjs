@@ -68,7 +68,7 @@ test('start assigns fixed Boss stats to the ready party',async()=>{
   const f=fixture('waiting');
   const result=await f.request('start');
   assert.equal(result.room.status,'active');
-  assert.equal(result.room.bossMaxHp,4800);
+  assert.equal(result.room.bossMaxHp,2000);
   assert.equal(result.room.serverDrivenBoss,true);
   assert.equal(result.room.bossBaseAttack,70);
 });
@@ -88,7 +88,7 @@ test('room start assigns the same Boss HP and attack for one through four player
       return [uid,{...base,uid,host:i===0,atk:200*(i+1),maxHp:1000*(i+1)}];
     }));
     const result=await f.request('start');
-    assert.equal(result.room.bossMaxHp,4800);
+    assert.equal(result.room.bossMaxHp,2000);
     assert.equal(result.room.bossBaseAttack,70);
   }
 });

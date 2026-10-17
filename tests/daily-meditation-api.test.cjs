@@ -116,7 +116,7 @@ test('failed claim transaction changes neither its receipt nor player balances',
 test('ticket cap converts the extra raid entry to two base gold, but still grants the draw ticket',async()=>{
   const f=fixture({raidTickets:{count:10,lastGrantDate:date}});for(let i=2;i<=5;i++)friend(f,'u'+i,3);await complete(f);
   const before=f.user().stats.gold,result=await f.service.claim('u1',{stars:15,date});
-  assert.equal(f.user().raidTickets.count,10);assert.equal(f.user().stats.gold-before,90);assert.equal(result.reward.drawTickets,1);
+  assert.equal(f.user().raidTickets.count,5);assert.equal(f.user().stats.gold-before,90);assert.equal(result.reward.drawTickets,1);
 });
 test('friend completing later unlocks a red-dot reward; stars persist after a completed friend leaves',async()=>{
   const f=fixture();friend(f,'u2',0,0,{completed:false});await complete(f);

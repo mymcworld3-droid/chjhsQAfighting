@@ -92,7 +92,7 @@ test('three clients see joins, readiness and start through real HTTP streaming w
   await until(()=>seen.every(list=>Object.values(list.at(-1).members).every(member=>member.ready)));
   const started=await clients[0].startRaidRoom(id);
   await until(()=>seen.every(list=>list.at(-1).status==='active'));
-  assert.equal(started.room.bossMaxHp,4800);
+  assert.equal(started.room.bossMaxHp,2000);
   assert.equal(playerDb.docs.get('users/a').raidTickets.count,2);
   assert.equal(playerDb.docs.get('users/b').raidTickets.count,2);
   assert.equal(playerDb.docs.get('users/c').raidTickets.count,2);
