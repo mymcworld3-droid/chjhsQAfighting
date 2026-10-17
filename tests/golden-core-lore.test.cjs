@@ -48,7 +48,7 @@ test('Golden Core status and downgrade warning use attunement terminology', () =
   const warning = read('public/cultivation/cultivation-core-equip-warning.js');
 
   assert.match(status, /目前調御金丹/);
-  assert.match(status, /ATTUNED CORE/);
+  assert.match(status, /調御狀態/);
   assert.match(status, /調御中/);
   assert.match(warning, /候選丹相/);
   assert.match(warning, /正在調御的本命金丹/);

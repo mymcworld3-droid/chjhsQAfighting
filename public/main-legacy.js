@@ -106,7 +106,6 @@ let soloSession = {
 // ==========================================
 // 🌍 國際化 (i18n) 設定
 // ==========================================
-let currentLang = localStorage.getItem('app_lang') || 'zh-TW';
 
 // Persist unanswered solo questions for the current account/range only.
 const soloQuestionCache = createSoloQuestionCache(window.localStorage);
@@ -132,7 +131,7 @@ function soloQuestionScope() {
         difficulty: String(settings.difficulty || 'auto'),
         level: String(profile.educationLevel || ''),
         weakSubjects: mode === 'focused' ? String(profile.weakSubjects || '') : '',
-        language: currentLang
+        language: 'zh-TW'
     });
 }
 
@@ -213,273 +212,147 @@ function pickBankQuestionWithoutReplacement(pool, drawKey) {
 }
 
 
-const translations = {
-    'zh-TW': {
-        app_title: "青雲問道 · 以學入道",
-        app_name: "青雲問道",
-        not_logged_in: "未登入",
-        welcome_title: "一念起，入仙途",
-        welcome_desc: "以知識為靈根，以每一題為修行。",
-        btn_login_google: "使用 Google 登入",
-        
-        // Onboarding
-        ob_title: "👋 嗨！初次見面",
-        ob_desc: "設定資料讓題目更適合你：",
-        ob_label_level: "你是幾年級學生？",
-        ob_label_strong: "擅長科目",
-        ob_label_weak: "弱項科目",
-        ob_placeholder_strong: "例如：歷史, 英文",
-        ob_placeholder_weak: "例如：數學, 理化",
-        btn_start_journey: "開始旅程",
-        
-        // Levels
-        level_elem_mid: "國小 (中年級)",
-        level_elem_high: "國小 (高年級)",
-        level_jh_1: "國中 (一年級)",
-        level_jh_2: "國中 (二年級)",
-        level_jh_3: "國中 (三年級)",
-        level_sh: "高中 / 高職",
-        level_univ: "大學 / 社會人士",
+// 固定繁體中文介面；文字鍵亦供主題與動態面板定位使用。
+const UI_TEXT = {
+    app_title: "青雲問道 · 以學入道",
+    app_name: "青雲問道",
+    not_logged_in: "未登入",
+    welcome_title: "一念起，入仙途",
+    welcome_desc: "以知識為靈根，以每一題為修行。",
+    btn_login_google: "使用 Google 登入",
 
-        // Home
-        btn_solo: "單人挑戰",
-        btn_pvp: "雙人對戰",
-        label_net_progress: "淨勝",
-        stat_score: "總積分",
-        stat_accuracy: "正確率",
-        stat_streak: "當前連對",
-        stat_best_streak: "最佳連對",
+    // Onboarding
+    ob_title: "👋 嗨！初次見面",
+    ob_desc: "設定資料讓題目更適合你：",
+    ob_label_level: "你是幾年級學生？",
+    ob_label_strong: "擅長科目",
+    ob_label_weak: "弱項科目",
+    ob_placeholder_strong: "例如：歷史, 英文",
+    ob_placeholder_weak: "例如：數學, 理化",
+    btn_start_journey: "開始旅程",
 
-        // Quiz
-        loading_title: "雲端大腦運算中",
-        loading_text: "AI 正在趕工出題中...",
-        label_analysis: "AI 解析：",
-        btn_back_home: "返回大廳",
-        btn_next_q: "下一題",
-        btn_giveup: "放棄此題 (換下一題)",
-        msg_correct: "回答正確！",
-        msg_wrong: "回答錯誤...",
-        msg_rank_up: "🎉 晉升至",
-        msg_rank_down: "⚠️ 降級至",
+    // Levels
+    level_elem_mid: "國小 (中年級)",
+    level_elem_high: "國小 (高年級)",
+    level_jh_1: "國中 (一年級)",
+    level_jh_2: "國中 (二年級)",
+    level_jh_3: "國中 (三年級)",
+    level_sh: "高中 / 高職",
+    level_univ: "大學 / 社會人士",
 
-        // Store
-        store_title: "道具商店",
-        tab_all: "全部",
-        tab_frame: "相框",
-        tab_avatar: "頭像",
-        msg_loading_products: "載入商品中...",
-        btn_equip: "裝備",
-        btn_equipped: "已裝備",
-        btn_unequip_avatar: "取消裝備",
-        msg_buy_confirm: "確定要花費 {price} 積分購買嗎？",
-        msg_buy_success: "購買成功！",
-        msg_no_funds: "積分不足！",
-        // 加在 translations['zh-TW'] 裡面
-        admin_inventory_title: "📦 現有商品庫存",
+    // Home
+    btn_solo: "單人挑戰",
+    btn_pvp: "雙人對戰",
+    label_net_progress: "淨勝",
+    stat_score: "總積分",
+    stat_accuracy: "正確率",
+    stat_streak: "當前連對",
+    stat_best_streak: "最佳連對",
 
-        // Battle
-        battle_searching: "正在搜尋對手...",
-        battle_connecting: "正在連接對戰伺服器",
-        btn_cancel_match: "取消配對",
-        battle_me: "我方",
-        battle_opp: "對手",
-        battle_generating: "正在生成題目...",
-        battle_waiting_opp: "等待對手作答中...",
-        battle_ended: "對戰結束",
-        battle_calculating: "計算結果中...",
-        btn_play_again: "再來一局",
-        battle_win: "🎉 勝利！",
-        battle_lose: "💔 惜敗...",
-        battle_draw: "🤝 平手",
+    // Quiz
+    loading_title: "雲端大腦運算中",
+    loading_text: "正在生成題目…",
+    label_analysis: "AI 解析：",
+    btn_back_home: "返回宗門",
+    btn_next_q: "繼續悟道",
+    btn_giveup: "放棄此題（換下一題）",
+    msg_correct: "回答正確！",
+    msg_wrong: "回答錯誤...",
+    msg_rank_up: "🎉 晉升至",
+    msg_rank_down: "⚠️ 降級至",
 
-        // Rank
-        rank_title: "全服排行榜",
-        th_player: "玩家",
-        th_rank: "段位",
+    // Store
+    store_title: "雲間坊市",
+    tab_all: "全部",
+    tab_frame: "相框",
+    tab_avatar: "頭像",
+    msg_loading_products: "載入商品中...",
+    btn_equip: "裝備",
+    btn_equipped: "已裝備",
+    btn_unequip_avatar: "取消裝備",
+    msg_buy_confirm: "確定要花費 {price} 積分購買嗎？",
+    msg_buy_success: "購買成功！",
+    msg_no_funds: "積分不足！",
+    admin_inventory_title: "📦 現有商品庫存",
 
-        // Settings
-        settings_title: "個人設定",
-        label_level: "年級 / 身份",
-        label_strong: "擅長科目",
-        label_weak: "弱項 (加強練習)",
-        placeholder_strong: "輸入擅長科目...",
-        placeholder_weak: "輸入想加強的科目...",
-        label_source: "出題來源",
-        label_difficulty: "題目難度",
-        hint_select_bank: "請依序選擇分類...",
-        diff_easy: "🟢 簡單 (Easy)",
-        diff_medium: "🟡 中等 (Medium)",
-        diff_hard: "🔴 困難 (Hard)",
-        btn_update_settings: "更新設定",
-        history_title: "答題紀錄",
-        inventory_title: "我的背包",
-        btn_logout: "登出帳號",
-        loading: "載入中...",
+    // Battle
+    battle_searching: "正在搜尋對手...",
+    battle_connecting: "正在連接對戰伺服器",
+    btn_cancel_match: "取消配對",
+    battle_me: "我方",
+    battle_opp: "對手",
+    battle_generating: "正在生成題目...",
+    battle_waiting_opp: "等待對手作答中...",
+    battle_ended: "對戰結束",
+    battle_calculating: "計算結果中...",
+    btn_play_again: "再來一局",
+    battle_win: "🎉 勝利！",
+    battle_lose: "💔 惜敗...",
+    battle_draw: "🤝 平手",
 
-        // Admin
-        admin_title: "管理後台",
-        admin_new_mode: "新增模式",
-        admin_maintenance: "系統維護",
-        btn_recalc_rank: "重算全服玩家段位",
-        msg_recalc_warn: "說明：這會遍歷所有使用者，根據其「淨積分」重新設定段位。",
-        admin_add_product: "➕ 上架新商品",
-        admin_label_name: "商品名稱",
-        admin_label_price: "價格 (分)",
-        admin_label_type: "商品類型",
-        admin_select_img: "從伺服器選擇圖片：",
-        btn_save_product: "上架商品",
-        admin_inventory_title: "📦 現有商品庫存",
+    // Rank
+    rank_title: "九州仙榜",
+    th_player: "玩家",
+    th_rank: "境界",
 
-        // Nav
-        nav_home: "宗門",
-        nav_quiz: "答題",
-        nav_store: "商店",
-        nav_rank: "排行",
-        nav_settings: "設定",
-        nav_social: "社交",
-        nav_admin: "管理",
+    // Settings
+    settings_title: "洞府設定",
+    label_level: "年級／身分",
+    label_strong: "擅長科目",
+    label_weak: "弱項 (加強練習)",
+    placeholder_strong: "輸入擅長科目...",
+    placeholder_weak: "輸入想加強的科目...",
+    label_source: "出題來源",
+    label_difficulty: "題目難度",
+    hint_select_bank: "請依序選擇分類...",
+    diff_easy: "🟢 簡單",
+    diff_medium: "🟡 中等",
+    diff_hard: "🔴 困難",
+    btn_update_settings: "更新設定",
+    history_title: "答題紀錄",
+    inventory_title: "法寶庫",
+    btn_logout: "登出帳號",
+    loading: "載入中...",
 
-        // Ranks
-        rank_bronze: "🥉 青銅",
-        rank_silver: "🥈 白銀",
-        rank_gold: "🥇 黃金",
-        rank_diamond: "🔷 鑽石",
-        rank_star: "🌟 星耀",
-        rank_master: "🟣 大師",
-        rank_grandmaster: "🔥 宗師",
-        rank_king: "👑 王者",
-        analysis_title: "能力分析圖譜",
-        analysis_desc: "依答題紀錄估計各單元能力，並提供 AI 補強建議"
-    },
-    'en': {
-        app_title: "Qingyun · The Path of Learning",
-        app_name: "Qingyun",
-        not_logged_in: "Guest",
-        welcome_title: "Begin Your Journey",
-        welcome_desc: "Cultivate knowledge, one question at a time.",
-        btn_login_google: "Login with Google",
-        
-        ob_title: "👋 Hi there!",
-        ob_desc: "Let's personalize your experience:",
-        ob_label_level: "Your Education Level?",
-        ob_label_strong: "Strong Subjects",
-        ob_label_weak: "Weak Subjects",
-        ob_placeholder_strong: "e.g., History, English",
-        ob_placeholder_weak: "e.g., Math, Science",
-        btn_start_journey: "Start Journey",
-        
-        level_elem_mid: "Elementary (Mid)",
-        level_elem_high: "Elementary (High)",
-        level_jh_1: "Junior High (Grade 7)",
-        level_jh_2: "Junior High (Grade 8)",
-        level_jh_3: "Junior High (Grade 9)",
-        level_sh: "Senior High",
-        level_univ: "University / Adult",
+    // Admin
+    admin_title: "管理後台",
+    admin_new_mode: "新增模式",
+    admin_maintenance: "系統維護",
+    btn_recalc_rank: "重算全服玩家境界",
+    msg_recalc_warn: "說明：這會遍歷所有使用者，根據其「淨積分」重新設定段位。",
+    admin_add_product: "➕ 上架新商品",
+    admin_label_name: "商品名稱",
+    admin_label_price: "價格 (分)",
+    admin_label_type: "商品類型",
+    admin_select_img: "從伺服器選擇圖片：",
+    btn_save_product: "上架商品",
+    admin_inventory_title: "📦 現有商品庫存",
 
-        btn_solo: "Solo Mode",
-        btn_pvp: "PvP Battle",
-        label_net_progress: "Net Score",
-        stat_score: "Total Score",
-        stat_accuracy: "Accuracy",
-        stat_streak: "Streak",
-        stat_best_streak: "Best Streak",
+    // Nav
+    nav_home: "宗門",
+    nav_quiz: "答題",
+    nav_store: "坊市",
+    nav_rank: "仙榜",
+    nav_settings: "洞府",
+    nav_social: "社交",
+    nav_admin: "管理",
 
-        loading_title: "AI Thinking...",
-        loading_text: "Generating your challenge...",
-        label_analysis: "AI Analysis:",
-        btn_back_home: "Home",
-        btn_next_q: "Next",
-        btn_giveup: "Give Up (Skip)",
-        msg_correct: "Correct!",
-        msg_wrong: "Wrong...",
-        msg_rank_up: "🎉 Promoted to",
-        msg_rank_down: "⚠️ Demoted to",
-
-        store_title: "Item Store",
-        tab_all: "All",
-        tab_frame: "Frame",
-        tab_avatar: "Avatar",
-        msg_loading_products: "Loading products...",
-        btn_equip: "Equip",
-        btn_equipped: "Equipped",
-        btn_unequip_avatar: "Unequip",
-        msg_buy_confirm: "Spend {price} points to buy?",
-        msg_buy_success: "Purchase Successful!",
-        msg_no_funds: "Insufficient Points!",
-
-        battle_searching: "Searching for opponent...",
-        battle_connecting: "Connecting to server...",
-        btn_cancel_match: "Cancel",
-        battle_me: "You",
-        battle_opp: "Enemy",
-        battle_generating: "Generating Question...",
-        battle_waiting_opp: "Waiting for opponent...",
-        battle_ended: "Battle Ended",
-        battle_calculating: "Calculating results...",
-        btn_play_again: "Play Again",
-        battle_win: "🎉 VICTORY!",
-        battle_lose: "💔 DEFEAT...",
-        battle_draw: "🤝 DRAW",
-
-        rank_title: "Leaderboard",
-        th_player: "Player",
-        th_rank: "Rank",
-
-        settings_title: "Settings",
-        label_level: "Level / Identity",
-        label_strong: "Strong Subjects",
-        label_weak: "Weak Subjects",
-        placeholder_strong: "Enter strong subjects...",
-        placeholder_weak: "Enter weak subjects...",
-        label_source: "Quiz Source",
-        label_difficulty: "Difficulty",
-        hint_select_bank: "Select a category...",
-        diff_easy: "🟢 Easy",
-        diff_medium: "🟡 Medium",
-        diff_hard: "🔴 Hard",
-        btn_update_settings: "Update Settings",
-        history_title: "History",
-        inventory_title: "Inventory",
-        btn_logout: "Logout",
-        loading: "Loading...",
-
-        admin_title: "Admin Panel",
-        admin_new_mode: "New Item",
-        admin_maintenance: "Maintenance",
-        btn_recalc_rank: "Recalculate Ranks",
-        msg_recalc_warn: "This will recalculate all users' ranks based on net score.",
-        admin_add_product: "➕ Add Product",
-        admin_label_name: "Product Name",
-        admin_label_price: "Price",
-        admin_label_type: "Type",
-        admin_select_img: "Select Image:",
-        btn_save_product: "Save Product",
-        admin_inventory_title: "📦 Current Inventory",
-
-        nav_home: "Home",
-        nav_quiz: "Quiz",
-        nav_store: "Store",
-        nav_rank: "Rank",
-        nav_settings: "Settings",
-        nav_social: "Social",
-        nav_admin: "Admin",
-
-        rank_bronze: "🥉 Bronze",
-        rank_silver: "🥈 Silver",
-        rank_gold: "🥇 Gold",
-        rank_diamond: "🔷 Diamond",
-        rank_star: "🌟 Star",
-        rank_master: "🟣 Master",
-        rank_grandmaster: "🔥 Grandmaster",
-        rank_king: "👑 King",
-        analysis_title: "能力分析圖譜",
-        analysis_desc: "依答題紀錄估計各單元能力，並提供 AI 補強建議"
-    }
+    // Ranks
+    rank_bronze: "🥉 青銅",
+    rank_silver: "🥈 白銀",
+    rank_gold: "🥇 黃金",
+    rank_diamond: "🔷 鑽石",
+    rank_star: "🌟 星耀",
+    rank_master: "🟣 大師",
+    rank_grandmaster: "🔥 宗師",
+    rank_king: "👑 王者",
+    analysis_title: "能力分析圖譜",
+    analysis_desc: "依答題紀錄估計各單元能力，並提供 AI 補強建議"
 };
 
-// 輔助函式：取得翻譯
+// 輔助函式：取得介面文字
 function t(key, params = {}) {
-    let str = translations[currentLang][key] || key;
+    let str = UI_TEXT[key] || key;
     for (const [k, v] of Object.entries(params)) {
         str = str.replace(`{${k}}`, v);
     }
@@ -490,30 +363,20 @@ function t(key, params = {}) {
 window.updateTexts = () => {
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
-        if (translations[currentLang][key]) {
-            el.innerText = translations[currentLang][key];
+        if (UI_TEXT[key]) {
+            el.innerText = UI_TEXT[key];
         }
     });
     document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
         const key = el.getAttribute('data-i18n-placeholder');
-        if (translations[currentLang][key]) {
-            el.placeholder = translations[currentLang][key];
+        if (UI_TEXT[key]) {
+            el.placeholder = UI_TEXT[key];
         }
     });
-    
-    // 更新按鈕文字
-    const langBtn = document.getElementById('lang-display');
-    if(langBtn) langBtn.innerText = currentLang === 'zh-TW' ? 'EN' : '中文';
     
     updateUIStats();
 };
 
-window.toggleLanguage = () => {
-    currentLang = currentLang === 'zh-TW' ? 'en' : 'zh-TW';
-    localStorage.setItem('app_lang', currentLang);
-    updateTexts();
-    if (currentUserData) { syncSoloQuestionCache(); void fillBuffer(); }
-};
 // ==========================================
 // 🛠️ 管理員 Debugger：啟動階段先記錄，確認管理員身分才顯示。
 // 技術故障只送到 Debugger；一般遊戲操作提示保留在原有 UI。
@@ -1030,7 +893,7 @@ function ensureGameStartupGate() {
             <div class="game-startup-veil"></div>
         </div>
         <div class="game-startup-content">
-            <div class="game-startup-brand">QINGYUN · CULTIVATION REALM</div>
+            <div class="game-startup-brand">青雲問道 · 仙途修行</div>
             <div class="game-startup-copy">
                 <div class="game-startup-kicker">一念入道 · 萬法將啟</div>
                 <h1>宗門載入中</h1>
@@ -1555,7 +1418,7 @@ onAuthStateChanged(auth, async (user) => {
         window.currentActiveQuiz = null;
         xiuxianDebugBuffer.length = 0;
         if (userInfoEl) {
-            // 加回 data-i18n 屬性，讓它顯示翻譯的 "未登入"
+            // 加回 data-i18n 屬性，讓它顯示「未登入」
             userInfoEl.setAttribute('data-i18n', 'not_logged_in');
             userInfoEl.innerText = t('not_logged_in');
         }
@@ -1901,14 +1764,14 @@ window.formatQuizRichText = formatQuizRichText;
 
 window.copyFriendCode = () => {
     const code = document.getElementById('my-friend-code').innerText;
-    navigator.clipboard.writeText(code).then(() => alert("Copied!"));
+    navigator.clipboard.writeText(code).then(() => alert("已複製！"));
 };
 
 window.addFriend = async () => {
     const input = document.getElementById('input-friend-code');
     const targetCode = input.value.trim().toUpperCase();
-    if (!targetCode) return alert("Please enter code");
-    if (targetCode === currentUserData.friendCode) return alert("Cannot add yourself");
+    if (!targetCode) return alert("請輸入好友代碼");
+    if (targetCode === currentUserData.friendCode) return alert("不能加自己為好友");
 
     const btn = document.querySelector('button[onclick="addFriend()"]');
     btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
@@ -1917,7 +1780,7 @@ window.addFriend = async () => {
         const q = query(collection(db, "users"), where("friendCode", "==", targetCode));
         const snap = await getDocs(q);
         if (snap.empty) {
-            alert("Code not found");
+            alert("找不到這個好友代碼");
             btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-user-plus"></i>';
             return;
         }
@@ -1926,7 +1789,7 @@ window.addFriend = async () => {
         const targetUserData = targetUserDoc.data();
 
         if (currentUserData.friends.includes(targetUserId)) {
-            alert("Already friends!");
+            alert("已經是好友了！");
             btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-user-plus"></i>';
             return;
         }
@@ -1944,7 +1807,7 @@ window.addFriend = async () => {
         loadFriendList();
     } catch (e) {
         console.error(e);
-        alert("Error: " + e.message);
+        alert("發生錯誤：" + e.message);
     } finally {
         btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-user-plus"></i>';
     }
@@ -2008,7 +1871,7 @@ window.loadFriendList = async () => {
             const lastActive = fData.lastActive ? fData.lastActive.toDate() : new Date(0);
             const diffMinutes = (now - lastActive) / 1000 / 60;
             const isOnline = diffMinutes < 5;
-            const statusHtml = isOnline ? `<span class="text-green-400 text-xs flex items-center gap-1"><div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div> Online</span>` : `<span class="text-gray-500 text-xs">Offline (${getTimeAgo(lastActive)})</span>`;
+            const statusHtml = isOnline ? `<span class="text-green-400 text-xs flex items-center gap-1"><div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div> 在線</span>` : `<span class="text-gray-500 text-xs">離線（${getTimeAgo(lastActive)}）</span>`;
             
             const div = document.createElement('div');
             div.className = "bg-slate-800/50 p-3 rounded-xl border border-slate-700 flex items-center gap-3";
@@ -2042,16 +1905,16 @@ window.loadFriendList = async () => {
         window.QAFriendChat?.updateBadges();
     } catch (e) {
         console.error(e);
-        container.innerHTML = '<div class="text-red-400 text-center">Load Failed</div>';
+        container.innerHTML = '<div class="text-red-400 text-center">載入失敗</div>';
     }
 };
 
 function getTimeAgo(date) {
     const seconds = Math.floor((new Date() - date) / 1000);
-    if (seconds > 86400) return Math.floor(seconds/86400) + "d ago";
-    if (seconds > 3600) return Math.floor(seconds/3600) + "h ago";
-    if (seconds > 60) return Math.floor(seconds/60) + "m ago";
-    return "Just now";
+    if (seconds > 86400) return Math.floor(seconds/86400) + " 天前";
+    if (seconds > 3600) return Math.floor(seconds/3600) + " 小時前";
+    if (seconds > 60) return Math.floor(seconds/60) + " 分鐘前";
+    return "剛剛";
 }
 
 // 學制是既有的年級選項，不收集出生日期。未設定時由玩家自行點擊前往設定。
@@ -2078,7 +1941,7 @@ window.switchToPage = (pageId) => {
     if (pageId === 'page-social' && window.promptXiuxianEducationLevel()) return false;
     if (window.canFirstVisitNavigate?.(pageId) === false) return false;
     if (isBattleActive && pageId !== 'page-battle') {
-        alert("Battle in progress!");
+        alert("鬥法進行中！");
         return;
     }
 
@@ -2335,7 +2198,7 @@ window.renderCascadingSelectors = (tree, currentPath) => {
             const currentFullPath = newParts.join('/');
             if (val === 'ai') {
                 hiddenInput.value = 'ai';
-                hint.innerText = "Mode: AI";
+                hint.innerText = "出題模式：智慧出題";
                 hint.className = "text-xs text-green-400 mt-1";
                 renderCascadingSelectors(tree, 'ai');
             } else {
@@ -2418,7 +2281,7 @@ async function updateSettingsInputs() {
         if (hiddenInput) {
             hiddenInput.value = settings.source || 'ai';
             if(settings.source === 'ai') {
-                hint.innerText = "Mode: AI";
+                hint.innerText = "出題模式：智慧出題";
                 hint.className = "text-xs text-green-400 mt-1";
             } else {
                 hint.innerText = `Selected: ${(settings.source||'').replace('.json', '')}`;
@@ -2696,7 +2559,7 @@ window.startQuizFlow = async (isNewSession = false) => {
             console.error(e);
             void window.trackPlayerAnalytics?.('question_load_failed', { mode: 'solo' });
             if (window.handleFirstVisitQuestionFailure?.()) return;
-            alert("Failed to start");
+            alert("無法開始，請稍後再試");
             switchToPage('page-home');
         }
     }
@@ -2949,7 +2812,7 @@ async function fetchOneQuestion() {
                     level: curriculumLevel, 
                     rank: rankName, 
                     difficulty: finalDifficulty,
-                    language: currentLang,
+                    language: 'zh-TW',
                     knowledgeMap: currentUserData.stats.knowledgeMap || {},
                     quizSessionId: (globalThis.__xiuxianQuizBatchSession || (globalThis.__xiuxianQuizBatchSession = (globalThis.crypto?.randomUUID?.() || Math.random().toString(36).slice(2) + Date.now().toString(36)))) + '-' + (currentUserData?.uid || 'guest'),
                     ...recentSoloQuestionContext()
@@ -3034,7 +2897,7 @@ async function fetchOneQuestion() {
         return { 
             data: { q: rawData.q, opts: allOptions, ans: allOptions.indexOf(rawData.correct), exp: rawData.exp }, 
             rank: rankName, 
-            badge: `🎯 ${displaySubject} | ${finalDifficulty.toUpperCase()}`,
+            badge: `🎯 ${displaySubject} | ${({easy: '簡單', medium: '中等', hard: '困難'})[finalDifficulty] || '適性練習'}`,
             learningSubject:displaySubject, learningTopic:rawData.sub_topic || '題庫', learningDifficulty:rawData.difficulty || finalDifficulty
         };
     } 
@@ -3052,7 +2915,7 @@ async function fetchOneQuestion() {
                     level: currentUserData.profile.educationLevel || "General", 
                     rank: rankName, 
                     difficulty: finalDifficulty,
-                    language: currentLang,
+                    language: 'zh-TW',
                     knowledgeMap: currentUserData.stats.knowledgeMap || {},
                     quizSessionId: (globalThis.__xiuxianQuizBatchSession || (globalThis.__xiuxianQuizBatchSession = (globalThis.crypto?.randomUUID?.() || Math.random().toString(36).slice(2) + Date.now().toString(36)))) + '-' + (currentUserData?.uid || 'guest'),
                     ...recentSoloQuestionContext()
@@ -3701,7 +3564,7 @@ async function fetchExtendedPracticeQuestion() {
             level: currentUserData?.profile?.educationLevel || 'General',
             rank: rankName,
             difficulty,
-            language: currentLang,
+            language: 'zh-TW',
             knowledgeMap: currentUserData?.stats?.knowledgeMap || {},
             quizSessionId: (globalThis.__xiuxianQuizBatchSession || (globalThis.__xiuxianQuizBatchSession = (globalThis.crypto?.randomUUID?.() || Math.random().toString(36).slice(2) + Date.now().toString(36)))) + '-' + (currentUserData?.uid || 'guest'),
                     ...recentSoloQuestionContext()
@@ -4019,7 +3882,7 @@ window.giveUpQuiz = async () => {
         isAnswering = true; 
         
         // 視為回答錯誤 (-1)，但不扣分，僅中斷連勝
-        await handleAnswer(-1, -2, document.getElementById('question-text').innerText, "Skipped by player.");
+        await handleAnswer(-1, -2, document.getElementById('question-text').innerText, "玩家放棄此題。");
         
         // 🔥 強制重置鎖定狀態 (handleAnswer 內部可能會解鎖，但放棄邏輯需確保安全)
         setTimeout(() => {
@@ -4738,7 +4601,7 @@ window.leaveBattle = async () => {
 
 // 🔥 新增：發現對手時的震撼動畫 (請將此函式加在 window.startBattleMatchmaking 之前)
 window.showOpponentFoundAnimation = async (oppData) => {
-    document.getElementById('battle-status-text').innerText = "OPPONENT FOUND!";
+    document.getElementById('battle-status-text').innerText = "已找到對手！";
     document.getElementById('battle-status-text').classList.add('text-red-400', 'font-bold');
     
     const oppUI = document.getElementById('match-opp');
@@ -4775,7 +4638,7 @@ function buildLocalBattlePlayer() {
     );
     return {
         uid: auth.currentUser.uid,
-        name: currentUserData.displayName || "Player",
+        name: currentUserData.displayName || "修士",
         equipped: { ...currentUserData.equipped, avatar: resolvePlayerAvatar(currentUserData, auth.currentUser) },
         goldenCore: window.getEquippedGoldenCoreBattleSnapshot?.() || null,
         artifactBattle,
@@ -4858,8 +4721,8 @@ window.startBattleMatchmaking = async () => {
     document.getElementById('battle-arena').classList.add('hidden');
     document.getElementById('battle-result').classList.add('hidden');
 
-    document.getElementById('battle-status-text').innerText = "SEARCHING FOR OPPONENTS...";
-    document.getElementById('match-me-name').innerText = currentUserData.displayName || "Player";
+    document.getElementById('battle-status-text').innerText = "正在搜尋對手…";
+    document.getElementById('match-me-name').innerText = currentUserData.displayName || "修士";
     document.getElementById('match-me-rank').innerHTML = getRankMarkup(currentUserData.stats?.rankLevel || 0);
     const myAvatar = document.getElementById('match-me-avatar');
     myAvatar.src = resolvePlayerAvatar(currentUserData, auth.currentUser);
@@ -4869,8 +4732,8 @@ window.startBattleMatchmaking = async () => {
         <div class="w-20 h-20 md:w-24 md:h-24 rounded-full border-4 border-red-500/30 border-dashed animate-[spin_3s_linear_infinite] flex items-center justify-center overflow-hidden bg-slate-900/50 p-1 relative">
             <i class="fa-solid fa-question text-3xl md:text-4xl text-red-500/50 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 mt-0"></i>
         </div>
-        <div class="mt-4 text-red-400 font-bold font-sci text-sm md:text-lg animate-pulse tracking-wider">SEARCHING</div>
-        <div class="text-[10px] md:text-xs text-red-500/50 font-mono">ESTIMATING...</div>
+        <div class="mt-4 text-red-400 font-bold font-sci text-sm md:text-lg animate-pulse tracking-wider">正在搜尋</div>
+        <div class="text-[10px] md:text-xs text-red-500/50 font-mono">正在尋找合適對手…</div>
     `;
 
     const searchTimeRange = new Date(Date.now() - 1 * 60 * 1000);
@@ -4927,7 +4790,7 @@ window.startBattleMatchmaking = async () => {
             listenToBattleRoom(currentBattleId);
         } else {
             console.log("⚠️ 無可用房間，建立新房間並預先生成題目...");
-            document.getElementById('battle-status-text').innerText = "GENERATING INITIAL QUERY...";
+            document.getElementById('battle-status-text').innerText = "正在生成首題…";
             
             // 🔥 關鍵修復：房主建立房間時「直接預先出好第一題」，讓對手加入時秒開，絕不卡頓！
             let initQ = null;
@@ -4937,7 +4800,7 @@ window.startBattleMatchmaking = async () => {
                 initQ = { data: { q: "通訊受到干擾 (連線忙碌)，請選擇正確選項以校正系統：", opts: ["【點擊此處】修復連線", "錯誤雜訊A", "錯誤雜訊B", "錯誤雜訊C"], ans: 0, exp: "系統自動派發備用題目。" }};
             }
 
-            document.getElementById('battle-status-text').innerText = "WAITING FOR CHALLENGER SIGNAL...";
+            document.getElementById('battle-status-text').innerText = "等待對手準備…";
             const roomRef = await addDoc(collection(db, "rooms"), { 
                 host: myBattleData, 
                 guest: null, 
@@ -5161,9 +5024,9 @@ function updateBattleCardUI(prefix, playerData) {
     container.innerHTML = `
         <div class="absolute inset-0 flex flex-col items-center justify-center p-3 text-center">
             <div class="text-4xl mb-3">${prefix === 'my' ? '⚔️' : '👹'}</div>
-            <div class="font-bold text-sm ${prefix === 'my' ? 'text-cyan-300' : 'text-red-300'}">${playerData.name || 'Player'}</div>
-            <div class="text-xs text-green-400 font-mono mt-2">HP ${currentHp}</div>
-            <div class="text-xs text-red-300 font-mono">ATK ${Number(playerData.atk || 20)}</div>
+            <div class="font-bold text-sm ${prefix === 'my' ? 'text-cyan-300' : 'text-red-300'}">${playerData.name || '修士'}</div>
+            <div class="text-xs text-green-400 font-mono mt-2">生命 ${currentHp}</div>
+            <div class="text-xs text-red-300 font-mono">攻擊 ${Number(playerData.atk || 20)}</div>
         </div>`;
     if (miniVisualEl) miniVisualEl.innerHTML = prefix === 'my' ? '⚔️' : '👹';
     if (subIndicatorEl) { subIndicatorEl.innerHTML = ''; subIndicatorEl.style.opacity = '0'; }
@@ -5259,7 +5122,7 @@ async function triggerMissAnimation(attackerPrefix, targetPrefix) {
         setTimeout(() => {
             // 收回並顯示 MISS
             attackerWrapper.style.transform = "translateY(0)";
-            createFloatingText(targetWrapper, "MISS", "text-gray-400 font-mono italic", -20);
+            createFloatingText(targetWrapper, "未命中", "text-gray-400 font-mono italic", -20);
             
             setTimeout(() => resolve(), 600);
         }, 300);
@@ -6060,11 +5923,11 @@ window.loadAdminLogs = async () => {
             li.innerHTML = `
                 <div class="flex justify-between mb-1"><span class="font-bold text-gray-300 truncate w-2/3">${log.email}</span><span class="text-gray-500 font-mono">${time}</span></div>
                 <div class="text-gray-400 mb-2 line-clamp-2">${log.question}</div>
-                <div class="flex justify-between items-center bg-slate-900/50 p-1 rounded"><span class="text-gray-400">${log.rankAtTime}</span><span class="${log.isCorrect ? 'text-green-400' : 'text-red-400'} font-bold px-2 py-0.5 rounded">${log.isCorrect ? 'CORRECT' : 'WRONG'}</span></div>
+                <div class="flex justify-between items-center bg-slate-900/50 p-1 rounded"><span class="text-gray-400">${log.rankAtTime}</span><span class="${log.isCorrect ? 'text-green-400' : 'text-red-400'} font-bold px-2 py-0.5 rounded">${log.isCorrect ? '答對' : '答錯'}</span></div>
             `;
             ul.appendChild(li);
         });
-    } catch (e) { ul.innerHTML = '<li class="text-center text-red-400 py-4">Error (Permission Denied)</li>'; }
+    } catch (e) { ul.innerHTML = '<li class="text-center text-red-400 py-4">無法載入，權限不足</li>'; }
 };
 
 // 九州仙榜只顯示玩家已設定學制所屬分流；普通仙榜沒有境界門檻。
@@ -6537,7 +6400,7 @@ window.loadAdminData = async () => {
         const snap = await getDocs(q);
         
         listContainer.innerHTML = '';
-        if(snap.empty) { listContainer.innerHTML = '<div class="text-center text-gray-500">No products</div>'; return; }
+        if(snap.empty) { listContainer.innerHTML = '<div class="text-center text-gray-500">尚無商品</div>'; return; }
 
         snap.forEach(doc => {
             const item = doc.data();
@@ -6553,13 +6416,13 @@ window.loadAdminData = async () => {
                         <div class="text-xs text-gray-400">${item.type} | $${item.price}</div>
                     </div>
                 </div>
-                <div class="text-blue-400 text-xs"><i class="fa-solid fa-pen"></i> Edit</div>
+                <div class="text-blue-400 text-xs"><i class="fa-solid fa-pen"></i> 編輯</div>
             `;
             listContainer.appendChild(div);
         });
     } catch (e) {
         console.error(e);
-        listContainer.innerHTML = '<div class="text-red-400 text-center">Load Failed</div>';
+        listContainer.innerHTML = '<div class="text-red-400 text-center">載入失敗</div>';
     }
 };
 
@@ -6661,7 +6524,7 @@ document.addEventListener('keydown', (event) => {
 });
 
 window.saveProduct = async () => {
-    if (!currentUserData || !currentUserData.isAdmin) return alert("Permission Denied (Admin only)");
+    if (!currentUserData || !currentUserData.isAdmin) return alert("權限不足，僅限管理員操作");
 
     const docId = document.getElementById('admin-edit-id').value; 
     const name = document.getElementById('admin-p-name').value;
@@ -6676,7 +6539,7 @@ window.saveProduct = async () => {
 
     const productData = { name, type, value, price, updatedAt: serverTimestamp() };
     const btn = document.getElementById('admin-btn-save');
-    btn.innerText = "Processing...";
+    btn.innerText = "處理中…";
     btn.disabled = true;
 
     try {
@@ -6690,7 +6553,7 @@ window.saveProduct = async () => {
         }
         resetAdminForm();
         loadAdminData(); 
-    } catch (e) { console.error("Save Error:", e); alert("Operation failed"); } 
+    } catch (e) { console.error("Save Error:", e); alert("操作失敗"); }
     finally {
         btn.disabled = false;
         btn.innerText = document.getElementById('admin-edit-id').value ? '儲存變更' : '建立商品';
@@ -6700,14 +6563,14 @@ window.saveProduct = async () => {
 window.deleteProduct = async () => {
     const docId = document.getElementById('admin-edit-id').value;
     if (!docId) return;
-    if (!confirm("Are you sure you want to delete this product?")) return;
+    if (!confirm("確定要刪除此商品嗎？")) return;
 
     try {
         await deleteDoc(doc(db, "products", docId));
-        alert("Deleted successfully");
+        alert("刪除成功");
         resetAdminForm();
         loadAdminData();
-    } catch (e) { console.error(e); alert("Delete failed"); }
+    } catch (e) { console.error(e); alert("刪除失敗"); }
 };
 
 window.toggleAdminInputPlaceholder = async () => {
@@ -6719,18 +6582,18 @@ window.toggleAdminInputPlaceholder = async () => {
     selectorDiv.classList.remove('hidden');
 
     if (type === 'frame') {
-        input.placeholder = "CSS Class (frame-gold) or Image Path";
-        hint.innerText = "Supports CSS classes or image paths";
+        input.placeholder = "樣式類別（例如 frame-gold）或圖片路徑";
+        hint.innerText = "支援樣式類別或圖片路徑";
     } else {
-        input.placeholder = "Image Path (e.g., assets/avatar1.png)";
-        hint.innerText = "Manual input or select from unused images below";
+        input.placeholder = "圖片路徑（例如 assets/avatar1.png）";
+        hint.innerText = "可自行輸入，或從下方未使用圖片中選擇";
     }
     await loadUnusedAssets();
 };
 
 async function loadUnusedAssets() {
     const select = document.getElementById('admin-asset-select');
-    select.innerHTML = '<option value="">Scanning...</option>';
+    select.innerHTML = '<option value="">正在掃描…</option>';
     try {
         const res = await fetch('/api/assets');
         const data = await res.json();
@@ -6748,7 +6611,7 @@ async function loadUnusedAssets() {
         select.innerHTML = `<option value="">${t('admin_select_img')}</option>`;
         if (unusedImages.length === 0) {
             const opt = document.createElement('option');
-            opt.innerText = "(No new images found)";
+            opt.innerText = "（找不到新圖片）";
             opt.disabled = true;
             select.appendChild(opt);
         } else {
@@ -6759,7 +6622,7 @@ async function loadUnusedAssets() {
                 select.appendChild(opt);
             });
         }
-    } catch (e) { console.error(e); select.innerHTML = '<option value="">Error</option>'; }
+    } catch (e) { console.error(e); select.innerHTML = '<option value="">發生錯誤</option>'; }
 }
 
 window.selectAdminImage = (value) => {
@@ -6776,7 +6639,7 @@ window.renderInventory = async (filterType = 'frame') => {
     container.innerHTML = `<div class="col-span-4 text-center text-gray-500 py-4"><div class="loader"></div></div>`;
 
     if (userInv.length === 0) {
-        container.innerHTML = `<div class="col-span-4 text-center text-gray-500 py-4 text-xs">Inventory empty. Go to Store!</div>`;
+        container.innerHTML = `<div class="col-span-4 text-center text-gray-500 py-4 text-xs">法寶庫尚無物品，可前往坊市選購。</div>`;
         return;
     }
 
@@ -6798,7 +6661,7 @@ window.renderInventory = async (filterType = 'frame') => {
         div.onclick = () => equipItem(item.type, pid, item.value); 
         if (isEquipped && item.type === 'avatar') div.title = t('btn_unequip_avatar');
         
-        const badge = isEquipped ? '<div class="absolute top-0 right-0 bg-green-500 text-[10px] px-1 rounded-bl">E</div>' : '';
+        const badge = isEquipped ? '<div class="absolute top-0 right-0 bg-green-500 text-[10px] px-1 rounded-bl">已裝備</div>' : '';
 
         div.innerHTML = `
             ${renderVisual(item.type, item.value, "w-10 h-10")}
@@ -6808,7 +6671,7 @@ window.renderInventory = async (filterType = 'frame') => {
         count++;
     });
 
-    if (count === 0) container.innerHTML = `<div class="col-span-4 text-center text-gray-500 py-4 text-xs">No items found</div>`;
+    if (count === 0) container.innerHTML = `<div class="col-span-4 text-center text-gray-500 py-4 text-xs">找不到物品</div>`;
 };
 
 window.loadStoreItems = async () => {
@@ -6822,7 +6685,7 @@ window.loadStoreItems = async () => {
         const snap = await getDocs(q);
         grid.innerHTML = '';
         
-        if (snap.empty) { grid.innerHTML = '<div class="col-span-full text-center text-gray-500 py-10">Store is empty...</div>'; return; }
+        if (snap.empty) { grid.innerHTML = '<div class="col-span-full text-center text-gray-500 py-10">坊市目前沒有商品…</div>'; return; }
 
         snap.forEach(doc => {
             const item = doc.data();
@@ -6850,7 +6713,7 @@ window.loadStoreItems = async () => {
                 <div class="flex-1 flex flex-col items-center justify-center w-full mb-3">
                     ${visual}
                     <div class="text-sm font-bold text-white mt-3 truncate w-full px-1">${item.name}</div>
-                    <div class="text-[10px] text-gray-400 mt-1 uppercase tracking-wider">${item.type === 'frame' ? 'Frame' : 'Avatar'}</div>
+                    <div class="text-[10px] text-gray-400 mt-1 uppercase tracking-wider">${item.type === 'frame' ? '相框' : '頭像'}</div>
                 </div>
                 ${btnAction}
             `;
@@ -6871,7 +6734,7 @@ window.buyItem = async (pid, price) => {
     try {
         const userRef = doc(db, "users", auth.currentUser.uid);
         let newInventory = currentUserData.inventory || [];
-        if(newInventory.includes(pid)) return alert("You already own this item");
+        if(newInventory.includes(pid)) return alert("你已擁有此物品");
         
         newInventory.push(pid);
         const newGold = currentGold - price;
@@ -6884,7 +6747,7 @@ window.buyItem = async (pid, price) => {
         updateUIStats();
         loadStoreItems();
         if(document.getElementById('page-settings').classList.contains('active-page')) renderInventory();
-    } catch(e) { console.error(e); alert("Purchase failed: " + e.message); }
+    } catch(e) { console.error(e); alert("購買失敗：" + e.message); }
 };
 
 let cosmeticEquipBusy = false;
@@ -6912,7 +6775,7 @@ window.equipItem = async (type, pid, value) => {
         void loadStoreItems();
         window.dispatchEvent(new CustomEvent('xiuxian:appearance-updated'));
         if(document.getElementById('page-settings')?.classList.contains('active-page')) void renderInventory();
-    } catch (e) { console.error(e); alert("Equip failed"); }
+    } catch (e) { console.error(e); alert("裝備失敗"); }
     finally {
         cosmeticEquipBusy = false;
         if (resetAvatar) resetAvatar.disabled = false;
@@ -6969,13 +6832,13 @@ function checkAdminRole(isAdmin) {
 
 // 系統強制重整觸發函式 (Admin Only)
 window.triggerGlobalReload = async () => {
-    if (!currentUserData || !currentUserData.isAdmin) return alert("Permission Denied");
+    if (!currentUserData || !currentUserData.isAdmin) return alert("權限不足");
     
     if (!confirm("⚠️ 危險操作：確定要強制所有線上玩家重新整理網頁嗎？\n(這將會中斷所有正在進行的對戰)")) return;
 
     const btn = document.querySelector('button[onclick="triggerGlobalReload()"]');
     const originalText = btn.innerHTML;
-    btn.innerHTML = '<div class="loader w-4 h-4 border-2"></div> Sending...';
+    btn.innerHTML = '<div class="loader w-4 h-4 border-2"></div> 發送中…';
     btn.disabled = true;
 
     try {
@@ -6999,12 +6862,12 @@ window.triggerGlobalReload = async () => {
 
 window.recalculateAllUserRanks = async () => {
     if (!window.trueImmortalBoardReady) { alert("五仙榜尚未讀取完成，請稍後再重算境界。"); return; }
-    if (!currentUserData || !currentUserData.isAdmin) return alert("Permission Denied");
+    if (!currentUserData || !currentUserData.isAdmin) return alert("權限不足");
     if (!confirm(t('msg_recalc_warn'))) return;
 
     const btn = document.querySelector('button[onclick="recalculateAllUserRanks()"]');
     const originalText = btn.innerHTML;
-    btn.innerHTML = '<div class="loader w-4 h-4 border-2"></div> Processing...';
+    btn.innerHTML = '<div class="loader w-4 h-4 border-2"></div> 處理中…';
     btn.disabled = true;
 
     try {
@@ -7025,7 +6888,7 @@ window.recalculateAllUserRanks = async () => {
         await Promise.all(updates);
         alert(`Recalculation Complete! Updated ${count} users.`);
 
-    } catch (e) { console.error(e); alert("Recalculation Failed: " + e.message); } 
+    } catch (e) { console.error(e); alert("重新計算失敗：" + e.message); }
     finally { btn.innerHTML = originalText; btn.disabled = false; }
 };
 

@@ -698,12 +698,7 @@ body.xianxia-theme main:has(#page-training.active-page),
         </h1>
 
         <div class="flex items-center gap-3">
-            <button aria-label="切換語言" onclick="toggleLanguage()" class="btn-icon-sm hover:text-cyan-400 transition">
-                <span id="lang-display" class="font-sci text-[10px] font-bold border border-white/20 px-2 py-1 rounded">EN</span>
-            </button>
-            <div id="user-info" class="glass-capsule px-3 py-1 text-xs font-bold text-cyan-300 flex items-center gap-2" data-i18n="not_logged_in">
-                GUEST
-            </div>
+            <div id="user-info" class="glass-capsule px-3 py-1 text-xs font-bold text-cyan-300 flex items-center gap-2" data-i18n="not_logged_in">未登入</div>
         </div>
     </header>
 
@@ -718,7 +713,7 @@ body.xianxia-theme main:has(#page-training.active-page),
                 
                 <button onclick="googleLogin()" class="btn-cyber-primary w-full max-w-xs py-4 rounded-xl font-bold flex items-center justify-center gap-3 group bg-slate-800 hover:bg-slate-700 transition border border-white/10">
                     <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5 h-5 bg-white rounded-full p-0.5">
-                    <span data-i18n="btn_login_google">以 Google 登入，開啟修行</span>
+                    <span data-i18n="btn_login_google">使用 Google 登入</span>
                     <i class="fa-solid fa-arrow-right opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0"></i>
                 </button>
                 <button id="btn-anonymous-login" type="button" onclick="anonymousLogin()" class="hidden btn-cyber-ghost w-full max-w-xs py-3 mt-3 rounded-xl text-sm" aria-label="匿名登入以測試遊戲">
@@ -737,16 +732,16 @@ body.xianxia-theme main:has(#page-training.active-page),
                     <div class="absolute -top-10 -right-10 w-40 h-40 bg-cyan-500/20 rounded-full blur-[60px] pointer-events-none"></div>
             
                     <div class="relative z-10 flex flex-col items-center text-center">
-                        <div class="text-[10px] font-bold text-cyan-300 tracking-[0.3em] mb-2 uppercase opacity-80">Current Rank</div>
+                        <div class="text-[10px] font-bold text-cyan-300 tracking-[0.3em] mb-2 uppercase opacity-80">目前境界</div>
                 
                         <h2 class="text-4xl md:text-5xl font-sci font-black text-white drop-shadow-[0_0_15px_rgba(34,211,238,0.6)] mb-5" id="display-rank">
-                            LOADING
+                            載入中…
                         </h2>
 
                         <div class="w-full max-w-[260px]">
                             <div class="flex justify-between text-[10px] text-cyan-200 mb-1.5 font-sci tracking-wider">
                                 <div class="flex items-center gap-1">
-                                    <i class="fa-solid fa-star text-yellow-400 animate-pulse"></i> <span>NEXT RANK</span>
+                                    <i class="fa-solid fa-star text-yellow-400 animate-pulse"></i> <span>下一境界</span>
                                 </div>
                                 <span>
                                     <span id="display-stars" class="text-yellow-400 font-bold text-sm">0</span> 
@@ -761,7 +756,7 @@ body.xianxia-theme main:has(#page-training.active-page),
                 </div>
     
                 <section id="xiuxian-panel" class="xiuxian-panel" aria-label="仙途修行" data-static-layout="1">
-                    <div class="xiuxian-kicker">修行境界 ／ CULTIVATION</div>
+                    <div class="xiuxian-kicker">修行境界</div>
                     <p class="xiuxian-invocation">心向青雲，步履不停。</p>
                     <div class="xiuxian-identity">
                         <div id="xiuxian-avatar-slot">
@@ -852,7 +847,7 @@ body.xianxia-theme main:has(#page-training.active-page),
         <div id="page-training" class="page-section hidden px-4 training-page training-page-v3" data-static-layout="1">
             <div class="training-page-heading-v3">
                 <div>
-                    <div class="training-eyebrow-v3">INNER ALCHEMY ／ 內丹修行</div>
+                    <div class="training-eyebrow-v3">內丹修行</div>
                     <h2>修煉</h2>
                 </div>
                 <div class="training-realm-seal-v3">金丹</div>
@@ -905,8 +900,8 @@ body.xianxia-theme main:has(#page-training.active-page),
 
             <div id="quiz-loading" class="text-center mt-32 hidden">
                 <div class="cyber-loader mx-auto mb-6"></div>
-                <h3 class="text-xl font-bold mt-6 text-cyan-400 animate-pulse font-sci" data-i18n="loading_title">SYSTEM CALCULATING</h3>
-                <p class="text-xs text-gray-400 mt-2" id="loading-text" data-i18n="loading_text">Generating Question...</p>
+                <h3 class="text-xl font-bold mt-6 text-cyan-400 animate-pulse font-sci" data-i18n="loading_title">雲端大腦運算中</h3>
+                <p class="text-xs text-gray-400 mt-2" id="loading-text" data-i18n="loading_text">正在生成題目…</p>
             </div>
 
             <div id="quiz-container" class="hidden mt-4">
@@ -914,7 +909,7 @@ body.xianxia-theme main:has(#page-training.active-page),
                     <div class="quiz-main-column">
                         <div class="glass-panel p-6 rounded-2xl mb-4 border-l-4 border-cyan-500 relative">
                         <div class="quiz-card-tools absolute top-3 right-3 z-20 flex items-center gap-2">
-                        <span class="text-[10px] bg-slate-900/50 px-2 py-1 rounded border border-white/10 text-cyan-300 backdrop-blur-md" id="quiz-badge">TYPE</span>
+                        <span class="text-[10px] bg-slate-900/50 px-2 py-1 rounded border border-white/10 text-cyan-300 backdrop-blur-md" id="quiz-badge">題目類型</span>
                         <button id="btn-extended-practice-stop" type="button" onclick="endQuizExtendedPractice()" class="quiz-extended-practice-stop hidden" title="結束延伸練習">
                         <i class="fa-solid fa-graduation-cap"></i>
                         <span>延伸中</span>
@@ -975,13 +970,13 @@ body.xianxia-theme main:has(#page-training.active-page),
                         </div>
                         <div class="flex gap-3">
                         <button onclick="switchToPage('page-home')" class="btn-cyber-ghost flex-1 py-3 rounded-lg text-xs" data-i18n="btn_back_home">返回宗門</button>
-                        <button id="btn-next-step" onclick="nextQuestion()" class="btn-cyber-primary flex-1 py-3 rounded-lg text-xs" data-i18n="btn_next_q">NEXT</button>
+                        <button id="btn-next-step" onclick="nextQuestion()" class="btn-cyber-primary flex-1 py-3 rounded-lg text-xs" data-i18n="btn_next_q">繼續悟道</button>
                         </div>
                         </div>
                         
                         <div class="mt-8 flex gap-3 w-full quiz-footer-actions">
                         <button id="btn-giveup" onclick="giveUpQuiz()" class="flex-1 py-3 text-gray-600 text-xs text-center hover:text-red-400 transition border border-transparent hover:border-red-500/20 rounded-lg group">
-                        <i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i> <span data-i18n="btn_giveup">ABORT MISSION</span>
+                        <i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i> <span data-i18n="btn_giveup">放棄此題（換下一題）</span>
                         </button>
                         <button id="btn-report" onclick="openReportModal()" class="flex-1 py-3 text-gray-600 text-xs text-center hover:text-yellow-400 transition border border-transparent hover:border-yellow-500/20 rounded-lg group">
                         <i class="fa-solid fa-bug group-hover:rotate-12 transition-transform"></i> <span>回報問題</span>
@@ -1032,7 +1027,7 @@ body.xianxia-theme main:has(#page-training.active-page),
         <div id="page-store" class="page-section hidden px-4">
             <div class="sticky top-0 bg-slate-950/95 backdrop-blur-md z-20 py-4 border-b border-slate-800 flex justify-between items-center mb-4">
                 <h2 class="text-xl font-bold text-pink-400 flex items-center gap-2">
-                    <i class="fa-solid fa-store"></i> <span data-i18n="store_title">STORE</span>
+                    <i class="fa-solid fa-store"></i> <span data-i18n="store_title">雲間坊市</span>
                 </h2>
                 <div class="bg-slate-800 px-3 py-1 rounded-full border border-yellow-500/30 text-yellow-400 font-mono text-sm flex items-center gap-1 shadow-lg">
                     <i class="fa-solid fa-coins text-yellow-300 animate-pulse"></i> 
@@ -1047,9 +1042,9 @@ body.xianxia-theme main:has(#page-training.active-page),
             </div>
 
             <div class="flex gap-2 mb-4 bg-slate-900/50 p-1 rounded-xl">
-                <button onclick="filterStore('all', this)" class="store-tab active flex-1 py-2 text-xs font-bold rounded-lg transition-all" data-i18n="tab_all">ALL</button>
-                <button onclick="filterStore('frame', this)" class="store-tab flex-1 py-2 text-xs font-bold rounded-lg transition-all" data-i18n="tab_frame">FRAMES</button>
-                <button onclick="filterStore('avatar', this)" class="store-tab flex-1 py-2 text-xs font-bold rounded-lg transition-all" data-i18n="tab_avatar">AVATARS</button>
+                <button onclick="filterStore('all', this)" class="store-tab active flex-1 py-2 text-xs font-bold rounded-lg transition-all" data-i18n="tab_all">全部</button>
+                <button onclick="filterStore('frame', this)" class="store-tab flex-1 py-2 text-xs font-bold rounded-lg transition-all" data-i18n="tab_frame">相框</button>
+                <button onclick="filterStore('avatar', this)" class="store-tab flex-1 py-2 text-xs font-bold rounded-lg transition-all" data-i18n="tab_avatar">頭像</button>
             </div>
 
             <p id="pm-market-load-state" class="text-xs text-amber-200" aria-live="polite"></p>
@@ -1058,7 +1053,7 @@ body.xianxia-theme main:has(#page-training.active-page),
             <!-- 使用 Tailwind 的響應式網格 (sm, md, lg, xl) 自動調整欄數 -->
             <div id="store-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 pb-20">
                 <!-- 改為 col-span-full 確保載入文字在任何欄數下都能置中 -->
-                <div class="col-span-full text-center py-10 text-gray-500 text-xs font-mono">LOADING DATA...</div>
+                <div class="col-span-full text-center py-10 text-gray-500 text-xs font-mono">資料載入中…</div>
             </div>
             <section id="player-market" class="hidden" aria-label="交易市集"></section>
         </div>
@@ -1069,7 +1064,7 @@ body.xianxia-theme main:has(#page-training.active-page),
 
         <div id="page-rank" class="page-section hidden px-4">
             <h2 class="text-xl font-bold mb-4 flex items-center gap-2 text-yellow-400 mt-4">
-                <i class="fa-solid fa-trophy"></i> <span data-i18n="rank_title">LEADERBOARD</span>
+                <i class="fa-solid fa-trophy"></i> <span data-i18n="rank_title">九州仙榜</span>
                 <button type="button" id="leaderboard-refresh" onclick="loadLeaderboard({force: true})" class="ml-auto rounded-lg border border-yellow-500/30 px-3 py-2 text-sm text-yellow-200">更新排名</button>
             </h2>
             <p class="mb-3 text-xs text-yellow-100/60">依照已設定的年級顯示仙榜；五大仙問鼎需渡劫期以上。</p>
@@ -1078,8 +1073,8 @@ body.xianxia-theme main:has(#page-training.active-page),
                     <thead class="bg-black/40 text-gray-500 font-mono text-[10px] uppercase tracking-wider">
                         <tr>
                             <th class="px-4 py-3 w-12">#</th>
-                            <th class="px-4 py-3" data-i18n="th_player">AGENT</th>
-                            <th class="px-4 py-3 text-right" data-i18n="th_rank">RATING</th>
+                            <th class="px-4 py-3" data-i18n="th_player">玩家</th>
+                            <th class="px-4 py-3 text-right" data-i18n="th_rank">境界</th>
                         </tr>
                     </thead>
                     <tbody id="leaderboard-body" class="divide-y divide-white/5"></tbody>
@@ -1089,7 +1084,7 @@ body.xianxia-theme main:has(#page-training.active-page),
 
         <div id="page-settings" class="page-section hidden px-4">
             <h2 class="text-xl font-bold mb-4 flex items-center gap-2 text-green-400 mt-4">
-                <i class="fa-solid fa-sliders"></i> <span data-i18n="settings_title">SETTINGS</span>
+                <i class="fa-solid fa-sliders"></i> <span data-i18n="settings_title">洞府設定</span>
             </h2>
             
             <div class="glass-panel p-6 rounded-2xl mb-6 relative overflow-hidden">
@@ -1099,17 +1094,17 @@ body.xianxia-theme main:has(#page-training.active-page),
                     <p class="text-xs text-gray-400">年級、擅長科目與想加強的科目都可選填；出題範圍可另外設定。</p>
                     <button id="btn-bind-guest" type="button" onclick="openFirstVisitAccountBinding()" class="hidden btn-cyber-primary w-full py-3 rounded-xl">綁定帳號，保存修行</button>
                     <div class="form-group">
-                        <label class="text-[10px] font-bold text-gray-400 mb-1 block uppercase">ID / Email</label>
+                        <label class="text-[10px] font-bold text-gray-400 mb-1 block uppercase">帳號／電子郵件</label>
                         <div class="text-sm font-mono text-cyan-200 truncate p-2 bg-slate-900/50 rounded border border-white/5" id="settings-email">...</div>
                     </div>
                     
                     <div class="form-group">
-                        <label class="text-[10px] font-bold text-cyan-400 mb-1 block uppercase">Player Name</label>
+                        <label class="text-[10px] font-bold text-cyan-400 mb-1 block uppercase">玩家名稱</label>
                         <input type="text" id="set-display-name" class="input-cyber w-full text-sm" placeholder="輸入新的名稱">
                     </div>
                     
                     <div class="form-group">
-                        <label class="text-[10px] font-bold text-gray-400 mb-1 block uppercase" data-i18n="label_level">Level</label>
+                        <label class="text-[10px] font-bold text-gray-400 mb-1 block uppercase" data-i18n="label_level">年級／身分</label>
                         <select id="set-level" class="input-cyber w-full">
                             <option value="">尚未設定（可稍後選擇）</option>
                             <option value="國小中年級" data-i18n="level_elem_mid">國小 (中年級)</option>
@@ -1124,17 +1119,17 @@ body.xianxia-theme main:has(#page-training.active-page),
 
                     <div class="grid grid-cols-2 gap-3">
                         <div class="form-group">
-                            <label class="text-[10px] font-bold text-green-500 mb-1 block uppercase">Strong</label>
+                            <label class="text-[10px] font-bold text-green-500 mb-1 block uppercase">擅長科目</label>
                             <input type="text" id="set-strong" class="input-cyber w-full text-xs">
                         </div>
                         <div class="form-group">
-                            <label class="text-[10px] font-bold text-red-500 mb-1 block uppercase">Weak</label>
+                            <label class="text-[10px] font-bold text-red-500 mb-1 block uppercase">想加強的科目</label>
                             <input type="text" id="set-weak" class="input-cyber w-full text-xs">
                         </div>
                     </div>
                     
                     <div class="pt-2 border-t border-white/5 mt-2">
-                        <label class="text-[10px] font-bold text-yellow-500 mb-1 block uppercase">出題模式 (Source Mode)</label>
+                        <label class="text-[10px] font-bold text-yellow-500 mb-1 block uppercase">出題模式</label>
                         <select id="set-source-mode" class="input-cyber w-full mb-3" onchange="toggleSourceMode()">
                             <option value="random">🌟 綜合練習 (隨機出題)</option>
                             <option value="focused">🎯 專注練習 (自訂單元)</option>
@@ -1148,7 +1143,7 @@ body.xianxia-theme main:has(#page-training.active-page),
                         <div id="bank-source-container" class="hidden bg-slate-900/50 p-3 rounded-lg border border-white/5">
                             <div id="bank-selectors-container" class="space-y-2"></div>
                             <input type="hidden" id="set-source-final-value" value="ai">
-                            <p id="bank-selection-hint" class="text-[10px] text-gray-500 mt-1 font-mono">Select database...</p>
+                            <p id="bank-selection-hint" class="text-[10px] text-gray-500 mt-1 font-mono">請選擇題庫…</p>
                         </div>
 
                         <div id="focused-source-container" class="hidden bg-slate-900/50 p-3 rounded-lg border border-white/5">
@@ -1171,28 +1166,28 @@ body.xianxia-theme main:has(#page-training.active-page),
                     </div>
 
                     <div class="form-group">
-                         <label class="text-[10px] font-bold text-purple-400 mb-1 block uppercase" data-i18n="label_difficulty">Difficulty</label>
+                         <label class="text-[10px] font-bold text-purple-400 mb-1 block uppercase" data-i18n="label_difficulty">題目難度</label>
                         <select id="set-difficulty" class="input-cyber w-full">
-                            <option value="auto" selected>⚡ AI AUTO</option>
-                            <option value="easy">🟢 EASY</option>
-                            <option value="medium">🟡 MEDIUM</option>
-                            <option value="hard">🔴 HARD</option>
+                            <option value="auto" selected>⚡ 自動難度</option>
+                            <option value="easy">🟢 簡單</option>
+                            <option value="medium">🟡 中等</option>
+                            <option value="hard">🔴 困難</option>
                         </select>
                     </div>
 
-                    <button onclick="saveProfile()" class="btn-cyber-primary w-full py-3 rounded-xl font-bold mt-2 hover:brightness-110 transition" data-i18n="btn_update_settings">UPDATE SYSTEM</button>
+                    <button onclick="saveProfile()" class="btn-cyber-primary w-full py-3 rounded-xl font-bold mt-2 hover:brightness-110 transition" data-i18n="btn_update_settings">更新設定</button>
                 </div>
             </div>
             
             <!-- 新版能力分析圖譜區塊 -->
             <div class="glass-panel p-5 rounded-2xl mb-6 relative border border-white/10 shadow-[0_0_20px_rgba(34,211,238,0.1)]">
                  <h3 class="font-bold text-white flex items-center gap-2 mb-2 font-sci">
-                    <i class="fa-solid fa-chart-radar text-cyan-400"></i> <span data-i18n="analysis_title">ANALYSIS</span>
+                    <i class="fa-solid fa-chart-radar text-cyan-400"></i> <span data-i18n="analysis_title">能力分析圖譜</span>
                 </h3>
                 <p class="text-[10px] text-gray-400 mb-4 font-mono" data-i18n="analysis_desc">依答題紀錄估計各單元能力，並提供 AI 補強建議</p>
 
                 <div id="percentile-display" class="hidden mb-4 bg-slate-900/60 p-4 rounded-xl border border-cyan-500/30 text-center shadow-[0_0_15px_rgba(34,211,238,0.15)] transition-all">
-                    <div class="text-[10px] text-gray-400 font-bold tracking-widest mb-2 font-mono uppercase">Global Ranking Estimate</div>
+                    <div class="text-[10px] text-gray-400 font-bold tracking-widest mb-2 font-mono uppercase">全服能力評估</div>
                     <div id="percentile-text" class="text-sm font-bold text-white leading-relaxed">
                         </div>
                 </div>
@@ -1210,7 +1205,7 @@ body.xianxia-theme main:has(#page-training.active-page),
                 <i class="fa-solid fa-clock-rotate-left mr-2"></i> 檢視答題紀錄
             </button>
             
-            <button onclick="logout()" class="w-full py-3 rounded-xl border border-red-800/50 text-red-400 hover:bg-red-900/20 transition text-xs font-bold tracking-widest" data-i18n="btn_logout">LOGOUT</button>
+            <button onclick="logout()" class="w-full py-3 rounded-xl border border-red-800/50 text-red-400 hover:bg-red-900/20 transition text-xs font-bold tracking-widest" data-i18n="btn_logout">登出帳號</button>
         </div>
 
         <!-- 🔥 新增：獨立的答題紀錄頁面 -->
@@ -1227,7 +1222,7 @@ body.xianxia-theme main:has(#page-training.active-page),
             
             <div class="glass-panel p-4 rounded-2xl mb-24 border border-white/5 relative overflow-hidden">
                 <div class="absolute -top-10 -right-10 w-32 h-32 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
-                <h3 class="text-xs font-bold text-gray-400 mb-4 px-1 uppercase tracking-wider">Recent History</h3>
+                <h3 class="text-xs font-bold text-gray-400 mb-4 px-1 uppercase tracking-wider">近期答題紀錄</h3>
                 
                 <ul id="history-list" class="space-y-2 min-h-[300px]">
                     <li class="text-center text-gray-500 py-10">
@@ -1243,7 +1238,7 @@ body.xianxia-theme main:has(#page-training.active-page),
         </div>
 
         <div id="page-admin" class="page-section hidden px-4">
-            <h2 class="text-xl font-bold text-red-500 mb-4 font-sci mt-4">ADMIN CONSOLE</h2>
+            <h2 class="text-xl font-bold text-red-500 mb-4 font-sci mt-4">管理後台</h2>
 
             <section id="admin-artifact-manager" class="glass-panel p-4 rounded-xl mb-4 admin-preload-shell" data-static-layout="1" data-admin-section-title="法寶管理" data-admin-section-icon="fa-hammer">
                 <div class="aam-head">
@@ -1301,8 +1296,8 @@ body.xianxia-theme main:has(#page-training.active-page),
             </div>
 
             <div class="glass-panel p-4 rounded-xl border border-red-500/20 mb-4">
-                 <button onclick="recalculateAllUserRanks()" class="btn-cyber-ghost w-full py-2 text-xs mb-2 text-yellow-400 border-yellow-500/30">RECALC RANKS</button>
-                 <button onclick="triggerGlobalReload()" class="btn-cyber-ghost w-full py-2 text-xs text-red-400 border-red-500/30">FORCE RELOAD</button>
+                 <button onclick="recalculateAllUserRanks()" class="btn-cyber-ghost w-full py-2 text-xs mb-2 text-yellow-400 border-yellow-500/30">重算玩家境界</button>
+                 <button onclick="triggerGlobalReload()" class="btn-cyber-ghost w-full py-2 text-xs text-red-400 border-red-500/30">通知全服重新整理</button>
              </div>
              <!-- 商品管理維持原有資料欄位；新增與編輯共用全螢幕編輯頁。 -->
              <div id="admin-product-editor" class="glass-panel p-4 rounded-xl mb-6">
@@ -1352,7 +1347,7 @@ body.xianxia-theme main:has(#page-training.active-page),
                         <i class="fa-solid fa-scroll text-blue-400 text-lg group-hover:scale-110 transition-transform"></i>
                     </div>
                     <div class="flex flex-col items-start">
-                        <span class="font-sci text-sm font-bold text-white tracking-widest" data-i18n="btn_solo">問道試煉</span>
+                        <span class="font-sci text-sm font-bold text-white tracking-widest" data-i18n="btn_solo">單人挑戰</span>
                         <span class="text-[9px] text-blue-300 font-mono">答題悟道 · 積累修為</span>
                     </div>
                 </button>
@@ -1362,7 +1357,7 @@ body.xianxia-theme main:has(#page-training.active-page),
                         <i class="fa-solid fa-khanda text-red-400 text-lg group-hover:scale-110 transition-transform"></i>
                     </div>
                     <div class="flex flex-col items-start">
-                            <span class="font-sci text-sm font-bold text-white tracking-widest" data-i18n="btn_pvp">鬥法論道</span>
+                            <span class="font-sci text-sm font-bold text-white tracking-widest" data-i18n="btn_pvp">雙人對戰</span>
                             <span class="text-[9px] text-red-300 font-mono">切磋學識 · 道友同修</span>
                     </div>
                 </button>
@@ -1384,7 +1379,7 @@ body.xianxia-theme main:has(#page-training.active-page),
                         <i class="fa-solid fa-store text-xl text-gray-500 group-hover:text-pink-400 group-[.active-nav-btn]:text-pink-400 transition-colors mb-0.5"></i>
                         <span class="active-dot absolute top-0 right-0 w-1.5 h-1.5 bg-pink-400 rounded-full opacity-0"></span>
                     </div>
-                    <span class="text-[10px] font-bold text-gray-500 group-hover:text-pink-400 group-[.active-nav-btn]:text-pink-400 transition-colors font-sci tracking-wider" data-i18n="nav_store">STORE</span>
+                    <span class="text-[10px] font-bold text-gray-500 group-hover:text-pink-400 group-[.active-nav-btn]:text-pink-400 transition-colors font-sci tracking-wider" data-i18n="nav_store">坊市</span>
                 </button>
                 
                 <button onclick="loadLeaderboard(); switchToPage('page-rank')" class="nav-btn group flex-1 flex flex-col items-center justify-center h-full transition-all" data-target="page-rank">
@@ -1392,7 +1387,7 @@ body.xianxia-theme main:has(#page-training.active-page),
                         <i class="fa-solid fa-chart-simple text-xl text-gray-500 group-hover:text-yellow-400 group-[.active-nav-btn]:text-yellow-400 transition-colors mb-0.5"></i>
                         <span class="active-dot absolute top-0 right-0 w-1.5 h-1.5 bg-yellow-400 rounded-full opacity-0"></span>
                     </div>
-                    <span class="text-[10px] font-bold text-gray-500 group-hover:text-yellow-400 group-[.active-nav-btn]:text-yellow-400 transition-colors font-sci tracking-wider" data-i18n="nav_rank">RANK</span>
+                    <span class="text-[10px] font-bold text-gray-500 group-hover:text-yellow-400 group-[.active-nav-btn]:text-yellow-400 transition-colors font-sci tracking-wider" data-i18n="nav_rank">仙榜</span>
                 </button>
 
                 <button onclick="switchToPage('page-settings')" class="nav-btn group flex-1 flex flex-col items-center justify-center h-full transition-all" data-target="page-settings">
@@ -1400,7 +1395,7 @@ body.xianxia-theme main:has(#page-training.active-page),
                         <i class="fa-solid fa-gear text-xl text-gray-500 group-hover:text-green-400 group-[.active-nav-btn]:text-green-400 transition-colors mb-0.5"></i>
                         <span class="active-dot absolute top-0 right-0 w-1.5 h-1.5 bg-green-400 rounded-full opacity-0"></span>
                     </div>
-                    <span class="text-[10px] font-bold text-gray-500 group-hover:text-green-400 group-[.active-nav-btn]:text-green-400 transition-colors font-sci tracking-wider" data-i18n="nav_settings">SETTING</span>
+                    <span class="text-[10px] font-bold text-gray-500 group-hover:text-green-400 group-[.active-nav-btn]:text-green-400 transition-colors font-sci tracking-wider" data-i18n="nav_settings">洞府</span>
                 </button>
 
             </div>
@@ -1413,10 +1408,10 @@ body.xianxia-theme main:has(#page-training.active-page),
         <div class="glass-panel border-2 border-cyan-500/50 rounded-2xl p-6 max-w-xs w-full shadow-[0_0_30px_rgba(6,182,212,0.3)] transform scale-95 transition-transform duration-300" id="custom-alert-box">
             <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2 font-sci">
                 <i class="fa-solid fa-terminal text-cyan-400"></i>
-                <span id="custom-alert-title">SYSTEM MSG</span>
+                <span id="custom-alert-title">系統訊息</span>
             </h3>
             <p id="custom-alert-msg" class="text-gray-300 mb-6 text-sm font-mono leading-relaxed">...</p>
-            <button onclick="closeCustomAlert()" class="btn-cyber-primary w-full py-3 rounded-lg font-bold">OK</button>
+            <button onclick="closeCustomAlert()" class="btn-cyber-primary w-full py-3 rounded-lg font-bold">確定</button>
         </div>
     </div>
     
@@ -1424,12 +1419,12 @@ body.xianxia-theme main:has(#page-training.active-page),
         <div class="glass-panel border-2 border-yellow-500/50 rounded-2xl p-6 max-w-xs w-full shadow-[0_0_30px_rgba(234,179,8,0.3)] transform scale-95 transition-transform duration-300" id="custom-confirm-box">
             <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2 font-sci">
                 <i class="fa-solid fa-triangle-exclamation text-yellow-400"></i>
-                <span id="custom-confirm-title">CONFIRM</span>
+                <span id="custom-confirm-title">確認操作</span>
             </h3>
             <p id="custom-confirm-msg" class="text-gray-300 mb-6 text-sm font-mono leading-relaxed">...</p>
             <div class="flex gap-3">
-                <button onclick="resolveCustomConfirm(false)" class="flex-1 btn-cyber-ghost py-2 rounded-lg text-xs hover:bg-white/10">CANCEL</button>
-                <button onclick="resolveCustomConfirm(true)" class="flex-1 btn-cyber-primary py-2 rounded-lg text-xs">PROCEED</button>
+                <button onclick="resolveCustomConfirm(false)" class="flex-1 btn-cyber-ghost py-2 rounded-lg text-xs hover:bg-white/10">取消</button>
+                <button onclick="resolveCustomConfirm(true)" class="flex-1 btn-cyber-primary py-2 rounded-lg text-xs">繼續</button>
             </div>
         </div>
     </div>
@@ -1469,7 +1464,7 @@ body.xianxia-theme main:has(#page-training.active-page),
     <div id="card-selector-modal" class="hidden fixed inset-0 bg-black/90 z-[60] flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="glass-panel rounded-2xl w-full max-w-md max-h-[80vh] flex flex-col border border-white/10">
             <div class="p-4 border-b border-white/10 flex justify-between items-center">
-                <h3 class="text-white font-bold font-sci">SELECT UNIT</h3>
+                <h3 class="text-white font-bold font-sci">選擇單元</h3>
                 <button onclick="document.getElementById('card-selector-modal').classList.add('hidden')" class="text-gray-400 hover:text-white transition"><i class="fa-solid fa-xmark text-xl"></i></button>
             </div>
             <div id="modal-card-list" class="p-4 overflow-y-auto grid grid-cols-3 gap-2"></div>
@@ -1479,20 +1474,20 @@ body.xianxia-theme main:has(#page-training.active-page),
     <div id="admin-debug-console" class="hidden fixed bottom-0 left-0 w-full h-64 bg-black/95 text-green-400 font-mono text-xs border-t-2 border-red-500 shadow-[0_-5px_20px_rgba(0,0,0,0.8)] flex flex-col transition-transform duration-300 translate-y-0">
         <div class="flex justify-between items-center px-4 py-2 bg-gray-900 border-b border-gray-700">
             <div class="flex items-center gap-2">
-                <span class="text-red-500 font-bold animate-pulse">🐞 SYSTEM DEBUGGER</span>
+                <span class="text-red-500 font-bold animate-pulse">🐞 系統除錯紀錄</span>
                 <span id="debug-count" class="bg-red-600 text-white px-2 py-0.5 rounded-full text-[10px]">0</span>
             </div>
             <div class="flex gap-2">
                 <button onclick="document.getElementById('debug-logs').innerHTML=''; document.getElementById('debug-count').innerText='0'" class="px-3 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded text-[10px] transition">
-                    CLEAR
+                    清除
                 </button>
                 <button onclick="document.getElementById('admin-debug-console').classList.add('translate-y-full')" class="px-3 py-1 bg-red-900 hover:bg-red-800 text-white rounded text-[10px] transition">
-                    HIDE
+                    隱藏
                 </button>
             </div>
         </div>
         <div id="debug-logs" class="flex-1 overflow-y-auto p-4 space-y-2 font-mono scroll-smooth">
-            <div class="text-gray-500 italic">Waiting for logs...</div>
+            <div class="text-gray-500 italic">等待紀錄…</div>
         </div>
     </div>
 

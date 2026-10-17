@@ -103,7 +103,7 @@ import { getFirestore, doc, updateDoc, increment } from 'https://www.gstatic.com
       <div class="relative z-10">
         <div class="flex items-center justify-between gap-3 mb-3">
           <div>
-            <div class="text-[10px] tracking-[.24em] text-yellow-500/80 font-bold">ADMIN TREASURY</div>
+            <div class="text-[10px] tracking-[.24em] text-yellow-500/80 font-bold">管理員寶庫</div>
             <h3 class="text-base font-bold text-yellow-100 mt-1">給自己匯錢</h3>
           </div>
           <i class="fa-solid fa-coins text-yellow-400 text-xl"></i>

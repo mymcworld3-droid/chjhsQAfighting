@@ -368,7 +368,7 @@ export const featureReady = (async () => {
           <div class="bv2-lobby-copy"><span class="bv2-kicker">靈識尋蹤</span><h3 id="bv2-lobby-title">正在搜尋對手</h3><p id="bv2-lobby-status">尋找修為相近的道友…</p></div>
           <div class="bv2-match-pair">
             <div class="bv2-match-card"><span>我方修士</span>${avatarMarkup('bv2-match-me-avatar')}<strong id="bv2-match-me">修士</strong><small id="bv2-match-me-core">本命金丹：—</small></div>
-            <div class="bv2-vs"><i></i><b>VS</b><i></i></div>
+            <div class="bv2-vs"><i></i><b>對決</b><i></i></div>
             <div class="bv2-match-card enemy"><span>對手修士</span>${avatarMarkup('bv2-match-enemy-avatar')}<strong id="bv2-match-enemy">搜尋中…</strong><small id="bv2-match-enemy-core">等待道友入場</small></div>
           </div>
           <button id="bv2-cancel" class="bv2-btn ghost" type="button">收回靈識 · 取消配對</button>
@@ -391,7 +391,7 @@ export const featureReady = (async () => {
             <div class="bv2-fighter-head"><div><span>對手</span><strong id="bv2-enemy-name">—</strong></div><b id="bv2-enemy-hp-text">1000</b></div>
             <div class="bv2-hp"><i id="bv2-enemy-hp"></i></div><small id="bv2-enemy-core">本命金丹：—</small>
           </article>
-          <div class="bv2-stage-round"><span>ROUND</span><b id="bv2-round">1 / ${BATTLE_V2.maxRounds}</b><span id="bv2-cultivation-pool">修為池 0</span></div>
+          <div class="bv2-stage-round"><span>回合</span><b id="bv2-round">1 / ${BATTLE_V2.maxRounds}</b><span id="bv2-cultivation-pool">修為池 0</span></div>
           <div class="bv2-stage" aria-label="雙人鬥法場">
             <div class="bv2-stage-architecture" aria-hidden="true"><i></i><i></i><i></i></div>
             <div class="bv2-stage-aura" aria-hidden="true"><i></i><i></i><i></i></div>

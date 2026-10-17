@@ -307,7 +307,7 @@ export function settleBattleRound({
     const support = role === 'host' ? hostSupport : guestSupport;
     const targetRole = role === 'host' ? 'guest' : 'host';
     if (!answerCorrect(player)) {
-      logs.push({ type: 'miss', actorRole: role, actorUid: player.uid, targetUid: defender.uid, damage: 0, message: '本回合作答未命中，MISS' });
+      logs.push({ type: 'miss', actorRole: role, actorUid: player.uid, targetUid: defender.uid, damage: 0, message: '本回合作答未命中' });
       steps.push({ type: 'miss', actorRole: role, actorUid: player.uid, targetUid: defender.uid, damage: 0, hostHp, guestHp });
       continue;
     }

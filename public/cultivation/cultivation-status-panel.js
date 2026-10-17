@@ -231,7 +231,7 @@
     return `
       <section class="training-status-panel">
         <div class="status-section status-power-section" aria-label="綜合戰力">
-          <div class="status-section-title"><span>綜合戰力</span><small>COMBAT POWER</small></div>
+          <div class="status-section-title"><span>綜合戰力</span><small>戰力總覽</small></div>
           <div class="status-power-main"><i class="fa-solid fa-bolt"></i><strong>${formatStatNumber(power.total)}</strong></div>
           <div class="status-power-sources">
             <div><span>基礎</span><b>${formatStatNumber(power.base)}</b></div>
@@ -242,7 +242,7 @@
           <p class="status-power-note">僅計入目前啟用金丹及已裝備法寶；停用金丹不計戰力。戰力不直接增加鬥法傷害。</p>
         </div>
         <div class="status-section status-core-section">
-          <div class="status-section-title"><span>目前調御金丹</span><small>ATTUNED CORE</small></div>
+          <div class="status-section-title"><span>目前調御金丹</span><small>調御狀態</small></div>
           ${currentCoreMarkup(snapshot.core, snapshot.coreTogglePending)}
         </div>
 

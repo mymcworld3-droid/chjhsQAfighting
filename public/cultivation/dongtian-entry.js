@@ -99,7 +99,7 @@
         <span class="dt-entry-chevron"><i class="fa-solid fa-chevron-down"></i></span>
       </button>
       <div class="dt-entry-body">
-        <div class="dt-entry-kicker">KNOWLEDGE SECRET REALM</div>
+        <div class="dt-entry-kicker">悟道秘境</div>
         <h4>開闢與遊歷洞天</h4>
         <p>上傳多張圖片或貼上文字，AI 會一次產生洞天名稱、程度、難度、科目與有順序的完整題組。建立後會永久保存，也可能被符合程度與科目的其他修士遇見。</p>
         <div class="dt-entry-status">${actualDongtianReady() ? '洞天系統已就緒，按下方按鈕開啟完整功能。' : '洞天完整模組正在載入；若沒有自動出現完整介面，可由此直接啟動。'}</div>

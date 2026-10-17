@@ -451,7 +451,7 @@ import { battleStepFeedback, createBattleImpact } from './battle-combat-feedback
       <header class="bt-head"><div><small>${esc(badge)}</small><h2>${esc(title)}</h2></div>${showLater ? '<button type="button" class="bt-later">稍後再練</button>' : ''}</header>
       <div class="bt-arena bv2-scoreboard">
         ${fighterMarkup({ enemy:false, name:playerName(), hp:playerHp, maxHp:playerCombat?.maxHp || 1000, image:playerImage, label:'我方 · 演武投影' })}
-        <div class="bt-vs bv2-round-seal">VS</div>
+        <div class="bt-vs bv2-round-seal">對決</div>
         ${fighterMarkup({ enemy:true, name:opponent, hp:opponentHp, maxHp:opponentMaxHp, image:opponentImage, label:'對手' })}
         <i class="bt-slash" aria-hidden="true"></i>
       </div>
@@ -731,13 +731,13 @@ import { battleStepFeedback, createBattleImpact } from './battle-combat-feedback
       guOpponentAt && !playerAnswered ? '顧長風已答 · 你的應答倒數' :
       playerAnswered ? '答案已送出 · 等待顧長風作答' : '雙方尚未出手 · 任一方先答後啟動 25 秒倒數';
     const explain = answered
-      ? `<div class="bt-explain"><b>${feedback.correct ? '答對：取得出手機會。' : feedback.choice === null ? '逾時：本回合 MISS。' : '答錯：本回合 MISS。'}</b><br>${mathText(question.exp)}<br>先手依作答時間決定，返回戰場後逐次執行攻擊、護體或 MISS。</div>
+      ? `<div class="bt-explain"><b>${feedback.correct ? '答對：取得出手機會。' : feedback.choice === null ? '逾時：本回合未命中。' : '答錯：本回合未命中。'}</b><br>${mathText(question.exp)}<br>先手依作答時間決定，返回戰場後逐次執行攻擊、護體或 MISS。</div>
          <div class="bt-actions"><button type="button" class="bt-primary" data-bt-action="gu-return-arena">看完解析 · 返回戰場</button></div>`
       : `<div class="bt-explain">${status}。${playerAnswered ? ' 正在等待另一方完成作答。' : ''}</div>`;
     const el = shell({
       opponent:'顧長風', badge:`築基鬥法教學 · 全畫面題目 ${guRound+1}/${QUESTIONS.length}`,
       title:'以答題決定誰能出手', showLater:!answered, quiz:true,
-      body:`<section class="bt-question"><div class="bt-question-meta"><span>ROUND ${guRound+1}</span><span id="bt-gu-timer" class="bt-shen-timer">${guDeadline ? '剩餘 ' + seconds + ' 秒' : '等待首答'}</span></div><h3>${mathText(question.q)}</h3><div class="bt-options">${opts}</div>${explain}</section>`
+      body:`<section class="bt-question"><div class="bt-question-meta"><span>回合 ${guRound+1}</span><span id="bt-gu-timer" class="bt-shen-timer">${guDeadline ? '剩餘 ' + seconds + ' 秒' : '等待首答'}</span></div><h3>${mathText(question.q)}</h3><div class="bt-options">${opts}</div>${explain}</section>`
     });
     if (!answered) el.querySelectorAll('[data-bt-choice]').forEach((button) => button.addEventListener('click', () => resolveGuAnswer(Number(button.dataset.btChoice))));
     else el.querySelector('[data-bt-action="gu-return-arena"]')?.addEventListener('click', playGuStrike);

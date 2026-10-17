@@ -36,7 +36,7 @@ test('second tutorial duel is Gu Changfeng and teaches the real battle timing ru
   assert.match(tutorial, /雙方都答對時依作答先後出手/);
   assert.match(tutorial, /settleBattleRound\(\{/);
   assert.match(tutorial, /QUESTIONS\.length/);
-  assert.match(tutorial, /答錯：本回合 MISS/);
+  assert.match(tutorial, /答錯：本回合未命中/);
   assert.match(tutorial, /outcome\.steps/);
 });
 

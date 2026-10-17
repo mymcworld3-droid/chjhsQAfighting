@@ -110,7 +110,7 @@
       ${firstQi ? '<div class="realm-breakthrough-sigil" aria-hidden="true">引氣入體</div><div class="realm-breakthrough-wave wave-a"></div><div class="realm-breakthrough-wave wave-b"></div>' : ''}
       <div class="realm-breakthrough-particles">${particleMarkup(firstQi ? 52 : major ? 36 : 20)}</div>
       <section class="realm-breakthrough-card">
-        <div class="realm-breakthrough-kicker">${major ? 'BREAKTHROUGH' : 'REALM ASCENSION'}</div>
+        <div class="realm-breakthrough-kicker">${major ? '大道突破' : '修為精進'}</div>
         <div class="realm-breakthrough-title">${major ? '境界突破' : '境界提升'}</div>
         <div class="realm-breakthrough-icon">${window.getRealmIconMarkup?.(to.name) || ''}</div>
         <div class="realm-breakthrough-realm">${escapeHtml(to.name)}</div>

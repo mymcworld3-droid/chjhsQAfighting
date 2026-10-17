@@ -757,7 +757,7 @@ import './raid-difficulty.js';
       '<header class="raid-battle-head"><button class="raid-back" type="button" data-leave><i class="fa-solid fa-door-open"></i></button>' +
       '<div><small data-party-size>清霜試煉・' + raidRoomMembers(state.room).length + ' 人隊伍</small><strong data-boss-actions>Boss 已出招 ' + state.bossActionCount + ' 次</strong></div>' +
       '<span data-boss-phase>階段 ' + state.boss.phase + '・' + phaseName(state.boss.phase) + '</span></header>' +
-      '<div class="raid-stage"><section class="raid-boss-side"><div class="raid-name-row"><div><small>BOSS</small><h3>' + state.boss.name + '</h3></div>' +
+      '<div class="raid-stage"><section class="raid-boss-side"><div class="raid-name-row"><div><small>首領</small><h3>' + state.boss.name + '</h3></div>' +
       '<b id="raid-boss-hp-text">' + Math.round(state.boss.hp).toLocaleString() + ' / ' + Math.round(state.boss.maxHp).toLocaleString() + '</b></div>' +
       '<div class="raid-hp boss"><i id="raid-boss-hp-bar" style="width:' + hpPct(state.boss.hp, state.boss.maxHp) + '%"></i></div>' +
       teamworkMarkup(false) +
