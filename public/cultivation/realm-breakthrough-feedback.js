@@ -29,8 +29,9 @@
 
   let initialized = false;
   let lastRealmIndex = 0;
-  let closingTimer = null;
-  let finishFeedback = null;
+  let activeFeedback = null;
+  const CONTINUE_AFTER_MS = 1000;
+  const EXIT_MS = 240;
 
   function loadStyle() {
     if (document.querySelector(`link[href="${CSS_HREF}"]`)) return;
@@ -65,18 +66,6 @@
       .replaceAll("'", '&#039;');
   }
 
-  function removeFeedback() {
-    clearTimeout(closingTimer);
-    const overlay = document.getElementById('realm-breakthrough-feedback');
-    if (!overlay) return;
-    overlay.classList.add('leaving');
-    setTimeout(() => {
-      overlay.remove();
-      finishFeedback?.();
-      finishFeedback = null;
-    }, 520);
-  }
-
   function particleMarkup(count) {
     return Array.from({ length: count }, (_, index) => {
       const angle = (360 / count) * index + (index % 3) * 4;
@@ -93,15 +82,18 @@
     const major = from.name !== to.name;
     const firstQi = fromIndex === 0 && toIndex === 1;
 
-    document.getElementById('realm-breakthrough-feedback')?.remove();
-    clearTimeout(closingTimer);
-    finishFeedback?.();
-    const completion = new Promise(resolve => { finishFeedback = resolve; });
+    activeFeedback?.dispose();
+    let resolveCompletion;
+    const completion = new Promise(resolve => { resolveCompletion = resolve; });
 
     const overlay = document.createElement('div');
     overlay.id = 'realm-breakthrough-feedback';
-    overlay.className = `realm-breakthrough-feedback ${major ? 'major' : 'minor'} ${firstQi ? 'first-qi' : ''}`;
-    overlay.setAttribute('aria-live', 'assertive');
+    overlay.className = `realm-breakthrough-feedback show ${major ? 'major' : 'minor'} ${firstQi ? 'first-qi' : ''}`;
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-label', `${to.name} ${to.sub}，境界突破`);
+    overlay.setAttribute('aria-describedby', 'realm-breakthrough-continue');
+    overlay.tabIndex = -1;
     overlay.innerHTML = `
       <div class="realm-breakthrough-flash"></div>
       <div class="realm-breakthrough-rays"></div>
@@ -119,10 +111,55 @@
         <div class="realm-breakthrough-route">${escapeHtml(from.name)} ${escapeHtml(from.sub)} <i class="fa-solid fa-arrow-right-long"></i> ${escapeHtml(to.name)} ${escapeHtml(to.sub)}</div>
         <p>${firstQi ? '一念明悟，靈氣入體。你的第一步，已刻入仙途。' : major ? '天地共鳴，道途再開。' : '靈台清明，修為更進一境。'}</p>
       </section>
+      <p id="realm-breakthrough-continue" class="realm-breakthrough-continue" aria-live="polite" aria-hidden="true">按任何地方以繼續</p>
     `;
 
+    // One monotonic deadline controls the one-second lock, independent of FPS.
+    const readyAt = performance.now() + CONTINUE_AFTER_MS;
+    let closing = false, disposed = false, closeTimer;
+    const previousFocus = document.activeElement;
+    const documents = [document];
+    // The fixed-ratio stage has black margins outside its iframe. They count too.
+    try { if (window.parent !== window && window.parent?.document) documents.push(window.parent.document); } catch (_) {}
+    const revealContinue = () => overlay.querySelector('.realm-breakthrough-continue')?.setAttribute('aria-hidden', 'false');
+    const readyTimer = setTimeout(revealContinue, Math.max(0, readyAt - performance.now()));
+    const session = { dispose() {
+      if (disposed) return;
+      disposed = true;
+      clearTimeout(readyTimer); clearTimeout(closeTimer);
+      for (const doc of documents) {
+        doc.removeEventListener('click', onContinue, true);
+        doc.removeEventListener('pointerdown', blockPointer, true);
+        doc.removeEventListener('keydown', onKeyDown, true);
+      }
+      overlay.remove();
+      if (activeFeedback === session) activeFeedback = null;
+      if (previousFocus?.isConnected) previousFocus.focus?.({ preventScroll:true });
+      resolveCompletion();
+    } };
+    function blockPointer(event) {
+      event.preventDefault(); event.stopImmediatePropagation();
+    }
+    function onContinue(event) {
+      blockPointer(event);
+      if (closing || performance.now() < readyAt) return;
+      closing = true;
+      revealContinue();
+      overlay.classList.add('leaving');
+      closeTimer = setTimeout(session.dispose, EXIT_MS);
+    }
+    function onKeyDown(event) {
+      if (['Enter', ' ', 'Escape'].includes(event.key)) onContinue(event);
+      else if (event.key === 'Tab') blockPointer(event);
+    }
+    activeFeedback = session;
     document.body.appendChild(overlay);
-    requestAnimationFrame(() => overlay.classList.add('show'));
+    overlay.focus?.({ preventScroll:true });
+    for (const doc of documents) {
+      doc.addEventListener('click', onContinue, true);
+      doc.addEventListener('pointerdown', blockPointer, true);
+      doc.addEventListener('keydown', onKeyDown, true);
+    }
 
     try {
       if (navigator.vibrate) navigator.vibrate(major ? [45, 55, 90] : 35);
@@ -132,7 +169,6 @@
       detail: { from: { ...from }, to: { ...to }, major }
     }));
 
-    closingTimer = setTimeout(removeFeedback, firstQi ? 3800 : major ? 3300 : 2500);
     return completion;
   }
 
