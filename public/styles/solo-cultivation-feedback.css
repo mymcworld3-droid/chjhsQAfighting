@@ -1,21 +1,21 @@
-#solo-cultivation-feedback{position:fixed;inset:0;z-index:7900;pointer-events:none;overflow:hidden;color:#ddf5ff;font-family:var(--xq-serif,'Noto Serif TC',serif);opacity:0;transition:opacity .18s ease}
+#solo-cultivation-feedback{position:fixed;inset:0;z-index:7900;pointer-events:none;overflow:hidden;color:#fff0c9;font-family:var(--xq-serif,'Noto Serif TC',serif);opacity:0;transition:opacity .18s ease}
 #solo-cultivation-feedback.show{opacity:1}
 #solo-cultivation-feedback.leaving{opacity:0}
-.solo-cultivation-panel{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:min(440px,calc(100% - 32px));box-sizing:border-box;padding:14px 18px max(12px,env(safe-area-inset-bottom,0px));border:1px solid #69bded77;border-radius:14px 14px 0 0;background:linear-gradient(130deg,#10283bf5,#071522f7);box-shadow:0 -12px 36px #0007,0 0 24px #258cdd22}
+.solo-cultivation-panel{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:min(440px,calc(100% - 32px));box-sizing:border-box;padding:14px 18px max(12px,env(safe-area-inset-bottom,0px));border:1px solid #d8b15d88;border-radius:14px 14px 0 0;background:linear-gradient(130deg,#302410f5,#171006f7);box-shadow:0 -12px 36px #0007,0 0 24px #d8a63822}
 .solo-cultivation-heading,.solo-cultivation-meta,.solo-cultivation-caption{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.solo-cultivation-heading{font-size:13px;letter-spacing:.08em;color:#dff6ff}
-.solo-cultivation-gain{font-size:17px;color:#91dcff;letter-spacing:0;font-variant-numeric:tabular-nums;white-space:nowrap}
-.solo-cultivation-meta{margin:7px 0 9px;font-size:11px;color:#a6c8db}
+.solo-cultivation-heading{font-size:13px;letter-spacing:.08em;color:#fff1cf}
+.solo-cultivation-gain{font-size:17px;color:#ffda83;letter-spacing:0;font-variant-numeric:tabular-nums;white-space:nowrap}
+.solo-cultivation-meta{margin:7px 0 9px;font-size:11px;color:#cdbb94}
 .solo-cultivation-total{font-variant-numeric:tabular-nums}
-.solo-cultivation-track{position:relative;height:9px;border-radius:8px;background:#020b15;border:1px solid #497b9c66}
-.solo-cultivation-fill{height:100%;border-radius:inherit;background:linear-gradient(90deg,#2465b5,#48bdff 72%,#c4f4ff);box-shadow:0 0 12px #3aaeff77;transition:width .18s ease-out}
-.solo-cultivation-receiver{position:absolute;top:50%;width:12px;height:12px;border-radius:50%;transform:translate(-50%,-50%);background:#e5fbff;box-shadow:0 0 8px #8be8ff,0 0 20px #299eff;opacity:.45;transition:left .18s ease-out,opacity .2s}
-.solo-cultivation-caption{margin-top:7px;font-size:10px;color:#83a9c2}
+.solo-cultivation-track{position:relative;height:9px;border-radius:8px;background:#120b03;border:1px solid #98763766}
+.solo-cultivation-fill{height:100%;border-radius:inherit;background:linear-gradient(90deg,#a66d1f,#e5b94f 72%,#fff0ad);box-shadow:0 0 12px #e2b44477;transition:width .18s ease-out}
+.solo-cultivation-receiver{position:absolute;top:50%;width:12px;height:12px;border-radius:50%;transform:translate(-50%,-50%);background:#fff7d9;box-shadow:0 0 8px #ffe39b,0 0 20px #e8ac32;opacity:.45;transition:left .18s ease-out,opacity .2s}
+.solo-cultivation-caption{margin-top:7px;font-size:10px;color:#b59d73}
 .solo-cultivation-progress{font-variant-numeric:tabular-nums}
 .solo-cultivation-sky{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-.solo-cultivation-tail-core{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke:#b6f2ff;opacity:.6}
-.solo-cultivation-orb{fill:#e2faff;filter:drop-shadow(0 0 4px #68d9ff) drop-shadow(0 0 9px #187dff)}
-.solo-cultivation-panel.absorbing{border-color:#9bdfff;box-shadow:0 12px 36px #0007,0 0 28px #258cdd55}
+.solo-cultivation-tail-core{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke:#fff0bd;opacity:.6}
+.solo-cultivation-orb{fill:#fff5d6;filter:drop-shadow(0 0 4px #ffdc7f) drop-shadow(0 0 9px #e7a72b)}
+.solo-cultivation-panel.absorbing{border-color:#ffe5a3;box-shadow:0 12px 36px #0007,0 0 28px #d8a63855}
 .solo-cultivation-panel.absorbing .solo-cultivation-receiver{opacity:1}
 @media(max-width:480px){.solo-cultivation-panel{padding:11px 14px max(10px,env(safe-area-inset-bottom,0px))}.solo-cultivation-heading{font-size:12px}.solo-cultivation-gain{font-size:16px}.solo-cultivation-next{max-width:65%;text-align:right}}
 @media(prefers-reduced-motion:reduce){#solo-cultivation-feedback,.solo-cultivation-fill,.solo-cultivation-receiver{transition:none}.solo-cultivation-orb{filter:none}}

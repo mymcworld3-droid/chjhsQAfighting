@@ -137,8 +137,8 @@ export function beginSoloCultivationFeedback({ scoreBefore, source, realms }) {
     sky.appendChild(defs);
     const orbs = Array.from({ length: reduced ? 1 : profile.count }, (_, i) => {
       const gradient = svgElement('linearGradient', { id: `solo-comet-${i}`, gradientUnits: 'userSpaceOnUse' });
-      gradient.append(svgElement('stop', { offset: '0%', 'stop-color': '#2586ff', 'stop-opacity': '0' }),
-        svgElement('stop', { offset: '100%', 'stop-color': '#64d7ff', 'stop-opacity': '.8' }));
+      gradient.append(svgElement('stop', { offset: '0%', 'stop-color': '#cc8e25', 'stop-opacity': '0' }),
+        svgElement('stop', { offset: '100%', 'stop-color': '#ffe18a', 'stop-opacity': '.8' }));
       defs.appendChild(gradient);
       const trail = svgElement('polygon', { class: 'solo-cultivation-tail', fill: `url(#solo-comet-${i})` });
       const core = svgElement('polyline', { class: 'solo-cultivation-tail-core', 'stroke-width': profile.radius * .34 });
