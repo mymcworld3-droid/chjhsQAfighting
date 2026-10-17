@@ -31,6 +31,7 @@ export const featureReady = (async () => {
   // opponent steal a live generation job every seven seconds.
   const ACTIVE_QUESTION_LEASE_MS = 65000;
   const QUIZ_REQUEST_TIMEOUT_MS = 58000;
+  const BATTLE_QUIZ_SESSION = (globalThis.crypto?.randomUUID?.() || Math.random().toString(36).slice(2) + Date.now().toString(36));
   const EMPTY_QUESTION_REPAIR_MS = 2500;
   const MATCH_RECONCILE_MS = 5000;
   const MATCH_SCAN_LIMIT = 80;
@@ -639,7 +640,8 @@ export const featureReady = (async () => {
       reasoning_steps: Number(entry?.reasoning_steps) || 1
     }));
     const request = { ...selected, rank: Math.min(Number(room.host?.rankLevel) || 0, Number(room.guest?.rankLevel) || 0),
-      avoidQuestions, avoidQuestionMeta, quizMode: 'battle-fast' };
+      avoidQuestions, avoidQuestionMeta, quizMode: 'battle-fast',
+      quizSessionId: BATTLE_QUIZ_SESSION + '-' + (userData()?.uid || 'guest') };
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), QUIZ_REQUEST_TIMEOUT_MS);
     try {
