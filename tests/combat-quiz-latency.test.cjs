@@ -28,7 +28,7 @@ test('three combat modes use a compact but strict full-question AI prompt', () =
     assert.match(prompt, /從零寫正確|解析應含/);
     assert.match(prompt, /complete|重新生成|重新生成 JSON|重新生成 q/);
     assert.match(prompt, /答案錯誤/);
-    assert.match(prompt, /TeX/);
+    assert.match(prompt, /數學式用 \$\.\.\.\$/);
   }
   assert.match(battle, /quizMode: 'battle-fast'/);
   assert.match(raid, /quizMode: 'raid-quick-simple'/);

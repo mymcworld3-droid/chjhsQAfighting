@@ -111,7 +111,8 @@ test('raid retains the original concise AI difficulty but adopts Wen Dao interfa
   assert.match(questionSource, /difficulty:\s*'medium'/);
   assert.match(questionSource, /quizMode:\s*'raid-quick-simple'/);
   assert.match(serverSource, /raidQuickSimple/);
-  assert.match(serverSource, /團本快答模式/);
+  assert.match(serverSource, /if \(raidQuickSimple\) difficulty = 'easy'/);
+  assert.match(serverSource, /raidQuickSimple\s*\? 1\s*:/);
 });
 
 test('raid answers are settled by the server and wrong answers never trigger a local boss strike', () => {

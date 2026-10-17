@@ -20,17 +20,17 @@ function quickQuizPrompt({ mode, subject, level, topic, rank, difficulty, previo
     '你是台灣國教專業教師。只出一道高品質繁體中文單選題，回傳純 JSON。',
     '科目='+safe(subject,40)+'；程度='+safe(level,32)+'；指定範圍='+safe(topic,180)+'；難度='+
       (quick?'easy':safe(difficulty,16))+'；段位='+Number(rank||0)+'；隨機種子='+safe(randomSeed,24),
-    quick ? '團本快答：1～2 句、一個核心觀念、一步可解，不設陷阱、不跨單元。' :
-      '保持指定學制與難度，題目清楚而有實質理解、推理深度；勿冗長敘事。',
+    '保持指定學制與難度，題目清楚而有實質理解、推理深度；勿冗長敘事。',
     '題型='+safe(targetForm,40)+'；認知層級='+(quick?1:quality.cognitive||2)+
       '；推理步數='+(quick?1:quality.steps||2),
-    '重要：先不參照預設答案，獨立解題、逐項核對四個選項，只能一個正解，三個錯誤選項不可與正解等價或互相同義。',
+    '參照預設答案，獨立解題、逐項核對四個選項。只能一個正解，三個錯誤選項不可與正解等價或互相同義。',
     '解析應含主要步驟和關鍵觀念，與 correct 完全一致，不以 A/B/C/D 或選項排序指稱。',
+    '題目請要整齊。',
     '發現錯題直接重寫 q、correct、wrong、exp，解析禁止「本題有錯」「原答案錯誤」「更正」等修訂註記。',
     '不得附帶選項於題幹、引用不存在的圖片、超綱或跨科。',
-    '數學式用 $...$；TeX 定界符、大括號和 left/right 必須成對；JSON 反斜線正確跳脫，不能確認則改用純文字。勿輸出 HTML 或 Markdown。',
-    '最近題目（勿重複題幹與解法骨架）：'+JSON.stringify(previous),
-    '近期考點/骨架/形式（勿僅替換數字重出）：'+JSON.stringify(previousForms),
+    '數學式用 $...$，JSON 反斜線正確跳脫。',
+    '最近題目：'+JSON.stringify(previous),
+    '近期考點／骨架／形式：'+JSON.stringify(previousForms),
     retryIssue ? '上次失敗：'+safe(retryIssue,280)+'。完整重新生成 JSON，禁止僅在解析註記錯誤。' : '',
     '只回傳這個 JSON 結構（內容請依題目替換）：'+JSON.stringify(spec)
   ].filter(Boolean).join('\n');

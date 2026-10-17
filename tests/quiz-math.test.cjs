@@ -82,6 +82,6 @@ test('all live question, choices and explanation surfaces use the shared formatt
   assert.match(tutorial,/quizMathTypeset\?\.\(el\)/);
   assert.match(legacy,/quiz-rich-option/);
   assert.match(legacy,/quizMathRichText \|\| parseMarkdownImages\)\(opt\)/);
-  assert.match(server,/LaTeX 排版/);
-  assert.match(server,/題幹、正確選項、三個錯誤選項及解析/);
+  assert.match(server,/數學式使用 TeX/);
+  assert.match(server,/公式定界符、大括號與 left\/right 必須成對/);
 });

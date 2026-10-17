@@ -552,32 +552,57 @@ app.post('/api/generate-quiz', async (req, res) => {
 
     const generationPrompt = `
         [系統指令]
-        你是一名 AI 教育專家，請生成一道高品質的「單選題」。
-        題目有需要換行時可以打\n。
-        
+        你是一名 AI 教師，請生成一道「單選題」。
+
         [出題規格]
-        1. **主科目**：${subject}
-        2. **指定題型**：${targetTopic}
-        3. **題型要求**：${topicDescription}
-        4. **適用程度**：${level} (段位：${rank})
-        5. **難度設定**：${difficulty}
-        6. **隨機因子**：${randomSeed}
-        7. **嚴格範圍**：只能考查「${level}」程度內的「${subject}／${targetTopic}」，不得跨科、超綱或擅自替換單元。
-        8. **避免重複題目**：近期已有 ${previousQuestions.length} 題。不得只換數字、人名、物品、地點或敘述後重出相同解法骨架。
-        9. **本題指定表現形式**：${targetForm}。除非該科確實不適用，請依這種形式設計。
-        10. **深度要求**：認知層級約 ${quality.cognitive}，合理推理步數約 ${quality.steps}。 ${quality.instruction}
-        11. **近期禁止骨架**：${recentTemplates.length ? JSON.stringify(recentTemplates) : '無'}。template_id 必須描述解題骨架，不可只寫題目名稱。
-        12. **近期概念/題型組合**：${recentConceptForms.length ? JSON.stringify(recentConceptForms) : '無'}。若可行，避免立刻重複同一 concept_id + question_form。
-        13. 錯誤選項應對應常見迷思、計算錯誤或推理錯誤，不能只是隨機湊數。
-        14. 必須提供四個不重複且僅有一個正解的選項，以及完整解析；解析須點出關鍵觀念與主要步驟。
-        14a. 本介面不能呈現附圖，題目不可引用未提供的圖片。若條件互相矛盾、答案需要更正或解析與正解不符，請重新構思整題後才輸出。
-        14c. **獨立驗算**：不先看預定的 correct，重新解題，再將四個選項逐一代入，確認只有一個選項正確、解析每一步及最後結論都指向 correct。
-        14d. **發現錯誤一律完整重寫 JSON**：題幹 q、正確答案 correct、三個 wrong 與解析 exp 必須一起修好。解析禁止說「這題有誤」「原答案錯誤」「應修改答案為」「原解析有問題」等修訂註記；不得只改 exp 或重新標示答案而保留錯誤的 correct。
-        14b. 四個選項會重新排序；題幹不要再列出 (A) 至 (D)，解析請以選項內容描述，不要使用 A／B／C／D 字母、選項一至四或第一項至第四項等排序指稱。
-        ${raidQuickSimple ? '15. **團本快答模式**：題目要比一般練習更簡單、直覺。題幹盡量 1–2 句；選項簡短；優先考基本辨識、直接代入、單一步驟計算或明確概念判斷。不要設文字陷阱，不要要求多層推論，不要故意混淆相近概念。' : ''}
-        16. **LaTeX 排版**：題幹、正確選項、三個錯誤選項及解析中的所有數學式都必須使用 TeX 語法。行內數學用 $...$，獨立公式用 $...$；例如 $x^2+1$、$\\frac{1}{2}$。一般中文保留純文字，不要將整段中文包進公式；不要輸出 HTML 或 Markdown 程式碼區塊。
-        16a. **公式檢查**：送出前確認每個公式的定界符、大括號與 left/right 成對，分數與根號的參數完整。僅使用 MathJax 支援的數學指令，不要使用 LaTeX 文件指令或自訂巨集。JSON 解碼後的 TeX 指令只能有一個反斜線；若無法確認語法，改用清楚的純文字算式。
+        主科目：${subject}
+        指定題型：${targetTopic}
+        題型要求：${topicDescription}
+        適用程度：${level}，段位：${rank}
+        難度設定：${difficulty}
+        隨機因子：${randomSeed}
+
+        只能考查指定程度內的指定科目與單元，不得超綱或擅自替換單元。
+
+        不得只換數字、人名、物品、地點或敘述，
+        重出相同解法骨架。
+
+        本題指定表現形式：${targetForm}
+        認知層級約：${quality.cognitive}
+        合理推理步數約：${quality.steps}
+        深度要求：${quality.instruction}
+
+        近期禁止骨架：${recentTemplates.length ? JSON.stringify(recentTemplates) : '無'}
+        近期概念／題型組合：${recentConceptForms.length ? JSON.stringify(recentConceptForms) : '無'}
+
+        錯誤選項應對應常見迷思、計算錯誤或推理錯誤，
+        不能只是隨機湊數。
+
+        生成題目儘量整齊。
+
+        必須提供四個不重複且僅有一個正解的選項，
+        以及點出關鍵觀念與主要步驟的解析。
+
+        題目不可引用未提供的圖片。
+
+        獨立驗算：
+        不先看預定的 correct，重新解題，
+        再將四個選項逐一代入，
+        確認只有一個選項正確，解析與最後結論都指向 correct。
+
+        發現錯誤一律完整重寫 JSON：
+        q、correct、wrong、exp 必須一起修好。
+        解析是給學生看的所以不要有修正報告等等。
+
+        四個選項會重新排序。
+        解析應以選項內容描述，不使用 A/B/C/D 或選項排序指稱。
+
+        數學式使用 TeX，公式定界符、大括號與 left/right 必須成對。
+        不要輸出 HTML 或 Markdown 程式碼區塊。
+
         ${diagnosticInfo}
+
+        只回傳 JSON。
     
         [輸出格式 (JSON Only)]
         請直接回傳 JSON，不要 markdown 標記：

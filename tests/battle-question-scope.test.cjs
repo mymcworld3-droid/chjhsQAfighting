@@ -89,7 +89,7 @@ test('battle rotates one shared question range per round and stores recent quest
   assert.match(serverSource, /isTooSimilarQuestion\(parsed\.q, previousQuestions\)/);
   assert.match(battleSource, /avoidQuestionMeta/);
   assert.match(battleSource, /template_id/);
-  assert.match(serverSource, /不得跨科、超綱/);
+  assert.match(readFileSync(join(__dirname, '../fast-quiz-prompt.cjs'), 'utf8'), /超綱或跨科/);
 });
 
 test('PvP normalizes correct/wrong answer payloads and refuses unrelated arithmetic fallback', () => {
