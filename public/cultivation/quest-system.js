@@ -16,7 +16,52 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     Object.entries(reward.materials || {}).forEach(([id, count]) => parts.push(`${materialNames[id] || id} ×${count}`));
     return parts.join(' · ');
   }
-  function status(message) { if ($('quest-status')) $('quest-status').textContent = message; }
+  function status(message) {
+    for (const id of ['quest-status', 'quest-spotlight-status']) if ($(id)) $(id).textContent = message;
+  }
+  // Reuse the existing snapshot. Rendering the home card never requests data.
+  function recommendedQuest() {
+    if (!snapshot || account !== getMainUser()?.uid) return null;
+    const candidates = [];
+    const add = (quests, kind) => (quests || []).forEach(q => {
+      if (q && !q.claimed && !q.locked) candidates.push({ q, kind });
+    });
+    add([snapshot.path, ...(snapshot.pathTicketRewards || [])], 'path');
+    if (snapshot.date === window.XianxiaQuestRules.dateKey()) {
+      add(snapshot.daily, 'daily'); add(snapshot.commissions, 'commission');
+    }
+    if (snapshot.weeklyKey === window.XianxiaQuestRules.weekKey()) add(snapshot.weekly, 'weekly');
+    const ready = candidates.find(({ q }) => q.claimable);
+    if (ready) return ready;
+    const ratio = q => Math.min(1, Math.max(0, Number(q.current) || 0) / Math.max(1, Number(q.target) || 1));
+    return candidates.sort((a, b) => ratio(b.q) - ratio(a.q))[0] || null;
+  }
+  function renderSpotlight() {
+    const slot = $('quest-spotlight-slot'), button = $('quest-spotlight');
+    if (!slot || !button) return;
+    slot.hidden = !getMainUser()?.uid;
+    const item = recommendedQuest(), q = item?.q;
+    const current = account === getMainUser()?.uid ? snapshot : null;
+    const ready = !!q?.claimable;
+    const labels = { scope: '設定範圍', solo: '繼續問道', meditation: '開始閉關',
+      enlightenment: '悟道試煉', battle: '前往鬥法', raid: '前往秘境', dongtian: '前往洞天',
+      'dongtian-tutorial': '開始教程', story: '觀看劇情' };
+    const action = ready ? (q.supplemental ? '補領抽獎券' : '領取獎勵') : labels[q?.destination] || '查看任務';
+    const title = q?.title || (current ? '繼續探索仙途' : busy ? '正在同步任務…' : '查看修行任務');
+    const reward = q ? [q.reward.drawTickets ? `抽獎券 ×${q.reward.drawTickets}` : '',
+      rewardText({ ...q.reward, drawTickets: 0 })].filter(Boolean).join(' · ') : '查看完整任務與獎勵';
+    const progressLabel = { solo: '答對', score: '修為', battle: '鬥法', raid: '通關',
+      meditation: '閉關', dongtian: '洞天', correction: '訂正', activity: '活動' }[q?.metric] || '進度';
+    $('quest-spotlight-kind').textContent = ready ? '獎勵可領' : ({ path: '仙道任務', daily: '日常任務', commission: '宗門委託', weekly: '每週任務' }[item?.kind] || '修行任務');
+    $('quest-spotlight-title').textContent = title;
+    $('quest-spotlight-progress').textContent = q ? (ready ? '✓ 已完成' : `${progressLabel} ${q.current}／${q.target}`) : '';
+    $('quest-spotlight-reward').textContent = reward;
+    $('quest-spotlight-reward').title = reward;
+    $('quest-spotlight-action').textContent = busy ? '同步中…' : `${action} →`;
+    button.disabled = busy;
+    button.classList.toggle('quest-spotlight-ready', ready);
+    button.setAttribute('aria-label', `${title}${q ? `，進度 ${q.current}／${q.target}` : ''}，${reward}，${action}`);
+  }
   function syncQuestIndicator() {
     const ready = q => q?.claimable && !q.claimed && !q.locked;
     const current = account === getMainUser()?.uid ? snapshot : null;
@@ -48,6 +93,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
   }
   function render() {
     syncQuestIndicator();
+    renderSpotlight();
     if (!$('quest-content')) return;
     ['path', 'daily', 'weekly'].forEach(key => {
       const button = $('quest-tab-' + key);
@@ -193,6 +239,14 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       if (!dialog.open) dialog.showModal();
       entry.setAttribute('aria-expanded', 'true');
       reconcileAccount(); void refresh();
+    });
+    $('quest-spotlight')?.addEventListener('click', () => {
+      if (busy || !reconcileAccount()) return;
+      const item = recommendedQuest();
+      if (!item) { entry.click(); return; }
+      status('');
+      if (item.q.claimable) void claim(item.q, item.kind);
+      else go(item.q.destination, item.q);
     });
     $('quest-close').addEventListener('click', () => dialog.close());
     dialog.addEventListener('close', () => entry.setAttribute('aria-expanded', String(dialog.open)));

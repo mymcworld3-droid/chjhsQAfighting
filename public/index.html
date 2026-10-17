@@ -810,6 +810,15 @@ body.xianxia-theme main:has(#page-training.active-page),
                     </button>
                 </aside>
 
+                <div id="quest-spotlight-slot" hidden>
+                    <button id="quest-spotlight" class="quest-spotlight" type="button" aria-label="查看當前任務">
+                        <span class="quest-spotlight-heading"><span id="quest-spotlight-kind">當前任務</span><span id="quest-spotlight-progress"></span></span>
+                        <span id="quest-spotlight-title" class="quest-spotlight-title">正在同步任務…</span>
+                        <span class="quest-spotlight-footer"><span id="quest-spotlight-reward"></span><span id="quest-spotlight-action">查看任務 →</span></span>
+                    </button>
+                    <p id="quest-spotlight-status" role="status" aria-live="polite"></p>
+                </div>
+
                 <div class="grid grid-cols-2 gap-3 mb-4 home-stats">
                     <div class="stat-card group">
                         <div class="stat-icon text-yellow-500"><i class="fa-solid fa-coins"></i></div>
