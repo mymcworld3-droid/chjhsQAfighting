@@ -40,12 +40,11 @@ test('realm observers defer breakthroughs until absorption ends, including the e
     removeEventListener() {},
     dispatchEvent: event => events.push(event)
   };
-  const node = () => ({ classList:{add(){}},setAttribute(){},remove(){},focus(){},querySelector:()=>({hidden:true}) });
+  const node = () => ({ classList:{add(){}},setAttribute(){},remove(){} });
   vm.runInNewContext(read('realm-breakthrough-feedback.js'), {
-    window, navigator:{}, CustomEvent: class { constructor(type, options) { this.type=type;this.detail=options.detail; } },
+    window, performance:{now:()=>0}, navigator:{}, CustomEvent: class { constructor(type, options) { this.type=type;this.detail=options.detail; } },
     document:{readyState:'complete',querySelector:()=>true, getElementById:id=>overlays.get(id),createElement:node,
-      addEventListener(){},removeEventListener(){},
-      body:{appendChild:el=>overlays.set(el.id,el)}},
+      addEventListener(){},removeEventListener(){},body:{appendChild:el=>overlays.set(el.id,el)}},
     setTimeout(){},clearTimeout(){},setInterval(){},requestAnimationFrame:fn=>fn()
   });
   active = true; score = 31;

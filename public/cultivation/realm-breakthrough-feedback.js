@@ -29,8 +29,9 @@
 
   let initialized = false;
   let lastRealmIndex = 0;
-  const CONTINUE_DELAY_MS = 1000;
   let activeFeedback = null;
+  const CONTINUE_AFTER_MS = 1000;
+  const EXIT_MS = 240;
 
   function loadStyle() {
     if (document.querySelector(`link[href="${CSS_HREF}"]`)) return;
@@ -65,68 +66,6 @@
       .replaceAll("'", '&#039;');
   }
 
-  function disposeFeedback(feedback, restoreFocus = false) {
-    if (!feedback || feedback.disposed) return;
-    feedback.disposed = true;
-    clearTimeout(feedback.readyTimer);
-    clearTimeout(feedback.closingTimer);
-    feedback.cleanup?.();
-    feedback.overlay.remove();
-    if (activeFeedback === feedback) activeFeedback = null;
-    if (restoreFocus && feedback.previousFocus?.isConnected) feedback.previousFocus.focus({ preventScroll: true });
-    feedback.resolve();
-  }
-
-  function enableContinue(feedback) {
-    if (feedback !== activeFeedback || feedback.disposed || feedback.closing) return;
-    clearTimeout(feedback.readyTimer);
-    const remaining = feedback.readyAt - Date.now();
-    if (remaining > 0) {
-      feedback.readyTimer = setTimeout(() => enableContinue(feedback), remaining);
-      return;
-    }
-    feedback.overlay.classList.add('can-continue');
-    feedback.hint.hidden = false;
-  }
-
-  function bindContinue(feedback) {
-    const documents = [document];
-    // The fixed-ratio game lives in an iframe. Its black margins belong to the
-    // outer document and must also accept the player's continue click.
-    try {
-      if (window.parent !== window && window.parent.document) documents.push(window.parent.document);
-    } catch (_) { /* Cross-origin embedding can only handle its own viewport. */ }
-    const onClick = event => {
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      if (feedback !== activeFeedback || feedback.closing) return;
-      if (Date.now() < feedback.readyAt) return;
-      enableContinue(feedback);
-      feedback.closing = true;
-      feedback.overlay.classList.add('leaving');
-      feedback.closingTimer = setTimeout(() => disposeFeedback(feedback, true), 260);
-    };
-    const onKey = event => {
-      if (['Enter', ' ', 'Escape'].includes(event.key)) onClick(event);
-    };
-    const onResume = () => enableContinue(feedback);
-    for (const doc of documents) {
-      doc.addEventListener('click', onClick, true);
-      doc.addEventListener('keydown', onKey, true);
-    }
-    document.addEventListener('visibilitychange', onResume);
-    window.addEventListener('pageshow', onResume);
-    feedback.cleanup = () => {
-      for (const doc of documents) {
-        doc.removeEventListener('click', onClick, true);
-        doc.removeEventListener('keydown', onKey, true);
-      }
-      document.removeEventListener('visibilitychange', onResume);
-      window.removeEventListener('pageshow', onResume);
-    };
-    enableContinue(feedback);
-  }
-
   function particleMarkup(count) {
     return Array.from({ length: count }, (_, index) => {
       const angle = (360 / count) * index + (index % 3) * 4;
@@ -143,18 +82,18 @@
     const major = from.name !== to.name;
     const firstQi = fromIndex === 0 && toIndex === 1;
 
-    disposeFeedback(activeFeedback);
-    let resolveFinished;
-    const completion = new Promise(resolve => { resolveFinished = resolve; });
+    activeFeedback?.dispose();
+    let resolveCompletion;
+    const completion = new Promise(resolve => { resolveCompletion = resolve; });
 
     const overlay = document.createElement('div');
     overlay.id = 'realm-breakthrough-feedback';
-    overlay.className = `realm-breakthrough-feedback ${major ? 'major' : 'minor'} ${firstQi ? 'first-qi' : ''}`;
+    overlay.className = `realm-breakthrough-feedback show ${major ? 'major' : 'minor'} ${firstQi ? 'first-qi' : ''}`;
     overlay.setAttribute('role', 'dialog');
     overlay.setAttribute('aria-modal', 'true');
-    overlay.setAttribute('aria-label', major ? '境界突破' : '境界提升');
+    overlay.setAttribute('aria-label', `${to.name} ${to.sub}，境界突破`);
+    overlay.setAttribute('aria-describedby', 'realm-breakthrough-continue');
     overlay.tabIndex = -1;
-    overlay.setAttribute('aria-live', 'assertive');
     overlay.innerHTML = `
       <div class="realm-breakthrough-flash"></div>
       <div class="realm-breakthrough-rays"></div>
@@ -171,21 +110,69 @@
         <div class="realm-breakthrough-divider"><span></span><b>◆</b><span></span></div>
         <div class="realm-breakthrough-route">${escapeHtml(from.name)} ${escapeHtml(from.sub)} <i class="fa-solid fa-arrow-right-long"></i> ${escapeHtml(to.name)} ${escapeHtml(to.sub)}</div>
         <p>${firstQi ? '一念明悟，靈氣入體。你的第一步，已刻入仙途。' : major ? '天地共鳴，道途再開。' : '靈台清明，修為更進一境。'}</p>
-        <button type="button" class="realm-breakthrough-continue" hidden>按任何地方以繼續</button>
       </section>
+      <p id="realm-breakthrough-continue" class="realm-breakthrough-continue" aria-live="polite" aria-hidden="true">按任何地方以繼續</p>
     `;
 
-    const feedback = { overlay, resolve: resolveFinished, previousFocus: document.activeElement };
+    // One monotonic deadline controls the one-second lock, independent of FPS.
+    const readyAt = performance.now() + CONTINUE_AFTER_MS;
+    let closing = false, disposed = false, closeTimer, readyTimer;
+    const previousFocus = document.activeElement;
+    const documents = [document];
+    // The fixed-ratio stage has black margins outside its iframe. They count too.
+    try { if (window.parent !== window && window.parent?.document) documents.push(window.parent.document); } catch (_) {}
+    const revealContinue = () => {
+      if (disposed || closing) return;
+      clearTimeout(readyTimer);
+      const remaining = readyAt - performance.now();
+      if (remaining > 0) {
+        readyTimer = setTimeout(revealContinue, remaining);
+        return;
+      }
+      overlay.querySelector('.realm-breakthrough-continue')?.setAttribute('aria-hidden', 'false');
+    };
+    readyTimer = setTimeout(revealContinue, Math.max(0, readyAt - performance.now()));
+    const session = { dispose() {
+      if (disposed) return;
+      disposed = true;
+      clearTimeout(readyTimer); clearTimeout(closeTimer);
+      document.removeEventListener('visibilitychange', revealContinue);
+      window.removeEventListener('pageshow', revealContinue);
+      for (const doc of documents) {
+        doc.removeEventListener('click', onContinue, true);
+        doc.removeEventListener('pointerdown', blockPointer, true);
+        doc.removeEventListener('keydown', onKeyDown, true);
+      }
+      overlay.remove();
+      if (activeFeedback === session) activeFeedback = null;
+      if (previousFocus?.isConnected) previousFocus.focus?.({ preventScroll:true });
+      resolveCompletion();
+    } };
+    function blockPointer(event) {
+      event.preventDefault(); event.stopImmediatePropagation();
+    }
+    function onContinue(event) {
+      blockPointer(event);
+      if (closing || performance.now() < readyAt) return;
+      revealContinue();
+      closing = true;
+      overlay.classList.add('leaving');
+      closeTimer = setTimeout(session.dispose, EXIT_MS);
+    }
+    function onKeyDown(event) {
+      if (['Enter', ' ', 'Escape'].includes(event.key)) onContinue(event);
+      else if (event.key === 'Tab') blockPointer(event);
+    }
+    activeFeedback = session;
     document.body.appendChild(overlay);
-    // Establish the initial opacity, then start CSS animations on the browser's
-    // time-based timeline. No phase waits for a number of rendered frames.
-    void overlay.offsetWidth;
-    overlay.classList.add('show');
-    feedback.readyAt = Date.now() + CONTINUE_DELAY_MS;
-    feedback.hint = overlay.querySelector('.realm-breakthrough-continue');
-    activeFeedback = feedback;
-    bindContinue(feedback);
-    overlay.focus({ preventScroll: true });
+    overlay.focus?.({ preventScroll:true });
+    for (const doc of documents) {
+      doc.addEventListener('click', onContinue, true);
+      doc.addEventListener('pointerdown', blockPointer, true);
+      doc.addEventListener('keydown', onKeyDown, true);
+    }
+    document.addEventListener('visibilitychange', revealContinue);
+    window.addEventListener('pageshow', revealContinue);
 
     try {
       if (navigator.vibrate) navigator.vibrate(major ? [45, 55, 90] : 35);

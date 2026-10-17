@@ -36,7 +36,8 @@ function harness() {
     body: { appendChild(node) { nodes.set(node.id, node); } },
     createElement() {
       const classes = new Set();
-      return { hint: { hidden: true }, classList: { add: name => classes.add(name), contains: name => classes.has(name) },
+      const hint = { hidden: true, setAttribute(key, value) { if (key === 'aria-hidden') this.hidden = value !== 'false'; } };
+      return { hint, classList: { add: name => classes.add(name), contains: name => classes.has(name) },
         setAttribute() {}, focus() {}, querySelector() { return this.hint; },
         remove() { if (nodes.get(this.id) === this) nodes.delete(this.id); } };
     }
@@ -47,7 +48,7 @@ function harness() {
     limitImmortalRank: i => i, dispatchEvent() {}
   });
   vm.runInNewContext(read('public/cultivation/realm-breakthrough-feedback.js'), {
-    window, document, navigator: {}, Date: { now: () => now },
+    window, document, navigator: {}, performance: { now: () => now },
     CustomEvent: class {}, setInterval() {},
     setTimeout(fn, ms) { timers.set(++id, { fn, at: now + ms }); return id; },
     clearTimeout(id) { timers.delete(id); }

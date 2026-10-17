@@ -212,12 +212,13 @@ body.xianxia-theme #page-training .training-place {
 .training-place-art > svg { position: absolute; inset: 0; }
 /* The broad bloom sits behind the sprite; the delicate rim follows its alpha. */
 .training-place-aura {
+  display: none;
   opacity: .36;
   filter: brightness(0) invert(1) blur(12px);
   transition: opacity .2s ease;
 }
 .training-place-cutout {
-  filter: drop-shadow(0 0 1.8px #fcfffcf2) drop-shadow(0 0 6.5px #f1fff280) drop-shadow(0 0 13px #ffffff24);
+  filter: drop-shadow(0 0 3px #fcfffcdd);
   transition: filter .2s ease;
 }
 .training-place-label {
@@ -288,10 +289,10 @@ body.xianxia-theme #page-training .training-place {
 .training-place.is-locked .training-place-label { border-color: #92958d80; }
 .training-place:not(:disabled):focus-visible .training-place-label { outline: 3px solid white; outline-offset: 4px; }
 .training-place:not(:disabled):focus-visible .training-place-aura { opacity: .6; }
-.training-place:not(:disabled):focus-visible .training-place-cutout { filter: brightness(1.08) drop-shadow(0 0 2.3px #fff) drop-shadow(0 0 9px #effff29c) drop-shadow(0 0 18px #ffffff2e); }
+.training-place:not(:disabled):focus-visible .training-place-cutout { filter: drop-shadow(0 0 5px #fff); }
 @media (hover: hover) {
   .training-place:not(:disabled):hover .training-place-aura { opacity: .54; }
-  .training-place:not(:disabled):hover .training-place-cutout { filter: brightness(1.06) drop-shadow(0 0 2.3px #fff) drop-shadow(0 0 9px #effff29c) drop-shadow(0 0 18px #ffffff2e); }
+  .training-place:not(:disabled):hover .training-place-cutout { filter: drop-shadow(0 0 5px #fff); }
   .training-place:not(:disabled):hover .training-place-label { border-color: #fff8dc; }
 }
 body.xianxia-theme #page-training .training-scene-detailbar {
@@ -342,3 +343,9 @@ body.xianxia-theme #page-training .training-scene-back {
 .training-place-label > .refinery-ready-dot { top:-.18em;right:-.18em;width:.45em;height:.45em;min-width:9px;min-height:9px; }
 @keyframes refinery-dot-breath { 50% { box-shadow:0 0 0 3px #24170b,0 0 20px rgba(255,66,50,.9);transform:scale(1.13); } }
 @media(prefers-reduced-motion:reduce) { .refinery-ready-dot { animation:none; } }
+
+/* Recovery after an interrupted renderer entry reuses the complete painted
+   background and the same building targets, without the extra cloud surfaces. */
+.training-map[data-render-profile="safe"] .training-map-atmosphere,
+.training-map[data-render-profile="safe"] .training-map-motes{display:none}
+.training-map[data-render-profile="safe"] .training-place-cutout{filter:none}

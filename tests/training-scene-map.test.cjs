@@ -20,7 +20,8 @@ test('repeated training navigation stays in the document and cannot run a delaye
     playStartupCloudCurtain() { throw new Error('Tab navigation must never reuse startup'); }
   };
   Object.defineProperty(window, 'location', { get() { throw new Error('Navigation must not reload the document'); } });
-  const context = { window, PAGE: 'page-training', page, navigation: null, navigationRevision: 0,
+  const context = { window, PAGE: 'page-training', page, navigation: null, navigationRevision: 0, entryCheck: 0,
+    markTrainingEntry() {}, markTrainingStable() {}, markTrainingExit() {}, setTimeout() {}, clearTimeout() {},
     visible: () => current === 'page-training', showMap: () => mapVisits++ };
   vm.createContext(context);
   vm.runInContext(source.slice(from, to) + '\nwrapNavigation();', context);

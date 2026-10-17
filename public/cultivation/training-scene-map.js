@@ -3,6 +3,7 @@ import './nascent-growth.js';
 import './training-scene-layer-art.js';
 import './training-scene-layouts.js';
 import { getMainUser } from './data/project-repository.js';
+import { trainingRenderProfile, markTrainingEntry, markTrainingStable, markTrainingExit } from './training-render-guard.js';
 
 const Rules = globalThis.QATrainingAccessRules;
 const Layouts = globalThis.QATrainingSceneLayouts;
@@ -20,6 +21,7 @@ const DETAIL_TABS = [
 let page, map, scenery, plane, bar, background, resizeObserver, pageObserver;
 let orientation = '', scheduled = false, running = false, navigation = null;
 let navigationRevision = 0;
+let entryCheck = 0;
 const unlocked = place => !!window.getCurrentUserData?.()?.stats &&
   (window.getTrainingAccessScore?.() ?? Rules.score(window.getCurrentUserData?.())) >= place.threshold;
 const visible = () => !!page?.classList.contains('active-page') && !page.classList.contains('hidden');
@@ -223,11 +225,13 @@ function renderScene(next) {
   const layout = Layouts[next];
   map.dataset.orientation = next;
   plane.style.setProperty('--training-map-font', `${layout.font}px`);
-  scenery.style.backgroundImage = `url("${layout.image}")`;
-  scenery.replaceChildren(...makeSceneryLayers(layout));
+  const safeRendering = trainingRenderProfile() === 'safe';
+  const plate = safeRendering ? `assets/training/cultivation-${next}-clean.webp` : layout.image;
+  scenery.style.backgroundImage = `url("${plate}")`;
+  scenery.replaceChildren(...(safeRendering ? [] : makeSceneryLayers(layout)));
   background = document.createElement('img');
   background.className = 'training-map-background';
-  background.src = layout.image;
+  background.src = plate;
   background.alt = '';
   background.draggable = false;
   background.decoding = 'async';
@@ -357,6 +361,7 @@ function ensure() {
   orientation = '';
   map = document.createElement('section');
   map.className = 'training-map';
+  map.dataset.renderProfile = trainingRenderProfile();
   map.setAttribute('aria-label', '修煉場景');
   map.hidden = true;
   scenery = document.createElement('div');
@@ -392,6 +397,15 @@ function wrapNavigation() {
   if (typeof base !== 'function' || base === navigation) return;
   navigation = function (id, ...args) {
     const wasVisible = visible();
+    if (id === PAGE && !wasVisible) {
+      markTrainingEntry();
+      clearTimeout(entryCheck);
+      // A killed renderer cannot reach this deadline; the next load can recover.
+      entryCheck = setTimeout(markTrainingStable, 15000);
+    } else if (id !== PAGE) {
+      clearTimeout(entryCheck);
+      markTrainingExit();
+    }
     if (id !== PAGE) navigationRevision++;
     // Keep navigation synchronous and inside this document. The startup curtain
     // allocates two full-screen PNG layers; reserve it for entering a building.

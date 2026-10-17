@@ -13,7 +13,7 @@
   --rb-pale: 255,235,180;
   position: fixed;
   inset: 0;
-  z-index: 6500;
+  z-index: 40000;
   display: grid;
   place-items: center;
   overflow: hidden;
@@ -30,23 +30,28 @@
 
 .realm-breakthrough-feedback.show { opacity: 1; }
 .realm-breakthrough-feedback.leaving { opacity: 0; }
-.realm-breakthrough-feedback.can-continue { cursor: pointer; }
+.realm-breakthrough-feedback:focus { outline: none; }
 .realm-breakthrough-continue {
-  display: block;
-  width: 100%;
-  margin-top: 18px;
-  padding: 8px;
-  border: 0;
-  background: transparent;
-  color: #f3dca2;
-  font: inherit;
-  font-size: 13px;
+  position: absolute;
+  z-index: 6;
+  bottom: max(18px, env(safe-area-inset-bottom, 0px));
+  left: 12px;
+  right: 12px;
+  margin: 0;
+  color: #fff0c1;
+  font-size: 15px;
+  font-weight: 700;
   letter-spacing: .12em;
-  cursor: pointer;
-  animation: realmContinuePulse 2s ease-in-out infinite;
+  text-align: center;
+  text-shadow: 0 2px 8px #000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .2s ease;
 }
-.realm-breakthrough-continue[hidden] { display: block; visibility: hidden; }
-@keyframes realmContinuePulse { 50% { opacity: .55; } }
+.realm-breakthrough-continue[aria-hidden="false"] {
+  opacity: 1;
+  visibility: visible;
+}
 
 .realm-breakthrough-flash {
   position: absolute;
@@ -123,6 +128,10 @@
   z-index: 4;
   width: min(calc(100vw - 34px), 520px);
   padding: 26px 22px 24px;
+  margin-bottom: 36px;
+  max-height: calc(100dvh - 92px);
+  overflow-y: auto;
+  box-sizing: border-box;
   text-align: center;
   border-radius: 30px;
   border: 1px solid rgba(216,177,93,.30);
@@ -283,8 +292,7 @@
   .realm-breakthrough-ring,
   .realm-breakthrough-particle,
   .realm-breakthrough-card,
-  .realm-breakthrough-icon,
-  .realm-breakthrough-continue {
+  .realm-breakthrough-icon {
     animation: none !important;
   }
   .realm-breakthrough-card { opacity: 1; transform: none; }
