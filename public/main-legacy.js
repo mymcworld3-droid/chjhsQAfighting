@@ -78,6 +78,7 @@ let battleUnsub = null;              // 對戰房監聽
 let chatUnsub = null;                // 聊天室監聽
 let currentBattleId = null;          // 當前對戰 ID
 let isBattleActive = false;          // 是否在對戰中
+const SOLO_QUIZ_BATCH_SESSION = (globalThis.crypto?.randomUUID?.() || Math.random().toString(36).slice(2) + Date.now().toString(36));
 let quizBuffer = [];                 // 題目緩衝
 const BUFFER_SIZE = 1;               // 只預取一題，減少切換範圍時浪費的 API 呼叫
 let isFetchingBuffer = false;
@@ -2950,6 +2951,7 @@ async function fetchOneQuestion() {
                     difficulty: finalDifficulty,
                     language: currentLang,
                     knowledgeMap: currentUserData.stats.knowledgeMap || {},
+                    quizSessionId: SOLO_QUIZ_BATCH_SESSION + '-' + (auth.currentUser?.uid || 'guest'),
                     ...recentSoloQuestionContext()
                 })
             });
@@ -3052,6 +3054,7 @@ async function fetchOneQuestion() {
                     difficulty: finalDifficulty,
                     language: currentLang,
                     knowledgeMap: currentUserData.stats.knowledgeMap || {},
+                    quizSessionId: SOLO_QUIZ_BATCH_SESSION + '-' + (auth.currentUser?.uid || 'guest'),
                     ...recentSoloQuestionContext()
                 })
             });
@@ -3689,7 +3692,8 @@ async function fetchExtendedPracticeQuestion() {
             difficulty,
             language: currentLang,
             knowledgeMap: currentUserData?.stats?.knowledgeMap || {},
-            ...recentSoloQuestionContext()
+            quizSessionId: SOLO_QUIZ_BATCH_SESSION + '-' + (auth.currentUser?.uid || 'guest'),
+                    ...recentSoloQuestionContext()
         })
     });
     if (!response.ok) throw new Error(`Server Error: ${response.status}`);
