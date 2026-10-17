@@ -37,6 +37,7 @@ test('realm observers defer breakthroughs until absorption ends, including the e
     isSoloCultivationFeedbackActive: () => active,
     waitForSoloCultivationFeedback: () => new Promise(resolve => { resolveAbsorption = resolve; }),
     addEventListener: (type, fn) => listeners.set(type, fn),
+    removeEventListener() {},
     dispatchEvent: event => events.push(event)
   };
   const node = () => ({ classList:{add(){}},setAttribute(){},remove(){} });

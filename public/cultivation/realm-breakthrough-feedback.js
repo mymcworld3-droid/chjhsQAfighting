@@ -116,17 +116,28 @@
 
     // One monotonic deadline controls the one-second lock, independent of FPS.
     const readyAt = performance.now() + CONTINUE_AFTER_MS;
-    let closing = false, disposed = false, closeTimer;
+    let closing = false, disposed = false, closeTimer, readyTimer;
     const previousFocus = document.activeElement;
     const documents = [document];
     // The fixed-ratio stage has black margins outside its iframe. They count too.
     try { if (window.parent !== window && window.parent?.document) documents.push(window.parent.document); } catch (_) {}
-    const revealContinue = () => overlay.querySelector('.realm-breakthrough-continue')?.setAttribute('aria-hidden', 'false');
-    const readyTimer = setTimeout(revealContinue, Math.max(0, readyAt - performance.now()));
+    const revealContinue = () => {
+      if (disposed || closing) return;
+      clearTimeout(readyTimer);
+      const remaining = readyAt - performance.now();
+      if (remaining > 0) {
+        readyTimer = setTimeout(revealContinue, remaining);
+        return;
+      }
+      overlay.querySelector('.realm-breakthrough-continue')?.setAttribute('aria-hidden', 'false');
+    };
+    readyTimer = setTimeout(revealContinue, Math.max(0, readyAt - performance.now()));
     const session = { dispose() {
       if (disposed) return;
       disposed = true;
       clearTimeout(readyTimer); clearTimeout(closeTimer);
+      document.removeEventListener('visibilitychange', revealContinue);
+      window.removeEventListener('pageshow', revealContinue);
       for (const doc of documents) {
         doc.removeEventListener('click', onContinue, true);
         doc.removeEventListener('pointerdown', blockPointer, true);
@@ -143,8 +154,8 @@
     function onContinue(event) {
       blockPointer(event);
       if (closing || performance.now() < readyAt) return;
-      closing = true;
       revealContinue();
+      closing = true;
       overlay.classList.add('leaving');
       closeTimer = setTimeout(session.dispose, EXIT_MS);
     }
@@ -160,6 +171,8 @@
       doc.addEventListener('pointerdown', blockPointer, true);
       doc.addEventListener('keydown', onKeyDown, true);
     }
+    document.addEventListener('visibilitychange', revealContinue);
+    window.addEventListener('pageshow', revealContinue);
 
     try {
       if (navigator.vibrate) navigator.vibrate(major ? [45, 55, 90] : 35);

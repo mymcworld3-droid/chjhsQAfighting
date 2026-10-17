@@ -22,7 +22,7 @@ function fixture() {
     getElementById:id=>nodes.get(id),createElement:element,body:{appendChild(node){nodes.set(node.id,node);}}});
   const parentDoc=surface();
   const window={parent:{document:parentDoc},getCurrentUserData:()=>({stats:{totalScore:score}}),limitImmortalRank:i=>i,
-    addEventListener:(type,fn)=>windowListeners.set(type,fn),dispatchEvent(){}};
+    addEventListener:(type,fn)=>windowListeners.set(type,fn),removeEventListener(){},dispatchEvent(){}};
   vm.runInNewContext(source,{window,document:doc,navigator:{},performance:{now:()=>time},CustomEvent:class{},
     setInterval(){},setTimeout:(fn,ms)=>{timers.set(++id,{fn,due:time+ms});return id;},clearTimeout:key=>timers.delete(key)});
   function advance(target) {time=target;for(const [key,timer] of [...timers])if(timer.due<=time){timers.delete(key);timer.fn();}}

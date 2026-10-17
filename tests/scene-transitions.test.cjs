@@ -140,3 +140,13 @@ test('training cloud navigation replaces a pending tab slide and normal slides r
   assert.equal(h.animations.length, 4);
   assert.equal(h.animations[2].canceled, false);
 });
+
+test('the training navigation uses an ordinary in-document slide', () => {
+  const h = harness();
+  h.target.id = 'page-training';
+  h.begin(null, h.target, 'alchemy', 'page')();
+  assert.equal(h.animations.length, 2);
+  assert.equal(h.animations[0].target, h.target);
+  assert.equal(h.animations[0].options.duration, 480);
+  assert.equal(h.body.classList.contains('scene-page-sliding'), true);
+});

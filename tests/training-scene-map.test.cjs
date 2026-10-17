@@ -9,6 +9,34 @@ const Layouts = require('../public/cultivation/training-scene-layouts.js');
 const Growth = require('../public/cultivation/nascent-growth.js');
 const Authority = require('../raid-authority.cjs');
 
+test('repeated training navigation stays in the document and cannot run a delayed startup transition', () => {
+  const source = fs.readFileSync(path.join(__dirname, '../public/cultivation/training-scene-map.js'), 'utf8');
+  const from = source.indexOf('function wrapNavigation() {');
+  const to = source.indexOf('\nfunction sync() {', from);
+  let current = 'page-home', mapVisits = 0, calls = 0;
+  const page = { isConnected: true };
+  const window = {
+    switchToPage(id) { calls++; current = id; return id; },
+    playStartupCloudCurtain() { throw new Error('Tab navigation must never reuse startup'); }
+  };
+  Object.defineProperty(window, 'location', { get() { throw new Error('Navigation must not reload the document'); } });
+  const context = { window, PAGE: 'page-training', page, navigation: null, navigationRevision: 0, entryCheck: 0,
+    markTrainingEntry() {}, markTrainingStable() {}, markTrainingExit() {}, setTimeout() {}, clearTimeout() {},
+    visible: () => current === 'page-training', showMap: () => mapVisits++ };
+  vm.createContext(context);
+  vm.runInContext(source.slice(from, to) + '\nwrapNavigation();', context);
+  const wrapped = window.switchToPage;
+  for (let i = 0; i < 25; i++) {
+    assert.equal(window.switchToPage('page-training'), 'page-training');
+    assert.equal(current, 'page-training', 'the destination commits synchronously');
+    vm.runInContext('wrapNavigation();', context);
+    assert.equal(window.switchToPage, wrapped, 'sync cannot stack navigation wrappers');
+    window.switchToPage('page-home');
+  }
+  assert.equal(mapVisits, 25);
+  assert.equal(calls, 50);
+});
+
 test('new accounts see Status; existing Foundation and Golden Core gates stay at 10 and 28', () => {
   const player = { stats: { totalScore: 0 } };
   assert.deepEqual(Rules.PLACES.filter(place => Rules.allows(player, place.threshold)).map(place => place.id), ['status']);
