@@ -1,4 +1,6 @@
-# 仙盟好友私訊（Firebase BD）
+# 仙盟好友私訊
+
+已支援 Render 後端＋Supabase PostgreSQL。切換與驗證程序見 [PostgreSQL 搬移指南](supabase-friend-chat.md)。下列 BD 說明適用於 `FRIEND_CHAT_STORAGE=firestore`，這仍是未設定時的預設值。
 
 ## 功能
 仙盟 → 好友 → 私訊，開啟好友聊天彈窗。每次顯示最近 60 則私人訊息。未讀好友私訊會使仙盟導覽、好友分頁和發訊好友的按鈕亮紅點。全服聊天的新訊息只使「全服聊天」分頁亮紅點，不能傳遞至導覽紅點。
