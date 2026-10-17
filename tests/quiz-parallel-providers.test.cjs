@@ -57,7 +57,10 @@ test('a malformed parallel response does not beat a successful valid response',a
 });
 
 test('one configured API retains the ordinary sequential path and quiz endpoint opts in for all modes',()=>{
-  assert.match(server,/aiRouter\.generateJSON\(prompt, \{ \.\.\.\(combatFastMode \? \{ timeoutMs: 16000 \} : \{\}\), parallel: true \}\)/);
+  assert.match(server,/aiRouter\.generateJSON\(prompt, \{/);
+  assert.match(server,/parallel: true/);
+  assert.match(server,/onSpare: spare => quizSparePool\.offer\(spareKey, spare\)/);
+  assert.match(server,/const saved = attempts === 0 \? quizSparePool\.take\(spareKey, validateCandidate\)/);
   assert.match(server,/const combatFastMode = FAST_QUIZ_MODES\.has/);
   assert.match(server,/app\.post\('\/api\/generate-quiz'/);
   assert.match(fs.readFileSync('fast-quiz-prompt.cjs','utf8'),/raid-quick-simple.*battle-fast.*immortal-fast/);
