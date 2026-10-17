@@ -2950,7 +2950,7 @@ async function fetchOneQuestion() {
                     difficulty: finalDifficulty,
                     language: currentLang,
                     knowledgeMap: currentUserData.stats.knowledgeMap || {},
-                    quizSessionId: (globalThis.__xiuxianQuizBatchSession || (globalThis.__xiuxianQuizBatchSession = (globalThis.crypto?.randomUUID?.() || Math.random().toString(36).slice(2) + Date.now().toString(36)))) + '-' + (auth.currentUser?.uid || 'guest'),
+                    quizSessionId: (globalThis.__xiuxianQuizBatchSession || (globalThis.__xiuxianQuizBatchSession = (globalThis.crypto?.randomUUID?.() || Math.random().toString(36).slice(2) + Date.now().toString(36)))) + '-' + (currentUserData?.uid || 'guest'),
                     ...recentSoloQuestionContext()
                 })
             });
@@ -3053,7 +3053,7 @@ async function fetchOneQuestion() {
                     difficulty: finalDifficulty,
                     language: currentLang,
                     knowledgeMap: currentUserData.stats.knowledgeMap || {},
-                    quizSessionId: (globalThis.__xiuxianQuizBatchSession || (globalThis.__xiuxianQuizBatchSession = (globalThis.crypto?.randomUUID?.() || Math.random().toString(36).slice(2) + Date.now().toString(36)))) + '-' + (auth.currentUser?.uid || 'guest'),
+                    quizSessionId: (globalThis.__xiuxianQuizBatchSession || (globalThis.__xiuxianQuizBatchSession = (globalThis.crypto?.randomUUID?.() || Math.random().toString(36).slice(2) + Date.now().toString(36)))) + '-' + (currentUserData?.uid || 'guest'),
                     ...recentSoloQuestionContext()
                 })
             });
@@ -3691,7 +3691,7 @@ async function fetchExtendedPracticeQuestion() {
             difficulty,
             language: currentLang,
             knowledgeMap: currentUserData?.stats?.knowledgeMap || {},
-            quizSessionId: (globalThis.__xiuxianQuizBatchSession || (globalThis.__xiuxianQuizBatchSession = (globalThis.crypto?.randomUUID?.() || Math.random().toString(36).slice(2) + Date.now().toString(36)))) + '-' + (auth.currentUser?.uid || 'guest'),
+            quizSessionId: (globalThis.__xiuxianQuizBatchSession || (globalThis.__xiuxianQuizBatchSession = (globalThis.crypto?.randomUUID?.() || Math.random().toString(36).slice(2) + Date.now().toString(36)))) + '-' + (currentUserData?.uid || 'guest'),
                     ...recentSoloQuestionContext()
         })
     });
