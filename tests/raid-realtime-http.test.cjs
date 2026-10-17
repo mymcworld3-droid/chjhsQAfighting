@@ -55,9 +55,10 @@ function client(origin,uid,requests) {
     clean(read('public/cultivation/data/raid-repository.js')),context);
   context.window={getCurrentUserData:()=>user};
   const user={uid,stats:{}};
-  context.localStorage={setItem(){},removeItem(){}};
+  const saved=new Map();
+  context.localStorage={getItem:key=>saved.get(key)||null,setItem:(key,value)=>saved.set(key,value),removeItem:key=>saved.delete(key)};
   vm.runInContext(clean(read('public/cultivation/raid-room.js'))+
-    '\nthis.operations={createRaidRoom,joinRaidRoomByCode,subscribeRaidRoom,setRaidReady,startRaidRoom};',context);
+    '\nthis.operations={createRaidRoom,joinRaidRoomByCode,subscribeRaidRoom,setRaidReady,startRaidRoom,kickRaidMember,reconnectRaidRoom,savedRoom:()=>localStorage.getItem(STORAGE_KEY)};',context);
   return context.operations;
 }
 async function until(predicate) {
@@ -100,4 +101,33 @@ test('three clients see joins, readiness and start through real HTTP streaming w
   seen.forEach(list=>{for(let index=1;index<list.length;index++)assert.ok(list[index].revision>=list[index-1].revision);});
   stops.forEach(stop=>stop());await until(()=>raidDb.listenerCount()===0);
   assert.deepEqual(errors,[]);
+});
+
+test('kicking pushes the new roster to teammates and closes the removed client with cleared reconnect storage',async t=>{
+  const playerDb=store(Object.fromEntries(['a','b','c'].map(uid=>['users/'+uid,
+    {displayName:uid,stats:{totalScore:68,attack:200,maxHp:1000},raidTickets:{count:3,lastGrantDate:'2099-01-01'}}])));
+  const raidDb=store();
+  const handler=createHandler({resolveA:()=>({db:playerDb,auth:{verifyIdToken:async token=>
+    ({uid:token,aud:'question-learning',iss:'https://securetoken.google.com/question-learning'})}}),
+    resolveC:()=>({db:raidDb}),logger:{error(){}}});
+  const app=express();app.use(express.json());app.post('/api/raid/room',handler);
+  const server=app.listen(0,'127.0.0.1');await new Promise(resolve=>server.once('listening',resolve));
+  const origin='http://127.0.0.1:'+server.address().port,requests=[],stops=[],errors=[];
+  t.after(async()=>{stops.forEach(stop=>stop());server.closeAllConnections();await new Promise(resolve=>server.close(resolve));});
+  const clients=['a','b','c'].map(uid=>client(origin,uid,requests)),seen=[[],[],[]];let initial;
+  const id=await clients[0].createRaidRoom(result=>{initial=result;});
+  stops.push(clients[0].subscribeRaidRoom(id,value=>seen[0].push(value),error=>errors.push(error),initial));
+  for(let i=1;i<3;i++){
+    let joined;await clients[i].joinRaidRoomByCode(initial.room.code,result=>{joined=result;});
+    stops.push(clients[i].subscribeRaidRoom(id,value=>seen[i].push(value),error=>errors.push(error),joined));
+  }
+  await until(()=>seen.every(rows=>Object.keys(rows.at(-1)?.members||{}).length===3));
+  await clients[0].kickRaidMember(id,'b');
+  await until(()=>seen[1].at(-1)===null && [0,2].every(i=>Object.keys(seen[i].at(-1)?.members||{}).length===2));
+  assert.equal(errors.length,1);assert.equal(errors[0].status,403);
+  assert.equal(clients[1].savedRoom(),null);
+  assert.equal(await clients[1].reconnectRaidRoom(),null);
+  assert.equal(clients[0].savedRoom(),id);assert.equal(clients[2].savedRoom(),id);
+  await until(()=>raidDb.listenerCount()===2);
+  assert.equal(requests.filter(row=>row.action==='get').length,0);
 });

@@ -57,7 +57,7 @@ test('event parser handles byte-split Chinese text, CRLF, comments and server er
 function clientFixture() {
   let next, failure, connected, cancelled=0, result;
   const requests=[], timers=new Map();let timerId=0;
-  const context={window:{getCurrentUserData:()=>null},localStorage:{setItem(){},removeItem(){}},
+  const context={window:{getCurrentUserData:()=>null},localStorage:{getItem(){return null;},setItem(){},removeItem(){}},
     setTimeout(fn,ms){const id=++timerId;timers.set(id,{fn,ms});return id;},clearTimeout:id=>timers.delete(id),
     raidRepository:{request:async action=>{requests.push(action);if(result instanceof Error)throw result;return result;},
       subscribeRoom(id,n,f,c){next=n;failure=f;connected=c;return()=>cancelled++;}}};

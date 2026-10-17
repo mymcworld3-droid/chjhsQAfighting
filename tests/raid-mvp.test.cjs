@@ -168,7 +168,7 @@ test('the entire trial page hides navigation and uses the available viewport', (
 
 
 test('raid hub scrolls as a whole without forcing its Boss card to the page bottom', () => {
-  assert.match(raidSource, /STYLE_HREF = 'styles\/raid-mode\.css\?v=20261017-scrollable-hub'/);
+  assert.match(raidSource, /STYLE_HREF = 'styles\/raid-mode\.css\?v=20261017-party-list'/);
   assert.doesNotMatch(raidSource, /function fitRaidHubToViewport\(\)/);
   assert.doesNotMatch(raidSource, /card\.style\.setProperty\('height'/);
   assert.match(cssSource, /#raid-hub:not\(\.hidden\)\s*\{[^}]*overflow-y:auto!important/);

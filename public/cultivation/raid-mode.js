@@ -5,7 +5,7 @@ import { generateRaidQuestion } from './raid-question.js';
 import {
   ensureRaidRoomAuth, getRaidTicketState, createRaidRoom, findOrCreateRaidRoom, joinRaidRoomByCode,
   listPublicRaidRooms, joinPublicRaidRoom, setRaidPublicVisibility, reconnectRaidRoom,
-  setRaidReady, startRaidRoom, subscribeRaidRoom, heartbeatRaidRoom, commitRaidPlayerAction,
+  setRaidReady, kickRaidMember, startRaidRoom, subscribeRaidRoom, heartbeatRaidRoom, commitRaidPlayerAction,
   commitRaidBossDefense, advanceRaidBossAction, leaveRaidRoom, raidRoomMembers, raidMemberOnline
 } from './raid-room.js';
 import { playerRepository } from './data/player-repository.js';
@@ -19,7 +19,7 @@ import './raid-difficulty.js';
 
   const DIFFICULTY = globalThis.QARaidDifficulty;
   const PAGE_ID = 'page-raid';
-  const STYLE_HREF = 'styles/raid-mode.css?v=20261017-scrollable-hub';
+  const STYLE_HREF = 'styles/raid-mode.css?v=20261017-party-list';
   const MALE = 'assets/story/characters/player-male-determined.png';
   const FEMALE = 'assets/story/characters/player-female-determined.png';
   const HEARTBEAT_MS = 8000;
@@ -608,13 +608,18 @@ import './raid-difficulty.js';
     lobby.innerHTML =
       '<header class="raid-heading"><button class="raid-back" type="button" data-leave><i class="fa-solid fa-arrow-left"></i></button>' +
       '<div><small>RAID PARTY ／ 秘境隊伍</small><h2>清霜試煉・' + escapeHtml(tier.name) + '</h2><p>隊伍代碼 <b class="raid-room-code">' + escapeHtml(state.room.code || '------') + '</b></p></div><span class="raid-seal">' + members.length + '/4</span></header>' +
-      '<div class="raid-party-list" data-party-count="' + members.length + '">' + members.map(member => {
+      '<div class="raid-party-list" role="list" aria-label="小隊成員" data-party-count="' + members.length + '">' + members.map(member => {
         const hp = Math.max(1, Number(member.maxHp) || 1);
-        return '<article class="raid-party-member ' + (member.uid === state.player.uid ? 'me' : '') + '">' +
+        const ready = member.ready && raidMemberOnline(member);
+        return '<article role="listitem" class="raid-party-member ' + (ready ? 'is-ready ' : 'is-waiting ') + (member.uid === state.player.uid ? 'me' : '') + '">' +
           '<img src="' + escapeHtml(member.portrait || MALE) + '" alt="隊員">' +
           '<div><small>' + (member.host ? '隊長' : '隊員') + (raidMemberOnline(member) ? '・在線' : '・離線') + '</small><strong>' + escapeHtml(member.name) + '</strong>' +
           '<span>戰力 ' + Math.max(0, Number(member.combatPower) || 0).toLocaleString() + '・HP ' + hp.toLocaleString() + '</span></div>' +
-          '<b class="' + (member.ready ? 'ready' : '') + '">' + (member.ready ? '已準備' : '未準備') + '</b></article>';
+          '<div class="raid-member-actions"><b class="raid-member-readiness ' + (ready ? 'ready' : 'waiting') + '"><i class="fa-solid ' +
+          (ready ? 'fa-circle-check' : 'fa-hourglass-half') + '" aria-hidden="true"></i>' + (ready ? '已準備' : '未準備') + '</b>' +
+          (isHost() && member.uid !== state.player.uid && state.room.status === 'waiting' ?
+            '<button type="button" class="raid-member-kick" data-kick-member="' + escapeHtml(member.uid) + '" aria-label="踢出 ' + escapeHtml(member.name) + '" ' +
+            (state.roomCommand ? 'disabled' : '') + '>' + (state.roomCommand === 'kick:' + member.uid ? '踢出中…' : '踢出') + '</button>' : '') + '</div></article>';
       }).join('') + '</div>' +
       '<div class="raid-lobby-actions"><span class="raid-lobby-visibility">'+
       (state.room.visibility==='public'?'公開招募中':'私人隊伍')+'</span>' +
@@ -623,9 +628,12 @@ import './raid-difficulty.js';
         '</button>' : '') +
       '<button class="raid-ghost" type="button" data-copy>複製隊伍代碼</button>' +
       (isHost() ? '<button class="raid-ghost" type="button" data-invite><i class="fa-solid fa-user-plus"></i> 邀請好友</button>' : '') +
-      '<button class="raid-primary" type="button" data-ready ' + (state.roomCommand ? 'disabled' : '') + '>' + (state.roomCommand === 'ready' ? '準備中…' : me?.ready ? '取消準備' : '準備') + '</button>' +
+      '<button class="raid-primary" type="button" data-ready data-ready-state="' + (me?.ready ? 'ready' : 'waiting') + '" ' + (state.roomCommand ? 'disabled' : '') + '>' + (state.roomCommand === 'ready' ? '更新中…' : me?.ready ? '取消準備' : '準備出戰') + '</button>' +
       (isHost() ? '<button class="raid-primary" type="button" data-start ' + (allReady && !state.roomCommand ? '' : 'disabled') + '>' + (state.roomCommand === 'start' ? '開戰中…' : '開始團本') + '</button>' : '<span class="raid-wait-host">等待隊長開始</span>') + '</div>';
     lobby.querySelector('[data-leave]')?.addEventListener('click', leaveRaid);
+    lobby.querySelectorAll('[data-kick-member]').forEach(button => {
+      button.addEventListener('click', () => { void kickPartyMember(button.dataset.kickMember); });
+    });
     lobby.querySelector('[data-copy]')?.addEventListener('click', async function () {
       try { await navigator.clipboard.writeText(String(state.room.code || '')); toast('隊伍代碼已複製'); }
       catch (_) { toast('隊伍代碼：' + String(state.room.code || '')); }
@@ -673,6 +681,29 @@ import './raid-difficulty.js';
     });
     lobby.querySelector('[data-start]')?.addEventListener('click', function () { void hostStartRaid(); });
     syncRaidBottomClearance();
+  }
+
+  async function kickPartyMember(targetUid) {
+    if (!isHost() || state.room?.status !== 'waiting' || state.roomCommand || targetUid === state.player?.uid) return;
+    const member = state.room.members?.[targetUid];
+    if (!member) return;
+    if (typeof window.openConfirm !== 'function') return toast('確認視窗尚未載入，請稍後再試');
+    const roomId = state.roomId;
+    state.roomCommand = 'kick:' + targetUid;
+    renderLobby();
+    try {
+      const confirmed = await window.openConfirm('確定將「' + member.name + '」踢出隊伍？');
+      if (confirmed !== true || state.roomId !== roomId || !isHost() || state.room?.status !== 'waiting') return;
+      await kickRaidMember(roomId, targetUid);
+      if (state.roomId === roomId) toast('已將「' + member.name + '」踢出隊伍');
+    } catch (error) {
+      if (state.roomId === roomId) toast(error.message || '踢出隊員失敗');
+    } finally {
+      if (state.roomId === roomId) {
+        state.roomCommand = '';
+        if (state.room?.status === 'waiting') renderLobby();
+      }
+    }
   }
 
   function currentBossClock() {
@@ -1272,7 +1303,7 @@ import './raid-difficulty.js';
     window.dispatchEvent(new CustomEvent('xiuxian:invite-blocked'));
     state.roomUnsub = subscribeRaidRoom(roomId, handleRoomSnapshot, error => {
       console.error('[Raid] room listener failed:', error);
-      toast('團本連線中斷，正在嘗試保留房間。');
+      if (![401,403,404].includes(error?.status)) toast('團本連線中斷，正在嘗試保留房間。');
     }, initialResult);
     startHeartbeat();
     updateHomeEntry();
@@ -1368,10 +1399,10 @@ import './raid-difficulty.js';
     }
   }
 
-  function handleRoomSnapshot(room, learningOutcome) {
+  function handleRoomSnapshot(room, learningOutcome, error) {
     if (learningOutcome) state.learningOutcome = learningOutcome;
     if (!room) {
-      toast('團本房間已關閉');
+      toast(error?.status === 403 ? '你已不在這個團本隊伍' : '團本房間已關閉');
       resetRaid(false);
       renderHub();
       return;

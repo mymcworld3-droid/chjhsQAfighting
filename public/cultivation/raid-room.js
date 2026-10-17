@@ -139,6 +139,9 @@ export async function reconnectRaidRoom(onResult) {
 export async function setRaidReady(roomId, ready) {
   return api('ready', { roomId, ready: !!ready });
 }
+export async function kickRaidMember(roomId, targetUid) {
+  return api('kick', { roomId, targetUid });
+}
 export async function startRaidRoom(roomId) {
   return api('start', { roomId });
 }
@@ -181,7 +184,11 @@ export function subscribeRaidRoom(roomId, callback, onError, initialResult) {
     if (stopped) return;
     const signature = String(error?.status || '') + ':' + String(error?.message || error);
     if (signature !== lastError) { lastError = signature; onError?.(error); }
-    if ([401,403,404].includes(error?.status)) { stop(); callback(null); }
+    if ([401,403,404].includes(error?.status)) {
+      stop();
+      if (localStorage.getItem(STORAGE_KEY) === roomId) forget();
+      callback(null, null, error);
+    }
   }
 
   function schedulePoll() {

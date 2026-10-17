@@ -490,6 +490,28 @@ function createHandler({
         return res.json({ ok: true, roomId: result ? roomId : null, room: result, spiritReward });
       }
 
+      if (action === 'kick') {
+        const targetUid = typeof req.body?.targetUid === 'string' ? req.body.targetUid.trim() : '';
+        if (!targetUid || targetUid.length > 128) throw Object.assign(new Error('請選擇要踢出的隊員'), { status:400 });
+        const room = await db.runTransaction(async tx => {
+          const snap = await tx.get(ref);
+          if (!snap.exists) throw Object.assign(new Error('隊伍不存在'), { status:404 });
+          const current = snap.data() || {};
+          requireMember(current, uid);
+          if (current.hostUid !== uid || !memberOnline(membersOf(current)[uid]))
+            throw Object.assign(new Error('只有在線隊長可以踢出隊員'), { status:403 });
+          if (current.status !== 'waiting') throw Object.assign(new Error('團本開始後不能踢出隊員'), { status:409 });
+          if (targetUid === uid) throw Object.assign(new Error('隊長不能踢出自己，請使用退出隊伍'), { status:400 });
+          if (!Object.hasOwn(membersOf(current), targetUid)) throw Object.assign(new Error('這位隊員已不在隊伍中'), { status:404 });
+          // Remove membership rather than marking offline, so reconnect/heartbeat cannot restore it.
+          const members = Object.fromEntries(Object.entries(membersOf(current)).filter(([id]) => id !== targetUid));
+          const update = { members, revision:Math.max(0,finite(current.revision))+1 };
+          tx.update(ref, update);
+          return publicRoom(roomId, { ...current, ...update });
+        });
+        return res.json({ ok:true, room });
+      }
+
       if (action === 'ready') {
         // Refresh the combat projection from Firebase A at the last safe pre-battle boundary.
         // Equipment/stat changes after Ready do not mutate an active raid.

@@ -136,3 +136,44 @@ test('public recruitment client renders visible cards and reuses room state reco
   assert.match(api,/export async function joinPublicRaidRoom/);
   assert.match(api,/remember\(result.roomId\)/);
 });
+
+test('only the current online captain may kick another member while waiting',async()=>{
+  const {c,a,call}=fixture();
+  const created=await call('a','create',{visibility:'public'}),roomId=created.body.roomId;
+  await call('b','join-code',{roomCode:created.body.room.code});
+  await call('c','join-code',{roomCode:created.body.room.code});
+  const tickets=structuredClone(a.docs.get('users/b').raidTickets);
+  assert.equal((await call('b','kick',{roomId,targetUid:'c'})).status,403);
+  assert.equal((await call('d','kick',{roomId,targetUid:'b'})).status,403);
+  assert.equal((await call('a','kick',{roomId,targetUid:'a'})).status,400);
+  assert.equal((await call('a','kick',{roomId,targetUid:''})).status,400);
+  assert.equal((await call('a','kick',{roomId,targetUid:'missing'})).status,404);
+  const before=c.docs.get('raidRooms/'+roomId),revision=before.revision;
+  c.docs.set('raidRooms/'+roomId,{...before,members:{...before.members,a:{...before.members.a,online:false}}});
+  assert.equal((await call('a','kick',{roomId,targetUid:'b'})).status,403);
+  c.docs.set('raidRooms/'+roomId,before);
+  const kicked=await call('a','kick',{roomId,targetUid:'b'});
+  assert.equal(kicked.status,200);assert.equal(kicked.body.room.members.b,undefined);
+  assert.equal(kicked.body.room.revision,revision+1);
+  assert.deepEqual(Object.keys(kicked.body.room.members),['a','c']);
+  assert.equal(kicked.body.room.hostUid,'a');
+  assert.equal((await call('b','get',{roomId})).status,403);
+  assert.equal((await call('b','ready',{roomId,ready:true})).status,403);
+  assert.equal((await call('b','reconnect',{roomId})).body.roomId,null);
+  await call('b','heartbeat',{roomId});
+  assert.equal(c.docs.get('raidRooms/'+roomId).members.b,undefined,'late heartbeat cannot re-add a kicked member');
+  assert.deepEqual(a.docs.get('users/b').raidTickets,tickets,'waiting-room kicks never spend tickets');
+  assert.equal((await call('d','join-public',{roomId})).status,200,'the seat becomes available');
+});
+
+test('kicking cannot alter a started party or its reserved tickets',async()=>{
+  const {c,a,call}=fixture();
+  const created=await call('a','create'),roomId=created.body.roomId;
+  await call('b','join-code',{roomCode:created.body.room.code});
+  await call('a','ready',{roomId,ready:true});await call('b','ready',{roomId,ready:true});
+  assert.equal((await call('a','start',{roomId})).status,200);
+  const tickets=a.docs.get('users/b').raidTickets.count;
+  assert.equal((await call('a','kick',{roomId,targetUid:'b'})).status,409);
+  assert.ok(c.docs.get('raidRooms/'+roomId).members.b);
+  assert.equal(a.docs.get('users/b').raidTickets.count,tickets);
+});
