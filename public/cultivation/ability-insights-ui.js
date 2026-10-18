@@ -1,3 +1,4 @@
+import './knowledge-points.js';
 import './ability-insights-core.js';
 import { authenticatedMainFetch, getMainUser } from './data/project-repository.js';
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
@@ -63,19 +64,19 @@ import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 
       const root = document.createElement('section');
       root.id = 'ability-insights-panel'; root.className = 'ai-ability-panel';
       root.innerHTML = `
-        <p class="ai-ability-definition">依已記錄的學習表現建立單元診斷；未練習不代表零能力。</p>
+        <p class="ai-ability-definition">每科固定 8 個知識點，依題目標記累積能力；出題範圍另行保存。未標記的舊題不推算知識點。</p>
         <div id="ai-ability-summary" class="ai-ability-stats" aria-live="polite"></div>
         <div id="ai-ability-priority" class="ai-ability-priority"></div>
-        <div class="ai-ability-head"><h4>能力細項</h4><small>點選科目查看各單元</small></div>
+        <div class="ai-ability-head"><h4>能力細項</h4><small>點選科目查看固定知識點</small></div>
         <div id="ai-ability-list" class="ai-ability-list"></div>
         <div class="ai-ability-skills"><div class="ai-ability-head"><h4>推理題型能力</h4>
           <small>依 AI 題目提供的題型標記；無紀錄則留白</small></div>
           <div id="ai-ability-skills-list" class="ai-ability-skill-grid"></div></div>
         <details class="ai-ability-method"><summary>診斷方法與數據限制</summary><p>${escape(description)}</p>
-        <p>少於 5 題的單元不判定熟練；8 題以上才有中等證據。圖表以保守估計展示，沒有資料的領域會留白而非 0 分。
-        近期趨勢與推理題型僅使用最新最多 160 筆可讀取的單人答題紀錄；題型維度須由題目原本提供標記才會納入，舊題目與其他玩法不一定涵蓋。數據不適合跨玩家公平排名。</p></details>
+        <p>少於 5 題的知識點不判定熟練；8 題以上才有中等證據。圖表節點固定，沒有資料的知識點會留白而非 0 分。
+        近期趨勢與推理題型僅使用最新最多 160 筆可讀取的已分類的答題紀錄；題型維度須由題目原本提供標記才會納入，舊題目與其他玩法不一定涵蓋。數據不適合跨玩家公平排名。</p></details>
         <section class="ai-ability-coach"><div class="ai-ability-head"><h4>AI 學習教練</h4><span>主動啟用</span></div>
-        <p>根據各單元答題數及正確數提供個人化練習建議。點擊才會將科目與彙總統計傳送至已設定的 AI 供應商，不傳送題目、姓名或完整作答紀錄。</p>
+        <p>根據各知識點答題數及正確數提供個人化練習建議。點擊才會將科目與彙總統計傳送至已設定的 AI 供應商，不傳送題目、姓名或完整作答紀錄。</p>
         <button type="button" id="ai-ability-request">讓 AI 制訂補強計畫</button>
         <div id="ai-ability-response" role="status" aria-live="polite"></div></section>`;
       canvas.closest('.relative')?.after(root);
@@ -94,7 +95,7 @@ import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 
     target.innerHTML = `
       <div><small>有紀錄答題</small><strong>${stats.total}</strong><span>${stats.correct} 題答對</span></div>
       <div><small>保守表現估計</small><strong>${percent(stats.estimate)}</strong><span>${stats.total ? '原始正確率 ' + percent(stats.rawAccuracy) : '尚無足夠紀錄'}</span></div>
-      <div><small>已練習單元</small><strong>${coverage} / ${inScope.length}</strong><span>未作答的項目不列為弱點</span></div>
+      <div><small>已練習知識點</small><strong>${coverage} / ${inScope.length}</strong><span>未作答的項目不列為弱點</span></div>
       <div><small>近 7 日趨勢</small><strong>${delta == null ? '—' : (delta > 0 ? '+' : '') + delta + 'pp'}</strong>
         <span>${trend ? (trend.recent.count + ' 題，' + (trend.previous.count ? '對比前 7 日' : '前期無資料')) : '最新答題紀錄尚未載入'}</span></div>`;
   }
@@ -111,11 +112,11 @@ import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 
       <p>${recommendation
         ? escape(recommendation.subject + ' · ' + recommendation.topic) +
           '　' + (recommendation.total < 5 ? '先完成至少 5 題，以建立可靠判斷。' :
-            '已練習 ' + recommendation.total + ' 題；建議先複習此單元再練 5 題。')
-        : '目前沒有足夠的單元紀錄。先在問道練習數題，即可累積圖譜。'}</p>
+            '已練習 ' + recommendation.total + ' 題；建議先複習此知識點再練 5 題。')
+        : '目前沒有足夠的知識點紀錄。先在問道練習數題，即可累積圖譜。'}</p>
       ${strong.length ? '<small>較穩定項目：' + escape(strong.map(x => x.topic).slice(0,2).join('、')) + '</small>' : ''}
       ${recommendation ? '<button type="button" data-ability-copy="' +
-        escape(recommendation.subject + '｜' + recommendation.topic) + '">複製此練習單元</button>' +
+        escape(recommendation.subject + '｜' + recommendation.topic) + '">複製此練習知識點</button>' +
         (recommendation.total >= 5 && recommendation.estimate < 78 ?
           '<button type="button" data-ability-start>開始悟道試煉 · 5 題</button>' : '') : ''}`;
     node.querySelector('[data-ability-start]')?.addEventListener('click', () => {
@@ -127,7 +128,7 @@ import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 
       const topic = event.currentTarget.dataset.abilityCopy;
       if (navigator.clipboard?.writeText) {
         void navigator.clipboard.writeText(topic).then(() => {
-          event.currentTarget.textContent = '已複製練習單元';
+          event.currentTarget.textContent = '已複製練習知識點';
         }).catch(() => {
           event.currentTarget.textContent = '複製失敗，請手動選取';
         });
@@ -159,9 +160,9 @@ import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 
     const observed = items.filter(x => x.total);
     const none = items.filter(x => !x.total);
     const first = observed.slice(0, currentSubject ? 12 : 14);
-    node.innerHTML = !items.length ? '<p>尚無單元分類，請先開始問道答題。</p>' :
+    node.innerHTML = !items.length ? '<p>尚無知識點分類，請先開始問道答題。</p>' :
       first.map(markup).join('') +
-      ((observed.length > first.length || none.length) ? '<details><summary>查看更多／尚未練習的單元（' +
+      ((observed.length > first.length || none.length) ? '<details><summary>查看更多／尚未練習的知識點（' +
       (observed.length - first.length + none.length) + '）</summary>' +
       [...observed.slice(first.length), ...none].map(markup).join('') + '</details>' : '');
   }
@@ -187,9 +188,7 @@ import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 
   }
   function initFilters(report) {
     const controls = $('chart-controls'); if (!controls) return;
-    const available = report.subjects.filter(x => x.studiedTopics > 0);
-    const other = report.subjects.filter(x => !x.studiedTopics);
-    const labels = [{ id: null, name: '總覽' }, ...available, ...other]
+    const labels = [{ id: null, name: '綜合' }, ...report.subjects]
       .map(x => ({ id: x.id === null ? null : x.name, name: x.name }));
     if (currentSubject && !labels.some(x => x.id === currentSubject)) currentSubject = null;
     controls.replaceChildren();
@@ -233,24 +232,20 @@ import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 
       title = '八種推理能力 · 樣本校正';
       series = axes.map(x => x.estimate);
     } else {
-      const topics = currentSubject ? report.topics.filter(x => x.subject === currentSubject) :
-        report.domains.filter(x => x.topicCount > 0 || x.total > 0);
-      axes = currentSubject ?
-        [...topics.filter(x => x.total), ...topics.filter(x => !x.total)].slice(0, 9) :
-        topics.slice(0, 7);
-      chartType = axes.filter(x => x.total > 0).length >= 3 ? 'radar' : 'bar';
-      title = currentSubject ? currentSubject + ' · 單元掌握' : '綜合能力領域';
+      axes = currentSubject ? report.topics.filter(x => x.subject === currentSubject) : report.domains;
+      chartType = 'radar';
+      title = currentSubject ? currentSubject + ' · 知識點掌握' : '綜合 · 十科能力';
       series = axes.map(x => x.estimate);
     }
     const known = axes.filter(x => x.total > 0).length;
-    if (!axes.length || !known) {
+    if (!axes.length || (!known && currentView !== 'knowledge')) {
       ctx.hidden = true;
       if (empty) {
         empty.hidden = false;
         empty.textContent = currentView === 'skills' ?
           '目前尚無標記推理題型的作答紀錄。完成新題目後，八種推理能力會逐步顯示。' :
           currentView === 'trend' ? '目前沒有近期可分類的答題紀錄，無法計算趨勢。' :
-          '尚無本領域的作答資料；未練習不是零分。';
+          '尚無此科的作答資料；未練習不是零分。';
       }
       return;
     }
@@ -335,7 +330,7 @@ import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 
     if (!uid) { replyBox.textContent = '請先登入才能取得 AI 建議。'; return; }
     const subject = currentSubject;
     const summary = Core.aiSummary(latestReport, subject, latestTrend, latestSkills);
-    if (!summary.topics.length) { replyBox.textContent = '此科目尚沒有已答題的單元。'; return; }
+    if (!summary.topics.length) { replyBox.textContent = '此科目尚沒有已答題的知識點。'; return; }
     aiBusy = true; btn.disabled = true; btn.textContent = '正在整理個人化練習策略…';
     replyBox.textContent = '僅傳送分類彙總，不會傳送題目或個人身分。';
     try {
@@ -358,7 +353,7 @@ import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 
       const list = document.createElement('ol');
       for (const step of advice.plan || []) {
         const li = document.createElement('li');
-        const title = document.createElement('b'); title.textContent = readable(step.topic) + ' · 建議 ' + step.questions + ' 題';
+        const title = document.createElement('b'); title.textContent = (step.subject ? readable(step.subject) + ' · ' : '') + readable(step.topic) + ' · 建議 ' + step.questions + ' 題';
         const reason = document.createElement('p'); reason.textContent = readable(step.reason);
         const action = document.createElement('p'); action.textContent = readable(step.action);
         li.append(title, reason, action); list.append(li);
@@ -375,17 +370,18 @@ import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 
   }
   function render({ map = {}, targetSubject = null, onPercentile } = {}) {
     const ctx = mount(); if (!ctx) return;
-    currentSubject = targetSubject;
+    currentSubject = globalThis.QAKnowledgePoints.subject(targetSubject) || null;
     const uid = getMainUser()?.uid || '';
     if (uid !== historyUid) {
       history = []; historyUid = uid; historyFetchedAt = 0; historyError = '';
+      if ($('ai-ability-response')) $('ai-ability-response').replaceChildren();
     }
     if (currentSubject !== lastRenderedSubject) {
       lastRenderedSubject = currentSubject;
       if ($('ai-ability-response')) $('ai-ability-response').replaceChildren();
       if ($('ai-ability-request') && !aiBusy) $('ai-ability-request').textContent = '讓 AI 制訂補強計畫';
     }
-    const report = Core.build(map, window.SUBJECT_SCHEMA_FRONTEND || {});
+    const report = Core.build(map);
     latestReport = report;
     initFilters(report);
     // Existing percentile is an explicit opt-in on the old page, not an AI score.

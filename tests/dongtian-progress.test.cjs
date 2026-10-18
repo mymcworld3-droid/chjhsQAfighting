@@ -7,6 +7,7 @@ const vm = require('node:vm');
 const register = require('../dongtian-api.js');
 const aiRouter = require('../ai-router.js');
 const ui = fs.readFileSync(path.join(__dirname, '../public/cultivation/dongtian.js'), 'utf8');
+const point = {knowledge_subject:'數學',knowledge_point_id:'math-3',knowledge_point:'方程與不等式'};
 
 function mockResponse() {
   const events = [];
@@ -25,7 +26,7 @@ test('NDJSON reports confirmed per-batch progress and final cave after independe
   const original = aiRouter.generateJSON;
   const responses = [
     { questionCount: 11, name: '代數重點', subject: '數學', level: '國中一年級' },
-    ...Array.from({length:11},(_,i)=>({ questions:[{q:'算式 '+(i+1)+' = ?',correct:'正解',wrong:['錯解1','錯解2','錯解3'],exp:'核心概念、逐步計算與三個錯誤選項判斷。'.repeat(8),subject:'數學'}] })),
+    ...Array.from({length:11},(_,i)=>({ questions:[{...point,q:'算式 '+(i+1)+' = ?',correct:'正解',wrong:['錯解1','錯解2','錯解3'],exp:'核心概念、逐步計算與三個錯誤選項判斷。'.repeat(8),subject:'數學'}] })),
     { approved: true, confidence: 0.96, issues: [], summary: '符合要求' }
   ];
   let calls = 0;
@@ -45,6 +46,7 @@ test('NDJSON reports confirmed per-batch progress and final cave after independe
     assert.deepEqual(res.events.map(e=>e.type),['planning','planned',...Array.from({length:11},()=>['batch-start','batch-complete']).flat(),'review','complete']);
     assert.deepEqual(res.events.filter(e=>e.type==='batch-complete').map(e=>[e.completed,e.total]),Array.from({length:11},(_,i)=>[i+1,11]));
     assert.equal(res.events.at(-1).dongtian.questions.length, 11);
+    assert.ok(res.events.at(-1).dongtian.questions.every(q=>q.knowledge_point_id==='math-3'));
     assert.equal(res.events.at(-1).doubleCheck.passed, true);
   } finally { aiRouter.generateJSON = original; }
 });
@@ -118,7 +120,7 @@ test('short explanations retry only that question; progress counts confirmed com
   const detail = '核心概念與依據。步驟一列式，步驟二代入求解，步驟三檢查結果。逐一分析三個錯誤選項的迷思。'.repeat(3);
   const responses = [{questionCount:10,subject:'數學'},
     {questions:[{q:'題目1',correct:'A',wrong:['B','C','D'],exp:'答案是 A'}]},
-    ...Array.from({length:10},(_,i)=>({questions:[{q:'題目'+(i+1),correct:'A',wrong:['B','C','D'],exp:detail}]})),
+    ...Array.from({length:10},(_,i)=>({questions:[{...point,q:'題目'+(i+1),correct:'A',wrong:['B','C','D'],exp:detail}]})),
     {approved:true,confidence:0.96,issues:[]}];
   aiRouter.generateJSON=async prompt=>{prompts.push(prompt);return{data:responses.shift(),provider:'test',model:'stub'};};
   try {
@@ -144,4 +146,17 @@ test('two short-explanation failures end creation without a partial or fabricate
     assert.equal(calls,3);assert.equal(res.events.at(-1).type,'error');assert.match(res.events.at(-1).error,/解析太簡短/);
     assert.equal(res.events.some(e=>e.type==='batch-complete'||e.type==='complete'),false);
   } finally {aiRouter.generateJSON=original;}
+});
+
+test('missing fixed knowledge tags cannot be accepted as a completed Dongtian batch',async()=>{
+  const original=aiRouter.generateJSON;let calls=0;
+  aiRouter.generateJSON=async()=>({data:calls++===0?{questionCount:10,subject:'數學'}:
+    {questions:[{q:'求一次方程式的解',correct:'A',wrong:['B','C','D'],exp:'依照等量公理移項後求出唯一正解，其他三個答案都不符合原方程式條件。'.repeat(4),subject:'數學'}]}});
+  try {
+    const routes={};register({post(name,fn){routes[name]=fn;}});const res=mockResponse(),log=console.error;console.error=()=>{};
+    try {await routes['/api/generate-dongtian']({get:()=> 'application/x-ndjson',body:{text:'教材',questionAmount:'low'}},res);}
+    finally {console.error=log;}
+    assert.equal(calls,3);assert.equal(res.events.at(-1).type,'error');assert.match(res.events.at(-1).error,/知識點標記無效/);
+    assert.equal(res.events.some(e=>e.type==='batch-complete'||e.type==='complete'),false);
+  }finally{aiRouter.generateJSON=original;}
 });

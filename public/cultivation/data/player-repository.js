@@ -5,6 +5,7 @@ import {
 import { getProjectServices, getMainUser, authenticatedMainFetch } from './project-repository.js';
 import { resolvePlayerAvatar } from '../profile-avatar.js';
 import '../curriculum-range-rules.js';
+import '../knowledge-points.js';
 
 const COLLECTION='users';
 function uidValue(uid){const value=String(uid||'').trim();if(!value)throw new Error('玩家 UID 不可為空');return value;}
@@ -42,9 +43,13 @@ export const playerRepository=Object.freeze({
     const stable=String(key||'').replace(/[^a-zA-Z0-9_-]/g,'_').slice(0,480);
     if(stable.length<6) throw new Error('答題紀錄缺少固定來源鍵');
     const {db}=await services(),ref=doc(db,'exam_logs',stable);
+    const point = globalThis.QAKnowledgePoints.label(value, value.subject);
     return runTransaction(db,async tx=>{
       const existing=await tx.get(ref);
       if(existing.exists()) return false;
+      if (getMainUser()?.uid !== user.uid) throw new Error('帳號已更換，請重新載入');
+      const playerRef = point ? doc(db,COLLECTION,user.uid) : null;
+      const player = playerRef ? await tx.get(playerRef) : null;
       const opts=Array.isArray(value.options)?value.options.slice(0,4).map(x=>String(x??'').slice(0,1500)):[];
       tx.set(ref,{
         uid:user.uid,email:user.email||'',timestamp:serverTimestamp(),
@@ -54,12 +59,19 @@ export const playerRepository=Object.freeze({
         question:String(value.question||'').slice(0,3000),
         subject:String(value.subject||'').slice(0,50),
         subTopic:String(value.subTopic||'').slice(0,150),
+        knowledgeSubject:point?.subject || '',
+        knowledgePointId:point?.id || '',
+        knowledgePoint:point?.name || '',
+        questionForm:String(value.question_form || '').slice(0,40),
         isCorrect:value.isCorrect===true,
         options:opts,
         correctIdx:Number.isInteger(value.correctIdx)?value.correctIdx:-1,
         userIdx:Number.isInteger(value.userIdx)?value.userIdx:-1,
         explanation:String(value.explanation||'').slice(0,3500),
         timeTaken:Math.max(0,Number(value.timeTaken)||0)
+      });
+      if (player?.exists()) tx.update(playerRef, {
+        'stats.knowledgePointMapV1':globalThis.QAKnowledgePoints.record(player.data()?.stats?.knowledgePointMapV1 || {},value,value.isCorrect===true)
       });
       return true;
     });

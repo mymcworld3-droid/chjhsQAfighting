@@ -17,6 +17,7 @@ function rawPack(title = '青雲水庫手札') {
     '兩組交換紀錄後重新檢查條件，指出單一觀察不足以確定原因，決策必須同時比較用水需求與供水能力。'
   ].map((s, i) => s + `第${i + 1}段補充紀錄：` + '管理人要求所有計算皆保存單位，逐步說明每個等式的意義，最後以原始條件檢驗所得結果。'.repeat(4));
   return { title, paragraphs, questions: rules.SKILLS.map((skill, i) => ({ skill, concept: target.detail,
+    knowledge_subject:'數學',knowledge_point_id:'math-3',knowledge_point:'方程與不等式',
     q: ['管理人首先要求弟子辨認哪一項資訊？', '根據兩組紀錄，整理等式應注意哪些條件？', '從水量逐時減少可以合理推論什麼結論？', '若再增加用水戶數，應如何建立新的方程式？', '比較兩組觀察，哪一種決策理由最充分？'][i],
     correct: '依據原文核對未知數與單位', wrong: ['只比較數字，不需要單位', '忽略資料的測量時間', '不用原始條件檢查結果'],
     exp: '應先依照原文辨認未知數與每筆資料的單位，再將相同時段的資訊整理成等式，逐步求解並代回原始條件確認。只看數字、混用時間或省略驗算都會失去合理的判斷依據，因此不能作為正確的解題方法。',
@@ -225,6 +226,7 @@ test('all five answers are required and simultaneous settlement awards only once
   const outcomes = await Promise.all(Array.from({ length: 6 }, () => api.updateRun(db, 'u1', run.id, 'settle', { goldAdded: 999999 }, now)));
   assert.equal(outcomes.filter(r => r.applied).length, 1);
   const p = db.docs.get('users/u1'); assert.equal(p.stats.totalScore, 35); assert.equal(p.stats.gold, 170); assert.equal(p.questProgress.totals.dongtian, 1);
+  assert.deepEqual(p.stats.knowledgePointMapV1.數學['math-3'],{total:5,correct:5},'concurrent settlement only counts the five tagged answers once');
   assert.equal(db.docs.get('opportunityStates/u1').active, null); assert.equal(outcomes[0].run.reward.correct, 5);
 });
 test('nascent soul rewards apply correct-answer and equipped cave bonus without client authority', () => {

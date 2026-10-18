@@ -219,6 +219,7 @@ test('correction celebration fires only after a successful saved reward and neve
       calculateRankFromScore:()=>0,updateUIStats(){},showCultivationFeedback(){},cultivationFeedback:null,fbTitle:{},t:()=> '答對',
       CustomEvent:class {constructor(type,{detail}={}){this.type=type;this.detail=detail;}},
       window:{currentActiveQuiz:quiz,QAAnswerGoldRules:require('../public/cultivation/answer-gold-rules.js'),
+        QAKnowledgePoints:require('../public/cultivation/knowledge-points.js'),
         XianxiaQuestRules:{recordEvent:()=>({})},dispatchEvent:event=>events.push(event)},
       runTransaction:async(_,worker)=>{if(scenario==='failed')throw Error('offline');return worker({get:async()=>({exists:()=>true,data:()=>remote}),update(){}});}};
     vm.runInNewContext(source.slice(start,end)+'\nthis.save=persistAnswer;',context);

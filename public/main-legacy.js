@@ -1,4 +1,6 @@
 import {} from './cultivation/solo-learning-rules.js';
+import './cultivation/knowledge-points.js';
+import './cultivation/ability-insights-core.js';
 import './cultivation/answer-gold-rules.js';
 import './cultivation/quest-rules.js';
 import './cultivation/first-visit.js';
@@ -180,6 +182,7 @@ function recentSoloQuestionContext() {
 
 function quizMetaFromRaw(rawData = {}) {
     return {
+        ...window.QAKnowledgePoints.metadata(rawData, rawData.subject),
         concept_id: String(rawData.concept_id || '').slice(0, 100),
         template_id: String(rawData.template_id || '').slice(0, 120),
         question_form: String(rawData.question_form || '').slice(0, 60),
@@ -3207,7 +3210,8 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
                 const savedStats = { ...stats,
                     ...(verifiedLearning.progress ? {soloLearningV1:verifiedLearning.progress} : {}),
                     gold: Math.max(0, Number(remote.stats?.gold) || 0) + verifiedGold,
-                    totalScore: Math.max(0, (Number(remote.stats?.totalScore) || 0) + cultivationDelta + learningDelta)
+                    totalScore: Math.max(0, (Number(remote.stats?.totalScore) || 0) + cultivationDelta + learningDelta),
+                    knowledgePointMapV1: window.QAKnowledgePoints.record(remote.stats?.knowledgePointMapV1 || {}, quiz, isCorrect)
                 };
                 cultivationReward.gain = Math.max(0,cultivationDelta + learningDelta);
                 scoreGain = verifiedGold;
@@ -3250,6 +3254,9 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
             // Older logs without these fields remain usable for general history.
             subject: learningContext?.subject || '',
             subTopic: learningContext?.topic || '',
+            knowledgeSubject: window.QAKnowledgePoints.label(quiz)?.subject || '',
+            knowledgePointId: window.QAKnowledgePoints.label(quiz)?.id || '',
+            knowledgePoint: window.QAKnowledgePoints.label(quiz)?.name || '',
             // AI-generated question metadata, not an AI inference from correctness.
             questionForm: String(quiz?.meta?.question_form || '').slice(0, 40),
             cognitiveLevel: Number(quiz?.meta?.cognitive_level) || null,
@@ -3943,7 +3950,8 @@ function renderQuiz(data, rank, topic) {
     syncQuizExtendedPracticeControls();
     document.getElementById('quiz-loading').classList.add('hidden');
     document.getElementById('quiz-container').classList.remove('hidden');
-    document.getElementById('quiz-badge').innerText = `${topic} | ${rank}`;
+    const point = window.QAKnowledgePoints.label(window.currentActiveQuiz);
+    document.getElementById('quiz-badge').innerText = `${topic} | ${rank}${point ? ' · 知識點：' + point.name : ''}`;
     const correctionNotice = document.getElementById('quiz-correction-notice');
     if (correctionNotice) correctionNotice.hidden = !window.currentActiveQuiz?.recoveryOrigin;
     
@@ -5697,20 +5705,10 @@ window.loadUserHistory = async (isLoadMore = false) => {
 
 let knowledgeChartInstance = null;
 
-// 輔助函式：計算五大領域的綜合正確率
+// 全服比較與圖譜使用同一份固定知識點統計。
 function calculateDomainScore(map, subjects) {
-    let totalCorrect = 0;
-    let totalQuestions = 0;
-    subjects.forEach(subj => {
-        if (map[subj]) {
-            Object.values(map[subj]).forEach(subStats => {
-                totalCorrect += (subStats.correct || 0);
-                totalQuestions += (subStats.total || 0);
-            });
-        }
-    });
-    if (totalQuestions === 0) return 0; // 無數據時顯示 0
-    return Math.round((totalCorrect / totalQuestions) * 100);
+    const rows = window.QAAbilityInsights.build(map).topics.filter(x => subjects.includes(x.subject));
+    return window.QAAbilityInsights.sum(rows).rawAccuracy || 0;
 }
 
 // ==========================================
@@ -5792,21 +5790,15 @@ window.updatePercentileDisplay = async (targetSubject, myMap) => {
         // 單科模式
         myScore = calculateDomainScore(myMap, [targetSubject]);
         allUsers.forEach(u => {
-            const uMap = (u.stats && u.stats.knowledgeMap) ? u.stats.knowledgeMap : {};
+            const uMap = u.stats?.knowledgePointMapV1 || {};
             othersScores.push(calculateDomainScore(uMap, [targetSubject]));
         });
     } else {
-        // 綜合模式 (五大領域平均)
-        const domains = [ ["國文"], ["英文"], ["數學"], ["歷史", "地理", "公民"], ["物理", "化學", "生物"] ];
-        const calcOverall = (userMap) => {
-            let total = 0;
-            domains.forEach(d => total += calculateDomainScore(userMap, d));
-            return total / domains.length;
-        };
+        const calcOverall = userMap => window.QAAbilityInsights.build(userMap).rawAccuracy || 0;
         
         myScore = calcOverall(myMap);
         allUsers.forEach(u => {
-            const uMap = (u.stats && u.stats.knowledgeMap) ? u.stats.knowledgeMap : {};
+            const uMap = u.stats?.knowledgePointMapV1 || {};
             othersScores.push(calcOverall(uMap));
         });
     }
@@ -5851,36 +5843,23 @@ window.renderKnowledgeGraph = (targetSubject = null) => {
         if (knowledgeChartInstance) { knowledgeChartInstance.destroy(); knowledgeChartInstance = null; }
         return window.QAAbilityGraph.render({
             targetSubject,
-            map: currentUserData?.stats?.knowledgeMap || {},
+            map: currentUserData?.stats?.knowledgePointMapV1 || {},
             onPercentile: window.updatePercentileDisplay
         });
     }
 
-    // 安全取得使用者知識圖譜數據 (如果尚未產生則給空物件)
-    const map = (currentUserData && currentUserData.stats && currentUserData.stats.knowledgeMap) ? currentUserData.stats.knowledgeMap : {};
-
-    // 🔥 呼叫我們剛剛寫的：更新全服前幾%顯示
-    if (window.updatePercentileDisplay) {
-        window.updatePercentileDisplay(targetSubject, map);
-    }
+    const map = currentUserData?.stats?.knowledgePointMapV1 || {};
+    targetSubject = window.QAKnowledgePoints.subject(targetSubject) || null;
+    if (window.updatePercentileDisplay) window.updatePercentileDisplay(targetSubject, map);
 
     // 1. 生成與更新切換按鈕 (放置於專屬的 chart-controls 容器內)
     const controls = document.getElementById('chart-controls');
     if (controls) {
         // 如果還沒有按鈕，就初始化它們
         if (controls.children.length === 0) {
-            const subjects = [
-                { id: null, label: "總覽", color: "border-blue-500 text-blue-400" },
-                { id: "國文", label: "國文", color: "border-slate-400 text-slate-300" },
-                { id: "英文", label: "英文", color: "border-slate-400 text-slate-300" },
-                { id: "數學", label: "數學", color: "border-slate-400 text-slate-300" },
-                { id: "歷史", label: "歷史", color: "border-amber-500 text-amber-400" }, 
-                { id: "地理", label: "地理", color: "border-amber-500 text-amber-400" },
-                { id: "公民", label: "公民", color: "border-amber-500 text-amber-400" },
-                { id: "物理", label: "物理", color: "border-emerald-500 text-emerald-400" }, 
-                { id: "化學", label: "化學", color: "border-emerald-500 text-emerald-400" },
-                { id: "生物", label: "生物", color: "border-emerald-500 text-emerald-400" },
-            ];
+            const subjects = [null, ...window.QAKnowledgePoints.SUBJECT_NAMES].map(name => ({
+                id:name, label:name || '綜合', color:'border-amber-500 text-amber-300'
+            }));
 
             subjects.forEach(subj => {
                 const btn = document.createElement('button');
@@ -5912,42 +5891,11 @@ window.renderKnowledgeGraph = (targetSubject = null) => {
     let chartColor = "rgba(34, 211, 238, 1)";     // 亮青色邊框
     let chartBgColor = "rgba(34, 211, 238, 0.2)"; // 青色半透明背景
 
-    if (targetSubject) {
-        // --- 單科細項模式 ---
-        chartTitle = `[ ${targetSubject} ] 核心能力解析`;
-        
-        // 依照文組/理組套用不同主題色
-        if(["歷史","地理","公民"].includes(targetSubject)) {
-            chartColor = "rgba(245, 158, 11, 1)"; // 琥珀色
-            chartBgColor = "rgba(245, 158, 11, 0.2)";
-        } else if(["物理","化學","生物"].includes(targetSubject)) {
-            chartColor = "rgba(16, 185, 129, 1)"; // 翡翠綠
-            chartBgColor = "rgba(16, 185, 129, 0.2)";
-        }
-
-        // 從前端定義的 Schema 取得軸向 (確保雷達圖即使沒資料也不會變形)
-        labels = window.SUBJECT_SCHEMA_FRONTEND?.[targetSubject] || (map[targetSubject] ? Object.keys(map[targetSubject]) : ["尚無資料"]);
-
-        // 填入答題正確率
-        dataValues = labels.map(topic => {
-            const s = map[targetSubject]?.[topic];
-            return (s && s.total > 0) ? Math.round((s.correct / s.total) * 100) : 0;
-        });
-
-    } else {
-        // --- 全域總覽模式 ---
-        chartTitle = "五大領域綜合分析 (Overall)";
-        labels = ["國文", "英文", "數學", "社會", "自然"];
-        dataValues = [
-            calculateDomainScore(map, ["國文"]),
-            calculateDomainScore(map, ["英文"]),
-            calculateDomainScore(map, ["數學"]),
-            calculateDomainScore(map, ["歷史", "地理", "公民"]),
-            calculateDomainScore(map, ["物理", "化學", "生物"])
-        ];
-        chartColor = "rgba(59, 130, 246, 1)"; // 賽博藍
-        chartBgColor = "rgba(59, 130, 246, 0.2)";
-    }
+    const report = window.QAAbilityInsights.build(map);
+    const axes = targetSubject ? report.topics.filter(x => x.subject === targetSubject) : report.domains;
+    labels = axes.map(x => x.topic || x.name);
+    dataValues = axes.map(x => x.estimate);
+    chartTitle = targetSubject ? targetSubject + ' · 知識點掌握' : '綜合 · 十科能力';
 
     // 3. 繪製 Chart.js 雷達圖
     if (knowledgeChartInstance) knowledgeChartInstance.destroy();

@@ -3,6 +3,7 @@ const aiRouter = require('./ai-router');
 const { questionIntegrityIssue } = require('./question-answer-integrity.cjs');
 const { PROJECT_IDS } = require('./firebase-admin-projects.cjs');
 const { playerRepository, dongtianRepository } = require('./server-repositories.cjs');
+const Knowledge = require('./public/cultivation/knowledge-points.js');
 
 const LEVELS = [
   '國小中年級',
@@ -251,6 +252,7 @@ ${JSON.stringify({
 
 [本批題目藍圖]
 ${JSON.stringify(blueprints)}
+${Knowledge.promptFor(plan.subject)}
 
 [先前已生成的全部題目]
 ${generatedQuestions.length ? JSON.stringify(generatedQuestions) : '[]'}
@@ -282,7 +284,10 @@ ${cleanText(text, MAX_TEXT) || '（沒有額外文字，主要依圖片內容出
       "correct": "唯一正確選項",
       "wrong": ["錯誤選項1", "錯誤選項2", "錯誤選項3"],
       "exp": "解析",
-      "subject": "科目標籤"
+      "subject": "科目標籤",
+      "knowledge_subject": "固定清單中的科目",
+      "knowledge_point_id": "固定清單中的 ID",
+      "knowledge_point": "固定清單中的名稱"
     }
   ]
 }
@@ -324,7 +329,8 @@ function normalizeQuestionBatch(raw, plan, existingQuestions, startIndex, expect
       correct,
       wrong: uniqueWrong,
       exp,
-      subject: cleanText(item?.subject || blueprint.subject || plan.subject, 24) || plan.subject
+      subject: cleanText(item?.subject || blueprint.subject || plan.subject, 24) || plan.subject,
+      ...Knowledge.metadata(item, item?.subject || blueprint.subject || plan.subject)
     });
   }
 
@@ -443,7 +449,8 @@ function normalizeResult(raw, creatorLevel) {
       correct,
       wrong: uniqueWrong,
       exp,
-      subject: cleanText(item?.subject || subject, 24) || subject
+      subject: cleanText(item?.subject || subject, 24) || subject,
+      ...Knowledge.metadata(item,item?.subject || subject)
     });
   }
 
@@ -605,7 +612,8 @@ function normalizeQuestionSnapshot(input) {
     correct: cleanText(item.correct, 800),
     wrong,
     exp: cleanText(item.exp, 3500),
-    subject: cleanText(item.subject || '綜合', 24) || '綜合'
+    subject: cleanText(item.subject || '綜合', 24) || '綜合',
+    ...Knowledge.metadata(item,item.subject)
   };
 }
 
@@ -708,12 +716,14 @@ function normalizeStandaloneQuestion(raw, original) {
     correct,
     wrong,
     exp,
-    subject: base.subject
+    subject: base.subject,
+    ...Knowledge.metadata(Knowledge.label(base,base.subject) ? base : data,base.subject)
   };
 }
 
 function buildRevisionPrompt(original, hint, issue, dongtian = {}) {
   return `
+${Knowledge.promptFor(original?.subject,Knowledge.label(original,original?.subject)?.id || '')}
 [任務]
 你是洞天題目修復師。請依洞天主人的「修改提示詞」修正被確認有誤的題目，但必須保持題目本質不變。
 
@@ -817,6 +827,7 @@ async function rewriteAndValidateQuestion(original, hint, issue, dongtian, maxAt
           '\n請重新求解並完整產生 q、correct、wrong[3]、exp；不要註記原題有錯。' : '');
       rewrite = await aiRouter.generateJSON(prompt, { timeoutMs: 60000 });
       revised = normalizeStandaloneQuestion(rewrite.data, original);
+      Knowledge.assertLabel(revised,original?.subject,Knowledge.label(original,original?.subject)?.id || '');
       validationRun = await aiRouter.generateJSON(
         buildRevisionValidationPrompt(original, revised, issue, hint, dongtian),
         { timeoutMs: 60000 }
@@ -1219,7 +1230,9 @@ module.exports = function registerDongtianApi(app) {
               text, creatorLevel, images.length, plan, generatedQuestions, startIndex, expectedCount
             ) + (lastError ? `\n[上次生成未通過]\n${cleanText(lastError.message, 500)}\n請針對這個問題重新生成本題，尤其不要省略解析。` : '');
             const routed = await generateMultimodalJSON(prompt, images);
-            batch = normalizeQuestionBatch(routed.data, plan, generatedQuestions, startIndex, expectedCount, true);
+            const candidates = normalizeQuestionBatch(routed.data, plan, generatedQuestions, startIndex, expectedCount, true);
+            candidates.forEach(question => Knowledge.assertLabel(question,question.subject));
+            batch = candidates;
             successfulRun = routed;
           } catch (error) {
             lastError = error;

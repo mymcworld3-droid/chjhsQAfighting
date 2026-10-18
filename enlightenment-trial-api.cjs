@@ -5,6 +5,7 @@ const { playerRepository } = require('./server-repositories.cjs');
 const { verifyMainIdentity, issueRaidQuestionTicket, readRaidQuestionTicket,
   assertRaidQuestionTicket } = require('./raid-question-ticket.cjs');
 const ability = require('./public/cultivation/ability-insights-core.js');
+const Knowledge = require('./public/cultivation/knowledge-points.js');
 
 const COLLECTION = 'enlightenmentTrialStates';
 const TOTAL = 5, REQUIRED = 4;
@@ -33,10 +34,17 @@ function candidateWeaknesses(map) {
     a.subject.localeCompare(b.subject,'zh') || a.topic.localeCompare(b.topic,'zh')).slice(0,10);
 }
 function titleFor(n) { return n >= 7 ? '明心悟道' : n >= 3 ? '辨惑行者' : n >= 1 ? '悟道學徒' : ''; }
+function playerWeaknesses(user) {
+  const fixed = ability.build(user.stats?.knowledgePointMapV1).topics
+    .filter(x => x.total >= 5 && x.estimate < 78)
+    .sort((a,b) => a.estimate-b.estimate || b.total-a.total).slice(0,10);
+  return fixed.length ? fixed : candidateWeaknesses(user.stats?.knowledgeMap);
+}
 function publicQuestion(question) {
   if (!question) return null;
   return {id:question.id,q:question.q,opts:question.opts,ticket:question.ticket,
-    subject:question.subject,topic:question.topic,level:question.level,expiresAtMs:question.expiresAtMs};
+    subject:question.subject,topic:question.topic,level:question.level,expiresAtMs:question.expiresAtMs,
+    ...Knowledge.metadata(question, question.subject)};
 }
 function snapshot(state, weakness=null) {
   if (!state) return {status:'idle',weakness,total:TOTAL,required:REQUIRED};
@@ -56,7 +64,7 @@ async function readState(db,uid) {
   if (!userSnap.exists) throw error('玩家資料不存在',404);
   const user=userSnap.data()||{};
   const raw=stateSnap.exists ? stateSnap.data()||{} : null;
-  return {user,state:raw,weakness:candidateWeaknesses(user.stats?.knowledgeMap)[0]||null};
+  return {user,state:raw,weakness:playerWeaknesses(user)[0]||null};
 }
 async function start(db,uid,selection={},now=Date.now()) {
   const userRef=db.collection('users').doc(uid),stateRef=db.collection(COLLECTION).doc(uid);
@@ -69,7 +77,7 @@ async function start(db,uid,selection={},now=Date.now()) {
       if(current.status==='active')return snapshot(current);
       throw error('今日悟道試煉已結束，明日可再挑戰');
     }
-    const available=candidateWeaknesses(user.stats?.knowledgeMap);
+    const available=playerWeaknesses(user);
     if(!available.length)throw error('目前沒有足夠證據判斷弱項。請先在問道同一單元完成至少五題。');
     const desiredSubject=clean(selection.subject,40),desiredTopic=clean(selection.topic);
     const progress=user.enlightenmentProgress||{};
@@ -78,6 +86,7 @@ async function start(db,uid,selection={},now=Date.now()) {
     const chosen=selected||available.find(x=>!mastered[fingerprint(x.subject,x.topic)])||available[0];
     const state={version:1,runId:crypto.randomUUID(),day:day(now),status:'active',
       subject:chosen.subject,topic:chosen.topic,level:clean(user.profile?.educationLevel,32)||'國中一年級',
+      knowledgePointId:chosen.knowledgePointId || '',
       index:0,correct:0,pendingQuestion:null,lastReview:null,history:[],
       startedAtMs:now,finishedAtMs:0,success:false,rewarded:false,
       title:titleFor(Object.keys(mastered).length),masteryCount:Object.keys(mastered).length};
@@ -93,7 +102,7 @@ async function prepareQuestion(db,uid,now=Date.now()) {
   const pending=state.pendingQuestion && state.pendingQuestion.expiresAtMs>now
     ? publicQuestion(state.pendingQuestion) : null;
   return {runId:state.runId,index:count(state.index),subject:state.subject,
-    topic:state.topic,level:state.level,history:(state.history||[]).slice(-TOTAL),pending};
+    topic:state.topic,level:state.level,knowledgePointId:state.knowledgePointId || '',history:(state.history||[]).slice(-TOTAL),pending};
 }
 async function commitQuestion(db,uid,expected,parsed,now=Date.now()) {
   const correct=clean(parsed?.correct,300),wrong=Array.isArray(parsed?.wrong)?parsed.wrong.map(x=>clean(x,300)):[];
@@ -110,6 +119,7 @@ async function commitQuestion(db,uid,expected,parsed,now=Date.now()) {
   const ticket=readRaidQuestionTicket(token);
   const fresh={id,q:String(parsed.q||'').slice(0,3000),opts,ticket:token,
     subject:expected.subject,topic:expected.topic,level:expected.level,
+    ...Knowledge.metadata(parsed, expected.subject),
     expiresAtMs:ticket.expiresAtMs};
   const ref=db.collection(COLLECTION).doc(uid);
   return db.runTransaction(async tx => {
@@ -144,6 +154,7 @@ async function answer(db,uid,request={},now=Date.now()) {
     map[state.subject]=subjects;
     const patch={
       'stats.knowledgeMap':map,
+      'stats.knowledgePointMapV1':Knowledge.record(stats.knowledgePointMapV1 || {},pending,correct),
       'stats.totalAnswered':count(stats.totalAnswered)+1,
       'stats.totalCorrect':count(stats.totalCorrect)+(correct?1:0)
     };

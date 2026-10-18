@@ -1034,6 +1034,7 @@ import './combat-contribution.js';
       // 對應團本伺服器簽名票證的完成結算；不信任未確認的前端選擇。
       void playerRepository.saveExamAnswer('raid_'+roomId+'_'+state.player?.uid+'_'+actionId,{
         mode:'raid',topic:'Raid',rankAtTime:'團本 · 清霜秘境',
+        ...globalThis.QAKnowledgePoints.metadata(question,question.subject),
         question:question.q,options:question.opts,correctIdx:question.ans,userIdx:selectedChoice,
         explanation:question.exp,subject:question.subject,subTopic:question.topic,
         isCorrect:state.answerCorrect,timeTaken:Math.max(0,now()-state.questionIssuedAtMs)/1000

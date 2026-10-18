@@ -7,6 +7,7 @@ const { PROJECT_IDS } = require('./firebase-admin-projects.cjs');
 const { questionQualityIssue, removeUnstableOptionLabels } = require('./question-quality.cjs');
 const { recordEvent } = require('./public/cultivation/quest-rules.js');
 const rules = require('./public/cultivation/opportunity-rules.js');
+const Knowledge = require('./public/cultivation/knowledge-points.js');
 const RUNS = 'opportunityRuns', STATES = 'opportunityStates', TTL = 24 * 60 * 60 * 1000;
 const fail = (message, status = 409) => Object.assign(new Error(message), { status });
 const hash = v => crypto.createHash('sha256').update(v).digest('hex');
@@ -37,7 +38,8 @@ function normalizePack(raw, target) {
     if (['integrate', 'evaluate'].includes(q.skill) && new Set(evidence.map(e => e.paragraph)).size < 2) throw fail('整合與評估題必須引用不同段落', 502);
     const issue = questionQualityIssue({ q: stem, correct, wrong, exp });
     if (issue) throw fail(issue, 502);
-    return { id: `Q${i + 1}`, q: stem, correct, wrong, exp, skill: q.skill, concept: clean(q.concept, 100), evidence };
+    return { id: `Q${i + 1}`, q: stem, correct, wrong, exp, skill: q.skill, concept: clean(q.concept, 100), evidence,
+      ...Knowledge.metadata(q,target.subject) };
   });
   const fingerprint = hash(rules.signature(article.map(p => p.text).join('')));
   return { title, paragraphs: article, questions, fingerprint, target };
@@ -45,6 +47,7 @@ function normalizePack(raw, target) {
 function generationPrompt(target, history, repair = '') {
   return `你是台灣課綱素養題編寫者。生成「機緣洞天」：一篇原創、連貫、有充足資訊的長文，五題共用全文。\n` +
     `嚴格範圍=${JSON.stringify(target)}。學科、選定單元與細項是真正考點；不得只把章節名貼進一般閱讀題，不得超綱。國小400至750字、國中650至1200字、高中以上850至1600字；英文科使用該年級可讀的英文250至550 words。` +
+    Knowledge.promptFor(target.subject) + '\n' +
     `文章4至10段，包含情境、觀察、資料、因果或不同觀點；不要依赖附圖。可以融入修仙世界，但概念與數據必須正確，不可讓故事妨礙理解。` +
     `五題依序技能=${JSON.stringify(rules.SKILLS)}，分別擷取、跨段整合、推論、應用、評估。每題都必須依本文才可作答，彼此獨立、不洩漏其他題答案。後兩題需結合單元知識，但本文仍是必要條件。` +
     `每題四個不重複選項，唯一正解，三個有合理迷思的錯誤選項。解析至少80中文字，提供推理步驟與錯誤選項原因；不能以選項字母或順序稱呼答案。` +
@@ -65,6 +68,7 @@ async function generatePack(target, history, generate = aiRouter.generateJSON) {
     try {
       const result = await call(generationPrompt(target, history, issue));
       const pack = normalizePack(result.data, target);
+      pack.questions.forEach(question => Knowledge.assertLabel(question,target.subject));
       if (history.some(h => h.fingerprint === pack.fingerprint || rules.signature(h.title) === rules.signature(pack.title))) throw fail('新文章與近期機緣重複', 502);
       const review = await call(`獨立審核以下素養題組，從原文自行解題，不要盲信標示正解。严格驗證每題是否真的使用原文、唯一正解、無錯誤、依據逐字存在、解析成立、沒有互相洩題，且每題具體考查指定學科單元。評估推論是否過度、數據是否矛盾、年級是否適當。範圍=${JSON.stringify(target)}\n題組=${JSON.stringify(pack)}\n只輸出JSON：{"scopeValid":true,"passageValid":true,"reason":"審核理由","questions":[{"id":"Q1","valid":true,"correct":"自行求出的正解內容"}]}，questions必須涵蓋Q1至Q5。不合格應valid:false。`);
       const r = review.data;
@@ -111,6 +115,7 @@ function publicRun(run) {
   return { id: run.id, status: run.status, title: run.pack.title, target: run.pack.target, paragraphs: run.pack.paragraphs,
     scope: run.scope, createdAt: run.createdAt, expiresAt: run.expiresAt,
     questions: run.questions.map((q, i) => ({ id: q.id, q: q.q, options: q.options, skill: q.skill,
+      ...Knowledge.metadata(q,run.pack.target.subject),
       ...(Number.isInteger(run.answers[i]) ? { feedback: feedback(q, run.answers[i]) } : {}) })),
     answered: run.answers.length, ...(run.reward ? { reward: run.reward } : {}) };
 }
@@ -184,7 +189,9 @@ async function updateRun(db, uid, id, action, body, now = Date.now()) {
     const player = userSnap.data(), reward = rewardFor(run, player);
     const balances = { gold: Math.max(0, Number(player.stats?.gold) || 0) + reward.goldAdded,
       totalScore: Math.max(0, Number(player.stats?.totalScore) || 0) + reward.cultivationAdded };
+    const knowledge = run.questions.reduce((map,q,i) => Knowledge.record(map,q,run.answers[i]===q.answer),player.stats?.knowledgePointMapV1 || {});
     tx.update(userRef, { 'stats.gold': balances.gold, 'stats.totalScore': balances.totalScore,
+      'stats.knowledgePointMapV1':knowledge,
       questProgress: recordEvent(player.questProgress, 'dongtian') });
     run.status = 'completed'; run.reward = { ...reward, balances };
     tx.update(runRef, { status: run.status, reward: run.reward, completedAt: now });

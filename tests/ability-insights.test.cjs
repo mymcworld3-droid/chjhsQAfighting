@@ -7,31 +7,29 @@ const Core = require('../public/cultivation/ability-insights-core.js');
 const abilityApi = require('../ability-coach-api.cjs');
 
 test('a missing subject is not a zero score; single lucky answer is not mastery', () => {
-  const output = Core.build({ 數學: { '函數': { correct: 1, total: 1 }, '微積分': { correct: 1, total: 9 } } },
-    { 數學: ['函數', '微積分', '線性代數'], 英文: ['閱讀'] });
-  const lucky = output.topics.find(x => x.topic === '函數');
+  const output = Core.build({ 數學: { 'math-4': { correct: 1, total: 1 }, 'math-8': { correct: 1, total: 9 } } });
+  const lucky = output.topics.find(x => x.topic === '函數與圖形');
   assert.equal(lucky.estimate, 60);
   assert.equal(lucky.status, '需要更多題');
   assert.equal(lucky.confidence, '不足');
-  const notTried = output.topics.find(x => x.topic === '線性代數');
+  const notTried = output.topics.find(x => x.topic === '幾何與向量');
   assert.equal(notTried.estimate, null);
   assert.equal(notTried.rawAccuracy, null);
   assert.equal(notTried.status, '尚未練習');
-  const unstudiedEnglish = output.domains.find(x => x.name === '語文');
+  const unstudiedEnglish = output.domains.find(x => x.name === '英文');
   assert.equal(unstudiedEnglish.estimate, null);
   assert.equal(output.studiedTopics, 2);
 });
 
 test('recommendation chooses verified weaknesses before unmeasured topics', () => {
   const report = Core.build({ 數學: {
-    '因式分解': { total: 12, correct: 2 },
-    '數列': { total: 7, correct: 7 },
-    '未試過': { total: 0, correct: 0 }
+    'math-2': { total: 12, correct: 2 },
+    'math-6': { total: 7, correct: 7 }
   } });
-  assert.equal(report.priorities[0].topic, '因式分解');
+  assert.equal(report.priorities[0].topic, '代數運算');
   assert.equal(report.weaknesses[0].status, '優先補強');
   assert.equal(report.strengths.length, 1);
-  assert.equal(report.strengths[0].topic, '數列');
+  assert.equal(report.strengths[0].topic, '數列與級數');
 });
 
 test('recent trend requires at least five samples in both windows', () => {
@@ -66,21 +64,21 @@ test('reasoning-form abilities use labeled question metadata only', () => {
 });
 
 test('AI summary excludes question bodies and personal identifiers', () => {
-  const report = Core.build({ 數學: { '函數': { total: 10, correct: 4 } } });
+  const report = Core.build({ 數學: { 'math-4': { total: 10, correct: 4 } } });
   const summary = Core.aiSummary(report, '數學');
   assert.equal(summary.topics.length, 1);
-  assert.equal(summary.topics[0].topic, '函數');
+  assert.equal(summary.topics[0].topic, '函數與圖形');
   assert.equal(summary.total, 10);
   assert.equal(summary.correct, 4);
   assert.doesNotMatch(JSON.stringify(summary), /email|uid|question|option|explanation/i);
-  const mixed = Core.build({ 數學: { '函數': { total: 10, correct: 4 } },
-    英文: { '閱讀': { total: 30, correct: 25 } } });
+  const mixed = Core.build({ 數學: { 'math-4': { total: 10, correct: 4 } },
+    英文: { 'english-4': { total: 30, correct: 25 } } });
   assert.equal(Core.aiSummary(mixed, '數學').total, 10, 'subject-specific summaries do not include other subjects');
   const other = Core.build({ '藝術': { '素描': { total: 8, correct: 6 } } });
-  assert.equal(other.domains.find(x => x.id === 'other').total, 8,
-    'nonstandard subjects must still appear on overview radar');
-  const priorities = Core.aiSummary(Core.build({ 數學: { '函數': { total: 9, correct: 1 } },
-    英文: { '閱讀': { total: 9, correct: 8 } } }), '英文').priorities;
+  assert.equal(other.domains.length,10,'analysis has exactly ten subjects and no extra domains');
+  assert.equal(other.total,0,'uncategorized subjects cannot invent knowledge points');
+  const priorities = Core.aiSummary(Core.build({ 數學: { 'math-4': { total: 9, correct: 1 } },
+    英文: { 'english-4': { total: 9, correct: 8 } } }), '英文').priorities;
   assert.ok(priorities.every(x => x.subject === '英文'),
     'AI focus respects selected subject even when another subject is weaker');
 });
@@ -137,6 +135,16 @@ test('AI request sanitizes aggregates, validates response and rate-limits per ui
   assert.equal(fallback.json.source, 'local');
   assert.equal(fallback.json.advice.plan[0].topic, '機率');
   assert.match(fallback.json.note, /備用/);
+});
+
+test('coach keeps identically named Chinese and English knowledge points separate',()=>{
+  const summary=abilityApi.normalizeInput({topics:[
+    {subject:'國文',topic:'閱讀理解',total:12,correct:2},
+    {subject:'英文',topic:'閱讀理解',total:20,correct:18}
+  ]});
+  const plan=abilityApi.normalizeAdvice({headline:'分科練習',plan:[{subject:'英文',topic:'閱讀理解',action:'練習英文閱讀',questions:5}]},summary);
+  assert.match(plan.plan[0].reason,/18\/20/);assert.equal(plan.plan[0].subject,'英文');
+  assert.throws(()=>abilityApi.normalizeAdvice({headline:'不明科目',plan:[{topic:'閱讀理解',action:'練習',questions:5}]},summary),/結構不完整/);
 });
 
 test('legacy graph delegates to enhanced module and recent logs include subject metadata', () => {

@@ -593,6 +593,9 @@ export const featureReady = (async () => {
     }
     return { id: randomId('bv2q'), q, opts: choices, ans, exp, subject: request.subject,
       topic: request.specificTopic || String(source.sub_topic || ''), level: request.level,
+      knowledge_subject: String(source.knowledge_subject || ''),
+      knowledge_point_id: String(source.knowledge_point_id || ''),
+      knowledge_point: String(source.knowledge_point || ''),
       concept_id: String(source.concept_id || '').slice(0, 100),
       template_id: String(source.template_id || '').slice(0, 120),
       question_form: String(source.question_form || '').slice(0, 60),
@@ -1953,6 +1956,7 @@ export const featureReady = (async () => {
     state.recordedQuestionKeys.add(key);
     void playerRepository.saveExamAnswer(key,{
       mode:'duel',topic:'Duel',rankAtTime:'鬥法 · 第 '+round+' 回合',
+      ...globalThis.QAKnowledgePoints.metadata(q,q.subject),
       question:q.q,options:q.opts,correctIdx:Number(q.ans),
       userIdx:answer.timedOut?-1:Number(answer.choice),
       isCorrect:answer.correct===true,explanation:q.exp||'',
