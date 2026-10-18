@@ -9,7 +9,7 @@ const Layouts = require('../public/cultivation/training-scene-layouts.js');
 const Growth = require('../public/cultivation/nascent-growth.js');
 const Authority = require('../raid-authority.cjs');
 
-test('repeated training navigation stays in the document and cannot run a delayed startup transition', () => {
+test('reduced-motion training navigation stays synchronous and inside the document', () => {
   const source = fs.readFileSync(path.join(__dirname, '../public/cultivation/training-scene-map.js'), 'utf8');
   const from = source.indexOf('function wrapNavigation() {');
   const to = source.indexOf('\nfunction sync() {', from);
@@ -21,6 +21,8 @@ test('repeated training navigation stays in the document and cannot run a delaye
   };
   Object.defineProperty(window, 'location', { get() { throw new Error('Navigation must not reload the document'); } });
   const context = { window, PAGE: 'page-training', page, navigation: null, navigationRevision: 0, entryCheck: 0,
+    pageNavigation: null, committingPageNavigation: false,
+    getMainUser: () => ({ uid: 'u1' }), document: { getElementById: () => null, hidden: false }, reducedMotion: () => true,
     markTrainingEntry() {}, markTrainingStable() {}, markTrainingExit() {}, setTimeout() {}, clearTimeout() {},
     visible: () => current === 'page-training', showMap: () => mapVisits++ };
   vm.createContext(context);

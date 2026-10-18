@@ -22,6 +22,9 @@ let page, map, scenery, plane, bar, background, resizeObserver, pageObserver;
 let orientation = '', scheduled = false, running = false, navigation = null;
 let navigationRevision = 0;
 let entryCheck = 0;
+let pageNavigation = null;
+let committingPageNavigation = false;
+const sceneImageLoads = new Map();
 const unlocked = place => !!window.getCurrentUserData?.()?.stats &&
   (window.getTrainingAccessScore?.() ?? Rules.score(window.getCurrentUserData?.())) >= place.threshold;
 const visible = () => !!page?.classList.contains('active-page') && !page.classList.contains('hidden');
@@ -43,6 +46,7 @@ function setDetail(placeId) {
   if (!page) return;
   const place = placeId === 'contract' ? { id: 'contract', name: '契器台' } : Rules.PLACES.find(place => place.id === placeId);
   if (!place) return;
+  if (pageNavigation?.isCurrent()) pageNavigation.place = place.id;
   page.classList.remove('training-scene-map-active');
   map.hidden = true;
   bar.hidden = false;
@@ -218,6 +222,37 @@ function makeSceneryLayers(layout) {
     band.appendChild(bank);
     return band;
   });
+}
+function preloadTrainingSceneAssets(next) {
+  const layout = Layouts[next];
+  const safeRendering = trainingRenderProfile() === 'safe';
+  const sources = new Set([
+    safeRendering ? `assets/training/cultivation-${next}-clean.webp` : layout.image,
+    ...(safeRendering ? [] : layout.layers.map(layer => layer.image)),
+    ...Object.values(layout.places).map(place => place.sprite.image)
+  ]);
+  return Promise.all([...sources].map(src => {
+    if (!sceneImageLoads.has(src)) {
+      const image = new Image();
+      image.decoding = 'async';
+      const loaded = new Promise(resolve => {
+        const finish = () => {
+          image.removeEventListener('load', finish);
+          image.removeEventListener('error', finish);
+          resolve();
+        };
+        image.addEventListener('load', finish, { once: true });
+        image.addEventListener('error', finish, { once: true });
+        image.src = src;
+        if (image.complete) finish();
+      }).then(async () => {
+        try { await image.decode?.(); } catch (_) { /* A missing asset must not trap the curtain. */ }
+        if (!image.naturalWidth) sceneImageLoads.delete(src);
+      });
+      sceneImageLoads.set(src, loaded);
+    }
+    return sceneImageLoads.get(src);
+  }));
 }
 function renderScene(next) {
   const focused = map.contains(document.activeElement) ? document.activeElement.dataset.trainingLocation : null;
@@ -396,7 +431,9 @@ function wrapNavigation() {
   const base = window.switchToPage;
   if (typeof base !== 'function' || base === navigation) return;
   navigation = function (id, ...args) {
+    if (id === PAGE && committingPageNavigation) return base.call(this, id, ...args);
     const wasVisible = visible();
+    if (id === PAGE && pageNavigation?.isCurrent()) return pageNavigation.promise;
     if (id === PAGE && !wasVisible) {
       markTrainingEntry();
       clearTimeout(entryCheck);
@@ -407,8 +444,43 @@ function wrapNavigation() {
       markTrainingExit();
     }
     if (id !== PAGE) navigationRevision++;
-    // Keep navigation synchronous and inside this document. The startup curtain
-    // allocates two full-screen PNG layers; reserve it for entering a building.
+    const uid = getMainUser()?.uid;
+    const alreadyCovered = document.getElementById('startup-cloud-curtain')?.classList.contains('is-closed');
+    if (id === PAGE && page?.isConnected && !wasVisible && uid && !alreadyCovered &&
+        !document.hidden && !reducedMotion() && typeof window.playStartupCloudCurtain === 'function') {
+      const origin = document.querySelector('.page-section.active-page');
+      const pending = { revision: ++navigationRevision, committed: false };
+      pending.isCurrent = () => pending.revision === navigationRevision && uid === getMainUser()?.uid &&
+        (pending.committed ? visible() : document.querySelector('.page-section.active-page') === origin);
+      // Decode the actual map assets while the cloud banks close, not afterward.
+      const next = innerWidth >= innerHeight ? 'landscape' : 'portrait';
+      const prepared = preloadTrainingSceneAssets(next);
+      pending.promise = window.playStartupCloudCurtain(async () => {
+        let result;
+        committingPageNavigation = true;
+        try { result = base.call(this, id, ...args); }
+        finally { committingPageNavigation = false; }
+        if (!visible()) return result;
+        showMap();
+        pending.committed = true;
+        pending.revision = navigationRevision;
+        const destination = Rules.PLACES.find(place => place.id === pending.place);
+        if (destination && unlocked(destination)) openPlace(destination, pending.tab);
+        await prepared;
+        // Rotation during the closing animation can select another scene.
+        const current = innerWidth >= innerHeight ? 'landscape' : 'portrait';
+        if (current !== next && pending.isCurrent()) await preloadTrainingSceneAssets(current);
+        if (pending.isCurrent()) fit();
+        return result;
+      }, { isCurrent: pending.isCurrent, blockInput: true, holdMs: 0 }).catch(error => {
+        console.warn('[Training navigation]', error);
+        return false;
+      }).finally(() => {
+        if (pageNavigation === pending) pageNavigation = null;
+      });
+      pageNavigation = pending;
+      return pending.promise;
+    }
     const result = base.call(this, id, ...args);
     if (id === PAGE && visible() && !wasVisible) showMap();
     return result;
@@ -434,6 +506,7 @@ function boot() {
       if (visible()) showMap();
       return;
     }
+    if (pageNavigation?.isCurrent()) pageNavigation.tab = target.dataset.trainingTab || 'status';
     if (target.closest(`#${PAGE}`)) setDetail(tabPlace[target.dataset.trainingTab || 'status']);
   }, true);
   ['xiuxian:user-data-ready', 'xiuxian:user-ready', 'xiuxian:stats-updated', 'xiuxian:features-ready', 'xiuxian:training-access-updated',
