@@ -35,7 +35,7 @@ test('Dongtian API normalizes at least ten ordered single-choice questions and m
   assert.equal(normalized.questions.length, 10);
   assert.equal(normalized.questions[0].id, 'DT-001');
   assert.equal(normalized.questions[9].id, 'DT-010');
-  assert.deepEqual(Object.keys(normalized.questions[0]), ['id','difficulty','q','correct','wrong','exp','subject','knowledge_subject','knowledge_point_id','knowledge_point']);
+  assert.deepEqual(Object.keys(normalized.questions[0]), ['id','difficulty','q','correct','wrong','exp','subject','knowledge_subject','knowledge_point_id','knowledge_point','knowledge_points']);
   assert.equal(normalized.questions[0].knowledge_point_id,'math-4');
   assert.equal(normalized.questions[1].knowledge_point_id,'','legacy questions stay unclassified');
 });

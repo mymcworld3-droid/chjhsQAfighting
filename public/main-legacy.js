@@ -3257,6 +3257,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
             knowledgeSubject: window.QAKnowledgePoints.label(quiz)?.subject || '',
             knowledgePointId: window.QAKnowledgePoints.label(quiz)?.id || '',
             knowledgePoint: window.QAKnowledgePoints.label(quiz)?.name || '',
+            knowledgePoints: window.QAKnowledgePoints.labels(quiz),
             // AI-generated question metadata, not an AI inference from correctness.
             questionForm: String(quiz?.meta?.question_form || '').slice(0, 40),
             cognitiveLevel: Number(quiz?.meta?.cognitive_level) || null,
@@ -3950,8 +3951,8 @@ function renderQuiz(data, rank, topic) {
     syncQuizExtendedPracticeControls();
     document.getElementById('quiz-loading').classList.add('hidden');
     document.getElementById('quiz-container').classList.remove('hidden');
-    const point = window.QAKnowledgePoints.label(window.currentActiveQuiz);
-    document.getElementById('quiz-badge').innerText = `${topic} | ${rank}${point ? ' · 知識點：' + point.name : ''}`;
+    const points = window.QAKnowledgePoints.labels(window.currentActiveQuiz);
+    document.getElementById('quiz-badge').innerText = `${topic} | ${rank}${points.length ? ' · 知識點：' + points.map(point => point.name).join('、') : ''}`;
     const correctionNotice = document.getElementById('quiz-correction-notice');
     if (correctionNotice) correctionNotice.hidden = !window.currentActiveQuiz?.recoveryOrigin;
     
@@ -5707,7 +5708,7 @@ let knowledgeChartInstance = null;
 
 // 全服比較與圖譜使用同一份固定知識點統計。
 function calculateDomainScore(map, subjects) {
-    const rows = window.QAAbilityInsights.build(map).topics.filter(x => subjects.includes(x.subject));
+    const rows = window.QAAbilityInsights.build(map).subjects.filter(x => subjects.includes(x.name));
     return window.QAAbilityInsights.sum(rows).rawAccuracy || 0;
 }
 

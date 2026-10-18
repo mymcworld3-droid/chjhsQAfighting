@@ -179,7 +179,8 @@ import { playerRepository } from './data/player-repository.js';
     return { question, options: choices, answer, explanation,
       knowledge_subject:String(source.knowledge_subject || ''),
       knowledge_point_id:String(source.knowledge_point_id || ''),
-      knowledge_point:String(source.knowledge_point || '') };
+      knowledge_point:String(source.knowledge_point || ''),
+      ...(Array.isArray(source.knowledge_points) ? {knowledge_points:source.knowledge_points} : {}) };
   }
 
   async function fetchChallengeQuestion(role, avoidQuestions = []) {

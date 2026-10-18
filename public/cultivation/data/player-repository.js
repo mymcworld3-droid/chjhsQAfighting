@@ -62,6 +62,7 @@ export const playerRepository=Object.freeze({
         knowledgeSubject:point?.subject || '',
         knowledgePointId:point?.id || '',
         knowledgePoint:point?.name || '',
+        knowledgePoints:globalThis.QAKnowledgePoints.labels(value,value.subject),
         questionForm:String(value.question_form || '').slice(0,40),
         isCorrect:value.isCorrect===true,
         options:opts,

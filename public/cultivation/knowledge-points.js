@@ -29,48 +29,81 @@
     return SUBJECT_NAMES.includes(canonical) ? canonical : '';
   }
   function points(value) { return SUBJECTS.find(x => x.name === subject(value))?.points || []; }
-  function label(input = {}, fallbackSubject = '') {
-    const raw = input?.meta || input || {};
-    const expected = subject(fallbackSubject || input?.learningSubject || input?.subject);
-    const declared = clean(raw.knowledge_subject ?? raw.knowledgeSubject);
+  function readLabel(raw, expected) {
+    if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;
+    const declared = clean(raw.subject ?? raw.knowledge_subject ?? raw.knowledgeSubject);
     const name = declared ? subject(declared) : expected;
     if (!name || (expected && expected !== name)) return null;
-    const id = clean(raw.knowledge_point_id ?? raw.knowledgePointId);
-    const text = clean(raw.knowledge_point ?? raw.knowledgePoint);
+    const id = clean(raw.id ?? raw.knowledge_point_id ?? raw.knowledgePointId);
+    const text = clean(raw.name ?? raw.knowledge_point ?? raw.knowledgePoint);
     const point = points(name).find(x => id ? x.id === id : text && x.name === text);
     if (!point || (text && point.name !== text)) return null;
     return { subject: name, id: point.id, name: point.name };
   }
+  function labels(input = {}, fallbackSubject = '') {
+    const raw = input?.meta || input || {};
+    const expected = subject(fallbackSubject || input?.learningSubject || input?.subject);
+    const list = raw.knowledge_points ?? raw.knowledgePoints;
+    if (list !== undefined) {
+      if (!Array.isArray(list) || list.length > 80) return [];
+      const values = list.map(item => readLabel(item, expected));
+      if (values.some(value => !value)) return [];
+      return [...new Map(values.map(value => [value.id, value])).values()];
+    }
+    // Single-label questions already saved in browsers and logs remain valid.
+    const value = readLabel({ knowledge_subject:raw.knowledge_subject ?? raw.knowledgeSubject,
+      knowledge_point_id:raw.knowledge_point_id ?? raw.knowledgePointId,
+      knowledge_point:raw.knowledge_point ?? raw.knowledgePoint },expected);
+    return value ? [value] : [];
+  }
+  function label(input, fallbackSubject = '') { return labels(input, fallbackSubject)[0] || null; }
   function metadata(input, fallbackSubject = '') {
-    const value = label(input, fallbackSubject);
-    return { knowledge_subject: value?.subject || '', knowledge_point_id: value?.id || '', knowledge_point: value?.name || '' };
+    const values = labels(input, fallbackSubject), value = values[0];
+    return { knowledge_subject: value?.subject || '', knowledge_point_id: value?.id || '', knowledge_point: value?.name || '', knowledge_points:values };
   }
   function assertLabel(input, fallbackSubject = '', targetId = '') {
-    const value = label(input, fallbackSubject);
-    if (value && (!targetId || value.id === targetId)) return value;
+    const values = labels(input, fallbackSubject);
+    const targets = (Array.isArray(targetId) ? targetId : [targetId]).filter(Boolean);
+    if (values.length && targets.every(id => values.some(value => value.id === id))) return values[0];
     // Subjects outside the ten analysis categories may explicitly opt out.
-    if (!subject(fallbackSubject) && !targetId && input?.knowledge_subject === '' &&
-        input?.knowledge_point_id === '' && input?.knowledge_point === '') return null;
-    throw new Error('知識點標記無效：請從指定科目的固定清單選一個主要知識點，範圍不可代替知識點');
+    const list = input?.knowledge_points ?? input?.knowledgePoints;
+    if (!subject(fallbackSubject) && !targets.length && (Array.isArray(list) && !list.length ||
+        list === undefined && input?.knowledge_subject === '' && input?.knowledge_point_id === '' && input?.knowledge_point === '')) return null;
+    throw new Error('知識點標記無效：請從指定科目的固定清單選取實際考查的一個或多個知識點，範圍不可代替知識點');
   }
   const count = value => Number.isFinite(Number(value)) ? Math.min(10000000, Math.max(0, Math.floor(Number(value)))) : 0;
+  const normalizeCount = value => ({total:count(value?.total),correct:Math.min(count(value?.total),count(value?.correct))});
+  function totals(map = {}) {
+    if (map?._totals) return {all:normalizeCount(map._totals.all),subjects:Object.fromEntries(SUBJECT_NAMES.map(name => [name,normalizeCount(map._totals.subjects?.[name])]))};
+    // Earlier maps counted exactly one point per question, so their sums are safe to migrate.
+    const subjects = Object.fromEntries(SUBJECTS.map(item => [item.name,item.points.reduce((sum,point) => {
+      const value = normalizeCount(map?.[item.name]?.[point.id]);
+      return {total:sum.total+value.total,correct:sum.correct+value.correct};
+    },{total:0,correct:0})]));
+    const all = Object.values(subjects).reduce((sum,value) => ({total:sum.total+value.total,correct:sum.correct+value.correct}),{total:0,correct:0});
+    return {all,subjects};
+  }
   function record(map = {}, input, isCorrect) {
-    const value = label(input);
-    if (!value || typeof isCorrect !== 'boolean') return map;
-    const old = map?.[value.subject]?.[value.id] || {};
-    const total = Math.min(10000000, count(old.total) + 1);
-    const correct = Math.min(count(old.correct), count(old.total)) + (isCorrect ? 1 : 0);
-    return { ...map, [value.subject]: { ...map?.[value.subject], [value.id]: { total, correct: Math.min(total, correct) } } };
+    const values = labels(input);
+    if (!values.length || typeof isCorrect !== 'boolean') return map;
+    const add = value => {const old=normalizeCount(value),total=Math.min(10000000,old.total+1);return {total,correct:Math.min(total,old.correct+(isCorrect?1:0))};};
+    const result = {...map}, summary = totals(map);
+    for (const value of values) result[value.subject] = {...result[value.subject],[value.id]:add(map?.[value.subject]?.[value.id])};
+    for (const name of new Set(values.map(value => value.subject))) summary.subjects[name]=add(summary.subjects[name]);
+    summary.all=add(summary.all);result._totals=summary;
+    return result;
   }
   function promptFor(value, targetId = '') {
     const selected = subject(value);
+    const targets = (Array.isArray(targetId) ? targetId : [targetId]).filter(Boolean);
     const choices = SUBJECTS.filter(x => !selected || x.name === selected)
-      .map(x => ({ subject:x.name, points:x.points.filter(p => !targetId || p.id === targetId) }));
+      .map(x => ({ subject:x.name, points:x.points }));
     return '[固定能力知識點標記]\n出題範圍／章節（sub_topic、topic、focus、concept）保持原要求，不得用它代替能力知識點。' +
-      '完成題目後，依實際主要考查能力，從以下清單選且只選一個；不得新增、改名、跨科或因選定節點而改變出題範圍。' +
-      '\n每題另附 knowledge_subject（分析科目）、knowledge_point_id（清單 ID）、knowledge_point（清單名稱），三者必須配對。' +
-      (!selected ? '無法合理歸入這十科的題目，三個欄位均填空字串，不可硬套學科。' : '') +
+      '完成題目後，依實際考查能力，從以下清單選一個或多個知識點；只選解題確實用到的能力，不因題幹提及就全部標記。不得新增、改名、跨出指定科目或因選定節點而改變出題範圍。' +
+      '\n每題另附 knowledge_points 陣列，每項為 {"subject":"分析科目","id":"清單 ID","name":"清單名稱"}，三者必須配對，同一 ID 不重複。' +
+      (targets.length ? '\n本題須涵蓋這些既定知識點 ID：'+JSON.stringify(targets)+'；可另標實際需要的同科知識點。' : '') +
+      (!selected ? '無法合理歸入這十科的題目，knowledge_points 填空陣列，不可硬套學科。' : '') +
       '\n固定清單：' + JSON.stringify(choices);
   }
-  return Object.freeze({ VERSION:1, SUBJECTS, SUBJECT_NAMES, subject, points, label, metadata, assertLabel, record, promptFor });
+  return Object.freeze({ VERSION:1, SUBJECTS, SUBJECT_NAMES, subject, points, labels, label, metadata, assertLabel, totals, record, promptFor });
 });

@@ -285,9 +285,7 @@ ${cleanText(text, MAX_TEXT) || '（沒有額外文字，主要依圖片內容出
       "wrong": ["錯誤選項1", "錯誤選項2", "錯誤選項3"],
       "exp": "解析",
       "subject": "科目標籤",
-      "knowledge_subject": "固定清單中的科目",
-      "knowledge_point_id": "固定清單中的 ID",
-      "knowledge_point": "固定清單中的名稱"
+      "knowledge_points": [{"subject":"固定清單中的科目","id":"固定清單中的 ID","name":"固定清單中的名稱"}]
     }
   ]
 }
@@ -717,13 +715,13 @@ function normalizeStandaloneQuestion(raw, original) {
     wrong,
     exp,
     subject: base.subject,
-    ...Knowledge.metadata(Knowledge.label(base,base.subject) ? base : data,base.subject)
+    ...Knowledge.metadata(Knowledge.labels(data,base.subject).length ? data : base,base.subject)
   };
 }
 
 function buildRevisionPrompt(original, hint, issue, dongtian = {}) {
   return `
-${Knowledge.promptFor(original?.subject,Knowledge.label(original,original?.subject)?.id || '')}
+${Knowledge.promptFor(original?.subject,Knowledge.labels(original,original?.subject).map(point=>point.id))}
 [任務]
 你是洞天題目修復師。請依洞天主人的「修改提示詞」修正被確認有誤的題目，但必須保持題目本質不變。
 
@@ -827,7 +825,7 @@ async function rewriteAndValidateQuestion(original, hint, issue, dongtian, maxAt
           '\n請重新求解並完整產生 q、correct、wrong[3]、exp；不要註記原題有錯。' : '');
       rewrite = await aiRouter.generateJSON(prompt, { timeoutMs: 60000 });
       revised = normalizeStandaloneQuestion(rewrite.data, original);
-      Knowledge.assertLabel(revised,original?.subject,Knowledge.label(original,original?.subject)?.id || '');
+      Knowledge.assertLabel(revised,original?.subject,Knowledge.labels(original,original?.subject).map(point=>point.id));
       validationRun = await aiRouter.generateJSON(
         buildRevisionValidationPrompt(original, revised, issue, hint, dongtian),
         { timeoutMs: 60000 }

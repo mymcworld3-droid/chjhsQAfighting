@@ -51,6 +51,7 @@
       uncertainty: margin(correct, total), confidence: total >= 20 ? '較高' : total >= 8 ? '中等' : '不足' };
   }
   function build(map = {}) {
+    const totals = Knowledge.totals(map);
     const topics = [];
     for (const subject of Knowledge.SUBJECTS) {
       for (const point of subject.points) {
@@ -59,7 +60,7 @@
     }
     const subjectStats = [...new Set(topics.map(x => x.subject))].map(name => {
       const rows = topics.filter(x => x.subject === name);
-      return { name, ...sum(rows), topicCount: rows.length, studiedTopics: rows.filter(x => x.total).length };
+      return { name, ...sum([totals.subjects[name]]), topicCount: rows.length, studiedTopics: rows.filter(x => x.total).length };
     });
     const domainStats = subjectStats.map((stats, index) => ({ ...stats, id:DOMAINS[index].id }));
     const practiced = topics.filter(x => x.total > 0);
@@ -72,13 +73,18 @@
     const priorities = [...weaknesses, ...practiced.filter(x => x.total >= 5 && x.estimate < 78)
       .sort((a, b) => a.estimate - b.estimate).slice(0, 5), ...unmeasured]
       .filter((x, i, all) => all.findIndex(v => v.subject === x.subject && v.topic === x.topic) === i).slice(0, 5);
-    return { topics, subjects: subjectStats, domains: domainStats, ...sum(practiced),
+    return { topics, subjects: subjectStats, domains: domainStats, ...sum([totals.all]),
       strengths, weaknesses, unmeasured, priorities, studiedTopics: practiced.length,
       availableTopics: topics.length };
   }
+  function matchesSubject(record, subject) {
+    if (!subject) return true;
+    const labels = Knowledge.labels(record);
+    return labels.length ? labels.some(point => point.subject === subject) : Knowledge.subject(record?.subject) === subject;
+  }
   function recentTrend(records, subject = null, now = Date.now()) {
     const accepted = (Array.isArray(records) ? records : [])
-      .filter(x => x && typeof x.isCorrect === 'boolean' && (!subject || Knowledge.subject(x.knowledgeSubject || x.subject) === subject))
+      .filter(x => x && typeof x.isCorrect === 'boolean' && matchesSubject(x,subject))
       .map(x => ({ ...x, ms: isoDay(x.timestamp) })).filter(x => x.ms && x.ms <= now && x.ms > now - 14 * 86400000);
     const recent = accepted.filter(x => x.ms > now - 7 * 86400000);
     const previous = accepted.filter(x => x.ms <= now - 7 * 86400000);
@@ -90,7 +96,7 @@
   function skillStats(records, subject = null) {
     // Only count an explicitly labeled reasoning form, never guess it from a wrong answer.
     const accepted = (Array.isArray(records) ? records : []).filter(x =>
-      x && typeof x.isCorrect === 'boolean' && (!subject || Knowledge.subject(x.knowledgeSubject || x.subject) === subject));
+      x && typeof x.isCorrect === 'boolean' && matchesSubject(x,subject));
     return FORMS.map(([code, name]) => {
       const subset = accepted.filter(x => x.questionForm === code);
       return { code, ...row('推理題型', name,
@@ -102,7 +108,7 @@
     const rows = scope.filter(x => x.total > 0)
       .sort((a, b) => a.estimate - b.estimate).slice(0, 20);
     const selectedRows = scope;
-    const scopedStats = sum(selectedRows.filter(x => x.total));
+    const scopedStats = subject ? report.subjects.find(x => x.name === subject) || sum([]) : report;
     return { subject: cleanLabel(subject || '綜合'), total: Math.min(200000, scopedStats.total),
       correct: Math.min(200000, scopedStats.correct),
       studiedTopics: selectedRows.filter(x => x.total).length,

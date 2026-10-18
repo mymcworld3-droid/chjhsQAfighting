@@ -596,6 +596,7 @@ export const featureReady = (async () => {
       knowledge_subject: String(source.knowledge_subject || ''),
       knowledge_point_id: String(source.knowledge_point_id || ''),
       knowledge_point: String(source.knowledge_point || ''),
+      ...(Array.isArray(source.knowledge_points) ? {knowledge_points:source.knowledge_points} : {}),
       concept_id: String(source.concept_id || '').slice(0, 100),
       template_id: String(source.template_id || '').slice(0, 120),
       question_form: String(source.question_form || '').slice(0, 60),
