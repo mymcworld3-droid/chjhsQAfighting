@@ -55,13 +55,13 @@ function growthFeedbackHarness() {
   const window = {getCurrentUserData:()=>({uid:state.uid}),getCombatPower:()=>({total:state.power}),
     getCombatStats:()=>({attack:state.attack,maxHp:state.hp})};
   const document = {getElementById:id=>nodes.get(id),activeElement:null,
-    createElement:()=>({setAttribute(){},querySelector:()=>({}),remove(){nodes.delete(this.id);}}),
+    createElement:()=>({setAttribute(){},querySelector:()=>({}),querySelectorAll:()=>[],remove(){nodes.delete(this.id);}}),
     body:{appendChild(node){nodes.set(node.id,node);}}};
   const context = {window,document,getMainUser:()=>({uid:state.uid}),Intl,setTimeout:()=>1,clearTimeout(){},
-    requestAnimationFrame:fn=>frames.push(fn),QAPlayerGrowth:Rules,QANascentGrowth:{}};
+    requestAnimationFrame:fn=>frames.push(fn),performance:{now:()=>100},QAPlayerGrowth:Rules,QANascentGrowth:{}};
   const source = fs.readFileSync(require.resolve('../public/cultivation/player-growth-feedback.js'),'utf8')
     .replace(/^import .*;\n/gm,'').replace(/if \(document.readyState === 'loading'\)[\s\S]*$/,'');
-  vm.runInNewContext(source+'\nrender = () => {}; this.api = {capture,observePower,schedule,resetObservation};',context);
+  vm.runInNewContext(source+'\nrender = () => {}; this.api = {capture,observePower,schedule,resetObservation,animateComparison};',context);
   return {state,window,api:context.api,popup:()=>nodes.get('growth-comparison'),flush:()=>{while(frames.length)frames.shift()();},frames};
 }
 
@@ -101,6 +101,25 @@ test('unchanged stats do not create feedback and percent changes retain units', 
   h.window.showGrowthComparison({uid:'u',before:snapshot,after:snapshot}); assert.equal(h.popup(),undefined);
   h.window.showGrowthComparison({uid:'u',before:{crit:{label:'暴擊率',value:10,unit:'%'}},after:{crit:{label:'暴擊率',value:12.5,unit:'%'}}});
   assert.match(h.popup().innerHTML,/\+2.5%/); assert.doesNotMatch(h.popup().innerHTML,/戰力/);
+});
+
+test('animated values use elapsed time, preserve units and settle exactly even after a suspended frame', () => {
+  const h=growthFeedbackHarness();
+  const nodes=[0,1].map(index=>({dataset:{growthValue:String(index)}}));
+  const popup={isConnected:true,querySelectorAll:()=>nodes};
+  const changes=[{before:{value:1000},after:{value:1500}},{before:{value:12.5},after:{value:10,unit:'%'}}];
+  h.api.animateComparison(popup,changes);
+  assert.equal(nodes[0].textContent,'1,000'); assert.equal(nodes[1].textContent,'12.5%');
+  h.frames.shift()(550); // 450 ms since start: cubic easing is 87.5% complete.
+  assert.equal(nodes[0].textContent,'1,438'); assert.equal(nodes[1].textContent,'10.31%');
+  h.frames.shift()(5100);
+  assert.equal(nodes[0].textContent,'1,500'); assert.equal(nodes[1].textContent,'10%');
+  assert.equal(h.frames.length,0);
+  h.api.animateComparison(popup,changes); popup.isConnected=false; h.frames.shift()(600);
+  assert.equal(h.frames.length,0,'closed or replaced cards stop requesting frames');
+  h.window.matchMedia=()=>({matches:true}); popup.isConnected=true;
+  h.api.animateComparison(popup,changes);
+  assert.equal(h.frames.length,0,'reduced motion keeps final markup and skips counting');
 });
 
 test('duel statistics use actual HP loss and exclude guarded reveal steps and overkill', () => {

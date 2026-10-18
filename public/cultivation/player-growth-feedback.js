@@ -190,6 +190,25 @@ function capture() {
   return stats;
 }
 window.captureGrowthSnapshot = capture;
+function animateComparison(popup, changes) {
+  if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+  const values = [...popup.querySelectorAll('[data-growth-value]')];
+  if (!values.length) return;
+  const startedAt = performance.now(), duration = 900;
+  function tick(now) {
+    if (!popup.isConnected) return;
+    const progress = Math.min(1, Math.max(0, (now - startedAt) / duration));
+    const eased = 1 - Math.pow(1 - progress, 3);
+    for (const node of values) {
+      const row = changes[Number(node.dataset.growthValue)];
+      const from = row.before.value, to = row.after.value;
+      const current = progress === 1 ? to : from + (to - from) * eased;
+      node.textContent = number(Number.isInteger(from) && Number.isInteger(to) ? Math.round(current) : Math.round(current * 100) / 100) + (row.after.unit || '');
+    }
+    if (progress < 1) requestAnimationFrame(tick);
+  }
+  tick(startedAt);
+}
 window.showGrowthComparison = ({uid,before,after,extra=[]}) => {
   if (!uid || uid !== getMainUser()?.uid) return;
   observedUid = uid; observedStats = after;
@@ -200,11 +219,13 @@ window.showGrowthComparison = ({uid,before,after,extra=[]}) => {
   const popup = document.createElement('aside'); popup.id = 'growth-comparison'; popup.className = 'growth-comparison';
   popup.setAttribute('role','status'); popup.setAttribute('aria-live','polite');
   const value = stat => stat ? number(stat.value) + (stat.unit || '') : '未生效';
-  popup.innerHTML = `<button class="growth-comparison-close" type="button" aria-label="關閉能力比較">×</button><div class="growth-change-list">${changes.map(row => {
+  popup.innerHTML = `<button class="growth-comparison-close" type="button" aria-label="關閉能力比較">×</button><div class="growth-change-list">${changes.map((row,index) => {
     const delta = Number.isFinite(row.before?.value) && Number.isFinite(row.after?.value) ? Math.round((row.after.value - row.before.value)*100)/100 : null;
-    return `<div class="growth-change${row.key === 'combatPower' ? ' growth-power-change' : ''}"><span>${esc(row.label)}</span><b>${esc(value(row.before))} <i>→</i> ${esc(value(row.after))}${delta !== null ? `<small class="growth-delta ${delta < 0 ? 'growth-decrease' : 'growth-increase'}">${delta > 0 ? '+' : ''}${esc(number(delta))}${esc(row.after?.unit || row.before?.unit || '')}</small>` : ''}</b></div>`;
+    const deltaText = delta === null ? '' : (delta > 0 ? '+' : '') + number(delta) + (row.after?.unit || row.before?.unit || '');
+    return `<div class="growth-change${row.key === 'combatPower' ? ' growth-power-change' : ''}"><span>${esc(row.label)}</span><b aria-label="${esc(value(row.before) + ' → ' + value(row.after) + (deltaText ? '（' + deltaText + '）' : ''))}"><span aria-hidden="true">${esc(value(row.before))} <i class="growth-change-arrow">→</i> <span class="growth-animated-value"${delta !== null ? ` data-growth-value="${index}"` : ''}>${esc(value(row.after))}</span>${delta !== null ? `<small class="growth-delta ${delta < 0 ? 'growth-decrease' : 'growth-increase'}">${esc(deltaText)}</small>` : ''}</span></b></div>`;
   }).join('')}</div>`;
   popup.querySelector('button').onclick = () => popup.remove(); document.body.appendChild(popup);
+  animateComparison(popup,changes);
   popupTimer = setTimeout(() => { if (!popup.contains(document.activeElement) && !popup.matches(':hover')) popup.remove(); }, 15000);
 };
 function showCorrection(event) {
