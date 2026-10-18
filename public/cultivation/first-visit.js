@@ -12,6 +12,7 @@ import './first-visit-rules.js';
   catch (_) { state = Rules.normalize(); }
   let user = null, ready = false, busy = false, scene = 0, readySerial = 0, trialAnswerPending = false;
   let trialBankOption = null;
+  let trialScopeOwner = null;
   let sceneTimer = null;
   const portraits = ['male', 'female'].map(g => `assets/story/characters/player-${g}-neutral.png`);
   const scenes = [
@@ -85,7 +86,11 @@ import './first-visit-rules.js';
     window.switchToPage?.('page-settings');
     const mode = $('set-source-mode');
     if (mode) {
-      if (!['random', 'focused'].includes(mode.value)) mode.value = 'focused';
+      if (trialScopeOwner !== user?.uid) {
+        const savedMode = window.getCurrentUserData?.()?.gameSettings?.sourceMode;
+        mode.value = ['random', 'focused'].includes(savedMode) ? savedMode : 'focused';
+        trialScopeOwner = user?.uid;
+      } else if (!['random', 'focused'].includes(mode.value)) mode.value = 'focused';
       // Keep the chosen practice mode when returning to adjust the scope.
       // Detach the incomplete bank option so native mobile selects omit it too.
       trialBankOption ||= mode.querySelector('option[value="bank"]');
