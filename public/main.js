@@ -2,6 +2,10 @@
 // Google 登入本身不被附加模組阻斷；登入後的遊戲則必須等所有修仙模組載入成功才開始。
 import './main-legacy.js?v=20261013-arrival1';
 import './cultivation/dongtian-entry.js';
+// Rendering is assessed during the login/loading screen, before scenery loads.
+void import('./cultivation/training-render-guard.js').catch(error => {
+  console.warn('[Training renderer] startup assessment unavailable', error);
+});
 // Analytics is optional: a tracking failure must never prevent core login.
 void import('./cultivation/player-analytics-client.js?v=20261016-events1').catch(error => {
   console.warn('[Player Analytics] optional tracking module unavailable', error);
