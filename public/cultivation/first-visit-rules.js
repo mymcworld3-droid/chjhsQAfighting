@@ -27,5 +27,18 @@
   }
   // Existing accounts keep their saved character and progression when logging in.
   function needsGender(data) { return !['male', 'female'].includes(data?.storyProgressV1?.gender); }
-  return { STAGES, normalize, readyStage, needsGender };
+  function guestProgress(data = {}) {
+    const stats = {};
+    for (const key of ['totalScore','gold','currentStreak','bestStreak','totalCorrect','totalAnswered']) {
+      const value = Number(data.stats?.[key]);
+      if (Number.isFinite(value) && value >= 0) stats[key] = value;
+    }
+    const profile = {};
+    for (const key of ['educationLevel','strongSubjects','weakSubjects']) {
+      if (typeof data.profile?.[key] === 'string') profile[key] = data.profile[key];
+    }
+    return { stats, profile, ...(data.gameSettings && typeof data.gameSettings === 'object'
+      ? { gameSettings: JSON.parse(JSON.stringify(data.gameSettings)) } : {}) };
+  }
+  return { STAGES, normalize, readyStage, needsGender, guestProgress };
 });

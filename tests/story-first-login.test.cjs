@@ -11,7 +11,8 @@ function loginContext({ failSave = false } = {}) {
   const node = { classList: { add() {}, remove() {} }, removeAttribute() {}, setAttribute() {} };
   let handler;
   const ctx = vm.createContext({
-    auth, db: {}, firstLoginUid: '', currentUserData: null, immortalBoardUnsub: null,
+    auth, db: {}, firstLoginUid: '', currentUserData: null, immortalBoardUnsub: null, pendingGuestProgress:null,
+    calculateRankFromScore:()=>0,
     window: { setTrueImmortalBoard() {} }, document: { getElementById: () => node },
     collection: () => ({}), onSnapshot: () => () => {}, updateTexts() {}, injectSocialUI() {},
     // This isolated slice does not evaluate the production identity UI helper.
@@ -20,6 +21,13 @@ function loginContext({ failSave = false } = {}) {
     doc: (_, collection, uid) => ({ collection, uid }),
     getDoc: async ref => ({ exists: () => rows.has(ref.uid), data: () => rows.get(ref.uid) }),
     setDoc: async (ref, value) => { if (failSave) throw Error('offline'); rows.set(ref.uid, value); },
+    runTransaction: async (_,worker) => {
+      const writes=[];
+      const result=await worker({get:async ref=>({exists:()=>rows.has(ref.uid),data:()=>rows.get(ref.uid)}),set:(ref,value)=>writes.push([ref.uid,value])});
+      if(failSave)throw Error('offline');
+      for(const [uid,value] of writes)rows.set(uid,value);
+      return result;
+    },
     updateDoc: async () => {},
     // Stop after account initialization; feature loading is unrelated to this decision.
     waitForVerifiedPlayerMigration: async () => { throw Error('end of account-init test'); },
@@ -29,7 +37,8 @@ function loginContext({ failSave = false } = {}) {
   const flag = legacy.match(/^window\.isXiuxianFirstLogin = .*;$/m)[0];
   const start = legacy.indexOf('onAuthStateChanged(auth, async (user) => {');
   const end = legacy.indexOf("window.addEventListener('xiuxian:stats-updated', ensureGameplayNavigationForReadyProfile);", start);
-  vm.runInContext(flag + '\n' + legacy.slice(start, end), ctx);
+  const initializer=legacy.slice(legacy.indexOf('function initialPlayerData('),legacy.indexOf('function syncAccountBindingUI('));
+  vm.runInContext(initializer + '\n' + flag + '\n' + legacy.slice(start, end), ctx);
   return { ctx, rows, login: async uid => { auth.currentUser = { uid }; await handler(auth.currentUser); } };
 }
 
@@ -55,6 +64,26 @@ test('first-login eligibility belongs to the authenticated account and failed in
   const failed = loginContext({ failSave: true });
   await failed.login('offline-player');
   assert.equal(failed.ctx.window.isXiuxianFirstLogin(), false);
+});
+
+test('a newly saved game character receives guest scope and cultivation once, while existing characters keep their data', async () => {
+  const rules=require('../public/cultivation/first-visit-rules.js');
+  const session=loginContext();
+  const handoff=()=>({uid:'guest',data:rules.guestProgress({stats:{totalScore:1,gold:20},
+    profile:{educationLevel:'國中一年級'},gameSettings:{sourceMode:'focused',focusedUnits:['分數']}})});
+  session.ctx.pendingGuestProgress=handoff();
+  await session.login('new-player');
+  const saved=session.rows.get('new-player');
+  assert.equal(saved.stats.totalScore,1);assert.equal(saved.gameSettings.focusedUnits[0],'分數');
+  assert.equal(saved.profile.educationLevel,'國中一年級');
+  assert.equal(session.ctx.window.isXiuxianFirstLogin(),true);
+  await session.login('next-player');
+  assert.equal(session.rows.get('next-player').stats.totalScore,0,'the handoff is consumed');
+  session.ctx.pendingGuestProgress=handoff();
+  session.rows.set('returning',{uid:'returning',friendCode:'OLD123',stats:{totalScore:68,gold:500},profile:{},gameSettings:{sourceMode:'random'}});
+  await session.login('returning');
+  assert.equal(session.rows.get('returning').stats.totalScore,68);
+  assert.equal(session.rows.get('returning').gameSettings.sourceMode,'random');
 });
 
 function autoContext({ firstLogin = true, gender = 'male' } = {}) {

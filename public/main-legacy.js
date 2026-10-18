@@ -563,6 +563,25 @@ function calculateRankFromScore(totalScore, uid = auth.currentUser?.uid) {
 // fire again, and the currentUser anonymous flag may lag until token refresh.
 // This is UI-only identity state, never used to authorize protected actions.
 let linkedGoogleIdentity = null;
+// Only this live guest session can seed a missing destination player document.
+// Existing player documents always win; never carry account data via localStorage.
+let pendingGuestProgress = null;
+function initialPlayerData(user, friendCode) {
+    const trial = !user.isAnonymous && pendingGuestProgress?.uid !== user.uid ? pendingGuestProgress?.data : null;
+    const data = {
+        uid: user.uid, displayName: user.displayName || '匿名修士', email: user.email || '',
+        photoURL: user.photoURL || '',
+        profile: { educationLevel: '', strongSubjects: '', weakSubjects: '', ...trial?.profile },
+        inventory: [], equipped: { frame: '', avatar: '' },
+        artifactSystem: { inventory: {}, equipped: {}, buffs: {} },
+        stats: { rankLevel: 0, currentStars: 0, totalScore: 0, gold: 0,
+            currentStreak: 0, bestStreak: 0, totalCorrect: 0, totalAnswered: 0, ...trial?.stats },
+        friends: [], friendCode, isAdmin: false,
+        ...(trial?.gameSettings ? { gameSettings: trial.gameSettings } : {})
+    };
+    data.stats.rankLevel = calculateRankFromScore(data.stats.totalScore, user.uid);
+    return data;
+}
 function syncAccountBindingUI(user = auth.currentUser) {
     const linked = !!user && (user.isAnonymous === false || linkedGoogleIdentity?.uid === user.uid);
     const bindingButton = document.getElementById('btn-bind-guest');
@@ -577,6 +596,9 @@ function syncAccountBindingUI(user = auth.currentUser) {
 window.startFirstVisitGuest = () => signInAnonymously(auth);
 window.googleLogin = async () => {
     const guest = auth.currentUser;
+    if (guest?.isAnonymous && linkedGoogleIdentity?.uid !== guest.uid && currentUserData?.uid === guest.uid) {
+        pendingGuestProgress = { uid: guest.uid, data: window.QingyunFirstVisitRules.guestProgress(currentUserData) };
+    }
     try {
         if (guest?.isAnonymous) {
             let result;
@@ -587,13 +609,15 @@ window.googleLogin = async () => {
                 if (!['auth/credential-already-in-use', 'auth/email-already-in-use'].includes(error?.code)) throw error;
                 const credential = GoogleAuthProvider.credentialFromError(error);
                 if (!credential) throw error;
-                // Existing accounts retain their own character, inventory and balances.
+                // Auth identities may exist without a game character. Only a missing
+                // player document can inherit this guest's saved scope and progress.
                 const existing = await signInWithCredential(auth, credential);
                 linkedGoogleIdentity = null;
                 syncAccountBindingUI(existing.user);
                 return existing;
             }
             const person = result.user;
+            pendingGuestProgress = null; // Same-UID binding already retains the saved player document.
             // Identity is now linked even if auth.currentUser still reports
             // isAnonymous for this same UID until Firebase refreshes its state.
             linkedGoogleIdentity = { uid: person.uid, email: person.email || '' };
@@ -1292,6 +1316,7 @@ onAuthStateChanged(auth, async (user) => {
         const userRef = doc(db, "users", user.uid);
         try {
             const docSnap = await getDoc(userRef);
+            if (auth.currentUser?.uid !== user.uid) return;
             
             if (docSnap.exists()) {
                 currentUserData = docSnap.data();
@@ -1315,25 +1340,19 @@ onAuthStateChanged(auth, async (user) => {
             } else {
                 // 新使用者初始化
                 const code = Math.random().toString(36).substring(2, 8).toUpperCase();
-                currentUserData = {
-                    uid: user.uid, displayName: user.displayName || '匿名修士', email: user.email || '',
-                    photoURL: user.photoURL || '',
-                    profile: { educationLevel: "", strongSubjects: "", weakSubjects: "" },
-                    inventory: [],
-                    equipped: { frame: '', avatar: '' },
-                    // 法寶持有與四個裝配欄位一律放在玩家文件，而非瀏覽器。
-                    artifactSystem: { inventory: {}, equipped: {}, buffs: {} },
-                    stats: { 
-                        rankLevel: 0, currentStars: 0, totalScore: 0, gold: 0,
-                        currentStreak: 0, bestStreak: 0, totalCorrect: 0, totalAnswered: 0
-                    },
-                    friends: [], 
-                    friendCode: code, 
-                    isAdmin: false
-                };
-                await setDoc(userRef, currentUserData);
-                firstLoginUid = user.uid;
+                const initialized = await runTransaction(db, async tx => {
+                    if (auth.currentUser?.uid !== user.uid) throw new Error('帳號已更換，請重新登入。');
+                    const latest = await tx.get(userRef);
+                    if (latest.exists()) return { created:false, data:latest.data() };
+                    const data = initialPlayerData(user, code);
+                    tx.set(userRef, data);
+                    return { created:true, data };
+                });
+                if (auth.currentUser?.uid !== user.uid) return;
+                currentUserData = initialized.data;
+                if (initialized.created) firstLoginUid = user.uid;
             }
+            if (!user.isAnonymous) pendingGuestProgress = null;
 
             // Reuse the trusted per-player BD/C completion marker after the first successful setup.
             // Only players without that marker enter migration polling / profile provisioning.
