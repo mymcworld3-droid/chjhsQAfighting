@@ -14,7 +14,7 @@ function quickQuizPrompt({ mode, subject, level, topic, rank, difficulty, previo
     q: '完整題幹', correct: '唯一正解',
     wrong: ['確定錯誤一','確定錯誤二','確定錯誤三'],
     exp: '精簡且答案一致的解析', subject: safe(subject,40), sub_topic: safe(topic,180),
-    knowledge_subject: Knowledge.subject(subject), knowledge_point_id: '清單中的 ID', knowledge_point: '清單中的名稱',
+    knowledge_points:[{subject:Knowledge.subject(subject),id:'清單中的 ID',name:'清單中的名稱'}],
     concept_id: '考點短ID', template_id: '解題骨架短ID', question_form: safe(targetForm,40),
     cognitive_level: quick ? 1 : quality.cognitive || 2,
     reasoning_steps: quick ? 1 : quality.steps || 2

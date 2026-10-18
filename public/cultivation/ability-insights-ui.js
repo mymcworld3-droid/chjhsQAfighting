@@ -89,7 +89,7 @@ import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 
     if (!target) return;
     const inScope = currentSubject
       ? report.topics.filter(x => x.subject === currentSubject) : report.topics;
-    const stats = Core.sum(inScope.filter(x => x.total));
+    const stats = currentSubject ? report.subjects.find(x => x.name === currentSubject) || Core.sum([]) : report;
     const coverage = inScope.filter(x => x.total).length;
     const delta = trend?.delta;
     target.innerHTML = `
