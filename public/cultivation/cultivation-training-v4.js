@@ -414,7 +414,8 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
 
   function nascentSoulTabMarkup() {
     if (!nascentUnlocked()) return '<section class="ns-panel"><h3>元嬰未成</h3><p>修為達到 68 後，方可凝聚本命元嬰。</p></section>';
-    if (!state.equippedCore) return '<section class="ns-panel"><h3>尚未調御金丹</h3><p>請先在金丹頁調御丹相，再溫養元嬰。</p></section>';
+    const getFragmentsButton = '<button type="button" class="ns-get-fragments-btn" data-ns-get-fragments><i class="fa-solid fa-gem" aria-hidden="true"></i><span>去獲取元嬰碎精</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>';
+    if (!state.equippedCore) return `<section class="ns-panel"><h3>尚未調御金丹</h3><p>請先在金丹頁調御丹相，再溫養元嬰。</p>${getFragmentsButton}</section>`;
     const player = window.getCurrentUserData?.() || {};
     const prepared = Growth.prepare(player);
     const core = state.equippedCore;
@@ -441,7 +442,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     }).join('');
     const lines = positions.map(([x, y], index) => `<line class="ns-growth-link ${prepared.growth.branches[branches[index].id] ? 'is-grown' : ''}" x1="50" y1="50" x2="${x}" y2="${y}"/>`).join('');
     return `<section class="ns-panel ns-growth-panel">
-      <div class="ns-growth-toolbar"><span class="ns-growth-resource">元嬰碎精 <strong aria-live="polite">${prepared.fragments}</strong></span><button type="button" class="ns-reset-btn" data-ns-reset ${soulBusy || !Growth.spent(prepared.growth) ? 'disabled' : ''}>重修</button></div>
+      <div class="ns-growth-toolbar"><span class="ns-growth-resource">元嬰碎精 <strong aria-live="polite">${prepared.fragments}</strong></span><div class="ns-growth-actions">${getFragmentsButton}<button type="button" class="ns-reset-btn" data-ns-reset ${soulBusy || !Growth.spent(prepared.growth) ? 'disabled' : ''}>重修</button></div></div>
       <div class="ns-growth-map" data-branch-count="${branches.length}" role="group" aria-label="元嬰分支">
         <svg class="ns-growth-links" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">${lines}</svg>
         <div class="ns-growth-core">${coreVisualMarkup(core, false)}<div class="ns-growth-core-caption"><strong>${coreType(core.type).name}</strong><span>${clampGrade(core.grade)} 品</span></div></div>
@@ -508,6 +509,10 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
 
   function bindSoulActions() {
     const content = document.getElementById('training-tab-content');
+    content?.querySelector('[data-ns-get-fragments]')?.addEventListener('click', () => {
+      if (typeof window.openRaidHub === 'function') window.openRaidHub();
+      else toast('秘境試煉尚未準備好，請稍後再試。');
+    });
     content?.querySelectorAll('[data-ns-upgrade]').forEach(button => button.addEventListener('click',()=>void saveSoulBranch(button.dataset.nsUpgrade)));
     content?.querySelector('[data-ns-reset]')?.addEventListener('click',()=>void saveSoulBranch(null,true));
     void migrateSoulResources();

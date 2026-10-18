@@ -662,7 +662,11 @@ body.xianxia-theme.ns-map-active #page-training .ns-branch-line[data-branch="cor
 body.xianxia-theme #training-tab-content:has(.ns-growth-panel) { overflow-y:auto; overscroll-behavior-y:contain; }
 body.xianxia-theme .training-page-v3:has(.ns-growth-panel) { grid-template-columns:minmax(0,1fr); padding-bottom:0; }
 body.xianxia-theme .training-page-v3:has(.ns-growth-panel) .training-subtabs-v3 { min-width:0; overflow-x:auto; }
-.ns-growth-toolbar { display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%; padding:0 8px; box-sizing:border-box; }
+.ns-growth-toolbar { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; width:100%; padding:0 8px; box-sizing:border-box; }
+.ns-growth-actions { display:flex; flex-wrap:wrap; align-items:center; justify-content:flex-end; gap:8px; max-width:100%; }
+.ns-get-fragments-btn { display:inline-flex; align-items:center; justify-content:center; gap:6px; min-height:36px; padding:7px 10px; border:1px solid #b99a59; border-radius:8px; background:#302718; color:#f2d69b; font:inherit; font-size:12px; line-height:1.4; white-space:nowrap; cursor:pointer; }
+.ns-get-fragments-btn:hover { background:#40331d; border-color:#e1bd75; }
+.ns-get-fragments-btn:focus-visible { outline:2px solid #ffe1a0; outline-offset:3px; }
 .ns-growth-resource { color:#aa9f8c; font-size:13px; }
 .ns-growth-resource strong { margin-left:8px; color:#f2d69b; font-size:18px; font-variant-numeric:tabular-nums; }
 .ns-growth-map { position:relative; flex:1 0 560px; width:min(100%,780px); height:620px; isolation:isolate; }
