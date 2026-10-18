@@ -368,6 +368,10 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     const tag = clickable ? 'button' : 'div';
     return `
       <${tag} ${clickable ? 'type="button"' : ''} class="golden-core-stage-v3 has-core-art ${clickable ? 'clickable' : ''}" data-core-visual-grade="${clampGrade(core.grade)}" data-core-visual-type="${type.id}" ${clickable ? 'id="training-core-orb" aria-label="查看金丹詳細資料"' : 'aria-hidden="true"'}>
+        <span class="golden-core-halo-v3 halo-a"></span>
+        <span class="golden-core-halo-v3 halo-b"></span>
+        <span class="golden-core-orbit-v3 orbit-a"></span>
+        <span class="golden-core-orbit-v3 orbit-b"></span>
         <span class="golden-core-sphere-v3 core-tone-${type.tone}">${globalThis.QAGoldenCoreArt.markup(type.id,core.grade,type.name,'golden-core-art')}<span class="golden-core-art-fallback" hidden>${type.icon}</span></span>
         <span class="golden-core-shadow-v3"></span>
       </${tag}>
