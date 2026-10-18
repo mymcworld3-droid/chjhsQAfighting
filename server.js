@@ -417,6 +417,7 @@ function chooseQuestionForm(previousMeta, seed) {
 // API 2: 生成測驗題目 (優化版：單次請求 + 安全 JSON 解析)
 // ==========================================
 const { MODES: FAST_QUIZ_MODES, quickQuizPrompt } = require('./fast-quiz-prompt.cjs');
+const { ANSWER_AND_EXPLANATION_RULES } = require('./quiz-answer-prompt.cjs');
 const raidDifficultyRules = require('./public/cultivation/raid-difficulty.js');
 const { createSparePool } = require('./quiz-spare-pool.cjs');
 const quizSparePool = createSparePool({ similar: (a, b) => isTooSimilarQuestion(a, [b]) });
@@ -581,7 +582,7 @@ app.post('/api/generate-quiz', async (req, res) => {
         生成題目儘量整齊。
 
         必須提供四個不重複且僅有一個正解的選項，
-        以及點出關鍵觀念與主要步驟的解析。
+        以及精簡、可核對的解析。
 
         題目不可引用未提供的圖片。
 
@@ -589,6 +590,8 @@ app.post('/api/generate-quiz', async (req, res) => {
         不先看預定的 correct，重新解題，
         再將四個選項逐一代入，
         確認只有一個選項正確，解析與最後結論都指向 correct。
+
+        ${ANSWER_AND_EXPLANATION_RULES}
 
         發現錯誤一律完整重寫 JSON：
         q、correct、wrong、exp 必須一起修好。
