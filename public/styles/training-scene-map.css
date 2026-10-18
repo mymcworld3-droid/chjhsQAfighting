@@ -312,6 +312,47 @@ body.xianxia-theme #page-training[data-training-place] > .training-scene-detailb
 body.xianxia-theme #page-training[data-training-place] > #training-tab-content { grid-row: 3; }
 body.xianxia-theme #page-training .training-subtab-v3:disabled { opacity: .45; cursor: not-allowed; }
 body.xianxia-theme #page-training .training-subtab-v3.is-locked::after { content: '🔒'; font-size: .8em; }
+/* Portrait: keep all seven destinations on one line; name the selected tab. */
+@media (orientation: portrait) {
+  body.xianxia-theme #page-training .training-subtabs-v3 {
+    display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
+    min-width: 0;
+    gap: 2px;
+  }
+  body.xianxia-theme #page-training .training-subtab-v3 {
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 36px;
+    height: 36px;
+    padding: 0 4px;
+    gap: 4px;
+    white-space: nowrap;
+    transition: color .18s ease, background-color .18s ease, border-color .18s ease;
+  }
+  body.xianxia-theme #page-training .training-subtab-v3.active {
+    flex: 0 0 auto;
+    padding-inline: 9px;
+  }
+  /* Visually hide labels while retaining their accessible names. Leave dots visible. */
+  body.xianxia-theme #page-training .training-subtab-v3:not(.active) > i + span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  body.xianxia-theme #page-training .training-subtab-v3.is-locked::after {
+    position: absolute;
+    right: 2px;
+    bottom: 1px;
+    font-size: 8px;
+  }
+}
 body.xianxia-theme #page-training .training-scene-back {
   display: inline-flex;
   align-items: center;
