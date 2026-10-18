@@ -1069,7 +1069,7 @@ function ensureStartupCloudCurtain() {
 
 let startupCloudTransitionPromise = Promise.resolve();
 
-function playStartupCloudCurtain(onClosed, { isCurrent = () => true, blockInput = false } = {}) {
+function playStartupCloudCurtain(onClosed, { isCurrent = () => true, blockInput = false, holdMs = 180 } = {}) {
     // Startup and subsequent navigation share one curtain and one motion.
     // Queue requests so an opening curtain cannot be reset by another caller.
     const transition = startupCloudTransitionPromise.then(async () => {
@@ -1097,7 +1097,7 @@ function playStartupCloudCurtain(onClosed, { isCurrent = () => true, blockInput 
             if (!isCurrent()) return false;
             await onClosed();
             await nextStartupFrame();
-            if (!reducedMotion) await waitStartupTransition(180);
+            if (!reducedMotion && holdMs > 0) await waitStartupTransition(holdMs);
 
             curtain.style.removeProperty('background-color');
             curtain.classList.remove('is-closed');

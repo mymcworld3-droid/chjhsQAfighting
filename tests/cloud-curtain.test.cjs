@@ -69,6 +69,23 @@ test('another caller cannot reset a curtain in flight, and stale queued navigati
   assert.equal(h.curtains.length, 1);
 });
 
+test('zero-hold training curtain opens immediately when the destination is ready', async () => {
+  const h = coordinator();
+  let ready;
+  const prepared = new Promise(resolve => { ready = resolve; });
+  const result = h.play(() => prepared, { blockInput: true, holdMs: 0 });
+  await flush();
+  h.waits[0].resolve(); await flush();
+  assert.equal(h.curtains[0].classList.contains('is-closed'), true);
+  assert.equal(h.curtains[0].classList.contains('is-opening'), false);
+  assert.deepEqual(h.holds, []);
+  ready(); await flush();
+  assert.equal(h.curtains[0].classList.contains('is-opening'), true);
+  assert.deepEqual(h.holds, [], 'no fixed sleep is added after destination readiness');
+  h.waits[1].resolve();
+  assert.equal(await result, true);
+});
+
 test('a destination error releases the curtain and input lock so the next transition can run', async () => {
   const h = coordinator();
   const result = h.play(() => { throw Error('render failed'); }, { blockInput: true });
