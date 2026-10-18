@@ -456,7 +456,6 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
         <div class="ns-growth-core">${coreVisualMarkup(core, false)}<div class="ns-growth-core-caption"><strong>${coreType(core.type).name}</strong><span>${clampGrade(core.grade)} 品</span></div></div>
         ${nodes}
       </div>
-      <div class="ns-track-goals" aria-label="追蹤元嬰目標">${branches.map(branch => `<button type="button" data-ns-track="${branch.id}">追蹤${branch.name}</button>`).join('')}</div>
     </section>`;
   }
 
@@ -524,7 +523,6 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
 
   function bindSoulActions() {
     const content = document.getElementById('training-tab-content');
-    content?.querySelectorAll('[data-ns-track]').forEach(button => button.addEventListener('click', () => window.trackCultivationGoal?.({type:'nascent',id:button.dataset.nsTrack})));
     content?.querySelector('[data-ns-get-fragments]')?.addEventListener('click', () => {
       if (typeof window.openRaidHub === 'function') window.openRaidHub();
       else toast('秘境試煉尚未準備好，請稍後再試。');
