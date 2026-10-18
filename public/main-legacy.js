@@ -621,6 +621,7 @@ window.googleLogin = async () => {
             // Identity is now linked even if auth.currentUser still reports
             // isAnonymous for this same UID until Firebase refreshes its state.
             linkedGoogleIdentity = { uid: person.uid, email: person.email || '' };
+            const introPreload = window.preloadFirstVisitScenes?.(person, currentUserData, false);
             syncAccountBindingUI(person);
             const identity = { email: person.email || '', photoURL: person.photoURL || '' };
             if (!currentUserData?.displayName || currentUserData.displayName === '匿名修士') identity.displayName = person.displayName || '青雲修士';
@@ -634,6 +635,8 @@ window.googleLogin = async () => {
             if (currentUserData) Object.assign(currentUserData, identity);
             await updateSettingsInputs();
             syncAccountBindingUI(person);
+            await introPreload;
+            if (auth.currentUser?.uid !== person.uid) return result;
             await window.handleFirstVisitReady?.(person, currentUserData, false);
             return result;
         }
@@ -1353,6 +1356,7 @@ onAuthStateChanged(auth, async (user) => {
                 if (initialized.created) firstLoginUid = user.uid;
             }
             if (!user.isAnonymous) pendingGuestProgress = null;
+            const introPreload = window.preloadFirstVisitScenes?.(user, currentUserData, firstLoginUid === user.uid);
 
             // Reuse the trusted per-player BD/C completion marker after the first successful setup.
             // Only players without that marker enter migration polling / profile provisioning.
@@ -1391,6 +1395,8 @@ onAuthStateChanged(auth, async (user) => {
             }
 
             // 所有腳本都已成功載入，現在才正式啟動其餘監聽與遊戲介面。
+            await introPreload;
+            if (auth.currentUser?.uid !== user.uid) return;
             startPresenceSystem();
             refreshInvitationListener();
             listenToSystemCommands();  

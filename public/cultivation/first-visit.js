@@ -14,6 +14,8 @@ import './first-visit-rules.js';
   let trialBankOption = null;
   let trialScopeOwner = null;
   let sceneTimer = null;
+  let pictureRevision = 0;
+  const sceneImages = new Map();
   const portraits = ['male', 'female'].map(g => `assets/story/characters/player-${g}-neutral.png`);
   const scenes = [
     ['opening-1.png', '知識，就是你的靈根', '歡迎來到青雲宗。每一次思考與作答，都會化為修行的力量。'],
@@ -22,6 +24,40 @@ import './first-visit-rules.js';
     ['opening-5.png', '探索洞天與秘境', '將學習內容化為洞天，與同門並肩探索未知。'],
     ['opening-9.png', '你的仙途，從這裡開始', '新手劇情已放在仙道任務中。準備好時，再去認識你的師姐與青雲宗。']
   ];
+  function loadSceneImage(file) {
+    if (sceneImages.has(file)) return sceneImages.get(file);
+    const image = new Image(); image.decoding = 'async';
+    const ready = new Promise(resolve => {
+      image.onload = async () => {
+        try { await image.decode?.(); } catch (_) {}
+        resolve(image.naturalWidth > 0);
+      };
+      image.onerror = () => resolve(false);
+      image.src = `assets/story/opening/${file}`;
+    });
+    const record = { image, ready }; sceneImages.set(file, record); return record;
+  }
+  window.preloadFirstVisitScenes = (person, data, firstLogin = false) => {
+    if (!person || person.isAnonymous || Rules.readyStage(state, person, data, firstLogin) !== 'background') return Promise.resolve();
+    return Promise.all(scenes.map(([file]) => loadSceneImage(file).ready));
+  };
+  async function showScenePicture(layer, file) {
+    const revision = ++pictureRevision, record = loadSceneImage(file);
+    await record.ready;
+    if (revision !== pictureRevision || $('first-visit-layer') !== layer || state.stage !== 'background') return;
+    if (!record.image.naturalWidth) return;
+    const previous = [...layer.querySelectorAll('.fv-scene')];
+    const image = record.image;
+    if (image.classList.contains('is-current') && image.parentElement === layer) return;
+    previous.forEach(node => node.classList.remove('is-current'));
+    image.className = 'fv-scene is-current'; image.alt = '青雲問道世界背景';
+    layer.insertBefore(image, layer.querySelector('.fv-card'));
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      if (revision !== pictureRevision || $('first-visit-layer') !== layer) return;
+      image.classList.add('is-ready');
+      setTimeout(() => previous.forEach(node => { if (!node.classList.contains('is-current')) node.remove(); }), 400);
+    }));
+  }
   const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
   function store(patch = {}) {
     state = Rules.normalize({ ...state, ...patch });
@@ -29,22 +65,27 @@ import './first-visit-rules.js';
     document.body.classList.toggle('first-visit-active', !state.completed && state.stage !== 'welcome');
     document.body.dataset.firstVisitStage = state.stage;
   }
-  function removeLayer() { clearTimeout(sceneTimer); sceneTimer = null; $('first-visit-layer')?.remove(); }
+  function removeLayer() { clearTimeout(sceneTimer); sceneTimer = null; pictureRevision++; $('first-visit-layer')?.remove(); }
   function panel(title, body, actions, { image = '', welcome = false } = {}) {
-    removeLayer();
-    const layer = document.createElement('section');
+    const existing = $('first-visit-layer');
+    const reuse = image && existing?.classList.contains('first-visit-background');
+    if (reuse) { clearTimeout(sceneTimer); sceneTimer = null; }
+    else removeLayer();
+    const layer = reuse ? existing : document.createElement('section');
     layer.id = 'first-visit-layer';
     layer.setAttribute('role', 'dialog');
     layer.setAttribute('aria-modal', 'true');
     layer.setAttribute('aria-labelledby', 'first-visit-title');
-    layer.className = welcome ? 'first-visit-welcome' : image ? 'first-visit-background' : '';
-    layer.innerHTML = `${image ? `<img class="fv-scene" src="assets/story/opening/${escape(image)}" alt="青雲問道世界背景">` : ''}
-      ${welcome ? `<div class="fv-portraits" aria-label="兩位主角立繪">${portraits.map((src,i) => `<img src="${src}" alt="${i ? '女修主角' : '男修主角'}">`).join('')}</div>` : ''}
-      <div class="fv-card"><small>青雲問道 · ${welcome ? '初入仙途' : state.stage === 'background' ? `世界介紹 ${scene + 1} / ${scenes.length}` : '你的修行旅程'}</small><h2 id="first-visit-title">${title}</h2><div class="fv-copy">${body}</div><p class="fv-error" role="alert"></p><div class="fv-actions">${actions}</div></div>`;
-    document.body.append(layer);
-    requestAnimationFrame(() => layer.classList.add('is-visible'));
-    layer.querySelector('button,input')?.focus({ preventScroll: true });
-    layer.addEventListener('keydown', event => {
+    if (!reuse) layer.className = welcome ? 'first-visit-welcome' : image ? 'first-visit-background' : '';
+    const card = `<small>青雲問道 · ${welcome ? '初入仙途' : state.stage === 'background' ? `世界介紹 ${scene + 1} / ${scenes.length}` : '你的修行旅程'}</small><h2 id="first-visit-title">${title}</h2><div class="fv-copy">${body}</div><p class="fv-error" role="alert"></p><div class="fv-actions">${actions}</div>`;
+    if (reuse) layer.querySelector('.fv-card').innerHTML = card;
+    else {
+      layer.innerHTML = `${welcome ? `<div class="fv-portraits" aria-label="兩位主角立繪">${portraits.map((src,i) => `<img src="${src}" alt="${i ? '女修主角' : '男修主角'}">`).join('')}</div>` : ''}<div class="fv-card">${card}</div>`;
+      document.body.append(layer);
+      requestAnimationFrame(() => layer.classList.add('is-visible'));
+    }
+    layer.querySelector('button:not(:disabled),input')?.focus({ preventScroll: true });
+    if (!reuse) layer.addEventListener('keydown', event => {
       if (event.key !== 'Tab') return;
       const controls = [...layer.querySelectorAll('button:not(:disabled),input:not(:disabled)')];
       const first = controls[0], last = controls.at(-1);
@@ -131,29 +172,24 @@ import './first-visit-rules.js';
   function backgrounds() {
     const [image, title, text] = scenes[scene];
     const finalLabel = Rules.needsGender(window.getCurrentUserData?.()) ? '選擇性別' : '進入宗門';
-    const layer = panel(title, `<p>${text}</p><div class="fv-dots" aria-label="世界介紹進度">${scenes.map((_,i) => `<i class="${i===scene?'current':''}"></i>`).join('')}</div>`, `${scene ? '<button type="button" class="fv-secondary" id="fv-prev">上一張</button>' : ''}<button type="button" id="fv-next">${scene === scenes.length-1 ? finalLabel : '下一張'}</button>`, { image });
+    const index = scene;
+    const layer = panel(title, `<p>${text}</p><div class="fv-dots" aria-label="世界介紹進度">${scenes.map((_,i) => `<i class="${i===scene?'current':''}"></i>`).join('')}</div>`, `<button type="button" class="fv-secondary${scene ? '' : ' fv-prev-placeholder'}" id="fv-prev" ${scene ? '' : 'disabled aria-hidden="true"'}>上一張</button><button type="button" id="fv-next">${scene === scenes.length-1 ? finalLabel : '下一張'}</button>`, { image });
     layer.querySelector('#fv-prev')?.addEventListener('click', () => { scene--; backgrounds(); });
     const next = () => {
-      if ($('first-visit-layer') !== layer || state.stage !== 'background') return;
+      if ($('first-visit-layer') !== layer || state.stage !== 'background' || scene !== index) return;
       if (scene < scenes.length-1) { scene++; backgrounds(); }
       else if (Rules.needsGender(window.getCurrentUserData?.())) { store({ stage: 'gender' }); gender(); }
       else void action(() => finish());
     };
     layer.querySelector('#fv-next').onclick = next;
     const scheduleNext = () => {
-      if ($('first-visit-layer') !== layer || state.stage !== 'background') return;
+      if ($('first-visit-layer') !== layer || state.stage !== 'background' || scene !== index) return;
       clearTimeout(sceneTimer);
-      sceneTimer = setTimeout(next, 2000);
+      sceneTimer = setTimeout(next, 3000);
     };
-    // Give each loaded image two seconds, including after manual navigation.
-    const picture = layer.querySelector('.fv-scene');
-    if (picture.complete) scheduleNext();
-    else {
-      picture.addEventListener('load', scheduleNext, { once:true });
-      picture.addEventListener('error', scheduleNext, { once:true });
-    }
-    // Warm the next picture without blocking the current panel.
-    if (scene < scenes.length-1) { const img = new Image(); img.src = `assets/story/opening/${scenes[scene+1][0]}`; }
+    // Keep the previous picture painted until this one is decoded.
+    void showScenePicture(layer, image).then(scheduleNext);
+    if (scene < scenes.length-1) loadSceneImage(scenes[scene+1][0]);
   }
   function gender() {
     const data = window.getCurrentUserData?.();
@@ -168,6 +204,7 @@ import './first-visit-rules.js';
     await window.completeFirstVisitSetup?.(selected, name);
     store({ stage: 'done', completed: true, joining: false });
     cleanup();
+    sceneImages.clear();
     window.switchToPage?.('page-home');
     $('bottom-nav')?.classList.remove('hidden');
     window.dispatchEvent(new CustomEvent('xiuxian:arrival-completed'));
@@ -195,6 +232,7 @@ import './first-visit-rules.js';
   window.handleFirstVisitSignedOut = () => {
     user = null; ready = false; readySerial++;
     cleanup();
+    sceneImages.clear();
     document.body.classList.remove('first-visit-active');
     if (state.completed || new URLSearchParams(location.search).get('qa') === '1') return false;
     store({ stage: 'welcome', joining: false }); welcome(); return true;
@@ -213,7 +251,11 @@ import './first-visit-rules.js';
     else if (next === 'features') features();
     else if (next === 'question') { if (serial === readySerial) void window.startQuizFlow?.(); }
     else if (next === 'invite') invite();
-    else if (next === 'background') { scene = 0; backgrounds(); }
+    else if (next === 'background') {
+      await window.preloadFirstVisitScenes(person, data, firstLogin);
+      if (serial !== readySerial || user?.uid !== person.uid) return false;
+      scene = 0; backgrounds();
+    }
     else if (next === 'gender') gender();
     return true;
   };
