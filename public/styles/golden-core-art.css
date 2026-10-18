@@ -1,7 +1,12 @@
 /* Painted cores share the original grade-based glow, runes, particles and wash animations. */
+.core-minimal-card .golden-core-stage-v3.has-core-art{transform:scale(.78);transform-origin:center}
 .golden-core-stage-v3.has-core-art .golden-core-sphere-v3,
 body.xianxia-theme .ns-growth-core .golden-core-stage-v3.has-core-art .golden-core-sphere-v3{
   width:100%!important;height:100%!important;background:none!important;
+}
+/* Keep the candidate core inside its surrounding original effects. */
+body.xianxia-theme #page-training .core-minimal-card .golden-core-stage-v3.has-core-art .golden-core-sphere-v3{
+  width:76%!important;height:76%!important;
 }
 .golden-core-art{display:block;position:relative;z-index:2;pointer-events:none;user-select:none;max-width:none}
 .golden-core-art[hidden],.golden-core-art-fallback[hidden]{display:none!important}

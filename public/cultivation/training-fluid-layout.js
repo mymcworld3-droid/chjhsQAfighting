@@ -177,6 +177,28 @@
           gap:5px!important;
         }
       }
+      /* Override the fluid grid only in portrait, including its !important widths. */
+      @media (orientation:portrait){
+        body.xianxia-theme #page-training .training-subtabs-v3{
+          display:flex!important;
+          flex-wrap:nowrap;
+          min-width:0;
+          gap:2px!important;
+        }
+        body.xianxia-theme #page-training .training-subtab-v3{
+          width:clamp(32px,9vw,44px)!important;
+          flex:0 1 auto!important;
+          min-height:36px;
+          height:36px;
+          padding:0 4px;
+          white-space:nowrap;
+        }
+        body.xianxia-theme #page-training .training-subtab-v3.active{
+          width:auto!important;
+          flex:0 0 auto!important;
+          padding-inline:9px;
+        }
+      }
     `;
     document.head.appendChild(style);
   }
