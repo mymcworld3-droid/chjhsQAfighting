@@ -1,0 +1,10 @@
+.app-select-menu{box-sizing:border-box;position:fixed;inset:auto;margin:0;padding:0;max-width:calc(100vw - 24px);border:1px solid #c7a45d88;border-radius:12px;background:#181a14;color:#eee2c8;box-shadow:0 10px 32px #0006;font:inherit;overflow:hidden;display:none;flex-direction:column}
+.app-select-menu[open]{display:flex}.app-select-menu::backdrop{background:#0003}
+.app-select-menu header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px 4px;flex-shrink:0}.app-select-menu header strong{font-weight:600;font-size:13px;line-height:1.4;color:#d9c38d;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.app-select-menu header button{border:0;background:transparent;color:#cabc9a;font:inherit;font-size:24px;min-width:36px;min-height:36px;cursor:pointer}
+.app-select-menu .app-select-search{box-sizing:border-box;display:block;width:calc(100% - 24px);margin:4px 12px 8px;padding:9px 10px;border:1px solid #c7a45d44;border-radius:7px;background:#ffffff08;color:#eee2c8;font:inherit;font-size:16px;min-height:40px;flex-shrink:0}
+.app-select-list{min-height:0;overflow:auto;overscroll-behavior:contain;touch-action:pan-y;padding:0 6px 6px;scroll-padding:6px}
+.app-select-option{box-sizing:border-box;position:relative;display:block;width:100%;min-height:44px;padding:10px 32px 10px 12px;border:1px solid transparent;border-radius:7px;background:transparent;color:#e2d6ba;font:inherit;font-size:14px;line-height:1.5;text-align:left;white-space:normal;overflow-wrap:anywhere;cursor:pointer}
+.app-select-option[aria-selected="true"]{background:#c7a45d24;color:#f5d997}.app-select-option[aria-selected="true"]::after{content:'✓';position:absolute;right:12px;top:50%;transform:translateY(-50%)}
+.app-select-option:disabled{opacity:.4;cursor:not-allowed}.app-select-option:focus-visible,.app-select-search:focus-visible,.app-select-menu header button:focus-visible{outline:2px solid #e7c47c;outline-offset:-2px}.app-select-option:not(:disabled):hover{background:#c7a45d18}
+.app-select-group{padding:10px 12px 4px;font-size:11px;color:#b4a17a}.app-select-empty{padding:14px 12px;margin:0;font-size:13px;color:#b4a17a}
