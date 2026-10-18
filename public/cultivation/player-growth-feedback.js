@@ -1,6 +1,7 @@
 import './player-growth-rules.js';
 import './nascent-growth.js';
 import './raid-difficulty.js';
+import './combat-power.js';
 import { ARTIFACT_CATALOG, getArtifactById } from './artifact-catalog.js';
 import { getArtifactRecipe, getMaterialById } from './material-catalog.js';
 import { getMainUser } from './data/project-repository.js';
@@ -10,6 +11,7 @@ const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;',
 const number = value => new Intl.NumberFormat('zh-TW', { maximumFractionDigits:2 }).format(value);
 const preferences = new Map();
 let owner = '', queued = false, popupTimer = null, goalTimer = null, dialog = null, dialogOpener = null;
+let observedUid = '', observedStats = null;
 const player = () => window.getCurrentUserData?.() || {};
 const score = () => globalThis.QATrainingAccessRules?.score(player()) || 0;
 const storageKey = uid => 'qa-player-goal-v1:' + uid;
@@ -176,6 +178,8 @@ function chooseGoal() {
 function capture() {
   const live = window.getCombatStats?.() || {}, battle = window.getArtifactBattleSnapshot?.() || {effects:[]};
   const stats = { attack:{label:'攻擊力',value:live.attack || 0,unit:''}, maxHp:{label:'生命上限',value:live.maxHp || 0,unit:''} };
+  const power = window.getCombatPower?.()?.total;
+  if (Number.isFinite(power)) stats.combatPower = {label:'戰力',value:power,unit:''};
   for (const stat of window.getCultivationStatusStats?.({...live,nascentSoul:window.getNascentSoulBattleSnapshot?.()},battle) || []) {
     if (['hp','attack'].includes(stat.key)) continue;
     stats[stat.key] = {label:stat.label,value:stat.sortValue,unit:stat.value.endsWith('%') ? '%' : '',note:stat.note || ''};
@@ -186,15 +190,20 @@ function capture() {
   return stats;
 }
 window.captureGrowthSnapshot = capture;
-window.showGrowthComparison = ({uid,title,before,after,extra=[]}) => {
+window.showGrowthComparison = ({uid,before,after,extra=[]}) => {
   if (!uid || uid !== getMainUser()?.uid) return;
+  observedUid = uid; observedStats = after;
+  const changes = [...Rules.statChanges(before,after), ...extra.filter(row => row.before?.value !== row.after?.value)];
+  changes.sort((a,b) => Number(b.key === 'combatPower') - Number(a.key === 'combatPower'));
+  if (!changes.length) return;
   document.getElementById('growth-comparison')?.remove(); clearTimeout(popupTimer);
-  const changes = [...extra,...Rules.statChanges(before,after)];
   const popup = document.createElement('aside'); popup.id = 'growth-comparison'; popup.className = 'growth-comparison';
   popup.setAttribute('role','status'); popup.setAttribute('aria-live','polite');
   const value = stat => stat ? number(stat.value) + (stat.unit || '') : '未生效';
-  popup.innerHTML = `<header><strong>${esc(title)}</strong><button type="button" aria-label="關閉能力比較">×</button></header><div class="growth-change-list">${changes.length ? changes.map(row =>
-    `<div class="growth-change"><span>${esc(row.label)}${row.after?.note ? `<small>${esc(row.after.note)}</small>` : ''}</span><b>${esc(value(row.before))} <i>→</i> ${esc(value(row.after))}</b></div>`).join('') : '<p>主要戰鬥數值維持不變，裝備已更新。</p>'}</div>`;
+  popup.innerHTML = `<button class="growth-comparison-close" type="button" aria-label="關閉能力比較">×</button><div class="growth-change-list">${changes.map(row => {
+    const delta = Number.isFinite(row.before?.value) && Number.isFinite(row.after?.value) ? Math.round((row.after.value - row.before.value)*100)/100 : null;
+    return `<div class="growth-change${row.key === 'combatPower' ? ' growth-power-change' : ''}"><span>${esc(row.label)}</span><b>${esc(value(row.before))} <i>→</i> ${esc(value(row.after))}${delta !== null ? `<small class="growth-delta ${delta < 0 ? 'growth-decrease' : 'growth-increase'}">${delta > 0 ? '+' : ''}${esc(number(delta))}${esc(row.after?.unit || row.before?.unit || '')}</small>` : ''}</b></div>`;
+  }).join('')}</div>`;
   popup.querySelector('button').onclick = () => popup.remove(); document.body.appendChild(popup);
   popupTimer = setTimeout(() => { if (!popup.contains(document.activeElement) && !popup.matches(':hover')) popup.remove(); }, 15000);
 };
@@ -211,11 +220,23 @@ function showCorrection(event) {
   card.querySelector('button').onclick = () => window.dispatchEvent(new CustomEvent('xiuxian:enlightenment-open',{detail:{subject:detail.subject,topic:detail.topic}}));
   host.appendChild(card); schedule();
 }
-function schedule() { if (!queued) { queued = true; requestAnimationFrame(() => { queued = false; render(); }); } }
+function observePower() {
+  const uid = getMainUser()?.uid || '';
+  if (!uid || (player().uid && player().uid !== uid)) { observedUid = ''; observedStats = null; return; }
+  const after = capture(), before = observedUid === uid ? observedStats : null;
+  observedUid = uid; observedStats = after;
+  if (before?.combatPower && after.combatPower && before.combatPower.value !== after.combatPower.value) {
+    window.showGrowthComparison({uid,before,after});
+  }
+}
+function resetObservation() { observedUid = ''; observedStats = null; schedule(); }
+function schedule() { if (!queued) { queued = true; requestAnimationFrame(() => { queued = false; render(); observePower(); }); } }
 function boot() {
   const style = document.createElement('link'); style.rel = 'stylesheet'; style.href = 'styles/player-growth.css'; document.head.appendChild(style);
   for (const name of ['xiuxian:user-data-ready','xiuxian:user-ready','xiuxian:stats-updated','material-system-updated','artifact-system-updated','artifact-catalog-updated','artifact-recipes-updated','xiuxian:recipe-license-updated','golden-core-equipped-changed','xiuxian:refinery-job-updated','xiuxian:enlightenment-updated']) window.addEventListener(name,schedule);
-  window.addEventListener('xiuxian:learning-progress',showCorrection); render();
+  // Login and runtime hydration establish a baseline, rather than an upgrade.
+  for (const name of ['xiuxian:user-data-ready','xiuxian:user-ready','golden-core-runtime-ready']) window.addEventListener(name,resetObservation);
+  window.addEventListener('xiuxian:learning-progress',showCorrection); render(); observePower();
   const home = document.getElementById('page-home');
   if (home) new MutationObserver(schedule).observe(home,{attributes:true,attributeFilter:['class']});
 }

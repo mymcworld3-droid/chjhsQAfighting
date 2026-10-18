@@ -50,6 +50,59 @@ test('stat comparisons include decreases and activation without inventing a zero
   assert.equal(Rules.statChanges(after,after).length,0);
 });
 
+function growthFeedbackHarness() {
+  const state = {uid:'u',power:1000,attack:200,hp:1000}, nodes = new Map(), frames = [];
+  const window = {getCurrentUserData:()=>({uid:state.uid}),getCombatPower:()=>({total:state.power}),
+    getCombatStats:()=>({attack:state.attack,maxHp:state.hp})};
+  const document = {getElementById:id=>nodes.get(id),activeElement:null,
+    createElement:()=>({setAttribute(){},querySelector:()=>({}),remove(){nodes.delete(this.id);}}),
+    body:{appendChild(node){nodes.set(node.id,node);}}};
+  const context = {window,document,getMainUser:()=>({uid:state.uid}),Intl,setTimeout:()=>1,clearTimeout(){},
+    requestAnimationFrame:fn=>frames.push(fn),QAPlayerGrowth:Rules,QANascentGrowth:{}};
+  const source = fs.readFileSync(require.resolve('../public/cultivation/player-growth-feedback.js'),'utf8')
+    .replace(/^import .*;\n/gm,'').replace(/if \(document.readyState === 'loading'\)[\s\S]*$/,'');
+  vm.runInNewContext(source+'\nrender = () => {}; this.api = {capture,observePower,schedule,resetObservation};',context);
+  return {state,window,api:context.api,popup:()=>nodes.get('growth-comparison'),flush:()=>{while(frames.length)frames.shift()();},frames};
+}
+
+test('one strengthening card lists only changed values with power first and signed deltas, without action headings', () => {
+  const h = growthFeedbackHarness(), before = h.api.capture();
+  h.state.power=1200; h.state.attack=220;
+  h.window.showGrowthComparison({uid:'u',title:'法器裝備後的變化',before,after:h.api.capture(),
+    extra:[{label:'未變分支',before:{value:1},after:{value:1}}]});
+  const html=h.popup().innerHTML;
+  assert.match(html,/戰力/); assert.match(html,/1,000/); assert.match(html,/1,200/); assert.match(html,/\+200/);
+  assert.match(html,/攻擊力/); assert.match(html,/\+20/);
+  assert.ok(html.indexOf('戰力')<html.indexOf('攻擊力'));
+  assert.doesNotMatch(html,/法器裝備後的變化|<header|生命上限|未變分支/);
+  h.state.power=800; h.state.attack=180;
+  h.window.showGrowthComparison({uid:'u',before:h.api.capture(),after:{combatPower:{label:'戰力',value:600,unit:''}}});
+  assert.match(h.popup().innerHTML,/growth-decrease">-200/);
+});
+
+test('power watcher coalesces updates with explicit feedback, ignores login and tracks increases and decreases', () => {
+  const h=growthFeedbackHarness();
+  h.api.observePower(); assert.equal(h.popup(),undefined,'initial load is a baseline');
+  const before=h.api.capture(); h.state.power=1500; h.state.attack=250;
+  h.api.schedule(); h.api.schedule(); assert.equal(h.frames.length,1);
+  h.window.showGrowthComparison({uid:'u',before,after:h.api.capture(),extra:[{label:'分支等級',before:{value:1},after:{value:2}}]});
+  const explicit=h.popup(); h.flush(); assert.equal(h.popup(),explicit,'queued events cannot replace the explicit upgrade card');
+  assert.match(h.popup().innerHTML,/分支等級/);
+  h.state.power=500; h.api.schedule(); h.flush();
+  assert.match(h.popup().innerHTML,/-1,000/);
+  h.popup().remove(); h.state.uid='other'; h.state.power=9000; h.api.observePower();
+  assert.equal(h.popup(),undefined,'account changes cannot compare different players');
+  h.state.power=10000; h.api.resetObservation(); h.flush(); assert.equal(h.popup(),undefined,'hydration does not announce upgrades');
+  h.window.showGrowthComparison({uid:'u',before,after:h.api.capture()}); assert.equal(h.popup(),undefined,'stale responses cannot show feedback');
+});
+
+test('unchanged stats do not create feedback and percent changes retain units', () => {
+  const h=growthFeedbackHarness(), snapshot=h.api.capture();
+  h.window.showGrowthComparison({uid:'u',before:snapshot,after:snapshot}); assert.equal(h.popup(),undefined);
+  h.window.showGrowthComparison({uid:'u',before:{crit:{label:'暴擊率',value:10,unit:'%'}},after:{crit:{label:'暴擊率',value:12.5,unit:'%'}}});
+  assert.match(h.popup().innerHTML,/\+2.5%/); assert.doesNotMatch(h.popup().innerHTML,/戰力/);
+});
+
 test('duel statistics use actual HP loss and exclude guarded reveal steps and overkill', () => {
   const outcome = {startHostHp:1000,startGuestHp:300,steps:[
     {actorRole:'host',type:'attack',damage:200,critical:true,hostHp:1000,guestHp:100},
