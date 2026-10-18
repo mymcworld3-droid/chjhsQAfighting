@@ -1,18 +1,11 @@
-/* The artwork already contains the core, veins and aura. Keep only one painted layer. */
-.golden-core-stage-v3.has-core-art{background:none!important;box-shadow:none!important;filter:none!important}
+/* Painted cores share the original grade-based glow, runes, particles and wash animations. */
 .golden-core-stage-v3.has-core-art .golden-core-sphere-v3,
 body.xianxia-theme .ns-growth-core .golden-core-stage-v3.has-core-art .golden-core-sphere-v3{
-  width:100%!important;height:100%!important;overflow:visible!important;
-  border:0!important;border-radius:0!important;background:none!important;
-  box-shadow:none!important;filter:none;transform-style:flat!important;
+  width:100%!important;height:100%!important;background:none!important;
 }
-.golden-core-stage-v3.has-core-art::before,.golden-core-stage-v3.has-core-art::after,
-.golden-core-stage-v3.has-core-art .golden-core-sphere-v3::before,
-.golden-core-stage-v3.has-core-art .golden-core-sphere-v3::after{display:none!important}
 .golden-core-art{display:block;position:relative;z-index:2;pointer-events:none;user-select:none;max-width:none}
 .golden-core-art[hidden],.golden-core-art-fallback[hidden]{display:none!important}
 .golden-core-art-fallback{position:absolute!important;inset:0;display:grid;place-items:center;font-size:36px}
-.status-core-orb.has-core-art{background:none!important;box-shadow:none!important;border:0!important;overflow:visible}
-.status-core-orb.has-core-art>i{display:none}
+.status-core-orb.has-core-art{background:none!important;overflow:visible}
 .xpp-core:has(.golden-core-thumbnail){display:flow-root}
 .xpp-core .golden-core-thumbnail{float:left;width:72px!important;height:72px!important;margin:0 12px 6px 0}
