@@ -3,7 +3,7 @@ import './nascent-growth.js';
 import './training-scene-layer-art.js';
 import './training-scene-layouts.js';
 import { getMainUser } from './data/project-repository.js';
-import { trainingRenderProfile, markTrainingEntry, markTrainingStable, markTrainingExit } from './training-render-guard.js';
+import { trainingRenderReady, trainingRenderProfile, markTrainingEntry, markTrainingStable, markTrainingExit } from './training-render-guard.js';
 
 const Rules = globalThis.QATrainingAccessRules;
 const Layouts = globalThis.QATrainingSceneLayouts;
@@ -522,6 +522,8 @@ function boot() {
   window.addEventListener('resize', scheduleFit, { passive: true });
   sync();
 }
-window.openTrainingSceneMap = showMap;
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
-else boot();
+export const featureReady = trainingRenderReady.then(() => {
+  window.openTrainingSceneMap = showMap;
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
+});

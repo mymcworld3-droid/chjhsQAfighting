@@ -54,7 +54,7 @@ test('startup gate reports catalog and image warmup progress', () => {
   assert.match(legacy, /法寶、材料、裝備與煉器資源已就緒/);
 });
 
-function imagePlan(player) {
+function imagePlan(player, profile = 'balanced') {
   const materials = Array.from({ length: 40 }, (_, i) => ({
     id: `material-${i}`, realm: '築基', imageUrl: `/material-${i}.webp`
   }));
@@ -63,12 +63,47 @@ function imagePlan(player) {
     getArtifactById: Pool.get, getMaterialById: id => materials.find(item => item.id === id),
     realmOrderByName: name => ['凡人', '練氣', '築基', '金丹', '元嬰', '化神', '煉虛', '合體', '渡劫', '半仙', '真仙'].indexOf(name),
     materialRealmOrderByName: () => 2,
+    trainingRenderProfile: () => profile,
     QATrainingAccessRules: Access, QASoulboundPool: Pool, QATrainingSceneLayouts: Layouts,
     window: { getCurrentUserData: () => player, matchMedia: () => ({ matches: false }) }
   };
   const source = preload.slice(0, preload.indexOf('function warmImage(')).replace(/^import[\s\S]*?;\s*/gm, '');
   return vm.runInNewContext(source + '\ncollectStartupImageUrls();', context);
 }
+
+test('low rendering preloads only composite scenery for both orientations, including background queues', () => {
+  const plan = imagePlan({ stats: { totalScore: 28 } }, 'safe');
+  const urls = [...plan.startup, ...plan.remaining];
+  assert.ok(plan.startup.includes('assets/training/cultivation-landscape-clean.webp'));
+  assert.ok(plan.remaining.includes('assets/training/cultivation-portrait-clean.webp'));
+  assert.equal(urls.some(url => url.startsWith('assets/training/layers/')), false);
+  for (const id of ['meditation', 'vault', 'forge', 'secret', 'status']) {
+    assert.ok(plan.startup.includes(`assets/training/cutouts/${id}-ai.webp`));
+  }
+  const high = imagePlan({ stats: { totalScore: 28 } }, 'balanced');
+  assert.ok(high.startup.includes(Layouts.landscape.layers[0].image));
+  assert.ok(high.remaining.includes(Layouts.portrait.layers[0].image));
+});
+
+test('startup image collection waits for the rendering decision before any images are warmed', async () => {
+  let resolve, collected = 0;
+  const context = {
+    trainingRenderReady: new Promise(done => { resolve = done; }),
+    dispatchProgress() {}, ARTIFACT_CATALOG: [], MATERIAL_CATALOG: [], ARTIFACT_RECIPES: {}, window: {},
+    collectStartupImageUrls() {
+      collected++;
+      return { startup: [], remaining: [], priority: { ownedArtifactIds: [], ownedMaterialIds: [], equippedArtifactIds: [] } };
+    },
+    warmRemainingInBackground() {}
+  };
+  const start = preload.indexOf('async function prepareStartupResources()');
+  const end = preload.indexOf('\nexport const featureReady', start);
+  vm.runInNewContext(preload.slice(start, end) + '\nthis.ready=prepareStartupResources();', context);
+  assert.equal(collected, 0);
+  resolve('safe');
+  assert.equal((await context.ready).ok, true);
+  assert.equal(collected, 1);
+});
 
 test('all eight permanent artworks warm before the gate even with many owned material images', () => {
   const player = { stats: { totalScore: 28, rankLevel: 3 }, materialSystem: {
