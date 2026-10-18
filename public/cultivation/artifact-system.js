@@ -287,6 +287,8 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
     const slot = canonicalEquipSlot(item);
     if (!slot) throw new Error('此法寶沒有可用裝備欄位');
 
+    const feedbackUid = authUser()?.uid;
+    const before = window.captureGrowthSnapshot?.();
     busyAction = `equip:${itemId}`; scheduleRender();
     try {
       let unequipped = false;
@@ -302,10 +304,12 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
           next.equipped[slot] = itemId;
         }
       });
+      if (authUser()?.uid !== feedbackUid) return;
       const replaced = getArtifactById(replacedId);
       toast(unequipped
         ? `已卸下 ${item.name}`
         : (replaced ? `已將 ${replaced.name} 替換為 ${item.name}` : `已裝備 ${item.name}`));
+      if (before) window.showGrowthComparison?.({uid:feedbackUid,title:unequipped ? '卸下法器後的變化' : '法器裝備後的變化',before,after:window.captureGrowthSnapshot?.()});
     } finally {
       busyAction = ''; scheduleRender();
     }

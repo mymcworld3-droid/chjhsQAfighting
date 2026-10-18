@@ -57,6 +57,7 @@ import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
         '已記錄此次練習表現；可複習解析，明日再次挑戰。')+'</p>'+
       '<div class="enlightenment-mastery"><i class="fa-solid fa-award"></i> 掌握單元 '+
       escape(trial.masteryCount||0)+' · '+escape(trial.title||'尚未取得稱號')+'</div>'+
+      (win?'<p class="enlightenment-concept-growth">已通過「'+escape(trial.subject)+' · '+escape(trial.topic)+'」本次五題檢驗，完成一輪概念補強。</p>':'')+
       '<button type="button" class="enlightenment-primary" data-close-result>完成</button></div>');
     $('enlightenment-body')?.querySelector('[data-close-result]')?.addEventListener('click',close);
   }

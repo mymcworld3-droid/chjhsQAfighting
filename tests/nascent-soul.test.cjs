@@ -234,7 +234,7 @@ test('each independent radial branch is an accessible upgrade button',()=>{
 
 function renderGrowthMap(type, branches = {}, fragments = 20, soulBusy = false, grade = 1) {
   const source = read('public/cultivation/cultivation-training-v4.js');
-  const start = source.indexOf('  function nascentSoulTabMarkup()');
+  const start = source.indexOf('  function branchDisplayValue(');
   const end = source.indexOf('  async function saveSoulBranch', start);
   const core = {type, grade};
   const player = {stats:{totalScore:68}, cultivationTraining:{equippedCore:core},

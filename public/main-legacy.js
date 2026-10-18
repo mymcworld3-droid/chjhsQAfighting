@@ -2489,6 +2489,7 @@ window.startQuizFlow = async (isNewSession = false) => {
     
     document.getElementById('quiz-container').classList.add('hidden');
     document.getElementById('feedback-section').classList.add('hidden');
+    document.getElementById('correction-growth-feedback')?.remove?.();
     document.getElementById('btn-giveup').classList.remove('hidden');
 
     const progressPanel = document.getElementById('solo-progress-panel');
@@ -3088,7 +3089,9 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     if (quiz) quiz.answerSelectedIndex = userIdx;
     const learningRules = window.QASoloLearningRules || globalThis.QASoloLearningRules;
     const learningReward = learningRules?.reward(stats, quiz, isCorrect, currentUserData.profile) || {gain:0,gold:0,recovery:false};
-    if (learningReward.progress) stats.soloLearningV1 = learningReward.progress;
+    if (learningReward.progress) stats.soloLearningV1 = {...learningReward.progress,
+        // Concept milestones become visible only after the answer is saved.
+        concepts:stats.soloLearningV1?.concepts || {}};
     const scoreBeforeAnswer = Math.max(0, Number(stats.totalScore) || 0);
     // 必須先攔住境界監看，再套用修為，避免突破提示搶在靈氣入體之前。
     const cultivationFeedback = isCorrect ? beginSoloCultivationFeedback({
@@ -3126,11 +3129,11 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         if (!cultivationReward.streakPreserved) stats.currentStreak = 0;
     }
 
-    if (window.currentActiveQuiz && window.currentActiveQuiz.badge) {
-        const parts = window.currentActiveQuiz.badge.replace('🎯 ', '').split(' | ');
-        if (parts.length >= 2) {
-            const subject = parts[0].trim();
-            const subTopic = parts[1].trim();
+    const learningContext = learningRules?.context(quiz);
+    if (window.currentActiveQuiz && learningContext) {
+        if (learningContext.subject && learningContext.topic) {
+            const subject = learningContext.subject;
+            const subTopic = learningContext.topic;
 
             if (!stats.knowledgeMap) stats.knowledgeMap = {};
             if (!stats.knowledgeMap[subject]) stats.knowledgeMap[subject] = {};
@@ -3162,7 +3165,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     const originalGoldenMessage = cultivationReward.goldenCoreMessage;
     const answerUser = auth.currentUser;
     const trialAnswerId = firstVisitAnswer ? `${answerUser.uid}:${Date.now()}:${Math.random().toString(36).slice(2)}` : '';
-    let answerSaved = false;
+    let answerSaved = false, correctionFeedback = null;
     const persistAnswer = () => runTransaction(db, async tx => {
                 if (auth.currentUser?.uid !== answerUser.uid) throw new Error('帳號已更換，請重新整理。');
                 const ref = doc(db, "users", answerUser.uid);
@@ -3172,6 +3175,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
                 // A retry after an uncertain network result cannot award the first answer twice.
                 if (trialAnswerId && remote.arrivalTrialAnswerV1?.id) return remote.stats;
                 const verifiedLearning = learningRules?.reward(remote.stats || {}, quiz, isCorrect, remote.profile) || learningReward;
+                correctionFeedback = verifiedLearning.recoveryFeedback || null;
                 const verifiedGold = isCorrect ? window.QAAnswerGoldRules.perCorrect(remote.stats?.totalScore) + verifiedLearning.gold : 0;
                 const learningDelta = verifiedLearning.gain - learningReward.gain +
                     (verifiedLearning.recovery ? 0 : -recoveryCoreGain);
@@ -3203,6 +3207,8 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
             }).then(async () => {
                 await cultivationFeedback?.play({ gain: cultivationReward.gain, totalScore: stats.totalScore });
                 showCultivationFeedback(cultivationReward, isCorrect);
+                if (correctionFeedback && quiz === window.currentActiveQuiz && auth.currentUser?.uid === answerUser.uid)
+                    window.dispatchEvent(new CustomEvent('xiuxian:learning-progress',{detail:{uid:answerUser.uid,...correctionFeedback}}));
             });
     try {
         const p1 = shouldSaveAnswer
@@ -3217,8 +3223,8 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
             timeTaken: timeTaken,
             // Structured category for future recent-topic learning trends.
             // Older logs without these fields remain usable for general history.
-            subject: String(window.currentActiveQuiz?.badge || '').replace('🎯 ', '').split(' | ')[0]?.trim().slice(0, 40) || '',
-            subTopic: String(window.currentActiveQuiz?.badge || '').replace('🎯 ', '').split(' | ')[1]?.trim().slice(0, 75) || '',
+            subject: learningContext?.subject || '',
+            subTopic: learningContext?.topic || '',
             // AI-generated question metadata, not an AI inference from correctness.
             questionForm: String(quiz?.meta?.question_form || '').slice(0, 40),
             cognitiveLevel: Number(quiz?.meta?.cognitive_level) || null,
@@ -3261,7 +3267,13 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     }
     
     document.getElementById('solo-correction-practice')?.remove();
+    document.getElementById('solo-correction-hint')?.remove();
     if (!isCorrect && userIdx >= 0 && quiz && fbSection) {
+        const hint = document.createElement('button'); hint.id = 'solo-correction-hint'; hint.type = 'button';
+        hint.className = 'btn-cyber-ghost mt-3 mr-2 px-4 py-2 rounded-lg text-xs';
+        hint.textContent = '先看概念提示';
+        hint.onclick = () => window.askQuizHelperPreset?.('請針對我這題的錯誤給一個簡短的概念提示，協助我理解關鍵步驟，再嘗試同概念訂正題。');
+        fbSection.appendChild(hint);
         const correction = document.createElement('button');
         correction.id = 'solo-correction-practice'; correction.type = 'button';
         correction.className = 'btn-cyber-primary mt-3 px-4 py-2 rounded-lg text-xs';

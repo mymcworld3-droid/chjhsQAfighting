@@ -2,6 +2,7 @@ import './battle-cultivation-rules.js';
 import { resolvePlayerAvatar } from './profile-avatar.js';
 import {} from './soul-talents.js';
 import './nascent-growth.js';
+import './combat-contribution.js';
 import {
   doc, collection, query, where, limit, startAfter, getDocs as firestoreGetDocs, getDoc as firestoreGetDoc,
   addDoc as firestoreAddDoc, updateDoc as firestoreUpdateDoc, onSnapshot, runTransaction as firestoreRunTransaction, serverTimestamp
@@ -1505,6 +1506,12 @@ export const featureReady = (async () => {
       reward.outcome === 'none' ? '獎勵資料待確認' :
       `${room[resultMarker] ? '已發放' : '發放中'}：+${reward.gold} 靈石${reward.cultivation ? ` · +${reward.cultivation} 修為` : ''}`;
     if (stats) stats.innerHTML = `<div><span>你的生命</span><b>${Math.max(0, Number(mine?.hp) || 0)}</b></div><div><span>對手生命</span><b>${Math.max(0, Number(enemy?.hp) || 0)}</b></div><div><span>總回合</span><b>${room.round}</b></div><div><span>結果</span><b>${isDraw ? '平局' : won ? '勝' : '敗'}</b></div><div><span>本場獎勵</span><b id="bv2-reward-status">${rewardLabel}</b></div>`;
+    if (stats) {
+      document.getElementById('bv2-result-contribution')?.remove();
+      const contribution = document.createElement('div'); contribution.id = 'bv2-result-contribution';
+      contribution.innerHTML = globalThis.QACombatContribution.markup(room.combatContributions?.[state.role], room.settledRound);
+      stats.after(contribution);
+    }
     if (stats && reward.cultivationPool !== undefined) {
       const totals = room.battleCultivationSummary || cultivationRules.summary(room);
       const detail = document.createElement('div');
@@ -1631,8 +1638,11 @@ export const featureReady = (async () => {
         });
         const names = { host: fresh.host?.name || '我方', guest: fresh.guest?.name || '對手' };
         const roundLogs = outcome.logs.map((entry) => ({ ...entry, actorName: names[entry.actorRole] || '修士', round, id: randomId(`log-${round}`) }));
+        const contributions = globalThis.QACombatContribution.battleRound(fresh.combatContributions, outcome);
+        if (!fresh.combatContributions && Number(fresh.settledRound) > 0) contributions.host.partial = contributions.guest.partial = true;
         if (!roundLogs.length) roundLogs.push({ type: 'round', round, id: randomId(`log-${round}`), message: '雙方此回合皆未形成有效攻勢。' });
         const common = {
+          combatContributions:contributions,
           'host.hp': outcome.hostHp, 'guest.hp': outcome.guestHp, 'host.isDead': outcome.hostHp <= 0, 'guest.isDead': outcome.guestHp <= 0,
           'host.coreShield': outcome.hostCoreShield, 'guest.coreShield': outcome.guestCoreShield,
           'host.coreCorrectStreak': outcome.hostCoreStreak, 'guest.coreCorrectStreak': outcome.guestCoreStreak,

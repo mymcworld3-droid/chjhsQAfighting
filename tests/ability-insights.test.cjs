@@ -144,7 +144,7 @@ test('legacy graph delegates to enhanced module and recent logs include subject 
   const entry = fs.readFileSync(path.join(__dirname, '../public/main.js'), 'utf8');
   const server = fs.readFileSync(path.join(__dirname, '../server.js'), 'utf8');
   assert.match(legacy, /window\.QAAbilityGraph\?\.render/);
-  assert.match(legacy, /subTopic: String\(window\.currentActiveQuiz/);
+  assert.match(legacy, /subTopic: learningContext\?\.topic/);
   assert.match(entry, /cultivation\/ability-insights-ui\.js/);
   assert.match(server, /registerAbilityCoachApi\(app\)/);
 });

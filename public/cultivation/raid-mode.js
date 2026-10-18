@@ -13,6 +13,7 @@ import { renderRaidLoot, renderRaidLearning } from './raid-loot-view.js';
 import { rewardRepository } from './data/reward-repository.js';
 import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
 import './raid-difficulty.js';
+import './combat-contribution.js';
 
 (function () {
   'use strict';
@@ -1538,6 +1539,7 @@ import './raid-difficulty.js';
         Math.max(0, Number(member.correct) || 0) + ' / ' + Math.max(0, Number(member.attempts) || 0) + ' 答對' +
         (Number(member.spiritCorrect) > 0 ? '・元嬰碎精 +' + Math.floor(member.spiritCorrect) + '（勝敗皆保留）' : '') + '</small></div>').join('') + '</div>' +
       '<div id="raid-learning-status" class="raid-learning-summary">' + renderRaidLearning(myRoomMember(), state.learningOutcome) + '</div>' +
+      globalThis.QACombatContribution.markup(myRoomMember()?.combatContribution) +
       '<div class="raid-prototype-note raid-loot-summary"><i class="fa-solid fa-gem"></i><span id="raid-reward-status"><b>' + (won ? '必得元嬰碎精 ×' + tier.fragments + '・通關戰利品' : '再接再厲') + '</b><small>' + (won ? '正在確認元嬰碎精、木鐵素材、煉製印記與首勝獎勵…' : '答題收益保留；擊敗大師姐另獲團本素材與煉製印記。') + '</small></span></div>' +
       '<div class="raid-result-actions"><button class="raid-ghost" type="button" data-home>返回宗門</button><button class="raid-ghost" type="button" data-refinery>前往煉器</button><button class="raid-primary" type="button" data-again>重新組隊</button></div></div>';
     result.querySelector('[data-home]')?.addEventListener('click', returnFromRaidResult);
@@ -1621,8 +1623,10 @@ import './raid-difficulty.js';
     } catch (_) {}
   }
 
-  function openHub() {
+  function openHub(options = {}) {
     if (score() < RAID_MVP.minimumScore) return toast('秘境於' + RAID_MVP.minimumRealm + '（' + RAID_MVP.minimumScore + ' 修為）解鎖。');
+    const requestedTier = options?.difficulty ? DIFFICULTY.get(options.difficulty) : null;
+    if (!state.roomId && requestedTier) state.selectedDifficulty = requestedTier.id;
     ensurePage();
     window.switchToPage?.(PAGE_ID);
     syncRaidViewportLock();

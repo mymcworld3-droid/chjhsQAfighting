@@ -1,5 +1,6 @@
 const Growth = require('./public/cultivation/nascent-growth.js');
 const Combo = require('./public/cultivation/combat-combo.js');
+const Contribution = require('./public/cultivation/combat-contribution.js');
 'use strict';
 const trainingAccess = require('./public/cultivation/training-access-rules.js');
 const soulboundPool = require('./public/cultivation/soulbound-pool.js');
@@ -294,6 +295,7 @@ async function loadTrustedRaidPlayer(db,uid){
 }
 function memberSnapshotFromTrusted(player,host=false){
   return {...player,ready:false,alive:true,online:true,host,damage:0,correct:0,attempts:0,
+    combatContribution:Contribution.normalize(),
     lastActionId:0,lastBossActionSeen:0,answeredQuestionIds:[],joinedAtMs:Date.now(),heartbeatAtMs:Date.now()};
 }
 // 固定三人基準試煉；隊伍人數、裝備與境界只改變玩家自身能力。
@@ -378,7 +380,7 @@ function resolvePlayerAction(member,{roomId,actionId,correct,bossHp=1,bossMaxHp=
   next.coreCorrectStreak=support.streak;next.coreShield=support.shield;
   let healed=support.heal+(correct?Math.max(0,Math.round(finite(next?.nascentSoul?.coreHeal))):0);
   next.hp=Math.min(next.maxHp,next.hp+healed);
-  let damage=0, critical=false, comboHits=[];
+  let damage=0, critical=false, comboHits=[], comboDamage=0;
   if(correct){
     const coreDamage=coreAttack(next,seed+':core-attack');
     const pursuit=next.goldenCore?.type==='sword'?coreDamage:0;
@@ -389,6 +391,7 @@ function resolvePlayerAction(member,{roomId,actionId,correct,bossHp=1,bossMaxHp=
     damage=artifact.damage+talent.normal+talent.trueDamage;
     critical=artifact.critical;
     comboHits=Combo.chain({damage:Math.min(bossHp,damage),chance:artifact.comboStats.chance,multiplier:artifact.comboStats.multiplier,seed:seed+':artifact',remainingHp:Math.max(0,bossHp-damage)});
+    comboDamage=Math.min(Math.max(0,finite(bossHp)-damage),comboHits.reduce((sum,n)=>sum+n,0));
     damage+=comboHits.reduce((sum,n)=>sum+n,0)+talent.followup+pursuit;
     const soulHeal=soulTalents.healing(next,Math.min(Math.max(0,bossHp),damage),talent.leech);
     healed+=soulHeal;next.hp=Math.min(next.maxHp,next.hp+soulHeal);
@@ -396,6 +399,9 @@ function resolvePlayerAction(member,{roomId,actionId,correct,bossHp=1,bossMaxHp=
     next.hp=Math.min(next.maxHp,next.hp+lifesteal);
     next.artifactShield=Math.max(0,Math.round(finite(next.artifactShield)))+artifact.shieldGain;
   }
+  next.combatContribution = Contribution.add(member.combatContribution, {rounds:1,
+    comboHits:comboHits.length,comboDamage,criticalHits:critical && damage > 0 && bossHp > 0 ? 1 : 0});
+  if (!member.combatContribution && (finite(member.lastActionId) > 0 || finite(member.lastBossActionSeen) > 0)) next.combatContribution.partial = true;
   return {member:next,damage,healed,critical,comboHits,correct:correct===true};
 }
 function resolveArtifactDefense(member,incoming){
@@ -416,7 +422,7 @@ function resolveArtifactDefense(member,incoming){
   }
   return {hpDamage,reflectDamage:Math.max(0,Math.round(hpDamage*clamp(sumEffect(effects,'equip_reflect_percent'),0,1)))};
 }
-function resolveBossDefense(member,{roomId,bossAction}={}){
+function resolveBossDefense(member,{roomId,bossAction,bossHp=Infinity}={}){
   const next={...member,artifactBattle:{...(member.artifactBattle||{}),effects:[...runtimeEffects(member)]}};
   const incoming=Math.max(0,Math.round(finite(bossAction?.damage))),seed=String(roomId)+':boss:'+String(bossAction?.id)+':'+String(next.uid);
   let damage=0,reflected=0,guarded=false;
@@ -427,6 +433,8 @@ function resolveBossDefense(member,{roomId,bossAction}={}){
     reflected=damage>0?defense.reflectDamage+coreCounter(next,damage,seed+':counter')+soulTalents.reflection(next,Math.min(next.hp,damage)):0;
     next.hp=Math.max(0,next.hp-damage);
   }
+  next.combatContribution = Contribution.add(member.combatContribution,{reflectedDamage:Math.min(Math.max(0,Math.round(reflected)),Math.max(0,bossHp))});
+  if (!member.combatContribution && (finite(member.lastActionId) > 0 || finite(member.lastBossActionSeen) > 0)) next.combatContribution.partial = true;
   return {member:next,damage,reflectedDamage:Math.max(0,Math.round(reflected)),guarded};
 }
 
