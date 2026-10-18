@@ -53,7 +53,8 @@ function loginHarness({ collision = false, cancel = false, staleAuth = false } =
   const ctx = vm.createContext({
     auth, provider: {}, db: {}, currentUserData: player,
     document: { getElementById: id => nodes.get(id) || { textContent: '' } },
-    window: { isFirstVisitActive: () => true, handleFirstVisitReady: async (user, data) => calls.push(['ready', user.uid, data.stats.totalScore]) },
+    window: { QingyunFirstVisitRules: rules, isFirstVisitActive: () => true, handleFirstVisitReady: async (user, data) => calls.push(['ready', user.uid, data.stats.totalScore]) },
+    calculateRankFromScore: score => score >= 1 ? 1 : 0,
     alert: message => calls.push(['alert', message]),
     signInAnonymously: async () => ({ user: auth.currentUser }),
     linkWithPopup: async user => {
@@ -106,6 +107,72 @@ test('existing Google credential signs into its own account and never overwrites
   await ctx.window.googleLogin();
   assert.equal(ctx.auth.currentUser.uid, account.uid);
   assert.deepEqual(calls.map(row => row[0]), ['link', 'existing']);
+});
+
+test('a Google identity without a game character inherits the live guest scope and earned realm', async () => {
+  const {ctx,player,calls}=loginHarness({collision:true});
+  player.profile={educationLevel:'國中二年級',strongSubjects:'數學',weakSubjects:'英文'};
+  player.gameSettings={sourceMode:'focused',source:'ai',difficulty:'auto',focusedUnits:[{subject:'數學',unit:'二次函數'}]};
+  player.isAdmin=true; player.inventory=['private-item'];
+  await ctx.window.googleLogin();
+  player.gameSettings.focusedUnits[0].unit='改過的範圍';
+  const created=ctx.initialPlayerData(account,'NEW123');
+  assert.equal(created.uid,account.uid); assert.equal(created.email,'');
+  assert.equal(created.profile.educationLevel,'國中二年級');
+  assert.equal(created.gameSettings.focusedUnits[0].unit,'二次函數','scope is captured before auth switches accounts');
+  assert.equal(created.stats.totalScore,1);assert.equal(created.stats.rankLevel,1);assert.equal(created.stats.gold,20);
+  assert.equal(created.isAdmin,false);assert.equal(created.inventory.length,0);
+  assert.deepEqual(calls.map(row=>row[0]),['link','existing'],'existing accounts are never patched');
+  const anotherGuest=ctx.initialPlayerData({uid:'other-guest',isAnonymous:true},'GUEST1');
+  assert.equal(anotherGuest.stats.totalScore,0);assert.equal(anotherGuest.gameSettings,undefined);
+});
+
+test('guest handoff is applied only to a transactionally missing player and is consumed after account loading', async () => {
+  const {ctx,player}=loginHarness({collision:true});await ctx.window.googleLogin();
+  const start=legacy.indexOf('                const initialized = await runTransaction(db, async tx => {');
+  const end=legacy.indexOf('\n            // Reuse the trusted',start);
+  const snippet=legacy.slice(start,end).replace(/^            }\n/m,'');
+  // Execute the actual initialization branch with a destination created by another login.
+  ctx.user=account;ctx.userRef={uid:account.uid};ctx.code='NEW123';ctx.firstLoginUid='';
+  let writes=0;
+  ctx.runTransaction=async(_,worker)=>worker({get:async()=>({exists:()=>true,data:()=>({uid:account.uid,stats:{totalScore:68},gameSettings:{sourceMode:'random'}})}),set(){writes++;}});
+  await vm.runInContext('(async()=>{'+snippet+'})()',ctx);
+  assert.equal(ctx.currentUserData.stats.totalScore,68);assert.equal(writes,0);
+  assert.equal(ctx.initialPlayerData({uid:'new-account',isAnonymous:false},'NEXT').stats.totalScore,0,'the guest cannot seed another account later');
+  assert.equal(player.stats.totalScore,1);
+});
+
+function slidesHarness({loaded=true,genderNeeded=true}={}) {
+  let layer=null,now=0,serial=0,genderCalls=0;
+  const timers=new Map();
+  const context=vm.createContext({state:{stage:'background'},scene:0,sceneTimer:null,
+    scenes:[['one.png','一','說明一'],['two.png','二','說明二']],
+    Rules:{needsGender:()=>genderNeeded},window:{getCurrentUserData:()=>({})},
+    Image:class {},setTimeout(fn,delay){const id=++serial;timers.set(id,{fn,at:now+delay});return id;},clearTimeout:id=>timers.delete(id),
+    $:()=>layer,store(patch){Object.assign(context.state,patch);},
+    gender(){genderCalls++;context.removeLayer();},action:fn=>fn(),finish(){context.state.stage='done';context.removeLayer();},
+    panel(){context.removeLayer();const handlers={};const nodes={'#fv-prev':{addEventListener:(_,fn)=>handlers.prev=fn},'#fv-next':{},'.fv-scene':{complete:loaded,addEventListener:(name,fn)=>handlers[name]=fn}};
+      layer={querySelector:key=>nodes[key],handlers,nodes,remove(){layer=null;}};return layer;}});
+  const remove= intro.slice(intro.indexOf('  function removeLayer()'),intro.indexOf('  function panel('));
+  const slides=intro.slice(intro.indexOf('  function backgrounds()'),intro.indexOf('  function gender()'));
+  vm.runInContext(remove+slides,context);context.backgrounds();
+  return {context,timers,layer:()=>layer,genderCalls:()=>genderCalls,
+    advance(ms){const until=now+ms;while(true){const next=[...timers].sort((a,b)=>a[1].at-b[1].at)[0];if(!next||next[1].at>until)break;now=next[1].at;timers.delete(next[0]);next[1].fn();}now=until;}};
+}
+
+test('world pictures advance after two displayed seconds and finish at manual gender selection', () => {
+  const h=slidesHarness();h.advance(1999);assert.equal(h.context.scene,0);
+  h.advance(1);assert.equal(h.context.scene,1);h.advance(2000);
+  assert.equal(h.context.state.stage,'gender');assert.equal(h.genderCalls(),1);assert.equal(h.timers.size,0);
+});
+
+test('slow images wait for loading, manual navigation resets the clock and stale image callbacks cannot skip slides', () => {
+  const h=slidesHarness({loaded:false});const first=h.layer();h.advance(5000);assert.equal(h.context.scene,0);
+  first.handlers.load();h.advance(1000);first.nodes['#fv-next'].onclick();assert.equal(h.context.scene,1);
+  first.handlers.load();assert.equal(h.timers.size,0,'removed images cannot schedule another advance');
+  h.layer().handlers.error();h.advance(1999);assert.equal(h.context.scene,1);
+  h.layer().handlers.prev();assert.equal(h.context.scene,0);assert.equal(h.timers.size,0);
+  h.layer().handlers.load();h.context.removeLayer();h.advance(5000);assert.equal(h.context.scene,0);
 });
 
 test('cancelling the popup preserves the guest and allows a second login attempt', async () => {

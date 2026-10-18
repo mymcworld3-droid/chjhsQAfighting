@@ -12,6 +12,7 @@ import './first-visit-rules.js';
   catch (_) { state = Rules.normalize(); }
   let user = null, ready = false, busy = false, scene = 0, readySerial = 0, trialAnswerPending = false;
   let trialBankOption = null;
+  let sceneTimer = null;
   const portraits = ['male', 'female'].map(g => `assets/story/characters/player-${g}-neutral.png`);
   const scenes = [
     ['opening-1.png', '知識，就是你的靈根', '歡迎來到青雲宗。每一次思考與作答，都會化為修行的力量。'],
@@ -27,7 +28,7 @@ import './first-visit-rules.js';
     document.body.classList.toggle('first-visit-active', !state.completed && state.stage !== 'welcome');
     document.body.dataset.firstVisitStage = state.stage;
   }
-  function removeLayer() { $('first-visit-layer')?.remove(); }
+  function removeLayer() { clearTimeout(sceneTimer); sceneTimer = null; $('first-visit-layer')?.remove(); }
   function panel(title, body, actions, { image = '', welcome = false } = {}) {
     removeLayer();
     const layer = document.createElement('section');
@@ -127,11 +128,25 @@ import './first-visit-rules.js';
     const finalLabel = Rules.needsGender(window.getCurrentUserData?.()) ? '選擇性別' : '進入宗門';
     const layer = panel(title, `<p>${text}</p><div class="fv-dots" aria-label="世界介紹進度">${scenes.map((_,i) => `<i class="${i===scene?'current':''}"></i>`).join('')}</div>`, `${scene ? '<button type="button" class="fv-secondary" id="fv-prev">上一張</button>' : ''}<button type="button" id="fv-next">${scene === scenes.length-1 ? finalLabel : '下一張'}</button>`, { image });
     layer.querySelector('#fv-prev')?.addEventListener('click', () => { scene--; backgrounds(); });
-    layer.querySelector('#fv-next').onclick = () => {
+    const next = () => {
+      if ($('first-visit-layer') !== layer || state.stage !== 'background') return;
       if (scene < scenes.length-1) { scene++; backgrounds(); }
       else if (Rules.needsGender(window.getCurrentUserData?.())) { store({ stage: 'gender' }); gender(); }
       else void action(() => finish());
     };
+    layer.querySelector('#fv-next').onclick = next;
+    const scheduleNext = () => {
+      if ($('first-visit-layer') !== layer || state.stage !== 'background') return;
+      clearTimeout(sceneTimer);
+      sceneTimer = setTimeout(next, 2000);
+    };
+    // Give each loaded image two seconds, including after manual navigation.
+    const picture = layer.querySelector('.fv-scene');
+    if (picture.complete) scheduleNext();
+    else {
+      picture.addEventListener('load', scheduleNext, { once:true });
+      picture.addEventListener('error', scheduleNext, { once:true });
+    }
     // Warm the next picture without blocking the current panel.
     if (scene < scenes.length-1) { const img = new Image(); img.src = `assets/story/opening/${scenes[scene+1][0]}`; }
   }
