@@ -74,6 +74,19 @@ test('start is persistent, same-day idempotent during active and rejects repeat 
   const raw=db.records.get('enlightenmentTrialStates/u1');
   assert.equal(raw.status,'active');
 });
+test('fixed knowledge weaknesses start a matching trial and recorded answers retain their knowledge point',async()=>{
+  const player=user();player.stats.knowledgePointMapV1={數學:{'math-4':{total:8,correct:1}}};
+  const db=database(player),trial=await rules.start(db,'u1',{subject:'數學',topic:'函數與圖形'});
+  assert.equal(trial.topic,'函數與圖形');
+  const expected=await rules.prepareQuestion(db,'u1');assert.equal(expected.knowledgePointId,'math-4');
+  const q=await rules.commitQuestion(db,'u1',expected,{...parsed(1),knowledge_subject:'數學',knowledge_point_id:'math-4',knowledge_point:'函數與圖形'});
+  assert.equal(q.knowledge_point_id,'math-4');
+  const ticket=tickets.readRaidQuestionTicket(q.ticket);
+  await submit(db,q,trial,ticket.answerIndex);
+  assert.deepEqual(db.records.get('users/u1').stats.knowledgePointMapV1.數學['math-4'],{total:9,correct:2});
+  await assert.rejects(submit(db,q,trial,ticket.answerIndex));
+  assert.equal(db.records.get('users/u1').stats.knowledgePointMapV1.數學['math-4'].total,9);
+});
 async function submit(db,question,trial,choice,now=Date.now()){
   return rules.answer(db,'u1',{runId:trial.runId,index:trial.index,questionId:question.id,
     ticket:question.ticket,choice},now);

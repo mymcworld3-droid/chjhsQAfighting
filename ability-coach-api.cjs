@@ -34,20 +34,22 @@ function normalizeInput(raw) {
   return { subject: clean(raw.subject, 24) || '綜合', topics, priorities, skills, trend };
 }
 function normalizeAdvice(data, summary = null) {
-  const knownTopics = summary ? new Set(summary.topics.map(item => item.topic)) : null;
   const headline = clean(data?.headline, 90);
   const explanation = clean(data?.explanation, 500);
-  const plan = (Array.isArray(data?.plan) ? data.plan : []).slice(0, 3).map(item => {
+  const plan = (Array.isArray(data?.plan) ? data.plan : []).slice(0, 3).flatMap(item => {
     const topic = clean(item?.topic, 60);
-    const observed = summary?.topics.find(row => row.topic === topic);
-    return { topic,
+    const subject = clean(item?.subject, 24);
+    const matches = summary?.topics.filter(row => row.topic === topic && (!subject || row.subject === subject)) || [];
+    const observed = matches.length === 1 ? matches[0] : null;
+    if (summary && !observed) return [];
+    return [{ topic, subject:observed?.subject || subject,
       // AI can propose learning actions, but the displayed evidence must
       // always be computed from actual input, not hallucinated prose.
       reason: observed ? '已答對 ' + observed.correct + '/' + observed.total +
         ' 題；樣本證據' + (observed.total >= 20 ? '較高' : observed.total >= 8 ? '中等' : '不足') :
         clean(item?.reason, 130),
-      action: clean(item?.action, 150), questions: within(item?.questions, 3, 10) };
-  }).filter(item => item.topic && item.action && (!knownTopics || knownTopics.has(item.topic)));
+      action: clean(item?.action, 150), questions: within(item?.questions, 3, 10) }];
+  }).filter(item => item.topic && item.action);
   if (!headline || !plan.length) throw new Error('AI 診斷回傳結構不完整');
   return { headline, explanation, plan };
 }
@@ -62,6 +64,7 @@ function localPracticePlan(summary) {
     const rate = (item.correct + 2) / (item.total + 4);
     return {
       topic: item.topic,
+      subject: item.subject,
       reason: '已答對 ' + item.correct + '/' + item.total + ' 題；樣本證據' +
         (item.total >= 20 ? '較高' : item.total >= 8 ? '中等' : '不足'),
       action: item.total < 5 ? '先完成至少五道涵蓋不同觀念的診斷題，再觀察常見錯誤。' :
@@ -110,7 +113,8 @@ skills 欄位是題目的「出題形式／推理類型」標記，不代表正�
 ${JSON.stringify(summary)}
 
 請回傳單一 JSON：
-{"headline":"一行保守且具體的診斷","explanation":"約50至120字、包含資料限制與最重要差距","plan":[{"topic":"統計摘要中確實出現的科目或單元","reason":"附上實際樣本依據或標示證據不足","action":"可執行的練習方法（例如先回想概念、再做指定類型題、檢查錯因）","questions":5}]}
+{"headline":"一行保守且具體的診斷","explanation":"約50至120字、包含資料限制與最重要差距","plan":[{"subject":"統計摘要中的科目","topic":"該科目確實出現的知識點名稱","reason":"附上實際樣本依據或標示證據不足","action":"可執行的練習方法（例如先回想概念、再做指定類型題、檢查錯因）","questions":5}]}
+科目與知識點必須一起匹配，國文與英文的「閱讀理解」是不同的節點，不可混用樣本。
 約二到三步；每步練習題數 3 到 10；不要依據數據猜測具體錯因，也不要把 AI 推測說成已證實。`;
       let advice, source = 'ai', provider = '', model = '';
       try {

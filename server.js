@@ -35,6 +35,7 @@ const { raidRepository, playerRepository } = require('./server-repositories.cjs'
 const { pickTrustedRaidKnowledge } = require('./raid-authority.cjs');
 const { verifyMainIdentity, issueRaidQuestionTicket } = require('./raid-question-ticket.cjs');
 const { questionQualityIssue, removeUnstableOptionLabels } = require('./question-quality.cjs');
+const Knowledge = require('./public/cultivation/knowledge-points.js');
 require('dotenv').config();
 
 const app = express();
@@ -550,6 +551,7 @@ app.post('/api/generate-quiz', async (req, res) => {
     const recentConceptForms = previousMeta.slice(-6)
         .filter(item => item.concept_id || item.question_form)
         .map(item => ({ concept_id: item.concept_id, question_form: item.question_form }));
+    const targetKnowledgePointId = enlightenmentContext?.knowledgePointId || '';
 
     const generationPrompt = `
         [系統指令]
@@ -592,6 +594,7 @@ app.post('/api/generate-quiz', async (req, res) => {
         確認只有一個選項正確，解析與最後結論都指向 correct。
 
         ${ANSWER_AND_EXPLANATION_RULES}
+        ${Knowledge.promptFor(subject, targetKnowledgePointId)}
 
         發現錯誤一律完整重寫 JSON：
         q、correct、wrong、exp 必須一起修好。
@@ -616,6 +619,9 @@ app.post('/api/generate-quiz', async (req, res) => {
             "exp": "解析內容...",
             "subject": "${subject}",
             "sub_topic": "${targetTopic}",
+            "knowledge_subject": "${Knowledge.subject(subject)}",
+            "knowledge_point_id": "固定清單中的 ID",
+            "knowledge_point": "對應的固定知識點名稱",
             "concept_id": "穩定且短小的考點ID",
             "template_id": "描述解題骨架的ID",
             "question_form": "${targetForm}",
@@ -638,6 +644,7 @@ app.post('/api/generate-quiz', async (req, res) => {
         knowledge: diagnosticInfo // never share between different diagnostic modes
     });
     const validateCandidate = (parsed, extraQuestions = [], extraTemplates = []) => {
+        Knowledge.assertLabel(parsed, subject, targetKnowledgePointId);
         const wrong = Array.isArray(parsed?.wrong) ? parsed.wrong : [];
         const options = [parsed?.correct, ...wrong];
         if (typeof parsed?.q !== 'string' || parsed.q.trim().length < 5 ||
@@ -676,6 +683,7 @@ app.post('/api/generate-quiz', async (req, res) => {
             const prompt = combatFastMode ? quickQuizPrompt({
                 mode: String(quizMode), subject, level, topic: targetTopic, rank, difficulty,
                 previousQuestions, previousMeta, targetForm, quality,
+                knowledgePointId: targetKnowledgePointId,
                 retryIssue: lastGenerationIssue, randomSeed
             }) : generationPrompt + retryCorrection;
             // Shorter instructions and bounded provider latency only for combat.
@@ -711,6 +719,8 @@ app.post('/api/generate-quiz', async (req, res) => {
 
             parsed.subject = subject;
             parsed.sub_topic = targetTopic;
+            Knowledge.assertLabel(parsed, subject, targetKnowledgePointId);
+            Object.assign(parsed, Knowledge.metadata(parsed, subject));
             parsed.question_form = QUESTION_FORMS.includes(String(parsed.question_form || ''))
                 ? String(parsed.question_form) : targetForm;
             parsed.concept_id = String(parsed.concept_id || (subject + ':' + targetTopic)).trim().slice(0, 100);
@@ -759,6 +769,7 @@ app.post('/api/generate-quiz', async (req, res) => {
                         ticket,
                         subject,
                         topic: targetTopic,
+                        ...Knowledge.metadata(parsed, subject),
                         level,
                         concept_id: parsed.concept_id,
                         template_id: parsed.template_id,

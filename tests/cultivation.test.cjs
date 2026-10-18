@@ -51,6 +51,7 @@ function setup(totalScore = 0) {
       body: { appendChild() {} }
     },
     window: {
+      QAKnowledgePoints:require('../public/cultivation/knowledge-points.js'),
       XianxiaQuestRules: require('../public/cultivation/quest-rules.js'),
       QAAnswerGoldRules: require('../public/cultivation/answer-gold-rules.js'),
       addEventListener(type, fn) { listeners.set(type, fn); },
@@ -136,6 +137,18 @@ function setup(totalScore = 0) {
     }
   };
 }
+
+test('solo answers aggregate explicit knowledge tags against saved totals without replacing curriculum scope', async () => {
+  const h=setup(28),point={knowledge_subject:'國文',knowledge_point_id:'chinese-2',knowledge_point:'文言文'};
+  h.context.window.QASoloLearningRules=require('../public/cultivation/solo-learning-rules.js');
+  h.setRemoteStats({knowledgePointMapV1:{國文:{'chinese-2':{total:7,correct:4}}}});
+  const tag=()=>Object.assign(h.context.window.currentActiveQuiz,{meta:{...point},learningSubject:'國文',learningTopic:'七上第一課'});
+  tag();await h.answer();await h.answer();
+  assert.deepEqual(h.writes.at(-1).data.stats.knowledgePointMapV1.國文['chinese-2'],{total:8,correct:5});
+  assert.equal(h.logs[0].knowledgePoint,'文言文');assert.equal(h.logs[0].subTopic,'七上第一課');
+  h.newQuiz();tag();await h.answer(1,0);
+  assert.deepEqual(h.writes.at(-1).data.stats.knowledgePointMapV1.國文['chinese-2'],{total:9,correct:5});
+});
 
 test('first-answer breakthrough handoff waits for verified cultivation absorption without another reward write', async () => {
   const h = setup(27);

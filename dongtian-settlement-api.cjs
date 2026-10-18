@@ -12,6 +12,7 @@ const INDEX_COLLECTION='dongtianIndex', DATA_COLLECTION='dongtians', PLAY_COLLEC
 const FIRST_COMPLETION_BASE_SPIRIT_STONES=30, FIRST_COMPLETION_SPIRIT_STONE_PER_QUESTION=30,
   OWNER_CULTIVATION_REWARD=1, OWNER_GOLD_REWARD=5, NASCENT_SOUL_THRESHOLD=68;
 const count = n => Number.isFinite(Number(n)) ? Math.max(0,Math.floor(Number(n))) : 0;
+const Knowledge = require('./public/cultivation/knowledge-points.js');
 const clean = v => String(v ?? '').trim();
 function safeId(v,max=240) { const id=clean(v); return id && id.length<=max && !id.includes('/') ? id : ''; }
 function receiptId(uid,cave,run) { return crypto.createHash('sha256').update(uid+'\n'+cave+'\n'+run).digest('hex'); }
@@ -35,7 +36,9 @@ function verifyAnswers(cave,submitted) {
   const qualityEligible=new Set(qs.map(questionKey)).size===total && qs.every(q =>
     clean(q.q) && clean(q.exp).replace(/\s/g,'').length>=80 &&
     Array.isArray(q.wrong) && q.wrong.length===3 && new Set([q.correct,...q.wrong].map(clean)).size===4);
-  return {correct,total,accuracy,tier,masteredKeys,qualityEligible};
+  const knowledgeAnswers = qs.map((q,i) => ({ ...Knowledge.metadata(q,q.subject || cave.subject),isCorrect:clean(as[i].selected)===clean(q.correct) }))
+    .filter(q => Knowledge.label(q));
+  return {correct,total,accuracy,tier,masteredKeys,qualityEligible,knowledgeAnswers};
 }
 function firstCompletionGold(correct) { return FIRST_COMPLETION_BASE_SPIRIT_STONES+count(correct)*FIRST_COMPLETION_SPIRIT_STONE_PER_QUESTION; }
 function caveSoulBonus(player) { return Growth.cultivation(player,'cave'); }
@@ -110,6 +113,8 @@ async function awardProgress(db,uid,e) {
         bestCorrect:Math.max(count(previous.bestCorrect),count(previous.correct),e.correct),learningRewardV2:ledger,
         completedAt:FieldValue.serverTimestamp(),completedAtMs:Date.now()},{merge:true});
       const p={questProgress:recordEvent(player.questProgress,'dongtian')};
+      if (e.knowledgeAnswers?.length) p['stats.knowledgePointMapV1'] = e.knowledgeAnswers.reduce(
+        (map,q) => Knowledge.record(map,q,q.isCorrect),player.stats?.knowledgePointMapV1 || {});
       if(paid.goldAdded) p['stats.gold']=FieldValue.increment(paid.goldAdded);
       if(paid.cultivationAdded) p['stats.totalScore']=FieldValue.increment(paid.cultivationAdded);
       tx.update(userRef,p);

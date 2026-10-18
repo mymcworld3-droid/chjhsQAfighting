@@ -1,17 +1,11 @@
 // 客觀能力診斷：確保統計分數與生成式 AI 的角色分開。
 (function (root, factory) {
-  const api = factory();
+  const api = factory(typeof module === 'object' && module.exports ? require('./knowledge-points.js') : root.QAKnowledgePoints);
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.QAAbilityInsights = api;
-})(typeof globalThis === 'object' ? globalThis : this, function () {
+})(typeof globalThis === 'object' ? globalThis : this, function (Knowledge) {
   'use strict';
-  const DOMAINS = Object.freeze([
-    { id: 'language', name: '語文', subjects: ['國文', '英文'] },
-    { id: 'math', name: '數學', subjects: ['數學', '數學A', '數學B', '數學甲', '數學乙'] },
-    { id: 'society', name: '社會', subjects: ['歷史', '地理', '公民'] },
-    { id: 'science', name: '自然', subjects: ['物理', '化學', '生物', '地球科學'] },
-    { id: 'tech', name: '科技', subjects: ['資訊科技'] }
-  ]);
+  const DOMAINS = Knowledge.SUBJECTS;
   const FORMS = Object.freeze([
     ['direct-application', '基本應用'], ['inverse-reasoning', '逆向推理'],
     ['error-analysis', '錯誤辨識'], ['scenario-modeling', '情境建模'],
@@ -56,37 +50,18 @@
       rawAccuracy: total ? Math.round(correct / total * 100) : null,
       uncertainty: margin(correct, total), confidence: total >= 20 ? '較高' : total >= 8 ? '中等' : '不足' };
   }
-  function build(map, schema = {}) {
-    const subjects = new Set([...Object.keys(schema || {}), ...Object.keys(map || {})]);
+  function build(map = {}) {
     const topics = [];
-    for (const subjectName of subjects) {
-      const subject = cleanLabel(subjectName);
-      if (!subject || !subjectName || typeof (map || {})[subjectName] === 'string') continue;
-      const source = (map || {})[subjectName] || {};
-      const suggested = Array.isArray(schema?.[subjectName]) ? schema[subjectName] : [];
-      const topicNames = new Set([...suggested, ...Object.keys(source)]);
-      for (const originalTopic of topicNames) {
-        const topic = cleanLabel(originalTopic);
-        if (!topic) continue;
-        topics.push(row(subject, topic, source[originalTopic]));
+    for (const subject of Knowledge.SUBJECTS) {
+      for (const point of subject.points) {
+        topics.push({ ...row(subject.name, point.name, map?.[subject.name]?.[point.id]), knowledgePointId:point.id });
       }
     }
     const subjectStats = [...new Set(topics.map(x => x.subject))].map(name => {
       const rows = topics.filter(x => x.subject === name);
       return { name, ...sum(rows), topicCount: rows.length, studiedTopics: rows.filter(x => x.total).length };
     });
-    const domainStats = DOMAINS.map(domain => {
-      const rows = topics.filter(x => domain.subjects.includes(x.subject));
-      return { id: domain.id, name: domain.name, ...sum(rows), topicCount: rows.length,
-        studiedTopics: rows.filter(x => x.total).length };
-    });
-    const knownSubjects = new Set(DOMAINS.flatMap(x => x.subjects));
-    const uncategorized = topics.filter(x => !knownSubjects.has(x.subject));
-    if (uncategorized.length) domainStats.push({
-      id: 'other', name: '其他領域', ...sum(uncategorized),
-      topicCount: uncategorized.length,
-      studiedTopics: uncategorized.filter(x => x.total).length
-    });
+    const domainStats = subjectStats.map((stats, index) => ({ ...stats, id:DOMAINS[index].id }));
     const practiced = topics.filter(x => x.total > 0);
     const strengths = practiced.filter(x => x.total >= 5 && x.estimate >= 78)
       .sort((a, b) => b.estimate - a.estimate || b.total - a.total).slice(0, 4);
@@ -103,7 +78,7 @@
   }
   function recentTrend(records, subject = null, now = Date.now()) {
     const accepted = (Array.isArray(records) ? records : [])
-      .filter(x => x && typeof x.isCorrect === 'boolean' && (!subject || x.subject === subject))
+      .filter(x => x && typeof x.isCorrect === 'boolean' && (!subject || Knowledge.subject(x.knowledgeSubject || x.subject) === subject))
       .map(x => ({ ...x, ms: isoDay(x.timestamp) })).filter(x => x.ms && x.ms <= now && x.ms > now - 14 * 86400000);
     const recent = accepted.filter(x => x.ms > now - 7 * 86400000);
     const previous = accepted.filter(x => x.ms <= now - 7 * 86400000);
@@ -115,7 +90,7 @@
   function skillStats(records, subject = null) {
     // Only count an explicitly labeled reasoning form, never guess it from a wrong answer.
     const accepted = (Array.isArray(records) ? records : []).filter(x =>
-      x && typeof x.isCorrect === 'boolean' && (!subject || x.subject === subject));
+      x && typeof x.isCorrect === 'boolean' && (!subject || Knowledge.subject(x.knowledgeSubject || x.subject) === subject));
     return FORMS.map(([code, name]) => {
       const subset = accepted.filter(x => x.questionForm === code);
       return { code, ...row('推理題型', name,

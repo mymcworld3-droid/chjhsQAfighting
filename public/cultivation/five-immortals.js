@@ -176,7 +176,10 @@ import { playerRepository } from './data/player-repository.js';
         if (answer === i) answer = j; else if (answer === j) answer = i;
       }
     }
-    return { question, options: choices, answer, explanation };
+    return { question, options: choices, answer, explanation,
+      knowledge_subject:String(source.knowledge_subject || ''),
+      knowledge_point_id:String(source.knowledge_point_id || ''),
+      knowledge_point:String(source.knowledge_point || '') };
   }
 
   async function fetchChallengeQuestion(role, avoidQuestions = []) {
@@ -290,6 +293,7 @@ import { playerRepository } from './data/player-repository.js';
       mode:'immortal',topic:'Immortal',rankAtTime:'問鼎 · '+run.role.name,
       question:q.question,options:q.options,correctIdx:q.answer,userIdx:choice,
       explanation:q.explanation,subject:run.role.subject,
+      ...globalThis.QAKnowledgePoints.metadata(q,run.role.subject),
       subTopic:run.role.name,isCorrect:choice===q.answer,timeTaken:0
     }).catch(error=>console.warn('[Immortal answer history]',error?.message||error));
   }

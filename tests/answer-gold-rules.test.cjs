@@ -39,7 +39,7 @@ test('solo transaction rechecks realm before the answer and displays the amount 
       stats,isCorrect:correct,trialAnswerId:'',learningRules:Learning,learningReward,quiz:q,
       cultivationDelta:correct?2:0,recoveryCoreGain:0,originalGoldenMessage:'',cultivationReward:{},scoreGain:30,
       calculateRankFromScore:()=>0,updateUIStats(){},showCultivationFeedback(){},cultivationFeedback:null,fbTitle:title,t:()=> '答對',CustomEvent:class{},
-      window:{QAAnswerGoldRules:Gold,XianxiaQuestRules:{recordEvent:()=>({})},dispatchEvent(){}},
+      window:{QAKnowledgePoints:require('../public/cultivation/knowledge-points.js'),QAAnswerGoldRules:Gold,XianxiaQuestRules:{recordEvent:()=>({})},dispatchEvent(){}},
       runTransaction:async(_,worker)=>worker({get:async()=>({exists:()=>true,data:()=>remote}),update:(_,value)=>{patch=value;}})};
     vm.runInNewContext(source.slice(start,end)+'\nthis.persist=persistAnswer;',context);
     await context.persist();

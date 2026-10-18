@@ -88,3 +88,12 @@ test('server eligibility rejects suspended content and pins verified answers acr
  const retry=await api.claimEligibility(bd,'u','c','run',answers.map(q=>({...q,selected:'B'})));assert.equal(retry.correct,4);
  bd.docs.get('dongtians/c').status='suspended';await assert.rejects(api.claimEligibility(bd,'u','c','other',answers),/封印/);
 });
+
+test('Dongtian knowledge evidence comes from saved questions and repeated receipts never count it twice',async()=>{
+ const cave=pack();cave.questions.forEach(q=>Object.assign(q,{subject:'地球科學',knowledge_subject:'地科',knowledge_point_id:'earth-4',knowledge_point:'大氣與天氣'}));
+ const answers=cave.questions.map((q,i)=>({id:q.id,selected:i<2?'A':'B',knowledge_point_id:'made-up'}));
+ const verified=api.verifyAnswers(cave,answers),d=db(),e={id:'tagged',uid:'u',dongtianId:'c',runId:'tagged',ownerUid:'owner',...verified};
+ assert.equal(verified.knowledgeAnswers.length,4);assert.equal(verified.knowledgeAnswers[0].knowledge_point_id,'earth-4');
+ await api.awardProgress(d,'u',e);await api.awardProgress(d,'u',e);
+ assert.deepEqual(d.docs.get('users/u').stats.knowledgePointMapV1.地科['earth-4'],{total:4,correct:2});
+});

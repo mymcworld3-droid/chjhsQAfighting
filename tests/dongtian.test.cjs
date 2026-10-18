@@ -1,5 +1,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const taggedRevision = data => data?.q ? {...data,knowledge_subject:'數學',knowledge_point_id:'math-1',knowledge_point:'數與運算'} : data;
 const { readFileSync } = require('node:fs');
 const { join } = require('node:path');
 const { execFileSync } = require('node:child_process');
@@ -24,6 +25,7 @@ test('Dongtian API normalizes at least ten ordered single-choice questions and m
     exp: 'E' + (i + 1),
     subject: '數學'
   }));
+  Object.assign(questions[0],{knowledge_subject:'數學',knowledge_point_id:'math-4',knowledge_point:'函數與圖形'});
   const normalized = api.normalizeResult({
     name: '星軌算境', level: '國中二年級', difficulty: '中等', subject: '數學',
     knowledgePoints: ['比例', '一次函數'], questions
@@ -33,7 +35,9 @@ test('Dongtian API normalizes at least ten ordered single-choice questions and m
   assert.equal(normalized.questions.length, 10);
   assert.equal(normalized.questions[0].id, 'DT-001');
   assert.equal(normalized.questions[9].id, 'DT-010');
-  assert.deepEqual(Object.keys(normalized.questions[0]), ['id','difficulty','q','correct','wrong','exp','subject']);
+  assert.deepEqual(Object.keys(normalized.questions[0]), ['id','difficulty','q','correct','wrong','exp','subject','knowledge_subject','knowledge_point_id','knowledge_point']);
+  assert.equal(normalized.questions[0].knowledge_point_id,'math-4');
+  assert.equal(normalized.questions[1].knowledge_point_id,'','legacy questions stay unclassified');
 });
 
 test('Dongtian first plans question count and fixed single-choice structure with a ten-question minimum', () => {
@@ -131,7 +135,7 @@ test('inconclusive whole-cave review retries independently before rejecting gene
     { approved:true, confidence:0.96, summary:'再審通過', issues:[] }
   ];
   let calls = 0;
-  router.generateJSON = async () => ({ data: replies[calls++], provider:'gemini-test', model:'test-model' });
+  router.generateJSON = async () => ({ data: taggedRevision(replies[calls++]), provider:'gemini-test', model:'test-model' });
   try {
     const checked = await api.reviewAndRepairGeneratedDongtian(cave);
     assert.equal(calls, 2);
@@ -168,7 +172,7 @@ test('review summaries with DT ids are structured and auto-repaired even when is
     { approved:true, confidence:0.97, summary:'修正後全題通過', issues:[] }
   ];
   let calls=0;
-  router.generateJSON=async()=>({data:replies[calls++],provider:'test',model:'stub'});
+  router.generateJSON=async()=>({data:taggedRevision(replies[calls++]),provider:'test',model:'stub'});
   try {
     const checked=await api.reviewAndRepairGeneratedDongtian(cave);
     assert.equal(calls,10);
@@ -194,7 +198,7 @@ test('a concrete issue is repaired only after independent revision validation an
     { approved:true, confidence:0.97, summary:'全題通過', issues:[] }
   ];
   let calls = 0;
-  router.generateJSON = async () => ({ data: replies[calls++], provider:'gemini-test', model:'test-model' });
+  router.generateJSON = async () => ({ data: taggedRevision(replies[calls++]), provider:'gemini-test', model:'test-model' });
   try {
     const checked = await api.reviewAndRepairGeneratedDongtian(cave);
     assert.equal(calls, 4);
@@ -218,7 +222,7 @@ test('failed repair validation blocks publication rather than skipping quality c
     { essencePreserved:true,errorResolved:false,singleCorrect:false,noNewError:true,levelAppropriate:true,confidence:0.9 }
   ];
   let calls = 0;
-  router.generateJSON = async () => ({ data: replies[calls++], provider:'gemini-test', model:'test-model' });
+  router.generateJSON = async () => ({ data: taggedRevision(replies[calls++]), provider:'gemini-test', model:'test-model' });
   try {
     const checked = await api.reviewAndRepairGeneratedDongtian(cave);
     assert.equal(calls, 4, 'the repair pipeline must attempt one more full rewrite before blocking publication');
@@ -241,7 +245,7 @@ test('a repair that only labels the original answer as wrong is retried with a c
   ];
   router.generateJSON = async prompt => {
     prompts.push(prompt);
-    return { data:replies[prompts.length-1], provider:'test',model:'test' };
+    return { data:taggedRevision(replies[prompts.length-1]), provider:'test',model:'test' };
   };
   try {
     const repaired = await api.rewriteAndValidateQuestion(original,'請修正答案','算術結果不正確',{subject:'數學'});
