@@ -1,6 +1,7 @@
 'use strict';
 // Compact generation instruction. Existing server validation is always retained.
 const MODES = new Set(['raid-quick-simple', 'raid-standard', 'battle-fast', 'immortal-fast']);
+const { ANSWER_AND_EXPLANATION_RULES } = require('./quiz-answer-prompt.cjs');
 function quickQuizPrompt({ mode, subject, level, topic, rank, difficulty, previousQuestions = [],
   previousMeta = [], targetForm = '', quality = {}, retryIssue = '', randomSeed = '' } = {}) {
   if (!MODES.has(mode)) throw new Error('Unsupported fast quiz mode');
@@ -11,7 +12,7 @@ function quickQuizPrompt({ mode, subject, level, topic, rank, difficulty, previo
   const spec = {
     q: '完整題幹', correct: '唯一正解',
     wrong: ['確定錯誤一','確定錯誤二','確定錯誤三'],
-    exp: '完整正確解析', subject: safe(subject,40), sub_topic: safe(topic,180),
+    exp: '精簡且答案一致的解析', subject: safe(subject,40), sub_topic: safe(topic,180),
     concept_id: '考點短ID', template_id: '解題骨架短ID', question_form: safe(targetForm,40),
     cognitive_level: quick ? 1 : quality.cognitive || 2,
     reasoning_steps: quick ? 1 : quality.steps || 2
@@ -23,8 +24,8 @@ function quickQuizPrompt({ mode, subject, level, topic, rank, difficulty, previo
     '保持指定學制與難度，題目清楚而有實質理解、推理深度；勿冗長敘事。',
     '題型='+safe(targetForm,40)+'；認知層級='+(quick?1:quality.cognitive||2)+
       '；推理步數='+(quick?1:quality.steps||2),
-    '參照預設答案，獨立解題、逐項核對四個選項。只能一個正解，三個錯誤選項不可與正解等價或互相同義。',
-    '解析應含主要步驟和關鍵觀念，與 correct 完全一致，不以 A/B/C/D 或選項排序指稱。',
+    '獨立解題、逐項核對四個選項。只能一個正解，三個錯誤選項不可與正解等價或互相同義。',
+    ANSWER_AND_EXPLANATION_RULES,
     '題目請要整齊。',
     '發現錯題直接重寫 q、correct、wrong、exp，解析禁止「本題有錯」「原答案錯誤」「更正」等修訂註記。',
     '不得附帶選項於題幹、引用不存在的圖片、超綱或跨科。',

@@ -56,6 +56,27 @@ test('a malformed parallel response does not beat a successful valid response',a
   });
 });
 
+test('a fast answer/explanation mismatch cannot win the quiz race or enter the spare pool',async()=>{
+  const {questionQualityIssue}=require('../question-quality.cjs');
+  await withMockProviders(async()=>{
+    const correct={q:'點 $(2,1)$ 到直線 $3x-4y+5=0$ 的距離為何？',correct:'$\\frac{7}{5}$',
+      wrong:['$\\frac{3}{5}$','$\\frac{1}{5}$','$\\frac{9}{5}$'],exp:'代入點到直線距離公式得 $\\frac{|6-4+5|}{5}=\\frac{7}{5}$。答案為 $\\frac{7}{5}$。'};
+    const wrong={...correct,correct:correct.wrong[0],wrong:[correct.correct,...correct.wrong.slice(1)]};
+    const spares=[];
+    global.fetch=async(url)=>{
+      const name=new URL(url).hostname.split('.')[0];
+      if(name==='fast')return response(wrong);
+      await new Promise(resolve=>setTimeout(resolve,5));return response(correct);
+    };
+    const result=await router.generateJSON('generate quiz',{parallel:true,timeoutMs:3000,
+      validate:data=>{const issue=questionQualityIssue(data);if(issue)throw Error(issue);},
+      onSpare:spare=>spares.push(spare)});
+    assert.notEqual(result.provider,'fast');assert.equal(result.data.correct,correct.correct);
+    await new Promise(resolve=>setTimeout(resolve,20));
+    assert.ok(spares.every(spare=>spare.provider!=='fast'));
+  });
+});
+
 test('one configured API retains the ordinary sequential path and quiz endpoint opts in for all modes',()=>{
   assert.match(server,/aiRouter\.generateJSON\(prompt, \{/);
   assert.match(server,/parallel: true/);
