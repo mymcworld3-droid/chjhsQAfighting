@@ -1,0 +1,255 @@
+{
+  "generator": "image_gen built-in",
+  "size": 384,
+  "format": "WebP with alpha",
+  "tiers": {
+    "low": "七至九品",
+    "mid": "四至六品",
+    "high": "一至三品"
+  },
+  "images": [
+    {
+      "id": "ocean-low",
+      "type": "ocean",
+      "tier": "low",
+      "name": "大海無垠丹",
+      "gradeRange": "七至九品",
+      "prompt": "Use case: stylized-concept. Asset type: transparent game UI item illustration for a refined Chinese xianxia cultivation game. Create ONE isolated spherical INNER GOLDEN CORE, not a medicine pill or jewelry. Identity: 大海無垠丹 / ocean core, LOW tier (grades seven through nine). A deep ocean-blue and teal translucent jade-like sphere with subtle rolling ocean wave currents inside, a thin warm antique-gold rim and just a few delicate gold meridian veins. Modest restrained energy, simple readable surface, clearly a low-tier young core; no grand halo. Consistent asset framing: square canvas, front three-quarter view from slightly above, entire perfectly round core centered, sphere diameter about 62 percent of canvas, tiny soft teal aura immediately around it with generous fully transparent padding. Painterly realistic fantasy inventory illustration, exquisite polished jade and liquid texture, crisp round silhouette, warm light upper left, shadowed lower right, controlled luminosity suitable on a near-black UI. Background must be genuine transparent alpha including outside the small aura. No pedestal, hands, environment, border, frame, lettering, symbols resembling text, labels, watermark, multiple objects or contact sheet.",
+      "path": "public/assets/golden-cores/ocean-low.webp"
+    },
+    {
+      "id": "ocean-mid",
+      "type": "ocean",
+      "tier": "mid",
+      "name": "大海無垠丹",
+      "gradeRange": "四至六品",
+      "prompt": "Use case: stylized-concept. Asset type: transparent game UI item illustration for a refined Chinese xianxia cultivation game. Create ONE isolated perfectly spherical INNER GOLDEN CORE, not a medicine tablet or jewelry. Identity: 大海無垠丹 / ocean core. Material and identity: deep ocean-blue and teal translucent jade, rolling ocean wave currents sealed inside, warm antique-gold meridian veins. Evolution: MID tier, grades four through six. Mature and refined: a complete elegant network of luminous gold surface meridian veins, stronger inner elemental motion, one slender curved gold energy orbit immediately around the sphere and a controlled soft aura. Clearly more developed than a young low-tier core.. Consistent asset framing: square canvas, front three-quarter view from slightly above, entire round core centered, sphere diameter about 62 percent of canvas, all effects inside 86 percent of canvas with generous fully transparent padding. Painterly realistic fantasy inventory illustration, exquisite polished jade and crystal material, crisp round silhouette, warm light upper left and shadow lower right, controlled luminosity designed for a near-black UI. Actual transparent alpha background including outside the close aura. No pedestal, hands, environment, border, frame, lettering, readable text, label, watermark, multiple objects or contact sheet.",
+      "path": "public/assets/golden-cores/ocean-mid.webp"
+    },
+    {
+      "id": "ocean-high",
+      "type": "ocean",
+      "tier": "high",
+      "name": "大海無垠丹",
+      "gradeRange": "一至三品",
+      "prompt": "Use case: stylized-concept. Asset type: transparent game UI item illustration for a refined Chinese xianxia cultivation game. Create ONE isolated perfectly spherical INNER GOLDEN CORE, not a medicine tablet or jewelry. Identity: 大海無垠丹 / ocean core. Material and identity: deep ocean-blue and teal translucent jade, rolling ocean wave currents sealed inside, warm antique-gold meridian veins. Evolution: HIGH tier, grades one through three. Supreme and resplendent: intricate luminous gold meridian filigree wrapping the sphere, fully awakened powerful inner elemental heart, two elegant thin gold energy orbit arcs and a radiant but controlled elemental corona close around the core. Clearly the most precious evolved version; keep the sphere readable, do not blow highlights out.. Consistent asset framing: square canvas, front three-quarter view from slightly above, entire round core centered, sphere diameter about 62 percent of canvas, all effects inside 86 percent of canvas with generous fully transparent padding. Painterly realistic fantasy inventory illustration, exquisite polished jade and crystal material, crisp round silhouette, warm light upper left and shadow lower right, controlled luminosity designed for a near-black UI. Actual transparent alpha background including outside the close aura. No pedestal, hands, environment, border, frame, lettering, readable text, label, watermark, multiple objects or contact sheet.",
+      "path": "public/assets/golden-cores/ocean-high.webp"
+    },
+    {
+      "id": "taichu-low",
+      "type": "taichu",
+      "tier": "low",
+      "name": "太初回元丹",
+      "gradeRange": "七至九品",
+      "prompt": "Use case: stylized-concept. Asset type: transparent game UI item illustration for a refined Chinese xianxia cultivation game. Create ONE isolated perfectly spherical INNER GOLDEN CORE, not a medicine tablet or jewelry. Identity: 太初回元丹 / taichu core. Material and identity: rich dawn amber and honey-gold translucent jade, a small radiant sun-like nucleus and circulating primordial life energy within, flowing antique-gold meridian veins. Evolution: LOW tier, grades seven through nine. Young and restrained: just a few fine surface veins, a faint close-fitting aura, clear simple core silhouette. No orbit ring or large halo.. Consistent asset framing: square canvas, front three-quarter view from slightly above, entire round core centered, sphere diameter about 62 percent of canvas, all effects inside 86 percent of canvas with generous fully transparent padding. Painterly realistic fantasy inventory illustration, exquisite polished jade and crystal material, crisp round silhouette, warm light upper left and shadow lower right, controlled luminosity designed for a near-black UI. Actual transparent alpha background including outside the close aura. No pedestal, hands, environment, border, frame, lettering, readable text, label, watermark, multiple objects or contact sheet.",
+      "path": "public/assets/golden-cores/taichu-low.webp"
+    },
+    {
+      "id": "taichu-mid",
+      "type": "taichu",
+      "tier": "mid",
+      "name": "太初回元丹",
+      "gradeRange": "四至六品",
+      "prompt": "Use case: stylized-concept. Asset type: transparent game UI item illustration for a refined Chinese xianxia cultivation game. Create ONE isolated perfectly spherical INNER GOLDEN CORE, not a medicine tablet or jewelry. Identity: 太初回元丹 / taichu core. Material and identity: rich dawn amber and honey-gold translucent jade, a small radiant sun-like nucleus and circulating primordial life energy within, flowing antique-gold meridian veins. Evolution: MID tier, grades four through six. Mature and refined: a complete elegant network of luminous gold surface meridian veins, stronger inner elemental motion, one slender curved gold energy orbit immediately around the sphere and a controlled soft aura. Clearly more developed than a young low-tier core.. Consistent asset framing: square canvas, front three-quarter view from slightly above, entire round core centered, sphere diameter about 62 percent of canvas, all effects inside 86 percent of canvas with generous fully transparent padding. Painterly realistic fantasy inventory illustration, exquisite polished jade and crystal material, crisp round silhouette, warm light upper left and shadow lower right, controlled luminosity designed for a near-black UI. Actual transparent alpha background including outside the close aura. No pedestal, hands, environment, border, frame, lettering, readable text, label, watermark, multiple objects or contact sheet.",
+      "path": "public/assets/golden-cores/taichu-mid.webp"
+    },
+    {
+      "id": "taichu-high",
+      "type": "taichu",
+      "tier": "high",
+      "name": "太初回元丹",
+      "gradeRange": "一至三品",
+      "prompt": "Use case: stylized-concept. Asset type: transparent game UI item illustration for a refined Chinese xianxia cultivation game. Create ONE isolated perfectly spherical INNER GOLDEN CORE, not a medicine tablet or jewelry. Identity: 太初回元丹 / taichu core. Material and identity: rich dawn amber and honey-gold translucent jade, a small radiant sun-like nucleus and circulating primordial life energy within, flowing antique-gold meridian veins. Evolution: HIGH tier, grades one through three. Supreme and resplendent: intricate luminous gold meridian filigree wrapping the sphere, fully awakened powerful inner elemental heart, two elegant thin gold energy orbit arcs and a radiant but controlled elemental corona close around the core. Clearly the most precious evolved version; keep the sphere readable, do not blow highlights out.. Consistent asset framing: square canvas, front three-quarter view from slightly above, entire round core centered, sphere diameter about 62 percent of canvas, all effects inside 86 percent of canvas with generous fully transparent padding. Painterly realistic fantasy inventory illustration, exquisite polished jade and crystal material, crisp round silhouette, warm light upper left and shadow lower right, controlled luminosity designed for a near-black UI. Actual transparent alpha background including outside the close aura. No pedestal, hands, environment, border, frame, lettering, readable text, label, watermark, multiple objects or contact sheet.",
+      "path": "public/assets/golden-cores/taichu-high.webp"
+    },
+    {
+      "id": "ningxin-low",
+      "type": "ningxin",
+      "tier": "low",
+      "name": "凝心靜音丹",
+      "gradeRange": "七至九品",
+      "prompt": "Use case: stylized-concept. Asset type: transparent game UI item illustration for a refined Chinese xianxia cultivation game. Create ONE isolated perfectly spherical INNER GOLDEN CORE, not a medicine tablet or jewelry. Identity: 凝心靜音丹 / ningxin core. Material and identity: ivory and pale celadon jade, serene concentric inner rings and a quiet diamond-shaped seal of light suspended within, delicate gold meridian veins. Evolution: LOW tier, grades seven through nine. Young and restrained: just a few fine surface veins, a faint close-fitting aura, clear simple core silhouette. No orbit ring or large halo.. Consistent asset framing: square canvas, front three-quarter view from slightly above, entire round core centered, sphere diameter about 62 percent of canvas, all effects inside 86 percent of canvas with generous fully transparent padding. Painterly realistic fantasy inventory illustration, exquisite polished jade and crystal material, crisp round silhouette, warm light upper left and shadow lower right, controlled luminosity designed for a near-black UI. Actual transparent alpha background including outside the close aura. No pedestal, hands, environment, border, frame, lettering, readable text, label, watermark, multiple objects or contact sheet.",
+      "path": "public/assets/golden-cores/ningxin-low.webp"
+    },
+    {
+      "id": "ningxin-mid",
+      "type": "ningxin",
+      "tier": "mid",
+      "name": "凝心靜音丹",
+      "gradeRange": "四至六品",
+      "prompt": "Use case: stylized-concept. Asset type: transparent game UI item illustration for a refined Chinese xianxia cultivation game. Create ONE isolated perfectly spherical INNER GOLDEN CORE, not a medicine tablet or jewelry. Identity: 凝心靜音丹 / ningxin core. Material and identity: ivory and pale celadon jade, serene concentric inner rings and a quiet diamond-shaped seal of light suspended within, delicate gold meridian veins. Evolution: MID tier, grades four through six. Mature and refined: a complete elegant network of luminous gold surface meridian veins, stronger inner elemental motion, one slender curved gold energy orbit immediately around the sphere and a controlled soft aura. Clearly more developed than a young low-tier core.. Consistent asset framing: square canvas, front three-quarter view from slightly above, entire round core centered, sphere diameter about 62 percent of canvas, all effects inside 86 percent of canvas with generous fully transparent padding. Painterly realistic fantasy inventory illustration, exquisite polished jade and crystal material, crisp round silhouette, warm light upper left and shadow lower right, controlled luminosity designed for a near-black UI. Actual transparent alpha background including outside the close aura. No pedestal, hands, environment, border, frame, lettering, readable text, label, watermark, multiple objects or contact sheet.",
+      "path": "public/assets/golden-cores/ningxin-mid.webp"
+    },
+    {
+      "id": "ningxin-high",
+      "type": "ningxin",
+      "tier": "high",
+      "name": "凝心靜音丹",
+      "gradeRange": "一至三品",
+      "prompt": "Use case: stylized-concept. Asset type: transparent game UI item illustration for a refined Chinese xianxia cultivation game. Create ONE isolated perfectly spherical INNER GOLDEN CORE, not a medicine tablet or jewelry. Identity: 凝心靜音丹 / ningxin core. Material and identity: ivory and pale celadon jade, serene concentric inner rings and a quiet diamond-shaped seal of light suspended within, delicate gold meridian veins. Evolution: HIGH tier, grades one through three. Supreme and resplendent: intricate luminous gold meridian filigree wrapping the sphere, fully awakened powerful inner elemental heart, two elegant thin gold energy orbit arcs and a radiant but controlled elemental corona close around the core. Clearly the most precious evolved version; keep the sphere readable, do not blow highlights out.. Consistent asset framing: square canvas, front three-quarter view from slightly above, entire round core centered, sphere diameter about 62 percent of canvas, all effects inside 86 percent of canvas with generous fully transparent padding. Painterly realistic fantasy inventory illustration, exquisite polished jade and crystal material, crisp round silhouette, warm light upper left and shadow lower right, controlled luminosity designed for a near-black UI. Actual transparent alpha background including outside the close aura. No pedestal, hands, environment, border, frame, lettering, readable text, label, watermark, multiple objects or contact sheet.",
+      "path": "public/assets/golden-cores/ningxin-high.webp"
+    },
+    {
+      "id": "pojing-low",
+      "type": "pojing",
+      "tier": "low",
+      "name": "破境衝仙丹",
+      "gradeRange": "七至九品",
+      "prompt": "Use case: stylized-concept. Asset type: transparent game UI item illustration for a refined Chinese xianxia cultivation game. Create ONE isolated perfectly spherical INNER GOLDEN CORE, not a medicine tablet or jewelry. Identity: 破境衝仙丹 / pojing core. Material and identity: burnished amber and deep vermilion jade, intense molten inner nucleus, a sharp ascending gold energy fissure breaking through layered inner barriers. Evolution: LOW tier, grades seven through nine. Young and restrained: just a few fine surface veins, a faint close-fitting aura, clear simple core silhouette. No orbit ring or large halo.. Consistent asset framing: square canvas, front three-quarter view from slightly above, entire round core centered, sphere diameter about 62 percent of canvas, all effects inside 86 percent of canvas with generous fully transparent padding. Painterly realistic fantasy inventory illustration, exquisite polished jade and crystal material, crisp round silhouette, warm light upper left and shadow lower right, controlled luminosity designed for a near-black UI. Actual transparent alpha background including outside the close aura. No pedestal, hands, environment, border, frame, lettering, readable text, label, watermark, multiple objects or contact sheet.",
+      "path": "public/assets/golden-cores/pojing-low.webp"
+    },
+    {
+      "id": "pojing-mid",
+      "type": "pojing",
+      "tier": "mid",
+      "name": "破境衝仙丹",
+      "gradeRange": "四至六品",
+      "prompt": "Use case: stylized-concept. Asset type: transparent game UI item illustration for a refined Chinese xianxia cultivation game. Create ONE isolated perfectly spherical INNER GOLDEN CORE, not a medicine tablet or jewelry. Identity: 破境衝仙丹 / pojing core. Material and identity: burnished amber and deep vermilion jade, intense molten inner nucleus, a sharp ascending gold energy fissure breaking through layered inner barriers. Evolution: MID tier, grades four through six. Mature and refined: a complete elegant network of luminous gold surface meridian veins, stronger inner elemental motion, one slender curved gold energy orbit immediately around the sphere and a controlled soft aura. Clearly more developed than a young low-tier core.. Consistent asset framing: square canvas, front three-quarter view from slightly above, entire round core centered, sphere diameter about 62 percent of canvas, all effects inside 86 percent of canvas with generous fully transparent padding. Painterly realistic fantasy inventory illustration, exquisite polished jade and crystal material, crisp round silhouette, warm light upper left and shadow lower right, controlled luminosity designed for a near-black UI. Actual transparent alpha background including outside the close aura. No pedestal, hands, environment, border, frame, lettering, readable text, label, watermark, multiple objects or contact sheet.",
+      "path": "public/assets/golden-cores/pojing-mid.webp"
+    },
+    {
+      "id": "pojing-high",
+      "type": "pojing",
+      "tier": "high",
+      "name": "破境衝仙丹",
+      "gradeRange": "一至三品",
+      "prompt": "Use case: stylized-concept. Asset type: transparent game UI item illustration for a refined Chinese xianxia cultivation game. Create ONE isolated perfectly spherical INNER GOLDEN CORE, not a medicine tablet or jewelry. Identity: 破境衝仙丹 / pojing core. Material and identity: burnished amber and deep vermilion jade, intense molten inner nucleus, a sharp ascending gold energy fissure breaking through layered inner barriers. Evolution: HIGH tier, grades one through three. Supreme and resplendent: intricate luminous gold meridian filigree wrapping the sphere, fully awakened powerful inner elemental heart, two elegant thin gold energy orbit arcs and a radiant but controlled elemental corona close around the core. Clearly the most precious evolved version; keep the sphere readable, do not blow highlights out.. Consistent asset framing: square canvas, front three-quarter view from slightly above, entire round core centered, sphere diameter about 62 percent of canvas, all effects inside 86 percent of canvas with generous fully transparent padding. Painterly realistic fantasy inventory illustration, exquisite polished jade and crystal material, crisp round silhouette, warm light upper left and shadow lower right, controlled luminosity designed for a near-black UI. Actual transparent alpha background including outside the close aura. No pedestal, hands, environment, border, frame, lettering, readable text, label, watermark, multiple objects or contact sheet.",
+      "path": "public/assets/golden-cores/pojing-high.webp"
+    },
+    {
+      "id": "xingchen-low",
+      "type": "xingchen",
+      "tier": "low",
+      "name": "星辰吞月丹",
+      "gradeRange": "七至九品",
+      "prompt": "Use case: stylized-concept. Asset type: transparent game UI item illustration for a refined Chinese xianxia cultivation game. Create ONE isolated perfectly spherical INNER GOLDEN CORE, not a medicine tablet or jewelry. Identity: 星辰吞月丹 / xingchen core. Material and identity: midnight indigo and silver-blue celestial jade, a clearly visible silver crescent moon and minute stars sealed within the sphere, fine antique-gold meridian veins. Evolution: LOW tier, grades seven through nine. Young and restrained: just a few fine surface veins, a faint close-fitting aura, clear simple core silhouette. No orbit ring or large halo.. Consistent asset framing: square canvas, front three-quarter view from slightly above, entire round core centered, sphere diameter about 62 percent of canvas, all effects inside 86 percent of canvas with generous fully transparent padding. Painterly realistic fantasy inventory illustration, exquisite polished jade and crystal material, crisp round silhouette, warm light upper left and shadow lower right, controlled luminosity designed for a near-black UI. Actual transparent alpha background including outside the close aura. No pedestal, hands, environment, border, frame, lettering, readable text, label, watermark, multiple objects or contact sheet.",
+      "path": "public/assets/golden-cores/xingchen-low.webp"
+    },
+    {
+      "id": "xingchen-mid",
+      "type": "xingchen",
+      "tier": "mid",
+      "name": "星辰吞月丹",
+      "gradeRange": "四至六品",
+      "prompt": "Use case: stylized-concept. Asset type: transparent game UI item illustration for a refined Chinese xianxia cultivation game. Create ONE isolated perfectly spherical INNER GOLDEN CORE, not a medicine tablet or jewelry. Identity: 星辰吞月丹 / xingchen core. Material and identity: midnight indigo and silver-blue celestial jade, a clearly visible silver crescent moon and minute stars sealed within the sphere, fine antique-gold meridian veins. Evolution: MID tier, grades four through six. Mature and refined: a complete elegant network of luminous gold surface meridian veins, stronger inner elemental motion, one slender curved gold energy orbit immediately around the sphere and a controlled soft aura. Clearly more developed than a young low-tier core.. Consistent asset framing: square canvas, front three-quarter view from slightly above, entire round core centered, sphere diameter about 62 percent of canvas, all effects inside 86 percent of canvas with generous fully transparent padding. Painterly realistic fantasy inventory illustration, exquisite polished jade and crystal material, crisp round silhouette, warm light upper left and shadow lower right, controlled luminosity designed for a near-black UI. Actual transparent alpha background including outside the close aura. No pedestal, hands, environment, border, frame, lettering, readable text, label, watermark, multiple objects or contact sheet.",
+      "path": "public/assets/golden-cores/xingchen-mid.webp"
+    },
+    {
+      "id": "xingchen-high",
+      "type": "xingchen",
+      "tier": "high",
+      "name": "星辰吞月丹",
+      "gradeRange": "一至三品",
+      "prompt": "Use case: stylized-concept. Asset type: transparent game UI item illustration for a refined Chinese xianxia cultivation game. Create ONE isolated perfectly spherical INNER GOLDEN CORE, not a medicine tablet or jewelry. Identity: 星辰吞月丹 / xingchen core. Material and identity: midnight indigo and silver-blue celestial jade, a clearly visible silver crescent moon and minute stars sealed within the sphere, fine antique-gold meridian veins. Evolution: HIGH tier, grades one through three. Supreme and resplendent: intricate luminous gold meridian filigree wrapping the sphere, fully awakened powerful inner elemental heart, two elegant thin gold energy orbit arcs and a radiant but controlled elemental corona close around the core. Clearly the most precious evolved version; keep the sphere readable, do not blow highlights out.. Consistent asset framing: square canvas, front three-quarter view from slightly above, entire round core centered, sphere diameter about 62 percent of canvas, all effects inside 86 percent of canvas with generous fully transparent padding. Painterly realistic fantasy inventory illustration, exquisite polished jade and crystal material, crisp round silhouette, warm light upper left and shadow lower right, controlled luminosity designed for a near-black UI. Actual transparent alpha background including outside the close aura. No pedestal, hands, environment, border, frame, lettering, readable text, label, watermark, multiple objects or contact sheet.",
+      "path": "public/assets/golden-cores/xingchen-high.webp"
+    },
+    {
+      "id": "wugou-low",
+      "type": "wugou",
+      "tier": "low",
+      "name": "無垢清心丹",
+      "gradeRange": "七至九品",
+      "prompt": "Use case: stylized-concept. Asset type: transparent game UI item illustration for a refined Chinese xianxia cultivation game. Create ONE isolated perfectly spherical INNER GOLDEN CORE, not a medicine tablet or jewelry. Identity: 無垢清心丹 / wugou core. Material and identity: flawless clear silver-white crystal jade with pale ice-blue depths, an abstract radiant lotus-shaped inner purity seal, extremely clean restrained antique-gold lines. Evolution: LOW tier, grades seven through nine. Young and restrained: just a few fine surface veins, a faint close-fitting aura, clear simple core silhouette. No orbit ring or large halo.. Consistent asset framing: square canvas, front three-quarter view from slightly above, entire round core centered, sphere diameter about 62 percent of canvas, all effects inside 86 percent of canvas with generous fully transparent padding. Painterly realistic fantasy inventory illustration, exquisite polished jade and crystal material, crisp round silhouette, warm light upper left and shadow lower right, controlled luminosity designed for a near-black UI. Actual transparent alpha background including outside the close aura. No pedestal, hands, environment, border, frame, lettering, readable text, label, watermark, multiple objects or contact sheet.",
+      "path": "public/assets/golden-cores/wugou-low.webp"
+    },
+    {
+      "id": "wugou-mid",
+      "type": "wugou",
+      "tier": "mid",
+      "name": "無垢清心丹",
+      "gradeRange": "四至六品",
+      "prompt": "Use case: stylized-concept. Asset type: transparent game UI item illustration for a refined Chinese xianxia cultivation game. Create ONE isolated perfectly spherical INNER GOLDEN CORE, not a medicine tablet or jewelry. Identity: 無垢清心丹 / wugou core. Material and identity: flawless clear silver-white crystal jade with pale ice-blue depths, an abstract radiant lotus-shaped inner purity seal, extremely clean restrained antique-gold lines. Evolution: MID tier, grades four through six. Mature and refined: a complete elegant network of luminous gold surface meridian veins, stronger inner elemental motion, one slender curved gold energy orbit immediately around the sphere and a controlled soft aura. Clearly more developed than a young low-tier core.. Consistent asset framing: square canvas, front three-quarter view from slightly above, entire round core centered, sphere diameter about 62 percent of canvas, all effects inside 86 percent of canvas with generous fully transparent padding. Painterly realistic fantasy inventory illustration, exquisite polished jade and crystal material, crisp round silhouette, warm light upper left and shadow lower right, controlled luminosity designed for a near-black UI. Actual transparent alpha background including outside the close aura. No pedestal, hands, environment, border, frame, lettering, readable text, label, watermark, multiple objects or contact sheet.",
+      "path": "public/assets/golden-cores/wugou-mid.webp"
+    },
+    {
+      "id": "wugou-high",
+      "type": "wugou",
+      "tier": "high",
+      "name": "無垢清心丹",
+      "gradeRange": "一至三品",
+      "prompt": "Use case: stylized-concept. Asset type: transparent game UI item illustration for a refined Chinese xianxia cultivation game. Create ONE isolated perfectly spherical INNER GOLDEN CORE, not a medicine tablet or jewelry. Identity: 無垢清心丹 / wugou core. Material and identity: flawless clear silver-white crystal jade with pale ice-blue depths, an abstract radiant lotus-shaped inner purity seal, extremely clean restrained antique-gold lines. Evolution: HIGH tier, grades one through three. Supreme and resplendent: intricate luminous gold meridian filigree wrapping the sphere, fully awakened powerful inner elemental heart, two elegant thin gold energy orbit arcs and a radiant but controlled elemental corona close around the core. Clearly the most precious evolved version; keep the sphere readable, do not blow highlights out.. Consistent asset framing: square canvas, front three-quarter view from slightly above, entire round core centered, sphere diameter about 62 percent of canvas, all effects inside 86 percent of canvas with generous fully transparent padding. Painterly realistic fantasy inventory illustration, exquisite polished jade and crystal material, crisp round silhouette, warm light upper left and shadow lower right, controlled luminosity designed for a near-black UI. Actual transparent alpha background including outside the close aura. No pedestal, hands, environment, border, frame, lettering, readable text, label, watermark, multiple objects or contact sheet.",
+      "path": "public/assets/golden-cores/wugou-high.webp"
+    },
+    {
+      "id": "thunder-low",
+      "type": "thunder",
+      "tier": "low",
+      "name": "萬劫雷霆丹",
+      "gradeRange": "七至九品",
+      "prompt": "Use case: stylized-concept. Asset type: transparent game UI item illustration for a refined Chinese xianxia cultivation game. Create ONE isolated perfectly spherical INNER GOLDEN CORE, not a medicine tablet or jewelry. Identity: 萬劫雷霆丹 / thunder core. Material and identity: dark sapphire and imperial violet translucent jade, branching violet-white lightning sealed inside, luminous lightning-shaped gold meridian veins. Evolution: LOW tier, grades seven through nine. Young and restrained: just a few fine surface veins, a faint close-fitting aura, clear simple core silhouette. No orbit ring or large halo.. Consistent asset framing: square canvas, front three-quarter view from slightly above, entire round core centered, sphere diameter about 62 percent of canvas, all effects inside 86 percent of canvas with generous fully transparent padding. Painterly realistic fantasy inventory illustration, exquisite polished jade and crystal material, crisp round silhouette, warm light upper left and shadow lower right, controlled luminosity designed for a near-black UI. Actual transparent alpha background including outside the close aura. No pedestal, hands, environment, border, frame, lettering, readable text, label, watermark, multiple objects or contact sheet.",
+      "path": "public/assets/golden-cores/thunder-low.webp"
+    },
+    {
+      "id": "thunder-mid",
+      "type": "thunder",
+      "tier": "mid",
+      "name": "萬劫雷霆丹",
+      "gradeRange": "四至六品",
+      "prompt": "Use case: stylized-concept. Asset type: transparent game UI item illustration for a refined Chinese xianxia cultivation game. Create ONE isolated perfectly spherical INNER GOLDEN CORE, not a medicine tablet or jewelry. Identity: 萬劫雷霆丹 / thunder core. Material and identity: dark sapphire and imperial violet translucent jade, branching violet-white lightning sealed inside, luminous lightning-shaped gold meridian veins. Evolution: MID tier, grades four through six. Mature and refined: a complete elegant network of luminous gold surface meridian veins, stronger inner elemental motion, one slender curved gold energy orbit immediately around the sphere and a controlled soft aura. Clearly more developed than a young low-tier core.. Consistent asset framing: square canvas, front three-quarter view from slightly above, entire round core centered, sphere diameter about 62 percent of canvas, all effects inside 86 percent of canvas with generous fully transparent padding. Painterly realistic fantasy inventory illustration, exquisite polished jade and crystal material, crisp round silhouette, warm light upper left and shadow lower right, controlled luminosity designed for a near-black UI. Actual transparent alpha background including outside the close aura. No pedestal, hands, environment, border, frame, lettering, readable text, label, watermark, multiple objects or contact sheet.",
+      "path": "public/assets/golden-cores/thunder-mid.webp"
+    },
+    {
+      "id": "thunder-high",
+      "type": "thunder",
+      "tier": "high",
+      "name": "萬劫雷霆丹",
+      "gradeRange": "一至三品",
+      "prompt": "Use case: stylized-concept. Asset type: transparent game UI item illustration for a refined Chinese xianxia cultivation game. Create ONE isolated perfectly spherical INNER GOLDEN CORE, not a medicine tablet or jewelry. Identity: 萬劫雷霆丹 / thunder core. Material and identity: dark sapphire and imperial violet translucent jade, branching violet-white lightning sealed inside, luminous lightning-shaped gold meridian veins. Evolution: HIGH tier, grades one through three. Supreme and resplendent: intricate luminous gold meridian filigree wrapping the sphere, fully awakened powerful inner elemental heart, two elegant thin gold energy orbit arcs and a radiant but controlled elemental corona close around the core. Clearly the most precious evolved version; keep the sphere readable, do not blow highlights out.. Consistent asset framing: square canvas, front three-quarter view from slightly above, entire round core centered, sphere diameter about 62 percent of canvas, all effects inside 86 percent of canvas with generous fully transparent padding. Painterly realistic fantasy inventory illustration, exquisite polished jade and crystal material, crisp round silhouette, warm light upper left and shadow lower right, controlled luminosity designed for a near-black UI. Actual transparent alpha background including outside the close aura. No pedestal, hands, environment, border, frame, lettering, readable text, label, watermark, multiple objects or contact sheet.",
+      "path": "public/assets/golden-cores/thunder-high.webp"
+    },
+    {
+      "id": "reverse-low",
+      "type": "reverse",
+      "tier": "low",
+      "name": "陰陽反轉丹",
+      "gradeRange": "七至九品",
+      "prompt": "Use case: stylized-concept. Asset type: transparent game UI item illustration for a refined Chinese xianxia cultivation game. Create ONE isolated perfectly spherical INNER GOLDEN CORE, not a medicine tablet or jewelry. Identity: 陰陽反轉丹 / reverse core. Material and identity: obsidian-black and pearlescent ivory jade swirling together in a spherical yin-yang balance, subtle violet depths, two intertwining currents edged in antique gold. Evolution: LOW tier, grades seven through nine. Young and restrained: just a few fine surface veins, a faint close-fitting aura, clear simple core silhouette. No orbit ring or large halo.. Consistent asset framing: square canvas, front three-quarter view from slightly above, entire round core centered, sphere diameter about 62 percent of canvas, all effects inside 86 percent of canvas with generous fully transparent padding. Painterly realistic fantasy inventory illustration, exquisite polished jade and crystal material, crisp round silhouette, warm light upper left and shadow lower right, controlled luminosity designed for a near-black UI. Actual transparent alpha background including outside the close aura. No pedestal, hands, environment, border, frame, lettering, readable text, label, watermark, multiple objects or contact sheet.",
+      "path": "public/assets/golden-cores/reverse-low.webp"
+    },
+    {
+      "id": "reverse-mid",
+      "type": "reverse",
+      "tier": "mid",
+      "name": "陰陽反轉丹",
+      "gradeRange": "四至六品",
+      "prompt": "Use case: stylized-concept. Asset type: transparent game UI item illustration for a refined Chinese xianxia cultivation game. Create ONE isolated perfectly spherical INNER GOLDEN CORE, not a medicine tablet or jewelry. Identity: 陰陽反轉丹 / reverse core. Material and identity: obsidian-black and pearlescent ivory jade swirling together in a spherical yin-yang balance, subtle violet depths, two intertwining currents edged in antique gold. Evolution: MID tier, grades four through six. Mature and refined: a complete elegant network of luminous gold surface meridian veins, stronger inner elemental motion, one slender curved gold energy orbit immediately around the sphere and a controlled soft aura. Clearly more developed than a young low-tier core.. Consistent asset framing: square canvas, front three-quarter view from slightly above, entire round core centered, sphere diameter about 62 percent of canvas, all effects inside 86 percent of canvas with generous fully transparent padding. Painterly realistic fantasy inventory illustration, exquisite polished jade and crystal material, crisp round silhouette, warm light upper left and shadow lower right, controlled luminosity designed for a near-black UI. Actual transparent alpha background including outside the close aura. No pedestal, hands, environment, border, frame, lettering, readable text, label, watermark, multiple objects or contact sheet.",
+      "path": "public/assets/golden-cores/reverse-mid.webp"
+    },
+    {
+      "id": "reverse-high",
+      "type": "reverse",
+      "tier": "high",
+      "name": "陰陽反轉丹",
+      "gradeRange": "一至三品",
+      "prompt": "Use case: stylized-concept. Asset type: transparent game UI item illustration for a refined Chinese xianxia cultivation game. Create ONE isolated perfectly spherical INNER GOLDEN CORE, not a medicine tablet or jewelry. Identity: 陰陽反轉丹 / reverse core. Material and identity: obsidian-black and pearlescent ivory jade swirling together in a spherical yin-yang balance, subtle violet depths, two intertwining currents edged in antique gold. Evolution: HIGH tier, grades one through three. Supreme and resplendent: intricate luminous gold meridian filigree wrapping the sphere, fully awakened powerful inner elemental heart, two elegant thin gold energy orbit arcs and a radiant but controlled elemental corona close around the core. Clearly the most precious evolved version; keep the sphere readable, do not blow highlights out.. Consistent asset framing: square canvas, front three-quarter view from slightly above, entire round core centered, sphere diameter about 62 percent of canvas, all effects inside 86 percent of canvas with generous fully transparent padding. Painterly realistic fantasy inventory illustration, exquisite polished jade and crystal material, crisp round silhouette, warm light upper left and shadow lower right, controlled luminosity designed for a near-black UI. Actual transparent alpha background including outside the close aura. No pedestal, hands, environment, border, frame, lettering, readable text, label, watermark, multiple objects or contact sheet.",
+      "path": "public/assets/golden-cores/reverse-high.webp"
+    },
+    {
+      "id": "sword-low",
+      "type": "sword",
+      "tier": "low",
+      "name": "破鋒劍心丹",
+      "gradeRange": "七至九品",
+      "prompt": "Use case: stylized-concept. Asset type: transparent game UI item illustration for a refined Chinese xianxia cultivation game. Create ONE isolated perfectly spherical INNER GOLDEN CORE, not a medicine tablet or jewelry. Identity: 破鋒劍心丹 / sword core. Material and identity: polished silver-grey jade with blue-steel depths, a slender upright sword-shaped inner nucleus and blade-like etchings, precise antique-gold meridian veins. Evolution: LOW tier, grades seven through nine. Young and restrained: just a few fine surface veins, a faint close-fitting aura, clear simple core silhouette. No orbit ring or large halo.. Consistent asset framing: square canvas, front three-quarter view from slightly above, entire round core centered, sphere diameter about 62 percent of canvas, all effects inside 86 percent of canvas with generous fully transparent padding. Painterly realistic fantasy inventory illustration, exquisite polished jade and crystal material, crisp round silhouette, warm light upper left and shadow lower right, controlled luminosity designed for a near-black UI. Actual transparent alpha background including outside the close aura. No pedestal, hands, environment, border, frame, lettering, readable text, label, watermark, multiple objects or contact sheet.",
+      "path": "public/assets/golden-cores/sword-low.webp"
+    },
+    {
+      "id": "sword-mid",
+      "type": "sword",
+      "tier": "mid",
+      "name": "破鋒劍心丹",
+      "gradeRange": "四至六品",
+      "prompt": "Use case: stylized-concept. Asset type: transparent game UI item illustration for a refined Chinese xianxia cultivation game. Create ONE isolated perfectly spherical INNER GOLDEN CORE, not a medicine tablet or jewelry. Identity: 破鋒劍心丹 / sword core. Material and identity: polished silver-grey jade with blue-steel depths, a slender upright sword-shaped inner nucleus and blade-like etchings, precise antique-gold meridian veins. Evolution: MID tier, grades four through six. Mature and refined: a complete elegant network of luminous gold surface meridian veins, stronger inner elemental motion, one slender curved gold energy orbit immediately around the sphere and a controlled soft aura. Clearly more developed than a young low-tier core.. Consistent asset framing: square canvas, front three-quarter view from slightly above, entire round core centered, sphere diameter about 62 percent of canvas, all effects inside 86 percent of canvas with generous fully transparent padding. Painterly realistic fantasy inventory illustration, exquisite polished jade and crystal material, crisp round silhouette, warm light upper left and shadow lower right, controlled luminosity designed for a near-black UI. Actual transparent alpha background including outside the close aura. No pedestal, hands, environment, border, frame, lettering, readable text, label, watermark, multiple objects or contact sheet.",
+      "path": "public/assets/golden-cores/sword-mid.webp"
+    },
+    {
+      "id": "sword-high",
+      "type": "sword",
+      "tier": "high",
+      "name": "破鋒劍心丹",
+      "gradeRange": "一至三品",
+      "prompt": "Use case: stylized-concept. Asset type: transparent game UI item illustration for a refined Chinese xianxia cultivation game. Create ONE isolated perfectly spherical INNER GOLDEN CORE, not a medicine tablet or jewelry. Identity: 破鋒劍心丹 / sword core. Material and identity: polished silver-grey jade with blue-steel depths, a slender upright sword-shaped inner nucleus and blade-like etchings, precise antique-gold meridian veins. Evolution: HIGH tier, grades one through three. Supreme and resplendent: intricate luminous gold meridian filigree wrapping the sphere, fully awakened powerful inner elemental heart, two elegant thin gold energy orbit arcs and a radiant but controlled elemental corona close around the core. Clearly the most precious evolved version; keep the sphere readable, do not blow highlights out.. Consistent asset framing: square canvas, front three-quarter view from slightly above, entire round core centered, sphere diameter about 62 percent of canvas, all effects inside 86 percent of canvas with generous fully transparent padding. Painterly realistic fantasy inventory illustration, exquisite polished jade and crystal material, crisp round silhouette, warm light upper left and shadow lower right, controlled luminosity designed for a near-black UI. Actual transparent alpha background including outside the close aura. No pedestal, hands, environment, border, frame, lettering, readable text, label, watermark, multiple objects or contact sheet.",
+      "path": "public/assets/golden-cores/sword-high.webp"
+    }
+  ]
+}

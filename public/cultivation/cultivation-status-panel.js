@@ -82,8 +82,8 @@
     return `
       <div class="status-core-row">
         <div class="status-core-detail" data-status-core-detail role="button" tabindex="0" title="查看金丹詳細">
-          <div class="status-core-orb core-tone-${meta.tone}" aria-hidden="true">
-            <span>${meta.icon}</span>
+          <div class="status-core-orb core-tone-${meta.tone}${globalThis.QAGoldenCoreArt ? ' has-core-art' : ''}" aria-hidden="true">
+            ${globalThis.QAGoldenCoreArt?.markup(core.type,core.grade,core.name) || `<span>${meta.icon}</span>`}
             <i></i>
           </div>
           <div class="status-core-copy">

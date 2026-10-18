@@ -41,6 +41,11 @@
     stage.classList.remove('core-quality-low', 'core-quality-mid', 'core-quality-high', 'core-quality-supreme');
     stage.classList.add(`core-grade-${grade}`, `core-quality-${qualityTier(grade)}`);
     stage.dataset.coreGrade = String(grade);
+    if(stage.classList.contains('has-core-art')){
+      // The painted asset contains its own meridians and aura; avoid stacking animated blur layers.
+      globalThis.QAGoldenCoreArt?.update(stage,{type:stage.dataset.coreVisualType,grade});
+      return;
+    }
 
     // 外層：日冕、放射金芒、靈霧、符文光輪。
     ensureChild(stage, '.core-celestial-aura', 'core-celestial-aura');

@@ -49,7 +49,8 @@ export function createGoldenCoreWashAnimation() {
         // 洗髓揭曉時同步更新候選丹的品質外觀；元嬰裝配丹仍維持自己的品級。
         const stage = sphere.closest('.golden-core-stage-v3');
         if (stage) stage.dataset.coreVisualGrade = String(Math.min(9, Math.max(1, Number(freshCore.grade) || 9)));
-        const icon = sphere.querySelector('span');
+        if(stage)globalThis.QAGoldenCoreArt?.update(stage,{type:freshType.id || freshCore.type,grade:freshCore.grade,name:freshType.name});
+        const icon = sphere.querySelector('.golden-core-art-fallback') || sphere.querySelector('span');
         if (icon) icon.textContent = freshType.icon;
         const name = card.querySelector('.core-minimal-name');
         const grade = card.querySelector('.core-minimal-grade');

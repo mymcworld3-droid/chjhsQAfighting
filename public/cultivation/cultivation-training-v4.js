@@ -1,4 +1,5 @@
 import {} from './golden-core-pity.js';
+import './golden-core-art.js';
 import {} from './soul-talents.js';
 import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-shells.js';
 import { createGoldenCoreWashAnimation } from './golden-core-wash-animation.js';
@@ -366,12 +367,8 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     const type = coreType(core.type);
     const tag = clickable ? 'button' : 'div';
     return `
-      <${tag} ${clickable ? 'type="button"' : ''} class="golden-core-stage-v3 ${clickable ? 'clickable' : ''}" data-core-visual-grade="${clampGrade(core.grade)}" ${clickable ? 'id="training-core-orb" aria-label="查看金丹詳細資料"' : 'aria-hidden="true"'}>
-        <span class="golden-core-halo-v3 halo-a"></span>
-        <span class="golden-core-halo-v3 halo-b"></span>
-        <span class="golden-core-orbit-v3 orbit-a"></span>
-        <span class="golden-core-orbit-v3 orbit-b"></span>
-        <span class="golden-core-sphere-v3 core-tone-${type.tone}"><span>${type.icon}</span></span>
+      <${tag} ${clickable ? 'type="button"' : ''} class="golden-core-stage-v3 has-core-art ${clickable ? 'clickable' : ''}" data-core-visual-grade="${clampGrade(core.grade)}" data-core-visual-type="${type.id}" ${clickable ? 'id="training-core-orb" aria-label="查看金丹詳細資料"' : 'aria-hidden="true"'}>
+        <span class="golden-core-sphere-v3 core-tone-${type.tone}">${globalThis.QAGoldenCoreArt.markup(type.id,core.grade,type.name,'golden-core-art')}<span class="golden-core-art-fallback" hidden>${type.icon}</span></span>
         <span class="golden-core-shadow-v3"></span>
       </${tag}>
     `;
@@ -1009,7 +1006,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     if (!coreLike || !CORE_TYPES.some((entry) => entry.id === coreLike.type)) return null;
     const grade = clampGrade(coreLike.grade);
     const type = coreType(coreLike.type);
-    return { type: type.id, name: type.name, grade, effect: type.effect(grade), equipped: true };
+    return { type: type.id, name: type.name, grade, effect: type.effect(grade), imageUrl:globalThis.QAGoldenCoreArt?.source(type.id,grade) || '', equipped: true };
   };
 
   // 候選丹相：供金丹頁與「品質下降警告」使用。

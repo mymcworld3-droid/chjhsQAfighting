@@ -83,6 +83,7 @@
     return {
       type,
       icon: data.icon || ICONS[type] || '◆',
+      image:globalThis.QAGoldenCoreArt?.TYPES.includes(type) ? globalThis.QAGoldenCoreArt.markup(type,data.grade || equipped?.grade || 9,data.name || equipped?.name || '金丹') : '',
       name: data.name || equipped?.name || '金丹',
       message: data.message || '金丹神通發動',
       kind: data.kind || '',
@@ -102,7 +103,7 @@
     if (data.shield) el.classList.add('shield-awaken');
     el.innerHTML = `
       <div class="golden-core-activation-card">
-        <div class="golden-core-activation-icon">${data.icon}</div>
+        <div class="golden-core-activation-icon">${data.image || data.icon}</div>
         <div>
           <div class="golden-core-activation-kicker">金丹神通發動</div>
           <div class="golden-core-activation-name">${data.name}</div>

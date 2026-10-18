@@ -1,4 +1,4 @@
-import { ARTIFACT_CATALOG, getArtifactById, realmOrderByName } from './artifact-catalog.js';
+import { ARTIFACT_CATALOG, realmOrderByName } from './artifact-catalog.js';
 import {
   MATERIAL_CATALOG,
   ARTIFACT_RECIPES,
@@ -8,11 +8,12 @@ import {
 import './training-scene-layer-art.js';
 import './training-scene-layouts.js';
 import './training-access-rules.js';
+import './golden-core-art.js';
 import { trainingRenderReady, trainingRenderProfile } from './training-render-guard.js';
 
 // 啟動資源預熱：玩家資料已由 main-legacy 載入，本模組只在 startup gate 期間
-// 整理法寶／材料／配方與常用圖片，避免第一次打開背包、裝備或煉器才等待。
-const STARTUP_IMAGE_LIMIT = 28;
+// 整理法寶／材料／配方資料，圖片只預熱金丹、修煉場景與材料；法寶圖片按需顯示。
+const STARTUP_IMAGE_LIMIT = 48;
 const STARTUP_TIMEOUT_MS = 5200;
 const IMAGE_CONCURRENCY = 4;
 const SCENE_ART = Object.freeze({
@@ -120,17 +121,18 @@ function collectStartupImageUrls() {
   const priority = collectPriorityDefinitions();
   const sceneOrientation = window.matchMedia?.('(orientation: portrait)')?.matches ? 'portrait' : 'landscape';
 
-  const equippedArtifacts = priority.equippedArtifactIds.map(getArtifactById).filter(Boolean);
-  const ownedArtifacts = priority.ownedArtifactIds.map(getArtifactById).filter(Boolean);
   const ownedMaterials = priority.ownedMaterialIds.map(getMaterialById).filter(Boolean);
   const recipeMaterials = priority.recipeMaterialIds.map(getMaterialById).filter(Boolean);
-  const nearbyArtifacts = priority.artifactIds.map(getArtifactById).filter(Boolean);
   const nearbyMaterials = priority.materialIds.map(getMaterialById).filter(Boolean);
-  const accessScore = window.getTrainingAccessScore?.() ?? globalThis.QATrainingAccessRules.score(userData());
-  const pool = globalThis.QASoulboundPool;
-  const permanentArtifacts = pool.candidates(pool.rankFor(accessScore));
+  const art = globalThis.QAGoldenCoreArt;
+  const training = userData().cultivationTraining || {};
+  const coreImages = unique([
+    ...[training.equippedCore,training.core].filter(Boolean).map(core=>art.source(core.type,core.grade)),
+    ...art.all()
+  ]);
 
   const urls = unique([
+    ...coreImages,
     ...SCENE_ART[sceneOrientation],
     ...trainingSceneImages(sceneOrientation),
     'assets/training/cutouts/meditation-ai.webp',
@@ -138,24 +140,18 @@ function collectStartupImageUrls() {
     'assets/training/cutouts/forge-ai.webp',
     'assets/training/cutouts/secret-ai.webp',
     'assets/training/cutouts/status-ai.webp',
-    ...definitionImageUrls(equippedArtifacts),
-    // Reserve the eight pool images before owned materials fill the startup cap.
-    // Permanent access also covers returning players whose current score fell.
-    ...definitionImageUrls(permanentArtifacts),
-    ...definitionImageUrls(ownedArtifacts),
     ...definitionImageUrls(ownedMaterials),
     ...definitionImageUrls(recipeMaterials),
-    ...definitionImageUrls(nearbyArtifacts),
     ...definitionImageUrls(nearbyMaterials)
   ]);
 
   return {
     priority,
+    coreImageCount: coreImages.length,
     startup: urls.slice(0, STARTUP_IMAGE_LIMIT),
     remaining: unique([
       ...SCENE_ART[sceneOrientation === 'portrait' ? 'landscape' : 'portrait'],
       ...trainingSceneImages(sceneOrientation === 'portrait' ? 'landscape' : 'portrait'),
-      ...definitionImageUrls(ARTIFACT_CATALOG),
       ...definitionImageUrls(MATERIAL_CATALOG)
     ]).filter((url) => !urls.slice(0, STARTUP_IMAGE_LIMIT).includes(url))
   };
@@ -237,6 +233,7 @@ async function prepareStartupResources() {
     ownedArtifactCount: images.priority.ownedArtifactIds.length,
     ownedMaterialCount: images.priority.ownedMaterialIds.length,
     equippedArtifactCount: images.priority.equippedArtifactIds.length,
+    coreImageCount: images.coreImageCount || 0,
     startupImageCount: images.startup.length,
     backgroundImageCount: images.remaining.length
   };

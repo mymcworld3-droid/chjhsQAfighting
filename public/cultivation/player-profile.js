@@ -126,7 +126,7 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
       '</b></div><div><span>累計答對</span><b>' + fmt(profile.correct) +
       '</b></div><div><span>累計答題</span><b>' + fmt(profile.answered) + '</b></div></div>' +
       '<section class="xpp-section"><h3>本命金丹</h3>' +
-      (core ? '<div class="xpp-core"><div><strong>' + esc(core.name) + '</strong><b>' +
+      (core ? '<div class="xpp-core">' + (globalThis.QAGoldenCoreArt?.markup(core.type,core.grade,core.name) || '') + '<div><strong>' + esc(core.name) + '</strong><b>' +
         fmt(core.grade) + ' 品 · 戰力 +' + fmt(profile.power.core) + '</b></div>' +
         (core.effect ? '<p>' + esc(core.effect) + '</p>' : '') + '</div>' :
         '<p class="xpp-note">目前沒有調御中的本命金丹。</p>') + '</section>' +
