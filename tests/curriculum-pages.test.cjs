@@ -36,7 +36,7 @@ test('three progressive pages go directly from subject to merged full-year chapt
 test('only one stage is visible while pages support scrolling, progress and mobile tiles',()=>{
   assert.match(pages,/item\.hidden = i!==active/);
   assert.match(pages,/setPage\(active-1\)/);
-  assert.match(pages,/back\.textContent = active===0 \? '← 返回洞府' : '← 返回上一步'/);
+  assert.match(pages,/back\.textContent = active===0 \? '← 返回設定' : '← 返回上一步'/);
   assert.doesNotMatch(css,/cs-page-tab|cs-page-path|cs-page-progress|cs-pages-top/);
   assert.match(css,/#scope-studio \.cs-scope \.cs-back/);
   assert.match(css,/#scope-studio \.cs-stage\[hidden\]\{display:none!important\}/);

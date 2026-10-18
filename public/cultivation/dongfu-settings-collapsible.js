@@ -1,8 +1,7 @@
-// 洞府設定頁：將個人資料、範圍設定與能力分析整理成可收合的一行式卡片。
+// 設定頁：將個人資料、範圍設定與能力分析整理成可收合的一行式卡片。
 (function () {
   'use strict';
 
-  const STORAGE_KEY = 'dongfuSettingsCollapseV1';
   const sections = new Map();
 
   const css = `
@@ -34,19 +33,7 @@
     document.head.appendChild(style);
   }
 
-  function readSaved() {
-    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}') || {}; } catch (_) { return {}; }
-  }
-
-  function saveState() {
-    try {
-      const value = {};
-      sections.forEach((entry, key) => { value[key] = entry.body.hidden; });
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
-    } catch (_) {}
-  }
-
-  function setCollapsed(key, collapsed, persist = true) {
+  function setCollapsed(key, collapsed) {
     const entry = sections.get(key);
     if (!entry) return false;
     // 範圍設定不是 disclosure；舊教學的開啟呼叫同樣直接進全螢幕。
@@ -60,8 +47,27 @@
     entry.body.hidden = !!collapsed;
     entry.card.classList.toggle('is-collapsed', !!collapsed);
     entry.button.setAttribute('aria-expanded', String(!collapsed));
-    if (persist) saveState();
     return true;
+  }
+
+  function resetSections() {
+    sections.forEach((_, key) => setCollapsed(key, true));
+    const page = document.getElementById('page-settings');
+    page?.querySelectorAll('.dongfu-collapse-card').forEach(card => {
+      const body = card.querySelector('.dongfu-collapse-body');
+      if (body) body.hidden = true;
+      card.classList.add('is-collapsed');
+      const button = card.querySelector('.dongfu-collapse-head');
+      if (button?.hasAttribute('aria-expanded')) button.setAttribute('aria-expanded', 'false');
+    });
+    const fallback = page?.querySelector('#dongtian-launcher-card');
+    if (fallback) {
+      fallback.dataset.open = '0';
+      fallback.querySelector('.dt-entry-head')?.setAttribute('aria-expanded', 'false');
+      const body = fallback.querySelector('.dt-entry-body');
+      if (body) body.hidden = true;
+    }
+    page?.querySelectorAll('details[open]').forEach(details => { details.open = false; });
   }
 
   function makeHeader(card, key, icon, title, summary) {
@@ -91,7 +97,7 @@
       button.querySelector('.dongfu-collapse-chevron i')?.classList.replace('fa-chevron-down', 'fa-arrow-right');
       button.addEventListener('click', () => window.openCurriculumStudio?.());
     } else {
-      button.addEventListener('click', () => setCollapsed(key, !body.hidden, true));
+      button.addEventListener('click', () => setCollapsed(key, !body.hidden));
     }
   }
 
@@ -151,9 +157,13 @@
       icon: 'fa-chart-radar', title: '能力分析圖譜', summary: '近期答題正確率與科目能力', className: 'dongfu-analysis-card'
     });
 
-    const saved = readSaved();
-    ['profile', 'analysis'].forEach((key) => setCollapsed(key, saved[key] !== undefined ? !!saved[key] : true, false));
-    setCollapsed('scope', true, false);
+    resetSections();
+    let wasActive = page.classList.contains('active-page') && !page.classList.contains('hidden');
+    new MutationObserver(() => {
+      const active = page.classList.contains('active-page') && !page.classList.contains('hidden');
+      if (wasActive && !active) resetSections();
+      wasActive = active;
+    }).observe(page, { attributes:true, attributeFilter:['class'] });
     page.dataset.dongfuCollapsible = '1';
     window.dispatchEvent(new CustomEvent('dongfu:settings-collapsible-ready'));
     return true;
@@ -170,7 +180,7 @@
       return false;
     }
     if (!sections.size) mount();
-    const opened = setCollapsed(key, false, options.persist === true);
+    const opened = setCollapsed(key, false);
     const entry = sections.get(key);
     if (opened && options.scroll !== false) entry?.button?.scrollIntoView?.({ behavior: 'smooth', block: 'center' });
     return opened;
@@ -179,11 +189,15 @@
   window.closeDongfuSettingsSection = function (key) {
     if (key === 'scope') return window.closeCurriculumStudio?.() ?? false;
     if (!sections.size) mount();
-    return setCollapsed(key, true, true);
+    return setCollapsed(key, true);
   };
 
   function boot() {
+    for (const key of ['dongfuSettingsCollapseV1','dongtianCardCollapsedV1','artifactForgeCollapsedV1']) {
+      try { localStorage.removeItem(key); } catch (_) {}
+    }
     mount();
+    window.addEventListener('xiuxian:user-data-ready', resetSections);
     const observer = new MutationObserver(() => { if (!document.getElementById('page-settings')?.dataset?.dongfuCollapsible) mount(); });
     observer.observe(document.body, { childList: true, subtree: true });
   }

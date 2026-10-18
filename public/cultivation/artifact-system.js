@@ -10,7 +10,6 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
   'use strict';
 
   const FIELD = 'artifactSystem';
-  const COLLAPSE_KEY = 'artifactForgeCollapsedV1';
   const SUPPORTED_EFFECTS = new Set([
     'equip_attack_flat', 'equip_attack_percent', 'equip_hp_flat', 'equip_hp_percent',
     'equip_damage_percent', 'equip_streak_damage_percent', 'equip_damage_reduction_flat', 'equip_damage_reduction_percent',
@@ -561,7 +560,6 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
     body.hidden = !!collapsed;
     card.classList.toggle('is-collapsed', !!collapsed);
     card.querySelector('.dongfu-collapse-head')?.setAttribute('aria-expanded', String(!collapsed));
-    try { localStorage.setItem(COLLAPSE_KEY, collapsed ? '1' : '0'); } catch (_) {}
   }
   function mountForge() {
     ensureStyle();
@@ -575,9 +573,7 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
     card.innerHTML = `<button type="button" class="dongfu-collapse-head" aria-expanded="false"><span class="dongfu-collapse-icon"><i class="fa-solid fa-hammer"></i></span><span class="dongfu-collapse-copy"><span class="dongfu-collapse-title">煉器室</span><span class="dongfu-collapse-summary">打造、裝備與催動法寶</span></span><span class="dongfu-collapse-chevron"><i class="fa-solid fa-chevron-down"></i></span></button><div id="artifact-forge-body" class="dongfu-collapse-body artifact-forge-body" hidden><div id="artifact-forge-content"></div></div>`;
     analysis.before(card);
     const body = card.querySelector('#artifact-forge-body');
-    let collapsed = true;
-    try { collapsed = localStorage.getItem(COLLAPSE_KEY) !== '0'; } catch (_) {}
-    setCollapsed(card, body, collapsed);
+    setCollapsed(card, body, true);
     card.querySelector('.dongfu-collapse-head').onclick = () => { setCollapsed(card, body, !body.hidden); if (!body.hidden) renderForge(); };
     card.addEventListener('click', (event) => {
       const craft = event.target.closest('[data-artifact-craft]');

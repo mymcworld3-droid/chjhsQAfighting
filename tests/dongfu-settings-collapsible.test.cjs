@@ -22,7 +22,9 @@ test('Dongfu settings are split into three collapsible one-line sections without
 test('Dongfu collapsible controller exposes section opening for tutorials and future navigation', () => {
   assert.match(moduleSource, /window\.openDongfuSettingsSection/);
   assert.match(moduleSource, /setCollapsed\(key, false/);
-  assert.match(moduleSource, /STORAGE_KEY = 'dongfuSettingsCollapseV1'/);
+  assert.doesNotMatch(moduleSource, /localStorage\.(?:getItem|setItem)/);
+  assert.match(moduleSource, /localStorage\.removeItem\(key\)/);
+  assert.match(moduleSource, /if \(wasActive && !active\) resetSections\(\)/);
 });
 
 test('newbie tutorial opens the affected Dongfu section before spotlighting settings', () => {

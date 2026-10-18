@@ -16,7 +16,7 @@ test('Qi-five Dongtian tutorial unlocks at five cultivation and never teleports 
   assert.match(tutorial, /SCORE_REQUIRED = 5/);
   assert.match(tutorial, /phase === 'settings'/);
   assert.match(tutorial, /\[data-target="page-settings"\]/);
-  assert.match(tutorial, /請自己點擊底部導覽的「洞府」/);
+  assert.match(tutorial, /請自己點擊底部導覽的「設定」/);
   assert.doesNotMatch(tutorial, /switchToPage/);
 });
 

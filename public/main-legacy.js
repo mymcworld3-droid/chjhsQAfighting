@@ -54,7 +54,7 @@ window.isXiuxianFirstLogin = () => Boolean(firstLoginUid && auth.currentUser?.ui
 window.getCurrentUserData = () => currentUserData;
 
 function hasCompletedPlayerProfile(profile = currentUserData?.profile) {
-    // 年級與強弱項皆為洞府內的選填設定，不再是遊戲門檻。
+    // 年級與強弱項皆為設定內的選填設定，不再是遊戲門檻。
     return Boolean(currentUserData?.stats);
 }
 window.hasCompletedPlayerProfile = hasCompletedPlayerProfile;
@@ -298,7 +298,7 @@ const UI_TEXT = {
     th_rank: "境界",
 
     // Settings
-    settings_title: "洞府設定",
+    settings_title: "設定",
     label_level: "年級／身分",
     label_strong: "擅長科目",
     label_weak: "弱項 (加強練習)",
@@ -335,7 +335,7 @@ const UI_TEXT = {
     nav_quiz: "答題",
     nav_store: "坊市",
     nav_rank: "仙榜",
-    nav_settings: "洞府",
+    nav_settings: "設定",
     nav_social: "社交",
     nav_admin: "管理",
 
@@ -691,7 +691,7 @@ window.logout = () => {
 // 🚪 遊戲啟動閘門：登入後等所有功能腳本載入完成才進遊戲
 // ==========================================
 const GAME_STARTUP_TIPS = [
-    '洞府可以調整出題範圍、難度與個人設定。',
+    '設定可以調整出題範圍、難度與個人設定。',
     '洞天首次完整通關可獲得靈石，題數越多，獎勵也越高。',
     '修煉頁的背包可以查看持有法寶與煉器素材。',
     '築基之後會逐步開啟更多修煉與鬥法內容。',
@@ -1405,7 +1405,7 @@ onAuthStateChanged(auth, async (user) => {
                 userInfoEl.innerHTML = `<i class="fa-solid fa-user-astronaut"></i> ${currentUserData.displayName || user.displayName || '玩家'}`;
             }
 
-            // 個人學制／強弱項留在洞府選填；首次流程由同一載具的到訪狀態接棒。
+            // 個人學制／強弱項留在設定選填；首次流程由同一載具的到訪狀態接棒。
             const arrival = window.getFirstVisitState?.();
             if ((user.isAnonymous && !arrival?.completed && new URLSearchParams(location.search).get('qa') !== '1') ||
                 arrival?.joining || firstLoginUid === user.uid && !user.isAnonymous ||
@@ -6141,7 +6141,7 @@ window.loadLeaderboard = async ({ force = false } = {}) => {
     const uid = auth.currentUser?.uid;
     const group = leaderboardEducationGroup(currentUserData?.profile?.educationLevel);
     if (!group) {
-        tbody.innerHTML = '<tr><td colspan="3" class="p-8 text-center text-yellow-200">請先在洞府設定年級，才能查看你的仙榜。 <button type="button" id="leaderboard-set-grade" class="underline text-cyan-200">前往設定</button></td></tr>';
+        tbody.innerHTML = '<tr><td colspan="3" class="p-8 text-center text-yellow-200">請先到設定頁設定年級，才能查看你的仙榜。 <button type="button" id="leaderboard-set-grade" class="underline text-cyan-200">前往設定</button></td></tr>';
         tbody.querySelector('#leaderboard-set-grade')?.addEventListener('click', () => window.switchToPage('page-settings'));
         return;
     }

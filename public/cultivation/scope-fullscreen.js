@@ -318,7 +318,7 @@ import { playerRepository } from './data/player-repository.js';
       <header class="ss-topbar">
         <span class="ss-emblem" aria-hidden="true"><i class="fa-solid fa-book-open-reader"></i></span>
         <div class="ss-brand"><span class="ss-overline">青雲問道 · 修習策劃</span><h2 id="ss-title">課程研修所</h2></div>
-        <button type="button" class="ss-close" id="ss-close" aria-label="返回洞府"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i><span>返回洞府</span></button>
+        <button type="button" class="ss-close" id="ss-close" aria-label="返回設定"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i><span>返回設定</span></button>
       </header>
       <nav class="ss-tabs" aria-label="選課分頁" role="tablist">
         <button id="ss-tab-course" type="button" role="tab" aria-selected="true"><i class="fa-solid fa-layer-group" aria-hidden="true"></i>選擇課程</button>

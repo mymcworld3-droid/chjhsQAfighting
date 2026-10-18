@@ -71,7 +71,7 @@ test('tutorial route gate intercepts the real quiz entry so the sample does not 
 test('Dongfu tutorial waits until the player clicks the bottom navigation before opening sections', () => {
   assert.match(tutorial, /if \(!route && step\.settingsSection/);
   assert.match(tutorial, /window\.openDongfuSettingsSection\(step\.settingsSection/);
-  assert.match(tutorial, /範圍、難度與個人設定都在「洞府」/);
+  assert.match(tutorial, /範圍、難度與個人設定都在「設定」/);
 });
 
 

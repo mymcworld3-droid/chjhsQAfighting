@@ -1,4 +1,4 @@
-// 洞天入口保險層：不依賴 Firebase，確保洞府永遠看得到「洞天」入口。
+// 洞天入口保險層：不依賴 Firebase，確保設定永遠看得到「洞天」入口。
 (function () {
   'use strict';
 
@@ -91,14 +91,14 @@
     const card = document.createElement('section');
     card.id = ENTRY_ID;
     card.className = 'glass-panel rounded-2xl mb-3 relative overflow-hidden';
-    card.dataset.open = '1';
+    card.dataset.open = '0';
     card.innerHTML = `
-      <button type="button" class="dt-entry-head" aria-expanded="true">
+      <button type="button" class="dt-entry-head" aria-expanded="false">
         <span class="dt-entry-icon"><i class="fa-solid fa-mountain-sun"></i></span>
         <span class="dt-entry-copy"><span class="dt-entry-title">洞天</span><span class="dt-entry-summary">多圖＋文字煉成固定題序的知識秘境</span></span>
         <span class="dt-entry-chevron"><i class="fa-solid fa-chevron-down"></i></span>
       </button>
-      <div class="dt-entry-body">
+      <div class="dt-entry-body" hidden>
         <div class="dt-entry-kicker">悟道秘境</div>
         <h4>開闢與遊歷洞天</h4>
         <p>上傳多張圖片或貼上文字，AI 會一次產生洞天名稱、程度、難度、科目與有順序的完整題組。建立後會永久保存，也可能被符合程度與科目的其他修士遇見。</p>

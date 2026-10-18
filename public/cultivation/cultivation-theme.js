@@ -160,7 +160,7 @@
     text('[data-i18n="store_title"]', '雲間坊市');
     text('[data-i18n="nav_quiz"]', '問道');
     text('[data-i18n="nav_rank"]', '仙榜');
-    text('[data-i18n="nav_settings"]', '洞府');
+    text('[data-i18n="nav_settings"]', '設定');
     text('[data-i18n="nav_social"]', '仙盟');
     text('[data-i18n="inventory_title"]', '法寶庫');
     text('[data-i18n="rank_title"]', '九州仙榜');

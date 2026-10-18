@@ -178,8 +178,8 @@ import './first-visit-rules.js';
     $('scope-studio')?.classList.remove('fv-scope');
     if ($('ss-title')) $('ss-title').textContent = '課程研修所';
     $('ss-picker')?.querySelector('.ss-panel-head small')?.replaceChildren(document.createTextNode('先選出題模式，再從課程目錄挑選章節或細項。'));
-    $('ss-close')?.setAttribute('aria-label', '返回洞府');
-    const label = $('ss-close')?.querySelector('span'); if (label) label.textContent = '返回洞府';
+    $('ss-close')?.setAttribute('aria-label', '返回設定');
+    const label = $('ss-close')?.querySelector('span'); if (label) label.textContent = '返回設定';
     $('fv-quiz-hint')?.remove();
   }
   window.isFirstVisitActive = () => !QA && !state.completed && state.stage !== 'welcome';
