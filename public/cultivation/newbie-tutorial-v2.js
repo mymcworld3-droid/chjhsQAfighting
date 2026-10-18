@@ -2,7 +2,7 @@ import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.j
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
-// 第一章問道授課，以及由仙道任務／洞府入口開啟的獨立洞天新手教程。
+// 第一章問道授課，以及由仙道任務／設定入口開啟的獨立洞天新手教程。
 (function () {
   'use strict';
 
@@ -81,7 +81,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     {
       page: 'page-settings', target: '#dongfu-scope-card .dongfu-collapse-head', requiresScopeOpen: true,
       kicker: '第九步 · 安排修習範圍', title: '點亮起的「範圍設定」',
-      body: '沈清霜：「先選你要鑽研的學問。」複習範圍位於<strong>獨立的全螢幕課程研修所</strong>，請親自點擊洞府中亮起的「範圍設定」進入。',
+      body: '沈清霜：「先選你要鑽研的學問。」複習範圍位於<strong>獨立的全螢幕課程研修所</strong>，請親自點擊設定中亮起的「範圍設定」進入。',
       note: '請點亮起的入口；點其他地方不會略過這個操作。'
     },
     {
@@ -98,20 +98,20 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     },
     {
       page: 'page-settings', target: '#scope-studio #ss-close', requiresScopeReturn: true,
-      kicker: '研修所 · 返回洞府', title: '親自返回洞府',
-      body: '現在請點亮起的<strong>「返回洞府」</strong>，再看看個人資料中的難度設定。若曾編輯卻尚未儲存，離開時遊戲會詢問是否放棄修改。',
+      kicker: '研修所 · 返回設定', title: '親自返回設定',
+      body: '現在請點亮起的<strong>「返回設定」</strong>，再看看個人資料中的難度設定。若曾編輯卻尚未儲存，離開時遊戲會詢問是否放棄修改。',
       note: '請實際點返回鍵，不能從其他地方跳過。'
     },
     {
       page: 'page-settings', target: '#set-difficulty', settingsSection: 'profile', kicker: '第十步 · 難度', title: '展開「個人資料」調整難度',
-      body: '洞府的<strong>個人資料</strong>收合區保留程度、強弱科與難度設定。難度可以交給 AI AUTO 自動調整，也可以固定為簡單、中等或困難。',
+      body: '設定的<strong>個人資料</strong>收合區保留程度、強弱科與難度設定。難度可以交給 AI AUTO 自動調整，也可以固定為簡單、中等或困難。',
       note: '剛開始可以先使用 AUTO 或中等。'
     },
     {
       page: 'page-home', target: '#xiuxian-panel',
       kicker: '第一章 · 授課完成', title: '回到宗門，繼續與師姐對話',
       body: '你已學會<strong>讀題 → 選答案 → 看解析 → 下一題</strong>，也認識了回報問題、修習範圍與難度設定。沈清霜仍在宗門等你，完成教學後會接續第一章對話。煉氣五層後，仙道任務會引導你觀看第二章，再另外開啟洞天新手教程。',
-      note: '洞天實作與劇情分開，可從後續仙道任務或洞府的「查看洞天新手教程」開始。'
+      note: '洞天實作與劇情分開，可從後續仙道任務或設定的「查看洞天新手教程」開始。'
     }
   ];
 
@@ -119,7 +119,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     {
       page: 'page-settings', target: '#dongtian-card .dongfu-collapse-head, #dongtian-launcher-card .dt-entry-head', requiresDongtianOpen: true,
       kicker: '洞天新手教程 · 找到入口', title: '先找到洞天在哪裡',
-      body: '洞天位在<strong>洞府</strong>裡，不會直接把你傳送進去。請找到「洞天」區塊並親自點開；自己的洞天建立、重玩、題目管理與刪除都從這裡進行。',
+      body: '洞天位在<strong>設定</strong>裡，不會直接把你傳送進去。請找到「洞天」區塊並親自點開；自己的洞天建立、重玩、題目管理與刪除都從這裡進行。',
       note: '請親自點亮起的「洞天」入口，把區塊展開。'
     },
     {
@@ -257,9 +257,9 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     if (step.page === 'page-settings') {
       return navRoute(
         'page-settings',
-        '洞府',
+        '設定',
         '#bottom-nav #nav-grid > button[data-target="page-settings"]',
-        '範圍、難度與個人設定都在「洞府」。請看底部導覽，找到並點擊「洞府」。'
+        '範圍、難度與個人設定都在「設定」。請看底部導覽，找到並點擊「設定」。'
       );
     }
 
@@ -602,7 +602,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
   function blockedLabelForStep(step) {
     if (step.requiresScopeOpen && !scopeStudioOpen()) return '請先進入研修所';
     if (step.requiresScopeOpenView && !scopeStudioOpen()) return '研修所尚未開啟';
-    if (step.requiresScopeReturn && scopeStudioOpen()) return '請先返回洞府';
+    if (step.requiresScopeReturn && scopeStudioOpen()) return '請先返回設定';
     if (step.requiresAnswer && !exampleAnswered) return '請先作答';
     if (step.requiresReport && !reportOpened) return '請先按回報問題';
     if (step.requiresDongtianOpen && !dongtianOpen) return '請先點開洞天';
@@ -694,7 +694,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     updateSpotlight();
     setTimeout(() => {
       const highlighted = target(displayStep().target);
-      // 固定底部的宗門／洞府按鈕不可 scrollIntoView：它們本來就在視窗內。
+      // 固定底部的宗門／設定按鈕不可 scrollIntoView：它們本來就在視窗內。
       if (highlighted && !highlighted.closest('#bottom-nav')) {
         highlighted.scrollIntoView?.({behavior:'smooth',block:'center'});
       }

@@ -138,12 +138,10 @@ export const featureReady = (async () => {
     document.head.appendChild(style);
   }
 
-  function collapseKey() { return 'dongtianCardCollapsedV1'; }
   function setCardCollapsed(card, body, collapsed) {
     body.hidden = !!collapsed;
     card.classList.toggle('is-collapsed', !!collapsed);
     card.querySelector('.dongfu-collapse-head')?.setAttribute('aria-expanded', String(!collapsed));
-    try { localStorage.setItem(collapseKey(), collapsed ? '1' : '0'); } catch (_) {}
   }
 
   function mount() {
@@ -193,9 +191,7 @@ export const featureReady = (async () => {
       </div>`;
     analysis.before(card);
     const body = card.querySelector('#dongtian-body');
-    let collapsed = true;
-    try { collapsed = localStorage.getItem(collapseKey()) !== '0'; } catch (_) {}
-    setCardCollapsed(card, body, collapsed);
+    setCardCollapsed(card, body, true);
     card.querySelector('.dongfu-collapse-head').onclick = () => {
       setCardCollapsed(card, body, !body.hidden);
       if (!body.hidden && !state.listLoaded) loadOwnDongtians();
@@ -516,7 +512,7 @@ export const featureReady = (async () => {
     const playerLevel = player?.profile?.educationLevel || '國中一年級';
     // 新手範例只需體驗一次作答、解析與結算；正式洞天仍遵守原有題數規則。
     const questions = [
-      { id:'TUTORIAL-DT-001', difficulty:'easy', subject:'洞天教學', q:'洞天功能主要位於哪個頁面？', correct:'洞府', wrong:['鬥法','排行榜','登入畫面'], exp:'洞天位於「洞府」中，可在那裡建立、重玩、管理與刪除自己的洞天。' },
+      { id:'TUTORIAL-DT-001', difficulty:'easy', subject:'洞天教學', q:'洞天功能主要位於哪個頁面？', correct:'設定', wrong:['鬥法','排行榜','登入畫面'], exp:'洞天位於「設定」中，可在那裡建立、重玩、管理與刪除自己的洞天。' },
     ];    return {
       id: 'newbie-private-dongtian-demo',
       tutorialOnly: true,
@@ -1309,7 +1305,7 @@ export const featureReady = (async () => {
     // Show an actionable settlement screen immediately rather than leaving the
     // last answered question visible while the transaction waits on Firestore.
     const overlay = ensureOverlay();
-    const settlementBack = `<button id="dt-settle-back" class="dt-back" type="button">返回洞府／宗門</button>`;
+    const settlementBack = `<button id="dt-settle-back" class="dt-back" type="button">返回設定／宗門</button>`;
     const bindSettlementBack = () => {
       overlay.querySelector('#dt-settle-back').onclick = () => {
         if (state.session !== s) return;

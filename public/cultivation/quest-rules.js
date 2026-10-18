@@ -23,7 +23,7 @@
     ({ id, title, description, metric, target, reward: { gold, cultivation, materials }, destination, minScore });
   // 保留舊目錄順序，用固定 ID 將既有 pathIndex 轉成已領清單。
   const LEGACY_PATH = [
-    quest('path-scope', '立下修習卷', '在洞府的範圍設定選擇至少一項學習範圍，並儲存出題範圍。', 'scope', 1, 30, 0, 'scope'),
+    quest('path-scope', '立下修習卷', '在設定的範圍設定選擇至少一項學習範圍，並儲存出題範圍。', 'scope', 1, 30, 0, 'scope'),
     quest('path-first-answer', '初次問道', '問道答對 1 題，踏出修行第一步。', 'solo', 1, 30, 0, 'solo'),
     quest('path-qi-five', '引氣入體', '修為達 5，晉至煉氣五層。', 'score', 5, 50, 0, 'solo'),
     quest('path-meditation', '靜心一日', '完成 1 次每日閉關，不要求全對。', 'meditation', 1, 40, 0, 'meditation'),

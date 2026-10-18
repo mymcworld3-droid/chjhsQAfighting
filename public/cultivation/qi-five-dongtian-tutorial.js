@@ -65,13 +65,13 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       button:'開始找洞天入口'
     };
     if (phase === 'settings') return {
-      kicker:'第 1 步 · 找到入口', title:'先找到底部「洞府」',
-      body:'洞天功能放在<strong>洞府</strong>裡。請自己點擊底部導覽的「洞府」，教學不會直接把你傳送過去。',
-      note:'請點紫色框標示的「洞府」。', button:'請點洞府', target:'[data-target="page-settings"]', locked:true
+      kicker:'第 1 步 · 找到入口', title:'先找到底部「設定」',
+      body:'洞天功能放在<strong>設定</strong>裡。請自己點擊底部導覽的「設定」，教學不會直接把你傳送過去。',
+      note:'請點紫色框標示的「設定」。', button:'請點設定', target:'[data-target="page-settings"]', locked:true
     };
     if (phase === 'card') return {
-      kicker:'第 2 步 · 打開洞天', title:'在洞府裡找到「洞天」',
-      body:'洞府裡的「洞天」區塊就是建立、重玩、管理與刪除洞天的位置。現在請親自點開它。',
+      kicker:'第 2 步 · 打開洞天', title:'在設定裡找到「洞天」',
+      body:'設定裡的「洞天」區塊就是建立、重玩、管理與刪除洞天的位置。現在請親自點開它。',
       note:'之後使用洞天，都從這個入口開始。', button:'請點開洞天', target:'#dongtian-card .dongfu-collapse-head', locked:true
     };
     if (phase === 'create') return {

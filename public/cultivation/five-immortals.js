@@ -234,7 +234,7 @@ import { playerRepository } from './data/player-repository.js';
     const role = roleById(roleId);
     const user = auth?.currentUser;
     if (!role || !user) { toast('請先登入，才能問鼎五仙。'); return; }
-    if (!currentGroup()) { toast('請先到洞府設定年級，才能查看及問鼎五仙。'); return; }
+    if (!currentGroup()) { toast('請先到設定頁設定年級，才能查看及問鼎五仙。'); return; }
     if (!eligible()) { toast(`只有渡劫以上修士（${TRIBULATION_SCORE} 修為）能問鼎五仙。`); return; }
     const serial = ++sessionSerial;
     challenge = { active: true, serial, cohort: currentGroup(), attemptId: Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,9), role, streak: 0, questionNumber: 0, target: ownerRecord(roleId), busy: false, question: null, seenQuestions: [], nextPromise: null };
@@ -374,7 +374,7 @@ import { playerRepository } from './data/player-repository.js';
     const uid = auth?.currentUser?.uid || '';
     const cohort = currentGroup();
     if (!cohort) {
-      container.innerHTML = '<p style="padding:26px 12px;text-align:center;color:#cdbb91">請先在洞府設定年級，才能查看你的五大仙榜。 <button type="button" id="five-set-grade" style="text-decoration:underline;color:#c9eedc">前往設定</button></p>';
+      container.innerHTML = '<p style="padding:26px 12px;text-align:center;color:#cdbb91">請先到設定頁設定年級，才能查看你的五大仙榜。 <button type="button" id="five-set-grade" style="text-decoration:underline;color:#c9eedc">前往設定</button></p>';
       container.querySelector('#five-set-grade')?.addEventListener('click', () => window.switchToPage?.('page-settings'));
       const note = document.getElementById('five-immortal-lock');
       if (note) note.textContent = '';

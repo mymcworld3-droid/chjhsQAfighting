@@ -79,7 +79,7 @@ test('Dongfu scope tile opens the dialog immediately, never exposing its old dro
   assert.match(dongfu, /if \(key === 'scope'\) \{/);
   assert.match(dongfu, /button\.addEventListener\('click', \(\) => window\.openCurriculumStudio\?\.\(\)\)/);
   assert.match(dongfu, /button\.setAttribute\('aria-haspopup', 'dialog'\)/);
-  assert.match(dongfu, /setCollapsed\('scope', true, false\)/);
+  assert.match(dongfu, /sections\.forEach\(\(_, key\) => setCollapsed\(key, true\)\)/);
   assert.match(dongfu, /\.dongfu-scope-card \.dongfu-collapse-body\{display:none!important\}/);
   assert.doesNotMatch(studio, /ss-launch-preview|ss-launch-button|const preview =/);
   assert.doesNotMatch(css, /ss-launch-preview/);
