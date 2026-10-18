@@ -77,6 +77,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/scope-fullscreen.js',
   './cultivation/curriculum-pages.js',
   './cultivation/quest-system.js',
+  './cultivation/player-growth-feedback.js',
   './cultivation/dongtian.js',
   './cultivation/opportunity-dongtian.js',
   './cultivation/story/opening-cinematic.js',

@@ -58,7 +58,7 @@ function advanceRaidClock(room, roomId, at = Date.now()) {
       let reflected = 0;
       for (const [uid, member] of Object.entries(next.members)) {
         if (member.alive === false || finite(member.hp) <= 0) continue;
-        const combat = resolveBossDefense(member, { roomId, bossAction: action });
+        const combat = resolveBossDefense(member, { roomId, bossAction: action, bossHp:Math.max(0,finite(next.bossHp) - reflected) });
         const reflection = Math.max(0, Math.round(finite(combat.reflectedDamage)));
         reflected += reflection;
         next.members[uid] = { ...combat.member, alive: finite(combat.member.hp) > 0,

@@ -412,6 +412,13 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     return state.equippedCore?.type || null;
   }
 
+  function branchDisplayValue(core, id, level) {
+    if (id === 'cultivation') return Math.round(level / 2);
+    if (id === 'attack') return Math.round(level * 3.5);
+    if (id === 'coreChance') return Math.round((Growth.branches(core).find(branch => branch.id === id)?.maxBonus || 0) * Math.min(level,Growth.CAP) / Growth.CAP * 100) / 100;
+    return Growth.branchValue(core, id, level);
+  }
+
   function nascentSoulTabMarkup() {
     if (!nascentUnlocked()) return '<section class="ns-panel"><h3>元嬰未成</h3><p>修為達到 68 後，方可凝聚本命元嬰。</p></section>';
     const getFragmentsButton = '<button type="button" class="ns-get-fragments-btn" data-ns-get-fragments><i class="fa-solid fa-gem" aria-hidden="true"></i><span>去獲取元嬰碎精</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>';
@@ -426,7 +433,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     const nodes = branches.map((branch, index) => {
       const status = Growth.status({...player,cultivationTraining:{...player.cultivationTraining,equippedCore:core}},branch.id);
       const level = status.level;
-      const value = Growth.branchValue(core,branch.id,level);
+      const value = branchDisplayValue(core,branch.id,level);
       const name = branch.name;
       const [x, y] = positions[index];
       const unit = branch.unit === '%' ? '%' : '';
@@ -435,6 +442,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
       return `<button type="button" class="ns-growth-node ${level ? 'is-grown' : ''}" style="--branch-x:${x}%;--branch-y:${y}%" data-ns-upgrade="${branch.id}" aria-label="${label}" title="${status.reason || '升級消耗 '+status.cost+' 碎精'}" ${!status.ok || soulBusy ? 'disabled' : ''}>
         <span class="ns-growth-name"><i class="fa-solid ${branch.icon}" aria-hidden="true"></i>${name}</span>
         <strong class="ns-growth-value ${unit ? 'is-percent' : ''}">+${value}${unit}</strong>
+        ${level < Growth.CAP ? `<small class="ns-growth-preview">下級 +${branchDisplayValue(core,branch.id,level + 1)}${unit}</small>` : ''}
         <span class="ns-growth-level">${level} / 10</span>
         <span class="ns-growth-track" aria-hidden="true"><span style="width:${level * 10}%"></span></span>
         <span class="ns-growth-action">${action}</span>
@@ -448,6 +456,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
         <div class="ns-growth-core">${coreVisualMarkup(core, false)}<div class="ns-growth-core-caption"><strong>${coreType(core.type).name}</strong><span>${clampGrade(core.grade)} 品</span></div></div>
         ${nodes}
       </div>
+      <div class="ns-track-goals" aria-label="追蹤元嬰目標">${branches.map(branch => `<button type="button" data-ns-track="${branch.id}">追蹤${branch.name}</button>`).join('')}</div>
     </section>`;
   }
 
@@ -457,6 +466,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
     if (!user) return toast('尚未登入，無法保存元嬰。');
     const core = {...state.equippedCore};
     if (reset && await window.openConfirm?.('重修將清除元嬰分支並返還全部已投入碎精，確定重修？') !== true) return;
+    const before = window.captureGrowthSnapshot?.();
     soulBusy = true;
     renderTrainingPage();
     try {
@@ -477,6 +487,11 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
         const local = window.getCurrentUserData?.();
         if (local) Growth.apply(local,result);
         toast(reset ? '元嬰已重修，返還 '+result.returned+' 碎精' : '升級成功，消耗 '+result.cost+' 碎精');
+        const extra = reset ? [] : [{label:result.branch.name + '分支等級',before:{value:result.level,unit:'級'},after:{value:result.level + 1,unit:'級'}}];
+        if (!reset && ['cultivation','core'].includes(branchId)) extra.push({label:result.branch.name + '加成',
+          before:{value:branchDisplayValue(core,branchId,result.level),unit:result.branch.unit === '%' ? '%' : ''},
+          after:{value:branchDisplayValue(core,branchId,result.level + 1),unit:result.branch.unit === '%' ? '%' : '',note:local?.cultivationTraining?.coreEnabled === false ? '重新啟用金丹後生效' : ''}});
+        if (before) window.showGrowthComparison?.({uid:user.uid,title:reset ? '元嬰重修後的變化' : '元嬰升級後的變化',before,after:window.captureGrowthSnapshot?.(),extra});
         window.dispatchEvent(new CustomEvent('xiuxian:stats-updated',{detail:{source:'nascent-growth'}}));
       }
     } catch (error) { toast('保存未完成：'+(error?.message || '請重試')); }
@@ -509,6 +524,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
 
   function bindSoulActions() {
     const content = document.getElementById('training-tab-content');
+    content?.querySelectorAll('[data-ns-track]').forEach(button => button.addEventListener('click', () => window.trackCultivationGoal?.({type:'nascent',id:button.dataset.nsTrack})));
     content?.querySelector('[data-ns-get-fragments]')?.addEventListener('click', () => {
       if (typeof window.openRaidHub === 'function') window.openRaidHub();
       else toast('秘境試煉尚未準備好，請稍後再試。');

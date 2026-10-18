@@ -369,6 +369,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
               <li><b>八方煉製</b><span>消耗 ${Math.max(0, Number(plan?.fragments) || 0).toLocaleString()} 煉器碎片，${plan?.valid ? `約需 ${esc(window.formatCultivationRefineryDuration?.(plan.durationMs) || '一段時間')}` : '目前無法計算煉製時間'}。</span></li>
               <li><b>開爐取寶</b><span>煉製完成後，按陣心「開爐」領取 ${esc(item.name)}。</span></li>
             </ol>
+            <button type="button" class="refinery-recipe-craft" data-refinery-track-recipe="${esc(item.id)}"><i class="fa-solid fa-bullseye"></i> 追蹤這件法器的材料</button>
             <button type="button" class="refinery-recipe-craft" data-refinery-craft-recipe="${esc(item.id)}" ${canCraft ? '' : 'disabled'}><i class="fa-solid fa-fire-flame-curved"></i> ${esc(actionText)}${plan?.valid ? `<small class="refinery-recipe-fragment-cost">${esc(craftCostText(plan))}</small>` : ''}</button>
             <p class="refinery-recipe-craft-note">${canCraft ? '點擊即按此配方投入素材、扣除煉器碎片並開始煉製。' : '請先確認配方、材料、煉器碎片及目前的煉製狀態。'}</p>
           </section>` : ''}
@@ -905,6 +906,8 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
   }
 
   function bindContent(content) {
+    content.querySelectorAll('[data-refinery-track-recipe]').forEach(button => button.addEventListener('click', () =>
+      window.trackCultivationGoal?.({type:'recipe',id:button.dataset.refineryTrackRecipe})));
     content.querySelector('[data-refinery-open-market]')?.addEventListener('click', () => window.openPlayerMarketplace?.('recipe'));
     content.querySelector('[data-refinery-recipe-book]')?.addEventListener('toggle', (event) => {
       recipeBookOpen = event.currentTarget.open;
@@ -1212,6 +1215,17 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
     ['foundation-training-stage-changed','golden-core-access-changed','material-system-updated','artifact-system-updated','material-catalog-updated','artifact-catalog-updated','artifact-recipes-updated','xiuxian:recipe-license-updated','xiuxian:user-ready','xiuxian:refinery-job-updated','xiuxian:stats-updated'].forEach((name) => window.addEventListener(name, schedule));
     window.addEventListener('xiuxian:refinery-open-request', () => activate());
     window.openCultivationRefinery = () => activate();
+    window.openCultivationRecipe = id => {
+      const item = getArtifactById(id);
+      if (!recipeAvailableToPlayer(item)) return false;
+      recipeBookOpen = true; expandedRecipeId = id;
+      if (!activate()) return false;
+      requestAnimationFrame(() => {
+        const card = [...document.querySelectorAll('[data-refinery-recipe-card]')].find(node => node.dataset.refineryRecipeCard === id);
+        card?.scrollIntoView({block:'nearest',behavior:'auto'});
+      });
+      return true;
+    };
 
     // 煉器每放一個材料都會重建內容區。若監看整個 body/subtree，
     // 這些 DOM 變更會再次觸發煉器排程，材料種類多時容易造成 observer storm。
