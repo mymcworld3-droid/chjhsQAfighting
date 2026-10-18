@@ -6,6 +6,7 @@ const vm = require('node:vm');
 const Pool = require('../public/cultivation/soulbound-pool.js');
 const Access = require('../public/cultivation/training-access-rules.js');
 const Layouts = require('../public/cultivation/training-scene-layouts.js');
+const CoreArt = require('../public/cultivation/golden-core-art.js');
 
 const read = (file) => fs.readFileSync(path.join(__dirname, '..', file), 'utf8');
 
@@ -41,7 +42,7 @@ test('startup preloader prioritizes owned equipped and recipe resources', () => 
   assert.match(preload, /materialSystem\?\.inventory/);
   assert.match(preload, /ARTIFACT_RECIPES/);
   assert.match(preload, /recipeMaterialIdsForArtifacts/);
-  assert.match(preload, /STARTUP_IMAGE_LIMIT = 28/);
+  assert.match(preload, /STARTUP_IMAGE_LIMIT = 48/);
   assert.match(preload, /IMAGE_CONCURRENCY = 4/);
   assert.match(preload, /warmRemainingInBackground/);
 });
@@ -50,8 +51,8 @@ test('startup gate reports catalog and image warmup progress', () => {
   assert.match(preload, /xiuxian:startup-resource-progress/);
   assert.match(legacy, /xiuxian:startup-resource-progress/);
   assert.match(legacy, /正在整理法寶、材料與煉器配方/);
-  assert.match(legacy, /正在預載背包與裝備圖片/);
-  assert.match(legacy, /法寶、材料、裝備與煉器資源已就緒/);
+  assert.match(legacy, /正在預載金丹圖片與修煉資源/);
+  assert.match(legacy, /金丹圖片、材料與修煉資源已就緒/);
 });
 
 function imagePlan(player, profile = 'balanced') {
@@ -65,6 +66,7 @@ function imagePlan(player, profile = 'balanced') {
     materialRealmOrderByName: () => 2,
     trainingRenderProfile: () => profile,
     QATrainingAccessRules: Access, QASoulboundPool: Pool, QATrainingSceneLayouts: Layouts,
+    QAGoldenCoreArt: CoreArt,
     window: { getCurrentUserData: () => player, matchMedia: () => ({ matches: false }) }
   };
   const source = preload.slice(0, preload.indexOf('function warmImage(')).replace(/^import[\s\S]*?;\s*/gm, '');
@@ -105,26 +107,31 @@ test('startup image collection waits for the rendering decision before any image
   assert.equal(collected, 1);
 });
 
-test('all eight permanent artworks warm before the gate even with many owned material images', () => {
+test('all 27 core images warm before the gate even with many owned material images', () => {
   const player = { stats: { totalScore: 28, rankLevel: 3 }, materialSystem: {
     inventory: Object.fromEntries(Array.from({ length: 40 }, (_, i) => [`material-${i}`, 1]))
   } };
   const plan = imagePlan(player);
-  for (const item of Pool.candidates(0)) {
-    assert.equal(plan.startup.filter(url => url === item.imageUrl).length, 1, item.name);
-    assert.equal(plan.remaining.includes(item.imageUrl), false);
+  for (const src of CoreArt.all()) {
+    assert.equal(plan.startup.filter(url => url === src).length, 1, src);
+    assert.equal(plan.remaining.includes(src), false);
   }
-  assert.ok(plan.startup.length <= 28);
+  assert.ok(plan.startup.length <= 48);
+  for(const item of Pool.ITEMS)assert.equal([...plan.startup,...plan.remaining].includes(item.imageUrl),false,'artifact art is never warmed');
 });
 
-test('permanent unlocks reserve pool artwork after deductions while locked accounts prioritize owned materials', () => {
+test('owned equipped and permanently unlocked artifacts never enter image warmup; current cores come first', () => {
   const restored = imagePlan({ stats: { totalScore: 0 }, trainingAccess: { version: 1, highestRealmScore: 68 } });
   const locked = imagePlan({ stats: { totalScore: 10, rankLevel: 2 }, materialSystem: {
     inventory: Object.fromEntries(Array.from({ length: 40 }, (_, i) => [`material-${i}`, 1]))
   } });
-  for (const item of Pool.candidates(0)) {
-    assert.ok(restored.startup.includes(item.imageUrl), item.name);
+  for (const item of Pool.ITEMS) {
+    assert.equal([...restored.startup,...restored.remaining].includes(item.imageUrl),false,item.name);
     assert.equal(locked.startup.includes(item.imageUrl), false);
-    assert.ok(locked.remaining.includes(item.imageUrl));
+    assert.equal(locked.remaining.includes(item.imageUrl), false);
   }
+  const equipped=imagePlan({cultivationTraining:{equippedCore:{type:'sword',grade:1},core:{type:'thunder',grade:5}},artifactSystem:{inventory:{[Pool.ITEMS[0].id]:1},equipped:{slot:Pool.ITEMS[0].id}}});
+  assert.equal(equipped.startup[0],CoreArt.source('sword',1));
+  assert.equal(equipped.startup[1],CoreArt.source('thunder',5));
+  assert.equal([...equipped.startup,...equipped.remaining].includes(Pool.ITEMS[0].imageUrl),false);
 });

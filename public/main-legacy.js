@@ -1252,12 +1252,12 @@ window.addEventListener('xiuxian:startup-resource-progress', (event) => {
         const loaded = Math.max(0, Number(detail.loaded) || 0);
         const total = Math.max(0, Number(detail.total) || 0);
         text.textContent = total
-            ? `正在預載背包與裝備圖片… ${loaded} / ${total}`
-            : '正在預載背包與裝備圖片…';
+            ? `正在預載金丹圖片與修煉資源… ${loaded} / ${total}`
+            : '正在預載金丹圖片與修煉資源…';
         return;
     }
     if (detail.phase === 'ready') {
-        text.textContent = '法寶、材料、裝備與煉器資源已就緒…';
+        text.textContent = '金丹圖片、材料與修煉資源已就緒…';
     }
 });
 
