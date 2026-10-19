@@ -87,6 +87,7 @@ function createGateway(env=process.env,fetchFn=fetch) {
     const response=await fetchFn(url+'/query',{method:'POST',headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify({statements}),signal:AbortSignal.timeout(20000)});
     const payload=await response.json().catch(()=>({}));
     if(response.status===409)throw conflict();
+    if(response.status===429&&payload.code==='resource-exhausted')throw Object.assign(Error('D1 quota exhausted'),{code:'resource-exhausted'});
     if(!response.ok || payload.success!==true || !Array.isArray(payload.result))throw Object.assign(Error('D1 gateway unavailable'),{code:'unavailable'});
     return payload.result;
   };
@@ -142,8 +143,8 @@ class Transaction {
   update(ref,data){this.writes.push({ref,type:'update',data});return this;}
   create(ref,data){this.writes.push({ref,type:'create',data});return this;}
   delete(ref){this.writes.push({ref,type:'delete'});return this;}
-  async commit(){
-    if(!this.writes.length)return;
+  async commit({before=[],after=[]}={}){
+    if(!this.writes.length&&!before.length&&!after.length)return;
     if(this.writes.length>500)throw Error('D1 batch exceeds 500 writes');
     for(const w of this.writes){if(w.ref.db!==this.db)throw Error('Cross-namespace write');await this.get(w.ref);}
     const prepared=this.preview();
@@ -154,6 +155,7 @@ class Transaction {
       collection_path:this.db.doc(path).parent.path,data:data===null?null:JSON.stringify(Codec.encode(data)),
       version:this.reads.get(path).version+1})));
     if(Buffer.byteLength(rows,'utf8')>1_800_000)throw Error('D1 transaction payload too large; split the batch');
+    const metadata=JSON.stringify([...prepared].map(([path,data])=>({path,version:this.reads.get(path).version+1,deleted:data===null})));
     const collections=JSON.stringify([...new Set([...prepared.keys()].map(p=>this.db.doc(p).parent.path))]);
     const statements=[
       {sql:`INSERT INTO d1_version_guard(id,valid) SELECT ?,CASE WHEN NOT EXISTS (
@@ -164,9 +166,9 @@ class Transaction {
         WHERE COALESCE(v.version,0) <> json_extract(r.value,'$.version')) THEN 1 ELSE 0 END`,params:[guard+':q',collectionReads,role]},
       {sql:`INSERT INTO document_versions(namespace,path,version)
         SELECT ?,json_extract(value,'$.path'),json_extract(value,'$.version') FROM json_each(?) WHERE true
-        ON CONFLICT(namespace,path) DO UPDATE SET version=excluded.version`,params:[role,rows]},
+        ON CONFLICT(namespace,path) DO UPDATE SET version=excluded.version`,params:[role,metadata]},
       {sql:`DELETE FROM documents WHERE namespace=? AND path IN (
-        SELECT json_extract(value,'$.path') FROM json_each(?) WHERE json_extract(value,'$.data') IS NULL)`,params:[role,rows]},
+        SELECT json_extract(value,'$.path') FROM json_each(?) WHERE json_extract(value,'$.deleted')=1)`,params:[role,metadata]},
       {sql:`INSERT INTO documents(namespace,path,collection_path,id,data,version,updated_at)
         SELECT ?,json_extract(value,'$.path'),json_extract(value,'$.collection_path'),json_extract(value,'$.id'),
         json_extract(value,'$.data'),json_extract(value,'$.version'),? FROM json_each(?) WHERE json_extract(value,'$.data') IS NOT NULL
@@ -176,7 +178,7 @@ class Transaction {
       {sql:'DELETE FROM d1_version_guard WHERE id IN (?,?)',params:[guard,guard+':q']}
     ];
     if(!this.collections.size)statements.splice(1,1);
-    await this.db.gateway(statements);
+    await this.db.gateway([...before,...statements,...after]);
     this.db._notify();
   }
   preview(){const data=new Map();for(const w of this.writes){const old=data.has(w.ref.path)?data.get(w.ref.path):this.reads.get(w.ref.path).data()??null;data.set(w.ref.path,Codec.apply(old,w));}return data;}

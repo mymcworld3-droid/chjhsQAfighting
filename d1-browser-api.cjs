@@ -166,7 +166,7 @@ async function executeCommit(db,input,context) {
   await tx.commit();
 }
 function registerD1BrowserApi(app,{env=process.env,resolve=role=>adminProject(role),store=role=>getD1Store(role,env)}={}) {
-  app.get('/api/data-config',(_req,res)=>res.set('Cache-Control','no-store').json({backend:env.GAME_DATA_BACKEND||'firestore',pollMs:Math.max(1000,Number(env.D1_POLL_MS)||5000)}));
+  app.get('/api/data-config',(_req,res)=>res.set('Cache-Control','no-store').json({backend:env.GAME_DATA_BACKEND||'firestore',pollMs:Math.max(1000,Number(env.D1_POLL_MS)||5000),autoMigration:env.D1_AUTO_MIGRATE_ON_ADMIN_LOGIN!=='0'&&!!env.D1_WORKER_URL&&String(env.D1_SERVICE_TOKEN||'').length>=32}));
   app.post('/api/data',async(req,res)=>{
     res.set('Cache-Control','no-store');
     if(env.GAME_DATA_BACKEND!=='d1')return res.status(404).json({error:'資料服務未啟用'});
