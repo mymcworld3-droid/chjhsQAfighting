@@ -1,4 +1,5 @@
 import './first-visit-rules.js';
+import './first-answer-guide.js';
 
 // Welcome and account invitations load with the auth core, before optional modules.
 (function () {
@@ -100,6 +101,7 @@ import './first-visit-rules.js';
   window.getFirstVisitState = () => ({ ...state });
   window.handleFirstVisitSignedOut = () => {
     user = null;
+    window.cancelFirstAnswerGuide?.();
     removeLayer();
     document.body.classList.remove('first-visit-active');
     if (state.completed || QA) return false;
@@ -110,6 +112,7 @@ import './first-visit-rules.js';
     removeLayer();
     const next = Rules.readyStage(state, person, data, firstLogin);
     store({ stage: next, completed: next === 'done', joining: false });
+    window.scheduleFirstAnswerGuide?.(person.uid, firstLogin);
     if (next === 'gender') { gender(); return true; }
     $('bottom-nav')?.classList.remove('hidden');
     return false;

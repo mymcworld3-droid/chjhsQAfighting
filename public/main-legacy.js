@@ -50,7 +50,7 @@ window.__xiuxianMigrationApproved = false;
 
 let currentUserData = null;
 let firstLoginUid = '';
-// 新帳號先完成世界介紹／角色設定；序章由仙道任務手動開啟。
+// 新帳號先完成角色設定與簡短答題導覽；序章由仙道任務手動開啟。
 window.isXiuxianFirstLogin = () => Boolean(firstLoginUid && auth.currentUser?.uid === firstLoginUid);
 // 🔥 新增這行：將玩家資料開放給修仙模組讀取
 window.getCurrentUserData = () => currentUserData;
@@ -260,7 +260,7 @@ const UI_TEXT = {
     label_analysis: "AI 解析：",
     btn_back_home: "返回宗門",
     btn_next_q: "繼續悟道",
-    btn_giveup: "放棄此題（換下一題）",
+    btn_giveup: "設定範圍",
     msg_correct: "回答正確！",
     msg_wrong: "回答錯誤...",
     msg_rank_up: "🎉 晉升至",
@@ -1422,7 +1422,7 @@ onAuthStateChanged(auth, async (user) => {
             } else {
                 // 個人資料完成後：雲海由左右合攏，宗門在遮幕後就位，再向兩側打開。
                 await enterHomeWithStartupCloudCurtain();
-                await window.handleFirstVisitReady?.(user, currentUserData, false);
+                await window.handleFirstVisitReady?.(user, currentUserData, firstLoginUid === user.uid);
                 syncSoloQuestionCache();
                 fillBuffer();
             }
@@ -3057,7 +3057,6 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     const fbTitle = document.getElementById('feedback-title');
     const fbIcon = document.getElementById('feedback-icon');
     const fbText = document.getElementById('feedback-text');
-    document.getElementById('btn-giveup').classList.add('hidden');
     if (fbSection) fbSection.classList.remove('hidden');
 
     if(isCorrect) {
@@ -3970,28 +3969,19 @@ function renderQuiz(data, rank, topic) {
     else void window.MathJax?.typesetPromise?.(mathTargets).catch(err => console.warn('[Quiz Math]', err));
 }
 
-// 在 main.js 中搜尋 window.giveUpQuiz 並替換
-
-window.giveUpQuiz = async () => { 
-    // 🔥 修正：防止連點造成的死循環
-    if (isAnswering) return; 
-    
-    // 使用自定義的 openConfirm (支援 Promise等待)
-    const isConfirmed = await openConfirm("確定要放棄此題嗎？\n(將視為回答錯誤並中斷連勝)");
-    
-    if (isConfirmed) {
-        // 🔥 標記為處理中，避免重複觸發 nextQuestion
-        isAnswering = true; 
-        
-        // 視為回答錯誤 (-1)，但不扣分，僅中斷連勝
-        await handleAnswer(-1, -2, document.getElementById('question-text').innerText, "玩家放棄此題。");
-        
-        // 🔥 強制重置鎖定狀態 (handleAnswer 內部可能會解鎖，但放棄邏輯需確保安全)
-        setTimeout(() => {
-            isAnswering = false;
-        }, 500);
+// Open the normal scope editor without recording an answer or changing the streak.
+window.openQuizScopeSettings = () => {
+    if (isAnswering || window.isSoloCultivationFeedbackActive?.()) return false;
+    if (typeof window.openCurriculumStudio !== 'function') {
+        window.showToast?.('範圍設定準備中，請稍後再試。');
+        return false;
     }
+    window.switchToPage('page-settings');
+    window.openCurriculumStudio();
+    return true;
 };
+// Older cached quiz markup uses this name; it now opens settings too.
+window.giveUpQuiz = window.openQuizScopeSettings;
 
 // 問道題目錯誤回報：審核與補償統一由後端核發；前端只顯示真正完成的交易結果。
 let reportSubmitting = false;
