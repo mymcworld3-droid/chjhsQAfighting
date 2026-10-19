@@ -521,11 +521,7 @@ const REALMS = [
     { name: '煉氣', sub: '三層', need: 3 },
     { name: '煉氣', sub: '四層', need: 4 },
     { name: '煉氣', sub: '五層', need: 5 },
-    { name: '煉氣', sub: '六層', need: 6 },
-    { name: '煉氣', sub: '七層', need: 7 },
-    { name: '煉氣', sub: '八層', need: 8 },
-    { name: '煉氣', sub: '九層', need: 9 },
-    { name: '築基', sub: '初期', need: 10 },
+    { name: '築基', sub: '初期', need: 6 },
     { name: '築基', sub: '中期', need: 16 },
     { name: '築基', sub: '後期', need: 22 },
     { name: '金丹', sub: '丹成一品', need: 28 },
@@ -539,14 +535,16 @@ const REALMS = [
 ];
 
 function getRankName(level, uid = auth.currentUser?.uid, score = currentUserData?.stats?.totalScore) {
-    const idx = window.limitImmortalRank(Math.min(level || 0, REALMS.length - 1), score, REALMS, uid);
+    const idx = Number.isFinite(Number(score)) ? calculateRankFromScore(Number(score), uid)
+        : window.limitImmortalRank(Math.min(level || 0, REALMS.length - 1), score, REALMS, uid);
     const r = REALMS[idx];
     return `${r.name} ${r.sub}`;
 }
 
 // 僅在 HTML 顯示場合附加境界紋章；AI 題目難度與資料欄位仍保留純文字境界。
 function getRankMarkup(level, uid = auth.currentUser?.uid, score = currentUserData?.stats?.totalScore) {
-    const idx = window.limitImmortalRank(Math.min(level || 0, REALMS.length - 1), score, REALMS, uid);
+    const idx = Number.isFinite(Number(score)) ? calculateRankFromScore(Number(score), uid)
+        : window.limitImmortalRank(Math.min(level || 0, REALMS.length - 1), score, REALMS, uid);
     const realm = REALMS[idx] || REALMS[0];
     return `${window.getRealmIconMarkup?.(realm.name, '', uid) || ''} ${realm.name} ${realm.sub}`;
 }

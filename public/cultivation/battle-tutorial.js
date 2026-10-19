@@ -11,7 +11,7 @@ import { battleStepFeedback, createBattleImpact } from './battle-combat-feedback
 
   const FIELD = 'battleTutorialV1';
   const VERSION = 1;
-  const FOUNDATION_SCORE = 10;
+  const FOUNDATION_SCORE = 6;
   const TRUE_DAMAGE = 65000;
   const SHEN_ANSWER_WINDOW_MS = 25000;
   const ROUND_COUNTDOWN_MS = 3000;
@@ -1005,7 +1005,7 @@ import { battleStepFeedback, createBattleImpact } from './battle-combat-feedback
     guPlayer = { ...playerCombat };
     guOpponent = {
       uid:'story-gu-changfeng', name:'顧長風', hp:2000, maxHp:2000, atk:220,
-      totalScore:10, goldenCore:null, coreShield:false, coreCorrectStreak:0,
+      totalScore:6, goldenCore:null, coreShield:false, coreCorrectStreak:0,
       artifactBattle:{ version:1, effects:[], openingShield:0 }, artifactShield:0,
       artifactFirstHitUsed:false, artifactCheatDeathUsed:false
     };

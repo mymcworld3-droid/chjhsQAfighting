@@ -7,7 +7,7 @@ const Gold = require('../public/cultivation/answer-gold-rules.js');
 const Learning = require('../public/cultivation/solo-learning-rules.js');
 
 test('realm answer gold rises at each major threshold and never uses a stale saved rank', () => {
-  const rows = [[0,20],[10,25],[28,30],[68,40],[188,50],[428,60],[788,70],[1268,80],[1868,100]];
+  const rows = [[0,20],[6,25],[28,30],[68,40],[188,50],[428,60],[788,70],[1268,80],[1868,100]];
   for (let i=0;i<rows.length;i++) {
     const [score,gold] = rows[i];
     assert.equal(Gold.perCorrect(score),gold);
@@ -21,7 +21,7 @@ test('realm answer gold rises at each major threshold and never uses a stale sav
 test('browser and server share identical realm gold values', () => {
   const context = {};
   vm.runInNewContext(fs.readFileSync(require.resolve('../public/cultivation/answer-gold-rules.js'),'utf8'),context);
-  for(const score of [0,9,10,27,28,67,68,187,188,428,788,1268,1868])
+  for(const score of [0,5,6,9,10,27,28,67,68,187,188,428,788,1268,1868])
     assert.equal(context.QAAnswerGoldRules.perCorrect(score),Gold.perCorrect(score));
 });
 

@@ -179,7 +179,7 @@ export const STORY_CHAPTERS = Object.freeze([
     Object.freeze({
     id: 'foundation-first-battle',
     order: 3,
-    minScore: 10,
+    minScore: 6,
     realm: '築基初期',
     title: '第三章 · 築基之後，別只會做題',
     subtitle: '第一次真正的鬥法',
@@ -225,7 +225,7 @@ export const STORY_CHAPTERS = Object.freeze([
   Object.freeze({
     id: 'foundation-refinery',
     order: 4,
-    minScore: 10,
+    minScore: 6,
     realm: '築基初期',
     title: '第四章 · 法寶不是把東西丟進火裡',
     subtitle: '八方煉器陣',

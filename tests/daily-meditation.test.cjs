@@ -37,7 +37,7 @@ test('early streak rewards start on day two, cultivation bonus on day three', ()
 
 test('every realm uses its own reward threshold', () => {
   const expected = [
-    [0, 1, 10], [9, 1, 10], [10, 2, 20], [27, 2, 20],
+    [0, 1, 10], [5, 1, 10], [6, 2, 20], [9, 2, 20], [10, 2, 20], [27, 2, 20],
     [28, 3, 30], [68, 4, 45], [188, 5, 60], [428, 6, 80],
     [788, 7, 100], [1268, 8, 130], [1868, 9, 160], [2588, 10, 200]
   ];

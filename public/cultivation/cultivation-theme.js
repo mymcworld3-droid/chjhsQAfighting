@@ -2,7 +2,7 @@
 (function () {
   'use strict';
 
-  // 前 10 題快速完成煉氣並築基；元嬰以後可點亮問道／閉關／洞天修為加成，後期門檻按新成長速度拉長。
+  // 煉氣最高五層，修為達 6 即築基；元嬰以後可點亮問道／閉關／洞天修為加成，後期門檻按新成長速度拉長。
   const REALMS = [
     { name: '凡人', sub: '初入仙途', need: 0 },
     { name: '煉氣', sub: '一層', need: 1 },
@@ -10,11 +10,7 @@
     { name: '煉氣', sub: '三層', need: 3 },
     { name: '煉氣', sub: '四層', need: 4 },
     { name: '煉氣', sub: '五層', need: 5 },
-    { name: '煉氣', sub: '六層', need: 6 },
-    { name: '煉氣', sub: '七層', need: 7 },
-    { name: '煉氣', sub: '八層', need: 8 },
-    { name: '煉氣', sub: '九層', need: 9 },
-    { name: '築基', sub: '初期', need: 10 },
+    { name: '築基', sub: '初期', need: 6 },
     { name: '築基', sub: '中期', need: 16 },
     { name: '築基', sub: '後期', need: 22 },
     { name: '金丹', sub: '丹成一品', need: 28 },
@@ -88,10 +84,10 @@
           <h2>修行境界圖錄</h2>
           <button type="button" class="xiuxian-realm-atlas-close" data-realm-atlas-close aria-label="關閉境界圖錄"><i class="fa-solid fa-xmark"></i></button>
         </header>
-        <p class="xiuxian-realm-atlas-intro">境界各有獨立紋章；煉氣共九層，築基分初、中、後期。真仙須登上九州五大仙榜。</p>
+        <p class="xiuxian-realm-atlas-intro">境界各有獨立紋章；煉氣共五層，築基分初、中、後期。真仙須登上九州五大仙榜。</p>
         <ul class="xiuxian-realm-atlas-list">
           ${grouped.map(realm => {
-            const subtitle = realm.name === '煉氣' ? '一至九層' :
+            const subtitle = realm.name === '煉氣' ? '一至五層' :
               realm.name === '築基' ? '初期 · 中期 · 後期' : realm.sub;
             const requirement = realm.name === '真仙' ? '1868 修為＋榜上仙位' : `${realm.need} 修為起`;
             return `<li class="xiuxian-realm-atlas-item" data-current="${current.name === realm.name}">

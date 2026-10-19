@@ -51,11 +51,7 @@ const detailedCurve = [
   ['煉氣', '三層', 3],
   ['煉氣', '四層', 4],
   ['煉氣', '五層', 5],
-  ['煉氣', '六層', 6],
-  ['煉氣', '七層', 7],
-  ['煉氣', '八層', 8],
-  ['煉氣', '九層', 9],
-  ['築基', '初期', 10],
+  ['築基', '初期', 6],
   ['築基', '中期', 16],
   ['築基', '後期', 22],
   ['金丹', '丹成一品', 28],
@@ -89,7 +85,7 @@ for (const rel of detailedRealmFiles) {
 // Artifact realm restrictions use one row per major realm.
 const artifactNeeds = {
   qi: 1,
-  foundation: 10,
+  foundation: 6,
   'golden-core': 28,
   'nascent-soul': 68,
   spirit: 188,
@@ -111,18 +107,18 @@ const artifactNeeds = {
 
 // All gameplay gates must agree with the new early-game pacing.
 for (const rel of walk('public/cultivation', (rel) => rel.endsWith('.js'))) {
-  replaceAll(rel, /const FOUNDATION_SCORE = \d+;/g, 'const FOUNDATION_SCORE = 10;');
+  replaceAll(rel, /const FOUNDATION_SCORE = \d+;/g, 'const FOUNDATION_SCORE = 6;');
   replaceAll(rel, /const GOLDEN_CORE_SCORE = \d+;/g, 'const GOLDEN_CORE_SCORE = 28;');
   replaceAll(rel, /const TRIBULATION_SCORE = \d+;/g, 'const TRIBULATION_SCORE = 1268;');
 }
 
 replace('public/cultivation/cultivation-training-v4.js', /const REALM_THRESHOLDS = \[[^\]]+\];/, 'const REALM_THRESHOLDS = [68, 188, 428, 788, 1268, 1868];', false);
-replaceAll('public/cultivation/cultivation-theme.js', '築基以前維持原進度；金丹以上因金丹特性會加速修煉，因此拉長後期曲線。', '前 10 題快速完成煉氣並築基；金丹後每題基礎 +2，因此後期門檻按實際答題量漸進。');
+replaceAll('public/cultivation/cultivation-theme.js', '築基以前維持原進度；金丹以上因金丹特性會加速修煉，因此拉長後期曲線。', '煉氣最高五層，修為達 6 即築基；金丹後每題基礎 +2，因此後期門檻按實際答題量漸進。');
 replaceAll('public/cultivation/cultivation-progression-v2.js', '金丹 120 開內丹', '金丹 28 開內丹');
 replaceAll('public/cultivation/cultivation-progression-v2.js', '<b>60 · 築基初期</b>', '<b>${FOUNDATION_SCORE} · 築基初期</b>');
-replaceAll('public/cultivation/foundation-training-page.js', '築基期修煉頁：60～119 修為只顯示背包；踏入金丹後交棒給完整修煉模組。', '築基期修煉頁：10～27 修為只顯示背包；踏入金丹後交棒給完整修煉模組。');
-replaceAll('public/cultivation/newbie-tutorial-v2.js', '60 修為後開放多人玩法', '10 修為後開放多人玩法');
-replaceAll('public/cultivation/newbie-tutorial-v2.js', '築基初期（60 修為）', '築基初期（10 修為）');
+replaceAll('public/cultivation/foundation-training-page.js', '築基期修煉頁：60～119 修為只顯示背包；踏入金丹後交棒給完整修煉模組。', '築基期修煉頁：6～27 修為只顯示背包；踏入金丹後交棒給完整修煉模組。');
+replaceAll('public/cultivation/newbie-tutorial-v2.js', '60 修為後開放多人玩法', '6 修為後開放多人玩法');
+replaceAll('public/cultivation/newbie-tutorial-v2.js', '築基初期（60 修為）', '築基初期（6 修為）');
 replaceAll('public/cultivation/five-immortals.js', '渡劫 · 3600 修為', '渡劫 · 1268 修為');
 
 // Update regression expectations for the new curve.
@@ -142,10 +138,10 @@ for (const rel of ['tests/progression-gates.test.cjs', 'tests/legacy-realm-curve
     source = source.replace(new RegExp(`(\\['${name}', )\\d+`, 'g'), `$1${need}`);
   }
   source = source
-    .replaceAll('FOUNDATION_SCORE = 60', 'FOUNDATION_SCORE = 10')
+    .replaceAll('FOUNDATION_SCORE = 60', 'FOUNDATION_SCORE = 6')
     .replaceAll('GOLDEN_CORE_SCORE = 120', 'GOLDEN_CORE_SCORE = 28')
-    .replaceAll('at 60 with backpack only while Golden Core waits for 120', 'at 10 with backpack only while Golden Core waits for 28')
-    .replaceAll('at 60 cultivation', 'at 10 cultivation')
+    .replaceAll('at 60 with backpack only while Golden Core waits for 120', 'at 6 with backpack only while Golden Core waits for 28')
+    .replaceAll('at 60 cultivation', 'at 6 cultivation')
     .replaceAll('behind migration and 120 cultivation', 'behind migration and 28 cultivation')
     .replace('const expected = [\n    [\'金丹\', 28]', 'const expected = [\n    [\'金丹\', 28]');
   write(rel, source);
@@ -153,8 +149,8 @@ for (const rel of ['tests/progression-gates.test.cjs', 'tests/legacy-realm-curve
 
 replaceAll('tests/progression-gates.test.cjs', 'const REALM_THRESHOLDS = [500, 800, 1200, 1800, 2600, 3600, 5000];', 'const REALM_THRESHOLDS = [68, 188, 428, 788, 1268, 1868];');
 replaceAll('tests/five-immortals-challenge.test.cjs', '3600', '1868');
-replaceAll('tests/newbie-mortal-tutorial.test.cjs', 'FOUNDATION_SCORE = 60', 'FOUNDATION_SCORE = 10');
-replaceAll('tests/newbie-mortal-tutorial.test.cjs', '60 修為', '10 修為');
+replaceAll('tests/newbie-mortal-tutorial.test.cjs', 'FOUNDATION_SCORE = 60', 'FOUNDATION_SCORE = 6');
+replaceAll('tests/newbie-mortal-tutorial.test.cjs', '60 修為', '6 修為');
 
 {
   const rel = 'tests/cultivation.test.cjs';

@@ -1,8 +1,8 @@
-// 狀態從角色建立起即可查看；築基 10 開背包、煉器；金丹 28 才解鎖金丹功能。
+// 狀態從角色建立起即可查看；築基 6 開背包、煉器；金丹 28 才解鎖金丹功能。
 (function () {
   'use strict';
 
-  const FOUNDATION_SCORE = 10;
+  const FOUNDATION_SCORE = 6;
   const GOLDEN_CORE_SCORE = 28;
   const MIGRATION_FIELD = 'progressionMigrationV2';
   const MIGRATION_VERSION = 2;
@@ -46,7 +46,7 @@
 
   function trainingAllowed() {
     // From the first account state, the shared shell exposes only Status.
-    // Foundation features are still gated separately at 10; Golden Core at 28.
+    // Foundation features are still gated separately at 6; Golden Core at 28.
     return !!data()?.stats;
   }
 

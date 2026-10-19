@@ -6,7 +6,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
 (function () {
   'use strict';
 
-  const FOUNDATION_SCORE = 10;
+  const FOUNDATION_SCORE = 6;
   const LEGACY_HIGH_REALM_SCORE = 150;
   const GOLDEN_CORE_SCORE = 28;
   const MIGRATION_FIELD = 'progressionMigrationV2';
@@ -21,11 +21,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     { name: '煉氣', sub: '三層', need: 3 },
     { name: '煉氣', sub: '四層', need: 4 },
     { name: '煉氣', sub: '五層', need: 5 },
-    { name: '煉氣', sub: '六層', need: 6 },
-    { name: '煉氣', sub: '七層', need: 7 },
-    { name: '煉氣', sub: '八層', need: 8 },
-    { name: '煉氣', sub: '九層', need: 9 },
-    { name: '築基', sub: '初期', need: 10 },
+    { name: '築基', sub: '初期', need: 6 },
     { name: '築基', sub: '中期', need: 16 },
     { name: '築基', sub: '後期', need: 22 },
     { name: '金丹', sub: '丹成一品', need: 28 },

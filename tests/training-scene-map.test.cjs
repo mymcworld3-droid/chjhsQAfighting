@@ -39,10 +39,10 @@ test('reduced-motion training navigation stays synchronous and inside the docume
   assert.equal(calls, 50);
 });
 
-test('new accounts see Status; existing Foundation and Golden Core gates stay at 10 and 28', () => {
+test('new accounts see Status; existing Foundation and Golden Core gates are at 6 and 28', () => {
   const player = { stats: { totalScore: 0 } };
   assert.deepEqual(Rules.PLACES.filter(place => Rules.allows(player, place.threshold)).map(place => place.id), ['status']);
-  player.stats.totalScore = 10;
+  player.stats.totalScore = 6;
   assert.deepEqual(Rules.PLACES.filter(place => Rules.allows(player, place.threshold)).map(place => place.id), ['forge', 'vault', 'secret', 'status']);
   player.stats.totalScore = 28;
   assert.equal(Rules.PLACES.every(place => Rules.allows(player, place.threshold)), true);

@@ -36,7 +36,7 @@ import {} from './soulbound-pool.js';
 export const ARTIFACT_REALMS = Object.freeze([
   { id: 'mortal', name: '凡人', order: 0, need: 0 },
   { id: 'qi', name: '煉氣', order: 1, need: 1 },
-  { id: 'foundation', name: '築基', order: 2, need: 10 },
+  { id: 'foundation', name: '築基', order: 2, need: 6 },
   { id: 'golden-core', name: '金丹', order: 3, need: 28 },
   { id: 'nascent-soul', name: '元嬰', order: 4, need: 68 },
   { id: 'spirit', name: '化神', order: 5, need: 188 },
