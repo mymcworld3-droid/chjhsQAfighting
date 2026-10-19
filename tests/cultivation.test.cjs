@@ -150,24 +150,6 @@ test('solo answers aggregate explicit knowledge tags against saved totals withou
   assert.deepEqual(h.writes.at(-1).data.stats.knowledgePointMapV1.國文['chinese-2'],{total:9,correct:5});
 });
 
-test('first-answer breakthrough handoff waits for verified cultivation absorption without another reward write', async () => {
-  const h = setup(27);
-  let release, handedOff = false;
-  h.context.waitForCultivationFeedback = () => new Promise(resolve => { release = resolve; });
-  h.context.window.beginFirstVisitAnswer = () => true;
-  h.context.window.handleFirstVisitAnswer = async () => { handedOff = true; };
-  const answering = h.answer();
-  await new Promise(resolve => setImmediate(resolve));
-  assert.equal(h.writes.length, 1);
-  assert.equal(handedOff, false);
-  assert.deepEqual(h.feedback[0], { type: 'begin', scoreBefore: 27 });
-  assert.deepEqual(h.feedback[1], { type: 'play', gain: 1, totalScore: 28 });
-  release();
-  await answering;
-  assert.equal(handedOff, true);
-  assert.equal(h.writes.length, 1);
-  assert.equal(h.feedback.at(-1).type, 'cancel');
-});
 
 test('failed answer persistence releases cultivation feedback and wrong answers create none', async () => {
   const h = setup(28);
@@ -180,29 +162,6 @@ test('failed answer persistence releases cultivation feedback and wrong answers 
   assert.equal(miss.feedback.length, 0);
 });
 
-test('first-visit answer waits for persistence before advancing; an uncertain-write retry cannot award twice', async () => {
-  const { context, writes, answer } = setup();
-  let transition;
-  context.window.beginFirstVisitAnswer = correct => correct;
-  context.window.handleFirstVisitAnswer = async value => { transition = value; };
-  const original = context.runTransaction;
-  let attempts = 0;
-  context.runTransaction = async (...args) => {
-    const result = await original(...args);
-    if (++attempts === 1) throw new Error('response lost after commit');
-    return result;
-  };
-  await answer();
-  assert.equal(transition.saved, false);
-  assert.equal(writes.length, 1);
-  assert.equal(writes[0].data.stats.totalScore, 1);
-  await transition.retry();
-  await transition.retry();
-  assert.equal(writes.length, 1);
-  assert.equal(context.currentUserData.stats.totalScore, 1);
-  assert.equal(context.currentUserData.stats.gold, 20);
-  assert.equal(writes[0].data.questProgress.totals.solo, 1);
-});
 
 test('correct answer updates saved stats and the top panel immediately', async () => {
   const h = setup(0);

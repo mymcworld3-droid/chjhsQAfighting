@@ -12,9 +12,9 @@ const chapters = vm.runInNewContext(read('public/cultivation/story/story-scripts
 const engine = read('public/cultivation/story/story-engine.js');
 const settle = () => new Promise(resolve => setImmediate(resolve));
 
-test('all 24 backgrounds have unique reserved filenames, existing fallbacks and valid chapter checkpoints', () => {
-  assert.equal(api.STORY_BACKGROUNDS.length, 24);
-  assert.equal(new Set(api.STORY_BACKGROUNDS.map(item => item.filename)).size, 24);
+test('all retained backgrounds have unique reserved filenames, existing fallbacks and valid chapter checkpoints', () => {
+  assert.equal(api.STORY_BACKGROUNDS.length, 7);
+  assert.equal(new Set(api.STORY_BACKGROUNDS.map(item => item.filename)).size, 7);
   const used = new Set();
   for (const item of api.STORY_BACKGROUNDS) {
     assert.match(item.src, /^assets\/story\/backgrounds\/story-bg-\d\d-[a-z-]+\.png$/);
@@ -30,7 +30,7 @@ test('all 24 backgrounds have unique reserved filenames, existing fallbacks and 
       previous = scene.fromLine;
     }
   }
-  assert.equal(used.size, 24, 'every requested image is used by the current story');
+  assert.equal(used.size, 7, 'every requested image is used by the current story');
 });
 
 test('the dream changes from study to library, returns to the study, then reveals the corridor', () => {
@@ -39,7 +39,7 @@ test('the dream changes from study to library, returns to the study, then reveal
   for (const [line, id] of expected) assert.equal(api.storyBackgroundForLine(dream, line).id, id);
   assert.equal(api.nextStoryBackground(dream, 1).id, 'study-night');
   const first = chapters[0];
-  assert.equal(api.storyBackgroundForLine(first, first.tutorialAfterLine + 1).id, 'study-day');
+  assert.equal(api.storyBackgroundForLine(first, 33).id, 'study-day');
   assert.equal(api.nextStoryBackground(dream, 21), null);
 });
 

@@ -9,7 +9,6 @@ const math = read('cultivation/quiz-math.js');
 const main = read('main.js');
 const battle = read('cultivation/battle-mode-v2.js');
 const dongtian = read('cultivation/dongtian.js');
-const tutorial = read('cultivation/battle-tutorial.js');
 const legacy = read('main-legacy.js');
 const server = readFileSync(join(__dirname, '../server.js'), 'utf8');
 
@@ -28,7 +27,7 @@ test('shared MathJax renderer loads before battle, story and Dongtian', () => {
   new vm.Script(math);
   const ix = p => main.indexOf("'" + p + "'");
   assert.ok(ix('./cultivation/quiz-math.js') > 0);
-  for (const p of ['./cultivation/battle-mode-v2.js','./cultivation/battle-tutorial.js','./cultivation/dongtian.js']) {
+  for (const p of ['./cultivation/battle-mode-v2.js','./cultivation/dongtian.js']) {
     assert.ok(ix('./cultivation/quiz-math.js') < ix(p), p);
   }
 });
@@ -75,11 +74,6 @@ test('all live question, choices and explanation surfaces use the shared formatt
   assert.match(dongtian,/rich\(option\.text\)/);
   assert.match(dongtian,/quizMathRichText \|\| escapeHtml\)\(q\.exp/);
   assert.match(dongtian,/quizMathTypeset\?\.\(slot\)/);
-  assert.match(tutorial,/mathText\(SHEN_QUESTION\.q\)/);
-  assert.match(tutorial,/mathText\(SHEN_QUESTION\.exp\)/);
-  assert.match(tutorial,/mathText\(question\.q\)/);
-  assert.match(tutorial,/mathText\(question\.exp\)/);
-  assert.match(tutorial,/quizMathTypeset\?\.\(el\)/);
   assert.match(legacy,/quiz-rich-option/);
   assert.match(legacy,/quizMathRichText \|\| parseMarkdownImages\)\(opt\)/);
   assert.match(server,/數學式使用 TeX/);

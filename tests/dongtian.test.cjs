@@ -484,14 +484,12 @@ test('Standalone revision normalization cannot change id, subject, or difficulty
 });
 
 
-test('Question report only appears after answering and tutorial reports stay local', () => {
+test('Question report only appears after answering', () => {
   const answerStart = uiSource.indexOf('function answerDongtian');
   const answerEnd = uiSource.indexOf('function removeModerationModal', answerStart);
   const answer = uiSource.slice(answerStart, answerEnd);
   assert.match(answer, /id="dt-report-question"/);
-  assert.match(answer, /s\.tutorialOnly/);
   assert.match(answer, /openQuestionReport/);
-  assert.match(answer, /教學範例不會送出回報/);
 });
 
 test('Completion settlement claims active BD content before the A reward receipt', () => {
@@ -571,41 +569,6 @@ test('Dongtian quiz fills both viewport dimensions without a black frame or glob
 });
 
 
-test('private one-question tutorial Dongtian never writes public play, reward, material, or history data', () => {
-  assert.match(uiSource, /function newbieDongtianDemoDefinition\(\)/);
-  assert.match(uiSource, /id: 'newbie-private-dongtian-demo'/);
-  assert.match(uiSource, /tutorialOnly: true/);
-  assert.match(uiSource, /private: true/);
-  assert.match(uiSource, /TUTORIAL-DT-001/);
-  const demoDefinition = uiSource.slice(uiSource.indexOf('function newbieDongtianDemoDefinition()'), uiSource.indexOf('function tutorialDongtianCardMarkup'));
-  assert.equal((demoDefinition.match(/id:'TUTORIAL-DT-\d+'/g) || []).length, 1);
-  assert.doesNotMatch(demoDefinition, /TUTORIAL-DT-010/);
-  assert.match(uiSource, /questionCount: questions\.length/);
-  assert.match(uiSource, /教學體驗 1 題/);
-  assert.match(uiSource, /不會公開、不會留下正式遊玩紀錄，也不會發放靈石、修為或材料/);
-
-  const enter = uiSource.slice(uiSource.indexOf('async function enterDongtian'), uiSource.indexOf('function ensureOverlay'));
-  assert.match(enter, /if \(!tutorialOnly\) \{/);
-  const finish = uiSource.slice(uiSource.indexOf('async function finishDongtian'), uiSource.indexOf('async function completeProgress'));
-  assert.match(finish, /if \(s\.tutorialOnly\) \{/);
-  assert.match(finish, /教學範例不發正式獎勵/);
-  assert.match(finish, /newbie:dongtian-demo-completed/);
-  const tutorialBranch = finish.slice(finish.indexOf('if (s.tutorialOnly)'), finish.indexOf('const firstCompletionReward'));
-  assert.doesNotMatch(tutorialBranch, /completeProgress\(/);
-  assert.doesNotMatch(tutorialBranch, /writeDongtianHistory\(/);
-});
-test('private tutorial Dongtian appears in My Dongtian and can be played then locally deleted', () => {
-  assert.match(uiSource, /function tutorialDongtianCardMarkup\(item\)/);
-  assert.match(uiSource, /data-dt-tutorial-card/);
-  assert.match(uiSource, /data-dt-tutorial-play/);
-  assert.match(uiSource, /data-dt-tutorial-delete/);
-  assert.match(uiSource, /function prepareNewbieDongtianDemo\(\)/);
-  assert.match(uiSource, /function startNewbieDongtianDemo\(\)/);
-  assert.match(uiSource, /function deleteNewbieDongtianDemo\(options = \{\}\)/);
-  assert.match(uiSource, /window\.prepareNewbieDongtianDemo = prepareNewbieDongtianDemo/);
-  assert.match(uiSource, /window\.startNewbieDongtianDemo = startNewbieDongtianDemo/);
-  assert.match(uiSource, /window\.deleteNewbieDongtianDemo = deleteNewbieDongtianDemo/);
-});
 
 test('owners delete real Dongtians through authenticated backend cascade cleanup', () => {
   const repositorySource = readFileSync(join(root, 'public/cultivation/data/dongtian-repository.js'), 'utf8');
@@ -627,9 +590,4 @@ test('owners delete real Dongtians through authenticated backend cascade cleanup
   assert.match(apiSource, /finalBatch\.delete\(dataRef\)/);
   assert.match(apiSource, /finalBatch\.delete\(indexRef\)/);
   assert.match(uiSource, /dongtian:deleted/);
-});
-
-test('tutorial sample remains available even if the formal Dongtian library fetch fails', () => {
-  assert.match(uiSource, /正式洞天名冊暫時無法讀取，但教學私有範例仍可正常使用/);
-  assert.match(uiSource, /state\.tutorialDemo \?\s*tutorialDongtianCardMarkup/);
 });

@@ -258,7 +258,6 @@ import { playerRepository } from './data/player-repository.js';
     if (previousFocus?.isConnected) previousFocus.focus({ preventScroll: true });
     else $('dongfu-scope-card')?.querySelector('.dongfu-collapse-head')?.focus({ preventScroll: true });
     finishTransition?.();
-    if (!force) window.firstVisitScopeClosed?.();
     return true;
   }
 
@@ -280,7 +279,6 @@ import { playerRepository } from './data/player-repository.js';
       updateSummary();
       saving = false;
       close(true);
-      window.firstVisitScopeSaved?.();
     } catch (error) {
       console.error('[Scope Studio] save failed:', error);
       saveButton.textContent = '儲存出題範圍';

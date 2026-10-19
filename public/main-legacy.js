@@ -625,7 +625,6 @@ window.googleLogin = async () => {
             // Identity is now linked even if auth.currentUser still reports
             // isAnonymous for this same UID until Firebase refreshes its state.
             linkedGoogleIdentity = { uid: person.uid, email: person.email || '' };
-            const introPreload = window.preloadFirstVisitScenes?.(person, currentUserData, false);
             syncAccountBindingUI(person);
             const identity = { email: person.email || '', photoURL: person.photoURL || '' };
             if (!currentUserData?.displayName || currentUserData.displayName === '匿名修士') identity.displayName = person.displayName || '青雲修士';
@@ -639,7 +638,6 @@ window.googleLogin = async () => {
             if (currentUserData) Object.assign(currentUserData, identity);
             await updateSettingsInputs();
             syncAccountBindingUI(person);
-            await introPreload;
             if (auth.currentUser?.uid !== person.uid) return result;
             await window.handleFirstVisitReady?.(person, currentUserData, false);
             return result;
@@ -1360,7 +1358,6 @@ onAuthStateChanged(auth, async (user) => {
                 if (initialized.created) firstLoginUid = user.uid;
             }
             if (!user.isAnonymous) pendingGuestProgress = null;
-            const introPreload = window.preloadFirstVisitScenes?.(user, currentUserData, firstLoginUid === user.uid);
 
             // Reuse the trusted per-player BD/C completion marker after the first successful setup.
             // Only players without that marker enter migration polling / profile provisioning.
@@ -1399,7 +1396,6 @@ onAuthStateChanged(auth, async (user) => {
             }
 
             // 所有腳本都已成功載入，現在才正式啟動其餘監聽與遊戲介面。
-            await introPreload;
             if (auth.currentUser?.uid !== user.uid) return;
             startPresenceSystem();
             refreshInvitationListener();
@@ -1419,7 +1415,7 @@ onAuthStateChanged(auth, async (user) => {
             const arrival = window.getFirstVisitState?.();
             if ((user.isAnonymous && !arrival?.completed && new URLSearchParams(location.search).get('qa') !== '1') ||
                 arrival?.joining || firstLoginUid === user.uid && !user.isAnonymous ||
-                ['background', 'gender'].includes(arrival?.stage)) {
+                arrival?.stage === 'gender') {
                 hideGameStartupGate();
                 const handled = await window.handleFirstVisitReady?.(user, currentUserData, firstLoginUid === user.uid);
                 if (!handled) await enterHomeWithStartupCloudCurtain();
@@ -1971,7 +1967,6 @@ window.promptXiuxianEducationLevel = () => {
 // 修改原本的 switchToPage
 window.switchToPage = (pageId) => {
     if (pageId === 'page-social' && window.promptXiuxianEducationLevel()) return false;
-    if (window.canFirstVisitNavigate?.(pageId) === false) return false;
     if (isBattleActive && pageId !== 'page-battle') {
         alert("鬥法進行中！");
         return;
@@ -2031,13 +2026,11 @@ window.switchToPage = (pageId) => {
 
 let brandHomeNavigationPending = false;
 function brandHomeFlowBlocked() {
-    // 標題不能繞過登入、劇情、教學或既有彈窗的完成／關閉流程。
-    if (window.getBattleTutorialState?.().active || window.isXiuxianOpeningCinematicActive?.()) return true;
+    // 標題不能繞過登入、劇情或既有彈窗的完成／關閉流程。
     return Boolean(document.querySelector([
         '#login-screen:not(.hidden)', '#page-onboarding:not(.hidden)',
-        '#game-startup-gate', '#startup-cloud-curtain', '#xiuxian-opening-cinematic',
-        '#xiuxian-story-layer', '#xiuxian-story-archive', '#newbie-tutorial-layer',
-        '#qi-five-dongtian-tutorial-layer', '#golden-core-tutorial-layer', '#battle-tutorial-layer',
+        '#game-startup-gate', '#startup-cloud-curtain',
+        '#xiuxian-story-layer', '#xiuxian-story-archive',
         '#daily-meditation-overlay', '#dongtian-overlay', '#opportunity-overlay', '#five-immortal-challenge',
         '#custom-alert-modal:not(.hidden)', '#custom-confirm-modal:not(.hidden)', '#report-modal:not(.hidden)'
     ].join(',')) || Array.from(document.querySelectorAll('[aria-modal="true"], [role="dialog"]'))
@@ -2502,7 +2495,6 @@ async function fillBuffer() {
 //  Quiz UI Logic
 // ==========================================
 window.startQuizFlow = async (isNewSession = false) => {
-    if (window.isFirstVisitTrial?.() && !window.isFirstVisitQuestion?.()) return;
     if (!soloSession.active && !isNewSession) {
         // 直接默認啟動無限模式
         soloSession = {
@@ -2606,7 +2598,6 @@ window.startQuizFlow = async (isNewSession = false) => {
             if (opening !== soloQuizOpenSerial || auth.currentUser?.uid !== uid) return;
             console.error(e);
             void window.trackPlayerAnalytics?.('question_load_failed', { mode: 'solo' });
-            if (window.handleFirstVisitQuestionFailure?.()) return;
             alert("無法開始，請稍後再試");
             switchToPage('page-home');
         }
@@ -2999,7 +2990,6 @@ window.fetchDailyMeditationQuestion = fetchOneQuestion;
 let soloNextBusy = false;
 window.nextQuestion = async () => {
     if (window.isSoloCultivationFeedbackActive?.()) return;
-    if (window.isFirstVisitTrial?.() && !window.isFirstVisitQuestion?.()) return;
     const quiz = window.currentActiveQuiz;
     // One roll per completed question; rapid clicks and unanswered questions cannot farm encounters.
     if (soloNextBusy || !quiz || !answeredSoloQuizzes.has(quiz) || window.isOpportunityActive?.()) return;
@@ -3019,7 +3009,7 @@ window.nextQuestion = async () => {
     }
     window.currentActiveQuiz = null;
     try {
-        const intercepted = extendedPracticeState.active || window.hasReadySoloCorrection?.() || window.isFirstVisitTrial?.() ? false : await window.maybeEncounterOpportunity?.({ quiz });
+        const intercepted = extendedPracticeState.active || window.hasReadySoloCorrection?.() ? false : await window.maybeEncounterOpportunity?.({ quiz });
         if (auth.currentUser?.uid !== account) return;
         if (!intercepted) await window.startQuizFlow();
     } catch (error) {
@@ -3049,7 +3039,6 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
 
     const timeTaken = (Date.now() - (window.quizStartTime || Date.now())) / 1000;
     const isCorrect = userIdx === correctIdx;
-    const firstVisitAnswer = window.beginFirstVisitAnswer?.(isCorrect) === true;
     quizHelperState.answered = true;
     quizHelperState.selectedIndex = Number.isInteger(userIdx) ? userIdx : null;
     quizHelperState.correctIndex = Number.isInteger(correctIdx) ? correctIdx : quizHelperState.correctIndex;
@@ -3193,7 +3182,6 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     const recoveryCoreGain = cultivationReward.recoveryBonusGain;
     const originalGoldenMessage = cultivationReward.goldenCoreMessage;
     const answerUser = auth.currentUser;
-    const trialAnswerId = firstVisitAnswer ? `${answerUser.uid}:${Date.now()}:${Math.random().toString(36).slice(2)}` : '';
     let answerSaved = false, correctionFeedback = null;
     const persistAnswer = () => runTransaction(db, async tx => {
                 if (auth.currentUser?.uid !== answerUser.uid) throw new Error('帳號已更換，請重新整理。');
@@ -3201,8 +3189,6 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
                 const snap = await tx.get(ref);
                 if (!snap.exists()) throw new Error('玩家資料不存在');
                 const remote = snap.data();
-                // A retry after an uncertain network result cannot award the first answer twice.
-                if (trialAnswerId && remote.arrivalTrialAnswerV1?.id) return remote.stats;
                 const verifiedLearning = learningRules?.reward(remote.stats || {}, quiz, isCorrect, remote.profile) || learningReward;
                 correctionFeedback = verifiedLearning.recoveryFeedback || null;
                 const verifiedGold = isCorrect ? window.QAAnswerGoldRules.perCorrect(remote.stats?.totalScore) + verifiedLearning.gold : 0;
@@ -3225,7 +3211,6 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
                 if (isCorrect) patch.questProgress = window.XianxiaQuestRules.recordEvent(remote.questProgress, 'solo');
                 if (isCorrect && verifiedLearning.recovery)
                   patch.questProgress = window.XianxiaQuestRules.recordEvent(patch.questProgress, 'correction');
-                if (trialAnswerId) patch.arrivalTrialAnswerV1 = { id: trialAnswerId, completedAtMs: Date.now() };
                 tx.update(ref, patch);
                 return savedStats;
             }).then(savedStats => {
@@ -3291,15 +3276,6 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         void window.trackPlayerAnalytics?.('answer_completed', { mode: 'solo', eventId });
     }
 
-    if (firstVisitAnswer) {
-        await window.handleFirstVisitAnswer?.({ isCorrect, saved: answerSaved, retry: async () => {
-            const saving = persistAnswer();
-            if (quiz) quiz.answerPersistence = saving;
-            await saving;
-        } });
-        return;
-    }
-    
     document.getElementById('solo-correction-practice')?.remove();
     document.getElementById('solo-correction-hint')?.remove();
     if (!isCorrect && userIdx >= 0 && quiz && fbSection) {

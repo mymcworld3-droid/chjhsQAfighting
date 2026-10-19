@@ -197,8 +197,6 @@
     if (currentIndex > lastRealmIndex) {
       const previousIndex = lastRealmIndex;
       lastRealmIndex = currentIndex;
-      // 首題先等資料保存成功，再由首次流程交棒播放突破。
-      if (window.isFirstVisitTrial?.()) return;
       showBreakthrough(previousIndex, currentIndex);
       return;
     }

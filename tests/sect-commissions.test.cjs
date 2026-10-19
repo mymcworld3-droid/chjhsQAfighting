@@ -81,5 +81,5 @@ test('zero-knowledge map never generates specialist task and legacy six dailies 
  const pool=rules.dailyCommissions(u,'u1',date);
  assert.ok(pool.every(q=>q.metric!=='enlightenment'));
  assert.equal(rules.DAILY.length,6);
- assert.equal(rules.PATH.length,37);
+ assert.equal(rules.PATH.length,23);
 });

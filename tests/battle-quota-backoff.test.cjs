@@ -78,7 +78,7 @@ test('quota reconnect ignores cached data, waits for server metadata, and cannot
   vm.runInNewContext('const roomQuota=createFirestoreQuotaGuard({now:nowMs,onExhausted:pauseForRoomQuota});'+
     section('  async function runRoomRequest(', '  function finite(')+
     section('  function detachRoomListener()', '  function stopTimers()')+
-    section('  function subscribeRoom(', '  function storyOrTutorialOpen(')+'\nthis.sub=subscribeRoom;',ctx);
+    section('  function subscribeRoom(', '  function storyOrOverlayOpen(')+'\nthis.sub=subscribeRoom;',ctx);
   ctx.sub('a');error(quota());assert.equal(ctx.state.syncPaused,true);assert.equal(detaches,1);assert.equal(timers.size,1);
   const retry=[...timers.values()][0];assert.equal(retry.ms,60000);now+=60000;retry.f();
   next({metadata:{fromCache:true}});assert.equal(ctx.applied,undefined);assert.equal(ctx.state.syncPaused,true);
@@ -112,7 +112,7 @@ function connectionHarness() {
   vm.runInNewContext('const roomQuota=createFirestoreQuotaGuard({now:nowMs,onExhausted:pauseForRoomQuota});'+
     section('  async function runRoomRequest(', '  function finite(')+
     section('  function detachRoomListener()', '  function stopTimers()')+
-    section('  function subscribeRoom(', '  function storyOrTutorialOpen(')+
+    section('  function subscribeRoom(', '  function storyOrOverlayOpen(')+
     '\nthis.sub=subscribeRoom;this.request=runRoomRequest;',ctx);
   ctx.sub('a');
   return {ctx,timers,messages,snap:s=>next(s),fail:e=>error(e),get detaches(){return detaches;},

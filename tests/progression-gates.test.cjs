@@ -15,8 +15,6 @@ const inventory = read('cultivation-inventory.js');
 const guard = read('golden-core-access-guard.js');
 const foundationTraining = read('foundation-training-page.js');
 const training = read('cultivation-training-v4.js');
-const tutorial = read('newbie-tutorial-v2.js');
-const coreTutorial = read('golden-core-tutorial.js');
 const combat = read('cultivation-combat-stats.js');
 const statusPanel = read('cultivation-status-panel.js');
 const visual = read('cultivation-core-visual.js');
@@ -132,27 +130,7 @@ test('legacy compensation formula and item are preserved', () => {
   assert.match(progression, /'stats\.totalScore': FOUNDATION_SCORE/);
 });
 
-test('beginner tutorial covers scope and reserves Dongtian practice for a later independent lesson', () => {
-  assert.match(tutorial, /綜合題目/);
-  assert.match(tutorial, /指定題庫/);
-  assert.match(tutorial, /專注練習/);
-  assert.match(tutorial, /煉氣五層後，仙道任務會引導你觀看第二章，再另外開啟洞天新手教程/);
-  assert.match(tutorial, /set-source-mode/);
-  assert.match(tutorial, /set-difficulty/);
-  assert.doesNotMatch(tutorial, /金丹/);
-});
 
-test('Golden Core tutorial is presented inside its story chapter after unlock', () => {
-  assert.match(coreTutorial, /goldenCoreTutorialV1/);
-  assert.match(coreTutorial, /isGoldenCoreUnlocked/);
-  assert.match(coreTutorial, /training-core-orb/);
-  assert.match(coreTutorial, /wash-golden-core/);
-  assert.match(coreTutorial, /training-status-tab/);
-  assert.match(coreTutorial, /金丹教學/);
-  assert.match(main, /cultivation\/newbie-tutorial-v2\.js/);
-  assert.match(main, /cultivation\/golden-core-tutorial\.js/);
-  assert.doesNotMatch(main, /'\.\/newbie-tutorial\.js'/);
-});
 
 test('combat base remains attack and HP while status reports equipped artifact effects in descending order', () => {
   assert.match(combat, /attack: 200/);
@@ -328,17 +306,6 @@ test('grade and subject preferences are optional Dongfu settings, and navigation
 });
 
 
-test('Golden Core chapter controls the tutorial on normal play and replay without repeated persistence', () => {
-  const storyScripts = read('story/story-scripts.js');
-  const storyEngine = read('story/story-engine.js');
-  assert.match(storyScripts, /id: 'golden-core-truth'[\s\S]*?tutorialKind: 'golden-core'/);
-  assert.match(storyScripts, /tutorialAfterLine: 14/);
-  assert.match(storyEngine, /window\.startGoldenCoreTutorial/);
-  assert.match(coreTutorial, /replayOnly = options\.replay === true \|\| adminPreview \|\| !!marker\(\)\?\.completed/);
-  assert.match(coreTutorial, /if \(!replayOnly\) persistFinished\(skipped\)/);
-  assert.match(coreTutorial, /xiuxian:story-tutorial-finished/);
-  assert.doesNotMatch(coreTutorial, /golden-core-access-changed/);
-});
 
 
 test('Foundation refinery access does not depend on the legacy migration marker', () => {

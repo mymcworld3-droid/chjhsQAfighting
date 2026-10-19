@@ -7,12 +7,10 @@ const vm = require('node:vm');
 
 const read = (file) => fs.readFileSync(path.join(__dirname, '..', file), 'utf8');
 const full = read('public/cultivation/battle-v3-stability-ui.js');
-const tutorial = read('public/cultivation/battle-tutorial.js');
 const formal = read('public/cultivation/battle-mode-v2.js');
 const main = read('public/main.js');
 const index = read('public/index.html');
 const viewport = full.slice(full.indexOf('/* Viewport-fit battle:'));
-const training = tutorial.slice(tutorial.indexOf('/* The training arena shares the fixed viewport'));
 
 test('formal stage uses rows corresponding to the actual combat elements', () => {
   assert.ok(viewport.length > 7000);
@@ -58,24 +56,12 @@ test('HP, names, core details and quiz actions retain their own space', () => {
     > full.indexOf("grid-template-areas:'score' 'rule' 'cue' 'log'!important"));
 });
 
-test('tutorial supports inner scroll fallback without clipping text', () => {
-  for (const fragment of [
-    'height:100%!important;min-height:0!important;flex:1',
-    'overflow-x:hidden!important;overflow-y:auto!important',
-    'min-height:0!important;max-width:1000px',
-    'overflow-wrap:anywhere',
-    'min-height:clamp(44px,6dvh,58px)'
-  ]) assert.ok(training.includes(fragment), fragment);
-});
 
 test('CSS blocks are balanced and browser loads the new build', () => {
   const tick = String.fromCharCode(96);
   const ending = full.indexOf('    ' + tick + ';\n    document.head.appendChild(style);');
   const css = full.slice(full.indexOf('/* Viewport-fit battle:'), ending);
-  const layer = String.fromCharCode(36, 123) + 'LAYER_ID}';
-  const trainingEnd = tutorial.indexOf('      @media(prefers-reduced-motion:reduce){#' + layer + ' *{', tutorial.indexOf('/* The training arena shares the fixed viewport'));
-  const tutorialCss = tutorial.slice(tutorial.indexOf('/* The training arena shares the fixed viewport'), trainingEnd);
-  for (const text of [css, tutorialCss]) assert.equal(text.split('{').length, text.split('}').length);
+  assert.equal(css.split('{').length, css.split('}').length);
   assert.ok(main.includes("XIUXIAN_FEATURE_BUILD = '20260930-economy-raid1'"));
   assert.ok(main.includes("BATTLE_FEATURE_BUILD = '20261006-battle-join-fix1'"));
   assert.ok(index.includes('main.js?v=20261013-arrival1'));
@@ -91,11 +77,7 @@ test('stage portraits keep the near-left and far-right duel depth in formal and 
   for (const token of [
     '#page-battle .bv2-stage-fighter.me{left:-4%;bottom:-6%;width:54%;height:84%}',
     '#page-battle .bv2-stage-fighter.enemy{right:-1%;bottom:23%;width:46%;height:67%}',
-    '#${LAYER_ID} .bt-fighter.me{left:1%;bottom:-6%;width:49%;height:91%!important}',
-    '#${LAYER_ID} .bt-fighter.enemy{right:4%;bottom:21%;width:42%;height:73%!important}',
-    '#${LAYER_ID} .bt-fighter.me{left:-4%;bottom:-6%;width:54%!important;height:84%!important}',
-    '#${LAYER_ID} .bt-fighter.enemy{right:-1%;bottom:23%;width:46%!important;height:67%!important}'
-  ]) assert.ok((token.includes('bt-fighter') ? tutorial : full).includes(token), token);
+  ]) assert.ok(full.includes(token), token);
   assert.ok(full.includes('left:72%;top:34%'), 'own attack impact targets the upper-right opponent');
   assert.ok(full.includes('left:28%;top:65%'), 'opponent attack impact targets the lower-left player');
 });

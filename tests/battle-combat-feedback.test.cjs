@@ -221,9 +221,9 @@ test('guest perspective reverses effect direction; late callbacks still apply HP
 });
 
 test('portrait keyframes carry no movement and reduced motion retains readable critical/core feedback', () => {
-  const css = read('styles/battle-mode-v2.css'), tutorial = read('cultivation/battle-tutorial.js');
-  for (const name of ['bv2StageAttackMe', 'bv2StageAttackEnemy', 'bv2StageHitMe', 'bv2StageHitEnemy', 'bv2StageMiss', 'btStageAdvanceMe', 'btStageAdvanceEnemy', 'btStageRecoilMe', 'btStageRecoilEnemy']) {
-    const text = name.startsWith('bt') ? tutorial : css;
+  const css = read('styles/battle-mode-v2.css');
+  for (const name of ['bv2StageAttackMe', 'bv2StageAttackEnemy', 'bv2StageHitMe', 'bv2StageHitEnemy', 'bv2StageMiss']) {
+    const text = css;
     const start = text.indexOf('@keyframes ' + name);
     const end = text.indexOf('\n', start);
     assert.ok(start >= 0, name);
@@ -232,8 +232,6 @@ test('portrait keyframes carry no movement and reduced motion retains readable c
   assert.doesNotMatch(css, /bv2IdleMe|bv2IdleEnemy/);
   assert.match(css, /bv2-critical-fx/);
   assert.match(css, /prefers-reduced-motion:reduce[\s\S]*bv2-core-caption[\s\S]*animation:none!important;opacity:1/);
-  assert.match(tutorial, /battleStepFeedback\(step, attacker\)/);
-  assert.match(tutorial, /impact\?\.remove\(\)/);
 });
 
 test('leaving combat clears pending impact layers, damage text and portrait animation classes', () => {

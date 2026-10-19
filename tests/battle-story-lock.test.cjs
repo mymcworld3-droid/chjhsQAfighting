@@ -7,9 +7,6 @@ const vm = require('node:vm');
 const read = path => readFileSync(join(__dirname, '..', 'public', path), 'utf8');
 const battle = read('cultivation/battle-mode-v2.js');
 const story = read('cultivation/story/story-engine.js');
-const newbie = read('cultivation/newbie-tutorial-v2.js');
-const golden = read('cultivation/golden-core-tutorial.js');
-const dongtian = read('cultivation/qi-five-dongtian-tutorial.js');
 
 test('battle lock spans matchmaking, joined room, result screen, recovery and departure', () => {
   const code = battle.slice(battle.indexOf('  window.isXiuxianBattleBusy ='), battle.indexOf('\n', battle.indexOf('  window.isXiuxianBattleBusy =')));
@@ -42,7 +39,7 @@ test('automatic story and replay cannot start during a PvP session', () => {
   assert.equal(ctx.blocking(), true);
   assert.equal(ctx.startChapter({ id: 'late-unlock' }, { replay: true }), false);
   assert.match(story, /if \(typeof window !== 'undefined' && window\.isXiuxianBattleBusy\?\.\(\)\) return false/);
-  assert.match(story, /if \(active \|\| blocking\(\) \|\| window\.getBattleTutorialState/);
+  assert.match(story, /if \(active \|\| blocking\(\)\)/);
   assert.match(story, /xiuxian:battle-session-ended/);
 });
 
@@ -52,11 +49,4 @@ test('battle departure releases story after navigation, while login recovers fir
   assert.match(battle, /window\.addEventListener\('xiuxian:user-ready', recoverBattleSession\)/);
   assert.match(battle, /state\.recovering = true/);
   assert.match(battle, /state\.recovering = false/);
-});
-
-test('newbie, golden core and Qi-five overlays respect formal battle lock', () => {
-  assert.match(newbie, /if \(active \|\| window\.isXiuxianBattleBusy\?\.\(\)\) return false/);
-  assert.match(golden, /if \(active \|\| window\.isXiuxianBattleBusy\?\.\(\)/);
-  assert.match(dongtian, /if \(window\.isXiuxianBattleBusy\?\.\(\)\) return true/);
-  assert.match(dongtian, /if\(active\|\|window\.isXiuxianBattleBusy\?\.\(\)/);
 });

@@ -7,7 +7,6 @@ const path = require('node:path');
 const read = (rel) => fs.readFileSync(path.join(__dirname, '..', 'public', rel), 'utf8');
 const formal = read('cultivation/battle-mode-v2.js');
 const stylesheet = read('styles/battle-mode-v2.css');
-const tutorial = read('cultivation/battle-tutorial.js');
 const main = read('main.js');
 const index = read('index.html');
 
@@ -39,26 +38,11 @@ test('battle-result animation only restarts when battle identity changes', () =>
   assert.match(stylesheet, /\.bv2-result\[data-outcome="draw"\]/);
 });
 
-test('story duel finale distinguishes Shen loss, Gu victory, loss, and practice', () => {
-  const shell = tutorial.slice(tutorial.indexOf('  function shell('), tutorial.indexOf('  function capturePlayerCombat()'));
-  assert.match(shell, /bt-finale-\$\{finale\}/);
-  assert.match(shell, /bt-finale-backdrop/);
-  assert.match(shell, /bt-finale-sparks/);
-  assert.match(tutorial, /resultKind:'defeat'/);
-  assert.match(tutorial, /resultKind:won \? 'win' : lost \? 'defeat' : 'practice'/);
-  assert.match(tutorial, /@keyframes btFinaleMark/);
-  assert.match(tutorial, /@keyframes btFinaleSpark/);
-  assert.match(tutorial, /shenTrueDamage:TRUE_DAMAGE/);
-});
 
 test('result stylesheet and all runtime modules receive the new cache version', () => {
   assert.match(formal, /battle-mode-v2\.css\?v=20261006-combatflow1&duel=20261006-pregen1/);
   assert.match(main, /XIUXIAN_FEATURE_BUILD = '20260930-economy-raid1'/);
   assert.match(index, /main\.js\?v=20261013-arrival1/);
   assert.equal(stylesheet.split('{').length,stylesheet.split('}').length,'result stylesheet braces');
-  const styleStart = tutorial.indexOf('/* Story finale:');
-  const styleEnd = tutorial.indexOf('      @media(prefers-reduced-motion:reduce){#\u0024{LAYER_ID} *{animation:none',styleStart);
-  const sceneCss = tutorial.slice(styleStart,styleEnd);
-  assert.ok(styleStart > 0 && styleEnd > styleStart);
-  assert.equal(sceneCss.split('{').length,sceneCss.split('}').length,'tutorial result CSS braces');
+
 });

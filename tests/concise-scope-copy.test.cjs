@@ -9,7 +9,6 @@ const curriculum = read('cultivation/curriculum-pages.js');
 const css = read('styles/curriculum-studio.css');
 const studio = read('cultivation/scope-fullscreen.js');
 const firstVisit = read('cultivation/first-visit.js');
-const tutorial = read('cultivation/newbie-tutorial-v2.js');
 
 test('Dongtian creation keeps text and multiple-image entry without the lengthy AI explanation', () => {
   const start = dongtian.indexOf('<section class="dt-create">');
@@ -27,11 +26,4 @@ test('normal scope selection hides STEP numbers and explanatory paragraphs only'
   assert.match(curriculum, /<h4>/);
   assert.match(css, /body:not\(:has\(#newbie-tutorial-layer\)\) #scope-studio:not\(\.fv-scope\) \.cs-stage-title > :is\(small,p\)\{display:none\}/);
   assert.match(studio, /curriculum-studio\.css\?v=20261014-scope-concise1/);
-});
-
-test('first-visit and guided newbie tutorial keep the existing scope instructions', () => {
-  assert.match(firstVisit, /studio\.classList\.add\('fv-scope'\)/);
-  assert.match(firstVisit, /第一步 · 選擇答題範圍/);
-  assert.match(tutorial, /layer\.id='newbie-tutorial-layer'/);
-  assert.match(tutorial, /kicker: '研修所 · 三步選課'/);
 });

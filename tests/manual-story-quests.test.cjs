@@ -43,9 +43,6 @@ test('manual first viewing records progress while completed chapters and locked 
   seen[chapter.id] = { completedAtMs: 1 };
   ctx.window.openXiuxianStoryChapter(chapter.id);
   assert.equal(modes.at(-1), true);
-  tutorialDone = false;
-  ctx.window.openXiuxianStoryChapter(chapter.id);
-  assert.equal(modes.at(-1), false, 'legacy readers may finish their missing tutorial by clicking');
   currentScore = 4;
   assert.equal(ctx.window.openXiuxianStoryChapter(chapter.id), false);
   admin = true;
@@ -122,5 +119,5 @@ test('the viewing quest opens its own chapter and gives feedback when the player
   assert.equal(messages.length, 0);
   opened = false;
   ctx.go(q.destination, q);
-  assert.match(messages[0], /先結束目前的戰鬥或教學/);
+  assert.match(messages[0], /先結束目前的戰鬥或其他彈窗/);
 });

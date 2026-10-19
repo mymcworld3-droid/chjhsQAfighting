@@ -6,7 +6,6 @@ const path = require('node:path');
 const vm = require('node:vm');
 const read = file => fs.readFileSync(path.join(__dirname, '..', file), 'utf8');
 const battle = read('public/cultivation/battle-mode-v2.js');
-const tutorial = read('public/cultivation/battle-tutorial.js');
 const fullscreen = read('public/cultivation/battle-v3-stability-ui.js');
 
 test('a throttled callback respects its absolute deadline rather than chaining paint delays', () => {
@@ -78,10 +77,6 @@ test('formal and tutorial attacks both use a fixed timeline and a delayed impact
   assert.match(battle,/scheduleBattleAt\(impactAtMs, key/);
   assert.match(battle,/atMs >= clearAtMs/);
   assert.doesNotMatch(battle.slice(battle.indexOf('  function animateSettlement(room) {'),battle.indexOf('  async function confirmReview() {')),/requestAnimationFrame/);
-  assert.match(tutorial,/async function waitUntil\(deadlineMs\)/);
-  assert.match(tutorial,/const strikeAtMs = startAtMs \+ 280 \+ index \* TURN_ANIMATION_MS/);
-  assert.match(tutorial,/await waitUntil\(impactAtMs\)/);
-  assert.match(tutorial,/await waitUntil\(clearAtMs\)/);
 });
 
 test('answering fills the viewport while preserving exit and scrolling for long questions',()=>{
@@ -92,5 +87,4 @@ test('answering fills the viewport while preserving exit and scrolling for long 
   assert.match(fullscreen, /overflow-x:hidden!important;overflow-y:auto!important;overscroll-behavior:contain/);
   assert.match(fullscreen, /#page-battle #bv2-quiz:not\(\.hidden\) > #battle-tutorial-layer\.bt-quiz-mode/);
   assert.match(fullscreen, /animation-duration:1450ms!important/);
-  assert.match(tutorial, /#\$\{LAYER_ID\} \.bt-fighter.strike\{animation-duration:1450ms!important\}/);
 });

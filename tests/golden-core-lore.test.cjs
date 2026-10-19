@@ -9,7 +9,6 @@ function read(rel) {
 
 test('Golden Cores are innate spirit-field cores, not external consumable pills', () => {
   const training = read('public/cultivation/cultivation-training-v4.js');
-  const tutorial = read('public/cultivation/golden-core-tutorial.js');
 
   assert.match(training, /自身靈田／丹田中凝聚的本命金丹/);
   assert.match(training, /training-core-feature/);
@@ -19,10 +18,6 @@ test('Golden Cores are innate spirit-field cores, not external consumable pills'
   assert.doesNotMatch(training, /已裝配此金丹/);
   assert.doesNotMatch(training, />裝配此金丹</);
 
-  assert.match(tutorial, /金丹不是外來丹藥/);
-  assert.match(tutorial, /洗髓不是換一顆外來丹藥/);
-  assert.match(tutorial, /重新洗鍊靈田中的本命金丹/);
-  assert.match(tutorial, /調御此丹相/);
 });
 
 test('all nine Golden Cores retain distinct humorous notes', () => {
