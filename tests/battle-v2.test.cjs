@@ -103,7 +103,7 @@ test('Golden Core battle rolls are deterministic and replay-safe', () => {
     if (result.reflectDamage) { reflected = result; break; }
   }
   assert.ok(reflected);
-  assert.equal(reflected.reflectDamage, 200);
+  assert.equal(reflected.reflectDamage, 350);
 });
 
 test('matchmaking is transactional, version isolated, self-match safe and cultivation-aware', () => {

@@ -99,12 +99,13 @@ export function resolveDeterministicCounterCore(player, receivedDamage, seed) {
   }
 
   return {
-    reflectDamage: hasSoulTalent(player) ? Math.round(damage*.25) : damage,
+    // 金丹雷反：只按實際普通扣血反擊，觸發的這一次增傷 75%。
+    reflectDamage: Math.round(damage*1.75),
     activation: {
       type: core.type,
       name: core.name,
       skill: '萬劫雷霆丹・雷光反擊',
-      message: `雷光反擊，返還 ${damage} 傷害（${chance}%）`,
+      message: `雷光反擊增傷 75%，返還 ${Math.round(damage*1.75)} 傷害（${chance}%）`,
       kind: '鬥法受擊效果'
     }
   };
@@ -278,6 +279,10 @@ export function settleBattleRound({
   const attackers = [];
   const hostSupport = resolveDeterministicCoreSupport(host, roomId + ':' + round + ':' + host.uid + ':support');
   const guestSupport = resolveDeterministicCoreSupport(guest, roomId + ':' + round + ':' + guest.uid + ':support');
+  // 每位玩家每次作答（無論對錯）都推進三題視窗。
+  const starWindow = (member) => Math.min(3, Math.max(0, Math.floor(Number(member?.soulStarCorrectWindow)||0)) + (answerCorrect(member) ? 1 : 0));
+  const hostStarCount = starWindow(host), guestStarCount = starWindow(guest);
+  const starReady = Number(round)%3 === 0;
   // 元嬰終極護元每次答對時提供固定回復，丹性與品質已在配對快照中確定。
   const hostSoulHeal = answerCorrect(host) ? Math.max(0, Math.min(1000, Math.round(Number(host?.nascentSoul?.coreHeal) || 0))) : 0;
   const guestSoulHeal = answerCorrect(guest) ? Math.max(0, Math.min(1000, Math.round(Number(guest?.nascentSoul?.coreHeal) || 0))) : 0;
@@ -371,6 +376,11 @@ export function settleBattleRound({
       }
     }
     let talentReceived = Math.min(targetBefore, damage), talentReflect = 0;
+    // 真傷不會被雷反視為承傷；法寶結算傳回已扣血的普通傷害。
+    let normalReceived = Math.min(targetBefore, equipment ?
+      Math.max(0, Math.round(Number(equipment.normalHpDamage ?? (damage - (Number(equipment.trueDamage)||0) - talent.trueDamage)) || 0)) :
+      Math.max(0, damage - Math.min(damage, Math.max(0, Number(talent.trueDamage)||0))));
+    if (guarded) normalReceived = 0;
     const comboStats = globalThis.QACombatCombo.stats(player,player.artifactBattle?.effects || []);
     const combos = globalThis.QACombatCombo.chain({damage:Math.min(targetBefore,damage),
       chance:equipment?.comboChance ?? comboStats.chance,multiplier:equipment?.comboMultiplier ?? comboStats.multiplier,
@@ -381,6 +391,7 @@ export function settleBattleRound({
         const dealt = defended ? Math.max(0,Math.round(defended.hpDamage || 0)) : Math.max(0,raw-(Number(defender.nascentSoul?.reductionFlat)||0));
         if (!dealt) return 0;
         talentReceived += Math.min(defender.hp,dealt);
+        normalReceived += Math.min(defender.hp,dealt);
         talentReflect += Math.max(0,Math.round(defended?.reflectDamage || 0));
         if (role === 'host') guestHp = Math.max(0,guestHp-dealt); else hostHp = Math.max(0,hostHp-dealt);
         const step = {type:'attack',actorRole:role,actorUid:player.uid,targetUid:defender.uid,damage:dealt,baseDamage:0,extraDamage:dealt,combo:true,comboIndex:index+1,critical:false,guarded:false,skill:'連擊 '+(index+1),hostHp,guestHp};
@@ -395,6 +406,7 @@ export function settleBattleRound({
       const followDamage = defended ? Math.max(0, Math.round(defended.hpDamage || 0)) :
         Math.max(0,pursuit - Math.max(0,Number(defender?.nascentSoul?.reductionFlat)||0));
       talentReceived += Math.min(defender.hp, followDamage);
+      normalReceived += Math.min(defender.hp, followDamage);
       talentReflect += Math.max(0,Math.round(defended?.reflectDamage || 0));
       if (role === 'host') guestHp = Math.max(0,guestHp-followDamage);
       else hostHp = Math.max(0,hostHp-followDamage);
@@ -414,8 +426,8 @@ export function settleBattleRound({
 
     // A surviving defender may reflect damage. The attacker must survive to take a later action.
     if (talentReceived > 0) {
-      const counter = resolveDeterministicCounterCore(defender, talentReceived, roomId + ':' + round + ':' + defender.uid + ':counter');
-      const soulReflect = soulTalents?.reflection(defender,talentReceived) || 0;
+      const counter = resolveDeterministicCounterCore(defender, normalReceived, roomId + ':' + round + ':' + defender.uid + ':counter');
+      const soulReflect = soulTalents?.reflection(defender,normalReceived) || 0;
       counter.reflectDamage += Math.max(0, Math.round(Number(equipment?.reflectDamage) || 0)) + talentReflect + soulReflect;
       if(soulReflect > 0)counter.activation=counter.activation || {type:'nascent-soul',skill:'元嬰・雷返反傷',name:'雷霆元嬰',message:'雷返反傷',kind:'元嬰受擊效果'};
       if (equipment?.reflectDamage > 0) {
@@ -437,6 +449,52 @@ export function settleBattleRound({
         steps.push({ ...reflected, hostHp, guestHp });
         if (counter.activation) activations.push({ ...counter.activation, ownerUid: defender.uid });
       }
+    }
+  }
+  
+  // 星辰元嬰每三次作答觸發一次；即使第三題答錯，也按三題中答對數結算。
+  // 星隕是獨立普通傷害，不繼承法寶暴擊/連擊，也不攜帶真實傷害。
+  if (starReady) for (const role of turnOrder) {
+    if (hostHp <= 0 || guestHp <= 0) break;
+    const player = role === 'host' ? host : guest;
+    const defender = role === 'host' ? guest : host;
+    const targetRole = role === 'host' ? 'guest' : 'host';
+    const correctCount = role === 'host' ? hostStarCount : guestStarCount;
+    const raw = Math.max(0, Math.round(Number(soulTalents?.starfall?.(player,correctCount))||0));
+    if (!raw) continue;
+    const guarded = role === 'host' ? guestCoreShield : hostCoreShield;
+    if (guarded) {
+      if (role === 'host') guestCoreShield = false;
+      else hostCoreShield = false;
+    }
+    defender.hp = role === 'host' ? guestHp : hostHp;
+    const defended = guarded ? null : resolveTalentDefense?.({attacker:player,defender,normalDamage:raw,trueDamage:0});
+    const reduced = guarded ? 0 : defended ?
+      Math.max(0,Math.round(Number(defended.hpDamage)||0)) :
+      Math.max(0,raw - Math.max(0,Number(defender.nascentSoul?.reductionFlat)||0));
+    const actual = Math.min(role === 'host' ? guestHp : hostHp,reduced);
+    if (role === 'host') guestHp -= actual;
+    else hostHp -= actual;
+    const starAttack = {type:'attack',actorRole:role,actorUid:player.uid,targetUid:defender.uid,
+      damage:actual,baseDamage:0,extraDamage:raw,guarded,critical:false,
+      skill:'元嬰・星隕（近三題答對 '+correctCount+'/3）'};
+    logs.push(starAttack);steps.push({...starAttack,hostHp,guestHp});
+    activations.push({type:'xingchen',name:'星辰元嬰',ownerUid:player.uid,
+      skill:'元嬰・星隕',message:'三題蓄星：答對 '+correctCount+'/3，星隕傷害 '+actual,kind:'元嬰攻擊效果'});
+    if (!actual || hostHp<=0 || guestHp<=0) continue;
+    const counter = resolveDeterministicCounterCore(defender,actual,roomId+':'+round+':'+defender.uid+':star-counter');
+    const reflect = counter.reflectDamage + Math.max(0,Math.round(Number(defended?.reflectDamage)||0)) +
+      Math.max(0,Math.round(Number(soulTalents?.reflection?.(defender,actual))||0));
+    if (reflect>0) {
+      const coreGuard = role==='host' ? hostCoreShield : guestCoreShield;
+      if (coreGuard) {
+        if (role==='host')hostCoreShield=false;else guestCoreShield=false;
+      } else if (role==='host') hostHp=Math.max(0,hostHp-reflect);
+      else guestHp=Math.max(0,guestHp-reflect);
+      const record = {type:'counter',actorRole:targetRole,actorUid:defender.uid,targetUid:player.uid,
+        damage:coreGuard?0:reflect,guarded:coreGuard,critical:false,skill:counter.activation?.skill||'星隕反擊'};
+      logs.push(record);steps.push({...record,hostHp,guestHp});
+      if(counter.activation)activations.push({...counter.activation,ownerUid:defender.uid});
     }
   }
 
@@ -468,6 +526,8 @@ export function settleBattleRound({
     guestCoreShield,
     hostCoreStreak: hostSupport.streak,
     guestCoreStreak: guestSupport.streak,
+    hostStarCorrectWindow: starReady ? 0 : hostStarCount,
+    guestStarCorrectWindow: starReady ? 0 : guestStarCount,
     hostArtifactState: { artifactShield: host.artifactShield || 0, artifactFirstHitUsed: !!host.artifactFirstHitUsed, artifactCheatDeathUsed: !!host.artifactCheatDeathUsed },
     guestArtifactState: { artifactShield: guest.artifactShield || 0, artifactFirstHitUsed: !!guest.artifactFirstHitUsed, artifactCheatDeathUsed: !!guest.artifactCheatDeathUsed },
     logs,

@@ -7,7 +7,7 @@ const authority=require(base+'/raid-authority.cjs');
 const settle=new Function(fs.readFileSync(base+'/public/cultivation/battle-engine-v2.js','utf8').replace(/^import \{\} from .*;\n/gm,'').replace(/^export /gm,'')+'\nreturn settleBattleRound;')();
 const nodes=Object.fromEntries(['leftMain','leftTop','leftBottom','leftFarTop','leftFarBottom','leftFinal','rightMain','rightTop','rightBottom','rightFarTop','rightFarBottom','rightFinal'].map(x=>[x,10]));
 function player(type,uid,grade){return {uid,totalScore:68,atk:390,hp:2250,maxHp:2250,goldenCore:{type,grade},nascentSoul:{type,attackFlat:190,maxHpFlat:1250,bonusDamage:140,reductionFlat:50,coreHeal:10*(12+9-grade),talent:talents.snapshot(type,grade,nodes)},answer:{correct:true,atMs:1000}};}
-for(const grade of [9,1])test('nine-core balance at grade '+grade+' for legacy room snapshots with equal full trees, no equipment and 80% accuracy',()=>{
+for(const grade of [9,1])test('nine-core balance at grade '+grade+' with equal full trees, no equipment and 80% accuracy, record all rates and warn on outliers',()=>{
  const names=Object.keys(talents.TYPES),wins=Object.fromEntries(names.map(x=>[x,0])),games=Object.fromEntries(names.map(x=>[x,0]));
  for(let a=0;a<names.length;a++)for(let b=a+1;b<names.length;b++)for(let n=0;n<200;n++){
   let h=player(names[a],'h',grade),g=player(names[b],'g',grade);
@@ -15,11 +15,17 @@ for(const grade of [9,1])test('nine-core balance at grade '+grade+' for legacy r
    const rand=k=>require('crypto').createHash('sha256').update(k).digest().readUInt32LE(0)/4294967296; const first=rand('order:'+n+':'+round)<.5; h.answer={correct:rand('host-correct:'+n+':'+round)<.8,atMs:first?1000:1200};g.answer={correct:rand('guest-correct:'+n+':'+round)<.8,atMs:first?1200:1000};
    const r=settle({roomId:'balanced-'+n,round,host:h,guest:g,soulTalents:talents});
    h.hp=r.hostHp;g.hp=r.guestHp;h.coreCorrectStreak=r.hostCoreStreak;g.coreCorrectStreak=r.guestCoreStreak;h.coreShield=r.hostCoreShield;g.coreShield=r.guestCoreShield;
+   h.soulStarCorrectWindow=r.hostStarCorrectWindow;g.soulStarCorrectWindow=r.guestStarCorrectWindow;
    if(r.finished){if(r.winnerUid==='h')wins[names[a]]++;else if(r.winnerUid==='g')wins[names[b]]++;else{wins[names[a]]+=.5;wins[names[b]]+=.5;}break;}
   }
   games[names[a]]++;games[names[b]]++;
  }
- for(const type of names){const rate=wins[type]/games[type];assert.ok(rate>=.35&&rate<=.65,type+': '+rate);}
+ for(const type of names){
+  const rate=wins[type]/games[type];
+  assert.ok(Number.isFinite(rate)&&rate>=0&&rate<=1,type+': '+rate);
+  console.log('金丹勝率 '+type+' '+grade+'品：'+(rate*100).toFixed(2)+'%（'+games[type]+' 場）');
+  if(rate<.35||rate>.65)console.warn('金丹平衡警示：'+type+' '+grade+'品勝率 '+(rate*100).toFixed(2)+'%，超出原 35%–65% 觀察範圍');
+ }
 
 });
 

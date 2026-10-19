@@ -27,6 +27,11 @@ export function resolveShenRaidCombat({ runId, round, player, boss, intent, corr
 
   const support = resolveDeterministicCoreSupport(p, seed + ':support');
   p.coreCorrectStreak = support.streak;
+  const starWindow=(Math.max(0,Math.floor(Number(p.soulStarAnswerWindow)||0))%3)+1;
+  const starCorrect=Math.min(3,Math.max(0,Math.floor(Number(p.soulStarCorrectWindow)||0))+(correct===true?1:0));
+  const starDamage=starWindow===3 ? (globalThis.QASoulTalents?.starfall?.(p,starCorrect)||0) : 0;
+  p.soulStarAnswerWindow=starWindow===3?0:starWindow;
+  p.soulStarCorrectWindow=starWindow===3?0:starCorrect;
   const soulHeal = correct ? Math.max(0, Number(p.nascentSoul?.coreHeal) || 0) : 0;
   const preHitHeal = Math.max(0, Math.round(Number(support.heal) || 0)) + soulHeal;
   p.hp = Math.min(p.maxHp, p.hp + preHitHeal);
@@ -63,7 +68,7 @@ export function resolveShenRaidCombat({ runId, round, player, boss, intent, corr
     outgoingDamage += hits.reduce((n,v)=>n+v,0);
     if (p.goldenCore?.type === 'sword' && boss.hp > outgoingDamage) outgoingDamage += resolveDeterministicAttackCore(p,seed+':core-attack').extraDamage;
   }
-  const projectedBossHp = Math.max(0, Number(boss.hp) - outgoingDamage);
+  const projectedBossHp = Math.max(0, Number(boss.hp) - outgoingDamage - starDamage);
   let incomingDamage = 0;
   let reflectedDamage = 0;
   let defenseSkill = '';
@@ -98,6 +103,7 @@ export function resolveShenRaidCombat({ runId, round, player, boss, intent, corr
     bossHp: boss.hp,
     bossMaxHp: boss.maxHp,
     outgoingDamage,
+    starfallDamage: starDamage,
     incomingDamage,
     reflectedDamage,
     artifactShield: p.artifactShield,
@@ -127,6 +133,11 @@ export function resolveShenPlayerAction({ runId, actionId = 1, player, boss, cor
 
   const support = resolveDeterministicCoreSupport(p, seed + ':support');
   p.coreCorrectStreak = support.streak;
+  const starWindow=(Math.max(0,Math.floor(Number(p.soulStarAnswerWindow)||0))%3)+1;
+  const starCorrect=Math.min(3,Math.max(0,Math.floor(Number(p.soulStarCorrectWindow)||0))+(correct===true?1:0));
+  const starDamage=starWindow===3 ? (globalThis.QASoulTalents?.starfall?.(p,starCorrect)||0) : 0;
+  p.soulStarAnswerWindow=starWindow===3?0:starWindow;
+  p.soulStarCorrectWindow=starWindow===3?0:starCorrect;
   p.coreShield = support.shield;
   const soulHeal = correct ? Math.max(0, Number(p.nascentSoul?.coreHeal) || 0) : 0;
   let healed = Math.max(0, Math.round(Number(support.heal) || 0)) + soulHeal;
@@ -165,6 +176,7 @@ export function resolveShenPlayerAction({ runId, actionId = 1, player, boss, cor
     if (artifactAttack) artifactAttack.comboHits=hits;
     if (p.goldenCore?.type === 'sword' && boss.hp > damage) damage += resolveDeterministicAttackCore(p,seed+':core-attack').extraDamage;
   }
+  damage+=starDamage;
   boss.hp = Math.max(0, Math.round(Number(boss.hp) || 0) - damage);
   boss.phase = boss.hp <= 0 ? 3 : boss.phase;
   return {
