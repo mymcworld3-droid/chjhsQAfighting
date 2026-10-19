@@ -1,4 +1,5 @@
 import './daily-meditation-rules.js';
+import './daily-meditation-rewards.js';
 import './nascent-growth.js';
 import { getMainUser, authenticatedMainFetch } from './data/project-repository.js';
 
@@ -15,7 +16,7 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
   let account='', state=null, session=null, busy=false, generation=0, statusSequence=0, clock=null, lastStatusAt=0, statusRequest=null;
   function reconcile() {
     const id=uid();
-    if(id!==account){pauseClock();account=id;state=null;session=null;clock=null;busy=false;lastStatusAt=0;statusRequest=null;generation++;statusSequence++;node('daily-meditation-overlay')?.remove();}
+    if(id!==account){globalThis.QAMeditationRewardFeedback?.clear();pauseClock();account=id;state=null;session=null;clock=null;busy=false;lastStatusAt=0;statusRequest=null;generation++;statusSequence++;node('daily-meditation-overlay')?.remove();}
     return id;
   }
   function notify(message) {const el=node('dm-status');if(el)el.textContent=message;else console.info('[閉關]',message);}
@@ -244,8 +245,30 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
       }
     });
   }
-  async function finish() {await task(async()=>{const result=await request('finish');applyEconomy(result.economy);session=null;clock=null;await refresh({force:true});renderDashboard();});}
-  async function claim(stars) {await task(async()=>{const result=await request('claim',{stars,date:state.date});state=result;lastStatusAt=Date.now();applyEconomy(result.economy);renderDashboard();notify(result.claimedNow?'已領取 '+stars+' 星共修獎勵。':'此節點今日已領取。');});}
+  function rewardReceipt(reward, {receiptId,title,subtitle,stars,note}={}) {
+    const owner=uid(),settings=userData()?.gameSettings;
+    globalThis.QAMeditationRewardFeedback?.show({
+      uid:owner,receiptId,reward,title,subtitle,note,
+      kicker:stars?stars+' 星共修':'今日閉關',
+      sound:settings?.soundEnabled!==false&&settings?.musicEnabled!==false,
+      isCurrent:()=>uid()===owner,
+      focusTarget:()=>node('dm-close'),
+      target:()=>stars?node('dm-content')?.querySelector('[data-dm-claim="'+stars+'"]'):node('dm-content')?.querySelector('.dm-summary')
+    });
+  }
+  async function finish() {await task(async()=>{
+    const result=await request('finish');applyEconomy(result.economy);session=null;clock=null;
+    // Show the committed reward even when refreshing the leaderboard is slow or offline.
+    rewardReceipt(result.record?.lastResult,{receiptId:'personal:'+result.record?.lastDate,title:'今日閉關完成',subtitle:'連續 '+(result.record?.streak||1)+' 日 · 參悟 '+(result.record?.lastResult?.stars||0)+' / 3 星'});
+    await refresh({force:true});renderDashboard();
+  });}
+  async function claim(stars) {await task(async()=>{
+    const result=await request('claim',{stars,date:state.date});state=result;lastStatusAt=Date.now();applyEconomy(result.economy);renderDashboard();
+    if(result.claimedNow){
+      rewardReceipt(result.reward,{receiptId:'coop:'+result.date+':'+stars,stars,title:stars===15?'共修圓滿 · 獎勵入袋':'共修獎勵入袋',subtitle:'同門聚星 · '+stars+' 星達成',note:result.reward?.convertedRaidGold?'團本入場券已滿，已折為 '+result.reward.convertedRaidGold+' 靈石。':''});
+    }
+    notify(result.claimedNow?'已領取 '+stars+' 星共修獎勵。':'此節點今日已領取。');
+  });}
   window.openDailyMeditation=open;window.getDailyMeditationPanelState=panelState;window.refreshDailyMeditationPanel=syncPanel;
   window.addEventListener('xiuxian:stats-updated',syncPanel);
   for(const name of ['xiuxian:user-data-ready','xiuxian:user-ready'])window.addEventListener(name,()=>{reconcile();syncPanel();if(!busy)void refresh().catch(()=>{});});
