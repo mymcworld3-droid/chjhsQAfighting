@@ -14,7 +14,7 @@ function pageRuntime() {
   const player = { uid: 'u1', stats: { totalScore: 28, gold: 10000 }, artifactSystem: { inventory: {}, equipped: {} } };
   const classes = () => {
     const values = new Set();
-    return { contains: value => values.has(value), remove: value => values.delete(value),
+    return { add: value => values.add(value), contains: value => values.has(value), remove: value => values.delete(value),
       toggle: (value, enabled) => enabled ? values.add(value) : values.delete(value) };
   };
   function node(id = '') {
@@ -44,7 +44,7 @@ function pageRuntime() {
   const context = { window, QASoulboundPool: Pool, QATrainingAccessRules: Access,
     document: { getElementById: id => nodes.get(id), createElement: () => node(),
       querySelector: selector => selector.includes('data-training-tab') ? tab : null,
-      head: { append() {} }, body: { classList: classes() },
+      head: { append() {} }, body: node('body'),
       addEventListener(name, callback) { documentEvents.set(name, callback); }
     },
     getArtifactById: Pool.get, artifactRealmColor: () => '#f5cf83',
@@ -77,6 +77,11 @@ function pageRuntime() {
       const overlay = nodes.get('soulbound-preview');
       if (overlay) overlay.fire('click', { target: overlay });
     },
+    revealAction(attribute, dataset = {}) {
+      const button = { disabled: false, dataset, hasAttribute: name => name === attribute };
+      nodes.get('soulbound-animation')?.fire('click', { target: { closest: () => button } });
+    },
+    revealHtml: () => nodes.get('soulbound-animation')?.innerHTML || '',
     html: () => nodes.get('soulbound-content').innerHTML
   };
 }
@@ -168,20 +173,37 @@ test('fragment-only pending results can be viewed and acknowledged without equip
   const runtime=pageRuntime();runtime.open();
   const batch={requestId:'fragment-request-0001',cost:250,results:[{kind:'fragments',fragments:30,ordinal:1}]};
   runtime.requests[0].reply({...snapshot(),fragments:30,pending:batch,misses:1,untilPity:19});await settle();
-  assert.match(runtime.html(),/煉器碎片 ×30/);assert.match(runtime.html(),/data-sb-vault/);assert.doesNotMatch(runtime.html(),/data-sb-equip=/);
-  const button={disabled:false,dataset:{},hasAttribute:name=>name==='data-sb-vault'};
-  runtime.nodes.get('soulbound-content').fire('click',{target:{closest:()=>button}});
+  assert.doesNotMatch(runtime.html(),/煉器碎片 ×30|sb-results|sb-featured/);
+  assert.match(runtime.revealHtml(),/data-sb-flip/);
+  assert.doesNotMatch(runtime.revealHtml(),/煉器碎片 ×30/);
+  runtime.revealAction('data-sb-keep');
+  assert.equal(runtime.requests.length,1,'unflipped results cannot be acknowledged');
+  runtime.revealAction('data-sb-flip');
+  assert.match(runtime.revealHtml(),/煉器碎片 ×30/);
+  assert.match(runtime.revealHtml(),/data-sb-keep/);
+  runtime.revealAction('data-sb-keep');
   assert.equal(runtime.requests[1].url,'/api/soulbound/ack');assert.equal(JSON.parse(runtime.requests[1].init.body).requestId,batch.requestId);
-  runtime.requests[1].reply({...snapshot(),fragments:30,misses:1,untilPity:19});await settle();assert.doesNotMatch(runtime.html(),/data-sb-vault/);
+  runtime.requests[1].reply({...snapshot(),fragments:30,misses:1,untilPity:19});await settle();assert.equal(runtime.nodes.has('soulbound-animation'),false);
 });
 
-test('mixed batches retain weapon comparison and older weapon-only receipts remain readable', async () => {
+test('mixed and legacy batches reveal each result only after flipping its card', async () => {
   for(const legacy of [false,true]){
     const runtime=pageRuntime();runtime.open();const item=Pool.ITEMS[0];
     const weapon={itemId:item.id,realm:item.realm,...(legacy?{}:{kind:'weapon',pity:true})};
     runtime.requests[0].reply({...snapshot(),inventory:{[item.id]:1},pending:{requestId:'weapon-request-00001',cost:500,results:legacy?[weapon]:[weapon,{kind:'fragments',fragments:25}]}});await settle();
-    assert.match(runtime.html(),/調御比較/);assert.ok(runtime.html().includes(`data-sb-equip="${item.id}"`));
-    assert.equal((runtime.html().match(/data-sb-select=/g)||[]).length,legacy?1:2);
+    assert.doesNotMatch(runtime.html(),/sb-results|sb-featured|data-sb-select/);
+    assert.doesNotMatch(runtime.revealHtml(),new RegExp(item.name));
+    runtime.revealAction('data-sb-flip');
+    assert.ok(runtime.revealHtml().includes(item.name));
+    assert.ok(runtime.revealHtml().includes(`data-sb-reveal-equip="${item.id}"`));
+    if(!legacy){
+      assert.doesNotMatch(runtime.revealHtml(),/data-sb-keep/);
+      runtime.revealAction('data-sb-next');
+      assert.doesNotMatch(runtime.revealHtml(),/煉器碎片 ×25/);
+      runtime.revealAction('data-sb-flip');
+      assert.match(runtime.revealHtml(),/煉器碎片 ×25/);
+      assert.match(runtime.revealHtml(),/data-sb-keep/);
+    }
   }
 });
 
@@ -225,7 +247,7 @@ test('voucher buttons display balance and send explicit ticket payment with zero
   const body=JSON.parse(runtime.requests[1].init.body);assert.equal(body.payment,'ticket');assert.equal(body.count,5);assert.equal(body.expectedCost,0);
   const batch={requestId:body.requestId,payment:'ticket',ticketsSpent:5,cost:0,results:Array.from({length:5},()=>({kind:'fragments',fragments:30}))};
   runtime.requests[1].reply({...snapshot(),result:batch,pending:batch,drawTickets:0});await settle();
-  assert.match(runtime.html(),/本批 5 張抽獎券/);assert.equal(runtime.player.soulboundDrawTickets,0);
+  runtime.revealAction('data-sb-skip');assert.match(runtime.revealHtml(),/本批 5 張抽獎券/);assert.equal(runtime.player.soulboundDrawTickets,0);
 });
 
 test('showcase preview redeems its selected weapon with the displayed fragment cost', async () => {
@@ -258,4 +280,34 @@ test('fragment redemption is not offered when short on fragments or a draw batch
     await settle();runtime.preview(Pool.candidates(0)[0].id);
     assert.match(runtime.nodes.get('soulbound-preview').innerHTML,/data-sb-redeem="[^"]+" disabled/);
   }
+});
+
+
+test('closing the fullscreen ceremony leaves the saved batch available without another draw', async () => {
+  const runtime=pageRuntime();runtime.open();
+  const batch={requestId:'saved-batch-000001',cost:250,results:[{kind:'fragments',fragments:35}]};
+  runtime.requests[0].reply({...snapshot(),fragments:35,pending:batch});await settle();
+  runtime.revealAction('data-sb-dismiss');
+  assert.equal(runtime.nodes.has('soulbound-animation'),false);
+  assert.match(runtime.html(),/data-sb-resume/);
+  const button={disabled:false,dataset:{},hasAttribute:name=>name==='data-sb-resume'};
+  runtime.nodes.get('soulbound-content').fire('click',{target:{closest:()=>button}});
+  assert.match(runtime.revealHtml(),/data-sb-flip/);
+  runtime.revealAction('data-sb-flip');
+  assert.match(runtime.revealHtml(),/煉器碎片 ×35/);
+  assert.equal(runtime.requests.length,1,'resuming cannot charge or roll again');
+});
+
+test('failed acknowledgement keeps the revealed batch available for the same receipt retry', async () => {
+  const runtime=pageRuntime();runtime.open();
+  const batch={requestId:'ack-retry-batch-001',cost:250,results:[{kind:'fragments',fragments:30}]};
+  runtime.requests[0].reply({...snapshot(),pending:batch});await settle();
+  runtime.revealAction('data-sb-flip');runtime.revealAction('data-sb-keep');
+  runtime.requests[1].reply({ok:false,error:'同步失敗'},503);await settle();
+  assert.match(runtime.revealHtml(),/同步失敗/);
+  assert.match(runtime.revealHtml(),/煉器碎片 ×30/);
+  runtime.revealAction('data-sb-keep');
+  assert.equal(JSON.parse(runtime.requests[2].init.body).requestId,batch.requestId);
+  runtime.requests[2].reply(snapshot());await settle();
+  assert.equal(runtime.nodes.has('soulbound-animation'),false);
 });

@@ -6,7 +6,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
 (function () {
   'use strict';
   const pool = globalThis.QASoulboundPool;
-  let snapshot = null, account = '', busy = false, selected = 0, message = '', animationTimer = null, externalDirty = false;
+  let snapshot = null, account = '', busy = false, message = '', animationTimer = null, flipTimer = null, presentation = null, externalDirty = false;
   const CAROUSEL_DELAY_MS = 4800, CAROUSEL_MOVE_MS = 660;
   let carouselStart = 0, carouselTimer = null, carouselMoveTimer = null;
   let previewItemId = '', previewTrigger = null;
@@ -24,7 +24,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
   function reconcile() {
     const uid = getMainUser()?.uid || '';
     if (account !== uid) {
-      clearTimeout(animationTimer); stopCarousel(); account = uid; snapshot = null; selected = 0;
+      closePresentation(false); stopCarousel(); account = uid; snapshot = null;
       carouselStart = 0; message = ''; externalDirty = false; previewItemId = ''; previewTrigger = null;
       $('soulbound-animation')?.remove(); $('soulbound-preview')?.remove();
     }
@@ -65,7 +65,6 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     }).join('；') || item.description || '基礎屬性加成';
   }
   function base(item, type) { return (item?.effects || []).filter(e => e.type === type).reduce((sum, e) => sum + Number(e.value || 0), 0); }
-  const signed = value => value > 0 ? `+${value}` : String(value);
   function image(item) {
     return item?.imageUrl ? `<img src="${esc(item.imageUrl)}" alt="${esc(item.name)}" width="144" height="144">`
       : `<span class="sb-fallback" aria-hidden="true">${esc(item?.icon || '契')}</span>`;
@@ -201,15 +200,6 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     previewTrigger = null;
     scheduleCarousel();
   }
-  function comparison(item) {
-    const current = equipped();
-    return `<div class="sb-compare"><h4>調御比較 · ${esc(current?.name || '空本命格')} → ${esc(item.name)}</h4>
-      <p>攻擊加成 ${base(current, 'equip_attack_flat')} → ${base(item, 'equip_attack_flat')} <b>${signed(base(item, 'equip_attack_flat') - base(current, 'equip_attack_flat'))}</b></p>
-      <p>生命加成 ${base(current, 'equip_hp_flat')} → ${base(item, 'equip_hp_flat')} <b>${signed(base(item, 'equip_hp_flat') - base(current, 'equip_hp_flat'))}</b></p>
-      ${(base(current, 'equip_attack_percent') || base(item, 'equip_attack_percent')) ? `<p>攻擊比例 ${pool.valueText('equip_attack_percent', base(current, 'equip_attack_percent'))} → ${pool.valueText('equip_attack_percent', base(item, 'equip_attack_percent'))}</p>` : ''}
-      ${(base(current, 'equip_hp_percent') || base(item, 'equip_hp_percent')) ? `<p>生命比例 ${pool.valueText('equip_hp_percent', base(current, 'equip_hp_percent'))} → ${pool.valueText('equip_hp_percent', base(item, 'equip_hp_percent'))}</p>` : ''}
-      <p>目前能力：${esc(effectText(current))}</p><p>換上能力：${esc(effectText(item))}</p><small>此處比較本命格屬性；戰鬥總值會再套用其他裝備與加成。原法器留在寶庫。</small></div>`;
-  }
   function render() {
     if (!$('soulbound-content')) return;
     stopCarousel(); // Data refreshes must not leave an obsolete slide transition alive.
@@ -227,17 +217,12 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       scheduleCarousel();
       return;
     }
-    const pending = s.pending, row = pending?.results[Math.min(selected, pending.results.length - 1)], item = row?.itemId && getArtifactById(row.itemId);
+    const pending = s.pending;
     const rank = s.rank, candidates = pool.candidates(Math.max(0, rank));
     $('soulbound-content').innerHTML = `<div class="sb-summary"><div><small>靈石餘額</small><strong>${s.balance.toLocaleString('zh-TW')}</strong></div><div><small>煉器碎片</small><strong>${Number(s.fragments || 0).toLocaleString('zh-TW')}</strong></div><div><small>目前本命</small><b>${esc(current?.name || '尚未調御')}</b><span>${esc(current?.realm || '選擇適合自己的器型')}</span></div><div><small>距離武器保底</small><b>${s.untilPity} 抽</b><span>累計 ${s.draws} 抽 · 出武器後重計</span></div></div>
       <div class="sb-pity"><progress value="${Number(s.misses || 0)}" max="${pool.PITY}" aria-label="本輪未出武器 ${Number(s.misses || 0)} 抽"></progress><span>八種武器同池 · 至多 ${pool.PITY} 抽必得一件完整武器</span></div>
       ${operation && !pending ? '<button type="button" data-sb-retry class="sb-primary">重試上次未確認的操作</button><p class="sb-note">使用同一編號重試，不會再次扣除碎片或靈石。</p>' : ''}
-      ${row ? `<section class="sb-results"><div class="sb-result-heading"><h3>${pending.results.length} 抽結果已保存</h3><span>本批 ${pending.payment === 'ticket' ? pending.ticketsSpent + ' 張抽獎券' : pending.cost + ' 靈石'}</span></div>
-        <div class="sb-result-tabs" role="group" aria-label="查看每抽結果">${pending.results.map((r, i) => {
-          const a = r.itemId && getArtifactById(r.itemId);
-          return `<button type="button" data-sb-select="${i}" aria-pressed="${i === selected}" style="--sb-color:${r.realm ? artifactRealmColor(r.realm) : '#f5cf83'}">${esc(a?.name || (r.itemId ? r.itemId : '煉器碎片 ×' + r.fragments))}<small>${a ? esc(r.realm) : '碎片'}${r.pity ? ' · 武器保底' : r.higher ? ' · 高階' : ''}</small></button>`;
-        }).join('')}</div><div class="sb-featured" style="--sb-color:${item ? artifactRealmColor(item.realm) : '#f5cf83'}">${item ? image(item) : '<span class="sb-fragment-art" aria-hidden="true">✦</span>'}<div><small>${item ? esc(item.realm) : '煉器資源'}</small><h3>${item ? esc(item.name) : '煉器碎片 ×' + Number(row.fragments || 0)}</h3><p>${item ? esc(effectText(item)) : '已加入碎片餘額，可在八方煉器陣使用。'}</p></div></div>${item ? comparison(item) : ''}
-        <div class="sb-actions">${item ? `<button type="button" class="sb-primary" data-sb-equip="${esc(item.id)}" ${busy || operation || !Number(s.inventory[item.id]) ? 'disabled' : ''}>調御此器</button>` : ''}<button type="button" data-sb-vault ${busy || operation ? 'disabled' : ''}>確認收入</button><button type="button" data-sb-again ${busy || operation ? 'disabled' : ''}>再次抽取</button></div></section>` : ''}
+      ${pending ? '<button type="button" data-sb-resume class="sb-primary">繼續翻牌 · 本批抽結果已保存</button>' : ''}
       <div class="sb-lobby">${showcaseMarkup(candidates)}<section class="sb-draw-controls"><h3>締結本命</h3><p>八種本命法器一起抽；至多 ${pool.PITY} 抽必得其中一件完整武器。</p>
         ${s.draws === 0 ? `<p class="sb-first">首抽 250 靈石；單抽與五連共用 ${pool.PITY} 抽保底，結果先保存再演出。</p>` : ''}
         <div class="sb-actions"><button type="button" data-sb-draw="1" class="sb-primary" ${busy || operation || pending || rank < 0 || s.balance < s.prices?.single ? 'disabled' : ''}>單抽 · ${s.prices?.single ?? '—'} 靈石</button><button type="button" data-sb-draw="5" ${busy || operation || pending || rank < 0 || s.balance < s.prices?.five ? 'disabled' : ''}>五連抽 · ${s.prices?.five ?? '—'} 靈石</button></div>
@@ -246,6 +231,8 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
         <p class="sb-note">${pending ? '先確認本批結果，即可繼續抽取或兌換。' : `一般武器機率 2%；其餘獲得 20–40 碎片。出武器後重置保底進度。`}</p></section></div>
       ${probabilityMarkup(rank, s.poolVersion)}
       <details class="sb-details"><summary>物品分解與碎片煉器</summary><p>材料、普通法器及本命法器可多選分解，確認後換成煉器碎片；裝備中的份數會保留。</p><button type="button" data-inventory-dismantle>物品分解</button></details>`;
+    if (presentation && !s.pending) closePresentation();
+    else if (presentation && presentation.phase === 'revealed') renderPresentation();
     scheduleCarousel();
   }
   async function refresh() {
@@ -258,17 +245,108 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       const operation = storedOperation();
       if (operation?.action === 'draw' && payload.pending?.requestId === operation.body.requestId) forgetOperation();
       message = payload.pending ? '已找回尚未查看完的抽取結果。' : '';
+      if (payload.pending && !presentation) openPresentation(payload.pending, false);
     } catch (e) { if (getMainUser()?.uid === uid) message = e.message; }
     finally { busy = false; render(); if (visible() && (getMainUser()?.uid !== uid || externalDirty)) { externalDirty = false; void refresh(); } }
   }
-  function reveal() { clearTimeout(animationTimer); animationTimer = null; $('soulbound-animation')?.remove(); render(); }
+  function closePresentation(restoreFocus = true) {
+    clearTimeout(animationTimer); clearTimeout(flipTimer); animationTimer = null; flipTimer = null;
+    const trigger = presentation?.trigger;
+    presentation = null;
+    const overlay = $('soulbound-animation');
+    if (overlay?.open && typeof overlay.close === 'function') overlay.close();
+    overlay?.remove();
+    document.body.classList.remove('sb-reveal-open');
+    if (restoreFocus) {
+      if (trigger?.isConnected) trigger.focus({ preventScroll: true });
+      else if (visible()) $('soulbound-content')?.querySelector('[data-sb-resume], [data-sb-draw]')?.focus({ preventScroll: true });
+    }
+    scheduleCarousel();
+  }
+  function resultMarkup(row) {
+    const item = row.itemId && (getArtifactById(row.itemId) || pool.get(row.itemId));
+    return `<span class="sb-reveal-rarity">${item ? esc(item.realm) + ' · 本命法器' : '煉器資源'}${row.pity ? ' · 保底' : row.higher ? ' · 高階' : ''}</span>
+      <div class="sb-reveal-art">${item ? image(item) : '<span class="sb-fragment-art" aria-hidden="true">✦</span>'}</div>
+      <h3>${item ? esc(item.name) : row.itemId ? esc(row.itemId) : '煉器碎片 ×' + Number(row.fragments || 0)}</h3>
+      <p>${item ? esc(effectText(item)) : row.itemId ? '法器已存入寶庫。' : '已存入碎片餘額，可用於煉器或兌換法器。'}</p>
+      ${item ? `<div class="sb-reveal-stats"><span>攻擊 +${base(item, 'equip_attack_flat')}</span><span>生命 +${base(item, 'equip_hp_flat')}</span></div>` : ''}`;
+  }
+  function renderPresentation() {
+    const state = presentation, overlay = $('soulbound-animation');
+    if (!state || !overlay) return;
+    if (state.phase === 'seal') {
+      overlay.innerHTML = '<div class="sb-reveal-stage sb-reveal-opening"><div class="sb-seal"><span>契</span></div><h2 id="sb-reveal-title">靈光聚合 · 契印開啟</h2><button type="button" data-sb-skip>略過演出</button></div>';
+      overlay.querySelector('[data-sb-skip]')?.focus({ preventScroll: true });
+      return;
+    }
+    const row = state.batch.results[state.index], flipped = state.revealed.has(state.index), ready = state.phase === 'revealed';
+    const item = row.itemId && (getArtifactById(row.itemId) || pool.get(row.itemId));
+    const allSeen = state.revealed.size === state.batch.results.length;
+    const blocked = busy || !!storedOperation();
+    overlay.innerHTML = `<button type="button" class="sb-reveal-close" data-sb-dismiss aria-label="稍後繼續翻牌">×</button>
+      <div class="sb-reveal-stage"><header class="sb-reveal-heading"><span>締結本命</span><h2 id="sb-reveal-title">${flipped ? '契印已啟' : '點擊翻開契牌'}</h2><p>${state.index + 1} / ${state.batch.results.length}</p></header>
+      <div class="sb-reveal-card ${state.phase === 'flipping' ? 'is-flipping' : flipped ? 'is-revealed' : ''}" style="--sb-color:${flipped && item ? esc(artifactRealmColor(item.realm)) : '#f5cf83'}">
+        <div class="sb-reveal-card-inner"><button type="button" class="sb-reveal-back" data-sb-flip ${flipped ? 'disabled aria-hidden="true" tabindex="-1"' : ''} aria-label="翻開第 ${state.index + 1} 張契牌"><span class="sb-card-ornament" aria-hidden="true">✧</span><span class="sb-card-seal" aria-hidden="true">契</span><span>點擊翻牌</span></button>
+        <section class="sb-reveal-front" aria-hidden="${!flipped}" aria-live="polite">${flipped ? resultMarkup(row) : ''}</section></div></div>
+      <footer class="sb-reveal-footer"><div class="sb-reveal-actions">
+        ${state.index > 0 ? `<button type="button" data-sb-previous ${state.phase === 'flipping' || blocked ? 'disabled' : ''}>上一張</button>` : ''}
+        ${ready && state.index < state.batch.results.length - 1 ? `<button type="button" class="sb-primary" data-sb-next ${blocked ? 'disabled' : ''}>下一張</button>` : ''}
+        ${ready && item ? `<button type="button" data-sb-reveal-equip="${esc(item.id)}" ${blocked || !Number(snapshot?.inventory?.[item.id]) || equipped()?.id === item.id ? 'disabled' : ''}>${equipped()?.id === item.id ? '已調御' : '調御此器'}</button>` : ''}
+        ${ready && allSeen ? `<button type="button" class="sb-primary" data-sb-keep ${blocked ? 'disabled' : ''}>確認收入</button>` : ''}
+      </div><p class="sb-reveal-message" role="status">${esc(message)}</p>
+      <small class="sb-reveal-payment">本批 ${state.batch.payment === 'ticket' ? Number(state.batch.ticketsSpent || 0) + ' 張抽獎券' : Number(state.batch.cost || 0).toLocaleString('zh-TW') + ' 靈石'}</small></footer></div>`;
+    overlay.querySelector(flipped ? '[data-sb-next], [data-sb-keep], [data-sb-reveal-equip]' : '[data-sb-flip]')?.focus({ preventScroll: true });
+  }
+  function startCards() {
+    clearTimeout(animationTimer); animationTimer = null;
+    if (!presentation) return;
+    presentation.phase = presentation.revealed.has(presentation.index) ? 'revealed' : 'card';
+    renderPresentation();
+  }
+  function flipCard() {
+    const state = presentation;
+    if (!state || state.phase !== 'card') return;
+    state.revealed.add(state.index);
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    state.phase = reduced ? 'revealed' : 'flipping'; renderPresentation();
+    if (!reduced) flipTimer = setTimeout(() => {
+      flipTimer = null;
+      if (presentation !== state) return;
+      state.phase = 'revealed'; renderPresentation();
+    }, 650);
+  }
+  function openPresentation(batch, opening = true) {
+    if (!batch?.results?.length || !visible()) return;
+    if (presentation?.batch.requestId === batch.requestId) return;
+    const trigger = document.activeElement;
+    closePresentation(false); hidePreview(); stopCarousel();
+    presentation = { batch, uid: account, index: 0, revealed: new Set(), phase: opening ? 'seal' : 'card', trigger };
+    const overlay = document.createElement('dialog');
+    overlay.id = 'soulbound-animation'; overlay.className = 'sb-reveal-overlay' + (batch.results.some(row => row.itemId) ? ' is-higher' : '');
+    overlay.setAttribute('aria-labelledby', 'sb-reveal-title');
+    document.body.appendChild(overlay); document.body.classList.add('sb-reveal-open');
+    overlay.addEventListener('cancel', event => { event.preventDefault(); if (!busy) closePresentation(); });
+    overlay.addEventListener('click', event => {
+      const button = event.target.closest?.('button');
+      if (!button || button.disabled || !presentation || getMainUser()?.uid !== presentation.uid) return;
+      if (button.hasAttribute('data-sb-skip')) startCards();
+      else if (button.hasAttribute('data-sb-flip')) flipCard();
+      else if (button.hasAttribute('data-sb-dismiss') && !busy) closePresentation();
+      else if (button.hasAttribute('data-sb-next') && presentation.phase === 'revealed' && !busy) {
+        presentation.index = Math.min(presentation.index + 1, batch.results.length - 1); startCards();
+      } else if (button.hasAttribute('data-sb-previous') && presentation.phase !== 'flipping' && !busy) {
+        presentation.index = Math.max(0, presentation.index - 1); startCards();
+      } else if (button.hasAttribute('data-sb-keep') && presentation.revealed.size === batch.results.length) void keepResults();
+      else if (button.hasAttribute('data-sb-reveal-equip') && presentation.phase === 'revealed') void equipmentAction(button.dataset.sbRevealEquip);
+    });
+    renderPresentation();
+    if (typeof overlay.showModal === 'function') overlay.showModal();
+    else overlay.setAttribute('open', '');
+    if (opening) animationTimer = setTimeout(startCards, matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 2000);
+  }
   function animate(batch) {
-    if (!visible() || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    openPresentation(batch);
     const higher = batch.results.some(r => r.itemId);
-    const el = document.createElement('div'); el.id = 'soulbound-animation'; el.className = 'sb-animation' + (higher ? ' is-higher' : '');
-    el.innerHTML = '<div class="sb-seal"><span>契</span></div><p>靈光聚合 · 契印開啟</p><button type="button">略過演出</button>';
-    $('soulbound-page').append(el); el.querySelector('button').addEventListener('click', reveal);
-    animationTimer = setTimeout(reveal, 2000);
     // Short generated chime: no external audio request and no persistent audio context.
     try {
       const Audio = window.AudioContext || window.webkitAudioContext;
@@ -293,8 +371,8 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     try {
       const payload = await request(operation.action, operation.body);
       if (getMainUser()?.uid !== uid) return;
-      forgetOperation(); apply(payload); selected = 0;
-      message = operation.action === 'draw' ? '抽取結果已保存，可確認收入。'
+      forgetOperation(); apply(payload);
+      message = operation.action === 'draw' ? ''
         : operation.action === 'redeem' ? `已兌換 ${payload.result.name}，消耗 ${payload.result.costFragments} 碎片；法器已存入寶庫。`
         : '操作已完成。';
       if (operation.action === 'draw' && payload.pending?.requestId === operation.body.requestId) {
@@ -318,12 +396,12 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     try {
       if (equipped()?.id !== itemId) await window.toggleEquipArtifact(itemId);
       if (getMainUser()?.uid !== uid) return;
-      await acknowledge(); if (getMainUser()?.uid === uid) message = '已調御；原本法器保留在寶庫。';
+      message = '已調御；原本法器保留在寶庫。';
     } catch (e) { if (getMainUser()?.uid === uid) message = e.message; }
     finally { busy = false; render(); if (visible() && (getMainUser()?.uid !== uid || externalDirty)) { externalDirty = false; void refresh(); } }
   }
   async function keepResults() {
-    if (busy) return;
+    if (busy || !presentation || presentation.revealed.size !== presentation.batch.results.length) return;
     const uid = reconcile(); busy = true; render();
     try { await acknowledge(); if (getMainUser()?.uid === uid) message = '本批結果已確認收入。'; }
     catch (e) { if (getMainUser()?.uid === uid) message = e.message; }
@@ -351,11 +429,10 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
         return;
       }
       if (busy) return;
-      if (button.hasAttribute('data-sb-select')) { selected = Number(button.dataset.sbSelect); render(); }
+      if (button.hasAttribute('data-sb-resume')) openPresentation(snapshot?.pending, false);
       else if (button.hasAttribute('data-sb-draw')) void runOperation({ action: 'draw', body: { count: Number(button.dataset.sbDraw), payment:button.dataset.sbPayment || 'gold', poolVersion: pool.VERSION, expectedCost: button.dataset.sbPayment === 'ticket' ? 0 : Number(button.dataset.sbDraw) === 5 ? snapshot.prices.five : snapshot.prices.single, requestId: crypto.randomUUID() } });
       else if (button.hasAttribute('data-sb-retry')) { const op = storedOperation(); if (op) void runOperation(op); }
-      else if (button.hasAttribute('data-sb-equip')) void equipmentAction(button.dataset.sbEquip);
-      else if (button.hasAttribute('data-sb-vault') || button.hasAttribute('data-sb-again')) void keepResults();
+
     });
     return true;
   }
