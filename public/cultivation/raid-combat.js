@@ -68,8 +68,7 @@ export function resolveShenRaidCombat({ runId, round, player, boss, intent, corr
     outgoingDamage += hits.reduce((n,v)=>n+v,0);
     if (p.goldenCore?.type === 'sword' && boss.hp > outgoingDamage) outgoingDamage += resolveDeterministicAttackCore(p,seed+':core-attack').extraDamage;
   }
-  outgoingDamage+=starDamage;
-  const projectedBossHp = Math.max(0, Number(boss.hp) - outgoingDamage);
+  const projectedBossHp = Math.max(0, Number(boss.hp) - outgoingDamage - starDamage);
   let incomingDamage = 0;
   let reflectedDamage = 0;
   let defenseSkill = '';
@@ -104,6 +103,7 @@ export function resolveShenRaidCombat({ runId, round, player, boss, intent, corr
     bossHp: boss.hp,
     bossMaxHp: boss.maxHp,
     outgoingDamage,
+    starfallDamage: starDamage,
     incomingDamage,
     reflectedDamage,
     artifactShield: p.artifactShield,
