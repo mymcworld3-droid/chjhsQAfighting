@@ -14,10 +14,10 @@ import { ensureSecondaryFirebaseAuth } from './cultivation/firebase-projects.js'
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, signInWithPopup, signInAnonymously, linkWithPopup, signInWithCredential, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { 
-    getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, addDoc, 
+    dataBackend, getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, addDoc,
     query, orderBy, limit, getDocs, getDocsFromServer, serverTimestamp, where, onSnapshot, runTransaction,
     arrayUnion, arrayRemove, writeBatch, startAfter 
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+} from "./data-store.js";
 
 import { applyCultivationReward, showCultivationFeedback } from './cultivation-rules.js';
 import { soulCultivationBonusForPlayer } from './cultivation/nascent-soul-rules.js';
@@ -1155,6 +1155,7 @@ async function enterHomeWithStartupCloudCurtain() {
 }
 
 async function waitForVerifiedPlayerMigration(user) {
+    if (dataBackend === 'd1') return; // One identity, all game data already verified before cutover.
     // Already-provisioned players are resolved by one trusted marker in A.
     // Only first-time / schema-upgrade players enter migration polling and BD/C profile checks.
     const token = await user.getIdToken();

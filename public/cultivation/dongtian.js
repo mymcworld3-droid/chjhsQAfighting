@@ -3,7 +3,7 @@ import { normalizeSpirit } from './nascent-soul-rules.js';
 import {
   collection, doc, getDoc, getDocs, query, where, limit,
   setDoc, updateDoc, writeBatch, runTransaction, serverTimestamp, increment, addDoc
-} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+} from '../data-store.js';
 import { dongtianRepository } from './data/dongtian-repository.js';
 import { playerRepository } from './data/player-repository.js';
 import { rewardRepository } from './data/reward-repository.js';

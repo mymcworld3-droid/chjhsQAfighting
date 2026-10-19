@@ -1,6 +1,6 @@
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { getFirestore, doc, updateDoc } from '../data-store.js';
 
 // 舊核心仍會依舊門檻重算 rankLevel；此層把資料索引校正成新版境界曲線。
 (function () {

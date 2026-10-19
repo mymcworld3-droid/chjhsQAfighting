@@ -10,7 +10,9 @@
     "build:module-versions": "node scripts/build-module-versions.cjs",
     "check:module-versions": "node scripts/build-module-versions.cjs --check",
     "migrate:dongtian": "node scripts/migrate-dongtian-to-bd.cjs",
-    "migrate:friend-chat": "node scripts/migrate-friend-chat-to-postgres.cjs"
+    "migrate:friend-chat": "node scripts/migrate-friend-chat-to-postgres.cjs",
+    "migrate:d1": "node scripts/migrate-firestore-to-d1.cjs",
+    "test:d1": "node --test tests/d1-*.test.cjs"
   },
   "keywords": [],
   "author": "",

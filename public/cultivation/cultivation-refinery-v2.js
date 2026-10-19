@@ -1,6 +1,6 @@
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-import { getFirestore, doc, runTransaction } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { getFirestore, doc, runTransaction } from '../data-store.js';
 import { ARTIFACT_CATALOG, getArtifactById, artifactRealmColor, realmOrderByName } from './artifact-catalog.js';
 import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialById, getArtifactRecipe, materialRealmColor, materialRealmOrderByName, artifactRecipeDepth, MAX_ARTIFACT_RECIPE_NESTING } from './material-catalog.js';
 

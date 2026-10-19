@@ -4,7 +4,7 @@ const {recordEvent}=require('./public/cultivation/quest-rules.js');
 const {PROJECT_IDS}=require('./firebase-admin-projects.cjs');
 const {playerRepository,battleRepository}=require('./server-repositories.cjs');
 const {runRewardReceipt}=require('./reward-receipt.cjs');
-const {FieldValue}=require('firebase-admin/firestore');
+const {FieldValue}=require('./storage-values.cjs');
 const {battleReward,summary}=require('./public/cultivation/battle-cultivation-rules.js');
 const Growth=require('./public/cultivation/nascent-growth.js');
 const ROOM_COLLECTION='rooms',CLAIM_COLLECTION='battleRewardClaims',MODE_VERSION=2,WIN_GOLD=500,WIN_CULTIVATION=5,LOSS_GOLD=200;

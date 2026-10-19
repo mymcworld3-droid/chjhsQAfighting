@@ -1,6 +1,6 @@
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-import { getFirestore, doc, onSnapshot, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { getFirestore, doc, onSnapshot, setDoc, serverTimestamp } from '../data-store.js';
 import {
   ARTIFACT_CATALOG_SCHEMA_VERSION,
   getDefaultArtifactCatalog,

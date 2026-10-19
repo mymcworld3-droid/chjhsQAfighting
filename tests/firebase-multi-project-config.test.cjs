@@ -32,7 +32,7 @@ function simulate(config = {}) {
     .replace(/^export /gm, '') +
     '\nthis.getServices = getFirebaseProjectServices;' +
     '\nthis.getStatus = firebaseProjectStatus;';
-  const ctx = vm.createContext({ ...mock, firebaseProjectConfigs: config, Object });
+  const ctx = vm.createContext({ ...mock, dataBackend: 'firestore', firebaseProjectConfigs: config, Object });
   vm.runInContext(code, ctx, { filename: 'firebase-projects.js' });
   return { ...ctx, apps };
 }

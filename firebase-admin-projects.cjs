@@ -36,7 +36,11 @@ function adminProject(role, { env = process.env, admin = require('firebase-admin
     projectId: PROJECT_IDS[role]
   }, APP_NAMES[role]);
   if (app.options.projectId !== PROJECT_IDS[role]) throw new Error('Firebase ' + role + ' Admin app project mismatch');
-  return { app, auth: require('firebase-admin/auth').getAuth(app), db: require('firebase-admin/firestore').getFirestore(app) };
+  const provider = env.GAME_DATA_BACKEND || 'firestore';
+  if (!['firestore', 'd1'].includes(provider)) throw new Error('Invalid GAME_DATA_BACKEND');
+  const db = provider === 'd1' ? require('./d1-store.cjs').getD1Store(role, env)
+    : require('firebase-admin/firestore').getFirestore(app);
+  return { app, auth: require('firebase-admin/auth').getAuth(app), db };
 }
 
 module.exports = { PROJECT_IDS, ENV_KEYS, parseServiceAccount, adminProject };

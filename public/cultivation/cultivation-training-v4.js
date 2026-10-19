@@ -7,7 +7,7 @@ import {} from './nascent-growth.js';
 import { NASCENT_SOUL_THRESHOLD, normalizeSpirit } from './nascent-soul-rules.js';
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
 
 // 修煉 v4：金丹是修士在自身靈田／丹田中凝聚的本命金丹；玩家永遠只有一顆，洗髓只重塑其丹性與品級。
 (function () {

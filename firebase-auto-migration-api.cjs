@@ -20,7 +20,7 @@ function createMigrationController({
 } = {}) {
   let working = null;
 
-  function enabled() { return env.FIREBASE_AUTO_MIGRATE_ON_START === '1'; }
+  function enabled() { return env.GAME_DATA_BACKEND !== 'd1' && env.FIREBASE_AUTO_MIGRATE_ON_START === '1'; }
   function markerRef(a) { return a.db.collection('systemMigrations').doc(MIGRATION_ID); }
   function publicState(data) {
     const status = data?.status === 'ready' && data?.verified === true ? 'ready'

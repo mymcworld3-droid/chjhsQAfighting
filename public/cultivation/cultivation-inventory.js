@@ -1,6 +1,6 @@
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { getFirestore, doc, updateDoc } from '../data-store.js';
 
 // 消耗道具只負責數量與服用；唯一背包畫面由 unified-inventory-grid.js 繪製。
 (function () {

@@ -6,7 +6,7 @@ import './combat-contribution.js';
 import {
   doc, collection, query, where, limit, startAfter, getDocs as firestoreGetDocs, getDoc as firestoreGetDoc,
   addDoc as firestoreAddDoc, updateDoc as firestoreUpdateDoc, onSnapshot, runTransaction as firestoreRunTransaction, serverTimestamp
-} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+} from '../data-store.js';
 import { BATTLE_V2, settleBattleRound, applyNascentSoulDuelRule } from './battle-engine-v2.js?v=20260926-nascent-seal1';
 import { snapshotBattleKnowledge, resolveBattleKnowledge, pickBattleKnowledge } from './battle-question-scope.js?v=20260922-range1';
 import { createFirestoreQuotaGuard } from './data/firestore-quota-guard.js';

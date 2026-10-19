@@ -1,7 +1,7 @@
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import './forge-fragments.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-import { getFirestore, doc, runTransaction } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { getFirestore, doc, runTransaction } from '../data-store.js';
 import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactById, realmForScore, realmOrderByName, artifactRealmColor } from './artifact-catalog.js';
 
 // 資料驅動法寶系統：法寶內容只在 artifact-catalog.js 定義。

@@ -1,6 +1,6 @@
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-import { getFirestore, doc, runTransaction, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { getFirestore, doc, runTransaction, serverTimestamp } from '../data-store.js';
 
 // AI forging: edit only depth-wide effect bounds. The engine automatically
 // distributes each range into twelve bands (Qi: 1-3 ... Immortal: 10-12).

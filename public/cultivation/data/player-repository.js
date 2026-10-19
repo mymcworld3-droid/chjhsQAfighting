@@ -1,7 +1,7 @@
 import {
   doc, getDoc, setDoc, updateDoc, runTransaction, onSnapshot,
   collection, addDoc, serverTimestamp
-} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+} from '../../data-store.js';
 import { getProjectServices, getMainUser, authenticatedMainFetch } from './project-repository.js';
 import { resolvePlayerAvatar } from '../profile-avatar.js';
 import '../curriculum-range-rules.js';

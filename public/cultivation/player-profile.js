@@ -1,6 +1,6 @@
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { getFirestore, doc, getDoc } from '../data-store.js';
 import { ARTIFACT_EQUIP_SLOTS, getArtifactById, realmForScore } from './artifact-catalog.js';
 import { resolvePlayerAvatar } from './profile-avatar.js';
 

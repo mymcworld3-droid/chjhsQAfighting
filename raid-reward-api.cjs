@@ -93,7 +93,7 @@ function validateRaidVictory(room, uid) {
 
 async function awardRaidReward(db, uid, roomId, validation, {
   rewards = REWARDS,
-  fieldValue = require('firebase-admin/firestore').FieldValue
+  fieldValue = require('./storage-values.cjs').FieldValue
 } = {}) {
   const userRef = db.collection('users').doc(uid);
   const receipt = await runRewardReceipt({

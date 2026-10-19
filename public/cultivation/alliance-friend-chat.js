@@ -1,4 +1,4 @@
-import { collection, query, orderBy, limit, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { collection, query, orderBy, limit, onSnapshot } from '../data-store.js';
 import { getProjectServices, getMainUser, authenticatedMainFetch } from './data/project-repository.js';
 
 const state = {
