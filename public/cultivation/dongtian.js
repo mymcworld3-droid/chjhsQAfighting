@@ -53,9 +53,8 @@ export const featureReady = (async () => {
     if (!owner || !id) throw new Error('洞天資料不完整');
     const cached = dongtianCache.getFull(owner, id);
     if (cached) return cached;
-    const snap = await getDoc(doc(db, DATA_COLLECTION, id));
-    if (!snap.exists()) throw new Error('洞天資料不存在');
-    const cave = { id: snap.id, ...snap.data() };
+    const cave = await dongtianRepository.getData(id, {owned:true});
+    if (uid() !== owner) throw new Error('登入狀態已改變，請重新進入');
     if (cave.ownerUid !== owner) throw new Error('只有洞天主人可以開啟此洞天');
     if (!Array.isArray(cave.questions) || !cave.questions.length) throw new Error('洞天題目尚未準備完成');
     dongtianCache.setFull(owner, id, cave);
@@ -717,8 +716,10 @@ export const featureReady = (async () => {
         dongtianCache.markEncountered(visitor, item.id);
         continue;
       }
-      const full = await getDoc(doc(db, DATA_COLLECTION, item.id));
-      if (full.exists() && full.data()?.status === 'active') return { id: full.id, ...full.data() };
+      let full;
+      try { full = await dongtianRepository.getData(item.id); }
+      catch (error) { if (!['not-found','failed-precondition'].includes(error?.code)) throw error; }
+      if (full?.status === 'active') return full;
       // Removed or sealed caves should not repeatedly reappear in this device's list.
       publicItems = publicItems.filter(row => row.id !== item.id);
       dongtianCache.setPublicList(publicItems);
@@ -759,19 +760,10 @@ export const featureReady = (async () => {
   }
 
   async function markEncountered(dongtian) {
-    const ref = doc(progressDb, PLAY_COLLECTION, `${uid()}__${dongtian.id}`);
     const visitor = uid();
-    await runTransaction(progressDb, async (tx) => {
-      const snap = await tx.get(ref);
-      if (uid() !== visitor) throw new Error('登入狀態已改變，請重新進入');
-      // Chat allows replaying a cave: never erase a previously completed run or its first reward.
-      tx.set(ref, snap.exists() ? { encountered: true } : {
-        uid: visitor, dongtianId: dongtian.id, ownerUid: dongtian.ownerUid || '',
-        encountered: true, encounteredAt: serverTimestamp(), encounteredAtMs: Date.now(), completed: false
-      }, { merge: true });
-    });
-    dongtianCache.markEncountered(uid(), dongtian.id);
-    updateDoc(doc(db, INDEX_COLLECTION, dongtian.id), { playCount: increment(1) }).catch(() => {});
+    await dongtianRepository.markEncountered(dongtian.id);
+    if (uid() !== visitor) throw new Error('登入狀態已改變，請重新進入');
+    dongtianCache.markEncountered(visitor, dongtian.id);
   }
 
   async function enterDongtian(dongtian, options = {}) {
@@ -780,7 +772,8 @@ export const featureReady = (async () => {
     if (dongtian.status && dongtian.status !== 'active') { toast('此洞天已封印，等待主人修復。'); return; }
     if (!tutorialOnly) {
       if (options.encountered) await markEncountered(dongtian);
-      else if (!options.alreadyEncountered) updateDoc(doc(db, INDEX_COLLECTION, dongtian.id), { playCount: increment(1) }).catch(() => {});
+      else if (!options.alreadyEncountered) void dongtianRepository.recordVisit(dongtian.id)
+        .catch(error => console.warn('[Dongtian visit]', error));
     }
     state.session = {
       dongtian,
@@ -1534,10 +1527,9 @@ export const featureReady = (async () => {
     openingSharedDongtian = true;
     const viewer = uid();
     try {
-      const snap = await getDoc(doc(db, DATA_COLLECTION, id));
+      const cave = await dongtianRepository.getData(id);
       if (uid() !== viewer) throw new Error('登入狀態已改變，請重新進入');
-      if (!snap.exists()) throw new Error('此洞天已刪除，無法進入');
-      const cave = { ...snap.data(), id: snap.id };
+      if (!cave) throw new Error('此洞天已刪除，無法進入');
       if (cave.status !== 'active' || cave.tutorialOnly) throw new Error('此洞天尚未開放或已封印');
       if (!Array.isArray(cave.questions) || !cave.questions.length) throw new Error('洞天題目尚未準備完成');
       await enterDongtian(cave, { source: cave.ownerUid === viewer ? 'owner' : 'chat', encountered: cave.ownerUid !== viewer });

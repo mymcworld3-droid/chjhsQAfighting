@@ -313,7 +313,7 @@ test('Dongtian encounter allows same or lower grade matching players and is one-
   assert.match(uiSource, /item\.ownerUid !== visitor/);
   assert.match(uiSource, /if \(playSnap\.exists\(\)\)/);
   assert.match(uiSource, /dongtianCache\.markEncountered\(visitor, item\.id\)/);
-  assert.match(uiSource, /encountered: true/);
+  assert.match(readFileSync(join(root, 'dongtian-entry-api.cjs'), 'utf8'), /encountered:true/);
 });
 
 test('Dongtian session keeps a fixed ordered question array until completion or explicit exit', () => {
@@ -449,7 +449,7 @@ test('Suspended Dongtians are excluded from encounters and owners receive a repa
   assert.match(apiSource, /\.where\('status', '==', 'active'\)/);
   assert.match(uiSource, /dongtianRepository\.listIndex\('public'\)/);
   // A cave could be sealed after index lookup; verify the full cave again.
-  assert.match(uiSource, /full\.data\(\)\?\.status === 'active'/);
+  assert.match(uiSource, /full\?\.status === 'active'/);
   assert.match(uiSource, /data-dt-repair/);
   assert.match(uiSource, /已封印 · 待修復/);
   assert.match(uiSource, /if \(dongtian\.status && dongtian\.status !== 'active'\)/);

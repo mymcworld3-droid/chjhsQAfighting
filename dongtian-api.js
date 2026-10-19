@@ -977,6 +977,7 @@ async function reviewAndRepairGeneratedDongtian(dongtian) {
 }
 
 module.exports = function registerDongtianApi(app) {
+  app.post('/api/dongtian/entry', require('./dongtian-entry-api.cjs').createEntryHandler({verifyPlayer:verifyMainPlayer}));
   app.post('/api/dongtian/delete', async (req, res) => {
     res.set?.('Cache-Control', 'no-store');
     try {

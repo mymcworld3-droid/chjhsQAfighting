@@ -71,7 +71,7 @@ function visitor(data = cave(), options = {}) {
   const context = vm.createContext({ window: {}, uid: () => options.uid === undefined ? 'visitor' : options.uid,
     state: { session: options.busy ? {} : null }, toast: s => notices.push(s), db: {}, DATA_COLLECTION: 'dongtians',
     doc: (_, collection, id) => ({ collection, id }),
-    getDoc: async () => { reads++; return { id: 'cave12345', exists: () => !!data, data: () => data }; },
+    dongtianRepository:{getData:async()=>{reads++;return data;}},
     enterDongtian: async (c, opts) => entered.push({ c, opts }) });
   vm.runInContext(source, context);
   return { open: id => context.window.openSharedDongtian(id || 'cave12345'), entered, notices, reads: () => reads };
@@ -97,19 +97,15 @@ test('chat entry rejects deleted, sealed, empty, tutorial caves and busy or sign
   const invalid = visitor(); await invalid.open('../other'); assert.equal(invalid.reads(), 0);
 });
 
-test('reentering through chat preserves completed progress and its first-completion reward guard', async () => {
+test('chat encounters call the authenticated server and only memoize confirmed progress', async () => {
   const source = caveSource.slice(caveSource.indexOf('  async function markEncountered('), caveSource.indexOf('  async function enterDongtian('));
-  for (const previous of [null, { completed: true, correct: 10, completedAtMs: 100 }, { completed: false }]) {
-    let progress = previous && { ...previous };
-    const context = vm.createContext({ uid: () => 'visitor', progressDb: {}, PLAY_COLLECTION: 'dongtianPlays', INDEX_COLLECTION: 'dongtianIndex', db: {},
-      doc: (_, collection, id) => ({ collection, id }), serverTimestamp: () => 'server-time', increment: n => n,
-      dongtianCache: { markEncountered() {} }, updateDoc: async () => {},
-      runTransaction: async (_, worker) => worker({ get: async () => ({ exists: () => !!progress }),
-        set(_, data, options) { assert.equal(options.merge, true); progress = { ...progress, ...data }; } }) });
-    vm.runInContext(source + '\nthis.mark = markEncountered;', context);
-    await context.mark(cave());
-    assert.equal(progress.encountered, true);
-    assert.equal(progress.completed, previous?.completed ?? false);
-    if (previous?.completed) { assert.equal(progress.correct, 10); assert.equal(progress.completedAtMs, 100); }
-  }
+  const sent=[],seen=[];
+  const context=vm.createContext({uid:()=> 'visitor',dongtianRepository:{markEncountered:async id=>sent.push(id)},
+    dongtianCache:{markEncountered:(uid,id)=>seen.push([uid,id])}});
+  vm.runInContext(source+'\nthis.mark=markEncountered;',context);
+  await context.mark(cave());
+  assert.deepEqual(sent,['cave12345']);assert.deepEqual(seen,[['visitor','cave12345']]);
+  context.dongtianRepository.markEncountered=async()=>{throw Error('unavailable');};
+  await assert.rejects(context.mark(cave()),/unavailable/);
+  assert.equal(seen.length,1);
 });

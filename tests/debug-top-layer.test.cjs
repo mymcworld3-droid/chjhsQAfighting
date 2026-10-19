@@ -109,6 +109,21 @@ test('refinery shows ordinary players only a neutral retry and routes errors int
   assert.match(legacy, /div\.textContent =/);
 });
 
+test('Firebase diagnostics preserve code and message even when Safari only supplies a minified stack', () => {
+  const vm = require('node:vm');
+  const start = legacy.indexOf('function formatXiuxianDebugArg(');
+  const end = legacy.indexOf('function queueXiuxianDebug(', start);
+  const ctx = vm.createContext({Error});
+  vm.runInContext(legacy.slice(start,end)+'\nthis.format=formatXiuxianDebugArg;',ctx);
+  const error = Object.assign(new Error('Missing or insufficient permissions'), {code:'permission-denied',phase:'content-read'});
+  error.stack='__PRIVATE_fromRpcStatus@firebase-firestore.js:1:288965';
+  const output=ctx.format(error);
+  assert.match(output,/code=permission-denied/);
+  assert.match(output,/phase=content-read/);
+  assert.match(output,/Missing or insufficient permissions/);
+  assert.match(output,/__PRIVATE_fromRpcStatus/);
+});
+
 test('safe action errors preserve gameplay validation but never expose raw technical exceptions to players', () => {
   const vm = require('node:vm');
   const start = legacy.indexOf('window.xiuxianSafeActionError =');
