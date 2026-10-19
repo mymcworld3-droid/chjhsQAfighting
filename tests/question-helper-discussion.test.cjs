@@ -49,6 +49,9 @@ function contextFrom(prompt) {
 function createClient(fetchReply = async () => ({ ok: true, json: async () => ({ answer: '先核對條件。', knowledgePoint: '功的計算' }) })) {
     const requests = [];
     const messages = [];
+    const automaticReports = [];
+    const quiz = {data:{q:problem.question,opts:problem.options,ans:1,exp:problem.explanation}};
+    const user = {uid:'helper-user'};
     const state = {
         question: problem.question, options: problem.options, subject: problem.subject,
         explanation: problem.explanation, correctIndex: 1, selectedIndex: null,
@@ -56,6 +59,8 @@ function createClient(fetchReply = async () => ({ ok: true, json: async () => ({
     };
     const elements = { input: { value: '', focus() {} }, send: { disabled: false }, status: { textContent: '' } };
     const context = {
+        window:{currentActiveQuiz:quiz, reportQuizHelperIssue:input=>automaticReports.push(input)},
+        auth:{currentUser:user},
         quizHelperState: state,
         quizHelperElements: () => elements,
         quizHelperAppendMessage: (role, text) => messages.push({ role, text }),
@@ -69,7 +74,7 @@ function createClient(fetchReply = async () => ({ ok: true, json: async () => ({
     };
     vm.createContext(context);
     vm.runInContext(sendSource + '\nglobalThis.send = sendQuizHelperMessage;', context);
-    return { state, elements, messages, requests, send: context.send };
+    return { state, elements, messages, requests, automaticReports, quiz, context, send: context.send };
 }
 
 test('pre-answer discussion includes fallible reference, labeled options and player claim for independent checking', async () => {
@@ -101,8 +106,66 @@ test('answer, correction and uncertain review responses keep their evidence and 
     ]) {
         const route = createRoute(async () => ({ data: { answer, knowledgePoint: '功的計算' }, provider: 'test', model: 'mock' }));
         const result = await route.request({ ...problem, message: '題目或答案是不是錯了？' });
-        assert.deepEqual(result.body, { answer, knowledgePoint: '功的計算', provider: 'test', model: 'mock' });
+        assert.deepEqual(result.body, { answer, knowledgePoint: '功的計算', questionIssue:null, provider: 'test', model: 'mock' });
     }
+});
+
+test('only an explicit high-confidence finding with concrete evidence requests automatic reporting', async () => {
+    const reason = '合力乘位移應為 58 J，標示答案 60 J 與題幹及解析矛盾。';
+    for (const issue of [null, {confirmed:false,confidence:1,reason}, {confirmed:'true',confidence:1,reason},
+        {confirmed:true,confidence:.79,reason}, {confirmed:true,confidence:2,reason},
+        {confirmed:true,confidence:1,reason:'可能有錯'}, {confirmed:true,confidence:.9,reason}]) {
+        const route = createRoute(async () => ({data:{answer:'已重新核算。',knowledgePoint:'功',questionIssue:issue}}));
+        const result = await route.request(problem);
+        assert.deepEqual(result.body.questionIssue, issue?.confirmed === true && issue.confidence === .9 ? {confirmed:true,reason} : null);
+        assert.match(route.calls[0].prompt,/自動代填理由並送交獨立審核/);
+    }
+});
+
+test('a confirmed helper finding immediately reports the original quiz without grading the player', async () => {
+    const reason = '答案與題目的計算結果不一致。';
+    const client = createClient(async () => ({ok:true,json:async()=>({answer:'原題有錯。',questionIssue:{confirmed:true,reason}})}));
+    await client.send('請檢查題目');
+    assert.equal(client.automaticReports.length,1);
+    assert.equal(client.automaticReports[0].quiz,client.quiz);
+    assert.equal(client.automaticReports[0].uid,'helper-user');
+    assert.equal(client.automaticReports[0].reason,reason);
+    assert.equal(client.state.answered,false);
+    assert.equal(client.state.selectedIndex,null);
+});
+
+function createAutoReporter(result = {status:'confirmed'}) {
+    const calls = [], quiz = {data:{q:problem.question}}, reason = {value:''};
+    const context = {reportSubmitting:false,reportQuizSnapshot:null,auth:{currentUser:{uid:'u'}},
+        document:{getElementById:()=>reason},console:{warn(){}},window:{currentActiveQuiz:quiz}};
+    context.window.openReportModal = () => {calls.push('open');context.reportQuizSnapshot=context.window.currentActiveQuiz;};
+    context.window.submitReport = async () => {calls.push(reason.value);return typeof result === 'function' ? result() : result;};
+    vm.createContext(context);
+    vm.runInContext(legacy.slice(legacy.indexOf('window.reportQuizHelperIssue ='),legacy.indexOf('window.submitReport = async')) ,context);
+    const input = {quiz,uid:'u',reason:'已核算出題目選項與解析矛盾。'};
+    return {context,input,calls,send:context.window.reportQuizHelperIssue};
+}
+
+test('automatic report fills and submits once and rejects stale question/account snapshots', async () => {
+    const h=createAutoReporter();
+    await h.send({...h.input,uid:'another-user'});
+    await h.send({...h.input,quiz:{data:{q:problem.question}}});
+    assert.equal(h.calls.length,0);
+    await h.send(h.input);await h.send(h.input);
+    assert.deepEqual(h.calls,['open',h.input.reason]);
+    const busy=createAutoReporter();busy.context.reportSubmitting=true;
+    await busy.send(busy.input);assert.equal(busy.calls.length,0);
+});
+
+test('automatic report suppresses concurrent duplicates while incomplete reviews remain retryable', async () => {
+    let release;
+    const h=createAutoReporter(()=>new Promise(resolve=>{release=resolve;}));
+    const pending=h.send(h.input);
+    await h.send(h.input);assert.equal(h.calls.length,2);
+    release(undefined);await pending;
+    const retry=h.send(h.input);assert.equal(h.calls.length,4);
+    release({status:'duplicate'});await retry;
+    await h.send(h.input);assert.equal(h.calls.length,4);
 });
 
 test('post-answer review retains actual selection and does not elevate the reference into a guaranteed answer', async () => {

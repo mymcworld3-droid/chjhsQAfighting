@@ -34,3 +34,6 @@
 .ai-ability-priority [data-ability-start]{margin-left:8px;border:1px solid #c8ad63a9;background:#9975382a;color:inherit;border-radius:9px;padding:8px 12px;cursor:pointer}
 @media(max-width:600px){.enlightenment-overlay{padding:6px}.enlightenment-panel{max-height:98dvh;border-radius:11px}.enlightenment-panel>header{padding:12px 15px}.enlightenment-panel>header h2{font-size:21px}#enlightenment-body{padding:14px}.enlightenment-question{font-size:17px}.enlightenment-options button{min-height:55px}}
 @media(prefers-reduced-motion:reduce){.enlightenment-overlay{backdrop-filter:none}}
+
+.enlightenment-options button.correct{border-color:#67bc8d;background:#244c36;color:#d2f1dc;opacity:1}
+.enlightenment-options button.wrong{border-color:#ce8277;background:#4b2a28;color:#f1cccc;opacity:1}

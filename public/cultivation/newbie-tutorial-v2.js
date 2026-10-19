@@ -64,8 +64,8 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       note: '教學範例不會真的產生下一題。'
     },
     {
-      page: 'page-quiz', target: '#btn-report', demo: true, requiresReport: true, kicker: '第六步 · 回報問題', title: '題目有錯就按「回報問題」',
-      body: '沈清霜：「玉簡也可能有錯。遇到<strong>答案錯誤、題意不清、選項有問題、錯字或解析不合理</strong>，便按『回報問題』，把理由說清楚。」現在請實際按一次看看。',
+      page: 'page-quiz', target: '#btn-report', demo: true, requiresReport: true, kicker: '第六步 · 題目有錯', title: '遇到錯題時，按「題目有錯」',
+      body: '沈清霜：「玉簡也可能有錯。遇到<strong>答案錯誤、題意不清、選項有問題、錯字或解析不合理</strong>，便按『題目有錯』，把理由說清楚。」現在請實際按一次看看。',
       note: '教學期間不會真的送出回報。'
     },
     {
@@ -110,7 +110,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     {
       page: 'page-home', target: '#xiuxian-panel',
       kicker: '第一章 · 授課完成', title: '回到宗門，繼續與師姐對話',
-      body: '你已學會<strong>讀題 → 選答案 → 看解析 → 下一題</strong>，也認識了回報問題、修習範圍與難度設定。沈清霜仍在宗門等你，完成教學後會接續第一章對話。煉氣五層後，仙道任務會引導你觀看第二章，再另外開啟洞天新手教程。',
+      body: '你已學會<strong>讀題 → 選答案 → 看解析 → 下一題</strong>，也認識了「題目有錯」按鈕、修習範圍與難度設定。沈清霜仍在宗門等你，完成教學後會接續第一章對話。煉氣五層後，仙道任務會引導你觀看第二章，再另外開啟洞天新手教程。',
       note: '洞天實作與劇情分開，可從後續仙道任務或設定的「查看洞天新手教程」開始。'
     }
   ];
@@ -372,7 +372,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
       panel = document.createElement('div');
       panel.id = 'newbie-report-demo';
       panel.className = 'newbie-report-demo';
-      panel.innerHTML = '<strong><i class="fa-solid fa-bug"></i> 回報題目問題</strong><ul><li>答案明顯錯誤</li><li>題目或選項有歧義</li><li>錯字、排版或內容缺漏</li><li>題解與正確答案矛盾</li></ul><em>正式題目按「回報問題」後，依畫面填寫並送出即可。這次範例不會送到伺服器。</em>';
+      panel.innerHTML = '<strong><i class="fa-solid fa-bug"></i> 回報題目問題</strong><ul><li>答案明顯錯誤</li><li>題目或選項有歧義</li><li>錯字、排版或內容缺漏</li><li>題解與正確答案矛盾</li></ul><em>正式題目按「題目有錯」後，依畫面填寫並送出即可。這次範例不會送到伺服器。</em>';
       const reportRow = document.getElementById('btn-report')?.parentElement;
       reportRow?.insertAdjacentElement('afterend', panel);
     }
@@ -604,7 +604,7 @@ import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs
     if (step.requiresScopeOpenView && !scopeStudioOpen()) return '研修所尚未開啟';
     if (step.requiresScopeReturn && scopeStudioOpen()) return '請先返回設定';
     if (step.requiresAnswer && !exampleAnswered) return '請先作答';
-    if (step.requiresReport && !reportOpened) return '請先按回報問題';
+    if (step.requiresReport && !reportOpened) return '請先按題目有錯';
     if (step.requiresDongtianOpen && !dongtianOpen) return '請先點開洞天';
     if (step.requiresDongtianDemoReady && !dongtianDemoReady) return '正在準備私有範例';
     if (step.requiresDongtianStart && !dongtianDemoStarted) return '請按「進入範例」';

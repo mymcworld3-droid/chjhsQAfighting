@@ -10,13 +10,15 @@ test('raid generator returns to quick simple baseline rather than full standardi
  assert.match(server,/const raidTicketMode = raidQuickSimple \|\|/);
  assert.match(raid,/if \(body\?\.raidQuestion\)/);
 });
-test('raid presents a Wenda-style study card, vertical four choices and review without changing authoritative settlement',()=>{
+test('raid presents an Enlightenment-style study panel, vertical four choices and review without changing authoritative settlement',()=>{
  const ui=read('public/cultivation/raid-mode.js'),css=read('public/styles/raid-mode.css');
- assert.match(ui,/raid-study-card/);
- assert.match(ui,/raid-study-stem/);
+ assert.match(ui,/enlightenment-panel raid-study-panel/);
+ assert.match(ui,/enlightenment-options raid-options/);
+ assert.doesNotMatch(ui,/quiz-helper|question-helper/);
+ assert.match(ui,/enlightenment-question/);
  assert.match(ui,/question\.ans = Number\(resolution\.correctIndex\)/);
  assert.match(ui,/question\.exp = String\(resolution\.explanation/);
- assert.match(css,/#page-raid \.raid-study-card \.raid-options\{\s*display:grid;grid-template-columns:1fr/);
+ assert.match(css,/#page-raid \.raid-study-panel \.raid-options\{display:grid;grid-template-columns:1fr/);
  assert.match(css,/position:sticky;top:0/);
 });
 test('raid, duel and Immortal summit write detailed exam history through one idempotent helper',()=>{
