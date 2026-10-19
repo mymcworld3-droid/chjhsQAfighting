@@ -83,10 +83,11 @@
     const damage = Math.max(0, Math.round(Number(receivedDamage) || 0));
     if (!damage) return { reflectDamage: 0 };
 
-    const message = `雷光反擊，返還 ${damage} 傷害（${chance}%）`;
+    const reflected = Math.round(damage*1.75);
+    const message = `雷光反擊傷害提高 75%，返還 ${reflected} 傷害（${chance}%）`;
     showActivation(core, message, '鬥法受擊效果');
     return {
-      reflectDamage: damage,
+      reflectDamage: reflected,
       skill: '萬劫雷霆丹・雷光反擊',
       message
     };
