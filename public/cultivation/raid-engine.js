@@ -72,6 +72,8 @@ export function resolveSoloRaidRound({
   bossHp = 1000,
   bossMaxHp = 1000,
   outgoingDamage = 0,
+  // 星隕在每三次作答時獨立發動，即使第三題答錯也結算。
+  starfallDamage = 0,
   incomingDamage = 0,
   reflectedDamage = 0,
   heal = 0,
@@ -86,7 +88,7 @@ export function resolveSoloRaidRound({
   let nextArtifactShield = Math.max(0, Math.round(finite(artifactShield) + Math.max(0, finite(shieldGain))));
   let nextCoreShield = !!coreShield;
 
-  const dealt = correct ? Math.max(0, Math.round(finite(outgoingDamage))) : 0;
+  const dealt = (correct ? Math.max(0, Math.round(finite(outgoingDamage))) : 0) + Math.max(0, Math.round(finite(starfallDamage)));
   nextBossHp = Math.max(0, nextBossHp - dealt);
 
   let received = 0;
