@@ -355,7 +355,7 @@ function coreAttack(member,seed){
 function coreCounter(member,received,seed){
   const core=member?.goldenCore;if(!core||core.type!=='thunder'||received<=0)return 0;
   const chance=chanceByGrade(core.grade,10,10,90);
-  return deterministicPercent(seed+':thunder')<chance?Math.round(received*(member?.nascentSoul?.talent?.final || member?.nascentSoul?.talent?.top || member?.nascentSoul?.talent?.far ? .25 : 1)):0;
+  return deterministicPercent(seed+':thunder')<chance?Math.round(received*1.75):0;
 }
 function runtimeEffects(member){return Array.isArray(member?.artifactBattle?.effects)?member.artifactBattle.effects:[];}
 function hpRatio(member){return clamp(finite(member?.hp)/Math.max(1,finite(member?.maxHp,1)),0,1);}
@@ -378,6 +378,11 @@ function resolvePlayerAction(member,{roomId,actionId,correct,bossHp=1,bossMaxHp=
   const next={...member,artifactBattle:{...(member.artifactBattle||{}),effects:[...runtimeEffects(member)]}};
   const seed=String(roomId)+':player:'+String(actionId)+':'+String(next.uid),support=coreSupport(next,correct,seed+':support');
   next.coreCorrectStreak=support.streak;next.coreShield=support.shield;
+  const starAnswers=(Math.max(0,Math.floor(finite(member?.soulStarAnswerWindow)))%3)+1;
+  const starCorrect=Math.min(3,Math.max(0,Math.floor(finite(member?.soulStarCorrectWindow)))+(correct===true?1:0));
+  const starDamage=starAnswers===3?soulTalents.starfall(next,starCorrect):0;
+  next.soulStarAnswerWindow=starAnswers===3?0:starAnswers;
+  next.soulStarCorrectWindow=starAnswers===3?0:starCorrect;
   let healed=support.heal+(correct?Math.max(0,Math.round(finite(next?.nascentSoul?.coreHeal))):0);
   next.hp=Math.min(next.maxHp,next.hp+healed);
   let damage=0, critical=false, comboHits=[], comboDamage=0;
@@ -399,6 +404,8 @@ function resolvePlayerAction(member,{roomId,actionId,correct,bossHp=1,bossMaxHp=
     next.hp=Math.min(next.maxHp,next.hp+lifesteal);
     next.artifactShield=Math.max(0,Math.round(finite(next.artifactShield)))+artifact.shieldGain;
   }
+  // 星隕獨立於答對攻擊：第三題答錯仍按近三題答對數結算。
+  damage+=starDamage;
   next.combatContribution = Contribution.add(member.combatContribution, {rounds:1,
     comboHits:comboHits.length,comboDamage,criticalHits:critical && damage > 0 && bossHp > 0 ? 1 : 0});
   if (!member.combatContribution && (finite(member.lastActionId) > 0 || finite(member.lastBossActionSeen) > 0)) next.combatContribution.partial = true;
@@ -430,7 +437,9 @@ function resolveBossDefense(member,{roomId,bossAction,bossHp=Infinity}={}){
   else if(incoming>0){
     const defense=resolveArtifactDefense(next,incoming);
     damage=Math.max(0,defense.hpDamage-Math.max(0,Math.min(1000,Math.round(finite(next?.nascentSoul?.reductionFlat)))));
-    reflected=damage>0?defense.reflectDamage+coreCounter(next,damage,seed+':counter')+soulTalents.reflection(next,Math.min(next.hp,damage)):0;
+    const trueReceived=Math.max(0,Math.min(damage,Math.round(finite(bossAction?.trueDamage))));
+    const normalReceived=Math.max(0,damage-trueReceived);
+    reflected=normalReceived>0?defense.reflectDamage+coreCounter(next,normalReceived,seed+':counter')+soulTalents.reflection(next,Math.min(next.hp,normalReceived)):0;
     next.hp=Math.max(0,next.hp-damage);
   }
   next.combatContribution = Contribution.add(member.combatContribution,{reflectedDamage:Math.min(Math.max(0,Math.round(reflected)),Math.max(0,bossHp))});
