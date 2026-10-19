@@ -186,22 +186,7 @@ function finite(value, fallback = 0) {
   return Number.isFinite(number) ? number : fallback;
 }
 
-const PERCENT_EFFECT_CAPS = Object.freeze({
-  equip_attack_percent: 5,
-  equip_hp_percent: 5,
-  equip_damage_percent: 3, equip_streak_damage_percent: 3,
-  equip_damage_reduction_percent: 0.8,
-  equip_crit_chance: 0.75,
-  equip_crit_damage_percent: 3,
-  equip_combo_chance: 0.10,
-  equip_combo_damage_percent: 3,
-  equip_lifesteal_percent: 0.5,
-  equip_reflect_percent: 1,
-  equip_low_hp_damage_percent: 2,
-  equip_low_hp_reduction_percent: 0.8,
-  equip_first_hit_reduction_percent: 0.9,
-  equip_damage_cap_percent: 1
-});
+const PERCENT_EFFECT_CAPS = globalThis.QASoulboundPool.PERCENT_EFFECT_CAPS;
 
 const FLAT_NONNEGATIVE_EFFECTS = new Set([
   'equip_attack_flat',
@@ -301,6 +286,7 @@ export function validateArtifactCatalog(items) {
     seen.add(item.id);
     if (!item.name) throw new Error(`法寶 ${item.id} 缺少名稱`);
     if (!ARTIFACT_REALMS.some((realm) => realm.name === item.realm)) throw new Error(`法寶 ${item.name} 使用未知境界：${item.realm}`);
+    if (item.soulboundRefinementVersion === globalThis.QASoulboundPool.REFINEMENT_VERSION && item.effects.length > globalThis.QASoulboundPool.MAX_REFINEMENT_EFFECTS) throw new Error('本命法寶成品最多四個詞條');
     if (!item.effects.length) throw new Error(`法寶 ${item.name} 至少需要一個效果`);
     item.effects.forEach((effect) => {
       if (!SUPPORTED_ARTIFACT_EFFECTS.includes(effect.type)) throw new Error(`法寶 ${item.name} 使用尚未支援的效果：${effect.type}`);
