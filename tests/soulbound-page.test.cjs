@@ -9,7 +9,9 @@ const Access = require('../public/cultivation/training-access-rules.js');
 const source = fs.readFileSync(path.join(__dirname, '../public/cultivation/soulbound-draw.js'), 'utf8')
   .replace(/^import .*;\n/gm, '');
 
-function pageRuntime() {
+function pageRuntime(options = {}) {
+  let now = 0, nextTimer = 0;
+  const timers = new Map();
   const nodes = new Map(), documentEvents = new Map(), events = new Map(), requests = [], stored = new Map();
   const player = { uid: 'u1', stats: { totalScore: 28, gold: 10000 }, artifactSystem: { inventory: {}, equipped: {} } };
   const classes = () => {
@@ -55,13 +57,26 @@ function pageRuntime() {
         reply(payload, status = 200) { resolve({ ok: status < 400, status, json: async () => payload }); }
       }));
     },
-    AbortController, setTimeout, clearTimeout,
+    AbortController,
+    Date: options.fakeTime ? { now: () => now } : Date,
+    setTimeout: options.fakeTime ? (callback, delay) => { const id = ++nextTimer; timers.set(id, {callback, at: now + delay}); return id; } : setTimeout,
+    clearTimeout: options.fakeTime ? id => timers.delete(id) : clearTimeout,
     crypto: { randomUUID: () => 'ui-draw-request-000001' },
     matchMedia: () => ({ matches: true }),
     CustomEvent: class { constructor(type, options) { this.type = type; this.detail = options?.detail; } }
   };
   vm.runInNewContext(source, context);
   return { window, requests, nodes, player,
+    advance(ms) {
+      const target = now + ms;
+      for (let count = 0; count < 100; count++) {
+        const next = [...timers.entries()].filter(([, timer]) => timer.at <= target).sort((a,b) => a[1].at - b[1].at)[0];
+        if (!next) break;
+        timers.delete(next[0]); now = next[1].at; next[1].callback();
+      }
+      now = target;
+    },
+    pendingTimers: () => timers.size,
     open() { documentEvents.get('click')({ target: { closest: () => tab } }); },
     leave() { for (const id of [...nodes.keys()]) if (id.startsWith('soulbound-')) nodes.delete(id); tab.classList.remove('active'); },
     draw(count, payment = 'gold') {
@@ -310,4 +325,44 @@ test('failed acknowledgement keeps the revealed batch available for the same rec
   assert.equal(JSON.parse(runtime.requests[2].init.body).requestId,batch.requestId);
   runtime.requests[2].reply(snapshot());await settle();
   assert.equal(runtime.nodes.has('soulbound-animation'),false);
+});
+
+
+test('five rewards appear together at regular pentagon vertices and flip automatically in order', async () => {
+  const runtime=pageRuntime({fakeTime:true});runtime.open();
+  const item=Pool.ITEMS[0];
+  const batch={requestId:'pentagon-batch-0001',cost:2250,results:[{kind:'fragments',fragments:20},{kind:'weapon',itemId:item.id,realm:item.realm},...Array.from({length:3},(_,i)=>({kind:'fragments',fragments:25+i}))]};
+  runtime.requests[0].reply({...snapshot(),pending:batch,inventory:{[item.id]:1}});await settle();
+  let html=runtime.revealHtml();
+  assert.equal((html.match(/data-sb-card-index=/g)||[]).length,5);
+  assert.doesNotMatch(html,/data-sb-next|data-sb-previous|data-sb-flip|煉器碎片 ×20/);
+  const positions=[...html.matchAll(/--sb-x:([\d.]+)%;--sb-y:([\d.]+)%/g)].map(m=>[Number(m[1]),Number(m[2])]);
+  assert.equal(positions.length,5);
+  const distances=positions.map((p,i)=>Math.hypot(p[0]-positions[(i+1)%5][0],p[1]-positions[(i+1)%5][1]));
+  assert.ok(Math.max(...distances)-Math.min(...distances)<.00001);
+  runtime.advance(149);assert.doesNotMatch(runtime.revealHtml(),/煉器碎片 ×20/);
+  runtime.advance(1);assert.match(runtime.revealHtml(),/煉器碎片 ×20/);
+  assert.doesNotMatch(runtime.revealHtml(),new RegExp(item.name));
+  runtime.advance(250);assert.ok(runtime.revealHtml().includes(item.name));
+  assert.doesNotMatch(runtime.revealHtml(),/煉器碎片 ×25/);
+  runtime.advance(750);html=runtime.revealHtml();
+  assert.equal((html.match(/class="sb-reveal-card is-revealed/g)||[]).length,5);
+  assert.match(html,/data-sb-keep/);
+  runtime.revealAction('data-sb-inspect',{sbInspect:'4'});assert.match(runtime.revealHtml(),/煉器碎片 ×27/);
+  assert.equal(runtime.requests.length,1,'automatic flips never perform purchases or acknowledge receipts');
+  runtime.revealAction('data-sb-keep');
+  assert.equal(runtime.requests[1].url,'/api/soulbound/ack');
+  runtime.requests[1].reply(snapshot());await settle();
+  assert.equal(runtime.nodes.has('soulbound-animation'),false);
+});
+
+test('dismissed pentagon timers cannot reveal or acknowledge a different presentation', async () => {
+  const runtime=pageRuntime({fakeTime:true});runtime.open();
+  const batch={requestId:'pentagon-cancel-001',cost:2250,results:Array.from({length:5},()=>({kind:'fragments',fragments:30}))};
+  runtime.requests[0].reply({...snapshot(),pending:batch});await settle();
+  assert.ok(runtime.pendingTimers()>0);
+  runtime.revealAction('data-sb-dismiss');runtime.advance(10000);
+  assert.equal(runtime.nodes.has('soulbound-animation'),false);
+  assert.equal(runtime.pendingTimers(),0);
+  assert.equal(runtime.requests.length,1);
 });

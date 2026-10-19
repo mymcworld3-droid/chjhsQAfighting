@@ -6,7 +6,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
 (function () {
   'use strict';
   const pool = globalThis.QASoulboundPool;
-  let snapshot = null, account = '', busy = false, message = '', animationTimer = null, flipTimer = null, presentation = null, externalDirty = false;
+  let snapshot = null, account = '', busy = false, message = '', animationTimer = null, flipTimer = null, autoTimer = null, presentation = null, externalDirty = false;
   const CAROUSEL_DELAY_MS = 4800, CAROUSEL_MOVE_MS = 660;
   let carouselStart = 0, carouselTimer = null, carouselMoveTimer = null;
   let previewItemId = '', previewTrigger = null;
@@ -250,7 +250,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     finally { busy = false; render(); if (visible() && (getMainUser()?.uid !== uid || externalDirty)) { externalDirty = false; void refresh(); } }
   }
   function closePresentation(restoreFocus = true) {
-    clearTimeout(animationTimer); clearTimeout(flipTimer); animationTimer = null; flipTimer = null;
+    clearTimeout(animationTimer); clearTimeout(flipTimer); clearTimeout(autoTimer); animationTimer = null; flipTimer = null; autoTimer = null;
     const trigger = presentation?.trigger;
     presentation = null;
     const overlay = $('soulbound-animation');
@@ -263,9 +263,9 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     }
     scheduleCarousel();
   }
-  function resultMarkup(row) {
+  function resultMarkup(row, compact = false) {
     const item = row.itemId && (getArtifactById(row.itemId) || pool.get(row.itemId));
-    return `<span class="sb-reveal-rarity">${item ? esc(item.realm) + ' · 本命法器' : '煉器資源'}${row.pity ? ' · 保底' : row.higher ? ' · 高階' : ''}</span>
+    return `<span class="sb-reveal-rarity">${item ? esc(item.realm) + (compact ? ' · 法器' : ' · 本命法器') : compact ? '碎片' : '煉器資源'}${row.pity ? ' · 保底' : row.higher ? ' · 高階' : ''}</span>
       <div class="sb-reveal-art">${item ? image(item) : '<span class="sb-fragment-art" aria-hidden="true">✦</span>'}</div>
       <h3>${item ? esc(item.name) : row.itemId ? esc(row.itemId) : '煉器碎片 ×' + Number(row.fragments || 0)}</h3>
       <p>${item ? esc(effectText(item)) : row.itemId ? '法器已存入寶庫。' : '已存入碎片餘額，可用於煉器或兌換法器。'}</p>
@@ -275,10 +275,11 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     const state = presentation, overlay = $('soulbound-animation');
     if (!state || !overlay) return;
     if (state.phase === 'seal') {
-      overlay.innerHTML = '<div class="sb-reveal-stage sb-reveal-opening"><div class="sb-seal"><span>契</span></div><h2 id="sb-reveal-title">靈光聚合 · 契印開啟</h2><button type="button" data-sb-skip>略過演出</button></div>';
+      overlay.innerHTML = '<div class="sb-reveal-stage sb-reveal-opening"><div class="sb-opening-seal-anchor"><div class="sb-seal"><span>契</span></div></div><div class="sb-opening-footer"><h2 id="sb-reveal-title">靈光聚合 · 契印開啟</h2><button type="button" data-sb-skip>略過演出</button></div></div>';
       overlay.querySelector('[data-sb-skip]')?.focus({ preventScroll: true });
       return;
     }
+    if (state.batch.results.length === 5) { renderPentagon(state, overlay); return; }
     const row = state.batch.results[state.index], flipped = state.revealed.has(state.index), ready = state.phase === 'revealed';
     const item = row.itemId && (getArtifactById(row.itemId) || pool.get(row.itemId));
     const allSeen = state.revealed.size === state.batch.results.length;
@@ -297,9 +298,70 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       <small class="sb-reveal-payment">本批 ${state.batch.payment === 'ticket' ? Number(state.batch.ticketsSpent || 0) + ' 張抽獎券' : Number(state.batch.cost || 0).toLocaleString('zh-TW') + ' 靈石'}</small></footer></div>`;
     overlay.querySelector(flipped ? '[data-sb-next], [data-sb-keep], [data-sb-reveal-equip]' : '[data-sb-flip]')?.focus({ preventScroll: true });
   }
+  function renderPentagon(state, overlay) {
+    const ready = state.phase === 'revealed', blocked = busy || !!storedOperation();
+    const selectedRow = state.batch.results[state.index];
+    const selectedItem = selectedRow.itemId && (getArtifactById(selectedRow.itemId) || pool.get(selectedRow.itemId));
+    const cards = state.batch.results.map((row, index) => {
+      const angle = (-90 + index * 72) * Math.PI / 180;
+      const x = 50 + 32 * Math.cos(angle), y = 50 + 32 * Math.sin(angle);
+      const flipped = state.revealed.has(index), flipping = state.flippingIndex === index;
+      const item = row.itemId && (getArtifactById(row.itemId) || pool.get(row.itemId));
+      const label = flipped ? item?.name || (row.itemId ? row.itemId : '煉器碎片 ×' + Number(row.fragments || 0)) : '尚未揭曉';
+      return `<div class="sb-reveal-card ${flipping ? 'is-flipping' : flipped ? 'is-revealed' : ''}${ready && state.index === index ? ' is-selected' : ''}" data-sb-card-index="${index}"
+        style="--sb-x:${x.toFixed(6)}%;--sb-y:${y.toFixed(6)}%;--sb-flip-delay:${flipping ? -state.flipElapsed : 0}ms;--sb-color:${flipped && item ? esc(artifactRealmColor(item.realm)) : '#f5cf83'}">
+        <div class="sb-reveal-card-inner"><div class="sb-reveal-back" aria-hidden="true"><span class="sb-card-ornament">✧</span><span class="sb-card-seal">契</span><span>${index + 1}</span></div>
+          <button type="button" class="sb-reveal-front" data-sb-inspect="${index}" aria-label="查看第 ${index + 1} 張：${esc(label)}" aria-hidden="${!flipped}" aria-pressed="${ready && state.index === index}" ${!ready ? 'disabled tabindex="-1"' : ''}>${flipped ? resultMarkup(row, true) : ''}</button>
+        </div></div>`;
+    }).join('');
+    overlay.innerHTML = `<button type="button" class="sb-reveal-close" data-sb-dismiss aria-label="稍後繼續翻牌">×</button>
+      <div class="sb-reveal-stage sb-reveal-batch"><header class="sb-reveal-heading"><span>締結本命</span><h2 id="sb-reveal-title">${ready ? '五契已啟' : '五契連啟'}</h2><p role="status">${state.revealed.size} / 5</p>
+        ${ready ? `<p class="sb-reveal-selection">${esc(selectedItem?.name || (selectedRow.itemId ? selectedRow.itemId : '煉器碎片 ×' + Number(selectedRow.fragments || 0)))}${selectedItem ? '<br>' + esc(effectText(selectedItem)) : ''}</p>` : ''}</header>
+      <div class="sb-pentagon" aria-label="五張契牌排列於正五邊形頂點">
+        <svg class="sb-pentagon-lines" viewBox="0 0 100 100" aria-hidden="true"><polygon points="50,18 80.433809,40.111456 68.809128,75.888544 31.190872,75.888544 19.566191,40.111456"/></svg>
+        <span class="sb-pentagon-mark" aria-hidden="true">契</span>${cards}</div>
+      <footer class="sb-reveal-footer"><div class="sb-reveal-actions">
+        ${ready && selectedItem ? `<button type="button" data-sb-reveal-equip="${esc(selectedItem.id)}" ${blocked || !Number(snapshot?.inventory?.[selectedItem.id]) || equipped()?.id === selectedItem.id ? 'disabled' : ''}>${equipped()?.id === selectedItem.id ? '已調御' : '調御此器'}</button>` : ''}
+        ${ready ? `<button type="button" class="sb-primary" data-sb-keep ${blocked ? 'disabled' : ''}>確認收入</button>` : ''}
+      </div><p class="sb-reveal-message" role="status">${esc(message)}</p>
+      <small class="sb-reveal-payment">${ready ? '點選契牌查看獎勵 · ' : '依序揭曉中 · '}本批 ${state.batch.payment === 'ticket' ? Number(state.batch.ticketsSpent || 0) + ' 張抽獎券' : Number(state.batch.cost || 0).toLocaleString('zh-TW') + ' 靈石'}</small></footer></div>`;
+    if (ready) overlay.querySelector('[data-sb-keep]')?.focus({ preventScroll: true });
+  }
+  function advancePentagon() {
+    const state = presentation;
+    if (!state || state.phase !== 'auto') return;
+    clearTimeout(autoTimer); autoTimer = null;
+    const elapsed = Math.max(0, Date.now() - state.autoStartedAt);
+    const boundaries = [];
+    state.flippingIndex = null;
+    for (let index = 0; index < 5; index++) {
+      const start = state.autoInitial + index * state.autoInterval, end = start + state.autoFlip;
+      boundaries.push(start, end);
+      if (elapsed >= start) state.revealed.add(index);
+      if (elapsed >= start && elapsed < end) { state.flippingIndex = index; state.flipElapsed = elapsed - start; }
+    }
+    if (elapsed >= state.autoInitial + 4 * state.autoInterval + state.autoFlip) {
+      state.phase = 'revealed';
+      const weapon = state.batch.results.findIndex(row => row.itemId);
+      state.index = weapon < 0 ? 0 : weapon;
+    }
+    renderPresentation();
+    const next = boundaries.sort((a,b) => a-b).find(time => time > elapsed);
+    if (state.phase === 'auto' && next !== undefined) autoTimer = setTimeout(() => {
+      if (presentation === state) advancePentagon();
+    }, next - elapsed);
+  }
   function startCards() {
     clearTimeout(animationTimer); animationTimer = null;
     if (!presentation) return;
+    if (presentation.batch.results.length === 5) {
+      const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      presentation.phase = 'auto'; presentation.autoStartedAt = Date.now();
+      presentation.autoInitial = reduced ? 150 : 450;
+      presentation.autoInterval = reduced ? 250 : 900;
+      presentation.autoFlip = reduced ? 0 : 650;
+      advancePentagon(); return;
+    }
     presentation.phase = presentation.revealed.has(presentation.index) ? 'revealed' : 'card';
     renderPresentation();
   }
@@ -337,12 +399,16 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       } else if (button.hasAttribute('data-sb-previous') && presentation.phase !== 'flipping' && !busy) {
         presentation.index = Math.max(0, presentation.index - 1); startCards();
       } else if (button.hasAttribute('data-sb-keep') && presentation.revealed.size === batch.results.length) void keepResults();
-      else if (button.hasAttribute('data-sb-reveal-equip') && presentation.phase === 'revealed') void equipmentAction(button.dataset.sbRevealEquip);
+      else if (button.hasAttribute('data-sb-inspect') && presentation.phase === 'revealed') {
+        const index = Number(button.dataset.sbInspect);
+        if (Number.isInteger(index) && index >= 0 && index < batch.results.length) { presentation.index = index; renderPresentation(); }
+      } else if (button.hasAttribute('data-sb-reveal-equip') && presentation.phase === 'revealed') void equipmentAction(button.dataset.sbRevealEquip);
     });
     renderPresentation();
     if (typeof overlay.showModal === 'function') overlay.showModal();
     else overlay.setAttribute('open', '');
     if (opening) animationTimer = setTimeout(startCards, matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 2000);
+    else if (batch.results.length === 5) startCards();
   }
   function animate(batch) {
     openPresentation(batch);
@@ -401,7 +467,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     finally { busy = false; render(); if (visible() && (getMainUser()?.uid !== uid || externalDirty)) { externalDirty = false; void refresh(); } }
   }
   async function keepResults() {
-    if (busy || !presentation || presentation.revealed.size !== presentation.batch.results.length) return;
+    if (busy || !presentation || presentation.phase !== 'revealed' || presentation.revealed.size !== presentation.batch.results.length) return;
     const uid = reconcile(); busy = true; render();
     try { await acknowledge(); if (getMainUser()?.uid === uid) message = '本批結果已確認收入。'; }
     catch (e) { if (getMainUser()?.uid === uid) message = e.message; }
