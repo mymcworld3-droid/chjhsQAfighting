@@ -65,11 +65,23 @@
     return { kind:'weapon',itemId: item.id, realm: item.realm, higher, pity };
   }
   // Shared by generation and catalog persistence. Attack/HP keep ordinary bounds.
-  const REFINEMENT_VERSION = 1;
-  function refinementCompatible(item, hasSoulbound) {
-    return hasSoulbound
+  const REFINEMENT_VERSION = 2;
+  const MAX_REFINEMENT_EFFECTS = 4;
+  const PERCENT_EFFECT_CAPS = Object.freeze({
+    equip_attack_percent:5, equip_hp_percent:5,
+    equip_damage_percent:3, equip_streak_damage_percent:3,
+    equip_damage_reduction_percent:.8, equip_crit_chance:.75,
+    equip_crit_damage_percent:3, equip_combo_chance:.1, equip_combo_damage_percent:3,
+    equip_lifesteal_percent:.5, equip_reflect_percent:1, equip_low_hp_damage_percent:2,
+    equip_low_hp_reduction_percent:.8, equip_first_hit_reduction_percent:.9,
+    equip_damage_cap_percent:1
+  });
+  function refinementCompatible(item, hasSoulbound, sources = []) {
+    const compatible = hasSoulbound
       ? item?.equipSlot === '本命法寶' && item.soulboundRefinementVersion === REFINEMENT_VERSION
       : item?.equipSlot !== '本命法寶';
+    if (!compatible || !hasSoulbound) return compatible;
+    try { assertRefinementImproves(item, sources); return true; } catch (_) { return false; }
   }
   const BASE_STATS = new Set(['equip_attack_flat','equip_attack_percent','equip_hp_flat','equip_hp_percent','timed_attack_multiplier']);
   function refinementCap(type, ordinaryCap, soulbound = false) {
@@ -89,7 +101,61 @@
     const scale = n => Math.min(cap, round(range.field === 'multiplier' ? 1 + (n - 1) * REFINEMENT_MULTIPLIER : n * REFINEMENT_MULTIPLIER));
     return { ...range, min:scale(range.min), max:scale(range.max) };
   }
-  const api = Object.freeze({ VERSION, PITY, WEAPON_RATE, FRAGMENT_MIN, FRAGMENT_MAX, REALMS, TYPES, ITEMS, get, rankFor, price, cost, candidates, roll, valueText, REFINEMENT_VERSION, REFINEMENT_MULTIPLIER, redemptionCost, refinementCap, refinementRange, refinementCompatible });
+  // Compare against the original catalog values, never their realm-clamped copies.
+  // These floors override random generation ranges, while combat caps still apply.
+  function refineEffects(proposed = [], sources = []) {
+    const inherited = new Map();
+    for (const item of sources.filter(item => item?.equipSlot === '本命法寶')) {
+      const ordered = [...(item.effects || [])].sort((a,b) =>
+        Number(b.type === item.coreEffect) - Number(a.type === item.coreEffect));
+      for (const effect of ordered) {
+        if (!String(effect.type).startsWith('equip_')) continue;
+        const previous = inherited.get(effect.type);
+        const inverse = effect.type === 'equip_damage_cap_percent';
+        if (!previous || ('value' in effect && (inverse ? effect.value < previous.value : effect.value > previous.value))) {
+          inherited.set(effect.type, { ...effect });
+        }
+      }
+    }
+    if (inherited.size > MAX_REFINEMENT_EFFECTS) throw new Error('本命法寶既有詞條超過四個，無法在保留全部屬性的條件下煉製。');
+    const effects = [...inherited.values()].map(base => {
+      const rolled = proposed.find(row => row.type === base.type);
+      if (!('value' in base)) return { ...base };
+      const value = Number(base.value);
+      if (!Number.isFinite(value) || value < 0) throw new Error('本命法寶原屬性數值無效，無法煉製。');
+      const inverse = base.type === 'equip_damage_cap_percent';
+      const step = base.type.endsWith('_flat') ? 1 : .0001;
+      const floor = Number((value + (inverse ? -step : step)).toFixed(4));
+      const limit = inverse ? .05 / REFINEMENT_MULTIPLIER
+        : refinementCap(base.type, PERCENT_EFFECT_CAPS[base.type] ?? Infinity, true);
+      if (inverse ? floor < limit || floor >= value : floor > limit || floor <= value) {
+        throw new Error('本命法寶屬性已達上限，無法保證煉製後逐項提升，請更換素材。');
+      }
+      const candidate = Number(rolled?.value);
+      const next = Number.isFinite(candidate) ? candidate : floor;
+      return { ...base, value:inverse ? Math.max(limit, Math.min(floor, next)) : Math.min(limit, Math.max(floor, next)) };
+    });
+    for (const effect of proposed) {
+      if (effects.length >= MAX_REFINEMENT_EFFECTS) break;
+      if (String(effect.type).startsWith('equip_') && !effects.some(row => row.type === effect.type)) effects.push({ ...effect });
+    }
+    return effects;
+  }
+  function assertRefinementImproves(item, sources = []) {
+    const effects = item?.effects || [];
+    if (item?.equipSlot !== '本命法寶' || effects.length > MAX_REFINEMENT_EFFECTS || new Set(effects.map(row => row.type)).size !== effects.length) {
+      throw new Error('本命法寶成品最多四個不重複詞條。');
+    }
+    const required = refineEffects([], sources);
+    for (const base of required) {
+      const actual = effects.find(row => row.type === base.type);
+      if (!actual || ('value' in base && (!Number.isFinite(actual.value) ||
+        (base.type === 'equip_damage_cap_percent' ? actual.value > base.value : actual.value < base.value)))) {
+        throw new Error('本命法寶成品必須保留並提升所有既有數值屬性。');
+      }
+    }
+  }
+  const api = Object.freeze({ VERSION, PITY, WEAPON_RATE, FRAGMENT_MIN, FRAGMENT_MAX, REALMS, TYPES, ITEMS, get, rankFor, price, cost, candidates, roll, valueText, REFINEMENT_VERSION, REFINEMENT_MULTIPLIER, MAX_REFINEMENT_EFFECTS, PERCENT_EFFECT_CAPS, redemptionCost, refinementCap, refinementRange, refinementCompatible, refineEffects, assertRefinementImproves });
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.QASoulboundPool = api;
 })(globalThis);

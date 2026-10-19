@@ -16,6 +16,67 @@ const boundBase = {
   effects:[{ type:'equip_attack_flat', value:60 }]
 };
 
+test('all permanent weapons strictly improve every original stat even with weaker AI rolls and low realm bounds', () => {
+  for (const source of pool.ITEMS) {
+    let previous = source;
+    for (const stage of [2, 3]) {
+      const result = api.sanitizeGeneratedArtifact({ ...proposed(), effects:source.effects.map(row => ({...row,value:0})) },
+        '金丹', stage, {}, {}, 2, {primaryArtifacts:[previous]});
+      for (const old of previous.effects) {
+        assert.ok(result.effects.find(row => row.type === old.type).value > old.value, source.id + ':' + old.type);
+      }
+      assert.equal(result.equipSlot,'本命法寶');
+      previous = result;
+    }
+  }
+});
+
+test('a fourth affix survives further refinement and a fifth cannot replace any existing affix', () => {
+  const source = {...pool.ITEMS[0],effects:[...pool.ITEMS[0].effects,{type:'equip_true_damage_flat',value:9999}]};
+  const result = api.sanitizeGeneratedArtifact({...proposed(),effects:[{type:'equip_shield_flat',value:99999}]},
+    '金丹',3,{}, {},2,{primaryArtifacts:[source]});
+  assert.deepEqual(result.effects.map(row => row.type),source.effects.map(row => row.type));
+  assert.equal(result.effects.length,4);
+  assert.equal(result.effects[3].value,10000);
+  pool.assertRefinementImproves(result,[source]);
+});
+
+test('inverse damage caps improve downwards and fixed abilities survive without invented numeric values', () => {
+  const source = {...boundBase,effects:[{type:'equip_damage_cap_percent',value:.2},{type:'equip_cheat_death'}]};
+  const result = api.sanitizeGeneratedArtifact({...proposed(),effects:[{type:'equip_damage_cap_percent',value:1}]},
+    '金丹',3,{}, {},2,{primaryArtifacts:[source]});
+  assert.ok(result.effects.find(row => row.type === 'equip_damage_cap_percent').value < .2);
+  assert.deepEqual(result.effects.find(row => row.type === 'equip_cheat_death'),{type:'equip_cheat_death'});
+  pool.assertRefinementImproves(result,[source]);
+});
+
+test('capped stats and recipes requiring over four inherited affixes fail instead of silently weakening weapons', () => {
+  assert.throws(() => pool.refineEffects([], [{...boundBase,effects:[{type:'equip_combo_chance',value:.12}]}]),/已達上限/);
+  const tooMany = {...boundBase,effects:[...pool.ITEMS[0].effects,
+    {type:'equip_true_damage_flat',value:1},{type:'equip_shield_flat',value:1}]};
+  assert.throws(() => pool.refineEffects([], [tooMany]),/超過四個/);
+});
+
+test('known recipes must improve current source values even when their rule version is current', () => {
+  const source = pool.ITEMS[0];
+  const stale = {...source,soulboundRefinementVersion:pool.REFINEMENT_VERSION};
+  assert.equal(pool.refinementCompatible(stale,true,[source]),false);
+  const fresh = {...stale,effects:pool.refineEffects([], [source])};
+  assert.equal(pool.refinementCompatible(fresh,true,[source]),true);
+  assert.equal(pool.refinementCompatible({...fresh,soulboundRefinementVersion:1},true,[source]),false);
+});
+
+test('catalog round trips preserve strict upgrades without clamping original stats back down', () => {
+  const context = {QASoulboundPool:pool};
+  vm.runInNewContext(read('public/cultivation/artifact-catalog.js').replace(/^import .*;\n/gm,'').replace(/export (const|function) /g,'$1 ')
+    +'\nthis.validate=validateArtifactCatalog;',context);
+  for (const source of pool.ITEMS) {
+    const refined = api.sanitizeGeneratedArtifact(proposed(),'金丹',2,{}, {},2,{primaryArtifacts:[source]});
+    const saved = context.validate([{...refined,id:'roundtrip'}])[0];
+    pool.assertRefinementImproves(saved,[source]);
+  }
+});
+
 test('ordinary new forging cannot create a soulbound equipment slot', () => {
   for (const stage of [1, 2, 3]) {
     const artifact = api.sanitizeGeneratedArtifact(proposed(), '元嬰', stage);
@@ -69,7 +130,7 @@ test('a shallower soulbound ingredient wins over deeper ordinary artifacts in ei
     assert.equal(result.equipSlot, '本命法寶');
     assert.equal(result.weaponForm, '飛劍');
     assert.equal(result.coreEffect, 'equip_combo_chance');
-    assert.deepEqual(result.effects.map(effect => effect.type), ['equip_combo_chance','equip_attack_flat','equip_hp_flat']);
+    assert.deepEqual(result.effects.map(effect => effect.type), ['equip_combo_chance','equip_attack_flat','equip_hp_flat','equip_shield_flat']);
     assert.equal(result.soulboundRefinementVersion, pool.REFINEMENT_VERSION);
   }
 });
@@ -113,14 +174,14 @@ test('catalog saving and reading preserves soulbound special bounds and attack/H
       id:'refined-test',name:'精煉法寶',realm:'元嬰',equipSlot:soulbound ? '本命法寶' : '護身法寶',
       soulboundRefinementVersion:pool.REFINEMENT_VERSION,
       effects:[{type:'equip_combo_chance',value:.4},{type:'equip_streak_damage_percent',value:9},
-        {type:'equip_attack_percent',value:20},{type:'equip_hp_percent',value:20},
-        {type:'equip_damage_cap_percent',value:.0125}]
+        {type:'equip_attack_percent',value:20},{type:'equip_hp_percent',value:20}]
     }])[0];
     assert.equal(item.effects[0].value,soulbound ? .12 : .1);
     assert.equal(item.effects[1].value,soulbound ? 3.6 : 3);
     assert.equal(item.effects[2].value,5);
     assert.equal(item.effects[3].value,5);
-    assert.equal(item.effects[4].value,soulbound ? .05 / 1.2 : .05);
+    const inverse = context.validate([{...item,effects:[{type:'equip_damage_cap_percent',value:.0125}]}])[0];
+    assert.equal(inverse.effects[0].value,soulbound ? .05 / 1.2 : .05);
     assert.equal(item.soulboundRefinementVersion,soulbound ? pool.REFINEMENT_VERSION : undefined);
   }
 });
@@ -244,13 +305,21 @@ test('an already-paid old known job upgrades on opening and a failed commit retr
   assert.equal(awarded.equipSlot,'本命法寶');
   assert.equal(awarded.coreEffect,'equip_combo_chance');
   assert.equal(awarded.effects.length,3);
-  assert.equal(awarded.soulboundRefinementVersion,1);
+  assert.equal(awarded.soulboundRefinementVersion,pool.REFINEMENT_VERSION);
   assert.equal(generations,1);
   assert.equal(docs.get('users/tester').forgeFragments,12);
   assert.equal(docs.get('users/tester').artifactSystem.inventory[awarded.id],1);
   assert.equal(docs.get('users/tester')[field],null);
   await assert.rejects(ctx.window.claimCultivationRefineryJob(),/目前沒有/);
   assert.equal(docs.get('users/tester').artifactSystem.inventory[awarded.id],1);
+  pool.assertRefinementImproves(awarded,[pool.ITEMS[0]]);
+  catalog.push({...pool.ITEMS[0],id:'capped-source',effects:[{type:'equip_combo_chance',value:.12}]});
+  const before = clone(docs.get('users/tester'));
+  const blocked = ctx.window.getCultivationRefineryPlan(['artifact:capped-source','material:ore']);
+  assert.equal(blocked.valid,false);
+  assert.match(blocked.reason,/已達上限/);
+  await assert.rejects(ctx.window.startCultivationRefineryJob(['artifact:capped-source','material:ore']),/已達上限/);
+  assert.deepEqual(docs.get('users/tester'),before);
 });
 
 test('legacy and known-recipe paths block minting while equipment slot stays operable', () => {

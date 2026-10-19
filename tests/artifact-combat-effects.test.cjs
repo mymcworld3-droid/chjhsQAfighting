@@ -82,7 +82,7 @@ test('catalog exposes useful flat and percentage combat effects but no battle-st
 });
 
 test('ordinary combo stays at ten percent while soulbound refinements allow twelve percent', () => {
-  assert.match(catalog, /equip_combo_chance:\s*0\.10/);
+  assert.equal(require('../public/cultivation/soulbound-pool.js').PERCENT_EFFECT_CAPS.equip_combo_chance, 0.10);
   assert.match(manager, /valueInput\.max = .*本命法寶.*'0\.12' : '0\.10'/);
   assert.match(manager, /本命法寶.*0\.12 : 0\.10, Math\.max\(0, value\)/);
   assert.match(resolverSource, /COMBO_CHANCE_CAP = 0\.10/);

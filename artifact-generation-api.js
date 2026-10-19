@@ -482,14 +482,10 @@ function sanitizeGeneratedArtifact(raw, targetRealm, refinementStage = 1, effect
     if (already < 0) effects.unshift(core);
     else if (already > 0) effects.unshift(effects.splice(already, 1)[0]);
   }
-  if (inheritsSoulbound) {
-    // Preserve the soulbound's attribute set before considering supporting effects.
-    const defining = inherited.filter((effect, index, all) => all.findIndex(row => row.type === effect.type) === index);
-    effects = [...defining.map(effect => effects.find(row => row.type === effect.type) || effect),
-      ...effects.filter(effect => !defining.some(row => row.type === effect.type))];
-  }
-  effects = effects.filter((effect, index, all) => all.findIndex((row) => row.type === effect.type) === index)
-    .slice(0, inheritsSoulbound ? Math.max(3, maxEffectsForGeneration(order, stage)) : maxEffectsForGeneration(order, stage));
+  effects = effects.filter((effect, index, all) => all.findIndex((row) => row.type === effect.type) === index);
+  effects = inheritsSoulbound
+    ? soulboundRules.refineEffects(effects, primaryItems)
+    : effects.slice(0, maxEffectsForGeneration(order, stage));
 
   if (!effects.length) {
     const fallbackType = forceConsumable ? 'timed_attack_multiplier'
@@ -632,10 +628,10 @@ function buildPrompt(payload) {
     '硬性規則：',
     '1. 法寶境界已由遊戲鎖定為「' + targetRealm + '」，不得改境界。',
     '2. 只輸出 JSON，不要 Markdown。',
-    '3. 效果只能使用下方允許的 type；依本次內部煉器階段與境界，最多 ' + (soulbound ? Math.max(3, maxEffectsForGeneration(order, refinementStage)) : maxEffectsForGeneration(order, refinementStage)) + ' 個效果。',
+    '3. 效果只能使用下方允許的 type；依本次內部煉器階段與境界，最多 ' + (soulbound ? soulboundRules.MAX_REFINEMENT_EFFECTS : maxEffectsForGeneration(order, refinementStage)) + ' 個效果。',
     '4. 每個效果必須使用下方境界＋煉製階段與投入素材數量調整後的 min～max（含上下限），不准填 0、不得突破範圍；百分比一律用小數，例如 0.10 = 10%。普通法器連擊上限 0.10，本命法寶上限 0.12。',
     '4d. 本次投入素材總數 ' + ingredientCount + '，數值範圍倍率 ×' + ingredientCountMultiplier(ingredientCount) + '；表內已計入此倍率，請勿再次乘算。',
-    soulbound ? '4e. 本命法寶精煉：表內已套用普通法器 1.2 倍屬性範圍，不可再次乘算。攻擊與生命（固定值、百分比）不乘 1.2；機率及減傷比例不超過 100%。傷害上限為反向效果，數值除以 1.2 才是強化。原本本命法寶的核心效果、攻擊與生命屬性優先保留，至少保留其三項屬性。戰鬥疊加總上限仍依原戰鬥規則。' : '',
+    soulbound ? '4e. 本命法寶精煉：表內已套用普通法器 1.2 倍屬性範圍，不可再次乘算。攻擊與生命（固定值、百分比）不乘 1.2；機率及減傷比例不超過 100%。傷害上限為反向效果，數值除以 1.2 才是強化。原本本命法寶的核心效果、生命、攻擊與所有既有詞條必須保留；每項數值加成必須嚴格高於原值，傷害上限比例則必須更低。原器數值的提升保底優先於隨機生成範圍；最多四個不重複詞條，已有四個時不得新增或替換。戰鬥疊加總上限仍依原戰鬥規則。' : '',
     '4a. 法寶無修士境界裝備限制：不論玩家境界高低，只要持有裝備型法寶就能裝備；本表的「境界」僅影響法寶效果數值。',
     '4b. 單次生命傷害上限 equip_damage_cap_percent 數值越小代表越強，不要誤選較大數字當成強化。',
     '4c. 限時特性只填 multiplier 和 durationMinutes；每場固定一次的保命／鏡映不填數值；排除錯誤選項每題固定 1 個，不填自訂 value。',
@@ -765,6 +761,7 @@ function registerArtifactGenerationApi(app) {
       const safePayload = { ...(req.body || {}), targetRealm, effectBoundsV2,
         forgeMethod: normalizeForgeMethod(req.body?.forgeMethod) };
       const refinementStage = deriveRefinementStage(safePayload);
+      soulboundRules.refineEffects([], ingredientHierarchy(safePayload).primary);
       const prompt = buildPrompt(safePayload);
       const routed = await aiRouter.generateJSON(prompt, { timeoutMs: 35000 });
       const hierarchy = ingredientHierarchy(safePayload);
@@ -780,7 +777,7 @@ function registerArtifactGenerationApi(app) {
         guidanceReview: reviewed.guidanceReview });
     } catch (error) {
       console.error('[Artifact Generation API]', error);
-      res.status(/上下限|境界設定|階段設定|不允許設定|效果上下限|有限數值|不支援的法寶/.test(error?.message || '') ? 400 : 500)
+      res.status(/本命法寶|上下限|境界設定|階段設定|不允許設定|效果上下限|有限數值|不支援的法寶/.test(error?.message || '') ? 400 : 500)
         .json({ error: error?.message || 'AI 法寶生成失敗' });
     }
   });
