@@ -391,7 +391,7 @@ test('Dao-heart blocks just one incoming hit, including a counterattack', () => 
     guest:{...g,hp:first.guestHp,coreCorrectStreak:first.guestCoreStreak},
     resolveEquipmentHit:({baseDamage})=>({damage:baseDamage,reflectDamage:120})
   });
-  assert.equal(next.hostHp,280,'without a fresh shield, both Thunder plus equipment reflection (320) and direct attack (200) deal damage');
+  assert.equal(next.hostHp,330,'without a fresh shield, Thunder adds 75% of 200 (150), equipment reflects 120, and direct attack deals 200');
   assert.equal(first.hostCoreShield,false);
   assert.equal(next.hostCoreShield,false);
 });
