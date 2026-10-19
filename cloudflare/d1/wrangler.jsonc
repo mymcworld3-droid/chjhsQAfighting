@@ -7,7 +7,7 @@
   "d1_databases": [{
     "binding": "DB",
     "database_name": "qingyun-game-prod",
-    "database_id": "REPLACE_WITH_YOUR_DATABASE_ID",
+    "database_id": "7e2dfc78-22e6-40cb-8803-a85a0df12896",
     "migrations_dir": "migrations"
   }]
 }
