@@ -1,7 +1,7 @@
 'use strict';
 
 const { adminProject, PROJECT_IDS } = require('./firebase-admin-projects.cjs');
-const { FieldValue } = require('firebase-admin/firestore');
+const { FieldValue } = require('./storage-values.cjs');
 
 const CONFIG_COLLECTION = 'gameConfig';
 const ARTIFACT_CONFIG_DOC = 'artifactCatalogV1';

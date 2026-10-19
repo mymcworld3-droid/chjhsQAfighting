@@ -12,7 +12,7 @@ async function runRewardReceipt({
   receiptId,
   onFirstClaim,
   createReceipt = {},
-  fieldValue = require('firebase-admin/firestore').FieldValue
+  fieldValue = require('./storage-values.cjs').FieldValue
 } = {}) {
   if (!db || typeof db.runTransaction !== 'function') throw new Error('Firestore db is required');
   const collectionName = requiredText(collection, 'receipt collection');

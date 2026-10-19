@@ -14,7 +14,7 @@ import {
   where,
   getDocs,
   writeBatch
-} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+} from './data-store.js';
 
 // 帳號刪除屬於登入核心能力，不依賴修仙附加模組。
 // 流程：二次確認 -> Google 重新驗證 -> 清除玩家自有資料 -> 刪除 users/{uid} -> 刪除 Firebase Auth。

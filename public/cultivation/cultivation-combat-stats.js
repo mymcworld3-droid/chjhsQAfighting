@@ -1,6 +1,6 @@
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-import { getFirestore, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { getFirestore, doc, updateDoc } from '../data-store.js';
 
 // 修仙戰鬥基礎數值：目前只保留攻擊力與生命值。
 // 正式鬥法會以此數值建立新的單場投影；房間內生命的損失不會寫回玩家資料。

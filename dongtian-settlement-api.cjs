@@ -6,7 +6,7 @@ const { recordEvent } = require('./public/cultivation/quest-rules.js');
 const { PROJECT_IDS } = require('./firebase-admin-projects.cjs');
 const { playerRepository, dongtianRepository } = require('./server-repositories.cjs');
 const { runRewardReceipt } = require('./reward-receipt.cjs');
-const { FieldValue } = require('firebase-admin/firestore');
+const { FieldValue } = require('./storage-values.cjs');
 const INDEX_COLLECTION='dongtianIndex', DATA_COLLECTION='dongtians', PLAY_COLLECTION='dongtianPlays',
   ELIGIBILITY_COLLECTION='dongtianSettlementClaims', REWARD_COLLECTION='dongtianRewardClaims';
 const FIRST_COMPLETION_BASE_SPIRIT_STONES=30, FIRST_COMPLETION_SPIRIT_STONE_PER_QUESTION=30,

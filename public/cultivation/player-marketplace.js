@@ -2,7 +2,7 @@ import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.j
 import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import {
   getFirestore, collection, doc, query, where, limit, getDoc, getDocs, getDocsFromCache, runTransaction
-} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+} from '../data-store.js';
 import { ARTIFACT_CATALOG, getArtifactById } from './artifact-catalog.js';
 import { MATERIAL_CATALOG, RAID_CRAFT_MATERIAL_IDS, RAID_REFINEMENT_KEYS, getMaterialById, getArtifactRecipe, materialMarketReferencePrice, materialMarketMinimumTotal } from './material-catalog.js';
 

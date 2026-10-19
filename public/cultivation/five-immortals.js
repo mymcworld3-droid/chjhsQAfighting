@@ -61,7 +61,7 @@ import { playerRepository } from './data/player-repository.js';
       const [appModule, authModule, firestoreModule] = await Promise.all([
         import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js'),
         import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js'),
-        import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js')
+        import('../data-store.js')
       ]);
       const app = appModule.getApp();
       auth = authModule.getAuth(app);

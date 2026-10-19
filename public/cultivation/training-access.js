@@ -1,6 +1,6 @@
 import './training-access-rules.js';
 import { getMainUser, getProjectServices } from './data/project-repository.js';
-import { doc, runTransaction } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { doc, runTransaction } from '../data-store.js';
 
 // Keep entrance unlocks across deductions, refreshes and devices. This never
 // changes stats.totalScore, battle matchmaking or the cultivation reward curve.

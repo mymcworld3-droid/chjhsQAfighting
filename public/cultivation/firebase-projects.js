@@ -1,6 +1,6 @@
 import { initializeApp, getApp, getApps } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth, signInWithCustomToken, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { dataBackend, getD1Database, getFirestore } from '../data-store.js';
 import { firebaseProjectConfigs } from '../firebase-projects-config.js';
 
 const APP_NAMES = Object.freeze({ BD: 'xiuxian-bd', C: 'xiuxian-battle' });
@@ -32,6 +32,7 @@ function hasWebConfig(role) {
  * and data migration have been completed.
  */
 export function getFirebaseProjectServices(role) {
+  if (dataBackend === 'd1') return {role,app:getApp(),auth:getAuth(getApp()),db:getD1Database(role)};
   if (role === 'A') {
     const app = getApp();
     return { role, app, auth: getAuth(app), db: getFirestore(app) };
@@ -101,6 +102,10 @@ function watchMainAccount() {
  * token signed for the requested secondary project.
  */
 export async function ensureSecondaryFirebaseAuth(role) {
+  if (dataBackend === 'd1') {
+    if (!getAuth(getApp()).currentUser) throw new Error('請先登入');
+    return getFirebaseProjectServices(role);
+  }
   if (role !== 'BD' && role !== 'C') throw new Error('只接受 BD 或 C 身分連線');
   const mainAuth = getAuth(getApp());
   const mainUser = mainAuth.currentUser;

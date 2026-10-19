@@ -1,7 +1,7 @@
 'use strict';
 const test=require('node:test'),assert=require('node:assert/strict'),vm=require('node:vm'),fs=require('node:fs');
 const FieldValue={serverTimestamp:()=>0,increment:n=>({__increment:n})};
-const sandbox={module:{exports:{}},require:id=>id==='firebase-admin/firestore'?{FieldValue}:require(id.startsWith('./') ? '../'+id.slice(2) : id),console,Date};
+const sandbox={module:{exports:{}},require:id=>['firebase-admin/firestore','./storage-values.cjs'].includes(id)?{FieldValue}:require(id.startsWith('./') ? '../'+id.slice(2) : id),console,Date};
 vm.runInNewContext(fs.readFileSync(require.resolve('../dongtian-settlement-api.cjs'),'utf8'),sandbox);
 const api=sandbox.module.exports.__test;
 function fakeDb(seed={}) {

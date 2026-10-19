@@ -2,7 +2,7 @@ import './knowledge-points.js';
 import './ability-insights-core.js';
 import { authenticatedMainFetch, getMainUser } from './data/project-repository.js';
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { getFirestore, collection, getDocs, query, where, orderBy, limit } from '../data-store.js';
 
 (function () {
   'use strict';
