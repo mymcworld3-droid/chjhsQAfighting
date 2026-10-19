@@ -83,8 +83,8 @@
     const damage = Math.max(0, Math.round(Number(receivedDamage) || 0));
     if (!damage) return { reflectDamage: 0 };
 
-    const reflected = Math.round(damage*1.75);
-    const message = `雷光反擊傷害提高 75%，返還 ${reflected} 傷害（${chance}%）`;
+    const reflected = Math.round(damage*.75);
+    const message = `雷光反擊率 +75 個百分點，金丹額外反擊 ${reflected} 傷害（觸發率 ${chance}%）`;
     showActivation(core, message, '鬥法受擊效果');
     return {
       reflectDamage: reflected,
