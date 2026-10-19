@@ -45,15 +45,38 @@ test('sword followup survives the first shield, has its own step and never calls
  assert.equal(r.guestHp,910);assert.equal(calls,1);
  assert.ok(r.steps.some(s=>/追魂追擊/.test(s.skill)&&s.damage===90));
 });
-test('charge requires three consecutive correct answers and low HP talents use current HP',()=>{
+test('starfall counts correct answers in every three attempts and low HP talents use current HP',()=>{
  const target=p('ocean');
- assert.equal(talents.attack(p('xingchen'),target,{streak:2}).normal,0);
- assert.equal(talents.attack(p('xingchen'),target,{streak:3}).normal,256);
- assert.equal(talents.attack(p('xingchen'),target,{streak:0}).normal,0);
+ assert.equal(talents.attack(p('xingchen'),target,{streak:3}).normal,0);
+ assert.equal(talents.starfall(p('xingchen'),0),0);
+ assert.equal(talents.starfall(p('xingchen'),2),128);
+ assert.equal(talents.starfall(p('xingchen'),3),192);
  const a=p('reverse'),healthy=talents.attack(a,target).normal;a.hp=500;
  assert.ok(talents.attack(a,target).normal>healthy);
  const execute=p('pojing'),high=talents.attack(execute,target).normal;target.hp=500;
  assert.ok(talents.attack(execute,target).normal>high);
+});
+test('starfall triggers on the third answered question even when that answer is wrong',()=>{
+ const h=p('xingchen'),g=p('ocean');g.answer.correct=false;
+ for(let round=1;round<=3;round++){
+  h.answer.correct=round===1||round===2;
+  const r=engine({roomId:'three-answers',round,host:h,guest:g,soulTalents:talents});
+  h.hp=r.hostHp;g.hp=r.guestHp;
+  h.coreCorrectStreak=r.hostCoreStreak;g.coreCorrectStreak=r.guestCoreStreak;
+  h.soulStarCorrectWindow=r.hostStarCorrectWindow;g.soulStarCorrectWindow=r.guestStarCorrectWindow;
+  if(round===3){
+   assert.ok(r.logs.some(x=>/星隕/.test(x.skill)&&x.damage===128));
+   assert.equal(r.hostStarCorrectWindow,0);
+  }
+ }
+});
+test('pure true damage never contributes to thunder reflection',()=>{
+ const h=p('wugou'),g=p('thunder');
+ h.atk=1;g.goldenCore={type:'thunder',grade:1};g.answer.correct=false;g.coreShield=true;
+ const r=engine({roomId:'true-only-thunder',round:1,host:h,guest:g,soulTalents:talents});
+ assert.equal(r.guestHp,928);
+ assert.equal(r.hostHp,1000);
+ assert.equal(r.logs.filter(x=>x.type==='counter').length,0);
 });
 test('lifesteal cannot heal from blocked or overkill damage',()=>{
  const a=p('taichu');assert.equal(talents.healing(a,0,64),0);
