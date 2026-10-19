@@ -241,6 +241,8 @@ import {} from './combat-combo.js';
 
     return {
       hpDamage,
+      // 只用真正扣血的普通傷害當金丹/元嬰反擊基數；真傷不得增加反擊。
+      normalHpDamage: Math.max(0, Math.min(hpDamage, Math.round(Math.max(0, Math.min(reducedNormal, damageCap ?? Infinity) - shieldAbsorbed)))),
       soulReductionApplied:true,
       shieldAbsorbed: Math.max(0, Math.round(shieldAbsorbed)),
       reflectDamage,
@@ -263,6 +265,7 @@ import {} from './combat-combo.js';
     const damage = Math.max(0, Math.round(Number(defense.hpDamage) || 0));
     return {
       damage,
+      normalHpDamage: defense.normalHpDamage,
       critical: attack.critical === true,
       comboChance: attack.comboChance,
       comboMultiplier: attack.comboMultiplier,
@@ -288,6 +291,7 @@ import {} from './combat-combo.js';
     const damage = Math.max(0, Math.round(Number(defense.hpDamage) || 0));
     return {
       damage,
+      normalHpDamage: 0,
       trueDamage,
       comboChance: attack.comboChance,
       comboMultiplier: attack.comboMultiplier,
