@@ -315,25 +315,30 @@ body.xianxia-theme #page-training .training-subtab-v3.is-locked::after { content
 /* Portrait: keep all seven destinations on one line; name the selected tab. */
 @media (orientation: portrait) {
   body.xianxia-theme #page-training .training-subtabs-v3 {
-    display: flex;
-    flex-wrap: nowrap;
-    width: 100%;
-    min-width: 0;
-    gap: 2px;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    gap: 2px !important;
   }
   body.xianxia-theme #page-training .training-subtab-v3 {
-    flex: 1 1 0;
-    min-width: 0;
-    min-height: 36px;
-    height: 36px;
-    padding: 0 4px;
+    position: relative;
+    box-sizing: border-box;
+    flex: 0 1 36px !important;
+    width: 36px !important;
+    min-width: 24px !important;
+    min-height: 36px !important;
+    height: 36px !important;
+    padding: 0 4px !important;
     gap: 4px;
     white-space: nowrap;
     transition: color .18s ease, background-color .18s ease, border-color .18s ease;
   }
   body.xianxia-theme #page-training .training-subtab-v3.active {
-    flex: 0 0 auto;
-    padding-inline: 9px;
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: 68px !important;
+    padding-inline: 9px !important;
   }
   /* Visually hide labels while retaining their accessible names. Leave dots visible. */
   body.xianxia-theme #page-training .training-subtab-v3:not(.active) > i + span {

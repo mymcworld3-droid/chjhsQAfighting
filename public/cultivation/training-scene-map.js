@@ -39,7 +39,7 @@ function loadStyle() {
   const link = document.createElement('link');
   link.id = 'training-scene-map-style';
   link.rel = 'stylesheet';
-  link.href = 'styles/training-scene-map.css?v=20261016-forge-ready';
+  link.href = 'styles/training-scene-map.css?v=20261019-portrait-tabs2';
   document.head.appendChild(link);
 }
 function setDetail(placeId) {
