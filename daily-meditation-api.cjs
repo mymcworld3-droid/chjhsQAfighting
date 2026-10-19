@@ -166,11 +166,12 @@ function createService({db,now=Date.now,random=Math.random}={}) {
       if(claimed.includes(body.stars))return {...view(c,uid,date),claimedNow:false,economy:economy(c.user)};
       if(c.stars<body.stars)throw fail('好友共修星星尚未達到此節點');
       const reward=Rules.meditationCoopReward(c.result.rewardScore,body.stars),user=c.user,patch={};
-      let gold=reward.gold;
+      let gold=reward.gold,raidTicketsAdded=0,convertedRaidGold=0;
       if(reward.raidTickets){
         const tickets=accrueRaidTickets(user,date),added=Math.min(reward.raidTickets,tickets.cap-tickets.count);
+        raidTicketsAdded=added;
         tickets.count+=added;patch.raidTickets=tickets;user.raidTickets=tickets;
-        if(!added)gold+=Rules.meditationCoopReward(c.result.rewardScore,9).gold;
+        if(!added){convertedRaidGold=Rules.meditationCoopReward(c.result.rewardScore,9).gold;gold+=convertedRaidGold;}
       }
       patch['stats.gold']=count(user.stats?.gold)+gold;
       patch.soulboundDrawTickets=count(user.soulboundDrawTickets)+reward.drawTickets;
@@ -179,7 +180,7 @@ function createService({db,now=Date.now,random=Math.random}={}) {
       tx.update(c.refs.user,patch);
       c.result={...c.result,claimed:[...claimed,body.stars],bestStars:c.stars};
       tx.set(c.refs.result,c.result);
-      return {...view(c,uid,date),claimedNow:true,reward:{...reward,gold},economy:economy(user)};
+      return {...view(c,uid,date),claimedNow:true,reward:{...reward,gold,raidTickets:raidTicketsAdded,convertedRaidGold},economy:economy(user)};
     });
   }
   return {status,start,answer,next,finish,claim};
