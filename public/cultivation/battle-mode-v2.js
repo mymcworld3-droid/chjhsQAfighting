@@ -548,6 +548,7 @@ export const featureReady = (async () => {
       // 金丹道心在配對時複製為本場一次性護體：抵擋一擊後消失，不消耗一般悟道持有的道心。
       coreShield: !!goldenCore && data.stats?.goldenCoreShield === true,
       coreCorrectStreak: 0,
+      soulStarCorrectWindow: 0,
       // All combat effects come from equipped artifacts at matchmaking, not local post-match state.
       artifactBattle, artifactShield: Math.max(0, Math.round(Number(openingShield) || 0)),
       artifactFirstHitUsed: false, artifactCheatDeathUsed: false,
@@ -1650,6 +1651,7 @@ export const featureReady = (async () => {
           'host.hp': outcome.hostHp, 'guest.hp': outcome.guestHp, 'host.isDead': outcome.hostHp <= 0, 'guest.isDead': outcome.guestHp <= 0,
           'host.coreShield': outcome.hostCoreShield, 'guest.coreShield': outcome.guestCoreShield,
           'host.coreCorrectStreak': outcome.hostCoreStreak, 'guest.coreCorrectStreak': outcome.guestCoreStreak,
+          'host.soulStarCorrectWindow': outcome.hostStarCorrectWindow, 'guest.soulStarCorrectWindow': outcome.guestStarCorrectWindow,
           'host.artifactShield': outcome.hostArtifactState.artifactShield,
           'guest.artifactShield': outcome.guestArtifactState.artifactShield,
           'host.artifactFirstHitUsed': outcome.hostArtifactState.artifactFirstHitUsed,
