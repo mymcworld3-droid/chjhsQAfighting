@@ -475,7 +475,7 @@ import { battleStepFeedback, createBattleImpact } from './battle-combat-feedback
       hp: maxHp, maxHp, atk: Math.max(1, Math.round(Number.isFinite(Number(stats.attack)) ? Number(stats.attack) : 200)),
       totalScore: score(), goldenCore, coreShield: !!goldenCore && d.stats?.goldenCoreShield === true,
       combatPower: Math.max(0, Math.round(Number(window.getCombatPower?.().total) || 0)),
-      coreCorrectStreak: 0, artifactBattle,
+      coreCorrectStreak: 0, soulStarCorrectWindow: 0, artifactBattle,
       artifactShield: Math.max(0, Math.round(Number(window.getArtifactBattleOpeningShield?.(artifactBattle) ?? artifactBattle.openingShield) || 0)),
       artifactFirstHitUsed: false, artifactCheatDeathUsed: false
     };
@@ -892,11 +892,11 @@ import { battleStepFeedback, createBattleImpact } from './battle-combat-feedback
     guHp = outcome.guestHp;
     guPlayer = {
       ...guPlayer, hp: playerHp, coreShield: outcome.hostCoreShield,
-      coreCorrectStreak: outcome.hostCoreStreak, ...outcome.hostArtifactState
+      coreCorrectStreak: outcome.hostCoreStreak, soulStarCorrectWindow: outcome.hostStarCorrectWindow, ...outcome.hostArtifactState
     };
     guOpponent = {
       ...guOpponent, hp: guHp, coreShield: outcome.guestCoreShield,
-      coreCorrectStreak: outcome.guestCoreStreak, ...outcome.guestArtifactState
+      coreCorrectStreak: outcome.guestCoreStreak, soulStarCorrectWindow: outcome.guestStarCorrectWindow, ...outcome.guestArtifactState
     };
     busy = false;
     if (outcome.finished || playerHp <= 0 || guHp <= 0 || guRound >= QUESTIONS.length - 1) {
