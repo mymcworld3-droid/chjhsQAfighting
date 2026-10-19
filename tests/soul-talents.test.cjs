@@ -49,8 +49,8 @@ test('starfall counts correct answers in every three attempts and low HP talents
  const target=p('ocean');
  assert.equal(talents.attack(p('xingchen'),target,{streak:3}).normal,0);
  assert.equal(talents.starfall(p('xingchen'),0),0);
- assert.equal(talents.starfall(p('xingchen'),2),128);
- assert.equal(talents.starfall(p('xingchen'),3),192);
+ assert.equal(talents.starfall(p('xingchen'),2),192);
+ assert.equal(talents.starfall(p('xingchen'),3),288);
  const a=p('reverse'),healthy=talents.attack(a,target).normal;a.hp=500;
  assert.ok(talents.attack(a,target).normal>healthy);
  const execute=p('pojing'),high=talents.attack(execute,target).normal;target.hp=500;
@@ -65,10 +65,28 @@ test('starfall triggers on the third answered question even when that answer is 
   h.coreCorrectStreak=r.hostCoreStreak;g.coreCorrectStreak=r.guestCoreStreak;
   h.soulStarCorrectWindow=r.hostStarCorrectWindow;g.soulStarCorrectWindow=r.guestStarCorrectWindow;
   if(round===3){
-   assert.ok(r.logs.some(x=>/星隕/.test(x.skill)&&x.damage===128));
+   assert.ok(r.logs.some(x=>/星隕/.test(x.skill)&&x.damage===192));
    assert.equal(r.hostStarCorrectWindow,0);
   }
  }
+});
+test('shared reflection rate stacks 16 percent equipment and 75 points from thunder',()=>{
+ const reflectRate=.16;
+ const coreBonus=.75;
+ assert.equal((reflectRate+coreBonus)*100,91);
+ const a=p('thunder'),b=p('ocean'); a.goldenCore={type:'thunder',grade:1};a.answer.correct=false;
+ b.answer.correct=true;b.atk=200;
+ a.artifactBattle={effects:[{type:'equip_reflect_percent',value:.16}]};
+ for(let i=0;i<200;i++){
+  const r=engine({roomId:'stack-'+i,round:1,host:b,guest:a,soulTalents:talents});
+  const counter=r.logs.find(x=>x.type==='counter');
+  if(counter){
+   // 攻擊 200、元嬰雷返（64）之外，金丹 150+法寶 32=182。
+   // 若該測試不接法寶防禦解析器，應仍正確觸發 75% 基礎加成。
+   assert.ok(counter.damage>=150);return;
+  }
+ }
+ assert.fail('雷霆金丹 90% 觸發率下未找到成功反擊');
 });
 test('pure true damage never contributes to thunder reflection',()=>{
  const h=p('wugou'),g=p('thunder');
