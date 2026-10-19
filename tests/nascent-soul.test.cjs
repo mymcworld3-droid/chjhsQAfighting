@@ -286,7 +286,7 @@ test('radial UI keeps current bonuses, ranks and costs without upper limits or e
 });
 
 test('radial branch labels show the equipped core ability and its actual bonus', () => {
-  const expected = {ocean:'蓄潮爆發',taichu:'吸血',pojing:'斬殺',xingchen:'連答蓄力',
+  const expected = {ocean:'蓄潮爆發',taichu:'吸血',pojing:'斬殺',xingchen:'三題蓄星',
     wugou:'真傷',thunder:'反傷',reverse:'低血增傷'};
   for (const [type, name] of Object.entries(expected)) {
     const markup = renderGrowthMap(type,{core:4});

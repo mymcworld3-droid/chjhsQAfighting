@@ -99,13 +99,13 @@ export function resolveDeterministicCounterCore(player, receivedDamage, seed) {
   }
 
   return {
-    // 金丹雷反：只按實際普通扣血反擊，觸發的這一次增傷 75%。
-    reflectDamage: Math.round(damage*1.75),
+    // 金丹雷反只提供 +75 個百分點反擊率，其餘反擊率由元嬰與法寶共同累加。
+    reflectDamage: Math.round(damage*.75),
     activation: {
       type: core.type,
       name: core.name,
       skill: '萬劫雷霆丹・雷光反擊',
-      message: `雷光反擊增傷 75%，返還 ${Math.round(damage*1.75)} 傷害（${chance}%）`,
+      message: `雷光反擊率 +75 個百分點，金丹額外反擊 ${Math.round(damage*.75)} 傷害（觸發率 ${chance}%）`,
       kind: '鬥法受擊效果'
     }
   };
@@ -428,7 +428,13 @@ export function settleBattleRound({
     if (talentReceived > 0) {
       const counter = resolveDeterministicCounterCore(defender, normalReceived, roomId + ':' + round + ':' + defender.uid + ':counter');
       const soulReflect = soulTalents?.reflection(defender,normalReceived) || 0;
-      counter.reflectDamage += Math.max(0, Math.round(Number(equipment?.reflectDamage) || 0)) + talentReflect + soulReflect;
+      const weaponReflect = Math.max(0, Math.round(Number(equipment?.reflectDamage) || 0)) + talentReflect;
+      // 一次合併金丹 + 武器反擊率，避免分別四捨五入產生的 1 點差異（如 16%+75%=91%）。
+      const coreBonus = counter.activation?.type === 'thunder' ? .75 : 0;
+      const combinedCoreWeapon = normalReceived > 0 && coreBonus > 0 && weaponReflect > 0
+        ? Math.round(normalReceived*(coreBonus + weaponReflect/normalReceived))
+        : counter.reflectDamage + weaponReflect;
+      counter.reflectDamage = combinedCoreWeapon + soulReflect;
       if(soulReflect > 0)counter.activation=counter.activation || {type:'nascent-soul',skill:'元嬰・雷返反傷',name:'雷霆元嬰',message:'雷返反傷',kind:'元嬰受擊效果'};
       if (equipment?.reflectDamage > 0) {
         counter.activation = counter.activation || { type: 'artifact', skill: equipment.reflectSkill || '法寶反傷', name: '法寶', message: '法寶反傷觸發', kind: '鬥法受擊效果' };

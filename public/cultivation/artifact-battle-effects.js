@@ -228,8 +228,9 @@ import {} from './combat-combo.js';
       cheatDeath = true;
     }
 
+    const normalHpDamage = Math.max(0, Math.min(hpDamage, Math.round(Math.max(0, Math.min(reducedNormal, damageCap ?? Infinity) - shieldAbsorbed))));
     const reflectPercent = clamp(sumValue(effects, 'equip_reflect_percent'), 0, REFLECT_CAP);
-    const reflectDamage = Math.max(0, Math.round(hpDamage * reflectPercent));
+    const reflectDamage = Math.max(0, Math.round(normalHpDamage * reflectPercent));
     const labels = [];
     const copied = copyLabel(effects);
     if (copied) labels.push(copied);
@@ -242,7 +243,7 @@ import {} from './combat-combo.js';
     return {
       hpDamage,
       // 只用真正扣血的普通傷害當金丹/元嬰反擊基數；真傷不得增加反擊。
-      normalHpDamage: Math.max(0, Math.min(hpDamage, Math.round(Math.max(0, Math.min(reducedNormal, damageCap ?? Infinity) - shieldAbsorbed)))),
+      normalHpDamage,
       soulReductionApplied:true,
       shieldAbsorbed: Math.max(0, Math.round(shieldAbsorbed)),
       reflectDamage,

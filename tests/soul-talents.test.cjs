@@ -49,8 +49,8 @@ test('starfall counts correct answers in every three attempts and low HP talents
  const target=p('ocean');
  assert.equal(talents.attack(p('xingchen'),target,{streak:3}).normal,0);
  assert.equal(talents.starfall(p('xingchen'),0),0);
- assert.equal(talents.starfall(p('xingchen'),2),128);
- assert.equal(talents.starfall(p('xingchen'),3),192);
+ assert.equal(talents.starfall(p('xingchen'),2),192);
+ assert.equal(talents.starfall(p('xingchen'),3),288);
  const a=p('reverse'),healthy=talents.attack(a,target).normal;a.hp=500;
  assert.ok(talents.attack(a,target).normal>healthy);
  const execute=p('pojing'),high=talents.attack(execute,target).normal;target.hp=500;
@@ -65,10 +65,30 @@ test('starfall triggers on the third answered question even when that answer is 
   h.coreCorrectStreak=r.hostCoreStreak;g.coreCorrectStreak=r.guestCoreStreak;
   h.soulStarCorrectWindow=r.hostStarCorrectWindow;g.soulStarCorrectWindow=r.guestStarCorrectWindow;
   if(round===3){
-   assert.ok(r.logs.some(x=>/星隕/.test(x.skill)&&x.damage===128));
+   assert.ok(r.logs.some(x=>/星隕/.test(x.skill)&&x.damage===192));
    assert.equal(r.hostStarCorrectWindow,0);
   }
  }
+});
+test('thunder adds 75 percentage points to equipment 16%, and soul can stack on the same hit',()=>{
+ const context={window:{},QACombatCombo:globalThis.QACombatCombo};vm.createContext(context);
+ const source=fs.readFileSync(require('node:path').join(__dirname,'../public/cultivation/artifact-battle-effects.js'),'utf8').replace(/^import \{\} from .*;\n/gm,'');
+ vm.runInContext(source,context);
+ const settle=(soul=false,roomId='stack-0')=>{
+  const a=p('ocean'),d=p('thunder');a.uid='a';d.uid='d';a.nascentSoul=null;
+  d.goldenCore={type:'thunder',grade:1};d.nascentSoul=soul?{talent:talents.snapshot('thunder',1,{leftTop:10,leftFarBottom:10,leftFinal:10})}:null;
+  d.answer.correct=false;d.artifactBattle={effects:[{type:'equip_reflect_percent',value:.16}]};
+  const r=engine({roomId,round:1,host:a,guest:d,soulTalents:talents,resolveEquipmentHit:args=>context.window.resolveArtifactBattleHit(args)});
+  return r.logs.find(x=>x.type==='counter'&&x.coreEffect?.type==='thunder');
+ };
+ let bare=null,withSoul=null;
+ for(let i=0;i<300;i++){
+  const seed='stack-'+i;bare=settle(false,seed);
+  if(bare){withSoul=settle(true,seed);break;}
+ }
+ assert.ok(bare);
+ assert.equal(bare.damage,182,'200 normal HP loss × (16% weapon + 75% core) = 182');
+ assert.equal(withSoul.damage,246,'same 200 HP × (16%+75%+32% soul) = 246');
 });
 test('pure true damage never contributes to thunder reflection',()=>{
  const h=p('wugou'),g=p('thunder');

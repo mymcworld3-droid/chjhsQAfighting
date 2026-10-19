@@ -15,8 +15,8 @@
   ].map(Object.freeze));
   const SPECIAL_BRANCHES = [{id:'coreChance',name:'金丹機率',icon:'fa-dice',maxBonus:7.5,unit:'%',description:'逐級增加爆擊或連擊機率，依金丹品級升滿增加 5–7.5%。'},
     {id:'coreDamage',name:'金丹傷害',icon:'fa-burst',maxBonus:50,unit:'%',description:'逐級增加爆擊或連擊傷害。爆擊升滿增加 25 個百分點，連擊升滿增加 15 個百分點。'}].map(Object.freeze);
-  // 百分比為對應神通的攻擊力係數；真傷直接使用戰鬥結算的固定傷害。
-  const CORE_FACTORS = Object.freeze({ocean:2,taichu:1.2,pojing:3.8,xingchen:4,thunder:1,reverse:1.8});
+  // 百分比為對應神通的攻擊力係數；星辰為「每答對一題」對應的星隕攻擊力係數（1.5× 元嬰係數），三題結算。真傷使用固定傷害。
+  const CORE_FACTORS = Object.freeze({ocean:2,taichu:1.2,pojing:3.8,xingchen:1.5,thunder:1,reverse:1.8});
   const CORE_ICONS = Object.freeze({ocean:'fa-water',taichu:'fa-heart-circle-plus',pojing:'fa-skull',
     xingchen:'fa-star',wugou:'fa-shield-halved',thunder:'fa-bolt',reverse:'fa-fire'});
   const roundBonus = value => Math.round(value * 10) / 10;

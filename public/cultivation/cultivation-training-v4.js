@@ -168,7 +168,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from 'https://www.gstati
       id: 'thunder', name: '萬劫雷霆丹', icon: '⚡', tone: 'thunder',
       effect(grade) {
         const counterChance = chanceByGrade(grade, 10, 10, 90);
-        return `進入下一境界前最後 ${breakthroughPercent(grade)}% 的修為區間時，悟道成功額外 +1 修為；鬥法受到攻擊時有 ${counterChance}% 機率雷光反擊，當次反擊傷害提高 75%（普通實際承傷 × 1.75，不含真實傷害）。`;
+        return `進入下一境界前最後 ${breakthroughPercent(grade)}% 的修為區間時，悟道成功額外 +1 修為；鬥法受到攻擊時有 ${counterChance}% 機率雷光反擊，當次反擊率額外 +75 個百分點（與元嬰、法寶反擊率相加，例如法寶 16% 變 91%；基於實際普通承傷，不含真傷）。`;
       },
       ability: '以雷劫淬丹，突破與受擊皆可引雷。',
       upkeep: '雷意需在實戰中承受攻擊才會反擊。',
