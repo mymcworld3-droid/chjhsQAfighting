@@ -35,7 +35,7 @@ test('battle Golden Core effects announce ocean, sword and thunder activations',
   assert.match(battle, /function showActivation\(core, message, kind\)/);
   assert.match(battle, /千尺巨浪席捲戰場，額外造成 100 傷害/);
   assert.match(battle, /萬劍追擊，額外造成 200 傷害/);
-  assert.match(battle, /雷光反擊率 \+75 個百分點，金丹額外反擊 \$\{reflected\} 傷害/);
+  assert.match(battle, /雷光反擊率 \+50 個百分點，金丹額外反擊 \$\{reflected\} 傷害/);
   assert.match(battle, /showActivation\(core, message, '鬥法攻擊效果'\)/);
   assert.match(battle, /showActivation\(core, message, '鬥法受擊效果'\)/);
 });
