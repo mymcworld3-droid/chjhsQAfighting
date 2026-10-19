@@ -70,23 +70,25 @@ test('starfall triggers on the third answered question even when that answer is 
   }
  }
 });
-test('shared reflection rate stacks 16 percent equipment and 75 points from thunder',()=>{
- const reflectRate=.16;
- const coreBonus=.75;
- assert.equal((reflectRate+coreBonus)*100,91);
- const a=p('thunder'),b=p('ocean'); a.goldenCore={type:'thunder',grade:1};a.answer.correct=false;
- b.answer.correct=true;b.atk=200;
- a.artifactBattle={effects:[{type:'equip_reflect_percent',value:.16}]};
- for(let i=0;i<200;i++){
-  const r=engine({roomId:'stack-'+i,round:1,host:b,guest:a,soulTalents:talents});
-  const counter=r.logs.find(x=>x.type==='counter');
-  if(counter){
-   // 攻擊 200、元嬰雷返（64）之外，金丹 150+法寶 32=182。
-   // 若該測試不接法寶防禦解析器，應仍正確觸發 75% 基礎加成。
-   assert.ok(counter.damage>=150);return;
-  }
+test('thunder adds 75 percentage points to equipment 16%, and soul can stack on the same hit',()=>{
+ const context={window:{},QACombatCombo:globalThis.QACombatCombo};vm.createContext(context);
+ const source=fs.readFileSync(require('node:path').join(__dirname,'../public/cultivation/artifact-battle-effects.js'),'utf8').replace(/^import \{\} from .*;\n/gm,'');
+ vm.runInContext(source,context);
+ const settle=(soul=false,roomId='stack-0')=>{
+  const a=p('ocean'),d=p('thunder');a.uid='a';d.uid='d';a.nascentSoul=null;
+  d.goldenCore={type:'thunder',grade:1};d.nascentSoul=soul?{talent:talents.snapshot('thunder',1,{leftTop:10,leftFarBottom:10,leftFinal:10})}:null;
+  d.answer.correct=false;d.artifactBattle={effects:[{type:'equip_reflect_percent',value:.16}]};
+  const r=engine({roomId,round:1,host:a,guest:d,soulTalents:talents,resolveEquipmentHit:args=>context.window.resolveArtifactBattleHit(args)});
+  return r.logs.find(x=>x.type==='counter'&&x.coreEffect?.type==='thunder');
+ };
+ let bare=null,withSoul=null;
+ for(let i=0;i<300;i++){
+  const seed='stack-'+i;bare=settle(false,seed);
+  if(bare){withSoul=settle(true,seed);break;}
  }
- assert.fail('雷霆金丹 90% 觸發率下未找到成功反擊');
+ assert.ok(bare);
+ assert.equal(bare.damage,182,'200 normal HP loss × (16% weapon + 75% core) = 182');
+ assert.equal(withSoul.damage,246,'same 200 HP × (16%+75%+32% soul) = 246');
 });
 test('pure true damage never contributes to thunder reflection',()=>{
  const h=p('wugou'),g=p('thunder');
