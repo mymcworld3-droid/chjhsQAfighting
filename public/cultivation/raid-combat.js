@@ -88,7 +88,7 @@ export function resolveShenRaidCombat({ runId, round, player, boss, intent, corr
       const weaponReflect = Math.max(0, Math.round(Number(defense?.reflectDamage) || 0));
       defenseSkill = [defense?.skill, soulReduction ? '元嬰守元-' + soulReduction : ''].filter(Boolean).join('・');
       const counter = resolveDeterministicCounterCore(p, incomingDamage, seed + ':counter');
-      const corePercent = counter.activation ? .75 : 0;
+      const corePercent = counter.activation ? .50 : 0;
       const weaponPercent = incomingDamage>0 ? weaponReflect/incomingDamage : 0;
       reflectedDamage += Math.round(incomingDamage*(corePercent+weaponPercent));
       reflectedDamage += Math.max(0,Math.round(Number(globalThis.QASoulTalents?.reflection?.(p,incomingDamage))||0));

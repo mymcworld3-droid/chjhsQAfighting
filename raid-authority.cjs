@@ -354,8 +354,8 @@ function coreAttack(member,seed){
 }
 function coreCounter(member,received,seed){
   const core=member?.goldenCore;if(!core||core.type!=='thunder'||received<=0)return 0;
-  const chance=chanceByGrade(core.grade,10,10,90);
-  return deterministicPercent(seed+':thunder')<chance?Math.round(received*.75):0;
+  const chance=chanceByGrade(core.grade,10,6.25,60);
+  return deterministicPercent(seed+':thunder')<chance?Math.round(received*.50):0;
 }
 function runtimeEffects(member){return Array.isArray(member?.artifactBattle?.effects)?member.artifactBattle.effects:[];}
 function hpRatio(member){return clamp(finite(member?.hp)/Math.max(1,finite(member?.maxHp,1)),0,1);}
@@ -441,7 +441,7 @@ function resolveBossDefense(member,{roomId,bossAction,bossHp=Infinity}={}){
     const normalReceived=Math.max(0,damage-trueReceived);
     const weaponPercent=clamp(sumEffect(runtimeEffects(next),'equip_reflect_percent'),0,1);
     const coreAdditional=coreCounter(next,normalReceived,seed+':counter');
-    const corePercent=coreAdditional>0?.75:0;
+    const corePercent=coreAdditional>0?.50:0;
     reflected=normalReceived>0?Math.round(normalReceived*(weaponPercent+corePercent)) + soulTalents.reflection(next,Math.min(next.hp,normalReceived)):0;
     next.hp=Math.max(0,next.hp-damage);
   }
