@@ -1,7 +1,7 @@
 // 團本 MVP 純戰鬥規則：不依賴 DOM / Firebase，方便未來將結算搬到可信任後端。
 export const RAID_MVP = Object.freeze({
   modeVersion: 1,
-  minimumScore: 10,
+  minimumScore: 6,
   minimumRealm: '築基期',
   // 每位玩家獨立出題；答完可立刻進入下一題，不等待隊友。
   minQuestionCycleMs: 0,

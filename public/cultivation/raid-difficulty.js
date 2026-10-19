@@ -3,7 +3,7 @@
   'use strict';
   const TIERS = Object.freeze({
     normal: Object.freeze({
-      id:'normal', name:'簡單', minScore:10, minRealm:'築基期', maxHp:2000, baseAttack:70,
+      id:'normal', name:'簡單', minScore:6, minRealm:'築基期', maxHp:2000, baseAttack:70,
       fragments:5, quizDifficulty:'medium', materialRealms:['煉氣','築基'],
       materials:Object.freeze(['qi-spirit-iron','foundation-refined-iron','qi-spirit-wood','foundation-century-wood'])
     }),

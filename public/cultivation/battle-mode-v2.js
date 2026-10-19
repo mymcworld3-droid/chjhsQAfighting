@@ -23,7 +23,7 @@ export const featureReady = (async () => {
   'use strict';
 
   const cultivationRules = window.XianxiaBattleCultivationRules;
-  const FOUNDATION_SCORE = 10;
+  const FOUNDATION_SCORE = 6;
   const ROOM_COLLECTION = 'rooms';
   const HEARTBEAT_MS = 8000;
   const WAITING_HEARTBEAT_MS = 24000;

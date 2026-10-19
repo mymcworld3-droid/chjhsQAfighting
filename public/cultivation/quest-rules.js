@@ -27,16 +27,16 @@
     quest('path-first-answer', '初次問道', '問道答對 1 題，踏出修行第一步。', 'solo', 1, 30, 0, 'solo'),
     quest('path-qi-five', '引氣入體', '修為達 5，晉至煉氣五層。', 'score', 5, 50, 0, 'solo'),
     quest('path-meditation', '靜心一日', '完成 1 次每日閉關，不要求全對。', 'meditation', 1, 40, 0, 'meditation'),
-    quest('path-foundation', '築基立道', '修為達 10，晉至築基初期。', 'score', 10, 100, 0, 'solo'),
-    quest('path-duel', '以武會友', '完成 1 場正式鬥法，勝負皆計。', 'battle', 1, 100, 1, 'battle', 10),
+    quest('path-foundation', '築基立道', '修為達 6，晉至築基初期。', 'score', 6, 100, 0, 'solo'),
+    quest('path-duel', '以武會友', '完成 1 場正式鬥法，勝負皆計。', 'battle', 1, 100, 1, 'battle', 6),
     quest('path-cave', '尋訪洞天', '完成 1 次洞天答題並結算。', 'dongtian', 1, 100, 1, 'dongtian'),
     quest('path-solo-ten', '十問明心', '累計問道答對 10 題。', 'solo', 10, 120, 1, 'solo'),
     quest('path-golden', '丹成大道', '修為達 28，晉至金丹。', 'score', 28, 200, 0, 'solo'),
-    quest('path-raid-one', '同門共戰', '成功通關團本 1 次。', 'raid', 1, 150, 2, 'raid', 10, { 'raid-refine-key-ii': 1 }),
-    quest('path-raid-three', '並肩破敵', '累計成功通關團本 3 次。', 'raid', 3, 250, 2, 'raid', 10, { 'raid-refine-key-iii': 1 }),
+    quest('path-raid-one', '同門共戰', '成功通關團本 1 次。', 'raid', 1, 150, 2, 'raid', 6, { 'raid-refine-key-ii': 1 }),
+    quest('path-raid-three', '並肩破敵', '累計成功通關團本 3 次。', 'raid', 3, 250, 2, 'raid', 6, { 'raid-refine-key-iii': 1 }),
     quest('path-nascent', '元嬰出竅', '修為達 68，晉至元嬰。', 'score', 68, 350, 0, 'solo'),
-    quest('path-duel-five', '鬥法磨心', '累計完成 5 場正式鬥法。', 'battle', 5, 250, 2, 'battle', 10),
-    quest('path-raid-ten', '護宗十戰', '累計成功通關團本 10 次。', 'raid', 10, 350, 3, 'raid', 10, { 'raid-refine-key-iii': 2 }),
+    quest('path-duel-five', '鬥法磨心', '累計完成 5 場正式鬥法。', 'battle', 5, 250, 2, 'battle', 6),
+    quest('path-raid-ten', '護宗十戰', '累計成功通關團本 10 次。', 'raid', 10, 350, 3, 'raid', 6, { 'raid-refine-key-iii': 2 }),
     quest('path-spirit', '神念通天', '修為達 188，晉至化神。', 'score', 188, 500, 0, 'solo'),
     quest('path-solo-hundred', '百問悟道', '累計問道答對 100 題。', 'solo', 100, 400, 3, 'solo'),
     quest('path-void', '虛空悟道', '修為達 428，晉至煉虛。', 'score', 428, 700, 0, 'solo'),
@@ -57,8 +57,8 @@
       quest('path-dongtian-tutorial', '完成洞天新手教程', '親自完成洞天範例的作答、結算、返回與刪除，並在最後儲存教學完成紀錄。稍後再學不算完成。', 'dongtian-tutorial', 1, 50, 0, 'dongtian-tutorial', 5)
     ],
     'path-foundation': [
-      storyQuest('foundation-first-battle', '第三章 · 築基之後，別只會做題', 10),
-      storyQuest('foundation-refinery', '第四章 · 法寶不是把東西丟進火裡', 10)
+      storyQuest('foundation-first-battle', '第三章 · 築基之後，別只會做題', 6),
+      storyQuest('foundation-refinery', '第四章 · 法寶不是把東西丟進火裡', 6)
     ],
     'path-solo-ten': [
       storyQuest('foundation-mid-alliance', '第五章 · 仙盟送來了一封很不吉利的信', 16),
@@ -85,9 +85,9 @@
     quest('daily-solo-three', '溫故知新', '今日問道答對 3 題。', 'solo', 3, 40, 1, 'solo'),
     quest('daily-solo-ten', '勤學不輟', '今日問道答對 10 題。', 'solo', 10, 80, 1, 'solo'),
     quest('daily-meditation', '靜心閉關', '今日完成每日閉關。', 'meditation', 1, 30, 0, 'meditation'),
-    quest('daily-battle', '論道切磋', '今日完成 1 場正式鬥法，勝負皆計。', 'battle', 1, 80, 0, 'battle', 10),
+    quest('daily-battle', '論道切磋', '今日完成 1 場正式鬥法，勝負皆計。', 'battle', 1, 80, 0, 'battle', 6),
     quest('daily-dongtian', '洞天探幽', '今日完成 1 次洞天答題並結算。', 'dongtian', 1, 60, 0, 'dongtian'),
-    quest('daily-raid', '同門協力', '今日成功通關團本 1 次。', 'raid', 1, 100, 1, 'raid', 10, { 'raid-refine-key-ii': 1 })
+    quest('daily-raid', '同門協力', '今日成功通關團本 1 次。', 'raid', 1, 100, 1, 'raid', 6, { 'raid-refine-key-ii': 1 })
   ];
 
   // 固定每日 UID + 臺灣日期種子；候選任務只採用現有可驗證的活動計數，
@@ -98,8 +98,8 @@
     quest('commission-solo-eight', '今日誦經・八問', '今日問道答對 8 題。', 'solo', 8, 100, 0, 'solo'),
     quest('commission-meditation', '宗門靜修令', '今日完成一次閉關，無須全對。', 'meditation', 1, 65, 0, 'meditation'),
     quest('commission-dongtian', '洞天巡訪令', '今日完成一次洞天答題並結算。', 'dongtian', 1, 85, 0, 'dongtian'),
-    quest('commission-battle', '演武短箋', '今日完成一場正式鬥法，勝負皆可。', 'battle', 1, 100, 0, 'battle', 10),
-    quest('commission-raid', '師門援戰令', '今日通關一次清霜秘境，任何難度均可。', 'raid', 1, 120, 0, 'raid', 10),
+    quest('commission-battle', '演武短箋', '今日完成一場正式鬥法，勝負皆可。', 'battle', 1, 100, 0, 'battle', 6),
+    quest('commission-raid', '師門援戰令', '今日通關一次清霜秘境，任何難度均可。', 'raid', 1, 120, 0, 'raid', 6),
     quest('commission-enlightenment', '弱項研修令', '今日完成一次悟道試煉，依能力圖譜的弱項單元補強。', 'enlightenment', 1, 90, 0, 'enlightenment')
   ]);
   function seedNumber(value) {
@@ -126,7 +126,7 @@
     quest('week-solo-50','七日問道・精進','本週累積問道答對 50 題。','solo',50,230,2,'solo'),
     quest('week-correction-2','溫故研習','本週累積訂正並答對 2 題。','correction',2,100,0,'solo'),
     quest('week-activity-2','百藝兼修','本週累積完成 2 次閉關、洞天、鬥法或團本活動，不須每日連續。','activity',2,125,0,'meditation'),
-    quest('week-raid-1','同門共進','本週通關團本 1 次，任意難度。','raid',1,130,0,'raid',10)
+    quest('week-raid-1','同門共進','本週通關團本 1 次，任意難度。','raid',1,130,0,'raid',6)
   ]);
   const METRICS = ['solo', 'meditation', 'battle', 'dongtian', 'raid', 'correction'];
   function normalizeProgress(raw = {}, date = dateKey()) {

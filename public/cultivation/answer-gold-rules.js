@@ -3,7 +3,7 @@
   'use strict';
   const REALMS = Object.freeze([
     { min: 0, name: '煉氣', bonus: 0 },
-    { min: 10, name: '築基', bonus: 5 },
+    { min: 6, name: '築基', bonus: 5 },
     { min: 28, name: '金丹', bonus: 10 },
     { min: 68, name: '元嬰', bonus: 20 },
     { min: 188, name: '化神', bonus: 30 },

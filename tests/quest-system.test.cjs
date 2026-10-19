@@ -301,7 +301,7 @@ test('daily rewards are independent, idempotent, and reset without resetting the
 });
 
 test('realm locks prevent activity rewards before foundation; meditation uses its persisted date', async () => {
-  const user = sample(); user.stats.totalScore = 9;
+  const user = sample(); user.stats.totalScore = 5;
   user.questProgress = rules.recordEvent(null, 'battle', date);
   user.dailyMeditation = { lastDate: date, totalDays: 1 };
   const v = rules.view(user, {}, date);

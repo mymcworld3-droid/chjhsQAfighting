@@ -1,7 +1,7 @@
 // 每日閉關數值表。獎勵由境界與連續天數決定，不套用一般答題／法寶倍率。
 const DAILY_MEDITATION_REALMS = Object.freeze([
   { min: 0, name: '煉氣', cultivation: 1, gold: 10 },
-  { min: 10, name: '築基', cultivation: 2, gold: 20 },
+  { min: 6, name: '築基', cultivation: 2, gold: 20 },
   { min: 28, name: '金丹', cultivation: 3, gold: 30 },
   { min: 68, name: '元嬰', cultivation: 4, gold: 45 },
   { min: 188, name: '化神', cultivation: 5, gold: 60 },

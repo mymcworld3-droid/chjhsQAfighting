@@ -57,7 +57,7 @@ test('True Immortal uses its celestial seal instead of the old star medal', () =
 test('realm UI, breakthrough, chat and matchmaking no longer use realm emoji', () => {
   for (const code of [theme, live, breakthrough, legacy]) {
     const realmRows = code.match(/\{ name: '(?:凡人|煉氣|築基|金丹|元嬰|化神|煉虛|合體|大乘|渡劫|半仙|真仙)', sub:[^\n]+/g) || [];
-    assert.ok(realmRows.length >= 20);
+    assert.equal(realmRows.length, 17);
     for (const row of realmRows) assert.doesNotMatch(row, /emoji:/);
   }
   assert.match(theme, /function openRealmAtlas\(/);

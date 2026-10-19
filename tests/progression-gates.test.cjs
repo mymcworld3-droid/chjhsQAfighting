@@ -38,10 +38,10 @@ test('login core is isolated from optional cultivation module failures', () => {
   assert.match(main, /\.\/cultivation\/cultivation-theme\.js/);
 });
 
-test('Status opens at account creation, Foundation features at 10, Golden Core at 28', () => {
-  assert.match(progression, /const FOUNDATION_SCORE = 10;/);
+test('Status opens at account creation, Foundation features at 6, Golden Core at 28', () => {
+  assert.match(progression, /const FOUNDATION_SCORE = 6;/);
   assert.match(progression, /const GOLDEN_CORE_SCORE = 28;/);
-  assert.match(guard, /const FOUNDATION_SCORE = 10;/);
+  assert.match(guard, /const FOUNDATION_SCORE = 6;/);
   assert.match(guard, /const GOLDEN_CORE_SCORE = 28;/);
   assert.match(guard, /return !!data\(\)\?\.stats;/);
   assert.match(guard, /html:not\(\.training-access-ready\) #nav-training/);
@@ -103,7 +103,7 @@ test('revival pill is a cultivation backpack consumable, not a Golden Core', () 
   assert.doesNotMatch(inventory, /cultivationTraining/);
 });
 
-test('multiplayer unlock remains Foundation Establishment at 10 cultivation', () => {
+test('multiplayer unlock remains Foundation Establishment at 6 cultivation', () => {
   assert.match(progression, /score\(\) < FOUNDATION_SCORE/);
   assert.match(progression, /startBattleMatchmaking/);
   assert.match(progression, /btn-social-nav/);
@@ -342,9 +342,9 @@ test('Golden Core chapter controls the tutorial on normal play and replay withou
 
 
 test('Foundation refinery access does not depend on the legacy migration marker', () => {
-  assert.match(foundationTraining, /築基期修煉頁：10～27 修為開放背包與煉器/);
+  assert.match(foundationTraining, /築基期修煉頁：6～27 修為開放背包與煉器/);
   assert.match(foundationTraining, /return !!window\.getCurrentUserData\?\.\(\)\?\.stats[\s\S]*value >= FOUNDATION_SCORE && value < GOLDEN_CORE_SCORE/);
-  assert.match(guard, /築基 10 開背包、煉器/);
+  assert.match(guard, /築基 6 開背包、煉器/);
   assert.doesNotMatch(guard, /function trainingAllowed\(\) \{\s*return migrationReady\(\)/);
   assert.match(guard, /function coreAllowed\(\) \{\s*return migrationReady\(\) && \(score\(\) >= GOLDEN_CORE_SCORE \|\| window\.getTrainingAccessScore\?\.\(\) >= GOLDEN_CORE_SCORE\)/);
 });

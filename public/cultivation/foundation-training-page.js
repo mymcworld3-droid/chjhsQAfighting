@@ -1,10 +1,10 @@
 import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-shells.js';
-// 築基期修煉頁：10～27 修為開放背包與煉器；踏入金丹後交棒給完整修煉模組。
+// 築基期修煉頁：6～27 修為開放背包與煉器；踏入金丹後交棒給完整修煉模組。
 (function () {
   'use strict';
 
   const CSS_HREF = 'cultivation-training-v3.css';
-  const FOUNDATION_SCORE = 10;
+  const FOUNDATION_SCORE = 6;
   const GOLDEN_CORE_SCORE = 28;
   let lastStage = null;
 

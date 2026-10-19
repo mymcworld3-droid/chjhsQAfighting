@@ -28,7 +28,7 @@
     const options = Object.values(tiers || {}).filter(tier => tier.materials?.includes(id));
     const tier = options.find(item => count(score) >= item.minScore) || options[0];
     return tier ? { difficulty:tier.id, label:tier.name + '清霜試煉', locked:count(score) < tier.minScore, minRealm:tier.minRealm }
-      : { difficulty:'normal', label:'清霜試煉', locked:count(score) < 10, minRealm:'築基期' };
+      : { difficulty:'normal', label:'清霜試煉', locked:count(score) < 6, minRealm:'築基期' };
   }
   function statChanges(before = {}, after = {}) {
     const keys = new Set([...Object.keys(before), ...Object.keys(after)]);

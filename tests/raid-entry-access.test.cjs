@@ -56,10 +56,10 @@ function fixture(profile, partner) {
 
 test('below Foundation the server rejects all entry routes, ready and legacy-room start without consuming tickets', async()=>{
   for (const action of ['create','quick','join-code','ready','start']) {
-    const f=fixture({stats:{totalScore:9}}), beforeA=structuredClone([...f.a.docs]), beforeC=structuredClone([...f.c.docs]);
+    const f=fixture({stats:{totalScore:5}}), beforeA=structuredClone([...f.a.docs]), beforeC=structuredClone([...f.c.docs]);
     const result=await f.request(action,{ready:true,totalScore:68,trainingAccessScore:68,player:{stats:{totalScore:68}}});
     assert.equal(result.status,403,action);
-    assert.match(result.body.error,/築基期（10 修為）/);
+    assert.match(result.body.error,/築基期（6 修為）/);
     assert.deepEqual([...f.a.docs],beforeA,action+' cannot update or deduct ticket balances');
     assert.deepEqual([...f.c.docs],beforeC,action+' cannot create or change a party');
   }
@@ -67,10 +67,10 @@ test('below Foundation the server rejects all entry routes, ready and legacy-roo
 
 test('exactly Foundation permits create, quick join and code join with the trusted player snapshot', async()=>{
   for (const action of ['create','quick','join-code']) {
-    const f=fixture({stats:{totalScore:10}}), result=await f.request(action);
+    const f=fixture({stats:{totalScore:6}}), result=await f.request(action);
     assert.equal(result.status,200,JSON.stringify(result.body));
-    assert.equal(result.body.room.members.a.trainingAccessScore,10);
-    assert.equal(result.body.room.members.a.totalScore,10);
+    assert.equal(result.body.room.members.a.trainingAccessScore,6);
+    assert.equal(result.body.room.members.a.totalScore,6);
     assert.equal(f.a.docs.get('users/a').raidTickets.count,3,'joining a party does not spend tickets');
   }
 });
@@ -88,7 +88,7 @@ test('permanent Foundation unlock survives a deduction in entry, readiness and b
 });
 
 test('an ineligible teammate prevents battle start before any party ticket is deducted', async()=>{
-  const f=fixture({stats:{totalScore:10}},{stats:{totalScore:9}});
+  const f=fixture({stats:{totalScore:6}},{stats:{totalScore:5}});
   const result=await f.request('start');
   assert.equal(result.status,403);assert.match(result.body.error,/築基期/);
   assert.equal(f.a.docs.get('users/a').raidTickets.count,3);
@@ -103,7 +103,7 @@ test('the trial catalog, raid engine and training map agree on the Foundation un
     read('raid-catalog.js').replace(/^import .*;\n/gm,'').replace(/^export /gm,'')+
     '\nthis.engine=RAID_MVP;this.trial=RAID_TRIALS[0];',context);
   const secret=Rules.PLACES.find(place=>place.id==='secret');
-  assert.equal(context.engine.minimumScore,10);
+  assert.equal(context.engine.minimumScore,6);
   assert.equal(context.trial.minimumScore,secret.threshold);
   assert.equal(context.trial.minimumRealm,secret.realm);
 });
@@ -120,7 +120,7 @@ test('hard/extreme rooms require their own trusted realm and quick matchmaking n
   assert.notEqual(created.body.roomId,'room12345','normal waiting rooms are excluded');
   assert.equal(created.body.room.difficulty,'extreme');
 
-  const invited=fixture({stats:{totalScore:10}});
+  const invited=fixture({stats:{totalScore:6}});
   const old=invited.c.docs.get('raidRooms/room12345');
   invited.c.docs.set('raidRooms/room12345',{...old,difficulty:'hard'});
   const mismatch=await invited.request('join-code');
