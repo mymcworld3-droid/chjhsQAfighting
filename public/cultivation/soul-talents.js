@@ -6,9 +6,9 @@
     taichu:{name:'還神',trait:'吸血',desc:'答對且造成傷害後吸血，上限為 1.2 × 能力倍率 × 攻擊力，且不超過實際傷害與生命上限的 15%。'},
     ningxin:{name:'凝鋒',trait:'會心',desc:'答對時有 25% 機率追加 3 倍能力倍率的普通傷害；不再觸發法寶暴擊。修習後道心改為每連答至少 3 題凝聚一次。'},
     pojing:{name:'破境',trait:'斬殺',desc:'敵方生命不高於 50% 時，額外普通傷害為能力倍率的 3.8 倍；其餘為 0.4 倍。'},
-    xingchen:{name:'星隕',trait:'三題蓄星',desc:'每作答 3 題結算一次星隕，不要求連續答對；傷害＝該 3 題答對數 × 攻擊力 × 元嬰能力係數。第三題答錯也會結算，真傷與法寶連擊不放大星隕。'},
+    xingchen:{name:'星隕',trait:'三題蓄星',desc:'每作答 3 題結算一次星隕，不要求連續答對；傷害＝該 3 題答對數 × 攻擊力 × 星辰元嬰能力係數 × 1.5。第三題答錯也會結算，真傷與法寶連擊不放大星隕。'},
     wugou:{name:'清光',trait:'真傷',desc:'答對追加固定真傷，穿過道心護體與普通減傷；法寶護盾與保命仍有效。金丹屬性分支升滿提供 60–72 真傷，依金丹品級提高。'},
-    thunder:{name:'雷返',trait:'反傷',desc:'受擊時金丹按品級有 10%–90% 機率令當次反擊傷害增加 75%（反擊普通實際承傷的 175%）；元嬰另有獨立雷返。真實傷害不計入反擊基數，反傷不可再觸發反傷。'},
+    thunder:{name:'雷返',trait:'反傷',desc:'受擊時金丹按品級有 10%–90% 機率令當次反擊率額外增加 75 個百分點，與元嬰及法寶反擊率相加（例如法寶 16% 加成後為 91%）；不再是固定反擊 175%。真實傷害不計入反擊基數，反傷不可再觸發反傷。'},
     reverse:{name:'逆命',trait:'低血增傷',desc:'自身生命不高於 50% 時，額外普通傷害為能力倍率的 1.8 倍；其餘為 0.25 倍。'},
     sword:{name:'追魂',trait:'連擊',desc:'答對追加一次 1.4 × 能力倍率 × 攻擊力的普通追擊；首擊被道心擋下仍可追擊，追擊不觸發法寶攻擊效果。'}
   });
@@ -45,7 +45,7 @@
     const t=player?.nascentSoul?.talent;
     if(t?.type!=='xingchen')return 0;
     const correct=Math.min(3,Math.max(0,Math.floor(Number(correctInWindow)||0)));
-    return Math.round(correct*power(player)*strength(t));
+    return Math.round(correct*power(player)*strength(t)*1.5);
   }
   function reflection(player,received) {
     const t=player?.nascentSoul?.talent;
