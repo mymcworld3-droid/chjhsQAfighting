@@ -4,10 +4,12 @@ const {test}=require('node:test'),assert=require('node:assert/strict');
 const fs=require('fs'); const base=require('node:path').resolve(__dirname,'..');
 const talents=require(base+'/public/cultivation/soul-talents.js');
 const authority=require(base+'/raid-authority.cjs');
-const settle=new Function(fs.readFileSync(base+'/public/cultivation/battle-engine-v2.js','utf8').replace(/^import \{\} from .*;\n/gm,'').replace(/^export /gm,'')+'\nreturn settleBattleRound;')();
+const engineSource=fs.readFileSync(base+'/public/cultivation/battle-engine-v2.js','utf8');
+const engine=(step,cap)=>new Function(engineSource.replace('chanceByGrade(core.grade, 10, 10, 90)', 'chanceByGrade(core.grade, 10, '+step+', '+cap+')').replace(/^import \{\} from .*;\n/gm,'').replace(/^export /gm,'')+'\nreturn settleBattleRound;')();
+let settle=engine(10,90);
 const nodes=Object.fromEntries(['leftMain','leftTop','leftBottom','leftFarTop','leftFarBottom','leftFinal','rightMain','rightTop','rightBottom','rightFarTop','rightFarBottom','rightFinal'].map(x=>[x,10]));
 function player(type,uid,grade){return {uid,totalScore:68,atk:390,hp:2250,maxHp:2250,goldenCore:{type,grade},nascentSoul:{type,attackFlat:190,maxHpFlat:1250,bonusDamage:140,reductionFlat:50,coreHeal:10*(12+9-grade),talent:talents.snapshot(type,grade,nodes)},answer:{correct:true,atMs:1000}};}
-for(const grade of [9,1])test('nine-core balance at grade '+grade+' with equal full trees, no equipment and 80% accuracy, record all rates and warn on outliers',()=>{
+for(const cap of [90,60,45,35,25,15,10])for(const grade of [9,1])test('thunder probability cap '+cap+' grade '+grade,()=>{ settle=engine((cap-10)/8,cap);
  const names=Object.keys(talents.TYPES),wins=Object.fromEntries(names.map(x=>[x,0])),games=Object.fromEntries(names.map(x=>[x,0]));
  for(let a=0;a<names.length;a++)for(let b=a+1;b<names.length;b++)for(let n=0;n<200;n++){
   let h=player(names[a],'h',grade),g=player(names[b],'g',grade);
@@ -23,7 +25,7 @@ for(const grade of [9,1])test('nine-core balance at grade '+grade+' with equal f
  for(const type of names){
   const rate=wins[type]/games[type];
   assert.ok(Number.isFinite(rate)&&rate>=0&&rate<=1,type+': '+rate);
-  console.log('金丹勝率 '+type+' '+grade+'品：'+(rate*100).toFixed(2)+'%（'+games[type]+' 場）');
+  if(type==='thunder'||type==='xingchen')console.log('機率上限='+cap+' 金丹勝率 '+type+' '+grade+'品：'+(rate*100).toFixed(2)+'%（'+games[type]+' 場）');
   if(rate<.35||rate>.65)console.warn('金丹平衡警示：'+type+' '+grade+'品勝率 '+(rate*100).toFixed(2)+'%，超出原 35%–65% 觀察範圍');
  }
 
