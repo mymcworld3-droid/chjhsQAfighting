@@ -30,6 +30,7 @@ function scenario(options = {}) {
       hasEncountered: () => options.seen === true,
       markEncountered() {}, setPublicList() {}
     },
+    dongtianRepository:{getData:async()=>cave},
     shuffle: (items) => items,
     doc: (_db, collection, id) => ({ collection, id }),
     getDoc: async (ref) => ref.collection === 'dongtianPlays'

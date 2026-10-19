@@ -394,7 +394,10 @@ const xiuxianNativeWarn = console.warn.bind(console);
 const xiuxianNativeLog = console.log.bind(console);
 
 function formatXiuxianDebugArg(arg) {
-    if (arg instanceof Error) return arg.stack || arg.message || String(arg);
+    if (arg instanceof Error || (arg && typeof arg === 'object' && typeof arg.message === 'string')) {
+        return [arg.code ? `[code=${arg.code}]` : '', arg.phase ? `[phase=${arg.phase}]` : '',
+            arg.message, arg.stack || ''].filter(Boolean).join('\n');
+    }
     if (typeof arg === 'object' && arg !== null) {
         try { return JSON.stringify(arg, null, 2); }
         catch (_) { return '[Object] (Circular)'; }

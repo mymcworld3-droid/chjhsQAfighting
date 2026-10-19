@@ -65,7 +65,7 @@ test('battle room traffic is isolated to C and rewards cross the server bridge t
 test('Dongtian content uses BD while plays, history and player rewards remain in A', () => {
   const mode=read('public/cultivation/dongtian.js'), repository=read('public/cultivation/data/dongtian-repository.js'), player=read('public/cultivation/data/player-repository.js'), reward=read('public/cultivation/data/reward-repository.js'), api=read('dongtian-settlement-api.cjs');
   assert.match(mode,/dongtianRepository\.connect\(\)/);assert.match(mode,/const progressDb = progress\.db/);assert.match(mode,/getDoc\(doc\(progressDb, PLAY_COLLECTION,/);
-  assert.match(mode,/runTransaction\(progressDb,/);assert.match(mode,/playerRepository\.addExamLog/);assert.match(mode,/rewardRepository\.claimDongtian/);
+  assert.match(mode,/dongtianRepository\.markEncountered/);assert.match(mode,/playerRepository\.addExamLog/);assert.match(mode,/rewardRepository\.claimDongtian/);
   assert.doesNotMatch(mode,/getFirestore\(getApp\(\)\)|getAuth\(getApp\(\)\)/);
   assert.match(repository,/progressRole:'A'/);assert.match(repository,/getProjectServices\('BD'\)/);assert.match(repository,/getProjectServices\('A'/);assert.match(repository,/authenticatedMainFetch/);assert.match(repository,/\/api\/dongtian\/list-index/);assert.match(repository,/\/api\/dongtian\/delete/);assert.match(player,/collection\(db,'exam_logs'\)/);assert.match(reward,/\/api\/dongtian\/settle/);assert.match(api,/PLAY_COLLECTION='dongtianPlays'/);
 });
