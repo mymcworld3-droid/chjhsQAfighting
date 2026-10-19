@@ -3542,6 +3542,8 @@ async function sendQuizHelperMessage(rawMessage) {
 
     const history = quizHelperState.messages.slice(-6).map(item => ({ role: item.role, text: item.text }));
     const requestQuestion = quizHelperState.question;
+    const requestQuiz = window.currentActiveQuiz;
+    const requestUid = auth.currentUser?.uid || '';
     const requestId = ++quizHelperState.requestSerial;
     quizHelperState.messages.push({ role: 'user', text: message });
     quizHelperAppendMessage('user', message);
@@ -3580,6 +3582,9 @@ async function sendQuizHelperMessage(rawMessage) {
         quizHelperState.messages.push({ role: 'assistant', text: answer, knowledgePoint });
         quizHelperAppendMessage('assistant', answer, { knowledgePoint });
         if (status) status.textContent = '';
+        if (payload.questionIssue?.confirmed === true) {
+            void window.reportQuizHelperIssue({ quiz: requestQuiz, uid: requestUid, reason: payload.questionIssue.reason });
+        }
     } catch (error) {
         if (requestId !== quizHelperState.requestSerial || requestQuestion !== quizHelperState.question) return;
         thinkingBubble?.remove();
@@ -4123,6 +4128,25 @@ window.closeReportModal = () => {
     }, 300);
 };
 
+// Helpers submit the exact question snapshot; changing question/account invalidates a late reply.
+window.reportQuizHelperIssue = async ({ quiz, uid, reason } = {}) => {
+    const text = String(reason || '').trim().slice(0, 1200);
+    if (!uid || uid !== auth.currentUser?.uid || quiz !== window.currentActiveQuiz || !quiz?.data?.q || text.length < 6) return;
+    if (reportSubmitting || quiz.helperReportUid === uid) return;
+    quiz.helperReportUid = uid;
+    try {
+        window.openReportModal();
+        if (reportQuizSnapshot !== quiz) { delete quiz.helperReportUid; return; }
+        document.getElementById('report-reason').value = text;
+        const result = await window.submitReport();
+        // No success marker on network, AI or persistence failures; a later check can retry.
+        if (!['confirmed','duplicate','rejected','limit'].includes(result?.status)) delete quiz.helperReportUid;
+    } catch (error) {
+        delete quiz.helperReportUid;
+        console.warn('[Quiz helper report]', error);
+    }
+};
+
 window.submitReport = async () => {
     if (reportSubmitting) return;
     const reason = document.getElementById('report-reason').value.trim();
@@ -4258,6 +4282,7 @@ window.submitReport = async () => {
                 showClose: !isLimit
             });
         }
+        return result;
     } catch (error) {
         // 明確記錄階段及 HTTP 狀態，避免只看見 main-legacy.js 的統一警告行號。
         console.warn('[Question report]', {

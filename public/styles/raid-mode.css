@@ -358,92 +358,23 @@ body.raid-page-open #page-raid.active-page > #raid-hub:not(.hidden) {
  .raid-difficulty-picker small{font-size:8px}
 }
 
-/* 團本題目與主問道保持相同讀題順序：獨立題目卡、四個垂直單選、解析緊隨答案。
-   這裡只更動樣式，不調整團本出題難度、戰鬥難度及答案簽章。 */
+/* 與悟道試煉共用題目、選項與解析樣式，團本只補戰鬥資訊與視窗配置。 */
 #page-raid .raid-question-shell:not(.raid-loading){
-  justify-content:flex-start;
-  align-items:stretch;
-  gap:12px;
-  background:linear-gradient(165deg,#101611 0%,#0b0f0c 63%,#10110f 100%);
+  justify-content:center;align-items:center;gap:0;padding:16px;overflow:hidden;
+  background:linear-gradient(160deg,#141512,#080b10);
 }
-#page-raid .raid-question-shell>header{
-  position:sticky;top:0;z-index:6;
-  padding:9px 12px;
-  border:1px solid rgba(217,186,114,.24);
-  border-radius:12px;
-  background:rgba(17,24,19,.96);
-  box-shadow:0 6px 15px #0005;
-}
-#page-raid .raid-study-card{
-  box-sizing:border-box;
-  width:min(100%,840px);
-  margin:0 auto 20px;
-  padding:clamp(16px,3vw,28px);
-  border:1px solid rgba(229,202,145,.29);
-  border-radius:18px;
-  background:linear-gradient(165deg,rgba(245,232,199,.95),rgba(225,210,175,.94));
-  color:#29372b;
-  box-shadow:0 14px 42px #0008,inset 0 1px #fff7;
-}
-#page-raid .raid-study-heading{
-  display:block;font-size:12px;letter-spacing:.13em;font-weight:750;
-  color:#56705a;margin-bottom:9px;
-}
-#page-raid .raid-study-stem{
-  font-size:clamp(18px,2vw,23px);line-height:1.95;
-  margin:8px 0 18px;color:#24372b;font-weight:650;
-  overflow-wrap:anywhere;white-space:normal;
-}
-#page-raid .raid-study-card .raid-options{
-  display:grid;grid-template-columns:1fr;gap:10px;
-  flex:none;grid-auto-rows:auto;
-}
-#page-raid .raid-study-card .raid-option{
-  display:flex;align-items:flex-start;min-height:62px;
-  padding:14px 16px;gap:14px;
-  color:#28372c;background:rgba(255,255,255,.55);
-  border:1px solid rgba(77,103,78,.23);border-radius:12px;
-  transition:background .12s ease,border-color .12s ease,transform .12s ease;
-}
-#page-raid .raid-study-card .raid-option>b{
-  flex:1;font-size:clamp(15px,1.4vw,18px);line-height:1.75;font-weight:550;
-}
-#page-raid .raid-study-card .raid-option>span{
-  display:grid;place-items:center;flex:0 0 32px;width:32px;height:32px;
-  border:1px solid rgba(65,104,73,.35);border-radius:8px;
-  color:#3e6348;background:#eaf0df;font-size:14px;font-weight:750;
-}
-#page-raid .raid-study-card .raid-option:hover:not(:disabled),
-#page-raid .raid-study-card .raid-option:focus-visible{
-  border-color:#62916a;background:#f9fff5;outline-offset:3px;
-}
-#page-raid .raid-study-card .raid-option.correct{
-  border-color:#4b9568;background:#e3f2df;color:#1c5730;
-}
-#page-raid .raid-study-card .raid-option.wrong{
-  border-color:#b46558;background:#fae1d9;color:#7b3025;
-}
-#page-raid .raid-study-card .raid-explain{
-  border-radius:12px;margin-top:18px;padding:17px;
-  font-size:15px;line-height:1.85;background:#fff8e9;
-  color:#354338;border-left:4px solid #ba9851;
-}
-#page-raid .raid-study-card .raid-explain>b{color:#324f37;font-size:16px}
-#page-raid .raid-study-card .raid-explain .raid-primary{
-  font-size:15px;min-height:48px;
-}
-#page-raid .raid-study-card :is(.raid-study-stem,.raid-option b,.raid-explain) mjx-container{
-  max-width:100%;overflow-x:auto;overflow-y:hidden;
-}
-@media(max-width:760px){
- #page-raid .raid-question-shell:not(.raid-loading){gap:8px;padding:8px 9px max(24px,env(safe-area-inset-bottom,0px))}
- #page-raid .raid-study-card{padding:15px 12px;border-radius:12px}
- #page-raid .raid-study-card .raid-option{min-height:54px;padding:10px;gap:10px}
- #page-raid .raid-study-card .raid-option>span{flex-basis:28px;width:28px;height:28px}
- #page-raid .raid-study-card .raid-explain{padding:12px}
-}
-@media(prefers-reduced-motion:reduce){
- #page-raid .raid-study-card .raid-option{transition:none}
+#page-raid .raid-study-panel{box-sizing:border-box;min-height:0;max-height:min(790px,100%);flex:0 1 auto}
+#page-raid .raid-study-panel>header{position:sticky;top:0;flex:none}
+#page-raid .raid-study-panel>header button{width:auto;padding:0 12px;font-size:13px}
+#page-raid .raid-study-body{padding:20px 22px 25px;min-height:0;overflow:auto;overscroll-behavior:contain}
+#page-raid .raid-study-panel .raid-options{display:grid;grid-template-columns:1fr;grid-auto-rows:auto;flex:none;gap:9px}
+#page-raid .raid-study-body .raid-question-boss{font-size:12px;margin:0 0 12px;color:#cebf96}
+#page-raid .raid-study-review{margin-top:18px}
+#page-raid .raid-study-review .enlightenment-primary{margin-top:0}
+#page-raid .raid-study-panel :is(.enlightenment-question,.enlightenment-options b,.enlightenment-explanation) mjx-container{max-width:100%;overflow-x:auto;overflow-y:hidden}
+@media(max-width:600px){
+ #page-raid .raid-question-shell:not(.raid-loading){padding:6px 6px max(6px,env(safe-area-inset-bottom,0px))}
+ #page-raid .raid-study-body{padding:14px}
 }
 
 /* 伺服器公開招募名單：保留秘境原有墨金配色，不顯示私人邀請碼。 */

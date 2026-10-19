@@ -20,7 +20,7 @@ import './combat-contribution.js';
 
   const DIFFICULTY = globalThis.QARaidDifficulty;
   const PAGE_ID = 'page-raid';
-  const STYLE_HREF = 'styles/raid-mode.css?v=20261017-party-list';
+  const STYLE_HREF = 'styles/raid-mode.css?v=20261019-enlightenment';
   const MALE = 'assets/story/characters/player-male-determined.png';
   const FEMALE = 'assets/story/characters/player-female-determined.png';
   const HEARTBEAT_MS = 8000;
@@ -184,6 +184,13 @@ import './combat-contribution.js';
     return !!document.querySelector('#xiuxian-story-layer,#newbie-tutorial-layer,#battle-tutorial-layer,#golden-core-tutorial-layer,#dongtian-overlay');
   }
   function ensureStyle() {
+    if (!document.getElementById('enlightenment-trial-style')) {
+      const shared = document.createElement('link');
+      shared.id = 'enlightenment-trial-style';
+      shared.rel = 'stylesheet';
+      shared.href = '/styles/enlightenment-trial.css';
+      document.head.appendChild(shared);
+    }
     const existing = [...document.querySelectorAll('link[rel="stylesheet"]')]
       .find(link => String(link.getAttribute('href') || '').includes('styles/raid-mode.css'));
     if (existing?.getAttribute('href') === STYLE_HREF) return;
@@ -948,7 +955,7 @@ import './combat-contribution.js';
       let cls = '';
       if (review && i === q.ans) cls = ' correct';
       else if (review && i === state.selectedChoice && i !== q.ans) cls = ' wrong';
-      return '<button class="raid-option' + cls + '" type="button" data-choice="' + i + '" ' + (review || state.status === 'submitting' || state.player.hp <= 0 ? 'disabled' : '') + '><span>' +
+      return '<button class="' + cls + '" type="button" data-choice="' + i + '" ' + (review || state.status === 'submitting' || state.player.hp <= 0 ? 'disabled' : '') + '><span>' +
         String.fromCharCode(65 + i) + '</span><b>' + rich(option) + '</b></button>';
     }).join('');
     let explain = '';
@@ -957,15 +964,17 @@ import './combat-contribution.js';
       const label = state.answerCorrect
         ? ('答對・' + (dealt > 0 ? '造成 ' + dealt.toLocaleString() + ' 傷害' : '攻勢已凝聚'))
         : '答錯・本次失去攻擊';
-      explain = '<div class="raid-explain ' + (state.answerCorrect ? 'correct' : 'wrong') + '"><b>' + label + '</b><p>' + rich(q.exp) + '</p>' +
-        '<button class="raid-primary" type="button" data-next>下一題</button><button class="raid-ghost" type="button" data-arena>先看戰場</button></div>';
+      explain = '<div class="enlightenment-review raid-study-review"><strong class="' + (state.answerCorrect ? 'correct' : 'wrong') + '">' + label + '</strong>' +
+        '<div class="enlightenment-explanation">' + rich(q.exp) + '</div>' +
+        '<button class="enlightenment-primary" type="button" data-next>下一題</button><button class="raid-ghost" type="button" data-arena>先看戰場</button></div>';
     }
-    view.innerHTML = '<div class="raid-question-shell"><header><div><small>' + escapeHtml(q.subject) + '・' + escapeHtml(q.level) + '</small><strong>個人題號 ' +
-      (state.playerActionCount + (review ? 0 : 1)) + '</strong></div><span id="raid-question-timer">不限時</span><button class="raid-ghost" type="button" data-question-arena>戰場</button></header>' +
+    view.innerHTML = '<div class="raid-question-shell"><article class="enlightenment-panel raid-study-panel"><header><div><small>宗門試煉 ／ 並肩共戰</small><h2>秘境試題</h2></div>' +
+      '<button class="raid-ghost" type="button" data-question-arena>戰場</button></header><div class="raid-study-body">' +
+      '<div class="enlightenment-overview"><span>本題科目</span><strong>' + escapeHtml(q.subject) + ' · ' + escapeHtml(q.level) + '</strong></div>' +
       '<div class="raid-question-boss"><img src="' + RAID_MVP.bossImage + '" alt="沈清霜"><span id="raid-question-boss-clock">Boss 行動倒數</span></div>' +
-      teamworkMarkup(true) +
-      '<div class="raid-study-card"><span class="raid-study-heading">問道 · 秘境試題</span>' +
-      '<h2 class="raid-study-stem">' + rich(q.q) + '</h2><div class="raid-options">' + opts + '</div>' + explain + '</div></div>';
+      teamworkMarkup(true) + '<div class="enlightenment-step"><span>個人題號 ' + (state.playerActionCount + (review ? 0 : 1)) +
+      '</span><span id="raid-question-timer">不限時</span></div>' +
+      '<h3 class="enlightenment-question">' + rich(q.q) + '</h3><div class="enlightenment-options raid-options">' + opts + '</div>' + explain + '</div></article></div>';
     typeset(view);
     view.querySelector('[data-question-arena]')?.addEventListener('click', () => renderArena());
     if (!review) {

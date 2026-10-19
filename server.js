@@ -163,8 +163,9 @@ ${JSON.stringify(context)}
 6. 尚未作答且只是泛問提示時，先提供關鍵觀念、下一步或簡短示範，不必主動揭曉整題；這不限制規則 3 的答案核對及規則 4 的題目檢查。已作答時可完整說明解法、錯因與觀念，仍須獨立檢查題庫參考。
 7. 數學式可使用 $...$ TeX 語法。回答以約 300 個中文字為原則，核對依據或玩家要求詳細說明時可適度增加。
 8. 從這次討論整理出一個最適合延伸練習的核心知識點，knowledgePoint 要簡短、具體，可直接作為下一題出題範圍，例如「功與動能定理」、「一元一次方程式移項」、「現在完成式」。
-9. 請只回傳合法 JSON：
-{"answer":"你的回答","knowledgePoint":"核心知識點"}
+9. 若你已獨立核算並能具體指出題幹、選項、標示答案或解析的實質錯誤，questionIssue.confirmed 填 true，confidence 填 0～1，reason 填可核對的錯誤依據（至少六個字）。只有證據充分且信心至少 0.8 才標記；玩家答錯、仍有疑問、缺少圖表、條件式推論或玩家要求回報，本身都不能作為確認有錯的依據。確認有錯後系統會自動代填理由並送交獨立審核，不要再要求玩家手動回報，也不要宣稱補償已入帳。
+10. 請只回傳合法 JSON：
+{"answer":"你的回答","knowledgePoint":"核心知識點","questionIssue":{"confirmed":false,"confidence":0.0,"reason":"具體錯誤依據，無確定錯誤則留空"}}
 `;
 
         const routed = await aiRouter.generateJSON(prompt, { timeoutMs: 25000 });
@@ -176,7 +177,12 @@ ${JSON.stringify(context)}
             .trim()
             .slice(0, 60);
 
-        res.json({ answer, knowledgePoint, provider: routed.provider, model: routed.model });
+        const issue = routed.data?.questionIssue;
+        const issueReason = String(issue?.reason || '').trim().slice(0, 1200);
+        const confidence = Number(issue?.confidence);
+        const questionIssue = issue?.confirmed === true && Number.isFinite(confidence) && confidence >= 0.8 && confidence <= 1 && issueReason.length >= 6
+            ? { confirmed: true, reason: issueReason } : null;
+        res.json({ answer, knowledgePoint, questionIssue, provider: routed.provider, model: routed.model });
     } catch (error) {
         console.error('[Question Helper]', error);
         res.status(502).json({ error: '問道助手暫時無法回應，請稍後再試。' });

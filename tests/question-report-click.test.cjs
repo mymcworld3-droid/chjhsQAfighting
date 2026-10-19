@@ -7,6 +7,14 @@ const vm = require('node:vm');
 const legacy = fs.readFileSync(path.join(__dirname, '../public/main-legacy.js'), 'utf8');
 const html = fs.readFileSync(path.join(__dirname, '../public/index.html'), 'utf8');
 
+test('the question-error button and tutorial use the same player-facing name', () => {
+  const tutorial = fs.readFileSync(path.join(__dirname, '../public/cultivation/newbie-tutorial-v2.js'), 'utf8');
+  assert.match(html, /id="btn-report"[\s\S]*?<span>題目有錯<\/span>/);
+  assert.match(tutorial, /按「題目有錯」/);
+  assert.doesNotMatch(html, /<span>回報問題<\/span>/);
+  assert.doesNotMatch(tutorial, /按[「『]回報問題/);
+});
+
 test('report modal shows status and stays accessible above story/tutorial overlays', () => {
   assert.match(html, /id="report-modal" class="hidden fixed inset-0 z-\[17000\]/);
   assert.match(html, /id="report-input-status" role="status" aria-live="polite"/);
