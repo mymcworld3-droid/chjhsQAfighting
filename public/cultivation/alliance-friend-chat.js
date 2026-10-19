@@ -4,7 +4,7 @@ import { getProjectServices, getMainUser, authenticatedMainFetch } from './data/
 const state = {
   uid: '', conversations: new Map(), peer: '', messages: [], lastMessageId: '',
   timer: null, polling: false, loading: false, sending: false,
-  globalUnsub: null, globalLatest: '', globalUnread: false
+  globalUnsub: null, globalListenGeneration: 0, globalLatest: '', globalUnread: false
 };
 const $ = id => document.getElementById(id);
 const currentUid = () => getMainUser()?.uid || '';
@@ -136,9 +136,13 @@ async function send(event) {
   } catch (error) { reportError(error.message); }
   finally { state.sending = false; sendButton.disabled = false; }
 }
+function stopGlobalListener() {
+  state.globalListenGeneration++;
+  if (state.globalUnsub) { state.globalUnsub(); state.globalUnsub = null; }
+}
 function reset(uid) {
   close(); state.uid = uid; state.conversations.clear();
-  if (state.globalUnsub) { state.globalUnsub(); state.globalUnsub = null; }
+  stopGlobalListener();
   state.globalLatest = ''; state.globalUnread = false; updateBadges();
 }
 async function poll() {
@@ -170,13 +174,14 @@ function ackGlobalChat() {
 }
 async function listenGlobal() {
   const uid = state.uid;
-  if (!uid || state.globalUnsub) return;
+  if (!uid || state.globalUnsub || document.visibilityState === 'hidden') return;
+  const generation = ++state.globalListenGeneration;
   try {
     const { db } = await getProjectServices('A', { authenticateSecondary: false });
-    if (state.uid !== uid) return;
+    if (state.uid !== uid || generation !== state.globalListenGeneration || document.visibilityState === 'hidden') return;
     state.globalUnsub = onSnapshot(query(collection(db, 'global_chat'),
       orderBy('timestamp', 'desc'), limit(1)), snap => {
-      if (uid !== state.uid) return;
+      if (uid !== state.uid || generation !== state.globalListenGeneration || document.visibilityState === 'hidden') return;
       const latest = snap.docs[0]?.id || '';
       const key = 'xiuxian-global-chat-seen:' + uid;
       let lastSeen = '';
@@ -190,20 +195,30 @@ async function listenGlobal() {
       state.globalUnread = Boolean(latest && latest !== lastSeen && !mine && !globalChatVisible());
       if (globalChatVisible() || (mine && latest)) ackGlobalChat();
       updateBadges();
-    }, err => console.warn('[Friend chat] public badge unavailable', err.message));
+    }, err => {
+      if (generation !== state.globalListenGeneration) return;
+      stopGlobalListener();
+      console.warn('[Friend chat] public badge unavailable', err.message);
+    });
   } catch (err) { console.warn('[Friend chat] public listener unavailable', err.message); }
 }
 function start() {
   const uid = currentUid();
-  if (!uid || !$('page-social')) return;
+  if (!uid || !$('page-social') || document.visibilityState === 'hidden') return;
   if (uid !== state.uid) reset(uid);
   ensureModal();
   if (!state.timer) state.timer = setInterval(() => { void poll(); }, 12000);
   void poll(); void listenGlobal();
 }
 document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'visible') void poll();
+  if (document.visibilityState === 'hidden') {
+    stopGlobalListener();
+  } else if (state.uid) {
+    void poll();
+    void listenGlobal();
+  }
 });
+window.addEventListener('pagehide', stopGlobalListener);
 document.addEventListener('keydown', event => {
   if (event.key === 'Escape' && $('alliance-chat-layer') && !$('alliance-chat-layer').hidden) close();
 });
