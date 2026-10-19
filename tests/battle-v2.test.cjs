@@ -280,7 +280,7 @@ test('Battle v2 hidden phases cannot be overridden by phase display styles', () 
 
 
 test('formal battle uses Foundation realm only; incomplete tutorials never block pairing or recovery', async () => {
-  const src = battleSource.slice(battleSource.indexOf('  function storyOrTutorialOpen() {'), battleSource.indexOf('  async function forfeitCurrentRoom() {'));
+  const src = battleSource.slice(battleSource.indexOf('  function storyOrOverlayOpen() {'), battleSource.indexOf('  async function forfeitCurrentRoom() {'));
   const calls = [];
   let layerPresent = false;
   let currentScore = 9;

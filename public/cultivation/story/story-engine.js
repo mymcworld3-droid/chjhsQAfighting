@@ -14,7 +14,7 @@ import { STORY_BACKGROUNDS, storyBackgroundForLine, nextStoryBackground, createS
 // - 第一次進入先選擇性別。
 // - 劇情依修為節點逐章解鎖並保存在 users/{uid}.storyProgressV1。
 // - 序章由仙道任務或劇情清單點擊開啟；登入與選擇性別不自動播放。
-// - 其他教學／戰鬥／洞天全螢幕介面存在時不搶畫面。
+// - 戰鬥／洞天全螢幕介面存在時不搶畫面。
 
 (function () {
   'use strict';
@@ -29,9 +29,6 @@ import { STORY_BACKGROUNDS, storyBackgroundForLine, nextStoryBackground, createS
   let currentChapter = null;
   let lineIndex = 0;
   let replayMode = false;
-  let storyTutorialPaused = false;
-  let pendingStoryTutorial = '';
-  let tutorialLaunchError = '';
   let chapterSaveError = '';
   let finishingChapter = false;
   let snoozeUntil = 0;
@@ -208,7 +205,7 @@ import { STORY_BACKGROUNDS, storyBackgroundForLine, nextStoryBackground, createS
       #${LAYER_ID} .story-gender-option span{display:block;padding:0 10px 13px;color:#887d68;font-size:9px}
       #${ARCHIVE_ID}{position:fixed;inset:0;z-index:15950;display:grid;place-items:center;padding:18px;background:rgba(0,0,0,.82);backdrop-filter:blur(10px)}
       #${ARCHIVE_ID} .story-archive-card{width:min(100%,760px);max-height:86dvh;overflow:auto;padding:22px;border:1px solid rgba(216,177,93,.3);border-radius:24px;background:linear-gradient(145deg,#171713,#070807);color:#ddcfaf;box-shadow:0 30px 90px rgba(0,0,0,.65)}
-      #${LAYER_ID} .story-tutorial-error{margin:9px 0;color:#ffe3a3;background:rgba(123,51,21,.72);padding:9px 12px;border:1px solid rgba(245,173,87,.65);border-radius:9px;font-size:12px;line-height:1.65}
+      #${LAYER_ID} .story-save-error{margin:9px 0;color:#ffe3a3;background:rgba(123,51,21,.72);padding:9px 12px;border:1px solid rgba(245,173,87,.65);border-radius:9px;font-size:12px;line-height:1.65}
       #${ARCHIVE_ID} .story-archive-head{display:flex;align-items:start;justify-content:space-between;gap:12px}.story-archive-head h3{margin:0;color:#f0dfb9;font-size:21px}.story-archive-head p{margin:4px 0 0;color:#857b68;font-size:9px}.story-archive-close{width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.08);background:#0b0b0a;color:#a79b82}
       #${ARCHIVE_ID} .story-archive-list{display:grid;gap:8px;margin-top:16px}.story-archive-item{width:100%;display:grid;grid-template-columns:62px minmax(0,1fr) auto;align-items:center;gap:10px;padding:11px;border-radius:14px;border:1px solid rgba(216,177,93,.12);background:rgba(255,255,255,.018);text-align:left}.story-archive-item:not(:disabled):hover{border-color:rgba(216,177,93,.36);background:rgba(216,177,93,.045)}.story-archive-item:disabled{opacity:.42}.story-archive-item em{color:#9d8450;font-size:8px;font-style:normal;font-weight:900}.story-archive-item b{display:block;color:#e3d7bc;font-size:10px}.story-archive-item small{display:block;margin-top:3px;color:#777062;font-size:8px}.story-archive-item span{color:#8f846e;font-size:8px}
       .story-archive-launcher{margin:7px 0 0;min-height:30px;padding:0 10px;border-radius:10px;border:1px solid rgba(216,177,93,.2);background:rgba(216,177,93,.045);color:#c8ac69;font-size:8px;font-weight:900}
@@ -225,18 +222,13 @@ import { STORY_BACKGROUNDS, storyBackgroundForLine, nextStoryBackground, createS
       '#game-startup-gate',
       '#startup-cloud-curtain',
       '#page-onboarding:not(.hidden)',
-      '#newbie-tutorial-layer',
-      '#qi-five-dongtian-tutorial-layer',
-      '#golden-core-tutorial-layer',
       '#progression-v2-modal',
       '.training-v3-modal-backdrop',
       '#realm-breakthrough-feedback',
       '#dongtian-overlay',
       '#five-immortal-challenge',
-      '#xiuxian-opening-cinematic',
       '#report-modal:not(.hidden)',
       '#battle-result-overlay',
-      '#battle-tutorial-layer'
     ].join(','));
   }
 
@@ -275,7 +267,7 @@ import { STORY_BACKGROUNDS, storyBackgroundForLine, nextStoryBackground, createS
     if (backdrop.dataset.scene === scene.id) return;
     backdrop.dataset.scene = scene.id;
     const paint = src => {
-      // 快速翻頁／退出／教學接棒時，較慢的舊載入不能蓋過目前場景。
+      // 快速翻頁／退出時，較慢的舊載入不能蓋過目前場景。
       if (!src || !active || !backdrop.isConnected || backdrop.dataset.scene !== scene.id) return;
       if (backdrop.dataset.src === src) return;
       const previous = Array.from(backdrop.querySelectorAll('.story-background-image'));
@@ -336,14 +328,14 @@ import { STORY_BACKGROUNDS, storyBackgroundForLine, nextStoryBackground, createS
     if (backdrop) el.prepend(backdrop);
     updateStoryBackground(el);
 
-    if (tutorialLaunchError || chapterSaveError) {
+    if (chapterSaveError) {
       const warning = document.createElement('p');
-      warning.className = 'story-tutorial-error';
+      warning.className = 'story-save-error';
       warning.setAttribute('role', 'alert');
-      warning.textContent = tutorialLaunchError || chapterSaveError;
+      warning.textContent = chapterSaveError;
       el.querySelector('.story-dialogue')?.insertBefore(warning, el.querySelector('.story-actions'));
       const next = el.querySelector('.story-next');
-      if (next) next.textContent = tutorialLaunchError ? '重新啟動教學' : '重新儲存觀看紀錄';
+      if (next) next.textContent = '重新儲存觀看紀錄';
     }
 
     el.querySelector('.story-later')?.addEventListener('click', deferChapter);
@@ -355,97 +347,12 @@ import { STORY_BACKGROUNDS, storyBackgroundForLine, nextStoryBackground, createS
     };
   }
 
-  function storyTutorialComplete(kind) {
-    const field = {
-      question: 'newbieTutorialV1',
-      dongtian: 'storyDongtianTutorialV1',
-      battle: 'battleTutorialV1',
-      'battle-shen': 'battleTutorialV1',
-      'battle-gu': 'battleTutorialV1',
-      'golden-core': 'goldenCoreTutorialV1'
-    }[kind];
-    return !!field && !!data()?.[field]?.completed;
-  }
-
-  function restoreStoryAfterFailedTutorial(kind, error) {
-    if (!storyTutorialPaused || pendingStoryTutorial !== kind) return;
-    console.warn('[Story] tutorial could not start:', kind, error || 'launcher returned false');
-    tutorialLaunchError = '教學暫時無法開啟。請按「重新啟動教學」重試；若仍無法進入，可按「稍後再看」並重新整理遊戲。';
-    storyTutorialPaused = false;
-    pendingStoryTutorial = '';
-    active = true;
-    renderLine();
-  }
-
-  function handoffStoryTutorial(kind) {
-    if (storyTutorialPaused || !currentChapter) return true;
-    const launch = {
-      question: window.startStoryQuestionTutorial,
-      dongtian: window.startStoryDongtianTutorial,
-      battle: window.startBattleTutorial,
-      'battle-shen': window.startBattleTutorial && ((options) => window.startBattleTutorial({ ...options, phase: 'shen' })),
-      'battle-gu': window.startBattleTutorial && ((options) => window.startBattleTutorial({ ...options, phase: 'gu' })),
-      'golden-core': window.startGoldenCoreTutorial
-    }[kind];
-    if (typeof launch !== 'function') {
-      console.warn('[Story] tutorial is not available yet:', kind);
-      tutorialLaunchError = '教學模組尚未載入。請按「重新啟動教學」重試；若仍無法進入，可按「稍後再看」並重新整理遊戲。';
-      renderLine();
-      return true;
-    }
-    tutorialLaunchError = '';
-    const adminPreview = replayMode && canPreviewAllStory() && score() < currentChapter.minScore;
-    const options = { story: true, replay: replayMode, adminPreview };
-    storyTutorialPaused = true;
-    pendingStoryTutorial = kind;
-    active = false;
-    document.getElementById(LAYER_ID)?.classList.remove('story-playing');
-    document.getElementById(LAYER_ID)?.remove();
-    Promise.resolve()
-      .then(() => launch(options))
-      .then((started) => {
-        if (started !== true) restoreStoryAfterFailedTutorial(kind);
-      })
-      .catch((error) => restoreStoryAfterFailedTutorial(kind, error));
-    return true;
-  }
-
-  function resumeAfterStoryTutorial(event) {
-    const kind = event?.detail?.kind;
-    if (!storyTutorialPaused || !kind || pendingStoryTutorial !== kind || !currentChapter) return;
-    storyTutorialPaused = false;
-    pendingStoryTutorial = '';
-    tutorialLaunchError = '';
-    if (event.detail?.deferred && !replayMode) {
-      // 第三章演武選擇「稍後」時不算通關，重進第三章再繼續。
-      active = false;
-      currentChapter = null;
-      lineIndex = 0;
-      replayMode = false;
-      autoPermits = 1;
-      snoozeUntil = Date.now() + 5 * 60 * 1000;
-      return;
-    }
-    active = true;
-    lineIndex = Math.min(lineIndex + 1, currentChapter.lines.length - 1);
-    prepareStoryScene(currentChapter);
-    renderLine({ bounce: true });
-  }
-
   function nextLine() {
     if (!active || !currentChapter) return;
     if (lineIndex >= currentChapter.lines.length - 1) {
       finishChapter();
       return;
     }
-    const checkpoint = currentChapter.tutorials?.find((item) => item.afterLine === lineIndex);
-    const kind = checkpoint?.kind ||
-      (currentChapter.tutorialAfterLine === lineIndex ? currentChapter.tutorialKind : '');
-    if (kind && (replayMode || !storyTutorialComplete(kind))) {
-      handoffStoryTutorial(kind);
-      return;
-    }
-    tutorialLaunchError = '';
     lineIndex += 1;
     renderLine({ bounce: true });
   }
@@ -478,7 +385,6 @@ import { STORY_BACKGROUNDS, storyBackgroundForLine, nextStoryBackground, createS
     currentChapter = null;
     lineIndex = 0;
     replayMode = false;
-    tutorialLaunchError = '';
     document.getElementById(LAYER_ID)?.remove();
     snoozeUntil = Date.now() + 1200;
     if (!wasReplay) window.dispatchEvent(new CustomEvent('xiuxian:story-chapter-completed', { detail: { id: finished.id } }));
@@ -528,7 +434,7 @@ import { STORY_BACKGROUNDS, storyBackgroundForLine, nextStoryBackground, createS
   }
 
   function startChapter(chapter, options = {}) {
-    if (!chapter || active || storyTutorialPaused) return false;
+    if (!chapter || active) return false;
     if (blocking()) return false;
     const request = options.backgroundRequest ?? ++chapterStartRequest;
     if (request !== chapterStartRequest) return false;
@@ -545,7 +451,6 @@ import { STORY_BACKGROUNDS, storyBackgroundForLine, nextStoryBackground, createS
     document.getElementById(ARCHIVE_ID)?.remove();
     prepareStoryScene(chapter);
     currentChapter = chapter;
-    tutorialLaunchError = '';
     chapterSaveError = '';
     lineIndex = 0;
     replayMode = options.replay === true;
@@ -645,7 +550,7 @@ import { STORY_BACKGROUNDS, storyBackgroundForLine, nextStoryBackground, createS
   function canPreviewAllStory() { return data()?.isAdmin === true; }
 
   function openArchive() {
-    if (active || blocking() || window.getBattleTutorialState?.().active) return;
+    if (active || blocking()) return;
     ensureStyle();
     document.getElementById(ARCHIVE_ID)?.remove();
     const el = document.createElement('div');
@@ -660,22 +565,7 @@ import { STORY_BACKGROUNDS, storyBackgroundForLine, nextStoryBackground, createS
       const read = !!seen[chapter.id];
       return `<button type="button" class="story-archive-item" data-story-chapter="${escapeHtml(chapter.id)}" ${unlocked ? '' : 'disabled'}><em>${escapeHtml(chapter.realm)}</em><span><b>${escapeHtml(chapter.title)}</b><small>${escapeHtml(chapter.subtitle)}</small></span><span>${!unlocked ? `需 ${chapter.minScore} 修為` : (read ? '已讀 · 重播' : '已解鎖')}</span></button>`;
     }).join('');
-    const openingRow = '<button type="button" class="story-archive-item" data-story-opening-replay><em>世界觀</em><span><b>修仙世界 · 仙途之始</b><small>九幕世界觀影片 · 自由重播，不修改進度</small></span><span>重播</span></button>';
-    el.innerHTML = `<section class="story-archive-card"><div class="story-archive-head"><div><h3>主線劇情回顧</h3><p>第一章後的劇情請自行點擊觀看。首次看完會記錄進度，已讀章節可隨時重播。</p></div><button type="button" class="story-archive-close">×</button></div><div class="story-archive-list">${canPreviewAllStory() ? '<button type="button" class="story-archive-item" data-admin-gender-preview><em>管理員</em><span><b>性別選擇</b><small>自由預覽 · 不修改角色性別</small></span></button>' : ''}${rows}${openingRow}${canPreviewAllStory() ? ['intro','shen-story','gu-intro','gu-result'].map((scene, i) => `<button type="button" class="story-archive-item" data-admin-battle-scene="${scene}"><em>管理員</em><span><b>${['沈清霜切磋','一劍之後 · 師姐震驚','顧長風入場','教學戰後對話'][i]}</b><small>自由預覽 · 不寫入進度</small></span></button>`).join('') : ''}</div></section>`;
-    el.querySelector('[data-story-opening-replay]')?.addEventListener('click', () => {
-      el.remove();
-      window.openXiuxianOpeningCinematic?.({ replay: true });
-    });
-    el.querySelector('[data-admin-gender-preview]')?.addEventListener('click', () => {
-      if (!canPreviewAllStory()) return;
-      el.remove();
-      openGenderChoice({ preview:true });
-    });
-    el.querySelectorAll('[data-admin-battle-scene]').forEach((button) => button.addEventListener('click', async () => {
-      if (!canPreviewAllStory()) return;
-      const opened = await window.startBattleTutorial?.({ replay:true, adminPreview:true, scene:button.dataset.adminBattleScene });
-      if (opened) el.remove();
-    }));
+    el.innerHTML = `<section class="story-archive-card"><div class="story-archive-head"><div><h3>主線劇情回顧</h3><p>第一、二章可自行點擊觀看。首次看完會記錄進度，已讀章節可隨時重播。</p></div><button type="button" class="story-archive-close">×</button></div><div class="story-archive-list">${rows}</div></section>`;
     el.querySelector('.story-archive-close')?.addEventListener('click', () => el.remove());
     el.addEventListener('click', (event) => { if (event.target === el) el.remove(); });
     el.querySelectorAll('[data-story-chapter]').forEach((button) => {
@@ -734,9 +624,7 @@ import { STORY_BACKGROUNDS, storyBackgroundForLine, nextStoryBackground, createS
       return openGenderChoice({ chapterId: id });
     }
     const adminPreview = canPreviewAllStory() && score() < chapter.minScore;
-    const tutorials = chapter.tutorials || (chapter.tutorialKind ? [{ kind: chapter.tutorialKind }] : []);
-    const pendingTutorial = tutorials.some(item => !storyTutorialComplete(item.kind));
-    const replay = options.replay === true || adminPreview || (!!seenMap()[id] && !pendingTutorial);
+    const replay = options.replay === true || adminPreview || !!seenMap()[id];
     return startChapter(chapter, { replay });
   };
   window.getXiuxianStoryChapters = () => STORY_CHAPTERS.map((chapter) => ({
@@ -763,12 +651,6 @@ import { STORY_BACKGROUNDS, storyBackgroundForLine, nextStoryBackground, createS
     });
     window.addEventListener('xiuxian:story-chapter-completed', syncArchiveIndicator);
     window.addEventListener('xiuxian:battle-session-ended', () => setTimeout(maybeAutoStart, 180));
-    window.addEventListener('xiuxian:opening-cinematic-completed', (event) => {
-      if (event.detail?.replay) return;
-      autoPermits = Math.max(1, autoPermits);
-      snoozeUntil = 0;
-      setTimeout(maybeAutoStart, 120);
-    });
     window.addEventListener('xiuxian:user-ready', () => {
       mountArchiveLauncher();
       autoPermits = Math.max(1, autoPermits);
@@ -780,12 +662,6 @@ import { STORY_BACKGROUNDS, storyBackgroundForLine, nextStoryBackground, createS
       setTimeout(maybeAutoStart, 180);
     });
     window.addEventListener('player-name-updated', () => { if (active && currentChapter) renderLine(); });
-    window.addEventListener('xiuxian:story-tutorial-finished', resumeAfterStoryTutorial);
-    window.addEventListener('xiuxian:battle-tutorial-completed', () => {
-      autoPermits = 1;
-      snoozeUntil = Math.max(snoozeUntil, Date.now() + 650);
-      setTimeout(maybeAutoStart, 900);
-    });
 
     mountArchiveLauncher();
     maybeAutoStart();

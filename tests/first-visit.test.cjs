@@ -17,25 +17,7 @@ test('a new device welcomes once; finished devices do not repeat the trial after
   assert.equal(rules.normalize({ version: 99, stage: 'done' }).stage, 'welcome');
 });
 
-test('guest reload resumes the saved question or feature introduction, and a saved correct answer resumes the invitation', () => {
-  for (const stage of ['features', 'question']) {
-    assert.equal(rules.readyStage(state(stage), guest, { stats: { totalScore: 0 } }), stage);
-  }
-  for (const stage of ['scope', 'features', 'question', 'invite']) {
-    assert.equal(rules.readyStage(state(stage), guest, { stats: { totalScore: 1 } }), 'invite');
-  }
-  assert.equal(rules.readyStage(state('question'), { ...guest, uid: 'another-guest' }, { stats: { totalScore: 0 } }), 'scope');
-});
 
-test('new accounts and account linking show backgrounds before gender, while returning players keep their account state', () => {
-  assert.equal(rules.readyStage({}, account, { profile: {}, stats: {} }, true), 'background');
-  assert.equal(rules.readyStage({}, account, { profile: {}, stats: {} }, false), 'done');
-  assert.equal(rules.readyStage({ ...state('invite'), joining: true }, account, {}), 'background');
-  assert.equal(rules.readyStage(state('gender'), account, {}), 'gender');
-  assert.equal(rules.readyStage(state('background'), account, { arrivalOnboardingV1: { completed: true } }), 'done');
-  assert.equal(rules.needsGender({ storyProgressV1: { gender: 'female' } }), false);
-  assert.equal(rules.needsGender({}), true);
-});
 
 function loginHarness({ collision = false, cancel = false, staleAuth = false } = {}) {
   const calls = [], player = { uid: guest.uid, displayName: '匿名修士', stats: { totalScore: 1, gold: 20 }, gameSettings: { sourceMode: 'focused' }, inventory: [] };
@@ -142,61 +124,6 @@ test('guest handoff is applied only to a transactionally missing player and is c
   assert.equal(player.stats.totalScore,1);
 });
 
-function slidesHarness({loaded=true,genderNeeded=true}={}) {
-  let layer=null,now=0,serial=0,genderCalls=0;
-  const timers=new Map(),pictures=[];
-  const context=vm.createContext({state:{stage:'background'},scene:0,sceneTimer:null,pictureRevision:0,
-    scenes:[['one.png','一','說明一'],['two.png','二','說明二']],
-    Rules:{needsGender:()=>genderNeeded},window:{getCurrentUserData:()=>({})},
-    showScenePicture(){return new Promise(resolve=>{pictures.push(resolve);if(loaded)resolve();});},loadSceneImage(){},
-    setTimeout(fn,delay){const id=++serial;timers.set(id,{fn,at:now+delay});return id;},clearTimeout:id=>timers.delete(id),
-    $:()=>layer,store(patch){Object.assign(context.state,patch);},
-    gender(){genderCalls++;context.removeLayer();},action:fn=>fn(),finish(){context.state.stage='done';context.removeLayer();},
-    panel(){context.clearTimeout(context.sceneTimer);const handlers={};const nodes={'#fv-prev':{addEventListener:(_,fn)=>handlers.prev=fn},'#fv-next':{}};
-      layer={querySelector:key=>nodes[key],handlers,nodes,remove(){layer=null;}};return layer;}});
-  const remove= intro.slice(intro.indexOf('  function removeLayer()'),intro.indexOf('  function panel('));
-  const slides=intro.slice(intro.indexOf('  function backgrounds()'),intro.indexOf('  function gender()'));
-  vm.runInContext(remove+slides,context);context.backgrounds();
-  return {context,timers,pictures,layer:()=>layer,genderCalls:()=>genderCalls,
-    advance(ms){const until=now+ms;while(true){const next=[...timers].sort((a,b)=>a[1].at-b[1].at)[0];if(!next||next[1].at>until)break;now=next[1].at;timers.delete(next[0]);next[1].fn();}now=until;}};
-}
-
-test('world pictures advance after three displayed seconds and finish at manual gender selection', async () => {
-  const h=slidesHarness();await Promise.resolve();h.advance(2999);assert.equal(h.context.scene,0);
-  h.advance(1);assert.equal(h.context.scene,1);await Promise.resolve();h.advance(3000);
-  assert.equal(h.context.state.stage,'gender');assert.equal(h.genderCalls(),1);assert.equal(h.timers.size,0);
-});
-
-test('slow images wait for decoding, manual navigation resets the clock and stale image callbacks cannot skip slides', async () => {
-  const h=slidesHarness({loaded:false});const first=h.layer();h.advance(5000);assert.equal(h.context.scene,0);
-  h.pictures[0]();await Promise.resolve();h.advance(1000);first.nodes['#fv-next'].onclick();assert.equal(h.context.scene,1);
-  first.nodes['#fv-next'].onclick();assert.equal(h.context.scene,1,'stale buttons cannot skip another slide');
-  assert.equal(h.timers.size,0,'previous timer is cancelled');
-  h.pictures[1]();await Promise.resolve();h.advance(2999);assert.equal(h.context.scene,1);
-  h.layer().handlers.prev();assert.equal(h.context.scene,0);assert.equal(h.timers.size,0);
-  h.pictures[2]();h.context.removeLayer();await Promise.resolve();h.advance(5000);assert.equal(h.context.scene,0);
-});
-
-test('only accounts needing the world introduction preload all five images and wait for decoding', async () => {
-  const images=[],decoders=[];
-  const context=vm.createContext({state:{},window:{},Rules:rules,sceneImages:new Map(),
-    scenes:[['one.png'],['two.png'],['three.png'],['four.png'],['five.png']],
-    Image:class {constructor(){images.push(this);this.naturalWidth=0;}decode(){return new Promise(resolve=>decoders.push(resolve));}}});
-  vm.runInContext(intro.slice(intro.indexOf('  function loadSceneImage('),intro.indexOf('  async function showScenePicture(')),context);
-  for(const [person,data,first] of [[null,{},true],[guest,{},true],[account,{},false],[account,{arrivalOnboardingV1:{completed:true}},true]]) {
-    await context.window.preloadFirstVisitScenes(person,data,first);
-    assert.equal(images.length,0);
-  }
-  let ready=false;
-  const first=context.window.preloadFirstVisitScenes(account,{},true).then(()=>ready=true);
-  const repeated=context.window.preloadFirstVisitScenes(account,{},true);
-  assert.equal(images.length,5,'repeated preloads reuse the image cache');
-  const loads=images.slice(0,4).map(image=>{image.naturalWidth=1672;return image.onload();});
-  images[4].onerror();await Promise.resolve();assert.equal(ready,false,'loading alone is insufficient before decoding');
-  decoders.forEach(resolve=>resolve());await Promise.all(loads);await first;await repeated;
-  assert.equal(ready,true,'one failed image does not block startup');
-});
-
 test('cancelling the popup preserves the guest and allows a second login attempt', async () => {
   const { ctx, calls, player } = loginHarness({ cancel: true });
   await assert.rejects(ctx.window.googleLogin(), /cancel/);
@@ -217,6 +144,6 @@ test('arrival assets exist, the survey is absent, and the first quest explicitly
   }
   const q = require('../public/cultivation/quest-rules.js').PATH[0];
   assert.equal(q.chapterId, 'prologue-enter-sect');
-  assert.match(q.title, /新手劇情/);
+  assert.match(q.title, /第一章/);
   assert.match(q.description, /不會自動播放/);
 });

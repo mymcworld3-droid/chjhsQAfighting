@@ -121,7 +121,7 @@ export const featureReady = (async () => {
   function score() { return Math.max(0, Number(userData()?.stats?.totalScore) || 0); }
   function nowMs() { return Date.now(); }
 
-  // Story, realm tutorials and delayed chapter launches must not take over an active duel.
+  // Story and delayed chapter launches must not take over an active duel.
   // Reserve the lock throughout matchmaking/recovery and retain it through the result screen.
   window.isXiuxianBattleBusy = () => Boolean(state.starting || state.leaving || state.recovering || state.roomId);
   // Incoming duel/raid invitations are suppressed only while matchmaking or combat is active.
@@ -2032,16 +2032,16 @@ export const featureReady = (async () => {
     if (!state.tick) state.tick = setInterval(tickRoom, 200); if (!state.heartbeat) state.heartbeat = setInterval(heartbeat, HEARTBEAT_MS); heartbeat();
   }
 
-  function storyOrTutorialOpen() {
-    return !!document.querySelector('#xiuxian-story-layer,#newbie-tutorial-layer,#battle-tutorial-layer,#golden-core-tutorial-layer,#dongtian-overlay');
+  function storyOrOverlayOpen() {
+    return !!document.querySelector('#xiuxian-story-layer,#dongtian-overlay');
   }
 
   async function startMatchmaking() {
-    if (window.getBattleTutorialState?.().active || state.starting) return; if (score() < FOUNDATION_SCORE) { toast(`需達築基初期（${FOUNDATION_SCORE} 修為）才可配對鬥法。`); return; } if (!me()) { alert('請先登入！'); return; }
+    if (state.starting) return; if (score() < FOUNDATION_SCORE) { toast(`需達築基初期（${FOUNDATION_SCORE} 修為）才可配對鬥法。`); return; } if (!me()) { alert('請先登入！'); return; }
     if (state.roomId && state.room && state.room.status !== 'finished') { window.switchToPage?.('page-battle'); return; }
-    // 境界是唯一的遊玩進度門檻；正在顯示的劇情或教學畫面仍不能與配對重疊。
-    if (storyOrTutorialOpen()) {
-      toast('請先關閉目前的劇情或教學畫面，再進入鬥法。');
+    // 境界是唯一的遊玩進度門檻；正在顯示的劇情或洞天畫面仍不能與配對重疊。
+    if (storyOrOverlayOpen()) {
+      toast('請先關閉目前的劇情或洞天畫面，再進入鬥法。');
       return;
     }
     resetRuntime(); state.starting = true;
@@ -2130,7 +2130,7 @@ export const featureReady = (async () => {
   }
 
   async function joinSpecificRoom(roomId) {
-    if (state.starting || state.roomId || score() < FOUNDATION_SCORE || !me() || !roomId || storyOrTutorialOpen()) return false;
+    if (state.starting || state.roomId || score() < FOUNDATION_SCORE || !me() || !roomId || storyOrOverlayOpen()) return false;
     state.starting = true;
     window.dispatchEvent(new CustomEvent('xiuxian:invite-blocked'));
     try {
@@ -2150,7 +2150,7 @@ export const featureReady = (async () => {
   }
 
   async function recoverBattleSession() {
-    if (state.recovering || state.starting || window.getBattleTutorialState?.().active || state.roomId || !me() || score() < FOUNDATION_SCORE || storyOrTutorialOpen()) return;
+    if (state.recovering || state.starting || state.roomId || !me() || score() < FOUNDATION_SCORE || storyOrOverlayOpen()) return;
     const uid = me().uid;
     state.recovering = true;
     try {
@@ -2203,45 +2203,6 @@ export const featureReady = (async () => {
       containerSelector: '#bv2-options'
     };
   };
-
-  // Local tutorials use the real arena, but never attach a matchmaking room.
-  let tutorialArenaBackup = null;
-  let tutorialQuizBackup = null;
-  window.openBattleTutorialArena = () => {
-    if (state.starting || state.roomId) return null;
-    ensurePage();
-    showSection('arena');
-    const arena = document.getElementById('bv2-arena');
-    const quiz = document.getElementById('bv2-quiz');
-    if (tutorialArenaBackup === null) {
-      tutorialArenaBackup = arena.innerHTML;
-      tutorialQuizBackup = quiz.innerHTML;
-    }
-    arena.innerHTML = '';
-    quiz.innerHTML = '';
-    setText('bv2-room-badge', '鬥法教學 · 不計戰績');
-    return arena;
-  };
-  window.setBattleTutorialScene = (scene) => {
-    if (tutorialArenaBackup === null) return null;
-    const phase = scene === 'quiz' ? 'quiz' : 'arena';
-    showSection(phase);
-    return document.getElementById('bv2-' + phase);
-  };
-  window.closeBattleTutorialArena = () => {
-    if (tutorialArenaBackup === null) return;
-    document.getElementById('bv2-arena').innerHTML = tutorialArenaBackup;
-    document.getElementById('bv2-quiz').innerHTML = tutorialQuizBackup || '';
-    tutorialArenaBackup = tutorialQuizBackup = null;
-    setText('bv2-room-badge', '尚未配對');
-    window.switchToPage?.('page-home');
-  };
-  document.addEventListener('click', (event) => {
-    if (tutorialArenaBackup !== null && event.target.closest?.('#bv2-leave-top')) {
-      event.preventDefault(); event.stopImmediatePropagation();
-      window.pauseBattleTutorial?.();
-    }
-  }, true);
 
   window.startBattleMatchmaking = startMatchmaking;
   window.leaveBattle = () => exitBattle({ navigate: true, forfeit: true });

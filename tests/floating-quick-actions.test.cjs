@@ -4,7 +4,6 @@ const { readFileSync } = require('node:fs');
 const { join } = require('node:path');
 
 const index = readFileSync(join(__dirname, '../public/index.html'), 'utf8');
-const tutorial = readFileSync(join(__dirname, '../public/cultivation/newbie-tutorial-v2.js'), 'utf8');
 
 test('original solo and duel launchers float above, not inside, the bottom nav grid', () => {
   const home = index.slice(index.indexOf('<div id="page-home"'), index.indexOf('<div id="page-training"'));
@@ -18,7 +17,6 @@ test('original solo and duel launchers float above, not inside, the bottom nav g
   assert.equal((index.match(/id="btn-home-pvp"/g) || []).length, 1);
   assert.match(nav, /id="btn-home-start"[^>]*onclick="startQuizFlow\(\)"/);
   assert.match(nav, /id="btn-home-pvp"[^>]*onclick="startBattleMatchmaking\(\)"/);
-  assert.match(tutorial, /target: '#btn-home-start'/);
 });
 
 test('floating launchers reserve content room without covering battle, question, or mobile nav', () => {

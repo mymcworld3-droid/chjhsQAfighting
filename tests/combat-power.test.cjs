@@ -9,7 +9,6 @@ const source = read('cultivation/combat-power.js');
 const main = read('main.js');
 const status = read('cultivation/cultivation-status-panel.js');
 const battle = read('cultivation/battle-mode-v2.js');
-const tutorial = read('cultivation/battle-tutorial.js');
 const bag = read('cultivation/unified-inventory-grid.js');
 
 const slots = ['本命法寶', '護身法寶', '佩飾法寶', '輔助法寶'];
@@ -69,7 +68,6 @@ test('battle and status snapshot the same combat rating, without touching actual
   assert.match(status, /金丹 · 品質/);
   assert.match(battle, /combatPower: Math\.max\(0, Math\.round\(Number\(window\.getCombatPower\?\.\(\)\.total\)/);
   assert.match(battle, /function playerPowerLabel/);
-  assert.match(tutorial, /combatPower: Math\.max\(0, Math\.round\(Number\(window\.getCombatPower\?\.\(\)\.total\)/);
   assert.match(bag, /window\.calculateArtifactPower\?\.\(item\)/);
   assert.match(bag, /法寶戰力/);
 });

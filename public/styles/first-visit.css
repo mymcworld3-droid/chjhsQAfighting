@@ -17,24 +17,6 @@
 #first-visit-layer .fv-portraits{position:absolute;inset:4% 2% 0;display:flex;align-items:flex-end;justify-content:space-between;pointer-events:none}
 #first-visit-layer .fv-portraits img{width:37%;height:95%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 0 35px #bcdecc22)}
 #first-visit-layer.first-visit-welcome .fv-card{width:min(620px,50%);background:linear-gradient(145deg,#11201fd9,#080f13eb)}
-#first-visit-layer .fv-features{display:grid;grid-template-columns:1fr 1fr;gap:16px;text-align:left}
-#first-visit-layer .fv-features>div{padding:20px;border:1px solid #b3cbb93b;border-radius:14px;background:#bdd8c809}
-#first-visit-layer .fv-features i{display:block;margin-bottom:12px;color:#e4cc97;font-size:28px}
-#first-visit-layer .fv-features strong{color:#e5f3e9;font-size:20px}
-#first-visit-layer .fv-scene{position:absolute;inset:0;z-index:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .35s ease}
-#first-visit-layer .fv-scene.is-ready{opacity:1}
-#first-visit-layer.first-visit-background{align-items:end;background:#091116;padding-bottom:32px}
-#first-visit-layer.first-visit-background::after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(transparent 25%,#020b0da8 65%,#020b0dee)}
-#first-visit-layer.first-visit-background h2{min-height:2.9em;margin:8px 0;display:grid;place-items:center}
-#first-visit-layer.first-visit-background .fv-copy>p{min-height:5.55em}
-#first-visit-layer.first-visit-background .fv-actions{display:grid;grid-template-columns:1fr 1fr}
-#first-visit-layer.first-visit-background .fv-actions button{padding:10px 8px;font-size:14px;white-space:nowrap}
-#first-visit-layer .fv-prev-placeholder{visibility:hidden}
-@media(orientation:landscape){#first-visit-layer.first-visit-background h2{min-height:1.45em}#first-visit-layer.first-visit-background .fv-copy>p{min-height:3.7em}}
-#first-visit-layer.first-visit-background .fv-card{width:min(900px,95%);background:#091514bd;backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
-#first-visit-layer .fv-dots{display:flex;justify-content:center;gap:10px;margin-top:18px}
-#first-visit-layer .fv-dots i{width:8px;height:8px;border-radius:50%;background:#647871}
-#first-visit-layer .fv-dots .current{background:#efd09a;box-shadow:0 0 12px #efd09a77}
 #first-visit-layer .fv-name{display:block;color:#b9cfc5;text-align:left;font-size:14px}
 #first-visit-layer .fv-name input{display:block;box-sizing:border-box;width:100%;margin-top:8px;border:1px solid #abcabc66;border-radius:10px;background:#071413;color:#f3ebd9;padding:12px;font:inherit;font-size:16px}
 #first-visit-layer .fv-genders{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:20px}
@@ -42,17 +24,6 @@
 #first-visit-layer .fv-gender img{display:block;width:100%;height:min(42vh,340px);object-fit:contain;object-position:center bottom}
 #first-visit-layer .fv-gender strong{display:block;margin-top:8px}
 body.first-visit-active #bottom-nav,body.first-visit-active #btn-extended-practice-stop,body.first-visit-active .quiz-helper-practice-btn{display:none!important}
-body[data-first-visit-stage="invite"] #realm-breakthrough-feedback{z-index:43000;pointer-events:auto}
-body[data-first-visit-stage="question"] #btn-quiz-home{font-size:0}
-body[data-first-visit-stage="question"] #btn-quiz-home::after{content:'調整答題範圍';font-size:12px}
-#scope-studio.fv-scope #ss-share,#scope-studio.fv-scope #ss-import,#scope-studio.fv-scope #ss-organize{display:none!important}
-#scope-studio.fv-scope #set-source-mode{min-height:48px;font-size:16px!important}
-#scope-studio.fv-scope .cs-stage-title h4{font-size:24px}
-#scope-studio.fv-scope .cs-stage-title p{font-size:14px;color:#c4d4c7}
-#scope-studio.fv-scope .cs-choice{min-height:62px}
-#scope-studio.fv-scope .cs-choice-main{font-size:17px}
-#scope-studio.fv-scope .ss-panel-head small{font-size:13px}
-#scope-studio.fv-scope #dongfu-scope-save{font-size:16px;min-height:48px}
 @media(orientation:portrait){
   #first-visit-layer{padding:20px}
   #first-visit-layer.first-visit-welcome{align-items:end;padding-bottom:7vh}
@@ -63,7 +34,6 @@ body[data-first-visit-stage="question"] #btn-quiz-home::after{content:'調整答
   #first-visit-layer h2{font-size:32px}
   #first-visit-layer .fv-actions{flex-direction:column}
   #first-visit-layer .fv-gender img{height:min(35vh,420px)}
-  #first-visit-layer .fv-scene{object-position:50% 35%}
 }
 @media(max-height:540px) and (orientation:landscape){#first-visit-layer .fv-card{padding:16px 24px}#first-visit-layer h2{font-size:24px;margin:8px 0}#first-visit-layer p{font-size:14px;line-height:1.5}#first-visit-layer .fv-actions{margin-top:12px}#first-visit-layer .fv-error{margin:4px 0}#first-visit-layer .fv-gender img{height:26vh}}
 @media(prefers-reduced-motion:reduce){#first-visit-layer,#first-visit-layer *{animation:none!important;transition:none!important;transform:none!important}}

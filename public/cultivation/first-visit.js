@@ -10,82 +10,30 @@ import './first-visit-rules.js';
   let state;
   try { state = Rules.normalize(JSON.parse(localStorage.getItem(KEY) || '{}')); }
   catch (_) { state = Rules.normalize(); }
-  let user = null, ready = false, busy = false, scene = 0, readySerial = 0, trialAnswerPending = false;
-  let trialBankOption = null;
-  let trialScopeOwner = null;
-  let sceneTimer = null;
-  let pictureRevision = 0;
-  const sceneImages = new Map();
+  let user = null, busy = false;
   const portraits = ['male', 'female'].map(g => `assets/story/characters/player-${g}-neutral.png`);
-  const scenes = [
-    ['opening-1.png', '知識，就是你的靈根', '歡迎來到青雲宗。每一次思考與作答，都會化為修行的力量。'],
-    ['opening-2.png', '與同門切磋問道', '磨練知識，也磨練自己的鬥法本領。'],
-    ['opening-4.png', '煉器，打造你的法寶', '收集材料、打造法寶，走出屬於自己的修行路。'],
-    ['opening-5.png', '探索洞天與秘境', '將學習內容化為洞天，與同門並肩探索未知。'],
-    ['opening-9.png', '你的仙途，從這裡開始', '新手劇情已放在仙道任務中。準備好時，再去認識你的師姐與青雲宗。']
-  ];
-  function loadSceneImage(file) {
-    if (sceneImages.has(file)) return sceneImages.get(file);
-    const image = new Image(); image.decoding = 'async';
-    const ready = new Promise(resolve => {
-      image.onload = async () => {
-        try { await image.decode?.(); } catch (_) {}
-        resolve(image.naturalWidth > 0);
-      };
-      image.onerror = () => resolve(false);
-      image.src = `assets/story/opening/${file}`;
-    });
-    const record = { image, ready }; sceneImages.set(file, record); return record;
-  }
-  window.preloadFirstVisitScenes = (person, data, firstLogin = false) => {
-    if (!person || person.isAnonymous || Rules.readyStage(state, person, data, firstLogin) !== 'background') return Promise.resolve();
-    return Promise.all(scenes.map(([file]) => loadSceneImage(file).ready));
-  };
-  async function showScenePicture(layer, file) {
-    const revision = ++pictureRevision, record = loadSceneImage(file);
-    await record.ready;
-    if (revision !== pictureRevision || $('first-visit-layer') !== layer || state.stage !== 'background') return;
-    if (!record.image.naturalWidth) return;
-    const previous = [...layer.querySelectorAll('.fv-scene')];
-    const image = record.image;
-    if (image.classList.contains('is-current') && image.parentElement === layer) return;
-    previous.forEach(node => node.classList.remove('is-current'));
-    image.className = 'fv-scene is-current'; image.alt = '青雲問道世界背景';
-    layer.insertBefore(image, layer.querySelector('.fv-card'));
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      if (revision !== pictureRevision || $('first-visit-layer') !== layer) return;
-      image.classList.add('is-ready');
-      setTimeout(() => previous.forEach(node => { if (!node.classList.contains('is-current')) node.remove(); }), 400);
-    }));
-  }
   const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
   function store(patch = {}) {
     state = Rules.normalize({ ...state, ...patch });
-    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (_) { /* private browsing still works this session */ }
-    document.body.classList.toggle('first-visit-active', !state.completed && state.stage !== 'welcome');
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (_) {}
+    document.body.classList.toggle('first-visit-active', state.stage === 'gender');
     document.body.dataset.firstVisitStage = state.stage;
   }
-  function removeLayer() { clearTimeout(sceneTimer); sceneTimer = null; pictureRevision++; $('first-visit-layer')?.remove(); }
-  function panel(title, body, actions, { image = '', welcome = false } = {}) {
-    const existing = $('first-visit-layer');
-    const reuse = image && existing?.classList.contains('first-visit-background');
-    if (reuse) { clearTimeout(sceneTimer); sceneTimer = null; }
-    else removeLayer();
-    const layer = reuse ? existing : document.createElement('section');
+  function removeLayer() { $('first-visit-layer')?.remove(); }
+  function panel(title, body, actions, { welcome = false } = {}) {
+    removeLayer();
+    const layer = document.createElement('section');
     layer.id = 'first-visit-layer';
     layer.setAttribute('role', 'dialog');
     layer.setAttribute('aria-modal', 'true');
     layer.setAttribute('aria-labelledby', 'first-visit-title');
-    if (!reuse) layer.className = welcome ? 'first-visit-welcome' : image ? 'first-visit-background' : '';
-    const card = `<small>青雲問道 · ${welcome ? '初入仙途' : state.stage === 'background' ? `世界介紹 ${scene + 1} / ${scenes.length}` : '你的修行旅程'}</small><h2 id="first-visit-title">${title}</h2><div class="fv-copy">${body}</div><p class="fv-error" role="alert"></p><div class="fv-actions">${actions}</div>`;
-    if (reuse) layer.querySelector('.fv-card').innerHTML = card;
-    else {
-      layer.innerHTML = `${welcome ? `<div class="fv-portraits" aria-label="兩位主角立繪">${portraits.map((src,i) => `<img src="${src}" alt="${i ? '女修主角' : '男修主角'}">`).join('')}</div>` : ''}<div class="fv-card">${card}</div>`;
-      document.body.append(layer);
-      requestAnimationFrame(() => layer.classList.add('is-visible'));
-    }
+    layer.className = welcome ? 'first-visit-welcome' : '';
+    const card = `<small>青雲問道 · ${welcome ? '初入仙途' : '你的修行旅程'}</small><h2 id="first-visit-title">${title}</h2><div class="fv-copy">${body}</div><p class="fv-error" role="alert"></p><div class="fv-actions">${actions}</div>`;
+    layer.innerHTML = `${welcome ? `<div class="fv-portraits" aria-label="兩位主角立繪">${portraits.map((src,i) => `<img src="${src}" alt="${i ? '女修主角' : '男修主角'}">`).join('')}</div>` : ''}<div class="fv-card">${card}</div>`;
+    document.body.append(layer);
+    requestAnimationFrame(() => layer.classList.add('is-visible'));
     layer.querySelector('button:not(:disabled),input')?.focus({ preventScroll: true });
-    if (!reuse) layer.addEventListener('keydown', event => {
+    layer.addEventListener('keydown', event => {
       if (event.key !== 'Tab') return;
       const controls = [...layer.querySelectorAll('button:not(:disabled),input:not(:disabled)')];
       const first = controls[0], last = controls.at(-1);
@@ -109,10 +57,10 @@ import './first-visit-rules.js';
     }
   }
   function welcome() {
-    const layer = panel('歡迎來到青雲問道！', '<p>讓我們開始答題吧！</p><p>先選想練習的範圍，答對第一題就能引氣入體。</p>',
+    const layer = panel('歡迎來到青雲問道！', '<p>歡迎踏上你的修行旅程。</p>',
       '<button type="button" id="fv-start">免註冊，開始答題</button><button type="button" id="fv-login" class="fv-secondary">已有帳號？直接登入</button>', { welcome: true });
     layer.querySelector('#fv-start').onclick = () => action(async () => {
-      store({ stage: 'scope', joining: false });
+      store({ stage: 'welcome', joining: false });
       try { await window.startFirstVisitGuest(); if ($('first-visit-layer') === layer) removeLayer(); }
       catch (e) { store({ stage: 'welcome' }); throw new Error('暫時無法開始免註冊答題，請再試一次。'); }
     });
@@ -122,74 +70,14 @@ import './first-visit-rules.js';
       catch (e) { store({ joining: false }); throw new Error('登入尚未完成，請再試一次。'); }
     });
   }
-  function openScope() {
-    removeLayer();
-    window.switchToPage?.('page-settings');
-    const mode = $('set-source-mode');
-    if (mode) {
-      if (trialScopeOwner !== user?.uid) {
-        const savedMode = window.getCurrentUserData?.()?.gameSettings?.sourceMode;
-        mode.value = ['random', 'focused'].includes(savedMode) ? savedMode : 'focused';
-        trialScopeOwner = user?.uid;
-      } else if (!['random', 'focused'].includes(mode.value)) mode.value = 'focused';
-      // Keep the chosen practice mode when returning to adjust the scope.
-      // Detach the incomplete bank option so native mobile selects omit it too.
-      trialBankOption ||= mode.querySelector('option[value="bank"]');
-      trialBankOption?.remove();
-      window.toggleSourceMode?.();
-    }
-    window.openCurriculumStudio?.();
-    const studio = $('scope-studio');
-    if (!studio || studio.hidden) {
-      const layer = panel('選擇你的修習範圍', '<p>範圍選擇器尚在準備，請稍後再試。</p>', '<button type="button" id="fv-retry">重新開啟範圍</button>');
-      layer.querySelector('#fv-retry').onclick = openScope;
-      return;
-    }
-    studio.classList.add('fv-scope');
-    $('ss-title').textContent = '第一步 · 選擇答題範圍';
-    $('ss-picker')?.querySelector('.ss-panel-head small')?.replaceChildren(document.createTextNode('綜合練習可直接開始；專注練習可選章節或輸入自訂範圍。'));
-    $('dongfu-scope-save').textContent = '選好了，開始答題';
-    $('ss-close')?.setAttribute('aria-label', '返回歡迎畫面');
-    const closeText = $('ss-close')?.querySelector('span'); if (closeText) closeText.textContent = '返回歡迎畫面';
-    const back = $('cs-prev'); if (back) back.textContent = '← 返回歡迎畫面';
-    $('bottom-nav')?.classList.add('hidden');
-  }
-  function features() {
-    const layer = panel('思考，才是問道的開始', '<div class="fv-features"><div><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i><strong>白板</strong><p>隨手寫下算式、畫圖，整理你的思路。</p></div><div><i class="fa-solid fa-comments" aria-hidden="true"></i><strong>問道助手</strong><p>卡住時可以提問，一起釐清觀念。</p></div></div><p>這些工具都在答題頁，隨時可用。</p>', '<button type="button" id="fv-question">開始第一題</button><button type="button" class="fv-secondary" id="fv-change-scope">調整範圍</button>');
-    layer.querySelector('#fv-question').onclick = () => {
-      store({ stage: 'question' }); removeLayer(); void window.startQuizFlow?.();
-    };
-    layer.querySelector('#fv-change-scope').onclick = () => { store({ stage: 'scope' }); openScope(); };
-  }
   function invite() {
-    const layer = panel('太好了！你已經成為一名合格的修士了！', '<p class="fv-realm">煉氣一層 · 引氣入體</p><p>加入我們的旅程吧！</p><p>綁定 Google 帳號保存這次修行，或登入你的既有帳號。</p>', '<button type="button" id="fv-bind">綁定 Google 帳號／登入</button>');
+    const layer = panel('保存你的修行', '<p>綁定 Google 帳號保存修行進度，或登入你的既有帳號。</p>', '<button type="button" id="fv-bind">綁定 Google 帳號／登入</button><button type="button" id="fv-cancel" class="fv-secondary">稍後再說</button>');
+    layer.querySelector('#fv-cancel').onclick = () => { store({ stage: 'done', completed: true, joining: false }); removeLayer(); };
     layer.querySelector('#fv-bind').onclick = () => action(async () => {
       store({ joining: true });
       try { await window.googleLogin(); }
       catch (e) { store({ joining: false }); throw new Error('尚未完成登入；你的免註冊修行仍保留，請再試一次。'); }
     });
-  }
-  function backgrounds() {
-    const [image, title, text] = scenes[scene];
-    const finalLabel = Rules.needsGender(window.getCurrentUserData?.()) ? '選擇性別' : '進入宗門';
-    const index = scene;
-    const layer = panel(title, `<p>${text}</p><div class="fv-dots" aria-label="世界介紹進度">${scenes.map((_,i) => `<i class="${i===scene?'current':''}"></i>`).join('')}</div>`, `<button type="button" class="fv-secondary${scene ? '' : ' fv-prev-placeholder'}" id="fv-prev" ${scene ? '' : 'disabled aria-hidden="true"'}>上一張</button><button type="button" id="fv-next">${scene === scenes.length-1 ? finalLabel : '下一張'}</button>`, { image });
-    layer.querySelector('#fv-prev')?.addEventListener('click', () => { scene--; backgrounds(); });
-    const next = () => {
-      if ($('first-visit-layer') !== layer || state.stage !== 'background' || scene !== index) return;
-      if (scene < scenes.length-1) { scene++; backgrounds(); }
-      else if (Rules.needsGender(window.getCurrentUserData?.())) { store({ stage: 'gender' }); gender(); }
-      else void action(() => finish());
-    };
-    layer.querySelector('#fv-next').onclick = next;
-    const scheduleNext = () => {
-      if ($('first-visit-layer') !== layer || state.stage !== 'background' || scene !== index) return;
-      clearTimeout(sceneTimer);
-      sceneTimer = setTimeout(next, 3000);
-    };
-    // Keep the previous picture painted until this one is decoded.
-    void showScenePicture(layer, image).then(scheduleNext);
-    if (scene < scenes.length-1) loadSceneImage(scenes[scene+1][0]);
   }
   function gender() {
     const data = window.getCurrentUserData?.();
@@ -203,112 +91,31 @@ import './first-visit-rules.js';
     if (selected && !name) throw new Error('請先輸入你的道號。');
     await window.completeFirstVisitSetup?.(selected, name);
     store({ stage: 'done', completed: true, joining: false });
-    cleanup();
-    sceneImages.clear();
+    removeLayer();
     window.switchToPage?.('page-home');
     $('bottom-nav')?.classList.remove('hidden');
     window.dispatchEvent(new CustomEvent('xiuxian:arrival-completed'));
   }
-  function cleanup() {
-    removeLayer();
-    if (trialBankOption) { $('set-source-mode')?.append(trialBankOption); trialBankOption = null; }
-    $('scope-studio')?.classList.remove('fv-scope');
-    if ($('ss-title')) $('ss-title').textContent = '課程研修所';
-    $('ss-picker')?.querySelector('.ss-panel-head small')?.replaceChildren(document.createTextNode('先選出題模式，再從課程目錄挑選章節或細項。'));
-    $('ss-close')?.setAttribute('aria-label', '返回設定');
-    const label = $('ss-close')?.querySelector('span'); if (label) label.textContent = '返回設定';
-    $('fv-quiz-hint')?.remove();
-  }
-  window.isFirstVisitActive = () => !QA && !state.completed && state.stage !== 'welcome';
-  window.isFirstVisitTrial = () => !QA && !!user?.isAnonymous && !state.completed;
-  window.isFirstVisitQuestion = () => window.isFirstVisitTrial() && state.stage === 'question' && !trialAnswerPending;
-  window.beginFirstVisitAnswer = isCorrect => {
-    if (!isCorrect || !window.isFirstVisitQuestion()) return false;
-    trialAnswerPending = true;
-    $('btn-next-step')?.setAttribute('disabled', '');
-    return true;
-  };
+  window.isFirstVisitActive = () => !QA && state.stage === 'gender';
   window.getFirstVisitState = () => ({ ...state });
   window.handleFirstVisitSignedOut = () => {
-    user = null; ready = false; readySerial++;
-    cleanup();
-    sceneImages.clear();
+    user = null;
+    removeLayer();
     document.body.classList.remove('first-visit-active');
-    if (state.completed || new URLSearchParams(location.search).get('qa') === '1') return false;
+    if (state.completed || QA) return false;
     store({ stage: 'welcome', joining: false }); welcome(); return true;
   };
   window.handleFirstVisitReady = async (person, data, firstLogin = false) => {
-    user = person; ready = true; trialAnswerPending = false;
-    if (new URLSearchParams(location.search).get('qa') === '1' && person.isAnonymous) { cleanup(); return false; }
-    const serial = ++readySerial;
-    const next = Rules.readyStage(state, person, data, firstLogin);
-    store({ stage: next, completed: next === 'done', joining: next === 'background' || next === 'gender' });
-    if (person.isAnonymous && !state.completed) store({ guestUid: person.uid });
-    cleanup();
-    if (next === 'done') return false;
-    $('bottom-nav')?.classList.add('hidden');
-    if (next === 'scope') openScope();
-    else if (next === 'features') features();
-    else if (next === 'question') { if (serial === readySerial) void window.startQuizFlow?.(); }
-    else if (next === 'invite') invite();
-    else if (next === 'background') {
-      await window.preloadFirstVisitScenes(person, data, firstLogin);
-      if (serial !== readySerial || user?.uid !== person.uid) return false;
-      scene = 0; backgrounds();
-    }
-    else if (next === 'gender') gender();
-    return true;
-  };
-  window.handleFirstVisitAnswer = async ({ isCorrect, saved, retry }) => {
-    if (!window.isFirstVisitTrial() || state.stage !== 'question' || !isCorrect) return false;
-    if (!saved) {
-      const layer = panel('首題答對了，正在保存修行', '<p>尚未收到儲存確認。請重試，成功後就能完成突破。</p>', '<button type="button" id="fv-save-retry">重新保存首題成果</button>');
-      layer.querySelector('#fv-save-retry').onclick = () => action(async () => {
-        await retry();
-        await window.handleFirstVisitAnswer({ isCorrect: true, saved: true });
-      });
-      return true;
-    }
+    user = person;
     removeLayer();
-    trialAnswerPending = false;
-    store({ stage: 'invite' });
-    await window.showFirstQiBreakthrough?.();
-    if (ready && user?.isAnonymous && state.stage === 'invite') invite();
-    return true;
-  };
-  window.canFirstVisitNavigate = page => !window.isFirstVisitActive() ||
-    (state.stage === 'scope' ? page === 'page-settings' : state.stage === 'question' ? page === 'page-quiz' : false);
-  window.firstVisitScopeSaved = () => {
-    if (state.stage !== 'scope' || !window.isFirstVisitTrial()) return;
-    store({ stage: 'features' }); features();
-  };
-  window.handleFirstVisitQuestionFailure = () => {
-    if (!window.isFirstVisitQuestion()) return false;
-    const layer = panel('題目暫時未能載入', '<p>你的出題範圍已保存，可以重新取得題目，或先調整範圍。</p>', '<button type="button" id="fv-retry-question">重新取得題目</button><button type="button" class="fv-secondary" id="fv-retry-scope">調整範圍</button>');
-    layer.querySelector('#fv-retry-question').onclick = () => { removeLayer(); void window.startQuizFlow?.(); };
-    layer.querySelector('#fv-retry-scope').onclick = () => { store({ stage: 'scope' }); openScope(); };
-    return true;
-  };
-  window.firstVisitScopeClosed = () => {
-    if (state.stage !== 'scope' || !window.isFirstVisitTrial()) return;
-    welcome();
-    const button = $('fv-start');
-    button.onclick = () => { removeLayer(); openScope(); };
+    const next = Rules.readyStage(state, person, data, firstLogin);
+    store({ stage: next, completed: next === 'done', joining: false });
+    if (next === 'gender') { gender(); return true; }
+    $('bottom-nav')?.classList.remove('hidden');
+    return false;
   };
   window.openFirstVisitAccountBinding = () => {
     if (!user?.isAnonymous) return false;
-    store({ stage: 'invite', completed: false }); invite(); return true;
+    store({ stage: 'invite', completed: true }); invite(); return true;
   };
-  window.addEventListener('xiuxian:page-changed', () => {
-    if (window.isFirstVisitTrial()) $('bottom-nav')?.classList.add('hidden');
-  });
-  // At the trial page, returning home means adjusting the learning range.
-  document.addEventListener('click', event => {
-    if (!window.isFirstVisitTrial()) return;
-    if (event.target.closest?.('#btn-quiz-home')) {
-      event.preventDefault(); event.stopImmediatePropagation();
-      if (trialAnswerPending || state.stage === 'invite') return;
-      store({ stage: 'scope' }); openScope();
-    }
-  }, true);
 })();

@@ -43,8 +43,8 @@ function client(shared,uid,roomId){
    'function db(){return battleDb;} function me(){return playerRepository.currentUser();} function nowMs(){return time;}' +
    section('  function roomRef(','  // Invite only')+
    section('  function scheduleReconcile(','  function renderLobby(')+
-   section('  function onRoomSnapshot(','  function storyOrTutorialOpen(')+
-   section('  function storyOrTutorialOpen()', '  async function forfeitCurrentRoom()')+
+   section('  function onRoomSnapshot(','  function storyOrOverlayOpen(')+
+   section('  function storyOrOverlayOpen()', '  async function forfeitCurrentRoom()')+
    '\nwatchWaitingRooms=()=>{};scheduleReconcile=()=>{};inviteOnlineFriends=()=>{};this.runtime=state;this.claim=claimWaitingRoom;this.merge=reconcileOwnWaitingRoom;this.subscribe=subscribeRoom;this.reset=resetRuntime;this.stale=isRoomStale;',ctx);
  ctx.runtime.role='host';if(roomId)ctx.subscribe(roomId);
  return {ctx,state:ctx.runtime,messages,pages,staleCallbacks};

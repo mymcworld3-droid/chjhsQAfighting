@@ -81,8 +81,8 @@ test('logged-out, incomplete and loading profiles cannot enter the home through 
   }
 });
 
-test('story, tutorials and trials retain their own close and completion flows', async () => {
-  for (const selector of ['#xiuxian-opening-cinematic', '#xiuxian-story-layer', '#xiuxian-story-archive', '#newbie-tutorial-layer', '#qi-five-dongtian-tutorial-layer', '#golden-core-tutorial-layer', '#battle-tutorial-layer', '#daily-meditation-overlay', '#dongtian-overlay', '#opportunity-overlay', '#five-immortal-challenge', '#custom-confirm-modal:not(.hidden)', '#report-modal:not(.hidden)']) {
+test('story and trials retain their own close and completion flows', async () => {
+  for (const selector of ['#xiuxian-story-layer', '#xiuxian-story-archive', '#daily-meditation-overlay', '#dongtian-overlay', '#opportunity-overlay', '#five-immortal-challenge', '#custom-confirm-modal:not(.hidden)', '#report-modal:not(.hidden)']) {
     const h = setup();
     h.flags.overlays.add(selector);
     assert.equal(await h.home(), false, selector);
@@ -93,12 +93,7 @@ test('story, tutorials and trials retain their own close and completion flows', 
   assert.equal(await h.home(), false);
   h.flags.modals = [{ getClientRects: () => [] }];
   assert.equal(await h.home(), true, 'hidden dialogs do not prevent navigation');
-  for (const getter of ['getBattleTutorialState', 'isXiuxianOpeningCinematicActive']) {
-    const activeFlow = setup();
-    activeFlow.context.window[getter] = () => getter === 'getBattleTutorialState' ? { active: true } : true;
-    assert.equal(await activeFlow.home(), false, 'active flow remains protected while its DOM is changing');
-    assert.equal(activeFlow.calls.pages.length, 0);
-  }
+
 });
 
 test('returning from an unanswered question preserves it and does not abandon or score it', async () => {

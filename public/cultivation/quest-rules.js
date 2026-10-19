@@ -51,34 +51,14 @@
     chapterId
   });
   const STORY_AFTER = {
-    'path-first-answer': [storyQuest('qi-one-ask-dao', '入門續篇 · 問道不是猜答案', 1)],
-    'path-qi-five': [
-      storyQuest('qi-five-dongtian', '第二章 · 竹簡天尊', 5),
-      quest('path-dongtian-tutorial', '完成洞天新手教程', '親自完成洞天範例的作答、結算、返回與刪除，並在最後儲存教學完成紀錄。稍後再學不算完成。', 'dongtian-tutorial', 1, 50, 0, 'dongtian-tutorial', 5)
-    ],
-    'path-foundation': [
-      storyQuest('foundation-first-battle', '第三章 · 築基之後，別只會做題', 6),
-      storyQuest('foundation-refinery', '第四章 · 法寶不是把東西丟進火裡', 6)
-    ],
-    'path-solo-ten': [
-      storyQuest('foundation-mid-alliance', '第五章 · 仙盟送來了一封很不吉利的信', 16),
-      storyQuest('foundation-late-shadow', '第六章 · 沈清霜的劍第一次出鞘', 22)
-    ],
-    'path-golden': [storyQuest('golden-core-truth', '第七章 · 丹成之日，問道碑醒了', 28)],
-    'path-nascent': [storyQuest('nascent-soul-expedition', '第八章 · 仙盟不是來請你喝茶', 68)],
-    'path-spirit': [storyQuest('spirit-transformation-history', '第九章 · 天裂不是天災', 188)],
-    'path-void': [storyQuest('void-refinement-choice', '第十章 · 無相客給了你一道沒有選項的題', 428)],
-    'path-union': [storyQuest('integration-revelation', '第十一章 · 仙府真正的用途', 788)],
-    'path-mahayana': [storyQuest('mahayana-alliance', '第十二章 · 大家都來了，因為你已經不能裝沒事', 1268)],
-    'path-tribulation': [storyQuest('tribulation-final', '第十三章 · 天劫之上仍有一道題', 1868)],
-    'path-immortal': [storyQuest('true-immortal-epilogue', '終章 · 出師這件事，師姐說了算', 2588)]
+    'path-qi-five': [storyQuest('qi-five-dongtian', '第二章 · 竹簡天尊', 5)]
   };
   const PATH_DRAW_TICKETS = Object.freeze({
     'path-golden': 1, 'path-raid-one': 2, 'path-nascent': 3, 'path-raid-ten': 5, 'path-solo-hundred': 5
   });
   const PATH = [{ ...storyQuest('prologue-enter-sect', '第一章 · 問道靈根', 0),
-    title: '完成新手劇情 · 問道靈根',
-    description: '準備好後，點「前往」認識青雲宗並完整觀看新手劇情；登入與選擇性別不會自動播放。' },
+    title: '完成第一章 · 問道靈根',
+    description: '準備好後，點「前往」認識青雲宗並完整觀看第一章；登入與選擇性別不會自動播放。' },
     ...LEGACY_PATH.flatMap(q => [q, ...(STORY_AFTER[q.id] || [])])]
     .map(q => ({ ...q, reward: { ...q.reward, drawTickets: PATH_DRAW_TICKETS[q.id] || 1 } }));
   const DAILY = [
@@ -179,12 +159,6 @@
     }
     if (q.metric === 'enlightenment')
       return verifiedTrial?.day===date && verifiedTrial.status==='completed' ? 1 : 0;
-    if (q.metric === 'dongtian-tutorial') {
-      const lesson = user?.storyDongtianTutorialV1;
-      const legacy = user?.qiFiveDongtianTutorialV1;
-      return (lesson?.completed === true && lesson?.skipped !== true) ||
-        (legacy?.completed === true && legacy?.played === true && legacy?.deleted === true) ? 1 : 0;
-    }
     if (q.metric === 'story') {
       const seen = user?.storyProgressV1?.seen?.[q.chapterId];
       return seen === true || number(seen?.completedAtMs) > 0 ? 1 : 0;

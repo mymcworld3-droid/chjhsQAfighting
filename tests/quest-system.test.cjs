@@ -43,7 +43,7 @@ const sample = () => ({ uid: 'u1', stats: { gold: 20, totalScore: 28, totalCorre
 const legacyTicketQuestIds = ['path-golden', 'path-raid-one', 'path-nascent', 'path-raid-ten', 'path-solo-hundred'];
 const beforeQuest = id => ({ version: 2, pathClaimed: rules.PATH.slice(0, rules.PATH.findIndex(q => q.id === id)).map(q => q.id) });
 
-test('every path quest including stories and tutorials grants one to five tickets', () => {
+test('every path quest including the two retained stories grants one to five tickets', () => {
   const quests = rules.PATH.filter(q => q.reward.drawTickets);
   assert.equal(quests.length, rules.PATH.length);
   assert.deepEqual(quests.filter(q => legacyTicketQuestIds.includes(q.id)).map(q => q.reward.drawTickets), [1, 2, 3, 5, 5]);
@@ -56,7 +56,6 @@ test('the complete path deposits all quest ticket quantities, preserves an exist
   const user = sample(); user.stats.totalScore = 3000; user.stats.totalCorrect = 100; user.soulboundDrawTickets = 7;
   user.questProgress = { totals: { solo: 100, meditation: 1, battle: 5, dongtian: 1, raid: 10 } };
   user.storyProgressV1 = { seen: Object.fromEntries(rules.PATH.filter(q => q.chapterId).map(q => [q.chapterId, true])) };
-  user.storyDongtianTutorialV1 = { completed: true };
   const db = fakeDb(user); let ticketCount = 7;
   for (const q of rules.PATH) {
     const paid = await questTransaction(db, 'u1', { kind: 'path', id: q.id, drawTickets: 999 }, now);
@@ -65,7 +64,7 @@ test('the complete path deposits all quest ticket quantities, preserves an exist
     assert.equal(paid.drawTickets, ticketCount);
     assert.equal((await questTransaction(db, 'u1', { kind: 'path', id: q.id }, now)).awarded, false);
   }
-  assert.equal(ticketCount, 55);
+  assert.equal(ticketCount, 41);
   const final = await questTransaction(db, 'u1', null, now);
   assert.equal(final.quests.path, null); assert.deepEqual(final.quests.pathTicketRewards, []);
   assert.deepEqual(db.docs.get('questStates/u1').pathTicketsClaimed, rules.PATH.map(q => q.id));
@@ -101,7 +100,7 @@ test('older and fully completed paths can claim full ticket rewards without repe
       assert.equal(results.find(r => r.awarded).reward.gold, 0);
     }
     const remote = db.docs.get('users/u1');
-    assert.equal(remote.soulboundDrawTickets, state.pathIndex === 21 ? 32 : 48); assert.deepEqual(remote.stats, user.stats);
+    assert.equal(remote.soulboundDrawTickets, state.pathIndex === 21 ? 32 : 34); assert.deepEqual(remote.stats, user.stats);
     assert.deepEqual(remote.materialSystem, user.materialSystem);
     const final = await questTransaction(db, 'u1', null, now);
     assert.equal(final.quests.pathCompleted, view.quests.pathCompleted);
@@ -117,14 +116,14 @@ test('the first one-ticket rollout migrates paid quantities and awards only diff
   const first = await questTransaction(db, 'u1', null, now);
   assert.deepEqual(first.quests.pathTicketRewards.filter(q => legacyTicketQuestIds.includes(q.id)).map(q => [q.id, q.reward.drawTickets]),
     [['path-raid-one', 1], ['path-nascent', 2], ['path-raid-ten', 4], ['path-solo-hundred', 4]]);
-  assert.equal(first.quests.pathTicketRewards.filter(q => !legacyTicketQuestIds.includes(q.id)).length, 32);
+  assert.equal(first.quests.pathTicketRewards.filter(q => !legacyTicketQuestIds.includes(q.id)).length, 18);
   assert.equal((await questTransaction(db, 'u1', { kind: 'path', id: 'path-golden' }, now)).awarded, false);
   for (const q of first.quests.pathTicketRewards) {
     const claims = await Promise.all([1, 2, 3].map(() => questTransaction(db, 'u1', { kind: 'path', id: q.id, drawTickets: 5 }, now)));
     assert.equal(claims.filter(r => r.awarded).length, 1);
     assert.equal(claims.find(r => r.awarded).reward.drawTickets, q.reward.drawTickets);
   }
-  assert.equal(db.docs.get('users/u1').soulboundDrawTickets, 43, 'five already-issued tickets are not re-awarded');
+  assert.equal(db.docs.get('users/u1').soulboundDrawTickets, 29, 'five already-issued tickets are not re-awarded');
   assert.deepEqual(db.docs.get('users/u1').stats, user.stats);
   assert.deepEqual(db.docs.get('questStates/u1').pathTicketAmounts,
     Object.fromEntries(rules.PATH.map(q => [q.id, q.reward.drawTickets])));
@@ -149,17 +148,17 @@ test('a partially paid quest retains its amount across daily claims and concurre
   assert.equal(db.docs.get('questStates/u1').pathTicketAmounts['path-raid-ten'], 5);
 });
 
-test('players already paid the five previous milestone rewards can supplement the other thirty-two quests', async () => {
+test('players already paid the five previous milestone rewards can supplement the other eighteen quests', async () => {
   const state = { version: 2, pathClaimed: rules.PATH.map(q => q.id), pathTicketsClaimed: legacyTicketQuestIds,
     pathTicketAmounts: Object.fromEntries(rules.PATH.filter(q => legacyTicketQuestIds.includes(q.id)).map(q => [q.id, q.reward.drawTickets])) };
   const user = sample(); user.soulboundDrawTickets = 0;
   const db = fakeDb(user, state), view = await questTransaction(db, 'u1', null, now);
-  assert.equal(view.quests.pathTicketRewards.length, 32);
+  assert.equal(view.quests.pathTicketRewards.length, 18);
   assert.ok(view.quests.pathTicketRewards.every(q => q.reward.drawTickets === 1 && !legacyTicketQuestIds.includes(q.id)));
   const id = 'path-story-prologue-enter-sect';
   const paid = await questTransaction(db, 'u1', { kind: 'path', id }, now);
   assert.equal(paid.reward.drawTickets, 1); assert.equal(paid.reward.gold, 0);
-  assert.equal(paid.drawTickets, 1); assert.equal(paid.quests.pathCompleted, 37);
+  assert.equal(paid.drawTickets, 1); assert.equal(paid.quests.pathCompleted, 23);
   assert.equal((await questTransaction(db, 'u1', { kind: 'path', id }, now)).awarded, false);
   assert.deepEqual(db.docs.get('users/u1').stats, user.stats);
 });
@@ -189,53 +188,8 @@ test('unfinished and out-of-order ticket quests cannot be claimed with caller-se
   assert.equal(db.docs.get('users/u1').soulboundDrawTickets, undefined);
 });
 
-test('the independent Dongtian tutorial quest follows the mid-Qi story and preserves all existing quest IDs', () => {
-  const index = rules.PATH.findIndex(q => q.id === 'path-qi-five');
-  assert.deepEqual(rules.PATH.slice(index, index + 4).map(q => q.id),
-    ['path-qi-five', 'path-story-qi-five-dongtian', 'path-dongtian-tutorial', 'path-meditation']);
-  assert.equal(rules.PATH.length, 37);
-  const oldClaimed = rules.PATH.filter(q => q.id !== 'path-dongtian-tutorial').map(q => q.id);
-  const migrated = rules.normalizeState({ version: 2, pathClaimed: oldClaimed }, date);
-  assert.deepEqual(migrated.pathClaimed, oldClaimed);
-  assert.equal(rules.view(sample(), migrated, date).path.id, 'path-dongtian-tutorial');
-  assert.equal(rules.view(sample(), migrated, date).pathCompleted, 36);
-});
 
-test('watching the dream, starting a lesson, skipping, and completing formal caves cannot finish the lesson quest', () => {
-  const index = rules.PATH.findIndex(q => q.id === 'path-dongtian-tutorial');
-  const state = { version: 2, pathClaimed: rules.PATH.slice(0, index).map(q => q.id) };
-  const user = sample();
-  user.storyProgressV1 = { seen: { 'qi-five-dongtian': { completedAtMs: 1 } } };
-  user.questProgress = { totals: { dongtian: 10 } };
-  for (const marker of [undefined, { started: true }, { completed: false }, { completed: true, skipped: true }]) {
-    user.storyDongtianTutorialV1 = marker;
-    assert.equal(rules.view(user, state, date).path.claimable, false);
-  }
-  user.storyDongtianTutorialV1 = { completed: true, skipped: false };
-  assert.equal(rules.view(user, state, date).path.claimable, true);
-  user.storyDongtianTutorialV1 = { completed: true, skipped: true };
-  user.qiFiveDongtianTutorialV1 = { completed: true, played: true, deleted: false };
-  assert.equal(rules.view(user, state, date).path.claimable, false);
-  user.qiFiveDongtianTutorialV1.deleted = true;
-  assert.equal(rules.view(user, state, date).path.claimable, true, 'a fully completed legacy lesson counts');
-});
 
-test('a saved lesson grants its fixed gold and one ticket once without counting as a formal cave', async () => {
-  const index = rules.PATH.findIndex(q => q.id === 'path-dongtian-tutorial');
-  const state = { version: 2, pathClaimed: rules.PATH.slice(0, index).map(q => q.id) };
-  const user = sample();
-  user.storyDongtianTutorialV1 = { completed: true, skipped: false };
-  const db = fakeDb(user, state);
-  const claims = await Promise.all(Array.from({ length: 5 }, () => questTransaction(db, 'u1', { kind: 'path', id: 'path-dongtian-tutorial' }, now)));
-  assert.equal(claims.filter(r => r.awarded).length, 1);
-  assert.equal(db.docs.get('users/u1').stats.gold, user.stats.gold + 50);
-  assert.equal(db.docs.get('users/u1').soulboundDrawTickets, 1);
-  assert.equal(db.docs.get('users/u1').stats.totalScore, user.stats.totalScore);
-  assert.equal(db.docs.get('users/u1').questProgress, undefined);
-  assert.equal(claims.at(-1).quests.path.id, 'path-meditation');
-  user.stats.totalScore = 4;
-  await assert.rejects(questTransaction(fakeDb(user, state), 'u1', { kind: 'path', id: 'path-dongtian-tutorial' }, now), /尚未完成/);
-});
 
 test('quest dates use Taiwan midnight, while totals survive daily resets', () => {
   assert.equal(rules.dateKey(new Date('2026-10-02T15:59:59Z')), '2026-10-02');
@@ -399,7 +353,7 @@ test('legacy path indices retain claimed rewards while inserted story quests rem
   assert.equal(before.quests.daily.find(q => q.id === 'daily-solo-three').claimed, true);
   const first = await questTransaction(db, 'u1', { kind: 'path', id: before.quests.path.id }, now);
   assert.equal(first.awarded, true);
-  assert.equal(first.quests.path.id, 'path-story-qi-one-ask-dao', 'already claimed original tasks are skipped');
+  assert.equal(first.quests.path.id, 'path-story-qi-five-dongtian', 'already claimed original tasks are skipped');
   assert.equal(first.quests.pathCompleted, 9);
   const duplicate = await questTransaction(db, 'u1', { kind: 'path', id: 'path-cave' }, now);
   assert.equal(duplicate.awarded, true, 'a previously claimed task can supplement only its new ticket');

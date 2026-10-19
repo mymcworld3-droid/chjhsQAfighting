@@ -45,7 +45,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     const ready = !!q?.claimable;
     const labels = { scope: '設定範圍', solo: '繼續問道', meditation: '開始閉關',
       enlightenment: '悟道試煉', battle: '前往鬥法', raid: '前往秘境', dongtian: '前往洞天',
-      'dongtian-tutorial': '開始教程', story: '觀看劇情' };
+      story: '觀看劇情' };
     const action = ready ? (q.supplemental ? '補領抽獎券' : '領取獎勵') : labels[q?.destination] || '查看任務';
     const title = q?.title || (current ? '繼續探索仙途' : busy ? '正在同步任務…' : '查看修行任務');
     const reward = q ? [q.reward.drawTickets ? `抽獎券 ×${q.reward.drawTickets}` : '',
@@ -81,7 +81,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     $('quest-open')?.setAttribute('aria-label', available ? '任務，有獎勵可領取' : '任務');
   }
   function card(q, kind) {
-    const label = q.claimed ? '已領取' : q.locked ? '尚未解鎖' : q.supplemental ? '補領抽獎券' : q.claimable ? '領取獎勵' : q.metric === 'story' ? '觀看劇情' : q.metric === 'dongtian-tutorial' ? '開始洞天教程' : '前往修行';
+    const label = q.claimed ? '已領取' : q.locked ? '尚未解鎖' : q.supplemental ? '補領抽獎券' : q.claimable ? '領取獎勵' : q.metric === 'story' ? '觀看劇情' : '前往修行';
     return `<article class="quest-card ${kind === 'path' ? 'quest-path-card' : ''} ${q.claimable ? 'quest-ready' : ''} ${q.claimed ? 'quest-claimed' : ''}">
       <div class="quest-card-heading"><h4>${esc(q.title)}</h4><span>${q.claimed ? '已完成' : q.claimable ? '待領獎' : '進行中'}</span></div>
       <p>${esc(q.description)}</p>
@@ -213,13 +213,9 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       battle: () => { void window.startBattleMatchmaking?.(); },
       raid: () => { void window.openRaidHub?.(); },
       dongtian: () => { window.openDongtianPanel?.(); },
-      'dongtian-tutorial': () => {
-        const opened = window.startDongtianTutorial?.();
-        if (!opened) status('洞天教程暫時無法開啟，請先結束目前的戰鬥、劇情或教學，再按「開始洞天教程」。');
-      },
       story: () => {
         const opened = window.openXiuxianStoryChapter?.(q.chapterId);
-        if (!opened) status('劇情暫時無法開啟，請先結束目前的戰鬥或教學，再按「觀看劇情」。');
+        if (!opened) status('劇情暫時無法開啟，請先結束目前的戰鬥或其他彈窗，再按「觀看劇情」。');
       }
     };
     actions[destination]?.();
@@ -281,7 +277,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     render();
   }
   mount();
-  ['xiuxian:user-data-ready', 'xiuxian:user-ready', 'xiuxian:quest-progress-updated', 'xiuxian:enlightenment-updated', 'xiuxian:story-chapter-completed', 'xiuxian:dongtian-tutorial-completed'].forEach(name => window.addEventListener(name, invalidate));
+  ['xiuxian:user-data-ready', 'xiuxian:user-ready', 'xiuxian:quest-progress-updated', 'xiuxian:enlightenment-updated', 'xiuxian:story-chapter-completed'].forEach(name => window.addEventListener(name, invalidate));
   window.addEventListener('material-system-updated', e => { if (!e.detail?.questReward) invalidate(); });
   window.addEventListener('xiuxian:stats-updated', e => { if (!applyingReward && e.detail?.source !== 'quest-reward') invalidate(); });
   document.addEventListener('visibilitychange', () => { if (!document.hidden) invalidate(); });
