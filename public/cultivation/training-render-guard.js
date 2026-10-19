@@ -6,8 +6,9 @@ let previous = null;
 try { previous = JSON.parse(sessionStorage.getItem(KEY) || 'null'); } catch (_) {}
 const recentInterruption = previous?.entering === true && previous?.cleanExit !== true &&
   Date.now() - Number(previous.at) >= 0 && Date.now() - Number(previous.at) < RECENT_MS;
-// Only crash recovery is sticky. A slow startup is tested again next launch.
-const recoverySafe = previous?.safe === true || recentInterruption;
+// Recover from the actual interrupted entry for this launch only. Older safe
+// flags must not permanently prevent the next launch from testing high rendering.
+const recoverySafe = recentInterruption;
 let safe = true;
 let assessment = { status:'testing', reason:'startup', samples:0 };
 let record = { safe:recoverySafe, entering:false, cleanExit:false, at:Date.now() };
@@ -34,23 +35,11 @@ window.getTrainingRenderDiagnostics = () => ({
 });
 if (recentInterruption) console.warn('[Training renderer] interrupted entry detected; using fewer image layers', window.getTrainingRenderDiagnostics());
 
-function deviceRenderingLimit() {
-  const device = window.navigator || {};
-  // Smooth frames cannot establish available GPU memory. Keep the composite
-  // scene on iOS, where the full layered scene has caused renderer reloads.
-  if (/iPhone|iPad|iPod/.test(device.userAgent || '') ||
-      (device.platform === 'MacIntel' && device.maxTouchPoints > 1)) return 'ios-memory-budget';
-  if (device.deviceMemory > 0 && device.deviceMemory <= 4) return 'device-memory';
-  if (device.hardwareConcurrency > 0 && device.hardwareConcurrency <= 2) return 'device-cpu';
-  return null;
-}
-
 function testStartupRendering() {
   return new Promise(resolve => {
     let frame = 0, deadline = 0, finished = false, canvas, texture;
     const intervals = [], drawTimes = [];
     const clock = window.performance;
-    const deviceLimit = deviceRenderingLimit();
     function finish(reason, high = false, metrics = {}) {
       if (finished) return;
       finished = true;
@@ -119,7 +108,9 @@ function testStartupRendering() {
             const drawP90Ms = percentile90(drawTimes);
             const slowFrames = intervals.filter(ms => ms > 34).length;
             const smooth = frameP90Ms <= 24 && drawP90Ms <= 8 && slowFrames <= 2;
-            finish(deviceLimit || (smooth ? 'performance-ok' : 'slow-rendering'), !deviceLimit && smooth, {
+            // Let every device try the layered scene when measured drawing is
+            // smooth; user-agent and hardware hints alone cannot veto it.
+            finish(smooth ? 'performance-ok' : 'slow-rendering', smooth, {
               frameP90Ms:Math.round(frameP90Ms * 10) / 10,
               drawP90Ms:Math.round(drawP90Ms * 10) / 10
             });

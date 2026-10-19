@@ -100,20 +100,23 @@ test('cold graphics initialization during warm-up does not misclassify an otherw
   assert.equal(f.diagnostics().drawP90Ms, 1);
 });
 
-test('iPhone/iPad and constrained hardware retain low rendering even with smooth probe frames', async () => {
-  for (const [navigator, reason] of [
-    [{ userAgent: 'Mozilla/5.0 (iPhone) CriOS/140 Mobile' }, 'ios-memory-budget'],
-    [{ userAgent: 'Mozilla/5.0 (iPad)' }, 'ios-memory-budget'],
-    [{ platform: 'MacIntel', maxTouchPoints: 5 }, 'ios-memory-budget'],
-    [{ deviceMemory: 4, hardwareConcurrency: 8 }, 'device-memory'],
-    [{ hardwareConcurrency: 2 }, 'device-cpu']
+test('all devices can try high rendering when the measured probe is smooth', async () => {
+  for (const navigator of [
+    { userAgent: 'Mozilla/5.0 (iPhone) CriOS/140 Mobile' },
+    { userAgent: 'Mozilla/5.0 (iPad)' },
+    { platform: 'MacIntel', maxTouchPoints: 5 },
+    { deviceMemory: 4, hardwareConcurrency: 8 },
+    { hardwareConcurrency: 2 },
+    { deviceMemory: 8, hardwareConcurrency: 8 }
   ]) {
     const f = runtime({ navigator });
-    assert.equal(await f.complete(), 'safe');
-    assert.equal(f.diagnostics().samples, 24, 'still assess frame and drawing performance on launch');
-    assert.equal(f.diagnostics().reason, reason);
+    assert.equal(await f.complete(), 'balanced');
+    assert.equal(f.diagnostics().samples, 24);
+    assert.equal(f.diagnostics().reason, 'performance-ok');
+    const slow = runtime({ navigator, frameMs: 40 });
+    assert.equal(await slow.complete(), 'safe', 'slow real measurements still select low rendering');
+    assert.equal(slow.diagnostics().reason, 'slow-rendering');
   }
-  assert.equal(await runtime({ navigator: { deviceMemory: 8, hardwareConcurrency: 8 } }).complete(), 'balanced');
 });
 
 test('normal reloads, stable maps and ordinary exits do not trigger crash recovery', async () => {
@@ -126,7 +129,7 @@ test('normal reloads, stable maps and ordinary exits do not trigger crash recove
   assert.equal(await runtime({ saved: f.record() }).complete(), 'balanced');
 });
 
-test('an interrupted entry locks the lighter renderer for this tab without another rendering probe', async () => {
+test('an interrupted entry recovers safely for one launch and the next launch tests high again', async () => {
   const first = runtime();
   await first.complete(); first.api.markTrainingEntry();
   const recovered = runtime({ saved: first.record() });
@@ -135,7 +138,7 @@ test('an interrupted entry locks the lighter renderer for this tab without anoth
   assert.equal(recovered.diagnostics().reason, 'crash-recovery');
   assert.equal(recovered.canvases.length, 0);
   recovered.api.markTrainingEntry(); recovered.api.markTrainingStable();
-  assert.equal(await runtime({ saved: recovered.record() }).api.trainingRenderReady, 'safe');
+  assert.equal(await runtime({ saved: recovered.record() }).complete(), 'balanced');
   assert.deepEqual(Object.keys(JSON.parse(recovered.record())).sort(), ['at', 'cleanExit', 'entering', 'safe']);
 });
 
@@ -193,4 +196,28 @@ test('the map waits for the startup decision before creating its scenery and exp
   assert.equal(boots, 1);
   assert.equal(context.window.openTrainingSceneMap, context.showMap);
   assert.match(main, /void import\('\.\/cultivation\/training-render-guard\.js'\)/, 'start testing before sign-in');
+});
+
+test('legacy safe flags do not lock a stable or cleanly exited browser into low rendering', async () => {
+  for (const previous of [
+    {safe:true,entering:false,cleanExit:false,at:99999},
+    {safe:true,entering:false,cleanExit:true,at:99999},
+    {safe:true,entering:true,cleanExit:true,at:99999},
+    {safe:true,entering:true,cleanExit:false,at:1000}
+  ]) {
+    const f=runtime({saved:JSON.stringify(previous)});
+    assert.equal(await f.complete(),'balanced');
+    assert.equal(f.diagnostics().reason,'performance-ok');
+  }
+});
+
+test('another interrupted entry during recovery still keeps the next launch safe', async () => {
+  const first=runtime();await first.complete();first.api.markTrainingEntry();
+  const recovery=runtime({saved:first.record()});
+  assert.equal(await recovery.api.trainingRenderReady,'safe');
+  recovery.api.markTrainingEntry();
+  const again=runtime({saved:recovery.record()});
+  assert.equal(await again.api.trainingRenderReady,'safe');
+  assert.equal(again.canvases.length,0);
+  assert.equal(again.diagnostics().interruptedEntry,true);
 });
