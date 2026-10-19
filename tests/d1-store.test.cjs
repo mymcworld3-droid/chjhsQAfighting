@@ -58,3 +58,9 @@ test('D1 history lookup uses a UID index rather than scanning the collection',()
   const plan=sql.prepare('EXPLAIN QUERY PLAN '+query.sql).all(...query.params).map(row=>row.detail).join('\n');
   assert.match(plan,/history_uid_time/);assert.doesNotMatch(plan,/SCAN documents/);
 });
+test('large source document fits the private gateway without sending repeated full document bodies',async()=>{
+  const {gateway}=setup();let size=0;
+  const db=new D1Store('A',{gateway:async batch=>{size=Math.max(size,Buffer.byteLength(JSON.stringify({statements:batch})));return gateway(batch);}});
+  await db.doc('large/doc').set({text:'x'.repeat(900000)});
+  assert.equal((await db.doc('large/doc').get()).data().text.length,900000);assert.ok(size<2_000_000);
+});

@@ -9,6 +9,7 @@ if(!configResponse.ok)throw Error('資料服務設定無法讀取，請稍後重
 const config=await configResponse.json();
 if(!['firestore','d1'].includes(config.backend))throw Error('資料服務設定無效');
 export const dataBackend=config.backend;
+export const autoMigrationEnabled=config.autoMigration===true;
 const isD1=config.backend==='d1';
 const dbs=new Map();
 function roleOf(app){const name=app?.name||'[DEFAULT]';return name==='xiuxian-bd'?'BD':name==='xiuxian-battle'?'C':'A';}

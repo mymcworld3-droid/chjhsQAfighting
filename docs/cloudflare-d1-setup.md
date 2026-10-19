@@ -1,6 +1,6 @@
 # 青雲問道：Cloudflare D1 初始化與搬遷
 
-目前交付的是可測試、預設關閉的搬遷程式。**建立空白 D1 不等於舊資料已搬好；必須完成匯出、匯入、核對及切換。** 本文件沒有假定已登入你的 Cloudflare 帳號。
+目前程式在設定好 D1 連線後，會由管理員登入自動啟動後端搬遷；正式遊戲預設仍使用 Firestore。**建立空白 D1 不等於舊資料已搬好；必須完成自動複製、最終核對及切換。** 本文件沒有假定已登入你的 Cloudflare 帳號。
 
 ## 資料如何整理
 
@@ -23,6 +23,7 @@ SQL 管理表與檢視：
 - `document_versions`：包含刪除記錄的版本表，阻擋舊交易覆蓋新資料。
 - `collection_versions`：讓集合查詢的交易偵測新增／刪除資料。
 - `d1_version_guard`：同一 SQL batch 中的版本檢查；失敗時整批回滾。
+- `d1_admin_migration_jobs`／`tasks`／`documents`：管理員觸發工作的租約、佇列、逐筆核對與續傳進度。
 - `collection_inventory`：按來源與集合查看筆數、大小。
 - `players`、`caves`、`battle_rooms`：方便查閱的 SQL view；修改資料仍經後端。
 
@@ -87,7 +88,7 @@ npx wrangler@4 d1 migrations apply qingyun-game-prod --local --config cloudflare
 npx wrangler@4 d1 migrations apply qingyun-game-prod --remote --config cloudflare/d1/wrangler.jsonc
 ```
 
-第一行只建立電腦裡的測試資料庫；**第二行才會初始化 Cloudflare 正式資料庫**。看到待執行的 migrations 時確認執行。
+第一行只建立電腦裡的測試資料庫；**第二行才會初始化 Cloudflare 正式資料庫，並包含 `0003_admin_auto_migration.sql` 的續傳資料表**。看到待執行的 migrations 時確認執行。
 
 驗證：
 
@@ -97,7 +98,7 @@ npx wrangler@4 d1 execute qingyun-game-prod --remote --config cloudflare/d1/wran
 
 應看見 documents、document_versions、collection_versions、d1_version_guard，以及 players、caves 等 view。此時 `players` 沒有玩家是正常的，舊資料尚未匯入。
 
-後台也可進入資料庫 → Console 執行上面 SELECT；若只使用後台建表，依序貼上 `0001_document_store.sql` 和 `0002_query_indexes.sql`。建議使用 migrations 指令，才能保留版本紀錄。
+後台也可進入資料庫 → Console 執行上面 SELECT；若只使用後台建表，依序貼上 `0001_document_store.sql`、`0002_query_indexes.sql` 和 `0003_admin_auto_migration.sql`。建議使用 migrations 指令，才能保留版本紀錄。
 
 ## 5. 部署私有 Worker
 
@@ -134,17 +135,43 @@ D1_POLL_MS=5000
 
 保留現有三組 `FIREBASE_*_SERVICE_ACCOUNT_JSON`，以及原本 AI 等環境變數。三組 Firebase 憑證仍供既有伺服器身分服務及資料匯出使用。請先部署相容程式，這時正式玩家仍讀寫 Firestore。
 
-在執行搬遷工具的電腦上，把同樣的密鑰／服務帳戶放進本機 `.env`（不提交 Git），以便讀來源、寫 D1。
+自動搬遷只需在 Render 設定密鑰／服務帳戶，不必下載到電腦。只有使用文末的手動 CLI 備份時，才需要在執行工具的電腦設定本機 `.env`（不提交 Git）。
 
 若 `FRIEND_CHAT_STORAGE=postgres` 已啟用，私訊原本就在 PostgreSQL，並非 Firebase 資料；本工具不搬 PostgreSQL。保留它的設定即可。仍用 Firestore 私訊時，切換後原私訊 API 會使用 BD 的 D1 存取層。
 
-## 7. 正式搬資料：先停止所有舊來源寫入
+## 7. 管理員登入，自動複製全部資料
 
-1. 保存 A／BD／C 三個專案各自目前的 Firestore Rules，供回復使用。
-2. Render 所有執行個體設 `GAME_DATA_MAINTENANCE=1`，重新部署，等待舊執行個體完全退出，確認 API 回傳維護狀態。維護模式也不啟動團本背景排程。
-3. 關閉舊版 A→BD 自動搬遷：`FIREBASE_AUTO_MIGRATE_ON_START=0`。
-4. 停止任何其他會寫這三個專案的管理腳本／服務，等待既有寫入結束。
-5. 在三個 Firestore 專案發佈暫時的全封鎖規則，阻止尚未更新的瀏覽器繼續直接寫入。維護期間會暫停遊戲。
+在 Render 設定好 D1_WORKER_URL、D1_SERVICE_TOKEN，並執行完全部 migrations 後，維持：
+
+```dotenv
+GAME_DATA_BACKEND=firestore
+GAME_DATA_MAINTENANCE=0
+D1_AUTO_MIGRATE_ON_ADMIN_LOGIN=1
+D1_SOURCE_WRITES_FROZEN=0
+```
+
+用原本的管理員帳號登入網站即可。後端會驗證 Firebase A 的登入憑證，以及正式 `users/{uid}.isAdmin === true`，再自動建立一份全站共用工作。
+
+你不需要下載所有玩家資料，也不用執行匯出／匯入指令。一般玩家登入不會啟動工作，前端只收到筆數、進度和狀態，不會收到其他玩家的完整資料。
+
+管理員畫面右下角會顯示「D1 資料搬遷」：
+
+- **正在複製**：後端逐批盤點 A／BD／C 全部集合，逐筆讀取文件並寫入 D1；包含未登入的玩家、答題紀錄、獎勵憑證，以及所有子集合。
+- **已複製**：這只是可在線上遊玩時執行的背景複製，還不能當作最終一致快照。玩家仍讀寫 Firestore。
+- **暫停**：連線或配額不足時保存進度；配額不足時每小時再檢查，恢復後續傳，避免密集重試。伺服器重啟也會接續既有工作。
+- **資料差異／已停止**：D1 有不同且不是本工作所寫入的資料時，停止以免覆蓋。解決差異後可按「重新檢查並續傳」。
+- **最終核對完成**：只有下一步停寫後，才可能顯示此狀態。
+
+多位管理員登入不會重複建立工作；完成背景複製後再登入，也不會重新讀取全部資料。關閉管理員網頁不影響後端執行。
+
+第一次仍會產生 Firestore 讀取與 D1 寫入量；資料量很大時可能需要跨日完成。所有進度存在 D1，不依賴 Render 暫存檔或瀏覽器 localStorage。
+
+## 8. 停寫後，自動補齊與最終核對
+
+1. 保存 A／BD／C 三個專案目前的 Firestore Rules。
+2. Render 所有執行個體設 `GAME_DATA_MAINTENANCE=1`，重新部署，等待舊個體完全退出。團本背景排程也會停止。
+3. 關閉舊版 A→BD 自動搬遷：`FIREBASE_AUTO_MIGRATE_ON_START=0`，停止其他會寫這三個專案的腳本／服務，等待既有工作結束。
+4. 在三個 Firestore 專案發佈以下規則，阻止尚未更新的瀏覽器繼續直接寫舊資料：
 
 ```text
 rules_version = '2';
@@ -157,50 +184,41 @@ service cloud.firestore {
 }
 ```
 
-Admin SDK 會繞過 Rules，所以只改規則還不夠，Render 與其他服務也必須停寫。登入服務不受 Firestore Rules 影響。
+5. 確認所有來源已停寫後，在 Render 加上：
 
-匯出到一個**全新**的私人資料夾，例如：
-
-```bash
-npm run migrate:d1 -- --export --source-frozen --directory=.d1-migration/final-20261019
+```dotenv
+GAME_DATA_MAINTENANCE=1
+D1_SOURCE_WRITES_FROZEN=1
 ```
 
-工具會盤點三個專案的所有集合與子集合，產生 `snapshot.ndjson` 與 `manifest.json`，保存 UID、文件路徑、時間戳記秒／奈秒及每筆 SHA-256。父文件不存在而子集合仍有資料的情況也會處理。會產生 Firestore 讀取量；來源配額用盡時應先等恢復，勿把未完成的匯出拿去切換。
+6. 重新部署後，後端會自動續接管理員已授權的工作，執行最終一輪；若從未登入啟動工作，請先用管理員帳號登入。維護期間仍可使用 Firebase Auth；獨立的管理員搬遷面板不依賴玩家主畫面載入成功。
+7. 等待面板顯示「所有來源資料已完成最終核對，可切換 D1」。後端狀態應為 `status: ready`、`verified: true`。
 
-匯出中斷時 `complete` 不會標為 true；請保留失敗資料夾供檢查，改用新的資料夾重做。這些檔案包含玩家私有資料，已加入 Git 忽略；請另做自己的安全備份。
+最終一輪會重新盤點集合與子集合，補上背景複製後新增／修改的資料，清除**本工作先前複製、且在停寫前已於來源刪除**的 D1 暫存文件，再檢查目標完整路徑集合與文件版本。不會刪除來源 Firestore。若 D1 目標被其他服務改過，會停止，不能靠重試強行覆蓋。
 
-## 8. 匯入 D1，再核對
+Admin SDK 會繞過 Firestore Rules，所以只改 Rules 不足以停寫，Render 與其他服務也必須停止。`D1_SOURCE_WRITES_FROZEN=1` 是你確認停寫完成後才設定的標記，程式無法從這個標記判斷其他外部服務是否已停寫。
 
-確認 D1 是準備切換、尚未提供正式寫入的獨立目標：
-
-```bash
-npm run migrate:d1 -- --import --target-frozen --directory=.d1-migration/final-20261019
-npm run migrate:d1 -- --verify-only --directory=.d1-migration/final-20261019
-```
-
-匯入只新增缺少資料：相同資料略過、不同資料停止，不會默默覆蓋。遇到網路中斷可重新執行匯入，相同文件會略過。
-
-核對需要看到 `verified: true`，且 matched 與匯出 documents 筆數相符。工具核對每筆內容 SHA-256，還會檢查目標是否多出匯出中沒有的文件。核對前不可讓測試玩家寫入正式目標，否則目標多出資料會被指出。
-
-Cloudflare Console 可查看：
+Cloudflare Console 可查閱：
 
 ```sql
 SELECT * FROM collection_inventory ORDER BY namespace,collection_path;
 SELECT uid,display_name,cultivation,gold FROM players LIMIT 20;
-SELECT namespace,id,status FROM battle_rooms LIMIT 20;
+SELECT id,state,updated_at FROM d1_admin_migration_jobs;
 ```
 
-不要在 Console 直接改背包或獎勵；直接修改會繞過版本表，破壞交易一致性。日後所有正式寫入都要透過本存取層。
+不要在 Console 直接改背包或獎勵；直接修改會繞過版本表，破壞交易一致性。
 
 ## 9. 切換正式網站
 
-只有 frozen snapshot 核對成功後，才在 Render 改成：
+只有管理員搬遷工作最終核對為 ready／verified，且來源仍維持停寫時，才在 Render 改成：
 
 ```dotenv
 GAME_DATA_BACKEND=d1
 GAME_DATA_MAINTENANCE=0
 FIREBASE_AUTO_MIGRATE_ON_START=0
 ```
+
+程式不會自行更改 Render 的 GAME_DATA_BACKEND；需要你完成這次正式切換。之後管理員登入不會再從舊 Firestore 回灌。
 
 重新部署後：
 
@@ -228,12 +246,27 @@ Cloudflare 官方目前列出 Free 每日 5,000,000 rows read、100,000 rows wri
 
 ## 失敗與回復
 
-- **切換前**：來源沒有被搬遷工具刪除或覆寫；先停匯入，保留維護，排查後重跑。不需要刪 Firebase。
+- **切換前**：來源沒有被搬遷工具刪除或覆寫；可設 D1_AUTO_MIGRATE_ON_ADMIN_LOGIN=0 並重新部署以暫停工作，保留維護，排查後重跑。不需要刪 Firebase。
 - **D1 尚未接受任何新寫入**：可以先把 Render 維持維護、設回 firestore，再恢復原 Firestore Rules，最後解除維護。
 - **D1 已接受玩家新寫入**：不要直接把開關切回 firestore，否則玩家會回到舊進度。先停止寫入並備份 D1，制定增量回灌／恢復方案後再決定。此工具不提供自動反向回灌。
 - **出現 401**：檢查 Render 的 D1_SERVICE_TOKEN 是否與 Worker SERVICE_TOKEN 相同，以及 Firebase 登入是否有效。
 - **出現 D1 gateway unavailable**：檢查 Worker 部署、DB binding、migrations、密鑰與配額。正式資料庫仍不能靜默退回舊來源。
-- **verified 失敗**：依 namespace/path 找出差異，確認凍結完整；不要用覆蓋所有目標資料來繞過核對。
+- **ready／verified 失敗**：依 namespace/path 找出差異，確認凍結完整；不要用覆蓋所有目標資料來繞過核對。
+
+
+## 可選：手動檔案匯出／匯入
+
+需要離線備份或手動搬遷時，舊版 CLI 工具仍可使用。先把 `D1_AUTO_MIGRATE_ON_ADMIN_LOGIN=0`，不要同時執行自動與手動工作。
+
+先依第 8 步凍結所有來源寫入，再執行：
+
+```bash
+npm run migrate:d1 -- --export --source-frozen --directory=.d1-migration/final-snapshot
+npm run migrate:d1 -- --import --target-frozen --directory=.d1-migration/final-snapshot
+npm run migrate:d1 -- --verify-only --directory=.d1-migration/final-snapshot
+```
+
+匯出資料夾必須全新。`snapshot.ndjson` 與 `manifest.json` 包含玩家私有資料，已加入 Git 忽略；請自行安全備份。工具不覆寫不同的 D1 資料，也不提供上線後的自動反向回灌。
 
 ## 官方文件
 

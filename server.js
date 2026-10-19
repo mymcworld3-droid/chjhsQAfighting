@@ -45,11 +45,12 @@ app.use(cors());
 app.use(express.json({ limit: '20mb' }));
 // Freeze ALL server mutations during the final Firestore snapshot/cutover.
 app.use('/api', (req,res,next) => {
-  if (process.env.GAME_DATA_MAINTENANCE === '1' && req.path !== '/data-config') {
+  if (process.env.GAME_DATA_MAINTENANCE === '1' && !['/data-config','/admin/d1-migration'].includes(req.path)) {
     return res.status(503).json({error:'資料搬遷維護中，請稍後再試',code:'unavailable'});
   }
   next();
 });
+const adminD1Migration = require('./d1-admin-migration-api.cjs')(app);
 require('./d1-browser-api.cjs').registerD1BrowserApi(app);
 registerGameStage(app);
 app.use(express.static(path.join(__dirname, 'public')));
@@ -828,6 +829,8 @@ app.get('/api/units', (req, res) => {
 // [已刪除] /api/generate-image 路由已移除，節省費用
 
 app.listen(port, () => {
+    // Resume only an already administrator-authorized durable job after a restart.
+    void adminD1Migration.resume().catch(error => console.warn('[D1 migration resume]', error.code || 'unavailable'));
     if (process.env.GAME_DATA_MAINTENANCE !== '1') registerRaidRoomApi.startScheduler();
     console.log(`Server is running on port ${port}`);
 });

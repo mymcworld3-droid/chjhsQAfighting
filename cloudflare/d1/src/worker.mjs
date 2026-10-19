@@ -23,8 +23,9 @@ export default {
       return Response.json({success:true, result}, {headers});
     } catch (error) {
       const conflict = /d1_version_guard|CHECK constraint failed: valid/i.test(String(error?.message));
+      const quota = /(?:quota|limit).*exceeded|exceeded.*(?:quota|limit)|resource.exhausted|too many (?:requests|rows)/i.test(String(error?.message));
       // SQL and bindings may contain private player data. Do not echo them.
-      return Response.json({success:false, code:conflict?'aborted':'d1-query-failed'}, {status:conflict?409:503, headers});
+      return Response.json({success:false, code:conflict?'aborted':quota?'resource-exhausted':'d1-query-failed'}, {status:conflict?409:quota?429:503, headers});
     }
   }
 };
