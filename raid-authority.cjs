@@ -352,10 +352,9 @@ function coreAttack(member,seed){
   if(core.type==='sword'&&deterministicPercent(seed+':sword')<chanceByGrade(grade,10,5,50))return 200;
   return 0;
 }
-function coreCounter(member,received,seed){
-  const core=member?.goldenCore;if(!core||core.type!=='thunder'||received<=0)return 0;
-  const chance=chanceByGrade(core.grade,10,6.25,60);
-  return deterministicPercent(seed+':thunder')<chance?Math.round(received*.50):0;
+function coreCounter(member,received){
+  if(member?.goldenCore?.type!=='thunder'||member.thunderCounterReady!==true||received<=0)return 0;
+  return Math.round(received);
 }
 function runtimeEffects(member){return Array.isArray(member?.artifactBattle?.effects)?member.artifactBattle.effects:[];}
 function hpRatio(member){return clamp(finite(member?.hp)/Math.max(1,finite(member?.maxHp,1)),0,1);}
@@ -378,6 +377,7 @@ function resolvePlayerAction(member,{roomId,actionId,correct,bossHp=1,bossMaxHp=
   const next={...member,artifactBattle:{...(member.artifactBattle||{}),effects:[...runtimeEffects(member)]}};
   const seed=String(roomId)+':player:'+String(actionId)+':'+String(next.uid),support=coreSupport(next,correct,seed+':support');
   next.coreCorrectStreak=support.streak;next.coreShield=support.shield;
+  next.thunderCounterReady=correct===true&&next.goldenCore?.type==='thunder';
   const starAnswers=(Math.max(0,Math.floor(finite(member?.soulStarAnswerWindow)))%3)+1;
   const starCorrect=Math.min(3,Math.max(0,Math.floor(finite(member?.soulStarCorrectWindow)))+(correct===true?1:0));
   const starDamage=starAnswers===3?soulTalents.starfall(next,starCorrect):0;
@@ -431,7 +431,7 @@ function resolveArtifactDefense(member,incoming){
 }
 function resolveBossDefense(member,{roomId,bossAction,bossHp=Infinity}={}){
   const next={...member,artifactBattle:{...(member.artifactBattle||{}),effects:[...runtimeEffects(member)]}};
-  const incoming=Math.max(0,Math.round(finite(bossAction?.damage))),seed=String(roomId)+':boss:'+String(bossAction?.id)+':'+String(next.uid);
+  const incoming=Math.max(0,Math.round(finite(bossAction?.damage)));
   let damage=0,reflected=0,guarded=false;
   if(next.coreShield&&incoming>0){next.coreShield=false;guarded=true;}
   else if(incoming>0){
@@ -440,11 +440,13 @@ function resolveBossDefense(member,{roomId,bossAction,bossHp=Infinity}={}){
     const trueReceived=Math.max(0,Math.min(damage,Math.round(finite(bossAction?.trueDamage))));
     const normalReceived=Math.max(0,damage-trueReceived);
     const weaponPercent=clamp(sumEffect(runtimeEffects(next),'equip_reflect_percent'),0,1);
-    const coreAdditional=coreCounter(next,normalReceived,seed+':counter');
-    const corePercent=coreAdditional>0?.50:0;
+    const coreAdditional=damage<next.hp?coreCounter(next,normalReceived):0;
+    const corePercent=coreAdditional>0?1:0;
     reflected=normalReceived>0?Math.round(normalReceived*(weaponPercent+corePercent)) + soulTalents.reflection(next,Math.min(next.hp,normalReceived)):0;
     next.hp=Math.max(0,next.hp-damage);
   }
+  // A correct answer arms the next boss action only; guarding also consumes that window.
+  next.thunderCounterReady=false;
   next.combatContribution = Contribution.add(member.combatContribution,{reflectedDamage:Math.min(Math.max(0,Math.round(reflected)),Math.max(0,bossHp))});
   if (!member.combatContribution && (finite(member.lastActionId) > 0 || finite(member.lastBossActionSeen) > 0)) next.combatContribution.partial = true;
   return {member:next,damage,reflectedDamage:Math.max(0,Math.round(reflected)),guarded};

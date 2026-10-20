@@ -167,11 +167,10 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
     {
       id: 'thunder', name: '萬劫雷霆丹', icon: '⚡', tone: 'thunder',
       effect(grade) {
-        const counterChance = chanceByGrade(grade, 10, 6.25, 60);
-        return `進入下一境界前最後 ${breakthroughPercent(grade)}% 的修為區間時，悟道成功額外 +1 修為；鬥法受到攻擊時有 ${counterChance}% 機率雷光反擊，當次反擊率額外 +50 個百分點（與元嬰、法寶反擊率相加，例如法寶 16% 變 66%；基於實際普通承傷，不含真傷）。`;
+        return `進入下一境界前最後 ${breakthroughPercent(grade)}% 的修為區間時，悟道成功額外 +1 修為；答對時，本回合反擊傷害比例必定 +100 個百分點（與元嬰、法寶加成相加，例如法寶 16% 變 116%；基於實際普通承傷，不含真傷；團本持續至下次首領攻擊，不疊加）。`;
       },
-      ability: '以雷劫淬丹，突破與受擊皆可引雷。',
-      upkeep: '雷意需在實戰中承受攻擊才會反擊。',
+      ability: '以雷劫淬丹，答對蓄雷，受擊反攻。',
+      upkeep: '須先答對蓄雷，再承受攻擊；未受擊不造成額外傷害。',
       warning: '若該次攻擊已使你倒下，則不再發動反擊。',
       note: '丹中雷光常年遊走。有人研究能不能順便替手機充電；手機沒充到，頭髮倒先充滿了。',
       resolve({ isCorrect, grade, score }) {

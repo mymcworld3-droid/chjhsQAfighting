@@ -77,14 +77,13 @@
     const core = battleCore(defender);
     if (!core || core.type !== 'thunder') return { reflectDamage: 0 };
 
-    const chance = chanceByGrade(core.grade, 10, 6.25, 60);
-    if (!triggered(chance)) return { reflectDamage: 0 };
+    if ((defender?.answer?.correct ?? defender?.answerCorrect) !== true) return { reflectDamage: 0 };
 
     const damage = Math.max(0, Math.round(Number(receivedDamage) || 0));
     if (!damage) return { reflectDamage: 0 };
 
-    const reflected = Math.round(damage*.50);
-    const message = `雷光反擊率 +50 個百分點，金丹額外反擊 ${reflected} 傷害（觸發率 ${chance}%）`;
+    const reflected = damage;
+    const message = `答對蓄雷，本回合反擊傷害比例 +100 個百分點，金丹額外反擊 ${reflected} 傷害`;
     showActivation(core, message, '鬥法受擊效果');
     return {
       reflectDamage: reflected,
