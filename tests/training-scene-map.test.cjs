@@ -152,6 +152,45 @@ test('both clean scene plates match their assets and contain six non-overlapping
   }
 });
 
+test('all six images, names and unlock plaques stay visible across phone and tablet aspect ratios', () => {
+  const source = fs.readFileSync(path.join(__dirname, '../public/cultivation/training-scene-map.js'), 'utf8');
+  const fit = source.slice(source.indexOf('function fit() {'), source.indexOf('\nfunction scheduleFit()'));
+  const cases = [[320,568,64,64],[360,640,64,72],[390,844,72,80],[430,932,72,80],
+    [768,1024,72,80],[844,390,56,64],[1024,768,72,80],[1366,768,72,80],[1920,1080,80,88]];
+  for (const [width,height,header,nav] of cases) {
+    const orientation = width >= height ? 'landscape' : 'portrait', layout = Layouts[orientation];
+    const properties = {}, style = { setProperty() {} };
+    const context = { map: { hidden:false, getBoundingClientRect:()=>({width,height:height-header}) },
+      page: { style }, plane: { style:properties }, scenery: { style:{} },
+      document: { querySelector: selector => ({ getBoundingClientRect: () => selector.includes('header') ? {bottom:header} : {top:height-nav} }) },
+      visible:()=>true, innerWidth:width, innerHeight:height, orientation, Layouts,
+      renderScene:()=>assert.fail('unchanged orientation must not rebuild the map') };
+    vm.createContext(context);vm.runInContext(fit+'\nfit();',context);
+    assert.equal(context.scenery.style.height, `${layout.height}px`, 'terrain must not stretch away from the buttons');
+    assert.equal(context.scenery.style.transform, properties.transform);
+    const scale = Number(properties.transform.match(/scale\(([^)]+)\)/)[1]);
+    const left = parseFloat(properties.left), top = parseFloat(properties.top), available = height-header-nav-4;
+    const check = (r,label) => {
+      assert.ok(left+r[0]*scale >= -.01 && top+r[1]*scale >= -.01, `${width}×${height} ${label} clipped at top/left`);
+      assert.ok(left+(r[0]+r[2])*scale <= width+.01 && top+(r[1]+r[3])*scale <= available+.01, `${width}×${height} ${label} clipped at bottom/right`);
+    };
+    const plaques = [];
+    for (const place of Rules.PLACES) {
+      const region = layout.places[place.id];check(region.bounds,place.name);
+      const font = layout.font*1.08;
+      // Conservative CJK glyph widths include letter spacing, plaque padding and borders.
+      const w = Math.max(place.name.length*font*1.08,(place.realm+'解鎖').length*font*.6*1.02)+font*1.5+2;
+      const h = font*(1.25+.33+.6*1.25+.07)+2;
+      const plaque = [region.label[0]-w/2,region.label[1]-layout.font*.84,w,h];
+      check(plaque,place.name+'名稱及解鎖提示');plaques.push(plaque);
+    }
+    for (let a=0;a<plaques.length;a++)for(let b=a+1;b<plaques.length;b++){
+      const [x,y,w,h]=plaques[a],[xx,yy,ww,hh]=plaques[b];
+      assert.ok(x+w<=xx||xx+ww<=x||y+h<=yy||yy+hh<=y,`${width}×${height} name plaques overlap`);
+    }
+  }
+});
+
 function accessRuntime() {
   const remote = new Map(), cache = new Map(), events = new Map();
   let uid = 'u1', player = { uid, stats: { totalScore: 0 } }, operations = 0;
