@@ -14,15 +14,15 @@
     return Math.random() * 100 < chance;
   }
 
-  function thunderTriggered(seed) {
-    if (seed == null) return triggered(60);
+  function thunderTriggered(seed, chance) {
+    if (seed == null) return triggered(chance);
     const text = String(seed).replace(/:star-counter$/, ':counter') + ':thunder';
     let hash = 2166136261;
     for (let i = 0; i < text.length; i += 1) {
       hash ^= text.charCodeAt(i);
       hash = Math.imul(hash, 16777619);
     }
-    return (hash >>> 0) % 100 < 60;
+    return (hash >>> 0) % 100 < chance;
   }
 
   function battleCore(player) {
@@ -93,10 +93,11 @@
     const damage = Math.max(0, Math.round(Number(receivedDamage) || 0));
     if (!damage) return { reflectDamage: 0 };
 
-    if (!thunderTriggered(seed)) return { reflectDamage: 0 };
+    const chance = chanceByGrade(core.grade, 10, 6.25, 60);
+    if (!thunderTriggered(seed, chance)) return { reflectDamage: 0 };
 
     const reflected = Math.round(damage * .5);
-    const message = `答對蓄雷（60%），本回合反擊傷害 +50%，金丹額外反擊 ${reflected} 傷害`;
+    const message = `答對蓄雷（${chance}%），本回合反擊傷害 +50%，金丹額外反擊 ${reflected} 傷害`;
     showActivation(core, message, '鬥法受擊效果');
     return {
       reflectDamage: reflected,

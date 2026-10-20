@@ -18,7 +18,7 @@ function activeRoom(prefix,round=1) {
  }
  throw Error('No active thunder seed');
 }
-test('correct answers roll a grade-independent 60% chance once per round with a 50% additive bonus',()=>{
+test('correct answers roll a grade-scaled 10–60% chance once per round with a 50% additive bonus',()=>{
  let triggered=0,missed=0;
  for(let grade=1;grade<=9;grade++)for(let seed=0;seed<100;seed++){
   const key='answer-'+seed+':1:g:';
@@ -26,7 +26,8 @@ test('correct answers roll a grade-independent 60% chance once per round with a 
   const again=engine.resolveDeterministicCounterCore(player('g',true,grade),200,key+'counter');
   const star=engine.resolveDeterministicCounterCore(player('g',true,grade),200,key+'star-counter');
   assert.equal(result.reflectDamage,again.reflectDamage);assert.equal(result.reflectDamage,star.reflectDamage);
-  assert.equal(result.reflectDamage,engine.resolveDeterministicCounterCore(player('g',true,1),200,key+'counter').reflectDamage);
+  let hash=2166136261;for(const ch of key+'counter:thunder'){hash^=ch.charCodeAt(0);hash=Math.imul(hash,16777619);}
+  assert.equal(result.reflectDamage,(hash>>>0)%100 < 10+(9-grade)*6.25 ? 100 : 0);
   if(result.reflectDamage){assert.equal(result.reflectDamage,100);assert.equal(result.activation.type,'thunder');triggered++;}
   else missed++;
  }
@@ -55,16 +56,16 @@ test('lethal and shielded hits cannot grant the thunder bonus',()=>{
 test('the browser fallback uses the same seeded chance and supports both answer formats without rerolling',()=>{
  const math=Object.create(Math);math.random=()=>{throw Error('Seeded thunder should not roll again');};
  const context={window:{},Math:math};vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../public/cultivation/golden-core-battle-effects.js'),'utf8'),context);
- const seed=activeRoom('fallback')+':1:g:counter';
- const resolve=(answer,key=seed)=>context.window.resolveGoldenCoreBattleCounter({defender:{goldenCore:{type:'thunder',grade:9},...answer},receivedDamage:125,seed:key});
+ const seed=Array.from({length:1000},(_,i)=>'fallback-'+i+':1:g:counter').find(key=>engine.resolveDeterministicCounterCore(player('g',true,9),125,key).reflectDamage);
+ const resolve=(answer,key=seed,grade=9)=>context.window.resolveGoldenCoreBattleCounter({defender:{goldenCore:{type:'thunder',grade},...answer},receivedDamage:125,seed:key});
  assert.equal(resolve({answer:{correct:true}}).reflectDamage,63);
  assert.equal(resolve({answerCorrect:true}).reflectDamage,63);
  assert.equal(resolve({answer:{correct:false},answerCorrect:true}).reflectDamage,0);
  assert.equal(resolve({}).reflectDamage,0);
- for(let i=0;i<100;i++){
+ for(let grade=1;grade<=9;grade++)for(let i=0;i<100;i++){
   const key='fallback-'+i+':1:g:counter';
-  const expected=engine.resolveDeterministicCounterCore(player('g',true,9),125,key).reflectDamage;
-  assert.equal(resolve({answer:{correct:true}},key).reflectDamage,expected);
+  const expected=engine.resolveDeterministicCounterCore(player('g',true,grade),125,key).reflectDamage;
+  assert.equal(resolve({answer:{correct:true}},key,grade).reflectDamage,expected);
  }
 });
 function raidMember(){return {...player('g',true),uid:'raid-player',hp:2000,maxHp:2000,
@@ -105,5 +106,14 @@ test('the 60% answer roll includes 59 and excludes 60, sharing the decision with
  for(const suffix of ['counter','star-counter']){
   assert.equal(engine.resolveDeterministicCounterCore(eligible,200,'threshold-190:1:g:'+suffix).reflectDamage,100);
   assert.equal(engine.resolveDeterministicCounterCore(eligible,200,'threshold-256:1:g:'+suffix).reflectDamage,0);
+ }
+});
+
+test('raid chance scales from ninth grade 10% to first grade 60%',()=>{
+ for(let grade=1;grade<=9;grade++)for(let id=1;id<=100;id++){
+  const member={...raidMember(),goldenCore:{type:'thunder',grade}};
+  const result=authority.resolvePlayerAction(member,{roomId:'raid',actionId:id,correct:true});
+  let hash=2166136261;for(const ch of 'raid:player:'+id+':raid-player:thunder'){hash^=ch.charCodeAt(0);hash=Math.imul(hash,16777619);}
+  assert.equal(result.member.thunderCounterReady,(hash>>>0)%100 < 10+(9-grade)*6.25);
  }
 });
