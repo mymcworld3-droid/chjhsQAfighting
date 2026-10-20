@@ -111,23 +111,23 @@ test('pure true damage never contributes to thunder reflection',()=>{
 });
 test('lifesteal cannot heal from blocked or overkill damage',()=>{
  const a=p('taichu');assert.equal(talents.healing(a,0,64),0);
- assert.equal(talents.healing(a,5,64),2);
+ assert.equal(talents.healing(a,5,64),3);
  const host=p('taichu'),guest=p('ocean');host.hp=400;guest.answer.correct=false;guest.hp=5;
  const r=engine({roomId:'leech-overkill',round:1,host,guest,soulTalents:talents});
- assert.equal(r.hostHp,402);
+ assert.equal(r.hostHp,403);
 });
-test('taichu lifesteal scales to 30% without attack or 15% max-HP recovery caps',()=>{
+test('taichu lifesteal scales to 50% without attack or 15% max-HP recovery caps',()=>{
  const a=p('taichu');a.atk=1;
- assert.equal(talents.leechRate(a.nascentSoul.talent),.3);
- assert.equal(talents.healing(a,2000),600);
+ assert.equal(talents.leechRate(a.nascentSoul.talent),.5);
+ assert.equal(talents.healing(a,2000),1000);
  assert.equal(talents.healing(p('taichu',9),2000),500);
  assert.equal(talents.healing(p('ocean'),2000),0);
  const guest=p('ocean');guest.answer.correct=false;
  a.atk=1000;a.hp=1;
  const r=engine({roomId:'uncapped-leech',round:1,host:a,guest,soulTalents:talents});
- assert.equal(r.hostHp,301);
+ assert.equal(r.hostHp,501);
  const raid=authority.resolvePlayerAction(a,{roomId:'uncapped-leech',actionId:1,correct:true,bossHp:2000,bossMaxHp:2000});
- assert.equal(raid.member.hp,301);
+ assert.equal(raid.member.hp,501);
 });
 test('taichu absorbs true damage and combo damage with real artifact settlement',()=>{
  const context={window:{},QACombatCombo:globalThis.QACombatCombo};vm.createContext(context);
@@ -143,32 +143,32 @@ test('taichu absorbs true damage and combo damage with real artifact settlement'
  const actual=10000-result.guestHp;
  assert.ok(result.steps.filter(step=>step.combo).length>=2);
  assert.ok(actual>300);
- assert.equal(result.hostHp,Math.min(1000,100+Math.round(actual*.3)));
+ assert.equal(result.hostHp,Math.min(1000,100+Math.round(actual*.5)));
  const blockedHost=p('taichu'),blockedGuest=p('ocean');blockedHost.hp=100;blockedGuest.answer.correct=false;
  blockedGuest.goldenCore={type:'wugou',grade:1};blockedGuest.coreShield=true;
  blockedHost.artifactBattle={effects:[{type:'equip_true_damage_flat',value:100}]};
  const guarded=engine({roomId:'taichu-true-shield',round:1,host:blockedHost,guest:blockedGuest,soulTalents:talents,
   resolveEquipmentHit:context.window.resolveArtifactBattleHit,resolveGuardedFollowup:context.window.resolveArtifactGuardedFollowup});
- assert.equal(guarded.hostHp,130);
+ assert.equal(guarded.hostHp,150);
 });
 test('taichu can leech from reflected attacks even after a wrong answer',()=>{
  const host=p('ocean'),guest=p('taichu');host.nascentSoul=null;guest.hp=400;guest.answer.correct=false;
  const r=engine({roomId:'counter-leech',round:1,host,guest,soulTalents:talents,resolveEquipmentHit:()=>({damage:200,reflectDamage:100})});
- assert.equal(r.guestHp,230);
+ assert.equal(r.guestHp,250);
  const member=p('taichu');member.hp=400;member.artifactBattle={effects:[{type:'equip_reflect_percent',value:.5}]};
  const raid=authority.resolveBossDefense(member,{roomId:'counter-leech',bossAction:{id:1,damage:200},bossHp:1000});
- assert.equal(raid.reflectedDamage,100);assert.equal(raid.member.hp,230);
+ assert.equal(raid.reflectedDamage,100);assert.equal(raid.member.hp,250);
 });
 test('independent pursuits and reflected starfall also provide taichu lifesteal',()=>{
  const host=p('taichu'),guest=p('ocean');host.hp=100;guest.answer.correct=false;
  const pursuit=engine({roomId:'leech-pursuit',round:1,host,guest,
   soulTalents:{...talents,attack:(...args)=>({...talents.attack(...args),followup:100})}});
- assert.equal(pursuit.hostHp,190);
+ assert.equal(pursuit.hostHp,250);
  const starHost=p('ocean'),starGuest=p('taichu');starHost.answer.correct=false;starGuest.answer.correct=false;starGuest.hp=400;
  const star=engine({roomId:'leech-star-counter',round:3,host:starHost,guest:starGuest,
   soulTalents:{...talents,starfall:player=>player.uid==='ocean'?100:0},
   resolveTalentDefense:()=>({hpDamage:100,reflectDamage:50})});
- assert.equal(star.guestHp,315);
+ assert.equal(star.guestHp,325);
 });
 test('reflection is bounded by actual received damage and cannot recurse',()=>{
  const a=p('thunder');assert.equal(talents.reflection(a,0),0);

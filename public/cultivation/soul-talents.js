@@ -3,7 +3,7 @@
   'use strict';
   const TYPES = Object.freeze({
     ocean:{name:'滄潮',trait:'蓄潮爆發',desc:'敵方生命至少 60% 時，額外普通傷害為能力倍率的 2 倍；其餘為 0.6 倍。'},
-    taichu:{name:'還神',trait:'吸血',desc:'所有攻擊造成實際傷害皆可吸血，含普通攻擊、真傷、爆擊、連擊、追擊及反擊；滿級九品 25%、一品 30%。無單次回血量或攻擊力限制，生命最多回滿。'},
+    taichu:{name:'還神',trait:'吸血',desc:'所有攻擊造成實際傷害皆可吸血，含普通攻擊、真傷、爆擊、連擊、追擊及反擊；滿級九品 25%、一品 50%。無單次回血量或攻擊力限制，生命最多回滿。'},
     ningxin:{name:'凝鋒',trait:'會心',desc:'答對時有 25% 機率追加 3 倍能力倍率的普通傷害；不再觸發法寶暴擊。修習後道心改為每連答至少 3 題凝聚一次。'},
     pojing:{name:'破境',trait:'斬殺',desc:'敵方生命不高於 50% 時，額外普通傷害為能力倍率的 3.8 倍；其餘為 0.4 倍。'},
     xingchen:{name:'星隕',trait:'三題蓄星',desc:'每作答 3 題結算一次星隕，不要求連續答對；傷害＝該 3 題答對數 × 攻擊力 × 星辰元嬰能力係數 × 1.5。第三題答錯也會結算，真傷與法寶連擊不放大星隕。'},
@@ -61,7 +61,7 @@
     if(t?.version!==1||t.type!=='taichu')return 0;
     const quality=(9-clamp(t.grade,1,9))/8;
     const investment=(.3*clamp(t.top,0,10)+.2*clamp(t.far,0,10)+.5*clamp(t.final,0,10))/10;
-    return (.25+.05*quality)*investment;
+    return (.25+.25*quality)*investment;
   }
   function healing(player,dealt) {return Math.round(Math.max(0,Number(dealt)||0)*leechRate(player?.nascentSoul?.talent));}
   const api=Object.freeze({TYPES,snapshot,strength,attack,starfall,reflection,healing,leechRate,power,trueDamage});
