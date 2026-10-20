@@ -2,8 +2,8 @@
 (function (root) {
   'use strict';
   const TYPES = Object.freeze({
-    ocean:{name:'滄潮',trait:'蓄潮爆發',desc:'敵方生命至少 70% 時，額外普通傷害為能力倍率的 2 倍；其餘為 0.6 倍。'},
-    taichu:{name:'還神',trait:'吸血',desc:'答對且造成傷害後吸血，上限為 1.2 × 能力倍率 × 攻擊力，且不超過實際傷害與生命上限的 15%。'},
+    ocean:{name:'滄潮',trait:'蓄潮爆發',desc:'敵方生命至少 60% 時，額外普通傷害為能力倍率的 2 倍；其餘為 0.6 倍。'},
+    taichu:{name:'還神',trait:'吸血',desc:'所有攻擊造成實際傷害皆可吸血，含普通攻擊、真傷、爆擊、連擊、追擊及反擊；滿級九品 25%、一品 30%。無單次回血量或攻擊力限制，生命最多回滿。'},
     ningxin:{name:'凝鋒',trait:'會心',desc:'答對時有 25% 機率追加 3 倍能力倍率的普通傷害；不再觸發法寶暴擊。修習後道心改為每連答至少 3 題凝聚一次。'},
     pojing:{name:'破境',trait:'斬殺',desc:'敵方生命不高於 50% 時，額外普通傷害為能力倍率的 3.8 倍；其餘為 0.4 倍。'},
     xingchen:{name:'星隕',trait:'三題蓄星',desc:'每作答 3 題結算一次星隕，不要求連續答對；傷害＝該 3 題答對數 × 攻擊力 × 星辰元嬰能力係數 × 1.5。第三題答錯也會結算，真傷與法寶連擊不放大星隕。'},
@@ -30,15 +30,15 @@
     const out={normal:0,trueDamage:0,followup:0,leech:0,name:TYPES[t?.type]?.name||''};
     if(!budget)return out;
     const own=clamp(player.hp/Math.max(1,player.maxHp),0,1),enemy=clamp(target?.hp/Math.max(1,target?.maxHp),0,1);
-    if(t.type==='ocean')out.normal=budget*(enemy>=.7?2:.6);
-    if(t.type==='taichu')out.leech=budget*1.2;
+    if(t.type==='ocean')out.normal=budget*(enemy>=.6?2:.6);
+    if(t.type==='taichu')out.leech=leechRate(t);
     if(t.type==='ningxin'&&!t.comboMode&&hash(seed+':soul-critical')<.25)out.normal=budget*3;
     if(t.type==='pojing')out.normal=budget*(enemy<=.5?3.8:.4);
     // 星隕按三題作答視窗獨立結算，不混入一般答對攻擊。
     if(t.type==='wugou')out.trueDamage=trueDamage(t);
     if(t.type==='reverse')out.normal=budget*(own<=.5?1.8:.25);
     if(t.type==='sword'&&!t.comboMode)out.followup=budget*1.4;
-    for(const key of ['normal','trueDamage','followup','leech'])out[key]=Math.round(out[key]);
+    for(const key of ['normal','trueDamage','followup'])out[key]=Math.round(out[key]);
     return out;
   }
   function starfall(player, correctInWindow) {
@@ -57,8 +57,14 @@
     return Math.round((2*clamp(t.top,0,10)+clamp(t.far,0,10)+3*clamp(t.final,0,10))*
       (1+.2*(9-clamp(t.grade,1,9))/8)*(t.powerScale===.5?.5:1));
   }
-  function healing(player,dealt,limit) {return Math.round(Math.min(Math.max(0,dealt),Math.max(0,limit),Math.max(1,Number(player.maxHp)||1)*.15));}
-  const api=Object.freeze({TYPES,snapshot,strength,attack,starfall,reflection,healing,power,trueDamage});
+  function leechRate(t) {
+    if(t?.version!==1||t.type!=='taichu')return 0;
+    const quality=(9-clamp(t.grade,1,9))/8;
+    const investment=(.3*clamp(t.top,0,10)+.2*clamp(t.far,0,10)+.5*clamp(t.final,0,10))/10;
+    return (.25+.05*quality)*investment;
+  }
+  function healing(player,dealt) {return Math.round(Math.max(0,Number(dealt)||0)*leechRate(player?.nascentSoul?.talent));}
+  const api=Object.freeze({TYPES,snapshot,strength,attack,starfall,reflection,healing,leechRate,power,trueDamage});
   if(typeof module==='object'&&module.exports)module.exports=api;
   else root.QASoulTalents=api;
 })(globalThis);

@@ -18,7 +18,7 @@ test('four ordinary branches and five critical/combo branches replace prerequisi
  for(const type of ['ningxin','sword']){assert.deepEqual(Growth.branches({type}).map(x=>x.id),['cultivation','attack','vitality','coreChance','coreDamage']);assert.equal(Growth.upgrade(player(type),'core').ok,false);assert.equal(Growth.upgrade(player(type),'coreDamage').ok,true);}
 });
 test('branch metadata names the real trait and reports grade-dependent bonuses',()=>{
- const expected={ocean:['蓄潮爆發',32,'%'],taichu:['吸血',19.2,'%'],pojing:['斬殺',60.8,'%'],
+ const expected={ocean:['蓄潮爆發',32,'%'],taichu:['吸血',30,'%'],pojing:['斬殺',60.8,'%'],
   xingchen:['三題蓄星',24,'%'],wugou:['真傷',72,''],thunder:['反傷',16,'%'],reverse:['低血增傷',28.8,'%']};
  for(const [type,[name,value,unit]] of Object.entries(expected)){
   const core={type,grade:1},branch=Growth.branches(core).at(-1);
@@ -45,7 +45,8 @@ test('trait previews agree with battle effects at every rank and grade',()=>{
    if(type==='wugou')assert.equal(value,hit.trueDamage);
    else if(type==='thunder')assert.ok(Math.abs(Math.round(value)-Talents.reflection(fighter,100))<=1);
    else if(type==='xingchen')assert.ok(Math.abs(Math.round(value/100*600)-Talents.starfall(fighter,1))<=1,`${type} grade ${grade} rank ${level}`);
-   else assert.ok(Math.abs(Math.round(value/100*600)-(type==='taichu'?hit.leech:hit.normal))<=1,`${type} grade ${grade} rank ${level}`);
+   else if(type==='taichu')assert.ok(Math.abs(value/100-Talents.leechRate(talent))<=.000500001,`${type} grade ${grade} rank ${level}`);
+   else assert.ok(Math.abs(Math.round(value/100*600)-hit.normal)<=1,`${type} grade ${grade} rank ${level}`);
   }
   for(const type of ['ningxin','sword']){
    const core={type,grade},p=player(type,{coreChance:level,coreDamage:level}),b=Growth.bonuses(p,core);
