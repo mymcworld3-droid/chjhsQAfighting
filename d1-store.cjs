@@ -88,7 +88,12 @@ function createGateway(env=process.env,fetchFn=fetch) {
     const payload=await response.json().catch(()=>({}));
     if(response.status===409)throw conflict();
     if(response.status===429&&payload.code==='resource-exhausted')throw Object.assign(Error('D1 quota exhausted'),{code:'resource-exhausted'});
-    if(!response.ok || payload.success!==true || !Array.isArray(payload.result))throw Object.assign(Error('D1 gateway unavailable'),{code:'unavailable'});
+    if(!response.ok || payload.success!==true || !Array.isArray(payload.result)){
+      // Expose only HTTP status and a controlled gateway error code, never request SQL or credentials.
+      const gatewayCode = ['aborted','resource-exhausted','d1-query-failed'].includes(payload.code) ? payload.code : 'unknown';
+      console.warn('[D1 gateway]', {httpStatus:response.status,gatewayCode});
+      throw Object.assign(Error('D1 gateway unavailable'),{code:'unavailable'});
+    }
     return payload.result;
   };
 }
