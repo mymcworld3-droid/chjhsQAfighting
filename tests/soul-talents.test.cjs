@@ -70,7 +70,7 @@ test('starfall triggers on the third answered question even when that answer is 
   }
  }
 });
-test('correct-answer thunder adds 100 percentage points to equipment 16%, and soul can stack on the same hit',()=>{
+test('correct-answer thunder adds 50% to equipment 16%, and soul can stack on the same hit',()=>{
  const context={window:{},QACombatCombo:globalThis.QACombatCombo};vm.createContext(context);
  const source=fs.readFileSync(require('node:path').join(__dirname,'../public/cultivation/artifact-battle-effects.js'),'utf8').replace(/^import \{\} from .*;\n/gm,'');
  vm.runInContext(source,context);
@@ -87,8 +87,8 @@ test('correct-answer thunder adds 100 percentage points to equipment 16%, and so
   if(bare){withSoul=settle(true,seed);break;}
  }
  assert.ok(bare);
- assert.equal(bare.damage,232,'200 normal HP loss × (16% weapon + 100% core) = 232');
- assert.equal(withSoul.damage,296,'same 200 HP × (16%+100%+32% soul) = 296');
+ assert.equal(bare.damage,132,'200 normal HP loss × (16% weapon + 50% core) = 132');
+ assert.equal(withSoul.damage,196,'same 200 HP × (16%+50%+32% soul) = 196');
 });
 test('pure true damage never contributes to thunder reflection',()=>{
  const h=p('wugou'),g=p('thunder');

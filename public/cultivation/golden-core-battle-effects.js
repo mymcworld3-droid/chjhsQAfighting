@@ -82,8 +82,8 @@
     const damage = Math.max(0, Math.round(Number(receivedDamage) || 0));
     if (!damage) return { reflectDamage: 0 };
 
-    const reflected = damage;
-    const message = `答對蓄雷，本回合反擊傷害比例 +100 個百分點，金丹額外反擊 ${reflected} 傷害`;
+    const reflected = Math.round(damage * .5);
+    const message = `答對蓄雷，本回合反擊傷害 +50%，金丹額外反擊 ${reflected} 傷害`;
     showActivation(core, message, '鬥法受擊效果');
     return {
       reflectDamage: reflected,
