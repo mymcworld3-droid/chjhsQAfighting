@@ -13,7 +13,6 @@ import './first-answer-guide.js';
   catch (_) { state = Rules.normalize(); }
   let user = null, busy = false;
   const portraits = ['male', 'female'].map(g => `assets/story/characters/player-${g}-neutral.png`);
-  const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
   function store(patch = {}) {
     state = Rules.normalize({ ...state, ...patch });
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (_) {}
@@ -81,15 +80,21 @@ import './first-answer-guide.js';
     });
   }
   function gender() {
-    const data = window.getCurrentUserData?.();
-    const layer = panel('選擇性別', `<label class="fv-name">道號<input id="fv-name" maxlength="24" autocomplete="nickname" value="${escape(data?.displayName || '')}" placeholder="輸入你的道號"></label><div class="fv-genders">${['male','female'].map((g,i) => `<button type="button" class="fv-gender" data-gender="${g}"><img src="${portraits[i]}" alt="${i?'女修':'男修'}"><strong>${i?'女修 · 師妹':'男修 · 師弟'}</strong></button>`).join('')}</div><p>進入宗門後，可從仙道任務開啟「第一章 · 問道靈根」。</p>`, '');
+    let selected = '';
+    const layer = panel('取名與選擇角色', `<label class="fv-name">道號<input id="fv-name" maxlength="24" autocomplete="nickname" required placeholder="輸入你的道號"></label><div class="fv-genders">${['male','female'].map((g,i) => `<button type="button" class="fv-gender" data-gender="${g}" aria-pressed="false"><img src="${portraits[i]}" alt="${i?'女修':'男修'}"><strong>${i?'女修 · 師妹':'男修 · 師弟'}</strong></button>`).join('')}</div><p>輸入道號並選好角色後，請按下方「確定」。</p>`, '<button type="button" id="fv-confirm">確定</button>');
     layer.querySelectorAll('[data-gender]').forEach(button => {
-      button.onclick = () => action(() => finish(button.dataset.gender, $('fv-name').value.trim()));
+      button.onclick = () => {
+        selected = button.dataset.gender;
+        layer.querySelectorAll('[data-gender]').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+        error('');
+      };
     });
+    layer.querySelector('#fv-confirm').onclick = () => action(() => finish(selected, $('fv-name').value.trim()));
   }
   async function finish(selected = '', name = '') {
     if (!user || user.isAnonymous) throw new Error('請先完成帳號綁定或登入。');
-    if (selected && !name) throw new Error('請先輸入你的道號。');
+    if (!name) { $('fv-name')?.focus(); throw new Error('請先輸入你的道號。'); }
+    if (!['male', 'female'].includes(selected)) throw new Error('請先選擇角色。');
     await window.completeFirstVisitSetup?.(selected, name);
     store({ stage: 'done', completed: true, joining: false });
     removeLayer();

@@ -98,9 +98,10 @@ test('gender choice displays both male and female full character portraits', () 
   assert.match(engine, /story-gender-option img/);
 });
 
-test('gender choice asks for the current player name and saves name before gender', () => {
+test('gender choice requires a typed name and saves name before gender confirmation', () => {
   assert.match(engine, /id="story-player-name"/);
-  assert.match(engine, /value="\$\{escapeHtml\(playerName\(\)\)\}"/);
+  assert.ok(engine.includes("value=\"${preview ? escapeHtml(playerName()) : ''}\""));
+  assert.match(engine, /id="story-gender-confirm"/);
   assert.match(engine, /window\.updatePlayerDisplayName\(requestedName\)/);
   assert.match(engine, /await persist\(\{ gender: selected \}\)/);
   assert.ok(engine.indexOf('window.updatePlayerDisplayName(requestedName)') < engine.indexOf('await persist({ gender: selected })'));
