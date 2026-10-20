@@ -41,3 +41,35 @@ test('D1 client listener supports Firebase metadata options and cancels stream w
   await new Promise(r=>setTimeout(r,10));assert.equal(got,1);stop();assert.equal(aborted,true);
   await new Promise(r=>setTimeout(r,15));assert.equal(h.requests.length,1);
 });
+
+test('back-forward cache suspends and restores listeners; leaving the page permanently stops them',async()=>{
+  let connections=0,aborts=0;
+  const h=await harness(async(body,options)=>{
+    connections++;let controller;
+    const stream=new ReadableStream({start(c){controller=c;c.enqueue(new TextEncoder().encode('data: '+JSON.stringify({exists:true,version:connections,data:{gold:connections}})+'\n\n'));}});
+    options.signal.addEventListener('abort',()=>{aborts++;controller.close();});
+    return {ok:true,body:stream};
+  });
+  const versions=[];const stop=h.api.onSnapshot(h.api.doc(h.api.getFirestore(),'users','u'),snap=>versions.push(snap.version));
+  await new Promise(r=>setTimeout(r,10));
+  function lifecycle(name,persisted){const event=new Event(name);Object.defineProperty(event,'persisted',{value:persisted});h.window.dispatchEvent(event);}
+  lifecycle('pagehide',true);await new Promise(r=>setTimeout(r,15));
+  assert.equal(aborts,1);assert.equal(connections,1);
+  lifecycle('pageshow',true);await new Promise(r=>setTimeout(r,90));
+  assert.equal(connections,2);assert.deepEqual(versions,[1,2]);
+  lifecycle('pagehide',false);lifecycle('pageshow',true);await new Promise(r=>setTimeout(r,70));
+  assert.equal(aborts,2);assert.equal(connections,2);stop();
+});
+test('restoring a cached page under a different account cannot revive old subscriptions',async()=>{
+  let connections=0;
+  const h=await harness(async(body,options)=>{
+    connections++;let controller;
+    const stream=new ReadableStream({start(c){controller=c;}});
+    options.signal.addEventListener('abort',()=>controller.close());return {ok:true,body:stream};
+  });
+  const stop=h.api.onSnapshot(h.api.doc(h.api.getFirestore(),'users','u'),()=>{});
+  await new Promise(r=>setTimeout(r,5));
+  const hide=new Event('pagehide');Object.defineProperty(hide,'persisted',{value:true});h.window.dispatchEvent(hide);
+  h.setUid('other');const show=new Event('pageshow');Object.defineProperty(show,'persisted',{value:true});h.window.dispatchEvent(show);
+  await new Promise(r=>setTimeout(r,90));assert.equal(connections,1);stop();
+});

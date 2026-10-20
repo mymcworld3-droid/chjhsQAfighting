@@ -183,10 +183,7 @@ async function callOpenAICompatible(provider, prompt, signal) {
 
 async function callProvider(provider, prompt, timeoutMs) {
   if (provider.type === 'gemini') {
-    return Promise.race([
-      callGemini(provider, prompt),
-      new Promise((_, reject) => setTimeout(() => reject(new Error('AI request timeout')), timeoutMs))
-    ]);
+    return withDeadline(callGemini(provider, prompt), timeoutMs);
   }
   return withTimeout((signal) => callOpenAICompatible(provider, prompt, signal), timeoutMs);
 }
@@ -200,6 +197,25 @@ function orderedProviders(providers) {
   const start = roundRobinCursor % providers.length;
   roundRobinCursor = (roundRobinCursor + 1) % providers.length;
   return providers.slice(start).concat(providers.slice(0, start));
+}
+
+// Upstream errors can echo keys in URLs, headers or JSON bodies. Sanitize before
+// recording diagnostics or propagating an error to an HTTP endpoint.
+function safeProviderError(error,provider={}) {
+  let message=String(error?.message || error || 'AI provider failed');
+  const secrets=[provider.key,...Object.entries(provider.headers||{})
+    .filter(([name])=>/authorization|api.?key|token|secret/i.test(name)).map(([,value])=>value)];
+  for(const secret of secrets){
+    if(typeof secret!=='string'||!secret)continue;
+    for(const value of new Set([secret,encodeURIComponent(secret)]))message=message.split(value).join('[REDACTED]');
+  }
+  return message.replace(/(Bearer\s+)[^\s"'<>]+/gi,'$1[REDACTED]')
+    .replace(/([?&](?:key|api_key|access_token)=)[^&\s"'<>]+/gi,'$1[REDACTED]').slice(0,500);
+}
+async function withDeadline(promise,timeoutMs) {
+  let timer;
+  try{return await Promise.race([promise,new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error('AI request timeout')),timeoutMs);})]);}
+  finally{clearTimeout(timer);}
 }
 
 // Concurrent quiz providers race to return the first syntactically valid JSON.
@@ -225,7 +241,7 @@ async function generateJSON(prompt, options = {}) {
       return { data, text, provider: provider.name, model: provider.model };
     } catch (error) {
       recordAttempt(provider, 'failed', error);
-      const message = error?.name === 'AbortError' ? 'timeout' : (error?.message || String(error));
+      const message = error?.name === 'AbortError' ? 'timeout' : safeProviderError(error,provider);
       errors.push(`${provider.name}: ${message}`);
       console.warn(`[AI Router] ${provider.name}/${provider.model} failed: ${message}`);
       throw error;
@@ -284,5 +300,7 @@ module.exports = {
   buildProviders,
   orderedProviders,
   recordAttempt,
-  getRecentActivity
+  getRecentActivity,
+  safeProviderError,
+  withDeadline
 };

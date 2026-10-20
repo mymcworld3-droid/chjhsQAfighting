@@ -11,7 +11,8 @@
     "check:module-versions": "node scripts/build-module-versions.cjs --check",
     "migrate:dongtian": "node scripts/migrate-dongtian-to-bd.cjs",
     "migrate:d1": "node scripts/migrate-firestore-to-d1.cjs",
-    "test:d1": "node --test tests/d1-*.test.cjs"
+    "test:d1": "node --test tests/d1-*.test.cjs",
+    "audit:code": "node --experimental-vm-modules scripts/audit-code.cjs"
   },
   "keywords": [],
   "author": "",
@@ -25,5 +26,8 @@
   },
   "engines": {
     "node": ">=18.0.0"
+  },
+  "overrides": {
+    "uuid": "11.1.1"
   }
 }

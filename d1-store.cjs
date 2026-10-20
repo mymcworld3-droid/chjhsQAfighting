@@ -230,7 +230,10 @@ class D1Store {
             if(signature!==watcher.last){watcher.last=signature;watcher.snapshot=snap;for(const l of watcher.listeners)try{l.next(snap);}catch(e){console.error('[D1 listener callback]',e.message);}}
           }
           watcher.failures=0;
-        }catch(e){watcher.failures++;for(const l of watcher.listeners)l.error?.(e);}
+        }catch(e){
+          watcher.failures++;
+          for(const l of watcher.listeners)try{l.error?.(e);}catch(callbackError){console.error('[D1 listener error callback]',callbackError.message);}
+        }
         finally{
           watcher.running=false;
           if(!watcher.stopped){
@@ -241,7 +244,7 @@ class D1Store {
       };watcher.tick=tick;this.watchers.set(key,watcher);
     }
     const listener={next,error};watcher.listeners.add(listener);
-    if(watcher.snapshot)queueMicrotask(()=>{if(watcher.listeners.has(listener))next(watcher.snapshot);});else if(!watcher.running)void watcher.tick();
+    if(watcher.snapshot)queueMicrotask(()=>{if(watcher.listeners.has(listener))try{next(watcher.snapshot);}catch(e){console.error('[D1 listener callback]',e.message);}});else if(!watcher.running)void watcher.tick();
     return ()=>{watcher.listeners.delete(listener);if(!watcher.listeners.size){watcher.stopped=true;clearTimeout(watcher.timer);this.watchers.delete(key);}};
   }
   _notify(paths){

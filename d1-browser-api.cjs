@@ -193,6 +193,7 @@ function registerD1BrowserApi(app,{env=process.env,resolve=role=>adminProject(ro
       let decoded;
       try {decoded=await resolve('A').auth.verifyIdToken(header[1],true);}catch(_){throw fail('登入已失效',401,'unauthenticated');}
       if(!decoded.uid||decoded.aud!==PROJECT_IDS.A||decoded.iss!=='https://securetoken.google.com/'+PROJECT_IDS.A)throw fail('身分不符',401,'unauthenticated');
+      if(req.aborted||res.destroyed||res.writableEnded)return;
       const input=req.body||{},role=input.target?.role||input.role;
       if(!['A','BD','C'].includes(role))throw fail('資料區不符',400,'invalid-argument');
       if(!['read','watch','commit'].includes(input.action))throw fail('未知操作',400,'invalid-argument');
@@ -232,6 +233,7 @@ function registerD1BrowserApi(app,{env=process.env,resolve=role=>adminProject(ro
       if(input.action==='read')return res.json(format(initialSnapshot||await target.get()));
       // Validate initial authorization BEFORE opening an SSE response.
       const initial=format(initialSnapshot||await target.get());
+      if(req.aborted||res.destroyed||res.writableEnded)return;
       res.set({'Content-Type':'text/event-stream; charset=utf-8','Cache-Control':'no-cache, no-transform','X-Accel-Buffering':'no'});
       res.flushHeaders();
       let stopped=false,unsubscribe,heartbeat,renew,last='';
@@ -246,6 +248,7 @@ function registerD1BrowserApi(app,{env=process.env,resolve=role=>adminProject(ro
       renew=setTimeout(stop,5*60*1000);heartbeat.unref?.();renew.unref?.();
 
     }catch(error){
+      if(req.aborted||res.destroyed||res.writableEnded)return;
       const code=error.code||'unavailable',status=error.status||(code==='aborted'?409:503);
       if(status>=500)console.error('[D1 browser]',code);
       res.status(status).json({error:status>=500?'資料服務暫時無法使用':error.message,code});
