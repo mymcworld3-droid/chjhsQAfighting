@@ -24,7 +24,7 @@
     const rules = talents || root.QASoulTalents;
     const rank = Math.min(CAP,count(level));
     const talent = rules?.snapshot(core?.type,core?.grade,{leftTop:rank,leftFarBottom:rank,leftFinal:rank});
-    if(talent) talent.powerScale=.5;
+    if(talent) talent.powerScale=core?.type==='wugou'?1:.5;
     if(core?.type === 'wugou') return rules?.trueDamage(talent) || 0;
     return roundBonus((rules?.strength(talent) || 0) * (CORE_FACTORS[core?.type] || 0) * 100);
   }
@@ -92,7 +92,7 @@
     if(accessScore(player)<THRESHOLD||player?.cultivationTraining?.coreEnabled===false||!core?.type)return null;
     const levels=normalize(player.nascentSoulGrowth).branches,n=levels.core;
     const talent=(talents || root.QASoulTalents)?.snapshot(core.type,core.grade,{leftTop:n,leftFarBottom:n,leftFinal:n})||null;
-    if(talent){talent.comboMode=true;talent.powerScale=.5;}
+    if(talent){talent.comboMode=true;talent.powerScale=core?.type==='wugou'?1:.5;}
     const quality=(9-Math.min(9,Math.max(1,count(core.grade)||9)))/8;
     const chance=levels.coreChance/10*(.05+.025*quality);
     return {type:core.type,attackFlat:Math.round(levels.attack*3.5),maxHpFlat:levels.vitality*25,

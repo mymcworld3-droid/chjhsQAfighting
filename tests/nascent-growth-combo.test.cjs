@@ -19,7 +19,7 @@ test('four ordinary branches and five critical/combo branches replace prerequisi
 });
 test('branch metadata names the real trait and reports grade-dependent bonuses',()=>{
  const expected={ocean:['蓄潮爆發',32,'%'],taichu:['吸血',19.2,'%'],pojing:['斬殺',60.8,'%'],
-  xingchen:['三題蓄星',24,'%'],wugou:['真傷',36,''],thunder:['反傷',16,'%'],reverse:['低血增傷',28.8,'%']};
+  xingchen:['三題蓄星',24,'%'],wugou:['真傷',72,''],thunder:['反傷',16,'%'],reverse:['低血增傷',28.8,'%']};
  for(const [type,[name,value,unit]] of Object.entries(expected)){
   const core={type,grade:1},branch=Growth.branches(core).at(-1);
   assert.equal(branch.name,name);assert.equal(branch.unit,unit);assert.equal(Growth.branchValue(core,'core',10),value);
@@ -31,8 +31,8 @@ test('branch metadata names the real trait and reports grade-dependent bonuses',
   assert.equal(Growth.branchValue(core,'coreChance',10),7.5);assert.equal(Growth.branchValue(core,'coreDamage',10),maxDamage);
   assert.equal(Growth.branchValue({...core,grade:9},'coreChance',10),5);
  }
- assert.equal(Growth.branchValue({type:'wugou',grade:2},'core',10),35);
- assert.equal(Growth.branchValue({type:'wugou',grade:9},'core',10),30);
+ assert.equal(Growth.branchValue({type:'wugou',grade:2},'core',10),71);
+ assert.equal(Growth.branchValue({type:'wugou',grade:9},'core',10),60);
 });
 test('trait previews agree with battle effects at every rank and grade',()=>{
  for(let grade=1;grade<=9;grade++)for(let level=0;level<=10;level++){
@@ -124,5 +124,19 @@ test('server daily settlement awards perfect-answer fragments with saved soul bo
   assert.equal(result.record.lastResult.soulCultivation,score>=68&&correct===3?5:0);
   assert.equal(db.docs.get('users/u1').stats.nascentSoulSpirit,0);
   const before=structuredClone(db.docs.get('users/u1'));await service.finish('u1');assert.deepEqual(db.docs.get('users/u1'),before);
+ }
+});
+
+test('wugou full-power true damage reaches 72 in trusted snapshots and actual PvP and raid settlement',()=>{
+ for(const [grade,level,expected] of [[9,10,60],[1,10,72],[1,5,36],[1,0,0]]){
+  const p=player('wugou',{core:level});p.cultivationTraining.equippedCore.grade=grade;
+  const trusted=trustedRaidPlayerSnapshot(p,'h');
+  assert.equal(Growth.branchValue(p.cultivationTraining.equippedCore,'core',level),expected);
+  assert.equal(Talents.attack(trusted,{hp:1000,maxHp:1000}).trueDamage,expected);
+  const f=fighters({...trusted,answer:{correct:true,atMs:100}});f.guest.coreShield=true;f.guest.goldenCore={type:'ningxin',grade:1};
+  const r=combat();const battle=r.settle({roomId:'wugou-72',round:1,...f,soulTalents:Talents,resolveEquipmentHit:r.window.resolveArtifactBattleHit,resolveGuardedFollowup:r.window.resolveArtifactGuardedFollowup,resolveTalentDefense:r.window.resolveArtifactBattleDefense});
+  assert.equal(battle.guestHp,3000-expected);
+  const raid=resolvePlayerAction(trusted,{roomId:'wugou-72',actionId:1,correct:true,bossHp:10000,bossMaxHp:10000});
+  assert.equal(raid.damage,200+expected);
  }
 });
