@@ -180,7 +180,7 @@ test('Golden Core roster matches the nine current pills and battle effects', () 
   assert.match(statusPanel, /sword: \{ icon: '⚔', tone: 'silver' \}/);
   assert.match(battleEffects, /extraDamage: 100/);
   assert.match(battleEffects, /extraDamage: 200/);
-  assert.match(battleEffects, /答對蓄雷，本回合反擊傷害 \+50%/);
+  assert.match(battleEffects, /答對蓄雷（60%），本回合反擊傷害 \+75%/);
   assert.match(battleEffects, /reflectDamage: reflected/);
   assert.match(main, /cultivation\/golden-core-battle-effects\.js/);
   assert.match(legacy, /goldenCore: window\.getEquippedGoldenCoreBattleSnapshot/);
