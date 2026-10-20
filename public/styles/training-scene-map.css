@@ -26,6 +26,8 @@ body.xianxia-theme #page-training.training-scene-map-active > :not(.training-map
   height: 100%;
   overflow: hidden;
   background: #889b9f;
+  background-size: cover;
+  background-position: center;
   isolation: isolate;
   touch-action: pan-x pan-y;
 }

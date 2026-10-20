@@ -262,6 +262,7 @@ function renderScene(next) {
   plane.style.setProperty('--training-map-font', `${layout.font}px`);
   const safeRendering = trainingRenderProfile() === 'safe';
   const plate = safeRendering ? `assets/training/cultivation-${next}-clean.webp` : layout.image;
+  map.style.backgroundImage = `url("${plate}")`;
   scenery.style.backgroundImage = `url("${plate}")`;
   scenery.replaceChildren(...(safeRendering ? [] : makeSceneryLayers(layout)));
   background = document.createElement('img');
@@ -367,17 +368,19 @@ function fit() {
   if (!rect.width || !rect.height) return;
   // The plate continues beneath navigation; targets keep the same safe area.
   const availableHeight = Math.max(1, rect.height - bottom);
-  const scale = Math.max(rect.width / layout.width, availableHeight / layout.height);
+  // Keep the complete interactive plane (including names and locks) inside
+  // the header/navigation safe area. Only the decorative backdrop may crop.
+  const scale = Math.min(rect.width / layout.width, availableHeight / layout.height);
   const left = (rect.width - layout.width * scale) / 2, offset = (availableHeight - layout.height * scale) / 2;
   plane.style.width = `${layout.width}px`;
   plane.style.height = `${layout.height}px`;
   plane.style.left = `${left}px`;
   plane.style.top = `${offset}px`;
   plane.style.transform = `scale(${scale})`;
-  // Extend the plate's lower edge just enough to reach the canvas bottom,
-  // without scaling or moving the buildings, labels, or their hit areas.
+  // Keep terrain layers registered to the same logical canvas as the buttons.
+  // The map's cover backdrop fills the remaining space beneath navigation.
   scenery.style.width = `${layout.width}px`;
-  scenery.style.height = `${Math.max(layout.height, (rect.height - offset + 1) / scale)}px`;
+  scenery.style.height = `${layout.height}px`;
   scenery.style.left = `${left}px`;
   scenery.style.top = `${offset}px`;
   scenery.style.transform = `scale(${scale})`;
