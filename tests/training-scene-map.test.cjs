@@ -48,6 +48,26 @@ test('new accounts see Status; existing Foundation and Golden Core gates are at 
   assert.equal(Rules.PLACES.every(place => Rules.allows(player, place.threshold)), true);
 });
 
+test('compact contract entrance sits beside the forge and opens its existing tab', () => {
+  const contract = Rules.PLACES.find(place => place.id === 'contract');
+  assert.equal(contract.name, '契器');
+  assert.equal(contract.threshold, 28);
+  for (const layout of Object.values(Layouts)) {
+    const forge = layout.places.forge.bounds, altar = layout.places.contract.bounds;
+    assert.ok(altar[2] < forge[2]);
+    assert.ok(altar[0] >= forge[0] + forge[2]);
+    assert.ok(altar[0] - forge[0] - forge[2] < layout.width * .03);
+  }
+  const calls = [], source = fs.readFileSync(path.join(__dirname, '../public/cultivation/training-scene-map.js'), 'utf8');
+  const context = { window: { resetTrainingScroll() {} },
+    page: { querySelector(selector) { assert.equal(selector, '[data-training-tab="contract"]'); return { click: () => calls.push('contract') }; } },
+    setDetail: id => calls.push(id), bar: { querySelector: () => ({ focus() {} }) } };
+  vm.createContext(context);
+  vm.runInContext(source.slice(source.indexOf('function openPlace('), source.indexOf('\nasync function animate')) + '\nthis.openPlace = openPlace;', context);
+  context.openPlace(contract);
+  assert.deepEqual(calls, ['contract', 'contract']);
+});
+
 test('entrance unlocks are monotonic through deductions and remote account restores', () => {
   const player = { stats: { totalScore: 68, gold: 500 } };
   player.trainingAccess = Rules.record(player);
@@ -88,7 +108,7 @@ test('previously unlocked soul upgrades and trusted combat core remain usable af
   assert.equal(Authority.trustedRaidPlayerSnapshot(player, 'u1').goldenCore, null);
 });
 
-test('both clean scene plates match their assets and contain five non-overlapping targets', () => {
+test('both clean scene plates match their assets and contain six non-overlapping targets', () => {
   for (const [name, layout] of Object.entries(Layouts)) {
     const file = fs.readFileSync(path.join(__dirname, '../public', layout.image.replace(/\.webp$/, '.png')));
     assert.equal(file.readUInt32BE(16), layout.width, `${name} image width`);
@@ -98,10 +118,19 @@ test('both clean scene plates match their assets and contain five non-overlappin
     const regions = Object.values(layout.places);
     for (const region of regions) {
       const sprite = region.sprite;
-      const png = fs.readFileSync(path.join(__dirname, '../public', sprite.image.replace(/\.webp$/, '.png')));
-      assert.equal(png.readUInt32BE(16), sprite.width);
-      assert.equal(png.readUInt32BE(20), sprite.height);
-      assert.equal(png[25], 6, 'each AI building asset must have a real RGBA alpha channel');
+      const pngPath = path.join(__dirname, '../public', sprite.image.replace(/\.webp$/, '.png'));
+      if (fs.existsSync(pngPath)) {
+        const png = fs.readFileSync(pngPath);
+        assert.equal(png.readUInt32BE(16), sprite.width);
+        assert.equal(png.readUInt32BE(20), sprite.height);
+        assert.equal(png[25], 6, 'each AI building asset must have a real RGBA alpha channel');
+      } else {
+        const webp = fs.readFileSync(path.join(__dirname, '../public', sprite.image));
+        assert.equal(webp.toString('ascii', 12, 16), 'VP8X');
+        assert.equal(webp.readUIntLE(24, 3) + 1, sprite.width);
+        assert.equal(webp.readUIntLE(27, 3) + 1, sprite.height);
+        assert.ok(webp[20] & 0x10, 'generated WebP must retain transparency');
+      }
       const [sx, sy, sw, sh] = sprite.crop;
       assert.ok(sx >= 0 && sy >= 0 && sw > 0 && sh > 0 && sx + sw <= sprite.width && sy + sh <= sprite.height);
       const [x, y, width, height] = region.bounds;

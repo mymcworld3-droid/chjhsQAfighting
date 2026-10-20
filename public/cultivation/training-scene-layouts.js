@@ -1,8 +1,14 @@
 // Shared AI-extracted alpha sprites retain fine roof tips, railings and ornaments.
-// Both fixed-ratio maps use the same five sprites on independently composed clean plates.
+// Both fixed-ratio maps share six sprites, including the compact contract altar beside the forge.
 (function (root) {
   'use strict';
   const sprites = {
+  "contract": {
+    "image": "assets/training/cutouts/contract-ai.webp",
+    "width": 768,
+    "height": 512,
+    "crop": [0, 0, 768, 512]
+  },
   "meditation": {
     "image": "assets/training/cutouts/meditation-ai.webp",
     "width": 1672,
@@ -113,6 +119,7 @@
         meditation: place('meditation', [602,130,505,480], [845,566], [845,406]),
         vault: place('vault', [150,140,340,288], [310,389], [311,286]),
         forge: place('forge', [43,438,502,341], [305,739], [303,614]),
+        contract: place('contract', [550,620,250,200], [675,794], [675,700]),
         secret: place('secret', [1208,137,310,293], [1360,390], [1367,271]),
         status: place('status', [1183,465,378,345], [1368,770], [1376,637])
       }
@@ -122,7 +129,8 @@
       places: {
         meditation: place('meditation', [237,574,482,378], [486,900], [481,766]),
         vault: place('vault', [17,228,354,311], [198,479], [198,374]),
-        forge: place('forge', [18,945,425,361], [238,1246], [244,1131]),
+        forge: place('forge', [18,945,340,361], [198,1246], [198,1131]),
+        contract: place('contract', [365,1080,190,230], [460,1270], [460,1180]),
         secret: place('secret', [603,265,316,315], [763,521], [773,419]),
         status: place('status', [561,952,362,435], [762,1302], [771,1151])
       }
