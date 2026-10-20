@@ -141,6 +141,22 @@ async function executeCommit(db,input,context) {
   const writes=input.writes,reads=input.reads||[];
   if(!Array.isArray(writes)||!writes.length||writes.length>500||!Array.isArray(reads)||reads.length>500)throw fail('交易過大',400,'invalid-argument');
   const tx=new Transaction(db);
+  // Validate every target before dispatch, then coalesce the documents needed by
+  // this commit. The normal checks below still authorize every read and write.
+  const targets=new Map();
+  for(const row of reads){
+    const ref=buildTarget(db,row.target);
+    if(ref instanceof Query)throw fail('交易讀取必須是單一文件',400,'invalid-argument');
+    targets.set(ref.path,ref);
+  }
+  for(const row of writes){
+    if(!['set','update','delete'].includes(row.type))throw fail('未知的寫入類型',400,'invalid-argument');
+    const ref=buildTarget(db,row.target);
+    if(ref instanceof Query)throw fail('寫入必須是單一文件',400,'invalid-argument');
+    targets.set(ref.path,ref);
+  }
+  if(db.role==='A')targets.set('users/'+context.uid,db.doc('users/'+context.uid));
+  await Promise.all([...targets.values()].map(ref=>tx.get(ref)));
   for(const row of reads) {
     const ref=buildTarget(db,row.target);
     if(ref instanceof Query)throw fail('交易讀取必須是單一文件',400,'invalid-argument');

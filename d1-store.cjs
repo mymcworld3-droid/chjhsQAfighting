@@ -1,6 +1,7 @@
 'use strict';
 const {randomUUID} = require('node:crypto');
 const Codec = require('./public/d1-codec.js');
+const {ReadBatcher} = require('./d1-read-batcher.cjs');
 const conflict = () => Object.assign(new Error('資料已更新，請重試'),{code:'aborted'});
 function validPath(path,document=true) {
   if(typeof path!=='string' || path.length>1500 || path.split('/').some(x=>!x||x==='.'||x==='..') || path.split('/').length%2 !== (document?0:1)) throw Error('Invalid document/collection path');
@@ -131,8 +132,13 @@ class Transaction {
   constructor(db){this.db=db;this.reads=new Map();this.collections=new Map();this.writes=[];}
   async get(ref){
     if(ref instanceof Query){
-      const [revision] = await this.db.gateway([{sql:'SELECT version FROM collection_versions WHERE namespace=? AND path=?',params:[this.db.role,ref.path]}]);
-      const snapshot=await ref.get();
+      if(ref.db!==this.db)throw Error('Cross-namespace transaction is unsupported');
+      // Read revision and matching documents in the same SQL transaction.
+      const [revision,result] = await this.db.gateway([
+        {sql:'SELECT version FROM collection_versions WHERE namespace=? AND path=?',params:[this.db.role,ref.path]},
+        compileQuery(ref)
+      ]);
+      const snapshot=querySnapshot(result.results.map(row=>new Snapshot(this.db.doc(row.path),row)));
       const version=revision.results[0]?.version||0;
       if(this.collections.has(ref.path)&&this.collections.get(ref.path)!==version)throw conflict();
       this.collections.set(ref.path,version);
@@ -151,7 +157,8 @@ class Transaction {
   async commit({before=[],after=[]}={}){
     if(!this.writes.length&&!before.length&&!after.length)return;
     if(this.writes.length>500)throw Error('D1 batch exceeds 500 writes');
-    for(const w of this.writes){if(w.ref.db!==this.db)throw Error('Cross-namespace write');await this.get(w.ref);}
+    for(const w of this.writes)if(w.ref.db!==this.db)throw Error('Cross-namespace write');
+    await Promise.all([...new Map(this.writes.map(w=>[w.ref.path,w.ref])).values()].map(ref=>this.get(ref)));
     const prepared=this.preview();
     const guard=randomUUID(),role=this.db.role,now=Date.now();
     const docReads=JSON.stringify([...this.reads].map(([path,snap])=>({path,version:snap.version})));
@@ -184,37 +191,66 @@ class Transaction {
     ];
     if(!this.collections.size)statements.splice(1,1);
     await this.db.gateway([...before,...statements,...after]);
-    this.db._notify();
+    this.db._notify([...prepared.keys()]);
   }
   preview(){const data=new Map();for(const w of this.writes){const old=data.has(w.ref.path)?data.get(w.ref.path):this.reads.get(w.ref.path).data()??null;data.set(w.ref.path,Codec.apply(old,w));}return data;}
 }
 class D1Store {
-  constructor(role,{gateway=createGateway(),pollMs=5000}={}){if(!['A','BD','C'].includes(role))throw Error('Invalid namespace');this.role=role;this.gateway=gateway;this.pollMs=pollMs;this.isD1=true;this.watchers=new Map();}
+  constructor(role,{gateway=createGateway(),pollMs=5000}={}){if(!['A','BD','C'].includes(role))throw Error('Invalid namespace');this.role=role;this.gateway=gateway;this.pollMs=pollMs;this.isD1=true;this.watchers=new Map();this.readBatcher=new ReadBatcher(statements=>this.gateway(statements));}
   collection(path){return new Query(this,path);}
   doc(path){return new Reference(this,path);}
-  async _get(ref){const [r]=await this.gateway([{sql:'SELECT d.data,v.version FROM document_versions v LEFT JOIN documents d ON d.namespace=v.namespace AND d.path=v.path WHERE v.namespace=? AND v.path=?',params:[this.role,ref.path]}]);const row=r.results[0];return new Snapshot(ref,row?.data?row:null,row?.version||0);}
-  async _query(query){const [r]=await this.gateway([compileQuery(query)]);return querySnapshot(r.results.map(row=>new Snapshot(this.doc(row.path),row)));}
-  async getAll(...refs){return Promise.all(refs.map(ref=>ref.get()));}
+  async _get(ref,options){const r=await this.readBatcher.read({sql:'SELECT d.data,v.version FROM document_versions v LEFT JOIN documents d ON d.namespace=v.namespace AND d.path=v.path WHERE v.namespace=? AND v.path=?',params:[this.role,ref.path]},options);if(!r)return;const row=r.results[0];return new Snapshot(ref,row?.data?row:null,row?.version||0);}
+  async _query(query,options){const r=await this.readBatcher.read(compileQuery(query),options);if(!r)return;return querySnapshot(r.results.map(row=>new Snapshot(this.doc(row.path),row)));}
+  async getAll(...refs){if(refs.some(ref=>ref.db!==this||!(ref instanceof Reference)))throw Error('Cross-namespace or invalid reference');return Promise.all(refs.map(ref=>ref.get()));}
   async runTransaction(work,{maxAttempts=5}={}){for(let attempt=0;attempt<maxAttempts;attempt++){const tx=new Transaction(this);try{const result=await work(tx);await tx.commit();return result;}catch(e){if(e.code!=='aborted'||attempt===maxAttempts-1)throw e;await new Promise(r=>setTimeout(r,20+Math.random()*60*(attempt+1)));}}}
   batch(){const tx=new Transaction(this);return {set:(...args)=>{tx.set(...args);return tx;},update:(...args)=>{tx.update(...args);return tx;},delete:(...args)=>{tx.delete(...args);return tx;},create:(...args)=>{tx.create(...args);return tx;},commit:()=>tx.commit()};}
   _watch(ref,next,error){
     const key=ref instanceof Query?JSON.stringify(compileQuery(ref)):ref.path;
     let watcher=this.watchers.get(key);
     if(!watcher){
-      watcher={listeners:new Set(),timer:null,running:false,last:null,snapshot:null,failures:0,stopped:false};
+      watcher={ref,listeners:new Set(),timer:null,running:false,dirty:false,last:null,snapshot:null,revision:null,failures:0,stopped:false};
       const tick=async()=>{
-        if(watcher.running||watcher.stopped)return;watcher.running=true;
-        try {const snap=await ref.get();const signature=JSON.stringify(snap instanceof Snapshot?[snap.version,snap.exists]:snap.docs.map(d=>[d.id,d.version]));
-          watcher.failures=0;if(signature!==watcher.last){watcher.last=signature;watcher.snapshot=snap;for(const l of watcher.listeners)try{l.next(snap);}catch(e){console.error('[D1 listener callback]',e.message);}}
+        if(watcher.stopped)return;
+        if(watcher.running){watcher.dirty=true;return;}
+        clearTimeout(watcher.timer);watcher.running=true;watcher.dirty=false;
+        try {
+          let revision=null;
+          if(ref instanceof Query){
+            const result=await this.readBatcher.read({sql:'SELECT version FROM collection_versions WHERE namespace=? AND path=?',params:[this.role,ref.path]},{active:()=>!watcher.stopped});
+            if(watcher.stopped)return;
+            revision=result.results[0]?.version||0;
+          }
+          // Unchanged collections need only an indexed revision lookup, not a full query.
+          if(!(ref instanceof Query)||!watcher.snapshot||revision!==watcher.revision){
+            const options={active:()=>!watcher.stopped};
+            const snap=await (ref instanceof Query?this._query(ref,options):this._get(ref,options));
+            if(watcher.stopped)return;
+            const signature=JSON.stringify(snap instanceof Snapshot?[snap.version,snap.exists]:snap.docs.map(d=>[d.id,d.version]));
+            watcher.revision=revision;
+            if(signature!==watcher.last){watcher.last=signature;watcher.snapshot=snap;for(const l of watcher.listeners)try{l.next(snap);}catch(e){console.error('[D1 listener callback]',e.message);}}
+          }
+          watcher.failures=0;
         }catch(e){watcher.failures++;for(const l of watcher.listeners)l.error?.(e);}
-        finally{watcher.running=false;if(!watcher.stopped){watcher.timer=setTimeout(tick,Math.min(60000,this.pollMs*2**Math.min(watcher.failures,4)));watcher.timer.unref?.();}}
+        finally{
+          watcher.running=false;
+          if(!watcher.stopped){
+            const delay=watcher.dirty&&!watcher.failures?0:Math.min(60000,this.pollMs*2**Math.min(watcher.failures,4));
+            watcher.timer=setTimeout(tick,delay);watcher.timer.unref?.();
+          }
+        }
       };watcher.tick=tick;this.watchers.set(key,watcher);
     }
     const listener={next,error};watcher.listeners.add(listener);
-    if(watcher.snapshot)queueMicrotask(()=>{if(watcher.listeners.has(listener))next(watcher.snapshot);});else void watcher.tick();
+    if(watcher.snapshot)queueMicrotask(()=>{if(watcher.listeners.has(listener))next(watcher.snapshot);});else if(!watcher.running)void watcher.tick();
     return ()=>{watcher.listeners.delete(listener);if(!watcher.listeners.size){watcher.stopped=true;clearTimeout(watcher.timer);this.watchers.delete(key);}};
   }
-  _notify(){for(const w of this.watchers.values()){clearTimeout(w.timer);void w.tick();}}
+  _notify(paths){
+    const documents=paths&&new Set(paths),collections=paths&&new Set(paths.map(path=>path.split('/').slice(0,-1).join('/')));
+    for(const w of this.watchers.values()){
+      if(paths&&!(w.ref instanceof Query?collections.has(w.ref.path):documents.has(w.ref.path)))continue;
+      clearTimeout(w.timer);void w.tick();
+    }
+  }
 }
 const stores=new Map();
 function getD1Store(role,env=process.env){const key=[role,env.D1_WORKER_URL,env.D1_SERVICE_TOKEN].join(':');if(!stores.has(key))stores.set(key,new D1Store(role,{gateway:createGateway(env),pollMs:Math.max(1000,Number(env.D1_POLL_MS)||5000)}));return stores.get(key);}
