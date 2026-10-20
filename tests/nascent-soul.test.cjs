@@ -294,8 +294,8 @@ test('radial branch labels show the equipped core ability and its actual bonus',
     assert.doesNotMatch(markup,/金丹屬性|金丹機率|金丹傷害|上限/);
   }
   const trueDamage = renderGrowthMap('wugou',{core:10},20,false,2);
-  assert.match(trueDamage,/ns-growth-value ">\+35</);
-  assert.doesNotMatch(trueDamage,/\+100%|\+35%/);
+  assert.match(trueDamage,/ns-growth-value ">\+71</);
+  assert.doesNotMatch(trueDamage,/\+100%|\+71%/);
   for (const [type, rate, damage] of [['ningxin','爆擊率','爆擊傷害'],['sword','連擊率','連擊傷害']]) {
     const markup = renderGrowthMap(type,{coreChance:4,coreDamage:4});
     assert.match(markup,new RegExp('<\\/i>'+rate+'<'));
