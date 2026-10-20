@@ -100,3 +100,56 @@ test('browser multi-document commits coalesce prereads and retain authorization'
   assert.equal(calls.length,2);assert.equal(calls[0].length,21);
   assert.equal((await db.doc('gameConfig/19').get()).data().n,19);
 });
+
+test('production namespaces share a read batch while keeping credentials and data separate',async()=>{
+  const {getD1Store}=require('../d1-store.cjs');
+  const originalFetch=global.fetch,calls=[];
+  global.fetch=async (url,options)=>{
+    const batch=JSON.parse(options.body).statements;
+    calls.push({url,token:options.headers.Authorization,batch});
+    return {ok:true,status:200,json:async()=>({success:true,result:batch.map(s=>({results:[{data:JSON.stringify({namespace:s.params[0]}),version:1}]}))})};
+  };
+  try{
+    const env={D1_WORKER_URL:'https://quota-test.example',D1_SERVICE_TOKEN:'a'.repeat(32)};
+    const other={...env,D1_SERVICE_TOKEN:'b'.repeat(32)};
+    const results=await Promise.all([
+      ...['A','BD','C'].map(role=>getD1Store(role,env).doc('users/shared').get()),
+      getD1Store('A',other).doc('users/shared').get()
+    ]);
+    assert.equal(calls.length,2);assert.deepEqual(calls[0].batch.map(s=>s.params[0]),['A','BD','C']);
+    assert.deepEqual(results.map(s=>s.data().namespace),['A','BD','C','A']);
+    assert.notEqual(calls[0].token,calls[1].token);
+  }finally{global.fetch=originalFetch;}
+});
+test('staggered healthy listeners converge on a shared deadline without adding delay; failures keep full backoff',()=>{
+  const {pollDelay}=require('../d1-store.cjs');
+  const starts=[10001,10100,12345,14999];
+  const deadlines=starts.map(at=>at+pollDelay(5000,0,false,at));
+  assert.deepEqual(deadlines,[15000,15000,15000,15000]);
+  starts.forEach(at=>{
+    assert.ok(pollDelay(5000,0,false,at)>0&&pollDelay(5000,0,false,at)<=5000);
+    assert.equal(pollDelay(5000,1,false,at),10000);
+    assert.equal(pollDelay(5000,0,true,at),0);
+  });
+});
+test('browser own-profile reads use one fresh snapshot and foreign reads stay projected',async()=>{
+  const {registerD1BrowserApi}=require('../d1-browser-api.cjs');
+  const {db,calls}=fixture();
+  await db.doc('users/u').set({uid:'u',isAdmin:false,email:'mine'});
+  await db.doc('users/peer').set({uid:'peer',displayName:'道友',email:'private'});
+  const routes={};registerD1BrowserApi({get(){},post:(path,handler)=>{routes[path]=handler;}},{env:{GAME_DATA_BACKEND:'d1'},store:()=>db,resolve:()=>({auth:{verifyIdToken:async()=>({uid:'u',aud:'question-learning',iss:'https://securetoken.google.com/question-learning'})}})});
+  async function invoke(body){
+    const response={statusCode:200,set(){return this;},status(code){this.statusCode=code;return this;},json(payload){this.payload=payload;return this;}};
+    await routes['/api/data']({get:()=>'Bearer token',body},response);return response;
+  }
+  calls.length=0;
+  const own=await invoke({action:'read',target:{role:'A',kind:'doc',path:'users/u'}});
+  assert.equal(own.payload.data.email,'mine');assert.equal(calls.length,1);assert.equal(calls[0].length,1);
+  calls.length=0;
+  const peer=await invoke({action:'read',target:{role:'A',kind:'doc',path:'users/peer'}});
+  assert.equal(peer.payload.data.email,undefined);assert.equal(calls.length,1);assert.equal(calls[0].length,2);
+  calls.length=0;
+  const bad=await invoke({action:'unknown',role:'A'});assert.equal(bad.statusCode,400);assert.equal(calls.length,0);
+  const escalation=await invoke({action:'commit',role:'A',writes:[{target:{role:'A',kind:'doc',path:'users/u'},type:'update',data:{isAdmin:true}}]});
+  assert.equal(escalation.statusCode,403);assert.equal((await db.doc('users/u').get()).data().isAdmin,false);
+});

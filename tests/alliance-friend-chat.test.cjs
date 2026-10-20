@@ -12,7 +12,7 @@ function mockProjects() {
     ['outsider', { displayName: '陌生人', friends: [] }]
   ]);
   const docs = new Map(), messages = new Map();
-  let messageCounter = 0;
+  let messageCounter = 0, writes = 0;
   const playersDb = { collection(name) {
     assert.equal(name, 'users');
     return { doc(uid) { return { async get() {
@@ -58,6 +58,7 @@ function mockProjects() {
       return fn({
         get: r => r.get(),
         set(r, change, options) {
+          writes++;
           const existing = docs.get(r.id) || {};
           docs.set(r.id, options?.merge ? { ...existing, ...change } : change);
         },
@@ -69,7 +70,7 @@ function mockProjects() {
       });
     }
   };
-  return { players, docs, messages,
+  return { players, docs, messages, get writes(){return writes;},
     projects: role => role === 'A' ? {
       auth: { async verifyIdToken(token) {
         if (token === 'invalid') throw Error('expired');
@@ -179,4 +180,19 @@ test('UI uses safe textContent and lights navigation only for private friend mes
   assert.match(main, /cultivation\/alliance-friend-chat\.js/);
   assert.match(server, /registerFriendChatApi\(app\)/);
   assert.match(css, /@media\(max-width:600px\)/);
+});
+
+
+test('unchanged read acknowledgements do not write again, and inbox exposes the message revision', async () => {
+  const context = mockProjects();
+  const h = createHandlers({ projects: context.projects, now: () => 10000, cooldowns: new Map() });
+  const sent = await request(h.send, 'alice', { peerUid: 'bob', text: '節省已讀寫入' });
+  const id = sent.data.message.id;
+  assert.equal((await request(h.inbox, 'bob')).data.conversations[0].lastMessageId, id);
+  await request(h.read, 'bob', { peerUid: 'alice', lastMessageId: id });
+  const before = context.writes;
+  assert.equal((await request(h.read, 'bob', { peerUid: 'alice', lastMessageId: id })).data.cleared, true);
+  assert.equal(context.writes, before);
+  context.players.get('alice').friends = [];
+  assert.equal((await request(h.read, 'bob', { peerUid: 'alice', lastMessageId: id })).status, 403);
 });

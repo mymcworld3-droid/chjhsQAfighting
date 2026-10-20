@@ -58,6 +58,7 @@ function cleanChat(row, uid, friends) {
   return {
     peerUid, name: String(row.names?.[peerUid] || '修士').slice(0, 35),
     lastText: String(row.lastText || '').slice(0, MAX_TEXT_LENGTH),
+    lastMessageId: String(row.lastMessageId || '').slice(0, 128),
     lastSenderUid: safeUid(row.lastSenderUid),
     updatedAt: timeMs(row.updatedAt), unread: Math.max(0, Math.min(9999, Number(row.unread?.[uid]) || 0))
   };
@@ -144,7 +145,8 @@ function createHandlers({ projects = adminProject, now = Date.now, cooldowns = s
       const data = snap.data();
       // A new message might arrive between loading the thread and marking read.
       if (data.lastMessageId !== lastMessageId || !data.memberUids?.includes(uid)) return;
-      tx.set(ref, { unread: { ...(data.unread || {}), [uid]: 0 } }, { merge: true });
+      if (Number(data.unread?.[uid]) > 0)
+        tx.set(ref, { unread: { ...(data.unread || {}), [uid]: 0 } }, { merge: true });
       cleared = true;
     });
     return { cleared };

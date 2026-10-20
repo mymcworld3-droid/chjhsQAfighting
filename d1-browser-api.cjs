@@ -193,11 +193,21 @@ function registerD1BrowserApi(app,{env=process.env,resolve=role=>adminProject(ro
       let decoded;
       try {decoded=await resolve('A').auth.verifyIdToken(header[1],true);}catch(_){throw fail('登入已失效',401,'unauthenticated');}
       if(!decoded.uid||decoded.aud!==PROJECT_IDS.A||decoded.iss!=='https://securetoken.google.com/'+PROJECT_IDS.A)throw fail('身分不符',401,'unauthenticated');
-      const own=await store('A').doc('users/'+decoded.uid).get();
-      const context={uid:decoded.uid,admin:own.data()?.isAdmin===true,decoded};
       const input=req.body||{},role=input.target?.role||input.role;
       if(!['A','BD','C'].includes(role))throw fail('資料區不符',400,'invalid-argument');
-      const db=store(role);
+      if(!['read','watch','commit'].includes(input.action))throw fail('未知操作',400,'invalid-argument');
+      const db=store(role),target=input.action==='commit'?null:buildTarget(db,input.target);
+      let own,initialSnapshot;
+      // A-store commits re-read and guard the authoritative role inside executeCommit.
+      if(!(input.action==='commit'&&role==='A')){
+        const ownRead=store('A').doc('users/'+decoded.uid).get();
+        // Share the same fresh snapshot for own-profile reads. Other document reads
+        // can travel alongside auth data; serialization still enforces permissions.
+        const targetRead=target&&!(target instanceof Query)
+          ?role==='A'&&target.path==='users/'+decoded.uid?ownRead:target.get():null;
+        [own,initialSnapshot]=await Promise.all([ownRead,targetRead]);
+      }
+      const context={uid:decoded.uid,admin:own?.data()?.isAdmin===true,decoded};
       if(input.action==='commit'){
         for(let attempt=0;;attempt++){
           try{await executeCommit(db,input,context);break;}
@@ -205,8 +215,6 @@ function registerD1BrowserApi(app,{env=process.env,resolve=role=>adminProject(ro
         }
         return res.json({ok:true});
       }
-      if(!['read','watch'].includes(input.action))throw fail('未知操作',400,'invalid-argument');
-      const target=buildTarget(db,input.target);
       const serialize=snap=>{
         if(!snap.exists)return {exists:false,version:snap.version};
         let data=snap.data();
@@ -221,9 +229,9 @@ function registerD1BrowserApi(app,{env=process.env,resolve=role=>adminProject(ro
         if(!snap.exists&&!PUBLIC.has(target.parent.path)&&!['dongtians','dongtianReports','exam_logs','dongtianPlays'].includes(target.parent.path)&&!(target.parent.path==='playerProfiles'&&target.id===context.uid)&&!context.admin)throw fail();
         return serialize(snap);
       };
-      if(input.action==='read')return res.json(format(await target.get()));
+      if(input.action==='read')return res.json(format(initialSnapshot||await target.get()));
       // Validate initial authorization BEFORE opening an SSE response.
-      const initial=format(await target.get());
+      const initial=format(initialSnapshot||await target.get());
       res.set({'Content-Type':'text/event-stream; charset=utf-8','Cache-Control':'no-cache, no-transform','X-Accel-Buffering':'no'});
       res.flushHeaders();
       let stopped=false,unsubscribe,heartbeat,renew,last='';

@@ -196,7 +196,7 @@ class Transaction {
   preview(){const data=new Map();for(const w of this.writes){const old=data.has(w.ref.path)?data.get(w.ref.path):this.reads.get(w.ref.path).data()??null;data.set(w.ref.path,Codec.apply(old,w));}return data;}
 }
 class D1Store {
-  constructor(role,{gateway=createGateway(),pollMs=5000}={}){if(!['A','BD','C'].includes(role))throw Error('Invalid namespace');this.role=role;this.gateway=gateway;this.pollMs=pollMs;this.isD1=true;this.watchers=new Map();this.readBatcher=new ReadBatcher(statements=>this.gateway(statements));}
+  constructor(role,{gateway=createGateway(),pollMs=5000,readBatcher}={}){if(!['A','BD','C'].includes(role))throw Error('Invalid namespace');this.role=role;this.gateway=gateway;this.pollMs=pollMs;this.isD1=true;this.watchers=new Map();this.readBatcher=readBatcher||new ReadBatcher(statements=>this.gateway(statements));}
   collection(path){return new Query(this,path);}
   doc(path){return new Reference(this,path);}
   async _get(ref,options){const r=await this.readBatcher.read({sql:'SELECT d.data,v.version FROM document_versions v LEFT JOIN documents d ON d.namespace=v.namespace AND d.path=v.path WHERE v.namespace=? AND v.path=?',params:[this.role,ref.path]},options);if(!r)return;const row=r.results[0];return new Snapshot(ref,row?.data?row:null,row?.version||0);}
@@ -234,7 +234,7 @@ class D1Store {
         finally{
           watcher.running=false;
           if(!watcher.stopped){
-            const delay=watcher.dirty&&!watcher.failures?0:Math.min(60000,this.pollMs*2**Math.min(watcher.failures,4));
+            const delay=pollDelay(this.pollMs,watcher.failures,watcher.dirty);
             watcher.timer=setTimeout(tick,delay);watcher.timer.unref?.();
           }
         }
@@ -252,6 +252,25 @@ class D1Store {
     }
   }
 }
-const stores=new Map();
-function getD1Store(role,env=process.env){const key=[role,env.D1_WORKER_URL,env.D1_SERVICE_TOKEN].join(':');if(!stores.has(key))stores.set(key,new D1Store(role,{gateway:createGateway(env),pollMs:Math.max(1000,Number(env.D1_POLL_MS)||5000)}));return stores.get(key);}
-module.exports={D1Store,Transaction,Snapshot,Query,Reference,compileQuery,createGateway,getD1Store,Codec,validPath};
+// Align healthy polls on common deadlines so subscriptions started at different
+// times join the same read batch. Never shorten error backoff.
+function pollDelay(pollMs,failures,dirty,at=Date.now()) {
+  if(failures)return Math.min(60000,pollMs*2**Math.min(failures,4));
+  if(dirty)return 0;
+  return pollMs-(at%pollMs);
+}
+const stores=new Map(),transports=new Map();
+function getD1Store(role,env=process.env){
+  const transportKey=JSON.stringify([env.D1_WORKER_URL,env.D1_SERVICE_TOKEN]);
+  const key=role+':'+transportKey;
+  if(!stores.has(key)){
+    let transport=transports.get(transportKey);
+    if(!transport){
+      const gateway=createGateway(env);
+      transport={gateway,readBatcher:new ReadBatcher(gateway)};transports.set(transportKey,transport);
+    }
+    stores.set(key,new D1Store(role,{...transport,pollMs:Math.max(1000,Number(env.D1_POLL_MS)||5000)}));
+  }
+  return stores.get(key);
+}
+module.exports={D1Store,Transaction,Snapshot,Query,Reference,compileQuery,createGateway,getD1Store,Codec,validPath,pollDelay};
