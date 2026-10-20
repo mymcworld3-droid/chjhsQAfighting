@@ -29,7 +29,7 @@ jobs:
       - name: Install Wrangler CLI
         run: npm install --no-save --no-package-lock wrangler@4
       - name: Apply remote D1 schema migrations
-        run: cd cloudflare/d1 && npx wrangler d1 migrations apply qingyun-game-prod --remote --yes
+        run: cd cloudflare/d1 && npx wrangler d1 migrations apply qingyun-game-prod --remote
       - name: Verify required tables exist on remote D1
         run: |
           cd cloudflare/d1
