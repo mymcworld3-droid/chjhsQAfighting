@@ -1,9 +1,5 @@
 // Private Render -> Worker gateway. Never give SERVICE_TOKEN to the browser.
-import { cleanupAnalytics } from './analytics-retention.mjs';
 export default {
-  async scheduled(_event, env) {
-    await cleanupAnalytics(env);
-  },
   async fetch(request, env) {
     const headers = { 'Cache-Control': 'no-store' };
     if (!env.SERVICE_TOKEN || env.SERVICE_TOKEN.length < 32) return new Response('Unavailable', {status:503, headers});
