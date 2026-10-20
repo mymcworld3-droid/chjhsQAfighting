@@ -5469,7 +5469,8 @@ async function resolveRoundLogic(roomId, room) {
 
                     if (attacker.hp > 0) {
                         const counterEffect = window.resolveGoldenCoreBattleCounter?.({
-                            defender, attacker, receivedDamage: normalReceived
+                            defender, attacker, receivedDamage: normalReceived,
+                            seed: `${roomId}:${freshRoom.round || 1}:${defender.uid}:counter`
                         }) || {};
                         const coreReflectDamage = Math.max(0, Number(counterEffect.reflectDamage) || 0);
                         if (coreReflectDamage > 0) {

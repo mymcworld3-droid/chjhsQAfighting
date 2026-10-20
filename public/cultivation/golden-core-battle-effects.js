@@ -14,6 +14,17 @@
     return Math.random() * 100 < chance;
   }
 
+  function thunderTriggered(seed) {
+    if (seed == null) return triggered(60);
+    const text = String(seed).replace(/:star-counter$/, ':counter') + ':thunder';
+    let hash = 2166136261;
+    for (let i = 0; i < text.length; i += 1) {
+      hash ^= text.charCodeAt(i);
+      hash = Math.imul(hash, 16777619);
+    }
+    return (hash >>> 0) % 100 < 60;
+  }
+
   function battleCore(player) {
     const core = player?.goldenCore;
     if (!core || !core.type) return null;
@@ -73,7 +84,7 @@
     return { extraDamage: 0 };
   };
 
-  window.resolveGoldenCoreBattleCounter = function ({ defender, receivedDamage } = {}) {
+  window.resolveGoldenCoreBattleCounter = function ({ defender, receivedDamage, seed } = {}) {
     const core = battleCore(defender);
     if (!core || core.type !== 'thunder') return { reflectDamage: 0 };
 
@@ -82,8 +93,10 @@
     const damage = Math.max(0, Math.round(Number(receivedDamage) || 0));
     if (!damage) return { reflectDamage: 0 };
 
-    const reflected = Math.round(damage * .5);
-    const message = `答對蓄雷，本回合反擊傷害 +50%，金丹額外反擊 ${reflected} 傷害`;
+    if (!thunderTriggered(seed)) return { reflectDamage: 0 };
+
+    const reflected = Math.round(damage * .75);
+    const message = `答對蓄雷（60%），本回合反擊傷害 +75%，金丹額外反擊 ${reflected} 傷害`;
     showActivation(core, message, '鬥法受擊效果');
     return {
       reflectDamage: reflected,
