@@ -138,6 +138,7 @@ function collectStartupImageUrls() {
     'assets/training/cutouts/meditation-ai.webp',
     'assets/training/cutouts/vault-ai.webp',
     'assets/training/cutouts/forge-ai.webp',
+    'assets/training/cutouts/contract-ai.webp',
     'assets/training/cutouts/secret-ai.webp',
     'assets/training/cutouts/status-ai.webp',
     ...definitionImageUrls(ownedMaterials),

@@ -221,6 +221,9 @@ body.xianxia-theme #page-training .training-place {
   filter: drop-shadow(0 0 3px #fcfffcdd);
   transition: filter .2s ease;
 }
+.training-place[data-training-location="contract"]:not(.is-locked) .training-place-cutout {
+  filter: drop-shadow(0 0 3px #fff6d5) drop-shadow(0 0 9px #e8c47799);
+}
 .training-place-label {
   position: absolute;
   z-index: 2;
