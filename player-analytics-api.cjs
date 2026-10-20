@@ -3,6 +3,7 @@
 // Anonymous browser cohorts + authenticated player cohorts. Never store quiz text,
 // answers, e-mail, IP addresses or user-agent strings in analytics.
 const crypto = require('node:crypto');
+const { queueAnalyticsCleanup } = require('./analytics-retention.cjs');
 const { adminProject, PROJECT_IDS } = require('./firebase-admin-projects.cjs');
 const COOKIE = 'qa_analytics_vid';
 const TYPES = new Set(['question_started', 'answer_completed', 'social_participated', 'question_load_failed', 'app_load_success', 'app_load_failed']);
@@ -250,7 +251,7 @@ async function report(db, now, range) {
     truncated: [v, p, d].some(s => s.size >= LIMIT)
   });
 }
-function registerPlayerAnalytics(app, { resolve = role => adminProject(role), logger = console } = {}) {
+function registerPlayerAnalytics(app, { resolve = role => adminProject(role), logger = console, cleanup = queueAnalyticsCleanup } = {}) {
   function route(fn) {
     return async (req, res) => {
       res.set?.('Cache-Control', 'no-store');
@@ -269,6 +270,7 @@ function registerPlayerAnalytics(app, { resolve = role => adminProject(role), lo
     const vid = readVisitor(req, res), now = new Date();
     await recordVisit(a.db, a, uid, vid, dayOf(now), now);
     res.json({ ok: true });
+    if (uid) void cleanup(a.db, { logger });
   }));
   app.post('/api/analytics/event', route(async (req, res, a) => {
     const uid = await identity(req, a);

@@ -1,4 +1,4 @@
-// One bounded atomic cleanup per hour. Aggregated player/daily/visitor metrics
+// One bounded atomic cleanup per eligible authenticated arrival. Player/daily/visitor metrics
 // remain intact; version tombstones prevent stale transactions resurrecting data.
 export const EXPIRY = `CASE WHEN json_extract(data,'$.expireAt.__d1type')='timestamp' THEN json_extract(data,'$.expireAt.seconds')*1000+json_extract(data,'$.expireAt.nanoseconds')/1000000.0
  WHEN json_extract(data,'$.expireAt.__d1type')='date' THEN CAST(strftime('%s',json_extract(data,'$.expireAt.value')) AS INTEGER)*1000

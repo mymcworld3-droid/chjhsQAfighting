@@ -29,7 +29,7 @@ test('recent analytics and expiry queries use bounded indexes without a sort or 
   assert.match(cleanupPlan,/analytics_event_expiry/);assert.doesNotMatch(cleanupPlan,/TEMP B-TREE|SCAN documents/);
 });
 
-test('hourly retention removes at most 500 expired events, preserves metrics and rejects stale resurrection',async()=>{
+test('login-triggered retention removes at most 500 expired events, preserves metrics and rejects stale resurrection',async()=>{
   const {db,sql,gateway}=setup();
   const now=Date.parse('2026-10-21T00:00:00Z');
   const {cleanupAnalytics}=await import('../cloudflare/d1/src/analytics-retention.mjs');
