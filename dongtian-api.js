@@ -401,10 +401,7 @@ async function generateMultimodalJSON(prompt, images) {
   for (const provider of providers) {
     try {
       const raw = provider.type === 'gemini'
-        ? await Promise.race([
-            callGemini(provider, prompt, images),
-            new Promise((_, reject) => setTimeout(() => reject(new Error('AI request timeout')), 70000))
-          ])
+        ? await aiRouter.withDeadline(callGemini(provider, prompt, images), 70000)
         : await callOpenAICompatible(provider, prompt, images);
       const text = aiRouter.extractJsonText(raw);
       const data = JSON.parse(text);
@@ -413,8 +410,9 @@ async function generateMultimodalJSON(prompt, images) {
       return { data, provider: provider.name, model: provider.model };
     } catch (error) {
       aiRouter.recordAttempt(provider, 'failed', error);
-      console.warn(`[AI Router multimodal] ${provider.name}/${provider.model} failed: ${error?.message || error}`);
-      errors.push(`${provider.name}: ${error?.message || error}`);
+      const message=aiRouter.safeProviderError(error,provider);
+      console.warn(`[AI Router multimodal] ${provider.name}/${provider.model} failed: ${message}`);
+      errors.push(`${provider.name}: ${message}`);
     }
   }
   throw new Error(`All multimodal providers failed: ${errors.join(' | ')}`);

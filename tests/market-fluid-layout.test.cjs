@@ -41,7 +41,7 @@ test('failed avatar previews show their fallback without an inline JavaScript er
   const source = read('public/main-legacy.js');
   const helper = source.slice(source.indexOf('function renderVisual('), source.indexOf('function getAvatarHtml('));
   const context = vm.createContext({});
-  vm.runInContext(helper, context);
+  vm.runInContext(source.slice(source.indexOf('function escapeHtml(text)'),source.indexOf('// 新增：將 Markdown')) + helper, context);
   const html = context.renderVisual('avatar', 'assets/missing-avatar.png');
   const handler = html.match(/onerror="([^"]+)"/)[1];
   const image = { style: {}, nextElementSibling: { style: { display: 'none' } } };

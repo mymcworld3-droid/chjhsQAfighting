@@ -1312,7 +1312,7 @@ onAuthStateChanged(auth, async (user) => {
         // 🔥【關鍵修正】登入後移除 data-i18n 屬性，防止 updateTexts() 把它覆蓋回 "未登入"
         if (userInfoEl) {
             userInfoEl.removeAttribute('data-i18n'); 
-            userInfoEl.innerHTML = `<i class="fa-solid fa-user-astronaut"></i> ${user.displayName || '玩家'}`;
+            userInfoEl.innerHTML = `<i class="fa-solid fa-user-astronaut"></i> ${escapeHtml(user.displayName || '玩家')}`;
         }
 
         showGameStartupGate('正在載入玩家資料…');
@@ -1410,7 +1410,7 @@ onAuthStateChanged(auth, async (user) => {
             // saved game identity wins over Google profile in every game session
             if (userInfoEl) {
                 userInfoEl.removeAttribute('data-i18n');
-                userInfoEl.innerHTML = `<i class="fa-solid fa-user-astronaut"></i> ${currentUserData.displayName || user.displayName || '玩家'}`;
+                userInfoEl.innerHTML = `<i class="fa-solid fa-user-astronaut"></i> ${escapeHtml(currentUserData.displayName || user.displayName || '玩家')}`;
             }
 
             // 個人學制／強弱項留在設定選填；首次流程由同一載具的到訪狀態接棒。
@@ -1700,8 +1700,7 @@ window.sendChatMessage = async () => {
 };
 
 function escapeHtml(text) {
-    if (!text) return text;
-    return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    return String(text ?? '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
 }
 // 新增：將 Markdown 圖片語法 ![alt](url) 轉換為 HTML <img>，並處理換行
 function normalizeQuizSymbols(text) {
@@ -1914,7 +1913,7 @@ window.loadFriendList = async () => {
                     </div>
                     <div class="flex justify-between items-center mt-1">
                         ${statusHtml}
-                        <span class="text-[10px] text-gray-500">Pts: ${fData.stats?.totalScore || 0}</span>
+                        <span class="text-[10px] text-gray-500">Pts: ${escapeHtml(fData.stats?.totalScore || 0)}</span>
                     </div>
                 </div>
             `;
@@ -2398,7 +2397,7 @@ window.saveProfile = async (triggerButton = null) => {
     
     // 更新畫面上方顯示的名稱
     const userInfoEl = document.getElementById('user-info');
-    if (userInfoEl) userInfoEl.innerHTML = `<i class="fa-solid fa-user-astronaut"></i> ${displayName}`;
+    if (userInfoEl) userInfoEl.innerHTML = `<i class="fa-solid fa-user-astronaut"></i> ${escapeHtml(displayName)}`;
 
     currentBankData = null; 
     localStorage.removeItem('currentQuiz'); 
@@ -6141,6 +6140,7 @@ window.loadLeaderboard = async ({ force = false } = {}) => {
 // ==========================================
 
 function renderVisual(type, value, sizeClass = "w-12 h-12") {
+    value = typeof value === 'string' ? value : '';
     const isImage = value && (value.includes('.') || value.includes('/'));
 
     if (type === 'frame') {
@@ -6150,16 +6150,16 @@ function renderVisual(type, value, sizeClass = "w-12 h-12") {
                 <div class="ui-avatar-viewport w-full h-full rounded-full overflow-hidden flex items-center justify-center bg-slate-800 relative z-0">
                     <i class="fa-solid fa-user text-gray-500"></i>
                 </div>
-                <img src="${value}" class="ui-product-frame absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[140%] w-auto object-contain pointer-events-none z-20" style="max-width: none;">
+                <img src="${escapeHtml(value)}" class="ui-product-frame absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[140%] w-auto object-contain pointer-events-none z-20" style="max-width: none;">
             </div>`;
         } else {
-            return `<div class="${sizeClass} rounded-full border-2 border-gray-600 ${value} flex items-center justify-center bg-slate-800 relative z-0">
+            return `<div class="${sizeClass} rounded-full border-2 border-gray-600 ${escapeHtml(value)} flex items-center justify-center bg-slate-800 relative z-0">
                         <i class="fa-solid fa-user text-gray-500"></i>
                     </div>`;
         }
     } else if (type === 'avatar') {
         return `<div class="${sizeClass} avatar-preview rounded-full overflow-hidden bg-slate-800 border-2 border-slate-600 relative z-10 flex items-center justify-center">
-                    <img src="${value}" class="avatar-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+                    <img src="${escapeHtml(value)}" class="avatar-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
                     <i class="fa-solid fa-image text-red-500" style="display:none" aria-hidden="true"></i>
                 </div>`;
     }
@@ -6167,8 +6167,8 @@ function renderVisual(type, value, sizeClass = "w-12 h-12") {
 }
 
 function getAvatarHtml(equipped, sizeClass = "w-10 h-10", accountAvatar = '') {
-    const frame = equipped?.frame || '';
-    const avatar = equipped?.avatar || accountAvatar || '';
+    const frame = typeof equipped?.frame === 'string' ? equipped.frame : '';
+    const avatar = [equipped?.avatar, accountAvatar].find(value => typeof value === 'string' && value) || '';
     const isFrameImg = frame && (frame.includes('.') || frame.includes('/'));
 
     const imgContent = avatar 
@@ -6176,10 +6176,10 @@ function getAvatarHtml(equipped, sizeClass = "w-10 h-10", accountAvatar = '') {
         : `<i class="fa-solid fa-user text-gray-400"></i>`;
 
     const borderClass = frame ? '' : 'border-2 border-slate-600';
-    const cssFrameClass = (!isFrameImg && frame) ? frame : '';
+    const cssFrameClass = (!isFrameImg && frame) ? escapeHtml(frame) : '';
 
     const frameImgElement = isFrameImg 
-        ? `<img src="${frame}" class="ui-avatar-frame" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); height: 145%; width: auto; max-width: none; z-index: 50; pointer-events: none;">`
+        ? `<img src="${escapeHtml(frame)}" class="ui-avatar-frame" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); height: 145%; width: auto; max-width: none; z-index: 50; pointer-events: none;">`
         : '';
 
     return `

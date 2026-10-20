@@ -34,6 +34,7 @@ function loginContext({ failSave = false } = {}) {
     console: { error() {}, warn() {} },
     onAuthStateChanged: (_, callback) => { handler = callback; }
   });
+  vm.runInContext(legacy.slice(legacy.indexOf('function escapeHtml(text)'),legacy.indexOf('// 新增：將 Markdown')),ctx);
   const flag = legacy.match(/^window\.isXiuxianFirstLogin = .*;$/m)[0];
   const start = legacy.indexOf('onAuthStateChanged(auth, async (user) => {');
   const end = legacy.indexOf("window.addEventListener('xiuxian:stats-updated', ensureGameplayNavigationForReadyProfile);", start);

@@ -9,7 +9,11 @@ class ReadBatcher {
   }
   read(statement,{active=()=>true}={}) {
     if(!/^SELECT\s/i.test(statement.sql))return Promise.reject(Error('Read batch accepts SELECT only'));
+    const params=statement.params||[];
+    if(!Array.isArray(params)||params.length>100||params.some(value=>value!==null&&typeof value!=='string'&&!(typeof value==='number'&&Number.isFinite(value))))
+      return Promise.reject(Object.assign(Error('Invalid D1 read parameters'),{code:'invalid-argument'}));
     const key=JSON.stringify(statement),bytes=Buffer.byteLength(key);
+    if(bytes>this.maxBytes)return Promise.reject(Object.assign(Error('D1 read exceeds batch limit'),{code:'invalid-argument'}));
     const existing=this.pending.get(key);
     if(existing){existing.active.push(active);return existing.promise;}
     if(this.pending.size&&(this.pending.size>=this.maxStatements||this.bytes+bytes>this.maxBytes))void this.flush();

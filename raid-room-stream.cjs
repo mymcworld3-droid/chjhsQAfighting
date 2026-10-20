@@ -2,6 +2,7 @@
 
 // Firebase C 變更直接推送；A 的收益結算不阻擋房間更新。
 function streamRaidRoom({req, res, ref, uid, initialRoom, settleSpirit, logger = console}) {
+  if(req.aborted||res.destroyed||res.writableEnded)return;
   let stopped = false, unsubscribe, keepalive, renew, rewardRetry;
   let rewardRunning = false, rewardRoom = null, latestRoom = initialRoom;
   let revision = Number(initialRoom?.revision) || 0;

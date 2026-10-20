@@ -79,14 +79,16 @@ export function onSnapshot(ref,...args){
   if(!isD1)return native.onSnapshot(ref,...args);
   if(args[0] && typeof args[0]==='object' && !('next' in args[0]) && !('error' in args[0]))args.shift();
   let [next,error]=args;if(typeof next==='object'){error=next.error?.bind(next);next=next.next?.bind(next);}
-  let stopped=false,timer,controller,last='',failures=0,running=false;
+  let stopped=false,timer,controller,last='',failures=0,running=false,paused=false,reconnectSoon=false;
   const uid=getAuth(getApp()).currentUser?.uid;
   async function connect(){
-    if(stopped||running||document.hidden)return;
+    if(stopped||paused||running||document.hidden)return;
     if(getAuth(getApp()).currentUser?.uid!==uid){stop();return;}
     running=true;controller=new AbortController();
     try {
       const token=await getAuth(getApp()).currentUser.getIdToken();
+      if(stopped||paused||document.hidden)return;
+      if(getAuth(getApp()).currentUser?.uid!==uid){stop();return;}
       const response=await fetch('/api/data',{method:'POST',cache:'no-store',signal:controller.signal,
         headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},
         body:JSON.stringify({action:'watch',target:serialize(ref)})});
@@ -107,11 +109,14 @@ export function onSnapshot(ref,...args){
         }
         if(buffer.length>4_000_000)throw Error('即時資料過大');
       }
-    }catch(e){if(!stopped&&e.name!=='AbortError'){failures++;error?.(e);}}
-    finally{running=false;if(!stopped&&!document.hidden)timer=setTimeout(connect,Math.min(60000,1000*2**Math.min(failures,6)));}
+    }catch(e){if(!stopped&&e.name!=='AbortError'){failures++;try{error?.(e);}catch(callbackError){console.error('[Data listener error callback]',callbackError);}}}
+    finally{running=false;if(!stopped&&!paused&&!document.hidden){clearTimeout(timer);timer=setTimeout(connect,reconnectSoon?50:Math.min(60000,1000*2**Math.min(failures,6)));reconnectSoon=false;}}
   }
-  function visibility(){clearTimeout(timer);if(document.hidden)controller?.abort();else {controller?.abort();timer=setTimeout(connect,50);}}
+  function visibility(){clearTimeout(timer);if(document.hidden)controller?.abort();else {reconnectSoon=true;controller?.abort();if(!running){reconnectSoon=false;timer=setTimeout(connect,50);}}}
   function stop(){if(stopped)return;stopped=true;clearTimeout(timer);controller?.abort();subscriptions.delete(stop);document.removeEventListener('visibilitychange',visibility);}
+  stop.pause=()=>{paused=true;clearTimeout(timer);controller?.abort();};
+  stop.resume=()=>{paused=false;visibility();};
   subscriptions.add(stop);document.addEventListener('visibilitychange',visibility);void connect();return stop;
 }
-window.addEventListener('pagehide',()=>{for(const stop of subscriptions)stop();});
+window.addEventListener('pagehide',event=>{for(const stop of subscriptions)event.persisted?stop.pause():stop();});
+window.addEventListener('pageshow',event=>{if(event.persisted)for(const stop of subscriptions)stop.resume();});

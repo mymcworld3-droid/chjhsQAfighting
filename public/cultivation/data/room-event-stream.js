@@ -15,6 +15,7 @@ export async function readRoomEvents(response, next, signal, progress) {
       if (done) break;
       progress?.();
       buffer = (buffer + decoder.decode(value,{stream:true})).replace(/\r\n/g,'\n');
+      if(buffer.length>4_000_000)throw Object.assign(new Error('即時資料過大，請重新連線'),{status:413});
       let end;
       while ((end = buffer.indexOf('\n\n')) >= 0) {
         const event = buffer.slice(0,end); buffer = buffer.slice(end+2);
