@@ -248,7 +248,7 @@ test('star burst deterministically boosts only every third correct hit, through 
   for (const streak of [0, 1, 2, 4, 5]) assert.equal(hit(streak).normalDamage, 200);
   for (const streak of [3, 6]) { assert.equal(hit(streak).normalDamage, 230); assert.match(hit(streak).skill, /連答爆發/); }
   assert.match(fs.readFileSync('public/cultivation/battle-engine-v2.js', 'utf8'), /player.coreCorrectStreak = support.streak/);
-  assert.match(fs.readFileSync('public/cultivation/raid-combat.js', 'utf8'), /p.coreCorrectStreak = support.streak/);
+  assert.match(fs.readFileSync('raid-authority.cjs', 'utf8'), /next.coreCorrectStreak=support.streak/);
 });
 
 test('a stale pool version cannot spend currency, and database transaction retries commit only one fragment award', async () => {

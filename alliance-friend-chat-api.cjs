@@ -1,7 +1,7 @@
 'use strict';
 
-// Private messages use the configured server-only store (BD or PostgreSQL).
-// Firebase A remains the identity and friendship authority.
+// Private messages use the shared BD document store (D1 after cutover).
+// Firebase A Auth remains the identity authority; player data uses the A store.
 const crypto = require('crypto');
 const { adminProject, PROJECT_IDS } = require('./firebase-admin-projects.cjs');
 
@@ -62,21 +62,14 @@ function cleanChat(row, uid, friends) {
     updatedAt: timeMs(row.updatedAt), unread: Math.max(0, Math.min(9999, Number(row.unread?.[uid]) || 0))
   };
 }
-function createHandlers({ projects = adminProject, now = Date.now, cooldowns = sendTimes,
-  env = process.env, store } = {}) {
-  const { getFriendChatStore } = require('./friend-chat-store.cjs');
-  const storage = () => store || getFriendChatStore(env);
-  const assertWritable = () => {
-    if (env.FRIEND_CHAT_READ_ONLY === '1') throw apiError('私訊資料搬移中，請稍後再試', 503);
-  };
+function createHandlers({ projects = adminProject, now = Date.now, cooldowns = sendTimes } = {}) {
   const withAuth = handler => async (req, res) => {
     res.set?.('Cache-Control', 'private, no-store');
     try {
       const a = projects('A');
       const uid = await authenticate(req, a);
-      const chatStore = storage();
-      const bdDb = chatStore ? null : projects('BD').db;
-      const result = await handler({ uid, aDb: a.db, bdDb, chatStore, req });
+      const bdDb = projects('BD').db;
+      const result = await handler({ uid, aDb: a.db, bdDb, req });
       return res.json({ ok: true, ...result });
     } catch (error) {
       const status = error?.status || (String(error?.message || '').includes('Missing server credential') ? 503 : 500);
@@ -84,13 +77,12 @@ function createHandlers({ projects = adminProject, now = Date.now, cooldowns = s
       return res.status(status).json({ ok: false, error: status >= 500 ? '仙盟私聊暫時無法使用' : error.message });
     }
   };
-  const inbox = withAuth(async ({ uid, aDb, bdDb, chatStore }) => {
+  const inbox = withAuth(async ({ uid, aDb, bdDb }) => {
     const player = await aDb.collection('users').doc(uid).get();
     const friends = friendUids(player.exists ? player.data() : null, uid);
     if (!friends.length) return { conversations: [], unread: 0 };
     // Single-field array-contains index; no additional composite index required.
-    const rows = chatStore ? await chatStore.inbox(uid) :
-      (await bdDb.collection(CHAT_COLLECTION).where('memberUids', 'array-contains', uid).limit(100).get()).docs.map(x => x.data());
+    const rows = (await bdDb.collection(CHAT_COLLECTION).where('memberUids', 'array-contains', uid).limit(100).get()).docs.map(x => x.data());
     const candidates = rows.map(row => cleanChat(row, uid, friends)).filter(Boolean);
     // A friend may have removed you since the thread was created. Do not leak
     // even the preview / unread count without checking the current reciprocal link.
@@ -101,22 +93,16 @@ function createHandlers({ projects = adminProject, now = Date.now, cooldowns = s
     const conversations = confirmed.filter(Boolean).sort((x, y) => y.updatedAt - x.updatedAt);
     return { conversations, unread: conversations.reduce((n, x) => n + x.unread, 0) };
   });
-  const thread = withAuth(async ({ uid, aDb, bdDb, chatStore, req }) => {
+  const thread = withAuth(async ({ uid, aDb, bdDb, req }) => {
     const peerUid = String(req.body?.peerUid || '');
     const peers = await friendship(aDb, uid, peerUid);
-    if (chatStore) {
-      const recent = await chatStore.thread(threadId(uid, peerUid));
-      return { peerUid, peerName: String(peers.other.displayName || '修士').slice(0, 35),
-        lastMessageId: recent.lastMessageId, messages: recent.messages.map(safeMessage).reverse() };
-    }
     const ref = bdDb.collection(CHAT_COLLECTION).doc(threadId(uid, peerUid));
     const recent = await ref.collection('messages').orderBy('sentAt', 'desc').limit(60).get();
     return { peerUid, peerName: String(peers.other.displayName || '修士').slice(0, 35),
       lastMessageId: recent.docs[0]?.id || '',
       messages: recent.docs.map(x => safeMessage({ id: x.id, ...x.data() })).reverse() };
   });
-  const send = withAuth(async ({ uid, aDb, bdDb, chatStore, req }) => {
-    assertWritable();
+  const send = withAuth(async ({ uid, aDb, bdDb, req }) => {
     const peerUid = String(req.body?.peerUid || '');
     const text = String(req.body?.text || '').trim();
     if (!text || text.length > MAX_TEXT_LENGTH || /[\u0000-\u0008\u000b\u000c\u000e-\u001f]/.test(text))
@@ -125,12 +111,6 @@ function createHandlers({ projects = adminProject, now = Date.now, cooldowns = s
     const current = now();
     if (current - (cooldowns.get(uid) || 0) < SEND_COOLDOWN_MS) throw apiError('請稍候再發送訊息', 429);
     const id = threadId(uid, peerUid);
-    if (chatStore) {
-      const message = await chatStore.send({ id, uid, peerUid, text, current,
-        names: { [uid]: String(own.displayName || '修士').slice(0, 35),
-          [peerUid]: String(other.displayName || '修士').slice(0, 35) } });
-      return { message };
-    }
     const ref = bdDb.collection(CHAT_COLLECTION).doc(id);
     const messageRef = ref.collection('messages').doc();
     await bdDb.runTransaction(async tx => {
@@ -152,12 +132,10 @@ function createHandlers({ projects = adminProject, now = Date.now, cooldowns = s
     }
     return { message: { id: messageRef.id, senderUid: uid, text, sentAt: current } };
   });
-  const read = withAuth(async ({ uid, aDb, bdDb, chatStore, req }) => {
-    assertWritable();
+  const read = withAuth(async ({ uid, aDb, bdDb, req }) => {
     const peerUid = String(req.body?.peerUid || '');
     const lastMessageId = String(req.body?.lastMessageId || '');
     await friendship(aDb, uid, peerUid);
-    if (chatStore) return { cleared: await chatStore.read(threadId(uid, peerUid), uid, lastMessageId) };
     const ref = bdDb.collection(CHAT_COLLECTION).doc(threadId(uid, peerUid));
     let cleared = false;
     await bdDb.runTransaction(async tx => {

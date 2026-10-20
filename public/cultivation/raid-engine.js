@@ -1,4 +1,4 @@
-// 團本 MVP 純戰鬥規則：不依賴 DOM / Firebase，方便未來將結算搬到可信任後端。
+// 團本共用設定與顯示時間軸；戰鬥結算由 raid-authority.cjs 負責。
 export const RAID_MVP = Object.freeze({
   modeVersion: 1,
   minimumScore: 6,
@@ -62,84 +62,6 @@ export function shenIntentForRound({ round = 1, bossHp = 1, bossMaxHp = 1, baseA
     damage: Math.round(attack * (turn % 4 === 0 ? 1.12 : 0.92)),
     kind: 'normal'
   };
-}
-
-export function resolveSoloRaidRound({
-  round = 1,
-  correct = false,
-  playerHp = 1000,
-  playerMaxHp = 1000,
-  bossHp = 1000,
-  bossMaxHp = 1000,
-  outgoingDamage = 0,
-  // 星隕在每三次作答時獨立發動，即使第三題答錯也結算。
-  starfallDamage = 0,
-  incomingDamage = 0,
-  reflectedDamage = 0,
-  heal = 0,
-  shieldGain = 0,
-  artifactShield = 0,
-  coreShield = false
-} = {}) {
-  const turn = Math.max(1, Math.floor(finite(round, 1)));
-  const maxPlayer = Math.max(1, Math.round(finite(playerMaxHp, 1000)));
-  let nextPlayerHp = clamp(Math.round(finite(playerHp, maxPlayer) + Math.max(0, finite(heal))), 0, maxPlayer);
-  let nextBossHp = clamp(Math.round(finite(bossHp, bossMaxHp)), 0, Math.max(1, finite(bossMaxHp, 1)));
-  let nextArtifactShield = Math.max(0, Math.round(finite(artifactShield) + Math.max(0, finite(shieldGain))));
-  let nextCoreShield = !!coreShield;
-
-  const dealt = (correct ? Math.max(0, Math.round(finite(outgoingDamage))) : 0) + Math.max(0, Math.round(finite(starfallDamage)));
-  nextBossHp = Math.max(0, nextBossHp - dealt);
-
-  let received = 0;
-  let reflected = 0;
-  let guarded = false;
-  if (nextBossHp > 0 && nextPlayerHp > 0) {
-    received = Math.max(0, Math.round(finite(incomingDamage)));
-    if (nextCoreShield && received > 0) {
-      // 道心護體與正式鬥法一致：只抵擋一次傷害，觸發後立刻消失。
-      guarded = true;
-      received = 0;
-      nextCoreShield = false;
-    }
-    nextPlayerHp = Math.max(0, nextPlayerHp - received);
-    reflected = received > 0 ? Math.max(0, Math.round(finite(reflectedDamage))) : 0;
-    nextBossHp = Math.max(0, nextBossHp - reflected);
-  }
-
-  let finished = false;
-  let won = false;
-  let finishReason = '';
-  if (nextBossHp <= 0) {
-    finished = true;
-    won = true;
-    finishReason = reflected > 0 && dealt === 0 ? 'reflect' : 'boss-defeated';
-  } else if (nextPlayerHp <= 0) {
-    finished = true;
-    finishReason = 'player-defeated';
-  }
-
-  return {
-    round: turn,
-    dealt,
-    received,
-    reflected,
-    guarded,
-    playerHp: nextPlayerHp,
-    bossHp: nextBossHp,
-    artifactShield: nextArtifactShield,
-    coreShield: nextCoreShield,
-    bossPhase: shenPhaseForHp(nextBossHp, bossMaxHp),
-    finished,
-    won,
-    finishReason
-  };
-}
-
-
-export function nextPersonalQuestionAt({ issuedAtMs = 0, resolvedAtMs = 0 } = {}) {
-  const issued = Math.max(0, finite(issuedAtMs));
-  return Math.max(issued, finite(resolvedAtMs, issued));
 }
 
 export function bossClockState({ startedAtMs = 0, nowMs = 0, actionCount = 0 } = {}) {
