@@ -300,6 +300,16 @@ export function settleBattleRound({
   const logs = [];
   const steps = [];
   const activations = [];
+  // All actual outgoing HP damage can leech, including independent strikes and counters.
+  const applySoulLeech = (role, player, dealt) => {
+    const hp = role === 'host' ? hostHp : guestHp;
+    if (hp <= 0) return;
+    const heal = soulTalents?.healing(player,dealt) || 0;
+    const amount = Math.max(0,Math.min(player.maxHp,hp+heal)-hp);
+    if (!amount) return;
+    if (role === 'host') hostHp += amount; else guestHp += amount;
+    logs.push({type:'heal',actorRole:role,actorUid:player.uid,amount,damage:0,skill:'元嬰・還神吸血'});
+  };
   for (const activation of hostSupport.activations) activations.push({ ...activation, ownerUid: host.uid });
   for (const activation of guestSupport.activations) activations.push({ ...activation, ownerUid: guest.uid });
   if (hostSupport.heal && startHostHp > currentHp(host)) logs.push({ type: 'heal', actorRole: 'host', actorUid: host.uid, damage: 0, amount: startHostHp - currentHp(host), skill: hostSoulHeal ? '本命護元' : '太初回元丹・回元' });
@@ -414,12 +424,7 @@ export function settleBattleRound({
       steps.push({type:'attack',actorRole:role,actorUid:player.uid,targetUid:defender.uid,
         damage:followDamage,baseDamage:0,extraDamage:followDamage,guarded:false,pursuit:true,critical:false,skill:plan.followupDamage ? '九天劍氣丹・追擊' : '元嬰・' + talent.name + '追擊',hostHp,guestHp});
     }
-    const soulLeech = soulTalents?.healing(player,talentReceived,talent.leech) || 0;
-    if(soulLeech > 0 && (role === 'host' ? hostHp : guestHp) > 0) {
-      if(role === 'host')hostHp=Math.min(player.maxHp,hostHp+soulLeech);
-      else guestHp=Math.min(player.maxHp,guestHp+soulLeech);
-      logs.push({type:'heal',actorRole:role,actorUid:player.uid,amount:soulLeech,damage:0,skill:'元嬰・還神吸血'});
-    }
+    applySoulLeech(role,player,talentReceived);
     // Step HP records must include any instant post-hit recovery before animation playback.
     steps[steps.length - 1].hostHp = hostHp;
     steps[steps.length - 1].guestHp = guestHp;
@@ -441,6 +446,7 @@ export function settleBattleRound({
         counter.activation = counter.activation || { type: 'artifact', skill: equipment.reflectSkill || '法寶反傷', name: '法寶', message: '法寶反傷觸發', kind: '鬥法受擊效果' };
       }
       if (counter.reflectDamage > 0) {
+        const counterTargetHp = role === 'host' ? hostHp : guestHp;
         const counterGuarded = role === 'host' ? hostCoreShield : guestCoreShield;
         if (counterGuarded) {
           if (role === 'host') hostCoreShield = false;
@@ -449,6 +455,7 @@ export function settleBattleRound({
           activations.push({ type: player.goldenCore?.type || 'shield', name: player.goldenCore?.name || '金丹', ownerUid: player.uid, skill: '金丹道心護體', message: '金丹道心護體發動並消耗，須重新凝聚', kind: '鬥法防護' });
         } else if (role === 'host') hostHp = Math.max(0, hostHp - counter.reflectDamage);
         else guestHp = Math.max(0, guestHp - counter.reflectDamage);
+        applySoulLeech(targetRole,defender,counterGuarded ? 0 : Math.min(counterTargetHp,counter.reflectDamage));
         const reflected = { type: 'counter', actorRole: targetRole, actorUid: defender.uid, targetUid: player.uid, damage: counterGuarded ? 0 : counter.reflectDamage, guarded: counterGuarded, critical: false,
           coreEffect: counter.activation?.type === defender.goldenCore?.type ? counter.activation : null,
           skill: counter.activation?.skill || '' };
@@ -482,6 +489,7 @@ export function settleBattleRound({
     const actual = Math.min(role === 'host' ? guestHp : hostHp,reduced);
     if (role === 'host') guestHp -= actual;
     else hostHp -= actual;
+    applySoulLeech(role,player,actual);
     const starAttack = {type:'attack',actorRole:role,actorUid:player.uid,targetUid:defender.uid,
       damage:actual,baseDamage:0,extraDamage:raw,guarded,critical:false,
       skill:'元嬰・星隕（近三題答對 '+correctCount+'/3）'};
@@ -493,11 +501,13 @@ export function settleBattleRound({
     const reflect = counter.reflectDamage + Math.max(0,Math.round(Number(defended?.reflectDamage)||0)) +
       Math.max(0,Math.round(Number(soulTalents?.reflection?.(defender,actual))||0));
     if (reflect>0) {
+      const counterTargetHp = role === 'host' ? hostHp : guestHp;
       const coreGuard = role==='host' ? hostCoreShield : guestCoreShield;
       if (coreGuard) {
         if (role==='host')hostCoreShield=false;else guestCoreShield=false;
       } else if (role==='host') hostHp=Math.max(0,hostHp-reflect);
       else guestHp=Math.max(0,guestHp-reflect);
+      applySoulLeech(targetRole,defender,coreGuard ? 0 : Math.min(counterTargetHp,reflect));
       const record = {type:'counter',actorRole:targetRole,actorUid:defender.uid,targetUid:player.uid,
         damage:coreGuard?0:reflect,guarded:coreGuard,critical:false,skill:counter.activation?.skill||'星隕反擊'};
       logs.push(record);steps.push({...record,hostHp,guestHp});

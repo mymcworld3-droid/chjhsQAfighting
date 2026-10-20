@@ -398,14 +398,14 @@ function resolvePlayerAction(member,{roomId,actionId,correct,bossHp=1,bossMaxHp=
     comboHits=Combo.chain({damage:Math.min(bossHp,damage),chance:artifact.comboStats.chance,multiplier:artifact.comboStats.multiplier,seed:seed+':artifact',remainingHp:Math.max(0,bossHp-damage)});
     comboDamage=Math.min(Math.max(0,finite(bossHp)-damage),comboHits.reduce((sum,n)=>sum+n,0));
     damage+=comboHits.reduce((sum,n)=>sum+n,0)+talent.followup+pursuit;
-    const soulHeal=soulTalents.healing(next,Math.min(Math.max(0,bossHp),damage),talent.leech);
-    healed+=soulHeal;next.hp=Math.min(next.maxHp,next.hp+soulHeal);
     const lifesteal=Math.max(0,Math.round(damage*artifact.lifesteal));healed+=lifesteal;
     next.hp=Math.min(next.maxHp,next.hp+lifesteal);
     next.artifactShield=Math.max(0,Math.round(finite(next.artifactShield)))+artifact.shieldGain;
   }
   // 星隕獨立於答對攻擊：第三題答錯仍按近三題答對數結算。
   damage+=starDamage;
+  const soulHeal=Math.min(Math.max(0,next.maxHp-next.hp),soulTalents.healing(next,Math.min(Math.max(0,bossHp),damage)));
+  healed+=soulHeal;next.hp+=soulHeal;
   next.combatContribution = Contribution.add(member.combatContribution, {rounds:1,
     comboHits:comboHits.length,comboDamage,criticalHits:critical && damage > 0 && bossHp > 0 ? 1 : 0});
   if (!member.combatContribution && (finite(member.lastActionId) > 0 || finite(member.lastBossActionSeen) > 0)) next.combatContribution.partial = true;
@@ -447,6 +447,8 @@ function resolveBossDefense(member,{roomId,bossAction,bossHp=Infinity}={}){
   }
   // A correct answer arms the next boss action only; guarding also consumes that window.
   next.thunderCounterReady=false;
+  const soulHeal=next.hp>0?Math.min(Math.max(0,next.maxHp-next.hp),soulTalents.healing(next,Math.min(Math.max(0,bossHp),reflected))):0;
+  next.hp+=soulHeal;
   next.combatContribution = Contribution.add(member.combatContribution,{reflectedDamage:Math.min(Math.max(0,Math.round(reflected)),Math.max(0,bossHp))});
   if (!member.combatContribution && (finite(member.lastActionId) > 0 || finite(member.lastBossActionSeen) > 0)) next.combatContribution.partial = true;
   return {member:next,damage,reflectedDamage:Math.max(0,Math.round(reflected)),guarded};
