@@ -31,7 +31,6 @@ PNG 原稿保留完整 1672×941／941×1672 畫布，WebP 以 alpha 範圍加�
 
 [完整 AI 提示詞](cutouts/PROMPTS.md)
 
-最終版面驗證預覽：[橫式](../../../docs/previews/training-ai-landscape.png)／[直式](../../../docs/previews/training-ai-portrait.png)。預覽使用實際頁面 HTML、CSS 與修煉模組，以及測試用登入／資料介面。
 
 ## 原始場景繪畫
 

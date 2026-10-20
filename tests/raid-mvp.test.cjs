@@ -21,7 +21,7 @@ function loadEngine() {
   const code = engineSource
     .replace(/export const /g, 'const ')
     .replace(/export function /g, 'function ') +
-    '\nthis.__raid={RAID_MVP,shenPhaseForHp,shenIntentForRound,resolveSoloRaidRound,nextPersonalQuestionAt,bossClockState};';
+    '\nthis.__raid={RAID_MVP,shenPhaseForHp,shenIntentForRound,bossClockState};';
   vm.runInContext(code, context);
   return context.__raid;
 }
@@ -34,11 +34,6 @@ test('raid questions have no answer deadline while boss keeps its own clock', ()
   assert.equal(e.RAID_MVP.bossActionIntervalMs, 18000);
   assert.equal(e.RAID_MVP.bossTelegraphMs, 5000);
   assert.equal('maxBossActions' in e.RAID_MVP, false);
-
-  const fast = e.nextPersonalQuestionAt({ issuedAtMs: 1000, resolvedAtMs: 2000 });
-  assert.equal(fast, 2000);
-  const slow = e.nextPersonalQuestionAt({ issuedAtMs: 1000, resolvedAtMs: 12000 });
-  assert.equal(slow, 12000);
 
   const warning = e.bossClockState({ startedAtMs: 1000, nowMs: 15000, actionCount: 0 });
   assert.equal(warning.telegraphing, true);

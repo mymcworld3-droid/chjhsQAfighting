@@ -137,7 +137,7 @@ D1_POLL_MS=5000
 
 自動搬遷只需在 Render 設定密鑰／服務帳戶，不必下載到電腦。只有使用文末的手動 CLI 備份時，才需要在執行工具的電腦設定本機 `.env`（不提交 Git）。
 
-若 `FRIEND_CHAT_STORAGE=postgres` 已啟用，私訊原本就在 PostgreSQL，並非 Firebase 資料；本工具不搬 PostgreSQL。保留它的設定即可。仍用 Firestore 私訊時，切換後原私訊 API 會使用 BD 的 D1 存取層。
+私訊與其餘遊戲資料共用文件存取層。切換 D1 後，私訊會儲存於 BD namespace，不需要另外設定聊天資料庫。
 
 ## 7. 管理員登入，自動複製全部資料
 
