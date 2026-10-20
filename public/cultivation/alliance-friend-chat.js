@@ -4,6 +4,7 @@ import { getProjectServices, getMainUser, authenticatedMainFetch } from './data/
 const state = {
   uid: '', conversations: new Map(), peer: '', messages: [], lastMessageId: '',
   timer: null, polling: false, loading: false, sending: false,
+  friendCount: null, friendSignature: '', failures: 0, retryAt: 0,
   globalUnsub: null, globalListenGeneration: 0, globalLatest: '', globalUnread: false
 };
 const $ = id => document.getElementById(id);
@@ -121,6 +122,7 @@ function open(peerUid, name) {
   render(); reportError();
   $('alliance-chat-input').focus();
   void loadThread();
+  void poll({ force: true });
 }
 async function send(event) {
   event.preventDefault();
@@ -142,18 +144,27 @@ function stopGlobalListener() {
 }
 function reset(uid) {
   close(); state.uid = uid; state.conversations.clear();
+  state.friendCount = null; state.friendSignature = ''; state.failures = 0; state.retryAt = 0;
   stopGlobalListener();
   state.globalLatest = ''; state.globalUnread = false; updateBadges();
 }
-async function poll() {
+async function poll({ force = false } = {}) {
   const uid = currentUid();
   if (!uid) { if (state.uid) reset(''); return; }
   if (uid !== state.uid) reset(uid);
   if (state.polling || document.visibilityState === 'hidden') return;
+  if (Date.now() < state.retryAt) return;
+  const profile = window.getCurrentUserData?.();
+  const signature = JSON.stringify(profile && (!profile.uid || profile.uid === uid) ? profile.friends || [] : []);
+  // Confirm once with the server. Resume on friend changes, explicit opening,
+  // social-page entry or foregrounding, including friends added on another device.
+  if (!force && state.friendCount === 0 && state.friendSignature === signature) return;
   state.polling = true;
   try {
     const data = await request('inbox');
     if (uid !== currentUid()) return;
+    state.friendCount = Number.isInteger(data.friendCount) ? data.friendCount : null;
+    state.friendSignature = signature; state.failures = 0; state.retryAt = 0;
     state.conversations = new Map((data.conversations || [])
       .filter(row => validUid(row.peerUid)).map(row => [row.peerUid, row]));
     updateBadges();
@@ -163,6 +174,8 @@ async function poll() {
     if (state.peer && !state.loading && (!active || !active.lastMessageId ||
       active.lastMessageId !== state.lastMessageId || active.unread > 0)) await loadThread();
   } catch (error) {
+    if (uid !== currentUid()) return;
+    state.retryAt = Date.now() + Math.min(300000, 12000 * 2 ** Math.min(state.failures++, 5));
     console.warn('[Friend chat] inbox unavailable:', error.message);
   } finally { state.polling = false; }
 }
@@ -212,13 +225,13 @@ function start() {
   if (uid !== state.uid) reset(uid);
   ensureModal();
   if (!state.timer) state.timer = setInterval(() => { void poll(); }, 12000);
-  void poll(); void listenGlobal();
+  void poll({ force: true }); void listenGlobal();
 }
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'hidden') {
     stopGlobalListener();
   } else if (state.uid) {
-    void poll();
+    void poll({ force: true });
     void listenGlobal();
   }
 });

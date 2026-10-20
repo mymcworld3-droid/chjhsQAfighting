@@ -75,9 +75,9 @@ async function recordVisit(db, a, uid, vid, today, now) {
   const prior = playerRef ? await playerRef.get() : null;
   const createdDay = uid && !prior.exists ? await createdDayFor(a, uid, today) : null;
   await db.runTransaction(async tx => {
-    const visitor = await tx.get(visitorRef);
-    const player = playerRef ? await tx.get(playerRef) : null;
-    const daily = dailyRef ? await tx.get(dailyRef) : null;
+    const [visitor, player, daily] = await Promise.all([
+      tx.get(visitorRef), playerRef ? tx.get(playerRef) : null, dailyRef ? tx.get(dailyRef) : null
+    ]);
     if (!visitor.exists) {
       tx.set(visitorRef, { firstDay: today, firstAt: now, lastDay: today, lastAt: now, started: false, firstStartDay: null });
     } else if (visitor.data().lastDay !== today) {
@@ -122,23 +122,31 @@ async function recordEvent(db, a, uid, vid, item, today, now) {
     const isSocial = type === 'social_participated';
     const totalAnswers = (Number(p.totalAnswers) || 0) + (isAnswer ? 1 : 0);
     const playerPatch = {
-      lastDay: today, lastAt: now, seenDays: daysWith(p.seenDays, today),
+      lastDay: today, seenDays: daysWith(p.seenDays, today),
       totalAnswers,
       firstQuestionAt: p.firstQuestionAt || (isStart || isSoloAnswer ? now : null),
       firstThreeAt: p.firstThreeAt || (totalAnswers >= 3 ? now : null),
       socialDays: isSocial ? daysWith(p.socialDays, today) : (p.socialDays || []),
       hadFirstDayFailure: !!p.hadFirstDayFailure || (type === 'app_load_failed' && p.firstDay === today)
     };
-    if (!player.exists) tx.set(playerRef, { ...p, ...playerPatch });
-    else tx.update(playerRef, playerPatch);
+    if (!player.exists) tx.set(playerRef, { ...p, ...playerPatch, lastAt: now });
+    else if (Object.keys(playerPatch).some(key => JSON.stringify(p[key]) !== JSON.stringify(playerPatch[key]))) {
+      tx.update(playerRef, { ...playerPatch, lastAt: now });
+    }
     if (!visitor.exists) tx.set(visitorRef, {
       firstDay: today, firstAt: now, lastDay: today, lastAt: now, started: isStart || isSoloAnswer,
       firstStartDay: isStart || isSoloAnswer ? today : null
     });
-    else tx.update(visitorRef, {
-      lastDay: today, lastAt: now, started: !!visitor.data().started || isStart || isSoloAnswer,
-      firstStartDay: visitor.data().firstStartDay || (isStart || isSoloAnswer ? today : null)
-    });
+    else {
+      const v = visitor.data();
+      const patch = {
+        lastDay: today, started: !!v.started || isStart || isSoloAnswer,
+        firstStartDay: v.firstStartDay || (isStart || isSoloAnswer ? today : null)
+      };
+      if (Object.keys(patch).some(key => v[key] !== patch[key])) {
+        tx.update(visitorRef, { ...patch, lastAt: now });
+      }
+    }
     tx.set(dailyRef, {
       uid, day: today, lastAt: now,
       answers: increment('answers', isAnswer),

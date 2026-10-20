@@ -14,7 +14,7 @@ function account() {
   if (!accounts.has(uid)) {
     let cached = 0;
     try { cached = Rules.realmScore(localStorage.getItem(cacheKey(uid))); } catch (_) {}
-    accounts.set(uid, { uid, highest: cached, confirmed: -1, saving: false, retry: null });
+    accounts.set(uid, { uid, highest: cached, confirmed: -1, saving: false, retry: null, failures: 0, retryAt: 0 });
   }
   return accounts.get(uid);
 }
@@ -27,6 +27,7 @@ function remember(state, highest) {
 }
 async function persist(state) {
   if (state.saving || state.highest <= state.confirmed) return;
+  if (Date.now() < state.retryAt || globalThis.document?.visibilityState === 'hidden') return;
   state.saving = true;
   clearTimeout(state.retry);
   state.retry = null;
@@ -46,6 +47,7 @@ async function persist(state) {
       return next;
     });
     state.confirmed = Math.max(state.confirmed, saved.highestRealmScore);
+    state.failures = 0; state.retryAt = 0;
     const previous = state.highest;
     remember(state, saved.highestRealmScore);
     if (getMainUser()?.uid === state.uid && previous < state.highest) {
@@ -53,7 +55,10 @@ async function persist(state) {
     }
   } catch (error) {
     console.warn('[Training access] unlock sync will retry:', error.code || error.message);
-    if (getMainUser()?.uid === state.uid) state.retry = setTimeout(sync, 5000);
+    const quota = /resource-exhausted|quota/i.test(String(error.code || '') + ' ' + error.message);
+    const delay = Math.min(quota ? 1800000 : 300000, (quota ? 60000 : 5000) * 2 ** Math.min(state.failures++, 9));
+    state.retryAt = Date.now() + delay;
+    if (getMainUser()?.uid === state.uid) state.retry = setTimeout(() => { state.retry = null; sync(); }, delay);
   } finally {
     state.saving = false;
     if (!state.retry && getMainUser()?.uid === state.uid && state.highest > state.confirmed) void persist(state);
@@ -76,4 +81,7 @@ window.isTrainingPlaceUnlocked = id => {
 };
 ['xiuxian:user-ready', 'xiuxian:stats-updated', 'xiuxian:migration-ready', 'xiuxian:features-ready', 'online']
   .forEach(name => window.addEventListener(name, sync));
+globalThis.document?.addEventListener('visibilitychange', () => {
+  if (document.visibilityState !== 'hidden') sync();
+});
 sync();

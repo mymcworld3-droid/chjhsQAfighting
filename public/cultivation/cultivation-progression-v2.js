@@ -36,6 +36,7 @@ import { getFirestore, doc, updateDoc } from '../data-store.js';
 
   let migrating = false;
   let migratedUid = null;
+  const migrationRetries = new Map();
   let pillBusy = false;
 
   function realms() {
@@ -130,6 +131,10 @@ import { getFirestore, doc, updateDoc } from '../data-store.js';
       return;
     }
 
+    if (document.visibilityState === 'hidden') return;
+    const retry = migrationRetries.get(user.uid) || { failures: 0, at: 0 };
+    if (Date.now() < retry.at) return;
+
     migrating = true;
     try {
       const originalScore = Math.max(0, Number(data.stats.totalScore) || 0);
@@ -141,6 +146,7 @@ import { getFirestore, doc, updateDoc } from '../data-store.js';
         await updateDoc(doc(getFirestore(getApp()), 'users', user.uid), { [MIGRATION_FIELD]: marker });
         data[MIGRATION_FIELD] = marker;
         migratedUid = user.uid;
+        migrationRetries.delete(user.uid);
         window.dispatchEvent(new CustomEvent('xiuxian:migration-ready', { detail: marker }));
         return;
       }
@@ -175,6 +181,7 @@ import { getFirestore, doc, updateDoc } from '../data-store.js';
       data.stats[PILL_FIELD] = newPills;
       data[MIGRATION_FIELD] = marker;
       migratedUid = user.uid;
+      migrationRetries.delete(user.uid);
 
       const displayScore = document.getElementById('display-score');
       if (displayScore) displayScore.textContent = String(FOUNDATION_SCORE);
@@ -189,6 +196,10 @@ import { getFirestore, doc, updateDoc } from '../data-store.js';
         summary: `<div class="progression-summary"><div><span>原修為</span><b>${originalScore.toLocaleString()}</b></div><div><span>調整後</span><b>${FOUNDATION_SCORE} · 築基初期</b></div><div><span>回魂聚靈丹</span><b>× ${grantedPills}</b></div><div><span>補償靈石</span><b>+${spiritStones.toLocaleString()}</b></div></div>`
       });
     } catch (error) {
+      const quota = /resource-exhausted|quota/i.test(String(error.code || '') + ' ' + error.message);
+      const delay = Math.min(quota ? 1800000 : 300000, (quota ? 60000 : 5000) * 2 ** Math.min(retry.failures++, 9));
+      retry.at = Date.now() + delay;
+      migrationRetries.set(user.uid, retry);
       console.error('Progression migration failed:', error);
     } finally {
       migrating = false;

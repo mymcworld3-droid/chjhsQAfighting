@@ -65,8 +65,11 @@ async function syncRaidTickets(db, uid, nowMs = now()) {
   return db.runTransaction(async tx => {
     const snap = await tx.get(userRef);
     if (!snap.exists) throw Object.assign(new Error('玩家資料不存在'), { status:404 });
+    const current = snap.data()?.raidTickets || {};
     const next = accrueRaidTickets(snap.data() || {}, today);
-    tx.update(userRef, { raidTickets: next });
+    if (Object.keys(next).some(key => current[key] !== next[key])) {
+      tx.update(userRef, { raidTickets: next });
+    }
     return next;
   });
 }
