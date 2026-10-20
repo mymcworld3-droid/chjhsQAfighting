@@ -95,8 +95,8 @@
 
     if (!thunderTriggered(seed)) return { reflectDamage: 0 };
 
-    const reflected = Math.round(damage * .75);
-    const message = `答對蓄雷（60%），本回合反擊傷害 +75%，金丹額外反擊 ${reflected} 傷害`;
+    const reflected = Math.round(damage * .5);
+    const message = `答對蓄雷（60%），本回合反擊傷害 +50%，金丹額外反擊 ${reflected} 傷害`;
     showActivation(core, message, '鬥法受擊效果');
     return {
       reflectDamage: reflected,
