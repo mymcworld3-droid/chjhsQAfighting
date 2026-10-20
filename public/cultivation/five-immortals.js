@@ -112,19 +112,18 @@ import { playerRepository } from './data/player-repository.js';
         if (data.uid && !uids.includes(data.uid)) uids.push(data.uid);
       });
       const profiles = {};
-      for (let i = 0; i < uids.length; i += 10) {
-        const batch = uids.slice(i, i + 10);
-        const q = fs.query(fs.collection(db, 'users'), fs.where(fs.documentId(), 'in', batch));
-        const usersSnap = await fs.getDocs(q);
-        usersSnap.forEach((docSnap) => {
-          const data = docSnap.data();
-          profiles[docSnap.id] = {
-            displayName: data.displayName || data.name || '無名仙客',
-            equipped: { ...data.equipped, avatar: resolvePlayerAvatar(data) },
-            totalScore: Math.max(0, Number(data.stats?.totalScore) || 0),
-            cohort: window.getLeaderboardEducationGroup?.(data.profile?.educationLevel)
-          };
-        });
+      // The shared Firestore/D1 transport does not expose documentId().
+      // Read the small number of seat owners directly by document path instead.
+      for (const uid of [...new Set(uids)]) {
+        const docSnap = await fs.getDoc(fs.doc(db, 'users', uid));
+        if (!docSnap.exists()) continue;
+        const data = docSnap.data();
+        profiles[docSnap.id] = {
+          displayName: data.displayName || data.name || '無名仙客',
+          equipped: { ...data.equipped, avatar: resolvePlayerAvatar(data) },
+          totalScore: Math.max(0, Number(data.stats?.totalScore) || 0),
+          cohort: window.getLeaderboardEducationGroup?.(data.profile?.educationLevel)
+        };
       }
       Object.keys(owners).forEach((roleId) => {
         const owner = owners[roleId];
