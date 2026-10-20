@@ -196,7 +196,9 @@ function register(app,options={}){
       const state=action==='start'?await controller.start(uid):await controller.status();
       res.json({ok:true,...state});
     }catch(error){const status=error.status||503;
-      res.status(status).json({error:status>=500?'搬遷服務尚未就緒，請確認 D1 migrations 與連線設定。':error.message,code:error.code||'unavailable',administrator});}
+      // Log only the error class/code, never credentials, SQL, tokens or private player data.
+      console.warn('[D1 migration API]', {code:error.code||'unavailable',kind:error.name||'Error',status});
+      res.status(status).json({error:status>=500?'搬遷服務尚未就緒，請確認 Worker 連線、憑證與 D1 migrations。':error.message,code:error.code||'unavailable',administrator});}
   });
   return controller;
 }
