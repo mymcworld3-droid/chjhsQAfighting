@@ -157,7 +157,11 @@ async function poll() {
     state.conversations = new Map((data.conversations || [])
       .filter(row => validUid(row.peerUid)).map(row => [row.peerUid, row]));
     updateBadges();
-    if (state.peer && !state.loading) await loadThread();
+    const active = state.conversations.get(state.peer);
+    // Inbox still checks reciprocal friendship on every poll. Only reload the
+    // open message history when it changed or unread messages need marking.
+    if (state.peer && !state.loading && (!active || !active.lastMessageId ||
+      active.lastMessageId !== state.lastMessageId || active.unread > 0)) await loadThread();
   } catch (error) {
     console.warn('[Friend chat] inbox unavailable:', error.message);
   } finally { state.polling = false; }
