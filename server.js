@@ -43,6 +43,19 @@ const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json({ limit: '20mb' }));
+// Serve a standalone maintenance screen for page navigations before game HTML/scripts
+// are served. Do not interfere with the administrator migration API.
+app.use((req,res,next) => {
+  if (process.env.GAME_DATA_MAINTENANCE !== '1' || !['GET','HEAD'].includes(req.method)) return next();
+  const pathname = req.path.toLowerCase();
+  if (pathname.startsWith('/api/')) return next();
+  const isPage = pathname === '/' || pathname === '/index.html' || pathname === '/stage.html'
+    || (req.accepts('html') && !path.extname(pathname) && !pathname.startsWith('/assets/'));
+  if (!isPage) return next();
+  res.set('Cache-Control', 'no-store, max-age=0');
+  res.set('Retry-After', '300');
+  return res.status(503).sendFile(path.join(__dirname, 'public', 'maintenance.html'));
+});
 // Freeze ALL server mutations during the final Firestore snapshot/cutover.
 app.use('/api', (req,res,next) => {
   if (process.env.GAME_DATA_MAINTENANCE === '1' && !['/data-config','/admin/d1-migration'].includes(req.path)) {
