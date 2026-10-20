@@ -46,6 +46,7 @@ test('fixed matured D1 and D7 cohorts exclude too-recent players', () => {
 
 function fakeFirestore() {
   const buckets = new Map();
+  const writes = [];
   const access = (collection, id) => {
     if (!buckets.has(collection)) buckets.set(collection, new Map());
     const bucket = buckets.get(collection);
@@ -59,15 +60,34 @@ function fakeFirestore() {
     async runTransaction(fn) {
       const tx = {
         get(ref) { return ref.get(); },
-        set(ref, data, opts) { ref.bucket.set(ref.id, opts?.merge ? { ...ref.bucket.get(ref.id), ...data } : data); },
-        update(ref, data) { ref.bucket.set(ref.id, { ...ref.bucket.get(ref.id), ...data }); },
-        create(ref, data) { if (ref.bucket.has(ref.id)) throw Error('already exists'); ref.bucket.set(ref.id, data); }
+        set(ref, data, opts) { writes.push(ref); ref.bucket.set(ref.id, opts?.merge ? { ...ref.bucket.get(ref.id), ...data } : data); },
+        update(ref, data) { writes.push(ref); ref.bucket.set(ref.id, { ...ref.bucket.get(ref.id), ...data }); },
+        create(ref, data) { if (ref.bucket.has(ref.id)) throw Error('already exists'); writes.push(ref); ref.bucket.set(ref.id, data); }
       };
       return fn(tx);
     }
   };
-  return { db, buckets };
+  return { db, buckets, writes };
 }
+test('steady question starts write two documents, answers three, without losing counts or deduplication', async () => {
+  const {db,buckets,writes}=fakeFirestore();
+  const a={auth:{getUser:async()=>({metadata:{creationTime:'2026-10-16T00:00:00Z'}})}};
+  const send=(type,id)=>recordEvent(db,a,'alice','a'.repeat(32),{type,mode:'solo',eventId:id},'2026-10-16',new Date('2026-10-16T10:00:00Z'));
+  await send('answer_completed','answer001');
+  writes.length=0;
+  await send('question_started','question02');
+  assert.equal(writes.length,2);
+  writes.length=0;
+  await send('answer_completed','answer002');
+  assert.equal(writes.length,3);
+  writes.length=0;
+  await send('answer_completed','answer002');
+  assert.equal(writes.length,0);
+  const daily=[...buckets.get('playerAnalyticsDaily').values()][0];
+  assert.equal(daily.answers,2);assert.equal(daily.starts,1);
+  assert.equal(buckets.get('playerAnalyticsPlayers').get('alice').totalAnswers,2);
+  assert.equal(buckets.get('playerAnalyticsEvents').size,3);
+});
 test('event retries with identical id are deduplicated and skip never counts', async () => {
   const { db, buckets } = fakeFirestore();
   const a = { auth: { async getUser() { return { metadata: { creationTime: '2026-10-16T00:00:00Z' } }; } } };

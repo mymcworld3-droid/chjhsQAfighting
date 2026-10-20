@@ -39,6 +39,7 @@ function compileQuery(query) {
     [ ['worldImmortals'], "collection_path='worldImmortals'" ],
     [ ['marketListings'], "collection_path='marketListings'" ],
     [ ['playerAnalyticsDaily'], "collection_path='playerAnalyticsDaily'" ],
+    [ ['playerAnalyticsEvents'], "collection_path='playerAnalyticsEvents'" ],
     [ ['playerAnalyticsVisitors','playerAnalyticsPlayers'], "collection_path IN ('playerAnalyticsVisitors','playerAnalyticsPlayers')" ],
     [ ['exam_logs'], "collection_path='exam_logs'" ],
     [ ['global_chat'], "collection_path='global_chat'" ]

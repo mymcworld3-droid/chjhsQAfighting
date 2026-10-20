@@ -35,6 +35,9 @@
 
 ## 事件一致性與效能
 
+- D1 版本以交易保留每個事件與去重鍵，但玩家、訪客摘要只有實際統計改變時才更新；`lastAt` 代表該摘要最近變動，不再隨每次事件重寫。穩定答題階段的「題目開始＋完成」由 8 次文件寫入降為 5 次（摘要首次補齊時可能較多）。每日累計與短期事件仍逐筆記錄。
+- D1 不使用 Firestore TTL。需先執行 `0004_analytics_retention.sql`，再部署 `cloudflare/d1/wrangler.jsonc` 的 Worker。Cron 每小時第 17 分鐘最多清除 500 筆已滿 90 天的事件，日期及 Firestore Timestamp 皆支援；不刪除玩家、訪客及每日彙總。保留刪除版本以阻止舊交易復活事件。清理沒有待刪資料時不異動版本；積壓超過每小時 500 筆時將分時逐步處理。
+- 最近事件與到期查詢均使用分析專用索引；須先套用 migration，避免缺少索引使排程失敗。合併程式碼不會自動替 Cloudflare 執行 migration 或部署 Worker。
 - 後端對事件類型、模式和 ID 設白名單；驗證 Firebase A ID Token、收件者 UID、專案及 Token 是否撤銷。管理員報表另外核對 \`users/{uid}.isAdmin\`。
 - 以 UID 與事件 ID 雜湊產生事件文件 ID。在 Firestore 交易中先確認不存在，才更新玩家與每日統計。UI 同題重複渲染與網路重送不應重複累計。
 - 不蒐集題目、選項、作答內容、IP、Email、UA；最近事件只展示不可逆的 UID 雜湊前 8 碼。Cookie 只由伺服器產生。

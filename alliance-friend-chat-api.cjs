@@ -81,7 +81,7 @@ function createHandlers({ projects = adminProject, now = Date.now, cooldowns = s
   const inbox = withAuth(async ({ uid, aDb, bdDb }) => {
     const player = await aDb.collection('users').doc(uid).get();
     const friends = friendUids(player.exists ? player.data() : null, uid);
-    if (!friends.length) return { conversations: [], unread: 0 };
+    if (!friends.length) return { conversations: [], unread: 0, friendCount: 0 };
     // Single-field array-contains index; no additional composite index required.
     const rows = (await bdDb.collection(CHAT_COLLECTION).where('memberUids', 'array-contains', uid).limit(100).get()).docs.map(x => x.data());
     const candidates = rows.map(row => cleanChat(row, uid, friends)).filter(Boolean);
@@ -92,7 +92,7 @@ function createHandlers({ projects = adminProject, now = Date.now, cooldowns = s
       return peer.exists && friendUids(peer.data(), row.peerUid).includes(uid) ? row : null;
     }));
     const conversations = confirmed.filter(Boolean).sort((x, y) => y.updatedAt - x.updatedAt);
-    return { conversations, unread: conversations.reduce((n, x) => n + x.unread, 0) };
+    return { conversations, unread: conversations.reduce((n, x) => n + x.unread, 0), friendCount: friends.length };
   });
   const thread = withAuth(async ({ uid, aDb, bdDb, req }) => {
     const peerUid = String(req.body?.peerUid || '');

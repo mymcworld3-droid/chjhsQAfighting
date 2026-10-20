@@ -88,7 +88,7 @@ npx wrangler@4 d1 migrations apply qingyun-game-prod --local --config cloudflare
 npx wrangler@4 d1 migrations apply qingyun-game-prod --remote --config cloudflare/d1/wrangler.jsonc
 ```
 
-第一行只建立電腦裡的測試資料庫；**第二行才會初始化 Cloudflare 正式資料庫，並包含 `0003_admin_auto_migration.sql` 的續傳資料表**。看到待執行的 migrations 時確認執行。
+第一行只建立電腦裡的測試資料庫；**第二行才會初始化 Cloudflare 正式資料庫，並包含 `0003_admin_auto_migration.sql` 的續傳資料表及 `0004_analytics_retention.sql` 的分析索引**。看到待執行的 migrations 時確認執行。
 
 驗證：
 
@@ -98,7 +98,7 @@ npx wrangler@4 d1 execute qingyun-game-prod --remote --config cloudflare/d1/wran
 
 應看見 documents、document_versions、collection_versions、d1_version_guard，以及 players、caves 等 view。此時 `players` 沒有玩家是正常的，舊資料尚未匯入。
 
-後台也可進入資料庫 → Console 執行上面 SELECT；若只使用後台建表，依序貼上 `0001_document_store.sql`、`0002_query_indexes.sql` 和 `0003_admin_auto_migration.sql`。建議使用 migrations 指令，才能保留版本紀錄。
+後台也可進入資料庫 → Console 執行上面 SELECT；若只使用後台建表，依序貼上 migrations 目錄的 `0001` 至 `0004` SQL。建議使用 migrations 指令，才能保留版本紀錄。
 
 ## 5. 部署私有 Worker
 
