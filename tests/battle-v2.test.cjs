@@ -99,11 +99,11 @@ test('Golden Core battle rolls are deterministic and replay-safe', () => {
   const thunder = { type: 'thunder', grade: 1, name: '萬劫雷霆丹' };
   let reflected = null;
   for (let i = 0; i < 300; i += 1) {
-    const result = e.resolveDeterministicCounterCore({ goldenCore: thunder }, 200, `counter-${i}`);
+    const result = e.resolveDeterministicCounterCore({ goldenCore: thunder, answer: { correct: true } }, 200, `counter-${i}`);
     if (result.reflectDamage) { reflected = result; break; }
   }
   assert.ok(reflected);
-  assert.equal(reflected.reflectDamage, 100);
+  assert.equal(reflected.reflectDamage, 200);
 });
 
 test('matchmaking is transactional, version isolated, self-match safe and cultivation-aware', () => {
@@ -391,7 +391,7 @@ test('Dao-heart blocks just one incoming hit, including a counterattack', () => 
     guest:{...g,hp:first.guestHp,coreCorrectStreak:first.guestCoreStreak},
     resolveEquipmentHit:({baseDamage})=>({damage:baseDamage,reflectDamage:120})
   });
-  assert.equal(next.hostHp,380,'without a fresh shield, Thunder adds 50% of 200 (100), equipment reflects 120, and direct attack deals 200');
+  assert.equal(next.hostHp,280,'without a fresh shield, correct-answer Thunder adds 200, equipment reflects 120, and direct attack deals 200');
   assert.equal(first.hostCoreShield,false);
   assert.equal(next.hostCoreShield,false);
 });

@@ -70,14 +70,14 @@ test('starfall triggers on the third answered question even when that answer is 
   }
  }
 });
-test('thunder adds 50 percentage points to equipment 16%, and soul can stack on the same hit',()=>{
+test('correct-answer thunder adds 100 percentage points to equipment 16%, and soul can stack on the same hit',()=>{
  const context={window:{},QACombatCombo:globalThis.QACombatCombo};vm.createContext(context);
  const source=fs.readFileSync(require('node:path').join(__dirname,'../public/cultivation/artifact-battle-effects.js'),'utf8').replace(/^import \{\} from .*;\n/gm,'');
  vm.runInContext(source,context);
  const settle=(soul=false,roomId='stack-0')=>{
   const a=p('ocean'),d=p('thunder');a.uid='a';d.uid='d';a.nascentSoul=null;
   d.goldenCore={type:'thunder',grade:1};d.nascentSoul=soul?{talent:talents.snapshot('thunder',1,{leftTop:10,leftFarBottom:10,leftFinal:10})}:null;
-  d.answer.correct=false;d.artifactBattle={effects:[{type:'equip_reflect_percent',value:.16}]};
+  d.answer.correct=true;d.answer.atMs=1200;d.artifactBattle={effects:[{type:'equip_reflect_percent',value:.16}]};
   const r=engine({roomId,round:1,host:a,guest:d,soulTalents:talents,resolveEquipmentHit:args=>context.window.resolveArtifactBattleHit(args)});
   return r.logs.find(x=>x.type==='counter'&&x.coreEffect?.type==='thunder');
  };
@@ -87,8 +87,8 @@ test('thunder adds 50 percentage points to equipment 16%, and soul can stack on 
   if(bare){withSoul=settle(true,seed);break;}
  }
  assert.ok(bare);
- assert.equal(bare.damage,132,'200 normal HP loss × (16% weapon + 50% core) = 132');
- assert.equal(withSoul.damage,196,'same 200 HP × (16%+50%+32% soul) = 196');
+ assert.equal(bare.damage,232,'200 normal HP loss × (16% weapon + 100% core) = 232');
+ assert.equal(withSoul.damage,296,'same 200 HP × (16%+100%+32% soul) = 296');
 });
 test('pure true damage never contributes to thunder reflection',()=>{
  const h=p('wugou'),g=p('thunder');

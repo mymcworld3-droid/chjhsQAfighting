@@ -92,7 +92,7 @@ test('thunder counter visuals require actual thunder reflection, not an unrelate
   const runtime = loadCombat();
   let counter;
   for (let index = 0; index < 1000; index++) {
-    const outcome = runtime.settle({ roomId: 'counter-room-' + index, round: 1, host: player('h'), guest: player('g', { goldenCore: { type: 'thunder', grade: 1 } }) });
+    const outcome = runtime.settle({ roomId: 'counter-room-' + index, round: 1, host: player('h'), guest: player('g', { goldenCore: { type: 'thunder', grade: 1 }, answer: { correct:true, atMs:2000 } }) });
     counter = outcome.steps.find(step => step.type === 'counter');
     if (counter) break;
   }

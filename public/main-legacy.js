@@ -5393,6 +5393,8 @@ async function resolveRoundLogic(roomId, room) {
                 const defenderHpBefore = Math.max(0, Number(defender.hp) || 0);
                 const intendedDamage = Math.max(0, Math.round(Number(artifactDefense.hpDamage) || 0));
                 let receivedDamage = Math.min(defenderHpBefore, intendedDamage);
+                let normalReceived = Math.min(defenderHpBefore, Math.max(0,
+                    Number(artifactDefense.normalHpDamage ?? (intendedDamage - Math.max(0, Number(artifactAttack.trueDamage) || 0))) || 0));
                 defender.hp = Math.max(0, defenderHpBefore - intendedDamage);
                 const extraHits = [];
                 const comboStats = globalThis.QACombatCombo.stats(attacker,attacker.artifactBattle?.effects || []);
@@ -5402,6 +5404,7 @@ async function resolveRoundLogic(roomId, room) {
                         const defense = window.resolveArtifactBattleDefense?.({attacker,defender,normalDamage:raw,trueDamage:0}) || {hpDamage:raw};
                         const dealt = Math.max(0,Math.round(Number(defense.hpDamage)||0));
                         receivedDamage += Math.min(defender.hp,dealt);
+                        normalReceived += Math.min(defender.hp,dealt);
                         defender.hp = Math.max(0,defender.hp-dealt);
                         artifactDefense.reflectDamage += Math.max(0,Number(defense.reflectDamage)||0);
                         if(dealt)extraHits.push({attacker:attackerRole,isHit:true,dmg:dealt,skill:'連擊 '+(index+1),combo:true,healed:null});
@@ -5411,6 +5414,7 @@ async function resolveRoundLogic(roomId, room) {
                     const defense = window.resolveArtifactBattleDefense?.({attacker,defender,normalDamage:pursuitDamage,trueDamage:0}) || {hpDamage:pursuitDamage};
                     const dealt = Math.max(0,Math.round(Number(defense.hpDamage)||0));
                     receivedDamage += Math.min(defender.hp,dealt);
+                    normalReceived += Math.min(defender.hp,dealt);
                     defender.hp = Math.max(0,defender.hp-dealt);
                     artifactDefense.reflectDamage += Math.max(0,Number(defense.reflectDamage)||0);
                     extraHits.push({attacker:attackerRole,isHit:true,dmg:dealt,skill:'金丹劍氣・追擊',pursuit:true,healed:null});
@@ -5465,7 +5469,7 @@ async function resolveRoundLogic(roomId, room) {
 
                     if (attacker.hp > 0) {
                         const counterEffect = window.resolveGoldenCoreBattleCounter?.({
-                            defender, attacker, receivedDamage
+                            defender, attacker, receivedDamage: normalReceived
                         }) || {};
                         const coreReflectDamage = Math.max(0, Number(counterEffect.reflectDamage) || 0);
                         if (coreReflectDamage > 0) {
