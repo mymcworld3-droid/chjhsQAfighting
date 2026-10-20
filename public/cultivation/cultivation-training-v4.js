@@ -167,7 +167,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
     {
       id: 'thunder', name: '萬劫雷霆丹', icon: '⚡', tone: 'thunder',
       effect(grade) {
-        return `進入下一境界前最後 ${breakthroughPercent(grade)}% 的修為區間時，悟道成功額外 +1 修為；答對時有 60% 機率使本回合反擊傷害 +50%（與元嬰、法寶加成相加，例如法寶 16% 觸發後變 66%；基於實際普通承傷，不含真傷；團本持續至下次首領攻擊，不疊加）。`;
+        return `進入下一境界前最後 ${breakthroughPercent(grade)}% 的修為區間時，悟道成功額外 +1 修為；答對時有 ${chanceByGrade(grade, 10, 6.25, 60)}% 機率使本回合反擊傷害 +50%（與元嬰、法寶加成相加，例如法寶 16% 觸發後變 66%；基於實際普通承傷，不含真傷；團本持續至下次首領攻擊，不疊加）。`;
       },
       ability: '以雷劫淬丹，答對蓄雷，受擊反攻。',
       upkeep: '須先答對蓄雷，再承受攻擊；未受擊不造成額外傷害。',

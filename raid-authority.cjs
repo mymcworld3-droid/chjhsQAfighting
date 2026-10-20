@@ -377,7 +377,7 @@ function resolvePlayerAction(member,{roomId,actionId,correct,bossHp=1,bossMaxHp=
   const next={...member,artifactBattle:{...(member.artifactBattle||{}),effects:[...runtimeEffects(member)]}};
   const seed=String(roomId)+':player:'+String(actionId)+':'+String(next.uid),support=coreSupport(next,correct,seed+':support');
   next.coreCorrectStreak=support.streak;next.coreShield=support.shield;
-  next.thunderCounterReady=correct===true&&next.goldenCore?.type==='thunder'&&deterministicPercent(seed+':thunder')<60;
+  next.thunderCounterReady=correct===true&&next.goldenCore?.type==='thunder'&&deterministicPercent(seed+':thunder')<chanceByGrade(next.goldenCore.grade,10,6.25,60);
   const starAnswers=(Math.max(0,Math.floor(finite(member?.soulStarAnswerWindow)))%3)+1;
   const starCorrect=Math.min(3,Math.max(0,Math.floor(finite(member?.soulStarCorrectWindow)))+(correct===true?1:0));
   const starDamage=starAnswers===3?soulTalents.starfall(next,starCorrect):0;
