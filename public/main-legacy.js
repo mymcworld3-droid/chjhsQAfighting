@@ -661,8 +661,9 @@ window.googleLogin = async () => {
 window.completeFirstVisitSetup = async (gender = '', name = '') => {
     const person = auth.currentUser;
     if (!person || person.isAnonymous) throw new Error('請先綁定或登入帳號。');
-    if (gender && !['male', 'female'].includes(gender)) throw new Error('請重新選擇角色。');
-    if (gender) await window.updatePlayerDisplayName(name);
+    if (!String(name || '').trim()) throw new Error('請先輸入你的道號。');
+    if (!['male', 'female'].includes(gender)) throw new Error('請重新選擇角色。');
+    await window.updatePlayerDisplayName(name);
     const patch = { arrivalOnboardingV1: { version: 1, completed: true, completedAtMs: Date.now() } };
     if (gender) patch['storyProgressV1.gender'] = gender;
     await updateDoc(doc(db, 'users', person.uid), patch);

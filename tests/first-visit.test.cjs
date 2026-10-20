@@ -11,6 +11,22 @@ const guest = { uid: 'guest-one', isAnonymous: true };
 const account = { uid: 'account-one', isAnonymous: false };
 const state = stage => ({ version: 1, stage, guestUid: guest.uid });
 
+test('arrival completion rejects missing names and roles before persisting setup', async () => {
+  const calls = [];
+  const ctx = vm.createContext({ auth: { currentUser: account }, currentUserData: {}, db: {},
+    window: { updatePlayerDisplayName: async name => calls.push(['name', name]), dispatchEvent() {} },
+    doc: () => ({}), updateDoc: async (_, patch) => calls.push(['setup', patch]),
+    updateUIStats() {}, CustomEvent: class {} });
+  const start = legacy.indexOf('window.completeFirstVisitSetup =');
+  vm.runInContext(legacy.slice(start, legacy.indexOf('window.anonymousLogin =', start)), ctx);
+  await assert.rejects(ctx.window.completeFirstVisitSetup('male', '   '), /輸入你的道號/);
+  await assert.rejects(ctx.window.completeFirstVisitSetup('', '清風'), /選擇角色/);
+  assert.equal(calls.length, 0);
+  await ctx.window.completeFirstVisitSetup('female', '清風');
+  assert.deepEqual(calls.map(call => call[0]), ['name', 'setup']);
+  assert.equal(ctx.currentUserData.storyProgressV1.gender, 'female');
+});
+
 test('a new device welcomes once; finished devices do not repeat the trial after logout', () => {
   assert.equal(rules.readyStage({}, null), 'welcome');
   assert.equal(rules.readyStage({ version: 1, stage: 'done' }, null), 'done');

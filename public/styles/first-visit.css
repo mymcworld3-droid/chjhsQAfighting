@@ -23,6 +23,8 @@
 #first-visit-layer .fv-gender{padding:0 8px 12px;overflow:hidden;background:radial-gradient(ellipse at center,#b3cec818,transparent),#0a1919}
 #first-visit-layer .fv-gender img{display:block;width:100%;height:min(42vh,340px);object-fit:contain;object-position:center bottom}
 #first-visit-layer .fv-gender strong{display:block;margin-top:8px}
+#first-visit-layer .fv-gender[aria-pressed="true"]{border-color:#f3d18b;box-shadow:0 0 0 2px #f3d18b88,0 0 24px #e7c88833;background-color:#203d35}
+#first-visit-layer #fv-confirm{width:100%;background:linear-gradient(135deg,#82672f,#51401e);border-color:#e7c888}
 body.first-visit-active #bottom-nav,body.first-visit-active #btn-extended-practice-stop,body.first-visit-active .quiz-helper-practice-btn{display:none!important}
 @media(orientation:portrait){
   #first-visit-layer{padding:20px}
