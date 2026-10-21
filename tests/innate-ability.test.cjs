@@ -357,7 +357,7 @@ test('raid meteors carry separate HP snapshots, replay identically and award the
   assert.equal(JSON.stringify(result),JSON.stringify(Raid.resolvePlayerAction(h,input)));
   let wrong=fighter('xingchen','meteor');wrong=advance(advance(wrong,false),false);
   wrong.soulStarAnswerWindow=2;wrong.soulStarCorrectWindow=0;
-  assert.deepEqual(Raid.resolvePlayerAction(wrong,input) .meteorHits.map(x=>x.damage),[120]);
+  assert.deepEqual(Raid.resolvePlayerAction(wrong,input).meteorHits.map(x=>x.damage),[120]);
 });
 test('WuChen returns shield-absorbed normal damage as true damage, excluding incoming true damage and retaliation loops',()=>{
   const h=fighter('wugou','clarity',{coreShield:true,answer:{correct:false,atMs:20}});h.nascentSoul=null;
