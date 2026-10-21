@@ -213,7 +213,16 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       const score = window.getTrainingAccessScore?.() ?? globalThis.QATrainingAccessRules.score(data());
       const rank = Math.max(0, pool.rankFor(score)), candidates = pool.candidates(rank);
       const status = !account ? '請登入後締結本命。' : busy ? '正在同步契印…' : '契印尚未同步，請按「重新同步」。';
-      $('soulbound-content').innerHTML = `<p class="sb-empty">${status}</p>${showcaseMarkup(candidates)}${probabilityMarkup(rank)}`;
+      // Keep the same lobby structure before and after sync. A bare showcase
+      // first paints the old stacked layout, then jumps when controls arrive.
+      $('soulbound-content').innerHTML = `<div class="sb-summary" aria-busy="true"><div><small>靈石餘額</small><strong>—</strong></div><div><small>煉器碎片</small><strong>—</strong></div><div><small>目前本命</small><b>—</b><span>正在讀取契印</span></div><div><small>距離武器保底</small><b>—</b><span>正在同步進度</span></div></div>
+        <div class="sb-pity"><progress value="0" max="${pool.PITY}" aria-label="保底進度同步中"></progress><span>八種武器同池 · 至多 ${pool.PITY} 抽必得一件完整武器</span></div>
+        <div class="sb-lobby">${showcaseMarkup(candidates)}<section class="sb-draw-controls" aria-busy="true"><h3>締結本命</h3><p>八種本命法器一起抽；至多 ${pool.PITY} 抽必得其中一件完整武器。</p>
+          <p class="sb-first" role="status">${status}</p>
+          <div class="sb-actions"><button type="button" class="sb-primary" disabled>單抽 · — 靈石</button><button type="button" disabled>五連抽 · — 靈石</button></div>
+          <p class="sb-first">本命法器抽獎券：— 張 · 閉關共修可獲得</p>
+          <div class="sb-actions"><button type="button" disabled>用券單抽 · 1 張</button><button type="button" disabled>用券五連 · 5 張</button></div>
+          <p class="sb-note">契印同步完成後即可抽取。</p></section></div>${probabilityMarkup(rank)}`;
       scheduleCarousel();
       return;
     }

@@ -120,11 +120,16 @@ test('three common-pool weapons remain visible during slow or failed sync, with 
   const runtime = pageRuntime();
   runtime.open();
   assertShowcase(runtime.html());
+  assert.match(runtime.html(), /class="sb-summary"/);
+  assert.match(runtime.html(), /class="sb-lobby"/);
+  assert.match(runtime.html(), /class="sb-draw-controls"/);
+  assert.doesNotMatch(runtime.html(), /class="sb-empty"/);
   assert.equal(runtime.html().includes('data-sb-draw='), false);
   assert.match(runtime.html(), /aria-label="常駐本命法器共用池"/);
   runtime.requests[0].reply({ ok: false, error: '契器暫時離線' }, 503);
   await settle();
   assertShowcase(runtime.html());
+  assert.match(runtime.html(), /class="sb-lobby"/);
   assert.equal(runtime.html().includes('正在同步契印'), false);
   assert.match(runtime.html(), /重新同步/);
   assert.equal(runtime.nodes.get('soulbound-status').textContent, '契器暫時離線');
@@ -138,6 +143,13 @@ test('three common-pool weapons remain visible during slow or failed sync, with 
   assert.equal((runtime.html().match(/data-sb-draw=/g) || []).length, 4);
   assert.match(runtime.html(), /五連抽 · 2650 靈石/);
   assert.equal(runtime.requests.length, 2, 'displaying the common pool never sends a purchase request');
+});
+
+test('contract styling is loaded by the initial document before feature modules can open the page', () => {
+  const html=fs.readFileSync(path.join(__dirname,'../public/index.html'),'utf8');
+  assert.match(html, /<link id="soulbound-page-style" rel="stylesheet" href="styles\/soulbound-draw\.css">/);
+  const headEnd=html.indexOf('</head>');
+  assert.ok(html.indexOf('id="soulbound-page-style"')<headEnd);
 });
 
 test('single and five draw buttons send one common-pool request without a target weapon', async () => {
