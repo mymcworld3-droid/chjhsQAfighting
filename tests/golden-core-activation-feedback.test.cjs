@@ -33,7 +33,7 @@ test('battle Golden Core effects announce ocean, sword and thunder activations',
   const battle = read('public/cultivation/golden-core-battle-effects.js');
 
   assert.match(battle, /function showActivation\(core, message, kind\)/);
-  assert.match(battle, /千尺巨浪席捲戰場，額外造成 100 傷害/);
+  assert.match(battle, /千尺巨浪席捲戰場，額外造成 150 傷害/);
   assert.match(battle, /萬劍追擊，額外造成 200 傷害/);
   assert.match(battle, /答對蓄雷（\$\{chance\}%），本回合反擊傷害 \+75%，金丹額外反擊 \$\{reflected\} 傷害/);
   assert.match(battle, /showActivation\(core, message, '鬥法攻擊效果'\)/);
