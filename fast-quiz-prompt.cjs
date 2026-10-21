@@ -1,7 +1,7 @@
 'use strict';
 // Compact generation instruction. Existing server validation is always retained.
 const MODES = new Set(['raid-quick-simple', 'raid-standard', 'battle-fast', 'immortal-fast']);
-const { ANSWER_AND_EXPLANATION_RULES } = require('./quiz-answer-prompt.cjs');
+const { ANSWER_AND_EXPLANATION_RULES, subjectReliabilityPrompt } = require('./quiz-answer-prompt.cjs');
 const Knowledge = require('./public/cultivation/knowledge-points.js');
 function quickQuizPrompt({ mode, subject, level, topic, rank, difficulty, previousQuestions = [],
   previousMeta = [], targetForm = '', quality = {}, retryIssue = '', randomSeed = '', knowledgePointId = '' } = {}) {
@@ -21,6 +21,8 @@ function quickQuizPrompt({ mode, subject, level, topic, rank, difficulty, previo
   };
   return [
     '你是台灣國教專業教師。只出一道高品質繁體中文單選題，回傳純 JSON。',
+    ANSWER_AND_EXPLANATION_RULES,
+    subjectReliabilityPrompt(subject),
     '科目='+safe(subject,40)+'；程度='+safe(level,32)+'；指定範圍='+safe(topic,180)+'；難度='+
       (quick?'easy':safe(difficulty,16))+'；段位='+Number(rank||0)+'；隨機種子='+safe(randomSeed,24),
     '保持指定學制與難度，題目清楚而有實質理解、推理深度；勿冗長敘事。',
@@ -28,7 +30,6 @@ function quickQuizPrompt({ mode, subject, level, topic, rank, difficulty, previo
       '；推理步數='+(quick?1:quality.steps||2),
     !quick && quality.instruction ? '深度要求：'+safe(quality.instruction,300) : '',
     '獨立解題、逐項核對四個選項。只能一個正解，三個錯誤選項不可與正解等價或互相同義。',
-    ANSWER_AND_EXPLANATION_RULES,
     Knowledge.promptFor(subject, knowledgePointId),
     '題目請要整齊。',
     '發現錯題直接重寫 q、correct、wrong、exp，解析禁止「本題有錯」「原答案錯誤」「更正」等修訂註記。',

@@ -75,3 +75,44 @@ test('all quiz generation modes share independent solving and concise explanatio
   assert.match(ANSWER_AND_EXPLANATION_RULES,/最後一句固定用「答案為/);
   assert.match(ANSWER_AND_EXPLANATION_RULES,/不逐項分析錯誤選項/);
 });
+
+test('reliability examples are valid questions with one correct choice and matching explanations',()=>{
+  const {RELIABILITY_EXAMPLES}=require('../quiz-answer-prompt.cjs');
+  for(const example of Object.values(RELIABILITY_EXAMPLES)) {
+    assert.equal(questionQualityIssue(example),'');
+    assert.equal(new Set([example.correct,...example.wrong]).size,4);
+    assert.ok(example.exp.endsWith('答案為 '+example.correct+'。'));
+  }
+});
+
+test('subject checks are selected by curriculum aliases and do not overwhelm other subjects with irrelevant examples',()=>{
+  const {subjectReliabilityPrompt}=require('../quiz-answer-prompt.cjs');
+  assert.equal(subjectReliabilityPrompt('數學A'),subjectReliabilityPrompt('數學'));
+  assert.equal(subjectReliabilityPrompt('英語'),subjectReliabilityPrompt('英文'));
+  assert.match(subjectReliabilityPrompt('數學'),/定義域、分母不為零/);
+  assert.match(subjectReliabilityPrompt('英文'),/恰有一處錯誤/);
+  assert.match(subjectReliabilityPrompt('化學'),/原子數與電荷/);
+  assert.match(subjectReliabilityPrompt('物理'),/量綱一致/);
+  assert.match(subjectReliabilityPrompt('國文'),/引文、人名、作者/);
+  assert.match(subjectReliabilityPrompt('歷史'),/年代、人物、事件先後/);
+  assert.match(subjectReliabilityPrompt('地理'),/地區、季節、半球/);
+  assert.match(subjectReliabilityPrompt('生物'),/一般情況與例外/);
+  assert.match(subjectReliabilityPrompt('公民'),/限定制度、地區/);
+  assert.match(subjectReliabilityPrompt('地球科學'),/自轉、公轉/);
+  assert.doesNotMatch(subjectReliabilityPrompt('數學'),/Kevin/);
+  assert.doesNotMatch(subjectReliabilityPrompt('英文',{examples:false}),/Kevin|格式示例/);
+});
+
+test('correctness instructions precede examples and vary-by-session data across combat modes',()=>{
+  const {QUESTION_RELIABILITY_RULES,subjectReliabilityPrompt}=require('../quiz-answer-prompt.cjs');
+  const {MODES,quickQuizPrompt}=require('../fast-quiz-prompt.cjs');
+  assert.match(QUESTION_RELIABILITY_RULES,/每個 wrong 必須有明確不成立的理由/);
+  assert.match(QUESTION_RELIABILITY_RULES,/若需近似須先指定取位/);
+  assert.match(QUESTION_RELIABILITY_RULES,/改出同範圍、同難度/);
+  for(const mode of MODES) {
+    const prompt=quickQuizPrompt({mode,subject:'英文',topic:'目前單元',previousQuestions:['之前的一題']});
+    assert.ok(prompt.indexOf(QUESTION_RELIABILITY_RULES)<prompt.indexOf(subjectReliabilityPrompt('英文')));
+    assert.ok(prompt.indexOf(QUESTION_RELIABILITY_RULES)<prompt.indexOf('科目=英文'));
+    assert.ok(prompt.includes('不得抄題或用示例取代指定單元'));
+  }
+});
