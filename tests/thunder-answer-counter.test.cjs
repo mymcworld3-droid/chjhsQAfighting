@@ -18,7 +18,7 @@ function activeRoom(prefix,round=1) {
  }
  throw Error('No active thunder seed');
 }
-test('correct answers roll a grade-scaled 10–60% chance once per round with a 50% additive bonus',()=>{
+test('correct answers roll a grade-scaled 30–70% chance once per round with a 50% additive bonus',()=>{
  let triggered=0,missed=0;
  for(let grade=1;grade<=9;grade++)for(let seed=0;seed<100;seed++){
   const key='answer-'+seed+':1:g:';
@@ -27,7 +27,7 @@ test('correct answers roll a grade-scaled 10–60% chance once per round with a 
   const star=engine.resolveDeterministicCounterCore(player('g',true,grade),200,key+'star-counter');
   assert.equal(result.reflectDamage,again.reflectDamage);assert.equal(result.reflectDamage,star.reflectDamage);
   let hash=2166136261;for(const ch of key+'counter:thunder'){hash^=ch.charCodeAt(0);hash=Math.imul(hash,16777619);}
-  assert.equal(result.reflectDamage,(hash>>>0)%100 < 10+(9-grade)*6.25 ? 100 : 0);
+  assert.equal(result.reflectDamage,(hash>>>0)%100 < 30+(9-grade)*5 ? 100 : 0);
   if(result.reflectDamage){assert.equal(result.reflectDamage,100);assert.equal(result.activation.type,'thunder');triggered++;}
   else missed++;
  }
@@ -101,19 +101,25 @@ test('eligible PvP thunder reflects only the normal portion of a mixed normal an
  assert.equal(result.hostHp,1980);assert.equal(result.guestHp,1900);
 });
 
-test('the 60% answer roll includes 59 and excludes 60, sharing the decision with starfall',()=>{
+test('the 70% answer roll includes 69 and excludes 70, sharing the decision with starfall',()=>{
  const eligible=player('g',true);
+ const keyFor=roll=>Array.from({length:10000},(_,i)=>'threshold-'+i+':1:g:').find(key=>{
+  let hash=2166136261;for(const ch of key+'counter:thunder'){hash^=ch.charCodeAt(0);hash=Math.imul(hash,16777619);}
+  return (hash>>>0)%100===roll;
+ });
+ const below=keyFor(69),boundary=keyFor(70);
+ assert.ok(below&&boundary);
  for(const suffix of ['counter','star-counter']){
-  assert.equal(engine.resolveDeterministicCounterCore(eligible,200,'threshold-190:1:g:'+suffix).reflectDamage,100);
-  assert.equal(engine.resolveDeterministicCounterCore(eligible,200,'threshold-256:1:g:'+suffix).reflectDamage,0);
+  assert.equal(engine.resolveDeterministicCounterCore(eligible,200,below+suffix).reflectDamage,100);
+  assert.equal(engine.resolveDeterministicCounterCore(eligible,200,boundary+suffix).reflectDamage,0);
  }
 });
 
-test('raid chance scales from ninth grade 10% to first grade 60%',()=>{
+test('raid chance scales from ninth grade 30% to first grade 70%',()=>{
  for(let grade=1;grade<=9;grade++)for(let id=1;id<=100;id++){
   const member={...raidMember(),goldenCore:{type:'thunder',grade}};
   const result=authority.resolvePlayerAction(member,{roomId:'raid',actionId:id,correct:true});
   let hash=2166136261;for(const ch of 'raid:player:'+id+':raid-player:thunder'){hash^=ch.charCodeAt(0);hash=Math.imul(hash,16777619);}
-  assert.equal(result.member.thunderCounterReady,(hash>>>0)%100 < 10+(9-grade)*6.25);
+  assert.equal(result.member.thunderCounterReady,(hash>>>0)%100 < 30+(9-grade)*5);
  }
 });

@@ -96,11 +96,11 @@ export function resolveDeterministicCounterCore(player, receivedDamage, seed) {
   if (!answerCorrect(player)) return { reflectDamage: 0, activation: null };
   // One answer roll per round, shared by ordinary hits and later starfall damage.
   const answerSeed = String(seed).replace(/:star-counter$/, ':counter');
-  const chance = chanceByGrade(core.grade, 10, 6.25, 60);
+  const chance = chanceByGrade(core.grade, 30, 5, 70);
   if (deterministicPercent(answerSeed + ':thunder') >= chance) return { reflectDamage: 0, activation: null };
 
   return {
-    // 答對時依品級有 10～60% 機率讓本回合金丹反擊傷害 +50%，其餘反擊率由元嬰與法寶共同累加。
+    // 答對時依品級有 30～70% 機率讓本回合金丹反擊傷害 +50%，其餘反擊率由元嬰與法寶共同累加。
     reflectDamage: Math.round(damage * .5),
     activation: {
       type: core.type,
