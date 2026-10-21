@@ -363,6 +363,7 @@ test('managed zoom affects question contents, preserves fullscreen scrollers and
   assert.match(css, /html\.app-answer-zoom-allowed #quiz-whiteboard-canvas\s*\{\s*touch-action:none!important/);
   assert.match(css, /zoom:var\(--app-answer-zoom,1\)/);
   assert.match(css, /quiz-main-column > :not\(#quiz-whiteboard-panel\)/);
-  assert.match(css, /#raid-question \.raid-question-shell > \*/);
+  assert.match(css, /#raid-question \.raid-study-body > \*/);
+  assert.doesNotMatch(css, /#raid-question \.raid-question-shell > \*/);
   assert.match(read('xianxia.css'), /touch-action:\s*none/);
 });

@@ -31,7 +31,7 @@ html.app-answer-zoom-allowed :is(
   #quiz-whiteboard-question,
   #bv2-quiz .bv2-question-card > *,
   #bv2-quiz .bt-quiz-fullscreen > *,
-  #raid-question .raid-question-shell > *,
+  #raid-question .raid-study-body > *,
   #dongtian-overlay .dt-question > *,
   #opportunity-overlay .op-workspace > *,
   #daily-meditation-overlay #dm-content,
