@@ -63,12 +63,13 @@ function authorizeWrite({role,path,before,after,operation,context,tx,preview}) {
         if(!same(before?.[field],after[field]) && !(before===null&&field==='isAdmin'&&after[field]===false))throw fail();
       }
       if(after.email!==undefined && after.email!==before?.email && after.email!==(decoded.email||''))throw fail();
+      // Friendships and invitation preferences are changed only by the trusted API.
+      if(!same(before?.friends||[],after.friends||[]) ||
+        Boolean(before?.friendInvitesDisabled)!==Boolean(after.friendInvitesDisabled))throw fail();
       return;
     }
     if(operation.type==='update'&&Object.keys(operation.data||{}).length===1) {
-      const friends=operation.data.friends;
       const own=preview.get('users/'+uid);
-      if(friends?.__d1op==='arrayUnion'&&same(friends.args,[uid])&&own?.friends?.includes(id))return;
       // A purchase may credit exactly one seller. The listing and buyer debit must
       // be in this same guarded SQL transaction; arbitrary peer gold writes fail.
       if(Object.hasOwn(operation.data,'stats.gold')) {

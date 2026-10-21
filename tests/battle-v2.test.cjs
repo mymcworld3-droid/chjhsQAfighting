@@ -285,7 +285,7 @@ test('formal battle uses Foundation realm only; incomplete tutorials never block
   let layerPresent = false;
   let currentScore = 9;
   const ctx = vm.createContext({
-    document: { querySelector: () => layerPresent ? {} : null },
+    document: { querySelector: () => layerPresent ? {} : null, getElementById: () => null },
     window: { getBattleTutorialState: () => ({active:false}), switchToPage: () => calls.push('page'), ensureCombatStats: async () => {}, dispatchEvent: () => {} },
     state: { starting:false, roomId:null, room:null, role:null },
     score: () => currentScore, FOUNDATION_SCORE:10, me: () => ({uid:'p'}),
