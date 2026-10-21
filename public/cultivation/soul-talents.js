@@ -2,7 +2,7 @@
 (function (root) {
   'use strict';
   const TYPES = Object.freeze({
-    ocean:{name:'滄潮',trait:'蓄潮爆發',desc:'敵方生命至少 60% 時，額外普通傷害為能力倍率的 2 倍；其餘為 0.6 倍。'},
+    ocean:{name:'滄潮',trait:'蓄潮爆發',desc:'敵方生命至少 60% 時，額外普通傷害為能力倍率的 2 倍；其餘為 1.2 倍。'},
     taichu:{name:'還神',trait:'吸血',desc:'所有攻擊造成實際傷害皆可吸血，含普通攻擊、真傷、爆擊、連擊、追擊及反擊；滿級九品 25%、一品 50%。無單次回血量或攻擊力限制，生命最多回滿。'},
     ningxin:{name:'凝鋒',trait:'會心',desc:'答對時有 25% 機率追加 3 倍能力倍率的普通傷害；不再觸發法寶暴擊。修習後道心改為每連答至少 3 題凝聚一次。'},
     pojing:{name:'破境',trait:'斬殺',desc:'敵方生命不高於 50% 時，額外普通傷害為能力倍率的 3.8 倍；其餘為 0.4 倍。'},
@@ -30,7 +30,7 @@
     const out={normal:0,trueDamage:0,followup:0,leech:0,name:TYPES[t?.type]?.name||''};
     if(!budget)return out;
     const own=clamp(player.hp/Math.max(1,player.maxHp),0,1),enemy=clamp(target?.hp/Math.max(1,target?.maxHp),0,1);
-    if(t.type==='ocean')out.normal=budget*(enemy>=.6?2:.6);
+    if(t.type==='ocean')out.normal=budget*(enemy>=.6?2:1.2);
     if(t.type==='taichu')out.leech=leechRate(t);
     if(t.type==='ningxin'&&!t.comboMode&&hash(seed+':soul-critical')<.25)out.normal=budget*3;
     if(t.type==='pojing')out.normal=budget*(enemy<=clamp(executeThreshold,.5,.7)?3.8:.4);

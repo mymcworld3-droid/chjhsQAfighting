@@ -58,7 +58,7 @@ test('starfall counts correct answers in every three attempts and low HP talents
 });
 test('ocean burst includes 60% current target HP in both duel and raid settlement',()=>{
  const host=p('ocean');host.nascentSoul.talent.powerScale=.5;
- for(const [hp,expected] of [[700,64],[650,64],[600,64],[599,19]]){
+ for(const [hp,expected] of [[700,64],[650,64],[600,64],[599,38]]){
   const guest=p('taichu');guest.hp=hp;guest.answer.correct=false;
   assert.equal(talents.attack(host,guest).normal,expected);
   const duel=engine({roomId:'ocean-hp-'+hp,round:1,host,guest,soulTalents:talents});

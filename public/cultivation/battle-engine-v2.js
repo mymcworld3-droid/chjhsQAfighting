@@ -57,12 +57,12 @@ export function resolveDeterministicAttackCore(player, seed) {
     const chance = chanceByGrade(core.grade, 10, 5, 50);
     if (deterministicPercent(`${seed}:ocean`) < chance) {
       return {
-        extraDamage: 100,
+        extraDamage: 150,
         activation: {
           type: core.type,
           name: core.name,
           skill: '大海無垠丹・千尺巨浪',
-          message: `千尺巨浪席捲戰場，額外造成 100 傷害（${chance}%）`,
+          message: `千尺巨浪席捲戰場，額外造成 150 傷害（${chance}%）`,
           kind: '鬥法攻擊效果'
         }
       };

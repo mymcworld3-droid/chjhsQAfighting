@@ -106,6 +106,21 @@ test('Golden Core battle rolls are deterministic and replay-safe', () => {
   assert.equal(reflected.reflectDamage, 150);
 });
 
+test('ocean wave retains the same 50% chance and now adds 150 damage', () => {
+  const e=loadEngine();
+  const ocean={type:'ocean',grade:1,name:'大海無垠丹'};
+  let triggered=null,missed=false;
+  for(let n=0;n<200;n++){
+    const proc=e.resolveDeterministicAttackCore({goldenCore:ocean},'ocean-boost-'+n);
+    if(proc.extraDamage===0)missed=true;
+    if(proc.extraDamage>0)triggered=proc;
+  }
+  assert.ok(triggered,'ocean core should trigger in deterministic sample');
+  assert.ok(missed,'ocean core should not trigger every time');
+  assert.equal(triggered.extraDamage,150);
+  assert.match(triggered.activation.message,/150 傷害/);
+});
+
 test('matchmaking is transactional, version isolated, self-match safe and cultivation-aware', () => {
   assert.match(battleSource, /where\('status', '==', 'waiting'\)/);
   assert.match(battleSource, /runTransaction\(db\(\)/);
@@ -478,7 +493,7 @@ test('Battle UI animates server attack steps with shield feedback but hides the 
   assert.match(battleSource,/const missed = step\.type === 'miss'/);
   assert.match(battleSource,/mine\.coreShield \? ' · 道心護體'/);
   assert.match(battleSource,/guest\.coreShield/);
-  assert.match(battleSource,/battle-engine-v2\.js\?v=20260926-nascent-seal1/);
+  assert.match(battleSource,/battle-engine-v2\.js\?v=20261022-ocean-balance1/);
 });
 
 test('lethal first attack stops before the other player can strike', () => {

@@ -104,9 +104,9 @@ let xiuxianFeatureLoadStarted = false;
 let xiuxianReadyTimer = null;
 let resolveXiuxianFeatureGate;
 const xiuxianFeatureGate = new Promise((resolve) => { resolveXiuxianFeatureGate = resolve; });
-const XIUXIAN_FEATURE_BUILD = '20261021-realm-hp100';
+const XIUXIAN_FEATURE_BUILD = '20261022-ocean-balance1';
 const RAID_FEATURE_BUILD = '20261006-raid-invite-block1';
-const BATTLE_FEATURE_BUILD = '20261006-battle-join-fix1';
+const BATTLE_FEATURE_BUILD = '20261022-ocean-balance1';
 
 // 交易市集僅為可選功能，載入失敗不可阻止玩家登入或進入遊戲。
 let xiuxianMarketLoad = null;

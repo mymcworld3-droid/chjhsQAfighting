@@ -41,7 +41,7 @@ test('battle-result animation only restarts when battle identity changes', () =>
 
 test('result stylesheet and all runtime modules receive the new cache version', () => {
   assert.match(formal, /battle-mode-v2\.css\?v=20261006-combatflow1&duel=20261006-pregen1/);
-  assert.match(main, /XIUXIAN_FEATURE_BUILD = '20261021-realm-hp100'/);
+  assert.match(main, /XIUXIAN_FEATURE_BUILD = '20261022-ocean-balance1'/);
   assert.match(index, /main\.js\?v=20261013-arrival1/);
   assert.equal(stylesheet.split('{').length,stylesheet.split('}').length,'result stylesheet braces');
 

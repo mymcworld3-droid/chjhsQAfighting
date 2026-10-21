@@ -80,12 +80,12 @@ test('browser and Node share identical ranks, previews and snapshots',()=>{
 });
 test('offensive variations respect HP boundaries, alternating answers, streaks and independent counters',()=>{
   const target={hp:600,maxHp:1000};
-  assert.equal(Innate.attack(advance(fighter('ocean','tide'),true),target).normal,40);
-  assert.equal(Innate.attack(advance(fighter('ocean','tide'),true),{hp:599,maxHp:1000}).normal,0);
+  assert.equal(Innate.attack(advance(fighter('ocean','tide'),true),target).normal,60);
+  assert.equal(Innate.attack(advance(fighter('ocean','tide'),true),{hp:599,maxHp:1000}).normal,20);
   assert.equal(Innate.attack(advance(fighter('pojing','execute'),true),{hp:500,maxHp:1000}).normal,0);
   assert.equal(Innate.executeThreshold(fighter('pojing','execute')),.7);
   assert.equal(Innate.attack(advance(fighter('reverse','defy',{hp:1500}),true),target).normal,160);
-  for(const [type,branch,every,damage] of [['ocean','surge',3,120],['pojing','momentum',3,120],['sword','pursuit',2,80]]) {
+  for(const [type,branch,every,damage] of [['ocean','surge',3,170],['pojing','momentum',3,120],['sword','pursuit',2,80]]) {
     let p=fighter(type,branch);
     for(let i=1;i<=every;i++){p=advance(p,true);assert.equal(Innate.attack(p,target).normal,i===every?damage:0);if(i<every)p=advance(p,false);}
   }
@@ -142,7 +142,7 @@ test('all eighteen powers are completely suppressed against golden core and belo
   }
   for(const score of [68,187,188]) {
     const h=fighter('ocean','tide');h.nascentSoul=null;
-    assert.equal(duel(h,{totalScore:score}).guestHp,duel({...h,innateAbility:null},{totalScore:score}).guestHp-40);
+    assert.equal(duel(h,{totalScore:score}).guestHp,duel({...h,innateAbility:null},{totalScore:score}).guestHp-60);
   }
 });
 test('PvP retries replay exactly, persist counters across rounds, and never advance input state',()=>{
@@ -163,7 +163,7 @@ test('WuGou innate light passes Dao shield while normal divine pursuit uses arti
   const h=fighter('ocean','tide');h.nascentSoul=null;
   const defended=duel(h,{artifactBattle:{effects:[{type:'equip_damage_reduction_percent',value:.5}]}});
   const base=duel({...h,innateAbility:null},{artifactBattle:{effects:[{type:'equip_damage_reduction_percent',value:.5}]}});
-  assert.equal(base.guestHp-defended.guestHp,20);
+  assert.equal(base.guestHp-defended.guestHp,30);
 });
 test('raid snapshots trust saved core and power; retries and boss actions do not duplicate charge or reflection windows',()=>{
   const h=fighter('thunder','rebound');h.goldenCore={type:'thunder',grade:9};h.nascentSoul=null;

@@ -58,10 +58,10 @@
     if (core.type === 'ocean') {
       const chance = chanceByGrade(core.grade, 10, 5, 50);
       if (triggered(chance)) {
-        const message = `千尺巨浪席捲戰場，額外造成 100 傷害（${chance}%）`;
+        const message = `千尺巨浪席捲戰場，額外造成 150 傷害（${chance}%）`;
         showActivation(core, message, '鬥法攻擊效果');
         return {
-          extraDamage: 100,
+          extraDamage: 150,
           skill: '大海無垠丹・千尺巨浪',
           message
         };
