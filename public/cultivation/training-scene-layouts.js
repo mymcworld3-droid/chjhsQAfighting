@@ -116,7 +116,7 @@
     landscape: {
       image: 'assets/training/layers/landscape-far.webp', layers: sceneLayers('landscape'), width: 1672, height: 941, font: 28,
       places: {
-        meditation: place('meditation', [602,130,505,480], [845,566], [845,406]),
+        meditation: place('meditation', [602,130,505,480], [845,594], [845,406]),
         vault: place('vault', [150,140,340,288], [310,389], [311,286]),
         forge: place('forge', [43,438,502,341], [305,739], [303,614]),
         contract: place('contract', [550,620,250,200], [675,794], [675,700]),
@@ -127,7 +127,7 @@
     portrait: {
       image: 'assets/training/layers/portrait-far.webp', layers: sceneLayers('portrait'), width: 941, height: 1672, font: 40,
       places: {
-        meditation: place('meditation', [237,574,482,378], [486,900], [481,766]),
+        meditation: place('meditation', [237,574,482,378], [486,936], [481,766]),
         vault: place('vault', [17,228,354,311], [198,479], [198,374]),
         forge: place('forge', [18,945,340,361], [198,1246], [198,1131]),
         contract: place('contract', [365,1080,190,230], [460,1270], [460,1180]),
