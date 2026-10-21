@@ -37,6 +37,16 @@ test('exactly one correct choice is required after whitespace and Unicode normal
   assert.equal(questionIntegrityIssue({ ...x, wrong: ['5', '3', '4'] }), '');
 });
 
+test('English apostrophes carry meaning and do not turn distinct alternatives into duplicates',()=>{
+  const {answerKey}=require('../question-answer-integrity.cjs');
+  assert.notEqual(answerKey("it's"),answerKey('its'));
+  assert.equal(answerKey('it’s'),answerKey("it's"));
+  assert.equal(answerKey('"it\'s"'),answerKey("it's"));
+  assert.notEqual(answerKey("students'"),answerKey('students'));
+  assert.notEqual(answerKey('-2'),answerKey('2'));
+  assert.notEqual(answerKey('1.4'),answerKey('14'));
+});
+
 test('the reported point-to-line question cannot label 3/5 correct when its solution concludes 7/5', () => {
   const reported={q:'點 $(2,1)$ 到直線 $3x-4y+5=0$ 的距離為何？',
     correct:'$\\frac{3}{5}$',wrong:['$\\frac{7}{5}$','$\\frac{1}{5}$','$\\frac{9}{5}$'],

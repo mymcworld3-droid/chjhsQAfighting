@@ -8,81 +8,141 @@ const { questionQualityIssue, removeUnstableOptionLabels } = require('./question
 const { recordEvent } = require('./public/cultivation/quest-rules.js');
 const rules = require('./public/cultivation/opportunity-rules.js');
 const Knowledge = require('./public/cultivation/knowledge-points.js');
+const { answerKey } = require('./question-answer-integrity.cjs');
 const { QUESTION_PRESENTATION_RULES, QUESTION_RELIABILITY_RULES, subjectReliabilityPrompt } = require('./quiz-answer-prompt.cjs');
 const RUNS = 'opportunityRuns', STATES = 'opportunityStates', TTL = 24 * 60 * 60 * 1000;
-const fail = (message, status = 409) => Object.assign(new Error(message), { status });
+const fail = (message, status = 409, details = {}) => Object.assign(new Error(message), { status, publicReason:message, ...details });
 const hash = v => crypto.createHash('sha256').update(v).digest('hex');
 const clean = (v, n = 600) => String(v || '').trim().slice(0, n);
 
+function packFail(message, check, questionId) {
+  return fail(message,502,{code:'opportunity-'+check,stage:'validation',...(questionId ? {questionId} : {})});
+}
+function diagnostic(error, stage = 'request') {
+  if (error?.opportunityDiagnostic) return error.opportunityDiagnostic;
+  stage = error?.stage || stage;
+  let code = error?.code?.startsWith?.('opportunity-') ? error.code : 'opportunity-unavailable';
+  let reason = error?.publicReason || '機緣服務暫時無法完成，請稍後重試';
+  let retryable = ![400,401,403,409,429].includes(error?.status);
+  if (error?.publicReason && code === 'opportunity-unavailable') {
+    code = ({400:'opportunity-invalid-request',401:'opportunity-auth',403:'opportunity-permission',404:'opportunity-not-found',429:'opportunity-rate-limit'})[error.status] ||
+      (error.status === 409 ? 'opportunity-state-changed' : code);
+  }
+  if (!error?.publicReason) {
+    const attempts = error?.attempts || [];
+    if (error?.name === 'AbortError' || /timeout|逾時/i.test(error?.message || '') || attempts.some(a => /timeout/.test(a.code || ''))) {
+      code = 'opportunity-timeout'; reason = stage === 'storage' ? '儲存機緣進度逾時，請重試展卷' : '長文生成或複核逾時，請稍後重試';
+    } else if (error?.code === 'refinery-ai-config') {
+      code = 'opportunity-provider-config'; reason = '出題服務尚未完成設定，請回報管理員'; retryable = false;
+    } else if (/quota|resource-exhausted/i.test(error?.code || '') || /D1 quota/i.test(error?.message || '') ||
+        attempts.some(a => a.httpStatus === 429)) {
+      code = 'opportunity-quota'; reason = '資料庫或出題服務用量暫時受限，請稍後重試';
+    } else if (stage === 'generation' || stage === 'review') {
+      code = 'opportunity-provider'; reason = '出題服務暫時無法回傳完整內容，請稍後重試';
+    } else if (stage === 'storage') {
+      code = 'opportunity-storage'; reason = '機緣已生成，但儲存進度暫時失敗，請重試展卷';
+    }
+  }
+  return {code,stage:error?.stage || stage,reason,retryable,...(error?.questionId ? {questionId:error.questionId} : {})};
+}
+function articleLimits(target) {
+  if (Knowledge.subject(target.subject) === '英文') return {unit:'英文單字',min:250,max:550};
+  return /國小/.test(target.level) ? {unit:'非空白字元',min:400,max:750}
+    : /國中/.test(target.level) ? {unit:'非空白字元',min:650,max:1200} : {unit:'非空白字元',min:850,max:1600};
+}
 function normalizePack(raw, target) {
-  if (!raw || typeof raw !== 'object') throw fail('機緣題組格式不完整', 502);
-  const title = clean(raw.title, 80), paragraphs = raw.paragraphs;
-  if (!title || !Array.isArray(paragraphs) || paragraphs.length < 4 || paragraphs.length > 10) throw fail('長文需要四至十個完整段落', 502);
-  const article = paragraphs.map((p, i) => ({ id: `P${i + 1}`, text: clean(p?.text ?? p, 1800) }));
-  if (article.some(p => p.text.length < 35 || /<\/?(?:script|iframe|img)\b/i.test(p.text))) throw fail('長文段落無效', 502);
-  if (new Set(article.map(p => rules.signature(p.text))).size !== article.length) throw fail('長文不能用重複段落充字數', 502);
-  const length = article.reduce((n, p) => n + p.text.replace(/\s/g, '').length, 0);
-  const minimum = target.subject === '英文' ? 900 : /國小/.test(target.level) ? 400 : /國中/.test(target.level) ? 650 : 850;
-  if (length < minimum || length > 6500) throw fail('共用文本長度不符合程度', 502);
-  if (!Array.isArray(raw.questions) || raw.questions.length !== 5) throw fail('機緣洞天必須恰好五題', 502);
+  if (!raw || typeof raw !== 'object') throw packFail('機緣題組格式不完整','pack-format');
+  const title = clean(raw.title,80), paragraphs = raw.paragraphs;
+  if (!title || !Array.isArray(paragraphs) || paragraphs.length < 4 || paragraphs.length > 10) throw packFail('長文需要四至十個完整段落','paragraph-count');
+  const article = paragraphs.map((p,i) => ({id:`P${i+1}`,text:clean(p?.text ?? p,1800)}));
+  if (article.some(p => p.text.length < 35 || /<\/?(?:script|iframe|img)\b/i.test(p.text))) throw packFail('長文段落無效','paragraph-format');
+  if (new Set(article.map(p => rules.signature(p.text))).size !== article.length) throw packFail('長文不能用重複段落充字數','duplicate-paragraph');
+  const limits = articleLimits(target), body = article.map(p => p.text).join(' ');
+  const length = limits.unit === '英文單字' ? (body.match(/[A-Za-z]+(?:['’\-][A-Za-z]+)*/g) || []).length : body.replace(/\s/g,'').length;
+  // Keep the existing hard safety cap. The target range guides generation;
+  // slightly overshooting its ideal length must not discard a valid pack.
+  if (length < limits.min || body.replace(/\s/g,'').length > 6500) throw packFail(`共用文本長度不符合程度：至少需要 ${limits.min} ${limits.unit}，實際 ${length}，全文不得超過6500字元`,'article-length');
+  if (!Array.isArray(raw.questions) || raw.questions.length !== 5) throw packFail('機緣洞天必須恰好五題','question-count');
   const stems = new Set();
-  const questions = raw.questions.map((q, i) => {
-    if (q.skill !== rules.SKILLS[i]) throw fail('題組認知層次或題序不完整', 502);
-    const stem = clean(q.q, 600), correct = clean(q.correct, 350), wrong = (Array.isArray(q.wrong) ? q.wrong : []).map(v => clean(v, 350));
-    const exp = removeUnstableOptionLabels(clean(q.exp, 1800));
-    const evidence = (Array.isArray(q.evidence) ? q.evidence : []).map(e => ({ paragraph: clean(e?.paragraph, 4), quote: clean(e?.quote, 500) }));
-    if (stem.length < 12 || !correct || wrong.length !== 3 || wrong.some(v => !v) || exp.length < 60 || !clean(q.concept, 100)) throw fail('題目、選項或解析不完整', 502);
-    const key = rules.signature(stem).replace(/\d+/g, '#');
-    if (stems.has(key) || new Set([correct, ...wrong].map(rules.signature)).size !== 4) throw fail('題目或選項重複', 502);
+  const questions = raw.questions.map((q,i) => {
+    const id = `Q${i+1}`;
+    if (q?.skill !== rules.SKILLS[i]) throw packFail('題組認知層次或題序不完整','skill-order',id);
+    const stem = clean(q.q,600), correct = clean(q.correct,350), wrong = (Array.isArray(q.wrong) ? q.wrong : []).map(v => clean(v,350));
+    const exp = removeUnstableOptionLabels(clean(q.exp,1800));
+    const evidence = (Array.isArray(q.evidence) ? q.evidence : []).map(e => ({paragraph:clean(e?.paragraph,4),quote:clean(e?.quote,500)}));
+    if (stem.length < 12 || !correct || wrong.length !== 3 || wrong.some(v => !v) || exp.length < 60 || !clean(q.concept,100)) throw packFail('題目、選項或解析不完整','question-format',id);
+    const key = rules.signature(stem).replace(/\d+/g,'#');
+    if (stems.has(key) || new Set([correct,...wrong].map(answerKey)).size !== 4) throw packFail('題目或選項重複','duplicate-choice',id);
     stems.add(key);
-    if (!evidence.length || evidence.length > 4 || evidence.some(e => e.quote.length < 8 || !article.find(p => p.id === e.paragraph)?.text.includes(e.quote))) throw fail('解析缺少可核對的文本依據', 502);
-    if (['integrate', 'evaluate'].includes(q.skill) && new Set(evidence.map(e => e.paragraph)).size < 2) throw fail('整合與評估題必須引用不同段落', 502);
-    const issue = questionQualityIssue({ q: stem, correct, wrong, exp });
-    if (issue) throw fail(issue, 502);
-    return { id: `Q${i + 1}`, q: stem, correct, wrong, exp, skill: q.skill, concept: clean(q.concept, 100), evidence,
-      ...Knowledge.metadata(q,target.subject) };
+    if (!evidence.length || evidence.length > 4 || evidence.some(e => e.quote.length < 8 || !article.find(p => p.id === e.paragraph)?.text.includes(e.quote))) throw packFail('解析缺少可核對的文本依據','evidence',id);
+    if (['integrate','evaluate'].includes(q.skill) && new Set(evidence.map(e => e.paragraph)).size < 2) throw packFail('整合與評估題必須引用不同段落','cross-paragraph-evidence',id);
+    const issue = questionQualityIssue({q:stem,correct,wrong,exp});
+    if (issue) throw packFail(issue,'question-quality',id);
+    try { Knowledge.assertLabel(q,target.subject); }
+    catch (_) { throw packFail('題目缺少指定科目的有效知識點標記','knowledge-label',id); }
+    return {id,q:stem,correct,wrong,exp,skill:q.skill,concept:clean(q.concept,100),evidence,...Knowledge.metadata(q,target.subject)};
   });
   const fingerprint = hash(rules.signature(article.map(p => p.text).join('')));
-  return { title, paragraphs: article, questions, fingerprint, target };
+  return {title,paragraphs:article,questions,fingerprint,target};
 }
 function generationPrompt(target, history, repair = '') {
+  const limits = articleLimits(target);
+  const points = Knowledge.points(target.subject), name = Knowledge.subject(target.subject);
+  const label = points.length ? [{subject:name,id:'從本科固定清單選取',name:'對應知識點名稱'}] : [];
+  const questions = rules.SKILLS.map((skill,i) => ({id:`Q${i+1}`,skill,concept:'實際考點',q:'完整題目，不含選項標記',
+    correct:'唯一正解內容',wrong:['錯誤內容一','錯誤內容二','錯誤內容三'],exp:'至少80中文字的解析，說明原文依據與判斷理由',
+    knowledge_points:label,evidence:[{paragraph:'P1',quote:'逐字引用P1中的連續原文'},
+      ...(['integrate','evaluate'].includes(skill) ? [{paragraph:'P3',quote:'逐字引用P3中的連續原文'}] : [])]}));
+  const schema = {title:'文本標題',paragraphs:[1,2,3,4].map(i => ({id:`P${i}`,text:`第${i}段完整原文`})),questions};
   return `你是台灣課綱素養題編寫者。生成「機緣洞天」：一篇原創、連貫、有充足資訊的長文，五題共用全文。\n` +
-    `嚴格範圍=${JSON.stringify(target)}。學科、選定單元與細項是真正考點；不得只把章節名貼進一般閱讀題，不得超綱。國小400至750字、國中650至1200字、高中以上850至1600字；英文科使用該年級可讀的英文250至550 words。` +
-    Knowledge.promptFor(target.subject) + '\n' +
-    QUESTION_PRESENTATION_RULES + '\n' +
+    `嚴格範圍=${JSON.stringify(target)}。學科、選定單元與細項是真正考點；不得只把章節名貼進一般閱讀題，不得超綱。全文只計正文，需要${limits.min}至${limits.max}${limits.unit}，寫完先自行計數。` +
+    Knowledge.promptFor(target.subject) + '\n' + QUESTION_PRESENTATION_RULES + '\n' +
     QUESTION_RELIABILITY_RULES + '\n' + subjectReliabilityPrompt(target.subject,{examples:false}) + '\n' +
-    `文章4至10段，包含情境、觀察、資料、因果或不同觀點；不要依赖附圖。可以融入修仙世界，但概念與數據必須正確，不可讓故事妨礙理解。` +
-    `五題依序技能=${JSON.stringify(rules.SKILLS)}，分別擷取、跨段整合、推論、應用、評估。每題都必須依本文才可作答，彼此獨立、不洩漏其他題答案。後兩題需結合單元知識，但本文仍是必要條件。` +
-    `每題四個不重複選項，唯一正解，三個有合理迷思的錯誤選項。解析至少80中文字，提供推理步驟與錯誤選項原因；不能以選項字母或順序稱呼答案。` +
-    `近期文章與考點=${JSON.stringify(history.slice(-8))}。避免相同情境、資料與推理骨架，不能只換數字或人名。${repair ? '\n上次未通過原因：' + repair : ''}\n` +
-    `只輸出JSON：{"title":"文本標題","paragraphs":["第一段全文","第二段全文","第三段全文","第四段全文"],"questions":[{"skill":"retrieve","concept":"選定範圍的具體考點","q":"題目","correct":"正解內容","wrong":["錯誤1","錯誤2","錯誤3"],"exp":"完整解析","evidence":[{"paragraph":"P1","quote":"該段原文逐字引用"}]}]}。questions必須5個且技能順序完全符合規格。`;
+    `文章4至10段，用P1、P2依序編號，包含情境、觀察、資料或因果；不依賴附圖、不重複段落。修仙情境不能妨礙單元理解。` +
+    `五題固定依序Q1 retrieve、Q2 integrate、Q3 infer、Q4 apply、Q5 evaluate。每題須依本文作答，彼此獨立、不洩漏其他題答案。` +
+    `每題四個不同選項、唯一正解、至少80中文字解析及有效knowledge_points。Q2整合比較與Q5評估判斷的evidence各至少兩筆，必須來自兩個不同段落；其他題至少一筆。` +
+    `每筆evidence須含實際存在的段落ID及連續逐字quote，不加省略號、不改寫；quote至少8字元，且完整存在於該段原文。` +
+    `近期文章與考點=${JSON.stringify(history.slice(-8))}。避免相同情境、資料與推理骨架，不能只換數字或人名。${repair ? '\n上次未通過原因：'+repair : ''}\n` +
+    `只輸出以下JSON結構，保留全部五題、各自技能、knowledge_points與引文數量；替換示意文字，不得省略欄位：\n${JSON.stringify(schema)}`;
 }
-async function generatePack(target, history, generate = aiRouter.generateJSON) {
+async function generatePack(target, history, generate = aiRouter.generateJSON, {now = Date.now,budgetMs = 75000} = {}) {
   let issue = '';
-  const deadline = Date.now() + 75000;
-  async function call(prompt) {
-    const remaining = deadline - Date.now();
-    if (remaining <= 0) throw fail('機緣洞天生成逾時', 504);
+  const deadline = now()+budgetMs, failures = [];
+  async function call(prompt, stage) {
+    const remaining = deadline-now();
+    if (remaining <= 0) throw fail('機緣洞天生成逾時',504,{code:'opportunity-timeout',stage});
+    const timeoutMs = Math.min(stage === 'generation' ? 45000 : 20000,remaining);
     let timer;
-    try { return await Promise.race([generate(prompt, { timeoutMs: Math.min(22000, remaining) }), new Promise((_, reject) => { timer = setTimeout(() => reject(fail('機緣洞天生成逾時', 504)), remaining); })]); }
-    finally { clearTimeout(timer); }
+    try { return await Promise.race([generate(prompt,{timeoutMs}),new Promise((_,reject) => {
+      timer = setTimeout(() => reject(fail('機緣洞天生成逾時',504,{code:'opportunity-timeout',stage})),timeoutMs);
+    })]); } finally { clearTimeout(timer); }
   }
   for (let attempt = 0; attempt < 2; attempt++) {
+    let stage = 'generation';
     try {
-      const result = await call(generationPrompt(target, history, issue));
-      const pack = normalizePack(result.data, target);
-      pack.questions.forEach(question => Knowledge.assertLabel(question,target.subject));
-      if (history.some(h => h.fingerprint === pack.fingerprint || rules.signature(h.title) === rules.signature(pack.title))) throw fail('新文章與近期機緣重複', 502);
-      const review = await call(`獨立審核以下素養題組，從原文自行解題，不要盲信標示正解。严格驗證每題是否真的使用原文、唯一正解、無錯誤、依據逐字存在、解析成立、沒有互相洩題，且每題具體考查指定學科單元。評估推論是否過度、數據是否矛盾、年級是否適當。範圍=${JSON.stringify(target)}\n題組=${JSON.stringify(pack)}\n只輸出JSON：{"scopeValid":true,"passageValid":true,"reason":"審核理由","questions":[{"id":"Q1","valid":true,"correct":"自行求出的正解內容"}]}，questions必須涵蓋Q1至Q5。不合格應valid:false。`);
+      const result = await call(generationPrompt(target,history,issue),stage);
+      stage = 'validation';
+      const pack = normalizePack(result.data,target);
+      if (history.some(h => h.fingerprint === pack.fingerprint || rules.signature(h.title) === rules.signature(pack.title))) throw packFail('新文章與近期機緣重複','duplicate-article');
+      stage = 'review';
+      const example = {scopeValid:true,passageValid:true,reason:'審核理由',questions:pack.questions.map(q => ({id:q.id,valid:true,correct:'自行求出的正解內容'}))};
+      const review = await call(`獨立審核以下素養題組，從原文自行解題，不要盲信標示正解。驗證範圍、唯一正解、逐字原文依據、解析、跨題洩題與年級適當性。Q2與Q5必須各引用兩段不同原文。正負號、小數點、分數線不可省略；判斷每個wrong是否確實錯誤。範圍=${JSON.stringify(target)}\n題組=${JSON.stringify(pack)}\n只輸出JSON：${JSON.stringify(example)}。questions必須涵蓋Q1至Q5各一次；每題重新求解並將完整正解內容填入correct。不合格應valid:false。`,stage);
       const r = review.data;
       if (r?.scopeValid !== true || r?.passageValid !== true || !Array.isArray(r.questions) || r.questions.length !== 5 ||
-          pack.questions.some(q => r.questions.filter(v => v.id === q.id && v.valid === true && rules.signature(v.correct) === rules.signature(q.correct)).length !== 1)) {
-        throw fail(clean(r?.reason, 400) || '獨立複核未通過', 502);
+          pack.questions.some(q => r.questions.filter(v => v.id === q.id && v.valid === true && answerKey(v.correct) === answerKey(q.correct)).length !== 1)) {
+        throw fail('獨立複核未通過：範圍、題目或答案未獲確認',502,{code:'opportunity-review-rejected',stage});
       }
       return pack;
-    } catch (e) { issue = clean(e.message, 400); if (e.status === 504) throw e; }
+    } catch (error) {
+      const failure = {...diagnostic(error,stage),attempt:attempt+1};
+      failures.push(failure); issue = (failure.questionId ? failure.questionId+'：' : '')+failure.reason;
+      if (!failure.retryable || error.status === 504 || attempt === 1) {
+        const title = failure.stage === 'validation' ? '機緣題組未通過品質檢查' : failure.stage === 'review' ? '機緣題組複核未完成' : '機緣內容暫時無法生成';
+        const result = fail(title+'，已保留原本問道進度：'+issue,error.status === 504 ? 504 : 502);
+        result.opportunityDiagnostic = {...failure,attempts:failures}; throw result;
+      }
+    }
   }
-  throw fail('機緣題組未通過品質檢查，已保留原本問道進度', 502);
 }
 // Bounded cache and single-flight generation prevent simultaneous users regenerating the same scope.
 function createGenerator(generate = aiRouter.generateJSON, now = Date.now) {
@@ -228,7 +288,11 @@ function createHandlers({ resolveA = () => playerRepository.resolve(), generate 
       try { identity = await a.auth.verifyIdToken(bearer[1], true); } catch (_) { throw fail('登入狀態已失效', 401); }
       if (!identity?.uid || identity.aud !== PROJECT_IDS.A || identity.iss !== 'https://securetoken.google.com/' + PROJECT_IDS.A) throw fail('登入身分驗證失敗', 401);
       return res.json({ ok: true, ...await handler(req, a.db, identity.uid) });
-    } catch (e) { if (!e.status || e.status >= 500) logger.warn('[Opportunity]', e.message); return res.status(e.status || 503).json({ ok: false, error: e.status ? e.message : '機緣洞天連線尚未完成，請稍後重試' }); }
+    } catch (e) {
+      const detail = {...diagnostic(e),requestId:/^[A-Za-z0-9_-]{12,80}$/.test(String(req.body?.requestId || '')) ? req.body.requestId : crypto.randomUUID()};
+      if (!e.status || e.status >= 500) logger.warn('[Opportunity]', detail);
+      return res.status(e.status || 503).json({ok:false,error:e.publicReason || detail.reason,diagnostic:detail});
+    }
   };
   return {
     current: route(async (_req, db, uid) => ({ run: (r => r ? publicRun(r) : null)(await currentRun(db, uid, now())) })),
@@ -259,7 +323,8 @@ function createHandlers({ resolveA = () => playerRepository.resolve(), generate 
           limit.count++; limits.set(uid, limit);
           const target = rules.chooseTarget(normalized, history);
           const pack = await generate(target, history);
-          return startRun(db, uid, requestId, pack, scope, now());
+          try { return await startRun(db, uid, requestId, pack, scope, now()); }
+          catch (error) { error.stage ||= 'storage'; throw error; }
         })().finally(() => pending.delete(uid));
         pending.set(uid, task);
       }
@@ -276,4 +341,4 @@ module.exports = app => {
   app.get('/api/opportunity/current', h.current);
   for (const action of ['start', 'answer', 'settle', 'abandon', 'report']) app.post('/api/opportunity/' + action, h[action]);
 };
-module.exports.__test = { RUNS, STATES, normalizePack, generationPrompt, generatePack, createGenerator, makeQuestions, publicRun, rewardFor, currentRun, startRun, updateRun, reportQuestion, createHandlers };
+module.exports.__test = { RUNS, STATES, normalizePack, generationPrompt, generatePack, articleLimits, diagnostic, createGenerator, makeQuestions, publicRun, rewardFor, currentRun, startRun, updateRun, reportQuestion, createHandlers };

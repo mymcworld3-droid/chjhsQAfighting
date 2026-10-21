@@ -21,14 +21,27 @@ import { playerRepository } from './data/player-repository.js';
   const toast = message => window.showToast?.(message);
 
   async function request(action, body, timeout = 18000) {
-    const controller = new AbortController(), timer = setTimeout(() => controller.abort(), timeout);
+    const controller = new AbortController();
+    let timer;
+    const deadline = new Promise((_,reject) => {
+      timer = setTimeout(() => {
+        reject(Object.assign(new Error('機緣洞天連線逾時，進度已保留，可重試展卷'), {
+          diagnostic:{code:'opportunity-client-timeout',stage:'connection',retryable:true}
+        }));
+        controller.abort();
+      },timeout);
+    });
     try {
-      const response = await authenticatedMainFetch('/api/opportunity/' + action, {
-        ...(body ? { method: 'POST', body: JSON.stringify(body) } : {}), signal: controller.signal
-      });
-      const result = await response.json().catch(() => ({}));
-      if (!response.ok || result.ok !== true) throw Object.assign(new Error(result.error || '機緣洞天尚未連線完成'), { status: response.status });
-      return result;
+      return await Promise.race([deadline,(async () => {
+        const response = await authenticatedMainFetch('/api/opportunity/' + action, {
+          ...(body ? { method: 'POST', body: JSON.stringify(body) } : {}), signal: controller.signal
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok || result.ok !== true) throw Object.assign(new Error(result.error || '機緣洞天尚未連線完成'), {
+          status:response.status,diagnostic:result.diagnostic
+        });
+        return result;
+      })()]);
     } catch (e) { if (e.name === 'AbortError') throw new Error('機緣洞天連線逾時'); throw e; }
     finally { clearTimeout(timer); }
   }
@@ -292,8 +305,9 @@ import { playerRepository } from './data/player-repository.js';
           openRun(result.run, account); release();
         } catch (e) {
           if (operation !== serial || uid() !== account) { release(); return; }
-          el.innerHTML = `${header('機緣尚未展開')}<div class="op-offer"><h3>暫時無法展開這卷機緣</h3><p role="alert">${esc(e.message)}</p><p>可在此重試，或繼續問道；下一次機緣會重新等待 20～30 題，不會每題反覆出現。</p><button id="op-retry-load" class="op-primary" type="button">重試展卷</button><button id="op-cancel-load" class="op-secondary" type="button">繼續問道</button></div>`;
-          $('op-retry-load').onclick = () => { void load(); };
+          const detail = {...(e.diagnostic || {code:'opportunity-connection',stage:'connection'}),requestId};
+          el.innerHTML = `${header('機緣尚未展開')}<div class="op-offer"><h3>暫時無法展開這卷機緣</h3><p role="alert">${esc(e.message)}</p><details><summary>查看失敗原因</summary><pre style="white-space:pre-wrap;overflow-wrap:anywhere;text-align:left">${esc(JSON.stringify(detail,null,2))}</pre></details><p>可在此重試，或繼續問道；下一次機緣會重新等待 20～30 題，不會每題反覆出現。</p>${detail.retryable === false ? '' : '<button id="op-retry-load" class="op-primary" type="button">重試展卷</button>'}<button id="op-cancel-load" class="op-secondary" type="button">繼續問道</button></div>`;
+          if ($('op-retry-load')) $('op-retry-load').onclick = () => { void load(); };
           $('op-cancel-load').onclick = skip; $('op-leave').onclick = skip;
           focusTitle();
         } finally { attemptBusy = false; inflight = false; }

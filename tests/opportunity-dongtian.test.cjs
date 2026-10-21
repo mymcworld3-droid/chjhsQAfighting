@@ -189,6 +189,111 @@ test('independent reviewer rejection regenerates, and permanently bad packs neve
   assert.equal(result.title, raw.title); assert.equal(calls, 4);
   await assert.rejects(api.generatePack(target, [], async () => ({ data: { questions: [] } })), /品質檢查/);
 });
+
+test('generation schema actually supplies five skills, knowledge labels and cross-paragraph evidence',()=>{
+  const prompt=api.generationPrompt(target,[]);
+  const schema=JSON.parse(prompt.slice(prompt.lastIndexOf('\n')+1));
+  assert.equal(schema.questions.length,5);
+  assert.deepEqual(schema.questions.map(q=>q.skill),rules.SKILLS);
+  assert.deepEqual(schema.questions.map(q=>q.id),['Q1','Q2','Q3','Q4','Q5']);
+  for(const q of schema.questions) {
+    assert.equal(q.knowledge_points[0].subject,'數學');
+    assert.ok(q.evidence.length>=1);
+    if(['integrate','evaluate'].includes(q.skill)) assert.equal(new Set(q.evidence.map(e=>e.paragraph)).size,2);
+  }
+  assert.match(prompt,/Q2整合比較與Q5評估判斷/);
+  assert.match(prompt,/650至1200非空白字元/);
+});
+
+test('valid signed, decimal and fractional alternatives remain distinct while numeric equivalents are rejected',()=>{
+  for(const [correct,wrong] of [['-2',['2','12','-12']],['1.4',['14','4.1','41']],['1/2',['12','2/1','21']]]) {
+    const raw=rawPack();Object.assign(raw.questions[0],{correct,wrong,exp:raw.questions[0].exp+'答案為 '+correct+'。'});
+    assert.equal(api.normalizePack(raw,target).questions[0].correct,correct);
+  }
+  const duplicate=rawPack();Object.assign(duplicate.questions[0],{correct:'1/2',wrong:['0.5','2','3']});
+  assert.throws(()=>api.normalizePack(duplicate,target),error=>error.code==='opportunity-duplicate-choice');
+});
+
+test('English passage length uses the same word count requested by the generator',()=>{
+  const english={...target,subject:'英文'};
+  const raw=rawPack();
+  raw.paragraphs=Array.from({length:4},(_,i)=>'Station '+['one','two','three','four'][i]+': '+Array(63).fill('water').join(' '));
+  raw.questions.forEach(q=>{
+    q.knowledge_subject='英文';q.knowledge_point_id='english-4';q.knowledge_point='閱讀理解';
+    q.evidence=[{paragraph:'P1',quote:raw.paragraphs[0].slice(0,35)},
+      ...(['integrate','evaluate'].includes(q.skill)?[{paragraph:'P3',quote:raw.paragraphs[2].slice(0,35)}]:[])];
+  });
+  assert.equal(api.normalizePack(raw,english).questions.length,5);
+  assert.match(api.generationPrompt(english,[]),/250至550英文單字/);
+  raw.paragraphs=raw.paragraphs.map((p,i)=>p.split(' ').slice(0,60).join(' '));
+  assert.throws(()=>api.normalizePack(raw,english),error=>error.code==='opportunity-article-length');
+});
+
+test('failed generation reports the exact missing field and question instead of erasing its cause',async()=>{
+  const raw=rawPack();delete raw.questions[3].knowledge_subject;delete raw.questions[3].knowledge_point_id;delete raw.questions[3].knowledge_point;
+  await assert.rejects(api.generatePack(target,[],async()=>({data:raw})),error=>{
+    const detail=api.diagnostic(error);
+    assert.equal(detail.stage,'validation');assert.equal(detail.questionId,'Q4');
+    assert.equal(detail.code,'opportunity-knowledge-label');assert.equal(detail.attempts.length,2);
+    assert.match(detail.reason,/知識點/);return true;
+  });
+});
+
+test('review cannot confirm a negative answer using the positive value and accepts equivalent numeric formatting',async()=>{
+  const raw=rawPack();Object.assign(raw.questions[0],{correct:'-2',wrong:['2','12','-12'],exp:raw.questions[0].exp+'答案為 -2。'});
+  let calls=0;
+  await assert.rejects(api.generatePack(target,[],async()=>{
+    if(++calls%2)return {data:raw};
+    const r=review(raw);r.data.questions[0].correct='2';return r;
+  }),error=>api.diagnostic(error).code==='opportunity-review-rejected');
+  Object.assign(raw.questions[0],{correct:'0.5',wrong:['0.6','0.7','0.8'],exp:raw.questions[1].exp+'答案為 0.5。'});
+  calls=0;
+  const result=await api.generatePack(target,[],async()=>{
+    if(++calls%2)return {data:raw};
+    const r=review(raw);r.data.questions[0].correct='1/2';return r;
+  });
+  assert.equal(result.questions[0].correct,'0.5');
+});
+
+test('long-form generation gets a sufficient deadline while all retries remain inside the total budget',async()=>{
+  const raw=rawPack(),timeouts=[];let clock=0,calls=0;
+  const result=await api.generatePack(target,[],async(_prompt,options)=>{
+    timeouts.push(options.timeoutMs);calls++;
+    clock += [35000,15000,12000,1000][calls-1];
+    return calls%2 ? {data:raw} : review(raw,calls===4);
+  },{now:()=>clock});
+  assert.equal(result.title,raw.title);
+  assert.deepEqual(timeouts,[45000,20000,25000,13000]);
+});
+
+test('storage failure is identified and raw provider or database messages are never sent to players',async()=>{
+  const db=fakeDb(),logs=[];db.runTransaction=async()=>{throw Error('Bearer private-database-token');};
+  const handlers=api.createHandlers({now:()=>now,resolveA:()=>({db,auth:{verifyIdToken:async()=>({uid:'u1',aud:PROJECT_IDS.A,iss:'https://securetoken.google.com/'+PROJECT_IDS.A})}}),
+    generate:async()=>api.normalizePack(rawPack(),target),logger:{warn:(...args)=>logs.push(args)}});
+  const res=response();await handlers.start({body:{requestId:'storage-request-001',scope:rules.scopeKey(player())},get:()=> 'Bearer test-token'},res);
+  assert.equal(res.statusCode,503);assert.equal(res.body.diagnostic.stage,'storage');
+  assert.equal(res.body.diagnostic.code,'opportunity-storage');assert.equal(res.body.diagnostic.requestId,'storage-request-001');
+  assert.ok(!JSON.stringify([res.body,logs]).includes('private-database-token'));
+});
+
+test('real D1 create, restore, answer and concurrent settlement keep one run and award only once',async t=>{
+  const {db,sql}=require('./helpers/d1-db.cjs').setup();t.after(()=>sql.close());
+  await db.doc('users/u1').set(player());
+  let calls=0;const raw=rawPack();
+  const handlers=api.createHandlers({now:()=>now,resolveA:()=>({db,auth:{verifyIdToken:async()=>({uid:'u1',aud:PROJECT_IDS.A,iss:'https://securetoken.google.com/'+PROJECT_IDS.A})}}),
+    generate:api.createGenerator(async()=>++calls%2?{data:raw}:review(raw),()=>now),logger:{warn(){}}});
+  const invoke=async(action,body={})=>{const res=response();await handlers[action]({body,get:()=> 'Bearer test-token'},res);assert.equal(res.statusCode,200,JSON.stringify(res.body));return res.body;};
+  const payload={requestId:'d1-start-request-001',scope:rules.scopeKey(player())};
+  const [first,second]=await Promise.all([invoke('start',payload),invoke('start',payload)]);
+  assert.equal(first.run.id,second.run.id);assert.equal(calls,2);
+  assert.equal((await invoke('current')).run.id,first.run.id);
+  assert.ok(!JSON.stringify(first.run).includes('"answer":'));
+  const stored=(await db.doc('opportunityRuns/'+first.run.id).get()).data();
+  for(let index=0;index<5;index++)await invoke('answer',{runId:first.run.id,index,selected:stored.questions[index].answer});
+  const results=await Promise.all([invoke('settle',{runId:first.run.id}),invoke('settle',{runId:first.run.id})]);
+  assert.equal(results.filter(r=>r.applied).length,1);
+  const saved=(await db.doc('users/u1').get()).data();assert.equal(saved.stats.gold,170);assert.equal(saved.stats.totalScore,35);
+});
 test('matching-scope generation is shared and bounded cache cannot return already visited text', async () => {
   let calls = 0; const raw = rawPack();
   const generator = api.createGenerator(async () => { calls++; return calls % 2 ? { data: raw } : review(raw); }, () => now);
