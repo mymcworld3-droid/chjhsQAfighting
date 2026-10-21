@@ -3099,10 +3099,10 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     const shieldBeforeAnswer = !!stats.goldenCoreShield;
     const cultivationReward = applyCultivationReward(stats, isCorrect, {
         soulBonusGain: soulCultivationBonusForPlayer(currentUserData, 'solo'),
-        learningBonusGain:learningReward.gain, isRecovery:learningReward.recovery
+        learningBonusGain:learningReward.gain, isRecovery:learningReward.recovery, isSkipped:userIdx < 0
     });
     cultivationReward.learningMessage = learningReward.message || '';
-    // 記下實際扣除的修為；道心擋住扣分或尚未達金丹時皆為 0。
+    // 記下實際扣除的修為；金丹期起答錯扣 1，金丹以前為 0。
     // 隨本次答題的 stats 一起存入，補償 API 不信任瀏覽器另外送來的扣分金額。
     if (quiz?.data?.q) {
         const scoreAfterAnswer = Math.max(0, Number(stats.totalScore) || 0);
@@ -3124,6 +3124,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         fbTitle.innerHTML += ` <span class="text-yellow-400 text-sm ml-2 border border-yellow-500 rounded px-1">+${scoreGain}💰 · +${cultivationReward.gain} 修為</span>`;
     } else {
         if (!cultivationReward.streakPreserved) stats.currentStreak = 0;
+        if (cultivationReward.penalty > 0) fbTitle.innerHTML += ` <span class="text-red-400 text-sm ml-2">-${cultivationReward.penalty} 修為</span>`;
     }
 
     const learningContext = learningRules?.context(quiz);
