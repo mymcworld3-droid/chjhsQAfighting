@@ -96,8 +96,8 @@
     const chance = chanceByGrade(core.grade, 30, 5, 70);
     if (!thunderTriggered(seed, chance)) return { reflectDamage: 0 };
 
-    const reflected = Math.round(damage * .5);
-    const message = `答對蓄雷（${chance}%），本回合反擊傷害 +50%，金丹額外反擊 ${reflected} 傷害`;
+    const reflected = Math.round(damage * .75);
+    const message = `答對蓄雷（${chance}%），本回合反擊傷害 +75%，金丹額外反擊 ${reflected} 傷害`;
     showActivation(core, message, '鬥法受擊效果');
     return {
       reflectDamage: reflected,

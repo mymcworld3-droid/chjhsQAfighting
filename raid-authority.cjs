@@ -354,7 +354,7 @@ function coreAttack(member,seed){
 }
 function coreCounter(member,received){
   if(member?.goldenCore?.type!=='thunder'||member.thunderCounterReady!==true||received<=0)return 0;
-  return Math.round(received*.5);
+  return Math.round(received*.75);
 }
 function runtimeEffects(member){return Array.isArray(member?.artifactBattle?.effects)?member.artifactBattle.effects:[];}
 function hpRatio(member){return clamp(finite(member?.hp)/Math.max(1,finite(member?.maxHp,1)),0,1);}
@@ -441,7 +441,7 @@ function resolveBossDefense(member,{roomId,bossAction,bossHp=Infinity}={}){
     const normalReceived=Math.max(0,damage-trueReceived);
     const weaponPercent=clamp(sumEffect(runtimeEffects(next),'equip_reflect_percent'),0,1);
     const coreAdditional=damage<next.hp?coreCounter(next,normalReceived):0;
-    const corePercent=coreAdditional>0?.5:0;
+    const corePercent=coreAdditional>0?.75:0;
     reflected=normalReceived>0?Math.round(normalReceived*(weaponPercent+corePercent)) + soulTalents.reflection(next,Math.min(next.hp,normalReceived)):0;
     next.hp=Math.max(0,next.hp-damage);
   }
