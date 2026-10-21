@@ -397,8 +397,8 @@ test('new AI artifact becomes usable immediately and is persisted as a permanent
   assert.match(aiJobs, /reviewStatus: 'pending'/);
   assert.match(aiJobs, /generatedByAI: true/);
   assert.match(aiJobs, /generationMaterials: fresh\.ingredients/);
-  assert.match(aiJobs, /items: committedCatalog/);
-  assert.match(aiJobs, /recipes: committedRecipes/);
+  assert.match(aiJobs, /items: raw\.isAdmin === true \? committedCatalog/);
+  assert.match(aiJobs, /recipes: raw\.isAdmin === true \? committedRecipes/);
   assert.match(aiJobs, /artifactSystem\.inventory\[awardedId\]/);
   assert.match(aiJobs, /replaceArtifactCatalog\(committedCatalog, 'ai-generated'\)/);
   assert.match(aiJobs, /replaceArtifactRecipes\(committedRecipes, 'ai-generated'\)/);
@@ -568,10 +568,10 @@ test('first successfully registered recipe gains immutable ownership without cha
   assert.match(claim, /recipeOwnerUid: user\.uid/);
   assert.match(claim, /recipeOwnerName: String\(raw\.displayName \|\| user\.displayName/);
   assert.match(claim, /recipeDiscoveredAtMs: Date\.now\(\)/);
-  assert.match(claim, /tx\.set\(artifactRef,[\s\S]*items: committedCatalog/);
-  assert.match(claim, /tx\.set\(materialRef,[\s\S]*recipes: committedRecipes/);
+  assert.match(claim, /tx\.set\(artifactRef,[\s\S]*items: raw\.isAdmin === true \? committedCatalog : \[candidate, \.\.\.\(artifactSnap\.data\(\)\?\.items \|\| \[\]\)\]/);
+  assert.match(claim, /tx\.set\(materialRef,[\s\S]*recipes: raw\.isAdmin === true \? committedRecipes : \{ \.\.\.\(materialSnap\.data\(\)\?\.recipes \|\| \{\}\), \[candidate\.id\]: fresh\.recipe \}/);
   assert.match(claim, /recipeFirstDiscovery: firstDiscovery/);
-  assert.doesNotMatch(claim.slice(claim.indexOf('} else if (recipeRepair.changed)')), /recipeOwnerUid:/);
+  assert.doesNotMatch(claim.slice(claim.indexOf('} else if (recipeRepair.changed && raw.isAdmin === true)')), /recipeOwnerUid:/);
 });
 
 test('recipe owner survives catalog normalization and concurrent admin saves', () => {
